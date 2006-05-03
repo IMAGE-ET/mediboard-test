@@ -1,0 +1,1772 @@
+/* $Id: main.css,v 1.72 2006/05/03 16:53:14 rhum1 Exp $ */
+
+/* Global CSS */
+  /* @import "./xhtml.css";   */
+
+/* XHTML elements */
+
+body {
+  font-family: arial, sans-serif;
+  font-size: 11px;  
+  background: #ddf; /* url(./images/bodyGradient.jpg) no-repeat fixed top center; */
+  margin: 0px;
+}
+
+@media print {
+  body { 
+    background: transparent;
+  }
+}
+
+pre {
+  border: 1px solid #aaa;
+  padding: 2px 10px;
+  font-family: lucida console;
+  font-size: 10px;
+  margin: 2px 10px;
+}
+
+table {
+  font-family: arial, sans-serif;
+  font-size: 11px;
+}
+
+tr {
+}
+
+th {
+  text-align: center;
+  vertical-align: top;
+}
+
+td {
+}
+
+img {
+  border: none;
+}
+
+ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+dl {
+  margin-top: 0px; 
+  padding-left: 1px;
+}
+
+dt {
+  margin-top: 5px;
+  color: #009;
+  font-weight: bold;
+}
+
+dd {
+  margin-bottom: 0px; 
+  margin-left: 12px;
+}
+
+a:link {
+  color: #555;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #555;
+  text-decoration: none;
+}
+
+a:active {
+  color: #555;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #555;
+  text-decoration: underline;
+}
+
+h1 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #555;
+  margin: 10px 0px;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #494;
+  margin: 10px 10px;
+}
+
+h3 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #449;
+  margin: 10px 20px;
+}
+
+form {
+  margin: 0px;
+}
+
+textarea {
+  font-family: arial, sans-serif;
+  font-size: 11px;
+  border: 1px black solid;
+  padding-left: 2px;
+  width: 99%;
+}
+
+button {
+  border: 1px black solid;
+  font-size: 12px;
+  background: #ddd;
+  margin: 0 2px;
+  padding: 0px 2px;
+}
+
+button:hover {
+  background: #bbb;
+}
+
+input {
+  border: 1px black solid;
+  font-size: 12px;
+  margin: 1px;
+  padding: 0px 2px;
+}
+
+input[type=submit],
+input[type=reset],
+input[type=button] {
+  background: #ddd;
+  margin: 0 10px;
+}
+
+input[type=submit]:hover,
+input[type=reset]:hover,
+input[type=button]:hover {
+  background: #bbb;
+}
+
+select {
+  border: 1px black solid;
+  font-size: 10px;
+  padding: 0;
+}
+
+optgroup {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 0px;
+  padding-left: 5px;
+  background: #fff;
+}
+
+option {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: normal;
+  padding: 0px;
+  padding-right: 4px;
+  background: #fff;
+}
+
+input,
+select,
+textarea {
+  background: #efe;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  background: #fff;
+}
+
+label:hover {
+  border-bottom: 1px dotted #888;
+  cursor: help;
+}
+
+label.notNull {
+  font-weight: bold;
+}
+  /* @import "./common.css";  */
+
+
+/* Title block */
+
+table.titleblock td {
+  white-space: nowrap;
+}
+
+table.titleblock td.titlecell {
+  font-family: Georgia, serif;
+  font-size: 20px; 
+  color: #620;
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+/* Bread crumbs block */
+
+table.crumbsblock {
+  width: 100%;
+}
+
+table.crumbsblock td {
+  white-space: nowrap;
+}
+
+table.crumbsblock td.crumbscell {
+  width: 100%;
+}
+
+/* Tab view table */
+
+table.taborflat {
+  display: none;
+}
+
+table.tabview {
+  border-spacing: 0px;
+  border-collapse: collapse; /* Hack for IE */
+  empty-cells: show;
+  width: 100%;
+}
+
+table.tabview td {
+  padding: 0px;
+}
+
+table.tabmenu {
+  margin-left: 20px;
+  border-spacing: 0px;
+}
+
+table.tabmenu td {
+  height: 28px;	
+}
+
+table.tabmenu td.normal {
+  background: url(./images/tabBg.png) repeat-x bottom;
+}
+
+table.tabmenu td.normalLeft {
+  width: 17px;
+  background: url(./images/tabLeft.png) no-repeat bottom right;
+}
+
+table.tabmenu td.normalRight {
+  width: 17px;
+  background: url(./images/tabRight.png) no-repeat bottom left;
+}
+
+table.tabmenu td.selected {
+  background: url(./images/tabSelectedBg.png) repeat-x;
+}
+
+table.tabmenu td.selectedLeft {
+  width: 17px;
+  background: url(./images/tabSelectedLeft.png) no-repeat bottom right;
+}
+
+table.tabmenu td.selectedRight {
+  width: 17px;
+  background: url(./images/tabSelectedRight.png) no-repeat bottom left;
+}
+
+/* Standard table */
+
+table.tbl {
+  width: 100%;
+  border: 0px;
+  border-spacing: 1px;
+  background-color: #777;
+}
+
+table.tbl a {
+  display: block;
+}
+
+table.tbl a.action {
+  display: inline;
+}
+
+table.tbl th a {
+  color: #fff;
+}
+
+table.tbl th {
+  background-color: #888;
+  padding: 2px;
+  color: #fff;
+  border: outset #ccc 1px;
+  font-weight: normal;
+  text-align: center;
+  white-space: nowrap;
+}
+
+table.tbl th.title {
+  font-size: 14px;
+  font-weight: bold;  
+  text-align: center;
+  background: #bbb;
+  border: #aaa 1px outset;
+}
+
+table.tbl td {
+  background-color: #fff;
+  padding: 2px;
+  white-space: nowrap;
+}
+
+table.tbl th.text {
+  white-space: normal;
+}
+
+table.tbl td.text {
+  white-space: normal;
+}
+
+table.tbl tr.clear,
+table.tbl tr.clear a {
+  background-color: #ddf;
+  color: #000;
+}
+
+table.tbl tr.clear td,
+table.tbl tr.clear th {
+  background-color: transparent;
+  border: none;
+}
+
+table.tbl td.date div {
+  font-size: 11px;
+  border: 1px dotted;
+  padding: 0px 1px;
+  margin: 1px;
+  width: 100px;
+  min-height: 15px;
+  float: left;
+}
+
+table.tbl td.date img {
+  margin-top: 3px;
+}
+
+/* a 'standard' table */
+
+table.std {
+  border: solid #8c8 3px;
+  background: #eef;
+}
+table.std th {
+  background-color: #888;
+  color: #fff;
+  border: outset #ccc 1px;
+}
+
+table.std td.hilite {
+  background-color: #fff;
+}
+
+/* Form tables */
+
+table.form {
+  width: 100%;
+  border-spacing: 1px;
+}
+
+table.form th {
+  color: #000;
+  white-space: nowrap;
+  background-color: #eee;
+  vertical-align: top;
+  text-align: right;
+  font-weight: normal;
+  padding: 2px 4px;
+  border: none;
+}
+
+table.form th.title {
+  font-size: 14px;
+  font-weight: bold;  
+  text-align: center;
+  background-color: #bbb;
+  border: #aaa 1px outset;
+}
+
+table.form th.category {
+  font-weight: bold;  
+  text-align: center;
+  background-color: #aaa;
+  border: #aaa 1px outset;
+}
+
+table.form th.mandatory {
+  color: #000;
+  font-weight: bold;
+}
+
+table.form th.text {
+  white-space: normal;
+  text-align: center;
+}
+
+table.form td {
+  white-space: nowrap;
+  vertical-align: top;
+  background: #eee;
+  text-align: left;
+  padding: 1px 4px;
+}
+
+table.form td.compte_rendu {
+  background: #ddd;
+}
+
+table.form td.text {
+  white-space: normal;
+}
+
+table.form td.info {
+  white-space: normal;
+}
+
+table.form td.readonly input {
+  background: #eee;
+  border: 1px dotted;
+}
+
+table.form td.button {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table.form td.date div {
+  font-size: 11px;
+  border: 1px dotted;
+  padding: 0px 1px;
+  margin: 1px;
+  width: 100px;
+  min-height: 15px;
+  float: left;
+}
+
+table.form td.date img {
+  margin-top: 3px;
+}
+
+div.autocomplete {
+  position:absolute;
+  width:250px;
+  max-height:200px;
+  overflow: auto;
+  background-color:white;
+  border:1px solid #888;
+  margin:0px;
+  padding:0px;
+}
+div.autocomplete ul {
+  list-style-type:none;
+  margin:0px;
+  padding:0px;
+}
+div.autocomplete ul li.selected { background-color: #ffb;}
+div.autocomplete ul li {
+  list-style-type:none;
+  display:block;
+  margin:0;
+  padding:2px;
+  cursor:pointer;
+}
+
+/* Pane table */
+
+table.main {
+  width: 100%;
+  margin: 4px;
+  border-spacing: 10px;
+}
+
+table.main td {
+  vertical-align: top;
+}
+
+table.main td.halfPane {
+  width: 50%;
+}
+
+table.main th.halfPane {
+  width: 50%;
+}
+
+table.main th.title {
+  font-size: 14px;
+  font-weight: bold;  
+  text-align: center;
+  background: #bbb;
+  border: #aaa 1px outset;
+}
+
+td.greedyPane {
+  width: 100%;
+}
+
+th.greedyPane {
+  width: 100%;
+}
+
+th.title {
+  font-size: 14px;
+  font-weight: bold;  
+  text-align: center;
+  background: #bbb;
+  border: #aaa 1px outset;
+}
+
+/* links in header blocks */
+
+a.hdr:link, 
+a.hdr:active, 
+a.hdr:visited {
+  color: #fff;
+}
+
+/* tabbed boxes */
+
+td.tabox {
+  background-color: #ccc;
+  border: solid #ccc 2px;
+}
+
+/* Spécialisation par média */
+
+@media print {
+  table.tbl {
+    font-size: 100%;
+  }
+  h1.newpage {
+    page-break-before:always;
+    display:none;
+  }
+}
+
+/* Message styles */
+
+#systemMsg {
+  float:right;
+}
+
+div.warning {
+  color: #666;
+  background: url(images/warning.png) no-repeat center left;
+  padding: 2px;
+  padding-left: 20px;
+}
+
+div.error {
+  color: #f00;
+  background: url(images/cross.png) no-repeat center left;
+  padding: 2px;
+  padding-left: 20px;
+}
+
+div.message {
+  color: #008;
+  background: url(images/check.png) no-repeat center left;
+  padding: 2px;
+  padding-left: 20px;
+}
+
+div.loading {
+  background: url(images/loading.gif) no-repeat center left;
+  padding: 2px;
+  padding-left: 20px;
+}
+
+div.big-warning {
+  margin: 10px 50px;
+  min-height: 50px;
+  background: #ffd url(icons/48/warning.png) no-repeat 5px center ;
+  border: 1px solid #da0;
+  padding: 5px;
+  padding-left: 60px;
+}
+
+div.big-success {
+  margin: 10px 50px;
+  min-height: 50px;
+  background: #efe url(icons/48/success.png) no-repeat 5px center ;
+  border: 1px solid #5a5;
+  padding: 5px;
+  padding-left: 60px;
+}
+
+div.big-info {
+  margin: 10px 50px;
+  min-height: 50px;
+  background: #eef url(icons/48/info.png) no-repeat 5px center ;
+  border: 1px solid #55a;
+  padding: 5px;
+  padding-left: 60px;
+}
+
+div.big-error {
+  margin: 10px 50px;
+  min-height: 50px;
+  background: #fee url(icons/48/error.png) no-repeat 5px center ;
+  border: 1px solid #a55;
+  padding: 5px;
+  padding-left: 60px;
+}
+
+@media print {
+  div.warning,
+  div.error,
+  div.message {
+    display: none;
+  }
+}
+
+  /* @import "./login.css";   */
+
+#login {
+  margin: 40px 0px 0px; 
+}
+
+#login table {
+  border: solid #8c8 3px;
+  width: 600px;
+  background: #eef;
+  margin: auto;
+  padding: 5px;
+}
+
+#login table td.logo {
+  width: 33%;
+  text-align: center;
+  font-size: 9px;
+  white-space: normal;
+}
+
+  /* @import "./header.css";  */
+
+/* Global header */
+
+#header {
+  width: 100%;
+  border-spacing: 0px;
+  border: none;
+}
+
+#header td {
+  padding: 0px;
+}
+
+/* Banner */
+
+#banner {
+  display: none;
+  background: url(./images/titleGradient.jpg) no-repeat center;
+  vertical-align: middle;
+}
+
+#banner p {
+  font-family: Georgia, serif;
+  font-size: 20px; 
+  float: left;
+  color: #620;
+  margin: 5px 10px 0;
+}
+
+#banner a {
+  float: right;
+}
+
+/* Navigation */
+
+#menubar table {
+  border: 1px solid #999;
+  background-color: #ccc;
+  color: #fff;
+  text-align: left;
+  width: 100%;
+}
+
+#nav {
+  vertical-align: middle;
+}
+
+#nav ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#nav li {
+  display: inline;
+  float: left;
+}
+
+#nav a {
+  display: block;
+  text-align: center;
+  font-weight: bold;
+  font-variant: small-caps;
+  font-size: 10pt;
+  padding: 3px 4px;
+}
+
+#nav a:hover {
+  text-decoration: none;
+  background: #ddd;
+  padding: 2px 3px;
+  border: 1px outset #ddd;
+}
+
+#nav a:active {
+  background: #ddd;
+  padding: 2px 3px;
+  border: 1px inset #ddd;
+}
+
+#nav li.selected a {
+  text-decoration: none;
+  background: #aaa;
+  padding: 2px 3px;
+  border: 1px inset #888;
+}
+
+#nav img {
+  display: block;
+  margin: auto;
+  width: 48px;
+}
+
+  /* ---- Begin Patch for damned IE that never works ---- */
+  
+  #nav li a {
+    width: 1em;
+    white-space: nowrap;
+  }
+  
+  #nav li>a {
+    width: auto;
+  }
+  
+  /* ---- End patch ---- */
+
+/* Creation */
+
+#new {
+  white-space: nowrap;
+  text-align: right;
+  vertical-align: middle;  
+}
+
+/* User */
+
+#user table {
+  border-spacing: 0px;
+  border: 2px;
+  width: 100%;
+  border-bottom: 1px dashed black;
+}
+
+#user td {
+  padding: 0 3px;
+  
+}
+
+#userWelcome {
+  width: 100%;
+}
+
+#userMenu {
+  white-space: nowrap;
+}
+
+/* Main -- table -- pane */
+
+#main {
+  width: 100%;
+  border-spacing: 0px
+}
+
+  /* @import "./htmlarea.css" */
+
+body {
+  font-family: Georgia, serifs;
+  font-size: 12px;
+}
+
+textarea#htmlarea {
+  width: 99%;
+  height: 100%;
+}
+
+span.hilite {
+  background: #f5f;
+}
+
+@media screen {
+  span.field {
+    background: #bbd;
+  }
+
+  span.value {
+    background: #ddd;
+  }
+
+  span.name {
+    background: #bdb;
+  }
+
+  span.choice {
+    background: #ddd;
+  }
+
+}
+
+/* Module specific CSS*/
+  /* @import "./modules.css";   */
+
+table.dPsalleOp select,
+table.dPsalleOp option,
+table.dPsalleOp input,
+table.dPsalleOp button  {
+  height: 20px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+  /* @import "./contacts.css";  */
+
+/* contacts table */
+
+table.contacts {
+	background-color: #888;
+}
+
+table.contacts td {
+	background-color: #def;
+}
+
+table.contacts td.hilite {
+	background-color: #fff;
+}
+
+  /* @import "./calendar.css";  */
+
+/* popup calendar */
+
+body.popcal {
+	background-color: #eee;
+}
+
+table.poptitle {
+	background-color: #fff;
+}
+
+table.poptitle td {
+	background-color: #fff;
+}
+
+table.poptitle th {
+	background-color: #fff;
+	color: #000;
+	font-size: 10pt;
+	font-weight: bold;
+}
+
+table.popcal {
+	background-color: #ccc;
+}
+
+table.popcal th {
+	background-color: #fff;
+	color: #000;
+	font-size: 9pt;
+	font-weight: normal;
+}
+
+table.popcal td {
+	background-color: #fff;
+	font-size: 8pt;
+	text-align: center;
+}
+
+table.popcal td.empty {
+	background-color: #ddd;
+}
+
+table.mocal td.day  {
+	background-color: #fff;
+	text-align: center;
+}
+
+table.popcal td.today {
+}
+
+table.popcal td.weekend {
+	background-color: #eee;
+}
+
+table.popcal a {
+	display: block;
+}
+
+table.popcal a:hover {
+	background-color: #eef;
+}
+
+table.popcal a:link,
+table.popcal a:visited {
+	color: #00f;
+	text-decoration: none;
+}
+
+table.popcal a.today:link,
+table.popcal a.today:visited {
+	color: #f00;
+	font-weight: bold;
+}
+
+table.popcal a.weekend:link,
+table.popcal a.weekend:visited {
+	color: #00a;
+}
+
+table.popcal a.empty:link,
+table.popcal a.empty:visited {
+	color: #777;
+}
+
+/* month calendar - title area */
+table.motitle {
+	background-color: #777;
+}
+table.motitle td {
+	background-color: #eee;
+}
+table.motitle th {
+	background-color: #eee;
+	font-size: 10pt;
+}
+
+table.mocal {
+	background-color: #777;
+}
+table.mocal th {
+	background-color: #555;
+	color: #fff;
+}
+table.mocal td {
+}
+table.mocal td.week {
+	vertical-align: top;
+	background-color: #888;
+	height: 80px;
+}
+table.mocal td.empty {
+	background-color: #ddd;
+	color: #aaa;
+	text-align: left;
+	vertical-align: top;
+	height: 80px;
+}
+table.mocal td.day  {
+	background-color: #fff;
+	color: #336;
+	text-align: left;
+	vertical-align: top;
+	height: 80px;
+}
+table.mocal td.today {
+	background-color: #ace;
+	color: #fff;
+	text-align: left;
+	vertical-align: top;
+}
+
+table.mocal td.weekend {
+	background-color: #eee;
+	text-align: left;
+	vertical-align: top;
+}
+
+table.mocal .event {
+}
+
+
+/* mini calendar - title area */
+table.minititle {
+}
+
+table.minititle td {
+}
+
+table.minititle th {
+	font-weight: normal;
+}
+
+table.minical {
+}
+
+table.minical th {
+	font-weight: normal;
+}
+
+table.minical td {
+}
+
+table.minical td.week {
+}
+
+table.minical td.empty {
+	color: #aaa;
+}
+
+table.minical td.day  {
+	text-align: center;
+}
+
+table.minical td.today {
+	background-color: #ddd;
+	text-align: center;
+}
+
+table.minical td.weekend {
+	text-align: center;
+}
+
+table.minical .event {
+}
+
+table.minical a {
+	display: block;
+	text-decoration: none;
+}
+
+table.minical a:hover {
+	background-color: #fff;
+}
+
+  /* @import "./ccam.css";      */
+
+table.fullCode {
+  width: 100%;
+  background: #f99;
+}
+
+table.fullCode tr td.pane {
+  vertical-align: top;
+  width: 50%;
+  background: #fdd;
+  padding: 5px;
+}
+
+table.fullCode tr td.pane table {
+  width: 100%;
+}
+
+table.findCode {
+  width: 100%;
+  background: #99f;
+}
+
+table.findCode th {
+  text-align: left;
+}
+
+table.findCode td {
+  vertical-align: top;
+  width: 25%;
+  background: #ddf;
+  padding: 5px;
+}
+
+table.bookCode {
+  width: 100%;
+  background: #f9f;
+}
+
+table.bookCode th {
+  text-align: left;
+}
+
+table.bookCode td {
+  vertical-align: top;
+  width: 25%;
+  background: #fdf;
+  padding: 5px;
+}
+
+table.selectCode {
+  width: 100%;
+  background: #f9f;
+}
+
+table.selectCode th {
+  text-align: left;
+}
+
+table.selectCode td {
+  vertical-align: top;
+  width: 33%;
+  background: #fdf;
+  padding: 5px;
+}
+
+  /* @import "./admission.css"; */
+
+/* The admission table based on the form one */
+
+#admission {
+  width: 100%;
+  border-spacing: 6px;
+  font-family: georgia, serif;
+  color: #006;
+  font-size: 14px;
+}
+
+#admission th {
+  white-space: nowrap;
+  background: transparent;
+  vertical-align: top;
+  text-align: right;
+  font-weight: bold;
+}
+
+#admission th.title {
+  font-weight: bold;  
+  text-align: center;
+  background: #68f;
+  border: #aaa 3px outset;
+  padding: 10px;
+  font-size: 26px;
+  color: #006;
+}
+
+#admission th.category {
+  font-weight: bold;  
+  text-align: center;
+  background: #abf;
+  padding: 10px;
+  border: #aaa 3px outset;
+  font-size: 20px;
+}
+
+#admission td {
+  white-space: normal;
+  vertical-align: top;
+  width: 100%;
+  background: transparent;
+  text-align: left;
+  padding: 1px 4px;
+}
+
+#admission td.halfPane {
+  white-space: normal;
+  vertical-align: top;
+  width: 50%;
+  background: transparent;
+  text-align: left;
+  padding: 1px 4px;
+}
+
+#admission td.info {
+  white-space: normal;
+  font-style: italic;
+  padding: 10px;
+  margin: 5px;
+  border: #aaa 2px dotted;
+}
+
+  /* @import "./hospitalisation.css"; */
+
+/* Chambres */
+
+table.chambrecollapse,
+table.chambreexpand {
+  width: 100%;
+  border-spacing: 0px;
+  border-collapse: collapse;
+  margin: 1px 0;
+}
+
+table.chambrecollapse em,
+table.chambreexpand em {
+  font-weight: bold;
+}
+
+
+table.chambrecollapse td,
+table.chambrecollapse th,
+table.chambreexpand td,
+table.chambreexpand th {
+  border: 1px outset #050;
+}
+
+table.chambrecollapse td.action,
+table.chambreexpand td.action {
+  width: 20px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+table.chambrecollapse th.chambre {
+  padding: 2px;
+  padding-left: 10px;
+  background: #aaa url(./images/collapse.gif) no-repeat center left;
+}
+
+table.chambreexpand th.chambre {
+  padding: 2px;
+  padding-left: 10px;
+  background: #aaa url(./images/expand.gif) no-repeat center left;
+}
+
+th.chambre img {
+  float: right;
+  margin: 0 1px;
+}
+
+table.chambrecollapse tr.litdispo td,
+table.chambreexpand tr.litdispo td {
+  background: #dfd;
+}
+
+table.chambrecollapse tr.lit td,
+table.chambreexpand tr.lit td {
+  background: #ccc;
+  color: #000;
+}
+
+table.chambrecollapse tr.patient td,
+table.chambreexpand tr.patient td {
+  background: #eee;
+  color: #000;
+}
+
+
+table.chambrecollapse tr.patient img,
+table.chambreexpand tr.patient img {
+  float: left;
+  margin-right: 2px;
+}
+
+table.chambrecollapse tr.lit,
+table.chambrecollapse tr.litdispo,
+table.chambrecollapse tr.dates {
+  display: none;
+}
+
+table.chambreexpand td.dates {
+  white-space: normal;
+  color: red;
+}
+
+table.chambreexpand tr.dates {
+}
+
+/* Operations */
+
+table.operationcollapse,
+table.operationexpand {
+  width: 100%;
+  background: #fff;
+  border-spacing: 0px;
+  border-collapse: collapse;
+}
+
+table.operationcollapse td,
+table.operationexpand td {
+  border: 1px solid #555;
+  padding: 0 2px;
+  color: #000;
+}
+
+table.operationcollapse em,
+table.operationexpand em {
+  font-weight: bold;
+}
+
+table.operationcollapse td.selectoperation,
+table.operationexpand td.selectoperation {
+  background: #ddf;
+  text-align: center;
+  vertical-align: middle;
+  width: 20px;
+}
+
+table.operationcollapse td.patient {
+  white-space: normal;
+  padding-left: 17px;
+  background: #ddf url(./images/collapse.gif) no-repeat center left;
+}
+
+table.operationexpand td.patient {
+  padding-left: 17px;
+  background: #ddf url(./images/expand.gif) no-repeat center left;
+}
+
+table.operationexpand td.date {
+}
+
+table.operationcollapse td.date {
+  display: none;
+}
+
+  /* @import "./collapser.css"; */
+
+tr.groupexpand td,
+tr.groupcollapse td {
+  background-color: #ddf;
+}
+
+tr.groupexpand td,
+tr.groupcollapse td,
+tr.groupexpand th,
+tr.groupcollapse th {
+  padding-left: 25px;
+  font-weight: bold;
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+tr.groupcollapse td,
+tr.groupcollapse th {
+  background-image: url(./images/collapse.gif);
+}
+
+tr.groupexpand td,
+tr.groupexpand th {
+  background-image: url(./images/expand.gif);
+}
+
+tr.triggerShow td,
+tr.triggerHide td {
+  background-color: #ddf;
+}
+
+tr.triggerShow td,
+tr.triggerHide td,
+tr.triggerShow th,
+tr.triggerHide th {
+  padding-left: 25px;
+  font-weight: bold;
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+tr.triggerHide td,
+tr.triggerHide th {
+  background-image: url(./images/expand.gif);
+}
+
+tr.triggerShow td,
+tr.triggerShow th {
+  background-image: url(./images/collapse.gif);
+}
+
+tr.show {
+  display: table-row;
+}
+
+td.show {
+  display: table-cell;
+}
+
+.hidden {
+  display: none;
+}
+
+  /* @import "./consultation.css"; */
+
+
+table#weber td {
+  text-align: center;
+}
+
+table#weber tr.values {
+  display: none;
+}
+
+table#weber tr.vocales {
+  display: none;
+}
+
+table#weber tr.moyenne td {
+  background-color: #ddd;
+}
+
+table#weber tr.moyenne td.aerien {
+  background-color: #aaf;
+  font-weight: bold;
+}
+
+table#weber tr.moyenne td.osseux {
+  background-color: #faa;
+  font-weight: bold;
+}
+
+table#weber td {
+  text-align: center;
+}
+
+@media print {
+  table#weber table#allvalues,
+  table#weber td.radiointeractive {
+    display: none;
+  }
+}
+
+/* Liste de choix dans les comptes rendus */
+
+td.listeChoixCR ul {
+  list-style-type: none;
+  list-style-position: inside;
+}
+
+td.listeChoixCR ul li {
+  display:inline;
+  float: left;
+  margin: 2px 2px 2px 0px;
+}
+
+/* Installation wizard */
+
+div.wizard {
+  padding: 20px; 
+  margin: 40px; 
+  background: #eee; 
+  border: 2px solid #8c8; 
+  font-family: arial;
+}
+
+div.wizard div.toc {
+  position: fixed;
+  right: 15px;
+  top: 15px;
+  background: #fff;
+  border: 2px solid #000;
+  margin: 5px;
+  padding: 10px;
+  opacity: .7;
+}
+
+div.wizard div.toc ol {
+  margin: 0px;
+  padding-left: 20px
+}
+
+div.wizard div.toc a {
+  display: block;
+  color: #000;
+}
+
+div.wizard-navigation {
+  text-align: center;
+  margin: 20px;
+}
+
+div.wizard-navigation a {
+  text-decoration: none;
+  border: 1px black solid;
+  font-weight: bold;
+  font-size: 12px;
+  background: #ddd;
+  margin: 0 2px;
+  padding: 2px 5px;
+}
+
+div.wizard-navigation a:hover {
+  background: #bbb;
+}
+
+div.generated {
+  margin: 5px;
+  text-align: center;
+  font-size: 90%;
+}
+
+/* The main calendar widget.  DIV containing a table. */
+
+.calendar {
+  position: relative;
+  display: none;
+  border-top: 2px solid #fff;
+  border-right: 2px solid #000;
+  border-bottom: 2px solid #000;
+  border-left: 2px solid #fff;
+  font-size: 11px;
+  color: #000;
+  cursor: default;
+  background: #d4d0c8;
+  font-family: tahoma,verdana,sans-serif;
+}
+
+.calendar table {
+  border-top: 1px solid #000;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  border-left: 1px solid #000;
+  font-size: 11px;
+  color: #000;
+  cursor: default;
+  background: #d4d0c8;
+  font-family: tahoma,verdana,sans-serif;
+}
+
+/* Header part -- contains navigation buttons and day names. */
+
+.calendar .button { /* "<<", "<", ">", ">>" buttons have this class */
+  text-align: center;
+  padding: 1px;
+  border-top: 1px solid #fff;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+  border-left: 1px solid #fff;
+}
+
+.calendar .nav {
+  background: transparent url(menuarrow.gif) no-repeat 100% 100%;
+}
+
+.calendar thead .title { /* This holds the current "month, year" */
+  font-weight: bold;
+  padding: 1px;
+  border: 1px solid #000;
+  background: #848078;
+  color: #fff;
+  text-align: center;
+}
+
+.calendar thead .headrow { /* Row <TR> containing navigation buttons */
+}
+
+.calendar thead .daynames { /* Row <TR> containing the day names */
+}
+
+.calendar thead .name { /* Cells <TD> containing the day names */
+  border-bottom: 1px solid #000;
+  padding: 2px;
+  text-align: center;
+  background: #f4f0e8;
+}
+
+.calendar thead .weekend { /* How a weekend day name shows in header */
+  color: #f00;
+}
+
+.calendar thead .hilite { /* How do the buttons in header appear when hover */
+  border-top: 2px solid #fff;
+  border-right: 2px solid #000;
+  border-bottom: 2px solid #000;
+  border-left: 2px solid #fff;
+  padding: 0px;
+  background-color: #e4e0d8;
+}
+
+.calendar thead .active { /* Active (pressed) buttons in header */
+  padding: 2px 0px 0px 2px;
+  border-top: 1px solid #000;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  border-left: 1px solid #000;
+  background-color: #c4c0b8;
+}
+
+/* The body part -- contains all the days in month. */
+
+.calendar tbody .day { /* Cells <TD> containing month days dates */
+  width: 2em;
+  text-align: right;
+  padding: 2px 4px 2px 2px;
+}
+.calendar tbody .day.othermonth {
+  font-size: 80%;
+  color: #aaa;
+}
+.calendar tbody .day.othermonth.oweekend {
+  color: #faa;
+}
+
+.calendar table .wn {
+  padding: 2px 3px 2px 2px;
+  border-right: 1px solid #000;
+  background: #f4f0e8;
+}
+
+.calendar tbody .rowhilite td {
+  background: #e4e0d8;
+}
+
+.calendar tbody .rowhilite td.wn {
+  background: #d4d0c8;
+}
+
+.calendar tbody td.hilite { /* Hovered cells <TD> */
+  padding: 1px 3px 1px 1px;
+  border-top: 1px solid #fff;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+  border-left: 1px solid #fff;
+}
+
+.calendar tbody td.active { /* Active (pressed) cells <TD> */
+  padding: 2px 2px 0px 2px;
+  border-top: 1px solid #000;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  border-left: 1px solid #000;
+}
+
+.calendar tbody td.selected { /* Cell showing selected date */
+  font-weight: bold;
+  border-top: 1px solid #000;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  border-left: 1px solid #000;
+  padding: 2px 2px 0px 2px;
+  background: #e4e0d8;
+}
+
+.calendar tbody td.weekend { /* Cells showing weekend days */
+  color: #f00;
+}
+
+.calendar tbody td.today { /* Cell showing today date */
+  font-weight: bold;
+  color: #00f;
+}
+
+.calendar tbody .disabled { color: #999; }
+
+.calendar tbody .emptycell { /* Empty cells (the best is to hide them) */
+  visibility: hidden;
+}
+
+.calendar tbody .emptyrow { /* Empty row (some months need less than 6 rows) */
+  display: none;
+}
+
+/* The footer part -- status bar and "Close" button */
+
+.calendar tfoot .footrow { /* The <TR> in footer (only one right now) */
+}
+
+.calendar tfoot .ttip { /* Tooltip (status bar) cell <TD> */
+  background: #f4f0e8;
+  padding: 1px;
+  border: 1px solid #000;
+  background: #848078;
+  color: #fff;
+  text-align: center;
+}
+
+.calendar tfoot .hilite { /* Hover style for buttons in footer */
+  border-top: 1px solid #fff;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+  border-left: 1px solid #fff;
+  padding: 1px;
+  background: #e4e0d8;
+}
+
+.calendar tfoot .active { /* Active (pressed) style for buttons in footer */
+  padding: 2px 0px 0px 2px;
+  border-top: 1px solid #000;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  border-left: 1px solid #000;
+}
+
+/* Combo boxes (menus that display months/years for direct selection) */
+
+.calendar .combo {
+  position: absolute;
+  display: none;
+  width: 4em;
+  top: 0px;
+  left: 0px;
+  cursor: default;
+  border-top: 1px solid #fff;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+  border-left: 1px solid #fff;
+  background: #e4e0d8;
+  font-size: 90%;
+  padding: 1px;
+  z-index: 100;
+}
+
+.calendar .combo .label,
+.calendar .combo .label-IEfix {
+  text-align: center;
+  padding: 1px;
+}
+
+.calendar .combo .label-IEfix {
+  width: 4em;
+}
+
+.calendar .combo .active {
+  background: #c4c0b8;
+  padding: 0px;
+  border-top: 1px solid #000;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  border-left: 1px solid #000;
+}
+
+.calendar .combo .hilite {
+  background: #048;
+  color: #fea;
+}
+
+.calendar td.time {
+  border-top: 1px solid #000;
+  padding: 1px 0px;
+  text-align: center;
+  background-color: #f4f0e8;
+}
+
+.calendar td.time .hour,
+.calendar td.time .minute,
+.calendar td.time .ampm {
+  padding: 0px 3px 0px 4px;
+  border: 1px solid #889;
+  font-weight: bold;
+  background-color: #fff;
+}
+
+.calendar td.time .ampm {
+  text-align: center;
+}
+
+.calendar td.time .colon {
+  padding: 0px 2px 0px 3px;
+  font-weight: bold;
+}
+
+.calendar td.time span.hilite {
+  border-color: #000;
+  background-color: #766;
+  color: #fff;
+}
+
+.calendar td.time span.active {
+  border-color: #f00;
+  background-color: #000;
+  color: #0f0;
+}

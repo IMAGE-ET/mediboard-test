@@ -1,0 +1,23 @@
+##
+## DO NOT MODIFY THIS FILE BY HAND!
+##
+"Add Department"=>"Ajouter un service",
+"Department Company"=>"Service",
+"Department Name"=>"Nom de Service",
+"Department Parent"=>"Service Supérieur",
+"Department deleted"=>"Service supprimé",
+"Department inserted"=>"Service inséré",
+"Department updated"=>"Service mis à jour",
+"Edit Department"=>"Editer un service",
+"Select Unit"=>"Sélection une unité",
+"View Department"=>"Voir le service",
+"badCompany"=>"Cette société est invalide. Vous ne pouvez pas ajouter un service",
+"delDept"=>"Etes-vous sûr de vouloir supprimer ce service",
+"delete department"=>"supprimer le service",
+"departmentDelete"=>"Etes-vous sûr de vouloir supprimer ce service",
+"deptIndexPage"=>"Merci d\'accéder aux services par leur société",
+"deptValidName"=>"Merci d\'entrer un nom de service valide",
+"deptWithProject"=>"Vous ne pouvez pas effacer un service qui possède un ou plusieurs projets",
+"deptWithSub"=>"Vous ne pouvez pas effacer un service qui possède des sous-services",
+"edit this department"=>"éditer ce service",
+"view this department"=>"voir ce service",

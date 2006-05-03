@@ -1,0 +1,944 @@
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 01
+Affections du système nerveux
+Groupes chirurgicaux
+01C01S Interventions pour affections du système nerveux, sauf craniotomie, avec CMAS
+01C03V Craniotomies pour traumatisme, âge supérieur à 17 ans sans CMA
+01C03W Craniotomies pour traumatisme, âge supérieur à 17 ans avec CMA
+01C04V Craniotomies en dehors de tout traumatisme, âge supérieur à 17 ans sans CMA
+01C04W Craniotomies en dehors de tout traumatisme, âge supérieur à 17 ans avec CMA
+01C05V Interventions sur le rachis et la moelle pour des affections neurologiques sans CMA
+01C05W Interventions sur le rachis et la moelle pour des affections neurologiques avec CMA
+01C06V Interventions sur le système vasculaire précérébral sans CMA
+01C06W Interventions sur le système vasculaire précérébral avec CMA
+01C08V Interventions sur les nerfs crâniens ou périphériques et autres interventions sur le système nerveux, âge inférieur à 70 ans sans CMA
+01C08W Interventions sur les nerfs crâniens ou périphériques et autres interventions sur le système nerveux, âge supérieur à 69 ans et/ou CMA
+01C09Z Pose d'un stimulateur cérébral
+01C10Z Pose d'un stimulateur médullaire
+01C11Z Craniotomies pour tumeurs, âge inférieur à 18 ans
+01C12Z Craniotomies pour affections non tumorales, âge inférieur à 18 ans
+01C13Z Libérations du canal carpien et d'autres nerfs superficiels Groupes avec acte classant non opératoire
+01K02Z Embolisations intracrâniennes et médullaires
+01K03Z Autres actes thérapeutiques par voie vasculaire du système nerveux
+Groupes "médicaux"
+01M01S Affections du système nerveux, avec CMAS
+01M02Z Convulsions, épilepsies et céphalées, âge inférieur à 18 ans
+01M03V Convulsions, épilepsies et céphalées, âge de 18 à 69 ans sans CMA
+01M03W Convulsions, épilepsies et céphalées, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+01M04Z Méningites virales
+01M05V Infections du système nerveux à l'exception des méningites virales, âge inférieur à 70 ans sans CMA
+01M05W Infections du système nerveux à l'exception des méningites virales, âge supérieur à 69 ans et/ou CMA
+01M06V Tumeurs du système nerveux, sans CMA
+01M06W Tumeurs du système nerveux, avec CMA
+01M07Z Maladies dégénératives du système nerveux, âge supérieur à 80 ans
+01M08V Maladies dégénératives du système nerveux, âge inférieur à 81 ans sans CMA
+01M08W Maladies dégénératives du système nerveux, âge inférieur à 81 ans avec CMA
+01M09Z Affections et lésions du rachis et de la moelle
+01M10V Autres affections cérébrovasculaires sans CMA
+01M10W Autres affections cérébrovasculaires avec CMA
+01M11V Affections des nerfs crâniens et rachidiens, âge inférieur à 70 ans sans CMA
+01M11W Affections des nerfs crâniens et rachidiens, âge supérieur à 69 ans et/ou CMA
+01M12V Autres affections du système nerveux, âge inférieur à 70 ans sans CMA
+01M12W Autres affections du système nerveux, âge supérieur à 69 ans et/ou CMA
+01M13Z Troubles de la conscience et comas d'origine non traumatique
+01M14V Accidents vasculaires cérébraux non transitoires sans CMA
+01M14W Accidents vasculaires cérébraux non transitoires avec CMA
+GHM classés par CMD Annexe 2-3
+01M15Z Accidents ischémiques transitoires et occlusions des artères précérébrales, âge supérieur à 80 ans
+01M16Z Accidents ischémiques transitoires et occlusions des artères précérébrales, âge inférieur à 81 ans
+01M17V Sclérose en plaques et ataxie cérébelleuse, âge inférieur à 70 ans sans CMA
+01M17W Sclérose en plaques et ataxie cérébelleuse, âge supérieur à 69 ans et/ou CMA
+01M18V Lésions traumatiques intracrâniennes sévères, âge inférieur à 70 ans sans CMA
+01M18W Lésions traumatiques intracrâniennes sévères, âge supérieur à 69 ans et/ou CMA
+01M19V Autres lésions traumatiques intracrâniennes, sauf commotions, âge inférieur à 70 ans sans CMA
+01M19W Autres lésions traumatiques intracrâniennes, sauf commotions, âge supérieur à 69 ans et/ou CMA
+01M20V Commotions cérébrales, âge inférieur à 70 ans sans CMA
+01M20W Commotions cérébrales, âge supérieur à 69 ans et/ou CMA
+01M21Z Douleurs chroniques rebelles
+Manuel des GHM - Version n°10 - 2006 Annexe 2-4
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 02
+Affections de l'oeil
+Groupes chirurgicaux
+02C02V Interventions sur la rétine, âge inférieur à 70 ans sans CMA
+02C02W Interventions sur la rétine, âge supérieur à 69 ans et/ou CMA
+02C03Z Interventions sur l'orbite
+02C04Z Autres interventions intraoculaires
+02C05Z Interventions sur le cristallin avec ou sans vitrectomie
+02C06Z Interventions primaires sur l'iris
+02C07Z Autres interventions extraoculaires, âge inférieur à 18 ans
+02C08V Autres interventions extraoculaires, âge de 18 à 69 ans sans CMA
+02C08W Autres interventions extraoculaires, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+02C09Z Allogreffes de cornée
+Groupes "médicaux"
+02M02Z Hyphéma
+02M03Z Infections oculaires aiguës sévères
+02M04Z Affections oculaires d'origine neurologique
+02M05Z Autres affections oculaires, âge inférieur à 18 ans
+02M06V Autres affections oculaires, âge supérieur à 17 ans sans CMA
+02M06W Autres affections oculaires, âge supérieur à 17 ans avec CMA
+GHM classés par CMD Annexe 2-5
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 03
+Affections des oreilles, du nez, de la gorge, de la bouche et des dents
+Groupes chirurgicaux
+03C02V Interventions majeures sur la tête et le cou sans CMA
+03C02W Interventions majeures sur la tête et le cou avec CMA
+03C03Z Exérèses de glandes salivaires
+03C04Z Interventions sur les glandes salivaires autres que les exérèses
+03C05Z Réparations de fissures labiale et palatine
+03C06Z Interventions sur les sinus et l'apophyse mastoïde, âge inférieur à 18 ans
+03C07V Interventions sur les sinus et l'apophyse mastoïde, âge de 18 à 69 ans sans CMA
+03C07W Interventions sur les sinus et l'apophyse mastoïde, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+03C09Z Rhinoplasties
+03C10Z Amygdalectomies et/ou adénoïdectomies isolées, âge inférieur à 18 ans
+03C11Z Amygdalectomies et/ou adénoïdectomies isolées, âge supérieur à 17 ans
+03C12Z Interventions sur les amygdales et les végétations adénoïdes autres que les amygdalectomies et/ou les adénoïdectomies isolées, âge inférieur à 18 ans
+03C13Z Interventions sur les amygdales et les végétations adénoïdes autres que les amygdalectomies et/ou les adénoïdectomies isolées, âge supérieur à 17 ans
+03C14Z Drains transtympaniques, âge inférieur à 18 ans
+03C15Z Drains transtympaniques, âge supérieur à 17 ans
+03C16V Autres interventions chirurgicales portant sur les oreilles, le nez, la gorge ou le cou, âge inférieur à 70 ans sans CMA
+03C16W Autres interventions chirurgicales portant sur les oreilles, le nez, la gorge ou le cou, âge supérieur à 69 ans et/ou CMA
+03C17Z Interventions sur la bouche
+03C18Z Pose d'implants cochléaires
+03C19Z Ostéotomies de la face
+03C20Z Interventions de reconstruction de l'oreille moyenne
+03C21Z Interventions pour oreilles décollées
+Groupes avec acte classant non opératoire
+03K02Z Affections de la bouche et des dents avec certaines extractions, réparations et prothèses dentaires
+Groupes "médicaux"
+03M02Z Traumatismes et déformations du nez
+03M03Z Otites moyennes et infections des voies aériennes supérieures, âge inférieur à 18 ans
+03M04V Otites moyennes et infections des voies aériennes supérieures, âge de 18 à 69 ans sans CMA
+03M04W Otites moyennes et infections des voies aériennes supérieures, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+03M05Z Troubles de l'équilibre
+03M06Z Épistaxis
+03M07V Tumeurs malignes des oreilles, du nez, de la gorge ou de la bouche, âge inférieur à 70 ans sans CMA
+03M07W Tumeurs malignes des oreilles, du nez, de la gorge ou de la bouche, âge supérieur à 69 ans et/ou CMA
+03M08Z Autres diagnostics portant sur les oreilles, le nez, la gorge ou la bouche, âge inférieur à 18 ans
+03M09V Autres diagnostics portant sur les oreilles, le nez, la gorge ou la bouche, âge supérieur à 17 ans sans CMA
+03M09W Autres diagnostics portant sur les oreilles, le nez, la gorge ou la bouche, âge supérieur à 17 ans avec CMA
+Manuel des GHM - Version n°10 - 2006 Annexe 2-6
+03M10Z Affections de la bouche et des dents sans certaines extractions, réparations ou prothèses dentaires, âge inférieur à 18 ans
+03M11V Affections de la bouche et des dents sans certaines extractions, réparations ou prothèses dentaires, âge de 18 à 69 ans sans CMA
+03M11W Affections de la bouche et des dents sans certaines extractions, réparations ou prothèses dentaires, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+GHM classés par CMD Annexe 2-7
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 04
+Affections de l'appareil respiratoire
+Groupes chirurgicaux
+04C01S Interventions pour affections de l'appareil respiratoire, avec CMAS
+04C02V Interventions majeures sur le thorax sans CMA
+04C02W Interventions majeures sur le thorax avec CMA
+04C03V Autres interventions chirurgicales sur le système respiratoire sans CMA
+04C03W Autres interventions chirurgicales sur le système respiratoire avec CMA
+Groupes "médicaux"
+04M02V Bronchites et asthme, âge inférieur à 18 ans sans CMA
+04M02W Bronchites et asthme, âge inférieur à 18 ans avec CMA
+04M03V Bronchites et asthme, âge de 18 à 69 ans sans CMA
+04M03W Bronchites et asthme, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+04M04Z Pneumonies et pleurésies banales, âge inférieur à 18 ans
+04M05V Pneumonies et pleurésies banales, âge supérieur à 17 ans sans CMA
+04M05W Pneumonies et pleurésies banales, âge supérieur à 17 ans avec CMA
+04M06Z Infections et inflammations respiratoires, âge inférieur à 18 ans
+04M07V Infections et inflammations respiratoires, âge supérieur à 17 ans sans CMA
+04M07W Infections et inflammations respiratoires, âge supérieur à 17 ans avec CMA
+04M08V Bronchopneumopathies chroniques sans CMA
+04M08W Bronchopneumopathies chroniques avec CMA
+04M09V Tumeurs de l'appareil respiratoire sans CMA
+04M09W Tumeurs de l'appareil respiratoire avec CMA
+04M10V Embolies pulmonaires sans CMA
+04M10W Embolies pulmonaires avec CMA
+04M11V Signes et symptômes respiratoires sans CMA
+04M11W Signes et symptômes respiratoires avec CMA
+04M12V Pneumothorax sans CMA
+04M12W Pneumothorax avec CMA
+04M13Z OEdème pulmonaire et détresse respiratoire
+04M14V Maladies pulmonaires interstitielles sans CMA
+04M14W Maladies pulmonaires interstitielles avec CMA
+04M15V Autres diagnostics portant sur le système respiratoire sans CMA
+04M15W Autres diagnostics portant sur le système respiratoire avec CMA
+04M16V Traumatismes thoraciques majeurs sans CMA
+04M16W Traumatismes thoraciques majeurs avec CMA
+04M17V Épanchements pleuraux sans CMA
+04M17W Épanchements pleuraux avec CMA
+Manuel des GHM - Version n°10 - 2006 Annexe 2-8
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 05
+Affections de l'appareil circulatoire
+Groupes chirurgicaux
+05C02Z Chirurgie de remplacement valvulaire avec circulation extracorporelle et avec cathétérisme cardiaque ou coronarographie
+05C03V Chirurgie de remplacement valvulaire avec circulation extracorporelle, sans cathétérisme cardiaque, ni coronarographie, sans CMA
+05C03W Chirurgie de remplacement valvulaire avec circulation extracorporelle, sans cathétérisme cardiaque, ni coronarographie, avec CMA
+05C04V Pontages aortocoronariens avec cathétérisme cardiaque ou coronarographie sans CMA
+05C04W Pontages aortocoronariens avec cathétérisme cardiaque ou coronarographie avec CMA
+05C05V Pontages aortocoronariens sans cathétérisme cardiaque ni coronarographie sans CMA
+05C05W Pontages aortocoronariens sans cathétérisme cardiaque ni coronarographie avec CMA
+05C06V Autres interventions cardiothoraciques, âge supérieur à 1 an, ou vasculaires quel que soit l'âge, avec circulation extracorporelle, sans CMA
+05C06W Autres interventions cardiothoraciques âge supérieur à 1 an, ou vasculaires quel que soit l'âge, avec circulation extracorporelle, avec CMA
+05C07Z Autres interventions cardiothoraciques, âge inférieur à 2 ans, avec circulation extracorporelle
+05C08V Autres interventions cardiothoraciques âge supérieur à 1 an, ou vasculaires quel que soit l'âge, sans circulation extracorporelle, sans CMA
+05C08W Autres interventions cardiothoraciques âge supérieur à 1 an, ou vasculaires quel que soit l'âge, sans circulation extracorporelle, avec CMA
+05C09Z Autres interventions cardiothoraciques, âge inférieur à 2 ans, sans circulation extracorporelle
+05C10V Chirurgie majeure de revascularisation sans CMA
+05C10W Chirurgie majeure de revascularisation avec CMA
+05C11V Autres interventions de chirurgie vasculaire sans CMA
+05C11W Autres interventions de chirurgie vasculaire avec CMA
+05C12V Amputations du membre inférieur, sauf des orteils, pour troubles circulatoires, sans CMA
+05C12W Amputations du membre inférieur, sauf des orteils, pour troubles circulatoires, avec CMA
+05C13V Amputations pour troubles circulatoires portant sur le membre supérieur ou les orteils sans CMA
+05C13W Amputations pour troubles circulatoires portant sur le membre supérieur ou les orteils avec CMA
+05C14Z Pose d'un stimulateur cardiaque permanent avec insuffisance cardiaque
+05C15Z Pose d'un stimulateur cardiaque permanent sans insuffisance cardiaque
+05C17V Ligatures de veines et éveinages, âge inférieur à 70 ans sans CMA
+05C17W Ligatures de veines et éveinages, âge supérieur à 69 ans et/ou CMA
+05C18Z Autres interventions sur le système circulatoire
+05C19Z Pose d'un défibrillateur cardiaque
+05C20Z Remplacement ou ablation chirurgicale d'électrodes ou repositionnement de boîtier de stimulation cardiaque permanente
+Groupes avec acte classant non opératoire
+05K05V Endoprothèses vasculaires et infarctus du myocarde sans CMA
+05K05W Endoprothèses vasculaires et infarctus du myocarde avec décès et/ou complications et/ou morbidités associées
+05K06V Endoprothèses vasculaires sans infarctus du myocarde sans CMA
+05K06W Endoprothèses vasculaires sans infarctus du myocarde avec CMA
+05K07Z Actes thérapeutiques par voie vasculaire sauf endoprothèses avec pathologie cardiovasculaire sévère en dehors de l'infarctus aigu du myocarde
+05K08Z Actes thérapeutiques par voie vasculaire sauf endoprothèses sans pathologie cardiovasculaire sévère
+05K09Z Actes diagnostiques par voie vasculaire avec pathologie cardiovasculaire sévère en dehors d'un infarctus aigu du myocarde
+05K10Z Actes diagnostiques par voie vasculaire sans pathologie cardiovasculaire sévère
+05K11Z Traitements des troubles du rythme par voie vasculaire
+GHM classés par CMD Annexe 2-9
+Groupes "médicaux"
+05M02E Infarctus aigu du myocarde avec décès
+05M03Z Infarctus aigu du myocarde avec complications cardiovasculaires et sortie en vie de l'établissement
+05M04V Infarctus aigu du myocarde sans complication cardiovasculaire sans CMA
+05M04W Infarctus aigu du myocarde sans complication cardiovasculaire avec CMA
+05M05V Syncopes et lipothymies, âge inférieur à 70 ans sans CMA
+05M05W Syncopes et lipothymies, âge supérieur à 69 ans et/ou CMA
+05M06V Angine de poitrine sans CMA
+05M06W Angine de poitrine avec CMA
+05M07V Thrombophlébites veineuses profondes, âge inférieur à 70 ans sans CMA
+05M07W Thrombophlébites veineuses profondes, âge supérieur à 69 ans et/ou CMA
+05M08V Arythmies et troubles de la conduction cardiaque, âge inférieur à 70 ans sans CMA
+05M08W Arythmies et troubles de la conduction cardiaque, âge supérieur à 69 ans et/ou CMA
+05M09V Insuffisances cardiaques et états de choc circulatoire sans CMA
+05M09W Insuffisances cardiaques et états de choc circulatoire avec CMA
+05M10Z Cardiopathies congénitales et valvulopathies, âge inférieur à 18 ans
+05M11V Cardiopathies congénitales et valvulopathies, âge de 18 à 69 ans sans CMA
+05M11W Cardiopathies congénitales et valvulopathies, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+05M12V Troubles vasculaires périphériques, âge inférieur à 70 ans sans CMA
+05M12W Troubles vasculaires périphériques, âge supérieur à 69 ans et/ou CMA
+05M13Z Douleurs thoraciques
+05M14Z Arrêt cardiaque
+05M15Z Hypertension artérielle
+05M16V Athérosclérose coronarienne sans CMA
+05M16W Athérosclérose coronarienne avec CMA
+05M17V Autres affections de l'appareil circulatoire sans CMA
+05M17W Autres affections de l'appareil circulatoire avec CMA
+05M18Z Endocardites aiguës et subaiguës
+Manuel des GHM - Version n°10 - 2006 Annexe 2-10
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 06
+Affections du tube digestif
+Groupes chirurgicaux
+06C02Z Chirurgie majeure des malformations digestives
+06C03V Résections rectales sans CMA
+06C03W Résections rectales avec CMA
+06C04V Interventions majeures sur l'intestin grêle et le côlon sans CMA
+06C04W Interventions majeures sur l'intestin grêle et le côlon avec CMA
+06C05Z Interventions sur l'oesophage, l'estomac et le duodénum, âge inférieur à 18 ans
+06C07V Interventions mineures sur l'intestin grêle et le côlon sans CMA
+06C07W Interventions mineures sur l'intestin grêle et le côlon avec CMA
+06C08V Appendicectomies compliquées, âge inférieur à 70 ans sans CMA
+06C08W Appendicectomies compliquées, âge supérieur à 69 ans et/ou CMA
+06C09V Appendicectomies non compliquées, âge inférieur à 70 ans sans CMA
+06C09W Appendicectomies non compliquées, âge supérieur à 69 ans et/ou CMA
+06C10Z Interventions réparatrices pour hernies et éventrations, âge inférieur à 18 ans
+06C11V Interventions réparatrices pour hernies et éventrations à l'exception des hernies inguinales et crurales, âge supérieur à 17 ans sans CMA
+06C11W Interventions réparatrices pour hernies et éventrations à l'exception des hernies inguinales et crurales, âge supérieur à 17 ans avec CMA
+06C12V Interventions réparatrices pour hernies inguinales et crurales, âge supérieur à 17 ans sans CMA
+06C12W Interventions réparatrices pour hernies inguinales et crurales, âge supérieur à 17 ans avec CMA
+06C13V Libérations d'adhérences péritonéales, âge inférieur à 70 ans sans CMA
+06C13W Libérations d'adhérences péritonéales, âge supérieur à 69 ans et/ou CMA
+06C14V Interventions sur le rectum et l'anus autres que les résections rectales sans CMA
+06C14W Interventions sur le rectum et l'anus autres que les résections rectales avec CMA
+06C15V Autres interventions sur le tube digestif sans CMA
+06C15W Autres interventions sur le tube digestif avec CMA
+06C16V Interventions sur l'oesophage, l'estomac et le duodénum pour tumeurs malignes, âge supérieur à 17 ans sans CMA
+06C16W Interventions sur l'oesophage, l'estomac et le duodénum pour tumeurs malignes, âge supérieur à 17 ans avec CMA
+06C17V Interventions sur l'oesophage, l'estomac et le duodénum pour affections non malignes, âge supérieur à 17 ans sans CMA
+06C17W Interventions sur l'oesophage, l'estomac et le duodénum pour affections non malignes, âge supérieur à 17 ans avec CMA
+Groupes "médicaux"
+06M01S Affections du tube digestif avec CMAS
+06M02V Gastroentérites et maladies diverses du tube digestif, âge inférieur à 18 ans sans CMA
+06M02W Gastroentérites et maladies diverses du tube digestif, âge inférieur à 18 ans avec CMA
+06M03V Gastroentérites et maladies diverses du tube digestif, âge de 18 à 69 ans sans CMA
+06M03W Gastroentérites et maladies diverses du tube digestif, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+06M04V Hémorragies digestives, âge inférieur à 70 ans sans CMA
+06M04W Hémorragies digestives, âge supérieur à 69 ans et/ou CMA
+06M05V Tumeurs malignes du tube digestif, âge inférieur à 70 ans sans CMA
+06M05W Tumeurs malignes du tube digestif, âge supérieur à 69 ans et/ou CMA
+06M06V Occlusions intestinales non dues à une hernie sans CMA
+06M06W Occlusions intestinales non dues à une hernie avec CMA
+06M07V Maladies inflammatoires de l'intestin sans CMA
+06M07W Maladies inflammatoires de l'intestin avec CMA
+06M08Z Autres affections digestives, âge inférieur à 18 ans
+06M09V Autres affections digestives, âge de 18 à 69 ans sans CMA
+06M09W Autres affections digestives, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+GHM classés par CMD Annexe 2-11
+06M10Z Ulcères gastroduodénaux compliqués
+06M11V Ulcères gastroduodénaux non compliqués, âge inférieur à 70 ans sans CMA
+06M11W Ulcères gastroduodénaux non compliqués, âge supérieur à 69 ans et/ou CMA
+Manuel des GHM - Version n°10 - 2006 Annexe 2-12
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 07
+Affections du système hépatobiliaire et du pancréas
+Groupes chirurgicaux
+07C04V Cholécystectomies sans exploration de la voie biliaire principale sans CMA
+07C04W Cholécystectomies sans exploration de la voie biliaire principale avec CMA
+07C06Z Interventions diagnostiques sur le système hépatobiliaire et pancréatique pour des affections malignes
+07C07Z Interventions diagnostiques sur le système hépatobiliaire et pancréatique pour des affections non malignes
+07C08Z Autres interventions sur le système hépatobiliaire et pancréatique
+07C09V Interventions sur le foie, le pancréas et les veines porte ou cave pour tumeurs malignes sans CMA
+07C09W Interventions sur le foie, le pancréas et les veines porte ou cave pour tumeurs malignes avec CMA
+07C10V Interventions sur le foie, le pancréas et les veines porte ou cave pour affections non malignes sans CMA
+07C10W Interventions sur le foie, le pancréas et les veines porte ou cave pour affections non malignes avec CMA
+07C11V Dérivations biliaires sans CMA
+07C11W Dérivations biliaires avec CMA
+07C12V Autres interventions sur les voies biliaires sauf cholécystectomies isolées sans CMA
+07C12W Autres interventions sur les voies biliaires sauf cholécystectomies isolées avec CMA
+Groupes "médicaux"
+07M01S Affections du système hépatobiliaire et du pancréas avec CMAS
+07M02V Affections des voies biliaires, âge inférieur à 70 ans sans CMA
+07M02W Affections des voies biliaires, âge supérieur à 69 ans et/ou CMA
+07M03V Hépatites alcooliques et cirrhoses, âge inférieur à 70 ans sans CMA
+07M03W Hépatites alcooliques et cirrhoses, âge supérieur à 69 ans et/ou CMA
+07M04V Affections hépatiques à l'exception des tumeurs malignes, des cirrhoses, des hépatites alcooliques, sans CMA
+07M04W Affections hépatiques à l'exception des tumeurs malignes, des cirrhoses, des hépatites alcooliques, avec CMA
+07M05V Affections non malignes du pancréas sans CMA
+07M05W Affections non malignes du pancréas avec CMA
+07M06V Affections malignes du système hépatobiliaire ou du pancréas, âge inférieur à 70 ans sans CMA
+07M06W Affections malignes du système hépatobiliaire ou du pancréas, âge supérieur à 69 ans et/ou CMA
+GHM classés par CMD Annexe 2-13
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 08
+Affections et traumatismes de l'appareil musculosquelettique
+et du tissu conjonctif
+Groupes chirurgicaux
+08C01S Interventions pour affections de l'appareil musculosquelettique et du tissu conjonctif, avec CMAS non traumatiques
+08C02Z Interventions majeures multiples sur les genoux et/ou les hanches
+08C04Z Interventions sur la hanche et le fémur, autres que les interventions majeures, âge inférieur à 18 ans
+08C05V Interventions sur la hanche et le fémur, autres que les interventions majeures, âge supérieur à 17 ans sans CMA
+08C05W Interventions sur la hanche et le fémur, autres que les interventions majeures, âge supérieur à 17 ans avec CMA
+08C06Z Amputations pour affections de l'appareil musculosquelettique et du tissu conjonctif
+08C08Z Interventions sur l'humérus ou sur le membre inférieur à l'exception de la hanche, du fémur et du pied, âge inférieur à 18 ans
+08C09V Interventions sur l'humérus ou sur le membre inférieur à l'exception de la hanche, du fémur et du pied, âge supérieur à 17 ans sans CMA
+08C09W Interventions sur l'humérus ou sur le membre inférieur à l'exception de la hanche, du fémur et du pied, âge supérieur à 17 ans avec CMA
+08C10V Interventions sur le genou, âge inférieur à 70 ans sans CMA
+08C10W Interventions sur le genou, âge supérieur à 69 ans et/ou CMA
+08C11V Interventions sur le membre supérieur à l'exception de l'humérus et de la main, âge inférieur à 70 ans sans CMA
+08C11W Interventions sur le membre supérieur à l'exception de l'humérus et de la main, âge supérieur à 69 ans et/ou CMA
+08C12Z Biopsies ostéoarticulaires
+08C13Z Résections osseuses localisées et/ou ablations de matériel de fixation interne au niveau de la hanche et du fémur
+08C14Z Résections osseuses localisées et/ou ablations de matériel de fixation interne au niveau d'une localisation autre que la hanche et le fémur
+08C15V Interventions sur le pied sans CMA
+08C15W Interventions sur le pied avec CMA
+08C17Z Interventions sur la main et le poignet pour kyste synovial
+08C18V Interventions sur la main et le poignet pour une affection autre qu'un kyste synovial sans CMA
+08C18W Interventions sur la main et le poignet pour une affection autre qu'un kyste synovial avec CMA
+08C19Z Arthroscopies
+08C20Z Greffes de peau pour maladie de l'appareil musculosquelettique ou du tissu conjonctif
+08C21V Autres interventions portant sur l'appareil musculosquelettique et le tissu conjonctif sans CMA
+08C21W Autres interventions portant sur l'appareil musculosquelettique et le tissu conjonctif avec CMA
+08C22Z Interventions pour reprise de prothèses articulaires
+08C23V Prothèses de hanche sans CMA
+08C23W Prothèses de hanche avec CMA
+08C24Z Prothèses de genou
+08C25Z Prothèses d'épaule
+08C26Z Interventions majeures sur le rachis
+08C27V Autres interventions sur le rachis sans CMA
+08C27W Autres interventions sur le rachis avec CMA
+08C28Z Interventions maxillofaciales
+08C29Z Interventions sur le tissu mou pour tumeurs malignes
+08C30V Interventions sur les tissus mous pour affections non malignes sans CMA
+08C30W Interventions sur les tissus mous pour affections non malignes avec CMA
+Manuel des GHM - Version n°10 - 2006 Annexe 2-14
+Groupes "médicaux"
+08M01S Affections de l'appareil musculosquelettique et du tissu conjonctif, avec CMAS non traumatiques
+08M02Z Fractures, entorses, luxations et dislocations de l'avant-bras, de la main, du pied ou multiples ou mal précisées, âge inférieur à 18 ans
+08M03V Fractures, entorses, luxations et dislocations de l'avant-bras, de la main, du pied ou multiples ou mal précisées, âge de 18 à 69 ans sans CMA
+08M03W Fractures, entorses, luxations et dislocations de l'avant-bras, de la main, du pied ou multiples ou mal précisées, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+08M04V Fractures de la hanche et du bassin sans CMA
+08M04W Fractures de la hanche et du bassin avec CMA
+08M05Z Fractures de la diaphyse, de l'épiphyse ou d'une partie non précisée du fémur
+08M06Z Fractures, entorses, luxations et dislocations du bras, de la jambe à l'exception du pied, âge inférieur à 18 ans
+08M07V Fractures, entorses, luxations et dislocations du bras, de la jambe à l'exception du pied, âge de 18 à 69 ans sans CMA
+08M07W Fractures, entorses, luxations et dislocations du bras, de la jambe à l'exception du pied, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+08M08Z Entorses et luxations du bassin et de la hanche
+08M09Z Arthropathies non spécifiques
+08M10V Maladies osseuses et arthropathies spécifiques, âge inférieur à 70 ans sans CMA
+08M10W Maladies osseuses et arthropathies spécifiques, âge supérieur à 69 ans et/ou CMA
+08M11V Fractures pathologiques et affections malignes de l'appareil musculosquelettique et du tissu conjonctif sans CMA
+08M11W Fractures pathologiques et affections malignes de l'appareil musculosquelettique et du tissu conjonctif avec CMA
+08M12V Pathologies rachidiennes relevant d'un traitement médical, âge inférieur à 70 ans sans CMA
+08M12W Pathologies rachidiennes relevant d'un traitement médical, âge supérieur à 69 ans et/ou CMA
+08M13Z Signes et symptômes concernant l'appareil musculosquelettique et le tissu conjonctif
+08M14V Affections du tissu conjonctif, âge inférieur à 70 ans sans CMA
+08M14W Affections du tissu conjonctif, âge supérieur à 69 ans et/ou CMA
+08M15V Tendinites, myosites et bursites, âge inférieur à 70 ans sans CMA
+08M15W Tendinites, myosites et bursites, âge supérieur à 69 ans et/ou CMA
+08M16Z Ostéomyélites
+08M17Z Arthrites septiques
+08M18Z Suites de traitement après une affection de l'appareil musculosquelettique ou du tissu conjonctif
+08M19V Autres pathologies de l'appareil musculosquelettique et du tissu conjonctif sans CMA
+08M19W Autres pathologies de l'appareil musculosquelettique et du tissu conjonctif avec CMA
+GHM classés par CMD Annexe 2-15
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 09
+Affections de la peau, des tissus sous-cutanés et des seins
+Groupes chirurgicaux
+09C02V Greffes de peau et/ou parages de plaie pour ulcère cutané ou cellulite sans CMA
+09C02W Greffes de peau et/ou parages de plaie pour ulcère cutané ou cellulite avec CMA
+09C03V Greffes de peau et/ou parages de plaie à l'exception des ulcères cutanés et cellulites sans CMA
+09C03W Greffes de peau et/ou parages de plaie à l'exception des ulcères cutanés et cellulites avec CMA
+09C04V Mastectomies totales pour tumeur maligne sans CMA
+09C04W Mastectomies totales pour tumeur maligne avec CMA
+09C05V Mastectomies subtotales pour tumeur maligne sans CMA
+09C05W Mastectomies subtotales pour tumeur maligne avec CMA
+09C06Z Interventions sur le sein pour des affections non malignes autres que les actes de biopsie et d'excision locale
+09C07Z Biopsies et excisions locales pour des affections non malignes du sein
+09C08Z Interventions sur la région anale et périanale
+09C09Z Interventions plastiques en dehors de la chirurgie esthétique
+09C10V Autres interventions sur la peau, les tissus sous-cutanés ou les seins sans CMA
+09C10W Autres interventions sur la peau, les tissus sous-cutanés ou les seins avec CMA
+Groupes "médicaux"
+09M02Z Traumatismes de la peau et des tissus sous-cutanés, âge inférieur à 18 ans
+09M03V Traumatismes de la peau et des tissus sous-cutanés, âge de 18 à 69 ans sans CMA
+09M03W Traumatismes de la peau et des tissus sous-cutanés, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+09M04Z Lésions, infections et inflammations de la peau et des tissus sous-cutanés, âge inférieur à 18 ans
+09M05V Lésions, infections et inflammations de la peau et des tissus sous-cutanés, âge de 18 à 69 ans sans CMA
+09M05W Lésions, infections et inflammations de la peau et des tissus sous-cutanés, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+09M06Z Ulcères cutanés
+09M07V Autres affections dermatologiques, âge inférieur à 70 ans sans CMA
+09M07W Autres affections dermatologiques, âge supérieur à 69 ans et/ou CMA
+09M08V Affections dermatologiques sévères, âge inférieur à 70 ans sans CMA
+09M08W Affections dermatologiques sévères, âge supérieur à 69 ans et/ou CMA
+09M09Z Affections non malignes des seins
+09M10V Tumeurs malignes des seins sans CMA
+09M10W Tumeurs malignes des seins avec CMA
+Groupes indifférenciés
+09Z02Z Interventions à visée esthétique
+Manuel des GHM - Version n°10 - 2006 Annexe 2-16
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 10
+Affections endocriniennes, métaboliques et nutritionnelles
+Groupes chirurgicaux
+10C01S Interventions pour affections endocriniennes, métaboliques et nutritionnelles, avec CMAS
+10C02Z Interventions sur l'hypophyse
+10C03Z Interventions sur les surrénales
+10C05Z Interventions sur les parathyroïdes
+10C07Z Interventions sur le tractus thyréoglosse
+10C08Z Autres interventions pour troubles endocriniens, métaboliques ou nutritionnels
+10C09Z Gastroplasties pour obésité
+10C10Z Autres interventions pour obésité
+10C11V Interventions sur la thyroïde pour tumeurs malignes, âge inférieur à 70 ans sans CMA
+10C11W Interventions sur la thyroïde pour tumeurs malignes, âge supérieur à 69 ans et/ou CMA
+10C12V Interventions sur la thyroïde pour affections non malignes, âge inférieur à 70 ans sans CMA
+10C12W Interventions sur la thyroïde pour affections non malignes, âge supérieur à 69 ans et/ou CMA
+Groupes "médicaux"
+10M01S Affections endocriniennes, métaboliques et nutritionnelles, avec CMAS
+10M02V Diabète, âge de 36 à 69 ans sans CMA
+10M02W Diabète, âge de 36 à 69 ans avec CMA, ou âge supérieur à 69 ans
+10M03Z Diabète, âge inférieur à 36 ans
+10M04V Troubles métaboliques ou nutritionnels divers, âge inférieur à 18 ans sans CMA
+10M04W Troubles métaboliques ou nutritionnels divers, âge inférieur à 18 ans avec CMA
+10M05V Troubles métaboliques ou nutritionnels divers, âge de 18 à 69 ans sans CMA
+10M05W Troubles métaboliques ou nutritionnels divers, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+10M06Z Maladies métaboliques congénitales
+10M07V Autres troubles endocriniens, âge inférieur à 70 ans sans CMA
+10M07W Autres troubles endocriniens, âge supérieur à 69 ans et/ou CMA
+GHM classés par CMD Annexe 2-17
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 11
+Affections du rein et des voies urinaires
+Groupes chirurgicaux
+11C01S Interventions pour affections des reins et des voies urinaires, avec CMAS
+11C02V Interventions sur les reins et les uretères et chirurgie majeure de la vessie pour une affection tumorale, sans CMA
+11C02W Interventions sur les reins et les uretères et chirurgie majeure de la vessie pour une affection tumorale, avec CMA
+11C03V Interventions sur les reins et les uretères et chirurgie majeure de la vessie pour une affection non tumorale, sans CMA
+11C03W Interventions sur les reins et les uretères et chirurgie majeure de la vessie pour une affection non tumorale, avec CMA
+11C04Z Autres interventions sur la vessie à l'exception des interventions transurétrales
+11C05V Interventions transurétrales ou par voie transcutanée sans CMA
+11C05W Interventions transurétrales ou par voie transcutanée avec CMA
+11C06Z Interventions sur l'urètre, âge inférieur à 18 ans
+11C07Z Interventions sur l'urètre, âge supérieur à 17 ans
+11C08V Autres interventions sur les reins et les voies urinaires sans CMA
+11C08W Autres interventions sur les reins et les voies urinaires avec CMA
+Groupes avec acte classant non opératoire
+11K02V Insuffisance rénale, avec dialyse, âge inférieur à 70 ans sans CMA
+11K02W Insuffisance rénale, avec dialyse, âge supérieur à 69 ans et/ou CMA
+Groupes "médicaux"
+11M01S Affections des reins et des voies urinaires, avec CMAS
+11M02V Lithiases urinaires, âge inférieur à 70 ans sans CMA
+11M02W Lithiases urinaires, âge supérieur à 69 ans et/ou CMA
+11M03V Infections des reins et des voies urinaires, âge inférieur à 18 ans sans CMA
+11M03W Infections des reins et des voies urinaires, âge inférieur à 18 ans avec CMA
+11M04V Infections des reins et des voies urinaires, âge de 18 à 69 ans sans CMA
+11M04W Infections des reins et des voies urinaires, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+11M06V Insuffisance rénale, sans dialyse, âge inférieur à 70 ans sans CMA
+11M06W Insuffisance rénale, sans dialyse, âge supérieur à 69 ans et/ou CMA
+11M07V Tumeurs des reins et des voies urinaires sans CMA
+11M07W Tumeurs des reins et des voies urinaires avec CMA
+11M08Z Autres affections des reins et des voies urinaires, âge inférieur à 18 ans
+11M09V Autres affections des reins et des voies urinaires, âge supérieur à 17 ans sans CMA
+11M09W Autres affections des reins et des voies urinaires, âge supérieur à 17 ans avec CMA
+11M10V Rétrécissement urétral, âge inférieur à 70 ans sans CMA
+11M10W Rétrécissement urétral, âge supérieur à 69 ans et/ou CMA
+11M11Z Signes et symptômes concernant les reins et les voies urinaires, âge inférieur à 18 ans
+11M12V Signes et symptômes concernant les reins et les voies urinaires, âge de 18 à 69 ans sans CMA
+11M12W Signes et symptômes concernant les reins et les voies urinaires, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+Manuel des GHM - Version n°10 - 2006 Annexe 2-18
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 12
+Affections de l'appareil génital masculin
+Groupes chirurgicaux
+12C01S Interventions pour affections de l'appareil génital masculin, avec CMAS
+12C03Z Interventions sur le pénis
+12C04V Prostatectomies transurétrales sans CMA
+12C04W Prostatectomies transurétrales avec CMA
+12C05Z Interventions sur les testicules pour des tumeurs malignes
+12C06Z Interventions sur les testicules pour des affections non malignes, âge inférieur à 18 ans
+12C07Z Interventions sur les testicules pour des affections non malignes, âge supérieur à 17 ans
+12C08Z Circoncisions
+12C09Z Autres interventions pour tumeurs malignes de l'appareil génital masculin
+12C10Z Autres interventions pour des affections non malignes de l'appareil génital masculin
+12C11Z Interventions pelviennes majeures chez l'homme pour tumeurs malignes
+12C12Z Interventions pelviennes majeures chez l'homme pour affections non malignes
+Groupes "médicaux"
+12M02V Infections et inflammations de l'appareil génital masculin, âge inférieur à 70 ans sans CMA
+12M02W Infections et inflammations de l'appareil génital masculin, âge supérieur à 69 ans et/ou CMA
+12M03V Tumeurs malignes de l'appareil génital masculin sans CMA
+12M03W Tumeurs malignes de l'appareil génital masculin avec CMA
+12M04V Hypertrophie prostatique bénigne, âge inférieur à 70 ans sans CMA
+12M04W Hypertrophie prostatique bénigne, âge supérieur à 69 ans et/ou CMA
+12M05Z Autres affections de l'appareil génital masculin
+GHM classés par CMD Annexe 2-19
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 13
+Affections de l'appareil génital féminin
+Groupes chirurgicaux
+13C01S Interventions pour affections de l'appareil génital féminin, avec CMAS
+13C02V Exentérations pelviennes, hystérectomies élargies ou vulvectomies, sans CMA
+13C02W Exentérations pelviennes, hystérectomies élargies ou vulvectomies, avec CMA
+13C03V Hystérectomies, âge inférieur à 70 ans sans CMA
+13C03W Hystérectomies, âge supérieur à 69 ans et/ou CMA
+13C04V Interventions réparatrices sur l'appareil génital féminin, âge inférieur à 70 ans sans CMA
+13C04W Interventions réparatrices sur l'appareil génital féminin, âge supérieur à 69 ans et/ou CMA
+13C05Z Interventions sur le système utéroannexiel pour des tumeurs malignes
+13C06Z Interruptions tubaires pour des affections non malignes
+13C07V Interventions sur le système utéroannexiel pour des affections non malignes, autres que les interruptions tubaires, âge inférieur à 70 ans sans CMA
+13C07W Interventions sur le système utéroannexiel pour des affections non malignes, autres que les interruptions tubaires, âge supérieur à 69 ans et/ou CMA
+13C08V Interventions sur la vulve, le vagin ou le col utérin, âge inférieur à 70 ans sans CMA
+13C08W Interventions sur la vulve, le vagin ou le col utérin, âge supérieur à 69 ans et/ou CMA
+13C09Z Laparoscopies ou coelioscopies diagnostiques
+13C10Z Ligatures tubaires par laparoscopie ou coelioscopie
+13C11Z Dilatations et curetages, conisations pour tumeurs malignes
+13C12Z Dilatations et curetages, conisations pour des affections non malignes
+13C13Z Autres interventions sur l'appareil génital féminin
+Groupes "médicaux"
+13M02Z Infections de l'appareil génital féminin
+13M03V Tumeurs malignes de l'appareil génital féminin sans CMA
+13M03W Tumeurs malignes de l'appareil génital féminin avec CMA
+13M04V Autres affections de l'appareil génital féminin, âge inférieur à 70 ans sans CMA
+13M04W Autres affections de l'appareil génital féminin, âge supérieur à 69 ans et/ou CMA
+Manuel des GHM - Version n°10 - 2006 Annexe 2-20
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 14
+Grossesses pathologiques, accouchements
+et affections du post-partum
+Groupes chirurgicaux
+14C02A Césariennes sans complication significative
+14C02B Césariennes avec autres complications
+14C02C Césariennes avec complications majeures
+14C03Z Accouchements par voie basse avec autres interventions
+14C04Z Affections du post-partum ou du post abortum avec intervention chirurgicale
+14C05Z Avortements avec aspiration ou curetage ou hystérotomie
+Groupes "médicaux"
+14M02Z Affections médicales du post-partum ou du post abortum
+Groupes indifférenciés
+14Z02A Accouchements par voie basse sans complication significative
+14Z02B Accouchements par voie basse avec autres complications
+14Z02C Accouchements par voie basse avec complications majeures
+14Z03A Affections de l'ante partum, avec ou sans intervention chirurgicale, sans complications
+14Z03B Affections de l'ante partum, avec ou sans intervention chirurgicale, avec complications
+14Z04Z Avortements sans aspiration, ni curetage, ni hystérotomie
+14Z05Z Grossesses ectopiques
+14Z06Z Menaces d'avortement
+14Z07Z Faux travail
+GHM classés par CMD Annexe 2-21
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 15
+Nouveau-nés, prématurés et affections de la période périnatale
+Groupes indifférenciés
+15Z02Z Autres problèmes postnéonatals précoces
+15Z03Z Transferts précoces de nouveau-nés vers un autre établissement
+15Z04E Nouveau-nés de 1500 g et plus, décédés
+15Z05A Nouveau-nés de 2500 g et plus, sans problème significatif
+15Z05B Nouveau-nés de 2500 g et plus, avec autre problème significatif
+15Z05C Nouveau-nés de 2500 g et plus, avec problème sévère
+15Z05D Nouveau-nés de 2500 g et plus, avec problème majeur
+15Z06A Nouveau-nés de 2000 g à 2499 g, sans problème significatif
+15Z06B Nouveau-nés de 2000 g à 2499 g, avec autre problème significatif
+15Z06C Nouveau-nés de 2000 g à 2499 g, avec problème sévère
+15Z06D Nouveau-nés de 2000 g à 2499 g, avec problème majeur
+15Z07A Nouveau-nés de 1500 g à 1999 g, sans problème significatif
+15Z07B Nouveau-nés de 1500 g à 1999 g, avec autre problème significatif
+15Z07C Nouveau-nés de 1500 g à 1999 g, avec problème majeur ou sévère
+15Z08A Nouveau-nés de 1000 g à 1499 g, sortis en vie
+15Z08E Nouveau-nés de 1000 g à 1499 g, décédés
+15Z09A Nouveau-nés de moins de 1000 g, sortis en vie
+15Z09E Nouveau-nés de moins de 1000 g, décédés
+Manuel des GHM - Version n°10 - 2006 Annexe 2-22
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 16
+Affections du sang et des organes hématopoïétiques
+Groupes chirurgicaux
+16C01S Interventions pour affections du sang et des organes hématopoïétiques, avec CMAS
+16C02Z Interventions sur la rate
+16C03V Autres interventions pour affections du sang et des organes hématopoïétiques sans CMA
+16C03W Autres interventions pour affections du sang et des organes hématopoïétiques avec CMA
+Groupes "médicaux"
+16M01S Affections du sang et des organes hématopoïétiques, avec CMAS
+16M02V Affections du système réticuloendothélial ou immunitaire sans CMA
+16M02W Affections du système réticuloendothélial ou immunitaire avec CMA
+16M03V Troubles de la lignée érythrocytaire, âge inférieur à 18 ans sans CMA
+16M03W Troubles de la lignée érythrocytaire, âge inférieur à 18 ans avec CMA
+16M04V Troubles de la lignée érythrocytaire, âge de 18 à 69 ans sans CMA
+16M04W Troubles de la lignée érythrocytaire, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+16M05V Troubles de la coagulation, âge inférieur à 70 ans sans CMA
+16M05W Troubles de la coagulation, âge supérieur à 69 ans et/ou CMA
+GHM classés par CMD Annexe 2-23
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 17
+Affections myéloprolifératives et tumeurs de siège imprécis ou diffus
+Groupes chirurgicaux
+17C01S Interventions pour affections myéloprolifératives et tumeurs de siège imprécis ou diffus, avec CMAS
+17C02V Interventions majeures au cours de lymphomes ou de leucémies sans CMA
+17C02W Interventions majeures au cours de lymphomes ou de leucémies avec CMA
+17C03V Autres interventions au cours de lymphomes ou de leucémies sans CMA
+17C03W Autres interventions au cours de lymphomes ou de leucémies avec CMA
+17C04V Interventions majeures pour affections myéloprolifératives ou tumeurs de siège imprécis ou diffus, sans CMA
+17C04W Interventions majeures pour affections myéloprolifératives ou tumeurs de siège imprécis ou diffus, avec CMA
+17C05V Autres interventions au cours d'affections myéloprolifératives ou de tumeurs de siège imprécis ou diffus sans CMA
+17C05W Autres interventions au cours d'affections myéloprolifératives ou de tumeurs de siège imprécis ou diffus avec CMA
+Groupes avec acte classant non opératoire
+17K02Z Antécédents ou suspicion d'affections tumorales, avec exploration endoscopique
+17K04Z Autres irradiations
+17K05Z Curiethérapies de la prostate
+17K06Z Autres curiethérapies et irradiations internes
+Groupes "médicaux"
+17M01S Affections myéloprolifératives et tumeurs de siège imprécis ou diffus, avec CMAS
+17M04Z Antécédents ou suspicion d'affections tumorales, avec autres explorations
+17M05Z Chimiothérapie pour leucémie aigüe
+17M06V Chimiothérapie pour autre tumeur, sans CMA
+17M06W Chimiothérapie pour autre tumeur, avec CMA
+17M07V Autres affections myéloprolifératives et tumeurs de siège imprécis ou diffus, âge inférieur à 70 ans sans CMA
+17M07W Autres affections myéloprolifératives et tumeurs de siège imprécis ou diffus, âge supérieur à 69 ans et/ou CMA
+17M08Z Leucémies aigües, âge inférieur à 18 ans
+17M09V Leucémies aigües, âge supérieur à 17 ans sans CMA
+17M09W Leucémies aigües, âge supérieur à 17 ans avec CMA
+17M10V Lymphomes ou autres leucémies sans CMA
+17M10W Lymphomes ou autres leucémies avec CMA
+Manuel des GHM - Version n°10 - 2006 Annexe 2-24
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 18
+Maladies infectieuses et parasitaires
+Groupes chirurgicaux
+18C02V Interventions pour maladies infectieuses ou parasitaires sans CMA
+18C02W Interventions pour maladies infectieuses ou parasitaires avec CMA
+Groupes "médicaux"
+18M02V Maladies virales et fièvres d'étiologie indéterminée, âge inférieur à 18 ans sans CMA
+18M02W Maladies virales et fièvres d'étiologie indéterminée, âge inférieur à 18 ans avec CMA
+18M03Z Maladies virales, âge supérieur à 17 ans
+18M04V Fièvres d'étiologie indéterminée, âge supérieur à 17 ans sans CMA
+18M04W Fièvres d'étiologie indéterminée, âge supérieur à 17 ans avec CMA
+18M05V Infections postopératoires et posttraumatiques sans CMA
+18M05W Infections postopératoires et posttraumatiques avec CMA
+18M06Z Septicémies, âge inférieur à 18 ans
+18M07V Septicémies, âge supérieur à 17 ans sans CMA
+18M07W Septicémies, âge supérieur à 17 ans avec CMA
+18M08V Autres maladies infectieuses ou parasitaires, âge inférieur à 70 ans sans CMA
+18M08W Autres maladies infectieuses ou parasitaires, âge supérieur à 69 ans et/ou CMA
+Groupes indifférenciés
+18Z01S Maladies infectieuses et parasitaires, avec CMAS, avec ou sans acte
+GHM classés par CMD Annexe 2-25
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 19
+Maladies et troubles mentaux
+Groupes chirurgicaux
+19C02Z Interventions chirurgicales avec un diagnostic principal de maladie mentale
+Groupes "médicaux"
+19M02V Troubles aigus de l'adaptation et du fonctionnement psychosocial, âge inférieur à 70 ans sans CMA
+19M02W Troubles aigus de l'adaptation et du fonctionnement psychosocial, âge supérieur à 69 ans et/ou CMA
+19M03Z Troubles de la personnalité et du comportement avec réactions impulsives
+19M04Z Psychoses, âge supérieur à 80 ans
+19M05Z Psychoses, âge inférieur à 81 ans
+19M06V Troubles mentaux d'origine organique et retards mentaux, âge supérieur à 80 ans sans CMA
+19M06W Troubles mentaux d'origine organique et retards mentaux, âge supérieur à 80 ans avec CMA
+19M07V Troubles mentaux d'origine organique et retards mentaux, âge inférieur à 81 ans sans CMA
+19M07W Troubles mentaux d'origine organique et retards mentaux, âge inférieur à 81 ans avec CMA
+19M08Z Maladies et troubles mentaux de l'enfance
+19M09Z Autres troubles mentaux
+19M10Z Névroses autres que les névroses dépressives
+19M11V Névroses dépressives, âge inférieur à 70 ans sans CMA
+19M11W Névroses dépressives, âge supérieur à 69 ans et/ou CMA
+Manuel des GHM - Version n°10 - 2006 Annexe 2-26
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 20
+Troubles mentaux organiques liés à l'absorption de drogues
+ou induits par celles-ci
+Groupes indifférenciés
+20Z02Z Toxicomanies non éthyliques avec dépendance
+20Z03Z Abus de drogues non éthyliques sans dépendance
+20Z04Z Éthylisme avec dépendance
+20Z05Z Éthylisme aigu
+20Z06V Troubles mentaux organiques induits par l'alcool ou d'autres substances, âge inférieur à 70 ans sans CMA
+20Z06W Troubles mentaux organiques induits par l'alcool ou d'autres substances, âge supérieur à 69 ans et/ou CMA
+GHM classés par CMD Annexe 2-27
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 21
+Traumatismes, allergies et empoisonnements
+Groupes chirurgicaux
+21C01S Interventions pour traumatismes, allergies et empoisonnements, avec CMAS
+21C02Z Greffes de peau pour lésions autres que des brûlures
+21C03Z Parages de plaies pour lésions autres que des brûlures
+21C04Z Interventions sur la main ou le poignet à la suite de blessures
+21C05V Autres interventions pour blessures ou complications d'acte sans CMA
+21C05W Autres interventions pour blessures ou complications d'acte avec CMA
+Groupes "médicaux"
+21M01S Traumatismes, allergies et empoisonnements, avec CMAS
+21M02Z Effets toxiques des médicaments et autres produits, âge inférieur à 18 ans
+21M03V Effets toxiques des médicaments et autres produits, âge de 18 à 69 ans sans CMA
+21M03W Effets toxiques des médicaments et autres produits, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+21M04Z Réactions allergiques non classées ailleurs, âge inférieur à 18 ans
+21M05Z Réactions allergiques non classées ailleurs, âge supérieur à 17 ans
+21M06Z Traumatismes complexes, âge inférieur à 18 ans
+21M07V Traumatismes complexes, âge de 18 à 69 ans sans CMA
+21M07W Traumatismes complexes, âge de 18 à 69 ans avec CMA, ou âge supérieur à 69 ans
+21M08V Autres traumatismes et effets nocifs autres que les intoxications, âge inférieur à 70 ans sans CMA
+21M08W Autres traumatismes et effets nocifs autres que les intoxications, âge supérieur à 69 ans et/ou CMA
+21M09V Complications iatrogéniques non classées ailleurs sans CMA
+21M09W Complications iatrogéniques non classées ailleurs avec CMA
+Manuel des GHM - Version n°10 - 2006 Annexe 2-28
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 22
+Brûlures
+Groupes chirurgicaux
+22C02Z Brûlures non étendues avec greffe cutanée
+22C03Z Brûlures non étendues avec parages de plaie ou autres interventions chirurgicales
+Groupes "médicaux"
+22M02Z Brûlures non étendues sans intervention chirurgicale
+Groupes indifférenciés
+22Z02Z Brûlures étendues
+GHM classés par CMD Annexe 2-29
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 23
+Facteurs influant sur l'état de santé et autres motifs de recours
+aux services de santé
+Groupes chirurgicaux
+23C02Z Interventions chirurgicales avec autres motifs de recours aux services de santé
+Groupes "médicaux"
+23M02Z Rééducation
+23M03V Signes et symptômes sans CMA
+23M03W Signes et symptômes avec CMA
+23M04Z Suivi thérapeutique avec diagnostic associé d'antécédent d'affection maligne
+23M05Z Suivi thérapeutique sans diagnostic associé d'antécédent d'affection maligne
+23M06Z Autres facteurs influant sur l'état de santé
+Groupes indifférenciés
+23Z02Z Soins palliatifs, avec ou sans acte
+23Z03Z Interventions de confort
+Manuel des GHM - Version n°10 - 2006 Annexe 2-30
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 24
+Séjours de moins de 2 jours
+Groupes chirurgicaux
+24C02Z Affections de la CMD 01 : séjours de moins de 2 jours, avec autre acte opératoire de la CMD 01
+24C03Z Interventions sur le cristallin : séjours de moins de 2 jours
+24C04Z Affections de la CMD 02 : séjours de moins de 2 jours, avec autre acte opératoire de la CMD 02
+24C05Z Amygdalectomies et/ou adénoïdectomies : séjours de moins de 2 jours
+24C06Z Drains transtympaniques : séjours de moins de 2 jours
+24C07Z Affections de la CMD 03 : séjours de moins de 2 jours, avec autre acte opératoire de la CMD 03
+24C08Z Affections de la CMD 04 : séjours de moins de 2 jours, avec acte opératoire de la CMD 04
+24C09Z Ligatures de veines et éveinages : séjours de moins de 2 jours
+24C10Z Affections de la CMD 05 : séjours de moins de 2 jours, avec autre acte opératoire de la CMD 05
+24C11Z Interventions réparatrices pour hernies abdominales : séjours de moins de 2 jours
+24C12Z Interventions sur le rectum et l'anus : séjours de moins de 2 jours
+24C13Z Affections de la CMD 06 : séjours de moins de 2 jours, avec autre acte opératoire de la CMD 06
+24C14Z Affections de la CMD 07 : séjours de moins de 2 jours, avec acte opératoire de la CMD 07
+24C15Z Résections osseuses localisées et ablations de matériel de fixation : séjours de moins de 2 jours
+24C17Z Arthroscopies : séjours de moins de 2 jours
+24C18Z Affections de la CMD 08 : séjours de moins de 2 jours, avec autre acte opératoire de la CMD 08
+24C20Z Affections de la CMD 10 : séjours de moins de 2 jours, avec acte opératoire de la CMD 10
+24C21Z Interventions transurétrales, sauf prostatectomie : séjours de moins de 2 jours
+24C22Z Affections de la CMD 11 : séjours de moins de 2 jours, avec autre acte opératoire de la CMD 11
+24C23Z Interventions sur les testicules : séjours de moins de 2 jours
+24C24Z Circoncisions : séjours de moins de 2 jours
+24C25Z Affections de la CMD 12 : séjours de moins de 2 jours, avec autre acte opératoire de la CMD 12
+24C27Z Interventions sur la vulve, le vagin et le col utérin : séjours de moins de 2 jours
+24C28Z Dilatations et curetages en dehors de la grossesse, conisations : séjours de moins de 2 jours
+24C29Z Affections de la CMD 13 : séjours de moins de 2 jours, avec autre acte opératoire de la CMD 13
+24C30Z Dilatations et curetages au cours de la grossesse, en dehors des interruptions volontaires : séjours de moins de 2 jours
+24C31Z Affections de la CMD 14 : séjours de moins de 2 jours, avec autre acte opératoire de la CMD 14
+24C32Z Affections de la CMD 16 : séjours de moins de 2 jours, avec acte opératoire de la CMD 16
+24C33Z Affections de la CMD 17 : séjours de moins de 2 jours, avec acte opératoire
+24C34Z Affections de la CMD 18 : séjours de moins de 2 jours, avec acte opératoire
+24C35Z Affections de la CMD 19 : séjours de moins de 2 jours, avec acte opératoire
+24C37Z Affections de la CMD 22 : séjours de moins de 2 jours, avec acte opératoire de la CMD 22
+24C38Z Motifs de recours de la CMD 23 : séjours de moins de 2 jours, avec acte opératoire
+24C39Z Créations et réfections des fistules artérioveineuses, séjours de moins de 2 jours
+24C40Z Interventions pour traumatismes de l'oeil, séjours de moins de 2 jours
+24C41Z Actes non mineurs de la CMD 02, séjours de moins de 2 jours
+24C42Z Actes non mineurs de la CMD 03 : séjours de moins de 2 jours
+24C43Z Pose d'un défibrillateur cardiaque : séjours de moins de 2 jours
+24C44Z Pose d'un stimulateur cardiaque permanent : séjours de moins de 2 jours
+24C45Z Hémorroïdectomies : séjours de moins de 2 jours
+24C46Z Actes non mineurs sur la main : séjours de moins de 2 jours
+24C47Z Interventions sur le sein : séjours de moins de 2 jours
+24C48Z Interventions sur la peau et les tissus sous-cutanés : séjours de moins de 2 jours
+24C49Z Prélèvements d'ovocytes : séjours de moins de 2 jours
+24C50Z Interventions et explorations sur le système utéroannexiel : séjours de moins de 2 jours
+24C51Z Interventions sur la main ou le poignet à la suite de blessures : séjours de moins de 2 jours
+24C52Z Allogreffes de cornée : séjours de moins de 2 jours
+24C53Z Autres affections de la CMD 21 : séjours de moins de 2 jours, avec acte opératoire de la CMD 21
+24C54Z Libérations du canal carpien et d'autres nerfs superficiels : séjours de moins de 2 jours
+24C55Z Autres interventions sur la main : séjours de moins de 2 jours
+GHM classés par CMD Annexe 2-31
+Groupes avec acte classant non opératoire
+24K01Z Greffes de cellules souches hématopoïétiques : séjours de moins de 2 jours
+24K04Z Mise en place de certains accès vasculaires : séjours de moins de 2 jours
+24K05Z Polysomnographies et autres explorations de longue durée : séjours de moins de 2 jours
+24K08Z Affections de la CMD 08 : séjours de moins de 2 jours, sans acte opératoire de la CMD 08, avec anesthésie
+24K09Z Affections de la CMD 09 : séjours de moins de 2 jours, sans acte opératoire de la CMD 09, avec anesthésie
+24K10Z Lithotritie extracorporelle de l'appareil urinaire : séjours de moins de 2 jours
+24K11Z Affections de la CMD 13 : séjours de moins de 2 jours, sans acte opératoire de la CMD 13, avec anesthésie
+24K12Z Affections de la CMD 17 : séjours de moins de 2 jours, sans acte opératoire, avec anesthésie
+24K14Z Autres séjours de moins de 2 jours sans acte opératoire, avec anesthésie
+24K15Z Affections de la CMD 03 : séjours de moins de 2 jours, sans acte opératoire de la CMD 03, avec anesthésie
+24K16Z Endoprothèses coronariennes et vasculaires périphériques : séjours de moins de 2 jours
+24K17Z Actes thérapeutiques par voie vasculaire sauf endoprothèses et embolisations : séjours de moins de 2 jours
+24K18Z Affections de la CMD 05 : séjours de moins de 2 jours, sans acte opératoire de la CMD 05, avec anesthésie
+24K19Z Affections de la CMD 06 : séjours de moins de 2 jours, sans acte opératoire de la CMD 06, avec anesthésie
+24K20Z Évacuation d'ascite : séjours de moins de 2 jours
+24K21Z Affections de la CMD 21 : séjours de moins de 2 jours, sans acte opératoire de la CMD 21, avec anesthésie
+24K22Z Affections de la CMD 22 : séjours de moins de 2 jours, sans acte opératoire de la CMD 22, avec anesthésie
+24K23Z Surveillances de greffes de coeur avec acte diagnostique par voie vasculaire : séjours de moins de 2 jours
+24K24Z Endoscopies biliaires thérapeutiques et anesthésie : séjours de moins de 2 jours
+24K25Z Autres endoscopies biliaires : séjours de moins de 2 jours
+24K26Z Endoscopies digestives thérapeutiques et anesthésie : séjours de moins de 2 jours
+24K27Z Endoscopies digestives thérapeutiques sans anesthésie : séjours de moins de 2 jours
+24K28Z Endoscopies digestives diagnostiques et anesthésie : séjours de moins de 2 jours
+24K29Z Endoscopies digestives diagnostiques sans anesthésie : séjours de moins de 2 jours
+24K30Z Endoscopies urinaires thérapeutiques et anesthésie : séjours de moins de 2 jours
+24K31Z Endoscopies urinaires thérapeutiques sans anesthésie : séjours de moins de 2 jours
+24K32Z Endoscopies urinaires diagnostiques et anesthésie : séjours de moins de 2 jours
+24K33Z Endoscopies urinaires diagnostiques sans anesthésie : séjours de moins de 2 jours
+24K34Z Endoscopies oto-rhino-laryngologiques : séjours de moins de 2 jours
+24K35Z Endoscopies bronchiques : séjours de moins de 2 jours
+24K36Z Traitements des troubles du rythme par voie vasculaire : séjours de moins de 2 jours
+24K37Z Embolisations : séjours de moins de 2 jours
+24K38Z Affections de la bouche et des dents avec certaines extractions, réparations et prothèses dentaires sans anesthésie : séjours de moins de 2 jours
+24K39Z Actes diagnostiques par voie vasculaire de la CMD 05 : séjours de moins de 2 jours
+Groupes "médicaux"
+24M01Z Convulsions, épilepsies et céphalées : séjours de moins de 2 jours
+24M02Z Commotions cérébrales : séjours de moins de 2 jours
+24M03Z Affections de la CMD 01 : séjours de moins de 2 jours, sans acte opératoire de la CMD 01
+24M04Z Affections de la CMD 02 : séjours de moins de 2 jours, sans acte opératoire de la CMD 02
+24M05Z Otites moyennes et infections des voies aériennes supérieures : séjours de moins de 2 jours
+24M06Z Affections de la CMD 03 : séjours de moins de 2 jours, sans acte opératoire de la CMD 03
+24M07Z Bronchites et asthme : séjours de moins de 2 jours
+24M08Z Affections de la CMD 04 : séjours de moins de 2 jours, sans acte opératoire de la CMD 04
+24M09Z Arythmies et troubles de la conduction cardiaque : séjours de moins de 2 jours
+24M10Z Affections de la CMD 05 : séjours de moins de 2 jours, sans acte opératoire de la CMD 05
+24M11Z Gastroentérites et maladies diverses du tube digestif : séjours de moins de 2 jours
+24M12Z Affections de la CMD 06 : séjours de moins de 2 jours, sans acte opératoire de la CMD 06
+24M13Z Affections de la CMD 07 : séjours de moins de 2 jours, sans acte opératoire de la CMD 07
+24M14Z Pathologies rachidiennes relevant d'un traitement médical : séjours de moins de 2 jours
+24M15Z Fractures, entorses et luxations : séjours de moins de 2 jours, sans anesthésie
+Manuel des GHM - Version n°10 - 2006 Annexe 2-32
+24M16Z Affections de la CMD 08 : séjours de moins de 2 jours, sans acte opératoire de la CMD 08
+24M17Z Traumatismes de la peau et des tissus sous-cutanés : séjours de moins de 2 jours
+24M18Z Affections de la CMD 09 : séjours de moins de 2 jours, sans acte opératoire de la CMD 09
+24M19Z Affections de la CMD 10 : séjours de moins de 2 jours, sans acte opératoire de la CMD 10
+24M20Z Lithiases urinaires : séjours de moins de 2 jours
+24M21Z Affections de la CMD 11 : séjours de moins de 2 jours, sans acte opératoire de la CMD 11
+24M22Z Affections de la CMD 12 : séjours de moins de 2 jours, sans acte opératoire de la CMD 12
+24M23Z Affections de la CMD 13 : séjours de moins de 2 jours, sans acte opératoire de la CMD 13
+24M24Z Affections de l'ante partum : séjours de moins de 2 jours
+24M25Z Affections de la CMD 14 : séjours de moins de 2 jours, sans acte opératoire de la CMD 14
+24M26Z Affections de la CMD 16 : séjours de moins de 2 jours, sans acte opératoire de la CMD 16
+24M27Z Affections de la CMD 17 : séjours de moins de 2 jours, sans acte opératoire
+24M28Z Affections de la CMD 18 : séjours de moins de 2 jours, sans acte opératoire
+24M29Z Troubles aigus de l'adaptation et du fonctionnement psychosocial : séjours de moins de 2 jours
+24M30Z Affections de la CMD 19 : séjours de moins de 2 jours, sans acte opératoire
+24M31Z Effets toxiques des médicaments et autres produits : séjours de moins de 2 jours
+24M32Z Affections de la CMD 21 : séjours de moins de 2 jours, sans acte opératoire de la CMD 21
+24M33Z Affections de la CMD 22 : séjours de moins de 2 jours, sans acte opératoire de la CMD 22
+24M34Z Autres motifs de recours pour infection à VIH : séjours de moins de 2 jours
+24M35Z Autres motifs de recours chez un patient diabétique : séjours de moins de 2 jours
+24M36Z Autres motifs de recours de la CMD 23 : séjours de moins de 2 jours, sans acte opératoire
+24M37Z Douleurs chroniques rebelles : séjours de moins de 2 jours
+24M38Z Affections des seins : séjours de moins de 2 jours
+24M39Z Surveillances de greffes de rein : séjours de moins de 2 jours
+24M40Z Surveillances de greffes de coeur sans acte diagnostique par voie vasculaire : séjours de moins de 2 jours
+Groupes indifférenciés
+24Z09E Infarctus du myocarde avec décès : séjours de moins de 2 jours
+24Z10E Nouveau-nés décédés : séjours de moins de 2 jours
+24Z11E Autres décès : séjours de moins de 2 jours
+24Z15Z Interruption volontaire de grossesse : séjours de moins de 2 jours
+24Z17Z Éthylisme aigu : séjours de moins de 2 jours
+24Z18Z Affections de la CMD 20 : séjours de moins de 2 jours
+24Z19Z Interventions à visée esthétique et de confort, séjours de moins de 2 jours
+24Z20Z Accouchements : séjours de moins de 2 jours
+24Z21Z Nouveau-nés et nourissons de 5 jours à 120 jours : séjours de moins de 2 jours
+24Z22Z Autres transferts vers MCO : séjours de moins de 2 jours
+24Z23Z Nouveau-nés de moins de 5 jours : séjours de moins de 2 jours
+24Z24Z Transferts de nouveau-nés vers un autre établissement MCO : séjours de moins de 2 jours
+24Z25Z Brûlures avec transfert vers un autre établissement MCO : séjours de moins de 2 jours
+GHM classés par CMD Annexe 2-33
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 25
+Maladies dues à une infection par le VIH
+Groupes chirurgicaux
+25C02Z Interventions pour maladie due au VIH
+Groupes "médicaux"
+25M02A Autres maladies dues au VIH
+25M02B Maladies dues au VIH, avec une seule complication infectieuse
+25M02C Maladies dues au VIH, avec plusieurs complications infectieuses
+Groupes indifférenciés
+25Z02E Maladies dues au VIH, avec décès
+25Z03Z Maladies dues au VIH, âge inférieur à 13 ans
+Manuel des GHM - Version n°10 - 2006 Annexe 2-34
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 26
+Traumatismes multiples graves
+Groupes chirurgicaux
+26C01S Interventions pour traumatismes multiples graves, avec CMAS non traumatiques
+26C02Z Interventions pour traumatismes multiples graves, sans CMAS
+Groupes "médicaux"
+26M01S Traumatismes multiples graves, avec CMAS non traumatiques
+26M02Z Traumatismes multiples graves, sans CMAS
+GHM classés par CMD Annexe 2-35
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 27
+Transplantations d'organes
+Groupes chirurgicaux
+27C02Z Transplantations hépatiques
+27C03Z Transplantations pancréatiques
+27C04Z Transplantations pulmonaires
+27C05Z Transplantations cardiaques
+27C06Z Transplantations rénales
+Groupes indifférenciés
+27Z02Z Allogreffes de cellules souches hématopoïétiques
+27Z03Z Autogreffes de cellules souches hématopoïétiques
+Manuel des GHM - Version n°10 - 2006 Annexe 2-36
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 28
+Séances
+Groupes indifférenciés
+28Z01Z Entraînements à la dialyse péritonéale automatisée, en séances
+28Z02Z Entraînements à la dialyse péritonéale continue ambulatoire, en séances
+28Z03Z Entraînements à l'hémodialyse, en séances
+28Z04Z Hémodialyse, en séances
+28Z05Z Dialyse péritonéale automatisée, en séances
+28Z06Z Dialyse péritonéale continue ambulatoire, en séances
+28Z07Z Chimiothérapie pour tumeur, en séances
+28Z08Z Préparations à une irradiation externe avec une dosimétrie tridimensionnelle
+28Z09Z Autres préparations à une irradiation externe
+28Z10Z Curiethérapie, en séances
+28Z11Z Techniques spéciales d'irradiation externe, en séances
+28Z12Z Techniques complexes d'irradiation externe, en séances
+28Z13Z Autres techniques d'irradiation externe, en séances
+28Z14Z Transfusion, en séances
+28Z15Z Caisson d'oxygénothérapie hyperbare, en séances
+GHM classés par CMD Annexe 2-37
+CATÉGORIE MAJEURE DE DIAGNOSTIC : 90
+Erreurs et autres séjours inclassables
+Groupes chirurgicaux
+90H02Z Actes sans relation avec le diagnostic principal : séjours de 2 jours et plus
+90H03Z Actes sans relation avec le diagnostic principal : séjours de moins de 2 jours
+Groupes indifférenciés
+90H01Z Erreurs détectées dans les RSA par le logiciel de mesure de l'activité hospitalière
+90Z00Z Erreurs détectées par les contrôles effectués sur les RUM et leur séquencement
+90Z01Z Diagnostic invalide comme diagnostic principal, dans certaines circonstances
+90Z02Z Autres erreurs détectées dans le parcours de l'arbre de groupage
+90Z03Z Erreurs d'implémentation de la fonction groupage ou erreur d'exécution d'un programme.

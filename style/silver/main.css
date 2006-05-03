@@ -1,0 +1,88 @@
+/* Global CSS for Mediboard_lite (include of Mediboard before)*/
+
+/* Menu principal */
+
+#menubar table {
+  border: 0px;
+  border-spacing: 0px;
+  background: url(./images/acier.png) repeat-x scroll bottom left;
+  color: #fff;
+  text-align: left;
+  width: 100%;
+}
+
+
+#menubar table td.textSelected,
+#menubar table td.textNonSelected {
+  border-style: inset;
+  border-width: 0 1px;
+  border-color: #888;
+  padding: 0 2px 3px;
+}
+
+#menubar table td.iconSelected,
+#menubar table td.textSelected {
+  background: url(./images/blue.png) repeat;
+}
+
+#menubar table td:hover {
+  background: url(./images/vert.png) repeat;
+}
+
+#menubar table td.noHover:hover {
+  background: transparent;
+}
+
+#menubar button.triggerHide,
+#menubar button.triggerHide:hover {
+  border: 0;
+  width: 10px;
+  height: 10px;
+  background: url(./images/up.png) no-repeat scroll bottom center;
+  cursor: pointer;
+}
+
+#menubar button.triggerShow,
+#menubar button.triggerShow:hover {
+  border: 0;
+  width: 10px;
+  height: 10px;
+  background: url(./images/down.png) no-repeat scroll bottom center;
+  cursor: pointer;
+}
+
+/* Onglets de module */
+
+table.tabmenu td.normal {
+  background: url(./images/tabBg.png) repeat-x bottom;
+}
+
+table.tabmenu td.normalLeft {
+  width: 10px;
+  background: url(./images/tabLeft.png) no-repeat bottom right;
+}
+
+table.tabmenu td.normalRight {
+  width: 10px;
+  background: url(./images/tabRight.png) no-repeat bottom left;
+}
+
+table.tabmenu td.selected {
+  background: url(./images/tabSelectedBg.png) repeat-x;
+}
+
+table.tabmenu td.selectedLeft {
+  width: 10px;
+  background: url(./images/tabSelectedLeft2.png) no-repeat bottom right;
+}
+
+table.tabmenu td.selectedRight {
+  width: 10px;
+  background: url(./images/tabSelectedRight2.png) no-repeat bottom left;
+}
+
+/* panneau d'affichage */
+
+table.tabview td.tabox {
+  background: url(./images/acierOnglet.png) repeat;
+}

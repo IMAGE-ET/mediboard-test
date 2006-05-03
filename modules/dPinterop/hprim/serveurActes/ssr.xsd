@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- auteur : Eric DUFOUR -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!--
+      inclusions des schémas de niveaux 2 et 3 utiles
+   -->
+   <xsd:include schemaLocation="professionnelsSante.xsd"/>
+   <xsd:include schemaLocation="pmsi.xsd"/>
+   <!--  -->
+   <xsd:complexType name="typeSsr">
+      <xsd:sequence>
+         <xsd:element name="identifiantSSR" type="typeIdentifiantPMSI">
+            <xsd:annotation>
+               <xsd:documentation> valeur alphanumérique indiquant d'une façon unique le soin de suite et de réadaptation évoqué dans l'événement </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="rhs" type="typeRhs" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation> relate les informations necessaires pour un résumé hebdomadaire de soins </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--  -->
+   <xsd:complexType name="typeRhs">
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="xsd:dateTime"/>
+         <xsd:element name="acteurAction" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="identifiant" type="typeIdentifiantPMSI"/>
+         <xsd:element name="dateHeureOptionnelleLundi" type="typeDateHeureOptionnelle"/>
+         <xsd:element name="medecinResponsable" type="typeMedecin" minOccurs="0"/>
+         <xsd:element name="uniteMedicale" type="typeUniteMedicale"/>
+         <xsd:element name="joursPresence" type="typeJoursPresence"/>
+         <xsd:element name="diagnostics" type="typeDiagnosticsRhs"/>
+         <xsd:element name="actes" type="typeActesRhs" minOccurs="0"/>
+         <xsd:element name="actesReeducation" type="typeActesReeducation" minOccurs="0"/>
+         <xsd:element name="dependances" type="typeDependances"/>
+         <xsd:element name="dateDerniereIntervention" type="xsd:date" minOccurs="0"/>
+         <xsd:element name="groupage" type="typeGroupageSsr" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="action" type="actionMiseAJour" use="required"/>
+      <xsd:attribute name="version" type="attrVersionRhs" use="required"/>
+   </xsd:complexType>
+   <!--
+   type groupage
+     -->
+   <xsd:complexType name="typeGroupageSsr">
+      <xsd:sequence>
+         <xsd:element name="cmc" type="xsd:integer"/>
+         <xsd:element name="ghs" type="xsd:integer"/>
+         <xsd:element name="codeErreur" type="xsd:integer"/>
+      </xsd:sequence>
+      <xsd:attribute name="version" type="attrVersionGroupeurRhs"/>
+   </xsd:complexType>
+
+
+<!-- ==========================
+   Attributs
+============================= -->
+
+<!--
+   version groupeur
+               Code     Traduction
+            .........      ..............................................
+            12             1.2
+            20             2.0
+-->
+   <xsd:simpleType name="attrVersionGroupeurRhs">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="12"/>
+         <xsd:enumeration value="20"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+<!--
+   version rhs
+               Code     Traduction
+            .........      ..............................................
+            M01
+            M02
+-->
+
+   <xsd:simpleType name="attrVersionRhs">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="M01"/>
+         <xsd:enumeration value="M02"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+</xsd:schema>

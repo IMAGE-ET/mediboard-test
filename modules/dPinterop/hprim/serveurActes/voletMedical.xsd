@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:insee="http://www.hprim.org/inseeXML" xmlns="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- 
+		inclusions des schémas des niveaux inférieurs utiles 
+	-->
+	<xsd:include schemaLocation="pieceJointe.xsd"/>
+	<xsd:include schemaLocation="nomenclaturesHprim.xsd"/>
+	<xsd:include schemaLocation="typesDeBase.xsd"/>
+	<xsd:include schemaLocation="carteGroupeSanguin.xsd"/>
+	<xsd:include schemaLocation="traitements.xsd"/>
+	<xsd:include schemaLocation="facteursEnvironnement.xsd"/>
+	<!-- -->
+	<xsd:annotation>
+		<xsd:documentation>contient le type d'élément "typeVoletMedical" contenant les renseignements cliniques et médicaux sur le patient</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="typeVoletMedical">
+		<xsd:sequence>
+			<xsd:element name="constantes" type="typeConstantesMedicales" minOccurs="0"/>
+			<xsd:element name="carteGroupeSanguin" type="typeCarteGroupeSanguin" minOccurs="0"/>
+			<xsd:element name="facteursEnvironnement" type="typeFacteursEnvironnement" minOccurs="0"/>
+			<xsd:element name="antecedents" type="typeAntecedents" minOccurs="0"/>
+			<xsd:element name="allergies" type="typeAllergies" minOccurs="0"/>
+			<xsd:element name="traitements" type="typeTraitements" minOccurs="0"/>
+			<xsd:element name="antecedentsFamiliaux" type="typeAntecedentsFamiliaux" minOccurs="0"/>
+			<xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+			<xsd:element name="piecesJointes" type="typePiecesJointes" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="grossesse" type="ouiNon" use="optional"/>
+		<xsd:attribute name="nouveauNe" type="ouiNon" use="optional"/>
+	</xsd:complexType>
+	<!--
+		"typeConstantesMedicales" :
+	-->
+	<xsd:complexType name="typeConstantesMedicales">
+		<xsd:sequence>
+			<xsd:element name="constante" type="typeConstanteMedicale" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--
+		"typeConstanteMedicale" :
+	-->
+	<xsd:complexType name="typeConstanteMedicale">
+		<xsd:sequence>
+			<xsd:element name="valeur" type="typeValeurUnite"/>
+			<xsd:element name="dateObservation" type="typeDateHeureOptionnelle" minOccurs="0"/>
+			<xsd:element name="autreIdentification" type="typeCode12Libelle80" minOccurs="0"/>
+			<xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="nature" type="natureConstanteMedicaleHprim" use="optional"/>
+	</xsd:complexType>
+	<!--
+		"typeValeurUnite"
+		La valeur de la constante est exprimée sous forme d'une chaîne de caractères sans contrainte.
+		L'attribut unite précise l'interprétation du contenu de cette chaîne.
+		La vérification de la cohérence entre l'unité et la valeur est laissée à l'appréciation du destinataire du message
+		Ce choix est fait pour éviter un type trop complexe et moins générique, donc moins ouvert :
+		Pour ajouter une nouvelle constante il suffit d'étendre les listes "natureConstanteMedicaleHprim" et "uniteHprim"
+	-->
+	<xsd:complexType name="typeValeurUnite">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="unite" type="uniteHprim" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<!--
+		"typeAntecedentsFamiliaux" :
+	-->
+	<xsd:complexType name="typeAntecedentsFamiliaux">
+		<xsd:sequence>
+			<xsd:element name="antecedentFamilial" type="typeAntecedentFamilial" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--
+		"typeAntecedentFamilial" :
+		antécédent familial : pathologie ou habitude ou comportement d'un parent du patient
+	-->
+	<xsd:complexType name="typeAntecedentFamilial">
+		<xsd:sequence>
+			<xsd:element name="parent" type="lienSangHprim"/>
+			<xsd:choice>
+				<xsd:element name="habitude" type="texte80"/>
+				<xsd:element name="antecedent" type="typeAntecedent"/>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- 
+		"typeAntecedents" :
+		un ou plusieurs antécédents
+	-->
+	<xsd:complexType name="typeAntecedents">
+		<xsd:sequence>
+			<xsd:element name="antecedent" type="typeAntecedent" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--
+		"typeAntecedent" :
+		pathologie du patient ou d'un parent
+	-->
+	<xsd:complexType name="typeAntecedent">
+		<xsd:sequence>
+			<xsd:element name="identification" type="typeCode17Libelle80Commentaire">
+				<xsd:annotation>
+					<xsd:documentation>L'identifiant peut être exprimé dans la CIM10, dans ce cas l'élément fils "dictionnaire" vaut "CIM10", et l'élément "code" contient le code de la CIM10.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="dateDebutEstimee" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="dateFinEstimee" type="xsd:date" nillable="true" minOccurs="0"/>
+			<xsd:element name="piecesJointes" type="typePiecesJointes" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- 
+		"typeAllergies" :
+		une ou plusieurs allergies
+	-->
+	<xsd:complexType name="typeAllergies">
+		<xsd:sequence>
+			<xsd:element name="allergie" type="typeAllergie" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="typeAllergie">
+		<xsd:sequence>
+			<xsd:element name="categorie" type="typeCode17Libelle80Commentaire" minOccurs="0"/>
+			<xsd:element name="allergene" type="typeCode17Libelle80Commentaire"/>
+			<xsd:element name="reaction" type="typeCode17Libelle80Commentaire" minOccurs="0"/>
+			<xsd:element name="dateDebutEstimee" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="dateFinEstimee" type="xsd:date" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="gravite" type="graviteHprim" use="optional"/>
+	</xsd:complexType>
+</xsd:schema>

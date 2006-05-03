@@ -1,0 +1,2138 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" xmlns:insee="http://www.hprim.org/inseeXML" targetNamespace="http://www.hprim.org/hprimXML" elementFormDefault="qualified" attributeFormDefault="unqualified"><xsd:annotation>
+		<xsd:documentation>contient les types d'éléments et d'attributs utilisés par les adresses postales, téléphoniques, de messagerie
+		</xsd:documentation>
+	</xsd:annotation><xsd:complexType name="typeAdresses">
+		<xsd:sequence>
+			<xsd:element name="adresse" type="typeAdresse" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeAdresse">
+		<xsd:complexContent>
+			<xsd:extension base="typeAdresseBase">
+				<xsd:sequence>
+					<xsd:element name="debutValide" type="xsd:date" minOccurs="0"/>
+					<xsd:element name="finValide" type="xsd:date" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:attribute name="categorie" type="categorieAdresse" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typeAdresseBase">
+		<xsd:sequence>
+			<xsd:element name="ligne" type="texte35" minOccurs="0" maxOccurs="3"/>
+			<xsd:element name="ville" type="texte35" minOccurs="0"/>
+			<xsd:element name="pays" type="pays" minOccurs="0"/>
+			<xsd:element name="codePostal" type="codePostal" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:simpleType name="codePostal">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="(([0-9][0-9])|(2A)|(2B))[0-9]{3}"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:simpleType name="departementFrancais">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="([0-9][0-9])|(2A)|(2B)"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:simpleType name="categorieAdresse">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="principale"/>
+			<xsd:enumeration value="professionnelle"/>
+			<xsd:enumeration value="domicile"/>
+			<xsd:enumeration value="vacances"/>
+			<xsd:enumeration value="facturation"/>
+			<xsd:enumeration value="médical"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:complexType name="typeNumerosTelephones">
+		<xsd:sequence>
+			<xsd:element name="telephone" type="typeNumeroTelephone" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeNumeroTelephone">
+		<xsd:simpleContent>
+			<xsd:extension base="numero20">
+				<xsd:attribute name="categorie" type="categorieTelephoneOuMail" use="optional"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType><xsd:complexType name="typeEmails">
+		<xsd:sequence>
+			<xsd:element name="email" type="typeEmail" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeEmail">
+		<xsd:simpleContent>
+			<xsd:extension base="texte80">
+				<xsd:attribute name="categorie" type="categorieTelephoneOuMail" use="optional"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType><xsd:simpleType name="categorieTelephoneOuMail">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="domicile"/>
+			<xsd:enumeration value="chambre"/>
+			<xsd:enumeration value="professionnel"/>
+			<xsd:enumeration value="mobile"/>
+			<xsd:enumeration value="vacances"/>
+			<xsd:enumeration value="jour"/>
+			<xsd:enumeration value="nuit"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:annotation>
+		<xsd:documentation>Définit la structure d'une carte de groupe sanguin</xsd:documentation>
+	</xsd:annotation><xsd:complexType name="typeCarteGroupeSanguin">
+		<xsd:sequence>
+			<xsd:element name="premiereDetermination" type="typeDeterminationGroupe" minOccurs="0"/>
+			<xsd:element name="deuxiemeDetermination" type="typeDeterminationGroupe" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="groupe" type="groupeABOHprim" use="required"/>
+		<xsd:attribute name="rhesus" type="rhesusHprim" use="required"/>
+	</xsd:complexType><xsd:complexType name="typeDeterminationGroupe">
+		<xsd:sequence>
+			<xsd:element name="date" type="typeDateHeureOptionnelle" minOccurs="0"/>
+			<xsd:element name="laboratoireExecutant" type="texte80" minOccurs="0"/>
+			<xsd:element name="phenotype" type="nom10" minOccurs="0"/>
+			<xsd:element name="agglutininesIrregulieres" type="texte35" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeEnteteMessage">
+		<xsd:annotation>
+			<xsd:documentation>Elément obligatoire et unique apparaissant en tête de tous les messages. Cet élément identifie et caractérise le message,  précise son émetteur et son destinataire</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="identifiantMessage" type="nom12"/>
+			<xsd:element name="dateHeureProduction" type="xsd:dateTime"/>
+			<xsd:element name="emetteur" type="typeEmetteurRecepteur"/>
+			<xsd:element name="destinataire" type="typeEmetteurRecepteur"/>
+			<xsd:element name="commentaireMessage" type="commentaire" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="modeTraitement" type="modeTraitement" default="réel"/>
+	</xsd:complexType><xsd:complexType name="typeEmetteurRecepteur">
+		<xsd:sequence>
+			<xsd:element name="agents" type="typeAgents"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeAgents">
+		<xsd:sequence>
+			<xsd:element name="agent" type="typeAgent" maxOccurs="3"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeAgent">
+		<xsd:complexContent>
+			<xsd:extension base="typeCode10Libelle35">
+				<xsd:sequence>
+					<xsd:element name="numeroAdeli" type="numeroFiness" minOccurs="0"/>
+					<xsd:element name="acteur" type="typeActeur" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:attribute name="categorie" use="required">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:enumeration value="acteur"/>
+							<xsd:enumeration value="application"/>
+							<xsd:enumeration value="système"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typeEnteteMessageAcquittement">
+		<xsd:annotation>
+			<xsd:documentation>Elément obligatoire et unique apparaissant en tête de tous les messages d'acquittement de traitement. Cet élément identifie et caractérise le message d'acquittement,  précise son émetteur et son destinataire, et référence le message de notifications d'événements objet de l'acquittement</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="typeEnteteMessage">
+				<xsd:sequence>
+					<xsd:element name="identifiantMessageAcquitte" type="nom12"/>
+					<xsd:element name="nomFichierMessageAcquitte" type="texte35" minOccurs="0"/>
+					<xsd:element name="observation" type="typeCode17Libelle80Commentaire" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:attribute name="statut" type="statutAcquittement" use="required"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:simpleType name="modeTraitement">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="réel"/>
+			<xsd:enumeration value="test"/>
+			<xsd:enumeration value="trace"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:complexType name="typeFacteursEnvironnement">
+		<xsd:annotation>
+			<xsd:documentation>type d'un élément du volet médical. Décrit les habitudes alimentaires, le tabac, l'environnement professionnel, sportif, ...etc</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="fumeur" type="typeFumeur" minOccurs="0"/>
+			<xsd:element name="regime" type="typeCode17Libelle80Commentaire" minOccurs="0"/>
+			<xsd:element name="consommationAlcool" type="typeConsommation" minOccurs="0"/>
+			<xsd:element name="exercicesPhysiques" type="typeExercicesPhysiques" minOccurs="0"/>
+			<xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeFumeur">
+		<xsd:sequence>
+			<xsd:element name="periodesFumeurs" type="typePeriodesFumeurs" nillable="true" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="actuel" type="ouiNon" use="required"/>
+	</xsd:complexType><xsd:complexType name="typePeriodesFumeurs">
+		<xsd:sequence>
+			<xsd:element name="periodeFumeur" type="typeConsommation" maxOccurs="3"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeConsommation">
+		<xsd:sequence>
+			<xsd:element name="dateDebutEstimee" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="dateFinEstimee" type="xsd:date" nillable="true" minOccurs="0"/>
+			<xsd:element name="volumeQuotidienEstime" type="xsd:unsignedByte" minOccurs="0"/>
+			<xsd:element name="uniteVolumeQuotidienEstime" type="typeCode17Libelle80Commentaire" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeExercicesPhysiques">
+		<xsd:sequence>
+			<xsd:element name="exercicePhysique" type="typeExercicePhysique" maxOccurs="3"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeExercicePhysique">
+		<xsd:sequence>
+			<xsd:element name="nomActivite" type="texte35"/>
+			<xsd:element name="dateDebutEstimee" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="dateFinEstimee" type="xsd:date" nillable="true" minOccurs="0"/>
+			<xsd:element name="dureeFrequence" type="typeDureeFrequence" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="competition" type="ouiNon" use="optional"/>
+	</xsd:complexType><xsd:complexType name="typeIdentifiantVenue">
+		<xsd:complexContent>
+			<xsd:extension base="typeIdentifiantAdministrationPatient">
+				<xsd:attribute name="nourrissonSansVenue" type="rangNaissance" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typeIdentifiantAdministrationPatient">
+		<xsd:sequence>
+			<xsd:element name="emetteur" type="typeIdentifiantPatient" minOccurs="0"/>
+			<xsd:element name="recepteur" type="typeIdentifiantPatient" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeIdentifiantPatient">
+		<xsd:sequence>
+			<xsd:element name="valeur" type="nom17"/>
+			<xsd:element name="lienIdentifiantParente" type="typeLienIdentifiantParente" minOccurs="0" maxOccurs="2"/>
+		</xsd:sequence>
+		<xsd:attribute name="etat" type="etatIdentifiantPatient" default="permanent"/>
+		<xsd:attribute name="portee" type="porteeIdentifiantPatient" default="local"/>
+		<xsd:attribute name="referent" type="ouiNon" default="non"/>
+	</xsd:complexType><xsd:complexType name="typeLienIdentifiantParente">
+		<xsd:simpleContent>
+			<xsd:extension base="nom17">
+				<xsd:attribute name="parent" type="lienSangHprim" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType><xsd:complexType name="typeIdentifiantMouvementPatient">
+		<xsd:sequence>
+			<xsd:element name="emetteur" type="nom17" minOccurs="0"/>
+			<xsd:element name="recepteur" type="nom17" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:simpleType name="etatIdentifiantPatient">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="permanent"/>
+			<xsd:enumeration value="temporaire"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:simpleType name="porteeIdentifiantPatient">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="local"/>
+			<xsd:enumeration value="départemental"/>
+			<xsd:enumeration value="régional"/>
+			<xsd:enumeration value="national"/>
+			<xsd:enumeration value="universel"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:simpleType name="rangNaissance">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[1-9]?"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:complexType name="typeModeEntreeEtablissementHprim">
+		<xsd:complexContent>
+			<xsd:extension base="typeCode12Libelle80">
+				<xsd:sequence>
+					<xsd:element name="provenance" type="typeLieuProvenanceOuDestinationHprim" minOccurs="0"/>
+					<xsd:element name="complementProvenance" type="typeProvenanceAutreEtablissement" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:attribute name="valeur" type="modeEntreeEtablissementHprim" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typeModeSortieEtablissementHprim">
+		<xsd:complexContent>
+			<xsd:extension base="typeCode12Libelle80">
+				<xsd:sequence>
+					<xsd:element name="destination" type="typeLieuProvenanceOuDestinationHprim" minOccurs="0"/>
+					<xsd:element name="circonstance" type="circonstanceSortieHprim" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:attribute name="valeur" type="modeSortieEtablissementHprim" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typeLieuProvenanceOuDestinationHprim">
+		<xsd:complexContent>
+			<xsd:extension base="typeCode12Libelle80">
+				<xsd:sequence>
+					<xsd:element name="entiteJuridique" type="typeEntiteJuridique" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:attribute name="valeur" type="lieuExterieurHprim" use="optional"/>
+				<xsd:attribute name="complementPMSI" type="complementModePMSI" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typeModeTransportHprim">
+		<xsd:complexContent>
+			<xsd:extension base="typeCode12Libelle80">
+				<xsd:attribute name="valeur" type="modeTransportHprim" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typeProvenanceAutreEtablissement">
+		<xsd:sequence>
+			<xsd:element name="dateEntree" type="xsd:date"/>
+			<xsd:element name="identifiantVenue" type="nom17" minOccurs="0"/>
+			<xsd:element name="indicateurActeRealise" type="indicateurActeHprim" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:simpleType name="complementModePMSI">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="0"/>
+			<xsd:enumeration value="1"/>
+			<xsd:enumeration value="2"/>
+			<xsd:enumeration value="3"/>
+			<xsd:enumeration value="4"/>
+			<xsd:enumeration value="5"/>
+			<xsd:enumeration value="6"/>
+			<xsd:enumeration value="7"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:element name="evenementsServeurActes">
+      <xsd:annotation>
+         <xsd:documentation/>
+      </xsd:annotation>
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="enteteMessage" type="typeEnteteMessage"/>
+            <xsd:choice>
+               <xsd:element name="evenementServeurIntervention" type="typeServeurIntervention" maxOccurs="unbounded"/>
+               <xsd:element name="evenementServeurActe" type="typeEvenementServeurActe" maxOccurs="unbounded"/>
+               <xsd:element name="evenementFusionIntervention" type="typeFusionIntervention" maxOccurs="unbounded"/>
+            </xsd:choice>
+         </xsd:sequence>
+         <xsd:attribute name="version" type="numeroVersion" use="required"/>
+         <xsd:attribute name="acquittementAttendu" type="ouiNon" default="non"/>
+         <xsd:attribute name="identifiantAttendu" type="ouiNon" default="non"/>
+      </xsd:complexType>
+   </xsd:element><xsd:complexType name="typeServeurIntervention">
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="xsd:dateTime" minOccurs="0"/>
+         <xsd:element name="acteur" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="patient" type="typePatient"/>
+         <xsd:element name="venue" type="typeVenue" minOccurs="0"/>
+         <xsd:element name="intervention" type="typeIntervention"/>
+      </xsd:sequence>
+      <xsd:attribute name="action" type="actionMiseAJour" use="required"/>
+   </xsd:complexType><xsd:complexType name="typeEvenementServeurActe">
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="xsd:dateTime" minOccurs="0"/>
+         <xsd:element name="acteur" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="patient" type="typePatient"/>
+         <xsd:element name="venue" type="typeVenue" minOccurs="0"/>
+         <xsd:element name="intervention" type="typeIntervention"/>
+         <xsd:element name="actesCCAM" type="typeActesCcam" minOccurs="0"/>
+         <xsd:element name="actesNGAP" type="typeActesNgap" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeFusionIntervention">
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="xsd:dateTime" minOccurs="0"/>
+         <xsd:element name="acteur" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="patient" type="typePatient"/>
+         <xsd:element name="venue" type="typeVenue" minOccurs="0"/>
+         <xsd:element name="intervention" type="typeIntervention"/>
+         <xsd:element name="interventionEliminee" type="typeIntervention"/>
+      </xsd:sequence>
+      <xsd:attribute name="action" type="actionFusion" use="required"/>
+   </xsd:complexType><xsd:complexType name="typeIntervention">
+      <xsd:annotation>
+         <xsd:documentation/>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="identifiant" type="typeIdentifiant"/>
+         <xsd:element name="debut" type="typeDateHeureOptionnelle" minOccurs="0"/>
+         <xsd:element name="fin" type="typeDateHeureOptionnelle" minOccurs="0"/>
+         <xsd:element name="uniteFonctionnelle" type="typeCode10Libelle35" minOccurs="0"/>
+         <xsd:element name="participants" type="typeParticipants" minOccurs="0"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+         <xsd:element name="demande" type="typeDemande" minOccurs="0"/>
+         <xsd:element name="piecesJointes" type="typePiecesJointes" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>permet d'adjoindre des documents au format libre (comme un fichier de synthése de rapport d''intervention au format doc )</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeActesCcam">
+      <xsd:sequence>
+         <xsd:element name="acteCCAM" type="typeActeCcam" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeActeCcam">
+      <xsd:sequence>
+         <xsd:element name="identifiant" type="typeIdentifiant">
+            <xsd:annotation>
+               <xsd:documentation>correspond à l'identification de la ligne de saisie  du triptique ( code, activité, phase) </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="codeActe" type="ccam"/>
+         <xsd:element name="codeActivite" type="nombre2"/>
+         <xsd:element name="codePhase" type="nombre2"/>
+         <xsd:element name="execute" type="typeDateHeureOptionnelle"/>
+         <xsd:element name="executant" type="typeExecutant"/>
+         <xsd:element name="modificateurs" type="typeModificateurs" minOccurs="0"/>
+         <xsd:element name="codeAssociationNonPrevue" type="nom1" minOccurs="0"/>
+         <xsd:element name="codeExtensionDocumentaire" type="nom1" minOccurs="0"/>
+         <xsd:element name="positionsDentaires" type="typePositionsDentaires" minOccurs="0"/>
+         <xsd:element name="priseCharge" type="typePriseCharge" minOccurs="0"/>
+         <xsd:element name="montant" type="typeMontant" minOccurs="0"/>
+         <xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="action" type="actionMiseAJour" use="required"/>
+      <xsd:attribute name="rapportExoneration" type="attrExo" use="optional"/>
+      <xsd:attribute name="facturable" type="ouiNon" default="oui"/>
+      <xsd:attribute name="remboursementExceptionnel" type="ouiNon" default="non"/>
+      <xsd:attribute name="supplementCharges" type="attrSupplement" use="optional"/>
+      <xsd:attribute name="valide" type="attrValide" default="non"/>
+      <xsd:attribute name="facture" type="attrFacture" default="non"/>
+      <xsd:attribute name="PMSI" type="attrPMSI" use="optional"/>
+      <xsd:attribute name="documentaire" type="ouiNon" default="non"/>
+      <xsd:attribute name="gratuit" type="ouiNon" default="non"/>
+   </xsd:complexType><xsd:complexType name="typePriseCharge">
+      <xsd:sequence>
+         <xsd:element name="risque" type="xsd:integer" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="ententePrealable" type="ouiNon" use="optional"/>
+
+   </xsd:complexType><xsd:complexType name="typeActesNgap">
+      <xsd:sequence>
+         <xsd:element name="acteNGAP" type="typeActeNgap" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeActeNgap">
+      <xsd:sequence>
+         <xsd:element name="identifiant" type="typeIdentifiant">
+            <xsd:annotation>
+               <xsd:documentation>correspond à l'identification de la ligne de saisie </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="lettreCle"/>
+         <xsd:element name="coefficient"/>
+         <xsd:element name="denombrement" minOccurs="0"/>
+         <xsd:element name="quantite" minOccurs="0"/>
+         <xsd:element name="execute" type="typeDateHeureOptionnelle"/>
+         <xsd:element name="prestataire" type="typePrestataire"/>
+         <xsd:element name="numeroSeance" type="xsd:positiveInteger" minOccurs="0"/>
+         <xsd:element name="NABMs" type="typeNabm" minOccurs="0"/>
+         <xsd:element name="minorMajor" type="typeMinorMajor" minOccurs="0"/>
+         <xsd:element name="montant" type="typeMontant" minOccurs="0"/>
+         <xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="action" type="actionMiseAJour" use="required"/>
+      <xsd:attribute name="facturable" type="ouiNon" default="oui"/>
+      <xsd:attribute name="executionNuit" type="attrNuit" default="non"/>
+      <xsd:attribute name="executionDimancheJourFerie" type="ouiNon" default="non"/>
+      <xsd:attribute name="acteHorsNomenclature" type="ouiNon" default="non"/>
+      <xsd:attribute name="rapportExoneration" type="attrExo" use="optional"/>
+      <xsd:attribute name="gratuit" type="ouiNon" default="non"/>
+      <xsd:attribute name="valide" type="attrValide" default="non"/>
+      <xsd:attribute name="facture" type="attrFacture" default="non"/>
+      <xsd:attribute name="porteeCle" type="attrPortee" default="n"/>
+   </xsd:complexType><xsd:complexType name="typeExecutant">
+      <xsd:sequence>
+         <xsd:element name="medecins" type="typeMedecinsExecutants" minOccurs="0"/>
+         <xsd:element name="uniteFonctionnelle" type="typeCode10Libelle35" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>doit etre présent au moins une de ces balises</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typePrestataire">
+      <xsd:sequence>
+         <xsd:element name="medecins" type="typeMedecins" minOccurs="0"/>
+         <xsd:element name="uniteFonctionnelle" type="typeCode10Libelle35" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>doit etre présent au moins une de ces balises</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeModificateurs">
+      <xsd:sequence>
+         <xsd:element name="modificateur" type="typeModificateur" minOccurs="0" maxOccurs="10"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeModificateur">
+      <xsd:simpleContent>
+         <xsd:extension base="nom1">
+            <xsd:attribute name="statut" type="attrModificateur" default="indf"/>
+         </xsd:extension>
+      </xsd:simpleContent>
+   </xsd:complexType><xsd:complexType name="typeMinorMajor">
+      <xsd:choice>
+         <xsd:element name="majoration" type="typeMinor" minOccurs="0"/>
+         <xsd:element name="minoration" type="typeMinor" minOccurs="0"/>
+      </xsd:choice>
+   </xsd:complexType><xsd:complexType name="typeMinor">
+      <xsd:sequence>
+         <xsd:element name="pourcentage" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="coefficient" type="decimalPositif" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeNabm">
+      <xsd:sequence>
+         <xsd:element name="code" type="xsd:integer" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeIdentifiant">
+      <xsd:sequence>
+         <xsd:element name="emetteur" type="nom17" minOccurs="0"/>
+         <xsd:element name="recepteur" type="nom17" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeMedecinsExecutants">
+      <xsd:sequence>
+         <xsd:element name="medecinExecutant" type="typeMedecinExecutant" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeParticipants">
+      <xsd:sequence>
+         <xsd:element name="participant" type="typeParticipant" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeMedecinExecutant">
+      <xsd:sequence>
+         <xsd:element name="medecin" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="etablissementExterieur" type="typeEtablissement" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="principal" type="ouiNon" default="non"/>
+   </xsd:complexType><xsd:complexType name="typeMontant">
+      <xsd:sequence>
+         <xsd:element name="montantTotal" type="decimalPositif" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>montant unitaire * quantité hors dépassement</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="numeroForfaitTechnique" type="nombre5" minOccurs="0"/>
+         <xsd:element name="numeroAgrementAppareil" type="nombre14" minOccurs="0"/>
+         <xsd:element name="numeroFacture" type="nombre9" minOccurs="0"/>
+         <xsd:element name="montantDepassement" type="typeDepassement" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="modeTraitement" type="attrModeTraitement" use="optional"/>
+      <xsd:attribute name="disciplineTraitement" type="attrDisciplineTraitement" use="optional"/>
+      <xsd:attribute name="liberal" type="ouiNon" default="non"/>
+   </xsd:complexType><xsd:complexType name="typeDepassement">
+      <xsd:simpleContent>
+         <xsd:extension base="decimalPositif">
+            <xsd:attribute name="motif" type="attrMotifDepassement" use="optional"/>
+         </xsd:extension>
+      </xsd:simpleContent>
+   </xsd:complexType><xsd:complexType name="typeParticipant">
+      <xsd:sequence>
+         <xsd:choice>
+            <xsd:element name="medecin" type="typeProfessionnelSante"/>
+            <xsd:element name="uniteFonctionnelle" type="typeCode10Libelle35"/>
+         </xsd:choice>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeDemande">
+      <xsd:sequence>
+         <xsd:element name="identifiant" type="typeIdentifiant" minOccurs="0"/>
+         <xsd:element name="datePrescription" type="typeDateHeureOptionnelle"/>
+         <xsd:element name="uniteFonctionnelle" type="typeCode10Libelle35" minOccurs="0"/>
+         <xsd:element name="medecin" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+         <xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typePositionsDentaires">
+      <xsd:sequence>
+         <xsd:element name="positionDentaire" type="xsd:string" maxOccurs="16"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:simpleType name="attrFacture">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="oui"/>
+         <xsd:enumeration value="non"/>
+         <xsd:enumeration value="trd"/>
+         <xsd:enumeration value="ec"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="attrPMSI">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="g"/>
+         <xsd:enumeration value="ng"/>
+         <xsd:enumeration value="tr"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="attrSupplement">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="c"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="attrValide">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="oui"/>
+         <xsd:enumeration value="non"/>
+         <xsd:enumeration value="att"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="attrExo">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="R"/>
+         <xsd:enumeration value="7"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="attrModificateur">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="ft"/>
+         <xsd:enumeration value="nft"/>
+         <xsd:enumeration value="indf"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="attrMotifDepassement">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="d"/>
+         <xsd:enumeration value="e"/>
+         <xsd:enumeration value="f"/>
+         <xsd:enumeration value="n"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="attrModeTraitement">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="19"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="attrDisciplineTraitement">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="35"/>
+         <xsd:enumeration value="753"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="attrNuit">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="non"/>
+         <xsd:enumeration value="1t"/>
+         <xsd:enumeration value="2t"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="attrPortee">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="n"/>
+         <xsd:enumeration value="l"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="categorieComplementaireHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="am"/>
+         <xsd:enumeration value="as"/>
+         <xsd:enumeration value="mt"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="categorieHospitalisationHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="hospitalisation_complete"/>
+         <xsd:enumeration value="hospitalisation_de_jour"/>
+         <xsd:enumeration value="hospitalisation_de_nuit"/>
+         <xsd:enumeration value="hospitalisation_à_domicile"/>
+         <xsd:enumeration value="consultation_externe"/>
+         <xsd:enumeration value="autres_unités_médico_techniques"/>
+         <xsd:enumeration value="accueil_urgences"/>
+         <xsd:enumeration value="internat_permanent"/>
+         <xsd:enumeration value="hébergement_nuit"/>
+         <xsd:enumeration value="semi_internat"/>
+         <xsd:enumeration value="externat"/>
+         <xsd:enumeration value="placement_famille_accueil"/>
+         <xsd:enumeration value="prestation_sur_lieu_de_vie"/>
+         <xsd:enumeration value="internat_semaine"/>
+         <xsd:enumeration value="consultation_soins_ambulatoires"/>
+         <xsd:enumeration value="hospitalisation_semaine"/>
+         <xsd:enumeration value="accueil_jour"/>
+         <xsd:enumeration value="anesthésie_ou_chirurgie_ambulatoire"/>
+         <xsd:enumeration value="accueil_familial_thérapeutique"/>
+         <xsd:enumeration value="accueil_temporaire_vacances"/>
+         <xsd:enumeration value="analyses_médicales_biologiques"/>
+         <xsd:enumeration value="consultation_soins_dentaires"/>
+         <xsd:enumeration value="stockage_organes"/>
+         <xsd:enumeration value="transport_malades"/>
+         <xsd:enumeration value="radiologie"/>
+         <xsd:enumeration value="recherche"/>
+         <xsd:enumeration value="enseignement"/>
+         <xsd:enumeration value="activité_de_soins"/>
+         <xsd:enumeration value="activité_non_dénommée"/>
+         <xsd:enumeration value="MDR"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="circonstanceMedicaleHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="bld"/>
+         <xsd:enumeration value="blp"/>
+         <xsd:enumeration value="gi"/>
+         <xsd:enumeration value="prnp"/>
+         <xsd:enumeration value="antn"/>
+         <xsd:enumeration value="pren"/>
+         <xsd:enumeration value="pern"/>
+         <xsd:enumeration value="ctrl"/>
+         <xsd:enumeration value="srv"/>
+         <xsd:enumeration value="dpst"/>
+         <xsd:enumeration value="eepi"/>
+         <xsd:enumeration value="rchr"/>
+         <xsd:enumeration value="mdl"/>
+         <xsd:enumeration value="exas"/>
+         <xsd:enumeration value="mt"/>
+         <xsd:enumeration value="pstm"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="circonstanceSortieHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="md"/>
+         <xsd:enumeration value="dm"/>
+         <xsd:enumeration value="cav"/>
+         <xsd:enumeration value="clt"/>
+         <xsd:enumeration value="atex"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="civiliteHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="mme"/>
+         <xsd:enumeration value="mlle"/>
+         <xsd:enumeration value="mr"/>
+         <xsd:enumeration value="sr"/>
+         <xsd:enumeration value="dr"/>
+         <xsd:enumeration value="pr"/>
+         <xsd:enumeration value="bb"/>
+         <xsd:enumeration value="enf"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="destinataireFactureHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="pat"/>
+         <xsd:enumeration value="ass"/>
+         <xsd:enumeration value="tut"/>
+         <xsd:enumeration value="apr"/>
+         <xsd:enumeration value="et"/>
+         <xsd:enumeration value="ld"/>
+         <xsd:enumeration value="amo"/>
+         <xsd:enumeration value="amc"/>
+         <xsd:enumeration value="aor"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="disciplineMedicoTarifaireHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="direction_générale"/>
+         <xsd:enumeration value="direction_services_économiques"/>
+         <xsd:enumeration value="internat"/>
+         <xsd:enumeration value="anesthésiologie"/>
+         <xsd:enumeration value="stomatologie"/>
+         <xsd:enumeration value="CATTP"/>
+         <xsd:enumeration value="institut_formation_soins_infirmiers"/>
+         <xsd:enumeration value="fictif"/>
+         <xsd:enumeration value="maison_retraite"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="formatPieceHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="htm"/>
+         <xsd:enumeration value="dcm"/>
+         <xsd:enumeration value="gif"/>
+         <xsd:enumeration value="jpg"/>
+         <xsd:enumeration value="png"/>
+         <xsd:enumeration value="pdf"/>
+         <xsd:enumeration value="rtf"/>
+         <xsd:enumeration value="bmp"/>
+         <xsd:enumeration value="doc"/>
+         <xsd:enumeration value="xls"/>
+         <xsd:enumeration value="txt"/>
+         <xsd:enumeration value="wav"/>
+         <xsd:enumeration value="xml"/>
+         <xsd:enumeration value="xsl"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="formePhysiqueIdentifiantHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="texte"/>
+         <xsd:enumeration value="code"/>
+         <xsd:enumeration value="deux"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="graviteHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="frt"/>
+         <xsd:enumeration value="moy"/>
+         <xsd:enumeration value="fbl"/>
+         <xsd:enumeration value="inc"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="groupeABOHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="AB"/>
+         <xsd:enumeration value="A"/>
+         <xsd:enumeration value="B"/>
+         <xsd:enumeration value="O"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="indicateurActeHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="acco"/>
+         <xsd:enumeration value="cesa"/>
+         <xsd:enumeration value="k50"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="lienMedecinHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="adrs"/>
+         <xsd:enumeration value="prsc"/>
+         <xsd:enumeration value="trt"/>
+         <xsd:enumeration value="rsp"/>
+         <xsd:enumeration value="intv"/>
+         <xsd:enumeration value="exec"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="lienParenteHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="mr"/>
+         <xsd:enumeration value="fm"/>
+         <xsd:enumeration value="pr"/>
+         <xsd:enumeration value="mr"/>
+         <xsd:enumeration value="grpp"/>
+         <xsd:enumeration value="grpm"/>
+         <xsd:enumeration value="grmp"/>
+         <xsd:enumeration value="grmm"/>
+         <xsd:enumeration value="fr"/>
+         <xsd:enumeration value="sr"/>
+         <xsd:enumeration value="fls"/>
+         <xsd:enumeration value="fll"/>
+         <xsd:enumeration value="pfls"/>
+         <xsd:enumeration value="pfll"/>
+         <xsd:enumeration value="oncp"/>
+         <xsd:enumeration value="oncm"/>
+         <xsd:enumeration value="tanp"/>
+         <xsd:enumeration value="tanm"/>
+         <xsd:enumeration value="coup"/>
+         <xsd:enumeration value="coum"/>
+         <xsd:enumeration value="coep"/>
+         <xsd:enumeration value="coem"/>
+         <xsd:enumeration value="gndr"/>
+         <xsd:enumeration value="bru"/>
+         <xsd:enumeration value="ami"/>
+         <xsd:enumeration value="vs"/>
+         <xsd:enumeration value="prt"/>
+         <xsd:enumeration value="tut"/>
+         <xsd:enumeration value="aut"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="lienSangHprim">
+      <xsd:restriction base="lienParenteHprim">
+         <xsd:enumeration value="pr"/>
+         <xsd:enumeration value="mr"/>
+         <xsd:enumeration value="grpp"/>
+         <xsd:enumeration value="grpm"/>
+         <xsd:enumeration value="grmp"/>
+         <xsd:enumeration value="grmm"/>
+         <xsd:enumeration value="fr"/>
+         <xsd:enumeration value="sr"/>
+         <xsd:enumeration value="fls"/>
+         <xsd:enumeration value="fll"/>
+         <xsd:enumeration value="pfls"/>
+         <xsd:enumeration value="pfll"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="lieuExterieurHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="aej"/>
+         <xsd:enumeration value="aet"/>
+         <xsd:enumeration value="dom"/>
+         <xsd:enumeration value="ext"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="modaliteHospitalisationHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="office"/>
+         <xsd:enumeration value="libre"/>
+         <xsd:enumeration value="tiers"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="modeEntreeEtablissementHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="00"/>
+         <xsd:enumeration value="01"/>
+         <xsd:enumeration value="02"/>
+         <xsd:enumeration value="03"/>
+         <xsd:enumeration value="04"/>
+         <xsd:enumeration value="05"/>
+         <xsd:enumeration value="06"/>
+         <xsd:enumeration value="07"/>
+         <xsd:enumeration value="08"/>
+         <xsd:enumeration value="09"/>
+         <xsd:enumeration value="0A"/>
+         <xsd:enumeration value="0B"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="modeSortieEtablissementHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="00"/>
+         <xsd:enumeration value="02"/>
+         <xsd:enumeration value="03"/>
+         <xsd:enumeration value="04"/>
+         <xsd:enumeration value="05"/>
+         <xsd:enumeration value="06"/>
+         <xsd:enumeration value="07"/>
+         <xsd:enumeration value="08"/>
+         <xsd:enumeration value="09"/>
+         <xsd:enumeration value="12"/>
+         <xsd:enumeration value="13"/>
+         <xsd:enumeration value="15"/>
+         <xsd:enumeration value="16"/>
+         <xsd:enumeration value="17"/>
+         <xsd:enumeration value="18"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="modeTransportHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="samu"/>
+         <xsd:enumeration value="ampu"/>
+         <xsd:enumeration value="ampr"/>
+         <xsd:enumeration value="taxi"/>
+         <xsd:enumeration value="pers"/>
+         <xsd:enumeration value="heli"/>
+         <xsd:enumeration value="pom"/>
+         <xsd:enumeration value="pol"/>
+         <xsd:enumeration value="aut"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="natureConstanteMedicaleHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="tmpr"/>
+         <xsd:enumeration value="ta"/>
+         <xsd:enumeration value="pds"/>
+         <xsd:enumeration value="pdsn"/>
+         <xsd:enumeration value="tll"/>
+         <xsd:enumeration value="tlln"/>
+         <xsd:enumeration value="sa"/>
+         <xsd:enumeration value="ddr"/>
+         <xsd:enumeration value="cr"/>
+         <xsd:enumeration value="av"/>
+         <xsd:enumeration value="aa"/>
+         <xsd:enumeration value="sc"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="natureEchantillonHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="[0-9][0-9][0-9]"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="naturePieceHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="img"/>
+         <xsd:enumeration value="vd"/>
+         <xsd:enumeration value="vds"/>
+         <xsd:enumeration value="son"/>
+         <xsd:enumeration value="ltt"/>
+         <xsd:enumeration value="m"/>
+         <xsd:enumeration value="doc"/>
+         <xsd:enumeration value="tab"/>
+         <xsd:enumeration value="grp"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="origineExamenHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="prsc"/>
+         <xsd:enumeration value="ufd"/>
+         <xsd:enumeration value="etd"/>
+         <xsd:enumeration value="eti"/>
+         <xsd:enumeration value="ete"/>
+         <xsd:enumeration value="se"/>
+         <xsd:enumeration value="app"/>
+         <xsd:enumeration value="inc"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="pieceDroitHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="00"/>
+         <xsd:enumeration value="01"/>
+         <xsd:enumeration value="02"/>
+         <xsd:enumeration value="03"/>
+         <xsd:enumeration value="04"/>
+         <xsd:enumeration value="05"/>
+         <xsd:enumeration value="06"/>
+         <xsd:enumeration value="07"/>
+         <xsd:enumeration value="10"/>
+         <xsd:enumeration value="11"/>
+         <xsd:enumeration value="12"/>
+         <xsd:enumeration value="13"/>
+         <xsd:enumeration value="14"/>
+         <xsd:enumeration value="15"/>
+         <xsd:enumeration value="17"/>
+         <xsd:enumeration value="20"/>
+         <xsd:enumeration value="21"/>
+         <xsd:enumeration value="22"/>
+         <xsd:enumeration value="24"/>
+         <xsd:enumeration value="25"/>
+         <xsd:enumeration value="26"/>
+         <xsd:enumeration value="27"/>
+         <xsd:enumeration value="28"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="presomptionDroitHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="30"/>
+         <xsd:enumeration value="31"/>
+         <xsd:enumeration value="32"/>
+         <xsd:enumeration value="33"/>
+         <xsd:enumeration value="34"/>
+         <xsd:enumeration value="35"/>
+         <xsd:enumeration value="36"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="regimeHospitalisationHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="A1"/>
+         <xsd:enumeration value="A2"/>
+         <xsd:enumeration value="CA"/>
+         <xsd:enumeration value="CJ"/>
+         <xsd:enumeration value="CP"/>
+         <xsd:enumeration value="DA"/>
+         <xsd:enumeration value="DS"/>
+         <xsd:enumeration value="HD"/>
+         <xsd:enumeration value="HJ"/>
+         <xsd:enumeration value="HN"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="remiseResultatAvancementHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="(i?p?v?f?)"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="remiseResultatContenuHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="(s?t?j?)"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="remiseResultatSupportHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="pst"/>
+         <xsd:enumeration value="prt"/>
+         <xsd:enumeration value="chr"/>
+         <xsd:enumeration value="fax"/>
+         <xsd:enumeration value="ml"/>
+         <xsd:enumeration value="hx"/>
+         <xsd:enumeration value="tel"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="repereGeographiqueGeneralHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="btm"/>
+         <xsd:enumeration value="etg"/>
+         <xsd:enumeration value="aile"/>
+         <xsd:enumeration value="clr"/>
+         <xsd:enumeration value="al"/>
+         <xsd:enumeration value="sctr"/>
+         <xsd:enumeration value="blc"/>
+         <xsd:enumeration value="pvl"/>
+         <xsd:enumeration value="armr"/>
+         <xsd:enumeration value="etr"/>
+         <xsd:enumeration value="rn"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="repereGeographiquePatientHprim">
+      <xsd:restriction base="repereGeographiqueGeneralHprim">
+         <xsd:enumeration value="btm"/>
+         <xsd:enumeration value="etg"/>
+         <xsd:enumeration value="aile"/>
+         <xsd:enumeration value="clr"/>
+         <xsd:enumeration value="al"/>
+         <xsd:enumeration value="sctr"/>
+         <xsd:enumeration value="blc"/>
+         <xsd:enumeration value="pvl"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="responsabiliteHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="(a?m?h?s?)"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="rhesusHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="+"/>
+         <xsd:enumeration value="-"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="situationFamilleHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="mr"/>
+         <xsd:enumeration value="mtl"/>
+         <xsd:enumeration value="dvrc"/>
+         <xsd:enumeration value="vf"/>
+         <xsd:enumeration value="spr"/>
+         <xsd:enumeration value="clbtr"/>
+         <xsd:enumeration value="enfc"/>
+         <xsd:enumeration value="aut"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="specialiteProfessionnelHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="technicien"/>
+         <xsd:enumeration value="sage_femme"/>
+         <xsd:enumeration value="infirmier"/>
+         <xsd:enumeration value="secrétaire"/>
+         <xsd:enumeration value="pharmacien_biologiste"/>
+         <xsd:enumeration value="médecin_biologiste"/>
+         <xsd:enumeration value="médecin_généraliste"/>
+         <xsd:enumeration value="pneumologue"/>
+         <xsd:enumeration value="ORL"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="specialiteLaboratoireHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="polyvalent"/>
+         <xsd:enumeration value="anapath"/>
+         <xsd:enumeration value="biochimie"/>
+         <xsd:enumeration value="hématologie"/>
+         <xsd:enumeration value="virologie"/>
+         <xsd:enumeration value="parasitologie"/>
+         <xsd:enumeration value="coprologie"/>
+         <xsd:enumeration value="bactériologie"/>
+         <xsd:enumeration value="microbiologie"/>
+         <xsd:enumeration value="moléculaire"/>
+         <xsd:enumeration value="immunologie"/>
+         <xsd:enumeration value="immunochimie"/>
+         <xsd:enumeration value="spécialisé"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="uniteHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="l"/>
+         <xsd:enumeration value="ml"/>
+         <xsd:enumeration value="/l"/>
+         <xsd:enumeration value="kilo/l"/>
+         <xsd:enumeration value="mega/l"/>
+         <xsd:enumeration value="giga/l"/>
+         <xsd:enumeration value="tera/l"/>
+         <xsd:enumeration value="/ml"/>
+         <xsd:enumeration value="UFC/ml"/>
+         <xsd:enumeration value="g"/>
+         <xsd:enumeration value="kg"/>
+         <xsd:enumeration value="mmol"/>
+         <xsd:enumeration value="µmol"/>
+         <xsd:enumeration value="nmol/l"/>
+         <xsd:enumeration value="mmol/l"/>
+         <xsd:enumeration value="µmol/l"/>
+         <xsd:enumeration value="nmol/l"/>
+         <xsd:enumeration value="mmol/24h"/>
+         <xsd:enumeration value="µmol/24h"/>
+         <xsd:enumeration value="nmol/24h"/>
+         <xsd:enumeration value="%"/>
+         <xsd:enumeration value="m"/>
+         <xsd:enumeration value="cm"/>
+         <xsd:enumeration value="mm"/>
+         <xsd:enumeration value="µm"/>
+         <xsd:enumeration value="/mm3"/>
+         <xsd:enumeration value="g/l"/>
+         <xsd:enumeration value="g/100ml"/>
+         <xsd:enumeration value="µ3"/>
+         <xsd:enumeration value="picog"/>
+         <xsd:enumeration value="°"/>
+         <xsd:enumeration value="s"/>
+         <xsd:enumeration value="date"/>
+         <xsd:enumeration value="heure"/>
+         <xsd:enumeration value="dateEtHeure"/>
+         <xsd:enumeration value="g/24h"/>
+         <xsd:enumeration value="mg/24h"/>
+         <xsd:enumeration value="µg/24h"/>
+         <xsd:enumeration value="ml/s"/>
+         <xsd:enumeration value="ml/mn"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="venueHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="hsp"/>
+         <xsd:enumeration value="hprm"/>
+         <xsd:enumeration value="cslt"/>
+         <xsd:enumeration value="cprm"/>
+         <xsd:enumeration value="nss"/>
+         <xsd:enumeration value="acc"/>
+         <xsd:enumeration value="sc"/>
+         <xsd:enumeration value="hd"/>
+         <xsd:enumeration value="pf"/>
+         <xsd:enumeration value="at"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="voieAdministrationHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="orale"/>
+         <xsd:enumeration value="rectale"/>
+         <xsd:enumeration value="oculaire"/>
+         <xsd:enumeration value="auriculaire"/>
+         <xsd:enumeration value="nasale"/>
+         <xsd:enumeration value="cutanée"/>
+         <xsd:enumeration value="hypo_dermique"/>
+         <xsd:enumeration value="intra_musculaire"/>
+         <xsd:enumeration value="péri_durale"/>
+         <xsd:enumeration value="tissulaire"/>
+         <xsd:enumeration value="perfusion"/>
+         <xsd:enumeration value="intra_veineuse"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="pays">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:simpleType name="activiteSocioProfessionnelle">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType><xsd:simpleType name="categorieSocioProfessionnelle">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType><xsd:simpleType name="numeroImmatriculationInsee">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="(1|2)[0-9]{2}(0[1-9]|1[0-2])[0-9]([0-9]|A|B)[0-9]{8}"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:complexType name="typePatient">
+      <xsd:sequence>
+         <xsd:element name="identifiant" type="typeIdentifiantAdministrationPatient"/>
+         <xsd:element name="personnePhysique" type="typePersonnePhysique"/>
+         <xsd:element name="categorieSocioProfessionnelle" type="categorieSocioProfessionnelle" minOccurs="0"/>
+         <xsd:element name="activiteSocioProfessionnelle" type="activiteSocioProfessionnelle" minOccurs="0"/>
+         <xsd:element name="personnesPrevenir" type="typePersonnesPrevenir" minOccurs="0"/>
+         <xsd:element name="droitOubli" type="xsd:date" minOccurs="0"/>
+         <xsd:element name="nombreEnfants" type="xsd:unsignedByte" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="confidentiel" type="ouiNon" default="non"/>
+      <xsd:attribute name="anonyme" type="ouiNon" use="optional"/>
+   </xsd:complexType><xsd:annotation>
+      <xsd:documentation>contient les types d'éléments et d'attributs utilisés par les personnes physiques</xsd:documentation>
+   </xsd:annotation><xsd:complexType name="typePersonnePhysique">
+      <xsd:complexContent>
+         <xsd:extension base="typePersonne">
+            <xsd:sequence>
+               <xsd:element name="dateNaissance" type="typeDateRecueillie"/>
+               <xsd:element name="lieuNaissance" type="typeAdresseBase" minOccurs="0"/>
+               <xsd:element name="nationalite" type="pays" minOccurs="0"/>
+               <xsd:element name="langueUsuelle" type="texte35" minOccurs="0"/>
+               <xsd:element name="situationFamilleHprim" type="typeSituationFamilleHprim" minOccurs="0"/>
+               <xsd:element name="decede" type="typeDecede" minOccurs="0"/>
+            </xsd:sequence>
+            <xsd:attribute name="sexe" type="sexe" use="required"/>
+            <xsd:attribute name="informationQualifiee" type="ouiNon" use="optional" default="oui"/>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType><xsd:complexType name="typePersonne">
+      <xsd:sequence>
+         <xsd:element name="nomUsuel" type="texte35"/>
+         <xsd:element name="nomNaissance" type="texte35" minOccurs="0"/>
+         <xsd:element name="alias" type="texte35" minOccurs="0"/>
+         <xsd:element name="prenoms" type="typePrenoms"/>
+         <xsd:element name="civiliteHprim" type="typeCiviliteHprim" minOccurs="0"/>
+         <xsd:element name="adresses" type="typeAdresses" minOccurs="0"/>
+         <xsd:element name="telephones" type="typeNumerosTelephones" minOccurs="0"/>
+         <xsd:element name="emails" type="typeEmails" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeActeur">
+      <xsd:sequence>
+         <xsd:element name="nom" type="texte35"/>
+         <xsd:element name="alias" type="texte35" minOccurs="0"/>
+         <xsd:element name="prenoms" type="typePrenoms" minOccurs="0"/>
+         <xsd:element name="civiliteHprim" type="typeCiviliteHprim" minOccurs="0"/>
+         <xsd:element name="adresses" type="typeAdresses" minOccurs="0"/>
+         <xsd:element name="telephones" type="typeNumerosTelephones" minOccurs="0"/>
+         <xsd:element name="emails" type="typeEmails" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="classe" use="optional">
+         <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+               <xsd:enumeration value="personne"/>
+               <xsd:enumeration value="organisation"/>
+            </xsd:restriction>
+         </xsd:simpleType>
+      </xsd:attribute>
+   </xsd:complexType><xsd:complexType name="typePrenoms">
+      <xsd:sequence>
+         <xsd:element name="prenom" type="texte35" maxOccurs="3"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeDecede">
+      <xsd:sequence>
+         <xsd:element name="dateDeces" type="typeDateRecueillie" minOccurs="0"/>
+         <xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+         <xsd:element name="lieu" type="texte35" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:simpleType name="sexe">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="M"/>
+         <xsd:enumeration value="F"/>
+         <xsd:enumeration value="I"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:complexType name="typeSituationFamilleHprim">
+      <xsd:complexContent>
+         <xsd:extension base="typeCode12Libelle80">
+            <xsd:attribute name="valeur" type="situationFamilleHprim" use="optional"/>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType><xsd:complexType name="typeCiviliteHprim">
+      <xsd:complexContent>
+         <xsd:extension base="typeCode12Libelle80">
+            <xsd:attribute name="valeur" type="civiliteHprim" use="optional"/>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType><xsd:complexType name="typePiecesJointes">
+		<xsd:sequence>
+			<xsd:element name="pieceJointe" type="typePieceJointe" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typePieceJointe">
+		<xsd:annotation>
+			<xsd:documentation>L'attribut naturePiece précise  s'il s'agit d'image, son, vidéo, ....</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="nomPiece" type="texte80" minOccurs="0"/>
+			<xsd:element name="professionnelOriginePiece" type="typeProfessionnelSante" minOccurs="0"/>
+			<xsd:choice>
+				<xsd:element name="appareilOriginePiece" type="typeCode17Libelle80Commentaire" minOccurs="0"/>
+				<xsd:element name="logicielOrigine" type="texte80" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Exemples : Word97, Flash5</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="dateProductionPiece" type="typeDateRecueillie" minOccurs="0"/>
+			<xsd:element name="formatPiece" type="texte35" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Exemples : "doc", "rtf", jpg". Ce format peut différer du suffixe du nom du fichier</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="commentairePiece" type="commentaire" minOccurs="0"/>
+			<xsd:choice>
+				<xsd:annotation>
+					<xsd:documentation>Le suffixe du nom du fichier  joint ou pointé est obligatoire</xsd:documentation>
+				</xsd:annotation>
+				<xsd:element name="adresseURI" type="xsd:anyURI"/>
+				<xsd:element name="nomFichierJoint" type="texte35"/>
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attribute name="naturePiece" type="naturePieceHprim" use="required"/>
+	</xsd:complexType><xsd:annotation>
+		<xsd:documentation>Ce schéma contient tous les types de données propres au PMSI </xsd:documentation>
+	</xsd:annotation><xsd:complexType name="typeActesRhs">
+		<xsd:sequence>
+			<xsd:element name="acte" type="typeActe" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeActesRum">
+		<xsd:sequence>
+			<xsd:element name="acte" type="typeActeRum" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeActe">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="CDAM" type="typeActeRumCdam"/>
+				<xsd:element name="CCAM" type="typeActeRumCcam"/>
+			</xsd:choice>
+			<xsd:element name="codesLibres" type="typeCodesLibres" minOccurs="0"/>
+			<xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeActeRum">
+		<xsd:complexContent>
+			<xsd:extension base="typeActe">
+				<xsd:attribute name="externe" type="ouiNon" default="non"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typeActeRumCdam">
+		<xsd:sequence>
+			<xsd:element name="code" type="typeActeSimple"/>
+			<xsd:element name="quantite" type="nombre2"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:simpleType name="typeActeSimple">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Z][0-9]{3}"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:complexType name="typeDiagnosticsRhs">
+		<xsd:sequence>
+			<xsd:element name="finalitePriseCharge" type="typeDiagnostic"/>
+			<xsd:element name="manifestationPrincipale" type="typeDiagnostic"/>
+			<xsd:element name="affectionEtiologique" type="typeDiagnostic"/>
+			<xsd:element name="diagnosticsAssocies" type="typeDiagnosticsAssocies" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeDiagnosticsAssocies">
+		<xsd:sequence>
+			<xsd:element name="diagnosticAssocie" type="typeDiagnostic" minOccurs="0" maxOccurs="5"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeDiagnosticsRum">
+		<xsd:sequence>
+			<xsd:element name="diagnosticPrincipal" type="typeDiagnostic"/>
+			<xsd:element name="diagnosticRelie" type="typeDiagnostic" minOccurs="0"/>
+			<xsd:element name="diagnosticsSignificatifs" type="typeDiagnosticsSignificatifs" minOccurs="0"/>
+			<xsd:element name="diagnosticsDocumentaires" type="typeDiagnosticsDocumentaires" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeDiagnosticsSignificatifs">
+		<xsd:sequence>
+			<xsd:element name="diagnosticSignificatif" type="typeDiagnostic" minOccurs="0" maxOccurs="15"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeDiagnosticsDocumentaires">
+		<xsd:sequence>
+			<xsd:element name="diagnosticDocumentaire" type="typeDiagnostic" minOccurs="0" maxOccurs="99"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeDiagnostic">
+		<xsd:sequence>
+			<xsd:element name="codeCim10" type="typeDiagnosticSimple"/>
+			<xsd:element name="codesLibres" type="typeCodesLibres" minOccurs="0"/>
+			<xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:simpleType name="typeDiagnosticSimple">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Z][0-9]{7}"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:complexType name="typeActesReeducation">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="acteReeducation" type="typeActeReeducation" maxOccurs="unbounded"/>
+				<xsd:element name="chapitreActeReeducation" type="typeChapitreActeReeducation" maxOccurs="12"/>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeActeReeducation">
+		<xsd:sequence>
+			<xsd:element name="codeCDARR" type="typeActeReeducationSimple"/>
+			<xsd:element name="duree" type="duree"/>
+			<xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeChapitreActeReeducation">
+		<xsd:sequence>
+			<xsd:element name="duree" type="duree"/>
+			<xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="mnemonique" type="typeChapitreReeducationSimple" use="required"/>
+	</xsd:complexType><xsd:simpleType name="typeActeReeducationSimple">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Z]{2}[0-9]{0,2}"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:simpleType name="typeChapitreReeducationSimple">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="me"/>
+			<xsd:enumeration value="sm"/>
+			<xsd:enumeration value="np"/>
+			<xsd:enumeration value="rc"/>
+			<xsd:enumeration value="nu"/>
+			<xsd:enumeration value="su"/>
+			<xsd:enumeration value="ri"/>
+			<xsd:enumeration value="ap"/>
+			<xsd:enumeration value="co"/>
+			<xsd:enumeration value="bi"/>
+			<xsd:enumeration value="me"/>
+			<xsd:enumeration value="ph"/>
+			<xsd:enumeration value="ba"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:complexType name="typeJoursPresence">
+		<xsd:sequence>
+			<xsd:element name="jourPresence" type="typeJourPresence" maxOccurs="7"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeJourPresence">
+		<xsd:attribute name="jour" type="jourSemaine" use="required"/>
+	</xsd:complexType><xsd:complexType name="typeDependances">
+		<xsd:sequence>
+			<xsd:element name="dependance" type="typeDependance" minOccurs="6" maxOccurs="6"/>
+		</xsd:sequence>
+		<xsd:attribute name="fauteuil" type="ouiNon" use="required"/>
+	</xsd:complexType><xsd:complexType name="typeDependance">
+		<xsd:sequence>
+			<xsd:element name="degre" type="degre"/>
+			<xsd:element name="codeLibre" type="typeCodeLibreDep" minOccurs="0"/>
+			<xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="nature" type="dependance" use="required"/>
+	</xsd:complexType><xsd:complexType name="typeCodeLibreDep">
+		<xsd:complexContent>
+			<xsd:extension base="typeCode10Libelle35">
+				<xsd:sequence>
+					<xsd:element name="valeur" type="nom15"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typeIdentifiantPMSI">
+		<xsd:sequence>
+			<xsd:element name="emetteur" type="nom17" minOccurs="0"/>
+			<xsd:element name="recepteur" type="nom17" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:simpleType name="dependance">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="habillage"/>
+			<xsd:enumeration value="déplacement"/>
+			<xsd:enumeration value="alimentation"/>
+			<xsd:enumeration value="continence"/>
+			<xsd:enumeration value="comportement"/>
+			<xsd:enumeration value="relation"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:simpleType name="igs2">
+		<xsd:restriction base="xsd:positiveInteger">
+			<xsd:maxExclusive value="1000"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:simpleType name="seance">
+		<xsd:restriction base="xsd:positiveInteger">
+			<xsd:maxExclusive value="100"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:simpleType name="degre">
+		<xsd:restriction base="xsd:positiveInteger">
+			<xsd:maxExclusive value="5"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:simpleType name="duree">
+		<xsd:restriction base="xsd:positiveInteger">
+			<xsd:maxExclusive value="999"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:complexType name="typeEntreeSortie">
+		<xsd:complexContent>
+			<xsd:extension base="typeDateHeureOptionnelle">
+				<xsd:attribute name="mode" type="modeMouvementPMSI" use="required"/>
+				<xsd:attribute name="complementMode" type="complementModePMSI" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:simpleType name="modeMouvementPMSI">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="0"/>
+			<xsd:enumeration value="6"/>
+			<xsd:enumeration value="7"/>
+			<xsd:enumeration value="8"/>
+			<xsd:enumeration value="9"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:complexType name="typeCodesLibres">
+		<xsd:sequence>
+			<xsd:element name="codeLibre" type="typeCode10Libelle35" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeUniteMedicale">
+		<xsd:complexContent>
+			<xsd:extension base="typeCode10Libelle35">
+				<xsd:sequence>
+					<xsd:element name="entree" type="typeEntreeSortie"/>
+					<xsd:element name="sortie" type="typeEntreeSortie" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typeActeRumCcam">
+		<xsd:sequence>
+			<xsd:element name="codeActe" type="ccam"/>
+			<xsd:element name="codePhase" type="nombre2"/>
+			<xsd:element name="quantite" type="nombre2"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeProfessionnelSante">
+		<xsd:sequence>
+			<xsd:element name="numeroAdeli" type="numeroFiness" minOccurs="0"/>
+			<xsd:element name="identification" type="typeCode10Libelle35" minOccurs="0"/>
+			<xsd:element name="personne" type="typePersonne" minOccurs="0"/>
+			<xsd:element name="specialiteHprim" type="typeSpecialiteProfessionnelHprim" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeMedecins">
+		<xsd:sequence>
+			<xsd:element name="medecin" type="typeMedecin" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeMedecin">
+		<xsd:complexContent>
+			<xsd:extension base="typeProfessionnelSante">
+				<xsd:attribute name="lien" type="lienMedecinHprim" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typePreleveur">
+		<xsd:complexContent>
+			<xsd:extension base="typeProfessionnelSante">
+				<xsd:attribute name="autorisationPrelevementArteriel" type="ouiNon" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typeEtablissementSante">
+		<xsd:sequence>
+			<xsd:element name="numeroAdeli" type="numeroFiness" minOccurs="0"/>
+			<xsd:element name="numeroFiness" type="numeroFiness" minOccurs="0"/>
+			<xsd:element name="identification" type="typeCode10Libelle35" minOccurs="0"/>
+			<xsd:element name="adresses" type="typeAdresses" minOccurs="0"/>
+			<xsd:element name="telephones" type="typeNumerosTelephones" minOccurs="0"/>
+			<xsd:element name="emails" type="typeEmails" minOccurs="0"/>
+			<xsd:element name="specialite" type="typeSpecialiteProfessionnelHprim" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeSpecialiteProfessionnelHprim">
+		<xsd:complexContent>
+			<xsd:extension base="typeCode12Libelle80">
+				<xsd:attribute name="valeur" type="specialiteProfessionnelHprim" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:annotation>
+		<xsd:documentation>contient les types d'éléments représentant des personnes en relation avec le patient : parent, tuteur, personne à prévenir</xsd:documentation>
+	</xsd:annotation><xsd:complexType name="typePersonnesPrevenir">
+		<xsd:sequence>
+			<xsd:element name="personnePrevenir" type="typePersonnePrevenir" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typePersonnePrevenir">
+		<xsd:sequence>
+			<xsd:element name="personne" type="typePersonne" minOccurs="0"/>
+			<xsd:element name="commentaire" type="commentaire" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>permet de décrire des informations complémentaires sur la personne.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="lienParente" type="lienParenteHprim" use="optional"/>
+		<xsd:attribute name="responsable" type="ouiNon" use="optional"/>
+		<xsd:attribute name="visiteAutorisee" type="ouiNon" use="optional"/>
+		<xsd:attribute name="enfantARemettre" type="ouiNon" use="optional"/>
+	</xsd:complexType><xsd:complexType name="typeRss">
+      <xsd:sequence>
+         <xsd:element name="identifiantRSS" type="typeIdentifiantPMSI">
+            <xsd:annotation>
+               <xsd:documentation> valeur alphanumérique indiquant d'une façon unique le résumé de sortie standardisé évoqué dans l'événement </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="groupage" type="typeGroupageRss" minOccurs="0"/>
+         <xsd:element name="rum" type="typeRum" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>relate les informations necessaires pour un résumé d'unité médicale </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="version" type="attrVersionRum" use="optional"/>
+   </xsd:complexType><xsd:complexType name="typeRssGroupe">
+      <xsd:sequence>
+         <xsd:element name="identifiantRSS" type="typeIdentifiantPMSI"/>
+         <xsd:element name="groupage" type="typeGroupageRss"/>
+      </xsd:sequence>
+      <xsd:attribute name="action" type="actionMiseAJour" use="required"/>
+      <xsd:attribute name="version" type="attrVersionRum" use="optional"/>
+   </xsd:complexType><xsd:complexType name="typeRum">
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="xsd:dateTime"/>
+         <xsd:element name="acteurAction" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="identifiant" type="typeIdentifiantPMSI"/>
+         <xsd:element name="medecinResponsable" type="typeMedecin" minOccurs="0"/>
+         <xsd:element name="uniteMedicale" type="typeUniteMedicale"/>
+         <xsd:element name="diagnostics" type="typeDiagnosticsRum"/>
+         <xsd:element name="actes" type="typeActesRum" minOccurs="0"/>
+         <xsd:element name="igs2" type="igs2" minOccurs="0"/>
+         <xsd:element name="seance" type="seance" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="action" type="actionMiseAJour" use="required"/>
+   </xsd:complexType><xsd:complexType name="typeGroupageRss">
+      <xsd:sequence>
+         <xsd:element name="cmd" type="xsd:integer"/>
+         <xsd:element name="ghm" type="xsd:integer"/>
+         <xsd:element name="codeErreur" type="xsd:integer"/>
+      </xsd:sequence>
+      <xsd:attribute name="version" type="attrVersionGroupeur"/>
+   </xsd:complexType><xsd:simpleType name="attrVersionGroupeur">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="23"/>
+         <xsd:enumeration value="34"/>
+         <xsd:enumeration value="45"/>
+         <xsd:enumeration value="50"/>
+         <xsd:enumeration value="67"/>
+         <xsd:enumeration value="68"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="attrVersionRum">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="002"/>
+         <xsd:enumeration value="003"/>
+         <xsd:enumeration value="004"/>
+         <xsd:enumeration value="005"/>
+         <xsd:enumeration value="007"/>
+         <xsd:enumeration value="008"/>
+         <xsd:enumeration value="A04"/>
+         <xsd:enumeration value="A05"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:complexType name="typeSaisieDelocalisee">
+		<xsd:annotation>
+			<xsd:documentation>Illustre un ensemble d'éléments entrant dans la fabrication de rum ou de rhs sans avoir l'effet structurant des résumés et donc adaptable de la problématique des unités de soins 
+         </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="dateAction" type="xsd:dateTime"/>
+			<xsd:element name="acteurAction" type="typeProfessionnelSante" minOccurs="0"/>
+			<xsd:element name="dateHeureReference" type="typeDateHeureOptionnelle">
+				<xsd:annotation>
+					<xsd:documentation> datation de référence de l'événement</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="identifiant" type="typeIdentifiantPMSI">
+				<xsd:annotation>
+					<xsd:documentation> valeur alphanumérique indiquant d'une façon unique la saisie délocalisée instanciée</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="uniteMedicale" type="typeUniteMedicale" minOccurs="0"/>
+			<xsd:element name="uniteFonctionnelleResponsable" type="typeCode10Libelle35" minOccurs="0"/>
+			<xsd:element name="medecinResponsable" type="typeMedecin" minOccurs="0"/>
+			<xsd:element name="actesRhs" type="typeActesRhs" minOccurs="0"/>
+			<xsd:element name="diagnosticsRhs" type="typeDiagnosticsRhs" minOccurs="0"/>
+			<xsd:element name="actesRum" type="typeActesRum" minOccurs="0"/>
+			<xsd:element name="diagnosticsRum" type="typeDiagnosticsRum" minOccurs="0"/>
+			<xsd:element name="actesReeducation" type="typeActesReeducation" minOccurs="0"/>
+			<xsd:element name="dependances" type="typeDependances" minOccurs="0"/>
+			<xsd:element name="igs2" type="igs2" minOccurs="0"/>
+			<xsd:element name="seance" type="seance" minOccurs="0"/>
+			<xsd:element name="dateDerniereIntervention" type="xsd:date" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="action" type="actionMiseAJour" use="required"/>
+	</xsd:complexType><xsd:complexType name="typeSsr">
+      <xsd:sequence>
+         <xsd:element name="identifiantSSR" type="typeIdentifiantPMSI">
+            <xsd:annotation>
+               <xsd:documentation> valeur alphanumérique indiquant d'une façon unique le soin de suite et de réadaptation évoqué dans l'événement </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="rhs" type="typeRhs" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation> relate les informations necessaires pour un résumé hebdomadaire de soins </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeRhs">
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="xsd:dateTime"/>
+         <xsd:element name="acteurAction" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="identifiant" type="typeIdentifiantPMSI"/>
+         <xsd:element name="dateHeureOptionnelleLundi" type="typeDateHeureOptionnelle"/>
+         <xsd:element name="medecinResponsable" type="typeMedecin" minOccurs="0"/>
+         <xsd:element name="uniteMedicale" type="typeUniteMedicale"/>
+         <xsd:element name="joursPresence" type="typeJoursPresence"/>
+         <xsd:element name="diagnostics" type="typeDiagnosticsRhs"/>
+         <xsd:element name="actes" type="typeActesRhs" minOccurs="0"/>
+         <xsd:element name="actesReeducation" type="typeActesReeducation" minOccurs="0"/>
+         <xsd:element name="dependances" type="typeDependances"/>
+         <xsd:element name="dateDerniereIntervention" type="xsd:date" minOccurs="0"/>
+         <xsd:element name="groupage" type="typeGroupageSsr" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="action" type="actionMiseAJour" use="required"/>
+      <xsd:attribute name="version" type="attrVersionRhs" use="required"/>
+   </xsd:complexType><xsd:complexType name="typeGroupageSsr">
+      <xsd:sequence>
+         <xsd:element name="cmc" type="xsd:integer"/>
+         <xsd:element name="ghs" type="xsd:integer"/>
+         <xsd:element name="codeErreur" type="xsd:integer"/>
+      </xsd:sequence>
+      <xsd:attribute name="version" type="attrVersionGroupeurRhs"/>
+   </xsd:complexType><xsd:simpleType name="attrVersionGroupeurRhs">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="12"/>
+         <xsd:enumeration value="20"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="attrVersionRhs">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="M01"/>
+         <xsd:enumeration value="M02"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:complexType name="typeTraitements">
+		<xsd:sequence>
+			<xsd:element name="traitement" type="typeTraitement" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeTraitement">
+		<xsd:complexContent>
+			<xsd:extension base="typeCode17Libelle80Commentaire">
+				<xsd:sequence>
+					<xsd:element name="motif" type="texte80" minOccurs="0"/>
+					<xsd:element name="dateDebutEstimee" type="xsd:date" minOccurs="0"/>
+					<xsd:element name="dateFinEstimee" type="xsd:date" nillable="true" minOccurs="0"/>
+					<xsd:element name="piecesJointes" type="typePiecesJointes" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:annotation>
+      <xsd:documentation>contient les items de base : lignes, chaines, numéros formatés...
+      </xsd:documentation>
+   </xsd:annotation><xsd:simpleType name="actionDemandeDemandeur">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="création"/>
+         <xsd:enumeration value="remplacement"/>
+         <xsd:enumeration value="corrections"/>
+         <xsd:enumeration value="suppression"/>
+         <xsd:enumeration value="suspension"/>
+         <xsd:enumeration value="reprise"/>
+         <xsd:enumeration value="terminaison"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="actionDemandeExecutant">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="récapitulatif"/>
+         <xsd:enumeration value="differentiel"/>
+         <xsd:enumeration value="statuts"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="actionExamenTestResultat">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="création"/>
+         <xsd:enumeration value="remplacement"/>
+         <xsd:enumeration value="corrections"/>
+         <xsd:enumeration value="suppression"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="actionEchantillon">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="création"/>
+         <xsd:enumeration value="remplacement"/>
+         <xsd:enumeration value="corrections"/>
+         <xsd:enumeration value="suppression"/>
+         <xsd:enumeration value="rappel"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="actionFusion">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="fusion"/>
+         <xsd:enumeration value="défusion"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="actionDemandee">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="demandeIdentifiant"/>
+         <xsd:enumeration value="demandeInformation"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="actionMiseAJour">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="création"/>
+         <xsd:enumeration value="remplacement"/>
+         <xsd:enumeration value="modification"/>
+         <xsd:enumeration value="suppression"/>
+         <xsd:enumeration value="information"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="commentaire">
+      <xsd:restriction base="xsd:string">
+         <xsd:maxLength value="4000"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="decimalPositif">
+      <xsd:restriction base="xsd:decimal">
+         <xsd:minExclusive value="0"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="erreurOuAvertissement">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="erreur"/>
+         <xsd:enumeration value="avertissement"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="minOuMax">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="min"/>
+         <xsd:enumeration value="max"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="nom1">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9])"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="nom2">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9]){1,2}"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="nom3">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9]|[\-,_]){1,3}"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="nom10">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9]|[\-,_]){1,10}"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="nom12">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9]|[\-,_]){1,12}"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="nom15">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9]|[\-,_]){1,15}"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="nom17">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9]|[\-,_]){1,17}"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="nom21">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9]|[\-,_]){1,21}"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="numero20">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="\d{1,20}"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="numeroFiness">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="\d{9}"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="numeroVersion">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="\d{1,2}(\.\d{0,2})?"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="ouiNon">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="oui"/>
+         <xsd:enumeration value="non"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="priorite">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="routine"/>
+         <xsd:enumeration value="urgent"/>
+         <xsd:enumeration value="immédiat"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="statutAcquittement">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="OK"/>
+         <xsd:enumeration value="avertissement"/>
+         <xsd:enumeration value="erreur"/>
+         <xsd:enumeration value="rejet"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="statutExecutantDemandeExamenTest">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="attenteEchantillon"/>
+         <xsd:enumeration value="attenteInformation"/>
+         <xsd:enumeration value="initial"/>
+         <xsd:enumeration value="partiel"/>
+         <xsd:enumeration value="complet"/>
+         <xsd:enumeration value="suspendu"/>
+         <xsd:enumeration value="repris"/>
+         <xsd:enumeration value="annulé"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="texte35">
+      <xsd:restriction base="xsd:string">
+         <xsd:maxLength value="35"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="texte80">
+      <xsd:restriction base="xsd:string">
+         <xsd:maxLength value="80"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="texte400">
+      <xsd:restriction base="xsd:string">
+         <xsd:maxLength value="400"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:complexType name="typeCode10Libelle35">
+      <xsd:sequence>
+         <xsd:element name="code" type="nom10"/>
+         <xsd:element name="libelle" type="texte35" minOccurs="0"/>
+         <xsd:element name="dictionnaire" type="nom12" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeCode10Libelle80">
+      <xsd:sequence>
+         <xsd:element name="code" type="nom10"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+         <xsd:element name="dictionnaire" type="nom12" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeCode12Libelle80">
+      <xsd:sequence>
+         <xsd:element name="code" type="nom12" minOccurs="0"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+         <xsd:element name="dictionnaire" type="nom12" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeCode17Libelle80Commentaire">
+      <xsd:sequence>
+         <xsd:element name="code" type="nom17" minOccurs="0"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+         <xsd:element name="dictionnaire" type="nom12" minOccurs="0"/>
+         <xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeCode21Libelle80">
+      <xsd:sequence>
+         <xsd:element name="code" type="nom21"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+         <xsd:element name="dictionnaire" type="nom12" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeContainer">
+      <xsd:sequence>
+         <xsd:element name="identifiant" type="nom17"/>
+         <xsd:element name="dateFermeture" type="xsd:date" minOccurs="0"/>
+         <xsd:element name="heureFermeture" type="xsd:time" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeEntiteJuridique">
+      <xsd:sequence>
+         <xsd:element name="finess" type="numeroFiness" minOccurs="0"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+         <xsd:element name="etablissement" type="typeEtablissement" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:complexType name="typeEtablissement">
+      <xsd:sequence>
+         <xsd:element name="finess" type="numeroFiness" minOccurs="0"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType><xsd:simpleType name="nombre2">
+      <xsd:restriction base="xsd:integer">
+         <xsd:minInclusive value="0"/>
+         <xsd:maxInclusive value="99"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="nombre5">
+      <xsd:restriction base="xsd:integer">
+         <xsd:minInclusive value="1"/>
+         <xsd:maxInclusive value="99999"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="nombre9">
+      <xsd:restriction base="xsd:integer">
+         <xsd:minInclusive value="1"/>
+         <xsd:maxInclusive value="999999999"/>
+      </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="nombre14">
+                  <xsd:restriction base="xsd:integer">
+                  <xsd:minInclusive value="1"/>
+                  <xsd:maxInclusive value="99999999999999"/>
+               </xsd:restriction>
+   </xsd:simpleType><xsd:simpleType name="ccam">
+                  <xsd:restriction base="xsd:string">
+         <xsd:pattern value="[A-Z]{4}[0-9]{3}"/>
+               </xsd:restriction>
+   </xsd:simpleType><xsd:annotation>
+		<xsd:documentation>Ce schéma contient tous les types de données construits à partir du temps qui passe : dates, heures, durées, intervalles, périodes, fréquences, ...</xsd:documentation>
+	</xsd:annotation><xsd:complexType name="typeDateRecueillie">
+		<xsd:complexContent>
+			<xsd:extension base="typeDateHeureOptionnelle">
+				<xsd:attribute name="dateIncertaine" type="ouiNon" default="non"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typeDateHeureOptionnelle">
+		<xsd:sequence>
+			<xsd:element name="date" type="xsd:date"/>
+			<xsd:element name="heure" type="xsd:time" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeTempsIndice">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:unsignedShort">
+				<xsd:attribute name="unite" type="uniteTemps" use="required"/>
+				<xsd:attribute name="indice" type="xsd:unsignedByte" use="optional"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType><xsd:complexType name="typeSequenceTemporelle">
+		<xsd:sequence>
+			<xsd:element name="quantite" type="xsd:unsignedByte" minOccurs="0"/>
+			<xsd:element name="debut" type="typeDateHeureOptionnelle" minOccurs="0"/>
+			<xsd:choice minOccurs="0">
+				<xsd:element name="fin" type="typeDateHeureOptionnelle"/>
+				<xsd:element name="dureeMax" type="typeDuree"/>
+				<xsd:element name="nombreMax" type="xsd:unsignedByte"/>
+			</xsd:choice>
+			<xsd:choice minOccurs="0">
+				<xsd:element name="intervalleRepetition" type="typeDuree"/>
+				<xsd:element name="jourSemaine" type="jourSemaine"/>
+				<xsd:element name="jourMois" type="jourMois"/>
+			</xsd:choice>
+			<xsd:choice minOccurs="0">
+				<xsd:element name="heureExecution" type="xsd:time" minOccurs="0"/>
+				<xsd:element name="moments" type="typeMomentsQuotidiens" minOccurs="0"/>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeMomentsQuotidiens">
+		<xsd:sequence>
+			<xsd:element name="momentQuotidien" type="momentQuotidien" maxOccurs="5"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeDureeFrequence">
+		<xsd:sequence>
+			<xsd:element name="duree" type="typeDuree"/>
+			<xsd:element name="frequence" type="typeFrequence"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeDuree">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:unsignedShort">
+				<xsd:attribute name="unite" type="uniteTemps" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType><xsd:complexType name="typeFrequence">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:unsignedShort">
+				<xsd:attribute name="par" type="uniteTemps" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType><xsd:simpleType name="uniteTemps">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="milliseconde"/>
+			<xsd:enumeration value="seconde"/>
+			<xsd:enumeration value="minute"/>
+			<xsd:enumeration value="heure"/>
+			<xsd:enumeration value="jour"/>
+			<xsd:enumeration value="semaine"/>
+			<xsd:enumeration value="quinzaine"/>
+			<xsd:enumeration value="mois"/>
+			<xsd:enumeration value="bimestre"/>
+			<xsd:enumeration value="trimestre"/>
+			<xsd:enumeration value="semestre"/>
+			<xsd:enumeration value="an"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:simpleType name="jourSemaine">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="lundi"/>
+			<xsd:enumeration value="mardi"/>
+			<xsd:enumeration value="mercredi"/>
+			<xsd:enumeration value="jeudi"/>
+			<xsd:enumeration value="vendredi"/>
+			<xsd:enumeration value="samedi"/>
+			<xsd:enumeration value="dimanche"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:simpleType name="jourMois">
+		<xsd:restriction base="xsd:unsignedByte">
+			<xsd:minInclusive value="1"/>
+			<xsd:maxInclusive value="31"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:simpleType name="momentQuotidien">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="reveil"/>
+			<xsd:enumeration value="coucher"/>
+			<xsd:enumeration value="toilette"/>
+			<xsd:enumeration value="repas"/>
+			<xsd:enumeration value="avant_repas"/>
+			<xsd:enumeration value="après_repas"/>
+			<xsd:enumeration value="matin"/>
+			<xsd:enumeration value="midi"/>
+			<xsd:enumeration value="soir"/>
+			<xsd:enumeration value="petit_déjeuner"/>
+			<xsd:enumeration value="déjeuner"/>
+			<xsd:enumeration value="diner"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:complexType name="typeVenue">
+		<xsd:sequence>
+			<xsd:element name="identifiant" type="typeIdentifiantVenue"/>
+			<xsd:element name="natureVenueHprim" type="typeNatureVenueHprim" minOccurs="0"/>
+			<xsd:element name="entree">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="typeEntreeVenue"/>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="medecins" type="typeMedecins" minOccurs="0"/>
+			<xsd:element name="sortie" type="typeSortieVenue" minOccurs="0"/>
+			<xsd:element name="droitOubli" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="Placement" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="modePlacement">
+							<xsd:complexType>
+								<xsd:complexContent>
+									<xsd:extension base="typeCode12Libelle80">
+										<xsd:attribute name="modaliteHospitalisation" type="modaliteHospitalisationHprim" use="optional"/>
+									</xsd:extension>
+								</xsd:complexContent>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="datePlacement">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="date" type="xsd:date"/>
+									<xsd:element name="heure" type="xsd:time" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="confidentiel" type="ouiNon" default="non"/>
+		<xsd:attribute name="anonyme" type="ouiNon" use="optional"/>
+		<xsd:attribute name="etat" type="etatVenue" use="optional"/>
+		<xsd:attribute name="facturable" type="ouiNon" use="optional"/>
+		<xsd:attribute name="prive" type="ouiNon" use="optional"/>
+	</xsd:complexType><xsd:complexType name="typeNatureVenueHprim">
+		<xsd:complexContent>
+			<xsd:extension base="typeCode12Libelle80">
+				<xsd:sequence>
+					<xsd:element name="accompagne" type="typePatientAccompagne" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Cet 'élément  est utilisé lorsque la nature vaut "acc" = accompagnant. Dans ce cas, l'élément "patient" dans l'événement décrit l'accompagnant, et l'élément "accompagne" référence le patient accompagné, à l'aide de son ipp et de sa venue.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+				<xsd:attribute name="valeur" type="venueHprim" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType><xsd:complexType name="typePatientAccompagne">
+		<xsd:sequence>
+			<xsd:element name="identifiantPermanent" type="typeIdentifiantAdministrationPatient"/>
+			<xsd:element name="identifiantVenue" type="typeIdentifiantVenue"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:simpleType name="etatVenue">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="encours"/>
+			<xsd:enumeration value="clôturée"/>
+			<xsd:enumeration value="préadmission"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:complexType name="typeEntreeVenue">
+		<xsd:sequence>
+			<xsd:element name="dateHeureOptionnelle" type="typeDateHeureOptionnelle"/>
+			<xsd:element name="modeEntree" type="typeModeEntreeEtablissementHprim" minOccurs="0"/>
+			<xsd:element name="modeTransport" type="typeModeTransportHprim" minOccurs="0"/>
+			<xsd:element name="uniteFonctionnelleResponsable" type="typeCode10Libelle35" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="typeEntree" type="typeEntreeHopital" use="optional"/>
+	</xsd:complexType><xsd:simpleType name="typeEntreeHopital">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="urgence"/>
+			<xsd:enumeration value="directe"/>
+			<xsd:enumeration value="rendez-vous"/>
+		</xsd:restriction>
+	</xsd:simpleType><xsd:complexType name="typeSortieVenue">
+		<xsd:sequence>
+			<xsd:element name="dateHeureOptionnelle" type="typeDateHeureOptionnelle"/>
+			<xsd:element name="modeSortieHprim" type="typeModeSortieEtablissementHprim" minOccurs="0"/>
+			<xsd:element name="modeTransportHprim" type="typeModeTransportHprim" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:annotation>
+		<xsd:documentation>contient le type d'élément "typeVoletMedical" contenant les renseignements cliniques et médicaux sur le patient</xsd:documentation>
+	</xsd:annotation><xsd:complexType name="typeVoletMedical">
+		<xsd:sequence>
+			<xsd:element name="constantes" type="typeConstantesMedicales" minOccurs="0"/>
+			<xsd:element name="carteGroupeSanguin" type="typeCarteGroupeSanguin" minOccurs="0"/>
+			<xsd:element name="facteursEnvironnement" type="typeFacteursEnvironnement" minOccurs="0"/>
+			<xsd:element name="antecedents" type="typeAntecedents" minOccurs="0"/>
+			<xsd:element name="allergies" type="typeAllergies" minOccurs="0"/>
+			<xsd:element name="traitements" type="typeTraitements" minOccurs="0"/>
+			<xsd:element name="antecedentsFamiliaux" type="typeAntecedentsFamiliaux" minOccurs="0"/>
+			<xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+			<xsd:element name="piecesJointes" type="typePiecesJointes" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="grossesse" type="ouiNon" use="optional"/>
+		<xsd:attribute name="nouveauNe" type="ouiNon" use="optional"/>
+	</xsd:complexType><xsd:complexType name="typeConstantesMedicales">
+		<xsd:sequence>
+			<xsd:element name="constante" type="typeConstanteMedicale" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeConstanteMedicale">
+		<xsd:sequence>
+			<xsd:element name="valeur" type="typeValeurUnite"/>
+			<xsd:element name="dateObservation" type="typeDateHeureOptionnelle" minOccurs="0"/>
+			<xsd:element name="autreIdentification" type="typeCode12Libelle80" minOccurs="0"/>
+			<xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="nature" type="natureConstanteMedicaleHprim" use="optional"/>
+	</xsd:complexType><xsd:complexType name="typeValeurUnite">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="unite" type="uniteHprim" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType><xsd:complexType name="typeAntecedentsFamiliaux">
+		<xsd:sequence>
+			<xsd:element name="antecedentFamilial" type="typeAntecedentFamilial" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeAntecedentFamilial">
+		<xsd:sequence>
+			<xsd:element name="parent" type="lienSangHprim"/>
+			<xsd:choice>
+				<xsd:element name="habitude" type="texte80"/>
+				<xsd:element name="antecedent" type="typeAntecedent"/>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeAntecedents">
+		<xsd:sequence>
+			<xsd:element name="antecedent" type="typeAntecedent" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeAntecedent">
+		<xsd:sequence>
+			<xsd:element name="identification" type="typeCode17Libelle80Commentaire">
+				<xsd:annotation>
+					<xsd:documentation>L'identifiant peut être exprimé dans la CIM10, dans ce cas l'élément fils "dictionnaire" vaut "CIM10", et l'élément "code" contient le code de la CIM10.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="dateDebutEstimee" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="dateFinEstimee" type="xsd:date" nillable="true" minOccurs="0"/>
+			<xsd:element name="piecesJointes" type="typePiecesJointes" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeAllergies">
+		<xsd:sequence>
+			<xsd:element name="allergie" type="typeAllergie" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType><xsd:complexType name="typeAllergie">
+		<xsd:sequence>
+			<xsd:element name="categorie" type="typeCode17Libelle80Commentaire" minOccurs="0"/>
+			<xsd:element name="allergene" type="typeCode17Libelle80Commentaire"/>
+			<xsd:element name="reaction" type="typeCode17Libelle80Commentaire" minOccurs="0"/>
+			<xsd:element name="dateDebutEstimee" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="dateFinEstimee" type="xsd:date" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="gravite" type="graviteHprim" use="optional"/>
+	</xsd:complexType></xsd:schema>

@@ -1,0 +1,53 @@
+/* Global CSS for Mediboard_super_lite (include of Mediboard before)*/
+
+/* Tab view table */
+
+table.taborflat {
+  display: none;
+}
+
+table.tabview {
+  border-spacing: 0px;
+  border-collapse: collapse; /* Hack for IE */
+  empty-cells: show;
+  width: 100%;
+}
+
+table.tabmenu {
+  margin-left: 20px;
+  border-spacing: 0px;
+}
+
+table.tabmenu td {
+  height: 16px;	
+}
+
+table.tabmenu td.normal {
+  background: #bbb; /*url(./images/tabBg.png) repeat-x bottom;*/
+  padding: 3px;
+}
+
+table.tabmenu td.normalLeft {
+  width: 3px;
+  background: transparent;
+}
+
+table.tabmenu td.normalRight {
+  width: 3px;
+  background: transparent;
+}
+
+table.tabmenu td.selected {
+  background: #afa;
+  padding: 3px;
+}
+
+table.tabmenu td.selectedLeft {
+  width: 3px;
+  background: transparent;
+}
+
+table.tabmenu td.selectedRight {
+  width: 3px;
+  background: transparent;
+}

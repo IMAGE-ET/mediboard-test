@@ -1,0 +1,753 @@
+'GHS';'GHM';'Libellé du GHM';'bornes basses';'bornes hautes';'tarif 2006';'EXH'
+1;'01C01S';'Interventions pour affections du système nerveux,sauf craniotomie, avec CMAS';4;42;3984,59;175,84
+3;'01C03V';'Craniotomies pour traumatisme, âge supérieur à 17ans sans CMA ';3;37;1631,67;139,42
+4;'01C03W';'Craniotomies pour traumatisme, âge supérieur à 17ans avec CMA ';6;47;4449,73;175,4
+5;'01C04V';'Craniotomies en dehors de tout traumatisme, âgesupérieur à 17 ans sans CMA ';4;40;2880,63;214,41
+6;'01C04W';'Craniotomies en dehors de tout traumatisme, âgesupérieur à 17 ans avec CMA ';6;50;4794,89;177,32
+7;'01C05V';'Interventions sur le rachis et la moelle pour desaffections neurologiques sans CMA ';'-';22;1914,42;198,01
+8;'01C05W';'Interventions sur le rachis et la moelle pour desaffections neurologiques avec CMA ';4;28;2585,93;172,72
+9;'01C06V';'Interventions sur le système vasculaire précérébralsans CMA';'-';17;2635,88;281,86
+10;'01C06W';'Interventions sur le système vasculaire précérébralavec CMA';3;21;2919,09;254,04
+12;'01C08V';'Interventions sur les nerfs crâniens oupériphériques et autres interventions sur le systèmenerveux, âge inférieur à 70 ans sans CMA ';'-';13;1147,97;242,76
+13;'01C08W';'Interventions sur les nerfs crâniens oupériphériques et autres interventions sur le systèmenerveux, âge supérieur à 69 ans et/ou CMA ';'-';16;1414,21;158,18
+14;'01C09Z';'Pose d''un stimulateur cérébral ';3;33;3485,44;195,08
+15;'01C10Z';'Pose d''un stimulateur médullaire ';'-';15;1032,22;195,32
+16;'01C11Z';'Craniotomies pour tumeurs, âge inférieur à 18 ans ';3;23;3098,55;244,62
+17;'01C12Z';'Craniotomies pour affections non tumorales, âgeinférieur à 18 ans ';'-';15;3168,37;380,2
+18;'01K02Z';'Embolisations intracrâniennes et médullaires ';'-';20;2685,75;242,63
+19;'01K03Z';'Autres actes thérapeutiques par voie vasculaire dusystème nerveux ';'-';15;1490,04;286,73
+20;'01C13Z';'Libérations du canal carpien et autres actes sur lesnerfs périphériques';'-';8;768,86;215,64
+150;'01M01S';'Affections du système nerveux, avec CMAS ';'-';45;2387,05;99,4
+151;'01M02Z';'Convulsions, épilepsies et céphalées, âge inférieurà 18 ans ';'-';15;708,84;116,93
+152;'01M03V';'Convulsions, épilepsies et céphalées, âge de 18 à69 ans sans CMA ';'-';17;645,52;95,7
+153;'01M03W';'Convulsions, épilepsies et céphalées, âge de 18 à69 ans avec CMA, ou âge supérieur à 69 ans ';3;22;1068,53;90,08
+154;'01M04Z';'Méningites virales ';'-';18;918,32;92,35
+155;'01M05V';'Infections du système nerveux à l''exception desméningites virales, âge inférieur à 70 ans sansCMA ';'-';27;1483,33;141,12
+156;'01M05W';'Infections du système nerveux à l''exception desméningites virales, âge supérieur à 69 ans et/ouCMA ';'-';34;2403,91;128,93
+157;'01M06V';'Tumeurs du système nerveux, sans CMA ';'-';30;1607,85;107,54
+158;'01M06W';'Tumeurs du système nerveux, avec CMA ';4;38;2120,93;102,01
+159;'01M07Z';'Maladies dégénératives du système nerveux, âgesupérieur à 80 ans ';'-';28;1310,82;87,59
+160;'01M08V';'Maladies dégénératives du système nerveux, âgeinférieur à 81 ans sans CMA ';'-';25;1148,52;98,41
+161;'01M08W';'Maladies dégénératives du système nerveux, âgeinférieur à 81 ans avec CMA ';5;32;1565,17;91,5
+162;'01M09Z';'Affections et lésions du rachis et de la moelle ';3;28;1491,99;99,34
+163;'01M10V';'Autres affections cérébrovasculaires sans CMA';'-';24;960,24;104,55
+164;'01M10W';'Autres affections cérébrovasculaires avec CMA ';'-';30;1459,99;90,4
+165;'01M11V';'Affections des nerfs crâniens et rachidiens, âgeinférieur à 70 ans sans CMA ';'-';17;781,24;110,22
+166;'01M11W';'Affections des nerfs crâniens et rachidiens, âgesupérieur à 69 ans et/ou CMA';3;22;1190,44;99,74
+167;'01M12V';'Autres affections du système nerveux, âge inférieurà 70 ans sans CMA ';'-';19;629,75;106,87
+168;'01M12W';'Autres affections du système nerveux, âgesupérieur à 69 ans et/ou CMA ';'-';24;1189,72;89,39
+169;'01M13Z';'Troubles de la conscience et comas d''origine nontraumatique ';'-';22;1035,25;86,94
+170;'01M14V';'Accidents vasculaires cérébraux non transitoiressans CMA ';'-';26;1246,25;88,86
+171;'01M14W';'Accidents vasculaires cérébraux non transitoiresavec CMA ';4;31;1529,77;89,76
+172;'01M15Z';'Accidents ischémiques transitoires et occlusionsdes artères précérébrales, âge supérieur à 80 ans ';'-';18;999,41;99,08
+173;'01M16Z';'Accidents ischémiques transitoires et occlusionsdes artères précérébrales, âge inférieur à 81 ans ';'-';15;879,29;131,84
+174;'01M17V';'Sclérose en plaques et ataxie cérébelleuse, âgeinférieur à 70 ans sans CMA ';'-';16;585,57;99,62
+175;'01M17W';'Sclérose en plaques et ataxie cérébelleuse, âgesupérieur à 69 ans et/ou CMA ';3;21;1101,54;98,33
+176;'01M18V';'Lésions traumatiques intracrâniennes sévères, âgeinférieur à 70 ans sans CMA ';'-';24;1179,84;183,3
+177;'01M18W';'Lésions traumatiques intracrâniennes sévères, âgesupérieur à 69 ans et/ou CMA ';4;30;1990,98;121,9
+178;'01M19V';'Autres lésions traumatiques intracrâniennes, saufcommotions, âge inférieur à 70 ans sans CMA ';'-';23;667,62;91,44
+179;'01M19W';'Autres lésions traumatiques intracrâniennes, saufcommotions, âge supérieur à 69 ans et/ou CMA ';'-';29;1360,72;87,13
+180;'01M20V';'Commotions cérébrales, âge inférieur à 70 ans sansCMA ';'-';15;404,64;108,14
+181;'01M20W';'Commotions cérébrales, âge supérieur à 69 ans et/ou CMA ';'-';19;966,81;94,2
+182;'01M21Z';'Douleurs chroniques rebelles ';'-';22;1236,22;102,15
+400;'02C02V';'Interventions sur la rétine, âge inférieur à 70 anssans CMA ';'-';12;1352,46;370,83
+401;'02C02W';'Interventions sur la rétine, âge supérieur à 69 anset/ou CMA ';'-';15;1590,62;280,42
+402;'02C03Z';'Interventions sur l''orbite ';'-';10;1206,21;281,86
+403;'02C04Z';'Autres interventions intraoculaires ';'-';8;1257,29;366,24
+404;'02C05Z';'Interventions sur le cristallin avec ou sansvitrectomie ';'-';3;1202,7;418
+405;'02C06Z';'Interventions primaires sur l''iris ';'-';15;829,7;211,61
+406;'02C07Z';'Autres interventions extraoculaires, âge inférieur à18 ans ';'-';3;766,13;281,66
+407;'02C08V';'Autres interventions extraoculaires, âge de 18 à 69ans sans CMA ';'-';12;806,12;281,89
+408;'02C08W';'Autres interventions extraoculaires, âge de 18 à 69ans avec CMA, ou âge supérieur à 69 ans ';'-';15;1196,56;196,66
+409;'02C09Z';'Allogreffes de cornée ';'-';9;3821,28;799,91
+500;'02M02Z';'Hyphéma ';'-';15;678,15;149,14
+501;'02M03Z';'Infections oculaires aiguës sévères ';'-';18;1122,3;114,78
+502;'02M04Z';'Affections oculaires d''origine neurologique ';'-';15;613,38;97,33
+503;'02M05Z';'Autres affections oculaires, âge inférieur à 18 ans ';'-';8;784,29;218,21
+504;'02M06V';'Autres affections oculaires, âge supérieur à 17 anssans CMA ';'-';16;827,58;134,67
+505;'02M06W';'Autres affections oculaires, âge supérieur à 17 ansavec CMA ';'-';20;1085,45;99,74
+600;'03C02V';'Interventions majeures sur la tête et le cou sansCMA ';'-';40;2664,66;157,42
+601;'03C02W';'Interventions majeures sur la tête et le cou avecCMA ';7;50;4160,82;153,81
+602;'03C03Z';'Exérèses de glandes salivaires ';'-';9;1160,24;214,78
+603;'03C04Z';'Interventions sur les glandes salivaires autres queles exérèses ';'-';15;1190,07;314,74
+604;'03C05Z';'Réparations de fissures labiale et palatine ';'-';13;1437,8;215,67
+605;'03C06Z';'Interventions sur les sinus et l''apophyse mastoïde,âge inférieur à 18 ans ';'-';9;1055,67;282,5
+606;'03C07V';'Interventions sur les sinus et l''apophyse mastoïde,âge de 18 à 69 ans sans CMA ';'-';11;1071,23;283,84
+607;'03C07W';'Interventions sur les sinus et l''apophyse mastoïde,âge de 18 à 69 ans avec CMA, ou âge supérieur à69 ans ';'-';14;1263,78;230,95
+610;'03C09Z';'Rhinoplasties ';'-';4;805,18;216,17
+611;'03C10Z';'Amygdalectomies et/ou adénoïdectomies isolées,âge inférieur à 18 ans ';'-';3;553,84;188,27
+612;'03C11Z';'Amygdalectomies et/ou adénoïdectomies isolées,âge supérieur à 17 ans ';'-';8;637,64;174,75
+613;'03C12Z';'Interventions sur les amygdales et les végétationsadénoïdes autres que les amygdalectomies et/ou lesadénoïdectomies isolées, âge inférieur à 18 ans ';'-';3;637,36;216,33
+614;'03C13Z';'Interventions sur les amygdales et les végétationsadénoïdes autres que les amygdalectomies et/ou lesadénoïdectomies isolées, âge supérieur à 17 ans ';'-';8;776,11;181,56
+615;'03C14Z';'Drains transtympaniques, âge inférieur à 18 ans ';'-';21;778,33;67,88
+616;'03C15Z';'Drains transtympaniques, âge supérieur à 17 ans ';'-';15;816,89;184,26
+617;'03C16V';'Autres interventions chirurgicales portant sur lesoreilles, le nez, la gorge ou le cou, âge inférieur à164';'-';17;920,67;198,98
+618;'03C16W';'Autres interventions chirurgicales portant sur lesoreilles, le nez, la gorge ou le cou, âge supérieur à69 ans et/ou CMA ';'-';22;1726,83;143,86
+619;'03C17Z';'Interventions sur la bouche ';'-';12;914,62;220,24
+620;'03C18Z';'Pose d''implants cochléaires ';'-';10;1739,11;230,6
+621;'03C19Z';'Ostéotomies de la face ';'-';9;1952,01;344,1
+622;'03C20Z';'Interventions de reconstruction de l''oreillemoyenne ';'-';13;1273,17;271,89
+623;'03C21Z';'Interventions pour oreilles décollées ';'-';6;681,86;209,89
+800;'03K02Z';'Affections de la bouche et des dents avec certainesextractions, réparations et prothèses dentaires ';'-';3;580,13;201,43
+801;'03M02Z';'Traumatismes et déformations du nez ';'-';11;572,46;146,91
+802;'03M03Z';'Otites moyennes et infections des voies aériennessupérieures, âge inférieur à 18 ans ';'-';10;546,78;122,98
+803;'03M04V';'Otites moyennes et infections des voies aériennessupérieures, âge de 18 à 69 ans sans CMA ';'-';15;617,63;147,99
+804;'03M04W';'Otites moyennes et infections des voies aériennessupérieures, âge de 18 à 69 ans avec CMA, ou âgesupérieur à 69 ans ';'-';18;1083,93;111,59
+805;'03M05Z';'Troubles de l''équilibre ';'-';15;699,06;95,3
+806;'03M06Z';'Épistaxis ';'-';15;594,05;113,11
+807;'03M07V';'Tumeurs malignes des oreilles, du nez, de la gorgeou de la bouche,âge inférieur à 70 ans sans CMA';'-';20;866,13;161,25
+808;'03M07W';'Tumeurs malignes des oreilles, du nez, de la gorgeou de la bouche, âge supérieur à 69 ans et/ou CMA ';'-';25;1646,26;120,68
+809;'03M08Z';'Autres diagnostics portant sur les oreilles, le nez, lagorge ou la bouche, âge inférieur à 18 ans ';'-';15;689,7;158,91
+810;'03M09V';'Autres diagnostics portant sur les oreilles, le nez, lagorge ou la bouche, âge supérieur à 17 ans sansCMA ';'-';15;652,98;140,72
+811;'03M09W';'Autres diagnostics portant sur les oreilles, le nez, lagorge ou la bouche, âge supérieur à 17 ans avecCMA ';'-';16;1004,77;116,8
+812;'03M10Z';'Affections de la bouche et des dents sans certainesextractions, réparations ou prothèses dentaires, âgeinférieur à 18 ans ';'-';8;509,72;105,64
+813;'03M11V';'Affections de la bouche et des dents sans certainesextractions, réparations ou prothèses dentaires, âgede 18 à 69 ans sans CMA ';'-';13;577,33;159,12
+814;'03M11W';'Affections de la bouche et des dents sans certainesextractions, réparations ou prothèses dentaires, âgede 18 à 69 ans avec CMA, ou âge supérieur à 69ans ';'-';17;1020,14;106,62
+1000;'04C01S';'Interventions pour affections de l''appareilrespiratoire, avec CMAS ';7;47;4200,33;164,66
+1001;'04C02V';'Interventions majeures sur le thorax sans CMA ';4;25;3109,88;224,93
+1002;'04C02W';'Interventions majeures sur le thorax avec CMA ';5;32;3570,63;204,64
+1003;'04C03V';'Autres interventions chirurgicales sur le systèmerespiratoire sans CMA ';'-';25;1614,34;154,79
+1004;'04C03W';'Autres interventions chirurgicales sur le systèmerespiratoire avec CMA ';'-';32;2204,97;128,86
+1100;'04M02V';'Bronchites et asthme, âge inférieur à 18 ans sansCMA ';'-';15;600,08;112,24
+1101;'04M02W';'Bronchites et asthme, âge inférieur à 18 ans avecCMA ';'-';15;1131,25;169,69
+1102;'04M03V';'Bronchites et asthme, âge de 18 à 69 ans sansCMA ';'-';19;735,67;102,93
+1103;'04M03W';'Bronchites et asthme, âge de 18 à 69 ans avecCMA, ou âge supérieur à 69 ans ';3;24;1243,97;94,15
+1104;'04M04Z';'Pneumonies et pleurésies banales, âge inférieur à18 ans';'-';15;842,68;151,44
+1105;'04M05V';'Pneumonies et pleurésies banales, âge supérieur à17 ans sans CMA ';'-';22;1031,75;96,13
+1106;'04M05W';'Pneumonies et pleurésies banales, âge supérieur à17 ans avec CMA ';4;28;1415,26;93,51
+1107;'04M06Z';'Infections et inflammations respiratoires, âgeinférieur à 18 ans ';7;44;3700,57;157,1
+1108;'04M07V';'Infections et inflammations respiratoires, âgesupérieur à 17 ans sans CMA ';'-';32;1782,48;113,5
+1109;'04M07W';'Infections et inflammations respiratoires, âgesupérieur à 17 ans avec CMA ';6;40;2304,25;107,54
+1110;'04M08V';'Bronchopneumopathies chroniques sans CMA ';'-';20;1066,5;99,72
+1111;'04M08W';'Bronchopneumopathies chroniques avec CMA ';4;26;1368,68;95,13
+1112;'04M09V';'Tumeurs de l''appareil respiratoire sans CMA ';'-';24;1323,76;115,79
+1113;'04M09W';'Tumeurs de l''appareil respiratoire avec CMA ';'-';30;1810,61;111,41
+1114;'04M10V';'Embolies pulmonaires sans CMA ';3;22;1113,02;94
+1115;'04M10W';'Embolies pulmonaires avec CMA ';4;27;1368,12;92,84
+1116;'04M11V';'Signes et symptômes respiratoires sans CMA ';'-';16;641,99;112,35
+1117;'04M11W';'Signes et symptômes respiratoires avec CMA ';'-';20;1075,9;98,64
+1118;'04M12V';'Pneumothorax sans CMA ';'-';18;678,72;99,99
+1119;'04M12W';'Pneumothorax avec CMA ';'-';23;1184,08;96,04
+1120;'04M13Z';'Œdème pulmonaire et détresse respiratoire ';4;31;1512,25;91,08
+1121;'04M14V';'Maladies pulmonaires interstitielles sans CMA ';'-';22;1015,59;102,41
+1122;'04M14W';'Maladies pulmonaires interstitielles avec CMA ';'-';28;1480,07;96,65
+1123;'04M15V';'Autres diagnostics portant sur le systèmerespiratoire sans CMA ';'-';20;798,1;96,23
+1124;'04M15W';'Autres diagnostics portant sur le systèmerespiratoire avec CMA ';'-';25;1247,78;92,06
+1125;'04M16V';'Traumatismes thoraciques majeurs sans CMA ';'-';16;681,89;95,23
+1126;'04M16W';'Traumatismes thoraciques majeurs avec CMA ';'-';21;1281,85;110,04
+1127;'04M17V';'Épanchements pleuraux sans CMA ';'-';20;871,95;99,28
+1128;'04M17W';'Épanchements pleuraux avec CMA ';'-';25;1320,41;96,76
+1400;'05C02Z';'Chirurgie de remplacement valvulaire aveccirculation extracorporelle et avec cathétérismecardiaque ou coronarographie ';7;45;8585,22;351,04
+1401;'05C03V';'Chirurgie de remplacement valvulaire aveccirculation extracorporelle, sans cathétérismecardiaque, ni coronarographie, sans CMA ';4;28;7516,33;487,79
+1402;'05C03W';'Chirurgie de remplacement valvulaire aveccirculation extracorporelle, sans cathétérismecardiaque, ni coronarographie, avec CMA ';5;34;8010,48;434,72
+1403;'05C04V';'Pontages aortocoronariens avec cathétérismecardiaque ou coronarographie sans CMA ';6;37;8106,68;400,35
+1404;'05C04W';'Pontages aortocoronariens avec cathétérismecardiaque ou coronarographie avec CMA ';7;44;9393,36;399,08
+1405;'05C05V';'Pontages aortocoronariens sans cathétérismecardiaque ni coronarographie sans CMA ';4;24;7823,09;543,57
+1406;'05C05W';'Pontages aortocoronariens sans cathétérismecardiaque ni coronarographie avec CMA ';4;30;8200,38;502,72
+1407;'05C06V';'Autres interventions cardiothoraciques, âgesupérieur à 1 an, ou vasculaires quel que soit l''âge,avec circulation extracorporelle, sans CMA ';4;26;7168,24;501,82
+1408;'05C06W';'Autres interventions cardiothoraciques âgesupérieur à 1 an, ou vasculaires quel que soit l''âge,284';5;33;8395,64;466,69
+1409;'05C07Z';'Autres interventions cardiothoraciques, âgeinférieur à 2 ans, avec circulation extracorporelle ';4;28;8641,93;567,44
+1410;'05C08V';'Autres interventions cardiothoraciques âgesupérieur à 1 an, ou vasculaires quel que soit l''âge,sans circulation extracorporelle, sans CMA ';'-';18;1515,71;256,61
+1411;'05C08W';'Autres interventions cardiothoraciques âgesupérieur à 1 an, ou vasculaires quel que soit l''âge,sans circulation extracorporelle, avec CMA ';'-';23;2287,63;184,39
+1412;'05C09Z';'Autres interventions cardiothoraciques, âgeinférieur à 2 ans, sans circulation extracorporelle ';3;23;6494,05;524,97
+1413;'05C10V';'Chirurgie majeure de revascularisation sans CMA ';4;32;3225,24;207,43
+1414;'05C10W';'Chirurgie majeure de revascularisation avec CMA ';6;40;4121,5;191,67
+1415;'05C11V';'Autres interventions de chirurgie vasculaire sansCMA ';'-';22;1905,46;221,09
+1416;'05C11W';'Autres interventions de chirurgie vasculaire avecCMA ';'-';28;2691,24;174,06
+1417;'05C12V';'Amputations du membre inférieur, sauf des orteils,pour troubles circulatoires, sans CMA ';6;51;2604,01;114,88
+1418;'05C12W';'Amputations du membre inférieur, sauf des orteils,pour troubles circulatoires, avec CMA ';7;64;3783,08;109,24
+1419;'05C13V';'Amputations pour troubles circulatoires portant surle membre supérieur ou les orteils sans CMA ';'-';29;1573,83;113,99
+1420;'05C13W';'Amputations pour troubles circulatoires portant surle membre supérieur ou les orteils avec CMA ';4;37;2218,2;109,79
+1421;'05C14Z';'Pose d''un stimulateur cardiaque permanent avecinsuffisance cardiaque ';'-';24;1788,82;139,01
+1422;'05C15Z';'Pose d''un stimulateur cardiaque permanent sansinsuffisance cardiaque ';'-';19;1260,51;174,04
+1424;'05C17V';'Ligatures de veines et éveinages, âge inférieur à 70ans sans CMA ';'-';12;965,89;299,05
+1425;'05C17W';'Ligatures de veines et éveinages, âge supérieur à69 ans et/ou CMA ';'-';15;1207,97;198,59
+1426;'05C18Z';'Autres interventions sur le système circulatoire ';'-';20;1666,82;151,14
+1427;'05C19Z';'Pose d''un défibrillateur cardiaque ';'-';24;2050,94;156,22
+1428;'05C20Z';'Remplacement ou ablation chirurgicaled''électrodes ou de boîtier de stimulation cardiaque323';'-';15;1210,04;167,58
+1654;'05M02E';'Infarctus aigu du myocarde avec décès ';'-';21;1231,49;108,02
+1655;'05M03Z';'Infarctus aigu du myocarde avec complicationscardiovasculaires et sortie en vie de l''établissement ';4;27;1731,16;117,1
+1656;'05M04V';'Infarctus aigu du myocarde sans complicationcardiovasculaire sans CMA ';'-';18;1338,86;160,43
+1657;'05M04W';'Infarctus aigu du myocarde sans complicationcardiovasculaire avec CMA ';3;23;1723,5;136,87
+1658;'05M05V';'Syncopes et lipothymies, âge inférieur à 70 anssans CMA ';'-';15;471,32;100,12
+1659;'05M05W';'Syncopes et lipothymies, âge supérieur à 69 anset/ou CMA ';'-';19;874,79;86,33
+1660;'05M06V';'Angine de poitrine sans CMA ';'-';16;654,43;98,41
+1661;'05M06W';'Angine de poitrine avec CMA ';'-';20;930,94;84
+1662;'05M07V';'Thrombophlébites veineuses profondes, âgeinférieur à 70 ans sans CMA ';'-';19;885,36;92,43
+1663;'05M07W';'Thrombophlébites veineuses profondes, âgesupérieur à 69 ans et/ou CMA ';3;24;1228,86;92,62
+1664;'05M08V';'Arythmies et troubles de la conduction cardiaque,âge inférieur à 70 ans sans CMA ';'-';15;475,4;121,09
+1665;'05M08W';'Arythmies et troubles de la conduction cardiaque,âge supérieur à 69 ans et/ou CMA ';'-';19;920,35;90,45
+1666;'05M09V';'Insuffisances cardiaques et états de choccirculatoire sans CMA ';'-';21;956,54;86,48
+1667;'05M09W';'Insuffisances cardiaques et états de choccirculatoire avec CMA ';4;27;1290,86;88,26
+1668;'05M10Z';'Cardiopathies congénitales et valvulopathies, âgeinférieur à 18 ans ';3;23;2011,67;162,42
+1669;'05M11V';'Cardiopathies congénitales et valvulopathies, âgede 18 à 69 ans sans CMA ';'-';17;717,47;131,21
+1670;'05M11W';'Cardiopathies congénitales et valvulopathies, âgede 18 à 69 ans avec CMA, ou âge supérieur à 69ans ';3;22;1168;95,51
+1671;'05M12V';'Troubles vasculaires périphériques, âge inférieur à70 ans sans CMA ';'-';18;829,54;190,72
+1672;'05M12W';'Troubles vasculaires périphériques, âge supérieur à69 ans et/ou CMA ';'-';23;1409,8;113,83
+1673;'05M13Z';'Douleurs thoraciques ';'-';15;594,09;96,75
+1674;'05M14Z';'Arrêt cardiaque ';'-';25;1083,11;80,39
+1675;'05M15Z';'Hypertension artérielle ';'-';19;933,18;89,83
+1676;'05M16V';'Athérosclérose coronarienne sans CMA ';'-';20;765,53;96,6
+1677;'05M16W';'Athérosclérose coronarienne avec CMA ';3;25;1239,37;89,73
+1678;'05M17V';'Autres affections de l''appareil circulatoire sansCMA ';'-';18;848,58;135,81
+1679;'05M17W';'Autres affections de l''appareil circulatoire avecCMA ';'-';23;1231,35;97,04
+1680;'05M18Z';'Endocardites aiguës et subaiguës ';7;43;2359,15;100,6
+1681;'05K05V';'Endoprothèses vasculaires et infarctus dumyocarde sans CMA ';'-';17;2378,52;277,45
+1682;'05K05W';'Endoprothèses vasculaires et infarctus dumyocarde avec décès et/ou complications et/oumorbidités associées ';3;22;2700,03;228,2
+1683;'05K06V';'Endoprothèses vasculaires sans infarctus dumyocarde sans CMA ';'-';14;2028,81;392,53
+1684;'05K06W';'Endoprothèses vasculaires sans infarctus dumyocarde avec CMA ';'-';16;2437,97;282,48
+1685;'05K07Z';'Actes thérapeutiques par voie vasculaire saufendoprothèses avec pathologie cardiovasculaire';'-';17;2035,91;217,54
+1686;'05K08Z';'Actes thérapeutiques par voie vasculaire saufendoprothèses sans pathologie cardiovasculaire';'-';15;1842,93;345,29
+1687;'05K09Z';'Actes diagnostiques par voie vasculaire avecpathologie cardiovasculaire sévère en dehors d''un';'-';15;1308,6;164,12
+1688;'05K10Z';'Actes diagnostiques par voie vasculaire sanspathologie cardiovasculaire sévère ';'-';15;1022,73;250,1
+1689;'05K11Z';'Traitements des troubles du rythme par voievasculaire';'-';14;2800;600,09
+1690;'05K11Z';'Traitements des troubles du rythme par voievasculaire';'-';14;6500;1393,07
+1900;'06C02Z';'Chirurgie majeure des malformations digestives ';'-';23;8473,87;666,02
+1901;'06C03V';'Résections rectales sans CMA ';5;40;4445,7;223,57
+1902;'06C03W';'Résections rectales avec CMA ';7;50;5407,37;199,91
+1903;'06C04V';'Interventions majeures sur l''intestin grêle et lecôlon sans CMA ';5;37;3266,69;186,64
+1904;'06C04W';'Interventions majeures sur l''intestin grêle et lecôlon avec CMA ';7;47;4194,78;165,51
+1905;'06C05Z';'Interventions sur l''oesophage, l''estomac et leduodénum, âge inférieur à 18 ans ';'-';15;1530,12;250,43
+1908;'06C07V';'Interventions mineures sur l''intestin grêle et lecôlon sans CMA ';4;35;2079,11;148,46
+1909;'06C07W';'Interventions mineures sur l''intestin grêle et lecôlon avec CMA ';7;44;3107,1;131,09
+1910;'06C08V';'Appendicectomies compliquées, âge inférieur à 70ans sans CMA ';'-';18;1147,8;161,64
+1911;'06C08W';'Appendicectomies compliquées, âge supérieur à 69ans et/ou CMA ';3;23;1739,31;136,05
+1912;'06C09V';'Appendicectomies non compliquées, âge inférieurà 70 ans sans CMA ';'-';12;907,25;173,41
+1913;'06C09W';'Appendicectomies non compliquées, âge supérieurà 69 ans et/ou CMA ';'-';15;1199,65;154,11
+1914;'06C10Z';'Interventions réparatrices pour hernies etéventrations, âge inférieur à 18 ans ';'-';8;853,13;235,38
+1915;'06C11V';'Interventions réparatrices pour hernies etéventrations à l''exception des hernies inguinales etcrurales, âge supérieur à 17 ans sans CMA ';'-';16;1303,28;166,81
+1916;'06C11W';'Interventions réparatrices pour hernies etéventrations à l''exception des hernies inguinales etcrurales, âge supérieur à 17 ans avec CMA ';3;21;1670,93;146,49
+1917;'06C12V';'Interventions réparatrices pour hernies inguinaleset crurales, âge supérieur à 17 ans sans CMA ';'-';12;1119,67;209,69
+1918;'06C12W';'Interventions réparatrices pour hernies inguinaleset crurales, âge supérieur à 17 ans avec CMA ';'-';15;1306,96;176,29
+1919;'06C13V';'Libérations d''adhérences péritonéales, âge inférieurà 70 ans sans CMA ';'-';21;1251,2;171,97
+1920;'06C13W';'Libérations d''adhérences péritonéales, âgesupérieur à 69 ans et/ou CMA ';'-';27;1928,95;133,03
+1921;'06C14V';'Interventions sur le rectum et l''anus autres que lesrésections rectales sans CMA ';'-';12;921,23;183,46
+1922;'06C14W';'Interventions sur le rectum et l''anus autres que lesrésections rectales avec CMA ';'-';15;1166,81;156,04
+1923;'06C15V';'Autres interventions sur le tube digestif sans CMA ';'-';28;1478,69;151,19
+1924;'06C15W';'Autres interventions sur le tube digestif avec CMA ';'-';36;2596,93;134,4
+1925;'06C16V';'Interventions sur l''œsophage, l''estomac et leduodénum pour tumeurs malignes, âge supérieur à17 ans sans CMA ';6;44;4043,35;173,29
+1926;'06C16W';'Interventions sur l''œsophage, l''estomac et leduodénum pour tumeurs malignes, âge supérieur à17 ans avec CMA ';7;55;5215,8;176,18
+1927;'06C17V';'Interventions sur l''oesophage, l''estomac et leduodénum pour affections non malignes, âgesupérieur à 17 ans sans CMA ';'-';21;1845,64;230,88
+1928;'06C17W';'Interventions sur l''oesophage, l''estomac et leduodénum pour affections non malignes, âgesupérieur à 17 ans avec CMA ';3;27;2716,06;187,2
+2100;'06M01S';'Affections du tube digestif avec CMAS ';'-';31;1939,13;116,56
+2101;'06M02V';'Gastroentérites et maladies diverses du tubedigestif, âge inférieur à 18 ans sans CMA ';'-';9;390,51;107,15
+2102;'06M02W';'Gastroentérites et maladies diverses du tubedigestif, âge inférieur à 18 ans avec CMA ';'-';12;1102,69;191,07
+2103;'06M03V';'Gastroentérites et maladies diverses du tubedigestif, âge de 18 à 69 ans sans CMA ';'-';15;633,49;142,05
+2104;'06M03W';'Gastroentérites et maladies diverses du tubedigestif, âge de 18 à 69 ans avec CMA, ou âgesupérieur à 69 ans ';'-';17;1022,24;111,69
+2105;'06M04V';'Hémorragies digestives, âge inférieur à 70 ans sansCMA ';'-';15;751,69;167,35
+2106;'06M04W';'Hémorragies digestives, âge supérieur à 69 anset/ou CMA ';'-';19;1499,88;147,78
+2107;'06M05V';'Tumeurs malignes du tube digestif, âge inférieur à70 ans sans CMA ';'-';19;866,48;150,17
+2108;'06M05W';'Tumeurs malignes du tube digestif, âge supérieur à69 ans et/ou CMA ';'-';24;1585,23;121,3
+2109;'06M06V';'Occlusions intestinales non dues à une hernie sansCMA ';'-';18;734,95;101,32
+2110;'06M06W';'Occlusions intestinales non dues à une hernie avecCMA ';'-';23;1290,94;102,78
+2111;'06M07V';'Maladies inflammatoires de l''intestin sans CMA ';'-';18;990,39;122,86
+2112;'06M07W';'Maladies inflammatoires de l''intestin avec CMA ';3;23;1400,9;111,95
+2113;'06M08Z';'Autres affections digestives, âge inférieur à 18 ans ';'-';8;558,03;138,82
+2114;'06M09V';'Autres affections digestives, âge de 18 à 69 anssans CMA ';'-';13;713,83;193,28
+2115;'06M09W';'Autres affections digestives, âge de 18 à 69 ansavec CMA, ou âge supérieur à 69 ans ';'-';17;1199,46;130,71
+2116;'06M10Z';'Ulcères gastroduodénaux compliqués ';'-';15;1070,11;128,16
+2117;'06M11V';'Ulcères gastroduodénaux non compliqués, âgeinférieur à 70 ans sans CMA ';'-';15;751,34;153,3
+2118;'06M11W';'Ulcères gastroduodénaux non compliqués, âgesupérieur à 69 ans et/ou CMA ';'-';18;1259,42;125,19
+2304;'07C04V';'Cholécystectomies sans exploration de la voiebiliaire principale sans CMA ';'-';16;1571,03;226,33
+2305;'07C04W';'Cholécystectomies sans exploration de la voiebiliaire principale avec CMA ';3;20;1973,54;179,07
+2308;'07C06Z';'Interventions diagnostiques sur le systèmehépatobiliaire et pancréatique pour des affectionsmalignes';'-';29;2309,41;146,53
+2309;'07C07Z';'Interventions diagnostiques sur le systèmehépatobiliaire et pancréatique pour des affectionsnon malignes ';3;21;1664,93;145,25
+2310;'07C08Z';'Autres interventions sur le système hépatobiliaireet pancréatique ';3;40;3021,94;141,05
+2311;'07C09V';'Interventions sur le foie, le pancréas et les veinesporte ou cave pour tumeurs malignes sans CMA ';6;42;4244,62;203,43
+2312;'07C09W';'Interventions sur le foie, le pancréas et les veinesporte ou cave pour tumeurs malignes avec CMA ';7;53;5735,65;201,08
+2313;'07C10V';'Interventions sur le foie, le pancréas et les veinesporte ou cave pour affections non malignes sans';3;39;2619,6;182,95
+2314;'07C10W';'Interventions sur le foie, le pancréas et les veinesporte ou cave pour affections non malignes avec';7;49;4219,16;158,98
+2315;'07C11V';'Dérivations biliaires sans CMA ';6;42;3777,39;168,55
+2316;'07C11W';'Dérivations biliaires avec CMA ';7;51;4440,91;161,34
+2317;'07C12V';'Autres interventions sur les voies biliaires saufcholécystectomies isolées sans CMA ';4;32;2507,96;174,56
+2318;'07C12W';'Autres interventions sur les voies biliaires saufcholécystectomies isolées avec CMA ';6;41;3402,78;155,44
+2500;'07M01S';'Affections du système hépatobiliaire et du pancréasavec CMAS ';'-';33;2126,9;117,42
+2501;'07M02V';'Affections des voies biliaires, âge inférieur à 70ans sans CMA ';'-';15;1005,6;228,12
+2502;'07M02W';'Affections des voies biliaires, âge supérieur à 69ans et/ou CMA ';'-';17;1403,87;147,36
+2503;'07M03V';'Hépatites alcooliques et cirrhoses, âge inférieur à70 ans sans CMA ';'-';20;1001,3;107,18
+2504;'07M03W';'Hépatites alcooliques et cirrhoses, âge supérieur à69 ans et/ou CMA ';3;26;1439,11;101,73
+2505;'07M04V';'Affections hépatiques à l''exception des tumeursmalignes, des cirrhoses, des hépatites alcooliques,sans CMA ';'-';18;781,57;116,68
+2506;'07M04W';'Affections hépatiques à l''exception des tumeursmalignes, des cirrhoses, des hépatites alcooliques,avec CMA ';'-';23;1327,75;106,06
+2507;'07M05V';'Affections non malignes du pancréas sans CMA ';'-';20;1054,39;108,28
+2508;'07M05W';'Affections non malignes du pancréas avec CMA ';4;26;1382,75;99,32
+2509;'07M06V';'Affections malignes du système hépatobiliaire oudu pancréas, âge inférieur à 70 ans sans CMA ';'-';20;1137,56;145,69
+2510;'07M06W';'Affections malignes du système hépatobiliaire oudu pancréas, âge supérieur à 69 ans et/ou CMA ';'-';25;1648,46;123,3
+2700;'08C01S';'Interventions pour affections de l''appareilmusculosquelettique et du tissu conjonctif, avecCMAS non traumatiques ';7;48;4257,63;164,19
+2701;'08C02Z';'Interventions majeures multiples sur les genouxet/ou les hanches ';7;48;4388,93;168,49
+2704;'08C04Z';'Interventions sur la hanche et le fémur, autres queles interventions majeures, âge inférieur à 18 ans ';'-';17;1845,69;200,22
+2705;'08C05V';'Interventions sur la hanche et le fémur, autres queles interventions majeures, âge supérieur à 17 anssans CMA ';5;35;2900,47;157,81
+2706;'08C05W';'Interventions sur la hanche et le fémur, autres queles interventions majeures, âge supérieur à 17 ansavec CMA ';7;44;3547,41;151,11
+2707;'08C06Z';'Amputations pour affections de l''appareilmusculosquelettique et du tissu conjonctif ';7;47;2956,1;115,81
+2710;'08C08Z';'Interventions sur l''humérus ou sur le membreinférieur à l''exception de la hanche, du fémur et dupied, âge inférieur à 18 ans';'-';12;1196,73;209,81
+2711;'08C09V';'Interventions sur l''humérus ou sur le membreinférieur à l''exception de la hanche, du fémur et dupied, âge supérieur à 17 ans sans CMA ';'-';19;1658,6;194,03
+2712;'08C09W';'Interventions sur l''humérus ou sur le membreinférieur à l''exception de la hanche, du fémur et dupied, âge supérieur à 17 ans avec CMA ';3;24;2132;160,79
+2713;'08C10V';'Interventions sur le genou, âge inférieur à 70 anssans CMA ';'-';16;1778,32;255,85
+2714;'08C10W';'Interventions sur le genou, âge supérieur à 69 anset/ou CMA ';3;20;1900,8;172,01
+2715;'08C11V';'Interventions sur le membre supérieur à l''exceptionde l''humérus et de la main, âge inférieur à 70 anssans CMA ';'-';12;1279,69;256,4
+2716;'08C11W';'Interventions sur le membre supérieur à l''exceptionde l''humérus et de la main, âge supérieur à 69 anset/ou CMA ';'-';15;1454,25;181,34
+2717;'08C12Z';'Biopsies ostéoarticulaires ';'-';15;1046,85;155,15
+2718;'08C13Z';'Résections osseuses localisées et/ou ablations dematériel de fixation interne au niveau de la hancheet du fémur ';'-';15;1008,5;149,22
+2719;'08C14Z';'Résections osseuses localisées et/ou ablations dematériel de fixation interne au niveau d''unelocalisation autre que la hanche et le fémur ';'-';11;830,53;175,92
+2720;'08C15V';'Interventions sur le pied sans CMA ';'-';12;1289,83;220,3
+2721;'08C15W';'Interventions sur le pied avec CMA ';'-';16;1465,75;171,73
+2724;'08C17Z';'Interventions sur la main et le poignet pour kystesynovial ';'-';6;762,71;227,97
+2725;'08C18V';'Interventions sur la main et le poignet pour uneaffection autre qu''un kyste synovial sans CMA ';'-';12;1020,67;258,26
+2726;'08C18W';'Interventions sur la main et le poignet pour uneaffection autre qu''un kyste synovial avec CMA ';'-';15;1293,07;188,76
+2727;'08C19Z';'Arthroscopies ';'-';6;856,91;258,84
+2728;'08C20Z';'Greffes de peau pour maladie de l''appareilmusculosquelettique ou du tissu conjonctif ';'-';15;1128,38;159,22
+2729;'08C21V';'Autres interventions portant sur l''appareilmusculosquelettique et le tissu conjonctif sansCMA ';'-';15;1189,57;202,63
+2730;'08C21W';'Autres interventions portant sur l''appareilmusculosquelettique et le tissu conjonctif avecCMA ';'-';19;1540,73;145,37
+2731;'08C22Z';'Interventions pour reprise de prothèses articulaires ';6;38;3645,14;176,77
+2732;'08C23V';'Prothèses de hanche sans CMA ';5;29;2997,24;175,52
+2733;'08C23W';'Prothèses de hanche avec CMA ';5;36;3290,4;167,5
+2734;'08C24Z';'Prothèses de genou ';5;32;3089,02;177,21
+2735;'08C25Z';'Prothèses d''épaule ';3;22;2034,9;168,93
+2736;'08C26Z';'Interventions majeures sur le rachis ';3;24;2802,4;217,08
+2737;'08C27V';'Autres interventions sur le rachis sans CMA ';'-';15;1512,15;196,97
+2738;'08C27W';'Autres interventions sur le rachis avec CMA ';'-';18;1804,11;180,1
+2739;'08C28Z';'Interventions maxillofaciales ';'-';15;1687,91;292,47
+2740;'08C29Z';'Interventions sur le tissu mou pour tumeursmalignes ';'-';17;1385,81;152,62
+2741;'08C30V';'Interventions sur les tissus mous pour affectionsnon malignes sans CMA ';'-';15;1073,89;195,99
+2742;'08C30W';'Interventions sur les tissus mous pour affectionsnon malignes avec CMA ';'-';19;1490,66;143,06
+3000;'08M01S';'Affections de l''appareil musculosquelettique et dutissu conjonctif, avec CMAS non traumatiques ';'-';40;2118,53;98,33
+3001;'08M02Z';'Fractures, entorses, luxations et dislocations del''avant-bras, de la main, du pied ou multiples oumal précisées, âge inférieur à 18 ans ';'-';3;585,13;203,36
+3002;'08M03V';'Fractures, entorses, luxations et dislocations del''avant-bras, de la main, du pied ou multiples oumal précisées, âge de 18 à 69 ans sans CMA ';'-';14;623,54;160,28
+3003;'08M03W';'Fractures, entorses, luxations et dislocations del''avant-bras, de la main, du pied ou multiples oumal précisées, âge de 18 à 69 ans avec CMA, ouâge supérieur à 69 ans ';'-';18;1011,77;103,15
+3004;'08M04V';'Fractures de la hanche et du bassin sans CMA ';'-';27;1210,54;92,38
+3005;'08M04W';'Fractures de la hanche et du bassin avec CMA ';'-';34;1726,68;94,57
+3006;'08M05Z';'Fractures de la diaphyse, de l''épiphyse ou d''unepartie non précisée du fémur ';'-';28;1506,48;100,46
+3007;'08M06Z';'Fractures, entorses, luxations et dislocations dubras, de la jambe à l''exception du pied,âge inférieurà 18 ans ';'-';11;645,57;172,95
+3008;'08M07V';'Fractures, entorses, luxations et dislocations dubras, de la jambe à l''exception du pied, âge de 18 à69 ans sans CMA ';'-';16;708,71;129,9
+3009;'08M07W';'Fractures, entorses, luxations et dislocations dubras, de la jambe à l''exception du pied, âge de 18 à69 ans avec CMA, ou âge supérieur à 69 ans ';'-';21;1105,95;94,78
+3010;'08M08Z';'Entorses et luxations du bassin et de la hanche ';'-';15;991,24;120,83
+3011;'08M09Z';'Arthropathies non spécifiques ';'-';18;916,9;93,22
+3012;'08M10V';'Maladies osseuses et arthropathies spécifiques, âgeinférieur à 70 ans sans CMA ';'-';19;1092,47;136,44
+3013;'08M10W';'Maladies osseuses et arthropathies spécifiques, âgesupérieur à 69 ans et/ou CMA ';'-';24;1303,43;98,59
+3014;'08M11V';'Fractures pathologiques et affections malignes del''appareil musculosquelettique et du tissuconjonctif sans CMA ';'-';28;1542,43;104,95
+3015;'08M11W';'Fractures pathologiques et affections malignes del''appareil musculosquelettique et du tissuconjonctif avec CMA ';4;35;1851,66;96,9
+3016;'08M12V';'Pathologies rachidiennes relevant d''un traitementmédical, âge inférieur à 70 ans sans CMA ';'-';17;694,33;102,56
+3017;'08M12W';'Pathologies rachidiennes relevant d''un traitementmédical, âge supérieur à 69 ans et/ou CMA ';'-';22;1129,11;92,12
+3018;'08M13Z';'Signes et symptômes concernant l''appareilmusculosquelettique et le tissu conjonctif ';'-';15;747,23;97,79
+3019;'08M14V';'Affections du tissu conjonctif, âge inférieur à 70ans sans CMA ';'-';19;777,7;103,49
+3020;'08M14W';'Affections du tissu conjonctif, âge supérieur à 69ans et/ou CMA ';'-';24;1289,95;98,72
+3021;'08M15V';'Tendinites, myosites et bursites, âge inférieur à 70ans sans CMA ';'-';16;801,49;155,87
+3022;'08M15W';'Tendinites, myosites et bursites, âge supérieur à 69ans et/ou CMA ';'-';21;1116,5;98,75
+3023;'08M16Z';'Ostéomyélites ';'-';27;1372,86;93,43
+3024;'08M17Z';'Arthrites septiques ';3;26;1378,2;98,78
+3025;'08M18Z';'Suites de traitement après une affection del''appareil musculosquelettique ou du tissuconjonctif ';'-';15;911,66;121,87
+3026;'08M19V';'Autres pathologies de l''appareilmusculosquelettique et du tissu conjonctif sansCMA ';'-';22;998,96;112,19
+3027;'08M19W';'Autres pathologies de l''appareilmusculosquelettique et du tissu conjonctif avecCMA ';'-';28;1454,83;94,83
+3300;'09C02V';'Greffes de peau et/ou parages de plaie pour ulcèrecutané ou cellulite sans CMA ';'-';44;1555,32;113,13
+3301;'09C02W';'Greffes de peau et/ou parages de plaie pour ulcèrecutané ou cellulite avec CMA ';3;55;3085,85;104,97
+3302;'09C03V';'Greffes de peau et/ou parages de plaie à l''exceptiondes ulcères cutanés et cellulites sans CMA ';'-';16;1064,81;198,06
+3303;'09C03W';'Greffes de peau et/ou parages de plaie à l''exceptiondes ulcères cutanés et cellulites avec CMA ';'-';20;1565,96;140,81
+3304;'09C04V';'Mastectomies totales pour tumeur maligne sansCMA ';'-';20;1720,18;165,8
+3305;'09C04W';'Mastectomies totales pour tumeur maligne avecCMA ';4;25;2035,1;148,69
+3306;'09C05V';'Mastectomies subtotales pour tumeur maligne sansCMA ';'-';15;1338,04;183,55
+3307;'09C05W';'Mastectomies subtotales pour tumeur maligne avecCMA ';'-';18;1610,73;159,76
+3308;'09C06Z';'Interventions sur le sein pour des affections nonmalignes autres que les actes de biopsie etd''excision locale ';'-';9;1065,11;226,47
+3309;'09C07Z';'Biopsies et excisions locales pour des affectionsnon malignes du sein ';'-';8;683,53;188,31
+3310;'09C08Z';'Interventions sur la région anale et périanale ';'-';8;738,19;173,17
+3311;'09C09Z';'Interventions plastiques en dehors de la chirurgieesthétique ';'-';14;1172,31;199,64
+3312;'09C10V';'Autres interventions sur la peau, les tissus sous-cutanés ou les seins sans CMA ';'-';19;846,03;159,42
+3313;'09C10W';'Autres interventions sur la peau, les tissus sous-cutanés ou les seins avec CMA ';'-';24;1486,22;115,54
+3500;'09M02Z';'Traumatismes de la peau et des tissus sous-cutanés,âge inférieur à 18 ans ';'-';12;612,69;154,98
+3501;'09M03V';'Traumatismes de la peau et des tissus sous-cutanés,âge de 18 à 69 ans sans CMA ';'-';16;585,18;128,45
+3502;'09M03W';'Traumatismes de la peau et des tissus sous-cutanés,âge de 18 à 69 ans avec CMA, ou âge supérieur à710';'-';20;1029,5;96,23
+3503;'09M04Z';'Lésions, infections et inflammations de la peau etdes tissus sous-cutanés, âge inférieur à 18 ans ';'-';8;597,99;138,24
+3504;'09M05V';'Lésions, infections et inflammations de la peau etdes tissus sous-cutanés, âge de 18 à 69 ans sansCMA ';'-';19;702,57;118,36
+3505;'09M05W';'Lésions, infections et inflammations de la peau etdes tissus sous-cutanés, âge de 18 à 69 ans avecCMA, ou âge supérieur à 69 ans ';3;24;1250,89;96,18
+3506;'09M06Z';'Ulcères cutanés ';'-';41;1956,92;87,42
+3507;'09M07V';'Autres affections dermatologiques, âge inférieur à70 ans sans CMA ';'-';16;626,15;132,16
+3508;'09M07W';'Autres affections dermatologiques, âge supérieur à69 ans et/ou CMA ';'-';21;1116,78;96,04
+3509;'09M08V';'Affections dermatologiques sévères, âge inférieur à70 ans sans CMA ';'-';20;891,23;113,96
+3510;'09M08W';'Affections dermatologiques sévères, âge supérieurà 69 ans et/ou CMA ';3;26;1465,19;105,07
+3511;'09M09Z';'Affections non malignes des seins ';'-';13;711,08;145,96
+3512;'09M10V';'Tumeurs malignes des seins sans CMA ';'-';28;1374,13;115,24
+3513;'09M10W';'Tumeurs malignes des seins avec CMA ';4;36;2204,62;113,66
+3700;'10C01S';'Interventions pour affections endocriniennes,métaboliques et nutritionnelles, avec CMAS ';4;32;2933,09;168,75
+3701;'10C02Z';'Interventions sur l''hypophyse ';3;19;2663,69;236,19
+3702;'10C03Z';'Interventions sur les surrénales ';3;23;2449,51;198,33
+3704;'10C05Z';'Interventions sur les parathyroïdes ';'-';13;1537,44;235,1
+3707;'10C07Z';'Interventions sur le tractus thyréoglosse ';'-';7;875,08;194,13
+3708;'10C08Z';'Autres interventions pour troubles endocriniens,métaboliques ou nutritionnels ';'-';20;1528,33;142,87
+3709;'10C09Z';'Gastroplasties pour obésité ';'-';9;1540,94;273,54
+3710;'10C10Z';'Autres interventions pour obésité ';'-';15;1451,77;194,41
+3711;'10C11V';'Interventions sur la thyroïde pour tumeursmalignes, âge inférieur à 70 ans sans CMA ';'-';12;1454,33;233,56
+3712;'10C11W';'Interventions sur la thyroïde pour tumeursmalignes, âge supérieur à 69 ans et/ou CMA ';'-';15;1583,13;206,12
+3713;'10C12V';'Interventions sur la thyroïde pour affections nonmalignes, âge inférieur à 70 ans sans CMA ';'-';8;1272,29;223,59
+3714;'10C12W';'Interventions sur la thyroïde pour affections nonmalignes, âge supérieur à 69 ans et/ou CMA ';'-';10;1387,71;209,97
+3900;'10M01S';'Affections endocriniennes, métaboliques etnutritionnelles, avec CMAS ';5;34;1777,15;96,71
+3901;'10M02V';'Diabète, âge de 36 à 69 ans sans CMA ';'-';19;875,72;91,62
+3902;'10M02W';'Diabète, âge de 36 à 69 ans avec CMA, ou âgesupérieur à 69 ans ';3;24;1168,08;90,37
+3903;'10M03Z';'Diabète, âge inférieur à 36 ans ';'-';15;728,87;91,48
+3904;'10M04V';'Troubles métaboliques ou nutritionnels divers, âgeinférieur à 18 ans sans CMA ';'-';16;682,13;90,21
+3905;'10M04W';'Troubles métaboliques ou nutritionnels divers, âgeinférieur à 18 ans avec CMA ';3;20;1513,16;141,86
+3906;'10M05V';'Troubles métaboliques ou nutritionnels divers, âgede 18 à 69 ans sans CMA ';'-';20;847,44;92,22
+3907;'10M05W';'Troubles métaboliques ou nutritionnels divers, âgede 18 à 69 ans avec CMA, ou âge supérieur à 69';'-';25;1299,4;94,53
+3908;'10M06Z';'Maladies métaboliques congénitales ';'-';15;978,34;135,06
+3909;'10M07V';'Autres troubles endocriniens, âge inférieur à 70 anssans CMA ';'-';19;756,61;109,46
+3910;'10M07W';'Autres troubles endocriniens, âge supérieur à 69ans et/ou CMA ';'-';24;1217,68;93,45
+4100;'11C01S';'Interventions pour affections des reins et des voiesurinaires, avec CMAS ';3;44;3742,08;157,34
+4101;'11C02V';'Interventions sur les reins et les uretères etchirurgie majeure de la vessie pour une affectiontumorale, sans CMA ';5;32;3252,83;186
+4102;'11C02W';'Interventions sur les reins et les uretères etchirurgie majeure de la vessie pour une affectiontumorale, avec CMA ';6;41;4055,3;181,61
+4103;'11C03V';'Interventions sur les reins et les uretères etchirurgie majeure de la vessie pour une affectionnon tumorale, sans CMA ';'-';26;1897,6;181,47
+4104;'11C03W';'Interventions sur les reins et les uretères etchirurgie majeure de la vessie pour une affectionnon tumorale, avec CMA ';5;33;2834,98;156,76
+4105;'11C04Z';'Autres interventions sur la vessie à l''exception desinterventions transurétrales ';'-';18;1496,62;154,89
+4106;'11C05V';'Interventions transurétrales ou par voietranscutanée sans CMA ';'-';15;1139,14;203,11
+4107;'11C05W';'Interventions transurétrales ou par voietranscutanée avec CMA ';'-';16;1442,62;165,12
+4108;'11C06Z';'Interventions sur l''urètre, âge inférieur à 18 ans ';'-';15;1016,59;233,58
+4109;'11C07Z';'Interventions sur l''urètre, âge supérieur à 17 ans ';'-';15;981,16;158,45
+4110;'11C08V';'Autres interventions sur les reins et les voiesurinaires sans CMA ';'-';20;1098,39;237,25
+4111;'11C08W';'Autres interventions sur les reins et les voiesurinaires avec CMA ';'-';26;1799,26;125,67
+4250;'11M01S';'Affections des reins et des voies urinaires, avecCMAS ';3;31;1785,24;106,93
+4251;'11M02V';'Lithiases urinaires, âge inférieur à 70 ans sansCMA ';'-';12;658,48;183,56
+4252;'11M02W';'Lithiases urinaires, âge supérieur à 69 ans et/ouCMA ';'-';15;902,84;132,3
+4253;'11M03V';'Infections des reins et des voies urinaires, âgeinférieur à 18 ans sans CMA ';'-';12;514,59;105,73
+4254;'11M03W';'Infections des reins et des voies urinaires, âgeinférieur à 18 ans avec CMA ';'-';15;1131,25;179,11
+4255;'11M04V';'Infections des reins et des voies urinaires, âge de18 à 69 ans sans CMA ';'-';15;539,07;103,77
+4256;'11M04W';'Infections des reins et des voies urinaires, âge de18 à 69 ans avec CMA, ou âge supérieur à 69 ans ';'-';19;984,88;95,1
+4259;'11M06V';'Insuffisance rénale, sans dialyse, âge inférieur à 70ans sans CMA ';'-';20;661,1;113,95
+4260;'11M06W';'Insuffisance rénale, sans dialyse, âge supérieur à 69ans et/ou CMA ';'-';25;1261,17;93,5
+4261;'11M07V';'Tumeurs des reins et des voies urinaires sans CMA ';'-';21;1062,57;112,14
+4262;'11M07W';'Tumeurs des reins et des voies urinaires avec CMA ';'-';27;1602,52;110,57
+4263;'11M08Z';'Autres affections des reins et des voies urinaires,âge inférieur à 18 ans ';'-';15;1074,56;188,67
+4264;'11M09V';'Autres affections des reins et des voies urinaires,âge supérieur à 17 ans sans CMA ';'-';15;761,48;136,87
+4265;'11M09W';'Autres affections des reins et des voies urinaires,âge supérieur à 17 ans avec CMA ';'-';18;1121,15;114,57
+4266;'11M10V';'Rétrécissement urétral, âge inférieur à 70 ans sansCMA ';'-';15;692,7;152,79
+4267;'11M10W';'Rétrécissement urétral, âge supérieur à 69 ans et/ouCMA ';'-';15;1038,85;137,95
+4268;'11M11Z';'Signes et symptômes concernant les reins et lesvoies urinaires, âge inférieur à 18 ans ';'-';15;997,84;232,05
+4269;'11M12V';'Signes et symptômes concernant les reins et lesvoies urinaires, âge de 18 à 69 ans sans CMA ';'-';15;512,1;118,5
+4270;'11M12W';'Signes et symptômes concernant les reins et lesvoies urinaires, âge de 18 à 69 ans avec CMA, ouâge supérieur à 69 ans ';'-';15;844,77;103,96
+4271;'11K02V';'Insuffisance rénale, avec dialyse, âge inférieur à 70ans sans CMA ';'-';24;659,02;69,92
+4272;'11K02W';'Insuffisance rénale, avec dialyse, âge supérieur à69 ans et/ou CMA ';'-';31;677,06;39,81
+4500;'12C01S';'Interventions pour affections de l''appareil génitalmasculin, avec CMAS ';6;39;3113,44;148,56
+4502;'12C03Z';'Interventions sur le pénis ';'-';15;1135,78;180,02
+4503;'12C04V';'Prostatectomies transurétrales sans CMA ';'-';16;1535,57;178,88
+4504;'12C04W';'Prostatectomies transurétrales avec CMA ';3;20;1809,08;163,53
+4505;'12C05Z';'Interventions sur les testicules pour des tumeursmalignes ';'-';15;1010,78;176,73
+4506;'12C06Z';'Interventions sur les testicules pour des affectionsnon malignes, âge inférieur à 18 ans ';'-';6;737,81;216,81
+4507;'12C07Z';'Interventions sur les testicules pour des affectionsnon malignes, âge supérieur à 17 ans ';'-';10;780,22;171,39
+4508;'12C08Z';'Circoncisions ';'-';11;633,17;166,97
+4509;'12C09Z';'Autres interventions pour tumeurs malignes del''appareil génital masculin ';3;20;1608,34;147,75
+4510;'12C10Z';'Autres interventions pour des affections nonmalignes de l''appareil génital masculin ';'-';15;1297,79;161,65
+4511;'12C11Z';'Interventions pelviennes majeures chez l''hommepour tumeurs malignes ';4;25;2683,91;197,25
+4512;'12C12Z';'Interventions pelviennes majeures chez l''hommepour affections non malignes ';4;27;2295,09;159,29
+4750;'12M02V';'Infections et inflammations de l''appareil génitalmasculin, âge inférieur à 70 ans sans CMA ';'-';14;524,15;104,17
+4751;'12M02W';'Infections et inflammations de l''appareil génitalmasculin, âge supérieur à 69 ans et/ou CMA ';'-';15;721,52;96,87
+4752;'12M03V';'Tumeurs malignes de l''appareil génital masculinsans CMA ';'-';20;856,75;119,17
+4753;'12M03W';'Tumeurs malignes de l''appareil génital masculinavec CMA ';'-';26;1529,91;109,44
+4754;'12M04V';'Hypertrophie prostatique bénigne, âge inférieur à70 ans sans CMA ';'-';13;550,06;142,21
+4755;'12M04W';'Hypertrophie prostatique bénigne, âge supérieur à69 ans et/ou CMA ';'-';15;948,33;112,71
+4756;'12M05Z';'Autres affections de l''appareil génital masculin ';'-';15;706,06;151,04
+4900;'13C01S';'Interventions pour affections de l''appareil génitalféminin, avec CMAS ';3;27;2276,75;155,39
+4901;'13C02V';'Exentérations pelviennes, hystérectomies élargiesou vulvectomies, sans CMA ';3;23;2052,92;182,47
+4902;'13C02W';'Exentérations pelviennes, hystérectomies élargiesou vulvectomies, avec CMA ';4;29;2736,7;175,89
+4903;'13C03V';'Hystérectomies, âge inférieur à 70 ans sans CMA ';'-';15;1604,69;186,28
+4904;'13C03W';'Hystérectomies, âge supérieur à 69 ans et/ou CMA ';'-';19;1849,62;174,86
+4905;'13C04V';'Interventions réparatrices sur l''appareil génitalféminin, âge inférieur à 70 ans sans CMA ';'-';15;1175,23;205,8
+4906;'13C04W';'Interventions réparatrices sur l''appareil génitalféminin, âge supérieur à 69 ans et/ou CMA ';'-';16;1509,65;168,68
+4907;'13C05Z';'Interventions sur le système utéroannexiel pour destumeurs malignes ';'-';20;1910,69;171,98
+4908;'13C06Z';'Interruptions tubaires pour des affections nonmalignes ';'-';13;1125,65;230,4
+4909;'13C07V';'Interventions sur le système utéroannexiel pour desaffections non malignes, autres que lesinterruptions tubaires, âge inférieur à 70 ans sansCMA ';'-';14;1140,35;222,46
+4910;'13C07W';'Interventions sur le système utéroannexiel pour desaffections non malignes, autres que lesinterruptions tubaires, âge supérieur à 69 ans et/ouCMA ';'-';15;1421,4;189,92
+4911;'13C08V';'Interventions sur la vulve, le vagin ou le col utérin,âge inférieur à 70 ans sans CMA ';'-';12;690,17;187,23
+4912;'13C08W';'Interventions sur la vulve, le vagin ou le col utérin,âge supérieur à 69 ans et/ou CMA ';'-';16;1184,17;138,62
+4913;'13C09Z';'Laparoscopies ou cœlioscopies diagnostiques ';'-';9;849,39;215,76
+4914;'13C10Z';'Ligatures tubaires par laparoscopie ou cœlioscopie ';'-';6;821,35;252,5
+4915;'13C11Z';'Dilatations et curetages, conisations pour tumeursmalignes ';'-';8;668,9;186,27
+4916;'13C12Z';'Dilatations et curetages, conisations pour desaffections non malignes ';'-';6;625,8;191,23
+4917;'13C13Z';'Autres interventions sur l''appareil génital féminin ';'-';16;1472,42;167,38
+5200;'13M02Z';'Infections de l''appareil génital féminin ';'-';15;652,55;112,6
+5201;'13M03V';'Tumeurs malignes de l''appareil génital fémininsans CMA ';'-';26;1101,39;122,15
+5202;'13M03W';'Tumeurs malignes de l''appareil génital fémininavec CMA ';5;33;2053,75;115,94
+5203;'13M04V';'Autres affections de l''appareil génital féminin, âgeinférieur à 70 ans sans CMA ';'-';12;714,65;196,76
+5204;'13M04W';'Autres affections de l''appareil génital féminin, âgesupérieur à 69 ans et/ou CMA ';'-';15;993,99;130,58
+5300;'14C02A';'Césariennes sans complication significative ';'-';20;1779,63;178,69
+5301;'14C02B';'Césariennes avec autres complications ';4;26;2190,61;157,8
+5302;'14C02C';'Césariennes avec complications majeures ';4;26;2334,33;165,72
+5303;'14C03Z';'Accouchements par voie basse avec autresinterventions ';'-';18;2781,76;278,46
+5304;'14C04Z';'Affections du post-partum ou du post abortum avecintervention chirurgicale ';'-';15;1034,55;185,02
+5305;'14C05Z';'Avortements avec aspiration ou curetage ouhystérotomie ';'-';8;629,39;179,07
+5450;'14M02Z';'Affections médicales du post-partum ou du postabortum ';'-';15;670,52;119,59
+5451;'14Z02A';'Accouchements par voie basse sans complicationsignificative ';'-';15;1443,14;219,82
+5452;'14Z02B';'Accouchements par voie basse avec autrescomplications ';'-';15;1623,15;194,74
+5453;'14Z02C';'Accouchements par voie basse avec complicationsmajeures ';'-';19;1794,03;173,61
+5454;'14Z03A';'Affections de l''ante partum, avec ou sansintervention chirurgicale, sans complications ';'-';15;697,55;112,77
+5455;'14Z03B';'Affections de l''ante partum, avec ou sansintervention chirurgicale, avec complications ';'-';18;983,7;101,89
+5456;'14Z04Z';'Avortements sans aspiration, ni curetage, nihystérotomie ';'-';12;657,84;142,73
+5457;'14Z05Z';'Grossesses ectopiques ';'-';11;1188,93;245,33
+5458;'14Z06Z';'Menaces d''avortement ';'-';15;730,47;109,03
+5459;'14Z07Z';'Faux travail ';'-';15;708,72;103,86
+5800;'15Z02Z';'Autres problèmes postnéonatals précoces ';5;42;1406,56;62,67
+5801;'15Z03Z';'Transferts précoces de nouveau-nés vers un autreétablissement ';'-';4;404,91;126,68
+5802;'15Z04E';'Nouveau-nés de 1500 g et plus, décédés ';'-';15;2212,57;287,21
+5803;'15Z05A';'Nouveau-nés de 2500 g et plus, sans problèmesignificatif ';'-';'-';261,54;
+5804;'15Z05B';'Nouveau-nés de 2500 g et plus, avec autreproblème significatif ';'-';12;449,29;53,02
+5805;'15Z05C';'Nouveau-nés de 2500 g et plus, avec problèmesévère ';'-';15;838,72;95,4
+5806;'15Z05D';'Nouveau-nés de 2500 g et plus, avec problèmemajeur ';'-';17;1242,87;134,19
+5807;'15Z06A';'Nouveau-nés de 2000 g à 2499 g, sans problèmesignificatif ';'-';17;655,05;71,34
+5808;'15Z06B';'Nouveau-nés de 2000 g à 2499 g, avec autreproblème significatif ';'-';20;1156,47;106,31
+5809;'15Z06C';'Nouveau-nés de 2000 g à 2499 g, avec problèmesévère ';4;25;1545,66;112,53
+5810;'15Z06D';'Nouveau-nés de 2000 g à 2499 g, avec problèmemajeur ';5;31;2468,68;146,75
+5811;'15Z07A';'Nouveau-nés de 1500 g à 1999 g, sans problèmesignificatif ';4;29;1803,26;116,04
+5812;'15Z07B';'Nouveau-nés de 1500 g à 1999 g, avec autreproblème significatif ';7;47;2876,91;112,61
+5813;'15Z07C';'Nouveau-nés de 1500 g à 1999 g, avec problèmemajeur ou sévère ';7;64;3974,52;116,4
+5814;'15Z08A';'Nouveau-nés de 1000 g à 1499 g, sortis en vie ';'-';55;4377,42;148,58
+5815;'15Z08E';'Nouveau-nés de 1000 g à 1499 g, décédés ';'-';15;2953,12;664,45
+5816;'15Z09A';'Nouveau-nés de moins de 1000 g, sortis en vie ';'-';51;6206,51;225,16
+5817;'15Z09E';'Nouveau-nés de moins de 1000 g, décédés ';'-';15;2250,73;319,36
+6100;'16C01S';'Interventions pour affections du sang et desorganes hématopoïétiques, avec CMAS ';7;48;5207,11;201,61
+6101;'16C02Z';'Interventions sur la rate ';4;25;2518,47;183,93
+6102;'16C03V';'Autres interventions pour affections du sang et desorganes hématopoïétiques sans CMA ';'-';15;910,63;184,21
+6103;'16C03W';'Autres interventions pour affections du sang et desorganes hématopoïétiques avec CMA ';'-';15;1318,16;160,15
+6150;'16M01S';'Affections du sang et des organeshématopoïétiques, avec CMAS ';4;30;2430,74;147,37
+6151;'16M02V';'Affections du système réticuloendothélial ouimmunitaire sans CMA ';'-';16;801,33;114,92
+6152;'16M02W';'Affections du système réticuloendothélial ouimmunitaire avec CMA ';3;21;1287,22;110,41
+6153;'16M03V';'Troubles de la lignée érythrocytaire, âge inférieur à18 ans sans CMA ';'-';15;1074,99;158,49
+6154;'16M03W';'Troubles de la lignée érythrocytaire, âge inférieur à18 ans avec CMA ';'-';15;2004,2;257,68
+6155;'16M04V';'Troubles de la lignée érythrocytaire, âge de 18 à 69ans sans CMA ';'-';16;963,69;180,95
+6156;'16M04W';'Troubles de la lignée érythrocytaire, âge de 18 à 69ans avec CMA, ou âge supérieur à 69 ans ';'-';20;1548,35;139,73
+6157;'16M05V';'Troubles de la coagulation, âge inférieur à 70 anssans CMA ';'-';17;1252,8;182,41
+6158;'16M05W';'Troubles de la coagulation, âge supérieur à 69 anset/ou CMA ';'-';22;1691,27;138,97
+6300;'17C01S';'Interventions pour affections myéloprolifératives ettumeurs de siège imprécis ou diffus, avec CMAS ';7;58;4690,59;150,51
+6301;'17C02V';'Interventions majeures au cours de lymphomes oude leucémies sans CMA ';'-';19;1647,92;183,56
+6302;'17C02W';'Interventions majeures au cours de lymphomes oude leucémies avec CMA ';3;24;2386,37;179,26
+6303;'17C03V';'Autres interventions au cours de lymphomes ou deleucémies sans CMA ';'-';17;1132,64;166,64
+6304;'17C03W';'Autres interventions au cours de lymphomes ou deleucémies avec CMA ';'-';22;1763,06;144,18
+6305;'17C04V';'Interventions majeures pour affectionsmyéloprolifératives ou tumeurs de siège imprécisou diffus, sans CMA ';3;29;2267,61;176,97
+6306;'17C04W';'Interventions majeures pour affectionsmyéloprolifératives ou tumeurs de siège imprécisou diffus, avec CMA ';5;37;3411,55;171,45
+6307;'17C05V';'Autres interventions au cours d''affectionsmyéloprolifératives ou de tumeurs de siègeimprécis ou diffus sans CMA ';'-';15;1116,16;179,97
+6308;'17C05W';'Autres interventions au cours d''affectionsmyéloprolifératives ou de tumeurs de siègeimprécis ou diffus avec CMA ';'-';19;1553;147,87
+6450;'17K02Z';'Antécédents ou suspicion d''affections tumorales,avec exploration endoscopique ';'-';15;732,76;179,1
+6452;'17K04Z';'Autres irradiations ';'-';29;1804,24;113,15
+6453;'17M01S';'Affections myéloprolifératives et tumeurs de siègeimprécis ou diffus, avec CMAS ';'-';37;2686,86;133,49
+6457;'17M04Z';'Antécédents ou suspicion d''affections tumorales,sans exploration endoscopique ';'-';15;766,19;113,16
+6458;'17M05Z';'Chimiothérapie pour leucémie aiguë ';'-';15;2082,53;277,35
+6459;'17M06V';'Chimiothérapie pour autre tumeur, sans CMA ';'-';15;1038,89;147,45
+6460;'17M06W';'Chimiothérapie pour autre tumeur, avec CMA ';'-';18;1378,49;136,81
+6461;'17M07V';'Autres affections myéloprolifératives et tumeurs desiège imprécis ou diffus, âge inférieur à 70 ans sansCMA ';'-';19;966,07;166,13
+6462;'17M07W';'Autres affections myéloprolifératives et tumeurs desiège imprécis ou diffus, âge supérieur à 69 anset/ou CMA ';'-';24;1636,16;122,94
+6463;'17K05Z';'Curiethérapies de la prostate ';'-';15;540,17;101,28
+6464;'17K06Z';'Autres curiethérapies et irradiations internes ';'-';9;540,17;123,33
+6465;'17M08Z';'Leucémies aiguës, âge inférieur à 18 ans ';'-';43;5669,1;250,11
+6466;'17M09V';'Leucémies aiguës, âge supérieur à 17 ans sansCMA ';'-';26;3132,85;291,3
+6467;'17M09W';'Leucémies aiguës, âge supérieur à 17 ans avecCMA ';3;33;5483,25;304,63
+6468;'17M10V';'Lymphomes ou autres leucémies sans CMA ';'-';26;1318,53;125,29
+6469;'17M10W';'Lymphomes ou autres leucémies avec CMA ';3;33;2185,99;121,68
+6700;'18C02V';'Interventions pour maladies infectieuses ouparasitaires sans CMA ';'-';32;1435,5;127,32
+6701;'18C02W';'Interventions pour maladies infectieuses ouparasitaires avec CMA ';4;40;2567,94;118,25
+6750;'18M02V';'Maladies virales et fièvres d''étiologie indéterminée,âge inférieur à 18 ans sans CMA ';'-';12;430,95;111,84
+6751;'18M02W';'Maladies virales et fièvres d''étiologie indéterminée,âge inférieur à 18 ans avec CMA ';'-';15;1187,51;164,93
+6752;'18M03Z';'Maladies virales, âge supérieur à 17 ans ';'-';15;811,77;104,9
+6753;'18M04V';'Fièvres d''étiologie indéterminée, âge supérieur à 17ans sans CMA ';'-';16;649,19;98,47
+6754;'18M04W';'Fièvres d''étiologie indéterminée, âge supérieur à 17ans avec CMA ';'-';20;1130,21;105,18
+6755;'18M05V';'Infections postopératoires et posttraumatiques sansCMA ';'-';22;933,48;99,7
+6756;'18M05W';'Infections postopératoires et posttraumatiques avecCMA ';3;28;1518,42;99,86
+6757;'18M06Z';'Septicémies, âge inférieur à 18 ans ';5;33;1665,4;92,52
+6758;'18M07V';'Septicémies, âge supérieur à 17 ans sans CMA ';'-';28;1365,82;95,72
+6759;'18M07W';'Septicémies, âge supérieur à 17 ans avec CMA ';3;35;1985,33;105,3
+6760;'18M08V';'Autres maladies infectieuses ou parasitaires, âgeinférieur à 70 ans sans CMA ';'-';19;731,2;100,08
+6761;'18M08W';'Autres maladies infectieuses ou parasitaires, âgesupérieur à 69 ans et/ou CMA ';3;24;1282,63;97,78
+6762;'18Z01S';'Maladies infectieuses et parasitaires, avec CMAS,avec ou sans acte ';6;46;2797,62;113,46
+7000;'19C02Z';'Interventions chirurgicales avec un diagnosticprincipal de maladie mentale ';3;20;1761,43;163
+7050;'19M02V';'Troubles aigus de l''adaptation et dufonctionnement psychosocial, âge inférieur à 70ans sans CMA ';'-';22;936,68;89,41
+7051;'19M02W';'Troubles aigus de l''adaptation et dufonctionnement psychosocial, âge supérieur à 69ans et/ou CMA ';3;28;1276,89;85,08
+7052;'19M03Z';'Troubles de la personnalité et du comportementavec réactions impulsives ';4;28;1379,35;91,38
+7053;'19M04Z';'Psychoses, âge supérieur à 80 ans ';5;35;1608,45;84,66
+7054;'19M05Z';'Psychoses, âge inférieur à 81 ans ';5;34;1591,24;86,24
+7055;'19M06V';'Troubles mentaux d''origine organique et retardsmentaux, âge supérieur à 80 ans sans CMA ';'-';28;1306,8;85,62
+7056;'19M06W';'Troubles mentaux d''origine organique et retardsmentaux, âge supérieur à 80 ans avec CMA ';5;35;1631,1;85,13
+7057;'19M07V';'Troubles mentaux d''origine organique et retardsmentaux, âge inférieur à 81 ans sans CMA ';'-';24;1129,41;88,67
+7058;'19M07W';'Troubles mentaux d''origine organique et retardsmentaux, âge inférieur à 81 ans avec CMA ';5;31;1536,83;91,52
+7059;'19M08Z';'Maladies et troubles mentaux de l''enfance ';'-';12;932,19;206
+7060;'19M09Z';'Autres troubles mentaux ';'-';19;938,19;88,15
+7061;'19M10Z';'Névroses autres que les névroses dépressives ';'-';17;875,26;92,73
+7062;'19M11V';'Névroses dépressives, âge inférieur à 70 ans sansCMA ';'-';27;1301,8;89,74
+7063;'19M11W';'Névroses dépressives, âge supérieur à 69 ans et/ouCMA ';4;31;1486,8;87,63
+7250;'20Z02Z';'Toxicomanies non éthyliques avec dépendance ';3;24;1243,37;93,8
+7251;'20Z03Z';'Abus de drogues non éthyliques sans dépendance ';'-';16;817,74;94,74
+7252;'20Z04Z';'Éthylisme avec dépendance ';4;30;1409,38;86,76
+7253;'20Z05Z';'Éthylisme aigu ';'-';15;765,93;92,47
+7254;'20Z06V';'Troubles mentaux organiques induits par l''alcoolou d''autres substances, âge inférieur à 70 ans sansCMA ';'-';21;972,74;102,71
+7255;'20Z06W';'Troubles mentaux organiques induits par l''alcoolou d''autres substances, âge supérieur à 69 ans et/ouCMA ';4;27;1356,37;93,12
+7400;'21C01S';'Interventions pour traumatismes, allergies etempoisonnements, avec CMAS ';4;64;6314,68;183,67
+7401;'21C02Z';'Greffes de peau pour lésions autres que desbrûlures ';'-';15;1678,64;209,42
+7402;'21C03Z';'Parages de plaies pour lésions autres que desbrûlures ';'-';20;1767,62;158,59
+7403;'21C04Z';'Interventions sur la main ou le poignet à la suite deblessures ';'-';15;1903,42;299,57
+7404;'21C05V';'Autres interventions pour blessures oucomplications d''acte sans CMA ';'-';29;1707,21;151,72
+7405;'21C05W';'Autres interventions pour blessures oucomplications d''acte avec CMA ';'-';37;2928,19;147,13
+7550;'21M01S';'Traumatismes, allergies et empoisonnements, avecCMAS ';3;33;1792,93;99,47
+7551;'21M02Z';'Effets toxiques des médicaments et autres produits,âge inférieur à 18 ans ';'-';15;763,83;175,04
+7552;'21M03V';'Effets toxiques des médicaments et autres produits,âge de 18 à 69 ans sans CMA ';'-';16;438,1;97,98
+7553;'21M03W';'Effets toxiques des médicaments et autres produits,âge de 18 à 69 ans avec CMA, ou âge supérieur à69 ans ';'-';20;1060,16;95,13
+7554;'21M04Z';'Réactions allergiques non classées ailleurs, âgeinférieur à 18 ans ';'-';4;560,08;151,22
+7555;'21M05Z';'Réactions allergiques non classées ailleurs, âgesupérieur à 17 ans ';'-';15;494,79;99,84
+7556;'21M06Z';'Traumatismes complexes, âge inférieur à 18 ans ';'-';13;628,28;148,28
+7557;'21M07V';'Traumatismes complexes, âge de 18 à 69 ans sansCMA ';'-';15;638,21;128,43
+7558;'21M07W';'Traumatismes complexes, âge de 18 à 69 ans avecCMA, ou âge supérieur à 69 ans ';'-';19;1011,82;95,66
+7559;'21M08V';'Autres traumatismes et effets nocifs autres que lesintoxications, âge inférieur à 70 ans sans CMA ';'-';15;549,89;103,93
+7560;'21M08W';'Autres traumatismes et effets nocifs autres que lesintoxications, âge supérieur à 69 ans et/ou CMA ';'-';18;1096,66;111,17
+7561;'21M09V';'Complications iatrogéniques non classées ailleurssans CMA ';'-';17;864,08;119,11
+7562;'21M09W';'Complications iatrogéniques non classées ailleursavec CMA ';'-';22;1303,44;109,57
+7800;'22C02Z';'Brûlures non étendues avec greffe cutanée ';'-';25;7635,13;553,31
+7801;'22C03Z';'Brûlures non étendues avec parages de plaie ouautres interventions chirurgicales ';'-';17;4500,71;475,59
+7850;'22M02Z';'Brûlures non étendues sans interventionchirurgicale ';'-';17;1122,34;119,37
+7900;'23C02Z';'Interventions chirurgicales avec autres motifs derecours aux services de santé ';'-';15;1342,67;171,15
+7950;'23M02Z';'Rééducation ';7;57;2243,56;72,57
+7951;'23M03V';'Signes et symptômes sans CMA ';'-';22;963,27;98,14
+7952;'23M03W';'Signes et symptômes avec CMA ';3;28;1527,33;101,85
+7953;'23M04Z';'Suivi thérapeutique avec diagnostic associéd''antécédent d''affection maligne ';'-';15;773,83;99,22
+7954;'23M05Z';'Suivi thérapeutique sans diagnostic associéd''antécédent d''affection maligne ';'-';15;799,76;101,07
+7955;'23M06Z';'Autres facteurs influant sur l''état de santé ';'-';15;822,67;109,21
+7956;'23Z02Z';'Soins palliatifs, avec ou sans acte ';'-';35;3063,76;163,69
+7957;'23Z02Z';'Soins palliatifs, avec ou sans acte ';'-';35;4289,27;190,84
+7958;'23Z02Z';'Soins palliatifs, avec ou sans acte ';'-';35;3982,89;175,54
+8001;'24C02Z';'Affections de la CMD 01 : séjours de moins de 2jours, avec autre acte opératoire de la CMD 01 ';'-';'-';615,3;
+8002;'24C03Z';'Interventions sur le cristallin : séjours de moins de2 jours ';'-';'-';1053,09;
+8003;'24C04Z';'Affections de la CMD 02 : séjours de moins de 2jours, avec autre acte opératoire de la CMD 02 ';'-';'-';400,43;
+8004;'24C05Z';'Amygdalectomies et/ou adénoïdectomies : séjoursde moins de 2 jours ';'-';'-';387,91;
+8005;'24C06Z';'Drains transtympaniques : séjours de moins de 2jours ';'-';'-';459,09;
+8006;'24C07Z';'Affections de la CMD 03 : séjours de moins de 2jours, avec autre acte opératoire de la CMD 03 ';'-';'-';465,22;
+8007;'24C08Z';'Affections de la CMD 04 : séjours de moins de 2jours, avec acte opératoire de la CMD 04 ';'-';'-';515,89;
+8008;'24C09Z';'Ligatures de veines et éveinages : séjours de moinsde 2 jours ';'-';'-';666,28;
+8009;'24C10Z';'Affections de la CMD 05 : séjours de moins de 2jours, avec autre acte opératoire de la CMD 05 ';'-';'-';701,43;
+8010;'24C11Z';'Interventions réparatrices pour herniesabdominales : séjours de moins de 2 jours ';'-';'-';668,24;
+8011;'24C12Z';'Interventions sur le rectum et l''anus : séjours demoins de 2 jours ';'-';'-';454,71;
+8012;'24C13Z';'Affections de la CMD 06 : séjours de moins de 2jours, avec autre acte opératoire de la CMD 06 ';'-';'-';570,33;
+8013;'24C14Z';'Affections de la CMD 07 : séjours de moins de 2jours, avec acte opératoire de la CMD 07 ';'-';'-';926,86;
+8014;'24C15Z';'Résections osseuses localisées et ablations dematériel de fixation : séjours de moins de 2 jours ';'-';'-';387,85;
+8016;'24C17Z';'Arthroscopies : séjours de moins de 2 jours ';'-';'-';601,05;
+8017;'24C18Z';'Affections de la CMD 08 : séjours de moins de 2jours, avec autre acte opératoire de la CMD 08 ';'-';'-';515,43;
+8019;'24C20Z';'Affections de la CMD 10 : séjours de moins de 2jours, avec acte opératoire de la CMD 10 ';'-';'-';615,37;
+8020;'24C21Z';'Interventions transurétrales, sauf prostatectomie :séjours de moins de 2 jours ';'-';'-';578,19;
+8021;'24C22Z';'Affections de la CMD 11 : séjours de moins de 2jours, avec autre acte opératoire de la CMD 11 ';'-';'-';379,43;
+8022;'24C23Z';'Interventions sur les testicules : séjours de moinsde 2 jours ';'-';'-';498,53;
+8023;'24C24Z';'Circoncisions : séjours de moins de 2 jours ';'-';'-';373,89;
+8024;'24C25Z';'Affections de la CMD 12 : séjours de moins de 2jours, avec autre acte opératoire de la CMD 12 ';'-';'-';409,25;
+8026;'24C27Z';'Interventions sur la vulve, le vagin et le col utérin :séjours de moins de 2 jours ';'-';'-';322,62;
+8027;'24C28Z';'Dilatations et curetages en dehors de la grossesse,conisations : séjours de moins de 2 jours ';'-';'-';377,59;
+8028;'24C29Z';'Affections de la CMD 13 : séjours de moins de 2jours, avec autre acte opératoire de la CMD 13 ';'-';'-';614,76;
+8029;'24C30Z';'Dilatations et curetages au cours de la grossesse, endehors des interruptions volontaires : séjours demoins de 2 jours ';'-';'-';340,06;
+8030;'24C31Z';'Affections de la CMD 14 : séjours de moins de 2jours, avec autre acte opératoire de la CMD 14 ';'-';'-';493,83;
+8031;'24C32Z';'Affections de la CMD 16 : séjours de moins de 2jours, avec acte opératoire de la CMD 16 ';'-';'-';376,72;
+8032;'24C33Z';'Affections de la CMD 17 : séjours de moins de 2jours, avec acte opératoire ';'-';'-';415,55;
+8033;'24C34Z';'Affections de la CMD 18 : séjours de moins de 2jours, avec acte opératoire ';'-';'-';424,82;
+8034;'24C35Z';'Affections de la CMD 19 : séjours de moins de 2jours, avec acte opératoire ';'-';'-';418,06;
+8036;'24C37Z';'Affections de la CMD 22 : séjours de moins de 2jours, avec acte opératoire de la CMD 22 ';'-';'-';430,22;
+8037;'24C38Z';'Motifs de recours de la CMD 23 : séjours de moinsde 2 jours, avec acte opératoire ';'-';'-';434,74;
+8038;'24C39Z';'Créations et réfections des fistulesartérioveineuses, séjours de moins de 2 jours ';'-';'-';745,9;
+8039;'24C40Z';'Interventions pour traumatismes de l''oeil, séjoursde moins de 2 jours ';'-';'-';461,37;
+8040;'24C41Z';'Actes non mineurs de la CMD 02, séjours de moinsde 2 jours ';'-';'-';763,97;
+8041;'24C42Z';'Actes non mineurs de la CMD 03, séjours de moinsde 2 jours ';'-';'-';656,7;
+8042;'24C43Z';'Pose d''un défibrillateur cardiaque : séjours demoins de 2 jours ';'-';'-';347,84;
+8043;'24C44Z';'Pose d''un stimulateur cardiaque permanent :séjours de moins de 2 jours ';'-';'-';575,96;
+8044;'24C45Z';'Hémorroïdectomies : séjours de moins de 2 jours ';'-';'-';437,32;
+8045;'24C46Z';'Actes non mineurs sur la main : séjours de moinsde 2 jours ';'-';'-';778,56;
+8046;'24C47Z';'Interventions sur le sein : séjours de moins de 2jours ';'-';'-';483,19;
+8047;'24C48Z';'Interventions sur la peau et les tissus sous-cutanés :séjours de moins de 2 jours ';'-';'-';401,67;
+8048;'24C49Z';'Prélèvements d''ovocytes : séjours de moins de 2jours ';'-';'-';345,71;
+8049;'24C50Z';'Interventions et explorations sur le systèmeutéroannexiel : séjours de moins de 2 jours ';'-';'-';661,36;
+8050;'24C51Z';'Interventions sur la main ou le poignet à la suite deblessures : séjours de moins de 2 jours ';'-';'-';880,25;
+8051;'24C52Z';'Allogreffes de cornée : séjours de moins de 2 jours ';'-';'-';3240,47;
+8052;'24C53Z';'Autres affections de la CMD 21 : séjours de moinsde 2 jours, avec acte opératoire de la CMD 21 ';'-';'-';624,64;
+8053;'24C54Z';'Libérations du canal carpien et autres actes sur lesnerfs périphériques : séjours de moins de 2 jours';'-';'-';449,77;
+8054;'24C55Z';'Autres interventions sur la main : séjours de moinsde 2 jours';'-';'-';532,68;
+8253;'24K04Z';'Mise en place de certains accès vasculaires :séjours de moins de 2 jours ';'-';'-';570,5;
+8254;'24K05Z';'Polysomnographies et autres explorations delongue durée : séjours de moins de 2 jours ';'-';'-';107,85;
+8257;'24K08Z';'Affections de la CMD 08 : séjours de moins de 2jours, sans acte opératoire de la CMD 08, avecanesthésie ';'-';'-';328,53;
+8258;'24K09Z';'Affections de la CMD 09 : séjours de moins de 2jours, sans acte opératoire de la CMD 09, avecanesthésie ';'-';'-';356,98;
+8259;'24K10Z';'Lithotritie extracorporelle de l''appareil urinaire :séjours de moins de 2 jours ';'-';'-';640,86;
+8260;'24K11Z';'Affections de la CMD 13 : séjours de moins de 2jours, sans acte opératoire de la CMD 13, avecanesthésie ';'-';'-';309,79;
+8261;'24K12Z';'Affections de la CMD 17 : séjours de moins de 2jours, sans acte opératoire, avec anesthésie ';'-';'-';373,69;
+8263;'24M01Z';'Convulsions, épilepsies et céphalées : séjours demoins de 2 jours ';'-';'-';186,56;
+8264;'24M02Z';'Commotions cérébrales : séjours de moins de 2jours ';'-';'-';125,37;
+8265;'24M03Z';'Affections de la CMD 01 : séjours de moins de 2jours, sans acte opératoire de la CMD 01 ';'-';'-';298,72;
+8266;'24M04Z';'Affections de la CMD 02 : séjours de moins de 2jours, sans acte opératoire de la CMD 02 ';'-';'-';384,76;
+8267;'24M05Z';'Otites moyennes et infections des voies aériennessupérieures : séjours de moins de 2 jours ';'-';'-';287,07;
+8268;'24M06Z';'Affections de la CMD 03 : séjours de moins de 2jours, sans acte opératoire de la CMD 03 ';'-';'-';271,92;
+8269;'24M07Z';'Bronchites et asthme : séjours de moins de 2 jours ';'-';'-';160,35;
+8270;'24M08Z';'Affections de la CMD 04 : séjours de moins de 2jours, sans acte opératoire de la CMD 04 ';'-';'-';164,72;
+8271;'24M09Z';'Arythmies et troubles de la conduction cardiaque :séjours de moins de 2 jours ';'-';'-';214,75;
+8272;'24M10Z';'Affections de la CMD 05 : séjours de moins de 2jours, sans acte opératoire de la CMD 05 ';'-';'-';290,96;
+8273;'24M11Z';'Gastroentérites et maladies diverses du tubedigestif : séjours de moins de 2 jours ';'-';'-';133,42;
+8274;'24M12Z';'Affections de la CMD 06 : séjours de moins de 2jours, sans acte opératoire de la CMD 06 ';'-';'-';193,2;
+8275;'24M13Z';'Affections de la CMD 07 : séjours de moins de 2jours, sans acte opératoire de la CMD 07 ';'-';'-';196,28;
+8276;'24M14Z';'Pathologies rachidiennes relevant d''un traitementmédical : séjours de moins de 2 jours ';'-';'-';181,15;
+8277;'24M15Z';'Fractures, entorses et luxations : séjours de moinsde 2 jours, sans anesthésie ';'-';'-';241,05;
+8278;'24M16Z';'Affections de la CMD 08 : séjours de moins de 2jours, sans acte opératoire de la CMD 08 ';'-';'-';239,29;
+8279;'24M17Z';'Traumatismes de la peau et des tissus sous-cutanés: séjours de moins de 2 jours ';'-';'-';192,34;
+8280;'24M18Z';'Affections de la CMD 09 : séjours de moins de 2jours, sans acte opératoire de la CMD 09 ';'-';'-';272,54;
+8281;'24M19Z';'Affections de la CMD 10 : séjours de moins de 2jours, sans acte opératoire de la CMD 10 ';'-';'-';106,78;
+8282;'24M20Z';'Lithiases urinaires : séjours de moins de 2 jours ';'-';'-';142,58;
+8283;'24M21Z';'Affections de la CMD 11 : séjours de moins de 2jours, sans acte opératoire de la CMD 11 ';'-';'-';192,3;
+8284;'24M22Z';'Affections de la CMD 12 : séjours de moins de 2jours, sans acte opératoire de la CMD 12 ';'-';'-';206,36;
+8285;'24M23Z';'Affections de la CMD 13 : séjours de moins de 2jours, sans acte opératoire de la CMD 13 ';'-';'-';204,67;
+8286;'24M24Z';'Affections de l''ante partum : séjours de moins de 2jours ';'-';'-';143,45;
+8287;'24M25Z';'Affections de la CMD 14 : séjours de moins de 2jours, sans acte opératoire de la CMD 14 ';'-';'-';124,36;
+8288;'24M26Z';'Affections de la CMD 16 : séjours de moins de 2jours, sans acte opératoire de la CMD 16 ';'-';'-';413,7;
+8289;'24M27Z';'Affections de la CMD 17 : séjours de moins de 2jours, sans acte opératoire ';'-';'-';285,34;
+8290;'24M28Z';'Affections de la CMD 18 : séjours de moins de 2jours, sans acte opératoire ';'-';'-';215,48;
+8291;'24M29Z';'Troubles aigus de l''adaptation et dufonctionnement psychosocial : séjours de moins de2 jours ';'-';'-';150,86;
+8292;'24M30Z';'Affections de la CMD 19 : séjours de moins de 2jours, sans acte opératoire ';'-';'-';175,86;
+8293;'24M31Z';'Effets toxiques des médicaments et autres produits: séjours de moins de 2 jours ';'-';'-';210;
+8294;'24M32Z';'Affections de la CMD 21 : séjours de moins de 2jours, sans acte opératoire de la CMD 21 ';'-';'-';243,27;
+8295;'24M33Z';'Affections de la CMD 22 : séjours de moins de 2jours, sans acte opératoire de la CMD 22 ';'-';'-';153,86;
+8296;'24M34Z';'Autres motifs de recours pour infection à VIH :séjours de moins de 2 jours ';'-';'-';164,32;
+8297;'24M35Z';'Autres motifs de recours chez un patient diabétique: séjours de moins de 2 jours ';'-';'-';86,49;
+8298;'24M36Z';'Autres motifs de recours de la CMD 23 : séjours demoins de 2 jours, sans acte opératoire ';'-';'-';208,01;
+8307;'24Z09E';'Infarctus du myocarde avec décès : séjours demoins de 2 jours ';'-';'-';1305,87;
+8308;'24Z10E';'Nouveau-nés décédés : séjours de moins de 2 jours ';'-';'-';196,46;
+8309;'24Z11E';'Autres décès : séjours de moins de 2 jours ';'-';'-';503,82;
+8315;'24Z17Z';'Éthylisme aigu : séjours de moins de 2 jours ';'-';'-';106,75;
+8316;'24Z18Z';'Affections de la CMD 20 : séjours de moins de 2jours ';'-';'-';153,81;
+8317;'24K14Z';'Autres séjours de moins de 2 jours sans acteopératoire, avec anesthésie ';'-';'-';310,32;
+8318;'24K15Z';'Affections de la CMD 03 : séjours de moins de 2jours, sans acte opératoire de la CMD 03, avecanesthésie ';'-';'-';404,45;
+8319;'24K16Z';'Endoprothèses coronariennes et vasculairespériphériques : séjours de moins de 2 jours ';'-';'-';1406,53;
+8320;'24K17Z';'Actes thérapeutiques par voie vasculaire saufendoprothèses et embolisations : séjours de moinsde 2 jours ';'-';'-';863,21;
+8321;'24K18Z';'Affections de la CMD 05 : séjours de moins de 2jours, sans acte opératoire de la CMD 05, avecanesthésie ';'-';'-';367,55;
+8322;'24K19Z';'Affections de la CMD 06 : séjours de moins de 2jours, sans acte opératoire de la CMD 06, avecanesthésie ';'-';'-';383,19;
+8323;'24K20Z';'Évacuation d''ascite : séjours de moins de 2 jours ';'-';'-';162,33;
+8324;'24K21Z';'Affections de la CMD 21 : séjours de moins de 2jours, sans acte opératoire de la CMD 21, avecanesthésie ';'-';'-';403,64;
+8325;'24K22Z';'Affections de la CMD 22 : séjours de moins de 2jours, sans acte opératoire de la CMD 22, avecanesthésie ';'-';'-';318,64;
+8326;'24K23Z';'Surveillances de greffes de coeur avec actediagnostique par voie vasculaire : séjours de moinsde 2 jours ';'-';'-';832,26;
+8327;'24K24Z';'Endoscopies biliaires thérapeutiques et anesthésie :séjours de moins de 2 jours ';'-';'-';1082,04;
+8328;'24K25Z';'Autres endoscopies biliaires : séjours de moins de2 jours ';'-';'-';435,51;
+8329;'24K26Z';'Endoscopies digestives thérapeutiques avecanesthésie : séjours de moins de 2 jours ';'-';'-';480,7;
+8330;'24K27Z';'Endoscopies digestives thérapeutiques sansanesthésie : séjours de moins de 2 jours ';'-';'-';456,69;
+8331;'24K28Z';'Endoscopies digestives diagnostiques et anesthésie: séjours de moins de 2 jours ';'-';'-';375,09;
+8332;'24K29Z';'Endoscopies digestives diagnostiques sansanesthésie : séjours de moins de 2 jours ';'-';'-';118,41;
+8333;'24K30Z';'Endoscopies urinaires thérapeutiques et anesthésie: séjours de moins de 2 jours ';'-';'-';472,26;
+8334;'24K31Z';'Endoscopies urinaires thérapeutiques sansanesthésie : séjours de moins de 2 jours ';'-';'-';280,14;
+8335;'24K32Z';'Endoscopies urinaires diagnostiques et anesthésie :séjours de moins de 2 jours ';'-';'-';334,81;
+8336;'24K33Z';'Endoscopies urinaires diagnostiques sansanesthésie : séjours de moins de 2 jours ';'-';'-';81,16;
+8337;'24K34Z';'Endoscopies oto-rhino-laryngologiques : séjours demoins de 2 jours ';'-';'-';438,5;
+8338;'24K35Z';'Endoscopies bronchiques : séjours de moins de 2jours ';'-';'-';272,1;
+8339;'24K36Z';'Traitements des troubles du rythme par voievasculaire : séjours de moins de 2 jours ';'-';'-';1115,86;
+8340;'24K37Z';'Embolisations : séjours de moins de 2 jours ';'-';'-';815,31;
+8341;'24K38Z';'Affections de la bouche et des dents avec certainesextractions, réparations et prothèses dentaires sansanesthésie : séjours de moins de 2 jours ';'-';'-';410,44;
+8342;'24K39Z';'Actes diagnostiques par voie vasculaire de la CMD05 : séjours de moins de 2 jours ';'-';'-';719,32;
+8343;'24M37Z';'Douleurs chroniques rebelles : séjours de moins de2 jours ';'-';'-';192,52;
+8344;'24M38Z';'Affections des seins : séjours de moins de 2 jours ';'-';'-';205,54;
+8345;'24M39Z';'Surveillances de greffes de rein : séjours de moinsde 2 jours ';'-';'-';356,69;
+8346;'24M40Z';'Surveillances de greffes de cœur sans actediagnostique par voie vasculaire : séjours de moinsde 2 jours ';'-';'-';382,16;
+8348;'24Z20Z';'Accouchements : séjours de moins de 2 jours ';'-';'-';770,74;
+8349;'24Z21Z';'Nouveau-nés et nourrissons de 5 jours à 120 jours :séjours de moins de 2 jours ';'-';'-';169,98;
+8350;'24Z22Z';'Autres transferts vers MCO : séjours de moins de 2jours ';'-';'-';563,54;
+8351;'24Z23Z';'Nouveau-nés de moins de 5 jours : séjours demoins de 2 jours ';'-';'-';169,98;
+8352;'24Z24Z';'Transferts de nouveau-nés vers un autreétablissement : séjours de moins de 2 jours';'-';'-';174,97;
+8353;'24Z25Z';'Brûlures avec transfert vers un autre établissement: séjours de moins de 2 jours';'-';'-';361,45;
+8700;'25C02Z';'Interventions pour maladie due au VIH ';'-';15;3173,66;415,83
+8750;'25M02A';'Autres maladies dues au VIH ';'-';26;1454,34;101,13
+8751;'25M02B';'Maladies dues au VIH, avec une seulecomplication infectieuse ';'-';16;1620,15;186,19
+8752;'25M02C';'Maladies dues au VIH, avec plusieurscomplications infectieuses ';4;30;2645,09;165,32
+8753;'25Z02E';'Maladies dues au VIH, avec décès ';7;60;4437,62;138,68
+8800;'26C01S';'Interventions pour traumatismes multiples graves,avec CMAS non traumatiques ';7;85;11762,18;247,62
+8801;'26C02Z';'Interventions pour traumatismes multiples graves,sans CMAS ';7;51;6526,35;236,02
+8850;'26M01S';'Traumatismes multiples graves, avec CMAS nontraumatiques ';7;73;7164,46;183,18
+8851;'26M02Z';'Traumatismes multiples graves, sans CMAS ';4;30;2994,99;182,97
+9506;'28Z07Z';'Chimiothérapie pour tumeur, en séances';'-';'-';307,8;
+9513;'28Z14Z';'Transfusion, en séances';'-';'-';519,03;
+9514;'28Z15Z';'Caisson d''oxygénothérapie hyperbare, en séances';'-';'-';71;
+9900;'90H02Z';'Actes sans relation avec le diagnostic principal :séjours de 2 jours et plus';'-';18;1645,35;165,52
+9901;'90H03Z';'Actes sans relation avec le diagnostic principal :séjours de moins de 2 jours';'-';'-';460,18;
