@@ -32,6 +32,7 @@ $tabBox = new CTabBox("?m=$m", "{$AppUI->cfg['root_dir']}/modules/$m/", $tab);
 $tabBox->add('view_dpadmin', 'Configuration générale');
 $tabBox->add('view_history', 'Historique');
 $tabBox->add('view_messages', 'Messagerie');
+$tabBox->add('view_logs', 'Logs système');
 
 $tabBox->show();
 ?>
