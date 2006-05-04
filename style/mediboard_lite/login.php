@@ -1,4 +1,4 @@
-<?php /* STYLE/DEFAULT $Id: login.php,v 1.3 2006/04/23 18:15:42 rhum1 Exp $ */
+<?php /* STYLE/DEFAULT $Id$ */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

@@ -1,4 +1,4 @@
-<?php /* $Id: header.php,v 1.8 2006/04/19 09:25:54 rhum1 Exp $ */ ?>
+<?php /* $Id$ */ ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">

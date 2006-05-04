@@ -1,4 +1,4 @@
-<?php /* $Id: overrides.php,v 1.1 2005/11/30 13:03:42 rhum1 Exp $ */
+<?php /* $Id$ */
 
 //
 // This overrides the show() function of the CTitleBlock_core class
