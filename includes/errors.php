@@ -114,7 +114,7 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
 if (!@filesize($logPath)) {
   $initTime = date("Y-m-d H:i:s");
   
-  $logInit = "<link rel='stylesheet' type='text/css' href='style/mediboard/main.css?build=24' media='all' />";  
+  $logInit = "<link rel='stylesheet' type='text/css' href='../style/mediboard/main.css?build=24' media='all' />";  
   $logInit .= "<h2>Log de Mediboard ré-initailisé depuis $initTime</h2>";
   file_put_contents($logPath, $logInit);
 }
