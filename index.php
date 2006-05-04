@@ -1,8 +1,8 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
-* @version $Revision: $
+* @version $Revision$
 * @author Thomas Despoix
 */
 
