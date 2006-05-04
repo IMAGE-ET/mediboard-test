@@ -1,9 +1,9 @@
-<?php /* $Id: labo_groupage.php,v 1.5 2006/04/28 13:32:24 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpmsi
-* @version $Revision: 1.5 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

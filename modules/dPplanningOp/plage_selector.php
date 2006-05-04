@@ -1,9 +1,9 @@
-<?php /* $Id: plage_selector.php,v 1.18 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPplanningOp
-* @version $Revision: 1.18 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,9 +1,9 @@
-<?php /* $Id: graph_activite.php,v 1.12 2006/03/08 14:48:40 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: 1.12 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

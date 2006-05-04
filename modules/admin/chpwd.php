@@ -1,4 +1,4 @@
-<?php /* PUBLIC $Id: chpwd.php,v 1.1 2006/04/21 17:09:46 mytto Exp $ */
+<?php /* PUBLIC $Id$ */
 $user_id = @$AppUI->user_id;
 
 // check for a non-zero user id

@@ -1,4 +1,4 @@
-<?php /* SYSTEM $Id: system.class.php,v 1.2 2006/04/21 17:00:44 rhum1 Exp $ */
+<?php /* SYSTEM $Id$ */
 
 /**
 * Preferences class

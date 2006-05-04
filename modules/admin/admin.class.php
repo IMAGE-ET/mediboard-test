@@ -1,4 +1,4 @@
-<?php /* ADMIN $Id: admin.class.php,v 1.9 2006/04/21 14:42:46 rhum1 Exp $ */
+<?php /* ADMIN $Id$ */
 
 // user types
 $utypes = array(

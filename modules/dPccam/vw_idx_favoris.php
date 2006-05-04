@@ -1,9 +1,9 @@
-<?php /* $Id: vw_idx_favoris.php,v 1.13 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPccam
-* @version $Revision: 1.13 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

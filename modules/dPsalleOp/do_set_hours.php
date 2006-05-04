@@ -1,9 +1,9 @@
-<?php /* $Id: do_set_hours.php,v 1.4 2005/11/29 13:14:47 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPsalleOp
-* @version $Revision: 1.4 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,4 +1,4 @@
-<?php /* SYSTEM $Id: translate.php,v 1.2 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* SYSTEM $Id$ */
 
 // only user_type of Administrator (1) can access this page
 if (!$canEdit || $AppUI->user_type != 1) {

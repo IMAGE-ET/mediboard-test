@@ -1,9 +1,9 @@
-<?php /* $Id: inc_graph_audio_tonal.php,v 1.16 2005/12/22 18:37:08 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: 1.16 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,9 +1,9 @@
-<?php /* $Id: GHM.class.php,v 1.6 2006/04/28 13:32:24 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage dPcim10
- * @version $Revision: 1.6 $
+ * @version $Revision$
  * @author Romain Ollivier
  */
 

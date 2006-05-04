@@ -1,9 +1,9 @@
-<?php /* $Id: graph_admissions.php,v 1.1 2005/12/15 20:03:02 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

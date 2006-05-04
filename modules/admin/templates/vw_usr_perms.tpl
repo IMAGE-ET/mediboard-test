@@ -1,4 +1,4 @@
-<!-- $Id: vw_usr_perms.tpl,v 1.6 2005/12/11 19:00:57 mytto Exp $ -->
+<!-- $Id$ -->
 
 {literal}
 <script type="text/javascript">

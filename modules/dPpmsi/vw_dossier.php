@@ -1,9 +1,9 @@
-<?php /* $Id: vw_dossier.php,v 1.8 2006/04/28 13:32:24 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpmsi
-* @version $Revision: 1.8 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

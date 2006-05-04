@@ -1,9 +1,9 @@
-<?php /* $Id: message.class.php,v 1.1 2006/02/06 18:26:14 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage system
- *	@version $Revision: 1.1 $
+ *	@version $Revision$
  *  @author Thomas Despoix
 */
 

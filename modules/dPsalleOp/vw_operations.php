@@ -1,9 +1,9 @@
-<?php /* $Id: vw_operations.php,v 1.25 2006/05/02 20:39:49 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPprotocoles
-* @version $Revision: 1.25 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

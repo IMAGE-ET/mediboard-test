@@ -1,9 +1,9 @@
-<?php /* $Id: acte.class.php,v 1.21 2006/03/10 16:45:02 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage dPccam
- * @version $Revision: 1.21 $
+ * @version $Revision$
  * @author Romain Ollivier
  */
 

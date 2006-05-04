@@ -1,9 +1,9 @@
-<?php /* $Id: vw_full_code.php,v 1.17 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPccam
-* @version $Revision: 1.17 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

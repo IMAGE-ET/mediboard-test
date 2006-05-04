@@ -1,9 +1,9 @@
-<?php /* $Id: edit_consultation.php,v 1.43 2006/05/02 09:01:48 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.43 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_do_ghs_action.php,v 1.8 2006/04/27 10:09:41 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpmsi
-* @version $Revision: 1.8 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

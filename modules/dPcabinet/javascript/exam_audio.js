@@ -1,4 +1,4 @@
-// $Id: exam_audio.js,v 1.3 2005/12/19 19:24:07 mytto Exp $
+// $Id$
 
 // --- Audiométrie Tonale
 

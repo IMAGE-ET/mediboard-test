@@ -1,9 +1,9 @@
-<?php /* $Id: setup.php,v 1.5 2006/04/21 19:50:40 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 1.5 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

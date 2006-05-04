@@ -1,9 +1,9 @@
-<?php /* $Id: do_plagesop_aed.php,v 1.7 2005/08/17 07:44:52 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPbloc
-* @version $Revision: 1.7 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

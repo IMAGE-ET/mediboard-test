@@ -1,9 +1,9 @@
-<?php /* $Id: vw_idx_mediusers.php,v 1.11 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage mediusers
-* @version $Revision: 1.11 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,9 +1,9 @@
-<?php /* $Id: do_affectation_aed.php,v 1.3 2006/04/24 07:57:46 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPhospi
-* @version $Revision: 1.3 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

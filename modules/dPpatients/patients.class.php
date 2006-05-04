@@ -1,9 +1,9 @@
-<?php /* $Id: patients.class.php,v 1.57 2006/05/02 16:16:04 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 1.57 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

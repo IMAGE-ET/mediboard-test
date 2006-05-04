@@ -1,9 +1,9 @@
-<?php /* $Id: view_history.php,v 1.12 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage system
- * @version $Revision: 1.12 $
+ * @version $Revision$
  * @author Romain Ollivier
  */
 

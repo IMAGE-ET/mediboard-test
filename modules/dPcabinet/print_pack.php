@@ -1,9 +1,9 @@
-<?php /* $Id: print_pack.php,v 1.1 2005/04/14 16:28:23 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,4 +1,4 @@
-<?php /* SYSTEM $Id: addeditpref.php,v 1.3 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* SYSTEM $Id$ */
 ##
 ## add or edit a user preferences
 ##

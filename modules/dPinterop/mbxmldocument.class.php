@@ -1,9 +1,9 @@
-<?php /* $Id: mbxmldocument.class.php,v 1.7 2006/04/07 15:01:35 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPinterop
-* @version $Revision: 1.7 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

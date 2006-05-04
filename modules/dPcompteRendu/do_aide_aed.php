@@ -1,9 +1,9 @@
-<?php /* $Id: do_aide_aed.php,v 1.3 2005/04/10 15:51:29 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision: 1.3 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

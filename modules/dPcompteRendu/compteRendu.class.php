@@ -1,9 +1,9 @@
-<?php /* $Id: compteRendu.class.php,v 1.13 2005/10/26 15:41:25 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision: 1.13 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

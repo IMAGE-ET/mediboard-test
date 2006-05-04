@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_do_add_cim10.php,v 1.3 2006/04/25 22:42:02 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPccam
-* @version $Revision: 1.3 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

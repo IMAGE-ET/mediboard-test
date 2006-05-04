@@ -1,9 +1,9 @@
-<?php /* $Id: vw_protocoles.php,v 1.18 2005/11/13 21:19:19 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPplanningOp
-* @version $Revision: 1.18 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

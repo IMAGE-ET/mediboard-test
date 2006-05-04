@@ -1,9 +1,9 @@
-<?php /* $Id: do_chambre_aed.php,v 1.2 2005/04/04 09:07:16 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPhospi
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

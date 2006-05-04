@@ -1,9 +1,9 @@
-<?php /* $Id: hprimxmlschema.class.php,v 1.4 2006/01/11 15:34:36 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPinterop
-* @version $Revision: 1.4 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

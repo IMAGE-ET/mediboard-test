@@ -1,9 +1,9 @@
-<?php /* $Id: export_hprim.php,v 1.24 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPinterop
-* @version $Revision: 1.24 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

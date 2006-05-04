@@ -3,7 +3,7 @@
 /**
 * @package Mediboard
 * @subpackage dPbloc
-* @version $Revision: 1.8 $
+* @version $Revision$
 * @author Romain Ollivier
 */
  

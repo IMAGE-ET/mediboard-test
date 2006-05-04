@@ -1,9 +1,9 @@
-<?php /* $Id: pack.class.php,v 1.7 2005/10/11 09:38:42 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision: 1.7 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,9 +1,9 @@
-<?php /* $Id: graph_audio_tympan.php,v 1.1 2005/12/19 19:24:06 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

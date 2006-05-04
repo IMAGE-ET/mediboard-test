@@ -1,4 +1,4 @@
-<?php /* ADMIN $Id: vw_active_usr.php,v 1.2 2006/04/14 08:37:34 rhum1 Exp $ */
+<?php /* ADMIN $Id$ */
 GLOBAL $AppUI, $canEdit, $stub, $where, $orderby;
 
 $sql = "

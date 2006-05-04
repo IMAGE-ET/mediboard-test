@@ -1,8 +1,8 @@
-/* $Id: fckplugin.js,v 1.5 2006/04/25 22:52:58 mytto Exp $
+/* $Id$
  *
  * @package Mediboard
  * @subpackage dPcompteRendu
- * @version $Revision: 1.5 $
+ * @version $Revision$
  * @author Thomas Despoix
  *
  * Mediboard additional custom combo plugin for FCKeditor

@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_get_last_refs.php,v 1.1 2005/09/11 23:59:49 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

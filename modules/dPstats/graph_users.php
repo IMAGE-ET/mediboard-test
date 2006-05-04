@@ -1,9 +1,9 @@
-<?php /* $Id: graph_users.php,v 1.3 2005/11/30 17:03:12 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: 1.3 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

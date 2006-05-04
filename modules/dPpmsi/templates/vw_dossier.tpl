@@ -1,4 +1,4 @@
-<!-- $Id: vw_dossier.tpl,v 1.15 2006/05/01 12:05:08 rhum1 Exp $ -->
+<!-- $Id$ -->
 
 {literal}
 <script type="text/javascript">

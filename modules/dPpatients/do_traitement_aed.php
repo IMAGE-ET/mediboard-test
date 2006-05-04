@@ -1,9 +1,9 @@
-<?php /* $Id: do_traitement_aed.php,v 1.1 2006/01/20 22:09:27 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

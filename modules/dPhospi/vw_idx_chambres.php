@@ -1,9 +1,9 @@
-<?php /* $Id: vw_idx_chambres.php,v 1.6 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPhospi
-* @version $Revision: 1.6 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

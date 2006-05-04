@@ -1,9 +1,9 @@
-<?php /* $Id: examaudio.class.php,v 1.6 2005/12/19 19:24:06 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.6 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

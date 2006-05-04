@@ -1,9 +1,9 @@
-<?php /* $Id: files.class.php,v 1.16 2006/04/29 15:34:11 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.16 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

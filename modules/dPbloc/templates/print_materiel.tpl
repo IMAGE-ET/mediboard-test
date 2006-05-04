@@ -1,4 +1,4 @@
-<!-- $Id: $ -->
+<!-- $Id$ -->
 
 <table class="main">
   <tr><th>Matériel à commander</th></tr>

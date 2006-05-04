@@ -1,9 +1,9 @@
-<?php /* $Id: templatemanager.class.php,v 1.24 2006/05/01 15:40:42 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision: 1.24 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

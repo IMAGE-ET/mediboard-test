@@ -1,4 +1,4 @@
-<!-- $Id: vw_edit_patients.tpl,v 1.45 2006/04/19 16:18:01 rhum1 Exp $ -->
+<!-- $Id$ -->
 
 {literal}
 <script type="text/javascript">

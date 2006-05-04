@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_do_add_ccam.php,v 1.2 2006/04/25 14:55:57 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPccam
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

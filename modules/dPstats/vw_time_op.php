@@ -1,9 +1,9 @@
-<?php /* $Id: vw_time_op.php,v 1.4 2006/04/28 13:27:10 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: 1.4 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

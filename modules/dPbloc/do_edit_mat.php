@@ -1,9 +1,9 @@
-<?php /* $Id: do_edit_mat.php,v 1.2 2005/05/04 17:32:10 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPbloc
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

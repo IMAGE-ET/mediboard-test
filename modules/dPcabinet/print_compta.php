@@ -1,9 +1,9 @@
-<?php /* $Id: print_compta.php,v 1.3 2005/07/19 10:46:54 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.3 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

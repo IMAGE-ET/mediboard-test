@@ -1,9 +1,9 @@
-<?php /* $Id: vw_planning.php,v 1.20 2006/04/21 16:56:07 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.20 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_vw_sorties_comp.php,v 1.1 2006/04/24 07:57:46 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPadmissions
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,8 +1,8 @@
-<?php /* $Id: view_operation.php,v 1.10 2005/07/19 10:46:54 mytto Exp $ */
+<?php /* $Id$ */
 /**
 * @package Mediboard
 * @subpackage dPbloc
-* @version $Revision: 1.10 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

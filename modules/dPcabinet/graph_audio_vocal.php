@@ -1,9 +1,9 @@
-<?php /* $Id: graph_audio_vocal.php,v 1.2 2005/11/30 17:05:26 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

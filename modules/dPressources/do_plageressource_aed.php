@@ -1,9 +1,9 @@
-<?php /* $Id: do_plageressource_aed.php,v 1.2 2005/09/06 12:33:53 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

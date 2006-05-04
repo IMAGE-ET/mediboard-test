@@ -1,9 +1,9 @@
-<?php /* $Id: print_admission.php,v 1.3 2005/03/31 15:22:31 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPadmissions
-* @version $Revision: 1.3 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

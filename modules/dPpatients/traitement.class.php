@@ -1,9 +1,9 @@
-<?php /* $Id: traitement.class.php,v 1.2 2006/02/01 10:53:25 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

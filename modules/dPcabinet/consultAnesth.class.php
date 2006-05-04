@@ -1,9 +1,9 @@
-<?php /* $Id: consultAnesth.class.php,v 1.7 2006/01/20 22:09:29 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.7 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

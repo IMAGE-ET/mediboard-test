@@ -1,9 +1,9 @@
-<?php /* $Id: do_antecedent_aed.php,v 1.1 2005/10/18 10:43:44 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

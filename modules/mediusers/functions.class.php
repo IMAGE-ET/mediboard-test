@@ -1,9 +1,9 @@
-<?php /* $Id: functions.class.php,v 1.18 2005/09/21 19:18:41 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage mediusers
- *	@version $Revision: 1.18 $
+ *	@version $Revision$
  *  @author Romain Ollivier
 */
 

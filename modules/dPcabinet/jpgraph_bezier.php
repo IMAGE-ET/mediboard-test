@@ -1,4 +1,4 @@
-<?php /* $Id: jpgraph_bezier.php,v 1.2 2006/04/19 09:36:10 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @abstract Bezier interoplated point generation, 

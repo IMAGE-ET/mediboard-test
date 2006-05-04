@@ -1,9 +1,9 @@
-<?php /* $Id: vw_idx_packs.php,v 1.5 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision: 1.5 $
+* @version $Revision$
 * @author Romain OLLIVIER
 */
 

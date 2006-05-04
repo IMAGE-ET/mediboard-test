@@ -1,9 +1,9 @@
-<?php /* $Id: pathologie.class.php,v 1.5 2005/05/02 08:24:03 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPplanningOp
-* @version $Revision: 1.5 $
+* @version $Revision$
 * @author Thomas Despoix
 */
  

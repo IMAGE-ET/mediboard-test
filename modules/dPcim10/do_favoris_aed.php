@@ -1,9 +1,9 @@
-<?php /* $Id: do_favoris_aed.php,v 1.5 2005/10/15 16:58:45 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcim10
-* @version $Revision: 1.5 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

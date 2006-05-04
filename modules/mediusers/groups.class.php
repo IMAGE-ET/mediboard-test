@@ -1,9 +1,9 @@
-<?php /* $Id: groups.class.php,v 1.11 2005/10/04 10:56:48 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage mediusers
- *	@version $Revision: 1.11 $
+ *	@version $Revision$
  *  @author Romain Ollivier
 */
 

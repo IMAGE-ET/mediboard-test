@@ -1,4 +1,4 @@
-<?php /* ADMIN $Id: do_user_aed.php,v 1.1 2005/01/03 14:01:20 mytto Exp $ */
+<?php /* ADMIN $Id$ */
 
 $del = isset($_REQUEST['del']) ? $_REQUEST['del'] : FALSE;
 

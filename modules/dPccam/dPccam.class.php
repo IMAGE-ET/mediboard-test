@@ -1,11 +1,11 @@
-<?php /* $Id: dPccam.class.php,v 1.8 2005/09/19 12:10:59 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  * 
  * une modification
 * @package Mediboard
 * @subpackage dPccam
-* @version $Revision: 1.8 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

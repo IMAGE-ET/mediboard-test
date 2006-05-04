@@ -1,9 +1,9 @@
-<?php /* $Id: dermato_consult2.php,v 1.2 2006/04/21 16:56:07 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPinterop
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Romain OLLIVIER
 */
 

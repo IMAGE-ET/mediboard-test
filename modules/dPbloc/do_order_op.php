@@ -1,9 +1,9 @@
-<?php /* $Id: do_order_op.php,v 1.12 2006/04/29 09:24:03 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPbloc
-* @version $Revision: 1.12 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

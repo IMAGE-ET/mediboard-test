@@ -1,9 +1,9 @@
-<?php /* $Id: favoricim10.class.php,v 1.2 2005/10/15 16:58:45 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcim10
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

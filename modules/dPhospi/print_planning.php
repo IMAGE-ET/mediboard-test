@@ -1,9 +1,9 @@
-<?php /* $Id: print_planning.php,v 1.14 2006/05/03 13:22:44 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPhospi
-* @version $Revision: 1.14 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

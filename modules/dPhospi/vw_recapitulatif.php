@@ -3,7 +3,7 @@
 /**
 * @package Mediboard
 * @subpackage dPhospi
-* @version $Revision: 1.8 $
+* @version $Revision$
 * @author Romain OLLIVIER
 */
 

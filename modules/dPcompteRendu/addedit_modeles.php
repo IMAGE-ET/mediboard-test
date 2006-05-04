@@ -1,9 +1,9 @@
-<?php /* $Id: addedit_modeles.php,v 1.14 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision: 1.14 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

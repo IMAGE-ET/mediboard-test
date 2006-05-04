@@ -1,9 +1,9 @@
-<?php /* $Id: chambre.class.php,v 1.19 2005/09/21 19:18:41 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage dPhospi
- *	@version $Revision: 1.19 $
+ *	@version $Revision$
  *  @author Thomas Despoix
 */
 

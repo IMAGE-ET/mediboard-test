@@ -1,9 +1,9 @@
-<?php /* $Id: vw_idx_planning.php,v 1.42 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPplanningOp
-* @version $Revision: 1.42 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

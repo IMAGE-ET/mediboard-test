@@ -1,4 +1,4 @@
-<!-- $Id: vw_idx_admission.tpl,v 1.41 2006/04/24 07:57:44 rhum1 Exp $ -->
+<!-- $Id$ -->
 
 <script type="text/javascript">
 {literal}

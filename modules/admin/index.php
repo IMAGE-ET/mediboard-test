@@ -1,4 +1,4 @@
-<?php /* $Id: index.php,v 1.2 2005/02/17 11:22:50 mytto Exp $ */
+<?php /* $Id$ */
 $AppUI->savePlace();
 
 if (isset( $_GET['tab'] )) {

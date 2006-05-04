@@ -1,4 +1,4 @@
-<!-- $Id: vw_addedit_planning.tpl,v 1.81 2006/04/21 16:08:34 rhum1 Exp $ -->
+<!-- $Id$ -->
 
 <script type="text/javascript">
 {literal}

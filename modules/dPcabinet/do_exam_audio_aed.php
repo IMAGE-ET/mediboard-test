@@ -1,9 +1,9 @@
-<?php /* $Id: do_exam_audio_aed.php,v 1.5 2005/12/02 09:59:14 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.5 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

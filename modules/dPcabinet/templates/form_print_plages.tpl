@@ -1,4 +1,4 @@
-<!-- $Id: form_print_planning.tpl,v 1.3 2005/02/17 17:00:12 rhum1 Exp $ -->
+<!-- $Id$ -->
 
 <script type="text/javascript">
 {literal}

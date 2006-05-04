@@ -1,7 +1,7 @@
-<?php /* SYSTEM $Id: translate_save.php,v 1.1 2005/10/04 10:54:40 rhum1 Exp $ */
+<?php /* SYSTEM $Id$ */
 /**
 * Processes the entries in the translation form.
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Andrew Eddie <users.sourceforge.net>
 */
 

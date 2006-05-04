@@ -1,9 +1,9 @@
-<?php /* $Id: medecin.php,v 1.9 2006/03/27 15:58:58 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 1.9 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

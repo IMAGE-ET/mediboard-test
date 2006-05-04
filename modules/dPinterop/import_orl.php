@@ -1,9 +1,9 @@
-<?php /* $Id: import_orl.php,v 1.5 2006/05/01 17:54:27 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPinterop
-* @version $Revision: 1.5 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

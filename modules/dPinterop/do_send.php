@@ -1,9 +1,9 @@
-<?php /* $Id: do_send.php,v 1.1 2005/08/23 16:14:37 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain OLLIVIER
 */
 

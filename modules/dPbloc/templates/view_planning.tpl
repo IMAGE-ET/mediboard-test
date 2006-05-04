@@ -1,4 +1,4 @@
-<!-- $Id: view_planning.tpl,v 1.27 2006/05/03 09:46:45 mytto Exp $ -->
+<!-- $Id$ -->
 
 {literal}
 <script type="text/javascript">

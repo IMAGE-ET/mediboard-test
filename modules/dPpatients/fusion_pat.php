@@ -1,9 +1,9 @@
-<?php /* $Id: fusion_pat.php,v 1.2 2005/12/08 22:19:55 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

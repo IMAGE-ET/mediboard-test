@@ -1,9 +1,9 @@
-<?php /* $Id: edit_compte_rendu.php,v 1.4 2006/05/01 15:40:42 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision: 1.4 $
+* @version $Revision$
 * @author Romain OLLIVIER
 */
 

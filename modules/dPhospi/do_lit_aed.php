@@ -1,9 +1,9 @@
-<?php /* $Id: do_lit_aed.php,v 1.1 2005/04/04 09:07:16 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPhospi
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

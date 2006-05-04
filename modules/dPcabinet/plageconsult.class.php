@@ -1,9 +1,9 @@
-<?php /* $Id: plageconsult.class.php,v 1.28 2005/10/17 00:26:17 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.28 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,4 +1,4 @@
-<?php /* ADMIN $Id: vw_usr_perms.php,v 1.4 2006/04/24 16:53:36 mytto Exp $ */
+<?php /* ADMIN $Id$ */
 global $AppUI, $user_id, $canEdit, $tab;
 
 // Get the installed modules

@@ -1,9 +1,9 @@
-<?php /* $Id: mediusers.class.php,v 1.41 2006/04/21 13:47:51 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage mediusers
- *	@version $Revision: 1.41 $
+ *	@version $Revision$
  *  @author Romain Ollivier
  */
 

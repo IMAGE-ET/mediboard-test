@@ -1,9 +1,9 @@
-<?php /* $Id: graph_patjoursalle.php,v 1.2 2005/12/11 01:57:20 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

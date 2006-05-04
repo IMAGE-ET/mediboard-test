@@ -1,9 +1,9 @@
-<?php /* $Id: service.class.php,v 1.6 2005/09/21 19:18:41 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage dPhospi
- *	@version $Revision: 1.6 $
+ *	@version $Revision$
  *  @author Thomas Despoix
 */
 

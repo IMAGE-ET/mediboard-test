@@ -1,9 +1,9 @@
-<?php /* $Id: plagesop.class.php,v 1.28 2005/09/21 19:18:41 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage dPbloc
- * @version $Revision: 1.28 $
+ * @version $Revision$
  * @author Romain Ollivier
  */
 

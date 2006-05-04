@@ -1,9 +1,9 @@
-<?php /* $Id: consultation.class.php,v 1.43 2006/05/01 21:25:42 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.43 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

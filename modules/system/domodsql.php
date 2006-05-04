@@ -1,4 +1,4 @@
-<?php /* SYSTEM $Id: domodsql.php,v 1.3 2006/04/21 16:27:25 rhum1 Exp $ */
+<?php /* SYSTEM $Id$ */
 ##
 ## Activate or move a module entry
 ##

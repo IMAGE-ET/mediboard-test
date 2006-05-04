@@ -1,9 +1,9 @@
-<?php /* $Id: do_acteccam_aed.php,v 1.3 2005/11/04 18:08:01 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPsalleOp
-* @version $Revision: 1.3 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

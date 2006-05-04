@@ -1,9 +1,9 @@
-<?php /* $Id: vw_idx_admission.php,v 1.21 2006/04/24 07:57:46 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPadmissions
-* @version $Revision: 1.21 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

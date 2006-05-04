@@ -1,4 +1,4 @@
-<?php /* SYSTEM $Id: index.php,v 1.3 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* SYSTEM $Id$ */
 $AppUI->savePlace();
 
 // [Begin] non-module specific code

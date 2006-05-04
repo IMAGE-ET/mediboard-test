@@ -1,9 +1,9 @@
-<?php /* $Id: do_tarif_aed.php,v 1.2 2005/10/04 10:56:49 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

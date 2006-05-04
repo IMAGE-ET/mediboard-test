@@ -1,9 +1,9 @@
-<?php /* $Id: vw_reveil.php,v 1.5 2006/04/24 07:57:46 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPprotocoles
-* @version $Revision: 1.5 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

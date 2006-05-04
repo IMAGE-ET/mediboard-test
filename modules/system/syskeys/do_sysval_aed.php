@@ -1,4 +1,4 @@
-<?php /* SYSKEYS $Id: do_sysval_aed.php,v 1.1 2005/10/04 10:54:41 rhum1 Exp $ */
+<?php /* SYSKEYS $Id$ */
 $del = isset($_POST['del']) ? $_POST['del'] : 0;
 
 $obj = new CSysVal();

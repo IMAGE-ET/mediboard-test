@@ -1,8 +1,8 @@
-/* $Id: $
+/* $Id$
  *
  * @package Mediboard
  * @subpackage dPcompteRendu
- * @version $Revision: $
+ * @version $Revision$
  * @author Romain OLLIVIER
  *
  * Mediboard additional page-break button plugin for FCKeditor

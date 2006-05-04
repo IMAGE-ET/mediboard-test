@@ -1,9 +1,9 @@
-<?php /* $Id: print_plages.php,v 1.6 2006/04/21 16:56:07 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.6 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

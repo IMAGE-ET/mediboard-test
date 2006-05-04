@@ -1,9 +1,9 @@
-<?php /* $Id: acteccam.class.php,v 1.9 2006/04/21 10:53:34 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage mediusers
- *	@version $Revision: 1.9 $
+ *	@version $Revision$
  *  @author Thomas Despoix
  */
 

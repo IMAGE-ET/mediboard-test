@@ -1,9 +1,9 @@
-<?php /* $Id: do_affectation_split.php,v 1.3 2005/07/01 08:55:59 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPhospi
-* @version $Revision: 1.3 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

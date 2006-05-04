@@ -1,9 +1,9 @@
-<?php /* $Id: view_planning.php,v 1.28 2006/04/29 09:24:03 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPbloc
-* @version $Revision: 1.28 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

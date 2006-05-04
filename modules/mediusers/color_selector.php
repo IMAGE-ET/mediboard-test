@@ -1,4 +1,4 @@
-<?php /* PUBLIC $Id: color_selector.php,v 1.1 2006/04/21 17:09:47 mytto Exp $ */
+<?php /* PUBLIC $Id$ */
 $callback = isset( $_GET['callback'] ) ? $_GET['callback'] : 0;
 ?>
 <script language="javascript">

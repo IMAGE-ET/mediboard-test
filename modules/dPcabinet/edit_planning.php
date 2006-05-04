@@ -1,9 +1,9 @@
-<?php /* $Id: edit_planning.php,v 1.7 2006/04/21 16:56:07 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.7 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

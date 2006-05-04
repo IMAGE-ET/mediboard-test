@@ -1,9 +1,9 @@
-<?php /* $Id: view_dpadmin.php,v 1.4 2006/05/01 17:54:27 mytto Exp $ */
+<?php /* $Id$ */
 
 /*
  * @package Mediboard
  * @subpackage system
- * @version $Revision: 1.4 $
+ * @version $Revision$
  * @author Romain Ollivier
  */
 

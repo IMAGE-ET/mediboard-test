@@ -1,9 +1,9 @@
-<?php /* $Id: do_plageconsult_aed.php,v 1.7 2005/08/29 21:06:46 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.7 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

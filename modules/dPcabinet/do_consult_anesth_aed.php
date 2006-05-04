@@ -1,9 +1,9 @@
-<?php /* $Id: do_consult_anesth_aed.php,v 1.1 2005/10/15 16:58:45 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

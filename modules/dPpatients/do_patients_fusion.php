@@ -1,9 +1,9 @@
-<?php /* $Id: do_patients_fusion.php,v 1.1 2005/12/08 11:15:39 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

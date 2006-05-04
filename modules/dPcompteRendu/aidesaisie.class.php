@@ -1,9 +1,9 @@
-<?php /* $Id: aidesaisie.class.php,v 1.8 2006/02/03 12:28:26 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision: 1.8 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

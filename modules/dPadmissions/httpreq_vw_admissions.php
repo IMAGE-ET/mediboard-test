@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_vw_admissions.php,v 1.3 2006/04/29 16:49:30 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPadmissions
-* @version $Revision: 1.3 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

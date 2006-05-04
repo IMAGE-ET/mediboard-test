@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_vw_consult_anesth.php,v 1.1 2006/05/02 09:01:48 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,9 +1,9 @@
-<?php /* $Id: do_edit_admis.php,v 1.8 2006/04/25 14:52:22 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPadmissions
-* @version $Revision: 1.8 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

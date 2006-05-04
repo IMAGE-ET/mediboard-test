@@ -1,4 +1,4 @@
-<!--  $Id: $ -->
+<!--  $Id$ -->
 {literal}
 <script type="text/javascript">
 

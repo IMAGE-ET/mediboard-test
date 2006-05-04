@@ -1,4 +1,4 @@
-<!-- $Id: vw_idx_salles.tpl,v 1.9 2006/04/19 16:18:00 rhum1 Exp $ -->
+<!-- $Id$ -->
 
 {literal}
 <script type="text/javascript">

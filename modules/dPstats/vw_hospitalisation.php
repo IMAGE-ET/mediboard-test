@@ -1,9 +1,9 @@
-<?php /* $Id: vw_hospitalisation.php,v 1.4 2006/04/21 16:55:52 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: 1.4 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

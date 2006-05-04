@@ -1,4 +1,4 @@
-<?php /* SYSKEYS $Id: index.php,v 1.1 2005/10/04 10:54:41 rhum1 Exp $ */
+<?php /* SYSKEYS $Id$ */
 $AppUI->savePlace();
 
 // pull all the key types

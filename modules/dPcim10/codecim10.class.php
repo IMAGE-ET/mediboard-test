@@ -1,9 +1,9 @@
-<?php /* $Id: codecim10.class.php,v 1.6 2006/03/08 13:18:54 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage dPcim10
- * @version $Revision: 1.6 $
+ * @version $Revision$
  * @author Romain Ollivier
  */
 

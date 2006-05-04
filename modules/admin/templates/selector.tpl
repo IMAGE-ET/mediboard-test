@@ -1,4 +1,4 @@
-<!-- $Id: selector.tpl,v 1.3 2005/10/20 09:40:23 mytto Exp $ -->
+<!-- $Id$ -->
 
 <script type="text/javascript">
   function setClose(){ldelim}

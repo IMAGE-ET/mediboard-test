@@ -1,9 +1,9 @@
-<?php /* $Id: do_edit_chambre.php,v 1.3 2006/04/24 07:57:46 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPadmissions
-* @version $Revision: 1.3 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

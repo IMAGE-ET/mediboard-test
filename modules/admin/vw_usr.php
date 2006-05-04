@@ -1,4 +1,4 @@
-<?php /* ADMIN  $Id: vw_usr.php,v 1.4 2006/04/24 16:53:36 mytto Exp $ */ ?>
+<?php /* ADMIN  $Id$ */ ?>
 <table cellpadding="2" cellspacing="1" border="0" width="100%" class="tbl">
 <tr>
 	<td width="60" align="right">

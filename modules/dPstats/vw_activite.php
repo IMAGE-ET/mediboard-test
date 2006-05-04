@@ -1,9 +1,9 @@
-<?php /* $Id: vw_activite.php,v 1.6 2006/04/21 16:55:51 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: 1.6 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

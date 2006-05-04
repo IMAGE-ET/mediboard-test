@@ -1,4 +1,4 @@
-<!-- $Id: addedit_planning.tpl,v 1.41 2006/04/19 16:17:59 rhum1 Exp $ -->
+<!-- $Id$ -->
 
 {literal}
 <script type="text/javascript">

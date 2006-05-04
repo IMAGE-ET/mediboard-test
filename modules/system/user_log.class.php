@@ -1,9 +1,9 @@
-<?php /* $Id: user_log.class.php,v 1.6 2006/04/21 14:58:36 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 1.6 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

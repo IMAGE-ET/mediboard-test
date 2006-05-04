@@ -1,9 +1,9 @@
-<?php /* $Id: do_planning_aed.php,v 1.28 2005/11/16 21:00:23 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPplanningOp
-* @version $Revision: 1.28 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

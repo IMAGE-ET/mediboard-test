@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_vw_main_consult.php,v 1.4 2006/04/27 10:09:39 rhum1 Exp $*/
+<?php /* $Id$*/
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.4 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

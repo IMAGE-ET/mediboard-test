@@ -1,9 +1,9 @@
-<?php /* $Id: vw_edit_plages.php,v 1.14 2005/10/25 17:50:41 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPbloc
-* @version $Revision: 1.14 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

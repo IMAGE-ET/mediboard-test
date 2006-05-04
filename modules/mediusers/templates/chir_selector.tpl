@@ -1,4 +1,4 @@
-<!-- $Id: chir_selector.tpl,v 1.4 2005/02/17 17:37:50 mytto Exp $ -->
+<!-- $Id$ -->
 
 {literal}
 <script type="text/javascript">

@@ -1,9 +1,9 @@
-<?php /* $Id: vw_compta.php,v 1.15 2005/08/29 21:16:05 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.15 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

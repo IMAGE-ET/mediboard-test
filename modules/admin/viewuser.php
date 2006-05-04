@@ -1,4 +1,4 @@
-<?php /* ADMIN $Id: viewuser.php,v 1.5 2006/04/21 17:09:46 mytto Exp $ */
+<?php /* ADMIN $Id$ */
 $AppUI->savePlace();
 
 $user_id = isset( $_GET['user_id'] ) ? $_GET['user_id'] : 0;

@@ -1,9 +1,9 @@
-<?php /* $Id: chir_selector.php,v 1.3 2005/02/24 17:24:00 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage mediuser
-* @version $Revision: 1.3 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

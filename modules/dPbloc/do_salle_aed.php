@@ -1,9 +1,9 @@
-<?php /* $Id: do_salle_aed.php,v 1.5 2005/12/10 19:03:23 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage dPbloc
- *	@version $Revision: 1.5 $
+ *	@version $Revision$
  *  @author Romain Ollivier
  */
 

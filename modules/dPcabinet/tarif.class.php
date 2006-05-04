@@ -1,9 +1,9 @@
-<?php /* $Id: tarif.class.php,v 1.7 2005/09/21 19:18:41 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.7 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

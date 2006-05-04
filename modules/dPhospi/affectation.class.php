@@ -1,9 +1,9 @@
-<?php /* $Id: affectation.class.php,v 1.23 2005/09/19 12:10:58 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage dPhospi
- *	@version $Revision: 1.23 $
+ *	@version $Revision$
  *  @author Thomas Despoix
 */
 

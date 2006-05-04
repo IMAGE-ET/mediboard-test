@@ -1,9 +1,9 @@
-<?php /* $Id: planning.class.php,v 1.25 2005/12/15 16:45:31 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPbloc
-* @version $Revision: 1.25 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

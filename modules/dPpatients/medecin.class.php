@@ -1,9 +1,9 @@
-<?php /* $Id: medecin.class.php,v 1.14 2006/03/27 15:58:58 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 1.14 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

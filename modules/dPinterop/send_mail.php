@@ -1,9 +1,9 @@
-<?php /* $Id: send_mail.php,v 1.3 2005/08/31 15:37:57 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPinterop
-* @version $Revision: 1.3 $
+* @version $Revision$
 * @author Romain OLLIVIER
 */
 

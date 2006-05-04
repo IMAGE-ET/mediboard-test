@@ -1,9 +1,9 @@
-<?php /* $Id: print_cr.php,v 1.1 2005/10/11 07:05:14 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

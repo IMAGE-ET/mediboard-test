@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_do_add_insee.php,v 1.4 2006/04/25 15:20:27 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 1.4 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

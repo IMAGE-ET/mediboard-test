@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_source_cr.php,v 1.1 2006/05/01 15:40:42 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain OLLIVIER
 */
 

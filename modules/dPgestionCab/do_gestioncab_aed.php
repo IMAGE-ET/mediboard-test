@@ -1,9 +1,9 @@
-<?php /* $Id: do_gestioncab_aed.php,v 1.1 2006/04/05 00:02:41 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPgestionCab
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

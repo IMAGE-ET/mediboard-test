@@ -1,9 +1,9 @@
-<?php /* $Id: graph_patparservice.php,v 1.1 2006/03/06 02:29:06 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

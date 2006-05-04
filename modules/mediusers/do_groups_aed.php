@@ -1,9 +1,9 @@
-<?php /* $Id: do_groups_aed.php,v 1.7 2005/10/04 10:56:49 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage mediusers
-* @version $Revision: 1.7 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

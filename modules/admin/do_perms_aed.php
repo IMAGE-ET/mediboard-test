@@ -1,4 +1,4 @@
-<?php /* ADMIN $Id: do_perms_aed.php,v 1.2 2005/02/16 14:52:17 mytto Exp $ */
+<?php /* ADMIN $Id$ */
 global $m, $a;
 
 $obj = new CPermission();

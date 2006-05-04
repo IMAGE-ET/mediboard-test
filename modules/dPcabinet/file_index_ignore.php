@@ -1,9 +1,9 @@
-<?php /* $Id: file_index_ignore.php,v 1.1 2005/01/13 09:45:15 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

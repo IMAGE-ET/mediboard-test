@@ -1,9 +1,9 @@
-<?php /* $Id: checkDate.php,v 1.4 2005/04/09 14:31:22 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPbloc
-* @version $Revision: 1.4 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

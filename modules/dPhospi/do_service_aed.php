@@ -1,9 +1,9 @@
-<?php /* $Id: do_service_aed.php,v 1.2 2005/03/25 16:33:39 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPhospi
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

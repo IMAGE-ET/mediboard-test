@@ -1,4 +1,4 @@
-<?php /* SYSTEM $Id: viewmods.php,v 1.8 2006/04/25 15:13:25 rhum1 Exp $*/
+<?php /* SYSTEM $Id$*/
 
 $AppUI->savePlace();
 

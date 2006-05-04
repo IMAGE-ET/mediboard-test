@@ -1,9 +1,9 @@
-<?php /* $Id: vw_idx_aides.php,v 1.11 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision: 1.11 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

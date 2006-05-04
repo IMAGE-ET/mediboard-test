@@ -1,9 +1,9 @@
-<?php /* $Id: do_liste_aed.php,v 1.2 2005/12/10 17:41:56 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Romain OLLIVIER
 */
 

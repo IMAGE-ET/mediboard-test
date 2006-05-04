@@ -1,9 +1,9 @@
-<?php /* $Id: salle.class.php,v 1.9 2005/12/10 19:03:23 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage dPbloc
- *	@version $Revision: 1.9 $
+ *	@version $Revision$
  *  @author Romain Ollivier
  */
 

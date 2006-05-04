@@ -1,4 +1,4 @@
-<?php /* SYSKEYS $Id: keys.php,v 1.1 2005/10/04 10:54:41 rhum1 Exp $*/
+<?php /* SYSKEYS $Id$*/
 $sql = "SELECT * FROM syskeys ORDER BY syskey_name";
 $keys = db_loadList( $sql );
 
