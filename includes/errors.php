@@ -7,7 +7,7 @@
  * @author Thomas Despoix
  */
 
-$logPath = "./mb-log.html";
+$logPath = "tmp/mb-log.html";
 
 error_reporting( E_ALL );
 ini_set("error_log", $logPath);
