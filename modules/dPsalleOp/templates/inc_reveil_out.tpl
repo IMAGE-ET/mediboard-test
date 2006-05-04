@@ -9,6 +9,7 @@
           <th>Salle</th>
           <th>Praticien</th>
           <th>Patient</th>
+          <th>Chambre</th>
           <th>Sortie Salle</th>
           <th>Entrée reveil</th>
           <th>Sortie reveil</th>
@@ -16,8 +17,18 @@
         {foreach from=$listOut key=key item=curr_op}
         <tr>
           <td>{$curr_op->_ref_plageop->_ref_salle->nom}</td>
-          <td>Dr. {$curr_op->_ref_chir->_view}</td>
+          <td class="text">Dr. {$curr_op->_ref_chir->_view}</td>
           <td class="text">{$curr_op->_ref_pat->_view}</td>
+          <td class="text">
+            {assign var="affectation" value=$curr_op->_ref_first_affectation}
+            {if $affectation->affectation_id}
+            {$affectation->_ref_lit->_ref_chambre->_ref_service->nom}
+            - {$affectation->_ref_lit->_ref_chambre->nom}
+            - {$affectation->_ref_lit->nom}
+            {else}
+            Non placé
+            {/if}
+          </td>
           <td>{$curr_op->sortie_bloc|date_format:"%Hh%M"}</td>
           <td>{$curr_op->entree_reveil|date_format:"%Hh%M"}</td>
           <td>
