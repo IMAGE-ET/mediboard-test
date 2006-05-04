@@ -1,10 +1,10 @@
-<?php /* CLASSES $Id: chrono.class.php,v 1.2 2006/03/08 18:08:52 mytto Exp $ */
+<?php /* CLASSES $Id$ */
 
 /**
  *  @package Mediboard
  *  @subpackage classes
  *  @author  Thomas Despoix
- *  @version $Revision: 1.2 $
+ *  @version $Revision$
  */
 // Chronometer
 class Chronometer {

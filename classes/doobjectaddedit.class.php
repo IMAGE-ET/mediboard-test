@@ -1,10 +1,10 @@
-<?php /* CLASSES $Id: doobjectaddedit.class.php,v 1.19 2006/05/01 15:40:42 rhum1 Exp $ */
+<?php /* CLASSES $Id$ */
 
 /**
  *  @package Mediboard
  *  @subpackage classes
  *  @author  Thomas Despoix
- *  @version $Revision: 1.19 $
+ *  @version $Revision$
  */
 
 global $AppUI, $canRead, $canEdit, $m;

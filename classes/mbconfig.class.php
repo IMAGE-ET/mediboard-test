@@ -1,10 +1,10 @@
-<?php /* CLASSES $Id: mbconfig.class.php,v 1.1 2006/04/19 09:36:11 mytto Exp $ */
+<?php /* CLASSES $Id$ */
 
 /**
  *  @package Mediboard
  *  @subpackage classes
  *  @author  Thomas Despoix
- *  @version $Revision: 1.1 $
+ *  @version $Revision$
  */
  
 require_once("Config.php");

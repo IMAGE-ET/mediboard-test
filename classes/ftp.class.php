@@ -1,10 +1,10 @@
-<?php /* $Id: ftp.class.php,v 1.5 2006/04/07 15:01:36 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
  *  @package Mediboard
  *  @subpackage classes
  *  @author  Thomas Despoix
- *  @version $Revision: 1.5 $
+ *  @version $Revision$
  */
  
 class CFTP {

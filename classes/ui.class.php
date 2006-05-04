@@ -1,4 +1,4 @@
-<?php /* CLASSES $Id: ui.class.php,v 1.14 2006/04/21 16:56:38 mytto Exp $ */
+<?php /* CLASSES $Id$ */
 /**
 * @package dotproject
 * @subpackage core
@@ -22,7 +22,7 @@ define( "UI_CASE_UPPERFIRST", 3 );
 * The Application User Interface Class.
 *
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
-* @version $Revision: 1.14 $
+* @version $Revision$
 */
 class CAppUI {
 /** @var array generic array for holding the state of anything */

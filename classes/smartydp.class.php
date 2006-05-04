@@ -1,4 +1,4 @@
-<?php /* CLASSES $Id: smartydp.class.php,v 1.11 2006/04/28 14:52:03 mytto Exp $ */
+<?php /* CLASSES $Id$ */
 /**
  * @package dotproject
  * @subpackage classes

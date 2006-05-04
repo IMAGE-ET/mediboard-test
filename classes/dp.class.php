@@ -1,9 +1,9 @@
-<?php /* CLASSES $Id: dp.class.php,v 1.22 2006/01/18 08:03:28 rhum1 Exp $ */
+<?php /* CLASSES $Id$ */
 
 /**
  *	@package dotproject
  *	@subpackage modules
- *	@version $Revision: 1.22 $
+ *	@version $Revision$
  */
 
 /**

@@ -1,4 +1,4 @@
-<?php /* CLASSES $Id: date.class.php,v 1.2 2006/03/28 14:20:01 mytto Exp $ */
+<?php /* CLASSES $Id$ */
 /**
 * @package dotproject
 * @subpackage utilites

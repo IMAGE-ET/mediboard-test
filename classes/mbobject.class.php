@@ -1,9 +1,9 @@
-<?php /* $Id: mbobject.class.php,v 1.20 2006/04/07 15:01:36 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage classes
- *	@version $Revision: 1.20 $
+ *	@version $Revision$
  *  @author Thomas Despoix
 */
 
