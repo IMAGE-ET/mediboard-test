@@ -8,6 +8,7 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m;
+
 require_once( $AppUI->getModuleClass('mediusers') );
 require_once( $AppUI->getModuleClass('dPcabinet', 'plageconsult') );
 require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
@@ -17,17 +18,7 @@ if (!$canRead) {
 }
 
 // Initialisation des variables
-$chir = dPgetParam( $_GET, 'chir', 0);
-if(!$chir) {
-  $listChir = new CMediusers;
-  $listChir = $listChir->loadPraticiens(PERM_EDIT);
-  $inChir = "(0";
-  foreach($listChir as $key => $value) {
-    $inChir .= ", '$value->user_id'";
-  }
-  $inChir .=")";
-}
-$plageSel = dPgetParam( $_GET, 'plagesel', NULL);
+$plageSel = dPgetParam( $_GET, 'plagesel');
 $date = dPgetParam( $_GET, 'date', mbDate() );
 $ndate = mbDate("+1 MONTH", $date);
 $pdate = mbDate("-1 MONTH", $date);
@@ -35,19 +26,30 @@ $pdate = mbDate("-1 MONTH", $date);
 // Récupération des plages de consultation disponibles
 $listPlage = new CPlageconsult;
 $where = array();
-if($chir) {
-  $where["chir_id"] = "= '$chir'";
-} else {
-  $where["chir_id"] = "IN $inChir";
+
+// Praticien sélectionnés
+$chir_id = dPgetParam( $_GET, 'chir_id');
+if (!$chir_id) {
+  $listChir = new CMediusers;
+  $listChir = $listChir->loadPraticiens(PERM_EDIT);
+  $inChir = join(array_keys($listChir), ", ");
 }
-$where["date"] = "LIKE '".mbTranformTime(null, $date, "%Y-%m-__")."'";
+
+$where["chir_id"] = $chir_id ? "= '$chir_id'" : "IN ($inChir)";
+
+// Choix du mois
+$month = mbTranformTime(null, $date, "%Y-%m-__");
+$where["date"] = "LIKE '$month'";
 $order = "date, debut";
+
+// Chargement des plages disponibles
 $listPlage = $listPlage->loadList($where, $order);
-foreach($listPlage as $key => $value) {
-  if(!$plageSel && $date == $value->date) {
-    $plageSel = $value->plageconsult_id;
+foreach ($listPlage as $keyPlage => $valuePlage) {
+  if (!$plageSel && $date == $valuePlage->date) {
+    $plageSel = $valuePlage->plageconsult_id;
   }
-  $listPlage[$key]->loadRefs(false);
+  
+  $listPlage[$keyPlage]->loadRefs(false);
 }
 
 // Récupération des consultations de la plage séléctionnée
@@ -115,7 +117,7 @@ $smarty = new CSmartyDP;
 $smarty->assign('date', $date);
 $smarty->assign('ndate', $ndate);
 $smarty->assign('pdate', $pdate);
-$smarty->assign('chir', $chir);
+$smarty->assign('chir_id', $chir_id);
 $smarty->assign('plageSel', $plageSel);
 $smarty->assign('plage', $plage);
 $smarty->assign('listPlage', $listPlage);

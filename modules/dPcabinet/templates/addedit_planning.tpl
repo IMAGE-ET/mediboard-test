@@ -47,7 +47,7 @@ function setPat( key, val ) {
 function popRDV() {
   var url = new Url;
   url.setModuleAction("dPcabinet", "plage_selector");
-  url.addElement(document.editFrm.chir_id, "chir");
+  url.addElement(document.editFrm.chir_id);
   url.popup(800, 600, "Plage");
 }
 
