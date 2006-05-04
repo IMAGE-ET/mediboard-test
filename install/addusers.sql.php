@@ -1,9 +1,9 @@
-<?php /* $Id: addusers.sql.php,v 1.3 2006/04/25 14:55:57 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage install
-* @version $Revision: 1.3 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

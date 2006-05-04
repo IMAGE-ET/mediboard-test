@@ -1,9 +1,9 @@
-<?php /* $Id: fileaccess.php,v 1.1 2006/05/02 16:31:03 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage install
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

@@ -1,9 +1,9 @@
-<?php /* $Id: checkstructure.php,v 1.1 2006/04/25 14:55:57 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage install
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

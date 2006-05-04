@@ -1,9 +1,9 @@
-<?php /* $Id: mbdb.class.php,v 1.1 2006/04/24 16:53:36 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage install
-* @version $Revision: 1.1 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

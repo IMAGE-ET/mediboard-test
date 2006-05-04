@@ -1,9 +1,9 @@
-<?php /* $Id: install.php,v 1.9 2006/04/25 22:00:56 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage install
-* @version $Revision: 1.9 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

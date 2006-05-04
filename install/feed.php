@@ -1,9 +1,9 @@
-<?php /* $Id: feed.php,v 1.5 2006/05/02 16:31:03 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage install
-* @version $Revision: 1.5 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

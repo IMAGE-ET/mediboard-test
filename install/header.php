@@ -1,9 +1,9 @@
-<?php /* $Id: header.php,v 1.7 2006/05/03 16:53:12 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage install
-* @version $Revision: 1.7 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

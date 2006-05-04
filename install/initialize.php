@@ -1,9 +1,9 @@
-<?php /* $Id: initialize.php,v 1.6 2006/05/03 16:53:12 rhum1 Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage install
-* @version $Revision: 1.6 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

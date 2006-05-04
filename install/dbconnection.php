@@ -1,9 +1,9 @@
-<?php /* $Id: dbconnection.php,v 1.2 2006/05/02 16:31:03 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage install
-* @version $Revision: 1.2 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 
