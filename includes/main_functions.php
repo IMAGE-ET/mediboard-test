@@ -1,4 +1,4 @@
-<?php /* INCLUDES $Id: main_functions.php,v 1.3 2005/06/07 13:50:35 rhum1 Exp $ */
+<?php /* INCLUDES $Id$ */
 ##
 ## Global General Purpose Functions
 ##

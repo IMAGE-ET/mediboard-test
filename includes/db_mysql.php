@@ -1,4 +1,4 @@
-<?php /* $Id: db_mysql.php,v 1.6 2006/04/28 14:52:03 mytto Exp $ */
+<?php /* $Id$ */
 /*
 	Based on Leo West's (west_leo@yahooREMOVEME.com):
 	lib.DB

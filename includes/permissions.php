@@ -1,4 +1,4 @@
-<?php /* INCLUDES $Id: permissions.php,v 1.5 2006/04/21 13:39:21 rhum1 Exp $ */
+<?php /* INCLUDES $Id$ */
 /*
  * This page handles permissions
  * 

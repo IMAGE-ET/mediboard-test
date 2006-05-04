@@ -1,9 +1,9 @@
-<?php /* $Id: config_dist.php,v 1.8 2006/04/21 16:08:57 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage includes
- * @version $Revision: 1.8 $
+ * @version $Revision$
  * @author Thomas Despoix
  */
 

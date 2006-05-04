@@ -1,9 +1,9 @@
-<?php /* $Id: mb_functions.php,v 1.36 2006/04/21 16:08:57 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage Style
- * @version $Revision: 1.36 $
+ * @version $Revision$
  * @author Thomas Despoix
  */
 

@@ -2,7 +2,7 @@
 # You may have to edit the above line to reflect your system
 # E.g. the typical UNIX/Linux system will require #!/usr/bin/perl
 
-# $Id: gateway.pl,v 1.1 2005/01/05 14:34:15 mytto Exp $ #
+# $Id$ #
 
 # send email report upon receipt (1 = yes, 0 = no)
 $send_email_report = 1;

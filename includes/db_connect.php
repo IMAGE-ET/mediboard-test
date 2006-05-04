@@ -1,4 +1,4 @@
-<?php /* INCLUDES $Id: db_connect.php,v 1.17 2006/04/28 14:52:03 mytto Exp $ */
+<?php /* INCLUDES $Id$ */
 /**
 * Generic functions based on library function (that is, non-db specific)
 *

@@ -1,4 +1,4 @@
-// $Id: functions.js,v 1.53 2005/11/24 23:51:22 rhum1 Exp $
+// $Id$
 
 function main() {
   prepareForms();
