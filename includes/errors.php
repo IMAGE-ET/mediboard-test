@@ -5,6 +5,7 @@
  * @subpackage Style
  * @version $Revision$
  * @author Thomas Despoix
+ * latest version: $HeadURL$ 
  */
 
 $logPath = "tmp/mb-log.html";
