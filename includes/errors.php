@@ -1,9 +1,9 @@
-<?php /* $Id: errors.php,v 1.3 2006/05/03 14:28:53 mytto Exp $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage Style
- * @version $Revision: 1.3 $
+ * @version $Revision$
  * @author Thomas Despoix
  */
 
