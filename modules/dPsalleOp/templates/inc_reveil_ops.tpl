@@ -2,7 +2,7 @@
 <script type="text/javascript">
 
 {/literal}
-regRedirectPopupCal("{$date}", "index.php?m={$m}&tab={$tab}&date=");
+regRedirectPopupCal("{$date}", "index.php?m={$m}&tab=vw_reveil&date=");
 {literal}
 
 </script>
