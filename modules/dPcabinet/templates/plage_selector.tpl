@@ -7,6 +7,7 @@ function setClose(time) {ldelim}
     "{$plage->chir_id}",
     "{$plage->_ref_chir->_view}");
   window.close();
+<!-- $Id$ -->
 {rdelim}
 
 function pageMain() {ldelim}
@@ -37,21 +38,17 @@ function pageMain() {ldelim}
       </tr>
       {foreach from=$listPlage item=curr_plage}
       {assign var="pct" value=$curr_plage->_affected/$curr_plage->_total*100|intval}
-      {if $pct > 100}
+      {if $pct gt 100}
       {assign var="pct" value=100}
       {/if}
-      {if $pct < 50}
-      {assign var="style" value="background:url(./modules/dPcabinet/images/pempty.png) repeat"}
-      {elseif $pct < 90}
-      {assign var="style" value="background:url(./modules/dPcabinet/images/pnormal.png) repeat"}
-      {elseif $pct < 100}
-      {assign var="style" value="background:url(./modules/dPcabinet/images/pbooked.png) repeat"}
-      {else}
-      {assign var="style" value="background:url(./modules/dPcabinet/images/pfull.png) repeat"}
+      {if $pct lt 50}{assign var="img" value="pempty.png"}
+      {elseif $pct lt 90}{assign var="img" value="pnormal.png"}
+      {elseif $pct lt 100}{assign var="img" value="pbooked.png"}
+      {else}{assign var="img" value="pfull.png"}
       {/if}
       <tr style="{if $curr_plage->plageconsult_id == $plageconsult_id}font-weight: bold;{/if}">
         <td>
-          <span style="float: left; width: {$pct}%; height: 100%; {$style};" />
+          <span style="float: left; width: {$pct}%; height: 100%; background:url(./modules/dPcabinet/images/{$img}) repeat;" />
           <a href="index.php?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;plageconsult_id={$curr_plage->plageconsult_id}&amp;chir_id={$chir_id}&amp;date={$date}">
           {$curr_plage->date|date_format:"%A %d"}
           </a>

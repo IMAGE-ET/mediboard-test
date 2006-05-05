@@ -8,7 +8,7 @@ function requestInfoPat() {
   url.setModuleAction("dPpatients", "httpreq_get_last_refs");
   url.addElement(document.editFrm.patient_id);
   url.requestUpdate("infoPat", {
-    waitingText: "Chargement des antécédants du patient",
+    waitingText: "Chargement des antécédants du patient"
   });
 }
 
