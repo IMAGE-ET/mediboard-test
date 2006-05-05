@@ -1,4 +1,4 @@
-<?php /* $Id: $ */
+<?php /* $Id: do_message_aed.php 23 2006-05-04 15:05:35Z MyttO $ */
 
 /**
 * @package Mediboard
@@ -13,10 +13,8 @@ if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-// Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+unlink("tmp/mb-log.html");
 
-$smarty->display('view_logs.tpl');
+$AppUI->redirect();
 
 ?>

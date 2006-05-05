@@ -1,0 +1,13 @@
+{if $canEdit}
+<div>
+  <form name="editFrm" action="index.php" method="get">
+    <input type="hidden" name="m" value="system" />
+    <input type="hidden" name="dosql" value="empty_logs" />
+    <button type="submit">
+      <img src="modules/{$m}/images/cross.png" alt="supprimer" />
+      Réinitialiser les logs
+    </button>
+</div>
+{/if}
+
+{include file="../../../tmp/mb-log.html"}
