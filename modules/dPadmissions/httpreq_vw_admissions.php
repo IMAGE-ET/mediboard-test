@@ -51,8 +51,7 @@ foreach ($today as $keyOp => $valueOp) {
   $affectation =& $operation->_ref_first_affectation;
   if ($affectation->affectation_id) {
     $affectation->loadRefsFwd();
-    $affectation->_ref_lit->loadRefsFwd();
-    $affectation->_ref_lit->_ref_chambre->loadRefsFwd();
+    $affectation->_ref_lit->loadCompleteView();
   }
 }
 

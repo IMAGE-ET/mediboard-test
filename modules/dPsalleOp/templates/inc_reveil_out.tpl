@@ -22,9 +22,7 @@
           <td class="text">
             {assign var="affectation" value=$curr_op->_ref_first_affectation}
             {if $affectation->affectation_id}
-            {$affectation->_ref_lit->_ref_chambre->_ref_service->nom}
-            - {$affectation->_ref_lit->_ref_chambre->nom}
-            - {$affectation->_ref_lit->nom}
+            {$affectation->_ref_lit->_view}
             {else}
             Non placé
             {/if}

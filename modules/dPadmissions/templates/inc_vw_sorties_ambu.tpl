@@ -37,7 +37,7 @@
           </td>
           <td>{$curr_sortie->sortie|date_format:"%H h %M"}</td>
           <td class="text">Dr. {$curr_sortie->_ref_operation->_ref_chir->_view}</td>
-          <td class="text">{$curr_sortie->_ref_lit->_ref_chambre->_ref_service->nom} - {$curr_sortie->_ref_lit->_ref_chambre->nom} - {$curr_sortie->_ref_lit->nom}</td>
+          <td class="text">{$curr_sortie->_ref_lit->_view}</td>
         </tr>
         {/foreach}
       </table>

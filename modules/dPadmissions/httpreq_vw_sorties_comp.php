@@ -46,8 +46,7 @@ foreach($listComp as $key => $value) {
   } else {
     $listComp[$key]->_ref_operation->loadRefsFwd();
     $listComp[$key]->_ref_operation->_ref_chir->loadRefsFwd();
-    $listComp[$key]->_ref_lit->loadRefsFwd();
-    $listComp[$key]->_ref_lit->_ref_chambre->loadRefsFwd();
+    $listComp[$key]->_ref_lit->loadCompleteView();
   }
 }
 

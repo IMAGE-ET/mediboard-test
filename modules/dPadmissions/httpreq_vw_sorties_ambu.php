@@ -46,8 +46,7 @@ foreach($listAmbu as $key => $value) {
   } else {
     $listAmbu[$key]->_ref_operation->loadRefsFwd();
     $listAmbu[$key]->_ref_operation->_ref_chir->loadRefsFwd();
-    $listAmbu[$key]->_ref_lit->loadRefsFwd();
-    $listAmbu[$key]->_ref_lit->_ref_chambre->loadRefsFwd();
+    $listAmbu[$key]->_ref_lit->loadCompleteView();
   }
 }
 

@@ -60,8 +60,7 @@ foreach($listReveil as $key => $value) {
   $listReveil[$key]->loadRefsAffectations();
   if($listReveil[$key]->_ref_first_affectation->affectation_id) {
     $listReveil[$key]->_ref_first_affectation->loadRefsFwd();
-    $listReveil[$key]->_ref_first_affectation->_ref_lit->loadRefsFwd();
-    $listReveil[$key]->_ref_first_affectation->_ref_lit->_ref_chambre->loadRefsFwd();
+    $listReveil[$key]->_ref_first_affectation->_ref_lit->loadCompleteView();
   }
   $listReveil[$key]->_ref_plageop->loadRefsFwd();
   //Tableau des timmings
@@ -89,8 +88,7 @@ foreach($listOut as $key => $value) {
   $listOut[$key]->loadRefsAffectations();
   if($listOut[$key]->_ref_first_affectation->affectation_id) {
     $listOut[$key]->_ref_first_affectation->loadRefsFwd();
-    $listOut[$key]->_ref_first_affectation->_ref_lit->loadRefsFwd();
-    $listOut[$key]->_ref_first_affectation->_ref_lit->_ref_chambre->loadRefsFwd();
+    $listOut[$key]->_ref_first_affectation->_ref_lit->loadCompleteView();
   }
   $listOut[$key]->_ref_plageop->loadRefsFwd();
   //Tableau des timmings
