@@ -334,6 +334,11 @@ table.tbl td.text {
   white-space: normal;
 }
 
+table.tbl td.button {
+  text-align: center;
+  vertical-align: middle;
+}
+
 table.tbl tr.clear,
 table.tbl tr.clear a {
   background-color: #ddf;

@@ -29,15 +29,47 @@
             Non placé
             {/if}
           </td>
-          <td>{$curr_op->sortie_bloc|date_format:"%Hh%M"}</td>
-          <td>{$curr_op->entree_reveil|date_format:"%Hh%M"}</td>
-          <td>
+          <td class="button">
+            {if $canEdit}
+	        <form name="editFrm{$curr_op->operation_id}" action="index.php" method="get">
+	          <input type="hidden" name="m" value="dPsalleOp" />
+	          <input type="hidden" name="a" value="do_set_hours" />
+	          <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
+	          <input type="hidden" name="type" value="sortie_bloc" />
+	          <input type="hidden" name="del" value="0" />
+	          <input name="hour" size="5" type="text" value="{$curr_op->sortie_bloc|date_format:"%H:%M"}">
+	          <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+              </form>
+            {else}
+            {$curr_op->sortie_bloc|date_format:"%Hh%M"}
+            {/if}
+          </td>
+          <td class="button">
+            {if $canEdit}
+	        <form name="editFrm{$curr_op->operation_id}" action="index.php" method="get">
+	          <input type="hidden" name="m" value="dPsalleOp" />
+	          <input type="hidden" name="a" value="do_set_hours" />
+	          <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
+	          <input type="hidden" name="type" value="sortie_bloc" />
+	          <input type="hidden" name="del" value="0" />
+	          <input name="hour" size="5" type="text" value="{$curr_op->entree_reveil|date_format:"%H:%M"}">
+	          <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+              </form>
+            {else}
+            {$curr_op->entree_reveil|date_format:"%Hh%M"}
+            {/if}
+          </td>
+          <td class="button">
             <form name="editFrm{$curr_op->operation_id}" action="index.php" method="get">
               <input type="hidden" name="m" value="dPsalleOp" />
               <input type="hidden" name="a" value="do_set_hours" />
               <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
               <input type="hidden" name="type" value="sortie_reveil" />
               <input type="hidden" name="del" value="0" />
+              {if $canEdit}
+	          <input name="hour" size="5" type="text" value="{$curr_op->sortie_reveil|date_format:"%H:%M"}">
+	          <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+              {else}
               <select name="hour" onchange="this.form.submit()">
                 {foreach from=$timing.$key.sortie_reveil item=curr_time}
                 <option value="{$curr_time}" {if $curr_time == $curr_op->sortie_reveil}selected="selected"{/if}>
@@ -45,6 +77,7 @@
                 </option>
                 {/foreach}
               </select>
+              {/if}
               <button type="submit" onclick="this.form.del.value = 1">
                 <img src="modules/{$m}/images/cross.png" alt="supprimer" />
               </button>

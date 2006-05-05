@@ -35,8 +35,22 @@ regRedirectPopupCal("{$date}", "index.php?m={$m}&tab={$tab}&date=");
           <td>{$curr_op->_ref_plageop->_ref_salle->nom}</td>
           <td class="text">Dr. {$curr_op->_ref_chir->_view}</td>
           <td class="text">{$curr_op->_ref_pat->_view}</td>
-          <td>{$curr_op->sortie_bloc|date_format:"%Hh%M"}</td>
-          <td>
+          <td class="button">
+            {if $canEdit}
+	        <form name="editFrm{$curr_op->operation_id}" action="index.php" method="get">
+	          <input type="hidden" name="m" value="dPsalleOp" />
+	          <input type="hidden" name="a" value="do_set_hours" />
+	          <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
+	          <input type="hidden" name="type" value="sortie_bloc" />
+	          <input type="hidden" name="del" value="0" />
+	          <input name="hour" size="5" type="text" value="{$curr_op->sortie_bloc|date_format:"%H:%M"}">
+	          <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+	        </form>
+            {else}
+            {$curr_op->sortie_bloc|date_format:"%Hh%M"}
+            {/if}
+          </td>
+          <td class="button">
             <form name="editFrm{$curr_op->operation_id}" action="index.php" method="get">
               <input type="hidden" name="m" value="dPsalleOp" />
               <input type="hidden" name="a" value="do_set_hours" />
