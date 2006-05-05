@@ -168,18 +168,14 @@ function printIntervention(id) {
   <tr><th colspan="3" class="category">Chambre actuelle</th></tr>
   <tr>
     <td colspan="3">
-      {$patient->_ref_curr_affectation->_ref_lit->_ref_chambre->_ref_service->nom}
-      - {$patient->_ref_curr_affectation->_ref_lit->_ref_chambre->nom}
-      - {$patient->_ref_curr_affectation->_ref_lit->nom}
+      {$patient->_ref_curr_affectation->_ref_lit->_view}
     </td>
   </tr>
   {elseif $patient->_ref_next_affectation->affectation_id}
   <tr><th colspan="3" class="category">Chambre à partir du {$patient->_ref_next_affectation->entree|date_format:"%d %b %Y"}</th></tr>
   <tr>
     <td colspan="3">
-      {$patient->_ref_next_affectation->_ref_lit->_ref_chambre->_ref_service->nom}
-      - {$patient->_ref_next_affectation->_ref_lit->_ref_chambre->nom}
-      - {$patient->_ref_next_affectation->_ref_lit->nom}
+      {$patient->_ref_next_affectation->_ref_lit->_view}
     </td>
   </tr>
   {/if}

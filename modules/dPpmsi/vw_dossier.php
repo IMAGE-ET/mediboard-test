@@ -19,34 +19,57 @@ if (!$canEdit) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$pat_id = mbGetValueFromGetOrSession("pat_id", 0);
-$patient = new CPatient;
-$patient->load($pat_id);
-
 // Chargement des praticiens
 $listPrat = new CMediusers;
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
 
-// Chargement des références du patient
-if($patient->patient_id) {
+// Chargement complet du dossier patient
+$pat_id = mbGetValueFromGetOrSession("pat_id");
+$patient = new CPatient;
+$patient->load($pat_id);
+if ($patient->patient_id) {
   $patient->loadRefs();
-  foreach($patient->_ref_consultations as $key => $value) {
-    $patient->_ref_consultations[$key]->loadRefs();
+  
+  $affectation =& $patient->_ref_curr_affectation;
+  if ($affectation->affectation_id) {
+    $affectation->loadRefsFwd();
+    $affectation->_ref_lit->loadCompleteView();
   }
-  foreach($patient->_ref_operations as $key => $value) {
-    $patient->_ref_operations[$key]->loadRefs();
-    $patient->_ref_operations[$key]->loadRefGHM();
-    foreach($patient->_ref_operations[$key]->_ref_actes_ccam as $key2 => $value2) {
-      $patient->_ref_operations[$key]->_ref_actes_ccam[$key2]->loadRefsFwd();
+  
+  $affectation =& $patient->_ref_next_affectation;
+  if ($affectation->affectation_id) {
+    $affectation->loadRefsFwd();
+    $affectation->_ref_lit->loadCompleteView();
+  }
+
+  foreach($patient->_ref_consultations as $keyConsult => $valueConsult) {
+    $consult =& $patient->_ref_consultations[$keyConsult];
+    $consult->loadRefs();
+  }
+  
+  foreach($patient->_ref_operations as $keyOp => $valueOp) {
+    $operation =& $patient->_ref_operations[$keyOp];
+    $operation->loadRefs();
+    $operation->loadRefGHM();
+    
+    foreach($operation->_ref_actes_ccam as $keyActe => $valueActe) {
+      $acte =& $operation->_ref_actes_ccam[$keyActe];
+      $acte->loadRefsFwd();
     }
-    $patient->_ref_operations[$key]->_ref_plageop->loadRefsFwd();
-    if($patient->_ref_operations[$key]->_ref_consult_anesth->consultation_anesth_id) {
-      $patient->_ref_operations[$key]->_ref_consult_anesth->loadRefsFwd();
-      $patient->_ref_operations[$key]->_ref_consult_anesth->_ref_plageconsult->loadRefsFwd();
+    
+    $plage =& $operation->_ref_plageop;
+    $plage->loadRefsFwd();
+    
+    $consultAnest =& $operation->_ref_consult_anesth;
+    
+    if ($consultAnest->consultation_anesth_id) {
+      $consultAnest->loadRefsFwd();
+      $consultAnest->_ref_plageconsult->loadRefsFwd();
     }
   }
-  foreach($patient->_ref_hospitalisations as $key => $value) {
-    $patient->_ref_hospitalisations[$key]->loadRefs();
+  foreach($patient->_ref_hospitalisations as $keyHospi => $valueHospi) {
+    $hospitalisation =& $patient->_ref_hospitalisations[$keyHospi];
+    $hospitalisation->loadRefs();
   }
 }
 

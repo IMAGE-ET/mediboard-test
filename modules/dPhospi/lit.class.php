@@ -55,10 +55,25 @@ class CLit extends CMbObject {
     
     $this->checkDispo($date);
   }
+  
+  function updateFormFields() {
+    $this->_view = $this->nom;
+  }
+  
+  function loadCompleteView() {
+    $this->loadRefsFwd();
+    
+    $chambre =& $this->_ref_chambre;
+    $chambre->loadRefsFwd();
+    
+    $this->_view = "{$chambre->_ref_service->nom} - $chambre->nom - $this->nom";
+  }
 
   function loadRefsFwd() {
     $this->_ref_chambre = new CChambre;
     $this->_ref_chambre->load($this->chambre_id);
+    
+    $this->_view = "{$this->_ref_chambre->nom} - $this->nom";
   }
 
   function canDelete(&$msg, $oid = null) {
