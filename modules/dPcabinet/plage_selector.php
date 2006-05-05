@@ -18,7 +18,7 @@ if (!$canRead) {
 }
 
 // Initialisation des variables
-$plageSel = dPgetParam( $_GET, 'plagesel');
+$plageconsult_id = dPgetParam( $_GET, 'plageconsult_id');
 $date = dPgetParam( $_GET, 'date', mbDate() );
 $ndate = mbDate("+1 MONTH", $date);
 $pdate = mbDate("-1 MONTH", $date);
@@ -27,7 +27,7 @@ $pdate = mbDate("-1 MONTH", $date);
 $listPlage = new CPlageconsult;
 $where = array();
 
-// Praticien sélectionnés
+// Praticiens sélectionnés
 $chir_id = dPgetParam( $_GET, 'chir_id');
 if (!$chir_id) {
   $listChir = new CMediusers;
@@ -45,8 +45,8 @@ $order = "date, debut";
 // Chargement des plages disponibles
 $listPlage = $listPlage->loadList($where, $order);
 foreach ($listPlage as $keyPlage => $valuePlage) {
-  if (!$plageSel && $date == $valuePlage->date) {
-    $plageSel = $valuePlage->plageconsult_id;
+  if (!$plageconsult_id && $date == $valuePlage->date) {
+    $plageconsult_id = $valuePlage->plageconsult_id;
   }
   
   $listPlage[$keyPlage]->loadRefs(false);
@@ -56,56 +56,27 @@ foreach ($listPlage as $keyPlage => $valuePlage) {
 $plage = new CPlageconsult;
 $plage->_ref_chir = new CMediusers;
 $listPlace = array();
-if($plageSel) {
-  $plage->load($plageSel);
+if ($plageconsult_id) {
+  $plage->load($plageconsult_id);
   $plage->loadRefs(false);
   $date = $plage->date;
-  $currMin = intval($plage->_min_deb);
-  $currHour = intval($plage->_hour_deb);
-  for($i = 0; $i < $plage->_total; $i++) {
-    $listPlace[$i]["patient"] = array();
+  
+  for ($i = 0; $i < $plage->_total; $i++) {
+    $minutes = $plage->_freq * $i;
+    $listPlace[$i]["time"] = mbTime("+ $minutes minutes", $plage->debut);
+    $listPlace[$i]["consultations"] = array();
   }
-  for($i = 0; $i < $plage->_total; $i++) {
-    $listPlace[$i]["hour"] = $currHour;
-    if($currMin != 0)
-      $listPlace[$i]["min"] = $currMin;
-    else
-      $listPlace[$i]["min"] = "00";
-    $qte = 0;
-    $nextHour = $currHour;
-    $nextMin = $currMin + intval($plage->_freq);
-    if($nextMin >= 60) {
-      $nextHour = $currHour + 1;
-      $nextMin -= 60;
-    }
-    if(count($plage->_ref_consultations)) {
-      foreach($plage->_ref_consultations as $key => $value) {
-        if($currHour == $nextHour) {
-          $rightPlace = (intval($value->_hour) == $currHour) && (intval($value->_min) >= $currMin) && (intval($value->_min) < $nextMin);
-        } else {
-          if(intval($value->_hour) == $currHour)
-            $rightPlace = (intval($value->_min) >= $currMin);
-          else
-            $rightPlace = (intval($value->_min) < $nextMin);
-        }
-        if($rightPlace) {
-          $tmp = array();
-          $tmp["premiere"] = $plage->_ref_consultations[$key]->premiere;
-          $tmp["duree"] = $plage->_ref_consultations[$key]->duree;
-          $tmp["motif"] = $plage->_ref_consultations[$key]->motif;
-          $tmpduree = $tmp["duree"];
-          $plage->_ref_consultations[$key]->loadRefs();
-          $tmp["patient"] = $plage->_ref_consultations[$key]->_ref_patient->_view;
-          while($tmpduree--) {
-            $listPlace[($i+$tmpduree)]["patient"][] = $tmp;
-          }
-        }
+  
+  foreach ($plage->_ref_consultations as $keyConsult => $valConsult) {
+    $consultation =& $plage->_ref_consultations[$keyConsult];
+    $consultation->loadRefPatient();
+    
+    $keyPlace = mbTimeCountIntervals($plage->debut, $consultation->heure, $plage->freq);
+    
+    for  ($i = 0;  $i < $consultation->duree; $i++) {
+      if (isset($listPlace[($keyPlace + $i)])) {
+        $listPlace[($keyPlace + $i)]["consultations"][] =& $consultation;
       }
-      $currMin = $nextMin;
-      $currHour = $nextHour;
-    } else {
-      $currMin = $nextMin;
-      $currHour = $nextHour;
     }
   }
 }
@@ -118,7 +89,7 @@ $smarty->assign('date', $date);
 $smarty->assign('ndate', $ndate);
 $smarty->assign('pdate', $pdate);
 $smarty->assign('chir_id', $chir_id);
-$smarty->assign('plageSel', $plageSel);
+$smarty->assign('plageconsult_id', $plageconsult_id);
 $smarty->assign('plage', $plage);
 $smarty->assign('listPlage', $listPlage);
 $smarty->assign('listPlace', $listPlace);

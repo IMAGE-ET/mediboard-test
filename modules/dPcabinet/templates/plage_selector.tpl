@@ -1,6 +1,6 @@
 <script type="text/javascript">
-function setClose(hour, min) {ldelim}
-  window.opener.setRDV(hour, min,
+function setClose(time) {ldelim}
+  window.opener.setRDV(time,
     "{$plage->plageconsult_id}",
     "{$plage->date|date_format:"%A %d/%m/%Y"}",
     "{$plage->freq}",
@@ -36,15 +36,15 @@ function pageMain() {ldelim}
         <th>Etat</th>
       </tr>
       {foreach from=$listPlage item=curr_plage}
-      <tr style="{if $curr_plage->plageconsult_id == $plageSel}font-weight: bold;{/if}">
+      <tr style="{if $curr_plage->plageconsult_id == $plageconsult_id}font-weight: bold;{/if}">
         <td>
-          <a href="index.php?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;plagesel={$curr_plage->plageconsult_id}&amp;chir_id={$chir_id}&amp;date={$date}">
+          <a href="index.php?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;plageconsult_id={$curr_plage->plageconsult_id}&amp;chir_id={$chir_id}&amp;date={$date}">
           {$curr_plage->date|date_format:"%A %d"}
           </a>
         </td>
         <td class="text">{$curr_plage->_ref_chir->_view}</td>
         <td class="text">{$curr_plage->libelle}</td>
-        <td>{$curr_plage->_ref_consultations|@count} / {$curr_plage->_total}</td>
+        <td>{$curr_plage->_affected} / {$curr_plage->_total}</td>
       </tr>
       {/foreach}
     </table>
@@ -58,26 +58,22 @@ function pageMain() {ldelim}
       </tr>
       {foreach from=$listPlace item=curr_place}
       <tr>
-        <td><input type="button" value="+" onclick="setClose({$curr_place.hour}, {$curr_place.min})" />{$curr_place.hour}h{$curr_place.min}</td>
+        <td><input type="button" value="+" onclick="setClose('{$curr_place.time|date_format:"%H:%M"}')" />{$curr_place.time|date_format:"%Hh%M"}</td>
         <td class="text">
-          {foreach from=$curr_place.patient item=curr_patient}
-          {if $curr_patient.patient}
-          <div {if $curr_patient.premiere}style="background: #faa;" {/if}>
-            {$curr_patient.patient}
-            {if $curr_patient.motif}
-            ({$curr_patient.motif|truncate:"20"})
+          {foreach from=$curr_place.consultations item=curr_consultation}
+          <div {if $curr_consultation->premiere}style="background: #faa;" {/if}>
+            {$curr_consultation->_ref_patient->_view}
+            {if $curr_consultation->motif}
+            ({$curr_consultation->motif|truncate:"20"})
             {/if}
           </div>
-          {/if}
           {/foreach}
         </td>
         <td>
-          {foreach from=$curr_place.patient item=curr_patient}
-          {if $curr_patient.patient}
-          <div {if $curr_patient.premiere}style="background: #faa;" {/if}>
-          {$curr_patient.duree}
+          {foreach from=$curr_place.consultations item=curr_consultation}
+          <div {if $curr_consultation->premiere}style="background: #faa;" {/if}>
+            {$curr_consultation->duree}
           </div>
-          {/if}
           {/foreach}
         </td>
       </tr>

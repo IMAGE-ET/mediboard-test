@@ -45,18 +45,18 @@ function setPat( key, val ) {
 }
 
 function popRDV() {
+  var oForm = document.editFrm;
   var url = new Url;
   url.setModuleAction("dPcabinet", "plage_selector");
-  url.addElement(document.editFrm.chir_id);
+  url.addElement(oForm.chir_id);
+  url.addElement(oForm.plageconsult_id);
   url.popup(800, 600, "Plage");
 }
 
-function setRDV( hour, min, id, date, freq, chirid, chirname ) {
+function setRDV(heure, id, date, freq, chirid, chirname ) {
   var f = document.editFrm;
   f.plageconsult_id.value = id;
-  f._date.value = date;
-  f._hour.value = hour;
-  f._min.value = min;
+  f.heure.value = heure;
   f.duree.value = freq;
   f.chir_id.value = chirid;
   f._chir_name.value = chirname;
@@ -160,10 +160,9 @@ function setRDV( hour, min, id, date, freq, chirid, chirname ) {
         </tr>
 
         <tr>
-          <th><label for="_hour" title="Heure du rendez-vous de consultation">Heure :</label></th>
+          <th><label for="heure" title="Heure du rendez-vous de consultation">Heure :</label></th>
           <td class="readonly">
-            <input type="text" name="_hour" value="{$consult->_hour}" size="3" readonly="readonly" /> h
-            <input type="text" name="_min" value="{$consult->_min}" size="3" readonly="readonly" />
+            <input type="text" name="heure" value="{$consult->heure|date_format:"%H:%M"}" size="3" readonly="readonly" />
           </td>
         </tr>
         <tr>

@@ -156,10 +156,14 @@ class CConsultation extends CMbObject {
     return $msg . parent::check();
   }
   
-  function loadRefsFwd() {
-    // Forward references
+
+  function loadRefPatient() {
     $this->_ref_patient = new CPatient;
     $this->_ref_patient->load($this->patient_id);
+  }
+  
+  function loadRefsFwd() {
+    $this->loadRefPatient();
     $this->_ref_plageconsult = new CPlageconsult;
     $this->_ref_plageconsult->load($this->plageconsult_id);
     $this->_ref_plageconsult->loadRefsFwd();

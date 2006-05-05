@@ -199,6 +199,20 @@ function mbTime($relative, $ref = null) {
 }
 
 /**
+ * Counts the number of intervals between reference and relative
+ * @return int: number of intervals
+ **/
+function mbTimeCountIntervals($reference, $relative, $interval) {
+  $refStamp = strtotime($reference) - strtotime("0:00:00");
+  $relStamp = strtotime($relative ) - strtotime("0:00:00");
+  $intStamp = strtotime($interval ) - strtotime("0:00:00");
+  $diffStamp = $relStamp - $refStamp;
+  $nbInterval = floatval($diffStamp / $intStamp);
+  return intval($nbInterval);
+  
+}
+
+/**
  * Adds a relative time to a reference time
  * @return string: the resulting time */
 function mbAddTime($relative, $ref = null) {

@@ -247,7 +247,7 @@ class CMbObject extends CDpObject {
     
       // Time
       case "time":
-        if (!preg_match ("/^([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})$/", $propValue)) {
+        if (!preg_match ("/^([0-9]{1,2}):([0-9]{1,2})(:([0-9]{1,2}))?$/", $propValue)) {
           return "format de time invalide";
         }
         
