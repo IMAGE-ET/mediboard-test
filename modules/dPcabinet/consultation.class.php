@@ -162,13 +162,17 @@ class CConsultation extends CMbObject {
     $this->_ref_patient->load($this->patient_id);
   }
   
-  function loadRefsFwd() {
-    $this->loadRefPatient();
+  function loadRefPlageConsult() {
     $this->_ref_plageconsult = new CPlageconsult;
     $this->_ref_plageconsult->load($this->plageconsult_id);
     $this->_ref_plageconsult->loadRefsFwd();
     $this->_ref_chir =& $this->_ref_plageconsult->_ref_chir;
     $this->_date = $this->_ref_plageconsult->date;
+  }
+  
+  function loadRefsFwd() {
+    $this->loadRefPatient();
+    $this->loadRefPlageConsult();
   }
   
   function loadRefFiles() {
@@ -199,15 +203,18 @@ class CConsultation extends CMbObject {
       $this->_etat .= " ($docs_valid Doc.)";
   }
   
-  function loadRefsBack() {
-    // Backward references
-    $this->loadRefFiles();
-    $this->loadRefDocs();
-    
+  function loadRefConsultAnesth() {
     $this->_ref_consult_anesth = new CConsultAnesth;
     $where = array();
     $where["consultation_id"] = "= '$this->consultation_id'";
     $this->_ref_consult_anesth->loadObject($where);
+  }
+  
+  function loadRefsBack() {
+    // Backward references
+    $this->loadRefFiles();
+    $this->loadRefDocs();
+    $this->loadRefConsultAnesth();
     
     $this->_ref_examaudio = new CExamAudio;
     $where = array();
