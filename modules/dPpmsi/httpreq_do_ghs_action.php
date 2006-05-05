@@ -113,12 +113,12 @@ function adddiagcm() {
   $base = $AppUI->cfg['baseGHS'];
   $fileName = "$filedir/diagCM.txt";
   do_connect($base);
-  $sql = "DROP TABLE IF EXISTS `diagCM`;";
+  $sql = "DROP TABLE IF EXISTS `diagcm`;";
   db_exec($sql, $base);
   if($error = db_error($base)) {
     echo "$error ($sql)<br />";
   }
-  $sql = "CREATE TABLE `diagCM` (
+  $sql = "CREATE TABLE `diagcm` (
   `diag` varchar(10) NOT NULL default '0',
   `CM_id` varchar(2) NOT NULL default '01',
   PRIMARY KEY  (`diag`, `CM_id`)
@@ -143,7 +143,7 @@ function adddiagcm() {
       $curr_cmd = $cmd[1];
       $nCM++;
     } else if(preg_match("`^($regCim10)`", $line, $diag)) {
-      $sql = "INSERT INTO diagCM VALUES('".$diag[1]."', '$curr_cmd')";db_exec($sql, $base);
+      $sql = "INSERT INTO diagcm VALUES('".$diag[1]."', '$curr_cmd')";db_exec($sql, $base);
       if($error = db_error($base)) {
         echo "$error ($sql)<br />";
       } else {
