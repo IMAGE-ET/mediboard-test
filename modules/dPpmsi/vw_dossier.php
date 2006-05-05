@@ -28,31 +28,16 @@ $pat_id = mbGetValueFromGetOrSession("pat_id");
 $patient = new CPatient;
 $patient->load($pat_id);
 if ($patient->patient_id) {
-  $patient->loadRefs();
-  
-  $affectation =& $patient->_ref_curr_affectation;
-  if ($affectation->affectation_id) {
-    $affectation->loadRefsFwd();
-    $affectation->_ref_lit->loadCompleteView();
-  }
-  
-  $affectation =& $patient->_ref_next_affectation;
-  if ($affectation->affectation_id) {
-    $affectation->loadRefsFwd();
-    $affectation->_ref_lit->loadCompleteView();
-  }
-
-  foreach($patient->_ref_consultations as $keyConsult => $valueConsult) {
-    $consult =& $patient->_ref_consultations[$keyConsult];
-    $consult->loadRefs();
-  }
-  
-  foreach($patient->_ref_operations as $keyOp => $valueOp) {
+  $patient->loadDossierComplet();
+    
+  // Chargement complémentaires sur les opérations
+  foreach ($patient->_ref_operations as $keyOp => $valueOp) {
     $operation =& $patient->_ref_operations[$keyOp];
-    $operation->loadRefs();
+    $consultAnest =& $operation->_ref_consult_anesth;
+    
     $operation->loadRefGHM();
     
-    foreach($operation->_ref_actes_ccam as $keyActe => $valueActe) {
+    foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {
       $acte =& $operation->_ref_actes_ccam[$keyActe];
       $acte->loadRefsFwd();
     }
@@ -60,16 +45,10 @@ if ($patient->patient_id) {
     $plage =& $operation->_ref_plageop;
     $plage->loadRefsFwd();
     
-    $consultAnest =& $operation->_ref_consult_anesth;
-    
     if ($consultAnest->consultation_anesth_id) {
       $consultAnest->loadRefsFwd();
       $consultAnest->_ref_plageconsult->loadRefsFwd();
     }
-  }
-  foreach($patient->_ref_hospitalisations as $keyHospi => $valueHospi) {
-    $hospitalisation =& $patient->_ref_hospitalisations[$keyHospi];
-    $hospitalisation->loadRefs();
   }
 }
 

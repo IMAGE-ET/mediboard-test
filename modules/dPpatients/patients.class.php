@@ -390,6 +390,41 @@ class CPatient extends CMbObject {
     }
   }
 
+  function loadDossierComplet() {
+    $this->loadRefs();
+    
+    // Affectations courantes
+    $affectation =& $this->_ref_curr_affectation;
+    if ($affectation->affectation_id) {
+      $affectation->loadRefsFwd();
+      $affectation->_ref_lit->loadCompleteView();
+    }
+    
+    $affectation =& $this->_ref_next_affectation;
+    if ($affectation->affectation_id) {
+      $affectation->loadRefsFwd();
+      $affectation->_ref_lit->loadCompleteView();
+    }
+  
+    // Consultations
+    foreach ($this->_ref_consultations as $keyConsult => $valueConsult) {
+      $consult =& $this->_ref_consultations[$keyConsult];
+      $consult->loadRefs();
+    }
+    
+    // Operations
+    foreach ($this->_ref_operations as $keyOp => $valueOp) {
+      $operation =& $this->_ref_operations[$keyOp];
+      $operation->loadRefs();
+    }
+  
+    // Hospitalisation
+    foreach ($this->_ref_hospitalisations as $keyHospi => $valueHospi) {
+      $hospitalisation =& $this->_ref_hospitalisations[$keyHospi];
+      $hospitalisation->loadRefs();
+    }
+  }
+  
   function getSiblings() {
     $sql = "SELECT patient_id, nom, prenom, naissance, adresse, ville, CP " .
       		"FROM patients WHERE " .

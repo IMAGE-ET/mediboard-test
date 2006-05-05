@@ -44,27 +44,8 @@ if(dPgetParam($_GET, "new", 0)) {
   $patient->load($patient_id);
 }
 
-if($patient->patient_id) {
-  $patient->loadRefs();
-  if($patient->_ref_curr_affectation->affectation_id) {
-    $patient->_ref_curr_affectation->loadRefsFwd();
-    $patient->_ref_curr_affectation->_ref_lit->loadRefsFwd();
-    $patient->_ref_curr_affectation->_ref_lit->_ref_chambre->loadRefsFwd();
-  } elseif($patient->_ref_next_affectation->affectation_id) {
-    $patient->_ref_next_affectation->loadRefsFwd();
-    $patient->_ref_next_affectation->_ref_lit->loadRefsFwd();
-    $patient->_ref_next_affectation->_ref_lit->_ref_chambre->loadRefsFwd();
-  }
-  foreach ($patient->_ref_operations as $key1 => $op) {
-    $patient->_ref_operations[$key1]->loadRefs();
-  }
-  foreach ($patient->_ref_hospitalisations as $key1 => $op) {
-    $patient->_ref_hospitalisations[$key1]->loadRefsFwd();
-  }
-  foreach ($patient->_ref_consultations as $key2 => $consult) {
-    $patient->_ref_consultations[$key2]->loadRefs();
-    $patient->_ref_consultations[$key2]->_ref_plageconsult->loadRefsFwd();
-  }
+if ($patient->patient_id) {
+  $patient->loadDossierComplet();
 }
 
 // Récuperation des patients recherchés
