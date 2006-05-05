@@ -32,6 +32,7 @@ class CPlageconsult extends CMbObject {
   var $_hour_fin = null;
   var $_min_fin = null;
   var $_freq = null;
+  var $_affected = null;
   var $_total = null;
 
   // Object References
@@ -63,6 +64,10 @@ class CPlageconsult extends CMbObject {
 
     $this->_ref_consultations = new CConsultation();
     $this->_ref_consultations = $this->_ref_consultations->loadList($where, $order);
+    $this->_affected = 0;
+    foreach($this->_ref_consultations as $consult) {
+      $this->_affected += $consult->duree;
+    }
   }
   
   function loadRefsFwd() {
