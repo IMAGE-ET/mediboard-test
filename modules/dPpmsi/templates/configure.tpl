@@ -34,7 +34,7 @@ function doGHSAction(sType, bFollowed) {
 <table class="main">
   <tr>
     <td>
-      <table class="form">
+      <table class="tbl">
         <tr>
           <th class="category" onclick="doGHSAction('extractFiles', true);"><button>Go</button></th>
           <th class="category">Action</th>

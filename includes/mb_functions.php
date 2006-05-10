@@ -498,4 +498,5 @@ function mbConvertDecaBinary($number) {
   $value = round($value, $value > 99 ? 0 : $value >  9 ? 1 : 2);
   return "$value $prefix$unit";
 }
+
 ?>

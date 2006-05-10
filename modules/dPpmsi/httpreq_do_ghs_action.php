@@ -47,9 +47,9 @@ function extractFiles() {
   $tarball = new Archive_Tar($filepath);
   if ($tarball->extract($filedir)) {
     $nbFiles = @count($tarball->listContent());
-    echo "<strong>Done</strong> : extraction de $nbFiles fichiers";
+    echo "<div class='message'>Extraction de $nbFiles fichiers</div>";
   } else {
-    echo "Erreur, impossible d'extraire l'archive";
+    echo "<div class='error'>Impossible d'extraire l'archive</div>";
   }
 }
 
@@ -66,7 +66,7 @@ function addcm() {
   $sql = "DROP TABLE IF EXISTS `cm`;";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   }
   $sql = "CREATE TABLE `cm` (
   `CM_id` varchar(2) NOT NULL default '0',
@@ -75,9 +75,9 @@ function addcm() {
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des catégoris majeurs';";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<strong>Done :</strong> Table des CM créée<br />";
+    echo "<div class='message'>Table des CM créée</div>";
   }
 
   // Lecture du fichier
@@ -97,13 +97,13 @@ function addcm() {
     $sql = "INSERT INTO cm values('$id', '".addslashes($nom)."');";
     db_exec($sql, $base);
     if($error = db_error($base)) {
-      echo "$error ($sql)<br />";
+      echo "<div class='error'>$error ($sql)</div>";
     } else {
       $nCM++;
-      //echo "<strong>Done :</strong> ".$id."-".$nom."<br />";
+      //echo "<div class='message'>$id-$nom</div>";
     }
   }
-  echo "<strong>Done :</strong> $nCM CM créés<br />";
+  echo "<div class='message'> $nCM CM créés</div>";
 }
 
 /** Ajout des diagnostics d'entrée dans les CM, valide pour la version 1010
@@ -116,7 +116,7 @@ function adddiagcm() {
   $sql = "DROP TABLE IF EXISTS `diagcm`;";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   }
   $sql = "CREATE TABLE `diagcm` (
   `diag` varchar(10) NOT NULL default '0',
@@ -125,9 +125,9 @@ function adddiagcm() {
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des diagnostics d\'entree dans les CM';";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<strong>Done :</strong> Table des diagnostics d'entrée créée<br />";
+    echo "<div class='message'> Table des diagnostics d'entrée créée</div>";
   }
   $file = @fopen( $fileName, 'rw' );
   if(! $file) {
@@ -145,14 +145,14 @@ function adddiagcm() {
     } else if(preg_match("`^($regCim10)`", $line, $diag)) {
       $sql = "INSERT INTO diagcm VALUES('".$diag[1]."', '$curr_cmd')";db_exec($sql, $base);
       if($error = db_error($base)) {
-        echo "$error ($sql)<br />";
+        echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nDiags++;
-        //echo "<strong>Done :</strong> ".$diag[1]." ($curr_cmd)<br />";
+        //echo "<div class='message'> ".$diag[1]." ($curr_cmd)</div>";
       }
     }
   }
-  echo "<strong>Done :</strong> $nDiags diagnostics créés dans $nCM CM<br />";
+  echo "<div class='message'> $nDiags diagnostics créés dans $nCM CM</div>";
 }
 
 /** Ajout des listes d'actes, valide pour la version 1010
@@ -169,7 +169,7 @@ function addactes() {
   $sql = "DROP TABLE IF EXISTS `liste`;";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   }
   $sql = "CREATE TABLE `liste` (
   `liste_id` varchar(6) NOT NULL default '0',
@@ -178,14 +178,14 @@ function addactes() {
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des listes';";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<strong>Done :</strong> Table des listes créée<br />";
+    echo "<div class='message'> Table des listes créée</div>";
   }
   $sql = "DROP TABLE IF EXISTS `acte`;";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   }
   $sql = "CREATE TABLE `acte` (
   `code` varchar(7) NOT NULL default '0',
@@ -196,14 +196,14 @@ function addactes() {
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des actes';";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<strong>Done :</strong> Table des actes créée<br />";
+    echo "<div class='message'> Table des actes créée</div>";
   }
   $sql = "DROP TABLE IF EXISTS `diag`;";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   }
   $sql = "CREATE TABLE `diag` (
   `code` varchar(7) NOT NULL default '0',
@@ -213,9 +213,9 @@ function addactes() {
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des diagnostics';";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<strong>Done :</strong> Table des diagnostics créée<br />";
+    echo "<div class='message'> Table des diagnostics créée</div>";
   }
   $file = @fopen( $fileName, 'rw' );
   if(! $file) {
@@ -239,28 +239,28 @@ function addactes() {
       db_exec($sql, $base);
       if($error = db_error($base)) {
         // L'erreur est commentée car certaines listes sont entrées en doublon
-        //echo "$error ($sql)<br />";
+        //echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nListes++;
-        //echo "<strong>Done :</strong> ".$liste[1]." : ".$liste[2]." (".$curr_cmd.")<br />"; 
+        //echo "<div class='message'> ".$liste[1]." : ".$liste[2]." (".$curr_cmd.")</div>"; 
       }
     } else if(preg_match("`^($regCCAM)/([[:digit:]])`", $line, $acte) && $curr_liste) {
       $sql = "INSERT INTO acte VALUES('".$acte[1]."', '".$acte[2]."', '$curr_liste', '$curr_cmd')";
       db_exec($sql, $base);
       if($error = db_error($base)) {
-        echo "$error ($sql)<br />";
+        echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nActes++;
-        //echo "<strong>Done :</strong> ".$acte[1]."/".$acte[2]." ($curr_liste, CMD $curr_cmd)<br />";
+        //echo "<div class='message'> ".$acte[1]."/".$acte[2]." ($curr_liste, CMD $curr_cmd)</div>";
       }
     } else if(preg_match("`^($regCim10)`", $line, $diag) && $curr_liste) {
       $sql = "INSERT INTO diag VALUES('".$diag[1]."', '$curr_liste', '$curr_cmd')";
       db_exec($sql, $base);
       if($error = db_error($base)) {
-        //echo "$error ($sql)<br />";
+        //echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nDiags++;
-        //echo "<strong>Done :</strong> ".$diag[1]." ($curr_liste, CMD $curr_cmd)<br />";
+        //echo "<div class='message'> ".$diag[1]." ($curr_liste, CMD $curr_cmd)</div>";
       }
     }
   }
@@ -274,7 +274,7 @@ function addactes() {
   $sql = "INSERT INTO liste VALUES('A-med', 'Actes reclassant dans un GHM médical')";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   } else {
     $nListes++;
   }
@@ -284,14 +284,14 @@ function addactes() {
       $sql = "INSERT INTO acte VALUES('".$acte[1]."', '".$acte[2]."', 'A-med', '99')";
       db_exec($sql, $base);
       if($error = db_error($base)) {
-        echo "$error ($sql)<br />";
+        echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nActes++;
-        //echo "<strong>Done :</strong> ".$acte[1]."/".$acte[2]." ($curr_liste, CMD $curr_cmd)<br />";
+        //echo "<div class='message'> ".$acte[1]."/".$acte[2]." ($curr_liste, CMD $curr_cmd)</div>";
       }
     }
   }
-  echo "<strong>Done :</strong> $nCM CM trouvés et $nListes listes, $nActes actes et $nDiags diagnostics créés<br />";
+  echo "<div class='message'> $nCM CM trouvés et $nListes listes, $nActes actes et $nDiags diagnostics créés</div>";
 }
 
 /** Ajout des GHM, valide pour la version 1010
@@ -306,7 +306,7 @@ function addghm() {
   $sql = "DROP TABLE IF EXISTS `ghm`;";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   }
   $sql = "CREATE TABLE `ghm` (
   `GHM_id` varchar(6) NOT NULL default '0',
@@ -322,9 +322,9 @@ function addghm() {
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des groupements homogènes de malades';";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<strong>Done :</strong> Table des GHM créée<br />";
+    echo "<div class='message'> Table des GHM créée</div>";
   }
 
   // Lecture du fichier
@@ -343,10 +343,10 @@ function addghm() {
     $line = fgets($file, 1024);
     if(preg_match("`^CATÉGORIE MAJEURE DE DIAGNOSTIC : ([[:digit:]]{2})`", $line, $cm)) {
       $curr_CM = $cm[1];
-      //echo "<strong>Done :</strong> Curr_CM = $curr_CM<br />";
+      //echo "<div class='message'> Curr_CM = $curr_CM</div>";
     } else if(preg_match("`^Groupes ([{$alnum}[:space:][:punct:]]*)`", $line, $groupe)) {
       $curr_group = $groupe[1];
-      //echo "<strong>Done :</strong> Curr_groupe = $curr_groupe<br />";
+      //echo "<div class='message'> Curr_groupe = $curr_groupe</div>";
     } else if(preg_match("`^([[:digit:]]{2}[{$alpha}][[:digit:]]{2}[{$alpha}]) ([{$alnum}[:space:][:punct:]]*)`", $line, $GHM)) {
       $sql = "INSERT INTO ghm" .
           "\nvalues('".addslashes($GHM[1])."', '".addslashes($GHM[2])."'," .
@@ -354,14 +354,14 @@ function addghm() {
           "\nnull, null, null, null, null);";
       db_exec($sql, $base);
       if($error = db_error($base)) {
-        echo "$error ($sql)<br />";
+        echo "<div class='error'>$error ($sql)</div>";
       } else {
-        //echo "<strong>Done :</strong> ".$id."-".$nom."<br />";
+        //echo "<div class='message'> ".$id."-".$nom."</div>";
         $nGHM++;
       }
     }
   }
-  echo "<strong>Done :</strong> $nGHM GHM créés<br />";
+  echo "<div class='message'> $nGHM GHM créés</div>";
   
   // Ajout des tarifs
   $fileName = "$filedir/tarifsGHS.csv";
@@ -400,14 +400,14 @@ function addghm() {
         "\nWHERE GHM_id = '".strtr($result[1], $trans2)."';";
     db_exec($sql, $base);
     if($error = db_error($base)) {
-      echo "$error ($sql)<br />";
+      echo "<div class='error'>$error ($sql)</div>";
       $nFailed++;
     } else {
-      //echo "<strong>Done :</strong> $line<br />";
+      //echo "<div class='message'> $line</div>";
       $nPass++;
     }
   }
-  echo "<strong>Done :</strong> $nPass tarifs créés, $nFailed échoués<br />";
+  echo "<div class='message'> $nPass tarifs créés, $nFailed échoués</div>";
 }
 
 /** Ajout des CMA, valide pour la version 1010
@@ -427,7 +427,7 @@ function addcma() {
     $sql = "DROP TABLE IF EXISTS `$typeCM`;";
     db_exec($sql, $base);
     if($error = db_error($base)) {
-      echo "$error ($sql)<br />";
+      echo "<div class='error'>$error ($sql)</div>";
     }
     $sql = "CREATE TABLE `$typeCM` (
     `".$typeCM."_id` varchar(10) NOT NULL default '0',
@@ -435,9 +435,9 @@ function addcma() {
   ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des $typeCM';";
     db_exec($sql, $base);
     if($error = db_error($base)) {
-      echo "$error ($sql)<br />";
+      echo "<div class='error'>$error ($sql)</div>";
     } else {
-      echo "<strong>Done :</strong> Table des $typeCM créée<br />";
+      echo "<div class='message'> Table des $typeCM créée</div>";
     }
   
     $fileName = "$filedir/$typeCM.txt";
@@ -457,13 +457,13 @@ function addcma() {
         $sql = "INSERT INTO $typeCM values('$CMA[1]');";
         db_exec($sql, $base);
         if($error = db_error($base)) {
-          echo "$error ($sql)<br />";
+          echo "<div class='error'>$error ($sql)</div>";
         } else {
           $nombre++;
         }
       }
     }
-    echo "<strong>Done :</strong> $nombre $typeCM créés<br />";
+    echo "<div class='message'> $nombre $typeCM créés</div>";
   }
 }
 
@@ -478,7 +478,7 @@ function addincomp() {
   $sql = "DROP TABLE IF EXISTS `incomp`;";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   }
   $sql = "CREATE TABLE `incomp` (
   `CIM1` varchar(10) NOT NULL default '0',
@@ -487,9 +487,9 @@ function addincomp() {
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des incompatibilités DP - CMA';";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<strong>Done :</strong> Table des incompatibilités créée<br />";
+    echo "<div class='message'> Table des incompatibilités créée</div>";
   }
 
   $fileName = "$filedir/incomp.txt";
@@ -543,13 +543,13 @@ function addincomp() {
       $sql = "INSERT INTO incomp VALUES('$baseCode', '$code');";
       db_exec($sql, $base);
       if($error = db_error($base)) {
-        echo "$error ($sql)<br />";
+        echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nIncomp++;
       }
     }
   }
-  echo "<strong>Done :</strong> $nIncomp incompatibilités créées<br />";
+  echo "<div class='message'> $nIncomp incompatibilités créées</div>";
 }
 
 /** Création de l'arbre de décision pour l'orientation vers les GHM
@@ -569,7 +569,7 @@ function addarbre() {
   $sql = "DROP TABLE IF EXISTS `arbre`;";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   }
 
   $fileName = "$filedir/arbreGHM.csv";
@@ -598,9 +598,9 @@ function addarbre() {
       ") ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table de l\'arbre de décision pour les GHM';";
   db_exec($sql, $base);
   if($error = db_error($base)) {
-    echo "$error ($sql)<br />";
+    echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<strong>Done :</strong> Table de l'arbre de décision créée<br />";
+    echo "<div class='message'> Table de l'arbre de décision créée</div>";
   }
   
   $nPass = 0;
@@ -621,13 +621,13 @@ function addarbre() {
         "\nvalues('', $line);";
     db_exec($sql, $base);
     if($error = db_error($base)) {
-      echo "$error ($sql)<br />";
+      echo "<div class='error'>$error ($sql)</div>";
       $nFailed++;
     } else {
-      //echo "<strong>Done :</strong> $line<br />";
+      //echo "<div class='message'> $line</div>";
       $nPass++;
     }
   }
-  echo "<strong>Done :</strong> $nPass lignes créés, $nFailed lignes échouées<br />";
+  echo "<div class='message'> $nPass lignes créés, $nFailed lignes échouées</div>";
 }
 ?>
