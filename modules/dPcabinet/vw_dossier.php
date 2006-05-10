@@ -18,6 +18,7 @@ require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
 if (!$canEdit) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
+
 // L'utilisateur est-il praticien?
 $chirSel = new CMediusers;
 $mediuser = new CMediusers;
@@ -26,7 +27,7 @@ if ($mediuser->isPraticien()) {
   $chirSel = $mediuser;
 }
 
-$pat_id = mbGetValueFromGetOrSession("patSel", 0);
+$pat_id = mbGetValueFromGetOrSession("patSel");
 $patSel = new CPatient;
 $patSel->load($pat_id);
 $patient = new CPatient;
@@ -35,53 +36,27 @@ $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
 
 // Chargement des références du patient
-if($pat_id) {
+if ($pat_id) {
   
   // Infos patient complètes (tableau de droite)
-  $patient->loadRefs();
-  if($patient->_ref_curr_affectation->affectation_id) {
-    $patient->_ref_curr_affectation->loadRefsFwd();
-    $patient->_ref_curr_affectation->_ref_lit->loadRefsFwd();
-    $patient->_ref_curr_affectation->_ref_lit->_ref_chambre->loadRefsFwd();
-  } elseif($patient->_ref_next_affectation->affectation_id) {
-    $patient->_ref_next_affectation->loadRefsFwd();
-    $patient->_ref_next_affectation->_ref_lit->loadRefsFwd();
-    $patient->_ref_next_affectation->_ref_lit->_ref_chambre->loadRefsFwd();
-  }
-  foreach ($patient->_ref_operations as $key => $op) {
-    $patient->_ref_operations[$key]->loadRefs();
-  }
-  foreach ($patient->_ref_hospitalisations as $key => $op) {
-    $patient->_ref_hospitalisations[$key]->loadRefs();
-  }
-  foreach ($patient->_ref_consultations as $key => $consult) {
-    $patient->_ref_consultations[$key]->loadRefs();
-    $patient->_ref_consultations[$key]->_ref_plageconsult->loadRefs();
-  }
+  $patient->loadDossierComplet();
   
   // Infos patient du cabinet (tableau de gauche)
-  $patSel->loadRefs();
-  foreach($patSel->_ref_consultations as $key => $value) {
-    $consultation =& $patSel->_ref_consultations[$key];
-    $consultation->loadRefs();
-    $plageconsult =& $consultation->_ref_plageconsult;
-    $plageconsult->loadRefsFwd();
-    if (!array_key_exists($plageconsult->chir_id, $listPrat)) {
+  $patSel = clone $patient;
+  foreach ($patSel->_ref_consultations as $key => $value) {
+    if (!array_key_exists($value->_ref_plageconsult->chir_id, $listPrat)) {
     	unset($patSel->_ref_consultations[$key]);
     }
   }
-  foreach($patSel->_ref_operations as $key => $value) {
-    $operation =& $patSel->_ref_operations[$key];
-    $operation->loadRefs();
-    if (!array_key_exists($operation->chir_id, $listPrat)) {
+
+  foreach ($patSel->_ref_operations as $key => $value) {
+    if (!array_key_exists($value->chir_id, $listPrat)) {
       unset($patSel->_ref_operations[$key]);
     }
   }
+
   foreach($patSel->_ref_hospitalisations as $key => $value) {
-    $hospitalisation =& $patSel->_ref_hospitalisations[$key];
-    $hospitalisation->loadRefs();
-    $hospitalisation->_ref_chir->loadRefs();
-    if (!array_key_exists($hospitalisation->chir_id, $listPrat)) {
+    if (!array_key_exists($value->chir_id, $listPrat)) {
       unset($patSel->_ref_hospitalisations[$key]);
     }
   }

@@ -73,6 +73,7 @@ $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
 $canEditCabinet = !getDenyEdit("dPcabinet");
 
+
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP;

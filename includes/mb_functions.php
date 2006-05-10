@@ -467,4 +467,35 @@ function mbVersion() {
   return "v$mb_version_major.$mb_version_minor.$mb_version_patch b$mb_version_build";
 }
 
+/**
+ * Converts an bytes number to the deca-binary equivalent
+ * @return string Mediboard version */
+function mbConvertDecaBinary($number) {
+  $bytes = $number;
+  $value = $number;
+  $prefix = "";
+  $unit = "o";
+
+  $kbytes = $bytes / 1024;
+  if ($kbytes >= 1) {
+    $value = $kbytes;
+    $prefix = "K";
+  }
+
+  $mbytes = $kbytes / 1024;
+  if ($mbytes >= 1) {
+    $value = $mbytes;
+    $prefix = "M";
+  }
+
+  $gbytes = $mbytes / 1024;
+  if ($gbytes >= 1) {
+    $value = $gbytes;
+    $prefix = "G";
+  }
+  
+  // Value with 3 significant digits, thent the unit
+  $value = round($value, $value > 99 ? 0 : $value >  9 ? 1 : 2);
+  return "$value $prefix$unit";
+}
 ?>

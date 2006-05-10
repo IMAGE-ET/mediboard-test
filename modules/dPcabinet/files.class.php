@@ -48,31 +48,7 @@ class CFile extends CMbObject {
 	}
 
   function updateFormFields() {
-    $bytes = $this->file_size;
-    $value = $bytes;
-    $unit = "o";
-
-    $kbytes = $bytes / 1024;
-    if ($kbytes >= 1) {
-			$value = $kbytes;
-      $unit = "Ko";
-		}
-
-    $mbytes = $kbytes / 1024;
-    if ($mbytes >= 1) {
-      $value = $mbytes;
-      $unit = "Mo";
-    }
-
-    $gbytes = $mbytes / 1024;
-    if ($gbytes >= 1) {
-      $value = $gbytes;
-      $unit = "Go";
-    }
-    
-    // Value with 3 significant digits, thent the unit
-    $value = round($value, $value > 99 ? 0 : $value >  9 ? 1 : 2);
-    $this->_file_size = "$value $unit";
+    $this->_file_size = mbConvertDecaBinary($this->file_size);
   }
 
 	function delete() {

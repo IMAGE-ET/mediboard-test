@@ -80,29 +80,33 @@ class CConsultation extends CMbObject {
   var $_ref_examaudio = null;
 
   function CConsultation() {
-    $this->CMbObject( 'consultation', 'consultation_id' );
+    $this->CMbObject('consultation', 'consultation_id');
 
-    $this->_props["plageconsult_id"] = "ref|notNull";
-    $this->_props["patient_id"]      = "ref|notNull";
-    $this->_props["heure"]           = "time|notNull";
-    $this->_props["duree"]           = "num";
-    $this->_props["secteur1"]        = "currency";
-    $this->_props["secteur2"]        = "currency";
-    $this->_props["chrono"]          = "enum|16|32|48|64|notNull";
-    $this->_props["annule"]          = "enum|0|1";
-    $this->_props["paye"]            = "enum|0|1";
-    $this->_props["date_paiement"]   = "date";
-    $this->_props["motif"]           = "text|confidential";
-    $this->_props["rques"]           = "text|confidential";
-    $this->_props["examen"]          = "text|confidential";
-    $this->_props["traitement"]      = "text|confidential";
-    $this->_props["compte_rendu"]    = "html|confidential";
-    $this->_props["ordonnance"]      = "html|confidential";
-    $this->_props["courrier1"]       = "html|confidential";
-    $this->_props["courrier2"]       = "html|confidential";
-    $this->_props["premiere"]        = "enum|0|1";
-    $this->_props["tarif"]           = "str|confidential";
-    $this->_props["type_tarif"]      = "str|confidential"; // En faire un enum
+    static $props = array (
+      "plageconsult_id" => "ref|notNull",
+      "patient_id"      => "ref|notNull",
+      "heure"           => "time|notNull",
+      "duree"           => "num",
+      "secteur1"        => "currency",
+      "secteur2"        => "currency",
+      "chrono"          => "enum|16|32|48|64|notNull",
+      "annule"          => "enum|0|1",
+      "paye"            => "enum|0|1",
+      "date_paiement"   => "date",
+      "motif"           => "text|confidential",
+      "rques"           => "text|confidential",
+      "examen"          => "text|confidential",
+      "traitement"      => "text|confidential",
+      "compte_rendu"    => "html|confidential",
+      "ordonnance"      => "html|confidential",
+      "courrier1"       => "html|confidential",
+      "courrier2"       => "html|confidential",
+      "premiere"        => "enum|0|1",
+      "tarif"           => "str|confidential",
+      "type_tarif"      => "str|confidential" // En faire un enum
+    );
+    
+    $this->_props =& $props;
   }
   
   function updateFormFields() {
@@ -110,7 +114,7 @@ class CConsultation extends CMbObject {
 
   	$this->_somme = $this->secteur1 + $this->secteur2;
 
-    if($this->date_paiement == "0000-00-00")
+    if($this->date_paiement =",0000-00-00")
       $this->date_paiement = null;
     $this->_hour = intval(substr($this->heure, 0, 2));
     $this->_min  = intval(substr($this->heure, 3, 2));
