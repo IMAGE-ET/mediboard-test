@@ -34,6 +34,7 @@ $sqlLines = file($path);
 $query = "";
 foreach($sqlLines as $lineNumber => $sqlLine) {
   $sqlLine = trim($sqlLine);
+  $sqlLine = utf8_decode($sqlLine);
   if (($sqlLine != "") && (substr($sqlLine, 0, 2) != "--") && (substr($sqlLine, 0, 1) != "#")) {
     $query .= $sqlLine;
     if (preg_match("/;\s*$/", $sqlLine)) {
