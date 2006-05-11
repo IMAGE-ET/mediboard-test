@@ -56,6 +56,7 @@ function popRDV() {
 function setRDV(heure, id, date, freq, chirid, chirname ) {
   var f = document.editFrm;
   f.plageconsult_id.value = id;
+  f._date.value = date;
   f.heure.value = heure;
   f.duree.value = freq;
   f.chir_id.value = chirid;
