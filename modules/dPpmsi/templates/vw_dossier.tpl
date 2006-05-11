@@ -136,7 +136,7 @@ function exporterDossier(operation_id) {
         </tr>
         <tr class="op{$curr_op->operation_id}">
           <td class="button">{$curr_op->_ref_consult_anesth->poid} kg</td>
-          <td class="button">{$curr_op->_ref_consult_anesth->taille} m</td>
+          <td class="button">{$curr_op->_ref_consult_anesth->taille} cm</td>
           <td class="button">{$curr_op->_ref_consult_anesth->groupe} {$curr_op->_ref_consult_anesth->rhesus}</td>
           <td class="button">{$curr_op->_ref_consult_anesth->tasys}/{$curr_op->_ref_consult_anesth->tadias}</td>
         </tr>

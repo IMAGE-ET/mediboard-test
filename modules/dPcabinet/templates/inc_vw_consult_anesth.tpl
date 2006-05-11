@@ -33,7 +33,7 @@
                 <th><label for="taille" title="Taille du patient">Taille:</label></th>
                 <td>
                   <input type="text" size="4" name="taille" title="{$consult_anesth->_props.taille}" value="{$consult_anesth->taille}" />
-                  m
+                  cm
                 </td>
                 <th><label for="oenolisme" title="Comportement alcoolique">Oenolisme:</label></th>
                 <td>
