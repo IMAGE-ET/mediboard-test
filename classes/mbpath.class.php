@@ -57,7 +57,7 @@ class CMbPath {
       case "tgz" : 
       $archive = new Archive_Tar($archivePath);
       $nbFiles = count($archive->listContent());
-      $extract = $archive->extract($libsDir);
+      $extract = $archive->extract($destinationDir);
       break;
       
       case "zip" : 

@@ -9,8 +9,7 @@
 
 require_once("checkauth.php");
 
-require_once ("Archive/Tar.php");
-require_once ("Archive/Zip.php");
+require_once ("../classes/mbpath.class.php");
 
 class CLibraryPatch {
   var $dirName = "";
@@ -88,28 +87,7 @@ class CLibrary {
       $libsDir .= "/$this->extraDir";
     }
     
-    $archive = null;
-    
-    switch (mbGetFileExtension($filePath)) {
-      case "gz"  :
-      case "tgz" : 
-      $archive = new Archive_Tar($filePath);
-      $this->nbFiles = count($archive->listContent());
-      $return = $archive->extract($libsDir);
-      break;
-      
-      case "zip" : 
-      $archive = new Archive_Zip($filePath);
-      $this->nbFiles = count($archive->listContent());
-      $return = $archive->extract(array("add_path" => $libsDir));
-      break;
-      
-      default : 
-      $return = false;
-      break;
-    }
-    
-    return $return;
+    return CMbPath::extract($filePath, $libsDir);
   }
 }
 
@@ -296,8 +274,8 @@ if (@$_POST["do"]) {
     </a>
   <td><?php echo $library->fileName; ?></td>
   <td>
-    <?php if ($library->install()) { ?>
-    <div class="message">Ok, <?php echo $library->nbFiles; ?> fichiers extraits</div>
+    <?php if ($nbFiles = $library->install()) { ?>
+    <div class="message">Ok, <?php echo $nbFiles ?> fichiers extraits</div>
     <?php } else { ?>
     <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Erreur, <?php echo $library->nbFiles; ?> fichiers trouvés</div>
     <?php } ?>

@@ -9,17 +9,15 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once("Archive/Tar.php");
+require_once($AppUI->getSystemClass("mbpath"));
 
 $filepath = "modules/dPpatients/INSEE/insee.tar.gz";
 $filedir = "tmp/insee";
 
-$tarball = new Archive_Tar($filepath);
-if ($tarball->extract($filedir)) {
-  $nbFiles = @count($tarball->listContent());
-  echo '<div class="message"><strong>Done</strong> : extraction de '.$nbFiles.' fichiers</div>';
+if ($nbFiles = CMbPath::extract($filepath, $filedir)) {
+  echo "<div class='message'>Extraction de $nbFiles fichiers</div>";
 } else {
-  echo '<div class="error">Erreur, impossible d\'extraire l\'archive<div>';
+  echo "<div class='error'>Erreur, impossible d'extraire l'archive<div>";
   exit(0);
 }
 

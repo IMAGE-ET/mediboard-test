@@ -90,6 +90,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
   }
   
+  function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {
+    $elValue = substr($elValue, 0, $elMaxSize);
+    return $this->addElement($elParent, $elName, $elValue);
+  }
+  
   function addCodeLibelle($elParent, $nodeName, $code, $libelle) {
     $codeLibelle = $this->addElement($elParent, $nodeName);
     $this->addElement($codeLibelle, "code", substr($code, 0, 10));
@@ -144,8 +149,15 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($acteCCAM, "codeActivite", $mbActeCCAM->code_activite);
     $this->addElement($acteCCAM, "codePhase", $mbActeCCAM->code_phase);
 
+    $mbOpDebut = mbGetValue(
+      $mbOp->debut_op, 
+      $mbOp->entree_bloc, 
+      $mbOp->time_operation
+    );
+    
     $execute = $this->addElement($acteCCAM, "execute");
     $this->addElement($execute, "date", $mbOp->_ref_plageop->date);
+    $this->addElement($execute, "heure", $mbOpDebut);
 
     $mbExecutant = $mbActeCCAM->_ref_executant;
     $executant = $this->addElement($acteCCAM, "executant");
@@ -185,14 +197,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       foreach ($childNodes as $childNode) {
         $this->purgeEmptyElementsNode($childNode);      
       }
-			
+      
       // Remove if empty
       if (!$node->hasChildNodes() && !$node->hasAttributes()) {
 //        trigger_error("Removing child node $node->nodeName in parent node {$node->parentNode->nodeName}", E_USER_NOTICE);
         $node->parentNode->removeChild($node);
       }
-		}
-		
+    }
+    
   }
 }
 

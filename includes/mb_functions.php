@@ -10,6 +10,17 @@
 require_once("mb_version.php");
 
 /**
+ * Returns the first arguments that do not evaluate to false (0, null, "")
+ */
+function mbGetValue() {
+  foreach(func_get_args() as $arg) {
+    if ($arg) {
+      return $arg;
+    }
+  }
+}
+
+/**
  * Returns the value of a variable retreived it from HTTP Get, with at least a
  * default value
  * @access public

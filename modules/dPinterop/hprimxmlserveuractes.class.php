@@ -67,20 +67,20 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     );
     
     $this->addAttribute($personnePhysique, "sexe", $sexeConversion[$mbPatient->sexe]);
-    $this->addElement($personnePhysique, "nomUsuel", substr($mbPatient->nom, 0, 35));
-    $this->addElement($personnePhysique, "nomNaissance", substr($mbPatient->_nom_naissance, 0, 35));
+    $this->addTexte($personnePhysique, "nomUsuel", $mbPatient->nom);
+    $this->addTexte($personnePhysique, "nomNaissance", $mbPatient->_nom_naissance);
     
     $prenoms = $this->addElement($personnePhysique, "prenoms");
     foreach ($mbPatient->_prenoms as $mbKey => $mbPrenom) {
       if ($mbKey < 4) {
-        $this->addElement($prenoms, "prenom", substr($mbPrenom, 0, 35));
+        $this->addTexte($prenoms, "prenom", $mbPrenom);
       }
     }
     
     $adresses = $this->addElement($personnePhysique, "adresses");
     $adresse = $this->addElement($adresses, "adresse");
-    $this->addElement($adresse, "ligne", $mbPatient->adresse);
-    $this->addElement($adresse, "ville", $mbPatient->ville);
+    $this->addTexte($adresse, "ligne", $mbPatient->adresse);
+    $this->addTexte($adresse, "ville", $mbPatient->ville);
     $this->addElement($adresse, "codePostal", $mbPatient->cp);
     
     $telephones = $this->addElement($personnePhysique, "telephones");
@@ -131,12 +131,22 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $identifiant = $this->addElement($intervention, "identifiant");
     $emetteur = $this->addElement($identifiant, "emetteur", "op$mbOp->operation_id");
     
-    $mbOpDebut = $mbOp->entree_bloc ? $mbOp->entree_bloc : $mbOp->time_operation;
+    $mbOpDebut = mbGetValue(
+      $mbOp->debut_op, 
+      $mbOp->entree_bloc, 
+      $mbOp->time_operation
+    );
+    
     $debut = $this->addElement($intervention, "debut");
     $this->addElement($debut, "date", $mbOp->_ref_plageop->date);
     $this->addElement($debut, "heure", $mbOpDebut);
     
-    $mbOpFin   = $mbOp->sortie_bloc ? $mbOp->sortie_bloc : mbAddTime($mbOp->temp_operation, $mbOp->time_operation);
+    $mbOpFin   = mbGetValue(
+      $mbOp->fin_op, 
+      $mbOp->sortie_bloc, 
+      mbAddTime($mbOp->temp_operation, $mbOp->time_operation)
+    );
+    
     $fin = $this->addElement($intervention, "fin");
     $this->addElement($fin, "date", $mbOp->_ref_plageop->date);
     $this->addElement($fin, "heure", $mbOpFin);

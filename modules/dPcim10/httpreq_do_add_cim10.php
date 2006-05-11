@@ -9,7 +9,7 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once("Archive/Tar.php");
+require_once($AppUI->getSystemClass("mbpath"));
 
 set_time_limit(360);
 ini_set("memory_limit", "64M");
@@ -17,9 +17,7 @@ ini_set("memory_limit", "64M");
 $filepath = "modules/dPcim10/base/cim10.tar.gz";
 $filedir = "tmp/cim10";
 
-$tarball = new Archive_Tar($filepath);
-if ($tarball->extract($filedir)) {
-  $nbFiles = @count($tarball->listContent());
+if ($nbFiles = CMbPath::extract($filepath, $filedir)) {
   echo "<div class='message'>Extraction de $nbFiles fichier(s)</div>";
 } else {
   echo "<div class='error'>Erreur, impossible d'extraire l'archive</div>";

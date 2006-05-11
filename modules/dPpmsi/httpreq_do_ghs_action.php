@@ -9,7 +9,7 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once("Archive/Tar.php");
+require_once($AppUI->getSystemClass("mbpath"));
 
 $type = mbGetValueFromGet("type");
 
@@ -37,16 +37,14 @@ switch($type) {
   case "AddArbre"    : addarbre(); break;
   
   default:
-  echo "Argument <strong>type</strong> manquant";
+  echo "<div class='error'>L'action '$type' n'existe pas";
 }
 
 /** Extraction des fichiers sources de Ajout des CM, valide pour la version 1010
  **/
 function extractFiles() {
   global $filepath, $filedir;
-  $tarball = new Archive_Tar($filepath);
-  if ($tarball->extract($filedir)) {
-    $nbFiles = @count($tarball->listContent());
+  if ($nbFiles = CMbPath::extract($filepath, $filedir)) {
     echo "<div class='message'>Extraction de $nbFiles fichiers</div>";
   } else {
     echo "<div class='error'>Impossible d'extraire l'archive</div>";
