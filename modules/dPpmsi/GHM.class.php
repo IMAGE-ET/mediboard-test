@@ -9,83 +9,115 @@
 
 require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
 
-class CGHM {
-  // Variables de structure 
+class CGHM  extends CMbObject {
+  // DB Table key
+  var $ghm_id = null;
   
-  // Id de la base de données (qui doit être dans le config.php)
-  var $dbghm = null;
-  
-  // Informations sur le patient
-  var $age = null;
-  var $sexe = null;
-  
-  // Informations de diagnostic
-  var $DP = null;   // Diagnostic principal
+  // DB fields
+  var $operation_id = null;
   var $DR = null;   // Diagnostic relié
-  var $DASs = null; // Diagnostics associés significatifs
-  var $DADs = null; // Diagnostics associés documentaires
+  var $DASs = null; // Diagnostics associés significatifs sérialisés
+  var $DADs = null; // Diagnostics associés documentaires sérialisés
   
-  // Informations sur les actes
-  var $actes = null;
+  // Database id (found in config.php)
+  var $_dbghm = null;
   
-  // Informations sur l'hospi
-  var $type_hospi = null;
-  var $duree = null;
-  var $séances = null;
-  var $motif = null;
-  var $destination = null;
+  // Patient
+  var $_age = null;
+  var $_sexe = null;
   
-  // Variable calculées
-  var $CM = null;
-  var $CM_nom = null;
-  var $GHM = null;
-  var $GHM_nom = null;
-  var $GHM_groupe = null;
-  var $GHS = null;
-  var $borne_basse = null;
-  var $borne_haute = null;
-  var $tarif_2006 = null;
-  var $EXH = null;
-  var $chemin = null;
+  // Actes
+  var $_actes = null;
+  
+  // Hospi
+  var $_type_hospi = null;
+  var $_duree = null;
+  var $_seances = null;
+  var $_motif = null;
+  var $_destination = null;
+  
+  // Diagnostics
+  var $_DP = null;   // Diagnostic principal
+  var $_DASs = array(); // Diagnostics associés significatifs
+  var $_DADs = array(); // Diagnostics associés documentaires
+  
+  // Results
+  var $_CM = null;
+  var $_CM_nom = null;
+  var $_GHM = null;
+  var $_GHM_nom = null;
+  var $_GHM_groupe = null;
+  var $_GHS = null;
+  var $_borne_basse = null;
+  var $_borne_haute = null;
+  var $_tarif_2006 = null;
+  var $_EXH = null;
+  var $_chemin = null;
+  
+  // Forward references
+  var $_ref_operation = null;
 
-  // Chronomètre
-  var $chrono;
+  // Chrono
+  var $_chrono;
 
   // Constructeur
   function CGHM() {
+    $this->CMbObject('ghm', 'ghm_id');
     global $AppUI;
     
     // Connection à la base
-    $this->dbghm = $AppUI->cfg['baseGHS'];
-    do_connect($this->dbghm);
+    $this->_dbghm = $AppUI->cfg['baseGHS'];
+    do_connect($this->_dbghm);
     
     // Initialisation des variables
-    $this->type_hospi = "comp";
-    $this->chemin = "";
-    $this->chrono = new chronometer();
+    $this->_type_hospi = "comp";
+    $this->_chemin = "";
+    $this->_chrono = new chronometer();
+  }
+  
+  function updateFormFields() {
+    if($this->ghm_id) {
+      $this->_DASs = explode("|", $this->DASs);
+      $this->_DASs = array_unique($this->_DASs);
+      $this->_DADs = explode("|", $this->DADs);
+      $this->_DADs = array_unique($this->_DADs);
+      $this->loadRefsFwd();
+      $this->bindInfos();
+      $this->getGHM();
+    }
+  }
+  
+  function updateDBFields() {
+    $this->DASs = implode("|", $this->_DASs);
+    $this->DADs = implode("|", $this->_DADs);
+  }
+  
+  function loadRefsFwd() {
+    $this->_ref_operation = new COperation;
+    $this->_ref_operation->load($this->operation_id);
+    $this->_ref_operation->loadRefs();
+    $this->_ref_patient =& $this->_ref_operation->_ref_pat;
+    $this->_ref_actes_ccam =& $this->_ref_operation->_ref_actes_ccam;
   }
   
   // Liaison à une intervention
-  function bindOp($operation_id) {
-    $operation = new COperation;
-    $operation->load($operation_id);
-    $operation->loadRefs();
+  function bindInfos() {
     // Infos patient
-    $this->age = $operation->_ref_pat->_age."a";
-    $operation->_ref_pat->sexe == "m" ? $this->sexe = "Masculin" : $this->sexe = "Féminin";
+    $this->_age = $this->_ref_patient->_age."a";
+    $this->_ref_patient->sexe == "m" ? $this->_sexe = "Masculin" : $this->_sexe = "Féminin";
     // Infos hospi
-    $this->type_hospi = $operation->type_adm;
-    $this->duree = $operation->duree_hospi;
-    $this->motif = "hospi";
-    $this->destination = "MCO";
+    $this->_type_hospi = $this->_ref_operation->type_adm;
+    $this->_duree = $this->_ref_operation->duree_hospi;
+    $this->_motif = "hospi";
+    $this->_destination = "MCO";
     // Infos codage
-    if(strlen($operation->CIM10_code) > 3)
-      $this->DP = substr($operation->CIM10_code, 0, 3).".".substr($operation->CIM10_code, 3);
+    if(strlen($this->_ref_operation->CIM10_code) > 3)
+      $this->_DP = substr($this->_ref_operation->CIM10_code, 0, 3).".".substr($this->_ref_operation->CIM10_code, 3);
     else
-      $this->DP = $operation->CIM10_code;
-    $this->actes = array();
-    foreach($operation->_ref_actes_ccam as $acte) {
-      $this->actes[] = array(
+      $this->_DP = $this->_ref_operation->CIM10_code;
+    $this->_actes = array();
+    foreach($this->_ref_actes_ccam as $acte) {
+      $this->_actes[] = array(
                          "code" => $acte->code_acte,
                          "phase" => $acte->code_phase,
                          "activite" => $acte->code_activite
@@ -102,7 +134,7 @@ class CGHM {
     switch($type) {
       case "DP" :
         $table = "diag";
-        $elements[] = $this->DP;
+        $elements[] = $this->_DP;
         break;
       case "DR" :
         $table = "diag";
@@ -110,12 +142,13 @@ class CGHM {
         break;
       case "DAS" :
         $table = "diag";
-        $elements = $this->DASs;
+        $elements = $this->_DASs;
         break;
       case "Actes" :
         $table = "acte";
-        foreach($this->actes as $acte) {
-          $elements[] = $acte["code"];
+        foreach($this->_actes as $acte) {
+          if($acte["activite"] == 1)
+            $elements[] = $acte["code"];
         }
         break;
       default :
@@ -137,7 +170,7 @@ class CGHM {
       $column1 = "code";
       $column2 = "liste_id";
       $sql = "SELECT liste_id FROM liste WHERE nom LIKE '%$liste%'";
-      $result = db_exec($sql, $this->dbghm);
+      $result = db_exec($sql, $this->_dbghm);
       if(mysql_num_rows($result) == 0) {
         return 0;
       }
@@ -151,7 +184,7 @@ class CGHM {
         $sql = "SELECT * FROM $table WHERE $column1 = '$element'";
         if($column2)
           $sql .= "AND $column2 = '$liste_id'";
-        $result = db_exec($sql, $this->dbghm);
+        $result = db_exec($sql, $this->_dbghm);
         $n = $n + mysql_num_rows($result);
       }
     }
@@ -163,39 +196,39 @@ class CGHM {
     if($groupe == "non opératoires") {
       $n = 0;
       $sql = "SELECT * FROM liste WHERE nom LIKE '%(non opératoires)%'";
-      $listeNO = db_loadList($sql, null, $this->dbghm);
-      foreach($this->actes as $acte) {
+      $listeNO = db_loadList($sql, null, $this->_dbghm);
+      foreach($this->_actes as $acte) {
         $isNO = 0;
         foreach($listeNO as $liste) {
           $sql = "SELECT code FROM acte" .
               "\nWHERE code = '".$acte["code"]."'" .
               "\nAND phase = '".$acte["phase"]."'" .
               "\nAND liste_id = '".$liste["liste_id"]."'" .
-              "\nAND CM_id = '$this->CM'";
-          $result = db_exec($sql, $this->dbghm);
+              "\nAND CM_id = '$this->_CM'";
+          $result = db_exec($sql, $this->_dbghm);
           if (mysql_num_rows($result))
             $isNO = 1;
         }
         if($isNO)
           $n++;
       }
-      if($n == count($this->actes))
+      if($n == count($this->_actes))
         return $n;
       else
         return 0;
     } else if($groupe == "operatoire") {
       $n = 0;
       $sql = "SELECT * FROM liste WHERE nom LIKE '%(non opératoires)%'";
-      $listeNO = db_loadList($sql, null, $this->dbghm);
-      foreach($this->actes as $acte) {
+      $listeNO = db_loadList($sql, null, $this->_dbghm);
+      foreach($this->_actes as $acte) {
         $isO = 1;
         foreach($listeNO as $liste) {
           $sql = "SELECT code FROM acte" .
               "\nWHERE code = '".$acte["code"]."'" .
               "\nAND phase = '".$acte["phase"]."'" .
               "\nAND liste_id = '".$liste["liste_id"]."'" .
-              "\nAND CM_id = '$this->CM'";
-          $result = db_exec($sql, $this->dbghm);
+              "\nAND CM_id = '$this->_CM'";
+          $result = db_exec($sql, $this->_dbghm);
           if (mysql_num_rows($result))
             $isO = 0;
         }
@@ -205,19 +238,19 @@ class CGHM {
       return $n;
     } else if($groupe == "non médical") {
       $n = 0;
-      foreach($this->actes as $acte) {
+      foreach($this->_actes as $acte) {
         $sql = "SELECT code FROM acte" .
             "\nWHERE code = '".$acte["code"]."'" .
             "\nAND phase = '".$acte["phase"]."'" .
             "\nAND liste_id = 'A-med'";
-        $result = db_exec($sql, $this->dbghm);
+        $result = db_exec($sql, $this->_dbghm);
         if (mysql_num_rows($result))
           $n++;
       }
       return $n;
     } else if($groupe == "activité 4") {
       $n = 0;
-      foreach($this->actes as $acte) {
+      foreach($this->_actes as $acte) {
         if($acte["activite"] == 4) {
           $n++;
         }
@@ -229,40 +262,40 @@ class CGHM {
   // Obtention de la catégorie majeure
   function getCM() {
     // Vérification du type d'hospitalisation
-    if($this->type_hospi == "séance") {
-      $this->CM = "28";
-    } else if($this->type_hospi == "ambu") {
-      $this->CM = "24";
+    if($this->_type_hospi == "séance") {
+      $this->_CM = "28";
+    } else if($this->_type_hospi == "ambu") {
+      $this->_CM = "24";
     } else if($this->isFromList("Actes", "transplantation")) {
-      $this->CM = "27";
+      $this->_CM = "27";
     } else if($this->isFromList("DP", "D-039")) {
-      $this->CM = "26";
+      $this->_CM = "26";
     } else if(($this->isFromList("DP", "D-036") && $this->isFromList("DAS", "D-037"))||
               ($this->isFromList("DP", "D-037") && $this->isFromList("DAS", "D-036"))) {
-      $this->CM = "25";
+      $this->_CM = "25";
     } else {
-      $sql = "SELECT * FROM diagcm WHERE diag = '$this->DP'";
-      $result = db_exec($sql, $this->dbghm);
+      $sql = "SELECT * FROM diagcm WHERE diag = '$this->_DP'";
+      $result = db_exec($sql, $this->_dbghm);
       if(mysql_num_rows($result) == 0) {
-        $this->CM = 100;
+        $this->_CM = 100;
       } else {
         $row = db_fetch_array($result);
-        $this->CM = $row["CM_id"];
+        $this->_CM = $row["CM_id"];
       }
     }
-    if($this->CM) {
-      $sql = "SELECT * FROM cm WHERE CM_id = '$this->CM'";
-      $result = db_exec($sql, $this->dbghm);
+    if($this->_CM) {
+      $sql = "SELECT * FROM cm WHERE CM_id = '$this->_CM'";
+      $result = db_exec($sql, $this->_dbghm);
       $row = db_fetch_array($result);
-      $this->CM_nom = $row["nom"];
+      $this->_CM_nom = $row["nom"];
     }
-    return $this->CM;
+    return $this->_CM;
   }
   
   // Vérification des conditions de l'arbre
   function checkCondition($type, $cond) {
     $n = 0;
-    $this->chemin .= "On teste ($type : $cond) -> ";
+    $this->_chemin .= "On teste ($type : $cond) -> ";
     if($type == "1A" || $type == "2A" || $type == "nA") {
       if($cond == "non opératoires" || $cond == "operatoire" || $cond == "non médical") {
         $n = $this->isFromGroup($type, $cond);
@@ -273,7 +306,7 @@ class CGHM {
             $n = 0;
           }
         } else {
-          if($n == count($this->actes)) {
+          if($n == count($this->_actes)) {
             $n = 1;
           } else {
             $n = 0;
@@ -288,7 +321,7 @@ class CGHM {
             $n = 0;
           }
         } else {
-          if($n == count($this->actes)) {
+          if($n == count($this->_actes)) {
             $n = 1;
           } else {
             $n = 0;
@@ -303,7 +336,7 @@ class CGHM {
       $n = $this->isFromList("DR", $cond);
     } else if($type == "Age") {
       preg_match("`^([<>])([[:digit:]]+)([[:alpha:]])`", $cond, $ageTest);
-      if(preg_match("`^([[:digit:]]+)([[:alpha:]])`", $this->age, $agePat)) {
+      if(preg_match("`^([[:digit:]]+)([[:alpha:]])`", $this->_age, $agePat)) {
         if($ageTest[1] == ">") {
           if($ageTest[3] == "j" && $agePat[2] == "a") {
             $n = 1;
@@ -319,33 +352,33 @@ class CGHM {
         }
       }
     } else if($type == "Sexe") {
-      if($cond == $this->sexe)
+      if($cond == $this->_sexe)
         $n = 1;
     } else if($type == "DS") {
       preg_match("`([<>=]{1,2})([[:digit:]]+)`", $cond, $duree);
       if($duree[1] == ">=") {
-        if($this->duree >= $duree[2]) {
+        if($this->_duree >= $duree[2]) {
           $n = 1;
         }
       } else if($duree[1] == "<") {
-        if($this->duree < $duree[2]) {
+        if($this->_duree < $duree[2]) {
           $n = 1;
         }
       }
     } else if($type == "NS") {
       preg_match("`([<>=]{1,2})([[:digit:]]+)`", $cond, $seances);
       if($seances[1] == ">=") {
-        if($this->seances >= $seances[2]) {
+        if($this->_seances >= $seances[2]) {
           $n = 1;
         }
       } else if($seances[1] == "<") {
-        if($this->seances < $seances[2]) {
+        if($this->_seances < $seances[2]) {
           $n = 1;
         }
       }
-    } else if($type == "MS" && $cond == $this->motif) {
+    } else if($type == "MS" && $cond == $this->_motif) {
       $n = 1;
-    } else if($type == "Dest" && $cond == $this->destination) {
+    } else if($type == "Dest" && $cond == $this->_destination) {
       $n = 1;
     }
     $this->chemin .= $n;
@@ -354,28 +387,28 @@ class CGHM {
 
   // Obtention du GHM
   function getGHM() {
-    $this->chrono->start();
-    $this->GHM = null;
-    if(!$this->DP) {
-      $this->GHM = "Diagnostic principal manquant";
+    $this->_chrono->start();
+    $this->_GHM = null;
+    if(!$this->_DP) {
+      $this->_GHM = "Diagnostic principal manquant";
       return;
     }
-    foreach($this->DASs as $key => $DAS) {
-      $sql = "SELECT * FROM incomp WHERE CIM1 = '$DAS' AND CIM2 = '".$this->DP."'";
-      $result = db_exec($sql, $this->dbghm);
+    foreach($this->_DASs as $key => $DAS) {
+      $sql = "SELECT * FROM incomp WHERE CIM1 = '$DAS' AND CIM2 = '".$this->_DP."'";
+      $result = db_exec($sql, $this->_dbghm);
       if(mysql_num_rows($result)) {
-        $this->DADs[] = $DAS;
-        unset($this->DASs[$key]);
+        $this->_DADs[] = $DAS;
+        unset($this->_DASs[$key]);
       }
     }
-    if(!$this->CM)
+    if(!$this->_CM)
       $this->getCM();
-    $sql = "SELECT * FROM arbre WHERE CM_id = '$this->CM'";
-    $listeBranches = db_loadList($sql, null, $this->dbghm);
+    $sql = "SELECT * FROM arbre WHERE CM_id = '$this->_CM'";
+    $listeBranches = db_loadList($sql, null, $this->_dbghm);
     $parcoursBranches = 0;
     $row = $listeBranches[0];
     $maxcond = 5;
-    for($i = 1; ($i <= $maxcond*2) && ($this->GHM === null); $i = $i + 2) {
+    for($i = 1; ($i <= $maxcond*2) && ($this->_GHM === null); $i = $i + 2) {
       $type = $i;
       $cond = $i + 1;
       // On vérifie qu'on a pas déjà fait le test
@@ -387,20 +420,20 @@ class CGHM {
         }
       }
       $oldrow = $row;
-      $this->chemin .= "Pour i = ".(($i+1)/2).", arbre_id = ".$row["arbre_id"].", ";
+      $this->_chemin .= "Pour i = ".(($i+1)/2).", arbre_id = ".$row["arbre_id"].", ";
       if($row[$type] == '') {
-        $this->chemin .= "c'est bon";
-        $this->chemin .= " pour ".$row["GHM"]."<br />";
-        $this->GHM = $row["GHM"];
+        $this->_chemin .= "c'est bon";
+        $this->_chemin .= " pour ".$row["GHM"]."<br />";
+        $this->_GHM = $row["GHM"];
       } else if(!($this->checkCondition($row[$type], $row[$cond]))) {
-        $this->chemin .= " pour ".$row["GHM"]."<br />";
+        $this->_chemin .= " pour ".$row["GHM"]."<br />";
         // On avance d'une ligne
         $parcoursBranches++;
         $row = $listeBranches[$parcoursBranches];
         if(!($row = @$listeBranches[$parcoursBranches])) {
-          $this->GHM = 0;
+          $this->_GHM = 0;
         } else if(!$row[$type]) {
-          $this->GHM = $row["GHM"];
+          $this->_GHM = $row["GHM"];
         } else {
           // On reviens à la dernière condition correcte
           $j = $i - 2; $nj = $j + 1;
@@ -412,23 +445,22 @@ class CGHM {
         }
         $i = $i - 2;
       } else {
-        $this->chemin .= " pour ".$row["GHM"]."<br />";
+        $this->_chemin .= " pour ".$row["GHM"]."<br />";
       }
     }
-    if($this->GHM) {
-      $sql = "SELECT * FROM ghm WHERE GHM_id = '$this->GHM'";
-      $result = db_exec($sql, $this->dbghm);
+    if($this->_GHM) {
+      $sql = "SELECT * FROM ghm WHERE GHM_id = '$this->_GHM'";
+      $result = db_exec($sql, $this->_dbghm);
       $row = db_fetch_array($result);
-      $this->GHM_nom = $row["nom"];
-      $this->GHM_groupe = $row["groupe"];
-      $this->GHS = $row["GHS"];
-      $this->borne_basse = $row["borne_basse"];
-      $this->borne_haute = $row["borne_haute"];
-      $this->tarif_2006 = $row["tarif_2006"];
-      $this->EXH = $row["EXH"];
+      $this->_GHM_nom = $row["nom"];
+      $this->_GHM_groupe = $row["groupe"];
+      $this->_GHS = $row["GHS"];
+      $this->_borne_basse = $row["borne_basse"];
+      $this->_borne_haute = $row["borne_haute"];
+      $this->_tarif_2006 = $row["tarif_2006"];
+      $this->_EXH = $row["EXH"];
     }
-    $this->chrono->stop();
-    $this->chemin .= "Calculé en ".$this->chrono->total." secondes";
-    return $this->GHM;
+    $this->_chrono->stop();
+    $this->_chemin .= "Calculé en ".$this->_chrono->total." secondes";
   }
 }

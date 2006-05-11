@@ -462,8 +462,14 @@ class COperation extends CMbObject {
   
   function loadRefGHM () {
     $this->_ref_GHM = new CGHM;
-    $this->_ref_GHM->bindOp($this->operation_id);
-    $this->_ref_GHM->getGHM();
+    $where["operation_id"] = "= '$this->operation_id'";
+    $this->_ref_GHM->loadObject($where);
+    if(!$this->_ref_GHM->ghm_id) {
+      $this->_ref_GHM->operation_id = $this->operation_id;
+      $this->_ref_GHM->loadRefsFwd();
+      $this->_ref_GHM->bindInfos();
+      $this->_ref_GHM->getGHM();
+    }
   }
   
   function loadPossibleActes () {

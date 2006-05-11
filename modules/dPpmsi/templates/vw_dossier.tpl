@@ -385,18 +385,18 @@ function exporterDossier(operation_id) {
             <input type="text" name="CIM10_code" value="{$curr_op->CIM10_code}"/>
             <button type="submit">Modifier</button>
             </form>
-            {if $curr_op->_ref_GHM->CM}
-            <strong>Catégorie majeure CM{$curr_op->_ref_GHM->CM}</strong> : {$curr_op->_ref_GHM->CM_nom}
+            {if $curr_op->_ref_GHM->_CM}
+            <strong>Catégorie majeure CM{$curr_op->_ref_GHM->_CM}</strong> : {$curr_op->_ref_GHM->_CM_nom}
             <br />
-            <strong>GHM</strong> : {$curr_op->_ref_GHM->GHM} ({$curr_op->_ref_GHM->tarif_2006} €)
+            <strong>GHM</strong> : {$curr_op->_ref_GHM->_GHM} ({$curr_op->_ref_GHM->_tarif_2006} €)
             <br />
-            {$curr_op->_ref_GHM->GHM_nom}
+            {$curr_op->_ref_GHM->_GHM_nom}
             <br />
-            <i>Appartenance aux groupes {$curr_op->_ref_GHM->GHM_groupe}</i>
+            <i>Appartenance aux groupes {$curr_op->_ref_GHM->_GHM_groupe}</i>
             <br />
-            <strong>Bornes d'hospitalisation</strong> : de {$GHM->borne_basse} jour(s) à {$GHM->borne_haute} jours
+            <strong>Bornes d'hospitalisation</strong> : de {$curr_op->_ref_GHM->_borne_basse} jour(s) à {$curr_op->_ref_GHM->_borne_haute} jours
             {else}
-            <strong>{$curr_op->_ref_GHM->GHM}</strong>
+            <strong>{$curr_op->_ref_GHM->_GHM}</strong>
             {/if}
           </td>
         </tr>

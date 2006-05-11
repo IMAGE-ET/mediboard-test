@@ -1,8 +1,12 @@
 <table class="main">
   <tr>
     <td class="halfpane">
-    <form name="GHMFrm" action="?m={$m}" method="get">
+    <form name="editFrm" action="index.php?m={$m}" method="post" onsubmit="return checkForm(this)">
     <input type="hidden" name="m" value="{$m}" />
+    <input type="hidden" name="dosql" value="do_ghm_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="ghm_id" value="{$GHM->ghm_id}" />
+      <input type="hidden" name="operation_id" value="{$operation->operation_id}" />
       <table class="form">
         <tr><th class="title" colspan="2">Patient</th></tr>
         <tr>
@@ -10,11 +14,11 @@
           <th class="category">Sexe</th>
         </tr>
         <tr>
-          <td><input type="text" name="age" value="{$GHM->age}" size="4" /></td>
+          <td><input type="text" name="_age" value="{$GHM->_age}" size="4" /></td>
           <td>
-            <select name="sexe">
-              <option value="masculin" {if $GHM->sexe == "masculin"}selected="selected"{/if}>Masculin</option>
-              <option value="féminin" {if $GHM->sexe == "féminin"}selected="selected"{/if}>Féminin</option>
+            <select name="_sexe">
+              <option value="masculin" {if $GHM->_sexe == "masculin"}selected="selected"{/if}>Masculin</option>
+              <option value="féminin" {if $GHM->_sexe == "féminin"}selected="selected"{/if}>Féminin</option>
             </select>
       </table>
       <table class="form">
@@ -26,23 +30,23 @@
           <th class="category">DAD (doc.)</th>
         </tr>
         <tr>
-          <td><input type="text" name="DP" value="{$GHM->DP}" size="7" /></td>
+          <td><input type="text" name="_DP" value="{$GHM->_DP}" size="7" /></td>
           <td><input type="text" name="DR" value="{$GHM->DR}" size="7" /></td>
           <td>
             {counter start=0 print=false assign=curr}
-            {foreach from=$GHM->DASs item=DAS key=key}
-            <input type="text" name="DASs[{$curr}]" value="{$DAS}" size="7" /><br />
+            {foreach from=$GHM->_DASs item=DAS key=key}
+            <input type="text" name="_DASs[{$curr}]" value="{$DAS}" size="7" /><br />
             {counter}
             {/foreach}
-            <input type="text" name="DASs[{$GHM->DASs|@count}]" value="" size="7" />
+            <input type="text" name="_DASs[{$GHM->_DASs|@count}]" value="" size="7" />
           </td>
           <td>
             {counter start=0 print=false assign=curr}
-            {foreach from=$GHM->DADs item=DAD key=key}
-            <input type="text" name="DADs[{$curr}]" value="{$DAD}" size="7" /><br />
+            {foreach from=$GHM->_DADs item=DAD key=key}
+            <input type="text" name="_DADs[{$curr}]" value="{$DAD}" size="7" /><br />
             {counter}
             {/foreach}
-            <input type="text" name="DADs[{$GHM->DADs|@count}]" value="" size="7" />
+            <input type="text" name="_DADs[{$GHM->_DADs|@count}]" value="" size="7" />
           </td>
         </tr>
       </table>
@@ -54,18 +58,18 @@
           <th class="category">Activite</th>
         </tr>
         {counter start=0 print=false assign=curr}
-        {foreach from=$GHM->actes item=acte key=key}
+        {foreach from=$GHM->_actes item=acte key=key}
         <tr>
-          <td><input type="text" name="actes[{$curr}][code]" value="{$acte.code}" size="8" /></td>
-          <td><input type="text" name="actes[{$curr}][phase]" value="{$acte.phase}" size="2" /></td>
-          <td><input type="text" name="actes[{$curr}][activite]" value="{$acte.activite}" size="2" /></td>
+          <td><input type="text" name="_actes[{$curr}][code]" value="{$acte.code}" size="8" /></td>
+          <td><input type="text" name="_actes[{$curr}][phase]" value="{$acte.phase}" size="2" /></td>
+          <td><input type="text" name="_actes[{$curr}][activite]" value="{$acte.activite}" size="2" /></td>
         </tr>
         {counter}
         {/foreach}
         <tr>
-          <td><input type="text" name="actes[{$GHM->actes|@count}][code]" value="" size="8" /></td>
-          <td><input type="text" name="actes[{$GHM->actes|@count}][phase]" value="" size="2" /></td>
-          <td><input type="text" name="actes[{$GHM->actes|@count}][activite]" value="" size="2" /></td>
+          <td><input type="text" name="_actes[{$GHM->actes|@count}][code]" value="" size="8" /></td>
+          <td><input type="text" name="_actes[{$GHM->actes|@count}][phase]" value="" size="2" /></td>
+          <td><input type="text" name="_actes[{$GHM->actes|@count}][activite]" value="" size="2" /></td>
         </tr>
       </table>
       <table class="form">
@@ -79,30 +83,30 @@
         </tr>
         <tr>
           <td>
-            <select name="type_hospi">
-              <option value="séance" {if $GHM->type_hospi == "séance"}selected="selected"{/if}>Séance</option>
-              <option value="ambu" {if $GHM->type_hospi == "ambu"}selected="selected"{/if}>Ambulatoire ( < 2 jours)</option>
-              <option value="comp" {if $GHM->type_hospi == "comp"}selected="selected"{/if}>Hospi. complète( > 2 jours)</option>
-              <option value="exte" {if $GHM->type_hospi == "exte"}selected="selected"{/if}>Hospi. externe</option>
+            <select name="_type_hospi">
+              <option value="séance" {if $GHM->_type_hospi == "séance"}selected="selected"{/if}>Séance</option>
+              <option value="ambu" {if $GHM->_type_hospi == "ambu"}selected="selected"{/if}>Ambulatoire ( < 2 jours)</option>
+              <option value="comp" {if $GHM->_type_hospi == "comp"}selected="selected"{/if}>Hospi. complète( > 2 jours)</option>
+              <option value="exte" {if $GHM->_type_hospi == "exte"}selected="selected"{/if}>Hospi. externe</option>
             </select>
           </td>
           <td>
-            <input type="text" name="duree" value="{$GHM->duree}" size="3" />
+            <input type="text" name="_duree" value="{$GHM->_duree}" size="3" />
           </td>
           <td>
-            <input type="text" name="seances" value="{$GHM->seances}" size="3" />
+            <input type="text" name="_seances" value="{$GHM->_seances}" size="3" />
           </td>
           <td>
-            <select name="motif">
-              <option value="hospi" {if $GHM->motif == "hospi"}selected="selected"{/if}>Hospitalisation</option>
-              <option value="décès" {if $GHM->type_hospi == "décès"}selected="selected"{/if}>Décès du patient</option>
-              <option value="transfert" {if $GHM->type_hospi == "transfert"}selected="selected"{/if}>Transfert</option>
+            <select name="_motif">
+              <option value="hospi" {if $GHM->_motif == "hospi"}selected="selected"{/if}>Hospitalisation</option>
+              <option value="décès" {if $GHM->_motif == "décès"}selected="selected"{/if}>Décès du patient</option>
+              <option value="transfert" {if $GHM->_motif == "transfert"}selected="selected"{/if}>Transfert</option>
             </select>
           </td>
           <td>
-            <select name="destination">
-              <option value="MCO" {if $GHM->destination == "MCO"}selected="selected"{/if}>MCO</option>
-              <option value="court séjour" {if $GHM->destination == "court séjour"}selected="selected"{/if}>Court séjour</option>
+            <select name="_destination">
+              <option value="MCO" {if $GHM->_destination == "MCO"}selected="selected"{/if}>MCO</option>
+              <option value="court séjour" {if $GHM->_destination == "court séjour"}selected="selected"{/if}>Court séjour</option>
             </select>
           </td>
         </tr>
@@ -123,21 +127,21 @@
         </tr>
         <tr>
           <td class="text">
-            {if $GHM->CM}
-            <strong>Catégorie majeure CM{$GHM->CM}</strong> : {$GHM->CM_nom}
+            {if $GHM->_CM}
+            <strong>Catégorie majeure CM{$GHM->_CM}</strong> : {$GHM->_CM_nom}
             <br />
-            <strong>GHM</strong> : {$GHM->GHM} ({$GHM->tarif_2006} €)
+            <strong>GHM</strong> : {$GHM->_GHM} ({$GHM->_tarif_2006} €)
             <br />
-            {$GHM->GHM_nom}
+            {$GHM->_GHM_nom}
             <br />
-            <i>Appartenance aux groupes {$GHM->GHM_groupe}</i>
+            <i>Appartenance aux groupes {$GHM->_GHM_groupe}</i>
             <br />
-            <strong>Bornes d'hospitalisation</strong> : de {$GHM->borne_basse} jour(s) à {$GHM->borne_haute} jours
+            <strong>Bornes d'hospitalisation</strong> : de {$GHM->_borne_basse} jour(s) à {$GHM->_borne_haute} jours
             <br />
             <strong>Chemin :</strong> <br />
-            {$GHM->chemin}
+            {$GHM->_chemin}
             {else}
-            <strong>{$GHM->GHM}</strong>
+            <strong>{$GHM->_GHM}</strong>
             {/if}
           </td>
         </tr>
