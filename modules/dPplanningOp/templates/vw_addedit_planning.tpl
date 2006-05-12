@@ -350,24 +350,18 @@ function pageMain() {
   <tr>
     {if $hospitalisation}
     <td>
-      <strong>
         <a class="button" href="index.php?m={$m}&amp;hospitalisation_id=0">Créer une nouvelle hospitalisation</a>
-      </strong>
     </td>
     <td>
-      <strong>
         <a href="index.php?m={$m}&amp;tab=vw_edit_planning&amp;operation_id={$op->operation_id}&amp;trans=1">Programmer une intervention pour ce patient</a>
-      </strong>
     </td>
     {else}
     <td colspan="2">
-      <strong>
        {if $protocole}
        <a class="button" href="index.php?m={$m}&amp;protocole_id=0">Créer un nouveau protocole</a>
        {else}
        <a class="button" href="index.php?m={$m}&amp;operation_id=0">Programmer une nouvelle intervention</a>
        {/if}
-      </strong>
     </td>
     {/if}
   </tr>

@@ -24,6 +24,7 @@ if(!$operation_id) {
 
 $operation = new COperation();
 $operation->load($operation_id);
+$operation->loadRefsFwd();
 $operation->loadRefGHM();
 
 // Création du template
@@ -31,6 +32,7 @@ require_once( $AppUI->getSystemClass('smartydp'));
 $smarty = new CSmartyDP;
 
 $smarty->assign("operation", $operation);
+$smarty->assign("patient", $operation->_ref_pat);
 $smarty->assign("GHM", $operation->_ref_GHM);
 
 $smarty->display('labo_groupage.tpl');
