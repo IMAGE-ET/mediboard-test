@@ -9,6 +9,7 @@
 
 if( !function_exists('memory_get_usage') ) {
   function memory_get_usage() {
+    /*
     if ( substr(PHP_OS,0,3) == 'WIN') {
       $output = array();
       $pid = getmypid();
@@ -24,7 +25,6 @@ if( !function_exists('memory_get_usage') ) {
           }
         }
       }
-
       return preg_replace( '/[\D]/', '', $output[5] ) * 1024;
     } else {
       $pid = getmypid();
@@ -32,6 +32,8 @@ if( !function_exists('memory_get_usage') ) {
       $output = explode("  ", $output[0]);
       return $output[1] * 1024;
     }
+    */
+    return "-";
   }
 }
 
