@@ -53,7 +53,7 @@ switch ($mode) {
 
 if($ajax) {
   $dbError = db_error();
-  echo "<div class='message'>Action effectuée à $dateTime</div>";
+  echo "<div class='message'>Action effectuée</div>";
   exit(0);
 }
 
