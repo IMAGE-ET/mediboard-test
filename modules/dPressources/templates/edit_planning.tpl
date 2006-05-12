@@ -73,7 +73,7 @@ function pageMain() {
         {if $plage->plageressource_id}
         <tr>
           <td colspan="4">
-            <a href="index.php?m={$m}&amp;plage_id=0">Créer de nouvelles plages</a>
+            <a class="button" href="index.php?m={$m}&amp;plage_id=0">Créer de nouvelles plages</a>
           </td>
         </tr>
         <tr>

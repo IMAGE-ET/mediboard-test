@@ -25,7 +25,6 @@ if(!$operation_id) {
 $operation = new COperation();
 $operation->load($operation_id);
 $operation->loadRefGHM();
-//mbTrace($operation->_ref_GHM);
 
 // Création du template
 require_once( $AppUI->getSystemClass('smartydp'));

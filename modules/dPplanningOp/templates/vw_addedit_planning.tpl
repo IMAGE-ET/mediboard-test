@@ -351,7 +351,7 @@ function pageMain() {
     {if $hospitalisation}
     <td>
       <strong>
-        <a href="index.php?m={$m}&amp;hospitalisation_id=0">Créer une nouvelle hospitalisation</a>
+        <a class="button" href="index.php?m={$m}&amp;hospitalisation_id=0">Créer une nouvelle hospitalisation</a>
       </strong>
     </td>
     <td>
@@ -363,9 +363,9 @@ function pageMain() {
     <td colspan="2">
       <strong>
        {if $protocole}
-       <a href="index.php?m={$m}&amp;protocole_id=0">Créer un nouveau protocole</a>
+       <a class="button" href="index.php?m={$m}&amp;protocole_id=0">Créer un nouveau protocole</a>
        {else}
-       <a href="index.php?m={$m}&amp;operation_id=0">Programmer une nouvelle intervention</a>
+       <a class="button" href="index.php?m={$m}&amp;operation_id=0">Programmer une nouvelle intervention</a>
        {/if}
       </strong>
     </td>

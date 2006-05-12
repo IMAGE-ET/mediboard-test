@@ -120,7 +120,7 @@ function setClose() {ldelim}
       <table class="form">
         {if !$dialog && $medecin->medecin_id}
         <tr>
-          <td colspan="2"><a href="index.php?m={$m}&amp;tab={$tab}&amp;new=1"><b>Créer un nouveau médecin</b></a></td>
+          <td colspan="2"><a class="button" href="index.php?m={$m}&amp;tab={$tab}&amp;new=1">Créer un nouveau médecin</a></td>
         </tr>
         {/if}
         <tr>

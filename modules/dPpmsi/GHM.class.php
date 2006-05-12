@@ -78,8 +78,10 @@ class CGHM  extends CMbObject {
   function updateFormFields() {
     if($this->ghm_id) {
       $this->_DASs = explode("|", $this->DASs);
+      $this->_DASs = mbRemoveValuesInArray("", $this->_DASs);
       $this->_DASs = array_unique($this->_DASs);
       $this->_DADs = explode("|", $this->DADs);
+      $this->_DADs = mbRemoveValuesInArray("", $this->_DADs);
       $this->_DADs = array_unique($this->_DADs);
       $this->loadRefsFwd();
       $this->bindInfos();

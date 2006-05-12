@@ -79,7 +79,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
 <table class="main" style="margin: 4px; border-spacing: 0px;">
   {if $consult->consultation_id}
   <tr>
-    <td><strong><a href="index.php?m={$m}&amp;consultation_id=0">Créer une nouvelle consultation</a></strong></td>
+    <td><a class="button" href="index.php?m={$m}&amp;consultation_id=0">Créer une nouvelle consultation</a></td>
   </tr>
   {/if}
   <tr>

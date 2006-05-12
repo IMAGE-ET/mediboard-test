@@ -32,7 +32,7 @@ function pageMain() {
       <input type="hidden" name="gestioncab_id" value="{$gestioncab->gestioncab_id}" />
       <input type="hidden" name="function_id" value="{$gestioncab->function_id}" />
       {if $gestioncab->gestioncab_id}
-      <a href="index.php?m={$m}&gestioncab_id=0">Créer une nouvelle fiche</a>
+      <a class="button" href="index.php?m={$m}&gestioncab_id=0">Créer une nouvelle fiche</a>
       {/if}
       <table class="form">
         <tr>

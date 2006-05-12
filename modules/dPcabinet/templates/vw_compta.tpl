@@ -117,7 +117,7 @@ function pageMain() {
       {if $tarif->tarif_id}
         <tr>
           <td colspan="3">
-            <a href="index.php?m={$m}&amp;tarif_id=null"><b>Créer un nouveau tarif</b></a>
+            <a class="button" href="index.php?m={$m}&amp;tarif_id=null">Créer un nouveau tarif</a>
           </td>
         </tr>
       {/if}

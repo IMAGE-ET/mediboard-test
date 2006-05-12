@@ -267,7 +267,7 @@ function pageMain() {
       </table>
     </td>
     <td>
-      <a href="index.php?m={$m}&amp;tab={$tab}&amp;plageconsult_id=0">cliquez ici pour créer une nouvelle plage</a>
+      <a class="button" href="index.php?m={$m}&amp;tab={$tab}&amp;plageconsult_id=0">Créer une nouvelle plage</a>
       
       <table class="tbl">
         <tr>

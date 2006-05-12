@@ -92,7 +92,7 @@ function pageMain() {
 <table class="main">
   {if $patient->patient_id}
   <tr>
-    <td><strong><a href="index.php?m={$m}&amp;patient_id=0">Créer un nouveau patient</a></strong></td>
+    <td><a class="button" href="index.php?m={$m}&amp;patient_id=0">Créer un nouveau patient</a></td>
   </tr>
   {/if}
   <tr>

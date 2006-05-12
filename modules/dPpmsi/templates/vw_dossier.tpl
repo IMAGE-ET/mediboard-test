@@ -309,11 +309,7 @@ function exporterDossier(operation_id) {
           </td>
         </tr>
         <tr class="op{$curr_op->operation_id}">
-          <td class="button">
-            <a href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={$curr_op->operation_id}">
-              <strong>Modifier</strong>
-            </a>
-          </td>
+          <td class="button">supprimer</td>
           <td class="button"><strong>Code</strong></td>
           <td class="button"><strong>Activité</strong></td>
           <td class="button"><strong>Phase &mdash; Modificateurs</strong></td>
@@ -359,6 +355,9 @@ function exporterDossier(operation_id) {
         {/foreach}
         <tr class="op{$curr_op->operation_id}">
           <td class="button" colspan="4">
+            <a class="button" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={$curr_op->operation_id}">
+              Modifier les actes
+            </a>
             <button onclick="exporterDossier({$curr_op->operation_id})">Exporter vers S@nté.com</button>
           </td>
         </tr>
