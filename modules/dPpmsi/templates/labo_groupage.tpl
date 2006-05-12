@@ -23,8 +23,8 @@
       <table class="form">
         <tr>
           <th class="title" style="text-align:left;">
-            <a class="button" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$operation->operation_id}" style="float:right;">
-              Modifier l'hospitalisation
+            <a class="button" href="index.php?m=dPpmsi&tab=vw_dossier&amp;pat_id={$patient->patient_id}" style="float:right;">
+              Voir le dossier
             </a>
             Hospitalisation
           </th>

@@ -29,7 +29,8 @@ $titleBlock->show();
 $tabBox = new CTabBox( "?m=dPpmsi", "{$AppUI->cfg['root_dir']}/modules/dPpmsi/", $tab );
 $tabBox->add( 'vw_dossier', 'Dossiers patient' );
 $tabBox->add( 'edit_actes', 'Codage des actes' );
-$tabBox->add( 'labo_groupage', 'Labo groupage GHM' );
+$tabBox->add( 'labo_groupage', 'Groupage GHM' );
+$tabBox->add( 'vw_list_hospi', 'Liste des hospitalisations' );
 $tabBox->show();
 
 ?>
