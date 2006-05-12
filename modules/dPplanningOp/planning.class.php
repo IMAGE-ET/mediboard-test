@@ -29,12 +29,30 @@ class COperation extends CMbObject {
   var $chir_id = null;
   var $plageop_id = null;
 
-  // DB fields
+  // DB Fields to be removed
+  var $CCAM_code = null;
+  var $CCAM_code2 = null;
+  var $compte_rendu = null;
+  var $cr_valide = null;
+
+  // DB Fields venue
+  var $date_adm = null;
+  var $time_adm = null;
+  var $entree_adm = null;
+  var $admis = null;
+  var $chambre = null;
+  
+  // DB Fields S@nté.com communication
+  var $venue_SHS = null;
+  var $code_uf = null;
+  var $libelle_uf = null;
+  var $saisie = null;
+  var $modifiee = null;
+  
+  // DB Fields
   var $salle_id = null;
   var $date = null;
   var $codes_ccam = null;
-  var $CCAM_code = null;
-  var $CCAM_code2 = null;
   var $CIM10_code = null;
   var $libelle = null;
   var $cote = null;
@@ -56,25 +74,14 @@ class COperation extends CMbObject {
   var $date_anesth = null;
   var $time_anesth = null;
   var $type_anesth = null;  
-  var $date_adm = null;
-  var $time_adm = null;
   var $duree_hospi = null;
   var $type_adm = null;
-  var $chambre = null;
-  var $venue_SHS = null;
-  var $code_uf = null;
-  var $libelle_uf = null;
   var $ATNC = null;
   var $rques = null;
   var $rank = null;
-  var $admis = null;
-  var $saisie = null;
-  var $modifiee = null;
   
   var $depassement = null;
   var $annulee = null;
-  var $compte_rendu = null;
-  var $cr_valide = null;
   var $pathologie = null;
   var $septique = null;
     
@@ -146,6 +153,7 @@ class COperation extends CMbObject {
     $this->_props["ATNC"] = "enum|o|n";
     $this->_props["rques"] = "str|confidential";
     $this->_props["rank"] = "num";
+    $this->_props["admission"] = "dateTime";
     $this->_props["admis"] = "enum|o|n";
     $this->_props["saisie"] = "enum|o|n";
     $this->_props["modifie"] = "enum|0|1";

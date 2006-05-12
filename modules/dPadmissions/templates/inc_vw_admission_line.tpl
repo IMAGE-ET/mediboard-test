@@ -3,6 +3,7 @@
 {elseif $curr_adm->type_adm == 'comp'} {assign var=background value="#fff"}
 {elseif $curr_adm->type_adm == 'exte'} {assign var=background value="#afa"}
 {/if}
+
 <td class="text" style="background: {$background}">
   <a name="adm{$curr_adm->operation_id}" href="javascript:printAdmission({$curr_adm->operation_id})">
   {$curr_adm->_ref_pat->_view}
@@ -29,21 +30,23 @@
   Pas de chambre
   {/if}
     <form name="editChFrm{$curr_adm->operation_id}" action="index.php" method="post">
+    
     <input type="hidden" name="m" value="dPhospi" />
     <input type="hidden" name="otherm" value="dPadmissions" />
     <input type="hidden" name="dosql" value="do_edit_chambre" />
     <input type="hidden" name="id" value="{$curr_adm->operation_id}" />
     {if $curr_adm->chambre == 'o'}
     <input type="hidden" name="value" value="n" />
-    <button type="button" style="background-color: #f55;" onclick="admission_id = {$curr_adm->operation_id}; submitAdmission(this.form);">
+    <button type="button" style="background-color: #f55;" onclick="submitAdmission(this.form);">
       <img src="modules/{$m}/images/refresh.png" alt="changer" /> simple
     </button>
     {else}
     <input type="hidden" name="value" value="o" />
-    <button type="button" onclick="admission_id = {$curr_adm->operation_id}; submitAdmission(this.form);">
+    <button type="button" onclick="submitAdmission(this.form);">
       <img src="modules/{$m}/images/refresh.png" alt="changer" /> double
     </button>
     {/if}
+    
     </form>
 </td>
 
@@ -59,12 +62,13 @@
   <input type="hidden" name="mode" value="admis" />
   {if $curr_adm->admis == "n"}
   <input type="hidden" name="value" value="o" />
-  <button type="button" onclick="admission_id = {$curr_adm->operation_id}; submitAdmission(this.form);">
+  <button type="button" onclick="submitAdmission(this.form);">
     <img src="modules/{$m}/images/tick.png" alt="Admis" /> Admis
   </button>
   {else}
+  à {$curr_adm->entree_adm|date_format:"%Hh%M"}<br />
   <input type="hidden" name="value" value="n" />
-  <button type="button" onclick="admission_id = {$curr_adm->operation_id}; submitAdmission(this.form);">
+  <button type="button" onclick="submitAdmission(this.form);">
     <img src="modules/{$m}/images/cross.png" alt="Annuler" /> Annuler
   </button>
   {/if}
@@ -79,12 +83,12 @@
   <input type="hidden" name="mode" value="saisie" />
   {if $curr_adm->saisie == "n"}
   <input type="hidden" name="value" value="o" />
-  <button type="button" onclick="admission_id = {$curr_adm->operation_id}; submitAdmission(this.form);">
+  <button type="button" onclick="submitAdmission(this.form);">
     <img src="modules/{$m}/images/tick.png" alt="Saisie" /> Saisie
   </button>
   {else}
   <input type="hidden" name="value" value="n" />
-  <button type="button" onclick="admission_id = {$curr_adm->operation_id}; submitAdmission(this.form);">
+  <button type="button" onclick="submitAdmission(this.form);">
     <img src="modules/{$m}/images/cross.png" alt="Annuler" /> Annuler
   </button>
   {/if}

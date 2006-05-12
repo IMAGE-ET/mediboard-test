@@ -15,12 +15,16 @@ $mode  = mbGetValueFromPost("mode", 0);
 $value = mbGetValueFromPost("value", 'o');
 $id    = mbGetValueFromPost("id", 0);
 
-switch($mode) {
+$dateTime = mbDateTime();
+
+switch ($mode) {
   case 'admis' : {
-    if($id) {
-      $sql = "UPDATE operations
-              SET admis = '$value'
-              WHERE operation_id = '$id'";
+    if ($id) {
+      $sql = "UPDATE operations SET " .
+        "\n`entree_adm` = '$dateTime', " .
+        "\n`admis` = '$value' " .
+        "\nWHERE operation_id = '$id'";
+          
       $result = db_exec($sql);
       db_error();
     }
@@ -48,7 +52,8 @@ switch($mode) {
 }
 
 if($ajax) {
-  echo '<div class="message">Action effectuée</div>';
+  $dbError = db_error();
+  echo "<div class='message'>Action effectuée à $dateTime</div>";
   exit(0);
 }
 

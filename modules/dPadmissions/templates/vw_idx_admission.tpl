@@ -17,8 +17,6 @@ function printDepassement(id) {
   url.popup(700, 550, "Depassement");
 }
 
-//var admission_id = 0;
-
 function reloadAdmission() {
   var admUrl = new Url;
   admUrl.setModuleAction("dPadmissions", "httpreq_vw_admissions");
