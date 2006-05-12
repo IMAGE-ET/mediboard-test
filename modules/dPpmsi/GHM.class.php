@@ -77,12 +77,16 @@ class CGHM  extends CMbObject {
   
   function updateFormFields() {
     if($this->ghm_id) {
-      $this->_DASs = explode("|", $this->DASs);
-      $this->_DASs = array_unique($this->_DASs);
-      $this->_DASs = mbRemoveValuesInArray("", $this->_DASs);
-      $this->_DADs = explode("|", $this->DADs);
-      $this->_DADs = array_unique($this->_DADs);
-      $this->_DADs = mbRemoveValuesInArray("", $this->_DADs);
+      if($this->DASs) {
+        $this->_DASs = explode("|", $this->DASs);
+      } else {
+        $this->_DASs = array();
+      }
+      if($this->DADs) {
+        $this->_DADs = explode("|", $this->DADs);
+      } else {
+        $this->_DADs = array();
+      }
       $this->loadRefsFwd();
       $this->bindInfos();
       $this->getGHM();
@@ -90,7 +94,17 @@ class CGHM  extends CMbObject {
   }
   
   function updateDBFields() {
+    $this->_DASs = array_unique($this->_DASs);
+        foreach($this->_DASs as $key => $DAS) {
+          if($DAS == "")
+            unset($this->_DASs[$key]);
+        }
     $this->DASs = implode("|", $this->_DASs);
+    $this->_DADs = array_unique($this->_DADs);
+        foreach($this->_DADs as $key => $DAD) {
+          if($DAD == "")
+            unset($this->_DADs[$key]);
+        }
     $this->DADs = implode("|", $this->_DADs);
   }
   

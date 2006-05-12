@@ -30,6 +30,12 @@
           </th>
         </tr>
       </table>
+      <form name="editFrm" action="index.php?m={$m}" method="post" onsubmit="return checkForm(this)">
+      <input type="hidden" name="m" value="{$m}" />
+      <input type="hidden" name="dosql" value="do_ghm_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="ghm_id" value="{$GHM->ghm_id}" />
+      <input type="hidden" name="operation_id" value="{$operation->operation_id}" />
       <table class="form">
         <tr>
           <th class="category">DP</th>
@@ -58,12 +64,6 @@
           </td>
         </tr>
       </table>
-      <form name="editFrm" action="index.php?m={$m}" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="m" value="{$m}" />
-      <input type="hidden" name="dosql" value="do_ghm_aed" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="ghm_id" value="{$GHM->ghm_id}" />
-      <input type="hidden" name="operation_id" value="{$operation->operation_id}" />
       <table class="form">
         <tr>
           <th class="category">Type</th>
