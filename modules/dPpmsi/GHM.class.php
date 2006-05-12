@@ -132,7 +132,8 @@ class CGHM  extends CMbObject {
     $this->_ref_patient->sexe == "m" ? $this->_sexe = "Masculin" : $this->_sexe = "Féminin";
     // Infos hospi
     $this->_type_hospi = $this->_ref_operation->type_adm;
-    $this->_duree = $this->_ref_operation->duree_hospi;
+    $this->_duree = mbDaysRelative($this->_ref_operation->_ref_first_affectation->entree, $this->_ref_operation->_ref_last_affectation->sortie);
+    //$this->_duree = $this->_ref_operation->duree_hospi;
     $this->_motif = "hospi";
     $this->_destination = "MCO";
     // Infos codage
@@ -289,7 +290,7 @@ class CGHM  extends CMbObject {
     // Vérification du type d'hospitalisation
     if($this->_type_hospi == "séance") {
       $this->_CM = "28";
-    } else if($this->_type_hospi == "ambu") {
+    } else if($this->_type_hospi == "ambu" || $this->_type_hospi == "exte") {
       $this->_CM = "24";
     } else if($this->isFromList("Actes", "transplantation")) {
       $this->_CM = "27";

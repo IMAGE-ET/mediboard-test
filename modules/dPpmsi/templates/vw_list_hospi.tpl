@@ -12,7 +12,7 @@ function pageMain() {
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="7">
+    <th class="title" colspan="8">
       Liste {$listAffectations|@count} personnes hospitalisée(s) au {$date|date_format:"%A %d %B %Y"}
       <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
@@ -25,6 +25,7 @@ function pageMain() {
     <th>Sortie</th>
     <th>Chambre</th>
     <th>GHM</th>
+    <th>Bornes</th>
   </tr>
   {foreach from=$listAffectations item=curr_aff}
   <tr>
@@ -55,6 +56,21 @@ function pageMain() {
         : {$curr_aff->_ref_operation->_ref_GHM->_GHM_nom}
         {/if}
       </a>
+    </td>
+    <td class="text">
+      {if $curr_aff->_ref_operation->_ref_GHM->_DP}
+        {if $curr_aff->_ref_operation->_ref_GHM->_borne_basse > $curr_aff->_ref_operation->_ref_GHM->_duree}
+        <img src="modules/dPpmsi/images/cross.png" alt="alerte" />
+        Séjour trop court
+        {elseif $curr_aff->_ref_operation->_ref_GHM->_borne_haute < $curr_aff->_ref_operation->_ref_GHM->_duree}
+        <img src="modules/dPpmsi/images/cross.png" alt="alerte" />
+        Séjour trop long
+        {else}
+        <img src="modules/dPpmsi/images/tick.png" alt="ok" />
+        {/if}
+      {else}
+      -
+      {/if}
     </td>
   </tr>
   {/foreach}
