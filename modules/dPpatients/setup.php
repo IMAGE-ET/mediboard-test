@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPpatients';
-$config['mod_version'] = '0.30';
+$config['mod_version'] = '0.29';
 $config['mod_directory'] = 'dPpatients';
 $config['mod_setup_class'] = 'CSetupdPpatients';
 $config['mod_type'] = 'user';
@@ -146,18 +146,6 @@ class CSetupdPpatients {
         db_exec( $sql ); db_error();
         
       case "0.29":
-        $sql = "CREATE TABLE `ghm` (
-                `ghm_id` BIGINT NOT NULL AUTO_INCREMENT ,
-                `operation_id` BIGINT NOT NULL ,
-                `DR` VARCHAR( 10 ) ,
-                `DASs` TEXT,
-                `DADs` TEXT,
-                PRIMARY KEY ( `ghm_id` ) ,
-                INDEX ( `operation_id` )
-                ) COMMENT = 'Table des GHM';";
-        db_exec( $sql ); db_error();
-      
-      case "0.30" :
   	    return true;
 		}
 
