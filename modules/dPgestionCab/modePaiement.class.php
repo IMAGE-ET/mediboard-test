@@ -12,7 +12,7 @@ require_once($AppUI->getSystemClass('mbobject'));
 require_once($AppUI->getModuleClass('dPgestionCab', 'gestionCab') );
 
 /**
- * The CRubrique Class
+ * The CModePaiement Class
  */
 class CModePaiement extends CMbObject {
   // DB Table key

@@ -363,6 +363,13 @@ function checkElement(oElement, aSpecFragments) {
       
       break;
     
+    case "pct":
+      if (!oElement.value.match(/^(\d+)(\.\d{1,2})?$/)) {
+        return "N'est pas une valeur décimale (utilisez le . pour la virgule)";
+      }
+      
+      break;
+    
 	case "text":
 	  break;
 	  

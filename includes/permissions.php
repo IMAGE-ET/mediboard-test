@@ -185,7 +185,7 @@ function isMbAllowed($perm_type, $mod, $item_id) {
   global $fastMbPerms;
 
   assert($mod != 'all');
-  assert($item_id > 0);
+  assert($item_id >= 0);
   assert($perm_type == PERM_EDIT or $perm_type == PERM_READ);
   
   $moduleAll =  isMbModule($mod, $perm_type == PERM_READ ? "readall" : "editall");

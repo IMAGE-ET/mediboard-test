@@ -40,6 +40,9 @@ class CMediusers extends CMbObject {
 	var $_user_last_name  = null;
 	var $_user_email      = null;
 	var $_user_phone      = null;
+  var $_user_adresse    = null;
+  var $_user_cp         = null;
+  var $_user_ville      = null;
 
   // Other fields
   var $_view = null;
@@ -62,6 +65,9 @@ class CMediusers extends CMbObject {
     $this->_user_props["_user_last_name"] = "notNull|str|confidential";
     $this->_user_props["_user_email"] = "str|confidential";
     $this->_user_props["_user_phone"] = "num|length|10|confidential";
+    $this->_user_props["_user_adresse"] = "str|confidential";
+    $this->_user_props["_user_cp"] = "num|length|5|confidential";
+    $this->_user_props["_user_ville"] = "str|confidential";
 	}
 
   function createUser() {
@@ -75,6 +81,9 @@ class CMediusers extends CMbObject {
     $user->user_last_name  = $this->_user_last_name ;
     $user->user_email      = $this->_user_email     ;
     $user->user_phone      = $this->_user_phone     ;
+    $user->user_address1    = $this->_user_adresse   ;
+    $user->user_zip        = $this->_user_cp        ;
+    $user->user_city       = $this->_user_ville     ;
 
     return $user;
   }
@@ -144,12 +153,15 @@ class CMediusers extends CMbObject {
     $user = new CUser();
     if ($user->load($this->user_id)) {
       $this->_user_type       = $utypes[$user->user_type];
-      $this->_user_username   = $user->user_username  ;
-      $this->_user_password   = $user->user_password  ;
+      $this->_user_username   = $user->user_username;
+      $this->_user_password   = $user->user_password;
       $this->_user_first_name = ucwords(strtolower($user->user_first_name));
       $this->_user_last_name  = strtoupper($user->user_last_name) ;
-      $this->_user_email      = $user->user_email     ;
-      $this->_user_phone      = $user->user_phone     ;
+      $this->_user_email      = $user->user_email;
+      $this->_user_phone      = $user->user_phone;
+      $this->_user_adresse    = $user->user_address1;
+      $this->_user_cp         = $user->user_zip;
+      $this->_user_ville      = $user->user_city;
       // Encrypt this datas
       $this->checkConfidential($this->_user_props);
       $this->_view            = $this->_user_last_name." ".$this->_user_first_name;
@@ -295,6 +307,10 @@ class CMediusers extends CMbObject {
     
     return $users;
     
+  }
+  
+  function loadUsers($perm_type = null, $function_id = null, $name = null) {
+    return $this->loadListFromType(null, $perm_type, $function_id, $name);
   }
 
   function loadChirurgiens($perm_type = null, $function_id = null, $name = null) {

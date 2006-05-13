@@ -264,7 +264,15 @@ class CMbObject extends CDpObject {
       // Currrency format
       case "currency":
         if (!preg_match ("/^([0-9]+)(\.[0-9]{0,2}){0,1}$/", $propValue)) {
-          return "N'est pas une valeur monétaire (utilisez le . pour la virgule)";
+          return "n'est pas une valeur monétaire (utilisez le . pour la virgule)";
+        }
+        
+        break;
+    
+      // Percentage with two digits after coma
+      case "pct":
+        if (!preg_match ("/^([0-9]+)(\.[0-9]{0,2}){0,1}$/", $propValue)) {
+          return "n'est pas un pourcentage (utilisez le . pour la virgule)";
         }
         
         break;

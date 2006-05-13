@@ -32,12 +32,10 @@ class CSetupdPgestionCab {
 	}
 
 	function remove() {
-    $sql = "DROP TABLE `gestioncab`;";
-    db_exec( $sql ); db_error();
-    $sql = "DROP TABLE `rubrique_gestioncab`;";
-    db_exec( $sql ); db_error();
-    $sql = "DROP TABLE `mode_paiement`;";
-    db_exec( $sql ); db_error();
+    db_exec( "DROP TABLE `gestioncab`;" ); db_error();
+    db_exec( "DROP TABLE `rubrique_gestioncab`;" ); db_error();
+    db_exec( "DROP TABLE `mode_paiement`;" ); db_error();
+    db_exec( "DROP TABLE `params_paie`;" ); db_error();
 		return null;
 	}
 
@@ -94,9 +92,37 @@ class CSetupdPgestionCab {
     $sql = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` )
             VALUES ('', '0', 'Virement');";
     db_exec( $sql ); db_error();
+    $sql = "CREATE TABLE `params_paie` (
+              `params_paie_id` BIGINT NOT NULL AUTO_INCREMENT ,
+              `user_id` BIGINT NOT NULL ,
+              `smic` FLOAT NOT NULL ,
+              `csgds` FLOAT NOT NULL ,
+              `csgnds` FLOAT NOT NULL ,
+              `ssms` FLOAT NOT NULL ,
+              `ssmp` FLOAT NOT NULL ,
+              `ssvs` FLOAT NOT NULL ,
+              `ssvp` FLOAT NOT NULL ,
+              `rcs` FLOAT NOT NULL ,
+              `rcp` FLOAT NOT NULL ,
+              `agffs` FLOAT NOT NULL ,
+              `agffp` FLOAT NOT NULL ,
+              `aps` FLOAT NOT NULL ,
+              `app` FLOAT NOT NULL ,
+              `acs` FLOAT NOT NULL ,
+              `acp` FLOAT NOT NULL ,
+              `aatp` FLOAT NOT NULL ,
+              `nom` VARCHAR(100) NOT NULL ,
+              `adresse` VARCHAR(50) NOT NULL ,
+              `cp` VARCHAR(5) NOT NULL ,
+              `ville` VARCHAR(50) NOT NULL ,
+              `siret` VARCHAR(14) NOT NULL ,
+              `ape` VARCHAR(4) NOT NULL ,
+              PRIMARY KEY ( `params_paie_id` ) ,
+              INDEX ( `user_id` )
+            ) COMMENT = 'Paramètres fiscaux pour les fiches de paie';";
+    db_exec( $sql ); db_error();
 		
 		$this->upgrade("all");
-
 		return null;
 	}
 }

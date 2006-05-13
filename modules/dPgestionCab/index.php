@@ -28,7 +28,8 @@ $titleBlock->show();
 
 $tabBox = new CTabBox( "?m=dPgestionCab", "{$AppUI->cfg['root_dir']}/modules/dPgestionCab/", $tab );
 $tabBox->add( 'edit_compta', 'Comptabilité' );
-$tabBox->add( 'edit_paie', 'Paie' );
+$tabBox->add( 'edit_paie', 'Fiche de paie' );
+$tabBox->add( 'edit_params', 'Paramètres' );
 $tabBox->show();
 
 ?>
