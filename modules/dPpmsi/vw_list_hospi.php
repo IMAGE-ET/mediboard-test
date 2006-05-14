@@ -20,7 +20,7 @@ $date = mbGetValueFromGetOrSession("date", mbDate());
 $listAffectations = new CAffectation;
 $where = array();
 $where[] = "entree < '$date 23:59:59' AND sortie > '$date 00:00:00'";
-$order = "entree, sortie";
+$order = "sortie, entree";
 $listAffectations = $listAffectations->loadList($where, $order);
 
 foreach($listAffectations as $key => $affectation) {

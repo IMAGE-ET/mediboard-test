@@ -19,4 +19,8 @@ $smarty = new CSmartyDP;
 
 $smarty->display('view_logs.tpl');
 
+global $logPath;
+
+include($logPath);
+
 ?>

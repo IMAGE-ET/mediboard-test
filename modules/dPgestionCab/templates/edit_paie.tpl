@@ -108,7 +108,7 @@ function pageMain() {
           <td class="button" colspan="2">
             <button type="submit">Sauver</button>
             {if $fichePaie->fiche_paie_id}
-            <button type="submit" onclick="confirmDeletion(this.form,{ldelim}typeName:'la ',objName:'{$fichePaie->_view|escape:javascript}'{rdelim})">
+            <button type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'la ',objName:'{$fichePaie->_view|escape:javascript}'{rdelim})">
               Supprimer
             </button>
             <button type="button" onclick="printFiche()">
@@ -131,9 +131,9 @@ function pageMain() {
             <form name="editFrm{$curr_fiche->fiche_paie_id}" action="./index.php?m={$m}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="dosql" value="do_fichePaie_aed" />
             <input type="hidden" name="m" value="dPgestionCab" />
-            <input type="hidden" name="fiche_paie_id" value="{$fichePaie->fiche_paie_id}" />
+            <input type="hidden" name="fiche_paie_id" value="{$curr_fiche->fiche_paie_id}" />
             <input type="hidden" name="del" value="0" />
-            <button type="submit" style="float:right;"onclick="confirmDeletion(this.form,{ldelim}typeName:'la ',objName:'{$fichePaie->_view|escape:javascript}'{rdelim})">
+            <button type="button" style="float:right;" onclick="confirmDeletion(this.form,{ldelim}typeName:'la ',objName:'{$curr_fiche->_view|escape:javascript}'{rdelim})">
               <img src="modules/dPgestionCab/images/cross.png" alt="supprimer" />
             </button>
             </form>

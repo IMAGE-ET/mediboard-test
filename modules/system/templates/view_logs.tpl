@@ -9,5 +9,3 @@
     </button>
 </div>
 {/if}
-
-{include file="../../../tmp/mb-log.html"}

@@ -52,7 +52,7 @@ if ($operation_id) {
     $AppUI->redirect( "m=$m&tab=vw_edit_hospi&hospitalisation_id=$op->operation_id" );
   }
   // On vérifie que l'utilisateur a les droits sur l'operation
-  $rigth = false;
+  $right = false;
   foreach($listChir as $key => $value) {
     if($value->user_id == $op->chir_id)
       $right = true;
