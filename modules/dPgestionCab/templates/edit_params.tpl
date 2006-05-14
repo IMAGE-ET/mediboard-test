@@ -221,6 +221,7 @@
           <td class="button" colspan="3">
             <button type="submit">Sauver</button>
           </td>
+        </tr>
       </table>
       </form>
     </td>

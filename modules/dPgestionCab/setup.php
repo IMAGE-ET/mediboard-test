@@ -36,6 +36,7 @@ class CSetupdPgestionCab {
     db_exec( "DROP TABLE `rubrique_gestioncab`;" ); db_error();
     db_exec( "DROP TABLE `mode_paiement`;" ); db_error();
     db_exec( "DROP TABLE `params_paie`;" ); db_error();
+    db_exec( "DROP TABLE `fiche_paie`;" ); db_error();
 		return null;
 	}
 
@@ -120,6 +121,18 @@ class CSetupdPgestionCab {
               PRIMARY KEY ( `params_paie_id` ) ,
               INDEX ( `user_id` )
             ) COMMENT = 'Paramètres fiscaux pour les fiches de paie';";
+    db_exec( $sql ); db_error();
+    $sql = "CREATE TABLE `fiche_paie` (
+              `fiche_paie_id` BIGINT NOT NULL AUTO_INCREMENT ,
+              `params_paie_id` BIGINT NOT NULL ,
+              `debut` DATE NOT NULL ,
+              `fin` DATE NOT NULL ,
+              `salaire` FLOAT NOT NULL ,
+              `heures` SMALLINT NOT NULL ,
+              `mutuelle` FLOAT NOT NULL ,
+              PRIMARY KEY ( `fiche_paie_id` ) ,
+              INDEX ( `params_paie_id` )
+            ) COMMENT = 'Table des fiches de paie';";
     db_exec( $sql ); db_error();
 		
 		$this->upgrade("all");
