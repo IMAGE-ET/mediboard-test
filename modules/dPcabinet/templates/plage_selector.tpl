@@ -1,3 +1,5 @@
+<!-- $Id$ -->
+
 <script type="text/javascript">
 function setClose(time) {ldelim}
   window.opener.setRDV(time,
@@ -7,7 +9,6 @@ function setClose(time) {ldelim}
     "{$plage->chir_id}",
     "{$plage->_ref_chir->_view}");
   window.close();
-<!-- $Id$ -->
 {rdelim}
 
 function pageMain() {ldelim}
@@ -68,11 +69,20 @@ function pageMain() {ldelim}
   </td>
   <td>
     <table class="tbl">
+      {if $plage->plageconsult_id}
+      <tr>
+        <th colspan="3">Plage du {$plage->date|date_format:"%A %d %B %Y"}</th>
+      </tr>
       <tr>
         <th>Heure</th>
         <th>Patient</th>
         <th>Durée</th>
       </tr>
+      {else}
+      <tr>
+        <th colspan="3">Pas de plage le {$date|date_format:"%A %d %B %Y"}</th>
+      </tr>
+      {/if}
       {foreach from=$listPlace item=curr_place}
       <tr>
         <td><input type="button" value="+" onclick="setClose('{$curr_place.time|date_format:"%H:%M"}')" />{$curr_place.time|date_format:"%Hh%M"}</td>

@@ -19,9 +19,20 @@ if (!$canRead) {
 
 // Initialisation des variables
 $plageconsult_id = dPgetParam( $_GET, 'plageconsult_id');
-$date = dPgetParam( $_GET, 'date', mbDate() );
-$ndate = mbDate("+1 MONTH", $date);
-$pdate = mbDate("-1 MONTH", $date);
+
+// Récupération des consultations de la plage séléctionnée
+$plage = new CPlageconsult;
+$listPlace = array();
+if ($plageconsult_id) {
+  $plage->load($plageconsult_id);
+  $date = $plage->date;
+  $ndate = mbDate("+1 MONTH", $date);
+  $pdate = mbDate("-1 MONTH", $date);
+} else {
+  $date = dPgetParam( $_GET, 'date', mbDate() );
+  $ndate = mbDate("+1 MONTH", $date);
+  $pdate = mbDate("-1 MONTH", $date);
+}
 
 // Récupération des plages de consultation disponibles
 $listPlage = new CPlageconsult;
@@ -48,18 +59,14 @@ foreach ($listPlage as $keyPlage => $valuePlage) {
   if (!$plageconsult_id && $date == $valuePlage->date) {
     $plageconsult_id = $valuePlage->plageconsult_id;
   }
-  
   $listPlage[$keyPlage]->loadRefs(false);
 }
 
-// Récupération des consultations de la plage séléctionnée
-$plage = new CPlageconsult;
-$plage->_ref_chir = new CMediusers;
-$listPlace = array();
-if ($plageconsult_id) {
-  $plage->load($plageconsult_id);
+if($plageconsult_id) {
+  if(!$plage->plageconsult_id) {
+    $plage->load($plageconsult_id);
+  }
   $plage->loadRefs(false);
-  $date = $plage->date;
   
   for ($i = 0; $i < $plage->_total; $i++) {
     $minutes = $plage->_freq * $i;
