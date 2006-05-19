@@ -141,9 +141,12 @@ class CAffectation extends CMbObject {
       $this->sortie = mbDate("", $this->sortie)." "."10:00:00";
     }
     if($flagAmbu) {
-      if($this->_ref_operation->time_operation != "00:00:00")
-        $this->sortie = mbDate("", $this->sortie)." ".mbTime("+ 6 hours", $this->_ref_operation->time_operation);
-      else
+      if($this->_ref_operation->time_operation != "00:00:00") {
+        if($this->_ref_operation->time_operation >= "18:00:00")
+          $this->sortie = mbDate("", $this->sortie)." "."23:59:00";
+        else
+          $this->sortie = mbDate("", $this->sortie)." ".mbTime("+ 6 hours", $this->_ref_operation->time_operation);
+      } else
         $this->sortie = mbDate("", $this->sortie)." "."18:00:00";
     }
   }

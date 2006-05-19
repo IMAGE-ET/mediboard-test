@@ -1,4 +1,4 @@
-<?php /* $Id: */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
@@ -6,33 +6,58 @@
 * @author Romain Ollivier
 */
 
-require "./includes/config.php";
-require "./classes/ui.class.php";
+$dPconfig = array();
 
+if (!is_file("./includes/config.php")) {
+  header("location: install/");
+  die("Redirection vers l'assistant d'installation");
+}
+
+require_once("./classes/ui.class.php");
+require_once("./includes/config.php");
+
+// Check that the user has correctly set the root directory
+is_file( "{$dPconfig['root_dir']}/includes/config.php" ) 
+  or die( "ERREUR FATALE: le repertoire racine est probablement mal configuré" );
+
+require_once("./includes/main_functions.php");
+require_once("./includes/errors.php");
+
+// PHP Configuration
+ini_set("memory_limit", "64M");
+
+// Manage the session variable(s)
 session_name( 'dotproject' );
 if (get_cfg_var( 'session.auto_start' ) > 0) {
-	session_write_close();
+  session_write_close();
 }
 session_start();
-$AppUI =& $_SESSION['AppUI'];
-
-require "{$AppUI->cfg['root_dir']}/includes/db_connect.php";
-
-include "{$AppUI->cfg['root_dir']}/includes/main_functions.php";
-include "{$AppUI->cfg['root_dir']}/includes/permissions.php";
-
-$canRead = !getDenyRead( 'dPcabinet' );
-if (!$canRead) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+session_register( 'AppUI' ); 
+  
+// Check if session has previously been initialised
+if (!isset( $_SESSION['AppUI'] ) || isset($_GET['logout'])) {
+    $_SESSION['AppUI'] = new CAppUI();
 }
 
-$file_id = isset($_GET['file_id']) ? $_GET['file_id'] : 0;
+$AppUI =& $_SESSION['AppUI'];
+$AppUI->setConfig( $dPconfig );
 
-require_once( $AppUI->getModuleClass('dPcabinet', 'files') );
+require "./includes/db_connect.php";
 
-if($file_id) {
+// Check permissions on dPcabinet. to be refactored with PEAR::Auth
+
+include "./includes/permissions.php";
+$canRead = !getDenyRead( 'dPcabinet' );
+if (!$canRead) {
+	$AppUI->redirect("m=system&a=access_denied");
+}
+
+require_once($AppUI->getModuleClass("dPcabinet", "files"));
+
+if ($file_id = mbGetValueFromGet("file_id")) {
   $file = new CFile();
   $file->load($file_id);
+  $file->findFilePath();
 
 	// BEGIN extra headers to resolve IE caching bug (JRP 9 Feb 2003)
 	// [http://bugs.php.net/bug.php?id=16173]
@@ -47,15 +72,8 @@ if($file_id) {
 	header("MIME-Version: 1.0");
 	header( "Content-length: {$file->file_size}" );
 	header( "Content-type: {$file->file_type}" );
-	header( "Content-disposition: inline; filename={$file->file_name}" );
-	if($file->file_consultation) {
-    if(is_file("{$AppUI->cfg['root_dir']}/files/consultations/{$file->file_consultation}/{$file->file_real_filename}"))
-      readfile( "{$AppUI->cfg['root_dir']}/files/consultations/{$file->file_consultation}/{$file->file_real_filename}" );
-    else
-      readfile( "{$AppUI->cfg['root_dir']}/files/consultations2/{$file->file_consultation}/{$file->file_real_filename}" );
-	} else {
-	  readfile( "{$AppUI->cfg['root_dir']}/files/operations/{$file->file_operation}/{$file->file_real_filename}" );
-	}
+	header( "Content-disposition: inline; filename={$file->file_name}");
+	readfile($file->_file_path);
 } else {
 	$AppUI->setMsg( "fileIdError", UI_MSG_ERROR );
 	$AppUI->redirect();

@@ -21,18 +21,17 @@ class CFile extends CMbObject {
   var $file_consultation_anesth = null;
   var $file_operation = null;
   var $file_real_filename = null;
-  var $file_task = null;
   var $file_name = null;
-  var $file_parent = null;
-  var $file_description = null;
+  
   var $file_type = null;
   var $file_owner = null;
   var $file_date = null;
   var $file_size = null;
-  var $file_version = null;
 
   // Form fields
   var $_file_size = null;
+  var $_sub_dir = null;
+  var $_object_id = null;
   var $_file_path = null;
 
   function CFile() {
@@ -42,7 +41,7 @@ class CFile extends CMbObject {
   }
 
   function check() {
-  // ensure the integrity of some variables
+    // Ensure the integrity of some variables
     $this->file_id = intval( $this->file_id );
     $this->file_consultation = intval( $this->file_consultation );
     $this->file_consultation_anesth = intval( $this->file_consultation_anesth );
@@ -54,29 +53,47 @@ class CFile extends CMbObject {
   function updateFormFields() {
     $this->_file_size = mbConvertDecaBinary($this->file_size);
     
+    // Computes complete file path
+    if ($object_id = $this->file_consultation       ) { $this->_sub_dir = "consultations"       ; $this->_object_id = $object_id; }
+    if ($object_id = $this->file_consultation_anesth) { $this->_sub_dir = "consultations_anesth"; $this->_object_id = $object_id; }
+    if ($object_id = $this->file_operation          ) { $this->_sub_dir = "operations"          ; $this->_object_id = $object_id; }
     
+    if (!$this->_object_id) {
+      trigger_error("No object_id associated with file (file_id = $this->file_id)", E_USER_WARNING);
+    }
+    
+    // File path can't be computed yet because of consultations2 hack
+//    $this->_file_path = "$filesDir/$this->_sub_dir/$this->_object_id/$this->file_real_filename";
+  }
+  
+  function findFilePath() {
+    global $filesDir;
+    
+    $this->_file_path = "$filesDir/$this->_sub_dir/$this->_object_id/$this->file_real_filename";
+    if (!is_file($this->_file_path)) {
+      $this->_sub_dir .= "2";    
+      $this->_file_path = "$filesDir/$this->_sub_dir/$this->_object_id/$this->file_real_filename";
+    }
+    
+    if (!is_file($this->_file_path)) {
+      trigger_error("File is not reachable", E_USER_WARNING);
+    }
   }
 
   function delete() {
-    global $filesDir;
-    // remove the file from the file system
-      if($this->file_consultation) {
-        @unlink( "$filesDir/consultations/$this->file_consultation/$this->file_real_filename" );
-        @unlink( "$filesDir/consultations2/$this->file_consultation/$this->file_real_filename" );
-      }
-      elseif($this->file_consultation_anesth) {
-        @unlink( "$filesDir/consultations_anesth/$this->file_consultation_anesth/$this->file_real_filename" );
-      }
-      else {
-        @unlink( "$filesDir/operations/$this->file_operation/$this->file_real_filename" );
-      }
-    // delete any index entries
+    // Actually remove the file
+    $this->findFilePath();
+    @unlink($this->_file_path);
+
+    // Delete any index entries
     $sql = "DELETE FROM files_index_mediboard WHERE file_id = $this->file_id";
     if (!db_exec( $sql )) {
       return db_error();
     }
-  // delete the main table reference
+    
+    // Delete the main table reference
     $sql = "DELETE FROM files_mediboard WHERE file_id = $this->file_id";
+    
     if (!db_exec( $sql )) {
       return db_error();
     }
@@ -89,6 +106,7 @@ class CFile extends CMbObject {
    */ 
   function moveTemp( $upload ) {
     global $filesDir;
+    $this->updateFormFields();
     
     // Check global directory
     if (!CMbPath::forceDir($filesDir)) {
@@ -96,22 +114,12 @@ class CFile extends CMbObject {
       return false;
     }
     
-    // Computes complete file path
-    $object_id = 0;
-    if ($tmp_id = $this->file_consultation       ) { $subDir = "consultations"       ; $object_id = $tmp_id; }
-    if ($tmp_id = $this->file_consultation_anesth) { $subDir = "consultations_anesth"; $object_id = $tmp_id; }
-    if ($tmp_id = $this->file_operation          ) { $subDir = "operations"          ; $object_id = $tmp_id; }
-    
-    if (!$object_id) {
-      trigger_error("No object_id associated with file (file_id = $this->file_id)", E_USER_WARNING);
-      return false;
-    }
-    
     // Checks complete file directory
-    $fileDir = "$filesDir/$subDir/$object_id";
+    $fileDir = "$filesDir/$this->_sub_dir/$this->_object_id";
+
     if (!@CMbPath::forceDir($fileDir)) {
       $subDir .= "2";
-      $fileDir = "$filesDir/$subDir/$object_id";
+      $fileDir = "$filesDir/$this->_sub_dir/$this->_object_id";
       if (!CMbPath::forceDir($fileDir)) {
         trigger_error("File directory couldn't be created for file (file_id = $this->file_id)", E_USER_WARNING);
         return false;

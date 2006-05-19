@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPcabinet';
-$config['mod_version'] = '0.37';
+$config['mod_version'] = '0.38';
 $config['mod_directory'] = 'dPcabinet';
 $config['mod_setup_class'] = 'CSetupdPcabinet';
 $config['mod_type'] = 'user';
@@ -35,15 +35,13 @@ class CSetupdPcabinet {
 	}
 
 	function remove() {
-      db_exec( "DROP TABLE consultation;" ); db_error();
-      db_exec( "DROP TABLE consultation_anesth;" ); db_error();
-      db_exec( "DROP TABLE plageconsult;" ); db_error();
-      db_exec( "DROP TABLE files_mediboard;" ); db_error();
-      db_exec( "DROP TABLE files_index_mediboard;" ); db_error();
-      db_exec( "DROP TABLE tarifs;" ); db_error();
-      db_exec( "DROP TABLE examaudio;"); db_error();
-      
-
+    db_exec( "DROP TABLE consultation;" ); db_error();
+    db_exec( "DROP TABLE consultation_anesth;" ); db_error();
+    db_exec( "DROP TABLE plageconsult;" ); db_error();
+    db_exec( "DROP TABLE files_mediboard;" ); db_error();
+    db_exec( "DROP TABLE files_index_mediboard;" ); db_error();
+    db_exec( "DROP TABLE tarifs;" ); db_error();
+    db_exec( "DROP TABLE examaudio;"); db_error();
 		return null;
 	}
 
@@ -127,36 +125,40 @@ class CSetupdPcabinet {
         $sql = "ALTER TABLE `consultation`" .
         		"\nADD `date_paiement` DATE AFTER `paye` ;";
         db_exec( $sql ); db_error();
+
         $sql = "UPDATE consultation, plageconsult
-                SET consultation.date_paiement = plageconsult.date
-                WHERE consultation.plageconsult_id = plageconsult.plageconsult_id
-                AND consultation.paye = 1";
+          SET consultation.date_paiement = plageconsult.date
+          WHERE consultation.plageconsult_id = plageconsult.plageconsult_id
+          AND consultation.paye = 1";
+        db_exec( $sql ); db_error();
+
       case "0.29":
         $sql = "CREATE TABLE `consultation_anesth` (
-                `consultation_anesth_id` BIGINT NOT NULL AUTO_INCREMENT ,
-                `consultation_id` BIGINT DEFAULT '0' NOT NULL ,
-                `operation_id` BIGINT DEFAULT '0' NOT NULL ,
-                `poid` FLOAT,
-                `taille` FLOAT,
-                `groupe` ENUM( '0', 'A', 'B', 'AB' ) ,
-                `rhesus` ENUM( '+', '-' ) ,
-                `antecedents` TEXT,
-                `traitements` TEXT,
-                `tabac` ENUM( '-', '+', '++' ) ,
-                `oenolisme` ENUM( '-', '+', '++' ) ,
-                `transfusions` ENUM( '-', '+' ) ,
-                `tasys` TINYINT,
-                `tadias` TINYINT,
-                `listCim10` TEXT,
-                `intubation` ENUM( 'dents', 'bouche', 'cou' ) ,
-                `biologie` ENUM( 'NF', 'COAG', 'IONO' ) ,
-                `commande_sang` ENUM( 'clinique', 'CTS', 'autologue' ) ,
-                `ASA` TINYINT,
-                PRIMARY KEY ( `consultation_anesth_id` ) ,
-                INDEX ( `consultation_id`) ,
-                INDEX ( `operation_id` )
-                ) COMMENT = 'Consultations d\'anesthésie';";
+          `consultation_anesth_id` BIGINT NOT NULL AUTO_INCREMENT ,
+          `consultation_id` BIGINT DEFAULT '0' NOT NULL ,
+          `operation_id` BIGINT DEFAULT '0' NOT NULL ,
+          `poid` FLOAT,
+          `taille` FLOAT,
+          `groupe` ENUM( '0', 'A', 'B', 'AB' ) ,
+          `rhesus` ENUM( '+', '-' ) ,
+          `antecedents` TEXT,
+          `traitements` TEXT,
+          `tabac` ENUM( '-', '+', '++' ) ,
+          `oenolisme` ENUM( '-', '+', '++' ) ,
+          `transfusions` ENUM( '-', '+' ) ,
+          `tasys` TINYINT,
+          `tadias` TINYINT,
+          `listCim10` TEXT,
+          `intubation` ENUM( 'dents', 'bouche', 'cou' ) ,
+          `biologie` ENUM( 'NF', 'COAG', 'IONO' ) ,
+          `commande_sang` ENUM( 'clinique', 'CTS', 'autologue' ) ,
+          `ASA` TINYINT,
+          PRIMARY KEY ( `consultation_anesth_id` ) ,
+          INDEX ( `consultation_id`) ,
+          INDEX ( `operation_id` )
+          ) COMMENT = 'Consultations d\'anesthésie';";
         db_exec( $sql ); db_error();
+        
       case "0.30":
         $document_types = array (
           array ("name" => "compte_rendu", "valide" => "cr_valide"),
@@ -171,9 +173,9 @@ class CSetupdPcabinet {
           $document_valide = $document_type["valide"];
 
           $sql = "SELECT *" .
-              "\nFROM `consultation`" .
-              "\nWHERE `$document_name` IS NOT NULL" .
-              "\nAND `$document_name` != ''";
+            "\nFROM `consultation`" .
+            "\nWHERE `$document_name` IS NOT NULL" .
+            "\nAND `$document_name` != ''";
           $res = db_exec( $sql );
   
           while ($obj = db_fetch_object($res)) {
@@ -220,18 +222,19 @@ class CSetupdPcabinet {
 
       case "0.34":
         $sql = "ALTER TABLE `consultation_anesth`
-                CHANGE `groupe` `groupe` ENUM( '?', '0', 'A', 'B', 'AB' ) DEFAULT '?' NOT NULL ,
-                CHANGE `rhesus` `rhesus` ENUM( '?', '+', '-' ) DEFAULT '?' NOT NULL ,
-                CHANGE `tabac` `tabac` ENUM( '?', '-', '+', '++' ) DEFAULT '?' NOT NULL ,
-                CHANGE `oenolisme` `oenolisme` ENUM( '?', '-', '+', '++' ) DEFAULT '?' NOT NULL ,
-                CHANGE `transfusions` `transfusions` ENUM( '?', '-', '+' ) DEFAULT '?' NOT NULL ,
-                CHANGE `intubation` `intubation` ENUM( '?', 'dents', 'bouche', 'cou' ) DEFAULT '?' NOT NULL ,
-                CHANGE `biologie` `biologie` ENUM( '?', 'NF', 'COAG', 'IONO' ) DEFAULT '?' NOT NULL ,
-                CHANGE `commande_sang` `commande_sang` ENUM( '?', 'clinique', 'CTS', 'autologue' ) DEFAULT '?' NOT NULL ;";
+          CHANGE `groupe` `groupe` ENUM( '?', '0', 'A', 'B', 'AB' ) DEFAULT '?' NOT NULL ,
+          CHANGE `rhesus` `rhesus` ENUM( '?', '+', '-' ) DEFAULT '?' NOT NULL ,
+          CHANGE `tabac` `tabac` ENUM( '?', '-', '+', '++' ) DEFAULT '?' NOT NULL ,
+          CHANGE `oenolisme` `oenolisme` ENUM( '?', '-', '+', '++' ) DEFAULT '?' NOT NULL ,
+          CHANGE `transfusions` `transfusions` ENUM( '?', '-', '+' ) DEFAULT '?' NOT NULL ,
+          CHANGE `intubation` `intubation` ENUM( '?', 'dents', 'bouche', 'cou' ) DEFAULT '?' NOT NULL ,
+          CHANGE `biologie` `biologie` ENUM( '?', 'NF', 'COAG', 'IONO' ) DEFAULT '?' NOT NULL ,
+          CHANGE `commande_sang` `commande_sang` ENUM( '?', 'clinique', 'CTS', 'autologue' ) DEFAULT '?' NOT NULL ;";
         db_exec( $sql ); db_error();
+
         $sql = "ALTER TABLE `consultation_anesth`
-                CHANGE `tasys` `tasys` INT( 5 ) DEFAULT NULL ,
-                CHANGE `tadias` `tadias` INT( 5 ) DEFAULT NULL;";
+          CHANGE `tasys` `tasys` INT( 5 ) DEFAULT NULL ,
+          CHANGE `tadias` `tadias` INT( 5 ) DEFAULT NULL;";
         db_exec( $sql ); db_error();
       
       case "0.35":
@@ -240,11 +243,19 @@ class CSetupdPcabinet {
 
       case "0.36":
         $sql = "ALTER TABLE `consultation_anesth`" .
-            "CHANGE `groupe` `groupe` ENUM( '?', 'O', 'A', 'B', 'AB' )" .
-            "DEFAULT '?' NOT NULL ;";
+          "CHANGE `groupe` `groupe` ENUM( '?', 'O', 'A', 'B', 'AB' )" .
+          "DEFAULT '?' NOT NULL ;";
         db_exec( $sql ); db_error();
-
+        
       case "0.37":
+        $sql = "ALTER TABLE `files_mediboard`" .
+          "\nDROP `file_parent`," .
+          "\nDROP `file_description`," .
+          "\nDROP `file_version`," .
+          "\nDROP `file_icon`;";
+        db_exec( $sql ); db_error();
+            
+      case "0.38":
   	    return true;
 		}
 
