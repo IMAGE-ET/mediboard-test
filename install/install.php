@@ -24,7 +24,11 @@ class CLibraryPatch {
     $sourcePath = "$patchDir/$this->dirName/$this->sourceName";
     $targetPath = "$libsDir/$this->dirName/$this->targetDir/$this->sourceName";
     $oldPath = $targetPath . ".old";
-    assert("Source is not existing" | is_file($targetPath));
+    
+    if (!is_file($targetPath)) {
+      trigger("Source '$targetPath' is not existing");
+    }
+
     @unlink($oldPath);
     rename($targetPath, $oldPath);
     return copy($sourcePath, $targetPath);
@@ -170,7 +174,7 @@ $libraries[] = $library;
 $library = new CLibrary;
 $library->name = "FCKEditor";
 $library->url = "http://www.fckeditor.net/";
-$library->fileName = "FCKeditor_2.2.tar.gz";
+$library->fileName = "FCKeditor_2.3b.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
 
 $renamer = new CLibraryRenamer;
@@ -183,6 +187,13 @@ $patch = new CLibraryPatch;
 $patch->dirName = "fckeditor";
 $patch->sourceName = "config.php";
 $patch->targetDir = "editor/filemanager/browser/default/connectors/php";
+
+$library->patches[] = $patch;
+
+$patch = new CLibraryPatch;
+$patch->dirName = "fckeditor";
+$patch->sourceName = "fck_showtableborders_gecko.css";
+$patch->targetDir = "editor/css";
 
 $library->patches[] = $patch;
 
