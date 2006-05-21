@@ -8,7 +8,7 @@ function pageMain() {
   {/literal}
   opsUpdater.addParam("date", "{$date}");
   {literal}
-  opsUpdater.periodicalUpdate('ops', { frequency: 30 });
+  opsUpdater.periodicalUpdate('ops', { frequency: 60 });
   
 }
 

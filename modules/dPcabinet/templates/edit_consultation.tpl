@@ -68,7 +68,7 @@ function pageMain() {
   listUpdater.addParam("date", "{$date}");
   listUpdater.addParam("vue2", "{$vue}");
   {literal}
-  listUpdater.periodicalUpdate('listConsult', { frequency: 30 });
+  listUpdater.periodicalUpdate('listConsult', { frequency: 60 });
   
 }
 
