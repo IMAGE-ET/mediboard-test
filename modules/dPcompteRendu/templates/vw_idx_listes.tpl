@@ -225,7 +225,7 @@ function checkForm() {
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="valeurs" value="{$liste->valeurs|escape:javascript}" />
           <input type="hidden" name="chir_id" value="{$liste->chir_id}" />
-          <input type="hidden" name="function_id" value="{$liste->_function_id}" />
+          <input type="hidden" name="function_id" value="{$liste->function_id}" />
           <input type="hidden" name="_del" value="{$curr_valeur}" />
           <button type="submit"><img src="modules/dPcompteRendu/images/trash.png" /></button>
           </form>
