@@ -38,8 +38,10 @@ $plageSel->loadRefs();
 foreach($plageSel->_ref_consultations as $key => $value) {
   if ($vue && $plageSel->_ref_consultations[$key]->paye)
     unset($plageSel->_ref_consultations[$key]);
-  else
-    $plageSel->_ref_consultations[$key]->loadRefs();
+  else {
+    $plageSel->_ref_consultations[$key]->loadRefPatient();
+    $plageSel->_ref_consultations[$key]->loadRefDocs();
+  }
 }
 
 if ($plageSel->chir_id != $chirSel) {

@@ -65,8 +65,10 @@ foreach($listPlage as $key => $value) {
   foreach($listPlage[$key]->_ref_consultations as $key2 => $value2) {
     if($vue && ($listPlage[$key]->_ref_consultations[$key2]->chrono == CC_TERMINE))
       unset($listPlage[$key]->_ref_consultations[$key2]);
-    else
-      $listPlage[$key]->_ref_consultations[$key2]->loadRefs();
+    else {
+      $listPlage[$key]->_ref_consultations[$key2]->loadRefPatient();
+      $listPlage[$key]->_ref_consultations[$key2]->loadRefDocs();
+    }
   }
 }
 
