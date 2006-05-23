@@ -60,6 +60,19 @@ if($mode_paiement_id)
 $sql .= "\nGROUP BY rubrique_id";
 $totaux = db_loadList($sql);
 
+$sql = "SELECT FORMAT(SUM(montant), 2) AS value, 0 as invar" .
+    "\nFROM `gestioncab`" .
+    "\nWHERE date BETWEEN '$date' AND '$datefin'" .
+    "\nAND function_id = '$user->function_id'";
+if($libelle)
+  $sql .= "\nAND libelle LIKE '%$libelle%'";
+if($rubrique_id)
+  $sql .= "\nAND rubrique_id = '$rubrique_id'";
+if($mode_paiement_id)
+  $sql .= "\nAND mode_paiement_id = '$mode_paiement_id'";
+$sql .= "\nGROUP BY invar";
+$total = db_loadResult($sql);
+
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP;
@@ -73,6 +86,7 @@ $smarty->assign('listRubriques'    , $listRubriques);
 $smarty->assign('listModesPaiement', $listModesPaiement);
 $smarty->assign('listGestionCab'   , $listGestionCab);
 $smarty->assign('totaux'           , $totaux);
+$smarty->assign('total'            , $total);
 
 $smarty->display('print_rapport.tpl');
 ?>

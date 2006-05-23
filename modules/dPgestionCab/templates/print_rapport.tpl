@@ -30,7 +30,7 @@
     {foreach from=$listRubriques item=rubrique}
     <td>
       {if $rubrique->rubrique_id == $fiche->rubrique_id}
-      {$fiche->montant} €
+      {$fiche->montant|string_format:"%.2f"} €
       {/if}
     </td>
     {/foreach}
@@ -41,11 +41,16 @@
   <tr>
     <th colspan="2">Totaux</th>
     {foreach from=$listRubriques item=rubrique}
+    {assign var="noTotal" value=1}
       {foreach from=$totaux item=total}
       {if $rubrique->rubrique_id == $total.rubrique_id}
-      <td>{$total.value} €</td>
+      <td>{$total.value|string_format:"%.2f"} €</td>
+      {assign var="noTotal" value=0}
       {/if}
       {/foreach}
+      {if $noTotal}
+      <td>-</td>
+      {/if}
     {/foreach}
-    <th colspan="2" />
+    <th colspan="2">{$total.value} €</th>
 </table>
