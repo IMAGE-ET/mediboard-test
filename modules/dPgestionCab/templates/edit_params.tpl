@@ -1,7 +1,8 @@
 <table class="main">
   <tr>
     <td colspan="2">
-      <form name="userSelector" action="?m={$m}" method="get">
+      <form name="userSelector" action="index.php" method="get">
+      <input type="hidden" name="m" value="{$m}" />
       <select name="user_id" onchange="this.form.submit()">
       {foreach from=$listUsers item=curr_user}
         <option value="{$curr_user->user_id}" {if $curr_user->user_id == $user->user_id}selected="selected"{/if}>

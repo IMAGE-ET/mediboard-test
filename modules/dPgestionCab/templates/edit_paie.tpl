@@ -22,7 +22,8 @@ function pageMain() {
 <table class="main">
   <tr>
     <td colspan="2">
-      <form name="userSelector" action="?m={$m}" method="get">
+      <form name="userSelector" action="index.php" method="get">
+      <input type="hidden" name="m" value="{$m}" />
       <select name="user_id" onchange="this.form.submit()">
       {foreach from=$listUsers item=curr_user}
         <option value="{$curr_user->user_id}" {if $curr_user->user_id == $user->user_id}selected="selected"{/if}>
@@ -50,7 +51,7 @@ function pageMain() {
       <table class="form">
         {if $fichePaie->fiche_paie_id}
         <tr>
-          <th class="title" colspan="2">Modifier la {$fichePaie->_view}</th>
+          <th class="title" colspan="4" style="color: #f00;" colspan="2">Modifier la {$fichePaie->_view}</th>
         </tr>
         {else}
         <tr>

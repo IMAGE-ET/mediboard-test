@@ -35,7 +35,10 @@ if(!$fichePaie->fiche_paie_id) {
 
 $listeFiches = new CFichePaie();
 $where = array();
-$where["params_paie_id"] = "= $paramsPaie->params_paie_id";
+if($paramsPaie->params_paie_id)
+  $where["params_paie_id"] = "= $paramsPaie->params_paie_id";
+else
+  $where[] = "0 = 1";
 $order = "debut DESC";
 $listeFiches = $listeFiches->loadList($where, $order);
 
