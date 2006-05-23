@@ -44,8 +44,37 @@ $AppUI->setConfig( $dPconfig );
 
 require "./includes/db_connect.php";
 
-// Check permissions on dPcabinet. to be refactored with PEAR::Auth
+// Direct acces needs Administrator rights
+$file_path = mbGetValueFromGet("file_path");
+if ($file_path) {
+  $file_size = filesize($file_path);
+  $file_type = "text/xml";
+  $file_name = basename($file_path);
+  
+  if ($AppUI->user_type == 1) {
+    // BEGIN extra headers to resolve IE caching bug (JRP 9 Feb 2003)
+    // [http://bugs.php.net/bug.php?id=16173]
+    header("Pragma: ");
+    header("Cache-Control: ");
+    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+    header("Cache-Control: no-store, no-cache, must-revalidate");  //HTTP/1.1
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    // END extra headers to resolve IE caching bug
+  
+    header("MIME-Version: 1.0");
+    header( "Content-length: $file_size" );
+    header( "Content-type: $file_type" );
+    header( "Content-disposition: inline; filename=$file_name");
+    readfile($file_path);
+    return;
+  } else {
+    $AppUI->setMsg("Permissions administrateur obligatoire", UI_MSG_ERROR);
+    $AppUI->redirect();
+  }
+}
 
+// Check permissions on dPcabinet. to be refactored with PEAR::Auth
 include "./includes/permissions.php";
 $canRead = !getDenyRead( 'dPcabinet' );
 if (!$canRead) {

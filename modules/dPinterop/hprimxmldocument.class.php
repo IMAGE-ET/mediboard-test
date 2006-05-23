@@ -85,6 +85,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $timeStamp = $matches[1];
       $this->sentFiles[] = array (
         "name" => $baseName,
+        "path" => $sentFile,
         "datetime" => strftime("%Y-%m-%d %H:%M:%S", $timeStamp)
       );
     }

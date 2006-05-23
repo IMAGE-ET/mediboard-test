@@ -61,12 +61,10 @@ $ftp->username = dPgetParam($_POST, "username", $HPrimConfig["username"]);
 $ftp->userpass = dPgetParam($_POST, "userpass", $HPrimConfig["userpass"]);
 
 $ajax = mbGetValueFromGet("ajax");
+$sent_files = mbGetValueFromGet("sent_files");
 
-$doc->getSentFiles();
-
-//
 // Connexion FTP
-if (isset($_POST["hostname"]) or ($ajax and $doc_valid)) {
+if (isset($_POST["hostname"]) or ($ajax and $doc_valid and !$sent_files)) {
   // Compte le nombre de fichiers déjà générés
   mbForceDirectory($doc->finalpath);
   $count = 0;
@@ -89,6 +87,8 @@ if (isset($_POST["hostname"]) or ($ajax and $doc_valid)) {
     $ftp->logStep("Archivage du fichier envoyé sur le serveur Mediboard sous le nom $documentFinalBaseName");
   }
 }
+
+$doc->getSentFiles();
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );

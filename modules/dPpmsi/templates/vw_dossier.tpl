@@ -46,12 +46,33 @@ function imprimerDocument(doc_id) {
   url.popup(700, 600, "Compte-rendu");
 }
 
-function exporterDossier(operation_id) {
+function exporterDossier(operation_id, oOptions) {
+  oDefaultOptions = {
+  	onlySentFiles : false
+  };
+  
+  Object.extend(oDefaultOptions, oOptions);
+  
   var url = new Url();
   url.setModuleAction("dPinterop", "export_hprim");
   url.addParam("operation_id", operation_id);
-//  url.popup(800, 600, "Export H'XML vers Sa@nté.com");
-  url.requestUpdate("hprim_export" + operation_id, {waitingText: "Export H'XML vers Sa@nté.com"}); 
+  url.addParam("sent_files", oDefaultOptions.onlySentFiles ? 1 : 0);
+  
+  oRequestOptions = {
+    waitingText: oDefaultOptions.onlySentFiles ? 
+  	  "Chargement des fichers envoyés" : 
+  	  "Export H'XML vers Sa@nté.com"
+  }
+  
+  url.requestUpdate("hprim_export" + operation_id, oRequestOptions); 
+}
+
+function pageMain() {
+  {/literal}
+  {foreach from=$patient->_ref_operations item=curr_op}
+  exporterDossier({$curr_op->operation_id}, {ldelim}onlySentFiles : true{rdelim});
+  {/foreach}
+  {literal}
 }
 
 </script>

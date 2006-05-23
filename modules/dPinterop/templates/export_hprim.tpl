@@ -26,7 +26,6 @@ function choosePreselection(oSelect) {
 <h2>Génération d'un fichier H'XML evenementsServeurActes</h2>
 {/if}
 
-
 <table class="main">
 
 <tr>
@@ -44,18 +43,6 @@ function choosePreselection(oSelect) {
   {/if}
   <h3>
   
-  <h3>Fichiers précédemment envoyés pour cette opération</h3>
-  <ul>
-    {foreach from=$doc->sentFiles item=curr_file}
-    <li>
-      Fichier {$curr_file.name} 
-      envoyé le {$curr_file.datetime|date_format:"%A %d %B %Y à %H:%M:%S"}
-    </li>
-    {foreachelse}
-    Aucun fichier envoyé précédemment
-    {/foreach}
-  </ul>
-
   {if !$ajax}
   <h3>XML: Schema de validation</h3>
   <ul>
@@ -84,7 +71,20 @@ function choosePreselection(oSelect) {
   {/foreach}
   </ul>
   {/if}
+  
+  <h3>Tous les fichiers envoyés pour cette opération</h3>
+  <ul>
+    {foreach from=$doc->sentFiles item=curr_file}
+    <li>
+      Fichier <a href="mbfileviewer.php?file_path={$curr_file.path}">{$curr_file.name}</a>
+      envoyé le {$curr_file.datetime|date_format:"%A %d %B %Y à %H:%M:%S"}
+    </li>
+    {foreachelse}
+    Aucun fichier envoyé
+    {/foreach}
+  </ul>
 </td>
+
 </tr>
 <tr>
 
