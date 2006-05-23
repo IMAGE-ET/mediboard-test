@@ -93,6 +93,12 @@ class CSetupdPgestionCab {
     $sql = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` )
             VALUES ('', '0', 'Virement');";
     db_exec( $sql ); db_error();
+    $sql = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` )
+            VALUES ('', '0', 'Prélèvement');";
+    db_exec( $sql ); db_error();
+    $sql = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` )
+            VALUES ('', '0', 'TIP');";
+    db_exec( $sql ); db_error();
     $sql = "CREATE TABLE `params_paie` (
               `params_paie_id` BIGINT NOT NULL AUTO_INCREMENT ,
               `user_id` BIGINT NOT NULL ,
@@ -129,7 +135,10 @@ class CSetupdPgestionCab {
               `fin` DATE NOT NULL ,
               `salaire` FLOAT NOT NULL ,
               `heures` SMALLINT NOT NULL ,
+              `heures_sup` SMALLINT NOT NULL ,
               `mutuelle` FLOAT NOT NULL ,
+              `precarite` FLOAT NOT NULL ,
+              `anciennete` FLOAT NOT NULL ,
               PRIMARY KEY ( `fiche_paie_id` ) ,
               INDEX ( `params_paie_id` )
             ) COMMENT = 'Table des fiches de paie';";

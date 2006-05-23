@@ -97,11 +97,38 @@ function pageMain() {
         </tr>
         <tr>
           <th>
+            <label for="heures_sup" title="Nombre d'heures suplémentaires travaillées dans la période">Nombre d'heures suplémentaires :</label>
+          </th>
+          <td>
+            <input type="text" size="4" name="heures_sup" title="{$fichePaie->_props.heures_sup}" value="{$fichePaie->heures_sup}" />
+            h
+          </td>
+        </tr>
+        <tr>
+          <th>
             <label for="mutuelle" title="Valeur de la cotisation pour la mutuelle">Mutuelle :</label>
           </th>
           <td>
             <input type="text" name="mutuelle" size="4" title="{$fichePaie->_props.mutuelle}" value="{$fichePaie->mutuelle}" />
             €
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="precarite" title="Prime de précarité exprimée en pourcentage">Prime de précarité :</label>
+          </th>
+          <td>
+            <input type="text" size="4" name="precarite" title="{$fichePaie->_props.precarite}" value="{$fichePaie->precarite}" />
+            %
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="anciennete" title="Prime d'ancienneté exprimée en pourcentage">Prime d'ancienneté :</label>
+          </th>
+          <td>
+            <input type="text" size="4" name="anciennete" title="{$fichePaie->_props.anciennete}" value="{$fichePaie->anciennete}" />
+            %
           </td>
         </tr>
         <tr>

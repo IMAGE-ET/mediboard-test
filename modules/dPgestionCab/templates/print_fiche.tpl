@@ -129,11 +129,35 @@
   <tbody>
     <tr>
       <td colspan="2" height="17" align="right" bgcolor="#e63">
-        <font color="#fff">Prime de précarité 10%</font>
+        <font color="#fff">Heures suplémentaires</font>
+      </td>
+      <td align="right">
+        {$fichePaie->salaire*1.25|string_format:"%.2f"} €
+      </td>
+      <td align="right">
+        {$fichePaie->heures_sup}
+      </td>
+      <td align="right">{$fichePaie->_salaire_heures_sup|string_format:"%.2f"} €</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td colspan="2" height="17" align="right" bgcolor="#e63">
+        <font color="#fff">Prime de précarité {$fichePaie->precarite|string_format:"%.2f"}%</font>
       </td>
       <td align="left"></td>
       <td align="left"></td>
       <td align="right">{$fichePaie->_prime_precarite|string_format:"%.2f"} €</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td colspan="2" height="17" align="right" bgcolor="#e63">
+        <font color="#fff">Prime de précarité {$fichePaie->anciennete|string_format:"%.2f"}%</font>
+      </td>
+      <td align="left"></td>
+      <td align="left"></td>
+      <td align="right">{$fichePaie->_prime_anciennete|string_format:"%.2f"} €</td>
     </tr>
   </tbody>
   <tbody>

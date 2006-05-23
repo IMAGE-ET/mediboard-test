@@ -23,11 +23,16 @@ class CFichePaie extends CMbObject {
   var $fin            = null;
   var $salaire        = null;
   var $heures         = null;
+  var $heures_sup     = null;
   var $mutuelle       = null;
+  var $precarite      = null;
+  var $anciennete     = null;
   
   // Forms Fields
   var $_salaire_base = null;
+  var $_salaire_heures_sup = null;
   var $_prime_precarite = null;
+  var $_prime_anciennete = null;
   var $_conges_payes = null;
   var $_salaire_brut = null;
   var $_csgds   = null; // CSG déductible salariale
@@ -62,7 +67,10 @@ class CFichePaie extends CMbObject {
     $this->_props["fin"] = "date|notNull";
     $this->_props["salaire"] = "currency|notNull";
     $this->_props["heures"] = "num|notNull";
+    $this->_props["heures_sup"] = "num|notNull";
     $this->_props["mutuelle"] = "currency|notNull";
+    $this->_props["anciennete"] = "pct|notNull";
+    $this->_props["precarite"] = "pct|notNull";
 
     $this->buildEnums();
   }
@@ -76,9 +84,18 @@ class CFichePaie extends CMbObject {
       $this->_ref_params_paie->loadRefsFwd();
       $this->_salaire_base = $this->salaire * $this->heures;
       $this->_salaire_brut = $this->_salaire_base;
-      $this->_prime_precarite = 0.1 * $this->_salaire_base;
+      $this->_salaire_heures_sup = ($this->salaire * 1.25) * $this->heures_sup;
+      $this->_salaire_brut += $this->_salaire_heures_sup;
+      $this->_prime_precarite = ($this->precarite / 100) *
+                                ($this->_salaire_base + $this->_salaire_heures_sup);
       $this->_salaire_brut += $this->_prime_precarite;
-      $this->_conges_payes = 0.1 * ($this->_salaire_base + $this->_prime_precarite);
+      $this->_prime_anciennete = ($this->anciennete / 100) *
+                                 ($this->_salaire_base + $this->_salaire_heures_sup);
+      $this->_salaire_brut += $this->_prime_anciennete;
+      $this->_conges_payes = 0.1 * ($this->_salaire_base +
+                                    $this->_salaire_heures_sup +
+                                    $this->_prime_precarite +
+                                    $this->_prime_anciennete);
       $this->_salaire_brut += $this->_conges_payes;
       $this->_csgds   = $this->_salaire_brut * $this->_ref_params_paie->csgds / 100;
       $this->_total_retenues = $this->_csgds;
