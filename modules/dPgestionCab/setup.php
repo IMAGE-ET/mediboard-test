@@ -60,6 +60,7 @@ class CSetupdPgestionCab {
               `rubrique_id` INT DEFAULT '0' NOT NULL ,
               `montant` FLOAT DEFAULT '0' NOT NULL ,
               `mode_paiement_id` INT DEFAULT '0' NOT NULL ,
+              `num_facture` INT NOT NULL ,
               `rques` TEXT,
               PRIMARY KEY ( `gestioncab_id` ) ,
               INDEX ( `function_id` , `rubrique_id` , `mode_paiement_id` )

@@ -15,7 +15,7 @@
     <th rowspan="2">Date</th>
     <th rowspan="2">libelle</th>
     <th colspan="{$listRubriques|@count}">Rubriques</th>
-    <th rowspan="2">Mode de paiement</th>
+    <th rowspan="2">Mode</th>
     <th rowspan="2">Remarques</th>
   </tr>
   <tr>
@@ -26,7 +26,9 @@
   {foreach from=$listGestionCab item=fiche}
   <tr>
     <td>{$fiche->date|date_format:"%d/%m/%Y"}</td>
-    <td>{$fiche->libelle}</td>
+    <td class="text">
+      {$fiche->libelle} ({$fiche->num_facture})
+    </td>
     {foreach from=$listRubriques item=rubrique}
     <td>
       {if $rubrique->rubrique_id == $fiche->rubrique_id}
@@ -35,7 +37,7 @@
     </td>
     {/foreach}
     <td>{$fiche->_ref_mode_paiement->nom}</td>
-    <td>{$fiche->rques|nl2br}</td>
+    <td class="text">{$fiche->rques|nl2br}</td>
   </tr>
   {/foreach}
   <tr>

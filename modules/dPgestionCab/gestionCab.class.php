@@ -27,6 +27,7 @@ class CGestionCab extends CMbObject {
   var $rubrique_id = null;
   var $montant = null;
   var $mode_paiement_id = null;
+  var $num_facture = null;
   var $rques = null;
 
   // Object References
@@ -43,9 +44,15 @@ class CGestionCab extends CMbObject {
     $this->_props["rubrique_id"]      = "ref|notNull";
     $this->_props["montant"]          = "currency|notNull";
     $this->_props["mode_paiement_id"] = "ref|notNull";
+    $this->_props["num_facture"]      = "num|notNull";
     $this->_props["rques"]            = "text";
 
     $this->buildEnums();
+  }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = "Fiche '".$this->libelle."'";
   }
 
   // Forward references

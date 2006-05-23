@@ -84,9 +84,15 @@ function pageMain() {
             {/foreach}
             </select>
           </td>
-          <th><label for="rques" title="Remarques concernant la fiche">Remarques :</label></th>
-          <td>
+          <th rowspan="2"><label for="rques" title="Remarques concernant la fiche">Remarques :</label></th>
+          <td rowspan="2">
             <textarea name="rques" title="{$gestioncab->_props.rques}">{$gestioncab->rques}</textarea>
+          </td>
+        </tr>
+        <tr>
+          <th><label for="num_facture" title="Numero de la facture">Numero de facture :</label></th>
+          <td>
+            <input name="num_facture" size="5" value="{$gestioncab->num_facture}" title="{$gestioncab->_props.num_facture}" />
           </td>
         </tr>
         <tr>
