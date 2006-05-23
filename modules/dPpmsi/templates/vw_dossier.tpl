@@ -46,6 +46,14 @@ function imprimerDocument(doc_id) {
   url.popup(700, 600, "Compte-rendu");
 }
 
+function submitSHSLink() {
+  var oPatForm = document.editPatFrm;
+  //debugObject(oPatForm);
+  var oOpForm = document.editOpFrm;
+  //submitFormAjax(oPatForm, 'systemMsg');
+  submitFormAjax(oOpForm, 'systemMsg');
+}
+
 function exporterDossier(operation_id, oOptions) {
   oDefaultOptions = {
   	onlySentFiles : false
@@ -232,71 +240,78 @@ function pageMain() {
             {$curr_op->entree_bloc|date_format:"%Hh%M"}
           </td>
           <td rowspan="6">
-        <form name="editPatFrm" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
-        <input type="hidden" name="dosql" value="do_patients_aed" />
-        <input type="hidden" name="m" value="dPpatients" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="patient_id" value="{$curr_op->_ref_pat->patient_id}" />
-        <table class="form">
-          <tr>
-            <th class="category" colspan="2"><i>Lien S@nté.com</i> : Patient <input type="submit" value="Valider" /></th>
-          </tr>
-          <tr>
-            <th><label for="SHS" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label></th>
-            <td><input type="text" title="notNull|num|length|8" name="SHS" value="{$curr_op->_ref_pat->SHS}" size="8" maxlength="8" /></td>
-          </tr>
-        </table>
-        </form>
-        <form name="editOpFrm" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
-        <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="m" value="dPplanningOp" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
-        <table class="form">
-          <tr>
-            <th class="category" colspan="2"><i>Lien S@nté.com</i> : Intervention <input type="submit" value="Valider" /></th>
-          </tr>
-          <tr>
-            <th>
-              <label for="venue_SHS" title="Choisir un identifiant pour la venue correspondant à l'opération">Identifiant de venue :</label><br />
-              Suggestion :
-            </th>
-            <td>
-              <input type="text" title="notNull|num|length|8" name="venue_SHS" value="{$curr_op->venue_SHS}" size="8" maxlength="8" /><br />
-              {$curr_op->_venue_SHS_guess}
-            </td>
-          </tr>
-          <tr>
-            <th><label for="_cmca_uf_preselection" title="Choisir une pré-selection pour remplir les unités fonctionnelles">Pré-sélection</label></th>
-            <td>
-              <select name="_cmca_uf_preselection" onchange="choosePreselection(this)">
-                <option value="">&mdash; Choisir une pré-selection</option>
-                <option value="ABS|ABSENT">(ABS) Absent</option>
-                <option value="AEC|ARRONDI EURO">(AEC) Arrondi Euro</option>
-                <option value="AEH|ARRONDI EURO">(AEH) Arrondi Euro</option>
-                <option value="AMB|CHIRURGIE AMBULATOIRE">(AMB) Chirurgie Ambulatoire</option>
-                <option value="CHI|CHIRURGIE">(CHI) Chirurgie</option>
-                <option value="CHO|CHIRURGIE COUTEUSE">(CHO) Chirurgie Coûteuse</option>
-                <option value="EST|ESTHETIQUE">(EST) Esthétique</option>
-                <option value="EXL|EXL POUR RECUP V4 V5">(EXL) EXL pour récup. v4 v5</option>
-                <option value="EXT|EXTERNES">(EXT) Externes</option>
-                <option value="MED|MEDECINE">(MED) Médecine</option>
-                <option value="PNE|PNEUMOLOGUE">(PNE) Pneumologie</option>
-                <option value="TRF|TRANSFERT >48H">(TRF) Transfert > 48h</option>
-                <option value="TRI|TRANSFERT >48H">(TRI) Transfert > 48h</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <th><label for="code_uf" title="Choisir un code pour l'unité fonctionnelle">Code d'unité fonct. :</label></th>
-            <td><input type="text" title="notNull|str|maxLength|10" name="code_uf" value="{$curr_op->code_uf}" size="10" maxlength="10" /></td>
-          </tr>
-          <tr>
-            <th><label for="libelle_uf" title="Choisir un libellé pour l'unité fonctionnelle">Libellé d'unité fonct. :</label></th>
-            <td><input type="text" title="notNull|str|maxLength|35" name="libelle_uf" value="{$curr_op->libelle_uf}" size="20" maxlength="35" /></td>
-          </tr>
-        </table>
-        </form>
+            <form name="editPatFrm" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
+            <input type="hidden" name="dosql" value="do_patients_aed" />
+            <input type="hidden" name="m" value="dPpatients" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="patient_id" value="{$curr_op->_ref_pat->patient_id}" />
+            <table class="form">
+              <tr>
+                <th class="category" colspan="2"><i>Lien S@nté.com</i> : Patient <input type="submit" value="Valider" /></th>
+              </tr>
+              <tr>
+                <th><label for="SHS" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label></th>
+                <td><input type="text" title="notNull|num|length|8" name="SHS" value="{$curr_op->_ref_pat->SHS}" size="8" maxlength="8" /></td>
+              </tr>
+            </table>
+            </form>
+            <form name="editOpFrm" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
+            <input type="hidden" name="dosql" value="do_planning_aed" />
+            <input type="hidden" name="m" value="dPplanningOp" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
+            <table class="form">
+              <tr>
+                <th class="category" colspan="2"><i>Lien S@nté.com</i> : Intervention <input type="submit" value="Valider" /></th>
+              </tr>
+              <tr>
+                <th>
+                  <label for="venue_SHS" title="Choisir un identifiant pour la venue correspondant à l'opération">Identifiant de venue :</label><br />
+                  Suggestion :
+                </th>
+                <td>
+                  <input type="text" title="notNull|num|length|8" name="venue_SHS" value="{$curr_op->venue_SHS}" size="8" maxlength="8" /><br />
+                  {$curr_op->_venue_SHS_guess}
+                </td>
+              </tr>
+              <tr>
+                <th><label for="_cmca_uf_preselection" title="Choisir une pré-selection pour remplir les unités fonctionnelles">Pré-sélection</label></th>
+                <td>
+                  <select name="_cmca_uf_preselection" onchange="choosePreselection(this)">
+                    <option value="">&mdash; Choisir une pré-selection</option>
+                    <option value="ABS|ABSENT">(ABS) Absent</option>
+                    <option value="AEC|ARRONDI EURO">(AEC) Arrondi Euro</option>
+                    <option value="AEH|ARRONDI EURO">(AEH) Arrondi Euro</option>
+                    <option value="AMB|CHIRURGIE AMBULATOIRE">(AMB) Chirurgie Ambulatoire</option>
+                    <option value="CHI|CHIRURGIE">(CHI) Chirurgie</option>
+                    <option value="CHO|CHIRURGIE COUTEUSE">(CHO) Chirurgie Coûteuse</option>
+                    <option value="EST|ESTHETIQUE">(EST) Esthétique</option>
+                    <option value="EXL|EXL POUR RECUP V4 V5">(EXL) EXL pour récup. v4 v5</option>
+                    <option value="EXT|EXTERNES">(EXT) Externes</option>
+                    <option value="MED|MEDECINE">(MED) Médecine</option>
+                    <option value="PNE|PNEUMOLOGUE">(PNE) Pneumologie</option>
+                    <option value="TRF|TRANSFERT >48H">(TRF) Transfert > 48h</option>
+                    <option value="TRI|TRANSFERT >48H">(TRI) Transfert > 48h</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th><label for="code_uf" title="Choisir un code pour l'unité fonctionnelle">Code d'unité fonct. :</label></th>
+                <td><input type="text" title="notNull|str|maxLength|10" name="code_uf" value="{$curr_op->code_uf}" size="10" maxlength="10" /></td>
+              </tr>
+              <tr>
+                <th><label for="libelle_uf" title="Choisir un libellé pour l'unité fonctionnelle">Libellé d'unité fonct. :</label></th>
+                <td><input type="text" title="notNull|str|maxLength|35" name="libelle_uf" value="{$curr_op->libelle_uf}" size="20" maxlength="35" /></td>
+              </tr>
+            </table>
+            </form>
+            <table class="form">
+              <tr>
+                <td class="button">
+                  <button type="button" onclick="submitSHSLink()" >Valider</button>
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
         <tr class="op{$curr_op->operation_id}">
