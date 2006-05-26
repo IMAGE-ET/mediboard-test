@@ -153,7 +153,7 @@
   <tbody>
     <tr>
       <td colspan="2" height="17" align="right" bgcolor="#e63">
-        <font color="#fff">Prime de précarité {$fichePaie->anciennete|string_format:"%.2f"}%</font>
+        <font color="#fff">Prime d'ancienneté {$fichePaie->anciennete|string_format:"%.2f"}%</font>
       </td>
       <td align="left"></td>
       <td align="left"></td>
