@@ -120,20 +120,13 @@ require_once( "./includes/permissions.php" );
 $m = $AppUI->checkFileName(dPgetParam( $_GET, 'm', getReadableModule() ));
 $a = $AppUI->checkFileName(dPgetParam( $_GET, 'a', 'index' ));
 $u = $AppUI->checkFileName(dPgetParam( $_GET, 'u', '' ));
+$dosql = $AppUI->checkFileName(dPgetParam( $_GET, 'dosql', '' ));
 
 // load module based locale settings
 @include_once( "./locales/$AppUI->user_locale/locales.php" );
 @include_once( "./locales/core.php" );
 
 $user_locale = $AppUI->user_locale;
-if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-    // This is a server using Windows, locales screwed up, not ISO standard 
-    switch ($user_locale) {
-    	case "es":
-    		$user_locale = "sp";
-    		break;
-    }
-} 	
 
 setlocale( LC_TIME, $user_locale );
 
@@ -164,8 +157,7 @@ if (!$suppressHeaders || $ajax) {
 // do some db work if dosql is set
 if (isset( $_REQUEST["dosql"]) ) {
     $mDo = isset( $_REQUEST["m"]) ? $_REQUEST["m"] : $m;
-    //require("./dosql/" . $_REQUEST["dosql"] . ".php");
-    require ("./modules/$mDo/" . $AppUI->checkFileName($_REQUEST["dosql"]) . ".php");
+    require ("./modules/$mDo/$dosql.php");
 }
 
 // start output proper
@@ -184,5 +176,8 @@ $phpChrono->stop();
 if(!$suppressHeaders) {
  require "./style/$uistyle/footer.php";
 }
+
 ob_end_flush();
+
+require "./includes/access_log.php";
 ?>

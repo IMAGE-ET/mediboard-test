@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'system';
-$config['mod_version'] = '1.0.0';
+$config['mod_version'] = '1.0.1';
 $config['mod_directory'] = 'system';
 $config['mod_setup_class'] = 'CSetupSystem';
 $config['mod_type'] = 'core';
@@ -38,6 +38,33 @@ class CSetupSystem {
   function upgrade( $old_version ) {
     switch ( $old_version ) {
       case "all":
+      case "1.0.0":
+        $sql = "CREATE TABLE `access_log` (" .
+            "\n`accesslog_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ," .
+            "\n`module` VARCHAR( 40 ) NOT NULL ," .
+            "\n`action` VARCHAR( 40 ) NOT NULL ," .
+            "\n`period` DATETIME NOT NULL ," .
+            "\n`hits` TINYINT DEFAULT '0' NOT NULL ," .
+            "\n`duration` DOUBLE NOT NULL," .
+            "\nPRIMARY KEY ( `accesslog_id` ))";
+         db_exec($sql); db_error();
+
+         $sql = "ALTER TABLE `access_log` " .
+            "\nADD UNIQUE `triplet` (`module` , `action` , `period`)";
+         db_exec($sql); db_error();
+
+         $sql = "ALTER TABLE `access_log` " .
+            "\nADD INDEX ( `module` )";
+         db_exec($sql); db_error();
+         
+         $sql = "ALTER TABLE `access_log` " .
+            "\nADD INDEX ( `action` )";
+         db_exec($sql); db_error();
+
+         $sql = "ALTER TABLE `access_log` " .
+            "\nADD INDEX ( `action` )";
+         db_exec($sql); db_error();
+
       case "1.0.0":
         return true;
     }

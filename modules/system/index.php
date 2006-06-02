@@ -29,10 +29,10 @@ $titleBlock = new CTitleBlock( 'System Administration', '48_my_computer.png', $m
 $titleBlock->show();
 
 $tabBox = new CTabBox("?m=$m", "{$AppUI->cfg['root_dir']}/modules/$m/", $tab);
-$tabBox->add('view_dpadmin', 'Configuration générale');
-$tabBox->add('view_history', 'Historique');
-$tabBox->add('view_messages', 'Messagerie');
-$tabBox->add('view_logs', 'Logs système');
-
+$tabBox->add("view_dpadmin", "Configuration générale");
+$tabBox->add("view_history", "Historique");
+$tabBox->add("view_messages", "Messagerie");
+$tabBox->add("view_logs", "Logs système");
+$tabBox->add("view_access_logs", "Logs d'accès");
 $tabBox->show();
 ?>
