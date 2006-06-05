@@ -42,7 +42,7 @@ $listModesPaiement = new CModePaiement;
 $listModesPaiement = $listModesPaiement->loadList($where);
 
 $listGestionCab    = new CGestionCab();
-$where["date"]     = ">= '$date'";
+$where["date"]     = "BETWEEN '$date' AND '$datefin'";
 if($libelle)
   $where["libelle"] = "LIKE '%$libelle%'";
 if($rubrique_id)

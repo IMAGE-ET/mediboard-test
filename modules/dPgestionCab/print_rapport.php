@@ -47,7 +47,7 @@ foreach($listGestionCab as $key => $fiche) {
   $listGestionCab[$key]->loadRefsFwd();
 }
 
-$sql = "SELECT rubrique_id, FORMAT(SUM(montant), 2) AS value" .
+$sql = "SELECT rubrique_id, SUM(montant) AS value" .
     "\nFROM `gestioncab`" .
     "\nWHERE date BETWEEN '$date' AND '$datefin'" .
     "\nAND function_id = '$user->function_id'";
@@ -60,7 +60,7 @@ if($mode_paiement_id)
 $sql .= "\nGROUP BY rubrique_id";
 $totaux = db_loadList($sql);
 
-$sql = "SELECT FORMAT(SUM(montant), 2) AS value, 0 as invar" .
+$sql = "SELECT SUM(montant) AS value, 0 as invar" .
     "\nFROM `gestioncab`" .
     "\nWHERE date BETWEEN '$date' AND '$datefin'" .
     "\nAND function_id = '$user->function_id'";

@@ -44,9 +44,9 @@
     <th colspan="2">Totaux</th>
     {foreach from=$listRubriques item=rubrique}
     {assign var="noTotal" value=1}
-      {foreach from=$totaux item=total}
-      {if $rubrique->rubrique_id == $total.rubrique_id}
-      <td>{$total.value|string_format:"%.2f"} €</td>
+      {foreach from=$totaux item=curr_total}
+      {if $rubrique->rubrique_id == $curr_total.rubrique_id}
+      <td>{$curr_total.value|string_format:"%.2f"} €</td>
       {assign var="noTotal" value=0}
       {/if}
       {/foreach}
@@ -54,5 +54,5 @@
       <td>-</td>
       {/if}
     {/foreach}
-    <th colspan="2">{$total.value} €</th>
+    <th colspan="2">{$total|string_format:"%.2f"} €</th>
 </table>
