@@ -117,10 +117,10 @@ require_once( "./includes/permissions.php" );
 
 
 // set the module and action from the url
-$m = $AppUI->checkFileName(dPgetParam( $_GET, 'm', getReadableModule() ));
-$a = $AppUI->checkFileName(dPgetParam( $_GET, 'a', 'index' ));
-$u = $AppUI->checkFileName(dPgetParam( $_GET, 'u', '' ));
-$dosql = $AppUI->checkFileName(dPgetParam( $_GET, 'dosql', '' ));
+$m     = $AppUI->checkFileName(mbGetValueFromGet( 'm', getReadableModule() ));
+$a     = $AppUI->checkFileName(mbGetValueFromGet( 'a', 'index' ));
+$u     = $AppUI->checkFileName(mbGetValueFromGet( 'u', '' ));
+$dosql = $AppUI->checkFileName(mbGetValueFromPost( 'dosql', '' ));
 
 // load module based locale settings
 @include_once( "./locales/$AppUI->user_locale/locales.php" );
