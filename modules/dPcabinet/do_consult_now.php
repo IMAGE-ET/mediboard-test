@@ -47,6 +47,7 @@ $consult = new CConsultation;
 $consult->plageconsult_id = $plage->plageconsult_id;
 $consult->patient_id = $_POST["patient_id"];
 $consult->heure = $hour_now;
+$consult->arrivee = $hour_now;
 $consult->duree = 1;
 $consult->chrono = CC_PATIENT_ARRIVE;
 $consult->motif = "Consultation immédiate";
