@@ -25,21 +25,22 @@ class COperation extends CMbObject {
   var $operation_id = null;
 
   // DB References
-  var $pat_id = null;
+  var $sejour_id = null;
+  var $pat_id = null; // sejour->patient_id
   var $chir_id = null;
   var $plageop_id = null;
 
   // DB Fields to be removed
-  var $CCAM_code = null;
-  var $CCAM_code2 = null;
-  var $compte_rendu = null;
-  var $cr_valide = null;
+//  var $CCAM_code = null;
+//  var $CCAM_code2 = null;
+//  var $compte_rendu = null;
+//  var $cr_valide = null;
 
   // DB Fields venue
-  var $date_adm = null;
-  var $time_adm = null;
-  var $entree_adm = null;
-  var $admis = null;
+  var $date_adm = null; // à virer
+  var $time_adm = null; // à virer
+  var $entree_adm = null; // sejour->entree_prevue
+  var $admis = null; // sejour->entree_reelle
   var $chambre = null;
   
   // DB Fields S@nté.com communication
@@ -126,8 +127,8 @@ class COperation extends CMbObject {
     $this->_props["pat_id"] = "ref";
     $this->_props["chir_id"] = "ref|notNull";
     $this->_props["plageop_id"] = "ref";
-    $this->_props["CCAM_code"] = "code|ccam";
-    $this->_props["CCAM_code2"] = "code|ccam";
+//    $this->_props["CCAM_code"] = "code|ccam";
+//    $this->_props["CCAM_code2"] = "code|ccam";
     $this->_props["CIM10_code"] = "code|cim10";
     $this->_props["libelle"] = "str|confidential";
     $this->_props["cote"] = "enum|droit|gauche|bilatéral|total";
