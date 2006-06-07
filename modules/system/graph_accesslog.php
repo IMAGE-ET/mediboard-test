@@ -106,19 +106,19 @@ $bplot->setLegend("Hits");
 $lplot = new LinePlot($duration);
 $lplot->SetColor("#008800");
 $lplot->SetWeight(1);
-$lplot->value->SetFormat("%01.2f");
-$lplot->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$lplot->value->SetMargin(10);
-$lplot->setLegend("Durée myenne page");
+//$lplot->value->SetFormat("%01.2f");
+//$lplot->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
+//$lplot->value->SetMargin(10);
+$lplot->setLegend("Durée page");
 
 // Create the line database duration plot
 $lplot2 = new LinePlot($request);
 $lplot2->SetColor("#880000");
 $lplot2->SetWeight(1);
-$lplot2->value->SetFormat("%01.2f");
-$lplot2->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$lplot2->value->SetMargin(10);
-$lplot2->setLegend("Durée moyenne db");
+//$lplot2->value->SetFormat("%01.2f");
+//$lplot2->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
+//$lplot2->value->SetMargin(10);
+$lplot2->setLegend("Durée db");
 
 // Add the graphs
 $graph->Add($lplot);
