@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPplanningOp';
-$config['mod_version'] = '0.36';
+$config['mod_version'] = '0.37';
 $config['mod_directory'] = 'dPplanningOp';
 $config['mod_setup_class'] = 'CSetupdPplanningOp';
 $config['mod_type'] = 'user';
@@ -168,28 +168,28 @@ class CSetupdPplanningOp {
       
       case "0.32":
         $sql = "ALTER TABLE `operations`" .
-          "ADD `venue_SHS` VARCHAR( 8 ) AFTER `chambre`;";
+          "\nADD `venue_SHS` VARCHAR( 8 ) AFTER `chambre`;";
         db_exec( $sql ); db_error();
         $sql = "ALTER TABLE `operations` ADD INDEX ( `venue_SHS` );";
         db_exec( $sql ); db_error();
       
       case "0.33":
         $sql = "ALTER TABLE `operations`" .
-          "ADD `code_uf` VARCHAR( 3 ) AFTER `venue_SHS`;";
+          "\nADD `code_uf` VARCHAR( 3 ) AFTER `venue_SHS`;";
         db_exec( $sql ); db_error();
         $sql = "ALTER TABLE `operations`" .
-          "ADD `libelle_uf` VARCHAR( 40 ) AFTER `code_uf`;";
+          "\nADD `libelle_uf` VARCHAR( 40 ) AFTER `code_uf`;";
         db_exec( $sql ); db_error();
     
       case "0.34":
-        $sql = "ALTER TABLE `operations`
-          ADD `entree_reveil` TIME AFTER `sortie_bloc` ,
-          ADD `sortie_reveil` TIME AFTER `entree_reveil` ;";
+        $sql = "ALTER TABLE `operations`" .
+            "\nADD `entree_reveil` TIME AFTER `sortie_bloc` ," .
+            "\nADD `sortie_reveil` TIME AFTER `entree_reveil` ;";
         db_exec($sql); db_error();
         
       case "0.35":
-        $sql = "ALTER TABLE `operations`
-          ADD `entree_adm` DATETIME AFTER `admis`;";
+        $sql = "ALTER TABLE `operations`" .
+            "\nADD `entree_adm` DATETIME AFTER `admis`;";
         db_exec($sql); db_error();
         
         $sql = "UPDATE `operations` SET" .
@@ -198,6 +198,90 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
     
       case "0.36":
+        // Réparation des opérations avec `duree_hospi` = '255'
+        $sql = "UPDATE `operations`, `plagesop` SET" .
+            "\n`operations`.`date_adm` = `plagesop`.`date`," .
+            "\n`operations`.`duree_hospi` = '1'" .
+            "\nWHERE `operations`.`duree_hospi` = '255'" .
+            "\nAND `operations`.`plageop_id` = `plagesop`.`id`";
+        db_exec($sql); db_error();
+      
+        // Création de la table
+        $sql = "CREATE TABLE `sejour` (" .
+            "\n`sejour_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ," .
+            "\n`patient_id` INT UNSIGNED NOT NULL ," .
+            "\n`praticien_id` INT UNSIGNED NOT NULL ," .
+            "\n`entree_prevue` DATETIME NOT NULL ," .
+            "\n`sortie_prevue` DATETIME NOT NULL ," .
+            "\n`entree_reelle` DATETIME," .
+            "\n`sortie_reelle` DATETIME," .
+            "\n`chambre_seule` ENUM('o','n') NOT NULL DEFAULT 'o'," .
+            "\nPRIMARY KEY ( `sejour_id` ))";
+        db_exec($sql); db_error();
+        
+        $sql = "ALTER TABLE `sejour` ADD INDEX ( `patient_id` )";
+        db_exec($sql); db_error();
+              
+        $sql = "ALTER TABLE `sejour` ADD INDEX ( `praticien_id` )";
+        db_exec($sql); db_error();
+              
+        $sql = "ALTER TABLE `sejour` ADD INDEX ( `entree_prevue` )";
+        db_exec($sql); db_error();
+              
+        $sql = "ALTER TABLE `sejour` ADD INDEX ( `sortie_prevue` )";
+        db_exec($sql); db_error();
+              
+        $sql = "ALTER TABLE `sejour` ADD INDEX ( `entree_reelle` )";
+        db_exec($sql); db_error();
+              
+        $sql = "ALTER TABLE `sejour` ADD INDEX ( `sortie_reelle` )";
+        db_exec($sql); db_error();
+        
+        // Migration de l'ancienne table
+        $sql = "ALTER TABLE `sejour`" .
+            "\nADD `tmp_operation_id` INT UNSIGNED NOT NULL AFTER `sejour_id`";
+        db_exec($sql); db_error();
+        
+        $sql = "INSERT INTO `sejour` ( " .
+            "\n  `sejour_id` , " .
+            "\n  `tmp_operation_id` , " .
+            "\n  `patient_id` , " .
+            "\n  `praticien_id` , " .
+            "\n  `entree_prevue` , " .
+            "\n  `sortie_prevue` , " .
+            "\n  `entree_reelle` , " .
+            "\n  `sortie_reelle` , " .
+            "\n  `chambre_seule` ) " .
+            "\nSELECT " .
+            "\n  '', " .
+            "\n  `operation_id`, " .
+            "\n  `pat_id`, " .
+            "\n  `chir_id`, " .
+            "\n  ADDTIME(`date_adm`, `time_adm`), " .
+            "\n  ADDDATE(ADDTIME(`date_adm`, `time_adm`), `duree_hospi`), " .
+            "\n  `entree_adm` , " .
+            "\n  NULL , " .
+            "\n `chambre` " .
+            "\nFROM `operations`";
+        db_exec($sql); db_error();
+
+        // Ajout d'une référence vers les sejour
+        $sql = "ALTER TABLE `operations` " .
+            "\nADD `sejour_id` INT UNSIGNED NOT NULL AFTER `operation_id`";
+        db_exec($sql); db_error();
+
+        $sql = "ALTER TABLE `operations` ADD INDEX ( `sejour_id` )";
+        db_exec($sql); db_error();
+
+        $sql = "UPDATE `operations`, `sejour` " .
+            "\nSET `operations`.`sejour_id` = `sejour`.`sejour_id`" .
+            "\nWHERE `sejour`.`tmp_operation_id` = `operations`.`operation_id`";
+        db_exec($sql); db_error();
+
+        $sql = "ALTER TABLE `sejour` DROP `tmp_operation_id` ";
+        db_exec($sql); db_error();
+        
+      case "0.37":
         return true;
       }
     

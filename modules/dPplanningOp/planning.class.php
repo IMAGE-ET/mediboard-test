@@ -37,11 +37,13 @@ class COperation extends CMbObject {
 //  var $cr_valide = null;
 
   // DB Fields venue
-  var $date_adm = null; // à virer
-  var $time_adm = null; // à virer
-  var $entree_adm = null; // sejour->entree_prevue
-  var $admis = null; // sejour->entree_reelle
-  var $chambre = null;
+  var $date_adm = null; // remplacé par $sejour->entree_prevue
+  var $time_adm = null; // remplacé par $sejour->entree_prevue
+  var $entree_adm = null; // remplacé par  $sejour->entree_réelle
+  var $admis = null; // remplacé par $sejour->entree_reelle
+  var $chambre = null; // remplacée par $sejour->chambre_seule
+  var $_entree_adm = null; // remplacé par $sejour->entree_prevue
+  var $_sortie_adm = null; // remplacé par $sejour->sortie_prevue
   
   // DB Fields S@nté.com communication
   var $venue_SHS = null;
@@ -94,8 +96,6 @@ class COperation extends CMbObject {
   var $_lu_type_anesth = null;
   var $_hour_adm = null;
   var $_min_adm = null;
-  var $_entree_adm = null;
-  var $_sortie_adm = null;
   var $_codes_ccam = array();
   var $_venue_SHS_guess = null;
   
