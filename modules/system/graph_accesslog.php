@@ -55,8 +55,8 @@ foreach($datax as $x) {
 }
 
 // Setup the graph.
-$graph = new Graph(400,150,"auto");    
-$graph->img->SetMargin(25,25,55,25);
+$graph = new Graph(500,150,"auto");    
+$graph->img->SetMargin(25,120,25,25);
 $graph->SetScale("textlin");
 $graph->SetMarginColor("lightblue");
 
@@ -90,7 +90,7 @@ $graph->xaxis->SetLabelAngle(50);
 // Legend
 //$graph->legend->SetMarkAbsSize(5);
 $graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$graph->legend->Pos(0.02,0.02, "right", "top");
+$graph->legend->Pos(0.02,0.5, "right", "center");
 
 // Create the bar hits pot
 $listPlots = array();
@@ -126,4 +126,7 @@ $graph->Add($lplot2);
 $graph->AddY2($bplot);
 
 // Finally send the graph to the browser
+$oldCfg = $dPconfig['debug'];
+$dPconfig['debug'] = '0';
 $graph->Stroke();
+$dPconfig['debug'] = $oldCfg;
