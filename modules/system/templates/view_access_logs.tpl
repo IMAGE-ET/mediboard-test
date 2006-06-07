@@ -31,6 +31,7 @@ function pageMain() {
       <th>Action</th>
       <th>Hits</th>
       <th>Duration</th>
+      <th>Std DB requests</th>
     </tr>
     
     {foreach from=$logs item=log}
@@ -39,7 +40,8 @@ function pageMain() {
       <td>{$log->module}</td>
       <td>{$log->action}</td>
       <td>{$log->hits}</td>
-      <td>{$log->_average|string_format:"%.3f"} secondes</td>
+      <td>{$log->_average_duration|string_format:"%.3f"} secondes</td>
+      <td>{$log->_average_request|string_format:"%.3f"} secondes</td>
     </tr>
     {/foreach}
     

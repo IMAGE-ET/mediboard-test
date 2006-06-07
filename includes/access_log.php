@@ -9,7 +9,8 @@
 
 global $AppUI;
 
-require_once($AppUI->getSystemClass("accesslog"));
+//require_once($AppUI->getSystemClass("accesslog"));
+require_once($AppUI->getModuleClass("system", "accesslog"));
 
 $module = $m;
 $action = mbGetValue($tab, $a, $dosql);
@@ -28,9 +29,11 @@ if (!$log->accesslog_id) {
   $log->period = $period;
   $log->hits = 0;
   $log->duration = 0.0;
+  $log->request = 0.0;
 }
 
 $log->hits++;
 $log->duration += $phpChrono->total;
+$log->request += $dbChronos["std"]->total;
 $log->store();
 ?>

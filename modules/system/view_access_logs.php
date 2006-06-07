@@ -9,7 +9,8 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getSystemClass("accesslog"));
+//require_once($AppUI->getSystemClass("accesslog"));
+require_once($AppUI->getModuleClass("system", "accesslog"));
 
 $date = mbGetValueFromGet("date", mbDate());
 $next = mbDate("+ 1 day", $date);

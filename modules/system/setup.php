@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'system';
-$config['mod_version'] = '1.0.1';
+$config['mod_version'] = '1.0.2';
 $config['mod_directory'] = 'system';
 $config['mod_setup_class'] = 'CSetupSystem';
 $config['mod_type'] = 'core';
@@ -65,7 +65,12 @@ class CSetupSystem {
             "\nADD INDEX ( `action` )";
          db_exec($sql); db_error();
 
-      case "1.0.0":
+      case "1.0.1":
+         $sql = "ALTER TABLE `access_log` CHANGE `hits` `hits` INT UNSIGNED DEFAULT '0' NOT NULL ";
+         db_exec($sql); db_error();
+         $sql = "ALTER TABLE `access_log` ADD `request` DOUBLE NOT NULL ;";
+         db_exec($sql); db_error();
+      case "1.0.2":
         return true;
     }
 
