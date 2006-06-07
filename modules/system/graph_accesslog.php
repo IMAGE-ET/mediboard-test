@@ -55,20 +55,17 @@ foreach($datax as $x) {
 }
 
 // Setup the graph.
-$graph = new Graph(500,150,"auto");    
-$graph->img->SetMargin(25,120,25,25);
+$graph = new Graph(450,125,"auto");    
+$graph->img->SetMargin(25,120,20,25);
 $graph->SetScale("textlin");
 $graph->SetMarginColor("lightblue");
 
 // Set up the title for the graph
-$title = "Analyse par heures";
-$subtitle = "$module - $action";
+$title = "Analyse par heures $module - $action";
 $graph->title->Set($title);
-$graph->subtitle->Set($subtitle);
-$graph->title->SetFont(FF_ARIAL,FS_NORMAL,9);
-$graph->title->SetColor("darkred");
+$graph->title->SetFont(FF_ARIAL,FS_NORMAL,7);
+$graph->title->SetColor("black");
 $graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,7);
-$graph->subtitle->SetColor("black");
 $graph->img->SetAntiAliasing();
 $graph->SetScale("textint");
 $graph->SetY2Scale("lin");
@@ -90,7 +87,7 @@ $graph->xaxis->SetLabelAngle(50);
 // Legend
 //$graph->legend->SetMarkAbsSize(5);
 $graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$graph->legend->Pos(0.02,0.5, "right", "center");
+$graph->legend->Pos(0.02,0.7, "right", "center");
 
 // Create the bar hits pot
 $listPlots = array();
