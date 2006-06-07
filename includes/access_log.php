@@ -13,7 +13,7 @@ global $AppUI;
 require_once($AppUI->getModuleClass("system", "accesslog"));
 
 $module = $m;
-$action = mbGetValue($tab, $a, $dosql);
+$action = mbGetValue(@$tab, $a, $dosql);
 $period = mbTranformTime(null, null, "%Y-%m-%d %H:00:00");
 
 $where = array();
