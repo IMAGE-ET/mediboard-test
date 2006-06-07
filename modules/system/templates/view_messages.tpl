@@ -56,8 +56,8 @@ function pageMain() {
       {assign var="href" value="?m=$m&amp;tab=$tab&amp;message_id=$message_id"}
       <td><a href="{$href}">{$curr_message->deb|date_format:"%d/%m/%Y %H:%M"}</a></td>
       <td><a href="{$href}">{$curr_message->fin|date_format:"%d/%m/%Y %H:%M"}</a></td>
-      <td><a href="{$href}">{$curr_message->titre}</a></td>
-      <td>{$curr_message->corps|nl2br}</td>
+      <td class="text"><a href="{$href}">{$curr_message->titre}</a></td>
+      <td class="text">{$curr_message->corps|nl2br}</td>
     </tr>
     {/foreach}
       
