@@ -83,7 +83,6 @@ if ($selConsult) {
   $patient->loadStaticCIM10($userSel->user_id);
   foreach ($patient->_ref_consultations as $key => $value) {
     $patient->_ref_consultations[$key]->loadRefsFwd();
-    $patient->_ref_consultations[$key]->_ref_plageconsult->loadRefsFwd();
   }
   foreach ($patient->_ref_operations as $key => $value) {
     $patient->_ref_operations[$key]->loadRefsFwd();
