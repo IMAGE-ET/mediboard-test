@@ -82,22 +82,20 @@ if ($selConsult) {
   $patient->loadRefs();
   $patient->loadStaticCIM10($userSel->user_id);
   foreach ($patient->_ref_consultations as $key => $value) {
-    $patient->_ref_consultations[$key]->loadRefs();
-    $patient->_ref_consultations[$key]->_ref_plageconsult->loadRefs();
+    $patient->_ref_consultations[$key]->loadRefsFwd();
+    $patient->_ref_consultations[$key]->_ref_plageconsult->loadRefsFwd();
   }
   foreach ($patient->_ref_operations as $key => $value) {
-    $patient->_ref_operations[$key]->loadRefs();
+    $patient->_ref_operations[$key]->loadRefsFwd();
   }
   foreach ($patient->_ref_hospitalisations as $key => $value) {
-    $patient->_ref_hospitalisations[$key]->loadRefs();
+    $patient->_ref_hospitalisations[$key]->loadRefsFwd();
   }
   
   // Affecter la date de la consultation
   $date = $consult->_ref_plageconsult->date;
   
 }
-
-//mbTrace($consult->_aides, "Aides");
 
 // Récupération des modèles
 $whereCommon = array();
