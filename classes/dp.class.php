@@ -141,7 +141,7 @@ class CDpObject {
  */
   function loadObject($where = null, $order = null, $group = null, $leftjoin = null) {
     $list =& $this->loadList($where, $order, "0,1", $group, $leftjoin);
-    foreach ($list as $key => $object) {
+    foreach ($list as $object) {
       foreach(get_object_vars($object) as $key => $value) {
         $this->$key = $value;
       }

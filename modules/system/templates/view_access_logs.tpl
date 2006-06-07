@@ -26,22 +26,23 @@ function pageMain() {
     <table class="tbl">
     
     <tr>
-      <th>Période</th>
-      <th>Module</th>
-      <th>Action</th>
-      <th>Hits</th>
-      <th>Duration</th>
-      <th>Std DB requests</th>
+      <th>Informations</th>
+      <th>Graphique de la journée</th>
     </tr>
     
     {foreach from=$logs item=log}
     <tr>
-      <td>{$log->period}</td>
-      <td>{$log->module}</td>
-      <td>{$log->action}</td>
-      <td>{$log->hits}</td>
-      <td>{$log->_average_duration|string_format:"%.3f"} secondes</td>
-      <td>{$log->_average_request|string_format:"%.3f"} secondes</td>
+      <td>
+        <ul>
+          <li><strong>Module :</strong> {$log->module}</li>
+          <li><strong>Action :</strong> {$log->action}</li>
+          <li><strong>Hits :</strong> {$log->hits}</li>
+          <li><strong>Page :</strong> {$log->_average_duration|string_format:"%.3f"} secondes</li>
+          <li><strong>DB :</strong> {$log->_average_request|string_format:"%.3f"} secondes</li>
+        </ul>
+      <td class="button">
+        <img src="index.php?m=system&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={$date}&amp;module={$log->module}&amp;action={$log->action}" alt="Graphique pour {$log->module} - {$log->action}" />
+      </td>
     </tr>
     {/foreach}
     

@@ -34,6 +34,17 @@ class CAccessLog extends CMbObject {
       $this->_average_request = $this->request / $this->hits;
     }
   }
+  
+  function loadAgregation($start, $end) {
+    $sql = "SELECT accesslog_id, module, action," .
+        "\nSUM(hits) AS hits, SUM(duration) AS duration, SUM(request) AS request" .
+        "\nFROM access_log" .
+        "\nWHERE period BETWEEN '$start' AND '$end'" .
+        "\nGROUP BY module, action" .
+        "\nORDER BY module, action";
+    $list = db_loadObjectList($sql, $this);
+    return $list;
+  }
 }
 
 

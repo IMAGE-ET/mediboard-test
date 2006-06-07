@@ -16,10 +16,7 @@ $date = mbGetValueFromGet("date", mbDate());
 $next = mbDate("+ 1 day", $date);
 
 $logs = new CAccessLog;
-$where = array();
-$where["period"] = "BETWEEN '$date' AND '$next'";
-
-$logs = $logs->loadList($where);
+$logs = $logs->loadAgregation($date, $next);
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
