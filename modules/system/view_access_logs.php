@@ -12,16 +12,18 @@ global $AppUI, $canRead, $canEdit, $m;
 //require_once($AppUI->getSystemClass("accesslog"));
 require_once($AppUI->getModuleClass("system", "accesslog"));
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
-$next = mbDate("+ 1 day", $date);
+$date     = mbGetValueFromGetOrSession("date", mbDate());
+$groupmod = mbGetValueFromGetOrSession("groupmod", 0);
+$next     = mbDate("+ 1 day", $date);
 
 $logs = new CAccessLog;
-$logs = $logs->loadAgregation($date, $next);
+$logs = $logs->loadAgregation($date, $next, $groupmod);
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP;
 $smarty->assign("logs", $logs);
 $smarty->assign("date", $date);
+$smarty->assign("groupmod", $groupmod);
 $smarty->display("view_access_logs.tpl");
 ?>

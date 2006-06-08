@@ -28,12 +28,18 @@ for($i = 0; $i <= 23; $i++) {
 }
 
 $logs = new CAccessLog();
-$where["period"] = "BETWEEN '$date' AND '$next'";
-$where["module"] = "= '$module'";
-$where["action"] = "= '$action'";
-$order = "period";
 
-$logs = $logs->loadList($where, $order);
+$sql = "SELECT accesslog_id, module, action," .
+      "\nSUM(hits) AS hits, SUM(duration) AS duration, SUM(request) AS request" .
+      "\nFROM access_log" .
+      "\nWHERE period BETWEEN '$date' AND '$next'" .
+      "\nAND module = '$module'";
+if($action)
+  $sql .= "\nAND action = '$action'";
+$sql .= "\nGROUP BY period" .
+    "\nORDER BY period";
+
+$logs = db_loadObjectList($sql, $logs);
 
 $nbHits = array();
 $duration = array();
@@ -63,7 +69,8 @@ $graph->SetY2Scale("int");
 $graph->SetMarginColor("lightblue");
 
 // Set up the title for the graph
-$title = mbTranformTime(null, $date, "%A %d %b %Y")." :  $module - $action";
+$title = mbTranformTime(null, $date, "%A %d %b %Y")." :  $module";
+if($action) $title .= "- $action";
 $graph->title->Set($title);
 $graph->title->SetFont(FF_ARIAL,FS_NORMAL,7+$size);
 $graph->title->SetColor("darkred");
@@ -77,7 +84,7 @@ $graph->y2axis->SetFont(FF_ARIAL,FS_NORMAL,6+$size);
 
 // Show 0 label on Y-axis (default is not to show)
 $graph->yscale->ticks->SupressZeroLabel(false);
-$graph->y2axis->SetColor("#000088");
+$graph->y2axis->SetColor("#888888");
 $graph->yaxis->SetColor("black");
 
 // Setup X-axis labels
@@ -93,7 +100,7 @@ $graph->legend->Pos(0.015,0.79, "right", "center");
 // Create the bar hits pot
 $listPlots = array();
 $bplot = new BarPlot($nbHits);
-$from = "#000088";
+$from = "#aaaaaa";
 $to = "#EEEEEE";
 $bplot->SetWidth(0.8);
 $bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);
