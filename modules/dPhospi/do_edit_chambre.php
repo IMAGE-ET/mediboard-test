@@ -15,9 +15,9 @@ $value = mbGetValueFromPost("value", "o");
 $id    = mbGetValueFromPost("id", 0);
 
 if($id) {
-  $sql = "UPDATE operations
-          SET chambre = '$value'
-          WHERE operation_id = '$id'";
+  $sql = "UPDATE sejour
+          SET chambre_seule = '$value'
+          WHERE sejour_id = '$id'";
   $result = db_exec($sql);
   db_error();
 }

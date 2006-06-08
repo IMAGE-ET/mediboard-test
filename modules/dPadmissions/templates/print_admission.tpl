@@ -6,11 +6,11 @@
   </tr>
 
   <tr>
-    <th>Chirurgien : </th>
-    <td>Dr. {$admission->_ref_chir->_view}</td>
+    <th>Praticien : </th>
+    <td>Dr. {$admission->_ref_praticien->_view}</td>
   </tr>
   
-  {assign var=patient value=$admission->_ref_pat}
+  {assign var=patient value=$admission->_ref_patient}
   <tr>
     <th class="category" colspan="2">Informations sur le patient</th>
   </tr>
@@ -122,45 +122,46 @@
   
   <tr>
     <th>Date d'admission :</th>
-    <td>{$admission->date_adm|date_format:"%d/%m/%Y"} à {$admission->_hour_adm}h{$admission->_min_adm}</td>
+    <td>{$admission->entree_prevue|date_format:"%d/%m/%Y à %Hh%M"}</td>
   </tr>
 
   <tr>
     <th>Durée d'hospitalisation :</th>
-    <td>{$admission->duree_hospi} jour(s)</td>
-  </tr>
-
-  <tr>
-    <th>Bilan pré-opératoire :</th>
-    <td class="text">{$admission->examen}</td>
+    <td>{$admission->_duree_prevue} jour(s)</td>
   </tr>
 
   <tr>
     <th>Admission en :</th>
-    <td>{$admission->type_adm}</td>
+    <td>{$admission->type}</td>
   </tr>
 
   <tr>
     <th>Chambre particulière :</th>
-    <td>{$admission->chambre}</td>
+    <td>{$admission->chambre_seule}</td>
   </tr>
 
   <tr>
     <th>Remarques :</th>
     <td>{$admission->rques|nl2br}</td>
   </tr>
-  
-  {if $admission->plageop_id}
+  {foreach from=$admission->_ref_operations item=curr_op}
   <tr>
-    <th class="category" colspan="2">Informations sur l'intervention</th>
+    <th class="category" colspan="2">
+      Informations sur l'intervention du {$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}
+    </th>
   </tr>
 
   <tr>
-    <th>Date d'intervention :</th>
-    <td>{$admission->_ref_plageop->_day}/{$admission->_ref_plageop->_month}/{$admission->_ref_plageop->_year}</td>
+    <th>Chirurgien :</th>
+    <td class="text">Dr. {$curr_op->_ref_chir->_view}</td>
   </tr>
 
-  {foreach from=$admission->_ext_codes_ccam item=curr_code}
+  <tr>
+    <th>Bilan pré-opératoire :</th>
+    <td class="text">{$curr_op->examen}</td>
+  </tr>
+
+  {foreach from=$curr_op->_ext_codes_ccam item=curr_code}
   <tr>
     <th>Acte médical :</th>
     <td class="text">{$curr_code->libelleLong} <em>({$curr_code->code})</em></td>
@@ -169,22 +170,18 @@
 
   <tr>
     <th>Côté :</th>
-    <td>{$admission->cote}</td>
+    <td>{$curr_op->cote}</td>
   </tr>
 
-  <!-- Pas d'affichage des dépassements pour l'instant 
-  {if $admission->depassement}
   <tr>
-    <th>Dépassement d'honoraires :</th>
-    <td>{$admission->depassement} €</td>
-  </tr> 
-  {/if}
-  -->
+    <th>Remarques :</th>
+    <td>{$curr_op->rques}</td>
+  </tr>
   
-  {else}
+  {foreachelse}
   <tr>
     <th class="category" colspan="2">Pas d'intervention</th>
   </tr>
-  {/if}
+  {/foreach}
 
 </table>

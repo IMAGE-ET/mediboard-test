@@ -5,19 +5,19 @@
 {/if}
 
 <td class="text" style="background: {$background}">
-  <a name="adm{$curr_adm->operation_id}" href="javascript:printAdmission({$curr_adm->operation_id})">
+  <a name="adm{$curr_adm->sejour_id}" href="javascript:printAdmission({$curr_adm->sejour_id})">
   {$curr_adm->_ref_patient->_view}
   </a>
 </td>
 
 <td class="text" style="background: {$background}">
-  <a href="javascript:printAdmission({$curr_adm->operation_id})">
+  <a href="javascript:printAdmission({$curr_adm->sejour_id})">
   Dr. {$curr_adm->_ref_praticien->_view}
   </a>
 </td>
 
 <td style="background: {$background}">
-  <a href="javascript:printAdmission({$curr_adm->operation_id})">
+  <a href="javascript:printAdmission({$curr_adm->sejour_id})">
   {$curr_adm->entree_prevue|date_format:"%Hh%M"} ({$curr_adm->type|truncate:1:"":true})
   </a>
 </td>
@@ -59,14 +59,14 @@
   <input type="hidden" name="m" value="{$m}" />
   <input type="hidden" name="dosql" value="do_edit_admis" />
   <input type="hidden" name="id" value="{$curr_adm->sejour_id}" />
-  <input type="hidden" name="mode" value="admis_SHS" />
+  <input type="hidden" name="mode" value="admis" />
   {if !$curr_adm->entree_reelle}
   <input type="hidden" name="value" value="o" />
   <button type="button" onclick="submitAdmission(this.form);">
     <img src="modules/{$m}/images/tick.png" alt="Admis" /> Admis
   </button>
   {else}
-  à {$curr_adm->entree_prevue|date_format:"%Hh%M"}<br />
+  à {$curr_adm->entree_reelle|date_format:"%Hh%M"}<br />
   <input type="hidden" name="value" value="n" />
   <button type="button" onclick="submitAdmission(this.form);">
     <img src="modules/{$m}/images/cross.png" alt="Annuler" /> Annuler
@@ -80,7 +80,7 @@
   <input type="hidden" name="m" value="{$m}" />
   <input type="hidden" name="dosql" value="do_edit_admis" />
   <input type="hidden" name="id" value="{$curr_adm->sejour_id}" />
-  <input type="hidden" name="mode" value="saisi_SHS" />
+  <input type="hidden" name="mode" value="saisie" />
   {if $curr_adm->saisi_SHS == "n"}
   <input type="hidden" name="value" value="o" />
   <button type="button" onclick="submitAdmission(this.form);">
@@ -103,7 +103,7 @@
   {foreach from=$curr_adm->_ref_operations item=curr_op}
   {if $curr_op->depassement}
   <!-- Pas de possibilité d'imprimer les dépassements pour l'instant -->
-  <!-- <a href="javascript:printDepassement({$curr_adm->operation_id})"></a> -->
+  <!-- <a href="javascript:printDepassement({$curr_adm->sejour_id})"></a> -->
   {$curr_op->depassement} €
   <br />
   {/if}

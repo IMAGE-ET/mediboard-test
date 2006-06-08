@@ -17,44 +17,36 @@ require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
 
 // Initialisation de variables
 $date = mbGetValueFromGetOrSession("date", mbDate());
+$month = mbTranformTime("+ 0 day", $date, "%Y-%m-__ __:__:__");
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
 
 // Liste des admissions par jour
-$sql = "SELECT plagesop.id AS pid, operations.operation_id, operations.date_adm AS date,
-    operations.depassement AS depassement, count(operation_id) AS num
-    FROM plagesop
-    LEFT JOIN operations
-    ON operations.plageop_id = plagesop.id
-    WHERE operations.date_adm LIKE '".mbTranformTime("+ 0 day", $date, "%Y-%m")."-__'
-    GROUP BY operations.date_adm
-    ORDER BY operations.date_adm";
+$sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
+    "\nFROM `sejour`" .
+    "\nWHERE `sejour`.`entree_prevue` LIKE '$month'" .
+    "\nGROUP BY `date`" .
+    "\nORDER BY `date`";
 $list1 = db_loadlist($sql);
 
 // Liste des admissions non effectuées par jour
-$sql = "SELECT operations.date_adm AS date,
-    operations.depassement AS depassement, count(operation_id) AS num
-    FROM plagesop
-    LEFT JOIN operations
-    ON operations.plageop_id = plagesop.id
-    WHERE operations.date_adm LIKE '".mbTranformTime("+ 0 day", $date, "%Y-%m")."-__'
-    AND operations.admis = 'n'
-    AND operations.annulee = 0
-    GROUP BY operations.date_adm
-    ORDER BY operations.date_adm";
+$sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
+    "\nFROM `sejour`" .
+    "\nWHERE `sejour`.`entree_prevue` LIKE '$month'" .
+    "\nAND `sejour`.`entree_reelle` IS NULL" .
+    "\nAND `sejour`.`annule` = 0" .
+    "\nGROUP BY `date`" .
+    "\nORDER BY `date`";
 $list2 = db_loadlist($sql);
 
 // Liste des admissions non préparées
-$sql = "SELECT operations.date_adm AS date,
-    operations.depassement AS depassement, count(operation_id) AS num
-    FROM plagesop
-    LEFT JOIN operations
-    ON operations.plageop_id = plagesop.id
-    WHERE operations.date_adm LIKE '".mbTranformTime("+ 0 day", $date, "%Y-%m")."-__'
-    AND operations.saisie = 'n'
-    AND operations.annulee = 0
-    GROUP BY operations.date_adm
-    ORDER BY operations.date_adm";
+$sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
+    "\nFROM `sejour`" .
+    "\nWHERE `sejour`.`entree_prevue` LIKE '$month'" .
+    "\nAND `sejour`.`saisi_SHS` = 'n'" .
+    "\nAND `sejour`.`annule` = 0" .
+    "\nGROUP BY `date`" .
+    "\nORDER BY `date`";
 $list3 = db_loadlist($sql);
 
 // On met toutes les sommes d'intervention dans le même tableau

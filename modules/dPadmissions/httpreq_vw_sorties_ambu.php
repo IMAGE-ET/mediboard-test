@@ -27,25 +27,24 @@ $now  = mbDate();
 $list = new CAffectation;
 $limit1 = $date." 00:00:00";
 $limit2 = $date." 23:59:59";
-$ljoin["operations"] = "operations.operation_id = affectation.operation_id";
+$ljoin["sejour"] = "sejour.sejour_id = affectation.sejour_id";
 $ljoin["lit"] = "lit.lit_id = affectation.lit_id";
 $ljoin["chambre"] = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"] = "service.service_id = chambre.service_id";
-$ljoin["patients"] = "operations.pat_id = patients.patient_id";
+$ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $where["sortie"] = "BETWEEN '$limit1' AND '$limit2'";
 if($vue) {
   $where["effectue"] = "= 0";
 }
 $order = "patients.nom, patients.prenom";
-$where["type_adm"] = "= 'ambu'";
+$where["type"] = "= 'ambu'";
 $listAmbu = $list->loadList($where, $order, null, null, $ljoin);
 foreach($listAmbu as $key => $value) {
   $listAmbu[$key]->loadRefsFwd();
   if($listAmbu[$key]->_ref_next->affectation_id) {
     unset($listAmbu[$key]);
   } else {
-    $listAmbu[$key]->_ref_operation->loadRefsFwd();
-    $listAmbu[$key]->_ref_operation->_ref_chir->loadRefsFwd();
+    $listAmbu[$key]->_ref_sejour->loadRefsFwd();
     $listAmbu[$key]->_ref_lit->loadCompleteView();
   }
 }

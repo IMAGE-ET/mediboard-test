@@ -37,11 +37,9 @@
 
       </form>
     </td>
-    <td>
-      <a name="sortie{$curr_sortie->affectation_id}"><b>{$curr_sortie->_ref_operation->_ref_pat->_view}</b></a>
-    </td>
+    <td><b>{$curr_sortie->_ref_sejour->_ref_patient->_view}</b></td>
     <td>{$curr_sortie->sortie|date_format:"%H h %M"}</td>
-    <td class="text">Dr. {$curr_sortie->_ref_operation->_ref_chir->_view}</td>
+    <td class="text">Dr. {$curr_sortie->_ref_sejour->_ref_praticien->_view}</td>
     <td class="text">{$curr_sortie->_ref_lit->_view}</td>
   </tr>
   {/foreach}

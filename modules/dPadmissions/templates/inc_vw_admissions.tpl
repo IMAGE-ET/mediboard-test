@@ -43,7 +43,7 @@ regRedirectPopupCal("{$date}", "index.php?m={$m}&tab={$tab}&date=");
     <th>DH</th>
   </tr>
   {foreach from=$today item=curr_adm}
-  <tr id="admission{$curr_adm->operation_id}">
+  <tr id="admission{$curr_adm->sejour_id}">
   {include file="inc_vw_admission_line.tpl"}
   </tr>
   {/foreach}

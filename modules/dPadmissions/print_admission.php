@@ -13,10 +13,14 @@ require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
 
 $id = mbGetValueFromGetOrSession("id");
 
-$admission = new Coperation();
+$admission = new CSejour();
 $admission->load($id);
 $admission->loadRefs();
-$admission->_ref_pat->loadRefs();
+$admission->_ref_patient->loadRefsFwd();
+foreach($admission->_ref_operations as $keyOp => $op) {
+  $admission->_ref_operations[$keyOp]->loadRefsFwd();
+  $admission->_ref_operations[$keyOp]->loadRefCCAM();
+}
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );

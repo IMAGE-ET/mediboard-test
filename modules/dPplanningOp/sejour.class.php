@@ -36,6 +36,8 @@ class CSejour extends CMbObject {
   var $venue_SHS = null; // remplace $op->venue_SHS
   var $saisi_SHS = null; // remplace $op->saisie
   var $modif_SHS = null; // remplace $op->modifiee
+  
+  var $rques = null;
 
   // Object References  
   var $_ref_patient = null;
@@ -43,7 +45,10 @@ class CSejour extends CMbObject {
   var $_ref_operations = null;
   var $_ref_affectations = null;
   var $_ref_first_affectation = null;
-  var $_ref_last_affectation = null; 
+  var $_ref_last_affectation = null;
+  
+  // Form Fields
+  var $_duree_prevue = null;
 
 	function CSejour() {
 		$this->CMbObject("sejour", "sejour_id");
@@ -78,6 +83,11 @@ class CSejour extends CMbObject {
     );
     
     return CDpObject::canDelete( $msg, $oid, $tables );
+  }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_duree_prevue = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
   }
   
   function updateDBFields() {

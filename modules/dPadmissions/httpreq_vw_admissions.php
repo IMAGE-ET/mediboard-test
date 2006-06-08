@@ -21,13 +21,14 @@ $selAdmis = mbGetValueFromGetOrSession("selAdmis", "0");
 $selSaisis = mbGetValueFromGetOrSession("selSaisis", "0");
 $selTri = mbGetValueFromGetOrSession("selTri", "nom");
 $date = mbGetValueFromGetOrSession("date", mbDate());
+$next = mbDate("+1 DAY", $date);
 
 // Operations de la journée
 $today = new CSejour;
 
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 
-$where["entree_prevue"] = "LIKE '$date __:__:__'";
+$where["entree_prevue"] = "BETWEEN '$date' AND '$next'";
 if($selAdmis != "0") {
   $where[] = "entree_reelle IS NOT NULL AND entree_reelle != '0000-00-00 00:00:00'";
   $where["annule"] = "= 0";

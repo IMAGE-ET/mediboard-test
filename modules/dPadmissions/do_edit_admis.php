@@ -20,11 +20,15 @@ $dateTime = mbDateTime();
 switch ($mode) {
   case 'admis' : {
     if ($id) {
-      $sql = "UPDATE operations SET " .
-        "\n`entree_adm` = '$dateTime', " .
-        "\n`admis` = '$value' " .
-        "\nWHERE operation_id = '$id'";
-          
+      if($value == "o") {
+        $sql = "UPDATE sejour SET" .
+          "\n`entree_reelle` = '$dateTime'" .
+          "\nWHERE sejour_id = '$id';";
+      } else {
+        $sql = "UPDATE sejour SET" .
+          "\n`entree_reelle` = NULL" .
+          "\nWHERE sejour_id = '$id';";
+      }
       $result = db_exec($sql);
       db_error();
     }
@@ -32,18 +36,18 @@ switch ($mode) {
   }
   case 'saisie' : {
     if($id) {
-      $sql = "UPDATE operations
-              SET saisie = '$value', modifiee = '0'
-              WHERE operation_id = '$id'";
+      $sql = "UPDATE sejour" .
+             "\nSET saisi_SHS = '$value', modif_SHS = '0'" .
+             "\nWHERE sejour_id = '$id';";
       $result = db_exec($sql);
       db_error();
     }
     break;
   }
   case 'allsaisie' : {
-    $sql = "UPDATE operations" .
-    		"\nSET saisie = '$value', modifiee = '0'" .
-    		"\nWHERE date_adm = '$id'";
+    $sql = "UPDATE sejour" .
+    		"\nSET saisi_SHS = '$value', modif_SHS = '0'" .
+    		"\nWHERE entree_prevue LIKE '$id __:__:__';";
     $result = db_exec($sql);
     db_error();
     $id = 0;
