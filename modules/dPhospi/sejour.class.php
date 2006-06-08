@@ -23,11 +23,18 @@ class CSejour extends CMbObject {
   var $praticien_id = null; // clone $op->chir_id
   
   // DB Fields
+  var $type = null; // remplace $op->type_adm
+  var $annule = null; // complète $op->annule
+  var $chambre_seule = null; // remplace $op->chambre
+  
   var $entree_prevue = null; // remplace $op->date_adm $op->time_adm, $op->_entree_adm
   var $sortie_prevue = null; // remplace $op->_sortie_adm
   var $entree_reelle = null; // remplace $op->entree_adm $op->admis
   var $sortie_reelle = null;
-  var $chambre_seule = null; // remplace $op->chambre
+
+  var $venue_SHS = null; // remplace $op->venue_SHS
+  var $saisi_SHS = null; // remplace $op->saisie
+  var $modif_SHS = null; // remplace $op->modifiee
 
   // Object References  
   var $_ref_patient = null;
@@ -38,11 +45,20 @@ class CSejour extends CMbObject {
 		$this->CMbObject("sejour", "sejour_id");
     
     $this->_props["patient_id"]    = "ref|notNull";
+    $this->_props["praticien_id"]    = "ref|notNull";
+    
+    $this->_props["type"] = "enum|comp|ambu|exte";
+    $this->_props["annulee"] = "enum|0|1";
+    $this->_props["chambre_seule"] = "enum|o|n";
+
     $this->_props["entree_prevue"] = "dateTime|notNull";
     $this->_props["sortie_prevue"] = "dateTime|notNull";
     $this->_props["entree_reelle"] = "dateTime";
     $this->_props["sortie_reelle"] = "dateTime";
-    $this->_props["chambre"] = "enum|o|n";
+    
+    $this->_props["venue_SHS"] = "num|length|8|confidential";
+    $this->_props["saisi_SHS"] = "enum|o|n";
+    $this->_props["modif_SHS"] = "enum|0|1";
 	}
 
   function check() {

@@ -44,13 +44,14 @@ class COperation extends CMbObject {
   var $chambre = null; // remplacée par $sejour->chambre_seule
   var $_entree_adm = null; // remplacé par $sejour->entree_prevue
   var $_sortie_adm = null; // remplacé par $sejour->sortie_prevue
+  var $type_adm = null; // remplacé $sejour->type
   
   // DB Fields S@nté.com communication
-  var $venue_SHS = null;
+  var $venue_SHS = null; // remplacé par $sejour->venue_SHS
   var $code_uf = null;
   var $libelle_uf = null;
-  var $saisie = null;
-  var $modifiee = null;
+  var $saisie = null; // remplacé par $sejour->saisi_SHS
+  var $modifiee = null;  // remplace $sejour->modif_SHS
   
   // DB Fields
   var $salle_id = null;
@@ -78,13 +79,12 @@ class COperation extends CMbObject {
   var $time_anesth = null;
   var $type_anesth = null;  
   var $duree_hospi = null;
-  var $type_adm = null;
   var $ATNC = null;
   var $rques = null;
   var $rank = null;
   
   var $depassement = null;
-  var $annulee = null;
+  var $annulee = null;  // completé par $sejour->annule
   var $pathologie = null;
   var $septique = null;
     
@@ -160,8 +160,8 @@ class COperation extends CMbObject {
     $this->_props["modifie"] = "enum|0|1";
     $this->_props["depassement"] = "currency|confidential";
     $this->_props["annulee"] = "enum|0|1";
-    $this->_props["compte_rendu"] = "html|confidential";
-    $this->_props["cr_valide"] = "enum|0|1";
+//    $this->_props["compte_rendu"] = "html|confidential";
+//    $this->_props["cr_valide"] = "enum|0|1";
     $this->_props["pathologie"] = "str|length|3";
     $this->_props["sceptique"] = "enum|0|1";
   }

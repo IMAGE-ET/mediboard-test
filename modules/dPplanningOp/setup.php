@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPplanningOp';
-$config['mod_version'] = '0.37';
+$config['mod_version'] = '0.38';
 $config['mod_directory'] = 'dPplanningOp';
 $config['mod_setup_class'] = 'CSetupdPplanningOp';
 $config['mod_type'] = 'user';
@@ -282,6 +282,41 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
         
       case "0.37":
+        // Migration de nouvelles propriétés
+        $sql = "ALTER TABLE `sejour` " .
+            "\nADD `type` ENUM( 'comp', 'ambu', 'exte' ) DEFAULT 'comp' NOT NULL AFTER `praticien_id` ," .
+            "\nADD `annule` TINYINT DEFAULT '0' NOT NULL AFTER `type` ," .
+            "\nADD `venue_SHS` VARCHAR( 8 ) AFTER `annule` ," .
+            "\nADD `saisi_SHS` ENUM( 'o', 'n' ) DEFAULT 'n' NOT NULL AFTER `venue_SHS` ," .
+            "\nADD `modif_SHS` TINYINT DEFAULT '0' NOT NULL AFTER `saisi_SHS`";
+        db_exec($sql); db_error();
+
+        $sql = "ALTER TABLE `sejour` ADD INDEX ( `type` )";
+        db_exec($sql); db_error();
+
+        $sql = "ALTER TABLE `sejour` ADD INDEX ( `annule` )";
+        db_exec($sql); db_error();
+
+        $sql = "ALTER TABLE `sejour` ADD INDEX ( `venue_SHS` )";
+        db_exec($sql); db_error();
+
+        $sql = "ALTER TABLE `sejour` ADD INDEX ( `saisi_SHS` )";
+        db_exec($sql); db_error();
+
+        $sql = "ALTER TABLE `sejour` ADD INDEX ( `modif_SHS` )";
+        db_exec($sql); db_error();
+
+        
+        $sql = "UPDATE `sejour`, `operations` SET" .
+            "\n`sejour`.`type` = `operations`.`type_adm`," .
+            "\n`sejour`.`annule` = `operations`.`annulee`," .
+            "\n`sejour`.`venue_SHS` = `operations`.`venue_SHS`," .
+            "\n`sejour`.`saisi_SHS` = `operations`.`saisie`," .
+            "\n`sejour`.`modif_SHS` = `operations`.`modifiee`" .
+            "\nWHERE `operations`.`sejour_id` = `sejour`.`sejour_id`";
+        db_exec($sql); db_error();
+            
+      case "0.38":
         return true;
       }
     
