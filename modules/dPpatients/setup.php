@@ -146,7 +146,7 @@ class CSetupdPpatients {
         db_exec( $sql ); db_error();
         
       case "0.29":
-  	    return true;
+  	    return "0.29";
 		}
 
 		return false;

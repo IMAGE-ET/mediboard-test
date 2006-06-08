@@ -42,7 +42,7 @@ class CSetupAdmin {
         $sql = "ALTER TABLE `users` CHANGE `user_address1` `user_address1` VARCHAR( 50 );";
         db_exec( $sql ); db_error();
       case "1.0.1":
-        return true;
+        return "1.0.1";
     }
     
 

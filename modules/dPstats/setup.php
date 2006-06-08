@@ -41,9 +41,7 @@ class CSetupdPstats {
 		{
 		case "all":
 		case "0.1":
-			return true;
-		default:
-			return false;
+			return "0.1";
 		}
 		return false;
 	}

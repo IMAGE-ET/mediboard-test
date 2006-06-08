@@ -7,10 +7,14 @@
 * @author Romain Ollivier
 */
 
+global $AppUI;
+
+require_once($AppUI->getSystemClass("mbsetup"));
+
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPhospi';
-$config['mod_version'] = '0.14';
+$config['mod_version'] = '0.15';
 $config['mod_directory'] = 'dPhospi';
 $config['mod_setup_class'] = 'CSetupdPhospi';
 $config['mod_type'] = 'user';
@@ -75,7 +79,25 @@ class CSetupdPhospi {
         db_exec($sql); db_error();
 
       case "0.14":
-	      return true;
+        if(CMbSetup::getVersionOf("dPplanningOp") < "0.38") {
+          return "0.14";
+        }
+        $sql = "DELETE affectation.* FROM affectation" .
+            "\nLEFT JOIN operations" .
+            "\nON affectation.operation_id = operations.operation_id" .
+            "\nWHERE operations.operation_id IS NULL;";
+        db_exec($sql); db_error();
+        $sql = "ALTER TABLE `affectation`" .
+            "\nADD `sejour_id` INT UNSIGNED DEFAULT '0' NOT NULL AFTER `operation_id`;";
+        db_exec($sql); db_error();
+        $sql = "ALTER TABLE ADD INDEX (`sejour_id`);";
+        db_exec($sql); db_error();
+        $sql = "UPDATE `affectation`,`operations`" .
+            "\nSET `affectation`.`sejour_id` = `operations`.`sejour_id`" .
+            "\nWHERE `affectation`.`operation_id` = `operations`.`operation_id`;";
+        db_exec($sql); db_error();
+      case "0.15":
+	      return "0.15";
     }
 	  return false;
 	}

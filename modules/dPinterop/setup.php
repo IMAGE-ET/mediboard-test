@@ -41,7 +41,7 @@ class CSetupdPinterop {
 		{
 		case "all":
 		case "0.1":
-			return true;
+			return "0.1";
 		}
 
 		return false;

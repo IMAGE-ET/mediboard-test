@@ -52,9 +52,7 @@ class CSetupdPpmsi {
                 ) COMMENT = 'Table des GHM';";
         db_exec( $sql ); db_error();
     case "0.11" :
-			return true;
-		default:
-			return false;
+			return "0.11";
 		}
 		return false;
 	}

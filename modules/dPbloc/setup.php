@@ -69,9 +69,7 @@ class CSetupdPbloc {
       $sql = "ALTER TABLE `sallesbloc` ADD `stats` TINYINT DEFAULT '0' NOT NULL AFTER `nom` ;";
       db_exec( $sql ); db_error();
     case "0.13":
-			return true;
-		default:
-			return false;
+			return "0.13";
 		}
 		return false;
 	}

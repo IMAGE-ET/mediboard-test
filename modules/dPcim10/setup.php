@@ -43,9 +43,7 @@ class CSetupdPcim10 {
 		switch ( $old_version ) {
 			case "all":
 			case "0.1":
-				return true;
-			default:
-				return false;
+				return "0.1";
 		}
 		return false;
 	}

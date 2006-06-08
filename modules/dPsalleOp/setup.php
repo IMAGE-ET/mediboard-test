@@ -77,7 +77,7 @@ class CSetupdPsalleOp {
       db_exec($sql); db_error();
       
 		case "0.14":
-    	return true;
+    	return "0.14";
 		}
 
 		return false;

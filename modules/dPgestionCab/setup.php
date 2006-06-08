@@ -44,7 +44,7 @@ class CSetupdPgestionCab {
 		switch ( $old_version ) {
 		case "all":
 		case "0.1":
-			return true;
+			return "0.1";
 		default:
 			return false;
 		}

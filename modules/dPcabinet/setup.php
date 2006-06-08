@@ -256,7 +256,7 @@ class CSetupdPcabinet {
         db_exec( $sql ); db_error();
             
       case "0.38":
-  	    return true;
+  	    return "0.38";
 		}
 
 		return false;

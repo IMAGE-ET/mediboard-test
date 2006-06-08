@@ -59,7 +59,7 @@ class CSetupMediusers {
         db_exec($sql);  db_error();
 
       case "0.13": 
-        return true;
+        return "0.13";
 		}
 
 		return false;

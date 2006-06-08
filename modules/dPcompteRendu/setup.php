@@ -105,7 +105,7 @@ class CSetupdPcompteRendu {
           $sql = "ALTER TABLE `aide_saisie` DROP `module` ";
           db_exec( $sql ); db_error();
         case "0.19":
-          return true;
+          return "0.19";
 		}
 		return false;
 	}

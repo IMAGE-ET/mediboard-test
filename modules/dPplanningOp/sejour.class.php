@@ -7,6 +7,7 @@
  *  @author Thomas Despoix
  */
 
+require_once( $AppUI->getModuleClass("mediusers") );
 require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
 require_once($AppUI->getModuleClass("dPpatients", "patients"));
 

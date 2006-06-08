@@ -71,7 +71,7 @@ class CSetupSystem {
          $sql = "ALTER TABLE `access_log` ADD `request` DOUBLE NOT NULL ;";
          db_exec($sql); db_error();
       case "1.0.2":
-        return true;
+        return "1.0.2";
     }
 
     return false;

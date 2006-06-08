@@ -68,20 +68,22 @@ switch ($cmd) {
     }
 		break;
 	case 'upgrade':
-		if ( $setup->upgrade( $obj->mod_version ) )	// returns true if upgrade succeeded
-		{
+    $newVersion = $setup->upgrade( $obj->mod_version );
+		if ($newVersion) {
 			$obj->bind( $config );
+      $topVersion = $obj->mod_version;
+      $obj->mod_version = $newVersion;
 			$obj->store();
-			$AppUI->setMsg( 'Module upgraded', UI_MSG_OK );
-		}
-		else
-		{
-			$AppUI->setMsg( 'Module not upgraded', UI_MSG_ERROR );
+      if($newVersion == $topVersion)
+			  $AppUI->setMsg( "Mise à jour de $obj->mod_name à la version $newVersion", UI_MSG_OK );
+      else
+        $AppUI->setMsg( "Mise à jour de $obj->mod_name à la version $newVersion sur $topVersion", UI_MSG_WARNING );
+		} else {
+			$AppUI->setMsg( "Module $obj->mod_name non mis à jour", UI_MSG_ERROR );
 		}
 		break;
 	case 'configure':
-		if ( $setup->configure() ) 	//returns true if configure succeeded
-		{
+		if ( $setup->configure() ) { 	//returns true if configure succeeded
 		}
 		else {
 			$AppUI->setMsg( 'Module configuration failed', UI_MSG_ERROR );

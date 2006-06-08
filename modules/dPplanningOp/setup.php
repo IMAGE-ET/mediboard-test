@@ -262,7 +262,8 @@ class CSetupdPplanningOp {
             "\n  `entree_adm` , " .
             "\n  NULL , " .
             "\n `chambre` " .
-            "\nFROM `operations`";
+            "\nFROM `operations`" .
+            "\nWHERE `operations`.`pat_id` != 0";
         db_exec($sql); db_error();
 
         // Ajout d'une référence vers les sejour
@@ -317,7 +318,7 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
             
       case "0.38":
-        return true;
+        return "0.38";
       }
     
     return false;
