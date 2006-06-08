@@ -49,12 +49,17 @@ class CMbObject extends CDpObject {
    */
   function check() {
     $msg = null;
+    $properties = get_object_vars($this);
     
     foreach ($this->_props as $propName => $propSpec) {
-      $propValue =& $this->$propName;
-      if ($propValue !== null) {
-        $msgProp = $this->checkProperty($propName);
-        $msg .= $msgProp ? "<br/> => $propName (val:'$propValue', spec:'$propSpec'): $msgProp" : null;
+      if(!array_key_exists($propName, $properties)) {
+        trigger_error("La propriété $propName n'existe pas", E_USER_WARNING);
+      } else {
+        $propValue =& $this->$propName;
+        if ($propValue !== null) {
+          $msgProp = $this->checkProperty($propName);
+          $msg .= $msgProp ? "<br/> => $propName (val:'$propValue', spec:'$propSpec'): $msgProp" : null;
+        }
       }
     }
     
