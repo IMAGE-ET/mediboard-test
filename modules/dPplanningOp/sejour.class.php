@@ -7,7 +7,7 @@
  *  @author Thomas Despoix
  */
 
-require_once( $AppUI->getModuleClass("mediusers") );
+require_once($AppUI->getModuleClass("mediusers") );
 require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
 require_once($AppUI->getModuleClass("dPpatients", "patients"));
 
@@ -41,6 +41,9 @@ class CSejour extends CMbObject {
   var $_ref_patient = null;
   var $_ref_praticien = null;
   var $_ref_operations = null;
+  var $_ref_affectations = null;
+  var $_ref_first_affectation = null;
+  var $_ref_last_affectation = null; 
 
 	function CSejour() {
 		$this->CMbObject("sejour", "sejour_id");
@@ -92,17 +95,37 @@ class CSejour extends CMbObject {
       "user_id" => "= '$this->praticien_id'"
     );
 
-    $this->_ref_praticien = new CMediuser;
+    $this->_ref_praticien = new CMediusers;
     $this->_ref_praticien->loadObject($where);
   }
   
-  function loadRefsBack() {
+  function loadRefsAffectations() {
+    $where = array("sejour_id" => "= '$this->sejour_id'");
+    $order = "sortie DESC";
+    $this->_ref_affectations = new CAffectation();
+    $this->_ref_affectations = $this->_ref_affectations->loadList($where, $order);
+
+    if(count($this->_ref_affectations) > 0) {
+      $this->_ref_first_affectation =& end($this->_ref_affectations);
+      $this->_ref_last_affectation =& reset($this->_ref_affectations);
+    } else {
+      $this->_ref_first_affectation =& new CAffectation;
+      $this->_ref_last_affectation =& new CAffectation;
+    }
+  }
+  
+  function loadRefsOperations() {
     $where = array (
       "sejour_id" => "= '$this->sejour_id'"
     );
 
-    $operations = new COperations;
+    $operations = new COperation;
     $this->_ref_operations = $operations->loadList($where);
+  }
+  
+  function loadRefsBack() {
+    $this->loadRefsAffectations();
+    $this->loadRefsOperations();
   }
 }
 ?>

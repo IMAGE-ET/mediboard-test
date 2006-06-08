@@ -13,7 +13,7 @@ if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once( $AppUI->getModuleClass('dPhospi', 'sejour') );
+require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour') );
 
 // Initialisation de variables
 
@@ -43,10 +43,9 @@ if($selTri == "heure")
 
 $today = $today->loadList($where, $order, null, null, $ljoin);
 
-foreach ($today as $keyOp => $valueOp) {
-  $sejour =& $today[$keyOp];
-  $sejour->loadRefsFwd();
-  $sejour->loadRefsAffectations();
+foreach ($today as $keySejour => $valueSejour) {
+  $sejour =& $today[$keySejour];
+  $sejour->loadRefs();
   $affectation =& $sejour->_ref_first_affectation;
   if ($affectation->affectation_id) {
     $affectation->loadRefsFwd();

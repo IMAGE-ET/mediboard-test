@@ -10,6 +10,7 @@
 require_once($AppUI->getSystemClass('mbobject'));
 require_once($AppUI->getModuleClass('dPhospi', 'lit'));
 require_once($AppUI->getModuleClass('dPplanningOp', 'planning'));
+require_once($AppUI->getModuleClass('dPplanningOp', 'sejour'));
 
 /**
  * Classe CAffectation. 
@@ -22,6 +23,7 @@ class CAffectation extends CMbObject {
   // DB References
   var $lit_id = null;
   var $operation_id = null;
+  var $sejour_id = null;
 
   // DB Fields
   var $entree = null;
@@ -165,6 +167,13 @@ class CAffectation extends CMbObject {
     
     $this->_ref_operation = new COperation;
     $this->_ref_operation->loadObject($where);
+    
+    $where = array (
+      "sejour_id" => "= '$this->sejour_id'"
+    );
+    
+    $this->_ref_sejour = new CSejour;
+    $this->_ref_sejour->loadObject($where);
 
     $where = array (
       "affectation_id" => "!= '$this->affectation_id'",
