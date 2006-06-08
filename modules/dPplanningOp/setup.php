@@ -317,6 +317,12 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
             
       case "0.38":
+        $sql = "UPDATE `sejour`, `operations` SET" .
+            "\n`sejour`.`entree_reelle` = NULL" .
+            "\nWHERE `operations`.`sejour_id` = `sejour`.`sejour_id`" .
+            "\nAND `operations`.`admis` = 'n'";
+        db_exec($sql); db_error();
+
         $sql = "ALTER TABLE `operations`" .
             "\nCHANGE `date_anesth` `date_anesth` DATE";
         db_exec($sql); db_error();
@@ -328,7 +334,7 @@ class CSetupdPplanningOp {
         
       case "0.39":
         return "0.39";
-      }
+    }
     
     return false;
 	}
