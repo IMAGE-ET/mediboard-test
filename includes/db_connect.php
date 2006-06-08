@@ -324,18 +324,14 @@ function db_updateObject( $table, &$object, $keyName, $updateNulls=true ) {
 			continue;
 		}
 		if( $v == '' ) {
-			$val = "''";
+      // Tries to nullify empty values but won't fail if not possible
+			$val = "NULL";
 		} else {
 			$val = "'" . db_escape( $v ) . "'";
 		}
 		$tmp[] = "`$k`=$val";
 	}
 	$sql = sprintf( $fmtsql, implode( ",", $tmp ) , $where );
-
-//  $filename = "tmp/dblog.txt";
-//  $fp = fopen($filename, "a");
-//  fputs($fp, "$sql\n\n");
-//  fclose($fp);
   
   return db_exec( $sql );
 }
