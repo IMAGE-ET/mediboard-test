@@ -14,22 +14,22 @@ function db_connect( $dbid = "std", $host="localhost", $dbname, $user="root", $p
   global $links_db;
   global $dbChronos;
   if(!isset($links_db[$dbid])) {
-    function_exists( "mysql_connect" )
-      or  die( "FATAL ERROR: MySQL support not available.  Please check your configuration." );
+    if(!function_exists( "mysql_connect" ))
+      trigger_error( "FATAL ERROR: MySQL support not available.  Please check your configuration.", E_USER_ERROR );
 
 	  if ($persist) {
-      $links_db[$dbid] = mysql_pconnect( "$host:$port", $user, $passwd )
-        or die( "FATAL ERROR: Connection to database server failed" );
+      if(!($links_db[$dbid] = mysql_pconnect( "$host:$port", $user, $passwd )))
+        trigger_error( "FATAL ERROR: Connection to database server failed", E_USER_ERROR );
     } else {
-      $links_db[$dbid] = mysql_connect( "$host:$port", $user, $passwd )
-        or die( "FATAL ERROR: Connection to database server failed" );
+      if(!($links_db[$dbid] = mysql_connect( "$host:$port", $user, $passwd )))
+        trigger_error( "FATAL ERROR: Connection to database server failed", E_USER_ERROR );
     }
 
     if ($dbname) {
-	    mysql_select_db( $dbname, $links_db[$dbid] )
-        or die( "FATAL ERROR: Database not found ($dbname)" );
+	    if(!mysql_select_db( $dbname, $links_db[$dbid] ))
+        trigger_error( "FATAL ERROR: Database not found ($dbname)", E_USER_ERROR );
     } else {
-      die( "FATAL ERROR: Database name not supplied<br />(connection to database server succesful)" );
+      trigger_error( "FATAL ERROR: Database name not supplied<br />(connection to database server succesful)", E_USER_ERROR );
     }
 
     $dbChronos[$dbid] = new Chronometer;
@@ -39,21 +39,21 @@ function db_connect( $dbid = "std", $host="localhost", $dbname, $user="root", $p
 function db_error($dbid = "std") {
   global $links_db;
   if(!isset($links_db[$dbid]))
-    die( "FATAL ERROR: link to $dbid not found." );
+    trigger_error( "FATAL ERROR: link to $dbid not found.", E_USER_ERROR );
 	return mysql_error($links_db[$dbid]);
 }
 
 function db_errno($dbid = "std") {
   global $links_db;
   if(!isset($links_db[$dbid]))
-    die( "FATAL ERROR: link to $dbid not found." );
+   trigger_error( "FATAL ERROR: link to $dbid not found.", E_USER_ERROR );
 	return mysql_errno($links_db[$dbid]);
 }
 
 function db_insert_id($dbid = "std") {
   global $links_db;
   if(!isset($links_db[$dbid]))
-    die( "FATAL ERROR: link to $dbid not found." );
+    trigger_error( "FATAL ERROR: link to $dbid not found.", E_USER_ERROR );
 	return mysql_insert_id($links_db[$dbid]);
 }
 
@@ -61,13 +61,14 @@ function db_exec($sql, $dbid = "std") {
   global $dbChronos;
   global $links_db;
   if(!isset($links_db[$dbid]))
-    die( "FATAL ERROR: link to $dbid not found." );
+    trigger_error( "FATAL ERROR: link to $dbid not found.", E_USER_ERROR );
 
   $dbChronos[$dbid]->start();
 	$cur = mysql_query( $sql, $links_db[$dbid] );
   $dbChronos[$dbid]->stop();
 
 	if( !$cur ) {
+    trigger_error("Erreur sql : ".db_error(), E_USER_WARNING);
 		return false;
 	}
   
@@ -105,7 +106,7 @@ function db_escape( $str ) {
 function db_version($dbid = "std") {
   global $links_db;
   if(!isset($links_db[$dbid]))
-    die( "FATAL ERROR: link to $dbid not found." );
+    trigger_error( "FATAL ERROR: link to $dbid not found.", E_USER_ERROR );
 	if( ($cur = mysql_query( "SELECT VERSION()",  $links_db[$dbid])) ) {
 		$row =  mysql_fetch_row( $cur );
 		mysql_free_result( $cur );
