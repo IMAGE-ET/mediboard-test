@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPplanningOp';
-$config['mod_version'] = '0.38';
+$config['mod_version'] = '0.39';
 $config['mod_directory'] = 'dPplanningOp';
 $config['mod_setup_class'] = 'CSetupdPplanningOp';
 $config['mod_type'] = 'user';
@@ -306,7 +306,6 @@ class CSetupdPplanningOp {
 
         $sql = "ALTER TABLE `sejour` ADD INDEX ( `modif_SHS` )";
         db_exec($sql); db_error();
-
         
         $sql = "UPDATE `sejour`, `operations` SET" .
             "\n`sejour`.`type` = `operations`.`type_adm`," .
@@ -318,7 +317,17 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
             
       case "0.38":
-        return "0.38";
+        $sql = "ALTER TABLE `operations`" .
+            "\nCHANGE `date_anesth` `date_anesth` DATE";
+        db_exec($sql); db_error();
+        
+        $sql = "UPDATE `operations` " .
+            "\nSET `date_anesth` = NULL" .
+            "\nWHERE `date_anesth` = '0000-00-00'";
+        db_exec($sql); db_error();
+        
+      case "0.39":
+        return "0.39";
       }
     
     return false;

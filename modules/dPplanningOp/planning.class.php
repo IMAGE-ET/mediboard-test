@@ -154,16 +154,15 @@ class COperation extends CMbObject {
     $this->_props["ATNC"] = "enum|o|n";
     $this->_props["rques"] = "str|confidential";
     $this->_props["rank"] = "num";
-    $this->_props["admission"] = "dateTime";
     $this->_props["admis"] = "enum|o|n";
     $this->_props["saisie"] = "enum|o|n";
-    $this->_props["modifie"] = "enum|0|1";
+    $this->_props["modifiee"] = "enum|0|1";
     $this->_props["depassement"] = "currency|confidential";
     $this->_props["annulee"] = "enum|0|1";
 //    $this->_props["compte_rendu"] = "html|confidential";
 //    $this->_props["cr_valide"] = "enum|0|1";
     $this->_props["pathologie"] = "str|length|3";
-    $this->_props["sceptique"] = "enum|0|1";
+    $this->_props["septique"] = "enum|0|1";
   }
 
   function check() {

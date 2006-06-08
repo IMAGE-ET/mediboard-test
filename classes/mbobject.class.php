@@ -50,10 +50,11 @@ class CMbObject extends CDpObject {
   function check() {
     $msg = null;
     $properties = get_object_vars($this);
+    $class = get_class($this);
     
     foreach ($this->_props as $propName => $propSpec) {
       if(!array_key_exists($propName, $properties)) {
-        trigger_error("La propriété $propName n'existe pas", E_USER_WARNING);
+        trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$class'", E_USER_WARNING);
       } else {
         $propValue =& $this->$propName;
         if ($propValue !== null) {
