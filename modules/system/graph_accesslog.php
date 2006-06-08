@@ -18,7 +18,6 @@ $date   = mbGetValueFromGet("date"   , mbDate());
 $module = mbGetValueFromGet("module" , 0);
 $action = mbGetValueFromGet("action" , 0);
 $size   = mbGetValueFromGet("size", 1);
-$next   = mbDate("+ 1 day", $date);
 
 for($i = 0; $i <= 23; $i++) {
   if($i <= 9)
@@ -29,10 +28,10 @@ for($i = 0; $i <= 23; $i++) {
 
 $logs = new CAccessLog();
 
-$sql = "SELECT accesslog_id, module, action," .
+$sql = "SELECT accesslog_id, module, action, period," .
       "\nSUM(hits) AS hits, SUM(duration) AS duration, SUM(request) AS request" .
       "\nFROM access_log" .
-      "\nWHERE period BETWEEN '$date' AND '$next'" .
+      "\nWHERE period LIKE '$date __:__:__'" .
       "\nAND module = '$module'";
 if($action)
   $sql .= "\nAND action = '$action'";
