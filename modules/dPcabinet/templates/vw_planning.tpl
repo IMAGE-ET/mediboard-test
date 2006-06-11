@@ -308,7 +308,7 @@ function pageMain() {
             <a class="action" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={$curr_consult->_ref_patient->patient_id}">
               <img src="modules/{$m}/images/edit.png" alt="modifier" />
             </a>
-            <a class="action" href="{$href_consult}">{$curr_consult->_ref_patient->_view}</a>
+            <a href="{$href_consult}">{$curr_consult->_ref_patient->_view}</a>
           </td>
           <td class="text" {$style}>
             <a href="{$href_consult}">{$curr_consult->motif|nl2br|truncate:35:"...":false}</a>

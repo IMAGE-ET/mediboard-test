@@ -164,21 +164,69 @@ function printIntervention(id) {
 </table>
 
 <table class="form">
-  {if $patient->_ref_curr_affectation->affectation_id}
-  <tr><th colspan="3" class="category">Chambre actuelle</th></tr>
+  {assign var="affectation" value=$patient->_ref_curr_affectation}
+  {if $affectation->affectation_id}
+  <tr>
+  	<th colspan="3" class="category">Chambre actuelle</th>
+  </tr>
   <tr>
     <td colspan="3">
-      {$patient->_ref_curr_affectation->_ref_lit->_view}
+      {$affectation->_ref_lit->_view}
+      depuis {$affectation->entree|date_format:"%d %b %Y à %H:%M"}
     </td>
   </tr>
-  {elseif $patient->_ref_next_affectation->affectation_id}
-  <tr><th colspan="3" class="category">Chambre à partir du {$patient->_ref_next_affectation->entree|date_format:"%d %b %Y"}</th></tr>
+  {assign var="affectation" value=$patient->_ref_next_affectation}
+  {elseif $affectation->affectation_id}
+  <tr>
+    <th colspan="3" class="category">Prochaine chambre</th>
+  </tr>
   <tr>
     <td colspan="3">
-      {$patient->_ref_next_affectation->_ref_lit->_view}
+      {$affectation->_ref_lit->_view}
+      depuis {$affectation->entree|date_format:"%d %b %Y à %H:%M"}
     </td>
   </tr>
   {/if}
+
+  {if $patient->_ref_sejours}
+  <tr><th colspan="4" class="category">Sejours</th></tr>
+  {foreach from=$patient->_ref_sejours item=curr_sejour}
+  <tr>
+    <td>
+      Séjour du {$curr_sejour->entree_prevue|date_format:"%d %b %Y"} 
+      au {$curr_sejour->sortie_prevue|date_format:"%d %b %Y"}
+	</td>
+	<td>
+      Dr. {$curr_sejour->_ref_praticien->_view}
+	</td>
+  </tr>
+  {foreach from=$curr_sejour->_ref_operations item=curr_op}
+  <tr>
+    <td>
+      <a class="action" style="float: right" href="javascript:printIntervention({$curr_op->operation_id})">
+        <img src="modules/dPpatients/images/print.png" alt="imprimer" title="imprimer"/>
+      </a>
+      {if $curr_op->annulee}
+      [ANNULE]
+      {else}
+      <a class="action" style="float: right" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
+        <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
+      </a>
+      {/if}
+      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
+      {$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}
+      </a>
+    </td>
+    <td>
+      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
+      Dr. {$curr_op->_ref_chir->_view}
+      </a>
+    </td>
+  </tr>
+  {/foreach}
+  {/foreach}
+  {/if}
+
   {if $patient->_ref_operations}
   <tr><th colspan="4" class="category">Interventions</th></tr>
   {foreach from=$patient->_ref_operations item=curr_op}
@@ -206,6 +254,7 @@ function printIntervention(id) {
   </tr>
   {/foreach}
   {/if}
+
   {if $patient->_ref_hospitalisations}
   <tr><th colspan="4" class="category">hospitalisations</th></tr>
   {foreach from=$patient->_ref_hospitalisations item=curr_op}
@@ -231,6 +280,7 @@ function printIntervention(id) {
   </tr>
   {/foreach}
   {/if}
+  
   {if $patient->_ref_consultations}
   <tr><th class="category" colspan="3">Consultations</th></tr>
   {foreach from=$patient->_ref_consultations item=curr_consult}

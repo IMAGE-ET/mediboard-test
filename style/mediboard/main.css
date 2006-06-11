@@ -297,8 +297,10 @@ table.tbl a {
   display: block;
 }
 
-table.tbl a.action {
+a.action {
   display: inline;
+  float: right;
+  margin: 0 1px;
 }
 
 table.tbl th a {

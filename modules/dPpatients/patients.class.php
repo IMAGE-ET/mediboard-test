@@ -7,15 +7,16 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once($AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once($AppUI->getModuleClass('dPpatients', 'medecin') );
-require_once($AppUI->getModuleClass('dPpatients', 'antecedent') );
-require_once($AppUI->getModuleClass('dPpatients', 'traitement') );
-require_once($AppUI->getModuleClass('dPcabinet', 'consultation') );
-require_once($AppUI->getModuleClass('dPhospi', 'affectation') );
-require_once($AppUI->getModuleClass('dPcim10', 'codecim10') );
+require_once($AppUI->getModuleClass("dPplanningOp", "planning") );
+require_once($AppUI->getModuleClass("dPplanningOp", "sejour") );
+require_once($AppUI->getModuleClass("dPpatients", "medecin") );
+require_once($AppUI->getModuleClass("dPpatients", "antecedent") );
+require_once($AppUI->getModuleClass("dPpatients", "traitement") );
+require_once($AppUI->getModuleClass("dPcabinet", "consultation") );
+require_once($AppUI->getModuleClass("dPhospi", "affectation") );
+require_once($AppUI->getModuleClass("dPcim10", "codecim10") );
 
 /**
  * The CPatient Class
@@ -77,6 +78,7 @@ class CPatient extends CMbObject {
   var $_pays = null;
 
   // Object References
+  var $_ref_sejours = null;
   var $_ref_operations = null;
   var $_ref_hospitalisations = null;
   var $_ref_consultations = null;
@@ -90,7 +92,7 @@ class CPatient extends CMbObject {
   var $_ref_medecin3 = null;
 
 	function CPatient() {
-		$this->CMbObject('patients', 'patient_id');
+		$this->CMbObject("patients", "patient_id");
     
     static $props = array (
       "nom"              => "str|notNull|confidential",
@@ -216,34 +218,47 @@ class CPatient extends CMbObject {
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      'label' => 'opération(s)', 
-      'name' => 'operations', 
-      'idfield' => 'operation_id', 
-      'joinfield' => 'pat_id'
+      "label" => "sejour(s)", 
+      "name" => "sejour", 
+      "idfield" => "sejour_id", 
+      "joinfield" => "patient_id"
     );
     $tables[] = array (
-      'label' => 'consultation(s)', 
-      'name' => 'consultation', 
-      'idfield' => 'consultation_id', 
-      'joinfield' => 'patient_id'
+      "label" => "opération(s)", 
+      "name" => "operations", 
+      "idfield" => "operation_id", 
+      "joinfield" => "pat_id"
     );
     $tables[] = array (
-      'label' => 'antécédent(s)', 
-      'name' => 'antecedent', 
-      'idfield' => 'antecedent_id', 
-      'joinfield' => 'patient_id'
+      "label" => "consultation(s)", 
+      "name" => "consultation", 
+      "idfield" => "consultation_id", 
+      "joinfield" => "patient_id"
     );
     $tables[] = array (
-      'label' => 'traitement(s)', 
-      'name' => 'traitement', 
-      'idfield' => 'traitement_id', 
-      'joinfield' => 'patient_id'
+      "label" => "antécédent(s)", 
+      "name" => "antecedent", 
+      "idfield" => "antecedent_id", 
+      "joinfield" => "patient_id"
+    );
+    $tables[] = array (
+      "label" => "traitement(s)", 
+      "name" => "traitement", 
+      "idfield" => "traitement_id", 
+      "joinfield" => "patient_id"
     );
     
     return parent::canDelete( $msg, $oid, $tables );
   }
   
   // Backward references
+  function loadRefsSejours() {
+    $sejour = new CSejour;
+    $where = array();
+    $where["patient_id"] = "= '$this->patient_id'";
+    $order = "entree_prevue DESC";
+    $this->_ref_sejours = $sejour->loadList($where, $order);
+  }
   
   function loadRefsOperations() {
     $this->_ref_operations = new COperation();
@@ -294,37 +309,34 @@ class CPatient extends CMbObject {
   }
   
   function loadRefsAffectations() {
+    $this->loadRefsSejours();
     $this->loadRefsOperations();
     $this->loadRefsHospitalisations();
     
-    // affectation actuelle et prochaine affectation
-    $this->_ref_curr_affectation = new CAffectation();
-    $this->_ref_next_affectation = new CAffectation();
-    $date = date("Y-m-d");
+    // Affectation actuelle et prochaine affectation
+    $inArray = array ("'0'"); // Utile quand aucun séjour
+    foreach($this->_ref_sejours as $keySejour => $valueSejour) {
+      $inArray[] = "'$keySejour'";
+    }
+    $in = join($inArray, ", ");
+
     $where = array();
-    $where["entree"] = "<= '$date 23:59:59'";
-    $where["sortie"] = ">= '$date 00:00:00'";
-    $inArray = array();
-    foreach($this->_ref_operations as $key => $value) {
-      $inArray[] = $key;
-    }
-    foreach($this->_ref_hospitalisations as $key => $value) {
-      $inArray[] = $key;
-    }
-    if(count($inArray)) {
-      $in = implode(", ", $inArray);
-      $where["operation_id"] ="IN ($in)";
-    }
-    else
-      $where["operation_id"] ="IS NULL";
-    $this->_ref_curr_affectation->loadObject($where);
+    $where["sejour_id"] ="IN ($in)";
     
-    $where["entree"] = "> '$date 23:59:59'";
-    $where["sortie"] = "> '$date 23:59:59'";
+    $now = mbDateTime();
+
     $order = "entree";
+    
+    $this->_ref_curr_affectation = new CAffectation();
+    $where["entree"] = "< '$now'";
+    $where["sortie"] = ">= '$now'";
+    $this->_ref_curr_affectation->loadObject($where, $order);
+    
+    $this->_ref_next_affectation = new CAffectation();
+    $where["entree"] = "> '$now'";
     $this->_ref_next_affectation->loadObject($where, $order);
   }
-  
+
   function loadRefsBack() {
     $this->loadRefsConsultations();
     $this->loadRefsAntecedents();
@@ -416,6 +428,16 @@ class CPatient extends CMbObject {
       $consult->loadRefs();
     }
     
+    // Sejours
+    foreach ($this->_ref_sejours as $keySejour => $valueSejour) {
+      $sejour =& $this->_ref_sejours[$keySejour];
+      $sejour->loadRefs();
+      foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
+        $operation =& $sejour->_ref_operations[$keyOp];
+        $operation->loadRefsFwd();
+      }
+    }
+
     // Operations
     foreach ($this->_ref_operations as $keyOp => $valueOp) {
       $operation =& $this->_ref_operations[$keyOp];
