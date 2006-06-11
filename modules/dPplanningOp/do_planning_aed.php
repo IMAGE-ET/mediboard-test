@@ -11,6 +11,7 @@ global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getSystemClass("doobjectaddedit"));
 require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
+require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour') );
 
 if($chir_id = dPgetParam( $_POST, 'chir_id', null))
   mbSetValueToSession('chir_id', $chir_id);

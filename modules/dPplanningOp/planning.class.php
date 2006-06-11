@@ -16,6 +16,7 @@ require_once( $AppUI->getModuleClass('dPccam'      , 'acte'         ) );
 require_once( $AppUI->getModuleClass('dPcabinet'   , 'consultAnesth') );
 require_once( $AppUI->getModuleClass('dPcabinet'   , 'files'        ) );
 require_once( $AppUI->getModuleClass('dPhospi'     , 'affectation'  ) );
+require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour'       ) );
 require_once( $AppUI->getModuleClass('dPplanningOp', 'pathologie'   ) );
 require_once( $AppUI->getModuleClass('dPsalleOp'   , 'acteccam'     ) );
 require_once( $AppUI->getModuleClass('dPpmsi'      , 'GHM'          ) );
@@ -61,6 +62,7 @@ class COperation extends CMbObject {
   var $libelle = null;
   var $cote = null;
   var $temp_operation = null;
+  var $pause = null;
   var $entree_bloc = null;
   var $pose_garrot = null;
   var $debut_op = null;
@@ -109,6 +111,7 @@ class COperation extends CMbObject {
   var $_ref_pat = null;
   var $_ref_chir = null;
   var $_ref_plageop = null;
+  var $_ref_sejour = null;
   var $_ref_consult_anesth = null;
   var $_ref_files = array();
   var $_ref_affectations = array();
@@ -413,12 +416,18 @@ class COperation extends CMbObject {
     $this->_ref_consult_anesth->loadObject($where);
   }
   
+  function loadRefSejour() {
+    $this->_ref_sejour = new CSejour();
+    $this->_ref_sejour->load($this->sejour_id);
+  }
+  
   function loadRefsFwd() {
     $this->loadRefsConsultAnesth();
     $this->loadRefChir();
     $this->loadRefPat();
     $this->loadRefPlageOp();
     $this->loadRefCCAM();
+    $this->loadRefSejour();
     $this->_view = "Intervention de {$this->_ref_pat->_view} par le Dr. {$this->_ref_chir->_view}";
   }
   

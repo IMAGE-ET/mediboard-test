@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPplanningOp';
-$config['mod_version'] = '0.40';
+$config['mod_version'] = '0.41';
 $config['mod_directory'] = 'dPplanningOp';
 $config['mod_setup_class'] = 'CSetupdPplanningOp';
 $config['mod_type'] = 'user';
@@ -338,7 +338,12 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
       
       case "0.40":
-        return "0.40";
+        $sql = "ALTER TABLE operations" .
+            "\nADD pause time NOT NULL default '00:00:00' AFTER temp_operation";
+        db_exec($sql); db_error();
+      
+      case "0.41":
+        return "0.41";
     }
     
     return false;

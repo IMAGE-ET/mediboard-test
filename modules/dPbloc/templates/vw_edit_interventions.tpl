@@ -24,11 +24,11 @@
             </a>
 		    <strong>
 		    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;id={$curr_op->_ref_pat->patient_id}">
-		    {$curr_op->_ref_pat->_view} ({$curr_op->_ref_pat->_age} ans)
+		    {$curr_op->_ref_sejour->_ref_patient->_view} ({$curr_op->_ref_sejour->_ref_patient->_age} ans)
 		    </a>
 		    </strong>
 			<br />
-			Admission le {$curr_op->date_adm|date_format:"%a %d %b"} à {$curr_op->time_adm|date_format:"%Hh%M"} ({$curr_op->type_adm|truncate:1:""|capitalize})
+			Admission le {$curr_op->_ref_sejour->entree_prevue|date_format:"%a %d %b à %Hh%M"} ({$curr_op->_ref_sejour->type|truncate:1:""|capitalize})
             <br />
 			Durée : {$curr_op->temp_operation|date_format:"%Hh%M"}
 		  </td>
@@ -45,13 +45,12 @@
             <input type="hidden" name="a" value="do_order_op" />
             <input type="hidden" name="cmd" value="setanesth" />
             <input type="hidden" name="id" value="{$curr_op->operation_id}" />
-            <select name="type">
+            <select name="type" onchange="this.form.submit()">
               <option value="NULL">&mdash; Anesthésie &mdash;</option>
               {foreach from=$anesth item=curr_anesth}
               <option {if $curr_op->_lu_type_anesth == $curr_anesth} selected="selected" {/if}>{$curr_anesth}</option>
               {/foreach}
             </select>
-            <input type="submit" value="changer" />
             </form>
 		  </td>
 		  <td>
@@ -77,35 +76,36 @@
 		{foreach from=$list2 item=curr_op}
 		<tr>
 		  <td width="50%">
-		    <a style="float:right;" href="javascript:view_log('COperation',{$curr_op->operation_id})">
+		    <a name="{$curr_op->operation_id}" style="float:right;" href="javascript:view_log('COperation',{$curr_op->operation_id})">
               <img src="images/history.gif" alt="historique" />
             </a>
-		    <a name="{$curr_op->operation_id}">
 			<form name="editFrm{$curr_op->operation_id}" action="index.php" method="get">
             <input type="hidden" name="m" value="{$m}" />
             <input type="hidden" name="a" value="do_order_op" />
             <input type="hidden" name="cmd" value="sethour" />
             <input type="hidden" name="id" value="{$curr_op->operation_id}" />
-            </a>
 		    <strong>
 		    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;id={$curr_op->_ref_pat->patient_id}">
-		    {$curr_op->_ref_pat->_view} ({$curr_op->_ref_pat->_age} ans)
+		    {$curr_op->_ref_sejour->_ref_patient->_view} ({$curr_op->_ref_sejour->_ref_patient->_age} ans)
 		    </a>
 		    </strong>
 			<br />
-			Admission le {$curr_op->date_adm|date_format:"%a %d %b"} à {$curr_op->time_adm|date_format:"%Hh%M"} ({$curr_op->type_adm|truncate:1:""|capitalize})
+			Admission le {$curr_op->_ref_sejour->entree_prevue|date_format:"%a %d %b à %Hh%M"} ({$curr_op->_ref_sejour->type|truncate:1:""|capitalize})
             <br />
-			Durée : {$curr_op->temp_operation|date_format:"%Hh%M"}
+			Horaire : {$curr_op->time_operation|date_format:"%Hh%M"} - Durée : {$curr_op->temp_operation|date_format:"%Hh%M"}
 			<br />
+			Pause : 
 			<select name="hour">
-			  <option selected="selected">{$curr_op->time_operation|date_format:"%H"}</option>
-			  {foreach from=$curr_op->_listhour item=curr_hour}
-			  <option>{$curr_hour}</option>
-			  {/foreach}
+			  <option selected="selected">{$curr_op->pause|date_format:"%H"}</option>
+			  <option>00</option>
+			  <option>01</option>
+			  <option>02</option>
+			  <option>03</option>
+			  <option>04</option>
 			</select>
 			h
 			<select name="min">
-			  <option selected="selected">{$curr_op->time_operation|date_format:"%M"}</option>
+			  <option selected="selected">{$curr_op->pause|date_format:"%M"}</option>
 			  <option>00</option>
 			  <option>15</option>
 			  <option>30</option>
@@ -127,13 +127,12 @@
             <input type="hidden" name="a" value="do_order_op" />
             <input type="hidden" name="cmd" value="setanesth" />
             <input type="hidden" name="id" value="{$curr_op->operation_id}" />
-            <select name="type">
+            <select name="type" onchange="this.form.submit()">
               <option value="">&mdash; Anesthésie &mdash;</option>
               {foreach from=$anesth item=curr_anesth}
               <option {if $curr_op->_lu_type_anesth == $curr_anesth} selected="selected" {/if}>{$curr_anesth}</option>
               {/foreach}
             </select>
-            <input type="submit" value="changer" />
             </form>
 		  </td>
 		  <td>

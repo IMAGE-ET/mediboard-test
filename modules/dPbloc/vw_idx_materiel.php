@@ -36,6 +36,7 @@ $op = new COperation;
 $op = $op->loadList($where, $order, null, null, $ljoin);
 foreach($op as $key => $value) {
   $op[$key]->loadRefsFwd();
+  $op[$key]->_ref_sejour->loadRefsFwd();
 }
 
 // Création du template

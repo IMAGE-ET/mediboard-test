@@ -35,6 +35,7 @@ $op1 = new COperation();
 $op1 = $op1->loadList($where1, $order, null, null, $ljoin);
 foreach($op1 as $key => $value) {
   $op1[$key]->loadRefsFwd();
+  $op1[$key]->_ref_sejour->loadRefsFwd();
 }
 
 $where2 = $where;
@@ -43,6 +44,7 @@ $op2 = new COperation();
 $op2 = $op2->loadList($where2, $order, null, null, $ljoin);
 foreach($op2 as $key => $value) {
   $op2[$key]->loadRefsFwd();
+  $op2[$key]->_ref_sejour->loadRefsFwd();
 }
 
 // Création du template

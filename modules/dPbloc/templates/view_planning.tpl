@@ -72,7 +72,7 @@ function printAdmission(id) {
       </td>
 		  <td>{$curr_op->cote|truncate:1:""|capitalize}</td>
           <td>{if $curr_op->_lu_type_anesth != ''}{$curr_op->_lu_type_anesth}{else}Non Définie{/if}</td>
-          <td>{$curr_op->type_adm|truncate:1:""|capitalize}</td>
+          <td>{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}</td>
 		  <td class="text">{$curr_op->rques|nl2br}</td>
 		  <td class="text">
 		    {if $curr_op->commande_mat == 'n' && $curr_op->materiel != ''}<em>Materiel manquant:</em>{/if}
@@ -80,20 +80,18 @@ function printAdmission(id) {
 		  </td>
 		  <td>
 		    <a href="javascript:printAdmission({$curr_op->operation_id})">
-		      {$curr_op->_ref_pat->_view}
+		      {$curr_op->_ref_sejour->_ref_patient->_view}
 		    </a>
 		  </td>
 		  <td>
 		    <a href="javascript:printAdmission({$curr_op->operation_id})">
-		      {$curr_op->_ref_pat->_age} ans
+		      {$curr_op->_ref_sejour->_ref_patient->_age} ans
 		    </a>
 		  </td>
 		  <td class="text">
         {assign var="affectation" value=$curr_op->_ref_first_affectation}
 		    {if $affectation->affectation_id}
-		    {$affectation->_ref_lit->_ref_chambre->_ref_service->nom} -
-		    {$affectation->_ref_lit->_ref_chambre->nom} -
-		    {$affectation->_ref_lit->nom}
+		    {$affectation->_ref_lit->_view}
 		    {/if}
 		  </td>
 		</tr>

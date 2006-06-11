@@ -38,7 +38,6 @@ class Cplanning {
 	  unset($this->salles);
     $sql = "SELECT id, nom FROM sallesbloc";
     $this->salles = db_loadlist($sql);
-    $mychrono = new Chronometer;
 	  foreach($this->salles as $key => $value) {
 	    $sql = "SELECT plagesop.id AS id, plagesop.debut AS debut, plagesop.fin AS fin,
               plagesop.chir_id AS chir, plagesop.anesth_id AS anesth, plagesop.id_spec AS spec,

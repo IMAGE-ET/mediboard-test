@@ -88,7 +88,7 @@ switch($cmd)
     $hour = dPgetParam( $_GET, 'hour', '00' );
     $min = dPgetParam( $_GET, 'min', '00' );
     $sql = "UPDATE operations
-			SET time_operation = '".$hour.":".$min.":00'
+			SET pause = '".$hour.":".$min.":00'
 			WHERE operations.operation_id = '$id'";
     $result = db_exec($sql);
     cleanOrderOp($plageop, "time");
@@ -140,6 +140,7 @@ function cleanOrderOp($plageop, $type = "rank") {
       $sql = "SELECT operations.operation_id," .
           "\noperations.rank," .
           "\noperations.temp_operation," .
+          "\noperations.pause," .
           "\nplagesop.debut" .
           "\nFROM operations" .
           "\nLEFT JOIN plagesop" .
@@ -156,9 +157,9 @@ function cleanOrderOp($plageop, $type = "rank") {
             "\nWHERE operations.operation_id = '$curr_id'";
         db_exec($sql);
         changeAffect($curr_id);
-        $hour = substr($debut, 0, 2) + substr($value["temp_operation"], 0, 2);
-        $min  = substr($debut, 3, 2) + substr($value["temp_operation"], 3, 2) + 15;
-        $debut = date("H:i:00", mktime($hour, $min, 0, 1, 1, 2000));
+        $debut = mbAddTime($value["temp_operation"], $debut); // durée de l'opération
+        $debut = mbAddTime("00:15:00", $debut);               // pause d'1/4h
+        $debut = mbAddTime($value["pause"], $debut);          // Pause
       }
       break;
   }
@@ -171,10 +172,15 @@ function changeAffect($id, $cmd = null) {
   $operation->loadRefs();
   $affectation =& $operation->_ref_last_affectation;
   if ($affectation->affectation_id && ($operation->type_adm == "ambu")) {
-    if($cmd == "rm")
+    if($cmd == "rm") {
       $affectation->sortie = mbDate("", $affectation->sortie)." 18:00:00";
-    else
-      $affectation->sortie = mbDate("", $affectation->sortie)." ".mbTime("+ 6 hours", $operation->time_operation);
+    } else {
+      $affectation->sortie = mbDate("", $affectation->sortie)." ";
+      if($operation->time_operation < "18:00:00")
+        $affectation->sortie .= mbTime("+ 6 hours", $operation->time_operation);
+      else
+        $affectation->sortie .= "23:59:00";
+    }
     $affectation->store();
   }
 }

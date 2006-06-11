@@ -16,7 +16,7 @@
 		<tr>
 		  <td>{$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}</td>
 		  <td class="text">Dr. {$curr_op->_ref_chir->_view}</td>
-		  <td class="text">{$curr_op->_ref_pat->_view}</td>
+		  <td class="text">{$curr_op->_ref_sejour->_ref_patient->_view}</td>
 		  <td class="text">
         {foreach from=$curr_op->_ext_codes_ccam item=curr_code}
         {$curr_code->code} : <em>{$curr_code->libelleLong}</em><br />
@@ -43,7 +43,7 @@
 		<tr>
 		  <td>{$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}</td>
 		  <td class="text">Dr. {$curr_op->_ref_chir->_view}</td>
-		  <td class="text">{$curr_op->_ref_pat->_view}</td>
+		  <td class="text">{$curr_op->_ref_sejour->_ref_patient->_view}</td>
 		  <td class="text">
         {foreach from=$curr_op->_ext_codes_ccam item=curr_code}
         {$curr_code->code} : <em>{$curr_code->libelleLong}</em><br />

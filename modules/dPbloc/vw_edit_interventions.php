@@ -38,7 +38,8 @@ $ljoin["plagesop"] = "operations.plageop_id = plagesop.id";
 $order = "operations.temp_operation";
 $list1 = $list1->loadList($where, $order, null, null, $ljoin);
 foreach($list1 as $key => $value) {
-  $list1[$key]->loadRefs();
+  $list1[$key]->loadRefsFwd();
+  $list1[$key]->_ref_sejour->loadRefsFwd();
 }
 
 // Liste de gauche
@@ -47,14 +48,8 @@ $where["rank"] = "!= '0'";
 $order = "operations.rank";
 $list2 = $list2->loadList($where, $order, null, null, $ljoin);
 foreach($list2 as $key => $value) {
-  $list2[$key]->loadRefs();
-  $j = 0;
-  for($i = substr($list2[$key]->_ref_plageop->debut, 0, 2) ; $i < substr($list2[$key]->_ref_plageop->fin, 0, 2) ; $i++) {
-    if(strlen($i) == 1)
-    $i = "0".$i;
-	$list2[$key]->_listhour[$j] = $i;
-	$j++;
-  }
+  $list2[$key]->loadRefsFwd();
+  $list2[$key]->_ref_sejour->loadRefsFwd();
 }
 
 // Création du template
