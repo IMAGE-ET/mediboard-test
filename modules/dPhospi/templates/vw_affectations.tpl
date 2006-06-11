@@ -427,8 +427,8 @@ function showLegend() {
               <form name="editChFrm{$curr_affectation->_ref_operation->operation_id}" action="index.php" method="post">
               <input type="hidden" name="m" value="{$m}" />
               <input type="hidden" name="dosql" value="do_edit_chambre" />
-              <input type="hidden" name="id" value="{$curr_affectation->_ref_operation->operation_id}" />
-              {if $curr_affectation->_ref_operation->chambre == 'o'}
+              <input type="hidden" name="id" value="{$curr_affectation->_ref_operation->_ref_sejour->sejour_id}" />
+              {if $curr_affectation->_ref_operation->_ref_sejour->chambre_seule == 'o'}
               <input type="hidden" name="value" value="n" />
               <button type="submit" style="background-color: #f55;">
                 <img src="modules/{$m}/images/refresh.png" alt="changer" /> chambre simple
@@ -587,7 +587,7 @@ function showLegend() {
         </td>
       </tr>
       {/if}
-      {if $curr_operation->chambre == "o"}
+      {if $curr_operation->_ref_sejour->chambre_seule == "o"}
       <tr>
         <td class="date" style="background-color: #f55;" colspan="2">
           <strong>Chambre seule</strong>

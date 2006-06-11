@@ -187,9 +187,10 @@ class COperation extends CMbObject {
     
   }
   
+  // Only use when current operation is deleted or canceled
   function reorder() {
       $sql = "SELECT operations.operation_id, operations.temp_operation,
-      	plagesop.debut
+      	operations.pause, plagesop.debut
         FROM operations
         LEFT JOIN plagesop
         ON plagesop.id = operations.plageop_id
@@ -199,23 +200,16 @@ class COperation extends CMbObject {
         ORDER BY operations.rank";
       $result = db_loadlist($sql);
       if(count($result)) {
-        $old_time = $result[0]["debut"];
-        $old_time_hour = substr($old_time, 0, 2);
-        $old_time_min = substr($old_time, 3, 2);
-        $new_time = mktime($old_time_hour, $old_time_min, 0, 1, 1, 2000);
+        $new_time = $result[0]["debut"];
       }
       $i = 1;
       foreach ($result as $key => $value) {
-      	$new_time_sql = date("H:i:00", $new_time);
-        $sql = "UPDATE operations SET rank = '$i', time_operation = '$new_time_sql' " .
+        $sql = "UPDATE operations SET rank = '$i', time_operation = '$new_time' " .
         		"WHERE operation_id = '".$value["operation_id"]."'";
         db_exec( $sql );
-        $add_time = $value["temp_operation"];
-        $add_time_hour = substr($add_time, 0, 2);
-        $add_time_min = substr($add_time, 3, 2);
-        $new_time_hour = date("H", $new_time);
-        $new_time_min = date("i", $new_time);
-        $new_time  = mktime($new_time_hour + $add_time_hour ,$new_time_min + $add_time_min ,0 ,1 ,1 ,2000);
+        $new_time = mbAddTime($value["temp_operation"], $new_time);
+        $new_time = mbAddTime("00:15:00", $new_time);
+        $new_time = mbAddTime($value["pause"], $new_time);
         $i++;
       }
     }
@@ -243,15 +237,7 @@ class COperation extends CMbObject {
     if ($this->rank)
   	  $this->reorder();
     $msg = parent::delete();
-    if($msg == null)
-      $this->delAff();
-  }
-  
-  function delAff() {
-    $this->loadRefsBack();
-    foreach($this->_ref_affectations as $key => $value) {
-      $this->_ref_affectations[$key]->delete();
-    }
+    return $msg;
   }
   
   function updateFormFields() {
@@ -331,7 +317,6 @@ class COperation extends CMbObject {
     // Cas d'une annulation
     if ($this->annulee) {
       $this->reorder();
-      $this->delAff();
     }
     
     // Vérification qu'on a pas des actes CCAM codés obsolètes

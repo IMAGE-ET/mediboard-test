@@ -14,7 +14,7 @@ require_once($AppUI->getModuleClass('dPplanningOp', 'sejour'));
 
 /**
  * Classe CAffectation. 
- * @abstract Gère les affectation en hospitation
+ * @abstract Gère les affectation des séjours dans des lits
  */
 class CAffectation extends CMbObject {
   // DB Table key
@@ -38,6 +38,7 @@ class CAffectation extends CMbObject {
   // Object references
   var $_ref_lit = null;
   var $_ref_operation = null;
+  var $_ref_sejour = null;
   var $_ref_prev = null;
   var $_ref_next = null;
 
@@ -46,6 +47,7 @@ class CAffectation extends CMbObject {
     
     $this->_props["lit_id"]       = "ref|notNull";
     $this->_props["operation_id"] = "ref|notNull";
+    $this->_props["sejour_id"]    = "ref|notNull";
     $this->_props["entree"]       = "dateTime|notNull";
     $this->_props["sortie"]       = "dateTime|notNull";
     $this->_props["confirme"]     = "enum|0|1";
@@ -77,7 +79,7 @@ class CAffectation extends CMbObject {
 	  if (!$this->canDelete( $msg )) {
 		  return $msg;
 	  }
-	  $sql = "DELETE FROM `affectation` WHERE `operation_id` = '".$this->operation_id."'";
+	  $sql = "DELETE FROM `affectation` WHERE `sejour_id` = '".$this->sejour_id."'";
 	  if (!db_exec( $sql )) {
       return db_error();
 	  } else {
@@ -92,55 +94,29 @@ class CAffectation extends CMbObject {
     $this->loadRefsFwd();
 
     if(!$this->_ref_prev->affectation_id) {
-      if($this->entree != $this->_ref_operation->date_adm." ".$this->_ref_operation->time_adm) {
-        $this->_ref_operation->date_adm = mbDate("+0 days", $this->entree);
-        $this->_ref_operation->time_adm = mbTime("+0 days", $this->entree);
-        $this->_ref_operation->updateFormFields();
+      if($this->entree != $this->_ref_sejour->entree_prevue) {
+        $this->_ref_sejour->entree_prevue = $this->entree;
       }
     }
     if(!$this->_ref_next->affectation_id) {
-      $debut = $this->_ref_operation->date_adm;
-      $fin = mbDate("+0 days", $this->sortie);
-      $duree = mbDaysRelative($debut, $fin) + 1;
-      if($duree != $this->_ref_operation->duree_hospi) {
-        $this->_ref_operation->duree_hospi = $duree;
-        $this->_ref_operation->updateFormFields();
+      if($this->sortie != $this->_ref_sejour->sortie_prevue) {
+        $this->_ref_sejour->sortie_prevue = $this->sortie;
       }
     }
-    $this->_ref_operation->store();
+    $this->_ref_sejour->store();
     return $msg;
   }
   
   function updateDBFields() {
-  	$where = array (
-      "operation_id" => "= '$this->operation_id'"
-    );
-    
-    $this->_ref_operation = new COperation;
-    $this->_ref_operation->loadObject($where);
 
-    $where = array (
-      "operation_id" => "= '$this->operation_id'",
-      "entree" => "= '$this->sortie'"
-    );
-    
-    $this->_ref_next = new CAffectation;
-    $this->_ref_next->loadObject($where);
-    
-    $where = array (
-      "operation_id" => "= '$this->operation_id'",
-      "sortie" => "= '$this->entree'"
-    );
-    
-    $this->_ref_prev = new CAffectation;
-    $this->_ref_prev->loadObject($where);
+  	$this->loadRefsFwd();
     
     $flag = !$this->_ref_next->affectation_id && !$this->_ref_prev->affectation_id && !$this->affectation_id;
-    $flagComp = $flag && ($this->_ref_operation->type_adm == "comp");
-    $flagAmbu = $flag && ($this->_ref_operation->type_adm == "ambu");
+    $flagComp = $flag && ($this->_ref_sejour->type == "comp");
+    $flagAmbu = $flag && ($this->_ref_sejour->type == "ambu");
     
     if($flagComp) {
-      $this->sortie = mbDate("", $this->sortie)." "."10:00:00";
+      $this->sortie = mbDate("", $this->sortie)." 10:00:00";
     }
     if($flagAmbu) {
       if($this->_ref_operation->time_operation != "00:00:00") {
@@ -177,7 +153,7 @@ class CAffectation extends CMbObject {
 
     $where = array (
       "affectation_id" => "!= '$this->affectation_id'",
-      "operation_id" => "= '$this->operation_id'",
+      "sejour_id" => "= '$this->sejour_id'",
       "sortie" => "= '$this->entree'"
     );
     
@@ -186,7 +162,7 @@ class CAffectation extends CMbObject {
     
     $where = array (
       "affectation_id" => "!= '$this->affectation_id'",
-      "operation_id" => "= '$this->operation_id'",
+      "sejour_id" => "= '$this->sejour_id'",
       "entree" => "= '$this->sortie'"
     );
     

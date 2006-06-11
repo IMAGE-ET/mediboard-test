@@ -57,7 +57,7 @@ class CSejour extends CMbObject {
     $this->_props["praticien_id"]    = "ref|notNull";
     
     $this->_props["type"] = "enum|comp|ambu|exte";
-    $this->_props["annulee"] = "enum|0|1";
+    $this->_props["annule"] = "enum|0|1";
     $this->_props["chambre_seule"] = "enum|o|n";
 
     $this->_props["entree_prevue"] = "dateTime|notNull";
@@ -83,6 +83,76 @@ class CSejour extends CMbObject {
     );
     
     return CDpObject::canDelete( $msg, $oid, $tables );
+  }
+  
+  function bindToOp($operation_id) {
+    $operation = new COperation;
+    $operation->load($operation_id);
+    $this->load($operation->sejour_id);
+    $this->patient_id    = $operation->pat_id;
+    $this->praticien_id  = $operation->chir_id;
+    $this->type          = $operation->type_adm;
+    $this->annule        = $operation->annulee;
+    $this->chambre_seule = $operation->chambre;
+    $this->entree_prevue = $operation->date_adm." ".$operation->time_adm;
+    $this->sortie_prevue = mbAddDateTime("+".$operation->duree_hospi." DAYS", $this->entree_prevue);
+    if($operation->admis == 'o')
+      $this->entree_reelle = $operation->entree_adm;
+    else
+      $this->entree_reelle = '';
+    $this->sortie_reelle = '';
+    $this->venue_SHS     = $operation->venue_SHS;
+    $this->saisi_SHS     = $operation->saisie;
+    $this->modif_SHS     = $operation->modifiee;
+  }
+  
+  function store() {
+    if(!($msg = parent::store())) {
+      $this->load($this->sejour_id);
+      if($this->annule) {
+        $this->delAffectations();
+      }
+      $this->loadRefsOperations();
+      foreach($this->_ref_operations as $keyOp => $operation) {
+        $this->_ref_operations[$keyOp]->pat_id = $this->patient_id;
+        $this->_ref_operations[$keyOp]->chir_id = $this->praticien_id;
+        $this->_ref_operations[$keyOp]->type_adm = $this->type;
+        $this->_ref_operations[$keyOp]->annulee = $this->annule;
+        $this->_ref_operations[$keyOp]->chambre = $this->chambre_seule;
+        $this->_ref_operations[$keyOp]->date_adm = $this->entree_prevue;
+        $this->_ref_operations[$keyOp]->time_adm = $operation->date_adm;
+        $this->_ref_operations[$keyOp]->duree_hospi = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
+        if($this->entree_reelle) {
+          $this->_ref_operations[$keyOp]->admis = 'o';
+        } else {
+          $this->_ref_operations[$keyOp]->admis = 'n';
+        }
+        $this->_ref_operations[$keyOp]->entree_adm = $this->entree_reelle;
+        $this->_ref_operations[$keyOp]->venue_SHS = $this->venue_SHS;
+        $this->_ref_operations[$keyOp]->saisie = $this->saisi_SHS;
+        $this->_ref_operations[$keyOp]->modifiee = $this->modif_SHS;
+        $msgOp = $this->_ref_operations[$keyOp]->store();
+      }
+    } else {
+      return $msg;
+    }
+    return null;
+  }
+  
+  function delete() {
+    $msg = parent::delete();
+    if($msg == null) {
+      //suppression des affectations
+      $this->delAffectations();
+    }
+    return $msg;
+  }
+  
+  function delAffectations() {
+    $this->loadRefsAffectations();
+    foreach($this->_ref_affectations as $key => $value) {
+      $this->_ref_affectations[$key]->delete();
+    }
   }
   
   function updateFormFields() {

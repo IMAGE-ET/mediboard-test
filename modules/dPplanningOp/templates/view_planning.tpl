@@ -85,7 +85,7 @@
   
   <tr>
     <th>Chambre particulière :</th>
-    <td>{if $operation->chambre == "o"}oui{else}non{/if}</td>
+    <td>{if $operation->_ref_sejour->chambre_seule == "o"}oui{else}non{/if}</td>
   </tr>
  
   <tr>
