@@ -24,14 +24,14 @@ function printAdmission(id) {
       </a>
     </th>
   </tr>
-  {foreach from=$listDays item=curr_day}
-  {foreach from=$curr_day.listChirs item=curr_chir}
-  {if $curr_chir.admissions}
+  {foreach from=$listDays key=key_day item=curr_day}
+  {foreach from=$curr_day key=key_prat item=curr_prat}
+  {assign var="praticien" value=$listPrats.$key_prat}
   <tr>
     <td>
       <strong>
-        {$curr_day.date_adm|date_format:"%a %d %b %Y"} 
-        &mdash; Dr. {$curr_chir.user_last_name} {$curr_chir.user_first_name} : {$curr_chir.admissions|@count} admission(s)
+        {$key_day|date_format:"%a %d %b %Y"} 
+        &mdash; Dr. {$praticien->_view} : {$curr_prat|@count} admission(s)
       </strong>
     </td>
   </tr>
@@ -39,73 +39,97 @@ function printAdmission(id) {
     <td>
 	  <table class="tbl">
 	    <tr>
-		  <th colspan="7"><strong>Admission</strong></th>
-		  <th colspan="4"><strong>Intervention</strong></th>
+		  <th colspan="6"><strong>Admission</strong></th>
+		  <th colspan="5"><strong>Intervention(s)</strong></th>
 		  <th colspan="3"><strong>Patient</strong></th>
 		</tr>
 		<tr>
 		  <th>Heure</th>
 		  <th>Type</th>
-		  <th>Durée</th>
-      <th>Bilan</th>
-      <th>Conv.</th>
-		  <th>Chambre</th>
-		  <th>Remarques</th>
-		  <th>Date</th>
-		  <th>Heure</th>
-		  <th>Dénomination</th>
-		  <th>Côté</th>
-		  <th>Nom / Prenom</th>
-		  <th>Naissance (Age)</th>
-		  <th>Remarques</th>
-		</tr>
-		{foreach from=$curr_chir.admissions item=curr_adm}
-		<tr>
-		  <td>{$curr_adm->_hour_adm}h{$curr_adm->_min_adm}</td>
-		  <td>{$curr_adm->type_adm|truncate:1:""|capitalize}</td>
-      <td>{$curr_adm->duree_hospi} j</td>
-      <td class="text">{$curr_adm->examen|nl2br}</td>
-      <td class="text">{$curr_adm->convalescence|nl2br}</td>
-      <td class="text">
-        {assign var="affectation" value=$curr_adm->_ref_first_affectation}
-        {if $affectation->affectation_id}
-        {$affectation->_ref_lit->_ref_chambre->_ref_service->nom}
-        - {$affectation->_ref_lit->_ref_chambre->nom}
-        - {$affectation->_ref_lit->nom}
-        {else}
-        Non placé
-        {/if}
-        ({$curr_adm->chambre})
-      </td>
-      <td class="text">{$curr_adm->rques}</td>
-      <td>{$curr_adm->_ref_plageop->date|date_format:"%d/%m/%Y"}</td>
-      <td>
-        {if $curr_adm->time_operation != "00:00:00"}
-        {$curr_adm->time_operation|truncate:5:""}
-        {/if}
-      </td>
-      
-      <td class="text">
-      {foreach from=$curr_adm->_ext_codes_ccam item=curr_code}
-      {$curr_code->libelleLong|truncate:80:"...":false} <em>({$curr_code->code})</em>
-      {/foreach}
-      </td>
-      <td>{$curr_adm->cote|truncate:1:""|capitalize}</td>
-      <td>
-        <a href="javascript:printAdmission({$curr_adm->operation_id})">{$curr_adm->_ref_pat->_view}</a>
-      </td>
-      <td>
-        <a href="javascript:printAdmission({$curr_adm->operation_id})">{$curr_adm->_ref_pat->_naissance} ({$curr_adm->_ref_pat->_age})</a>
-      </td>
-      <td class="text">
-        <a href="javascript:printAdmission({$curr_adm->operation_id})">{$curr_adm->_ref_pat->rques}</a>
-      </td>
-		</tr>
-		{/foreach}
-	  </table>
-	</td>
+          <th>Durée</th>
+          <th>Conv.</th>
+          <th>Chambre</th>
+          <th>Remarques</th>
+          <th>Date</th>
+          <th>Dénomination</th>
+          <th>Côté</th>
+          <th>Bilan</th>
+          <th>Remarques</th>
+          <th>Nom / Prenom</th>
+          <th>Naissance (Age)</th>
+          <th>Remarques</th>
+        </tr>
+        {foreach from=$curr_prat item=curr_sejour}
+        <tr>
+          <td>{$curr_sejour->entree_prevue|date_format:"%Hh%M"}</td>
+          <td>{$curr_sejour->type|truncate:1:""|capitalize}</td>
+          <td>{$curr_sejour->_duree_prevue} j</td>
+          <td class="text">{$curr_sejour->convalescence|nl2br}</td>
+          <td class="text">
+            {assign var="affectation" value=$curr_sejour->_ref_first_affectation}
+            {if $affectation->affectation_id}
+            {$affectation->_ref_lit->_view}
+            {else}
+            Non placé
+            {/if}
+            ({$curr_sejour->chambre_seule})
+          </td>
+          <td class="text">{$curr_sejour->rques}</td>
+          <td>
+            {foreach from=$curr_sejour->_ref_operations item=curr_operation}
+            {$curr_operation->_ref_plageop->date|date_format:"%d/%m/%Y"}
+            {if $curr_operation->time_operation != "00:00:00"}
+              à {$curr_operation->time_operation|date_format:"%Hh%M"}
+            {/if}
+            <br />
+            {/foreach}
+          </td>
+          <td class="text">
+            {foreach from=$curr_sejour->_ref_operations item=curr_operation}
+              {foreach from=$curr_operation->_ext_codes_ccam item=curr_code}
+              {$curr_code->libelleLong|truncate:80:"...":false} <em>({$curr_code->code})</em>
+              {/foreach}
+              <br />
+            {/foreach}
+          </td>
+          <td>
+            {foreach from=$curr_sejour->_ref_operations item=curr_operation}
+              {$curr_operation->cote|truncate:1:""|capitalize}
+              <br />
+            {/foreach}
+          </td>
+          <td class="text">
+            {foreach from=$curr_sejour->_ref_operations item=curr_operation}
+              {$curr_operation->examen|nl2br}
+              <br />
+            {/foreach}
+          </td>
+          <td class="text">
+            {foreach from=$curr_sejour->_ref_operations item=curr_operation}
+              {$curr_operation->rques|nl2br}
+              <br />
+            {/foreach}
+          </td>
+          <td>
+            <a href="javascript:printAdmission({$curr_sejour->sejour_id})">
+              {$curr_sejour->_ref_patient->_view}
+            </a>
+          </td>
+          <td>
+            <a href="javascript:printAdmission({$curr_sejour->sejour_id})">
+              {$curr_sejour->_ref_patient->_naissance} ({$curr_sejour->_ref_patient->_age})
+            </a>
+          </td>
+          <td class="text">
+            <a href="javascript:printAdmission({$curr_sejour->sejour_id})">
+              {$curr_sejour->_ref_patient->rques}
+            </a>
+          </td>
+        </tr>
+        {/foreach}
+      </table>
+    </td>
   </tr>
-  {/if}
   {/foreach}
   {/foreach}
 </table>

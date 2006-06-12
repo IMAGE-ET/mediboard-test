@@ -41,7 +41,8 @@ class CSejour extends CMbObject {
   var $modif_SHS = null; // remplace $op->modifiee
 
   var $pathologie = null; // remplace $operation->pathologie
-  var $septique = null;   // remplace $operation->septique
+  var $septique = null; // remplace $operation->septique
+  var $convalescence = null; // remplace $operation->convalescence
   
   var $rques = null;
 
@@ -77,6 +78,7 @@ class CSejour extends CMbObject {
 
     $this->_props["pathologie"] = "str|length|3";
     $this->_props["septique"] = "enum|0|1";
+    $this->_props["convalescence"] = "str|confidential";
 	}
 
   function check() {
@@ -124,6 +126,7 @@ class CSejour extends CMbObject {
     $this->modif_SHS     = $operation->modifiee;
     $this->pathologie    = $operation->pathologie;
     $this->septique      = $operation->septique;
+    $this->convalescence = $operation->convalescence;
   }
   
   function store() {
@@ -155,6 +158,7 @@ class CSejour extends CMbObject {
         $this->_ref_operations[$keyOp]->modifiee = $this->modif_SHS;
         $this->_ref_operations[$keyOp]->pathologie = $this->pathologie;
         $this->_ref_operations[$keyOp]->septique = $this->septique;
+        $this->_ref_operations[$keyOp]->convalescence = $this->convalescence;
         $msgOp = $this->_ref_operations[$keyOp]->store();
       }
       // Cas ou on a une premiere affectation différente

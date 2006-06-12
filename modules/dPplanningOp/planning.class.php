@@ -73,7 +73,7 @@ class COperation extends CMbObject {
   var $time_operation = null;
   var $examen = null;
   var $materiel = null;
-  var $convalescence = null;
+  var $convalescence = null; // remplacé par $sejour->convalescence
   var $commande_mat = null;
   var $info = null;
   var $date_anesth = null;

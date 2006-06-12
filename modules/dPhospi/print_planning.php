@@ -1,3 +1,5 @@
+
+
 <?php /* $Id$ */
 
 /**
@@ -9,11 +11,11 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-if (!$canRead) {			// lock out users that do not have at least readPermission on this module
-	$AppUI->redirect( "m=system&a=access_denied" );
+if (!$canRead) {      // lock out users that do not have at least readPermission on this module
+  $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
+require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour') );
 
 $deb = dPgetParam( $_GET, 'deb', date("Y-m-d")." 06:00:00");
 $fin = dPgetParam( $_GET, 'fin', date("Y-m-d")." 21:00:00");
@@ -25,102 +27,63 @@ $conv = dPgetParam( $_GET, 'conv', 0);
 $ordre = dPgetParam( $_GET, 'ordre', 'heure');
 $total = 0;
 
+$sejours = new CSejour;
 
-$where[] = "DATE_ADD(`date_adm`, INTERVAL `time_adm` HOUR_SECOND) >= '$deb'";
-$where[] = "DATE_ADD(`date_adm`, INTERVAL `time_adm` HOUR_SECOND) <= '$fin'";
+$ljoin["patients"] = "patients.patient_id = sejour.patient_id";
 
-$whereImploded = implode(" AND ", $where);
-
-// On sort les journées
-$sql = "SELECT date_adm" .
-    "\nFROM operations" .
-    "\nWHERE $whereImploded" .
-    "\nGROUP BY date_adm" .
-    "\nORDER BY date_adm";
-$listDays = db_loadlist($sql);
-
+$where[] = "sejour.entree_prevue >= '$deb'";
+$where[] = "sejour.entree_prevue <= '$fin'";
+$where["annule"] = "= 0";
 // Clause de filtre par spécialité
 if ($spe) {
   $speChirs = new CMediusers;
   $speChirs = $speChirs->loadList(array ("function_id" => "= '$spe'"));
   $idChirs = join(array_keys($speChirs), ", ");
-  $inChirs = "AND chir_id IN ($idChirs)";
+  $where[] = "sejour.praticien_id IN ($idChirs)";
+}
+// Clause de filtre par chirurgien
+if($chir) {
+  $where[] = "sejour.praticien_id = '$chir'";
+}
+if ($type) {
+  $where["type"] = "= '$type'";
+}
+if ($conv == "o") {
+  $where[] = "(sejour.convalescence IS NOT NULL AND sejour.convalescence != '')";
+}
+if ($conv == "n") {
+  $where[] = "(sejour.convalescence IS NULL OR sejour.convalescence = '')";
 }
 
-// Clause de filtre par chirurgien
-$addChir = $chir ? " AND chir_id = '$chir'" : null;
+$order = "DATE_FORMAT(sejour.entree_prevue, '%Y-%m-%d'), sejour.praticien_id";
+if($ordre == "heure") {
+  $order .= ", sejour.entree_prevue";
+} else {
+  $order .= ", patients.nom, patients.prenom";
+}
 
-// On sort les chirurgiens de chaque jour
-foreach($listDays as $keyDay => $valueDay) {
-  $day =& $listDays[$keyDay];
-  $sql = "SELECT chir_id, user_last_name, user_first_name" .
-  		"\nFROM operations" .
-  		"\nLEFT JOIN users" .
-  		"\nON users.user_id = operations.chir_id" .
-  		"\nWHERE date_adm = '".$day["date_adm"]."'" .
-      "\nAND $whereImploded";
+$sejours = $sejours->loadList($where, $order, null, null, $ljoin);
 
-  if ($spe) {
-    $sql .= $inChirs;
-  }
-
-  if ($chir) {
-    $sql .= $addChir;
-  }
-  
-  $sql .= " GROUP BY chir_id" .
-  		" ORDER BY chir_id";
-      
-  $day["listChirs"] = db_loadlist($sql);
-  foreach($day["listChirs"] as $keyChir => $valueChir) {
-    $dayChir =& $day["listChirs"][$keyChir];
-  	$listAdm = new COperation;
-  	$ljoin = array();
-  	$ljoin["patients"] = "operations.pat_id = patients.patient_id";
-  	$where = array();
-  	$where["annulee"] = "= 0";
-  	$where["chir_id"] = "= '". $valueChir["chir_id"] ."'";
-  	$where["date_adm"] = "= '".$day["date_adm"]."'";
-
-    if ($type) {
-      $where["type_adm"] = "= '$type'";
-    }
-    
-    if ($conv == "o") {
-        $where[] = "(operations.convalescence IS NOT NULL AND operations.convalescence != '')";
-    }
-    
-    if ($conv == "n") {
-        $where[] = "(operations.convalescence IS NULL OR operations.convalescence = '')";
-    }
-    
-  	$where[] = $whereImploded;
-    if($ordre == 'heure')
-      $order = "operations.time_adm, operations.chir_id, operations.time_operation";
-    else
-      $order = "patients.nom, patients.prenom, operations.chir_id, operations.time_adm";
-  	$listAdm = $listAdm->loadList($where, $order, null, null, $ljoin);
-    $dayChir["admissions"] = array();
-    
-    foreach ($listAdm as $keyAdm => $valueAdm) {
-      $operation =& $listAdm[$keyAdm];
-      $operation->loadRefs();
-      
-      $first_affectation =& $operation->_ref_first_affectation;
-      if ($first_affectation->affectation_id) {
-        $first_affectation->loadRefsFwd();
-        $lit =& $first_affectation->_ref_lit;
-        $lit->loadRefsFwd();
-        $chambre =& $lit->_ref_chambre;
-        $chambre->loadRefsFwd();
+$listDays = array();
+$listPrats = array();
+if(count($sejours)) {
+  foreach($sejours as $key => $sejour) {
+    $sejours[$key]->loadRefs();
+    $sejours[$key]->_ref_first_affectation->loadRefsFwd();
+    $sejours[$key]->_ref_first_affectation->_ref_lit->loadCompleteView();
+    if($service && ($sejours[$key]->_ref_first_affectation->_ref_lit->_ref_chambre->_ref_service->service_id != $service)) {
+      unset($sejours[$key]);
+    } else {
+      if(!isset($listPrats[$sejour->praticien_id])) {
+        $listPrats[$sejour->praticien_id] =& $sejours[$key]->_ref_praticien;
       }
-      
-      if (!$service || (isset($chambre) && $chambre->_ref_service->service_id == $service)) {
-        $dayChir["admissions"][$keyAdm] = $operation;
+      foreach($sejours[$key]->_ref_operations as $keyOp => $operation) {
+        $sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
       }
+      $curr_date = mbDate(null, $sejour->entree_prevue);
+      $curr_prat = $sejour->praticien_id;
+      $listDays[$curr_date][$curr_prat][] =& $sejours[$key];
     }
-    
-    $total += count($dayChir["admissions"]);
   }
 }
 
@@ -131,7 +94,8 @@ $smarty = new CSmartyDP;
 $smarty->assign('deb', $deb);
 $smarty->assign('fin', $fin);
 $smarty->assign('listDays', $listDays);
-$smarty->assign('total', $total);
+$smarty->assign('listPrats', $listPrats);
+$smarty->assign('total', count($sejours));
 
 $smarty->display('print_planning.tpl');
 
