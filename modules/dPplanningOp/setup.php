@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPplanningOp';
-$config['mod_version'] = '0.41';
+$config['mod_version'] = '0.43';
 $config['mod_directory'] = 'dPplanningOp';
 $config['mod_setup_class'] = 'CSetupdPplanningOp';
 $config['mod_type'] = 'user';
@@ -343,7 +343,29 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
       
       case "0.41":
-        return "0.41";
+        $sql = "ALTER TABLE `sejour` " .
+          "\nADD `pathologie` VARCHAR( 8 ) DEFAULT NULL," .
+          "\nADD `septique` TINYINT DEFAULT '0' NOT NULL ;";
+        db_exec($sql); db_error();
+        
+        $sql = "UPDATE `sejour`, `operations` SET" .
+            "\n`sejour`.`pathologie` = `operations`.`pathologie`," .
+            "\n`sejour`.`septique` = `operations`.`septique`" .
+            "\nWHERE `operations`.`sejour_id` = `sejour`.`sejour_id`";
+        db_exec($sql); db_error();
+      case "0.42":
+        $sql = "ALTER TABLE `sejour` " .
+          "\nADD `code_uf` VARCHAR( 8 ) DEFAULT NULL AFTER venue_SHS," .
+          "\nADD `libelle_uf` TINYINT DEFAULT '0' NOT NULL AFTER code_uf;";
+        db_exec($sql); db_error();
+        
+        $sql = "UPDATE `sejour`, `operations` SET" .
+            "\n`sejour`.`code_uf` = `operations`.`code_uf`," .
+            "\n`sejour`.`libelle_uf` = `operations`.`libelle_uf`" .
+            "\nWHERE `operations`.`sejour_id` = `sejour`.`sejour_id`";
+        db_exec($sql); db_error();
+      case "0.43" :
+        return "0.43";
     }
     
     return false;

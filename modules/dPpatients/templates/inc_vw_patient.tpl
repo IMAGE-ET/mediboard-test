@@ -189,7 +189,9 @@ function printIntervention(id) {
   {/if}
 
   {if $patient->_ref_sejours}
-  <tr><th colspan="4" class="category">Sejours</th></tr>
+  <tr>
+    <th colspan="2" class="category">Sejours</th>
+  </tr>
   {foreach from=$patient->_ref_sejours item=curr_sejour}
   <tr>
     <td>
@@ -203,95 +205,54 @@ function printIntervention(id) {
   {foreach from=$curr_sejour->_ref_operations item=curr_op}
   <tr>
     <td>
-      <a class="action" style="float: right" href="javascript:printIntervention({$curr_op->operation_id})">
+      <a class="actionPat" href="javascript:printIntervention({$curr_op->operation_id})">
         <img src="modules/dPpatients/images/print.png" alt="imprimer" title="imprimer"/>
       </a>
       {if $curr_op->annulee}
       [ANNULE]
       {else}
-      <a class="action" style="float: right" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
+      <a class="actionPat" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
         <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
       </a>
       {/if}
-      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
-      {$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}
-      </a>
-    </td>
-    <td>
-      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
-      Dr. {$curr_op->_ref_chir->_view}
-      </a>
-    </td>
-  </tr>
-  {/foreach}
-  {/foreach}
-  {/if}
-
-  {if $patient->_ref_operations}
-  <tr><th colspan="4" class="category">Interventions</th></tr>
-  {foreach from=$patient->_ref_operations item=curr_op}
-  <tr>
-    <td>
-      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
-      {$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}
-      </a>
-      <em><a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_op->date_adm|date_format:"%Y-%m-%d"}#adm{$curr_op->operation_id}">
+      <em><a class="actionPat" href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_op->date_adm|date_format:"%Y-%m-%d"}#adm{$curr_op->operation_id}">
       (adm. le {$curr_op->date_adm|date_format:"%d %b %Y"})
       </a></em>
-      <a href="javascript:printIntervention({$curr_op->operation_id})">
-      <img src="modules/dPpatients/images/print.png" alt="imprimer" title="imprimer"/>
+      <a class="actionPat" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
+        {$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}
       </a>
     </td>
     <td>
       <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
-      Dr. {$curr_op->_ref_chir->_view}
+        Dr. {$curr_op->_ref_chir->_view}
       </a>
-    </td>
-    <td>{if $curr_op->annulee}[ANNULE]{else}
-      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
-      <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" /></a>{/if}
     </td>
   </tr>
   {/foreach}
-  {/if}
-
-  {if $patient->_ref_hospitalisations}
-  <tr><th colspan="4" class="category">hospitalisations</th></tr>
-  {foreach from=$patient->_ref_hospitalisations item=curr_op}
-  <tr>
-    <td>
-      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_op->operation_id}">
-      Simple hospi.
-      </a>
-      <em><a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_op->date_adm|date_format:"%Y-%m-%d"}#adm{$curr_op->operation_id}">
-      (adm. le {$curr_op->date_adm|date_format:"%d %b %Y"})
-      </a></em>
-      <img src="modules/dPpatients/images/print.png" alt="imprimer" title="imprimer" onclick="printIntervention({$curr_op->operation_id})"/>
-    </td>
-    <td>
-      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_op->operation_id}">
-      Dr. {$curr_op->_ref_chir->_view}
-      </a>
-    </td>
-    <td>{if $curr_op->annulee}[ANNULE]{else}
-      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_op->operation_id}">
-      <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" /></a>{/if}
-    </td>
-  </tr>
   {/foreach}
   {/if}
   
   {if $patient->_ref_consultations}
-  <tr><th class="category" colspan="3">Consultations</th></tr>
+  <tr><th class="category" colspan="2">Consultations</th></tr>
   {foreach from=$patient->_ref_consultations item=curr_consult}
   <tr>
-    <td><a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={$curr_consult->consultation_id}">
-      {$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}</a></td>
-    <td><a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={$curr_consult->consultation_id}">
-      Dr. {$curr_consult->_ref_plageconsult->_ref_chir->_view}</a></td>
-    <td>{if $curr_consult->annule}[ANNULE]{else}
-    <a href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={$curr_consult->consultation_id}">
-    <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" /></a>{/if}</td>
+    <td>
+      {if $curr_consult->annule}
+      [ANNULE]
+      {else}
+      <a class="actionPat" href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={$curr_consult->consultation_id}">
+        <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
+      </a>
+      {/if}
+      <a class="actionPat" href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={$curr_consult->consultation_id}">
+        {$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}
+      </a>
+    </td>
+    <td>
+      <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={$curr_consult->consultation_id}">
+        Dr. {$curr_consult->_ref_plageconsult->_ref_chir->_view}
+      </a>
+    </td>
   </tr>
   {/foreach}
   {/if}

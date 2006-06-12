@@ -27,7 +27,6 @@ $mode = mbGetValueFromGetOrSession("mode");
 // Initialisation de la liste des chirs, patients et plagesop
 $listChirs = array();
 $listPats = array();
-$listPlagesOp = array();
 
 // Récupération des fonctions
 $listFunctions = new CFunctions;
@@ -68,30 +67,25 @@ foreach ($services as $service_id => $service) {
             $aff_next->_ref_lit->loadRefsFwd();
           }
 
-          $operation =& $affectations[$affectation_id]->_ref_operation;
-          if(isset($listChirs[$operation->chir_id])) {
-            $operation->_ref_chir =& $listChirs[$operation->chir_id];
+          $sejour =& $affectations[$affectation_id]->_ref_sejour;
+          $sejour->loadRefsOperations();
+          if(isset($listChirs[$sejour->praticien_id])) {
+            $sejour->_ref_praticien =& $listChirs[$sejour->praticien_id];
           }
           else {
-            $operation->loadRefChir();
-            $operation->_ref_chir->_ref_function =& $listFunctions[$operation->_ref_chir->function_id];
-            $listChirs[$operation->chir_id] =& $operation->_ref_chir;
+            $sejour->loadRefPraticien();
+            $sejour->_ref_praticien->_ref_function =& $listFunctions[$sejour->_ref_praticien->function_id];
+            $listChirs[$sejour->praticien_id] =& $sejour->_ref_praticien;
           }
-          if(isset($listPats[$operation->pat_id])) {
-            $operation->_ref_pat =& $listPats[$operation->pat_id];
-          }
-          else {
-            $operation->loadRefPat();
-            $listPats[$operation->pat_id] =& $operation->_ref_pat;
-          }
-          if(isset($listPlagesOp[$operation->plageop_id])) {
-            $operation->_ref_plageop =& $listPlagesOp[$operation->plageop_id];
+          if(isset($listPats[$sejour->patient_id])) {
+            $sejour->_ref_patient =& $listPats[$sejour->patient_id];
           }
           else {
-            $operation->loadRefPlageOp();
-            $listPlagesOp[$operation->plageop_id] =& $operation->_ref_plageop;
+            $sejour->loadRefPatient();
+            $listPats[$sejour->patient_id] =& $sejour->_ref_patient;
           }
-          $operation->loadRefCCAM();
+          foreach($sejour->_ref_operations as $operation_id => $operation)
+            $sejour->_ref_operations[$operation_id]->loadRefCCAM();
         } else
           unset($affectations[$affectation_id]);
       }
@@ -105,163 +99,145 @@ foreach ($services as $service_id => $service) {
 
 // Récupération des admissions à affecter
 $leftjoin = array(
-  "affectation"     => "operations.operation_id = affectation.operation_id",
-  "users_mediboard" => "operations.chir_id = users_mediboard.user_id",
-  "patients" => "operations.pat_id = patients.patient_id"
+  "affectation"     => "sejour.sejour_id = affectation.sejour_id",
+  "users_mediboard" => "sejour.praticien_id = users_mediboard.user_id",
+  "patients" => "sejour.patient_id = patients.patient_id"
 );
 $ljwhere = "affectation.affectation_id IS NULL";
-$order = "users_mediboard.function_id, operations.date_adm, operations.time_adm, patients.nom, patients.prenom";
+$order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
 
 // Admissions de la veille
 $where = array(
-  "date_adm" => "= '".mbDate("-1 days", $date)."'",
-  "type_adm" => "!= 'exte'",
-  "annulee" => "= 0",
+  "entree_prevue" => "BETWEEN '".mbDate("-1 days", $date)." 00:00:00' AND '$date 00:00:00'",
+  "type" => "!= 'exte'",
+  "annule" => "= 0",
   $ljwhere  
 );
-$opNonAffecteesVeille = new COperation;
-$opNonAffecteesVeille = $opNonAffecteesVeille->loadList($where, $order, null, null, $leftjoin);
+$sejourNonAffectesVeille = new CSejour;
+$sejourNonAffectesVeille = $sejourNonAffectesVeille->loadList($where, $order, null, null, $leftjoin);
 
-foreach ($opNonAffecteesVeille as $op_id => $op) {
-   if(isset($listChirs[$opNonAffecteesVeille[$op_id]->chir_id])) {
-     $opNonAffecteesVeille[$op_id]->_ref_chir =& $listChirs[$opNonAffecteesVeille[$op_id]->chir_id];
+foreach ($sejourNonAffectesVeille as $sejour_id => $sejour) {
+   if(isset($listChirs[$sejourNonAffectesVeille[$sejour_id]->praticien_id])) {
+     $sejourNonAffectesVeille[$sejour_id]->_ref_praticien =& $listChirs[$sejourNonAffectesVeille[$sejour_id]->praticien_id];
    }
    else {
-     $opNonAffecteesVeille[$op_id]->loadRefChir();
-     $opNonAffecteesVeille[$op_id]->_ref_chir->_ref_function =& $listFunctions[$opNonAffecteesVeille[$op_id]->_ref_chir->function_id];
-     $listChirs[$opNonAffecteesVeille[$op_id]->chir_id] =& $opNonAffecteesVeille[$op_id]->_ref_chir;
+     $sejourNonAffectesVeille[$sejour_id]->loadRefPraticien();
+     $sejourNonAffectesVeille[$sejour_id]->_ref_praticien->_ref_function =& $listFunctions[$sejourNonAffectesVeille[$sejour_id]->_ref_praticien->function_id];
+     $listChirs[$sejourNonAffectesVeille[$sejour_id]->chir_id] =& $sejourNonAffectesVeille[$sejour_id]->_ref_praticien;
    }
-   if(isset($listPats[$opNonAffecteesVeille[$op_id]->pat_id])) {
-     $opNonAffecteesVeille[$op_id]->_ref_pat =& $listPats[$opNonAffecteesVeille[$op_id]->pat_id];
-   }
-   else {
-     $opNonAffecteesVeille[$op_id]->loadRefPat();
-     $listPats[$opNonAffecteesVeille[$op_id]->pat_id] =& $opNonAffecteesVeille[$op_id]->_ref_pat;
-   }
-   if(isset($listPlagesOp[$opNonAffecteesVeille[$op_id]->plageop_id])) {
-     $opNonAffecteesVeille[$op_id]->_ref_plageop =& $listPlagesOp[$opNonAffecteesVeille[$op_id]->plageop_id];
+   if(isset($listPats[$sejourNonAffectesVeille[$sejour_id]->patient_id])) {
+     $sejorNonAffecteesVeille[$sejour_id]->_ref_patient =& $listPats[$sejourNonAffectesVeille[$sejour_id]->patient_id];
    }
    else {
-     $opNonAffecteesVeille[$op_id]->loadRefPlageOp();
-     $listPlagesOp[$opNonAffecteesVeille[$op_id]->plageop_id] =& $opNonAffecteesVeille[$op_id]->_ref_plageop;
+     $sejourNonAffectesVeille[$sejour_id]->loadRefPatient();
+     $listPats[$sejourNonAffectesVeille[$sejour_id]->patient_id] =& $sejourNonAffectesVeille[$sejour_id]->_ref_patient;
    }
-   $opNonAffecteesVeille[$op_id]->loadRefCCAM();
+   $sejourNonAffectesVeille[$sejour_id]->loadRefsOperations();
+   foreach($sejourNonAffectesVeille[$sejour_id]->_ref_operations as $operation_id => $operation) {
+     $sejourNonAffectesVeille[$sejour_id]->_ref_operations[$operation_id]->loadRefCCAM();
+   }
 }
 
 // Admissions du matin
 $where = array(
-  "date_adm" => "= '$date'",
-  "time_adm" => "< '$heureLimit'",
-  "type_adm" => "!= 'exte'",
-  "annulee" => "= 0",
+  "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date $heureLimit'",
+  "type" => "!= 'exte'",
+  "annule" => "= 0",
   $ljwhere  
 );
-$opNonAffecteesMatin = new COperation;
-$opNonAffecteesMatin = $opNonAffecteesMatin->loadList($where, $order, null, null, $leftjoin);
+$sejourNonAffectesMatin = new CSejour;
+$sejourNonAffectesMatin = $sejourNonAffectesMatin->loadList($where, $order, null, null, $leftjoin);
 
-foreach ($opNonAffecteesMatin as $op_id => $op) {
-   if(isset($listChirs[$opNonAffecteesMatin[$op_id]->chir_id])) {
-     $opNonAffecteesMatin[$op_id]->_ref_chir =& $listChirs[$opNonAffecteesMatin[$op_id]->chir_id];
+foreach ($sejourNonAffectesMatin as $sejour_id => $sejour) {
+   if(isset($listChirs[$sejourNonAffectesMatin[$sejour_id]->praticien_id])) {
+     $sejourNonAffectesMatin[$sejour_id]->_ref_praticien =& $listChirs[$sejourNonAffectesMatin[$sejour_id]->praticien_id];
    }
    else {
-     $opNonAffecteesMatin[$op_id]->loadRefChir();
-     $opNonAffecteesMatin[$op_id]->_ref_chir->_ref_function =& $listFunctions[$opNonAffecteesMatin[$op_id]->_ref_chir->function_id];
-     $listChirs[$opNonAffecteesMatin[$op_id]->chir_id] =& $opNonAffecteesMatin[$op_id]->_ref_chir;
+     $sejourNonAffectesMatin[$sejour_id]->loadRefPraticien();
+     $sejourNonAffectesMatin[$sejour_id]->_ref_praticien->_ref_function =& $listFunctions[$sejourNonAffectesMatin[$sejour_id]->_ref_praticien->function_id];
+     $listChirs[$sejourNonAffectesMatin[$sejour_id]->praticien_id] =& $sejourNonAffectesMatin[$sejour_id]->_ref_praticien;
    }
-   if(isset($listPats[$opNonAffecteesMatin[$op_id]->pat_id])) {
-     $opNonAffecteesMatin[$op_id]->_ref_pat =& $listPats[$opNonAffecteesMatin[$op_id]->pat_id];
-   }
-   else {
-     $opNonAffecteesMatin[$op_id]->loadRefPat();
-     $listPats[$opNonAffecteesMatin[$op_id]->pat_id] =& $opNonAffecteesMatin[$op_id]->_ref_pat;
-   }
-   if(isset($listPlagesOp[$opNonAffecteesMatin[$op_id]->plageop_id])) {
-     $opNonAffecteesMatin[$op_id]->_ref_plageop =& $listPlagesOp[$opNonAffecteesMatin[$op_id]->plageop_id];
+   if(isset($listPats[$sejourNonAffectesMatin[$sejour_id]->patient_id])) {
+     $sejourNonAffectesMatin[$sejour_id]->_ref_patient =& $listPats[$sejourNonAffectesMatin[$sejour_id]->patient_id];
    }
    else {
-     $opNonAffecteesMatin[$op_id]->loadRefPlageOp();
-     $listPlagesOp[$opNonAffecteesMatin[$op_id]->plageop_id] =& $opNonAffecteesMatin[$op_id]->_ref_plageop;
+     $sejourNonAffectesMatin[$sejour_id]->loadRefPatient();
+     $listPats[$sejourNonAffectesMatin[$sejour_id]->patient_id] =& $sejourNonAffectesMatin[$sejour_id]->_ref_patient;
    }
-   $opNonAffecteesMatin[$op_id]->loadRefCCAM();
+   $sejourNonAffectesMatin[$sejour_id]->loadRefsOperations();
+   foreach($sejourNonAffectesMatin[$sejour_id]->_ref_operations as $operation_id => $operation) {
+     $sejourNonAffectesMatin[$sejour_id]->_ref_operations[$operation_id]->loadRefCCAM();
+   }
 }
 
 // Admissions du soir
 $where = array(
-  "date_adm" => "= '$date'",
-  "time_adm" => ">= '$heureLimit'",
-  "type_adm" => "!= 'exte'",
-  "annulee" => "= 0",
+  "entree_prevue" => "BETWEEN '$date $heureLimit' AND '$date 23:59:59'",
+  "type" => "!= 'exte'",
+  "annule" => "= 0",
   $ljwhere  
 );
-$opNonAffecteesSoir = new COperation;
-$opNonAffecteesSoir = $opNonAffecteesSoir->loadList($where, $order, null, null, $leftjoin);
+$sejourNonAffectesSoir = new CSejour;
+$sejourNonAffectesSoir = $sejourNonAffectesSoir->loadList($where, $order, null, null, $leftjoin);
 
-foreach ($opNonAffecteesSoir as $op_id => $op) {
-   if(isset($listChirs[$opNonAffecteesSoir[$op_id]->chir_id])) {
-     $opNonAffecteesSoir[$op_id]->_ref_chir =& $listChirs[$opNonAffecteesSoir[$op_id]->chir_id];
+foreach ($sejourNonAffectesSoir as $sejour_id => $sejour) {
+   if(isset($listChirs[$sejourNonAffectesSoir[$sejour_id]->praticien_id])) {
+     $sejourNonAffectesSoir[$sejour_id]->_ref_praticien =& $listChirs[$sejourNonAffectesSoir[$sejour_id]->praticien_id];
    }
    else {
-     $opNonAffecteesSoir[$op_id]->loadRefChir();
-     $opNonAffecteesSoir[$op_id]->_ref_chir->_ref_function =& $listFunctions[$opNonAffecteesSoir[$op_id]->_ref_chir->function_id];
-     $listChirs[$opNonAffecteesSoir[$op_id]->chir_id] =& $opNonAffecteesSoir[$op_id]->_ref_chir;
+     $sejourNonAffectesSoir[$sejour_id]->loadRefPraticien();
+     $sejourNonAffectesSoir[$sejour_id]->_ref_praticien->_ref_function =& $listFunctions[$sejourNonAffectesSoir[$sejour_id]->_ref_praticien->function_id];
+     $listChirs[$sejourNonAffectesSoir[$sejour_id]->praticien_id] =& $sejourNonAffectesSoir[$sejour_id]->_ref_praticien;
    }
-   if(isset($listPats[$opNonAffecteesSoir[$op_id]->pat_id])) {
-     $opNonAffecteesSoir[$op_id]->_ref_pat =& $listPats[$opNonAffecteesSoir[$op_id]->pat_id];
-   }
-   else {
-     $opNonAffecteesSoir[$op_id]->loadRefPat();
-     $listPats[$opNonAffecteesSoir[$op_id]->pat_id] =& $opNonAffecteesSoir[$op_id]->_ref_pat;
-   }
-   if(isset($listPlagesOp[$opNonAffecteesSoir[$op_id]->plageop_id])) {
-     $opNonAffecteesSoir[$op_id]->_ref_plageop =& $listPlagesOp[$opNonAffecteesSoir[$op_id]->plageop_id];
+   if(isset($listPats[$sejourNonAffectesSoir[$sejour_id]->patient_id])) {
+     $sejourNonAffectesSoir[$sejour_id]->_ref_patient =& $listPats[$sejourNonAffectesSoir[$sejour_id]->patient_id];
    }
    else {
-     $opNonAffecteesSoir[$op_id]->loadRefPlageOp();
-     $listPlagesOp[$opNonAffecteesSoir[$op_id]->plageop_id] =& $opNonAffecteesSoir[$op_id]->_ref_plageop;
+     $sejourNonAffectesSoir[$sejour_id]->loadRefPatient();
+     $listPats[$sejourNonAffectesSoir[$sejour_id]->patient_id] =& $sejourNonAffectesSoir[$sejour_id]->_ref_patient;
    }
-   $opNonAffecteesSoir[$op_id]->loadRefCCAM();
+   $sejourNonAffectesSoir[$sejour_id]->loadRefsOperations();
+   foreach($sejourNonAffectesSoir[$sejour_id]->_ref_operations as $operation_id => $operation) {
+     $sejourNonAffectesSoir[$sejour_id]->_ref_operations[$operation_id]->loadRefCCAM();
+   }
 }
 
 // Admissions antérieures
 $where = array(
-  "annulee" => "= 0",
-  "'$date' BETWEEN ADDDATE(`date_adm`, INTERVAL 2 DAY) AND ADDDATE(`date_adm`, INTERVAL `duree_hospi` DAY)",
-  "affectation.affectation_id IS NULL"
+  "annule" => "= 0",
+  "'".mbDate("-2 DAYS", $date)."' BETWEEN entree_prevue AND sortie_prevue",
+  $ljwhere
 );
-$opNonAffecteesAvant = new COperation;
-$opNonAffecteesAvant = $opNonAffecteesAvant->loadList($where, $order, null, null, $leftjoin);
+$sejourNonAffectesAvant = new CSejour;
+$sejourNonAffectesAvant = $sejourNonAffectesAvant->loadList($where, $order, null, null, $leftjoin);
 
-foreach ($opNonAffecteesAvant as $op_id => $op) {
-   if(isset($listChirs[$opNonAffecteesAvant[$op_id]->chir_id])) {
-     $opNonAffecteesAvant[$op_id]->_ref_chir =& $listChirs[$opNonAffecteesAvant[$op_id]->chir_id];
+foreach ($sejourNonAffectesAvant as $sejour_id => $sejour) {
+   if(isset($listChirs[$sejourNonAffectesAvant[$sejour_id]->praticien_id])) {
+     $sejourNonAffectesAvant[$sejour_id]->_ref_praticien =& $listChirs[$sejourNonAffectesAvant[$sejour_id]->praticien_id];
    }
    else {
-     $opNonAffecteesAvant[$op_id]->loadRefChir();
-     $opNonAffecteesAvant[$op_id]->_ref_chir->_ref_function =& $listFunctions[$opNonAffecteesAvant[$op_id]->_ref_chir->function_id];
-     $listChirs[$opNonAffecteesAvant[$op_id]->chir_id] =& $opNonAffecteesAvant[$op_id]->_ref_chir;
+     $sejourNonAffectesAvant[$sejour_id]->loadRefPraticien();
+     $sejourNonAffectesAvant[$sejour_id]->_ref_praticien->_ref_function =& $listFunctions[$sejourNonAffectesAvant[$sejour_id]->_ref_praticien->function_id];
+     $listChirs[$sejourNonAffectesAvant[$sejour_id]->praticien_id] =& $sejourNonAffectesAvant[$sejour_id]->_ref_praticien;
    }
-   if(isset($listPats[$opNonAffecteesAvant[$op_id]->pat_id])) {
-     $opNonAffecteesAvant[$op_id]->_ref_pat =& $listPats[$opNonAffecteesAvant[$op_id]->pat_id];
-   }
-   else {
-     $opNonAffecteesAvant[$op_id]->loadRefPat();
-     $listPats[$opNonAffecteesAvant[$op_id]->pat_id] =& $opNonAffecteesAvant[$op_id]->_ref_pat;
-   }
-   if(isset($listPlagesOp[$opNonAffecteesAvant[$op_id]->plageop_id])) {
-     $opNonAffecteesAvant[$op_id]->_ref_plageop =& $listPlagesOp[$opNonAffecteesAvant[$op_id]->plageop_id];
+   if(isset($listPats[$sejourNonAffectesAvant[$sejour_id]->patient_id])) {
+     $sejourNonAffectesAvant[$sejour_id]->_ref_patient =& $listPats[$sejourNonAffectesAvant[$sejour_id]->patient_id];
    }
    else {
-     $opNonAffecteesAvant[$op_id]->loadRefPlageOp();
-     $listPlagesOp[$opNonAffecteesAvant[$op_id]->plageop_id] =& $opNonAffecteesAvant[$op_id]->_ref_plageop;
+     $sejourNonAffectesAvant[$sejour_id]->loadRefPatient();
+     $listPats[$sejourNonAffectesAvant[$sejour_id]->patient_id] =& $sejourNonAffectesAvant[$sejour_id]->_ref_patient;
    }
-   $opNonAffecteesAvant[$op_id]->loadRefCCAM();
+   $sejourNonAffectesAvant[$sejour_id]->loadRefsOperations();
+   foreach($sejourNonAffectesAvant[$sejour_id]->_ref_operations as $operation_id => $operation) {
+     $sejourNonAffectesAvant[$sejour_id]->_ref_operations[$operation_id]->loadRefCCAM();
+   }
 }
 
-$groupOpNonAffectees = array(
-  "veille" => $opNonAffecteesVeille ,
-  "matin"  => $opNonAffecteesMatin ,
-  "soir"   => $opNonAffecteesSoir ,
-  "avant"  => $opNonAffecteesAvant
+$groupSejourNonAffectes = array(
+  "veille" => $sejourNonAffectesVeille ,
+  "matin"  => $sejourNonAffectesMatin ,
+  "soir"   => $sejourNonAffectesSoir ,
+  "avant"  => $sejourNonAffectesAvant
 );
 
 // Création du template
@@ -276,7 +252,7 @@ $smarty->assign('heureLimit', $heureLimit);
 $smarty->assign('mode', $mode);
 $smarty->assign('totalLits', $totalLits);
 $smarty->assign('services', $services);
-$smarty->assign('groupOpNonAffectees' , $groupOpNonAffectees);
+$smarty->assign('groupSejourNonAffectes' , $groupSejourNonAffectes);
 
 $smarty->display('vw_affectations.tpl');
 ?>

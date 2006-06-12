@@ -297,10 +297,14 @@ table.tbl a {
   display: block;
 }
 
-a.action {
+a.actionPat {
   display: inline;
   float: right;
   margin: 0 1px;
+}
+
+table.tbl a.action {
+  display: inline;
 }
 
 table.tbl th a {
@@ -1291,7 +1295,9 @@ table.chambreexpand tr.dates {
 /* Operations */
 
 table.operationcollapse,
-table.operationexpand {
+table.operationexpand,
+table.sejourcollapse,
+table.sejourexpand {
   width: 100%;
   background: #fff;
   border-spacing: 0px;
@@ -1299,40 +1305,50 @@ table.operationexpand {
 }
 
 table.operationcollapse td,
-table.operationexpand td {
+table.operationexpand td,
+table.sejourcollapse td,
+table.sejourexpand td {
   border: 1px solid #555;
   padding: 0 2px;
   color: #000;
 }
 
 table.operationcollapse em,
-table.operationexpand em {
+table.operationexpand em,
+table.sejourcollapse em,
+table.sejourexpand em {
   font-weight: bold;
 }
 
 table.operationcollapse td.selectoperation,
-table.operationexpand td.selectoperation {
+table.operationexpand td.selectsejour,
+table.sejourcollapse td.selectsejour,
+table.sejourexpand td.selectsejour {
   background: #ddf;
   text-align: center;
   vertical-align: middle;
   width: 20px;
 }
 
-table.operationcollapse td.patient {
+table.operationcollapse td.patient,
+table.sejourcollapse td.patient {
   white-space: normal;
   padding-left: 17px;
   background: #ddf url(./images/collapse.gif) no-repeat center left;
 }
 
-table.operationexpand td.patient {
+table.operationexpand td.patient,
+table.sejournexpand td.patient {
   padding-left: 17px;
   background: #ddf url(./images/expand.gif) no-repeat center left;
 }
 
-table.operationexpand td.date {
+table.operationexpand td.date,
+table.sejourexpand td.date {
 }
 
-table.operationcollapse td.date {
+table.operationcollapse td.date,
+table.sejourcollapse td.date {
   display: none;
 }
 

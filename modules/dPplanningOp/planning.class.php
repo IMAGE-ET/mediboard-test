@@ -17,7 +17,6 @@ require_once( $AppUI->getModuleClass('dPcabinet'   , 'consultAnesth') );
 require_once( $AppUI->getModuleClass('dPcabinet'   , 'files'        ) );
 require_once( $AppUI->getModuleClass('dPhospi'     , 'affectation'  ) );
 require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour'       ) );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'pathologie'   ) );
 require_once( $AppUI->getModuleClass('dPsalleOp'   , 'acteccam'     ) );
 require_once( $AppUI->getModuleClass('dPpmsi'      , 'GHM'          ) );
 
@@ -49,8 +48,8 @@ class COperation extends CMbObject {
   
   // DB Fields S@nté.com communication
   var $venue_SHS = null; // remplacé par $sejour->venue_SHS
-  var $code_uf = null;
-  var $libelle_uf = null;
+  var $code_uf = null; // remplacé par $sejour->code_uf
+  var $libelle_uf = null; // remplacé par $sejour->libelle_uf
   var $saisie = null; // remplacé par $sejour->saisi_SHS
   var $modifiee = null;  // remplace $sejour->modif_SHS
   
@@ -86,9 +85,9 @@ class COperation extends CMbObject {
   var $rank = null;
   
   var $depassement = null;
-  var $annulee = null;  // completé par $sejour->annule
-  var $pathologie = null;
-  var $septique = null;
+  var $annulee = null;    // completé par $sejour->annule
+  var $pathologie = null; // remplacé par $sejour->pathologie
+  var $septique = null;   // remplacé par $sejour->septique
     
   // Form fields
   var $_hour_op = null;
@@ -164,8 +163,6 @@ class COperation extends CMbObject {
     $this->_props["annulee"] = "enum|0|1";
 //    $this->_props["compte_rendu"] = "html|confidential";
 //    $this->_props["cr_valide"] = "enum|0|1";
-    $this->_props["pathologie"] = "str|length|3";
-    $this->_props["septique"] = "enum|0|1";
   }
 
   function check() {
@@ -178,10 +175,6 @@ class COperation extends CMbObject {
         $msg .= "Praticien non valide";
       }
     }
-
-    if ($this->pathologie != null && (!in_array($this->pathologie, $pathos->dispo))) {
-      $msg.= "Pathologie non disponible<br />";
-    }
     
     return $msg . parent::check();
     
@@ -189,30 +182,30 @@ class COperation extends CMbObject {
   
   // Only use when current operation is deleted or canceled
   function reorder() {
-      $sql = "SELECT operations.operation_id, operations.temp_operation,
-      	operations.pause, plagesop.debut
-        FROM operations
-        LEFT JOIN plagesop
-        ON plagesop.id = operations.plageop_id
-        WHERE operations.plageop_id = '$this->plageop_id'
-        AND operations.rank != 0
-        AND operations.operation_id != '$this->operation_id'
-        ORDER BY operations.rank";
-      $result = db_loadlist($sql);
-      if(count($result)) {
-        $new_time = $result[0]["debut"];
-      }
-      $i = 1;
-      foreach ($result as $key => $value) {
-        $sql = "UPDATE operations SET rank = '$i', time_operation = '$new_time' " .
-        		"WHERE operation_id = '".$value["operation_id"]."'";
-        db_exec( $sql );
-        $new_time = mbAddTime($value["temp_operation"], $new_time);
-        $new_time = mbAddTime("00:15:00", $new_time);
-        $new_time = mbAddTime($value["pause"], $new_time);
-        $i++;
-      }
+    $sql = "SELECT operations.operation_id, operations.temp_operation,
+    	operations.pause, plagesop.debut
+      FROM operations
+      LEFT JOIN plagesop
+      ON plagesop.id = operations.plageop_id
+      WHERE operations.plageop_id = '$this->plageop_id'
+      AND operations.rank != 0
+      AND operations.operation_id != '$this->operation_id'
+      ORDER BY operations.rank";
+    $result = db_loadlist($sql);
+    if(count($result)) {
+      $new_time = $result[0]["debut"];
     }
+    $i = 1;
+    foreach ($result as $key => $value) {
+      $sql = "UPDATE operations SET rank = '$i', time_operation = '$new_time' " .
+             "WHERE operation_id = '".$value["operation_id"]."'";
+      db_exec( $sql );
+      $new_time = mbAddTime($value["temp_operation"], $new_time);
+      $new_time = mbAddTime("00:15:00", $new_time);
+      $new_time = mbAddTime($value["pause"], $new_time);
+      $i++;
+    }
+  }
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
@@ -263,8 +256,8 @@ class COperation extends CMbObject {
     $this->_hour_adm = substr($this->time_adm, 0, 2);
     $this->_min_adm  = substr($this->time_adm, 3, 2);
 
-    $this->_entree_adm = "$this->date_adm $this->time_adm";
-    $this->_sortie_adm = mbDateTime("+ $this->duree_hospi days", $this->_entree_adm);
+    //$this->_entree_adm = "$this->date_adm $this->time_adm";
+    //$this->_sortie_adm = mbDateTime("+ $this->duree_hospi days", $this->_entree_adm);
     
     $this->_venue_SHS_guess = mbTranformTime(null, $this->_datetime, "%y");
     $this->_venue_SHS_guess .= 
@@ -338,18 +331,6 @@ class COperation extends CMbObject {
       $chirTmp->load($this->chir_id);
       $plageTmp->chir_id = $chirTmp->user_id;
       $plageTmp->store();
-    }
-    
-    // Cas ou on a une premiere affectation d'entrée différente
-    // à l'heure d'admission
-    if ($this->date_adm && $this->time_adm) {
-      $this->loadRefsAffectations();
-      $affectation =& $this->_ref_first_affectation;
-      $admission = $this->date_adm." ".$this->time_adm;
-      if ($affectation->affectation_id && ($affectation->entree != $admission)) {
-        $affectation->entree = $admission;
-        $affectation->store();
-      }
     }
     
     return $msg;

@@ -4,19 +4,19 @@ function flipChambre(chambre_id) {
   flipElementClass("chambre" + chambre_id, "chambrecollapse", "chambreexpand", "chambres");
 }
 
-function flipOperation(operation_id) {
-  flipElementClass("operation" + operation_id, "operationcollapse", "operationexpand");
+function flipSejour(sejour_id) {
+  flipElementClass("sejour" + sejour_id, "sejourcollapse", "sejourexpand");
 }
 
 var selected_hospitalisation = null;
 
-function selectHospitalisation(operation_id) {
+function selectHospitalisation(sejour_id) {
   var element = document.getElementById("hospitalisation" + selected_hospitalisation);
   if (element) {
     element.checked = false;
   }
 
-  selected_hospitalisation = operation_id;
+  selected_hospitalisation = sejour_id;
  
   submitAffectation();
 }
@@ -106,7 +106,7 @@ function setupCalendar(affectation_id) {
         onUpdate    : function() { 
           if (calendar.dateClicked) {
             form = eval("document.splitAffectation" + affectation_id);
-            submitAffectationSplit(form)
+            submitAffectationSplit(form);
           }
         }
       }
@@ -229,23 +229,24 @@ function showLegend() {
             </td>
           </tr>
           {foreach from=$curr_lit->_ref_affectations item=curr_affectation}
+          {eval var=$curr_affectation->_ref_sejour->_ref_patient->_view assign="patient_view"}
           <tr class="patient">
             {if $curr_affectation->confirme}
             <td class="text" style="background-image:url(modules/{$m}/images/ray.gif); background-repeat:repeat;">
             {else}
             <td class="text">
             {/if}
-              {if ($curr_affectation->_ref_operation->admis == "n") || ($curr_affectation->_ref_prev->affectation_id && $curr_affectation->_ref_prev->effectue == 0)}
+              {if ($curr_affectation->_ref_sejour->entree_reelle) || ($curr_affectation->_ref_prev->affectation_id && $curr_affectation->_ref_prev->effectue == 0)}
                 <font style="color:#a33">
               {else}
-                {if $curr_affectation->_ref_operation->septique == 1}
+                {if $curr_affectation->_ref_sejour->septique == 1}
                 <font style="color:#3a3">
                 {else}
                 <font>
                 {/if}
               {/if}
               
-              {if $curr_affectation->_ref_operation->type_adm == "ambu"}
+              {if $curr_affectation->_ref_sejour->type == "ambu"}
               <img src="modules/{$m}/images/X.png" alt="X" title="Sortant ce soir" />
               {elseif $curr_affectation->sortie|date_format:"%Y-%m-%d" == $demain}
                 {if $curr_affectation->_ref_next->affectation_id}
@@ -260,18 +261,18 @@ function showLegend() {
                 <img src="modules/{$m}/images/Oo.png" alt="Oo" title="Sortant aujourd'hui" />
                 {/if}
               {/if}
-              {if $curr_affectation->_ref_operation->type_adm == "ambu"}
-              <em>{$curr_affectation->_ref_operation->_ref_pat->_view}</em>
+              {if $curr_affectation->_ref_sejour->type == "ambu"}
+              <em>{$patient_view}</em>
               {else}
-              <strong>{$curr_affectation->_ref_operation->_ref_pat->_view}</strong>
+              <strong>{$patient_view}</strong>
               {/if}
-              {if ($curr_affectation->_ref_operation->admis == "n") || ($curr_affectation->_ref_prev->affectation_id && $curr_affectation->_ref_prev->effectue == 0)}
+              {if (!$curr_affectation->_ref_sejour->entree_reelle) || ($curr_affectation->_ref_prev->affectation_id && $curr_affectation->_ref_prev->effectue == 0)}
               {$curr_affectation->entree|date_format:"%d/%m %Hh%M"}
               {/if}
             </font>
             </td>
-            <td class="action" style="background:#{$curr_affectation->_ref_operation->_ref_chir->_ref_function->color}">
-              {$curr_affectation->_ref_operation->_ref_chir->_shortview}
+            <td class="action" style="background:#{$curr_affectation->_ref_sejour->_ref_praticien->_ref_function->color}">
+              {$curr_affectation->_ref_sejour->_ref_praticien->_shortview}
             </td>
           </tr>
           <tr class="dates">
@@ -281,7 +282,6 @@ function showLegend() {
               {$curr_affectation->entree|date_format:"%A %d %B %H:%M"}
               ({$curr_affectation->_entree_relative} jours)
             <td class="action">
-              {eval var=$curr_affectation->_ref_operation->_ref_pat->_view assign="pat_view"}
 
               <form name="rmvAffectation{$curr_affectation->affectation_id}" action="?m={$m}" method="post">
 
@@ -291,12 +291,11 @@ function showLegend() {
 
               </form>
               
-              <a style="float: right;" href="javascript:confirmDeletion(document.rmvAffectation{$curr_affectation->affectation_id},{ldelim}typeName:'l\'affectation',objName:'{$pat_view|addslashes}'{rdelim})">
+              <a style="float: right;" href="javascript:confirmDeletion(document.rmvAffectation{$curr_affectation->affectation_id},{ldelim}typeName:'l\'affectation',objName:'{$patient_view|addslashes}'{rdelim})">
                 <img src="modules/{$m}/images/trash.png" alt="trash" title="Supprimer l'affectation" />
               </a>
             {else}
             <td class="text">
-              {eval var=$curr_affectation->_ref_operation->_ref_pat->_view assign="pat_view"}
 
               <form name="rmvAffectation{$curr_affectation->affectation_id}" action="?m={$m}" method="post">
 
@@ -306,7 +305,7 @@ function showLegend() {
 
               </form>
               
-              <a style="float: right;" href="javascript:confirmDeletion(document.rmvAffectation{$curr_affectation->affectation_id},{ldelim}typeName:'l\'affectation',objName:'{$pat_view|addslashes}'{rdelim})">
+              <a style="float: right;" href="javascript:confirmDeletion(document.rmvAffectation{$curr_affectation->affectation_id},{ldelim}typeName:'l\'affectation',objName:'{$patient_view|addslashes}'{rdelim})">
                 <img src="modules/{$m}/images/trash.png" alt="trash" title="Supprimer l'affectation" />
               </a>
               <em>Entrée</em>:
@@ -314,7 +313,6 @@ function showLegend() {
               ({$curr_affectation->_entree_relative} jours)
             </td>
             <td class="action">
-              {eval var=$curr_affectation->_ref_operation->_ref_pat->_view assign="pat_view"}
 
               <form name="entreeAffectation{$curr_affectation->affectation_id}" action="?m={$m}" method="post">
 
@@ -342,7 +340,7 @@ function showLegend() {
 
               <input type="hidden" name="dosql" value="do_affectation_split" />
               <input type="hidden" name="affectation_id" value="{$curr_affectation->affectation_id}" />
-              <input type="hidden" name="operation_id" value="{$curr_affectation->operation_id}" />
+              <input type="hidden" name="sejour_id" value="{$curr_affectation->sejour_id}" />
               <input type="hidden" name="entree" value="{$curr_affectation->entree}" />
               <input type="hidden" name="sortie" value="{$curr_affectation->sortie}" />
               <input type="hidden" name="_new_lit_id" value="" />
@@ -359,7 +357,6 @@ function showLegend() {
               ({$curr_affectation->_sortie_relative} jours)
             </td>
             <td class="action">
-              {eval var=$curr_affectation->_ref_operation->_ref_pat->_view assign="pat_view"}
 
               <form name="sortieAffectation{$curr_affectation->affectation_id}" action="?m={$m}" method="post">
 
@@ -376,59 +373,70 @@ function showLegend() {
             </td>
           </tr>
           <tr class="dates">
-            <td colspan="2"><em>Age</em>: {$curr_affectation->_ref_operation->_ref_pat->_age} ans</td>
+            <td colspan="2"><em>Age</em>: {$curr_affectation->_ref_sejour->_ref_patient->_age} ans</td>
           </tr>
           <tr class="dates">
-            <td class="text" colspan="2"><em>Dr. {$curr_affectation->_ref_operation->_ref_chir->_view}</em></td>
+            <td class="text" colspan="2"><em>Dr. {$curr_affectation->_ref_sejour->_ref_praticien->_view}</em></td>
           </tr>
           <tr class="dates">
             <td class="text" colspan="2">
-              {foreach from=$curr_affectation->_ref_operation->_ext_codes_ccam item=curr_code}
-              <em>{$curr_code->code}</em> : {$curr_code->libelleLong}<br />
+              {foreach from=$curr_affectation->_ref_sejour->_ref_operations item=curr_operation}
+                {foreach from=$curr_operation->_ext_codes_ccam item=curr_code}
+                <em>{$curr_code->code}</em> : {$curr_code->libelleLong}<br />
+                {/foreach}
               {/foreach}
             </td>
           </tr>
           <tr class="dates">
             <td class="text" colspan="2">
-              <form name="SeptieOperation{$curr_affectation->_ref_operation->operation_id}" action="?m=dPplanningOp" method="post">
+              <form name="SeptieSejour{$curr_affectation->_ref_sejour->sejour_id}" action="?m=dPhospi" method="post">
 
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="otherm" value="dPhospi" />
-              <input type="hidden" name="dosql" value="do_planning_aed" />
-              <input type="hidden" name="operation_id" value="{$curr_affectation->_ref_operation->operation_id}" />
+              <input type="hidden" name="dosql" value="do_sejour_aed" />
+              <input type="hidden" name="sejour_id" value="{$curr_affectation->_ref_sejour->sejour_id}" />
         
               <em>Pathologie</em>:
-              {$curr_affectation->_ref_operation->pathologie}
-              <input type="radio" name="septique" value="0" {if $curr_affectation->_ref_operation->septique == 0} checked="checked" {/if} onclick="this.form.submit()" />
-              <label for="septique_0" title="Opération propre">Propre</label>
-              <input type="radio" name="septique" value="1" {if $curr_affectation->_ref_operation->septique == 1} checked="checked" {/if} onclick="this.form.submit()" />
-              <label for="septique_1" title="Opération septique">Septique</label>
+              {$curr_affectation->_ref_sejour->pathologie}
+              <input type="radio" name="septique" value="0" {if $curr_affectation->_ref_sejour->septique == 0} checked="checked" {/if} onclick="this.form.submit()" />
+              <label for="septique_0" title="Séjour propre">Propre</label>
+              <input type="radio" name="septique" value="1" {if $curr_affectation->_ref_sejour->septique == 1} checked="checked" {/if} onclick="this.form.submit()" />
+              <label for="septique_1" title="Séjour septique">Septique</label>
       
               </form>
                             
             </td>
           </tr>
-          {if $curr_affectation->_ref_operation->rques != ""}
+          {if $curr_affectation->_ref_sejour->rques != ""}
           <tr class="dates">
             <td class="text" colspan="2" style="background-color: #ff5">
-              <em>Intervention</em>: {$curr_affectation->_ref_operation->rques|nl2br}
+              <em>Séjour</em>: {$curr_affectation->_ref_sejour->rques|nl2br}
             </td>
           </tr>
           {/if}
-          {if $curr_affectation->_ref_operation->_ref_pat->rques != ""}
+          {foreach from=$curr_affectation->_ref_sejour->_ref_operations item=curr_operation}
+          {if $curr_operation->rques != ""}
           <tr class="dates">
             <td class="text" colspan="2" style="background-color: #ff5">
-              <em>Patient</em>: {$curr_affectation->_ref_operation->_ref_pat->rques|nl2br}
+              <em>Intervention</em>: {$curr_operation->rques|nl2br}
+            </td>
+          </tr>
+          {/if}
+          {/foreach}
+          {if $curr_affectation->_ref_sejour->_ref_patient->rques != ""}
+          <tr class="dates">
+            <td class="text" colspan="2" style="background-color: #ff5">
+              <em>Patient</em>: {$curr_affectation->_ref_sejour->_ref_patient->rques|nl2br}
             </td>
           </tr>
           {/if}
           <tr class="dates">
             <td class="text" colspan="2">
-              <form name="editChFrm{$curr_affectation->_ref_operation->operation_id}" action="index.php" method="post">
+              <form name="editChFrm{$curr_affectation->_ref_sejour->sejour_id}" action="index.php" method="post">
               <input type="hidden" name="m" value="{$m}" />
               <input type="hidden" name="dosql" value="do_edit_chambre" />
-              <input type="hidden" name="id" value="{$curr_affectation->_ref_operation->_ref_sejour->sejour_id}" />
-              {if $curr_affectation->_ref_operation->_ref_sejour->chambre_seule == 'o'}
+              <input type="hidden" name="id" value="{$curr_affectation->_ref_sejour->sejour_id}" />
+              {if $curr_affectation->_ref_sejour->chambre_seule == 'o'}
               <input type="hidden" name="value" value="n" />
               <button type="submit" style="background-color: #f55;">
                 <img src="modules/{$m}/images/refresh.png" alt="changer" /> chambre simple
@@ -482,7 +490,7 @@ function showLegend() {
     
     <div id="calendar-container"></div>
   
-    {foreach from=$groupOpNonAffectees key=group_name item=opNonAffectees}
+    {foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}
 
     <table class="tbl">
       <tr>
@@ -496,76 +504,78 @@ function showLegend() {
       </tr>
     </table>
 
-    {foreach from=$opNonAffectees item=curr_operation}
-    <form name="addAffectation{$curr_operation->operation_id}" action="?m={$m}" method="post">
+    {foreach from=$sejourNonAffectes item=curr_sejour}
+    <form name="addAffectation{$curr_sejour->sejour_id}" action="?m={$m}" method="post">
 
     <input type="hidden" name="dosql" value="do_affectation_aed" />
     <input type="hidden" name="lit_id" value="" />
-    <input type="hidden" name="operation_id" value="{$curr_operation->operation_id}" />
-    <input type="hidden" name="entree" value="{$curr_operation->_entree_adm}" />
-    <input type="hidden" name="sortie" value="{$curr_operation->_sortie_adm}" />
+    <input type="hidden" name="sejour_id" value="{$curr_sejour->sejour_id}" />
+    <input type="hidden" name="entree" value="{$curr_sejour->entree_prevue}" />
+    <input type="hidden" name="sortie" value="{$curr_sejour->sortie_prevue}" />
 
     </form>
 
-    <table class="operationcollapse" id="operation{$curr_operation->operation_id}">
+    <table class="sejourcollapse" id="sejour{$curr_sejour->sejour_id}">
       <tr>
-        <td class="selectoperation" style="background:#{$curr_operation->_ref_chir->_ref_function->color}">
-          {if $curr_operation->pathologie != ""}  
-          <input type="radio" id="hospitalisation{$curr_operation->operation_id}" onclick="selectHospitalisation({$curr_operation->operation_id})" />
+        <td class="selectsejour" style="background:#{$curr_sejour->_ref_praticien->_ref_function->color}">
+          {if $curr_sejour->pathologie != ""}  
+          <input type="radio" id="hospitalisation{$curr_sejour->sejour_id}" onclick="selectHospitalisation({$curr_sejour->sejour_id})" />
           {/if}
         </td>
-        <td class="patient" onclick="flipOperation({$curr_operation->operation_id})">
-          <strong><a name="operation{$curr_operation->operation_id}">{$curr_operation->_ref_pat->_view}</a></strong>
-          {if $curr_operation->type_adm == "comp"}
-          ({$curr_operation->duree_hospi}j)
+        <td class="patient" onclick="flipSejour({$curr_sejour->sejour_id})">
+          <strong><a name="sejour{$curr_sejour->sejour_id}">{$curr_sejour->_ref_patient->_view}</a></strong>
+          {if $curr_sejour->type == "comp"}
+          ({$curr_sejour->_duree_prevue}j)
           {else}
-          ({$curr_operation->type_adm|truncate:1:""|capitalize})
+          ({$curr_sejour->type|truncate:1:""|capitalize})
           {/if}
         </td>
       </tr>
       <tr>
-        <td class="date" colspan="2"><em>Entrée</em>: {$curr_operation->_entree_adm|date_format:"%A %d %B %H:%M"}</td>
+        <td class="date" colspan="2"><em>Entrée</em>: {$curr_sejour->entree_prevue|date_format:"%A %d %B %H:%M"}</td>
       </tr>
       <tr>
-        <td class="date" colspan="2"><em>Sortie</em>: {$curr_operation->_sortie_adm|date_format:"%A %d %B"}</td>
+        <td class="date" colspan="2"><em>Sortie</em>: {$curr_sejour->sortie_prevue|date_format:"%A %d %B"}</td>
       </tr>
       <tr>
-        <td class="date" colspan="2"><em>Age:</em>: {$curr_operation->_ref_pat->_age} ans
+        <td class="date" colspan="2"><em>Age:</em>: {$curr_sejour->_ref_patient->_age} ans
       </tr>
       <tr>
-        <td class="date" colspan="2"><em>Dr. {$curr_operation->_ref_chir->_view}</em></td>
+        <td class="date" colspan="2"><em>Dr. {$curr_sejour->_ref_praticien->_view}</em></td>
       </tr>
       <tr>
         <td class="date" colspan="2">
+          {foreach from=$curr_sejour->_ref_operations item=curr_operation}
           {foreach from=$curr_operation->_ext_codes_ccam item=curr_code}
           <em>{$curr_code->code}</em> : {$curr_code->libelleLong}<br />
+          {/foreach}
           {/foreach}
         </td>
       </tr>
       <tr>
         <td class="date" colspan="2">
         
-        <form name="EditOperation{$curr_operation->operation_id}" action="?m=dPplanningOp" method="post">
+        <form name="EditSejour{$curr_sejour->sejour_id}" action="?m=dPhospi" method="post">
 
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="otherm" value="dPhospi" />
-        <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{$curr_operation->operation_id}" />
+        <input type="hidden" name="dosql" value="do_sejour_aed" />
+        <input type="hidden" name="sejour_id" value="{$curr_sejour->sejour_id}" />
         
         <em>Pathologie:</em>
         <select name="pathologie">
           <option value="">&mdash; Choisir &mdash;</option>
           {foreach from=$pathos->dispo item=curr_patho}
-          <option {if $curr_patho == $curr_operation->pathologie}selected="selected"{/if}>
+          <option {if $curr_patho == $curr_sejour->pathologie}selected="selected"{/if}>
           {$curr_patho}
           </option>
           {/foreach}
         </select>
         <br />
-        <input type="radio" name="septique" value="0" {if $curr_operation->septique == 0} checked="checked" {/if} />
+        <input type="radio" name="septique" value="0" {if $curr_sejour->septique == 0} checked="checked" {/if} />
         <label for="septique_0" title="Opération propre">Propre</label>
-        <input type="radio" name="septique" value="1" {if $curr_operation->septique == 1} checked="checked" {/if} />
-        <label for="septique_1" title="Opération septique">Septique</label>
+        <input type="radio" name="septique" value="1" {if $curr_sejour->septique == 1} checked="checked" {/if} />
+        <label for="septique_1" title="Séjour septique">Septique</label>
 
         <input type="submit" value="valider" />
         
@@ -573,6 +583,14 @@ function showLegend() {
         
         </td>
       </tr>
+      {if $curr_sejour->rques != ""}
+      <tr>
+        <td class="date" colspan="2" style="background-color: #ff5">
+          <em>Séjour</em>: {$curr_sejour->rques|escape:nl2br}
+        </td>
+      </tr>
+      {/if}
+      {foreach from=$curr_sejour->_ref_operations item=curr_operation}
       {if $curr_operation->rques != ""}
       <tr>
         <td class="date" colspan="2" style="background-color: #ff5">
@@ -580,14 +598,15 @@ function showLegend() {
         </td>
       </tr>
       {/if}
-      {if $curr_operation->_ref_pat->rques != ""}
+      {/foreach}
+      {if $curr_sejour->_ref_patient->rques != ""}
       <tr>
         <td class="date" colspan="2" style="background-color: #ff5">
-          <em>Patient</em>: {$curr_operation->_ref_pat->rques|escape:nl2br}
+          <em>Patient</em>: {$curr_sejour->_ref_patient->rques|escape:nl2br}
         </td>
       </tr>
       {/if}
-      {if $curr_operation->_ref_sejour->chambre_seule == "o"}
+      {if $curr_sejour->chambre_seule == "o"}
       <tr>
         <td class="date" style="background-color: #f55;" colspan="2">
           <strong>Chambre seule</strong>

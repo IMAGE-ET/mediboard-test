@@ -110,15 +110,15 @@ class CChambre extends CMbObject {
     }
 
     foreach ($listAff as $affectation1) {
-      $operation1 =& $affectation1->_ref_operation;
-      assert($operation1);
-      $patient1 =& $operation1->_ref_pat;
+      $sejour1 =& $affectation1->_ref_sejour;
+      assert($sejour1);
+      $patient1 =& $sejour1->_ref_patient;
       assert($patient1);
-      $chirurgien1 =& $operation1->_ref_chir;
+      $chirurgien1 =& $sejour1->_ref_praticien;
       assert($chirurgien1);
-      if((count($this->_ref_lits) == 1) && $operation1->chambre == "n")
+      if((count($this->_ref_lits) == 1) && $sejour1->chambre_seule == "n")
         $this->_chambre_double++;
-      if((count($this->_ref_lits) > 1) && $operation1->chambre == "o")
+      if((count($this->_ref_lits) > 1) && $sejour1->chambre_seule == "o")
         $this->_chambre_seule++;
       
       foreach($listAff as $affectation2) {
@@ -126,20 +126,20 @@ class CChambre extends CMbObject {
       	$flag = $flag && $affectation1->colide($affectation2);
       	$flag = $flag && ($affectation1->lit_id != $affectation2->lit_id);
    	    if($flag) {
-          $operation2 =& $affectation2->_ref_operation;
-          assert($operation2);
-          $patient2 =& $operation2->_ref_pat;
+          $sejour2 =& $affectation2->_ref_sejour;
+          assert($sejour2);
+          $patient2 =& $sejour2->_ref_patient;
           assert($patient2);
-          $chirurgien2 =& $operation2->_ref_chir;
+          $chirurgien2 =& $sejour2->_ref_praticien;
           assert($chirurgien2);
 
           // Conflits de pathologies
           $pathologie1 = array(
-            "pathologie" => $operation1->pathologie,
-            "septique" => $operation1->septique);
+            "pathologie" => $sejour1->pathologie,
+            "septique" => $sejour1->septique);
           $pathologie2 = array(
-            "pathologie" => $operation2->pathologie,
-            "septique" => $operation2->septique);
+            "pathologie" => $sejour2->pathologie,
+            "septique" => $sejour2->septique);
           if (!$pathos->isCompat($pathologie1["pathologie"], $pathologie2["pathologie"], $pathologie1["septique"], $pathologie2["septique"]))
             $this->_conflits_pathologies++;
 

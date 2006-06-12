@@ -7,9 +7,10 @@
  *  @author Thomas Despoix
  */
 
-require_once($AppUI->getModuleClass("mediusers") );
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-require_once($AppUI->getModuleClass("dPpatients", "patients"));
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"  ));
+require_once($AppUI->getModuleClass("dPpatients"  , "patients"  ));
+require_once($AppUI->getModuleClass("dPplanningOp", "pathologie"));
 
 /**
  * Classe CSejour. 
@@ -34,8 +35,13 @@ class CSejour extends CMbObject {
   var $sortie_reelle = null;
 
   var $venue_SHS = null; // remplace $op->venue_SHS
+  var $code_uf = null; // remplace $op->code_uf
+  var $libelle_uf = null; // remplace $op->libelle_uf
   var $saisi_SHS = null; // remplace $op->saisie
   var $modif_SHS = null; // remplace $op->modifiee
+
+  var $pathologie = null; // remplace $operation->pathologie
+  var $septique = null;   // remplace $operation->septique
   
   var $rques = null;
 
@@ -68,10 +74,20 @@ class CSejour extends CMbObject {
     $this->_props["venue_SHS"] = "num|length|8|confidential";
     $this->_props["saisi_SHS"] = "enum|o|n";
     $this->_props["modif_SHS"] = "enum|0|1";
+
+    $this->_props["pathologie"] = "str|length|3";
+    $this->_props["septique"] = "enum|0|1";
 	}
 
   function check() {
-    parent::check();
+    $msg = null;
+    global $pathos;
+
+    if ($this->pathologie != null && (!in_array($this->pathologie, $pathos->dispo))) {
+      $msg.= "Pathologie non disponible<br />";
+    }
+
+    return $msg . parent::check();
   }
   
   function canDelete(&$msg, $oid = null) {
@@ -102,8 +118,12 @@ class CSejour extends CMbObject {
       $this->entree_reelle = '';
     $this->sortie_reelle = '';
     $this->venue_SHS     = $operation->venue_SHS;
+    $this->code_uf       = $operation->code_uf;
+    $this->libelle_uf    = $operation->libelle_uf;
     $this->saisi_SHS     = $operation->saisie;
     $this->modif_SHS     = $operation->modifiee;
+    $this->pathologie    = $operation->pathologie;
+    $this->septique      = $operation->septique;
   }
   
   function store() {
@@ -129,14 +149,27 @@ class CSejour extends CMbObject {
         }
         $this->_ref_operations[$keyOp]->entree_adm = $this->entree_reelle;
         $this->_ref_operations[$keyOp]->venue_SHS = $this->venue_SHS;
+        $this->_ref_operations[$keyOp]->code_uf = $this->code_uf;
+        $this->_ref_operations[$keyOp]->libelle_uf = $this->libelle_uf;
         $this->_ref_operations[$keyOp]->saisie = $this->saisi_SHS;
         $this->_ref_operations[$keyOp]->modifiee = $this->modif_SHS;
+        $this->_ref_operations[$keyOp]->pathologie = $this->pathologie;
+        $this->_ref_operations[$keyOp]->septique = $this->septique;
         $msgOp = $this->_ref_operations[$keyOp]->store();
       }
-    } else {
-      return $msg;
+      // Cas ou on a une premiere affectation différente
+      // de l'heure d'admission
+      if ($this->entree_prevue) {
+        $this->loadRefsAffectations();
+        $affectation =& $this->_ref_first_affectation;
+        $admission = $this->entree_prevue;
+        if ($affectation->affectation_id && ($affectation->entree != $this->entree_prevue)) {
+          $affectation->entree = $this->entree_prevue;
+          $affectation->store();
+        }
+      }
     }
-    return null;
+    return $msg;
   }
   
   function delete() {
@@ -163,20 +196,27 @@ class CSejour extends CMbObject {
   function updateDBFields() {
   }
   
-  function loadRefsFwd() {
+  function loadRefPatient() {
     $where = array (
       "patient_id" => "= '$this->patient_id'"
     );
 
     $this->_ref_patient = new CPatient;
     $this->_ref_patient->loadObject($where);
-
+  }
+  
+  function loadRefPraticien() {
     $where = array (
       "user_id" => "= '$this->praticien_id'"
     );
 
     $this->_ref_praticien = new CMediusers;
     $this->_ref_praticien->loadObject($where);
+  }
+  
+  function loadRefsFwd() {
+    $this->loadRefPatient();
+    $this->loadRefPraticien();
   }
   
   function loadRefsAffectations() {

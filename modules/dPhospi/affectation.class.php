@@ -93,17 +93,22 @@ class CAffectation extends CMbObject {
     $this->load($this->affectation_id);
     $this->loadRefsFwd();
 
+    $changeSejour = 0;
     if(!$this->_ref_prev->affectation_id) {
       if($this->entree != $this->_ref_sejour->entree_prevue) {
         $this->_ref_sejour->entree_prevue = $this->entree;
+        $changeSejour = 1;
       }
     }
     if(!$this->_ref_next->affectation_id) {
       if($this->sortie != $this->_ref_sejour->sortie_prevue) {
         $this->_ref_sejour->sortie_prevue = $this->sortie;
+        $changeSejour = 1;
       }
     }
-    $this->_ref_sejour->store();
+    if($changeSejour) {
+      $this->_ref_sejour->store();
+    }
     return $msg;
   }
   

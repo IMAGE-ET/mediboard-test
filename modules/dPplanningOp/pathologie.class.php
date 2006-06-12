@@ -93,7 +93,7 @@ class CPathologies {
     assert($septique1 !== null);
     assert($septique2 !== null);
 
-    // bidierctional
+    // bidirectional
     return 
       @$this->compat[$patho1][$septique1][$patho2][$septique2] or
       @$this->compat[$patho2][$septique2][$patho1][$septique1];
