@@ -42,7 +42,6 @@ $tabBox->add("edit_sorties", "Déplacements / Sorties");
 $tabBox->add("vw_recherche", "Chercher une chambre");
 if ($canEdit) {
   $tabBox->add("vw_affectations", "Affectations");
-  $tabBox->add("vw_recapitulatif", "Recapitulatif");
   $tabBox->add("vw_idx_services", "Services");
   $tabBox->add("vw_idx_chambres", "Chambres");
 }
