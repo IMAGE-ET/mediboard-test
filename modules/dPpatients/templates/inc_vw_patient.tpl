@@ -195,13 +195,13 @@ function printIntervention(id) {
   {foreach from=$patient->_ref_sejours item=curr_sejour}
   <tr>
     <td>
-      <a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_op->date_adm|date_format:"%Y-%m-%d"}#adm{$curr_op->operation_id}">
+      <a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}#adm{$curr_sejour->sejour_id}">
         Séjour du {$curr_sejour->entree_prevue|date_format:"%d %b %Y"} 
         au {$curr_sejour->sortie_prevue|date_format:"%d %b %Y"}
       </a>
 	</td>
 	<td>
-      <a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_op->date_adm|date_format:"%Y-%m-%d"}#adm{$curr_op->operation_id}">
+      <a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}#adm{$curr_sejour->sejour_id}">
         Dr. {$curr_sejour->_ref_praticien->_view}
       </a>
 	</td>

@@ -79,8 +79,6 @@ class CPatient extends CMbObject {
 
   // Object References
   var $_ref_sejours = null;
-  var $_ref_operations = null;
-  var $_ref_hospitalisations = null;
   var $_ref_consultations = null;
   var $_ref_antecedents = null;
   var $_ref_traitements = null;
@@ -260,28 +258,6 @@ class CPatient extends CMbObject {
     $this->_ref_sejours = $sejour->loadList($where, $order);
   }
   
-  function loadRefsOperations() {
-    $this->_ref_operations = new COperation();
-    $where = array();
-    $where["pat_id"] = "= '$this->patient_id'";
-    $where["plageop_id"] = "<> 0";
-    $order = "plagesop.date DESC";
-    $leftjoin = array();
-    $leftjoin["plagesop"] = "operations.plageop_id = plagesop.id";
-    $this->_ref_operations = $this->_ref_operations->loadList($where, $order, null, null, $leftjoin);
-  }
-  
-  function loadRefsHospitalisations() {
-    $this->_ref_hospitalisations = new COperation();
-    $where = array();
-    $where["pat_id"] = "= '$this->patient_id'";
-    $where["plageop_id"] = "IS NULL";
-    $order = "date_adm DESC, time_adm DESC";
-    $leftjoin = array();
-    $leftjoin["plagesop"] = "operations.plageop_id = plagesop.id";
-    $this->_ref_hospitalisations = $this->_ref_hospitalisations->loadList($where, $order, null, null, $leftjoin);
-  }
-  
   function loadRefsConsultations() {
     $this->_ref_consultations = new CConsultation();
     $where = array();
@@ -310,8 +286,6 @@ class CPatient extends CMbObject {
   
   function loadRefsAffectations() {
     $this->loadRefsSejours();
-    $this->loadRefsOperations();
-    $this->loadRefsHospitalisations();
     
     // Affectation actuelle et prochaine affectation
     $inArray = array ("'0'"); // Utile quand aucun séjour
@@ -436,18 +410,6 @@ class CPatient extends CMbObject {
         $operation =& $sejour->_ref_operations[$keyOp];
         $operation->loadRefsFwd();
       }
-    }
-
-    // Operations
-    foreach ($this->_ref_operations as $keyOp => $valueOp) {
-      $operation =& $this->_ref_operations[$keyOp];
-      $operation->loadRefs();
-    }
-  
-    // Hospitalisation
-    foreach ($this->_ref_hospitalisations as $keyHospi => $valueHospi) {
-      $hospitalisation =& $this->_ref_hospitalisations[$keyHospi];
-      $hospitalisation->loadRefs();
     }
   }
   

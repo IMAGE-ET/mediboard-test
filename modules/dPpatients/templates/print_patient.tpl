@@ -35,12 +35,25 @@
   <tr><th></th><td>{$patient->_ref_medecin3->adresse|nl2br}<br />{$patient->_ref_medecin3->cp} {$patient->_ref_medecin3->ville}</td></tr>
   {/if}
   
-  {if $patient->_ref_operations|@count}
-  <tr><th class="category" colspan="2">Antécédents chirurgicaux</th></tr>
-  {foreach from=$patient->_ref_operations item=curr_op}
+  {if $patient->_ref_sejours|@count}
+  <tr><th class="category" colspan="2">Séjours précédent</th></tr>
+  {foreach from=$patient->_ref_sejours item=curr_sejour}
   <tr>
-    <th>Dr. {$curr_op->_ref_chir->_view}</th>
-    <td>le {$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}</td>
+    <th>Dr. {$curr_sejour->_ref_praticien->_view}</th>
+    <td>
+      Du {$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}
+      au {$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}
+      <ul>
+      {foreach from=$curr_sejour->_ref_operations item="curr_op"}
+        <li>
+          Intervention le {$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}
+          (Dr {$curr_op->_ref_chir->_view})
+        </li>
+      {foreachelse}
+        <li><em>Pas d'interventions</em></li>
+      {/foreach}
+      </ul>
+    </td>
   </tr>
   {/foreach}
   {/if}
