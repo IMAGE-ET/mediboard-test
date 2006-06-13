@@ -110,36 +110,24 @@ function pageMain() {
     {if $patient->patient_id}
     <td>
       <table class="form">
-        <tr><th class="title" colspan="4">Interventions</th></tr>
-        {foreach from=$patient->_ref_operations item=curr_op}
+        {foreach from=$patient->_ref_sejours item=curr_sejour}
+        <tr>
+          <th class="title" colspan="4">
+          	Séjour du {$curr_sejour->entree_prevue|date_format:"%A %d %b %Y (%Hh%M)"}
+          	au {$curr_sejour->sortie_prevue|date_format:"%A %d %b %Y (%Hh%M)"}
+          </th>
+        </tr>
+        {foreach from=$curr_sejour->_ref_operations item=curr_op}
         <tr class="groupcollapse" id="op{$curr_op->operation_id}" onclick="flipGroup({$curr_op->operation_id}, 'op')">
           <td colspan="4">
             <strong>
-            Dr. {$curr_op->_ref_chir->_view} &mdash;
-            {$curr_op->_ref_plageop->date|date_format:"%A %d %B %Y"}
+            Dr. {$curr_op->_ref_chir->_view}
+            &mdash; {$curr_op->_ref_plageop->date|date_format:"%A %d %B %Y"}
+            &mdash; {$curr_op->_ref_plageop->_ref_salle->nom}
+            
             </strong>
           </td>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
-          <th colspan="4" class="category">Hospitalisation</th>
-        </tr>
-        {if $curr_op->_ref_affectations|@count} 
-        <tr class="op{$curr_op->operation_id}">
-          <th>Séjour</th>
-          <td class="text" colspan="3">
-            Du {$curr_op->_ref_first_affectation->entree|date_format:"%A %d/%m/%Y (%Hh%M)"}
-            au {$curr_op->_ref_last_affectation->sortie|date_format:"%A %d/%m/%Y (%Hh%M)"}
-          </td>
-        </tr>
-        {else}
-        <tr class="op{$curr_op->operation_id}">
-          <th>Admission prévue</th>
-          <td class="text" colspan="3">
-            Le {$curr_op->date_adm|date_format:"%A %d/%m/%Y"} {$curr_op->time_adm|date_format:"(%Hh%M)"}
-            pour {$curr_op->duree_hospi} jour(s)
-          </td>
-        </tr>
-        {/if}
         {foreach from=$curr_op->_ext_codes_ccam item=curr_code}
         <tr class="op{$curr_op->operation_id}">
           <th>{$curr_code->code}</th>
@@ -153,7 +141,7 @@ function pageMain() {
         <tr class="op{$curr_op->operation_id}">
           <th>Consultation</th>
           <td class="text" colspan="3">
-            Le {$curr_op->_ref_consult_anesth->_ref_plageconsult->date|date_format:"%A %d/%m/%Y"}
+            Le {$curr_op->_ref_consult_anesth->_ref_plageconsult->date|date_format:"%A %d %b %Y"}
             avec le Dr. {$curr_op->_ref_consult_anesth->_ref_plageconsult->_ref_chir->_view}
           </td>
         </tr>
@@ -189,7 +177,7 @@ function pageMain() {
             <ul>
               {foreach from=$patient->_ref_antecedents item=curr_ant}
               <li>
-                {$curr_ant->type} le {$curr_ant->date|date_format:"%d/%m/%Y"} :
+                {$curr_ant->type} le {$curr_ant->date|date_format:"%d %b %Y"} :
                 <i>{$curr_ant->rques}</i>
                 </form>
               </li>
@@ -206,9 +194,9 @@ function pageMain() {
               {foreach from=$patient->_ref_traitements item=curr_trmt}
               <li>
                 {if $curr_trmt->fin}
-                  Du {$curr_trmt->debut|date_format:"%d/%m/%Y"} au {$curr_trmt->fin|date_format:"%d/%m/%Y"}
+                  Du {$curr_trmt->debut|date_format:"%d %b %Y"} au {$curr_trmt->fin|date_format:"%d %b %Y"}
                 {else}
-                  Depuis le {$curr_trmt->debut|date_format:"%d/%m/%Y"}
+                  Depuis le {$curr_trmt->debut|date_format:"%d %b %Y"}
                 {/if}
                 : <i>{$curr_trmt->traitement}</i>
                 </form>
@@ -228,9 +216,8 @@ function pageMain() {
         <tr class="op{$curr_op->operation_id}">
           <th>Date</th>
           <td class="text" colspan="3">
-            Le {$curr_op->_ref_plageop->date|date_format:"%A %d/%m/%Y"}
+            Le {$curr_op->_ref_plageop->date|date_format:"%A %d %b %Y"}
             par le Dr. {$curr_op->_ref_chir->_view},
-            {$curr_op->_ref_plageop->_ref_salle->nom}
           </td>
         </tr>
         <tr class="op{$curr_op->operation_id}">
@@ -240,14 +227,17 @@ function pageMain() {
             {$curr_op->entree_bloc|date_format:"%Hh%M"}
           </td>
           <td rowspan="6">
-            <form name="editPatFrm" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
+            <form name="editPatFrm" action="?m={$m}" method="post" onsubmit="return true;">
             <input type="hidden" name="dosql" value="do_patients_aed" />
             <input type="hidden" name="m" value="dPpatients" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="patient_id" value="{$curr_op->_ref_pat->patient_id}" />
             <table class="form">
               <tr>
-                <th class="category" colspan="2"><i>Lien S@nté.com</i> : Patient <input type="submit" value="Valider" /></th>
+                <th class="category" colspan="2">
+                  <em>Lien S@nté.com</em> : Patient 
+                  <input type="button" value="Valider" onclick="submitFormAjax(this.form)" />
+                </th>
               </tr>
               <tr>
                 <th><label for="SHS" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label></th>
@@ -436,57 +426,6 @@ function pageMain() {
           </td>
         </tr>
         
-        {/foreach}
-        <tr>
-          <th class="title" colspan="4">Hospitalisations</th>
-        </tr>
-        {foreach from=$patient->_ref_hospitalisations item=curr_hospi}
-        <tr class="groupcollapse" id="hospi{$curr_hospi->operation_id}" onclick="flipGroup({$curr_hospi->operation_id}, 'hospi')">
-          <td colspan="4">
-            <strong>
-            Dr. {$curr_hospi->_ref_chir->_view} &mdash;
-            {$curr_hospi->date_adm|date_format:"%A %d %B %Y"}
-            </strong>
-          </td>
-        </tr>
-        {if $curr_op->_ref_affectations|@count}
-        <tr class="hospi{$curr_op->operation_id}">
-          <th>Séjour</th>
-          <td class="text" colspan="3">
-            Du {$curr_hospi->_ref_first_affectation->entree|date_format:"%A %d/%m/%Y (%Hh%M)"}
-            au {$curr_hospi->_ref_last_affectation->sortie|date_format:"%A %d/%m/%Y (%Hh%M)"}
-          </td>
-        </tr>
-        {else}
-        <tr class="hospi{$curr_hospi->operation_id}">
-          <th>Admission prévue</th>
-          <td class="text" colspan="3">
-            Le {$curr_hospi->date_adm|date_format:"%A %d/%m/%Y"} {$curr_hospi->time_adm|date_format:"(%Hh%M)"}
-            pour {$curr_hospi->duree_hospi} jour(s)
-          </td>
-        </tr>
-        {/if}
-        {foreach from=$curr_hospi->_ext_codes_ccam item=curr_code}
-        <tr class="hospi{$curr_hospi->operation_id}">
-          <th>{$curr_code->code}</th>
-          <td class="text" colspan="3">{$curr_code->libelleLong}</td>
-        </tr>
-        {/foreach}
-        {foreach from=$curr_hospi->_ref_documents item=document}
-        <tr class="hospi{$curr_hospi->operation_id}">
-          <th>{$document->nom}</th>
-          {if $document->source}
-          <td colspan="3">
-            <button onclick="imprimerDocument({$document->compte_rendu_id})">
-              <img src="modules/dPpmsi/images/print.png" />
-            </button>
-          </td>
-          {else}
-          <td colspan="3">
-            -
-          </td>
-          {/if}
-        </tr>
         {/foreach}
         {/foreach}
        </table>

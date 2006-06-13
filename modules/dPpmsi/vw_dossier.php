@@ -30,26 +30,31 @@ $patient->load($pat_id);
 if ($patient->patient_id) {
   $patient->loadDossierComplet();
     
-  // Chargement complémentaires sur les opérations
-  foreach ($patient->_ref_operations as $keyOp => $valueOp) {
-    $operation =& $patient->_ref_operations[$keyOp];
-    $consultAnest =& $operation->_ref_consult_anesth;
-    
-    $operation->loadRefGHM();
-    
-    foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {
-      $acte =& $operation->_ref_actes_ccam[$keyActe];
-      $acte->loadRefsFwd();
-    }
-    
-    $plage =& $operation->_ref_plageop;
-    $plage->loadRefsFwd();
-    
-    if ($consultAnest->consultation_anesth_id) {
-      $consultAnest->loadRefsFwd();
-      $consultAnest->_ref_plageconsult->loadRefsFwd();
+  // Chargements complémentaires sur les opérations
+  foreach ($patient->_ref_sejours as $keySejour => $valueSejour) {
+    $sejour =& $patient->_ref_sejours[$keySejour];
+
+    foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
+      $operation =& $sejour->_ref_operations[$keyOp];
+      $consultAnest =& $operation->_ref_consult_anesth;
+      
+      $operation->loadRefGHM();
+      
+      foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {
+        $acte =& $operation->_ref_actes_ccam[$keyActe];
+        $acte->loadRefsFwd();
+      }
+      
+      $plage =& $operation->_ref_plageop;
+      $plage->loadRefsFwd();
+      
+      if ($consultAnest->consultation_anesth_id) {
+        $consultAnest->loadRefsFwd();
+        $consultAnest->_ref_plageconsult->loadRefsFwd();
+      }
     }
   }
+  
 }
 
 $canEditCabinet = !getDenyEdit("dPcabinet");
