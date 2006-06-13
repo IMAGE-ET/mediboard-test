@@ -28,7 +28,7 @@
           </td>
           <td class="text">
             <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_urgence->operation_id}">
-            {$curr_urgence->time_adm|date_format:"%H h %M"}
+            {$curr_urgence->_ref_sejour->entree_prevue|date_format:"%H h %M"}
             </a>
           </td>
           <td class="text">
@@ -65,7 +65,7 @@
           </td>
           <td class="text">
             <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_urgence->operation_id}">
-            {$curr_urgence->time_adm|date_format:"%H h %M"}
+            {$curr_urgence->_ref_sejour->entree_prevue|date_format:"%H h %M"}
             </a>
           </td>
           <td class="text">

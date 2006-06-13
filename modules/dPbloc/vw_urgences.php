@@ -25,7 +25,7 @@ $where["annulee"] = "= 0";
 $ljoin = array();
 $ljoin["patients"] = "operations.pat_id = patients.patient_id";
 $ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
-$order = "operations.time_adm, patients.nom, patients.prenom";
+$order = "sejour.entree_prevue, patients.nom, patients.prenom";
 
 // Récupération urgences de chaque jour
 // Admissions passées
