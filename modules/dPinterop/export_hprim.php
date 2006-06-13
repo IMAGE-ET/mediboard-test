@@ -26,12 +26,16 @@ $doc = new CHPrimXMLServeurActes;
 $mb_operation_id = dPgetParam($_POST, "mb_operation_id", mbGetValueFromGetOrSession("operation_id"));
 if ($mbOp->load($mb_operation_id)) {
   $mbOp->loadRefs();
+
   foreach ($mbOp->_ref_actes_ccam as $acte_ccam) {
     $acte_ccam->loadRefsFwd();
   }
 
+  $mbSejour =& $mbOp->_ref_sejour;
+  $mbSejour->loadRefsFwd();
+  
   if (isset($_POST["sc_patient_id"  ])) $mbOp->_ref_pat->SHS = $_POST["sc_patient_id"  ];
-  if (isset($_POST["sc_venue_id"    ])) $mbOp->venue_SHS     = $_POST["sc_venue_id"    ];
+  if (isset($_POST["sc_venue_id"    ])) $mbSejour->venue_SHS = $_POST["sc_venue_id"    ];
   if (isset($_POST["cmca_uf_code"   ])) $mbOp->code_uf       = $_POST["cmca_uf_code"   ];
   if (isset($_POST["cmca_uf_libelle"])) $mbOp->libelle_uf    = $_POST["cmca_uf_libelle"];
   

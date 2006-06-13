@@ -232,6 +232,7 @@ function pageMain() {
             <input type="hidden" name="m" value="dPpatients" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="patient_id" value="{$curr_op->_ref_pat->patient_id}" />
+ 
             <table class="form">
               <tr>
                 <th class="category" colspan="2">
@@ -244,15 +245,21 @@ function pageMain() {
                 <td><input type="text" title="notNull|num|length|8" name="SHS" value="{$curr_op->_ref_pat->SHS}" size="8" maxlength="8" /></td>
               </tr>
             </table>
+ 
             </form>
-            <form name="editOpFrm" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
+ 
+            <form name="editSejourFrm" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="dosql" value="do_planning_aed" />
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
+ 
             <table class="form">
               <tr>
-                <th class="category" colspan="2"><i>Lien S@nté.com</i> : Intervention <input type="submit" value="Valider" /></th>
+                <th class="category" colspan="2">
+                  <em>Lien S@nté.com</em> : Séjour
+                  <input type="submit" value="Valider" />
+                </th>
               </tr>
               <tr>
                 <th>
@@ -260,10 +267,28 @@ function pageMain() {
                   Suggestion :
                 </th>
                 <td>
-                  <input type="text" title="notNull|num|length|8" name="venue_SHS" value="{$curr_op->venue_SHS}" size="8" maxlength="8" /><br />
-                  {$curr_op->_venue_SHS_guess}
+                  <input type="text" title="{$curr_sejour->_props.venue_SHS}" name="venue_SHS" value="{$curr_sejour->venue_SHS}" size="8" maxlength="8" /><br />
+                  {$curr_sejour->_venue_SHS_guess}
                 </td>
               </tr>
+            </table>
+            
+            </form>
+            
+            <form name="editSejourFrm" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
+            <input type="hidden" name="dosql" value="do_planning_aed" />
+            <input type="hidden" name="m" value="dPplanningOp" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
+ 
+            <table class="form">
+              <tr>
+                <th class="category" colspan="2">
+                  <em>Lien S@nté.com</em> : Intervention
+                  <input type="submit" value="Valider" />
+                </th>
+              </tr>
+
               <tr>
                 <th><label for="_cmca_uf_preselection" title="Choisir une pré-selection pour remplir les unités fonctionnelles">Pré-sélection</label></th>
                 <td>
@@ -294,7 +319,9 @@ function pageMain() {
                 <td><input type="text" title="notNull|str|maxLength|35" name="libelle_uf" value="{$curr_op->libelle_uf}" size="20" maxlength="35" /></td>
               </tr>
             </table>
+            
             </form>
+            
             <table class="form">
               <tr>
                 <td class="button">

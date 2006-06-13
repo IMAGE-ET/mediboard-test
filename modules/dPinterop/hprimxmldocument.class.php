@@ -96,10 +96,15 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $this->addElement($elParent, $elName, $elValue);
   }
   
+  function addDateHeure($elParent, $dateTime) {
+    $this->addElement($elParent, "date", mbDate(null, $dateTime));
+    $this->addElement($elParent, "heure", mbTime(null, $dateTime));
+  }
+  
   function addCodeLibelle($elParent, $nodeName, $code, $libelle) {
     $codeLibelle = $this->addElement($elParent, $nodeName);
-    $this->addElement($codeLibelle, "code", substr($code, 0, 10));
-    $this->addElement($codeLibelle, "libelle", substr($libelle, 0, 35));
+    $this->addTexte($codeLibelle, "code", 10);
+    $this->addTexte($codeLibelle, "libelle", 35);
     return $codeLibelle;
   }
   
@@ -112,7 +117,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function addIdentifiantPart($elParent, $partName, $partValue) {
     $part = $this->addElement($elParent, $partName);
-    $this->addElement($part, "valeur", $partValue);
+    $this->addTexte($part, "valeur", $partValue, 17);
     $this->addAttribute($part, "etat", "permanent");
     $this->addAttribute($part, "portee", "local");
     $this->addAttribute($part, "referent", "non");

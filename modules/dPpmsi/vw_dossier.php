@@ -36,10 +36,10 @@ if ($patient->patient_id) {
 
     foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
       $operation =& $sejour->_ref_operations[$keyOp];
-      $consultAnest =& $operation->_ref_consult_anesth;
       
       $operation->loadRefGHM();
-      
+
+      $operation->loadRefsActesCCAM();  
       foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {
         $acte =& $operation->_ref_actes_ccam[$keyActe];
         $acte->loadRefsFwd();
@@ -48,6 +48,7 @@ if ($patient->patient_id) {
       $plage =& $operation->_ref_plageop;
       $plage->loadRefsFwd();
       
+      $consultAnest =& $operation->_ref_consult_anesth;
       if ($consultAnest->consultation_anesth_id) {
         $consultAnest->loadRefsFwd();
         $consultAnest->_ref_plageconsult->loadRefsFwd();

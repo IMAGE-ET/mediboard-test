@@ -98,14 +98,10 @@ class COperation extends CMbObject {
   var $_hour_adm = null;
   var $_min_adm = null;
   var $_codes_ccam = array();
-  var $_venue_SHS_guess = null;
   
   // Shortcut fields
   var $_datetime = null;
   
-  // HPRIM fields
-  var $_modalite_hospitalisation = "libre"; // enum|office|libre|tiers
-
   // DB References
   var $_ref_pat = null;
   var $_ref_chir = null;
@@ -255,15 +251,6 @@ class COperation extends CMbObject {
 
     $this->_hour_adm = substr($this->time_adm, 0, 2);
     $this->_min_adm  = substr($this->time_adm, 3, 2);
-
-    //$this->_entree_adm = "$this->date_adm $this->time_adm";
-    //$this->_sortie_adm = mbDateTime("+ $this->duree_hospi days", $this->_entree_adm);
-    
-    $this->_venue_SHS_guess = mbTranformTime(null, $this->_datetime, "%y");
-    $this->_venue_SHS_guess .= 
-      $this->type_adm == "exte" ? "5" :
-      $this->type_adm == "ambu" ? "4" : "0";
-    $this->_venue_SHS_guess .="xxxxx";
   }
   
   function updateDBFields() {

@@ -90,41 +90,40 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $dateNaissance = $this->addElement($personnePhysique, "dateNaissance");
     $this->addElement($dateNaissance, "date", $mbPatient->naissance);
     
-    // Ajout de la venue: +/- l'hospitalisation
+    // Ajout de la venue, c'est-à-dire le séjour
+    $mbSejour =& $mbOp->_ref_sejour;
     $venue = $this->addElement($evenementServeurActe, "venue");
     
     $identifiant = $this->addElement($venue, "identifiant");
-    $this->addIdentifiantPart($identifiant, "emetteur", "op$mbOp->operation_id");
-    $this->addIdentifiantPart($identifiant, "recepteur", $mbOp->venue_SHS);
+    $this->addIdentifiantPart($identifiant, "emetteur", "sj$mbSejour->sejour_id");
+    $this->addIdentifiantPart($identifiant, "recepteur", $mbSejour->venue_SHS);
     
+    // Entrée de séjour
+    $mbEntree = mbGetValue($mbSejour->entree_reelle, $mbSejour->entree_prevue);
     $entree = $this->addElement($venue, "entree");
     $dateHeureOptionnelle = $this->addElement($entree, "dateHeureOptionnelle");
-    $this->addElement($dateHeureOptionnelle, "date", $mbOp->date_adm);
-    $this->addElement($dateHeureOptionnelle, "heure", $mbOp->time_adm);
+    $this->addDateHeure($dateHeureOptionnelle, $mbEntree);
     
     // Ajout du médecin prescripteur
-    $mbChir =& $mbOp->_ref_chir;
+    $mbPraticien =& $mbSejour->_ref_praticien;
     
     $medecins = $this->addElement($venue, "medecins");
     $medecin = $this->addElement($medecins, "medecin");
-    $this->addElement($medecin, "numeroAdeli", $mbChir->adeli);
-    $this->addAttribute($medecin, "lien", "exec");
+    $this->addElement($medecin, "numeroAdeli", $mbPraticien->adeli);
+    $this->addAttribute($medecin, "lien", "rsp");
+    $this->addCodeLibelle($medecin, "identification", "prat$mbPraticien->user_id", $mbPraticien->_user_username);
     
-    $identification = $this->addElement($medecin, "identification");
-    $this->addElement($identification, "code", "chir$mbChir->user_id");
-    $this->addElement($identification, "libelle", $mbChir->_user_username);
-    
+    // Sortie de séjour
+    $mbSortie =& mbGetValue($mbSejour->sortie_reelle, $mbSejour->sortie_prevue);
     $sortie = $this->addElement($venue, "sortie");
     $dateHeureOptionnelle = $this->addElement($sortie, "dateHeureOptionnelle");
-    $this->addElement($dateHeureOptionnelle, "date", mbDate(null, $mbOp->_ref_last_affectation->sortie));
-    $this->addElement($dateHeureOptionnelle, "heure", mbTime(null, $mbOp->_ref_last_affectation->sortie));
+    $this->addDateHeure($dateHeureOptionnelle, $mbSortie);
     
     $placement = $this->addElement($venue, "Placement");
     $modePlacement = $this->addElement($placement, "modePlacement");
-    $this->addAttribute($modePlacement, "modaliteHospitalisation", $mbOp->_modalite_hospitalisation);
+    $this->addAttribute($modePlacement, "modaliteHospitalisation", $mbSejour->modalite_hospitalisation);
     $datePlacement = $this->addElement($placement, "datePlacement");
-    $this->addElement($datePlacement, "date", $mbOp->date_adm);
-    $this->addElement($datePlacement, "heure", $mbOp->time_adm);
+    $this->addDateHeure($datePlacement, $mbEntree);
     
     // Ajout de l'intervention
     $intervention = $this->addElement($evenementServeurActe, "intervention");
@@ -151,7 +150,6 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $this->addElement($fin, "date", $mbOp->_ref_plageop->date);
     $this->addElement($fin, "heure", $mbOpFin);
     
-    $mbChir->loadRefs();
     $this->addUniteFonctionnelle($intervention, $mbOp);
     
     // Ajout des participants
@@ -168,7 +166,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     }
         
     // Libellé de l'opération
-    $this->addElement($intervention, "libelle", substr($mbOp->libelle, 0, 80));
+    $this->addTexte($intervention, "libelle", 80);
     
     // Ajout des actes CCAM
     $actesCCAM = $this->addElement($evenementServeurActe, "actesCCAM");

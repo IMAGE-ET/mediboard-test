@@ -26,6 +26,7 @@ class CSejour extends CMbObject {
   
   // DB Fields
   var $type = null; // remplace $op->type_adm
+  var $modalite_hospitalisation = null;
   var $annule = null; // complète $op->annule
   var $chambre_seule = null; // remplace $op->chambre
   
@@ -43,7 +44,7 @@ class CSejour extends CMbObject {
   var $convalescence = null; // remplace $operation->convalescence
   
   var $rques = null;
-
+  
   // Object References  
   var $_ref_patient = null;
   var $_ref_praticien = null;
@@ -55,6 +56,7 @@ class CSejour extends CMbObject {
   
   // Form Fields
   var $_duree_prevue = null;
+  var $_venue_SHS_guess = null;
 
 	function CSejour() {
 		$this->CMbObject("sejour", "sejour_id");
@@ -63,6 +65,7 @@ class CSejour extends CMbObject {
     $this->_props["praticien_id"]    = "ref|notNull";
     
     $this->_props["type"] = "enum|comp|ambu|exte";
+    $this->_props["modalite_hospitalisation"] = "enum|office|libre|tiers";
     $this->_props["annule"] = "enum|0|1";
     $this->_props["chambre_seule"] = "enum|o|n";
 
@@ -189,7 +192,14 @@ class CSejour extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
+    
     $this->_duree_prevue = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
+    
+    $this->_venue_SHS_guess = mbTranformTime(null, $this->entree_prevue, "%y");
+    $this->_venue_SHS_guess .= 
+      $this->type == "exte" ? "5" :
+      $this->type == "ambu" ? "4" : "0";
+    $this->_venue_SHS_guess .="xxxxx";
   }
   
   function updateDBFields() {

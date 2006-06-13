@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPplanningOp';
-$config['mod_version'] = '0.44';
+$config['mod_version'] = '0.45';
 $config['mod_directory'] = 'dPplanningOp';
 $config['mod_setup_class'] = 'CSetupdPplanningOp';
 $config['mod_type'] = 'user';
@@ -373,8 +373,20 @@ class CSetupdPplanningOp {
             "\n`sejour`.`convalescence` = `operations`.`convalescence`" .
             "\nWHERE `operations`.`sejour_id` = `sejour`.`sejour_id`";
         db_exec($sql); db_error();
+        
       case "0.44" :
-        return "0.44";
+        $sql = "ALTER TABLE `sejour` DROP `code_uf`;";
+        db_exec($sql); db_error();
+
+        $sql = "ALTER TABLE `sejour` DROP `libelle_uf`;";
+        db_exec($sql); db_error();
+        
+        $sql = " ALTER TABLE `sejour` " .
+            "\nADD `modalite_hospitalisation` ENUM( 'office', 'libre', 'tiers' ) NOT NULL DEFAULT 'libre' AFTER `type`;";
+        db_exec($sql); db_error();
+
+      case "0.45" :
+        return "0.45";
     }
     
     return false;
