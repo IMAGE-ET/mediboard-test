@@ -504,27 +504,14 @@ class COperation extends CMbObject {
       }
     } 
   }
-  
-  function getSiblings() {
-    $twoWeeksBefore = mbDate("-15 days", $this->date_adm);
-    $twoWeeksAfter  = mbDate("+15 days", $this->date_adm);
     
-    $sql = "SELECT operation_id" .
-  		"\nFROM operations WHERE " .
-  		"\nAND pat_id = '$this->pat_id' " .
-  		"\nAND chir_id = '$this->chir_id'" .
-  		"\nAND date_adm BETWEEN($twoWeeksBefore AND $twoWeeksAfter)";
-    $siblings = db_loadlist($sql);
-    return $siblings;
-  }
-  
   function fillTemplate(&$template) {
   	$this->loadRefsFwd();
   	$this->_ref_plageop->loadRefsFwd();
     $dateFormat = "%d / %m / %Y";
     $timeFormat = "%Hh%M";
-    $template->addProperty("Admission - Date", mbTranformTime(null, $this->date_adm, $dateFormat));
-    $template->addProperty("Admission - Heure", mbTranformTime(null, $this->time_adm, $timeFormat));
+    $template->addProperty("Admission - Date", mbTranformTime(null, $this->_ref_sejour->entree_prevue, $dateFormat));
+    $template->addProperty("Admission - Heure", mbTranformTime(null, $this->_ref_sejour->entree_prevue, $timeFormat));
     $template->addProperty("Hospitalisation - Durée", $this->duree_hospi);
     $template->addProperty("Opération - Anesthésiste - nom", $this->_ref_plageop->_ref_anesth->_user_last_name);
     $template->addProperty("Opération - Anesthésiste - prénom", $this->_ref_plageop->_ref_anesth->_user_first_name);

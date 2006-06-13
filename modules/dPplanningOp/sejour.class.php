@@ -30,7 +30,7 @@ class CSejour extends CMbObject {
   var $annule = null; // complète $op->annule
   var $chambre_seule = null; // remplace $op->chambre
   
-  var $entree_prevue = null; // remplace $op->date_adm $op->time_adm, $op->_entree_adm
+  var $entree_prevue = null;
   var $sortie_prevue = null; // remplace $op->_sortie_adm
   var $entree_reelle = null; // remplace $op->entree_adm $op->admis
   var $sortie_reelle = null;

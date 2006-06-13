@@ -69,8 +69,8 @@
   <tr>
     <th>Admission :</th>
     <td>
-      le {$operation->date_adm|date_format:"%A %d/%m/%Y"} 
-      à {$operation->time_adm|date_format:"%Hh%M"}
+      {assign var="sejour" value=$operation->_ref_sejour}
+      le {$sejour->entree_prevue|date_format:"%A %d/%m/%Y à %Hh%M"} 
     </td>
   </tr>
   
