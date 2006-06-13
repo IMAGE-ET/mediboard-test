@@ -13,7 +13,8 @@
           <th>Service:</th>
           <td>
             <select name="service_id">
-              <option value="0">&mdash; Tous les services</option>{foreach from=$listServices item=curr_service}
+              <option value="0">&mdash; Tous les services</option>
+              {foreach from=$listServices item=curr_service}
               <option value="{$curr_service->service_id}" {if $curr_service->service_id == $service_id}selected="selected"{/if}>
                 {$curr_service->nom}
               </option>
@@ -45,7 +46,7 @@
               <option value="1" {if $type_adm == "1"}selected="selected"{/if}>Hospi complètes + ambu</option>
               {foreach from=$listHospis item=curr_hospi}
               <option value="{$curr_hospi.code}" {if $curr_hospi.code == $type_adm}selected="selected"{/if}>
-                {$curr_hospi.code}
+                {$curr_hospi.view}
               </option>
               {/foreach}
             </select>

@@ -26,7 +26,7 @@ $finact = mbDate("+ 1 MONTH", $finact);
 $finact = mbDate("-1 DAY", $finact);
 $prat_id  = mbGetValueFromGetOrSession("prat_id", 0);
 $service_id = mbGetValueFromGetOrSession("service_id", 0);
-$type_adm = mbGetValueFromGetOrSession("type_adm", 0);
+$type_adm = mbGetValueFromGetOrSession("type_adm", 1);
 
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);

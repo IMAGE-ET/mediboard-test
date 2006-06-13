@@ -17,8 +17,7 @@ require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph_bar'));
 $debut    = mbGetValueFromGet("debut"   , mbDate("-1 YEAR"));
 $fin      = mbGetValueFromGet("fin"     , mbDate());
 $prat_id  = mbGetValueFromGet("prat_id" , 0);
-$service_id = mbGetValueFromGet("salle_id", 0);
-//$codeCCAM = mbGetValueFromGet("codeCCAM", "");
+$service_id = mbGetValueFromGet("service_id", 0);
 
 $pratSel = new CMediusers;
 $pratSel->load($prat_id);
@@ -39,18 +38,19 @@ $opbysalle = array();
 foreach($services as $service) {
   $id = $service["service_id"];
   $opbysalle[$id]["nom"] = $salle["nom"];
-  $sql = "SELECT COUNT(operations.operation_id) AS total," .
-    "\nDATE_FORMAT(operations.date_adm, '%m/%Y') AS mois," .
-    "\nDATE_FORMAT(operations.date_adm, '%Y%m') AS orderitem," .
+  $sql = "SELECT COUNT(sejour.sejour_id) AS total," .
+    "\nDATE_FORMAT(sejour.entree_prevue, '%m/%Y') AS mois," .
+    "\nDATE_FORMAT(sejour.entre_prevue, '%Y%m') AS orderitem," .
     "\nservice.nom AS nom" .
-    "\nFROM operations, affectation, services, chambre, lit" .
-    "\nWHERE operations.date_adm BETWEEN '$debut' AND '$fin'";
+    "\nFROM sejour, affectation, services, chambre, lit" .
+    "\nWHERE sejour.annule = 0" .
+    "\nAND sejour.entree_prevue BETWEEN '$debut' AND '$fin'";
   if($prat_id)
-    $sql .= "\nAND operations.chir_id = '$prat_id'";
+    $sql .= "\nAND sejour.praticien_id = '$prat_id'";
   $sql .= "\nAND service.service_id = chambre.service_id" .
     "\nAND chambre.chambre_id = lit.chambre_id" .
     "\nAND lit.affectation_id = affectation.affectation_id" .
-    "\nAND affectation.operation_id = operations.operation_id" .
+    "\nAND affectation.sejour_id = sejour.sejour_id" .
     "\nAND service.service_id = '$id'" .
     "\nGROUP BY mois" .
     "\nORDER BY orderitem";
@@ -59,12 +59,12 @@ foreach($services as $service) {
     $f = true;
     foreach($result as $totaux) {
       if($x == $totaux["mois"]) {
-        $opbysalle[$id]["op"][] = $totaux["total"];
+        $opbysalle[$id]["sejour"][] = $totaux["total"];
         $f = false;
       }
     }
     if($f) {
-      $opbysalle[$id]["op"][] = 0;
+      $opbysalle[$id]["sejour"][] = 0;
     }
   }
 }
@@ -132,7 +132,7 @@ $colors = array("#aa5500",
                 "#00ffff",);
 $listPlots = array();
 foreach($opbysalle as $key => $value) {
-  $bplot = new BarPlot($value["op"]);
+  $bplot = new BarPlot($value["sejour"]);
   $from = $colors[$key];
   $to = "#EEEEEE";
   $bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);

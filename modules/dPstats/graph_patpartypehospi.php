@@ -45,16 +45,16 @@ $patbyhospi = array();
 foreach($listHospis as $hospi) {
   $type = $hospi["code"];
   $patbyhospi[$type]["nom"] = $hospi["view"];
-  $sql = "SELECT COUNT(operations.operation_id) AS total," .
-    "\noperations.type_adm," .
-    "\nDATE_FORMAT(operations.date_adm, '%m/%Y') AS mois," .
-    "\nDATE_FORMAT(operations.date_adm, '%Y%m') AS orderitem" .
-    "\nFROM operations" .
-    "\nWHERE operations.date_adm BETWEEN '$debut' AND '$fin'" .
-    "\nAND operations.type_adm = '$type'" .
-    "\nAND operations.annulee = 0";
+  $sql = "SELECT COUNT(sejour.sejour_id) AS total," .
+    "\nsejour.type," .
+    "\nDATE_FORMAT(sejour.entree_prevue, '%m/%Y') AS mois," .
+    "\nDATE_FORMAT(sejour.entree_prevue, '%Y%m') AS orderitem" .
+    "\nFROM sejour" .
+    "\nWHERE sejour.entree_prevue BETWEEN '$debut 00:00:00' AND '$fin 23:59:59'" .
+    "\nAND sejour.type = '$type'" .
+    "\nAND sejour.annule = 0";
   if($prat_id)
-    $sql .= "\nAND operations.chir_id = '$prat_id'";
+    $sql .= "\nAND sejour.praticien_id = '$prat_id'";
   $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
   $result = db_loadlist($sql);
@@ -62,12 +62,12 @@ foreach($listHospis as $hospi) {
     $f = true;
     foreach($result as $totaux) {
       if($x == $totaux["mois"]) {
-        $patbyhospi[$type]["op"][] = $totaux["total"];
+        $patbyhospi[$type]["sejour"][] = $totaux["total"];
         $f = false;
       }
     }
     if($f) {
-      $patbyhospi[$type]["op"][] = 0;
+      $patbyhospi[$type]["sejour"][] = 0;
     }
   }
 }
@@ -120,7 +120,7 @@ $colors = array('comp' => "#aa5500",
                 'exte' => "#0055aa");
 $listPlots = array();
 foreach($patbyhospi as $key => $value) {
-  $bplot = new BarPlot($value["op"]);
+  $bplot = new BarPlot($value["sejour"]);
   $from = $colors[$key];
   $to = "#EEEEEE";
   $bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);
