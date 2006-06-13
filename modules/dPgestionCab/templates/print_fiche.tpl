@@ -163,7 +163,7 @@
   <tbody>
     <tr>
       <td colspan="2" height="17" align="right" bgcolor="#e63">
-        <font color="#fff">Congés payés</font>
+        <font color="#fff">Congés payés {$fichePaie->conges_payes|string_format:"%.2f"}%</font>
       </td>
       <td align="left"></td>
       <td align="left"></td>

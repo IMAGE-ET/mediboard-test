@@ -133,6 +133,15 @@ function pageMain() {
           </td>
         </tr>
         <tr>
+          <th>
+            <label for="conges_payes" title="Congés payés exprimés en pourcentage">Prime d'ancienneté :</label>
+          </th>
+          <td>
+            <input type="text" size="4" name="conges_payes" title="{$fichePaie->_props.conges_payes}" value="{$fichePaie->conges_payes}" />
+            %
+          </td>
+        </tr>
+        <tr>
           <td class="button" colspan="2">
             <button type="submit">Sauver</button>
             {if $fichePaie->fiche_paie_id}

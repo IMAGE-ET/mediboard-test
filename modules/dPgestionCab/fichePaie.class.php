@@ -27,6 +27,7 @@ class CFichePaie extends CMbObject {
   var $mutuelle       = null;
   var $precarite      = null;
   var $anciennete     = null;
+  var $conges_payes   = null;
   
   // Forms Fields
   var $_salaire_base = null;
@@ -63,14 +64,15 @@ class CFichePaie extends CMbObject {
     $this->CMbObject('fiche_paie', 'fiche_paie_id');
     
     $this->_props["params_paie_id"] = "ref|notNull";
-    $this->_props["debut"] = "date|notNull";
-    $this->_props["fin"] = "date|notNull";
-    $this->_props["salaire"] = "currency|notNull";
-    $this->_props["heures"] = "num|notNull";
-    $this->_props["heures_sup"] = "num|notNull";
-    $this->_props["mutuelle"] = "currency|notNull";
-    $this->_props["anciennete"] = "pct|notNull";
-    $this->_props["precarite"] = "pct|notNull";
+    $this->_props["debut"]          = "date|notNull";
+    $this->_props["fin"]            = "date|notNull";
+    $this->_props["salaire"]        = "currency|notNull";
+    $this->_props["heures"]         = "num|notNull";
+    $this->_props["heures_sup"]     = "num|notNull";
+    $this->_props["mutuelle"]       = "currency|notNull";
+    $this->_props["anciennete"]     = "pct|notNull";
+    $this->_props["precarite"]      = "pct|notNull";
+    $this->_props["conges_payes"]   = "pct|notNull";
 
     $this->buildEnums();
   }
@@ -92,15 +94,12 @@ class CFichePaie extends CMbObject {
       $this->_prime_anciennete = ($this->anciennete / 100) *
                                  ($this->_salaire_base + $this->_salaire_heures_sup);
       $this->_salaire_brut += $this->_prime_anciennete;
-      $this->_conges_payes = 0.1 * ($this->_salaire_base +
+      $this->_conges_payes = $this->conges_payes *
+                                   ($this->_salaire_base +
                                     $this->_salaire_heures_sup +
                                     $this->_prime_precarite +
                                     $this->_prime_anciennete);
       $this->_salaire_brut += $this->_conges_payes;
-      $this->_csgds   = $this->_salaire_brut * $this->_ref_params_paie->csgds / 100;
-      $this->_total_retenues = $this->_csgds;
-      $this->_csgnds  = $this->_salaire_brut * $this->_ref_params_paie->csgnds / 100;
-      $this->_total_retenues += $this->_csgnds;
       $this->_ssms    = $this->_salaire_brut * $this->_ref_params_paie->ssms / 100;
       $this->_total_retenues += $this->_ssms;
       $this->_ssmp    = $this->_salaire_brut * $this->_ref_params_paie->ssmp / 100;
@@ -121,6 +120,14 @@ class CFichePaie extends CMbObject {
       $this->_total_retenues += $this->_aps;
       $this->_app     = $this->_salaire_brut * $this->_ref_params_paie->app / 100;
       $this->_total_cot_patr += $this->_app;
+      // On peut calculer ici la CSG/RDS
+      $this->_csgds   = ($this->_salaire_brut + $this->_rcp + $this->_app) * 0.97
+                        * $this->_ref_params_paie->csgds / 100;
+      $this->_total_retenues = $this->_csgds;
+      $this->_csgnds  = ($this->_salaire_brut + $this->_rcp + $this->_app) * 0.97
+                        * $this->_ref_params_paie->csgnds / 100;
+      $this->_total_retenues += $this->_csgnds;
+      // On reviens à nos cotisations classiques
       $this->_acs     = $this->_salaire_brut * $this->_ref_params_paie->acs / 100;
       $this->_total_retenues += $this->_acs;
       $this->_acp     = $this->_salaire_brut * $this->_ref_params_paie->acp / 100;
