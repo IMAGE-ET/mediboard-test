@@ -142,8 +142,8 @@ class CSejour extends CMbObject {
         $this->_ref_operations[$keyOp]->type_adm = $this->type;
         $this->_ref_operations[$keyOp]->annulee = $this->annule;
         $this->_ref_operations[$keyOp]->chambre = $this->chambre_seule;
-        $this->_ref_operations[$keyOp]->date_adm = $this->entree_prevue;
-        $this->_ref_operations[$keyOp]->time_adm = $operation->date_adm;
+        $this->_ref_operations[$keyOp]->date_adm = mbDate(null, $this->entree_prevue);
+        $this->_ref_operations[$keyOp]->time_adm = mbTime(null, $this->entree_prevue);
         $this->_ref_operations[$keyOp]->duree_hospi = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
         if($this->entree_reelle) {
           $this->_ref_operations[$keyOp]->admis = 'o';
