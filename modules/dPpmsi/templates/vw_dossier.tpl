@@ -236,7 +236,7 @@ function pageMain() {
               <tr>
                 <th class="category" colspan="2">
                   <em>Lien S@nté.com</em> : Patient 
-                  <input type="button" value="Valider" onclick="submitFormAjax(this.form)" />
+                  <input type="submit" value="Valider" />
                 </th>
               </tr>
               <tr>
