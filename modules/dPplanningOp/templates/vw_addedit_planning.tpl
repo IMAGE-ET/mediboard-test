@@ -639,7 +639,7 @@ function pageMain() {
         <tr>
           <th><label for="chambre_o" title="Patient à placer dans une chambre particulière">Chambre particulière :</label></th>
           <td>
-            <input name="chambre" value="o" type="radio" {if $op->_ref_sejour->chambre_seule == "o"} checked="checked" {/if} onchange="modifOp()" />
+            <input name="chambre" value="o" type="radio" {if $op->operation_id && $op->_ref_sejour->chambre_seule == "o"} checked="checked" {/if} onchange="modifOp()" />
             <label for="chambre_o">Oui</label>
             <input name="chambre" value="n" type="radio" {if !$op->operation_id || $op->_ref_sejour->chambre_seule == "n"} checked="checked" {/if} onchange="modifOp()" />
             <label for="chambre_n">Non</label>
