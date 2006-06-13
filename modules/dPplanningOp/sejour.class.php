@@ -114,7 +114,7 @@ class CSejour extends CMbObject {
     $this->annule        = $operation->annulee;
     $this->chambre_seule = $operation->chambre;
     $this->entree_prevue = $operation->date_adm." ".$operation->time_adm;
-    $this->sortie_prevue = mbAddDateTime("+".$operation->duree_hospi." DAYS", $this->entree_prevue);
+    $this->sortie_prevue = mbDateTime("+".$operation->duree_hospi." DAYS", $this->entree_prevue);
     if($operation->admis == 'o')
       $this->entree_reelle = $operation->entree_adm;
     else
