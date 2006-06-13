@@ -36,8 +36,6 @@ for ($i = -5; $i < 0; $i++) {
   $operation = new COperation;
   $where["entree_prevue"] = "BETWEEN '$curr_day' and '$next_day'";
   
-  mbTrace($where, "where");
-  
   $list1[$i]["date"] = $curr_day;
   $list1[$i]["urgences"] = $operation->loadList($where, $order, null, null, $ljoin);
   foreach($list1[$i]["urgences"] as $key => $value) {
