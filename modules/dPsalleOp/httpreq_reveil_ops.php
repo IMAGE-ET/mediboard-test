@@ -35,7 +35,7 @@ $listSalles = new CSalle;
 $listSalles = $listSalles->loadList();
 
 // Selection des plages opératoires de la journée
-$plages = new CplageOp;
+$plages = new CPlageOp;
 $where = array();
 $where["date"] = "= '$date'";
 $plages = $plages->loadList($where);
@@ -59,6 +59,7 @@ $listOps = $listOps->loadList($where, $order);
 foreach($listOps as $key => $value) {
   $listOps[$key]->loadRefsFwd();
   $listOps[$key]->_ref_plageop->loadRefsFwd();
+  $listOps[$key]->_ref_sejour->loadRefsFwd();
   //Tableau des timmings
   $timing[$key]["entree_reveil"] = array();
   $timing[$key]["sortie_reveil"] = array();
