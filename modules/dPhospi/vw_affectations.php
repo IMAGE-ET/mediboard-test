@@ -123,7 +123,7 @@ foreach ($sejourNonAffectesVeille as $sejour_id => $sejour) {
    else {
      $sejourNonAffectesVeille[$sejour_id]->loadRefPraticien();
      $sejourNonAffectesVeille[$sejour_id]->_ref_praticien->_ref_function =& $listFunctions[$sejourNonAffectesVeille[$sejour_id]->_ref_praticien->function_id];
-     $listChirs[$sejourNonAffectesVeille[$sejour_id]->chir_id] =& $sejourNonAffectesVeille[$sejour_id]->_ref_praticien;
+     $listChirs[$sejourNonAffectesVeille[$sejour_id]->praticien_id] =& $sejourNonAffectesVeille[$sejour_id]->_ref_praticien;
    }
    if(isset($listPats[$sejourNonAffectesVeille[$sejour_id]->patient_id])) {
      $sejorNonAffecteesVeille[$sejour_id]->_ref_patient =& $listPats[$sejourNonAffectesVeille[$sejour_id]->patient_id];
