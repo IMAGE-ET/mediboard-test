@@ -26,7 +26,7 @@ function incPatientHistoryMain() {
           <li>
             <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
               <strong>Dr. {$curr_op->_ref_chir->_view}</strong>
-              {$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}
+              le {$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}
             </a>
           </li>
         {foreachelse}

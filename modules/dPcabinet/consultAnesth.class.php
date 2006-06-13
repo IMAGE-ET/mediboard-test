@@ -63,7 +63,7 @@ class CConsultAnesth extends CMbObject {
     $this->_props["taille"]          = "currency";
     $this->_props["groupe"]          = "enum|?|O|A|B|AB";
     $this->_props["rhesus"]          = "enum|?|-|+";
-    $this->_props["antecedants"]     = "str|confidential";
+    $this->_props["antecedents"]     = "str|confidential";
     $this->_props["traitements"]     = "str|confidential";
     $this->_props["tabac"]           = "enum|?|-|+|++";
     $this->_props["oenolisme"]       = "enum|?|-|+|++";

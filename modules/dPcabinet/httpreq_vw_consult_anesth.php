@@ -76,11 +76,12 @@ if ($selConsult) {
     $patient->_ref_consultations[$key]->loadRefs();
     $patient->_ref_consultations[$key]->_ref_plageconsult->loadRefs();
   }
-  foreach ($patient->_ref_operations as $key => $value) {
-    $patient->_ref_operations[$key]->loadRefs();
-  }
-  foreach ($patient->_ref_hospitalisations as $key => $value) {
-    $patient->_ref_hospitalisations[$key]->loadRefs();
+  foreach ($patient->_ref_sejours as $key => $sejour) {
+    $patient->_ref_sejours[$key]->loadRefsFwd();
+    $patient->_ref_sejours[$key]->loadRefsOperations();
+    foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
+      $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
+    }
   }
 
   $consult_anesth =& $consult->_ref_consult_anesth;
