@@ -36,18 +36,20 @@ switch ($mode) {
   }
   case 'saisie' : {
     if($id) {
-      $sql = "UPDATE sejour" .
-             "\nSET saisi_SHS = '$value', modif_SHS = '0'" .
-             "\nWHERE sejour_id = '$id';";
+      $sql = "UPDATE sejour, operations" .
+        "\nSET sejour.saisi_SHS = '$value', sejour.modif_SHS = '0', operations.saisie = '$value'" .
+        "\nWHERE sejour.sejour_id = operations.sejour_id" .
+        "\nAND sejour.sejour_id = '$id';";
       $result = db_exec($sql);
       db_error();
     }
     break;
   }
   case 'allsaisie' : {
-    $sql = "UPDATE sejour" .
-    		"\nSET saisi_SHS = '$value', modif_SHS = '0'" .
-    		"\nWHERE entree_prevue LIKE '$id __:__:__';";
+      $sql = "UPDATE sejour, operations" .
+        "\nSET sejour.saisi_SHS = '$value', sejour.modif_SHS = '0', operations.saisie = '$value'" .
+        "\nWHERE sejour.sejour_id = operations.sejour_id" .
+        "\nAND entree_prevue LIKE '$id __:__:__';";
     $result = db_exec($sql);
     db_error();
     $id = 0;
