@@ -195,11 +195,15 @@ function printIntervention(id) {
   {foreach from=$patient->_ref_sejours item=curr_sejour}
   <tr>
     <td>
-      Séjour du {$curr_sejour->entree_prevue|date_format:"%d %b %Y"} 
-      au {$curr_sejour->sortie_prevue|date_format:"%d %b %Y"}
+      <a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_op->date_adm|date_format:"%Y-%m-%d"}#adm{$curr_op->operation_id}">
+        Séjour du {$curr_sejour->entree_prevue|date_format:"%d %b %Y"} 
+        au {$curr_sejour->sortie_prevue|date_format:"%d %b %Y"}
+      </a>
 	</td>
 	<td>
-      Dr. {$curr_sejour->_ref_praticien->_view}
+      <a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_op->date_adm|date_format:"%Y-%m-%d"}#adm{$curr_op->operation_id}">
+        Dr. {$curr_sejour->_ref_praticien->_view}
+      </a>
 	</td>
   </tr>
   {foreach from=$curr_sejour->_ref_operations item=curr_op}
@@ -215,11 +219,8 @@ function printIntervention(id) {
         <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
       </a>
       {/if}
-      <em><a class="actionPat" href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_op->date_adm|date_format:"%Y-%m-%d"}#adm{$curr_op->operation_id}">
-      (adm. le {$curr_op->date_adm|date_format:"%d %b %Y"})
-      </a></em>
       <a class="actionPat" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
-        {$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}
+        Intervention le {$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}
       </a>
     </td>
     <td>
@@ -245,7 +246,7 @@ function printIntervention(id) {
       </a>
       {/if}
       <a class="actionPat" href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={$curr_consult->consultation_id}">
-        {$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}
+        Le {$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}
       </a>
     </td>
     <td>
