@@ -48,8 +48,8 @@ class COperation extends CMbObject {
   
   // DB Fields S@nté.com communication
   var $venue_SHS = null; // remplacé par $sejour->venue_SHS
-  var $code_uf = null; // remplacé par $sejour->code_uf
-  var $libelle_uf = null; // remplacé par $sejour->libelle_uf
+  var $code_uf = null;
+  var $libelle_uf = null;
   var $saisie = null; // remplacé par $sejour->saisi_SHS
   var $modifiee = null;  // remplace $sejour->modif_SHS
   

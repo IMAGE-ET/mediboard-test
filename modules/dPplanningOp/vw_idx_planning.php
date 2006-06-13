@@ -84,6 +84,7 @@ foreach($listDay as $key => $value) {
   $listDay[$key]->loadRefs();
   foreach($listDay[$key]->_ref_operations as $key2 => $value2) {
     $listDay[$key]->_ref_operations[$key2]->loadRefs();
+    $listDay[$key]->_ref_operations[$key2]->_ref_sejour->loadRefsFwd();
   }
 }
 

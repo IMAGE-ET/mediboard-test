@@ -35,8 +35,6 @@ class CSejour extends CMbObject {
   var $sortie_reelle = null;
 
   var $venue_SHS = null; // remplace $op->venue_SHS
-  var $code_uf = null; // remplace $op->code_uf
-  var $libelle_uf = null; // remplace $op->libelle_uf
   var $saisi_SHS = null; // remplace $op->saisie
   var $modif_SHS = null; // remplace $op->modifiee
 
@@ -121,8 +119,6 @@ class CSejour extends CMbObject {
       $this->entree_reelle = '';
     $this->sortie_reelle = '';
     $this->venue_SHS     = $operation->venue_SHS;
-    $this->code_uf       = $operation->code_uf;
-    $this->libelle_uf    = $operation->libelle_uf;
     $this->saisi_SHS     = $operation->saisie;
     $this->modif_SHS     = $operation->modifiee;
     $this->pathologie    = $operation->pathologie;
@@ -153,8 +149,6 @@ class CSejour extends CMbObject {
         }
         $this->_ref_operations[$keyOp]->entree_adm = $this->entree_reelle;
         $this->_ref_operations[$keyOp]->venue_SHS = $this->venue_SHS;
-        $this->_ref_operations[$keyOp]->code_uf = $this->code_uf;
-        $this->_ref_operations[$keyOp]->libelle_uf = $this->libelle_uf;
         $this->_ref_operations[$keyOp]->saisie = $this->saisi_SHS;
         $this->_ref_operations[$keyOp]->modifiee = $this->modif_SHS;
         $this->_ref_operations[$keyOp]->pathologie = $this->pathologie;
