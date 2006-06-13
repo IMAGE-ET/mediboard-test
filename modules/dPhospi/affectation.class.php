@@ -143,13 +143,6 @@ class CAffectation extends CMbObject {
     $this->_ref_lit->loadObject($where);
 
     $where = array (
-      "operation_id" => "= '$this->operation_id'"
-    );
-    
-    $this->_ref_operation = new COperation;
-    $this->_ref_operation->loadObject($where);
-    
-    $where = array (
       "sejour_id" => "= '$this->sejour_id'"
     );
     

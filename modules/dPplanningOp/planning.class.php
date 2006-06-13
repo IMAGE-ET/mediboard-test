@@ -26,8 +26,8 @@ class COperation extends CMbObject {
 
   // DB References
   var $sejour_id = null;
-  var $pat_id = null; // sejour->patient_id
-  var $chir_id = null;
+  var $pat_id = null; // remplacé par $sejour->patient_id
+  var $chir_id = null; // dupliqué en $sejour->praticien_id
   var $plageop_id = null;
 
   // DB Fields to be removed

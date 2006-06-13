@@ -13,21 +13,30 @@ if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
+require_once( $AppUI->getModuleClass("dPplanningOp", "sejour"));
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
+$next = mbDate("+1 day", $date);
 
-$listAffectations = new CAffectation;
+$sejour = new CSejour;
 $where = array();
-$where[] = "entree < '$date 23:59:59' AND sortie > '$date 00:00:00'";
-$order = "sortie, entree";
-$listAffectations = $listAffectations->loadList($where, $order);
+$where["entree_prevue"] = "< '$next'";
+$where["sortie_prevue"] = "> '$date'";
+$order = array();
+$order[] = "sortie_prevue";
+$order[] = "entree_prevue";
 
-foreach($listAffectations as $key => $affectation) {
-  $listAffectations[$key]->loadRefs();
-  $listAffectations[$key]->_ref_lit->loadCompleteView();
-  $listAffectations[$key]->_ref_operation->loadRefs();
-  $listAffectations[$key]->_ref_operation->loadRefGHM();
+$listSejours = $sejour->loadList($where, $order);
+
+foreach ($listSejours as $keySejour => $valueSejour) {
+  $sejour =& $listSejours[$keySejour];
+  $sejour->loadRefs();
+  foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
+    $operation =& $sejour->_ref_operations[$keyOp];
+    $operation->loadRefChir();
+    $operation->loadRefPlageOp();
+    $operation->loadRefGHM();
+  }
 }
 
 // Création du template
@@ -35,7 +44,7 @@ require_once( $AppUI->getSystemClass('smartydp'));
 $smarty = new CSmartyDP;
 
 $smarty->assign("date", $date);
-$smarty->assign("listAffectations", $listAffectations);
+$smarty->assign("listSejours", $listSejours);
 
 $smarty->display('vw_list_hospi.tpl');
 

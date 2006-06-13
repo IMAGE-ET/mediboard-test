@@ -50,6 +50,7 @@ class CSejour extends CMbObject {
   var $_ref_patient = null;
   var $_ref_praticien = null;
   var $_ref_operations = null;
+  var $_ref_last_operation = null;
   var $_ref_affectations = null;
   var $_ref_first_affectation = null;
   var $_ref_last_affectation = null;
@@ -229,7 +230,7 @@ class CSejour extends CMbObject {
     $this->_ref_affectations = new CAffectation();
     $this->_ref_affectations = $this->_ref_affectations->loadList($where, $order);
 
-    if(count($this->_ref_affectations) > 0) {
+    if (count($this->_ref_affectations) > 0) {
       $this->_ref_first_affectation =& end($this->_ref_affectations);
       $this->_ref_last_affectation =& reset($this->_ref_affectations);
     } else {
@@ -242,9 +243,21 @@ class CSejour extends CMbObject {
     $where = array (
       "sejour_id" => "= '$this->sejour_id'"
     );
+    
+    $ljoin = array (
+      "plagesop" => "plagesop.id = operation.plageop_id"
+    );
+    
+    $order = "plagesop.date DESC";
 
     $operations = new COperation;
     $this->_ref_operations = $operations->loadList($where);
+    
+    if (count($this->_ref_operations) > 0) {
+      $this->_ref_last_operation =& reset($this->_ref_operations);
+    } else {
+      $this->_ref_last_operation =& new COperation;
+    }
   }
   
   function loadRefsBack() {
