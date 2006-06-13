@@ -96,7 +96,7 @@ class CSejour extends CMbObject {
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
       "label" => "opérations", 
-      "name" => "operation", 
+      "name" => "operations", 
       "idfield" => "operation_id", 
       "joinfield" => "sejour_id"
     );
