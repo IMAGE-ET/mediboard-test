@@ -31,8 +31,9 @@ $logs = new CAccessLog();
 $sql = "SELECT accesslog_id, module, action, period," .
       "\nSUM(hits) AS hits, SUM(duration) AS duration, SUM(request) AS request" .
       "\nFROM access_log" .
-      "\nWHERE period LIKE '$date __:__:__'" .
-      "\nAND module = '$module'";
+      "\nWHERE period LIKE '$date __:__:__'";
+if($module)
+  $sql .= "\nAND module = '$module'";
 if($action)
   $sql .= "\nAND action = '$action'";
 $sql .= "\nGROUP BY period" .
@@ -68,7 +69,8 @@ $graph->SetY2Scale("int");
 $graph->SetMarginColor("lightblue");
 
 // Set up the title for the graph
-$title = mbTranformTime(null, $date, "%A %d %b %Y")." :  $module";
+$title = mbTranformTime(null, $date, "%A %d %b %Y");
+if($module) $title .= " :  $module";
 if($action) $title .= "- $action";
 $graph->title->Set($title);
 $graph->title->SetFont(FF_ARIAL,FS_NORMAL,7+$size);

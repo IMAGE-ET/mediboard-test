@@ -34,8 +34,9 @@ function pageMain() {
     <input type="hidden" name="tab" value="{$tab}" />
     <label for="vue1" title="Type de vue des graphiques">Type de vue :</label>
     <select name="groupmod" onchange="this.form.submit()">
-      <option value="0"{if !$groupmod}selected="selected"{/if}>Pas de regroupement</option>
-      <option value="1"{if $groupmod}selected="selected"{/if}>Regrouper par module</option>
+      <option value="0"{if $groupmod == 0}selected="selected"{/if}>Pas de regroupement</option>
+      <option value="1"{if $groupmod == 1}selected="selected"{/if}>Regrouper par module</option>
+      <option value="2"{if $groupmod == 2}selected="selected"{/if}>Regrouper toute la journée</option>
     </select>
     </form>
   </th>
@@ -50,9 +51,13 @@ function pageMain() {
       <tr>
       {/if}
         <td class="button">
-          {if $groupmod}
+          {if $groupmod == 2}
+          <a href="javascript:zoom('{$date}', 0, 0)" title="Agrandir">
+            <img src="index.php?m=system&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={$date}&amp;module=0&amp;action=0" alt="Graphique pour la journée" />
+          </a>
+          {elseif $groupmod == 1}
           <a href="javascript:zoom('{$date}', '{$log->module}', 0)" title="Agrandir">
-            <img src="index.php?m=system&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={$date}&amp;module={$log->module}&amp;action=0" alt="Graphique pour {$log->module} - {$log->action}" />
+            <img src="index.php?m=system&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={$date}&amp;module={$log->module}&amp;action=0" alt="Graphique pour {$log->module}" />
           </a>
           {else}
           <a href="javascript:zoom('{$date}', '{$log->module}', '{$log->action}')" title="Agrandir">

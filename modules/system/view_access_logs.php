@@ -13,7 +13,7 @@ global $AppUI, $canRead, $canEdit, $m;
 require_once($AppUI->getModuleClass("system", "accesslog"));
 
 $date     = mbGetValueFromGetOrSession("date", mbDate());
-$groupmod = mbGetValueFromGetOrSession("groupmod", 0);
+$groupmod = mbGetValueFromGetOrSession("groupmod", 1);
 $next     = mbDate("+ 1 day", $date);
 
 $logs = new CAccessLog;

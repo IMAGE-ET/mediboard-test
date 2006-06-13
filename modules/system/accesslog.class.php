@@ -37,10 +37,14 @@ class CAccessLog extends CMbObject {
   
   function loadAgregation($start, $end, $module = 0) {
     $sql = "SELECT accesslog_id, module, action," .
-        "\nSUM(hits) AS hits, SUM(duration) AS duration, SUM(request) AS request" .
+        "\nSUM(hits) AS hits, SUM(duration) AS duration, SUM(request) AS request," .
+        "\n0 AS grouping" .
         "\nFROM access_log" .
         "\nWHERE period BETWEEN '$start' AND '$end'";
-    if($module) {
+    if($module == 2) {
+      $sql .= "\nGROUP BY grouping";
+    }
+    else if($module == 1) {
       $sql .= "\nGROUP BY module" .
           "\nORDER BY module";
     } else {
