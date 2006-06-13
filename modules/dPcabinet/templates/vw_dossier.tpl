@@ -158,10 +158,13 @@ function printDocument(doc_id) {
           </td>
         </tr>
         {/foreach}
-        <tr>
-          <th class="category" colspan="2">Interventions</th>
-        </tr>
         {foreach from=$patSel->_ref_sejours item=curr_sejour}
+        <tr>
+          <th class="category" colspan="2">
+          	Séjour du {$curr_sejour->entree_prevue}
+          	au {$curr_sejour->sortie_prevue}
+          </th>
+        </tr>
         {foreach from=$curr_sejour->_ref_operations item=curr_op}
         <tr class="groupcollapse" id="op{$curr_op->operation_id}" onclick="flipGroup({$curr_op->operation_id}, 'op')">
           <td colspan="2">
@@ -238,92 +241,6 @@ function printDocument(doc_id) {
         {/foreach}
         {/foreach}
         </tr>
-        <tr>
-          <th class="category" colspan="2">Hospitalisations</th>
-        </tr>
-        {foreach from=$patSel->_ref_hospitalisations item=curr_hospi}
-        <tr class="groupcollapse" id="hospi{$curr_hospi->operation_id}" onclick="flipGroup({$curr_hospi->operation_id}, 'hospi')">
-          <td colspan="2">
-            <strong>
-            Dr. {$curr_hospi->_ref_chir->_view} &mdash;
-            {$curr_hospi->date_adm|date_format:"%A %d %B %Y"}
-            </strong>
-          </td>
-        </tr>
-        <tr class="hospi{$curr_hospi->operation_id}">
-          <th>Actes Médicaux :</th>
-          <td class="text">
-            <ul>
-              {foreach from=$curr_hospi->_ext_codes_ccam item=curr_code}
-              <li><strong>{$curr_code->code}</strong> : {$curr_code->libelleLong}</li>
-              {foreachelse}
-              <li>Simple observation</li>
-              {/foreach}
-            </ul>
-          </td>
-        </tr>
-        
-        {if $chirSel}
-        <tr class="hospi{$curr_hospi->operation_id}">
-          <th>Ajouter un pack :</th>
-          <td>
-            <select name="pack" onchange="printPack({$curr_hospi->operation_id}, this.value)">
-              <option value="">&mdash; chosir un pack</option>
-              {foreach from=$curr_hospi->_ref_chir->_ref_packs item=curr_pack}
-              <option value="{$curr_pack->pack_id}">{$curr_pack->nom}</option>
-              {/foreach}
-            </select>
-          </td>
-        </tr>
-        {/if}
-        <tr class="hospi{$curr_hospi->operation_id}">
-          <th>Documents créés :</th>
-          <td>
-          <ul>
-            {foreach from=$curr_hospi->_ref_documents item=document}
-            <li>
-              {$document->nom}
-              <button onclick="printDocument({$document->compte_rendu_id})">
-                <img src="modules/dPcabinet/images/print.png" />
-              </button>
-            </li>
-            {foreachelse}
-            <li>Aucun document créé</li>
-            {/foreach}
-          </ul>
-        </tr>
-        <tr class="hospi{$curr_hospi->operation_id}">
-          <th>Fichiers attachés :</th>
-          <td>
-            <ul>
-              {foreach from=$curr_hospi->_ref_files item=curr_file}
-              <li>
-                <form name="uploadFrm{$curr_file->file_id}" action="?m=dPcabinet" enctype="multipart/form-data" method="post">
-      
-                <input type="hidden" name="dosql" value="do_file_aed" />
-                <input type="hidden" name="del" value="1" />
-                <input type="hidden" name="file_id" value="{$curr_file->file_id}" />
-                <a href="mbfileviewer.php?file_id={$curr_file->file_id}">{$curr_file->file_name}</a>
-                ({$curr_file->_file_size}) 
-                <input type="button" value="supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'le fichier',objName:'{$curr_file->file_name|escape:javascript}'{rdelim})"/>
-      
-                </form>
-              </li>
-              {foreachelse}
-              <li>Aucun fichier attaché</li>
-              {/foreach}
-            </ul>
-            <form name="uploadFrm" action="?m=dPcabinet" enctype="multipart/form-data" method="post">
-            <input type="hidden" name="dosql" value="do_file_aed" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="file_operation" value="{$curr_hospi->operation_id}" />
-            <input type="file" name="formfile" />
-            <input type="submit" value="ajouter" />
-
-            </form>
-          </td>
-        </tr>
-        {/foreach}
       </table>
     </td>
     <td class="pane">
