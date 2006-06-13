@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPplanningOp';
-$config['mod_version'] = '0.45';
+$config['mod_version'] = '0.46';
 $config['mod_directory'] = 'dPplanningOp';
 $config['mod_setup_class'] = 'CSetupdPplanningOp';
 $config['mod_type'] = 'user';
@@ -386,7 +386,14 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
 
       case "0.45" :
-        return "0.45";
+        $sql = "ALTER TABLE `operations` DROP `entree_adm`;";
+        db_exec($sql); db_error();
+
+        $sql = "ALTER TABLE `operations` DROP `admis`;";
+        db_exec($sql); db_error();
+
+      case "0.46" :
+        return "0.46";
     }
     
     return false;

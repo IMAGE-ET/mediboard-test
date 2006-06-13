@@ -31,8 +31,8 @@ class CSejour extends CMbObject {
   var $chambre_seule = null; // remplace $op->chambre
   
   var $entree_prevue = null;
-  var $sortie_prevue = null; // remplace $op->_sortie_adm
-  var $entree_reelle = null; // remplace $op->entree_adm $op->admis
+  var $sortie_prevue = null;
+  var $entree_reelle = null;
   var $sortie_reelle = null;
 
   var $venue_SHS = null; // remplace $op->venue_SHS
@@ -116,10 +116,6 @@ class CSejour extends CMbObject {
     $this->chambre_seule = $operation->chambre;
     $this->entree_prevue = $operation->date_adm." ".$operation->time_adm;
     $this->sortie_prevue = mbDateTime("+".$operation->duree_hospi." DAYS", $this->entree_prevue);
-    if($operation->admis == 'o')
-      $this->entree_reelle = $operation->entree_adm;
-    else
-      $this->entree_reelle = '';
     $this->sortie_reelle = '';
     $this->venue_SHS     = $operation->venue_SHS;
     $this->saisi_SHS     = $operation->saisie;
@@ -145,12 +141,6 @@ class CSejour extends CMbObject {
         $this->_ref_operations[$keyOp]->date_adm = mbDate(null, $this->entree_prevue);
         $this->_ref_operations[$keyOp]->time_adm = mbTime(null, $this->entree_prevue);
         $this->_ref_operations[$keyOp]->duree_hospi = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
-        if($this->entree_reelle) {
-          $this->_ref_operations[$keyOp]->admis = 'o';
-        } else {
-          $this->_ref_operations[$keyOp]->admis = 'n';
-        }
-        $this->_ref_operations[$keyOp]->entree_adm = $this->entree_reelle;
         $this->_ref_operations[$keyOp]->venue_SHS = $this->venue_SHS;
         $this->_ref_operations[$keyOp]->saisie = $this->saisi_SHS;
         $this->_ref_operations[$keyOp]->modifiee = $this->modif_SHS;

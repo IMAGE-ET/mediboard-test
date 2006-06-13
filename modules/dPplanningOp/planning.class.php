@@ -39,11 +39,7 @@ class COperation extends CMbObject {
   // DB Fields venue
   var $date_adm = null; // remplacé par $sejour->entree_prevue
   var $time_adm = null; // remplacé par $sejour->entree_prevue
-  var $entree_adm = null; // remplacé par  $sejour->entree_réelle
-  var $admis = null; // remplacé par $sejour->entree_reelle
   var $chambre = null; // remplacée par $sejour->chambre_seule
-  var $_entree_adm = null; // remplacé par $sejour->entree_prevue
-  var $_sortie_adm = null; // remplacé par $sejour->sortie_prevue
   var $type_adm = null; // remplacé $sejour->type
   
   // DB Fields S@nté.com communication
@@ -152,7 +148,6 @@ class COperation extends CMbObject {
     $this->_props["ATNC"] = "enum|o|n";
     $this->_props["rques"] = "str|confidential";
     $this->_props["rank"] = "num";
-    $this->_props["admis"] = "enum|o|n";
     $this->_props["saisie"] = "enum|o|n";
     $this->_props["modifiee"] = "enum|0|1";
     $this->_props["depassement"] = "currency|confidential";
