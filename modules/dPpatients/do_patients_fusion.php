@@ -72,14 +72,14 @@ if (intval(dPgetParam($_POST, 'del'))) {
 $patient_id = $do->_obj->patient_id;
 
 // Régularisation des liens étrangers
-$sql = "UPDATE operations SET" .
-    "\npat_id = '$patient_id'" .
-    "\nWHERE pat_id = '$patient1->patient_id'";
+$sql = "UPDATE sejour SET" .
+    "\npatient_id = '$patient_id'" .
+    "\nWHERE patient_id = '$patient1->patient_id'";
 db_exec( $sql ); $msg = db_error();
 
-$sql = "UPDATE operations SET" .
-    "\npat_id = '$patient_id'" .
-    "\nWHERE pat_id = '$patient2->patient_id'";
+$sql = "UPDATE sejour SET" .
+    "\npatient_id = '$patient_id'" .
+    "\nWHERE patient_id = '$patient2->patient_id'";
 db_exec( $sql ); $msg .= db_error();
 
 $sql = "UPDATE consultation SET" .

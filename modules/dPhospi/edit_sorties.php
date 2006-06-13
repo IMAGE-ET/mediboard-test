@@ -28,13 +28,13 @@ $date = mbGetValueFromGetOrSession("date", mbDate());
 
 $limit1 = $date." 00:00:00";
 $limit2 = $date." 23:59:59";
-$ljoin["operations"] = "operations.operation_id = affectation.operation_id";
-$ljoin["patients"] = "operations.pat_id = patients.patient_id";
+$ljoin["sejour"] = "sejour.sejour_id = affectation.sejour_id";
+$ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["lit"] = "lit.lit_id = affectation.lit_id";
 $ljoin["chambre"] = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"] = "service.service_id = chambre.service_id";
 $where["sortie"] = "BETWEEN '$limit1' AND '$limit2'";
-$where["type_adm"] = "<> 'exte'";
+$where["type"] = "!= 'exte'";
 if($vue) {
   $where["confirme"] = "= 0";
 }
@@ -51,18 +51,16 @@ foreach($deplacements as $key => $value) {
   if(!$deplacements[$key]->_ref_next->affectation_id) {
     unset($deplacements[$key]);
   } else {
-    $deplacements[$key]->_ref_operation->loadRefsFwd();
-    $deplacements[$key]->_ref_operation->_ref_chir->loadRefsFwd();
-    $deplacements[$key]->_ref_lit->loadRefsFwd();
-    $deplacements[$key]->_ref_lit->_ref_chambre->loadRefsFwd();
+    $deplacements[$key]->_ref_sejour->loadRefsFwd();
+    $deplacements[$key]->_ref_sejour->_ref_praticien->loadRefsFwd();
+    $deplacements[$key]->_ref_lit->loadCompleteView();
     $deplacements[$key]->_ref_next->loadRefsFwd();
-    $deplacements[$key]->_ref_next->_ref_lit->loadRefsFwd();
-    $deplacements[$key]->_ref_next->_ref_lit->_ref_chambre->loadRefsFwd();
+    $deplacements[$key]->_ref_next->_ref_lit->loadCompleteView();
   }
 }
 
 // Récupération des sorties ambu du jour
-$where["type_adm"] = "= 'ambu'";
+$where["type"] = "= 'ambu'";
 $sortiesAmbu = new CAffectation;
 $sortiesAmbu = $sortiesAmbu->loadList($where, $order, null, null, $ljoin);
 foreach($sortiesAmbu as $key => $value) {
@@ -70,15 +68,16 @@ foreach($sortiesAmbu as $key => $value) {
   if($sortiesAmbu[$key]->_ref_next->affectation_id) {
     unset($sortiesAmbu[$key]);
   } else {
-    $sortiesAmbu[$key]->_ref_operation->loadRefsFwd();
-    $sortiesAmbu[$key]->_ref_operation->_ref_chir->loadRefsFwd();
-    $sortiesAmbu[$key]->_ref_lit->loadRefsFwd();
-    $sortiesAmbu[$key]->_ref_lit->_ref_chambre->loadRefsFwd();
+    $sortiesAmbu[$key]->_ref_sejour->loadRefsFwd();
+    $sortiesAmbu[$key]->_ref_sejour->_ref_praticien->loadRefsFwd();
+    $sortiesAmbu[$key]->_ref_lit->loadCompleteView();
+    $sortiesAmbu[$key]->_ref_next->loadRefsFwd();
+    $sortiesAmbu[$key]->_ref_next->_ref_lit->loadCompleteView();
   }
 }
 
 // Récupération des sorties hospi complete du jour
-$where["type_adm"] = "= 'comp'";
+$where["type"] = "= 'comp'";
 $sortiesComp = new CAffectation;
 $sortiesComp = $sortiesComp->loadList($where, $order, null, null, $ljoin);
 foreach($sortiesComp as $key => $value) {
@@ -86,10 +85,11 @@ foreach($sortiesComp as $key => $value) {
   if($sortiesComp[$key]->_ref_next->affectation_id) {
     unset($sortiesComp[$key]);
   } else {
-    $sortiesComp[$key]->_ref_operation->loadRefsFwd();
-    $sortiesComp[$key]->_ref_operation->_ref_chir->loadRefsFwd();
-    $sortiesComp[$key]->_ref_lit->loadRefsFwd();
-    $sortiesComp[$key]->_ref_lit->_ref_chambre->loadRefsFwd();
+    $sortiesComp[$key]->_ref_sejour->loadRefsFwd();
+    $sortiesComp[$key]->_ref_sejour->_ref_praticien->loadRefsFwd();
+    $sortiesComp[$key]->_ref_lit->loadCompleteView();
+    $sortiesComp[$key]->_ref_next->loadRefsFwd();
+    $sortiesComp[$key]->_ref_next->_ref_lit->loadCompleteView();
   }
 }
 

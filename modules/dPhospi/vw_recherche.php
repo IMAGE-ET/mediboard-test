@@ -78,19 +78,17 @@ if ($typeVue == 1) {
 		"\nON chambre.chambre_id = lit.chambre_id" .
 		"\nLEFT JOIN service" .
 		"\nON service.service_id = chambre.service_id" .
-		"\nLEFT JOIN operations" .
-		"\nON operations.operation_id = affectation.operation_id" .
-		"\nLEFT JOIN patients" .
-		"\nON patients.patient_id = operations.pat_id" .
+		"\nLEFT JOIN sejour" .
+		"\nON sejour.sejour_id = affectation.sejour_id" .
 		"\nWHERE affectation.entree < '$date 23:59:59'" .
 		"\nAND affectation.sortie > '$date 00:00:00'" .
-		"\nAND operations.chir_id = '$selPrat'" .
+		"\nAND sejour.praticien_id = '$selPrat'" .
 		"\nORDER BY service.nom, chambre.nom, lit.nom";
   $listAff = new CAffectation;
   $listAff = db_loadObjectList($sql, $listAff);
   foreach($listAff as $key => $currAff) {
     $listAff[$key]->loadRefs();
-    $listAff[$key]->_ref_operation->loadRefsFwd();
+    $listAff[$key]->_ref_sejour->loadRefsFwd();
     $listAff[$key]->_ref_lit->loadRefsFwd();
     $listAff[$key]->_ref_lit->_ref_chambre->loadRefsFwd();
   }

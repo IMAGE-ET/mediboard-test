@@ -222,12 +222,6 @@ class CPatient extends CMbObject {
       "joinfield" => "patient_id"
     );
     $tables[] = array (
-      "label" => "opération(s)", 
-      "name" => "operations", 
-      "idfield" => "operation_id", 
-      "joinfield" => "pat_id"
-    );
-    $tables[] = array (
       "label" => "consultation(s)", 
       "name" => "consultation", 
       "idfield" => "consultation_id", 

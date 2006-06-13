@@ -21,7 +21,7 @@ function pageMain() {
   <tr>
     {if $typeVue}
     <td>
-      <form name="chossePrat" action="?m={$m}" method="get">
+      <form name="choosePrat" action="?m={$m}" method="get">
       <input type="hidden" name="m" value="{$m}" />
       <select name="selPrat" onchange="submit()">
       <option value="0" {if $selPrat == 0}selected="selected"{/if}>&mdash; Selectionner un praticien &mdash;</option>
@@ -74,7 +74,7 @@ function pageMain() {
         {/foreach}
         {else}
         <tr>
-          <th class="title" colspan="7">
+          <th class="title" colspan="5">
             {if $selPrat}
               Dr. {$listPrat.$selPrat->_view} -
             {/if}
@@ -83,27 +83,26 @@ function pageMain() {
         </tr>
         <tr>
           <th>Patient</th>
-          <th>CCAM</th>
           <th>Service</th>
           <th>Chambre</th>
           <th>Lit</th>
-          <th>Entrée</th>
-          <th>Sortie prévue</th>
+          <th>Séjour</th>
+          <th>Occupation du lit</th>
         </tr>
         {foreach from=$listAff item=curr_aff}
         <tr>
-          <td>{$curr_aff->_ref_operation->_ref_pat->_view}</td>
-          <td class="text">
-            {foreach from=$curr_aff->_ref_operation->_ext_codes_ccam item=curr_code}
-            <strong>{$curr_code->code}</strong> : {$curr_code->libelleLong}
-            <br />
-            {/foreach}    
-          </td>
+          <td>{$curr_aff->_ref_sejour->_ref_patient->_view}</td>
           <td>{$curr_aff->_ref_lit->_ref_chambre->_ref_service->nom}</td>
           <td>{$curr_aff->_ref_lit->_ref_chambre->nom}</td>
           <td>{$curr_aff->_ref_lit->nom}</td>
-          <td>{$curr_aff->entree|date_format:"%A %d %B %Y à %H h %M"}
-          <td>{$curr_aff->sortie|date_format:"%A %d %B %Y à %H h %M"}
+          <td>
+            Du {$curr_aff->_ref_sejour->entree_prevue|date_format:"%A %d %B %Y à %H h %M"}
+            au {$curr_aff->_ref_sejour->sortie_prevue|date_format:"%A %d %B %Y à %H h %M"}
+          </td>
+          <td>
+            Du {$curr_aff->entree|date_format:"%A %d %B %Y à %H h %M"}
+            au {$curr_aff->sortie|date_format:"%A %d %B %Y à %H h %M"}
+          </td>
         </tr>
         {/foreach}
         {/if}

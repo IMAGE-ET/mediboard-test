@@ -73,20 +73,16 @@ function pageMain() {
                 {else}
                 <td class="text">
                 {/if}
-                  <b>{$curr_sortie->_ref_operation->_ref_pat->_view}</b>
+                  <b>{$curr_sortie->_ref_sejour->_ref_patient->_view}</b>
                 </td>
-                <td class="text" style="background:#{$curr_sortie->_ref_operation->_ref_chir->_ref_function->color}">
-                  {$curr_sortie->_ref_operation->_ref_chir->_view}
-                </td>
-                <td class="text">
-                  {$curr_sortie->_ref_lit->_ref_chambre->_ref_service->nom} -
-                  {$curr_sortie->_ref_lit->_ref_chambre->nom} -
-                  {$curr_sortie->_ref_lit->nom}
+                <td class="text" style="background:#{$curr_sortie->_ref_sejour->_ref_praticien->_ref_function->color}">
+                  {$curr_sortie->_ref_sejour->_ref_praticien->_view}
                 </td>
                 <td class="text">
-                  {$curr_sortie->_ref_next->_ref_lit->_ref_chambre->_ref_service->nom} -
-                  {$curr_sortie->_ref_next->_ref_lit->_ref_chambre->nom} -
-                  {$curr_sortie->_ref_next->_ref_lit->nom}
+                  {$curr_sortie->_ref_lit->_view}
+                </td>
+                <td class="text">
+                  {$curr_sortie->_ref_next->_ref_lit->_view}
                 </td>
                 <td>{$curr_sortie->sortie|date_format:"%H h %M"}</td>
               </tr>
@@ -104,8 +100,8 @@ function pageMain() {
                 <th>Confirmation</th>
                 <th><a href="index.php?m={$m}&amp;tab={$tab}&amp;typeOrder=0">Patient</a></th>
                 <th>Praticien</th>
-                <th><a href="index.php?m={$m}&amp;tab={$tab}&amp;typeOrder=1">Service</a></th>
-                <th>Chambre</th>
+                <th><a href="index.php?m={$m}&amp;tab={$tab}&amp;typeOrder=1">Chambre</a></th>
+                <th>Heure prévue</th>
               </tr>
               <tr><th colspan="5">Hospitalisations complètes</th></tr>
               {foreach from=$sortiesComp item=curr_sortie}
@@ -136,15 +132,13 @@ function pageMain() {
                 {else}
                 <td class="text">
                 {/if}
-                  <b>{$curr_sortie->_ref_operation->_ref_pat->_view}</b>
+                  <b>{$curr_sortie->_ref_sejour->_ref_patient->_view}</b>
                 </td>
-                <td class="text" style="background:#{$curr_sortie->_ref_operation->_ref_chir->_ref_function->color}">
-                  {$curr_sortie->_ref_operation->_ref_chir->_view}
+                <td class="text" style="background:#{$curr_sortie->_ref_sejour->_ref_praticien->_ref_function->color}">
+                  {$curr_sortie->_ref_sejour->_ref_praticien->_view}
                 </td>
                 <td class="text">
-                  {$curr_sortie->_ref_lit->_ref_chambre->_ref_service->nom} -
-                  {$curr_sortie->_ref_lit->_ref_chambre->nom} -
-                  {$curr_sortie->_ref_lit->nom}
+                  {$curr_sortie->_ref_lit->_view}
                 </td>
                 <td>{$curr_sortie->sortie|date_format:"%H h %M"}</td>
               </tr>
@@ -178,15 +172,13 @@ function pageMain() {
                 {else}
                 <td class="text">
                 {/if}
-                  <b>{$curr_sortie->_ref_operation->_ref_pat->_view}</b>
+                  <b>{$curr_sortie->_ref_sejour->_ref_patient->_view}</b>
                 </td>
-                <td class="text" style="background:#{$curr_sortie->_ref_operation->_ref_chir->_ref_function->color}">
-                  {$curr_sortie->_ref_operation->_ref_chir->_view}
+                <td class="text" style="background:#{$curr_sortie->_ref_sejour->_ref_praticien->_ref_function->color}">
+                  {$curr_sortie->_ref_sejour->_ref_praticien->_view}
                 </td>
                 <td class="text">
-                  {$curr_sortie->_ref_lit->_ref_chambre->_ref_service->nom} -
-                  {$curr_sortie->_ref_lit->_ref_chambre->nom} -
-                  {$curr_sortie->_ref_lit->nom}
+                  {$curr_sortie->_ref_lit->_view}
                 </td>
                 <td>{$curr_sortie->sortie|date_format:"%H h %M"}</td>
               </tr>
