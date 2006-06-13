@@ -49,15 +49,19 @@ if ($pat_id) {
     }
   }
 
-  foreach ($patSel->_ref_operations as $key => $value) {
-    if (!array_key_exists($value->chir_id, $listPrat)) {
-      unset($patSel->_ref_operations[$key]);
-    }
-  }
-
-  foreach($patSel->_ref_hospitalisations as $key => $value) {
-    if (!array_key_exists($value->chir_id, $listPrat)) {
-      unset($patSel->_ref_hospitalisations[$key]);
+  foreach ($patSel->_ref_sejours as $key => $sejour) {
+    if (!array_key_exists($sejour->praticien_id, $listPrat)) {
+      unset($patSel->_ref_sejours[$key]);
+    } else {
+      $patSel->_ref_sejours[$key]->loadRefsFwd();
+      $patSel->_ref_sejours[$key]->loadRefsOperations();
+      foreach($patSel->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
+        if (!array_key_exists($op->chir_id, $listPrat)) {
+          unset($patSel->_ref_sejours[$key]->_ref_operations[$keyOp]);
+        } else {
+          $patSel->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
+        }
+      }
     }
   }
 }

@@ -23,58 +23,53 @@ $patient->loadRefs();
 foreach($patient->_ref_consultations as $key => $value) {
   $patient->_ref_consultations[$key]->loadRefs();
 }
-foreach($patient->_ref_operations as $key => $value) {
-  $patient->_ref_operations[$key]->loadRefs();
+foreach($patient->_ref_sejours as $key => $value) {
+  $patient->_ref_sejours[$key]->loadRefs();
 }
 
 $consultations =& $patient->_ref_consultations;
-$operations =& $patient->_ref_operations;
+$sejours =& $patient->_ref_sejours;
 
 $user = new CMediusers;
 $user->load($AppUI->user_id);
 $listPrat = $user->loadPraticiens(PERM_EDIT);
+
+$docsCons = array();
+$docsOp = array();
+$filesCons = array();
+$filesOp = array();
 
 // Consultations
 foreach($consultations as $key => $value) {
   $prat = $value->_ref_plageconsult->chir_id;
   if(!isset($listPrat[$prat])) {
     unset($consultations[$key]);
+  } else {
+    if($consultations[$key]->_ref_documents) {
+      $docsCons = array_merge($docsCons, $consultations[$key]->_ref_documents);
+    }
+    if($consultations[$key]->_ref_files) {
+      $filesCons = array_merge($filesCons, $consultations[$key]->_ref_files);
+    }
   }
 }
 
-// Interventions
-foreach($operations as $key => $value) {
-  $prat = $value->_ref_plageop->chir_id;
-  if(!isset($listPrat[$prat])) {
-    unset($operations[$key]);
-  }
-}
-
-// Documents
-$docsCons = array();
-$docsOp = array();
-foreach($consultations as $key => $value) {
-  if($consultations[$key]->_ref_documents) {
-    $docsCons = array_merge($docsCons, $consultations[$key]->_ref_documents);
-  }
-}
-foreach($operations as $key => $value) {
-  if($operations[$key]->_ref_documents) {
-    $docsOp = array_merge($docsOp, $operations[$key]->_ref_documents);
-  }
-}
-
-// Fichiers
-$filesCons = array();
-$filesOp = array();
-foreach($consultations as $key => $value) {
-  if($consultations[$key]->_ref_files) {
-    $filesCons = array_merge($filesCons, $consultations[$key]->_ref_files);
-  }
-}
-foreach($operations as $key => $value) {
-  if($operations[$key]->_ref_files) {
-    $filesOp = array_merge($filesOp, $operations[$key]->_ref_files);
+// Sejours
+foreach($sejours as $key => $sejour) {
+  $sejours[$key]->loadRefsOperations();
+  foreach($sejours[$key]->_ref_operations as $keyOp => $op) {
+    $sejours[$key]->_ref_operations[$keyOp]->loadRefs();
+    $prat = $op->_ref_plageop->chir_id;
+    if(!isset($listPrat[$prat])) {
+      unset($sejours[$key]->_ref_operations[$keyOp]);
+    } else {
+      if($sejours[$key]->_ref_operations[$keyOp]->_ref_documents) {
+        $docsOp = array_merge($docsOp, $sejours[$key]->_ref_operations[$keyOp]->_ref_documents);
+      }
+      if($sejours[$key]->_ref_operations[$keyOp]->_ref_files) {
+        $filesOp = array_merge($filesOp, $sejours[$key]->_ref_operations[$keyOp]->_ref_files);
+      }
+    }
   }
 }
 
@@ -83,7 +78,7 @@ require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP;
 
 $smarty->assign('consultations' , $consultations );
-$smarty->assign('operations', $operations);
+$smarty->assign('sejours', $sejours);
 $smarty->assign('docsCons', $docsCons);
 $smarty->assign('docsOp', $docsOp);
 $smarty->assign('filesCons', $filesCons);

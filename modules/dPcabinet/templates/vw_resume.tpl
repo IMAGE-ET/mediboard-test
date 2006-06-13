@@ -101,7 +101,8 @@ function newExam(sAction, consultation_id) {
   <tr>
     <td class="text" valign="top">
       <ul>
-        {foreach from=$operations item=curr_op}
+        {foreach from=$sejours item=curr_sejour}
+        {foreach from=$curr_sejour->_ref_operations item=curr_op}
         <li>
           Dr. {$curr_op->_ref_chir->_view}
           &mdash; {$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}
@@ -110,6 +111,9 @@ function newExam(sAction, consultation_id) {
             {$curr_code}
           {/foreach}
         </li>
+        {/foreach}
+        {foreachelse}
+        <li>Hospitalisation simple du {$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"} au {$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}</li>
         {/foreach}
       </ul>
     </td>

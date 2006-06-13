@@ -16,6 +16,14 @@ function editPat(patient_id) {
   url.redirect();
 }
 
+function showAll(patient_id) {
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "vw_resume");
+  url.addParam("dialog", 1);
+  url.addParam("patient_id", patient_id);
+  url.popup(800, 500, "Resume");
+}
+
 function pasteText(formName) {
   var form = document.editFrm;
   var aide = eval("form._aide_" + formName);

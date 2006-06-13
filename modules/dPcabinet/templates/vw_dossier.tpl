@@ -161,7 +161,8 @@ function printDocument(doc_id) {
         <tr>
           <th class="category" colspan="2">Interventions</th>
         </tr>
-        {foreach from=$patSel->_ref_operations item=curr_op}
+        {foreach from=$patSel->_ref_sejours item=curr_sejour}
+        {foreach from=$curr_sejour->_ref_operations item=curr_op}
         <tr class="groupcollapse" id="op{$curr_op->operation_id}" onclick="flipGroup({$curr_op->operation_id}, 'op')">
           <td colspan="2">
             <strong>
@@ -234,6 +235,7 @@ function printDocument(doc_id) {
 
             </form>
           </td>
+        {/foreach}
         {/foreach}
         </tr>
         <tr>

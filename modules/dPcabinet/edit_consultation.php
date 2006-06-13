@@ -81,14 +81,15 @@ if ($selConsult) {
   $patient =& $consult->_ref_patient;
   $patient->loadRefs();
   $patient->loadStaticCIM10($userSel->user_id);
-  foreach ($patient->_ref_consultations as $key => $value) {
+  foreach($patient->_ref_consultations as $key => $consul) {
     $patient->_ref_consultations[$key]->loadRefsFwd();
   }
-  foreach ($patient->_ref_operations as $key => $value) {
-    $patient->_ref_operations[$key]->loadRefsFwd();
-  }
-  foreach ($patient->_ref_hospitalisations as $key => $value) {
-    $patient->_ref_hospitalisations[$key]->loadRefsFwd();
+  foreach($patient->_ref_sejours as $key => $sejour) {
+    $patient->_ref_sejours[$key]->loadRefsFwd();
+    $patient->_ref_sejours[$key]->loadRefsOperations();
+    foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
+      $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
+    }
   }
   
   // Affecter la date de la consultation

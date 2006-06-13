@@ -2,9 +2,8 @@
 {literal}
 
 function incPatientHistoryMain() {
-  initEffectClass("groupconsultations"   , "triggerconsultations"   );
-  initEffectClass("grouphospitalisations", "triggerhospitalisations");
-  initEffectClass("groupoperations"      , "triggeroperations");
+  initEffectClass("groupoperations"   , "triggeroperations"      );
+  initEffectClass("groupconsultations", "triggerconsultations"   );
 }
 
 {/literal}  
@@ -13,59 +12,51 @@ function incPatientHistoryMain() {
 
 <table class="form">
   <tr class="triggerShow" id="triggeroperations" onclick="flipEffectElement('groupoperations', 'SlideDown', 'SlideUp', 'triggeroperations')">
-    <td colspan="2">Interventions ({$patient->_ref_operations|@count})</td>
+    <td>Hospitalisations ({$patient->_ref_sejours|@count})</td>
   </tr>
   <tbody id="groupoperations" style="display:none">
-    {foreach from=$patient->_ref_operations item=curr_op}
+    {foreach from=$patient->_ref_sejours item=curr_sejour}
     <tr>
       <td>
-        <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
-          {$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}
-        </a>
+        <strong>Dr. {$curr_sejour->_ref_praticien->_view}</strong>
+        Du {$curr_sejour->entree_prevue|date_format:"%d %b %Y"}
+        au {$curr_sejour->sortie_prevue|date_format:"%d %b %Y"}
+        <ul>
+        {foreach from=$curr_sejour->_ref_operations item=curr_op}
+          <li>
+            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
+              <strong>Dr. {$curr_op->_ref_chir->_view}</strong>
+              {$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}
+            </a>
+          </li>
+        {foreachelse}
+          <li>Pas d'intevention</li>
+        {/foreach}
+        </ul>
       </td>
-      <td>Dr. {$curr_op->_ref_chir->_view}</td>
     </tr>
     {foreachelse}
     <tr>
-      <td colspan="2"><em>Aucune opération disponible</em></td>
-    </tr>
-    {/foreach}
-  </tbody>
-  <tr class="triggerShow" id="triggerhospitalisations" onclick="flipEffectElement('grouphospitalisations', 'SlideDown', 'SlideUp', 'triggerhospitalisations')">
-    <td colspan="2">Hospitalisations ({$patient->_ref_hospitalisations|@count})</td>
-  </tr>
-  <tbody id="grouphospitalisations" style="display:none">
-    {foreach from=$patient->_ref_hospitalisations item=curr_op}
-    <tr>
-      <td>
-        <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_op->operation_id}">
-          {$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}
-       </a>
-      </td>
-      <td>Dr. {$curr_op->_ref_chir->_view}</td>
-    </tr>
-    {foreachelse}
-    <tr>
-      <td colspan="2"><em>Aucune hospitalisation disponible</em></td>
+      <td><em>Aucun séjour disponible</em></td>
     </tr>
     {/foreach}
   </tbody>
   <tr class="triggerShow" id="triggerconsultations" onclick="flipEffectElement('groupconsultations', 'SlideDown', 'SlideUp', 'triggerconsultations')">
-    <td colspan="2">Consultations ({$patient->_ref_consultations|@count})</td>
+    <td>Consultations ({$patient->_ref_consultations|@count})</td>
   </tr>
   <tbody id="groupconsultations" style="display:none">
     {foreach from=$patient->_ref_consultations item=curr_consult}
     <tr>
       <td>
         <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={$curr_consult->consultation_id}">
+          <strong>Dr. {$curr_consult->_ref_plageconsult->_ref_chir->_view}</strong>
           {$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}
         </a>
       </td>
-      <td>Dr. {$curr_consult->_ref_plageconsult->_ref_chir->_view}</td>
     </tr>
     {foreachelse}
     <tr>
-      <td colspan="2"><em>Aucune consultation disponible</em></td>
+      <td><em>Aucune consultation disponible</em></td>
     </tr>
     {/foreach}
   </tbody>
