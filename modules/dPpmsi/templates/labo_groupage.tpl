@@ -11,7 +11,11 @@
           </th>
         </tr>
         <tr>
-          <td>Admis le {$operation->date_adm|date_format:"%A %d %B %Y"}</td>
+          <td>
+            {assign var="sejour" value=$operation->_ref_sejour}
+          	Séjour du {$sejour->entree_prevue|date_format:"%A %d %B %Y à %H:%M"}
+            au {$sejour->sortie_prevue|date_format:"%A %d %B %Y à %H:%M"}
+          </td>
         </tr>
         <tr>
           <td>Opéré par le Dr. {$operation->_ref_chir->_view} le {$operation->_ref_plageop->date|date_format:"%A %d %B %Y"}</td>

@@ -119,12 +119,16 @@ class CGHM  extends CMbObject {
   // Liaison à une intervention
   function bindInfos() {
     // Infos patient
-    $annais = substr($this->_ref_patient->naissance, 0, 4);
-    $anadm = substr($this->_ref_operation->date_adm, 0, 4);
-    $moisnais = substr($this->_ref_patient->naissance, 5, 2);
-    $moisadm = substr($this->_ref_operation->date_adm, 5, 2);
-    $journais = substr($this->_ref_patient->naissance, 8, 2);
-    $jouradm = substr($this->_ref_operation->date_adm, 8, 2);
+    $adm = $this->_ref_operation->_ref_sejour->entree_prevue;    
+    $anadm = substr($adm, 0, 4);
+    $moisadm = substr($adm, 5, 2);
+    $jouradm = substr($adm, 8, 2);
+    
+    $nais = $this->_ref_patient->naissance;
+    $annais = substr($nais, 0, 4);
+    $moisnais = substr($nais, 5, 2);
+    $journais = substr($nais, 8, 2);
+    
     $this->_age = $anadm-$annais;
     if($moisadm<$moisnais){$this->_age=$this->_age-1;}
     if($jouradm<$journais && $moisadm==$moisnais){$this->_age=$this->_age-1;}
