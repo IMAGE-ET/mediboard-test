@@ -275,10 +275,10 @@ class CSejour extends CMbObject {
   
   function loadRefGHM () {
     $this->_ref_GHM = new CGHM;
-    $where["operation_id"] = "= '$this->operation_id'";
+    $where["sejour_id"] = "= '$this->sejour_id'";
     $this->_ref_GHM->loadObject($where);
     if(!$this->_ref_GHM->ghm_id) {
-      $this->_ref_GHM->operation_id = $this->operation_id;
+      $this->_ref_GHM->sejour_id = $this->sejour_id;
       $this->_ref_GHM->loadRefsFwd();
       $this->_ref_GHM->bindInfos();
       $this->_ref_GHM->getGHM();
