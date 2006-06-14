@@ -53,6 +53,18 @@ class CSejour extends CMbObject {
   
   var $rques = null;
   
+  // Form Fields
+  var $_duree_prevue = null;
+  
+  var $_date_entree_prevue = null;
+  var $_date_sortie_prevue = null;
+  var $_hour_entree_prevue = null;
+  var $_hour_sortie_prevue = null;
+  var $_min_entree_prevue = null;
+  var $_min_sortie_prevue = null;
+
+  var $_venue_SHS_guess = null;
+
   // Object References  
   var $_ref_patient = null;
   var $_ref_praticien = null;
@@ -63,10 +75,6 @@ class CSejour extends CMbObject {
   var $_ref_last_affectation = null;
   var $_ref_GHM = array();
   
-  // Form Fields
-  var $_duree_prevue = null;
-  var $_venue_SHS_guess = null;
-
 	function CSejour() {
 		$this->CMbObject("sejour", "sejour_id");
     
@@ -79,7 +87,7 @@ class CSejour extends CMbObject {
     $this->_props["chambre_seule"] = "enum|o|n";
 
     $this->_props["entree_prevue"] = "dateTime|notNull";
-    $this->_props["sortie_prevue"] = "dateTime|notNull";
+    $this->_props["sortie_prevue"] = "dateTime|moreThan|entree_prevue|notNull";
     $this->_props["entree_reelle"] = "dateTime";
     $this->_props["sortie_reelle"] = "dateTime";
     
@@ -199,6 +207,13 @@ class CSejour extends CMbObject {
     
     $this->_duree_prevue = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
     
+    $this->_date_entree_prevue = mbDate(null, $this->entree_prevue);
+    $this->_date_sortie_prevue = mbDate(null, $this->sortie_prevue);
+    $this->_hour_entree_prevue = mbTranformTime(null, $this->entree_prevue, "%H");
+    $this->_hour_sortie_prevue = mbTranformTime(null, $this->sortie_prevue, "%H");
+    $this->_min_entree_prevue = mbTranformTime(null, $this->entree_prevue, "%M");
+    $this->_min_sortie_prevue = mbTranformTime(null, $this->sortie_prevue, "%M");
+    
     $this->_venue_SHS_guess = mbTranformTime(null, $this->entree_prevue, "%y");
     $this->_venue_SHS_guess .= 
       $this->type == "exte" ? "5" :
@@ -207,6 +222,8 @@ class CSejour extends CMbObject {
   }
   
   function updateDBFields() {
+    $date->entree_prevue = "$this->_date_entree_prevue $this->_hour_entree_prevue:$this->_min_entree_prevue";
+    $date->sortie_prevue = "$this->_date_sortie_prevue $this->_hour_sortie_prevue:$this->_min_sortie_prevue";
   }
   
   function loadRefPatient() {
