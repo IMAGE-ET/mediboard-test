@@ -22,17 +22,18 @@ function pageMain() {
     <th>Patient</th>
     <th>Entrée</th>
     <th>Sortie</th>
-    <th>Intervention</th>
+    <th>Intervention(s)</th>
     <th>GHM</th>
     <th>Bornes</th>
   </tr>
   {foreach from=$listSejours item=curr_sejour}
+  {assign var="GHM" value=$curr_sejour->_ref_GHM}
   <tr>
     <td class="text">
       {$curr_sejour->_ref_praticien->_view}
     </td>
 
-    <td class="text">
+    <td class="text" {if !$GHM->_DP} style="background-color:#fdd" {/if}>
       <a title="Voir le dossier PMSI" href="index.php?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={$curr_sejour->patient_id}">
         {$curr_sejour->_ref_patient->_view}
       </a>
@@ -49,26 +50,21 @@ function pageMain() {
     <td class="text">
       {foreach from=$curr_sejour->_ref_operations item=curr_operation}
       <a title="Voir la feuille d'admission" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_operation->operation_id}">
-      Le {$curr_operation->_ref_plageop->date|date_format:"%d/%m/%Y"}
-      par le Dr. {$curr_operation->_ref_chir->_view}
+        Le {$curr_operation->_ref_plageop->date|date_format:"%d/%m/%Y"}
+        par le Dr. {$curr_operation->_ref_chir->_view}
       </a>
+      <br />
       {/foreach}
     </td>
     
-    <td class="text">
-      {foreach from=$curr_sejour->_ref_operations item=curr_operation}
-      {assign var="GHM" value=$curr_operation->_ref_GHM}
-      <a title="Labo de groupage pour l'intervention" {if !$GHM->_DP} style="background-color:#fdd" {/if} 
-         href="index.php?m=dPpmsi&amp;tab=labo_groupage&amp;operation_id={$curr_operation->operation_id}">
+    <td class="text" {if !$GHM->ghm_id} style="background-color:#fdd" {/if}>
+      <a title="Labo de groupage pour l'intervention" href="index.php?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={$curr_sejour->sejour_id}">
       	{$GHM->_GHM}
         {if $GHM->_DP}: {$GHM->_GHM_nom}{/if}
       </a>
-      {/foreach}
     </td>
   
     <td class="text">
-      {foreach from=$curr_sejour->_ref_operations item=curr_operation}
-      {assign var="GHM" value=$curr_operation->_ref_GHM}
       {if $GHM->_DP}
         {if $GHM->_borne_basse > $GHM->_duree}
         <img src="modules/dPpmsi/images/cross.png" alt="alerte" />
@@ -82,7 +78,6 @@ function pageMain() {
       {else}
       -
       {/if}
-      {/foreach}
     </td>
   </tr>
   {/foreach}

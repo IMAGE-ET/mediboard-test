@@ -7,7 +7,7 @@
  * @author Romain Ollivier
  */
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
+require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour') );
 
 class CGHM  extends CMbObject {
   // DB Table key
@@ -56,7 +56,7 @@ class CGHM  extends CMbObject {
   var $_chemin = null;
   
   // Forward references
-  var $_ref_operation = null;
+  var $_ref_sejour = null;
 
   // Chrono
   var $_chrono;
@@ -110,17 +110,21 @@ class CGHM  extends CMbObject {
   }
   
   function loadRefsFwd() {
-    $this->_ref_operation = new COperation;
-    $this->_ref_operation->load($this->operation_id);
-    $this->_ref_operation->loadRefs();
-    $this->_ref_patient =& $this->_ref_operation->_ref_pat;
-    $this->_ref_actes_ccam =& $this->_ref_operation->_ref_actes_ccam;
+    $this->_ref_sejour = new CSejour;
+    $this->_ref_sejour->load($this->sejour_id);
+    $this->_ref_sejour->loadRefs();
+    $this->_ref_actes_ccam = array();
+    foreach($this->_ref_sejour->_ref_operations as $keyOp => $op) {
+      $this->_ref_sejour->_ref_operations[$keyOp]->loadRefsActesCCAM();
+      $this->_ref_actes_ccam = array_merge($this->_ref_actes_ccam, $this->_ref_sejour->_ref_operations[$keyOp]->_ref_actes_ccam);
+    }
+    $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
   }
   
   // Liaison à une intervention
   function bindInfos() {
     // Infos patient
-    $adm = $this->_ref_operation->_ref_sejour->entree_prevue;    
+    $adm = $this->_ref_sejour->entree_prevue;    
     $anadm = substr($adm, 0, 4);
     $moisadm = substr($adm, 5, 2);
     $jouradm = substr($adm, 8, 2);
@@ -136,16 +140,15 @@ class CGHM  extends CMbObject {
     $this->_age .= "a";
     $this->_ref_patient->sexe == "m" ? $this->_sexe = "Masculin" : $this->_sexe = "Féminin";
     // Infos hospi
-    $this->_type_hospi = $this->_ref_operation->type_adm;
-    $this->_duree = mbDaysRelative($this->_ref_operation->_ref_first_affectation->entree, $this->_ref_operation->_ref_last_affectation->sortie);
-    //$this->_duree = $this->_ref_operation->duree_hospi;
+    $this->_type_hospi = $this->_ref_sejour->type;
+    $this->_duree = mbDaysRelative($this->_ref_sejour->entree_prevue, $this->_ref_sejour->sortie_prevue);
     $this->_motif = "hospi";
     $this->_destination = "MCO";
     // Infos codage
-    if(strlen($this->_ref_operation->CIM10_code) > 3)
-      $this->_DP = substr($this->_ref_operation->CIM10_code, 0, 3).".".substr($this->_ref_operation->CIM10_code, 3);
+    if(strlen($this->_ref_sejour->DP) > 3)
+      $this->_DP = substr($this->_ref_sejour->DP, 0, 3).".".substr($this->_ref_sejour->DP, 3);
     else
-      $this->_DP = $this->_ref_operation->CIM10_code;
+      $this->_DP = $this->_ref_sejour->DP;
     $this->_actes = array();
     foreach($this->_ref_actes_ccam as $acte) {
       $this->_actes[] = array(

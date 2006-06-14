@@ -31,11 +31,11 @@ $listSejours = $sejour->loadList($where, $order);
 foreach ($listSejours as $keySejour => $valueSejour) {
   $sejour =& $listSejours[$keySejour];
   $sejour->loadRefs();
+  $sejour->loadRefGHM();
   foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
     $operation =& $sejour->_ref_operations[$keyOp];
     $operation->loadRefChir();
     $operation->loadRefPlageOp();
-    $operation->loadRefGHM();
   }
 }
 

@@ -33,11 +33,10 @@ if ($patient->patient_id) {
   // Chargements complémentaires sur les opérations
   foreach ($patient->_ref_sejours as $keySejour => $valueSejour) {
     $sejour =& $patient->_ref_sejours[$keySejour];
+    $sejour->loadRefGHM();
 
     foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
       $operation =& $sejour->_ref_operations[$keyOp];
-      
-      $operation->loadRefGHM();
 
       $operation->loadRefsActesCCAM();  
       foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {

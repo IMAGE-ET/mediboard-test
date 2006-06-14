@@ -12,13 +12,9 @@
         </tr>
         <tr>
           <td>
-            {assign var="sejour" value=$operation->_ref_sejour}
           	Séjour du {$sejour->entree_prevue|date_format:"%A %d %B %Y à %H:%M"}
             au {$sejour->sortie_prevue|date_format:"%A %d %B %Y à %H:%M"}
           </td>
-        </tr>
-        <tr>
-          <td>Opéré par le Dr. {$operation->_ref_chir->_view} le {$operation->_ref_plageop->date|date_format:"%A %d %B %Y"}</td>
         </tr>
         <tr>
           <td>Agé de {$GHM->_age} lors de son admission, de sexe {$GHM->_sexe}</td>
@@ -39,7 +35,7 @@
       <input type="hidden" name="dosql" value="do_ghm_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="ghm_id" value="{$GHM->ghm_id}" />
-      <input type="hidden" name="operation_id" value="{$operation->operation_id}" />
+      <input type="hidden" name="sejour_id" value="{$sejour->sejour_id}" />
       <table class="form">
         <tr>
           <th class="category">DP</th>
@@ -91,14 +87,16 @@
       </table>
       </form>
       <table class="form">
+        {foreach from=$sejour->_ref_operations item=curr_op}
         <tr>
           <th class="title" colspan="3" style="text-align:left;">
-            <a class="button" href="index.php?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={$operation->operation_id}" style="float:right;">
+            <a class="button" href="index.php?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={$curr_op->operation_id}" style="float:right;">
               Modifier les actes
             </a>
-            Actes
+            Actes du Dr. {$curr_op->_ref_chir->_view} le {$curr_op->_ref_plageop->date|date_format:"%d %B %Y"}
           </th>
         </tr>
+        {/foreach}
         <tr>
           <th class="category">Code</th>
           <th class="category">Phase</th>

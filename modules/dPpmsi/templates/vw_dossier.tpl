@@ -3,11 +3,6 @@
 {literal}
 <script type="text/javascript">
 
-function pageMain() {
-  initGroups("hospi");
-  initGroups("op");
-}
-
 function choosePreselection(oSelect) {
   if (!oSelect.value) { 
     return;
@@ -76,6 +71,7 @@ function exporterDossier(operation_id, oOptions) {
 }
 
 function pageMain() {
+  initGroups("sejour");
   {/literal}
   {foreach from=$patient->_ref_operations item=curr_op}
   exporterDossier({$curr_op->operation_id}, {ldelim}onlySentFiles : true{rdelim});
@@ -110,55 +106,20 @@ function pageMain() {
     {if $patient->patient_id}
     <td>
       <table class="form">
-        {foreach from=$patient->_ref_sejours item=curr_sejour}
         <tr>
-          <th class="title" colspan="4">
-          	Séjour du {$curr_sejour->entree_prevue|date_format:"%A %d %b %Y (%Hh%M)"}
-          	au {$curr_sejour->sortie_prevue|date_format:"%A %d %b %Y (%Hh%M)"}
-          </th>
+          <th colspan="4" class="title">Liste des séjours</th>
         </tr>
-        {foreach from=$curr_sejour->_ref_operations item=curr_op}
-        <tr class="groupcollapse" id="op{$curr_op->operation_id}" onclick="flipGroup({$curr_op->operation_id}, 'op')">
-          <td colspan="4">
-            <strong>
-            Dr. {$curr_op->_ref_chir->_view}
-            &mdash; {$curr_op->_ref_plageop->date|date_format:"%A %d %B %Y"}
-            &mdash; {$curr_op->_ref_plageop->_ref_salle->nom}
-            
-            </strong>
+        {foreach from=$patient->_ref_sejours item=curr_sejour}
+        {assign var="GHM" value=$curr_sejour->_ref_GHM}
+        <tr class="groupcollapse" id="sejour{$curr_sejour->sejour_id}" onclick="flipGroup({$curr_sejour->sejour_id}, 'sejour')">
+          <td colspan="4" style="background-color:#aaf;">
+          	Dr. {$curr_sejour->_ref_praticien->_view} -
+          	Séjour du {$curr_sejour->entree_prevue|date_format:"%d %b %Y (%Hh%M)"}
+          	au {$curr_sejour->sortie_prevue|date_format:"%d %b %Y (%Hh%M)"}
           </td>
         </tr>
-        {foreach from=$curr_op->_ext_codes_ccam item=curr_code}
-        <tr class="op{$curr_op->operation_id}">
-          <th>{$curr_code->code}</th>
-          <td class="text" colspan="3">{$curr_code->libelleLong}</td>
-        </tr>
-        {/foreach}
-        {if $curr_op->_ref_consult_anesth->consultation_anesth_id}
-        <tr class="op{$curr_op->operation_id}">
-          <th colspan="4" class="category">Consultation pré-anesthésique</th>
-        </tr>
-        <tr class="op{$curr_op->operation_id}">
-          <th>Consultation</th>
-          <td class="text" colspan="3">
-            Le {$curr_op->_ref_consult_anesth->_ref_plageconsult->date|date_format:"%A %d %b %Y"}
-            avec le Dr. {$curr_op->_ref_consult_anesth->_ref_plageconsult->_ref_chir->_view}
-          </td>
-        </tr>
-        <tr class="op{$curr_op->operation_id}">
-          <td class="button">Poids</td>
-          <td class="button">Taille</td>
-          <td class="button">Groupe</td>
-          <td class="button">Tension</td>
-        </tr>
-        <tr class="op{$curr_op->operation_id}">
-          <td class="button">{$curr_op->_ref_consult_anesth->poid} kg</td>
-          <td class="button">{$curr_op->_ref_consult_anesth->taille} cm</td>
-          <td class="button">{$curr_op->_ref_consult_anesth->groupe} {$curr_op->_ref_consult_anesth->rhesus}</td>
-          <td class="button">{$curr_op->_ref_consult_anesth->tasys}/{$curr_op->_ref_consult_anesth->tadias}</td>
-        </tr>
-        <tr class="op{$curr_op->operation_id}">
-          <th>Diagnostics</th>
+        <tr class="sejour{$curr_sejour->sejour_id}">
+          <th>Diagnostics du patient</th>
           <td class="text" colspan="3">
             <ul>
               {foreach from=$patient->_codes_cim10 item=curr_code}
@@ -171,8 +132,8 @@ function pageMain() {
             </ul>
           </td>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
-          <th>Antécedents</th>
+        <tr class="sejour{$curr_sejour->sejour_id}">
+          <th>Antécedents du patient</th>
           <td class="text" colspan="3">
             <ul>
               {foreach from=$patient->_ref_antecedents item=curr_ant}
@@ -187,8 +148,8 @@ function pageMain() {
             </ul>
           </td>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
-          <th>Traitements</th>
+        <tr class="sejour{$curr_sejour->sejour_id}">
+          <th>Traitements du patient</th>
           <td class="text" colspan="3">
             <ul>
               {foreach from=$patient->_ref_traitements item=curr_trmt}
@@ -207,27 +168,66 @@ function pageMain() {
             </ul>
           </td>
         </tr>
-        {/if}
-        <tr class="op{$curr_op->operation_id}">
-          <th colspan="4" class="category">
-            Intervention
+        {foreach from=$curr_sejour->_ref_operations item=curr_op}
+        <tr class="sejour{$curr_sejour->sejour_id}">
+          <th class="category" colspan="4">
+            Dr. {$curr_op->_ref_chir->_view}
+            &mdash; {$curr_op->_ref_plageop->date|date_format:"%A %d %B %Y"}
+            &mdash; {$curr_op->_ref_plageop->_ref_salle->nom}
           </th>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
+        {foreach from=$curr_op->_ext_codes_ccam item=curr_code}
+        <tr class="sejour{$curr_sejour->sejour_id}">
+          <th>{$curr_code->code}</th>
+          <td class="text" colspan="3">{$curr_code->libelleLong}</td>
+        </tr>
+        {/foreach}
+        {if $curr_op->_ref_consult_anesth->consultation_anesth_id}
+        <tr class="sejour{$curr_sejour->sejour_id}">
+          <td colspan="4">
+            <strong>Consultation pré-anesthésique</strong>
+          </td>
+        </tr>
+        <tr class="sejour{$curr_sejour->sejour_id}">
+          <th>Consultation</th>
+          <td class="text" colspan="3">
+            Le {$curr_op->_ref_consult_anesth->_ref_plageconsult->date|date_format:"%A %d %b %Y"}
+            avec le Dr. {$curr_op->_ref_consult_anesth->_ref_plageconsult->_ref_chir->_view}
+          </td>
+        </tr>
+        <tr class="sejour{$curr_sejour->sejour_id}">
+          <td class="button">Poids</td>
+          <td class="button">Taille</td>
+          <td class="button">Groupe</td>
+          <td class="button">Tension</td>
+        </tr>
+        <tr class="sejour{$curr_sejour->sejour_id}">
+          <td class="button">{$curr_op->_ref_consult_anesth->poid} kg</td>
+          <td class="button">{$curr_op->_ref_consult_anesth->taille} cm</td>
+          <td class="button">{$curr_op->_ref_consult_anesth->groupe} {$curr_op->_ref_consult_anesth->rhesus}</td>
+          <td class="button">{$curr_op->_ref_consult_anesth->tasys}/{$curr_op->_ref_consult_anesth->tadias}</td>
+        </tr>
+        {/if}
+        <tr class="sejour{$curr_sejour->sejour_id}">
+          <td colspan="4">
+            <strong>Intervention</strong>
+          </td>
+        </tr>
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <th>Date</th>
           <td class="text" colspan="3">
             Le {$curr_op->_ref_plageop->date|date_format:"%A %d %b %Y"}
             par le Dr. {$curr_op->_ref_chir->_view},
           </td>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <th rowspan="6">Heures</th>
           <th>Entrée en salle</th>
           <td>
             {$curr_op->entree_bloc|date_format:"%Hh%M"}
           </td>
           <td rowspan="6">
-            <form name="editPatFrm" action="?m={$m}" method="post" onsubmit="return true;">
+            <form name="editPatFrm{$curr_op->operation_id}" action="?m={$m}" method="post" onsubmit="return true;">
             <input type="hidden" name="dosql" value="do_patients_aed" />
             <input type="hidden" name="m" value="dPpatients" />
             <input type="hidden" name="del" value="0" />
@@ -248,8 +248,8 @@ function pageMain() {
  
             </form>
  
-            <form name="editSejourFrm" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
-            <input type="hidden" name="dosql" value="do_planning_aed" />
+            <form name="editSejourFrm{$curr_op->operation_id}" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
+            <input type="hidden" name="dosql" value="do_sejour_aed" />
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
@@ -275,7 +275,7 @@ function pageMain() {
             
             </form>
             
-            <form name="editSejourFrm" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
+            <form name="editOpFrm{$curr_op->operation_id}" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="dosql" value="do_planning_aed" />
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="del" value="0" />
@@ -331,44 +331,44 @@ function pageMain() {
             </table>
           </td>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <th>Pose du garrot</th>
           <td>
             {$curr_op->pose_garrot|date_format:"%Hh%M"}
           </td>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <th>Début d'intervention</th>
           <td>
             {$curr_op->debut_op|date_format:"%Hh%M"}
           </td>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <th>Fin d'intervention</th>
           <td>
             {$curr_op->fin_op|date_format:"%Hh%M"}
           </td>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <th>Retrait du garrot</th>
           <td>
             {$curr_op->retrait_garrot|date_format:"%Hh%M"}
           </td>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <th>Sortie de salle</th>
           <td>
             {$curr_op->sortie_bloc|date_format:"%Hh%M"}
           </td>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <td class="button">supprimer</td>
           <td class="button"><strong>Code</strong></td>
           <td class="button"><strong>Activité</strong></td>
           <td class="button"><strong>Phase &mdash; Modificateurs</strong></td>
         </tr>
         {foreach from=$curr_op->_ref_actes_ccam item=curr_acte}
-        <tr class="op{$curr_op->operation_id}">
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <td class="button">
             <form name="formActe-{$curr_acte->_view}" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="m" value="dPsalleOp" />
@@ -391,7 +391,7 @@ function pageMain() {
         </tr>
         {/foreach}
         {foreach from=$curr_op->_ref_documents item=document}
-        <tr class="op{$curr_op->operation_id}">
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <th>{$document->nom}</th>
           {if $document->source}
           <td colspan="3">
@@ -406,7 +406,7 @@ function pageMain() {
           {/if}
         </tr>
         {/foreach}
-        <tr class="op{$curr_op->operation_id}">
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <td class="button" colspan="4">
             <a class="button" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={$curr_op->operation_id}">
               Modifier les actes
@@ -414,46 +414,47 @@ function pageMain() {
             <button onclick="exporterDossier({$curr_op->operation_id})">Exporter vers S@nté.com</button>
           </td>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <td class="text" id="hprim_export{$curr_op->operation_id}" colspan="4">
           </td>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
+        {/foreach}
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <th class="category" colspan="4">
             Groupage
-            <a href="index.php?m=dPpmsi&amp;tab=labo_groupage&amp;operation_id={$curr_op->operation_id}">
+            <a href="index.php?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={$curr_sejour->sejour_id}">
               (envoyer vers le labo)
             </a>
           </th>
         </tr>
-        <tr class="op{$curr_op->operation_id}">
+        <tr class="sejour{$curr_sejour->sejour_id}">
           <td colspan="4">
             <form name="editFrm" action="?m={$m}" method="post">
             <input type="hidden" name="m" value="dPplanningOp" />
-            <input type="hidden" name="dosql" value="do_planning_aed" />
+            <input type="hidden" name="dosql" value="do_sejour_aed" />
             <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
+            <input type="hidden" name="sejour_id" value="{$curr_sejour->sejour_id}" />
             Diagnostic principal :
-            <input type="text" name="CIM10_code" value="{$curr_op->CIM10_code}"/>
+            <input type="text" name="DP" value="{$curr_sejour->DP}"/>
             <button type="submit">Modifier</button>
             </form>
-            {if $curr_op->_ref_GHM->_CM}
-            <strong>Catégorie majeure CM{$curr_op->_ref_GHM->_CM}</strong> : {$curr_op->_ref_GHM->_CM_nom}
+            {if $curr_sejour->_ref_GHM->_CM}
+            <strong>Catégorie majeure CM{$GHM->_CM}</strong> : {$GHM->_CM_nom}
             <br />
-            <strong>GHM</strong> : {$curr_op->_ref_GHM->_GHM} ({$curr_op->_ref_GHM->_tarif_2006} €)
+            <strong>GHM</strong> : {$GHM->_GHM} ({$GHM->_tarif_2006} €)
             <br />
-            {$curr_op->_ref_GHM->_GHM_nom}
+            {$GHM->_GHM_nom}
             <br />
-            <i>Appartenance aux groupes {$curr_op->_ref_GHM->_GHM_groupe}</i>
+            <i>Appartenance aux groupes {$GHM->_GHM_groupe}</i>
             <br />
-            <strong>Bornes d'hospitalisation</strong> : de {$curr_op->_ref_GHM->_borne_basse} jour(s) à {$curr_op->_ref_GHM->_borne_haute} jours
+            <strong>Bornes d'hospitalisation</strong> :
+            de {$GHM->_borne_basse} jour(s)
+            à {$GHM->_borne_haute} jours
             {else}
-            <strong>{$curr_op->_ref_GHM->_GHM}</strong>
+            <strong>{$GHM->_GHM}</strong>
             {/if}
           </td>
         </tr>
-        
-        {/foreach}
         {/foreach}
        </table>
       {/if}
