@@ -37,8 +37,7 @@ class CSetupdPstats {
 	}
 
 	function upgrade( $old_version ) {
-		switch ( $old_version )
-		{
+		switch ( $old_version ) {
 		case "all":
 		case "0.1":
 			return "0.1";

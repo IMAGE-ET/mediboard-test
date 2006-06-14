@@ -40,8 +40,7 @@ class CSetupdPbloc {
 
 	function upgrade( $old_version ) {
 
-		switch ( $old_version )
-		{
+		switch ( $old_version ) {
 		case "all":
 		case "0.1":
 		  $sql = "ALTER TABLE `plagesop` ADD INDEX ( `id_chir` );";

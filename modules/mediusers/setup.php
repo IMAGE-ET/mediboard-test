@@ -43,8 +43,7 @@ class CSetupMediusers {
 
 	function upgrade( $old_version ) {
 
-		switch ( $old_version )
-		{
+		switch ( $old_version ) {
 			case "all":
 			case "0.1":
         $sql = "ALTER TABLE `users_mediboard` ADD `remote` TINYINT DEFAULT NULL;";

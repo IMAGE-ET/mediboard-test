@@ -160,6 +160,7 @@ class CSetupdPcabinet {
         db_exec( $sql ); db_error();
         
       case "0.30":
+        //@todo : IMPORTANT : passer tout en sql
         $document_types = array (
           array ("name" => "compte_rendu", "valide" => "cr_valide"),
           array ("name" => "ordonnance", "valide" => "or_valide"),

@@ -32,36 +32,20 @@ class CSetupdPadmissions {
 	}
 
 	function remove() {
-		/*
-		db_exec( "DROP TABLE admissions;" );
-		*/
-
 		return null;
 	}
 
 	function upgrade( $old_version ) {
-		switch ( $old_version )
-		{
+		switch ( $old_version ) {
 		case "all":
 		case "0.1":
 			return "0.1";
-		default:
-			return false;
 		}
 		return false;
 	}
 
 	function install() {
-		/*
-		$sql = "CREATE TABLE admissions ( " .
-			"  admission_id bigint(20) unsigned NOT NULL auto_increment" .
-			"  patient_id bigint(20) usigned NOT NULL default '0'" .
-			", date date NOT NULL default '0000-00-00'" .
-			", PRIMARY KEY  (dPadmissions_id)" .
-			", UNIQUE KEY protocoles_id (protocoles_id)" .
-			") TYPE=MyISAM;";
-		db_exec( $sql ); db_error();
-		*/
+    $this->upgrade("all");
 		return null;
 	}
 }

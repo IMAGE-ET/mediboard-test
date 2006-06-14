@@ -14,7 +14,8 @@ class CGHM  extends CMbObject {
   var $ghm_id = null;
   
   // DB fields
-  var $operation_id = null;
+  var $operation_id = null; // A supprimer
+  var $sejour_id = null;
   var $DR = null;   // Diagnostic relié
   var $DASs = null; // Diagnostics associés significatifs sérialisés
   var $DADs = null; // Diagnostics associés documentaires sérialisés

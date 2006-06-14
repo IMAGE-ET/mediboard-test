@@ -103,7 +103,7 @@ class CSetupdPplanningOp {
           array ("name" => "compte_rendu", "valide" => "cr_valide"));
           
         set_time_limit( 1800 );
-        
+        //@todo : IMPORTANT passer tout en SQL
         foreach ($document_types as $document_type) {
           $document_name = $document_type["name"];
           $document_valide = $document_type["valide"];

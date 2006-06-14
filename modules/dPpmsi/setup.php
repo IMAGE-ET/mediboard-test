@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPpmsi';
-$config['mod_version'] = '0.11';
+$config['mod_version'] = '0.12';
 $config['mod_directory'] = 'dPpmsi';
 $config['mod_setup_class'] = 'CSetupdPpmsi';
 $config['mod_type'] = 'user';
@@ -51,8 +51,22 @@ class CSetupdPpmsi {
                 INDEX ( `operation_id` )
                 ) COMMENT = 'Table des GHM';";
         db_exec( $sql ); db_error();
+
     case "0.11" :
-			return "0.11";
+        if(CMbSetup::getVersionOf("dPplanningOp") < "0.38") {
+          return "0.11";
+        }
+        $sql = "ALTER TABLE `ghm`" .
+            "ADD `sejour_id` INT NOT NULL AFTER `operation_id`;";
+        db_exec($sql); db_error();
+        
+        $sql = "UPDATE `ghm`, `operations` SET" .
+            "\n`ghm`.`sejour_id` = `operation`.`sejour_id`" .
+            "\nWHERE `ghm`.`operation_id` = `operation`.`operation_id`";
+        db_exec($sql); db_error();
+
+    case "0.12" :
+			return "0.12";
 		}
 		return false;
 	}
