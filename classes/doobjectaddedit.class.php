@@ -94,6 +94,8 @@ class CDoObjectAddEdit {
         $this->redirect =& $this->redirectError;
       }
     } else {
+      $id = $this->objectKeyGetVarName;
+      mbSetValueToSession($id, $this->_obj->$id);
       $isNotNew = @$_POST[$this->objectKeyGetVarName];
       $this->doLog("store");
       $AppUI->setMsg( $isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);

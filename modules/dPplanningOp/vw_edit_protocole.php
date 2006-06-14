@@ -7,28 +7,45 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $tab;
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
+require_once( $AppUI->getModuleClass('dPplanningOp', 'protocole') );
+require_once( $AppUI->getModuleClass('mediusers') );
 
 if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$operation_id = mbGetValueFromGetOrSession("protocole_id", 0);
+$protocole_id = mbGetValueFromGetOrSession("protocole_id", 0);
+$chir_id = mbGetValueFromGetOrSession("chir_id", 0);
 
-$op = new COperation;
+// L'utilisateur est-il un praticien
+$mediuser = new CMediusers;
+$mediuser->load($AppUI->user_id);
+if ($mediuser->isPraticien() and !$praticien_id) {
+  $chir_id = $mediuser->user_id;
+}
+
+// Chargement du praticien
 $chir = new CMediusers;
-if(!$operation_id) {
-  // L'utilisateur est-il praticien?
-  $mediuser = new CMediusers;
-  $mediuser->load($AppUI->user_id);
-  if ($mediuser->isPraticien()) {
-    $chir = $mediuser;
+if ($chir_id) {
+  $chir->load($chir_id);
+}
+
+// Vérification des droits sur les praticiens
+$listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
+
+$protocole = new CProtocole;
+if($protocole_id) {
+  $protocole->load($protocole_id);
+  $protocole->loadRefs();
+
+  // On vérifie que l'utilisateur a les droits sur l'operation
+  if (!array_key_exists($protocole->chir_id, $listPraticiens)) {
+    $AppUI->setMsg("Vous n'avez pas accès à ce protocole", UI_MSG_WARNING);
+    $AppUI->redirect("m=$m&tab=$tab&protocole_id=0"); 
   }
-}  else {
-  $op->load($operation_id);
-  $op->loadRefs();
+  $chir =& $protocole->_ref_chir;
 }
 
 // Heures & minutes
@@ -48,17 +65,14 @@ for ($i = 0; $i < 60; $i += $step) {
 require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP;
 
-$smarty->assign('protocole', true);
-$smarty->assign('hospitalisation', false);
+$smarty->assign('protocole', $protocole);
+$smarty->assign('chir', $chir);
 
-$smarty->assign('op', $op);
-$smarty->assign('chir' , $op->chir_id    ? $op->_ref_chir    : $chir);
-$smarty->assign('pat'  , $op->pat_id     ? $op->_ref_pat     : null );
-$smarty->assign('plage', $op->plageop_id ? $op->_ref_plageop : new CPlageop );
+$smarty->assign('listPraticiens', $listPraticiens);
 
 $smarty->assign('hours', $hours);
 $smarty->assign('mins', $mins);
 
-$smarty->display('vw_addedit_planning.tpl');
+$smarty->display('vw_edit_protocole.tpl');
 
 ?>

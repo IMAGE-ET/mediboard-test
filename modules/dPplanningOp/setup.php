@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPplanningOp';
-$config['mod_version'] = '0.47';
+$config['mod_version'] = '0.48';
 $config['mod_directory'] = 'dPplanningOp';
 $config['mod_setup_class'] = 'CSetupdPplanningOp';
 $config['mod_type'] = 'user';
@@ -403,7 +403,50 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
         
       case "0.47" :
-        return "0.47";
+        $sql = "CREATE TABLE protocole ( " .
+          "  protocole_id INT UNSIGNED NOT NULL auto_increment" .
+          ", chir_id INT UNSIGNED NOT NULL DEFAULT '0'" .
+          ", type ENUM('comp','ambu','exte') DEFAULT 'comp'" .
+          ", DP VARCHAR(5) DEFAULT NULL" .
+          ", convalescence TEXT DEFAULT NULL" .
+          ", rques_sejour TEXT DEFAULT NULL" .
+          ", pathologie VARCHAR(8) DEFAULT NULL" .
+          ", septique TINYINT DEFAULT '0' NOT NULL" .
+          ", codes_ccam VARCHAR(160) DEFAULT NULL" .
+          ", libelle TEXT DEFAULT NULL" .
+          ", temp_operation TIME NOT NULL DEFAULT '00:00:00'" .
+          ", examen TEXT DEFAULT NULL" .
+          ", materiel TEXT DEFAULT NULL" .
+          ", duree_hospi TINYINT(4) UNSIGNED NOT NULL DEFAULT '0'" .
+          ", rques_operation TEXT DEFAULT NULL" .
+          ", depassement TINYINT DEFAULT NULL" .
+          ", PRIMARY KEY  (protocole_id)" .
+          ") TYPE=MyISAM;";
+        db_exec( $sql ); db_error();
+    
+        $sql = "ALTER TABLE `protocole` ADD INDEX (`chir_id`)";
+        db_exec($sql); db_error();
+        
+        $sql = "INSERT INTO `protocole` (" .
+            " `protocole_id`, `chir_id`," .
+            " `type`, `DP`, `convalescence`, `rques_sejour`, `pathologie`, `septique`," .
+            " `codes_ccam`, `libelle`, `temp_operation`, `examen`, `materiel`," .
+            " `duree_hospi`, `rques_operation`,  `depassement`)" .
+            "\nSELECT '', `operations`.`chir_id`," .
+            " `operations`.`type_adm`, `operations`.`CIM10_code`, `operations`.`convalescence`," .
+            " '', '', '', `operations`.`codes_ccam`, `operations`.`libelle`," .
+            " `operations`.`temp_operation`, `operations`.`examen`," .
+            " `operations`.`materiel`, `operations`.`duree_hospi`, `operations`.`rques`," .
+            " `operations`.`depassement`" .
+            "\nFROM `operations`" .
+            "\nWHERE `operations`.`pat_id` == 0";
+        db_exec($sql); db_error();
+        
+        $sql = "DELETE FROM `operations` WHERE `pat_id` == 0";
+        db_exec($sql); db_error();
+      
+      case "0.48":
+        return "0.48";
     }
     
     return false;
