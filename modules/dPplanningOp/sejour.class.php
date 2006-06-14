@@ -39,6 +39,7 @@ class CSejour extends CMbObject {
   var $saisi_SHS = null; // remplace $op->saisie
   var $modif_SHS = null; // remplace $op->modifiee
 
+  var $DP = null; // remplace $operation->CIM10_code
   var $pathologie = null; // remplace $operation->pathologie
   var $septique = null; // remplace $operation->septique
   var $convalescence = null; // remplace $operation->convalescence
@@ -78,6 +79,7 @@ class CSejour extends CMbObject {
     $this->_props["saisi_SHS"] = "enum|o|n";
     $this->_props["modif_SHS"] = "enum|0|1";
 
+    $this->_props["DP"] = "code|cim10";
     $this->_props["pathologie"] = "str|length|3";
     $this->_props["septique"] = "enum|0|1";
     $this->_props["convalescence"] = "str|confidential";
@@ -120,6 +122,7 @@ class CSejour extends CMbObject {
     $this->venue_SHS     = $operation->venue_SHS;
     $this->saisi_SHS     = $operation->saisie;
     $this->modif_SHS     = $operation->modifiee;
+    $this->DP            = $operation->CIM10_code;
     $this->pathologie    = $operation->pathologie;
     $this->septique      = $operation->septique;
     $this->convalescence = $operation->convalescence;
@@ -133,19 +136,20 @@ class CSejour extends CMbObject {
       }
       $this->loadRefsOperations();
       foreach($this->_ref_operations as $keyOp => $operation) {
-        $this->_ref_operations[$keyOp]->pat_id = $this->patient_id;
-        $this->_ref_operations[$keyOp]->chir_id = $this->praticien_id;
-        $this->_ref_operations[$keyOp]->type_adm = $this->type;
-        $this->_ref_operations[$keyOp]->annulee = $this->annule;
-        $this->_ref_operations[$keyOp]->chambre = $this->chambre_seule;
-        $this->_ref_operations[$keyOp]->date_adm = mbDate(null, $this->entree_prevue);
-        $this->_ref_operations[$keyOp]->time_adm = mbTime(null, $this->entree_prevue);
-        $this->_ref_operations[$keyOp]->duree_hospi = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
-        $this->_ref_operations[$keyOp]->venue_SHS = $this->venue_SHS;
-        $this->_ref_operations[$keyOp]->saisie = $this->saisi_SHS;
-        $this->_ref_operations[$keyOp]->modifiee = $this->modif_SHS;
-        $this->_ref_operations[$keyOp]->pathologie = $this->pathologie;
-        $this->_ref_operations[$keyOp]->septique = $this->septique;
+        $this->_ref_operations[$keyOp]->pat_id        = $this->patient_id;
+        $this->_ref_operations[$keyOp]->chir_id       = $this->praticien_id;
+        $this->_ref_operations[$keyOp]->type_adm      = $this->type;
+        $this->_ref_operations[$keyOp]->annulee       = $this->annule;
+        $this->_ref_operations[$keyOp]->chambre       = $this->chambre_seule;
+        $this->_ref_operations[$keyOp]->date_adm      = mbDate(null, $this->entree_prevue);
+        $this->_ref_operations[$keyOp]->time_adm      = mbTime(null, $this->entree_prevue);
+        $this->_ref_operations[$keyOp]->duree_hospi   = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
+        $this->_ref_operations[$keyOp]->venue_SHS     = $this->venue_SHS;
+        $this->_ref_operations[$keyOp]->saisie        = $this->saisi_SHS;
+        $this->_ref_operations[$keyOp]->modifiee      = $this->modif_SHS;
+        $this->_ref_operations[$keyOp]->CIM10_code    = $this->DP;
+        $this->_ref_operations[$keyOp]->pathologie    = $this->pathologie;
+        $this->_ref_operations[$keyOp]->septique      = $this->septique;
         $this->_ref_operations[$keyOp]->convalescence = $this->convalescence;
         $msgOp = $this->_ref_operations[$keyOp]->store();
       }

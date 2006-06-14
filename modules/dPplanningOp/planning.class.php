@@ -53,7 +53,7 @@ class COperation extends CMbObject {
   var $salle_id = null;
   var $date = null;
   var $codes_ccam = null;
-  var $CIM10_code = null;
+  var $CIM10_code = null; // remplacé par $sejour->DP
   var $libelle = null;
   var $cote = null;
   var $temp_operation = null;
