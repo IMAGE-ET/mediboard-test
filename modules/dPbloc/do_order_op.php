@@ -171,7 +171,7 @@ function changeAffect($id, $cmd = null) {
   $operation->load($id);
   $operation->loadRefs();
   $affectation =& $operation->_ref_last_affectation;
-  if ($affectation->affectation_id && ($operation->type_adm == "ambu")) {
+  if ($affectation->affectation_id && ($operation->_ref_sejour->type == "ambu")) {
     if($cmd == "rm") {
       $affectation->sortie = mbDate("", $affectation->sortie)." 18:00:00";
     } else {
