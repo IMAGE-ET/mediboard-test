@@ -7,6 +7,10 @@
 * @author Romain Ollivier
 */
 
+global $AppUI;
+
+require_once($AppUI->getSystemClass("mbsetup"));
+
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPpmsi';
