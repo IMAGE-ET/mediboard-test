@@ -129,49 +129,51 @@ class CSejour extends CMbObject {
   }
   
   function store() {
-    if(!($msg = parent::store())) {
-      $this->load($this->sejour_id);
-      if($this->annule) {
-        $this->delAffectations();
-      }
-      $this->loadRefsOperations();
-      foreach($this->_ref_operations as $keyOp => $operation) {
-        $this->_ref_operations[$keyOp]->pat_id        = $this->patient_id;
-        $this->_ref_operations[$keyOp]->chir_id       = $this->praticien_id;
-        $this->_ref_operations[$keyOp]->type_adm      = $this->type;
-        $this->_ref_operations[$keyOp]->annulee       = $this->annule;
-        $this->_ref_operations[$keyOp]->chambre       = $this->chambre_seule;
-        $this->_ref_operations[$keyOp]->date_adm      = mbDate(null, $this->entree_prevue);
-        $this->_ref_operations[$keyOp]->time_adm      = mbTime(null, $this->entree_prevue);
-        $this->_ref_operations[$keyOp]->duree_hospi   = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
-        $this->_ref_operations[$keyOp]->venue_SHS     = $this->venue_SHS;
-        $this->_ref_operations[$keyOp]->saisie        = $this->saisi_SHS;
-        $this->_ref_operations[$keyOp]->modifiee      = $this->modif_SHS;
-        $this->_ref_operations[$keyOp]->CIM10_code    = $this->DP;
-        $this->_ref_operations[$keyOp]->pathologie    = $this->pathologie;
-        $this->_ref_operations[$keyOp]->septique      = $this->septique;
-        $this->_ref_operations[$keyOp]->convalescence = $this->convalescence;
-        $msgOp = $this->_ref_operations[$keyOp]->store();
-      }
-      // Cas ou on a une premiere affectation différente
-      // de l'heure d'admission
-      if ($this->entree_prevue) {
-        $this->loadRefsAffectations();
-        $affectation =& $this->_ref_first_affectation;
-        $admission = $this->entree_prevue;
-        if ($affectation->affectation_id && ($affectation->entree != $this->entree_prevue)) {
-          $affectation->entree = $this->entree_prevue;
-          $affectation->store();
-        }
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+
+    if ($this->annule) {
+      $this->delAffectations();
+    }
+
+    // Cas où on a une premiere affectation différente de l'heure d'admission
+    if ($this->entree_prevue) {
+      $this->loadRefsAffectations();
+      $affectation =& $this->_ref_first_affectation;
+      $admission = $this->entree_prevue;
+      if ($affectation->affectation_id && ($affectation->entree != $this->entree_prevue)) {
+        $affectation->entree = $this->entree_prevue;
+        $affectation->store();
       }
     }
-    return $msg;
+
+//    // Synchronisation vers les opérations
+//    $this->loadRefsOperations();
+//    foreach($this->_ref_operations as $keyOp => $valueOp) {
+//      $operation =& $this->_ref_operations[$keyOp];
+//      $operation->pat_id = $this->patient_id;
+//      $operation->chir_id = $this->praticien_id;
+//      $operation->type_adm = $this->type;
+//      $operation->annulee = $this->annule;
+//      $operation->chambre = $this->chambre_seule;
+//      $operation->date_adm = mbDate(null, $this->entree_prevue);
+//      $operation->time_adm = mbTime(null, $this->entree_prevue);
+//      $operation->duree_hospi = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
+//      $operation->venue_SHS = $this->venue_SHS;
+//      $operation->saisie = $this->saisi_SHS;
+//      $operation->modifiee = $this->modif_SHS;
+//      $operation->pathologie = $this->pathologie;
+//      $operation->septique = $this->septique;
+//      $operation->convalescence = $this->convalescence;
+//      $msgOp = $operation->store();
+//    }
   }
   
   function delete() {
     $msg = parent::delete();
-    if($msg == null) {
-      //suppression des affectations
+    if ($msg == null) {
+      // Suppression des affectations
       $this->delAffectations();
     }
     return $msg;
