@@ -15,7 +15,7 @@ require_once($AppUI->getModuleClass("dPplanningOp", "pathologie"));
 // @todo: Put the following in $config_dist;
 $dPconfig["dPplanningOp"]["sejour"] = array (
   "heure_deb" => "7",
-  "heure_fin" => "7",
+  "heure_fin" => "20",
   "min_intervalle" => "15"
 );
 

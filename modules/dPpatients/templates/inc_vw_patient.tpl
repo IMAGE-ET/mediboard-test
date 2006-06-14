@@ -128,8 +128,8 @@ function printIntervention(id) {
       </a>
     </td>
     <td class="button">
-      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;pat_id={$patient->patient_id}&amp;hospitalisation_id=0">
-        Une hospitalisation
+      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={$patient->patient_id}&amp;sejour_id=0">
+        Un séjour
       </a>
     </td>
     <td class="button">
@@ -190,11 +190,14 @@ function printIntervention(id) {
 
   {if $patient->_ref_sejours}
   <tr>
-    <th colspan="2" class="category">Sejours</th>
+    <th colspan="2" class="category">Séjours</th>
   </tr>
   {foreach from=$patient->_ref_sejours item=curr_sejour}
   <tr>
     <td>
+      <a class="actionPat" title="Modifier le séjour" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={$curr_sejour->sejour_id}">
+        <img src="modules/dPpatients/images/planning.png" alt="Planifier"/>
+      </a>
       <a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}#adm{$curr_sejour->sejour_id}">
         Séjour du {$curr_sejour->entree_prevue|date_format:"%d %b %Y"} 
         au {$curr_sejour->sortie_prevue|date_format:"%d %b %Y"}
@@ -210,7 +213,7 @@ function printIntervention(id) {
   <tr>
     <td>
       <a class="actionPat" href="javascript:printIntervention({$curr_op->operation_id})">
-        <img src="modules/dPpatients/images/print.png" alt="imprimer" title="imprimer"/>
+        <img src="modules/dPpatients/images/print.png" alt="Imprimer" title="Imprimer l'opération"/>
       </a>
       {if $curr_op->annulee}
       [ANNULE]

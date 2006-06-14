@@ -75,6 +75,7 @@ class CSmartyDP extends Smarty {
     // Standard data assignment
     $this->assign("app", $AppUI);
     $this->assign("dbChronos", $dbChronos);
+    $this->assign("dPconfig", $dPconfig);
     $this->assign("user", $AppUI->user_id); // shouldn't be necessary
     $this->assign("canEdit", $canEdit);
     $this->assign("canRead", $canRead);

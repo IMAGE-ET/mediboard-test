@@ -238,24 +238,29 @@ class CDpObject {
 	function store( $updateNulls = false ) {
     global $AppUI;
     
-        $this->updateDBFields();
-		$msg = $this->check();
-		if( $msg ) {
+    // Properties checking
+    $this->updateDBFields();
+		if($msg = $this->check()) {
 			return $AppUI->_(get_class( $this )) . 
         $AppUI->_("::store-check failed:") .
         $AppUI->_($msg);
 		}
+    
+    // DB query
 		$k = $this->_tbl_key;
 		if( $this->$k ) {
-			$ret = db_updateObject( $this->_tbl, $this, $this->_tbl_key, $updateNulls );
+			$ret = db_updateObject( $this->_tbl, $this, $k, $updateNulls );
 		} else {
-			$ret = db_insertObject( $this->_tbl, $this, $this->_tbl_key );
+			$ret = db_insertObject( $this->_tbl, $this, $k);
 		}
-		if( !$ret ) {
+    
+		if (!$ret) {
 			return get_class( $this )."::store failed <br />" . db_error();
-		} else {
-			return NULL;
-		}
+		} 
+
+    // Load the object to get all properties
+    $this->load();
+    return null;
 	}
   
 /**

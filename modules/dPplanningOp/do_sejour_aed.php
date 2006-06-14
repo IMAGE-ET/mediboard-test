@@ -10,11 +10,12 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getSystemClass("doobjectaddedit"));
-require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
+require_once( $AppUI->getModuleClass("dPplanningOp", "sejour"));
+require_once( $AppUI->getModuleClass("dPplanningOp", "planning"));
 
-if($chir_id = dPgetParam( $_POST, 'chir_id', null))
-  mbSetValueToSession('chir_id', $chir_id);
+if ($chir_id = mbGetValueFromPost("chir_id")) {
+  mbSetValueToSession("chir_id", $chir_id);
+}
 
 
 $do = new CDoObjectAddEdit("CSejour", "sejour_id");
