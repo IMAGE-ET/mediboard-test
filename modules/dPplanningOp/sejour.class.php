@@ -54,6 +54,7 @@ class CSejour extends CMbObject {
   var $_ref_affectations = null;
   var $_ref_first_affectation = null;
   var $_ref_last_affectation = null;
+  var $_ref_GHM = array();
   
   // Form Fields
   var $_duree_prevue = null;
@@ -263,6 +264,18 @@ class CSejour extends CMbObject {
   function loadRefsBack() {
     $this->loadRefsAffectations();
     $this->loadRefsOperations();
+  }
+  
+  function loadRefGHM () {
+    $this->_ref_GHM = new CGHM;
+    $where["operation_id"] = "= '$this->operation_id'";
+    $this->_ref_GHM->loadObject($where);
+    if(!$this->_ref_GHM->ghm_id) {
+      $this->_ref_GHM->operation_id = $this->operation_id;
+      $this->_ref_GHM->loadRefsFwd();
+      $this->_ref_GHM->bindInfos();
+      $this->_ref_GHM->getGHM();
+    }
   }
 }
 ?>
