@@ -46,11 +46,6 @@ if ($pat_id) {
 $op = new COperation;
 if ($operation_id) {
   $op->load($operation_id);
-  // On vérifie qu'il y a bien une intervention
-  if(!$op->plageop_id && !$trans) {
-  	mbSetValueToSession("operation_id", 0);
-    $AppUI->redirect( "m=$m&tab=vw_edit_hospi&hospitalisation_id=$op->operation_id" );
-  }
   // On vérifie que l'utilisateur a les droits sur l'operation
   $right = false;
   foreach($listChir as $key => $value) {
@@ -59,7 +54,7 @@ if ($operation_id) {
   }
   if(!$right) {
     $AppUI->setMsg("Vous n'avez pas accès à cette intervention", UI_MSG_ALERT);
-    $AppUI->redirect( "m=dPpatients&tab=0&id=$op->pat_id");
+    $AppUI->redirect( "m=dPplanningOp&tab=vw_edit_planning&operation_id=0");
   }
   $op->loadRefs();
 }
@@ -111,10 +106,7 @@ for ($i = 0; $i < 60; $i += $step) {
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
-
-$smarty->assign('protocole', false);
-$smarty->assign('hospitalisation', false);
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('op', $op);
 $smarty->assign('chir' , $op->chir_id    ? $op->_ref_chir    : $chir);
@@ -128,6 +120,6 @@ $smarty->assign('listPack'      , $listPack      );
 $smarty->assign('hours', $hours);
 $smarty->assign('mins', $mins);
 
-$smarty->display('vw_addedit_planning.tpl');
+$smarty->display('vw_edit_planning.tpl');
 
 ?>

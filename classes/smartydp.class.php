@@ -58,7 +58,7 @@ class CSmartyDP extends Smarty {
    * Directories initialisation
    * Standard data assignment
    */
-  function CSmartyDP() {
+  function CSmartyDP($doubleTagMod = 0) {
     global $AppUI, $dbChronos, $dPconfig, $canRead, $canEdit, $m, $a, $tab, $dialog, $mb_version_build;
     $root = $AppUI->getConfig( 'root_dir' );
     
@@ -71,6 +71,12 @@ class CSmartyDP extends Smarty {
     // Debugginf directives
     $this->debug_tpl = "$root/classes/smarty_debug.tpl";
     $this->debugging = false;
+    
+    // Delimiter definition
+    if($doubleTagMod) {
+      $this->left_delimiter = "{{";
+      $this->right_delimiter = "}}";
+    }
 
     // Standard data assignment
     $this->assign("app", $AppUI);
