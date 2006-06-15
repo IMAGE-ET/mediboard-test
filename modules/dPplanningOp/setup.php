@@ -439,10 +439,10 @@ class CSetupdPplanningOp {
             " `operations`.`materiel`, `operations`.`duree_hospi`, `operations`.`rques`," .
             " `operations`.`depassement`" .
             "\nFROM `operations`" .
-            "\nWHERE `operations`.`pat_id` == 0";
+            "\nWHERE `operations`.`pat_id` = 0";
         db_exec($sql); db_error();
         
-        $sql = "DELETE FROM `operations` WHERE `pat_id` == 0";
+        $sql = "DELETE FROM `operations` WHERE `pat_id` = 0";
         db_exec($sql); db_error();
       
       case "0.48":
