@@ -15,6 +15,7 @@ require_once($AppUI->getModuleClass('admin'));
 require_once($AppUI->getModuleClass('mediusers', "functions"));
 require_once($AppUI->getModuleClass('dPcompteRendu', "pack"));
 require_once($AppUI->getModuleClass('dPplanningOp', "planning"));
+require_once($AppUI->getModuleClass('dPplanningOp', "protocole"));
 
 $utypes_flip = array_flip($utypes);
 
@@ -194,10 +195,8 @@ class CMediusers extends CMbObject {
   
   function loadProtocoles() {
     $where["chir_id"] = "= '$this->user_id'";
-    $where["pat_id"] = "= 0";
-    $where["plageop_id"] = "iS NULL";
     $order = "codes_ccam";
-    $protocoles = new COperation;
+    $protocoles = new CProtocole;
     $this->_ref_protocoles = $protocoles->loadList($where, $order);
   }
   
