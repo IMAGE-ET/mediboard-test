@@ -195,7 +195,7 @@ function pageMain() {
       <table class="form">
         <tr>
           <th class="category" colspan="3">
-            Opération
+            Informations concernant l'opération
           </th>
         </tr>
         
@@ -281,7 +281,7 @@ function pageMain() {
     <td>
       <table class="form">
         <tr>
-         <th class="category" colspan="3">Sejour</th>
+         <th class="category" colspan="3">Informations concernant le séjour</th>
        </tr>
         <tr>
           <th class="mandatory"><label for="duree_hospi" title="Durée d'hospitalisation en jours">Durée d'hospitalisation :</label></th>
