@@ -319,9 +319,7 @@ function pageMain() {
 <input type="hidden" name="operation_id" value="{{$op->operation_id}}" />
 <input type="hidden" name="commande_mat" value="{{$op->commande_mat}}" />
 <input type="hidden" name="rank" value="{{$op->rank}}" />
-<input type="hidden" name="saisie" value="{{$op->saisie}}" />
-<input type="hidden" name="annulee" value="0" />
-<input type="hidden" name="modifiee" value="{{$op->modifiee}}" />
+<input type="hidden" name="annulee" value="{{$op->annulee}}" />
 
 <table class="main" style="margin: 4px; border-spacing: 0px;">
   {{if $op->operation_id}}
@@ -334,6 +332,7 @@ function pageMain() {
   <tr>
     {{if $op->operation_id}}
     <th colspan="2" class="title" style="color: #f00;">
+      <button style="float:left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
       <a style="float:right;" href="javascript:view_log('COperation',{{$op->operation_id}})">
         <img src="images/history.gif" alt="historique" />
       </a>
@@ -354,25 +353,20 @@ function pageMain() {
           </th>
         </tr>
         <tr>
-          <td class="button" colspan="3">
-            <input type="button" value="Choisir un protocole" onclick="popProtocole()" />
-          </td>
-        </tr>
-        <tr>
           <th class="mandatory">
             <input type="hidden" name="chir_id" title="{{$op->_props.chir_id}}" value="{{$chir->user_id}}" ondblclick="popChir()" />
             <label for="chir_id" title="Chirurgien Responsable. Obligatoire">Chirurgien :</label>
           </th>
-          <td class="readonly"><input type="text" name="_chir_name" size="30" value="{{if $chir->user_id}}{{$chir->_view}}{{/if}}" readonly="readonly" /></td>
-          <td class="button"><input type="button" value="choisir un chirurgien" onclick="popChir()" /></td>
-        </tr>
-        <tr>
-          <th class="mandatory">
-            <input type="hidden" name="pat_id" title="{{$op->_props.pat_id}}|notNull" ondblclick="popPat()" value="{{$pat->patient_id}}" />
-            <label for="pat_id" title="Patient concerné. Obligatoire">Patient :</label>
-          </th>
-          <td class="readonly"><input type="text" name="_pat_name" size="30" value="{{$pat->_view}}" readonly="readonly" /></td>
-          <td class="button"><input type="button" value="Rechercher un patient" onclick="popPat()" /></td>
+          <td colspan="2">
+            <select name="praticien_id" title="{{$sejour->_props.praticien_id}}">
+              <option value="">&mdash; Choisir un praticien</option>
+              {{foreach from=$listPraticiens item=curr_praticien}}
+              <option value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
+              {{$curr_praticien->_view}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
         </tr>
         <tr>
           <th class="mandatory">
@@ -383,27 +377,21 @@ function pageMain() {
             {{foreach from=$hours key=key item=hour}}
               <option value="{{$key}}" {{if (!$op && $key == 1) || $op->_hour_op == $key}} selected="selected" {{/if}}>{{$key}}</option>
             {{/foreach}}
-            </select>
-            :
+            </select> h
             <select name="_min_op">
             {{foreach from=$mins item=min}}
               <option value="{{$min}}" {{if (!$op && $min == 0) || $op->_min_op == $min}} selected="selected" {{/if}}>{{$min}}</option>
             {{/foreach}}
-            </select>
+            </select> mn
           </td>
         </tr>
         <tr>
           <th class="mandatory">
-            <input type="hidden" name="plageop_id" title="{{$op->_props.pat_id}}|notNull" ondblclick="popPlage()" value="{{$plage->id}}" />
+            <input type="hidden" name="plageop_id" title="{{$op->_props.plageop_id}}|notNull" ondblclick="popPlage()" value="{{$plage->id}}" />
             <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention :</label>
           </th>
           <td class="readonly"><input type="text" name="date" readonly="readonly" size="10" value="{{$plage->_date}}" /></td>
           <td class="button"><input type="button" value="Choisir une date" onclick="popPlage()" /></td>
-        </tr>
-        <tr>
-          <th><label for="CIM10_code" title="Code CIM10 de diagnostic">Diagnostic (CIM10) :</label></th>
-          <td><input type="text" name="CIM10_code" title="{{$op->_props.CIM10_code}}" size="10" value="{{$op->CIM10_code}}" /></td>
-          <td class="button"><input type="button" value="Sélectionner un code" onclick="popCode('cim10')" /></td>
         </tr>
         <tr>
           <th>
@@ -443,12 +431,12 @@ function pageMain() {
         <tr>
           <td class="text"><label for="examen" title="Bilan pré-opératoire">Bilan pré-op</label></td>
           <td class="text"><label for="materiel" title="Matériel à prévoir / examens per-opératoire">Matériel à prévoir / examens per-op</label></td>
-          <td class="text"><label for="convalescence" title="Convalescence post-opératoire">Convalescence</label></td>
+          <td class="text"><label for="rques" title="Remarques sur l'iitervention">Remarques</label></td>
         </tr>
         <tr>
           <td><textarea name="examen" title="{{$op->_props.examen}}" rows="3">{{$op->examen}}</textarea></td>
           <td><textarea name="materiel" title="{{$op->_props.materiel}}" rows="3">{{$op->materiel}}</textarea></td>
-          <td><textarea name="convalescence" title="{{$op->_props.convalescence}}" rows="3">{{$op->convalescence}}</textarea></td>
+          <td><textarea name="rques" title="{{$op->_props.rques}}" rows="3">{{$op->rques}}</textarea></td>
         </tr>
         <tr>
           <th><label for="depassement"title="Valeur du dépassement d'honoraire éventuel">Dépassement d'honoraire :</label></th>
@@ -463,16 +451,12 @@ function pageMain() {
             <label for="info_n">Non</label>
           </td>
         </tr>
-      </table>
-    </td>
-    <td>
-      <table class="form">
         <tr>
           <th class="category" colspan="3">RDV d'anesthésie</th>
         </tr>
         <tr>
           <th><label for="date_anesth_trigger" title="Date de rendez-vous d'anesthésie">Date :</label></th>
-          <td class="date">
+          <td class="date" colspan="2">
             <div id="editFrm_date_anesth_da">{{$op->date_anesth|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="date_anesth" title="{{$op->_props.date_anesth}}" value="{{$op->date_anesth}}" onchange="modifOp()" />
             <img id="editFrm_date_anesth_trigger" src="./images/calendar.gif" alt="calendar"/>
@@ -480,7 +464,7 @@ function pageMain() {
         </tr>
         <tr>
           <th><label for="_hour_anesth">Heure :</label></th>
-          <td>
+          <td colspan="2">
             <select name="_hour_anesth">
             {{foreach from=$hours item=hour}}
               <option {{if $op->_hour_anesth == $hour}} selected="selected" {{/if}}>{{$hour}}</option>
@@ -494,81 +478,10 @@ function pageMain() {
             </select>
           </td>
         </tr>
-        <tr>
-          <th class="category" colspan="3">Admission</th>
-        </tr>
-        <tr>
-          <th><label for="date_adm" title="Choisir une date d'admission">Date :</label></th>
-          <td class="date">
-            <div id="editFrm_date_adm_da">{{$op->date_adm|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="date_adm" title="{{$op->_props.date_adm}}|notNull" value="{{$op->date_adm}}" onchange="modifOp()"/>
-            <img id="editFrm_date_adm_trigger" src="./images/calendar.gif" alt="calendar"/>
-          </td>
-        </tr>
-        <tr>
-          <th class="mandatory"><label for="_hour_adm" title="Heure d'admission">Heure :</label></th>
-          <td>
-            <select name="_hour_adm">
-            {{foreach from=$hours item=hour}}
-              <option value="{{$hour}}" {{if $op->_hour_adm == $hour}} selected="selected" {{/if}}>{{$hour}}</option>
-            {{/foreach}}
-            </select>
-            :
-            <select name="_min_adm">
-            {{foreach from=$mins item=min}}
-              <option value="{{$min}}" {{if $op->_min_adm == $min}} selected="selected" {{/if}}>{{$min}}</option>
-            {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <th class="mandatory"><label for="duree_hospi" title="Durée d'hospitalisation en jours">Durée d'hospitalisation :</label></th>
-          <td><input type="text" name="duree_hospi" title="{{$op->_props.duree_hospi}}" size="2" value="{{$op->duree_hospi}}" /> jours</td>
-        </tr>
-        <tr>
-          <th><label for="type_adm_comp" title="Type d'admission">{{tr}}type_adm{{/tr}} :</label></th>
-          <td>
-            <input name="type_adm" value="comp" type="radio" {{if !$op->operation_id || $op->type_adm == "comp"}}checked="checked"{{/if}} onchange="modifOp()" />
-            <label for="type_adm_comp">{{tr}}comp{{/tr}}</label><br />
-            <input name="type_adm" value="ambu" type="radio" {{if $op->type_adm == "ambu"}}checked="checked"{{/if}} onchange="modifOp()" />
-            <label for="type_adm_ambu">{{tr}}ambu{{/tr}}</label><br />
-            <input name="type_adm" value="exte" type="radio" {{if $op->type_adm == "exte"}}checked="checked"{{/if}} onchange="modifOp()" />
-            <label for="type_adm_exte">{{tr}}exte{{/tr}}</label><br />
-          </td>
-        </tr>
-        <tr>
-          <th><label for="chambre_o" title="Patient à placer dans une chambre particulière">Chambre particulière :</label></th>
-          <td>
-            <input name="chambre" value="o" type="radio" {{if $op->operation_id && $op->_ref_sejour->chambre_seule == "o"}} checked="checked" {{/if}} onchange="modifOp()" />
-            <label for="chambre_o">Oui</label>
-            <input name="chambre" value="n" type="radio" {{if !$op->operation_id || $op->_ref_sejour->chambre_seule == "n"}} checked="checked" {{/if}} onchange="modifOp()" />
-            <label for="chambre_n">Non</label>
-        </tr>
-        <tr>
-          <th>
-            <label for="venue_SHS" title="Code Administratif SHS">
-              Code de venue SHS :
-            </label>
-          </th>
-          <td>
-            <input type="text" size="8" maxlength="8" name="venue_SHS" title="{{$op->_props.venue_SHS}}" value="{{$op->venue_SHS}}" />
-          </td>
-        </tr>
-        <tr><th class="category" colspan="3">Autre</th></tr>
-        <tr>
-          <th><label for="ATNC_n" title="Intervention présantant un risque ATNC">Risque ATNC:</label></th>
-          <td>
-            <input name="ATNC" value="o" type="radio" {{if $op->ATNC == "o"}} checked="checked" {{/if}} />
-            <label for="ATNC_o">Oui</label>
-            <input name="ATNC" value="n" type="radio" {{if !$op || $op->ATNC == "n"}} checked="checked" {{/if}} />
-            <label for="ATNC_n">Non</label>
-          </td>
-        </tr>
-        <tr>
-          <th><label for="rques" title="Remarques générales sur l'intervention">Remarques :</label></th>
-          <td><textarea name="rques" rows="3">{{$op->rques}}</textarea></td>
-        </tr>
       </table>
+    </td>
+    <td>
+      {{include file="inc_form_sejour.tpl"}}
     </td>
   </tr>
   <tr>
@@ -579,8 +492,8 @@ function pageMain() {
           {{if $op->operation_id}}
             <input type="reset" value="Réinitialiser" />
             <input type="submit" value="Modifier" />
-            <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{{ldelim}}typeName:'l\'intervention du Dr',objName:'{{$op->_ref_chir->_view}}'{{rdelim}})" />
-            <input type="button" value="Annuler" onclick="{{literal}}if (confirm('Veuillez confirmer l\'annulation')) {{var f = this.form; f.annulee.value = 1; f.rank.value = 0; f.submit();}}{{/literal}}" />
+            <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{typeName:'l\'intervention du Dr',objName:'{{$op->_ref_chir->_view}}'})" />
+            <input type="button" value="Annuler" onclick="if (confirm('Veuillez confirmer l\'annulation')) {var f = this.form; f.annulee.value = 1; f.rank.value = 0; f.submit();}" />
           {{else}}
             <input type="submit" value="Créer" />
           {{/if}}

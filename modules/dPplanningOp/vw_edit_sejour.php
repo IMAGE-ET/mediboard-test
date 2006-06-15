@@ -65,6 +65,8 @@ if ($sejour_id) {
   $patient =& $sejour->_ref_patient;
 }
 
+$patient->loadRefsSejours();
+
 // Heures & minutes
 $sejourConfig =& $dPconfig["dPplanningOp"]["sejour"];
 for ($i = $sejourConfig["heure_deb"]; $i <= $sejourConfig["heure_fin"]; $i++) {
@@ -77,7 +79,7 @@ for ($i = 0; $i < 60; $i += $sejourConfig["min_intervalle"]) {
 
 // Création du template
 require_once($AppUI->getSystemClass ("smartydp" ));
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign("sejour", $sejour);
 $smarty->assign("praticien" , $praticien);

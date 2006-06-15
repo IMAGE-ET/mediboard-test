@@ -37,23 +37,23 @@ class COperation extends CMbObject {
 //  var $cr_valide = null;
 
   // DB Fields venue
-  var $date_adm = null; // remplacé par $sejour->entree_prevue
-  var $time_adm = null; // remplacé par $sejour->entree_prevue
-  var $chambre = null; // remplacée par $sejour->chambre_seule
-  var $type_adm = null; // remplacé $sejour->type
+//  var $date_adm = null; // remplacé par $sejour->entree_prevue
+//  var $time_adm = null; // remplacé par $sejour->entree_prevue
+//  var $chambre = null; // remplacée par $sejour->chambre_seule
+//  var $type_adm = null; // remplacé $sejour->type
   
   // DB Fields S@nté.com communication
-  var $venue_SHS = null; // remplacé par $sejour->venue_SHS
+//  var $venue_SHS = null; // remplacé par $sejour->venue_SHS
   var $code_uf = null;
   var $libelle_uf = null;
-  var $saisie = null; // remplacé par $sejour->saisi_SHS
-  var $modifiee = null;  // remplace $sejour->modif_SHS
+//  var $saisie = null; // remplacé par $sejour->saisi_SHS
+//  var $modifiee = null;  // remplace $sejour->modif_SHS
   
   // DB Fields
   var $salle_id = null;
   var $date = null;
   var $codes_ccam = null;
-  var $CIM10_code = null; // remplacé par $sejour->DP
+//  var $CIM10_code = null; // remplacé par $sejour->DP
   var $libelle = null;
   var $cote = null;
   var $temp_operation = null;
@@ -69,7 +69,7 @@ class COperation extends CMbObject {
   var $time_operation = null;
   var $examen = null;
   var $materiel = null;
-  var $convalescence = null; // remplacé par $sejour->convalescence
+//  var $convalescence = null; // remplacé par $sejour->convalescence
   var $commande_mat = null;
   var $info = null;
   var $date_anesth = null;
@@ -82,8 +82,8 @@ class COperation extends CMbObject {
   
   var $depassement = null;
   var $annulee = null;    // completé par $sejour->annule
-  var $pathologie = null; // remplacé par $sejour->pathologie
-  var $septique = null;   // remplacé par $sejour->septique
+//  var $pathologie = null; // remplacé par $sejour->pathologie
+//  var $septique = null;   // remplacé par $sejour->septique
     
   // Form fields
   var $_hour_op = null;
@@ -91,15 +91,15 @@ class COperation extends CMbObject {
   var $_hour_anesth = null;
   var $_min_anesth = null;
   var $_lu_type_anesth = null;
-  var $_hour_adm = null;
-  var $_min_adm = null;
+//  var $_hour_adm = null;
+//  var $_min_adm = null;
   var $_codes_ccam = array();
   
   // Shortcut fields
   var $_datetime = null;
   
   // DB References
-  var $_ref_pat = null;
+//  var $_ref_pat = null;
   var $_ref_chir = null;
   var $_ref_plageop = null;
   var $_ref_sejour = null;
@@ -107,7 +107,7 @@ class COperation extends CMbObject {
   var $_ref_files = array();
   var $_ref_actes_ccam = array(); 
   var $_ref_documents = array();
-  var $_ref_GHM = array();
+//  var $_ref_GHM = array();
   
   // External references
   var $_ext_codes_ccam = null;
@@ -115,12 +115,12 @@ class COperation extends CMbObject {
   function COperation() {
     $this->CMbObject( 'operations', 'operation_id' );
     
-    $this->_props["pat_id"] = "ref";
+//    $this->_props["pat_id"] = "ref";
     $this->_props["chir_id"] = "ref|notNull";
     $this->_props["plageop_id"] = "ref";
 //    $this->_props["CCAM_code"] = "code|ccam";
 //    $this->_props["CCAM_code2"] = "code|ccam";
-    $this->_props["CIM10_code"] = "code|cim10";
+//    $this->_props["CIM10_code"] = "code|cim10";
     $this->_props["libelle"] = "str|confidential";
     $this->_props["cote"] = "enum|droit|gauche|bilatéral|total";
     $this->_props["temp_operation"] = "time";
@@ -129,24 +129,24 @@ class COperation extends CMbObject {
     $this->_props["time_operation"] = "time";
     $this->_props["examen"] = "str|confidential";
     $this->_props["materiel"] = "str|confidential";
-    $this->_props["convalescence"] = "str|confidential";
+//    $this->_props["convalescence"] = "str|confidential";
     $this->_props["commande_mat"] = "enum|o|n";
     $this->_props["info"] = "enum|o|n";
     $this->_props["date_anesth"] = "date";
     $this->_props["time_anesth"] = "time";
     $this->_props["type_anesth"] = "num";
     $this->_props["date_anesth"] = "date";
-    $this->_props["date_adm"] = "date";
-    $this->_props["time_adm"] = "time";
+//    $this->_props["date_adm"] = "date";
+//    $this->_props["time_adm"] = "time";
     $this->_props["duree_hospi"] = "num";
-    $this->_props["type_adm"] = "enum|comp|ambu|exte";
-    $this->_props["venue_SHS"] = "num|length|8|confidential";
-    $this->_props["chambre"] = "enum|o|n";
+//    $this->_props["type_adm"] = "enum|comp|ambu|exte";
+//    $this->_props["venue_SHS"] = "num|length|8|confidential";
+//    $this->_props["chambre"] = "enum|o|n";
     $this->_props["ATNC"] = "enum|o|n";
     $this->_props["rques"] = "str|confidential";
     $this->_props["rank"] = "num";
-    $this->_props["saisie"] = "enum|o|n";
-    $this->_props["modifiee"] = "enum|0|1";
+//    $this->_props["saisie"] = "enum|o|n";
+//    $this->_props["modifiee"] = "enum|0|1";
     $this->_props["depassement"] = "currency|confidential";
     $this->_props["annulee"] = "enum|0|1";
 //    $this->_props["compte_rendu"] = "html|confidential";
@@ -156,7 +156,6 @@ class COperation extends CMbObject {
   function check() {
     // Data checking
     $msg = null;
-    global $pathos;
 
     if(!$this->operation_id) {
       if (!$this->chir_id) {
@@ -240,9 +239,6 @@ class COperation extends CMbObject {
 
     $this->_hour_anesth = substr($this->time_anesth, 0, 2);
     $this->_min_anesth  = substr($this->time_anesth, 3, 2);
-
-    $this->_hour_adm = substr($this->time_adm, 0, 2);
-    $this->_min_adm  = substr($this->time_adm, 3, 2);
   }
   
   function updateDBFields() {
@@ -269,11 +265,6 @@ class COperation extends CMbObject {
         if($value == $this->_lu_type_anesth)
           $this->type_anesth = $key;
       }
-    }
-    if ($this->_hour_adm !== null and $this->_min_adm !== null) {
-      $this->time_adm = 
-        $this->_hour_adm.":".
-        $this->_min_adm.":00";
     }
     if ($this->_hour_op !== null and $this->_min_op !== null) {
       $this->temp_operation = 
@@ -320,11 +311,6 @@ class COperation extends CMbObject {
     $this->_ref_chir->load($this->chir_id);
   }
   
-  function loadRefPat() {
-    $this->_ref_pat = new CPatient;
-    $this->_ref_pat->load($this->pat_id);
-  }
-  
   function loadRefPlageOp() {
     $this->_ref_plageop = new CPlageOp;
     $this->_ref_plageop->load($this->plageop_id);
@@ -369,11 +355,11 @@ class COperation extends CMbObject {
   function loadRefsFwd() {
     $this->loadRefsConsultAnesth();
     $this->loadRefChir();
-    $this->loadRefPat();
     $this->loadRefPlageOp();
     $this->loadRefCCAM();
     $this->loadRefSejour();
-    $this->_view = "Intervention de {$this->_ref_pat->_view} par le Dr. {$this->_ref_chir->_view}";
+    $this->_ref_sejour->loadRefsFwd();
+    $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr. {$this->_ref_chir->_view}";
   }
   
   function loadRefsFiles() {
@@ -404,18 +390,6 @@ class COperation extends CMbObject {
     $this->loadRefsFiles();
     $this->loadRefsActesCCAM();
     $this->loadRefsDocuments();
-  }
-  
-  function loadRefGHM () {
-    $this->_ref_GHM = new CGHM;
-    $where["operation_id"] = "= '$this->operation_id'";
-    $this->_ref_GHM->loadObject($where);
-    if(!$this->_ref_GHM->ghm_id) {
-      $this->_ref_GHM->operation_id = $this->operation_id;
-      $this->_ref_GHM->loadRefsFwd();
-      $this->_ref_GHM->bindInfos();
-      $this->_ref_GHM->getGHM();
-    }
   }
   
   function loadPossibleActes () {
@@ -486,35 +460,36 @@ class COperation extends CMbObject {
   	$this->_ref_plageop->loadRefsFwd();
     $dateFormat = "%d / %m / %Y";
     $timeFormat = "%Hh%M";
-    $template->addProperty("Admission - Date", mbTranformTime(null, $this->_ref_sejour->entree_prevue, $dateFormat));
-    $template->addProperty("Admission - Heure", mbTranformTime(null, $this->_ref_sejour->entree_prevue, $timeFormat));
-    $template->addProperty("Hospitalisation - Durée", $this->duree_hospi);
-    $template->addProperty("Opération - Anesthésiste - nom", $this->_ref_plageop->_ref_anesth->_user_last_name);
+    $template->addProperty("Admission - Date"                 , mbTranformTime(null, $this->_ref_sejour->entree_prevue, $dateFormat));
+    $template->addProperty("Admission - Heure"                , mbTranformTime(null, $this->_ref_sejour->entree_prevue, $timeFormat));
+    $template->addProperty("Hospitalisation - Durée"          , mbDaysRelative($this->_ref_sejour->entree_prevue, $this->_ref_sejour->sortie_prevue));
+    $template->addProperty("Hospitalisation - Date sortie"    , mbTranformTime(null, $this->_ref_sejour->sortie_prevue, $dateFormat));
+    $template->addProperty("Opération - Anesthésiste - nom"   , $this->_ref_plageop->_ref_anesth->_user_last_name);
     $template->addProperty("Opération - Anesthésiste - prénom", $this->_ref_plageop->_ref_anesth->_user_first_name);
-    $template->addProperty("Opération - Anesthésie", $this->_lu_type_anesth);
-    $template->addProperty("Opération - libellé", $this->libelle);
-    $template->addProperty("Opération - CCAM - code"        , @$this->_ext_codes_ccam[0]->code);
-    $template->addProperty("Opération - CCAM - description" , @$this->_ext_codes_ccam[0]->libelleLong);
-    $template->addProperty("Opération - CCAM2 - code"       , @$this->_ext_codes_ccam[1]->code);
-    $template->addProperty("Opération - CCAM2 - description", @$this->_ext_codes_ccam[1]->libelleLong);
-    $template->addProperty("Opération - CCAM3 - code"       , @$this->_ext_codes_ccam[2]->code);
-    $template->addProperty("Opération - CCAM3 - description", @$this->_ext_codes_ccam[2]->libelleLong);
-    $template->addProperty("Opération - CCAM complet", implode(" - ", $this->_codes_ccam));
-    $template->addProperty("Opération - salle", $this->_ref_plageop->_ref_salle->nom);
-    $template->addProperty("Opération - côté", $this->cote);
-    $template->addProperty("Opération - date", mbTranformTime(null, $this->_ref_plageop->date, $dateFormat));
-    $template->addProperty("Opération - heure", mbTranformTime(null, $this->time_operation, $timeFormat));
-    $template->addProperty("Opération - durée", mbTranformTime(null, $this->temp_operation, $timeFormat));
-    $template->addProperty("Opération - entrée bloc",  mbTranformTime(null, $this->entree_bloc, $timeFormat));
-    $template->addProperty("Opération - pose garrot",  mbTranformTime(null, $this->pose_garrot, $timeFormat));
-    $template->addProperty("Opération - début op",  mbTranformTime(null, $this->debut_op, $timeFormat));
-    $template->addProperty("Opération - fin op",  mbTranformTime(null, $this->fin_op, $timeFormat));
-    $template->addProperty("Opération - retrait garrot",  mbTranformTime(null, $this->retrait_garrot, $timeFormat));
-    $template->addProperty("Opération - sortie bloc",  mbTranformTime(null, $this->sortie_bloc, $timeFormat));
-    $template->addProperty("Opération - depassement", $this->depassement);
-    $template->addProperty("Opération - exams pre-op", nl2br($this->examen));
-    $template->addProperty("Opération - matériel", nl2br($this->materiel));
-    $template->addProperty("Opération - convalescence", nl2br($this->convalescence));
+    $template->addProperty("Opération - Anesthésie"           , $this->_lu_type_anesth);
+    $template->addProperty("Opération - libellé"              , $this->libelle);
+    $template->addProperty("Opération - CCAM - code"          , @$this->_ext_codes_ccam[0]->code);
+    $template->addProperty("Opération - CCAM - description"   , @$this->_ext_codes_ccam[0]->libelleLong);
+    $template->addProperty("Opération - CCAM2 - code"         , @$this->_ext_codes_ccam[1]->code);
+    $template->addProperty("Opération - CCAM2 - description"  , @$this->_ext_codes_ccam[1]->libelleLong);
+    $template->addProperty("Opération - CCAM3 - code"         , @$this->_ext_codes_ccam[2]->code);
+    $template->addProperty("Opération - CCAM3 - description"  , @$this->_ext_codes_ccam[2]->libelleLong);
+    $template->addProperty("Opération - CCAM complet"         , implode(" - ", $this->_codes_ccam));
+    $template->addProperty("Opération - salle"                , $this->_ref_plageop->_ref_salle->nom);
+    $template->addProperty("Opération - côté"                 , $this->cote);
+    $template->addProperty("Opération - date"                 , mbTranformTime(null, $this->_ref_plageop->date, $dateFormat));
+    $template->addProperty("Opération - heure"                , mbTranformTime(null, $this->time_operation, $timeFormat));
+    $template->addProperty("Opération - durée"                , mbTranformTime(null, $this->temp_operation, $timeFormat));
+    $template->addProperty("Opération - entrée bloc"          ,  mbTranformTime(null, $this->entree_bloc, $timeFormat));
+    $template->addProperty("Opération - pose garrot"          ,  mbTranformTime(null, $this->pose_garrot, $timeFormat));
+    $template->addProperty("Opération - début op"             ,  mbTranformTime(null, $this->debut_op, $timeFormat));
+    $template->addProperty("Opération - fin op"               ,  mbTranformTime(null, $this->fin_op, $timeFormat));
+    $template->addProperty("Opération - retrait garrot"       ,  mbTranformTime(null, $this->retrait_garrot, $timeFormat));
+    $template->addProperty("Opération - sortie bloc"          ,  mbTranformTime(null, $this->sortie_bloc, $timeFormat));
+    $template->addProperty("Opération - depassement"          , $this->depassement);
+    $template->addProperty("Opération - exams pre-op"         , nl2br($this->examen));
+    $template->addProperty("Opération - matériel"             , nl2br($this->materiel));
+    $template->addProperty("Opération - convalescence"        , nl2br($this->_ref_sejour->convalescence));
   }
 }
 

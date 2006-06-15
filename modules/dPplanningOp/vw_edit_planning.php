@@ -7,9 +7,10 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $tab, $dPconfig;
 
 require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
+require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour') );
 require_once( $AppUI->getModuleClass('mediusers') );
 require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
 require_once( $AppUI->getModuleClass('dPcompteRendu', 'pack') );
@@ -18,46 +19,64 @@ if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$operation_id = mbGetValueFromGetOrSession("operation_id", 0);
+$operation_id = mbGetValueFromGetOrSession("operation_id", null);
+$sejour_id = mbGetValueFromGetOrSession("sejour_id", null);
 $chir_id = mbGetValueFromGetOrSession("chir_id", null);
-$pat_id = dPgetParam($_GET, "pat_id");
-$trans = dPgetParam($_GET, "trans", 0);
-$chir = new CMediusers;
-$pat = new CPatient;
+$patient_id = dPgetParam($_GET, "pat_id");
 
-// L'utilisateur est-il un praticiens
-$mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
-if ($mediuser->isPraticien()) {
-  $chir = $mediuser;
+// L'utilisateur est-il un praticien
+$chir = new CMediusers;
+$chir->load($AppUI->user_id);
+if ($chir->isPraticien() and !$chir_id) {
+  $chir_id = $chir->user_id;
 }
 
-// Vérification des droits sur les praticiens
-$listChir = $mediuser->loadPraticiens(PERM_EDIT);
-// A t'on fourni l'id du patient et du chirurgien?
+// Chargement du praticien
+$chir = new CMediusers;
 if ($chir_id) {
   $chir->load($chir_id);
 }
-if ($pat_id) {
-  $pat->load($pat_id);
+
+// Chargement du patient
+$patient = new CPatient;
+if ($patient_id && !$operation_id && !$sejour_id) {
+  $patient->load($patient_id);
+  $patient->loadRefsSejours();
+}
+
+// Vérification des droits sur les praticiens
+$listPraticiens = $chir->loadPraticiens(PERM_EDIT);
+
+// On récupère le séjour
+$sejour = new CSejour;
+if($sejour_id && !$operation_id) {
+  $sejour->load($sejour_id);
+  $sejour->loadRefsFwd();
+  $chir =& $sejour->_ref_praticien;
+  $patient =& $sejour->_ref_patient;
+  $patient->loadRefsSejours();
 }
 
 // On récupère l'opération
 $op = new COperation;
 if ($operation_id) {
   $op->load($operation_id);
+
   // On vérifie que l'utilisateur a les droits sur l'operation
-  $right = false;
-  foreach($listChir as $key => $value) {
-    if($value->user_id == $op->chir_id)
-      $right = true;
+  if (!array_key_exists($op->chir_id, $listPraticiens)) {
+    $AppUI->setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
+    $AppUI->redirect("m=$m&tab=$tab&operation_id=0");
   }
-  if(!$right) {
-    $AppUI->setMsg("Vous n'avez pas accès à cette intervention", UI_MSG_ALERT);
-    $AppUI->redirect( "m=dPplanningOp&tab=vw_edit_planning&operation_id=0");
-  }
+
   $op->loadRefs();
+  $sejour =& $op->_ref_sejour;
+  $sejour->loadRefsFwd();
+  $chir =& $sejour->_ref_praticien;
+  $patient =& $sejour->_ref_patient;
+  $patient->loadRefsSejours();
 }
+
+$listSejours =& $patient->_ref_sejours;
 
 // Récupération des modèles
 $whereCommon = array();
@@ -96,30 +115,35 @@ $start = 7;
 $stop = 20;
 $step = 15;
 
-for ($i = $start; $i < $stop; $i++) {
+$sejourConfig =& $dPconfig["dPplanningOp"]["sejour"];
+for ($i = $sejourConfig["heure_deb"]; $i <= $sejourConfig["heure_fin"]; $i++) {
     $hours[] = $i;
 }
 
-for ($i = 0; $i < 60; $i += $step) {
+for ($i = 0; $i < 60; $i += $sejourConfig["min_intervalle"]) {
     $mins[] = $i;
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once( $AppUI->getSystemClass ("smartydp" ) );
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('op', $op);
-$smarty->assign('chir' , $op->chir_id    ? $op->_ref_chir    : $chir);
-$smarty->assign('pat'  , $op->pat_id     ? $op->_ref_pat     : $pat );
-$smarty->assign('plage', $op->plageop_id ? $op->_ref_plageop : new CPlageop );
+$smarty->assign("op"         , $op);
+$smarty->assign("sejour"     , $sejour);
+$smarty->assign("chir"       , $chir);
+$smarty->assign("praticien"  , $chir);
+$smarty->assign("patient"    , $patient );
+$smarty->assign("listSejours", $listSejours );
+$smarty->assign("plage"      , $op->plageop_id ? $op->_ref_plageop : new CPlageop );
 
-$smarty->assign('listModelePrat', $listModelePrat);
-$smarty->assign('listModeleFunc', $listModeleFunc);
-$smarty->assign('listPack'      , $listPack      );
+$smarty->assign("listPraticiens", $listPraticiens);
+$smarty->assign("listModelePrat", $listModelePrat);
+$smarty->assign("listModeleFunc", $listModeleFunc);
+$smarty->assign("listPack"      , $listPack      );
 
-$smarty->assign('hours', $hours);
-$smarty->assign('mins', $mins);
+$smarty->assign("hours", $hours);
+$smarty->assign("mins" , $mins);
 
-$smarty->display('vw_edit_planning.tpl');
+$smarty->display("vw_edit_planning.tpl");
 
 ?>
