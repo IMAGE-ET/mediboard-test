@@ -105,9 +105,6 @@ class COperation extends CMbObject {
   var $_ref_sejour = null;
   var $_ref_consult_anesth = null;
   var $_ref_files = array();
-  var $_ref_affectations = array();
-  var $_ref_first_affectation = null;
-  var $_ref_last_affectation = null; 
   var $_ref_actes_ccam = array(); 
   var $_ref_documents = array();
   var $_ref_GHM = array();
@@ -388,21 +385,6 @@ class COperation extends CMbObject {
     }
   }
   
-  function loadRefsAffectations() {
-    $where = array("operation_id" => "= '$this->operation_id'");
-    $order = "sortie DESC";
-    $this->_ref_affectations = new CAffectation();
-    $this->_ref_affectations = $this->_ref_affectations->loadList($where, $order);
-
-    if(count($this->_ref_affectations) > 0) {
-      $this->_ref_first_affectation =& end($this->_ref_affectations);
-      $this->_ref_last_affectation =& reset($this->_ref_affectations);
-    } else {
-      $this->_ref_first_affectation =& new CAffectation;
-      $this->_ref_last_affectation =& new CAffectation;
-    }
-  }
-  
   function loadRefsActesCCAM() {
     $where = array("operation_id" => "= '$this->operation_id'");
     $this->_ref_actes_ccam = new CActeCCAM;
@@ -420,7 +402,6 @@ class COperation extends CMbObject {
 
   function loadRefsBack() {
     $this->loadRefsFiles();
-    $this->loadRefsAffectations();
     $this->loadRefsActesCCAM();
     $this->loadRefsDocuments();
   }

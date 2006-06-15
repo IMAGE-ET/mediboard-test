@@ -92,8 +92,9 @@ foreach($plagesop as $keyPlage => $valuePlage) {
       $operation =& $listOp[$keyOp];
       $operation->loadRefsFwd();
       $operation->_ref_sejour->loadRefsFwd();
+      $operation->_ref_sejour->loadRefsAffectations();
       $operation->loadRefsAffectations();
-      $affectation =& $operation->_ref_first_affectation;
+      $affectation =& $operation->_ref_sejour->_ref_first_affectation;
       if ($affectation->affectation_id) {
         $affectation->loadRefsFwd();
         $affectation->_ref_lit->loadCompleteView();

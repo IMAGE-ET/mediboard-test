@@ -89,7 +89,7 @@ function printAdmission(id) {
 		    </a>
 		  </td>
 		  <td class="text">
-        {assign var="affectation" value=$curr_op->_ref_first_affectation}
+        {assign var="affectation" value=$curr_op->_ref_sejour->_ref_first_affectation}
 		    {if $affectation->affectation_id}
 		    {$affectation->_ref_lit->_view}
 		    {/if}

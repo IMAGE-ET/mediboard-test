@@ -170,7 +170,8 @@ function changeAffect($id, $cmd = null) {
   $operation = new COperation;
   $operation->load($id);
   $operation->loadRefs();
-  $affectation =& $operation->_ref_last_affectation;
+  $operation->_ref_sejour->loadRefsAffectations();
+  $affectation =& $operation->_ref_sejour->_ref_last_affectation;
   if ($affectation->affectation_id && ($operation->_ref_sejour->type == "ambu")) {
     if($cmd == "rm") {
       $affectation->sortie = mbDate("", $affectation->sortie)." 18:00:00";
