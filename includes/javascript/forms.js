@@ -139,34 +139,34 @@ function prepareForms() {
 
 function checkMoreThan(oElement, aSpecFragments) {
   if (sFragment1 = aSpecFragments[1]) {
+
     switch (sFragment1) {
       case "moreThan":
-        var sTargetElement = aSpecFragments[2];
-        var oTargetElement = oElements.form.elements[sTargetElement];
+      var sTargetElement = aSpecFragments[2];
+      var oTargetElement = oElement.form.elements[sTargetElement];
 
-		if (!oTargetElement) {
-          return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
-		}
-		        
-		if (oElement.value <= oTargetElement.value) {
-		  return 
-		}
+      if (!oTargetElement) {
+        return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
+      }
+      
+      if (oElement.value <= oTargetElement.value) {
+        return printf("'%s' n'est pas strictement supérieur à '%s'", oElement.value, oTargetElement.value);
+      }
 
-        break;
+      break;
            
       case "moreEquals":
-        var sTargetElement = aSpecFragments[2];
-        var oTargetElement = this.form.getElement(sTargetElement);
+      var sTargetElement = aSpecFragments[2];
+      var oTargetElement = oElement.form.elements[sTargetElement];
 
-		if (!oTargetElement) {
-          return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
-		}
-		        
-		if (oElement.value < oTargetElement.value) {
-		  return 
-		}
+      if (!oTargetElement) {
+        return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
+      }
+      if (oElement.value < oTargetElement.value) {
+        return printf("'%s' n'est pas supérieur ou égal à '%s'", oElement.value, oTargetElement.value);
+      }
 
-        break;
+      break;
     }
   };
 
@@ -331,12 +331,11 @@ function checkElement(oElement, aSpecFragments) {
       if (!aSpecFragments.contains(oElement.value)) {
         return "N'est pas une valeur possible";
       }
-
+      
       break;
 
     case "date":
       if(!oElement.value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)) {
-      	debugObject(oElement);
         return "N'as pas un format correct";
       }
       
@@ -422,6 +421,10 @@ function checkElement(oElement, aSpecFragments) {
       break;
     default:
       return "Spécification invalide";
+  }
+  
+  if (sCheckMessage = checkMoreThan(oElement, aSpecFragments)) {
+    return sCheckMessage;
   }
   
   return null;

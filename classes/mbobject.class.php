@@ -48,6 +48,7 @@ class CMbObject extends CDpObject {
    *  @return null if the object is ok a message if not
    */
   function check() {
+    global $dPconfig;
     $msg = null;
     $properties = get_object_vars($this);
     $class = get_class($this);
@@ -59,7 +60,8 @@ class CMbObject extends CDpObject {
         $propValue =& $this->$propName;
         if ($propValue !== null) {
           $msgProp = $this->checkProperty($propName);
-          $msg .= $msgProp ? "<br/> => $propName (val:'$propValue', spec:'$propSpec'): $msgProp" : null;
+          $debugInfo = $dPconfig["debug"] ? "(val:'$propValue', spec:'$propSpec')" : "";
+          $msg .= $msgProp ? "<br/> => $propName : $msgProp" : null;
         }
       }
     }
@@ -86,6 +88,43 @@ class CMbObject extends CDpObject {
     }
     
     return $fragmentPosition !== false;
+  }
+  
+  function checkMoreThan($propValue, $specFragments) {
+    if ($fragment = @$specFragments[1]) {
+  
+      switch ($fragment) {
+        case "moreThan":
+        $targetPropName = $specFragments[2];
+        $targetPropValue = $this->$targetPropName;
+    
+        if (!isset($targetPropValue)) {
+          return printf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
+        }
+
+        if ($propValue <= $targetPropValue) {
+          return "'$propValue' n'est pas strictement supérieur à '$targetPropValue'";
+        }
+  
+        break;
+             
+        case "moreEquals":
+        $targetPropName = $specFragments[2];
+        $targetPropValue = $this->$targetPropName;
+    
+        if (!isset($targetPropValue)) {
+          return printf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
+        }
+
+        if ($propValue < $targetPropValue) {
+          return "'$propValue' n'est pas supérieur ou égal à '$targetPropValue'";
+        }
+  
+        break;
+      }
+    };
+  
+    return null;
   }
   
   function checkProperty($propName) {
@@ -353,6 +392,10 @@ class CMbObject extends CDpObject {
         return "Spécification invalide";
 		}
 
+    if ($checkMessage = $this->checkMoreThan($propValue, $specFragments)) {
+      return $checkMessage;
+    }
+    
     return null;
   }
   

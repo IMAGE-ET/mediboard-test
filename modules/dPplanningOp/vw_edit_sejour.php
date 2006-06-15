@@ -49,7 +49,7 @@ if ($sejour_id) {
   $sejour->load($sejour_id);
 
   // On vérifie que l'utilisateur a les droits sur l'operation
-  if (array_key_exists($sejour->praticien_id, $listPraticiens)) {
+  if (!array_key_exists($sejour->praticien_id, $listPraticiens)) {
     $AppUI->setMsg("Vous n'avez pas accès à ce séjour", UI_MSG_WARNING);
     $AppUI->redirect("m=$m&tab=$tab&sejour_id=0");
   }

@@ -128,7 +128,7 @@ function pageMain() {
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="sejour_id" value="{$sejour->sejour_id}" />
 <input type="hidden" name="saisi_SHS" value="{$sejour->saisi_SHS}" />
-<input type="hidden" name="modif_SHS" value="{$sejour->saisi_SHS}" />
+<input type="hidden" name="modif_SHS" value="{$sejour->modif_SHS}" />
 <input type="hidden" name="annulee" value="0" />
 
 <table class="main">
@@ -230,11 +230,11 @@ function pageMain() {
 
         <tr>
           <th>
-          	<label for="_date_sortie_prevue" title="Choisir une date d'entrée">Entrée prévue :</label>
+          	<label for="_date_sortie_prevue" title="Choisir une date d'entrée">Sortie prévue :</label>
           </th>
           <td class="date">
             <div id="editFrm__date_sortie_prevue_da">{$sejour->_date_sortie_prevue|date_format:"%d/%m/%Y"}</div>
-            <input type="hidden" name="_date_sortie_prevue" title="date|notNull" value="{$sejour->_date_sortie_prevue}" onchange="modifSejour()"/>
+            <input type="hidden" name="_date_sortie_prevue" title="date|moreEquals|_date_entree_prevue|notNull" value="{$sejour->_date_sortie_prevue}" onchange="modifSejour()"/>
             <img id="editFrm__date_sortie_prevue_trigger" src="./images/calendar.gif" alt="calendar"/>
           </td>
           <td>

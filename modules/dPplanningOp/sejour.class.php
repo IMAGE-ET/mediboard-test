@@ -222,8 +222,15 @@ class CSejour extends CMbObject {
   }
   
   function updateDBFields() {
-    $date->entree_prevue = "$this->_date_entree_prevue $this->_hour_entree_prevue:$this->_min_entree_prevue";
-    $date->sortie_prevue = "$this->_date_sortie_prevue $this->_hour_sortie_prevue:$this->_min_sortie_prevue";
+    if ($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
+      $time_entree_prevue = mbTime(null, "$this->_hour_entree_prevue:$this->_min_entree_prevue");
+      $this->entree_prevue = mbAddDateTime($time_entree_prevue, $this->_date_entree_prevue);
+    }
+    
+    if ($this->_hour_sortie_prevue !== null and $this->_min_sortie_prevue !== null) {
+      $time_sortie_prevue = mbTime(null, "$this->_hour_sortie_prevue:$this->_min_sortie_prevue");
+      $this->sortie_prevue = mbAddDateTime($time_sortie_prevue, $this->_date_sortie_prevue);
+    }
   }
   
   function loadRefPatient() {

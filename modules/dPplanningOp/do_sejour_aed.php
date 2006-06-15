@@ -13,10 +13,9 @@ require_once($AppUI->getSystemClass("doobjectaddedit"));
 require_once( $AppUI->getModuleClass("dPplanningOp", "sejour"));
 require_once( $AppUI->getModuleClass("dPplanningOp", "planning"));
 
-if ($chir_id = mbGetValueFromPost("chir_id")) {
-  mbSetValueToSession("chir_id", $chir_id);
+if ($praticien_id = mbGetValueFromPost("praticien_id")) {
+  mbSetValueToSession("praticien_id", $praticien_id);
 }
-
 
 $do = new CDoObjectAddEdit("CSejour", "sejour_id");
 $do->createMsg = "Séjour créé";
