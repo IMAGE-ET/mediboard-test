@@ -60,8 +60,9 @@ class CMbObject extends CDpObject {
         $propValue =& $this->$propName;
         if ($propValue !== null) {
           $msgProp = $this->checkProperty($propName);
+          
           $debugInfo = $dPconfig["debug"] ? "(val:'$propValue', spec:'$propSpec')" : "";
-          $msg .= $msgProp ? "<br/> => $propName : $msgProp" : null;
+          $msg .= $msgProp ? "<br/> => $propName : $msgProp $debugInfo" : null;
         }
       }
     }

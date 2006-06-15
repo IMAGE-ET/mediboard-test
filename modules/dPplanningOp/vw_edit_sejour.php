@@ -55,6 +55,11 @@ if ($sejour_id) {
   }
 
   $sejour->loadRefs();
+  
+  foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
+    $operation =& $sejour->_ref_operations[$keyOp];
+    $operation->loadRefsFwd();
+  }
 
   $praticien =& $sejour->_ref_praticien;
   $patient =& $sejour->_ref_patient;

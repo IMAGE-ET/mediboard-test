@@ -74,10 +74,23 @@ function modifSejour() {
 }
 
 function confirmAnnulation() {
-  if (confirm("Veuillez confirmer l'annulation")) {
-	 var oForm = document.editFrm;
-	 oForm.annule.value = 1; 
-	 oForm.submit();
+  var oForm = document.editFrm;
+  var oElement = oForm.annule;
+  
+  if (oElement.value == "0") {
+    if (confirm("Voulez-vous vraiment annuler le séjour ?")) {
+      oElement.value = "1";
+      oForm.submit();
+      return;
+    }
+  }
+      
+  if (oElement.value == "1") {
+    if (confirm("Voulez-vous vraiment rétablir le séjour ?")) {
+      oElement.value = "0";
+      oForm.submit();
+      return;
+    }
   }
 }
 
@@ -129,7 +142,7 @@ function pageMain() {
 <input type="hidden" name="sejour_id" value="{$sejour->sejour_id}" />
 <input type="hidden" name="saisi_SHS" value="{$sejour->saisi_SHS}" />
 <input type="hidden" name="modif_SHS" value="{$sejour->modif_SHS}" />
-<input type="hidden" name="annulee" value="0" />
+<input type="hidden" name="annule" value="{$sejour->annule}" />
 
 <table class="main">
   {if $sejour->sejour_id}
@@ -171,6 +184,14 @@ function pageMain() {
           </th>
         </tr>
 
+        {if $sejour->annule == 1}
+        <tr>
+          <th class="category" colspan="3" style="background: #f00;">
+          SEJOUR ANNULE
+          </th>
+        </tr>
+		{/if}
+		
         <tr>
           <th>
             <label for="praticien_id" title="Praticien responsable. Obligatoire">Praticien :</label>
@@ -257,7 +278,9 @@ function pageMain() {
           {if $sejour->sejour_id}
             <input type="submit" value="Modifier" />
             <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'le {$sejour->_view|escape:"javascript"}'{rdelim});" />
-            <input type="button" value="Annuler" onclick="confirmAnnulation();" />
+		    {if $sejour->annule == "0"}{assign var="annule_text" value="Annuler"}{/if}
+		    {if $sejour->annule == "1"}{assign var="annule_text" value="Rétablir"}{/if}
+            <input type="button" value="{$annule_text}" onclick="confirmAnnulation();" />
           {else}
             <input type="submit" value="Créer" />
           {/if}
@@ -267,6 +290,9 @@ function pageMain() {
 
       </table>
     
+    </td>
+    <td>
+      {include file="inc_infos_operation.tpl"}
     </td>
   </tr>
 

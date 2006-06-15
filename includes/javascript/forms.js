@@ -28,7 +28,7 @@ function getLabelFor(oElement) {
 }
 
 function getCheckedValue(radioObj) {
-  if(!radioObj)
+  if (!radioObj)
     return "";
   var radioLength = radioObj.length;
   if(radioLength == undefined)
@@ -43,6 +43,19 @@ function getCheckedValue(radioObj) {
   }
   return "";
 }
+
+function setCheckedValue(oRadio, sValue) {
+  if (!oRadio) {
+    return;
+  }
+  
+  for (var i = 0; i < oRadio.length; i++) {
+    if (oRadio[i].value = sValue) {
+      oRadio[i].checked = true;
+    }
+  }
+}
+
 
 function setRadioValue(oElement, sValue) {
   for(var i = 0;i < oElement.length; i++) {
