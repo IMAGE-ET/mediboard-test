@@ -8,7 +8,7 @@
 */
 
 require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
+require_once($AppUI->getModuleClass('dPplanningOp', "protocole"));
 
 global $AppUI, $canRead, $canEdit, $m;
 
@@ -50,7 +50,7 @@ ksort($listCodes);
 array_unique($listCodes);
 
 // Protocole selectionné
-$protSel = new COperation;
+$protSel = new CProtocole;
 if ($protocole_id = mbGetValueFromGetOrSession("protocole_id")) {
   $protSel->load($protocole_id);
   $protSel->loadRefs();

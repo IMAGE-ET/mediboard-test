@@ -2,8 +2,8 @@
 
 {literal}
 <script type="text/javascript">
-function setClose(user_id, user_last_name, user_first_name, codes_ccam, libelle, _hour_op, _min_op, examen, materiel, convalescence, depassement, type_adm, duree_hospi, rques) {
-  window.opener.setProtocole(user_id, user_last_name, user_first_name, codes_ccam, libelle, _hour_op, _min_op, examen, materiel, convalescence, depassement, type_adm, duree_hospi, rques);
+function setClose(user_id, user_last_name, user_first_name, codes_ccam, libelle, _hour_op, _min_op, examen, materiel, convalescence, depassement, type_adm, duree_hospi, rques_sejour) {
+  window.opener.setProtocole(user_id, user_last_name, user_first_name, codes_ccam, libelle, _hour_op, _min_op, examen, materiel, convalescence, depassement, type_adm, duree_hospi, rques_sejour);
   window.close();
 }
 </script>
@@ -68,7 +68,7 @@ function setClose(user_id, user_last_name, user_first_name, codes_ccam, libelle,
         <tr>    
           <td class="text">
             {if $dialog}
-            <a href="javascript:setClose('{$curr_protocole->_ref_chir->user_id}','{$curr_protocole->_ref_chir->_user_last_name|escape:javascript}','{$curr_protocole->_ref_chir->_user_first_name|escape:javascript}','{$curr_protocole->codes_ccam}','{$curr_protocole->libelle}','{$curr_protocole->_hour_op}','{$curr_protocole->_min_op}','{$curr_protocole->examen|escape:javascript}','{$curr_protocole->materiel|escape:javascript}','{$curr_protocole->convalescence|escape:javascript}','{$curr_protocole->depassement}','{$curr_protocole->type_adm}','{$curr_protocole->duree_hospi}','{$curr_protocole->rques|escape:javascript}')">            {else}
+            <a href="javascript:setClose('{$curr_protocole->_ref_chir->user_id}','{$curr_protocole->_ref_chir->_user_last_name|escape:javascript}','{$curr_protocole->_ref_chir->_user_first_name|escape:javascript}','{$curr_protocole->codes_ccam}','{$curr_protocole->libelle}','{$curr_protocole->_hour_op}','{$curr_protocole->_min_op}','{$curr_protocole->examen|escape:javascript}','{$curr_protocole->materiel|escape:javascript}','{$curr_protocole->convalescence|escape:javascript}','{$curr_protocole->depassement}','{$curr_protocole->type_adm}','{$curr_protocole->duree_hospi}','{$curr_protocole->rques_sejour|escape:javascript}')">            {else}
             <a href="?m={$m}&amp;{if $dialog}a=vw_protocoles&amp;dialog=1{else}tab={$tab}{/if}&amp;protocole_id={$curr_protocole->operation_id}">
             {/if}
               <strong>
@@ -170,9 +170,9 @@ function setClose(user_id, user_last_name, user_first_name, codes_ccam, libelle,
           <td>{$protSel->duree_hospi} jours</td>
         </tr>
   
-        {if $protSel->rques}
+        {if $protSel->rques_sejour}
         <tr>
-          <th class="text" colspan="2">Remarques</th>
+          <th class="text" colspan="2">Remarques du séjour</th>
         </tr>
                  
         <tr>
