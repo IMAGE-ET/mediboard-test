@@ -67,7 +67,7 @@ if ($sejour_id) {
 
 // Heures & minutes
 $sejourConfig =& $dPconfig["dPplanningOp"]["sejour"];
-for ($i = $sejourConfig["heure_deb"]; $i < $sejourConfig["heure_fin"]; $i++) {
+for ($i = $sejourConfig["heure_deb"]; $i <= $sejourConfig["heure_fin"]; $i++) {
     $hours[] = $i;
 }
 
@@ -87,6 +87,6 @@ $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("hours", $hours);
 $smarty->assign("mins", $mins);
 
-$smarty->display("vw_addedit_sejour.tpl");
+$smarty->display("vw_edit_sejour.tpl");
 
 ?>

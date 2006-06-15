@@ -121,7 +121,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     
     $placement = $this->addElement($venue, "Placement");
     $modePlacement = $this->addElement($placement, "modePlacement");
-    $this->addAttribute($modePlacement, "modaliteHospitalisation", $mbSejour->modalite_hospitalisation);
+    $this->addAttribute($modePlacement, "modaliteHospitalisation", $mbSejour->modalite);
     $datePlacement = $this->addElement($placement, "datePlacement");
     $this->addDateHeure($datePlacement, $mbEntree);
     

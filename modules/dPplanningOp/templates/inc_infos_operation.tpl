@@ -16,7 +16,7 @@
   {foreach from=$sejour->_ref_operations item=curr_operation}
   <tr>
     <td>{$curr_operation->_ref_chir->_view}</td>
-    <td>{$curr_operation->_ref_plageop->date}</td>
+    <td>{$curr_operation->_ref_plageop->date|date_format:"%a %d %b %Y"}</td>
     <td class="text">
       {foreach from=$curr_operation->_ext_codes_ccam item=curr_ext_code}
       <strong>{$curr_ext_code->code}</strong> :
