@@ -116,7 +116,7 @@ function pageMain() {
 {{include file="js_form_operation.tpl"}}
 {{include file="js_form_sejour.tpl"}}
 
-<table class="main" <!-- style="margin: 4px; border-spacing: 0px;" --> onmousemove="checkSejourToReload()">
+<table class="main" style="margin: 4px; border-spacing: 0px;" onmousemove="checkSejourToReload()">
   {{if $op->operation_id}}
   <tr>
     <td colspan="2">
