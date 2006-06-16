@@ -219,8 +219,6 @@ function regFieldCalendar(sFormName, sFieldName, bTime) {
   
   var sInputId = sFormName + "_" + sFieldName;
   
-  debug(sInputId, "Registering calendar");
-  
   if (!document.getElementById(sInputId)) {
     return;
   }
