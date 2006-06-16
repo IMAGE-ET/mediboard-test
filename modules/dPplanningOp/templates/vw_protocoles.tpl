@@ -212,9 +212,9 @@ function setClose(protocole_id) {
         <tr>
           <td class="button" colspan="2">
             <form name="modif" action="./index.php" method="get">
-            <input type="hidden" name="m" value="{$m}" />
+            <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="tab" value="vw_edit_protocole" />
-            <input type="hidden" name="protocole_id" value="{$protSel->protocole_id}" />
+            <input type="hidden" name="protocole_id" value="{{$protSel->protocole_id}}" />
             <input type="submit" value="Modifier" />
             </form>
           </td>
