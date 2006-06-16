@@ -2,36 +2,6 @@
 
 <script type="text/javascript">
 
-function checkFormSejour() {
-  var oForm = document.editSejour;
-  
-  if (!checkForm(oForm)) {
-    return false;
-  }
-
-  if (!checkDureeSejour()) {
-    return false;
-  }
-  
-  return true;
-}
-
-function checkDureeSejour() {
-  var form = document.editSejour;
-
-  field1 = form.type_adm;
-  field2 = form.duree_hospi;
-  if (field1 && field2) {
-    if (field1[0].checked && (field2.value == 0 || field2.value == '')) {
-      field2.value = prompt("Veuillez saisir une durée prévue d'hospitalisation d'au moins 1 jour", "1");
-      field2.focus();
-      return false;
-    }
-  }
-
-  return true;
-}
-
 function confirmAnnulation() {
   var oForm = document.editSejour;
   var oElement = oForm.annule;
@@ -65,23 +35,7 @@ function setPat(patient_id, _patient_view) {
   if (patient_id) {
     oForm.patient_id.value = patient_id;
     oForm._patient_view.value = _patient_view;
-  }
-}
-
-function popCode(type) {
-  var url = new Url();
-  url.setModuleAction("dPplanningOp", "code_selector");
-  url.addElement(document.editSejour.chir_id, "chir");
-  url.addParam("type", type)
-  url.popup(600, 500, type);
-}
-
-function setCode(sCode, sCodeType) {
-  if (sCode) {
-    var oForm = document.editSejour;
-    var oElement = null;
-    if (type == "cim10") oElement = oForm.DP;
-    oElement.value = sCode;
+    reloadSelectSejours();
   }
 }
 
@@ -93,18 +47,26 @@ function modifSejour() {
   }
 }
 
+function reloadSelectSejours() {
+  var sejoursUrl = new Url;
+  var iPatient_id = document.editSejour.patient_id.value;
+  sejoursUrl.setModuleAction("dPplanningOp", "httpreq_get_sejours");
+  sejoursUrl.addParam("patient_id", iPatient_id);
+  sejoursUrl.addParam("sejour_id", "{{$sejour->sejour_id}}");
+  sejoursUrl.requestUpdate('selectSejours');
+}
+
 function incFormSejourMain() {
   regFieldCalendar("editSejour", "_date_entree_prevue");
   regFieldCalendar("editSejour", "_date_sortie_prevue");
+  reloadSelectSejours();
 }
 
 </script>
-
-<form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkFormSejour()">
+<form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="dosql" value="do_sejour_aed" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="sejour_id" value="{{$sejour->sejour_id}}" />
 <input type="hidden" name="saisi_SHS" value="{{$sejour->saisi_SHS}}" />
 <input type="hidden" name="modif_SHS" value="{{$sejour->modif_SHS}}" />
 <input type="hidden" name="annule" value="{{$sejour->annule}}" />
@@ -125,6 +87,13 @@ function incFormSejourMain() {
 </tr>
 {{/if}}
 
+<tr>
+  <th>
+    Sejours existants :
+  </th>
+  <td colspan="2" id="selectSejours">
+  </td>
+</tr>
 <tr>
   <th>
     <label for="praticien_id" title="Praticien responsable. Obligatoire">Praticien :</label>

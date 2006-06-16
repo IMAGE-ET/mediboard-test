@@ -10,7 +10,12 @@
 global $AppUI, $canRead, $canEdit, $m;
 require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
 
+$sejour_id  = mbGetValueFromGet("sejour_id", 0);
 $patient_id = mbGetValueFromGet("patient_id", 0);
+
+echo "patient : $patient_id, sejour : $sejour_id";
+exit(0);
+
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefsSejours();
@@ -23,7 +28,10 @@ if ($canRead) {
   require_once( $AppUI->getSystemClass ('smartydp' ) );
   $smarty = new CSmartyDP(1);
 
+  $smarty->assign('sejour_id', $sejour_id);
   $smarty->assign('sejours', $patient->_ref_sejours);
 
   $smarty->display('inc_select_sejours.tpl');
 }
+
+?>
