@@ -31,14 +31,14 @@
         </tr>
         <tr>
           <td colspan="4" class="button">
-            <img src='?m=dPstats&amp;a=graph_users&amp;suppressHeaders=1&amp;debut={$debutlog}&amp;fin={$finlog}&amp;user_id={$user_id}' />
+            <img alt="Activité utilisateur" src='?m=dPstats&amp;a=graph_users&amp;suppressHeaders=1&amp;debut={$debutlog}&amp;fin={$finlog}&amp;user_id={$user_id}' />
           </td>
         </tr>
       </table>
       </form>
     </td>
     <td>
-      <form name="test" action="index.php" method="GET">
+      <form name="test" action="index.php" method="get">
       <input type="hidden" name="m" value="dPstats" />
       <table class="form">
         <tr>

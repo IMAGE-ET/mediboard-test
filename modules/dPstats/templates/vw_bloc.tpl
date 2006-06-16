@@ -44,11 +44,11 @@
         </tr>
         <tr>
           <td colspan="4" class="button">
-            <img src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={$debutact}&amp;fin={$finact}&amp;salle_id={$salle_id}&amp;prat_id={$prat_id}&amp;codeCCAM={$codeCCAM}' />
+            <img alt="Nombre d'interventions" src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={$debutact}&amp;fin={$finact}&amp;salle_id={$salle_id}&amp;prat_id={$prat_id}&amp;codeCCAM={$codeCCAM}' />
             {if $prat_id}
-              <img src='?m=dPstats&amp;a=graph_praticienbloc&amp;suppressHeaders=1&amp;debut={$debutact}&amp;fin={$finact}&amp;salle_id={$salle_id}&amp;prat_id={$prat_id}&amp;codeCCAM={$codeCCAM}' />
+              <img alt="Occupation des plages" src='?m=dPstats&amp;a=graph_praticienbloc&amp;suppressHeaders=1&amp;debut={$debutact}&amp;fin={$finact}&amp;salle_id={$salle_id}&amp;prat_id={$prat_id}&amp;codeCCAM={$codeCCAM}' />
             {else}
-              <img src='?m=dPstats&amp;a=graph_patjoursalle&amp;suppressHeaders=1&amp;debut={$debutact}&amp;fin={$finact}&amp;salle_id={$salle_id}&amp;prat_id={$prat_id}&amp;codeCCAM={$codeCCAM}' />
+              <img alt="Patients par jour par salle" src='?m=dPstats&amp;a=graph_patjoursalle&amp;suppressHeaders=1&amp;debut={$debutact}&amp;fin={$finact}&amp;salle_id={$salle_id}&amp;prat_id={$prat_id}&amp;codeCCAM={$codeCCAM}' />
             {/if}
           </td>
         </tr>

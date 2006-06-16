@@ -60,8 +60,8 @@
         </tr>
         <tr>
           <td colspan="4" class="button">
-            <img src='?m=dPstats&amp;a=graph_patparservice&amp;suppressHeaders=1&amp;debut={$debutact}&amp;fin={$finact}&amp;service_id={$service_id}&amp;prat_id={$prat_id}&amp;type_adm={$type_adm}' />
-            <img src='?m=dPstats&amp;a=graph_patpartypehospi&amp;suppressHeaders=1&amp;debut={$debutact}&amp;fin={$finact}&amp;service_id={$service_id}&amp;prat_id={$prat_id}&amp;type_adm={$type_adm}'' />
+            <img alt="Patients par service" src='?m=dPstats&amp;a=graph_patparservice&amp;suppressHeaders=1&amp;debut={$debutact}&amp;fin={$finact}&amp;service_id={$service_id}&amp;prat_id={$prat_id}&amp;type_adm={$type_adm}' />
+            <img alt="Admissions par type d'hospitalisation" src='?m=dPstats&amp;a=graph_patpartypehospi&amp;suppressHeaders=1&amp;debut={$debutact}&amp;fin={$finact}&amp;service_id={$service_id}&amp;prat_id={$prat_id}&amp;type_adm={$type_adm}' />
           </td>
         </tr>
       </table>
