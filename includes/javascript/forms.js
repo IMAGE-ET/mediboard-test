@@ -92,6 +92,9 @@ function getBoundingForm(oElement) {
 var bGiveFormFocus = true;
 
 function prepareForm(oForm) {
+  var sFormName = oForm.getAttribute("name");
+  var sFormClass = oForm.getAttribute("class");
+
   // Build label targets
   aLabels = document.getElementsByTagName("label");
   iLabel = 0;
@@ -100,15 +103,12 @@ function prepareForm(oForm) {
     if (oForm == oBoundingForm) {
       if (sFor = oLabel.getAttribute("for")) {
         reg = new RegExp("/^" + oForm.getAttribute("name") + "/");
-        if(!sFor.match(reg)) {
-          oLabel.setAttribute("for", oForm.getAttribute("name") + "_" + sFor);
+        if(sFor.indexOf(sFormName) != 0) {
+          oLabel.setAttribute("for", sFormName + "_" + sFor);
         }
       } 
   	}
   } 
-
-  var sFormName = oForm.getAttribute("name");
-  var sFormClass = oForm.getAttribute("class");
 
   // For each element
   var iElement = 0;

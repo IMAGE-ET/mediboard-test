@@ -191,6 +191,18 @@
 
 <tr>
   <td class="text" colspan="3">
+    <label for="convalescence" title="Remarques">Convalescence</label>
+  </td>
+</tr>
+
+<tr>
+  <td  colspan="3">
+    <textarea name="convalescence" title="{{$sejour->_props.convalescence}}" rows="3">{{$sejour->convalescence}}</textarea>
+  </td>
+</tr>
+
+<tr>
+  <td class="text" colspan="3">
     <label for="rques" title="Remarques">Remarques sur le séjour</label>
   </td>
 </tr>
@@ -200,6 +212,7 @@
     <textarea name="rques" title="{{$sejour->_props.rques}}" rows="3">{{$sejour->rques}}</textarea>
   </td>
 </tr>
+
 
 {{if !$mode_operation}}
 <tr>
