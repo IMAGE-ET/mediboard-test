@@ -20,6 +20,8 @@ $prat_id    = mbGetValueFromGet("prat_id"   , 0);
 $service_id = mbGetValueFromGet("service_id", 0);
 $type_adm   = mbGetValueFromGet("type_adm"  , 0);
 
+$total = 0;
+
 $pratSel = new CMediusers;
 $pratSel->load($prat_id);
 
@@ -63,6 +65,7 @@ foreach($listHospis as $hospi) {
     foreach($result as $totaux) {
       if($x == $totaux["mois"]) {
         $patbyhospi[$type]["sejour"][] = $totaux["total"];
+        $total += $totaux["total"];
         $f = false;
       }
     }
@@ -80,17 +83,14 @@ $graph->SetMarginColor("lightblue");
 
 // Set up the title for the graph
 $title = "Nombre d'admissions par type d'hospitalisation";
-$subtitle = "";
+$subtitle = "- $total patients -";
 if($prat_id) {
-  $subtitle .= "- Dr. $pratSel->_view ";
-}
-if($subtitle) {
-  $subtitle .= "-";
-  $graph->subtitle->Set($subtitle);
+  $subtitle .= " Dr. $pratSel->_view -";
 }
 $graph->title->Set($title);
 $graph->title->SetFont(FF_ARIAL,FS_NORMAL,10);
 $graph->title->SetColor("darkred");
+$graph->subtitle->Set($subtitle);
 $graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,7);
 $graph->subtitle->SetColor("black");
 //$graph->img->SetAntiAliasing();

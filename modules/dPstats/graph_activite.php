@@ -20,6 +20,8 @@ $prat_id  = mbGetValueFromGet("prat_id" , 0);
 $salle_id = mbGetValueFromGet("salle_id", 0);
 $codeCCAM = mbGetValueFromGet("codeCCAM", "");
 
+$total = 0;
+
 $pratSel = new CMediusers;
 $pratSel->load($prat_id);
 
@@ -62,6 +64,7 @@ foreach($salles as $salle) {
     foreach($result as $totaux) {
       if($x == $totaux["mois"]) {
         $opbysalle[$id]["op"][] = $totaux["total"];
+        $total += $totaux["total"];
         $f = false;
       }
     }
@@ -79,23 +82,17 @@ $graph->SetMarginColor("lightblue");
 
 // Set up the title for the graph
 $title = "Nombre d'interventions";
-$subtitle = "";
+$subtitle = "- $total opérations -";
 if($prat_id) {
-  $subtitle .= "- Dr. $pratSel->_view ";
-}
-if($salle_id) {
-  $subtitle .= "- $salleSel->nom ";
+  $subtitle .= " Dr. $pratSel->_view -";
 }
 if($codeCCAM) {
-  $subtitle .= "- CCAM : $codeCCAM ";
-}
-if($subtitle) {
-  $subtitle .= "-";
-  $graph->subtitle->Set($subtitle);
+  $subtitle .= " CCAM : $codeCCAM -";
 }
 $graph->title->Set($title);
 $graph->title->SetFont(FF_ARIAL,FS_NORMAL,10);
 $graph->title->SetColor("darkred");
+$graph->subtitle->Set($subtitle);
 $graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,7);
 $graph->subtitle->SetColor("black");
 //$graph->img->SetAntiAliasing();

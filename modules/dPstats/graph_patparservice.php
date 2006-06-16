@@ -20,6 +20,8 @@ $prat_id    = mbGetValueFromGet("prat_id"   , 0);
 $service_id = mbGetValueFromGet("service_id", 0);
 $type_adm   = mbGetValueFromGet("type_adm"  , 0);
 
+$total = 0;
+
 $pratSel = new CMediusers;
 $pratSel->load($prat_id);
 
@@ -59,13 +61,13 @@ foreach($services as $service) {
     $sql .= "\nAND operations.chir_id = '$prat_id'";
   $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
-  //echo "$sql<br />";
   $result = db_loadlist($sql);
   foreach($datax as $x) {
     $f = true;
     foreach($result as $totaux) {
       if($x == $totaux["mois"]) {
         $patbyservice[$id]["op"][] = $totaux["total"];
+        $total += $totaux["total"];
         $f = false;
       }
     }
@@ -83,17 +85,14 @@ $graph->SetMarginColor("lightblue");
 
 // Set up the title for the graph
 $title = "Nombre de patients par service";
-$subtitle = "";
+$subtitle = "- $total passages -";
 if($prat_id) {
-  $subtitle .= "- Dr. $pratSel->_view ";
-}
-if($subtitle) {
-  $subtitle .= "-";
-  $graph->subtitle->Set($subtitle);
+  $subtitle .= " Dr. $pratSel->_view -";
 }
 $graph->title->Set($title);
 $graph->title->SetFont(FF_ARIAL,FS_NORMAL,10);
 $graph->title->SetColor("darkred");
+$graph->subtitle->Set($subtitle);
 $graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,7);
 $graph->subtitle->SetColor("black");
 //$graph->img->SetAntiAliasing();
