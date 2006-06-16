@@ -127,7 +127,9 @@ function pageMain() {
         {if $selOp->operation_id}
         <tr>
           <th class="title" colspan="2">
-            {$selOp->_ref_pat->_view} ({$selOp->_ref_pat->_age} ans) &mdash; Dr. {$selOp->_ref_chir->_view}
+            {$selOp->_ref_sejour->_ref_patient->_view} 
+            ({$selOp->_ref_sejour->_ref_patient->_age} ans) 
+            &mdash; Dr. {$selOp->_ref_chir->_view}
           </th>
         </tr>
         <tr>
