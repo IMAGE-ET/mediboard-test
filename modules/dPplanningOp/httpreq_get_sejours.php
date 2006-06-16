@@ -13,11 +13,17 @@ require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
 $sejour_id  = mbGetValueFromGet("sejour_id", 0);
 $patient_id = mbGetValueFromGet("patient_id", 0);
 
+$date = mbDate()." 00:00:00";
+
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefsSejours();
 foreach($patient->_ref_sejours as $key => $sejour) {
-  $patient->_ref_sejours[$key]->loadRefsFwd();
+  if($patient->_ref_sejours[$key]->sortie_prevue < $date) {
+    unset($patient->_ref_sejours[$key]);
+  } else {
+    $patient->_ref_sejours[$key]->loadRefsFwd();
+  }
 }
 
 if ($canRead) {
