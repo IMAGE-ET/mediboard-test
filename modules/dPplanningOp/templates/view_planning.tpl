@@ -24,7 +24,7 @@
     <th class="category" colspan="2">Renseignements concernant le patient</th>
   </tr>
   
-  {assign var="patient" value=$operation->_ref_pat}
+  {assign var="patient" value=$operation->_ref_sejour->_ref_patient}
   <tr>
     <th>Nom / Prénom :</th>
     <td>{$patient->_view}</td>

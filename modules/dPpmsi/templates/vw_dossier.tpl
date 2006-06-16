@@ -231,7 +231,7 @@ function pageMain() {
             <input type="hidden" name="dosql" value="do_patients_aed" />
             <input type="hidden" name="m" value="dPpatients" />
             <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="patient_id" value="{$curr_op->_ref_pat->patient_id}" />
+            <input type="hidden" name="patient_id" value="{$curr_sejour->_ref_patient->patient_id}" />
  
             <table class="form">
               <tr>
@@ -242,7 +242,7 @@ function pageMain() {
               </tr>
               <tr>
                 <th><label for="SHS" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label></th>
-                <td><input type="text" title="notNull|num|length|8" name="SHS" value="{$curr_op->_ref_pat->SHS}" size="8" maxlength="8" /></td>
+                <td><input type="text" title="notNull|num|length|8" name="SHS" value="{$curr_sejour->_ref_patient->SHS}" size="8" maxlength="8" /></td>
               </tr>
             </table>
  

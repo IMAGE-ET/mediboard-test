@@ -23,7 +23,8 @@ $operation_id = dPgetParam($_GET, "operation_id", null);
 $op = new COperation;
 $op->load($operation_id);
 $op->loadRefsFwd();
-$patient =& $op->_ref_pat;
+$op->_ref_sejour->loadRefsFwd();
+$patient =& $op->_ref_sejour->_ref_patient;
 
 $pack_id = dPgetParam($_GET, "pack_id", null);
 

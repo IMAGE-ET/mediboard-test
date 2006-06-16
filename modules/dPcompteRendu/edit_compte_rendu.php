@@ -49,10 +49,12 @@ $compte_rendu->loadRefsFwd();
 $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;
 //@todo : passer tout en _ref_patient
-if($compte_rendu->_object_className == "CConsultation")
+if($compte_rendu->_object_className == "COperation") {
+  $object->_ref_sejour->loadRefsFwd();
+  $patient =& $object->_ref_sejour->_ref_patient;
+} else {
   $patient =& $object->_ref_patient;
-else
-  $patient =& $object->_ref_pat;
+}
 $medichir =& $object->_ref_chir;
 
 // Gestion du template

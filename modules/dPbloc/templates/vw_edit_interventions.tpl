@@ -23,7 +23,7 @@
               <img src="images/history.gif" alt="historique" />
             </a>
 		    <strong>
-		    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;id={$curr_op->_ref_pat->patient_id}">
+		    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;id={$curr_op->_ref_sejour->_ref_patient->patient_id}">
 		    {$curr_op->_ref_sejour->_ref_patient->_view} ({$curr_op->_ref_sejour->_ref_patient->_age} ans)
 		    </a>
 		    </strong>
@@ -85,7 +85,7 @@
             <input type="hidden" name="cmd" value="sethour" />
             <input type="hidden" name="id" value="{$curr_op->operation_id}" />
 		    <strong>
-		    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;id={$curr_op->_ref_pat->patient_id}">
+		    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;id={$curr_op->_ref_sejour->_ref_patient->patient_id}">
 		    {$curr_op->_ref_sejour->_ref_patient->_view} ({$curr_op->_ref_sejour->_ref_patient->_age} ans)
 		    </a>
 		    </strong>

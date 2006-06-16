@@ -31,7 +31,7 @@ class COperation extends CMbObject {
 
   // DB References
   var $sejour_id = null;
-  var $pat_id = null; // remplacé par $sejour->patient_id
+  //var $pat_id = null; // remplacé par $sejour->patient_id
   var $chir_id = null; // dupliqué en $sejour->praticien_id
   var $plageop_id = null;
 
@@ -104,7 +104,6 @@ class COperation extends CMbObject {
   var $_datetime = null;
   
   // DB References
-//  var $_ref_pat = null;
   var $_ref_chir = null;
   var $_ref_plageop = null;
   var $_ref_sejour = null;
@@ -112,7 +111,6 @@ class COperation extends CMbObject {
   var $_ref_files = array();
   var $_ref_actes_ccam = array(); 
   var $_ref_documents = array();
-//  var $_ref_GHM = array();
   
   // External references
   var $_ext_codes_ccam = null;

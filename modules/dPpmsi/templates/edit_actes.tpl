@@ -11,7 +11,7 @@ function pageMain() {
 <table class="tbl">
   <tr>
     <th class="title" colspan="2">
-      {$selOp->_ref_pat->_view} &mdash; {$selOp->_ref_plageop->date|date_format:"%A %d %B %Y"}<br />
+      {$selOp->_ref_sejour->_ref_patient->_view} &mdash; {$selOp->_ref_plageop->date|date_format:"%A %d %B %Y"}<br />
       Chirurgien : Dr. {$selOp->_ref_chir->_view}<br />
       Anesthésiste probable : Dr. {$selOp->_ref_plageop->_ref_anesth->_view} 
       
@@ -19,7 +19,7 @@ function pageMain() {
   </tr>
   <tr>
     <th>Patient</th>
-    <td>{$selOp->_ref_pat->_view} &mdash; {$selOp->_ref_pat->_age} ans</td>
+    <td>{$selOp->_ref_sejour->_ref_patient->_view} &mdash; {$selOp->_ref_sejour->_ref_patient->_age} ans</td>
   </tr>
   <tr>
     <th>Actes</th>

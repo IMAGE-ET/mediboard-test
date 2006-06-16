@@ -40,6 +40,7 @@ for ($i = -5; $i < 0; $i++) {
   $list1[$i]["urgences"] = $operation->loadList($where, $order, null, null, $ljoin);
   foreach($list1[$i]["urgences"] as $key => $value) {
     $list1[$i]["urgences"][$key]->loadRefsFwd();
+    $list1[$i]["urgences"][$key]->_ref_sejour->loadRefsFwd();
   }
 }
 
@@ -55,6 +56,7 @@ for ($i = 0; $i < 5; $i++) {
   $list2[$i]["urgences"] = $operation->loadList($where, $order, null, null, $ljoin);
   foreach($list2[$i]["urgences"] as $key => $value) {
     $list2[$i]["urgences"][$key]->loadRefsFwd();
+    $list2[$i]["urgences"][$key]->_ref_sejour->loadRefsFwd();
   }
 }
 

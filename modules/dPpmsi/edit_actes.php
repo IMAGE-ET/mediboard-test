@@ -23,6 +23,7 @@ if(!$operation_id) {
 $selOp = new COperation;
 $selOp->load($operation_id);
 $selOp->loadRefs();
+$selOp->_ref_sejour->loadRefsFwd();
 foreach($selOp->_ext_codes_ccam as $key => $value) {
   $selOp->_ext_codes_ccam[$key]->Load();
 }

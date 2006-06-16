@@ -20,8 +20,8 @@ $id = mbGetValueFromGetOrSession("id");
 $admission = new COperation();
 $admission->load($id);
 $admission->loadRefs();
+$admission->_ref_sejour->loadRefsFwd();
 $admission->_ref_plageop->loadRefs();
-//$admission->_ref_pat->loadRefs();
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );

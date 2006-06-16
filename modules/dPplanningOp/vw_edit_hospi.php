@@ -57,6 +57,7 @@ if ($operation_id) {
     $AppUI->redirect( "m=dPpatients&tab=0&id=$op->pat_id");
   }
   $op->loadRefs();
+  $op->_ref_sejour->loadRefsFwd();
 }
 
 // Récupération des modèles
@@ -113,7 +114,7 @@ $smarty->assign('hospitalisation', true);
 
 $smarty->assign('op', $op);
 $smarty->assign('chir' , $op->chir_id    ? $op->_ref_chir    : $chir);
-$smarty->assign('pat'  , $op->pat_id     ? $op->_ref_pat     : $pat );
+$smarty->assign('pat'  , $op->_ref_sejour->patient_id ? $op->_ref_sejour->_ref_patient : $pat );
 $smarty->assign('plage', $op->plageop_id ? $op->_ref_plageop : new CPlageop );
 
 $smarty->assign('listModelePrat', $listModelePrat);

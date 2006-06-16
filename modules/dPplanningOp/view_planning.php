@@ -23,7 +23,8 @@ $operation_id = dPgetParam($_GET, "operation_id", null);
 $operation = new COperation;
 $operation->load($operation_id);
 $operation->loadRefsFwd();
-$patient =& $operation->_ref_pat;
+$operation->_ref_sejour->loadRefsFwd();
+$patient =& $operation->_ref_sejour->_ref_patient;
 $patient->loadRefs();
 
 $today = mbDate();

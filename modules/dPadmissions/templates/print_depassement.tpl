@@ -8,7 +8,7 @@
 
   <tr>
     <th>Nom / Prénom du patient :</th>
-    <td>{$admission->_ref_pat->_view}</td>
+    <td>{$admission->_ref_sejour->_ref_patient->_view}</td>
   </tr>
 
   <tr>
