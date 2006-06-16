@@ -304,7 +304,7 @@ function pageMain() {
         </tr>
         <tr>
           <td><textarea name="convalescence" title="{$protocole->_props.convalescence}" rows="3">{$protocole->convalescence}</textarea></td>
-          <td colspan="2"><textarea name="rques_operation" title="{$protocole->_props.rques_sejour}" rows="3">{$protocole->rques_operation}</textarea></td>
+          <td colspan="2"><textarea name="rques_sejour" title="{$protocole->_props.rques_sejour}" rows="3">{$protocole->rques_sejour}</textarea></td>
         </tr>
       </table>
     </td>

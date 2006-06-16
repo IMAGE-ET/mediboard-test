@@ -99,7 +99,10 @@ function prepareForm(oForm) {
   	oBoundingForm = getBoundingForm(oLabel);
     if (oForm == oBoundingForm) {
       if (sFor = oLabel.getAttribute("for")) {
-        oLabel.setAttribute("for", oForm.getAttribute("name") + "_" + sFor);
+        reg = new RegExp("/^" + oForm.getAttribute("name") + "/");
+        if(!sFor.match(reg)) {
+          oLabel.setAttribute("for", oForm.getAttribute("name") + "_" + sFor);
+        }
       } 
   	}
   } 
