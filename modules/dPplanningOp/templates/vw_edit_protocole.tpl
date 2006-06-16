@@ -233,11 +233,6 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="DP" title="Code CIM10 du diagnostic principal">Diagnostic principal (CIM10) :</label></th>
-          <td><input type="text" name="DP" title="{$protocole->_props.DP}" size="10" value="{$protocole->DP}" /></td>
-          <td class="button"><input type="button" value="Sélectionner un code" onclick="popCode('cim10')" /></td>
-        </tr>
-        <tr>
           <th>
             <label for="_codeCCAM" title="Codes CCAM d'intervention">Ajout de codes CCAM :</label>
           </th>
@@ -264,13 +259,13 @@ function pageMain() {
         <tr>
           <td class="text"><label for="examen" title="Bilan pré-opératoire">Bilan pré-op</label></td>
           <td class="text"><label for="materiel" title="Matériel à prévoir / examens per-opératoire">Matériel à prévoir / examens per-op</label></td>
-          <td class="text"><label for="convalescence" title="Convalescence post-opératoire">Convalescence</label></td>
+          <td class="text"><label for="rques_operation" title="Remarques sur l'intervention">Remarques</label></td>
         </tr>
 
         <tr>
           <td><textarea name="examen" title="{$protocole->_props.examen}" rows="3">{$protocole->examen}</textarea></td>
           <td><textarea name="materiel" title="{$protocole->_props.materiel}" rows="3">{$protocole->materiel}</textarea></td>
-          <td><textarea name="convalescence" title="{$protocole->_props.convalescence}" rows="3">{$protocole->convalescence}</textarea></td>
+          <td><textarea name="rques_operation" title="{$protocole->_props.rques_operation}" rows="3">{$protocole->rques_operation}</textarea></td>
         </tr>
         <tr>
           <th><label for="depassement"title="Valeur du dépassement d'honoraire éventuel">Dépassement d'honoraire :</label></th>
@@ -284,12 +279,17 @@ function pageMain() {
          <th class="category" colspan="3">Informations concernant le séjour</th>
        </tr>
         <tr>
+          <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM) :</label></th>
+          <td><input type="text" name="DP" title="{$protocole->_props.DP}" size="10" value="{$protocole->DP}" /></td>
+          <td class="button"><input type="button" value="Sélectionner un code" onclick="popCode('cim10')" /></td>
+        </tr>
+        <tr>
           <th class="mandatory"><label for="duree_hospi" title="Durée d'hospitalisation en jours">Durée d'hospitalisation :</label></th>
-          <td><input type="text" name="duree_hospi" title="{$protocole->_props.duree_hospi}" size="2" value="{$protocole->duree_hospi}" /> jours</td>
+          <td colspan="2"><input type="text" name="duree_hospi" title="{$protocole->_props.duree_hospi}" size="2" value="{$protocole->duree_hospi}" /> jours</td>
         </tr>
         <tr>
           <th><label for="type_comp" title="Type d'admission">{tr}type_adm{/tr} :</label></th>
-          <td>
+          <td colspan="2">
             <input name="type" value="comp" type="radio" {if !$protocole->protocole_id || $protocole->type == "comp"}checked="checked"{/if} />
             <label for="type_comp">{tr}comp{/tr}</label><br />
             <input name="type" value="ambu" type="radio" {if $protocole->type == "ambu"}checked="checked"{/if} />
@@ -299,8 +299,12 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="rques_operation" title="Remarques générales sur l'intervention">Remarques :</label></th>
-          <td><textarea name="rques_operation" rows="3">{$protocole->rques_operation}</textarea></td>
+          <td><label for="convalescence" title="Convalescence post-opératoire">Convalescence</label></td>
+          <td colspan="2"><label for="rques_sejour" title="Remarques générales sur le séjour">Remarques</label></td>
+        </tr>
+        <tr>
+          <td><textarea name="convalescence" title="{$protocole->_props.convalescence}" rows="3">{$protocole->convalescence}</textarea></td>
+          <td colspan="2"><textarea name="rques_operation" title="{$protocole->_props.rques_sejour}" rows="3">{$protocole->rques_operation}</textarea></td>
         </tr>
       </table>
     </td>

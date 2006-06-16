@@ -6,20 +6,22 @@
 var aProtocoles = new Array();
 {{foreach from=$protocoles item=curr_protocole}}
 aProtocoles[{{$curr_protocole->protocole_id}}] = {
-  protocole_id  : {{$curr_protocole->protocole_id}},
-  chir_id       : {{$curr_protocole->chir_id}},
-  _chir_view    : "{{$curr_protocole->_ref_chir->_view|escape:javascript}}",
-  codes_ccam    : "{{$curr_protocole->codes_ccam}}",
-  libelle       : "{{$curr_protocole->libelle|escape:javascript}}",
-  _hour_op      : "{{$curr_protocole->_hour_op}}",
-  _min_op       : "{{$curr_protocole->_min_op}}",
-  examen        : "{{$curr_protocole->examen|escape:javascript}}",
-  materiel      : "{{$curr_protocole->materiel|escape:javascript}}",
-  convalescence : "{{$curr_protocole->convalescence|escape:javascript}}",
-  depassement   : "{{$curr_protocole->depassement}}",
-  type          : "{{$curr_protocole->type}}",
-  duree_hospi   : {{$curr_protocole->duree_hospi}},
-  rques_sejour  : "{{$curr_protocole->rques_sejour|escape:javascript}}"
+  protocole_id     : {{$curr_protocole->protocole_id}},
+  chir_id          : {{$curr_protocole->chir_id}},
+  _chir_view       : "{{$curr_protocole->_ref_chir->_view|escape:javascript}}",
+  codes_ccam       : "{{$curr_protocole->codes_ccam}}",
+  DP               : "{{$curr_protocole->DP}}",
+  libelle          : "{{$curr_protocole->libelle|escape:javascript}}",
+  _hour_op         : "{{$curr_protocole->_hour_op}}",
+  _min_op          : "{{$curr_protocole->_min_op}}",
+  examen           : "{{$curr_protocole->examen|escape:javascript}}",
+  materiel         : "{{$curr_protocole->materiel|escape:javascript}}",
+  convalescence    : "{{$curr_protocole->convalescence|escape:javascript}}",
+  depassement      : "{{$curr_protocole->depassement}}",
+  type             : "{{$curr_protocole->type}}",
+  duree_hospi      : {{$curr_protocole->duree_hospi}},
+  rques_sejour     : "{{$curr_protocole->rques_sejour|escape:javascript}}"
+  rques_operation  : "{{$curr_protocole->rques_operation|escape:javascript}}"
 }
 {{/foreach}}
 
