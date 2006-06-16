@@ -95,6 +95,20 @@ function checkCCAM() {
   return true;
 }
 
+function checkChir() {
+  var oForm = document.editOp;
+  var oField = null;
+  
+  if (oField = oForm.chir_id) {
+    if (oField.value == 0) {
+      alert("Chirurgien manquant");
+      popChir();
+      return false;
+    }
+  }
+  return true;
+}
+
 function checkDuree() {
   var form = document.editOp;
   field1 = form._hour_op;
@@ -118,8 +132,8 @@ function modifOp() {
 }
 
 function popPlage() {
-  if (checkChir() & checkDuree()) {
-    var oForm = document.editOp;
+  var oForm = document.editOp;
+  if (checkChir() && checkDuree()) {
     var url = new Url();
     url.setModuleAction("dPplanningOp", "plage_selector");
     url.addElement(oForm.chir_id, "chir");

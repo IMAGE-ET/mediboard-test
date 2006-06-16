@@ -121,7 +121,7 @@ function pageMain() {
       <a style="float:right;" href="javascript:view_log('COperation',{{$op->operation_id}})">
         <img src="images/history.gif" alt="historique" />
       </a>
-      Modification de l'intervention de {{$pat->_view}} par le Dr. {{$chir->_view}}
+      Modification de l'intervention de {{$patient->_view}} par le Dr. {{$chir->_view}}
     </th>
     {{else}}
     <th colspan="2" class="title"> 

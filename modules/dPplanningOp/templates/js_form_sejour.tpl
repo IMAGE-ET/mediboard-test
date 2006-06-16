@@ -75,8 +75,6 @@ function reloadSejour(sejour_id) {
 }
 
 function incFormSejourMain() {
-  regFieldCalendar("editSejour", "_date_entree_prevue");
-  regFieldCalendar("editSejour", "_date_sortie_prevue");
 }
 
 var bChangePat = 0;

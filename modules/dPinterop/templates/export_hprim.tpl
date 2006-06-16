@@ -115,7 +115,7 @@ function choosePreselection(oSelect) {
   
   <tr>
    <th><label for="sc_patient_id" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label></th>
-    <td><input type="text" title="notNull|num|length|8" name="sc_patient_id" value="{$mbOp->_ref_pat->SHS}" size="8" maxlength="8" /></td>
+    <td><input type="text" title="notNull|num|length|8" name="sc_patient_id" value="{$mbSejour->_ref_patient->SHS}" size="8" maxlength="8" /></td>
   </tr>
   
   <tr>
