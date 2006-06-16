@@ -374,12 +374,12 @@ function pageMain() {
           </th>
           <td colspan="2">
             <select name="_hour_op">
-            {{foreach from=$hours key=key item=hour}}
+            {{foreach from=$hours_duree key=key item=hour}}
               <option value="{{$key}}" {{if (!$op && $key == 1) || $op->_hour_op == $key}} selected="selected" {{/if}}>{{$key}}</option>
             {{/foreach}}
             </select> h
             <select name="_min_op">
-            {{foreach from=$mins item=min}}
+            {{foreach from=$mins_duree item=min}}
               <option value="{{$min}}" {{if (!$op && $min == 0) || $op->_min_op == $min}} selected="selected" {{/if}}>{{$min}}</option>
             {{/foreach}}
             </select> mn

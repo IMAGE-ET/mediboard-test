@@ -65,8 +65,6 @@ if ($sejour_id) {
   $patient =& $sejour->_ref_patient;
 }
 
-$patient->loadRefsSejours();
-
 // Heures & minutes
 $sejourConfig =& $dPconfig["dPplanningOp"]["sejour"];
 for ($i = $sejourConfig["heure_deb"]; $i <= $sejourConfig["heure_fin"]; $i++) {

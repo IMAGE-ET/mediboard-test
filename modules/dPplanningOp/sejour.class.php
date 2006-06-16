@@ -8,9 +8,11 @@
  */
 
 require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"  ));
-require_once($AppUI->getModuleClass("dPpatients"  , "patients"  ));
-require_once($AppUI->getModuleClass("dPplanningOp", "pathologie"));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"   ));
+require_once($AppUI->getModuleClass("dPpatients"  , "patients"   ));
+require_once($AppUI->getModuleClass("dPplanningOp", "pathologie" ));
+require_once($AppUI->getModuleClass("dPpmsi"      , "GHM"        ));
+require_once($AppUI->getModuleClass("dPhospi"     , "affectation"));
 
 // @todo: Put the following in $config_dist;
 $dPconfig["dPplanningOp"]["sejour"] = array (

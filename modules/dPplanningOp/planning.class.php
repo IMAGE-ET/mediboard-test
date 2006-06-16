@@ -15,10 +15,15 @@ require_once( $AppUI->getModuleClass('dPbloc'      , 'plagesop'     ) );
 require_once( $AppUI->getModuleClass('dPccam'      , 'acte'         ) );
 require_once( $AppUI->getModuleClass('dPcabinet'   , 'consultAnesth') );
 require_once( $AppUI->getModuleClass('dPcabinet'   , 'files'        ) );
-require_once( $AppUI->getModuleClass('dPhospi'     , 'affectation'  ) );
 require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour'       ) );
 require_once( $AppUI->getModuleClass('dPsalleOp'   , 'acteccam'     ) );
-require_once( $AppUI->getModuleClass('dPpmsi'      , 'GHM'          ) );
+
+// @todo: Put the following in $config_dist;
+$dPconfig["dPplanningOp"]["operation"] = array (
+  "duree_deb" => "0",
+  "duree_fin" => "10",
+  "min_intervalle" => "15"
+);
 
 class COperation extends CMbObject {
   // DB Table key

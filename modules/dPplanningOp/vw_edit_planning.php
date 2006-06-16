@@ -21,8 +21,8 @@ if (!$canRead) {
 
 $operation_id = mbGetValueFromGetOrSession("operation_id", null);
 $sejour_id = mbGetValueFromGetOrSession("sejour_id", null);
-$chir_id = mbGetValueFromGetOrSession("chir_id", null);
-$patient_id = dPgetParam($_GET, "pat_id");
+$chir_id = mbGetValueFromGet("chir_id", null);
+$patient_id = mbGetValueFromGet("pat_id", null);
 
 // L'utilisateur est-il un praticien
 $chir = new CMediusers;
@@ -52,9 +52,10 @@ $sejour = new CSejour;
 if($sejour_id && !$operation_id) {
   $sejour->load($sejour_id);
   $sejour->loadRefsFwd();
-  $chir =& $sejour->_ref_praticien;
+  if(!$chir_id) {
+    $chir =& $sejour->_ref_praticien;
+  }
   $patient =& $sejour->_ref_patient;
-  $patient->loadRefsSejours();
 }
 
 // On récupère l'opération
@@ -73,10 +74,7 @@ if ($operation_id) {
   $sejour->loadRefsFwd();
   $chir =& $sejour->_ref_praticien;
   $patient =& $sejour->_ref_patient;
-  $patient->loadRefsSejours();
 }
-
-$listSejours =& $patient->_ref_sejours;
 
 // Récupération des modèles
 $whereCommon = array();
@@ -110,11 +108,6 @@ if($op->chir_id) {
   $listPack = $listPack->loadlist($where, $order);
 }
 
-// Heures & minutes
-$start = 7;
-$stop = 20;
-$step = 15;
-
 $sejourConfig =& $dPconfig["dPplanningOp"]["sejour"];
 for ($i = $sejourConfig["heure_deb"]; $i <= $sejourConfig["heure_fin"]; $i++) {
     $hours[] = $i;
@@ -122,6 +115,15 @@ for ($i = $sejourConfig["heure_deb"]; $i <= $sejourConfig["heure_fin"]; $i++) {
 
 for ($i = 0; $i < 60; $i += $sejourConfig["min_intervalle"]) {
     $mins[] = $i;
+}
+
+$operationConfig =& $dPconfig["dPplanningOp"]["operation"];
+for ($i = $operationConfig["duree_deb"]; $i <= $operationConfig["duree_fin"]; $i++) {
+    $hours_duree[] = $i;
+}
+
+for ($i = 0; $i < 60; $i += $operationConfig["min_intervalle"]) {
+    $mins_duree[] = $i;
 }
 
 // Création du template
@@ -133,7 +135,6 @@ $smarty->assign("sejour"     , $sejour);
 $smarty->assign("chir"       , $chir);
 $smarty->assign("praticien"  , $chir);
 $smarty->assign("patient"    , $patient );
-$smarty->assign("listSejours", $listSejours );
 $smarty->assign("plage"      , $op->plageop_id ? $op->_ref_plageop : new CPlageop );
 
 $smarty->assign("listPraticiens", $listPraticiens);
@@ -141,8 +142,10 @@ $smarty->assign("listModelePrat", $listModelePrat);
 $smarty->assign("listModeleFunc", $listModeleFunc);
 $smarty->assign("listPack"      , $listPack      );
 
-$smarty->assign("hours", $hours);
-$smarty->assign("mins" , $mins);
+$smarty->assign("hours"      , $hours);
+$smarty->assign("mins"       , $mins);
+$smarty->assign("hours_duree", $hours_duree);
+$smarty->assign("mins_duree" , $mins_duree);
 
 $smarty->display("vw_edit_planning.tpl");
 
