@@ -103,6 +103,9 @@ function pageMain() {
 
 </script>
 
+{{include file="js_form_operation.tpl"}}
+{{include file="js_form_sejour.tpl"}}
+
 <table class="main" style="margin: 4px; border-spacing: 0px;">
   {{if $op->operation_id}}
   <tr>
@@ -129,11 +132,9 @@ function pageMain() {
   </tr>
   <tr>
     <td>
-      {{include file="js_form_operation.tpl"}}
       {{include file="inc_form_operation.tpl"}}
     </td>
-    <td>
-      {{include file="js_form_sejour.tpl"}}
+    <td id="inc_form_sejour">
       {{include file="inc_form_sejour.tpl"}}
     </td>
   </tr>
