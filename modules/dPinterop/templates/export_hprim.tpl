@@ -31,11 +31,12 @@ function choosePreselection(oSelect) {
 <tr>
 
 <td>
+  {assign var="mbSejour" value=$mbOp->_ref_sejour}
   {if !$doc_valid}
   <h3>Document non valide : pensez à valider les valeurs suivantes !</h3>
   <ul>
     <li>Code Adeli du praticien : '{$mbOp->_ref_chir->adeli}'</li>
-    <li>Identifiant S@anté.com du patient : '{$mbOp->_ref_pat->SHS}'</li>
+    <li>Identifiant S@anté.com du patient : '{$mbSejour->_ref_patient->SHS}'</li>
     <li>Identifiant S@anté.com de la venue : '{$mbOp->venue_SHS}'</li>
     <li>Code d'unité fonctionnelle S@anté.com : '{$mbOp->code_uf}'</li>
     <li>Libellé d'unité fonctionnelle S@anté.com : '{$mbOp->libelle_uf}'</li>

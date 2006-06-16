@@ -51,12 +51,12 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $this->addDateTimeElement($evenementServeurActe, "dateAction");
 
     // Ajout du patient
-    $mbPatient =& $mbOp->_ref_pat;
+    $mbPatient =& $mbOp->_ref_sejour->_ref_patient;
     
     $patient = $this->addElement($evenementServeurActe, "patient");
     $identifiant = $this->addElement($patient, "identifiant");
     $this->addIdentifiantPart($identifiant, "emetteur", "pat$mbPatient->patient_id");
-    $this->addIdentifiantPart($identifiant, "recepteur", $mbOp->_ref_pat->SHS);
+    $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->SHS);
     
     $personnePhysique = $this->addElement($patient, "personnePhysique");
     

@@ -34,10 +34,10 @@ if ($mbOp->load($mb_operation_id)) {
   $mbSejour =& $mbOp->_ref_sejour;
   $mbSejour->loadRefsFwd();
   
-  if (isset($_POST["sc_patient_id"  ])) $mbOp->_ref_pat->SHS = $_POST["sc_patient_id"  ];
-  if (isset($_POST["sc_venue_id"    ])) $mbSejour->venue_SHS = $_POST["sc_venue_id"    ];
-  if (isset($_POST["cmca_uf_code"   ])) $mbOp->code_uf       = $_POST["cmca_uf_code"   ];
-  if (isset($_POST["cmca_uf_libelle"])) $mbOp->libelle_uf    = $_POST["cmca_uf_libelle"];
+  if (isset($_POST["sc_patient_id"  ])) $mbSejour->_ref_patient->SHS = $_POST["sc_patient_id"  ];
+  if (isset($_POST["sc_venue_id"    ])) $mbSejour->venue_SHS         = $_POST["sc_venue_id"    ];
+  if (isset($_POST["cmca_uf_code"   ])) $mbOp->code_uf               = $_POST["cmca_uf_code"   ];
+  if (isset($_POST["cmca_uf_libelle"])) $mbOp->libelle_uf            = $_POST["cmca_uf_libelle"];
   
   if (!$doc->checkSchema()) {
     return;
