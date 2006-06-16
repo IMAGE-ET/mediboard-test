@@ -129,10 +129,11 @@ function pageMain() {
   </tr>
   <tr>
     <td>
+      {{include file="js_form_operation.tpl"}}
       {{include file="inc_form_operation.tpl"}}
-      
     </td>
     <td>
+      {{include file="js_form_sejour.tpl"}}
       {{include file="inc_form_sejour.tpl"}}
     </td>
   </tr>
