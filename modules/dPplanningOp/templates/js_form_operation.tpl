@@ -124,11 +124,7 @@ function checkDuree() {
 }
 
 function modifOp() {
-  f = document.editOp;
-  if (f.saisie.value == 'o') {
-    f.modifiee.value = 1;
-    f.saisie.value = 'n';
-  }
+  modifSejour();
 }
 
 function popPlage() {
