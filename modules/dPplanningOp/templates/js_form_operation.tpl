@@ -102,7 +102,6 @@ function checkChir() {
   if (oField = oForm.chir_id) {
     if (oField.value == 0) {
       alert("Chirurgien manquant");
-      popChir();
       return false;
     }
   }

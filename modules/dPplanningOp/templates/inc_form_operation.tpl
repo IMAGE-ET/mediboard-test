@@ -31,8 +31,8 @@
         {{/foreach}}
       </select>
     </td>
-  </tr
-  >
+  </tr> 
+
   <tr>
     <th class="mandatory">
       <label for="_hour_op" title="Durée de l'intervention. Obligatoire">Temps opératoire :</label>
@@ -47,7 +47,7 @@
       {{foreach from=$mins_duree item=min}}
         <option value="{{$min}}" {{if (!$op && $min == 0) || $op->_min_op == $min}} selected="selected" {{/if}}>{{$min}}</option>
       {{/foreach}}
-    </select> mn
+      </select> mn
     </td>
   </tr>
 

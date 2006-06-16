@@ -5,7 +5,7 @@
 function popCode(type) {
   var url = new Url();
   url.setModuleAction("dPplanningOp", "code_selector");
-  url.addElement(document.editOp.chir_id, "chir");
+  url.addElement(document.editSejour.praticien_id, "chir");
   url.addParam("type", type)
   url.popup(600, 500, type);
 }
@@ -20,14 +20,13 @@ function setCode(sCode, type ) {
   
   if (type == "cim10") {
     oForm = document.editSejour;
-    oField = oForm.CIM10_code;
+    oField = oForm.DP;
   }
   
   oField.value = sCode;
 }
 
 function pageMain() {
-  incFormOperationMain();
   incFormSejourMain();
 }
   

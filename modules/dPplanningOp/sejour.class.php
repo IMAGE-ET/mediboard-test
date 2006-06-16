@@ -101,6 +101,8 @@ class CSejour extends CMbObject {
     $this->_props["pathologie"] = "str|length|3";
     $this->_props["septique"] = "enum|0|1";
     $this->_props["convalescence"] = "str|confidential";
+
+    $this->_props["rques"] = "text";
 	}
 
   function check() {

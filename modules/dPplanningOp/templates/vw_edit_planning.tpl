@@ -3,6 +3,16 @@
 <script type="text/javascript">
 
 function popCode(type) {
+  var oElement = null;
+  
+  if (type == "ccam") {
+    oElement = document.editOp._codeCCAM;
+  }
+  
+  if (type == "cim10") {
+    oElement = document.editSejour.DP;
+  }
+
   var url = new Url();
   url.setModuleAction("dPplanningOp", "code_selector");
   url.addElement(document.editOp.chir_id, "chir");
@@ -15,20 +25,17 @@ function setCode(sCode, type ) {
     return;
   }
   
-  var oForm = null
-  var oField = null;
+  var oElement = null;
   
   if (type == "ccam") {
-    oForm = document.editOp;
-    oField = oForm._codeCCAM;
+    oElement = document.editOp._codeCCAM;
   }
   
   if (type == "cim10") {
-    oForm = document.editSejour;
-    oField = oForm.CIM10_code;
+    oElement = document.editSejour.DP;
   }
   
-  oField.value = sCode;
+  oElement.value = sCode;
 }
 
 function popProtocole() {
@@ -56,6 +63,7 @@ function setProtocole(protocole) {
   formOp.duree_hospi.value       = protocole.duree_hospi;
   formOp.rques.value             = protocole.rques_operation;
   formSejour.convalescence.value = protocole.convalescence;
+  formSejour.DP.value            = protocole.DP;
   formSejour.rques.value         = protocole.rques_sejour;
   setRadioValue(formSejour.type, protocole.type);
 }
@@ -137,6 +145,7 @@ function pageMain() {
       {{include file="inc_form_operation.tpl"}}
     </td>
     <td id="inc_form_sejour">
+      {{assign var="mode_operation" value=true}}
       {{include file="inc_form_sejour.tpl"}}
     </td>
   </tr>

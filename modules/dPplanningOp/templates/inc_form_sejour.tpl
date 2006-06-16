@@ -41,6 +41,7 @@
     </select>
   </td>
 </tr>
+
 <tr>
   <th>
     <label for="praticien_id" title="Praticien responsable. Obligatoire">Praticien :</label>
@@ -68,6 +69,12 @@
   <td class="button">
   	<input type="button" value="Rechercher un patient" onclick="popPat()" />
   </td>
+</tr>
+
+<tr>
+  <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM) :</label></th>
+  <td><input type="text" name="DP" title="{{$sejour->_props.DP}}" size="10" value="{{$sejour->DP}}" /></td>
+  <td class="button"><input type="button" value="Sélectionner un code" onclick="popCode('cim10')" /></td>
 </tr>
 
 <tr>
@@ -149,7 +156,9 @@
 </tr>
 
 <tr>
-  <th><label for="modalite_libre" title="modalite d'admission">{{tr}}Modalité d'admission{{/tr}} :</label></th>
+  <th>
+    <label for="modalite_libre" title="modalite d'admission">{{tr}}Modalité d'admission{{/tr}} :</label>
+  </th>
   <td colspan="2">
     <input name="modalite" value="libre" type="radio" {{if !$sejour->sejour_id || $sejour->modalite == "libre"}}checked="checked"{{/if}} onchange="modifSejour()" />
     <label for="modalite_libre">Libre</label><br />
@@ -160,6 +169,39 @@
   </td>
 </tr>
 
+<tr>
+  <th>
+    <label for="chambre_seule_o" title="Patient à placer dans une chambre particulière">Chambre particulière :</label>
+  </th>
+  <td colspan="2">
+    <input name="chambre_seule" value="o" type="radio" {{if $sejour->chambre_seule == "o" || !$sejour->sejour_id}} checked="checked" {{/if}} onchange="modifSejour()" />
+    <label for="chambre_seule_o">Oui</label>
+    <input name="chambre_seule" value="n" type="radio" {{if $sejour->chambre_seule == "n"}} checked="checked" {{/if}} onchange="modifSejour()" />
+    <label for="chambre_seule_n">Non</label>
+</tr>
+
+<tr>
+  <th>
+    <label for="venue_SHS" title="Code Administratif SHS">Code de venue SHS :</label>
+  </th>
+  <td colspan="2">
+    <input type="text" size="8" maxlength="8" name="venue_SHS" title="{{$sejour->_props.venue_SHS}}" value="{{$sejour->venue_SHS}}" />
+  </td>
+</tr>
+
+<tr>
+  <td class="text" colspan="3">
+    <label for="rques" title="Remarques">Remarques sur le séjour</label>
+  </td>
+</tr>
+
+<tr>
+  <td  colspan="3">
+    <textarea name="rques" title="{{$sejour->_props.rques}}" rows="3">{{$sejour->rques}}</textarea>
+  </td>
+</tr>
+
+{{if !$mode_operation}}
 <tr>
   <td class="button" colspan="3">
   {{if $sejour->sejour_id}}
@@ -172,8 +214,8 @@
     <input type="submit" value="Créer" />
   {{/if}}
   </td>
-  
 </tr>
+{{/if}}
 
 </table>
 
