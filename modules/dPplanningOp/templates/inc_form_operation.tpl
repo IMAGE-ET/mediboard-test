@@ -71,7 +71,7 @@
       </button>
     </td>
     <td class="button">
-      <input type="button" value="Sélectionner un code" onclick="popCode('ccam')"/>
+      <input type="button" value="Choisir un code" onclick="popCode('ccam')"/>
     </td>
   </tr>
 
@@ -86,7 +86,7 @@
   
   <tr>
     <th><label for="libelle" title="Libellé facultatif d'intervention">Libellé :</label></th>
-    <td colspan="2"><input type="text" name="libelle" title="{{$op->_props.libelle}}" size="70" value="{{$op->libelle}}"/></td>
+    <td colspan="2"><input type="text" name="libelle" title="{{$op->_props.libelle}}" size="50" value="{{$op->libelle}}"/></td>
   </tr>
   
   <tr>

@@ -67,14 +67,14 @@
   	<input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" readonly="readonly" />
   </td>
   <td class="button">
-  	<input type="button" value="Rechercher un patient" onclick="popPat()" />
+  	<input type="button" value="Choisir un patient" onclick="popPat()" />
   </td>
 </tr>
 
 <tr>
   <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM) :</label></th>
   <td><input type="text" name="DP" title="{{$sejour->_props.DP}}" size="10" value="{{$sejour->DP}}" /></td>
-  <td class="button"><input type="button" value="Sélectionner un code" onclick="popCode('cim10')" /></td>
+  <td class="button"><input type="button" value="Choisir un code" onclick="popCode('cim10')" /></td>
 </tr>
 
 <tr>
@@ -96,14 +96,22 @@
     {{foreach from=$hours item=hour}}
       <option value="{{$hour}}" {{if $sejour->_hour_entree_prevue == $hour || (!$sejour->sejour_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
     {{/foreach}}
-    </select>
-    h
+    </select> h
     <select name="_min_entree_prevue">
     {{foreach from=$mins item=min}}
       <option value="{{$min}}" {{if $sejour->_min_entree_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}
-    </select>
-    mn
+    </select> mn
+  </td>
+</tr>
+
+<tr>
+  <th>
+    <label for="_duree_prevue" title="Choisir une durée prévue de séjour">Durée du séjour</label>
+  </th>
+  <td colspan="2">
+    <input type="text" name="_duree_prevue" value="{{$sejour->_duree_prevue}}" size="4" onchange="updateSortiePrevue()" />
+    jours
   </td>
 </tr>
 
@@ -113,7 +121,7 @@
   </th>
   <td class="date">
     <div id="editSejour__date_sortie_prevue_da">{{$sejour->_date_sortie_prevue|date_format:"%d/%m/%Y"}}</div>
-    <input type="hidden" name="_date_sortie_prevue" title="date|moreEquals|_date_entree_prevue|notNull" value="{{$sejour->_date_sortie_prevue}}" onchange="modifSejour()"/>
+    <input type="hidden" name="_date_sortie_prevue" title="date|moreEquals|_date_entree_prevue|notNull" value="{{$sejour->_date_sortie_prevue}}" onchange="updateDureePrevue(); modifSejour()"/>
     <img id="editSejour__date_sortie_prevue_trigger" src="./images/calendar.gif" alt="calendar"/>
   </td>
   <td>
@@ -122,17 +130,16 @@
     {{foreach from=$hours item=hour}}
       <option value="{{$hour}}" {{if $sejour->_hour_sortie_prevue == $hour  || (!$sejour->sejour_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
     {{/foreach}}
-    </select>
-    h
+    </select> h
     <select name="_min_sortie_prevue">
     {{foreach from=$mins item=min}}
       <option value="{{$min}}" {{if $sejour->_min_sortie_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}
-    </select>
-    mn
+    </select> mn
   </td>
 </tr>
 
+{{if !$mode_operation}}
 <tr>
   <th>Entrée réelle :</th>
   <td colspan="2">{{$sejour->entree_reelle|date_format:"%d/%m/%Y à %Hh%M"}}</td>
@@ -142,6 +149,7 @@
   <th>Sortie réelle :</th>
   <td colspan="2">{{$sejour->sortie_reelle|date_format:"%d/%m/%Y à %Hh%M"}}</td>
 </tr>
+{{/if}}
 
 <tr>
   <th><label for="type_comp" title="Type d'admission">{{tr}}Type d'admission{{/tr}} :</label></th>
@@ -155,6 +163,7 @@
   </td>
 </tr>
 
+{{if !$mode_operation}}
 <tr>
   <th>
     <label for="modalite_libre" title="modalite d'admission">{{tr}}Modalité d'admission{{/tr}} :</label>
@@ -168,6 +177,7 @@
     <label for="modalite_tiers">Tiers</label><br />
   </td>
 </tr>
+{{/if}}
 
 <tr>
   <th>
@@ -180,6 +190,7 @@
     <label for="chambre_seule_n">Non</label>
 </tr>
 
+{{if !$mode_operation}}
 <tr>
   <th>
     <label for="venue_SHS" title="Code Administratif SHS">Code de venue SHS :</label>
@@ -188,6 +199,7 @@
     <input type="text" size="8" maxlength="8" name="venue_SHS" title="{{$sejour->_props.venue_SHS}}" value="{{$sejour->venue_SHS}}" />
   </td>
 </tr>
+{{/if}}
 
 <tr>
   <td class="text" colspan="3">

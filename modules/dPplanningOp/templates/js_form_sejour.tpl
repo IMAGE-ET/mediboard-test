@@ -31,6 +31,26 @@ function modifSejour() {
   }
 }
 
+
+function updateSortiePrevue() {
+  var oForm = document.editSejour;
+  
+  var dDate = makeDateFromDATE(oForm._date_entree_prevue.value);
+  var iDelta = parseInt(oForm._duree_prevue.value, 10);  
+  dDate.setDate(dDate.getDate() + iDelta);
+  oForm._date_sortie_prevue.value = makeDATEFromDate(dDate);
+}
+
+function updateDureePrevue() {
+  var oForm = document.editSejour;
+  
+  var dEntreePrevue = makeDateFromDATE(oForm._date_entree_prevue.value);
+  var dSortiePrevue = makeDateFromDATE(oForm._date_sortie_prevue.value);
+  var iSecondsDelta = dSortiePrevue - dEntreePrevue;
+  var iDaysDelta = iSecondsDelta / (24 * 60 * 60 * 1000);
+  oForm._duree_prevue.value = iDaysDelta;
+}
+
 function popPat() {
   var url = new Url();
   url.setModuleAction("dPpatients", "pat_selector");
