@@ -12,8 +12,9 @@ require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour'  ) );
 require_once( $AppUI->getModuleClass('dPpatients'  , 'patients') );
 require_once( $AppUI->getModuleClass('mediusers') );
 
-$sejour_id   = mbGetValueFromGet("sejour_id" , 0);
-$patient_id  = mbGetValueFromGet("patient_id", 0);
+$mode_operation = mbGetValueFromGet("mode_operation", 0);
+$sejour_id      = mbGetValueFromGet("sejour_id"     , 0);
+$patient_id     = mbGetValueFromGet("patient_id"    , 0);
 
 $sejour = new CSejour;
 $praticien = new CMediusers;
@@ -59,6 +60,7 @@ $smarty->assign("sejours"  , $sejours);
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("hours"      , $hours);
 $smarty->assign("mins"       , $mins);
+$smarty->assign("mode_operation", $mode_operation);
 
 $smarty->display('inc_form_sejour.tpl');
 

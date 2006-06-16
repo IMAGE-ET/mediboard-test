@@ -35,20 +35,26 @@ function modifSejour() {
 function updateSortiePrevue() {
   var oForm = document.editSejour;
   
-  var dDate = makeDateFromDATE(oForm._date_entree_prevue.value);
-  var iDelta = parseInt(oForm._duree_prevue.value, 10);  
-  dDate.setDate(dDate.getDate() + iDelta);
-  oForm._date_sortie_prevue.value = makeDATEFromDate(dDate);
+  if(oForm._date_entree_prevue.value) {
+    var dDate = makeDateFromDATE(oForm._date_entree_prevue.value);
+    var iDelta = parseInt(oForm._duree_prevue.value, 10);  
+    dDate.setDate(dDate.getDate() + iDelta);
+    oForm._date_sortie_prevue.value = makeDATEFromDate(dDate);
+    oDiv = document.getElementById('editSejour__date_sortie_prevue_da');
+    oDiv.innerHTML = makeLocaleDateFromDate(dDate);
+  }
 }
 
 function updateDureePrevue() {
   var oForm = document.editSejour;
   
-  var dEntreePrevue = makeDateFromDATE(oForm._date_entree_prevue.value);
-  var dSortiePrevue = makeDateFromDATE(oForm._date_sortie_prevue.value);
-  var iSecondsDelta = dSortiePrevue - dEntreePrevue;
-  var iDaysDelta = iSecondsDelta / (24 * 60 * 60 * 1000);
-  oForm._duree_prevue.value = iDaysDelta;
+  if(oForm._date_entree_prevue.value) {
+    var dEntreePrevue = makeDateFromDATE(oForm._date_entree_prevue.value);
+    var dSortiePrevue = makeDateFromDATE(oForm._date_sortie_prevue.value);
+    var iSecondsDelta = dSortiePrevue - dEntreePrevue;
+    var iDaysDelta = iSecondsDelta / (24 * 60 * 60 * 1000);
+    oForm._duree_prevue.value = iDaysDelta;
+  }
 }
 
 function popPat() {
@@ -67,11 +73,20 @@ function setPat(patient_id, _patient_view, childWindow) {
   }
 }
 
-function checkSejourToReload() {
+function checkSejoursToReload() {
   if(bChangePat) {
-    reloadSejour();
+    reloadListSejours();
     bChangePat = 0;
   }
+}
+
+function reloadListSejours() {
+  var sejoursUrl = new Url;
+  var oForm = document.editSejour;
+  var iPatient_id = oForm.patient_id.value;
+  sejoursUrl.setModuleAction("dPplanningOp", "httpreq_get_sejours");
+  sejoursUrl.addParam("patient_id", iPatient_id);
+  sejoursUrl.requestUpdate('selectSejours', { waitingText : null });
 }
 
 function reloadSejour(sejour_id) {
@@ -82,6 +97,9 @@ function reloadSejour(sejour_id) {
   sejoursUrl.setModuleAction("dPplanningOp", "httpreq_vw_sejour");
   sejoursUrl.addParam("sejour_id", iSejour_id);
   sejoursUrl.addParam("patient_id", iPatient_id);
+  if(document.editOp) {
+    sejoursUrl.addParam("mode_operation", 1);
+  }
   sejoursUrl.requestUpdate('inc_form_sejour', { waitingText : null });
 }
 

@@ -139,11 +139,12 @@ function popPlage() {
 }
 
 function setPlage(plage_id, sDate, bAdm) {
-  var form = document.editOp;
+  var oOpForm     = document.editOp;
+  var oSejourForm = document.editSejour;
 
   if (plage_id) {
-    form.plageop_id.value = plage_id;
-    form.date.value = sDate;
+    oOpForm.plageop_id.value = plage_id;
+    oOpForm._date.value = sDate;
     
     // Initialize adminission date according to operation date
     var dAdm = makeDateFromLocaleDate(sDate);
@@ -158,13 +159,12 @@ function setPlage(plage_id, sDate, bAdm) {
     }
     
     if (bAdm != 2) {
-      form._hour_adm.value = dAdm.getHours();
-      form._min_adm.value = dAdm.getMinutes();
-      form.date_adm.value = makeDATEFromDate(dAdm);
-    
-
-      var div_rdv_adm = document.getElementById("editOp_date_adm_da");
+      oSejourForm._hour_entree_prevue.value = dAdm.getHours();
+      oSejourForm._min_entree_prevue.value = dAdm.getMinutes();
+      oSejourForm._date_entree_prevue.value = makeDATEFromDate(dAdm);
+      var div_rdv_adm = document.getElementById("editSejour__date_entree_prevue_da");
       div_rdv_adm.innerHTML = makeLocaleDateFromDate(dAdm);
+      updateSortiePrevue();
     }
   }
 }

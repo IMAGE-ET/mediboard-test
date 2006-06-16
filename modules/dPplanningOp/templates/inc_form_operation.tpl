@@ -18,11 +18,10 @@
   
   <tr>
     <th class="mandatory">
-      <input type="hidden" name="chir_id" title="{{$op->_props.chir_id}}" value="{{$chir->user_id}}" ondblclick="popChir()" />
       <label for="chir_id" title="Chirurgien Responsable. Obligatoire">Chirurgien :</label>
     </th>
     <td colspan="2">
-      <select name="praticien_id" title="{{$sejour->_props.praticien_id}}">
+      <select name="chir_id" title="{{$op->_props.chir_id_id}}">
         <option value="">&mdash; Choisir un praticien</option>
         {{foreach from=$listPraticiens item=curr_praticien}}
         <option value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -56,7 +55,7 @@
       <input type="hidden" name="plageop_id" title="{{$op->_props.plageop_id}}|notNull" ondblclick="popPlage()" value="{{$plage->id}}" />
       <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention :</label>
     </th>
-    <td class="readonly"><input type="text" name="date" readonly="readonly" size="10" value="{{$plage->_date}}" /></td>
+    <td class="readonly"><input type="text" name="_date" readonly="readonly" size="10" value="{{$plage->_date}}" /></td>
     <td class="button"><input type="button" value="Choisir une date" onclick="popPlage()" /></td>
   </tr>
   
@@ -104,7 +103,7 @@
   <tr>
     <td class="text"><label for="examen" title="Bilan pré-opératoire">Bilan pré-op</label></td>
     <td class="text"><label for="materiel" title="Matériel à prévoir / examens per-opératoire">Matériel à prévoir / examens per-op</label></td>
-    <td class="text"><label for="rques" title="Remarques sur l'iitervention">Remarques</label></td>
+    <td class="text"><label for="rques" title="Remarques sur l'intervention">Remarques sur l'intervention</label></td>
   </tr>
 
   <tr>

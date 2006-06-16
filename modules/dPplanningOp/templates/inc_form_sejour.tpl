@@ -8,7 +8,7 @@
 <input type="hidden" name="modif_SHS" value="{{$sejour->modif_SHS}}" />
 <input type="hidden" name="annule" value="{{$sejour->annule}}" />
 
-<table class="form">
+<table class="form" onmousemove="checkSejoursToReload()">
 
 <tr>
   <th class="category" colspan="3">
@@ -30,7 +30,7 @@
   </th>
   <td colspan="2" id="selectSejours">
     <select name="sejour_id" onchange="reloadSejour(this.value)">
-      <option value="0" {{if !$sejour->sejour_id}} selected="selected" {{/if}}>
+      <option value="" {{if !$sejour->sejour_id}} selected="selected" {{/if}}>
         &mdash; Selectionner un séjour existant
       </option>
       {{foreach from=$sejours item=curr_sejour}}
@@ -115,9 +115,9 @@
   </td>
 </tr>
 
-<tr>
+<tr {{if 0 && $mode_operation}} style="display: none" {{/if}}>
   <th>
-  	<label for="_date_sortie_prevue" title="Choisir une date d'entrée">Sortie prévue :</label>
+  	<label for="_date_sortie_prevue" title="Choisir une date de sortie">Sortie prévue :</label>
   </th>
   <td class="date">
     <div id="editSejour__date_sortie_prevue_da">{{$sejour->_date_sortie_prevue|date_format:"%d/%m/%Y"}}</div>
@@ -184,9 +184,9 @@
     <label for="chambre_seule_o" title="Patient à placer dans une chambre particulière">Chambre particulière :</label>
   </th>
   <td colspan="2">
-    <input name="chambre_seule" value="o" type="radio" {{if $sejour->chambre_seule == "o" || !$sejour->sejour_id}} checked="checked" {{/if}} onchange="modifSejour()" />
+    <input name="chambre_seule" value="o" type="radio" {{if $sejour->chambre_seule == "o"}} checked="checked" {{/if}} onchange="modifSejour()" />
     <label for="chambre_seule_o">Oui</label>
-    <input name="chambre_seule" value="n" type="radio" {{if $sejour->chambre_seule == "n"}} checked="checked" {{/if}} onchange="modifSejour()" />
+    <input name="chambre_seule" value="n" type="radio" {{if $sejour->chambre_seule == "n" || !$sejour->sejour_id}} checked="checked" {{/if}} onchange="modifSejour()" />
     <label for="chambre_seule_n">Non</label>
 </tr>
 
@@ -202,25 +202,19 @@
 {{/if}}
 
 <tr>
-  <td class="text" colspan="3">
-    <label for="convalescence" title="Remarques">Convalescence</label>
+  <td class="text">
+    <label for="convalescence" title="Convalescence">Convalescence</label>
   </td>
-</tr>
-
-<tr>
-  <td  colspan="3">
-    <textarea name="convalescence" title="{{$sejour->_props.convalescence}}" rows="3">{{$sejour->convalescence}}</textarea>
-  </td>
-</tr>
-
-<tr>
-  <td class="text" colspan="3">
+  <td class="text" colspan="2">
     <label for="rques" title="Remarques">Remarques sur le séjour</label>
   </td>
 </tr>
 
 <tr>
-  <td  colspan="3">
+  <td>
+    <textarea name="convalescence" title="{{$sejour->_props.convalescence}}" rows="3">{{$sejour->convalescence}}</textarea>
+  </td>
+  <td colspan="2">
     <textarea name="rques" title="{{$sejour->_props.rques}}" rows="3">{{$sejour->rques}}</textarea>
   </td>
 </tr>
