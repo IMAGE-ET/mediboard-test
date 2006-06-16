@@ -107,7 +107,7 @@ function pageMain() {
             {$curr_operation->time_operation|date_format:"%Hh%M"}
             </a>
           </td>
-          <td>{$curr_operation->_ref_pat->_view}</td>
+          <td>{$curr_operation->_ref_sejour->_ref_patient->_view}</td>
           <td>
             <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_operation->operation_id}" title="Modifier l'intervention">
               {foreach from=$curr_operation->_ext_codes_ccam item=curr_code}
