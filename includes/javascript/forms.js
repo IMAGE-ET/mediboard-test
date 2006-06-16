@@ -89,64 +89,66 @@ function getBoundingForm(oElement) {
   return getBoundingForm(oElement.parentNode);
 }
 
-function prepareForms() {
+var bGiveFormFocus = true;
+
+function prepareForm(oForm) {
   // Build label targets
   aLabels = document.getElementsByTagName("label");
   iLabel = 0;
   while (oLabel = aLabels[iLabel++]) {
-  	oForm = getBoundingForm(oLabel);
-  	if (sFor = oLabel.getAttribute("for")) {
-      oLabel.setAttribute("for", oForm.getAttribute("name") + "_" + sFor);
-  	} 
+  	oBoundingForm = getBoundingForm(oLabel);
+    if (oForm == oBoundingForm) {
+      if (sFor = oLabel.getAttribute("for")) {
+        oLabel.setAttribute("for", oForm.getAttribute("name") + "_" + sFor);
+      } 
+  	}
   } 
 
-  var bGiveFocus = true;
+  var sFormName = oForm.getAttribute("name");
+  var sFormClass = oForm.getAttribute("class");
 
+  // For each element
+  var iElement = 0;
+  while (oElement = oForm.elements[iElement++]) {
+    // Watch elements for watch class forms
+    if (sFormClass == "watch") {
+      oElement.watch("value", watchFormModified);
+    }
+     
+    // Create id for each element if id is null
+    if (!oElement.id) {
+      oElement.id = sFormName + "_" + oElement.name;
+      if (oElement.type == "radio") {
+        oElement.id += "_" + oElement.value;
+      }
+    }
+  
+    // Label emphasized for notNull elements
+    if (sPropSpec = oElement.getAttribute("title")) {
+      aSpecFragments = sPropSpec.split("|");
+      if (aSpecFragments.contains("notNull")) {
+        if (oLabel = getLabelFor(oElement)) {
+          oLabel.className = "notNull";
+        }
+      }
+    }
+   
+    // Focus on first text input
+    if (bGiveFormFocus && oElement.type == "text" && !oElement.getAttribute("readonly")) {
+      // Internet Explorer will not give focus to a not visible element but will raise an error
+      if (oElement.clientWidth > 0) {
+        oElement.focus();
+        bGiveFormFocus = false;
+      } 
+    }
+  }
+}
+
+function prepareForms() {
   // For each form
   var iForm = 0;
   while (oForm = document.forms[iForm++]) {
-    var sFormName = oForm.getAttribute("name");
-    var sFormClass = oForm.getAttribute("class");
-    
-    // For each element
-    var iElement = 0;
-    while (oElement = oForm.elements[iElement++]) {
-      // Watch elements for watch class forms
-      if (sFormClass == "watch") {
-        //if(oElement.type == "textarea") {
-        //  oElement.watch("innerHTML", watchFormModified);
-        //} else {
-          oElement.watch("value", watchFormModified);
-          //alert("Watch sur "+oElement.name);
-        //}
-      }
-      // Create id for each element if id is null
-      if (!oElement.id) {
-        oElement.id = sFormName + "_" + oElement.name;
-        if (oElement.type == "radio") {
-          oElement.id += "_" + oElement.value;
-        }
-      }
-
-      // Label emphasized for notNull elements
-      if (sPropSpec = oElement.getAttribute("title")) {
-        aSpecFragments = sPropSpec.split("|");
-        if (aSpecFragments.contains("notNull")) {
-          if (oLabel = getLabelFor(oElement)) {
-            oLabel.className = "notNull";
-          }
-        }
-      }
-      
-      // Focus on first text input
-      if (bGiveFocus && oElement.type == "text" && !oElement.getAttribute("readonly")) {
-        // Internet Explorer will not give focus to a not visible element but will raise an error
-        if (oElement.clientWidth > 0) {
-          oElement.focus();
-          bGiveFocus = false;
-        } 
-      }
-    }
+    prepareForm(oForm);
   }
 }
 

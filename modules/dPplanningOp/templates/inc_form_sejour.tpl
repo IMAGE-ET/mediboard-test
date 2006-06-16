@@ -82,12 +82,6 @@
     <div id="editSejour__date_entree_prevue_da">{{$sejour->_date_entree_prevue|date_format:"%d/%m/%Y"}}</div>
     <input type="hidden" name="_date_entree_prevue" title="date|notNull" value="{{$sejour->_date_entree_prevue}}" onchange="modifSejour()"/>
     <img id="editSejour__date_entree_prevue_trigger" src="./images/calendar.gif" alt="calendar"/>
-    <script text/javascript">
-    regFieldCalendar("editSejour", "_date_entree_prevue");
-  regFieldCalendar("editSejour", "_date_sortie_prevue");
-  
-	</script>
-  
   </td>
   <td>
     à
@@ -184,3 +178,10 @@
 </table>
 
 </form>
+
+<script type="text/javascript">
+// Explicit form preparation for Ajax loading
+prepareForm(document.editSejour);
+regFieldCalendar("editSejour", "_date_entree_prevue");
+regFieldCalendar("editSejour", "_date_sortie_prevue");
+</script>
