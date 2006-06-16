@@ -71,7 +71,7 @@ function reloadSejour(sejour_id) {
   var iSejour_id = oForm.sejour_id.value;
   sejoursUrl.setModuleAction("dPplanningOp", "httpreq_vw_sejour");
   sejoursUrl.addParam("sejour_id", iSejour_id);
-  sejoursUrl.requestUpdate('inc_form_sejour');
+  sejoursUrl.requestUpdate('inc_form_sejour', { waitingText : null });
 }
 
 function incFormSejourMain() {
