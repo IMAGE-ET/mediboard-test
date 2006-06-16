@@ -3,25 +3,21 @@
 <script type="text/javascript">
 
 function checkFormSejour() {
-  var oForm = document.editFrm;
+  var oForm = document.editSejour;
   
   if (!checkForm(oForm)) {
     return false;
   }
 
-  if (!checkDuree()) {
-    return false;
-  }
-
-  if (!checkDureeHospi()) {
+  if (!checkDureeSejour()) {
     return false;
   }
   
   return true;
 }
 
-function checkDureeHospi() {
-  var form = document.editFrm;
+function checkDureeSejour() {
+  var form = document.editSejour;
 
   field1 = form.type_adm;
   field2 = form.duree_hospi;
@@ -36,22 +32,8 @@ function checkDureeHospi() {
   return true;
 }
 
-function checkDuree() {
-  var form = document.editFrm;
-  field1 = form._hour_op;
-  field2 = form._min_op;
-  if (field1 && field2) {
-    if (field1.value == 0 && field2.value == 0) {
-      alert("Temps opératoire invalide");
-      field1.focus();
-      return false;
-    }
-  }
-  return true;
-}
-
 function confirmAnnulation() {
-  var oForm = document.editFrm;
+  var oForm = document.editSejour;
   var oElement = oForm.annule;
   
   if (oElement.value == "0") {
@@ -78,7 +60,7 @@ function popPat() {
 }
 
 function setPat(patient_id, _patient_view) {
-  var oForm = document.editFrm;
+  var oForm = document.editSejour;
 
   if (patient_id) {
     oForm.patient_id.value = patient_id;
@@ -89,14 +71,14 @@ function setPat(patient_id, _patient_view) {
 function popCode(type) {
   var url = new Url();
   url.setModuleAction("dPplanningOp", "code_selector");
-  url.addElement(document.editFrm.chir_id, "chir");
+  url.addElement(document.editSejour.chir_id, "chir");
   url.addParam("type", type)
   url.popup(600, 500, type);
 }
 
 function setCode(sCode, sCodeType) {
   if (sCode) {
-    var oForm = document.editFrm;
+    var oForm = document.editSejour;
     var oElement = null;
     if (type == "cim10") oElement = oForm.DP;
     oElement.value = sCode;
@@ -104,20 +86,28 @@ function setCode(sCode, sCodeType) {
 }
 
 function modifSejour() {
-  var oForm = document.editFrm;
+  var oForm = document.editSejour;
   if (oForm.saisi_SHS.value == 'o') {
     oForm.modif_SHS.value = 1;
     oForm.saisi_SHS.value = 'n';
   }
 }
 
-function pageMain() {
-  regFieldCalendar("editFrm", "_date_entree_prevue");
-  regFieldCalendar("editFrm", "_date_sortie_prevue");
+function incFormSejourMain() {
+  regFieldCalendar("editSejour", "_date_entree_prevue");
+  regFieldCalendar("editSejour", "_date_sortie_prevue");
 }
 
 </script>
 
+<form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkFormSejour()">
+
+<input type="hidden" name="dosql" value="do_sejour_aed" />
+<input type="hidden" name="del" value="0" />
+<input type="hidden" name="sejour_id" value="{{$sejour->sejour_id}}" />
+<input type="hidden" name="saisi_SHS" value="{{$sejour->saisi_SHS}}" />
+<input type="hidden" name="modif_SHS" value="{{$sejour->modif_SHS}}" />
+<input type="hidden" name="annule" value="{{$sejour->annule}}" />
 
 <table class="form">
 
@@ -173,9 +163,9 @@ function pageMain() {
   	<label for="_date_entree_prevue" title="Choisir une date d'entrée">Entrée prévue :</label>
   </th>
   <td class="date">
-    <div id="editFrm__date_entree_prevue_da">{{$sejour->_date_entree_prevue|date_format:"%d/%m/%Y"}}</div>
+    <div id="editSejour__date_entree_prevue_da">{{$sejour->_date_entree_prevue|date_format:"%d/%m/%Y"}}</div>
     <input type="hidden" name="_date_entree_prevue" title="date|notNull" value="{{$sejour->_date_entree_prevue}}" onchange="modifSejour()"/>
-    <img id="editFrm__date_entree_prevue_trigger" src="./images/calendar.gif" alt="calendar"/>
+    <img id="editSejour__date_entree_prevue_trigger" src="./images/calendar.gif" alt="calendar"/>
   </td>
   <td>
     à
@@ -199,9 +189,9 @@ function pageMain() {
   	<label for="_date_sortie_prevue" title="Choisir une date d'entrée">Sortie prévue :</label>
   </th>
   <td class="date">
-    <div id="editFrm__date_sortie_prevue_da">{{$sejour->_date_sortie_prevue|date_format:"%d/%m/%Y"}}</div>
+    <div id="editSejour__date_sortie_prevue_da">{{$sejour->_date_sortie_prevue|date_format:"%d/%m/%Y"}}</div>
     <input type="hidden" name="_date_sortie_prevue" title="date|moreEquals|_date_entree_prevue|notNull" value="{{$sejour->_date_sortie_prevue}}" onchange="modifSejour()"/>
-    <img id="editFrm__date_sortie_prevue_trigger" src="./images/calendar.gif" alt="calendar"/>
+    <img id="editSejour__date_sortie_prevue_trigger" src="./images/calendar.gif" alt="calendar"/>
   </td>
   <td>
     à 
@@ -270,3 +260,5 @@ function pageMain() {
 </tr>
 
 </table>
+
+</form>
