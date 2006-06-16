@@ -80,11 +80,6 @@ if ($operation_id) {
 
 $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;
-foreach($sejours as $key => $curr_sejour) {
-  if($sejours[$key]->sortie_prevue < $date) {
-    unset($sejours[$key]);
-  }
-}
 
 // Récupération des modèles
 $whereCommon = array();

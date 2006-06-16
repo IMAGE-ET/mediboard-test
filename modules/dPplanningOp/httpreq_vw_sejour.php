@@ -8,17 +8,28 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m, $tab, $dPconfig;
-require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour') );
+require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour'  ) );
+require_once( $AppUI->getModuleClass('dPpatients'  , 'patients') );
+require_once( $AppUI->getModuleClass('mediusers') );
 
-$sejour_id  = mbGetValueFromGet("sejour_id", 0);
+$sejour_id   = mbGetValueFromGet("sejour_id" , 0);
+$patient_id  = mbGetValueFromGet("patient_id", 0);
 
 $sejour = new CSejour;
-$sejour->load($sejour_id);
-$sejour->loadRefsFwd();
-$praticien =& $sejour->_ref_praticien;
-$patient =& $sejour->_ref_patient;
-$patient->loadRefsSejours();
-$sejours =& $patient->_ref_sejours;
+$praticien = new CMediusers;
+if($sejour_id) {
+  $sejour->load($sejour_id);
+  $sejour->loadRefsFwd();
+  $praticien =& $sejour->_ref_praticien;
+  $patient =& $sejour->_ref_patient;
+  $patient->loadRefsSejours();
+  $sejours =& $patient->_ref_sejours;
+} else {
+  $patient = new CPatient;
+  $patient->load($patient_id);
+  $patient->loadRefsSejours();
+  $sejours =& $patient->_ref_sejours;
+}
 
 // L'utilisateur est-il un praticien
 $mediuser = new CMediusers;

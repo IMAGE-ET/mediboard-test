@@ -47,30 +47,21 @@ function setPat(patient_id, _patient_view, childWindow) {
   }
 }
 
-function checkPatToReload() {
+function checkSejourToReload() {
   if(bChangePat) {
-    reloadSelectSejours();
+    reloadSejour();
     bChangePat = 0;
   }
-}
-
-function reloadSelectSejours() {
-  var sejoursUrl = new Url;
-  var oForm = document.editSejour;
-  var iPatient_id = oForm.patient_id.value;
-  var iSejour_id = oForm.sejour_id.value;
-  sejoursUrl.setModuleAction("dPplanningOp", "httpreq_get_sejours");
-  sejoursUrl.addParam("patient_id", iPatient_id);
-  sejoursUrl.addParam("sejour_id", iSejour_id);
-  sejoursUrl.requestUpdate('selectSejours', { waitingText : null });
 }
 
 function reloadSejour(sejour_id) {
   var sejoursUrl = new Url;
   var oForm = document.editSejour;
+  var iPatient_id = oForm.patient_id.value;
   var iSejour_id = oForm.sejour_id.value;
   sejoursUrl.setModuleAction("dPplanningOp", "httpreq_vw_sejour");
   sejoursUrl.addParam("sejour_id", iSejour_id);
+  sejoursUrl.addParam("patient_id", iPatient_id);
   sejoursUrl.requestUpdate('inc_form_sejour', { waitingText : null });
 }
 
