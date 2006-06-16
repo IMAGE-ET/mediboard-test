@@ -31,11 +31,45 @@ function modifSejour() {
   }
 }
 
+function popPat() {
+  var url = new Url();
+  url.setModuleAction("dPpatients", "pat_selector");
+  url.popup(800, 500, "Patient");
+}
+
+function setPat(patient_id, _patient_view, childWindow) {
+  var oForm = document.editSejour;
+
+  if (patient_id) {
+    oForm.patient_id.value = patient_id;
+    oForm._patient_view.value = _patient_view;
+    bChangePat = 1;
+  }
+}
+
+function checkPatToReload() {
+  if(bChangePat) {
+    reloadSelectSejours();
+    bChangePat = 0;
+  }
+}
+
+function reloadSelectSejours() {
+  var sejoursUrl = new Url;
+  var iPatient_id = document.editSejour.patient_id.value;
+  sejoursUrl.setModuleAction("dPplanningOp", "httpreq_get_sejours");
+  sejoursUrl.addParam("patient_id", iPatient_id);
+  sejoursUrl.addParam("sejour_id", "{{$sejour->sejour_id}}");
+  sejoursUrl.requestUpdate('selectSejours', { waitingText : null });
+}
+
 function incFormSejourMain() {
   regFieldCalendar("editSejour", "_date_entree_prevue");
   regFieldCalendar("editSejour", "_date_sortie_prevue");
   reloadSelectSejours();
 }
+
+var bChangePat = 0;
 
 </script>
 <form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -62,7 +96,7 @@ function incFormSejourMain() {
 </tr>
 {{/if}}
 
-<tr>
+<tr onmouseover="checkPatToReload()" onmouseout="checkPatToReload()">
   <th>
     Sejours existants :
   </th>

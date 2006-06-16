@@ -13,9 +13,6 @@ require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
 $sejour_id  = mbGetValueFromGet("sejour_id", 0);
 $patient_id = mbGetValueFromGet("patient_id", 0);
 
-echo "patient : $patient_id, sejour : $sejour_id";
-exit(0);
-
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefsSejours();
