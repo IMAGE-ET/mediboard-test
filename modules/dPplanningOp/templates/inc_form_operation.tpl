@@ -95,36 +95,6 @@ function checkCCAM() {
   return true;
 }
 
-function checkDureeHospi() {
-  var form = document.editOp;
-
-  field1 = form.type_adm;
-  field2 = form.duree_hospi;
-  if (field1 && field2) {
-    if (field1[0].checked && (field2.value == 0 || field2.value == '')) {
-      field2.value = prompt("Veuillez saisir une durée prévue d'hospitalisation d'au moins 1 jour", "1");
-      field2.focus();
-      return false;
-    }
-  }
-
-  return true;
-}
-
-function checkChir() {
-  var form = document.editOp;
-  var field = null;
-  
-  if (field = form.chir_id) {
-    if (field.value == 0) {
-      alert("Chirurgien manquant");
-      popChir();
-      return false;
-    }
-  }
-  return true;
-}
-
 function checkDuree() {
   var form = document.editOp;
   field1 = form._hour_op;
@@ -147,20 +117,6 @@ function modifOp() {
   }
 }
 
-function popChir() {
-  var url = new Url();
-  url.setModuleAction("mediusers", "chir_selector");
-  url.popup(400, 250, 'Chirurgien');
-}
-
-function setChir( key, val ){
-  var f = document.editOp;
-  if (val != '') {
-     f.chir_id.value = key;
-     f._chir_name.value = val;
-  }
-}
-
 function popPat() {
   var url = new Url();
   url.setModuleAction("dPpatients", "pat_selector");
@@ -173,23 +129,6 @@ function setPat( key, val ) {
   if (val != '') {
     f.pat_id.value = key;
     f._pat_name.value = val;
-  }
-}
-
-function popCode(type) {
-  var url = new Url();
-  url.setModuleAction("dPplanningOp", "code_selector");
-  url.addElement(document.editOp.chir_id, "chir");
-  url.addParam("type", type)
-  url.popup(600, 500, type);
-}
-
-function setCode( key, type ) {
-  if (key) {
-    var form = document.editOp;
-    var field = form.CIM10_code;
-    if (type == 'ccam')  field = form._codeCCAM;
-    field.value = key;
   }
 }
 
