@@ -96,6 +96,31 @@ function printForm() {
   return;
 }
 
+function popPat() {
+  var url = new Url();
+  url.setModuleAction("dPpatients", "pat_selector");
+  url.popup(800, 500, "Patient");
+}
+
+function setPat(patient_id, _patient_view) {
+  var oForm = document.editSejour;
+
+  if (patient_id) {
+    oForm.patient_id.value = patient_id;
+    oForm._patient_view.value = _patient_view;
+    reloadSelectSejours();
+  }
+}
+
+function reloadSelectSejours() {
+  var sejoursUrl = new Url;
+  var iPatient_id = document.editSejour.patient_id.value;
+  sejoursUrl.setModuleAction("dPplanningOp", "httpreq_get_sejours");
+  sejoursUrl.addParam("patient_id", iPatient_id);
+  sejoursUrl.addParam("sejour_id", "{{$sejour->sejour_id}}");
+  sejoursUrl.requestUpdate('selectSejours');
+}
+
 function pageMain() {
   incFormOperationMain();
   incFormSejourMain();
