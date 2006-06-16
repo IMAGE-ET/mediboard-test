@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_get_last_refs.php 136 2006-06-13 22:47:54Z Rhum1 $ */
+<?php /* $Id: $ */
 
 /**
 * @package Mediboard
-* @subpackage dPpatients
-* @version $Revision: 136 $
+* @subpackage dPplanningOp
+* @version $Revision: $
 * @author Romain Ollivier
 */
 
@@ -18,11 +18,10 @@ $date = mbDate()." 00:00:00";
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefsSejours();
-foreach($patient->_ref_sejours as $key => $sejour) {
-  if($patient->_ref_sejours[$key]->sortie_prevue < $date) {
-    unset($patient->_ref_sejours[$key]);
-  } else {
-    $patient->_ref_sejours[$key]->loadRefsFwd();
+$sejours =& $patient->_ref_sejours;
+foreach($sejours as $key => $curr_sejour) {
+  if($sejours[$key]->sortie_prevue < $date) {
+    unset($sejours[$key]);
   }
 }
 
@@ -32,7 +31,7 @@ if ($canRead) {
   $smarty = new CSmartyDP(1);
 
   $smarty->assign('sejour_id', $sejour_id);
-  $smarty->assign('sejours', $patient->_ref_sejours);
+  $smarty->assign('sejours', $sejours);
 
   $smarty->display('inc_select_sejours.tpl');
 }

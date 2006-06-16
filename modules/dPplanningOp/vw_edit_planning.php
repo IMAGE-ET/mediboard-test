@@ -24,6 +24,8 @@ $sejour_id = mbGetValueFromGetOrSession("sejour_id", null);
 $chir_id = mbGetValueFromGet("chir_id", null);
 $patient_id = mbGetValueFromGet("pat_id", null);
 
+$date = mbDate()." 00:00:00";
+
 // L'utilisateur est-il un praticien
 $chir = new CMediusers;
 $chir->load($AppUI->user_id);
@@ -74,6 +76,14 @@ if ($operation_id) {
   $sejour->loadRefsFwd();
   $chir =& $sejour->_ref_praticien;
   $patient =& $sejour->_ref_patient;
+}
+
+$patient->loadRefsSejours();
+$sejours =& $patient->_ref_sejours;
+foreach($sejours as $key => $curr_sejour) {
+  if($sejours[$key]->sortie_prevue < $date) {
+    unset($sejours[$key]);
+  }
 }
 
 // Récupération des modèles
@@ -130,12 +140,13 @@ for ($i = 0; $i < 60; $i += $operationConfig["min_intervalle"]) {
 require_once( $AppUI->getSystemClass ("smartydp" ) );
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("op"         , $op);
-$smarty->assign("sejour"     , $sejour);
-$smarty->assign("chir"       , $chir);
-$smarty->assign("praticien"  , $chir);
-$smarty->assign("patient"    , $patient );
-$smarty->assign("plage"      , $op->plageop_id ? $op->_ref_plageop : new CPlageop );
+$smarty->assign("op"        , $op);
+$smarty->assign("plage"     , $op->plageop_id ? $op->_ref_plageop : new CPlageop );
+$smarty->assign("sejour"    , $sejour);
+$smarty->assign("chir"      , $chir);
+$smarty->assign("praticien" , $chir);
+$smarty->assign("patient"   , $patient );
+$smarty->assign("sejours"   , $sejours);
 
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listModelePrat", $listModelePrat);

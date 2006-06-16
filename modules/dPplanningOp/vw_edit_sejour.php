@@ -65,6 +65,9 @@ if ($sejour_id) {
   $patient =& $sejour->_ref_patient;
 }
 
+$patient->loadRefsSejours();
+$sejours =& $patient->_ref_sejours;
+
 // Heures & minutes
 $sejourConfig =& $dPconfig["dPplanningOp"]["sejour"];
 for ($i = $sejourConfig["heure_deb"]; $i <= $sejourConfig["heure_fin"]; $i++) {
@@ -82,6 +85,7 @@ $smarty = new CSmartyDP(1);
 $smarty->assign("sejour", $sejour);
 $smarty->assign("praticien" , $praticien);
 $smarty->assign("patient"  , $patient);
+$smarty->assign("sejours", $sejours);
 
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("hours", $hours);

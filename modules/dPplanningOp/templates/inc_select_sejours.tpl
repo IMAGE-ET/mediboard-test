@@ -1,4 +1,4 @@
-<select name="sejour_id">
+<select name="sejour_id" onchange="reloadSejour(this.value)">
   <option value="0" {{if !$sejour_id}} selected="selected" {{/if}}>
     &mdash Selectionner un séjour existant
   </option>

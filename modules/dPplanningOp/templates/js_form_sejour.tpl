@@ -56,17 +56,27 @@ function checkPatToReload() {
 
 function reloadSelectSejours() {
   var sejoursUrl = new Url;
-  var iPatient_id = document.editSejour.patient_id.value;
+  var oForm = document.editSejour;
+  var iPatient_id = oForm.patient_id.value;
+  var iSejour_id = oForm.sejour_id.value;
   sejoursUrl.setModuleAction("dPplanningOp", "httpreq_get_sejours");
   sejoursUrl.addParam("patient_id", iPatient_id);
-  sejoursUrl.addParam("sejour_id", "{{$sejour->sejour_id}}");
+  sejoursUrl.addParam("sejour_id", iSejour_id);
   sejoursUrl.requestUpdate('selectSejours', { waitingText : null });
+}
+
+function reloadSejour(sejour_id) {
+  var sejoursUrl = new Url;
+  var oForm = document.editSejour;
+  var iSejour_id = oForm.sejour_id.value;
+  sejoursUrl.setModuleAction("dPplanningOp", "httpreq_vw_sejour");
+  sejoursUrl.addParam("sejour_id", iSejour_id);
+  sejoursUrl.requestUpdate('inc_form_sejour');
 }
 
 function incFormSejourMain() {
   regFieldCalendar("editSejour", "_date_entree_prevue");
   regFieldCalendar("editSejour", "_date_sortie_prevue");
-  reloadSelectSejours();
 }
 
 var bChangePat = 0;
