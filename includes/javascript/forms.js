@@ -102,7 +102,6 @@ function prepareForm(oForm) {
   	oBoundingForm = getBoundingForm(oLabel);
     if (oForm == oBoundingForm) {
       if (sFor = oLabel.getAttribute("for")) {
-        reg = new RegExp("/^" + oForm.getAttribute("name") + "/");
         if(sFor.indexOf(sFormName) != 0) {
           oLabel.setAttribute("for", sFormName + "_" + sFor);
         }
