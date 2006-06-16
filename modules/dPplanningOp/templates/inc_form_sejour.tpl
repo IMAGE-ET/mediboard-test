@@ -8,7 +8,7 @@
 <input type="hidden" name="modif_SHS" value="{{$sejour->modif_SHS}}" />
 <input type="hidden" name="annule" value="{{$sejour->annule}}" />
 
-<table class="form" onmousemove="checkSejourToReload()">
+<table class="form">
 
 <tr>
   <th class="category" colspan="3">
