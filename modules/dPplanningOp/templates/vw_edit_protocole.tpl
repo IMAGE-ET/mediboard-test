@@ -242,7 +242,7 @@ function pageMain() {
               <img src="modules/dPplanningOp/images/tick.png" alt="ajouter" />
             </button>
           </td>
-          <td class="button"><input type="button" value="Sélectionner un code" onclick="popCode('ccam')"/></td>
+          <td class="button"><input type="button" value="Choisir un code" onclick="popCode('ccam')"/></td>
         </tr>
         <tr>
           <th>
@@ -254,7 +254,7 @@ function pageMain() {
         </tr>
         <tr>
           <th><label for="libelle" title="Libellé facultatif d'intervention">Libellé :</label></th>
-          <td colspan="2"><input type="text" name="libelle" title="{$protocole->_props.libelle}" size="70" value="{$protocole->libelle}"/></td>
+          <td colspan="2"><input type="text" name="libelle" title="{$protocole->_props.libelle}" size="50" value="{$protocole->libelle}"/></td>
         </tr>
         <tr>
           <td class="text"><label for="examen" title="Bilan pré-opératoire">Bilan pré-op</label></td>
@@ -281,7 +281,7 @@ function pageMain() {
         <tr>
           <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM) :</label></th>
           <td><input type="text" name="DP" title="{$protocole->_props.DP}" size="10" value="{$protocole->DP}" /></td>
-          <td class="button"><input type="button" value="Sélectionner un code" onclick="popCode('cim10')" /></td>
+          <td class="button"><input type="button" value="Choisir un code" onclick="popCode('cim10')" /></td>
         </tr>
         <tr>
           <th class="mandatory"><label for="duree_hospi" title="Durée d'hospitalisation en jours">Durée d'hospitalisation :</label></th>

@@ -41,7 +41,7 @@ function setCode(sCode, type ) {
 function popProtocole() {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "vw_protocoles");
-  url.addElement(document.editFrm.chir_id);
+  url.addElement(document.editOp.chir_id, "chir_id");
   url.popup(700, 500, "Protocole");
 }
 
@@ -51,7 +51,6 @@ function setProtocole(protocole) {
   var formSejour = document.editSejour;
   
   formOp.chir_id.value           = protocole.chir_id;
-  formOp._chir_name.value        = protocole._chir_view;
   formOp.codes_ccam.value        = protocole.codes_ccam;
   refreshListCCAM();
   formOp.libelle.value           = protocole.libelle;
@@ -60,8 +59,10 @@ function setProtocole(protocole) {
   formOp.materiel.value          = protocole.materiel;
   formOp.examen.value            = protocole.examen;
   formOp.depassement.value       = protocole.depassement;
-  formOp.duree_hospi.value       = protocole.duree_hospi;
   formOp.rques.value             = protocole.rques_operation;
+  formSejour.praticien_id.value  = protocole.chir_id;
+  formSejour._duree_prevue.value = protocole.duree_hospi;
+  formSejour._duree_prevue.onchange();
   formSejour.convalescence.value = protocole.convalescence;
   formSejour.DP.value            = protocole.DP;
   formSejour.rques.value         = protocole.rques_sejour;
@@ -101,7 +102,7 @@ function printPack() {
 function printForm() {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "view_planning"); 
-  url.addElement(document.editFrm.operation_id);
+  url.addElement(document.editOp.operation_id);
   url.popup(700, 500, url, "printPlanning");
   return;
 }

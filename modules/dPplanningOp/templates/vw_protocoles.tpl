@@ -8,7 +8,6 @@ var aProtocoles = new Array();
 aProtocoles[{{$curr_protocole->protocole_id}}] = {
   protocole_id     : {{$curr_protocole->protocole_id}},
   chir_id          : {{$curr_protocole->chir_id}},
-  _chir_view       : "{{$curr_protocole->_ref_chir->_view|escape:javascript}}",
   codes_ccam       : "{{$curr_protocole->codes_ccam}}",
   DP               : "{{$curr_protocole->DP}}",
   libelle          : "{{$curr_protocole->libelle|escape:javascript}}",
@@ -20,7 +19,7 @@ aProtocoles[{{$curr_protocole->protocole_id}}] = {
   depassement      : "{{$curr_protocole->depassement}}",
   type             : "{{$curr_protocole->type}}",
   duree_hospi      : {{$curr_protocole->duree_hospi}},
-  rques_sejour     : "{{$curr_protocole->rques_sejour|escape:javascript}}"
+  rques_sejour     : "{{$curr_protocole->rques_sejour|escape:javascript}}",
   rques_operation  : "{{$curr_protocole->rques_operation|escape:javascript}}"
 }
 {{/foreach}}
