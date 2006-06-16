@@ -40,26 +40,28 @@ function popProtocole() {
 
 function setProtocole(protocole) {
 
-  var form = document.editFrm;
+  var formOp = document.editOp;
+  var formSejour = document.editSejour;
   
-  form.chir_id.value       = protocole.chir_id;
-  form._chir_name.value    = protocole._chir_view;
-  form.codes_ccam.value    = protocole.codes_ccam;
+  formOp.chir_id.value           = protocole.chir_id;
+  formOp._chir_name.value        = protocole._chir_view;
+  formOp.codes_ccam.value        = protocole.codes_ccam;
   refreshListCCAM();
-  form.libelle.value       = protocole.libelle;
-  form._hour_op.value      = protocole._hour_op;
-  form._min_op.value       = protocole.min_op;
-  form.materiel.value      = protocole.materiel;
-  form.convalescence.value = protocole.convalescence;
-  form.examen.value        = protocole.examen;
-  form.depassement.value   = protocole.depassement;
-  setRadioValue(form.type_adm, protocole.type);
-  form.duree_hospi.value   = protocole.duree_hospi;
-  form.rques.value         = protocole.rques_sejour;
+  formOp.libelle.value           = protocole.libelle;
+  formOp._hour_op.value          = protocole._hour_op;
+  formOp._min_op.value           = protocole.min_op;
+  formOp.materiel.value          = protocole.materiel;
+  formOp.examen.value            = protocole.examen;
+  formOp.depassement.value       = protocole.depassement;
+  formOp.duree_hospi.value       = protocole.duree_hospi;
+  formOp.rques.value             = protocole.rques_operation;
+  formSejour.convalescence.value = protocole.convalescence;
+  formSejour.rques.value         = protocole.rques_sejour;
+  setRadioValue(formSejour.type, protocole.type);
 }
 
 function printDocument() {
-  form = document.editFrm;
+  form = document.editOp;
   
   if (checkFormOperation() && (form._choix_modele.value != 0)) {
     var url = new Url;
@@ -74,7 +76,7 @@ function printDocument() {
 }
 
 function printPack() {
-  form = document.editFrm;
+  form = document.editOp;
 
   if (checkFormOperation() && (form._choix_pack.value != 0)) {
     var url = new Url;

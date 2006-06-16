@@ -70,7 +70,6 @@ function pageMain() {
       {{include file="inc_form_sejour.tpl"}}
     </td>
     <td>
-      {{include file="js_infos_operation.tpl"}}
       {{include file="inc_infos_operation.tpl"}}
     </td>
   </tr>
