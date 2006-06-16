@@ -117,21 +117,6 @@ function modifOp() {
   }
 }
 
-function popPat() {
-  var url = new Url();
-  url.setModuleAction("dPpatients", "pat_selector");
-  url.popup(800, 500, "Patient");
-}
-
-function setPat( key, val ) {
-  var f = document.editOp;
-
-  if (val != '') {
-    f.pat_id.value = key;
-    f._pat_name.value = val;
-  }
-}
-
 function popPlage() {
   if (checkChir() & checkDuree()) {
     var oForm = document.editOp;
