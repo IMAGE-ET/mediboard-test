@@ -168,7 +168,7 @@ function pageMain() {
           <td class="button">
           {{if $op->operation_id}}
             <input type="button" value="Modifier" onclick="submitForms();" />
-            <input type="button" value="Supprimer" onclick="confirmDeletion(document.editOp.form,{typeName:'l\'intervention du Dr',objName:'{{$op->_ref_chir->_view}}'})" />
+            <input type="button" value="Supprimer" onclick="confirmDeletion(document.editOp,{typeName:'l\'intervention du Dr',objName:'{{$op->_ref_chir->_view}}'})" />
             <input type="button" value="Annuler" onclick="if (confirm('Veuillez confirmer l\'annulation')) {var f = document.editOp; f.annulee.value = 1; f.rank.value = 0; f.submit();}" />
           {{else}}
             <input type="button" value="Créer" onclick="submitForms();" />
