@@ -17,7 +17,7 @@ function reloadMain() {
 </script>
 {/literal}
 
-<form class="watch" name="editFrm" action="?m={$m}" method="post" onsubmit="checkForm(this);">
+<form class="watch" name="editFrm" action="?m={$m}" method="post" onsubmit="return checkForm(this);">
 
 <input type="hidden" name="m" value="{$m}" />
 <input type="hidden" name="del" value="0" />

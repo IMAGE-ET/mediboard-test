@@ -108,7 +108,7 @@ function submitFdr(oForm) {
       <ul>
         {foreach from=$consult->_ref_files item=curr_file}
         <li>
-          <form name="uploadFrm{$curr_file->file_id}" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="checkForm(this)">
+          <form name="uploadFrm{$curr_file->file_id}" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
             <a href="mbfileviewer.php?file_id={$curr_file->file_id}">{$curr_file->file_name}</a>
             ({$curr_file->_file_size})
             <input type="hidden" name="m" value="dPcabinet" />
@@ -125,7 +125,7 @@ function submitFdr(oForm) {
           <li>Aucun fichier disponible</li>
         {/foreach}
       </ul>
-      <form name="uploadFrm" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="checkForm(this)">
+      <form name="uploadFrm" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="m" value="dPcabinet" />
         <input type="hidden" name="dosql" value="do_file_aed" />
         <input type="hidden" name="del" value="0" />
@@ -188,7 +188,7 @@ function submitFdr(oForm) {
     
     </td>
     <td>
-      <form name="tarifFrm" action="?m={$m}" method="post" onsubmit="checkForm(this)">
+      <form name="tarifFrm" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
 
       <input type="hidden" name="m" value="{$m}" />
       <input type="hidden" name="del" value="0" />

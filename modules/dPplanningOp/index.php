@@ -42,7 +42,7 @@ if ($canEdit) {
   $tabBox->add("vw_edit_planning", "Planifier / Modifier une intervention");
 }
 
-$tabBox->add("vw_edit_hospi", "Planifier / Modifier une hospitalisation");
+//$tabBox->add("vw_edit_hospi", "Planifier / Modifier une hospitalisation");
 $tabBox->add("vw_edit_sejour", "Planifier / Modifier un séjour");
 
 if ($canEdit) {
