@@ -138,7 +138,12 @@ function deleteObjects() {
 
   confirmDeletion(document.editOp, oOptions, oAjaxOptions);
 }
-  
+ 
+function cancelObjects() {
+  cancelOperation();
+//  cancelSejour();
+}  
+
 function pageMain() {
   incFormOperationMain();
   incFormSejourMain();
@@ -190,7 +195,7 @@ function pageMain() {
           {{if $op->operation_id}}
             <input type="button" value="Modifier" onclick="submitForms();" />
             <input type="button" value="Supprimer" onclick="deleteObjects();" />
-            <input type="button" value="Annuler" onclick="if (confirm('Veuillez confirmer l\'annulation')) {var f = document.editOp; f.annulee.value = 1; f.rank.value = 0; f.submit();}" />
+            <input type="button" value="Annuler" onclick="cancelObjects();" />
           {{else}}
             <input type="button" value="Créer" onclick="submitForms();" />
           {{/if}}

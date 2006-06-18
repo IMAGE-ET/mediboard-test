@@ -146,6 +146,27 @@ function popPlage() {
   }
 }
 
+function cancelOperation() {
+  var oForm = document.editOp;
+  var oElement = oForm.annulee;
+  
+  if (oElement.value == "0") {
+    if (confirm("Voulez-vous vraiment annuler l'opération ?")) {
+      oElement.value = "1";
+      oForm.submit();
+      return;
+    }
+  }
+      
+  if (oElement.value == "1") {
+    if (confirm("Voulez-vous vraiment rétablir l'opération ?")) {
+      oElement.value = "0";
+      oForm.submit();
+      return;
+    }
+  }
+}
+
 function setPlage(plage_id, sDate, bAdm) {
   var oOpForm     = document.editOp;
   var oSejourForm = document.editSejour;

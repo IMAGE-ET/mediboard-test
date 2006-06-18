@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 
-function confirmAnnulation() {
+function cancelSejour() {
   var oForm = document.editSejour;
   var oElement = oForm.annule;
   

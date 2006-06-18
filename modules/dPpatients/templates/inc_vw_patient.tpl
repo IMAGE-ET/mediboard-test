@@ -198,16 +198,22 @@ function printIntervention(id) {
       <a class="actionPat" title="Modifier le séjour" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={$curr_sejour->sejour_id}">
         <img src="modules/dPpatients/images/planning.png" alt="Planifier"/>
       </a>
-      <a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}#adm{$curr_sejour->sejour_id}">
+      <a class="actionPat" href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}#adm{$curr_sejour->sejour_id}">
         Séjour du {$curr_sejour->entree_prevue|date_format:"%d %b %Y"} 
         au {$curr_sejour->sortie_prevue|date_format:"%d %b %Y"}
       </a>
 	</td>
-	<td>
+    {if $curr_sejour->annule}
+ 	<td style="background: #f00">
+      <strong>[SEJOUR ANNULE]</strong>
+	</td>
+    {else}
+ 	<td>
       <a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}#adm{$curr_sejour->sejour_id}">
         Dr. {$curr_sejour->_ref_praticien->_view}
       </a>
 	</td>
+    {/if}
   </tr>
   {foreach from=$curr_sejour->_ref_operations item=curr_op}
   <tr>
@@ -215,22 +221,24 @@ function printIntervention(id) {
       <a class="actionPat" href="javascript:printIntervention({$curr_op->operation_id})">
         <img src="modules/dPpatients/images/print.png" alt="Imprimer" title="Imprimer l'opération"/>
       </a>
-      {if $curr_op->annulee}
-      [ANNULE]
-      {else}
       <a class="actionPat" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
         <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
       </a>
-      {/if}
       <a class="actionPat" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
         Intervention le {$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}
       </a>
     </td>
+    {if $curr_op->annulee}
+ 	<td style="background: #f00">
+      <strong>[OPERATION ANNULEE]</strong>
+	</td>
+    {else}
     <td>
       <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
         Dr. {$curr_op->_ref_chir->_view}
       </a>
     </td>
+    {/if}
   </tr>
   {/foreach}
   {/foreach}

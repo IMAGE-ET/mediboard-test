@@ -442,7 +442,9 @@ class CAppUI {
 		  else
 		    $params .= "&" . $session_id;
 		}
-   
+//    mbTrace("Location: index.php?$params");
+//    mbTrace($this->getMsg(), "Message");
+//    die();
 		header( "Location: index.php?$params" );
 		exit();	// stop the PHP execution
 	}

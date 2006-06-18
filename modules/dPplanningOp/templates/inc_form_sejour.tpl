@@ -232,7 +232,7 @@
     <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|escape:"javascript"}}'});" />
     {{if $sejour->annule == "0"}}{{assign var="annule_text" value="Annuler"}}{{/if}}
     {{if $sejour->annule == "1"}}{{assign var="annule_text" value="Rétablir"}}{{/if}}
-    <input type="button" value="{{$annule_text}}" onclick="confirmAnnulation();" />
+    <input type="button" value="{{$annule_text}}" onclick="cancelSejour();" />
   {{else}}
     <input type="submit" value="Créer" />
   {{/if}}

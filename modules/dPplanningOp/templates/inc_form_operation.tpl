@@ -18,6 +18,14 @@
     </th>
   </tr>
   
+  {{if $op->annulee == 1}}
+  <tr>
+    <th class="category" colspan="3" style="background: #f00;">
+    OPERATION ANNULEE
+    </th>
+  </tr>
+  {{/if}}
+
   <tr>
     <th class="mandatory">
       <label for="chir_id" title="Chirurgien Responsable. Obligatoire">Chirurgien :</label>
