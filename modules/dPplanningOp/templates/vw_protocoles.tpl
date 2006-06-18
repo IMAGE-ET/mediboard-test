@@ -38,7 +38,7 @@ function setClose(protocole_id) {
 
       <form name="selectFrm" action="index.php" method="get">
       
-      <input type="hidden" name="m" value="{$m}" />
+      <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" {{if $dialog}} name="a" {{else}} name="tab" {{/if}} value="vw_protocoles" />
       <input type="hidden" name="dialog" value="{{$dialog}}" />
 
