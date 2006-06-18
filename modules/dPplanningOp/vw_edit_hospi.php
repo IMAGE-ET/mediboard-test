@@ -54,7 +54,7 @@ if ($operation_id) {
   }
   if(!$right) {
     $AppUI->setMsg("Vous n'avez pas accès à cette intervention", UI_MSG_ALERT);
-    $AppUI->redirect( "m=dPpatients&tab=0&id=$op->pat_id");
+    $AppUI->redirect( "m=$m&tab=vw_edit_hospitalisation&id=0");
   }
   $op->loadRefs();
   $op->_ref_sejour->loadRefsFwd();

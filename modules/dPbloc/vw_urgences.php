@@ -20,10 +20,10 @@ $today = date("Y-m-d");
 
 $where = array();
 $where["plageop_id"] = "IS NULL";
-$where["pat_id"] = "IS NOT NULL";
+$where["patient_id"] = "IS NOT NULL";
 $where["annulee"] = "= 0";
 $ljoin = array();
-$ljoin["patients"] = "operations.pat_id = patients.patient_id";
+$ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
 $order = "sejour.entree_prevue, patients.nom, patients.prenom";
 

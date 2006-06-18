@@ -330,11 +330,6 @@ class COperation extends CMbObject {
     
     $ext_code_ccam =& $this->_ext_codes_ccam[0];
     $code_ccam = @$this->_codes_ccam[0];
-    
-    if (!$this->plageop_id && $this->pat_id && !count($this->_codes_ccam)) {
-      $ext_code_ccam->libelleCourt = "Simple surveillance";
-      $ext_code_ccam->libelleLong = "Simple surveillance";
-    }
 
     if ($this->libelle !== null && $this->libelle != "") {
       $ext_code_ccam->libelleCourt = "<em>[$this->libelle]</em><br />".$ext_code_ccam->libelleCourt;
