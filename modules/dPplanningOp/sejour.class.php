@@ -210,7 +210,6 @@ class CSejour extends CMbObject {
     parent::updateFormFields();
     
     $this->_duree_prevue = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
-    
     $this->_date_entree_prevue = mbDate(null, $this->entree_prevue);
     $this->_date_sortie_prevue = mbDate(null, $this->sortie_prevue);
     $this->_hour_entree_prevue = mbTranformTime(null, $this->entree_prevue, "%H");

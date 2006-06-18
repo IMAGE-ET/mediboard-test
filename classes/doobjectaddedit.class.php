@@ -105,10 +105,12 @@ class CDoObjectAddEdit {
   
   function doRedirect() {
     global $AppUI;
-    if($this->ajax) {
+    if ($this->ajax) {
+      $id = $this->objectKeyGetVarName;
       echo $AppUI->getMsg();
-      exit(0);
-    } elseif($this->redirect !== null) {
+      echo "<script type='text/javascript'>$id = $this->_obj->$id</script>";
+      exit;
+    } elseif ($this->redirect !== null) {
       $AppUI->redirect($this->redirect);
     }
   }

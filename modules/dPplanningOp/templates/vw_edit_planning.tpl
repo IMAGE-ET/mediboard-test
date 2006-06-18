@@ -107,6 +107,11 @@ function printForm() {
   return;
 }
 
+function submitForms() {
+  var oForm = document.editSejour;
+  submitFormAjax(oForm, 'systemMsg');
+}
+
 function pageMain() {
   incFormOperationMain();
   incFormSejourMain();
@@ -156,11 +161,11 @@ function pageMain() {
         <tr>
           <td class="button">
           {{if $op->operation_id}}
-            <input type="submit" value="Modifier" />
+            <input type="button" value="Modifier" />
             <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{typeName:'l\'intervention du Dr',objName:'{{$op->_ref_chir->_view}}'})" />
             <input type="button" value="Annuler" onclick="if (confirm('Veuillez confirmer l\'annulation')) {var f = this.form; f.annulee.value = 1; f.rank.value = 0; f.submit();}" />
           {{else}}
-            <input type="submit" value="Créer" />
+            <input type="button" value="Créer" onclick="submitForms();" />
           {{/if}}
           {{if $op->operation_id}}
             <input type="button" value="Imprimer" onClick="printForm();" />
