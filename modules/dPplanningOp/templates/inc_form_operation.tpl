@@ -5,6 +5,7 @@
 <input type="hidden" name="dosql" value="do_planning_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="operation_id" value="{{$op->operation_id}}" />
+<input type="hidden" name="sejour_id" value="{{$op->sejour_id}}" />
 <input type="hidden" name="commande_mat" value="{{$op->commande_mat}}" />
 <input type="hidden" name="rank" value="{{$op->rank}}" />
 <input type="hidden" name="annulee" value="{{$op->annulee}}" />

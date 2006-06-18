@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPgestionCab';
-$config['mod_version'] = '0.11';
+$config['mod_version'] = '0.12';
 $config['mod_directory'] = 'dPgestionCab';
 $config['mod_setup_class'] = 'CSetupdPgestionCab';
 $config['mod_type'] = 'user';
@@ -46,10 +46,16 @@ class CSetupdPgestionCab {
 		case "0.1":
       $sql = "ALTER TABLE fiche_paie" .
           "\nADD `conges_payes` FLOAT NOT NULL;";
-    db_exec( $sql ); db_error();
+      db_exec( $sql ); db_error();
 
     case "0.11":
-			return "0.11";
+      $sql = "ALTER TABLE fiche_paie" .
+          "\nADD `prime_speciale` FLOAT NOT NULL";
+      db_exec( $sql ); db_error();
+      $sql = "ALTER TABLE params_paie" .
+          "\nADD `matricule` VARCHAR(15)";
+    case "0.12":
+			return "0.12";
 		}
 		return false;
 	}

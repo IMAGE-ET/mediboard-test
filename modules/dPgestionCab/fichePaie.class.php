@@ -28,6 +28,7 @@ class CFichePaie extends CMbObject {
   var $precarite      = null;
   var $anciennete     = null;
   var $conges_payes   = null;
+  var $prime_speciale = null;
   
   // Forms Fields
   var $_salaire_base = null;
@@ -73,6 +74,7 @@ class CFichePaie extends CMbObject {
     $this->_props["anciennete"]     = "pct|notNull";
     $this->_props["precarite"]      = "pct|notNull";
     $this->_props["conges_payes"]   = "pct|notNull";
+    $this->_props["prime_speciale"] = "pct|notNull";
 
     $this->buildEnums();
   }
@@ -100,6 +102,7 @@ class CFichePaie extends CMbObject {
                                     $this->_prime_precarite +
                                     $this->_prime_anciennete);
       $this->_salaire_brut += $this->_conges_payes;
+      $this->_salaire_brut += $this->prime_speciale;
       $this->_ssms    = $this->_salaire_brut * $this->_ref_params_paie->ssms / 100;
       $this->_total_retenues += $this->_ssms;
       $this->_ssmp    = $this->_salaire_brut * $this->_ref_params_paie->ssmp / 100;

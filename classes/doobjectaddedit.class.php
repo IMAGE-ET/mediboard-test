@@ -22,6 +22,7 @@ class CDoObjectAddEdit {
   var $redirectError  = null;
   var $redirectDelete = null;
   var $ajax = null;
+  var $callBack = null;
   var $suppressHeaders = null;
   var $_obj = null;
   var $_logIt = null;
@@ -29,16 +30,16 @@ class CDoObjectAddEdit {
   function CDoObjectAddEdit($className, $objectKeyGetVarName) {
     global $m;
     
-    $this->className = $className;
+    $this->className           = $className;
     $this->objectKeyGetVarName = $objectKeyGetVarName;
-    $this->redirect = "m={$m}";
-    $this->redirectStore  = null;
-    $this->redirectError  = null;
-    $this->redirectDelete = null;
-    $this->createMsg = "Object of type $className created";
-    $this->modifyMsg = "Object of type $className modified";
-    $this->deleteMsg = "Object of type $className deleted";
-    $this->_logIt = true;
+    $this->redirect            = "m={$m}";
+    $this->redirectStore       = null;
+    $this->redirectError       = null;
+    $this->redirectDelete      = null;
+    $this->createMsg           = "Object of type $className created";
+    $this->modifyMsg           = "Object of type $className modified";
+    $this->deleteMsg           = "Object of type $className deleted";
+    $this->_logIt              = true;
   }
   
   function doBind() {
@@ -46,8 +47,10 @@ class CDoObjectAddEdit {
     
     $this->ajax = mbGetValueFromPost("ajax", 0);
     $this->suppressHeaders = mbGetValueFromPost("suppressHeaders", 0);
+    $this->callBack = mbGetValueFromPost("callback", null);
     unset($_POST["ajax"]);
     unset($_POST["suppressHeaders"]);
+    unset($_POST["callback"]);
     
     //UTF8 issue for Ajax
     if($this->ajax) {
@@ -108,8 +111,11 @@ class CDoObjectAddEdit {
     if ($this->ajax) {
       $idName = $this->objectKeyGetVarName;
       $idValue = $this->_obj->$idName;
+      $callBack = $this->callBack;
       echo $AppUI->getMsg();
-      echo "<script type='text/javascript'>var $idName = $idValue; alert('$idName = $idValue');</script>";
+      if($callBack) {
+        echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
+      }
       exit;
     } elseif ($this->redirect !== null) {
       $AppUI->redirect($this->redirect);

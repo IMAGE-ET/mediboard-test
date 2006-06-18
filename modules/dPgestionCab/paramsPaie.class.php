@@ -46,6 +46,9 @@ class CParamsPaie extends CMbObject {
   var $ville   = null;
   var $siret   = null;
   var $ape     = null;
+  
+  // Utilisateur
+  var $matricule = null; // numéro de sécurité sociale
 
   // Object References
   var $_ref_user = null;
@@ -53,29 +56,30 @@ class CParamsPaie extends CMbObject {
   function CParamsPaie() {
     $this->CMbObject('params_paie', 'params_paie_id');
     
-    $this->_props["user_id"] = "ref|notNull";
-    $this->_props["smic"]    = "currency|notNull";
-    $this->_props["csgds"]   = "pct|notNull";
-    $this->_props["csgnds"]  = "pct|notNull";
-    $this->_props["ssms"]    = "pct|notNull";
-    $this->_props["ssmp"]    = "pct|notNull";
-    $this->_props["ssvs"]    = "pct|notNull";
-    $this->_props["ssvp"]    = "pct|notNull";
-    $this->_props["rcs"]     = "pct|notNull";
-    $this->_props["rcp"]     = "pct|notNull";
-    $this->_props["agffs"]   = "pct|notNull";
-    $this->_props["agffp"]   = "pct|notNull";
-    $this->_props["aps"]     = "pct|notNull";
-    $this->_props["app"]     = "pct|notNull";
-    $this->_props["acs"]     = "pct|notNull";
-    $this->_props["acp"]     = "pct|notNull";
-    $this->_props["aatp"]    = "pct|notNull";
-    $this->_props["nom"]     = "str|notNull|confidential";
-    $this->_props["adresse"] = "str|confidential";
-    $this->_props["cp"]      = "num|length|5|confidential";
-    $this->_props["ville"]   = "str|confidential";
-    $this->_props["siret"]   = "num|length|14|confidential";
-    $this->_props["ape"]     = "str|length|4|confidential";
+    $this->_props["user_id"]   = "ref|notNull";
+    $this->_props["smic"]      = "currency|notNull";
+    $this->_props["csgds"]     = "pct|notNull";
+    $this->_props["csgnds"]    = "pct|notNull";
+    $this->_props["ssms"]      = "pct|notNull";
+    $this->_props["ssmp"]      = "pct|notNull";
+    $this->_props["ssvs"]      = "pct|notNull";
+    $this->_props["ssvp"]      = "pct|notNull";
+    $this->_props["rcs"]       = "pct|notNull";
+    $this->_props["rcp"]       = "pct|notNull";
+    $this->_props["agffs"]     = "pct|notNull";
+    $this->_props["agffp"]     = "pct|notNull";
+    $this->_props["aps"]       = "pct|notNull";
+    $this->_props["app"]       = "pct|notNull";
+    $this->_props["acs"]       = "pct|notNull";
+    $this->_props["acp"]       = "pct|notNull";
+    $this->_props["aatp"]      = "pct|notNull";
+    $this->_props["nom"]       = "str|notNull|confidential";
+    $this->_props["adresse"]   = "str|confidential";
+    $this->_props["cp"]        = "num|length|5|confidential";
+    $this->_props["ville"]     = "str|confidential";
+    $this->_props["siret"]     = "num|length|14|confidential";
+    $this->_props["ape"]       = "str|length|4|confidential";
+    $this->_props["matricule"] = "code|insee|confidential";
 
     $this->buildEnums();
   }

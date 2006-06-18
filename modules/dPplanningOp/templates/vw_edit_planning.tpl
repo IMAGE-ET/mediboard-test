@@ -69,14 +69,14 @@ function setProtocole(protocole) {
   setRadioValue(formSejour.type, protocole.type);
 }
 
-function printDocument() {
+function printDocument(iDocument_id) {
   form = document.editOp;
   
-  if (checkFormOperation() && (form._choix_modele.value != 0)) {
+  if (checkFormOperation() && (iDocument_id.value != 0)) {
     var url = new Url;
     url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
     url.addElement(form.operation_id, "object_id");
-    url.addElement(form._choix_modele, "modele_id");
+    url.addElement(iDocument_id, "modele_id");
     url.popup(700, 600, "Document");
     return true;
   }
@@ -84,14 +84,14 @@ function printDocument() {
   return false;
 }
 
-function printPack() {
+function printPack(iPack_id) {
   form = document.editOp;
 
-  if (checkFormOperation() && (form._choix_pack.value != 0)) {
+  if (checkFormOperation() && (iPack_id.value != 0)) {
     var url = new Url;
     url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
     url.addElement(form.operation_id, "object_id");
-    url.addElement(form._choix_pack, "pack_id");
+    url.addElement(iPack_id, "pack_id");
     url.popup(700, 600, "Document");
     return true;
   }
@@ -109,14 +109,13 @@ function printForm() {
 
 function submitForms() {
   var oForm = document.editSejour;
-  
-  var oOptions = {
-    onComplete : function () {
-      alert('message :' + sejour_id);
-    }
-  }
-  
-  submitFormAjax(oForm, 'systemMsg', oOptions);
+  submitFormAjax(oForm, 'systemMsg');
+}
+
+function submitFormOperation(iSejour_id) {
+  var oForm = document.editOp;
+  oForm.sejour_id.value = iSejour_id;
+  oForm.submit();
 }
 
 function pageMain() {
@@ -168,15 +167,15 @@ function pageMain() {
         <tr>
           <td class="button">
           {{if $op->operation_id}}
-            <input type="button" value="Modifier" />
-            <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{typeName:'l\'intervention du Dr',objName:'{{$op->_ref_chir->_view}}'})" />
-            <input type="button" value="Annuler" onclick="if (confirm('Veuillez confirmer l\'annulation')) {var f = this.form; f.annulee.value = 1; f.rank.value = 0; f.submit();}" />
+            <input type="button" value="Modifier" onclick="submitForms();" />
+            <input type="button" value="Supprimer" onclick="confirmDeletion(document.editOp.form,{typeName:'l\'intervention du Dr',objName:'{{$op->_ref_chir->_view}}'})" />
+            <input type="button" value="Annuler" onclick="if (confirm('Veuillez confirmer l\'annulation')) {var f = document.editOp; f.annulee.value = 1; f.rank.value = 0; f.submit();}" />
           {{else}}
             <input type="button" value="Créer" onclick="submitForms();" />
           {{/if}}
           {{if $op->operation_id}}
             <input type="button" value="Imprimer" onClick="printForm();" />
-            <select name="_choix_modele" onchange="printDocument()">
+            <select name="_choix_modele" onchange="printDocument(this)">
               <option value="">&mdash; Choisir un modèle</option>
               <optgroup label="Modèles du praticien">
               {{foreach from=$listModelePrat item=curr_modele}}
@@ -189,7 +188,7 @@ function pageMain() {
               {{/foreach}}
               </optgroup>
             </select>
-            <select name="_choix_pack" onchange="printPack()">
+            <select name="_choix_pack" onchange="printPack(this)">
               <option value="">&mdash; Choisir un pack</option>
               {{foreach from=$listPack item=curr_pack}}
                 <option value="{{$curr_pack->pack_id}}">{{$curr_pack->nom}}</option>

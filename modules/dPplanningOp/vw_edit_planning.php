@@ -74,7 +74,7 @@ if ($operation_id) {
   $op->loadRefs();
   $sejour =& $op->_ref_sejour;
   $sejour->loadRefsFwd();
-  $chir =& $sejour->_ref_praticien;
+  $chir =& $op->_ref_chir;
   $patient =& $sejour->_ref_patient;
 }
 
@@ -88,27 +88,27 @@ $order = "nom";
 
 // Modèles de l'utilisateur
 $listModelePrat = array();
-if ($op->chir_id) {
+if ($chir->user_id) {
   $where = $whereCommon;
-  $where["chir_id"] = "= '".$op->_ref_chir->user_id."'";
+  $where["chir_id"] = "= '".$chir->user_id."'";
   $listModelePrat = new CCompteRendu;
   $listModelePrat = $listModelePrat->loadlist($where, $order);
 }
 
 // Modèles de la fonction
 $listModeleFunc = array();
-if ($op->chir_id) {
+if ($chir->user_id) {
   $where = $whereCommon;
-  $where["function_id"] = "= '".$op->_ref_chir->function_id."'";
+  $where["function_id"] = "= '".$chir->function_id."'";
   $listModeleFunc = new CCompteRendu;
   $listModeleFunc = $listModeleFunc->loadlist($where, $order);
 }
 
 // Packs d'hospitalisation
 $listPack = array();
-if($op->chir_id) {
+if($chir->user_id) {
   $where = array();
-  $where["chir_id"] = "= '".$op->_ref_chir->user_id."'";
+  $where["chir_id"] = "= '".$chir->user_id."'";
   $listPack = new CPack;
   $listPack = $listPack->loadlist($where, $order);
 }

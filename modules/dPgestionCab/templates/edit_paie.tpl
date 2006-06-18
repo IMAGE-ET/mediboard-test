@@ -142,6 +142,15 @@ function pageMain() {
           </td>
         </tr>
         <tr>
+          <th>
+            <label for="prime_special" title="Prime spéciale en euros">Prime spéciale :</label>
+          </th>
+          <td>
+            <input type="text" size="4" name="prime_speciale" title="{$fichePaie->_props.prime_speciale}" value="{$fichePaie->prime_speciale}" />
+            €
+          </td>
+        </tr>
+        <tr>
           <td class="button" colspan="2">
             <button type="submit">Sauver</button>
             {if $fichePaie->fiche_paie_id}

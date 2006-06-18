@@ -82,7 +82,12 @@
       <td align=left>
         {$paramsPaie->ape}
       </td>
-      <td colspan="3" align="left"></td>
+      <td align="right">
+        <strong>Sécurité sociale :</strong>
+      </td>
+      <td colspan="2" align="left">
+        {$paramsPaie->matricule}
+      </td>
     </tr>
   </tbody>
   <tbody>
@@ -140,6 +145,7 @@
       <td align="right">{$fichePaie->_salaire_heures_sup|string_format:"%.2f"} €</td>
     </tr>
   </tbody>
+  {if $fichePaie->_prime_precarite}
   <tbody>
     <tr>
       <td colspan="2" height="17" align="right" bgcolor="#e63">
@@ -150,6 +156,8 @@
       <td align="right">{$fichePaie->_prime_precarite|string_format:"%.2f"} €</td>
     </tr>
   </tbody>
+  {/if}
+  {if $fichePaie->_prime_anciennete}
   <tbody>
     <tr>
       <td colspan="2" height="17" align="right" bgcolor="#e63">
@@ -160,6 +168,8 @@
       <td align="right">{$fichePaie->_prime_anciennete|string_format:"%.2f"} €</td>
     </tr>
   </tbody>
+  {/if}
+  {if $fichePaie->_conges_payes}
   <tbody>
     <tr>
       <td colspan="2" height="17" align="right" bgcolor="#e63">
@@ -170,6 +180,19 @@
       <td align="right">{$fichePaie->_conges_payes|string_format:"%.2f"} €</td>
     </tr>
   </tbody>
+  {/if}
+  {if $fichePaie->prime_speciale}
+  <tbody>
+    <tr>
+      <td colspan="2" height="17" align="right" bgcolor="#e63">
+        <font color="#fff">Prime spéciale</font>
+      </td>
+      <td align="left"></td>
+      <td align="left"></td>
+      <td align="right">{$fichePaie->prime_speciale|string_format:"%.2f"} €</td>
+    </tr>
+  </tbody>
+  {/if}
   <tbody>
     <tr>
       <td colspan="4" height="17" align="right" bgcolor="#eee">

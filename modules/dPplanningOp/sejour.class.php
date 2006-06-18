@@ -127,27 +127,6 @@ class CSejour extends CMbObject {
     return CDpObject::canDelete( $msg, $oid, $tables );
   }
   
-  function bindToOp($operation_id) {
-    $operation = new COperation;
-    $operation->load($operation_id);
-    $this->load($operation->sejour_id);
-    $this->patient_id    = $operation->pat_id;
-    $this->praticien_id  = $operation->chir_id;
-    $this->type          = $operation->type_adm;
-    $this->annule        = $operation->annulee;
-    $this->chambre_seule = $operation->chambre;
-    $this->entree_prevue = $operation->date_adm." ".$operation->time_adm;
-    $this->sortie_prevue = mbDateTime("+".$operation->duree_hospi." DAYS", $this->entree_prevue);
-    $this->sortie_reelle = '';
-    $this->venue_SHS     = $operation->venue_SHS;
-    $this->saisi_SHS     = $operation->saisie;
-    $this->modif_SHS     = $operation->modifiee;
-    $this->DP            = $operation->CIM10_code;
-    $this->pathologie    = $operation->pathologie;
-    $this->septique      = $operation->septique;
-    $this->convalescence = $operation->convalescence;
-  }
-  
   function store() {
     if ($msg = parent::store()) {
       return $msg;
@@ -167,27 +146,6 @@ class CSejour extends CMbObject {
         $affectation->store();
       }
     }
-
-//    // Synchronisation vers les opérations
-//    $this->loadRefsOperations();
-//    foreach($this->_ref_operations as $keyOp => $valueOp) {
-//      $operation =& $this->_ref_operations[$keyOp];
-//      $operation->pat_id = $this->patient_id;
-//      $operation->chir_id = $this->praticien_id;
-//      $operation->type_adm = $this->type;
-//      $operation->annulee = $this->annule;
-//      $operation->chambre = $this->chambre_seule;
-//      $operation->date_adm = mbDate(null, $this->entree_prevue);
-//      $operation->time_adm = mbTime(null, $this->entree_prevue);
-//      $operation->duree_hospi = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
-//      $operation->venue_SHS = $this->venue_SHS;
-//      $operation->saisie = $this->saisi_SHS;
-//      $operation->modifiee = $this->modif_SHS;
-//      $operation->pathologie = $this->pathologie;
-//      $operation->septique = $this->septique;
-//      $operation->convalescence = $this->convalescence;
-//      $msgOp = $operation->store();
-//    }
   }
   
   function delete() {

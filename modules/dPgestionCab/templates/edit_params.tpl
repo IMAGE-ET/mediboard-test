@@ -73,6 +73,15 @@
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
+          <th class="title" colspan="3">Employé</th>
+        </tr>
+        <tr>
+          <th>
+            <label for="matricule" title="Code de sécurité sociale">Sécurité sociale :</label>
+          </th>
+          <td colspan="2"><input type="text" name="matricule" title="{$paramsPaie->_props.matricule}" value="{$paramsPaie->matricule}" /></td>
+        </tr>
+        <tr>
           <th class="title" colspan="3">Employeur</th>
         </tr>
         <tr>
