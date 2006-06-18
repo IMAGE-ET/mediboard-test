@@ -115,7 +115,7 @@
   </td>
 </tr>
 
-<tr {{if 0 && $mode_operation}} style="display: none" {{/if}}>
+<tr {{if $mode_operation}} style="display: none" {{/if}}>
   <th>
   	<label for="_date_sortie_prevue" title="Choisir une date de sortie">Sortie prévue :</label>
   </th>

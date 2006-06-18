@@ -21,7 +21,7 @@
       <label for="chir_id" title="Chirurgien Responsable. Obligatoire">Chirurgien :</label>
     </th>
     <td colspan="2">
-      <select name="chir_id" title="{{$op->_props.chir_id_id}}">
+      <select name="chir_id" title="{{$op->_props.chir_id}}" onchange="synchroPrat()">
         <option value="">&mdash; Choisir un praticien</option>
         {{foreach from=$listPraticiens item=curr_praticien}}
         <option value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>

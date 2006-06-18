@@ -126,6 +126,14 @@ function modifOp() {
   modifSejour();
 }
 
+function synchroPrat() {
+  var oOpForm = document.editOp;
+  var oSejourForm = document.editSejour;
+  if(!oSejourForm.praticien_id.value) {
+    oSejourForm.praticien_id.value = oOpForm.chir_id.value;
+  }
+}
+
 function popPlage() {
   var oForm = document.editOp;
   if (checkChir() && checkDuree()) {

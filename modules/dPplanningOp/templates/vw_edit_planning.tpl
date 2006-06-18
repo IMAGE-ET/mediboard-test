@@ -51,6 +51,7 @@ function setProtocole(protocole) {
   var formSejour = document.editSejour;
   
   formOp.chir_id.value           = protocole.chir_id;
+  formOp.chir_id.onchange();
   formOp.codes_ccam.value        = protocole.codes_ccam;
   refreshListCCAM();
   formOp.libelle.value           = protocole.libelle;
@@ -60,7 +61,6 @@ function setProtocole(protocole) {
   formOp.examen.value            = protocole.examen;
   formOp.depassement.value       = protocole.depassement;
   formOp.rques.value             = protocole.rques_operation;
-  formSejour.praticien_id.value  = protocole.chir_id;
   formSejour._duree_prevue.value = protocole.duree_hospi;
   formSejour._duree_prevue.onchange();
   formSejour.convalescence.value = protocole.convalescence;
