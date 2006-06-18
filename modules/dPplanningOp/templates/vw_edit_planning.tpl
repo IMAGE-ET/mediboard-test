@@ -115,9 +115,30 @@ function submitForms() {
 function submitFormOperation(iSejour_id) {
   var oForm = document.editOp;
   oForm.sejour_id.value = iSejour_id;
+  if (oForm.onsubmit()) {
+    oForm.submit();
+  }
+}
+
+function deleteSejour() {
+  var oForm = document.editSejour;
+  oForm.del.value = 1;
   oForm.submit();
 }
 
+function deleteObjects() {
+  var oOptions = {
+  	objName : '{{$op->_view}}',
+  	ajax : true,
+  }
+  
+  var oAjaxOptions = {
+    onComplete : deleteSejour
+  }
+
+  confirmDeletion(document.editOp, oOptions, oAjaxOptions);
+}
+  
 function pageMain() {
   incFormOperationMain();
   incFormSejourMain();
@@ -168,7 +189,7 @@ function pageMain() {
           <td class="button">
           {{if $op->operation_id}}
             <input type="button" value="Modifier" onclick="submitForms();" />
-            <input type="button" value="Supprimer" onclick="confirmDeletion(document.editOp,{typeName:'l\'intervention du Dr',objName:'{{$op->_ref_chir->_view}}'})" />
+            <input type="button" value="Supprimer" onclick="deleteObjects();" />
             <input type="button" value="Annuler" onclick="if (confirm('Veuillez confirmer l\'annulation')) {var f = document.editOp; f.annulee.value = 1; f.rank.value = 0; f.submit();}" />
           {{else}}
             <input type="button" value="Créer" onclick="submitForms();" />
@@ -180,11 +201,15 @@ function pageMain() {
               <optgroup label="Modèles du praticien">
               {{foreach from=$listModelePrat item=curr_modele}}
                 <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
+              {{foreachelse}}
+                <option value="">Aucun modèle disponible</option>
               {{/foreach}}
               </optgroup>
               <optgroup label="Modèles du cabinet">
               {{foreach from=$listModeleFunc item=curr_modele}}
                 <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
+              {{foreachelse}}
+                <option value="">Aucun modèle disponible</option>
               {{/foreach}}
               </optgroup>
             </select>
@@ -192,6 +217,8 @@ function pageMain() {
               <option value="">&mdash; Choisir un pack</option>
               {{foreach from=$listPack item=curr_pack}}
                 <option value="{{$curr_pack->pack_id}}">{{$curr_pack->nom}}</option>
+              {{foreachelse}}
+                <option value="">Aucun pack disponible</option>
               {{/foreach}}
             </select>
           {{/if}}

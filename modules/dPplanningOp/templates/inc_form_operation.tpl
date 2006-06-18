@@ -3,6 +3,7 @@
 <form name="editOp" action="?m={{$m}}" method="post" onsubmit="return checkFormOperation()">
 
 <input type="hidden" name="dosql" value="do_planning_aed" />
+<input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="operation_id" value="{{$op->operation_id}}" />
 <input type="hidden" name="sejour_id" value="{{$op->sejour_id}}" />

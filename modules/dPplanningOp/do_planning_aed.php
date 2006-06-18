@@ -23,6 +23,7 @@ if (intval(dPgetParam($_POST, 'del'))) {
   mbSetValueToSession("operation_id");
   $do->deleteMsg = "Opération supprimée";
   $do->redirectDelete = "m=$m&tab=vw_edit_planning";
+  $do->doDelete();
 } else {
   $do->modifyMsg = "Opération modifiée";
   $do->createMsg = "Opération créée";

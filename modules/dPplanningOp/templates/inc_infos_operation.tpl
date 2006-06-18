@@ -15,7 +15,9 @@
 
   {{foreach from=$sejour->_ref_operations item=curr_operation}}
   <tr>
-    <td>{{$curr_operation->_ref_chir->_view}}</td>
+    <td>
+      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_operation->operation_id}}">{{$curr_operation->_ref_chir->_view}}</a>
+    </td>
     <td>{{$curr_operation->_ref_plageop->date|date_format:"%a %d %b %Y"}}</td>
     <td class="text">
       {{foreach from=$curr_operation->_ext_codes_ccam item=curr_ext_code}}

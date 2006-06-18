@@ -105,27 +105,6 @@ function flipGroup(id, groupname) {
   }
 }
 
-function confirmDeletion(oForm, oOptions, oOptionsAjax) {
-  oDefaultOptions = {
-    typeName: "",
-    objName : "",
-    msg     : "Voulez-vous réellement supprimer ",
-    ajax    : 0,
-    target  : ""
-  }
-  
-  Object.extend(oDefaultOptions, oOptions);
-  
-  if (oDefaultOptions.objName.length) oDefaultOptions.objName = " '" + oDefaultOptions.objName + "'";
-  if (confirm(oDefaultOptions.msg + oDefaultOptions.typeName + " " + oDefaultOptions.objName + " ?" )) {
-  	oForm.del.value = 1;
-  	if(oDefaultOptions.ajax)
-  	  submitFormAjax(oForm, oDefaultOptions.target, oOptionsAjax);
-  	else
-  	  oForm.submit();
-  }
-}
-
 function getFunctionName(oFunction) {
   var sFunction = oFunction.toString();
   var re = /function ([^{]*)/;

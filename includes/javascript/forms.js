@@ -5,6 +5,27 @@ function confirmExit() {
     alert("element non sauvegardé");
 }
 
+function confirmDeletion(oForm, oOptions, oOptionsAjax) {
+  oDefaultOptions = {
+    typeName: "",
+    objName : "",
+    msg     : "Voulez-vous réellement supprimer ",
+    ajax    : 0,
+    target  : "systemMsg"
+  }
+  
+  Object.extend(oDefaultOptions, oOptions);
+  
+  if (oDefaultOptions.objName.length) oDefaultOptions.objName = " '" + oDefaultOptions.objName + "'";
+  if (confirm(oDefaultOptions.msg + oDefaultOptions.typeName + " " + oDefaultOptions.objName + " ?" )) {
+  	oForm.del.value = 1;
+  	if(oDefaultOptions.ajax)
+  	  submitFormAjax(oForm, oDefaultOptions.target, oOptionsAjax);
+  	else
+  	  oForm.submit();
+  }
+}
+
 //window.onUnload = confirmExit();
 
 var bFormsToSave = false;
