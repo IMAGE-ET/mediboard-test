@@ -109,7 +109,14 @@ function printForm() {
 
 function submitForms() {
   var oForm = document.editSejour;
-  submitFormAjax(oForm, 'systemMsg');
+  
+  var oOptions = {
+    onComplete : function () {
+      alert('message :' + sejour_id);
+    }
+  }
+  
+  submitFormAjax(oForm, 'systemMsg', oOptions);
 }
 
 function pageMain() {

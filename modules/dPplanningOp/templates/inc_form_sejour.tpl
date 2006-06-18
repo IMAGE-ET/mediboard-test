@@ -2,6 +2,7 @@
 
 <form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
+<input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_sejour_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="saisi_SHS" value="{{$sejour->saisi_SHS}}" />

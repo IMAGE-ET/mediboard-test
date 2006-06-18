@@ -491,17 +491,18 @@ function checkForm(oForm) {
 }
 
 function submitFormAjax(oForm, ioTarget, oOptions) {
-  if(oForm.attributes.onsubmit) {
-  if(oForm.attributes.onsubmit.nodeValue) {        // this second test is only for IE
-    sEventCode = oForm.attributes.onsubmit.nodeValue;
-    sEventCode = sEventCode.replace(/(\W)this(\W)/g, "$1oForm$2");
-    if(!eval(sEventCode))
-      return;
-  } }
-  urlTarget = new Url;
+  if (oForm.attributes.onsubmit) {
+    if (oForm.attributes.onsubmit.nodeValue) {        // this second test is only for IE
+      if (!oForm.onsubmit()) {
+        return;
+      }
+    }  
+  }
+  
+  url = new Url;
   var iElement = 0;
   while (oElement = oForm.elements[iElement++]) {
-    urlTarget.addParam(oElement.name, oElement.value);
+    url.addParam(oElement.name, oElement.value);
   }
 
   var oDefaultOptions = {
@@ -509,7 +510,7 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
   };
   Object.extend(oDefaultOptions, oOptions);
 
-  urlTarget.requestUpdate(ioTarget, oDefaultOptions);
+  url.requestUpdate(ioTarget, oDefaultOptions);
 }
 
 function setSelectionRange(textarea, selectionStart, selectionEnd) {
