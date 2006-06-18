@@ -123,7 +123,7 @@ function printIntervention(id) {
   <tr><th class="category" colspan="3">Planifier</th></tr>
   <tr>
     <td class="button">
-      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={$patient->patient_id}&amp;operation_id=0">
+      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={$patient->patient_id}&amp;operation_id=0&amp;sejour_id=0">
         Une intervention
       </a>
     </td>

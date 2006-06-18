@@ -121,7 +121,7 @@ function pageMain() {
   {{if $op->operation_id}}
   <tr>
     <td colspan="2">
-       <a class="button" href="index.php?m={{$m}}&amp;operation_id=0">Programmer une nouvelle intervention</a>
+       <a class="button" href="index.php?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">Programmer une nouvelle intervention</a>
     </td>
   </tr>
   {{/if}}
