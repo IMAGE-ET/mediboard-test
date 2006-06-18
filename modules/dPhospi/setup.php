@@ -90,7 +90,7 @@ class CSetupdPhospi {
         $sql = "ALTER TABLE `affectation`" .
             "\nADD `sejour_id` INT UNSIGNED DEFAULT '0' NOT NULL AFTER `operation_id`;";
         db_exec($sql); db_error();
-        $sql = "ALTER TABLE ADD INDEX (`sejour_id`);";
+        $sql = "ALTER TABLE `affectation` ADD INDEX (`sejour_id`);";
         db_exec($sql); db_error();
         $sql = "UPDATE `affectation`,`operations`" .
             "\nSET `affectation`.`sejour_id` = `operations`.`sejour_id`" .

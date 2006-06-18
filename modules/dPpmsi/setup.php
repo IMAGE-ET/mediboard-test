@@ -66,7 +66,7 @@ class CSetupdPpmsi {
         
         $sql = "UPDATE `ghm`, `operations` SET" .
             "\n`ghm`.`sejour_id` = `operation`.`sejour_id`" .
-            "\nWHERE `ghm`.`operation_id` = `operation`.`operation_id`";
+            "\nWHERE `ghm`.`operation_id` = `operations`.`operation_id`";
         db_exec($sql); db_error();
 
     case "0.12" :
