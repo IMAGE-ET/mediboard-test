@@ -117,17 +117,14 @@ function prepareForm(oForm) {
   var sFormClass = oForm.getAttribute("class");
 
   // Build label targets
-  aLabels = document.getElementsByTagName("label");
+  aLabels = oForm.getElementsByTagName("label");
   iLabel = 0;
   while (oLabel = aLabels[iLabel++]) {
-  	oBoundingForm = getBoundingForm(oLabel);
-    if (oForm == oBoundingForm) {
-      if (sFor = oLabel.getAttribute("for")) {
-        if(sFor.indexOf(sFormName) != 0) {
-          oLabel.setAttribute("for", sFormName + "_" + sFor);
-        }
-      } 
-  	}
+    if (sFor = oLabel.getAttribute("for")) {
+      if (sFor.indexOf(sFormName) != 0) {
+        oLabel.setAttribute("for", sFormName + "_" + sFor);
+      }
+    } 
   } 
 
   // For each element
@@ -171,6 +168,8 @@ function prepareForms() {
   // For each form
   var iForm = 0;
   while (oForm = document.forms[iForm++]) {
+    debug(iForm, "Numéro de formulaire");
+  
     prepareForm(oForm);
   }
 }
