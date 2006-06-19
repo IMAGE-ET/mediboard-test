@@ -84,7 +84,7 @@ foreach ($services as $service_id => $service) {
             $sejour->loadRefPatient();
             $listPats[$sejour->patient_id] =& $sejour->_ref_patient;
           }
-          foreach($sejour->_ref_operations as $operation_id => $operation)
+          foreach($sejour->_ref_operations as $operation_id => $curr_operation)
             $sejour->_ref_operations[$operation_id]->loadRefCCAM();
         } else
           unset($affectations[$affectation_id]);
@@ -116,7 +116,7 @@ $where = array(
 $sejourNonAffectesVeille = new CSejour;
 $sejourNonAffectesVeille = $sejourNonAffectesVeille->loadList($where, $order, null, null, $leftjoin);
 
-foreach ($sejourNonAffectesVeille as $sejour_id => $sejour) {
+foreach ($sejourNonAffectesVeille as $sejour_id => $curr_sejour) {
    if(isset($listChirs[$sejourNonAffectesVeille[$sejour_id]->praticien_id])) {
      $sejourNonAffectesVeille[$sejour_id]->_ref_praticien =& $listChirs[$sejourNonAffectesVeille[$sejour_id]->praticien_id];
    }
@@ -148,7 +148,7 @@ $where = array(
 $sejourNonAffectesMatin = new CSejour;
 $sejourNonAffectesMatin = $sejourNonAffectesMatin->loadList($where, $order, null, null, $leftjoin);
 
-foreach ($sejourNonAffectesMatin as $sejour_id => $sejour) {
+foreach ($sejourNonAffectesMatin as $sejour_id => $curr_sejour) {
    if(isset($listChirs[$sejourNonAffectesMatin[$sejour_id]->praticien_id])) {
      $sejourNonAffectesMatin[$sejour_id]->_ref_praticien =& $listChirs[$sejourNonAffectesMatin[$sejour_id]->praticien_id];
    }
@@ -180,7 +180,7 @@ $where = array(
 $sejourNonAffectesSoir = new CSejour;
 $sejourNonAffectesSoir = $sejourNonAffectesSoir->loadList($where, $order, null, null, $leftjoin);
 
-foreach ($sejourNonAffectesSoir as $sejour_id => $sejour) {
+foreach ($sejourNonAffectesSoir as $sejour_id => $curr_sejour) {
    if(isset($listChirs[$sejourNonAffectesSoir[$sejour_id]->praticien_id])) {
      $sejourNonAffectesSoir[$sejour_id]->_ref_praticien =& $listChirs[$sejourNonAffectesSoir[$sejour_id]->praticien_id];
    }
@@ -211,7 +211,7 @@ $where = array(
 $sejourNonAffectesAvant = new CSejour;
 $sejourNonAffectesAvant = $sejourNonAffectesAvant->loadList($where, $order, null, null, $leftjoin);
 
-foreach ($sejourNonAffectesAvant as $sejour_id => $sejour) {
+foreach ($sejourNonAffectesAvant as $sejour_id => $curr_sejour) {
    if(isset($listChirs[$sejourNonAffectesAvant[$sejour_id]->praticien_id])) {
      $sejourNonAffectesAvant[$sejour_id]->_ref_praticien =& $listChirs[$sejourNonAffectesAvant[$sejour_id]->praticien_id];
    }
