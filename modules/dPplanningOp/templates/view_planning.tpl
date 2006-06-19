@@ -77,9 +77,9 @@
   <tr>
     <th>Hospitalisation :</th>
     <td>
-      {if $operation->type_adm == "comp"}Complète{/if}
-      {if $operation->type_adm == "ambu"}Ambulatoire{/if}
-      {if $operation->type_adm == "exte"}Externe{/if}
+      {if $sejour->type == "comp"}Complète{/if}
+      {if $sejour->type == "ambu"}Ambulatoire{/if}
+      {if $sejour->type == "exte"}Externe{/if}
     </td>
   </tr>
   
