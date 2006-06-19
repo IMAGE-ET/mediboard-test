@@ -520,7 +520,9 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
   url = new Url;
   var iElement = 0;
   while (oElement = oForm.elements[iElement++]) {
-    url.addParam(oElement.name, oElement.value);
+    if (oElement.type != "radio" || oElement.checked) {
+      url.addParam(oElement.name, oElement.value);
+    }
   }
 
   var oDefaultOptions = {
