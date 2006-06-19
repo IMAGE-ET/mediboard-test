@@ -37,7 +37,7 @@ function choosePreselection(oSelect) {
   <ul>
     <li>Code Adeli du praticien : '{$mbOp->_ref_chir->adeli}'</li>
     <li>Identifiant S@anté.com du patient : '{$mbSejour->_ref_patient->SHS}'</li>
-    <li>Identifiant S@anté.com de la venue : '{$mbOp->venue_SHS}'</li>
+    <li>Identifiant S@anté.com de la venue : '{$mbSejour->venue_SHS}'</li>
     <li>Code d'unité fonctionnelle S@anté.com : '{$mbOp->code_uf}'</li>
     <li>Libellé d'unité fonctionnelle S@anté.com : '{$mbOp->libelle_uf}'</li>
   </ul>
