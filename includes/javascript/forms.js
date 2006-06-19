@@ -168,8 +168,6 @@ function prepareForms() {
   // For each form
   var iForm = 0;
   while (oForm = document.forms[iForm++]) {
-    debug(iForm, "Numéro de formulaire");
-  
     prepareForm(oForm);
   }
 }
