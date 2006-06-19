@@ -53,7 +53,6 @@ function pageMain() {
         Le {$curr_operation->_ref_plageop->date|date_format:"%d/%m/%Y"}
         par le Dr. {$curr_operation->_ref_chir->_view}
       </a>
-      <br />
       {/foreach}
     </td>
     

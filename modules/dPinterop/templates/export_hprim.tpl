@@ -35,7 +35,6 @@ function choosePreselection(oSelect) {
   {if !$doc_valid}
   <h3>Document non valide : pensez à valider les valeurs suivantes !</h3>
   <ul>
-<<<<<<< .mine
     <li>
       {if $mbSejour->_ref_patient->SHS}
       <div class="message">

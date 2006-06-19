@@ -90,8 +90,8 @@ function submitOpForm(operation_id) {
 
 function submitAllForms(operation_id) {
   submitPatForm(operation_id);
-  submitOpForm(operation_id);
   submitSejourForm(operation_id);
+  submitOpForm(operation_id);
 }
 
 function pageMain() {
@@ -354,7 +354,7 @@ function pageMain() {
 
               <tr>
                 <th><label for="code_uf" title="Choisir un code pour l'unité fonctionnelle">Code d'unité fonct. :</label></th>
-                <td><input type="text" title="{$curr_op->_props.code_uf}notNull" name="code_uf" value="{$curr_op->code_uf}" size="10" maxlength="10" /></td>
+                <td><input type="text" title="{$curr_op->_props.code_uf}|notNull" name="code_uf" value="{$curr_op->code_uf}" size="10" maxlength="10" /></td>
               </tr>
 
               <tr>
