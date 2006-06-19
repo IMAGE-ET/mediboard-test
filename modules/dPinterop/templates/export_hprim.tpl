@@ -35,11 +35,74 @@ function choosePreselection(oSelect) {
   {if !$doc_valid}
   <h3>Document non valide : pensez à valider les valeurs suivantes !</h3>
   <ul>
-    <li>Code Adeli du praticien : '{$mbOp->_ref_chir->adeli}'</li>
-    <li>Identifiant S@anté.com du patient : '{$mbSejour->_ref_patient->SHS}'</li>
-    <li>Identifiant S@anté.com de la venue : '{$mbSejour->venue_SHS}'</li>
-    <li>Code d'unité fonctionnelle S@anté.com : '{$mbOp->code_uf}'</li>
-    <li>Libellé d'unité fonctionnelle S@anté.com : '{$mbOp->libelle_uf}'</li>
+<<<<<<< .mine
+    <li>
+      {if $mbSejour->_ref_patient->SHS}
+      <div class="message">
+      {else}
+      <div class="error">
+      {/if}
+      Identifiant S@nté.com du patient : 
+      '{$mbSejour->_ref_patient->SHS}'
+      </div>
+    </li>
+    
+    <li>
+      {if $mbSejour->venue_SHS}
+      <div class="message">
+      {else}
+      <div class="error">
+      {/if}
+      Identifiant S@nté.com de la venue : 
+      '{$mbSejour->venue_SHS}'
+      </div>
+    </li>
+
+    <li>
+      {if $mbSejour->_ref_praticien->adeli}
+      <div class="message">
+      {else}
+      <div class="error">
+      {/if}
+      Code Adeli du praticien responsable du séjour : 
+      '{$mbSejour->_ref_praticien->adeli}' 
+      (Dr. {$mbSejour->_ref_praticien->_view})
+      </div>
+    </li>
+
+    <li>
+      {if $mbOp->_ref_chir->_view}
+      <div class="message">
+      {else}
+      <div class="error">
+      {/if}
+      Code Adeli du chirurgien responsable de l'intervention : 
+      '{$mbOp->_ref_chir->adeli}'
+      (Dr. {$mbOp->_ref_chir->_view})
+      </div>
+    </li>
+
+    <li>
+      {if $mbOp->code_uf}
+      <div class="message">
+      {else}
+      <div class="error">
+      {/if}
+      Code d'unité fonctionnelle S@nté.com : 
+      '{$mbOp->code_uf}'
+      </div>
+    </li>
+
+    <li>
+      {if $mbOp->libelle_uf}
+      <div class="message">
+      {else}
+      <div class="error">
+      {/if}
+      Libellé d'unité fonctionnelle S@nté.com : 
+      '{$mbOp->libelle_uf}'
+      </div>
+    </li>
   </ul>
   {/if}
   <h3>

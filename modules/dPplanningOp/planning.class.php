@@ -124,6 +124,8 @@ class COperation extends CMbObject {
 //    $this->_props["CCAM_code"] = "code|ccam";
 //    $this->_props["CCAM_code2"] = "code|ccam";
 //    $this->_props["CIM10_code"] = "code|cim10";
+    $this->_props["code_uf"] = "str|maxLength|10";
+    $this->_props["libelle_uf"] = "str|maxLength|35";
     $this->_props["libelle"] = "str|confidential";
     $this->_props["cote"] = "enum|droit|gauche|bilatéral|total";
     $this->_props["temp_operation"] = "time";

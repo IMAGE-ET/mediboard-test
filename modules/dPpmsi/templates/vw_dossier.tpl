@@ -70,12 +70,36 @@ function exporterDossier(operation_id, oOptions) {
   url.requestUpdate("hprim_export" + operation_id, oRequestOptions); 
 }
 
+function submitPatForm(operation_id) {
+  var oForm = document.forms["editPatFrm" + operation_id];
+  var iTarget = "updatePat" + operation_id;
+  submitFormAjax(oForm, iTarget);
+}
+
+function submitSejourForm(operation_id) {
+  var oForm = document.forms["editSejourFrm" + operation_id];
+  var iTarget = "updateSejour" + operation_id;
+  submitFormAjax(oForm, iTarget);
+}
+
+function submitOpForm(operation_id) {
+  var oForm = document.forms["editOpFrm" + operation_id];
+  var iTarget = "updateOp" + operation_id;
+  submitFormAjax(oForm, iTarget);
+}
+
+function submitAllForms(operation_id) {
+  submitPatForm(operation_id);
+  submitOpForm(operation_id);
+  submitSejourForm(operation_id);
+}
+
 function pageMain() {
   initGroups("sejour");
   {/literal}
   {foreach from=$patient->_ref_sejours item=curr_sejour}
   {foreach from=$curr_sejour->_ref_operations item=curr_op}
-  exporterDossier({$curr_op->operation_id}, {ldelim}onlySentFiles : true{rdelim});
+//  exporterDossier({$curr_op->operation_id}, {ldelim}onlySentFiles : true{rdelim});
   {/foreach}
   {/foreach}
   {literal}
@@ -126,7 +150,7 @@ function pageMain() {
             <ul>
               {foreach from=$patient->_codes_cim10 item=curr_code}
               <li>
-                {$curr_code->code}: {$curr_code->libelle}
+                {$curr_code->code} : {$curr_code->libelle}
               </li>
               {foreachelse}
               <li>Pas de diagnostic</li>
@@ -141,8 +165,7 @@ function pageMain() {
               {foreach from=$patient->_ref_antecedents item=curr_ant}
               <li>
                 {$curr_ant->type} le {$curr_ant->date|date_format:"%d %b %Y"} :
-                <i>{$curr_ant->rques}</i>
-                </form>
+                <em>{$curr_ant->rques}</em>
               </li>
               {foreachelse}
               <li>Pas d'antécédents</li>
@@ -161,7 +184,7 @@ function pageMain() {
                 {else}
                   Depuis le {$curr_trmt->debut|date_format:"%d %b %Y"}
                 {/if}
-                : <i>{$curr_trmt->traitement}</i>
+                : <em>{$curr_trmt->traitement}</em>
                 </form>
               </li>
               {foreachelse}
@@ -229,52 +252,68 @@ function pageMain() {
             {$curr_op->entree_bloc|date_format:"%Hh%M"}
           </td>
           <td rowspan="6">
-            <form name="editPatFrm{$curr_op->operation_id}" action="?m={$m}" method="post" onsubmit="return true;">
+            <form name="editPatFrm{$curr_op->operation_id}" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
+
             <input type="hidden" name="dosql" value="do_patients_aed" />
             <input type="hidden" name="m" value="dPpatients" />
             <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="patient_id" value="{$curr_sejour->_ref_patient->patient_id}" />
+            <input type="hidden" name="patient_id" value="{$patient->patient_id}" />
  
             <table class="form">
               <tr>
                 <th class="category" colspan="2">
                   <em>Lien S@nté.com</em> : Patient 
-                  <input type="submit" value="Valider" />
+                  <input type="button" value="Valider" onclick="submitPatForm({$curr_op->operation_id})" />
                 </th>
               </tr>
+
               <tr>
-                <th><label for="SHS" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label></th>
-                <td><input type="text" title="notNull|num|length|8" name="SHS" value="{$curr_sejour->_ref_patient->SHS}" size="8" maxlength="8" /></td>
+                <th>
+                  <label for="SHS" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label>
+                </th>
+                <td>
+                  <input type="text" title="{$patient->_props.SHS}|notNull" name="SHS" value="{$patient->SHS}" size="8" maxlength="8" />
+                </td>
+              </tr>
+
+              <tr>
+                <td id="updatePat{$curr_op->operation_id}" />
               </tr>
             </table>
  
             </form>
  
             <form name="editSejourFrm{$curr_op->operation_id}" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
+            
             <input type="hidden" name="dosql" value="do_sejour_aed" />
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
+            <input type="hidden" name="sejour_id" value="{$curr_sejour->sejour_id}" />
  
             <table class="form">
               <tr>
                 <th class="category" colspan="2">
                   <em>Lien S@nté.com</em> : Séjour
-                  <input type="submit" value="Valider" />
+                  <input type="button" value="Valider" onclick="submitSejourForm({$curr_op->operation_id})" />
                 </th>
               </tr>
+
               <tr>
                 <th>
-                  <label for="venue_SHS" title="Choisir un identifiant pour la venue correspondant à l'opération">Identifiant de venue :</label><br />
-                  Suggestion :
+                  <label for="venue_SHS" title="Choisir un identifiant pour la venue correspondant à l'opération">Identifiant de venue :</label>
+                  <br />Suggestion :
                 </th>
                 <td>
-                  <input type="text" title="{$curr_sejour->_props.venue_SHS}" name="venue_SHS" value="{$curr_sejour->venue_SHS}" size="8" maxlength="8" /><br />
-                  {$curr_sejour->_venue_SHS_guess}
+                  <input type="text" title="{$curr_sejour->_props.venue_SHS}|notNull" name="venue_SHS" value="{$curr_sejour->venue_SHS}" size="8" maxlength="8" />
+                  <br />{$curr_sejour->_venue_SHS_guess}
                 </td>
               </tr>
+
+              <tr>
+                <td id="updateSejour{$curr_op->operation_id}" />
+              </tr>
             </table>
-            
+
             </form>
             
             <form name="editOpFrm{$curr_op->operation_id}" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
@@ -287,7 +326,7 @@ function pageMain() {
               <tr>
                 <th class="category" colspan="2">
                   <em>Lien S@nté.com</em> : Intervention
-                  <input type="submit" value="Valider" />
+                  <input type="button" value="Valider" onclick="submitOpForm({$curr_op->operation_id})" />
                 </th>
               </tr>
 
@@ -312,22 +351,29 @@ function pageMain() {
                   </select>
                 </td>
               </tr>
+
               <tr>
                 <th><label for="code_uf" title="Choisir un code pour l'unité fonctionnelle">Code d'unité fonct. :</label></th>
-                <td><input type="text" title="notNull|str|maxLength|10" name="code_uf" value="{$curr_op->code_uf}" size="10" maxlength="10" /></td>
+                <td><input type="text" title="{$curr_op->_props.code_uf}notNull" name="code_uf" value="{$curr_op->code_uf}" size="10" maxlength="10" /></td>
               </tr>
+
               <tr>
                 <th><label for="libelle_uf" title="Choisir un libellé pour l'unité fonctionnelle">Libellé d'unité fonct. :</label></th>
-                <td><input type="text" title="notNull|str|maxLength|35" name="libelle_uf" value="{$curr_op->libelle_uf}" size="20" maxlength="35" /></td>
+                <td><input type="text" title="{$curr_op->_props.libelle_uf}|notNull" name="libelle_uf" value="{$curr_op->libelle_uf}" size="20" maxlength="35" /></td>
               </tr>
+
+              <tr>
+                <td id="updateOp{$curr_op->operation_id}" />
+              </tr>
+
             </table>
-            
+
             </form>
             
             <table class="form">
               <tr>
                 <td class="button">
-                  <button type="button" onclick="submitSHSLink()" >Valider</button>
+                  <button type="button" onclick="submitAllForms({$curr_op->operation_id})" >Tout valider</button>
                 </td>
               </tr>
             </table>
@@ -378,7 +424,7 @@ function pageMain() {
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="acte_id" value="{$curr_acte->acte_id}" />
             <button type="submit">
-              <img src="modules/dPpmsi/images/cross.png" />
+              <img src="modules/dPpmsi/images/cross.png" alt="delete" />
             </button>
             </form>
           </td>
@@ -447,7 +493,7 @@ function pageMain() {
             <br />
             {$GHM->_GHM_nom}
             <br />
-            <i>Appartenance aux groupes {$GHM->_GHM_groupe}</i>
+            <em>Appartenance aux groupes {$GHM->_GHM_groupe}</em>
             <br />
             <strong>Bornes d'hospitalisation</strong> :
             de {$GHM->_borne_basse} jour(s)

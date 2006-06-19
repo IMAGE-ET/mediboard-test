@@ -7,7 +7,7 @@ function setClose(time) {ldelim}
     "{$plage->date|date_format:"%A %d/%m/%Y"}",
     "{$plage->freq}",
     "{$plage->chir_id}",
-    "{$plage->_ref_chir->_view}");
+    "{$plage->_ref_chir->_view|escape:"javascript"}");
   window.close();
 {rdelim}
 
