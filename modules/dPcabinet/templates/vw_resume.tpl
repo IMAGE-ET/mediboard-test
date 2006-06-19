@@ -111,9 +111,12 @@ function newExam(sAction, consultation_id) {
             {$curr_code}
           {/foreach}
         </li>
-        {/foreach}
         {foreachelse}
-        <li>Hospitalisation simple du {$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"} au {$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}</li>
+        <li>
+          Hospitalisation simple du {$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}
+          au {$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}
+        </li>
+        {/foreach}
         {/foreach}
       </ul>
     </td>
