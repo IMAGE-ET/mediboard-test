@@ -56,7 +56,7 @@ function setProtocole(protocole) {
   refreshListCCAM();
   formOp.libelle.value           = protocole.libelle;
   formOp._hour_op.value          = protocole._hour_op;
-  formOp._min_op.value           = protocole.min_op;
+  formOp._min_op.value           = protocole._min_op;
   formOp.materiel.value          = protocole.materiel;
   formOp.examen.value            = protocole.examen;
   formOp.depassement.value       = protocole.depassement;
