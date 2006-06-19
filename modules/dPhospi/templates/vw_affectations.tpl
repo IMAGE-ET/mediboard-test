@@ -169,7 +169,10 @@ function showLegend() {
 
     <tr>
     {foreach from=$services item=curr_service}
-      <th><a href="index.php?m={$m}&amp;tab={$tab}&amp;service_id={$curr_service->service_id}">{$curr_service->nom} / {$curr_service->_nb_lits_dispo} lit(s) dispo</a></td>
+      <th>
+        <a href="index.php?m={$m}&amp;tab={$tab}&amp;service_id={$curr_service->service_id}">
+        {$curr_service->nom} / {$curr_service->_nb_lits_dispo} lit(s) dispo</a>
+      </th>
     {/foreach}
     </tr>
 
@@ -236,7 +239,7 @@ function showLegend() {
             {else}
             <td class="text">
             {/if}
-              {if ($curr_affectation->_ref_sejour->entree_reelle) || ($curr_affectation->_ref_prev->affectation_id && $curr_affectation->_ref_prev->effectue == 0)}
+              {if !$curr_affectation->_ref_sejour->entree_reelle && !($curr_affectation->_ref_prev->affectation_id && $curr_affectation->_ref_prev->effectue == 0)}
                 <font style="color:#a33">
               {else}
                 {if $curr_affectation->_ref_sejour->septique == 1}
