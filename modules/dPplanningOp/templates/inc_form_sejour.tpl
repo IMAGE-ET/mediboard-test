@@ -96,12 +96,12 @@
   </td>
   <td>
     à
-    <select name="_hour_entree_prevue">
+    <select name="_hour_entree_prevue" onchange="updateHeureSortie()">
     {{foreach from=$hours item=hour}}
       <option value="{{$hour}}" {{if $sejour->_hour_entree_prevue == $hour || (!$sejour->sejour_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
     {{/foreach}}
     </select> h
-    <select name="_min_entree_prevue">
+    <select name="_min_entree_prevue" onchange="updateHeureSortie()">
     {{foreach from=$mins item=min}}
       <option value="{{$min}}" {{if $sejour->_min_entree_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}

@@ -57,6 +57,15 @@ function updateDureePrevue() {
   }
 }
 
+function updateHeureSortie() {
+  var oForm = document.editSejour
+  
+  if(oForm._date_entree_prevue.value == oForm._date_sortie_prevue.value) {
+    oForm._hour_sortie_prevue.value = oForm._hour_entree_prevue.value;
+    oForm._min_sortie_prevue.value = oForm._min_entree_prevue.value;
+  }
+}
+
 function popPat() {
   var url = new Url();
   url.setModuleAction("dPpatients", "pat_selector");
