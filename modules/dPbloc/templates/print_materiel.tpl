@@ -14,7 +14,7 @@
 		</tr>
 		{foreach from=$op1 item=curr_op}
 		<tr>
-		  <td>{$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}</td>
+		  <td>{$curr_op->_datetime|date_format:"%d/%m/%Y"}</td>
 		  <td class="text">Dr. {$curr_op->_ref_chir->_view}</td>
 		  <td class="text">{$curr_op->_ref_sejour->_ref_patient->_view}</td>
 		  <td class="text">
@@ -41,7 +41,7 @@
 		</tr>
 		{foreach from=$op2 item=curr_op}
 		<tr>
-		  <td>{$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}</td>
+		  <td>{$curr_op->_datetime|date_format:"%d/%m/%Y"}</td>
 		  <td class="text">Dr. {$curr_op->_ref_chir->_view}</td>
 		  <td class="text">{$curr_op->_ref_sejour->_ref_patient->_view}</td>
 		  <td class="text">

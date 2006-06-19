@@ -90,7 +90,7 @@
  
   <tr>
     <th>Date d'intervention :</th>
-    <td>le {$operation->_ref_plageop->date|date_format:"%A %d/%m/%Y"}</td>
+    <td>le {$operation->_->datetime|date_format:"%A %d/%m/%Y"}</td>
   </tr>
 
   <tr>

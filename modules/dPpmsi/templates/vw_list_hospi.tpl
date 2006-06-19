@@ -50,7 +50,7 @@ function pageMain() {
     <td class="text">
       {foreach from=$curr_sejour->_ref_operations item=curr_operation}
       <a title="Voir la feuille d'admission" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_operation->operation_id}">
-        Le {$curr_operation->_ref_plageop->date|date_format:"%d/%m/%Y"}
+        Le {$curr_operation->_datetime|date_format:"%d/%m/%Y"}
         par le Dr. {$curr_operation->_ref_chir->_view}
       </a>
       {/foreach}

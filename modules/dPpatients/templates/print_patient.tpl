@@ -46,7 +46,7 @@
       <ul>
       {foreach from=$curr_sejour->_ref_operations item="curr_op"}
         <li>
-          Intervention le {$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}
+          Intervention le {$curr_op->_datetime|date_format:"%d/%m/%Y"}
           (Dr {$curr_op->_ref_chir->_view})
         </li>
       {foreachelse}

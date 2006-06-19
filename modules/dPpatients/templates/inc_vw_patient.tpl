@@ -225,7 +225,7 @@ function printIntervention(id) {
         <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
       </a>
       <a class="actionPat" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={$curr_op->operation_id}">
-        Intervention le {$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}
+        Intervention le {$curr_op->_datetime|date_format:"%d %b %Y"}
       </a>
     </td>
     {if $curr_op->annulee}

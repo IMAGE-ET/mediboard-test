@@ -46,6 +46,7 @@ if ($canEdit) {
 $tabBox->add("vw_edit_sejour", "Planifier / Modifier un séjour");
 
 if ($canEdit) {
+  $tabBox->add("vw_edit_urgence", "Planifier / Modifier une urgence");
   $tabBox->add("vw_protocoles", "Protocoles");
   $tabBox->add("vw_edit_protocole", "Créer / Modifier un protocole");
 }

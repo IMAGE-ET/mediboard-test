@@ -31,34 +31,17 @@ class COperation extends CMbObject {
 
   // DB References
   var $sejour_id = null;
-  //var $pat_id = null; // remplacé par $sejour->patient_id
   var $chir_id = null; // dupliqué en $sejour->praticien_id
   var $plageop_id = null;
-
-  // DB Fields to be removed
-//  var $CCAM_code = null;
-//  var $CCAM_code2 = null;
-//  var $compte_rendu = null;
-//  var $cr_valide = null;
-
-  // DB Fields venue
-//  var $date_adm = null; // remplacé par $sejour->entree_prevue
-//  var $time_adm = null; // remplacé par $sejour->entree_prevue
-//  var $chambre = null; // remplacée par $sejour->chambre_seule
-//  var $type_adm = null; // remplacé $sejour->type
   
   // DB Fields S@nté.com communication
-//  var $venue_SHS = null; // remplacé par $sejour->venue_SHS
   var $code_uf = null;
   var $libelle_uf = null;
-//  var $saisie = null; // remplacé par $sejour->saisi_SHS
-//  var $modifiee = null;  // remplace $sejour->modif_SHS
   
   // DB Fields
   var $salle_id = null;
   var $date = null;
   var $codes_ccam = null;
-//  var $CIM10_code = null; // remplacé par $sejour->DP
   var $libelle = null;
   var $cote = null;
   var $temp_operation = null;
@@ -74,7 +57,6 @@ class COperation extends CMbObject {
   var $time_operation = null;
   var $examen = null;
   var $materiel = null;
-//  var $convalescence = null; // remplacé par $sejour->convalescence
   var $commande_mat = null;
   var $info = null;
   var $date_anesth = null;
@@ -87,8 +69,6 @@ class COperation extends CMbObject {
   
   var $depassement = null;
   var $annulee = null;    // completé par $sejour->annule
-//  var $pathologie = null; // remplacé par $sejour->pathologie
-//  var $septique = null;   // remplacé par $sejour->septique
     
   // Form fields
   var $_hour_op = null;
@@ -96,8 +76,6 @@ class COperation extends CMbObject {
   var $_hour_anesth = null;
   var $_min_anesth = null;
   var $_lu_type_anesth = null;
-//  var $_hour_adm = null;
-//  var $_min_adm = null;
   var $_codes_ccam = array();
   
   // Shortcut fields
@@ -114,46 +92,68 @@ class COperation extends CMbObject {
   
   // External references
   var $_ext_codes_ccam = null;
+  
+  // Old fields
+//  var $pat_id = null; // remplacé par $sejour->patient_id
+//  var $CCAM_code = null;  // DB Field to be removed
+//  var $CCAM_code2 = null;  // DB Field to be removed
+//  var $compte_rendu = null;  // DB Field to be removed
+//  var $cr_valide = null;  // DB Field to be removed
+//  var $date_adm = null; // remplacé par $sejour->entree_prevue
+//  var $time_adm = null; // remplacé par $sejour->entree_prevue
+//  var $chambre = null; // remplacée par $sejour->chambre_seule
+//  var $type_adm = null; // remplacé $sejour->type
+//  var $venue_SHS = null; // remplacé par $sejour->venue_SHS
+//  var $saisie = null; // remplacé par $sejour->saisi_SHS
+//  var $modifiee = null;  // remplace $sejour->modif_SHS
+//  var $CIM10_code = null; // remplacé par $sejour->DP
+//  var $convalescence = null; // remplacé par $sejour->convalescence
+//  var $pathologie = null; // remplacé par $sejour->pathologie
+//  var $septique = null;   // remplacé par $sejour->septique
+//  var $_hour_adm = null;
+//  var $_min_adm = null;
 
   function COperation() {
     $this->CMbObject( 'operations', 'operation_id' );
+
+    $this->_props["chir_id"]        = "ref|notNull";
+    $this->_props["plageop_id"]     = "ref";
+    $this->_props["date"]           = "dateTime";
+    $this->_props["code_uf"]        = "str|maxLength|10";
+    $this->_props["libelle_uf"]     = "str|maxLength|35";
+    $this->_props["libelle"]        = "str|confidential";
+    $this->_props["cote"]           = "enum|droit|gauche|bilatéral|total";
+    $this->_props["temp_operation"] = "time";
+    $this->_props["entree_bloc"]    = "time";
+    $this->_props["sortie_bloc"]    = "time";
+    $this->_props["time_operation"] = "time";
+    $this->_props["examen"]         = "str|confidential";
+    $this->_props["materiel"]       = "str|confidential";
+    $this->_props["commande_mat"]   = "enum|o|n";
+    $this->_props["info"]           = "enum|o|n";
+    $this->_props["date_anesth"]    = "date";
+    $this->_props["time_anesth"]    = "time";
+    $this->_props["type_anesth"]    = "num";
+    $this->_props["date_anesth"]    = "date";
+    $this->_props["duree_hospi"]    = "num";
+    $this->_props["ATNC"]           = "enum|o|n";
+    $this->_props["rques"]          = "str|confidential";
+    $this->_props["rank"]           = "num";
+    $this->_props["depassement"]    = "currency|confidential";
+    $this->_props["annulee"]        = "enum|0|1";
     
 //    $this->_props["pat_id"] = "ref";
-    $this->_props["chir_id"] = "ref|notNull";
-    $this->_props["plageop_id"] = "ref";
 //    $this->_props["CCAM_code"] = "code|ccam";
 //    $this->_props["CCAM_code2"] = "code|ccam";
 //    $this->_props["CIM10_code"] = "code|cim10";
-    $this->_props["code_uf"] = "str|maxLength|10";
-    $this->_props["libelle_uf"] = "str|maxLength|35";
-    $this->_props["libelle"] = "str|confidential";
-    $this->_props["cote"] = "enum|droit|gauche|bilatéral|total";
-    $this->_props["temp_operation"] = "time";
-    $this->_props["entree_bloc"] = "time";
-    $this->_props["sortie_bloc"] = "time";
-    $this->_props["time_operation"] = "time";
-    $this->_props["examen"] = "str|confidential";
-    $this->_props["materiel"] = "str|confidential";
 //    $this->_props["convalescence"] = "str|confidential";
-    $this->_props["commande_mat"] = "enum|o|n";
-    $this->_props["info"] = "enum|o|n";
-    $this->_props["date_anesth"] = "date";
-    $this->_props["time_anesth"] = "time";
-    $this->_props["type_anesth"] = "num";
-    $this->_props["date_anesth"] = "date";
 //    $this->_props["date_adm"] = "date";
 //    $this->_props["time_adm"] = "time";
-    $this->_props["duree_hospi"] = "num";
 //    $this->_props["type_adm"] = "enum|comp|ambu|exte";
 //    $this->_props["venue_SHS"] = "num|length|8|confidential";
 //    $this->_props["chambre"] = "enum|o|n";
-    $this->_props["ATNC"] = "enum|o|n";
-    $this->_props["rques"] = "str|confidential";
-    $this->_props["rank"] = "num";
 //    $this->_props["saisie"] = "enum|o|n";
 //    $this->_props["modifiee"] = "enum|0|1";
-    $this->_props["depassement"] = "currency|confidential";
-    $this->_props["annulee"] = "enum|0|1";
 //    $this->_props["compte_rendu"] = "html|confidential";
 //    $this->_props["cr_valide"] = "enum|0|1";
   }
@@ -317,9 +317,13 @@ class COperation extends CMbObject {
   }
   
   function loadRefPlageOp() {
-    $this->_ref_plageop = new CPlageOp;
-    $this->_ref_plageop->load($this->plageop_id);
-    $this->_datetime = $this->_ref_plageop->date . " " . $this->time_operation;
+    if($this->plageop_id) {
+      $this->_ref_plageop = new CPlageOp;
+      $this->_ref_plageop->load($this->plageop_id);
+      $this->_datetime = $this->_ref_plageop->date . " " . $this->time_operation;
+    } else {
+      $this->_datetime = $this->date;
+    }
   }
   
   function loadRefCCAM() {

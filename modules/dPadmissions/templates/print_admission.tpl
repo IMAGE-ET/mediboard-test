@@ -147,7 +147,7 @@
   {foreach from=$admission->_ref_operations item=curr_op}
   <tr>
     <th class="category" colspan="2">
-      Informations sur l'intervention du {$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}
+      Informations sur l'intervention du {$curr_op->_datetime|date_format:"%d/%m/%Y"}
     </th>
   </tr>
 

@@ -197,7 +197,7 @@ function pageMain() {
         <tr class="sejour{$curr_sejour->sejour_id}">
           <th class="category" colspan="4">
             Dr. {$curr_op->_ref_chir->_view}
-            &mdash; {$curr_op->_ref_plageop->date|date_format:"%A %d %B %Y"}
+            &mdash; {$curr_op->_datetime|date_format:"%A %d %B %Y"}
             &mdash; {$curr_op->_ref_plageop->_ref_salle->nom}
           </th>
         </tr>
@@ -241,7 +241,7 @@ function pageMain() {
         <tr class="sejour{$curr_sejour->sejour_id}">
           <th>Date</th>
           <td class="text" colspan="3">
-            Le {$curr_op->_ref_plageop->date|date_format:"%A %d %b %Y"}
+            Le {$curr_op->_datetime|date_format:"%A %d %b %Y"}
             par le Dr. {$curr_op->_ref_chir->_view},
           </td>
         </tr>

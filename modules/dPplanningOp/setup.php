@@ -451,7 +451,12 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
 
       case "0.49":
-        return "0.49";
+        $sql = "UPDATE `operations` SET `date` = NULL;";
+        db_exec($sql); db_error();
+        $sql = "ALTER TABLE `operations` CHANGE `date` `date` DATETIME DEFAULT NULL;";
+        db_exec($sql); db_error();
+      case "0.50":
+        return "0.50";
     }
     
     return false;
