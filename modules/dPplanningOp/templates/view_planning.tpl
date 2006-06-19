@@ -109,7 +109,7 @@
 
   <tr>
     <th>Durée prévue d'hospitalisation :</th>
-    <td>{$operation->duree_hospi} jours</td>
+    <td>{$operation->_ref_sejour->_duree_prevue} jours</td>
   </tr>
   
   <tr><th class="category" colspan="2">Rendez vous d'anesthésie</th></tr>

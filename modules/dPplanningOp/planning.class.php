@@ -460,7 +460,7 @@ class COperation extends CMbObject {
     $timeFormat = "%Hh%M";
     $template->addProperty("Admission - Date"                 , mbTranformTime(null, $this->_ref_sejour->entree_prevue, $dateFormat));
     $template->addProperty("Admission - Heure"                , mbTranformTime(null, $this->_ref_sejour->entree_prevue, $timeFormat));
-    $template->addProperty("Hospitalisation - Durée"          , mbDaysRelative($this->_ref_sejour->entree_prevue, $this->_ref_sejour->sortie_prevue));
+    $template->addProperty("Hospitalisation - Durée"          , $this->_ref_sejour->_duree_prevue);
     $template->addProperty("Hospitalisation - Date sortie"    , mbTranformTime(null, $this->_ref_sejour->sortie_prevue, $dateFormat));
     $template->addProperty("Opération - Anesthésiste - nom"   , $this->_ref_plageop->_ref_anesth->_user_last_name);
     $template->addProperty("Opération - Anesthésiste - prénom", $this->_ref_plageop->_ref_anesth->_user_first_name);
@@ -478,12 +478,12 @@ class COperation extends CMbObject {
     $template->addProperty("Opération - date"                 , mbTranformTime(null, $this->_ref_plageop->date, $dateFormat));
     $template->addProperty("Opération - heure"                , mbTranformTime(null, $this->time_operation, $timeFormat));
     $template->addProperty("Opération - durée"                , mbTranformTime(null, $this->temp_operation, $timeFormat));
-    $template->addProperty("Opération - entrée bloc"          ,  mbTranformTime(null, $this->entree_bloc, $timeFormat));
-    $template->addProperty("Opération - pose garrot"          ,  mbTranformTime(null, $this->pose_garrot, $timeFormat));
-    $template->addProperty("Opération - début op"             ,  mbTranformTime(null, $this->debut_op, $timeFormat));
-    $template->addProperty("Opération - fin op"               ,  mbTranformTime(null, $this->fin_op, $timeFormat));
-    $template->addProperty("Opération - retrait garrot"       ,  mbTranformTime(null, $this->retrait_garrot, $timeFormat));
-    $template->addProperty("Opération - sortie bloc"          ,  mbTranformTime(null, $this->sortie_bloc, $timeFormat));
+    $template->addProperty("Opération - entrée bloc"          , mbTranformTime(null, $this->entree_bloc, $timeFormat));
+    $template->addProperty("Opération - pose garrot"          , mbTranformTime(null, $this->pose_garrot, $timeFormat));
+    $template->addProperty("Opération - début op"             , mbTranformTime(null, $this->debut_op, $timeFormat));
+    $template->addProperty("Opération - fin op"               , mbTranformTime(null, $this->fin_op, $timeFormat));
+    $template->addProperty("Opération - retrait garrot"       , mbTranformTime(null, $this->retrait_garrot, $timeFormat));
+    $template->addProperty("Opération - sortie bloc"          , mbTranformTime(null, $this->sortie_bloc, $timeFormat));
     $template->addProperty("Opération - depassement"          , $this->depassement);
     $template->addProperty("Opération - exams pre-op"         , nl2br($this->examen));
     $template->addProperty("Opération - matériel"             , nl2br($this->materiel));
