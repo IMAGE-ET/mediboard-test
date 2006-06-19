@@ -118,7 +118,7 @@ class CFile extends CMbObject {
     $fileDir = "$filesDir/$this->_sub_dir/$this->_object_id";
 
     if (!@CMbPath::forceDir($fileDir)) {
-      $subDir .= "2";
+      $this->_sub_dir .= "2";
       $fileDir = "$filesDir/$this->_sub_dir/$this->_object_id";
       if (!CMbPath::forceDir($fileDir)) {
         trigger_error("File directory couldn't be created for file (file_id = $this->file_id)", E_USER_WARNING);
