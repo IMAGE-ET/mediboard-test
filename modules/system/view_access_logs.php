@@ -14,16 +14,23 @@ require_once($AppUI->getModuleClass("system", "accesslog"));
 
 $date     = mbGetValueFromGetOrSession("date", mbDate());
 $groupmod = mbGetValueFromGetOrSession("groupmod", 1);
+$module   = mbGetValueFromGetOrSession("module", "system");
 $next     = mbDate("+ 1 day", $date);
 
 $logs = new CAccessLog;
-$logs = $logs->loadAgregation($date, $next, $groupmod);
+$logs = $logs->loadAgregation($date, $next, $groupmod, $module);
+
+$listModules = $AppUI->getMenuModules();
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP;
+
 $smarty->assign("logs", $logs);
 $smarty->assign("date", $date);
 $smarty->assign("groupmod", $groupmod);
+$smarty->assign("module", $module);
+$smarty->assign("listModules", $listModules);
+
 $smarty->display("view_access_logs.tpl");
 ?>

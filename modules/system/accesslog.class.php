@@ -35,16 +35,19 @@ class CAccessLog extends CMbObject {
     }
   }
   
-  function loadAgregation($start, $end, $module = 0) {
+  function loadAgregation($start, $end, $groupmod = 0, $module = 0) {
     $sql = "SELECT accesslog_id, module, action," .
         "\nSUM(hits) AS hits, SUM(duration) AS duration, SUM(request) AS request," .
         "\n0 AS grouping" .
         "\nFROM access_log" .
         "\nWHERE period BETWEEN '$start' AND '$end'";
-    if($module == 2) {
+    if($module && !$groupmod) {
+      $sql .= "\nAND module = '$module'";
+    }
+    if($groupmod == 2) {
       $sql .= "\nGROUP BY grouping";
     }
-    else if($module == 1) {
+    else if($groupmod == 1) {
       $sql .= "\nGROUP BY module" .
           "\nORDER BY module";
     } else {
