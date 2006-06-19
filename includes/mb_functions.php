@@ -253,7 +253,7 @@ function mbDaysRelative($from, $to) {
   $from = intval(strtotime($from) / 86400);
   $to   = intval(strtotime($to  ) / 86400);
   $days = intval($to - $from);
-  return $days-1;
+  return $days;
 }
 
 /**
