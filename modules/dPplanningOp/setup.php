@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'dPplanningOp';
-$config['mod_version'] = '0.49';
+$config['mod_version'] = '0.50';
 $config['mod_directory'] = 'dPplanningOp';
 $config['mod_setup_class'] = 'CSetupdPplanningOp';
 $config['mod_type'] = 'user';
