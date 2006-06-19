@@ -22,6 +22,8 @@ require_once( $AppUI->getModuleClass('dPsalleOp'   , 'acteccam'     ) );
 $dPconfig["dPplanningOp"]["operation"] = array (
   "duree_deb" => "0",
   "duree_fin" => "10",
+  "hour_urgence_deb" => "0",
+  "hour_urgence_fin" => "23",
   "min_intervalle" => "15"
 );
 
@@ -73,6 +75,8 @@ class COperation extends CMbObject {
   // Form fields
   var $_hour_op = null;
   var $_min_op = null;
+  var $_hour_urgence = null;
+  var $_min_urgence = null;
   var $_hour_anesth = null;
   var $_min_anesth = null;
   var $_lu_type_anesth = null;
@@ -118,7 +122,7 @@ class COperation extends CMbObject {
 
     $this->_props["chir_id"]        = "ref|notNull";
     $this->_props["plageop_id"]     = "ref";
-    $this->_props["date"]           = "dateTime";
+    $this->_props["date"]           = "date";
     $this->_props["code_uf"]        = "str|maxLength|10";
     $this->_props["libelle_uf"]     = "str|maxLength|35";
     $this->_props["libelle"]        = "str|confidential";
@@ -236,6 +240,9 @@ class COperation extends CMbObject {
     
     $this->_hour_op = intval(substr($this->temp_operation, 0, 2));
     $this->_min_op  = intval(substr($this->temp_operation, 3, 2));
+    
+    $this->_hour_urgence = intval(substr($this->time_operation, 0, 2));
+    $this->_min_urgence  = intval(substr($this->time_operation, 3, 2));
 
     if ($this->type_anesth != null) {
       $anesth = dPgetSysVal("AnesthType");
@@ -275,6 +282,11 @@ class COperation extends CMbObject {
       $this->temp_operation = 
         $this->_hour_op.":".
         $this->_min_op.":00";
+    }
+    if ($this->_hour_urgence !== null and $this->_min_urgence !== null) {
+      $this->time_operation = 
+        $this->_hour_urgence.":".
+        $this->_min_urgence.":00";
     }
   }
 
@@ -320,10 +332,11 @@ class COperation extends CMbObject {
     if($this->plageop_id) {
       $this->_ref_plageop = new CPlageOp;
       $this->_ref_plageop->load($this->plageop_id);
-      $this->_datetime = $this->_ref_plageop->date . " " . $this->time_operation;
+      $this->_datetime = $this->_ref_plageop->date;
     } else {
       $this->_datetime = $this->date;
     }
+    $this->_datetime .= " ".$this->time_operation;
   }
   
   function loadRefCCAM() {

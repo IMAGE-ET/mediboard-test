@@ -156,14 +156,31 @@ function pageMain() {
 
 <table class="main" style="margin: 4px; border-spacing: 0px;">
   {{if $op->operation_id}}
+  {{if $modurgence}}
+  <tr>
+    <td colspan="2">
+       <a class="button" href="index.php?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">Programmer une nouvelle urgence</a>
+    </td>
+  </tr>
+  {{else}}
   <tr>
     <td colspan="2">
        <a class="button" href="index.php?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">Programmer une nouvelle intervention</a>
     </td>
   </tr>
   {{/if}}
+  {{/if}}
   <tr>
     {{if $op->operation_id}}
+    {{if $modurgence}}
+    <th colspan="2" class="title" style="color: #f00; background-color: #00a">
+      <button style="float:left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
+      <a style="float:right;" href="javascript:view_log('COperation',{{$op->operation_id}})">
+        <img src="images/history.gif" alt="historique" />
+      </a>
+      Modification de l'urgence de {{$patient->_view}} par le Dr. {{$chir->_view}}
+    </th>
+    {{else}}
     <th colspan="2" class="title" style="color: #f00;">
       <button style="float:left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
       <a style="float:right;" href="javascript:view_log('COperation',{{$op->operation_id}})">
@@ -171,11 +188,19 @@ function pageMain() {
       </a>
       Modification de l'intervention de {{$patient->_view}} par le Dr. {{$chir->_view}}
     </th>
+    {{/if}}
+    {{else}}
+    {{if $modurgence}}
+    <th colspan="2" class="title" style="color: #fff; background-color: #00a"> 
+      <button style="float:left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
+      Création d'une urgence
+    </th>
     {{else}}
     <th colspan="2" class="title"> 
       <button style="float:left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
       Création d'une intervention
     </th>
+    {{/if}}
     {{/if}}
   </tr>
   <tr>

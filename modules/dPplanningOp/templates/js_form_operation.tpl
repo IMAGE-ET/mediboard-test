@@ -134,6 +134,19 @@ function synchroPrat() {
   }
 }
 
+function updateEntreePrevue() {
+  var oOpForm = document.editOp;
+  var oSejourForm = document.editSejour;
+
+  if(oOpForm.date.value) {
+    oSejourForm._date_entree_prevue.value = oOpForm.date.value;
+    var dDate = makeDateFromDATE(oOpForm.date.value);
+    oDiv = document.getElementById('editSejour__date_entree_prevue_da');
+    oDiv.innerHTML = makeLocaleDateFromDate(dDate);
+    updateSortiePrevue();
+  }
+}
+
 function popPlage() {
   var oForm = document.editOp;
   if (checkChir() && checkDuree()) {
@@ -200,6 +213,9 @@ function setPlage(plage_id, sDate, bAdm) {
   
 function incFormOperationMain() {
   regFieldCalendar("editOp", "date_anesth");
+  {{if $modurgence}}
+  regFieldCalendar("editOp", "date");
+  {{/if}}
   refreshListCCAM();
 }
 

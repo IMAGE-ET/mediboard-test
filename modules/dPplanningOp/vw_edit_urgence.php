@@ -1,9 +1,9 @@
-<?php /* $Id$ */
+<?php /* $Id: $ */
 
 /**
 * @package Mediboard
 * @subpackage dPplanningOp
-* @version $Revision$
+* @version $Revision: $
 * @author Romain Ollivier
 */
 
@@ -16,7 +16,7 @@ require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
 require_once( $AppUI->getModuleClass('dPcompteRendu', 'pack') );
 
 if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
+  $AppUI->redirect( "m=system&a=access_denied" );
 }
 
 $operation_id = mbGetValueFromGetOrSession("operation_id", null);
@@ -147,7 +147,7 @@ $smarty->assign("praticien" , $chir);
 $smarty->assign("patient"   , $patient );
 $smarty->assign("sejours"   , $sejours);
 
-$smarty->assign("modurgence", 0);
+$smarty->assign("modurgence", 1);
 $smarty->assign("date"      , $date);
 
 $smarty->assign("listPraticiens", $listPraticiens);

@@ -12,27 +12,27 @@
           <th colspan="4">{$curr_day.date|date_format:"%A %d %B %Y"}</th>
         </tr>
         <tr>
-          <th>Patient</th><th>Chirurgien</th><th>Admsission</th><th>Remarques</th>
+          <th>Patient</th><th>Chirurgien</th><th>Heure</th><th>Remarques</th>
         </tr>
         {foreach from=$curr_day.urgences item=curr_urgence}
         <tr>
           <td class="text">
-            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_urgence->operation_id}">
+            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={$curr_urgence->operation_id}">
             {$curr_urgence->_ref_sejour->_ref_patient->_view}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_urgence->operation_id}">
+            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={$curr_urgence->operation_id}">
             Dr. {$curr_urgence->_ref_chir->_view}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_urgence->operation_id}">
-            {$curr_urgence->_ref_sejour->entree_prevue|date_format:"%H h %M"}
+            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={$curr_urgence->operation_id}">
+            {$curr_urgence->_datetime|date_format:"%Hh%M"}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_urgence->operation_id}">
+            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={$curr_urgence->operation_id}">
             {$curr_urgence->rques|escape:javascript}
             </a>
           </td>
@@ -49,27 +49,27 @@
           <th colspan="4">{$curr_day.date|date_format:"%A %d %B %Y"}</th>
         </tr>
         <tr>
-          <th>Patient</th><th>Chirurgien</th><th>Admsission</th><th>Remarques</th>
+          <th>Patient</th><th>Chirurgien</th><th>Heure</th><th>Remarques</th>
         </tr>
         {foreach from=$curr_day.urgences item=curr_urgence}
         <tr>
           <td class="text">
-            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_urgence->operation_id}">
+            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={$curr_urgence->operation_id}">
             {$curr_urgence->_ref_sejour->_ref_patient->_view}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_urgence->operation_id}">
+            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={$curr_urgence->operation_id}">
             Dr. {$curr_urgence->_ref_chir->_view}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_urgence->operation_id}">
-            {$curr_urgence->_ref_sejour->entree_prevue|date_format:"%H h %M"}
+            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={$curr_urgence->operation_id}">
+            {$curr_urgence->_datetime|date_format:"%H h %M"}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_hospi&amp;hospitalisation_id={$curr_urgence->operation_id}">
+            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={$curr_urgence->operation_id}">
             {$curr_urgence->rques|escape:javascript}
             </a>
           </td>

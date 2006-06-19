@@ -31,7 +31,6 @@ function modifSejour() {
   }
 }
 
-
 function updateSortiePrevue() {
   var oForm = document.editSejour;
   

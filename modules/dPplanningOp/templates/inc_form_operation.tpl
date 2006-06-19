@@ -61,12 +61,38 @@
   </tr>
 
   <tr>
+    {{if $modurgence}}
+    <th>
+      <label for="date" title="Choisir une date d'intervention">Date de l'intervention :</label>
+    </th>
+    <td class="date">
+      <input type="hidden" name="plageop_id" value="" />
+      <div id="editOp_date_da">{{$op->date|date_format:"%d/%m/%Y"}}</div>
+      <input type="hidden" name="date" title="date|notNull" value="{{$op->date}}" onchange="updateEntreePrevue(); modifSejour()" />
+      <img id="editOp_date_trigger" src="./images/calendar.gif" alt="calendar"/>
+    </td>
+    <td>
+      à
+      <select name="_hour_urgence">
+      {{foreach from=$hours_urgence item=hour}}
+        <option value="{{$hour}}" {{if $op->_hour_urgence == $hour || (!$op->operation_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
+      {{/foreach}}
+      </select> h
+      <select name="_min_urgence">
+      {{foreach from=$mins_duree item=min}}
+        <option value="{{$min}}" {{if $op->_min_urgence == $min}} selected="selected" {{/if}}>{{$min}}</option>
+      {{/foreach}}
+      </select> mn
+    </td>
+    {{else}}
     <th class="mandatory">
+      <input type="hidden" name="date" value="" />
       <input type="hidden" name="plageop_id" title="{{$op->_props.plageop_id}}|notNull" ondblclick="popPlage()" value="{{$plage->id}}" />
       <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention :</label>
     </th>
     <td class="readonly"><input type="text" name="_date" readonly="readonly" size="10" value="{{$plage->_date}}" /></td>
     <td class="button"><input type="button" value="Choisir une date" onclick="popPlage()" /></td>
+    {{/if}}
   </tr>
   
   <tr>
