@@ -73,8 +73,10 @@ function exporterDossier(operation_id, oOptions) {
 function pageMain() {
   initGroups("sejour");
   {/literal}
-  {foreach from=$patient->_ref_operations item=curr_op}
+  {foreach from=$patient->_ref_sejours item=curr_sejour}
+  {foreach from=$curr_sejour->_ref_operations item=curr_op}
   exporterDossier({$curr_op->operation_id}, {ldelim}onlySentFiles : true{rdelim});
+  {/foreach}
   {/foreach}
   {literal}
 }
