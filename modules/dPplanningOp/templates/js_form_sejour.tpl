@@ -36,8 +36,10 @@ function updateSortiePrevue() {
   
   if(oForm._date_entree_prevue.value) {
     var dDate = makeDateFromDATE(oForm._date_entree_prevue.value);
-    var iDelta = parseInt(oForm._duree_prevue.value, 10);  
-    dDate.setDate(dDate.getDate() + iDelta);
+    var iDelta = parseInt(oForm._duree_prevue.value, 10);
+    if(iDelta) {
+      dDate.setDate(dDate.getDate() + iDelta);
+    }
     oForm._date_sortie_prevue.value = makeDATEFromDate(dDate);
     oDiv = document.getElementById('editSejour__date_sortie_prevue_da');
     oDiv.innerHTML = makeLocaleDateFromDate(dDate);

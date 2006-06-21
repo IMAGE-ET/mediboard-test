@@ -97,7 +97,7 @@
   </th>
   <td class="date">
     <div id="editSejour__date_entree_prevue_da">{{$sejour->_date_entree_prevue|date_format:"%d/%m/%Y"}}</div>
-    <input type="hidden" name="_date_entree_prevue" title="date|notNull" value="{{$sejour->_date_entree_prevue}}" onchange="modifSejour()"/>
+    <input type="hidden" name="_date_entree_prevue" title="date|notNull" value="{{$sejour->_date_entree_prevue}}" onchange="modifSejour(); updateSortiePrevue();"/>
     <img id="editSejour__date_entree_prevue_trigger" src="./images/calendar.gif" alt="calendar"/>
   </td>
   <td>

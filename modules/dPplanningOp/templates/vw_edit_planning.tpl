@@ -108,8 +108,14 @@ function printForm() {
 }
 
 function submitForms() {
-  var oForm = document.editSejour;
-  submitFormAjax(oForm, 'systemMsg');
+  var oSejourForm = document.editSejour;
+  if(!checkForm(oSejourForm)) {
+    return;
+  }
+  if(!checkFormOperation()) {
+    return;
+  }
+  submitFormAjax(oSejourForm, 'systemMsg');
 }
 
 function submitFormOperation(iSejour_id) {
