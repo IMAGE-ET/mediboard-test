@@ -25,16 +25,17 @@ $heureLimit = "16:00:00";
 $mode = mbGetValueFromGetOrSession("mode");
 
 // Initialisation de la liste des chirs, patients et plagesop
+global $listChirs;
 $listChirs = array();
+global $listPats;
 $listPats = array();
 
 // Récupération des fonctions
+global $listFunctions;
 $listFunctions = new CFunctions;
 $listFunctions = $listFunctions->loadList();
 
 // Récupération du service à ajouter/éditer
-//$serviceSel = new CService;
-//$serviceSel->load(mbGetValueFromGetOrSession("service_id"));
 $totalLits = 0;
 
 // Récupération des chambres/services
@@ -98,147 +99,87 @@ foreach ($services as $service_id => $service) {
 }
 
 // Récupération des admissions à affecter
-$leftjoin = array(
-  "affectation"     => "sejour.sejour_id = affectation.sejour_id",
-  "users_mediboard" => "sejour.praticien_id = users_mediboard.user_id",
-  "patients" => "sejour.patient_id = patients.patient_id"
-);
-$ljwhere = "affectation.affectation_id IS NULL";
-$order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
+function loadSejourNonAffectes($where) {
+  global $listChirs, $listPats, $listFunctions;
+  
+  $leftjoin = array(
+    "affectation"     => "sejour.sejour_id = affectation.sejour_id",
+    "users_mediboard" => "sejour.praticien_id = users_mediboard.user_id",
+    "patients" => "sejour.patient_id = patients.patient_id"
+  );
+  $where[] = "affectation.affectation_id IS NULL";
+  $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
+  
+  $sejourNonAffectes = new CSejour;
+  $sejourNonAffectes = $sejourNonAffectes->loadList($where, $order, null, null, $leftjoin);
+  
+  foreach ($sejourNonAffectes as $keySejour => $valSejour) {
+    $sejour =& $sejourNonAffectes[$keySejour];
+    
+    // Chargement optimisé du praticien 
+    if (array_key_exists($sejour->praticien_id, $listChirs)) {
+      $sejour->_ref_praticien =& $listChirs[$sejour->praticien_id];
+    } else {
+      $sejour->loadRefPraticien();
+      $sejour->_ref_praticien->_ref_function =& $listFunctions[$sejour->_ref_praticien->function_id];
+      $listChirs[$sejour->praticien_id] =& $sejour->_ref_praticien;
+    }
+     
+    // Chargement optimisé du patient
+    if (array_key_exists($sejour->patient_id, $listPats)) {
+      $sejour->_ref_patient =& $listPats[$sejour->patient_id];
+    } else {
+      $sejour->loadRefPatient();
+      $listPats[$sejour->patient_id] =& $sejour->_ref_patient;
+    }
+
+    // Chargement des opérations
+    $sejour->loadRefsOperations();
+    foreach($sejour->_ref_operations as $keyOp => $valueOp) {
+      $operation =& $sejour->_ref_operations[$keyOp];
+      $operation->loadRefCCAM();
+    }
+  }
+  
+  return $sejourNonAffectes;
+}
 
 // Admissions de la veille
+$dayBefore = mbDate("-1 days", $date);
 $where = array(
-  "entree_prevue" => "BETWEEN '".mbDate("-1 days", $date)." 00:00:00' AND '$date 00:00:00'",
+  "entree_prevue" => "BETWEEN '$dayBefore 00:00:00' AND '$date 00:00:00'",
   "type" => "!= 'exte'",
   "annule" => "= 0",
-  $ljwhere  
 );
-$sejourNonAffectesVeille = new CSejour;
-$sejourNonAffectesVeille = $sejourNonAffectesVeille->loadList($where, $order, null, null, $leftjoin);
 
-foreach ($sejourNonAffectesVeille as $sejour_id => $curr_sejour) {
-   if(isset($listChirs[$sejourNonAffectesVeille[$sejour_id]->praticien_id])) {
-     $sejourNonAffectesVeille[$sejour_id]->_ref_praticien =& $listChirs[$sejourNonAffectesVeille[$sejour_id]->praticien_id];
-   }
-   else {
-     $sejourNonAffectesVeille[$sejour_id]->loadRefPraticien();
-     $sejourNonAffectesVeille[$sejour_id]->_ref_praticien->_ref_function =& $listFunctions[$sejourNonAffectesVeille[$sejour_id]->_ref_praticien->function_id];
-     $listChirs[$sejourNonAffectesVeille[$sejour_id]->praticien_id] =& $sejourNonAffectesVeille[$sejour_id]->_ref_praticien;
-   }
-   if(isset($listPats[$sejourNonAffectesVeille[$sejour_id]->patient_id])) {
-     $sejorNonAffecteesVeille[$sejour_id]->_ref_patient =& $listPats[$sejourNonAffectesVeille[$sejour_id]->patient_id];
-   }
-   else {
-     $sejourNonAffectesVeille[$sejour_id]->loadRefPatient();
-     $listPats[$sejourNonAffectesVeille[$sejour_id]->patient_id] =& $sejourNonAffectesVeille[$sejour_id]->_ref_patient;
-   }
-   $sejourNonAffectesVeille[$sejour_id]->loadRefsOperations();
-   foreach($sejourNonAffectesVeille[$sejour_id]->_ref_operations as $operation_id => $operation) {
-     $sejourNonAffectesVeille[$sejour_id]->_ref_operations[$operation_id]->loadRefCCAM();
-   }
-}
+$groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where);
 
 // Admissions du matin
 $where = array(
   "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date $heureLimit'",
   "type" => "!= 'exte'",
   "annule" => "= 0",
-  $ljwhere  
 );
-$sejourNonAffectesMatin = new CSejour;
-$sejourNonAffectesMatin = $sejourNonAffectesMatin->loadList($where, $order, null, null, $leftjoin);
 
-foreach ($sejourNonAffectesMatin as $sejour_id => $curr_sejour) {
-   if(isset($listChirs[$sejourNonAffectesMatin[$sejour_id]->praticien_id])) {
-     $sejourNonAffectesMatin[$sejour_id]->_ref_praticien =& $listChirs[$sejourNonAffectesMatin[$sejour_id]->praticien_id];
-   }
-   else {
-     $sejourNonAffectesMatin[$sejour_id]->loadRefPraticien();
-     $sejourNonAffectesMatin[$sejour_id]->_ref_praticien->_ref_function =& $listFunctions[$sejourNonAffectesMatin[$sejour_id]->_ref_praticien->function_id];
-     $listChirs[$sejourNonAffectesMatin[$sejour_id]->praticien_id] =& $sejourNonAffectesMatin[$sejour_id]->_ref_praticien;
-   }
-   if(isset($listPats[$sejourNonAffectesMatin[$sejour_id]->patient_id])) {
-     $sejourNonAffectesMatin[$sejour_id]->_ref_patient =& $listPats[$sejourNonAffectesMatin[$sejour_id]->patient_id];
-   }
-   else {
-     $sejourNonAffectesMatin[$sejour_id]->loadRefPatient();
-     $listPats[$sejourNonAffectesMatin[$sejour_id]->patient_id] =& $sejourNonAffectesMatin[$sejour_id]->_ref_patient;
-   }
-   $sejourNonAffectesMatin[$sejour_id]->loadRefsOperations();
-   foreach($sejourNonAffectesMatin[$sejour_id]->_ref_operations as $operation_id => $operation) {
-     $sejourNonAffectesMatin[$sejour_id]->_ref_operations[$operation_id]->loadRefCCAM();
-   }
-}
+$groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where);
 
 // Admissions du soir
 $where = array(
   "entree_prevue" => "BETWEEN '$date $heureLimit' AND '$date 23:59:59'",
   "type" => "!= 'exte'",
   "annule" => "= 0",
-  $ljwhere  
 );
-$sejourNonAffectesSoir = new CSejour;
-$sejourNonAffectesSoir = $sejourNonAffectesSoir->loadList($where, $order, null, null, $leftjoin);
 
-foreach ($sejourNonAffectesSoir as $sejour_id => $curr_sejour) {
-   if(isset($listChirs[$sejourNonAffectesSoir[$sejour_id]->praticien_id])) {
-     $sejourNonAffectesSoir[$sejour_id]->_ref_praticien =& $listChirs[$sejourNonAffectesSoir[$sejour_id]->praticien_id];
-   }
-   else {
-     $sejourNonAffectesSoir[$sejour_id]->loadRefPraticien();
-     $sejourNonAffectesSoir[$sejour_id]->_ref_praticien->_ref_function =& $listFunctions[$sejourNonAffectesSoir[$sejour_id]->_ref_praticien->function_id];
-     $listChirs[$sejourNonAffectesSoir[$sejour_id]->praticien_id] =& $sejourNonAffectesSoir[$sejour_id]->_ref_praticien;
-   }
-   if(isset($listPats[$sejourNonAffectesSoir[$sejour_id]->patient_id])) {
-     $sejourNonAffectesSoir[$sejour_id]->_ref_patient =& $listPats[$sejourNonAffectesSoir[$sejour_id]->patient_id];
-   }
-   else {
-     $sejourNonAffectesSoir[$sejour_id]->loadRefPatient();
-     $listPats[$sejourNonAffectesSoir[$sejour_id]->patient_id] =& $sejourNonAffectesSoir[$sejour_id]->_ref_patient;
-   }
-   $sejourNonAffectesSoir[$sejour_id]->loadRefsOperations();
-   foreach($sejourNonAffectesSoir[$sejour_id]->_ref_operations as $operation_id => $operation) {
-     $sejourNonAffectesSoir[$sejour_id]->_ref_operations[$operation_id]->loadRefCCAM();
-   }
-}
+$groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where);
 
 // Admissions antérieures
+$twoDaysBefore = mbDate("-2 days", $date);
 $where = array(
   "annule" => "= 0",
-  "'".mbDate("-2 DAYS", $date)."' BETWEEN entree_prevue AND sortie_prevue",
-  $ljwhere
+  "'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue",
 );
-$sejourNonAffectesAvant = new CSejour;
-$sejourNonAffectesAvant = $sejourNonAffectesAvant->loadList($where, $order, null, null, $leftjoin);
 
-foreach ($sejourNonAffectesAvant as $sejour_id => $curr_sejour) {
-   if(isset($listChirs[$sejourNonAffectesAvant[$sejour_id]->praticien_id])) {
-     $sejourNonAffectesAvant[$sejour_id]->_ref_praticien =& $listChirs[$sejourNonAffectesAvant[$sejour_id]->praticien_id];
-   }
-   else {
-     $sejourNonAffectesAvant[$sejour_id]->loadRefPraticien();
-     $sejourNonAffectesAvant[$sejour_id]->_ref_praticien->_ref_function =& $listFunctions[$sejourNonAffectesAvant[$sejour_id]->_ref_praticien->function_id];
-     $listChirs[$sejourNonAffectesAvant[$sejour_id]->praticien_id] =& $sejourNonAffectesAvant[$sejour_id]->_ref_praticien;
-   }
-   if(isset($listPats[$sejourNonAffectesAvant[$sejour_id]->patient_id])) {
-     $sejourNonAffectesAvant[$sejour_id]->_ref_patient =& $listPats[$sejourNonAffectesAvant[$sejour_id]->patient_id];
-   }
-   else {
-     $sejourNonAffectesAvant[$sejour_id]->loadRefPatient();
-     $listPats[$sejourNonAffectesAvant[$sejour_id]->patient_id] =& $sejourNonAffectesAvant[$sejour_id]->_ref_patient;
-   }
-   $sejourNonAffectesAvant[$sejour_id]->loadRefsOperations();
-   foreach($sejourNonAffectesAvant[$sejour_id]->_ref_operations as $operation_id => $operation) {
-     $sejourNonAffectesAvant[$sejour_id]->_ref_operations[$operation_id]->loadRefCCAM();
-   }
-}
-
-$groupSejourNonAffectes = array(
-  "veille" => $sejourNonAffectesVeille ,
-  "matin"  => $sejourNonAffectesMatin ,
-  "soir"   => $sejourNonAffectesSoir ,
-  "avant"  => $sejourNonAffectesAvant
-);
+$groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where);
 
 // Création du template
 require_once($AppUI->getSystemClass('smartydp'));
