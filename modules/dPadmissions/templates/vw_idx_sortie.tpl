@@ -60,7 +60,7 @@ function pageMain() {
     <td class="halfPane">
       <form name="typeVue" action="?m={$m}" method="get">
       <input type="hidden" name="m" value="{$m}" />
-      <label for="vue" title="Choisir un type de vue">Type de vue:</label>
+      <label for="vue" title="Choisir un type de vue">Type de vue</label>
       <select name="vue" onchange="submit()">
         <option value="0" {if $vue == 0}selected="selected"{/if}>Tout afficher</option>
         <option value="1" {if $vue == 1}selected="selected"{/if}>Ne pas afficher les validés</option>

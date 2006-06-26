@@ -199,7 +199,7 @@ function submitFdr(oForm) {
       <table class="form">
         {if !$consult->tarif}
         <tr>
-          <th><label for="choix" title="Type de tarif pour la consultation. Obligatoire.">Choix du tarif :</label></th>
+          <th><label for="choix" title="Type de tarif pour la consultation. Obligatoire.">Choix du tarif</label></th>
           <td>
             <select name="choix"  title="notNull|str" onchange="modifTarif()">
               <option value="" selected="selected">&mdash; Choix du tarif</option>
@@ -223,7 +223,7 @@ function submitFdr(oForm) {
         {/if}
         {if $consult->paye == "0"}
         <tr>
-          <th><label for="_somme" title="Somme à régler. Obligatoire.">Somme à régler :</label></th>
+          <th><label for="_somme" title="Somme à régler. Obligatoire.">Somme à régler</label></th>
           <td>
             <input type="text" size="4" name="_somme" title="notNull|currency" value="{$consult->secteur1+$consult->secteur2}" /> €
             <input type="hidden" name="secteur1" value="{$consult->secteur1}" />
@@ -253,7 +253,7 @@ function submitFdr(oForm) {
         {if $consult->tarif && $consult->paye == "0"}
         <tr>
           <th>
-            <label for="type_tarif" title="Moyen de paiement">Moyen de paiement :</label>
+            <label for="type_tarif" title="Moyen de paiement">Moyen de paiement</label>
           </th>
           <td>
             <select name="type_tarif">

@@ -61,11 +61,11 @@ function setColor(color) {
           </th>
         </tr>
         <tr>
-          <th class="mandatory"><label for="text" title="Intitulé de la fonction. Obligatoire">Intitulé:</label></th>
+          <th class="mandatory"><label for="text" title="Intitulé de la fonction. Obligatoire">Intitulé</label></th>
           <td><input type="text" name="text" size="30" value="{$userfunction->text}" /></td>
         </tr>
         <tr>
-          <th class="mandatory"><label for="group_id" title="Groupe auquel se rattache la fonction">Groupe:</label></th>
+          <th class="mandatory"><label for="group_id" title="Groupe auquel se rattache la fonction">Groupe</label></th>
           <td>
             <select name="group_id">
             {foreach from=$listGroups item=curr_group}
@@ -77,7 +77,7 @@ function setColor(color) {
           </td>
         </tr>
         <tr>
-          <th><label for="color" title="Couleur de visualisation des fonctions dans les plannings">Couleur:</label></th>
+          <th><label for="color" title="Couleur de visualisation des fonctions dans les plannings">Couleur</label></th>
           <td>
             <span id="test" title="test" style="background: #{$userfunction->color};">
             <a href="javascript:popColor()">cliquez ici</a>

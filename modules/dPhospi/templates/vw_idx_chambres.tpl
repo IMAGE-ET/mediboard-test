@@ -75,12 +75,12 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="nom" title="intitulé du chambre, obligatoire.">Intitulé :</label></th>
+      <th><label for="nom" title="intitulé du chambre, obligatoire.">Intitulé</label></th>
       <td><input type="text" name="nom" title="{$chambreSel->_props.nom}" value="{$chambreSel->nom}" /></td>
     </tr>
 
 	<tr>
-     <th><label for="service_id" title="Service auquel la chambre est rattaché, obligatoire.">Service :</label></th>
+     <th><label for="service_id" title="Service auquel la chambre est rattaché, obligatoire.">Service</label></th>
 	  <td>
         <select name="service_id" title="{$chambreSel->_props.service_id}">
           <option value="">&mdash; Choisir un service &mdash;</option>
@@ -92,7 +92,7 @@ function pageMain() {
 	</tr>
 	    
     <tr>
-      <th><label for="caracteristiques" title="Caracteristiques du chambre.">Caractéristiques :</label></th>
+      <th><label for="caracteristiques" title="Caracteristiques du chambre.">Caractéristiques</label></th>
       <td>
         <textarea name="caracteristiques" rows="4">{$chambreSel->caracteristiques}</textarea></td>
     </tr>
@@ -133,7 +133,7 @@ function pageMain() {
     </tr>
 	  {/foreach}
     <tr>
-      <th><label for="nom" title="Nom du lit">Nom :</label></th>
+      <th><label for="nom" title="Nom du lit">Nom</label></th>
       <td>
         <input type="text" name="nom" title="{$litSel->_props.nom}" value="{$litSel->nom}" />
         {if $litSel->lit_id}

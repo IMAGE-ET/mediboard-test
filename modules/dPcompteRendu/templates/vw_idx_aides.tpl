@@ -69,7 +69,7 @@ function pageMain() {
       </tr>
 
       <tr>
-        <th><label for="filter_user_id" title="Filtrer les aides pour cet utilisateur">Utilisateur :</label></th>
+        <th><label for="filter_user_id" title="Filtrer les aides pour cet utilisateur">Utilisateur</label></th>
         <td>
           <select name="filter_user_id" onchange="this.form.submit()">
             <option value="0">&mdash; Tous les utilisateurs</option>
@@ -80,7 +80,7 @@ function pageMain() {
             {/foreach}
           </select>
         </td>
-        <th><label for="filter_class" title="Filtrer les aides pour ce type d'objet">Type d'objet :</label></th>
+        <th><label for="filter_class" title="Filtrer les aides pour ce type d'objet">Type d'objet</label></th>
         <td>
           <select name="filter_class" onchange="this.form.submit()">
             <option value="0">&mdash; Tous les types d'objets</option>
@@ -149,7 +149,7 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="user_id" title="Utilisateur concerné, obligatoire.">Utilisateur :</label></th>
+      <th><label for="user_id" title="Utilisateur concerné, obligatoire.">Utilisateur</label></th>
       <td>
         <select name="user_id" title="{$aide->_props.user_id}">
           <option value="0">&mdash; Choisir un utilisateur</option>
@@ -163,7 +163,7 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="class" title="Type d'objet concerné, obligatoire.">Objet:</label></th>
+      <th><label for="class" title="Type d'objet concerné, obligatoire.">Objet</label></th>
       <td>
         <select name="class" title="{$aide->_props.class}" onchange="loadFields()">
           <option value="">&mdash; Choisir un objet</option>
@@ -172,7 +172,7 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="field" title="Champ de l'objet concerné, obligatoire.">Champ:</label></th>
+      <th><label for="field" title="Champ de l'objet concerné, obligatoire.">Champ</label></th>
       <td>
         <select name="field" title="{$aide->_props.field}">
           <option value="">&mdash; Choisir un champ</option>
@@ -181,12 +181,12 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="name" title="intitulé de l'aide, obligatoire.">Intitulé:</label></th>
+      <th><label for="name" title="intitulé de l'aide, obligatoire.">Intitulé</label></th>
       <td><input type="text" name="name" title="{$aide->_props.name}" value="{$aide->name}" /></td>
     </tr>
     
     <tr>
-      <th><label for="text" title="Texte de remplacement.">Texte:</label></th>
+      <th><label for="text" title="Texte de remplacement.">Texte</label></th>
       <td>
         <textarea style="width: 200px" rows="4" name="text" title="{$aide->_props.text}">{$aide->text}</textarea>
       </td>

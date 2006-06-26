@@ -32,7 +32,7 @@
 
 <table class="form">
   <tr>
-    <th><label for="keys" title="Un ou plusieurs mots clés, séparés par des espaces. Obligatoire">Mots clefs:</label></th>
+    <th><label for="keys" title="Un ou plusieurs mots clés, séparés par des espaces. Obligatoire">Mots clefs</label></th>
     <td><input type="text" title="notNull|str" name="keys" value="{$keys}" /></td>
   </tr>
   <tr>

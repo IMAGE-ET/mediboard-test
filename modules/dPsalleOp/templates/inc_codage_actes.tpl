@@ -40,7 +40,7 @@
       </tr>
     
       <tr style="display: none;">
-        <th><label for="execution" title="Date et heure d'exécution de l'acte">Exécution :</label></th>
+        <th><label for="execution" title="Date et heure d'exécution de l'acte">Exécution</label></th>
         <td>
           <input type="text" name="execution" title="{$acte->_props.execution}" readonly="readonly" value="{$acte->execution}" />
           <input type="button" value="Maintenant" onclick="this.form.execution.value = makeDATETIMEFromDate(new Date());" /><br />
@@ -50,7 +50,7 @@
       <tbody id="group{$key}" style="display: none">
       
       <tr class="{$key}">
-        <th><label for="executant_id" title="Professionnel de santé exécutant l'acte">Exécutant :</label></th>
+        <th><label for="executant_id" title="Professionnel de santé exécutant l'acte">Exécutant</label></th>
         <td>
           {if $curr_activite->numero == 4}
             {assign var="listExecutants" value=$listAnesths}
@@ -67,7 +67,7 @@
       </tr>
 
       <tr class="{$acte->_view}">
-        <th><label for="modificateurs" title="Modificateurs associés à l'acte">Modificateur(s) :</label></th>
+        <th><label for="modificateurs" title="Modificateurs associés à l'acte">Modificateur(s)</label></th>
         <td class="text">
           {foreach from=$curr_phase->_modificateurs item=curr_mod}
           <input type="checkbox" name="modificateur_{$curr_mod->code}" {if $curr_mod->_value}checked="checked"{/if} />
@@ -78,7 +78,7 @@
       </tr>
         
       <tr class="{$acte->_view}">
-        <th><label for="commentaire" title="Commentaires sur l'acte">Commentaire :</label></th>
+        <th><label for="commentaire" title="Commentaires sur l'acte">Commentaire</label></th>
         <td><textarea name="commentaire" title="{$acte->_props.commentaire}">{$acte->commentaire}</textarea></td>
       </tr>
       

@@ -35,7 +35,7 @@
 {{if $mode_operation}}
 <tr>
   <th>
-    Sejours existants :
+    Sejours existants
   </th>
   <td colspan="2" id="selectSejours">
     <select name="sejour_id" onchange="reloadSejour(this.value)">
@@ -54,7 +54,7 @@
 
 <tr>
   <th>
-    <label for="praticien_id" title="Praticien responsable. Obligatoire">Praticien :</label>
+    <label for="praticien_id" title="Praticien responsable. Obligatoire">Praticien</label>
   </th>
   <td colspan="2">
     <select name="praticien_id" title="{{$sejour->_props.praticien_id}}">
@@ -71,7 +71,7 @@
 <tr>
   <th>
     <input type="hidden" name="patient_id" title="{{$sejour->_props.patient_id}}" ondblclick="popPat()" value="{{$patient->patient_id}}" />
-    <label for="patient_id" title="Patient concerné. Obligatoire">Patient :</label>
+    <label for="patient_id" title="Patient concerné. Obligatoire">Patient</label>
   </th>
   <td class="readonly">
   	<input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" readonly="readonly" />
@@ -82,7 +82,7 @@
 </tr>
 
 <tr>
-  <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM) :</label></th>
+  <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM)</label></th>
   <td><input type="text" name="DP" title="{{$sejour->_props.DP}}" size="10" value="{{$sejour->DP}}" /></td>
   <td class="button"><input type="button" value="Choisir un code" onclick="popCode('cim10')" /></td>
 </tr>
@@ -93,7 +93,7 @@
 
 <tr>
   <th>
-  	<label for="_date_entree_prevue" title="Choisir une date d'entrée">Entrée prévue :</label>
+  	<label for="_date_entree_prevue" title="Choisir une date d'entrée">Entrée prévue</label>
   </th>
   <td class="date">
     <div id="editSejour__date_entree_prevue_da">{{$sejour->_date_entree_prevue|date_format:"%d/%m/%Y"}}</div>
@@ -127,7 +127,7 @@
 
 <tr {{if $mode_operation}} style="display: none" {{/if}}>
   <th>
-  	<label for="_date_sortie_prevue" title="Choisir une date de sortie">Sortie prévue :</label>
+  	<label for="_date_sortie_prevue" title="Choisir une date de sortie">Sortie prévue</label>
   </th>
   <td class="date">
     <div id="editSejour__date_sortie_prevue_da">{{$sejour->_date_sortie_prevue|date_format:"%d/%m/%Y"}}</div>
@@ -162,7 +162,7 @@
 {{/if}}
 
 <tr>
-  <th><label for="type_comp" title="Type d'admission">{{tr}}Type d'admission{{/tr}} :</label></th>
+  <th><label for="type_comp" title="Type d'admission">{{tr}}Type d'admission{{/tr}}</label></th>
   <td colspan="2">
     <input name="type" value="comp" type="radio" {{if !$sejour->sejour_id || $sejour->type == "comp"}}checked="checked"{{/if}} onchange="modifSejour()" />
     <label for="type_comp">{{tr}}comp{{/tr}}</label><br />
@@ -176,7 +176,7 @@
 {{if !$mode_operation}}
 <tr>
   <th>
-    <label for="modalite_libre" title="modalite d'admission">{{tr}}Modalité d'admission{{/tr}} :</label>
+    <label for="modalite_libre" title="modalite d'admission">{{tr}}Modalité d'admission{{/tr}}</label>
   </th>
   <td colspan="2">
     <input name="modalite" value="libre" type="radio" {{if !$sejour->sejour_id || $sejour->modalite == "libre"}}checked="checked"{{/if}} onchange="modifSejour()" />
@@ -191,7 +191,7 @@
 
 <tr>
   <th>
-    <label for="chambre_seule_o" title="Patient à placer dans une chambre particulière">Chambre particulière :</label>
+    <label for="chambre_seule_o" title="Patient à placer dans une chambre particulière">Chambre particulière</label>
   </th>
   <td colspan="2">
     <input name="chambre_seule" value="o" type="radio" {{if $sejour->chambre_seule == "o"}} checked="checked" {{/if}} onchange="modifSejour()" />
@@ -203,7 +203,7 @@
 {{if !$mode_operation}}
 <tr>
   <th>
-    <label for="venue_SHS" title="Code Administratif SHS">Code de venue SHS :</label>
+    <label for="venue_SHS" title="Code Administratif SHS">Code de venue SHS</label>
   </th>
   <td colspan="2">
     <input type="text" size="8" maxlength="8" name="venue_SHS" title="{{$sejour->_props.venue_SHS}}" value="{{$sejour->venue_SHS}}" />

@@ -60,7 +60,7 @@ function pageMain() {
         {/if}
         <tr>
           <th>
-            <label for="debut" title="Debut de la période de la fiche de paie">Début de la période :</label>
+            <label for="debut" title="Debut de la période de la fiche de paie">Début de la période</label>
           </th>
           <td class="date">
             <div id="editFrm_debut_da">{$fichePaie->debut|date_format:"%d/%m/%Y"}</div>
@@ -70,7 +70,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="fin" title="Fin de la période de la fiche de paie">Fin de la période :</label>
+            <label for="fin" title="Fin de la période de la fiche de paie">Fin de la période</label>
           </th>
           <td class="date">
             <div id="editFrm_fin_da">{$fichePaie->fin|date_format:"%d/%m/%Y"}</div>
@@ -80,7 +80,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="salaire" title="Salaire horaireen euros">Salaire horaire :</label>
+            <label for="salaire" title="Salaire horaireen euros">Salaire horaire</label>
           </th>
           <td>
             <input type="text" name="salaire" size="5" title="{$fichePaie->_props.salaire}" value="{$fichePaie->salaire}" />
@@ -89,7 +89,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="heures" title="Nombre d'heures travaillées dans la période">Nombre d'heures travaillées :</label>
+            <label for="heures" title="Nombre d'heures travaillées dans la période">Nombre d'heures travaillées</label>
           </th>
           <td>
             <input type="text" size="4" name="heures" title="{$fichePaie->_props.heures}" value="{$fichePaie->heures}" />
@@ -98,7 +98,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="heures_sup" title="Nombre d'heures suplémentaires travaillées dans la période">Nombre d'heures suplémentaires :</label>
+            <label for="heures_sup" title="Nombre d'heures suplémentaires travaillées dans la période">Nombre d'heures suplémentaires</label>
           </th>
           <td>
             <input type="text" size="4" name="heures_sup" title="{$fichePaie->_props.heures_sup}" value="{$fichePaie->heures_sup}" />
@@ -107,7 +107,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="mutuelle" title="Valeur de la cotisation pour la mutuelle">Mutuelle :</label>
+            <label for="mutuelle" title="Valeur de la cotisation pour la mutuelle">Mutuelle</label>
           </th>
           <td>
             <input type="text" name="mutuelle" size="4" title="{$fichePaie->_props.mutuelle}" value="{$fichePaie->mutuelle}" />
@@ -116,7 +116,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="precarite" title="Prime de précarité exprimée en pourcentage">Prime de précarité :</label>
+            <label for="precarite" title="Prime de précarité exprimée en pourcentage">Prime de précarité</label>
           </th>
           <td>
             <input type="text" size="4" name="precarite" title="{$fichePaie->_props.precarite}" value="{$fichePaie->precarite}" />
@@ -125,7 +125,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="anciennete" title="Prime d'ancienneté exprimée en pourcentage">Prime d'ancienneté :</label>
+            <label for="anciennete" title="Prime d'ancienneté exprimée en pourcentage">Prime d'ancienneté</label>
           </th>
           <td>
             <input type="text" size="4" name="anciennete" title="{$fichePaie->_props.anciennete}" value="{$fichePaie->anciennete}" />
@@ -134,7 +134,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="conges_payes" title="Congés payés exprimés en pourcentage">Prime d'ancienneté :</label>
+            <label for="conges_payes" title="Congés payés exprimés en pourcentage">Prime d'ancienneté</label>
           </th>
           <td>
             <input type="text" size="4" name="conges_payes" title="{$fichePaie->_props.conges_payes}" value="{$fichePaie->conges_payes}" />
@@ -143,7 +143,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="prime_special" title="Prime spéciale en euros">Prime spéciale :</label>
+            <label for="prime_special" title="Prime spéciale en euros">Prime spéciale</label>
           </th>
           <td>
             <input type="text" size="4" name="prime_speciale" title="{$fichePaie->_props.prime_speciale}" value="{$fichePaie->prime_speciale}" />

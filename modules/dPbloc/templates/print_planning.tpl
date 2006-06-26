@@ -59,7 +59,7 @@ function pageMain() {
       <table class="form">
         <tr><th class="category" colspan="3">Choix de la période</th></tr>
         <tr>
-          <th><label for="deb" title="Date de début de la recherche">Début:</label></th>
+          <th><label for="deb" title="Date de début de la recherche">Début</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_deb_da">{$deb|date_format:"%d/%m/%Y"}</div>
             <input type="hidden" name="deb" value="{$deb}" />
@@ -67,7 +67,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="fin" title="Date de fin de la recherche">Fin:</label></th>
+          <th><label for="fin" title="Date de fin de la recherche">Fin</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_fin_da">{$fin|date_format:"%d/%m/%Y"}</div>
             <input type="hidden" name="fin" value="{$fin}" />
@@ -75,11 +75,11 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="vide" title="Afficher ou cacher les plages vides dans le rapport">Afficher les plages vides:</label></th>
+          <th><label for="vide" title="Afficher ou cacher les plages vides dans le rapport">Afficher les plages vides</label></th>
           <td colspan="2"><input type="checkbox" name="vide" /></td>
         </tr>
         <tr>
-          <th><label for="code_ccam" title="Rechercher en fonction d'un code CCAM">Code CCAM:</label></th>
+          <th><label for="code_ccam" title="Rechercher en fonction d'un code CCAM">Code CCAM</label></th>
           <td><input type="text" name="code_ccam" size="10" value="" /></td>
           <td class="button"><input type="button" value="sélectionner un code" onclick="popCode('ccam')"/></td>
         </tr>
@@ -91,7 +91,7 @@ function pageMain() {
       <table class="form">
         <tr><th class="category" colspan="2">Choix des paramètres de tri</th></tr>
         <tr>
-          <th><label for="type" title="Recherche en fonction de la présence dans le planning">Affichage des interventions:</label></th>
+          <th><label for="type" title="Recherche en fonction de la présence dans le planning">Affichage des interventions</label></th>
           <td><select name="type">
             <option value="0">&mdash; Toutes les interventions &mdash;</option>
             <option value="1">insérées dans le planning</option>
@@ -99,7 +99,7 @@ function pageMain() {
           </select></td>
         </tr>
         <tr>
-          <th><label for="chir" title="Rechercher en fonction du praticien">Praticiens:</label></th>
+          <th><label for="chir" title="Rechercher en fonction du praticien">Praticiens</label></th>
           <td><select name="chir">
             <option value="0">&mdash; Tous les praticiens &mdash;</option>
             {foreach from=$listPrat item=curr_prat}
@@ -108,7 +108,7 @@ function pageMain() {
           </select></td>
         </tr>
         <tr>
-          <th><label for="spe" title="Rechercher en fonction d'une spécialité opératoire">Specialité:</label></th>
+          <th><label for="spe" title="Rechercher en fonction d'une spécialité opératoire">Specialité</label></th>
           <td><select name="spe">
             <option value="0">&mdash; Toutes les spécialités &mdash;</option>
             {foreach from=$listSpec item=curr_spec}
@@ -117,7 +117,7 @@ function pageMain() {
           </select></td>
         </tr>
         <tr>
-          <th><label for="salle" title="Rechercher en fonciton d'une salle d'opération">Salle:</label></th>
+          <th><label for="salle" title="Rechercher en fonciton d'une salle d'opération">Salle</label></th>
           <td><select name="salle">
             <option value="0">&mdash; Toutes les salles &mdash;</option>
             {foreach from=$listSalles item=curr_salle}

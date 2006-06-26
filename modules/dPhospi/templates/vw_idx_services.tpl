@@ -67,12 +67,12 @@ function checkFrm() {
     </tr>
 
     <tr>
-      <th class="mandatory"><label for="nom" title="intitulé du service, obligatoire.">Intitulé:</label></th>
+      <th class="mandatory"><label for="nom" title="intitulé du service, obligatoire.">Intitulé</label></th>
       <td><input type="text" name="nom" value="{$serviceSel->nom}" /></td>
     </tr>
     
     <tr>
-      <th><label for="description" title="Description du service, responsabilités, lignes de conduite.">Description:</label></th>
+      <th><label for="description" title="Description du service, responsabilités, lignes de conduite.">Description</label></th>
       <td><textarea name="description" rows="4">{$serviceSel->description}</textarea></td>
     </tr>
     

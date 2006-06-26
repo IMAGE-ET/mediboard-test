@@ -182,7 +182,7 @@ function choosePreselection(oSelect) {
   
   <tr>
     <th>
-      <label for="sc_venue_id" title="Choisir un identifiant pour la venue correspondant à l'opération">Identifiant de venue :</label><br />
+      <label for="sc_venue_id" title="Choisir un identifiant pour la venue correspondant à l'opération">Identifiant de venue</label><br />
       Suggestion :
     </th>
     <td>
@@ -254,22 +254,22 @@ function choosePreselection(oSelect) {
   </tr>
   
   <tr>
-    <th><label for="hostname" title="Nom pleinement qualifié de l'hôte FTP">Nom du server :</label></th>
+    <th><label for="hostname" title="Nom pleinement qualifié de l'hôte FTP">Nom du server</label></th>
     <td><input type="text" title="notNull|str" name="hostname" value="{$ftp->hostname}"/></td>
   </tr>
   
   <tr>
-    <th><label for="username" title="Nom de l'utilisateur FTP">Utilisateur :</label></th>
+    <th><label for="username" title="Nom de l'utilisateur FTP">Utilisateur</label></th>
     <td><input type="text" title="notNull|str" name="username" value="{$ftp->username}"/></td>
   </tr>
   
   <tr>
-    <th><label for="userpass" title="Nom de l'utilisateur FTP">Mot de passe :</label></th>
+    <th><label for="userpass" title="Nom de l'utilisateur FTP">Mot de passe</label></th>
     <td><input type="password" title="notNull|str" name="userpass" value="{$ftp->userpass}"/></td>
   </tr>
 
   <tr>
-    <th><label for="fileprefix" title="Préfixe pour le nom de fichier à télécharger">Préfix de nom de fichier :</label></th>
+    <th><label for="fileprefix" title="Préfixe pour le nom de fichier à télécharger">Préfix de nom de fichier</label></th>
     <td><input type="text" title="notNull|str" name="fileprefix" value="{$fileprefix}"/></td>
   </tr>
   

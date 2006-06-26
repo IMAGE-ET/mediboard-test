@@ -20,7 +20,7 @@
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="dosql" value="do_planning_aed" />
             <input type="hidden" name="operation_id" value="{$consult_anesth->_ref_operation->operation_id}" />
-            <label for="type_anesth" title="Type d'anesthésie pour l'intervention">Type d'anesthésie :</label>
+            <label for="type_anesth" title="Type d'anesthésie pour l'intervention">Type d'anesthésie</label>
             <select name="type_anesth" onchange="submitFormAjax(this.form, 'systemMsg')">
               <option value="">&mdash; Choisir un type d'anesthésie</option>
               {html_options options=$anesth selected=$consult_anesth->_ref_operation->type_anesth}

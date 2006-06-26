@@ -275,7 +275,7 @@ function setPermItem( key, val ) {
 	  </tr>
 	  
 	  <tr>
-	    <th><label for="temp_user_name">{tr}Copy Permissions from User{/tr}:</label></th>
+	    <th><label for="temp_user_name">{tr}Copy Permissions from User{/tr}</label></th>
 	    <td>
 	      <select name="temp_user_name">
 			{html_options options=$otherUsers}

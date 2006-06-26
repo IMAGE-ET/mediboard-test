@@ -26,7 +26,7 @@ function pageMain() {
       </tr>
 
       <tr>
-        <th><label for="filter_status" title="Filtrer les messages">Filtrer :</label></th>
+        <th><label for="filter_status" title="Filtrer les messages">Filtrer</label></th>
         <td>
           <select name="filter_status" onchange="this.form.submit()">
            {html_options options=$mp_status selected=$filter_status}
@@ -88,7 +88,7 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="deb" title="Date de début de la publication, obligatoire">Début de publication :</label></th>
+      <th><label for="deb" title="Date de début de la publication, obligatoire">Début de publication</label></th>
       <td class="date">
         <div id="editFrm_deb_da">{$message->deb|date_format:"%d/%m/%Y %H:%M"}</div>
         <input type="hidden" name="deb" title="{$message->_props.deb}" value="{$message->deb}" />
@@ -97,7 +97,7 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="fin" title="Date de fin de la publication, obligatoire">Début de fin :</label></th>
+      <th><label for="fin" title="Date de fin de la publication, obligatoire">Début de fin</label></th>
       <td class="date">
         <div id="editFrm_fin_da">{$message->fin|date_format:"%d/%m/%Y %H:%M"}</div>
         <input type="hidden" name="fin" title="{$message->_props.fin}" value="{$message->fin}" />
@@ -106,12 +106,12 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="titre" title="Titre du message, obligatoire.">Titre :</label></th>
+      <th><label for="titre" title="Titre du message, obligatoire.">Titre</label></th>
       <td><input type="text" name="titre" title="{$message->_props.titre}" value="{$message->titre}" /></td>
     </tr>
 
     <tr>
-      <th><label for="corps" title="Corps du message, obligatoire.">Corps :</label></th>
+      <th><label for="corps" title="Corps du message, obligatoire.">Corps</label></th>
       <td>
         <textarea style="width: 200px" rows="4" name="corps" title="{$message->_props.corps}">{$message->corps}</textarea>
       </td>

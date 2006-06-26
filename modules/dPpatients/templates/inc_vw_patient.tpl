@@ -147,7 +147,7 @@ function printIntervention(id) {
       <input type="hidden" name="dosql" value="do_consult_now" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="patient_id" title="notNull|ref" value="{$patient->patient_id}" />
-      <label for="prat_id" title="Praticien pour la consultation immédiate. Obligatoire">Praticien:</label>
+      <label for="prat_id" title="Praticien pour la consultation immédiate. Obligatoire">Praticien</label>
       <select name="prat_id" title="notNull|ref">
         <option value="">&mdash; Choisir un praticien</option>
         {foreach from=$listPrat item=curr_prat}

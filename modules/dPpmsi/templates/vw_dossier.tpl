@@ -300,7 +300,7 @@ function pageMain() {
 
               <tr>
                 <th>
-                  <label for="venue_SHS" title="Choisir un identifiant pour la venue correspondant à l'opération">Identifiant de venue :</label>
+                  <label for="venue_SHS" title="Choisir un identifiant pour la venue correspondant à l'opération">Identifiant de venue</label>
                   <br />Suggestion :
                 </th>
                 <td>
@@ -353,12 +353,12 @@ function pageMain() {
               </tr>
 
               <tr>
-                <th><label for="code_uf" title="Choisir un code pour l'unité fonctionnelle">Code d'unité fonct. :</label></th>
+                <th><label for="code_uf" title="Choisir un code pour l'unité fonctionnelle">Code d'unité fonct.</label></th>
                 <td><input type="text" title="{$curr_op->_props.code_uf}|notNull" name="code_uf" value="{$curr_op->code_uf}" size="10" maxlength="10" /></td>
               </tr>
 
               <tr>
-                <th><label for="libelle_uf" title="Choisir un libellé pour l'unité fonctionnelle">Libellé d'unité fonct. :</label></th>
+                <th><label for="libelle_uf" title="Choisir un libellé pour l'unité fonctionnelle">Libellé d'unité fonct.</label></th>
                 <td><input type="text" title="{$curr_op->_props.libelle_uf}|notNull" name="libelle_uf" value="{$curr_op->libelle_uf}" size="20" maxlength="35" /></td>
               </tr>
 

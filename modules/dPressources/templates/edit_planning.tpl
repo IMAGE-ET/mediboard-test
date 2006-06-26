@@ -89,7 +89,7 @@ function pageMain() {
         <tr><th colspan="4" class="category">Ajouter des plages</th></tr>
         {/if}
         <tr>
-          <th><label for="date" title="Date de la plage. Obligatoire">Date:</label></th>
+          <th><label for="date" title="Date de la plage. Obligatoire">Date</label></th>
           <td class="date">
             {if $plage->plageressource_id}
             <div id="addPlage_date_da">{$plage->date|date_format:"%d/%m/%Y"}</div>
@@ -100,7 +100,7 @@ function pageMain() {
             {/if}
             <img id="addPlage_date_trigger" src="./images/calendar.gif" title="calendar" title="Choisir une date"/>
           </td>
-          <th><label for="_hour_deb" title="Heure de début">Début:</label></th>
+          <th><label for="_hour_deb" title="Heure de début">Début</label></th>
           <td>
             <select name="_hour_deb">
               {foreach from=$listHours item=curr_hour}
@@ -112,7 +112,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="libelle" title="Libellé de la plage">Libellé:</label></th>
+          <th><label for="libelle" title="Libellé de la plage">Libellé</label></th>
           <td><input type="text" name="libelle" value="{$plage->libelle}" title="{$plage->_props.libelle}" /></td>
           <th><label for="_hour_fin" title="Heure de fin">Fin:</label</th>
           <td>
@@ -126,13 +126,13 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="tarif" title="Tarif de la plage. Obligatoire">Tarif:</label></th>
+          <th><label for="tarif" title="Tarif de la plage. Obligatoire">Tarif</label></th>
           <td><input type="text" name="tarif" size="3" value="{$plage->tarif}" title="{$plage->_props.tarif}" />€</td>
           <th><label for="_repeat" title="Nombre de semaine concernées">Répétition:</th>
           <td><input type="text" name="_repeat" size="3" value="1" /></td>
         </tr>
         <tr>
-          <th><label for="prat_id" title="Praticien. Optionnel">Praticien:</label></th>
+          <th><label for="prat_id" title="Praticien. Optionnel">Praticien</label></th>
           <td>
             <select name="prat_id">
               <option value="0">&mdash; Choix du praticien</option>
@@ -143,7 +143,7 @@ function pageMain() {
               {/foreach}
             </select>
           </td>
-          <th><label for="_double" title="Cochez pour n'affecter qu'une semaine sur deux">1 sem / 2:</label></th>
+          <th><label for="_double" title="Cochez pour n'affecter qu'une semaine sur deux">1 sem / 2</label></th>
           <td><input type="checkbox" name="_double" /></td>
         </tr>
         <tr>
@@ -160,7 +160,7 @@ function pageMain() {
       <table class="form">
         <tr><th colspan="2" class="category">Supprimer cette plage</th></tr>
         <tr>
-          <th><label for="_repeat" title="Nombre de semaine concernées">Répétition:</label></th>
+          <th><label for="_repeat" title="Nombre de semaine concernées">Répétition</label></th>
           <td><input type="text" name="_repeat" size="3" value="1" /></td>
         </tr>
         <tr>

@@ -521,14 +521,6 @@ table.main th.halfPane {
   width: 50%;
 }
 
-table.main th.title {
-  font-size: 14px;
-  font-weight: bold;  
-  text-align: center;
-  background: #bbb;
-  border: #aaa 1px outset;
-}
-
 td.greedyPane {
   width: 100%;
 }

@@ -44,7 +44,7 @@ function setClose(protocole_id) {
 
       <table class="form">
         <tr>
-          <th><label for="chir_id" title="Filtrer les protocoles d'un praticien">Praticien :</label></th>
+          <th><label for="chir_id" title="Filtrer les protocoles d'un praticien">Praticien</label></th>
           <td>
             <select name="chir_id" onchange="this.form.submit()">
               <option value="" >&mdash; Tous les chirurgiens</option>
@@ -57,7 +57,7 @@ function setClose(protocole_id) {
               {{/foreach}}
             </select>
           </td>
-          <th><label for="code_ccam" title="Filtrer avec un code CCAM">Code CCAM :</label></th>
+          <th><label for="code_ccam" title="Filtrer avec un code CCAM">Code CCAM</label></th>
           <td>
             <select name="code_ccam" onchange="this.form.submit()">
               <option value="" >&mdash; Tous les codes</option>

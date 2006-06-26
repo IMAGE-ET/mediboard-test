@@ -201,7 +201,7 @@ function pageMain() {
         
         <tr>
           <th>
-            <label for="praticien_id" title="Praticien responsable. Obligatoire">Praticien :</label>
+            <label for="praticien_id" title="Praticien responsable. Obligatoire">Praticien</label>
           </th>
           <td colspan="2">
             <select name="chir_id" title="{$protocole->_props.chir_id}">
@@ -216,7 +216,7 @@ function pageMain() {
         </tr>
         <tr>
           <th class="mandatory">
-            <label for="_hour_op" title="Durée de l'intervention. Obligatoire">Temps opératoire :</label>
+            <label for="_hour_op" title="Durée de l'intervention. Obligatoire">Temps opératoire</label>
           </th>
           <td colspan="2">
             <select name="_hour_op">
@@ -234,7 +234,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="_codeCCAM" title="Codes CCAM d'intervention">Ajout de codes CCAM :</label>
+            <label for="_codeCCAM" title="Codes CCAM d'intervention">Ajout de codes CCAM</label>
           </th>
           <td>
             <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" />
@@ -253,7 +253,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="libelle" title="Libellé facultatif d'intervention">Libellé :</label></th>
+          <th><label for="libelle" title="Libellé facultatif d'intervention">Libellé</label></th>
           <td colspan="2"><input type="text" name="libelle" title="{$protocole->_props.libelle}" size="50" value="{$protocole->libelle}"/></td>
         </tr>
         <tr>
@@ -268,7 +268,7 @@ function pageMain() {
           <td><textarea name="rques_operation" title="{$protocole->_props.rques_operation}" rows="3">{$protocole->rques_operation}</textarea></td>
         </tr>
         <tr>
-          <th><label for="depassement"title="Valeur du dépassement d'honoraire éventuel">Dépassement d'honoraire :</label></th>
+          <th><label for="depassement"title="Valeur du dépassement d'honoraire éventuel">Dépassement d'honoraire</label></th>
           <td colspan="2"><input name="depassement" title="{$protocole->_props.depassement}" type="text" size="4" value="{$protocole->depassement}" /> €</td>
         </tr>
       </table>
@@ -279,16 +279,16 @@ function pageMain() {
          <th class="category" colspan="3">Informations concernant le séjour</th>
        </tr>
         <tr>
-          <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM) :</label></th>
+          <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM)</label></th>
           <td><input type="text" name="DP" title="{$protocole->_props.DP}" size="10" value="{$protocole->DP}" /></td>
           <td class="button"><input type="button" value="Choisir un code" onclick="popCode('cim10')" /></td>
         </tr>
         <tr>
-          <th class="mandatory"><label for="duree_hospi" title="Durée d'hospitalisation en jours">Durée d'hospitalisation :</label></th>
+          <th class="mandatory"><label for="duree_hospi" title="Durée d'hospitalisation en jours">Durée d'hospitalisation</label></th>
           <td colspan="2"><input type="text" name="duree_hospi" title="{$protocole->_props.duree_hospi}" size="2" value="{$protocole->duree_hospi}" /> jours</td>
         </tr>
         <tr>
-          <th><label for="type_comp" title="Type d'admission">{tr}type_adm{/tr} :</label></th>
+          <th><label for="type_comp" title="Type d'admission">{tr}type_adm{/tr}</label></th>
           <td colspan="2">
             <input name="type" value="comp" type="radio" {if !$protocole->protocole_id || $protocole->type == "comp"}checked="checked"{/if} />
             <label for="type_comp">{tr}comp{/tr}</label><br />

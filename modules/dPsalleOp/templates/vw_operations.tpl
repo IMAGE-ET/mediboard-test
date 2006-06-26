@@ -29,7 +29,7 @@ function pageMain() {
         </tr>
         
         <tr>
-          <th><label for="salle" title="Salle d'opération">Salle :</label></th>
+          <th><label for="salle" title="Salle d'opération">Salle</label></th>
           <td>
             <select name="salle" onchange="this.form.submit()">
               <option value="0">&mdash; Aucune salle</option>
@@ -69,7 +69,7 @@ function pageMain() {
         </tr>
       
         <tr>
-          <th><label for="anesth_id" title="Anesthésiste associé à la plage d'opération">Anesthésiste :</label></th>
+          <th><label for="anesth_id" title="Anesthésiste associé à la plage d'opération">Anesthésiste</label></th>
           <td>
             <select name="anesth_id" onchange="submit()">
               <option value="0">&mdash; Choisir un anesthésiste</option>

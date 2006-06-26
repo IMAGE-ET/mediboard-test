@@ -34,7 +34,7 @@
         </tr>
         <tr>
           <th>
-            <label for="_user_adresse" title="Adresse de l'employé">Adresse :</label>
+            <label for="_user_adresse" title="Adresse de l'employé">Adresse</label>
           </th>
           <td>
             <input type="text" size="30" name="_user_adresse" title="{$user->_user_props._user_adresse}" value="{$user->_user_adresse}" />
@@ -42,7 +42,7 @@
         </tr>
         <tr>
           <th>
-            <label for="_user_cp" title="Code postal de l'employé">Code Postal :</label>
+            <label for="_user_cp" title="Code postal de l'employé">Code Postal</label>
           </th>
           <td>
             <input type="text" size="6" name="_user_cp" title="{$user->_user_props._user_cp}" value="{$user->_user_cp}" />
@@ -50,7 +50,7 @@
         </tr>
         <tr>
           <th>
-            <label for="_user_ville" title="Ville de l'employé">Ville :</label>
+            <label for="_user_ville" title="Ville de l'employé">Ville</label>
           </th>
           <td>
             <input type="text" name="_user_ville" title="{$user->_user_props._user_ville}" value="{$user->_user_ville}" />
@@ -77,7 +77,7 @@
         </tr>
         <tr>
           <th>
-            <label for="matricule" title="Code de sécurité sociale">Sécurité sociale :</label>
+            <label for="matricule" title="Code de sécurité sociale">Sécurité sociale</label>
           </th>
           <td colspan="2"><input type="text" name="matricule" title="{$paramsPaie->_props.matricule}" value="{$paramsPaie->matricule}" /></td>
         </tr>
@@ -86,37 +86,37 @@
         </tr>
         <tr>
           <th>
-            <label for="nom" title="Raison sociale de l'employeur">Nom :</label>
+            <label for="nom" title="Raison sociale de l'employeur">Nom</label>
           </th>
           <td colspan="2"><input type="text" name="nom" title="{$paramsPaie->_props.nom}" value="{$paramsPaie->nom}" /></td>
         </tr>
         <tr>
           <th>
-            <label for="adresse" title="Adresse de l'employeur">Adresse :</label>
+            <label for="adresse" title="Adresse de l'employeur">Adresse</label>
           </th>
           <td colspan="2"><input type="text" size="30" name="adresse" title="{$paramsPaie->_props.adresse}" value="{$paramsPaie->adresse}" /></td>
         </tr>
         <tr>
           <th>
-            <label for="cp" title="Code postal de l'employeur">Code Postal :</label>
+            <label for="cp" title="Code postal de l'employeur">Code Postal</label>
           </th>
           <td colspan="2"><input type="text" size="6" name="cp" title="{$paramsPaie->_props.cp}" value="{$paramsPaie->cp}" /></td>
         </tr>
         <tr>
           <th>
-            <label for="ville" title="Ville de l'employeur">Ville :</label>
+            <label for="ville" title="Ville de l'employeur">Ville</label>
           </th>
           <td colspan="2"><input type="text" name="ville" title="{$paramsPaie->_props.ville}" value="{$paramsPaie->ville}" /></td>
         </tr>
         <tr>
           <th>
-            <label for="siret" title="Numero de SIRET de l'employeur">Siret :</label>
+            <label for="siret" title="Numero de SIRET de l'employeur">Siret</label>
           </th>
           <td colspan="2"><input type="text" size="15" name="siret" title="{$paramsPaie->_props.siret}" value="{$paramsPaie->siret}" /></td>
         </tr>
         <tr>
           <th>
-            <label for="ape" title="Code APE de l'employeur">Code APE :</label>
+            <label for="ape" title="Code APE de l'employeur">Code APE</label>
           </th>
           <td colspan="2"><input type="text" size="5" name="ape" title="{$paramsPaie->_props.ape}" value="{$paramsPaie->ape}" /></td>
         </tr>
@@ -125,7 +125,7 @@
         </tr>
         <tr>
           <th>
-            <label for="smic" title="Valeur du smic horaire">Smic horaire :</label>
+            <label for="smic" title="Valeur du smic horaire">Smic horaire</label>
           </th>
           <td colspan="2">
             <input type="text" size="5" name="smic" title="{$paramsPaie->_props.smic}" value="{$paramsPaie->smic}" />

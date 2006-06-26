@@ -67,7 +67,6 @@ table.form th.category {
 }
 
 table.form th.mandatory {
-  color: #fff;
   font-weight: bold;
 }
 
@@ -358,4 +357,15 @@ table.tbl td.date div {
 
 table.tbl td.date img {
   margin-top: 3px;
+}
+
+/* Main table */
+
+th.title {
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;  
+  text-align: center;
+  background: #638cc9;
+  border: #638cc9 1px outset;
 }

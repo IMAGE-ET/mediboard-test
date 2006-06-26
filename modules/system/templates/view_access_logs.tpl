@@ -32,7 +32,7 @@ function pageMain() {
     <form action="index.php" name="typevue" method="get">
     <input type="hidden" name="m" value="{$m}" />
     <input type="hidden" name="tab" value="{$tab}" />
-    <label for="groupmod" title="Type de vue des graphiques">Type de vue :</label>
+    <label for="groupmod" title="Type de vue des graphiques">Type de vue</label>
     <select name="groupmod" onchange="this.form.submit()">
       <option value="0"{if $groupmod == 0}selected="selected"{/if}>Pas de regroupement</option>
       <option value="1"{if $groupmod == 1}selected="selected"{/if}>Regrouper par module</option>
@@ -40,7 +40,7 @@ function pageMain() {
     </select>
     {if $groupmod == 0}
     <br />
-    <label for="module" title="Type de vue des graphiques">Module :</label>
+    <label for="module" title="Type de vue des graphiques">Module</label>
     <select name="module" onchange="this.form.submit()">
       {foreach from=$listModules item=curr_module}
       <option value="{$curr_module.mod_directory}" {if $curr_module.mod_directory == $module} selected="selected" {/if}>

@@ -41,7 +41,7 @@ function pageMain() {
       <table class="form">
         <tr><th class="category" colspan="3">Choix de la période</th></tr>
         <tr>
-          <th><label for="deb" title="Date de début de la période">Début:</label></th>
+          <th><label for="deb" title="Date de début de la période">Début</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_deb_da">{$deb|date_format:"%d/%m/%Y"}</div>
             <input type="hidden" name="deb" value="{$deb}" />
@@ -49,7 +49,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="fin" title="Date de fin de la période">Fin:</label></th>
+          <th><label for="fin" title="Date de fin de la période">Fin</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_fin_da">{$fin|date_format:"%d/%m/%Y"}</div>
             <input type="hidden" name="fin" value="{$fin}" />

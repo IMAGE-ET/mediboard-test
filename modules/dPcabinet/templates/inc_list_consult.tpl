@@ -15,7 +15,7 @@
       </td>
     </tr>
     <tr>
-      <th><label for="vue2" title="Type de vue du planning">Type de vue:</label></th>
+      <th><label for="vue2" title="Type de vue du planning">Type de vue</label></th>
       <td colspan="5">
         <select name="vue2" onchange="this.form.submit()">
           <option value="0"{if $vue == "0"}selected="selected"{/if}>Tout afficher</option>

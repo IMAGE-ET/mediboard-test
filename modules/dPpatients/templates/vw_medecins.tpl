@@ -54,17 +54,17 @@ function setClose() {ldelim}
         </tr>
   
         <tr>
-          <th><label for="medecin_nom" title="Nom complet ou partiel du médecin recherché">Nom:</label></th>
+          <th><label for="medecin_nom" title="Nom complet ou partiel du médecin recherché">Nom</label></th>
           <td><input tabindex="1" type="text" name="medecin_nom" value="{$nom}" /></td>
         </tr>
         
         <tr>
-          <th><label for="medecin_prenom" title="Prénom complet ou partiel du médecin recherché">Prénom:</label></th>
+          <th><label for="medecin_prenom" title="Prénom complet ou partiel du médecin recherché">Prénom</label></th>
           <td><input tabindex="2" type="text" name="medecin_prenom" value="{$prenom}" /></td>
         </tr>
         
         <tr>
-          <th><label for="medecin_dept" title="Département du médecin recherché">Département (00 pour tous) :</label></th>
+          <th><label for="medecin_dept" title="Département du médecin recherché">Département (00 pour tous)</label></th>
           <td><input tabindex="3" type="text" name="medecin_dept" value="{$departement}" /></td>
         </tr>
         
@@ -137,34 +137,34 @@ function setClose() {ldelim}
         </tr>
 
         <tr>
-          <th><label for="nom" title="Nom du médecin">Nom :</label></th>
+          <th><label for="nom" title="Nom du médecin">Nom</label></th>
           <td {if $dialog} class="readonly" {/if}><input type="text" {if $dialog} readonly {/if} name="nom" value="{$medecin->nom}" /></td>
         </tr>
         
         <tr>
-          <th><label for="prenom" title="Prénom du médecin">Prénom :</label></th>
+          <th><label for="prenom" title="Prénom du médecin">Prénom</label></th>
           <td {if $dialog} class="readonly" {/if}><input type="text" {if $dialog} readonly {/if} name="prenom" value="{$medecin->prenom}" /></td>
         </tr>
         
         <tr>
-          <th><label for="adresse" title="Adresse du cabinet du médecin">Adresse :</label></th>
+          <th><label for="adresse" title="Adresse du cabinet du médecin">Adresse</label></th>
           <td {if $dialog} class="readonly" {/if}>
             <textarea {if $dialog} readonly {/if} name="adresse">{$medecin->adresse}</textarea>
           </td>
         </tr>
         
         <tr>
-          <th><label for="cp" title="Code Postal du cabinet du médecin">Code Postal :</label></th>
+          <th><label for="cp" title="Code Postal du cabinet du médecin">Code Postal</label></th>
           <td {if $dialog} class="readonly" {/if}><input type="text" {if $dialog} readonly {/if} name="cp" value="{$medecin->cp}" /></td>
         </tr>
         
         <tr>
-          <th><label for="ville" title="Ville du cabinet du médecin">Ville :</label></th>
+          <th><label for="ville" title="Ville du cabinet du médecin">Ville</label></th>
           <td {if $dialog} class="readonly" {/if}><input type="text" {if $dialog} readonly {/if} name="ville" value="{$medecin->ville}" /></td>
         </tr>
         
         <tr>
-          <th><label for="_tel1" title="Téléphone du médecin">Tél :</label></th>
+          <th><label for="_tel1" title="Téléphone du médecin">Tél</label></th>
           <td {if $dialog} class="readonly" {/if}>
             <input type="text" {if $dialog} readonly {/if} size="2" maxlength="2" name="_tel1" value="{$medecin->_tel1}" /> -
             <input type="text" {if $dialog} readonly {/if} size="2" maxlength="2" name="_tel2" value="{$medecin->_tel2}" /> -
@@ -175,7 +175,7 @@ function setClose() {ldelim}
         </tr>
         
         <tr>
-          <th><label for="_fax1" title="Fax du médecin">Fax :</label></th>
+          <th><label for="_fax1" title="Fax du médecin">Fax</label></th>
           <td {if $dialog} class="readonly" {/if}>
             <input type="text" {if $dialog} readonly {/if} size="2" maxlength="2" name="_fax1" value="{$medecin->_fax1}" /> -
             <input type="text" {if $dialog} readonly {/if} size="2" maxlength="2" name="_fax2" value="{$medecin->_fax2}" /> -
@@ -186,7 +186,7 @@ function setClose() {ldelim}
         </tr>
         
         <tr>
-          <th><label for="email" title="Email du médecin">Email :</label></th>
+          <th><label for="email" title="Email du médecin">Email</label></th>
           <td {if $dialog} class="readonly" {/if}><input type="text" {if $dialog} readonly {/if} name="email" value="{$medecin->email}" /></td>
         </tr>
 

@@ -102,7 +102,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
         
         <tr>
           <th>
-            <label for="chir_id" title="Praticien pour la consultation">Praticien :</label>
+            <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
             <input type="hidden" name="chir_id" title="notNull|ref" value="{$chir->user_id}" ondblclick="popChir()" />
           </th>
             <td class="readonly">
@@ -117,7 +117,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
         <tr>
           <th class="mandatory">
             <input type="hidden" name="patient_id" value="{$pat->patient_id}" />
-            <label for="chir_id" title="Patient pour la consultation">Patient :</label>
+            <label for="chir_id" title="Patient pour la consultation">Patient</label>
           </th>
           <td class="readonly"><input type="text" name="_pat_name" size="30" value="{$pat->_view}" readonly="readonly" /></td>
           <td class="button"><input type="button" value="rechercher un patient" onclick="popPat()" /></td>
@@ -142,7 +142,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
         <tr><th class="category" colspan="3">Rendez-vous</th></tr>
 
         <tr>
-          <th><label for="premiere" title="Première consultation de ce patient avec le praticien?">Consultation:</label></th>
+          <th><label for="premiere" title="Première consultation de ce patient avec le praticien?">Consultation</label></th>
           <td>
             <input type="checkbox" name="_check_premiere" value="1" {if $consult->_check_premiere} checked="checked" {/if} />
             <label for="_check_premiere" title="Première consultation de ce patient avec le praticien">Première consultation</label>
@@ -153,7 +153,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
         </tr>
 
         <tr>
-          <th><label for="plageconsult_id" title="Date du rendez-vous de consultation">Date :</label></th>
+          <th><label for="plageconsult_id" title="Date du rendez-vous de consultation">Date</label></th>
           <td class="readonly">
             <input type="text" name="_date" value="{$consult->_date|date_format:"%A %d/%m/%Y"}" readonly="readonly" />
             <input type="hidden" name="plageconsult_id" title="{$consult->_props.plageconsult_id}" value="{$consult->plageconsult_id}" ondblclick="popRDV()" />
@@ -161,13 +161,13 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
         </tr>
 
         <tr>
-          <th><label for="heure" title="Heure du rendez-vous de consultation">Heure :</label></th>
+          <th><label for="heure" title="Heure du rendez-vous de consultation">Heure</label></th>
           <td class="readonly">
             <input type="text" name="heure" value="{$consult->heure|date_format:"%H:%M"}" size="3" readonly="readonly" />
           </td>
         </tr>
         <tr>
-          <th><label for="_duree" title="Durée prévue de la consultation">Durée :</label></th>
+          <th><label for="_duree" title="Durée prévue de la consultation">Durée</label></th>
           <td>
             <select name="duree">
               <option value="1" {if $consult->duree == 1} selected="selected" {/if}>simple</option>

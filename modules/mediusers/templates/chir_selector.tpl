@@ -25,7 +25,7 @@ function setClose(){
 </tr>
 
 <tr>
-  <th><label for="spe" title="Spécialité du chirurgien">Spécialité :</label></th>
+  <th><label for="spe" title="Spécialité du chirurgien">Spécialité</label></th>
   <td>
     <select name="spe" onChange="this.form.submit()">
       <option value="">&mdash; Trier par spécialité</option>
@@ -39,7 +39,7 @@ function setClose(){
 </tr>
 
 <tr>
-  <th><label for="name" title="Nom partiel ou complet du chirurgien">Nom :</label></th>
+  <th><label for="name" title="Nom partiel ou complet du chirurgien">Nom</label></th>
   <td><input name="name" value="{$name}" size="30" /> <input type="submit" value="rechercher" /></td>
 </tr>
 

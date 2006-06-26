@@ -6,12 +6,12 @@
             <input type="hidden" name="consultation_anesth_id" value="{$consult_anesth->consultation_anesth_id}" />
             <table class="form">
               <tr>
-                <th><label for="poid" title="Poids du patient">Poids:</label></th>
+                <th><label for="poid" title="Poids du patient">Poids</label></th>
                 <td>
                   <input type="text" size="4" name="poid" title="{$consult_anesth->_props.poid}" value="{$consult_anesth->poid}" />
                   kg
                 </td>
-                <th><label for="tabac" title="Comportement tabagique">Tabac:</label></th>
+                <th><label for="tabac" title="Comportement tabagique">Tabac</label></th>
                 <td>
                   <select name="tabac" title="{$consult_anesth->_props.tabac}|%2B|%2B%2B">
                     <option value="?" {if $consult_anesth->tabac == "?"}selected="selected"{/if}>
@@ -30,12 +30,12 @@
                 </td>
               </tr>
               <tr>
-                <th><label for="taille" title="Taille du patient">Taille:</label></th>
+                <th><label for="taille" title="Taille du patient">Taille</label></th>
                 <td>
                   <input type="text" size="4" name="taille" title="{$consult_anesth->_props.taille}" value="{$consult_anesth->taille}" />
                   cm
                 </td>
-                <th><label for="oenolisme" title="Comportement alcoolique">Oenolisme:</label></th>
+                <th><label for="oenolisme" title="Comportement alcoolique">Oenolisme</label></th>
                 <td>
                   <select name="oenolisme" title="{$consult_anesth->_props.oenolisme}|%2B|%2B%2B">
                     <option value="?" {if $consult_anesth->oenolisme == "?"}selected="selected"{/if}>
@@ -54,7 +54,7 @@
                 </td>
               </tr>
               <tr>
-                <th><label for="groupe" title="Groupe sanguin">Groupe:</label></th>
+                <th><label for="groupe" title="Groupe sanguin">Groupe</label></th>
                 <td>
                   <select name="groupe" title="{$consult_anesth->_props.groupe}">
                     {html_options values=$consult_anesth->_enums.groupe output=$consult_anesth->_enums.groupe selected=$consult_anesth->groupe}
@@ -72,7 +72,7 @@
                     </option>
                   </select>
                 </td>
-                <th><label for="transfusions" title="Antécédents de transfusions">Transfusion:</label></th>
+                <th><label for="transfusions" title="Antécédents de transfusions">Transfusion</label></th>
                 <td>
                   <select name="transfusions" title="{$consult_anesth->_props.transfusions}|%2B">
                     <option value="?" {if $consult_anesth->transfusions == "?"}selected="selected"{/if}>
@@ -88,13 +88,13 @@
                 </td>
               </tr>
               <tr>
-                <th><label for="tasys" title="Pression arterielle">TA:</label></th>
+                <th><label for="tasys" title="Pression arterielle">TA</label></th>
                 <td>
                   <input type="text" size="2" name="tasys" title="{$consult_anesth->_props.tasys}" value="{$consult_anesth->tasys}" />
                   -
                   <input type="text" size="2" name="tadias" title="{$consult_anesth->_props.tadias}" value="{$consult_anesth->tadias}" />
                 </td>
-                <th><label for="ASA" title="Score ASA">ASA:</label></th>
+                <th><label for="ASA" title="Score ASA">ASA</label></th>
                 <td>
                   <select name="ASA">
                     {html_options values=$consult_anesth->_enums.ASA output=$consult_anesth->_enums.ASA selected=$consult_anesth->ASA}

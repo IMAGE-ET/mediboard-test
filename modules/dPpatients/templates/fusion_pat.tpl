@@ -29,7 +29,7 @@ function setChecked(oField, sValue) {
     <th width="30%" class="category">2ème patient</th>
     <th width="30%" class="category">Résultat</th>
   <tr>
-    <th><label for="nom" title="Nom du patient. Obligatoire">Nom:</label></th>
+    <th><label for="nom" title="Nom du patient. Obligatoire">Nom</label></th>
     <td>
       <input type="radio" name="_choix_nom" value="{$patient1->nom}" checked="checked" onclick="setField(this.form.nom, '{$patient1->nom|escape:javascript}')" />
       {$patient1->nom}
@@ -43,7 +43,7 @@ function setChecked(oField, sValue) {
      </td>
   </tr>
   <tr>
-    <th><label for="prenom" title="Prénom du patient. Obligatoire">Prénom:</label></th>
+    <th><label for="prenom" title="Prénom du patient. Obligatoire">Prénom</label></th>
     <td>
       <input type="radio" name="_choix_prenom" value="{$patient1->prenom}" checked="checked" onclick="setField(this.form.prenom, '{$patient1->prenom|escape:javascript}')" />
       {$patient1->prenom}
@@ -56,7 +56,7 @@ function setChecked(oField, sValue) {
       <input tabindex="2" type="text" name="prenom" value="{$finalPatient->prenom}" title="{$finalPatient->_props.prenom}" /></td>
   </tr>
   <tr>
-    <th><label for="nom_jeune_fille" title="Nom de jeune fille d'une femme mariée">Nom de jeune fille:</label></th>
+    <th><label for="nom_jeune_fille" title="Nom de jeune fille d'une femme mariée">Nom de jeune fille</label></th>
     <td>
       <input type="radio" name="_choix_nom_jeune_fille" value="{$patient1->nom_jeune_fille}" checked="checked" onclick="setField(this.form.nom_jeune_fille, '{$patient1->nom_jeune_fille|escape:javascript}')" />
       {$patient1->nom_jeune_fille}
@@ -70,7 +70,7 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
-    <th><label for="_jour" title="Date de naissance du patient, au format JJ-MM-AAAA">Date de naissance:</label></th>
+    <th><label for="_jour" title="Date de naissance du patient, au format JJ-MM-AAAA">Date de naissance</label></th>
     <td>
       <input type="radio" name="_choix_naissance" value="{$patient1->naissance}" checked="checked"
       onclick="setField(this.form._jour, '{$patient1->_jour}'); setField(this.form._mois, '{$patient1->_mois}'); setField(this.form._annee, '{$patient1->_annee}');" />
@@ -88,7 +88,7 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
-    <th><label for="sexe" title="Sexe du patient">Sexe:</label></th>
+    <th><label for="sexe" title="Sexe du patient">Sexe</label></th>
     <td>
       <input type="radio" name="_choix_sexe" value="{$patient1->sexe}" checked="checked" onclick="setField(this.form.sexe, '{$patient1->sexe}')" />
       {if $patient1->sexe == "m"}
@@ -118,7 +118,7 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
-    <th><label for="adresse" title="Adresse du patient">Adresse:</label></th>
+    <th><label for="adresse" title="Adresse du patient">Adresse</label></th>
     <td>
       <input type="radio" name="_choix_adresse" value="{$patient1->adresse}" checked="checked" onclick="setField(this.form.adresse, '{$patient1->adresse|escape:javascript}')" />
       {$patient1->adresse}
@@ -132,7 +132,7 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
-    <th><label for="cp" title="Code postal">Code Postal:</label></th>
+    <th><label for="cp" title="Code postal">Code Postal</label></th>
     <td>
       <input type="radio" name="_choix_cp" value="{$patient1->cp}" checked="checked" onclick="setField(this.form.cp, '{$patient1->cp|escape:javascript}')" />
       {$patient1->cp}
@@ -146,7 +146,7 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
-    <th><label for="ville" title="Ville du patient">Ville:</label></th>
+    <th><label for="ville" title="Ville du patient">Ville</label></th>
     <td>
       <input type="radio" name="_choix_ville" value="{$patient1->ville}" checked="checked" onclick="setField(this.form.ville, '{$patient1->ville|escape:javascript}')" />
       {$patient1->ville}
@@ -160,7 +160,7 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
-    <th><label for="_tel1" title="Numéro de téléphone filaire">Téléphone:</label></th>
+    <th><label for="_tel1" title="Numéro de téléphone filaire">Téléphone</label></th>
     <td>
       <input type="radio" name="_choix_tel" value="{$patient1->tel}" checked="checked"
       onclick="setField(this.form._tel1, '{$patient1->_tel1}'); setField(this.form._tel2, '{$patient1->_tel2}');
@@ -182,7 +182,7 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
-    <th><label for="_tel21" title="Numéro de téléphone portable">Portable:</label></th>
+    <th><label for="_tel21" title="Numéro de téléphone portable">Portable</label></th>
     <td>
       <input type="radio" name="_choix_tel2" value="{$patient1->tel2}" checked="checked"
       onclick="setField(this.form._tel21, '{$patient1->_tel21}'); setField(this.form._tel22, '{$patient1->_tel22}');
@@ -204,7 +204,7 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
-    <th><label for="incapable_majeur" title="Patient reconnu incapable majeur">Incapable majeur:</label></th>
+    <th><label for="incapable_majeur" title="Patient reconnu incapable majeur">Incapable majeur</label></th>
     <td>
       <input type="radio" name="_choix_incapable majeur" value="{$patient1->incapable_majeur}" checked="checked" onclick="setChecked(this.form.incapable_majeur, '{$patient1->incapable_majeur|escape:javascript}')" />
       {$patient1->incapable_majeur}
@@ -219,7 +219,7 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
-    <th><label for="ATNC" title="Patient présentant un risque ATNC">ATNC:</label></th>
+    <th><label for="ATNC" title="Patient présentant un risque ATNC">ATNC</label></th>
     <td>
       <input type="radio" name="_choix_ATNC" value="{$patient1->ATNC}" checked="checked" onclick="setChecked(this.form.ATNC, '{$patient1->ATNC|escape:javascript}')" />
       {$patient1->ATNC}
@@ -234,7 +234,7 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
-    <th><label for="matricule" title="Matricule valide d'assuré social (13 chiffres + 2 pour la clé)">Numéro d'assuré social:</label></th>
+    <th><label for="matricule" title="Matricule valide d'assuré social (13 chiffres + 2 pour la clé)">Numéro d'assuré social</label></th>
     <td>
       <input type="radio" name="_choix_matricule" value="{$patient1->matricule}" checked="checked" onclick="setField(this.form.matricule, '{$patient1->matricule|escape:javascript}')" />
       {$patient1->matricule}
@@ -248,7 +248,7 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
-    <th><label for="SHS" title="Code Administratif SHS">Code administratif:</label></th>
+    <th><label for="SHS" title="Code Administratif SHS">Code administratif</label></th>
     <td>
       <input type="radio" name="_choix_SHS" value="{$patient1->SHS}" checked="checked" onclick="setField(this.form.SHS, '{$patient1->SHS|escape:javascript}')" />
       {$patient1->SHS}
@@ -260,7 +260,7 @@ function setChecked(oField, sValue) {
     <td><input tabindex="26" type="text" size="10" maxlength="10" name="SHS" title="{$finalPatient->_props.SHS}" value="{$finalPatient->SHS}" /></td>
   </tr>
   <tr>
-    <th><label for="rques" title="Remarques générales concernant le patient">Remarques:</label></th>
+    <th><label for="rques" title="Remarques générales concernant le patient">Remarques</label></th>
     <td class="text">
       <input type="radio" name="_choix_rques" value="{$patient1->rques}" checked="checked" onclick="setField(this.form.rques, '{$patient1->rques|escape:javascript}')" />
       {$patient1->rques}
@@ -275,7 +275,7 @@ function setChecked(oField, sValue) {
   </tr>
   <tr>
     <th>
-      <label for="medecin_traitant" title="Choisir un médecin traitant">Medecin traitant:</label>
+      <label for="medecin_traitant" title="Choisir un médecin traitant">Medecin traitant</label>
       <input type="hidden" name="medecin_traitant" value="{$patient1->medecin_traitant}" />
     </th>
     <td>
@@ -289,7 +289,7 @@ function setChecked(oField, sValue) {
   </tr>
   <tr>
     <th>
-      <label for="medecin1" title="Choisir un médecin correspondant">Médecin correspondant 1:</label>
+      <label for="medecin1" title="Choisir un médecin correspondant">Médecin correspondant 1</label>
       <input type="hidden" name="medecin1" value="{$patient1->medecin1}" />
     </th>
     <td>
@@ -303,7 +303,7 @@ function setChecked(oField, sValue) {
   </tr>
   <tr>
     <th>
-      <label for="medecin2" title="Choisir un médecin correspondant">Médecin correspondant 2:</label>
+      <label for="medecin2" title="Choisir un médecin correspondant">Médecin correspondant 2</label>
       <input type="hidden" name="medecin2" value="{$patient1->medecin2}" />
     </th>
     <td>
@@ -317,7 +317,7 @@ function setChecked(oField, sValue) {
   </tr>
   <tr>
     <th>
-      <label for="medecin3" title="Choisir un médecin correspondant">Médecin correspondant 3:</label>
+      <label for="medecin3" title="Choisir un médecin correspondant">Médecin correspondant 3</label>
       <input type="hidden" name="medecin3" value="{$patient1->medecin3}" />
     </th>
     <td>

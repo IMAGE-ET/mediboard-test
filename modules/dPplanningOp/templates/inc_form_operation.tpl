@@ -28,7 +28,7 @@
 
   <tr>
     <th class="mandatory">
-      <label for="chir_id" title="Chirurgien Responsable. Obligatoire">Chirurgien :</label>
+      <label for="chir_id" title="Chirurgien Responsable. Obligatoire">Chirurgien</label>
     </th>
     <td colspan="2">
       <select name="chir_id" title="{{$op->_props.chir_id}}" onchange="synchroPrat()">
@@ -44,7 +44,7 @@
 
   <tr>
     <th class="mandatory">
-      <label for="_hour_op" title="Durée de l'intervention. Obligatoire">Temps opératoire :</label>
+      <label for="_hour_op" title="Durée de l'intervention. Obligatoire">Temps opératoire</label>
     </th>
     <td colspan="2">
       <select name="_hour_op">
@@ -63,7 +63,7 @@
   <tr>
     {{if $modurgence}}
     <th>
-      <label for="date" title="Choisir une date d'intervention">Date de l'intervention :</label>
+      <label for="date" title="Choisir une date d'intervention">Date de l'intervention</label>
     </th>
     <td class="date">
       <input type="hidden" name="plageop_id" value="" />
@@ -88,7 +88,7 @@
     <th class="mandatory">
       <input type="hidden" name="date" value="" />
       <input type="hidden" name="plageop_id" title="{{$op->_props.plageop_id}}|notNull" ondblclick="popPlage()" value="{{$plage->id}}" />
-      <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention :</label>
+      <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention</label>
     </th>
     <td class="readonly"><input type="text" name="_date" readonly="readonly" size="10" value="{{$plage->_date}}" /></td>
     <td class="button"><input type="button" value="Choisir une date" onclick="popPlage()" /></td>
@@ -97,7 +97,7 @@
   
   <tr>
     <th>
-      <label for="_codeCCAM" title="Codes CCAM d'intervention">Ajout de codes CCAM :</label>
+      <label for="_codeCCAM" title="Codes CCAM d'intervention">Ajout de codes CCAM</label>
     </th>
     <td>
       <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" />
@@ -112,7 +112,7 @@
 
   <tr>
     <th>
-      Liste des codes CCAM:
+      Liste des codes CCAM
       <input name="codes_ccam" type="hidden" value="{{$op->codes_ccam}}" />
     </th>
     <td colspan="2" class="text" id="listCodesCcam">
@@ -120,12 +120,12 @@
   </tr>
   
   <tr>
-    <th><label for="libelle" title="Libellé facultatif d'intervention">Libellé :</label></th>
+    <th><label for="libelle" title="Libellé facultatif d'intervention">Libellé</label></th>
     <td colspan="2"><input type="text" name="libelle" title="{{$op->_props.libelle}}" size="50" value="{{$op->libelle}}"/></td>
   </tr>
   
   <tr>
-    <th class="mandatory"><label for="cote" title="Côté concerné par l'intervention">Côté :</label></th>
+    <th class="mandatory"><label for="cote" title="Côté concerné par l'intervention">Côté</label></th>
     <td colspan="2">
       <select name="cote" title="{{$op->_props.cote}}" onchange="modifOp()">
         <option value="total"     {{if !$op || $op->cote == "total"}} selected="selected" {{/if}} >total</option>
@@ -149,12 +149,12 @@
   </tr>
   
   <tr>
-    <th><label for="depassement"title="Valeur du dépassement d'honoraire éventuel">Dépassement d'honoraire :</label></th>
+    <th><label for="depassement"title="Valeur du dépassement d'honoraire éventuel">Dépassement d'honoraire</label></th>
     <td colspan="2"><input name="depassement" title="{{$op->_props.depassement}}" type="text" size="4" value="{{$op->depassement}}" /> €</td>
   </tr>
   
   <tr>
-    <th><label for="info_n">Information du patient :</label></th>
+    <th><label for="info_n">Information du patient</label></th>
     <td colspan="2">
       <input name="info" value="o" type="radio" {{if $op->info == "o"}} checked="checked" {{/if}}/>
       <label for="info_o">Oui</label>
@@ -169,7 +169,7 @@
 
   <tr>
     <th>
-      <label for="date_anesth" title="Choisir une date rendez-vous d'anesthésie">Date de RdV :</label>
+      <label for="date_anesth" title="Choisir une date rendez-vous d'anesthésie">Date de RdV</label>
     </th>
     <td class="date">
       <div id="editOp_date_anesth_da">{{$op->date_anesth|date_format:"%d/%m/%Y"}}</div>

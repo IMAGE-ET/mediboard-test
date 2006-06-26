@@ -48,9 +48,9 @@ function pageMain() {
           {/if}
         </tr>
         <tr>
-          <th><label for="libelle" title="Libellé de la fiche">Libellé :</label></th>
+          <th><label for="libelle" title="Libellé de la fiche">Libellé</label></th>
           <td><input name="libelle" value="{$gestioncab->libelle}" title="{$gestioncab->_props.libelle}" /></td>
-          <th><label for="date" title="Date de paiement de la fiche">Date :</label></th>
+          <th><label for="date" title="Date de paiement de la fiche">Date</label></th>
           <td class="date">
             <div id="editFrm_date_da">
               {$gestioncab->date|date_format:"%d/%m/%Y"}
@@ -60,7 +60,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="rubrique_id" title="Rubrique concernée">Rubrique :</label></th>
+          <th><label for="rubrique_id" title="Rubrique concernée">Rubrique</label></th>
           <td>
             <select name="rubrique_id">
             {foreach from=$listRubriques item=rubrique}
@@ -70,11 +70,11 @@ function pageMain() {
             {/foreach}
             </select>
           </td>
-          <th><label for="montant" title="Montant de la fiche, utilisez un point (.) pour les centimes">Montant :</label></th>
+          <th><label for="montant" title="Montant de la fiche, utilisez un point (.) pour les centimes">Montant</label></th>
           <td><input name="montant" value="{$gestioncab->montant}" title="{$gestioncab->_props.montant}" /> €</td>
         </tr>
         <tr>
-          <th><label for="mode_paiement_id" title="Mode de paiement de la fiche">Mode de paiement :</label></th>
+          <th><label for="mode_paiement_id" title="Mode de paiement de la fiche">Mode de paiement</label></th>
           <td>
             <select name="mode_paiement_id">
             {foreach from=$listModesPaiement item=mode}
@@ -84,13 +84,13 @@ function pageMain() {
             {/foreach}
             </select>
           </td>
-          <th rowspan="2"><label for="rques" title="Remarques concernant la fiche">Remarques :</label></th>
+          <th rowspan="2"><label for="rques" title="Remarques concernant la fiche">Remarques</label></th>
           <td rowspan="2">
             <textarea name="rques" title="{$gestioncab->_props.rques}">{$gestioncab->rques}</textarea>
           </td>
         </tr>
         <tr>
-          <th><label for="num_facture" title="Numero de la facture">Numero de facture :</label></th>
+          <th><label for="num_facture" title="Numero de la facture">Numero de facture</label></th>
           <td>
             <input name="num_facture" size="5" value="{$gestioncab->num_facture}" title="{$gestioncab->_props.num_facture}" />
           </td>

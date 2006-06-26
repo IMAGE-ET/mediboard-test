@@ -121,7 +121,7 @@ function incAntecedantsMain() {
         <tr>
           <td colspan="2"><strong>Ajouter un antécédent</strong></td>
           <td>
-            <label for="rques" title="Remarques sur l'antécédent">Remarques :</label>
+            <label for="rques" title="Remarques sur l'antécédent">Remarques</label>
             <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
               <option value="0">&mdash; Choisir une aide</option>
               {html_options options=$antecedent->_aides.rques}
@@ -130,7 +130,7 @@ function incAntecedantsMain() {
 
         </tr>
         <tr>
-          <th><label for="date" title="Date de l'antécédent">Date :</label></th>
+          <th><label for="date" title="Date de l'antécédent">Date</label></th>
           <td class="date">
             <div id="editAntFrm_date_da">{$today|date_format:"%d/%m/%Y"}</div>
             <input type="hidden" name="date" value="{$today}" />
@@ -141,7 +141,7 @@ function incAntecedantsMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="type" title="Type d'antécédent">Type :</label></th>
+          <th><label for="type" title="Type d'antécédent">Type</label></th>
           <td>
             <select name="type">
               <option value="chir">Chirurgical</option>
@@ -173,7 +173,7 @@ function incAntecedantsMain() {
         <tr>
           <td colspan="2"><strong>Ajouter un traitement</strong></td>
           <td>
-            <label for="traitement" title="Traitement">Traitement :</label>
+            <label for="traitement" title="Traitement">Traitement</label>
             <select name="_helpers_traitement" size="1" onchange="pasteHelperContent(this)">
               <option value="0">&mdash; Choisir une aide</option>
               {html_options options=$traitement->_aides.traitement}
@@ -181,7 +181,7 @@ function incAntecedantsMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="debut" title="Début du traitement">Début :</label></th>
+          <th><label for="debut" title="Début du traitement">Début</label></th>
           <td class="date">
             <div id="editTrmtFrm_debut_da">{$today|date_format:"%d/%m/%Y"}</div>
             <input type="hidden" name="debut" value="{$today}" />
@@ -194,7 +194,7 @@ function incAntecedantsMain() {
         <tr>
           <th>
             <input type="checkbox" checked="checked" name="_en_cours" onclick="finTrmt()" />
-            <label for="fin" title="Fin du traitement">Fin :</label>
+            <label for="fin" title="Fin du traitement">Fin</label>
           </th>
           <td class="date">
             <div id="editTrmtFrm_fin_da">{$today|date_format:"%d/%m/%Y"}</div>
