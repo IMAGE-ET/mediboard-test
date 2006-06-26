@@ -81,7 +81,7 @@ function popChgPwd() {
 <tr>
 	<td id="menubar">
 <?php
-echo "| ".mbPortalLink( $m, "Aide" )." |";
+echo "| ".mbPortalLink( $m, "Aide" )." | ";
 foreach ($nav as $module) {
   $modDirectory = $module['mod_directory'];
   if (isMbModuleVisible($modDirectory)) {
