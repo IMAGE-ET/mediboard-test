@@ -67,7 +67,17 @@ table.form th.category {
 }
 
 table.form th.mandatory {
+  color: #f00;
   font-weight: bold;
+}
+
+label.notNull {
+  font-weight: bold;
+}
+
+label:hover {
+  border-bottom: 1px dotted #888;
+  cursor: help;
 }
 
 table.form th.text {
