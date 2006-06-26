@@ -45,8 +45,10 @@ if ($patient->patient_id) {
         $acte->loadRefsFwd();
       }
       
-      $plage =& $operation->_ref_plageop;
-      $plage->loadRefsFwd();
+      if($operation->plageop_id) {
+        $plage =& $operation->_ref_plageop;
+        $plage->loadRefsFwd();
+      }
       
       $consultAnest =& $operation->_ref_consult_anesth;
       if ($consultAnest->consultation_anesth_id) {
