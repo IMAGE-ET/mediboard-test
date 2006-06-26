@@ -260,7 +260,7 @@ a.button:hover, button:hover {
 }
 
 input {
-  border: 1px black solid;
+  border: 1px #a5acb2 solid;
   font-size: 12px;
   margin: 1px;
   padding: 0px 2px;
@@ -269,6 +269,7 @@ input {
 input[type=submit],
 input[type=reset],
 input[type=button] {
+  border-color: black;
   background: #638cc9;
   margin: 0 10px;
   color: #fff;
@@ -279,6 +280,44 @@ input[type=reset]:hover,
 input[type=button]:hover {
   background: #8ae;
   color: #fff;
+}
+
+select {
+  border: 1px a5acb2 solid;
+  font-size: 10px;
+  padding: 0;
+}
+
+optgroup {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 0px;
+  padding-left: 5px;
+  background: #fff;
+}
+
+option {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: normal;
+  padding: 0px;
+  padding-right: 4px;
+  background: #fff;
+}
+
+input,
+select,
+textarea {
+  border: 1px #a5acb2 solid;
+  background: #fff;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border: 1px #a5acb2 inset;
+  background: #ddf;
 }
 
 /* Standard table */
