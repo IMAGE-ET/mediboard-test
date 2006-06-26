@@ -72,6 +72,8 @@ table.form th.mandatory {
 }
 
 label.notNull {
+  padding-right: 13px;
+  background: url(./images/redbox.jpg) no-repeat center right;
   font-weight: bold;
 }
 
@@ -204,7 +206,8 @@ table.tabmenu {
 }
 
 table.tabmenu td {
-  height: 28px;	
+  height: 25px;
+  padding-top: 2px;
 }
 
 table.tabmenu td.normal {
@@ -216,12 +219,12 @@ table.tabmenu td.normal a {
 }
 
 table.tabmenu td.normalLeft {
-  width: 17px;
+  width: 15px;
   background: url(./images/tabLeft.png) no-repeat bottom right;
 }
 
 table.tabmenu td.normalRight {
-  width: 17px;
+  width: 15px;
   background: url(./images/tabRight.png) no-repeat bottom left;
 }
 
@@ -230,12 +233,12 @@ table.tabmenu td.selected {
 }
 
 table.tabmenu td.selectedLeft {
-  width: 17px;
+  width: 15px;
   background: url(./images/tabSelectedLeft.png) no-repeat bottom right;
 }
 
 table.tabmenu td.selectedRight {
-  width: 17px;
+  width: 15px;
   background: url(./images/tabSelectedRight.png) no-repeat bottom left;
 }
 
