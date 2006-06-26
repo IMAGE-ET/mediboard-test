@@ -38,9 +38,9 @@ table.form {
 }
 
 table.form th {
-  color: #fff;
+  color: #000;
   white-space: nowrap;
-  background-color: #638cc9;
+  background-color: #ffe;
   vertical-align: top;
   text-align: right;
   font-weight: normal;
@@ -49,6 +49,7 @@ table.form th {
 }
 
 table.form th.title {
+  color: #fff;
   font-size: 14px;
   font-weight: bold; 
   text-align: center;
@@ -57,6 +58,7 @@ table.form th.title {
 }
 
 table.form th.category {
+  color: #fff;
   font-weight: bold;  
   font-style: italic;  
   text-align: center;
@@ -65,7 +67,7 @@ table.form th.category {
 }
 
 table.form th.mandatory {
-  color: #000;
+  color: #fff;
   font-weight: bold;
 }
 
@@ -184,7 +186,7 @@ td#menubar a:hover {
 
 td.tabox {
   background-color: #fff;
-  border: solid #fff 4px;
+  border: solid #fff 0px;
 }
 
 table.tabmenu {
@@ -301,6 +303,7 @@ table.tbl th {
   border: outset #ccc 1px;
   font-weight: normal;
   text-align: center;
+  font-style: italic;
   white-space: nowrap;
 }
 
