@@ -105,9 +105,11 @@ function checkForm() {
     </tr>
 
     <tr>
-      <th class="mandatory"><label for="user_id" title="Utilisateur concerné, obligatoire.">Utilisateur</label></th>
+      <th>
+        <label for="chir_id" title="Utilisateur concerné, obligatoire.">Utilisateur</label>
+      </th>
       <td>
-        <select name="chir_id">
+        <select name="chir_id" title="{$pack->_props.chir_id}">
           <option value="0">&mdash; Choisir un utilisateur</option>
           {foreach from=$users item=curr_user}
           <option value="{$curr_user->user_id}" {if $curr_user->user_id == $pack->chir_id} selected="selected" {/if}>
@@ -119,8 +121,8 @@ function checkForm() {
     </tr>
 
     <tr>
-      <th class="mandatory"><label for="name" title="intitulé du pack, obligatoire.">Intitulé</label></th>
-      <td><input type="text" name="nom" value="{$pack->nom}" /></td>
+      <th><label for="nom" title="intitulé du pack, obligatoire.">Intitulé</label></th>
+      <td><input type="text" title="{$pack->_props.nom}" name="nom" value="{$pack->nom}" /></td>
     </tr>
 
     <tr>

@@ -175,7 +175,7 @@ function checkForm() {
       <th><label for="compte_rendu_id" title="Compte-rendu associé.">Compte-rendu</label></th>
       <td>
         <select name="compte_rendu_id">
-          <option value="0">&mdash; Tous &mdash;</option>
+          <option value="0">&mdash; Tous</option>
           <optgroup label="CR du praticien">
           {foreach from=$listCrPrat item=curr_cr}
           <option value="{$curr_cr->compte_rendu_id}" {if $liste->compte_rendu_id == $curr_cr->compte_rendu_id}selected="selected"{/if}>
