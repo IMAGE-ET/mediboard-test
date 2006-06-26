@@ -77,6 +77,12 @@ label.notNull {
   font-weight: bold;
 }
 
+label.notNullOK {
+  padding-right: 13px;
+  background: url(./images/greenbox.jpg) no-repeat center right;
+  font-weight: bold;
+}
+
 label:hover {
   border-bottom: 1px dotted #888;
   cursor: help;
@@ -283,7 +289,7 @@ input[type=button]:hover {
 }
 
 select {
-  border: 1px a5acb2 solid;
+  border: 1px #a5acb2 solid;
   font-size: 10px;
   padding: 0;
 }

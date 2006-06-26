@@ -148,7 +148,21 @@ function prepareForm(oForm) {
       aSpecFragments = sPropSpec.split("|");
       if (aSpecFragments.contains("notNull")) {
         if (oLabel = getLabelFor(oElement)) {
-          oLabel.className = "notNull";
+          if(oElement.value) {
+            oLabel.className = "notNullOK";
+          } else {
+            oLabel.className = "notNull";
+          }
+          var onchangeFct = "";
+          if(oElement.getAttribute("onchange")) {
+            if(oElement.getAttribute("onchange").indexOf("notNullOK(this)") == -1) {
+              onchangeFct = "notNullOK(this); ";
+            }
+            onchangeFct = onchangeFct + oElement.getAttribute("onchange");
+          } else {
+            onchangeFct = "notNullOK(this); ";
+          }
+          oElement.setAttribute("onchange", onchangeFct);
         }
       }
     }
@@ -170,6 +184,16 @@ function prepareForms() {
   while (oForm = document.forms[iForm++]) {
     prepareForm(oForm);
   }
+}
+
+function notNullOK(oElement) {
+  if (oLabel = getLabelFor(oElement)) {
+    if(oElement.value) {
+      oLabel.className = "notNullOK";
+    } else {
+      oLabel.className = "notNull";
+    }
+  } 
 }
 
 function checkMoreThan(oElement, aSpecFragments) {

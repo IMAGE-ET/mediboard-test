@@ -41,6 +41,7 @@ function updateSortiePrevue() {
       dDate.setDate(dDate.getDate() + iDelta);
     }
     oForm._date_sortie_prevue.value = makeDATEFromDate(dDate);
+    oForm._date_sortie_prevue.onchange();
     oDiv = document.getElementById('editSejour__date_sortie_prevue_da');
     oDiv.innerHTML = makeLocaleDateFromDate(dDate);
   }
@@ -81,6 +82,8 @@ function setPat(patient_id, _patient_view, childWindow) {
     oForm._patient_view.value = _patient_view;
     bChangePat = 1;
   }
+  
+  oForm.patient_id.onchange();
 }
 
 function checkSejoursToReload() {

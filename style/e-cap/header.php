@@ -62,6 +62,13 @@ function popChgPwd() {
         <td class="logo">
           <img src="./style/<?php echo $uistyle ?>/images/e-cap.jpg" alt="eCap logo" />
         </td>
+        <th width="1%">
+        <?php
+          $titleBlock = new CTitleBlock("$m", "$m.png", $m, "$m.$a");
+          $titleBlock->addCell();
+          $titleBlock->show();
+        ?>
+        </th>
         <td class="welcome">
           CAPIO Santé
           <br />
