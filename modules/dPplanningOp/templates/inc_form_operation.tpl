@@ -27,12 +27,12 @@
   {{/if}}
 
   <tr>
-    <th class="mandatory">
+    <th>
       <label for="chir_id" title="Chirurgien Responsable. Obligatoire">Chirurgien</label>
     </th>
     <td colspan="2">
       <select name="chir_id" title="{{$op->_props.chir_id}}" onchange="synchroPrat()">
-        <option value="">&mdash; Choisir un praticien</option>
+        <option value="">&mdash; Choisir un chirurgien</option>
         {{foreach from=$listPraticiens item=curr_praticien}}
         <option value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
         {{$curr_praticien->_view}}
@@ -43,11 +43,11 @@
   </tr> 
 
   <tr>
-    <th class="mandatory">
+    <th>
       <label for="_hour_op" title="Durée de l'intervention. Obligatoire">Temps opératoire</label>
     </th>
     <td colspan="2">
-      <select name="_hour_op">
+      <select name="_hour_op" title="notNull|num">
       {{foreach from=$hours_duree key=key item=hour}}
         <option value="{{$key}}" {{if (!$op && $key == 1) || $op->_hour_op == $key}} selected="selected" {{/if}}>{{$key}}</option>
       {{/foreach}}
@@ -85,10 +85,10 @@
       </select> mn
     </td>
     {{else}}
-    <th class="mandatory">
+    <th>
+      <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention</label>
       <input type="hidden" name="date" value="" />
       <input type="hidden" name="plageop_id" title="{{$op->_props.plageop_id}}|notNull" ondblclick="popPlage()" value="{{$plage->id}}" />
-      <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention</label>
     </th>
     <td class="readonly"><input type="text" name="_date" readonly="readonly" size="10" value="{{$plage->_date}}" /></td>
     <td class="button"><input type="button" value="Choisir une date" onclick="popPlage()" /></td>
@@ -125,13 +125,14 @@
   </tr>
   
   <tr>
-    <th class="mandatory"><label for="cote" title="Côté concerné par l'intervention">Côté</label></th>
+    <th><label for="cote" title="Côté concerné par l'intervention">Côté</label></th>
     <td colspan="2">
       <select name="cote" title="{{$op->_props.cote}}" onchange="modifOp()">
-        <option value="total"     {{if !$op || $op->cote == "total"}} selected="selected" {{/if}} >total</option>
-        <option value="droit"     {{if $op->cote == "droit"        }} selected="selected" {{/if}} >droit    </option>
-        <option value="gauche"    {{if $op->cote == "gauche"       }} selected="selected" {{/if}} >gauche   </option>
-        <option value="bilatéral" {{if $op->cote == "bilatéral"    }} selected="selected" {{/if}} >bilatéral</option>
+        <option value=""          {{if !$op->operation_id}} selected="selected" {{/if}}>&mdash; Choisir un côté</option>
+        <option value="total"     {{if $op->cote == "total"        }} selected="selected" {{/if}}>total    </option>
+        <option value="droit"     {{if $op->cote == "droit"        }} selected="selected" {{/if}}>droit    </option>
+        <option value="gauche"    {{if $op->cote == "gauche"       }} selected="selected" {{/if}}>gauche   </option>
+        <option value="bilatéral" {{if $op->cote == "bilatéral"    }} selected="selected" {{/if}}>bilatéral</option>
       </select>
     </td>
   </tr>

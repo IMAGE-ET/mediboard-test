@@ -4,6 +4,10 @@
 <script type="text/javascript">
 function checkPlage() {
   var form = document.editFrm;
+  
+  if (!checkForm(form)) {
+    return false;
+   }
     
   if (form.chir_id.value == 0 && form.id_spec.value == 0) {
     alert("Merci de choisir un chirurgien ou une spécialité");
@@ -24,7 +28,6 @@ function pageMain() {
   {/literal}
   regRedirectFlatCal("{$date}", "index.php?m={$m}&tab={$tab}&date=");
   {literal}
-  //regFieldCalendar("editFrm", "date");
 }
 
 </script>
@@ -53,10 +56,10 @@ function pageMain() {
   </tr>
 
   <tr>
-    <th class="mandatory">Chirurgien:</th>
+    <th><label for="chir_id" title="Nom du chirurgien">Chirurgien</th>
     <td>
-      <select name='chir_id'>
-        <option value="0">-- Choisir un praticien</option>
+      <select name="chir_id">
+        <option value="0">&mdash; Choisir un chirurgien</option>
 
         <optgroup label="Chirurgiens">
         {foreach from=$chirs item=chir}
@@ -76,9 +79,11 @@ function pageMain() {
       </select>
     </td>
     
-    <th>Salle:</th>
+    <th>
+      <label for="id_salle" title="Nom de la salle. Obligatoire.">Salle</label>
+    </th>
     <td>
-      <select name='id_salle'>
+      <select name="id_salle" title="{$plagesel->_props.id_salle}">
       {foreach from=$salles item=salle}
         <option value="{$salle->id}" {if $plagesel->id_salle == $salle->id} selected="selected"{/if} >
           {$salle->nom}

@@ -198,12 +198,12 @@ function pageMain() {
     {{else}}
     {{if $modurgence}}
     <th colspan="2" class="title" style="color: #fff; background-color: #00a"> 
-      <button style="float:left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
+      <button style="float: left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
       Création d'une urgence
     </th>
     {{else}}
     <th colspan="2" class="title"> 
-      <button style="float:left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
+      <button style="float: left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
       Création d'une intervention
     </th>
     {{/if}}

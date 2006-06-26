@@ -67,8 +67,8 @@ function checkFrm() {
     </tr>
 
     <tr>
-      <th class="mandatory"><label for="nom" title="intitulé du service, obligatoire.">Intitulé</label></th>
-      <td><input type="text" name="nom" value="{$serviceSel->nom}" /></td>
+      <th><label for="nom" title="intitulé du service, obligatoire.">Intitulé</label></th>
+      <td><input type="text" title="{$serviceSel->_props.nom}" name="nom" value="{$serviceSel->nom}" /></td>
     </tr>
     
     <tr>

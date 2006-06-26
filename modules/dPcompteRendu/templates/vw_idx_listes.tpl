@@ -167,8 +167,8 @@ function checkForm() {
     </tr>
 
     <tr>
-      <th class="mandatory"><label for="name" title="intitulé de la liste, obligatoire.">Intitulé</label></th>
-      <td><input type="text" name="nom" value="{$liste->nom}" /></td>
+      <th><label for="nom" title="intitulé de la liste, obligatoire.">Intitulé</label></th>
+      <td><input type="text" title="{$liste->_props.nom}" name="nom" value="{$liste->nom}" /></td>
     </tr>
     
     <tr>

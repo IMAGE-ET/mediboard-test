@@ -1,24 +1,5 @@
 <!-- $Id$ -->
 
-{literal}
-<script type="text/javascript">
-function checkSalle() {
-  var form = document.salle;
-  var field = null;
-  
-  if (field = form.nom) {
-    if (field.value.length == 0) {
-      alert("Intitulé manquant");
-      field.focus();
-      return false;
-    }
-  }   
-    
-  return true;
-}
-</script>
-{/literal}
-
 <table class="main">
 
 <tr>
@@ -44,7 +25,8 @@ function checkSalle() {
   
   <td class="halfPane">
 
-    <form name="salle" action="./index.php?m={$m}" method="post" onsubmit="return checkSalle()">
+    <form name="salle" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
+
     <input type="hidden" name="dosql" value="do_salle_aed" />
     <input type="hidden" name="id" value="{$salleSel->id}" />
     <input type="hidden" name="del" value="0" />
@@ -62,15 +44,17 @@ function checkSalle() {
     </tr>
 
     <tr>
-      <th class="mandatory">Intitulé:</th>
-      <td><input type="text" name="nom" value="{$salleSel->nom}" /></td>
+      <th><label for="nom" title="Intitulé de la salle. Obligatoire">Intitulé</label></th>
+      <td><input type="text" title="{$salleSel->_props.nom}" name="nom" value="{$salleSel->nom}" /></td>
     </tr>
     
     <tr>
-      <th>Stats</th>
+      <th><label for="stats_0" title="Prendre ou non en compte la salle dans les statistiques">Stats</label></th>
       <td>
-        <input type="radio" name="stats" value="1" {if $salleSel->stats}checked="checked"{/if}> Oui /
-        <input type="radio" name="stats" value="0" {if !$salleSel->stats || !$salleSel->id}checked="checked"{/if}> Non
+        <input type="radio" name="stats" value="1" {if $salleSel->stats}checked="checked"{/if} />
+        <label for="stats_1" title="La prendre en compte dans les statistiques">Oui</label>
+        <input type="radio" name="stats" value="0" {if !$salleSel->stats || !$salleSel->id}checked="checked"{/if} />
+        <label for="stats_0" title="Ne pas la prendre en compte dans les statistiques">Non</label>
       </td>
     </tr>
     
@@ -79,7 +63,7 @@ function checkSalle() {
         {if $salleSel->id}
         <input type="reset" value="Réinitialiser" />
         <input type="submit" value="Valider" />
-        <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'la salle',objName:'{$salleSel->nom|escape:javascript}'{rdelim})""/>
+        <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'la salle',objName:'{$salleSel->nom|escape:javascript}'{rdelim})"/>
         {else}
         <input type="submit" name="btnFuseAction" value="Créer" />
         {/if}
@@ -88,6 +72,7 @@ function checkSalle() {
 
     </table>
 
+    </form>
   </td>
 </tr>
 
