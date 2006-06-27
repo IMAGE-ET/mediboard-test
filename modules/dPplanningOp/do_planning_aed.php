@@ -25,6 +25,9 @@ if (intval(dPgetParam($_POST, 'del'))) {
   $do->redirectDelete = "m=$m&tab=vw_edit_planning";
   $do->doDelete();
 } else {
+  if($do->_obj->annulee) {
+    $do->_obj->rank = 0;
+  }
   $do->modifyMsg = "Opération modifiée";
   $do->createMsg = "Opération créée";
   $do->doStore();
