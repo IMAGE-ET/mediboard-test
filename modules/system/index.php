@@ -25,9 +25,6 @@ $active = intval(!$tab);
 
 // [End] non-module specific code
 
-$titleBlock = new CTitleBlock( 'System Administration', '48_my_computer.png', $m, "$m.$a" );
-$titleBlock->show();
-
 $tabBox = new CTabBox("?m=$m", "{$AppUI->cfg['root_dir']}/modules/$m/", $tab);
 $tabBox->add("view_dpadmin", "Configuration générale");
 $tabBox->add("view_history", "Historique");

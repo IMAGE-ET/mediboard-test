@@ -141,3 +141,10 @@ foreach ($nav as $module) {
       echo $AppUI->getMsg();
     ?>
   </div>
+<?php
+
+$titleBlock = new CTitleBlock( "module-$m-long", "$m.png", $m, "$m.$a" );
+$titleBlock->addCell();
+$titleBlock->show();
+
+?>

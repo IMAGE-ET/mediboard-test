@@ -31,10 +31,6 @@ $active = intval(!$tab);
 
 // [End] non-module specific code
 
-$titleBlock = new CTitleBlock("Planning des chirurgiens", "$m.png", $m, "$m.$a");
-$titleBlock->addCell();
-$titleBlock->show();
-
 $tabBox = new CTabBox("?m=$m", "{$AppUI->cfg['root_dir']}/modules/$m/", $tab );
 
 if ($canEdit) {

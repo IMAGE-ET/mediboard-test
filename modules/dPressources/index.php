@@ -31,10 +31,6 @@ $active = intval(!$tab);
 
 // [End] non-module specific code
 
-$titleBlock = new CTitleBlock("Gestion des salles d'exploration fonctionnelle", "$m.png", $m, "$m.$a");
-$titleBlock->addCell();
-$titleBlock->show();
-
 $tabBox = new CTabBox("?m=$m", $AppUI->cfg['root_dir'] . "/modules/$m/", $tab );
 $tabBox->add("view_planning", "Planning réservations");
 if($canEdit) {

@@ -22,10 +22,6 @@ if (isset( $_GET['tab'] )) {
 $tab = $AppUI->getState( 'dPcabinetIdxTab' ) !== NULL ? $AppUI->getState( 'dPcabinetIdxTab' ) : 0;
 $active = intval( !$AppUI->getState( 'dPcabinetIdxTab' ) );
 
-$titleBlock = new CTitleBlock( 'Gestion de cabinet de consultation', 'dPcabinet.png', $m, "$m.$a" );
-$titleBlock->addCell();
-$titleBlock->show();
-
 $tabBox = new CTabBox( "?m=dPcabinet", "{$AppUI->cfg['root_dir']}/modules/dPcabinet/", $tab );
 $tabBox->add( 'vw_planning', 'Programmes de consultation' );
 $tabBox->add( 'edit_planning', 'Créer / Modifier un rendez-vous' );

@@ -1,13 +1,13 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-"Child Tasks",
 "Active Users",
 "Add User",
 "Add or Edit Permissions",
 "Administrator",
 "Branch Manager",
 "CEO",
+"Child Tasks",
 "Complete",
 "Copy Permissions from Template",
 "Copy Permissions from User",
@@ -67,6 +67,8 @@
 "edit preferences",
 "edit this user",
 "full access to module",
+"module-admin-court"=>"Users",
+"module-admin-long"=>"Users administration",
 "projects list",
 "read only",
 "read-write",

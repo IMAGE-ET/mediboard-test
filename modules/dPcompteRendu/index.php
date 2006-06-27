@@ -22,10 +22,6 @@ if (isset( $_GET['tab'] )) {
 $tab = $AppUI->getState( 'dPcompteRenduIdxTab' ) !== NULL ? $AppUI->getState( 'dPcompteRenduIdxTab' ) : 0;
 $active = intval( !$AppUI->getState( 'dPcompteRenduIdxTab' ) );
 
-$titleBlock = new CTitleBlock( 'Gestion des comptes-rendus', 'dPcompteRendu.png', $m, "$m.$a" );
-$titleBlock->addCell();
-$titleBlock->show();
-
 $tabBox = new CTabBox( "?m=$m", "{$AppUI->cfg['root_dir']}/modules/$m/", $tab );
 $tabBox->add('vw_modeles', 'liste des modèles');
 $tabBox->add('addedit_modeles', 'Edition des modèles');

@@ -63,12 +63,19 @@ function popChgPwd() {
           <img src="./style/<?php echo $uistyle ?>/images/e-cap.jpg" alt="eCap logo" />
         </td>
         <th width="1%">
-        <?php
-          //$titleBlock = new CTitleBlock("$m", "$m.png", $m, "$m.$a");
-          //$titleBlock->addCell();
-          //$titleBlock->show();
-        ?>
+          <?php
+            $titleBlock = new CTitleBlock("module-$m-long", "$m.png", $m, "$m.$a");
+            $titleBlock->addCell();
+            $titleBlock->show();
+          ?>
         </th>
+        <td>
+          <div id="systemMsg">
+          <?php
+            echo $AppUI->getMsg();
+          ?>
+          </div>
+        </td>
         <td class="welcome">
           CAPIO Santé
           <br />
@@ -100,8 +107,3 @@ foreach ($nav as $module) {
 <table id="main" class="<?php echo $m ?>">
 <tr>
   <td>
-  <div id="systemMsg">
-    <?php
-	    echo $AppUI->getMsg();
-    ?>
-  </div>

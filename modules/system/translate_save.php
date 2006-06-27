@@ -18,12 +18,14 @@ if (!($fp = fopen ("{$AppUI->cfg['root_dir']}/locales/$lang/$module.inc", "wt"))
 
 $txt = "##\n## DO NOT MODIFY THIS FILE BY HAND!\n##\n";
 
+//mbTrace($trans, "trans", true);
+
 if ($lang == 'en') {
 // editing the english file
 	foreach ($trans as $langs) {
 		if ( (@$langs['abbrev'] || $langs['english']) && empty($langs['del']) ) {
-			$langs['abbrev'] = addslashes( stripslashes( @$langs['abbrev'] ) );
-			$langs['english'] = addslashes( stripslashes( $langs['english'] ) );
+			$langs['abbrev']  = strtr( stripslashes(@$langs['abbrev']), array('"' => '\"' ) );
+			$langs['english'] = strtr( stripslashes($langs['english']), array('"' => '\"' ) );
 			if (!empty($langs['abbrev'])) {
 				$txt .= "\"{$langs['abbrev']}\"=>";
 			}
@@ -34,8 +36,8 @@ if ($lang == 'en') {
 // editing the translation
 	foreach ($trans as $langs) {
 		if ( empty($langs['del']) ) {
-			$langs['english'] = addslashes( stripslashes( $langs['english'] ) );
-			$langs['lang'] = addslashes( stripslashes( $langs['lang'] ) );
+			$langs['english'] = strtr( stripslashes($langs['english']), array('"' => '\"' ) );
+			$langs['lang']    = strtr( stripslashes($langs['lang']), array('"' => '\"' ) );
 			//fwrite( $fp, "\"{$langs['english']}\"=>\"{$langs['lang']}\",\n" );
 			$txt .= "\"{$langs['english']}\"=>\"{$langs['lang']}\",\n";
 		}

@@ -207,6 +207,7 @@ td.tabox {
 }
 
 table.tabmenu {
+  margin-top: 20px;
   margin-left: 20px;
   border-spacing: 0px;
 }
@@ -432,4 +433,9 @@ th.title {
   text-align: center;
   background: #638cc9;
   border: #638cc9 1px outset;
+}
+
+/* System message */
+#systemMsg {
+  text-align: center;
 }

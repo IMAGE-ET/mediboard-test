@@ -22,10 +22,6 @@ if (isset( $_GET['tab'] )) {
 $tab = $AppUI->getState( 'dPpmsiIdxTab' ) !== NULL ? $AppUI->getState( 'dPpmsiIdxTab' ) : 0;
 $active = intval( !$AppUI->getState( 'dPpmsiIdxTab' ) );
 
-$titleBlock = new CTitleBlock( 'Gestion des actes PMSI', 'dPpmsi.png', $m, "$m.$a" );
-$titleBlock->addCell();
-$titleBlock->show();
-
 $tabBox = new CTabBox( "?m=dPpmsi", "{$AppUI->cfg['root_dir']}/modules/dPpmsi/", $tab );
 $tabBox->add( 'vw_dossier', 'Dossiers patient' );
 $tabBox->add( 'edit_actes', 'Codage des actes' );

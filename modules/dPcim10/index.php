@@ -14,7 +14,7 @@ if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
-//save the workplace state (have a footprint on this site)
+//save the workplace state
 $AppUI->savePlace();
 
 // retrieve any state parameters (temporary session variables that are not stored in db)
@@ -24,14 +24,6 @@ if (isset( $_GET['tab'] )) {
 	$AppUI->setState( "dPcim10IdxTab", $_GET['tab'] );
 }
 $tab = $AppUI->getState( "dPcim10IdxTab" ) !== NULL ? $AppUI->getState( "dPcim10IdxTab" ) : 1;
-
-// we prepare the User Interface Design with the dPFramework
-
-// setup the title block with Name, Icon and Help
-$titleBlock = new CTitleBlock( "Aide au codage CIM10", "dPcim10.png", $m, "$m.$a" );
-$titleBlock->show();
-
-// now prepare and show the tabbed information boxes with the dPFramework
 
 // build new tab box object
 $tabBox = new CTabBox( "?m=$m", "{$AppUI->cfg['root_dir']}/modules/$m/", $tab );

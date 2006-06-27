@@ -23,11 +23,6 @@ if (isset( $_GET['tab'] )) {
 $tab = $AppUI->getState( 'dPblocIdxTab' ) !== NULL ? $AppUI->getState( 'dPblocIdxTab' ) : 0;
 $active = intval( !$AppUI->getState( 'dPblocIdxTab' ) );
 
-$titleBlock = new CTitleBlock( 'Planning du bloc opératoire', 'dPbloc.png', $m, "$m.$a" );
-$titleBlock->addCell();
-
-$titleBlock->show();
-
 $tabBox = new CTabBox( "?m=dPbloc", "{$AppUI->cfg['root_dir']}/modules/dPbloc/", $tab );
 if($canEdit) {
   $tabBox->add( "vw_idx_planning", "Planning de la semaine" );
