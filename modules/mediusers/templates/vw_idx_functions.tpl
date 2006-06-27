@@ -60,19 +60,28 @@ function setColor(color) {
           {/if}
           </th>
         </tr>
+        
         <tr>
-          <th class="mandatory"><label for="text" title="Intitulé de la fonction. Obligatoire">Intitulé</label></th>
-          <td><input type="text" name="text" size="30" value="{$userfunction->text}" /></td>
-        </tr>
-        <tr>
-          <th class="mandatory"><label for="group_id" title="Groupe auquel se rattache la fonction">Groupe</label></th>
+          <th>
+            <label for="text" title="Intitulé de la fonction. Obligatoire">Intitulé</label>
+          </th>
           <td>
-            <select name="group_id">
-            {foreach from=$listGroups item=curr_group}
+            <input type="text" name="text" title="{$userfunction->_props.text}" size="30" value="{$userfunction->text}" />
+          </td>
+        </tr>
+        
+        <tr>
+          <th>
+            <label for="group_id" title="Groupe auquel se rattache la fonction">Groupe</label>
+          </th>
+          <td>
+            <select name="group_id" title="{$userfunction->_props.group_id}">
+              <option value="">&mdash; choisir un groupe</option>
+              {foreach from=$listGroups item=curr_group}
               <option value="{$curr_group->group_id}" {if $curr_group->group_id == $userfunction->group_id} selected="selected" {/if}>
-              {$curr_group->text}
+                {$curr_group->text}
               </option>
-            {/foreach}
+              {/foreach}
             </select>
           </td>
         </tr>

@@ -201,7 +201,7 @@ function pageMain() {
         
         <tr>
           <th>
-            <label for="praticien_id" title="Praticien responsable. Obligatoire">Praticien</label>
+            <label for="chir_id" title="Praticien responsable. Obligatoire">Praticien</label>
           </th>
           <td colspan="2">
             <select name="chir_id" title="{$protocole->_props.chir_id}">
@@ -215,21 +215,20 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th class="mandatory">
+          <th>
             <label for="_hour_op" title="Durée de l'intervention. Obligatoire">Temps opératoire</label>
           </th>
           <td colspan="2">
-            <select name="_hour_op">
+            <select name="_hour_op" title="notNull|num|min|0">
             {foreach from=$hours key=key item=hour}
               <option value="{$key}" {if (!$protocole && $key == 1) || $protocole->_hour_op == $key} selected="selected" {/if}>{$key}</option>
             {/foreach}
-            </select>
-            :
+            </select> h 
             <select name="_min_op">
             {foreach from=$mins item=min}
               <option value="{$min}" {if (!$protocole && $min == 0) || $protocole->_min_op == $min} selected="selected" {/if}>{$min}</option>
             {/foreach}
-            </select>
+            </select> mn
           </td>
         </tr>
         <tr>
@@ -284,7 +283,7 @@ function pageMain() {
           <td class="button"><input type="button" value="Choisir un code" onclick="popCode('cim10')" /></td>
         </tr>
         <tr>
-          <th class="mandatory"><label for="duree_hospi" title="Durée d'hospitalisation en jours">Durée d'hospitalisation</label></th>
+          <th><label for="duree_hospi" title="Durée d'hospitalisation en jours">Durée d'hospitalisation</label></th>
           <td colspan="2"><input type="text" name="duree_hospi" title="{$protocole->_props.duree_hospi}" size="2" value="{$protocole->duree_hospi}" /> jours</td>
         </tr>
         <tr>

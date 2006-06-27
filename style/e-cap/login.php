@@ -33,7 +33,7 @@
 
 <body onload="main()">
 <div id="login">
-  <form name="login" action="./index.php" method="post">
+  <form name="loginFrm" action="./index.php" method="post">
   
 	<input type="hidden" name="login" value="<?php echo time();?>" />
 	<input type="hidden" name="redirect" value="<?php echo $redirect;?>" />
@@ -65,8 +65,8 @@
     </tr>
 
     <tr>
-      <th class="mandatory"><?php echo $AppUI->_('Username'); ?>:</th>
-      <td><input type="text" size="25" maxlength="20" name="username" class="text" /></td>
+      <th><label for="username" title="Nom de l'utilisateur pour s'authentifier"><?php echo $AppUI->_('Username'); ?></label></th>
+      <td><input type="text" title="str|notNull" size="25" maxlength="20" name="username" class="text" /></td>
 <?php if ($dPconfig['demo_version']) { ?>
       <td rowspan="3" class="category">
         <strong>Administrateur</strong>: admin/admin<br />
@@ -79,8 +79,8 @@
     </tr>
 
     <tr>
-      <th class="mandatory"><?php echo $AppUI->_('Password'); ?>:</th>
-      <td><input type="password" size="25" maxlength="32" name="password" class="text" /></td>
+      <th><label for="password" title="Mot de passe d'authentification"><?php echo $AppUI->_('Password'); ?></label></th>
+      <td><input type="password"  title="str|notNull" size="25" maxlength="32" name="password" class="text" /></td>
     </tr>
     
     <tr>

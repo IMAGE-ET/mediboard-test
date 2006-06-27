@@ -21,6 +21,7 @@ function popChir() {
 function setChir( key, val ){
   var f = document.editFrm;
   f.chir_id.value = key;
+  f.chir_id.onchange();
   f._chir_name.value = val;
 }
 
@@ -37,6 +38,7 @@ function setPat( key, val ) {
 
   if (val != '') {
     f.patient_id.value = key;
+    f.patient_id.onchange();
     f._pat_name.value = val;
     myNode = document.getElementById("clickPat");
     myNode.innerHTML = "++ Infos patient (cliquez pour afficher) ++";
@@ -56,6 +58,7 @@ function popRDV() {
 function setRDV(heure, id, date, freq, chirid, chirname ) {
   var f = document.editFrm;
   f.plageconsult_id.value = id;
+  f.plageconsult_id.onchange();
   f._date.value = date;
   f.heure.value = heure;
   f.duree.value = freq;
@@ -79,7 +82,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
 <table class="main" style="margin: 4px; border-spacing: 0px;">
   {if $consult->consultation_id}
   <tr>
-    <td><a class="button" href="index.php?m={$m}&amp;consultation_id=0">Créer une nouvelle consultation</a></td>
+    <td><a class="button" href="?m={$m}&amp;consultation_id=0">Créer une nouvelle consultation</a></td>
   </tr>
   {/if}
   <tr>
@@ -103,24 +106,24 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
         <tr>
           <th>
             <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
-            <input type="hidden" name="chir_id" title="notNull|ref" value="{$chir->user_id}" ondblclick="popChir()" />
+            <input type="hidden" name="chir_id" title="{$consult->_props.patient_id}" value="{$chir->user_id}" ondblclick="popChir()" />
           </th>
             <td class="readonly">
               <input type="text" name="_chir_name" size="30" value="{$chir->_view}" readonly="readonly" />
-              <button type="button" onclick="setChir(0, '')">
+              <button type="button" onclick="setChir('', '')">
                 <img src="modules/{$m}/images/cross.png" alt="X" />
               </button>
             </td>
-            <td class="button"><input type="button" value="choisir un praticien" onclick="popChir()" /></td>
+            <td class="button"><input type="button" value="Choisir un praticien" onclick="popChir()" /></td>
         </tr>
 
         <tr>
-          <th class="mandatory">
-            <input type="hidden" name="patient_id" value="{$pat->patient_id}" />
-            <label for="chir_id" title="Patient pour la consultation">Patient</label>
+          <th>
+            <input type="hidden" title="{$consult->_props.patient_id}" name="patient_id" value="{$pat->patient_id}" />
+            <label for="patient_id" title="Patient pour la consultation">Patient</label>
           </th>
           <td class="readonly"><input type="text" name="_pat_name" size="30" value="{$pat->_view}" readonly="readonly" /></td>
-          <td class="button"><input type="button" value="rechercher un patient" onclick="popPat()" /></td>
+          <td class="button"><input type="button" value="Rechercher un patient" onclick="popPat()" /></td>
         </tr>
         
         <tr>
@@ -148,7 +151,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
             <label for="_check_premiere" title="Première consultation de ce patient avec le praticien">Première consultation</label>
           </td>
           <td rowspan="4" class="button">
-            <input type="button" value="Selectionner" onclick="popRDV()" />
+            <input type="button" value="Sélectionner" onclick="popRDV()" />
           </td>
         </tr>
 

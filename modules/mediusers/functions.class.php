@@ -35,7 +35,7 @@ class CFunctions extends CMbObject {
     
     $this->_props["text"] = "str|notNull|confidential";
     $this->_props["color"] = "str|length|6|notNull";
-    $this->_props["goup_id"] = "ref|notNull";
+    $this->_props["group_id"] = "ref|notNull";
 	}
   
   function updateFormFields () {

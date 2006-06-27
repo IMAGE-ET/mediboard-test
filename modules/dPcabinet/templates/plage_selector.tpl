@@ -1,6 +1,7 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
+{if $plage->plageconsult_id}
 function setClose(time) {ldelim}
   window.opener.setRDV(time,
     "{$plage->plageconsult_id}",
@@ -10,6 +11,7 @@ function setClose(time) {ldelim}
     "{$plage->_ref_chir->_view|escape:"javascript"}");
   window.close();
 {rdelim}
+{/if}
 
 function pageMain() {ldelim}
   regRedirectPopupCal("{$date}", "index.php?m=dPcabinet&a=plage_selector&dialog=1&chir_id={$chir_id}&date=");  

@@ -302,19 +302,19 @@ function pageMain() {
           {/if}
           
           <td {$style}>
-            <a href="{$href_consult}">{$curr_consult->_hour}h{if $curr_consult->_min}{$curr_consult->_min}{/if}</a>
+            <a href="{$href_consult}" title="Voir la consultation">{$curr_consult->_hour}h{if $curr_consult->_min}{$curr_consult->_min}{/if}</a>
           </td>
           <td class="text" {$style}>
-            <a class="action" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={$curr_consult->_ref_patient->patient_id}">
+            <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={$curr_consult->_ref_patient->patient_id}">
               <img src="modules/{$m}/images/edit.png" alt="modifier" />
             </a>
-            <a href="{$href_consult}">{$curr_consult->_ref_patient->_view}</a>
+            <a href="{$href_consult}"  title="Voir la consultation">{$curr_consult->_ref_patient->_view}</a>
           </td>
           <td class="text" {$style}>
-            <a href="{$href_consult}">{$curr_consult->motif|nl2br|truncate:35:"...":false}</a>
+            <a href="{$href_consult}"  title="Voir la consultation">{$curr_consult->motif|nl2br|truncate:35:"...":false}</a>
           </td>
           <td class="text" {$style}>
-            <a href="{$href_consult}">{$curr_consult->rques|nl2br|truncate:35:"...":false}</a>
+            <a href="{$href_consult}"  title="Voir la consultation">{$curr_consult->rques|nl2br|truncate:35:"...":false}</a>
           </td>
           <td {$style}>
             <form name="etatFrm{$curr_consult->consultation_id}" action="?m=dPcabinet" method="post">

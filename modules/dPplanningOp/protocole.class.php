@@ -60,7 +60,7 @@ class CProtocole extends CMbObject {
     $this->_props["libelle"] = "str|confidential";
     $this->_props["examen"] = "str|confidential";
     $this->_props["materiel"] = "str|confidential";
-    $this->_props["duree_hospi"] = "num";
+    $this->_props["duree_hospi"] = "notNull|num|min|0";
     $this->_props["rques_operation"] = "str|confidential";
     $this->_props["depassement"] = "currency|confidential";
   }

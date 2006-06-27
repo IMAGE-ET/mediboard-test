@@ -328,6 +328,19 @@ function checkElement(oElement, aSpecFragments) {
 
       if (sFragment1 = aSpecFragments[1]) {
         switch (sFragment1) {
+          case "min":
+            iMin = parseInt(aSpecFragments[2], 10);
+
+            if (iMin == NaN) {
+              return "Spécification de minimum numérique invalide";
+            }
+            
+            if (oElement.value < iMin) {
+              return printf("Soit avoir une valeur minimale de %s", iMin);
+            }
+            
+            break;
+        
           case "length":
             iLength = parseInt(aSpecFragments[2], 10);
            

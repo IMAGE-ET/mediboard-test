@@ -229,6 +229,18 @@ class CMbObject extends CDpObject {
           case null:
             break;
             
+          case "min":
+            if (!is_int($min = @$specFragments[2])) {
+              return "Spécification de minimum numérique invalide";
+            }
+            
+            $min = intval($min);
+            if ($propValue < $min) {
+              return "Soit avoir une valeur minimale de $min";
+            }
+            
+            break;
+            
           case "length":
             $length = intval(@$specFragments[2]);
             

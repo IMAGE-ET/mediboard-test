@@ -35,7 +35,7 @@ function pageMain() {
 
 {if $canEdit}
 
-<form name='editFrm' action='./index.php?m={$m}' method='post' onsubmit='return checkPlage()'>
+<form name='editFrm' action='?m={$m}' method='post' onsubmit='return checkPlage()'>
 
 <input type='hidden' name='dosql' value='do_plagesop_aed' />
 <input type='hidden' name='del' value='0' />
@@ -56,11 +56,10 @@ function pageMain() {
   </tr>
 
   <tr>
-    <th><label for="chir_id" title="Nom du chirurgien">Chirurgien</th>
+    <th><label for="chir_id" title="Nom du chirurgien">Chirurgien</label></th>
     <td>
-      <select name="chir_id">
-        <option value="0">&mdash; Choisir un chirurgien</option>
-
+      <select name="chir_id" title="{$plagesel->_props.chir_id}">
+        <option value="">&mdash; Choisir un chirurgien</option>
         <optgroup label="Chirurgiens">
         {foreach from=$chirs item=chir}
           <option value="{$chir->user_id}" {if $plagesel->chir_id == $chir->user_id} selected="selected" {/if} >
@@ -84,17 +83,18 @@ function pageMain() {
     </th>
     <td>
       <select name="id_salle" title="{$plagesel->_props.id_salle}">
-      {foreach from=$salles item=salle}
+        <option value="">&mdash; Choisir une salle</option>
+        {foreach from=$salles item=salle}
         <option value="{$salle->id}" {if $plagesel->id_salle == $salle->id} selected="selected"{/if} >
           {$salle->nom}
         </option>
-      {/foreach}
+        {/foreach}
       </select>
     </td>
 
-    <th class="mandatory">Début:</th>
+    <th><label for="_heuredeb" title="Heure de début de la plage. Obligatoire">Début</label></th>
     <td>
-      <select name='_heuredeb'>
+      <select name="_heuredeb" title="notNull|num">
       {foreach from=$heures item=heure}
         <option {if $plagesel->_heuredeb == $heure} selected="selected" {/if} >
           {$heure|string_format:"%02d"}
@@ -113,19 +113,19 @@ function pageMain() {
   </tr>
 
   <tr>
-    <th>Anesthésiste:</th>
+    <th><label for="anest_id" title="Anesthésiste associé à la plage opératoire">Anesthésiste</label></th>
     <td>
-      <select name='anesth_id'>
-        <option value="0">-- Choisir un anesthésiste</option>
-      {foreach from=$anesths item=anesth}
+      <select name="anesth_id">
+        <option value="">&mdash; Choisir un anesthésiste</option>
+        {foreach from=$anesths item=anesth}
         <option value="{$anesth->user_id}" {if $plagesel->anesth_id == $anesth->user_id} selected="selected" {/if} >
           {$anesth->_view}
         </option>
-      {/foreach}
+        {/foreach}
 	  </select>
     </td>
 
-    <th>Date:</th>
+    <th><label for="date" title="Date de la plage opératoire.">Date</label></th>
     <td class="date">
       {if $plagesel->id}
       <div id="editFrm_date_da">{$plagesel->date|date_format:"%d/%m/%Y"}</div>
@@ -138,31 +138,31 @@ function pageMain() {
       <!--img id="editFrm_date_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date"/-->
     </td>
 
-    <th class="mandatory">Fin:</th>
+    <th><label for="_heurefin" title="Heure de fin de la plage. Obligatoire">Fin</label></th>
     <td>
-      <select name='_heurefin'>
-      {foreach from=$heures item=heure}
+      <select name="_heurefin" title="notNull|num">
+        {foreach from=$heures item=heure}
         <option {if $plagesel->_heurefin == $heure} selected="selected" {/if} >
           {$heure|string_format:"%02d"}
         </option>
-      {/foreach}
+        {/foreach}
       </select>
       :
       <select name='_minutefin'>
-      {foreach from=$minutes item=minute}
+        {foreach from=$minutes item=minute}
         <option {if $plagesel->_minutefin == $minute} selected="selected" {/if} >
           {$minute|string_format:"%02d"}
         </option>
-      {/foreach}
+        {/foreach}
       </select>
     </td>
   </tr>
   
   <tr>
-    <th class="mandatory">Spécialité:</th>
+    <th><label for="id_spec" title="">Spécialité</label></th>
     <td colspan="5">
-      <select name='id_spec'>
-        <option value="0">-- Choisir une spécialité</option>
+      <select name="id_spec" title="{$plagesel->_props.chir_id}">
+        <option value="">&mdash; Choisir une spécialité</option>
         {foreach from=$specs item=spec}
           <option value="{$spec->function_id}" {if $spec->function_id == $plagesel->id_spec} selected="selected" {/if} >
             {$spec->text}
@@ -173,9 +173,17 @@ function pageMain() {
   </tr>
   
   <tr>
-    <th>Durée de répétition:</th>
-    <td><input type="text" name="_repeat" size="1" value="1" /> semaine(s)</td>
-    <td colspan="4"><input type="checkbox" name="_double" />Une semaine sur deux</td>
+    <th>
+      <label for="_repeat" title="Nombre de répétitions hébdomadaire pour cette plage">Durée de répétition</label>
+    </th>
+    <td>
+      <input type="text" title="notNull|num|min|1" name="_repeat" size="1" value="1" />
+      semaine(s)
+    </td>
+    <td colspan="4">
+      <input type="checkbox" name="_double" />
+      <label for="_double" title="Appliquer les répétitions une semaine sur deux">Une semaine sur deux</label>
+    </td>
   </tr>
   
   <tr>
@@ -194,7 +202,7 @@ function pageMain() {
 </form>
 
 {if $plagesel->id}
-  <form name='removeFrm' action='./index.php?m={$m}' method='post'>
+  <form name='removeFrm' action='?m={$m}' method='post'>
 
   <input type='hidden' name='dosql' value='do_plagesop_aed' />
   <input type='hidden' name='del' value='1' />
