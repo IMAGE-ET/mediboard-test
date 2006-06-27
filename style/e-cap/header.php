@@ -64,9 +64,9 @@ function popChgPwd() {
         </td>
         <th width="1%">
         <?php
-          $titleBlock = new CTitleBlock("$m", "$m.png", $m, "$m.$a");
-          $titleBlock->addCell();
-          $titleBlock->show();
+          //$titleBlock = new CTitleBlock("$m", "$m.png", $m, "$m.$a");
+          //$titleBlock->addCell();
+          //$titleBlock->show();
         ?>
         </th>
         <td class="welcome">

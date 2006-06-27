@@ -23,9 +23,9 @@ function pageMain() {
 
             <table class="form">
               <tr>
-                <th class="mandatory">Code de l'acte:</th>
+                <th><label for="codeacte" title="Code CCAM de l'acte">Code de l'acte</label></th>
                 <td>
-                  <input tabindex="1" type="text" name="codeacte" value="{$codeacte}" />
+                  <input tabindex="1" type="text" name="codeacte" title="code|ccam" value="{$codeacte}" />
                   <input tabindex="2" type="submit" value="afficher" />
                 </td>
               </tr>

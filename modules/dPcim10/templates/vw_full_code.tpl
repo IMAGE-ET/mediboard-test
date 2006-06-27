@@ -31,7 +31,7 @@
         <tr>
           <th><label for="code" title="Code total ou partiel de l'acte">Code de l'acte</label></th>
           <td>
-            <input tabindex="1" type="text" title="notNull|code|cim10" name="code" value="{$cim10->code}" />
+            <input tabindex="1" type="text" title="str" name="code" value="{$cim10->code}" />
             <input tabindex="2" type="submit" value="afficher" />
           </td>
         </tr>
