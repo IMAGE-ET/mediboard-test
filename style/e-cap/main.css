@@ -315,6 +315,7 @@ option {
 input,
 select,
 textarea {
+  padding: 1px;
   border: 1px #a5acb2 solid;
   background: #fff;
 }
@@ -322,7 +323,8 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-  border: 1px #a5acb2 inset;
+  padding: 0px;
+  border: 2px #a5acb2 inset;
   background: #ddf;
 }
 
@@ -337,6 +339,10 @@ table.tbl {
 
 table.tbl a {
   display: block;
+}
+
+table.tbl tr:hover td {
+  background-color: #fdd;
 }
 
 a.actionPat {
