@@ -199,6 +199,10 @@ label:hover {
 label.notNull {
   font-weight: bold;
 }
+
+label.notNullOK {
+  font-weight: bold;
+}
   /* @import "./common.css";  */
 
 
