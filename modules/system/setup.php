@@ -15,7 +15,7 @@ $config['mod_directory'] = 'system';
 $config['mod_setup_class'] = 'CSetupSystem';
 $config['mod_type'] = 'core';
 $config['mod_ui_name'] = 'Administration';
-$config['mod_ui_icon'] = '48_my_computer.png';
+$config['mod_ui_icon'] = 'system.png';
 $config['mod_description'] = 'Administration système';
 $config['mod_config'] = true;
 

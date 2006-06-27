@@ -15,7 +15,7 @@ $config['mod_directory'] = 'admin';
 $config['mod_setup_class'] = 'CSetupAdmin';
 $config['mod_type'] = 'core';
 $config['mod_ui_name'] = 'Utilisateurs';
-$config['mod_ui_icon'] = 'helix-setup-users.png';
+$config['mod_ui_icon'] = 'admin.png';
 $config['mod_description'] = 'Gestion des Utilisateurs';
 $config['mod_config'] = false;
 
