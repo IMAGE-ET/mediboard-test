@@ -152,7 +152,7 @@ class CPlageOp extends CMbObject {
     $this->_year  = substr($this->date, 0, 4);
     $this->_month = substr($this->date, 5, 2);
     $this->_day   = substr($this->date, 8, 2);
-    $this->_date = "$this->_day/$this->_month/$this->_year";
+    $this->_date = "$this->_year-$this->_month-$this->_day";
     $this->_heuredeb  = substr($this->debut, 0, 2);
     $this->_minutedeb = substr($this->debut, 3, 2);
     $this->_heurefin  = substr($this->fin, 0, 2);
@@ -166,7 +166,7 @@ class CPlageOp extends CMbObject {
       $this->fin   = $this->_heurefin.":".$this->_minutefin.":00";
     if(($this->_year !== null) && ($this->_month !== null) && ($this->_day !== null)) {
       $this->date = $this->_year."-".$this->_month."-".$this->_day;
-      $this->_date = $this->_day."/".$this->_month."/".$this->_year;
+      $this->_date = $this->_year."-".$this->_month."-".$this->_day;
     }
   }
   

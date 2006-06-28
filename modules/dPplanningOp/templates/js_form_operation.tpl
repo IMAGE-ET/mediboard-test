@@ -70,7 +70,11 @@ function checkFormOperation() {
   }
   
   if(!checkCCAM()) {
-    return false
+    return false;
+  }
+  
+  if(!checkCompatOpAdm()) {
+    return false;
   }
 
   return true;
@@ -120,6 +124,28 @@ function checkDuree() {
     }
   }
   return true
+}
+
+function checkCompatOpAdm() {
+  var oOpForm     = document.editOp;
+  var oSejourForm = document.editSejour;
+  // cas des urgences
+  if(oOpForm.date.value && oSejourForm._date_entree_prevue.value) {
+    if(oOpForm.date.value < oSejourForm._date_entree_prevue.value) {
+      alert("Date d'admission superieure à la date d'opération");
+      oSejourForm._date_entree_prevue.focus();
+      return false;
+    }
+  }
+  // cas normal
+  if(oOpForm._date.value && oSejourForm._date_entree_prevue.value) {
+    if(oOpForm._date.value < oSejourForm._date_entree_prevue.value) {
+      alert("Date d'admission superieure à la date d'opération");
+      oSejourForm._date_entree_prevue.focus();
+      return false;
+    }
+  }
+  return true;
 }
 
 function modifOp() {
@@ -186,10 +212,11 @@ function setPlage(plage_id, sDate, bAdm) {
 
   if (plage_id) {
     oOpForm.plageop_id.value = plage_id;
-    oOpForm._date.value = sDate;
+    oOpForm._datestr.value = sDate;
+    var dAdm = makeDateFromLocaleDate(sDate);
+    oOpForm._date = makeDATEFromDate(dAdm);
     
     // Initialize adminission date according to operation date
-    var dAdm = makeDateFromLocaleDate(sDate);
     switch(bAdm) {
       case 0 :
         dAdm.setHours(17);
@@ -213,10 +240,10 @@ function setPlage(plage_id, sDate, bAdm) {
   
 function incFormOperationMain() {
   regFieldCalendar("editOp", "date_anesth");
-  {{if $modurgence}}
-  regFieldCalendar("editOp", "date");
-  {{/if}}
   refreshListCCAM();
+  if({{$modurgence}} && !{{$op->operation_id}}) {
+    updateEntreePrevue();
+  }
 }
 
 </script>

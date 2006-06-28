@@ -65,11 +65,13 @@
     <th>
       <label for="date" title="Choisir une date d'intervention">Date de l'intervention</label>
     </th>
-    <td class="date">
+    <td>
       <input type="hidden" name="plageop_id" value="" />
-      <div id="editOp_date_da">{{$op->date|date_format:"%d/%m/%Y"}}</div>
-      <input type="hidden" name="date" title="date|notNull" value="{{$op->date}}" onchange="updateEntreePrevue(); modifSejour()" />
-      <img id="editOp_date_trigger" src="./images/calendar.gif" alt="calendar"/>
+      <input type="hidden" name="_date" value="" />
+      <select name="date" onchange="{{if !$op->operation_id}}updateEntreePrevue();{{/if}} modifSejour()">
+        <option value="{{$today|date_format:"%Y-%m-%d"}}">{{$today|date_format:"%d/%m/%Y"}} (ajourd'hui)</option>
+        <option value="{{$tomorow|date_format:"%Y-%m-%d"}}">{{$tomorow|date_format:"%d/%m/%Y"}} (demain)</option>
+      </select>
     </td>
     <td>
       à
@@ -88,9 +90,10 @@
     <th>
       <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention</label>
       <input type="hidden" name="date" value="" />
+      <input type="hidden" name="_date" value="{{$plage->_date}}" />
       <input type="hidden" name="plageop_id" title="{{$op->_props.plageop_id}}|notNull" ondblclick="popPlage()" value="{{$plage->id}}" />
     </th>
-    <td class="readonly"><input type="text" name="_date" readonly="readonly" size="10" value="{{$plage->_date}}" /></td>
+    <td class="readonly"><input type="text" name="_datestr" readonly="readonly" size="10" value="{{$plage->_date|date_format:"%d/%m/%Y"}}" /></td>
     <td class="button"><input type="button" value="Choisir une date" onclick="popPlage()" /></td>
     {{/if}}
   </tr>
