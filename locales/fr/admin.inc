@@ -73,8 +73,6 @@
 "edit preferences"=>"éditer les preférences",
 "edit this user"=>"éditer cet utilisateur",
 "full access to module"=>"acces complet au modules",
-"module-admin-court"=>"Utilisateurs",
-"module-admin-long"=>"Administration des utilisateurs",
 "projects list"=>"liste des projets",
 "read only"=>"lecture seule",
 "read-write"=>"lecture-écriture",

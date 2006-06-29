@@ -80,7 +80,9 @@ foreach ($nav as $module) {
   if (isMbModuleVisible($modDirectory)) {
     $modName = $AppUI->_($module['mod_ui_name']);
     $tdClass = $modDirectory == $m ? "class='textSelected'" : "class='textNonSelected'";
-    echo "<td align='center' $tdClass><a href='?m=$modDirectory'><strong>$modName</strong></a></td>\n";
+    echo "<td align='center' $tdClass><a href='?m=$modDirectory'><strong>" .
+        $AppUI->_("module-".$modDirectory."-court") .
+        "</strong></a></td>\n";
   }
 }
 

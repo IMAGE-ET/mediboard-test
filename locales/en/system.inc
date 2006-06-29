@@ -1,7 +1,6 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-"module-system-court"=>"Administration",
 "Abbreviation",
 "Are you sure you want to delete this?",
 "Are you sure?",
@@ -70,7 +69,6 @@
 "install",
 "it"=>"Italian",
 "ja"=>"Japanese",
-"module-system-long"=>"System administration",
 "pl"=>"Polish",
 "pt"=>"Portugese",
 "pt_br"=>"Portuguese Brazillian",

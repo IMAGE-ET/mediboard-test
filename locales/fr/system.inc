@@ -70,8 +70,6 @@
 "install"=>"Installer",
 "it"=>"Italien",
 "ja"=>"Japonais",
-"module-system-court"=>"Administration",
-"module-system-long"=>"Administration système",
 "pl"=>"Polonais",
 "pt"=>"Portugais",
 "pt_br"=>"Brésilien",

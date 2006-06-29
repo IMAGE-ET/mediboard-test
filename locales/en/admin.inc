@@ -67,8 +67,6 @@
 "edit preferences",
 "edit this user",
 "full access to module",
-"module-admin-court"=>"Users",
-"module-admin-long"=>"Users administration",
 "projects list",
 "read only",
 "read-write",

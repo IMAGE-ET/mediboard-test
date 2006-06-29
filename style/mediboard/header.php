@@ -68,7 +68,9 @@ foreach ($nav as $module) {
 		$modIcon = dPfindImage($module['mod_ui_icon'], $module['mod_directory']);
     $modImage = dPshowImage($modIcon, 48, 48, $modName);
     $liClass = $modDirectory == $m ? "class='selected'" : "";
-		echo "<li $liClass><a href='?m=$modDirectory'>$modImage $modName</a></li>\n";
+		echo "<li $liClass><a href='?m=$modDirectory'>$modImage " .
+        $AppUI->_("module-".$modDirectory."-court") .
+        "</a></li>\n";
 	}
 }
 

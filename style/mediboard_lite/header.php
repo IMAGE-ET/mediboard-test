@@ -48,15 +48,7 @@
 ?>
 
 
-<table id="header" cellspacing="0"><!-- IE Hack: cellspacing should be useless --> 
-<!--
-<tr>
-	<td id="banner">
-		<p>Mediboard :: Système de gestion des structures de santé</p>
-		<a href='http://www.mediboard.org'><img src="./style/<?php echo $uistyle;?>/images/mbSmall.gif" alt="Logo Mediboard"  /></a>
-	</td>
-</tr>
--->
+<table id="header" cellspacing="0"><!-- IE Hack: cellspacing should be useless -->
 <tr>
 	<td id="menubar">
 		<table>
@@ -69,7 +61,9 @@ foreach ($nav as $module) {
 		$modIcon = dPfindImage($module['mod_ui_icon'], $module['mod_directory']);
     $modImage = dPshowImage($modIcon, 48, 48, $modName);
     $liClass = $modDirectory == $m ? "class='selected'" : "";
-		echo "<td align='center'><a href='?m=$modDirectory'>$modImage<br />$modName</a></td>\n";
+		echo "<td align='center'><a href='?m=$modDirectory'>$modImage<br />" .
+        $AppUI->_("module-".$modDirectory."-court") .
+        "</a></td>\n";
 	}
 }
 

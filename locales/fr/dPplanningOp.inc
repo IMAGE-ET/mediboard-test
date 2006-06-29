@@ -4,6 +4,4 @@
 "ambu"=>"Ambulatoire",
 "comp"=>"Hospitalisation complète",
 "exte"=>"Externe",
-"module-dPplanningOp-court"=>"Planining chir.",
-"module-dPplanningOp-long"=>"Planning des chirurgiens",
 "type_adm"=>"Admission en",
