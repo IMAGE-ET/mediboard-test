@@ -142,9 +142,9 @@ foreach ($nav as $module) {
     ?>
   </div>
 <?php
-
-$titleBlock = new CTitleBlock( "module-$m-long", "$m.png", $m, "$m.$a" );
-$titleBlock->addCell();
-$titleBlock->show();
-
+if(!$dialog) {
+  $titleBlock = new CTitleBlock( "module-$m-long", "$m.png", $m, "$m.$a" );
+  $titleBlock->addCell();
+  $titleBlock->show();
+}
 ?>
