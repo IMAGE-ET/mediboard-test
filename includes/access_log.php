@@ -7,7 +7,7 @@
  * @author Thomas Despoix
  */
 
-global $AppUI;
+global $AppUI, $m, $tab, $a, $dosql;
 
 //require_once($AppUI->getSystemClass("accesslog"));
 require_once($AppUI->getModuleClass("system", "accesslog"));

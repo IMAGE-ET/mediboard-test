@@ -7,40 +7,18 @@
 * @author Romain Ollivier
 */
 
-// [Begin] non-module specific code
- 
-$canRead = !getDenyRead($m);
-$canEdit = !getDenyEdit($m);
+require_once($AppUI->getSystemClass("tabindex"));
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$tabs = array();
+$tabs[] = array("form_print_planning", "Impression des plannings", 0);
+$tabs[] = array("edit_sorties", "Déplacements / Sorties", 0);
+$tabs[] = array("vw_recherche", "Chercher une chambre", 0);
+$tabs[] = array("vw_affectations", "Affectations", 1);
+$tabs[] = array("vw_idx_services", "Services", 1);
+$tabs[] = array("vw_idx_chambres", "Chambres", 1);
+$default = "form_print_planning";
 
-$AppUI->savePlace();
+$index = new CTabIndex($tabs, $default);
+$index->show();
 
-if (isset($_GET['tab'])) {
-	$AppUI->setState("{$m}IdxTab", $_GET['tab']);
-}
-
-$tab = $AppUI->getState("{$m}IdxTab");
-if (!$tab) {
-  $tab = 0;
-}
-
-$active = intval(!$tab);
-
-// [End] non-module specific code
-
-$tabBox = new CTabBox("?m=$m", "{$AppUI->cfg['root_dir']}/modules/$m/", $tab );
-
-$tabBox->add("form_print_planning", "Impression des plannings");
-$tabBox->add("edit_sorties", "Déplacements / Sorties");
-$tabBox->add("vw_recherche", "Chercher une chambre");
-if ($canEdit) {
-  $tabBox->add("vw_affectations", "Affectations");
-  $tabBox->add("vw_idx_services", "Services");
-  $tabBox->add("vw_idx_chambres", "Chambres");
-}
-
-$tabBox->show();
 ?>

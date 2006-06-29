@@ -7,24 +7,16 @@
 * @author Romain Ollivier
 */
 
-$canRead = !getDenyRead( $m );
-$canEdit = !getDenyEdit( $m );
+require_once($AppUI->getSystemClass("tabindex"));
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$tabs = array();
+$tabs[] = array("vw_idx_mediusers", "Utilisateurs", 0);
+$tabs[] = array("vw_idx_functions", "Fonctions des utilisateurs", 0);
+$tabs[] = array("vw_idx_groups", "Groupes d'utilisateurs", 0);
+$tabs[] = array("vw_idx_disciplines", "Spécialités médicales", 0);
+$default = "vw_idx_mediusers";
 
-$AppUI->savePlace();
-
-if (isset( $_GET['tab'] )) {
-	$AppUI->setState( "mediusersIdxTab", $_GET['tab'] );
-}
-$tab = $AppUI->getState( "mediusersIdxTab" ) !== NULL ? $AppUI->getState( "mediusersIdxTab" ) : 0;
-
-$tabBox = new CTabBox( "?m=$m", "{$AppUI->cfg['root_dir']}/modules/$m/", $tab );
-$tabBox->add( "vw_idx_mediusers", "Utilisateurs" );
-$tabBox->add( "vw_idx_functions", "Fonctions des utilisateurs" );
-$tabBox->add( "vw_idx_groups", "Groupes d'utilisateurs" );
-$tabBox->show();
+$index = new CTabIndex($tabs, $default);
+$index->show();
 
 ?>

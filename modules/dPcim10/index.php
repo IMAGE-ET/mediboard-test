@@ -7,30 +7,16 @@
 * @author Romain Ollivier
 */
 
-$canRead = !getDenyRead( $m );
-$canEdit = !getDenyEdit( $m );
+require_once($AppUI->getSystemClass("tabindex"));
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$tabs = array();
+$tabs[] = array("vw_idx_favoris", "Mes favoris", 0);
+$tabs[] = array("vw_find_code", "Rechercher un code", 0);
+$tabs[] = array("vw_full_code", "Affichage d'un code", 0);
+$tabs[] = array("vw_idx_chapter", "Sommaire de la CIM10", 0);
+$default = "vw_find_code";
 
-//save the workplace state
-$AppUI->savePlace();
-
-// retrieve any state parameters (temporary session variables that are not stored in db)
-
-if (isset( $_GET['tab'] )) {
-	// saves the current tab box state
-	$AppUI->setState( "dPcim10IdxTab", $_GET['tab'] );
-}
-$tab = $AppUI->getState( "dPcim10IdxTab" ) !== NULL ? $AppUI->getState( "dPcim10IdxTab" ) : 1;
-
-// build new tab box object
-$tabBox = new CTabBox( "?m=$m", "{$AppUI->cfg['root_dir']}/modules/$m/", $tab );
-$tabBox->add( "vw_idx_favoris", "Mes favoris" );
-$tabBox->add( "vw_find_code"  , "Rechercher un code" );
-$tabBox->add( "vw_full_code"  , "Affichage d'un code" );
-$tabBox->add( "vw_idx_chapter"  , "Sommaire de la CIM10" );
-$tabBox->show();
+$index = new CTabIndex($tabs, $default);
+$index->show();
 
 ?>

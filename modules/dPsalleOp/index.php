@@ -7,24 +7,14 @@
 * @author Romain Ollivier
 */
 
-$canRead = !getDenyRead( $m );
-$canEdit = !getDenyEdit( $m );
+require_once($AppUI->getSystemClass("tabindex"));
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$tabs = array();
+$tabs[] = array("vw_operations", "Salles d'opération", 0);
+$tabs[] = array("vw_reveil", "Salle de reveil", 0);
+$default = "vw_operations";
 
-$AppUI->savePlace();
-
-if (isset( $_GET['tab'] )) {
-	$AppUI->setState( 'dPsalleOpIdxTab', $_GET['tab'] );
-}
-$tab = $AppUI->getState( 'dPsalleOpIdxTab' ) !== NULL ? $AppUI->getState( 'dPsalleOpIdxTab' ) : 0;
-$active = intval( !$AppUI->getState( 'dPsalleOpIdxTab' ) );
-
-$tabBox = new CTabBox( "?m=dPsalleOp", "{$AppUI->cfg['root_dir']}/modules/dPsalleOp/", $tab );
-$tabBox->add( 'vw_operations', 'Salles d\'opération' );
-$tabBox->add( 'vw_reveil', 'Salle de reveil' );
-$tabBox->show();
+$index = new CTabIndex($tabs, $default);
+$index->show();
 
 ?>

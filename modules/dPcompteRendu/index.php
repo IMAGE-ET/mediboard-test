@@ -7,27 +7,17 @@
 * @author Romain Ollivier
 */
 
-$canRead = !getDenyRead( $m );
-$canEdit = !getDenyEdit( $m );
+require_once($AppUI->getSystemClass("tabindex"));
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$tabs = array();
+$tabs[] = array("vw_modeles", "liste des modèles", 0);
+$tabs[] = array("addedit_modeles", "Edition des modèles", 0);
+$tabs[] = array("vw_idx_aides", "Aides à la saisie", 0);
+$tabs[] = array("vw_idx_listes", "Listes de choix", 0);
+$tabs[] = array("vw_idx_packs", "Packs d'hospitalisation", 0);
+$default = "vw_modeles";
 
-$AppUI->savePlace();
-
-if (isset( $_GET['tab'] )) {
-	$AppUI->setState( 'dPcompteRenduIdxTab', $_GET['tab'] );
-}
-$tab = $AppUI->getState( 'dPcompteRenduIdxTab' ) !== NULL ? $AppUI->getState( 'dPcompteRenduIdxTab' ) : 0;
-$active = intval( !$AppUI->getState( 'dPcompteRenduIdxTab' ) );
-
-$tabBox = new CTabBox( "?m=$m", "{$AppUI->cfg['root_dir']}/modules/$m/", $tab );
-$tabBox->add('vw_modeles', 'liste des modèles');
-$tabBox->add('addedit_modeles', 'Edition des modèles');
-$tabBox->add('vw_idx_aides', 'Aides à la saisie');
-$tabBox->add('vw_idx_listes', 'Listes de choix');
-$tabBox->add('vw_idx_packs', 'Packs d\'hospitalisation');
-$tabBox->show();
+$index = new CTabIndex($tabs, $default);
+$index->show();
 
 ?>

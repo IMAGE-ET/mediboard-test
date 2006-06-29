@@ -5,34 +5,21 @@
 * @subpackage dPbloc
 * @version $Revision$
 * @author Romain Ollivier
-*/ 
+*/
 
-$canRead = !getDenyRead( $m );
-$canEdit = !getDenyEdit( $m );
+require_once($AppUI->getSystemClass("tabindex"));
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$tabs = array();
+$tabs[] = array("vw_idx_planning", "Planning de la semaine", 1);
+$tabs[] = array("vw_edit_plages", "Planning du jour", 1);
+$tabs[] = array("vw_edit_interventions", "Gestion des interventions", 1);
+$tabs[] = array("vw_urgences", "Voir les urgences", 1);
+$tabs[] = array("vw_idx_materiel", "Commande de matériel", 1);
+$tabs[] = array("vw_idx_salles", "Gestion des salles", 1);
+$tabs[] = array("print_planning", "Impression des plannings", 0);
+$default = 0;
 
-$AppUI->savePlace();
+$index = new CTabIndex($tabs, $default);
+$index->show();
 
-
-if (isset( $_GET['tab'] )) {
-	$AppUI->setState( 'dPblocIdxTab', $_GET['tab'] );
-}
-$tab = $AppUI->getState( 'dPblocIdxTab' ) !== NULL ? $AppUI->getState( 'dPblocIdxTab' ) : 0;
-$active = intval( !$AppUI->getState( 'dPblocIdxTab' ) );
-
-$tabBox = new CTabBox( "?m=dPbloc", "{$AppUI->cfg['root_dir']}/modules/dPbloc/", $tab );
-if($canEdit) {
-  $tabBox->add( "vw_idx_planning", "Planning de la semaine" );
-  $tabBox->add( "vw_edit_plages", "Planning du jour" );
-  $tabBox->add( "vw_edit_interventions", "Gestion des interventions" );
-  $tabBox->add( "vw_urgences", "Voir les urgences");
-  $tabBox->add( "vw_idx_materiel", "Commande de matériel" );
-  $tabBox->add( "vw_idx_salles", "Gestion des salles" );
-}
-$tabBox->add( "print_planning", "Impression des plannings" );
-
-$tabBox->show();
 ?>

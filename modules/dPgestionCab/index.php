@@ -7,25 +7,15 @@
 * @author Romain Ollivier
 */
 
-$canRead = !getDenyRead( $m );
-$canEdit = !getDenyEdit( $m );
+require_once($AppUI->getSystemClass("tabindex"));
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$tabs = array();
+$tabs[] = array("edit_compta", "Comptabilité", 0);
+$tabs[] = array("edit_paie", "Fiche de paie", 0);
+$tabs[] = array("edit_params", "Paramètres", 0);
+$default = "edit_compta";
 
-$AppUI->savePlace();
-
-if (isset( $_GET['tab'] )) {
-	$AppUI->setState( 'dPpmsiIdxTab', $_GET['tab'] );
-}
-$tab = $AppUI->getState( 'dPpmsiIdxTab' ) !== NULL ? $AppUI->getState( 'dPpmsiIdxTab' ) : 0;
-$active = intval( !$AppUI->getState( 'dPpmsiIdxTab' ) );
-
-$tabBox = new CTabBox( "?m=dPgestionCab", "{$AppUI->cfg['root_dir']}/modules/dPgestionCab/", $tab );
-$tabBox->add( 'edit_compta', 'Comptabilité' );
-$tabBox->add( 'edit_paie', 'Fiche de paie' );
-$tabBox->add( 'edit_params', 'Paramètres' );
-$tabBox->show();
+$index = new CTabIndex($tabs, $default);
+$index->show();
 
 ?>

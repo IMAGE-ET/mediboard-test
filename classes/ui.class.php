@@ -711,11 +711,11 @@ class CAppUI {
 */
 class CTabBox_core {
 /** @var array */
-	var $tabs=NULL;
+	var $tabs = null;
 /** @var int The active tab */
-	var $active=NULL;
+	var $active = null;
 /** @var string The base URL query string to prefix tab links */
-	var $baseHRef=NULL;
+	var $baseHRef = null;
 /** @var string The base path to prefix the include file */
 	var $baseInc;
 
@@ -725,7 +725,7 @@ class CTabBox_core {
 * @param string The base path to prefix the include file
 * @param int The active tab
 */
-	function CTabBox( $baseHRef='', $baseInc='', $active=0 ) {
+	function CTabBox( $baseHRef='', $baseInc='', $active = 0 ) {
 		$this->tabs = array();
 		$this->active = $active;
 		$this->baseHRef = ($baseHRef ? "$baseHRef&" : "?");
@@ -787,7 +787,7 @@ class CTabBox_core {
 		reset( $this->tabs );
 		$s = '';
 	// tabbed / flat view options
-		if (@$AppUI->getPref( 'TABVIEW' ) == 0) {
+		if (@$AppUI->getPref( "TABVIEW" ) == 0) {
 			$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td nowrap="nowrap">';
 			$s .= '<a href="'.$this->baseHRef.'tab=0">'.$AppUI->_('tabbed').'</a> : ';
 			$s .= '<a href="'.$this->baseHRef.'tab=-1">'.$AppUI->_('flat').'</a>';

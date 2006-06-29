@@ -7,29 +7,18 @@
 * @author Romain Ollivier
 */
 
-$canRead = !getDenyRead( $m );
-$canEdit = !getDenyEdit( $m );
+require_once($AppUI->getSystemClass("tabindex"));
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$tabs = array();
+$tabs[] = array("vw_planning", "Programmes de consultation", 0);
+$tabs[] = array("edit_planning", "Créer / Modifier un rendez-vous", 0);
+$tabs[] = array("edit_consultation", "Consultation", 0);
+$tabs[] = array("vw_dossier", "Dossiers", 0);
+$tabs[] = array("form_print_plages", "Impression des plannings", 0);
+$tabs[] = array("vw_compta", "Comptabilité", 0);
+$default = "vw_planning";
 
-$AppUI->savePlace();
-
-if (isset( $_GET['tab'] )) {
-	$AppUI->setState( 'dPcabinetIdxTab', $_GET['tab'] );
-}
-$tab = $AppUI->getState( 'dPcabinetIdxTab' ) !== NULL ? $AppUI->getState( 'dPcabinetIdxTab' ) : 0;
-$active = intval( !$AppUI->getState( 'dPcabinetIdxTab' ) );
-
-$tabBox = new CTabBox( "?m=dPcabinet", "{$AppUI->cfg['root_dir']}/modules/dPcabinet/", $tab );
-$tabBox->add( 'vw_planning', 'Programmes de consultation' );
-$tabBox->add( 'edit_planning', 'Créer / Modifier un rendez-vous' );
-$tabBox->add( 'edit_consultation', 'Consultation' );
-$tabBox->add( 'vw_dossier', 'Dossiers' );
-//$tabBox->add( 'idx_compte_rendus', 'Compte-rendus');
-$tabBox->add( 'form_print_plages', 'Impression des plannings' );
-$tabBox->add( 'vw_compta', 'Comptabilité' );
-$tabBox->show();
+$index = new CTabIndex($tabs, $default);
+$index->show();
 
 ?>

@@ -7,36 +7,15 @@
 * @author Romain OLLIVIER
 */
 
-// [Begin] non-module specific code
- 
-$canRead = !getDenyRead($m);
-$canEdit = !getDenyEdit($m);
+require_once($AppUI->getSystemClass("tabindex"));
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$tabs = array();
+$tabs[] = array("view_planning", "Planning réservations", 0);
+$tabs[] = array("edit_planning", "Administration des plages", 1);
+$tabs[] = array("view_compta", "Comptabilité", 1);
+$default = "view_planning";
 
-$AppUI->savePlace();
-
-if (isset($_GET['tab'])) {
-  $AppUI->setState("{$m}IdxTab", $_GET['tab']);
-}
-
-$tab = $AppUI->getState("{$m}IdxTab");
-if (!$tab) {
-  $tab = 0;
-}
-
-$active = intval(!$tab);
-
-// [End] non-module specific code
-
-$tabBox = new CTabBox("?m=$m", $AppUI->cfg['root_dir'] . "/modules/$m/", $tab );
-$tabBox->add("view_planning", "Planning réservations");
-if($canEdit) {
-  $tabBox->add("edit_planning", "Administration des plages");
-  $tabBox->add("view_compta", "Comptabilité");
-}
-$tabBox->show();
+$index = new CTabIndex($tabs, $default);
+$index->show();
 
 ?>

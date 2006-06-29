@@ -7,26 +7,16 @@
 * @author Romain Ollivier
 */
 
-$canRead = !getDenyRead( $m );
-$canEdit = !getDenyEdit( $m );
+require_once($AppUI->getSystemClass("tabindex"));
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$tabs = array();
+$tabs[] = array("vw_dossier", "Dossiers patient", 0);
+$tabs[] = array("edit_actes", "Codage des actes", 0);
+$tabs[] = array("labo_groupage", "Groupage GHM", 0);
+$tabs[] = array("vw_list_hospi", "Liste des hospitalisations", 0);
+$default = "vw_dossier";
 
-$AppUI->savePlace();
-
-if (isset( $_GET['tab'] )) {
-	$AppUI->setState( 'dPpmsiIdxTab', $_GET['tab'] );
-}
-$tab = $AppUI->getState( 'dPpmsiIdxTab' ) !== NULL ? $AppUI->getState( 'dPpmsiIdxTab' ) : 0;
-$active = intval( !$AppUI->getState( 'dPpmsiIdxTab' ) );
-
-$tabBox = new CTabBox( "?m=dPpmsi", "{$AppUI->cfg['root_dir']}/modules/dPpmsi/", $tab );
-$tabBox->add( 'vw_dossier', 'Dossiers patient' );
-$tabBox->add( 'edit_actes', 'Codage des actes' );
-$tabBox->add( 'labo_groupage', 'Groupage GHM' );
-$tabBox->add( 'vw_list_hospi', 'Liste des hospitalisations' );
-$tabBox->show();
+$index = new CTabIndex($tabs, $default);
+$index->show();
 
 ?>
