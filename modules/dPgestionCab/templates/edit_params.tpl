@@ -19,6 +19,7 @@
       <input type="hidden" name="dosql" value="do_mediusers_aed" />
       <input type="hidden" name="m" value="mediusers" />
       <input type="hidden" name="user_id" value="{$user->user_id}" />
+      <input type="hidden" name="function_id" value="{$user->function_id}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
