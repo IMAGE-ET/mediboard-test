@@ -205,3 +205,110 @@ CREATE TABLE `users` (
 -- 
 
 INSERT INTO `users` VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 0, 1, 'Admin', 'Person', 1, 0, 'contact@mediboard.org', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', NULL, 0, '');
+
+-- 
+-- Contenu de la table `users` et `permissions`
+-- pour les modèles d'utilisateurs
+--
+
+INSERT INTO `users` VALUES ('', '>> Accueil', '5678708573db51f90da2095407abc45e', 0, 2, 'accueil', 'accueil', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, 1, '');
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'mediusers', '-1', '3' FROM users WHERE `user_username` = '>> Accueil';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPccam', '-1', '-1' FROM users WHERE `user_username` = '>> Accueil';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcim10', '-1', '-1' FROM users WHERE `user_username` = '>> Accueil';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPadmissions', '-1', '-1' FROM users WHERE `user_username` = '>> Accueil';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPpatients', '-1', '-1' FROM users WHERE `user_username` = '>> Accueil';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPhospi', '-1', '1' FROM users WHERE `user_username` = '>> Accueil';
+
+INSERT INTO `users` VALUES ('', '>> Anesthesie', '5678708573db51f90da2095407abc45e', 0, 4, 'anesthesie', 'anesthesie', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, 1, '');
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPccam', '-1', '-1' FROM users WHERE `user_username` = '>> Anesthesie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcim10', '-1', '-1' FROM users WHERE `user_username` = '>> Anesthesie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPpatients', '-1', '-1' FROM users WHERE `user_username` = '>> Anesthesie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPhospi', '-1', '1' FROM users WHERE `user_username` = '>> Anesthesie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPbloc', '-1', '1' FROM users WHERE `user_username` = '>> Anesthesie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPplanningOp', '-1', '-1' FROM users WHERE `user_username` = '>> Anesthesie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcabinet', '-1', '-1' FROM users WHERE `user_username` = '>> Anesthesie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcompteRendu', '-1', '-1' FROM users WHERE `user_username` = '>> Anesthesie';
+
+INSERT INTO `users` VALUES ('', '>> Chirurgie', '5678708573db51f90da2095407abc45e', 0, 3, 'chirurgie', 'chirurgie', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, 1, '');
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPccam', '-1', '-1' FROM users WHERE `user_username` = '>> Chirurgie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcim10', '-1', '-1' FROM users WHERE `user_username` = '>> Chirurgie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPpatients', '-1', '-1' FROM users WHERE `user_username` = '>> Chirurgie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPhospi', '-1', '1' FROM users WHERE `user_username` = '>> Chirurgie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPbloc', '-1', '1' FROM users WHERE `user_username` = '>> Chirurgie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPplanningOp', '-1', '-1' FROM users WHERE `user_username` = '>> Chirurgie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcabinet', '-1', '-1' FROM users WHERE `user_username` = '>> Chirurgie';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcompteRendu', '-1', '-1' FROM users WHERE `user_username` = '>> Chirurgie';
+
+INSERT INTO `users` VALUES ('', '>> Direction', '5678708573db51f90da2095407abc45e', 0, 5, 'direction', 'direction', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, 1, '');
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'all', '-1', '-1' FROM users WHERE `user_username` = '>> Direction';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcabinet', '-1', '0' FROM users WHERE `user_username` = '>> Direction';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPgestionCab', '-1', '0' FROM users WHERE `user_username` = '>> Direction';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPinterop', '-1', '0' FROM users WHERE `user_username` = '>> Direction';
+
+INSERT INTO `users` VALUES ('', '>> Facturation', '5678708573db51f90da2095407abc45e', 0, 6, 'facturation', 'facturation', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, 1, '');
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'mediusers', '-1', '3' FROM users WHERE `user_username` = '>> Facturation';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPccam', '-1', '-1' FROM users WHERE `user_username` = '>> Facturation';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcim10', '-1', '-1' FROM users WHERE `user_username` = '>> Facturation';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPadmissions', '-1', '1' FROM users WHERE `user_username` = '>> Facturation';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPpatients', '-1', '-1' FROM users WHERE `user_username` = '>> Facturation';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPhospi', '-1', '1' FROM users WHERE `user_username` = '>> Facturation';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPbloc', '-1', '1' FROM users WHERE `user_username` = '>> Facturation';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPpmsi', '-1', '1' FROM users WHERE `user_username` = '>> Facturation';
+
+INSERT INTO `users` VALUES ('', '>> Hospitalisation', '5678708573db51f90da2095407abc45e', 0, 7, 'Hospitalisation', 'Hospitalisation', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', NULL, 1, '');
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'mediusers', '-1', '3' FROM users WHERE `user_username` = '>> Hospitalisation';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPccam', '-1', '-1' FROM users WHERE `user_username` = '>> Hospitalisation';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcim10', '-1', '-1' FROM users WHERE `user_username` = '>> Hospitalisation';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPadmissions', '-1', '-1' FROM users WHERE `user_username` = '>> Hospitalisation';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPpatients', '-1', '-1' FROM users WHERE `user_username` = '>> Hospitalisation';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPhospi', '-1', '-1' FROM users WHERE `user_username` = '>> Hospitalisation';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPbloc', '-1', '1' FROM users WHERE `user_username` = '>> Hospitalisation';
+
+INSERT INTO `users` VALUES ('', '>> PMSI', '5678708573db51f90da2095407abc45e', 0, 8, 'PMSI', 'PMSI', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, 1, '');
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'mediusers', '-1', '3' FROM users WHERE `user_username` = '>> PMSI';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPccam', '-1', '-1' FROM users WHERE `user_username` = '>> PMSI';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcim10', '-1', '-1' FROM users WHERE `user_username` = '>> PMSI';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPadmissions', '-1', '1' FROM users WHERE `user_username` = '>> PMSI';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPpatients', '-1', '-1' FROM users WHERE `user_username` = '>> PMSI';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPhospi', '-1', '1' FROM users WHERE `user_username` = '>> PMSI';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPbloc', '-1', '1' FROM users WHERE `user_username` = '>> PMSI';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPpmsi', '-1', '-1' FROM users WHERE `user_username` = '>> PMSI';
+
+INSERT INTO `users` VALUES ('', '>> Qualite', '5678708573db51f90da2095407abc45e', 0, 9, 'qualite', 'qualite', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, 1, '');
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'mediusers', '-1', '3' FROM users WHERE `user_username` = '>> Qualite';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPccam', '-1', '-1' FROM users WHERE `user_username` = '>> Qualite';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcim10', '-1', '-1' FROM users WHERE `user_username` = '>> Qualite';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPadmissions', '-1', '1' FROM users WHERE `user_username` = '>> Qualite';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPpatients', '-1', '-1' FROM users WHERE `user_username` = '>> Qualite';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPhospi', '-1', '1' FROM users WHERE `user_username` = '>> Qualite';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPbloc', '-1', '1' FROM users WHERE `user_username` = '>> Qualite';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPstats', '-1', '-1' FROM users WHERE `user_username` = '>> Qualite';
+
+INSERT INTO `users` VALUES ('', '>> Secretariat', '5678708573db51f90da2095407abc45e', 0, 10, 'secretariat', 'secretariat', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, 1, '');
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPccam', '-1', '-1' FROM users WHERE `user_username` = '>> Secretariat';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcim10', '-1', '-1' FROM users WHERE `user_username` = '>> Secretariat';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPpatients', '-1', '-1' FROM users WHERE `user_username` = '>> Secretariat';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPhospi', '-1', '1' FROM users WHERE `user_username` = '>> Secretariat';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPbloc', '-1', '1' FROM users WHERE `user_username` = '>> Secretariat';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPplanningOp', '-1', '-1' FROM users WHERE `user_username` = '>> Secretariat';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcabinet', '-1', '-1' FROM users WHERE `user_username` = '>> Secretariat';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcompteRendu', '-1', '-1' FROM users WHERE `user_username` = '>> Secretariat';
+
+INSERT INTO `users` VALUES ('', '>> SI', '5678708573db51f90da2095407abc45e', 0, 1, 'SI', 'SI', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, 1, '');
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'all', '-1', '-1' FROM users WHERE `user_username` = '>> SI';
+
+INSERT INTO `users` VALUES ('', '>> Survbloc', '5678708573db51f90da2095407abc45e', 0, 12, 'survbloc', 'survbloc', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, 1, '');
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'mediusers', '-1', '3' FROM users WHERE `user_username` = '>> Survbloc';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPccam', '-1', '-1' FROM users WHERE `user_username` = '>> Survbloc';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcim10', '-1', '-1' FROM users WHERE `user_username` = '>> Survbloc';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPadmissions', '-1', '1' FROM users WHERE `user_username` = '>> Survbloc';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPpatients', '-1', '-1' FROM users WHERE `user_username` = '>> Survbloc';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPhospi', '-1', '1' FROM users WHERE `user_username` = '>> Survbloc';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPbloc', '-1', '-1' FROM users WHERE `user_username` = '>> Survbloc';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPsalleOp', '-1', '-1' FROM users WHERE `user_username` = '>> Survbloc';
+
+INSERT INTO `users` VALUES ('', '>> Bloc', '5678708573db51f90da2095407abc45e', 0, 12, 'bloc', 'bloc', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, 1, '');
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'mediusers', '-1', '3' FROM users WHERE `user_username` = '>> Bloc';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPccam', '-1', '-1' FROM users WHERE `user_username` = '>> Bloc';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPcim10', '-1', '-1' FROM users WHERE `user_username` = '>> Bloc';
+INSERT INTO `permissions` (`permission_user`, `permission_grant_on`, `permission_item`, `permission_value`) SELECT users.user_id, 'dPsalleOp', '-1', '1' FROM users WHERE `user_username` = '>> Bloc';
