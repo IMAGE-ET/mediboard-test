@@ -474,22 +474,19 @@ class COperation extends CMbObject {
     
   function fillTemplate(&$template) {
   	$this->loadRefsFwd();
-    if($this->plageop_id) {
+    if ($this->plageop_id) {
       $this->_ref_plageop->loadRefsFwd();
     }
+
     $dateFormat = "%d / %m / %Y";
     $timeFormat = "%Hh%M";
+
     $template->addProperty("Admission - Date"                 , mbTranformTime(null, $this->_ref_sejour->entree_prevue, $dateFormat));
     $template->addProperty("Admission - Heure"                , mbTranformTime(null, $this->_ref_sejour->entree_prevue, $timeFormat));
     $template->addProperty("Hospitalisation - Durée"          , $this->_ref_sejour->_duree_prevue);
     $template->addProperty("Hospitalisation - Date sortie"    , mbTranformTime(null, $this->_ref_sejour->sortie_prevue, $dateFormat));
-    if($this->plageop_id) {
-      $template->addProperty("Opération - Anesthésiste - nom"   , $this->_ref_plageop->_ref_anesth->_user_last_name);
-      $template->addProperty("Opération - Anesthésiste - prénom", $this->_ref_plageop->_ref_anesth->_user_first_name);
-    } else {
-      $template->addProperty("Opération - Anesthésiste - nom"   , "");
-      $template->addProperty("Opération - Anesthésiste - prénom", "");
-    }
+    $template->addProperty("Opération - Anesthésiste - nom"   , @$this->_ref_plageop->_ref_anesth->_user_last_name);
+    $template->addProperty("Opération - Anesthésiste - prénom", @$this->_ref_plageop->_ref_anesth->_user_first_name);
     $template->addProperty("Opération - Anesthésie"           , $this->_lu_type_anesth);
     $template->addProperty("Opération - libellé"              , $this->libelle);
     $template->addProperty("Opération - CCAM - code"          , @$this->_ext_codes_ccam[0]->code);
@@ -499,7 +496,7 @@ class COperation extends CMbObject {
     $template->addProperty("Opération - CCAM3 - code"         , @$this->_ext_codes_ccam[2]->code);
     $template->addProperty("Opération - CCAM3 - description"  , @$this->_ext_codes_ccam[2]->libelleLong);
     $template->addProperty("Opération - CCAM complet"         , implode(" - ", $this->_codes_ccam));
-    $template->addProperty("Opération - salle"                , $this->_ref_plageop->_ref_salle->nom);
+    $template->addProperty("Opération - salle"                , @$this->_ref_plageop->_ref_salle->nom);
     $template->addProperty("Opération - côté"                 , $this->cote);
     $template->addProperty("Opération - date"                 , mbTranformTime(null, $this->_datetime, $dateFormat));
     $template->addProperty("Opération - heure"                , mbTranformTime(null, $this->time_operation, $timeFormat));

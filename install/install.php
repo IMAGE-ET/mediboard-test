@@ -174,7 +174,7 @@ $libraries[] = $library;
 $library = new CLibrary;
 $library->name = "FCKEditor";
 $library->url = "http://www.fckeditor.net/";
-$library->fileName = "FCKeditor_2.3b.tar.gz";
+$library->fileName = "FCKeditor_2.2.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
 
 $renamer = new CLibraryRenamer;
