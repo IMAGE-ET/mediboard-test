@@ -9,13 +9,14 @@
 
 global $utypes, $utypes_flip;
 
-require_once($AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once($AppUI->getModuleClass('admin'));
-require_once($AppUI->getModuleClass('mediusers', "functions"));
-require_once($AppUI->getModuleClass('dPcompteRendu', "pack"));
-require_once($AppUI->getModuleClass('dPplanningOp', "planning"));
-require_once($AppUI->getModuleClass('dPplanningOp', "protocole"));
+require_once($AppUI->getModuleClass("admin"));
+require_once($AppUI->getModuleClass("mediusers", "functions"));
+require_once($AppUI->getModuleClass("mediusers", "discipline"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "pack"));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
+require_once($AppUI->getModuleClass("dPplanningOp", "protocole"));
 
 $utypes_flip = array_flip($utypes);
 
@@ -32,6 +33,7 @@ class CMediusers extends CMbObject {
 
   // DB References
 	var $function_id = null;
+  var $discipline_id = null;
 
   // dotProject user fields
   var $_user_type       = null;
@@ -51,15 +53,17 @@ class CMediusers extends CMbObject {
 
   // Object references
   var $_ref_function = null;
+  var $_ref_discipline = null;
   var $_ref_packs = array();
   var $_ref_protocoles = array();
 
 	function CMediusers() {
-		$this->CMbObject( 'users_mediboard', 'user_id' );
+		$this->CMbObject( "users_mediboard", "user_id" );
 
     $this->_props["remote"] = "enum|0|1";
     $this->_props["adeli"] = "num|length|9|confidential";
     $this->_props["function_id"] = "ref|notNull";
+    $this->_props["discipline_id"] = "ref";
     
     $this->_user_props["_user_username"] = "notNull|str|minLength|3|confidential";
     $this->_user_props["_user_first_name"] = "str|confidential";
@@ -91,45 +95,45 @@ class CMediusers extends CMbObject {
   
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      'label' => 'opération(s) ', 
-      'name' => 'operations', 
-      'idfield' => 'operation_id', 
-      'joinfield' => 'chir_id'
+      "label" => "opération(s)", 
+      "name" => "operations", 
+      "idfield" => "operation_id", 
+      "joinfield" => "chir_id"
     );
 
     $tables[] = array (
-      'label' => 'acte(s) CCAM', 
-      'name' => 'acte_ccam', 
-      'idfield' => 'acte_id', 
-      'joinfield' => 'executant_id'
+      "label" => "acte(s) CCAM", 
+      "name" => "acte_ccam", 
+      "idfield" => "acte_id", 
+      "joinfield" => "executant_id"
     );
 
     $tables[] = array (
-      'label' => 'plage(s) de consultation', 
-      'name' => 'plageconsult', 
-      'idfield' => 'plageconsult_id', 
-      'joinfield' => 'chir_id'
+      "label" => "plage(s) de consultation", 
+      "name" => "plageconsult", 
+      "idfield" => "plageconsult_id", 
+      "joinfield" => "chir_id"
     );
 
     $tables[] = array (
-      'label' => 'plage(s) opératoire(s) (chirurgien) ', 
-      'name' => 'plagesop', 
-      'idfield' => 'id', 
-      'joinfield' => 'chir_id'
+      "label" => "plage(s) opératoire(s) (chirurgien)", 
+      "name" => "plagesop", 
+      "idfield" => "id", 
+      "joinfield" => "chir_id"
     );
 
     $tables[] = array (
-      'label' => 'plage(s) opératoire(s) (anesthésiste) ', 
-      'name' => 'plagesop', 
-      'idfield' => 'id', 
-      'joinfield' => 'anesth_id'
+      "label" => "plage(s) opératoire(s) (anesthésiste)", 
+      "name" => "plagesop", 
+      "idfield" => "id", 
+      "joinfield" => "anesth_id"
     );
 
     $tables[] = array (
-      'label' => 'Pack(s) de documents', 
-      'name' => 'pack', 
-      'idfield' => 'pack_id', 
-      'joinfield' => 'chir_id'
+      "label" => "Pack(s) de documents", 
+      "name" => "pack", 
+      "idfield" => "pack_id", 
+      "joinfield" => "chir_id"
     );
 
     return parent::canDelete($msg, $oid, $tables);
@@ -184,6 +188,8 @@ class CMediusers extends CMbObject {
     // Forward references
     $this->_ref_function = new CFunctions;
     $this->_ref_function->load($this->function_id);
+    $this->_ref_discipline = new CDiscipline;
+    $this->_ref_discipline->load($this->discipline_id);
   }
 
   function loadRefsBack() {
@@ -228,6 +234,8 @@ class CMediusers extends CMbObject {
       $sql = "UPDATE `users_mediboard` SET";
       if($this->function_id !== null)
         $sql .= "\n`function_id` = '$this->function_id',";
+      if($this->function_id !== null)
+        $sql .= "\n`discipline_id` = '$this->discipline_id',";
       if($this->remote !== null)
         $sql .= "\n`remote` = '$this->remote',";
       if($this->adeli !== null)
@@ -236,9 +244,10 @@ class CMediusers extends CMbObject {
               "\nWHERE `user_id` = '$this->user_id'";
     } else {
       $this->user_id = $dPuser->user_id;
+      mbTrace($this, "mediuser", true);
       $sql = "INSERT INTO `users_mediboard`" .
-          "( `user_id` , `function_id`,  `remote`, `adeli`)" .
-          "VALUES ('$this->user_id', '$this->function_id', '$this->remote', '$this->adeli')";
+          "( `user_id` , `function_id`, `discipline_id` ,  `remote`, `adeli`)" .
+          "VALUES ('$this->user_id', '$this->function_id', '$this->discipline_id' , '$this->remote', '$this->adeli')";
     }
 
     db_exec($sql);
@@ -260,7 +269,7 @@ class CMediusers extends CMbObject {
   function insFunctionPermission() {
     $perm = new CPermission;
     $perm->permission_user = $this->user_id; 
-    $perm->permission_grant_on = 'mediusers';
+    $perm->permission_grant_on = "mediusers";
     $perm->permission_item = $this->function_id;
     $perm->store();
   }

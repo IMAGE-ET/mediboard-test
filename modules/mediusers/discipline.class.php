@@ -44,7 +44,7 @@ class CDiscipline extends CMbObject {
       "label" => "utilisateurs", 
       "name" => "users_mediboard", 
       "idfield" => "user_id", 
-      "joinfield" => "specialite_id"
+      "joinfield" => "discipline_id"
     );
     
     return parent::canDelete( $msg, $oid, $tables );

@@ -12,6 +12,7 @@ global $AppUI, $canRead, $canEdit, $m;
 require_once($AppUI->getModuleClass("admin"));
 require_once($AppUI->getModuleClass("mediusers", "mediusers"));
 require_once($AppUI->getModuleClass("mediusers", "functions"));
+require_once($AppUI->getModuleClass("mediusers", "discipline"));
 
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
@@ -25,6 +26,11 @@ $mediuserSel->load(mbGetValueFromGetOrSession("user_id"));
 $order = array("group_id", "text");
 $functions = new CFunctions;
 $functions = $functions->loadList(null, $order);
+
+// Récupération des disciplines
+$order = "text";
+$disciplines = new CDiscipline;
+$disciplines = $disciplines->loadList(null, $order);
 
 // Récuperation des utilisateurs
 foreach ($functions as $key => $function) {
@@ -45,6 +51,7 @@ $smarty = new CSmartyDP;
 $smarty->assign('mediuserSel', $mediuserSel);
 $smarty->assign('profiles', $profiles);
 $smarty->assign('functions', $functions);
+$smarty->assign('disciplines', $disciplines);
 
 $smarty->display('vw_idx_mediusers.tpl');
 

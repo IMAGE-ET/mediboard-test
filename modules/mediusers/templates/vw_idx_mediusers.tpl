@@ -138,10 +138,23 @@ function toggleFunction(function_id) {
           <th><label for="function_id" title="Fonction de l'utilisateur au sein de l'établissement. Obligatoire">Fonction</label></th>
           <td>
             <select name="function_id" title="{$mediuserSel->_props.function_id}">
-              <option>&mdash; Choisir une fonction &mdash;</option>
+              <option value="">&mdash; Choisir une fonction &mdash;</option>
               {foreach from=$functions item=curr_function}
               <option value="{$curr_function->function_id}" {if $curr_function->function_id == $mediuserSel->function_id} selected="selected" {/if}>
                 {$curr_function->text}
+              </option>
+              {/foreach}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th><label for="discipline_id" title="Spécialité de l'utilisateur. Optionnel">Spécialité</label></th>
+          <td>
+            <select name="discipline_id" title="{$mediuserSel->_props.discipline_id}">
+              <option value="">&mdash; Choisir une spécialité &mdash;</option>
+              {foreach from=$disciplines item=curr_discipline}
+              <option value="{$curr_discipline->discipline_id}" {if $curr_discipline->discipline_id == $mediuserSel->discipline_id} selected="selected" {/if}>
+                {$curr_discipline->text|strtolower}
               </option>
               {/foreach}
             </select>
