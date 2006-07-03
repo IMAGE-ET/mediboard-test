@@ -560,9 +560,14 @@ class CAppUI {
     $sql = "SELECT remote FROM users_mediboard WHERE user_id = $obj->user_id";
     // If can't find remote info, remote info doesn't exist so don't check
     $remote = 1; // 1 IS don't check value
-    if ($cur = db_exec( $sql )) {
-      if ($row = db_fetch_row($cur)) {
-        $remote = intval($row[0]);
+    $sql = "SHOW TABLES FROM `mediboard` LIKE 'users_mediboard'";
+    $result = db_loadList( $sql );
+    
+    if(count($result)) {
+      if ($cur = db_exec( $sql )) {
+        if ($row = db_fetch_row($cur)) {
+          $remote = intval($row[0]);
+        }
       }
     }
     
