@@ -241,7 +241,7 @@ function setPlage(plage_id, sDate, bAdm) {
 function incFormOperationMain() {
   regFieldCalendar("editOp", "date_anesth");
   refreshListCCAM();
-  if({{$modurgence}} && !{{$op->operation_id}}) {
+  if({{$modurgence && !$op->operation_id}}) {
     updateEntreePrevue();
   }
 }
