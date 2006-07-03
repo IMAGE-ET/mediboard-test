@@ -9,98 +9,95 @@
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
-$config['mod_name'] = 'dPbloc';
-$config['mod_version'] = '0.13';
-$config['mod_directory'] = 'dPbloc';
-$config['mod_setup_class'] = 'CSetupdPbloc';
-$config['mod_type'] = 'user';
-$config['mod_ui_name'] = 'Planning Bloc';
-$config['mod_ui_icon'] = 'dPbloc.png';
-$config['mod_description'] = 'Gestion du bloc opératoire';
-$config['mod_config'] = true;
+$config["mod_name"] = "dPbloc";
+$config["mod_version"] = "0.13";
+$config["mod_directory"] = "dPbloc";
+$config["mod_setup_class"] = "CSetupdPbloc";
+$config["mod_type"] = "user";
+$config["mod_ui_name"] = "Planning Bloc";
+$config["mod_ui_icon"] = "dPbloc.png";
+$config["mod_description"] = "Gestion du bloc opératoire";
+$config["mod_config"] = true;
 
-if (@$a == 'setup') {
-	echo dPshowModuleConfig( $config );
+if (@$a == "setup") {
+  echo dPshowModuleConfig( $config );
 }
 
 class CSetupdPbloc {
 
-	function configure() {
-	global $AppUI;
-		$AppUI->redirect( 'm=dPbloc&a=configure' );
-  		return true;
-	}
+  function configure() {
+    global $AppUI;
+    $AppUI->redirect( "m=dPbloc&a=configure" );
+    return true;
+  }
 
-	function remove() {
-		db_exec( "DROP TABLE plagesop;" );
-		db_exec( "DROP TABLE sallesbloc;" );
-		return null;
-	}
+  function remove() {
+    db_exec( "DROP TABLE plagesop;" );
+    db_exec( "DROP TABLE sallesbloc;" );
+    return null;
+  }
 
+  function upgrade($old_version) {
+    switch ($old_version) {
+      case "all":
+      case "0.1":
+        $sql = "ALTER TABLE `plagesop` ADD INDEX ( `id_chir` );";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `plagesop` ADD INDEX ( `id_anesth` )";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `plagesop` ADD INDEX ( `id_spec` )";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `plagesop` ADD INDEX ( `id_salle` )";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `plagesop` ADD INDEX ( `date` )";
+        db_exec( $sql ); db_error();
+      case "0.11":
+        $sql = "ALTER TABLE `plagesop` ADD `chir_id` BIGINT DEFAULT '0' NOT NULL AFTER `id` ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `plagesop` ADD INDEX ( `chir_id` ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `plagesop` ADD `anesth_id` BIGINT DEFAULT '0' NOT NULL AFTER `chir_id` ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `plagesop` ADD INDEX ( `anesth_id` ) ;";
+        db_exec( $sql ); db_error();
+        $this->swapPratIds();
+      case "0.12":
+        $sql = "ALTER TABLE `sallesbloc` ADD `stats` TINYINT DEFAULT '0' NOT NULL AFTER `nom` ;";
+        db_exec( $sql ); db_error();
+      case "0.13":
+        return "0.13";
+    }
+    return false;
+  }
 
-	function upgrade( $old_version ) {
-
-		switch ( $old_version ) {
-		case "all":
-		case "0.1":
-		  $sql = "ALTER TABLE `plagesop` ADD INDEX ( `id_chir` );";
-		  db_exec( $sql ); db_error();
-		  $sql = "ALTER TABLE `plagesop` ADD INDEX ( `id_anesth` )";
-		  db_exec( $sql ); db_error();
-		  $sql = "ALTER TABLE `plagesop` ADD INDEX ( `id_spec` )";
-		  db_exec( $sql ); db_error();
-		  $sql = "ALTER TABLE `plagesop` ADD INDEX ( `id_salle` )";
-		  db_exec( $sql ); db_error();
-		  $sql = "ALTER TABLE `plagesop` ADD INDEX ( `date` )";
-		  db_exec( $sql ); db_error();
-		case "0.11":
-      $sql = "ALTER TABLE `plagesop` ADD `chir_id` BIGINT DEFAULT '0' NOT NULL AFTER `id` ;";
-      db_exec( $sql ); db_error();
-      $sql = "ALTER TABLE `plagesop` ADD INDEX ( `chir_id` ) ;";
-      db_exec( $sql ); db_error();
-      $sql = "ALTER TABLE `plagesop` ADD `anesth_id` BIGINT DEFAULT '0' NOT NULL AFTER `chir_id` ;";
-      db_exec( $sql ); db_error();
-      $sql = "ALTER TABLE `plagesop` ADD INDEX ( `anesth_id` ) ;";
-      db_exec( $sql ); db_error();
-      $this->swapPratIds();
-      return true;
-    case "0.12":
-      $sql = "ALTER TABLE `sallesbloc` ADD `stats` TINYINT DEFAULT '0' NOT NULL AFTER `nom` ;";
-      db_exec( $sql ); db_error();
-    case "0.13":
-			return "0.13";
-		}
-		return false;
-	}
-
-	function install() {
-		$sql = "CREATE TABLE plagesop (
-					id bigint(20) NOT NULL auto_increment,
-					id_chir varchar(20) NOT NULL default '0',
-					id_anesth varchar(20) default NULL,
-					id_spec tinyint(4) default NULL,
-					id_salle tinyint(4) NOT NULL default '0',
-					date date NOT NULL default '0000-00-00',
-					debut time NOT NULL default '00:00:00',
-					fin time NOT NULL default '00:00:00',
-					PRIMARY KEY  (id)
-					) TYPE=MyISAM COMMENT='Table des plages d''opération';";
-		db_exec( $sql ); db_error();
-		$sql = "CREATE TABLE sallesbloc (
-  					id tinyint(4) NOT NULL auto_increment,
-					nom varchar(50) NOT NULL default '',
-					PRIMARY KEY  (id)
-					) TYPE=MyISAM COMMENT='Table des salles d''opération du bloc' AUTO_INCREMENT=6 ;";
-		db_exec( $sql ); db_error();
-		$this->upgrade("all");
-		return null;
-	}
+  function install() {
+    $sql = "CREATE TABLE plagesop (
+          id bigint(20) NOT NULL auto_increment,
+          id_chir varchar(20) NOT NULL default '0',
+          id_anesth varchar(20) default NULL,
+          id_spec tinyint(4) default NULL,
+          id_salle tinyint(4) NOT NULL default '0',
+          date date NOT NULL default '0000-00-00',
+          debut time NOT NULL default '00:00:00',
+          fin time NOT NULL default '00:00:00',
+          PRIMARY KEY  (id)
+          ) TYPE=MyISAM COMMENT='Table des plages d\'opération';";
+    db_exec( $sql ); db_error();
+    $sql = "CREATE TABLE sallesbloc (
+            id tinyint(4) NOT NULL auto_increment,
+            nom varchar(50) NOT NULL default '',
+            PRIMARY KEY  (id)
+            ) TYPE=MyISAM COMMENT='Table des salles d\'opération du bloc';";
+    db_exec( $sql ); db_error();
+    $this->upgrade("all");
+    return null;
+  }
   
   function swapPratIds() {
     global $AppUI;
     set_time_limit( 1800 );
     ignore_user_abort( 1 );
-    require_once( $AppUI->getModuleClass('admin') );
+    require_once( $AppUI->getModuleClass("admin") );
     $user = new CUser;
     
     // Changement des chirurgiens
@@ -109,7 +106,7 @@ class CSetupdPbloc {
         "\nGROUP BY id_chir";
     $listPlages = db_loadList($sql);
     foreach($listPlages as $key => $plage) {
-      $where['user_username'] = "= '".$plage['id_chir']."'";
+      $where["user_username"] = "= '".$plage["id_chir"]."'";
       $user->loadObject($where);
       if($user->user_id) {
         $sql = "UPDATE plagesop" .
@@ -125,7 +122,7 @@ class CSetupdPbloc {
         "\nGROUP BY id_anesth";
     $listPlages = db_loadList($sql);
     foreach($listPlages as $key => $plage) {
-      $where['user_username'] = "= '".$plage['id_anesth']."'";
+      $where["user_username"] = "= '".$plage["id_anesth"]."'";
       $user->loadObject($where);
       if($user->user_id) {
         $sql = "UPDATE plagesop" .

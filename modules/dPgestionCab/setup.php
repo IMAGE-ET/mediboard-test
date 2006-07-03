@@ -9,59 +9,59 @@
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
-$config['mod_name'] = 'dPgestionCab';
-$config['mod_version'] = '0.12';
-$config['mod_directory'] = 'dPgestionCab';
-$config['mod_setup_class'] = 'CSetupdPgestionCab';
-$config['mod_type'] = 'user';
-$config['mod_ui_name'] = 'Gestion Cab.';
-$config['mod_ui_icon'] = 'dPgestionCab.png';
-$config['mod_description'] = 'Gestion comptable de cabinet';
-$config['mod_config'] = true;
+$config["mod_name"] = "dPgestionCab";
+$config["mod_version"] = "0.12";
+$config["mod_directory"] = "dPgestionCab";
+$config["mod_setup_class"] = "CSetupdPgestionCab";
+$config["mod_type"] = "user";
+$config["mod_ui_name"] = "Gestion Cab.";
+$config["mod_ui_icon"] = "dPgestionCab.png";
+$config["mod_description"] = "Gestion comptable de cabinet";
+$config["mod_config"] = true;
 
-if (@$a == 'setup') {
-	echo dPshowModuleConfig( $config );
+if (@$a == "setup") {
+  echo dPshowModuleConfig( $config );
 }
 
 class CSetupdPgestionCab {
 
-	function configure() {
-	global $AppUI;
-		$AppUI->redirect( 'm=dPgestionCab&a=configure' );
-  		return true;
-	}
+  function configure() {
+    global $AppUI;
+    $AppUI->redirect( "m=dPgestionCab&a=configure" );
+    return true;
+  }
 
-	function remove() {
+  function remove() {
     db_exec( "DROP TABLE `gestioncab`;" ); db_error();
     db_exec( "DROP TABLE `rubrique_gestioncab`;" ); db_error();
     db_exec( "DROP TABLE `mode_paiement`;" ); db_error();
     db_exec( "DROP TABLE `params_paie`;" ); db_error();
     db_exec( "DROP TABLE `fiche_paie`;" ); db_error();
-		return null;
-	}
+    return null;
+  }
 
-	function upgrade( $old_version ) {
-		switch ( $old_version ) {
-		case "all":
-		case "0.1":
-      $sql = "ALTER TABLE fiche_paie" .
-          "\nADD `conges_payes` FLOAT NOT NULL;";
-      db_exec( $sql ); db_error();
+  function upgrade( $old_version ) {
+    switch ( $old_version ) {
+      case "all":
+      case "0.1":
+        $sql = "ALTER TABLE fiche_paie" .
+            "\nADD `conges_payes` FLOAT NOT NULL;";
+        db_exec( $sql ); db_error();
+  
+      case "0.11":
+        $sql = "ALTER TABLE fiche_paie" .
+            "\nADD `prime_speciale` FLOAT NOT NULL";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE params_paie" .
+            "\nADD `matricule` VARCHAR(15)";
+        db_exec( $sql ); db_error();
+      case "0.12":
+        return "0.12";
+    }
+    return false;
+  }
 
-    case "0.11":
-      $sql = "ALTER TABLE fiche_paie" .
-          "\nADD `prime_speciale` FLOAT NOT NULL";
-      db_exec( $sql ); db_error();
-      $sql = "ALTER TABLE params_paie" .
-          "\nADD `matricule` VARCHAR(15)";
-      db_exec( $sql ); db_error();
-    case "0.12":
-			return "0.12";
-		}
-		return false;
-	}
-
-	function install() {
+  function install() {
     $sql = "CREATE TABLE `gestioncab` (
               `gestioncab_id` INT NOT NULL AUTO_INCREMENT ,
               `function_id` INT NOT NULL ,
@@ -74,7 +74,7 @@ class CSetupdPgestionCab {
               `rques` TEXT,
               PRIMARY KEY ( `gestioncab_id` ) ,
               INDEX ( `function_id` , `rubrique_id` , `mode_paiement_id` )
-            ) COMMENT = 'Table des lignes de la comptabilité de cabinet';";
+            ) TYPE=MyISAM COMMENT = 'Table des lignes de la comptabilité de cabinet';";
     db_exec( $sql ); db_error();
     $sql = "CREATE TABLE `rubrique_gestioncab` (
               `rubrique_id` INT NOT NULL AUTO_INCREMENT ,
@@ -82,7 +82,7 @@ class CSetupdPgestionCab {
               `nom` VARCHAR( 30 ) DEFAULT 'divers' NOT NULL ,
               PRIMARY KEY ( `rubrique_id` ) ,
               INDEX ( `function_id` )
-            ) COMMENT = 'Table des rubriques pour la gestion comptable de cabinet';";
+            ) TYPE=MyISAM COMMENT = 'Table des rubriques pour la gestion comptable de cabinet';";
     db_exec( $sql ); db_error();
     $sql = "INSERT INTO `rubrique_gestioncab` ( `rubrique_id` , `function_id` , `nom` )
             VALUES ('', '0', 'divers');";
@@ -93,7 +93,7 @@ class CSetupdPgestionCab {
               `nom` VARCHAR( 30 ) DEFAULT 'inconnu' NOT NULL ,
               PRIMARY KEY ( `mode_paiement_id` ) ,
               INDEX ( `function_id` )
-            ) COMMENT = 'Table des modes de règlement';";
+            ) TYPE=MyISAM COMMENT = 'Table des modes de règlement';";
     db_exec( $sql ); db_error();
     $sql = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` )
             VALUES ('', '0', 'Chèque');";
@@ -137,7 +137,7 @@ class CSetupdPgestionCab {
               `ape` VARCHAR(4) NOT NULL ,
               PRIMARY KEY ( `params_paie_id` ) ,
               INDEX ( `user_id` )
-            ) COMMENT = 'Paramètres fiscaux pour les fiches de paie';";
+            ) TYPE=MyISAM COMMENT = 'Paramètres fiscaux pour les fiches de paie';";
     db_exec( $sql ); db_error();
     $sql = "CREATE TABLE `fiche_paie` (
               `fiche_paie_id` BIGINT NOT NULL AUTO_INCREMENT ,
@@ -152,12 +152,12 @@ class CSetupdPgestionCab {
               `anciennete` FLOAT NOT NULL ,
               PRIMARY KEY ( `fiche_paie_id` ) ,
               INDEX ( `params_paie_id` )
-            ) COMMENT = 'Table des fiches de paie';";
+            ) TYPE=MyISAM COMMENT = 'Table des fiches de paie';";
     db_exec( $sql ); db_error();
-		
-		$this->upgrade("all");
-		return null;
-	}
+    
+    $this->upgrade("all");
+    return null;
+  }
 }
 
 ?>

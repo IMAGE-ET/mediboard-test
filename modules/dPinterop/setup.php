@@ -20,37 +20,34 @@ $config["mod_description"] = "Module d'interopérabilité pour Mediboard";
 $config["mod_config"] = true;
 
 if (@$a == "setup") {
-	echo dPshowModuleConfig( $config );
+  echo dPshowModuleConfig($config);
 }
 
 class CSetupdPinterop {
 
-	function configure() {
+  function configure() {
     global $AppUI;
-		$AppUI->redirect( "m=dPinterop&a=configure" );
-  		return true;
-	}
+    $AppUI->redirect("m=dPinterop&a=configure");
+    return true;
+  }
 
-	function remove() {
+  function remove() {
+    return null;
+  }
 
-		return null;
-	}
+  function upgrade($old_version) {
+    switch ($old_version) {
+      case "all":
+      case "0.1":
+        return "0.1";
+    }
+    return false;
+  }
 
-	function upgrade( $old_version ) {
-		switch ( $old_version )
-		{
-		case "all":
-		case "0.1":
-			return "0.1";
-		}
-
-		return false;
-	}
-
-	function install() {
+  function install() {
     $this->upgrade("all");
-		return null;
-	}
+    return null;
+  }
 }
 
 ?>

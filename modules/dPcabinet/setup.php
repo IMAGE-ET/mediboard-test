@@ -12,47 +12,47 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
-$config['mod_name'] = 'dPcabinet';
-$config['mod_version'] = '0.38';
-$config['mod_directory'] = 'dPcabinet';
-$config['mod_setup_class'] = 'CSetupdPcabinet';
-$config['mod_type'] = 'user';
-$config['mod_ui_name'] = 'Cabinet';
-$config['mod_ui_icon'] = 'dPcabinet.png';
-$config['mod_description'] = 'Gestion de cabinet de consultation';
-$config['mod_config'] = true;
+$config["mod_name"] = "dPcabinet";
+$config["mod_version"] = "0.38";
+$config["mod_directory"] = "dPcabinet";
+$config["mod_setup_class"] = "CSetupdPcabinet";
+$config["mod_type"] = "user";
+$config["mod_ui_name"] = "Cabinet";
+$config["mod_ui_icon"] = "dPcabinet.png";
+$config["mod_description"] = "Gestion de cabinet de consultation";
+$config["mod_config"] = true;
 
-if (@$a == 'setup') {
-	echo dPshowModuleConfig( $config );
+if (@$a == "setup") {
+  echo dPshowModuleConfig($config);
 }
 
 class CSetupdPcabinet {
 
-	function configure() {
-	global $AppUI;
-		$AppUI->redirect( 'm=dPcabinet&a=configure' );
-  		return true;
-	}
+  function configure() {
+    global $AppUI;
+    $AppUI->redirect("m=dPcabinet&a=configure");
+    return true;
+  }
 
-	function remove() {
-    db_exec( "DROP TABLE consultation;" ); db_error();
-    db_exec( "DROP TABLE consultation_anesth;" ); db_error();
-    db_exec( "DROP TABLE plageconsult;" ); db_error();
-    db_exec( "DROP TABLE files_mediboard;" ); db_error();
-    db_exec( "DROP TABLE files_index_mediboard;" ); db_error();
-    db_exec( "DROP TABLE tarifs;" ); db_error();
-    db_exec( "DROP TABLE examaudio;"); db_error();
-		return null;
-	}
+  function remove() {
+    db_exec("DROP TABLE consultation;");          db_error();
+    db_exec("DROP TABLE consultation_anesth;");   db_error();
+    db_exec("DROP TABLE plageconsult;");          db_error();
+    db_exec("DROP TABLE files_mediboard;");       db_error();
+    db_exec("DROP TABLE files_index_mediboard;"); db_error();
+    db_exec("DROP TABLE tarifs;");                db_error();
+    db_exec("DROP TABLE examaudio;");             db_error();
+    return null;
+  }
 
-	function upgrade( $old_version ) {
-		switch ( $old_version ) {
-  		case "all":
-  		case "0.1":
-  		  $sql = "ALTER TABLE plageconsult ADD freq TIME DEFAULT '00:15:00' NOT NULL AFTER date ;";
-  		  db_exec( $sql ); db_error();
+  function upgrade( $old_version ) {
+    switch ( $old_version ) {
+      case "all":
+      case "0.1":
+        $sql = "ALTER TABLE plageconsult ADD freq TIME DEFAULT '00:15:00' NOT NULL AFTER date ;";
+        db_exec( $sql ); db_error();
 
-  		case "0.2":
+      case "0.2":
         $sql = "ALTER TABLE consultation ADD compte_rendu TEXT DEFAULT NULL";
         db_exec( $sql ); db_error();
 
@@ -84,8 +84,9 @@ class CSetupdPcabinet {
                 `description` VARCHAR( 50 ) ,
                 `valeur` TINYINT,
                 PRIMARY KEY ( `tarif_id` ) ,
-                INDEX ( `chir_id` , `function_id` )
-                ) COMMENT = 'table des tarifs de consultation';";
+                INDEX ( `chir_id`),
+                INDEX ( `function_id` )
+                ) TYPE=MyISAM COMMENT = 'table des tarifs de consultation';";
         db_exec( $sql ); db_error();
         $sql = "ALTER TABLE `consultation` ADD `tarif` TINYINT,
                 ADD `type_tarif` ENUM( 'cheque', 'CB', 'especes', 'tiers', 'autre' ) ;";
@@ -123,7 +124,7 @@ class CSetupdPcabinet {
         
       case "0.28":
         $sql = "ALTER TABLE `consultation`" .
-        		"\nADD `date_paiement` DATE AFTER `paye` ;";
+            "\nADD `date_paiement` DATE AFTER `paye` ;";
         db_exec( $sql ); db_error();
 
         $sql = "UPDATE consultation, plageconsult
@@ -156,7 +157,7 @@ class CSetupdPcabinet {
           PRIMARY KEY ( `consultation_anesth_id` ) ,
           INDEX ( `consultation_id`) ,
           INDEX ( `operation_id` )
-          ) COMMENT = 'Consultations d\'anesthésie';";
+          ) TYPE=MyISAM COMMENT = 'Consultations d\'anesthésie';";
         db_exec( $sql ); db_error();
         
       case "0.30":
@@ -199,7 +200,7 @@ class CSetupdPcabinet {
           "\n`droite_aerien` VARCHAR( 64 ) ," .
           "\n`droite_osseux` VARCHAR( 64 ) ," .
           "\nPRIMARY KEY ( `examaudio_id` ) ," .
-          "\nINDEX ( `consultation_id` ))";
+          "\nINDEX ( `consultation_id` )) TYPE=MyISAM";
           
         db_exec( $sql ); db_error();
       case "0.32":
@@ -257,14 +258,14 @@ class CSetupdPcabinet {
         db_exec( $sql ); db_error();
             
       case "0.38":
-  	    return "0.38";
-		}
+        return "0.38";
+    }
 
-		return false;
-	}
+    return false;
+  }
 
-	function install() {
-		$sql = "CREATE TABLE consultation (
+  function install() {
+    $sql = "CREATE TABLE consultation (
                 consultation_id bigint(20) NOT NULL auto_increment,
                 plageconsult_id bigint(20) NOT NULL default '0',
                 patient_id bigint(20) NOT NULL default '0',
@@ -277,8 +278,8 @@ class CSetupdPcabinet {
                 PRIMARY KEY  (consultation_id),
                 KEY plageconsult_id (plageconsult_id,patient_id)
                 ) TYPE=MyISAM COMMENT='Table des consultations';";
-		db_exec( $sql ); db_error();
-		$sql = "CREATE TABLE plageconsult (
+    db_exec( $sql ); db_error();
+    $sql = "CREATE TABLE plageconsult (
                 plageconsult_id bigint(20) NOT NULL auto_increment,
                 chir_id bigint(20) NOT NULL default '0',
                 date date NOT NULL default '0000-00-00',
@@ -287,8 +288,8 @@ class CSetupdPcabinet {
                 PRIMARY KEY  (plageconsult_id),
                 KEY chir_id (chir_id)
                 ) TYPE=MyISAM COMMENT='Table des plages de consultation des médecins';";
-		db_exec( $sql ); db_error();
-		$sql = "CREATE TABLE files_mediboard (
+    db_exec( $sql ); db_error();
+    $sql = "CREATE TABLE files_mediboard (
                 file_id int(11) NOT NULL auto_increment,
                 file_real_filename varchar(255) NOT NULL default '',
                 file_consultation bigint(20) NOT NULL default '0',
@@ -307,7 +308,7 @@ class CSetupdPcabinet {
                 KEY idx_file_operation (file_operation),
                 KEY idx_file_parent (file_parent)
               ) TYPE=MyISAM;";
-		db_exec( $sql ); db_error();
+    db_exec( $sql ); db_error();
         $sql = "CREATE TABLE files_index_mediboard (
                 file_id int(11) NOT NULL default '0',
                 word varchar(50) NOT NULL default '',
@@ -316,10 +317,10 @@ class CSetupdPcabinet {
                 KEY idx_fwrd (word),
                 KEY idx_wcnt (word_placement)
                 ) TYPE=MyISAM;";
-		db_exec( $sql ); db_error();
+    db_exec( $sql ); db_error();
     $this->upgrade("all");
-		return null;
-	}
+    return null;
+  }
 }
 
 ?>

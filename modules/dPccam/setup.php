@@ -9,34 +9,30 @@
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
-$config['mod_name'] = 'dPccam';
-$config['mod_version'] = '0.1';
-$config['mod_directory'] = 'dPccam';
-$config['mod_setup_class'] = 'CSetupdPccam';
-$config['mod_type'] = 'user';
-$config['mod_ui_name'] = 'CCAM';
-$config['mod_ui_icon'] = 'dPccam.png';
-$config['mod_description'] = 'Aide au codage CCAM';
-$config['mod_config'] = true;
+$config["mod_name"] = "dPccam";
+$config["mod_version"] = "0.1";
+$config["mod_directory"] = "dPccam";
+$config["mod_setup_class"] = "CSetupdPccam";
+$config["mod_type"] = "user";
+$config["mod_ui_name"] = "CCAM";
+$config["mod_ui_icon"] = "dPccam.png";
+$config["mod_description"] = "Aide au codage CCAM";
+$config["mod_config"] = true;
 
-// show module configuration with the dPframework (if requested via http)
-if (@$a == 'setup') {
-	echo dPshowModuleConfig( $config );
+if (@$a == "setup") {
+	echo dPshowModuleConfig($config);
 }
 
 class CSetupdPccam {
 
 	function configure() {
 		global $AppUI;
-		// load module specific configuration page
-		$AppUI->redirect( 'm=dPccam&a=configure' );
-		
-  		return true;
+		$AppUI->redirect( "m=dPccam&a=configure" );
+		return true;
 	}
 
 	function remove() {
 		db_exec( "DROP TABLE ccamfavoris;" );
-
 		return null;
 	}
 
@@ -47,7 +43,6 @@ class CSetupdPccam {
 			case "0.1":
 				return "0.1";
 		}
-
 		return false;
 	}
 
@@ -58,7 +53,6 @@ class CSetupdPccam {
 				`favoris_code` varchar(7) NOT NULL default '',
 				PRIMARY KEY  (`favoris_id`)
 				) TYPE=MyISAM COMMENT='table des favoris'";
-
 		db_exec( $sql );
 		db_error();
 		$this->upgrade("all");

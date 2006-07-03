@@ -90,7 +90,7 @@
     <th>
       <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention</label>
       <input type="hidden" name="date" value="" />
-      <input type="hidden" name="_date" value="{{$plage->_date}}" />
+      <input type="hidden" name="_date" value="" />
       <input type="hidden" name="plageop_id" title="{{$op->_props.plageop_id}}|notNull" ondblclick="popPlage()" value="{{$plage->id}}" />
     </th>
     <td class="readonly"><input type="text" name="_datestr" readonly="readonly" size="10" value="{{$plage->_date|date_format:"%d/%m/%Y"}}" /></td>

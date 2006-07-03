@@ -9,8 +9,8 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('mediusers', 'functions' ) );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("mediusers", "functions"));
 
 // @todo : gros refactoring en perspective
 
@@ -46,15 +46,15 @@ class Cplanning {
               LEFT JOIN operations
               ON operations.plageop_id = plagesop.id
               AND operations.annulee = '0'
-              WHERE plagesop.id_salle = '".$value['id']."'
+              WHERE plagesop.id_salle = '".$value["id"]."'
               AND plagesop.date = '".$year."-".$month."-".$day."'
               AND (plagesop.chir_id = users_mediboard.user_id OR plagesop.id_spec = functions_mediboard.function_id)
               AND users_mediboard.function_id = functions_mediboard.function_id
               GROUP BY plagesop.id";
-	    $this->salles[$key]['plages'] = db_loadlist($sql);
-	    foreach($this->salles[$key]['plages'] as $key2 => $value2) {
-	  	  $this->salles[$key]['plages'][$key2]['debut'] = substr($value2['debut'], 0, 5);
-		    $this->salles[$key]['plages'][$key2]['fin'] = substr($value2['fin'], 0, 5);
+	    $this->salles[$key]["plages"] = db_loadlist($sql);
+	    foreach($this->salles[$key]["plages"] as $key2 => $value2) {
+	  	  $this->salles[$key]["plages"][$key2]["debut"] = substr($value2["debut"], 0, 5);
+		    $this->salles[$key]["plages"][$key2]["fin"] = substr($value2["fin"], 0, 5);
 	    }
 	  }
   }
@@ -112,21 +112,21 @@ class Cplanning {
 	    echo "<tr>\n";
 	    echo "<td bgcolor=\"#000000\" height=\"2\">";
 	    echo "</td>\n";
-	    echo "<td bgcolor=\"#ccddff\">".$value['nom']."</td>\n";
+	    echo "<td bgcolor=\"#ccddff\">".$value["nom"]."</td>\n";
 	    for($hours = 8; $hours <= 18; $hours++) {
 	      if(strlen($hours) == 1)
 		      $hours = "0".$hours;
-	      if(isset($value['plages'])) {
-		      foreach($value['plages'] as $key2 => $value2) {
-		        if($value2['debut'] == "$hours:00") {
+	      if(isset($value["plages"])) {
+		      foreach($value["plages"] as $key2 => $value2) {
+		        if($value2["debut"] == "$hours:00") {
               $f = 0;
-			        $fsize = (substr($value2['fin'], 0, 2) - substr($value2['debut'], 0, 2)) * 4;
-			        $fsize += (substr($value2['fin'], 3, 2) - substr($value2['debut'], 3, 2)) / 15;
-			        echo "<td style=\"white-space: normal;\" bgcolor=\"#".$value2['couleur']."\" colspan=\"$fsize\" align=\"center\" nowrap=\"nowrap\"><b>";
-			        echo "<a href=\"index.php?m=dPbloc&tab=2&id=".$value2['id']."\" target=\"_self\">";
-			        echo $this->dispMed($value2['chir'], $value2['anesth'], $value2['spec']);
-			        echo "</a> (".$value2['numop'].")";
-			        echo "<a href=\"index.php?m=dPbloc&tab=1&id=".$value2['id']."&date=$this->year-$this->month-$this->day\" target=\"_self\">";
+			        $fsize = (substr($value2["fin"], 0, 2) - substr($value2["debut"], 0, 2)) * 4;
+			        $fsize += (substr($value2["fin"], 3, 2) - substr($value2["debut"], 3, 2)) / 15;
+			        echo "<td style=\"white-space: normal;\" bgcolor=\"#".$value2["couleur"]."\" colspan=\"$fsize\" align=\"center\" nowrap=\"nowrap\"><b>";
+			        echo "<a href=\"index.php?m=dPbloc&tab=2&id=".$value2["id"]."\" target=\"_self\">";
+			        echo $this->dispMed($value2["chir"], $value2["anesth"], $value2["spec"]);
+			        echo "</a> (".$value2["numop"].")";
+			        echo "<a href=\"index.php?m=dPbloc&tab=1&id=".$value2["id"]."&date=$this->year-$this->month-$this->day\" target=\"_self\">";
 			        echo " <img src=\"./modules/dPbloc/images/edit.png\" alt=\"editer la plage\" border=\"0\" height=\"16\" width=\"16\">";
 			        echo "</a>";
 			        echo "</b></td>\n";
@@ -139,17 +139,17 @@ class Cplanning {
 		    } else
 		      $fsize--;
 	      for($minutes = 15; $minutes < 60; $minutes += 15) {
-		      if(isset($value['plages'])) {
-		        foreach($value['plages'] as $key2 => $value2) {
-		          if($value2['debut'] == "$hours:$minutes") {
+		      if(isset($value["plages"])) {
+		        foreach($value["plages"] as $key2 => $value2) {
+		          if($value2["debut"] == "$hours:$minutes") {
 			          $f = 0;
-			          $fsize = (substr($value2['fin'], 0, 2) - substr($value2['debut'], 0, 2)) * 4;
-			          $fsize += (substr($value2['fin'], 3, 2) - substr($value2['debut'], 3, 2)) / 15;
-			          echo "<td style=\"white-space: normal;\" bgcolor=\"#".$value2['couleur']."\" colspan=\"$fsize\" align=\"center\" nowrap=\"nowrap\"><b>";
-			          echo "<a href=\"index.php?m=dPbloc&tab=2&id=".$value2['id']."\" target=\"_self\">";
-			          echo $this->dispMed($value2['chir'], $value2['anesth'], $value2['spec']);
-			          echo "</a> (".$value2['numop'].")";
-			          echo "<a href=\"index.php?m=dPbloc&tab=1&id=".$value2['id']."&date=$this->year-$this->month-$this->day\" target=\"_self\">";
+			          $fsize = (substr($value2["fin"], 0, 2) - substr($value2["debut"], 0, 2)) * 4;
+			          $fsize += (substr($value2["fin"], 3, 2) - substr($value2["debut"], 3, 2)) / 15;
+			          echo "<td style=\"white-space: normal;\" bgcolor=\"#".$value2["couleur"]."\" colspan=\"$fsize\" align=\"center\" nowrap=\"nowrap\"><b>";
+			          echo "<a href=\"index.php?m=dPbloc&tab=2&id=".$value2["id"]."\" target=\"_self\">";
+			          echo $this->dispMed($value2["chir"], $value2["anesth"], $value2["spec"]);
+			          echo "</a> (".$value2["numop"].")";
+			          echo "<a href=\"index.php?m=dPbloc&tab=1&id=".$value2["id"]."&date=$this->year-$this->month-$this->day\" target=\"_self\">";
 			          echo " <img src=\"./modules/dPbloc/images/edit.png\" alt=\"editer la plage\" border=\"0\" height=\"16\" width=\"16\">";
 			          echo "</a>";
 			          echo "</b></td>\n";
