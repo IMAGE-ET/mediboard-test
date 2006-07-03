@@ -212,7 +212,7 @@ class CSetupMediusers {
 
 	function install() {
 		$sql = "CREATE TABLE `users_mediboard` (" .
-			"\n`user_id` INT(11) `unsigned` NOT NULL," .
+			"\n`user_id` INT(11) UNSIGNED NOT NULL," .
 			"\n`function_id` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0'," .
 			"\nPRIMARY KEY (`user_id`)" .
 			"\n) TYPE=MyISAM;";

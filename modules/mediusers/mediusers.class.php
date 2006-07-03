@@ -244,7 +244,6 @@ class CMediusers extends CMbObject {
               "\nWHERE `user_id` = '$this->user_id'";
     } else {
       $this->user_id = $dPuser->user_id;
-      mbTrace($this, "mediuser", true);
       $sql = "INSERT INTO `users_mediboard`" .
           "( `user_id` , `function_id`, `discipline_id` ,  `remote`, `adeli`)" .
           "VALUES ('$this->user_id', '$this->function_id', '$this->discipline_id' , '$this->remote', '$this->adeli')";
