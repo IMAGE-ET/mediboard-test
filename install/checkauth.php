@@ -73,7 +73,7 @@ if (PEAR::isError($users)) {
 }
 
 // Abandon if only user is still admin/admin
-if (count($users) == 1 and $users[0][$userCol] == "admin" and $users[0][$passCol] == md5("admin")) {
+if ($users[0][$userCol] == "admin" and $users[0][$passCol] == md5("admin")) {
   return;
 }
 
