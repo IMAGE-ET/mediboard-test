@@ -221,7 +221,7 @@
   <tbody>
     <tr>
       <td colspan="2" height="17" align="center" bgcolor="#e63">
-        <strong><font color="#309">BASE CSG</font></strong>
+        <strong><font color="#309">BASE CSG : {$fichePaie->_base_csg|string_format:"%.2f"} €</font></strong>
       </td>
       <td colspan="3" align="left"></td>
     </tr>

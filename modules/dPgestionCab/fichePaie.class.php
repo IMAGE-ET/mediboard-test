@@ -37,6 +37,7 @@ class CFichePaie extends CMbObject {
   var $_prime_anciennete = null;
   var $_conges_payes = null;
   var $_salaire_brut = null;
+  var $_base_csg = null;
   var $_csgds   = null; // CSG déductible salariale
   var $_csgnds  = null; // CSG non déductible salariale
   var $_ssms    = null; // sécurité sociale maladie salariale
@@ -104,7 +105,7 @@ class CFichePaie extends CMbObject {
       $this->_salaire_brut += $this->_conges_payes;
       $this->_salaire_brut += $this->prime_speciale;
       $this->_ssms    = $this->_salaire_brut * $this->_ref_params_paie->ssms / 100;
-      $this->_total_retenues += $this->_ssms;
+      $this->_total_retenues = $this->_ssms;
       $this->_ssmp    = $this->_salaire_brut * $this->_ref_params_paie->ssmp / 100;
       $this->_total_cot_patr = $this->_ssmp;
       $this->_ssvs    = $this->_salaire_brut * $this->_ref_params_paie->ssvs / 100;
@@ -124,11 +125,10 @@ class CFichePaie extends CMbObject {
       $this->_app     = $this->_salaire_brut * $this->_ref_params_paie->app / 100;
       $this->_total_cot_patr += $this->_app;
       // On peut calculer ici la CSG/RDS
-      $this->_csgds   = ($this->_salaire_brut + $this->_rcp + $this->_app) * 0.97
-                        * $this->_ref_params_paie->csgds / 100;
-      $this->_total_retenues = $this->_csgds;
-      $this->_csgnds  = ($this->_salaire_brut + $this->_rcp + $this->_app) * 0.97
-                        * $this->_ref_params_paie->csgnds / 100;
+      $this->_base_csg = $this->_salaire_brut * 0.97 + $this->_app;
+      $this->_csgds   = $this->_base_csg * $this->_ref_params_paie->csgds / 100;
+      $this->_total_retenues += $this->_csgds;
+      $this->_csgnds  = $this->_base_csg * $this->_ref_params_paie->csgnds / 100;
       $this->_total_retenues += $this->_csgnds;
       // On reviens à nos cotisations classiques
       $this->_acs     = $this->_salaire_brut * $this->_ref_params_paie->acs / 100;

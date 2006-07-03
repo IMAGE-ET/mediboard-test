@@ -134,7 +134,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="conges_payes" title="Congés payés exprimés en pourcentage">Prime d'ancienneté</label>
+            <label for="conges_payes" title="Congés payés exprimés en pourcentage">Congés payés</label>
           </th>
           <td>
             <input type="text" size="4" name="conges_payes" title="{$fichePaie->_props.conges_payes}" value="{$fichePaie->conges_payes}" />

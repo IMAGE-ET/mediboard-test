@@ -54,6 +54,7 @@ class CSetupdPgestionCab {
       db_exec( $sql ); db_error();
       $sql = "ALTER TABLE params_paie" .
           "\nADD `matricule` VARCHAR(15)";
+      db_exec( $sql ); db_error();
     case "0.12":
 			return "0.12";
 		}
