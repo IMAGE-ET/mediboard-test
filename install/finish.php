@@ -46,7 +46,7 @@ function checkForm(oForm) {
 </p>
 
 <div class="big-warning">
-  Attention, toute la sécurité du système se résume à la sécurité de ce mot de passe. 
+  L'administrateur a pour login admin. Attention, toute la sécurité du système se résume à la sécurité de ce mot de passe. 
   Il est recommandé d'utiliser une séquence de plus de 4 caractères composée de lettres, 
   minuscules et majuscules, de chiffres et d'autres symboles comme @$%^, etc.
 </div>
