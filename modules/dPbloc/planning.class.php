@@ -42,11 +42,10 @@ class Cplanning {
 	    $sql = "SELECT plagesop.id AS id, plagesop.debut AS debut, plagesop.fin AS fin,
               plagesop.chir_id AS chir, plagesop.anesth_id AS anesth, plagesop.id_spec AS spec,
               functions_mediboard.color AS couleur, COUNT(operations.operation_id) AS numop
-              FROM plagesop, users_mediboard, functions_mediboard
-              LEFT JOIN operations
-              ON operations.plageop_id = plagesop.id
+              FROM plagesop, users_mediboard, functions_mediboard, operations
+              WHERE operations.plageop_id = plagesop.id
               AND operations.annulee = '0'
-              WHERE plagesop.id_salle = '".$value["id"]."'
+              AND plagesop.id_salle = '".$value["id"]."'
               AND plagesop.date = '".$year."-".$month."-".$day."'
               AND (plagesop.chir_id = users_mediboard.user_id OR plagesop.id_spec = functions_mediboard.function_id)
               AND users_mediboard.function_id = functions_mediboard.function_id
