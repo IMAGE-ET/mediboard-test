@@ -39,17 +39,15 @@ class Cplanning {
     $sql = "SELECT id, nom FROM sallesbloc";
     $this->salles = db_loadlist($sql);
 	  foreach($this->salles as $key => $value) {
-	    $sql = "SELECT plagesop.id AS id, plagesop.debut AS debut, plagesop.fin AS fin,
-              plagesop.chir_id AS chir, plagesop.anesth_id AS anesth, plagesop.id_spec AS spec,
-              functions_mediboard.color AS couleur, COUNT(operations.operation_id) AS numop
-              FROM plagesop, users_mediboard, functions_mediboard, operations
-              WHERE operations.plageop_id = plagesop.id
-              AND operations.annulee = '0'
-              AND plagesop.id_salle = '".$value["id"]."'
-              AND plagesop.date = '".$year."-".$month."-".$day."'
-              AND (plagesop.chir_id = users_mediboard.user_id OR plagesop.id_spec = functions_mediboard.function_id)
-              AND users_mediboard.function_id = functions_mediboard.function_id
-              GROUP BY plagesop.id";
+	    $sql = "SELECT plagesop.id AS id, plagesop.debut AS debut, plagesop.fin AS fin, plagesop.chir_id AS chir, plagesop.anesth_id AS anesth, plagesop.id_spec AS spec, functions_mediboard.color AS couleur, COUNT( operations.operation_id ) AS numop
+                FROM plagesop
+                LEFT JOIN operations on (operations.plageop_id=plagesop.id AND operations.annulee = '0')
+                LEFT JOIN users_mediboard ON (users_mediboard.user_id = plagesop.chir_id)
+                LEFT JOIN functions_mediboard ON (plagesop.id_spec = functions_mediboard.function_id OR users_mediboard.function_id = functions_mediboard.function_id)
+                WHERE (plagesop.chir_id IS NOT NULL OR plagesop.id_spec IS NOT NULL)
+                AND plagesop.id_salle = '".$value["id"]."'    
+                AND plagesop.date = '".$year."-".$month."-".$day."'
+                GROUP BY plagesop.id";
 	    $this->salles[$key]["plages"] = db_loadlist($sql);
 	    foreach($this->salles[$key]["plages"] as $key2 => $value2) {
 	  	  $this->salles[$key]["plages"][$key2]["debut"] = substr($value2["debut"], 0, 5);
