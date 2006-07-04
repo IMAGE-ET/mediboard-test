@@ -36,7 +36,7 @@ unset($dbConfigs["ccam"]);
   </tr>
   <tr>
     <td class="button">
-      <input type="submit" name="do" value="Construire de la base" />
+      <input type="submit" name="do" value="Construire la base" />
     </td>
   </tr>
 </table>
