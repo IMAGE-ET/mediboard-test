@@ -119,10 +119,12 @@ function submitForms() {
 }
 
 function submitFormOperation(iSejour_id) {
-  var oForm = document.editOp;
-  oForm.sejour_id.value = iSejour_id;
-  if (oForm.onsubmit()) {
-    oForm.submit();
+  if(iSejour_id) {
+    var oForm = document.editOp;
+    oForm.sejour_id.value = iSejour_id;
+    if (oForm.onsubmit()) {
+      oForm.submit();
+    }
   }
 }
 

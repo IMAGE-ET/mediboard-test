@@ -33,6 +33,10 @@ function modifSejour() {
 
 function updateSortiePrevue() {
   var oForm = document.editSejour;
+    
+  if(!oForm._duree_prevue.value) {
+    oForm._duree_prevue.value = 0;
+  }
   
   if(oForm._date_entree_prevue.value) {
     var dDate = makeDateFromDATE(oForm._date_entree_prevue.value);
@@ -44,6 +48,7 @@ function updateSortiePrevue() {
     oForm._date_sortie_prevue.onchange();
     oDiv = document.getElementById('editSejour__date_sortie_prevue_da');
     oDiv.innerHTML = makeLocaleDateFromDate(dDate);
+    updateHeureSortie();
   }
 }
 

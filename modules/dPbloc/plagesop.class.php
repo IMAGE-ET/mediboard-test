@@ -7,7 +7,7 @@
  * @author Romain Ollivier
  */
 
-require_once( $AppUI->getSystemClass ('mbobject' ) );
+require_once( $AppUI->getSystemClass ("mbobject" ) );
 
 require_once($AppUI->getModuleClass("mediusers"));
 require_once($AppUI->getModuleClass("mediusers", "functions"));
@@ -34,7 +34,6 @@ class CPlageOp extends CMbObject {
   var $fin = null;
     
   // Form Fields
-  var $_date = null;
   var $_day = null;
   var $_month = null;
   var $_year = null;
@@ -43,7 +42,7 @@ class CPlageOp extends CMbObject {
   var $_heurefin = null;
   var $_minutefin = null;
   
-  // Object Refernces
+  // Object References
   var $_ref_chir = null;
   var $_ref_anesth = null;
   var $_ref_spec = null;
@@ -51,7 +50,7 @@ class CPlageOp extends CMbObject {
   var $_ref_operations = null;
 
   function CPlageOp() {
-    $this->CMbObject( 'plagesop', 'id' );
+    $this->CMbObject( "plagesop", "id" );
 
     $this->_props["chir_id"]   = "ref";
     $this->_props["anesth_id"] = "ref";
@@ -70,8 +69,6 @@ class CPlageOp extends CMbObject {
   }
 
   function loadRefsFwd() {
-    // Forward references
-    
     $this->_ref_chir = new CMediusers;
     $this->_ref_chir->load($this->chir_id);
     
@@ -86,7 +83,6 @@ class CPlageOp extends CMbObject {
   }
   
   function loadRefsBack($annulee = 1) {
-    // Backward references
     if($annulee)
       $sql = "SELECT * FROM operations WHERE plageop_id = '$this->id' order by rank";
     else
@@ -94,13 +90,12 @@ class CPlageOp extends CMbObject {
     $this->_ref_operations = db_loadObjectList($sql, new COperation);
   }
 
-  // Overload canDelete
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      'label' => 'Opérations', 
-      'name' => 'operations', 
-      'idfield' => 'operation_id', 
-      'joinfield' => 'plageop_id'
+      "label" => "Opérations", 
+      "name" => "operations", 
+      "idfield" => "operation_id", 
+      "joinfield" => "plageop_id"
     );
     
     return parent::canDelete( $msg, $oid, $tables );
@@ -118,9 +113,9 @@ class CPlageOp extends CMbObject {
     $row = db_loadlist($sql);
     $msg = null;
     foreach ($row as $key => $value) {
-      if (($value['debut'] < $this->fin and $value['fin'] > $this->fin)
-        or($value['debut'] < $this->debut and $value['fin'] > $this->debut)
-        or($value['debut'] >= $this->debut and $value['fin'] <= $this->fin)) {
+      if (($value["debut"] < $this->fin and $value["fin"] > $this->fin)
+        or($value["debut"] < $this->debut and $value["fin"] > $this->debut)
+        or($value["debut"] >= $this->debut and $value["fin"] <= $this->fin)) {
         $msg .= "Collision avec la plage du $this->date, de {$value['debut']} à {$value['fin']}. ";
       }
     }
@@ -145,14 +140,13 @@ class CPlageOp extends CMbObject {
     if ($msg = $this->hasCollisions()) {
       return $msg;
     }    
-  return parent::store();
+    return parent::store();
   }
   
   function updateFormFields() {
-    $this->_year  = substr($this->date, 0, 4);
-    $this->_month = substr($this->date, 5, 2);
-    $this->_day   = substr($this->date, 8, 2);
-    $this->_date = "$this->_year-$this->_month-$this->_day";
+    $this->_year      = substr($this->date, 0, 4);
+    $this->_month     = substr($this->date, 5, 2);
+    $this->_day       = substr($this->date, 8, 2);
     $this->_heuredeb  = substr($this->debut, 0, 2);
     $this->_minutedeb = substr($this->debut, 3, 2);
     $this->_heurefin  = substr($this->fin, 0, 2);
@@ -166,7 +160,6 @@ class CPlageOp extends CMbObject {
       $this->fin   = $this->_heurefin.":".$this->_minutefin.":00";
     if(($this->_year !== null) && ($this->_month !== null) && ($this->_day !== null)) {
       $this->date = $this->_year."-".$this->_month."-".$this->_day;
-      $this->_date = $this->_year."-".$this->_month."-".$this->_day;
     }
   }
   
