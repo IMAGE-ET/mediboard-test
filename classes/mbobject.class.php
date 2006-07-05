@@ -230,7 +230,7 @@ class CMbObject extends CDpObject {
             break;
             
           case "min":
-            if (!is_int($min = @$specFragments[2])) {
+            if (!is_numeric($min = @$specFragments[2])) {
               return "Spécification de minimum numérique invalide";
             }
             
