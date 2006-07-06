@@ -39,27 +39,22 @@ class CSetupdPressources {
   function upgrade($old_version) {
     switch ($old_version) {
       case "all":
+        $sql = "CREATE TABLE `plageressource` (
+                 `plageressource_id` BIGINT NOT NULL AUTO_INCREMENT ,
+                 `prat_id` BIGINT,
+                 `date` DATE NOT NULL ,
+                 `debut` TIME NOT NULL ,
+                 `fin` TIME NOT NULL ,
+                 `tarif` FLOAT DEFAULT '0' NOT NULL ,
+                 `paye` TINYINT DEFAULT '0' NOT NULL ,
+                 `libelle` VARCHAR( 50 ) ,
+                 PRIMARY KEY ( `plageressource_id` )
+               ) TYPE=MyISAM COMMENT = 'Table des plages de ressource';";
+        db_exec( $sql ); db_error();
       case "0.1":
         return "0.1";
       }
     return false;
-  }
-
-  function install() {
-    $sql = "CREATE TABLE `plageressource` (
-             `plageressource_id` BIGINT NOT NULL AUTO_INCREMENT ,
-             `prat_id` BIGINT,
-             `date` DATE NOT NULL ,
-             `debut` TIME NOT NULL ,
-             `fin` TIME NOT NULL ,
-             `tarif` FLOAT DEFAULT '0' NOT NULL ,
-             `paye` TINYINT DEFAULT '0' NOT NULL ,
-             `libelle` VARCHAR( 50 ) ,
-             PRIMARY KEY ( `plageressource_id` )
-           ) TYPE=MyISAM COMMENT = 'Table des plages de ressource';";
-    db_exec( $sql ); db_error();
-    $this->upgrade("all");
-    return null;
   }
 }
 

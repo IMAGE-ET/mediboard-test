@@ -40,23 +40,18 @@ class CSetupdPcim10 {
   function upgrade($old_version) {
     switch ($old_version) {
       case "all":
+        $sql = "CREATE TABLE `cim10favoris` (
+            `favoris_id` bigint(20) NOT NULL auto_increment,
+            `favoris_user` int(11) NOT NULL default '0',
+            `favoris_code` varchar(16) NOT NULL default '',
+            PRIMARY KEY  (`favoris_id`)
+            ) TYPE=MyISAM COMMENT='table des favoris cim10'";
+        db_exec( $sql );
+        db_error();
       case "0.1":
         return "0.1";
     }
     return false;
-  }
-
-  function install() {
-    $sql = "CREATE TABLE `cim10favoris` (
-        `favoris_id` bigint(20) NOT NULL auto_increment,
-        `favoris_user` int(11) NOT NULL default '0',
-        `favoris_code` varchar(16) NOT NULL default '',
-        PRIMARY KEY  (`favoris_id`)
-        ) TYPE=MyISAM COMMENT='table des favoris cim10'";
-    db_exec( $sql );
-    db_error();
-    $this->upgrade("all");
-    return null;
   }
 }
 

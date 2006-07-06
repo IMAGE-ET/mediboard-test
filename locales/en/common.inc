@@ -1,7 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-"module-mediusers-long"=>"Gestion des utilisateurs",
+"module-all-court"=>"All modules",
 "About",
 "Active Projects",
 "Add",
@@ -172,6 +172,7 @@
 "module-dPstats-court"=>"Stats",
 "module-dPstats-long"=>"Reporting",
 "module-mediusers-court"=>"Mediusers",
+"module-mediusers-long"=>"Gestion des utilisateurs",
 "module-system-court"=>"Administration",
 "module-system-long"=>"System administration",
 "new department",

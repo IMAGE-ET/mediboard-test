@@ -1,9 +1,14 @@
 <?php /* ADMIN $Id$ */
-global $AppUI, $user_id, $canEdit, $tab;
+global $AppUI, $user_id, $canEdit, $tab, $mb_module_active;
 
 // Get the installed modules
-$modules = $AppUI->getActiveModules( 'modules' );
-$modules["all"] = "All Modules";
+
+// Create fake 'all' module
+$moduleAll = new CMbModule();
+$moduleAll->mod_name = "all";
+$modules["all"] = $moduleAll;
+
+$modules = array_merge($modules, CMbModule::getInstalled());
 
 $pgos["admin"] = array(
   "table"       => "users", 
@@ -73,7 +78,6 @@ while ($row = db_fetch_assoc( $res )) {
     "perm_item" => $row["permission_item"],
     "perm_value" => $row["permission_value"],
     "perm_module" => $module,
-    "perm_module_name" => $modules[$module],
     "perm_item_name" => $item_name,
     "perm_value_name" => $perm_value_name
   );
@@ -100,17 +104,17 @@ $permSel = new CPermission;
 $permSel->load(mbGetValueFromGetOrSession("perm_id"));
 
 // Template creation
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once( $AppUI->getSystemClass ("smartydp" ) );
 $smarty = new CSmartyDP;
 
-$smarty->assign('user_id', $user_id);
-$smarty->assign('permItemValues', $permItemValues);
-$smarty->assign('permModuleValues', $permModuleValues);
-$smarty->assign('pgos', $pgos);
-$smarty->assign('userPerms', $userPerms);
-$smarty->assign('permSel', $permSel);
-$smarty->assign('otherUsers', $otherUsers);
-$smarty->assign('modules', $modules);
+$smarty->assign("user_id", $user_id);
+$smarty->assign("permItemValues", $permItemValues);
+$smarty->assign("permModuleValues", $permModuleValues);
+$smarty->assign("pgos", $pgos);
+$smarty->assign("userPerms", $userPerms);
+$smarty->assign("permSel", $permSel);
+$smarty->assign("otherUsers", $otherUsers);
+$smarty->assign("modules", $modules);
 
-$smarty->display('vw_usr_perms.tpl');
+$smarty->display("vw_usr_perms.tpl");
 ?>

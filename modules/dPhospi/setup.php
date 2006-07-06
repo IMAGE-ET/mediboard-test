@@ -9,7 +9,7 @@
 
 global $AppUI;
 
-require_once($AppUI->getSystemClass("mbsetup"));
+require_once($AppUI->getSystemClass("mbmodule"));
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
@@ -47,6 +47,27 @@ class CSetupdPhospi {
   function upgrade($old_version) {
     switch ($old_version) {
       case "all":
+        $sql = "CREATE TABLE `service` (" .
+          "\n`service_id` INT NOT NULL AUTO_INCREMENT ," .
+          "\n`nom` VARCHAR( 50 ) NOT NULL ," .
+          "\n`description` TEXT," .
+          "\nPRIMARY KEY ( `service_id` )) TYPE=MyISAM;";
+        db_exec($sql); db_error();
+        $sql = "CREATE TABLE `chambre` (" .
+          "\n`chambre_id` INT NOT NULL AUTO_INCREMENT ," .
+          "\n`service_id` INT NOT NULL ," .
+          "\n`nom` VARCHAR( 50 ) ," .
+          "\n`caracteristiques` TEXT," .
+          "\nPRIMARY KEY ( `chambre_id` ) ," .
+          "\nINDEX ( `service_id` )) TYPE=MyISAM;";
+        db_exec($sql); db_error();
+        $sql = "CREATE TABLE `lit` (" .
+          "\n`lit_id` INT NOT NULL AUTO_INCREMENT ," .
+          "\n`chambre_id` INT NOT NULL," .
+          "\n`nom` VARCHAR( 50 ) NOT NULL ," .
+          "\nPRIMARY KEY ( `lit_id` ) ," .
+          "\nINDEX ( `chambre_id` )) TYPE=MyISAM;";
+        db_exec($sql); db_error();
       case "0.1":
         $sql = "CREATE TABLE `affectation` (" .
             "\n`affectation_id` INT NOT NULL AUTO_INCREMENT," .
@@ -73,15 +94,15 @@ class CSetupdPhospi {
       case "0.13":
         $sql = "ALTER TABLE `affectation` ADD INDEX ( `operation_id` ) ;";
         db_exec($sql); db_error();
-        $sql = "ALTER TABLE `affectation` DROP INDEX ( `lit_id` ) ;";
-        db_exec($sql); db_error();
         $sql = "ALTER TABLE `affectation` ADD INDEX ( `lit_id` ) ;";
         db_exec($sql); db_error();
 
       case "0.14":
-        if(CMbSetup::getVersionOf("dPplanningOp") < "0.38") {
+        $module = @CMbModule::getInstalled("dPplanningOp");
+        if (!$module || $module->mod_version < "0.38") {
           return "0.14";
         }
+
         $sql = "DELETE affectation.* FROM affectation" .
             "\nLEFT JOIN operations" .
             "\nON affectation.operation_id = operations.operation_id" .
@@ -102,32 +123,6 @@ class CSetupdPhospi {
     return false;
   }
 
-  function install() {
-    $sql = "CREATE TABLE `service` (" .
-      "\n`service_id` INT NOT NULL AUTO_INCREMENT ," .
-      "\n`nom` VARCHAR( 50 ) NOT NULL ," .
-      "\n`description` TEXT," .
-      "\nPRIMARY KEY ( `service_id` )) TYPE=MyISAM;";
-    db_exec($sql); db_error();
-    $sql = "CREATE TABLE `chambre` (" .
-      "\n`chambre_id` INT NOT NULL AUTO_INCREMENT ," .
-      "\n`service_id` INT NOT NULL ," .
-      "\n`nom` VARCHAR( 50 ) ," .
-      "\n`caracteristiques` TEXT," .
-      "\nPRIMARY KEY ( `chambre_id` ) ," .
-      "\nINDEX ( `service_id` )) TYPE=MyISAM;";
-    db_exec($sql); db_error();
-    $sql = "CREATE TABLE `lit` (" .
-      "\n`lit_id` INT NOT NULL AUTO_INCREMENT ," .
-      "\n`chambre_id` INT NOT NULL," .
-      "\n`nom` VARCHAR( 50 ) NOT NULL ," .
-      "\nPRIMARY KEY ( `lit_id` ) ," .
-      "\nINDEX ( `chambre_id` )) TYPE=MyISAM;";
-    db_exec($sql); db_error();
-    
-    $this->upgrade("all");
-    return null;
-  }
 }
 
 ?>

@@ -10,6 +10,7 @@ $obj = new CModule();
 if ($mod_id) {
 	$obj->load( $mod_id );
 } else {
+  $obj->mod_version = "all";
 	$obj->mod_directory = $mod_directory;
 }
 
@@ -49,14 +50,6 @@ switch ($cmd) {
 		$obj->store();
 		$AppUI->setMsg( 'Module menu state changed', UI_MSG_OK );
 		break;
-	case 'install':
-	// do the module specific stuff
-		$AppUI->setMsg( $setup->install() );
-		$obj->bind( $config );
-	// add to the installed modules table
-		$obj->install();
-		$AppUI->setMsg( 'Module installed', UI_MSG_OK );
-		break;
 	case 'remove':
 	// do the module specific stuff
     $msg = $setup->remove();
@@ -67,19 +60,34 @@ switch ($cmd) {
       $AppUI->setMsg( 'Module removed', UI_MSG_ALERT );
     }
 		break;
+  case 'install':
+    $newVersion = $setup->upgrade($obj->mod_version);
+    if ($newVersion) {
+      $obj->bind( $config );
+      $topVersion = $obj->mod_version;
+      $obj->mod_version = $newVersion;
+      $obj->install();
+      if ($newVersion == $topVersion)
+        $AppUI->setMsg( "Installation de '$obj->mod_name' à la version $newVersion", UI_MSG_OK );
+      else
+        $AppUI->setMsg( "Installation de '$obj->mod_name' à la version $newVersion sur $topVersion", UI_MSG_WARNING );
+    } else {
+      $AppUI->setMsg( "Module '$obj->mod_name' non installé", UI_MSG_ERROR );
+    }
+    break;
 	case 'upgrade':
-    $newVersion = $setup->upgrade( $obj->mod_version );
+    $newVersion = $setup->upgrade($obj->mod_version);
 		if ($newVersion) {
 			$obj->bind( $config );
       $topVersion = $obj->mod_version;
       $obj->mod_version = $newVersion;
 			$obj->store();
-      if($newVersion == $topVersion)
-			  $AppUI->setMsg( "Mise à jour de $obj->mod_name à la version $newVersion", UI_MSG_OK );
+      if ($newVersion == $topVersion)
+			  $AppUI->setMsg( "Mise à jour de '$obj->mod_name' à la version $newVersion", UI_MSG_OK );
       else
-        $AppUI->setMsg( "Mise à jour de $obj->mod_name à la version $newVersion sur $topVersion", UI_MSG_WARNING );
+        $AppUI->setMsg( "Mise à jour de '$obj->mod_name' à la version $newVersion sur $topVersion", UI_MSG_WARNING );
 		} else {
-			$AppUI->setMsg( "Module $obj->mod_name non mis à jour", UI_MSG_ERROR );
+			$AppUI->setMsg( "Module '$obj->mod_name' non mis à jour", UI_MSG_ERROR );
 		}
 		break;
 	case 'configure':

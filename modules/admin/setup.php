@@ -48,11 +48,6 @@ class CSetupAdmin {
 
     return false;
   }
-
-  function install() {
-    $this->upgrade("all");
-    return null;
-  }
 }
 
 ?>

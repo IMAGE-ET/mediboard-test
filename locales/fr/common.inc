@@ -142,6 +142,7 @@
 "login"=>"login",
 "module-admin-court"=>"Utilisateurs",
 "module-admin-long"=>"Administration des utilisateurs",
+"module-all-court"=>"Tous",
 "module-dPadmissions-court"=>"Admissions",
 "module-dPadmissions-long"=>"Gestion des admissions",
 "module-dPbloc-court"=>"Planning bloc",

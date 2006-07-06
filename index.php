@@ -54,12 +54,13 @@ $AppUI =& $_SESSION['AppUI'];
 $AppUI->setConfig( $dPconfig );
 $AppUI->checkStyle();
  
+// load the db handler
+require_once( "./includes/db_connect.php" );
+
 // load the commonly used classes
 require_once( $AppUI->getSystemClass('date'));
 require_once( $AppUI->getSystemClass('dp'));
-
-// load the db handler
-require_once( "./includes/db_connect.php" );
+require_once( $AppUI->getSystemClass('mbmodule'));
 
 // load default preferences if not logged in
 if ($AppUI->doLogin()) {

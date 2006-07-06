@@ -73,9 +73,10 @@ if (@$_POST["adminhost"]) {
     $_POST["adminuser"],
     $_POST["adminpass"]);
     
-  $dbConnection->connect();
-  foreach($queries as $query) {
-    $dbConnection->query($query);
+  if ($dbConnection->connect()) {
+    foreach($queries as $query) {
+      $dbConnection->query($query);
+    }
   }
 ?>
 

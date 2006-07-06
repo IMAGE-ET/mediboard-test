@@ -42,7 +42,42 @@ class CSetupMediusers {
   function upgrade($old_version) {
     switch ($old_version) {
       case "all":
-
+        $sql = "CREATE TABLE `users_mediboard` (" .
+          "\n`user_id` INT(11) UNSIGNED NOT NULL," .
+          "\n`function_id` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0'," .
+          "\nPRIMARY KEY (`user_id`)" .
+          "\n) TYPE=MyISAM;";
+        db_exec($sql); db_error();
+        
+        $sql = "CREATE TABLE `functions_mediboard` (" .
+          "\n`function_id` TINYINT(4) UNSIGNED NOT NULL AUTO_INCREMENT," .
+          "\n`group_id` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0'," .
+          "\n`text` VARCHAR(50) NOT NULL," .
+          "\n`color` VARCHAR(6) NOT NULL DEFAULT 'ffffff'," .
+          "\nPRIMARY KEY (`function_id`)" .
+          "\n) TYPE=MyISAM;";
+        db_exec($sql); db_error();
+        
+        $sql = "CREATE TABLE `groups_mediboard` (" .
+          "\n`group_id` TINYINT(4) UNSIGNED NOT NULL AUTO_INCREMENT," .
+          "\n`text` VARCHAR(50) NOT NULL," .
+          "\nPRIMARY KEY  (`group_id`)" .
+          "\n) TYPE=MyISAM;";
+        db_exec($sql); db_error();
+        
+        $sql = "INSERT INTO `groups_mediboard` (`text`) VALUES ('Cabinets');";
+        db_exec($sql); db_error();
+        $sql = "INSERT INTO `groups_mediboard` (`text`) VALUES ('Administration');";
+        db_exec($sql); db_error();
+        
+        $sql = "INSERT INTO `functions_mediboard` (`group_id`, `text`, `color`) VALUES (1, 'Chirurgie orthopédique et traumatologique', '99FF66');";
+        db_exec($sql); db_error();
+        $sql = "INSERT INTO `functions_mediboard` (`group_id`, `text`, `color`) VALUES (1, 'Anesthésie - Réanimation', 'FFFFFF');";
+        db_exec($sql); db_error();
+        $sql = "INSERT INTO `functions_mediboard` (`group_id`, `text`, `color`) VALUES (2, 'Direction', 'CCFFFF');";
+        db_exec($sql); db_error();
+        $sql = "INSERT INTO `functions_mediboard` (`group_id`, `text`, `color`) VALUES (2, 'PMSI', 'FF3300');";
+        db_exec($sql); db_error();
       case "0.1":
         $sql = "ALTER TABLE `users_mediboard` ADD `remote` TINYINT DEFAULT NULL;";
         db_exec($sql);  db_error();
@@ -108,7 +143,7 @@ class CSetupMediusers {
         db_exec($sql);  db_error();
         $sql = "INSERT INTO `discipline` (`text`) VALUES('DERMATOLOGIE ET VENEREOLOGIE');";
         db_exec($sql);  db_error();
-        $sql = "INSERT INTO `discipline` (`text`) VALUES('ENDOCRINOLOGIE ET METABOLISMES'";
+        $sql = "INSERT INTO `discipline` (`text`) VALUES('ENDOCRINOLOGIE ET METABOLISMES');";
         db_exec($sql);  db_error();
         $sql = "INSERT INTO `discipline` (`text`) VALUES('EVALUATION ET TRAITEMENT DE LA DOULEUR');";
         db_exec($sql);  db_error();
@@ -206,50 +241,6 @@ class CSetupMediusers {
     }
 
     return false;
-  }
-
-  function install() {
-    $sql = "CREATE TABLE `users_mediboard` (" .
-      "\n`user_id` INT(11) UNSIGNED NOT NULL," .
-      "\n`function_id` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0'," .
-      "\nPRIMARY KEY (`user_id`)" .
-      "\n) TYPE=MyISAM;";
-    db_exec($sql); db_error();
-    
-    $sql = "CREATE TABLE `functions_mediboard` (" .
-      "\n`function_id` TINYINT(4) UNSIGNED NOT NULL AUTO_INCREMENT," .
-      "\n`group_id` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0'," .
-      "\n`text` VARCHAR(50) NOT NULL," .
-      "\n`color` VARCHAR(6) NOT NULL DEFAULT 'ffffff'," .
-      "\nPRIMARY KEY (`function_id`)" .
-      "\n) TYPE=MyISAM;";
-    db_exec($sql); db_error();
-    
-    $sql = "CREATE TABLE `groups_mediboard` (" .
-      "\n`group_id` TINYINT(4) UNSIGNED NOT NULL AUTO_INCREMENT," .
-      "\n`text` VARCHAR(50) NOT NULL," .
-      "\nPRIMARY KEY  (`group_id`)" .
-      "\n) TYPE=MyISAM;";
-    db_exec($sql); db_error();
-    
-    $sql = "INSERT INTO `groups_mediboard` (`text`) VALUES ('Chirurgie');";
-    db_exec($sql); db_error();
-    $sql = "INSERT INTO `groups_mediboard` (`text`) VALUES ('Anesthésie');";
-    db_exec($sql); db_error();
-    $sql = "INSERT INTO `groups_mediboard` (`text`) VALUES ('Administration');";
-    db_exec($sql); db_error();
-    
-    $sql = "INSERT INTO `functions_mediboard` (`group_id`, `text`, `color`) VALUES (2, 'Chirurgie orthopédique et traumatologique', '99FF66');";
-    db_exec($sql); db_error();
-    $sql = "INSERT INTO `functions_mediboard` (`group_id`, `text`, `color`) VALUES (2, 'Anesthésie - Réanimation', 'FFFFFF');";
-    db_exec($sql); db_error();
-    $sql = "INSERT INTO `functions_mediboard` (`group_id`, `text`, `color`) VALUES (3, 'Direction', 'CCFFFF');";
-    db_exec($sql); db_error();
-    $sql = "INSERT INTO `functions_mediboard` (`group_id`, `text`,  color`) VALUES (3, 'PMSI', 'FF3300');";
-    db_exec($sql); db_error();
-    $this->upgrade("all");
-
-    return null;
   }
 }
 

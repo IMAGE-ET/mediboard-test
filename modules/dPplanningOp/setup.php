@@ -43,6 +43,37 @@ class CSetupdPplanningOp {
   function upgrade( $old_version ) {
     switch ($old_version) {
       case "all":
+        $sql = "CREATE TABLE operations ( " .
+          "  operation_id bigint(20) unsigned NOT NULL auto_increment" .
+          ", pat_id bigint(20) unsigned NOT NULL default '0'" .
+          ", chir_id bigint(20) unsigned NOT NULL default '0'" .
+          ", plageop_id bigint(20) unsigned NOT NULL default '0'" .
+          ", CIM10_code varchar(5) default NULL" .
+          ", CCAM_code varchar(7) default NULL" .
+          ", cote enum('droit','gauche','bilatéral','total') NOT NULL default 'total'" .
+          ", temp_operation time NOT NULL default '00:00:00'" .
+          ", time_operation time NOT NULL default '00:00:00'" .
+          ", examen text" .
+          ", materiel text" .
+          ", commande_mat enum('o', 'n') NOT NULL default 'n'" .
+          ", info enum('o','n') NOT NULL default 'n'" .
+          ", date_anesth date NOT NULL default '0000-00-00'" .
+          ", time_anesth time NOT NULL default '00:00:00'" .
+          ", type_anesth tinyint(4) default NULL" .
+          ", date_adm date NOT NULL default '0000-00-00'" .
+          ", time_adm time NOT NULL default '00:00:00'" .
+          ", duree_hospi tinyint(4) unsigned NOT NULL default '0'" .
+          ", type_adm enum('comp','ambu','exte') default 'comp'" .
+          ", chambre enum('o','n') NOT NULL default 'o'" .
+          ", ATNC enum('o','n') NOT NULL default 'n'" .
+          ", rques text" .
+          ", rank tinyint(4) NOT NULL default '0'" .
+          ", admis enum('n','o') NOT NULL default 'n'" .
+          ", PRIMARY KEY  (operation_id)" .
+          ", UNIQUE KEY operation_id (operation_id)" .
+          ") TYPE=MyISAM;";
+        db_exec( $sql ); db_error();
+
         $sql = "INSERT INTO sysvals" .
           "\nVALUES ('', '1', 'AnesthType', '1|Rachi\n2|Rachi + bloc\n3|Anesthésie loco-régionnale\n4|Anesthésie locale\n5|Neurolept\n6|Anesthésie générale\n7|Anesthesie generale + bloc\n8|Anesthesie peribulbaire\n0|Non définie')";
         db_exec( $sql ); db_error();
@@ -198,6 +229,11 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
     
       case "0.36":
+        $module = @CMbModule::getInstalled("dPbloc");
+        if (!$module || $module->mod_version < "0.1") {
+          return "0.36";
+        }
+      
         // Réparation des opérations avec `duree_hospi` = '255'
         $sql = "UPDATE `operations`, `plagesop` SET" .
             "\n`operations`.`date_adm` = `plagesop`.`date`," .
@@ -458,42 +494,6 @@ class CSetupdPplanningOp {
     }
     
     return false;
-  }
-
-  function install() {
-    $sql = "CREATE TABLE operations ( " .
-      "  operation_id bigint(20) unsigned NOT NULL auto_increment" .
-      ", pat_id bigint(20) unsigned NOT NULL default '0'" .
-      ", chir_id bigint(20) unsigned NOT NULL default '0'" .
-      ", plageop_id bigint(20) unsigned NOT NULL default '0'" .
-      ", CIM10_code varchar(5) default NULL" .
-      ", CCAM_code varchar(7) default NULL" .
-      ", cote enum('droit','gauche','bilatéral','total') NOT NULL default 'total'" .
-      ", temp_operation time NOT NULL default '00:00:00'" .
-      ", time_operation time NOT NULL default '00:00:00'" .
-      ", examen text" .
-      ", materiel text" .
-      ", commande_mat enum('o', 'n') NOT NULL default 'n'" .
-      ", info enum('o','n') NOT NULL default 'n'" .
-      ", date_anesth date NOT NULL default '0000-00-00'" .
-      ", time_anesth time NOT NULL default '00:00:00'" .
-      ", type_anesth tinyint(4) default NULL" .
-      ", date_adm date NOT NULL default '0000-00-00'" .
-      ", time_adm time NOT NULL default '00:00:00'" .
-      ", duree_hospi tinyint(4) unsigned NOT NULL default '0'" .
-      ", type_adm enum('comp','ambu','exte') default 'comp'" .
-      ", chambre enum('o','n') NOT NULL default 'o'" .
-      ", ATNC enum('o','n') NOT NULL default 'n'" .
-      ", rques text" .
-      ", rank tinyint(4) NOT NULL default '0'" .
-      ", admis enum('n','o') NOT NULL default 'n'" .
-      ", PRIMARY KEY  (operation_id)" .
-      ", UNIQUE KEY operation_id (operation_id)" .
-      ") TYPE=MyISAM;";
-    db_exec( $sql ); db_error();
-    
-    $this->upgrade("all");
-    return null;
   }
 }
 

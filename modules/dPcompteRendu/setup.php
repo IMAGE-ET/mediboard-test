@@ -42,6 +42,20 @@ class CSetupdPcompteRendu {
   function upgrade( $old_version ) {
     switch ( $old_version ) {
       case "all":
+        $sql = "CREATE TABLE compte_rendu (" .
+            "\ncompte_rendu_id BIGINT NOT NULL AUTO_INCREMENT ," .
+            "\nchir_id BIGINT DEFAULT '0' NOT NULL ," .
+            "\nnom VARCHAR( 50 ) ," .
+            "\nsource TEXT," .
+            "\ntype ENUM( 'consultation', 'operation', 'hospitalisation', 'autre' ) DEFAULT 'autre' NOT NULL ," .
+            "\nPRIMARY KEY ( compte_rendu_id ) ," .
+            "\nINDEX ( chir_id )" .
+            "\n) TYPE=MyISAM COMMENT = 'Table des modeles de compte-rendu';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE permissions" .
+            "\nCHANGE permission_grant_on permission_grant_on VARCHAR( 25 ) NOT NULL";
+        db_exec( $sql ); db_error();
       case "0.1":
         $sql = "CREATE TABLE `aide_saisie` (" .
             "\n`aide_id` INT NOT NULL AUTO_INCREMENT ," .
@@ -107,26 +121,6 @@ class CSetupdPcompteRendu {
         return "0.19";
     }
     return false;
-  }
-
-  function install() {
-    $sql = "CREATE TABLE compte_rendu (" .
-        "\ncompte_rendu_id BIGINT NOT NULL AUTO_INCREMENT ," .
-        "\nchir_id BIGINT DEFAULT '0' NOT NULL ," .
-        "\nnom VARCHAR( 50 ) ," .
-        "\nsource TEXT," .
-        "\ntype ENUM( 'consultation', 'operation', 'hospitalisation', 'autre' ) DEFAULT 'autre' NOT NULL ," .
-        "\nPRIMARY KEY ( compte_rendu_id ) ," .
-        "\nINDEX ( chir_id )" .
-        "\n) TYPE=MyISAM COMMENT = 'Table des modeles de compte-rendu';";
-    db_exec( $sql ); db_error();
-    
-    $sql = "ALTER TABLE permissions" .
-        "\nCHANGE permission_grant_on permission_grant_on VARCHAR( 25 ) NOT NULL";
-    db_exec( $sql ); db_error();
-    
-    $this->upgrade("all");
-    return null;
   }
 }
 

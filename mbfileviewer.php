@@ -44,6 +44,11 @@ $AppUI->setConfig( $dPconfig );
 
 require "./includes/db_connect.php";
 
+// load the commonly used classes
+require_once( $AppUI->getSystemClass('date'));
+require_once( $AppUI->getSystemClass('dp'));
+require_once( $AppUI->getSystemClass('mbmodule'));
+
 // Direct acces needs Administrator rights
 $file_path = mbGetValueFromGet("file_path");
 if ($file_path) {

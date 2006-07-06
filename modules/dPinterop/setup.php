@@ -44,10 +44,6 @@ class CSetupdPinterop {
     return false;
   }
 
-  function install() {
-    $this->upgrade("all");
-    return null;
-  }
 }
 
 ?>

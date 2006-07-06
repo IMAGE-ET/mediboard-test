@@ -42,6 +42,27 @@ class CSetupdPpatients {
   function upgrade($old_version) {
     switch ($old_version) {
       case "all":
+        $sql = "CREATE TABLE `patients` (
+              `patient_id` int(11) NOT NULL auto_increment,
+              `nom` varchar(50) NOT NULL default '',
+              `prenom` varchar(50) NOT NULL default '',
+              `naissance` date NOT NULL default '0000-00-00',
+              `sexe` enum('m','f') NOT NULL default 'm',
+              `adresse` varchar(50) NOT NULL default '',
+              `ville` varchar(50) NOT NULL default '',
+              `cp` varchar(5) NOT NULL default '',
+              `tel` varchar(10) NOT NULL default '',
+              `medecin_traitant` int(11) NOT NULL default '0',
+              `incapable_majeur` enum('o','n') NOT NULL default 'n',
+              `ATNC` enum('o','n') NOT NULL default 'n',
+              `matricule` varchar(15) NOT NULL default '',
+              `SHS` varchar(10) NOT NULL default '',
+              PRIMARY KEY  (`patient_id`),
+              UNIQUE KEY `patient_id` (`patient_id`),
+              KEY `matricule` (`matricule`,`SHS`),
+              KEY `nom` (`nom`,`prenom`)
+            ) TYPE=MyISAM;";
+        db_exec( $sql ); db_error();
       case "0.1":
         $sql = "ALTER TABLE patients" .
             "\nADD tel2 VARCHAR( 10 ) AFTER tel ," .
@@ -150,31 +171,6 @@ class CSetupdPpatients {
     return false;
   }
 
-  function install() {
-    $sql = "CREATE TABLE `patients` (
-          `patient_id` int(11) NOT NULL auto_increment,
-          `nom` varchar(50) NOT NULL default '',
-          `prenom` varchar(50) NOT NULL default '',
-          `naissance` date NOT NULL default '0000-00-00',
-          `sexe` enum('m','f') NOT NULL default 'm',
-          `adresse` varchar(50) NOT NULL default '',
-          `ville` varchar(50) NOT NULL default '',
-          `cp` varchar(5) NOT NULL default '',
-          `tel` varchar(10) NOT NULL default '',
-          `medecin_traitant` int(11) NOT NULL default '0',
-          `incapable_majeur` enum('o','n') NOT NULL default 'n',
-          `ATNC` enum('o','n') NOT NULL default 'n',
-          `matricule` varchar(15) NOT NULL default '',
-          `SHS` varchar(10) NOT NULL default '',
-          PRIMARY KEY  (`patient_id`),
-          UNIQUE KEY `patient_id` (`patient_id`),
-          KEY `matricule` (`matricule`,`SHS`),
-          KEY `nom` (`nom`,`prenom`)
-        ) TYPE=MyISAM;";
-    db_exec( $sql ); db_error();
-    $this->upgrade("all");
-    return null;
-  }
 }
 
 ?>

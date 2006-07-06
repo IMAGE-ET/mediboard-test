@@ -27,7 +27,7 @@ class CMbDb {
   }
   
   function logError($error, $prefix = "") {
-    $prefix .= sprintf("\nErreur # %s: %s", $error->code, $error->message);
+    $prefix .= sprintf("\nErreur # %s\nMessage: %s, \nInfo: %s", $error->code, $error->message, $error->userinfo);
     $this->_errors[] = $prefix;
   }
 

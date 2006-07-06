@@ -9,7 +9,7 @@
 
 global $AppUI;
 
-require_once($AppUI->getSystemClass("mbsetup"));
+require_once($AppUI->getSystemClass("mbmodule"));
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
@@ -56,15 +56,17 @@ class CSetupdPpmsi {
           db_exec( $sql ); db_error();
   
       case "0.11" :
-        if(CMbSetup::getVersionOf("dPplanningOp") < "0.38") {
+        $module = @CMbModule::getInstalled("dPplanningOp");
+        if (!$module || $module->mod_version < "0.38") {
           return "0.11";
         }
+
         $sql = "ALTER TABLE `ghm`" .
           "ADD `sejour_id` INT NOT NULL AFTER `operation_id`;";
         db_exec($sql); db_error();
           
         $sql = "UPDATE `ghm`, `operations` SET" .
-          "\n`ghm`.`sejour_id` = `operation`.`sejour_id`" .
+          "\n`ghm`.`sejour_id` = `operations`.`sejour_id`" .
           "\nWHERE `ghm`.`operation_id` = `operations`.`operation_id`";
         db_exec($sql); db_error();
   
@@ -72,11 +74,6 @@ class CSetupdPpmsi {
         return "0.12";
     }
     return false;
-  }
-
-  function install() {
-    $this->upgrade("all");
-    return null;
   }
 }
 

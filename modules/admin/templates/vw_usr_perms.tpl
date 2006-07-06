@@ -100,11 +100,17 @@ function setPermItem( key, val ) {
           {/if}
         </td>
 
-		<td style="background: #{$bg_color};">{tr}{$userPerm.perm_module_name}{/tr}</td>
+		<td style="background: #{$bg_color};">
+		  {tr}module-{$userPerm.perm_module}-court{/tr}
+		</td>
 	
-		<td style="background: #{$bg_color}; width: 100%;">{$userPerm.perm_item_name}</td>
+		<td style="background: #{$bg_color}; width: 100%;">
+		  {$userPerm.perm_item_name}
+		</td>
 	
-		<td style="background: #{$bg_color}; width: 100%;">{tr}{$userPerm.perm_value_name}{/tr}</td>
+		<td style="background: #{$bg_color}; width: 100%;">
+		  {tr}{$userPerm.perm_value_name}{/tr}
+		</td>
 	
 		<td style="background: #{$bg_color};">
 		{if $canEdit}
@@ -159,8 +165,11 @@ function setPermItem( key, val ) {
 	    <th>{tr}Module{/tr}:</th>
 	    <td colspan="3">
 	      <select name="permission_grant_on">
-	        <option value="all">{tr}All Modules{/tr}</option>
-	      	{html_options options=$modules selected=$permSel->permission_grant_on}
+	        {foreach from=$modules key=key_module item=curr_module}
+            <option value="{$key_module}" {if $key_module == $permSel->permission_grant_on}selected="selected"{/if}>
+              {tr}module-{$key_module}-court{/tr}
+            </option>
+	        {/foreach}
 	      </select>
 		</td>
 	  </tr>
@@ -221,7 +230,11 @@ function setPermItem( key, val ) {
 	    <th>{tr}Module{/tr}:</th>
 	    <td colspan="2">
 	      <select name="permission_grant_on">
-	      	{html_options options=$modules selected=$permSel->permission_grant_on}
+	        {foreach from=$modules key=key_module item=curr_module}
+            <option value="{$key_module}" {if $key_module == $permSel->permission_grant_on}selected="selected"{/if}>
+              {tr}module-{$key_module}-court{/tr}
+            </option>
+	        {/foreach}
 	      </select>
 		</td>
 	  </tr>

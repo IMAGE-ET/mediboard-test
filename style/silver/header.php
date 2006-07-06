@@ -36,7 +36,7 @@
 	$dialog = dPgetParam( $_GET, 'dialog');
 	if (!$dialog) {
 		// top navigation menu
-		$nav = $AppUI->getMenuModules();
+		$nav = CMbModule::getVisible();
 ?>
 
 <?php 
@@ -57,13 +57,18 @@
         <td class="noHover" />
 <?php
 foreach ($nav as $module) {
-	$modDirectory = $module['mod_directory'];
-	if (isMbModuleVisible($modDirectory)) {
-		$modName = $AppUI->_($module['mod_ui_name']);
-		$modIcon = dPfindImage($module['mod_ui_icon'], $module['mod_directory']);
-    $modImage = dPshowImage($modIcon, 48, 48, $modName);
-    $tdClass = $modDirectory == $m ? "class='iconSelected'" : "class='iconNonSelected'";
-		echo "<td align='center' $tdClass><a href='?m=$modDirectory'>$modImage</a></td>\n";
+	if (isMbModuleVisible($module->mod_name)) {
+    $modNameCourt = $AppUI->_("module-$module->mod_name-court");
+    $modNameCourtEscaped = strtr($modNameCourt, "'", "\'");
+    $modNameLong = $AppUI->_("module-$module->mod_name-long");
+    $modNameLongEscaped = strtr($modNameLong, "'", "\'");
+		$modIcon = "modules/$module->mod_name/images/$module->mod_name.png";
+    $tdClass = $module->mod_name == $m ? "class='iconSelected'" : "class='iconNonSelected'";
+    echo "\n<td align='center' $tdClass>";
+    echo "\n  <a href='?m=$module->mod_name' title='$modNameLongEscaped'>";
+    echo "\n    <img src='$modIcon' alt='$modNameCourtEscaped' height='48' width ='48' />";
+    echo "\n  </a>";
+    echo "\n</td>";
 	}
 }
 
@@ -76,13 +81,17 @@ foreach ($nav as $module) {
         </td>
 <?php
 foreach ($nav as $module) {
-  $modDirectory = $module['mod_directory'];
-  if (isMbModuleVisible($modDirectory)) {
-    $modName = $AppUI->_($module['mod_ui_name']);
-    $tdClass = $modDirectory == $m ? "class='textSelected'" : "class='textNonSelected'";
-    echo "<td align='center' $tdClass><a href='?m=$modDirectory'><strong>" .
-        $AppUI->_("module-".$modDirectory."-court") .
-        "</strong></a></td>\n";
+  if (isMbModuleVisible($module->mod_name)) {
+    $modNameCourt = $AppUI->_("module-$module->mod_name-court");
+    $modNameLong = $AppUI->_("module-$module->mod_name-long");
+    $modNameLongEscaped = strtr($modNameLong, "'", "\'");
+    $modNameCourtEscaped = strtr($modNameCourt, "'", "\'");
+    $tdClass = $module->mod_name == $m ? "class='textSelected'" : "class='textNonSelected'";
+    echo "\n<td align='center' $tdClass  title='$modNameLongEscaped'>";
+    echo "\n  <a href='?m=$module->mod_name'>";
+    echo "\n    <strong>$modNameCourt</strong>";
+    echo "\n  </a>";
+    echo "\n</td>";
   }
 }
 

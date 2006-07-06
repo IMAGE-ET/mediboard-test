@@ -560,7 +560,7 @@ class CAppUI {
     $sql = "SELECT remote FROM users_mediboard WHERE user_id = $obj->user_id";
     // If can't find remote info, remote info doesn't exist so don't check
     $remote = 1; // 1 IS don't check value
-    $sql = "SHOW TABLES FROM `mediboard` LIKE 'users_mediboard'";
+    $sql = "SHOW TABLES LIKE 'users_mediboard'";
     $result = db_loadList( $sql );
     
     if(count($result)) {
@@ -668,33 +668,6 @@ class CAppUI {
 		$this->user_prefs = array_merge( $this->user_prefs, db_loadHashList( $sql ) );
 	}
 
-// --- Module connectors
-
-/**
-* Gets a list of the installed modules
-* @return array Named array list in the form 'module directory'=>'module name'
-*/
-	function getInstalledModules() {
-		$sql = "
-		SELECT mod_directory, mod_ui_name
-		FROM modules
-		ORDER BY mod_directory
-		";
-		return (db_loadHashList( $sql ));
-	}
-/**
-* Gets a list of the active modules
-* @return array Named array list in the form 'module directory'=>'module name'
-*/
-	function getActiveModules() {
-		$sql = "
-		SELECT mod_directory, mod_ui_name
-		FROM modules
-		WHERE mod_active > 0
-		ORDER BY mod_directory
-		";
-		return (db_loadHashList( $sql ));
-	}
 /**
 * Gets a list of the modules that should appear in the menu
 * @return array Named array list in the form
