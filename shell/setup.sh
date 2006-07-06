@@ -30,7 +30,7 @@ chmod -R go-w *
 check_errs $? "Failed to protect all files from writing" "Files protected from writing!"
 
 # Give write access to Apache for some directories
-chmod -R g+w lib/ tmp/ files/ includes/ modules/*/templates_c/
+chmod -R g+w lib/ tmp/ files/ includes/ modules/*/templates_c/ modules/dPinterop/hprim/
 check_errs $? "Failed to allow Apache writing to mandatory files" "Apache writing allowed for mandatory files!"
 
 

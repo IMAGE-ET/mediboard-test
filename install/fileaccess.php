@@ -46,6 +46,12 @@ $pathAccess->description = "Répertoire du fichier de configuration du système";
 
 $pathAccesses[] = $pathAccess;
 
+$pathAccess = new CPathAccess;
+$pathAccess->path = "modules/dPinterop/hprim";
+$pathAccess->description = "Répertoire des schemas HPRIM";
+
+$pathAccesses[] = $pathAccess;
+
 
 foreach(glob("$mbpath/modules/*/templates_c") as $templates_c) {
   $module = basename(dirname($templates_c));
