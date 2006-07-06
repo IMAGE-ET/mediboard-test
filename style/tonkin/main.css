@@ -297,7 +297,7 @@ button:hover,
 input[type=submit]:hover,
 input[type=reset]:hover,
 input[type=button]:hover {
-  background: #5de;
+  background: url(./images/buttonover.png) repeat-x bottom;
 }
 
 select {
