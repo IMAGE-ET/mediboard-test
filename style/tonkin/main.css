@@ -1,0 +1,435 @@
+/* Global CSS for Mediboard_lite (include of Mediboard before)*/
+
+/* Body */
+
+body {
+  font-family: arial, sans-serif;
+  font-size: 11px;  
+  background: #fff;
+  margin: 0px;
+}
+
+/* Login */
+
+#login {
+  margin: 40px 0px 0px; 
+}
+
+#login table {
+  border: solid #000 3px;
+  width: 600px;
+  background: #fff;
+  margin: auto;
+  padding: 5px;
+}
+
+#login table td.logo {
+  width: 33%;
+  text-align: center;
+  font-size: 9px;
+  white-space: normal;
+}
+
+/* Form tables */
+
+table.form {
+  width: 100%;
+  border-spacing: 1px;
+}
+
+table.form th {
+  color: #000;
+  white-space: nowrap;
+  background-color: #eef;
+  vertical-align: top;
+  text-align: right;
+  font-weight: normal;
+  padding: 2px 4px;
+  border: none;
+}
+
+table.form th.title {
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold; 
+  text-align: center;
+  background-color: #2eb4c9;
+  border: #aaa 1px outset;
+}
+
+table.form th.category {
+  color: #fff;
+  font-weight: bold;  
+  font-style: italic;  
+  text-align: center;
+  background-color: #2eb4c9;
+  border: #2eb4c9 1px outset;
+}
+
+table.form th.mandatory {
+  color: #f00;
+  font-weight: bold;
+}
+
+label.notNull {
+  padding-right: 13px;
+  background: url(./images/redbox.jpg) no-repeat center right;
+  font-weight: bold;
+}
+
+label.notNullOK {
+  padding-right: 13px;
+  background: url(./images/greenbox.jpg) no-repeat center right;
+  font-weight: bold;
+}
+
+label:hover {
+  border-bottom: 1px dotted #888;
+  cursor: help;
+}
+
+table.form th.text {
+  white-space: normal;
+  text-align: center;
+}
+
+table.form td {
+  white-space: nowrap;
+  vertical-align: top;
+  background: #eef;
+  text-align: left;
+  padding: 1px 4px;
+}
+
+table.form td.compte_rendu {
+  background: #eef;
+}
+
+table.form td.text {
+  white-space: normal;
+}
+
+table.form td.info {
+  white-space: normal;
+}
+
+table.form td.readonly input {
+  background: #ffe;
+  border: 1px dotted;
+}
+
+table.form td.button {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table.form td.date div {
+  font-size: 11px;
+  border: 1px dotted;
+  padding: 0px 1px;
+  margin: 1px;
+  width: 100px;
+  min-height: 15px;
+  float: left;
+}
+
+table.form td.date img {
+  margin-top: 3px;
+}
+
+div.autocomplete {
+  position:absolute;
+  width:250px;
+  max-height:200px;
+  overflow: auto;
+  background-color:white;
+  border:1px solid #888;
+  margin:0px;
+  padding:0px;
+}
+div.autocomplete ul {
+  list-style-type:none;
+  margin:0px;
+  padding:0px;
+}
+div.autocomplete ul li.selected { background-color: #ffe;}
+div.autocomplete ul li {
+  list-style-type:none;
+  display:block;
+  margin:0;
+  padding:2px;
+  cursor:pointer;
+}
+
+/* Navigation */
+
+table#header {
+  background: url(./images/bandeau.png) repeat-x top;
+  height: 84px;
+}
+
+td#mainHeader table {
+  width: 100%;
+}
+
+td#mainHeader td.logo {
+  text-align: left;
+}
+
+td#menubar1 {
+  text-align: right;
+  color: #000;
+  width: 100%;
+}
+
+td#menubar1 a.textSelected {
+  color: #fdd;
+  font-weight: bold;
+}
+
+td#menubar1 a {
+  color: #000;
+}
+
+td#menubar1 a:hover {
+  color: #cbecf3;
+}
+
+td#menubar2 {
+  text-align: right;
+  color: #fff;
+  width: 100%;
+}
+
+td#menubar2 a.textSelected {
+  color: #fdd;
+  font-weight: bold;
+}
+
+td#menubar2 a {
+  color: #fff;
+}
+
+td#menubar2 a:hover {
+  color: #cbecf3;
+}
+
+/* Tabbed items */
+
+td.tabox {
+  background-color: #fff;
+  border: solid #fff 0px;
+}
+
+table.tabmenu {
+  margin-top: 20px;
+  margin-left: 20px;
+  border-spacing: 0px;
+}
+
+table.tabmenu td {
+  height: 25px;
+  padding-top: 2px;
+}
+
+table.tabmenu td.normal {
+  background: url(./images/tabBg.png) repeat-x bottom;
+}
+
+table.tabmenu td.normal a {
+  color: #fff;
+}
+
+table.tabmenu td.normalLeft {
+  width: 15px;
+  background: url(./images/tabLeft.png) no-repeat bottom right;
+}
+
+table.tabmenu td.normalRight {
+  width: 15px;
+  background: url(./images/tabRight.png) no-repeat bottom left;
+}
+
+table.tabmenu td.selected {
+  background: url(./images/tabSelectedBg.png) repeat-x bottom;
+}
+
+table.tabmenu td.selectedLeft {
+  width: 15px;
+  background: url(./images/tabSelectedLeft.png) no-repeat bottom right;
+}
+
+table.tabmenu td.selectedRight {
+  width: 15px;
+  background: url(./images/tabSelectedRight.png) no-repeat bottom left;
+}
+
+/* Inputs */
+
+input,
+select,
+textarea {
+  color: #082F54;
+  background-image:url(./images/input.png);
+  border:1px solid black;
+  font-size: 12px;
+  margin: 1px;
+  padding: 1px;
+}
+
+a.button,
+button,
+input[type=submit],
+input[type=reset],
+input[type=button] {
+  color: #fff;
+  text-decoration: none;
+  cursor: default;
+  border: 1px black solid;
+  font-size: 12px;
+  background: #2eb4c9;
+  margin: 0 2px;
+  padding: 0px 2px;
+}
+
+a.button:hover,
+button:hover,
+input[type=submit]:hover,
+input[type=reset]:hover,
+input[type=button]:hover {
+  background: #5de;
+}
+
+select {
+  font-size: 10px;
+}
+
+optgroup {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 0px;
+  padding-left: 5px;
+  background-color: transparent;
+}
+
+option {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: normal;
+  padding: 0px;
+  padding-right: 4px;
+  background-color: transparent;
+}
+
+/* Standard table */
+
+table.tbl {
+  width: 100%;
+  border: 0px;
+  border-spacing: 1px;
+  background-color: #fff;
+}
+
+table.tbl a {
+  display: block;
+}
+
+table.tbl tr:hover td {
+  background-color: #fdd;
+}
+
+a.actionPat {
+  display: inline;
+  float: right;
+  margin: 0 1px;
+}
+
+table.tbl a.action {
+  display: inline;
+}
+
+table.tbl th a {
+  color: #fff;
+}
+
+table.tbl th {
+  background-color: #2eb4c9;
+  padding: 2px;
+  color: #fff;
+  border: outset #ccc 1px;
+  font-weight: normal;
+  text-align: center;
+  font-style: italic;
+  white-space: nowrap;
+}
+
+table.tbl th.title {
+  font-size: 14px;
+  font-weight: bold;  
+  text-align: center;
+  background-color: #2eb4c9;
+  border: #aaa 1px outset;
+  color: #fff;
+}
+
+table.tbl td {
+  background-color: #eef;
+  padding: 2px;
+  white-space: nowrap;
+}
+
+table.tbl th.text {
+  white-space: normal;
+}
+
+table.tbl td.text {
+  white-space: normal;
+}
+
+table.tbl td.button {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table.tbl tr.clear,
+table.tbl tr.clear a {
+  background-color: #fff;
+  color: #000;
+}
+
+table.tbl tr.clear td,
+table.tbl tr.clear th {
+  background-color: transparent;
+  border: none;
+}
+
+table.tbl td.date div {
+  font-size: 11px;
+  border: 1px dotted;
+  padding: 0px 1px;
+  margin: 1px;
+  width: 100px;
+  min-height: 15px;
+  float: left;
+}
+
+table.tbl td.date img {
+  margin-top: 3px;
+}
+
+/* Main table */
+
+th.title {
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;  
+  text-align: center;
+  background-color: #2eb4c9;
+  border: #cbecf3 1px outset;
+}
+
+/* System message */
+#systemMsg {
+  text-align: center;
+}
