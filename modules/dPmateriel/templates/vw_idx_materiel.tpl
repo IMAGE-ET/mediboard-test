@@ -82,7 +82,6 @@
   </tr>
   <tr>
     <td class="halfPane">
-      </form>
          {if $materiel->materiel_id}
          <a class="button" href="index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id=0&amp;materiel_id={$materiel->materiel_id}">
            Créer un nouveau stock pour ce matériel

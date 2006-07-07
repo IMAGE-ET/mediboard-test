@@ -71,7 +71,7 @@
           <td><input name="telephone" title="{$fournisseur->_props.telephone}" type="text" value="{$fournisseur->telephone}" /></td>
         </tr>
         <tr>
-          <th><label for="mail" title="Mail">E-Mail</label></th>
+          <th><label for="mail" title="E-Mail valide">E-Mail</label></th>
           <td><input name="mail" title="{$fournisseur->_props.mail}" type="text" value="{$fournisseur->mail}" /></td>
         </tr>
         <tr>

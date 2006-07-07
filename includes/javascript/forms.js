@@ -466,7 +466,11 @@ function checkElement(oElement, aSpecFragments) {
 	  
 	case "html":
 	  break;
-
+	case "email":
+	  if (!oElement.value.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)) {
+        return "Le format de l'email n'est pas valide";
+      }
+	  break;
     case "code":
       if (sFragment1 = aSpecFragments[1]) {
         switch (sFragment1) {

@@ -88,6 +88,7 @@
           </td>
         </tr>        
       </table>
+      </form>
       {/if}
     </td>
   </tr>

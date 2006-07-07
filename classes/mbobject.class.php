@@ -372,7 +372,12 @@ class CMbObject extends CDpObject {
 //         while (purgeHtmlText($regexps, $propValue));
 
         break;
-        
+      
+      case "email":
+        if (!preg_match("/^[-a-z0-9\._]+@[-a-z0-9\.]+\.[a-z]{2,4}$/i", $propValue)) {
+          return "Le format de l'email n'est pas valide";
+        }
+        break;
       // Special Codes
       case "code":
         switch (@$specFragments[1]) {
