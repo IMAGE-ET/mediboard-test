@@ -1,0 +1,46 @@
+<?php /* $Id: $ */
+
+/**
+ *	@package Mediboard
+ *	@subpackage dPmateriel
+ *	@version $Revision: $
+ *  @author Sébastien Fillonneau
+ */
+ 
+global $AppUI, $canRead, $canEdit, $m;
+
+if (!$canRead) {
+	$AppUI->redirect( "m=system&a=access_denied" );
+}
+ 
+require_once( $AppUI->getModuleClass("dPmateriel", "materiel") );
+require_once( $AppUI->getModuleClass("dPmateriel", "category") );
+
+$materiel_id = mbGetValueFromGetOrSession("materiel_id", null);
+
+// Chargement du matériel demandé
+$materiel=new CMateriel;
+$materiel->load($materiel_id);
+$materiel->LoadRefsBack();
+
+// Liste des Catégories
+$Categories = new CCategory;
+$listCategories = $Categories->loadList();
+
+//Chargement de tous les matériels
+$lstmateriel = new CMateriel;
+$where = array();
+$listMateriel = $lstmateriel->loadList($where);
+foreach($listMateriel as $key => $value) {
+  $listMateriel[$key]->loadRefsFwd();
+}
+
+// Création du template
+require_once( $AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP;
+$smarty->assign("listMateriel", $listMateriel);
+$smarty->assign("materiel", $materiel);
+$smarty->assign("listCategories", $listCategories);
+$smarty->display('vw_idx_materiel.tpl');
+
+?>

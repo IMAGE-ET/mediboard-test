@@ -161,6 +161,8 @@
 "module-dPhospi-long"=>"Planning des hospitalisations",
 "module-dPinterop-court"=>"Interop",
 "module-dPinterop-long"=>"Interopérabilité mediboard",
+"module-dPmateriel-court"=>"Matériel",
+"module-dPmateriel-long"=>"Gestion du matériel",
 "module-dPpatients-court"=>"Dossiers patient",
 "module-dPpatients-long"=>"Gestion des dossiers patient",
 "module-dPplanningOp-court"=>"Planning chir",

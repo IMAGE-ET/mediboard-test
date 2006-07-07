@@ -1,0 +1,21 @@
+<?php /* $Id: $ */
+
+/**
+ *	@package Mediboard
+ *	@subpackage dPmateriel
+ *	@version $Revision: $
+ *  @author Sébastien Fillonneau
+ */
+
+require_once($AppUI->getSystemClass("tabindex"));
+
+$tabs = array();
+$tabs[] = array("vw_idx_stock", "Edition des stocks", 0);
+$tabs[] = array("vw_idx_materiel", "Edition des Fiches matériel", 0);
+$tabs[] = array("vw_idx_category", "Gérer les catégories de matériel", 0);
+$default = 0;
+
+$index = new CTabIndex($tabs, $default);
+$index->show();
+
+?>
