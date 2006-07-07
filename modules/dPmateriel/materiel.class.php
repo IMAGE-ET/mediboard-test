@@ -26,7 +26,7 @@ class CMateriel extends CMbObject {
   var $category_id = null;
 
   // Object References
-  var $_ref_stock = null;
+  var $_refs_stock = null;
   var $_ref_category = null;
   
 	function CMateriel() {
@@ -39,13 +39,13 @@ class CMateriel extends CMbObject {
 	}
 	
 	function LoadRefsBack(){
-	  $this->_ref_stock = new CStock;
+	  $this->_refs_stock = new CStock;
 	  $where = array();
 	  $where["materiel_id"] = "= '$this->materiel_id'";
-      $this->_ref_stock = $this->_ref_stock->loadList($where);
-      foreach($this->_ref_stock as $key => $value) {
-        $this->_ref_stock[$key]->loadRefsFwd();
-        $this->_ref_stock[$key]->_ref_group->loadRefsFwd();
+      $this->_refs_stock = $this->_refs_stock->loadList($where);
+      foreach($this->_refs_stock as $key => $value) {
+        $this->_refs_stock[$key]->loadRefsFwd();
+        $this->_refs_stock[$key]->_ref_group->loadRefsFwd();
       }
 	} 
 	

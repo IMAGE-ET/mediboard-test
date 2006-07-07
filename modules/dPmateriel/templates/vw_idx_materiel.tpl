@@ -87,7 +87,7 @@
            <th>Seuil de Commande</th>
            <th>Quantité</th>
          </tr>
-         {foreach from=$materiel->_ref_stock item=curr_stock}
+         {foreach from=$materiel->_refs_stock item=curr_stock}
          <tr>
            <td>{$curr_stock->_ref_group->text}</td>
            <td>{$curr_stock->seuil_cmd}</td>

@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.13, created on 2006-07-07 09:46:14
+<?php /* Smarty version 2.6.13, created on 2006-07-07 11:22:12
          compiled from vw_idx_materiel.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('modifier', 'nl2br', 'vw_idx_materiel.tpl', 28, false),array('modifier', 'escape', 'vw_idx_materiel.tpl', 75, false),)), $this); ?>
@@ -115,7 +115,7 @@ smarty_core_load_plugins(array('plugins' => array(array('modifier', 'nl2br', 'vw
            <th>Seuil de Commande</th>
            <th>Quantité</th>
          </tr>
-         <?php $_from = $this->_tpl_vars['materiel']->_ref_stock; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
+         <?php $_from = $this->_tpl_vars['materiel']->_refs_stock; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
     foreach ($_from as $this->_tpl_vars['curr_stock']):
 ?>
          <tr>
