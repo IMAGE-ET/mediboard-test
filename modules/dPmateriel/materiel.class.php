@@ -11,6 +11,7 @@
 require_once( $AppUI->getSystemClass('mbobject'));
 require_once( $AppUI->getModuleClass("dPmateriel", "stock") );
 require_once($AppUI->getModuleClass("dPmateriel", "category"));
+require_once($AppUI->getModuleClass("dPmateriel", "refmateriel"));
 
 /**
  * The CMateriel class
@@ -26,7 +27,8 @@ class CMateriel extends CMbObject {
   var $category_id = null;
 
   // Object References
-  var $_refs_stock = null;
+  var $_ref_stock = null;
+  var $_ref_refMateriel = null;
   var $_ref_category = null;
   
 	function CMateriel() {
@@ -35,21 +37,22 @@ class CMateriel extends CMbObject {
       $this->_props["nom"] = "str|maxLength|50|notNull";
       $this->_props["code_barre"] = "num";
       $this->_props["description"] = "str";
-      $this->_props["category_id"] = "num|notNull";
+      $this->_props["category_id"] = "ref|notNull";
 	}
 	
-	function LoadRefsBack(){
-	  $this->_refs_stock = new CStock;
+	function loadRefsBack(){
+	  $this->_ref_stock = new CStock;
 	  $where = array();
 	  $where["materiel_id"] = "= '$this->materiel_id'";
-      $this->_refs_stock = $this->_refs_stock->loadList($where);
-      foreach($this->_refs_stock as $key => $value) {
-        $this->_refs_stock[$key]->loadRefsFwd();
-        $this->_refs_stock[$key]->_ref_group->loadRefsFwd();
-      }
+      $this->_ref_stock = $this->_ref_stock->loadList($where);
+      
+      $this->_ref_refMateriel = new CRefMateriel;
+	  $where = array();
+	  $where["materiel_id"] = "= '$this->materiel_id'";
+      $this->_ref_refMateriel = $this->_ref_refMateriel->loadList($where);
 	} 
 	
-	function LoadRefsFwd(){
+	function loadRefsFwd(){
 	  // Forward references    
       $this->_ref_category = new CCategory;
       $this->_ref_category->load($this->category_id);	

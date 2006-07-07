@@ -22,6 +22,10 @@ $stock_id = mbGetValueFromGetOrSession("stock_id", null);
 // Récupération des données pour le stock choisi 
 $stock=new CStock;
 $stock->load($stock_id);
+if($stock_id = mbGetValueFromGet("materiel_id")){
+  $stock->materiel_id = $stock_id;
+}
+
 
 // Récupération de la liste des Stock
 $lststock = new CStock;

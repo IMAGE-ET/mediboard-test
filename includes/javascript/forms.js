@@ -340,7 +340,27 @@ function checkElement(oElement, aSpecFragments) {
             }
             
             break;
-        
+          
+          case "max":
+              iMax = parseInt(aSpecFragments[2], 10);
+
+              if (iMax == NaN) {
+                return "Spécification de maximum numérique invalide";
+              }
+              
+              if (oElement.value > iMax) {
+                return printf("Soit avoir une valeur maximale de %s", iMin);
+              }
+              
+              break;
+
+          case "pos":
+            if (oElement.value <= 0) {
+              return "Doit avoir une valeur positive";
+            }
+            break;
+          
+          
           case "length":
             iLength = parseInt(aSpecFragments[2], 10);
            

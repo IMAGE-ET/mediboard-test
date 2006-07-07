@@ -20,7 +20,7 @@ $category_id = mbGetValueFromGetOrSession("category_id", null);
 // Chargement de la catégorie demandé
 $category=new CCategory;
 $category->load($category_id);
-$category->LoadRefsBack();
+$category->loadRefsBack();
 
 // Liste des Catégories
 $lstCategory = new CCategory;

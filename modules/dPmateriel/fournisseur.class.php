@@ -8,6 +8,7 @@
  */
 
 require_once( $AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getModuleClass("dPmateriel", "refmateriel"));
 
 /**
  * The CFournisseur class
@@ -24,9 +25,40 @@ class CFournisseur extends CMbObject {
   var $ville = null;
   var $telephone = null;
   var $mail = null;
+  var $prenom = null;
+  var $nom = null;
+  
+  // Object References
+  var $_ref_references = null;
   
   function CFournisseur() {
     $this->CMbObject( 'fournisseur', 'fournisseur_id' );
-  }	  	
+    
+    $this->_props["societe"] = "str|maxLength|50|notNull";
+    $this->_props["adresse"] = "str";
+    $this->_props["code_postal"] = "num";
+    $this->_props["ville"] = "str";
+    $this->_props["telephone"] = "num";
+    $this->_props["mail"] = "email";
+    $this->_props["nom"] = "str|maxLength|50";
+    $this->_props["prenom"] = "str|maxLength|50";
+  }	 
+  
+  function loadRefsBack(){
+    $this->_ref_references = new CRefMateriel;
+    $where = array();
+	$where["fournisseur_id"] = "= '$this->fournisseur_id'";
+    $this->_ref_references = $this->_ref_references->loadList($where);
+  } 	
+  
+  function canDelete(&$msg, $oid = null) {
+    $tables[] = array (
+      'label' => 'référence(s)', 
+      'name' => 'ref_materiel', 
+      'idfield' => 'reference_id', 
+      'joinfield' => 'fournisseur_id'
+    );
+    return CDpObject::canDelete( $msg, $oid, $tables );
+  }
 }
 ?>

@@ -1,9 +1,9 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage classes
- *	@version $Revision$
+ *  @package Mediboard
+ *  @subpackage classes
+ *  @version $Revision$
  *  @author Thomas Despoix
 */
 
@@ -35,7 +35,7 @@ function purgeHtmlText($regexps, &$source) {
 class CMbObject extends CDpObject {
   
   var $_aides = array();
-  /*
+  /**
    * Properties  specification
    */
   var $_props = array();
@@ -151,7 +151,7 @@ class CMbObject extends CDpObject {
     
     switch ($specFragments[0]) {
       // Reference to another object
-			case "ref":
+      case "ref":
         if (!is_numeric($propValue)) {
           return "N'est pas une référence (format non numérique)";
         }
@@ -165,8 +165,8 @@ class CMbObject extends CDpObject {
         if ($propValue < 0) {
           return "N'est pas une référence (entier négatif)";
         }
-				
-				break;
+        
+        break;
         
       // regular string
       case "str":
@@ -240,7 +240,26 @@ class CMbObject extends CDpObject {
             }
             
             break;
+
+          case "max":
+            if (!is_numeric($max = @$specFragments[2])) {
+              return "Spécification de maximum numérique invalide";
+            }
             
+            $max = intval($max);
+            if ($propValue > $max) {
+              return "Soit avoir une valeur maximale de $max";
+            }
+            
+            break;
+          
+          case "pos":            
+            if ($propValue <= 0) {
+              return "Doit avoir une valeur positive";
+            }
+            
+            break;
+  
           case "length":
             $length = intval(@$specFragments[2]);
             
@@ -403,7 +422,7 @@ class CMbObject extends CDpObject {
 
       default:
         return "Spécification invalide";
-		}
+    }
 
     if ($checkMessage = $this->checkMoreThan($propValue, $specFragments)) {
       return $checkMessage;

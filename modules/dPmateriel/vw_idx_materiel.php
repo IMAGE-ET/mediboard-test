@@ -21,7 +21,16 @@ $materiel_id = mbGetValueFromGetOrSession("materiel_id", null);
 // Chargement du matériel demandé
 $materiel=new CMateriel;
 $materiel->load($materiel_id);
-$materiel->LoadRefsBack();
+$materiel->loadRefsBack();
+
+foreach($materiel->_ref_stock as $key => $value) {
+  $materiel->_ref_stock[$key]->loadRefsFwd();
+  $materiel->_ref_stock[$key]->_ref_group->loadRefsFwd();
+}
+foreach($materiel->_ref_refMateriel as $key => $value) {
+  $materiel->_ref_refMateriel[$key]->loadRefsFwd();
+}
+
 
 // Liste des Catégories
 $Categories = new CCategory;

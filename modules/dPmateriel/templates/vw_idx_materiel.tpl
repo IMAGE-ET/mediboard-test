@@ -1,6 +1,6 @@
 <table class="main">
   <tr>
-    <td class="halfPane">
+    <td class="halfPane" rowspan="3">
       <a class="button" href="index.php?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id=0">
         Créer une nouvelle fiche
       </a>
@@ -78,6 +78,16 @@
         </tr>        
       </table>
       </form>
+    </td>
+  </tr>
+  <tr>
+    <td class="halfPane">
+      </form>
+         {if $materiel->materiel_id}
+         <a class="button" href="index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id=0&amp;materiel_id={$materiel->materiel_id}">
+           Créer un nouveau stock pour ce matériel
+         </a>
+         {/if}
          <table class="tbl">
          <tr>
            <th class="title" colspan="3">Stock(s) correspondant(s)</th>
@@ -87,7 +97,7 @@
            <th>Seuil de Commande</th>
            <th>Quantité</th>
          </tr>
-         {foreach from=$materiel->_refs_stock item=curr_stock}
+         {foreach from=$materiel->_ref_stock item=curr_stock}
          <tr>
            <td>{$curr_stock->_ref_group->text}</td>
            <td>{$curr_stock->seuil_cmd}</td>
@@ -99,6 +109,34 @@
          </tr>
          {/foreach}
        </table>
+    </td>
+  </tr>
+  <tr>
+    <td class="halfPane">
+      <table class="tbl">
+        <tr>
+          <th class="title" colspan="4">Référence(s) correspondante(s)</th>
+        </tr>
+        <tr>
+           <th>Fournisseur</th>
+           <th>Quantité</th>
+           <th>Prix</th>
+           <th>Prix Unitaire</th>
+         </tr>
+         {foreach from=$materiel->_ref_refMateriel item=curr_refMateriel}
+         <tr>
+           <td>{$curr_refMateriel->_ref_fournisseur->societe}</td>
+           <td>{$curr_refMateriel->quantite}</td>
+           <td>{$curr_refMateriel->prix}</td>
+           <td>{$curr_refMateriel->_prix_unitaire|string_format:"%.2f"}</td>
+         </tr>
+         {foreachelse}
+         <tr>
+           <td class="button" colspan="4">Aucune référence trouvée</td>
+         </tr>
+         {/foreach}
+       </table>
+    
     </td>
   </tr>
 </table>
