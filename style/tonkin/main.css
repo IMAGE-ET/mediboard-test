@@ -431,9 +431,14 @@ th.title {
 
 table.titleblock td.titlecell {
   font-size: 20px; 
+  color: #000;
+  width: 100%;
+}
+
+table#header table.titleblock td.titlecell {
+  font-size: 20px; 
   color: #fff;
   width: 100%;
-  padding-bottom: 10px;
 }
 
 /* System message */
