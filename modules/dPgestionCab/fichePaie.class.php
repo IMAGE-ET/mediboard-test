@@ -97,7 +97,7 @@ class CFichePaie extends CMbObject {
       $this->_prime_anciennete = ($this->anciennete / 100) *
                                  ($this->_salaire_base + $this->_salaire_heures_sup);
       $this->_salaire_brut += $this->_prime_anciennete;
-      $this->_conges_payes = $this->conges_payes *
+      $this->_conges_payes = ($this->conges_payes / 100) *
                                    ($this->_salaire_base +
                                     $this->_salaire_heures_sup +
                                     $this->_prime_precarite +
