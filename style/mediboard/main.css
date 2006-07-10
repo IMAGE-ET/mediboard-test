@@ -132,7 +132,9 @@ a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange {
   padding: 0px 2px;
 }
 
-a.button:hover, button:hover {
+a.button:hover, button:hover, a.buttontrash:hover, a.buttonsubmit:hover, a.buttonnew:hover,
+a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, a.buttonsearch:hover, 
+a.buttontick:hover, a.buttonchange:hover {
   background-color: #bbb;
 }
 
