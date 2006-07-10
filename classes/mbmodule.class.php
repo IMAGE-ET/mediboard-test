@@ -7,7 +7,7 @@
  * @author Thomas Despoix
  */
  
-global $AppUI;
+global $AppUI, $m;
 
 require_once($AppUI->getSystemClass("mbobject"));
 

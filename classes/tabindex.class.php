@@ -20,9 +20,9 @@ class CTabIndex {
     }
     $AppUI->savePlace();
     if(isset($_GET["tab"])) {
-      $AppUI->setState("{$m}IdxTab", $_GET["tab"]);
+      $AppUI->setState($m."IdxTab", $_GET["tab"]);
     }
-    $tab = $AppUI->getState("{$m}IdxTab") !== null ? $AppUI->getState("{$m}IdxTab") : $default;
+    $tab = $AppUI->getState($m."IdxTab") !== null ? $AppUI->getState($m."IdxTab") : $default;
     $this->tabBox = new CTabBox("?m=$m", $AppUI->cfg["root_dir"]."/modules/$m/", $tab);
     // For each tabs :
     // 0 : file name, 1 : tab name, 2 : can edit right needed

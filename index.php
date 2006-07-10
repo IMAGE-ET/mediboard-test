@@ -143,7 +143,7 @@ $suppressHeaders = dPgetParam($_GET, "suppressHeaders");
 
 // Output the charset header in cas of an ajax request
 $ajax = dPgetParam($_GET, "ajax", false);
- 
+
 if (!$suppressHeaders || $ajax) {
 	// output the character set header
 	if (isset($locale_char_set)) {
