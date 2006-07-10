@@ -75,7 +75,7 @@ class CSetupdPmateriel {
             \n`fournisseur_id` int(11) NOT NULL auto_increment,
             \n`societe` VARCHAR(50) NOT NULL,
             \n`adresse` TEXT default '',		
-            \n`code_postal` VARCHAR(5),
+            \n`codepostal` VARCHAR(5),
             \n`ville` VARCHAR(100),
             \n`telephone` VARCHAR(25),
            	\n`mail` VARCHAR(100),

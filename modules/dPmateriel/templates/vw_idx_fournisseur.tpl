@@ -1,3 +1,36 @@
+{literal}
+<script type="text/javascript">
+function updateFields(selected) {
+  Element.cleanWhitespace(selected);
+  dn = selected.childNodes;
+  $('editFournisseur_codepostal').value = dn[0].firstChild.firstChild.nodeValue;
+  $('editFournisseur_ville').value = dn[2].firstChild.nodeValue;
+}
+
+function pageMain() {
+  new Ajax.Autocompleter(
+    'editFournisseur_codepostal',
+    'codepostal_auto_complete',
+    'index.php?m=dPmateriel&ajax=1&suppressHeaders=1&a=httpreq_do_insee_autocomplete', {
+      minChars: 2,
+      frequency: 0.15,
+      updateElement: updateFields
+    }
+  );
+  new Ajax.Autocompleter(
+    'editFournisseur_ville',
+    'ville_auto_complete',
+    'index.php?m=dPmateriel&ajax=1&suppressHeaders=1&a=httpreq_do_insee_autocomplete', {
+      minChars: 4,
+      frequency: 0.15,
+      updateElement: updateFields
+    }
+  );
+}
+
+</script>
+{/literal}
+
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="2">
@@ -27,7 +60,7 @@
           </td>
           <td>{$curr_fournisseur->nom} {$curr_fournisseur->prenom}</td>
           <td>
-            {$curr_fournisseur->adresse|nl2br}<br />{$curr_fournisseur->code_postal} {$curr_fournisseur->ville}
+            {$curr_fournisseur->adresse|nl2br}<br />{$curr_fournisseur->codepostal} {$curr_fournisseur->ville}
           </td>
           <td>{$curr_fournisseur->telephone}</td>
           <td>{$curr_fournisseur->mail}</td>
@@ -59,12 +92,19 @@
           <td><textarea title="{$fournisseur->_props.adresse}" name="adresse">{$fournisseur->adresse}</textarea></td>
         </tr>
         <tr>
-          <th><label for="code_postal" title="Code Postal">Code Postal</label></th>
-          <td><input name="code_postal" title="{$fournisseur->_props.code_postal}" type="text" value="{$fournisseur->code_postal}" /></td>
+          <th><label for="codepostal" title="Code Postal">Code Postal</label></th>
+          <td>
+            <input size="31" maxlength="5" type="text" name="codepostal" title="{$fournisseur->_props.codepostal}" value="{$fournisseur->codepostal}" />
+            <div style="display:none;" class="autocomplete" id="codepostal_auto_complete"></div>
+          </td>
         </tr>
         <tr>
           <th><label for="ville" title="Ville">Ville</label></th>
-          <td><input name="ville" title="{$fournisseur->_props.ville}" type="text" value="{$fournisseur->ville}" /></td>
+          <td>
+           
+            <input size="31" type="text" name="ville" value="{$fournisseur->ville}" title="{$fournisseur->_props.ville}" />
+          <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
+          </td>
         </tr>
         <tr>
           <th><label for="telephone" title="Téléphone">Téléphone</label></th>
@@ -75,11 +115,11 @@
           <td><input name="mail" title="{$fournisseur->_props.mail}" type="text" value="{$fournisseur->mail}" /></td>
         </tr>
         <tr>
-          <th><label for="nom" title="Nom">Nom du contact</label></th>
+          <th><label for="nom" title="Nom du contact">Nom du contact</label></th>
           <td><input name="nom" title="{$fournisseur->_props.nom}" type="text" value="{$fournisseur->nom}" /></td>
         </tr>
         <tr>
-          <th><label for="prenom" title="Prénom">Prénom du Contact</label></th>
+          <th><label for="prenom" title="Prénom du contact">Prénom du Contact</label></th>
           <td><input name="prenom" title="{$fournisseur->_props.prenom}" type="text" value="{$fournisseur->prenom}" /></td>
         </tr>
         <tr>

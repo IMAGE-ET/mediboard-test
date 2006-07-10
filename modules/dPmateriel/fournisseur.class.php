@@ -21,7 +21,7 @@ class CFournisseur extends CMbObject {
   var $societe = null;
   var $adresse = null;
   var $adresse_suite = null;
-  var $code_postal = null;
+  var $codepostal = null;
   var $ville = null;
   var $telephone = null;
   var $mail = null;
@@ -36,7 +36,7 @@ class CFournisseur extends CMbObject {
     
     $this->_props["societe"] = "str|maxLength|50|notNull";
     $this->_props["adresse"] = "str";
-    $this->_props["code_postal"] = "num";
+    $this->_props["codepostal"] = "num|length|5";
     $this->_props["ville"] = "str";
     $this->_props["telephone"] = "num";
     $this->_props["mail"] = "email";
