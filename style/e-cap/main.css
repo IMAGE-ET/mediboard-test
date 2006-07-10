@@ -251,19 +251,16 @@ table.tabmenu td.selectedRight {
 
 /* Inputs */
 
-a.button, button {
+a.button, button, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
+a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange {
   color: #fff;
-  text-decoration: none;
-  cursor: default;
-  border: 1px black solid;
-  font-size: 12px;
-  background: #638cc9;
-  margin: 0 2px;
-  padding: 0px 2px;
+  background-color: #638cc9;
 }
 
-a.button:hover, button:hover {
-  background: #8ae;
+a.button:hover, button:hover, a.buttontrash:hover, a.buttonsubmit:hover, a.buttonnew:hover,
+a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, a.buttonsearch:hover, 
+a.buttontick:hover, a.buttonchange:hover {
+  background-color: #8ae;
 }
 
 input {
