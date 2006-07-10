@@ -3,7 +3,7 @@
 ## Activate or move a module entry
 ##
 
-global $Appui;
+global $AppUI;
 
 $cmd = mbGetValueFromGet("cmd", "0");
 $mod_id = intval(mbGetValueFromGet("mod_id", "0"));
