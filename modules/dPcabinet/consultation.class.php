@@ -178,17 +178,18 @@ class CConsultation extends CMbObject {
     $this->loadRefPatient();
     $this->loadRefPlageConsult();
   }
-  
+
   function loadRefFiles() {
     $this->_ref_files = array();
     if($this->consultation_id) {
       $where = array();
-      $where["file_consultation"] = "= '$this->consultation_id'";
+      $where["file_object_id"] = "= '$this->consultation_id'";
+      $where["file_class"] = "= 'CConsultation'";
       $this->_ref_files = new CFile();
       $this->_ref_files = $this->_ref_files->loadList($where);
     }
   }
-  
+
   function loadRefDocs() {
     $this->_ref_documents = array();
     $this->_ref_documents = new CCompteRendu();
@@ -206,7 +207,7 @@ class CConsultation extends CMbObject {
     if($docs_valid)
       $this->_etat .= " ($docs_valid Doc.)";
   }
-  
+
   function loadRefConsultAnesth() {
     $this->_ref_consult_anesth = new CConsultAnesth;
     $where = array();

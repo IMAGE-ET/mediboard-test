@@ -8,18 +8,20 @@
 */
 
 require_once($AppUI->getSystemClass ("mbobject"));
-require_once($AppUI->getSystemClass ('mbpath'));
+require_once($AppUI->getSystemClass ("mbpath"));
 
-$filesDir = "{$AppUI->cfg['root_dir']}/files";
+$filesDir = $AppUI->cfg["root_dir"]."/files";
 
 class CFile extends CMbObject {
   // DB Table key
   var $file_id = null;
   
   // DB Fields
-  var $file_consultation = null;
-  var $file_consultation_anesth = null;
-  var $file_operation = null;
+  var $file_object_id = null;
+  var $file_class = null;
+//  var $file_consultation = null;
+//  var $file_consultation_anesth = null;
+//  var $file_operation = null;
   var $file_real_filename = null;
   var $file_name = null;
   
@@ -31,52 +33,42 @@ class CFile extends CMbObject {
   // Form fields
   var $_file_size = null;
   var $_sub_dir = null;
-  var $_object_id = null;
   var $_file_path = null;
 
   function CFile() {
-    $this->CMbObject( 'files_mediboard', 'file_id' );
+    $this->CMbObject("files_mediboard", "file_id");
     
     //@todo : creer les types des propriétés
   }
 
   function check() {
     // Ensure the integrity of some variables
-    $this->file_id = intval( $this->file_id );
-    $this->file_consultation = intval( $this->file_consultation );
-    $this->file_consultation_anesth = intval( $this->file_consultation_anesth );
-    $this->file_operation = intval( $this->file_operation );
-
-    return NULL; // object is ok
+    $this->file_id = intval($this->file_id);
+    $this->file_object_id = intval($this->file_object_id);
+    //$this->file_consultation = intval($this->file_consultation);
+    //$this->file_consultation_anesth = intval($this->file_consultation_anesth);
+    //$this->file_operation = intval($this->file_operation);
+    return null; // object is ok
   }
 
   function updateFormFields() {
     $this->_file_size = mbConvertDecaBinary($this->file_size);
-    
-    // Computes complete file path
-    if ($object_id = $this->file_consultation       ) { $this->_sub_dir = "consultations"       ; $this->_object_id = $object_id; }
-    if ($object_id = $this->file_consultation_anesth) { $this->_sub_dir = "consultations_anesth"; $this->_object_id = $object_id; }
-    if ($object_id = $this->file_operation          ) { $this->_sub_dir = "operations"          ; $this->_object_id = $object_id; }
-    
-    if (!$this->_object_id) {
+
+    if (!$this->file_object_id) {
       trigger_error("No object_id associated with file (file_id = $this->file_id)", E_USER_WARNING);
     }
     
-    // File path can't be computed yet because of consultations2 hack
-//    $this->_file_path = "$filesDir/$this->_sub_dir/$this->_object_id/$this->file_real_filename";
+    // Computes complete file path
+    $this->_sub_dir = "$this->file_class";
+    $this->_sub_dir .= "/".intval($this->file_object_id / 1000);
   }
   
   function findFilePath() {
     global $filesDir;
     
-    $this->_file_path = "$filesDir/$this->_sub_dir/$this->_object_id/$this->file_real_filename";
+    $this->_file_path = "$filesDir/$this->_sub_dir/$this->file_object_id/$this->file_real_filename";
     if (!is_file($this->_file_path)) {
-      $this->_sub_dir .= "2";    
-      $this->_file_path = "$filesDir/$this->_sub_dir/$this->_object_id/$this->file_real_filename";
-    }
-    
-    if (!is_file($this->_file_path)) {
-      trigger_error("File is not reachable", E_USER_WARNING);
+      trigger_error("Fichier introuvable", E_USER_WARNING);
     }
   }
 
@@ -97,7 +89,7 @@ class CFile extends CMbObject {
     if (!db_exec( $sql )) {
       return db_error();
     }
-    return NULL;
+    return null;
   }
 
   /**
@@ -115,20 +107,12 @@ class CFile extends CMbObject {
     }
     
     // Checks complete file directory
-    $fileDir = "$filesDir/$this->_sub_dir/$this->_object_id";
-
-    if (!@CMbPath::forceDir($fileDir)) {
-      $this->_sub_dir .= "2";
-      $fileDir = "$filesDir/$this->_sub_dir/$this->_object_id";
-      if (!CMbPath::forceDir($fileDir)) {
-        trigger_error("File directory couldn't be created for file (file_id = $this->file_id)", E_USER_WARNING);
-        return false;
-      }
-    }
+    $fileDir = "$filesDir/$this->_sub_dir/$this->file_object_id";
+    CMbPath::forceDir($fileDir);
     
     // Moves temp file to specific directory
     $this->_file_path = "$fileDir/$this->file_real_filename";
-    return move_uploaded_file( $upload['tmp_name'], $this->_file_path);
+    return move_uploaded_file( $upload["tmp_name"], $this->_file_path);
   }
 
   /**
@@ -150,7 +134,7 @@ class CFile extends CMbObject {
 
     // Parse it
     $parser = $parser . " " . $this->_file_path;
-    $pos = strpos( $parser, '/pdf' );
+    $pos = strpos( $parser, "/pdf" );
     if (false !== $pos) {
       $x = `$parser -`;
     } else {

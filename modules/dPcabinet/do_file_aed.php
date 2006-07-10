@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-require_once( $AppUI->getModuleClass('dPcabinet', 'files') );
+require_once($AppUI->getModuleClass("dPcabinet", "files"));
 
 $ajax = mbGetValueFromPost("ajax", 0);
 $suppressHeaders = mbGetValueFromPost("suppressHeaders", 0);
@@ -24,9 +24,9 @@ function doRedirect() {
   }
 }
 
-//addfile sql
-$file_id = intval( dPgetParam( $_POST, 'file_id', 0 ) );
-$del = intval( dPgetParam( $_POST, 'del', 0 ) );
+$file_id = intval(mbGetValueFromPost("file_id", 0));
+$del     = intval(mbGetValueFromPost("del", 0 ));
+
 $obj = new CFile();
 
 if (!$obj->bind( $_POST )) {
@@ -34,11 +34,10 @@ if (!$obj->bind( $_POST )) {
 	doRedirect();
 }
 
-// prepare (and translate) the module name ready for the suffix
-$AppUI->setMsg( 'Fichier' );
+$AppUI->setMsg("Fichier");
 // delete the file
 if ($del) {
-	$obj->load( $file_id );
+	$obj->load($file_id);
 	if (($msg = $obj->delete())) {
 		$AppUI->setMsg( $msg, UI_MSG_ERROR );
 		doRedirect();
@@ -52,26 +51,26 @@ set_time_limit( 600 );
 ignore_user_abort( 1 );
 
 $upload = null;
-if (isset( $_FILES['formfile'] )) {
-	$upload = $_FILES['formfile'];
+if (isset($_FILES["formfile"])) {
+	$upload = $_FILES["formfile"];
 
-	if ($upload['size'] < 1) {
+	if ($upload["size"] < 1) {
 		if (!$file_id) {
-			$AppUI->setMsg( 'Taille de fichier nulle. Echec de l\'opération.', UI_MSG_ERROR );
+			$AppUI->setMsg("Taille de fichier nulle. Echec de l'opération.", UI_MSG_ERROR);
 			doRedirect();
 		}
 	} else {
 
 	// store file with a unique name
-		$obj->file_name = $upload['name'];
-		$obj->file_type = $upload['type'];
-		$obj->file_size = $upload['size'];
-		$obj->file_date = db_unix2dateTime( time() );
-		$obj->file_real_filename = uniqid( rand() );
+		$obj->file_name = $upload["name"];
+		$obj->file_type = $upload["type"];
+		$obj->file_size = $upload["size"];
+		$obj->file_date = db_unix2dateTime(time());
+		$obj->file_real_filename = uniqid(rand());
 
-		$res = $obj->moveTemp( $upload );
+		$res = $obj->moveTemp($upload);
 		if (!$res) {
-		    $AppUI->setMsg( 'Impossible de créer le fichier', UI_MSG_ERROR );
+		    $AppUI->setMsg("Impossible de créer le fichier", UI_MSG_ERROR);
 		    doRedirect();
 		}
 		//$obj->indexStrings();
@@ -83,10 +82,12 @@ if (!$file_id) {
 }
 
 if (($msg = $obj->store())) {
-	$AppUI->setMsg( $msg, UI_MSG_ERROR );
+	$AppUI->setMsg($msg, UI_MSG_ERROR);
 } else {
-	$AppUI->setMsg( $file_id ? 'modifié' : 'ajouté', UI_MSG_OK, true );
+	$AppUI->setMsg($file_id ? "modifié" : "ajouté", UI_MSG_OK, true);
   $obj->indexStrings();
 }
+
 doRedirect();
+
 ?>

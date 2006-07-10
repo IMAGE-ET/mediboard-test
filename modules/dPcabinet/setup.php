@@ -12,15 +12,15 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
-$config["mod_name"] = "dPcabinet";
-$config["mod_version"] = "0.38";
-$config["mod_directory"] = "dPcabinet";
+$config["mod_name"]        = "dPcabinet";
+$config["mod_version"]     = "0.39";
+$config["mod_directory"]   = "dPcabinet";
 $config["mod_setup_class"] = "CSetupdPcabinet";
-$config["mod_type"] = "user";
-$config["mod_ui_name"] = "Cabinet";
-$config["mod_ui_icon"] = "dPcabinet.png";
+$config["mod_type"]        = "user";
+$config["mod_ui_name"]     = "Cabinet";
+$config["mod_ui_icon"]     = "dPcabinet.png";
 $config["mod_description"] = "Gestion de cabinet de consultation";
-$config["mod_config"] = true;
+$config["mod_config"]      = true;
 
 if (@$a == "setup") {
   echo dPshowModuleConfig($config);
@@ -46,7 +46,7 @@ class CSetupdPcabinet {
   }
 
   function upgrade( $old_version ) {
-    switch ( $old_version ) {
+    switch ($old_version) {
       case "all":
         $sql = "CREATE TABLE consultation (
                     consultation_id bigint(20) NOT NULL auto_increment,
@@ -311,9 +311,33 @@ class CSetupdPcabinet {
         db_exec( $sql ); db_error();
             
       case "0.38":
-        return "0.38";
+        $sql = "ALTER TABLE `files_mediboard`" .
+            "\nADD `file_object_id` INT(11) NOT NULL DEFAULT '0' AFTER `file_real_filename`," .
+            "\nADD `file_class` VARCHAR(30) NOT NULL DEFAULT 'CPatients' AFTER `file_object_id`;";
+        db_exec( $sql ); db_error();
+        $sql = "UPDATE `files_mediboard`" .
+            "SET `file_object_id` = `file_consultation`," .
+            "\n`file_class` = 'CConsultation'" .
+            "\nWHERE `file_consultation` != 0;";
+        db_exec( $sql ); db_error();
+        $sql = "UPDATE `files_mediboard`" .
+            "SET `file_object_id` = `file_consultation_anesth`," .
+            "\n`file_class` = 'CConsultAnesth'" .
+            "\nWHERE `file_consultation_anesth` != 0;";
+        db_exec( $sql ); db_error();
+        $sql = "UPDATE `files_mediboard`" .
+            "SET `file_object_id` = `file_operation`," .
+            "\n`file_class` = 'COperation'" .
+            "\nWHERE `file_operation` != 0;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `files_mediboard`" .
+          "\nDROP `file_consultation`," .
+          "\nDROP `file_consultation_anesth`," .
+          "\nDROP `file_operation`;";
+        db_exec( $sql ); db_error();
+      case "0.39":
+        return "0.39";
     }
-
     return false;
   }
 }

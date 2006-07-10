@@ -129,7 +129,8 @@ function submitFdr(oForm) {
         <input type="hidden" name="m" value="dPcabinet" />
         <input type="hidden" name="dosql" value="do_file_aed" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="file_consultation" value="{$consult->consultation_id}" />
+        <input type="hidden" name="file_class" value="CConsultation" />
+        <input type="hidden" name="file_object_id" value="{$consult->consultation_id}" />
         <input type="file" name="formfile" size="0" /><br />
         <input type="submit" value="ajouter" />
       </form>

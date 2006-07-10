@@ -7,15 +7,15 @@
 * @author Romain Ollivier
 */
 
-require_once( $AppUI->getSystemClass ('mbobject' ) );
+require_once( $AppUI->getSystemClass ("mbobject"));
 
-require_once($AppUI->getModuleClass('dPcim10', 'favoricim10'));
-require_once($AppUI->getModuleClass('dPcim10', 'codecim10'));
-require_once($AppUI->getModuleClass('dPpatients', 'patients'));
-require_once($AppUI->getModuleClass('dPcabinet', 'consultation'));
-require_once($AppUI->getModuleClass('dPcabinet', 'plageconsult'));
-require_once($AppUI->getModuleClass('dPcabinet', 'files'));
-require_once($AppUI->getModuleClass('dPcompteRendu', 'compteRendu'));
+require_once($AppUI->getModuleClass("dPcim10"      , "favoricim10"));
+require_once($AppUI->getModuleClass("dPcim10"      , "codecim10"));
+require_once($AppUI->getModuleClass("dPpatients"   , "patients"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "plageconsult"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "files"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 
 class CConsultAnesth extends CMbObject {
   // DB Table key
@@ -54,7 +54,7 @@ class CConsultAnesth extends CMbObject {
   var $_ref_plageconsult = null;
 
   function CConsultAnesth() {
-    $this->CMbObject( 'consultation_anesth', 'consultation_anesth_id' );
+    $this->CMbObject("consultation_anesth", "consultation_anesth_id");
 
     $this->_props["consultation_id"] = "ref|notNull";
     $this->_props["operation_id"]    = "ref|notNull";
