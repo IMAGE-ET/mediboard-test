@@ -8,7 +8,7 @@
 */
 
 require_once($AppUI->getModuleClass("system", "message"));
-require_once($AppUI->getSystemClass('doobjectaddedit'));
+require_once($AppUI->getSystemClass("doobjectaddedit"));
 
 $do = new CDoObjectAddEdit("CMessage", "message_id");
 $do->createMsg = "Message créé";
