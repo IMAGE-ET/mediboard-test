@@ -9,7 +9,7 @@ $cmd = mbGetValueFromGet("cmd", "0");
 $mod_id = intval(mbGetValueFromGet("mod_id", "0"));
 $mod_directory = mbGetValueFromGet("mod_directory", "0");
 
-require_once($Appui->getModuleClass("system", "system"));
+require_once($AppUI->getModuleClass("system", "system"));
 
 $obj = new CModule();
 if ($mod_id) {
