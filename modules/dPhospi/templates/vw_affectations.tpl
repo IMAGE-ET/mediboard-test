@@ -441,13 +441,13 @@ function showLegend() {
               <input type="hidden" name="id" value="{$curr_affectation->_ref_sejour->sejour_id}" />
               {if $curr_affectation->_ref_sejour->chambre_seule == 'o'}
               <input type="hidden" name="value" value="n" />
-              <button type="submit" style="background-color: #f55;">
-                <img src="modules/{$m}/images/refresh.png" alt="changer" /> chambre simple
+              <button clas="change" type="submit" style="background-color: #f55;">
+                chambre simple
               </button>
               {else}
               <input type="hidden" name="value" value="o" />
-              <button type="submit">
-                <img src="modules/{$m}/images/refresh.png" alt="changer" /> chambre double
+              <button class="change" type="submit">
+                chambre double
               </button>
               {/if}
               </form>

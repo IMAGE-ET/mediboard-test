@@ -189,10 +189,9 @@ function pageMain() {
   <tr>
     <td class="button" colspan="6">
     {if $plagesel->id}
-      <input type='reset' value='Réinitialiser' />
-      <input type='submit' value='Modifier' />
+      <button type="submit" class="modify">Modifier</button>
     {else}
-      <input type='submit' value='Ajouter' >
+      <button type="submit" class="new">Ajouter</button>
     {/if}
     </td>
   </tr>
@@ -219,7 +218,7 @@ function pageMain() {
    
     <tr>
       <td class="button" colspan="2">
-        <input type='submit' value='Supprimer' />
+        <button type="submit" class="trash">Supprimer</button>
       </td>
     </tr>
   </table>

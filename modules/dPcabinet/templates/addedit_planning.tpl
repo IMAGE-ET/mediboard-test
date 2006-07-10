@@ -82,7 +82,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
 <table class="main" style="margin: 4px; border-spacing: 0px;">
   {if $consult->consultation_id}
   <tr>
-    <td><a class="button" href="?m={$m}&amp;consultation_id=0">Créer une nouvelle consultation</a></td>
+    <td><a class="buttonnew" href="?m={$m}&amp;consultation_id=0">Créer une nouvelle consultation</a></td>
   </tr>
   {/if}
   <tr>
@@ -110,9 +110,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
           </th>
             <td class="readonly">
               <input type="text" name="_chir_name" size="30" value="{$chir->_view}" readonly="readonly" />
-              <button type="button" onclick="setChir('', '')">
-                <img src="modules/{$m}/images/cross.png" alt="X" />
-              </button>
+              <button class="cancel" type="button" onclick="setChir('', '')"></button>
             </td>
             <td class="button"><input type="button" value="Choisir un praticien" onclick="popChir()" /></td>
         </tr>
@@ -123,7 +121,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
             <label for="patient_id" title="Patient pour la consultation">Patient</label>
           </th>
           <td class="readonly"><input type="text" name="_pat_name" size="30" value="{$pat->_view}" readonly="readonly" /></td>
-          <td class="button"><input type="button" value="Rechercher un patient" onclick="popPat()" /></td>
+          <td class="button"><button class="search" type="button" onclick="popPat()">Rechercher un patient</button></td>
         </tr>
         
         <tr>
@@ -211,11 +209,12 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
         <tr>
           <td class="button">
           {if $consult->consultation_id}
-            <input type="reset" value="Réinitialiser" />
-            <input type="submit" value="Modifier" />
-            <input type="button" value="Supprimer" style="cursor: pointer;" onclick="confirmDeletion(this.form,{ldelim}typeName:'la consultation de',objName:'{$consult->_ref_patient->_view|escape:javascript}'{rdelim})" />
+            <button class="modify" type="submit">Modifier</button>
+            <button class="trash" type="button" style="cursor: pointer;" onclick="confirmDeletion(this.form,{ldelim}typeName:'la consultation de',objName:'{$consult->_ref_patient->_view|escape:javascript}'{rdelim})">
+              Supprimer
+            </button>
           {else}
-            <input type="submit" value="Créer" />
+            <button class="submit" type="submit">Créer</button>
           {/if}
           </td>
         </tr>

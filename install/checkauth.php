@@ -35,7 +35,7 @@ function showLogin() {
     <td><input type="password" name="password" />
   </td>
   <tr>
-    <td class="button" colspan="2"><input type="submit" value="Valider" /></td>
+    <td class="button" colspan="2"><button class="submit" type="submit">Valider</button></td>
   </tr>
 </table>
 

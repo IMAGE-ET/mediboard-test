@@ -120,7 +120,7 @@ function pageMain() {
             <input type="text" readonly="readonly" name="patNom" value="{$patient->_view}" />
           </td>
           <td class="button">
-            <input type="button" value="chercher" onclick="popPat()" />
+            <button class="search" type="button" onclick="popPat()">chercehr</button>
           </td>
         </tr>
       </table>
@@ -263,7 +263,7 @@ function pageMain() {
               <tr>
                 <th class="category" colspan="2">
                   <em>Lien S@nté.com</em> : Patient 
-                  <input type="button" value="Valider" onclick="submitPatForm({$curr_op->operation_id})" />
+                  <button class="submit" type="button" onclick="submitPatForm({$curr_op->operation_id})">Valider</button>
                 </th>
               </tr>
 
@@ -294,7 +294,7 @@ function pageMain() {
               <tr>
                 <th class="category" colspan="2">
                   <em>Lien S@nté.com</em> : Séjour
-                  <input type="button" value="Valider" onclick="submitSejourForm({$curr_op->operation_id})" />
+                  <button class="submit" type="button" onclick="submitSejourForm({$curr_op->operation_id})">Valider</button>
                 </th>
               </tr>
 
@@ -326,7 +326,7 @@ function pageMain() {
               <tr>
                 <th class="category" colspan="2">
                   <em>Lien S@nté.com</em> : Intervention
-                  <input type="button" value="Valider" onclick="submitOpForm({$curr_op->operation_id})" />
+                  <button class="submit" type="button" onclick="submitOpForm({$curr_op->operation_id})">Valider</button>
                 </th>
               </tr>
 
@@ -373,7 +373,7 @@ function pageMain() {
             <table class="form">
               <tr>
                 <td class="button">
-                  <button type="button" onclick="submitAllForms({$curr_op->operation_id})" >Tout valider</button>
+                  <button class="submit" type="button" onclick="submitAllForms({$curr_op->operation_id})" >Tout valider</button>
                 </td>
               </tr>
             </table>
@@ -423,9 +423,7 @@ function pageMain() {
             <input type="hidden" name="dosql" value="do_acteccam_aed" />
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="acte_id" value="{$curr_acte->acte_id}" />
-            <button type="submit">
-              <img src="modules/dPpmsi/images/cross.png" alt="delete" />
-            </button>
+            <button class="trash" type="submit"></button>
             </form>
           </td>
           <td class="text">{$curr_acte->_ref_executant->_view} : {$curr_acte->code_acte}</td>
@@ -443,9 +441,7 @@ function pageMain() {
           <th>{$document->nom}</th>
           {if $document->source}
           <td colspan="3">
-            <button onclick="imprimerDocument({$document->compte_rendu_id})">
-              <img src="modules/dPpmsi/images/print.png" />
-            </button>
+            <button class="print" onclick="imprimerDocument({$document->compte_rendu_id})"></button>
           </td>
           {else}
           <td colspan="3">
@@ -484,7 +480,7 @@ function pageMain() {
             <input type="hidden" name="sejour_id" value="{$curr_sejour->sejour_id}" />
             Diagnostic principal :
             <input type="text" name="DP" value="{$curr_sejour->DP}"/>
-            <button type="submit">Modifier</button>
+            <button class="modify" type="submit">Modifier</button>
             </form>
             {if $curr_sejour->_ref_GHM->_CM}
             <strong>Catégorie majeure CM{$GHM->_CM}</strong> : {$GHM->_CM_nom}

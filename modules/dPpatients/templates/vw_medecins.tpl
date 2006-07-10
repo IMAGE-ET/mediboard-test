@@ -69,7 +69,7 @@ function setClose() {ldelim}
         </tr>
         
         <tr>
-          <td class="button" colspan="2"><input type="submit" value="rechercher" /></td>
+          <td class="button" colspan="2"><button class="search" type="submit">Rechercher</button></td>
         </tr>
       </table>
 
@@ -120,7 +120,7 @@ function setClose() {ldelim}
       <table class="form">
         {if !$dialog && $medecin->medecin_id}
         <tr>
-          <td colspan="2"><a class="button" href="index.php?m={$m}&amp;tab={$tab}&amp;new=1">Créer un nouveau médecin</a></td>
+          <td colspan="2"><a class="buttonnew" href="index.php?m={$m}&amp;tab={$tab}&amp;new=1">Créer un nouveau médecin</a></td>
         </tr>
         {/if}
         <tr>
@@ -197,10 +197,12 @@ function setClose() {ldelim}
           {else}
             {if $medecin->medecin_id}
             <input type="hidden" name="medecin_id" value="{$medecin->medecin_id}" />
-            <input type="submit" value="Modifier" />
-            <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'le médecin',objName:'{$medecin->_view|escape:javascript}'{rdelim})"/>
+            <button class="modify" type="submit">Modifier</button>
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{ldelim}typeName:'le médecin',objName:'{$medecin->_view|escape:javascript}'{rdelim})">
+              Supprimer
+            </button>
             {else}
-            <input type="submit" value="Créer" />
+            <button class="submit" type="submit">Créer</button>
             {/if}
           {/if}
           </td>

@@ -22,9 +22,7 @@ function setClose(code) {
   <tr>
     <th class="category" colspan="2">
       {if !$cim10->_levelsInf|@count}
-        <button type="button" onclick="setClose('{$cim10->code}')">
-          <img src="modules/dPcim10/images/tick.png" />
-        </button>
+        <button class="tick" type="button" onclick="setClose('{$cim10->code}')"></button>
       {/if}
       <strong>{$cim10->code}: {$cim10->libelle}</strong>
     </th>
@@ -99,9 +97,7 @@ function setClose(code) {
         <ul>
           {foreach from=$cim10->_levelsInf item=curr_code}
           <li>
-            <button type="button" onclick="setClose('{$curr_code->code}')">
-              <img src="modules/dPcim10/images/tick.png" />
-            </button>
+            <button class="tick" type="button" onclick="setClose('{$curr_code->code}')"></button>
             <a class="action" href="index.php?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={$curr_code->code}">
               <button type="button">
                 <img src="modules/dPcim10/images/downarrow.png" />
@@ -118,9 +114,7 @@ function setClose(code) {
         <ul>
           {foreach from=$cim10->_exclude item=curr_code}
           <li>
-            <button type="button" onclick="setClose('{$curr_code->code}')">
-              <img src="modules/dPcim10/images/tick.png" />
-            </button>
+            <button class="tick" type="button" onclick="setClose('{$curr_code->code}')"></button>
             <a class="action" href="index.php?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={$curr_code->code}">
               <button type="button">
                 <img src="modules/dPcim10/images/downarrow.png" />

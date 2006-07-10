@@ -19,14 +19,12 @@
             <input type="hidden" name="affectation_id" value="{$curr_sortie->affectation_id}" />
             {if $curr_sortie->effectue}
             <input type="hidden" name="effectue" value="0" />
-            <button type="button" onclick="submitComp(this.form)">
-              <img src="modules/{$m}/images/cross.png" alt="Annuler" title="Annuler la sortie" />
+            <button class="cancel" type="button" onclick="submitComp(this.form)">
               Annuler la sortie
             </button>
             {else}
             <input type="hidden" name="effectue" value="1" />
-            <button type="button" onclick="submitComp(this.form)">
-              <img src="modules/{$m}/images/tick.png" alt="Confirmer" title="Effectuer la sortie" />
+            <button class="tick" type="button" onclick="submitComp(this.form)">
               Effectuer la sortie
             </button>
             {/if}

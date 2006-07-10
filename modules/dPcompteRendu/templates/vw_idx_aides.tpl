@@ -195,11 +195,16 @@ function pageMain() {
     <tr>
       <td class="button" colspan="2">
         {if $aide->aide_id}
-        <input type="reset" value="Réinitialiser" />
-        <input type="submit" value="Valider" />
-        <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'l\'aide',objName:'{$aide->name|escape:javascript}'{rdelim})" />
+        <button class="submit" type="submit">
+          Valider
+        </button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'l\'aide',objName:'{$aide->name|escape:javascript}'{rdelim})">
+          Supprimer
+        </button>
         {else}
-        <input type="submit" value="Créer" />
+        <button class="submit" type="submit">
+          Créer
+        </button>
         {/if}
       </td>
     </tr>

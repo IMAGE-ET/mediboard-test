@@ -87,7 +87,9 @@ function reloadMain() {
   </tr>
   <tr>
     <td class="button" colspan="4">
-      <input type="button" value="sauver" onclick="submitFormAjax(this.form, 'systemMsg')" />
+      <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">
+        sauver
+      </button>
     </td>
   </tr>
 </table>

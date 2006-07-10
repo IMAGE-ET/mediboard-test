@@ -89,7 +89,7 @@
             {if $curr_consult->paye}
               <input type="hidden" name="paye" value="0" />
               <input type="hidden" name="date_paiement" value="" />
-              <button type="submit">Annuler</button>
+              <button class="cancel" type="submit">Annuler</button>
             {else}
               <input type="hidden" name="paye" value="1" />
               <input type="hidden" name="date_paiement" value="{$today}" />
@@ -100,7 +100,7 @@
                 <option value="tiers"   {if $curr_consult->type_tarif == "tiers"  }selected="selected"{/if}>Tiers-payant</option>
                 <option value="autre"   {if $curr_consult->type_tarif == "autre"  }selected="selected"{/if}>Autre       </option>
               </select>
-              <button type="submit"><img src="modules/{$m}/images/tick.png" title="valider" /></button>
+              <button type="submit" class="tick"></button>
             {/if}
             </form>
           </td>

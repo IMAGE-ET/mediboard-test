@@ -72,8 +72,7 @@ function newExam(sAction, consultation_id) {
       {foreach from=$docsCons item=curr_doc}
         <li>
           {$curr_doc->nom}
-          <button onclick="printDocument({$curr_doc->compte_rendu_id})">
-            <img src="modules/dPcabinet/images/print.png" />
+          <button class="print" onclick="printDocument({$curr_doc->compte_rendu_id})">
           </button>
         </li>
       {/foreach}
@@ -125,8 +124,7 @@ function newExam(sAction, consultation_id) {
       {foreach from=$docsOp item=curr_doc}
         <li>
           {$curr_doc->nom}
-          <button onclick="printDocument({$curr_doc->compte_rendu_id})">
-            <img src="modules/dPcabinet/images/print.png" />
+          <button class="print" onclick="printDocument({$curr_doc->compte_rendu_id})">
           </button>
         </li>
       {/foreach}

@@ -87,10 +87,12 @@
       <tr>
         <td class="button" colspan="2">
           {if $acte->acte_id}
-          <input type="submit" value="Modifier cet acte" />
-          <input type="button" value="Supprimer cet acte" onclick="confirmDeletion(this.form,{ldelim}typeName:'l\'acte',objName:'{$acte->_view|escape:javascript}'{rdelim})"  />
+          <button class="modify" type="submit">Modifier cet acte</button>
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'l\'acte',objName:'{$acte->_view|escape:javascript}'{rdelim})">
+            Supprimer cet acte
+          </button>
           {else}
-          <input type="submit" value="Coder cet acte" style="background-color: #faa" />
+          <button class="submit" type="submit" style="background-color: #faa">Coder cet acte</button>
           {/if}
         </td>
       </tr>

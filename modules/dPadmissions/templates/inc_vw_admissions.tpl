@@ -35,9 +35,7 @@ regRedirectPopupCal("{$date}", "index.php?m={$m}&tab={$tab}&date=");
       <input type="hidden" name="mode" value="allsaisie" />
       <input type="hidden" name="value" value="o" />
       Saisis
-      <button type="submit">
-        <img src="modules/{$m}/images/tick.png" alt="Admis" />
-      </button>
+      <button class="tick" type="submit"></button>
       </form>
     </th>
     <th>DH</th>

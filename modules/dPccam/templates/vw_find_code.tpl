@@ -38,8 +38,7 @@
 
   <tr>
     <td class="button" colspan="2">
-      <input tabindex="6" type="reset" value="réinitialiser" />
-      <input tabindex="7" type="submit" value="rechercher" />
+      <button class="search" tabindex="7" type="submit">rechercher</button>
     </td>
     <th><label for="seltopo2" title="Système concerné par le code CCAM">Système</label></th>
     <td>

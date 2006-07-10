@@ -48,7 +48,7 @@ function showRow($id=0, $key=0, $title='', $value='') {
 		$s .= '<td valign="top">'.arraySelect( $keys, 'sysval_key_id', 'size="1" class="text"', $key).'</td>';
 		$s .= '<td valign="top"><input type="text" name="sysval_title" value="'.dPformSafe($title).'" class="text" /></td>';
 		$s .= '<td valign="top"><textarea name="sysval_value" class="small" rows="5" cols="40">'.dPformSafe($value).'</textarea></td>';
-		$s .= '<td><input type="submit" value="'.$AppUI->_($id ? 'edit' : 'add').'" class="button" /></td>';
+		$s .= '<td><button class="submit" type="submit">'.$AppUI->_($id ? 'edit' : 'add').'</button></td>';
 		$s .= '<td>&nbsp;</td>';
 	} else {
 		$s .= '<td width="12" valign="top">';

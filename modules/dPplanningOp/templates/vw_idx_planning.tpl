@@ -161,9 +161,7 @@ function pageMain() {
                   <button type="button" onclick="editDocument({$document->compte_rendu_id})">
                     <img src="modules/dPplanningOp/images/edit.png" /> 
                   </button>
-                  <button type="button" onclick="this.form.del.value = 1; this.form.submit()">
-                    <img src="modules/dPplanningOp/images/trash.png" /> 
-                  </button>
+                  <button class="trash" type="button" onclick="this.form.del.value = 1; this.form.submit()"></button>
                   </form>
                 </td>
               </tr>

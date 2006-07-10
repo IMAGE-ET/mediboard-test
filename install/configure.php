@@ -242,7 +242,7 @@ $dPconfig = $mbConfig->values;
   </tr>
 
   <tr>
-    <td class="button"><input type="submit" value="Valider la configuration" /></td>
+    <td class="button"><button class="submit" type="submit">Valider la configuration</button></td>
   </tr>
 </table>
 

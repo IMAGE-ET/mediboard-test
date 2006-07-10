@@ -148,7 +148,7 @@ function pageMain() {
 	                Entrée du patient:
 	                {if $canEdit}
 	                <input name="hour" size="5" type="text" value="{$selOp->entree_bloc|date_format:"%H:%M"}">
-	                <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+	                <button class="tick" type="submit"></button>
 	                {else}
 	                <select name="hour" onchange="this.form.submit()">
 	                  {foreach from=$timing.entree_bloc item=curr_time}
@@ -158,7 +158,7 @@ function pageMain() {
 	                  {/foreach}
 	                </select>
 	                {/if}
-	                <button type="submit" onclick="this.form.del.value = 1"><img src="modules/{$m}/images/cross.png" /></button>
+	                <button class="cancel" type="submit" onclick="this.form.del.value = 1"></button>
 	                {else}
 	                <input type="submit" value="entrée du patient" />
 	                {/if}
@@ -175,7 +175,7 @@ function pageMain() {
 	                Pose du garrot:
 	                {if $canEdit}
 	                <input name="hour" size="5" type="text" value="{$selOp->pose_garrot|date_format:"%H:%M"}">
-	                <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+	                <button class="tick" type="submit"></button>
 	                {else}
 	                <select name="hour" onchange="this.form.submit()">
 	                  {foreach from=$timing.pose_garrot item=curr_time}
@@ -185,7 +185,7 @@ function pageMain() {
 	                  {/foreach}
 	                </select>
 	                {/if}
-	                <button type="submit" onclick="this.form.del.value = 1"><img src="modules/{$m}/images/cross.png" /></button>
+	                <button class="cancel" type="submit" onclick="this.form.del.value = 1"></button>
 	                {else}
 	                <input type="submit" value="pose du garrot" />
 	                {/if}
@@ -202,7 +202,7 @@ function pageMain() {
 	                Début d'intervention:
 	                {if $canEdit}
 	                <input name="hour" size="5" type="text" value="{$selOp->debut_op|date_format:"%H:%M"}">
-	                <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+	                <button class="tick" type="submit"></button>
 	                {else}
 	                <select name="hour" onchange="this.form.submit()">
 	                  {foreach from=$timing.debut_op item=curr_time}
@@ -212,7 +212,7 @@ function pageMain() {
 	                  {/foreach}
 	                </select>
 	                {/if}
-	                <button type="submit" onclick="this.form.del.value = 1"><img src="modules/{$m}/images/cross.png" /></button>
+	                <button class="cancel" type="submit" onclick="this.form.del.value = 1"></button>
 	                {else}
 	                <input type="submit" value="début d'intervention" />
 	                {/if}
@@ -284,7 +284,7 @@ function pageMain() {
 	                Fin d'intervention:
 	                {if $canEdit}
 	                <input name="hour" size="5" type="text" value="{$selOp->fin_op|date_format:"%H:%M"}">
-	                <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+	                <button type="submit" class="tick"></button>
 	                {else}
 	                <select name="hour" onchange="this.form.submit()">
 	                  {foreach from=$timing.fin_op item=curr_time}
@@ -294,7 +294,7 @@ function pageMain() {
 	                  {/foreach}
 	                </select>
 	                {/if}
-	                <button type="submit" onclick="this.form.del.value = 1"><img src="modules/{$m}/images/cross.png" /></button>
+	                <button type="submit" onclick="this.form.del.value = 1" class="cancel"></button>
 	                {else}
 	                <input type="submit" value="fin d'intervention" />
 	                {/if}
@@ -311,7 +311,7 @@ function pageMain() {
 	                Retrait du garrot:
 	                {if $canEdit}
 	                <input name="hour" size="5" type="text" value="{$selOp->retrait_garrot|date_format:"%H:%M"}">
-	                <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+	                <button type="submit" class="tick"></button>
 	                {else}
 	                <select name="hour" onchange="this.form.submit()">
 	                  {foreach from=$timing.retrait_garrot item=curr_time}
@@ -321,7 +321,7 @@ function pageMain() {
 	                  {/foreach}
 	                </select>
 	                {/if}
-	                <button type="submit" onclick="this.form.del.value = 1"><img src="modules/{$m}/images/cross.png" /></button>
+	                <button class="cancel" type="submit" onclick="this.form.del.value = 1"></button>
 	                {else}
 	                <input type="submit" value="retrait du garrot" />
 	                {/if}
@@ -338,7 +338,7 @@ function pageMain() {
 	                Sortie du patient:
 	                {if $canEdit}
 	                <input name="hour" size="5" type="text" value="{$selOp->sortie_bloc|date_format:"%H:%M"}">
-	                <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+	                <button type="submit" class="tick"></button>
 	                {else}
 	                <select name="hour" onchange="this.form.submit()">
 	                  {foreach from=$timing.sortie_bloc item=curr_time}
@@ -348,7 +348,7 @@ function pageMain() {
 	                  {/foreach}
 	                </select>
 	                {/if}
-	                <button type="submit" onclick="this.form.del.value = 1"><img src="modules/{$m}/images/cross.png" /></button>
+	                <button type="submit" onclick="this.form.del.value = 1" class="cancel"></button>
 	                {else}
 	                <input type="submit" value="sortie du patient" />
 	                {/if}

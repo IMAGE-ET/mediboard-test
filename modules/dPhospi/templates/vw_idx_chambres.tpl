@@ -100,11 +100,12 @@ function pageMain() {
     <tr>
       <td class="button" colspan="2">
         {if $chambreSel->chambre_id}
-        <input type="reset" value="Réinitialiser" />
-        <input type="submit" value="Valider" />
-        <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'la chambre',objName:'{$chambreSel->nom|escape:javascript}'{rdelim})" />
+        <button class="submit" type="submit">Valider</button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'la chambre',objName:'{$chambreSel->nom|escape:javascript}'{rdelim})">
+          Supprimer
+        </button>
         {else}
-        <input type="submit" name="btnFuseAction" value="Créer" />
+        <button class="submit" name="btnFuseAction" type="submit">Créer</button>
         {/if}
       </td>
     </tr>
@@ -137,10 +138,12 @@ function pageMain() {
       <td>
         <input type="text" name="nom" title="{$litSel->_props.nom}" value="{$litSel->nom}" />
         {if $litSel->lit_id}
-        <input type="submit" value="Modifier" />
-        <input type="button" value="supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'le lit',objName:'{$litSel->nom|escape:javascript}'{rdelim})" />
+        <button class="modify" type="submit">Modifier</button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'le lit',objName:'{$litSel->nom|escape:javascript}'{rdelim})">
+          Supprimer
+        </button>
         {else}
-        <input type="submit" value="Créer" />
+        <button class="submit" type="submit">Créer</button>
         {/if}
       </td>
     </tr>

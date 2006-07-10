@@ -103,8 +103,8 @@ function setClose(date) {
 
   <tr>
     <td class="button" colspan="2">
-      <input type="button" class="button" value="annuler" onclick="window.close()" />
-      <input type="button" class="button" value="selectionner" onclick="setClose('')" />
+      <button class="cancel" type="button" onclick="window.close()">annuler</button>
+      <button type="button" onclick="setClose('')">selectionner</button>
     </td>
   </tr>
 

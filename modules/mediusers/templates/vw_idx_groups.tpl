@@ -57,11 +57,12 @@ function checkGroup() {
         <tr>
           <td class="button" colspan="2">
           {if $usergroup->group_id}
-            <input type="reset" value="Réinitialiser" />
-            <input type="submit" value="Valider" />
-            <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'le groupe',objName:'{$usergroup->text|escape:javascript}'{rdelim})" />
+            <button class="modify" type="submit">Valider</button>
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'le groupe',objName:'{$usergroup->text|escape:javascript}'{rdelim})">
+              Supprimer
+            </button>
           {else}
-            <input type="submit" name="btnFuseAction" value="Créer" />
+            <button class="submit" type="submit" name="btnFuseAction">Créer</button>
           {/if}
           </td>
         </tr>

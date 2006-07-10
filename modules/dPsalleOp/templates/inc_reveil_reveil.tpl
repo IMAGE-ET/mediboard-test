@@ -36,7 +36,7 @@
 	          <input type="hidden" name="type" value="sortie_bloc" />
 	          <input type="hidden" name="del" value="0" />
 	          <input name="hour" size="5" type="text" value="{$curr_op->sortie_bloc|date_format:"%H:%M"}">
-	          <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+	          <button class="tick" type="submit"></button>
               </form>
             {else}
             {$curr_op->sortie_bloc|date_format:"%Hh%M"}
@@ -51,7 +51,7 @@
               <input type="hidden" name="del" value="0" />
               {if $canEdit}
 	          <input name="hour" size="5" type="text" value="{$curr_op->entree_reveil|date_format:"%H:%M"}">
-	          <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+	          <button type="submit" class="tick"></button>
               {else}
               <select name="hour" onchange="this.form.submit()">
                 {foreach from=$timing.$key.entree_reveil item=curr_time}
@@ -61,9 +61,7 @@
                 {/foreach}
               </select>
               {/if}
-              <button type="submit" onclick="this.form.del.value = 1">
-                <img src="modules/{$m}/images/cross.png" alt="supprimer" />
-              </button>
+              <button class="cancel" type="submit" onclick="this.form.del.value = 1"></button>
             </form>
           </td>
           <td class="button">
@@ -73,9 +71,7 @@
               <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
               <input type="hidden" name="type" value="sortie_reveil" />
               <input type="hidden" name="del" value="0" />
-              <button type="submit">
-                <img src="modules/{$m}/images/tick.png" alt="valider" />
-              </button>
+              <button class="tick" type="submit"></button>
             </form>
           </td>
         </tr>

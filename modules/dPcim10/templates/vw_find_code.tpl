@@ -37,8 +37,7 @@
   </tr>
   <tr>
     <td class="button" colspan="2">
-      <input type="reset" value="réinitialiser" />
-      <input type="submit" value="rechercher" />
+      <button class="search" type="submit">Rechercher</button>
     </td>
   </tr>
 </table>

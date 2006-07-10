@@ -5,7 +5,7 @@
 <tr>
   <td class="halfPane">
 
-    <a href="index.php?m={$m}&amp;tab={$tab}&amp;salle_id=0"><strong>Créer une salle</strong></a>
+    <a class="buttonnew" href="index.php?m={$m}&amp;tab={$tab}&amp;salle_id=0"><strong>Créer une salle</strong></a>
 
     <table class="tbl">
       
@@ -61,11 +61,14 @@
     <tr>
       <td class="button" colspan="2">
         {if $salleSel->id}
-        <input type="reset" value="Réinitialiser" />
-        <input type="submit" value="Valider" />
-        <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'la salle',objName:'{$salleSel->nom|escape:javascript}'{rdelim})"/>
+        <button class="submit" type="submit">Valider</button>
+        <button type="button" class="trash" onclick="confirmDeletion(this.form,{ldelim}typeName:'la salle',objName:'{$salleSel->nom|escape:javascript}'{rdelim})">
+          Supprimer
+        </button>
         {else}
-        <input type="submit" name="btnFuseAction" value="Créer" />
+        <button type="submit" name="btnFuseAction" class="new">
+          Créer
+        </button>
         {/if}
       </td>
     </tr>

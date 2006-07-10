@@ -47,7 +47,11 @@ function pageMain() {
 
             <table class="form">
               <tr>
-                <td class="button"><input class="button" type="submit" name="btnFuseAction" value="Ajouter à mes favoris" /></td>
+                <td class="button">
+                  <button class="submit" type="submit" name="btnFuseAction">
+                    Ajouter à mes favoris
+                  </button>
+                </td>
               </tr>
             </table>
 

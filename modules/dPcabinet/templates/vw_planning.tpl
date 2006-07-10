@@ -230,9 +230,9 @@ function pageMain() {
               </tr>
               <tr>
                 {if !$plageSel->plageconsult_id}
-                <td class="button" colspan="4"><input type="submit" value="Créer" /></td>
+                <td class="button" colspan="4"><button type="submit" class="submit">Créer</button></td>
                 {else}
-                <td class="button" colspan="4"><input type="submit" value="Modifier" /></td>
+                <td class="button" colspan="4"><button type="submit" class="modify">Modifier</button></td>
                 {/if}
               </tr>
             </table>
@@ -256,7 +256,9 @@ function pageMain() {
               </tr>
               <tr>
                 <td class="button" colspan="2">
-                  <input type='button' value='Supprimer' onclick="confirmDeletion(this.form,{ldelim}typeName:'la plage de consultations du',objName:'{$plageSel->date|date_format:"%A %d %B %Y"}'{rdelim})" />
+                  <button class="trash" type='button' onclick="confirmDeletion(this.form,{ldelim}typeName:'la plage de consultations du',objName:'{$plageSel->date|date_format:"%A %d %B %Y"}'{rdelim})">
+                    Supprimer
+                  </button>
                 </td>
               </tr>
             </table>
@@ -267,7 +269,7 @@ function pageMain() {
       </table>
     </td>
     <td>
-      <a class="button" href="index.php?m={$m}&amp;tab={$tab}&amp;plageconsult_id=0">Créer une nouvelle plage</a>
+      <a class="buttonnew" href="index.php?m={$m}&amp;tab={$tab}&amp;plageconsult_id=0">Créer une nouvelle plage</a>
       
       <table class="tbl">
         <tr>

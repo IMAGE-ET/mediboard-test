@@ -92,7 +92,7 @@ function pageMain() {
 <table class="main">
   {if $patient->patient_id}
   <tr>
-    <td><a class="button" href="index.php?m={$m}&amp;patient_id=0">Créer un nouveau patient</a></td>
+    <td><a class="buttonnew" href="index.php?m={$m}&amp;patient_id=0">Créer un nouveau patient</a></td>
   </tr>
   {/if}
   <tr>
@@ -198,7 +198,7 @@ function pageMain() {
         </th>
         <td class="readonly">
           <input type="text" name="_medecin_traitant_name" size="30" value="Dr. {$patient->_ref_medecin_traitant->_view}" readonly="readonly" />
-          <button type="button" onclick="delMed('_traitant')"><img src="modules/{$m}/images/cross.png" title="supprimer" alt="supprimer" /></button>
+          <button class="cancel" type="button" onclick="delMed('_traitant')"></button>
         </td>
         <td class="button"><input tabindex="26" type="button" value="choisir un médecin" onclick="popMed('_traitant')" /></td>
       </tr>
@@ -215,7 +215,7 @@ function pageMain() {
         </th>
         <td class="readonly">
           <input type="text" name="_medecin1_name" size="30" value="Dr. {$patient->_ref_medecin1->_view}" readonly="readonly" />
-          <button type="button" onclick="delMed('1')"><img src="modules/{$m}/images/cross.png" title="supprimer" alt="supprimer" /></button>
+          <button class="cancel" type="button" onclick="delMed('1')"></button>
         </td>
         <td class="button"><input tabindex="28" type="button" value="choisir un médecin" onclick="popMed('1')" /></td>
       </tr>
@@ -232,7 +232,7 @@ function pageMain() {
         </th>
         <td class="readonly">
           <input type="text" name="_medecin2_name" size="30" value="{if ($patient->_ref_medecin2)}Dr. {$patient->_ref_medecin2->_view}{/if}" readonly="readonly" />
-          <button type="button" onclick="delMed('2')"><img src="modules/{$m}/images/cross.png" title="supprimer" alt="supprimer" /></button>
+          <button class="cancel" type="button" onclick="delMed('2')"></button>
         </td>
         <td class="button"><input tabindex="29" type="button" value="choisir un médecin" onclick="popMed('2')" /></td>
       </tr>
@@ -252,7 +252,7 @@ function pageMain() {
         </th>
         <td class="readonly">
           <input type="text" name="_medecin3_name" size="30" value="{if ($patient->_ref_medecin3)}Dr. {$patient->_ref_medecin3->_view}{/if}" readonly="readonly" />
-          <button type="button" onclick="delMed('3')"><img src="modules/{$m}/images/cross.png" title="supprimer" alt="supprimer" /></button>
+          <button class="cancel" type="button" onclick="delMed('3')"></button>
         </td>
         <td class="button"><input tabindex="30" type="button" value="choisir un médecin" onclick="popMed('3')" /></td>
       </tr>
@@ -279,12 +279,15 @@ function pageMain() {
       <tr>
         <td class="button" colspan="5">
           {if $patient->patient_id}
-            <input type="reset" value="Réinitialiser" />
-            <input type="submit" value="Valider" />
-            <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'le patient',objName:'{$patient->_view|escape:javascript}'{rdelim})"/>
-            <input type="button" value="Imprimer" onclick="printPatient({$patient->patient_id})" />
+            <button type="submit" class="submit">Valider</button>
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{ldelim}typeName:'le patient',objName:'{$patient->_view|escape:javascript}'{rdelim})">
+              Supprimer
+            </button>
+            <button type="button" class="print" onclick="printPatient({$patient->patient_id})">
+              Imprimer
+            </button>
           {else}
-            <input tabindex="32" type="submit" value="Créer" />
+            <button tabindex="32" type="submit" class="submit">Créer</button>
           {/if}
         </td>
       </tr>

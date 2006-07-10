@@ -76,7 +76,7 @@ function affNaissance() {
         </tr>
         
         <tr>
-          <td class="button" colspan="2"><input type="submit" value="rechercher" /></td>
+          <td class="button" colspan="2"><button class="search" type="submit">Rechercher</button></td>
         </tr>
       </table>
       </form>

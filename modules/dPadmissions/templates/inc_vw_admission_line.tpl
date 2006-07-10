@@ -37,13 +37,13 @@
     <input type="hidden" name="id" value="{$curr_adm->sejour_id}" />
     {if $curr_adm->chambre_seule == 'o'}
     <input type="hidden" name="value" value="n" />
-    <button type="button" style="background-color: #f55;" onclick="submitAdmission(this.form);">
-      <img src="modules/{$m}/images/refresh.png" alt="changer" /> simple
+    <button class="change" type="button" style="background-color: #f55;" onclick="submitAdmission(this.form);">
+      simple
     </button>
     {else}
     <input type="hidden" name="value" value="o" />
-    <button type="button" onclick="submitAdmission(this.form);">
-      <img src="modules/{$m}/images/refresh.png" alt="changer" /> double
+    <button class="change" type="button" onclick="submitAdmission(this.form);">
+      double
     </button>
     {/if}
     
@@ -62,14 +62,14 @@
   <input type="hidden" name="mode" value="admis" />
   {if !$curr_adm->entree_reelle}
   <input type="hidden" name="value" value="o" />
-  <button type="button" onclick="submitAdmission(this.form);">
-    <img src="modules/{$m}/images/tick.png" alt="Admis" /> Admis
+  <button class="tick" type="button" onclick="submitAdmission(this.form);">
+    Admis
   </button>
   {else}
   à {$curr_adm->entree_reelle|date_format:"%Hh%M"}<br />
   <input type="hidden" name="value" value="n" />
-  <button type="button" onclick="submitAdmission(this.form);">
-    <img src="modules/{$m}/images/cross.png" alt="Annuler" /> Annuler
+  <button class="cancel" type="button" onclick="submitAdmission(this.form);">
+    Annuler
   </button>
   {/if}
   </form>
@@ -83,13 +83,13 @@
   <input type="hidden" name="mode" value="saisie" />
   {if $curr_adm->saisi_SHS == "n"}
   <input type="hidden" name="value" value="o" />
-  <button type="button" onclick="submitAdmission(this.form);">
-    <img src="modules/{$m}/images/tick.png" alt="Saisi" /> Saisi
+  <button class="tick" type="button" onclick="submitAdmission(this.form);">
+    Saisi
   </button>
   {else}
   <input type="hidden" name="value" value="n" />
-  <button type="button" onclick="submitAdmission(this.form);">
-    <img src="modules/{$m}/images/cross.png" alt="Annuler" /> Annuler
+  <button class="cancel" type="button" onclick="submitAdmission(this.form);">
+    Annuler
   </button>
   {/if}
   {if $curr_adm->modif_SHS == 1}

@@ -49,8 +49,7 @@ function refreshListCCAM() {
   var iCode = 0;
   while (sCode = aCcam[iCode++]) {
     var sCodeNode = sCode;
-    sCodeNode += "<button type='button' onclick='delCCAM(\"" + sCode + "\")'>";
-    sCodeNode += "<img src='modules/dPplanningOp/images/cross.png' />";
+    sCodeNode += "<button class='cancel' type='button' onclick='delCCAM(\"" + sCode + "\")'>";
     sCodeNode += "<\/button>";
     aCodeNodes.push(sCodeNode);
   }

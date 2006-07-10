@@ -44,7 +44,7 @@ regRedirectPopupCal("{$date}", "index.php?m={$m}&tab=vw_reveil&date=");
 	          <input type="hidden" name="type" value="sortie_bloc" />
 	          <input type="hidden" name="del" value="0" />
 	          <input name="hour" size="5" type="text" value="{$curr_op->sortie_bloc|date_format:"%H:%M"}">
-	          <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+	          <button class="tick" type="submit"></button>
 	        </form>
             {else}
             {$curr_op->sortie_bloc|date_format:"%Hh%M"}
@@ -57,9 +57,7 @@ regRedirectPopupCal("{$date}", "index.php?m={$m}&tab=vw_reveil&date=");
               <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
               <input type="hidden" name="type" value="entree_reveil" />
               <input type="hidden" name="del" value="0" />
-              <button type="submit">
-                <img src="modules/{$m}/images/tick.png" alt="valider" />
-              </button>
+              <button class="tick" type="submit"></button>
             </form>
           </td>
         </tr>

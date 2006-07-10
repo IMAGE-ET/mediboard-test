@@ -36,12 +36,12 @@ function pageMain() {
   {{if $sejour->sejour_id}}
   <tr>
     <td>
-      <a class="button" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;sejour_id=0">
+      <a class="buttonnew" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;sejour_id=0">
         Programmer un nouveau séjour
       </a>
     </td>
     <td>
-      <a class="button" href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->sejour_id}}">
+      <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->sejour_id}}">
         Programmer une nouvelle intervention dans ce séjour
       </a>
     </td>

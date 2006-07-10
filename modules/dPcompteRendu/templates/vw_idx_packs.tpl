@@ -128,11 +128,16 @@ function checkForm() {
     <tr>
       <td class="button" colspan="2">
         {if $pack->pack_id}
-        <input type="reset" value="Réinitialiser" />
-        <input type="submit" value="Valider" />
-        <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'le pack',objName:'{$pack->nom|escape:javascript}'{rdelim})" />
+        <button class="submit" type="submit">
+          Valider
+        </button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'le pack',objName:'{$pack->nom|escape:javascript}'{rdelim})">
+          Supprimer
+        </button>
         {else}
-        <input type="submit" value="Créer" />
+        <button class="submit" type="submit">
+          Créer
+        </button>
         {/if}
       </td>
     </tr>
@@ -158,7 +163,7 @@ function checkForm() {
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="modeles" value="{$pack->modeles|escape:javascript}" />
           <input type="hidden" name="_del" value="{$curr_modele->compte_rendu_id}" />
-          <button type="submit"><img src="modules/dPcompteRendu/images/trash.png" /></button>
+          <button class="trash" type="submit"></button>
           </form>
         </td>
       </tr>

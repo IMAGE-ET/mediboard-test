@@ -165,8 +165,7 @@ function doEmptyTemplates() {
   
 <tr>
   <td>
-    <button onclick="doEmptyTemplates()">
-      <img src="modules/system/images/cross.png" alt="Vider" />
+    <button class="cancel" onclick="doEmptyTemplates()">
       Supprimer les templates
     </button>
   </td>

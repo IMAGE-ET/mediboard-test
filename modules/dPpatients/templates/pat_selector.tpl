@@ -40,7 +40,7 @@ function setClose(key, val){
 <tr>
   <th>Prénom:</th>
   <td><input name="firstName" value="{$firstName}" size="30" /></td>
-  <td><input type="submit" value="rechercher" /></td>
+  <td><button class="search" type="submit">rechercher</button></td>
 </tr>
 
 <tr>
@@ -72,8 +72,8 @@ function setClose(key, val){
 
 <tr>
   <td class="button" colspan="2">
-    <input type="button" class="button" value="Créer un patient" onclick="createPat()" />
-    <input type="button" class="button" value="Annuler" onclick="window.close()" />
+    <button class="submit" type="button" onclick="createPat()">Créer un patient</button>
+    <button class="cancel" type="button" onclick="window.close()">Annuler</button>
   </td>
 </tr>
 

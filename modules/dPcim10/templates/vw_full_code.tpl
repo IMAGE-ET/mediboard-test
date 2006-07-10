@@ -48,7 +48,9 @@
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="favoris_code" value="{$cim10->code}" />
       <input type="hidden" name="favoris_user" value="{$user}" />
-      <input class="button" type="submit" name="btnFuseAction" value="Ajouter à mes favoris" />
+      <button class="submit" type="submit" name="btnFuseAction">
+        Ajouter à mes favoris
+      </button>
       
       </form>
     </td>

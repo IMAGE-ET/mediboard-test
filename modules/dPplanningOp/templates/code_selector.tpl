@@ -35,7 +35,7 @@ function setClose(code, type) {
 <table class="form">
   <tr>
     <td class="button" colspan="3">
-      <input type="button" value="annuler" onclick="window.close()" />
+      <button class="cancel" type="button" onclick="window.close()">Annuler</button>
     </td>
   </tr>
 </table>

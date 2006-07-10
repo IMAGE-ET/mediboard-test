@@ -126,13 +126,82 @@ a.button, button {
   cursor: default;
   border: 1px black solid;
   font-size: 12px;
-  background: #ddd;
+  background-color: #ddd;
   margin: 0 2px;
   padding: 0px 2px;
 }
 
 a.button:hover, button:hover {
-  background: #bbb;
+  background-color: #bbb;
+}
+
+button.trash, a.buttontrash {
+  background-image: url(images/buttons/trash.png);
+  background-repeat: no-repeat;
+  background-position: center left;
+  padding: 0px 0px;
+  padding-left: 18px;
+}
+
+button.submit, a.buttonsubmit {
+  background-image: url(images/buttons/save.png);
+  background-repeat: no-repeat;
+  background-position: center left;
+  padding: 0px 0px;
+  padding-left: 18px;
+}
+button.new, a.buttonnew {
+  background-image: url(images/buttons/new.png);
+  background-repeat: no-repeat;
+  background-position: center left;
+  padding: 0px 0px;
+  padding-left: 18px;
+}
+button.print, a.buttonprint {
+  background-image: url(images/buttons/print.png);
+  background-repeat: no-repeat;
+  background-position: center left;
+  padding: 0px 0px;
+  padding-left: 18px;
+  height: 16px;  
+}
+button.cancel, a.buttoncancel {
+  background-image: url(images/buttons/cancel.png);
+  background-repeat: no-repeat;
+  background-position: center left;
+  padding: 0px 0px;
+  padding-left: 18px;
+  height: 16px;  
+}
+button.modify, a.buttonmodify {
+  background-image: url(images/buttons/save.png);
+  background-repeat: no-repeat;
+  background-position: center left;
+  padding: 0px 0px;
+  padding-left: 18px;
+}
+button.search, a.buttonsearch {
+  background-image: url(images/buttons/search.png);
+  background-repeat: no-repeat;
+  background-position: center left;
+  padding: 0px 0px;
+  padding-left: 18px;
+}
+button.tick, a.buttontick {
+  background-image: url(images/buttons/tick.png);
+  background-repeat: no-repeat;
+  background-position: 2px 0px;
+  padding: 0px 0px;
+  padding-left: 18px;
+  height: 16px;
+}
+
+button.change, a.buttonchange {
+  background-image: url(images/buttons/change.png);
+  background-repeat: no-repeat;
+  background-position: 2px 0px;
+  padding: 0px 0px;
+  padding-left: 18px;
 }
 
 input {
@@ -1792,3 +1861,5 @@ div.generated {
   background-color: #000;
   color: #0f0;
 }
+
+

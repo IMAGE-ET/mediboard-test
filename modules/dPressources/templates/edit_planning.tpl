@@ -73,7 +73,7 @@ function pageMain() {
         {if $plage->plageressource_id}
         <tr>
           <td colspan="4">
-            <a class="button" href="index.php?m={$m}&amp;plage_id=0">Créer de nouvelles plages</a>
+            <a class="buttonnew" href="index.php?m={$m}&amp;plage_id=0">Créer de nouvelles plages</a>
           </td>
         </tr>
         <tr>
@@ -151,7 +151,7 @@ function pageMain() {
             <input type='hidden' name='dosql' value='do_plageressource_aed' />
             <input type='hidden' name='del' value='0' />
             <input type='hidden' name='plageressource_id' value='{$plage->plageressource_id}' />
-            <button type="submit">Créer</button>
+            <button class="submit" type="submit">Créer</button>
         </tr>
       </table>
       </form>
@@ -168,7 +168,7 @@ function pageMain() {
             <input type='hidden' name='dosql' value='do_plageressource_aed' />
             <input type='hidden' name='del' value='1' />
             <input type='hidden' name='plageressource_id' value='{$plage->plageressource_id}' />
-            <button type="submit">Supprimer</button>
+            <button class="trash" type="submit">Supprimer</button>
         </tr>
       </table>
       </form>

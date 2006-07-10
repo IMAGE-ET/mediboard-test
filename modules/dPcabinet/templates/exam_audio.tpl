@@ -138,7 +138,7 @@
   
         <tr>
           <td class="button" colspan="9">
-            <input type="submit" value="Valider" />
+            <button class="submit" type="submit">Valider</button>
           </td>
         </tr>
       </tbody>
@@ -332,7 +332,7 @@
   
         <tr>
           <td class="button" colspan="9">
-            <input type="submit" value="Valider" />
+            <button class="submit" type="submit">Valider</button>
           </td>
         </tr>
       </tbody>
@@ -353,7 +353,7 @@
       </tr>
       <tr>
         <td class="button radiointeractive">
-          <input type="submit" value="Valider" />
+          <button class="submit" type="submit">Valider</button>
         </td>
       </tr>
     </table>

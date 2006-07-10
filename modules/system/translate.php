@@ -139,7 +139,7 @@ foreach ($trans as $k => $langs){
 ?>
 <tr>
 	<td colspan="4" align="right">
-		<input type="submit" value="<?php echo $AppUI->_( 'submit' );?>" class="button" />
+		<button class="submit" type="submit"><?php echo $AppUI->_( 'submit' );?></button>
 	</td>
 </tr>
 </form>

@@ -84,20 +84,16 @@ function delCode() {
       <td style="text-align:right">
         Ajouter un code
         <input type="text" size="7" name="_newCode" />
-        <button type="button" onclick="addCode()">
-          <img src="modules/dPcabinet/images/tick.png">
-        </button>
+        <button class="tick" type="button" onclick="addCode()"></button>
       </td>
     </tr>
     <tr>
       <td>
-        <button type="button" onclick="delCode()">
-          <img src="modules/dPcabinet/images/cross.png">
-        </button>
+        <button class="cancel" type="button" onclick="delCode()"></button>
         <div id="codename" style="display:inline; white-space:normal">Selectionnez un code</div>
       </td>
       <td style="text-align:right">
-        <button type="button" onclick="popCode()">Rechercher...</button>
+        <button class="search" type="button" onclick="popCode()">Rechercher...</button>
       </td>
     </tr>
   </table>

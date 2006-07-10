@@ -34,7 +34,7 @@ function pageMain() {
       </form>
       {if $fichePaie->fiche_paie_id}
       <br />
-      <a class="button" href="index.php?m={$m}&amp;tab=edit_paie&amp;fiche_paie_id=0" title="Créer une nouvelle fiche de paie">
+      <a class="buttonnew" href="index.php?m={$m}&amp;tab=edit_paie&amp;fiche_paie_id=0" title="Créer une nouvelle fiche de paie">
         Créer une nouvelle fiche de paie
       </a>
       {/if}
@@ -152,12 +152,12 @@ function pageMain() {
         </tr>
         <tr>
           <td class="button" colspan="2">
-            <button type="submit">Sauver</button>
+            <button class="submit" type="submit">Sauver</button>
             {if $fichePaie->fiche_paie_id}
-            <button type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'la ',objName:'{$fichePaie->_view|escape:javascript}'{rdelim})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'la ',objName:'{$fichePaie->_view|escape:javascript}'{rdelim})">
               Supprimer
             </button>
-            <button type="button" onclick="printFiche()">
+            <button class="print" type="button" onclick="printFiche()">
               Imprimer
             </button>
             {/if}
@@ -179,8 +179,7 @@ function pageMain() {
             <input type="hidden" name="m" value="dPgestionCab" />
             <input type="hidden" name="fiche_paie_id" value="{$curr_fiche->fiche_paie_id}" />
             <input type="hidden" name="del" value="0" />
-            <button type="button" style="float:right;" onclick="confirmDeletion(this.form,{ldelim}typeName:'la ',objName:'{$curr_fiche->_view|escape:javascript}'{rdelim})">
-              <img src="modules/dPgestionCab/images/cross.png" alt="supprimer" />
+            <button class="trash" type="button" style="float:right;" onclick="confirmDeletion(this.form,{ldelim}typeName:'la ',objName:'{$curr_fiche->_view|escape:javascript}'{rdelim})">
             </button>
             </form>
             <a href="index.php?m=dPgestionCab&amp;tab=edit_paie&amp;fiche_paie_id={$curr_fiche->fiche_paie_id}" title="Editer cette fiche" >

@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <a class="button" href="index.php?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id=0">
+      <a class="buttonnew" href="index.php?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id=0">
         Créer une nouvelle fiche
       </a>
       <table class="tbl">
@@ -70,9 +70,9 @@
         </tr>
         <tr>
           <td class="button" colspan="2">
-            <button type="submit">Valider</button>
+            <button class="submit" type="submit">Valider</button>
             {if $materiel->materiel_id}
-              <button type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'le matériel',objName:'{$materiel->_view|escape:javascript}'{rdelim})">Supprimer</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'le matériel',objName:'{$materiel->_view|escape:javascript}'{rdelim})">Supprimer</button>
             {/if}
           </td>
         </tr>        
@@ -83,9 +83,9 @@
   <tr>
     <td class="halfPane">
          {if $materiel->materiel_id}
-         <a class="button" href="index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id=0&amp;materiel_id={$materiel->materiel_id}">
+         <button class="new" type="button" onclick="window.location='index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id=0&amp;materiel_id={$materiel->materiel_id}'">
            Créer un nouveau stock pour ce matériel
-         </a>
+         </button>
          {/if}
          <table class="tbl">
          <tr>

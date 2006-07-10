@@ -39,7 +39,7 @@ function showRow($id=0, $name='', $label='') {
 		$s .= '<td>&nbsp;</td>';
 		$s .= '<td><input type="text" name="syskey_name" value="'.$name.'" class="text" /></td>';
 		$s .= '<td><textarea name="syskey_label" class="small" rows="2" cols="40">'.$label.'</textarea></td>';
-		$s .= '<td><input type="submit" value="'.$AppUI->_($id ? 'edit' : 'add').'" class="button" /></td>';
+		$s .= '<td><button class="submit" type="submit">'.$AppUI->_($id ? 'edit' : 'add').'</button></td>';
 		$s .= '<td>&nbsp;</td>';
 	} else {
 		$s .= '<td width="12">';

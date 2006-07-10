@@ -167,13 +167,13 @@ function pageMain() {
   {{if $modurgence}}
   <tr>
     <td colspan="2">
-       <a class="button" href="index.php?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">Programmer une nouvelle urgence</a>
+       <a class="buttonnew" href="index.php?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">Programmer une nouvelle urgence</a>
     </td>
   </tr>
   {{else}}
   <tr>
     <td colspan="2">
-       <a class="button" href="index.php?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">Programmer une nouvelle intervention</a>
+       <a class="buttonnew" href="index.php?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">Programmer une nouvelle intervention</a>
     </td>
   </tr>
   {{/if}}
@@ -226,14 +226,14 @@ function pageMain() {
         <tr>
           <td class="button">
           {{if $op->operation_id}}
-            <input type="button" value="Modifier" onclick="submitForms();" />
-            <input type="button" value="Supprimer" onclick="deleteObjects();" />
-            <input type="button" value="Annuler" onclick="cancelObjects();" />
+            <button class="modify" type="button" onclick="submitForms();">Modifier</button>
+            <button class="trash" type="button" onclick="deleteObjects();">Supprimer</button>
+            <button class="cancel" type="button" onclick="cancelObjects();">Annuler</button>
           {{else}}
-            <input type="button" value="Créer" onclick="submitForms();" />
+            <button class="submit" type="button" onclick="submitForms();">Créer</button>
           {{/if}}
           {{if $op->operation_id}}
-            <input type="button" value="Imprimer" onClick="printForm();" />
+            <button class="print" type="button" onclick="printForm();">Imprimer</button>
             <select name="_choix_modele" onchange="printDocument(this)">
               <option value="">&mdash; Choisir un modèle</option>
               <optgroup label="Modèles du praticien">

@@ -67,7 +67,7 @@ function pageMain() {
   
   <td class="pane">
 
-  <a href="index.php?m={$m}&amp;tab={$tab}&amp;message_id=0"><strong>Créer un message</strong></a>
+  <a class="buttonnew" href="index.php?m={$m}&amp;tab={$tab}&amp;message_id=0"><strong>Créer un message</strong></a>
 
     <form name="editFrm" action="?m={$m}" method="post" onsubmit="return checkForm(this)">
 
@@ -120,11 +120,12 @@ function pageMain() {
     <tr>
       <td class="button" colspan="2">
         {if $message->message_id}
-        <input type="reset" value="Réinitialiser" />
-        <input type="submit" value="Valider" />
-        <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'message',objName:'{$message->_view|escape:javascript}'{rdelim})" />
+        <button class="modify" type="submit">Valider</button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'message',objName:'{$message->_view|escape:javascript}'{rdelim})">
+          Supprimer
+        </button>
         {else}
-        <input type="submit" value="Créer" />
+        <button class="submit" type="submit">Créer</button>
         {/if}
       </td>
     </tr>

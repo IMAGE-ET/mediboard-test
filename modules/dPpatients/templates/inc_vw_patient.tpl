@@ -108,10 +108,12 @@ function printIntervention(id) {
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="tab" value="vw_edit_patients" />
       <input type="hidden" name="patient_id" value="{$patient->patient_id}" />
-      <input type="submit" value="Modifier" />
-
-      <input type="button" value="Imprimer" onclick="printPatient({$patient->patient_id})" />
-
+      <button type="submit" class="modify">
+        Modifier
+      </button>
+      <button type="button" class="print" onclick="printPatient({$patient->patient_id})">
+        Imprimer
+      </button>
       </form>
 
     </td>

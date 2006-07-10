@@ -59,7 +59,7 @@
         </tr>
         <tr>
           <td class="button" colspan="2">
-            <button type="submit">Sauver</button>
+            <button class="submit" type="submit">Sauver</button>
           </td>
         </tr>
       </table>
@@ -230,7 +230,7 @@
         </tr>
         <tr>
           <td class="button" colspan="3">
-            <button type="submit">Sauver</button>
+            <button class="submit" type="submit">Sauver</button>
           </td>
         </tr>
       </table>

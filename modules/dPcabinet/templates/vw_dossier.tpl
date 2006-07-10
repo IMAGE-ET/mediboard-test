@@ -58,7 +58,7 @@ function printDocument(doc_id) {
             <input type="text" readonly="readonly" name="patNom" value="{$patSel->_view}" />
           </td>
           <td class="button">
-            <input type="button" value="chercher" onclick="popPat()" />
+            <button class="search" type="button" onclick="popPat()">chercher</button>
           </td>
         </tr>
       </table>
@@ -117,8 +117,7 @@ function printDocument(doc_id) {
             {foreach from=$curr_consult->_ref_documents item=document}
             <li>
               {$document->nom}
-              <button onclick="printDocument({$document->compte_rendu_id})">
-                <img src="modules/dPcabinet/images/print.png" />
+              <button class="print" onclick="printDocument({$document->compte_rendu_id})">
               </button>
             </li>
             {foreachelse}
@@ -139,7 +138,9 @@ function printDocument(doc_id) {
                 <input type="hidden" name="file_id" value="{$curr_file->file_id}" />
                 <a href="mbfileviewer.php?file_id={$curr_file->file_id}">{$curr_file->file_name}</a>
                 ({$curr_file->_file_size}) 
-                <input type="button" value="supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'le fichier',objName:'{$curr_file->file_name|escape:javascript}'{rdelim})"/>
+                <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'le fichier',objName:'{$curr_file->file_name|escape:javascript}'{rdelim})">
+                  Supprimer
+                </button>
       
                 </form>
               </li>
@@ -199,8 +200,7 @@ function printDocument(doc_id) {
             {foreach from=$curr_op->_ref_documents item=document}
             <li>
               {$document->nom}
-              <button onclick="printDocument({$document->compte_rendu_id})">
-                <img src="modules/dPcabinet/images/print.png" />
+              <button class="print" onclick="printDocument({$document->compte_rendu_id})">
               </button>
             </li>
             {foreachelse}
@@ -221,7 +221,9 @@ function printDocument(doc_id) {
                 <input type="hidden" name="file_id" value="{$curr_file->file_id}" />
                 <a href="mbfileviewer.php?file_id={$curr_file->file_id}">{$curr_file->file_name}</a>
                 ({$curr_file->_file_size}) 
-                <input type="button" value="supprimer" onclick="confirmDeletion(this.form, 'le fichier', '{$curr_file->file_name|escape:javascript}')"/>
+                <button class="trash" type="button" onclick="confirmDeletion(this.form, 'le fichier', '{$curr_file->file_name|escape:javascript}')">
+                  supprimer
+                </button>
       
                 </form>
               </li>

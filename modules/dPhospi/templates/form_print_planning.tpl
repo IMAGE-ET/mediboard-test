@@ -135,7 +135,7 @@ function pageMain() {
   <tr>
     <td colspan="2">
 
-      <table class="form"><tr><td class="button"><input type="button" value="Afficher" onclick="checkForm()" /></td></tr></table>
+      <table class="form"><tr><td class="button"><button type="button" onclick="checkForm()">Afficher</button></td></tr></table>
 
     </td>
   </tr>

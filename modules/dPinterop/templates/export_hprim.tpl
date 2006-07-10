@@ -230,7 +230,7 @@ function choosePreselection(oSelect) {
 
   <tr>
     <td class="button" colspan="2">
-  	  <input type="submit" value="Générer le document"/>
+  	  <button type="submit">Générer le document</button>
     </td>
   </tr>
 
@@ -275,7 +275,7 @@ function choosePreselection(oSelect) {
   
   <tr>
     <td class="button" colspan="2">
-      <input type="submit" value="Envoyer le document"/>
+      <button type="submit">Envoyer le document</button>
     </td>
   </tr>
 

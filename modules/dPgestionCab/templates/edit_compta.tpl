@@ -32,7 +32,7 @@ function pageMain() {
       <input type="hidden" name="gestioncab_id" value="{$gestioncab->gestioncab_id}" />
       <input type="hidden" name="function_id" value="{$gestioncab->function_id}" />
       {if $gestioncab->gestioncab_id}
-      <a class="button" href="index.php?m={$m}&gestioncab_id=0">Créer une nouvelle fiche</a>
+      <a class="buttonnew" href="index.php?m={$m}&gestioncab_id=0">Créer une nouvelle fiche</a>
       {/if}
       <table class="form">
         <tr>
@@ -98,10 +98,12 @@ function pageMain() {
         <tr>
           <td class="button" colspan="5">
             {if $gestioncab->gestioncab_id}
-            <input type="submit" value="Modifier" />
-            <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'la fiche',objName:'{$gestioncab->_view|escape:javascript}'{rdelim})"/>
+            <button class="modify" type="submit">Modifier</button>
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'la fiche',objName:'{$gestioncab->_view|escape:javascript}'{rdelim})">
+              Supprimer
+            </button>
             {else}
-            <input type="submit" value="Créer" />
+            <button class="submit" type="submit">Créer</button>
             {/if}
           </td>
         </tr>
@@ -125,9 +127,7 @@ function pageMain() {
             <img id="selectFrm_date_trigger" src="./images/calendar.gif" alt="calendar" />
           </td>
           <td class="button">
-            <button type="button" onclick="printRapport()">
-              <img src="modules/dPgestionCab/images/print.png" alt="imprimer" />
-            </button>
+            <button class="print" type="button" onclick="printRapport()"></button>
           </td>
         </tr>
         <tr>

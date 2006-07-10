@@ -95,9 +95,7 @@ function incAntecedantsMain() {
           {foreach from=$curr_cat item=curr_code}
           <tr class="{$cat}">
             <td class="text">
-              <button type="button" onclick="putCim10('{$curr_code->code}')">
-                <img src="modules/dPcabinet/images/tick.png" />
-              </button>
+              <button class="tick" type="button" onclick="putCim10('{$curr_code->code}')"></button>
               <button type="button" onclick="selectCim10('{$curr_code->code}')">
                 <img src="modules/dPcabinet/images/downarrow.png" />
               </button>

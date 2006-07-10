@@ -51,7 +51,7 @@ function refreshCR() {
         </li>
         {/foreach}
         <li>
-          <button type="submit"><img src="modules/{$m}/images/tick.png" /></button>
+          <button class="tick" type="submit"></button>
         </li>
       </ul>
       {/if}

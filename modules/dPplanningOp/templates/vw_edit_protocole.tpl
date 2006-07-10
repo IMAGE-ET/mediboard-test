@@ -48,8 +48,7 @@ function refreshListCCAM() {
   var iCode = 0;
   while (sCode = aCcam[iCode++]) {
     var sCodeNode = sCode;
-    sCodeNode += "<button type='button' onclick='delCCAM(\"" + sCode + "\")'>";
-    sCodeNode += "<img src='modules/dPplanningOp/images/cross.png' />";
+    sCodeNode += "<button class='cancel' type='button' onclick='delCCAM(\"" + sCode + "\")'>";
     sCodeNode += "<\/button>";
     aCodeNodes.push(sCodeNode);
   }
@@ -169,7 +168,7 @@ function pageMain() {
   {if $protocole->protocole_id}
   <tr>
     <td colspan="2">
-       <a class="button" href="index.php?m={$m}&amp;protocole_id=0">Créer un nouveau protocole</a>
+       <a class="buttonnew" href="index.php?m={$m}&amp;protocole_id=0">Créer un nouveau protocole</a>
     </td>
   </tr>
   {/if}
@@ -237,9 +236,8 @@ function pageMain() {
           </th>
           <td>
             <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" />
-            <button type="button" onclick="putCCAM(this.form._codeCCAM.value)">
-              <img src="modules/dPplanningOp/images/tick.png" alt="ajouter" />
-            </button>
+            <button class="tick" type="button" onclick="putCCAM(this.form._codeCCAM.value)"></button>
+            
           </td>
           <td class="button"><input type="button" value="Choisir un code" onclick="popCode('ccam')"/></td>
         </tr>
@@ -315,10 +313,12 @@ function pageMain() {
         <tr>
           <td class="button">
           {if $protocole->protocole_id}
-            <input type="submit" value="Modifier" />
-            <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'le {$protocole->_view|escape:javascript}'{rdelim})" />
+            <button class="modify" type="submit">Modifier</button>
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'le {$protocole->_view|escape:javascript}'{rdelim})">
+              Supprimer
+            </button>
           {else}
-            <input type="submit" value="Créer" />
+            <button class="submit" type="submit">Créer</button>
           {/if}
           </td>
         </tr>

@@ -15,7 +15,9 @@
       <input type="hidden" name="dosql" value="do_favoris_aed" />
       <input type="hidden" name="del" value="1" />
       <input type="hidden" name="favoris_id" value="{$curr_code->favoris_id}" />
-      <input class="button" type="submit" name="btnFuseAction" value="Retirer de mes favoris" />
+      <button class="trash" type="submit" name="btnFuseAction">
+        Retirer de mes favoris
+      </button>
 	  </form>
     </td>
   {if ($curr_key+1) is div by 4 or ($curr_key+1) == $codes|@count}

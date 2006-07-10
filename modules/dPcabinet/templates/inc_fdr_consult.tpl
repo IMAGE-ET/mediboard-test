@@ -115,9 +115,8 @@ function submitFdr(oForm) {
             <input type="hidden" name="dosql" value="do_file_aed" />
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="file_id" value="{$curr_file->file_id}" />
-            <button type="button"
+            <button class="cancel" type="button"
               onclick="confirmDeletion(this.form, {ldelim}typeName:'le fichier',objName:'{$curr_file->file_name|escape:javascript}',ajax:1,target:'systemMsg'{rdelim},{ldelim}onComplete:reloadFdr{rdelim})"/>
-              <img src="modules/dPcabinet/images/cross.png" />
             </button>
           </form>
         </li>
@@ -151,8 +150,7 @@ function submitFdr(oForm) {
           <button type="button" onclick="editDocument({$document->compte_rendu_id})">
             <img src="modules/dPcabinet/images/edit.png" /> 
           </button>
-          <button type="button" onclick="this.form.del.value = 1; submitFdr(this.form)">
-            <img src="modules/dPcabinet/images/trash.png" /> 
+          <button class="trash" type="button" onclick="this.form.del.value = 1; submitFdr(this.form)">
           </button>
           </form>
         </td>
@@ -247,7 +245,7 @@ function submitFdr(oForm) {
         </tr>
         <tr>
           <td colspan="2" class="button">
-            <input type="button" value="Annuler" onclick="cancelTarif()" />
+            <button class="cancel" type="button" onclick="cancelTarif()">Annuler</button>
           </td>
         </tr>
         {/if}
@@ -269,7 +267,7 @@ function submitFdr(oForm) {
         <tr>
           <td colspan="2" class="button">
             <input type="button" value="Règlement effectué" onclick="effectuerReglement()" />
-            <input type="button" value="Annuler" onclick="cancelTarif()"/>
+            <button class="cancel" type="button" onclick="cancelTarif()">Annuler</button>
           </td>
         </tr>
         {elseif $consult->paye == "0"}
@@ -283,7 +281,7 @@ function submitFdr(oForm) {
         <tr>
           <td colspan="2" class="button">
             <input type="button" value="Valider ce tarif" onclick="submitFdr(this.form)" />
-            <input type="button" value="Annuler" onclick="cancelTarif()"/>
+            <button class="cancel" type="button" onclick="cancelTarif()">Annuler</button>
           </td>
         </tr>
         {/if}

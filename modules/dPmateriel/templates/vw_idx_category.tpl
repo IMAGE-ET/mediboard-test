@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="button" href="index.php?m=dPmateriel&amp;tab=vw_idx_category&amp;category_id=0">
+      <a class="buttonnew" href="index.php?m=dPmateriel&amp;tab=vw_idx_category&amp;category_id=0">
         Créer une nouvelle catégorie
       </a>
       <table class="tbl">
@@ -44,9 +44,9 @@
         </tr>
         <tr>
           <td class="button" colspan="2">
-            <button type="submit">Valider</button>
+            <button class="submit" type="submit">Valider</button>
             {if $category->category_id}
-              <button type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'la catégorie',objName:'{$category->_view|escape:javascript}'{rdelim})">Supprimer</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'la catégorie',objName:'{$category->_view|escape:javascript}'{rdelim})">Supprimer</button>
             {/if}
           </td>
         </tr>  

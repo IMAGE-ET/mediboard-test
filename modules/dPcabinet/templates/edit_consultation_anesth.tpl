@@ -111,10 +111,8 @@ function pageMain() {
       <table class="form">
         <tr>
           <th class="category" colspan="4">
-            <button type="button" style="float: left;" onclick="printFiche()">
-              <img src="modules/dPcabinet/images/print.png" alt="historique" />
+            <button class="print" type="button" style="float: left;" onclick="printFiche()">
               Imprimer la fiche
-              <img src="modules/dPcabinet/images/print.png" alt="historique" />
             </button>
             <input type="hidden" name="chrono" value="{$consult->chrono}" />
             Consultation

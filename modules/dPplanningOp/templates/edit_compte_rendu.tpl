@@ -15,7 +15,7 @@
     <td>{$curr_list->nom}</td>
     {/foreach}
     <td class="button" rowspan="2">
-      <button onclick="javascript:this.form.special.value = 2;"><img src="modules/{$m}/images/tick.png" /></button>
+      <button class="tick" onclick="javascript:this.form.special.value = 2;"></button>
     </td>
   </tr>
   <tr>

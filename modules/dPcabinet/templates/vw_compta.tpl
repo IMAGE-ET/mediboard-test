@@ -106,7 +106,7 @@ function pageMain() {
         <tr>
           <td class="button" colspan="2">
             <input type="submit" value="Validation paiements" onclick="document.printFrm.a.value='print_rapport';" />
-            <input type="submit" value="Impression compta" onclick="document.printFrm.a.value='print_compta';" />
+            <button class="print" type="submit" onclick="document.printFrm.a.value='print_compta';">Impression compta</button>
           </td>
         </tr>
       </table>
@@ -117,7 +117,7 @@ function pageMain() {
       {if $tarif->tarif_id}
         <tr>
           <td colspan="3">
-            <a class="button" href="index.php?m={$m}&amp;tarif_id=null">Créer un nouveau tarif</a>
+            <a class="buttonnew" href="index.php?m={$m}&amp;tarif_id=null">Créer un nouveau tarif</a>
           </td>
         </tr>
       {/if}
@@ -213,10 +213,12 @@ function pageMain() {
               <tr>
                 <td class="button" colspan="2">
                   {if $tarif->tarif_id}
-                  <input type="submit" value="Modifier" />
-                  <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'le tarif',objName:'{$tarif->description|escape:javascript}'{rdelim})" />
+                  <button class="modify" type="submit">Modifier</button>
+                  <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'le tarif',objName:'{$tarif->description|escape:javascript}'{rdelim})">
+                    Supprimer
+                  </button>
                   {else}
-                  <input type="submit" name="btnFuseAction" value="Créer" />
+                  <button class="submit" type="submit" name="btnFuseAction">Créer</button>
                   {/if}
                 </td>
               </tr>

@@ -54,15 +54,13 @@ function pageMain() {
                 {if $curr_sortie->confirme}
                 <input type="hidden" name="confirme" value="0" />
                 <input type="hidden" name="effectue" value="0" />
-                <button type="submit">
-                <img src="modules/{$m}/images/cross.png" alt="Annuler" title="Annuler le déplacement" />
+                <button type="submit" class="cancel">
                 Annuler le déplacement
                 </button>
                 {else}
                 <input type="hidden" name="confirme" value="1" />
                 <input type="hidden" name="effectue" value="1" />
-                <button type="submit">
-                <img src="modules/{$m}/images/tick.png" alt="Confirmer" title="Confirmer le déplacement" />
+                <button type="submit" class="tick">
                 Confirmer le déplacement
                 </button>
                 {/if}
@@ -114,14 +112,12 @@ function pageMain() {
                 <input type="hidden" name="affectation_id" value="{$curr_sortie->affectation_id}" />
                 {if $curr_sortie->confirme}
                 <input type="hidden" name="confirme" value="0" />
-                <button type="submit">
-                <img src="modules/{$m}/images/cross.png" alt="Annuler" title="Annuler la sortie" />
+                <button type="submit" class="cancel">
                 Annuler la sortie
                 </button>
                 {else}
                 <input type="hidden" name="confirme" value="1" />
-                <button type="submit">
-                <img src="modules/{$m}/images/tick.png" alt="Confirmer" title="Confirmer la sortie" />
+                <button type="submit" class="tick">
                 Confirmer la sortie
                 </button>
                 {/if}
@@ -154,14 +150,12 @@ function pageMain() {
                 <input type="hidden" name="affectation_id" value="{$curr_sortie->affectation_id}" />
                 {if $curr_sortie->confirme}
                 <input type="hidden" name="confirme" value="0" />
-                <button type="submit">
-                <img src="modules/{$m}/images/cross.png" alt="Annuler" title="Annuler la sortie" />
+                <button type="submit" class="cancel">
                 Annuler la sortie
                 </button>
                 {else}
                 <input type="hidden" name="confirme" value="1" />
-                <button type="submit">
-                <img src="modules/{$m}/images/tick.png" alt="Confirmer" title="Confirmer la sortie" />
+                <button type="submit" class="tick">
                 Confirmer la sortie
                 </button>
                 {/if}

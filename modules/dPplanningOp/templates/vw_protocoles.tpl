@@ -214,7 +214,7 @@ function setClose(protocole_id) {
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="tab" value="vw_edit_protocole" />
             <input type="hidden" name="protocole_id" value="{{$protSel->protocole_id}}" />
-            <input type="submit" value="Modifier" />
+            <button class="modify" type="submit">Modifier</button>
             </form>
           </td>
         </tr>

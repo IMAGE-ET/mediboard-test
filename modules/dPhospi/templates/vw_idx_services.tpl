@@ -79,11 +79,12 @@ function checkFrm() {
     <tr>
       <td class="button" colspan="2">
         {if $serviceSel->service_id}
-        <input type="reset" value="Réinitialiser" />
-        <input type="submit" value="Valider" />
-        <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{ldelim}typeName:'le service ',objName:'{$serviceSel->nom|escape:javascript}'{rdelim})" />
+        <button class="modify" type="submit">Valider</button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'le service ',objName:'{$serviceSel->nom|escape:javascript}'{rdelim})">
+          Supprimer
+        </button>
         {else}
-        <input type="submit" name="btnFuseAction" value="Créer" />
+        <button class="submit" name="btnFuseAction" type="submit">Créer</button>
         {/if}
       </td>
     </tr>

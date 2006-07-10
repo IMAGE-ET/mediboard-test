@@ -234,13 +234,23 @@
 <tr>
   <td class="button" colspan="3">
   {{if $sejour->sejour_id}}
-    <input type="submit" value="Modifier" />
-    <input type="button" value="Supprimer" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|escape:"javascript"}}'});" />
-    {{if $sejour->annule == "0"}}{{assign var="annule_text" value="Annuler"}}{{/if}}
-    {{if $sejour->annule == "1"}}{{assign var="annule_text" value="Rétablir"}}{{/if}}
-    <input type="button" value="{{$annule_text}}" onclick="cancelSejour();" />
+    <button class="modify" type="submit">Modifier</button>
+    <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|escape:"javascript"}}'});">
+      Supprimer
+    </button>
+    {{if $sejour->annule == "0"}}
+      {{assign var="annule_text" value="Annuler"}}
+      {{assign var="annule_class" value="cancel"}}
+    {{/if}}
+    {{if $sejour->annule == "1"}}
+      {{assign var="annule_text" value="Rétablir"}}
+      {{assign var="annule_class" value="change"}}
+    {{/if}}
+    <button class="{{$annule_class}}" type="button" onclick="cancelSejour();">
+      {{$annule_text}}
+    </button>
   {{else}}
-    <input type="submit" value="Créer" />
+    <button class="submit" type="submit">Créer</button>
   {{/if}}
   </td>
 </tr>

@@ -1,9 +1,9 @@
 <table class="main">
   <tr>
     <td class="HalfPane">
-      <a class="button" href="index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id=0">
+      <a class="buttonnew" href="index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id=0">
         Créer un nouveau stock
-      </a> 
+      </a>
       <table class="tbl">
         <tr>
           <th>id</th>
@@ -85,9 +85,9 @@
         </tr>
         <tr>
           <td class="button" colspan="2">
-            <button type="submit">Valider</button>
+            <button class="submit" type="submit">Valider</button>
             {if $stock->stock_id}
-              <button type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'le stock',objName:'{$stock->_view|escape:javascript}'{rdelim})">Supprimer</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'le stock',objName:'{$stock->_view|escape:javascript}'{rdelim})">Supprimer</button>
             {/if}
           </td>
         </tr>        

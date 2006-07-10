@@ -103,7 +103,7 @@
               </tr>
               <tr>
                 <td class="button" colspan="4">
-                  <button type="button" onclick="submitConsultAnesth()">Valider</button>
+                  <button class="submit" type="button" onclick="submitConsultAnesth()">Valider</button>
                 </td>
               </tr>
             </table>
@@ -150,7 +150,7 @@
               {/foreach}
               <tr>
                 <td class="button">
-                  <button type="button" onclick="submitOpConsult()">valider</button>
+                  <button class="submit" type="button" onclick="submitOpConsult()">valider</button>
             </table>
             </form>
             {/if}
