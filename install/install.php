@@ -172,6 +172,21 @@ $library->renamer = $renamer;
 $libraries[] = $library;
 
 $library = new CLibrary;
+
+$library->name = "Open Rico";
+$library->url = "http://openrico.org/";
+$library->fileName = "Rico-1.1.2.tar.gz";
+$library->description = "Composant Javascript d'effets spéciaux, utilisant le framework prototype.js";
+
+$renamer = new CLibraryRenamer;
+$renamer->sourceDir = "Rico-1.1.2";
+$renamer->targetDir = "rico";
+
+$library->renamer = $renamer;
+
+$libraries[] = $library;
+
+$library = new CLibrary;
 $library->name = "FCKEditor";
 $library->url = "http://www.fckeditor.net/";
 $library->fileName = "FCKeditor_2.2.tar.gz";

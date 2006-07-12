@@ -28,6 +28,7 @@
   <?php mbLoadScript("lib/jscalendar/calendar-setup.js"); ?>
   <?php mbLoadScript("lib/scriptaculous/lib/prototype.js"); ?>
   <?php mbLoadScript("lib/scriptaculous/src/scriptaculous.js"); ?>
+  <?php mbLoadScript("lib/rico/rico.js"); ?>
 </head>
 
 <body onload="main()">
