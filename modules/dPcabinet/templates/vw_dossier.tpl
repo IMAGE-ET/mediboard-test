@@ -235,7 +235,8 @@ function printDocument(doc_id) {
             <form name="uploadFrm" action="?m=dPcabinet" enctype="multipart/form-data" method="post">
             <input type="hidden" name="dosql" value="do_file_aed" />
             <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="file_operation" value="{$curr_op->operation_id}" />
+            <input type="hidden" name="file_class" value="COperation" />
+            <input type="hidden" name="file_object_id" value="{$curr_op->operation_id}" />
             <input type="file" name="formfile" />
             <input type="submit" value="ajouter" />
 

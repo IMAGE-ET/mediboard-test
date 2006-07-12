@@ -7,11 +7,11 @@
  * @author Romain Ollivier
  */
 
-require_once( $AppUI->getSystemClass ("mbobject" ) );
+require_once($AppUI->getSystemClass("mbobject"));
 
 require_once($AppUI->getModuleClass("mediusers"));
 require_once($AppUI->getModuleClass("mediusers", "functions"));
-require_once($AppUI->getModuleClass("dPbloc", "salle"));
+require_once($AppUI->getModuleClass("dPbloc"   , "salle"));
 
 /**
  * The plagesop Class

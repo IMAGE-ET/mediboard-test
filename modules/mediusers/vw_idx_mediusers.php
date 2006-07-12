@@ -28,9 +28,8 @@ $functions = new CFunctions;
 $functions = $functions->loadList(null, $order);
 
 // Récupération des disciplines
-$order = "text";
 $disciplines = new CDiscipline;
-$disciplines = $disciplines->loadList(null, $order);
+$disciplines = $disciplines->loadUsedDisciplines();
 
 // Récuperation des utilisateurs
 foreach ($functions as $key => $function) {

@@ -7,16 +7,17 @@
 * @author Romain Ollivier
 */
 
-require_once( $AppUI->getSystemClass ('mbobject' ) );
+require_once($AppUI->getSystemClass ("mbobject"));
 
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPpatients'  , 'patients'     ) );
-require_once( $AppUI->getModuleClass('dPbloc'      , 'plagesop'     ) );
-require_once( $AppUI->getModuleClass('dPccam'      , 'acte'         ) );
-require_once( $AppUI->getModuleClass('dPcabinet'   , 'consultAnesth') );
-require_once( $AppUI->getModuleClass('dPcabinet'   , 'files'        ) );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour'       ) );
-require_once( $AppUI->getModuleClass('dPsalleOp'   , 'acteccam'     ) );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPpatients"  , "patients"     ));
+require_once($AppUI->getModuleClass("dPbloc"      , "plagesop"     ));
+require_once($AppUI->getModuleClass("dPbloc"       , "salle"        ));
+require_once($AppUI->getModuleClass("dPccam"      , "acte"         ));
+require_once($AppUI->getModuleClass("dPcabinet"   , "consultAnesth"));
+require_once($AppUI->getModuleClass("dPcabinet"   , "files"        ));
+require_once($AppUI->getModuleClass("dPplanningOp", "sejour"       ));
+require_once($AppUI->getModuleClass("dPsalleOp"   , "acteccam"     ));
 
 // @todo: Put the following in $config_dist;
 $dPconfig["dPplanningOp"]["operation"] = array (
@@ -32,67 +33,67 @@ class COperation extends CMbObject {
   var $operation_id = null;
 
   // DB References
-  var $sejour_id = null;
-  var $chir_id = null; // dupliqué en $sejour->praticien_id
+  var $sejour_id  = null;
+  var $chir_id    = null; // dupliqué en $sejour->praticien_id
   var $plageop_id = null;
   
   // DB Fields S@nté.com communication
-  var $code_uf = null;
+  var $code_uf    = null;
   var $libelle_uf = null;
   
   // DB Fields
-  var $salle_id = null;
-  var $date = null;
-  var $codes_ccam = null;
-  var $libelle = null;
-  var $cote = null;
+  var $salle_id       = null;
+  var $date           = null;
+  var $codes_ccam     = null;
+  var $libelle        = null;
+  var $cote           = null;
   var $temp_operation = null;
-  var $pause = null;
-  var $entree_bloc = null;
-  var $pose_garrot = null;
-  var $debut_op = null;
-  var $fin_op = null;
+  var $pause          = null;
+  var $entree_bloc    = null;
+  var $pose_garrot    = null;
+  var $debut_op       = null;
+  var $fin_op         = null;
   var $retrait_garrot = null;
-  var $sortie_bloc = null;
-  var $entree_reveil = null;
-  var $sortie_reveil = null;
+  var $sortie_bloc    = null;
+  var $entree_reveil  = null;
+  var $sortie_reveil  = null;
   var $time_operation = null;
-  var $examen = null;
-  var $materiel = null;
-  var $commande_mat = null;
-  var $info = null;
-  var $date_anesth = null;
-  var $time_anesth = null;
-  var $type_anesth = null;  
-  var $duree_hospi = null;
-  var $ATNC = null;
-  var $rques = null;
-  var $rank = null;
+  var $examen         = null;
+  var $materiel       = null;
+  var $commande_mat   = null;
+  var $info           = null;
+  var $date_anesth    = null;
+  var $time_anesth    = null;
+  var $type_anesth    = null;  
+  var $duree_hospi    = null;
+  var $ATNC           = null;
+  var $rques          = null;
+  var $rank           = null;
   
-  var $depassement = null;
-  var $annulee = null;    // completé par $sejour->annule
+  var $depassement    = null;
+  var $annulee        = null;    // completé par $sejour->annule
     
   // Form fields
-  var $_hour_op = null;
-  var $_min_op = null;
-  var $_hour_urgence = null;
-  var $_min_urgence = null;
-  var $_hour_anesth = null;
-  var $_min_anesth = null;
+  var $_hour_op        = null;
+  var $_min_op         = null;
+  var $_hour_urgence   = null;
+  var $_min_urgence    = null;
+  var $_hour_anesth    = null;
+  var $_min_anesth     = null;
   var $_lu_type_anesth = null;
-  var $_codes_ccam = array();
+  var $_codes_ccam     = array();
   
   // Shortcut fields
   var $_datetime = null;
   
   // DB References
-  var $_ref_chir = null;
-  var $_ref_plageop = null;
-  var $_ref_sejour = null;
+  var $_ref_chir           = null;
+  var $_ref_plageop        = null;
+  var $_ref_sejour         = null;
   var $_ref_consult_anesth = null;
-  var $_ref_files = array();
-  var $_ref_actes_ccam = array(); 
-  var $_ref_documents = array();
+  var $_ref_files          = array();
+  var $_ref_actes_ccam     = array(); 
+  var $_ref_documents      = array();
   
   // External references
   var $_ext_codes_ccam = null;
@@ -118,7 +119,7 @@ class COperation extends CMbObject {
 //  var $_min_adm = null;
 
   function COperation() {
-    $this->CMbObject( 'operations', 'operation_id' );
+    $this->CMbObject("operations", "operation_id");
 
     $this->_props["chir_id"]        = "ref|notNull";
     $this->_props["plageop_id"]     = "ref";
@@ -146,20 +147,20 @@ class COperation extends CMbObject {
     $this->_props["depassement"]    = "currency|confidential";
     $this->_props["annulee"]        = "enum|0|1";
     
-//    $this->_props["pat_id"] = "ref";
-//    $this->_props["CCAM_code"] = "code|ccam";
-//    $this->_props["CCAM_code2"] = "code|ccam";
-//    $this->_props["CIM10_code"] = "code|cim10";
+//    $this->_props["pat_id"]        = "ref";
+//    $this->_props["CCAM_code"]     = "code|ccam";
+//    $this->_props["CCAM_code2"]    = "code|ccam";
+//    $this->_props["CIM10_code"]    = "code|cim10";
 //    $this->_props["convalescence"] = "str|confidential";
-//    $this->_props["date_adm"] = "date";
-//    $this->_props["time_adm"] = "time";
-//    $this->_props["type_adm"] = "enum|comp|ambu|exte";
-//    $this->_props["venue_SHS"] = "num|length|8|confidential";
-//    $this->_props["chambre"] = "enum|o|n";
-//    $this->_props["saisie"] = "enum|o|n";
-//    $this->_props["modifiee"] = "enum|0|1";
-//    $this->_props["compte_rendu"] = "html|confidential";
-//    $this->_props["cr_valide"] = "enum|0|1";
+//    $this->_props["date_adm"]      = "date";
+//    $this->_props["time_adm"]      = "time";
+//    $this->_props["type_adm"]      = "enum|comp|ambu|exte";
+//    $this->_props["venue_SHS"]     = "num|length|8|confidential";
+//    $this->_props["chambre"]       = "enum|o|n";
+//    $this->_props["saisie"]        = "enum|o|n";
+//    $this->_props["modifiee"]      = "enum|0|1";
+//    $this->_props["compte_rendu"]  = "html|confidential";
+//    $this->_props["cr_valide"]     = "enum|0|1";
   }
 
   function check() {
@@ -329,12 +330,15 @@ class COperation extends CMbObject {
   }
   
   function loadRefPlageOp() {
+    $this->_ref_plageop = new CPlageOp;
     if($this->plageop_id) {
-      $this->_ref_plageop = new CPlageOp;
       $this->_ref_plageop->load($this->plageop_id);
+      $this->_ref_salle =& $this->_ref_plageop->_ref_salle;
       $this->_datetime = $this->_ref_plageop->date;
     } else {
       $this->_datetime = $this->date;
+      $this->_ref_salle = new CSalle;
+      $this->_ref_salle->load($this->salle_id);
     }
     $this->_datetime .= " ".$this->time_operation;
   }
@@ -382,7 +386,8 @@ class COperation extends CMbObject {
   function loadRefsFiles() {
     $this->_ref_files = array();
     if ($this->operation_id) {
-      $where = array("file_operation" => "= '$this->operation_id'");
+      $where["file_class"] = "= 'COperation'";
+      $where["file_object_id"] = "= '$this->operation_id'";
       $this->_ref_files = new CFile();
       $this->_ref_files = $this->_ref_files->loadList($where);
     }

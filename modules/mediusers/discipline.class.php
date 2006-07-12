@@ -29,6 +29,15 @@ class CDiscipline extends CMbObject {
     $this->_props["text"] = "str|notNull";
   }
   
+  function loadUsedDisciplines($where = array(), $order = null) {
+    $ljoin["users_mediboard"] = "`users_mediboard`.`discipline_id` = `discipline`.`discipline_id`";
+    $where["users_mediboard`.`discipline_id"] = "IS NOT NULL";
+    if(!$order) {
+      $order = "`discipline`.`text`";
+    }
+    return $this->loadList($where, $order, null, null, $ljoin);
+  }
+  
   function updateFormFields () {
     parent::updateFormFields();
 

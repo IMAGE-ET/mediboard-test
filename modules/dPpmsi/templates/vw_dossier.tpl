@@ -198,7 +198,7 @@ function pageMain() {
           <th class="category" colspan="4">
             Dr. {$curr_op->_ref_chir->_view}
             &mdash; {$curr_op->_datetime|date_format:"%A %d %B %Y"}
-            &mdash; {$curr_op->_ref_plageop->_ref_salle->nom}
+            &mdash; {$curr_op->_ref_salle->nom}
           </th>
         </tr>
         {foreach from=$curr_op->_ext_codes_ccam item=curr_code}
