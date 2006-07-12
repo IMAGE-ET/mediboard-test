@@ -60,7 +60,7 @@ function updateDureePrevue() {
     var dSortiePrevue = makeDateFromDATE(oForm._date_sortie_prevue.value);
     var iSecondsDelta = dSortiePrevue - dEntreePrevue;
     var iDaysDelta = iSecondsDelta / (24 * 60 * 60 * 1000);
-    oForm._duree_prevue.value = iDaysDelta;
+    oForm._duree_prevue.value = Math.floor(iDaysDelta);
   }
 }
 

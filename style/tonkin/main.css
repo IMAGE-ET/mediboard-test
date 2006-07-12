@@ -310,6 +310,7 @@ button.trash, a.buttontrash {
   background-repeat: repeat-x;
   background-position: left bottom;
   padding-left: 18px;
+  height: 16px;
 }
 
 button.trash:hover, a.buttontrash:hover {
@@ -317,6 +318,7 @@ button.trash:hover, a.buttontrash:hover {
   background-repeat: repeat-x;
   background-position: left bottom;
   padding-left: 18px;
+  height: 16px;
 }
 
 button.submit, a.buttonsubmit {
@@ -352,6 +354,7 @@ button.print, a.buttonprint {
   background-repeat: repeat-x;
   background-position: left bottom;
   padding-left: 18px;
+  height: 16px;
 }
 
 button.print:hover, a.buttonprint:hover {
@@ -359,6 +362,7 @@ button.print:hover, a.buttonprint:hover {
   background-repeat: repeat-x;
   background-position: left bottom;
   padding-left: 18px;
+  height: 16px;
 }
 
 button.cancel, a.buttoncancel {
@@ -366,6 +370,7 @@ button.cancel, a.buttoncancel {
   background-repeat: repeat-x;
   background-position: left bottom;
   padding-left: 18px;
+  height: 16px;
 }
 
 button.cancel:hover, a.buttoncancel:hover {
@@ -373,6 +378,7 @@ button.cancel:hover, a.buttoncancel:hover {
   background-repeat: repeat-x;
   background-position: left bottom;
   padding-left: 18px;
+  height: 16px;
 }
 
 button.modify, a.buttonmodify {
@@ -406,6 +412,7 @@ button.tick, a.buttontick {
   background-repeat: repeat-x;
   background-position: left bottom;
   padding-left: 18px;
+  height: 16px;
 }
 
 button.tick:hover, a.buttontick:hover {
@@ -413,6 +420,7 @@ button.tick:hover, a.buttontick:hover {
   background-repeat: repeat-x;
   background-position: left bottom;
   padding-left: 18px;
+  height: 16px;
 }
 button.change, a.buttonchange {
   background-image: url(./images/buttons/change.png);

@@ -143,6 +143,7 @@ button.trash, a.buttontrash {
   background-repeat: no-repeat;
   background-position: center left;
   padding-left: 18px;
+  height: 16px;
 }
 
 button.submit, a.buttonsubmit {
