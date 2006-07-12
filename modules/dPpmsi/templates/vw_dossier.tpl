@@ -120,7 +120,7 @@ function pageMain() {
             <input type="text" readonly="readonly" name="patNom" value="{$patient->_view}" />
           </td>
           <td class="button">
-            <button class="search" type="button" onclick="popPat()">chercehr</button>
+            <button class="search" type="button" onclick="popPat()">chercher</button>
           </td>
         </tr>
       </table>
@@ -500,9 +500,9 @@ function pageMain() {
           </td>
         </tr>
         {/foreach}
-       </table>
+       </table></td>
       {/if}
-    </td>
+    
   </tr>
 </table>
 

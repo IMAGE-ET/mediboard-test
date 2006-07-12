@@ -142,7 +142,7 @@ function checkForm() {
       <th><label for="function_id" title="Fonction à laquelle le modèle est associé">Fonction</label></th>
       <td>
         <select name="function_id" onchange="this.form.chir_id.value = 0">
-          <option value="0">&mdash; Associer à une fonction &mdash;</options>
+          <option value="0">&mdash; Associer à une fonction &mdash;</option>
           {foreach from=$listFunc item=curr_func}
             <option value="{$curr_func->function_id}" {if $curr_func->function_id == $liste->function_id} selected="selected" {/if}>
               {$curr_func->_view}
@@ -156,7 +156,7 @@ function checkForm() {
       <th><label for="chir_id" title="Praticien auquel le modèle est associé">Praticien</label></th>
       <td>
         <select name="chir_id" onchange="this.form.function_id.value = 0">
-          <option value="0">&mdash; Associer à un praticien &mdash;</options>
+          <option value="0">&mdash; Associer à un praticien &mdash;</option>
           {foreach from=$listPrat item=curr_prat}
             <option value="{$curr_prat->user_id}" {if ($liste->liste_choix_id && ($curr_prat->user_id == $liste->chir_id)) || (!$liste->liste_choix_id && ($curr_prat->user_id == $user_id))}selected="selected"{/if}>
               {$curr_prat->_view}

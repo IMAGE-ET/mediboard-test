@@ -81,7 +81,7 @@ function submitIt(){
 </table>
 
 <table width="95%" border="0" bgcolor="#f4efe3" cellpadding="0" cellspacing="1" height="400">
-<form name="changeuser" action="./index.php?m=admin&a=dosql" method="post">
+<form name="changeuser" action="./index.php?m=admin&amp;a=dosql" method="post">
     <input type="hidden" name="user_id" value="<?php echo intval($prow["user_id"]);?>" />
     <tr height="20">
         <td valign="top" bgcolor="#878676" colspan="2">

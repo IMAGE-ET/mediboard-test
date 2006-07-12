@@ -46,11 +46,11 @@ foreach( $arr as $L ) {
 $a2z = "\n<table cellpadding=\"2\" cellspacing=\"1\" border=\"0\">";
 $a2z .= "\n<tr>";
 $a2z .= '<td width="100%" align="right">' . $AppUI->_('Show'). ': </td>';
-$a2z .= '<td><a href="./index.php?m=admin&stub=0">' . $AppUI->_('All') . '</a></td>';
+$a2z .= '<td><a href="./index.php?m=admin&amp;stub=0">' . $AppUI->_('All') . '</a></td>';
 for ($c=65; $c < 91; $c++) {
 	$cu = chr( $c );
 	$cell = strpos($let, "$cu") > 0 ?
-		"<a href=\"?m=admin&stub=$cu\">$cu</a>" :
+		"<a href=\"?m=admin&amp;stub=$cu\">$cu</a>" :
 		"<font color=\"#999999\">$cu</font>";
 	$a2z .= "\n\t<td>$cell</td>";
 }
@@ -72,12 +72,12 @@ $titleBlock->addCell( $a2z );
 
 // New user cell
 
-$newUserCell = '<td align="right" width="100%"><input type="button" class=button value="'.$AppUI->_('add user').'" onClick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" /></td>';
+$newUserCell = '<td align="right" width="100%"><input type="button" class=button value="'.$AppUI->_('add user').'" onClick="javascript:window.location=\'./index.php?m=admin&amp;a=addedituser\';" /></td>';
 $titleBlock->addCell($newUserCell);
 
 $titleBlock->show();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function delMe( x, y ) {
 	if (confirm( "<?php echo $AppUI->_('doDelete').' '.$AppUI->_('User');?> " + y + "?" )) {
 		document.frmDelete.user_id.value = x;

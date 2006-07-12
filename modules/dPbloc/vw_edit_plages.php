@@ -24,7 +24,7 @@ $day   = $dateParts[2];
 $planning = new Cplanning($day, $month, $year);
 ?>
 
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function popPlanning(debut) {
   var url = new Url;
   url.setModuleAction("dPbloc", "view_planning");

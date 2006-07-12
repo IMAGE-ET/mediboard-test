@@ -98,7 +98,7 @@ function pageMain() {
             <div id="addPlage_date_da">{$debut|date_format:"%d/%m/%Y"}</div>
             <input type="hidden" name="date" value="{$debut}" title="{$plage->_props.date}" />
             {/if}
-            <img id="addPlage_date_trigger" src="./images/calendar.gif" title="calendar" title="Choisir une date"/>
+            <img id="addPlage_date_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date"/>
           </td>
           <th><label for="_hour_deb" title="Heure de début">Début</label></th>
           <td>
@@ -128,7 +128,7 @@ function pageMain() {
         <tr>
           <th><label for="tarif" title="Tarif de la plage. Obligatoire">Tarif</label></th>
           <td><input type="text" name="tarif" size="3" value="{$plage->tarif}" title="{$plage->_props.tarif}" />€</td>
-          <th><label for="_repeat" title="Nombre de semaine concernées">Répétition:</th>
+          <th><label for="_repeat" title="Nombre de semaine concernées">Répétition:</label></th>
           <td><input type="text" name="_repeat" size="3" value="1" /></td>
         </tr>
         <tr>

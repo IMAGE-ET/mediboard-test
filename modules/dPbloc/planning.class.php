@@ -93,7 +93,7 @@ class Cplanning {
 	  echo "<td bgcolor=\"#000000\" height=\"2\">";
 	  echo "</td>\n";
 	  echo "<td align=\"center\" width=\"75\">";
-	  echo "<a href=\"index.php?m=dPbloc&tab=1&date=$this->year-$this->month-$this->day\">$today</a>";
+	  echo "<a href=\"index.php?m=dPbloc&amp;tab=1&amp;date=$this->year-$this->month-$this->day\">$today</a>";
 	  echo "</td>\n";
 	  for($hours = 8; $hours <= 18; $hours++) {
 	    if(strlen($hours) == 1)
@@ -120,11 +120,11 @@ class Cplanning {
 			        $fsize = (substr($value2["fin"], 0, 2) - substr($value2["debut"], 0, 2)) * 4;
 			        $fsize += (substr($value2["fin"], 3, 2) - substr($value2["debut"], 3, 2)) / 15;
 			        echo "<td style=\"white-space: normal;\" bgcolor=\"#".$value2["couleur"]."\" colspan=\"$fsize\" align=\"center\" nowrap=\"nowrap\"><b>";
-			        echo "<a href=\"index.php?m=dPbloc&tab=2&id=".$value2["id"]."\" target=\"_self\">";
+			        echo "<a href=\"index.php?m=dPbloc&amp;tab=2&amp;id=".$value2["id"]."\" target=\"_self\">";
 			        echo $this->dispMed($value2["chir"], $value2["anesth"], $value2["spec"]);
 			        echo "</a> (".$value2["numop"].")";
-			        echo "<a href=\"index.php?m=dPbloc&tab=1&id=".$value2["id"]."&date=$this->year-$this->month-$this->day\" target=\"_self\">";
-			        echo " <img src=\"./modules/dPbloc/images/edit.png\" alt=\"editer la plage\" border=\"0\" height=\"16\" width=\"16\">";
+			        echo "<a href=\"index.php?m=dPbloc&amp;tab=1&amp;id=".$value2["id"]."&amp;date=$this->year-$this->month-$this->day\" target=\"_self\">";
+			        echo " <img src=\"./modules/dPbloc/images/edit.png\" alt=\"editer la plage\" border=\"0\" height=\"16\" width=\"16\" />";
 			        echo "</a>";
 			        echo "</b></td>\n";
 			      }
@@ -143,10 +143,10 @@ class Cplanning {
 			          $fsize = (substr($value2["fin"], 0, 2) - substr($value2["debut"], 0, 2)) * 4;
 			          $fsize += (substr($value2["fin"], 3, 2) - substr($value2["debut"], 3, 2)) / 15;
 			          echo "<td style=\"white-space: normal;\" bgcolor=\"#".$value2["couleur"]."\" colspan=\"$fsize\" align=\"center\" nowrap=\"nowrap\"><b>";
-			          echo "<a href=\"index.php?m=dPbloc&tab=2&id=".$value2["id"]."\" target=\"_self\">";
+			          echo "<a href=\"index.php?m=dPbloc&amp;tab=2&amp;id=".$value2["id"]."\" target=\"_self\">";
 			          echo $this->dispMed($value2["chir"], $value2["anesth"], $value2["spec"]);
 			          echo "</a> (".$value2["numop"].")";
-			          echo "<a href=\"index.php?m=dPbloc&tab=1&id=".$value2["id"]."&date=$this->year-$this->month-$this->day\" target=\"_self\">";
+			          echo "<a href=\"index.php?m=dPbloc&amp;tab=1&amp;id=".$value2["id"]."&amp;date=$this->year-$this->month-$this->day\" target=\"_self\">";
 			          echo " <img src=\"./modules/dPbloc/images/edit.png\" alt=\"editer la plage\" border=\"0\" height=\"16\" width=\"16\">";
 			          echo "</a>";
 			          echo "</b></td>\n";
@@ -177,7 +177,7 @@ class Cplanning {
 	  $tomonth = $this->monthList[intval($this->month)];
 	  echo "<a href=\"#\" onclick=\"popPlanning('$this->year-$this->month-$this->day');\">";
 	  echo "<b>$today $this->day $tomonth $this->year</b>";
-	  echo "<br /><img src=\"modules/dPbloc/images/print.png\" height=\"15\" width=\"15\" alt=\"imprimer\" border=\"0\">";
+	  echo "<br /><img src=\"modules/dPbloc/images/print.png\" height=\"15\" width=\"15\" alt=\"imprimer\" border=\"0\" />";
 	  echo "</a>";
 	  echo "</td>";
 	  echo "</tr>\n";
@@ -186,7 +186,7 @@ class Cplanning {
 	  echo "<table align=\"center\">";
     echo "<tr>";
     echo "<td bgcolor=\"#ffffff\">";
-    echo "<a href=\"index.php?m=dPbloc&tab=1&id=0\" target=\"_self\">Ajouter une plage opératoire</a>";
+    echo "<a href=\"index.php?m=dPbloc&amp;tab=1&amp;id=0\" target=\"_self\">Ajouter une plage opératoire</a>";
     echo "</td>";
     echo "</tr>";
     echo "</table>";

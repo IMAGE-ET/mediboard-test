@@ -1,7 +1,7 @@
 <!-- $Id$ -->
 
 {literal}
-<script type="text/javascript">
+<script language="Javascript" type="text/javascript">
 function checkPlage() {
   var form = document.editFrm;
   

@@ -90,3 +90,4 @@ function pageMain() {
     </td>
   </tr>
 </table>
+</form>

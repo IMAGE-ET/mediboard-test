@@ -30,7 +30,7 @@ function pageMain() {
     </tr>
     
 	{foreach from=$services item=curr_service}
-	<tr class="triggerShow" id="triggerservice{$curr_service->service_id}" onclick="flipEffectElement('groupservice{$curr_service->service_id}', 'SlideDown', 'SlideUp', 'triggerservice{$curr_service->service_id}')"
+	<tr class="triggerShow" id="triggerservice{$curr_service->service_id}" onclick="flipEffectElement('groupservice{$curr_service->service_id}', 'SlideDown', 'SlideUp', 'triggerservice{$curr_service->service_id}')">
 	  <td colspan="4">{$curr_service->nom}</td>
 	</tr>
   <tbody id="groupservice{$curr_service->service_id}" style="display: none">

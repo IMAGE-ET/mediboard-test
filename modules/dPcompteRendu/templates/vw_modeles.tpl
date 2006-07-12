@@ -16,7 +16,7 @@
           </th>
           <td>
             <select name="prat_id" onchange="submit()">
-              <option value="0">&mdash; Choisir un utilisateur &mdash;</options>
+              <option value="0">&mdash; Choisir un utilisateur &mdash;</option>
               {foreach from=$listPrat item=curr_prat}
                 <option value="{$curr_prat->user_id}" {if $curr_prat->user_id == $userSel->user_id} selected="selected" {/if}>
                   {$curr_prat->_view}

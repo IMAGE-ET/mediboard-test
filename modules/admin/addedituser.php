@@ -25,8 +25,8 @@ if (!db_loadHash( $sql, $user ) && $user_id > 0) {
 	if ($canEdit) {
 	  $titleBlock->addCrumb( "?m=admin", "users list" );
 	}
-	$titleBlock->addCrumb( "?m=admin&a=viewuser&user_id=$user_id", "view this user" );
-	$titleBlock->addCrumb( "?m=system&a=addeditpref&user_id=$user_id", "edit preferences" );
+	$titleBlock->addCrumb( "?m=admin&amp;a=viewuser&amp;user_id=$user_id", "view this user" );
+	$titleBlock->addCrumb( "?m=system&amp;a=addeditpref&amp;user_id=$user_id", "edit preferences" );
 	$titleBlock->show();
 ?>
 <SCRIPT language="javascript">

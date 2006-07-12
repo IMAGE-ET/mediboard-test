@@ -130,7 +130,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
         </tr>
 
         <tr>
-          <th><label for="rques" title="Remartques de la consultation" >Remarques</label></th>
+          <th><label for="rques" title="Remarques de la consultation" >Remarques</label></th>
           <td colspan="2"><textarea name="rques" title="{$consult->_props.rques}" rows="3">{$consult->rques}</textarea></td>
         </tr>
 

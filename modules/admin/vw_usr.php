@@ -26,7 +26,7 @@ foreach ($users as $row) {
 			</td>
 			<td>
 				<a href="?m=admin&amp;a=viewuser&amp;user_id=<?php echo $row["user_id"];?>&amp;tab=1" title="">
-					<img src="images/obj/lock.gif" width="16" height="16" border="0" alt="<?php echo $AppUI->_('edit permissions');?>">
+					<img src="images/obj/lock.gif" width="16" height="16" border="0" alt="<?php echo $AppUI->_('edit permissions');?>" />
 				</a>
 			</td>
 			<td>
@@ -42,7 +42,7 @@ foreach ($users as $row) {
 		<a href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $row["user_id"];?>"><?php echo $row["user_username"];?></a>
 	</td>
 	<td>
-		<a href="mailto:<?php echo $row["user_email"];?>"><img style="float: left; margin: 0 2px" src="images/obj/email.gif" width="16" height="16" border="0" alt="email"></a>
+		<a href="mailto:<?php echo $row["user_email"];?>"><img style="float: left; margin: 0 2px" src="images/obj/email.gif" width="16" height="16" border="0" alt="email" /></a>
 		<?php echo $row["user_last_name"].', '.$row["user_first_name"];?>
 	</td>
 </tr>

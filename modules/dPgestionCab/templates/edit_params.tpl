@@ -139,7 +139,7 @@
           <th class="category">patronnales</th>
         </tr>
         <tr>
-          <th>CSG déductible :</th>
+          <th><label for="csgds" title="CSG déductible">CSG déductible :</label></th>
           <td>
             <input type="text" size="5" name="csgds" title="{$paramsPaie->_props.csgds}" value="{$paramsPaie->csgds}" />
             %
@@ -147,7 +147,7 @@
           <td>-</td>
         </tr>
         <tr>
-          <th>CSG non déductible :</th>
+          <th><label for="csgnds" title="CSG non déductible">CSG non déductible :</label></th>
           <td>
             <input type="text" size="5" name="csgnds" title="{$paramsPaie->_props.csgnds}" value="{$paramsPaie->csgnds}" />
             %
@@ -155,7 +155,7 @@
           <td>-</td>
         </tr>
         <tr>
-          <th>S.S. maladie :</th>
+          <th><label for="ssms" title="S.S. maladie">S.S. maladie :</label></th>
           <td>
             <input type="text" size="5" name="ssms" title="{$paramsPaie->_props.ssms}" value="{$paramsPaie->ssms}" />
             %
@@ -166,7 +166,7 @@
           </td>
         </tr>
         <tr>
-          <th>S.S. vieillesse :</th>
+         <th><label for="ssvs" title="S.S. vieillesse">S.S. vieillesse :</label></th>
           <td>
             <input type="text" size="5" name="ssvs" title="{$paramsPaie->_props.ssvs}" value="{$paramsPaie->ssvs}" />
             %
@@ -177,7 +177,7 @@
           </td>
         </tr>
         <tr>
-          <th>Retraite complémentaire :</th>
+          <th><label for="rcs" title="Retraite complémentaire">Retraite complémentaire :</label></th>
           <td>
             <input type="text" size="5" name="rcs" title="{$paramsPaie->_props.rcs}" value="{$paramsPaie->rcs}" />
             %
@@ -188,7 +188,7 @@
           </td>
         </tr>
         <tr>
-          <th>AGFF :</th>
+          <th><label for="agffs" title="AGFF">AGFF :</label></th>
           <td>
             <input type="text" size="5" name="agffs" title="{$paramsPaie->_props.agffs}" value="{$paramsPaie->agffs}" />
             %
@@ -199,7 +199,7 @@
           </td>
         </tr>
         <tr>
-          <th>Assurance prévoyance :</th>
+          <th><label for="aps" title="Assurance prévoyance">Assurance prévoyance :</label></th>
           <td>
             <input type="text" size="5" name="aps" title="{$paramsPaie->_props.aps}" value="{$paramsPaie->aps}" />
             %
@@ -210,7 +210,7 @@
           </td>
         </tr>
         <tr>
-          <th>Assurance chômage :</th>
+          <th><label for="acs" title="AGFF">Assurance chômage :</label></th>
           <td>
             <input type="text" size="5" name="acs" title="{$paramsPaie->_props.acs}" value="{$paramsPaie->acs}" />
             %
@@ -221,7 +221,7 @@
           </td>
         </tr>
         <tr>
-          <th>Accident du travail :</th>
+          <th><label for="aatp" title="Accident du travail">Accident du travail :</label></th>
           <td>-</td>
           <td>
             <input type="text" size="5" name="aatp" title="{$paramsPaie->_props.aatp}" value="{$paramsPaie->aatp}" />
