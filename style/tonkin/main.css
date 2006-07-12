@@ -277,8 +277,8 @@ textarea {
   padding: 1px;
 }
 
-a.button,
-button,
+a.button, button, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
+a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange,
 input[type=submit],
 input[type=reset],
 input[type=button] {
@@ -287,9 +287,12 @@ input[type=button] {
   cursor: default;
   border: 1px black solid;
   font-size: 12px;
-  background: url(./images/button.png) repeat-x bottom;
+  background-color: #ddd;
   margin: 0 2px;
   padding: 0px 2px;
+  background-image: url(./images/button.png);
+  background-repeat: repeat-x;
+  background-position: bottom;
 }
 
 a.button:hover,
@@ -297,7 +300,132 @@ button:hover,
 input[type=submit]:hover,
 input[type=reset]:hover,
 input[type=button]:hover {
-  background: url(./images/buttonover.png) repeat-x bottom;
+  background-image: url(./images/buttonover.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+}
+
+button.trash, a.buttontrash {
+  background-image: url(./images/buttons/trash.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.trash:hover, a.buttontrash:hover {
+  background-image: url(./images/buttons/trashover.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.submit, a.buttonsubmit {
+  background-image: url(./images/buttons/save.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.submit:hover, a.buttonsubmit:hover {
+  background-image: url(./images/buttons/saveover.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.new, a.buttonnew {
+  background-image: url(./images/buttons/new.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.new:hover, a.buttonnew:hover {
+  background-image: url(./images/buttons/newover.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.print, a.buttonprint {
+  background-image: url(./images/buttons/print.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.print:hover, a.buttonprint:hover {
+  background-image: url(./images/buttons/printover.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.cancel, a.buttoncancel {
+  background-image: url(./images/buttons/cancel.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.cancel:hover, a.buttoncancel:hover {
+  background-image: url(./images/buttons/cancelover.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.modify, a.buttonmodify {
+  background-image: url(./images/buttons/save.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.modify:hover, a.buttonmodify:hover {
+  background-image: url(./images/buttons/saveover.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+button.search, a.buttonsearch {
+  background-image: url(./images/buttons/search.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.search:hover, a.buttonsearch:hover {
+  background-image: url(./images/buttons/searchover.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+button.tick, a.buttontick {
+  background-image: url(./images/buttons/tick.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.tick:hover, a.buttontick:hover {
+  background-image: url(./images/buttons/tickover.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+button.change, a.buttonchange {
+  background-image: url(./images/buttons/change.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.change:hover, a.buttonchange:hover {
+  background-image: url(./images/buttons/changeover.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  padding-left: 18px;
 }
 
 select {
