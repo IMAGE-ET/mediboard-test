@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.50";
+$config["mod_version"]     = "0.51";
 $config["mod_directory"]   = "dPplanningOp";
 $config["mod_setup_class"] = "CSetupdPplanningOp";
 $config["mod_type"]        = "user";
@@ -35,8 +35,10 @@ class CSetupdPplanningOp {
   }
 
   function remove() {
-    db_exec( "DROP TABLE operations;" );
-    db_exec( "DELETE FROM sysval WHERE  sysval_title = 'AnesthType';" );
+    db_exec("DROP TABLE operations;");
+    db_exec("DROP TABLE sejour;");
+    db_exec("DROP TABLE protocole;");
+    db_exec("DELETE FROM sysval WHERE  sysval_title = 'AnesthType';");
     return null;
   }
 
@@ -490,9 +492,11 @@ class CSetupdPplanningOp {
         $sql = "UPDATE `operations` SET `date` = NULL;";
         db_exec($sql); db_error();
       case "0.50":
-        return "0.50";
+        $sql = "ALTER TABLE `operations` ADD `anesth_id` INT UNSIGNED DEFAULT NULL AFTER `chir_id`";
+        db_exec($sql); db_error();
+      case "0.51":
+        return "0.51";
     }
-    
     return false;
   }
 }

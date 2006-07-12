@@ -37,29 +37,30 @@ regRedirectPopupCal("{$date}", "index.php?m={$m}&tab=vw_reveil&date=");
           <td class="text">{$curr_op->_ref_sejour->_ref_patient->_view}</td>
           <td class="button">
             {if $canEdit}
-	        <form name="editFrm{$curr_op->operation_id}" action="index.php" method="get">
-	          <input type="hidden" name="m" value="dPsalleOp" />
-	          <input type="hidden" name="a" value="do_set_hours" />
-	          <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
-	          <input type="hidden" name="type" value="sortie_bloc" />
-	          <input type="hidden" name="del" value="0" />
-	          <input name="hour" size="5" type="text" value="{$curr_op->sortie_bloc|date_format:"%H:%M"}">
-	          <button class="tick" type="submit"></button>
-	        </form>
+              <form name="editSortieBlocFrm{$curr_op->operation_id}" action="index.php?m={$m}" method="post">
+                <input type="hidden" name="m" value="dPplanningOp" />
+                <input type="hidden" name="dosql" value="do_planning_aed" />
+                <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
+                <input type="hidden" name="del" value="0" />
+	            <input name="sortie_bloc" size="5" type="text" value="{$curr_op->sortie_bloc|date_format:"%H:%M"}">
+	            <button class="tick" type="submit"></button>
+	          </form>
             {else}
-            {$curr_op->sortie_bloc|date_format:"%Hh%M"}
+              {$curr_op->sortie_bloc|date_format:"%Hh%M"}
             {/if}
           </td>
           <td class="button">
-            <form name="editFrm{$curr_op->operation_id}" action="index.php" method="get">
-              <input type="hidden" name="m" value="dPsalleOp" />
-              <input type="hidden" name="a" value="do_set_hours" />
+            <form name="editEntreeReveilFrm{$curr_op->operation_id}" action="index.php?m={$m}" method="post">
+              <input type="hidden" name="m" value="dPplanningOp" />
+              <input type="hidden" name="dosql" value="do_planning_aed" />
               <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
-              <input type="hidden" name="type" value="entree_reveil" />
               <input type="hidden" name="del" value="0" />
-              <button class="tick" type="submit"></button>
+              <input type="hidden" name="entree_reveil" value="" />
+              <button class="tick" type="submit" onclick="this.form.entree_reveil.value = 'current'"></button>
             </form>
           </td>
         </tr>
         {/foreach}
       </table>
+      
+      </form>

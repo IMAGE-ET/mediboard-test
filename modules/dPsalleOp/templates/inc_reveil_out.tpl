@@ -29,46 +29,44 @@
           </td>
           <td class="button">
             {if $canEdit}
-	        <form name="editFrm{$curr_op->operation_id}" action="index.php" method="get">
-	          <input type="hidden" name="m" value="dPsalleOp" />
-	          <input type="hidden" name="a" value="do_set_hours" />
-	          <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
-	          <input type="hidden" name="type" value="sortie_bloc" />
-	          <input type="hidden" name="del" value="0" />
-	          <input name="hour" size="5" type="text" value="{$curr_op->sortie_bloc|date_format:"%H:%M"}">
+            <form name="editSortieBlocFrm{$curr_op->operation_id}" action="index.php?m={$m}" method="post">
+              <input type="hidden" name="m" value="dPplanningOp" />
+              <input type="hidden" name="dosql" value="do_planning_aed" />
+              <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
+              <input type="hidden" name="del" value="0" />
+	          <input name="sortie_bloc" size="5" type="text" value="{$curr_op->sortie_bloc|date_format:"%H:%M"}">
 	          <button class="tick" type="submit"></button>
-              </form>
+            </form>
             {else}
             {$curr_op->sortie_bloc|date_format:"%Hh%M"}
             {/if}
           </td>
           <td class="button">
             {if $canEdit}
-	        <form name="editFrm{$curr_op->operation_id}" action="index.php" method="get">
-	          <input type="hidden" name="m" value="dPsalleOp" />
-	          <input type="hidden" name="a" value="do_set_hours" />
-	          <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
-	          <input type="hidden" name="type" value="sortie_bloc" />
-	          <input type="hidden" name="del" value="0" />
-	          <input name="hour" size="5" type="text" value="{$curr_op->entree_reveil|date_format:"%H:%M"}">
+            <form name="editEntreeReveilFrm{$curr_op->operation_id}" action="index.php?m={$m}" method="post">
+              <input type="hidden" name="m" value="dPplanningOp" />
+              <input type="hidden" name="dosql" value="do_planning_aed" />
+              <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
+              <input type="hidden" name="del" value="0" />
+	          <input name="entree_reveil" size="5" type="text" value="{$curr_op->entree_reveil|date_format:"%H:%M"}">
 	          <button class="tick" type="submit"></button>
-              </form>
+            </form>
             {else}
             {$curr_op->entree_reveil|date_format:"%Hh%M"}
             {/if}
           </td>
           <td class="button">
-            <form name="editFrm{$curr_op->operation_id}" action="index.php" method="get">
-              <input type="hidden" name="m" value="dPsalleOp" />
-              <input type="hidden" name="a" value="do_set_hours" />
+            <form name="editSortieReveilFrm{$curr_op->operation_id}" action="index.php?m={$m}" method="post">
+              <input type="hidden" name="m" value="dPplanningOp" />
+              <input type="hidden" name="dosql" value="do_planning_aed" />
               <input type="hidden" name="operation_id" value="{$curr_op->operation_id}" />
-              <input type="hidden" name="type" value="sortie_reveil" />
               <input type="hidden" name="del" value="0" />
               {if $canEdit}
-	          <input name="hour" size="5" type="text" value="{$curr_op->sortie_reveil|date_format:"%H:%M"}">
+	          <input name="sortie_reveil" size="5" type="text" value="{$curr_op->sortie_reveil|date_format:"%H:%M"}">
 	          <button class="tick" type="submit"></button>
               {else}
-              <select name="hour" onchange="this.form.submit()">
+              <select name="sortie_reveil" onchange="this.form.submit()">
+                <option value="">-</option>
                 {foreach from=$timing.$key.sortie_reveil item=curr_time}
                 <option value="{$curr_time}" {if $curr_time == $curr_op->sortie_reveil}selected="selected"{/if}>
                   {$curr_time|date_format:"%Hh%M"}
@@ -76,7 +74,7 @@
                 {/foreach}
               </select>
               {/if}
-              <button class="cancel" type="submit" onclick="this.form.del.value = 1"></button>
+              <button class="cancel" type="submit" onclick="this.form.sortie_reveil.value = ''"></button>
             </form>
           </td>
         </tr>

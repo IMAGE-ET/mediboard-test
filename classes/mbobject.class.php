@@ -7,8 +7,8 @@
  *  @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass('dp'));
-require_once($AppUI->getModuleClass('dPcompteRendu', 'aidesaisie') );
+require_once($AppUI->getSystemClass("dp"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "aidesaisie"));
 
 function htmlReplace($find, $replace, &$source) {
   $matches = array();

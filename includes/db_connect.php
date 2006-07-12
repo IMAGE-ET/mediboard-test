@@ -1,4 +1,4 @@
-<?php /* INCLUDES $Id$ */
+<?php /* $Id$ */
 /**
 * Generic functions based on library function (that is, non-db specific)
 *
@@ -10,7 +10,7 @@ require_once($AppUI->getSystemClass("chrono"));
 $dbChronos = array();
 
 // load the db specific handlers
-require_once( "{$AppUI->cfg['root_dir']}/includes/db_{$AppUI->cfg['dbtype']}.php" );
+require_once($AppUI->cfg["root_dir"]."/includes/db_".$AppUI->cfg["dbtype"].".php");
 
 // make the connection to the db
 function do_connect($dbid) {
@@ -18,13 +18,13 @@ function do_connect($dbid) {
   
   db_connect(
     $dbid,
-    $AppUI->cfg['db'][$dbid]['dbhost'],
-    $AppUI->cfg['db'][$dbid]['dbname'],
-    $AppUI->cfg['db'][$dbid]['dbuser'],
-    $AppUI->cfg['db'][$dbid]['dbpass'],
-    $AppUI->cfg['db'][$dbid]['dbport'],
-    $AppUI->cfg['dbpersist']
-  );
+    $AppUI->cfg["db"][$dbid]["dbhost"],
+    $AppUI->cfg["db"][$dbid]["dbname"],
+    $AppUI->cfg["db"][$dbid]["dbuser"],
+    $AppUI->cfg["db"][$dbid]["dbpass"],
+    $AppUI->cfg["db"][$dbid]["dbport"],
+    $AppUI->cfg["dbpersist"]
+ );
 }
 
 do_connect("std");
@@ -37,14 +37,14 @@ do_connect("std");
 * @param strong The db identifier
 * @return The value returned in the query or null if the query failed.
 */
-function db_loadResult( $sql, $dbid = 'std' ) {
-	$cur = db_exec( $sql, $dbid );
-	$cur or exit( db_error() );
+function db_loadResult($sql, $dbid = "std") {
+	$cur = db_exec($sql, $dbid);
+	$cur or exit(db_error());
 	$ret = null;
-	if ($row = db_fetch_row( $cur )) {
+	if ($row = db_fetch_row($cur)) {
 		$ret = $row[0];
 	}
-	db_free_result( $cur );
+	db_free_result($cur);
 	return $ret;
 }
 
@@ -56,19 +56,19 @@ function db_loadResult( $sql, $dbid = 'std' ) {
 * @param string The SQL query
 * @param object The address of variable
 */
-function db_loadObject( $sql, &$object, $bindAll=false , $strip = true) {
+function db_loadObject($sql, &$object, $bindAll=false , $strip = true) {
 	if ($object != null) {
 		$hash = array();
-		if( !db_loadHash( $sql, $hash ) ) {
+		if(!db_loadHash($sql, $hash)) {
 			return false;
 		}
-		bindHashToObject( $hash, $object, null, $strip, $bindAll );
+		bindHashToObject($hash, $object, null, $strip, $bindAll);
 		return true;
 	} else {
-		$cur = db_exec( $sql );
-		$cur or exit( db_error() );
-		if ($object = db_fetch_object( $cur )) {
-			db_free_result( $cur );
+		$cur = db_exec($sql);
+		$cur or exit(db_error());
+		if ($object = db_fetch_object($cur)) {
+			db_free_result($cur);
 			return true;
 		} else {
 			$object = null;
@@ -84,11 +84,11 @@ function db_loadObject( $sql, &$object, $bindAll=false , $strip = true) {
 * @param array An array for the result to be return in
 * @return <b>True</b> is the query was successful, <b>False</b> otherwise
 */
-function db_loadHash( $sql, &$hash ) {
-	$cur = db_exec( $sql );
-	$cur or exit( db_error() );
-	$hash = db_fetch_assoc( $cur );
-	db_free_result( $cur );
+function db_loadHash($sql, &$hash) {
+	$cur = db_exec($sql);
+	$cur or exit(db_error());
+	$hash = db_fetch_assoc($cur);
+	db_free_result($cur);
 	if ($hash == false) {
 		return false;
 	} else {
@@ -103,14 +103,14 @@ function db_loadHash( $sql, &$hash ) {
 *
 * @param string $index
 */
-function db_loadHashList( $sql, $index='' ) {
-	$cur = db_exec( $sql );
-	$cur or exit( db_error() );
+function db_loadHashList($sql, $index="") {
+	$cur = db_exec($sql);
+	$cur or exit(db_error());
 	$hashlist = array();
-	while ($hash = db_fetch_array( $cur )) {
+	while ($hash = db_fetch_array($cur)) {
 		$hashlist[$hash[$index ? $index : 0]] = $index ? $hash : $hash[1];
 	}
-	db_free_result( $cur );
+	db_free_result($cur);
 	return $hashlist;
 }
 
@@ -124,21 +124,21 @@ function db_loadHashList( $sql, $index='' ) {
 * @param string the db identifier
 * @return array the query result
 */
-function db_loadList( $sql, $maxrows=NULL, $dbid = 'std' ) {
+function db_loadList($sql, $maxrows=NULL, $dbid = "std") {
 	GLOBAL $AppUI;
-	if (!($cur = db_exec( $sql, $dbid ))) {;
-		$AppUI->setMsg( db_error(), UI_MSG_ERROR );
+	if (!($cur = db_exec($sql, $dbid))) {;
+		$AppUI->setMsg(db_error(), UI_MSG_ERROR);
 		return false;
 	}
 	$list = array();
 	$cnt = 0;
-	while ($hash = db_fetch_assoc( $cur )) {
+	while ($hash = db_fetch_assoc($cur)) {
 		$list[] = $hash;
-		if( $maxrows && $maxrows == $cnt++ ) {
+		if($maxrows && $maxrows == $cnt++) {
 			break;
 		}
 	}
-	db_free_result( $cur );
+	db_free_result($cur);
 	return $list;
 }
 
@@ -149,21 +149,21 @@ function db_loadList( $sql, $maxrows=NULL, $dbid = 'std' ) {
 *
 * @param [type] $maxrows
 */
-function db_loadColumn( $sql, $maxrows=NULL ) {
+function db_loadColumn($sql, $maxrows=NULL) {
 	GLOBAL $AppUI;
-	if (!($cur = db_exec( $sql ))) {;
-		$AppUI->setMsg( db_error(), UI_MSG_ERROR );
+	if (!($cur = db_exec($sql))) {;
+		$AppUI->setMsg(db_error(), UI_MSG_ERROR);
 		return false;
 	}
 	$list = array();
 	$cnt = 0;
-	while ($row = db_fetch_row( $cur )) {
+	while ($row = db_fetch_row($cur)) {
 		$list[] = $row[0];
-		if( $maxrows && $maxrows == $cnt++ ) {
+		if($maxrows && $maxrows == $cnt++) {
 			break;
 		}
 	}
-	db_free_result( $cur );
+	db_free_result($cur);
 	return $list;
 }
 
@@ -171,15 +171,15 @@ function db_loadColumn( $sql, $maxrows=NULL ) {
  * class must implement the Load() factory, see examples in Webo classes
  * @note to optimize request, only select object oids in $sql
  */
-function db_loadObjectList( $sql, $object, $maxrows = NULL ) {
-	$cur = db_exec( $sql );
+function db_loadObjectList($sql, $object, $maxrows = NULL) {
+	$cur = db_exec($sql);
 	if (!$cur) {
-    mbTrace($sql, 'sql');
-		mbTrace("db_loadObjectList : " . db_error(), 'error');
+    mbTrace($sql, "sql");
+		mbTrace("db_loadObjectList : " . db_error(), "error");
 	}
 	$list = array();
 	$cnt = 0;
-	while ($row = db_fetch_array( $cur )) {
+	while ($row = db_fetch_array($cur)) {
 		$class = get_class($object);
 		$object = new $class();
         $keyname = $object->_tbl_key;
@@ -187,12 +187,12 @@ function db_loadObjectList( $sql, $object, $maxrows = NULL ) {
     $object->checkConfidential();
 		$object->updateFormFields();
 		$list[$object->$keyname] = $object;
-		if( $maxrows && $maxrows == $cnt++ ) {
+		if($maxrows && $maxrows == $cnt++) {
 			break;
 		}
 	}
   
-	db_free_result( $cur );
+	db_free_result($cur);
 	return $list;
 }
 
@@ -204,20 +204,20 @@ function db_loadObjectList( $sql, $object, $maxrows = NULL ) {
 *
 * @param [type] $verbose
 */
-function db_insertArray( $table, &$hash, $verbose=false ) {
-	$fmtsql = "insert into $table ( %s ) values( %s ) ";
+function db_insertArray($table, &$hash, $verbose=false) {
+	$fmtsql = "insert into $table (%s) values(%s) ";
 	foreach ($hash as $k => $v) {
 		if (is_array($v) or is_object($v) or $v == NULL) {
 			continue;
 		}
 		$fields[] = $k;
-		$values[] = "'" . db_escape( $v ) . "'";
+		$values[] = "'" . db_escape($v) . "'";
 	}
-	$sql = sprintf( $fmtsql, implode( ",", $fields ) ,  implode( ",", $values ) );
+	$sql = sprintf($fmtsql, implode(",", $fields) ,  implode(",", $values));
 
 	($verbose) && print "$sql<br />\n";
 
-	if (!db_exec( $sql )) {
+	if (!db_exec($sql)) {
 		return false;
 	}
 	$id = db_insert_id();
@@ -231,26 +231,26 @@ function db_insertArray( $table, &$hash, $verbose=false ) {
 *
 * @param [type] $verbose
 */
-function db_updateArray( $table, &$hash, $keyName, $verbose=false ) {
+function db_updateArray($table, &$hash, $keyName, $verbose=false) {
 	$fmtsql = "UPDATE $table SET %s WHERE %s";
 	foreach ($hash as $k => $v) {
-		if( is_array($v) or is_object($v) or $k[0] == '_' ) // internal or NA field
+		if(is_array($v) or is_object($v) or $k[0] == "_") // internal or NA field
 			continue;
 
-		if( $k == $keyName ) { // PK not to be updated
-			$where = "$keyName='" . db_escape( $v ) . "'";
+		if($k == $keyName) { // PK not to be updated
+			$where = "$keyName='" . db_escape($v) . "'";
 			continue;
 		}
-		if ($v == '') {
-			$val = 'NULL';
+		if ($v == "") {
+			$val = "NULL";
 		} else {
-			$val = "'" . db_escape( $v ) . "'";
+			$val = "'" . db_escape($v) . "'";
 		}
 		$tmp[] = "$k=$val";
 	}
-	$sql = sprintf( $fmtsql, implode( ",", $tmp ) , $where );
+	$sql = sprintf($fmtsql, implode(",", $tmp) , $where);
 	($verbose) && print "$sql<br />\n";
-	$ret = db_exec( $sql );
+	$ret = db_exec($sql);
 	return $ret;
 }
 
@@ -260,11 +260,11 @@ function db_updateArray( $table, &$hash, $keyName, $verbose=false ) {
 * { Description }
 *
 */
-function db_delete( $table, $keyName, $keyValue ) {
-	$keyName = db_escape( $keyName );
-	$keyValue = db_escape( $keyValue );
+function db_delete($table, $keyName, $keyValue) {
+	$keyName = db_escape($keyName);
+	$keyValue = db_escape($keyValue);
   $sql = "DELETE FROM $table WHERE $keyName='$keyValue'";
-	$ret = db_exec( $sql );
+	$ret = db_exec($sql);
 	return $ret;
 }
 
@@ -277,22 +277,22 @@ function db_delete( $table, $keyName, $keyValue ) {
 * @param [type] $keyName
 * @param [type] $verbose
 */
-function db_insertObject( $table, &$object, $keyName = NULL, $verbose=false ) {
-	$fmtsql = "INSERT INTO $table ( %s ) VALUES ( %s ) ";
-	foreach (get_object_vars( $object ) as $k => $v) {
+function db_insertObject($table, &$object, $keyName = NULL, $verbose=false) {
+	$fmtsql = "INSERT INTO $table (%s) VALUES (%s) ";
+	foreach (get_object_vars($object) as $k => $v) {
 		if (is_array($v) or is_object($v) or $v == NULL) {
 			continue;
 		}
-		if ($k[0] == '_') { // internal field
+		if ($k[0] == "_") { // internal field
 			continue;
 		}
 		$fields[] = "`$k`";
-		$values[] = "'" . db_escape( $v ) . "'";
+		$values[] = "'" . db_escape($v) . "'";
 	}
-	$sql = sprintf( $fmtsql, implode( ",", $fields ) ,  implode( ",", $values ) );
+	$sql = sprintf($fmtsql, implode(",", $fields) ,  implode(",", $values));
 	($verbose) && print "$sql<br />\n";
 
-	if (!db_exec( $sql )) {
+	if (!db_exec($sql)) {
 		return false;
 	}
 	$id = db_insert_id();
@@ -309,31 +309,31 @@ function db_insertObject( $table, &$object, $keyName = NULL, $verbose=false ) {
 *
 * @param [type] $updateNulls
 */
-function db_updateObject( $table, &$object, $keyName, $updateNulls=true ) {
+function db_updateObject($table, &$object, $keyName, $updateNulls=true) {
 	$fmtsql = "UPDATE $table SET %s WHERE %s";
   $tmp = array();
-	foreach (get_object_vars( $object ) as $k => $v) {
-		if( is_array($v) or is_object($v) or $k[0] == '_' ) { // internal or NA field
+	foreach (get_object_vars($object) as $k => $v) {
+		if(is_array($v) or is_object($v) or $k[0] == "_") { // internal or NA field
 			continue;
 		}
-		if( $k == $keyName ) { // PK not to be updated
-			$where = "`$keyName`='" . db_escape( $v ) . "'";
+		if($k == $keyName) { // PK not to be updated
+			$where = "`$keyName`='" . db_escape($v) . "'";
 			continue;
 		}
-		if ($v === NULL && !$updateNulls) {
+		if ($v === null && !$updateNulls) {
 			continue;
 		}
-		if( $v == '' ) {
+		if($v == "") {
       // Tries to nullify empty values but won't fail if not possible
 			$val = "NULL";
 		} else {
-			$val = "'" . db_escape( $v ) . "'";
+			$val = "'" . db_escape($v) . "'";
 		}
 		$tmp[] = "`$k`=$val";
 	}
-	$sql = sprintf( $fmtsql, implode( ",", $tmp ) , $where );
+	$sql = sprintf($fmtsql, implode(",", $tmp) , $where);
   
-  return db_exec( $sql );
+  return db_exec($sql);
 }
 
 /**
@@ -342,10 +342,10 @@ function db_updateObject( $table, &$object, $keyName, $updateNulls=true ) {
 * { Description }
 *
 */
-function db_dateConvert( $src, &$dest, $srcFmt ) {
-	$result = strtotime( $src );
+function db_dateConvert($src, &$dest, $srcFmt) {
+	$result = strtotime($src);
 	$dest = $result;
-	return ( $result != 0 );
+	return ($result != 0);
 }
 
 /**
@@ -355,14 +355,14 @@ function db_dateConvert( $src, &$dest, $srcFmt ) {
 *
 * @param [type] $timestamp
 */
-function db_datetime( $timestamp = NULL ) {
+function db_datetime($timestamp = NULL) {
 	if (!$timestamp) {
 		return NULL;
 	}
 	if (is_object($timestamp)) {
-		return $timestamp->toString( '%Y-%m-%d %H:%M:%S');
+		return $timestamp->toString("%Y-%m-%d %H:%M:%S");
 	} else {
-		return strftime( '%Y-%m-%d %H:%M:%S', $timestamp );
+		return strftime("%Y-%m-%d %H:%M:%S", $timestamp);
 	}
 }
 
@@ -372,10 +372,10 @@ function db_datetime( $timestamp = NULL ) {
 * { Description }
 *
 */
-function db_dateTime2locale( $dateTime, $format ) {
-	if (intval( $dateTime)) {
-		$date = new CDate( $dateTime );
-		return $date->format( $format );
+function db_dateTime2locale($dateTime, $format) {
+	if (intval($dateTime)) {
+		$date = new CDate($dateTime);
+		return $date->format($format);
 	} else {
 		return null;
 	}
@@ -383,7 +383,7 @@ function db_dateTime2locale( $dateTime, $format ) {
 
 function stripslashes_deep($value) {
   return is_array($value) ?
-    array_map('stripslashes_deep', $value) :
+    array_map("stripslashes_deep", $value) :
     stripslashes($value);
 }
 
@@ -396,24 +396,24 @@ function stripslashes_deep($value) {
 * @param boolean
 * @param boolean
 */
-function bindHashToObject( $hash, &$obj, $prefix=NULL, $checkSlashes=true, $bindAll=false ) {
-	is_array( $hash ) or die( "bindHashToObject : hash expected" );
-	is_object( $obj ) or die( "bindHashToObject : object expected" );
+function bindHashToObject($hash, &$obj, $prefix=NULL, $checkSlashes=true, $bindAll=false) {
+	is_array($hash) or die("bindHashToObject : hash expected");
+	is_object($obj) or die("bindHashToObject : object expected");
 
 	if ($bindAll) {
 		foreach ($hash as $k => $v) {
-			$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes_deep( $hash[$k] ) : $hash[$k];
+			$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes_deep($hash[$k]) : $hash[$k];
 		}
 	} else if ($prefix) {
 		foreach (get_object_vars($obj) as $k => $v) {
 			if (isset($hash[$prefix . $k ])) {
-				$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes_deep( $hash[$k] ) : $hash[$k];
+				$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes_deep($hash[$k]) : $hash[$k];
 			}
 		}
 	} else {
 		foreach (get_object_vars($obj) as $k => $v) {
 			if (isset($hash[$k])) {
-				$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes_deep( $hash[$k] ) : $hash[$k];
+				$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes_deep($hash[$k]) : $hash[$k];
 			}
 		}
 	}

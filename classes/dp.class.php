@@ -235,7 +235,7 @@ class CDpObject {
  *	Can be overloaded/supplemented by the child class
  *	@return null|string null if successful otherwise returns and error message
  */
-	function store( $updateNulls = false ) {
+	function store($updateNulls = false) {
     global $AppUI;
     
     // Properties checking
@@ -262,7 +262,7 @@ class CDpObject {
     $this->load();
     return null;
 	}
-  
+
 /**
  * This function update the db fields from the form fields
  */

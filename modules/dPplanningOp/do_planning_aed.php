@@ -10,16 +10,26 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getSystemClass("doobjectaddedit"));
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
 
-if($chir_id = dPgetParam( $_POST, 'chir_id', null))
-  mbSetValueToSession('chir_id', $chir_id);
+$chir_id = mbGetValueFromPostOrSession("chir_id", null);
 
+// lignes pour rentrer l'heure courante du serveur dans certains champs
+$listTimes = array("entree_bloc", "pose_garrot", "debut_op",
+                   "sortie_bloc", "retrait_garrot", "fin_op",
+                   "entree_reveil", "sortie_reveil");
+foreach($listTimes as $curr_item) {
+  if(isset($_POST[$curr_item])) {
+    if($_POST[$curr_item] == "current") {
+      $_POST[$curr_item] = mbTranformTime(null, null, "%H:%M:00");
+    }
+  }
+}
 
 $do = new CDoObjectAddEdit("COperation", "operation_id");
 $do->doBind();
 
-if (intval(dPgetParam($_POST, 'del'))) {
+if(intval(mbGetValueFromPost("del", null))) {
   mbSetValueToSession("operation_id");
   $do->deleteMsg = "Opération supprimée";
   $do->redirectDelete = "m=$m&tab=vw_edit_planning";
@@ -31,9 +41,7 @@ if (intval(dPgetParam($_POST, 'del'))) {
   $do->modifyMsg = "Opération modifiée";
   $do->createMsg = "Opération créée";
   $do->doStore();
-  if($otherm = dPgetParam( $_POST, 'otherm', 0)) {
-    $m = $otherm;
-  }
+  $m = mbGetValueFromPost("otherm", $m);
   if($m == "dPhospi") {
     $do->redirectStore = "m=$m#operation".$do->_obj->operation_id;
   }

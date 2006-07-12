@@ -35,6 +35,7 @@ class COperation extends CMbObject {
   // DB References
   var $sejour_id  = null;
   var $chir_id    = null; // dupliqué en $sejour->praticien_id
+  var $anesth_id  = null; // dupliqué en $plageop->anesth_id
   var $plageop_id = null;
   
   // DB Fields S@nté.com communication
@@ -89,6 +90,8 @@ class COperation extends CMbObject {
   // DB References
   var $_ref_chir           = null;
   var $_ref_plageop        = null;
+    var $_ref_salle        = null;
+    var $_ref_anesth       = null;
   var $_ref_sejour         = null;
   var $_ref_consult_anesth = null;
   var $_ref_files          = array();
@@ -267,24 +270,25 @@ class COperation extends CMbObject {
       }
       $this->codes_ccam = implode("|", $codes_ccam);
     }
-  	if ($this->_hour_anesth !== null and $this->_min_anesth !== null) {
+  	if($this->_hour_anesth !== null and $this->_min_anesth !== null) {
       $this->time_anesth = 
         $this->_hour_anesth.":".
         $this->_min_anesth.":00";
   	}
-    if ($this->_lu_type_anesth) {
+    if($this->_lu_type_anesth) {
       $anesth = dPgetSysVal("AnesthType");
       foreach($anesth as $key => $value) {
-        if($value == $this->_lu_type_anesth)
+        if(trim($value) == $this->_lu_type_anesth) {
           $this->type_anesth = $key;
+        }
       }
     }
-    if ($this->_hour_op !== null and $this->_min_op !== null) {
+    if($this->_hour_op !== null and $this->_min_op !== null) {
       $this->temp_operation = 
         $this->_hour_op.":".
         $this->_min_op.":00";
     }
-    if ($this->_hour_urgence !== null and $this->_min_urgence !== null) {
+    if($this->_hour_urgence !== null and $this->_min_urgence !== null) {
       $this->time_operation = 
         $this->_hour_urgence.":".
         $this->_min_urgence.":00";
@@ -292,8 +296,9 @@ class COperation extends CMbObject {
   }
 
   function store() {
-    if ($msg = parent::store())
+    if ($msg = parent::store()) {
       return $msg;
+    }
 
     // Cas d'une annulation
     if ($this->annulee) {
@@ -330,10 +335,16 @@ class COperation extends CMbObject {
   }
   
   function loadRefPlageOp() {
+    $this->_ref_anesth = new CMediusers;
+    $this->_ref_anesth->load($this->anesth_id);
     $this->_ref_plageop = new CPlageOp;
     if($this->plageop_id) {
       $this->_ref_plageop->load($this->plageop_id);
+      $this->_ref_plageop->loadRefsFwd();
       $this->_ref_salle =& $this->_ref_plageop->_ref_salle;
+      if(!$this->anesth_id) {
+        $this->_ref_anesth =& $this->_ref_plageop->_ref_anesth;
+      }
       $this->_datetime = $this->_ref_plageop->date;
     } else {
       $this->_datetime = $this->date;
