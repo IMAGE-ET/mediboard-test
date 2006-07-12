@@ -44,6 +44,9 @@ if (isset($_GET["date"])) {
 //Liste des types d'anesthésie
 $anesth = dPgetSysVal("AnesthType");
 
+//Liste des types d'anesthésie
+$anesth = dPgetSysVal("AnesthType");
+
 // Consultation courante
 $consult = new CConsultation();
 $consult->_ref_chir = $userSel;
@@ -76,6 +79,7 @@ require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP;
 
 $smarty->assign('consult_anesth', $consult_anesth);
+$smarty->assign('anesth'        , $anesth        );
 
 $smarty->display('inc_type_anesth.tpl');
 
