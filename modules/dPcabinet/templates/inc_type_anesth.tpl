@@ -5,7 +5,7 @@
         <tr>
           {if $consult_anesth->consultation_anesth_id}
           <td class="text">
-            Intervention le <strong>{$consult_anesth->_ref_operation->_ref_plageop->date|date_format:"%a %d %b %Y"}</strong>
+            Intervention le <strong>{$consult_anesth->_ref_operation->_datetime|date_format:"%a %d %b %Y"}</strong>
             par le <strong>Dr. {$consult_anesth->_ref_operation->_ref_chir->_view}</strong><br />
             <ul>
               {foreach from=$consult_anesth->_ref_operation->_ext_codes_ccam item=curr_code}
@@ -30,7 +30,7 @@
           </td>
           {else}
           <td colspan="2" class="text">
-            Vous devez d'abord séléctionner une intervention pour ce patient
+            Vous devez d'abord sélectionner une intervention pour ce patient
           </td>
           {/if}
         </tr>
