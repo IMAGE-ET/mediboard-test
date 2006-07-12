@@ -52,8 +52,8 @@ class CCompteRendu extends CMbObject {
     $this->_props["chir_id"]     = "ref";
     $this->_props["function_id"] = "ref";
     $this->_props["object_id"]   = "ref";
-    $this->_props["nom"]         = "str|notNull|confidential";
-    $this->_props["source"]      = "html|confidential";
+    $this->_props["nom"]         = "str|notNull";
+    $this->_props["source"]      = "html";
     $this->_props["type"]        = "enum|operation|hospitalisation|consultation|notNull";
   }
   

@@ -131,7 +131,7 @@ function submitFdr(oForm) {
         <input type="hidden" name="file_class" value="CConsultation" />
         <input type="hidden" name="file_object_id" value="{$consult->consultation_id}" />
         <input type="file" name="formfile" size="0" /><br />
-        <input type="submit" value="ajouter" />
+        <button class="submit" type="submit">Ajouter</button>
       </form>
     </td>
     <td>
@@ -280,7 +280,7 @@ function submitFdr(oForm) {
         </tr>
         <tr>
           <td colspan="2" class="button">
-            <input type="button" value="Valider ce tarif" onclick="submitFdr(this.form)" />
+            <button class="submit" type="button" onclick="submitFdr(this.form)">Valider ce tarif</button>
             <button class="cancel" type="button" onclick="cancelTarif()">Annuler</button>
           </td>
         </tr>

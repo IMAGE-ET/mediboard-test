@@ -41,7 +41,7 @@ class CListeChoix extends CMbObject {
 
     $this->_props["chir_id"]         = "ref";
     $this->_props["function_id"]     = "ref";
-    $this->_props["nom"]             = "str|notNull|confidential";
+    $this->_props["nom"]             = "str|notNull";
     $this->_props["valeurs"]         = "str|confidential";
     $this->_props["compte_rendu_id"] = "ref";
   }

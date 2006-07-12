@@ -65,8 +65,8 @@ class CMediusers extends CMbObject {
     $this->_props["function_id"] = "ref|notNull";
     $this->_props["discipline_id"] = "ref";
     
-    $this->_user_props["_user_username"] = "notNull|str|minLength|3|confidential";
-    $this->_user_props["_user_first_name"] = "str|confidential";
+    $this->_user_props["_user_username"] = "notNull|str|minLength|3";
+    $this->_user_props["_user_first_name"] = "str";
     $this->_user_props["_user_last_name"] = "notNull|str|confidential";
     $this->_user_props["_user_email"] = "str|confidential";
     $this->_user_props["_user_phone"] = "num|length|10|confidential";
@@ -86,7 +86,7 @@ class CMediusers extends CMbObject {
     $user->user_last_name  = $this->_user_last_name ;
     $user->user_email      = $this->_user_email     ;
     $user->user_phone      = $this->_user_phone     ;
-    $user->user_address1    = $this->_user_adresse   ;
+    $user->user_address1   = $this->_user_adresse   ;
     $user->user_zip        = $this->_user_cp        ;
     $user->user_city       = $this->_user_ville     ;
 

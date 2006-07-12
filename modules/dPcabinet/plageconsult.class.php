@@ -47,7 +47,7 @@ class CPlageconsult extends CMbObject {
     $this->_props["freq"]    = "time|notNull";
     $this->_props["debut"]   = "time|notNull";
     $this->_props["fin"]     = "time|notNull";
-    $this->_props["libelle"] = "str|confidential";
+    $this->_props["libelle"] = "str";
   }
   
   function loadRefs($withCanceled = true) {

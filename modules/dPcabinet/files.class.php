@@ -19,9 +19,6 @@ class CFile extends CMbObject {
   // DB Fields
   var $file_object_id = null;
   var $file_class = null;
-//  var $file_consultation = null;
-//  var $file_consultation_anesth = null;
-//  var $file_operation = null;
   var $file_real_filename = null;
   var $file_name = null;
   
@@ -45,10 +42,7 @@ class CFile extends CMbObject {
     // Ensure the integrity of some variables
     $this->file_id = intval($this->file_id);
     $this->file_object_id = intval($this->file_object_id);
-    //$this->file_consultation = intval($this->file_consultation);
-    //$this->file_consultation_anesth = intval($this->file_consultation_anesth);
-    //$this->file_operation = intval($this->file_operation);
-    return null; // object is ok
+    return null;
   }
 
   function updateFormFields() {

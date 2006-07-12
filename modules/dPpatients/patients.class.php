@@ -94,7 +94,7 @@ class CPatient extends CMbObject {
     
     static $props = array (
       "nom"              => "str|notNull|confidential",
-      "prenom"           => "str|notNull|confidential",
+      "prenom"           => "str|notNull",
       "nom_jeune_fille"  => "str|confidential",
       "medecin_traitant" => "ref",
       "medecin1"         => "ref",
@@ -102,7 +102,7 @@ class CPatient extends CMbObject {
       "medecin3"         => "ref",
       "matricule"        => "code|insee|confidential",
       "regime_sante"     => "str|",
-      "SHS"              => "num|length|8|confidential",
+      "SHS"              => "num|length|8",
       "sexe"             => "enum|m|f|j",
       "adresse"          => "str|confidential",
       "ville"            => "str|confidential",

@@ -55,7 +55,7 @@ function printDocument(doc_id) {
           <td class="readonly">
             <input type="hidden" name="m" value="{$m}" />
             <input type="hidden" name="patSel" value="{$patSel->patient_id}" />
-            <input type="text" readonly="readonly" name="patNom" value="{$patSel->_view}" />
+            <input type="text" size="40" readonly="readonly" name="patNom" value="{$patSel->_view}" />
           </td>
           <td class="button">
             <button class="search" type="button" onclick="popPat()">chercher</button>
@@ -118,6 +118,7 @@ function printDocument(doc_id) {
             <li>
               {$document->nom}
               <button class="print" onclick="printDocument({$document->compte_rendu_id})">
+                Imprimer
               </button>
             </li>
             {foreachelse}
@@ -153,7 +154,7 @@ function printDocument(doc_id) {
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="file_consultation" value="{$curr_consult->consultation_id}" />
             <input type="file" name="formfile" />
-            <input type="submit" value="ajouter" />
+            <button class="submit" type="submit">Ajouter</button>
 
             </form>
           </td>

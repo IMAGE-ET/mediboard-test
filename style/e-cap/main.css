@@ -40,7 +40,7 @@ table.form {
 table.form th {
   color: #000;
   white-space: nowrap;
-  background-color: #ffe;
+  background-color: #ffd;
   vertical-align: top;
   text-align: right;
   font-weight: normal;
@@ -55,6 +55,20 @@ table.form th.title {
   text-align: center;
   background-color: #638cc9;
   border: #aaa 1px outset;
+}
+
+table.form tr.groupexpand td,
+table.form tr.groupcollapse td,
+table.form tr.groupexpand th,
+table.form tr.groupcollapse th {
+  padding-left: 25px;
+}
+
+table.form tr.triggerShow td,
+table.form tr.triggerHide td,
+table.form tr.triggerShow th,
+table.form tr.triggerHide th {
+  padding-left:25px;
 }
 
 table.form th.category {
@@ -96,13 +110,13 @@ table.form th.text {
 table.form td {
   white-space: nowrap;
   vertical-align: top;
-  background: #ffe;
+  background-color: #ffd;
   text-align: left;
   padding: 1px 4px;
 }
 
 table.form td.compte_rendu {
-  background: #ffe;
+  background: #ffd;
 }
 
 table.form td.text {
@@ -114,7 +128,7 @@ table.form td.info {
 }
 
 table.form td.readonly input {
-  background: #ffe;
+  background-color: #ffd;
   border: 1px dotted;
 }
 
@@ -152,7 +166,7 @@ div.autocomplete ul {
   margin:0px;
   padding:0px;
 }
-div.autocomplete ul li.selected { background-color: #ffe;}
+div.autocomplete ul li.selected { background-color: #ffd;}
 div.autocomplete ul li {
   list-style-type:none;
   display:block;
@@ -377,7 +391,7 @@ table.tbl th.title {
 }
 
 table.tbl td {
-  background-color: #ffe;
+  background-color: #ffd;
   padding: 2px;
   white-space: nowrap;
 }

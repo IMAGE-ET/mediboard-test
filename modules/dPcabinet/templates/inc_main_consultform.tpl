@@ -33,7 +33,7 @@ function reloadMain() {
       (Etat : {$consult->_etat}
       {if $consult->chrono <= $smarty.const.CC_EN_COURS}
       / 
-      <input type="button" value="Terminer" onclick="submitConsultWithChrono({$smarty.const.CC_TERMINE})" />
+      <button class="submit" type="button" onclick="submitConsultWithChrono({$smarty.const.CC_TERMINE})">Terminer</button>
       {/if})
     </th>
   </tr>

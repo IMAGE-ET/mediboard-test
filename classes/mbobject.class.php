@@ -514,14 +514,14 @@ class CMbObject extends CDpObject {
     // test if it is confidential
     $confidential = array_search("confidential", $specFragments);
     if ($confidential !== false) {
-      array_splice($specFragments, $confidential);
+      array_splice($specFragments, $confidential, 1);
     }
 
     if ($confidential) {
       // test if notNull and remove this fragment
       $notNull = array_search("notNull", $specFragments);
       if ($notNull !== false) {
-        array_splice($specFragments, $notNull);
+        array_splice($specFragments, $notNull, 1);
       }
       
       switch ($specFragments[0]) {

@@ -65,7 +65,7 @@ function showHeader() {
       <?php } ?>
     </li>
     <?php } ?>
-  <ol>
+  </ol>
 </div>
 
 <h1>Installation de Mediboard <?php echo mbVersion(); ?> &mdash; Etape <?php echo $currentStepKey+1; ?>/<?php echo count($steps); ?>  </h1>

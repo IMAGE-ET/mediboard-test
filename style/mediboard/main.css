@@ -1411,6 +1411,24 @@ table.sejourcollapse td.date {
   display: none;
 }
 
+/* @import "./dPpatients.css" */
+
+table#weeklyPlanning {
+  width: 100%;
+}
+
+table#weeklyPlanning td {
+  text-align: center; 
+  vertical-align: middle;
+}
+
+table#weeklyPlanning td.nonEmpty {
+  background: #aaa; 
+}
+
+table#weeklyPlanning td.empty {
+  background: #eee; 
+}
   /* @import "./collapser.css"; */
 
 tr.groupexpand td,

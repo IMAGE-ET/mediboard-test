@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.39";
+$config["mod_version"]     = "0.40";
 $config["mod_directory"]   = "dPcabinet";
 $config["mod_setup_class"] = "CSetupdPcabinet";
 $config["mod_type"]        = "user";
@@ -335,7 +335,38 @@ class CSetupdPcabinet {
           "\nDROP `file_consultation_anesth`," .
           "\nDROP `file_operation`;";
         db_exec( $sql ); db_error();
+        
       case "0.39":
+        // Move all files from former to latter strategy
+        foreach(glob("files/*/*/*") as $filePath) {
+          $fileFragment = $filePath;
+          $filePathOld = $fileFragment;
+          $fileRealName = basename($fileFragment);
+          $fileFragment = dirname($fileFragment);
+          $fileObjectId = basename($fileFragment);
+          $fileFragment = dirname($fileFragment);
+          $fileDir = basename($fileFragment);
+
+          switch ($fileDir) {
+            case "consultations" : $fileObjectClass = "CConsultation" ; break;
+            case "consultations2": $fileObjectClass = "CConsultation" ; break;
+            case "consult_anesth": $fileObjectClass = "CConsultAnesth"; break;
+            case "operations"    : $fileObjectClass = "COperation"    ; break;
+          	default: $fileObjectClass = null;
+          }
+
+          if (!$fileObjectClass) {
+            continue;
+          }
+                    
+          $fileDirHash = intval($fileObjectId / 1000);
+          $filePathNew = "files/$fileObjectClass/$fileDirHash/$fileObjectId/$fileRealName";
+          mbTrace($filePathOld, "Old Path");
+          mbTrace($filePathNew, "New Path");
+          // rename($filePathOld, $filePathNew);
+        }
+        
+        die();
         return "0.39";
     }
     return false;

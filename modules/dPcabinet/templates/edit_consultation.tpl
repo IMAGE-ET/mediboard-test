@@ -114,9 +114,11 @@ function pageMain() {
             {include file="inc_patient_history.tpl"}
           </td>
           <td class="button">
-            <input type="button" value="intervention"    onclick="newOperation      ({$consult->_ref_plageconsult->chir_id},{$consult->patient_id})" /><br />
-            <input type="button" value="hospitalisation" onclick="newHospitalisation({$consult->_ref_plageconsult->chir_id},{$consult->patient_id})" /><br />
-            <input type="button" value="consultation"    onclick="newConsultation   ({$consult->_ref_plageconsult->chir_id},{$consult->patient_id})" />
+            <button style="margin: 1px;" class="new" type="button" onclick="newOperation      ({$consult->_ref_plageconsult->chir_id},{$consult->patient_id})">Nouvelle intervention</button>
+            <br/>
+            <button style="margin: 1px;" class="new" type="button" onclick="newHospitalisation({$consult->_ref_plageconsult->chir_id},{$consult->patient_id})">Nouveau séjour</button>
+            <br/>
+            <button style="margin: 1px;" class="new" type="button" onclick="newConsultation   ({$consult->_ref_plageconsult->chir_id},{$consult->patient_id})">Nouvelle consultation</button>
           </td>
         </tr>
       </table>

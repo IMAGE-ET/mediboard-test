@@ -180,6 +180,7 @@ function pageMain() {
             <input type="hidden" name="fiche_paie_id" value="{$curr_fiche->fiche_paie_id}" />
             <input type="hidden" name="del" value="0" />
             <button class="trash" type="button" style="float:right;" onclick="confirmDeletion(this.form,{ldelim}typeName:'la ',objName:'{$curr_fiche->_view|escape:javascript}'{rdelim})">
+              Supprimer
             </button>
             </form>
             <a href="index.php?m=dPgestionCab&amp;tab=edit_paie&amp;fiche_paie_id={$curr_fiche->fiche_paie_id}" title="Editer cette fiche" >

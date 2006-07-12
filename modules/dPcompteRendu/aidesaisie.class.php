@@ -33,8 +33,8 @@ class CAideSaisie extends CMbObject {
     $this->_props["user_id"] = "ref|notNull";
     $this->_props["class"]  = "str|notNull";
     $this->_props["field"]  = "str|notNull";
-    $this->_props["name"]   = "str|notNull|confidential";
-    $this->_props["text"]   = "text|notNull|confidential";
+    $this->_props["name"]   = "str|notNull";
+    $this->_props["text"]   = "text|notNull";
   }
   
   function loadRefsFwd() {

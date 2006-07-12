@@ -93,17 +93,17 @@ class CConsultation extends CMbObject {
       "annule"          => "enum|0|1",
       "paye"            => "enum|0|1",
       "date_paiement"   => "date",
-      "motif"           => "text|confidential",
-      "rques"           => "text|confidential",
-      "examen"          => "text|confidential",
-      "traitement"      => "text|confidential",
-      "compte_rendu"    => "html|confidential",
-      "ordonnance"      => "html|confidential",
-      "courrier1"       => "html|confidential",
-      "courrier2"       => "html|confidential",
+      "motif"           => "text",
+      "rques"           => "text",
+      "examen"          => "text",
+      "traitement"      => "text",
+      "compte_rendu"    => "html",
+      "ordonnance"      => "html",
+      "courrier1"       => "html",
+      "courrier2"       => "html",
       "premiere"        => "enum|0|1",
-      "tarif"           => "str|confidential",
-      "type_tarif"      => "str|confidential" // En faire un enum
+      "tarif"           => "str",
+      "type_tarif"      => "str" // En faire un enum
     );
     
     $this->_props =& $props;
