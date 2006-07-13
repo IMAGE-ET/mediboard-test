@@ -42,6 +42,13 @@ class CConsultAnesth extends CMbObject {
   var $biologie = null;
   var $commande_sang = null;
   var $ASA = null;
+  
+  var $mallampati = null;
+  var $bouche = null;
+  var $distThyro = null;
+  var $etatBucco = null;
+  var $conclusion = null;
+  var $position = null;
 
   // Form fields
   var $_date_consult = null;
@@ -74,7 +81,17 @@ class CConsultAnesth extends CMbObject {
     $this->_props["biologie"]        = "enum|?|NF|COAG|IONO";
     $this->_props["commande_sang"]   = "enum|?|clinique|CTS|autologue";
     $this->_props["ASA"]             = "enum|1|2|3|4|5";
-
+    
+    // Champs pour les conditions d'intubation
+    $this->_props["mallampati"]      = "enum|classe1|classe2|classe3|classe4";
+    $this->_props["bouche"]          = "enum|m20|m35|p35";
+    $this->_props["distThyro"]       = "enum|m65|p65";
+    $this->_props["etatBucco"]       = "str";
+    $this->_props["conclusion"]      = "str";
+    $this->_props["position"]        = "enum|DD|DV|DL|GP|AS|TO";
+    
+    //
+    
     $this->buildEnums();
   }
   

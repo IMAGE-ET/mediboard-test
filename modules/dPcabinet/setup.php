@@ -335,8 +335,19 @@ class CSetupdPcabinet {
           "\nDROP `file_consultation_anesth`," .
           "\nDROP `file_operation`;";
         db_exec( $sql ); db_error();
-        
+      
       case "0.39":
+        $sql = "ALTER TABLE `consultation_anesth`
+        	    ADD `mallampati` ENUM( 'classe1', 'classe2', 'classe3', 'classe4' ),
+        	    ADD `bouche` ENUM( 'm20', 'm35', 'p35' ),
+        	    ADD `distThyro` ENUM( 'm65', 'p65' ),
+        	    ADD `etatBucco` VARCHAR(50),
+        	    ADD `conclusion` VARCHAR(50),
+        	    ADD `position` ENUM( 'DD', 'DV', 'DL', 'GP', 'AS', 'TO' );";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'trans', 'obst', 'chir', 'med', 'fam', 'alle' ) NOT NULL DEFAULT 'med';";
+        db_exec( $sql ); db_error();
+      case "0.40":
         // Move all files from former to latter strategy
         foreach(glob("files/*/*/*") as $filePath) {
           $fileFragment = $filePath;
@@ -365,8 +376,6 @@ class CSetupdPcabinet {
           mbTrace($filePathNew, "New Path");
           // rename($filePathOld, $filePathNew);
         }
-        
-        die();
         return "0.39";
     }
     return false;

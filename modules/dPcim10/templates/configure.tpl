@@ -1,5 +1,4 @@
 <script language="JavaScript" type="text/javascript">
-{literal}
 
 function startCIM10() {
   var CIM10Url = new Url;
@@ -7,7 +6,6 @@ function startCIM10() {
   CIM10Url.requestUpdate("cim10");
 }
 
-{/literal}
 </script>
 
 <h2>Import de la base de données CCAM V2</h2>

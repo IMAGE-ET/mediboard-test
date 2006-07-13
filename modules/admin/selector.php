@@ -71,7 +71,7 @@ if (!$ok) {
 
 // Template creation
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('callback', $callback);
 $smarty->assign('title', $title);

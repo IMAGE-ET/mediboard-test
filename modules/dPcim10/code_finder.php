@@ -35,7 +35,7 @@ if($i >= 0)
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('up', $up);
 $smarty->assign('cim10', $cim10);

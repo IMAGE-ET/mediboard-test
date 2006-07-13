@@ -133,7 +133,7 @@ $tarifsCab = $tarifsCab->loadList($where, $order);
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('date', $date );
 $smarty->assign('hour', $hour );

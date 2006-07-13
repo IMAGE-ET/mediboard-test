@@ -1,5 +1,5 @@
 <table class="form" id="admission">
-  <tr><th colspan="2">Dr. {$admission->_ref_chir->_view}</th></tr>
+  <tr><th colspan="2">Dr. {{$admission->_ref_chir->_view}}</th></tr>
   <tr><th colspan="2">Centre Médico Chirurgical de l'Atlantique</th></tr>
   <tr><th colspan="2">26 rue Moulin des justices</th></tr>
   <tr><th colspan="2">17138 &mdash; Puilboreau</th></tr>
@@ -8,28 +8,28 @@
 
   <tr>
     <th>Nom / Prénom du patient :</th>
-    <td>{$admission->_ref_sejour->_ref_patient->_view}</td>
+    <td>{{$admission->_ref_sejour->_ref_patient->_view}}</td>
   </tr>
 
   <tr>
     <th>Date d'intervention :</th>
-    <td>{$admission->_ref_plageop->_day}/{$admission->_ref_plageop->_month}/{$admission->_ref_plageop->_year}</td>
+    <td>{{$admission->_ref_plageop->_day}}/{{$admission->_ref_plageop->_month}}/{{$admission->_ref_plageop->_year}}</td>
   </tr>
   
-  {foreach from=$admission->_ext_codes_ccam item=curr_acte}
+  {{foreach from=$admission->_ext_codes_ccam item=curr_acte}}
   <tr>
     <th>Acte médical :</th>
-    <td class="text">{$curr_acte->libelleLong} <i>({$curr_acte->code})</i></td>
+    <td class="text">{{$curr_acte->libelleLong}} <i>({{$curr_acte->code}})</i></td>
   </tr>
-  {/foreach}
+  {{/foreach}}
 
   <tr>
     <th>Côté: </th>
-    <td>{$admission->cote}</td>
+    <td>{{$admission->cote}}</td>
   </tr>
   
   <tr>
-    <th>Dépassement d'honoraires: </th><td>{$admission->depassement} €</td>
+    <th>Dépassement d'honoraires: </th><td>{{$admission->depassement}} €</td>
   </tr>
 
   <tr>

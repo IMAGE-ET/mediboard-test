@@ -57,7 +57,7 @@ foreach($listGestionCab as $key => $fiche) {
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('gestioncab'       , $gestioncab);
 $smarty->assign('date'             , $date);

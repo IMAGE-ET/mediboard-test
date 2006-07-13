@@ -24,7 +24,7 @@ $cim10->loadRefs();
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('lang', $lang);
 $smarty->assign('cim10', $cim10);

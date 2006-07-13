@@ -35,7 +35,7 @@ foreach($favoris as $key => $value) {
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('codes', $codes);
 

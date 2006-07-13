@@ -24,7 +24,7 @@ foreach($admission->_ref_operations as $keyOp => $op) {
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('admission', $admission);
 

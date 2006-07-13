@@ -46,7 +46,7 @@ $listUsers = $user->loadUsers(PERM_EDIT);
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('user', $user);
 $smarty->assign('fichePaie', $fichePaie);

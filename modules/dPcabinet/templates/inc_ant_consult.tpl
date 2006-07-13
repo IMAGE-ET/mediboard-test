@@ -1,5 +1,4 @@
 <script type="text/javascript">
-{literal}
 
 var cim10url = new Url;
 
@@ -35,11 +34,11 @@ function finTrmt() {
   var oViewField = document.getElementById('editTrmtFrm_fin_da');
   var oTriggerField = document.getElementById('editTrmtFrm_fin_trigger');
   if (oEnCours.checked) {
-    {/literal}
-    oHiddenField.value = "{$today}";
-    oViewField.innerHTML = "{$today|date_format:"%d/%m/%Y"}";
+
+    oHiddenField.value = "{{$today}}";
+    oViewField.innerHTML = "{{$today|date_format:"%d/%m/%Y"}}";
     oTriggerField.style.display = "inline";
-    {literal}
+
   } else {
     oHiddenField.value = "";
     oViewField.innerHTML = "En cours";
@@ -64,47 +63,43 @@ function submitAnt(oForm) {
 }
 
 function incAntecedantsMain() {
-  {/literal}
-  {foreach from=$patient->_static_cim10 key=cat item=curr_cat}
-  initEffectClass("group{$cat}", "trigger{$cat}");
-  {/foreach}
-  {literal}
+  {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}
+  initEffectClass("group{{$cat}}", "trigger{{$cat}}");
+  {{/foreach}}
 }
 
-{/literal}
 </script>
 
 <table class="form">
-  <tr><th class="category" colspan="2">Antécédents / Traitements</th></tr>
   <tr>
     <td class="text">
       <strong>Ajouter un diagnostic</strong>
-      <form name="editDiagFrm" action="?m={$m}" method="post">
+      <form name="editDiagFrm" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="tab" value="edit_consultation" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_patients_aed" />
-      <input type="hidden" name="patient_id" value="{$patient->patient_id}" />
-      <input type="hidden" name="listCim10" value="{$patient->listCim10}" />
+      <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
+      <input type="hidden" name="listCim10" value="{{$patient->listCim10}}" />
       <table style="width: 100%">
-      {foreach from=$patient->_static_cim10 key=cat item=curr_cat}
-        <tr id="trigger{$cat}" class="triggerShow" onclick="flipEffectElement('group{$cat}', 'SlideDown', 'SlideUp', 'trigger{$cat}')">
-          <td>{$cat}</td>
+      {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}
+        <tr id="trigger{{$cat}}" class="triggerShow" onclick="flipEffectElement('group{{$cat}}', 'SlideDown', 'SlideUp', 'trigger{{$cat}}')">
+          <td>{{$cat}}</td>
         </tr>
-        <tbody id="group{$cat}" style="display: none">
-          {foreach from=$curr_cat item=curr_code}
-          <tr class="{$cat}">
+        <tbody id="group{{$cat}}" style="display: none">
+          {{foreach from=$curr_cat item=curr_code}}
+          <tr class="{{$cat}}">
             <td class="text">
-              <button class="tick" type="button" onclick="putCim10('{$curr_code->code}')"></button>
-              <button type="button" onclick="selectCim10('{$curr_code->code}')">
-                <img src="modules/dPcabinet/images/downarrow.png" />
+              <button class="tick" type="button" onclick="putCim10('{{$curr_code->code}}')"></button>
+              <button type="button" onclick="selectCim10('{{$curr_code->code}}')">
+                <img src="modules/dPcabinet/images/downarrow.png" alt=""/>
               </button>
-              {$curr_code->code}: {$curr_code->libelle}
+              {{$curr_code->code}}: {{$curr_code->libelle}}
             </td>
           </tr>
-           {/foreach}
+           {{/foreach}}
         </tbody>
-      {/foreach}
+      {{/foreach}}
       </table>
       </form>
       
@@ -114,7 +109,7 @@ function incAntecedantsMain() {
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_antecedent_aed" />
-      <input type="hidden" name="patient_id" value="{$patient->patient_id}" />
+      <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
       <table class="form">
         <tr>
           <td colspan="2"><strong>Ajouter un antécédent</strong></td>
@@ -122,7 +117,7 @@ function incAntecedantsMain() {
             <label for="rques" title="Remarques sur l'antécédent">Remarques</label>
             <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
               <option value="0">&mdash; Choisir une aide</option>
-              {html_options options=$antecedent->_aides.rques}
+              {{html_options options=$antecedent->_aides.rques}}
             </select>
           </td>
 
@@ -130,8 +125,8 @@ function incAntecedantsMain() {
         <tr>
           <th><label for="date" title="Date de l'antécédent">Date</label></th>
           <td class="date">
-            <div id="editAntFrm_date_da">{$today|date_format:"%d/%m/%Y"}</div>
-            <input type="hidden" name="date" value="{$today}" />
+            <div id="editAntFrm_date_da">{{$today|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" name="date" value="{{$today}}" />
             <img id="editAntFrm_date_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
           <td rowspan="2">
@@ -144,6 +139,7 @@ function incAntecedantsMain() {
             <select name="type">
               <option value="chir">Chirurgical</option>
               <option value="fam">Familial</option>
+              <option value="alle">Allergie</option>
               <option value="obst">Obstétrique</option>
               <option value="med">Medical</option>
               <option value="trans">Transfusion</option>
@@ -165,7 +161,7 @@ function incAntecedantsMain() {
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_traitement_aed" />
-      <input type="hidden" name="patient_id" value="{$patient->patient_id}" />
+      <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
       
       <table class="form">
         <tr>
@@ -174,15 +170,15 @@ function incAntecedantsMain() {
             <label for="traitement" title="Traitement">Traitement</label>
             <select name="_helpers_traitement" size="1" onchange="pasteHelperContent(this)">
               <option value="0">&mdash; Choisir une aide</option>
-              {html_options options=$traitement->_aides.traitement}
+              {{html_options options=$traitement->_aides.traitement}}
             </select>
           </td>
         </tr>
         <tr>
           <th><label for="debut" title="Début du traitement">Début</label></th>
           <td class="date">
-            <div id="editTrmtFrm_debut_da">{$today|date_format:"%d/%m/%Y"}</div>
-            <input type="hidden" name="debut" value="{$today}" />
+            <div id="editTrmtFrm_debut_da">{{$today|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" name="debut" value="{{$today}}" />
             <img id="editTrmtFrm_debut_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
           <td rowspan="2">
@@ -195,8 +191,8 @@ function incAntecedantsMain() {
             <label for="fin" title="Fin du traitement">Fin</label>
           </th>
           <td class="date">
-            <div id="editTrmtFrm_fin_da">{$today|date_format:"%d/%m/%Y"}</div>
-            <input type="hidden" name="fin" value="{$today}" />
+            <div id="editTrmtFrm_fin_da">{{$today|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" name="fin" value="{{$today}}" />
             <img id="editTrmtFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>
@@ -210,7 +206,7 @@ function incAntecedantsMain() {
       
     </td>
     <td class="text" id="listAnt">
-      {include file="inc_list_ant.tpl"}
+      {{include file="inc_list_ant.tpl"}}
     </td>
   </tr>
 </table>

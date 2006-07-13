@@ -26,7 +26,7 @@ $salleSel->load(mbGetValueFromGetOrSession('salle_id'));
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('salles', $salles);
 $smarty->assign('salleSel', $salleSel);

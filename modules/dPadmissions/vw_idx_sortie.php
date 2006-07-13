@@ -25,7 +25,7 @@ $now  = mbDate();
 
 // Création du template
 require_once($AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 $smarty->assign('date' , $date );
 $smarty->assign('now' , $now );
 $smarty->assign('vue' , $vue );

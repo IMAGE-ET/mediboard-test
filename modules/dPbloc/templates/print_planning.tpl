@@ -1,6 +1,5 @@
 <!-- $Id$ -->
 
-{literal}
 <script type="text/javascript">
 function checkForm() {
   var form = document.paramFrm;
@@ -48,7 +47,7 @@ function pageMain() {
 }
 
 </script>
-{/literal}
+
 
 <form name="paramFrm" action="?m=dPbloc" method="post" onsubmit="return checkForm()">
 
@@ -61,16 +60,16 @@ function pageMain() {
         <tr>
           <th><label for="deb" title="Date de début de la recherche">Début</label></th>
           <td class="date" colspan="2">
-            <div id="paramFrm_deb_da">{$deb|date_format:"%d/%m/%Y"}</div>
-            <input type="hidden" name="deb" value="{$deb}" />
+            <div id="paramFrm_deb_da">{{$deb|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" name="deb" value="{{$deb}}" />
             <img id="paramFrm_deb_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
         <tr>
           <th><label for="fin" title="Date de fin de la recherche">Fin</label></th>
           <td class="date" colspan="2">
-            <div id="paramFrm_fin_da">{$fin|date_format:"%d/%m/%Y"}</div>
-            <input type="hidden" name="fin" value="{$fin}" />
+            <div id="paramFrm_fin_da">{{$fin|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" name="fin" value="{{$fin}}" />
             <img id="paramFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>
@@ -102,27 +101,27 @@ function pageMain() {
           <th><label for="chir" title="Rechercher en fonction du praticien">Praticiens</label></th>
           <td><select name="chir">
             <option value="0">&mdash; Tous les praticiens &mdash;</option>
-            {foreach from=$listPrat item=curr_prat}
-              <option value="{$curr_prat->user_id}">{$curr_prat->_view}</option>
-            {/foreach}
+            {{foreach from=$listPrat item=curr_prat}}
+              <option value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
+            {{/foreach}}
           </select></td>
         </tr>
         <tr>
           <th><label for="spe" title="Rechercher en fonction d'une spécialité opératoire">Specialité</label></th>
           <td><select name="spe">
             <option value="0">&mdash; Toutes les spécialités &mdash;</option>
-            {foreach from=$listSpec item=curr_spec}
-              <option value="{$curr_spec->function_id}">{$curr_spec->text}</option>
-            {/foreach}
+            {{foreach from=$listSpec item=curr_spec}}
+              <option value="{{$curr_spec->function_id}}">{{$curr_spec->text}}</option>
+            {{/foreach}}
           </select></td>
         </tr>
         <tr>
           <th><label for="salle" title="Rechercher en fonciton d'une salle d'opération">Salle</label></th>
           <td><select name="salle">
             <option value="0">&mdash; Toutes les salles &mdash;</option>
-            {foreach from=$listSalles item=curr_salle}
-	            <option value="{$curr_salle->id}">{$curr_salle->nom}</option>
-            {/foreach}
+            {{foreach from=$listSalles item=curr_salle}}
+	            <option value="{{$curr_salle->id}}">{{$curr_salle->nom}}</option>
+            {{/foreach}}
           </select></td>
         </tr>
       </table>

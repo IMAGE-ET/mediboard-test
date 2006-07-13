@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-{literal}
+
 <script type="text/javascript">
 
 function checkItemForm() {
@@ -9,7 +9,7 @@ function checkItemForm() {
   
   if (field = form.permission_item)
     if (field.value == -1) {
-      alert("{/literal}{tr}Please choose an item.{/tr}{literal}");
+      alert("{{tr}}Please choose an item.{{/tr}}");
       popPermItem();
       return false;
     }
@@ -18,7 +18,7 @@ function checkItemForm() {
 }
 
 function delModulePerm(id) {
-	if (confirm( "{/literal}{tr}Are you sure you want to delete this module permission?{/tr}{literal}")) {
+	if (confirm( "{{tr}}Are you sure you want to delete this module permission?{{/tr}}")) {
 		var f = document.frmItemPerms;
 		f.del.value = 1;
 		f.permission_id.value = id;
@@ -27,7 +27,7 @@ function delModulePerm(id) {
 }
 
 function delItemPerm(id) {
-	if (confirm( "{/literal}{tr}Are you sure you want to delete this item permission?{/tr}{literal}")) {
+	if (confirm( "{{tr}}Are you sure you want to delete this item permission?{{/tr}}")) {
 		var f = document.frmModulePerms;
 		f.del.value = 1;
 		f.permission_id.value = id;
@@ -36,11 +36,9 @@ function delItemPerm(id) {
 }
 
 var tables = new Array;
-{/literal}
-{foreach from=$pgos item=pgo key=module}
-	tables['{$module}'] = '{$pgo.table}';
-{/foreach}
-{literal}
+{{foreach from=$pgos item=pgo key=module}}
+	tables['{{$module}}'] = '{{$pgo.table}}';
+{{/foreach}}
 
 function popPermItem() {
 	var f = document.frmItemPerms;
@@ -67,7 +65,7 @@ function setPermItem( key, val ) {
 }
 
 </script>
-{/literal}
+
 
 <table class="main">
   <tr>
@@ -76,171 +74,171 @@ function setPermItem( key, val ) {
     <table class="tbl">
       <tr>
       	<th />
-      	<th>{tr}Module{/tr}</th>
-      	<th>{tr}Item{/tr}</th>
-      	<th>{tr}Type{/tr}</th>
+      	<th>{{tr}}Module{{/tr}}</th>
+      	<th>{{tr}}Item{{/tr}}</th>
+      	<th>{{tr}}Type{{/tr}}</th>
       	<th />
       </tr>
 
-      {foreach from=$userPerms item=userPerm} 
+      {{foreach from=$userPerms item=userPerm}} 
       <tr>
-		{if $userPerm.perm_module == "all" && $userPerm.perm_item == -1}
-			{assign var="bg_color" value="ffc235"}
-		{elseif $userPerm.perm_item == -1 }
-			{assign var="bg_color" value="ffff99"}
-		{else}
-			{assign var="bg_color" value="transparent"}
-		{/if}
+		{{if $userPerm.perm_module == "all" && $userPerm.perm_item == -1}}
+			{{assign var="bg_color" value="ffc235"}}
+		{{elseif $userPerm.perm_item == -1 }}
+			{{assign var="bg_color" value="ffff99"}}
+		{{else}}
+			{{assign var="bg_color" value="transparent"}}
+		{{/if}}
 
-        <td style="background: #{$bg_color};">
-          {if $canEdit}
-          <a href="index.php?m={$m}&amp;a={$a}&amp;user_id={$user_id}&amp;perm_id={$userPerm.perm_id}">
-          	{html_image file="./images/icons/stock_edit-16.png"}
+        <td style="background: #{{$bg_color}};">
+          {{if $canEdit}}
+          <a href="index.php?m={{$m}}&amp;a={{$a}}&amp;user_id={{$user_id}}&amp;perm_id={{$userPerm.perm_id}}">
+          	{{html_image file="./images/icons/stock_edit-16.png"}}
           </a>
-          {/if}
+          {{/if}}
         </td>
 
-		<td style="background: #{$bg_color};">
-		  {tr}module-{$userPerm.perm_module}-court{/tr}
+		<td style="background: #{{$bg_color}};">
+		  {{tr}}module-{{$userPerm.perm_module}}-court{{/tr}}
 		</td>
 	
-		<td style="background: #{$bg_color}; width: 100%;">
-		  {$userPerm.perm_item_name}
+		<td style="background: #{{$bg_color}}; width: 100%;">
+		  {{$userPerm.perm_item_name}}
 		</td>
 	
-		<td style="background: #{$bg_color}; width: 100%;">
-		  {tr}{$userPerm.perm_value_name}{/tr}
+		<td style="background: #{{$bg_color}}; width: 100%;">
+		  {{tr}}{{$userPerm.perm_value_name}}{{/tr}}
 		</td>
 	
-		<td style="background: #{$bg_color};">
-		{if $canEdit}
-		  {if $userPerm.perm_item == -1}
-		  <a href="javascript:delModulePerm({$userPerm.perm_id});" title="{tr}delete{/tr}">
-          {else}
-		  <a href="javascript:delItemPerm({$userPerm.perm_id});" title="{tr}delete{/tr}">
-          {/if}
-        	{html_image file="./images/icons/stock_delete-16.png"}
+		<td style="background: #{{$bg_color}};">
+		{{if $canEdit}}
+		  {{if $userPerm.perm_item == -1}}
+		  <a href="javascript:delModulePerm({{$userPerm.perm_id}});" title="{{tr}}delete{{/tr}}">
+          {{else}}
+		  <a href="javascript:delItemPerm({{$userPerm.perm_id}});" title="{{tr}}delete{{/tr}}">
+          {{/if}}
+        	{{html_image file="./images/icons/stock_delete-16.png"}}
 		  </a>
-		{/if}
+		{{/if}}
 		</td>
 	  </tr>	
-	  {/foreach}
+	  {{/foreach}}
 	</table>
 	
     <table>
       <tr>
 		<td style="width: 20px; background: #ffc235;"></td>
-		<td> = {tr}Global permission{/tr}</td>
+		<td> = {{tr}}Global permission{{/tr}}</td>
 		<td style="width: 20px; background: #ffff99;"></td>
-		<td> = {tr}Module permission{/tr}</td>
+		<td> = {{tr}}Module permission{{/tr}}</td>
       </tr>
     </table>
 
   	</td>
   	<td class="halfPane">
 	
-	{if $canEdit}
+	{{if $canEdit}}
 	
-	{if !$permSel->permission_id || $permSel->permission_item == -1}
+	{{if !$permSel->permission_id || $permSel->permission_item == -1}}
 	<!-- AddEdit Permission on modules -->
-	<form name="frmModulePerms" method="post" action="?m={$m}">
+	<form name="frmModulePerms" method="post" action="?m={{$m}}">
 
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="dosql" value="do_perms_aed" />
-	<input type="hidden" name="user_id" value="{$user_id}" />
-	<input type="hidden" name="permission_user" value="{$user_id}" />
-	<input type="hidden" name="permission_id" value="{$permSel->permission_id}" />
+	<input type="hidden" name="user_id" value="{{$user_id}}" />
+	<input type="hidden" name="permission_user" value="{{$user_id}}" />
+	<input type="hidden" name="permission_id" value="{{$permSel->permission_id}}" />
 	<input type="hidden" name="permission_item" value="-1" />
 
 	<table class="form">
 	  <tr>
-        {if $permSel->permission_id}
-		<th class="category" colspan="4">{tr}Edit permission on module{/tr}</th>
-        {else}
-		<th class="category" colspan="4">{tr}Add permission on module{/tr}</th>
-        {/if}
+        {{if $permSel->permission_id}}
+		<th class="category" colspan="4">{{tr}}Edit permission on module{{/tr}}</th>
+        {{else}}
+		<th class="category" colspan="4">{{tr}}Add permission on module{{/tr}}</th>
+        {{/if}}
 	  </tr>
 	  
 	  <tr>
-	    <th>{tr}Module{/tr}:</th>
+	    <th>{{tr}}Module{{/tr}}:</th>
 	    <td colspan="3">
 	      <select name="permission_grant_on">
-	        {foreach from=$modules key=key_module item=curr_module}
-            <option value="{$key_module}" {if $key_module == $permSel->permission_grant_on}selected="selected"{/if}>
-              {tr}module-{$key_module}-court{/tr}
+	        {{foreach from=$modules key=key_module item=curr_module}}
+            <option value="{{$key_module}}" {{if $key_module == $permSel->permission_grant_on}}selected="selected"{{/if}}>
+              {{tr}}module-{{$key_module}}-court{{/tr}}
             </option>
-	        {/foreach}
+	        {{/foreach}}
 	      </select>
 		</td>
 	  </tr>
 
       <tr>
-	    <th>{tr}Level{/tr}:</th>
+	    <th>{{tr}}Level{{/tr}}:</th>
 	    <td>
-          <input type="checkbox" name="_module_visible" {if $permSel->_module_visible}checked="checked"{/if} />
-          <label for="_module_visible">{tr}Visible{/tr}</label>
+          <input type="checkbox" name="_module_visible" {{if $permSel->_module_visible}}checked="checked"{{/if}} />
+          <label for="_module_visible">{{tr}}Visible{{/tr}}</label>
         </td>
         <td>
-          <input type="checkbox" name="_module_readall" {if $permSel->_module_readall}checked="checked"{/if} />
-          <label for="_module_readall">{tr}Read All{/tr}</label>
+          <input type="checkbox" name="_module_readall" {{if $permSel->_module_readall}}checked="checked"{{/if}} />
+          <label for="_module_readall">{{tr}}Read All{{/tr}}</label>
         </td>
         <td>
-          <input type="checkbox" name="_module_editall" {if $permSel->_module_editall}checked="checked"{/if} />
-          <label for="_module_editall">{tr}Edit All{/tr}</label>
+          <input type="checkbox" name="_module_editall" {{if $permSel->_module_editall}}checked="checked"{{/if}} />
+          <label for="_module_editall">{{tr}}Edit All{{/tr}}</label>
         </td>
       </tr>
 
       <tr>
         <td class="button" colspan="4">
-          <input type="reset" value="{tr}Reset{/tr}" />
-          {if $permSel->permission_id}
-		  <input type="submit" value="{tr}Edit{/tr}" />
-		  <input type="submit" value="{tr}Remove{/tr}" onclick="if (confirm('{tr}Please confirm removal{/tr}')) {ldelim}this.form.del.value = 1; this.form.submit();{rdelim}" />
-		  {else}
-          <input type="submit" value="{tr}Add{/tr}" />
-		  {/if}
+          <input type="reset" value="{{tr}}Reset{{/tr}}" />
+          {{if $permSel->permission_id}}
+		  <input type="submit" value="{{tr}}Edit{{/tr}}" />
+		  <input type="submit" value="{{tr}}Remove{{/tr}}" onclick="if (confirm('{{tr}}Please confirm removal{{/tr}}')) {this.form.del.value = 1; this.form.submit();}" />
+		  {{else}}
+          <input type="submit" value="{{tr}}Add{{/tr}}" />
+		  {{/if}}
 	    </td>
 	  </tr>
     </table>
     
     </form>
-	{/if}
+	{{/if}}
 	
-	{if !$permSel->permission_id || $permSel->permission_item != -1}
+	{{if !$permSel->permission_id || $permSel->permission_item != -1}}
 	<!-- AddEdit Permission on items -->
-	<form name="frmItemPerms" method="post" action="?m={$m}" onsubmit="return checkItemForm();">
+	<form name="frmItemPerms" method="post" action="?m={{$m}}" onsubmit="return checkItemForm();">
 
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="dosql" value="do_perms_aed" />
-	<input type="hidden" name="user_id" value="{$user_id}" />
-	<input type="hidden" name="permission_user" value="{$user_id}" />
-	<input type="hidden" name="permission_id" value="{$permSel->permission_id}" />
-	<input type="hidden" name="permission_item" value="{$permSel->permission_item}" />
+	<input type="hidden" name="user_id" value="{{$user_id}}" />
+	<input type="hidden" name="permission_user" value="{{$user_id}}" />
+	<input type="hidden" name="permission_id" value="{{$permSel->permission_id}}" />
+	<input type="hidden" name="permission_item" value="{{$permSel->permission_item}}" />
 
 	<table class="form">
 	  <tr>
-        {if $permSel->permission_id}
-		<th class="category" colspan="3">{tr}Edit permission on item{/tr}</th>
-        {else}
-		<th class="category" colspan="3">{tr}Add permission on item{/tr}</th>
-        {/if}
+        {{if $permSel->permission_id}}
+		<th class="category" colspan="3">{{tr}}Edit permission on item{{/tr}}</th>
+        {{else}}
+		<th class="category" colspan="3">{{tr}}Add permission on item{{/tr}}</th>
+        {{/if}}
 	  </tr>
 	  
 	  <tr>
-	    <th>{tr}Module{/tr}:</th>
+	    <th>{{tr}}Module{{/tr}}:</th>
 	    <td colspan="2">
 	      <select name="permission_grant_on">
-	        {foreach from=$modules key=key_module item=curr_module}
-            <option value="{$key_module}" {if $key_module == $permSel->permission_grant_on}selected="selected"{/if}>
-              {tr}module-{$key_module}-court{/tr}
+	        {{foreach from=$modules key=key_module item=curr_module}}
+            <option value="{{$key_module}}" {{if $key_module == $permSel->permission_grant_on}}selected="selected"{{/if}}>
+              {{tr}}module-{{$key_module}}-court{{/tr}}
             </option>
-	        {/foreach}
+	        {{/foreach}}
 	      </select>
 		</td>
 	  </tr>
 
 	  <tr>
-		<th>{tr}Item{/tr}:</th>
+		<th>{{tr}}Item{{/tr}}:</th>
 		<td class="readonly">
 		  <input type="text" name="permission_item_name" class="text" size="60" value="" readonly="readonly" />
 		</td>
@@ -250,48 +248,48 @@ function setPermItem( key, val ) {
 	  </tr>
 
       <tr>
-	    <th>{tr}Level{/tr}:</th>
+	    <th>{{tr}}Level{{/tr}}:</th>
 	    <td colspan="2">
 	      <select name="permission_value">
-	        {html_options options=$permItemValues selected=$permSel->permission_value}
+	        {{html_options options=$permItemValues selected=$permSel->permission_value}}
 	      </select>
         </td>
       </tr>
 
       <tr>
         <td class="button" colspan="3">
-          <input type="reset" value="{tr}Reset{/tr}" />
-          {if $permSel->permission_id}
-		  <input type="submit" value="{tr}Edit{/tr}" />
-		  <input type="submit" value="{tr}Remove{/tr}"  onclick="{literal}if (confirm('Please confirm removal')) {this.form.del.value = 1; this.form.submit();}{/literal}" />
-		  {else}
-          <input type="submit" value="{tr}Add{/tr}" />
-		  {/if}
+          <input type="reset" value="{{tr}}Reset{{/tr}}" />
+          {{if $permSel->permission_id}}
+		  <input type="submit" value="{{tr}}Edit{{/tr}}" />
+		  <input type="submit" value="{{tr}}Remove{{/tr}}"  onclick="if (confirm('Please confirm removal')) {this.form.del.value = 1; this.form.submit();}" />
+		  {{else}}
+          <input type="submit" value="{{tr}}Add{{/tr}}" />
+		  {{/if}}
 	    </td>
 	  </tr>
     </table>
     
     </form>
-    {/if}
+    {{/if}}
     
-	{if !$permSel->permission_id}
+	{{if !$permSel->permission_id}}
 
-	<form name="cpPerms" method="post" action="?m={$m}">
+	<form name="cpPerms" method="post" action="?m={{$m}}">
 
 	<input type="hidden" name="dosql" value="do_perms_cp" />
-	<input type="hidden" name="user_id" value="{$user_id}" />
-	<input type="hidden" name="permission_user" value="{$user_id}" />
+	<input type="hidden" name="user_id" value="{{$user_id}}" />
+	<input type="hidden" name="permission_user" value="{{$user_id}}" />
 
 	<table class="form">
       <tr>
-	    <th class="category" colspan="2">{tr}Copy Permissions from Template{/tr}</th>
+	    <th class="category" colspan="2">{{tr}}Copy Permissions from Template{{/tr}}</th>
 	  </tr>
 	  
 	  <tr>
-	    <th><label for="temp_user_name">{tr}Copy Permissions from User{/tr}</label></th>
+	    <th><label for="temp_user_name">{{tr}}Copy Permissions from User{{/tr}}</label></th>
 	    <td>
 	      <select name="temp_user_name">
-			{html_options options=$otherUsers}
+			{{html_options options=$otherUsers}}
 		  </select>
 		</td>
 	
@@ -300,22 +298,22 @@ function setPermItem( key, val ) {
 	  <tr>
         <td colspan="2">
           <input type="checkbox" name="delPerms" class="text" value="true" checked="checked" />
-	      <label for="delPerms">{tr}adminDeleteTemplate{/tr}</label>
+	      <label for="delPerms">{{tr}}adminDeleteTemplate{{/tr}}</label>
 	    </td>
       </tr>
 
       <tr>
 	    <td class="button" colspan="2">
-	      <input type="submit" value="{tr}Copy from Template{/tr}" class="button" name="cptempperms" />
+	      <input type="submit" value="{{tr}}Copy from Template{{/tr}}" class="button" name="cptempperms" />
 	    </td>
       </tr>
   
 	</table>
 
 	</form>
-	{/if}
+	{{/if}}
 
-	{/if}
+	{{/if}}
 	
 	</td>
   </tr>

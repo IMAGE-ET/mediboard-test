@@ -71,7 +71,7 @@ for ($i = 0; $i < 60; $i += $step) {
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('plagesel', $plagesel);
 $smarty->assign('chirs', $chirs);

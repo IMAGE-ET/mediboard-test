@@ -20,7 +20,7 @@ $code->Load();
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 // @todo : ne passer que $code. Adapter le template en conséquence
 $smarty->assign('codeacte', strtoupper($code->code));

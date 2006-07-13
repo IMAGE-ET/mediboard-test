@@ -71,7 +71,7 @@ foreach ($bilan as $frequence => $value) {
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign("_conduction", $_conduction);
 $smarty->assign("_oreille", $_oreille);

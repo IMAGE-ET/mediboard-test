@@ -90,7 +90,7 @@ $listMins[] = "30";
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('vue', $vue);
 $smarty->assign('chirSel', $chirSel);

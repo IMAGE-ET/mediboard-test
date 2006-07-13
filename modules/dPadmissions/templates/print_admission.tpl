@@ -7,113 +7,113 @@
 
   <tr>
     <th>Praticien : </th>
-    <td>Dr. {$admission->_ref_praticien->_view}</td>
+    <td>Dr. {{$admission->_ref_praticien->_view}}</td>
   </tr>
   
-  {assign var=patient value=$admission->_ref_patient}
+  {{assign var=patient value=$admission->_ref_patient}}
   <tr>
     <th class="category" colspan="2">Informations sur le patient</th>
   </tr>
   
   <tr>
     <th>Nom / Prénom :</th>
-    <td>{$patient->_view}</td>
+    <td>{{$patient->_view}}</td>
   </tr>
 
   <tr>
     <th>Date de naissance / Sexe : </th>
-    <td>né(e) le {$patient->_jour}/{$patient->_mois}/{$patient->_annee} de sexe {$patient->sexe}</td>
+    <td>né(e) le {{$patient->_jour}}/{{$patient->_mois}}/{{$patient->_annee}} de sexe {{$patient->sexe}}</td>
   </tr>
 
   <tr>
     <th>Incapable majeur :</th>
-    <td>{$patient->incapable_majeur}</td>
+    <td>{{$patient->incapable_majeur}}</td>
   </tr>
 
   <tr>
     <th>Téléphone: </th>
-    <td>{$patient->tel}</td>
+    <td>{{$patient->tel}}</td>
   </tr>
 
   <tr>
     <th>Portable :</th>
-    <td>{$patient->tel2}</td>
+    <td>{{$patient->tel2}}</td>
   </tr>
 
   <tr>
     <th>Adresse :</th>
-    <td>{$patient->adresse} &mdash; {$patient->cp} {$patient->ville}</td>
+    <td>{{$patient->adresse}} &mdash; {{$patient->cp}} {{$patient->ville}}</td>
   </tr>
 
   <tr>
     <th>Numero d'assuré social :</th>
-    <td>{$patient->matricule}</td>
+    <td>{{$patient->matricule}}</td>
   </tr>
 
   <tr>
     <th>Remarques :</th>
-    <td>{$patient->rques|nl2br:php}</td>
+    <td>{{$patient->rques|nl2br:php}}</td>
   </tr>
 
-  {if $patient->_ref_medecin_traitant->medecin_id}
+  {{if $patient->_ref_medecin_traitant->medecin_id}}
   <tr>
     <th>Medecin traitant :</th>
-    <td>{$patient->_ref_medecin_traitant->_view}</td>
+    <td>{{$patient->_ref_medecin_traitant->_view}}</td>
   </tr>
 
   <tr>
     <th />
     <td>
-      {$patient->_ref_medecin_traitant->adresse|nl2br}<br />
-      {$patient->_ref_medecin_traitant->cp} {$patient->_ref_medecin_traitant->ville}
+      {{$patient->_ref_medecin_traitant->adresse|nl2br}}<br />
+      {{$patient->_ref_medecin_traitant->cp}} {{$patient->_ref_medecin_traitant->ville}}
     </td>
   </tr>
-  {/if}
+  {{/if}}
 
-  {if $patient->_ref_medecin1->medecin_id}
+  {{if $patient->_ref_medecin1->medecin_id}}
   <tr>
     <th>Medecin correspondant 1: </th>
-    <td>{$patient->_ref_medecin1->_view}</td>
+    <td>{{$patient->_ref_medecin1->_view}}</td>
   </tr>
   
   <tr>
     <th />
     <td>
-      {$patient->_ref_medecin1->adresse|nl2br}<br />
-      {$patient->_ref_medecin1->cp} {$patient->_ref_medecin1->ville}
+      {{$patient->_ref_medecin1->adresse|nl2br}}<br />
+      {{$patient->_ref_medecin1->cp}} {{$patient->_ref_medecin1->ville}}
     </td>
   </tr>
-  {/if}
+  {{/if}}
 
-  {if $patient->_ref_medecin1->medecin_id}
+  {{if $patient->_ref_medecin1->medecin_id}}
   <tr>
     <th>Medecin correspondant 2: </th>
-    <td>{$patient->_ref_medecin2->_view}</td>
+    <td>{{$patient->_ref_medecin2->_view}}</td>
   </tr>
   
   <tr>
     <th />
     <td>
-      {$patient->_ref_medecin2->adresse|nl2br}<br />
-      {$patient->_ref_medecin2->cp} {$patient->_ref_medecin2->ville}
+      {{$patient->_ref_medecin2->adresse|nl2br}}<br />
+      {{$patient->_ref_medecin2->cp}} {{$patient->_ref_medecin2->ville}}
     </td>
   </tr>
-  {/if}
+  {{/if}}
 
-  {if $patient->_ref_medecin3->medecin_id}
+  {{if $patient->_ref_medecin3->medecin_id}}
   <tr>
     <th>Medecin correspondant 3: </th>
-    <td>{$patient->_ref_medecin3->_view}</td>
+    <td>{{$patient->_ref_medecin3->_view}}</td>
   </tr>
   
   <tr>
     <th />
     <td>
-      {$patient->_ref_medecin3->adresse|nl2br}<br />
-      {$patient->_ref_medecin3->cp} {$patient->_ref_medecin3->ville}
+      {{$patient->_ref_medecin3->adresse|nl2br}}<br />
+      {{$patient->_ref_medecin3->cp}} {{$patient->_ref_medecin3->ville}}
     </td>
   </tr>
-  {/if}
+  {{/if}}
 
   
   <tr>
@@ -122,66 +122,66 @@
   
   <tr>
     <th>Date d'admission :</th>
-    <td>{$admission->entree_prevue|date_format:"%d/%m/%Y à %Hh%M"}</td>
+    <td>{{$admission->entree_prevue|date_format:"%d/%m/%Y à %Hh%M"}}</td>
   </tr>
 
   <tr>
     <th>Durée d'hospitalisation :</th>
-    <td>{$admission->_duree_prevue} jour(s)</td>
+    <td>{{$admission->_duree_prevue}} jour(s)</td>
   </tr>
 
   <tr>
     <th>Admission en :</th>
-    <td>{$admission->type}</td>
+    <td>{{$admission->type}}</td>
   </tr>
 
   <tr>
     <th>Chambre particulière :</th>
-    <td>{$admission->chambre_seule}</td>
+    <td>{{$admission->chambre_seule}}</td>
   </tr>
 
   <tr>
     <th>Remarques :</th>
-    <td>{$admission->rques|nl2br}</td>
+    <td>{{$admission->rques|nl2br}}</td>
   </tr>
-  {foreach from=$admission->_ref_operations item=curr_op}
+  {{foreach from=$admission->_ref_operations item=curr_op}}
   <tr>
     <th class="category" colspan="2">
-      Informations sur l'intervention du {$curr_op->_datetime|date_format:"%d/%m/%Y"}
+      Informations sur l'intervention du {{$curr_op->_datetime|date_format:"%d/%m/%Y"}}
     </th>
   </tr>
 
   <tr>
     <th>Chirurgien :</th>
-    <td class="text">Dr. {$curr_op->_ref_chir->_view}</td>
+    <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
   </tr>
 
   <tr>
     <th>Bilan pré-opératoire :</th>
-    <td class="text">{$curr_op->examen}</td>
+    <td class="text">{{$curr_op->examen}}</td>
   </tr>
 
-  {foreach from=$curr_op->_ext_codes_ccam item=curr_code}
+  {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
   <tr>
     <th>Acte médical :</th>
-    <td class="text">{$curr_code->libelleLong} <em>({$curr_code->code})</em></td>
+    <td class="text">{{$curr_code->libelleLong}} <em>({{$curr_code->code}})</em></td>
   </tr>
-  {/foreach}
+  {{/foreach}}
 
   <tr>
     <th>Côté :</th>
-    <td>{$curr_op->cote}</td>
+    <td>{{$curr_op->cote}}</td>
   </tr>
 
   <tr>
     <th>Remarques :</th>
-    <td>{$curr_op->rques}</td>
+    <td>{{$curr_op->rques}}</td>
   </tr>
   
-  {foreachelse}
+  {{foreachelse}}
   <tr>
     <th class="category" colspan="2">Pas d'intervention</th>
   </tr>
-  {/foreach}
+  {{/foreach}}
 
 </table>

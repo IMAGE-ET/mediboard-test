@@ -47,7 +47,7 @@ if (!$consultation_id) {
 }
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('consult', $consult);
 $smarty->assign('chir', $chir);

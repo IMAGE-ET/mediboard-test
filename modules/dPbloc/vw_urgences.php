@@ -58,7 +58,7 @@ for ($i = 0; $i < 5; $i++) {
 
 // Création du template
 require_once($AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 $smarty->assign('list1' , $list1 );
 $smarty->assign('list2' , $list2 );
 

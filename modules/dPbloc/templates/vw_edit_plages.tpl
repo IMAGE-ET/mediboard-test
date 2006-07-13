@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-{literal}
+
 <script language="Javascript" type="text/javascript">
 function checkPlage() {
   var form = document.editFrm;
@@ -25,55 +25,53 @@ function checkPlage() {
 }
 
 function pageMain() {
-  {/literal}
-  regRedirectFlatCal("{$date}", "index.php?m={$m}&tab={$tab}&date=");
-  {literal}
+  regRedirectFlatCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
 }
 
 </script>
-{/literal}
 
-{if $canEdit}
 
-<form name='editFrm' action='?m={$m}' method='post' onsubmit='return checkPlage()'>
+{{if $canEdit}}
+
+<form name='editFrm' action='?m={{$m}}' method='post' onsubmit='return checkPlage()'>
 
 <input type='hidden' name='dosql' value='do_plagesop_aed' />
 <input type='hidden' name='del' value='0' />
-<input type='hidden' name='id' value='{$plagesel->id}' />
+<input type='hidden' name='id' value='{{$plagesel->id}}' />
 
 <table class="form">
   <tr>
     <th class="category" colspan="6">
-      {if $plagesel->id}
-	    <a style="float:right;" href="javascript:view_log('CPlageOp',{$plagesel->id})">
+      {{if $plagesel->id}}
+	    <a style="float:right;" href="javascript:view_log('CPlageOp',{{$plagesel->id}})">
           <img src="images/history.gif" alt="historique" />
         </a>
         Modifier la plage opératoire
-      {else}
+      {{else}}
         Ajouter une plage opératoire
-      {/if}
+      {{/if}}
       </th>
   </tr>
 
   <tr>
     <th><label for="chir_id" title="Nom du chirurgien">Chirurgien</label></th>
     <td>
-      <select name="chir_id" title="{$plagesel->_props.chir_id}">
+      <select name="chir_id" title="{{$plagesel->_props.chir_id}}">
         <option value="">&mdash; Choisir un chirurgien</option>
         <optgroup label="Chirurgiens">
-        {foreach from=$chirs item=chir}
-          <option value="{$chir->user_id}" {if $plagesel->chir_id == $chir->user_id} selected="selected" {/if} >
-            {$chir->_view}
+        {{foreach from=$chirs item=chir}}
+          <option value="{{$chir->user_id}}" {{if $plagesel->chir_id == $chir->user_id}} selected="selected" {{/if}} >
+            {{$chir->_view}}
           </option>
-        {/foreach}
+        {{/foreach}}
         </optgroup>
 
         <optgroup label="Anesthésistes">
-        {foreach from=$anesths item=anesth}
-          <option value="{$anesth->user_id}" {if $plagesel->chir_id == $anesth->user_id} selected="selected" {/if} >
-            {$anesth->_view}
+        {{foreach from=$anesths item=anesth}}
+          <option value="{{$anesth->user_id}}" {{if $plagesel->chir_id == $anesth->user_id}} selected="selected" {{/if}} >
+            {{$anesth->_view}}
           </option>
-        {/foreach}
+        {{/foreach}}
         </optgroup>
       </select>
     </td>
@@ -82,32 +80,32 @@ function pageMain() {
       <label for="id_salle" title="Nom de la salle. Obligatoire.">Salle</label>
     </th>
     <td>
-      <select name="id_salle" title="{$plagesel->_props.id_salle}">
+      <select name="id_salle" title="{{$plagesel->_props.id_salle}}">
         <option value="">&mdash; Choisir une salle</option>
-        {foreach from=$salles item=salle}
-        <option value="{$salle->id}" {if $plagesel->id_salle == $salle->id} selected="selected"{/if} >
-          {$salle->nom}
+        {{foreach from=$salles item=salle}}
+        <option value="{{$salle->id}}" {{if $plagesel->id_salle == $salle->id}} selected="selected"{{/if}} >
+          {{$salle->nom}}
         </option>
-        {/foreach}
+        {{/foreach}}
       </select>
     </td>
 
     <th><label for="_heuredeb" title="Heure de début de la plage. Obligatoire">Début</label></th>
     <td>
       <select name="_heuredeb" title="notNull|num">
-      {foreach from=$heures item=heure}
-        <option {if $plagesel->_heuredeb == $heure} selected="selected" {/if} >
-          {$heure|string_format:"%02d"}
+      {{foreach from=$heures item=heure}}
+        <option {{if $plagesel->_heuredeb == $heure}} selected="selected" {{/if}} >
+          {{$heure|string_format:"%02d"}}
         </option>
-      {/foreach}
+      {{/foreach}}
       </select>
       :
       <select name='_minutedeb'>
-      {foreach from=$minutes item=minute}
-        <option {if $plagesel->_minutedeb == $minute} selected="selected" {/if} >
-          {$minute|string_format:"%02d"}
+      {{foreach from=$minutes item=minute}}
+        <option {{if $plagesel->_minutedeb == $minute}} selected="selected" {{/if}} >
+          {{$minute|string_format:"%02d"}}
         </option>
-      {/foreach}
+      {{/foreach}}
       </select>
     </td>
   </tr>
@@ -117,23 +115,23 @@ function pageMain() {
     <td>
       <select name="anesth_id">
         <option value="">&mdash; Choisir un anesthésiste</option>
-        {foreach from=$anesths item=anesth}
-        <option value="{$anesth->user_id}" {if $plagesel->anesth_id == $anesth->user_id} selected="selected" {/if} >
-          {$anesth->_view}
+        {{foreach from=$anesths item=anesth}}
+        <option value="{{$anesth->user_id}}" {{if $plagesel->anesth_id == $anesth->user_id}} selected="selected" {{/if}} >
+          {{$anesth->_view}}
         </option>
-        {/foreach}
+        {{/foreach}}
 	  </select>
     </td>
 
     <th><label for="date" title="Date de la plage opératoire.">Date</label></th>
     <td class="date">
-      {if $plagesel->id}
-      <div id="editFrm_date_da">{$plagesel->date|date_format:"%d/%m/%Y"}</div>
-      <input type="hidden" name="date" value="{$plagesel->date}" />
-      {else}
-      <div id="editFrm_date_da">{$date|date_format:"%d/%m/%Y"}</div>
-      <input type="hidden" name="date" value="{$date}" />
-      {/if}
+      {{if $plagesel->id}}
+      <div id="editFrm_date_da">{{$plagesel->date|date_format:"%d/%m/%Y"}}</div>
+      <input type="hidden" name="date" value="{{$plagesel->date}}" />
+      {{else}}
+      <div id="editFrm_date_da">{{$date|date_format:"%d/%m/%Y"}}</div>
+      <input type="hidden" name="date" value="{{$date}}" />
+      {{/if}}
       <!-- Possibilité de changer la date ? -->
       <!--img id="editFrm_date_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date"/-->
     </td>
@@ -141,19 +139,19 @@ function pageMain() {
     <th><label for="_heurefin" title="Heure de fin de la plage. Obligatoire">Fin</label></th>
     <td>
       <select name="_heurefin" title="notNull|num">
-        {foreach from=$heures item=heure}
-        <option {if $plagesel->_heurefin == $heure} selected="selected" {/if} >
-          {$heure|string_format:"%02d"}
+        {{foreach from=$heures item=heure}}
+        <option {{if $plagesel->_heurefin == $heure}} selected="selected" {{/if}} >
+          {{$heure|string_format:"%02d"}}
         </option>
-        {/foreach}
+        {{/foreach}}
       </select>
       :
       <select name='_minutefin'>
-        {foreach from=$minutes item=minute}
-        <option {if $plagesel->_minutefin == $minute} selected="selected" {/if} >
-          {$minute|string_format:"%02d"}
+        {{foreach from=$minutes item=minute}}
+        <option {{if $plagesel->_minutefin == $minute}} selected="selected" {{/if}} >
+          {{$minute|string_format:"%02d"}}
         </option>
-        {/foreach}
+        {{/foreach}}
       </select>
     </td>
   </tr>
@@ -161,13 +159,13 @@ function pageMain() {
   <tr>
     <th><label for="id_spec" title="">Spécialité</label></th>
     <td colspan="5">
-      <select name="id_spec" title="{$plagesel->_props.chir_id}">
+      <select name="id_spec" title="{{$plagesel->_props.chir_id}}">
         <option value="">&mdash; Choisir une spécialité</option>
-        {foreach from=$specs item=spec}
-          <option value="{$spec->function_id}" {if $spec->function_id == $plagesel->id_spec} selected="selected" {/if} >
-            {$spec->text}
+        {{foreach from=$specs item=spec}}
+          <option value="{{$spec->function_id}}" {{if $spec->function_id == $plagesel->id_spec}} selected="selected" {{/if}} >
+            {{$spec->text}}
           </option>
-        {/foreach}
+        {{/foreach}}
       </select>
     </td>
   </tr>
@@ -188,11 +186,11 @@ function pageMain() {
   
   <tr>
     <td class="button" colspan="6">
-    {if $plagesel->id}
+    {{if $plagesel->id}}
       <button type="submit" class="modify">Modifier</button>
-    {else}
+    {{else}}
       <button type="submit" class="new">Ajouter</button>
-    {/if}
+    {{/if}}
     </td>
   </tr>
 
@@ -200,12 +198,12 @@ function pageMain() {
 
 </form>
 
-{if $plagesel->id}
-  <form name='removeFrm' action='?m={$m}' method='post'>
+{{if $plagesel->id}}
+  <form name='removeFrm' action='?m={{$m}}' method='post'>
 
   <input type='hidden' name='dosql' value='do_plagesop_aed' />
   <input type='hidden' name='del' value='1' />
-  <input type='hidden' name='id' value='{$plagesel->id}' /> 
+  <input type='hidden' name='id' value='{{$plagesel->id}}' /> 
   <table class="form">
     <tr>
       <th class="category" colspan="2">Supprimer la plage opératoire</th>
@@ -224,9 +222,9 @@ function pageMain() {
   </table>
 
   </form>
-{/if}
+{{/if}}
 
-{/if}
+{{/if}}
 
 </td>
 <td>
@@ -237,10 +235,10 @@ function pageMain() {
   <tr>
   	<th>Liste des spécialités</th>
   </tr>
-  {foreach from=$specs item=curr_spec}
+  {{foreach from=$specs item=curr_spec}}
   <tr>
-    <td class="text" style="background: #{$curr_spec->color};">{$curr_spec->text}</td>
+    <td class="text" style="background: #{{$curr_spec->color}};">{{$curr_spec->text}}</td>
   </tr>
-  {/foreach}
+  {{/foreach}}
 </table>
 

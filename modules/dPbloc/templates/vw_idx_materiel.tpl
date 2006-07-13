@@ -1,6 +1,5 @@
 <!-- $Id$ -->
 
-{literal}
 <script type="text/javascript">
 function checkForm() {
   var form = document.paramFrm;
@@ -28,7 +27,7 @@ function pageMain() {
 }
 
 </script>
-{/literal}
+
 
 <table class="main">
   <tr>
@@ -42,34 +41,34 @@ function pageMain() {
 		  <th>Matériel à commander</th>
 		  <th>Valider</th>
 		</tr>
-		{foreach from=$op item=curr_op}
+		{{foreach from=$op item=curr_op}}
 		<tr>
-		  <td>{$curr_op->_datetime|date_format:"%a %d %b %Y"}</td>
-		  <td class="text">Dr. {$curr_op->_ref_chir->_view}</td>
-		  <td class="text">{$curr_op->_ref_sejour->_ref_patient->_view}</td>
+		  <td>{{$curr_op->_datetime|date_format:"%a %d %b %Y"}}</td>
+		  <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
+		  <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
 		  <td class="text">
-        {foreach from=$curr_op->_ext_codes_ccam item=curr_code}
-        {$curr_code->code} : <em>{$curr_code->libelleLong}</em><br />
-        {/foreach}
-        (Côté : {$curr_op->cote})
+        {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
+        {{$curr_code->code}} : <em>{{$curr_code->libelleLong}}</em><br />
+        {{/foreach}}
+        (Côté : {{$curr_op->cote}})
       </td>
-		  <td class="text">{$curr_op->materiel|nl2br}</td>
+		  <td class="text">{{$curr_op->materiel|nl2br}}</td>
 		  <td>
-  			<form name="editFrm{$curr_op->operation_id}" action="index.php" method="get">
+  			<form name="editFrm{{$curr_op->operation_id}}" action="index.php" method="get">
           <input type="hidden" name="m" value="dPbloc" />
           <input type="hidden" name="a" value="do_edit_mat" />
-          <input type="hidden" name="id" value="{$curr_op->operation_id}" />
-          {if $typeAff}
+          <input type="hidden" name="id" value="{{$curr_op->operation_id}}" />
+          {{if $typeAff}}
           <input type="hidden" name="value" value="n" />
   		    <input type="submit" value="annulé" />
-  		    {else}
+  		    {{else}}
           <input type="hidden" name="value" value="o" />
           <input type="submit" value="commandé" />
-    			{/if}
+    			{{/if}}
   			</form>
 		  </td>
 		</tr>
-		{/foreach}
+		{{/foreach}}
 	  </table>
 	</td>
 	<td>
@@ -82,16 +81,16 @@ function pageMain() {
       <tr>
         <th><label for="deb" title="Date de début de la recherche">Début</label></th>
         <td class="date" colspan="2">
-          <div id="paramFrm_deb_da">{$deb|date_format:"%d/%m/%Y"}</div>
-          <input type="hidden" name="deb" value="{$deb}" />
+          <div id="paramFrm_deb_da">{{$deb|date_format:"%d/%m/%Y"}}</div>
+          <input type="hidden" name="deb" value="{{$deb}}" />
           <img id="paramFrm_deb_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
         </td>
       </tr>
       <tr>
         <th><label for="fin" title="Date de fin de la recherche">Fin</label></th>
         <td class="date" colspan="2">
-          <div id="paramFrm_fin_da">{$fin|date_format:"%d/%m/%Y"}</div>
-          <input type="hidden" name="fin" value="{$fin}" />
+          <div id="paramFrm_fin_da">{{$fin|date_format:"%d/%m/%Y"}}</div>
+          <input type="hidden" name="fin" value="{{$fin}}" />
           <img id="paramFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
         </td>
       </tr>
@@ -104,11 +103,11 @@ function pageMain() {
 	  
 	  </form>
 
-	  <form name="typeVue" action="?m={$m}" method="get">
-        <input type="hidden" name="m" value="{$m}" />
+	  <form name="typeVue" action="?m={{$m}}" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
         <select name="typeAff" onchange="submit()">
-          <option value="0" {if $typeAff == 0}selected="selected"{/if}>Matériel à commander</option>
-          <option value="1" {if $typeAff == 1}selected="selected"{/if}>Matériel à annuler</option>
+          <option value="0" {{if $typeAff == 0}}selected="selected"{{/if}}>Matériel à commander</option>
+          <option value="1" {{if $typeAff == 1}}selected="selected"{{/if}}>Matériel à annuler</option>
         </select>
       </form>
     </td>

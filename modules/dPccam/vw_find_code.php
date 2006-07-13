@@ -100,7 +100,7 @@ while($row = db_fetch_array($result)) {
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('clefs', $clefs);
 $smarty->assign('selacces', $selacces);

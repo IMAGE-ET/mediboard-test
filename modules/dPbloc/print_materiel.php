@@ -49,7 +49,7 @@ foreach($op2 as $key => $value) {
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('op1', $op1);
 $smarty->assign('op2', $op2);

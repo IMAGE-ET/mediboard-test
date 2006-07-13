@@ -1,7 +1,7 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-{literal}
+
 function checkForm() {
   var form = document.paramFrm;
     
@@ -29,7 +29,7 @@ function pageMain() {
   regFieldCalendar("paramFrm", "fin");
 }
 
-{/literal}
+
 </script>
 
 <form name="paramFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm()">
@@ -43,16 +43,16 @@ function pageMain() {
         <tr>
           <th><label for="deb" title="Date de début de la période">Début</label></th>
           <td class="date" colspan="2">
-            <div id="paramFrm_deb_da">{$deb|date_format:"%d/%m/%Y"}</div>
-            <input type="hidden" name="deb" value="{$deb}" />
+            <div id="paramFrm_deb_da">{{$deb|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" name="deb" value="{{$deb}}" />
             <img id="paramFrm_deb_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
         <tr>
           <th><label for="fin" title="Date de fin de la période">Fin</label></th>
           <td class="date" colspan="2">
-            <div id="paramFrm_fin_da">{$fin|date_format:"%d/%m/%Y"}</div>
-            <input type="hidden" name="fin" value="{$fin}" />
+            <div id="paramFrm_fin_da">{{$fin|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" name="fin" value="{{$fin}}" />
             <img id="paramFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>
@@ -67,9 +67,9 @@ function pageMain() {
           <th>Praticien:</th>
           <td><select name="chir">
             <option value="0">&mdash; Tous</option>
-            {foreach from=$listChir item=curr_chir}
-	            <option value="{$curr_chir->user_id}">{$curr_chir->_view}</option>
-            {/foreach}
+            {{foreach from=$listChir item=curr_chir}}
+	            <option value="{{$curr_chir->user_id}}">{{$curr_chir->_view}}</option>
+            {{/foreach}}
           </select></td>
         </tr>
       </table>
