@@ -5,7 +5,7 @@
       Informations sur le patient
     </div>
     <div id="panel1Content"  class="accordionTabContentBox">
-      {{include file="inc_patient_infos_accord.tpl"}}
+      {{include file="inc_patient_infos_accord_consult.tpl"}}
     </div>
   </div>
   
@@ -23,27 +23,17 @@
       Examens
     </div>
     <div id="panel3Content"  class="accordionTabContentBox">
+      <div id="mainConsult">
       {{include file="inc_main_consultform.tpl"}}
-    </div>
-  </div>
-
-  <div id="panel4">
-    <div id="panel4Header" class="accordionTabTitleBar">
-      Evaluation des conditions d'intubations et Intervention
-    </div>
-    <div id="panel4Content"  class="accordionTabContentBox">
-      {{include file="inc_intubation.tpl"}}
-      <div id="choixAnesth">
-      {{include file="inc_type_anesth.tpl"}}
       </div>
     </div>
   </div>
   
-  <div id="panel5">
-    <div id="panel5Header" class="accordionTabTitleBar">
+  <div id="panel4">
+    <div id="panel4Header" class="accordionTabTitleBar">
       Documents et Réglements
     </div>
-    <div id="panel5Content"  class="accordionTabContentBox">
+    <div id="panel4Content"  class="accordionTabContentBox">
       <div id="fdrConsult">
       {{include file="inc_fdr_consult.tpl"}}
       </div>

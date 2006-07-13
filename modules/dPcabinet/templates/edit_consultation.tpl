@@ -91,7 +91,7 @@ function pageMain() {
     <td id="listConsult" class="effectShown" style="vertical-align: top;">
     </td>
     {{if $consult->consultation_id}}
-    <td>
+    <td class="greedyPane">
     {{else}}
     <td class="halfPane">
     {{/if}}
@@ -108,6 +108,7 @@ function pageMain() {
       <table class="form">
         <tr>
           <th class="category" colspan="4">
+            <button id="triggerList" class="triggerHide" type="button" onclick="flipEffectElement('listConsult', 'Appear', 'Fade', 'triggerList');" style="float:left">+/-</button>
             <input type="hidden" name="chrono" value="{{$consult->chrono}}" />
             Consultation
             (Etat : {{$consult->_etat}}
@@ -120,48 +121,9 @@ function pageMain() {
       </table>
       </form>
 
-      <table class="form">
-        <tr>
-          <th class="category">
-            <button id="triggerList" class="triggerHide" type="button" onclick="flipEffectElement('listConsult', 'Appear', 'Fade', 'triggerList');" style="float:left">+/-</button>
-            Patient
-          </th>
-          <th class="category">Correspondants</th>
-          <th class="category">
-            <a style="float:right;" href="javascript:view_log('CConsultation',{{$consult->consultation_id}})">
-              <img src="images/history.gif" alt="historique" />
-            </a>
-            Historique
-          </th>
-          <th class="category">Planification</th>
-        </tr>
-        <tr>
-          <td class="text">
-            {{include file="inc_patient_infos.tpl"}}
-          </td>
-          <td class="text">
-            {{include file="inc_patient_medecins.tpl"}}
-          </td>
-          <td class="text">
-            {{include file="inc_patient_history.tpl"}}
-          </td>
-          <td class="button">
-            <button style="margin: 1px;" class="new" type="button" onclick="newOperation      ({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}})">Nouvelle intervention</button>
-            <br/>
-            <button style="margin: 1px;" class="new" type="button" onclick="newHospitalisation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}})">Nouveau séjour</button>
-            <br/>
-            <button style="margin: 1px;" class="new" type="button" onclick="newConsultation   ({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}})">Nouvelle consultation</button>
-          </td>
-        </tr>
-      </table>
+      
+      {{include file="inc_accord_ant_consult.tpl"}}
 
-      <div id="mainConsult">
-      {{include file="inc_main_consultform.tpl"}}
-      </div>
-
-      <div id="fdrConsult">
-      {{include file="inc_fdr_consult.tpl"}}
-      </div>
 
       {{/if}}
 

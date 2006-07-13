@@ -126,7 +126,7 @@ function pageMain() {
 
       </form>
 
-      {{include file="inc_accord_ant_consultform.tpl"}}
+      {{include file="inc_accord_ant_consultAnesth.tpl"}}
 
     {{/if}}
 
