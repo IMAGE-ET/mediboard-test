@@ -147,14 +147,15 @@ $smarty->assign('tarifsCab', $tarifsCab);
 $smarty->assign('anesth', $anesth);
 $smarty->assign('consult', $consult);
 
-if ($consult->_ref_chir->isFromType(array("Anesthésiste")) || $consult->_ref_consult_anesth->consultation_anesth_id) {
-  $antecedent = new CAntecedent();
-  $antecedent->loadAides($userSel->user_id);
-  $smarty->assign("antecedent", $antecedent);
+$antecedent = new CAntecedent();
+$antecedent->loadAides($userSel->user_id);
+$smarty->assign("antecedent", $antecedent);
 
-  $traitement = new CTraitement();
-  $traitement->loadAides($userSel->user_id);
-  $smarty->assign("traitement", $traitement);
+$traitement = new CTraitement();
+$traitement->loadAides($userSel->user_id);
+$smarty->assign("traitement", $traitement);
+  
+if ($consult->_ref_chir->isFromType(array("Anesthésiste")) || $consult->_ref_consult_anesth->consultation_anesth_id) {
   
   $smarty->assign('consult_anesth', $consult->_ref_consult_anesth);
   $smarty->display('edit_consultation_anesth.tpl');
