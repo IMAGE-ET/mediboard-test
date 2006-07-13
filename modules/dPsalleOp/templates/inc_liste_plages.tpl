@@ -109,3 +109,54 @@
         {{/foreach}}
       </table>
       {{/foreach}}
+
+      {{if $urgences|@count}}
+      
+      <hr />
+
+      <table class="form">
+        <tr>
+          <th class="category" colspan="2">
+            Urgences
+          </th>
+        </tr>        
+      </table>
+      <table class="tbl">
+        <tr>
+          <th>praticien</th>
+          <th>Patient</th>
+          <th>Intervention</th>
+          <th>Coté</th>
+        </tr>
+        {{foreach from=$urgences item=curr_operation}}
+        <tr>
+          {{if $curr_operation->entree_bloc && $curr_operation->sortie_bloc}}
+          <td style="background-image:url(modules/{{$m}}/images/ray.gif); background-repeat:repeat;">
+          {{elseif $curr_operation->entree_bloc}}
+          <td style="background-color:#cfc">
+          {{elseif $curr_operation->sortie_bloc}}
+          <td style="background-color:#fcc">
+          {{else}}
+          <td>
+          {{/if}}
+            <a href="index.php?m={{$m}}&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
+              {{$curr_operation->_ref_chir->_view}}
+            </a>
+          </td>
+          <td>
+            <a href="index.php?m={{$m}}&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
+              {{$curr_operation->_ref_sejour->_ref_patient->_view}}
+            </a>
+          </td>
+          <td>
+            <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_operation->operation_id}}" title="Modifier l'intervention">
+              {{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
+              {{$curr_code->code}}<br />
+              {{/foreach}}
+            </a>
+          </td>
+          <td>{{$curr_operation->cote}}</td>
+        </tr>
+        {{/foreach}}
+      </table>
+      {{/if}}

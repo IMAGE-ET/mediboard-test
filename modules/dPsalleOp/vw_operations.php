@@ -10,7 +10,7 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
+	$AppUI->redirect("m=system&a=access_denied");
 }
 
 require_once($AppUI->getModuleClass("mediusers"));
@@ -20,8 +20,8 @@ require_once($AppUI->getModuleClass("dPbloc"      , "plagesop" ));
 require_once($AppUI->getModuleClass("dPplanningOp", "planning" ));
 
 $salle = mbGetValueFromGetOrSession("salle");
-$op = mbGetValueFromGetOrSession("op");
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$op    = mbGetValueFromGetOrSession("op");
+$date  = mbGetValueFromGetOrSession("date", mbDate());
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;
@@ -50,6 +50,17 @@ foreach($plages as $key => $value) {
     else
       $plages[$key]->_ref_operations[$key2]->loadRefsFwd();
   }
+}
+
+$urgences = new COperation;
+$where = array();
+$where["date"]     = "= '".mbDate()."'";
+$where["salle_id"] = "= '$salle'";
+$order = "chir_id";
+$urgences = $urgences->loadList($where);
+foreach($urgences as $keyOp => $curr_op) {
+  $urgences[$keyOp]->loadRefsFwd();
+  $urgences[$keyOp]->_ref_sejour->loadRefPatient();
 }
 
 // Opération selectionnée
@@ -99,6 +110,7 @@ $smarty->assign("listAnesthType", dPgetSysVal("AnesthType"));
 $smarty->assign("listAnesths"   , $listAnesths             );
 $smarty->assign("listChirs"     , $listChirs               );
 $smarty->assign("plages"        , $plages                  );
+$smarty->assign("urgences"      , $urgences                );
 $smarty->assign("selOp"         , $selOp                   );
 $smarty->assign("timing"        , $timing                  );
 $smarty->assign("date"          , $date                    );
