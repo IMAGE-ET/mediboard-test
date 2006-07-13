@@ -9,17 +9,24 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass("dPcabinet", "file"));
+require_once( $AppUI->getModuleClass("dPcabinet", "files"));
   
+set_time_limit(90);
+
 if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
+
+$where["file_id"] = "< '1000'";
+$file = new CFile();
+$files = $file->loadList($where);
 
 // Création du template
 require_once( $AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
+$smarty->assign("files", $files);
 
-$smarty->display("httpreq_check_file_integrity.tpl");
+$smarty->display("inc_check_file_integrity.tpl");
 
 ?>
