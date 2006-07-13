@@ -21,14 +21,14 @@
             </form>
             <br />
             Intervention le <strong>{{$consult_anesth->_ref_operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
-            par le <strong>Dr. {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong><br />
+            par le <strong>Dr. {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong> (coté {{$consult->_ref_consult_anesth->_ref_operation->cote}})<br />
             <ul>
               {{foreach from=$consult_anesth->_ref_operation->_ext_codes_ccam item=curr_code}}
               <li><em>{{$curr_code->libelleLong}}</em> ({{$curr_code->code}})</li>
               {{/foreach}}
             </ul>
           </td>
-
+          
           <td class="text" width="200">
             <form name="EditPosFrm" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="{{$m}}" />
