@@ -14,19 +14,19 @@
         </tr>
         {{foreach from=$listStock item=curr_stock}}
         <tr>
-          <td>
+          <td class="text">
             <a href="index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id={{$curr_stock->stock_id}}" title="Modifier le stock">
               {{$curr_stock->stock_id}}
             </a>
           </td>
-          <td>
+          <td class="text">
             <a href="index.php?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id={{$curr_stock->_ref_materiel->materiel_id}}" title="Modifier le matériel">
               {{$curr_stock->_ref_materiel->nom}} ({{$curr_stock->_ref_materiel->_ref_category->category_name}})
               {{if $curr_stock->_ref_materiel->code_barre}}<br />{{$curr_stock->_ref_materiel->code_barre}}{{/if}}
-              {{if $curr_stock->_ref_materiel->description}}<br />{{$curr_stock->_ref_materiel->description}}{{/if}}
+              {{if $curr_stock->_ref_materiel->description}}<br />{{$curr_stock->_ref_materiel->description|nl2br}}{{/if}}
             </a>
           </td>
-          <td>{{$curr_stock->_ref_group->text}}</td>
+          <td class="text">{{$curr_stock->_ref_group->text}}</td>
           <td>{{$curr_stock->seuil_cmd}}</td>
           <td>{{$curr_stock->quantite}}</td>
         </tr>

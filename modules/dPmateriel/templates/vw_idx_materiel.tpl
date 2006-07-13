@@ -19,13 +19,13 @@
               {{$curr_materiel->materiel_id}}
             </a>
           </td>
-          <td>
+          <td class="text">
             <a href="index.php?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id={{$curr_materiel->materiel_id}}" title="Modifier le matériel">
               {{$curr_materiel->nom}}
             </a>
           </td>
-          <td>{{$curr_materiel->_ref_category->category_name}}</td>
-          <td>{{$curr_materiel->description|nl2br}}</td>
+          <td class="text">{{$curr_materiel->_ref_category->category_name}}</td>
+          <td class="text">{{$curr_materiel->description|nl2br}}</td>
           <td>{{$curr_materiel->code_barre}}</td>
         </tr>
         {{/foreach}}        
@@ -98,7 +98,7 @@
          </tr>
          {{foreach from=$materiel->_ref_stock item=curr_stock}}
          <tr>
-           <td>{{$curr_stock->_ref_group->text}}</td>
+           <td class="text">{{$curr_stock->_ref_group->text}}</td>
            <td>{{$curr_stock->seuil_cmd}}</td>
            <td>{{$curr_stock->quantite}}</td>
          </tr>
@@ -124,7 +124,7 @@
          </tr>
          {{foreach from=$materiel->_ref_refMateriel item=curr_refMateriel}}
          <tr>
-           <td>{{$curr_refMateriel->_ref_fournisseur->societe}}</td>
+           <td class="text">{{$curr_refMateriel->_ref_fournisseur->societe}}</td>
            <td>{{$curr_refMateriel->quantite}}</td>
            <td>{{$curr_refMateriel->prix}}</td>
            <td>{{$curr_refMateriel->_prix_unitaire|string_format:"%.2f"}}</td>

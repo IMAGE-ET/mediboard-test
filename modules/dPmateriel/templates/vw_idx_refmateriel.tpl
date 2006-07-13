@@ -7,8 +7,8 @@
       <table class="tbl">
         <tr>
           <th>id</th>
-          <th>Matériel</th>
           <th>Fournisseur</th>
+          <th>Matériel</th>
           <th>Quantité</th>
           <th>Prix</th>
           <th>Prix Unitaire</th>
@@ -20,8 +20,8 @@
               {{$curr_reference->reference_id}}
             </a>
           </td>
-          <td>{{$curr_reference->_ref_fournisseur->societe}}</td>
-          <td>{{$curr_reference->_ref_materiel->nom}}</td>
+          <td class="text">{{$curr_reference->_ref_fournisseur->societe}}</td>
+          <td class="text">{{$curr_reference->_ref_materiel->nom|nl2br}}</td>
           <td>{{$curr_reference->quantite}}</td>
           <td>{{$curr_reference->prix}}</td>
           <td>{{$curr_reference->_prix_unitaire|string_format:"%.2f"}}</td>

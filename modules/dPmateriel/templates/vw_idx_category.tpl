@@ -16,7 +16,7 @@
               {{$curr_category->category_id}}
             </a>
           </td>
-          <td>
+          <td class="text">
             <a href="index.php?m=dPmateriel&amp;tab=vw_idx_category&amp;category_id={{$curr_category->category_id}}" title="Modifier le catégorie">
               {{$curr_category->category_name}}
             </a>

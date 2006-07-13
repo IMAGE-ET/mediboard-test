@@ -51,13 +51,13 @@ function pageMain() {
               {{$curr_fournisseur->fournisseur_id}}
             </a>
           </td>
-          <td>
+          <td class="text">
             <a href="index.php?m=dPmateriel&amp;tab=vw_idx_fournisseur&amp;fournisseur_id={{$curr_fournisseur->fournisseur_id}}" title="Modifier le fournisseur">
               {{$curr_fournisseur->societe}}
             </a>
           </td>
-          <td>{{$curr_fournisseur->nom}} {{$curr_fournisseur->prenom}}</td>
-          <td>
+          <td class="text">{{$curr_fournisseur->nom}} {{$curr_fournisseur->prenom}}</td>
+          <td class="text">
             {{$curr_fournisseur->adresse|nl2br}}<br />{{$curr_fournisseur->codepostal}} {{$curr_fournisseur->ville}}
           </td>
           <td>{{$curr_fournisseur->telephone}}</td>
@@ -152,7 +152,7 @@ function pageMain() {
          </tr>
          {{foreach from=$fournisseur->_ref_references item=curr_refmateriel}}
          <tr>
-           <td>{{$curr_refmateriel->_ref_materiel->nom}}</td>
+           <td class="text">{{$curr_refmateriel->_ref_materiel->nom}}</td>
            <td>{{$curr_refmateriel->quantite}}</td>
            <td>{{$curr_refmateriel->prix}}</td>
            <td>{{$curr_refmateriel->_prix_unitaire|string_format:"%.2f"}}</td>
