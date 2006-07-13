@@ -10,10 +10,10 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour') );
+require_once($AppUI->getModuleClass("dPplanningOp", "sejour"));
 
 $sejour_id  = mbGetValueFromGetOrSession("sejour_id", null);
 
@@ -32,13 +32,13 @@ foreach($sejour->_ref_operations as $keyOp => $value) {
 $sejour->loadRefGHM();
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+require_once( $AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign("sejour", $sejour);
+$smarty->assign("sejour" , $sejour              );
 $smarty->assign("patient", $sejour->_ref_patient);
-$smarty->assign("GHM", $sejour->_ref_GHM);
+$smarty->assign("GHM"    , $sejour->_ref_GHM    );
 
-$smarty->display('labo_groupage.tpl');
+$smarty->display("labo_groupage.tpl");
 
 ?>

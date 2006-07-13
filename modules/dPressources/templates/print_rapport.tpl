@@ -2,15 +2,15 @@
   <tr>
     <th>
       <a href="javascript:window.print()">
-        &mdash; Dr. {$prat->_view} &mdash<br />
-        Plages du {$deb|date_format:"%A %d %b %Y"}
-        au {$fin|date_format:"%A %d %B %Y"}<br />
-        {$plages|@count}
-        {if $type}
+        &mdash; Dr. {{$prat->_view}} &mdash<br />
+        Plages du {{$deb|date_format:"%A %d %b %Y"}}
+        au {{$fin|date_format:"%A %d %B %Y"}}<br />
+        {{$plages|@count}}
+        {{if $type}}
         plage(s) payée(s)
-        {else}
+        {{else}}
         plage(s) en attente de paiement
-        {/if}
+        {{/if}}
         sur la periode
       </a>
     </th>
@@ -24,22 +24,22 @@
           <th>Libellé</th>
           <th>Tarif</th>
         </tr>
-        {foreach from=$plages item=curr_plage}
+        {{foreach from=$plages item=curr_plage}}
         <tr>
-          <td>{$curr_plage->date|date_format:"%A %d %B %Y"}</td>
+          <td>{{$curr_plage->date|date_format:"%A %d %B %Y"}}</td>
           <td>
-            {$curr_plage->debut|date_format:"%Hh%M"}
+            {{$curr_plage->debut|date_format:"%Hh%M"}}
             &mdash
-            {$curr_plage->fin|date_format:"%Hh%M"}
+            {{$curr_plage->fin|date_format:"%Hh%M"}}
           </td>
-          <td>{$curr_plage->libelle}</td>
-          <td>{$curr_plage->tarif} €</td>
+          <td>{{$curr_plage->libelle}}</td>
+          <td>{{$curr_plage->tarif}} €</td>
         </tr>
-        {/foreach}
+        {{/foreach}}
         <tr>
           <th colspan="2" />
           <th>Total</th>
-          <td><strong>{$total} €</strong></td>
+          <td><strong>{{$total}} €</strong></td>
         </tr>
       </table>
     </td>

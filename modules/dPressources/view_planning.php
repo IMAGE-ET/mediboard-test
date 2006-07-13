@@ -9,11 +9,11 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPressources', 'plageressource') );
-require_once( $AppUI->getModuleClass('mediusers') );
+require_once($AppUI->getModuleClass("dPressources", "plageressource"));
+require_once($AppUI->getModuleClass("mediusers"));
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+if(!$canRead) {
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 // Période
@@ -98,16 +98,18 @@ if($isprat) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+require_once( $AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('debut', $debut);
-$smarty->assign('prec', $prec);
-$smarty->assign('suiv', $suiv);
-$smarty->assign('plages', $plages);
-$smarty->assign('prat', $prat);
-$smarty->assign('isprat', $isprat);
-$smarty->assign('compte', $compte);
-$smarty->assign('listHours', $listHours);
+$smarty->assign("debut"    , $debut);
+$smarty->assign("prec"     , $prec);
+$smarty->assign("suiv"     , $suiv);
+$smarty->assign("plages"   , $plages);
+$smarty->assign("prat"     , $prat);
+$smarty->assign("isprat"   , $isprat);
+$smarty->assign("compte"   , $compte);
+$smarty->assign("listHours", $listHours);
 
-$smarty->display('view_planning.tpl');
+$smarty->display("view_planning.tpl");
+
+?>

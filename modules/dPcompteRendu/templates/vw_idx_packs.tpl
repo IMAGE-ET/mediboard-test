@@ -1,6 +1,4 @@
 <!--  $Id$ -->
-
-{literal}
 <script type="text/javascript">
 
 function checkForm() {
@@ -26,7 +24,6 @@ function checkForm() {
   return true;
 }
 </script>
-{/literal}
 
 <table class="main">
 
@@ -35,7 +32,7 @@ function checkForm() {
 
     <form name="filterFrm" action="?" method="get">
     
-    <input type="hidden" name="m" value="{$m}" />
+    <input type="hidden" name="m" value="{{$m}}" />
         
     <table class="form">
 
@@ -44,11 +41,11 @@ function checkForm() {
         <td>
           <select name="filter_user_id" onchange="this.form.submit()">
             <option value="0">&mdash; Tous les utilisateurs</option>
-            {foreach from=$users item=curr_user}
-            <option value="{$curr_user->user_id}" {if $curr_user->user_id == $user_id} selected="selected" {/if}>
-              {$curr_user->_view}
+            {{foreach from=$users item=curr_user}}
+            <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $user_id}} selected="selected" {{/if}}>
+              {{$curr_user->_view}}
             </option>
-            {/foreach}
+            {{/foreach}}
           </select>
         </td>
       </tr>
@@ -68,15 +65,15 @@ function checkForm() {
       <th>modeles</th>
     </tr>
 
-    {foreach from=$packs item=curr_pack}
+    {{foreach from=$packs item=curr_pack}}
     <tr>
-      {eval var=$curr_pack->pack_id assign="pack_id"}
-      {assign var="href" value="?m=$m&amp;tab=$tab&amp;pack_id=$pack_id"}
-      <td><a href="{$href}">{$curr_pack->_ref_chir->_view}</a></td>
-      <td><a href="{$href}">{$curr_pack->nom}</a></td>
-      <td><a href="{$href}">{$curr_pack->_modeles|@count}</a></td>
+      {{eval var=$curr_pack->pack_id assign="pack_id"}}
+      {{assign var="href" value="?m=$m&amp;tab=$tab&amp;pack_id=$pack_id"}}
+      <td><a href="{{$href}}">{{$curr_pack->_ref_chir->_view}}</a></td>
+      <td><a href="{{$href}}">{{$curr_pack->nom}}</a></td>
+      <td><a href="{{$href}}">{{$curr_pack->_modeles|@count}}</a></td>
     </tr>
-    {/foreach}
+    {{/foreach}}
       
     </table>
 
@@ -84,23 +81,23 @@ function checkForm() {
   
   <td class="pane">
 
-	<a href="index.php?m={$m}&amp;tab={$tab}&amp;pack_id=0"><strong>Créer un pack</strong></a>
+	<a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;pack_id=0"><strong>Créer un pack</strong></a>
 
-    <form name="editFrm" action="?m={$m}" method="post" onsubmit="return checkForm()">
+    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
 
     <input type="hidden" name="dosql" value="do_pack_aed" />
-    <input type="hidden" name="pack_id" value="{$pack->pack_id}" />
+    <input type="hidden" name="pack_id" value="{{$pack->pack_id}}" />
     <input type="hidden" name="del" value="0" />
 
     <table class="form">
 
     <tr>
       <th class="category" colspan="2">
-      {if $pack->pack_id}
+      {{if $pack->pack_id}}
         Modification d'un pack
-      {else}
+      {{else}}
         Création d'un pack
-      {/if}
+      {{/if}}
       </th>
     </tr>
 
@@ -109,36 +106,36 @@ function checkForm() {
         <label for="chir_id" title="Utilisateur concerné, obligatoire.">Utilisateur</label>
       </th>
       <td>
-        <select name="chir_id" title="{$pack->_props.chir_id}">
+        <select name="chir_id" title="{{$pack->_props.chir_id}}">
           <option value="0">&mdash; Choisir un utilisateur</option>
-          {foreach from=$users item=curr_user}
-          <option value="{$curr_user->user_id}" {if $curr_user->user_id == $pack->chir_id} selected="selected" {/if}>
-            {$curr_user->_view}
+          {{foreach from=$users item=curr_user}}
+          <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $pack->chir_id}} selected="selected" {{/if}}>
+            {{$curr_user->_view}}
           </option>
-          {/foreach}
+          {{/foreach}}
         </select>
       </td>
     </tr>
 
     <tr>
       <th><label for="nom" title="intitulé du pack, obligatoire.">Intitulé</label></th>
-      <td><input type="text" title="{$pack->_props.nom}" name="nom" value="{$pack->nom}" /></td>
+      <td><input type="text" title="{{$pack->_props.nom}}" name="nom" value="{{$pack->nom}}" /></td>
     </tr>
 
     <tr>
       <td class="button" colspan="2">
-        {if $pack->pack_id}
+        {{if $pack->pack_id}}
         <button class="submit" type="submit">
           Valider
         </button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{ldelim}typeName:'le pack',objName:'{$pack->nom|escape:javascript}'{rdelim})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le pack',objName:'{{$pack->nom|escape:javascript}}'})">
           Supprimer
         </button>
-        {else}
+        {{else}}
         <button class="submit" type="submit">
           Créer
         </button>
-        {/if}
+        {{/if}}
       </td>
     </tr>
 
@@ -148,45 +145,45 @@ function checkForm() {
 
   </td>
   
-  {if $pack->pack_id}
+  {{if $pack->pack_id}}
   <td class="pane">
   
     <table class="form">
-      {if $pack->_modeles|@count}
+      {{if $pack->_modeles|@count}}
       <tr><th class="category" colspan="2">Modèles du pack</th></tr>
-      {foreach from=$pack->_modeles item=curr_modele}
-      <tr><td>{$curr_modele->nom}</td>
+      {{foreach from=$pack->_modeles item=curr_modele}}
+      <tr><td>{{$curr_modele->nom}}</td>
         <td>
-          <form name="delFrm{$pack->pack_id}" action="?m={$m}" method="post" onsubmit="return checkForm()">
+          <form name="delFrm{{$pack->pack_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
           <input type="hidden" name="dosql" value="do_pack_aed" />
-          <input type="hidden" name="pack_id" value="{$pack->pack_id}" />
+          <input type="hidden" name="pack_id" value="{{$pack->pack_id}}" />
           <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="modeles" value="{$pack->modeles|escape:javascript}" />
-          <input type="hidden" name="_del" value="{$curr_modele->compte_rendu_id}" />
+          <input type="hidden" name="modeles" value="{{$pack->modeles|escape:javascript}}" />
+          <input type="hidden" name="_del" value="{{$curr_modele->compte_rendu_id}}" />
           <button class="trash" type="submit"></button>
           </form>
         </td>
       </tr>
-      {/foreach}
-      {/if}
+      {{/foreach}}
+      {{/if}}
       <tr><th class="category" colspan="2">Ajouter un modèle</th></tr>
       <tr><td colspan="2">
-        <form name="addFrm" action="?m={$m}" method="post" onsubmit="return checkForm()">
+        <form name="addFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
         <input type="hidden" name="dosql" value="do_pack_aed" />
-        <input type="hidden" name="pack_id" value="{$pack->pack_id}" />
+        <input type="hidden" name="pack_id" value="{{$pack->pack_id}}" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="modeles" value="{$pack->modeles|escape:javascript}" />
+        <input type="hidden" name="modeles" value="{{$pack->modeles|escape:javascript}}" />
         <select name="_new">
           <option value="">&mdash; Choisir un modèle</option>
           <optgroup label="Modèles du praticien">
-            {foreach from=$listModelePrat item=curr_modele}
-            <option value="{$curr_modele->compte_rendu_id}">{$curr_modele->nom}</option>
-            {/foreach}
+            {{foreach from=$listModelePrat item=curr_modele}}
+            <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
+            {{/foreach}}
           </optgroup>
           <optgroup label="Modèles du cabinet">
-            {foreach from=$listModeleFunc item=curr_modele}
-            <option value="{$curr_modele->compte_rendu_id}">{$curr_modele->nom}</option>
-            {/foreach}
+            {{foreach from=$listModeleFunc item=curr_modele}}
+            <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
+            {{/foreach}}
           </optgroup>
         </select>
         <button type="submit"><img src="modules/dPcompteRendu/images/check.png" /></button>
@@ -195,7 +192,7 @@ function checkForm() {
     </table>
   
   </td>
-  {/if}
+  {{/if}}
   
 </tr>
 

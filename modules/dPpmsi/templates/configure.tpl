@@ -1,4 +1,3 @@
-{literal}
 <script type="text/javascript">
 
 var aActionTypes = ["extractFiles", "AddCM", "AddDiagCM", "AddActes", "AddGHM", "AddCMA", "AddIncomp", "AddArbre"];
@@ -27,7 +26,6 @@ function doGHSAction(sType, bFollowed) {
 }
 
 </script>
-{/literal}
 
 <h2>Création et remplissage des la base des GHS / GHM</h2>
 

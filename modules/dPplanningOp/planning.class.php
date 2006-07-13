@@ -449,7 +449,7 @@ class COperation extends CMbObject {
           
           
           $possible_acte->executant_id = $possible_acte->code_activite == 4 ?
-            $this->_ref_plageop->anesth_id : 
+            $this->_ref_anesth->user_id : 
             $this->chir_id;
           
           if (!$depassement_affecte and $possible_acte->code_activite == 1) {

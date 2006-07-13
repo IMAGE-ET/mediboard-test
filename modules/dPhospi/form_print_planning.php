@@ -11,9 +11,9 @@ global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getModuleClass("mediusers"));
 require_once($AppUI->getModuleClass("mediusers", "functions"));
-require_once($AppUI->getModuleClass("dPhospi", "service"));
+require_once($AppUI->getModuleClass("dPhospi"  , "service"  ));
 
-if (!$canRead) {
+if(!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
@@ -27,16 +27,16 @@ $listServ = new CService();
 $listServ = $listServ->loadlist();
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP;
 
-$smarty->assign('today', date("Y-m-d")." 06:00:00");
-$smarty->assign('tomorrow', date("Y-m-d")." 21:00:00");
+$smarty->assign("today"   , date("Y-m-d")." 06:00:00");
+$smarty->assign("tomorrow", date("Y-m-d")." 21:00:00");
 
-$smarty->assign('listPrat', $listPrat);
-$smarty->assign('listSpec', $listSpec);
-$smarty->assign('listServ', $listServ);
+$smarty->assign("listPrat", $listPrat);
+$smarty->assign("listSpec", $listSpec);
+$smarty->assign("listServ", $listServ);
 
-$smarty->display('form_print_planning.tpl');
+$smarty->display("form_print_planning.tpl");
 
 ?>

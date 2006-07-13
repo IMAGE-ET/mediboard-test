@@ -8,9 +8,10 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m, $tab, $dPconfig;
-require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour'  ) );
-require_once( $AppUI->getModuleClass('dPpatients'  , 'patients') );
-require_once( $AppUI->getModuleClass('mediusers') );
+
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPplanningOp", "sejour"  ));
+require_once($AppUI->getModuleClass("dPpatients"  , "patients"));
 
 $mode_operation = mbGetValueFromGet("mode_operation", 0);
 $sejour_id      = mbGetValueFromGet("sejour_id"     , 0);
@@ -49,7 +50,7 @@ for ($i = 0; $i < 60; $i += $sejourConfig["min_intervalle"]) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("sejour"   , $sejour);
@@ -62,6 +63,6 @@ $smarty->assign("hours"      , $hours);
 $smarty->assign("mins"       , $mins);
 $smarty->assign("mode_operation", $mode_operation);
 
-$smarty->display('inc_form_sejour.tpl');
+$smarty->display("inc_form_sejour.tpl");
 
 ?>

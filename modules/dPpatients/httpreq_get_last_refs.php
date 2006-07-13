@@ -8,7 +8,8 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m;
-require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
+
+require_once($AppUI->getModuleClass("dPpatients", "patients"));
 
 $patient_id = mbGetValueFromGet("patient_id", 0);
 $patient = new CPatient;
@@ -27,10 +28,12 @@ foreach($patient->_ref_consultations as $key => $consult) {
 
 if ($canRead) {
   // Création du template
-  require_once( $AppUI->getSystemClass ('smartydp' ) );
-  $smarty = new CSmartyDP;
+  require_once($AppUI->getSystemClass("smartydp"));
+  $smarty = new CSmartyDP(1);
 
-  $smarty->assign('patient', $patient);
+  $smarty->assign("patient", $patient);
 
-  $smarty->display('httpreq_get_last_refs.tpl');
+  $smarty->display("httpreq_get_last_refs.tpl");
 }
+
+?>

@@ -8,12 +8,13 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m;
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'pack') );
-require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
+
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
+require_once($AppUI->getModuleClass("dPplanningOp" , "planning"    ));
+require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu" ));
+require_once($AppUI->getModuleClass("dPcompteRendu", "pack"        ));
+require_once($AppUI->getModuleClass("dPpatients"   , "patients"    ));
 
 if (!$canEdit) {
 	$AppUI->redirect( "m=system&a=access_denied" );
@@ -57,21 +58,20 @@ if ($patient->patient_id) {
       }
     }
   }
-  
 }
 
 $canEditCabinet = !getDenyEdit("dPcabinet");
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+require_once( $AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
 $smarty->debugging = false;
 
-$smarty->assign('patient', $patient);
-$smarty->assign('listPrat', $listPrat);
-$smarty->assign('canEditCabinet', $canEditCabinet);
+$smarty->assign("patient"       , $patient       );
+$smarty->assign("listPrat"      , $listPrat      );
+$smarty->assign("canEditCabinet", $canEditCabinet);
 
-$smarty->display('vw_dossier.tpl');
+$smarty->display("vw_dossier.tpl");
 
 ?>

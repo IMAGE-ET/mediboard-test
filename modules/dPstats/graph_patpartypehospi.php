@@ -8,17 +8,19 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m;
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPhospi', 'service') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph'));
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph_bar'));
+
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPhospi"     , "service" ));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
+
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"    ));
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_bar"));
 
 $debut      = mbGetValueFromGet("debut"     , mbDate("-1 YEAR"));
-$fin        = mbGetValueFromGet("fin"       , mbDate());
-$prat_id    = mbGetValueFromGet("prat_id"   , 0);
-$service_id = mbGetValueFromGet("service_id", 0);
-$type_adm   = mbGetValueFromGet("type_adm"  , 0);
+$fin        = mbGetValueFromGet("fin"       , mbDate()         );
+$prat_id    = mbGetValueFromGet("prat_id"   , 0                );
+$service_id = mbGetValueFromGet("service_id", 0                );
+$type_adm   = mbGetValueFromGet("type_adm"  , 0                );
 
 $total = 0;
 
@@ -115,9 +117,9 @@ $graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
 $graph->legend->Pos(0.02,0.02, "right", "top");
 
 // Create the bar pot
-$colors = array('comp' => "#aa5500",
-                'ambu' => "#55aa00",
-                'exte' => "#0055aa");
+$colors = array("comp" => "#aa5500",
+                "ambu" => "#55aa00",
+                "exte" => "#0055aa");
 $listPlots = array();
 foreach($patbyhospi as $key => $value) {
   $bplot = new BarPlot($value["sejour"]);
@@ -126,7 +128,7 @@ foreach($patbyhospi as $key => $value) {
   $bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);
   $bplot->SetColor("white");
   $bplot->setLegend($value["nom"]);
-  $bplot->value->SetFormat('%01.0f');
+  $bplot->value->SetFormat("%01.0f");
   $bplot->value->SetColor($colors[$key]);
   $bplot->value->SetFont(FF_ARIAL,FS_NORMAL, 8); 
   //$bplot->value->show();
@@ -135,7 +137,7 @@ foreach($patbyhospi as $key => $value) {
 
 $gbplot = new AccBarPlot($listPlots);
 $gbplot->SetWidth(0.6);
-$gbplot->value->SetFormat('%01.0f'); 
+$gbplot->value->SetFormat("%01.0f"); 
 $gbplot->value->show();
 
 // Set color for the frame of each bar

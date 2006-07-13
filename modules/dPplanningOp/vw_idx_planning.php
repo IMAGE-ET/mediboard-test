@@ -9,16 +9,16 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once( $AppUI->getModuleClass('dPbloc', 'plagesop') );
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu') );
+require_once($AppUI->getModuleClass("mediusers") );
+require_once($AppUI->getModuleClass("dPplanningOp" , "planning"   ));
+require_once($AppUI->getModuleClass("dPbloc"       , "plagesop"   ));
+require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
+if(!$canRead) {
+	$AppUI->redirect("m=system&a=access_denied");
 }
 
-$date   = mbGetValueFromGetOrSession("date", mbDate());
+$date      = mbGetValueFromGetOrSession("date", mbDate());
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
 
@@ -90,19 +90,19 @@ foreach($listDay as $key => $value) {
 
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('date', $date);
-$smarty->assign('lastmonth', $lastmonth);
-$smarty->assign('nextmonth', $nextmonth);
-$smarty->assign('listChir', $listChir);
-$smarty->assign('selChir', $selChir);
-$smarty->assign('crList', $crList);
-$smarty->assign('hospiList', $hospiList);
-$smarty->assign('listPlages', $listPlages);
-$smarty->assign('listDay', $listDay);
+$smarty->assign("date"      , $date      );
+$smarty->assign("lastmonth" , $lastmonth );
+$smarty->assign("nextmonth" , $nextmonth );
+$smarty->assign("listChir"  , $listChir  );
+$smarty->assign("selChir"   , $selChir   );
+$smarty->assign("crList"    , $crList    );
+$smarty->assign("hospiList" , $hospiList );
+$smarty->assign("listPlages", $listPlages);
+$smarty->assign("listDay"   , $listDay   );
 
-$smarty->display('vw_idx_planning.tpl');
+$smarty->display("vw_idx_planning.tpl");
 
 ?>

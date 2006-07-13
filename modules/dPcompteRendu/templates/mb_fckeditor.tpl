@@ -1,6 +1,3 @@
-{literal}
-
-
 function debugAlert(oTarget, sLabel) {
   var sMsg = sLabel + " : " ;
   
@@ -22,37 +19,35 @@ function debugAlert(oTarget, sLabel) {
   
   alert(sMsg);
 }
-{/literal}
-
 
 // Mediboard Combo configuration
 var aMbCombos = new Array();
 
-var bAutoSelectSpans = {if $templateManager->valueMode} false {else} true {/if};
+var bAutoSelectSpans = {{if $templateManager->valueMode}} false {{else}} true {{/if}};
 
 // Add properties Combo
 var oMbCombo = new Object();
 oMbCombo.commandName = "MbField";
-oMbCombo.spanClass = {if $templateManager->valueMode} "value" {else} "field" {/if};
+oMbCombo.spanClass = {{if $templateManager->valueMode}} "value" {{else}} "field" {{/if}};
 oMbCombo.commandLabel = "Champs";
 
 var aOptions = new Array();
 oMbCombo.options = aOptions;
 aMbCombos.push(oMbCombo);
 
-{foreach from=$templateManager->properties item=property}
-  aOptions.push( {ldelim} 
-    view: "{$property.field|escape:"htmlall"|escape:"javascript"}" ,
+{{foreach from=$templateManager->properties item=property}}
+  aOptions.push( {
+    view: "{{$property.field|escape:"htmlall"|escape:"javascript"}}" ,
     item: 
-      {if $templateManager->valueMode} 
-        "{$property.value|escape:"htmlall"|nl2br|escape:"javascript"}" 
-      {else} 
-        "[{$property.field|escape:"htmlall"|escape:"javascript"}]" 
-      {/if}
-    {rdelim});
-{/foreach}
+      {{if $templateManager->valueMode}} 
+        "{{$property.value|escape:"htmlall"|nl2br|escape:"javascript"}}" 
+      {{else}} 
+        "[{{$property.field|escape:"htmlall"|escape:"javascript"}}]" 
+      {{/if}}
+    });
+{{/foreach}}
 
-{if !$templateManager->valueMode}
+{{if !$templateManager->valueMode}}
 // Add name lists Combo
 var oMbCombo = new Object();
 oMbCombo.commandName = "MbNames";
@@ -63,13 +58,13 @@ var aOptions = new Array();
 oMbCombo.options = aOptions;
 aMbCombos.push(oMbCombo);
 
-{foreach from=$templateManager->lists item=list}
-  aOptions.push( {ldelim} 
-    view: "{$list.name|escape:"htmlall"|escape:"javascript"}" ,
-    item: "[Liste - {$list.name|escape:"htmlall"|escape:"javascript"}]"
-    {rdelim});
-{/foreach}
-{/if}
+{{foreach from=$templateManager->lists item=list}}
+  aOptions.push( { 
+    view: "{{$list.name|escape:"htmlall"|escape:"javascript"}}" ,
+    item: "[Liste - {{$list.name|escape:"htmlall"|escape:"javascript"}}]"
+    });
+{{/foreach}}
+{{/if}}
 
 // Add helpers Combo
 var oMbCombo = new Object();
@@ -81,12 +76,12 @@ var aOptions = new Array();
 oMbCombo.options = aOptions;
 aMbCombos.push(oMbCombo);
 
-{foreach from=$templateManager->helpers key=helperName item=helperText}
-  aOptions.push( {ldelim} 
-    view: "{$helperName|escape:"htmlall"|escape:"javascript"}" ,
-    item: "{$helperText|escape:"htmlall"|nl2br|escape:"javascript"}"
-    {rdelim});
-{/foreach}
+{{foreach from=$templateManager->helpers key=helperName item=helperText}}
+  aOptions.push( { 
+    view: "{{$helperName|escape:"htmlall"|escape:"javascript"}}" ,
+    item: "{{$helperText|escape:"htmlall"|nl2br|escape:"javascript"}}"
+    });
+{{/foreach}}
 
 // Toolbar configuration
 aToolbarSet = FCKConfig.ToolbarSets['Default'];
@@ -97,9 +92,9 @@ aToolbarSet = FCKConfig.ToolbarSets['Default'];
 
 // Add MbCombos toolbar
 aMbToolbar = new Array();
-for (var i = 0; i < aMbCombos.length; i++) {ldelim}
+for (var i = 0; i < aMbCombos.length; i++) {
   aMbToolbar.push(aMbCombos[i].commandName);
-{rdelim}
+}
 // Add MbPageBreak button
 aMbToolbar.push("mbPageBreak");
 aToolbarSet.push(aMbToolbar);
@@ -113,9 +108,9 @@ aToolbarSet.splice(11, 1);
 // FCK editor general configuration
 sMbPath = "../../../";
 
-{if $configAlert}
-alert('{$configAlert|escape:javascript}');
-{/if}
+{{if $configAlert}}
+alert('{{$configAlert|escape:javascript}}');
+{{/if}}
 
 FCKConfig.Plugins.Add( 'tablecommands', null);
 
@@ -123,7 +118,7 @@ sMbPluginsPath = sMbPath + "modules/dPcompteRendu/fcke_plugins/" ;
 FCKConfig.Plugins.Add( 'mbcombo'    , 'en,fr', sMbPluginsPath ) ;
 FCKConfig.Plugins.Add( 'mbpagebreak', 'en,fr', sMbPluginsPath ) ;
 
-FCKConfig.EditorAreaCSS = sMbPath + "style/mediboard/htmlarea.css?build={$mb_version_build}";
+FCKConfig.EditorAreaCSS = sMbPath + "style/mediboard/htmlarea.css?build={{$mb_version_build}}";
 FCKConfig.DefaultLanguage = "fr" ;
 FCKConfig.AutoDetectLanguage = false ;
 

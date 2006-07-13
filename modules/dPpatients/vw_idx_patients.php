@@ -9,9 +9,9 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
+require_once($AppUI->getModuleClass("dPpatients"  , "patients"));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
+require_once($AppUI->getModuleClass("dPcabinet"   , "consultation"));
 
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
@@ -22,16 +22,18 @@ $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
 if ($mediuser->isFromType(array("Chirurgien"))) {
   $chir = $mediuser;
-} else
+} else {
   $chir = null;
+}
 
 // L'utilisateur est-il un anesthésiste
 $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
 if ($mediuser->isFromType(array("Anesthésiste"))) {
   $anesth = $mediuser;
-} else
+} else {
   $anesth = null;
+}
 
 $patient_id = mbGetValueFromGetOrSession("id", 0);
 
@@ -49,18 +51,19 @@ if ($patient->patient_id) {
 }
 
 // Récuperation des patients recherchés
-$patient_nom       = mbGetValueFromGetOrSession("nom"   , '');
-$patient_prenom    = mbGetValueFromGetOrSession("prenom", '');
-$patient_naissance = mbGetValueFromGetOrSession("naissance", 'off');
-$patient_day       = mbGetValueFromGetOrSession("Date_Day", date("d"));
+$patient_nom       = mbGetValueFromGetOrSession("nom"       , ""       );
+$patient_prenom    = mbGetValueFromGetOrSession("prenom"    , ""       );
+$patient_naissance = mbGetValueFromGetOrSession("naissance" , "off"    );
+$patient_day       = mbGetValueFromGetOrSession("Date_Day"  , date("d"));
 $patient_month     = mbGetValueFromGetOrSession("Date_Month", date("m"));
-$patient_year      = mbGetValueFromGetOrSession("Date_Year", date("Y"));
+$patient_year      = mbGetValueFromGetOrSession("Date_Year" , date("Y"));
 
 $where = null;
 if ($patient_nom   ) $where[] = "nom LIKE '".addslashes($patient_nom)."%'";
 if ($patient_prenom) $where[] = "prenom LIKE '".addslashes($patient_prenom)."%'";
-if ($patient_naissance == "on")
+if ($patient_naissance == "on") {
   $where["naissance"] = "= '$patient_year/$patient_month/$patient_day'";
+}
 
 $patients = null;
 if ($where) {
@@ -75,19 +78,19 @@ $canEditCabinet = !getDenyEdit("dPcabinet");
 
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass ("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('nom', $patient_nom);
-$smarty->assign('prenom', $patient_prenom);
-$smarty->assign('naissance', $patient_naissance);
-$smarty->assign('date', "$patient_year-$patient_month-$patient_day");
-$smarty->assign('patients', $patients);
-$smarty->assign('patient', $patient);
-$smarty->assign('chir', $chir);
-$smarty->assign('anesth', $anesth);
-$smarty->assign('listPrat', $listPrat);
-$smarty->assign('canEditCabinet', $canEditCabinet);
+$smarty->assign("nom"           , $patient_nom                               );
+$smarty->assign("prenom"        , $patient_prenom                            );
+$smarty->assign("naissance"     , $patient_naissance                         );
+$smarty->assign("date"          , "$patient_year-$patient_month-$patient_day");
+$smarty->assign("patients"      , $patients                                  );
+$smarty->assign("patient"       , $patient                                   );
+$smarty->assign("chir"          , $chir                                      );
+$smarty->assign("anesth"        , $anesth                                    );
+$smarty->assign("listPrat"      , $listPrat                                  );
+$smarty->assign("canEditCabinet", $canEditCabinet                            );
 
-$smarty->display('vw_idx_patients.tpl');
+$smarty->display("vw_idx_patients.tpl");
 ?>

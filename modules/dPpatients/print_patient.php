@@ -9,16 +9,15 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
+require_once($AppUI->getModuleClass("dPpatients", "patients"));
 
-if (!$canRead) {			// lock out users that do not have at least readPermission on this module
-	$AppUI->redirect( "m=system&a=access_denied" );
+if (!$canRead) {
+	$AppUI->redirect("m=system&a=access_denied");
 }
 
 $today = date("d/m/Y");
 
-// Récupération des variables passées en GET
-$patient_id = dPgetParam($_GET, "patient_id", 0);
+$patient_id = mbGetValueFromGet("patient_id", 0);
 
 //Création du patient
 $patient = new CPatient();
@@ -38,10 +37,12 @@ foreach($patient->_ref_consultations as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
-$smarty->assign('patient', $patient);
-$smarty->assign('today', $today);
-$smarty->display('print_patient.tpl');
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
+
+$smarty->assign("patient", $patient);
+$smarty->assign("today"  , $today  );
+
+$smarty->display("print_patient.tpl");
 
 ?>

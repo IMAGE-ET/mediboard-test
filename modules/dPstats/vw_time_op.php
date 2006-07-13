@@ -8,15 +8,15 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m;
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
 
 if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$codeCCAM = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
-$prat_id  = mbGetValueFromGetOrSession("prat_id", 0);
+$codeCCAM   = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
+$prat_id    = mbGetValueFromGetOrSession("prat_id", 0);
 $intervalle = mbGetValueFromGetOrSession("intervalle", 2);
 
 $user = new CMediusers;
@@ -104,16 +104,16 @@ $sql .= "\nGROUP BY groupall";
 db_loadHash($sql, $total);
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('prat_id'   , $prat_id);
-$smarty->assign('codeCCAM'  , $codeCCAM);
-$smarty->assign('intervalle'  , $intervalle);
-$smarty->assign('listPrats' , $listPrats);
-$smarty->assign('listOps'   , $listOps);
-$smarty->assign('total'     , $total);
+$smarty->assign("prat_id"   , $prat_id   );
+$smarty->assign("codeCCAM"  , $codeCCAM  );
+$smarty->assign("intervalle", $intervalle);
+$smarty->assign("listPrats" , $listPrats );
+$smarty->assign("listOps"   , $listOps   );
+$smarty->assign("total"     , $total     );
 
-$smarty->display('vw_time_op.tpl');
+$smarty->display("vw_time_op.tpl");
 
 ?>

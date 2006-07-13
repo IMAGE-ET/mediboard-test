@@ -1,6 +1,5 @@
 <!-- $Id$ -->
 
-{literal}
 <script type="text/javascript">
 function checkForm() {
   var form = document.paramFrm;
@@ -38,7 +37,6 @@ function pageMain() {
 }
 
 </script>
-{/literal}
 
 <form name="paramFrm" action="?m=dPhospi" method="post" onsubmit="return checkForm()">
 
@@ -52,8 +50,8 @@ function pageMain() {
         <tr>
           <th><label for="deb">Début</label></th>
           <td class="date" colspan="2">
-            <div id="paramFrm_deb_da">{$today|date_format:"%d/%m/%Y %H:%M"}</div>
-            <input type="hidden" name="deb" value="{$today}" />
+            <div id="paramFrm_deb_da">{{$today|date_format:"%d/%m/%Y %H:%M"}}</div>
+            <input type="hidden" name="deb" value="{{$today}}" />
             <img id="paramFrm_deb_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
@@ -61,8 +59,8 @@ function pageMain() {
         <tr>
           <th><label for="fin">Fin</label></th>
           <td class="date" colspan="2">
-            <div id="paramFrm_fin_da">{$tomorrow|date_format:"%d/%m/%Y %H:%M"}</div>
-            <input type="hidden" name="fin" value="{$tomorrow}" />
+            <div id="paramFrm_fin_da">{{$tomorrow|date_format:"%d/%m/%Y %H:%M"}}</div>
+            <input type="hidden" name="fin" value="{{$tomorrow}}" />
             <img id="paramFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>
@@ -81,9 +79,9 @@ function pageMain() {
           <th><label for="service">Service</label></th>
           <td><select name="service">
             <option value="0">&mdash; Tous les services &mdash;</option>
-            {foreach from=$listServ item=curr_serv}
-            <option value="{$curr_serv->service_id}">{$curr_serv->nom}</option>
-            {/foreach}
+            {{foreach from=$listServ item=curr_serv}}
+            <option value="{{$curr_serv->service_id}}">{{$curr_serv->nom}}</option>
+            {{/foreach}}
           </select></td>
         </tr>
       </table>
@@ -106,18 +104,18 @@ function pageMain() {
           <th><label for="chir">Praticien</label></th>
           <td><select name="chir">
             <option value="0">&mdash; Tous les praticiens &mdash;</option>
-            {foreach from=$listPrat item=curr_prat}
-              <option value="{$curr_prat->user_id}">{$curr_prat->_view}</option>
-            {/foreach}
+            {{foreach from=$listPrat item=curr_prat}}
+              <option value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
+            {{/foreach}}
           </select></td>
         </tr>
         <tr>
           <th><label for="spe">Specialité</label></th>
           <td><select name="spe">
             <option value="0">&mdash; Toutes les spécialités &mdash;</option>
-            {foreach from=$listSpec item=curr_spec}
-              <option value="{$curr_spec->function_id}">{$curr_spec->text}</option>
-            {/foreach}
+            {{foreach from=$listSpec item=curr_spec}}
+              <option value="{{$curr_spec->function_id}}">{{$curr_spec->text}}</option>
+            {{/foreach}}
           </select></td>
         </tr>
         <tr>

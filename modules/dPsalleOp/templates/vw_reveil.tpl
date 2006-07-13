@@ -1,19 +1,15 @@
-{literal}
 <script type="text/javascript">
 
 function pageMain() {
   
   var opsUpdater = new Url;
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_reveil_ops");
-  {/literal}
-  opsUpdater.addParam("date", "{$date}");
-  {literal}
+  opsUpdater.addParam("date", "{{$date}}");
   opsUpdater.periodicalUpdate('ops', { frequency: 60 });
   
 }
 
 </script>
-{/literal}
 
 <table class="main">
   <tr>
@@ -23,10 +19,10 @@ function pageMain() {
     </td>
     <td class="halfPane">
       <div id="reveil">
-      {include file="inc_reveil_reveil.tpl"}
+      {{include file="inc_reveil_reveil.tpl"}}
       </div>
       <div id="out">
-      {include file="inc_reveil_out.tpl"}
+      {{include file="inc_reveil_out.tpl"}}
       </div>
     </td>
   </tr>

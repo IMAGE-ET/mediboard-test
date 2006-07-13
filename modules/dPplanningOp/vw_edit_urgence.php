@@ -9,22 +9,22 @@
 
 global $AppUI, $canRead, $canEdit, $m, $tab, $dPconfig;
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour') );
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'pack') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPplanningOp" , "planning"));
+require_once($AppUI->getModuleClass("dPplanningOp" , "sejour"  ));
+require_once($AppUI->getModuleClass("dPpatients"   , "patients"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "pack"    ));
 
-if (!$canRead) {
+if(!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$operation_id = mbGetValueFromGetOrSession("operation_id", null);
-$sejour_id = mbGetValueFromGetOrSession("sejour_id", null);
-$chir_id = mbGetValueFromGet("chir_id", null);
-$patient_id = mbGetValueFromGet("pat_id", null);
-$today = mbDate();
-$tomorow = mbDate("+1 DAY");
+$operation_id = mbGetValueFromGetOrSession("operation_id");
+$sejour_id    = mbGetValueFromGetOrSession("sejour_id");
+$chir_id      = mbGetValueFromGet("chir_id");
+$patient_id   = mbGetValueFromGet("pat_id");
+$today        = mbDate();
+$tomorow      = mbDate("+1 DAY");
 
 // L'utilisateur est-il un praticien
 $chir = new CMediusers;

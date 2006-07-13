@@ -7,24 +7,24 @@
 * @author Thomas Despoix
 */
 
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once($AppUI->getModuleClass('dPplanningOp', "protocole"));
-
 global $AppUI, $canRead, $canEdit, $m;
+
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPplanningOp", "protocole"));
 
 // L'utilisateur est-il chirurgien?
 $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
 
-$chir_id = $mediuser->isPraticien() ? $mediuser->user_id : null;
-$chir_id = mbGetValueFromGetOrSession("chir_id", $chir_id);
+$chir_id   = $mediuser->isPraticien() ? $mediuser->user_id : null;
+$chir_id   = mbGetValueFromGetOrSession("chir_id", $chir_id);
 $code_ccam = mbGetValueFromGetOrSession("code_ccam");
 
 // Praticiens et protocoles disponibles
-$listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_READ);
+$listPrat   = new CMediusers();
+$listPrat   = $listPrat->loadPraticiens(PERM_READ);
 $protocoles = array();
-$listCodes = array();
+$listCodes  = array();
 
 foreach($listPrat as $keyPrat => $valuePrat) {
   $prat =& $listPrat[$keyPrat];
@@ -57,16 +57,16 @@ if ($protocole_id = mbGetValueFromGetOrSession("protocole_id")) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('protocoles', $protocoles);
-$smarty->assign('listPrat', $listPrat);
-$smarty->assign('listCodes', $listCodes);
-$smarty->assign('protSel', $protSel);
-$smarty->assign('chir_id', $chir_id);
-$smarty->assign('code_ccam', $code_ccam);
+$smarty->assign("protocoles", $protocoles);
+$smarty->assign("listPrat"  , $listPrat  );
+$smarty->assign("listCodes" , $listCodes );
+$smarty->assign("protSel"   , $protSel   );
+$smarty->assign("chir_id"   , $chir_id   );
+$smarty->assign("code_ccam" , $code_ccam );
 
-$smarty->display('vw_protocoles.tpl');
+$smarty->display("vw_protocoles.tpl");
 
 ?>

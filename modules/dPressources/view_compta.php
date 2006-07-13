@@ -9,11 +9,11 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPressources', 'plageressource') );
-require_once( $AppUI->getModuleClass('mediusers') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPressources", "plageressource"));
 
 if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 // Chargement de la liste des praticiens pour l'historique
@@ -67,7 +67,7 @@ foreach($list as $key => $value) {
   $total["total"] += $value["total"];
   $total["somme"] += $value["somme"];
   $total["prat"]++;
-  $where["prat_id"] = "= '".$value['prat_id']."'";
+  $where["prat_id"] = "= '".$value["prat_id"]."'";
   $list[$key]["praticien"] = new CMediusers;
   $list[$key]["praticien"]->load($value["prat_id"]);
   $list[$key]["plages"] = new CPlageressource;
@@ -75,12 +75,14 @@ foreach($list as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('listPrats', $listPrats);
-$smarty->assign('list', $list);
-$smarty->assign('total', $total);
-$smarty->assign('today', mbDate());
+$smarty->assign("listPrats", $listPrats);
+$smarty->assign("list"     , $list     );
+$smarty->assign("total"    , $total    );
+$smarty->assign("today"    , mbDate()  );
 
-$smarty->display('view_compta.tpl');
+$smarty->display("view_compta.tpl");
+
+?>

@@ -1,4 +1,3 @@
-{literal}
 <script type="text/javascript">
 function setClose(date) {
   var form = document.frmSelector;
@@ -24,7 +23,6 @@ function setClose(date) {
   window.close();
 }
 </script>
-{/literal}
 
 <form action="index.php" target="_self" name="frmSelector" method="get">
 <input type="hidden" name="m" value="dPplanningOp" />
@@ -36,9 +34,9 @@ function setClose(date) {
 
   <tr>
     <th class="category" colspan="2">
-      <a style="float:left;" href="index.php?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={$curr_op_hour}&amp;curr_op_min={$curr_op_min}&amp;chir={$chir}&amp;month={$pmonth}&amp;year={$pyear}">&lt; &lt;</a>
-      <a style="float:right;" href="index.php?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={$curr_op_hour}&amp;curr_op_min={$curr_op_min}&amp;chir={$chir}&amp;month={$nmonth}&amp;year={$nyear}">&gt; &gt;</a>
-      <div>{$nameMonth} {$year}</div>
+      <a style="float:left;" href="index.php?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;month={{$pmonth}}&amp;year={{$pyear}}">&lt; &lt;</a>
+      <a style="float:right;" href="index.php?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;month={{$nmonth}}&amp;year={{$nyear}}">&gt; &gt;</a>
+      <div>{{$nameMonth}} {{$year}}</div>
     </th>
   </tr>
 
@@ -46,24 +44,24 @@ function setClose(date) {
     <td rowspan="3">
       <select name="list"  size="14">
         <option value="0" selected="selected">&mdash; Choisir une date &mdash;</option>
-        {foreach from=$list item=curr_plage}
-        {if $curr_plage.free_time < 0}
-          <option value="0" ondblclick="setClose('{$curr_plage.date|date_format:"%d/%m/%Y"}')"
-          onclick="document.frmSelector.fmtdate.value='{$curr_plage.date|date_format:"%d/%m/%Y"}'"
-        {else}
-          <option value="{$curr_plage.id}" ondblclick="setClose('{$curr_plage.date|date_format:"%d/%m/%Y"}')"
-          onclick="document.frmSelector.fmtdate.value='{$curr_plage.date|date_format:"%d/%m/%Y"}'"
-        {/if}
-        {if $curr_plage.id_spec }
+        {{foreach from=$list item=curr_plage}}
+        {{if $curr_plage.free_time < 0}}
+          <option value="0" ondblclick="setClose('{{$curr_plage.date|date_format:"%d/%m/%Y"}}')"
+          onclick="document.frmSelector.fmtdate.value='{{$curr_plage.date|date_format:"%d/%m/%Y"}}'"
+        {{else}}
+          <option value="{{$curr_plage.id}}" ondblclick="setClose('{{$curr_plage.date|date_format:"%d/%m/%Y"}}')"
+          onclick="document.frmSelector.fmtdate.value='{{$curr_plage.date|date_format:"%d/%m/%Y"}}'"
+        {{/if}}
+        {{if $curr_plage.id_spec }}
           style="background:#aae"
-        {elseif $curr_plage.free_time < 0}
+        {{elseif $curr_plage.free_time < 0}}
           style="background:#eaa"
-        {else}
+        {{else}}
           style="background:transparent"
-        {/if}>
-        {$curr_plage.date|date_format:"%a %d %b %Y"} - {$curr_plage.nom}
+        {{/if}}>
+        {{$curr_plage.date|date_format:"%a %d %b %Y"}} - {{$curr_plage.nom}}
         </option>
-        {/foreach}
+        {{/foreach}}
       </select>
     </td>
     <td>

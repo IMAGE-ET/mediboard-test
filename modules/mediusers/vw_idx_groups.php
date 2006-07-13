@@ -7,13 +7,13 @@
 * @author Romain Ollivier
 */
 
-GLOBAL $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m;
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
+if(!$canRead) {
+	$AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once( $AppUI->getModuleClass('mediusers', 'groups') );
+require_once($AppUI->getModuleClass("mediusers", "groups"));
 
 // Récupération des fonctions
 $listGroups = new CGroups;
@@ -28,12 +28,12 @@ $usergroup = new CGroups;
 $usergroup->load(mbGetValueFromGetOrSession("group_id", 0));
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('usergroup', $usergroup);
-$smarty->assign('listGroups', $listGroups);
+$smarty->assign("usergroup", $usergroup);
+$smarty->assign("listGroups", $listGroups);
 
-$smarty->display('vw_idx_groups.tpl');
+$smarty->display("vw_idx_groups.tpl");
 
 ?>

@@ -10,12 +10,12 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getModuleClass("admin"));
-require_once($AppUI->getModuleClass("mediusers", "mediusers"));
-require_once($AppUI->getModuleClass("mediusers", "functions"));
+require_once($AppUI->getModuleClass("mediusers", "mediusers" ));
+require_once($AppUI->getModuleClass("mediusers", "functions" ));
 require_once($AppUI->getModuleClass("mediusers", "discipline"));
 
 if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 // Récupération du user à ajouter/editer
@@ -44,14 +44,14 @@ $profiles = new CUser();
 $profiles = $profiles->loadList($where);
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('mediuserSel', $mediuserSel);
-$smarty->assign('profiles', $profiles);
-$smarty->assign('functions', $functions);
-$smarty->assign('disciplines', $disciplines);
+$smarty->assign("mediuserSel", $mediuserSel);
+$smarty->assign("profiles"   , $profiles   );
+$smarty->assign("functions"  , $functions  );
+$smarty->assign("disciplines", $disciplines);
 
-$smarty->display('vw_idx_mediusers.tpl');
+$smarty->display("vw_idx_mediusers.tpl");
 
 ?>

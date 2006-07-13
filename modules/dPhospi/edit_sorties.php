@@ -11,20 +11,19 @@ global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getModuleClass("dPhospi", "affectation"));
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+if(!$canRead) {
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 // Type d'affichage
-$vue = mbGetValueFromGetOrSession("vue", 0);
+$vue       = mbGetValueFromGetOrSession("vue"      , 0);
 $typeOrder = mbGetValueFromGetOrSession("typeOrder", 1);
 
 // Récupération de la journée à afficher
 $year  = mbGetValueFromGetOrSession("year" , date("Y"));
 $month = mbGetValueFromGetOrSession("month", date("m")-1) + 1;
 $day   = mbGetValueFromGetOrSession("day"  , date("d"));
-
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date  = mbGetValueFromGetOrSession("date" , mbDate());
 
 $limit1 = $date." 00:00:00";
 $limit2 = $date." 23:59:59";
@@ -94,14 +93,14 @@ foreach($sortiesComp as $key => $value) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
-$smarty->assign('date' , $date );
-$smarty->assign('deplacements' , $deplacements );
-$smarty->assign('sortiesAmbu'  , $sortiesAmbu  );
-$smarty->assign('sortiesComp'  , $sortiesComp  );
-$smarty->assign('vue'          , $vue          );
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
+$smarty->assign("date"         , $date        );
+$smarty->assign("deplacements" , $deplacements);
+$smarty->assign("sortiesAmbu"  , $sortiesAmbu );
+$smarty->assign("sortiesComp"  , $sortiesComp );
+$smarty->assign("vue"          , $vue         );
 
-$smarty->display('edit_sorties.tpl');
+$smarty->display("edit_sorties.tpl");
 
 ?>

@@ -9,10 +9,10 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPressources', 'plageressource') );
+require_once($AppUI->getModuleClass("dPressources", "plageressource"));
 
-if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+if(!$canEdit) {
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 // Liste des prats
@@ -53,15 +53,15 @@ for ($i = 8; $i <= 20; $i++) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('debut', $debut);
-$smarty->assign('prec', $prec);
-$smarty->assign('suiv', $suiv);
-$smarty->assign('plage', $plage);
-$smarty->assign('plages', $plages);
-$smarty->assign('listPrat', $listPrat);
-$smarty->assign('listHours', $listHours);
+$smarty->assign("debut"    , $debut    );
+$smarty->assign("prec"     , $prec     );
+$smarty->assign("suiv"     , $suiv     );
+$smarty->assign("plage"    , $plage    );
+$smarty->assign("plages"   , $plages   );
+$smarty->assign("listPrat" , $listPrat );
+$smarty->assign("listHours", $listHours);
 
-$smarty->display('edit_planning.tpl');
+$smarty->display("edit_planning.tpl");

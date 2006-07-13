@@ -9,15 +9,15 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+if(!$canRead) {
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->display('view_logs.tpl');
+$smarty->display("view_logs.tpl");
 
 global $logPath;
 

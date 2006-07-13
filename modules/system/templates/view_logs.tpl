@@ -1,4 +1,4 @@
-{if $canEdit}
+{{if $canEdit}}
 <div>
   <form name="editFrm" action="?m=system" method="post">
     <input type="hidden" name="m" value="system" />
@@ -7,4 +7,4 @@
       Réinitialiser les logs
     </button>
 </div>
-{/if}
+{{/if}}

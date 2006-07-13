@@ -13,11 +13,11 @@ if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once($AppUI->getModuleClass("mediusers", "functions"));
 require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPbloc", "salle"));
-require_once($AppUI->getModuleClass("dPbloc", "plagesop"));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
+require_once($AppUI->getModuleClass("mediusers"   , "functions"));
+require_once($AppUI->getModuleClass("dPbloc"      , "salle"    ));
+require_once($AppUI->getModuleClass("dPbloc"      , "plagesop" ));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning" ));
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
 
@@ -104,19 +104,19 @@ foreach($listOut as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+require_once( $AppUI->getSystemClass ("smartydp" ) );
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('listSalles', $listSalles);
-$smarty->assign('listAnesthType', dPgetSysVal("AnesthType"));
-$smarty->assign('listAnesths', $listAnesths);
-$smarty->assign('listChirs', $listChirs);
-$smarty->assign('plages', $plages);
-$smarty->assign('listReveil', $listReveil);
-$smarty->assign('listOut', $listOut);
-$smarty->assign('timing', $timing);
-$smarty->assign('date', $date);
+$smarty->assign("listSalles"    , $listSalles              );
+$smarty->assign("listAnesthType", dPgetSysVal("AnesthType"));
+$smarty->assign("listAnesths"   , $listAnesths             );
+$smarty->assign("listChirs"     , $listChirs               );
+$smarty->assign("plages"        , $plages                  );
+$smarty->assign("listReveil"    , $listReveil              );
+$smarty->assign("listOut"       , $listOut                 );
+$smarty->assign("timing"        , $timing                  );
+$smarty->assign("date"          , $date                    );
 
-$smarty->display('vw_reveil.tpl');
+$smarty->display("vw_reveil.tpl");
 
 ?>

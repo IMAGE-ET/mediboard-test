@@ -1,34 +1,32 @@
-{literal}
 <script type="text/javascript">
 function setClose(code, type) {
   window.opener.setCode(code, type);
   window.close();
 }
 </script>
-{/literal}
 
 <table class="selectCode">
   <tr>
   	<th>Favoris disponibles</th>
   </tr>
   
-  {if !$list}
+  {{if !$list}}
   <tr>
   	<td>Aucun favori disponible</td>
   </tr>
-  {/if}
+  {{/if}}
 
   <tr>
-  {foreach from=$list item=curr_code key=curr_key}
+  {{foreach from=$list item=curr_code key=curr_key}}
     <td>
-      <strong>{$curr_code->code}</strong><br />
-      {$curr_code->libelleLong}<br />
-      <input type="button" class="button" value="selectionner" onclick="setClose('{$curr_code->code}', '{$type}')" />
+      <strong>{{$curr_code->code}}</strong><br />
+      {{$curr_code->libelleLong}}<br />
+      <input type="button" class="button" value="selectionner" onclick="setClose('{{$curr_code->code}}', '{{$type}}')" />
     </td>
-  {if ($curr_key+1) is div by 3}
+  {{if ($curr_key+1) is div by 3}}
   </tr><tr>
-  {/if}
-  {/foreach}
+  {{/if}}
+  {{/foreach}}
   </tr>
 </table>
 

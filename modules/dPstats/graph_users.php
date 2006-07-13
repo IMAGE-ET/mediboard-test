@@ -8,10 +8,12 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m;
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph'));
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph_bar'));
+
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
+
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"    ));
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_bar"));
 
 $user_id = mbGetValueFromGet("user_id", $AppUI->user_id);
 $user = new CMediusers;

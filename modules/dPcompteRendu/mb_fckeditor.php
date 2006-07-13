@@ -61,7 +61,7 @@ $templateManager =& $_SESSION['dPcompteRendu']['templateManager'];
 // Création du template
 require_once( $AppUI->getSystemClass('smartydp'));
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 $smarty->debugging = false;
 
 $smarty->assign("configAlert", $configAlert);

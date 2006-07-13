@@ -9,47 +9,47 @@
         </tr>
         <tr>
           <th>Début:</th>
-          <td><input type="text" name="debutact" value="{$debutact}" /></td>
+          <td><input type="text" name="debutact" value="{{$debutact}}" /></td>
           <th>Salle:</th>
           <td>
             <select name="salle_id">
               <option value="0">&mdash; Toutes les salles</option>
-              {foreach from=$listSalles item=curr_salle}
-              <option value="{$curr_salle->id}" {if $curr_salle->id == $salle_id}selected="selected"{/if}>
-                {$curr_salle->nom}
+              {{foreach from=$listSalles item=curr_salle}}
+              <option value="{{$curr_salle->id}}" {{if $curr_salle->id == $salle_id}}selected="selected"{{/if}}>
+                {{$curr_salle->nom}}
               </option>
-              {/foreach}
+              {{/foreach}}
             </select>
           </td>
         </tr>
         <tr>
           <th>Fin:</th>
-          <td><input type="text" name="finact" value="{$finact}" /></td>
+          <td><input type="text" name="finact" value="{{$finact}}" /></td>
           <th>Praticien:</th>
           <td>
             <select name="prat_id">
               <option value="0">&mdash; Tous les praticiens</option>
-              {foreach from=$listPrats item=curr_prat}
-              <option value="{$curr_prat->user_id}" {if $curr_prat->user_id == $prat_id}selected="selected"{/if}>
-                {$curr_prat->_view}
+              {{foreach from=$listPrats item=curr_prat}}
+              <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $prat_id}}selected="selected"{{/if}}>
+                {{$curr_prat->_view}}
               </option>
-              {/foreach}
+              {{/foreach}}
             </select>
           </td>
         </tr>
         <tr>
           <th>Acte CCAM:</th>
-          <td><input type="text" name="codeCCAM" value="{$codeCCAM}" /></td>
+          <td><input type="text" name="codeCCAM" value="{{$codeCCAM}}" /></td>
           <td colspan="2" class="button"><button type="submit">Go</button></td>
         </tr>
         <tr>
           <td colspan="4" class="button">
-            <img alt="Nombre d'interventions" src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={$debutact}&amp;fin={$finact}&amp;salle_id={$salle_id}&amp;prat_id={$prat_id}&amp;codeCCAM={$codeCCAM}' />
-            {if $prat_id}
-              <img alt="Occupation des plages" src='?m=dPstats&amp;a=graph_praticienbloc&amp;suppressHeaders=1&amp;debut={$debutact}&amp;fin={$finact}&amp;salle_id={$salle_id}&amp;prat_id={$prat_id}&amp;codeCCAM={$codeCCAM}' />
-            {else}
-              <img alt="Patients par jour par salle" src='?m=dPstats&amp;a=graph_patjoursalle&amp;suppressHeaders=1&amp;debut={$debutact}&amp;fin={$finact}&amp;salle_id={$salle_id}&amp;prat_id={$prat_id}&amp;codeCCAM={$codeCCAM}' />
-            {/if}
+            <img alt="Nombre d'interventions" src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;prat_id={{$prat_id}}&amp;codeCCAM={{$codeCCAM}}' />
+            {{if $prat_id}}
+              <img alt="Occupation des plages" src='?m=dPstats&amp;a=graph_praticienbloc&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;prat_id={{$prat_id}}&amp;codeCCAM={{$codeCCAM}}' />
+            {{else}}
+              <img alt="Patients par jour par salle" src='?m=dPstats&amp;a=graph_patjoursalle&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;prat_id={{$prat_id}}&amp;codeCCAM={{$codeCCAM}}' />
+            {{/if}}
           </td>
         </tr>
       </table>

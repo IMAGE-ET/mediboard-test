@@ -1,5 +1,4 @@
-{if $templateManager->editor == "fckeditor" }
-{literal}
+{{if $templateManager->editor == "fckeditor" }}
 <script type="text/javascript" src="lib/fckeditor/fckeditor.js"></script>
 <script language="JavaScript" type="text/javascript">
 
@@ -16,5 +15,4 @@ function initFCKEditor() {
 }
 
 </script>
-{/literal}
-{/if}
+{{/if}}

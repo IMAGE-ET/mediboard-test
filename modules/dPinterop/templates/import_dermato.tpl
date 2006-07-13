@@ -1,5 +1,4 @@
 <script language="JavaScript" type="text/javascript">
-{literal}
 
 function doAction(sAction) {
   var url = new Url();
@@ -8,7 +7,6 @@ function doAction(sAction) {
   url.popup(400, 400, sAction);
 }  
 
-{/literal}
 </script>
 
 <h1>Procédure</h1>

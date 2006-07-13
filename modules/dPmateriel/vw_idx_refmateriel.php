@@ -9,20 +9,20 @@
  
 global $AppUI, $canRead, $canEdit, $m;
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
+if(!$canRead) {
+	$AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once( $AppUI->getModuleClass("dPmateriel", "refmateriel") );
-require_once( $AppUI->getModuleClass("dPmateriel", "category") );
-require_once( $AppUI->getModuleClass("dPmateriel", "fournisseur") );
+require_once($AppUI->getModuleClass("dPmateriel", "refmateriel"));
+require_once($AppUI->getModuleClass("dPmateriel", "category"   ));
+require_once($AppUI->getModuleClass("dPmateriel", "fournisseur"));
 
-$reference_id = mbGetValueFromGetOrSession("reference_id", null);
+$reference_id = mbGetValueFromGetOrSession("reference_id");
 
 // Chargement de la reference demandé
 $reference=new CRefMateriel;
 $reference->load($reference_id);
-if($reference_id = mbGetValueFromGet("fournisseur_id", null)){
+if($reference_id = mbGetValueFromGet("fournisseur_id")){
   $reference->fournisseur_id = $reference_id;
 }
 
@@ -46,11 +46,13 @@ $Fournisseur = new CFournisseur;
 $listFournisseur = $Fournisseur->loadList();
 
 // Création du template
-require_once( $AppUI->getSystemClass("smartydp"));
-$smarty = new CSmartyDP;
-$smarty->assign("listCategory",$listCategory);
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
+
+$smarty->assign("listCategory"   ,$listCategory   );
 $smarty->assign("listFournisseur",$listFournisseur);
-$smarty->assign("listReference", $listReference);
-$smarty->assign("reference", $reference);
-$smarty->display('vw_idx_refmateriel.tpl');
+$smarty->assign("listReference"  , $listReference );
+$smarty->assign("reference"      , $reference     );
+
+$smarty->display("vw_idx_refmateriel.tpl");
 ?>

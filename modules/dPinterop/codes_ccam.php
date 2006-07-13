@@ -9,13 +9,13 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultAnesth') );
+require_once($AppUI->getModuleClass("dPcabinet", "consultAnesth"));
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+if(!$canRead) {
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
-set_time_limit( 1800 );
+set_time_limit(1800);
 
 
 $sql = "SELECT `operation_id` , `codes_ccam`, `CCAM_code` , `CCAM_code2`" .
@@ -40,3 +40,5 @@ while ($obj = db_fetch_object($res)) {
 };
 
 echo "$i interventions mises à jour";
+
+?>

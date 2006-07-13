@@ -9,7 +9,7 @@
 
 global $AppUI, $m;
 
-require_once($AppUI->getModuleClass('dPpatients', 'patients') );
+require_once($AppUI->getModuleClass("dPpatients", "patients"));
 
 $listIds = array();
 foreach($_GET as $key => $value) {
@@ -41,12 +41,12 @@ $titleBlock->addCell();
 $titleBlock->show();
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('patient1', $patient1);
-$smarty->assign('patient2', $patient2);
-$smarty->assign('finalPatient', $finalPatient);
+$smarty->assign("patient1"    , $patient1    );
+$smarty->assign("patient2"    , $patient2    );
+$smarty->assign("finalPatient", $finalPatient);
 
-$smarty->display('fusion_pat.tpl');
+$smarty->display("fusion_pat.tpl");
 ?>

@@ -1,4 +1,3 @@
-{literal}
 <script language="JavaScript" type="text/javascript">
 
 function checkForm() {
@@ -30,46 +29,45 @@ function pageMain() {
 }
 
 </script>
-{/literal}
 
 <table class="main">
   <tr>
     <td>
       <table class="tbl">
         <tr>
-          <th colspan="3" class="title">Plages en attente de paiement &mdash; {$today|date_format:"%A %d %B %Y"}</th>
+          <th colspan="3" class="title">Plages en attente de paiement &mdash; {{$today|date_format:"%A %d %B %Y"}}</th>
         </tr>
         <tr>
           <th>Praticien</th>
           <th>Quantité</th>
           <th>Montant</th>
         </tr>
-        {foreach from=$list item=curr_prat}
-        <tr class="groupcollapse" id="plages{$curr_prat.prat_id}" onclick="flipGroup('{$curr_prat.prat_id}', 'plages')">
-          <td>Dr. {$curr_prat.praticien->_view}</td>
-          <td>{$curr_prat.total} plage(s)</td>
-          <td>{$curr_prat.somme} €</td>
+        {{foreach from=$list item=curr_prat}}
+        <tr class="groupcollapse" id="plages{{$curr_prat.prat_id}}" onclick="flipGroup('{{$curr_prat.prat_id}}', 'plages')">
+          <td>Dr. {{$curr_prat.praticien->_view}}</td>
+          <td>{{$curr_prat.total}} plage(s)</td>
+          <td>{{$curr_prat.somme}} €</td>
         </tr>
-          {foreach from=$curr_prat.plages item=curr_plage}
-            <tr class="plages{$curr_prat.prat_id}">
+          {{foreach from=$curr_prat.plages item=curr_plage}}
+            <tr class="plages{{$curr_prat.prat_id}}">
               <td>
-                <form name="editPlage{$curr_plage->plageressource_id}" action="?m={$m}" method="post">
+                <form name="editPlage{{$curr_plage->plageressource_id}}" action="?m={{$m}}" method="post">
                 <input type='hidden' name='dosql' value='do_plageressource_aed' />
                 <input type='hidden' name='del' value='0' />
-                <input type='hidden' name='plageressource_id' value='{$curr_plage->plageressource_id}' />
+                <input type='hidden' name='plageressource_id' value='{{$curr_plage->plageressource_id}}' />
                 <input type='hidden' name='paye' value='1' />
                 <button type="submit">Valider le paiement</button>
                 </form>
               </td>
-              <td>{$curr_plage->date|date_format:"%A %d %B %Y"}</td>
-              <td>{$curr_plage->tarif} €</td>
+              <td>{{$curr_plage->date|date_format:"%A %d %B %Y"}}</td>
+              <td>{{$curr_plage->tarif}} €</td>
             </tr>
-          {/foreach}
-        {/foreach}
+          {{/foreach}}
+        {{/foreach}}
         <tr>
-          <th>{$total.prat} praticien(s)</th>
-          <th>{$total.total} plage(s)</th>
-          <th>{$total.somme} €</th>
+          <th>{{$total.prat}} praticien(s)</th>
+          <th>{{$total.total}} plage(s)</th>
+          <th>{{$total.somme}} €</th>
       </table>
 
     </td>
@@ -83,16 +81,16 @@ function pageMain() {
         <tr>
           <th><label for="deb">Début</label></th>
           <td class="date" colspan="2">
-            <div id="paramFrm_deb_da">{$today|date_format:"%d/%m/%Y"}</div>
-            <input type="hidden" name="deb" value="{$today}" />
+            <div id="paramFrm_deb_da">{{$today|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" name="deb" value="{{$today}}" />
             <img id="paramFrm_deb_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
         <tr>
           <th><label for="fin">Fin</label></th>
           <td class="date" colspan="2">
-            <div id="paramFrm_fin_da">{$today|date_format:"%d/%m/%Y"}</div>
-            <input type="hidden" name="fin" value="{$today}" />
+            <div id="paramFrm_fin_da">{{$today|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" name="fin" value="{{$today}}" />
             <img id="paramFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>
@@ -108,9 +106,9 @@ function pageMain() {
           <th><label for="prat_id">Praticien</label></th>
           <td>
             <select name="prat_id">
-              {foreach from=$listPrats item=curr_prat}
-              <option value="{$curr_prat->user_id}">{$curr_prat->_view}</option>
-              {/foreach}
+              {{foreach from=$listPrats item=curr_prat}}
+              <option value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
+              {{/foreach}}
             </select>
           </td>
         </tr>

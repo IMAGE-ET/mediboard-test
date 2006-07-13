@@ -1,5 +1,4 @@
 <script language="JavaScript" type="text/javascript">
-{literal}
 
 function show(elementId, doIt) {
   element = document.getElementById(elementId);
@@ -118,7 +117,6 @@ function pageMain() {
   setRunning(false);
 }
 
-{/literal}
 </script>
 
 <h2>Import de la base données de l'ordre des médecin</h2>

@@ -9,8 +9,8 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+if(!$canRead) {
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 require_once($AppUI->getModuleClass("mediusers"));
@@ -97,16 +97,16 @@ if ($typeVue == 1) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('date_recherche', $date_recherche);
-$smarty->assign('libre', $libre);
-$smarty->assign('typeVue', $typeVue);
-$smarty->assign('selPrat', $selPrat);
-$smarty->assign('listPrat', $listPrat);
-$smarty->assign('listAff', $listAff);
+$smarty->assign("date_recherche", $date_recherche);
+$smarty->assign("libre"         , $libre         );
+$smarty->assign("typeVue"       , $typeVue       );
+$smarty->assign("selPrat"       , $selPrat       );
+$smarty->assign("listPrat"      , $listPrat      );
+$smarty->assign("listAff"       , $listAff       );
 
-$smarty->display('vw_recherche.tpl');
+$smarty->display("vw_recherche.tpl");
 
 ?>

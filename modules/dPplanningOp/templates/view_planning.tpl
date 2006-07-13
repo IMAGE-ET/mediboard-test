@@ -12,53 +12,53 @@
   
   <tr>
     <th>Date :</th>
-    <td>{$today|date_format:"%A %d/%m/%Y"}</td>
+    <td>{{$today|date_format:"%A %d/%m/%Y"}}</td>
   </tr>
   
   <tr>
     <th>Chirurgien :</th>
-    <td>Dr. {$operation->_ref_chir->_view}</td>
+    <td>Dr. {{$operation->_ref_chir->_view}}</td>
   </tr>
   
   <tr>
     <th class="category" colspan="2">Renseignements concernant le patient</th>
   </tr>
   
-  {assign var="patient" value=$operation->_ref_sejour->_ref_patient}
+  {{assign var="patient" value=$operation->_ref_sejour->_ref_patient}}
   <tr>
     <th>Nom / Prénom :</th>
-    <td>{$patient->_view}</td>
+    <td>{{$patient->_view}}</td>
   </tr>
   
   <tr>
     <th>Date de naissance / Sexe :</th>
     <td>
-      né(e) le {$patient->_naissance}
+      né(e) le {{$patient->_naissance}}
       de sexe 
-      {if $patient->sexe == "m"}masculin{else}féminin{/if}
+      {{if $patient->sexe == "m"}}masculin{{else}}féminin{{/if}}
     </td>
   </tr>
   
   <tr>
     <th>Incapable majeur :</th>
-    <td>{if $patient->incapable_majeur == "o"}oui{else}non{/if}</td>
+    <td>{{if $patient->incapable_majeur == "o"}}oui{{else}}non{{/if}}</td>
   </tr>
 
   <tr>
     <th>Téléphone :</th>
-    <td>{$patient->_tel1} {$patient->_tel2} {$patient->_tel3} {$patient->_tel4} {$patient->_tel5}</td>
+    <td>{{$patient->_tel1}} {{$patient->_tel2}} {{$patient->_tel3}} {{$patient->_tel4}} {{$patient->_tel5}}</td>
   </tr>
 
   <tr>
     <th>Medecin traitant :</th>
-    <td>{$patient->_ref_medecin_traitant->_view}</td>
+    <td>{{$patient->_ref_medecin_traitant->_view}}</td>
   </tr>
   
   <tr>
     <th>Adresse :</th>
     <td>
-      {$patient->adresse} &mdash;
-      {$patient->cp} {$patient->ville}
+      {{$patient->adresse}} &mdash;
+      {{$patient->cp}} {{$patient->ville}}
     </td>
   </tr>
   
@@ -69,47 +69,47 @@
   <tr>
     <th>Admission :</th>
     <td>
-      {assign var="sejour" value=$operation->_ref_sejour}
-      le {$sejour->entree_prevue|date_format:"%A %d/%m/%Y à %Hh%M"} 
+      {{assign var="sejour" value=$operation->_ref_sejour}}
+      le {{$sejour->entree_prevue|date_format:"%A %d/%m/%Y à %Hh%M"}} 
     </td>
   </tr>
   
   <tr>
     <th>Hospitalisation :</th>
     <td>
-      {if $sejour->type == "comp"}Complète{/if}
-      {if $sejour->type == "ambu"}Ambulatoire{/if}
-      {if $sejour->type == "exte"}Externe{/if}
+      {{if $sejour->type == "comp"}}Complète{{/if}}
+      {{if $sejour->type == "ambu"}}Ambulatoire{{/if}}
+      {{if $sejour->type == "exte"}}Externe{{/if}}
     </td>
   </tr>
   
   <tr>
     <th>Chambre particulière :</th>
-    <td>{if $operation->_ref_sejour->chambre_seule == "o"}oui{else}non{/if}</td>
+    <td>{{if $operation->_ref_sejour->chambre_seule == "o"}}oui{{else}}non{{/if}}</td>
   </tr>
  
   <tr>
     <th>Date d'intervention :</th>
-    <td>le {$operation->_datetime|date_format:"%A %d/%m/%Y"}</td>
+    <td>le {{$operation->_datetime|date_format:"%A %d/%m/%Y"}}</td>
   </tr>
 
   <tr>
     <th>Actes médicaux: </th>
     <td class="text">
-      {foreach from=$operation->_ext_codes_ccam item=ext_code_ccam}
-      {$ext_code_ccam->libelleLong}<br />
-      {/foreach}
+      {{foreach from=$operation->_ext_codes_ccam item=ext_code_ccam}}
+      {{$ext_code_ccam->libelleLong}}<br />
+      {{/foreach}}
     </td>
   </tr>
   
   <tr>
     <th>Côté :</th>
-    <td>{$operation->cote}</td>
+    <td>{{$operation->cote}}</td>
   </tr>
 
   <tr>
     <th>Durée prévue d'hospitalisation :</th>
-    <td>{$operation->_ref_sejour->_duree_prevue} jours</td>
+    <td>{{$operation->_ref_sejour->_duree_prevue}} jours</td>
   </tr>
   
   <tr><th class="category" colspan="2">Rendez vous d'anesthésie</th></tr>

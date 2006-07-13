@@ -1,5 +1,3 @@
-
-
 <?php /* $Id$ */
 
 /**
@@ -11,21 +9,21 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-if (!$canRead) {      // lock out users that do not have at least readPermission on this module
-  $AppUI->redirect( "m=system&a=access_denied" );
+if(!$canRead) {
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour') );
+require_once($AppUI->getModuleClass("dPplanningOp", "sejour"));
 
-$deb = dPgetParam( $_GET, 'deb', date("Y-m-d")." 06:00:00");
-$fin = dPgetParam( $_GET, 'fin', date("Y-m-d")." 21:00:00");
-$service = dPgetParam( $_GET, 'service', 0);
-$type = dPgetParam( $_GET, 'type', 0 );
-$chir = dPgetParam( $_GET, 'chir', 0 );
-$spe = dPgetParam( $_GET, 'spe', 0);
-$conv = dPgetParam( $_GET, 'conv', 0);
-$ordre = dPgetParam( $_GET, 'ordre', 'heure');
-$total = 0;
+$deb     = mbGetValueFromGet("deb"    , date("Y-m-d")." 06:00:00");
+$fin     = mbGetValueFromGet("fin"    , date("Y-m-d")." 21:00:00");
+$service = mbGetValueFromGet("service", 0                        );
+$type    = mbGetValueFromGet("type"   , 0                        );
+$chir    = mbGetValueFromGet("chir"   , 0                        );
+$spe     = mbGetValueFromGet("spe"    , 0                        );
+$conv    = mbGetValueFromGet("conv"   , 0                        );
+$ordre   = mbGetValueFromGet("ordre"  , "heure"                  );
+$total   = 0;
 
 $sejours = new CSejour;
 
@@ -88,15 +86,15 @@ if(count($sejours)) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('deb', $deb);
-$smarty->assign('fin', $fin);
-$smarty->assign('listDays', $listDays);
-$smarty->assign('listPrats', $listPrats);
-$smarty->assign('total', count($sejours));
+$smarty->assign("deb"      , $deb           );
+$smarty->assign("fin"      , $fin           );
+$smarty->assign("listDays" , $listDays      );
+$smarty->assign("listPrats", $listPrats     );
+$smarty->assign("total"    , count($sejours));
 
-$smarty->display('print_planning.tpl');
+$smarty->display("print_planning.tpl");
 
 ?>

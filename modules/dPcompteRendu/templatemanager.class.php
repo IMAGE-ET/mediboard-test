@@ -103,7 +103,7 @@ class CTemplateManager {
     // Don't use mbSetValue which uses $m'
     $_SESSION['dPcompteRendu']['templateManager'] = $this;
    
-    $smarty = new CSmartyDP;
+    $smarty = new CSmartyDP(1);
     $smarty->template_dir = "modules/dPcompteRendu/templates/";
     $smarty->compile_dir = "modules/dPcompteRendu/templates_c/";
     $smarty->config_dir = "modules/dPcompteRendu/configs/";

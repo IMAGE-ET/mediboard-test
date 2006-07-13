@@ -1,4 +1,3 @@
-{literal}
 <script type="text/javascript">
 
 function doAction(sAction) {
@@ -9,7 +8,6 @@ function doAction(sAction) {
 }
 
 </script>
-{/literal}
 
 <h2>Création et remplissage des la base des GHS / GHM</h2>
 

@@ -81,7 +81,7 @@ $templateManager->initHTMLArea();
 // Création du template
 require_once( $AppUI->getSystemClass('smartydp'));
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('templateManager', $templateManager);
 $smarty->assign('compte_rendu', $compte_rendu);

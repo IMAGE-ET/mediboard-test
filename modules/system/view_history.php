@@ -9,14 +9,14 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('system', 'user_log') );
+require_once($AppUI->getModuleClass("system", "user_log"));
 
 // Require all dPmodules class
-foreach (glob("modules/dP*/*.class.php") as $fileName) {
-  require_once($AppUI->getConfig( 'root_dir' )."/".$fileName);
+foreach(glob("modules/dP*/*.class.php") as $fileName) {
+  require_once($AppUI->getConfig("root_dir")."/".$fileName);
 }
 // Add the user class
-require_once( $AppUI->getModuleClass ('admin' ) );
+require_once($AppUI->getModuleClass("admin"));
 
 $dialog = mbGetValueFromGet("dialog", 0);
 
@@ -30,13 +30,14 @@ $object_class = mbGetValueFromGetOrSession("object_class", null);
 $type         = mbGetValueFromGetOrSession("type"        , null);
 
 // Récupération de la liste des classes disponibles
-$where = array();
-$where[] = "1";
-$order = "object_class";
-$group = "object_class";
-$list = new CUserLog;
-$list = $list->loadList($where, $order, null, $group);
+$where       = array();
+$where[]     = "1";
+$order       = "object_class";
+$group       = "object_class";
+$list        = new CUserLog;
+$list        = $list->loadList($where, $order, null, $group);
 $listClasses = array();
+
 foreach($list as $key => $value) {
   $listClasses[] = $value->object_class;
 }
@@ -81,20 +82,20 @@ foreach($list as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('dialog'      , $dialog      );
-$smarty->assign('object_class', $object_class);
-$smarty->assign('object_id'   , $object_id   );
-$smarty->assign('user_id'     , $user_id     );
-$smarty->assign('type'        , $type        );
-$smarty->assign('listClasses' , $listClasses );
-$smarty->assign('listUsers'   , $listUsers   );
-$smarty->assign('listTypes'   , $listTypes   );
-$smarty->assign('item'        , $item        );
-$smarty->assign('list'        , $list        );
+$smarty->assign("dialog"      , $dialog      );
+$smarty->assign("object_class", $object_class);
+$smarty->assign("object_id"   , $object_id   );
+$smarty->assign("user_id"     , $user_id     );
+$smarty->assign("type"        , $type        );
+$smarty->assign("listClasses" , $listClasses );
+$smarty->assign("listUsers"   , $listUsers   );
+$smarty->assign("listTypes"   , $listTypes   );
+$smarty->assign("item"        , $item        );
+$smarty->assign("list"        , $list        );
 
-$smarty->display('view_history.tpl');
+$smarty->display("view_history.tpl");
 
 ?>

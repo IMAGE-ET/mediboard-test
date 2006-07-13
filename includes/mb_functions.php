@@ -26,7 +26,7 @@ function mbGetValue() {
  * @access public
  * @return any 
  **/
-function mbGetValueFromGet($valName, $valDefault = NULL) {
+function mbGetValueFromGet($valName, $valDefault = null) {
   return isset($_GET[$valName]) ? $_GET[$valName] : $valDefault;
 }
 
@@ -36,7 +36,7 @@ function mbGetValueFromGet($valName, $valDefault = NULL) {
  * @access public
  * @return any 
  **/
-function mbGetValueFromPost($valName, $valDefault = NULL) {
+function mbGetValueFromPost($valName, $valDefault = null) {
   return isset($_POST[$valName]) ? $_POST[$valName] : $valDefault;
 }
 
@@ -46,7 +46,7 @@ function mbGetValueFromPost($valName, $valDefault = NULL) {
  * @access public
  * @return any 
  **/
-function mbGetValueFromGetOrSession($valName, $valDefault = NULL) {
+function mbGetValueFromGetOrSession($valName, $valDefault = null) {
   global $m;
 
   if (isset($_GET[$valName])) {
@@ -62,7 +62,7 @@ function mbGetValueFromGetOrSession($valName, $valDefault = NULL) {
  * @access public
  * @return any 
  **/
-function mbGetValueFromPostOrSession($valName, $valDefault = NULL) {
+function mbGetValueFromPostOrSession($valName, $valDefault = null) {
   global $m;
 
   if (isset($_POST[$valName])) {
@@ -77,7 +77,7 @@ function mbGetValueFromPostOrSession($valName, $valDefault = NULL) {
  * @access public
  * @return void
  **/
-function mbSetValueToSession($valName, $value = NULL) {
+function mbSetValueToSession($valName, $value = null) {
   global $m;
 
   $_SESSION[$m][$valName] = $value;

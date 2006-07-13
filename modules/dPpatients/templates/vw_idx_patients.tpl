@@ -1,7 +1,6 @@
 <!-- $Id$ -->
 
 <script language="JavaScript" type="text/javascript">
-{literal}
 
 function affNaissance() {
   var oForm      = document.find;
@@ -23,7 +22,6 @@ function affNaissance() {
   }
 }
 
-{/literal}
 </script>
 
 <table class="main">
@@ -31,8 +29,8 @@ function affNaissance() {
     <td class="greedyPane">
       <form name="find" action="./index.php" method="get">
 
-      <input type="hidden" name="m" value="{$m}" />
-      <input type="hidden" name="tab" value="{$tab}" />
+      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="tab" value="{{$tab}}" />
       <input type="hidden" name="new" value="1" />
       
       <table class="form">
@@ -42,36 +40,36 @@ function affNaissance() {
   
         <tr>
           <th><label for="nom" title="Nom du patient à rechercher, au moins les premières lettres">Nom</label></th>
-          <td><input tabindex="1" type="text" name="nom" value="{$nom}" /></td>
+          <td><input tabindex="1" type="text" name="nom" value="{{$nom}}" /></td>
         </tr>
         
         <tr>
           <th><label for="prenom" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
-          <td><input tabindex="2" type="text" name="prenom" value="{$prenom}" /></td>
+          <td><input tabindex="2" type="text" name="prenom" value="{{$prenom}}" /></td>
         </tr>
         
         <tr>
           <th>
             <label for="Date_Day" title="Date de naissance du patient à rechercher">
-              <input type="checkbox" name="check_naissance" onclick="affNaissance()" {if $naissance == "on"}checked="checked"{/if}/>
-              <input type="hidden" name="naissance" {if $naissance == "on"}value="on"{else}value="off"{/if} />
+              <input type="checkbox" name="check_naissance" onclick="affNaissance()" {{if $naissance == "on"}}checked="checked"{{/if}}/>
+              <input type="hidden" name="naissance" {{if $naissance == "on"}}value="on"{{else}}value="off"{{/if}} />
               Date de naissance:
             </label>
           </th>
           <td>
-            {if $naissance == "on"}
-            {html_select_date
+            {{if $naissance == "on"}}
+            {{html_select_date
                  time=$date
                  start_year=1900
                  field_order=DMY
-                 all_extra="style='display:inline;'"}
-             {else}
-            {html_select_date
+                 all_extra="style='display:inline;'"}}
+             {{else}}
+            {{html_select_date
                  time=$date
                  start_year=1900
                  field_order=DMY
-                 all_extra="style='display:none;'"}
-             {/if}
+                 all_extra="style='display:none;'"}}
+             {{/if}}
           </td>
         </tr>
         
@@ -93,25 +91,25 @@ function affNaissance() {
           <th>Ville</th>
         </tr>
 
-        {foreach from=$patients item=curr_patient}
+        {{foreach from=$patients item=curr_patient}}
         <tr>
-          <td><input type="checkbox" name="fusion_{$curr_patient->patient_id}" /></td>
-          <td class="text"><a href="index.php?m={$m}&amp;tab={$tab}&amp;id={$curr_patient->patient_id}">{$curr_patient->_view}</a></td>
-          <td class="text"><a href="index.php?m={$m}&amp;tab={$tab}&amp;id={$curr_patient->patient_id}">{$curr_patient->_naissance}</a></td>
-          <td class="text"><a href="index.php?m={$m}&amp;tab={$tab}&amp;id={$curr_patient->patient_id}">{$curr_patient->adresse}</a></td>
-          <td class="text"><a href="index.php?m={$m}&amp;tab={$tab}&amp;id={$curr_patient->patient_id}">{$curr_patient->ville}</a></td>
+          <td><input type="checkbox" name="fusion_{{$curr_patient->patient_id}}" /></td>
+          <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;id={{$curr_patient->patient_id}}">{{$curr_patient->_view}}</a></td>
+          <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;id={{$curr_patient->patient_id}}">{{$curr_patient->_naissance}}</a></td>
+          <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;id={{$curr_patient->patient_id}}">{{$curr_patient->adresse}}</a></td>
+          <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;id={{$curr_patient->patient_id}}">{{$curr_patient->ville}}</a></td>
         </tr>
-        {/foreach}
+        {{/foreach}}
         
       </table>
       </form>
 
     </td>
  
-    {if $patient->patient_id}
+    {{if $patient->patient_id}}
     <td class="pane">
-    {include file="inc_vw_patient.tpl"}
+    {{include file="inc_vw_patient.tpl"}}
     </td>
-    {/if}
+    {{/if}}
   </tr>
 </table>

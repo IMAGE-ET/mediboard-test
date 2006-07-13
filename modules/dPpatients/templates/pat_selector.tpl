@@ -1,6 +1,4 @@
 <!-- $Id$ -->
-
-{literal}
 <script type="text/javascript">
 function createPat(){
   var form = document.frmSelector;
@@ -18,7 +16,6 @@ function setClose(key, val){
   window.close();
 }
 </script>
-{/literal}
 
 <form action="index.php" target="_self" name="frmSelector" method="get">
 
@@ -34,12 +31,12 @@ function setClose(key, val){
 
 <tr>
   <th>Nom:</th>
-  <td><input name="name" value="{$name}" size="30" /></td>
+  <td><input name="name" value="{{$name}}" size="30" /></td>
   <td></td>
 </tr>
 <tr>
   <th>Prénom:</th>
-  <td><input name="firstName" value="{$firstName}" size="30" /></td>
+  <td><input name="firstName" value="{{$firstName}}" size="30" /></td>
   <td><button class="search" type="submit">rechercher</button></td>
 </tr>
 
@@ -57,15 +54,15 @@ function setClose(key, val){
   <th align="center">Mobile</th>
   <th align="center">Selectionner</th>
 </tr>
-{foreach from=$list item=curr_patient}
+{{foreach from=$list item=curr_patient}}
 <tr>
-  <td>{$curr_patient->_view}</td>
-  <td>{$curr_patient->_naissance}</td>
-  <td>{$curr_patient->tel}</td>
-  <td>{$curr_patient->tel2}</td>
-  <td class="button"><input type="button" class="button" value="selectionner" onclick="setClose({$curr_patient->patient_id}, '{$curr_patient->_view|escape:javascript}')" /></td>
+  <td>{{$curr_patient->_view}}</td>
+  <td>{{$curr_patient->_naissance}}</td>
+  <td>{{$curr_patient->tel}}</td>
+  <td>{{$curr_patient->tel2}}</td>
+  <td class="button"><input type="button" class="button" value="selectionner" onclick="setClose({{$curr_patient->patient_id}}, '{{$curr_patient->_view|escape:javascript}}')" /></td>
 </tr>
-{/foreach}
+{{/foreach}}
 </table>
 
 <table class="form">

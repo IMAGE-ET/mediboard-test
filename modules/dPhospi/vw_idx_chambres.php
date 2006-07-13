@@ -11,8 +11,8 @@ global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getModuleClass("dPhospi", "service"));
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+if(!$canRead) {
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 // Récupération de la chambre à ajouter/editer
@@ -38,13 +38,13 @@ foreach ($services as $service_id => $service) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('chambreSel', $chambreSel);
-$smarty->assign('litSel', $litSel);
-$smarty->assign('services', $services);
+$smarty->assign("chambreSel", $chambreSel);
+$smarty->assign("litSel"    , $litSel);
+$smarty->assign("services"  , $services);
 
-$smarty->display('vw_idx_chambres.tpl');
+$smarty->display("vw_idx_chambres.tpl");
 
 ?>

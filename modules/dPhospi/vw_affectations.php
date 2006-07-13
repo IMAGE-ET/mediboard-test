@@ -9,20 +9,20 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("mediusers", "functions"));
-require_once($AppUI->getModuleClass("dPhospi", "service"));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
+require_once($AppUI->getModuleClass("mediusers"   , "functions" ));
+require_once($AppUI->getModuleClass("dPhospi"     , "service"   ));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"  ));
 require_once($AppUI->getModuleClass("dPplanningOp", "pathologie"));
 
 global $pathos;
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+if(!$canRead) {
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
-$date = mbGetValueFromGetOrSession("date", mbDate()); 
+$date       = mbGetValueFromGetOrSession("date", mbDate()); 
 $heureLimit = "16:00:00";
-$mode = mbGetValueFromGetOrSession("mode");
+$mode       = mbGetValueFromGetOrSession("mode");
 
 // Initialisation de la liste des chirs, patients et plagesop
 global $listChirs;
@@ -182,18 +182,19 @@ $where = array(
 $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where);
 
 // Création du template
-require_once($AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
 $smarty->debugging = false;
-$smarty->assign('pathos' , $pathos);
-$smarty->assign('date' , $date );
-$smarty->assign('demain', mbDate("+ 1 day", $date));
-$smarty->assign('heureLimit', $heureLimit);
-$smarty->assign('mode', $mode);
-$smarty->assign('totalLits', $totalLits);
-$smarty->assign('services', $services);
-$smarty->assign('groupSejourNonAffectes' , $groupSejourNonAffectes);
+$smarty->assign("pathos"                 , $pathos);
+$smarty->assign("date"                   , $date );
+$smarty->assign("demain"                 , mbDate("+ 1 day", $date));
+$smarty->assign("heureLimit"             , $heureLimit);
+$smarty->assign("mode"                   , $mode);
+$smarty->assign("totalLits"              , $totalLits);
+$smarty->assign("services"               , $services);
+$smarty->assign("groupSejourNonAffectes" , $groupSejourNonAffectes);
 
-$smarty->display('vw_affectations.tpl');
+$smarty->display("vw_affectations.tpl");
+
 ?>

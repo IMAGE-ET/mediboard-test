@@ -14,7 +14,7 @@ require_once($AppUI->getModuleClass("system", "message"));
 global $mp_status;
 
 if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 // Récupération du message à ajouter/éditer
@@ -28,14 +28,14 @@ $messages = new CMessage;
 $messages = $messages->loadPublications($filter_status);
 
 // Création du template
-require_once($AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('message', $message);
-$smarty->assign('messages', $messages);
-$smarty->assign('mp_status', $mp_status);
-$smarty->assign('filter_status', $filter_status);
+$smarty->assign("message"      , $message      );
+$smarty->assign("messages"     , $messages     );
+$smarty->assign("mp_status"    , $mp_status    );
+$smarty->assign("filter_status", $filter_status);
 
-$smarty->display('view_messages.tpl');
+$smarty->display("view_messages.tpl");
 
 ?>

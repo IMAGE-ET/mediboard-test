@@ -1,6 +1,5 @@
 <!-- $Id$ -->
 
-{literal}
 <script type="text/javascript">
 function setClose(){
   var list = document.frmSelector.list;
@@ -10,7 +9,6 @@ function setClose(){
   window.close();
 }
 </script>
-{/literal}
 
 <form action="index.php" target="_self" name="frmSelector" method="get">
 
@@ -29,18 +27,18 @@ function setClose(){
   <td>
     <select name="spe" onChange="this.form.submit()">
       <option value="">&mdash; Trier par spécialité</option>
-      {foreach from=$specs item=curr_spec}
-      <option value="{$curr_spec->function_id}" {if $curr_spec->function_id == $spe} selected="selected"{/if}>
-        {$curr_spec->text}
+      {{foreach from=$specs item=curr_spec}}
+      <option value="{{$curr_spec->function_id}}" {{if $curr_spec->function_id == $spe}} selected="selected"{{/if}}>
+        {{$curr_spec->text}}
       </option>
-      {/foreach}
+      {{/foreach}}
     </select>
   </td>
 </tr>
 
 <tr>
   <th><label for="name" title="Nom partiel ou complet du chirurgien">Nom</label></th>
-  <td><input name="name" value="{$name}" size="30" /> <input type="submit" value="rechercher" /></td>
+  <td><input name="name" value="{{$name}}" size="30" /> <input type="submit" value="rechercher" /></td>
 </tr>
 
 <tr>
@@ -51,9 +49,9 @@ function setClose(){
   <td colspan="2">
     <select name="list"  size="8">
       <option value="0" selected="selected">&mdash; Choisir un praticien</option>
-      {foreach from=$prats item=curr_prat}
-      <option value="{$curr_prat->user_id}" ondblclick="setClose()">{$curr_prat->_view}</option>
-      {/foreach}
+      {{foreach from=$prats item=curr_prat}}
+      <option value="{{$curr_prat->user_id}}" ondblclick="setClose()">{{$curr_prat->_view}}</option>
+      {{/foreach}}
     </select>
   </td>
 </tr>

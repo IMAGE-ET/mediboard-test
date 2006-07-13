@@ -9,12 +9,12 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-if (!$canRead) {
+if(!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once( $AppUI->getModuleClass('dPressources', 'plageressource') );
-require_once( $AppUI->getModuleClass('mediusers') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPressources", "plageressource"));
 
 $prat_id = mbGetValueFromGet("prat_id", 0);
 if(!$prat_id) {
@@ -47,16 +47,16 @@ foreach($plages as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP;
 
 $smarty->debugging = false;
 
-$smarty->assign('deb', $deb);
-$smarty->assign('fin', $fin);
-$smarty->assign('type', $type);
-$smarty->assign('prat', $prat);
-$smarty->assign('plages', $plages);
-$smarty->assign('total', $total);
+$smarty->assign("deb"   , $deb   );
+$smarty->assign("fin"   , $fin   );
+$smarty->assign("type"  , $type  );
+$smarty->assign("prat"  , $prat  );
+$smarty->assign("plages", $plages);
+$smarty->assign("total" , $total );
 
-$smarty->display('print_rapport.tpl');
+$smarty->display("print_rapport.tpl");

@@ -18,36 +18,31 @@ if (!$canRead) {
 set_time_limit( 1800 );
 
 $sql = "SELECT
-plageconsult.date,
-consultation.consultation_id,
-operations.operation_id,
-consultation_anesth.consultation_anesth_id,
-patients.nom,
-patients.prenom
-
-FROM
-patients,
-consultation,
-plageconsult
-
-LEFT JOIN operations
-ON operations.pat_id = patients.patient_id
-
-LEFT JOIN consultation_anesth
-ON consultation_anesth.consultation_id = consultation.consultation_id
-
-WHERE
-(plageconsult.chir_id = '23'
-OR plageconsult.chir_id = '22'
-OR plageconsult.chir_id = '25'
-OR plageconsult.chir_id = '19')
-AND consultation.plageconsult_id = plageconsult.plageconsult_id
-AND consultation.patient_id = patients.patient_id
-AND operations.operation_id IS NOT NULL
-AND consultation_anesth.consultation_anesth_id IS NULL
-GROUP BY consultation.consultation_id
-
-ORDER BY plageconsult.date";
+          plageconsult.date,
+          consultation.consultation_id,
+          operations.operation_id,
+          consultation_anesth.consultation_anesth_id,
+          patients.nom,
+          patients.prenom
+        FROM
+          patients,
+          consultation,
+          plageconsult
+        LEFT JOIN operations
+        ON operations.pat_id = patients.patient_id
+        LEFT JOIN consultation_anesth
+        ON consultation_anesth.consultation_id = consultation.consultation_id
+        WHERE
+          (plageconsult.chir_id = '23'
+          OR plageconsult.chir_id = '22'
+          OR plageconsult.chir_id = '25'
+          OR plageconsult.chir_id = '19')
+        AND consultation.plageconsult_id = plageconsult.plageconsult_id
+        AND consultation.patient_id = patients.patient_id
+        AND operations.operation_id IS NOT NULL
+        AND consultation_anesth.consultation_anesth_id IS NULL
+        GROUP BY consultation.consultation_id
+        ORDER BY plageconsult.date";
 
 $listConsult = db_loadlist($sql);
 
@@ -63,3 +58,5 @@ foreach($listConsult as $key => $value) {
 }
 
 echo "$i consultations d'anesthésie sur un besoin de $n";
+
+?>

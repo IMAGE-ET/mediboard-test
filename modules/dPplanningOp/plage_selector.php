@@ -7,17 +7,17 @@
 * @author Romain Ollivier
 */
 
-GLOBAL $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m;
 
-if (!$canRead) {			// lock out users that do not have at least readPermission on this module
+if(!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once( $AppUI->getModuleClass('mediusers') );
+require_once($AppUI->getModuleClass("mediusers"));
 
-$chir = dPgetParam( $_GET, 'chir', 0);
-$month = dPgetParam( $_GET, 'month', date("m") );
-$year = dPgetParam( $_GET, 'year', date("Y") );
+$chir   = mbGetValueFromGet("chir" , 0);
+$month  = mbGetValueFromGet("month", date("m"));
+$year   = mbGetValueFromGet("year" , date("Y"));
 $pmonth = $month - 1;
 if($pmonth == 0) {
   $pyear = $year - 1;
@@ -30,14 +30,14 @@ if(strlen($pmonth) == 1)
 $nmonth = $month + 1;
 if($nmonth == 13) {
   $nyear = $year + 1;
-  $nmonth = '01';
+  $nmonth = "01";
 }
 else
   $nyear = $year;
 if(strlen($nmonth) == 1)
   $nmonth = "0".$nmonth;
-$curr_op_hour = dPgetParam( $_GET, 'curr_op_hour', "25");
-$curr_op_min = dPgetParam($_GET, 'curr_op_min', "00");
+$curr_op_hour = mbGetValueFromGet("curr_op_hour", "25");
+$curr_op_min  = mbGetValueFromGet("curr_op_min" , "00");
 $today = date("Y-m-d");
 $monthList = array("Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
                    "Juillet", "Aout", "Septembre", "Octobre", "Novembre",
@@ -70,21 +70,21 @@ foreach($list as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP;
 
-$smarty->assign('month', $month);
-$smarty->assign('nameMonth', $nameMonth);
-$smarty->assign('pmonth', $pmonth);
-$smarty->assign('nmonth', $nmonth);
-$smarty->assign('year', $year);
-$smarty->assign('pyear', $pyear);
-$smarty->assign('nyear', $nyear);
-$smarty->assign('curr_op_hour', $curr_op_hour);
-$smarty->assign('curr_op_min', $curr_op_min);
-$smarty->assign('chir', $chir);
-$smarty->assign('list', $list);
+$smarty->assign("month"       , $month);
+$smarty->assign("nameMonth"   , $nameMonth);
+$smarty->assign("pmonth"      , $pmonth);
+$smarty->assign("nmonth"      , $nmonth);
+$smarty->assign("year"        , $year);
+$smarty->assign("pyear"       , $pyear);
+$smarty->assign("nyear"       , $nyear);
+$smarty->assign("curr_op_hour", $curr_op_hour);
+$smarty->assign("curr_op_min" , $curr_op_min);
+$smarty->assign("chir"        , $chir);
+$smarty->assign("list"        , $list);
 
-$smarty->display('plage_selector.tpl');
+$smarty->display("plage_selector.tpl");
 
 ?>

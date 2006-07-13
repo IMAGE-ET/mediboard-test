@@ -8,18 +8,20 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m;
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPbloc', 'salle') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph'));
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph_line'));
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph_regstat'));
+
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPbloc"      , "salle"   ));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
+
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"        ));
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_line"   ));
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_regstat"));
 
 $debut    = mbGetValueFromGet("debut"   , mbDate("-1 YEAR"));
-$fin      = mbGetValueFromGet("fin"     , mbDate());
-$prat_id  = mbGetValueFromGet("prat_id" , 0);
-$salle_id = mbGetValueFromGet("salle_id", 0);
-$codeCCAM = mbGetValueFromGet("codeCCAM", "");
+$fin      = mbGetValueFromGet("fin"     , mbDate()         );
+$prat_id  = mbGetValueFromGet("prat_id" , 0                );
+$salle_id = mbGetValueFromGet("salle_id", 0                );
+$codeCCAM = mbGetValueFromGet("codeCCAM", ""               );
 
 $pratSel = new CMediusers;
 $pratSel->load($prat_id);

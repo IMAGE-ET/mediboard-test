@@ -86,7 +86,7 @@ if($pack_id) {
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('users', $users);
 $smarty->assign('user_id', $user_id);

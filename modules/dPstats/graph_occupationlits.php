@@ -8,16 +8,18 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m;
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPhospi', 'service') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph'));
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph_bar'));
 
-$debut      = mbGetValueFromGet("debut"   , mbDate("-1 YEAR"));
-$fin        = mbGetValueFromGet("fin"     , mbDate());
-$prat_id    = mbGetValueFromGet("prat_id" , 0);
-$service_id = mbGetValueFromGet("service_id", 0);
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPhospi"     , "service" ));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
+
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"    ));
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_bar"));
+
+$debut      = mbGetValueFromGet("debut"     , mbDate("-1 YEAR"));
+$fin        = mbGetValueFromGet("fin"       , mbDate()         );
+$prat_id    = mbGetValueFromGet("prat_id"   , 0                );
+$service_id = mbGetValueFromGet("service_id", 0                );
 
 $pratSel = new CMediusers;
 $pratSel->load($prat_id);
@@ -28,7 +30,7 @@ $serviceSel->load($service_id);
 $datax = array("ticks" => array(), "date" => array());
 for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
   $datax["ticks"][] = mbTranformTime("+0 DAY", $i, "%m/%Y");
-  $datax["date"][] = mbTranformTime("+0 DAY", $i, "%Y-%m");
+  $datax["date"][]  = mbTranformTime("+0 DAY", $i, "%Y-%m");
 }
 
 $sql = "SELECT * FROM service";
@@ -131,7 +133,7 @@ foreach($hoursByService as $key => $value) {
   //$bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);
   $bplot->SetFillColor($colors[$key]);
   $bplot->setLegend($value["nom"]);
-  $bplot->value->SetFormat('%01.0f');
+  $bplot->value->SetFormat("%01.0f");
   $bplot->value->SetColor($colors[$key]);
   $bplot->value->SetFont(FF_ARIAL,FS_NORMAL, 8); 
   //$bplot->value->show();

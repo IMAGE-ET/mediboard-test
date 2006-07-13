@@ -9,12 +9,12 @@
 
 global $AppUI, $canRead, $canEdit, $m, $tab, $dPconfig;
 
-require_once( $AppUI->getModuleClass("dPplanningOp", "sejour"));
-require_once( $AppUI->getModuleClass('mediusers'));
-require_once( $AppUI->getModuleClass('dPpatients', 'patients'));
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPplanningOp", "sejour"  ));
+require_once($AppUI->getModuleClass("dPpatients"  , "patients"));
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
+if(!$canRead) {
+	$AppUI->redirect("m=system&a=access_denied");
 }
 
 $sejour_id = mbGetValueFromGetOrSession("sejour_id");
@@ -82,14 +82,15 @@ for ($i = 0; $i < 60; $i += $sejourConfig["min_intervalle"]) {
 require_once($AppUI->getSystemClass ("smartydp" ));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("sejour", $sejour);
+$smarty->assign("sejour"    , $sejour);
 $smarty->assign("praticien" , $praticien);
-$smarty->assign("patient"  , $patient);
-$smarty->assign("sejours", $sejours);
+$smarty->assign("patient"   , $patient);
+$smarty->assign("sejours"   , $sejours);
 
 $smarty->assign("listPraticiens", $listPraticiens);
+
 $smarty->assign("hours", $hours);
-$smarty->assign("mins", $mins);
+$smarty->assign("mins" , $mins);
 
 $smarty->display("vw_edit_sejour.tpl");
 

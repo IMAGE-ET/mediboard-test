@@ -70,7 +70,7 @@ if (!$aide_id) {
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('users', $users);
 $smarty->assign('classes', $classes);

@@ -8,17 +8,19 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m;
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPbloc', 'salle') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph'));
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph_bar'));
+
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPbloc"      , "salle"   ));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
+
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"    ));
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_bar"));
 
 $debut    = mbGetValueFromGet("debut"   , mbDate("-1 YEAR"));
-$fin      = mbGetValueFromGet("fin"     , mbDate());
-$prat_id  = mbGetValueFromGet("prat_id" , 0);
-$salle_id = mbGetValueFromGet("salle_id", 0);
-$codeCCAM = mbGetValueFromGet("codeCCAM", "");
+$fin      = mbGetValueFromGet("fin"     , mbDate()         );
+$prat_id  = mbGetValueFromGet("prat_id" , 0                );
+$salle_id = mbGetValueFromGet("salle_id", 0                );
+$codeCCAM = mbGetValueFromGet("codeCCAM", ""               );
 
 $total = 0;
 
@@ -137,7 +139,7 @@ foreach($opbysalle as $key => $value) {
   $bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);
   $bplot->SetColor("white");
   $bplot->setLegend($value["nom"]);
-  $bplot->value->SetFormat('%01.0f');
+  $bplot->value->SetFormat("%01.0f");
   $bplot->value->SetColor($colors[$key]);
   $bplot->value->SetFont(FF_ARIAL,FS_NORMAL, 8); 
   //$bplot->value->show();
@@ -146,7 +148,7 @@ foreach($opbysalle as $key => $value) {
 
 $gbplot = new AccBarPlot($listPlots);
 $gbplot->SetWidth(0.6);
-$gbplot->value->SetFormat('%01.0f'); 
+$gbplot->value->SetFormat("%01.0f"); 
 $gbplot->value->show();
 
 // Set color for the frame of each bar

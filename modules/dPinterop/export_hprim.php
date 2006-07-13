@@ -96,7 +96,7 @@ $doc->getSentFiles();
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign("doc", $doc);
 $smarty->assign("fileprefix", $fileprefix);

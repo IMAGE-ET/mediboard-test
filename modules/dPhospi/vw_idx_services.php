@@ -11,7 +11,7 @@ global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getModuleClass("dPhospi", "service"));
 
-if (!$canRead) {
+if(!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
@@ -25,12 +25,12 @@ $services = new CService;
 $services = $services->loadList(null, $order);
 
 // Création du template
-require_once($AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('serviceSel', $serviceSel);
-$smarty->assign('services', $services);
+$smarty->assign("serviceSel", $serviceSel);
+$smarty->assign("services"  , $services  );
 
-$smarty->display('vw_idx_services.tpl');
+$smarty->display("vw_idx_services.tpl");
 
 ?>

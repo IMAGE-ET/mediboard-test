@@ -21,7 +21,7 @@ $cr = $compteRendu->source;
 
 // Création du template
 require_once( $AppUI->getSystemClass('smartydp'));
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign('cr', $cr);
 

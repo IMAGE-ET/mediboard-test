@@ -14,19 +14,19 @@ global $AppUI, $canRead, $canEdit, $m;
 //  $AppUI->redirect( "m=system&a=access_denied" );
 //}
 
-require_once( $AppUI->getModuleClass('dPccam', 'acte') );
-require_once( $AppUI->getModuleClass('dPcim10', 'codecim10') );
+require_once($AppUI->getModuleClass("dPccam" , "acte"     ));
+require_once($AppUI->getModuleClass("dPcim10", "codecim10"));
 
 $list = array();
-$type = dPgetParam( $_GET, 'type', 0 );
-$chir = dPgetParam( $_GET, 'chir', 0 );
+$type = mbGetValueFromGet("type", 0 );
+$chir = mbGetValueFromGet("chir", 0 );
 
 switch($type) {
-	case 'ccam' :
-  case 'ccam2':
+	case "ccam" :
+  case "ccam2":
 		$sql = "select favoris_code
 				from ccamfavoris
-				where favoris_user = '$chir' or favoris_user = $AppUI->user_id
+				where favoris_user = '$chir' or favoris_user = '$AppUI->user_id'
 				group by favoris_code
 				order by favoris_code";
 		$codes = db_loadlist($sql);
@@ -57,12 +57,12 @@ switch($type) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('type', $type);
-$smarty->assign('list', $list);
+$smarty->assign("type", $type);
+$smarty->assign("list", $list);
 
-$smarty->display('code_selector.tpl');
+$smarty->display("code_selector.tpl");
 
 ?>

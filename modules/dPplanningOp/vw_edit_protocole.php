@@ -9,15 +9,15 @@
 
 global $AppUI, $canRead, $canEdit, $m, $tab;
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'protocole') );
-require_once( $AppUI->getModuleClass('mediusers') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPplanningOp", "protocole"));
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
+if(!$canRead) {
+	$AppUI->redirect("m=system&a=access_denied");
 }
 
 $protocole_id = mbGetValueFromGetOrSession("protocole_id", 0);
-$chir_id = mbGetValueFromGetOrSession("chir_id", 0);
+$chir_id      = mbGetValueFromGetOrSession("chir_id"     , 0);
 
 // L'utilisateur est-il un praticien
 $mediuser = new CMediusers;
@@ -62,17 +62,17 @@ for ($i = 0; $i < 60; $i += $step) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+require_once($AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
 
-$smarty->assign('protocole', $protocole);
-$smarty->assign('chir', $chir);
+$smarty->assign("protocole", $protocole);
+$smarty->assign("chir"     , $chir);
 
-$smarty->assign('listPraticiens', $listPraticiens);
+$smarty->assign("listPraticiens", $listPraticiens);
 
-$smarty->assign('hours', $hours);
-$smarty->assign('mins', $mins);
+$smarty->assign("hours", $hours);
+$smarty->assign("mins" , $mins);
 
-$smarty->display('vw_edit_protocole.tpl');
+$smarty->display("vw_edit_protocole.tpl");
 
 ?>
