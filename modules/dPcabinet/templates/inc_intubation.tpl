@@ -12,19 +12,19 @@
     </td>
     {{/foreach}}
 
-    <th><label for="bouche" title="Ouverture de la bouche">Ouverture de la bouche</label></th>
+    <th><label for="bouche_m20" title="Ouverture de la bouche">Ouverture de la bouche</label></th>
     <td>
       {{foreach from=$consult->_ref_consult_anesth->_enums.bouche item=curr_bouche}}
-      <input type="radio" name="bouche" value="{{$curr_bouche}}" {{if $consult->_ref_consult_anesth->bouche == $curr_bouche}}checked="checked"{{/if}} />{{tr}}{{$curr_bouche}}{{/tr}}<br />
+      <input type="radio" name="bouche" value="{{$curr_bouche}}" {{if $consult->_ref_consult_anesth->bouche == $curr_bouche}}checked="checked"{{/if}} /><label for="bouche_{{$curr_bouche}}" title="{{tr}}{{$curr_bouche}}{{/tr}}">{{tr}}{{$curr_bouche}}{{/tr}}</label><br />
       {{/foreach}}
     </td>
   </tr>
   
   <tr>
-    <th><label for="distThyro" title="Distance thyro-mentonnière">Distance thyro-mentonnière</label></th>
+    <th><label for="distThyro_m65" title="Distance thyro-mentonnière">Distance thyro-mentonnière</label></th>
     <td>
       {{foreach from=$consult->_ref_consult_anesth->_enums.distThyro item=curr_distThyro}}
-      <input type="radio" name="distThyro" value="{{$curr_distThyro}}" {{if $consult->_ref_consult_anesth->distThyro == $curr_distThyro}}checked="checked"{{/if}} />{{tr}}{{$curr_distThyro}}{{/tr}}<br />
+      <input type="radio" name="distThyro" value="{{$curr_distThyro}}" {{if $consult->_ref_consult_anesth->distThyro == $curr_distThyro}}checked="checked"{{/if}} /><label for="distThyro_{{$curr_distThyro}}" title="{{tr}}{{$curr_distThyro}}{{/tr}}">{{tr}}{{$curr_distThyro}}{{/tr}}</label><br />
       {{/foreach}}
     </td>
   </tr>

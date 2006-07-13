@@ -29,7 +29,7 @@
             </ul>
           </td>
 
-          <td class="text">
+          <td class="text" width="200">
             <form name="EditPosFrm" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="del" value="0" />
