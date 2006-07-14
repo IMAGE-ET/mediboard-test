@@ -63,10 +63,10 @@ foreach($files as $filePath) {
   );
 
   $doc = new CFile;
-  $doc->loadObject($where);
+  $doc->file_id = 1; // $doc->loadObject($where); // Takes way too much time
   if (!$doc->file_id) {
     $filesWithoutDocCount++;
-    if (count($filesWithoutDocCount) < $show) {
+    if (count($filesWithoutDocTruncated) < $show) {
       $filesWithoutDocTruncated[] = array(
         "fileName" => $fileName,
         "fileObjectId" => $fileObjectId,

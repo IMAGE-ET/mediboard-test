@@ -374,13 +374,13 @@ class CSetupdPcabinet {
           $fileDirHash = intval($fileObjectId / 1000);
           $filePathNew = "files/$fileObjectClass/$fileDirHash/$fileObjectId/$fileRealName";
 
+          CMbPath::forceDir(dirname($filePathNew));
           if (!rename($filePathOld, $filePathNew)) {
             trigger_error("Impossible to move '$filePathOld' to '$filePathNew'", E_USER_ERROR);
+            return "0.40";
           }
         }
-        
-        return "0.40";
-        
+                
       case "0.41":
         return "0.41";
     }
