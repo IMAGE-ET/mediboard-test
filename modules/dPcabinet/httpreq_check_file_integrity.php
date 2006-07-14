@@ -49,7 +49,7 @@ do {
 $files = glob("files/*/*/*/*");
 $filesCount = 0;
 $filesWithoutDocCount = 0;
-$filesWithoutDocTrucuncated = array();
+$filesWithoutDocTruncated = array();
 foreach($files as $filePath) {
   $filesCount++;
   $fileName = basename($filePath);
