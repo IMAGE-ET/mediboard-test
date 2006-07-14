@@ -91,7 +91,10 @@ require_once($AppUI->getModuleClass("dPcabinet", "files"));
 if ($file_id = mbGetValueFromGet("file_id")) {
   $file = new CFile();
   $file->load($file_id);
-  $file->findFilePath();
+  if (!is_file($file->_file_path)) {
+    $AppUI->setMsg("Fichier manquant", UI_MSG_ERROR);
+    $AppUI->redirect();
+  }
 
 	// BEGIN extra headers to resolve IE caching bug (JRP 9 Feb 2003)
 	// [http://bugs.php.net/bug.php?id=16173]

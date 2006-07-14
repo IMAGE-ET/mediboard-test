@@ -42,10 +42,11 @@ class CFile extends CMbObject {
     // Ensure the integrity of some variables
     $this->file_id = intval($this->file_id);
     $this->file_object_id = intval($this->file_object_id);
-    return null;
   }
 
   function updateFormFields() {
+    global $filesDir;
+    
     $this->_file_size = mbConvertDecaBinary($this->file_size);
 
     if (!$this->file_object_id) {
@@ -55,20 +56,12 @@ class CFile extends CMbObject {
     // Computes complete file path
     $this->_sub_dir = "$this->file_class";
     $this->_sub_dir .= "/".intval($this->file_object_id / 1000);
+
+    $this->_file_path = "$filesDir/$this->_sub_dir/$this->file_object_id/$this->file_real_filename";
   }
   
-  function findFilePath() {
-    global $filesDir;
-    
-    $this->_file_path = "$filesDir/$this->_sub_dir/$this->file_object_id/$this->file_real_filename";
-    if (!is_file($this->_file_path)) {
-      trigger_error("Fichier introuvable", E_USER_WARNING);
-    }
-  }
-
   function delete() {
     // Actually remove the file
-    $this->findFilePath();
     @unlink($this->_file_path);
 
     // Delete any index entries
