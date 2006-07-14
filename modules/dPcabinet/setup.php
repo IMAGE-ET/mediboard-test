@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.40";
+$config["mod_version"]     = "0.41";
 $config["mod_directory"]   = "dPcabinet";
 $config["mod_setup_class"] = "CSetupdPcabinet";
 $config["mod_type"]        = "user";
@@ -347,6 +347,7 @@ class CSetupdPcabinet {
         db_exec( $sql ); db_error();
         $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'trans', 'obst', 'chir', 'med', 'fam', 'alle' ) NOT NULL DEFAULT 'med';";
         db_exec( $sql ); db_error();
+        
       case "0.40":
         // Move all files from former to latter strategy
         $nbFiles = 0;
@@ -379,7 +380,10 @@ class CSetupdPcabinet {
         
         mbTrace($nbFiles, "Number of files to be moved");
         die();
-        return "0.39";
+        return "0.40";
+        
+      case "0.41":
+        return "0.41";
     }
     return false;
   }
