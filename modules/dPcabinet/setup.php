@@ -350,7 +350,6 @@ class CSetupdPcabinet {
         
       case "0.40":
         // Move all files from former to latter strategy
-        $nbFiles = 0;
         foreach(glob("files/*/*/*") as $filePath) {
           $fileFragment = $filePath;
           $filePathOld = $fileFragment;
@@ -374,12 +373,12 @@ class CSetupdPcabinet {
                     
           $fileDirHash = intval($fileObjectId / 1000);
           $filePathNew = "files/$fileObjectClass/$fileDirHash/$fileObjectId/$fileRealName";
-          $nbFiles++;
-          // rename($filePathOld, $filePathNew);
+
+          if (!rename($filePathOld, $filePathNew)) {
+            trigger_error("Impossible to move '$filePathOld' to '$filePathNew'", E_USER_ERROR);
+          }
         }
         
-        mbTrace($nbFiles, "Number of files to be moved");
-        die();
         return "0.40";
         
       case "0.41":
