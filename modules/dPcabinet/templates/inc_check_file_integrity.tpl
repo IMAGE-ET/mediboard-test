@@ -4,16 +4,17 @@
   <tr>
     <th class="title" colspan="4">Bilan d'intégrité</th>
   </tr>
+  <tr>
     <th>Nombre de documents</th>
     <th>Nombre de documents sans fichiers</th>
     <th>Nombre de fichiers</th>
     <th>Nombre de fichiers sans documents</th>
   </tr>
   <tr>
-    <td>{{$docs|@count}}</td>
-    <td>{{$docsWithoutFile|@count}}</td>
-    <td>{{$files|@count}}</td>
-    <td>{{$filesWithoutDoc|@count}}</td>
+    <td>{{$docsCount}}</td>
+    <td>{{$docsWithoutFileCount}}</td>
+    <td>{{$filesCount}}</td>
+    <td>{{$filesWithoutDocCount}}</td>
   </tr>
 </table>
 
@@ -21,8 +22,8 @@
   <tr>
     <th class="title" colspan="4">
       Détail des documents sans fichiers
-      {{if $docsWithoutFile|@count > $limit}}
-      ({{$limit}} premiers documents sur {{$docsWithoutFile|@count}})
+      {{if $docsWithoutFileCount > $show}}
+      ({{$show}} premiers documents sur {{$docsWithoutFileCount}})
       {{/if}}
     </th>
   </tr>
@@ -47,8 +48,8 @@
   <tr>
     <th class="title" colspan="4">
       Détail des fichiers sans documents
-      {{if $filesWithoutDoc|@count > $limit}}
-      ({{$limit}} premiers fichiers sur {{$filesWithoutDoc|@count}})
+      {{if $filesWithoutDocCount > $show}}
+      ({{$show}} premiers fichiers sur {{$filesWithoutDocCount}})
       {{/if}}
     </th>
   </tr>
@@ -58,7 +59,7 @@
     <th>Nom réel du fichier</th>
     <th>Chemin du fichier</th>
   </tr>
-  {{foreach from=$filesWithoutDoc item=curr_file}}
+  {{foreach from=$filesWithoutDocTruncated item=curr_file}}
   <tr>
     <td>{{$curr_file.fileObjectClass}}</td>
     <td>{{$curr_file.fileObjectId}}</td>
