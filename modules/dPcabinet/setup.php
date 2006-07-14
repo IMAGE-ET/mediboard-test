@@ -349,6 +349,7 @@ class CSetupdPcabinet {
         db_exec( $sql ); db_error();
       case "0.40":
         // Move all files from former to latter strategy
+        $nbFiles = 0;
         foreach(glob("files/*/*/*") as $filePath) {
           $fileFragment = $filePath;
           $filePathOld = $fileFragment;
@@ -372,10 +373,12 @@ class CSetupdPcabinet {
                     
           $fileDirHash = intval($fileObjectId / 1000);
           $filePathNew = "files/$fileObjectClass/$fileDirHash/$fileObjectId/$fileRealName";
-          mbTrace($filePathOld, "Old Path");
-          mbTrace($filePathNew, "New Path");
+          $nbFiles++;
           // rename($filePathOld, $filePathNew);
         }
+        
+        mbTrace($nbFiles, "Number of files to be moved");
+        die();
         return "0.39";
     }
     return false;
