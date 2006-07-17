@@ -56,14 +56,12 @@ foreach($files as $filePath) {
   $fileObjectId = basename(dirname($filePath));
   $fileObjectClass = basename(dirname(dirname(dirname($filePath))));
 
-  $where = array(
+  $where = array (
     "file_real_filename" => "= '$fileName'",
-    "file_object_id" => "= '$fileObjectId'",
-    "file_class" => "= '$fileObjectClass'",
   );
 
   $doc = new CFile;
-  $doc->file_id = 1; // $doc->loadObject($where); // Takes way too much time
+  $doc->loadObject($where); // Takes way too much time
   if (!$doc->file_id) {
     $filesWithoutDocCount++;
     if (count($filesWithoutDocTruncated) < $show) {

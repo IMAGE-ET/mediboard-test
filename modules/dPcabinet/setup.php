@@ -380,8 +380,19 @@ class CSetupdPcabinet {
             return "0.40";
           }
         }
+        
+        CMbPath::purgeEmptySubdirs("files/consultations");
+        CMbPath::purgeEmptySubdirs("files/consultations2");
+        CMbPath::purgeEmptySubdirs("files/consult_anesth");
+        CMbPath::purgeEmptySubdirs("files/operations");
                 
       case "0.41":
+        $sql = "ALTER TABLE `files_mediboard` ADD INDEX ( `file_real_filename` );";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `files_mediboard` ADD UNIQUE ( `file_real_filename` );";
+        db_exec( $sql ); db_error();
+        
+      case "0.42";
         return "0.41";
     }
     return false;
