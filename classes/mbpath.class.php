@@ -11,8 +11,13 @@ require_once ("Archive/Tar.php");
 require_once ("Archive/Zip.php");
 
 class CMbPath {
+  /**
+   * Ensures a directory exists by building all tree sub-diriectories if possible
+   * @return job done boolean
+   */
   function forceDir($dir, $mode = 0755) {
     if (!$dir) {
+      trigger_error("Directory is null", E_USER_WARNING);
       return false;
     }
     
@@ -25,6 +30,54 @@ class CMbPath {
     }
   
     return false;
+  }
+  
+  /**
+   * @returns true if directory is empty
+   */
+  function isEmptyDir($dir) {
+    if (false === $dh = opendir($dir)) {
+      trigger_error("Passed argument is not a valid directory or couldn't be opened'", E_USER_WARNING);
+      return false;
+    }
+    
+    $file = readdir($dh); // for ./
+    $file = readdir($dh); // for ../
+    $file = readdir($dh); // for real first child
+
+    closedir($dh);
+
+    return $file == null;             
+  }
+  
+  /**
+   * Removes all empty sub-directories of a given directory
+   * @return integer removed directories count
+   */
+  function purgeEmptySubdirs($dir) {
+    $removedDirsCount = 0;
+    
+    if (false === $dh = opendir($dir)) {
+      trigger_error("Passed argument is not a valid directory or couldn't be opened'", E_USER_WARNING);
+      return 0;
+    }
+    
+    while ($node = readdir($dh)) {
+      $path = "$dir/$node";
+      if (is_dir($path) and $node != "." and $node != "..") {
+        $removedDirsCount += CMbPath::purgeEmptySubdirs($path);
+      }
+    }
+    closedir($dh);
+    
+    if (CMbPath::isEmptyDir($dir)) {
+      if (rmdir($dir)) {
+        mbTrace($dir, "Removed directory");
+        $removedDirsCount++;
+      }
+    }
+    
+    return $removedDirsCount;
   }
   
   function getExtension($path) {
