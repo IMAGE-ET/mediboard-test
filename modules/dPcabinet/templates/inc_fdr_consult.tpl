@@ -77,8 +77,8 @@ function newExam(oSelect, consultation_id) {
 function reloadFdr() {
   var mainUrl = new Url;
   mainUrl.setModuleAction("dPcabinet", "httpreq_vw_fdr_consult");
-  mainUrl.addParam("selConsult", document.editFrm.consultation_id.value);
-  mainUrl.requestUpdate('fdrConsult', { waitingText : null });
+  mainUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
+  mainUrl.requestUpdate('fdrConsultContent', { waitingText : null });
 }
 
 function submitFdr(oForm) {
@@ -107,7 +107,7 @@ function submitFdr(oForm) {
       <ul>
         {{foreach from=$consult->_ref_files item=curr_file}}
         <li>
-          <form name="uploadFrm{{$curr_file->file_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
+          <form name="delFrm{{$curr_file->file_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
             <a href="mbfileviewer.php?file_id={{$curr_file->file_id}}">{{$curr_file->file_name}}</a>
             ({{$curr_file->_file_size}})
             <input type="hidden" name="m" value="dPcabinet" />

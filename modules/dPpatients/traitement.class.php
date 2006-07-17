@@ -31,7 +31,7 @@ class CTraitement extends CMbObject {
 
     $this->_props["patient_id"] = "ref|notNull";
     $this->_props["debut"]      = "date|notNull";
-    $this->_props["fin"]        = "date";
+    $this->_props["fin"]        = "date|moreEquals|debut";
     $this->_props["traitement"] = "text";
   }
   

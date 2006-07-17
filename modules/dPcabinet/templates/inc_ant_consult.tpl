@@ -148,7 +148,7 @@ function incAntecedantsMain() {
         </tr>
         <tr>
           <td class="button" colspan="3">
-            <button type="button" onclick="submitAnt(this.form)">Ajouter</button>
+            <button class="submit" type="button" onclick="submitAnt(this.form)">Ajouter</button>
           </td>
         </tr>
       </table>
@@ -156,7 +156,7 @@ function incAntecedantsMain() {
       
       <hr />
 
-      <form name="editTrmtFrm" action="?m=dPcabinet" method="post">
+      <form name="editTrmtFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
       
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
@@ -178,7 +178,7 @@ function incAntecedantsMain() {
           <th><label for="debut" title="Début du traitement">Début</label></th>
           <td class="date">
             <div id="editTrmtFrm_debut_da">{{$today|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debut" value="{{$today}}" />
+            <input type="hidden" name="debut" title="{{$traitement->_props.debut}}" value="{{$today}}" />
             <img id="editTrmtFrm_debut_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
           <td rowspan="2">
@@ -192,13 +192,13 @@ function incAntecedantsMain() {
           </th>
           <td class="date">
             <div id="editTrmtFrm_fin_da">{{$today|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" value="{{$today}}" />
+            <input type="hidden" name="fin" title="{{$traitement->_props.fin}}" value="{{$today}}" />
             <img id="editTrmtFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>
         <tr>
           <td class="button" colspan="3">
-            <button type="button" onclick="submitAnt(this.form)">Ajouter</button>
+            <button class="submit" type="button" onclick="submitAnt(this.form)">Ajouter</button>
           </td>
         </tr>
       </table>

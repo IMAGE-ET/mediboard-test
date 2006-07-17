@@ -50,20 +50,6 @@ function pasteText(formName) {
   aide.value = 0;
 }
 
-function submitConsultWithChronoExams(chrono) {
-  var oForm = document.editFrmExams;
-  oForm.chrono.value = chrono;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadMain });
-}
-
-function reloadMain() {
-  var mainUrl = new Url;
-  mainUrl.setModuleAction("dPcabinet", "httpreq_vw_main_consult");
-  mainUrl.addParam("selConsult", document.editFrmExams.consultation_id.value);
-  mainUrl.requestUpdate('mainConsult', { waitingText : null });
-}
-
-
 function pageMain() {
 
   {{if $consult->consultation_id}}
@@ -102,32 +88,11 @@ function pageMain() {
 
       {{if $consult->consultation_id}}
       {{assign var="patient" value=$consult->_ref_patient}}
-      <form class="watch" name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-
-      <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_consultation_aed" />
-      <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
-      <input type="hidden" name="_check_premiere" value="{{$consult->_check_premiere}}" />
-      <table class="form">
-        <tr>
-          <th class="category" colspan="4">
-            <button id="triggerList" class="triggerHide" type="button" onclick="flipEffectElement('listConsult', 'Appear', 'Fade', 'triggerList');" style="float:left">+/-</button>
-            <input type="hidden" name="chrono" value="{{$consult->chrono}}" />
-            Consultation
-            (Etat : {{$consult->_etat}}
-            {{if $consult->chrono <= $smarty.const.CC_EN_COURS}}
-            / 
-            <button class="submit" type="button" onclick="submitConsultWithChronoExams({{$smarty.const.CC_TERMINE}})">Terminer</button>
-            {{/if}})
-          </th>
-        </tr>
-      </table>
-      </form>
-
+      <div id="finishBanner">
+      {{include file="inc_finish_banner.tpl"}}
+      </div>
       
       {{include file="inc_accord_ant_consult.tpl"}}
-
 
       {{/if}}
 

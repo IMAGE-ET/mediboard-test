@@ -26,6 +26,7 @@ $hour  = mbTime(null);
 
 // Utilisateur sélectionné ou utilisateur courant
 $prat_id = mbGetValueFromGetOrSession("chirSel", 0);
+$_is_anesth = false;
 
 $userSel = new CMediusers;
 $userSel->load($prat_id ? $prat_id : $AppUI->user_id);
@@ -154,8 +155,15 @@ $smarty->assign("antecedent", $antecedent);
 $traitement = new CTraitement();
 $traitement->loadAides($userSel->user_id);
 $smarty->assign("traitement", $traitement);
-  
-if ($consult->_ref_chir->isFromType(array("Anesthésiste")) || $consult->_ref_consult_anesth->consultation_anesth_id) {
+
+if ($consult->_ref_chir->isFromType(array("Anesthésiste")) || $consult->_ref_consult_anesth->consultation_anesth_id){
+  $_is_anesth=true;	
+}else{
+  $_is_anesth=false;
+}
+$smarty->assign('_is_anesth', $_is_anesth);  
+
+if ($_is_anesth) {
   
   $smarty->assign('consult_anesth', $consult->_ref_consult_anesth);
   $smarty->display('edit_consultation_anesth.tpl');

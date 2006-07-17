@@ -31,12 +31,6 @@ function pasteText(formName) {
   aide.value = 0;
 }
 
-function submitConsultWithChrono(chrono) {
-  var form = document.editFrm;
-  form.chrono.value = chrono;
-  form.submit();
-}
-
 function submitConsultAnesth() {
   var oForm = document.editAnesthPatFrm;
   submitFormAjax(oForm, 'systemMsg');
@@ -98,34 +92,11 @@ function pageMain() {
     
       {{if $consult->consultation_id}}
       {{assign var="patient" value=$consult->_ref_patient}}
-
-      <form name="editFrm" action="?m={{$m}}" method="post">
-
-      <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_consultation_aed" />
-      <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
-      <input type="hidden" name="_check_premiere" value="{{$consult->_check_premiere}}" />
-
-      <table class="form">
-        <tr>
-          <th class="category">
-            <button id="triggerList" class="triggerHide" type="button" onclick="flipEffectElement('listConsult', 'Appear', 'Fade', 'triggerList');" style="float:left">+/-</button>
-            <button class="print" type="button" style="float: left;" onclick="printFiche()">
-              Imprimer la fiche
-            </button>
-            <input type="hidden" name="chrono" value="{{$consult->chrono}}" />
-            Consultation
-            (Etat : {{$consult->_etat}}
-            {{if $consult->chrono <= $smarty.const.CC_EN_COURS}}
-            / <input type="button" value="Terminer" onclick="submitConsultWithChrono({{$smarty.const.CC_TERMINE}})" />
-            {{/if}})
-          </th>
-        </tr>
-      </table>
-
-      </form>
-
+      
+      <div id="finishBanner">
+      {{include file="inc_finish_banner.tpl"}}
+      </div>
+      
       {{include file="inc_accord_ant_consultAnesth.tpl"}}
 
     {{/if}}

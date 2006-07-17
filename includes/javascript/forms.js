@@ -197,7 +197,7 @@ function notNullOK(oElement) {
 }
 
 function checkMoreThan(oElement, aSpecFragments) {
-  if (sFragment1 = aSpecFragments[1]) {
+	if (sFragment1 = aSpecFragments[1]) {
 
     switch (sFragment1) {
       case "moreThan":
