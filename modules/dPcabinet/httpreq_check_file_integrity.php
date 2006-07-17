@@ -50,6 +50,8 @@ $files = glob("files/*/*/*/*");
 $filesCount = 0;
 $filesWithoutDocCount = 0;
 $filesWithoutDocTruncated = array();
+$filesWithBadDocCount = 0;
+$filesWithBadDocTruncated = array();
 foreach($files as $filePath) {
   $filesCount++;
   $fileName = basename($filePath);
@@ -59,9 +61,10 @@ foreach($files as $filePath) {
   $where = array (
     "file_real_filename" => "= '$fileName'",
   );
-
+  
   $doc = new CFile;
-  $doc->loadObject($where); // Takes way too much time
+  $doc->loadObject($where);
+
   if (!$doc->file_id) {
     $filesWithoutDocCount++;
     if (count($filesWithoutDocTruncated) < $show) {
@@ -73,6 +76,21 @@ foreach($files as $filePath) {
       );
     }
   }
+
+  if ($doc->file_id) {
+    if ($doc->file_object_id != $fileObjectId or $doc->file_class != $fileObjectClass) {
+      $filesWithBadDocCount++;
+      if (count($filesWithBadDocTruncated) < $show) {
+        $filesWithBadDocTruncated[] = array(
+          "fileName" => $fileName,
+          "fileObjectId" => $fileObjectId,
+          "fileObjectClass" => $fileObjectClass,
+          "filePath" => $filePath,
+        );
+      }
+    }
+  }
+
 }
 
 
@@ -86,6 +104,8 @@ $smarty->assign("docsWithoutFileCount", $docsWithoutFileCount);
 $smarty->assign("docsCount", $docsCount);
 $smarty->assign("filesWithoutDocTruncated", $filesWithoutDocTruncated);
 $smarty->assign("filesWithoutDocCount", $filesWithoutDocCount);
+$smarty->assign("filesWithBadDocTruncated", $filesWithBadDocTruncated);
+$smarty->assign("filesWithBadDocCount", $filesWithBadDocCount);
 $smarty->assign("filesCount", $filesCount);
 
 $smarty->display("inc_check_file_integrity.tpl");

@@ -350,6 +350,7 @@ class CSetupdPcabinet {
         
       case "0.40":
         // Move all files from former to latter strategy
+        set_time_limit(120);
         foreach(glob("files/*/*/*") as $filePath) {
           $fileFragment = $filePath;
           $filePathOld = $fileFragment;
@@ -360,10 +361,10 @@ class CSetupdPcabinet {
           $fileDir = basename($fileFragment);
 
           switch ($fileDir) {
-            case "consultations" : $fileObjectClass = "CConsultation" ; break;
-            case "consultations2": $fileObjectClass = "CConsultation" ; break;
-            case "consult_anesth": $fileObjectClass = "CConsultAnesth"; break;
-            case "operations"    : $fileObjectClass = "COperation"    ; break;
+            case "consultations"       : $fileObjectClass = "CConsultation" ; break;
+            case "consultations2"      : $fileObjectClass = "CConsultation" ; break;
+            case "consultations_anesth": $fileObjectClass = "CConsultAnesth"; break;
+            case "operations"          : $fileObjectClass = "COperation"    ; break;
           	default: $fileObjectClass = null;
           }
 
@@ -383,7 +384,7 @@ class CSetupdPcabinet {
         
         CMbPath::purgeEmptySubdirs("files/consultations");
         CMbPath::purgeEmptySubdirs("files/consultations2");
-        CMbPath::purgeEmptySubdirs("files/consult_anesth");
+        CMbPath::purgeEmptySubdirs("files/consultations_anesth");
         CMbPath::purgeEmptySubdirs("files/operations");
                 
       case "0.41":
