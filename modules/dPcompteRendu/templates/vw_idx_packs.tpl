@@ -160,7 +160,7 @@ function checkForm() {
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="modeles" value="{{$pack->modeles|escape:javascript}}" />
           <input type="hidden" name="_del" value="{{$curr_modele->compte_rendu_id}}" />
-          <button class="trash" type="submit"></button>
+          <button class="trash notext" type="submit"></button>
           </form>
         </td>
       </tr>

@@ -104,7 +104,7 @@
     </th>
     <td>
       <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" />
-      <button class="tick" type="button" onclick="putCCAM(this.form._codeCCAM.value)"></button>
+      <button class="tick notext" type="button" onclick="putCCAM(this.form._codeCCAM.value)"></button>
     </td>
     <td class="button">
       <input type="button" value="Choisir un code" onclick="popCode('ccam')"/>

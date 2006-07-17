@@ -229,7 +229,7 @@ function checkForm() {
           <input type="hidden" name="chir_id" value="{{$liste->chir_id}}" />
           <input type="hidden" name="function_id" value="{{$liste->function_id}}" />
           <input type="hidden" name="_del" value="{{$curr_valeur}}" />
-          <button class="trash" type="submit"></button>
+          <button class="trash notext" type="submit"></button>
           </form>
         </td>
       </tr>

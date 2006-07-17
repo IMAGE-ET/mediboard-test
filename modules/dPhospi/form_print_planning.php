@@ -28,7 +28,7 @@ $listServ = $listServ->loadlist();
 
 // Création du template
 require_once($AppUI->getSystemClass ("smartydp"));
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign("today"   , date("Y-m-d")." 06:00:00");
 $smarty->assign("tomorrow", date("Y-m-d")." 21:00:00");

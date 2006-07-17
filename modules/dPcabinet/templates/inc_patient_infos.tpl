@@ -1,5 +1,4 @@
-            <button onclick="editPat({{$patient->patient_id}})" style="float: left;">
-              <img src="modules/dPcabinet/images/edit.png" alt=""/>
+            <button class="edit notext" onclick="editPat({{$patient->patient_id}})" style="float: left;">
             </button>
             {{$patient->_view}}
             <br />

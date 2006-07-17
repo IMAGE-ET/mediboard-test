@@ -124,7 +124,7 @@ function pageMain() {
             <img id="selectFrm_date_trigger" src="./images/calendar.gif" alt="calendar" />
           </td>
           <td class="button">
-            <button class="print" type="button" onclick="printRapport()"></button>
+            <button class="print notext" type="button" onclick="printRapport()"></button>
           </td>
         </tr>
         <tr>

@@ -90,7 +90,7 @@ function incAntecedantsMain() {
           {{foreach from=$curr_cat item=curr_code}}
           <tr class="{{$cat}}">
             <td class="text">
-              <button class="tick" type="button" onclick="putCim10('{{$curr_code->code}}')"></button>
+              <button class="tick notext" type="button" onclick="putCim10('{{$curr_code->code}}')"></button>
               <button type="button" onclick="selectCim10('{{$curr_code->code}}')">
                 <img src="modules/dPcabinet/images/downarrow.png" alt=""/>
               </button>

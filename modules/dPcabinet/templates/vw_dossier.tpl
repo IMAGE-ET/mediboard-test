@@ -202,7 +202,7 @@ function printDocument(doc_id) {
             {{foreach from=$curr_op->_ref_documents item=document}}
             <li>
               {{$document->nom}}
-              <button class="print" onclick="printDocument({{$document->compte_rendu_id}})">
+              <button class="print notext" onclick="printDocument({{$document->compte_rendu_id}})">
               </button>
             </li>
             {{foreachelse}}

@@ -24,7 +24,7 @@ $listModules = $AppUI->getMenuModules();
 
 // Création du template
 require_once( $AppUI->getSystemClass ('smartydp' ) );
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP(1);
 
 $smarty->assign("logs", $logs);
 $smarty->assign("date", $date);

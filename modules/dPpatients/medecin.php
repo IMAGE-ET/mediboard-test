@@ -139,7 +139,7 @@ $str = @file_get_contents($path);
 if (!$str) {
   // Création du template
   require_once( $AppUI->getSystemClass ('smartydp' ) );
-  $smarty = new CSmartyDP;
+  $smarty = new CSmartyDP(1);
   
   $smarty->assign("end_of_process", true);
   $smarty->display("medecin.tpl");

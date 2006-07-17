@@ -419,7 +419,7 @@ function pageMain() {
             <input type="hidden" name="dosql" value="do_acteccam_aed" />
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
-            <button class="trash" type="submit"></button>
+            <button class="trash notext" type="submit"></button>
             </form>
           </td>
           <td class="text">{{$curr_acte->_ref_executant->_view}} : {{$curr_acte->code_acte}}</td>
@@ -437,7 +437,7 @@ function pageMain() {
           <th>{{$document->nom}}</th>
           {{if $document->source}}
           <td colspan="3">
-            <button class="print" onclick="imprimerDocument({{$document->compte_rendu_id}})"></button>
+            <button class="print notext" onclick="imprimerDocument({{$document->compte_rendu_id}})"></button>
           </td>
           {{else}}
           <td colspan="3">

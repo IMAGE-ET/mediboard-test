@@ -120,7 +120,7 @@ textarea {
   width: 99%;
 }
 
-a.button, button, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
+a.button, button, a.buttonedit, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
 a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange {
   color: #000;
   text-decoration: none;
@@ -130,73 +130,67 @@ a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange {
   background-color: #ddd;
   margin: 0 2px;
   padding: 0px 2px;
+  background-repeat: no-repeat;
+  background-position: center left;
+  height: 18px;
 }
 
-a.button:hover, button:hover, a.buttontrash:hover, a.buttonsubmit:hover, a.buttonnew:hover,
-a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, a.buttonsearch:hover, 
-a.buttontick:hover, a.buttonchange:hover {
+a.button:hover, button:hover, a.buttonedit:hover, a.buttontrash:hover, a.buttonsubmit:hover,
+a.buttonnew:hover, a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, 
+a.buttonsearch:hover, a.buttontick:hover, a.buttonchange:hover {
   background-color: #bbb;
+}
+
+button.edit, a.buttonedit {
+  background-image: url(images/buttons/edit.png);
+  
+  padding-left: 16px;
+  height: 18px;
 }
 
 button.trash, a.buttontrash {
   background-image: url(images/buttons/trash.png);
-  background-repeat: no-repeat;
-  background-position: center left;
-  padding-left: 18px;
-  height: 16px;
+  padding-left: 18px; 
 }
 
 button.submit, a.buttonsubmit {
   background-image: url(images/buttons/save.png);
-  background-repeat: no-repeat;
-  background-position: center left;
   padding-left: 18px;
 }
 button.new, a.buttonnew {
   background-image: url(images/buttons/new.png);
-  background-repeat: no-repeat;
-  background-position: center left;
   padding-left: 18px;
 }
 button.print, a.buttonprint {
   background-image: url(images/buttons/print.png);
-  background-repeat: no-repeat;
-  background-position: center left;
   padding-left: 18px;
-  height: 16px;  
 }
 button.cancel, a.buttoncancel {
   background-image: url(images/buttons/cancel.png);
-  background-repeat: no-repeat;
-  background-position: center left;
   padding-left: 18px;
-  height: 16px;  
 }
+
 button.modify, a.buttonmodify {
   background-image: url(images/buttons/save.png);
-  background-repeat: no-repeat;
-  background-position: center left;
   padding-left: 18px;
 }
 button.search, a.buttonsearch {
   background-image: url(images/buttons/search.png);
-  background-repeat: no-repeat;
-  background-position: center left;
   padding-left: 18px;
 }
 button.tick, a.buttontick {
   background-image: url(images/buttons/tick.png);
-  background-repeat: no-repeat;
-  background-position: 2px 0px;
   padding-left: 18px;
-  height: 16px;
+  height: 18px;
 }
 
 button.change, a.buttonchange {
   background-image: url(images/buttons/change.png);
-  background-repeat: no-repeat;
-  background-position: 2px 0px;
   padding-left: 18px;
+}
+
+button.notext {
+  padding : 0px 0px 0px 10px;
 }
 
 input {

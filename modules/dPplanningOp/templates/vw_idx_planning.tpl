@@ -154,10 +154,9 @@ function pageMain() {
                   <input type="hidden" name="dosql" value="do_modele_aed" />
                   <input type="hidden" name="object_id" value="{{$curr_op->operation_id}}" />
                   <input type="hidden" name="compte_rendu_id" value="{{$document->compte_rendu_id}}" />
-                  <button type="button" onclick="editDocument({{$document->compte_rendu_id}})">
-                    <img src="modules/dPplanningOp/images/edit.png" /> 
+                  <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">
                   </button>
-                  <button class="trash" type="button" onclick="this.form.del.value = 1; this.form.submit()"></button>
+                  <button class="trash notext" type="button" onclick="this.form.del.value = 1; this.form.submit()"></button>
                   </form>
                 </td>
               </tr>

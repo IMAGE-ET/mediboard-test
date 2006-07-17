@@ -114,9 +114,8 @@ function submitFdr(oForm) {
             <input type="hidden" name="dosql" value="do_file_aed" />
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
-            <button class="cancel" type="button"
-              onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadFdr})"/>
-            </button>
+            <button class="cancel notext" type="button"
+              onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadFdr})"/></button>
           </form>
         </li>
         {{foreachelse}}
@@ -146,10 +145,8 @@ function submitFdr(oForm) {
           <input type="hidden" name="dosql" value="do_modele_aed" />
           <input type="hidden" name="object_id" value="{{$consult->consultation_id}}" />
           <input type="hidden" name="compte_rendu_id" value="{{$document->compte_rendu_id}}" />
-          <button type="button" onclick="editDocument({{$document->compte_rendu_id}})">
-            <img src="modules/dPcabinet/images/edit.png" alt="" /> 
-          </button>
-          <button class="trash" type="button" onclick="this.form.del.value = 1; submitFdr(this.form)">
+          <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})"></button>
+          <button class="trash notext" type="button" onclick="this.form.del.value = 1; submitFdr(this.form)">
           </button>
           </form>
         </td>

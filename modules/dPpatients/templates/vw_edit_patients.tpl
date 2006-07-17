@@ -196,7 +196,7 @@ function pageMain() {
         </th>
         <td class="readonly">
           <input type="text" name="_medecin_traitant_name" size="30" value="Dr. {{$patient->_ref_medecin_traitant->_view}}" readonly="readonly" />
-          <button class="cancel" type="button" onclick="delMed('_traitant')"></button>
+          <button class="cancel notext" type="button" onclick="delMed('_traitant')"></button>
         </td>
         <td class="button"><input tabindex="26" type="button" value="choisir un médecin" onclick="popMed('_traitant')" /></td>
       </tr>
@@ -213,7 +213,7 @@ function pageMain() {
         </th>
         <td class="readonly">
           <input type="text" name="_medecin1_name" size="30" value="Dr. {{$patient->_ref_medecin1->_view}}" readonly="readonly" />
-          <button class="cancel" type="button" onclick="delMed('1')"></button>
+          <button class="cancel notext" type="button" onclick="delMed('1')"></button>
         </td>
         <td class="button"><input tabindex="28" type="button" value="choisir un médecin" onclick="popMed('1')" /></td>
       </tr>
@@ -230,7 +230,7 @@ function pageMain() {
         </th>
         <td class="readonly">
           <input type="text" name="_medecin2_name" size="30" value="{{if ($patient->_ref_medecin2)}}Dr. {{$patient->_ref_medecin2->_view}}{{/if}}" readonly="readonly" />
-          <button class="cancel" type="button" onclick="delMed('2')"></button>
+          <button class="cancel notext" type="button" onclick="delMed('2')"></button>
         </td>
         <td class="button"><input tabindex="29" type="button" value="choisir un médecin" onclick="popMed('2')" /></td>
       </tr>
@@ -250,7 +250,7 @@ function pageMain() {
         </th>
         <td class="readonly">
           <input type="text" name="_medecin3_name" size="30" value="{{if ($patient->_ref_medecin3)}}Dr. {{$patient->_ref_medecin3->_view}}{{/if}}" readonly="readonly" />
-          <button class="cancel" type="button" onclick="delMed('3')"></button>
+          <button class="cancel notext" type="button" onclick="delMed('3')"></button>
         </td>
         <td class="button"><input tabindex="30" type="button" value="choisir un médecin" onclick="popMed('3')" /></td>
       </tr>

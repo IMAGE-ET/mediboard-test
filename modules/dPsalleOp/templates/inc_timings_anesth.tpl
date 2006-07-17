@@ -13,7 +13,7 @@
                   Entrée patient:
                   {{if $canEdit}}
                   <input name="entree_bloc" size="5" type="text" value="{{$selOp->entree_bloc|date_format:"%H:%M"}}">
-                  <button class="tick" type="submit"></button>
+                  <button class="tick notext" type="submit"></button>
                   {{else}}
                   <select name="entree_bloc" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -24,7 +24,7 @@
                     {{/foreach}}
                   </select>
                   {{/if}}
-                  <button class="cancel" type="submit" onclick="this.form.entree_bloc.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.entree_bloc.value = ''"></button>
                   {{else}}
                   <input type="hidden" name="entree_bloc" value="" />
                   <button class="submit" type="submit" onclick="this.form.entree_bloc.value = 'current'">entrée patient</button>
@@ -35,7 +35,7 @@
                   Pose garrot:
                   {{if $canEdit}}
                   <input name="pose_garrot" size="5" type="text" value="{{$selOp->pose_garrot|date_format:"%H:%M"}}">
-                  <button class="tick" type="submit"></button>
+                  <button class="tick notext" type="submit"></button>
                   {{else}}
                   <select name="pose_garrot" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -46,7 +46,7 @@
                     {{/foreach}}
                   </select>
                   {{/if}}
-                  <button class="cancel" type="submit" onclick="this.form.pose_garrot.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.pose_garrot.value = ''"></button>
                   {{else}}
                   <input type="hidden" name="pose_garrot" value="" />
                   <button class="submit" type="submit" onclick="this.form.pose_garrot.value = 'current'">pose garrot</button>
@@ -57,7 +57,7 @@
                   Début opération:
                   {{if $canEdit}}
                   <input name="debut_op" size="5" type="text" value="{{$selOp->debut_op|date_format:"%H:%M"}}">
-                  <button class="tick" type="submit"></button>
+                  <button class="tick notext" type="submit"></button>
                   {{else}}
                   <select name="debut_op" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -68,7 +68,7 @@
                     {{/foreach}}
                   </select>
                   {{/if}}
-                  <button class="cancel" type="submit" onclick="this.form.debut_op.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.debut_op.value = ''"></button>
                   {{else}}
                   <input type="hidden" name="debut_op" value="" />
                   <button class="submit" type="submit" onclick="this.form.debut_op.value = 'current'">début intervention</button>
@@ -81,7 +81,7 @@
                   Fin opération:
                   {{if $canEdit}}
                   <input name="fin_op" size="5" type="text" value="{{$selOp->fin_op|date_format:"%H:%M"}}">
-                  <button class="tick" type="submit"></button>
+                  <button class="tick notext" type="submit"></button>
                   {{else}}
                   <select name="fin_op" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -92,7 +92,7 @@
                     {{/foreach}}
                   </select>
                   {{/if}}
-                  <button class="cancel" type="submit" onclick="this.form.fin_op.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.fin_op.value = ''"></button>
                   {{else}}
                   <input type="hidden" name="fin_op" value="" />
                   <button class="submit" type="submit" onclick="this.form.fin_op.value = 'current'">fin intervention</button>
@@ -103,7 +103,7 @@
                   Retrait garrot:
                   {{if $canEdit}}
                   <input name="retrait_garrot" size="5" type="text" value="{{$selOp->retrait_garrot|date_format:"%H:%M"}}">
-                  <button class="tick" type="submit"></button>
+                  <button class="tick notext" type="submit"></button>
                   {{else}}
                   <select name="retrait_garrot" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -114,7 +114,7 @@
                     {{/foreach}}
                   </select>
                   {{/if}}
-                  <button class="cancel" type="submit" onclick="this.form.retrait_garrot.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.retrait_garrot.value = ''"></button>
                   {{else}}
                   <input type="hidden" name="retrait_garrot" value="" />
                   <button class="submit" type="submit" onclick="this.form.retrait_garrot.value = 'current'">retrait garrot</button>
@@ -125,7 +125,7 @@
                   Sortie patient:
                   {{if $canEdit}}
                   <input name="sortie_bloc" size="5" type="text" value="{{$selOp->sortie_bloc|date_format:"%H:%M"}}">
-                  <button class="tick" type="submit"></button>
+                  <button class="tick notext" type="submit"></button>
                   {{else}}
                   <select name="sortie_bloc" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -136,7 +136,7 @@
                     {{/foreach}}
                   </select>
                   {{/if}}
-                  <button class="cancel" type="submit" onclick="this.form.sortie_bloc.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.sortie_bloc.value = ''"></button>
                   {{else}}
                   <input type="hidden" name="sortie_bloc" value="" />
                   <button class="submit" type="submit" onclick="this.form.sortie_bloc.value = 'current'">sortie patient</button>

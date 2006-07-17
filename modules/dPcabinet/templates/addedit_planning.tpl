@@ -108,7 +108,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
           </th>
             <td class="readonly">
               <input type="text" name="_chir_name" size="30" value="{{$chir->_view}}" readonly="readonly" />
-              <button class="cancel" type="button" onclick="setChir('', '')"></button>
+              <button class="cancel notext" type="button" onclick="setChir('', '')"></button>
             </td>
             <td class="button"><input type="button" value="Choisir un praticien" onclick="popChir()" /></td>
         </tr>
