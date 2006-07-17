@@ -10,7 +10,6 @@
 global $AppUI, $canRead, $canEdit, $m;
 require_once($AppUI->getModuleClass("system", "accesslog"));
 require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"));
-die();
 require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_bar"));
 require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_line"));
 require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_regstat"));
