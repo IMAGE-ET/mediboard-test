@@ -27,7 +27,7 @@
           <td><input type="text" name="finact" value="{{$finact}}" /></td>
           <th>Praticien:</th>
           <td>
-            <select name="prat_id">
+            <select name="prat_id" onchange="this.form.discipline_id.value = 0">
               <option value="0">&mdash; Tous les praticiens</option>
               {{foreach from=$listPrats item=curr_prat}}
               <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $prat_id}}selected="selected"{{/if}}>
@@ -40,13 +40,28 @@
         <tr>
           <th>Acte CCAM:</th>
           <td><input type="text" name="codeCCAM" value="{{$codeCCAM}}" /></td>
-          <td colspan="2" class="button"><button type="submit">Go</button></td>
+          <th>Spécialité:</th>
+          <td>
+            <select name="discipline_id" onchange="this.form.prat_id.value = 0">
+              <option value="0">&mdash; Toutes les spécialités</option>
+              {{foreach from=$listDisciplines item=curr_disc}}
+              <option value="{{$curr_disc->discipline_id}}" {{if $curr_disc->discipline_id == $discipline_id}}selected="selected"{{/if}}>
+                {{$curr_disc->_view}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
+        <tr>
+          <td colspan="4" class="button"><button type="submit">Go</button></td>
+        </tr>
         </tr>
         <tr>
           <td colspan="4" class="button">
-            <img alt="Nombre d'interventions" src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;prat_id={{$prat_id}}&amp;codeCCAM={{$codeCCAM}}' />
+            <img alt="Nombre d'interventions" src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;prat_id={{$prat_id}}&amp;codeCCAM={{$codeCCAM}}&amp;discipline_id={{$discipline_id}}' />
             {{if $prat_id}}
               <img alt="Occupation des plages" src='?m=dPstats&amp;a=graph_praticienbloc&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;prat_id={{$prat_id}}&amp;codeCCAM={{$codeCCAM}}' />
+            {{elseif $discipline_id}}
+              <img alt="Répartition par praticiens" src='?m=dPstats&amp;a=graph_pratdiscipline&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;discipline_id={{$discipline_id}}&amp;codeCCAM={{$codeCCAM}}' />
             {{else}}
               <img alt="Patients par jour par salle" src='?m=dPstats&amp;a=graph_patjoursalle&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;prat_id={{$prat_id}}&amp;codeCCAM={{$codeCCAM}}' />
             {{/if}}

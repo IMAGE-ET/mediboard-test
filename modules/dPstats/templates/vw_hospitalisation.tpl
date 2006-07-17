@@ -38,7 +38,6 @@
           </td>
         </tr>
         <tr>
-          <th colspan="2"/>
           <th>Type d'hospitalisation:</th>
           <td>
             <select name="type_adm">
@@ -47,6 +46,17 @@
               {{foreach from=$listHospis item=curr_hospi}}
               <option value="{{$curr_hospi.code}}" {{if $curr_hospi.code == $type_adm}}selected="selected"{{/if}}>
                 {{$curr_hospi.view}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
+          <th>Spécialité:</th>
+          <td>
+            <select name="discipline_id">
+              <option value="0">&mdash; Toutes les spécialités</option>
+              {{foreach from=$listDisciplines item=curr_disc}}
+              <option value="{{$curr_disc->discipline_id}}" {{if $curr_disc->discipline_id == $discipline_id}}selected="selected"{{/if}}>
+                {{$curr_disc->_view}}
               </option>
               {{/foreach}}
             </select>
@@ -60,8 +70,8 @@
         </tr>
         <tr>
           <td colspan="4" class="button">
-            <img alt="Patients par service" src='?m=dPstats&amp;a=graph_patparservice&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;service_id={{$service_id}}&amp;prat_id={{$prat_id}}&amp;type_adm={{$type_adm}}' />
-            <img alt="Admissions par type d'hospitalisation" src='?m=dPstats&amp;a=graph_patpartypehospi&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;service_id={{$service_id}}&amp;prat_id={{$prat_id}}&amp;type_adm={{$type_adm}}' />
+            <img alt="Patients par service" src='?m=dPstats&amp;a=graph_patparservice&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;service_id={{$service_id}}&amp;prat_id={{$prat_id}}&amp;type_adm={{$type_adm}}&amp;discipline_id={{$discipline_id}}' />
+            <img alt="Admissions par type d'hospitalisation" src='?m=dPstats&amp;a=graph_patpartypehospi&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;service_id={{$service_id}}&amp;prat_id={{$prat_id}}&amp;type_adm={{$type_adm}}&amp;discipline_id={{$discipline_id}}' />
           </td>
         </tr>
       </table>

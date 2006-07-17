@@ -152,7 +152,7 @@ function toggleFunction(function_id) {
               <option value="">&mdash; Choisir une spécialité &mdash;</option>
               {{foreach from=$disciplines item=curr_discipline}}
               <option value="{{$curr_discipline->discipline_id}}" {{if $curr_discipline->discipline_id == $mediuserSel->discipline_id}} selected="selected" {{/if}}>
-                {{$curr_discipline->text|strtolower}}
+                {{$curr_discipline->_view}}
               </option>
               {{/foreach}}
             </select>

@@ -10,22 +10,27 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPhospi"     , "service" ));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
+require_once($AppUI->getModuleClass("mediusers"   , "discipline"));
+require_once($AppUI->getModuleClass("dPhospi"     , "service"   ));
+require_once($AppUI->getModuleClass("dPplanningOp", "sejour"  ));
 
 require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"    ));
 require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_bar"));
 
-$debut      = mbGetValueFromGet("debut"     , mbDate("-1 YEAR"));
-$fin        = mbGetValueFromGet("fin"       , mbDate()         );
-$prat_id    = mbGetValueFromGet("prat_id"   , 0                );
-$service_id = mbGetValueFromGet("service_id", 0                );
-$type_adm   = mbGetValueFromGet("type_adm"  , 0                );
+$debut         = mbGetValueFromGet("debut"        , mbDate("-1 YEAR"));
+$fin           = mbGetValueFromGet("fin"          , mbDate()         );
+$prat_id       = mbGetValueFromGet("prat_id"      , 0                );
+$service_id    = mbGetValueFromGet("service_id"   , 0                );
+$type_adm      = mbGetValueFromGet("type_adm"     , 0                );
+$discipline_id = mbGetValueFromGet("discipline_id", 0                );
 
 $total = 0;
 
 $pratSel = new CMediusers;
 $pratSel->load($prat_id);
+
+$disciplineSel = new CDiscipline;
+$disciplineSel->load($discipline_id);
 
 for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
   $datax[] = mbTranformTime("+0 DAY", $i, "%m/%Y");
@@ -54,11 +59,15 @@ foreach($listHospis as $hospi) {
     "\nDATE_FORMAT(sejour.entree_prevue, '%m/%Y') AS mois," .
     "\nDATE_FORMAT(sejour.entree_prevue, '%Y%m') AS orderitem" .
     "\nFROM sejour" .
+    "\nINNER JOIN users_mediboard" .
+    "\nON sejour.praticien_id = users_mediboard.user_id" .
     "\nWHERE sejour.entree_prevue BETWEEN '$debut 00:00:00' AND '$fin 23:59:59'" .
     "\nAND sejour.type = '$type'" .
     "\nAND sejour.annule = 0";
   if($prat_id)
     $sql .= "\nAND sejour.praticien_id = '$prat_id'";
+  if($discipline_id)
+    $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
   $result = db_loadlist($sql);
@@ -88,6 +97,9 @@ $title = "Nombre d'admissions par type d'hospitalisation";
 $subtitle = "- $total patients -";
 if($prat_id) {
   $subtitle .= " Dr. $pratSel->_view -";
+}
+if($discipline_id) {
+  $subtitle .= " $disciplineSel->_view -";
 }
 $graph->title->Set($title);
 $graph->title->SetFont(FF_ARIAL,FS_NORMAL,10);

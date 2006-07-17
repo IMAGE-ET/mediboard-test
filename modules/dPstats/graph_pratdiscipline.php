@@ -1,9 +1,9 @@
-<?php /* $Id$ */
+<?php /* $Id: graph_activite.php 331 2006-07-13 14:26:26Z Rhum1 $ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision$
+* @version $Revision: 331 $
 * @author Romain Ollivier
 */
 
@@ -19,15 +19,11 @@ require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_bar"));
 
 $debut         = mbGetValueFromGet("debut"        , mbDate("-1 YEAR"));
 $fin           = mbGetValueFromGet("fin"          , mbDate()         );
-$prat_id       = mbGetValueFromGet("prat_id"      , 0                );
 $salle_id      = mbGetValueFromGet("salle_id"     , 0                );
 $discipline_id = mbGetValueFromGet("discipline_id", 0                );
 $codeCCAM      = mbGetValueFromGet("codeCCAM"     , ""               );
 
 $total = 0;
-
-$pratSel = new CMediusers;
-$pratSel->load($prat_id);
 
 $salleSel = new CSalle;
 $salleSel->load($salle_id);
@@ -39,64 +35,59 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
   $datax[] = mbTranformTime("+0 DAY", $i, "%m/%Y");
 }
 
-$sql = "SELECT * FROM sallesbloc WHERE stats = 1";
-if($salle_id)
-  $sql .= "\nAND id = '$salle_id'";
-$salles = db_loadlist($sql);
+$users= new CMediusers;
+$where = array();
+if($discipline_id)
+  $where["discipline_id"] = " = '$discipline_id'";
+$users = $users->loadList($where);
 
-$opbysalle = array();
-foreach($salles as $salle) {
-  $id = $salle["id"];
-  $opbysalle[$id]["nom"] = $salle["nom"];
+$opbyprat = array();
+foreach($users as $user) {
+  $id = $user->user_id;
+  $opbyprat[$id]["nom"] = $user->_view;
   $sql = "SELECT COUNT(operations.operation_id) AS total," .
     "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .
     "\nDATE_FORMAT(plagesop.date, '%Y%m') AS orderitem," .
-    "\nsallesbloc.nom AS nom" .
-    "\nFROM plagesop, sallesbloc" .
+    "\nusers_mediboard.user_id" .
+    "\nFROM plagesop" .
     "\nINNER JOIN operations" .
     "\nON operations.plageop_id = plagesop.id" .
     "\nAND operations.annulee = 0" .
     "\nINNER JOIN users_mediboard" .
-    "\nON operations.chir_id = users_mediboard.user_id" .
+    "\nON plagesop.chir_id = users_mediboard.user_id" .
+    "\nAND users_mediboard.user_id = '$id'" .
     "\nWHERE plagesop.date BETWEEN '$debut' AND '$fin'";
-  if($prat_id)
-    $sql .= "\nAND operations.chir_id = '$prat_id'";
   if($discipline_id)
     $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if($codeCCAM)
     $sql .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-  $sql .= "\nAND plagesop.id_salle = sallesbloc.id" .
-    "\nAND sallesbloc.id = '$id'" .
-    "\nGROUP BY mois" .
+  $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
   $result = db_loadlist($sql);
   foreach($datax as $x) {
     $f = true;
     foreach($result as $totaux) {
       if($x == $totaux["mois"]) {
-        $opbysalle[$id]["op"][] = $totaux["total"];
+        $opbyprat[$id]["op"][] = $totaux["total"];
         $total += $totaux["total"];
         $f = false;
       }
     }
     if($f) {
-      $opbysalle[$id]["op"][] = 0;
+      $opbyprat[$id]["op"][] = 0;
     }
   }
 }
 
 // Setup the graph.
 $graph = new Graph(500,300,"auto");    
-$graph->img->SetMargin(50,40,50,70);
+$graph->img->SetMargin(50,150,50,70);
 $graph->SetScale("textlin");
 $graph->SetMarginColor("lightblue");
 
 // Set up the title for the graph
 $title = "Nombre d'interventions";
 $subtitle = "- $total opérations -";
-if($prat_id) {
-  $subtitle .= " Dr. $pratSel->_view -";
-}
 if($discipline_id) {
   $subtitle .= " $disciplineSel->_view -";
 }
@@ -128,7 +119,7 @@ $graph->xaxis->SetLabelAngle(50);
 // Legend
 $graph->legend->SetMarkAbsSize(5);
 $graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$graph->legend->Pos(0.02,0.02, "right", "top");
+$graph->legend->Pos(0.02,0.5, "right", "center");
 
 // Create the bar pot
 $colors = array("#aa5500",
@@ -144,15 +135,16 @@ $colors = array("#aa5500",
                 "#ff00ff",
                 "#00ffff",);
 $listPlots = array();
-foreach($opbysalle as $key => $value) {
+//mbTrace($opbyprat, "", true);
+foreach($opbyprat as $key => $value) {
   $bplot = new BarPlot($value["op"]);
-  $from = $colors[$key];
+  $from = $colors[($key % 12)];
   $to = "#EEEEEE";
   $bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);
   $bplot->SetColor("white");
-  $bplot->setLegend($value["nom"]);
+  $bplot->setLegend($users[$key]->_view);
   $bplot->value->SetFormat("%01.0f");
-  $bplot->value->SetColor($colors[$key]);
+  $bplot->value->SetColor($colors[($key % 12)]);
   $bplot->value->SetFont(FF_ARIAL,FS_NORMAL, 8); 
   //$bplot->value->show();
   $listPlots[] = $bplot;

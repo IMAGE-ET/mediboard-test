@@ -41,11 +41,11 @@ class CDiscipline extends CMbObject {
   function updateFormFields () {
     parent::updateFormFields();
 
-    $this->_view = $this->text;
-    if(strlen($this->text) > 25)
-      $this->_shortview = substr($this->text, 0, 23)."...";
+    $this->_view = strtolower($this->text);
+    if(strlen($this->_view) > 25)
+      $this->_shortview = substr($this->_view, 0, 23)."...";
     else
-      $this->_shortview = $this->text;
+      $this->_shortview = $this->_view;
   }
   
   function canDelete(&$msg, $oid = null) {
