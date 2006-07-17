@@ -4,7 +4,7 @@
 
 function zoom(date, module, action) {
   url = new Url();
-  url.setModuleAction("system", "graph_accesslog");
+  url.setModuleAction("dPstats", "graph_accesslog");
   url.addParam("suppressHeaders", 1);
   url.addParam("size"  , 2);
   url.addParam("date"  , date);
