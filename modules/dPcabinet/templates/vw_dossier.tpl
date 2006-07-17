@@ -132,7 +132,7 @@ function printDocument(doc_id) {
               {{foreach from=$curr_consult->_ref_files item=curr_file}}
               <li>
                 <form name="uploadFrm{{$curr_file->file_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post">
-      
+                <input type="hidden" name="m" value="dPcabinet" />
                 <input type="hidden" name="dosql" value="do_file_aed" />
                 <input type="hidden" name="del" value="1" />
                 <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
@@ -148,10 +148,12 @@ function printDocument(doc_id) {
               <li>Aucun fichier attaché</li>
               {{/foreach}}
             </ul>
-            <form name="uploadFrm" action="?m=dPcabinet" enctype="multipart/form-data" method="post">
+            <form name="uploadFrm" action="?m={{$m}}" enctype="multipart/form-data" method="post">
+            <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_file_aed" />
             <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="file_consultation" value="{{$curr_consult->consultation_id}}" />
+            <input type="hidden" name="file_class" value="CConsultation" />
+            <input type="hidden" name="file_object_id" value="{{$curr_consult->consultation_id}}" />
             <input type="file" name="formfile" />
             <button class="submit" type="submit">Ajouter</button>
 

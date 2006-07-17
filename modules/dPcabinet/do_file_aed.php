@@ -53,7 +53,9 @@ ignore_user_abort( 1 );
 $upload = null;
 if (isset($_FILES["formfile"])) {
 	$upload = $_FILES["formfile"];
-
+	
+    mbTrace($_FILES,"FILES");
+    
 	if ($upload["size"] < 1) {
 		if (!$file_id) {
 			$AppUI->setMsg("Taille de fichier nulle. Echec de l'opération.", UI_MSG_ERROR);
@@ -67,7 +69,9 @@ if (isset($_FILES["formfile"])) {
 		$obj->file_size = $upload["size"];
 		$obj->file_date = db_unix2dateTime(time());
 		$obj->file_real_filename = uniqid(rand());
-
+        
+        mbTrace($obj,"fileobject",true);
+        
 		$res = $obj->moveTemp($upload);
 		if (!$res) {
 		    $AppUI->setMsg("Impossible de créer le fichier", UI_MSG_ERROR);

@@ -68,7 +68,11 @@ function pageMain() {
 
   {{if $consult->consultation_id}}
   incPatientHistoryMain();
+  incAntecedantsMain();
   initEffectClass("listConsult", "triggerList");
+  regFieldCalendar("editAntFrm", "date");
+  regFieldCalendar("editTrmtFrm", "debut");
+  regFieldCalendar("editTrmtFrm", "fin");
   {{/if}}
   
   var listUpdater = new Url;
