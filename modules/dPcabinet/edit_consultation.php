@@ -168,6 +168,6 @@ if ($_is_anesth) {
   $smarty->assign('consult_anesth', $consult->_ref_consult_anesth);
   $smarty->display('edit_consultation_anesth.tpl');
 } else {
-  $smarty->display('edit_consultation.tpl');
+  $smarty->display('edit_consultation_old.tpl');
 }
 ?>
