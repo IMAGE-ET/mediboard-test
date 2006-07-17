@@ -16,9 +16,11 @@ if (!$canRead) {
 require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
 require_once($AppUI->getModuleClass("dPbloc"      , "salle"   ));
 
+$date  = mbGetValueFromGetOrSession("date", mbDate());
+
 $urgences      = new COperation;
 $where         = array();
-$where["date"] = "= '".mbDate()."'";
+$where["date"] = "= '".$date."'";
 $order         = "salle_id, chir_id";
 $urgences      = $urgences->loadList($where, $order);
 foreach($urgences as $keyOp => $op) {
@@ -38,6 +40,7 @@ $smarty->debugging = false;
 
 $smarty->assign("urgences"  , $urgences);
 $smarty->assign("listSalles", $listSalles);
+$smarty->assign("date",$date);
 
 $smarty->display("vw_urgences.tpl");
 

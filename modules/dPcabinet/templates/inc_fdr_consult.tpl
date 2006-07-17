@@ -115,7 +115,7 @@ function submitFdr(oForm) {
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
             <button class="cancel notext" type="button"
-              onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadFdr})"/></button>
+              onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadFdr})" />
           </form>
         </li>
         {{foreachelse}}

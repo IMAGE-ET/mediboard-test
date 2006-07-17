@@ -1,9 +1,19 @@
+<script type="text/javascript">
+
+function pageMain() {
+  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+}
+
+</script>
+
 <table class="main">
   <tr>
     <td>
       <table class="tbl">
         <tr>
-          <th class="title" colspan="5">Urgences de la journée</th>
+          <th class="title" colspan="5">Urgences du {{$date|date_format:"%A %d %B %Y"}}
+            <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+          </th>
         </tr>
         <tr>
           <th>Patient</th>
@@ -17,11 +27,11 @@
           <td>{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
           <td>Dr. {{$curr_op->_ref_chir->_view}}</td>
           <td>
-            <form name="editOpFrm{{$curr_op->opertion_id}}" action="?m={{$m}}" method="post">
+            <form name="editOpFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="dosql" value="do_planning_aed" />
-            <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}"
+            <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
             <select name="salle_id" onchange="submitFormAjax(this.form, 'systemMsg')">
               <option value="">&mdash; Choix de la salle</option>
               {{foreach from=$listSalles item=curr_salle}}
@@ -30,6 +40,7 @@
               </option>
               {{/foreach}}
             </select>
+            </form>
           </td>
           <td>{{$curr_op->cote}}</td>
           <td class="text">
