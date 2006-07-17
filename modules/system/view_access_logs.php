@@ -23,7 +23,7 @@ $logs = $logs->loadAgregation($date, $next, $groupmod, $module);
 $listModules = $AppUI->getMenuModules();
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("logs", $logs);
@@ -33,4 +33,5 @@ $smarty->assign("module", $module);
 $smarty->assign("listModules", $listModules);
 
 $smarty->display("view_access_logs.tpl");
+
 ?>

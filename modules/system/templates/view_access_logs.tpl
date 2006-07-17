@@ -60,15 +60,15 @@ function pageMain() {
         <td class="button">
           {{if $groupmod == 2}}
           <a href="javascript:zoom('{{$date}}', 0, 0)" title="Agrandir">
-            <img src="index.php?m=system&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;action=0" alt="Graphique pour la journée" />
+            <img src="index.php?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;action=0" alt="Graphique pour la journée" />
           </a>
           {{elseif $groupmod == 1}}
           <a href="javascript:zoom('{{$date}}', '{{$log->module}}', 0)" title="Agrandir">
-            <img src="index.php?m=system&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;action=0" alt="Graphique pour {{$log->module}}" />
+            <img src="index.php?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;action=0" alt="Graphique pour {{$log->module}}" />
           </a>
           {{else}}
           <a href="javascript:zoom('{{$date}}', '{{$log->module}}', '{{$log->action}}')" title="Agrandir">
-            <img src="index.php?m=system&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;action={{$log->action}}" alt="Graphique pour {{$log->module}} - {{$log->action}}" />
+            <img src="index.php?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;action={{$log->action}}" alt="Graphique pour {{$log->module}} - {{$log->action}}" />
           </a>
           {{/if}}
         </td>
