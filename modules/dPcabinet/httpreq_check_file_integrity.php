@@ -15,7 +15,7 @@ if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-set_time_limit(90);
+set_time_limit(300);
 
 $show = mbGetValueFromGet("show", 50);
 
