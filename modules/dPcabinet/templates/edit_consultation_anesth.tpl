@@ -52,6 +52,11 @@ function reloadConsultAnesth() {
   anesthUrl.requestUpdate('choixAnesth');
 }
 
+function submitAll() {
+  var oForm = document.editFrmExams;
+  submitFormAjax(oForm, 'systemMsg');
+}
+
 function pageMain() {
     
 

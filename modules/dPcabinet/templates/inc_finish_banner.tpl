@@ -34,7 +34,7 @@ function reloadFinishBanner() {
             (Etat : {{$consult->_etat}}
             {{if $consult->chrono <= $smarty.const.CC_EN_COURS}}
             / 
-            <button class="submit" type="button" onclick="submitConsultWithChrono({{$smarty.const.CC_TERMINE}})">Terminer</button>
+            <button class="submit" type="button" onclick="submitAll(); submitConsultWithChrono({{$smarty.const.CC_TERMINE}})">Terminer</button>
             {{/if}})
           </th>
         </tr>

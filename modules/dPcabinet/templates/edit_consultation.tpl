@@ -50,6 +50,11 @@ function pasteText(formName) {
   aide.value = 0;
 }
 
+function submitAll() {
+  var oForm = document.editFrmExams;
+  submitFormAjax(oForm, 'systemMsg');
+}
+
 function pageMain() {
 
   {{if $consult->consultation_id}}

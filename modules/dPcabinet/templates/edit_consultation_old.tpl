@@ -43,13 +43,17 @@ function newConsultation(chir_id, pat_id) {
 }
 
 function pasteText(formName) {
-  var form = document.editFrm;
-  var aide = eval("form._aide_" + formName);
-  var area = eval("form." + formName);
+  var oForm = document.editFrmExams;
+  var aide = eval("oForm._aide_" + formName);
+  var area = eval("oForm." + formName);
   insertAt(area, aide.value + '\n')
   aide.value = 0;
 }
 
+function submitAll() {
+  var oForm = document.editFrmExams;
+  submitFormAjax(oForm, 'systemMsg');
+}
 
 function pageMain() {
 
