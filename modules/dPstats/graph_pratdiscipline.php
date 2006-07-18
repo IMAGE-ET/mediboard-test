@@ -86,7 +86,7 @@ $graph->SetScale("textlin");
 $graph->SetMarginColor("lightblue");
 
 // Set up the title for the graph
-$title = "Nombre d'interventions";
+$title = "Nombre d'interventions par praticien";
 $subtitle = "- $total opérations -";
 if($discipline_id) {
   $subtitle .= " $disciplineSel->_view -";

@@ -92,7 +92,7 @@ $graph->SetScale("textlin");
 $graph->SetMarginColor("lightblue");
 
 // Set up the title for the graph
-$title = "Nombre d'interventions";
+$title = "Nombre d'interventions par salle";
 $subtitle = "- $total opérations -";
 if($prat_id) {
   $subtitle .= " Dr. $pratSel->_view -";
