@@ -3,7 +3,7 @@
 function printFiche() {
   var url = new Url;
   url.setModuleAction("dPcabinet", "print_fiche"); 
-  url.addElement(document.editFrm.consultation_id);
+  url.addElement(document.editFrmFinish.consultation_id);
   url.popup(700, 500, url, "printFiche");
   return;
 }
