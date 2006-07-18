@@ -1,15 +1,30 @@
+<script type="text/javascript">
+
+function pageMain() {
+  regFieldCalendar("users", "debutlog");
+  regFieldCalendar("users", "finlog");
+  regFieldCalendar("Form1", "debutact");
+  regFieldCalendar("Form1", "finact");
+}
+
+</script>
+
 <table class="main">
   <tr>
     <td>
-      <form name="users" action="index.php" method="get">
+      <form name="users" action="index.php" method="get" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPstats" />
       <table class="form">
         <tr>
           <th colspan="4" class="category">Activité des utilisateurs</th>
         </tr>
         <tr>
-          <th>Début:</th>
-          <td><input type="text" name="debutlog" value="{{$debutlog}}" /></td>
+          <th><label for="debutlog" title="Date de début">Début:</label></th>
+          <td class="date">
+            <div id="users_debutlog_da">{{$debutlog|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" name="debutlog" title="date|notNull" value="{{$debutlog}}" />
+            <img id="users_debutlog_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+         </td>
           <th>utilisateur:</th>
           <td>
             <select name="user_id">
@@ -22,8 +37,12 @@
           </td>
         </tr>
         <tr>
-          <th>Fin:</th>
-          <td><input type="text" name="finlog" value="{{$finlog}}" /></td>
+          <th><label for="finlog" title="Date de fin">Fin:</label></th>
+          <td class="date">
+            <div id="users_finlog_da">{{$finlog|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" name="finlog" title="date|moreEquals|debutlog|notNull" value="{{$finlog}}" />
+            <img id="users_finlog_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+         </td>
           <td colspan="2" />
         </tr>
         <tr>
@@ -38,19 +57,27 @@
       </form>
     </td>
     <td>
-      <form name="test" action="index.php" method="get">
+      <form name="Form1" action="index.php" method="get" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPstats" />
       <table class="form">
         <tr>
-          <th colspan="4" class="category">Autre graph</th>
+          <th colspan="2" class="category">Autre graph</th>
         </tr>
         <tr>
-          <th>Début:</th>
-          <td><input type="text" name="test" value="" /></td>
+          <th><label for="debutact" title="Date de début">Début:</label></th>
+          <td class="date">
+            <div id="Form1_debutact_da">{{$debutact|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" name="debutact" title="date|notNull" value="{{$debutact}}" />
+            <img id="Form1_debutact_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+         </td>
         </tr>
         <tr>
-          <th>Fin:</th>
-          <td><input type="text" name="test" value="" /></td>
+          <th><label for="finact" title="Date de fin">Fin:</label></th>
+          <td class="date">
+            <div id="Form1_finact_da">{{$finact|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" name="finact" title="date|moreEquals|debutact|notNull" value="{{$finact}}" />
+            <img id="Form1_finact_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+          </td>
         </tr>
         <tr>
           <td colspan="2" class="button"><button type="submit">Go</button></td>
