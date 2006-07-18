@@ -1,5 +1,4 @@
-            <button class="edit notext" onclick="editPat({{$patient->patient_id}})" style="float: left;">
-            </button>
+            <a href="index.php?m=dPpatients&tab=vw_edit_patients&patient_id={{$patient->patient_id}}" class="buttonedit notext"></a>
             {{$patient->_view}}
             <br />
             Age : {{$patient->_age}} ans

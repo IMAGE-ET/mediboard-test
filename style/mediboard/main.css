@@ -143,9 +143,7 @@ a.buttonsearch:hover, a.buttontick:hover, a.buttonchange:hover {
 
 button.edit, a.buttonedit {
   background-image: url(images/buttons/edit.png);
-  
   padding-left: 16px;
-  height: 18px;
 }
 
 button.trash, a.buttontrash {
@@ -181,7 +179,6 @@ button.search, a.buttonsearch {
 button.tick, a.buttontick {
   background-image: url(images/buttons/tick.png);
   padding-left: 18px;
-  height: 18px;
 }
 
 button.change, a.buttonchange {
@@ -189,8 +186,12 @@ button.change, a.buttonchange {
   padding-left: 18px;
 }
 
-button.notext {
+button.notext{
   padding : 0px 0px 0px 10px;
+}
+
+a.notext{
+  padding : 0px 0px 1px 16px;
 }
 
 input {

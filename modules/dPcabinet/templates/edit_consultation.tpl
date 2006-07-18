@@ -1,12 +1,5 @@
 <script type="text/javascript">
 
-function editPat(patient_id) {
-  var url = new Url;
-  url.setModuleTab("dPpatients", "vw_edit_patients");
-  url.addParam("patient_id", patient_id);
-  url.redirect();
-}
-
 function showAll(patient_id) {
   var url = new Url;
   url.setModuleAction("dPcabinet", "vw_resume");

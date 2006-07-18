@@ -8,12 +8,6 @@ function printFiche() {
   return;
 }
 
-function editPat(patient_id) {
-  var url = new Url;
-  url.setModuleAction("dPpatients", "vw_edit_patients");
-  url.addParam("patient_id", patient_id);
-  url.redirect();
-}
 
 function showAll(patient_id) {
   var url = new Url;
