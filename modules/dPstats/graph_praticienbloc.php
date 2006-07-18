@@ -42,9 +42,10 @@ $nbHours = array();
 $sql = "SELECT SUM(TIME_TO_SEC(plagesop.fin) - TIME_TO_SEC(plagesop.debut)) AS total," .
   "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .
   "\nDATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem" .
-  "\nFROM plagesop, sallesbloc" .
-  "\nWHERE plagesop.id_salle = sallesbloc.id" .
-  "\nAND sallesbloc.stats = 1" .
+  "\nFROM plagesop" .
+  "\nINNER JOIN sallesbloc" .
+  "\nON plagesop.id_salle = sallesbloc.id" .
+  "\nWHERE sallesbloc.stats = 1" .
   "\nAND plagesop.date BETWEEN '$debut' AND '$fin'";
   if($prat_id)
     $sql .= "\nAND plagesop.chir_id = '$prat_id'";
@@ -70,12 +71,13 @@ $doneHours = array();
 $sql = "SELECT SUM(TIME_TO_SEC(operations.sortie_bloc) - TIME_TO_SEC(operations.entree_bloc)) AS total," .
   "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .
   "\nDATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem" .
-  "\nFROM plagesop, sallesbloc" .
+  "\nFROM plagesop" .
+  "\nINNER JOIN sallesbloc" .
+  "\nON plagesop.id_salle = sallesbloc.id" .
   "\nLEFT JOIN operations" .
   "\nON operations.plageop_id = plagesop.id" .
   "\nAND operations.annulee = 0" .
-  "\nWHERE plagesop.id_salle = sallesbloc.id" .
-  "\nAND sallesbloc.stats = 1" .
+  "\nWHERE sallesbloc.stats = 1" .
   "\nAND plagesop.date BETWEEN '$debut' AND '$fin'";
   if($prat_id)
     $sql .= "\nAND operations.chir_id = '$prat_id'";

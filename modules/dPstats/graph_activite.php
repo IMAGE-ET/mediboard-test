@@ -52,7 +52,9 @@ foreach($salles as $salle) {
     "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .
     "\nDATE_FORMAT(plagesop.date, '%Y%m') AS orderitem," .
     "\nsallesbloc.nom AS nom" .
-    "\nFROM plagesop, sallesbloc" .
+    "\nFROM plagesop" .
+    "\nINNER JOIN sallesbloc" .
+    "\nON plagesop.id_salle = sallesbloc.id" .
     "\nINNER JOIN operations" .
     "\nON operations.plageop_id = plagesop.id" .
     "\nAND operations.annulee = 0" .
@@ -65,8 +67,7 @@ foreach($salles as $salle) {
     $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if($codeCCAM)
     $sql .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-  $sql .= "\nAND plagesop.id_salle = sallesbloc.id" .
-    "\nAND sallesbloc.id = '$id'" .
+  $sql .= "\nAND sallesbloc.id = '$id'" .
     "\nGROUP BY mois" .
     "\nORDER BY orderitem";
   $result = db_loadlist($sql);

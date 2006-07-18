@@ -25,7 +25,7 @@ function pageMain() {
             <input type="hidden" name="debutlog" title="date|notNull" value="{{$debutlog}}" />
             <img id="users_debutlog_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
          </td>
-          <th>utilisateur:</th>
+          <th><label for="user_id" title="Utilisateur">Utilisateur</label></th>
           <td>
             <select name="user_id">
             {{foreach from=$listUsers item=curr_user}}
@@ -46,7 +46,7 @@ function pageMain() {
           <td colspan="2" />
         </tr>
         <tr>
-          <td colspan="4" class="button"><button type="submit">Go</button></td>
+          <td colspan="4" class="button"><button class="search" type="submit">Go</button></td>
         </tr>
         <tr>
           <td colspan="4" class="button">
@@ -80,7 +80,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <td colspan="2" class="button"><button type="submit">Go</button></td>
+          <td colspan="2" class="button"><button class="search" type="submit">Go</button></td>
         </tr>
         <tr>
           <td colspan="2" class="button">

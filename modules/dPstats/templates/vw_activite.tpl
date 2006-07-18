@@ -35,7 +35,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <td colspan="2" class="button"><button type="submit">Go</button></td>
+          <td colspan="2" class="button"><button class="search" type="submit">Go</button></td>
         </tr>
         <tr>
           <td colspan="2" class="button">
@@ -68,7 +68,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <td colspan="2" class="button"><button type="submit">Go</button></td>
+          <td colspan="2" class="button"><button class="search" type="submit">Go</button></td>
         </tr>
         <tr>
           <td colspan="2" class="button">

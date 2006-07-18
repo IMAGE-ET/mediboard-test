@@ -17,13 +17,13 @@ function pageMain() {
           <th colspan="4" class="category">Activité du bloc opératoire</th>
         </tr>
         <tr>
-          <th><label for="debutact" title="Date de début">Début:</label></th>
+          <th><label for="debutact" title="Date de début">Début</label></th>
           <td class="date">
             <div id="bloc_debutact_da">{{$debutact|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="debutact" title="date|notNull" value="{{$debutact}}" />
             <img id="bloc_debutact_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
          </td>
-          <th>Salle:</th>
+          <th><label for="salle_id" title="Salle">Salle</label></th>
           <td>
             <select name="salle_id">
               <option value="0">&mdash; Toutes les salles</option>
@@ -36,13 +36,13 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="finact" title="Date de fin">Fin:</label></th>
+          <th><label for="finact" title="Date de fin">Fin</label></th>
           <td class="date">
             <div id="bloc_finact_da">{{$finact|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="finact" title="date|moreEquals|debutact|notNull" value="{{$finact}}" />
             <img id="bloc_finact_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
-          <th>Praticien:</th>
+          <th><label for="prat_id" title="Praticien">Praticien</label></th>
           <td>
             <select name="prat_id" onchange="this.form.discipline_id.value = 0">
               <option value="0">&mdash; Tous les praticiens</option>
@@ -55,9 +55,9 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th>Acte CCAM:</th>
+          <th><label for="codeCCAM" title="Acte CCAM">Acte CCAM</label></th>
           <td><input type="text" name="codeCCAM" value="{{$codeCCAM}}" /></td>
-          <th>Spécialité:</th>
+          <th><label for="discipline_id" title="Spécialité">Spécialité</label></th>
           <td>
             <select name="discipline_id" onchange="this.form.prat_id.value = 0">
               <option value="0">&mdash; Toutes les spécialités</option>
@@ -69,8 +69,7 @@ function pageMain() {
             </select>
           </td>
         <tr>
-          <td colspan="4" class="button"><button type="submit">Go</button></td>
-        </tr>
+          <td colspan="4" class="button"><button class="search" type="submit">Go</button></td>
         </tr>
         <tr>
           <td colspan="4" class="button">

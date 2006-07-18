@@ -17,13 +17,13 @@ function pageMain() {
           <th colspan="4" class="category">Occupation des lits</th>
         </tr>
         <tr>
-          <th><label for="debutact" title="Date de début">Début:</label></th>
+          <th><label for="debutact" title="Date de début">Début</label></th>
           <td class="date">
             <div id="hospitalisation_debutact_da">{{$debutact|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="debutact" title="date|notNull" value="{{$debutact}}" />
             <img id="hospitalisation_debutact_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
          </td>
-          <th>Service:</th>
+          <th><label for="service_id" title="Service">Service</label></th>
           <td>
             <select name="service_id">
               <option value="0">&mdash; Tous les services</option>
@@ -36,13 +36,13 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="finact" title="Date de fin">Fin:</label></th>
+          <th><label for="finact" title="Date de fin">Fin</label></th>
           <td class="date">
             <div id="hospitalisation_finact_da">{{$finact|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="finact" title="date|moreEquals|debutact|notNull" value="{{$finact}}" />
             <img id="hospitalisation_finact_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
-          <th>Praticien:</th>
+          <th><label for="prat_id" title="Praticien">Praticien</label></th>
           <td>
             <select name="prat_id">
               <option value="0">&mdash; Tous les praticiens</option>
@@ -55,7 +55,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th>Type d'hospitalisation:</th>
+          <th><label for="type_adm" title="Type d'hospitalisation">Type d'hospitalisation</label></th>
           <td>
             <select name="type_adm">
               <option value="0">&mdash; Tous les types d'hospi</option>
@@ -67,7 +67,7 @@ function pageMain() {
               {{/foreach}}
             </select>
           </td>
-          <th>Spécialité:</th>
+          <th><label for="discipline_id" title="Spécialité">Spécialité</label></th>
           <td>
             <select name="discipline_id">
               <option value="0">&mdash; Toutes les spécialités</option>
@@ -80,7 +80,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <td colspan="4" class="button"><button type="submit">Go</button></td>
+          <td colspan="4" class="button"><button class="search" type="submit">Go</button></td>
         </tr>
         <tr>
           <td colspan="4"><i>Note : le nombre d'admissions par type d'hospitalisation avant le 16 novembre 2005 est en dessous de la réalité dû à un mauvais remplissage des dates d'admission par certains cabinets</i></td>

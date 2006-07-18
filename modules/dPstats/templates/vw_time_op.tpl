@@ -8,31 +8,31 @@
           <th colspan="5" class="category">Moyenne des temps opératoires</th>
         </tr>
         <tr>
-          <th>Acte CCAM:</th>
+          <th><label for="codeCCAM" title="Acte CCAM">Acte CCAM</label></th>
           <td>
             <input type="text" name="codeCCAM" value="{{$codeCCAM}}" />
             (% pour grouper toutes les interventions)
           </td>
           <th rowspan="2">
-            Intervalle:
+            <label for="intervalle_0" title="Intervalle">Intervalle</label>
           </th>
           <td rowspan="2">
             <input type="radio" name="intervalle" value="0" {{if $intervalle == 0}}checked="checked"{{/if}} />
-            Dernier mois
+            <label for="intervalle_0" title="Dernier mois">Dernier mois</label>
             <br />
             <input type="radio" name="intervalle" value="1" {{if $intervalle == 1}}checked="checked"{{/if}} />
-            6 dernier mois
+            <label for="intervalle_1" title="6 dernier mois">6 dernier mois</label>
           </td>
           <td rowspan="2">
             <input type="radio" name="intervalle" value="2" {{if $intervalle == 2}}checked="checked"{{/if}} />
-            Dernière année
+            <label for="intervalle_2" title="Dernière année">Dernière année</label>
             <br />
             <input type="radio" name="intervalle" value="3" {{if $intervalle == 3}}checked="checked"{{/if}} />
-            Pas d'intervalle
+            <label for="intervalle_3" title="Pas d'ntervalle">Pas d'intervalle</label>
           </td>
         </tr>
         <tr>
-          <th>Praticien:</th>
+          <th><label for="prat_id" title="Praticien">Praticien</label></th>
           <td>
             <select name="prat_id">
               <option value="0">&mdash; Tous les praticiens</option>
@@ -45,7 +45,7 @@
           </td>
         </tr>
         <tr>
-          <td colspan="5" class="button"><button type="submit">Go</button></td>
+          <td colspan="5" class="button"><button type="submit" class="search">Go</button></td>
         </tr>
       </table>
       </form>

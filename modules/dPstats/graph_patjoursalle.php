@@ -42,12 +42,13 @@ $op = array();
 $sql = "SELECT COUNT(operations.operation_id) AS total," .
   "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .
   "\nDATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem" .
-  "\nFROM plagesop, sallesbloc" .
+  "\nFROM plagesop" .
+  "\nINNER JOIN sallesbloc" .
+  "\nON plagesop.id_salle = sallesbloc.id" .
   "\nLEFT JOIN operations" .
   "\nON operations.plageop_id = plagesop.id" .
   "\nAND operations.annulee = 0" .
-  "\nWHERE plagesop.id_salle = sallesbloc.id" .
-  "\nAND sallesbloc.stats = 1" .
+  "\nWHERE sallesbloc.stats = 1" .
   "\nAND plagesop.date BETWEEN '$debut' AND '$fin'";
   if($prat_id)
     $sql .= "\nAND operations.chir_id = '$prat_id'";
