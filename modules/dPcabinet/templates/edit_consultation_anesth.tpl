@@ -55,6 +55,8 @@ function reloadConsultAnesth() {
 function submitAll() {
   var oForm = document.editFrmExams;
   submitFormAjax(oForm, 'systemMsg');
+  var oForm1 = document.editFrmIntubation;
+  submitFormAjax(oForm1, 'systemMsg');
 }
 
 function pageMain() {

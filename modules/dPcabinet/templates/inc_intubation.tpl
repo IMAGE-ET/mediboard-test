@@ -1,4 +1,4 @@
-<form name="intubation" action="?m=dPcabinet" method="post">
+<form name="editFrmIntubation" action="?m=dPcabinet" method="post">
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
