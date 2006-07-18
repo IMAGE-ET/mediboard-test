@@ -12,13 +12,13 @@ global $AppUI, $m;
 $ajax  = mbGetValueFromPost("ajax", 0);
 $m     = mbGetValueFromPost("m", 0);
 $mode  = mbGetValueFromPost("mode", 0);
-$value = mbGetValueFromPost("value", 'o');
+$value = mbGetValueFromPost("value", "o");
 $id    = mbGetValueFromPost("id", 0);
 
 $dateTime = mbDateTime();
 
 switch ($mode) {
-  case 'admis' : {
+  case "admis" : {
     if ($id) {
       if($value == "o") {
         $sql = "UPDATE sejour SET" .
@@ -34,24 +34,29 @@ switch ($mode) {
     }
     break;
   }
-  case 'saisie' : {
+  case "saisie" : {
     if($id) {
-      $sql = "UPDATE sejour, operations" .
-        "\nSET sejour.saisi_SHS = '$value', sejour.modif_SHS = '0', operations.saisie = '$value'" .
-        "\nWHERE sejour.sejour_id = operations.sejour_id" .
-        "\nAND sejour.sejour_id = '$id';";
-      $result = db_exec($sql);
-      db_error();
+      $sql = "UPDATE sejour" .
+        "\nSET sejour.saisi_SHS = '$value', sejour.modif_SHS = '0'" .
+        "\nWHERE sejour.sejour_id = '$id';";
+      $result = db_exec($sql); db_error();
+      $sql = "UPDATE operations" .
+        "\nSET operations.saisie = '$value'" .
+        "\nWHERE operations.sejour_id = '$id';";
+      $result = db_exec($sql); db_error();
     }
     break;
   }
-  case 'allsaisie' : {
+  case "allsaisie" : {
+      $sql = "UPDATE sejour" .
+        "\nSET sejour.saisi_SHS = '$value', sejour.modif_SHS = '0'" .
+        "\nWHERE sejour.entree_prevue LIKE '$id __:__:__';";
+    $result = db_exec($sql); db_error();
       $sql = "UPDATE sejour, operations" .
-        "\nSET sejour.saisi_SHS = '$value', sejour.modif_SHS = '0', operations.saisie = '$value'" .
+        "\nSET operations.saisie = '$value'" .
         "\nWHERE sejour.sejour_id = operations.sejour_id" .
         "\nAND entree_prevue LIKE '$id __:__:__';";
-    $result = db_exec($sql);
-    db_error();
+    $result = db_exec($sql); db_error();
     $id = 0;
     break;
   }
