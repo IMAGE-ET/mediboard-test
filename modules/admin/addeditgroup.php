@@ -122,5 +122,5 @@ function submitIt(){
     <tr><td align="right">Country:</td><td><input type="text" class="text" name="user_country" value="<?php echo $prow["user_country"];?>" maxlength="50" /> </td></tr>
     <tr><td align="right">ICQ#:</td><td><input type="text" class="text" name="user_icq" value="<?php echo $prow["user_icq"];?>" maxlength="50" /> AOL Nick: <input type="text" class="text" name="user_aol" value="<?php echo $prow["user_aol"];?>" maxlength="50" /> </td></tr>
     <tr><td align="right">Birthday:</td><td><input type="text" class="text" name="user_birthday" value="<?php echo substr($prow["user_birthday"],0,10);?>" maxlength="50" /> format(YYYY-MM-DD)</td></tr>
-    <tr><td align="left">&nbsp; &nbsp; &nbsp;<input class="button" type="button" value="back" onClick="javascript:history.back(-1);" /></td><td align="right"><input type="button" value="submit" onClick="submitIt()" class="button" />&nbsp; &nbsp; &nbsp;</td></tr>
+    <tr><td align="left">&nbsp; &nbsp; &nbsp;<button type="button" onClick="javascript:history.back(-1);">back</button></td><td align="right"><button type="submit" onClick="submitIt()">submit</button>&nbsp; &nbsp; &nbsp;</td></tr>
 </table>

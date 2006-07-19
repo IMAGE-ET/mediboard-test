@@ -21,7 +21,7 @@ function setClose(code, type) {
     <td>
       <strong>{{$curr_code->code}}</strong><br />
       {{$curr_code->libelleLong}}<br />
-      <input type="button" class="button" value="selectionner" onclick="setClose('{{$curr_code->code}}', '{{$type}}')" />
+      <button type="button" onclick="setClose('{{$curr_code->code}}', '{{$type}}')">selectionner</button>
     </td>
   {{if ($curr_key+1) is div by 3}}
   </tr><tr>

@@ -189,7 +189,7 @@ function setClose() {
         <tr>
           <td class="button" colspan="4">
           {{if $dialog}}
-            <input type="button" value="Selectionner ce medecin" onclick="setClose()" />
+            <button type="button" onclick="setClose()">Selectionner ce medecin</button>
           {{else}}
             {{if $medecin->medecin_id}}
             <input type="hidden" name="medecin_id" value="{{$medecin->medecin_id}}" />

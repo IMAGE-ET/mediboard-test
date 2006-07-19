@@ -87,7 +87,7 @@ function pageMain() {
       {{/if}}
       {{foreach from=$listPlace item=curr_place}}
       <tr>
-        <td><input type="button" value="+" onclick="setClose('{{$curr_place.time|date_format:"%H:%M"}}')" />{{$curr_place.time|date_format:"%Hh%M"}}</td>
+        <td><button type="button" onclick="setClose('{{$curr_place.time|date_format:"%H:%M"}}')">+</button>{{$curr_place.time|date_format:"%Hh%M"}}</td>
         <td class="text">
           {{foreach from=$curr_place.consultations item=curr_consultation}}
           <div {{if $curr_consultation->premiere}}style="background: #faa;" {{/if}}>

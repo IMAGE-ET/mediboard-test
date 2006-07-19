@@ -60,7 +60,7 @@ function setClose(key, val){
   <td>{{$curr_patient->_naissance}}</td>
   <td>{{$curr_patient->tel}}</td>
   <td>{{$curr_patient->tel2}}</td>
-  <td class="button"><input type="button" class="button" value="selectionner" onclick="setClose({{$curr_patient->patient_id}}, '{{$curr_patient->_view|escape:javascript}}')" /></td>
+  <td class="button"><button type="button" onclick="setClose({{$curr_patient->patient_id}}, '{{$curr_patient->_view|escape:javascript}}')">selectionner</button></td>
 </tr>
 {{/foreach}}
 </table>

@@ -110,7 +110,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
               <input type="text" name="_chir_name" size="30" value="{{$chir->_view}}" readonly="readonly" />
               <button class="cancel notext" type="button" onclick="setChir('', '')"></button>
             </td>
-            <td class="button"><input type="button" value="Choisir un praticien" onclick="popChir()" /></td>
+            <td class="button"><button type="button" class="search" onclick="popChir()">Choisir un praticien</button></td>
         </tr>
 
         <tr>
@@ -147,7 +147,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
             <label for="_check_premiere" title="Première consultation de ce patient avec le praticien">Première consultation</label>
           </td>
           <td rowspan="4" class="button">
-            <input type="button" value="Sélectionner" onclick="popRDV()" />
+            <button type="button" onclick="popRDV()">Sélectionner</button>
           </td>
         </tr>
 
