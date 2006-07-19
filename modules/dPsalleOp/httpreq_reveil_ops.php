@@ -48,10 +48,11 @@ $timing = array();
 
 $listOps = new COperation;
 $where = array();
-if(count($listIdPlages))
-  $where["plageop_id"] = "IN(".implode(",", $listIdPlages).")";
-else
-  $where[] = "1 = 0";
+if(count($listIdPlages)) {
+  $where[] = "`plageop_id` IN(".implode(",", $listIdPlages).") OR (`plageop_id` IS NULL AND `date` = '$date')";
+} else {
+  $where[] = "`plageop_id` IS NULL AND `date` = '$date'";
+}
 $where["sortie_bloc"] = "IS NOT NULL";
 $where["entree_reveil"] = "IS NULL";
 $order = "sortie_bloc";

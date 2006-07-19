@@ -47,10 +47,11 @@ $timing = array();
 
 $listReveil = new COperation;
 $where = array();
-if(count($listIdPlages))
-  $where["plageop_id"] = "IN(".implode(",", $listIdPlages).")";
-else
-  $where[] = "1 = 0";
+if(count($listIdPlages)) {
+  $where[] = "`plageop_id` IN(".implode(",", $listIdPlages).") OR (`plageop_id` IS NULL AND `date` = '$date')";
+} else {
+  $where[] = "`plageop_id` IS NULL AND `date` = '$date'";
+}
 $where["entree_reveil"] = "IS NOT NULL";
 $where["sortie_reveil"] = "IS NULL";
 $order = "entree_reveil";
@@ -76,10 +77,11 @@ foreach($listReveil as $key => $value) {
 
 $listOut = new COperation;
 $where = array();
-if(count($listIdPlages))
-  $where["plageop_id"] = "IN(".implode(",", $listIdPlages).")";
-else
-  $where[] = "1 = 0";
+if(count($listIdPlages)) {
+  $where[] = "`plageop_id` IN(".implode(",", $listIdPlages).") OR (`plageop_id` IS NULL AND `date` = '$date')";
+} else {
+  $where[] = "`plageop_id` IS NULL AND `date` = '$date'";
+}
 $where["entree_reveil"] = "IS NOT NULL";
 $where["sortie_reveil"] = "IS NOT NULL";
 $order = "sortie_reveil DESC";
