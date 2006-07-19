@@ -182,7 +182,7 @@ function pageMain() {
     {{if $op->operation_id}}
     {{if $modurgence}}
     <th colspan="2" class="title" style="color: #f00; background-color: #00a">
-      <button style="float:left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
+      <button style="float:left;" class="search" type="button" onclick="popProtocole()">Choisir un protocole</button>
       <a style="float:right;" href="javascript:view_log('COperation',{{$op->operation_id}})">
         <img src="images/history.gif" alt="historique" />
       </a>
@@ -190,7 +190,7 @@ function pageMain() {
     </th>
     {{else}}
     <th colspan="2" class="title" style="color: #f00;">
-      <button style="float:left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
+      <button class="search" style="float:left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
       <a style="float:right;" href="javascript:view_log('COperation',{{$op->operation_id}})">
         <img src="images/history.gif" alt="historique" />
       </a>
@@ -200,12 +200,12 @@ function pageMain() {
     {{else}}
     {{if $modurgence}}
     <th colspan="2" class="title" style="color: #fff; background-color: #00a"> 
-      <button style="float: left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
+      <button class="search" style="float: left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
       Création d'une urgence
     </th>
     {{else}}
     <th colspan="2" class="title"> 
-      <button style="float: left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
+      <button class="search" style="float: left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
       Création d'une intervention
     </th>
     {{/if}}

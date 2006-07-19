@@ -111,16 +111,16 @@ function pageMain() {
   </tr>
 
   <tr>
-    <th><label for="anest_id" title="Anesthésiste associé à la plage opératoire">Anesthésiste</label></th>
+    <th><label for="id_spec" title="Spécialité associée à la plage opératoire">Spécialité</label></th>
     <td>
-      <select name="anesth_id">
-        <option value="">&mdash; Choisir un anesthésiste</option>
-        {{foreach from=$anesths item=anesth}}
-        <option value="{{$anesth->user_id}}" {{if $plagesel->anesth_id == $anesth->user_id}} selected="selected" {{/if}} >
-          {{$anesth->_view}}
-        </option>
+      <select name="id_spec" title="{{$plagesel->_props.id_spec}}">
+        <option value="">&mdash; Choisir une spécialité</option>
+        {{foreach from=$specs item=spec}}
+          <option value="{{$spec->function_id}}" {{if $spec->function_id == $plagesel->id_spec}} selected="selected" {{/if}} >
+            {{$spec->text}}
+          </option>
         {{/foreach}}
-	  </select>
+      </select>
     </td>
 
     <th><label for="date" title="Date de la plage opératoire.">Date</label></th>
@@ -157,16 +157,16 @@ function pageMain() {
   </tr>
   
   <tr>
-    <th><label for="id_spec" title="">Spécialité</label></th>
+    <th><label for="anest_id" title="Anesthésiste associé à la plage opératoire">Anesthésiste</label></th>
     <td colspan="5">
-      <select name="id_spec" title="{{$plagesel->_props.chir_id}}">
-        <option value="">&mdash; Choisir une spécialité</option>
-        {{foreach from=$specs item=spec}}
-          <option value="{{$spec->function_id}}" {{if $spec->function_id == $plagesel->id_spec}} selected="selected" {{/if}} >
-            {{$spec->text}}
-          </option>
+      <select name="anesth_id">
+        <option value="">&mdash; Choisir un anesthésiste</option>
+        {{foreach from=$anesths item=anesth}}
+        <option value="{{$anesth->user_id}}" {{if $plagesel->anesth_id == $anesth->user_id}} selected="selected" {{/if}} >
+          {{$anesth->_view}}
+        </option>
         {{/foreach}}
-      </select>
+	  </select>
     </td>
   </tr>
   

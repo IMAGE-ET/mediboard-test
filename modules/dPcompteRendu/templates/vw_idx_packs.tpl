@@ -33,6 +33,8 @@ function checkForm() {
     <form name="filterFrm" action="?" method="get">
     
     <input type="hidden" name="m" value="{{$m}}" />
+
+	<a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;pack_id=0" class="buttonnew"><strong>Créer un pack</strong></a>
         
     <table class="form">
 
@@ -80,8 +82,6 @@ function checkForm() {
   </td>
   
   <td class="pane">
-
-	<a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;pack_id=0"><strong>Créer un pack</strong></a>
 
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
 
@@ -186,7 +186,7 @@ function checkForm() {
             {{/foreach}}
           </optgroup>
         </select>
-        <button type="submit"><img src="modules/dPcompteRendu/images/check.png" /></button>
+        <button type="submit" class="tick notext"></button>
         </form>
       </td></tr>
     </table>

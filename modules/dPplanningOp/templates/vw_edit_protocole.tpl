@@ -237,7 +237,7 @@ function pageMain() {
             <button class="tick notext" type="button" onclick="putCCAM(this.form._codeCCAM.value)"></button>
             
           </td>
-          <td class="button"><input type="button" value="Choisir un code" onclick="popCode('ccam')"/></td>
+          <td class="button"><button class="search" type="button" onclick="popCode('ccam')">Choisir un code</button></td>
         </tr>
         <tr>
           <th>
@@ -276,7 +276,7 @@ function pageMain() {
         <tr>
           <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM)</label></th>
           <td><input type="text" name="DP" title="{{$protocole->_props.DP}}" size="10" value="{{$protocole->DP}}" /></td>
-          <td class="button"><input type="button" value="Choisir un code" onclick="popCode('cim10')" /></td>
+          <td class="button"><button type="button" class="search" onclick="popCode('cim10')">Choisir un code</button></td>
         </tr>
         <tr>
           <th><label for="duree_hospi" title="Durée d'hospitalisation en jours">Durée d'hospitalisation</label></th>

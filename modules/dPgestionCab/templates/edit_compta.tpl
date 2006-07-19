@@ -108,36 +108,36 @@ function pageMain() {
       </form>
     </td>
     <td class="halfpane">
-      <form name="selectFrm" action="index.php" method="get">
+      <form name="selectFrm" action="index.php" method="get" onSubmit="return checkForm(this)">
       <input type="hidden" name="m" value="{{$m}}" />
       <table class="tbl">
         <tr>
           <th class="title" colspan="5">Recherche de fiches</th>
         </tr>
         <tr>
-          <td style="text-align: right; vertical-align: middle;">Depuis le :</td>
+          <td style="text-align: right; vertical-align: middle;"><label for="date" title="Date de début de la recherche">Depuis le</label></td>
           <td class="date" colspan="3">
             <div id="selectFrm_date_da">
               {{$date|date_format:"%d/%m/%Y"}}
             </div>
-            <input type="hidden" name="date" value="{{$date}}" />
+            <input type="hidden" title="date|notNull" name="date" value="{{$date}}" />
             <img id="selectFrm_date_trigger" src="./images/calendar.gif" alt="calendar" />
           </td>
           <td class="button">
-            <button class="print notext" type="button" onclick="printRapport()"></button>
+            <button class="print" type="button" onclick="printRapport()">Imprimer</button>
           </td>
         </tr>
         <tr>
-          <td style="text-align: right; vertical-align: middle;">Jusqu'au :</td>
+          <td style="text-align: right; vertical-align: middle;"><label for="datefin" title="Date de fin de la recherche">Jusqu'au</label></td>
           <td class="date" colspan="3">
             <div id="selectFrm_datefin_da">
               {{$datefin|date_format:"%d/%m/%Y"}}
             </div>
-            <input type="hidden" name="datefin" value="{{$datefin}}" />
+            <input type="hidden" name="datefin" title="date|moreEquals|date|notNull" value="{{$datefin}}" />
             <img id="selectFrm_datefin_trigger" src="./images/calendar.gif" alt="calendar" />
           </td>
           <td class="button">
-            <button type="submit">Go</button>
+            <button type="submit" class="search">Afficher</button>
           </td>
         </tr>
         <tr>

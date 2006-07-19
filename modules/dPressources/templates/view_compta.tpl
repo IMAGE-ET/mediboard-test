@@ -1,10 +1,9 @@
 <script language="JavaScript" type="text/javascript">
 
-function checkForm() {
+function checkFormPrint() {
   var form = document.paramFrm;
     
-  if (form.deb.value > form.fin.value) {
-    alert("Date de début superieure à la date de fin");
+  if(!(checkForm(form))){
     return false;
   }
 
@@ -56,7 +55,7 @@ function pageMain() {
                 <input type='hidden' name='del' value='0' />
                 <input type='hidden' name='plageressource_id' value='{{$curr_plage->plageressource_id}}' />
                 <input type='hidden' name='paye' value='1' />
-                <button type="submit">Valider le paiement</button>
+                <button type="submit" class="submit">Valider le paiement</button>
                 </form>
               </td>
               <td>{{$curr_plage->date|date_format:"%A %d %B %Y"}}</td>
@@ -73,24 +72,24 @@ function pageMain() {
     </td>
     <td>
     
-      <form name="paramFrm" action="?m=dPressources" method="post" onsubmit="return checkForm()">
+      <form name="paramFrm" action="?m=dPressources" method="post" onsubmit="return checkFormPrint()">
       <table class="form">
         <tr>
           <th class="title" colspan="2">Edition des rapports</th>
         </tr>
         <tr>
-          <th><label for="deb">Début</label></th>
+          <th><label for="deb" title="Date de début pour les rapports">Début</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_deb_da">{{$today|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="deb" value="{{$today}}" />
+            <input type="hidden" name="deb" title="date|notNull" value="{{$today}}" />
             <img id="paramFrm_deb_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
         <tr>
-          <th><label for="fin">Fin</label></th>
+          <th><label for="fin" title="Date de fin pour les rapports">Fin</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_fin_da">{{$today|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" value="{{$today}}" />
+            <input type="hidden" name="fin" title="date|moreEquals|deb|notNull" value="{{$today}}" />
             <img id="paramFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>
@@ -113,7 +112,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <td colspan="2" class="button"><button type="button" onclick="checkForm()">Afficher</button></td>
+          <td colspan="2" class="button"><button class="print" type="button" onclick="checkFormPrint()">Afficher</button></td>
         </tr>
       </table>
       </form>

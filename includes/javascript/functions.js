@@ -206,7 +206,7 @@ function regFieldCalendar(sFormName, sFieldName, bTime) {
       inputField  : sInputId,
       displayArea : sInputId + "_da",
       ifFormat    : "%Y-%m-%d" + (bTime ? " %H:%M:%S" : ""),
-      daFormat    : "%d/%m/%Y" + (bTime ? " %H:%M:%S" : ""),
+      daFormat    : "%d/%m/%Y" + (bTime ? " %H:%M" : ""),
       button      : sInputId + "_trigger",
       showsTime   : bTime
     } 

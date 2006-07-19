@@ -77,14 +77,14 @@
   	<input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" readonly="readonly" />
   </td>
   <td class="button">
-  	<input type="button" value="Choisir un patient" onclick="popPat()" />
+  	<button type="button" class="search" onclick="popPat()">Choisir un patient</button>
   </td>
 </tr>
 
 <tr>
   <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM)</label></th>
   <td><input type="text" name="DP" title="{{$sejour->_props.DP}}" size="10" value="{{$sejour->DP}}" /></td>
-  <td class="button"><input type="button" value="Choisir un code" onclick="popCode('cim10')" /></td>
+  <td class="button"><button type="button" class="search" onclick="popCode('cim10')">Choisir un code</button></td>
 </tr>
 
 <tr>

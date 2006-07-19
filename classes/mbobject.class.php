@@ -145,14 +145,15 @@ class CMbObject extends CDpObject {
       array_splice($specFragments, $notNull, 1);
     }
 
-    if ($propValue == "") {
-      return $notNull ? "Ne pas peut pas avoir une valeur nulle" : null;
+    if(!in_array("xor", $specFragments) and !in_array("nand", $specFragments) ){
+      if ($propValue == "") {
+        return $notNull ? "Ne pas peut pas avoir une valeur nulle" : null;
+      }
     }
-    
     switch ($specFragments[0]) {
       // Reference to another object
       case "ref":
-        if (!is_numeric($propValue)) {
+        if (!is_numeric($propValue) && $propValue!="") {
           return "N'est pas une référence (format non numérique)";
         }
 
@@ -162,12 +163,44 @@ class CMbObject extends CDpObject {
           return "ne peut pas être une référence nulle";
         }
 
-        if ($propValue < 0) {
+        if ($propValue < 0 ) {
           return "N'est pas une référence (entier négatif)";
         }
         
-        break;
+        if(isset($specFragments[1])){
         
+          switch ($specFragments[1]) {
+            case "xor":
+              $targetPropName = @$specFragments[2];
+              
+              if(!$targetPropName){
+                return "Spécification de chaîne de caractères invalide";
+              }
+          
+              $targetPropValue = $this->$targetPropName;
+      
+              if (!isset($targetPropValue)) {
+                return "Elément cible invalide ou inexistant (nom = $targetPropName)";
+              }
+             
+              if ($propValue==0 and $targetPropValue==0) {
+                return "Merci de choisir soit '$propName', soit '$targetPropName'"; 
+              }
+              
+              if ($propValue!=0 and $targetPropValue!=0) {
+                return "Vous ne devez choisir qu'un seul de ces champs : '$propName', '$targetPropName'"; 
+              }
+            
+              break;
+            
+            case "nand":
+          	  break;
+          	
+            default:
+              return "Spécification de chaîne de caractères invalide";
+          }
+          break;
+        }
       // regular string
       case "str":
         switch (@$specFragments[1]) {

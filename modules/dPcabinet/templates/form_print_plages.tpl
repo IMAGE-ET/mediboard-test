@@ -2,14 +2,11 @@
 
 <script type="text/javascript">
 
-function checkForm() {
+function checkFormPrint() {
   var form = document.paramFrm;
-    
-  if (form.deb.value > form.fin.value) {
-    alert("Date de début superieure à la date de fin");
+  if(!(checkForm(form))){
     return false;
   }
-  
   popPlages();
 }
 
@@ -32,7 +29,7 @@ function pageMain() {
 
 </script>
 
-<form name="paramFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm()">
+<form name="paramFrm" action="?m=dPcabinet" method="post" onsubmit="return checkFormPrint()">
 
 <table class="main">
   <tr>
@@ -44,7 +41,7 @@ function pageMain() {
           <th><label for="deb" title="Date de début de la période">Début</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_deb_da">{{$deb|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="deb" value="{{$deb}}" />
+            <input type="hidden" title="date|notNull" name="deb" value="{{$deb}}" />
             <img id="paramFrm_deb_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
@@ -52,7 +49,7 @@ function pageMain() {
           <th><label for="fin" title="Date de fin de la période">Fin</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_fin_da">{{$fin|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" value="{{$fin}}" />
+            <input type="hidden" title="date|moreEquals|deb|notNull" name="fin" value="{{$fin}}" />
             <img id="paramFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>
@@ -64,7 +61,7 @@ function pageMain() {
       <table class="form">
         <tr><th class="category" colspan="2">Choix des paramètres de tri</th></tr>
         <tr>
-          <th>Praticien:</th>
+          <th><label for="chir" title="Praticien">Praticien</label></th>
           <td><select name="chir">
             <option value="0">&mdash; Tous</option>
             {{foreach from=$listChir item=curr_chir}}
@@ -82,7 +79,7 @@ function pageMain() {
       <table class="form">
         <tr>
           <td class="button">
-            <input type="button" value="Afficher" onclick="checkForm()" />
+            <button type="button" class="print" onclick="checkFormPrint()">Afficher</button>
           </td>
         </tr>
         </table>

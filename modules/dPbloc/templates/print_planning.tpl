@@ -1,11 +1,10 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-function checkForm() {
+function checkFormPrint() {
   var form = document.paramFrm;
     
-  if (form.deb.value > form.fin.value) {
-    alert("Date de début superieure à la date de fin");
+  if(!(checkForm(form))){
     return false;
   }
   
@@ -49,7 +48,7 @@ function pageMain() {
 </script>
 
 
-<form name="paramFrm" action="?m=dPbloc" method="post" onsubmit="return checkForm()">
+<form name="paramFrm" action="?m=dPbloc" method="post" onsubmit="return checkFormPrint()">
 
 <table class="main">
   <tr>
@@ -61,7 +60,7 @@ function pageMain() {
           <th><label for="deb" title="Date de début de la recherche">Début</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_deb_da">{{$deb|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="deb" value="{{$deb}}" />
+            <input type="hidden" name="deb" title="date|notNull" value="{{$deb}}" />
             <img id="paramFrm_deb_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
@@ -69,7 +68,7 @@ function pageMain() {
           <th><label for="fin" title="Date de fin de la recherche">Fin</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_fin_da">{{$fin|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" value="{{$fin}}" />
+            <input type="hidden" name="fin" title="date|moreEquals|deb|notNull" value="{{$fin}}" />
             <img id="paramFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>
@@ -80,7 +79,7 @@ function pageMain() {
         <tr>
           <th><label for="code_ccam" title="Rechercher en fonction d'un code CCAM">Code CCAM</label></th>
           <td><input type="text" name="code_ccam" size="10" value="" /></td>
-          <td class="button"><input type="button" value="sélectionner un code" onclick="popCode('ccam')"/></td>
+          <td class="button"><button type="button" class="search" onclick="popCode('ccam')">sélectionner un code</button></td>
         </tr>
       </table>
 
@@ -131,7 +130,7 @@ function pageMain() {
   <tr>
     <td colspan="2">
 
-      <table class="form"><tr><td class="button"><input type="button" value="Afficher" onclick="checkForm()" /></td></tr></table>
+      <table class="form"><tr><td class="button"><button class="print" type="button" onclick="checkFormPrint()">Afficher</button></td></tr></table>
 
     </td>
   </tr>

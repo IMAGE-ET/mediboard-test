@@ -22,6 +22,7 @@ function pageMain() {
     <td colspan="2">
       <form name="userSelector" action="index.php" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
+      <label for="user_id" title="Veuillez sélectionner l'utilisateur concerné">Utilisateur Concerné</label>
       <select name="user_id" onchange="this.form.submit()">
       {{foreach from=$listUsers item=curr_user}}
         <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $user->user_id}}selected="selected"{{/if}}>
@@ -62,7 +63,7 @@ function pageMain() {
           </th>
           <td class="date">
             <div id="editFrm_debut_da">{{$fichePaie->debut|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debut" value="{{$fichePaie->debut}}" />
+            <input type="hidden" name="debut" title="{{$fichePaie->_props.debut}}" value="{{$fichePaie->debut}}" />
             <img id="editFrm_debut_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
@@ -72,7 +73,7 @@ function pageMain() {
           </th>
           <td class="date">
             <div id="editFrm_fin_da">{{$fichePaie->fin|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" value="{{$fichePaie->fin}}" />
+            <input type="hidden" name="fin" title="{{$fichePaie->_props.fin}}" value="{{$fichePaie->fin}}" />
             <img id="editFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
@@ -141,7 +142,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="prime_special" title="Prime spéciale en euros">Prime spéciale</label>
+            <label for="prime_speciale" title="Prime spéciale en euros">Prime spéciale</label>
           </th>
           <td>
             <input type="text" size="4" name="prime_speciale" title="{{$fichePaie->_props.prime_speciale}}" value="{{$fichePaie->prime_speciale}}" />

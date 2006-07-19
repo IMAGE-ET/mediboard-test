@@ -4,9 +4,8 @@
 <script type="text/javascript">
 function checkRapport(){
   var form = document.printFrm;
-    
-  if (form.deb.value > form.fin.value) {
-    alert("Date de début superieure à la date de fin");
+  
+  if(!(checkForm(form))){
     return false;
   }
 
@@ -46,7 +45,7 @@ function pageMain() {
           <th><label for="deb" title="Date de début de la recherche">Début</label></th>
           <td class="date" colspan="2">
             <div id="printFrm_deb_da">{{$deb|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="deb" value="{{$deb}}" />
+            <input type="hidden" name="deb" title="date|notNull" value="{{$deb}}" />
             <img id="printFrm_deb_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
@@ -54,7 +53,7 @@ function pageMain() {
           <th><label for="fin" title="Date de fin de la recherche">Fin</label></th>
           <td class="date" colspan="2">
             <div id="printFrm_fin_da">{{$fin|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" value="{{$fin}}" />
+            <input type="hidden" name="fin" title="date|moreEquals|deb|notNull" value="{{$fin}}" />
             <img id="printFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>
@@ -62,7 +61,7 @@ function pageMain() {
           <th class="category" colspan="2">Critères d'affichage</th>
         </tr>
         <tr>
-          <th>Praticien :</th>
+          <th><label for="chir" title="Praticien">Praticien</label></th>
           <td>
             <select name="chir">
               <!-- <option value="0">&mdash; Tous &mdash;</option> -->
@@ -72,7 +71,7 @@ function pageMain() {
             </select>
           </td>
         <tr>
-          <th>Etat des paiements :</th>
+          <th><label for="etat" title="Etat des paiements">Etat des paiements</label></th>
           <td>
             <select name="etat">
               <option value="-1">&mdash; Tous &mdash;</option>
@@ -82,7 +81,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th>Type de paiement :</th>
+          <th><label for="type" title="Type de paiement">Type de paiement</label></th>
           <td>
             <select name="type">
               <option value="0">Tout type</option>
@@ -95,7 +94,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th>Type d'affichage :</th>
+          <th><label for="aff" title="Type d'affichage">Type d'affichage</label></th>
           <td>
             <select name="aff">
               <option value="1">Liste complète</option>
@@ -105,7 +104,7 @@ function pageMain() {
         </tr>
         <tr>
           <td class="button" colspan="2">
-            <input type="submit" value="Validation paiements" onclick="document.printFrm.a.value='print_rapport';" />
+            <button class="search" type="submit" onclick="document.printFrm.a.value='print_rapport';">Validation paiements</button>
             <button class="print" type="submit" onclick="document.printFrm.a.value='print_compta';">Impression compta</button>
           </td>
         </tr>
@@ -171,7 +170,7 @@ function pageMain() {
             </table>
           </td>
           <td>
-            <form name="editFrm" action="./index.php?m={{$m}}" method="post">
+            <form name="editFrm" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="dosql" value="do_tarif_aed" />
             <input type="hidden" name="tarif_id" value="{{$tarif->tarif_id}}" />
             <input type="hidden" name="del" value="0" />
@@ -184,7 +183,7 @@ function pageMain() {
               <tr><th class="category" colspan="2">Créer un nouveau tarif</th></tr>
               {{/if}}
               <tr>
-                <th>Type :</th>
+                <th><label for="_type" title="Veuillez choisir le type du tarif">Type</label></th>
                 <td>
                   <select name="_type">
                     <option value="chir" {{if $tarif->chir_id}} selected="selected" {{/if}}>Tarif personnel</option>
@@ -193,21 +192,21 @@ function pageMain() {
                 </td>
               </tr>
               <tr>
-                <th>Nom :</th>
+                <th><label for="description" title="Veuillez saisir un nom pour ce tarif">Nom</label></th>
                 <td>
-                  <input type="text" name="description" value="{{$tarif->description}}" />
+                  <input type="text" title="{{$tarif->_props.description}}" name="description" value="{{$tarif->description}}" />
                 </td>
               </tr>
               <tr>
-                <th>Secteur1 :</th>
+                <th><label for="secteur1" title="Veuillez saisir un tarif pour le secteur 1">Secteur1</label></th>
                 <td>
-                  <input type="text" name="secteur1" value="{{$tarif->secteur1}}" size="6" /> €
+                  <input type="text" title="{{$tarif->_props.secteur1}}" name="secteur1" value="{{$tarif->secteur1}}" size="6" /> €
                 </td>
               </tr>
               <tr>
-                <th>Secteur2 :</th>
+                <th><label for="secteur2" title="Veuillez saisir un tarif pour le secteur 2">Secteur2</label></th>
                 <td>
-                  <input type="text" name="secteur2" value="{{$tarif->secteur2}}" size="6" /> €
+                  <input type="text" title="{{$tarif->_props.secteur2}}" name="secteur2" value="{{$tarif->secteur2}}" size="6" /> €
                 </td>
               </tr>
               <tr>

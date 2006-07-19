@@ -19,6 +19,7 @@ function pageMain() {
     <td>
       <form name="choosePrat" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
+      <label for="selPrat" title="Veuillez choisir un praticien">Praticiens</label>
       <select name="selPrat" onchange="submit()">
       <option value="0" {{if $selPrat == 0}}selected="selected"{{/if}}>&mdash; Selectionner un praticien &mdash;</option>
       {{foreach from=$listPrat item=curr_prat}}
@@ -31,14 +32,15 @@ function pageMain() {
     </td>
     {{else}}
     <td class="Pane">
-      <strong><a href="javascript:popPlanning('{{$date_recherche}}')">Etat des services</a></strong>
+      <strong><a class="buttonsearch" href="javascript:popPlanning('{{$date_recherche}}')">Etat des services</a></strong>
     </td>
     {{/if}}
     <td style="text-align: right;">
       <form name="typeVue" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
+      <label for="typeVue" title="Veuillez choisir un type de vue">Type de vue</label>
       <select name="typeVue" onchange="submit()">
-        <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>Afficher les lits disponible</option>
+        <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>Afficher les lits disponibles</option>
         <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Afficher les patients d'un chirurgien</option>
       </select>
       </form>

@@ -38,7 +38,7 @@ function checkForm() {
     <form name="filterFrm" action="?" method="get">
     
     <input type="hidden" name="m" value="{{$m}}" />
-        
+	<a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;liste_id=0" class="buttonnew"><strong>Créer une liste de choix</strong></a>        
     <table class="form">
 
       <tr>
@@ -114,8 +114,6 @@ function checkForm() {
   </td>
   
   <td class="pane">
-
-	<a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;liste_id=0"><strong>Créer une liste de choix</strong></a>
 
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
 
@@ -245,7 +243,7 @@ function checkForm() {
         <input type="hidden" name="chir_id" value="{{$liste->chir_id}}" />
         <input type="hidden" name="function_id" value="{{$liste->function_id}}" />
         <input type="text" name="_new" value="" />
-        <button type="submit"><img src="modules/dPcompteRendu/images/check.png" /></button>
+        <button type="submit" class="tick notext"></button>
         </form>
       </td></tr>
     </table>

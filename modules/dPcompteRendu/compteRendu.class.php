@@ -49,7 +49,7 @@ class CCompteRendu extends CMbObject {
   function CCompteRendu() {
     $this->CMbObject("compte_rendu", "compte_rendu_id");
 
-    $this->_props["chir_id"]     = "ref";
+    $this->_props["chir_id"]     = "ref|xor|function_id";
     $this->_props["function_id"] = "ref";
     $this->_props["object_id"]   = "ref";
     $this->_props["nom"]         = "str|notNull";
@@ -57,22 +57,6 @@ class CCompteRendu extends CMbObject {
     $this->_props["type"]        = "enum|operation|hospitalisation|consultation|notNull";
   }
   
-  function check() {
-    if ($this->chir_id and $this->function_id) {
-      return "Un modèle ne peut pas appartenir à la fois à une fonction et un utilisateur";
-    }
-
-    if (!$this->object_id and !($this->chir_id or $this->function_id)) {
-      return "Un modèle doit appertenir à un utilisateur ou une fonction";
-    }
-    
-    if ($this->object_id and ($this->chir_id or $this->function_id)) {
-		  return "un document n'appartient ni à un utilisateur ni une fonction, il doit être lié à un objet'";
-		}
-    
-    return parent::check();
-
-  }
   
   function loadModeles($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     if (!isset($where['object_id'])) {

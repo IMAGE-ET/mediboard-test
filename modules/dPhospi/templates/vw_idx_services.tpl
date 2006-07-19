@@ -3,7 +3,7 @@
 <tr>
   <td class="halfPane">
 
-    <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;service_id=0"><strong>Créer un service</strong></a>
+    <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;service_id=0" class="buttonnew"><strong>Créer un service</strong></a>
 
     <table class="tbl">
       

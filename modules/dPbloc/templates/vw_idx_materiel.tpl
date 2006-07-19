@@ -1,11 +1,10 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-function checkForm() {
+function checkFormPrint() {
   var form = document.paramFrm;
     
-  if (form.deb.value > form.fin.value) {
-    alert("Date de début superieure à la date de fin");
+  if(!(checkForm(form))){
     return false;
   }
   
@@ -60,10 +59,10 @@ function pageMain() {
           <input type="hidden" name="id" value="{{$curr_op->operation_id}}" />
           {{if $typeAff}}
           <input type="hidden" name="value" value="n" />
-  		    <input type="submit" value="annulé" />
+  		    <button type="submit" class="cancel">annulé</button>
   		    {{else}}
           <input type="hidden" name="value" value="o" />
-          <input type="submit" value="commandé" />
+          <button type="submit" class="submit">commandé</button>
     			{{/if}}
   			</form>
 		  </td>
@@ -72,7 +71,7 @@ function pageMain() {
 	  </table>
 	</td>
 	<td>
-    <form name="paramFrm" action="?m=dPbloc" method="post" onsubmit="return checkForm()">
+    <form name="paramFrm" action="?m=dPbloc" method="post" onsubmit="return checkFormPrint()">
 
 	  <table class="form">
 	    <tr>
@@ -82,7 +81,7 @@ function pageMain() {
         <th><label for="deb" title="Date de début de la recherche">Début</label></th>
         <td class="date" colspan="2">
           <div id="paramFrm_deb_da">{{$deb|date_format:"%d/%m/%Y"}}</div>
-          <input type="hidden" name="deb" value="{{$deb}}" />
+          <input type="hidden" name="deb" title="date|notNull" value="{{$deb}}" />
           <img id="paramFrm_deb_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
         </td>
       </tr>
@@ -90,13 +89,13 @@ function pageMain() {
         <th><label for="fin" title="Date de fin de la recherche">Fin</label></th>
         <td class="date" colspan="2">
           <div id="paramFrm_fin_da">{{$fin|date_format:"%d/%m/%Y"}}</div>
-          <input type="hidden" name="fin" value="{{$fin}}" />
+          <input type="hidden" name="fin" title="date|moreEquals|deb|notNull" value="{{$fin}}" />
           <img id="paramFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
         </td>
       </tr>
 	    <tr>
 	      <td colspan="2" class="button">
-	        <input type="button" value="Afficher" onclick="checkForm()" />
+	        <button type="button" onclick="checkFormPrint()" class="search">Afficher</button>
 	      </td>
 	    </tr>
 	  </table>

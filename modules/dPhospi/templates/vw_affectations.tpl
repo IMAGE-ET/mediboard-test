@@ -138,7 +138,7 @@ function showLegend() {
 
 <tr>
   <td>
-    <a href="javascript:showLegend()">Légende</a>
+    <a href="javascript:showLegend()" class="buttonsearch">Légende</a>
   </td>
   <th>
     <a href="javascript:{{if $dialog}}window.print(){{else}}popPlanning(){{/if}}">
@@ -149,6 +149,7 @@ function showLegend() {
   <td>
     <form name="chgMode" action="?m={{$m}}" method="get">
     <input type="hidden" name="m" value="{{$m}}" />
+    <label for="mode" title="Veuillez choisir un type de vue">Type de vue</label>
     <select name="mode" onchange="submit()">
       <option value="0" {{if $mode == 0}}selected="selected"{{/if}}>Vue instantanée</option>
       <option value="1" {{if $mode == 1}}selected="selected"{{/if}}>Vue de la journée</option>

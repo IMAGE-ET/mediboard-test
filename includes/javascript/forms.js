@@ -234,11 +234,14 @@ function checkMoreThan(oElement, aSpecFragments) {
 
 function checkElement(oElement, aSpecFragments) {
   aSpecFragments.removeByValue("confidential");
-  bNotNull = aSpecFragments.removeByValue("notNull") > 0;
-  if (oElement.value == "") {
-    return bNotNull ? "Ne pas peut pas être vide" : null;
-  }
   
+  bNotNull = aSpecFragments.removeByValue("notNull") > 0;
+  if(!aSpecFragments.include("xor") && !aSpecFragments.include("nand")){
+    if (oElement.value == "") {
+      return bNotNull ? "Ne pas peut pas être vide" : null;
+    }
+  }
+
   switch (aSpecFragments[0]) {
     case "ref":
       if (isNaN(oElement.value)) {
@@ -248,13 +251,51 @@ function checkElement(oElement, aSpecFragments) {
       iElementValue = parseInt(oElement.value, 10);
       
       if (iElementValue == 0 && bNotNull) {
-        return "ne peut pas être une référence nulle";
+        return "Ne peut pas être une référence nulle";
       }
 
       if (iElementValue < 0) {
         return "N'est pas une référence (entier négatif)";
       }
-				
+      if (sFragment1 = aSpecFragments[1]) {
+        switch (sFragment1) {
+
+          case "xor" :
+        	// Test existance parametre supplementaire
+        	  var sTargetElement = aSpecFragments[2];
+        	  
+            if (!sTargetElement) {
+              return "Spécification de chaîne de caractères invalide";
+            }
+            
+        	var oTargetElement = oElement.form.elements[sTargetElement];
+        	  
+        	if (!oTargetElement) {
+              return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
+      		}
+        	
+        	var oTargetLabel = getLabelFor(oTargetElement);
+        	var oLabel = getLabelFor(oElement);
+        	var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : sTargetElement;
+        	var sLabel = oLabel ? oLabel.innerHTML : oElement.name;
+        	
+            if (oElement.value == "" && oTargetElement.value == ""){
+      		  return printf("Merci de choisir soit '%s', soit '%s'", sLabel, sTargetLabel);  
+      		}
+              
+            if (oElement.value != "" && oTargetElement.value != ""){
+      		  return printf("Vous ne devez choisir qu'un seul de ces champs : '%s', '%s'", sLabel, sTargetLabel);   
+      		}
+        	
+            break;
+          
+          case "nand" :
+            break;
+          
+          default:
+            return "Spécification de chaîne de caractères invalide";
+        }  
+      }
       break;
       
     case "str":

@@ -144,7 +144,11 @@ function pageMain() {
             <input type='hidden' name='dosql' value='do_plageressource_aed' />
             <input type='hidden' name='del' value='0' />
             <input type='hidden' name='plageressource_id' value='{{$plage->plageressource_id}}' />
+            {{if $plage->plageressource_id}}
+            <button class="modify" type="submit">Modifier</button>
+            {{else}}
             <button class="submit" type="submit">Créer</button>
+            {{/if}}
         </tr>
       </table>
       </form>

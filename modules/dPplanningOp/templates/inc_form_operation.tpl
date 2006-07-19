@@ -94,7 +94,7 @@
       <input type="hidden" name="plageop_id" title="{{$op->_props.plageop_id}}|notNull" ondblclick="popPlage()" value="{{$plage->id}}" />
     </th>
     <td class="readonly"><input type="text" name="_datestr" readonly="readonly" size="10" value="{{$plage->date|date_format:"%d/%m/%Y"}}" /></td>
-    <td class="button"><input type="button" value="Choisir une date" onclick="popPlage()" /></td>
+    <td class="button"><button type="button" class="search" onclick="popPlage()">Choisir une date</button></td>
     {{/if}}
   </tr>
   
@@ -107,7 +107,7 @@
       <button class="tick notext" type="button" onclick="putCCAM(this.form._codeCCAM.value)"></button>
     </td>
     <td class="button">
-      <input type="button" value="Choisir un code" onclick="popCode('ccam')"/>
+      <button type="button" class="search" onclick="popCode('ccam')">Choisir un code</button>
     </td>
   </tr>
 

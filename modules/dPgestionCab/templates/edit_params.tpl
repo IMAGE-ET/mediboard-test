@@ -3,6 +3,7 @@
     <td colspan="2">
       <form name="userSelector" action="index.php" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
+      <label for="user_id" title="Veuillez sélectionner l'utilisateur concerné">Utilisateur Concerné</label>
       <select name="user_id" onchange="this.form.submit()">
       {{foreach from=$listUsers item=curr_user}}
         <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $user->user_id}}selected="selected"{{/if}}>
@@ -26,11 +27,11 @@
           <th class="title" colspan="2">Informations sur l'utilisateur</th>
         </tr>
         <tr>
-          <th>Nom :</th>
+          <th><label title="Nom de l'employé">Nom</label></th>
           <td>{{$user->_view}}</td>
         </tr>
         <tr>
-          <th>Fonction :</th>
+          <th><label title="Fonction de l'employé">Fonction</label></th>
           <td>{{$user->_user_type}}</td>
         </tr>
         <tr>

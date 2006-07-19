@@ -56,7 +56,7 @@ class CPlageOp extends CMbObject {
     $this->_props["anesth_id"] = "ref";
     $this->_props["id_chir"]   = "str";
     $this->_props["id_anesth"] = "str";
-    $this->_props["id_spec"]   = "ref";
+    $this->_props["id_spec"]   = "ref|xor|chir_id";
     $this->_props["id_salle"]  = "ref|notNull";
     $this->_props["date"]      = "date|notNull";
     $this->_props["debut"]     = "time|notNull";

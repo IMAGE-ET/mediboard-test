@@ -13,27 +13,9 @@ function supprimer() {
   form.submit();
 }
 
-function checkModele() {
-  var form = document.editFrm;
-  var field = null;
-   
-  var fieldChir = form.elements['chir_id'];
-  var fieldFunc = form.elements['function_id'];
-  
-  if (fieldChir && fieldFunc) {
-    if (fieldChir.value == 0 && fieldFunc.value == 0) {
-      alert("Le modèle doit être associé à une fonction ou un praticien");
-      fieldChir.focus();
-      return false;
-    }
-  }
-
-  return checkForm(form);
-}
-
 </script>
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkModele()">
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="del" value="0" />
@@ -44,7 +26,11 @@ function checkModele() {
 
 <tr>
   <td>
-  
+    {{if $compte_rendu->compte_rendu_id}}
+    <button class="new" type="button" onclick="nouveau()">
+      Créer un modèle
+    </button>
+    {{/if}}  
 <table class="form">
   <tr>
     <th class="category" colspan="2">
@@ -65,8 +51,8 @@ function checkModele() {
   <tr>
     <th><label for="function_id" title="Fonction à laquelle le modèle est associé">Fonction</label></th>
     <td>
-      <select name="function_id" onchange="this.form.chir_id.value = 0">
-        <option value="0">&mdash; Associer à une fonction &mdash;</option>
+      <select name="function_id" title="{{$compte_rendu->_props.function_id}}">
+        <option value="">&mdash; Associer à une fonction &mdash;</option>
         {{foreach from=$listFunc item=curr_func}}
           <option value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $compte_rendu->function_id}} selected="selected" {{/if}}>
             {{$curr_func->_view}}
@@ -79,8 +65,8 @@ function checkModele() {
   <tr>
     <th><label for="chir_id" title="Praticien auquel le modèle est associé">Praticien</label></th>
     <td>
-      <select name="chir_id" onchange="this.form.function_id.value = 0">
-        <option value="0">&mdash; Associer à un praticien &mdash;</option>
+      <select name="chir_id" title="{{$compte_rendu->_props.chir_id}}">
+        <option value="">&mdash; Associer à un praticien &mdash;</option>
         {{foreach from=$listPrat item=curr_prat}}
           <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $prat_id}} selected="selected" {{/if}}>
             {{$curr_prat->_view}}
@@ -109,9 +95,6 @@ function checkModele() {
       <button class="modify" type="submit">Modifier</button>
       <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$compte_rendu->nom|escape:javascript}}'})">
         Supprimer
-      </button>
-      <button class="new" type="button" onclick="nouveau()">
-        Nouveau
       </button>
     {{else}}
       <button class="submit" type="submit">Créer</button>

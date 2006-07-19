@@ -1,14 +1,13 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-function checkForm() {
+function checkFormPrint() {
   var form = document.paramFrm;
-    
-  if (form.deb.value > form.fin.value) {
-    alert("Date de début superieure à la date de fin");
+  
+  if(!(checkForm(form))){
     return false;
   }
-
+  
   popPlanning();
 }
 
@@ -38,7 +37,7 @@ function pageMain() {
 
 </script>
 
-<form name="paramFrm" action="?m=dPhospi" method="post" onsubmit="return checkForm()">
+<form name="paramFrm" action="?m=dPhospi" method="post" onsubmit="return checkFormPrint()">
 
 <table class="main">
   <tr>
@@ -51,7 +50,7 @@ function pageMain() {
           <th><label for="deb">Début</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_deb_da">{{$today|date_format:"%d/%m/%Y %H:%M"}}</div>
-            <input type="hidden" name="deb" value="{{$today}}" />
+            <input type="hidden" name="deb" title="dateTime|notNull" value="{{$today}}" />
             <img id="paramFrm_deb_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
@@ -60,7 +59,7 @@ function pageMain() {
           <th><label for="fin">Fin</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_fin_da">{{$tomorrow|date_format:"%d/%m/%Y %H:%M"}}</div>
-            <input type="hidden" name="fin" value="{{$tomorrow}}" />
+            <input type="hidden" name="fin" title="dateTime|moreEquals|deb|notNull" value="{{$tomorrow}}" />
             <img id="paramFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>
@@ -133,7 +132,7 @@ function pageMain() {
   <tr>
     <td colspan="2">
 
-      <table class="form"><tr><td class="button"><button type="button" onclick="checkForm()">Afficher</button></td></tr></table>
+      <table class="form"><tr><td class="button"><button type="button" onclick="checkFormPrint()" class="print">Afficher</button></td></tr></table>
 
     </td>
   </tr>
