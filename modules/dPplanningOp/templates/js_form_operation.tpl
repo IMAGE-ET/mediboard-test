@@ -201,7 +201,7 @@ function setPlage(plage_id, sDate, bAdm) {
     oOpForm.plageop_id.value = plage_id;
     oOpForm._datestr.value = sDate;
     var dAdm = makeDateFromLocaleDate(sDate);
-    oOpForm._date = makeDATEFromDate(dAdm);
+    oOpForm._date.value = makeDATEFromDate(dAdm);
     
     // Initialize admission date according to operation date
     switch(bAdm) {
