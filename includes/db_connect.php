@@ -179,8 +179,8 @@ function db_loadObjectList($sql, $object, $maxrows = NULL) {
 	}
 	$list = array();
 	$cnt = 0;
-	while ($row = db_fetch_array($cur)) {
-		$class = get_class($object);
+	$class = get_class($object);
+	while ($row = db_fetch_array($cur)) {		
 		$object = new $class();
         $keyname = $object->_tbl_key;
 		$object->bind($row);
