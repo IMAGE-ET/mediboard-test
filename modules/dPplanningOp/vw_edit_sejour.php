@@ -17,8 +17,8 @@ if(!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
 
-$sejour_id = mbGetValueFromGetOrSession("sejour_id");
-$patient_id = mbGetValueFromGet("patient_id");
+$sejour_id    = mbGetValueFromGetOrSession("sejour_id");
+$patient_id   = mbGetValueFromGet("patient_id");
 $praticien_id = mbGetValueFromGetOrSession("praticien_id");
 
 // L'utilisateur est-il un praticien

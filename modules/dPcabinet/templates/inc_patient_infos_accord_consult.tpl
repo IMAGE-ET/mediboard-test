@@ -1,4 +1,35 @@
-<table class="form">
+<script type="text/javascript">
+
+function newOperation(chir_id, pat_id) {
+  var url = new Url;
+  url.setModuleTab("dPplanningOp", "vw_edit_planning");
+  url.addParam("chir_id", chir_id);
+  url.addParam("pat_id", pat_id);
+  url.addParam("operation_id", 0);
+  url.redirect();
+}
+
+function newHospitalisation(chir_id, pat_id) {
+  var url = new Url;
+  url.setModuleTab("dPplanningOp", "vw_edit_sejour");
+  url.addParam("praticien_id", chir_id);
+  url.addParam("patient_id", pat_id);
+  url.addParam("hospitalisation_id", 0);
+  url.redirect();
+}
+
+function newConsultation(chir_id, pat_id) {
+  var url = new Url;
+  url.setModuleTab("dPcabinet", "edit_planning");
+  url.addParam("chir_id", chir_id);
+  url.addParam("pat_id", pat_id);
+  url.addParam("consultation_id", 0);
+  url.redirect();
+}
+
+</script>
+
+      <table class="form">
         <tr>
           <th class="category">
             Patient

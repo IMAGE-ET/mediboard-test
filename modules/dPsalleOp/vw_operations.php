@@ -54,7 +54,7 @@ foreach($plages as $key => $value) {
 
 $urgences = new COperation;
 $where = array();
-$where["date"]     = "= '".mbDate()."'";
+$where["date"]     = "= '$date'";
 $where["salle_id"] = "= '$salle'";
 $order = "chir_id";
 $urgences = $urgences->loadList($where);
