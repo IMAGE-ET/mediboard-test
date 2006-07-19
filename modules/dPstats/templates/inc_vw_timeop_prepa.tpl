@@ -18,5 +18,12 @@
           <td>-</td>
         </tr>
         {{/foreach}}
+        <tr>
+          <th>Total</th>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
         
       </table>

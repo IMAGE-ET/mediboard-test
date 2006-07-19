@@ -44,7 +44,7 @@ require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 if($typeVue){
-  $smarty->assign("result", $result);
+  $smarty->assign("result", $result); 
 }else{
   $smarty->assign("prat_id"   , $prat_id   );
   $smarty->assign("codeCCAM"  , $codeCCAM  );

@@ -18,10 +18,10 @@ foreach($listPrats as $_prat) {
     "\nFROM operations" .
     "\nINNER JOIN plagesop" .
     "\nON operations.plageop_id = plagesop.id" .
-	"\nWHERE operations.chir_id = '$_prat->user_id'" .          // Pour le chirurgien désiré
-    "\nAND annulee = 0" .                            // Opération non annulée
+    "\nWHERE operations.chir_id = '$_prat->user_id'" .
+    "\nAND annulee = 0" .
     "\nAND entree_bloc IS NOT NULL" .
-    "\nAND sortie_bloc IS NOT NULL";  // Opération ayant une heure d'entrée et de sortie
+    "\nAND sortie_bloc IS NOT NULL";
     
   switch($intervalle) {
     case 0:
@@ -59,10 +59,7 @@ foreach($listPrats as $_prat) {
     $result[$keyPrep]["somme"] = array_sum($curr_prep);
     $result[$keyPrep]["preparation"] = count($curr_prep);
     $result[$keyPrep]["moyenne"] = strftime("%H:%M:%S", array_sum($curr_prep)/count($curr_prep));
-  }
-    
+  } 
 }
-
-
 
 ?>
