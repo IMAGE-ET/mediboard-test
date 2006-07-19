@@ -1,0 +1,130 @@
+    <table class="tbl">
+      <tr>
+        <th class="title">
+          Admissions 
+          {{if $group_name == "veille"}}de la veille{{/if}}
+          {{if $group_name == "matin" }}du matin{{/if}}
+          {{if $group_name == "soir"  }}du soir{{/if}}
+          {{if $group_name == "avant" }}antérieures{{/if}}
+        </th>
+      </tr>
+    </table>
+
+    {{foreach from=$sejourNonAffectes item=curr_sejour}}
+    <form name="addAffectation{{$curr_sejour->sejour_id}}" action="?m={{$m}}" method="post">
+
+    <input type="hidden" name="dosql" value="do_affectation_aed" />
+    <input type="hidden" name="lit_id" value="" />
+    <input type="hidden" name="sejour_id" value="{{$curr_sejour->sejour_id}}" />
+    <input type="hidden" name="entree" value="{{$curr_sejour->entree_prevue}}" />
+    <input type="hidden" name="sortie" value="{{$curr_sejour->sortie_prevue}}" />
+
+    </form>
+
+    <table class="sejourcollapse" id="sejour{{$curr_sejour->sejour_id}}">
+      <tr>
+        <td class="selectsejour" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
+          {{if $curr_sejour->pathologie != ""}}  
+          <input type="radio" id="hospitalisation{{$curr_sejour->sejour_id}}" onclick="selectHospitalisation({{$curr_sejour->sejour_id}})" />
+          {{/if}}
+        </td>
+        <td class="patient" onclick="flipSejour({{$curr_sejour->sejour_id}})">
+          <strong><a name="sejour{{$curr_sejour->sejour_id}}">{{$curr_sejour->_ref_patient->_view}}</a></strong>
+          {{if $curr_sejour->type == "comp"}}
+          ({{$curr_sejour->_duree_prevue}}j)
+          {{else}}
+          ({{$curr_sejour->type|truncate:1:""|capitalize}})
+          {{/if}}
+        </td>
+      </tr>
+      <tr>
+        <td class="date" colspan="2"><em>Entrée</em> : {{$curr_sejour->entree_prevue|date_format:"%A %d %B %H:%M"}}</td>
+      </tr>
+      <tr>
+        <td class="date" colspan="2"><em>Sortie</em> : {{$curr_sejour->sortie_prevue|date_format:"%A %d %B"}}</td>
+      </tr>
+      <tr>
+        <td class="date" colspan="2"><em>Age</em> : {{$curr_sejour->_ref_patient->_age}} ans
+      </tr>
+      <tr>
+        <td class="date" colspan="2"><em>Dr. {{$curr_sejour->_ref_praticien->_view}}</em></td>
+      </tr>
+      <tr>
+        <td class="date" colspan="2">
+          {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
+          {{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
+          <em>{{$curr_code->code}}</em> : {{$curr_code->libelleLong}}<br />
+          {{/foreach}}
+          {{/foreach}}
+        </td>
+      </tr>
+      <tr>
+        <td class="date" colspan="2">
+        
+        <form name="EditSejour{{$curr_sejour->sejour_id}}" action="?m=dPhospi" method="post">
+
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="otherm" value="dPhospi" />
+        <input type="hidden" name="dosql" value="do_sejour_aed" />
+        <input type="hidden" name="sejour_id" value="{{$curr_sejour->sejour_id}}" />
+        
+        <em>Pathologie:</em>
+        <select name="pathologie">
+          <option value="">&mdash; Choisir &mdash;</option>
+          {{foreach from=$pathos->dispo item=curr_patho}}
+          <option {{if $curr_patho == $curr_sejour->pathologie}}selected="selected"{{/if}}>
+          {{$curr_patho}}
+          </option>
+          {{/foreach}}
+        </select>
+        <br />
+        <input type="radio" name="septique" value="0" {{if $curr_sejour->septique == 0}} checked="checked" {{/if}} />
+        <label for="septique_0" title="Opération propre">Propre</label>
+        <input type="radio" name="septique" value="1" {{if $curr_sejour->septique == 1}} checked="checked" {{/if}} />
+        <label for="septique_1" title="Séjour septique">Septique</label>
+
+        <input type="submit" value="valider" />
+        
+        </form>
+        
+        </td>
+      </tr>
+      {{if $curr_sejour->rques != ""}}
+      <tr>
+        <td class="date" colspan="2" style="background-color: #ff5">
+          <em>Séjour</em>: {{$curr_sejour->rques|escape:nl2br}}
+        </td>
+      </tr>
+      {{/if}}
+      {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
+      {{if $curr_operation->rques != ""}}
+      <tr>
+        <td class="date" colspan="2" style="background-color: #ff5">
+          <em>Intervention</em>: {{$curr_operation->rques|escape:nl2br}}
+        </td>
+      </tr>
+      {{/if}}
+      {{/foreach}}
+      {{if $curr_sejour->_ref_patient->rques != ""}}
+      <tr>
+        <td class="date" colspan="2" style="background-color: #ff5">
+          <em>Patient</em>: {{$curr_sejour->_ref_patient->rques|escape:nl2br}}
+        </td>
+      </tr>
+      {{/if}}
+      {{if $curr_sejour->chambre_seule == "o"}}
+      <tr>
+        <td class="date" style="background-color: #f55;" colspan="2">
+          <strong>Chambre seule</strong>
+        </td>
+      </tr>
+      {{else}}
+      <tr>
+        <td class="date" colspan="2">
+          <strong>Chambre double</strong>
+        </td>
+      </tr>
+      {{/if}}
+    </table>
+    
+    {{/foreach}}
