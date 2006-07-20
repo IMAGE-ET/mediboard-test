@@ -1,4 +1,4 @@
-            <a href="index.php?m=dPpatients&tab=vw_edit_patients&patient_id={{$patient->patient_id}}" class="buttonedit notext"></a>
+            <a href="index.php?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->patient_id}}" class="buttonedit notext"></a>
             {{$patient->_view}}
             <br />
             Age : {{$patient->_age}} ans
