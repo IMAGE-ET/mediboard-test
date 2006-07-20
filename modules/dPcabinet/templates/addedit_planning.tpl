@@ -62,7 +62,6 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
   f.heure.value = heure;
   f.duree.value = freq;
   f.chir_id.value = chirid;
-  f._chir_name.value = chirname;
 }
 
 </script>
@@ -104,13 +103,17 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
         <tr>
           <th>
             <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
-            <input type="hidden" name="chir_id" title="{{$consult->_props.patient_id}}" value="{{$chir->user_id}}" ondblclick="popChir()" />
           </th>
-            <td class="readonly">
-              <input type="text" name="_chir_name" size="30" value="{{$chir->_view}}" readonly="readonly" />
-              <button class="cancel notext" type="button" onclick="setChir('', '')"></button>
-            </td>
-            <td class="button"><button type="button" class="search" onclick="popChir()">Choisir un praticien</button></td>
+          <td colspan="2">
+            <select name="chir_id" title="{{$consult->_props.patient_id}}">
+              <option value="">&mdash; Choisir un praticien</option>
+              {{foreach from=$listPraticiens item=curr_praticien}}
+              <option value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
+                {{$curr_praticien->_view}}
+              </option>
+        {{/foreach}}
+      </select>
+          </td>
         </tr>
 
         <tr>

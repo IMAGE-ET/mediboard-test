@@ -40,62 +40,6 @@
         {{/foreach}}
       </select>
     </td>
-  </tr> 
-
-  <tr>
-    <th>
-      <label for="_hour_op" title="Durée de l'intervention. Obligatoire">Temps opératoire</label>
-    </th>
-    <td colspan="2">
-      <select name="_hour_op" title="notNull|num">
-      {{foreach from=$hours_duree key=key item=hour}}
-        <option value="{{$key}}" {{if (!$op && $key == 1) || $op->_hour_op == $key}} selected="selected" {{/if}}>{{$key}}</option>
-      {{/foreach}}
-      </select> h
-      <select name="_min_op">
-      {{foreach from=$mins_duree item=min}}
-        <option value="{{$min}}" {{if (!$op && $min == 0) || $op->_min_op == $min}} selected="selected" {{/if}}>{{$min}}</option>
-      {{/foreach}}
-      </select> mn
-    </td>
-  </tr>
-
-  <tr>
-    {{if $modurgence}}
-    <th>
-      <label for="date" title="Choisir une date d'intervention">Date de l'intervention</label>
-    </th>
-    <td>
-      <input type="hidden" name="plageop_id" value="" />
-      <input type="hidden" name="_date" value="" />
-      <select name="date" onchange="{{if !$op->operation_id}}updateEntreePrevue();{{/if}} modifSejour()">
-        <option value="{{$today|date_format:"%Y-%m-%d"}}">{{$today|date_format:"%d/%m/%Y"}} (ajourd'hui)</option>
-        <option value="{{$tomorow|date_format:"%Y-%m-%d"}}">{{$tomorow|date_format:"%d/%m/%Y"}} (demain)</option>
-      </select>
-    </td>
-    <td>
-      à
-      <select name="_hour_urgence">
-      {{foreach from=$hours_urgence item=hour}}
-        <option value="{{$hour}}" {{if $op->_hour_urgence == $hour || (!$op->operation_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
-      {{/foreach}}
-      </select> h
-      <select name="_min_urgence">
-      {{foreach from=$mins_duree item=min}}
-        <option value="{{$min}}" {{if $op->_min_urgence == $min}} selected="selected" {{/if}}>{{$min}}</option>
-      {{/foreach}}
-      </select> mn
-    </td>
-    {{else}}
-    <th>
-      <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention</label>
-      <input type="hidden" name="date" value="" />
-      <input type="hidden" name="_date" value="{{$plage->date}}" />
-      <input type="hidden" name="plageop_id" title="{{$op->_props.plageop_id}}|notNull" ondblclick="popPlage()" value="{{$plage->id}}" />
-    </th>
-    <td class="readonly"><input type="text" name="_datestr" readonly="readonly" size="10" value="{{$plage->date|date_format:"%d/%m/%Y"}}" /></td>
-    <td class="button"><button type="button" class="search" onclick="popPlage()">Choisir une date</button></td>
-    {{/if}}
   </tr>
   
   <tr>
@@ -136,6 +80,63 @@
         <option value="bilatéral" {{if $op->cote == "bilatéral"    }} selected="selected" {{/if}}>bilatéral</option>
       </select>
     </td>
+  </tr> 
+
+  <tr>
+    <th>
+      <label for="_hour_op" title="Durée de l'intervention. Obligatoire">Temps opératoire</label>
+    </th>
+    <td>
+      <select name="_hour_op" title="notNull|num">
+      {{foreach from=$hours_duree key=key item=hour}}
+        <option value="{{$key}}" {{if (!$op && $key == 1) || $op->_hour_op == $key}} selected="selected" {{/if}}>{{$key}}</option>
+      {{/foreach}}
+      </select> h
+      <select name="_min_op">
+      {{foreach from=$mins_duree item=min}}
+        <option value="{{$min}}" {{if (!$op && $min == 0) || $op->_min_op == $min}} selected="selected" {{/if}}>{{$min}}</option>
+      {{/foreach}}
+      </select> mn
+    </td>
+    <td id="timeEst"><i>Temps estimé :</i></td>
+  </tr>
+
+  <tr>
+    {{if $modurgence}}
+    <th>
+      <label for="date" title="Choisir une date d'intervention">Date de l'intervention</label>
+    </th>
+    <td>
+      <input type="hidden" name="plageop_id" value="" />
+      <input type="hidden" name="_date" value="" />
+      <select name="date" onchange="{{if !$op->operation_id}}updateEntreePrevue();{{/if}} modifSejour()">
+        <option value="{{$today|date_format:"%Y-%m-%d"}}">{{$today|date_format:"%d/%m/%Y"}} (ajourd'hui)</option>
+        <option value="{{$tomorow|date_format:"%Y-%m-%d"}}">{{$tomorow|date_format:"%d/%m/%Y"}} (demain)</option>
+      </select>
+    </td>
+    <td>
+      à
+      <select name="_hour_urgence">
+      {{foreach from=$hours_urgence item=hour}}
+        <option value="{{$hour}}" {{if $op->_hour_urgence == $hour || (!$op->operation_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
+      {{/foreach}}
+      </select> h
+      <select name="_min_urgence">
+      {{foreach from=$mins_duree item=min}}
+        <option value="{{$min}}" {{if $op->_min_urgence == $min}} selected="selected" {{/if}}>{{$min}}</option>
+      {{/foreach}}
+      </select> mn
+    </td>
+    {{else}}
+    <th>
+      <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention</label>
+      <input type="hidden" name="date" value="" />
+      <input type="hidden" name="_date" value="{{$plage->date}}" />
+      <input type="hidden" name="plageop_id" title="{{$op->_props.plageop_id}}|notNull" ondblclick="popPlage()" value="{{$plage->id}}" />
+    </th>
+    <td class="readonly"><input type="text" name="_datestr" readonly="readonly" size="10" value="{{$plage->date|date_format:"%d/%m/%Y"}}" /></td>
+    <td class="button"><button type="button" class="search" onclick="popPlage()">Choisir une date</button></td>
+    {{/if}}
   </tr>
 
   <tr>
