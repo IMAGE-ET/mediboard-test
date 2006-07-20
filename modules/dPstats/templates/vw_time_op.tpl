@@ -19,19 +19,21 @@
           <td>
             <input type="text" name="codeCCAM" value="{{$codeCCAM}}" />
             (% pour grouper toutes les interventions)
-          </td> 
-          {{/if}}    
-          <th{{$_aff_particulier}}>
+          </td>   
+          <th rowspan="2">
+          {{else}}  
+          <th colspan="3">
+          {{/if}}   
             <label for="intervalle_0" title="Intervalle">Intervalle</label>
           </th>
-          <td{{$_aff_particulier}}>
+          <td{{if !$typeVue}} rowspan="2"{{/if}}>
             <input type="radio" name="intervalle" value="0" {{if $intervalle == 0}}checked="checked"{{/if}} />
             <label for="intervalle_0" title="Dernier mois">Dernier mois</label>
             <br />
             <input type="radio" name="intervalle" value="1" {{if $intervalle == 1}}checked="checked"{{/if}} />
             <label for="intervalle_1" title="6 dernier mois">6 dernier mois</label>
           </td>
-          <td{{$_aff_particulier}}>
+          <td{{if !$typeVue}} rowspan="2"{{/if}}>
             <input type="radio" name="intervalle" value="2" {{if $intervalle == 2}}checked="checked"{{/if}} />
             <label for="intervalle_2" title="Dernière année">Dernière année</label>
             <br />

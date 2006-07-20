@@ -30,11 +30,9 @@ $listPrats = $user->loadPraticiens(PERM_READ);
 
 if($typeVue){
   // Stat des temps de préparation
-  $_aff_particulier="";
   include("inc_vw_timeop_prepa.php");
 }else{
   // Stat des temps opératoires
-  $_aff_particulier=" rowspan=\"2\"";
   include("inc_vw_timeop_op.php");
 }
 
@@ -56,7 +54,6 @@ $smarty->assign("intervalle", $intervalle);
 $smarty->assign("total"     , $total     );  
 
 $smarty->assign("typeVue", $typeVue);
-$smarty->assign("_aff_particulier", $_aff_particulier);
 
 $smarty->display("vw_time_op.tpl");
 
