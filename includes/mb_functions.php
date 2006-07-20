@@ -257,6 +257,39 @@ function mbDaysRelative($from, $to) {
 }
 
 /**
+ * Return the std variance of an array
+ * @return float: ecart-type
+ **/
+
+function mbMoyenne($array) {
+  if (is_array($array)) {
+    $moyenne = array_sum($array) / count($array);
+    return $moyenne;
+  } else {
+    return false;
+  }
+}
+
+/**
+ * Return the std variance of an array
+ * @return float: ecart-type
+ **/
+
+function mbEcartType($array) {
+  if (is_array($array)) {
+    $moyenne = mbMoyenne($array);
+    $sigma = 0;
+    foreach($array as $value) {
+      $sigma += pow((floatval($value)-$moyenne),2);
+    }
+    $ecarttype = sqrt($sigma / count($array));
+    return $ecarttype;
+  } else {
+    return false;
+  }
+}
+
+/**
  * Inserts a CSV file into a mysql table 
  * Not a generic function : used for import of specials files
  * in dPinterop
