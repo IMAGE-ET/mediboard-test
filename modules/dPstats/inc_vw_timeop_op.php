@@ -7,7 +7,10 @@
 * @author Romain Ollivier
 */
 
-$sql = "SELECT" .
+// Vide la table contenant les données
+db_exec("TRUNCATE `temps_op`"); db_error();
+
+$sql = "SELECT operations.chir_id, " .
        "\nusers.user_last_name, users.user_first_name," .
        "\nCOUNT(operations.operation_id) AS total," .
        "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.sortie_bloc)-TIME_TO_SEC(operations.entree_bloc))) as duree_bloc," .
@@ -88,4 +91,19 @@ $sql .= "\nGROUP BY groupall";
 
 db_loadHash($sql, $total);
 
+// Mémorisation des données dans MySQL
+foreach($listOps as $keylistOps => $curr_listOps){
+  // Mémorisation des données dans MySQL
+  $sql = "INSERT INTO `temps_op` (`temp_op_id`, `chir_id`, `CCAM`, `nb_intervention`, `estimation`, `occup_moy`, `occup_ecart`, `duree_moy`, `duree_ecart`)
+          VALUES (NULL, 
+                  '".$curr_listOps["chir_id"]."',
+            	  '".$curr_listOps["ccam"]."',
+            	  '".$curr_listOps["total"]."',
+            	  '".$curr_listOps["estimation"]."',
+            	  '".$curr_listOps["duree_bloc"]."',
+            	  '".$curr_listOps["ecart_bloc"]."',
+            	  '".$curr_listOps["duree_operation"]."',
+            	  '".$curr_listOps["ecart_operation"]."');";
+  db_exec( $sql ); db_error();
+}
 ?>

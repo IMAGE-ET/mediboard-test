@@ -14,6 +14,9 @@ $total["preparation"] = 0;
 $total["nbPlage"] = 0;
 $total["elements"] = array();
 
+// Vide la table contenant les données
+db_exec("TRUNCATE `temps_prepa`"); db_error();
+
 foreach($listPrats as $_prat) {
   //Récupération des opérations par chirurgien
   
@@ -75,6 +78,17 @@ foreach($listPrats as $_prat) {
     $result[$_prat->user_id]["moyenne"] = mbMoyenne($preparation[$_prat->user_id]);    
     $result[$_prat->user_id]["ecartType"] = mbEcartType($preparation[$_prat->user_id]);
     
+    // Mémorisation des données dans MySQL
+    $sql = "INSERT INTO `temps_prepa` (`temp_prepa_id`, `chir_id`, `nb_prepa`, `nb_plages`, `duree_moy`, `duree_ecart`)
+            VALUES (NULL, 
+            		'$_prat->user_id',
+            		'".$result[$_prat->user_id]["preparation"]."',
+            		'".$result[$_prat->user_id]["nbPlage"]."',
+            		'".strftime("%H:%M:%S",$result[$_prat->user_id]["moyenne"])."',
+            		'".strftime("%H:%M:%S",$result[$_prat->user_id]["ecartType"])."');";
+	db_exec( $sql ); db_error();
+    
+    // Mémorisation pour le calcul de la moyenne générale
     $total["elements"] = array_merge($total["elements"], $preparation[$_prat->user_id]);
   }
 
@@ -87,6 +101,5 @@ foreach($result as $keyresult => $curr_result){
 
 $total["moyenne"] = mbMoyenne($total["elements"]);
 $total["ecartType"] = mbEcartType($total["elements"]);
-//mbTrace($preparation);
 
 ?>
