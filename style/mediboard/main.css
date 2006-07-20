@@ -1259,6 +1259,21 @@ table.selectCode td {
   border: #aaa 2px dotted;
 }
 
+/* Accordion rico */
+
+div.accordionMain {
+  border: 1px solid #000;
+}
+
+div.accordionTabTitleBar {
+  cursor: pointer;
+  font-size: 14px;
+  border: 1px outset #458;
+}
+
+div.accordionTabContentBox {
+}
+
   /* @import "./hospitalisation.css"; */
 
 /* Chambres */
