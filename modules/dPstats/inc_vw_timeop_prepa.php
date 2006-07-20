@@ -10,6 +10,10 @@
 $preparation = array();
 $result = array();
 
+$total["preparation"] = 0;
+$total["nbPlage"] = 0;
+$total["elements"] = array();
+
 foreach($listPrats as $_prat) {
   //Récupération des opérations par chirurgien
   
@@ -40,6 +44,9 @@ foreach($listPrats as $_prat) {
 
   $old_plagesop = 0;
   $old_operation_id = 0;
+  $nb_oper_par_plage = 0;
+  $nb_plage[$_prat->user_id] = 0;
+  $preparation[$_prat->user_id] = array();
     
   foreach($operations as $keyOp => $curr_op) {
       
@@ -48,18 +55,38 @@ foreach($listPrats as $_prat) {
       $testValid = $testValid && ($operations[$old_operation_id]["sec_sortie"] < $curr_op["sec_entree"]);
       if($testValid) {
         $preparation[$_prat->user_id][] = $curr_op["sec_entree"] - $operations[$old_operation_id]["sec_sortie"];
+        $nb_oper_par_plage++;
+        if($nb_oper_par_plage==1){
+          $nb_plage[$_prat->user_id] = $nb_plage[$_prat->user_id] + 1;  
+        }
       }
+    }else{
+      $nb_oper_par_plage = 0;
     }
     $old_operation_id = $keyOp;
     $old_plagesop = $curr_op["plageop_id"];
   }
+  
+  if(count($preparation[$_prat->user_id])) {
+    $result[$_prat->user_id]["nbPlage"] = $nb_plage[$_prat->user_id];
+    $result[$_prat->user_id]["praticien"] = $listPrats[$_prat->user_id]->_view;
+    $result[$_prat->user_id]["somme"] = array_sum($preparation[$_prat->user_id]);
+    $result[$_prat->user_id]["preparation"] = count($preparation[$_prat->user_id]);
+    $result[$_prat->user_id]["moyenne"] = mbMoyenne($preparation[$_prat->user_id]);    
+    $result[$_prat->user_id]["ecartType"] = mbEcartType($preparation[$_prat->user_id]);
     
-  foreach($preparation as $keyPrep => $curr_prep) {
-  	$result[$keyPrep]["praticien"] = $listPrats[$keyPrep]->_view;
-    $result[$keyPrep]["somme"] = array_sum($curr_prep);
-    $result[$keyPrep]["preparation"] = count($curr_prep);
-    $result[$keyPrep]["moyenne"] = strftime("%H:%M:%S", array_sum($curr_prep)/count($curr_prep));
-  } 
+    $total["elements"] = array_merge($total["elements"], $preparation[$_prat->user_id]);
+  }
+
 }
+
+foreach($result as $keyresult => $curr_result){
+  $total["preparation"] += $curr_result["preparation"];
+  $total["nbPlage"] += $curr_result["nbPlage"];
+}
+
+$total["moyenne"] = mbMoyenne($total["elements"]);
+$total["ecartType"] = mbEcartType($total["elements"]);
+//mbTrace($preparation);
 
 ?>

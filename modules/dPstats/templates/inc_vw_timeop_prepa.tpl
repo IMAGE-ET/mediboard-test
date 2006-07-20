@@ -13,17 +13,17 @@
         <tr>
           <td>Dr. {{$curr_result.praticien}}</td>
           <td>{{$curr_result.preparation}}</td>
-          <td>-</td>
+          <td>{{$curr_result.nbPlage}}</td>
           <td>{{$curr_result.moyenne|date_format:"%Mmin %Ss"}}</td>
-          <td>-</td>
+          <td>{{$curr_result.ecartType|date_format:"%Mmin %Ss"}}</td>
         </tr>
         {{/foreach}}
         <tr>
           <th>Total</th>
-          <td>-</td>
-          <td>-</td>
-          <td>-</td>
-          <td>-</td>
+          <td>{{$total.preparation}}</td>
+          <td>{{$total.nbPlage}}</td>
+          <td>{{$total.moyenne|date_format:"%Mmin %Ss"}}</td>
+          <td>{{$total.ecartType|date_format:"%Mmin %Ss"}}</td>
         </tr>
         
       </table>

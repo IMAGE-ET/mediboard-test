@@ -50,10 +50,10 @@ if($typeVue){
   $smarty->assign("codeCCAM"  , $codeCCAM  );
   $smarty->assign("listPrats" , $listPrats );
   $smarty->assign("listOps"   , $listOps   );
-  $smarty->assign("total"     , $total     );  
 }
 
 $smarty->assign("intervalle", $intervalle);
+$smarty->assign("total"     , $total     );  
 
 $smarty->assign("typeVue", $typeVue);
 $smarty->assign("_aff_particulier", $_aff_particulier);
