@@ -127,7 +127,7 @@ function pageMain() {
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+            <a href="index.php?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->operation_id}}">
               {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
               <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
               {{/foreach}}
@@ -137,13 +137,13 @@ function pageMain() {
             {{if $curr_op->annulee}}
             [ANNULEE]
             {{else}}
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
-              {{$curr_op->time_operation|date_format:"%Hh%M"}}
+            <a href="index.php?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->operation_id}}">
+              {{$curr_op->_datetime|date_format:"le %d/%m/%Y à %Hh%M"}}
             </a>
             {{/if}}
           </td>
           <td style="text-align: center;">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+            <a href="index.php?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->operation_id}}">
               {{$curr_op->temp_operation|date_format:"%Hh%M"}}
             </a>
           </td>
