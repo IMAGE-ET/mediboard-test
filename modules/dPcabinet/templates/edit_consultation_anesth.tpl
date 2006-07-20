@@ -38,11 +38,11 @@ function submitOpConsult() {
 function reloadConsultAnesth() {
   var consultUrl = new Url;
   consultUrl.setModuleAction("dPcabinet", "httpreq_vw_consult_anesth");
-  consultUrl.addParam("selConsult", document.editFrm.consultation_id.value);
+  consultUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   consultUrl.requestUpdate('consultAnesth');
   var anesthUrl = new Url;
   anesthUrl.setModuleAction("dPcabinet", "httpreq_vw_choix_anesth");
-  anesthUrl.addParam("selConsult", document.editFrm.consultation_id.value);
+  anesthUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   anesthUrl.requestUpdate('choixAnesth');
 }
 

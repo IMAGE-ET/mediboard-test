@@ -128,8 +128,8 @@
                   {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
                   <br />
                   <input type="radio" name="_operation_id" value="{{$curr_op->operation_id}}" />
-                  Intervention le {{$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}}
-                  avec le Dr. {{$curr_op->_ref_chir->_view}}
+                  <label for="_operation_id_{{$curr_op->operation_id}}" title="Description de l'intervention">Intervention le {{$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}}
+                  avec le Dr. {{$curr_op->_ref_chir->_view}}</label>
                   {{if $curr_op->_ext_codes_ccam|@count}}
                   <ul>
                     {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
