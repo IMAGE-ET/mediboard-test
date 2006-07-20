@@ -1,7 +1,7 @@
-<div style="margin-top:6px; border-top-width:1px; border-top-style:solid;" id="accordionConsult">
+<div class="accordionMain" id="accordionConsult">
 
   <div id="Infos">
-    <div id="InfosHeader" class="accordionTabTitleBar" style="background-color:#f00;">
+    <div id="InfosHeader" class="accordionTabTitleBar">
       Informations sur le patient
     </div>
     <div id="InfosContent"  class="accordionTabContentBox">
@@ -41,5 +41,5 @@
 </div>
 
 <script language="Javascript" type="text/javascript">
-new Rico.Accordion( $('accordionConsult'), {panelHeight:310} );
+new Rico.Accordion( $('accordionConsult'), {panelHeight:340} );
 </script>
