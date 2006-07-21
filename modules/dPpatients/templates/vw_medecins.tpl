@@ -194,7 +194,7 @@ function setClose() {
             {{if $medecin->medecin_id}}
             <input type="hidden" name="medecin_id" value="{{$medecin->medecin_id}}" />
             <button class="modify" type="submit">Modifier</button>
-            <button type="button" class="trash" onclick="confirmDeletion(this.form,§typeName:'le médecin',objName:'{{$medecin->_view|escape:javascript}}'§)">
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le médecin',objName:'{{$medecin->_view|escape:javascript}}'})">
               Supprimer
             </button>
             {{else}}
