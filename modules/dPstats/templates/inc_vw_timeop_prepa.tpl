@@ -9,21 +9,21 @@
           <th>Moyenne</th>
           <th>Ecart-type</th>
         </tr>
-        {{foreach from=$result item=curr_result}}
+        {{foreach from=$listTemps item=curr_temps}}
         <tr>
-          <td>Dr. {{$curr_result.praticien}}</td>
-          <td>{{$curr_result.preparation}}</td>
-          <td>{{$curr_result.nbPlage}}</td>
-          <td>{{$curr_result.moyenne|date_format:"%Mmin %Ss"}}</td>
-          <td>{{$curr_result.ecartType|date_format:"%Mmin %Ss"}}</td>
+          <td>Dr. {{$curr_temps->_ref_praticien->_view}}</td>
+          <td>{{$curr_temps->nb_prepa}}</td>
+          <td>{{$curr_temps->nb_plages}}</td>
+          <td>{{$curr_temps->duree_moy|date_format:"%Mmin %Ss"}}</td>
+          <td>{{$curr_temps->duree_ecart|date_format:"%Mmin %Ss"}}</td>
         </tr>
         {{/foreach}}
         <tr>
           <th>Total</th>
-          <td>{{$total.preparation}}</td>
-          <td>{{$total.nbPlage}}</td>
+          <td>{{$total.nbPrep}}</td>
+          <td>{{$total.nbPlages}}</td>
           <td>{{$total.moyenne|date_format:"%Mmin %Ss"}}</td>
-          <td>{{$total.ecartType|date_format:"%Mmin %Ss"}}</td>
+          <td>-</td>
         </tr>
         
       </table>

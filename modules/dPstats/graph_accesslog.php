@@ -133,3 +133,5 @@ $graph->AddY2($bplot);
 
 // Finally send the graph to the browser
 $graph->Stroke();
+
+?>

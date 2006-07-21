@@ -7,103 +7,51 @@
 * @author Romain Ollivier
 */
 
-// Vide la table contenant les données
-db_exec("TRUNCATE `temps_op`"); db_error();
+require_once($AppUI->getModuleClass("dPstats", "tempsOp"));
 
-$sql = "SELECT operations.chir_id, " .
-       "\nusers.user_last_name, users.user_first_name," .
-       "\nCOUNT(operations.operation_id) AS total," .
-       "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.sortie_bloc)-TIME_TO_SEC(operations.entree_bloc))) as duree_bloc," .
-       "\nSEC_TO_TIME(STD(TIME_TO_SEC(operations.sortie_bloc)-TIME_TO_SEC(operations.entree_bloc))) as ecart_bloc," .
-       "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op))) as duree_operation," .
-       "\nSEC_TO_TIME(STD(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op))) as ecart_operation," .
-       "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.temp_operation))) AS estimation,";
-if($codeCCAM)
-  $sql .= "\n'$codeCCAM' AS ccam";
-else
-  $sql .= "\noperations.codes_ccam AS ccam";
-$sql .="\nFROM operations" .
-       "\nLEFT JOIN users" .
-       "\nON operations.chir_id = users.user_id" .
-       "\nLEFT JOIN plagesop" .
-       "\nON operations.plageop_id = plagesop.id" .
-       "\nWHERE operations.entree_bloc IS NOT NULL" .
-       "\nAND operations.debut_op IS NOT NULL" .
-       "\nAND operations.fin_op IS NOT NULL" .
-       "\nAND operations.sortie_bloc IS NOT NULL" .
-       "\nAND operations.entree_bloc < operations.debut_op";
-       "\nAND operations.debut_op < operations.fin_op";
-       "\nAND operations.fin_op < operations.sortie_bloc";
-switch($intervalle) {
-  case 0:
-    $sql .= "\nAND plagesop.date BETWEEN '".mbDate("-1 month")."' AND '".mbDate()."'";
-    break;
-  case 1:
-    $sql .= "\nAND plagesop.date BETWEEN '".mbDate("-6 month")."' AND '".mbDate()."'";
-    break;
-  case 2:
-    $sql .= "\nAND plagesop.date BETWEEN '".mbDate("-1 year")."' AND '".mbDate()."'";
-    break;
+$codeCCAM   = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
+$prat_id    = mbGetValueFromGetOrSession("prat_id", 0);
+
+$total["nbInterventions"] = 0;
+$total["estim_moy"] = 0;
+$total["estim_somme"] = 0;
+$total["occup_moy"] = 0;
+$total["occup_somme"] = 0;
+$total["duree_moy"] = 0;
+$total["duree_somme"] = 0;
+
+
+$listTemps = new CTempsOp;
+
+$where = array();
+if($prat_id) {
+  $where["chir_id"] = "= '$prat_id'";
+} elseif(count($listPrats)) {
+  $where["chir_id"] = "IN (".implode(",", array_keys($listPrats)).")";
+} else {
+  $where[] = "0 = 1";
 }
-if($prat_id)
-  $sql .= "\nAND operations.chir_id = '$prat_id'";
-if($codeCCAM)
-  $sql .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-$sql .= "\nGROUP BY operations.chir_id, ccam" .
-        "\nORDER BY users.user_last_name, users.user_first_name, ccam";
 
-$listOps = db_loadList($sql);
-
-$sql = "SELECT" .
-       "\n'1' AS groupall," .
-       "\nCOUNT(operations.operation_id) AS total," .
-       "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.sortie_bloc)-TIME_TO_SEC(operations.entree_bloc))) as duree_bloc," .
-       "\nSEC_TO_TIME(STD(TIME_TO_SEC(operations.sortie_bloc)-TIME_TO_SEC(operations.entree_bloc))) as ecart_bloc," .
-       "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op))) as duree_operation," .
-       "\nSEC_TO_TIME(STD(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op))) as ecart_operation," .
-       "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.temp_operation))) AS estimation" .
-       "\nFROM operations" .
-       "\nLEFT JOIN plagesop" .
-       "\nON operations.plageop_id = plagesop.id" .
-       "\nWHERE operations.entree_bloc IS NOT NULL" .
-       "\nAND operations.debut_op IS NOT NULL" .
-       "\nAND operations.fin_op IS NOT NULL" .
-       "\nAND operations.sortie_bloc IS NOT NULL" .
-       "\nAND operations.entree_bloc < operations.debut_op";
-       "\nAND operations.debut_op < operations.fin_op";
-       "\nAND operations.fin_op < operations.sortie_bloc";
-switch($intervalle) {
-  case 0:
-    $sql .= "\nAND plagesop.date BETWEEN '".mbDate("-1 month")."' AND '".mbDate()."'";
-    break;
-  case 1:
-    $sql .= "\nAND plagesop.date BETWEEN '".mbDate("-6 month")."' AND '".mbDate()."'";
-    break;
-  case 2:
-    $sql .= "\nAND plagesop.date BETWEEN '".mbDate("-1 year")."' AND '".mbDate()."'";
-    break;
+if($codeCCAM) {
+  $where["ccam"] = "LIKE '%$codeCCAM%'";
 }
-if($prat_id)
-  $sql .= "\nAND operations.chir_id = '$prat_id'";
-if($codeCCAM)
-  $sql .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-$sql .= "\nGROUP BY groupall";
 
-db_loadHash($sql, $total);
+$ljoin = array();
+$ljoin["users"] = "users.user_id = temps_op.chir_id";
 
-// Mémorisation des données dans MySQL
-foreach($listOps as $keylistOps => $curr_listOps){
-  // Mémorisation des données dans MySQL
-  $sql = "INSERT INTO `temps_op` (`temp_op_id`, `chir_id`, `CCAM`, `nb_intervention`, `estimation`, `occup_moy`, `occup_ecart`, `duree_moy`, `duree_ecart`)
-          VALUES (NULL, 
-                  '".$curr_listOps["chir_id"]."',
-            	  '".$curr_listOps["ccam"]."',
-            	  '".$curr_listOps["total"]."',
-            	  '".$curr_listOps["estimation"]."',
-            	  '".$curr_listOps["duree_bloc"]."',
-            	  '".$curr_listOps["ecart_bloc"]."',
-            	  '".$curr_listOps["duree_operation"]."',
-            	  '".$curr_listOps["ecart_operation"]."');";
-  db_exec( $sql ); db_error();
+$order = "users.user_last_name ASC, users.user_first_name ASC, ccam";
+
+$listTemps = $listTemps->loadList($where, $order, null, null, $ljoin);
+
+foreach($listTemps as $keyTemps => $temps) {
+  $listTemps[$keyTemps]->loadRefsFwd();
+  $total["nbInterventions"] += $temps->nb_intervention;
+  $total["occup_somme"] += $temps->nb_intervention * strtotime($temps->occup_moy);
+  $total["duree_somme"] += $temps->nb_intervention * strtotime($temps->duree_moy);
+  $total["estim_somme"] += $temps->nb_intervention * strtotime($temps->estimation);
 }
+$total["occup_moy"] = $total["occup_somme"] / $total["nbInterventions"];
+$total["duree_moy"] = $total["duree_somme"] / $total["nbInterventions"];
+$total["estim_moy"] = $total["estim_somme"] / $total["nbInterventions"];
+
 ?>

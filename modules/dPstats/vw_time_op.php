@@ -19,10 +19,6 @@ if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$codeCCAM   = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
-$prat_id    = mbGetValueFromGetOrSession("prat_id", 0);
-$intervalle = mbGetValueFromGetOrSession("intervalle", 2);
-
 $typeVue    = mbGetValueFromGetOrSession("typeVue", 0);
 
 $user = new CMediusers;
@@ -41,18 +37,14 @@ if($typeVue){
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-if($typeVue){
-  $smarty->assign("result", $result); 
-}else{
-  $smarty->assign("prat_id"   , $prat_id   );
-  $smarty->assign("codeCCAM"  , $codeCCAM  );
-  $smarty->assign("listPrats" , $listPrats );
-  $smarty->assign("listOps"   , $listOps   );
+if(!$typeVue) {
+  $smarty->assign("prat_id"  , $prat_id  );
+  $smarty->assign("codeCCAM" , $codeCCAM );
+  $smarty->assign("listPrats", $listPrats);
 }
 
-$smarty->assign("intervalle", $intervalle);
-$smarty->assign("total"     , $total     );  
-
+$smarty->assign("listTemps", $listTemps);
+$smarty->assign("total", $total);
 $smarty->assign("typeVue", $typeVue);
 
 $smarty->display("vw_time_op.tpl");

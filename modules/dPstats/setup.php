@@ -42,9 +42,9 @@ class CSetupdPstats {
       case "all":
       case "0.1":
         $sql = "CREATE TABLE `temps_op` (
-               `temp_op_id` INT(11) NOT NULL AUTO_INCREMENT ,
+               `temps_op_id` INT(11) NOT NULL AUTO_INCREMENT ,
                `chir_id` INT(11) NOT NULL ,
-               `CCAM` VARCHAR( 100 ) NOT NULL ,
+               `ccam` VARCHAR( 100 ) NOT NULL ,
                `nb_intervention` INT(11) NOT NULL ,
                `estimation` TIME NOT NULL ,
                `occup_moy` TIME NOT NULL ,
@@ -56,7 +56,7 @@ class CSetupdPstats {
         db_exec( $sql ); db_error();
         
         $sql = "CREATE TABLE `temps_prepa` (
-               `temp_prepa_id` INT(11) NOT NULL AUTO_INCREMENT ,
+               `temps_prepa_id` INT(11) NOT NULL AUTO_INCREMENT ,
                `chir_id` INT(11) NOT NULL ,
                `nb_prepa` INT(11) NOT NULL ,
                `nb_plages` INT(11) NOT NULL ,
