@@ -51,7 +51,7 @@ class CSetupdPstats {
                `occup_ecart` TIME NOT NULL ,
                `duree_moy` TIME NOT NULL ,
                `duree_ecart` TIME NOT NULL,
-               PRIMARY KEY  (temp_op_id)
+               PRIMARY KEY  (temps_op_id)
                ) TYPE=MyISAM COMMENT='Table temporaire des temps operatoire';";
         db_exec( $sql ); db_error();
         
@@ -62,12 +62,19 @@ class CSetupdPstats {
                `nb_plages` INT(11) NOT NULL ,
                `duree_moy` TIME NOT NULL ,
                `duree_ecart` TIME NOT NULL,
-               PRIMARY KEY  (temp_prepa_id)
+               PRIMARY KEY  (temps_prepa_id)
                ) TYPE=MyISAM COMMENT='Table temporaire des temps preparatoire';";
         db_exec( $sql ); db_error();
                 
       case "0.11":
-        return "0.11";
+        $sql = "ALTER TABLE `temps_op` ADD INDEX ( `chir_id` );";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `temps_op` ADD INDEX ( `ccam` );";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `temps_prepa` ADD INDEX ( `chir_id` )";
+        db_exec( $sql ); db_error();
+      case "0.12":
+        return "0.12";
     }
     return false;
   }
