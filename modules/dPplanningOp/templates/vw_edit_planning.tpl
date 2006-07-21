@@ -36,6 +36,7 @@ function setCode(sCode, type ) {
   }
   
   oElement.value = sCode;
+  oElement.onblur();
 }
 
 function popProtocole() {

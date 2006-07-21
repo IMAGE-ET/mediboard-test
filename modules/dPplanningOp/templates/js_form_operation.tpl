@@ -3,6 +3,10 @@
 <script type="text/javascript">
   
 function putCCAM(code) {
+  if(!code) {
+    refreshListCCAM();
+    return false;
+  }
   aSpec = new Array();
   aSpec[0] = "code";
   aSpec[1] = "ccam";
@@ -10,6 +14,7 @@ function putCCAM(code) {
   oCode = new Object();
   oCode.value = code
   if(sAlert = checkElement(oCode, aSpec)) {
+    refreshListCCAM();
     alert(sAlert);
     return false;
   }
@@ -38,6 +43,8 @@ function delCCAM(code) {
   modifOp();
 }
 
+var periodicalTimeUpdater = new PeriodicalExecuter(updateTime, 1);
+
 function refreshListCCAM() {
   oCcamNode = document.getElementById("listCodesCcam");
   var oForm = document.editOp;
@@ -54,8 +61,19 @@ function refreshListCCAM() {
     aCodeNodes.push(sCodeNode);
   }
   oCcamNode.innerHTML = aCodeNodes.join(" &mdash; ");
+  periodicalTimeUpdater.currentlyExecuting = false;
 }
 
+function updateTime() {
+  var oForm = document.editOp;
+  if(oForm.chir_id.value) {
+    var timeUrl = new Url;
+    timeUrl.setModuleAction("dPplanningOp", "httpreq_get_op_time");
+    timeUrl.addElement(oForm.chir_id, "chir_id");
+    timeUrl.addElement(oForm.codes_ccam, "codes");
+    timeUrl.requestUpdate('timeEst', { waitingText : null });
+  }
+}
 
 function checkFormOperation() {
   var oForm = document.editOp;
@@ -157,6 +175,7 @@ function synchroPrat() {
   if(!oSejourForm.praticien_id.value) {
     oSejourForm.praticien_id.value = oOpForm.chir_id.value;
   }
+  updateTime();
 }
 
 function updateEntreePrevue() {

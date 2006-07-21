@@ -47,7 +47,7 @@
       <label for="_codeCCAM" title="Codes CCAM d'intervention">Ajout de codes CCAM</label>
     </th>
     <td>
-      <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" />
+      <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" onblur="putCCAM(this.form._codeCCAM.value)" />
       <button class="tick notext" type="button" onclick="putCCAM(this.form._codeCCAM.value)"></button>
     </td>
     <td class="button">
@@ -58,7 +58,7 @@
   <tr>
     <th>
       Liste des codes CCAM
-      <input name="codes_ccam" type="hidden" value="{{$op->codes_ccam}}" />
+      <input name="codes_ccam" type="hidden" value="{{$op->codes_ccam}}" onchange="refreshListCCAM()" />
     </th>
     <td colspan="2" class="text" id="listCodesCcam">
     </td>
@@ -88,8 +88,8 @@
     </th>
     <td>
       <select name="_hour_op" title="notNull|num">
-      {{foreach from=$hours_duree key=key item=hour}}
-        <option value="{{$key}}" {{if (!$op && $key == 1) || $op->_hour_op == $key}} selected="selected" {{/if}}>{{$key}}</option>
+      {{foreach from=$hours_duree item=hour}}
+        <option value="{{$hour}}" {{if (!$op && $hour == 1) || $op->_hour_op == $hour}} selected="selected" {{/if}}>{{$hour}}</option>
       {{/foreach}}
       </select> h
       <select name="_min_op">
@@ -98,7 +98,8 @@
       {{/foreach}}
       </select> mn
     </td>
-    <td id="timeEst"><i>Temps estimé :</i></td>
+    <td id="timeEst">
+    </td>
   </tr>
 
   <tr>

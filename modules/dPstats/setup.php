@@ -71,7 +71,7 @@ class CSetupdPstats {
         db_exec( $sql ); db_error();
         $sql = "ALTER TABLE `temps_op` ADD INDEX ( `ccam` );";
         db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `temps_prepa` ADD INDEX ( `chir_id` )";
+        $sql = "ALTER TABLE `temps_prepa` ADD INDEX ( `chir_id` );";
         db_exec( $sql ); db_error();
       case "0.12":
         return "0.12";

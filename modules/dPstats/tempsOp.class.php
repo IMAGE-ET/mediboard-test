@@ -61,10 +61,10 @@ class CTempsOp extends CMbObject {
     
     if(is_array($ccam)){
       foreach($ccam as $keyccam => $code){
-        $where[] = "ccam LIKE '%$code%'";
+        $where[] = "ccam LIKE '%".strtoupper($code)."%'";
       }
     }elseif($ccam){
-      $where["ccam"] = "LIKE '%$ccam%'";
+      $where["ccam"] = "LIKE '%".strtoupper($ccam)."%'";
     }
     
     $temp = new CTempsOp;
@@ -73,7 +73,12 @@ class CTempsOp extends CMbObject {
       $total["nbInterventions"] += $temps->nb_intervention;
       $total["occup_somme"] += $temps->nb_intervention * strtotime($temps->occup_moy);
     }
-    $time = $total["occup_somme"] / $total["nbInterventions"];
+    if($total["nbInterventions"]) {
+      $time = $total["occup_somme"] / $total["nbInterventions"];
+    } else {
+      $time = 0;
+    }
+    
     
     return $time;
   }
