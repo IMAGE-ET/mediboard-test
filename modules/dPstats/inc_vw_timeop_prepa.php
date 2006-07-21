@@ -36,6 +36,7 @@ foreach($listTemps as $keyTemps => $temps) {
   $total["nbPlages"] += $temps->nb_plages;
   $total["somme"] += $temps->nb_prepa * strtotime($temps->duree_moy);
 }
-
-$total["moyenne"] = $total["somme"] / $total["nbPrep"];
+if($total["nbPrep"]!=0){
+  $total["moyenne"] = $total["somme"] / $total["nbPrep"];
+}
 ?>

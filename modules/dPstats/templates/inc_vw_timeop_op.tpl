@@ -28,9 +28,9 @@
             {{$curr_temps->estimation|date_format:"%Hh%M"}}
           </td>
           <td>{{$curr_temps->occup_moy|date_format:"%Hh%M"}}</td>
-          <td><i>{{$curr_temps->occup_ecart|date_format:"%Hh%M"}}</i></td>
+          <td><i>{{if $curr_temps->occup_ecart != "-"}}{{$curr_temps->occup_ecart|date_format:"%Hh%M"}}{{else}}-{{/if}}</i></td>
           <td>{{$curr_temps->duree_moy|date_format:"%Hh%M"}}</td>
-          <td><i>{{$curr_temps->duree_ecart|date_format:"%Hh%M"}}</i></td>
+          <td><i>{{if $curr_temps->duree_ecart != "-"}}{{$curr_temps->duree_ecart|date_format:"%Hh%M"}}{{else}}-{{/if}}</i></td>
         </tr>
         {{/foreach}}
         
