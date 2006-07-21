@@ -15,6 +15,7 @@ $tabs[] = array("view_history", "Historique", 0);
 $tabs[] = array("view_messages", "Messagerie", 0);
 $tabs[] = array("view_logs", "Logs système", 0);
 $tabs[] = array("view_access_logs", "Logs d'accès", 0);
+$tabs[] = array("view_metrique", "Métrique", 0);
 $default = "view_dpadmin";
 
 $index = new CTabIndex($tabs, $default);
