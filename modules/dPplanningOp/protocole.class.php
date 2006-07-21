@@ -7,9 +7,8 @@
 * @author Romain Ollivier
 */
 
-require_once( $AppUI->getSystemClass ('mbobject' ) );
-
-require_once( $AppUI->getModuleClass('mediusers') );
+require_once($AppUI->getSystemClass("mbobject" ));
+require_once($AppUI->getModuleClass("mediusers"));
 
 class CProtocole extends CMbObject {
   // DB Table key
@@ -48,21 +47,19 @@ class CProtocole extends CMbObject {
   var $_ext_codes_ccam = null;
 
   function CProtocole() {
-    $this->CMbObject( 'protocole', 'protocole_id' );
+    $this->CMbObject("protocole","protocole_id");
 
-    $this->_props["chir_id"] = "ref|notNull";
-    
-    $this->_props["type"] = "enum|comp|ambu|exte";
-    $this->_props["DP"] = "code|cim10";
-    $this->_props["convalescence"] = "str|confidential";
-    $this->_props["rques_sejour"] = "str|confidential";
-    
-    $this->_props["libelle"] = "str|confidential";
-    $this->_props["examen"] = "str|confidential";
-    $this->_props["materiel"] = "str|confidential";
-    $this->_props["duree_hospi"] = "notNull|num|min|0";
+    $this->_props["chir_id"]         = "ref|notNull";
+    $this->_props["type"]            = "enum|comp|ambu|exte";
+    $this->_props["DP"]              = "code|cim10";
+    $this->_props["convalescence"]   = "str|confidential";
+    $this->_props["rques_sejour"]    = "str|confidential";
+    $this->_props["libelle"]         = "str|confidential";
+    $this->_props["examen"]          = "str|confidential";
+    $this->_props["materiel"]        = "str|confidential";
+    $this->_props["duree_hospi"]     = "notNull|num|min|0";
     $this->_props["rques_operation"] = "str|confidential";
-    $this->_props["depassement"] = "currency|confidential";
+    $this->_props["depassement"]     = "currency|confidential";
   }
 
   function check() {    
@@ -135,8 +132,12 @@ class CProtocole extends CMbObject {
     $this->loadRefChir();
     $this->loadRefCCAM();
     $this->_view = "Protocole du Dr. {$this->_ref_chir->_view}";
-    foreach($this->_ext_codes_ccam as $key => $ccam) {
-      $this->_view .= " - $ccam->code";
+    if($this->libelle) {
+      $this->_view .= " - $this->libelle";
+    } else {
+      foreach($this->_ext_codes_ccam as $key => $ccam) {
+        $this->_view .= " - $ccam->code";
+      }
     }
   }
 }
