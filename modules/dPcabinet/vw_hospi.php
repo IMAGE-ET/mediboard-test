@@ -62,8 +62,8 @@ foreach ($boucle_req as $keyBoucleReq => $curr_BoucleReq){
     
     if($loadData){
       ${"Aff".$curr_BoucleReq}[$key]->_ref_sejour->loadRefsFwd();
-      ${"Aff".$curr_BoucleReq}[$key]->_ref_lit->loadRefsFwd();
-      ${"Aff".$curr_BoucleReq}[$key]->_ref_lit->_ref_chambre->loadRefsFwd();
+      ${"Aff".$curr_BoucleReq}[$key]->_ref_sejour->loadRefsOperations();
+      ${"Aff".$curr_BoucleReq}[$key]->_ref_lit->loadCompleteView();
     }else{
       unset(${"Aff".$curr_BoucleReq}[$key]);
     }

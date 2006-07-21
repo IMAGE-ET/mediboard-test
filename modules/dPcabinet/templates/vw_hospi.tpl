@@ -9,7 +9,7 @@ function pageMain() {
     <td colspan="2">
       <form name="editFrmPratDate" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
-      <table class="form">
+      <table style="width: 100%">
         <tr>
           <td>
             <label for="selPrat" title="Veuillez choisir un praticien">Praticiens</label>
@@ -22,10 +22,10 @@ function pageMain() {
             {{/foreach}}
             </select>
           </td>
-          <td class="date">
+          <th>
             {{$dateRecherche|date_format:"%A %d %B %Y"}}
             <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
-          </td>
+          </th>
         </tr>
       </table>
       </form>
@@ -35,22 +35,18 @@ function pageMain() {
     <td class="HalfPane">
       <table class="tbl">
         <tr>
-          <th colspan="5">Entrees</th>
+          <th class="title" colspan="4">Entrées</th>
         </tr>
         <tr>
           <th>Heure</th>
           <th>Patient</th>
-          <th>Service</th>
           <th>Chambre</th>
-          <th>Lit</th>
         </tr>
         {{foreach from=$AfflistEntree item=curr_aff}}
         <tr>
           <td>{{$curr_aff->entree|date_format:"%H h %M"}}</td>
           <td>{{$curr_aff->_ref_sejour->_ref_patient->_view}}</td>
-          <td>{{$curr_aff->_ref_lit->_ref_chambre->_ref_service->nom}}</td>
-          <td>{{$curr_aff->_ref_lit->_ref_chambre->nom}}</td>
-          <td>{{$curr_aff->_ref_lit->nom}}</td>
+          <td>{{$curr_aff->_ref_lit->_view}}</td>
         </tr>
         {{/foreach}}        
       </table>
@@ -58,22 +54,18 @@ function pageMain() {
     <td class="HalfPane">
       <table class="tbl">
         <tr>
-          <th colspan="5">Sortie</th>
+          <th class="title" colspan="4">Sorties</th>
         </tr>
         <tr>
           <th>Heure</th>
           <th>Patient</th>
-          <th>Service</th>
           <th>Chambre</th>
-          <th>Lit</th>
         </tr>
         {{foreach from=$AfflistSortie item=curr_aff}}
         <tr>
           <td>{{$curr_aff->sortie|date_format:"%H h %M"}}</td>
           <td>{{$curr_aff->_ref_sejour->_ref_patient->_view}}</td>
-          <td>{{$curr_aff->_ref_lit->_ref_chambre->_ref_service->nom}}</td>
-          <td>{{$curr_aff->_ref_lit->_ref_chambre->nom}}</td>
-          <td>{{$curr_aff->_ref_lit->nom}}</td>
+          <td>{{$curr_aff->_ref_lit->_view}}</td>
         </tr>
         {{/foreach}}        
       </table>
