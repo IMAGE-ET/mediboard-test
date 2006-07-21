@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPstats";
-$config["mod_version"]     = "0.11";
+$config["mod_version"]     = "0.12";
 $config["mod_directory"]   = "dPstats";
 $config["mod_setup_class"] = "CSetupdPstats";
 $config["mod_type"]        = "user";
