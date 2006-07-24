@@ -328,7 +328,7 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
-    <td class="button" colspan="4"><button type="submit">Fusionner</button></td>
+    <td class="button" colspan="4"><button type="submit" class="submit">Fusionner</button></td>
   </tr>
 </table>
 

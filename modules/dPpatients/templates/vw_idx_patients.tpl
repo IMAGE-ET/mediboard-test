@@ -50,10 +50,10 @@ function affNaissance() {
         
         <tr>
           <th>
-            <label for="Date_Day" title="Date de naissance du patient à rechercher">
+            <label for="check_naissance" title="Date de naissance du patient à rechercher">
               <input type="checkbox" name="check_naissance" onclick="affNaissance()" {{if $naissance == "on"}}checked="checked"{{/if}}/>
               <input type="hidden" name="naissance" {{if $naissance == "on"}}value="on"{{else}}value="off"{{/if}} />
-              Date de naissance:
+              Date de naissance
             </label>
           </th>
           <td>
@@ -84,7 +84,7 @@ function affNaissance() {
       <input type="hidden" name="a" value="fusion_pat" />
       <table class="tbl">
         <tr>
-          <th><button type="submit">Fusion</button></th>
+          <th><button type="submit" class="search">Fusion</button></th>
           <th>Nom - Prénom</th>
           <th>Date de naissance</th>
           <th>Adresse</th>

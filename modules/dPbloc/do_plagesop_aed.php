@@ -71,22 +71,19 @@ if ($del) {
   $not_created = 0;
   $not_updated = 0;
 
-  while ($repeat--) {
+  while ($repeat-- > 0) {
     $msg = null;
     if ($obj->id) {
       if ($msg = $obj->store()) {
         $not_updated++;
-      } 
-      else {
+      } else {
         $msg = "plage mise à jour";
         $updated++;
       }
-    }
-    else {
+    } else {
       if ($msg = $obj->store()) {
         $not_created++;
-      } 
-      else {
+      } else {
         $msg = "plage créée";
         $created++;
       }
@@ -97,9 +94,9 @@ if ($del) {
     $obj->becomeNext();
     
     if ($double) {
-			$repeat--;
+	  $repeat--;
       $obj->becomeNext();
-		}
+    }
   }
   
   if ($created) $header [] = "$created plage(s) créée(s)";
