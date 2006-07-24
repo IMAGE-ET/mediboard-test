@@ -7,8 +7,8 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass ("mbobject"));
-require_once($AppUI->getSystemClass ("mbpath"));
+require_once($AppUI->getSystemClass("mbobject"));
+require_once($AppUI->getSystemClass("mbpath"));
 
 $filesDir = $AppUI->cfg["root_dir"]."/files";
 
@@ -17,28 +17,28 @@ class CFile extends CMbObject {
   var $file_id = null;
   
   // DB Fields
-  var $file_object_id = null;
-  var $file_class = null;
+  var $file_object_id     = null;
+  var $file_class         = null;
   var $file_real_filename = null;
-  var $file_name = null;
-  
-  var $file_type = null;
-  var $file_owner = null;
-  var $file_date = null;
-  var $file_size = null;
+  var $file_name          = null;
+  var $file_type          = null;
+  var $file_category      = null;
+  var $file_owner         = null;
+  var $file_date          = null;
+  var $file_size          = null;
 
   // Form fields
   var $_file_size = null;
-  var $_sub_dir = null;
+  var $_sub_dir   = null;
   var $_file_path = null;
 
   function CFile() {
     $this->CMbObject("files_mediboard", "file_id");
     
-    $this->_props["file_class"] = "str|notNull";
-    $this->_props["file_object_id"] = "ref|notNull";
-    $this->_props["file_date"] = "dateTime|notNull";
-    $this->_props["file_size"] = "num|pos";
+    $this->_props["file_class"]         = "str|notNull";
+    $this->_props["file_object_id"]     = "ref|notNull";
+    $this->_props["file_date"]          = "dateTime|notNull";
+    $this->_props["file_size"]          = "num|pos";
     $this->_props["file_real_filename"] = "str|notNull";
   }
 
@@ -70,14 +70,14 @@ class CFile extends CMbObject {
 
     // Delete any index entries
     $sql = "DELETE FROM files_index_mediboard WHERE file_id = $this->file_id";
-    if (!db_exec( $sql )) {
+    if (!db_exec($sql)) {
       return db_error();
     }
     
     // Delete the main table reference
     $sql = "DELETE FROM files_mediboard WHERE file_id = $this->file_id";
     
-    if (!db_exec( $sql )) {
+    if (!db_exec($sql)) {
       return db_error();
     }
     return null;
@@ -87,7 +87,7 @@ class CFile extends CMbObject {
    * move a file from a temporary (uploaded) location to the file system
    * @return boolean job-done
    */ 
-  function moveTemp( $upload ) {
+  function moveTemp($upload) {
     global $filesDir;
     $this->updateFormFields();
     
@@ -103,7 +103,7 @@ class CFile extends CMbObject {
     
     // Moves temp file to specific directory
     $this->_file_path = "$fileDir/$this->file_real_filename";
-    return move_uploaded_file( $upload["tmp_name"], $this->_file_path);
+    return move_uploaded_file($upload["tmp_name"], $this->_file_path);
   }
 
   /**
@@ -119,13 +119,13 @@ class CFile extends CMbObject {
     }
     
     // Buffer the file
-    $fp = fopen( $this->_file_path, "rb" );
-    $x = fread( $fp, $this->file_size );
-    fclose( $fp );
+    $fp = fopen($this->_file_path, "rb");
+    $x = fread($fp, $this->file_size);
+    fclose($fp);
 
     // Parse it
     $parser = $parser . " " . $this->_file_path;
-    $pos = strpos( $parser, "/pdf" );
+    $pos = strpos($parser, "/pdf");
     if (false !== $pos) {
       $x = `$parser -`;
     } else {
@@ -133,40 +133,40 @@ class CFile extends CMbObject {
     }
 
     // if nothing, return
-    if (strlen( $x ) < 1) {
+    if (strlen($x) < 1) {
       return 0;
     }
   
     // remove punctuation and parse the strings
-    $x = str_replace( array( ".", ",", "!", "@", "(", ")" ), " ", $x );
-    $warr = split( "[[:space:]]", $x );
+    $x = str_replace(array(".", ",", "!", "@", "(", ")"), " ", $x);
+    $warr = split("[[:space:]]", $x);
 
     $wordarr = array();
-    $nwords = count( $warr );
-    for ($x=0; $x < $nwords; $x++) {
+    $nwords = count($warr);
+    for($x=0; $x < $nwords; $x++) {
       $newword = $warr[$x];
-      if (!ereg( "[[:punct:]]", $newword )
-        && strlen( trim( $newword ) ) > 2
-        && !ereg( "[[:digit:]]", $newword )) {
-        $wordarr[] = array( "word" => $newword, "wordplace" => $x );
+      if(!ereg("[[:punct:]]", $newword)
+        && strlen(trim($newword)) > 2
+        && !ereg("[[:digit:]]", $newword)) {
+        $wordarr[] = array("word" => $newword, "wordplace" => $x);
       }
     }
-    db_exec( "LOCK TABLES files_index_mediboard WRITE" );
+    db_exec("LOCK TABLES files_index_mediboard WRITE");
     
     // filter out common strings
     $ignore = array();
-    include "{$AppUI->cfg['root_dir']}/modules/dPcabinet/file_index_ignore.php";
+    include $AppUI->cfg["root_dir"]."/modules/dPcabinet/file_index_ignore.php";
     foreach ($ignore as $w) {
-      unset( $wordarr[$w] );
+      unset($wordarr[$w]);
     }
     
     // insert the strings into the table
-    while (list( $key, $val ) = each( $wordarr )) {
-      $sql = "INSERT INTO files_index_mediboard VALUES ('" . $this->file_id . "', '" . $wordarr[$key]['word'] . "', '" . $wordarr[$key]['wordplace'] . "')";
-      db_exec( $sql );
+    while(list($key, $val) = each($wordarr)) {
+      $sql = "INSERT INTO files_index_mediboard VALUES ('" . $this->file_id . "', '" . $wordarr[$key]["word"] . "', '" . $wordarr[$key]["wordplace"] . "')";
+      db_exec($sql);
     }
 
-    db_exec( "UNLOCK TABLES;" );
+    db_exec("UNLOCK TABLES;");
     return $nwords;
   }
 }

@@ -9,7 +9,7 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
+require_once($AppUI->getModuleClass("dPpatients", "patients"));
 
 if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
@@ -74,16 +74,16 @@ foreach($sejours as $key => $sejour) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once( $AppUI->getSystemClass ("smartydp" ) );
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('consultations' , $consultations );
-$smarty->assign('sejours', $sejours);
-$smarty->assign('docsCons', $docsCons);
-$smarty->assign('docsOp', $docsOp);
-$smarty->assign('filesCons', $filesCons);
-$smarty->assign('filesOp', $filesOp);
+$smarty->assign("consultations" , $consultations );
+$smarty->assign("sejours"       , $sejours);
+$smarty->assign("docsCons"      , $docsCons);
+$smarty->assign("docsOp"        , $docsOp);
+$smarty->assign("filesCons"     , $filesCons);
+$smarty->assign("filesOp"       , $filesOp);
 
-$smarty->display('vw_resume.tpl');
+$smarty->display("vw_resume.tpl");
 
 ?>

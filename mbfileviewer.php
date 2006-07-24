@@ -81,12 +81,12 @@ if ($file_path) {
 
 // Check permissions on dPcabinet. to be refactored with PEAR::Auth
 include "./includes/permissions.php";
-$canRead = !getDenyRead( 'dPcabinet' );
+$canRead = !getDenyRead("dPcabinet");
 if (!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once($AppUI->getModuleClass("dPcabinet", "files"));
+require_once($AppUI->getModuleClass("dPfiles", "files"));
 
 if ($file_id = mbGetValueFromGet("file_id")) {
   $file = new CFile();

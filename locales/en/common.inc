@@ -1,8 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-"module-dPmateriel-long"=>"Gestion du matériel",
-"module-all-court"=>"All modules",
+"module-dPfiles-long"=>"Files management",
 "About",
 "Active Projects",
 "Add",
@@ -142,6 +141,7 @@
 "login",
 "module-admin-court"=>"Users",
 "module-admin-long"=>"Users Administration",
+"module-all-court"=>"All modules",
 "module-dPadmissions-court"=>"Admissions",
 "module-dPadmissions-long"=>"Gestion des admissions",
 "module-dPbloc-court"=>"Planning bloc",
@@ -154,6 +154,7 @@
 "module-dPcim10-long"=>"Aide au codage CIM10",
 "module-dPcompteRendu-court"=>"Comptes-rendus",
 "module-dPcompteRendu-long"=>"Gestion des comptes-rendus",
+"module-dPfiles-court"=>"Files",
 "module-dPgestionCab-court"=>"Gestion cab",
 "module-dPgestionCab-long"=>"Gestion comptable de cabinet",
 "module-dPhospi-court"=>"Planning hospi",
@@ -161,6 +162,7 @@
 "module-dPinterop-court"=>"Interop",
 "module-dPinterop-long"=>"Interopérabilité mediboard",
 "module-dPmateriel-court"=>"Matériel",
+"module-dPmateriel-long"=>"Gestion du matériel",
 "module-dPpatients-court"=>"Dossiers patient",
 "module-dPpatients-long"=>"Gestion des dossiers patient",
 "module-dPplanningOp-court"=>"Planning chir",

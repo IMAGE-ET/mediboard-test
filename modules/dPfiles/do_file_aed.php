@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getModuleClass("dPcabinet", "files"));
+require_once($AppUI->getModuleClass("dPfiles", "files"));
 
 $ajax = mbGetValueFromPost("ajax", 0);
 $suppressHeaders = mbGetValueFromPost("suppressHeaders", 0);
@@ -85,7 +85,7 @@ if (($msg = $obj->store())) {
 	$AppUI->setMsg($msg, UI_MSG_ERROR);
 } else {
 	$AppUI->setMsg($file_id ? "modifié" : "ajouté", UI_MSG_OK, true);
-  $obj->indexStrings();
+  //$obj->indexStrings();
 }
 
 doRedirect();

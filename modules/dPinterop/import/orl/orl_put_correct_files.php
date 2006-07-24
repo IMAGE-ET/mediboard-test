@@ -13,8 +13,8 @@ if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once( $AppUI->getModuleClass('dPcabinet', 'files') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
+require_once($AppUI->getModuleClass("dPfiles", "files"));
+require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
 
 $chrono = new Chronometer;
 

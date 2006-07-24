@@ -7,14 +7,14 @@
 * @author Romain Ollivier
 */
 
-require_once( $AppUI->getSystemClass ('mbobject' ) );
+require_once($AppUI->getSystemClass("mbobject" ));
 
-require_once($AppUI->getModuleClass('dPpatients'   , 'patients'));
-require_once($AppUI->getModuleClass('dPcabinet'    , 'consultAnesth'));
-require_once($AppUI->getModuleClass('dPcabinet'    , 'plageconsult'));
-require_once($AppUI->getModuleClass('dPcabinet'    , 'files'));
-require_once($AppUI->getModuleClass('dPcabinet'    , 'examaudio'));
-require_once($AppUI->getModuleClass('dPcompteRendu', 'compteRendu'));
+require_once($AppUI->getModuleClass("dPpatients"   , "patients"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "consultAnesth"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "plageconsult"));
+require_once($AppUI->getModuleClass("dPfiles"      , "files"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "examaudio"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 
 // Enum for Consultation.chrono
 if(!defined("CC_PLANIFIE")) {
@@ -80,7 +80,7 @@ class CConsultation extends CMbObject {
   var $_ref_examaudio = null;
 
   function CConsultation() {
-    $this->CMbObject('consultation', 'consultation_id');
+    $this->CMbObject("consultation", "consultation_id");
 
     static $props = array (
       "plageconsult_id" => "ref|notNull",

@@ -155,6 +155,8 @@
 "module-dPcim10-long"=>"Aide au codage CIM10",
 "module-dPcompteRendu-court"=>"Comptes-rendus",
 "module-dPcompteRendu-long"=>"Gestion des comptes-rendus",
+"module-dPfiles-court"=>"Fichiers",
+"module-dPfiles-long"=>"Gestion de fichiers",
 "module-dPgestionCab-court"=>"Gestion cab",
 "module-dPgestionCab-long"=>"Gestion comptable de cabinet",
 "module-dPhospi-court"=>"Planning hospi",

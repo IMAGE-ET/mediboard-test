@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.41";
+$config["mod_version"]     = "0.42";
 $config["mod_directory"]   = "dPcabinet";
 $config["mod_setup_class"] = "CSetupdPcabinet";
 $config["mod_type"]        = "user";
@@ -71,35 +71,6 @@ class CSetupdPcabinet {
                     PRIMARY KEY  (plageconsult_id),
                     KEY chir_id (chir_id)
                     ) TYPE=MyISAM COMMENT='Table des plages de consultation des médecins';";
-        db_exec( $sql ); db_error();
-        $sql = "CREATE TABLE files_mediboard (
-                    file_id int(11) NOT NULL auto_increment,
-                    file_real_filename varchar(255) NOT NULL default '',
-                    file_consultation bigint(20) NOT NULL default '0',
-                    file_operation bigint(20) NOT NULL default '0',
-                    file_name varchar(255) NOT NULL default '',
-                    file_parent int(11) default '0',
-                    file_description text,
-                    file_type varchar(100) default NULL,
-                    file_owner int(11) default '0',
-                    file_date datetime default NULL,
-                    file_size int(11) default '0',
-                    file_version float NOT NULL default '0',
-                    file_icon varchar(20) default 'obj/',
-                    PRIMARY KEY  (file_id),
-                    KEY idx_file_consultation (file_consultation),
-                    KEY idx_file_operation (file_operation),
-                    KEY idx_file_parent (file_parent)
-                  ) TYPE=MyISAM;";
-        db_exec( $sql ); db_error();
-            $sql = "CREATE TABLE files_index_mediboard (
-                    file_id int(11) NOT NULL default '0',
-                    word varchar(50) NOT NULL default '',
-                    word_placement int(11) default '0',
-                    PRIMARY KEY  (file_id,word),
-                    KEY idx_fwrd (word),
-                    KEY idx_wcnt (word_placement)
-                    ) TYPE=MyISAM;";
         db_exec( $sql ); db_error();
       case "0.1":
         $sql = "ALTER TABLE plageconsult ADD freq TIME DEFAULT '00:15:00' NOT NULL AFTER date ;";
@@ -301,41 +272,10 @@ class CSetupdPcabinet {
           "CHANGE `groupe` `groupe` ENUM( '?', 'O', 'A', 'B', 'AB' )" .
           "DEFAULT '?' NOT NULL ;";
         db_exec( $sql ); db_error();
-        
+
       case "0.37":
-        $sql = "ALTER TABLE `files_mediboard`" .
-          "\nDROP `file_parent`," .
-          "\nDROP `file_description`," .
-          "\nDROP `file_version`," .
-          "\nDROP `file_icon`;";
-        db_exec( $sql ); db_error();
-            
       case "0.38":
-        $sql = "ALTER TABLE `files_mediboard`" .
-            "\nADD `file_object_id` INT(11) NOT NULL DEFAULT '0' AFTER `file_real_filename`," .
-            "\nADD `file_class` VARCHAR(30) NOT NULL DEFAULT 'CPatients' AFTER `file_object_id`;";
-        db_exec( $sql ); db_error();
-        $sql = "UPDATE `files_mediboard`" .
-            "SET `file_object_id` = `file_consultation`," .
-            "\n`file_class` = 'CConsultation'" .
-            "\nWHERE `file_consultation` != 0;";
-        db_exec( $sql ); db_error();
-        $sql = "UPDATE `files_mediboard`" .
-            "SET `file_object_id` = `file_consultation_anesth`," .
-            "\n`file_class` = 'CConsultAnesth'" .
-            "\nWHERE `file_consultation_anesth` != 0;";
-        db_exec( $sql ); db_error();
-        $sql = "UPDATE `files_mediboard`" .
-            "SET `file_object_id` = `file_operation`," .
-            "\n`file_class` = 'COperation'" .
-            "\nWHERE `file_operation` != 0;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `files_mediboard`" .
-          "\nDROP `file_consultation`," .
-          "\nDROP `file_consultation_anesth`," .
-          "\nDROP `file_operation`;";
-        db_exec( $sql ); db_error();
-      
+
       case "0.39":
         $sql = "ALTER TABLE `consultation_anesth`
         	    ADD `mallampati` ENUM( 'classe1', 'classe2', 'classe3', 'classe4' ),
@@ -347,54 +287,12 @@ class CSetupdPcabinet {
         db_exec( $sql ); db_error();
         $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'trans', 'obst', 'chir', 'med', 'fam', 'alle' ) NOT NULL DEFAULT 'med';";
         db_exec( $sql ); db_error();
-        
+      
       case "0.40":
-        // Move all files from former to latter strategy
-        set_time_limit(120);
-        foreach(glob("files/*/*/*") as $filePath) {
-          $fileFragment = $filePath;
-          $filePathOld = $fileFragment;
-          $fileRealName = basename($fileFragment);
-          $fileFragment = dirname($fileFragment);
-          $fileObjectId = basename($fileFragment);
-          $fileFragment = dirname($fileFragment);
-          $fileDir = basename($fileFragment);
-
-          switch ($fileDir) {
-            case "consultations"       : $fileObjectClass = "CConsultation" ; break;
-            case "consultations2"      : $fileObjectClass = "CConsultation" ; break;
-            case "consultations_anesth": $fileObjectClass = "CConsultAnesth"; break;
-            case "operations"          : $fileObjectClass = "COperation"    ; break;
-          	default: $fileObjectClass = null;
-          }
-
-          if (!$fileObjectClass) {
-            continue;
-          }
-                    
-          $fileDirHash = intval($fileObjectId / 1000);
-          $filePathNew = "files/$fileObjectClass/$fileDirHash/$fileObjectId/$fileRealName";
-
-          CMbPath::forceDir(dirname($filePathNew));
-          if (!rename($filePathOld, $filePathNew)) {
-            trigger_error("Impossible to move '$filePathOld' to '$filePathNew'", E_USER_ERROR);
-            return "0.40";
-          }
-        }
-        
-        CMbPath::purgeEmptySubdirs("files/consultations");
-        CMbPath::purgeEmptySubdirs("files/consultations2");
-        CMbPath::purgeEmptySubdirs("files/consultations_anesth");
-        CMbPath::purgeEmptySubdirs("files/operations");
-                
       case "0.41":
-        $sql = "ALTER TABLE `files_mediboard` ADD INDEX ( `file_real_filename` );";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `files_mediboard` ADD UNIQUE ( `file_real_filename` );";
-        db_exec( $sql ); db_error();
         
       case "0.42";
-        return "0.41";
+        return "0.42";
     }
     return false;
   }

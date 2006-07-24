@@ -9,7 +9,7 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass("dPcabinet", "files"));
+require_once( $AppUI->getModuleClass("dPfiles", "files"));
 
 if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );

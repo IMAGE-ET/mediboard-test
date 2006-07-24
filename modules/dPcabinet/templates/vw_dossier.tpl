@@ -132,7 +132,7 @@ function printDocument(doc_id) {
               {{foreach from=$curr_consult->_ref_files item=curr_file}}
               <li>
                 <form name="uploadFrm{{$curr_file->file_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post">
-                <input type="hidden" name="m" value="dPcabinet" />
+                <input type="hidden" name="m" value="dPfiles" />
                 <input type="hidden" name="dosql" value="do_file_aed" />
                 <input type="hidden" name="del" value="1" />
                 <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
@@ -149,7 +149,7 @@ function printDocument(doc_id) {
               {{/foreach}}
             </ul>
             <form name="uploadFrm" action="?m={{$m}}" enctype="multipart/form-data" method="post">
-            <input type="hidden" name="m" value="dPcabinet" />
+            <input type="hidden" name="m" value="dPfiles" />
             <input type="hidden" name="dosql" value="do_file_aed" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="file_class" value="CConsultation" />
@@ -217,7 +217,7 @@ function printDocument(doc_id) {
               {{foreach from=$curr_op->_ref_files item=curr_file}}
               <li>
                 <form name="uploadFrm{{$curr_file->file_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post">
-      
+                <input type="hidden" name="m" value="dPfiles" />
                 <input type="hidden" name="dosql" value="do_file_aed" />
                 <input type="hidden" name="del" value="1" />
                 <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
@@ -234,6 +234,7 @@ function printDocument(doc_id) {
               {{/foreach}}
             </ul>
             <form name="uploadFrm" action="?m=dPcabinet" enctype="multipart/form-data" method="post">
+            <input type="hidden" name="m" value="dPfiles" />
             <input type="hidden" name="dosql" value="do_file_aed" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="file_class" value="COperation" />

@@ -14,7 +14,7 @@ require_once($AppUI->getModuleClass("dPcim10"      , "codecim10"));
 require_once($AppUI->getModuleClass("dPpatients"   , "patients"));
 require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
 require_once($AppUI->getModuleClass("dPcabinet"    , "plageconsult"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "files"));
+require_once($AppUI->getModuleClass("dPfiles"      , "files"));
 require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 
 class CConsultAnesth extends CMbObject {

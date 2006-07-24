@@ -110,7 +110,7 @@ function submitFdr(oForm) {
           <form name="delFrm{{$curr_file->file_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
             <a href="mbfileviewer.php?file_id={{$curr_file->file_id}}">{{$curr_file->file_name}}</a>
             ({{$curr_file->_file_size}})
-            <input type="hidden" name="m" value="dPcabinet" />
+            <input type="hidden" name="m" value="dPfiles" />
             <input type="hidden" name="dosql" value="do_file_aed" />
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
@@ -123,7 +123,7 @@ function submitFdr(oForm) {
         {{/foreach}}
       </ul>
       <form name="uploadFrm" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
-        <input type="hidden" name="m" value="dPcabinet" />
+        <input type="hidden" name="m" value="dPfiles" />
         <input type="hidden" name="dosql" value="do_file_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="file_class" value="CConsultation" />
