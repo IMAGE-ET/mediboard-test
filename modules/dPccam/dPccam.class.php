@@ -9,7 +9,7 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getSystemClass("mbobject"));
 
 /**
  * The CFavoriCCAM Class
@@ -25,7 +25,7 @@ class CFavoriCCAM extends CMbObject {
   var $favoris_code = NULL;
 
 	function CFavoriCCAM() {
-		$this->CMbObject( 'ccamfavoris', 'favoris_id' );
+		$this->CMbObject("ccamfavoris", "favoris_id");
     
     $this->_props["favoris_user"] = "ref|notNull";
     $this->_props["favoris_code"] = "str|notNull";

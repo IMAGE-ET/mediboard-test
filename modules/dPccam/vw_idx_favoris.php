@@ -13,7 +13,7 @@ if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 	
-require_once( $AppUI->getModuleClass('dPccam', 'acte') );
+require_once( $AppUI->getModuleClass("dPccam", "acte") );
 
 $user = $AppUI->user_id;
 
@@ -34,11 +34,11 @@ foreach($favoris as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once( $AppUI->getSystemClass ("smartydp") );
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('codes', $codes);
+$smarty->assign("codes", $codes);
 
-$smarty->display('vw_idx_favoris.tpl');
+$smarty->display("vw_idx_favoris.tpl");
 
 ?>

@@ -39,7 +39,7 @@ class CCodeCCAM {
   // Constructeur
   function CCodeCCAM($code) {
     global $AppUI;
-    $this->dbccam = $AppUI->cfg['baseCCAM'];
+    $this->dbccam = $AppUI->cfg["baseCCAM"];
     do_connect($this->dbccam);
     $this->code = strtoupper($code);
   }
@@ -69,8 +69,8 @@ class CCodeCCAM {
     } else {
       $row = db_fetch_array($result);
       //On rentre les champs de la table actes
-      $this->libelleCourt = $row['LIBELLECOURT'];
-      $this->libelleLong = $row['LIBELLELONG'];
+      $this->libelleCourt = $row["LIBELLECOURT"];
+      $this->libelleLong = $row["LIBELLELONG"];
       $query1 = "select * from activiteacte where ";
       $query1 .= "CODEACTE = '" . $this->code . "' ";
       $query1 .= "and ACTIVITE = '4'";
@@ -100,12 +100,12 @@ class CCodeCCAM {
       $row = db_fetch_array($result);
     
       //On rentre les champs de la table actes
-      $this->chapitres[0]["db"] = $row['ARBORESCENCE1'];
-      $this->chapitres[1]["db"] = $row['ARBORESCENCE2'];
-      $this->chapitres[2]["db"] = $row['ARBORESCENCE3'];
-      $this->chapitres[3]["db"] = $row['ARBORESCENCE4'];
-      $this->libelleCourt = $row['LIBELLECOURT'];
-      $this->libelleLong = $row['LIBELLELONG'];
+      $this->chapitres[0]["db"] = $row["ARBORESCENCE1"];
+      $this->chapitres[1]["db"] = $row["ARBORESCENCE2"];
+      $this->chapitres[2]["db"] = $row["ARBORESCENCE3"];
+      $this->chapitres[3]["db"] = $row["ARBORESCENCE4"];
+      $this->libelleCourt = $row["LIBELLECOURT"];
+      $this->libelleLong = $row["LIBELLELONG"];
     
       //On rentre les caracteristiques des chapitres
       $pere = "000001";
@@ -116,16 +116,16 @@ class CCodeCCAM {
         $result = db_exec($query, $this->dbccam);
         $row = db_fetch_array($result);
         
-        $query = "select * from notesarborescence where CODEMENU = '" . $row['CODEMENU'] . "'";
+        $query = "select * from notesarborescence where CODEMENU = '" . $row["CODEMENU"] . "'";
         $result2 = db_exec($query, $this->dbccam);
         
-        $track .= substr($row['RANG'], -2) . ".";
+        $track .= substr($row["RANG"], -2) . ".";
         $this->chapitres[$key]["rang"] = $track;
-        $this->chapitres[$key]["code"] = $row['CODEMENU'];
-        $this->chapitres[$key]["nom"] = $row['LIBELLE'];
+        $this->chapitres[$key]["code"] = $row["CODEMENU"];
+        $this->chapitres[$key]["nom"] = $row["LIBELLE"];
         $this->chapitres[$key]["rq"] = "";
         while($row2 = db_fetch_array($result2)) {
-          $this->chapitres[$key]["rq"] .= "* " . str_replace("¶", "\n", $row2['TEXTE']) . "\n";
+          $this->chapitres[$key]["rq"] .= "* " . str_replace("¶", "\n", $row2["TEXTE"]) . "\n";
         }
         $pere = $this->chapitres[$key]["code"];
       }
@@ -136,7 +136,7 @@ class CCodeCCAM {
       $query = "select * from notes where CODEACTE = '$this->code'";
       $result = db_exec($query, $this->dbccam);
       while ($row = db_fetch_array($result)) {
-        $this->remarques[] = str_replace("¶", "\n", $row['TEXTE']);
+        $this->remarques[] = str_replace("¶", "\n", $row["TEXTE"]);
       }
       
       // Extraction des activités
@@ -179,7 +179,7 @@ class CCodeCCAM {
         while($row = db_fetch_array($result)) {
           $query = "select CODE as code, LIBELLE as libelle" .
               "\nfrom modificateur " .
-              "\nwhere CODE = '" . $row['MODIFICATEUR'] . "'" .
+              "\nwhere CODE = '" . $row["MODIFICATEUR"] . "'" .
               "\norder by CODE";
           $modificateurs[] = db_fetch_object(db_exec($query, $this->dbccam));
         }
@@ -219,11 +219,11 @@ class CCodeCCAM {
       $result = db_exec($query, $this->dbccam);
       $i = 0;
       while($row = db_fetch_array($result)) {
-        $this->assos[$i]["code"] = $row['ACTEASSO'];
-        $query = "select * from actes where CODE = '" . $row['ACTEASSO'] . "'";
+        $this->assos[$i]["code"] = $row["ACTEASSO"];
+        $query = "select * from actes where CODE = '" . $row["ACTEASSO"] . "'";
         $result2 = db_exec($query, $this->dbccam);
         $row2 = db_fetch_array($result2);
-        $this->assos[$i]["texte"] = $row2['LIBELLELONG'];
+        $this->assos[$i]["texte"] = $row2["LIBELLELONG"];
         $i++;
       }
       
@@ -232,11 +232,11 @@ class CCodeCCAM {
       $result = db_exec($query, $this->dbccam);
       $i = 0;
       while($row = db_fetch_array($result)) {
-        $this->incomps[$i]["code"] = $row['INCOMPATIBLE'];
-        $query = "select * from actes where CODE = '" . $row['INCOMPATIBLE'] . "'";
+        $this->incomps[$i]["code"] = $row["INCOMPATIBLE"];
+        $query = "select * from actes where CODE = '" . $row["INCOMPATIBLE"] . "'";
         $result2 = db_exec($query, $this->dbccam);
         $row2 = db_fetch_array($result2);
-        $this->incomps[$i]["texte"] = $row2['LIBELLELONG'];
+        $this->incomps[$i]["texte"] = $row2["LIBELLELONG"];
         $i++;
       }
       
@@ -245,13 +245,13 @@ class CCodeCCAM {
       $result = db_exec($query, $this->dbccam);
       if(db_num_rows($result) > 0) {
         $row = db_fetch_array($result);
-        $this->procedure["code"] = $row['CODEPROCEDURE'];
-        $query = "select LIBELLELONG from actes where CODE = '" . $this->procedure['code'] . "'";
+        $this->procedure["code"] = $row["CODEPROCEDURE"];
+        $query = "select LIBELLELONG from actes where CODE = '" . $this->procedure["code"] . "'";
         $result = db_exec($query, $this->dbccam);
         $row = db_fetch_array($result);
-        $this->procedure["texte"] = $row['LIBELLELONG'];
+        $this->procedure["texte"] = $row["LIBELLELONG"];
       } else {
-        $this->procedure['code'] = "aucune";
+        $this->procedure["code"] = "aucune";
         $this->procedure["texte"] = "";
       }
     }

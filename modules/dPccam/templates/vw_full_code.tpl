@@ -1,10 +1,28 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
+function updateFields(selected) {
+  Element.cleanWhitespace(selected);
+  dn = selected.childNodes;
+  $('selection_codeacte').value = dn[0].firstChild.firstChild.nodeValue;
+}
 
 function pageMain() {
   initGroups("chap");
+  
+  new Ajax.Autocompleter(
+    'selection_codeacte',
+    'codeacte_auto_complete',
+    'index.php?m=dPccam&ajax=1&suppressHeaders=1&a=httpreq_do_ccam_autocomplete', {
+      minChars: 2,
+      frequency: 0.15,
+      updateElement: updateFields
+    }
+  );
 }
+
+</script>
+
   
 </script>
 
@@ -23,7 +41,8 @@ function pageMain() {
               <tr>
                 <th><label for="codeacte" title="Code CCAM de l'acte">Code de l'acte</label></th>
                 <td>
-                  <input tabindex="1" type="text" name="codeacte" title="code|ccam" value="{{$codeacte}}" />
+                  <input tabindex="1" type="text" size="50" name="codeacte" title="code|ccam" value="{{if $codeacte!="XXXXXXX"}}{{$codeacte}}{{/if}}" />
+                  <div style="display:none;" class="autocomplete" id="codeacte_auto_complete"></div>                 
                   <input tabindex="2" type="submit" value="afficher" />
                 </td>
               </tr>

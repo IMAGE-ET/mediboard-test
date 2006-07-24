@@ -8,7 +8,7 @@
 */
 
 require_once($AppUI->getModuleClass("dPccam", "dPccam"));
-require_once($AppUI->getSystemClass('doobjectaddedit'));
+require_once($AppUI->getSystemClass("doobjectaddedit"));
 
 $do = new CDoObjectAddEdit("CFavoriCCAM", "favoris_id");
 $do->createMsg = "Favori créé";
