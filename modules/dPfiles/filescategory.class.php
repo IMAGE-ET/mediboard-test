@@ -7,7 +7,7 @@
  *  @author Sébastien Fillonneau
  */
 
-require_once( $AppUI->getSystemClass('mbobject'));
+require_once( $AppUI->getSystemClass("mbobject"));
 
 /**
  * The CFilesCategory class
@@ -20,7 +20,7 @@ class CFilesCategory extends CMbObject {
   
   
   function CFilesCategory() {
-    $this->CMbObject( 'files_category', 'files_category_id' );
+    $this->CMbObject( "files_category", "files_category_id" );
 
     $this->_props["files_category_id"] = "ref";
     $this->_props["nom"]               = "str|maxLength|50|notNull";
@@ -30,10 +30,10 @@ class CFilesCategory extends CMbObject {
   
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      'label' => 'fichier(s)', 
-      'name' => 'files_mediboard', 
-      'idfield' => 'files_category_id', 
-      'joinfield' => 'files_category_id'
+      "label" => "fichier(s)", 
+      "name" => "files_mediboard", 
+      "idfield" => "files_category_id", 
+      "joinfield" => "files_category_id"
     );
     
   return CDpObject::canDelete( $msg, $oid, $tables );	
@@ -46,6 +46,10 @@ class CFilesCategory extends CMbObject {
     $listCat = new CFilesCategory;
     return $listCat->loadList($where);
     
+  }
+  
+  function updateFormFields(){
+    $this->_view = $this->nom;
   }
 
 }
