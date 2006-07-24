@@ -90,9 +90,9 @@ function delMe( x, y ) {
 
 
 // tabbed information boxes
-$tabBox = new CTabBox( "?m=admin", "{$AppUI->cfg['root_dir']}/modules/admin/", $tab );
-$tabBox->add( 'vw_active_usr', 'Active Users' );
-$tabBox->add( 'vw_inactive_usr', 'Inactive Users' );
+$tabBox = new CTabBox( "?m=admin", $AppUI->cfg["root_dir"]."/modules/admin/", $tab );
+$tabBox->add("vw_active_usr"  , "Active Users");
+$tabBox->add("vw_inactive_usr", "Inactive Users");
 $tabBox->show();
 ?>
 

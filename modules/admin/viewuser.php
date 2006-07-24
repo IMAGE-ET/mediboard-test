@@ -116,7 +116,7 @@ function popChgPwd() {
 
 <?php	
 	// tabbed information boxes
-	$tabBox = new CTabBox( "?m=admin&amp;a=viewuser&amp;user_id=$user_id", "{$AppUI->cfg['root_dir']}/modules/admin/", $tab );
+	$tabBox = new CTabBox( "?m=admin&amp;a=viewuser&amp;user_id=$user_id", $AppUI->cfg["root_dir"]."/modules/admin/", $tab );
   $tabBox->add( "vw_usr_perms", "Permissions Mediboard" );
 	$tabBox->show();
 }

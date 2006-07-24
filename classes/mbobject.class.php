@@ -53,12 +53,12 @@ class CMbObject extends CDpObject {
     $properties = get_object_vars($this);
     $class = get_class($this);
     
-    foreach ($this->_props as $propName => $propSpec) {
+    foreach($this->_props as $propName => $propSpec) {
       if(!array_key_exists($propName, $properties)) {
         trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$class'", E_USER_WARNING);
       } else {
         $propValue =& $this->$propName;
-        if ($propValue !== null) {
+        if($propValue !== null) {
           $msgProp = $this->checkProperty($propName);
           
           $debugInfo = $dPconfig["debug"] ? "(val:'$propValue', spec:'$propSpec')" : "";

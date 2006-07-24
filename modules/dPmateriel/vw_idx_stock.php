@@ -17,18 +17,20 @@ require_once($AppUI->getModuleClass("dPmateriel", "stock"   ));
 require_once($AppUI->getModuleClass("dPmateriel", "category"));
 require_once($AppUI->getModuleClass("mediusers", "groups"   ));
 
+getChildClasses();
+
 $stock_id = mbGetValueFromGetOrSession("stock_id");
 
 // Récupération des données pour le stock choisi 
-$stock=new CStock;
+$stock = new CStock;
 $stock->load($stock_id);
 if($stock_id = mbGetValueFromGet("materiel_id")){
   $stock->materiel_id = $stock_id;
 }
 
 // Récupération de la liste des Stock
-$lststock = new CStock;
-$listStock = $lststock->loadList();
+$liststock = new CStock;
+$listStock = $liststock->loadList();
 foreach($listStock as $key => $value) {
   $listStock[$key]->loadRefsFwd();
   $listStock[$key]->_ref_materiel->loadRefsFwd();
