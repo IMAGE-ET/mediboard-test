@@ -157,7 +157,7 @@ class CSetupdPfiles {
         $sql = "ALTER TABLE `files_mediboard` ADD INDEX (`file_category`);";
         db_exec($sql); db_error();
         $sql = "CREATE TABLE `files_category` (" .
-            "\n`files_category` INT(11) NOT NULL auto_increment, " .
+            "\n`files_category_id` INT(11) NOT NULL auto_increment, " .
             "\n`nom` VARCHAR(50) NOT NULL DEFAULT ''," .
             "\n`class` VARCHAR(30) DEFAULT NULL," .
             "\nPRIMARY KEY  (files_category)" .
