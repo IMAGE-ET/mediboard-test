@@ -557,7 +557,7 @@ function getChildClasses($parent = "CMbObject") {
       unset($listClasses[$key]);
     }
   }
-  mbTrace($listClasses);
+  return sort($listClasses);
 }
 
 ?>
