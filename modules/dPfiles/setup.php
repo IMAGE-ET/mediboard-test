@@ -152,15 +152,15 @@ class CSetupdPfiles {
         }
         
       case "0.1";
-        $sql = "ALTER TABLE `files_mediboard` ADD `file_category` INT(11) NOT NULL DEFAULT '1' AFTER `file_type`";
+        $sql = "ALTER TABLE `files_mediboard` ADD `files_category_id` INT(11) NOT NULL DEFAULT '1' AFTER `file_type`";
         db_exec($sql); db_error();
-        $sql = "ALTER TABLE `files_mediboard` ADD INDEX (`file_category`);";
+        $sql = "ALTER TABLE `files_mediboard` ADD INDEX (`files_category_id`);";
         db_exec($sql); db_error();
         $sql = "CREATE TABLE `files_category` (" .
             "\n`files_category_id` INT(11) NOT NULL auto_increment, " .
             "\n`nom` VARCHAR(50) NOT NULL DEFAULT ''," .
             "\n`class` VARCHAR(30) DEFAULT NULL," .
-            "\nPRIMARY KEY  (files_category)" .
+            "\nPRIMARY KEY  (files_category_id)" .
             "\n) TYPE=MyISAM;";
         db_exec($sql); db_error();
         $sql = "INSERT INTO `files_category` VALUES('1', 'divers', NULL)";
