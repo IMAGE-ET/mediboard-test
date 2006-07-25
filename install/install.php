@@ -86,7 +86,7 @@ class CLibrary {
     $libsDir = "$mbpath/lib";
     $filePath = "$pkgsDir/$this->fileName";
     
-    // For libraries archive non contained in directory
+    // For libraries archive not contained in directory
     if ($this->extraDir) {
       $libsDir .= "/$this->extraDir";
     }
@@ -232,6 +232,15 @@ $patch->sourceName = "calendar-fr.js";
 $patch->targetDir = "lang";
 
 $library->patches[] = $patch;
+
+$libraries[] = $library;
+
+$library = new CLibrary;
+$library->name = "phpThumb";
+$library->url = "http://phpthumb.sourceforge.net/";
+$library->fileName = "phpThumb_1.7.3.zip";
+$library->description = "Composant de création de thumbnails";
+$library->extraDir = "phpThumb";
 
 $libraries[] = $library;
 
