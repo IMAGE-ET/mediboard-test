@@ -118,9 +118,11 @@ class CPatient extends CMbObject {
     $this->_props =& $props;
     
     static $seek = array(
-      "nom"    => "likebegin",
-      "prenom" => "likebegin"
+      "nom"    => "likeBegin",
+      "prenom" => "likeBegin"
     );
+    
+    $this->_seek =& $seek;
     
     $this->buildEnums();
 	}
