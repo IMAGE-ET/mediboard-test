@@ -47,8 +47,8 @@ $consult->_ref_chir = $userSel;
 if ($selConsult) {
   $consult->load($selConsult);
   $consult->loadRefsFwd();
-  $consult->loadRefDocs();
-  $consult->loadRefFiles();
+  $consult->loadRefsDocs();
+  $consult->loadRefsFiles();
   
   // On vérifie que l'utilisateur a les droits sur la consultation
   $right = false;

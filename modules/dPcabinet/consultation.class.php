@@ -186,12 +186,12 @@ class CConsultation extends CMbObject {
     $this->loadRefPlageConsult();
   }
 
-  function loadRefFiles() {
+  function loadRefsFiles() {
     $this->_ref_files = new CFile();
     $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
   }
 
-  function loadRefDocs() {
+  function loadRefsDocs() {
     $this->_ref_documents = array();
     $this->_ref_documents = new CCompteRendu();
     $where = array();
@@ -218,8 +218,8 @@ class CConsultation extends CMbObject {
   
   function loadRefsBack() {
     // Backward references
-    $this->loadRefFiles();
-    $this->loadRefDocs();
+    $this->loadRefsFiles();
+    $this->loadRefsDocs();
     $this->loadRefConsultAnesth();
     
     $this->_ref_examaudio = new CExamAudio;
