@@ -557,7 +557,7 @@ function getChildClasses($parent = "CMbObject", $properties = null) {
       unset($listClasses[$key]);
     } else {
       foreach($properties as $prop) {
-        if(!in_array($prop, get_object_vars($class))) {
+        if(!in_array($prop, get_class_vars($class))) {
           unset($listClasses[$key]);
         }
       }
