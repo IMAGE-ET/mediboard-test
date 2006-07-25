@@ -73,25 +73,29 @@ class CMbObject extends CDpObject {
   
   function seek($keywords) {
     $sql = "SELECT * FROM `$this->_tbl` WHERE 1";
-    foreach($keywords as $key) {
-      $sql .= "\nAND (0";
-      foreach($this->_seek as $keySeek => $spec) {
-        switch($spec) {
-          case "equal":
-            $sql .= "\nOR `$keySeek` = '$key'";
-            break;
-          case "like":
-            $sql .= "\nOR `$keySeek` LIKE '%$key%'";
-            break;
-          case "likeBegin":
-            $sql .= "\nOR `$keySeek` LIKE '$key%'";
-            break;
-          case "likeEnd":
-            $sql .= "\nOR `$keySeek` LIKE '%$key'";
-            break;
+    if(count($keywords) and count($this->_seek)) {
+      foreach($keywords as $key) {
+        $sql .= "\nAND (0";
+        foreach($this->_seek as $keySeek => $spec) {
+          switch($spec) {
+            case "equal":
+              $sql .= "\nOR `$keySeek` = '$key'";
+              break;
+            case "like":
+              $sql .= "\nOR `$keySeek` LIKE '%$key%'";
+              break;
+            case "likeBegin":
+              $sql .= "\nOR `$keySeek` LIKE '$key%'";
+              break;
+            case "likeEnd":
+              $sql .= "\nOR `$keySeek` LIKE '%$key'";
+              break;
+          }
         }
+        $sql .= "\n)";
       }
-      $sql .= "\n)";
+    } else {
+      $sql .= "\nAND 0";
     }
     $sql .= "\nORDER BY";
     foreach($this->_seek as $keySeek => $spec) {
