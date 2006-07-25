@@ -249,7 +249,7 @@ function printDocument(doc_id) {
         </tr>
       </table>
     </td>
-    <td class="pane">
+    <td class="pane" id="vwPatient">
     {{include file="../../dPpatients/templates/inc_vw_patient.tpl"}}
     </td>
   </tr>

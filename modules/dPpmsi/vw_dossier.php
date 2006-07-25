@@ -15,10 +15,15 @@ require_once($AppUI->getModuleClass("dPplanningOp" , "planning"    ));
 require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu" ));
 require_once($AppUI->getModuleClass("dPcompteRendu", "pack"        ));
 require_once($AppUI->getModuleClass("dPpatients"   , "patients"    ));
+require_once($AppUI->getModuleClass("dPfiles"      , "filescategory"));
 
 if (!$canEdit) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
+
+// Liste des Category pour les fichiers
+$listCategory = new CFilesCategory;
+$listCategory = $listCategory->listCatClass("CPatient");
 
 // Chargement des praticiens
 $listPrat = new CMediusers;
@@ -71,6 +76,7 @@ $smarty->debugging = false;
 $smarty->assign("patient"       , $patient       );
 $smarty->assign("listPrat"      , $listPrat      );
 $smarty->assign("canEditCabinet", $canEditCabinet);
+$smarty->assign("listCategory"  , $listCategory  );
 
 $smarty->display("vw_dossier.tpl");
 

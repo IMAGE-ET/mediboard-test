@@ -16,6 +16,12 @@ function printIntervention(id) {
   url.popup(700, 550, "Admission");
 }
 
+function reloadVwPatient(){
+  var mainUrl = new Url;
+  mainUrl.setModuleAction("dPpatients", "httpreq_vw_patient");
+  mainUrl.addParam("id", document.modif.patient_id.value);
+  mainUrl.requestUpdate('vwPatient', { waitingText : null });
+}
 </script>
 
 <table class="form">
@@ -268,4 +274,47 @@ function printIntervention(id) {
   </tr>
   {{/foreach}}
   {{/if}}
+  <tr><th class="category" colspan="2">Documents</th></tr>
+  <tr>
+    <td colspan="2">
+      <strong>Fichiers</strong>
+      <ul>
+        {{foreach from=$patient->_ref_files item=curr_file}}  
+        <li>
+          {{if $canEdit}}
+          <form name="delFrm{{$curr_file->file_id}}" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">{{/if}}
+          <a target="_blank" href="mbfileviewer.php?file_id={{$curr_file->file_id}}">{{$curr_file->file_name}}</a>
+          ({{$curr_file->_file_size}})
+          {{if $canEdit}}
+          <input type="hidden" name="m" value="dPfiles" />
+          <input type="hidden" name="dosql" value="do_file_aed" />
+          <input type="hidden" name="del" value="1" />
+          <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" /> 
+          <button class="cancel notext" type="button"
+            onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadVwPatient})" />
+          </form>    
+          {{/if}}
+        </li>
+        {{foreachelse}}
+        <li>Aucun fichier disponible</li>  
+        {{/foreach}}
+      </ul>
+      {{if $canEdit}}
+      <form name="uploadFrm" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
+        <input type="hidden" name="m" value="dPfiles" />
+        <input type="hidden" name="dosql" value="do_file_aed" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="file_class" value="CPatient" />
+        <input type="hidden" name="file_object_id" value="{{$patient->patient_id}}" />
+        <input type="file" name="formfile" size="0" /><br />
+        Dans : <select name="file_category_id">
+        {{foreach from=$listCategory item=curr_listCat}}
+        <option value="{{$curr_listCat->file_category_id}}">{{$curr_listCat->nom}}</option>
+        {{/foreach}}
+        </select>
+        <button class="submit" type="submit">Ajouter</button>
+      </form>
+      {{/if}}
+    </td>
+  </tr>
 </table>

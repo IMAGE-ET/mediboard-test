@@ -122,7 +122,9 @@ function pageMain() {
       </table>
       </form>
       {{if $patient->patient_id}}
+      <div id="vwPatient">
       {{include file="../../dPpatients/templates/inc_vw_patient.tpl"}}
+      </div>
       {{/if}}
     </td>
     {{if $patient->patient_id}}

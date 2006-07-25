@@ -40,7 +40,6 @@ if($selClass && $selKey){
   $object->loadRefsFiles();
 }
 
-mbTrace($object->_ref_files);
 $smarty->assign("listCategory", $listCategory);
 $smarty->assign("listClass"   , $listClass   );
 $smarty->assign("selClass"    , $selClass    );

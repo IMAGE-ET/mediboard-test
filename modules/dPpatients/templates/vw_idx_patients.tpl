@@ -107,7 +107,7 @@ function affNaissance() {
     </td>
  
     {{if $patient->patient_id}}
-    <td class="pane">
+    <td class="pane" id="vwPatient">
     {{include file="inc_vw_patient.tpl"}}
     </td>
     {{/if}}

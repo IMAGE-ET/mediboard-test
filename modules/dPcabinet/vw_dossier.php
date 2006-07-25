@@ -8,16 +8,21 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m;
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'pack') );
-require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
+require_once( $AppUI->getModuleClass("mediusers") );
+require_once( $AppUI->getModuleClass("dPcabinet", "consultation") );
+require_once( $AppUI->getModuleClass("dPplanningOp", "planning") );
+require_once( $AppUI->getModuleClass("dPcompteRendu", "compteRendu") );
+require_once( $AppUI->getModuleClass("dPcompteRendu", "pack") );
+require_once( $AppUI->getModuleClass("dPpatients", "patients") );
+require_once( $AppUI->getModuleClass("dPfiles"     , "filescategory"));
 
 if (!$canEdit) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
+
+// Liste des Category pour les fichiers
+$listCategory = new CFilesCategory;
+$listCategory = $listCategory->listCatClass("CPatient");
 
 // L'utilisateur est-il praticien?
 $chirSel = new CMediusers;
@@ -69,15 +74,16 @@ if ($pat_id) {
 $canEditCabinet = !getDenyEdit("dPcabinet");
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
+require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('patSel', $patSel);
-$smarty->assign('patient', $patient);
-$smarty->assign('chirSel', $chirSel);
-$smarty->assign('listPrat', $listPrat);
-$smarty->assign('canEditCabinet', $canEditCabinet);
+$smarty->assign("patSel", $patSel);
+$smarty->assign("patient", $patient);
+$smarty->assign("chirSel", $chirSel);
+$smarty->assign("listPrat", $listPrat);
+$smarty->assign("canEditCabinet", $canEditCabinet);
+$smarty->assign("listCategory"  , $listCategory );
 
-$smarty->display('vw_dossier.tpl');
+$smarty->display("vw_dossier.tpl");
 
 ?>

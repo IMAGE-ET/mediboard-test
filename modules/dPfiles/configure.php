@@ -15,15 +15,15 @@ if(!$canRead) {
  
 require_once($AppUI->getModuleClass("dPfiles", "filescategory"));
 
-$files_category_id = mbGetValueFromGetOrSession("files_category_id");
+$file_category_id = mbGetValueFromGetOrSession("file_category_id");
 
 // Chargement de la catégorie demandé
 $category=new CFilesCategory;
-$category->load($files_category_id);
+$category->load($file_category_id);
 
 // Liste des Catégories
-$lstCategory = new CFilesCategory;
-$listCategory = $lstCategory->loadList();
+$listCategory = new CFilesCategory;
+$listCategory = $listCategory->loadList();
 
 // LIste des Class
 $listClass = getChildClasses();
