@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="index.php?m={{$m}}&amp;a=configure&amp;files_category_id=0">
+      <a class="buttonnew" href="index.php?m={{$m}}&amp;a=configure&amp;file_category_id=0">
         Créer une nouvelle catégorie de fichiers
       </a>
       <table class="tbl">
@@ -13,12 +13,12 @@
         {{foreach from=$listCategory item=curr_category}}
         <tr>
           <td>
-            <a href="index.php?m={{$m}}&amp;a=configure&amp;files_category_id={{$curr_category->files_category_id}}" title="Modifier la catégorie">
-              {{$curr_category->files_category_id}}
+            <a href="index.php?m={{$m}}&amp;a=configure&amp;file_category_id={{$curr_category->file_category_id}}" title="Modifier la catégorie">
+              {{$curr_category->file_category_id}}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m={{$m}}&amp;a=configure&amp;files_category_id={{$curr_category->files_category_id}}" title="Modifier le catégorie">
+            <a href="index.php?m={{$m}}&amp;a=configure&amp;file_category_id={{$curr_category->file_category_id}}" title="Modifier le catégorie">
               {{$curr_category->nom}}
             </a>
           </td>
@@ -33,11 +33,11 @@
       <form name="editCat" action="./index.php?m={{$m}}&amp;a=configure" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPfiles" />
       <input type="hidden" name="dosql" value="do_filescategory_aed" />
-	  <input type="hidden" name="files_category_id" value="{{$category->files_category_id}}" />
+	  <input type="hidden" name="file_category_id" value="{{$category->file_category_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          {{if $category->files_category_id}}
+          {{if $category->file_category_id}}
           <th class="title" colspan="2" style="color:#f00;">Modification de la catégorie {{$category->_view}}</th>
           {{else}}
           <th class="title" colspan="2">Création d'une catégorie</th>
@@ -60,7 +60,7 @@
         </tr>        
         <tr>
           <td class="button" colspan="2">
-            {{if $category->files_category_id}}
+            {{if $category->file_category_id}}
               <button class="submit" type="modify">Modifier</button>
               <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la catégorie',objName:'{{$category->_view|escape:javascript}}'})">Supprimer</button>
             {{else}}
