@@ -25,13 +25,14 @@ $selView  = mbGetValueFromGetOrSession("selView" , null);
 // Liste des Class
 $listClass = getChildClasses("CMbObject", array("_ref_files"));
 
-$listCategory = CFilesCategory::lstCatClass($selClass);
+$listCategory = CFilesCategory::listCatClass($selClass);
 
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
+$object = null;
 
 if($selClass && $selKey){
   $object = new $selClass;
@@ -46,6 +47,7 @@ $smarty->assign("selClass"    , $selClass    );
 $smarty->assign("selKey"      , $selKey      );
 $smarty->assign("selView"     , $selView     );
 $smarty->assign("keywords"    , $keywords    );
+$smarty->assign("object"      , $object      );
 
 $smarty->display("vw_files.tpl");
 

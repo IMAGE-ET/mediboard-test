@@ -41,7 +41,7 @@ class CFilesCategory extends CMbObject {
   return CDpObject::canDelete( $msg, $oid, $tables );	
   }
   
-  function lstCatClass($paramclass = null){
+  function listCatClass($paramclass = null){
     $where = array();
     $where[] = "`class` IS NULL OR `class` = '$paramclass'";
     

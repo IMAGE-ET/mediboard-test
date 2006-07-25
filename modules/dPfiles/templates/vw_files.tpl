@@ -26,8 +26,9 @@ function setData(key, val){
           <td>
             <form name="FrmClass" action="?m={{$m}}" method="get">
             <input type="hidden" name="m" value="{{$m}}" />          
-            <label for="selClass" title="Veuillez Sélectionner une Class">Class</label>
+            <label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label>
             <select name="selClass" onchange="submit()">
+              <option value="">&mdash Choisissez un type</option>
             {{foreach from=$listClass item=curr_listClass}}
               <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{$curr_listClass}}</option>
             {{/foreach}}
@@ -43,6 +44,9 @@ function setData(key, val){
           </td>
         </tr>
         {{if $selClass && $selKey}}
+        <tr>
+          <th class="category">{{$object->_view}}</th>
+        </tr>
         <tr>
           <td>
             <div class="accordionMain" id="accordionConsult">
