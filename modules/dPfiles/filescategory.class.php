@@ -14,7 +14,7 @@ require_once( $AppUI->getSystemClass("mbobject"));
  */
 class CFilesCategory extends CMbObject {
   // DB Table key
-  var $files_category_id = null;	
+  var $file_category_id = null;	
   var $nom = null;
   var $class = null;
   
@@ -22,7 +22,7 @@ class CFilesCategory extends CMbObject {
   function CFilesCategory() {
     $this->CMbObject( "files_category", "files_category_id" );
 
-    $this->_props["files_category_id"] = "ref";
+    $this->_props["file_category_id"] = "ref";
     $this->_props["nom"]               = "str|maxLength|50|notNull";
     $this->_props["class"]             = "str|maxLength|30";
     
