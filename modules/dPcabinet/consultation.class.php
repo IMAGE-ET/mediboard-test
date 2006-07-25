@@ -187,14 +187,8 @@ class CConsultation extends CMbObject {
   }
 
   function loadRefFiles() {
-    $this->_ref_files = array();
-    if($this->consultation_id) {
-      $where = array();
-      $where["file_object_id"] = "= '$this->consultation_id'";
-      $where["file_class"] = "= 'CConsultation'";
-      $this->_ref_files = new CFile();
-      $this->_ref_files = $this->_ref_files->loadList($where);
-    }
+    $this->_ref_files = new CFile();
+    $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
   }
 
   function loadRefDocs() {

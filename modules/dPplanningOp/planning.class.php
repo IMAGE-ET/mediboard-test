@@ -398,13 +398,8 @@ class COperation extends CMbObject {
   }
   
   function loadRefsFiles() {
-    $this->_ref_files = array();
-    if ($this->operation_id) {
-      $where["file_class"] = "= 'COperation'";
-      $where["file_object_id"] = "= '$this->operation_id'";
-      $this->_ref_files = new CFile();
-      $this->_ref_files = $this->_ref_files->loadList($where);
-    }
+    $this->_ref_files = new CFile();
+    $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
   }
   
   function loadRefsActesCCAM() {

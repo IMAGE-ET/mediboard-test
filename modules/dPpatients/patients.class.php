@@ -312,7 +312,13 @@ class CPatient extends CMbObject {
     $this->_ref_next_affectation->loadObject($where, $order);
   }
 
+  function loadRefFiles() {
+    $this->_ref_files = new CFile();
+    $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
+  }
+
   function loadRefsBack() {
+    $this->loadRefsFiles();
     $this->loadRefsConsultations();
     $this->loadRefsAntecedents();
     $this->loadRefsTraitements();
