@@ -26,7 +26,7 @@ class CPatient extends CMbObject {
 	var $patient_id = null;
 
   // DB Fields
-	var $nom = null;
+	var $nom              = null;
 	var $nom_jeune_fille  = null;
 	var $prenom           = null;
 	var $naissance        = null;
@@ -77,6 +77,7 @@ class CPatient extends CMbObject {
   var $_pays           = null;
 
   // Object References
+  var $_ref_files            = null;
   var $_ref_sejours          = null;
   var $_ref_consultations    = null;
   var $_ref_antecedents      = null;
