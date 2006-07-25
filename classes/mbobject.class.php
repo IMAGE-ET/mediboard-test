@@ -93,6 +93,10 @@ class CMbObject extends CDpObject {
       }
       $sql .= "\n)";
     }
+    $sql .= "\nORDER BY"
+    foreach($this->_seek as $keySeek => $spec) {
+      $sql .= "\n$keySeek";
+    }
     return db_loadObjectList($sql, $this);
   }
   
