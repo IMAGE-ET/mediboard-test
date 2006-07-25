@@ -63,6 +63,8 @@ class CFile extends CMbObject {
     $this->_sub_dir .= "/".intval($this->file_object_id / 1000);
 
     $this->_file_path = "$filesDir/$this->_sub_dir/$this->file_object_id/$this->file_real_filename";
+    
+    $this->_view = $this->file_name." (".$this->_file_size.")";
   }
   
   function delete() {
