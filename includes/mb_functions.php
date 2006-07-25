@@ -545,7 +545,7 @@ function mbConvertDecaBinary($number) {
 
 
   
-function getChildClasses($parent = "CMbObject") {
+function getChildClasses($parent = "CMbObject", $properties = null) {
   global $AppUI;
   // Require all dPmodules class
   foreach(glob("modules/dP*/*.class.php") as $fileName) {
@@ -555,6 +555,12 @@ function getChildClasses($parent = "CMbObject") {
   foreach($listClasses as $key => $class) {
     if(!is_subclass_of($class, $parent)) {
       unset($listClasses[$key]);
+    } else {
+      foreach($properties as $prop) {
+        if(!in_array($prop, get_object_vars($class))) {
+          unset($listClasses[$key]);
+        }
+      }
     }
   }
   sort($listClasses);
