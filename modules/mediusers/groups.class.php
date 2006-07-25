@@ -7,26 +7,28 @@
  *  @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
-require_once( $AppUI->getModuleClass('mediusers', 'functions') );
+require_once($AppUI->getSystemClass("mbobject"));
+require_once($AppUI->getModuleClass("mediusers", "functions"));
 
 /**
  * The CGroup class
  */
 class CGroups extends CMbObject {
   // DB Table key
-	var $group_id = NULL;	
+	var $group_id = null;	
 
   // DB Fields
-	var $text = NULL;
+	var $text = null;
 
   // Object References
   var $_ref_functions = null;
 
   function CGroups() {
-    $this->CMbObject( 'groups_mediboard', 'group_id' );
+    $this->CMbObject("groups_mediboard", "group_id");
 
     $this->_props["text"] = "str|notNull|confidential";
+    
+    $this->_seek["text"] = "like";
   }
   
   function updateFormFields () {
@@ -41,10 +43,10 @@ class CGroups extends CMbObject {
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      'label' => 'Fonctions', 
-      'name' => 'functions_mediboard', 
-      'idfield' => 'function_id', 
-      'joinfield' => 'group_id'
+      "label"     => "Fonctions", 
+      "name"      => "functions_mediboard", 
+      "idfield"   => "function_id", 
+      "joinfield" => "group_id"
     );
     
     return CDpObject::canDelete( $msg, $oid, $tables );

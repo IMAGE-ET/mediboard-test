@@ -7,15 +7,15 @@
 * @author Thomas Despoix
 */
 
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'listeChoix') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'aidesaisie') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
-require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
-require_once( $AppUI->getModuleClass('mediusers'));
-require_once( $AppUI->getModuleClass('mediusers', 'functions'));
-require_once( $AppUI->getSystemClass('smartydp'));
+require_once( $AppUI->getModuleClass("dPcompteRendu", "compteRendu") );
+require_once( $AppUI->getModuleClass("dPcompteRendu", "listeChoix") );
+require_once( $AppUI->getModuleClass("dPcompteRendu", "aidesaisie") );
+require_once( $AppUI->getModuleClass("dPplanningOp" , "planning") );
+require_once( $AppUI->getModuleClass("dPcabinet"    , "consultation") );
+require_once( $AppUI->getModuleClass("dPpatients"   , "patients") );
+require_once( $AppUI->getModuleClass("mediusers"    , "functions"));
+require_once( $AppUI->getModuleClass("mediusers"));
+require_once( $AppUI->getSystemClass("smartydp"));
 
 define("TMT_CONSULTATION"   , "consultation"   );
 define("TMT_HOSPITALISATION", "hospitalisation");
@@ -57,21 +57,21 @@ class CTemplateManager {
   
   function addProperty($field, $value = null) {
     $this->properties[$field] = array (
-      'field' => $field,
-      'value' => $value,
+      "field" => $field,
+      "value" => $value,
       // @todo : passer en regexp
-      //'fieldHTML' => $this->makeSpan("field", "[{$field}]"),
-      //'valueHTML' => $this->makeSpan("value", "{$value}"));
-      'fieldHTML' => htmlentities("[{$field}]"),
-      'valueHTML' => $value);
+      //"fieldHTML" => $this->makeSpan("field", "[{$field}]"),
+      //"valueHTML" => $this->makeSpan("value", "{$value}"));
+      "fieldHTML" => htmlentities("[{$field}]"),
+      "valueHTML" => $value);
   }
 
   function addList($name, $choice = null) {
     $this->lists[$name] = array (
-      'name' => $name,
+      "name" => $name,
       // @todo : passer en regexp
-      //'nameHTML' => $this->makeSpan("name", "[Liste - {$name}]"));
-      'nameHTML' => htmlentities("[Liste - {$name}]"));
+      //"nameHTML" => $this->makeSpan("name", "[Liste - {$name}]"));
+      "nameHTML" => htmlentities("[Liste - {$name}]"));
   } 
   
   function addHelper($name, $text) {
@@ -92,7 +92,7 @@ class CTemplateManager {
     } else {
     
       if (!$this->valueMode) {
-        $this->SetFields('hospitalisation', $template->chir_id);
+        $this->SetFields("hospitalisation", $template->chir_id);
       }
 
       $this->renderDocument($template->_source);
@@ -100,8 +100,8 @@ class CTemplateManager {
   }
   
   function initHTMLArea () {
-    // Don't use mbSetValue which uses $m'
-    $_SESSION['dPcompteRendu']['templateManager'] = $this;
+    // Don't use mbSetValue which uses $m
+    $_SESSION["dPcompteRendu"]["templateManager"] = $this;
    
     $smarty = new CSmartyDP(1);
     $smarty->template_dir = "modules/dPcompteRendu/templates/";
@@ -109,7 +109,7 @@ class CTemplateManager {
     $smarty->config_dir = "modules/dPcompteRendu/configs/";
     $smarty->cache_dir = "modules/dPcompteRendu/cache/";
     $smarty->assign("templateManager", $this);
-    $smarty->display('init_htmlarea.tpl');
+    $smarty->display("init_htmlarea.tpl");
 	}
   
   function setFields($modeleType) {
@@ -166,8 +166,8 @@ class CTemplateManager {
   function renderDocument($source) {
     
     foreach($this->properties as $property) {
-      $fields[] = $property['fieldHTML'];
-      $values[] = $property['valueHTML'];
+      $fields[] = $property["fieldHTML"];
+      $values[] = $property["valueHTML"];
     }
     $this->document = str_replace($fields, $values, $source);
   }

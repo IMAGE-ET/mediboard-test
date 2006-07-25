@@ -7,35 +7,37 @@
  *  @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once($AppUI->getModuleClass('mediusers', 'groups'));
-require_once($AppUI->getModuleClass('mediusers', 'mediusers'));
+require_once($AppUI->getModuleClass("mediusers", "groups"));
+require_once($AppUI->getModuleClass("mediusers", "mediusers"));
 
 /**
  * The CFunction Class
  */
 class CFunctions extends CMbObject {
   // DB Table key
-	var $function_id = NULL;
+	var $function_id = null;
 
   // DB Fields
-	var $text = NULL;
-	var $color = NULL;
+	var $text  = null;
+	var $color = null;
 
   // DB References
-	var $group_id = NULL;
+	var $group_id = null;
   
   // Object References
   var $_ref_group = null;
   var $_ref_users = null;
 
 	function CFunctions() {
-		$this->CMbObject('functions_mediboard', 'function_id');
+		$this->CMbObject("functions_mediboard", "function_id");
     
     $this->_props["text"] = "str|notNull|confidential";
     $this->_props["color"] = "str|length|6|notNull";
     $this->_props["group_id"] = "ref|notNull";
+    
+    $this->_seek["text"] = "like";
 	}
   
   function updateFormFields () {
@@ -50,17 +52,17 @@ class CFunctions extends CMbObject {
   
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      'label' => 'utilisateurs', 
-      'name' => 'users_mediboard', 
-      'idfield' => 'user_id', 
-      'joinfield' => 'function_id'
+      "label"     => "utilisateurs", 
+      "name"      => "users_mediboard", 
+      "idfield"   => "user_id", 
+      "joinfield" => "function_id"
     );
     
     $tables[] = array (
-      'label' => 'plages opératoires', 
-      'name' => 'plagesop', 
-      'idfield' => 'id', 
-      'joinfield' => 'id_spec'
+      "label"     => "plages opératoires", 
+      "name"      => "plagesop", 
+      "idfield"   => "id", 
+      "joinfield" => "id_spec"
     );
     
     return parent::canDelete( $msg, $oid, $tables );
@@ -102,7 +104,6 @@ class CFunctions extends CMbObject {
     } else {
       $specs = $basespecs;
     }
-
     return $specs;
   }
 }

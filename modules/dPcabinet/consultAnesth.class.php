@@ -23,42 +23,40 @@ class CConsultAnesth extends CMbObject {
 
   // DB References
   var $consultation_id = null;
-  var $operation_id = null;
+  var $operation_id    = null;
 
   // DB fields
-  var $poid = null;
-  var $taille = null;
-  var $groupe = null;
-  var $rhesus = null;
-  var $antecedents = null;
-  var $traitements = null;
-  var $tabac = null;
-  var $oenolisme = null;
-  var $transfusions = null;
-  var $tasys = null;
-  var $tadias = null;
-  
-  var $intubation = null;
-  var $biologie = null;
+  var $poid          = null;
+  var $taille        = null;
+  var $groupe        = null;
+  var $rhesus        = null;
+  var $antecedents   = null;
+  var $traitements   = null;
+  var $tabac         = null;
+  var $oenolisme     = null;
+  var $transfusions  = null;
+  var $tasys         = null;
+  var $tadias        = null;
+  var $intubation    = null;
+  var $biologie      = null;
   var $commande_sang = null;
-  var $ASA = null;
-  
-  var $mallampati = null;
-  var $bouche = null;
-  var $distThyro = null;
-  var $etatBucco = null;
-  var $conclusion = null;
-  var $position = null;
+  var $ASA           = null;
+  var $mallampati    = null;
+  var $bouche        = null;
+  var $distThyro     = null;
+  var $etatBucco     = null;
+  var $conclusion    = null;
+  var $position      = null;
 
   // Form fields
   var $_date_consult = null;
-  var $_date_op = null;
+  var $_date_op      = null;
 
   // Object References
-  var $_ref_consult = null;
+  var $_ref_consult            = null;
   var $_ref_last_consultanesth = null;
-  var $_ref_operation = null;
-  var $_ref_plageconsult = null;
+  var $_ref_operation          = null;
+  var $_ref_plageconsult       = null;
 
   function CConsultAnesth() {
     $this->CMbObject("consultation_anesth", "consultation_anesth_id");
@@ -89,8 +87,6 @@ class CConsultAnesth extends CMbObject {
     $this->_props["etatBucco"]       = "str";
     $this->_props["conclusion"]      = "str";
     $this->_props["position"]        = "enum|DD|DV|DL|GP|AS|TO";
-    
-    //
     
     $this->buildEnums();
   }

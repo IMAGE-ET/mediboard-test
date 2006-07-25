@@ -7,8 +7,8 @@
  *  @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
-require_once($AppUI->getModuleClass('dPhospi', 'chambre'));
+require_once($AppUI->getSystemClass("mbobject"));
+require_once($AppUI->getModuleClass("dPhospi", "chambre"));
 
 /**
  * Classe CService. 
@@ -27,10 +27,13 @@ class CService extends CMbObject {
   var $_ref_chambres = null;
 
 	function CService() {
-		$this->CMbObject( 'service', 'service_id' );
+		$this->CMbObject("service", "service_id");
     
-    $this->_props["nom"] = "str|notNull|confidential";
+    $this->_props["nom"]         = "str|notNull|confidential";
     $this->_props["description"] = "str|confidential";
+    
+    $this->_seek["nom"]         = "like";
+    $this->_seek["description"] = "like";
 	}
 
   function loadRefsBack() {
@@ -43,10 +46,10 @@ class CService extends CMbObject {
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      'label' => 'Chambres', 
-      'name' => 'chambre', 
-      'idfield' => 'chambre_id', 
-      'joinfield' => 'service_id'
+      "label"     => "Chambres", 
+      "name"      => "chambre", 
+      "idfield"   => "chambre_id", 
+      "joinfield" => "service_id"
     );
         
     return CDpObject::canDelete( $msg, $oid, $tables );

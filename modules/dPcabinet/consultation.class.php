@@ -30,54 +30,54 @@ class CConsultation extends CMbObject {
 
   // DB References
   var $plageconsult_id = null;
-  var $patient_id = null;
+  var $patient_id      = null;
 
   // DB fields
-  var $heure = null;
-  var $duree = null;
-  var $secteur1 = null;
-  var $secteur2 = null;
-  var $chrono = null;
-  var $annule = null;
-  var $paye = null;
+  var $heure         = null;
+  var $duree         = null;
+  var $secteur1      = null;
+  var $secteur2      = null;
+  var $chrono        = null;
+  var $annule        = null;
+  var $paye          = null;
   var $date_paiement = null;
-  var $motif = null;
-  var $rques = null;
-  var $examen = null;
-  var $traitement = null;
-  var $compte_rendu = null;
-  var $premiere = null;
-  var $tarif = null;
-  var $type_tarif = null;
-  var $arrivee = null;
+  var $motif         = null;
+  var $rques         = null;
+  var $examen        = null;
+  var $traitement    = null;
+  var $compte_rendu  = null;
+  var $premiere      = null;
+  var $tarif         = null;
+  var $type_tarif    = null;
+  var $arrivee       = null;
   
   // Document fields:  to be externalized
-  var $cr_valide = null;
+  var $cr_valide  = null;
   var $ordonnance = null;
-  var $or_valide = null;
-  var $courrier1 = null;
-  var $c1_valide = null;
-  var $courrier2 = null;
-  var $c2_valide = null;
+  var $or_valide  = null;
+  var $courrier1  = null;
+  var $c1_valide  = null;
+  var $courrier2  = null;
+  var $c2_valide  = null;
 
   // Form fields
-  var $_etat = null;
-  var $_hour = null;
-  var $_min = null;
+  var $_etat           = null;
+  var $_hour           = null;
+  var $_min            = null;
   var $_check_premiere = null; // CheckBox: must be present in all forms!
-  var $_somme = null;
-  var $_date = null; // updated at loadRefs()
-  
+  var $_somme          = null;
+  var $_date           = null; // updated at loadRefs()
 
   // Fwd References
-  var $_ref_patient = null;
+  var $_ref_patient      = null;
   var $_ref_plageconsult = null;
-  var $_ref_chir = null; //pseudo RefFwd, get that in plageConsult
+  var $_ref_chir         = null; //pseudo RefFwd, get that in plageConsult
+
   // Back References
-  var $_ref_files = null;
-  var $_ref_documents = null; // Pseudo backward references to documents
+  var $_ref_files          = null;
+  var $_ref_documents      = null; // Pseudo backward references to documents
   var $_ref_consult_anesth = null;
-  var $_ref_examaudio = null;
+  var $_ref_examaudio      = null;
 
   function CConsultation() {
     $this->CMbObject("consultation", "consultation_id");
@@ -107,6 +107,13 @@ class CConsultation extends CMbObject {
     );
     
     $this->_props =& $props;
+    
+    static $seek = array(
+      "motif"           => "like",
+      "remarques"       => "like",
+      "examen"          => "like",
+      "traitement"      => "like"
+    ); 
   }
   
   function updateFormFields() {

@@ -7,9 +7,9 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once($AppUI->getModuleClass('mediusers') );
+require_once($AppUI->getModuleClass("mediusers"));
 
 /**
  * The CParamsPaie Class
@@ -54,7 +54,7 @@ class CParamsPaie extends CMbObject {
   var $_ref_user = null;
 
   function CParamsPaie() {
-    $this->CMbObject('params_paie', 'params_paie_id');
+    $this->CMbObject("params_paie", "params_paie_id");
     
     $this->_props["user_id"]   = "ref|notNull";
     $this->_props["smic"]      = "currency|notNull";

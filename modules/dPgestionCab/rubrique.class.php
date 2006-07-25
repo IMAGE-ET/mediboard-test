@@ -7,9 +7,9 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once($AppUI->getModuleClass('dPgestionCab', 'gestionCab') );
+require_once($AppUI->getModuleClass("dPgestionCab", "gestionCab") );
 
 /**
  * The CRubrique Class
@@ -26,10 +26,12 @@ class CRubrique extends CMbObject {
   var $_ref_function = null;
 
   function CRubrique() {
-    $this->CMbObject('rubrique_gestioncab', 'rubrique_id');
+    $this->CMbObject("rubrique_gestioncab", "rubrique_id");
     
     $this->_props["function_id"] = "ref|notNull";
     $this->_props["nom"]         = "str|notNull";
+    
+    $this->_seek["nom"] = "like";
 
     $this->buildEnums();
   }

@@ -7,10 +7,10 @@
  *  @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
-require_once($AppUI->getModuleClass('dPhospi', 'lit'));
-require_once($AppUI->getModuleClass('dPplanningOp', 'planning'));
-require_once($AppUI->getModuleClass('dPplanningOp', 'sejour'));
+require_once($AppUI->getSystemClass("mbobject"));
+require_once($AppUI->getModuleClass("dPhospi"     , "lit"));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
+require_once($AppUI->getModuleClass("dPplanningOp", "sejour"));
 
 /**
  * Classe CAffectation. 
@@ -43,7 +43,7 @@ class CAffectation extends CMbObject {
   var $_ref_next = null;
 
 	function CAffectation() {
-		$this->CMbObject('affectation', 'affectation_id');
+		$this->CMbObject("affectation", "affectation_id");
     
     $this->_props["lit_id"]       = "ref|notNull";
     $this->_props["operation_id"] = "ref|notNull";

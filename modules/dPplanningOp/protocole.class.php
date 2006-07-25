@@ -18,26 +18,26 @@ class CProtocole extends CMbObject {
   var $chir_id = null; // Sejour / Operation
 
   // DB Fields Sejour
-  var $type = null;
-  var $DP = null;
+  var $type          = null;
+  var $DP            = null;
   var $convalescence = null;
-  var $rques_sejour = null; // Sejour->rques
-  var $pathologie = null;
-  var $septique = null;
+  var $rques_sejour  = null; // Sejour->rques
+  var $pathologie    = null;
+  var $septique      = null;
   
   // DB Fields Operation
-  var $codes_ccam = null;
-  var $libelle = null;
-  var $temp_operation = null;
-  var $examen = null;
-  var $materiel = null;
-  var $duree_hospi = null;
+  var $codes_ccam      = null;
+  var $libelle         = null;
+  var $temp_operation  = null;
+  var $examen          = null;
+  var $materiel        = null;
+  var $duree_hospi     = null;
   var $rques_operation = null; // Operation->rques
-  var $depassement = null;
+  var $depassement     = null;
     
   // Form fields
-  var $_hour_op = null;
-  var $_min_op = null;
+  var $_hour_op    = null;
+  var $_min_op     = null;
   var $_codes_ccam = array();
   
   // DB References
@@ -60,6 +60,9 @@ class CProtocole extends CMbObject {
     $this->_props["duree_hospi"]     = "notNull|num|min|0";
     $this->_props["rques_operation"] = "str|confidential";
     $this->_props["depassement"]     = "currency|confidential";
+
+    $this->_seek["libelle"]  = "like";
+    $this->_seek["materiel"] = "like";
   }
 
   function check() {    

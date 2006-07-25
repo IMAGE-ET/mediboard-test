@@ -7,8 +7,8 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
-require_once($AppUI->getModuleClass('dPcabinet', 'consultation'));
+require_once($AppUI->getSystemClass("mbobject"));
+require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
 
 $frequences = array(
   "125Hz",
@@ -84,9 +84,9 @@ class CExamAudio extends CMbObject {
     $this->CMbObject("examaudio", "examaudio_id");
 
     $this->_props["consultation_id"] = "ref|notNull";
-    $this->_props["remarques"] = "text";
+    $this->_props["remarques"]       = "text";
 
-    // Special nitialisation
+    // Special initialisations
     $this->gauche_aerien = "|||||||";
     $this->gauche_osseux = "|||||||";
     $this->gauche_conlat = "|||||||";

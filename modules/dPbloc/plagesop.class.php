@@ -21,36 +21,36 @@ class CPlageOp extends CMbObject {
   var $id = null;
   
   // DB References
-  var $chir_id = null;
+  var $chir_id   = null;
   var $anesth_id = null;
-  var $id_chir = null;
+  var $id_chir   = null;
   var $id_anesth = null;
-  var $id_spec = null;
-  var $id_salle = null;
+  var $id_spec   = null;
+  var $id_salle  = null;
 
   // DB fields
-  var $date = null;
+  var $date  = null;
   var $debut = null;
-  var $fin = null;
+  var $fin   = null;
     
   // Form Fields
-  var $_day = null;
-  var $_month = null;
-  var $_year = null;
-  var $_heuredeb = null;
+  var $_day       = null;
+  var $_month     = null;
+  var $_year      = null;
+  var $_heuredeb  = null;
   var $_minutedeb = null;
-  var $_heurefin = null;
+  var $_heurefin  = null;
   var $_minutefin = null;
   
   // Object References
-  var $_ref_chir = null;
-  var $_ref_anesth = null;
-  var $_ref_spec = null;
-  var $_ref_salle = null;
+  var $_ref_chir       = null;
+  var $_ref_anesth     = null;
+  var $_ref_spec       = null;
+  var $_ref_salle      = null;
   var $_ref_operations = null;
 
   function CPlageOp() {
-    $this->CMbObject( "plagesop", "id" );
+    $this->CMbObject("plagesop", "id");
 
     $this->_props["chir_id"]   = "ref";
     $this->_props["anesth_id"] = "ref";

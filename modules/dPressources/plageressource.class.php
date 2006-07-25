@@ -7,9 +7,9 @@
 * @author Romain Ollivier
 */
 
-require_once( $AppUI->getSystemClass ('mbobject' ) );
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once( $AppUI->getModuleClass('mediusers') );
+require_once($AppUI->getModuleClass("mediusers"));
 
 // Enum for Plageressource.state
 if(!defined("PR_FREE")) {
@@ -29,34 +29,36 @@ class CPlageressource extends CMbObject {
   var $prat_id = null;
 
   // DB fields
-  var $date = null;
-  var $debut = null;
-  var $fin = null;
-  var $tarif = null;
+  var $date    = null;
+  var $debut   = null;
+  var $fin     = null;
+  var $tarif   = null;
   var $libelle = null;
-  var $paye = null;
+  var $paye    = null;
 
   // Form fields
   var $_hour_deb = null;
-  var $_min_deb = null;
+  var $_min_deb  = null;
   var $_hour_fin = null;
-  var $_min_fin = null;
-  var $_state = null;
+  var $_min_fin  = null;
+  var $_state    = null;
 
   // Object References
-  var $_ref_prat = null;
+  var $_ref_prat     = null;
   var $_ref_patients = null;
 
   function CPlageressource() {
-    $this->CMbObject( 'plageressource', 'plageressource_id' );
+    $this->CMbObject("plageressource", "plageressource_id");
     
     $this->_props["prat_id"] = "ref";
-    $this->_props["date"] = "date|notNull";
-    $this->_props["debut"] = "time|notNull";
-    $this->_props["fin"] = "time|notNull";
-    $this->_props["tarif"] = "currency|notNull|confidential";
+    $this->_props["date"]    = "date|notNull";
+    $this->_props["debut"]   = "time|notNull";
+    $this->_props["fin"]     = "time|notNull";
+    $this->_props["tarif"]   = "currency|notNull|confidential";
     $this->_props["libelle"] = "str|confidential";
-    $this->_props["paye"] = "enum|0|1";
+    $this->_props["paye"]    = "enum|0|1";
+    
+    $this->_seek["libelle"] = "like";
   }
   
   function loadRefsFwd() {
@@ -140,13 +142,13 @@ class CPlageressource extends CMbObject {
     // Store old datas
     $prat_id = $this->prat_id;
     $libelle = $this->libelle;
-    $tarif = $this->tarif;
+    $tarif   = $this->tarif;
     
     // Store old form fields
     $_hour_deb = $this->_hour_deb;
-    $_min_deb = $this->_min_deb;
+    $_min_deb  = $this->_min_deb;
     $_hour_fin = $this->_hour_fin;
-    $_min_fin = $this->_min_fin;
+    $_min_fin  = $this->_min_fin;
 
     $this->date = mbDate("+7 DAYS", $this->date);
     $where["date"] = "= '$this->date'";
@@ -157,13 +159,13 @@ class CPlageressource extends CMbObject {
     }
 
     // Restore old fields
-    $this->prat_id = $prat_id;
-    $this->libelle = $libelle;
-    $this->tarif = $tarif;
+    $this->prat_id   = $prat_id;
+    $this->libelle   = $libelle;
+    $this->tarif     = $tarif;
     $this->_hour_deb = $_hour_deb;
-    $this->_min_deb = $_min_deb;
+    $this->_min_deb  = $_min_deb;
     $this->_hour_fin = $_hour_fin;
-    $this->_min_fin = $_min_fin;
+    $this->_min_fin  = $_min_fin;
     $this->updateDBFields();
   }    
 }

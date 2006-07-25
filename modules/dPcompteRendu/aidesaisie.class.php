@@ -7,9 +7,9 @@
 * @author Thomas Despoix
 */
 
-require_once( $AppUI->getSystemClass ('mbobject' ) );
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once( $AppUI->getModuleClass('mediusers') );
+require_once($AppUI->getModuleClass("mediusers"));
 
 class CAideSaisie extends CMbObject {
   // DB Table key
@@ -28,7 +28,7 @@ class CAideSaisie extends CMbObject {
   var $_ref_user = null;
 
   function CAideSaisie() {
-    $this->CMbObject( 'aide_saisie', 'aide_id' );
+    $this->CMbObject("aide_saisie", "aide_id");
 
     $this->_props["user_id"] = "ref|notNull";
     $this->_props["class"]  = "str|notNull";

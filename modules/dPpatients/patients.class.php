@@ -119,7 +119,8 @@ class CPatient extends CMbObject {
     
     static $seek = array(
       "nom"    => "likeBegin",
-      "prenom" => "likeBegin"
+      "prenom" => "likeBegin",
+      "ville"  => "like"
     );
     
     $this->_seek =& $seek;

@@ -29,6 +29,8 @@ class CFavoriCCAM extends CMbObject {
     
     $this->_props["favoris_user"] = "ref|notNull";
     $this->_props["favoris_code"] = "str|notNull";
+    
+    $this->_seek["favoris_code"] = "equal";
 	}
 
   function check() {

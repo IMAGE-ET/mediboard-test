@@ -12,11 +12,11 @@ global $utypes, $utypes_flip;
 require_once($AppUI->getSystemClass("mbobject"));
 
 require_once($AppUI->getModuleClass("admin"));
-require_once($AppUI->getModuleClass("mediusers", "functions"));
-require_once($AppUI->getModuleClass("mediusers", "discipline"));
+require_once($AppUI->getModuleClass("mediusers"    , "functions"));
+require_once($AppUI->getModuleClass("mediusers"    , "discipline"));
 require_once($AppUI->getModuleClass("dPcompteRendu", "pack"));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-require_once($AppUI->getModuleClass("dPplanningOp", "protocole"));
+require_once($AppUI->getModuleClass("dPplanningOp" , "planning"));
+require_once($AppUI->getModuleClass("dPplanningOp" , "protocole"));
 
 $utypes_flip = array_flip($utypes);
 
@@ -32,7 +32,7 @@ class CMediusers extends CMbObject {
   var $adeli  = null;
 
   // DB References
-	var $function_id = null;
+	var $function_id   = null;
   var $discipline_id = null;
 
   // dotProject user fields
@@ -48,13 +48,13 @@ class CMediusers extends CMbObject {
   var $_user_ville      = null;
 
   // Other fields
-  var $_view = null;
+  var $_view      = null;
   var $_shortview = null;
 
   // Object references
-  var $_ref_function = null;
+  var $_ref_function   = null;
   var $_ref_discipline = null;
-  var $_ref_packs = array();
+  var $_ref_packs      = array();
   var $_ref_protocoles = array();
 
 	function CMediusers() {
@@ -95,44 +95,44 @@ class CMediusers extends CMbObject {
   
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      "label" => "opération(s)", 
-      "name" => "operations", 
-      "idfield" => "operation_id", 
+      "label"     => "opération(s)", 
+      "name"      => "operations", 
+      "idfield"   => "operation_id", 
       "joinfield" => "chir_id"
     );
 
     $tables[] = array (
-      "label" => "acte(s) CCAM", 
-      "name" => "acte_ccam", 
-      "idfield" => "acte_id", 
+      "label"     => "acte(s) CCAM", 
+      "name"      => "acte_ccam", 
+      "idfield"   => "acte_id", 
       "joinfield" => "executant_id"
     );
 
     $tables[] = array (
-      "label" => "plage(s) de consultation", 
-      "name" => "plageconsult", 
-      "idfield" => "plageconsult_id", 
+      "label"     => "plage(s) de consultation", 
+      "name"      => "plageconsult", 
+      "idfield"   => "plageconsult_id", 
       "joinfield" => "chir_id"
     );
 
     $tables[] = array (
-      "label" => "plage(s) opératoire(s) (chirurgien)", 
-      "name" => "plagesop", 
-      "idfield" => "id", 
+      "label"     => "plage(s) opératoire(s) (chirurgien)", 
+      "name"      => "plagesop", 
+      "idfield"   => "id", 
       "joinfield" => "chir_id"
     );
 
     $tables[] = array (
-      "label" => "plage(s) opératoire(s) (anesthésiste)", 
-      "name" => "plagesop", 
-      "idfield" => "id", 
+      "label"     => "plage(s) opératoire(s) (anesthésiste)", 
+      "name"      => "plagesop", 
+      "idfield"   => "id", 
       "joinfield" => "anesth_id"
     );
 
     $tables[] = array (
-      "label" => "Pack(s) de documents", 
-      "name" => "pack", 
-      "idfield" => "pack_id", 
+      "label"     => "Pack(s) de documents", 
+      "name"      => "pack", 
+      "idfield"   => "pack_id", 
       "joinfield" => "chir_id"
     );
 

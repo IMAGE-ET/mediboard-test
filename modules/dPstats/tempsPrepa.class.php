@@ -18,10 +18,10 @@ class CTempsPrepa extends CMbObject {
   var $temps_prepa_id = null;
   
   // DB Fields
-  var $chir_id = null;
-  var $nb_prepa = null;
-  var $nb_plages = null;
-  var $duree_moy = null;
+  var $chir_id     = null;
+  var $nb_prepa    = null;
+  var $nb_plages   = null;
+  var $duree_moy   = null;
   var $duree_ecart = null;
   
   // Object References

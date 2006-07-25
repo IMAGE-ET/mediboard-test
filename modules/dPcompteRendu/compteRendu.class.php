@@ -7,12 +7,12 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass('mbobject' ));
+require_once($AppUI->getSystemClass("mbobject" ));
 
-require_once($AppUI->getModuleClass('mediusers'));
-require_once($AppUI->getModuleClass('mediusers', 'functions'));
-require_once($AppUI->getModuleClass('dPcabinet', 'consultation'));
-require_once($AppUI->getModuleClass('dPplanningOp', 'planning'));
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("mediusers", "functions"));
+require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
 
 $ECompteRenduType = array(
   "consultation", 
@@ -59,16 +59,16 @@ class CCompteRendu extends CMbObject {
   
   
   function loadModeles($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
-    if (!isset($where['object_id'])) {
-      $where['object_id'] = "IS NULL";
+    if (!isset($where["object_id"])) {
+      $where["object_id"] = "IS NULL";
     }
     
     return parent::loadList($where, $order, $limit, $group, $leftjoin);
   }
 
   function loadDocuments($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
-    if (!isset($where['object_id'])) {
-      $where['object_id'] = "IS NOT NULL";
+    if (!isset($where["object_id"])) {
+      $where["object_id"] = "IS NOT NULL";
     }
     
     return parent::loadList($where, $order, $limit, $group, $leftjoin);

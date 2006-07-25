@@ -7,7 +7,7 @@
  * @author Romain Ollivier
  */
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour') );
+require_once($AppUI->getModuleClass("dPplanningOp", "sejour"));
 
 class CGHM  extends CMbObject {
   // DB Table key
@@ -15,45 +15,45 @@ class CGHM  extends CMbObject {
   
   // DB fields
   var $operation_id = null; // A supprimer
-  var $sejour_id = null;
-  var $DR = null;   // Diagnostic relié
-  var $DASs = null; // Diagnostics associés significatifs sérialisés
-  var $DADs = null; // Diagnostics associés documentaires sérialisés
+  var $sejour_id    = null;
+  var $DR           = null; // Diagnostic relié
+  var $DASs         = null; // Diagnostics associés significatifs sérialisés
+  var $DADs         = null; // Diagnostics associés documentaires sérialisés
   
   // Database id (found in config.php)
   var $_dbghm = null;
   
   // Patient
-  var $_age = null;
+  var $_age  = null;
   var $_sexe = null;
   
   // Actes
   var $_actes = null;
   
   // Hospi
-  var $_type_hospi = null;
-  var $_duree = null;
-  var $_seances = null;
-  var $_motif = null;
+  var $_type_hospi  = null;
+  var $_duree       = null;
+  var $_seances     = null;
+  var $_motif       = null;
   var $_destination = null;
   
   // Diagnostics
-  var $_DP = null;   // Diagnostic principal
+  var $_DP   = null;    // Diagnostic principal
   var $_DASs = array(); // Diagnostics associés significatifs
   var $_DADs = array(); // Diagnostics associés documentaires
   
   // Results
-  var $_CM = null;
-  var $_CM_nom = null;
-  var $_GHM = null;
-  var $_GHM_nom = null;
-  var $_GHM_groupe = null;
-  var $_GHS = null;
+  var $_CM          = null;
+  var $_CM_nom      = null;
+  var $_GHM         = null;
+  var $_GHM_nom     = null;
+  var $_GHM_groupe  = null;
+  var $_GHS         = null;
   var $_borne_basse = null;
   var $_borne_haute = null;
-  var $_tarif_2006 = null;
-  var $_EXH = null;
-  var $_chemin = null;
+  var $_tarif_2006  = null;
+  var $_EXH         = null;
+  var $_chemin      = null;
   
   // Forward references
   var $_ref_sejour = null;
@@ -63,11 +63,11 @@ class CGHM  extends CMbObject {
 
   // Constructeur
   function CGHM() {
-    $this->CMbObject('ghm', 'ghm_id');
+    $this->CMbObject("ghm", "ghm_id");
     global $AppUI;
     
     // Connection à la base
-    $this->_dbghm = $AppUI->cfg['baseGHS'];
+    $this->_dbghm = $AppUI->cfg["baseGHS"];
     do_connect($this->_dbghm);
     
     // Initialisation des variables

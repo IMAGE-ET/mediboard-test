@@ -7,9 +7,9 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once($AppUI->getModuleClass('dPgestionCab', 'gestionCab') );
+require_once($AppUI->getModuleClass("dPgestionCab", "gestionCab") );
 
 /**
  * The CModePaiement Class
@@ -26,10 +26,12 @@ class CModePaiement extends CMbObject {
   var $_ref_function = null;
 
   function CModePaiement() {
-    $this->CMbObject('mode_paiement', 'mode_paiement_id');
+    $this->CMbObject("mode_paiement", "mode_paiement_id");
     
     $this->_props["function_id"] = "ref|notNull";
     $this->_props["nom"]         = "str|notNull";
+    
+    $this->_seek["nom"] = "like";
 
     $this->buildEnums();
   }

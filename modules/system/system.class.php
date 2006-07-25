@@ -4,9 +4,9 @@
 * Preferences class
 */
 class CPreferences {
-	var $pref_user = NULL;
-	var $pref_name = NULL;
-	var $pref_value = NULL;
+	var $pref_user = null;
+	var $pref_name = null;
+	var $pref_value = null;
 
 	function CPreferences() {
 		// empty constructor
@@ -17,13 +17,13 @@ class CPreferences {
 			return "CPreferences::bind failed";
 		} else {
 			bindHashToObject( $hash, $this );
-			return NULL;
+			return null;
 		}
 	}
 
 	function check() {
 		// TODO MORE
-		return NULL; // object is ok
+		return null; // object is ok
 	}
 
 	function store() {
@@ -34,10 +34,10 @@ class CPreferences {
 		if (($msg = $this->delete())) {
 			return "CPreference::store-delete failed<br />$msg";
 		}
-		if (!($ret = db_insertObject( 'user_preferences', $this, 'pref_user' ))) {
+		if (!($ret = db_insertObject("user_preferences", $this, "pref_user"))) {
 			return "CPreference::store failed <br />" . db_error();
 		} else {
-			return NULL;
+			return null;
 		}
 	}
 
@@ -46,7 +46,7 @@ class CPreferences {
 		if (!db_exec( $sql )) {
 			return db_error();
 		} else {
-			return NULL;
+			return null;
 		}
 	}
 }
@@ -69,7 +69,7 @@ class CModule extends CDpObject {
 	var $mod_description=null;
 
 	function CModule() {
-		$this->CDpObject( 'modules', 'mod_id' );
+		$this->CDpObject("modules", "mod_id");
 	}
   
   function reorder() {
@@ -101,17 +101,17 @@ class CModule extends CDpObject {
 			return db_error();
 		} else {
       $this->reorder();
-			return NULL;
+			return null;
 		}
 	}
 
 	function move( $dirn ) {
 		$temp = $this->mod_ui_order;
-		if ($dirn == 'moveup') {
+		if ($dirn == "moveup") {
 			$temp--;
 			$sql = "UPDATE modules SET mod_ui_order = (mod_ui_order+1) WHERE mod_ui_order = $temp";
 			db_exec( $sql );
-		} else if ($dirn == 'movedn') {
+		} else if ($dirn == "movedn") {
 			$temp++;
 			$sql = "UPDATE modules SET mod_ui_order = (mod_ui_order-1) WHERE mod_ui_order = $temp";
 			db_exec( $sql );

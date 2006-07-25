@@ -7,8 +7,8 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
-require_once($AppUI->getModuleClass('dPgestionCab', 'paramsPaie') );
+require_once($AppUI->getSystemClass("mbobject"));
+require_once($AppUI->getModuleClass("dPgestionCab", "paramsPaie") );
 
 /**
  * The CFichePaie Class
@@ -63,7 +63,7 @@ class CFichePaie extends CMbObject {
   var $_ref_params_paie = null;
 
   function CFichePaie() {
-    $this->CMbObject('fiche_paie', 'fiche_paie_id');
+    $this->CMbObject("fiche_paie", "fiche_paie_id");
     
     $this->_props["params_paie_id"] = "ref|notNull";
     $this->_props["debut"]          = "date|notNull";

@@ -25,14 +25,16 @@ class CFilesCategory extends CMbObject {
     $this->_props["files_category_id"] = "ref";
     $this->_props["nom"]               = "str|maxLength|50|notNull";
     $this->_props["class"]             = "str|maxLength|30";
+    
+    $this->_seek["nom"] = "like";
   }
 	
   
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      "label" => "fichier(s)", 
-      "name" => "files_mediboard", 
-      "idfield" => "files_category_id", 
+      "label"     => "fichier(s)", 
+      "name"      => "files_mediboard", 
+      "idfield"   => "files_category_id", 
       "joinfield" => "files_category_id"
     );
     

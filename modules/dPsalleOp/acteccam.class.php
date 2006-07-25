@@ -24,13 +24,13 @@ class CActeCCAM extends CMbObject {
   var $executant_id = null;
 
   // DB Fields
-  var $code_acte = null;
-  var $code_activite  = null;
-  var $code_phase = null;
-  var $execution = null;
-  var $modificateurs = null;
+  var $code_acte           = null;
+  var $code_activite       = null;
+  var $code_phase          = null;
+  var $execution           = null;
+  var $modificateurs       = null;
   var $montant_depassement = null;
-  var $commentaire = null;  
+  var $commentaire         = null;  
 
   // Form fields
   var $_modificateurs = array();
@@ -43,16 +43,17 @@ class CActeCCAM extends CMbObject {
 	function CActeCCAM() {
 		$this->CMbObject( "acte_ccam", "acte_id" );
 
-    $this->_props["code_acte"] = "notNull|code|ccam";
-    $this->_props["code_activite"] = "notNull|num|maxLength|2";
-    $this->_props["code_phase"] = "notNull|num|maxLength|2";
-    $this->_props["execution"] = "notNull|dateTime";
-    $this->_props["modificateurs"] = "str|maxLength|4";
+    $this->_props["code_acte"]           = "notNull|code|ccam";
+    $this->_props["code_activite"]       = "notNull|num|maxLength|2";
+    $this->_props["code_phase"]          = "notNull|num|maxLength|2";
+    $this->_props["execution"]           = "notNull|dateTime";
+    $this->_props["modificateurs"]       = "str|maxLength|4";
     $this->_props["montant_depassement"] = "currency";
-    $this->_props["commentaire"] = "text";
-
-    $this->_props["operation_id"] = "notNull|ref";
-    $this->_props["executant_id"] = "notNull|ref";
+    $this->_props["commentaire"]         = "text";
+    $this->_props["operation_id"]        = "notNull|ref";
+    $this->_props["executant_id"]        = "notNull|ref";
+    
+    $this->_seek["code_acte"] = "equal";
 	}
   
   function check() {

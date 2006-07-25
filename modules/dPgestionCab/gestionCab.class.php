@@ -7,11 +7,11 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once($AppUI->getModuleClass('dPgestionCab', 'modePaiement') );
-require_once($AppUI->getModuleClass('dPgestionCab', 'rubrique') );
-require_once($AppUI->getModuleClass('mediusers', 'functions') );
+require_once($AppUI->getModuleClass("dPgestionCab", "modePaiement") );
+require_once($AppUI->getModuleClass("dPgestionCab", "rubrique") );
+require_once($AppUI->getModuleClass("mediusers"   , "functions") );
 
 /**
  * The CGestionCab Class
@@ -21,22 +21,22 @@ class CGestionCab extends CMbObject {
   var $gestioncab_id = null;
 
   // DB Fields
-  var $function_id = null;
-  var $libelle = null;
-  var $date = null;
-  var $rubrique_id = null;
-  var $montant = null;
+  var $function_id      = null;
+  var $libelle          = null;
+  var $date             = null;
+  var $rubrique_id      = null;
+  var $montant          = null;
   var $mode_paiement_id = null;
-  var $num_facture = null;
-  var $rques = null;
+  var $num_facture      = null;
+  var $rques            = null;
 
   // Object References
-  var $_ref_function = null;
-  var $_ref_rubrique = null;
+  var $_ref_function      = null;
+  var $_ref_rubrique      = null;
   var $_ref_mode_paiement = null;
 
   function CGestionCab() {
-    $this->CMbObject('gestioncab', 'gestioncab_id');
+    $this->CMbObject("gestioncab", "gestioncab_id");
     
     $this->_props["function_id"]      = "ref|notNull";
     $this->_props["libelle"]          = "str|notNull";
@@ -46,6 +46,8 @@ class CGestionCab extends CMbObject {
     $this->_props["mode_paiement_id"] = "ref|notNull";
     $this->_props["num_facture"]      = "num|notNull";
     $this->_props["rques"]            = "text";
+    
+    $this->_seek["libelle"] = "like";
 
     $this->buildEnums();
   }

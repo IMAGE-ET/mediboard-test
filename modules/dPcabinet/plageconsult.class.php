@@ -7,10 +7,10 @@
 * @author Romain Ollivier
 */
 
-require_once( $AppUI->getSystemClass ('mbobject' ) );
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
 
 class CPlageconsult extends CMbObject {
   // DB Table key
@@ -20,27 +20,27 @@ class CPlageconsult extends CMbObject {
   var $chir_id = null;
 
   // DB fields
-  var $date = null;
-  var $freq = null;
-  var $debut = null;
-  var $fin = null;
+  var $date    = null;
+  var $freq    = null;
+  var $debut   = null;
+  var $fin     = null;
   var $libelle = null;
 
   // Form fields
   var $_hour_deb = null;
-  var $_min_deb = null;
+  var $_min_deb  = null;
   var $_hour_fin = null;
-  var $_min_fin = null;
-  var $_freq = null;
+  var $_min_fin  = null;
+  var $_freq     = null;
   var $_affected = null;
-  var $_total = null;
+  var $_total    = null;
 
   // Object References
-  var $_ref_chir = null;
+  var $_ref_chir          = null;
   var $_ref_consultations = null;
 
   function CPlageconsult() {
-    $this->CMbObject( 'plageconsult', 'plageconsult_id' );
+    $this->CMbObject("plageconsult", "plageconsult_id");
     
     $this->_props["chir_id"] = "ref|notNull";
     $this->_props["date"]    = "date|notNull";
@@ -89,10 +89,10 @@ class CPlageconsult extends CMbObject {
   
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      'label' => 'consultations', 
-      'name' => 'consultation',
-      'idfield' => 'consultation_id', 
-      'joinfield' => 'plageconsult_id'
+      "label"     => "consultations", 
+      "name"      => "consultation",
+      "idfield"   => "consultation_id", 
+      "joinfield" => "plageconsult_id"
     );
     return parent::canDelete( $msg, $oid, $tables );
   }
@@ -102,8 +102,8 @@ class CPlageconsult extends CMbObject {
  */
   function hasCollisions() {
     // Get all other plages the same day
-    $where["chir_id"] = "= '$this->chir_id'";
-    $where["date"] = "= '$this->date'";
+    $where["chir_id"]         = "= '$this->chir_id'";
+    $where["date"]            = "= '$this->date'";
     $where["plageconsult_id"] = "!= '$this->plageconsult_id'";
     $plages = new CPlageconsult;
     $plages = $plages->loadList($where);
@@ -112,9 +112,9 @@ class CPlageconsult extends CMbObject {
     $msg = null;
     
     foreach ($plages as $plage) {
-      if (($plage->debut < $this->fin and $plage->fin > $this->fin)
-        or($plage->debut < $this->debut and $plage->fin > $this->debut)
-        or($plage->debut >= $this->debut and $plage->fin <= $this->fin)) {
+      if (($plage->debut <  $this->fin   and $plage->fin >  $this->fin  )
+        or($plage->debut <  $this->debut and $plage->fin >  $this->debut)
+        or($plage->debut >= $this->debut and $plage->fin <= $this->fin  )) {
         $msg .= "Collision avec la plage du $this->date, de $plage->debut à $plage->fin.";
       }
     }
@@ -157,10 +157,10 @@ class CPlageconsult extends CMbObject {
     $this->_hour_fin = intval(substr($this->fin, 0, 2));
     $this->_min_fin  = intval(substr($this->fin, 3, 2));
     $this->_freq     = substr($this->freq, 3, 2);
-    $tmpHfin          = substr($this->fin, 0, 2);
-    $tmpMfin          = substr($this->fin, 3, 2);
-    $tmpHdebut        = substr($this->debut, 0, 2);
-    $tmpMdebut        = substr($this->debut, 3, 2);
+    $tmpHfin         = substr($this->fin, 0, 2);
+    $tmpMfin         = substr($this->fin, 3, 2);
+    $tmpHdebut       = substr($this->debut, 0, 2);
+    $tmpMdebut       = substr($this->debut, 3, 2);
     $tmpfreq         = 60 / substr($this->freq, 3, 2);
     $this->_total    = (($tmpHfin + $tmpMfin/60) - ($tmpHdebut + $tmpMdebut/60)) * $tmpfreq;
   }
@@ -185,11 +185,11 @@ class CPlageconsult extends CMbObject {
   function becomeNext() {
     // Store form fields
     $_hour_deb = $this->_hour_deb;
-    $_min_deb = $this->_min_deb;
+    $_min_deb  = $this->_min_deb;
     $_hour_fin = $this->_hour_fin;
-    $_min_fin = $this->_min_fin;
-    $_freq = $this->_freq;
-    $libelle = $this->libelle;
+    $_min_fin  = $this->_min_fin;
+    $_freq     = $this->_freq;
+    $libelle   = $this->libelle;
 
     $this->date = mbDate("+7 DAYS", $this->date);
     $where["date"] = "= '$this->date'";
@@ -201,11 +201,11 @@ class CPlageconsult extends CMbObject {
 
     // Restore form fields
     $this->_hour_deb = $_hour_deb;
-    $this->_min_deb = $_min_deb;
+    $this->_min_deb  = $_min_deb;
     $this->_hour_fin = $_hour_fin;
-    $this->_min_fin = $_min_fin;
-    $this->_freq = $_freq;
-    $this->libelle = $libelle;
+    $this->_min_fin  = $_min_fin;
+    $this->_freq     = $_freq;
+    $this->libelle   = $libelle;
     $this->updateDBFields();
   }    
 }

@@ -7,21 +7,23 @@
 * @author Romain Ollivier
 */
 
-require_once( $AppUI->getSystemClass ('mbobject' ) );
+require_once($AppUI->getSystemClass("mbobject"));
 
 /**
  * The dPcim10 Class
  */
 class CFavoricim10 extends CMbObject {
-	var $favoris_id = NULL;
-	var $favoris_code = NULL;
-	var $favoris_user = NULL;
+	var $favoris_id   = null;
+	var $favoris_code = null;
+	var $favoris_user = null;
 
 	function CFavoricim10() {
-		$this->CMbObject( 'cim10favoris', 'favoris_id' );
+		$this->CMbObject("cim10favoris", "favoris_id");
 
     $this->_props["favoris_code"] = "str|notNull";
     $this->_props["favoris_user"] = "ref|notNull";
+    
+    $this->_seek["favoris_code"] = "equal";
 	}
 
 	function delete() {
@@ -52,8 +54,7 @@ class CFavoricim10 extends CMbObject {
 		}
 		else {
 			return "Favoris déja existant";
-		}
-		
+    }
 	}
 }
 ?>

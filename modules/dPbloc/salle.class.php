@@ -8,7 +8,7 @@
  */
 
 
-require_once( $AppUI->getSystemClass('mbobject'));
+require_once( $AppUI->getSystemClass("mbobject"));
 
 /**
  * The CGroups class
@@ -22,18 +22,20 @@ class CSalle extends CMbObject {
   var $stats = null;
 
 	function CSalle() {
-		$this->CMbObject( 'sallesbloc', 'id' );
+		$this->CMbObject("sallesbloc", "id");
 
     $this->_props["nom"]   = "str|notNull|confidential";
     $this->_props["stats"] = "enum|0|1|notNull";
+    
+    $this->_seek["nom"] = "like";
 	}
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      'label' => 'plages opératoires', 
-      'name' => 'plagesop', 
-      'idfield' => 'id', 
-      'joinfield' => 'id_salle'
+      "label"     => "plages opératoires", 
+      "name"      => "plagesop", 
+      "idfield"   => "id", 
+      "joinfield" => "id_salle"
     );
     
     return CDpObject::canDelete( $msg, $oid, $tables );

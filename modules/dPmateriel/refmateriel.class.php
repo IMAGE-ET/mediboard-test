@@ -7,7 +7,7 @@
  *  @author Sébastien Fillonneau
  */
 
-require_once( $AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getSystemClass("mbobject"));
 require_once($AppUI->getModuleClass("dPmateriel", "fournisseur"));
 require_once($AppUI->getModuleClass("dPmateriel", "materiel"));
 
@@ -32,7 +32,7 @@ class CRefMateriel extends CMbObject {
   var $_prix_unitaire = null;
   
   function CRefMateriel() {
-    $this->CMbObject( 'ref_materiel', 'reference_id' );
+    $this->CMbObject("ref_materiel", "reference_id");
     
     $this->_props["fournisseur_id"] = "ref|notNull";
     $this->_props["materiel_id"] = "ref|notNull";

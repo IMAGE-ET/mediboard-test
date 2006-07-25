@@ -7,9 +7,9 @@
 * @author Romain Ollivier
 */
 
-require_once( $AppUI->getSystemClass ('mbobject' ) );
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once($AppUI->getModuleClass('dPpatients', 'patients'));
+require_once($AppUI->getModuleClass("dPpatients", "patients"));
 
 class CAntecedent extends CMbObject {
   // DB Table key
@@ -19,15 +19,15 @@ class CAntecedent extends CMbObject {
   var $patient_id = null;
 
   // DB fields
-  var $type = null;
-  var $date = null;
+  var $type  = null;
+  var $date  = null;
   var $rques = null;
   
   // Object References
   var $_ref_patient = null;
 
   function CAntecedent() {
-    $this->CMbObject( 'antecedent', 'antecedent_id' );
+    $this->CMbObject("antecedent", "antecedent_id");
 
     $this->_props["patient_id"] = "ref|notNull";
     $this->_props["type"]       = "enum|alle|trans|obst|chir|med|fam|notNull";

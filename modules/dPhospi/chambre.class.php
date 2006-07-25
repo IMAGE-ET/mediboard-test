@@ -7,10 +7,10 @@
  *  @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
-require_once($AppUI->getModuleClass('dPhospi', 'lit'));
-require_once($AppUI->getModuleClass('dPhospi', 'service'));
-require_once($AppUI->getModuleClass('dPplanningOp', 'pathologie'));
+require_once($AppUI->getSystemClass("mbobject"));
+require_once($AppUI->getModuleClass("dPhospi"     , "lit"));
+require_once($AppUI->getModuleClass("dPhospi"     , "service"));
+require_once($AppUI->getModuleClass("dPplanningOp", "pathologie"));
 
 /**
  * Classe CChambre. 
@@ -29,12 +29,12 @@ class CChambre extends CMbObject {
   var $caracteristiques = null; // côté rue, fenêtre, lit accompagnant, ...
 
   // Form Fields
-  var $_nb_lits_dispo = null;
-  var $_overbooking = null;
-  var $_ecart_age = null;
-  var $_genres_melanges = null;
-  var $_chambre_seule = null;
-  var $_chambre_double = null;
+  var $_nb_lits_dispo        = null;
+  var $_overbooking          = null;
+  var $_ecart_age            = null;
+  var $_genres_melanges      = null;
+  var $_chambre_seule        = null;
+  var $_chambre_double       = null;
   var $_conflits_chirurgiens = null;
   var $_conflits_pathologies = null;
 
@@ -43,11 +43,13 @@ class CChambre extends CMbObject {
   var $_ref_lits = null;
 
 	function CChambre() {
-		$this->CMbObject('chambre', 'chambre_id');
+		$this->CMbObject("chambre", "chambre_id");
     
-    $this->_props["service_id"] = "ref|notNull";
-    $this->_props["nom"] = "str|notNull|confidential";
+    $this->_props["service_id"]       = "ref|notNull";
+    $this->_props["nom"]              = "str|notNull|confidential";
     $this->_props["caracteristiques"] = "str|confidential";
+    
+    $this->_seek["nom"]        = "like";
 	}
 
   function loadRefsFwd() {
@@ -68,10 +70,10 @@ class CChambre extends CMbObject {
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      'label' => 'Lits', 
-      'name' => 'lit', 
-      'idfield' => 'lit_id', 
-      'joinfield' => 'chambre_id'
+      "label"     => "Lits", 
+      "name"      => "lit", 
+      "idfield"   => "lit_id", 
+      "joinfield" => "chambre_id"
     );
         
     return CDpObject::canDelete($msg, $oid, $tables);

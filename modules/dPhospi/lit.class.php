@@ -7,10 +7,10 @@
  *  @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once($AppUI->getModuleClass('dPhospi', 'chambre'));
-require_once($AppUI->getModuleClass('dPhospi', 'affectation'));
+require_once($AppUI->getModuleClass("dPhospi", "chambre"));
+require_once($AppUI->getModuleClass("dPhospi", "affectation"));
 
 /**
  * Classe CLit. 
@@ -30,16 +30,18 @@ class CLit extends CMbObject {
   var $_overbooking = null;
 
   // Object references
-  var $_ref_chambre = null;
+  var $_ref_chambre      = null;
   var $_ref_affectations = null;
-  var $_ref_last_dispo = null;
-  var $_ref_next_dispo = null;
+  var $_ref_last_dispo   = null;
+  var $_ref_next_dispo   = null;
 
 	function CLit() {
-		$this->CMbObject('lit', 'lit_id');
+		$this->CMbObject("lit", "lit_id");
     
     $this->_props["chambre_id"] = "ref|notNull";
     $this->_props["nom"]        = "str|notNull|confidential";
+    
+    $this->_seek["nom"]        = "like";
 	}
 
   function loadAffectations($date) {
@@ -78,10 +80,10 @@ class CLit extends CMbObject {
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      'label' => 'Affectations', 
-      'name' => 'affectation', 
-      'idfield' => 'affectation_id', 
-      'joinfield' => 'lit_id'
+      "label"     => "Affectations", 
+      "name"      => "affectation", 
+      "idfield"   => "affectation_id", 
+      "joinfield" => "lit_id"
     );
         
     return CDpObject::canDelete($msg, $oid, $tables);

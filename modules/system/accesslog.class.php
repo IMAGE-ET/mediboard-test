@@ -7,18 +7,18 @@
  * @author Thomas Despoix
  */
 
-require_once($AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getSystemClass("mbobject"));
 
 class CAccessLog extends CMbObject {
   var $accesslog_id = null;
   
   // DB Fields
-  var $module = null;
-  var $action = null;
-  var $period = null;
-  var $hits = null;
+  var $module   = null;
+  var $action   = null;
+  var $period   = null;
+  var $hits     = null;
   var $duration = null;
-  var $request = null;
+  var $request  = null;
   
   // Form fields
   var $_average_duration = null;

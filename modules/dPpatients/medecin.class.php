@@ -7,9 +7,9 @@
 * @author Romain Ollivier
 */
 
-require_once( $AppUI->getSystemClass ('mbobject' ) );
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
+require_once($AppUI->getModuleClass("dPpatients", "patients"));
 
 /**
  * The CMedecin Class
@@ -19,17 +19,17 @@ class CMedecin extends CMbObject {
 	var $medecin_id = null;
 
   // DB Fields
-	var $nom = null;
-  var $prenom = null;
-  var $nom_jeunefille = null;
-	var $adresse = null;
-	var $ville = null;
-	var $cp = null;
-	var $tel = null;
-	var $fax = null;
-	var $email = null;
-  var $disciplines = null;
-  var $orientations = null;
+	var $nom             = null;
+  var $prenom          = null;
+  var $nom_jeunefille  = null;
+	var $adresse         = null;
+	var $ville           = null;
+	var $cp              = null;
+	var $tel             = null;
+	var $fax             = null;
+	var $email           = null;
+  var $disciplines     = null;
+  var $orientations    = null;
   var $complementaires = null;
 
   // Form fields
@@ -48,20 +48,25 @@ class CMedecin extends CMbObject {
   var $_ref_patients = null;
 
 	function CMedecin() {
-		$this->CMbObject( 'medecin', 'medecin_id' );
+		$this->CMbObject("medecin", "medecin_id");
     
-    $this->_props["nom"] = "str|notNull|confidential";
-    $this->_props["prenom"] = "str|confidential";
-    $this->_props["nom_jeunefille"] = "str|confidential";
-    $this->_props["adresse"] = "str|confidential";
-    $this->_props["ville"] = "str|confidential";
-    $this->_props["cp"] = "num|length|5|confidential";
-    $this->_props["tel"] = "num|length|10|confidential";
-    $this->_props["fax"] = "num|length|10|confidential";
-    $this->_props["email"] = "str|confidential";
-    $this->_props["disciplines"] = "str|confidential";
-    $this->_props["orientations"] = "str|confidential";
+    $this->_props["nom"]             = "str|notNull|confidential";
+    $this->_props["prenom"]          = "str|confidential";
+    $this->_props["nom_jeunefille"]  = "str|confidential";
+    $this->_props["adresse"]         = "str|confidential";
+    $this->_props["ville"]           = "str|confidential";
+    $this->_props["cp"]              = "num|length|5|confidential";
+    $this->_props["tel"]             = "num|length|10|confidential";
+    $this->_props["fax"]             = "num|length|10|confidential";
+    $this->_props["email"]           = "str|confidential";
+    $this->_props["disciplines"]     = "str|confidential";
+    $this->_props["orientations"]    = "str|confidential";
     $this->_props["complementaires"] = "str|confidential";
+    
+    $this->_seek["nom"]         = "likeBegin";
+    $this->_seek["prenom"]      = "likeBegin";
+    $this->_seek["ville"]       = "like";
+    $this->_seek["disciplines"] = "like";
 	}
   
   function updateFormFields() {
@@ -116,10 +121,10 @@ class CMedecin extends CMbObject {
 	
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      'label' => 'patient(s)', 
-      'name' => 'patients', 
-      'idfield' => 'patient_id', 
-      'joinfield' => 'medecin_traitant'
+      "label"     => "patient(s)", 
+      "name"      => "patients", 
+      "idfield"   => "patient_id", 
+      "joinfield" => "medecin_traitant"
     );
     
     return parent::canDelete( $msg, $oid, $tables );

@@ -21,11 +21,11 @@ require_once($AppUI->getModuleClass("dPsalleOp"   , "acteccam"     ));
 
 // @todo: Put the following in $config_dist;
 $dPconfig["dPplanningOp"]["operation"] = array (
-  "duree_deb" => "0",
-  "duree_fin" => "10",
+  "duree_deb"        => "0",
+  "duree_fin"        => "10",
   "hour_urgence_deb" => "0",
   "hour_urgence_fin" => "23",
-  "min_intervalle" => "15"
+  "min_intervalle"   => "15"
 );
 
 class COperation extends CMbObject {
@@ -90,8 +90,8 @@ class COperation extends CMbObject {
   // DB References
   var $_ref_chir           = null;
   var $_ref_plageop        = null;
-    var $_ref_salle        = null;
-    var $_ref_anesth       = null;
+  var $_ref_salle          = null;
+  var $_ref_anesth         = null;
   var $_ref_sejour         = null;
   var $_ref_consult_anesth = null;
   var $_ref_files          = array();
@@ -149,6 +149,9 @@ class COperation extends CMbObject {
     $this->_props["rank"]           = "num";
     $this->_props["depassement"]    = "currency|confidential";
     $this->_props["annulee"]        = "enum|0|1";
+    
+    $this->_seek["libelle"]    = "like";
+    $this->_seek["materiel"]   = "like";
     
 //    $this->_props["pat_id"]        = "ref";
 //    $this->_props["CCAM_code"]     = "code|ccam";
@@ -209,16 +212,16 @@ class COperation extends CMbObject {
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      "label" => "acte(s) CCAM", 
-      "name" => "acte_ccam", 
-      "idfield" => "acte_id", 
+      "label"     => "acte(s) CCAM", 
+      "name"      => "acte_ccam", 
+      "idfield"   => "acte_id", 
       "joinfield" => "operation_id"
     );
 
     $tables[] = array (
-      "label" => "affectation(s) d'hospitalisation", 
-      "name" => "affectation", 
-      "idfield" => "affectation_id", 
+      "label"     => "affectation(s) d'hospitalisation", 
+      "name"      => "affectation", 
+      "idfield"   => "affectation_id", 
       "joinfield" => "operation_id"
     );
 

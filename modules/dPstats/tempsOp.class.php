@@ -18,14 +18,14 @@ class CTempsOp extends CMbObject {
   var $temps_op_id = null;
   
   // DB Fields
-  var $chir_id = null;
-  var $ccam = null;
+  var $chir_id         = null;
+  var $ccam            = null;
   var $nb_intervention = null;
-  var $estimation = null;
-  var $occup_moy = null;
-  var $occup_ecart = null;
-  var $duree_moy = null;
-  var $duree_ecart = null;
+  var $estimation      = null;
+  var $occup_moy       = null;
+  var $occup_ecart     = null;
+  var $duree_moy       = null;
+  var $duree_ecart     = null;
   
   // Object References
   var $_ref_praticien = null;
@@ -78,8 +78,6 @@ class CTempsOp extends CMbObject {
     } else {
       $time = 0;
     }
-    
-    
     return $time;
   }
 }

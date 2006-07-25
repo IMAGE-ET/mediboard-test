@@ -16,8 +16,8 @@ require_once($AppUI->getModuleClass("dPhospi"     , "affectation"));
 
 // @todo: Put the following in $config_dist;
 $dPconfig["dPplanningOp"]["sejour"] = array (
-  "heure_deb" => "0",
-  "heure_fin" => "23",
+  "heure_deb"      => "0",
+  "heure_fin"      => "23",
   "min_intervalle" => "15"
 );
 
@@ -30,13 +30,13 @@ class CSejour extends CMbObject {
   var $sejour_id = null;
   
   // DB Réference
-  var $patient_id = null; // remplace $op->pat_id
+  var $patient_id   = null; // remplace $op->pat_id
   var $praticien_id = null; // clone $op->chir_id
   
   // DB Fields
-  var $type = null; // remplace $op->type_adm
-  var $modalite = null;
-  var $annule = null; // complète $op->annule
+  var $type          = null; // remplace $op->type_adm
+  var $modalite      = null;
+  var $annule        = null; // complète $op->annule
   var $chambre_seule = null; // remplace $op->chambre
   
   var $entree_prevue = null;
@@ -48,24 +48,22 @@ class CSejour extends CMbObject {
   var $saisi_SHS = null; // remplace $op->saisie
   var $modif_SHS = null; // remplace $op->modifiee
 
-  var $DP = null; // remplace $operation->CIM10_code
-  var $pathologie = null; // remplace $operation->pathologie
-  var $septique = null; // remplace $operation->septique
+  var $DP            = null; // remplace $operation->CIM10_code
+  var $pathologie    = null; // remplace $operation->pathologie
+  var $septique      = null; // remplace $operation->septique
   var $convalescence = null; // remplace $operation->convalescence
   
   var $rques = null;
   
   // Form Fields
-  var $_duree_prevue = null;
-  
+  var $_duree_prevue       = null;
   var $_date_entree_prevue = null;
   var $_date_sortie_prevue = null;
   var $_hour_entree_prevue = null;
   var $_hour_sortie_prevue = null;
-  var $_min_entree_prevue = null;
-  var $_min_sortie_prevue = null;
-
-  var $_venue_SHS_guess = null;
+  var $_min_entree_prevue  = null;
+  var $_min_sortie_prevue  = null;
+  var $_venue_SHS_guess    = null;
 
   // Object References  
   var $_ref_patient = null;
@@ -81,28 +79,23 @@ class CSejour extends CMbObject {
 		$this->CMbObject("sejour", "sejour_id");
     
     $this->_props["patient_id"]    = "ref|notNull";
-    $this->_props["praticien_id"]    = "ref|notNull";
-    
-    $this->_props["type"] = "enum|comp|ambu|exte";
-    $this->_props["modalite"] = "enum|office|libre|tiers";
-    $this->_props["annule"] = "enum|0|1";
+    $this->_props["praticien_id"]  = "ref|notNull";
+    $this->_props["type"]          = "enum|comp|ambu|exte";
+    $this->_props["modalite"]      = "enum|office|libre|tiers";
+    $this->_props["annule"]        = "enum|0|1";
     $this->_props["chambre_seule"] = "enum|o|n";
-
     $this->_props["entree_prevue"] = "dateTime|notNull";
     $this->_props["sortie_prevue"] = "dateTime|moreEquals|entree_prevue|notNull";
     $this->_props["entree_reelle"] = "dateTime";
     $this->_props["sortie_reelle"] = "dateTime";
-    
-    $this->_props["venue_SHS"] = "num|length|8|confidential";
-    $this->_props["saisi_SHS"] = "enum|o|n";
-    $this->_props["modif_SHS"] = "enum|0|1";
-
-    $this->_props["DP"] = "code|cim10";
-    $this->_props["pathologie"] = "str|length|3";
-    $this->_props["septique"] = "enum|0|1";
+    $this->_props["venue_SHS"]     = "num|length|8|confidential";
+    $this->_props["saisi_SHS"]     = "enum|o|n";
+    $this->_props["modif_SHS"]     = "enum|0|1";
+    $this->_props["DP"]            = "code|cim10";
+    $this->_props["pathologie"]    = "str|length|3";
+    $this->_props["septique"]      = "enum|0|1";
     $this->_props["convalescence"] = "str|confidential";
-
-    $this->_props["rques"] = "text";
+    $this->_props["rques"]         = "text";
 	}
 
   function check() {
@@ -118,9 +111,9 @@ class CSejour extends CMbObject {
   
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      "label" => "opérations", 
-      "name" => "operations", 
-      "idfield" => "operation_id", 
+      "label"     => "opérations", 
+      "name"      => "operations", 
+      "idfield"   => "operation_id", 
       "joinfield" => "sejour_id"
     );
     

@@ -7,7 +7,7 @@
  *  @author Sébastien Fillonneau
  */
 
-require_once( $AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getSystemClass("mbobject"));
 require_once($AppUI->getModuleClass("dPmateriel", "materiel"));
 
 /**
@@ -15,16 +15,18 @@ require_once($AppUI->getModuleClass("dPmateriel", "materiel"));
  */
 class CCategory extends CMbObject {
   // DB Table key
-  var $category_id = null;	
+  var $category_id   = null;	
   var $category_name = null;
   
   // Referencies
   var $_ref_materiel = null;
   
   function CCategory() {
-    $this->CMbObject( 'materiel_category', 'category_id' );
+    $this->CMbObject("materiel_category", "category_id");
 
     $this->_props["category_name"] = "str|maxLength|50|notNull";
+    
+    $this->_seek["category_name"] = "like";
   }
 	
   function loadRefsBack(){
@@ -36,10 +38,10 @@ class CCategory extends CMbObject {
   
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      'label' => 'matériel(s)', 
-      'name' => 'materiel', 
-      'idfield' => 'materiel_id', 
-      'joinfield' => 'category_id'
+      "label"     => "matériel(s)", 
+      "name"      => "materiel", 
+      "idfield"   => "materiel_id", 
+      "joinfield" => "category_id"
     );
     
   return CDpObject::canDelete( $msg, $oid, $tables );	

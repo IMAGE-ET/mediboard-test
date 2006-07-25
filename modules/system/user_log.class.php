@@ -7,8 +7,8 @@
 * @author Romain Ollivier
 */
 
-require_once( $AppUI->getSystemClass ('mbobject' ) );
-require_once( $AppUI->getModuleClass ('admin' ) );
+require_once($AppUI->getSystemClass("mbobject"));
+require_once($AppUI->getModuleClass("admin"));
 
 global $AppUI;
 
@@ -20,18 +20,18 @@ class CUserLog extends CMbObject {
   var $user_log_id = null;
 
   // DB Fields
-  var $user_id = null;
-  var $object_id = null;
+  var $user_id      = null;
+  var $object_id    = null;
   var $object_class = null;
-  var $type = null;
-  var $date = null;
+  var $type         = null;
+  var $date         = null;
 
   // Object References
   var $_ref_user = null;
   var $_ref_object = null;
 
   function CUserLog() {
-    $this->CMbObject( 'user_log', 'user_log_id' );
+    $this->CMbObject("user_log", "user_log_id");
     
     $this->_props["user_id"]      = "ref|notNull";
     $this->_props["object_id"]    = "ref|notNull";

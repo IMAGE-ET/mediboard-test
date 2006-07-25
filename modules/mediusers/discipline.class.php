@@ -26,7 +26,10 @@ class CDiscipline extends CMbObject {
 
   function CDiscipline() {
     $this->CMbObject("discipline", "discipline_id");
+
     $this->_props["text"] = "str|notNull";
+    
+    $this->_seek["text"] = "like";
   }
   
   function loadUsedDisciplines($where = array(), $order = null) {
@@ -50,9 +53,9 @@ class CDiscipline extends CMbObject {
   
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      "label" => "utilisateurs", 
-      "name" => "users_mediboard", 
-      "idfield" => "user_id", 
+      "label"     => "utilisateurs", 
+      "name"      => "users_mediboard", 
+      "idfield"   => "user_id", 
       "joinfield" => "discipline_id"
     );
     

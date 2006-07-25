@@ -7,37 +7,37 @@
 * @author Romain Ollivier
 */
 
-require_once( $AppUI->getSystemClass ('mbobject' ) );
+require_once($AppUI->getSystemClass("mbobject"));
 
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('mediusers', 'functions'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("mediusers", "functions"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 
 class CListeChoix extends CMbObject {
   // DB Table key
   var $liste_choix_id = null;
 
   // DB References
-  var $chir_id = null;     // not null when associated to a user
+  var $chir_id     = null; // not null when associated to a user
   var $function_id = null; // not null when associated to a function
 
   // DB fields
-  var $nom = null;
-  var $valeurs = null;
+  var $nom             = null;
+  var $valeurs         = null;
   var $compte_rendu_id = null;
   
   // Form fields
-  var $_valeurs;
-  var $_new;
-  var $_del;
+  var $_valeurs = null;
+  var $_new     = null;
+  var $_del     = null;
   
   // Referenced objects
-  var $_ref_chir = null;
+  var $_ref_chir     = null;
   var $_ref_function = null;
-  var $_ref_modele = null;
+  var $_ref_modele   = null;
 
   function CListeChoix() {
-    $this->CMbObject( 'liste_choix', 'liste_choix_id' );
+    $this->CMbObject("liste_choix", "liste_choix_id");
 
     $this->_props["chir_id"]         = "ref";
     $this->_props["function_id"]     = "ref";
@@ -66,7 +66,7 @@ class CListeChoix extends CMbObject {
   }
   
   function updateFormFields() {
-    if($this->valeurs != '')
+    if($this->valeurs != "")
       $this->_valeurs = explode("|", $this->valeurs);
     else
       $this->_valeurs = array();

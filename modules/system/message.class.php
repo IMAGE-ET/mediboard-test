@@ -7,13 +7,13 @@
  *  @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass('mbobject'));
+require_once($AppUI->getSystemClass("mbobject"));
 
 $mp_status = array(
-  "all" => "Tous les messages",
-  "past" => "Déjà publiés",
+  "all"     => "Tous les messages",
+  "past"    => "Déjà publiés",
   "present" => "En cours de publication",
-  "future" => "Publications à venir",
+  "future"  => "Publications à venir",
 );
 
 /**
@@ -25,16 +25,16 @@ class CMessage extends CMbObject {
 	var $message_id = null;	
   
   // DB Fields
-  var $deb = null;
-  var $fin = null;
+  var $deb   = null;
+  var $fin   = null;
   var $titre = null;
   var $corps = null;
   
 	function CMessage() {
-		$this->CMbObject('message', 'message_id');
+		$this->CMbObject("message", "message_id");
     
-    $this->_props["deb"] = "dateTime|notNull";
-    $this->_props["fin"] = "dateTime|notNull";
+    $this->_props["deb"]   = "dateTime|notNull";
+    $this->_props["fin"]   = "dateTime|notNull";
     $this->_props["titre"] = "str|maxLength|40|notNull";
     $this->_props["corps"] = "text";
 	}
