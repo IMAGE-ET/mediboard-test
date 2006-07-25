@@ -278,11 +278,11 @@ function pageMain() {
         <td class="button" colspan="5">
           {{if $patient->patient_id}}
             <button type="submit" class="submit">Valider</button>
-            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le patient',objName:'{{$patient->_view|escape:javascript}}'})">
-              Supprimer
-            </button>
             <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
               Imprimer
+            </button>
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le patient',objName:'{{$patient->_view|escape:javascript}}'})">
+              Supprimer
             </button>
           {{else}}
             <button tabindex="32" type="submit" class="submit">Créer</button>
