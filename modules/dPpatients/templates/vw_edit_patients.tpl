@@ -195,7 +195,7 @@ function pageMain() {
           <input type="hidden" name="medecin_traitant" title="{{$patient->_props.medecin_traitant}}" value="{{$patient->medecin_traitant}}" />
         </th>
         <td class="readonly">
-          <input type="text" name="_medecin_traitant_name" size="30" value="Dr. {{$patient->_ref_medecin_traitant->_view}}" readonly="readonly" />
+          <input type="text" name="_medecin_traitant_name" size="30" value="Dr. {{$patient->_ref_medecin_traitant->_view}}" ondblclick="popMed('_traitant')" readonly="readonly" />
           <button class="cancel notext" type="button" onclick="delMed('_traitant')"></button>
         </td>
         <td class="button"><button class="search" tabindex="26" type="button" onclick="popMed('_traitant')">choisir un médecin</button></td>
@@ -212,7 +212,7 @@ function pageMain() {
           <input type="hidden" name="medecin1" value="{{$patient->_ref_medecin1->medecin_id}}" title="{{$patient->_props.medecin1}}" />
         </th>
         <td class="readonly">
-          <input type="text" name="_medecin1_name" size="30" value="Dr. {{$patient->_ref_medecin1->_view}}" readonly="readonly" />
+          <input type="text" name="_medecin1_name" size="30" value="Dr. {{$patient->_ref_medecin1->_view}}" ondblclick="popMed('1')" readonly="readonly" />
           <button class="cancel notext" type="button" onclick="delMed('1')"></button>
         </td>
         <td class="button"><button class="search" tabindex="28" type="button" onclick="popMed('1')">choisir un médecin</button></td>
@@ -229,7 +229,7 @@ function pageMain() {
           <label for="medecin2" title="Choisir un second médecin correspondant">Médecin correspondant 2</label>
         </th>
         <td class="readonly">
-          <input type="text" name="_medecin2_name" size="30" value="{{if ($patient->_ref_medecin2)}}Dr. {{$patient->_ref_medecin2->_view}}{{/if}}" readonly="readonly" />
+          <input type="text" name="_medecin2_name" size="30" value="{{if ($patient->_ref_medecin2)}}Dr. {{$patient->_ref_medecin2->_view}}{{/if}}" ondblclick="popMed('2')" readonly="readonly" />
           <button class="cancel notext" type="button" onclick="delMed('2')"></button>
         </td>
         <td class="button"><button class="search" tabindex="29" type="button" onclick="popMed('2')">choisir un médecin</button></td>
@@ -249,7 +249,7 @@ function pageMain() {
           <label for="medecin3" title="Choisir un troisième médecin correspondant">Médecin correspondant 3</label>
         </th>
         <td class="readonly">
-          <input type="text" name="_medecin3_name" size="30" value="{{if ($patient->_ref_medecin3)}}Dr. {{$patient->_ref_medecin3->_view}}{{/if}}" readonly="readonly" />
+          <input type="text" name="_medecin3_name" size="30" value="{{if ($patient->_ref_medecin3)}}Dr. {{$patient->_ref_medecin3->_view}}{{/if}}" ondblclick="popMed('3')" readonly="readonly" />
           <button class="cancel notext" type="button" onclick="delMed('3')"></button>
         </td>
         <td class="button"><button class="search" tabindex="30" type="button" onclick="popMed('3')">choisir un médecin</button></td>

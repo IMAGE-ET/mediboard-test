@@ -54,7 +54,7 @@ function printDocument(doc_id) {
           <td class="readonly">
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="patSel" value="{{$patSel->patient_id}}" />
-            <input type="text" size="40" readonly="readonly" name="patNom" value="{{$patSel->_view}}" />
+            <input type="text" size="40" readonly="readonly" ondblclick="popPat()" name="patNom" value="{{$patSel->_view}}" />
           </td>
           <td class="button">
             <button class="search" type="button" onclick="popPat()">chercher</button>

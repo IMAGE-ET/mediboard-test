@@ -74,7 +74,7 @@
     <label for="patient_id" title="Patient concerné. Obligatoire">Patient</label>
   </th>
   <td class="readonly">
-  	<input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" readonly="readonly" />
+  	<input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" ondblclick="popPat()" readonly="readonly" />
   </td>
   <td class="button">
   	<button type="button" class="search" onclick="popPat()">Choisir un patient</button>

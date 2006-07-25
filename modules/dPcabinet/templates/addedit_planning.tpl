@@ -45,6 +45,13 @@ function setPat( key, val ) {
   }
 }
 
+function ClearRDV(){
+  var f = document.editFrm;
+  f.plageconsult_id.value = 0;
+  f._date.value = "";
+  f.heure.value = "";
+}
+
 function popRDV() {
   var oForm = document.editFrm;
   var url = new Url;
@@ -105,7 +112,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
             <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
           </th>
           <td colspan="2">
-            <select name="chir_id" title="{{$consult->_props.patient_id}}">
+            <select name="chir_id" title="{{$consult->_props.patient_id}}" onChange="ClearRDV()">
               <option value="">&mdash; Choisir un praticien</option>
               {{foreach from=$listPraticiens item=curr_praticien}}
               <option value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -121,7 +128,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
             <input type="hidden" title="{{$consult->_props.patient_id}}" name="patient_id" value="{{$pat->patient_id}}" />
             <label for="patient_id" title="Patient pour la consultation">Patient</label>
           </th>
-          <td class="readonly"><input type="text" name="_pat_name" size="30" value="{{$pat->_view}}" readonly="readonly" /></td>
+          <td class="readonly"><input type="text" name="_pat_name" size="30" value="{{$pat->_view}}" ondblclick="popPat()" readonly="readonly" /></td>
           <td class="button"><button class="search" type="button" onclick="popPat()">Rechercher un patient</button></td>
         </tr>
         
@@ -157,7 +164,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
         <tr>
           <th><label for="plageconsult_id" title="Date du rendez-vous de consultation">Date</label></th>
           <td class="readonly">
-            <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" readonly="readonly" />
+            <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="popRDV()" readonly="readonly" />
             <input type="hidden" name="plageconsult_id" title="{{$consult->_props.plageconsult_id}}" value="{{$consult->plageconsult_id}}" ondblclick="popRDV()" />
           </td>
         </tr>
