@@ -31,16 +31,19 @@
   <?php mbLoadScript("lib/rico/rico.js"); ?>
 </head>
 
+<?php $dialog = dPgetParam( $_GET, 'dialog'); ?>
+
 <body onload="main()">
 
 <script type="text/javascript">
 function popChgPwd() {
-  window.open( './index.php?m=admin&a=chpwd&dialog=1', 'chpwd', 'top=250,left=250,width=350, height=220, scollbars=false' );
+  var url = new Url;
+  url.setModuleAction("admin", "chpwd");
+  url.popup(400, 300, "ChangePassword");
 }
 </script>
 
 <?php 
-	$dialog = dPgetParam( $_GET, 'dialog');
 	if (!$dialog) {
 		// top navigation menu
 		$nav = $AppUI->getMenuModules();
@@ -83,8 +86,8 @@ function popChgPwd() {
           <?php
             echo "| ".mbPortalLink( $m, "Aide" )." | ";
           ?>
-          <a href='#' onclick='popChgPwd();return false'>Changez votre mot de passe</a> |
-          <a href="./index.php?logout=-1"><?php echo $AppUI->_('Logout');?></a> |
+          <a href="javascript:popChgPwd();">Changez votre mot de passe</a> |
+          <a href="?logout=-1"><?php echo $AppUI->_('Logout'); ?></a> |
         </td>
       </tr>
       <tr>
@@ -111,7 +114,13 @@ function popChgPwd() {
 	</td>
 </tr>
 </table>
-<?php } // (!$dialog) ?>
+
+<?php } else { /* (!$dialog) */ ?>
+<div id="systemMsg" style="display: block;">
+<?php echo $AppUI->getMsg(); ?>
+</div>
+<?php } ?>
+
 <table id="main" class="<?php echo $m ?>">
 <tr>
   <td>

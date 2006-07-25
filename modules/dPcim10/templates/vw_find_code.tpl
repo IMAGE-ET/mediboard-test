@@ -1,7 +1,19 @@
-<form action="index.php" target="_self" name="selectLang" method="get" >
+{{if $dialog}}
+{{assign var="action" value="dialog=1&amp;a"}}
+{{else}}
+{{assign var="action" value="tab"}}
+{{/if}}
+
+<form action="?" name="selectLang" method="get" >
+
+{{if $dialog}}
+<input type="hidden" name="a" value="{{$a}}" />
+{{else}}
+<input type="hidden" name="tab" value="{{$tab}}" />
+{{/if}}
 
 <input type="hidden" name="m" value="dPcim10" />
-<input type="hidden" name="tab" value="vw_find_code" />
+<input type="hidden" name="dialog" value="{{$dialog}}" />
 <input type="hidden" name="keys" value="{{$keys}}" />
 
 <table class="form">
@@ -25,10 +37,16 @@
 
 </form>
 
-<form action="index.php" name="selection" method="get" onsubmit="return checkForm(this)">
+<form action="?" name="selection" method="get" onsubmit="return checkForm(this)">
+
+{{if $dialog}}
+<input type="hidden" name="a" value="{{$a}}" />
+{{else}}
+<input type="hidden" name="tab" value="{{$tab}}" />
+{{/if}}
 
 <input type="hidden" name="m" value="{{$m}}" />
-<input type="hidden" name="tab" value="vw_find_code" />
+<input type="hidden" name="dialog" value="{{$dialog}}" />
 
 <table class="form">
   <tr>
@@ -62,9 +80,10 @@
   {{/if}}
     <td>
       <strong>
-        <a href="index.php?m={{$m}}&amp;tab=vw_full_code&amp;code={{$curr_master.code}}">{{$curr_master.code}}</a>
+        <a href="?m={{$m}}&amp;{{$action}}=vw_full_code&amp;code={{$curr_master.code}}">{{$curr_master.code}}</a>
       </strong>
-      <br />{{$curr_master.text}}
+      <br />
+      {{$curr_master.text}}
     </td>
   {{if ($curr_key+1) is div by 4 or ($curr_key+1) == $master|@count}}
   </tr>

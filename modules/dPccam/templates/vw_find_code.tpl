@@ -1,7 +1,19 @@
-<form action="index.php" target="_self" name="selection" method="get" >
+{{if $dialog}}
+{{assign var="action" value="dialog=1&amp;a"}}
+{{else}}
+{{assign var="action" value="tab"}}
+{{/if}}
+
+<form  name="selection" action="?" method="get" >
+
+{{if $dialog}}
+<input type="hidden" name="a" value="{{$a}}" />
+{{else}}
+<input type="hidden" name="tab" value="{{$tab}}" />
+{{/if}}
 
 <input type="hidden" name="m" value="{{$m}}" />
-<input type="hidden" name="tab" value="{{$tab}}" />
+<input type="hidden" name="dialog" value="{{$dialog}}" />
 
 <table class="form">
   <tr>
@@ -16,7 +28,9 @@
       <select tabindex="3" name="selacces" onchange="this.form.submit()">
         <option value="">&mdash; Choisir une voie d'accès</option>
         {{foreach from=$acces item=curr_acces}}
-        <option value="{{$curr_acces.code}}" {{if $curr_acces.code == $selacces}} selected="selected" {{/if}}>{{$curr_acces.texte|escape}}</option>
+        <option value="{{$curr_acces.code}}" {{if $curr_acces.code == $selacces}} selected="selected" {{/if}}>
+          {{$curr_acces.texte|escape|lower}}
+        </option>
         {{/foreach}}
       </select>
     </td>
@@ -30,7 +44,9 @@
       <select tabindex="4" name="seltopo1" onchange="this.form.submit()">
         <option value="">&mdash; Choisir un appareil</option>
         {{foreach from=$topo1 item=curr_topo1}}
-        <option value="{{$curr_topo1.code}}" {{if $curr_topo1.code == $seltopo1}} selected="selected" {{/if}}>{{$curr_topo1.texte|escape}}</option>
+        <option value="{{$curr_topo1.code}}" {{if $curr_topo1.code == $seltopo1}} selected="selected" {{/if}}>
+          {{$curr_topo1.texte|escape|lower}}
+        </option>
         {{/foreach}}
       </select>
     </td>
@@ -38,7 +54,7 @@
 
   <tr>
     <td class="button" colspan="2">
-      <button class="search" tabindex="7" type="submit">rechercher</button>
+      <button class="search" tabindex="7" type="submit">Rechercher</button>
     </td>
     <th><label for="seltopo2" title="Système concerné par le code CCAM">Système</label></th>
     <td>
@@ -52,6 +68,7 @@
   </tr>
 
 </table>
+
 </form>
 
 <table class="findCode">
@@ -59,9 +76,9 @@
   <tr>
     <th colspan="4">
       {{if $numcodes == 100}}
-      Plus de {{$numcodes}} résultats trouvés, seuls les 100 premiers sont affichés:
+      Plus de {{$numcodes}} résultats trouvés, seuls les 100 premiers sont affichés :
       {{else}}
-      {{$numcodes}} résultats trouvés:
+      {{$numcodes}} résultats trouvés :
       {{/if}}
     </th>
   </tr>
@@ -71,7 +88,12 @@
   <tr>
   {{/if}}
     <td>
-      <strong><a href="index.php?m={{$m}}&amp;tab=vw_full_code&amp;codeacte={{$curr_code.code}}">{{$curr_code.code}}</a></strong><br />
+      <strong>
+        <a href="?m={{$m}}&amp;{{$action}}=vw_full_code&amp;codeacte={{$curr_code.code}}">
+          {{$curr_code.code}}
+        </a>
+      </strong>
+      <br />
       {{$curr_code.texte}}
     </td>
   {{if ($curr_key+1) is div by 4 or ($curr_key+1) == $codes|@count}}

@@ -20,7 +20,7 @@ require_once($AppUI->getModuleClass("dPcim10", "codecim10"));
 
 $lang = mbGetValueFromGetOrSession("lang", LANG_FR);
 
-//Recherche des codes favoris
+// Recherche des codes favoris
 
 $favoris = new CFavoricim10();
 $where = array();

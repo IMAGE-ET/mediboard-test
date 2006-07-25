@@ -14,6 +14,7 @@ $do = new CDoObjectAddEdit("CFavoricim10", "favoris_id");
 $do->createMsg = "Favori créé";
 $do->modifyMsg = "Favori modifié";
 $do->deleteMsg = "Favori supprimé";
+$do->redirect = null;
 $do->doIt();
 
 ?>

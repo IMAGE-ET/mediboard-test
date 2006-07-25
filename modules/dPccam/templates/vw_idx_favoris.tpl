@@ -9,8 +9,13 @@
   <tr>
   {{/if}}
     <td>
-      <strong><a href="index.php?m={{$m}}&amp;tab=vw_full_code&amp;codeacte={{$curr_code->code}}">{{$curr_code->code}}</a></strong><br />
-      {{$curr_code->libelleLong}}<br />
+      <strong>
+        <a href="index.php?m={{$m}}&amp;tab=vw_full_code&amp;codeacte={{$curr_code->code}}">{{$curr_code->code}}</a>
+      </strong>
+      <br />
+
+      {{$curr_code->libelleLong}}
+      <br />
       <form name="delFavoris" action="./index.php?m={{$m}}" method="post">
       <input type="hidden" name="dosql" value="do_favoris_aed" />
       <input type="hidden" name="del" value="1" />

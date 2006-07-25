@@ -1,3 +1,19 @@
+{{if $dialog}}
+{{assign var="action" value="dialog=1&amp;a"}}
+{{else}}
+{{assign var="action" value="tab"}}
+{{/if}}
+
+
+<script type="text/javascript">
+  
+function selectCode(code) {
+  window.opener.setCode(code, "cim10");
+  window.close();
+}
+
+</script>
+
 <table class="fullCode">
   <tr>
     <th colspan="2">
@@ -23,16 +39,23 @@
   
   <tr>
     <td class="leftPane">
-      <form action="index.php" target="_self" name="selection" method="get" onsubmit="return checkForm(this)">
-      <input type="hidden" name="m" value="{{$m}}" />
+      <form action="?" name="selection" method="get" onsubmit="return checkForm(this)">
+      
+      {{if $dialog}}
+      <input type="hidden" name="a" value="{{$a}}" />
+      {{else}}
       <input type="hidden" name="tab" value="{{$tab}}" />
+      {{/if}}
+
+      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="dialog" value="{{$dialog}}" />
 
       <table class="form">
         <tr>
           <th><label for="code" title="Code total ou partiel de l'acte">Code de l'acte</label></th>
           <td>
             <input tabindex="1" type="text" title="str" name="code" value="{{$cim10->code}}" />
-            <input tabindex="2" type="submit" value="afficher" />
+            <button tabindex="2" class="search" type="submit">Afficher</button>
           </td>
         </tr>
       </table>
@@ -40,9 +63,9 @@
       </form>
     </td>
      
-    {{if $canEdit}}
     <td class="rightPane">
-      <form name="addFavoris" action="?m={{$m}}" method="post">
+    {{if $canEdit}}
+      <form name="addFavoris" action="?m={{$m}}&amp;{{$action}}={{$a}}" method="post">
       
       <input type="hidden" name="dosql" value="do_favoris_aed" />
       <input type="hidden" name="del" value="0" />
@@ -53,8 +76,14 @@
       </button>
       
       </form>
-    </td>
     {{/if}}
+ 
+    {{if $dialog}}
+    <button class="tick" type="button" onclick="selectCode('{{$cim10->code}}')">
+      Sélectionner ce code
+    </button>
+    {{/if}}
+    </td>
   </tr>
 
   {{if $cim10->_isInfo}}
@@ -77,7 +106,7 @@
           Exclusions:
           <ul>
             {{foreach from=$cim10->_exclude item=curr_exclude}}
-            <li><a href="index.php?m={{$m}}&amp;t{{$tab}}&amp;code={{$curr_exclude->code}}"><strong>{{$curr_exclude->code}}</strong></a>: {{$curr_exclude->libelle}}</li>
+            <li><a href="?m={{$m}}&amp;{{$action}}=vw_full_code&amp;code={{$curr_exclude->code}}"><strong>{{$curr_exclude->code}}</strong></a>: {{$curr_exclude->libelle}}</li>
             {{/foreach}}
           </ul>
         </li>
@@ -134,7 +163,7 @@
       <ul>
         {{foreach from=$cim10->_levelsSup item=curr_level}}
         {{if $curr_level->sid != 0}}
-        <li><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;code={{$curr_level->code}}"><strong>{{$curr_level->code}}</strong></a>: {{$curr_level->libelle}}</li>
+        <li><a href="index.php?m={{$m}}&amp;{{$action}}=vw_full_code&amp;code={{$curr_level->code}}"><strong>{{$curr_level->code}}</strong></a>: {{$curr_level->libelle}}</li>
         {{/if}}
         {{/foreach}}
       </ul>
@@ -146,7 +175,7 @@
       <ul>
         {{foreach from=$cim10->_levelsInf item=curr_level}}
         {{if $curr_level->sid != 0}}
-        <li><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;code={{$curr_level->code}}"><strong>{{$curr_level->code}}</strong></a>: {{$curr_level->libelle}}</li>
+        <li><a href="index.php?m={{$m}}&amp;{{$action}}=vw_full_code&amp;code={{$curr_level->code}}"><strong>{{$curr_level->code}}</strong></a>: {{$curr_level->libelle}}</li>
         {{/if}}
         {{/foreach}}
       </ul>

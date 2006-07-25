@@ -17,7 +17,7 @@ function popCode(type) {
   url.setModuleAction("dPplanningOp", "code_selector");
   url.addElement(document.editOp.chir_id, "chir");
   url.addParam("type", type)
-  url.popup(600, 500, type);
+  url.popup(700, 500, type);
 }
 
 function setCode(sCode, type ) {
@@ -36,7 +36,10 @@ function setCode(sCode, type ) {
   }
   
   oElement.value = sCode;
-  oElement.onblur();
+  
+  if (oElement.onblur) {
+    oElement.onblur();
+  }
 }
 
 function popProtocole() {

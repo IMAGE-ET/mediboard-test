@@ -3,6 +3,17 @@ function setClose(code, type) {
   window.opener.setCode(code, type);
   window.close();
 }
+
+function createFavori() {
+  var sType = "{{$type}}";
+  var sModule = sType == "ccam" ? "dPccam" : "dPcim10";
+
+  var url = new Url;
+  url.setModuleAction(sModule, "vw_find_code");
+  url.addParam("dialog", 1);
+  url.redirect();
+}
+
 </script>
 
 <table class="selectCode">
@@ -19,9 +30,13 @@ function setClose(code, type) {
   <tr>
   {{foreach from=$list item=curr_code key=curr_key}}
     <td>
-      <strong>{{$curr_code->code}}</strong><br />
-      {{$curr_code->libelleLong}}<br />
-      <button type="button" onclick="setClose('{{$curr_code->code}}', '{{$type}}')">selectionner</button>
+      <strong>{{$curr_code->code}}</strong>
+      <br />
+      {{$curr_code->libelleLong}}
+      <br />
+      <button class="tick" type="button" onclick="setClose('{{$curr_code->code}}', '{{$type}}')">
+        Sélectionner
+      </button>
     </td>
   {{if ($curr_key+1) is div by 3}}
   </tr><tr>
@@ -33,7 +48,8 @@ function setClose(code, type) {
 <table class="form">
   <tr>
     <td class="button" colspan="3">
-      <button class="cancel" type="button" onclick="window.close()">Annuler</button>
+      <button class="cancel" type="button" onclick="window.close();">Annuler</button>
+      <button class="search" type="button" onclick="createFavori();">Rechercher un autre code</button>
     </td>
   </tr>
 </table>

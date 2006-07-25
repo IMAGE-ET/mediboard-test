@@ -865,6 +865,7 @@ div.big-error {
 /* Main -- table -- pane */
 
 #main {
+  clear: both;
   width: 100%;
   border-spacing: 0px
 }
