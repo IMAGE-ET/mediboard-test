@@ -36,10 +36,10 @@ $smarty = new CSmartyDP(1);
 if($selClass && $selKey){
   $object = new $selClass;
   $object->load($selKey);
-  $listFile = CFile::loadFilesForObject($object);
+  $object->loadRefsFiles();
 }
 
-
+mbTrace($object->_ref_files);
 $smarty->assign("listCategory", $listCategory);
 $smarty->assign("listClass"   , $listClass   );
 $smarty->assign("selClass"    , $selClass    );
