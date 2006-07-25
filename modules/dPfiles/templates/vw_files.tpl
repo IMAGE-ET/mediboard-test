@@ -16,6 +16,12 @@ function setData(key, val){
     f.submit();
   }
 }
+function ResetValue(){
+   var f = document.FrmClass;
+   f.selKey.value = "";
+   f.selView.value = "";
+   f.submit()
+}
 </script>
 
 <table class="main">
@@ -27,7 +33,7 @@ function setData(key, val){
             <form name="FrmClass" action="?m={{$m}}" method="get">
             <input type="hidden" name="m" value="{{$m}}" />          
             <label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label>
-            <select name="selClass" onchange="submit()">
+            <select name="selClass" onchange="ResetValue()">
               <option value="">&mdash Choisissez un type</option>
             {{foreach from=$listClass item=curr_listClass}}
               <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{$curr_listClass}}</option>
