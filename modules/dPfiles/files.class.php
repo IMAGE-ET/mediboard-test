@@ -22,7 +22,7 @@ class CFile extends CMbObject {
   var $file_real_filename = null;
   var $file_name          = null;
   var $file_type          = null;
-  var $files_category_id   = null;
+  var $file_category_id   = null;
   var $file_owner         = null;
   var $file_date          = null;
   var $file_size          = null;
