@@ -93,7 +93,7 @@ class CMbObject extends CDpObject {
       }
       $sql .= "\n)";
     }
-    $sql .= "\nORDER BY"
+    $sql .= "\nORDER BY";
     foreach($this->_seek as $keySeek => $spec) {
       $sql .= "\n$keySeek";
     }
