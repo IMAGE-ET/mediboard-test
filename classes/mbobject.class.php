@@ -75,20 +75,22 @@ class CMbObject extends CDpObject {
     $sql = "SELECT * FROM `$this->_tbl` WHERE 1";
     foreach($this->_seek as $keySeek => $spec) {
       foreach($keywords as $key) {
+        $sql .= "\nAND (0";
         switch($spec) {
           case "equal":
-            $sql .= "\nAND `$keySeek` = '$key'";
+            $sql .= "\nOR `$keySeek` = '$key'";
             break;
           case "like":
-            $sql .= "\nAND `$keySeek` LIKE '%$key%'";
+            $sql .= "\nOR `$keySeek` LIKE '%$key%'";
             break;
           case "likeBegin":
-            $sql .= "\nAND `$keySeek` LIKE '$key%'";
+            $sql .= "\nOR `$keySeek` LIKE '$key%'";
             break;
           case "likeEnd":
-            $sql .= "\nAND `$keySeek` LIKE '%$key'";
+            $sql .= "\nOR `$keySeek` LIKE '%$key'";
             break;
         }
+        $sql .= "\n)";
       }
     }
     return db_loadObjectList($sql, $this);
