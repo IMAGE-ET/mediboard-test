@@ -543,7 +543,7 @@ function mbConvertDecaBinary($number) {
   return "$value $prefix$unit";
 }
 
-function getChildClasses($parent = "CMbObject", $properties = null) {
+function getChildClasses($parent = "CMbObject", $properties = array()) {
   global $AppUI;
   // Require all dPmodules class
   foreach(glob("modules/dP*/*.class.php") as $fileName) {
@@ -551,9 +551,14 @@ function getChildClasses($parent = "CMbObject", $properties = null) {
   }
   $listClasses = get_declared_classes();
   foreach($listClasses as $key => $class) {
-    $object = new $class;
     if(!is_subclass_of($class, $parent)) {
       unset($listClasses[$key]);
+    } else {
+      foreach($properties as $prop) {
+        if(!array_key_exists($prop, get_class_vars($class))) {
+          unset($listClasses[$key]);
+        }
+      }
     }
   }
   sort($listClasses);
