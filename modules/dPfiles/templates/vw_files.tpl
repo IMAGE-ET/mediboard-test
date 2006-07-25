@@ -56,9 +56,13 @@ function setData(key, val){
                   {{$curr_listCat->nom}}
                 </div>
                 <div id="{{$curr_listCat->nom}}Content"  class="accordionTabContentBox">
-                  <div id="mainConsult">
-                  
-                  </div>
+                  <ul>
+                  {{foreach from=$object->_ref_files item=curr_file}}
+                    {{if $curr_file->file_category_id == $curr_listCat->file_category_id}}
+                      <li>{{$curr_file->_view}}</li>
+                    {{/if}}
+                  {{/foreach}}
+                  </ul>
                 </div>
               </div>
             {{/foreach}}            

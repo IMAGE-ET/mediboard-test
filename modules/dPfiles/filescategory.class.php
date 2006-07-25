@@ -34,8 +34,8 @@ class CFilesCategory extends CMbObject {
     $tables[] = array (
       "label"     => "fichier(s)", 
       "name"      => "files_mediboard", 
-      "idfield"   => "files_category_id", 
-      "joinfield" => "files_category_id"
+      "idfield"   => "file_category_id", 
+      "joinfield" => "file_category_id"
     );
     
   return CDpObject::canDelete( $msg, $oid, $tables );	

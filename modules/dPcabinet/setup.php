@@ -38,8 +38,6 @@ class CSetupdPcabinet {
     db_exec("DROP TABLE consultation;");          db_error();
     db_exec("DROP TABLE consultation_anesth;");   db_error();
     db_exec("DROP TABLE plageconsult;");          db_error();
-    db_exec("DROP TABLE files_mediboard;");       db_error();
-    db_exec("DROP TABLE files_index_mediboard;"); db_error();
     db_exec("DROP TABLE tarifs;");                db_error();
     db_exec("DROP TABLE examaudio;");             db_error();
     return null;

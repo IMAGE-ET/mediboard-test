@@ -22,7 +22,7 @@ class CFile extends CMbObject {
   var $file_real_filename = null;
   var $file_name          = null;
   var $file_type          = null;
-  var $file_category_id   = null;
+  var $files_category_id   = null;
   var $file_owner         = null;
   var $file_date          = null;
   var $file_size          = null;
@@ -37,7 +37,7 @@ class CFile extends CMbObject {
     
     $this->_props["file_class"]         = "str|notNull";
     $this->_props["file_object_id"]     = "ref|notNull";
-    $this->_props["file_category_id"]   = "ref|";
+    $this->_props["files_category_id"]  = "ref|";
     $this->_props["file_date"]          = "dateTime|notNull";
     $this->_props["file_size"]          = "num|pos";
     $this->_props["file_real_filename"] = "str|notNull";
