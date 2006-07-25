@@ -74,8 +74,8 @@ class CMbObject extends CDpObject {
   function seek($keywords) {
     $sql = "SELECT * FROM `$this->_tbl` WHERE 1";
     foreach($this->_seek as $keySeek => $spec) {
+      $sql .= "\nAND (0";
       foreach($keywords as $key) {
-        $sql .= "\nAND (0";
         switch($spec) {
           case "equal":
             $sql .= "\nOR `$keySeek` = '$key'";
@@ -90,8 +90,8 @@ class CMbObject extends CDpObject {
             $sql .= "\nOR `$keySeek` LIKE '%$key'";
             break;
         }
-        $sql .= "\n)";
       }
+      $sql .= "\n)";
     }
     return db_loadObjectList($sql, $this);
   }
