@@ -169,5 +169,14 @@ class CFile extends CMbObject {
     db_exec("UNLOCK TABLES;");
     return $nwords;
   }
+  
+  function loadFilesForObject($object){
+    $key = $object->_tbl_key;
+    $where["file_class"] = "= '".get_class($object)."'";
+    $where["file_object_id"] = "= '".$object->$key."'";
+    $listFile = new CFile();
+    $listFile = $listFile->loadList($where);
+    return $listFile;
+  }
 }
 ?>

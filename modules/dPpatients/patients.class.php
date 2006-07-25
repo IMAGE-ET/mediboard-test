@@ -67,7 +67,7 @@ class CPatient extends CMbObject {
 	var $_tel24       = null;
 	var $_tel25       = null;
 	var $_age         = null;
-  var $_codes_cim10 = null;
+    var $_codes_cim10 = null;
   
   // HPRIM Fields
   var $_prenoms        = null; // multiple
@@ -313,7 +313,7 @@ class CPatient extends CMbObject {
     $this->_ref_next_affectation->loadObject($where, $order);
   }
 
-  function loadRefFiles() {
+  function loadRefsFiles() {
     $this->_ref_files = new CFile();
     $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
   }
