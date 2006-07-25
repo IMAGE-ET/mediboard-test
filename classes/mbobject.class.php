@@ -40,6 +40,7 @@ class CMbObject extends CDpObject {
    */
   var $_props = array();
   var $_enums = array();
+  var $_seek  = array();
 
   /**
    *  Generic check method
@@ -68,6 +69,29 @@ class CMbObject extends CDpObject {
     }
     
     return $msg;
+  }
+  
+  function seek($keywords) {
+    $sql = "SELECT * FROM `$this->_tbl` WHERE 1";
+    foreach($this->_seek as $keySeek => $spec) {
+      foreach($keywords as $key) {
+        switch($spec) {
+          case "equal":
+            $sql .= "\nAND `$keySeek` = '$key'";
+            break;
+          case "like":
+            $sql .= "\nAND `$keySeek` LIKE '%$key%'";
+            break;
+          case "likeBegin":
+            $sql .= "\nAND `$keySeek` LIKE '$key%'";
+            break;
+          case "likeEnd":
+            $sql .= "\nAND `$keySeek` LIKE '%$key'";
+            break;
+        }
+      }
+    }
+    return db_loadObjectList($sql, $this);
   }
   
   function buildEnums() {

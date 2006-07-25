@@ -11,12 +11,12 @@ require_once($AppUI->getSystemClass("mbobject"));
 
 require_once($AppUI->getModuleClass("dPplanningOp", "planning") );
 require_once($AppUI->getModuleClass("dPplanningOp", "sejour") );
-require_once($AppUI->getModuleClass("dPpatients", "medecin") );
-require_once($AppUI->getModuleClass("dPpatients", "antecedent") );
-require_once($AppUI->getModuleClass("dPpatients", "traitement") );
-require_once($AppUI->getModuleClass("dPcabinet", "consultation") );
-require_once($AppUI->getModuleClass("dPhospi", "affectation") );
-require_once($AppUI->getModuleClass("dPcim10", "codecim10") );
+require_once($AppUI->getModuleClass("dPpatients"  , "medecin") );
+require_once($AppUI->getModuleClass("dPpatients"  , "antecedent") );
+require_once($AppUI->getModuleClass("dPpatients"  , "traitement") );
+require_once($AppUI->getModuleClass("dPcabinet"   , "consultation") );
+require_once($AppUI->getModuleClass("dPhospi"     , "affectation") );
+require_once($AppUI->getModuleClass("dPcim10"     , "codecim10") );
 
 /**
  * The CPatient Class
@@ -27,67 +27,66 @@ class CPatient extends CMbObject {
 
   // DB Fields
 	var $nom = null;
-	var $nom_jeune_fille = null;
-	var $prenom = null;
-	var $naissance = null;
-	var $sexe = null;
-	var $adresse = null;
-	var $ville = null;
-	var $cp = null;
-	var $tel = null;
-	var $tel2 = null;
+	var $nom_jeune_fille  = null;
+	var $prenom           = null;
+	var $naissance        = null;
+	var $sexe             = null;
+	var $adresse          = null;
+	var $ville            = null;
+	var $cp               = null;
+	var $tel              = null;
+	var $tel2             = null;
 	var $medecin_traitant = null;
-	var $medecin1 = null;
-	var $medecin2 = null;
-	var $medecin3 = null;
+	var $medecin1         = null;
+	var $medecin2         = null;
+	var $medecin3         = null;
 	var $incapable_majeur = null;
-	var $ATNC = null;
-	var $matricule = null;
-	var $SHS = null;
-  var $regime_sante = null;
-	var $rques = null;
-  
-  var $listCim10 = null;
+	var $ATNC             = null;
+	var $matricule        = null;
+	var $SHS              = null;
+  var $regime_sante     = null;
+	var $rques            = null;
+  var $listCim10        = null;
   
   // Other fields
   var $_static_cim10 = null;
 
   // Form fields
-  var $_naissance = null;
-  var $_jour = null;
-	var $_mois = null;
-	var $_annee = null;
-	var $_tel1 = null;
-	var $_tel2 = null;
-	var $_tel3 = null;
-	var $_tel4 = null;
-	var $_tel5 = null;
-	var $_tel21 = null;
-	var $_tel22 = null;
-	var $_tel23 = null;
-	var $_tel24 = null;
-	var $_tel25 = null;
-	var $_age = null;
+  var $_naissance   = null;
+  var $_jour        = null;
+	var $_mois        = null;
+	var $_annee       = null;
+	var $_tel1        = null;
+	var $_tel2        = null;
+	var $_tel3        = null;
+	var $_tel4        = null;
+	var $_tel5        = null;
+	var $_tel21       = null;
+	var $_tel22       = null;
+	var $_tel23       = null;
+	var $_tel24       = null;
+	var $_tel25       = null;
+	var $_age         = null;
   var $_codes_cim10 = null;
   
   // HPRIM Fields
-  var $_prenoms = null; // multiple
-  var $_nom_naissance = null; // +/- = nom_jeune_fille
+  var $_prenoms        = null; // multiple
+  var $_nom_naissance  = null; // +/- = nom_jeune_fille
   var $_adresse_ligne2 = null;
   var $_adresse_ligne3 = null;
-  var $_pays = null;
+  var $_pays           = null;
 
   // Object References
-  var $_ref_sejours = null;
-  var $_ref_consultations = null;
-  var $_ref_antecedents = null;
-  var $_ref_traitements = null;
+  var $_ref_sejours          = null;
+  var $_ref_consultations    = null;
+  var $_ref_antecedents      = null;
+  var $_ref_traitements      = null;
   var $_ref_curr_affectation = null;
   var $_ref_next_affectation = null;
   var $_ref_medecin_traitant = null;
-  var $_ref_medecin1 = null;
-  var $_ref_medecin2 = null;
-  var $_ref_medecin3 = null;
+  var $_ref_medecin1         = null;
+  var $_ref_medecin2         = null;
+  var $_ref_medecin3         = null;
 
 	function CPatient() {
 		$this->CMbObject("patients", "patient_id");
@@ -117,6 +116,11 @@ class CPatient extends CMbObject {
     );
     
     $this->_props =& $props;
+    
+    static $seek = array(
+      "nom"    => "likebegin",
+      "prenom" => "likebegin"
+    );
     
     $this->buildEnums();
 	}
