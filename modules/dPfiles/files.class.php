@@ -37,7 +37,7 @@ class CFile extends CMbObject {
     
     $this->_props["file_class"]         = "str|notNull";
     $this->_props["file_object_id"]     = "ref|notNull";
-    $this->_props["files_category_id"]  = "ref|";
+    $this->_props["files_category_id"]  = "ref";
     $this->_props["file_date"]          = "dateTime|notNull";
     $this->_props["file_size"]          = "num|pos";
     $this->_props["file_real_filename"] = "str|notNull";
@@ -46,7 +46,7 @@ class CFile extends CMbObject {
   function check() {
     // Ensure the integrity of some variables
     $this->file_id = intval($this->file_id);
-    $this->file_object_id = intval($this->file_object_id);
+    //$this->file_object_id = intval($this->file_object_id);
   }
 
   function updateFormFields() {

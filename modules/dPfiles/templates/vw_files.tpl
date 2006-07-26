@@ -12,7 +12,7 @@ function ZoomFileAjax(file_id){
   var VwFileUrl = new Url;
   VwFileUrl.setModuleAction("dPfiles", "preview_files");
   VwFileUrl.addParam("file_id", file_id);
-  VwFileUrl.requestUpdate('bigView');
+  VwFileUrl.requestUpdate('bigView', { waitingText : null });
 }
 
 function setData(key, val){
@@ -71,7 +71,7 @@ function ResetValue(){
           <th class="category" colspan="2">{{$object->_view}}</th>
         </tr>
         <tr>
-          <td id="listView">
+          <td style="width: 400px;" id="listView">
             {{include file="inc_list_view.tpl"}}
           </td>
           <td id="bigView" style="text-align: center;">

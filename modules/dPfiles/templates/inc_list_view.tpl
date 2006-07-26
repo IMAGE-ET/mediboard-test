@@ -18,6 +18,21 @@
                         {{$curr_file->_view}}<br />
                         {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
                       </td>
+                      <td>
+                        <form name="editFile{{$curr_file->file_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+                          <input type="hidden" name="m" value="dPfiles" />
+                          <input type="hidden" name="dosql" value="do_file_aed" />
+                          <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
+                          <input type="hidden" name="del" value="0" />
+                          <select name="file_category_id" onchange="this.form.submit()">
+                            {{foreach from=$listCategory item=curr_cat}}
+                            <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $curr_file->file_category_id}}selected="selected"{{/if}} >
+                              {{$curr_cat->nom}}
+                            </option>
+                            {{/foreach}}
+                          </select>
+                        </form>
+                      </td>
                     </tr>
                     {{/if}}
                   {{/foreach}}
