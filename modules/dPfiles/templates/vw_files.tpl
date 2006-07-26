@@ -31,7 +31,7 @@ function ResetValue(){
     <td>
       <form name="FrmClass" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="file_id" value="{{$file_id}}" />
+      <input type="hidden" name="file_id" value="{{$file->file_id}}" />
       <table class="form">
         <tr>
           <td>
@@ -58,13 +58,13 @@ function ResetValue(){
   </tr>
   {{if $selClass && $selKey}}
   <tr>
-    <td class="halfPane">
+    <td>
       <table class="form">
         <tr>
           <th class="category" colspan="2">{{$object->_view}}</th>
         </tr>
         <tr>
-          <td>
+          <td id="listView">
             <div class="accordionMain" id="accordionConsult">
             {{foreach from=$listCategory item=curr_listCat}}
               <div id="{{$curr_listCat->nom}}">
@@ -88,7 +88,7 @@ function ResetValue(){
                     </tr>
                     {{/if}}
                   {{/foreach}}
-                  </ul>
+                  </table>
                 </div>
               </div>
             {{/foreach}}            
@@ -97,15 +97,17 @@ function ResetValue(){
             new Rico.Accordion( $('accordionConsult'), {panelHeight:350} );
             </script>
           </td>
+          <td id="bigView" style="text-align: center;">
+            {{if $file->file_id}}
+            {{$file->_view}}<br />
+            {{$file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}<br />
+            <img src="mbfileviewer.php?file_id={{$file->file_id}}&amp;phpThumb=1&amp;hp=350&amp;wl=450" alt="-" />
+            {{else}}
+            Selectionnez un fichier
+            {{/if}}
+          </td>
         </tr>
       </table>
-    </td>
-    <td class="halfPane" style="text-align: center;">
-      {{if $file_id}}
-      <img src="mbfileviewer.php?file_id={{$file_id}}&amp;phpThumb=1&amp;hp=350&amp;wl=300" alt="-" />
-      {{else}}
-      Selectionnez un fichier
-      {{/if}}
     </td>
   </tr>
   {{/if}}

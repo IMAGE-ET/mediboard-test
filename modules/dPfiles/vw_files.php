@@ -23,11 +23,13 @@ $selKey   = mbGetValueFromGetOrSession("selKey"  , null);
 $selView  = mbGetValueFromGetOrSession("selView" , null);
 $file_id  = mbGetValueFromGetOrSession("file_id" , null);
 
+$file = new CFile;
+$file->load($file_id);
+
 // Liste des Class
 $listClass = getChildClasses("CMbObject", array("_ref_files"));
 
 $listCategory = CFilesCategory::listCatClass($selClass);
-
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
@@ -46,7 +48,7 @@ $smarty->assign("listClass"   , $listClass   );
 $smarty->assign("selClass"    , $selClass    );
 $smarty->assign("selKey"      , $selKey      );
 $smarty->assign("selView"     , $selView     );
-$smarty->assign("file_id"     , $file_id     );
+$smarty->assign("file"        , $file        );
 $smarty->assign("keywords"    , $keywords    );
 $smarty->assign("object"      , $object      );
 
