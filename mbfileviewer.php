@@ -107,10 +107,13 @@ if ($file_id = mbGetValueFromGet("file_id")) {
       header("Location: modules/dPfiles/images/acroread.png");
     } elseif(strpos($file->file_type, "text") !== false) {
       header("Location: modules/dPfiles/images/text.png");
+    } elseif(strpos($file->file_type, "msword") !== false) {
+      header("Location: modules/dPfiles/images/text.png");
+    } elseif(strpos($file->file_type, "video") !== false) {
+      header("Location: modules/dPfiles/images/video.png");
     } else {
       header("Location: modules/dPfiles/images/unknown.png");
     }
-    
     /*
     $thumb = new phpthumb;
     $thumb->setSourceData(file_get_contents($file->_file_path));
