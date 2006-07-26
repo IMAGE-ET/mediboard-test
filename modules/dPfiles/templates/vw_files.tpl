@@ -10,7 +10,7 @@ function popSearch() {
 
 function ZoomFileAjax(file_id){
   var VwFileUrl = new Url;
-  VwFileUrl.setModuleAction("dPfiles", "httpreq_prevw_files");
+  VwFileUrl.setModuleAction("dPfiles", "preview_files");
   VwFileUrl.addParam("file_id", file_id);
   VwFileUrl.requestUpdate('bigView');
 }
@@ -75,7 +75,7 @@ function ResetValue(){
             {{include file="inc_list_view.tpl"}}
           </td>
           <td id="bigView" style="text-align: center;">
-            {{include file="httpreq_prevw_files.tpl"}}
+            {{include file="inc_preview_file.tpl"}}
           </td>
         </tr>
       </table>
