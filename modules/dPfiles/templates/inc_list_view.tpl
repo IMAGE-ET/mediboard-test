@@ -1,10 +1,10 @@
             <div class="accordionMain" id="accordionConsult">
             {{foreach from=$listCategory item=curr_listCat}}
-              <div id="{{$curr_listCat->nom}}">
-                <div id="{{$curr_listCat->nom}}Header" class="accordionTabTitleBar">
+              <div id="Acc{{$curr_listCat->file_category_id}}">
+                <div id="Acc{{$curr_listCat->file_category_id}}Header" class="accordionTabTitleBar">
                   {{$curr_listCat->nom}}
                 </div>
-                <div id="{{$curr_listCat->nom}}Content"  class="accordionTabContentBox">
+                <div id="Acc{{$curr_listCat->file_category_id}}Content"  class="accordionTabContentBox">
                   <table class="tbl">
                   {{foreach from=$object->_ref_files item=curr_file}}
                     {{if $curr_file->file_category_id == $curr_listCat->file_category_id}}
@@ -15,10 +15,11 @@
                         </a>
                       </td>
                       <td style="vertical-align: middle;">
-                        {{$curr_file->_view}}<br />
-                        {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
+                        {{$curr_file->_shortview}}<br />
+                        {{$curr_file->_file_size}}<br />
+                        le {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
                       </td>
-                      <td>
+                      <td class="button">
                         <form name="editFile{{$curr_file->file_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
                           <input type="hidden" name="m" value="dPfiles" />
                           <input type="hidden" name="dosql" value="do_file_aed" />
@@ -31,6 +32,10 @@
                             </option>
                             {{/foreach}}
                           </select>
+                          <br />
+                          <button type="button" class="trash" onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}'})">
+                            Supprimer
+                          </button>
                         </form>
                       </td>
                     </tr>
