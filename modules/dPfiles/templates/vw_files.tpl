@@ -13,14 +13,16 @@ function setData(key, val){
   if (val != '') {
     f.selKey.value = key;
     f.selView.value = val;
+    f.file_id.value = "";
     f.submit();
   }
 }
 function ResetValue(){
    var f = document.FrmClass;
-   f.selKey.value = "";
+   f.selKey.value  = "";
    f.selView.value = "";
-   f.submit()
+   f.file_id.value = "";
+   f.submit();
 }
 </script>
 
@@ -29,6 +31,7 @@ function ResetValue(){
     <td>
       <form name="FrmClass" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="file_id" value="{{$file_id}}" />
       <table class="form">
         <tr>
           <td>
@@ -73,8 +76,15 @@ function ResetValue(){
                   {{foreach from=$object->_ref_files item=curr_file}}
                     {{if $curr_file->file_category_id == $curr_listCat->file_category_id}}
                     <tr>
-                      <td><img src="mbfileviewer.php?file_id={{$curr_file->file_id}}&amp;phpThumb=1" alt="-" /></td>
-                      <td style="vertical-align: middle;">{{$curr_file->_view}}</td>
+                      <td>
+                        <a href="index.php?m={{$m}}&amp;file_id={{$curr_file->file_id}}">
+                          <img src="mbfileviewer.php?file_id={{$curr_file->file_id}}&amp;phpThumb=1" alt="-" />
+                        </a>
+                      </td>
+                      <td style="vertical-align: middle;">
+                        {{$curr_file->_view}}<br />
+                        {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
+                      </td>
                     </tr>
                     {{/if}}
                   {{/foreach}}
@@ -90,8 +100,12 @@ function ResetValue(){
         </tr>
       </table>
     </td>
-    <td class="halfPane">
-      bonjour
+    <td class="halfPane" style="text-align: center;">
+      {{if $file_id}}
+      <img src="mbfileviewer.php?file_id={{$file_id}}&amp;phpThumb=1&amp;hp=350&amp;wl=300" alt="-" />
+      {{else}}
+      Selectionnez un fichier
+      {{/if}}
     </td>
   </tr>
   {{/if}}

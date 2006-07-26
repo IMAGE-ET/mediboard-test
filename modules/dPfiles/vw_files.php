@@ -21,6 +21,7 @@ $selClass = mbGetValueFromGetOrSession("selClass", null);
 $keywords = mbGetValueFromGetOrSession("keywords", null);
 $selKey   = mbGetValueFromGetOrSession("selKey"  , null);
 $selView  = mbGetValueFromGetOrSession("selView" , null);
+$file_id  = mbGetValueFromGetOrSession("file_id" , null);
 
 // Liste des Class
 $listClass = getChildClasses("CMbObject", array("_ref_files"));
@@ -45,6 +46,7 @@ $smarty->assign("listClass"   , $listClass   );
 $smarty->assign("selClass"    , $selClass    );
 $smarty->assign("selKey"      , $selKey      );
 $smarty->assign("selView"     , $selView     );
+$smarty->assign("file_id"     , $file_id     );
 $smarty->assign("keywords"    , $keywords    );
 $smarty->assign("object"      , $object      );
 
