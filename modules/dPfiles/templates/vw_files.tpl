@@ -17,7 +17,7 @@ function ZoomFileAjax(file_id){
   var VwFileUrl = new Url;
   VwFileUrl.setModuleAction("dPfiles", "preview_files");
   VwFileUrl.addParam("file_id", file_id);
-  VwFileUrl.requestUpdate('bigView', { waitingText : null });
+  VwFileUrl.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
 }
 
 function setData(key, val){
