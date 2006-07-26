@@ -7,6 +7,10 @@ function popSearch() {
   url.addParam("selClass", f.selClass.value);  
   url.popup(600, 300, "-");
 }
+function popFile(file_id){
+  var url = new Url;
+  url.ViewFilePopup(file_id);
+}
 
 function ZoomFileAjax(file_id){
   var VwFileUrl = new Url;

@@ -10,6 +10,11 @@ function cancelTarif() {
   submitFdr(oForm);
 }
 
+function popFile(file_id){
+  var url = new Url;
+  url.ViewFilePopup(file_id);
+}
+
 function modifTarif() {
   var oForm = document.tarifFrm;
   var secteurs = oForm.choix.value;
@@ -108,7 +113,7 @@ function submitFdr(oForm) {
         {{foreach from=$consult->_ref_files item=curr_file}}
         <li>
           <form name="delFrm{{$curr_file->file_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
-            <a href="mbfileviewer.php?file_id={{$curr_file->file_id}}">{{$curr_file->file_name}}</a>
+            <a href="#" OnClick="popFile({{$curr_file->file_id}})">{{$curr_file->file_name}}</a>
             ({{$curr_file->_file_size}})
             <input type="hidden" name="m" value="dPfiles" />
             <input type="hidden" name="dosql" value="do_file_aed" />

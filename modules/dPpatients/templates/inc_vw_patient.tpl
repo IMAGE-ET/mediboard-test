@@ -9,6 +9,11 @@ function printPatient(id) {
   url.popup(700, 550, "Patient");
 }
 
+function popFile(file_id){
+  var url = new Url;
+  url.ViewFilePopup(file_id);
+}
+
 function printIntervention(id) {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "view_planning");
@@ -283,7 +288,7 @@ function reloadVwPatient(){
         <li>
           {{if $canEdit}}
           <form name="delFrm{{$curr_file->file_id}}" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">{{/if}}
-          <a target="_blank" href="mbfileviewer.php?file_id={{$curr_file->file_id}}">{{$curr_file->file_name}}</a>
+          <a href="#" OnClick="popFile({{$curr_file->file_id}})">{{$curr_file->file_name}}</a>
           ({{$curr_file->_file_size}})
           {{if $canEdit}}
           <input type="hidden" name="m" value="dPfiles" />

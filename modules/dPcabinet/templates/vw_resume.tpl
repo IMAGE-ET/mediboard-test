@@ -9,6 +9,11 @@ function printDocument(doc_id) {
   url.popup(700, 600, 'Compte-rendu');
 }
 
+function popFile(file_id){
+  var url = new Url;
+  url.ViewFilePopup(file_id);
+}
+
 function newExam(sAction, consultation_id) {
   if (sAction) {
     var url = new Url;
@@ -81,7 +86,7 @@ function newExam(sAction, consultation_id) {
       <ul>
       {{foreach from=$filesCons item=curr_file}}
         <li>
-          <a href="mbfileviewer.php?file_id={{$curr_file->file_id}}" target="_blank">{{$curr_file->file_name}}</a>
+          <a href="#" OnClick="popFile({{$curr_file->file_id}})">{{$curr_file->file_name}}</a>
           ({{$curr_file->_file_size}})
         </li>
       {{/foreach}}
@@ -133,7 +138,7 @@ function newExam(sAction, consultation_id) {
       <ul>
       {{foreach from=$filesOp item=curr_file}}
         <li>
-          <a href="mbfileviewer.php?file_id={{$curr_file->file_id}}" target="_blank">{{$curr_file->file_name}}</a>
+          <a href="#" OnClick="popFile({{$curr_file->file_id}})">{{$curr_file->file_name}}</a>
           ({{$curr_file->_file_size}})
         </li>
       {{/foreach}}

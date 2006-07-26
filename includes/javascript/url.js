@@ -102,3 +102,10 @@ Url.prototype.periodicalUpdate = function(ioTarget, oOptions) {
   
   new Ajax.PeriodicalUpdater(ioTarget, "index.php", oDefaultOptions);
 }
+
+Url.prototype.ViewFilePopup = function(file_id){
+  this.setModuleAction("dPfiles", "preview_files");
+  this.addParam("popup", "1");
+  this.addParam("file_id", file_id);
+  this.popup(700, 500, "Fichier");
+}
