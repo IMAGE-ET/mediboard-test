@@ -7,6 +7,7 @@ function popSearch() {
   url.addParam("selClass", f.selClass.value);  
   url.popup(600, 300, "-");
 }
+
 function popFile(file_id){
   var url = new Url;
   url.ViewFilePopup(file_id);
@@ -34,6 +35,18 @@ function ResetValue(){
    f.selView.value = "";
    f.file_id.value = "";
    f.submit();
+}
+
+function reloadListFile(){
+  var listFileUrl = new Url;
+  listFileUrl.setModuleAction("dPfiles", "httpreq_vw_listfiles");
+  listFileUrl.addParam("selKey", document.FrmClass.selKey.value);
+  listFileUrl.addParam("selClass", document.FrmClass.selClass.value);  
+  listFileUrl.requestUpdate('listView', { waitingText : null });
+}
+
+function submitFileChangt(oForm){
+  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadListFile });
 }
 </script>
 

@@ -25,7 +25,7 @@
                           <input type="hidden" name="dosql" value="do_file_aed" />
                           <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
                           <input type="hidden" name="del" value="0" />
-                          <select name="file_category_id" onchange="this.form.submit()">
+                          <select name="file_category_id" onchange="submitFileChangt(this.form)">
                             {{foreach from=$listCategory item=curr_cat}}
                             <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $curr_file->file_category_id}}selected="selected"{{/if}} >
                               {{$curr_cat->nom}}
@@ -33,7 +33,7 @@
                             {{/foreach}}
                           </select>
                           <br />
-                          <button type="button" class="trash" onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}'})">
+                          <button type="button" class="trash" onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
                             Supprimer
                           </button>
                         </form>
