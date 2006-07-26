@@ -23,6 +23,6 @@ $smarty = new CSmartyDP(1);
 $smarty->assign("file_id", $file_id);
 $smarty->assign("file"   , $file   );
 
-$smarty->display("httpreq_prevw_files.tpl");
+$smarty->display("inc_prevw_files.tpl");
 
 ?>
