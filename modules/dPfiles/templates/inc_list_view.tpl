@@ -10,7 +10,7 @@
                     {{if $curr_file->file_category_id == $curr_listCat->file_category_id}}
                     <tr>
                       <td>
-                        <a href="index.php?m={{$m}}&amp;file_id={{$curr_file->file_id}}">
+                        <a href="#" onclick="ZoomFileAjax({{$curr_file->file_id}});">
                           <img src="mbfileviewer.php?file_id={{$curr_file->file_id}}&amp;phpThumb=1" alt="-" />
                         </a>
                       </td>
