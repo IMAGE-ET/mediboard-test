@@ -25,12 +25,12 @@ function doRedirect() {
 }
 
 $file_id = intval(mbGetValueFromPost("file_id", 0));
-$del     = intval(mbGetValueFromPost("del", 0 ));
+$del     = intval(mbGetValueFromPost("del"    , 0));
 
 $obj = new CFile();
 
-if (!$obj->bind( $_POST )) {
-	$AppUI->setMsg( $obj->getError(), UI_MSG_ERROR );
+if (!$obj->bind($_POST)) {
+	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 	doRedirect();
 }
 
@@ -39,19 +39,19 @@ $AppUI->setMsg("Fichier");
 if ($del) {
 	$obj->load($file_id);
 	if (($msg = $obj->delete())) {
-		$AppUI->setMsg( $msg, UI_MSG_ERROR );
+		$AppUI->setMsg($msg, UI_MSG_ERROR);
 		doRedirect();
 	} else {
-		$AppUI->setMsg( "supprimé", UI_MSG_ALERT, true );
+		$AppUI->setMsg("supprimé", UI_MSG_ALERT, true);
 		doRedirect();
 	}
 }
 
-set_time_limit( 600 );
-ignore_user_abort( 1 );
+set_time_limit(600);
+ignore_user_abort(1);
 
 $upload = null;
-if (isset($_FILES["formfile"])) {
+if(isset($_FILES["formfile"])) {
 	$upload = $_FILES["formfile"];
     
 	if ($upload["size"] < 1) {
