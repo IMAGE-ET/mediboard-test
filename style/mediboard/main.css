@@ -568,8 +568,8 @@ div.autocomplete ul li {
 
 table.main {
   width: 100%;
-  margin: 4px;
-  border-spacing: 10px;
+  margin: 2px;
+  border-spacing: 4px;
 }
 
 table.main td {
