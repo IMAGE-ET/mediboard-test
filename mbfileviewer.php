@@ -103,8 +103,12 @@ if ($file_id = mbGetValueFromGet("file_id")) {
     $f  = mbGetValueFromGet("f" , "png");
     if(strpos($file->file_type, "image") !== false) {
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path&hp=$hp&wl=$wl&f=$f");
+    } elseif(strpos($file->file_type, "pdf") !== false) {
+      header("Location: modules/dPfiles/images/acroread.png");
+    } elseif(strpos($file->file_type, "text") !== false) {
+      header("Location: modules/dPfiles/images/text.png");
     } else {
-      return null;
+      header("Location: modules/dPfiles/images/unknown.png");
     }
     
     /*
