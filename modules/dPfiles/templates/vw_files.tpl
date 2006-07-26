@@ -26,32 +26,39 @@ function ResetValue(){
 
 <table class="main">
   <tr>
-    <td  class="HalfPane">
+    <td>
+      <form name="FrmClass" action="?m={{$m}}" method="get">
+      <input type="hidden" name="m" value="{{$m}}" />
       <table class="form">
         <tr>
           <td>
-            <form name="FrmClass" action="?m={{$m}}" method="get">
-            <input type="hidden" name="m" value="{{$m}}" />          
             <label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label>
             <select name="selClass" onchange="ResetValue()">
-              <option value="">&mdash Choisissez un type</option>
+              <option value="">&mdash; Choisissez un type</option>
             {{foreach from=$listClass item=curr_listClass}}
               <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{$curr_listClass}}</option>
             {{/foreach}}
             </select>
-            
+          </td>
+          <td>
             {{if $selClass}}
             <input type="text" name="keywords" value="{{$keywords}}" />
             <button type="button" onclick="popSearch()" class="search">Rechercher</button>
             {{/if}}
             <input type="hidden" name="selKey" value="{{$selKey}}" />
-            <input type="hidden" name="selView" value="{{$selView}}" />  
-            </form>
+            <input type="hidden" name="selView" value="{{$selView}}" />
           </td>
         </tr>
-        {{if $selClass && $selKey}}
+      </table>
+      </form>
+    </td>
+  </tr>
+  {{if $selClass && $selKey}}
+  <tr>
+    <td class="halfPane">
+      <table class="form">
         <tr>
-          <th class="category">{{$object->_view}}</th>
+          <th class="category" colspan="2">{{$object->_view}}</th>
         </tr>
         <tr>
           <td>
@@ -62,10 +69,13 @@ function ResetValue(){
                   {{$curr_listCat->nom}}
                 </div>
                 <div id="{{$curr_listCat->nom}}Content"  class="accordionTabContentBox">
-                  <ul>
+                  <table class="tbl">
                   {{foreach from=$object->_ref_files item=curr_file}}
                     {{if $curr_file->file_category_id == $curr_listCat->file_category_id}}
-                      <li>{{$curr_file->_view}}</li>
+                    <tr>
+                      <td><img src="mbfileviewer.php?file_id={{$curr_file->file_id}}&amp;phpThumb=1" alt="-" /></td>
+                      <td style="vertical-align: middle;">{{$curr_file->_view}}</td>
+                    </tr>
                     {{/if}}
                   {{/foreach}}
                   </ul>
@@ -74,15 +84,15 @@ function ResetValue(){
             {{/foreach}}            
             </div>
             <script language="Javascript" type="text/javascript">
-            new Rico.Accordion( $('accordionConsult'), {panelHeight:100} );
+            new Rico.Accordion( $('accordionConsult'), {panelHeight:350} );
             </script>
           </td>
         </tr>
-        {{/if}}
       </table>
-    </td>    
-    <td class="greedyPane">
-    
+    </td>
+    <td class="halfPane">
+      bonjour
     </td>
   </tr>
+  {{/if}}
 </table>

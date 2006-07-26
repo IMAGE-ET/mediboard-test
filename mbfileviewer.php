@@ -15,10 +15,11 @@ if (!is_file("./includes/config.php")) {
 
 require_once("./classes/ui.class.php");
 require_once("./includes/config.php");
+require_once("./lib/phpThumb/phpthumb.class.php");
 
 // Check that the user has correctly set the root directory
-is_file( "{$dPconfig['root_dir']}/includes/config.php" ) 
-  or die( "ERREUR FATALE: le repertoire racine est probablement mal configuré" );
+is_file($dPconfig["root_dir"]."/includes/config.php") 
+  or die("ERREUR FATALE: le repertoire racine est probablement mal configuré");
 
 require_once("./includes/main_functions.php");
 require_once("./includes/errors.php");
@@ -27,27 +28,27 @@ require_once("./includes/errors.php");
 ini_set("memory_limit", "64M");
 
 // Manage the session variable(s)
-session_name( 'dotproject' );
-if (get_cfg_var( 'session.auto_start' ) > 0) {
+session_name("dotproject");
+if (get_cfg_var("session.auto_start") > 0) {
   session_write_close();
 }
 session_start();
-session_register( 'AppUI' ); 
+session_register("AppUI"); 
   
 // Check if session has previously been initialised
-if (!isset( $_SESSION['AppUI'] ) || isset($_GET['logout'])) {
-    $_SESSION['AppUI'] = new CAppUI();
+if (!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
+    $_SESSION["AppUI"] = new CAppUI();
 }
 
-$AppUI =& $_SESSION['AppUI'];
-$AppUI->setConfig( $dPconfig );
+$AppUI =& $_SESSION["AppUI"];
+$AppUI->setConfig($dPconfig);
 
 require "./includes/db_connect.php";
 
 // load the commonly used classes
-require_once( $AppUI->getSystemClass('date'));
-require_once( $AppUI->getSystemClass('dp'));
-require_once( $AppUI->getSystemClass('mbmodule'));
+require_once($AppUI->getSystemClass("date"));
+require_once($AppUI->getSystemClass("dp"));
+require_once($AppUI->getSystemClass("mbmodule"));
 
 // Direct acces needs Administrator rights
 $file_path = mbGetValueFromGet("file_path");
@@ -68,9 +69,9 @@ if ($file_path) {
     // END extra headers to resolve IE caching bug
   
     header("MIME-Version: 1.0");
-    header( "Content-length: $file_size" );
-    header( "Content-type: $file_type" );
-    header( "Content-disposition: inline; filename=$file_name");
+    header("Content-length: $file_size");
+    header("Content-type: $file_type");
+    header("Content-disposition: inline; filename=$file_name");
     readfile($file_path);
     return;
   } else {
@@ -83,7 +84,7 @@ if ($file_path) {
 include "./includes/permissions.php";
 $canRead = !getDenyRead("dPcabinet");
 if (!$canRead) {
-	$AppUI->redirect("m=system&a=access_denied");
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 require_once($AppUI->getModuleClass("dPfiles", "files"));
@@ -95,24 +96,44 @@ if ($file_id = mbGetValueFromGet("file_id")) {
     $AppUI->setMsg("Fichier manquant", UI_MSG_ERROR);
     $AppUI->redirect();
   }
+  
+  if(mbGetValueFromGet("phpThumb")) {
+    $hp = mbGetValueFromGet("hp", 64);
+    $wl = mbGetValueFromGet("wl", 64);
+    $f  = mbGetValueFromGet("f" , "png");
+    if(strpos($file->file_type, "image") !== false) {
+      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path&hp=$hp&wl=$wl&f=$f");
+    } else {
+      return null;
+    }
+    
+    /*
+    $thumb = new phpthumb;
+    $thumb->setSourceData(file_get_contents($file->_file_path));
+    $thumb->setParameter("hp", 64);
+    $thumb->setParameter("wl", 64);
+    $thumb->GenerateThumbnail();
+    $thumb->OutputThumbnail();*/
+  } else {
 
-	// BEGIN extra headers to resolve IE caching bug (JRP 9 Feb 2003)
-	// [http://bugs.php.net/bug.php?id=16173]
-	header("Pragma: ");
-	header("Cache-Control: ");
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-	header("Cache-Control: no-store, no-cache, must-revalidate");  //HTTP/1.1
-	header("Cache-Control: post-check=0, pre-check=0", false);
-	// END extra headers to resolve IE caching bug
+    // BEGIN extra headers to resolve IE caching bug (JRP 9 Feb 2003)
+    // [http://bugs.php.net/bug.php?id=16173]
+    header("Pragma: ");
+    header("Cache-Control: ");
+    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+    header("Cache-Control: no-store, no-cache, must-revalidate");  //HTTP/1.1
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    // END extra headers to resolve IE caching bug
 
-	header("MIME-Version: 1.0");
-	header( "Content-length: {$file->file_size}" );
-	header( "Content-type: {$file->file_type}" );
-	header( "Content-disposition: inline; filename={$file->file_name}");
-	readfile($file->_file_path);
+    header("MIME-Version: 1.0");
+    header("Content-length: {$file->file_size}");
+    header("Content-type: {$file->file_type}");
+    header("Content-disposition: inline; filename={$file->file_name}");
+    readfile($file->_file_path);
+  }
 } else {
-	$AppUI->setMsg( "fileIdError", UI_MSG_ERROR );
-	$AppUI->redirect();
+  $AppUI->setMsg("fileIdError", UI_MSG_ERROR);
+  $AppUI->redirect();
 }
 ?>

@@ -64,6 +64,7 @@ class CFile extends CMbObject {
 
     $this->_file_path = "$filesDir/$this->_sub_dir/$this->file_object_id/$this->file_real_filename";
     
+    $this->_shortview = $this->file_name;
     $this->_view = $this->file_name." (".$this->_file_size.")";
   }
   
