@@ -232,7 +232,11 @@ function pageMain() {
           {{if $op->operation_id}}
             <button class="modify" type="button" onclick="submitForms();">Modifier</button>
             <button class="trash" type="button" onclick="deleteObjects();">Supprimer</button>
+            {{if $op->annulee}}
+            <button class="change" type="button" onclick="cancelObjects();">Rétablir</button>
+            {{else}}
             <button class="cancel" type="button" onclick="cancelObjects();">Annuler</button>
+            {{/if}}
           {{else}}
             <button class="submit" type="button" onclick="submitForms();">Créer</button>
           {{/if}}
