@@ -107,7 +107,7 @@
           <td colspan="2">
             Intervention le <strong>{{$consult_anesth->_ref_operation->_ref_plageop->date|date_format:"%a %d %b %Y"}}</strong>
             <br />par le <strong>Dr. {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong> (coté {{$consult_anesth->_ref_operation->cote}})<br />
-            Position : {{$consult_anesth->position}}<br />
+            Position : {{tr}}{{$consult_anesth->position}}{{/tr}}<br />
             <ul>
               {{foreach from=$consult_anesth->_ref_operation->_ext_codes_ccam item=curr_code}}
               <li><em>{{$curr_code->libelleLong}}</em> ({{$curr_code->code}})</li>
