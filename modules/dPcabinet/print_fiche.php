@@ -9,11 +9,11 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
-require_once( $AppUI->getModuleClass('mediusers') );
+require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
+require_once($AppUI->getModuleClass("mediusers"));
 
 if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
@@ -47,10 +47,10 @@ if ($consultation_id) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('consult', $consult);
+$smarty->assign("consult", $consult);
 
-$smarty->display('print_fiche.tpl');
+$smarty->display("print_fiche.tpl");
 ?>

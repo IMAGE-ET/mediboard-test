@@ -11,9 +11,9 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'plageconsult') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPcabinet", "plageconsult"));
+require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
 
 // Récupération des paramètres
 $today = mbDate();
@@ -26,7 +26,7 @@ $chirSel->load($chir);
 
 $etat = mbGetValueFromGetOrSession("etat", 0);
 $type = mbGetValueFromGetOrSession("type", 0);
-$aff = mbGetValueFromGetOrSession("aff", 1);
+$aff  = mbGetValueFromGetOrSession("aff" , 1);
 
 // Requète sur les plages de consultation considérées
 $where = array();
@@ -48,20 +48,20 @@ $listPlage = new CPlageconsult;
 $listPlage = $listPlage->loadList($where, "date, chir_id");
 
 // On charge les références des consultations qui nous interessent
-$total["cheque"]["valeur"] = 0;
-$total["CB"]["valeur"] = 0;
+$total["cheque"]["valeur"]  = 0;
+$total["CB"]["valeur"]      = 0;
 $total["especes"]["valeur"] = 0;
-$total["tiers"]["valeur"] = 0;
-$total["autre"]["valeur"] = 0;
-$total["cheque"]["nombre"] = 0;
-$total["CB"]["nombre"] = 0;
+$total["tiers"]["valeur"]   = 0;
+$total["autre"]["valeur"]   = 0;
+$total["cheque"]["nombre"]  = 0;
+$total["CB"]["nombre"]      = 0;
 $total["especes"]["nombre"] = 0;
-$total["tiers"]["nombre"] = 0;
-$total["autre"]["nombre"] = 0;
-$total["secteur1"] = 0;
-$total["secteur2"] = 0;
-$total["tarif"] = 0;
-$total["nombre"] = 0;
+$total["tiers"]["nombre"]   = 0;
+$total["autre"]["nombre"]   = 0;
+$total["secteur1"]          = 0;
+$total["secteur2"]          = 0;
+$total["tarif"]             = 0;
+$total["nombre"]            = 0;
 foreach($listPlage as $key => $value) {
   $listPlage[$key]->loadRefsFwd();
   //unset($listPlage[$key]->_ref_consultations);
@@ -113,26 +113,26 @@ foreach($listPlage as $key => $value) {
   }
   $total["secteur1"] += $listPlage[$key]->total1;
   $total["secteur2"] += $listPlage[$key]->total2;
-  $total["tarif"] += $listPlage[$key]->total1 + $listPlage[$key]->total2;
-  $total["nombre"] += count($listPlage[$key]->_ref_consultations);
+  $total["tarif"]    += $listPlage[$key]->total1 + $listPlage[$key]->total2;
+  $total["nombre"]   += count($listPlage[$key]->_ref_consultations);
   if(!count($listPlage[$key]->_ref_consultations))
     unset($listPlage[$key]);
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
+require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('today', $today);
-$smarty->assign('deb', $deb);
-$smarty->assign('fin', $fin);
-$smarty->assign('aff', $aff);
-$smarty->assign('etat', $etat);
-$smarty->assign('type', $type);
-$smarty->assign('chirSel', $chirSel);
-$smarty->assign('listPlage', $listPlage);
-$smarty->assign('total', $total);
+$smarty->assign("today"    , $today);
+$smarty->assign("deb"      , $deb);
+$smarty->assign("fin"      , $fin);
+$smarty->assign("aff"      , $aff);
+$smarty->assign("etat"     , $etat);
+$smarty->assign("type"     , $type);
+$smarty->assign("chirSel"  , $chirSel);
+$smarty->assign("listPlage", $listPlage);
+$smarty->assign("total"    , $total);
 
-$smarty->display('print_rapport.tpl');
+$smarty->display("print_rapport.tpl");
 
 ?>

@@ -488,9 +488,14 @@ class COperation extends CMbObject {
     
   function fillTemplate(&$template) {
   	$this->loadRefsFwd();
-    if ($this->plageop_id) {
-      $this->_ref_plageop->loadRefsFwd();
-    }
+    $this->_ref_sejour->loadRefsFwd();
+    $this->_ref_chir->fillTemplate($template);
+    $this->_ref_sejour->_ref_patient->fillTemplate($template);
+    $this->fillLimitedTemplate($template);
+  }
+  
+  function fillLimitedTemplate(&$template) {
+    $this->loadRefsFwd();
 
     $dateFormat = "%d / %m / %Y";
     $timeFormat = "%Hh%M";
@@ -499,8 +504,8 @@ class COperation extends CMbObject {
     $template->addProperty("Admission - Heure"                , mbTranformTime(null, $this->_ref_sejour->entree_prevue, $timeFormat));
     $template->addProperty("Hospitalisation - Durée"          , $this->_ref_sejour->_duree_prevue);
     $template->addProperty("Hospitalisation - Date sortie"    , mbTranformTime(null, $this->_ref_sejour->sortie_prevue, $dateFormat));
-    $template->addProperty("Opération - Anesthésiste - nom"   , @$this->_ref_plageop->_ref_anesth->_user_last_name);
-    $template->addProperty("Opération - Anesthésiste - prénom", @$this->_ref_plageop->_ref_anesth->_user_first_name);
+    $template->addProperty("Opération - Anesthésiste - nom"   , @$this->_ref_anesth->_user_last_name);
+    $template->addProperty("Opération - Anesthésiste - prénom", @$this->_ref_anesth->_user_first_name);
     $template->addProperty("Opération - Anesthésie"           , $this->_lu_type_anesth);
     $template->addProperty("Opération - libellé"              , $this->libelle);
     $template->addProperty("Opération - CCAM - code"          , @$this->_ext_codes_ccam[0]->code);

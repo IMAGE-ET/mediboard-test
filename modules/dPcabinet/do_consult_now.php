@@ -9,14 +9,14 @@
 
 global $AppUI, $m;
 
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'plageconsult') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPpatients", "patients"));
+require_once($AppUI->getModuleClass("dPcabinet" , "plageconsult"));
+require_once($AppUI->getModuleClass("dPcabinet" , "consultation"));
 
 $canEdit = !getDenyEdit($m);
 if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 $chir = new CMediusers;

@@ -195,8 +195,14 @@ class CConsultation extends CMbObject {
     $this->_ref_documents = array();
     $this->_ref_documents = new CCompteRendu();
     $where = array();
-    $where["type"] = "= 'consultation'";
-    $where["object_id"] = "= '$this->consultation_id'";
+    $this->loadRefConsultAnesth();
+    if($this->_ref_consult_anesth->consultation_anesth_id) {
+      $where[] = "`type` = 'consultation' OR `type` = 'consultAnesth'";
+      $where[] = "`object_id` = '$this->consultation_id' OR `object_id` = '$this->_ref_consult_anesth->consultation_anesth_id'";
+    } else {
+      $where["type"] = "= 'consultation'";
+      $where["object_id"] = "= '$this->consultation_id'";
+    }
     $order = "nom";
     $this->_ref_documents = $this->_ref_documents->loadList($where, $order);
     $docs_valid = 0;
@@ -230,6 +236,14 @@ class CConsultation extends CMbObject {
   
   function fillTemplate(&$template) {
   	$this->loadRefsFwd();
+    $this->_ref_plageconsult->loadRefsFwd();
+    $this->_ref_plageconsult->_ref_chir->fillTemplate($template);
+    $this->_ref_patient->fillTemplate($template);
+    $this->fillLimitedTemplate($template);
+  }
+  
+  function fillLimitedTemplate(&$template) {
+    $this->loadRefsFwd();
     $template->addProperty("Consultation - date"      , mbTranformTime("+0 DAY", $this->_ref_plageconsult->date, "%d / %m / %Y") );
     $template->addProperty("Consultation - heure"     , $this->heure);
     $template->addProperty("Consultation - motif"     , nl2br($this->motif));

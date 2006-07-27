@@ -9,14 +9,14 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPcabinet', 'plageconsult') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'tarif') );
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "plageconsult"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "tarif"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
   
 if (!$canEdit) {
-	$AppUI->redirect( "m=system&a=access_denied" );
+	$AppUI->redirect("m=system&a=access_denied");
 }
 
 $date  = mbGetValueFromGetOrSession("date", mbDate());
@@ -73,7 +73,7 @@ if ($selConsult) {
   }
   if(!$right) {
     $AppUI->setMsg("Vous n'avez pas accès à cette consultation", UI_MSG_ALERT);
-    $AppUI->redirect( "m=dPpatients&tab=0&id=$consult->patient_id");
+    $AppUI->redirect("m=dPpatients&tab=0&id=$consult->patient_id");
   }
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
     $consult->_ref_consult_anesth->loadRefs();
@@ -100,7 +100,7 @@ if ($selConsult) {
 
 // Récupération des modèles
 $whereCommon = array();
-$whereCommon["type"] = "= 'consultation'";
+$whereCommon[] = "`type` = 'consultation' OR `type` = 'consultAnesth'";
 $order = "nom";
 
 // Modèles de l'utilisateur
@@ -133,20 +133,20 @@ $tarifsCab = new CTarif;
 $tarifsCab = $tarifsCab->loadList($where, $order);
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('date', $date );
-$smarty->assign('hour', $hour );
-$smarty->assign('vue', $vue);
-$smarty->assign('today', $today);
-$smarty->assign('userSel', $userSel);
-$smarty->assign('listModelePrat', $listModelePrat);
-$smarty->assign('listModeleFunc', $listModeleFunc);
-$smarty->assign('tarifsChir', $tarifsChir);
-$smarty->assign('tarifsCab', $tarifsCab);
-$smarty->assign('anesth', $anesth);
-$smarty->assign('consult', $consult);
+$smarty->assign("date"          , $date);
+$smarty->assign("hour"          , $hour);
+$smarty->assign("vue"           , $vue);
+$smarty->assign("today"         , $today);
+$smarty->assign("userSel"       , $userSel);
+$smarty->assign("listModelePrat", $listModelePrat);
+$smarty->assign("listModeleFunc", $listModeleFunc);
+$smarty->assign("tarifsChir"    , $tarifsChir);
+$smarty->assign("tarifsCab"     , $tarifsCab);
+$smarty->assign("anesth"        , $anesth);
+$smarty->assign("consult"       , $consult);
 
 $antecedent = new CAntecedent();
 $antecedent->loadAides($userSel->user_id);
@@ -156,18 +156,17 @@ $traitement = new CTraitement();
 $traitement->loadAides($userSel->user_id);
 $smarty->assign("traitement", $traitement);
 
-if ($consult->_ref_chir->isFromType(array("Anesthésiste")) || $consult->_ref_consult_anesth->consultation_anesth_id){
+if($consult->_ref_chir->isFromType(array("Anesthésiste")) || $consult->_ref_consult_anesth->consultation_anesth_id) {
   $_is_anesth=true;	
-}else{
+} else {
   $_is_anesth=false;
 }
-$smarty->assign('_is_anesth', $_is_anesth);  
+$smarty->assign("_is_anesth", $_is_anesth);  
 
-if ($_is_anesth) {
-  
-  $smarty->assign('consult_anesth', $consult->_ref_consult_anesth);
-  $smarty->display('edit_consultation_anesth.tpl');
+if($_is_anesth) {
+  $smarty->assign("consult_anesth", $consult->_ref_consult_anesth);
+  $smarty->display("edit_consultation_anesth.tpl");
 } else {
-  $smarty->display('edit_consultation_old.tpl');
+  $smarty->display("edit_consultation_old.tpl");
 }
 ?>

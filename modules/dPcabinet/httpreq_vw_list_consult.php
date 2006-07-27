@@ -9,12 +9,12 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPcabinet', 'plageconsult') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
-require_once( $AppUI->getModuleClass('mediusers') );
+require_once($AppUI->getModuleClass("dPcabinet", "plageconsult"));
+require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
+require_once($AppUI->getModuleClass("mediusers"));
   
 if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
@@ -73,18 +73,18 @@ foreach($listPlage as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('tab', "edit_consultation");
-$smarty->assign('date', $date );
-$smarty->assign('hour', $hour );
-$smarty->assign('vue', $vue);
-$smarty->assign('today', $today);
-$smarty->assign('userSel', $userSel);
-$smarty->assign('listPlage', $listPlage);
-$smarty->assign('consult', $consult);
+$smarty->assign("tab"      , "edit_consultation");
+$smarty->assign("date"     , $date);
+$smarty->assign("hour"     , $hour);
+$smarty->assign("vue"      , $vue);
+$smarty->assign("today"    , $today);
+$smarty->assign("userSel"  , $userSel);
+$smarty->assign("listPlage", $listPlage);
+$smarty->assign("consult"  , $consult);
 
-$smarty->display('inc_list_consult.tpl');
+$smarty->display("inc_list_consult.tpl");
 
 ?>

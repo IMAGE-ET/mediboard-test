@@ -9,27 +9,27 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'plageconsult') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPcabinet", "plageconsult"));
+require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
 
 if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 // Initialisation des variables
-$plageconsult_id = dPgetParam( $_GET, 'plageconsult_id');
+$plageconsult_id = mbGetValueFromGet("plageconsult_id");
 
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;
 $listPlace = array();
 if ($plageconsult_id) {
   $plage->load($plageconsult_id);
-  $date = $plage->date;
+  $date  = $plage->date;
   $ndate = mbDate("+1 MONTH", $date);
   $pdate = mbDate("-1 MONTH", $date);
 } else {
-  $date = dPgetParam( $_GET, 'date', mbDate() );
+  $date  = mbGetValueFromGet("date", mbDate());
   $ndate = mbDate("+1 MONTH", $date);
   $pdate = mbDate("-1 MONTH", $date);
 }
@@ -39,7 +39,7 @@ $listPlage = new CPlageconsult;
 $where = array();
 
 // Praticiens sélectionnés
-$chir_id = dPgetParam( $_GET, 'chir_id');
+$chir_id = mbGetValueFromGet("chir_id");
 if (!$chir_id) {
   $listChir = new CMediusers;
   $listChir = $listChir->loadPraticiens(PERM_EDIT);
@@ -89,18 +89,18 @@ if($plageconsult_id) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('date', $date);
-$smarty->assign('ndate', $ndate);
-$smarty->assign('pdate', $pdate);
-$smarty->assign('chir_id', $chir_id);
-$smarty->assign('plageconsult_id', $plageconsult_id);
-$smarty->assign('plage', $plage);
-$smarty->assign('listPlage', $listPlage);
-$smarty->assign('listPlace', $listPlace);
+$smarty->assign("date"           , $date);
+$smarty->assign("ndate"          , $ndate);
+$smarty->assign("pdate"          , $pdate);
+$smarty->assign("chir_id"        , $chir_id);
+$smarty->assign("plageconsult_id", $plageconsult_id);
+$smarty->assign("plage"          , $plage);
+$smarty->assign("listPlage"      , $listPlage);
+$smarty->assign("listPlace"      , $listPlace);
 
-$smarty->display('plage_selector.tpl');
+$smarty->display("plage_selector.tpl");
 
 ?>

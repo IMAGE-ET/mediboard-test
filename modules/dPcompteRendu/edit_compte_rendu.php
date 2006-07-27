@@ -9,21 +9,23 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('mediusers'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'pack'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'listeChoix'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'templatemanager'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'aidesaisie'));
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "pack"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "listeChoix"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "templatemanager"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "aidesaisie"));
 
-if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+if(!$canEdit) {
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
-$compte_rendu_id = dPgetParam($_GET, "compte_rendu_id", 0);
-$modele_id       = dPgetParam($_GET, "modele_id"      , 0);
-$pack_id         = dPgetParam($_GET, "pack_id"        , 0);
-$object_id       = dPgetParam($_GET, "object_id"      , 0);
+$compte_rendu_id = mbGetValueFromGet("compte_rendu_id"   , 0);
+$modele_id       = mbGetValueFromGet("modele_id"         , 0);
+$praticien_id    = mbGetValueFromGet("praticien_id"      , 0);
+$type            = mbGetValueFromGet("type"              , 0);
+$pack_id         = mbGetValueFromGet("pack_id"           , 0);
+$object_id       = mbGetValueFromGet("object_id"         , 0);
 
 // Faire ici le test des différentes variables dont on a besoin
 
@@ -33,7 +35,7 @@ if($compte_rendu_id) {
 } else {
   $compte_rendu->load($modele_id);
   $compte_rendu->compte_rendu_id = null;
-  $compte_rendu->chir_id = null;
+  $compte_rendu->chir_id = $praticien_id;
   $compte_rendu->function_id = null;
   $compte_rendu->object_id = $object_id;
   if($pack_id) {
@@ -48,20 +50,13 @@ if($compte_rendu_id) {
 $compte_rendu->loadRefsFwd();
 $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;
-//@todo : passer tout en _ref_patient
-if($compte_rendu->_object_className == "COperation") {
-  $object->_ref_sejour->loadRefsFwd();
-  $patient =& $object->_ref_sejour->_ref_patient;
-} else {
-  $patient =& $object->_ref_patient;
-}
-$medichir =& $object->_ref_chir;
+
+$medichir = new CMediusers;
+$medichir->load($compte_rendu->chir_id);
 
 // Gestion du template
 $templateManager = new CTemplateManager;
 
-$medichir->fillTemplate($templateManager);
-$patient->fillTemplate($templateManager);
 $object->fillTemplate($templateManager);
 
 $templateManager->document = $compte_rendu->source;
@@ -79,14 +74,14 @@ $lists = $templateManager->getUsedLists($chirLists);
 $templateManager->initHTMLArea();
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
+require_once($AppUI->getSystemClass("smartydp"));
 
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('templateManager', $templateManager);
-$smarty->assign('compte_rendu', $compte_rendu);
-$smarty->assign('lists', $lists);
+$smarty->assign("templateManager", $templateManager);
+$smarty->assign("compte_rendu"   , $compte_rendu);
+$smarty->assign("lists"          , $lists);
 
-$smarty->display('edit_compte_rendu.tpl');
+$smarty->display("edit_compte_rendu.tpl");
 
 ?>

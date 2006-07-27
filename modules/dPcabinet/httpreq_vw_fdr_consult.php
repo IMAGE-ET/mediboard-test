@@ -9,14 +9,14 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPcabinet', 'plageconsult') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'tarif') );
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "plageconsult"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "tarif"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
   
 if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 // Utilisateur sélectionné ou utilisateur courant
@@ -58,13 +58,13 @@ if ($selConsult) {
   }
   if(!$right) {
     $AppUI->setMsg("Vous n'avez pas accès à cette consultation", UI_MSG_ALERT);
-    $AppUI->redirect( "m=dPpatients&tab=0&id=$consult->patient_id");
+    $AppUI->redirect("m=dPpatients&tab=0&id=$consult->patient_id");
   }
 }
 
 // Récupération des modèles
 $whereCommon = array();
-$whereCommon["type"] = "= 'consultation'";
+$whereCommon[] = "`type` = 'consultation' OR `type` = 'consultAnesth'";
 $order = "nom";
 
 // Modèles de l'utilisateur
@@ -97,15 +97,15 @@ $tarifsCab = new CTarif;
 $tarifsCab = $tarifsCab->loadList($where, $order);
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('listModelePrat', $listModelePrat);
-$smarty->assign('listModeleFunc', $listModeleFunc);
-$smarty->assign('tarifsChir', $tarifsChir);
-$smarty->assign('tarifsCab', $tarifsCab);
-$smarty->assign('consult', $consult);
+$smarty->assign("listModelePrat", $listModelePrat);
+$smarty->assign("listModeleFunc", $listModeleFunc);
+$smarty->assign("tarifsChir"    , $tarifsChir);
+$smarty->assign("tarifsCab"     , $tarifsCab);
+$smarty->assign("consult"       , $consult);
 
-$smarty->display('inc_fdr_consult.tpl');
+$smarty->display("inc_fdr_consult.tpl");
 
 ?>

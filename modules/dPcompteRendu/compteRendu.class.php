@@ -10,8 +10,9 @@
 require_once($AppUI->getSystemClass("mbobject" ));
 
 require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("mediusers", "functions"));
-require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
+require_once($AppUI->getModuleClass("mediusers"   , "functions"));
+require_once($AppUI->getModuleClass("dPcabinet"   , "consultation"));
+require_once($AppUI->getModuleClass("dPcabinet"   , "consultAnesth"));
 require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
 
 $ECompteRenduType = array(
@@ -26,25 +27,25 @@ class CCompteRendu extends CMbObject {
   var $compte_rendu_id = null;
 
   // DB References
-  var $chir_id = null; // not null when is a template associated to a user
+  var $chir_id     = null; // not null when is a template associated to a user
   var $function_id = null; // not null when is a template associated to a function
-  var $object_id = null; // null when is a template, not null when a document
+  var $object_id   = null; // null when is a template, not null when a document
 
   // DB fields
-  var $nom = null;
+  var $nom    = null;
   var $source = null;
-  var $type = null;
+  var $type   = null;
   var $valide = null;
   
   /// Form fields
-  var $_is_document = false;
-  var $_is_modele = false;
+  var $_is_document      = false;
+  var $_is_modele        = false;
   var $_object_className = null;
   
   // Referenced objects
-  var $_ref_chir = null;
+  var $_ref_chir     = null;
   var $_ref_function = null;
-  var $_ref_object = null;
+  var $_ref_object   = null;
 
   function CCompteRendu() {
     $this->CMbObject("compte_rendu", "compte_rendu_id");
@@ -78,6 +79,9 @@ class CCompteRendu extends CMbObject {
     switch($this->type) {
       case "consultation" :
         $this->_object_className = "CConsultation";
+        break;
+      case "consultAnesth" :
+        $this->_object_className = "CConsultAnesth";
         break;
       case "operation" :
         $this->_object_className = "COperation";
@@ -113,6 +117,10 @@ class CCompteRendu extends CMbObject {
       switch($this->_object_className) {
         case "CConsultation" :
           $this->_ref_chir->load($this->_ref_object->_ref_plageconsult->chir_id);
+          break;
+        case "CConsultAnesth" :
+          $this->_ref_object->_ref_consultation->loadRefsFwd();
+          $this->_ref_chir->load($this->_ref_object->_ref_consultation->_ref_plageconsult->chir_id);
           break;
         case "COperation" :
           $this->_ref_chir->load($this->_ref_object->chir_id);

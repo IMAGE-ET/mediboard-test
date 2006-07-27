@@ -10,15 +10,15 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 if (!$canRead) {			// lock out users that do not have at least readPermission on this module
-	$AppUI->redirect( "m=system&a=access_denied" );
+	$AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'plageconsult') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
+require_once($AppUI->getModuleClass("dPcabinet", "plageconsult"));
 
-$deb = mbGetValueFromGetOrSession("deb", mbDate());
-$fin = mbGetValueFromGetOrSession("fin", mbDate());
+$deb  = mbGetValueFromGetOrSession("deb", mbDate());
+$fin  = mbGetValueFromGetOrSession("fin", mbDate());
 $chir = mbGetValueFromGetOrSession("chir");
 
 // Liste des praticiens
@@ -57,13 +57,13 @@ foreach($listPlage as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('deb', $deb);
-$smarty->assign('fin', $fin);
-$smarty->assign('listPlage', $listPlage);
+$smarty->assign("deb", $deb);
+$smarty->assign("fin", $fin);
+$smarty->assign("listPlage", $listPlage);
 
-$smarty->display('print_plages.tpl');
+$smarty->display("print_plages.tpl");
 
 ?>

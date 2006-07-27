@@ -9,10 +9,10 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
+require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
   
 if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+  $AppUI->redirect("m=system&a=access_denied");
 }
 
 // Utilisateur sélectionné ou utilisateur courant
@@ -64,7 +64,7 @@ if ($selConsult) {
   }
   if(!$right) {
     $AppUI->setMsg("Vous n'avez pas accès à cette consultation", UI_MSG_ALERT);
-    $AppUI->redirect( "m=dPpatients&tab=0&id=$consult->patient_id");
+    $AppUI->redirect("m=dPpatients&tab=0&id=$consult->patient_id");
   }
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
     $consult->_ref_consult_anesth->loadRefs();
@@ -75,12 +75,12 @@ if ($selConsult) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('consult_anesth', $consult_anesth);
-$smarty->assign('anesth'        , $anesth        );
+$smarty->assign("consult_anesth", $consult_anesth);
+$smarty->assign("anesth"        , $anesth        );
 
-$smarty->display('inc_type_anesth.tpl');
+$smarty->display("inc_type_anesth.tpl");
 
 ?>

@@ -11,20 +11,20 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'plageconsult') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultation') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPcabinet", "plageconsult"));
+require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
 
 // Récupération des paramètres
-$deb = mbGetValueFromGetOrSession("deb", mbDate());
-$fin = mbGetValueFromGetOrSession("fin", mbDate());
+$deb  = mbGetValueFromGetOrSession("deb", mbDate());
+$fin  = mbGetValueFromGetOrSession("fin", mbDate());
 $chir = mbGetValueFromGetOrSession("chir");
 $chirSel = new CMediusers;
 $chirSel->load($chir);
 //$etat = mbGetValueFromGetOrSession("etat", 0);
 $etat = 1;
 $type = mbGetValueFromGetOrSession("type", 0);
-$aff = mbGetValueFromGetOrSession("aff", 1);
+$aff  = mbGetValueFromGetOrSession("aff", 1);
 
 // Récupération des plages de dates de paiement
 $sql = "SELECT consultation.date_paiement AS date," .
@@ -115,19 +115,19 @@ foreach($listPlage as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
+require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->debugging = false;
-$smarty->assign('deb', $deb);
-$smarty->assign('fin', $fin);
-$smarty->assign('aff', $aff);
-$smarty->assign('etat', $etat);
-$smarty->assign('type', $type);
-$smarty->assign('chirSel', $chirSel);
-$smarty->assign('listPlage', $listPlage);
-$smarty->assign('total', $total);
+$smarty->assign("deb"      , $deb);
+$smarty->assign("fin"      , $fin);
+$smarty->assign("aff"      , $aff);
+$smarty->assign("etat"     , $etat);
+$smarty->assign("type"     , $type);
+$smarty->assign("chirSel"  , $chirSel);
+$smarty->assign("listPlage", $listPlage);
+$smarty->assign("total"    , $total);
 
-$smarty->display('print_compta.tpl');
+$smarty->display("print_compta.tpl");
 
 ?>

@@ -125,7 +125,11 @@ class CConsultAnesth extends CMbObject {
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
     $this->_ref_consultation->fillTemplate($template);
-    $this->_ref_operation->fillTemplate($template);
+    $this->fillLimitedTemplate($template);
+    $this->_ref_operation->fillLimitedTemplate($template);
+  }
+  
+  function fillLimitedTemplate(&$template) {
   }
 }
 
