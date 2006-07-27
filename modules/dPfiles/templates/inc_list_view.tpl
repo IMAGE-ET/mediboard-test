@@ -19,7 +19,7 @@
             {{$curr_file->_file_size}}<br />
             le {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
           </td>
-          <td class="button, {{cycle name=cellform values="dark, light"}}">
+          <td class="button {{cycle name=cellform values="dark, light"}}">
             <form name="editFile{{$curr_file->file_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPfiles" />
               <input type="hidden" name="dosql" value="do_file_aed" />
