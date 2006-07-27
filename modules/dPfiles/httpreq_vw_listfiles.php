@@ -19,6 +19,7 @@ if (!$canEdit) {
 
 $selClass = mbGetValueFromGetOrSession("selClass", null);
 $selKey   = mbGetValueFromGetOrSession("selKey"  , null);
+$typeVue  = mbGetValueFromGetOrSession("typeVue" , 0);
 
 
 // Liste des Class
@@ -42,7 +43,10 @@ $smarty->assign("listCategory", $listCategory);
 $smarty->assign("selClass"    , $selClass    );
 $smarty->assign("selKey"      , $selKey      );
 $smarty->assign("object"      , $object      );
-
-$smarty->display("inc_list_view.tpl");
-
+$smarty->assign("typeVue"     , $typeVue     );
+if($typeVue){
+$smarty->display("inc_list_view_colonne.tpl");
+}else{
+  $smarty->display("inc_list_view.tpl");
+}
 ?>

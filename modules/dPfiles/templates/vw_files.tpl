@@ -42,6 +42,7 @@ function reloadListFile(){
   listFileUrl.setModuleAction("dPfiles", "httpreq_vw_listfiles");
   listFileUrl.addParam("selKey", document.FrmClass.selKey.value);
   listFileUrl.addParam("selClass", document.FrmClass.selClass.value);  
+  listFileUrl.addParam("typeVue", document.FrmClass.typeVue.value);    
   listFileUrl.requestUpdate('listView', { waitingText : null });
 }
 
@@ -75,6 +76,14 @@ function submitFileChangt(oForm){
             <input type="hidden" name="selKey" value="{{$selKey}}" />
             <input type="hidden" name="selView" value="{{$selView}}" />
           </td>
+          {{if $selKey}}
+          <td>
+            <select name="typeVue" onchange="submit()">
+              <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>Avec Prévisualisation</option>
+              <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Sans Prévisualisation</option>
+            </select>
+          </td>
+          {{/if}}
         </tr>
       </table>
       </form>
@@ -88,12 +97,18 @@ function submitFileChangt(oForm){
           <th class="category" colspan="2">{{$object->_view}}</th>
         </tr>
         <tr>
+          {{if $typeVue}}
+          <td colspan="2" id="listView">
+            {{include file="inc_list_view_colonne.tpl"}}
+          </td>
+          {{else}}
           <td style="width: 400px;" id="listView">
             {{include file="inc_list_view.tpl"}}
           </td>
           <td id="bigView" style="text-align: center;">
             {{include file="inc_preview_file.tpl"}}
           </td>
+          {{/if}}
         </tr>
       </table>
     </td>

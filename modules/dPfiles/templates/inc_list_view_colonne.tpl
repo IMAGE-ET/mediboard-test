@@ -6,11 +6,14 @@
     </div>
     <div id="Acc{{$curr_listCat->file_category_id}}Content"  class="accordionTabContentBox">
       <table class="tbl">
+      {{counter start=0 skip=1 assign=curr_data}}
       {{foreach from=$object->_ref_files item=curr_file}}
         {{if $curr_file->file_category_id == $curr_listCat->file_category_id}}
+        {{if $curr_data is div by 3 || $curr_data==0}}
         <tr>
+        {{/if}}
           <td class="{{cycle name=cellicon values="dark, light"}}">
-            <a href="javascript:ZoomFileAjax({{$curr_file->file_id}});">
+            <a href="javascript:popFile({{$curr_file->file_id}});">
               <img src="mbfileviewer.php?file_id={{$curr_file->file_id}}&amp;phpThumb=1" alt="-" />
             </a>
           </td>
@@ -38,9 +41,15 @@
               </button>
             </form>
           </td>
+        {{if ($curr_data+1) is div by 3}}
         </tr>
         {{/if}}
+        {{counter}}
+        {{/if}}
       {{/foreach}}
+      {{if !(($curr_data-1) is div by 3) && $curr_data!=0}}
+      </tr>
+      {{/if}}
       </table>
     </div>
   </div>
