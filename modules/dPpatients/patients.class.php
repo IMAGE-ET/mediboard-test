@@ -132,6 +132,7 @@ class CPatient extends CMbObject {
   function updateFormFields() {
 
     $this->nom = strtoupper($this->nom);
+    $this->nom_jeune_fille = strtoupper($this->nom_jeune_fille);
     $this->prenom = ucwords(strtolower($this->prenom));
     
     $this->_nom_naissance = $this->nom_jeune_fille ? $this->nom_jeune_fille : $this->nom; 
@@ -190,6 +191,10 @@ class CPatient extends CMbObject {
   function updateDBFields() {
     if ($this->nom) {
   	  $this->nom = strtoupper($this->nom);
+    }
+    
+    if ($this->nom_jeune_fille) {
+  	  $this->nom_jeune_fille = strtoupper($this->nom_jeune_fille);
     }
 
     if ($this->prenom) {
