@@ -35,61 +35,65 @@
         </tr>
         <tr>
           <th>Nom / Prenom</th>
-          <td class="halfPane">{{$patient->_view}}</td>
+          <td>{{$patient->_view}}</td>
         </tr>
         {{if $patient->nom_jeune_fille}}
         <tr>
           <th>Nom de jeune fille</th>
-          <td class="halfPane">{{$patient->nom_jeune_fille}}</td>
+          <td>{{$patient->nom_jeune_fille}}</td>
         </tr>
         {{/if}}
         <tr>
           <th>Date de naissance</th>
-          <td class="halfPane">
+          <td>
             {{$patient->_jour}}/{{$patient->_mois}}/{{$patient->_annee}}
-            ({{$patient->_age}} ans)
+            <br />({{$patient->_age}} ans)
           </td>
         </tr>
         <tr>
           <th>Sexe</th>
-          <td class="halfPane">
+          <td>
             {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}
           </td>
         </tr>    
         <tr>
-          <td class="halfPane">
+          <td>
             <table style="font-size: 100%;">
               <tr>
-                <th style="width:100%;">Poids </th>
-                <td>{{$consult->_ref_consult_anesth->poid}} kg</td>
+                <th style="width:100%;">Poids</th>
+                <td style="white-space: nowrap;">{{$consult->_ref_consult_anesth->poid}} kg</td>
               </tr>
               <tr>
-                <th>Taille </th>
-                <td>{{$consult->_ref_consult_anesth->taille}} m</td>
+                <th>Taille</th>
+                <td style="white-space: nowrap;">{{$consult->_ref_consult_anesth->taille}} cm</td>
               </tr>
               <tr>
-                <th>Groupe sanguin </th>
-                <td>{{$consult->_ref_consult_anesth->groupe}} {{$consult->_ref_consult_anesth->rhesus}}</td>
+                <th>Groupe sanguin</th>
+                <td style="white-space: nowrap;">{{$consult->_ref_consult_anesth->groupe}} {{$consult->_ref_consult_anesth->rhesus}}</td>
               </tr>
               <tr>
-                <th>Tension </th>
-                <td>{{$consult->_ref_consult_anesth->tasys}} / {{$consult->_ref_consult_anesth->tadias}}</td>
+                <th>Tension</th>
+                <td style="white-space: nowrap;">{{$consult->_ref_consult_anesth->tasys}} / {{$consult->_ref_consult_anesth->tadias}}</td>
               </tr>
             </table>
           </td>
-          <td class="halfPane">
+          <td>
             <table style="font-size: 100%;">
               <tr>
-                <th>Tabac </th>
+                <th>Tabac</th>
                 <td>{{$consult->_ref_consult_anesth->tabac}}</td>
               </tr>
               <tr>
-                <th>Oenolisme </th>
+                <th>Oenolisme</th>
                 <td>{{$consult->_ref_consult_anesth->oenolisme}}</td>
               </tr>
               <tr>
-                <th>Transfusions </th>
+                <th>Transfusions</th>
                 <td>{{$consult->_ref_consult_anesth->transfusions}}</td>
+              </tr>
+              <tr>
+                <th>ASA</th>
+                <td>{{$consult_anesth->ASA}}</td>
               </tr>
             </table>
           </td>
