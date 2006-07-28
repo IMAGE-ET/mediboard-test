@@ -100,7 +100,7 @@ if ($file_id = mbGetValueFromGet("file_id")) {
   if(mbGetValueFromGet("phpThumb")) {
     $hp = mbGetValueFromGet("hp", 64);
     $wl = mbGetValueFromGet("wl", 64);
-    $f  = mbGetValueFromGet("f" , "png");
+    $f  = mbGetValueFromGet("f" , "jpg");
     if(strpos($file->file_type, "image") !== false) {
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path&hp=$hp&wl=$wl&f=$f");
     } elseif(strpos($file->file_type, "pdf") !== false) {
