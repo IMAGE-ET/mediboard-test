@@ -69,7 +69,7 @@ function submitFileChangt(oForm){
             <select name="typeVue" onchange="submit()">
               <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>Avec Prévisualisation</option>
               <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Sans Prévisualisation</option>
-              <option value="2" {{if $typeVue == 2}}selected="selected"{{/if}}>Grands apperçu</option>
+              <option value="2" {{if $typeVue == 2}}selected="selected"{{/if}}>Grands apperçus</option>
             </select>
           </td>
           {{/if}}

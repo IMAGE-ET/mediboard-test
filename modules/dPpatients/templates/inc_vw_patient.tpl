@@ -282,28 +282,40 @@ function reloadVwPatient(){
   <tr><th class="category" colspan="2">Documents</th></tr>
   <tr>
     <td colspan="2">
-      <strong>Fichiers</strong>
-      <ul>
-        {{foreach from=$patient->_ref_files item=curr_file}}  
-        <li>
-          {{if $canEdit}}
-          <form name="delFrm{{$curr_file->file_id}}" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">{{/if}}
-          <a href="#" OnClick="popFile({{$curr_file->file_id}})">{{$curr_file->file_name}}</a>
-          ({{$curr_file->_file_size}})
-          {{if $canEdit}}
-          <input type="hidden" name="m" value="dPfiles" />
-          <input type="hidden" name="dosql" value="do_file_aed" />
-          <input type="hidden" name="del" value="1" />
-          <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" /> 
-          <button class="cancel notext" type="button"
-            onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadVwPatient})" />
-          </form>    
-          {{/if}}
-        </li>
-        {{foreachelse}}
-        <li>Aucun fichier disponible</li>  
+      
+      
+      <table class="form">
+        <tr>
+          <td colspan="3"><strong>Fichiers</strong></td>
+        </tr>
+        <tr>
+          <td class="catergory">Rubrique</td>
+          <td class="catergory">Fichiers</td>
+          <td class="catergory"></td>                    
+        </tr>
+        {{foreach from=$affichageNbFile item=curr_nbfile}}
+        <tr>
+          <td class="catergory">{{$curr_nbfile.name}}</td>
+          <td class="catergory">{{$curr_nbfile.nb}}</td>
+          <td class="catergory">
+            {{if $curr_nbfile.nb>=1}}
+            <a class="buttonsearch" href="index.php?m=dPfiles&amp;selClass=CPatient&amp;selKey={{$patient->patient_id}}">
+            Visualiser les fichiers
+            </a>
+            {{/if}}
+		  </td>            
+        </tr>
         {{/foreach}}
-      </ul>
+        {{if $patient->_ref_files}}
+        <tr>
+          <td colspan="3" class="button"> 
+            <a class="buttonsearch" href="index.php?m=dPfiles&amp;selClass=CPatient&amp;selKey={{$patient->patient_id}}">
+              Visualiser les fichiers
+            </a>
+          </td>
+        </tr>
+        {{/if}}
+      </table>
       {{if $canEdit}}
       <form name="uploadFrm" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="m" value="dPfiles" />
@@ -313,8 +325,8 @@ function reloadVwPatient(){
         <input type="hidden" name="file_object_id" value="{{$patient->patient_id}}" />
         <input type="file" name="formfile" size="0" /><br />
         Dans : <select name="file_category_id">
-        {{foreach from=$listCategory item=curr_listCat}}
-        <option value="{{$curr_listCat->file_category_id}}">{{$curr_listCat->nom}}</option>
+        {{foreach from=$affichageNbFile item=curr_listCat key=keyCat}}
+        <option value="{{$keyCat}}">{{$curr_listCat.name}}</option>
         {{/foreach}}
         </select>
         <button class="submit" type="submit">Ajouter</button>
