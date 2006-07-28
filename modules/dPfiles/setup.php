@@ -92,22 +92,27 @@ class CSetupdPfiles {
               "\nWHERE `file_consultation` != 0;";
           db_exec( $sql ); db_error();
           $sql = "UPDATE `files_mediboard`" .
-              "SET `file_object_id` = `file_consultation_anesth`," .
-              "\n`file_class` = 'CConsultAnesth'" .
-              "\nWHERE `file_consultation_anesth` != 0;";
-          db_exec( $sql ); db_error();
-          $sql = "UPDATE `files_mediboard`" .
               "SET `file_object_id` = `file_operation`," .
               "\n`file_class` = 'COperation'" .
               "\nWHERE `file_operation` != 0;";
           db_exec( $sql ); db_error();
           $sql = "ALTER TABLE `files_mediboard`" .
             "\nDROP `file_consultation`," .
-            "\nDROP `file_consultation_anesth`," .
             "\nDROP `file_operation`;";
           db_exec( $sql ); db_error();
           
           // Move all files from former to latter strategy
+          $dirsToPurge = array(
+            "consultations"  => "CConsultation",
+            "consultations2" => "CConsultation",
+            "operations" => "COperation",
+          );
+          
+          $sql = "ALTER TABLE `files_mediboard` ADD INDEX (`file_real_filename`);";
+          db_exec( $sql ); db_error();
+          $sql = "ALTER TABLE `files_mediboard` ADD UNIQUE (`file_real_filename`);";
+          db_exec( $sql ); db_error();
+
           set_time_limit(120);
           foreach(glob("files/*/*/*") as $filePath) {
             $fileFragment = $filePath;
@@ -118,14 +123,7 @@ class CSetupdPfiles {
             $fileFragment = dirname($fileFragment);
             $fileDir = basename($fileFragment);
   
-            switch ($fileDir) {
-              case "consultations"       : $fileObjectClass = "CConsultation" ; break;
-              case "consultations2"      : $fileObjectClass = "CConsultation" ; break;
-              case "consultations_anesth": $fileObjectClass = "CConsultAnesth"; break;
-              case "operations"          : $fileObjectClass = "COperation"    ; break;
-              default: $fileObjectClass = null;
-            }
-  
+            $fileObjectClass = @$dirsToPurge[$fileDir];
             if (!$fileObjectClass) {
               continue;
             }
@@ -140,16 +138,12 @@ class CSetupdPfiles {
             }
           }
           
-          CMbPath::purgeEmptySubdirs("files/consultations");
-          CMbPath::purgeEmptySubdirs("files/consultations2");
-          CMbPath::purgeEmptySubdirs("files/consultations_anesth");
-          CMbPath::purgeEmptySubdirs("files/operations");
-  
-          $sql = "ALTER TABLE `files_mediboard` ADD INDEX (`file_real_filename`);";
-          db_exec( $sql ); db_error();
-          $sql = "ALTER TABLE `files_mediboard` ADD UNIQUE (`file_real_filename`);";
-          db_exec( $sql ); db_error();
-          
+          foreach($dirsToPurge as $dirName => $objectClass) {
+            $dir = "files/$dirName";
+            if (is_dir($dir)) {
+              CMbPath::purgeEmptySubdirs($dir);
+            }
+          }
         }
         
       case "0.1";
