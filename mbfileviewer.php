@@ -101,10 +101,11 @@ if ($file_id = mbGetValueFromGet("file_id")) {
     $hp = mbGetValueFromGet("hp", 64);
     $wl = mbGetValueFromGet("wl", 64);
     $f  = mbGetValueFromGet("f" , "jpg");
+    $q  = mbGetValueFromGet("q" , 90);
     if(strpos($file->file_type, "image") !== false) {
-      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path&hp=$hp&wl=$wl&f=$f");
+      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path&hp=$hp&wl=$wl&f=$f&q=$q");
     } elseif(strpos($file->file_type, "pdf") !== false) {
-      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path&h=$hp&w=$wl&f=$f");
+      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path&h=$hp&w=$wl&f=$f&q=$q");
       //header("Location: modules/dPfiles/images/acroread.png");
     } elseif(strpos($file->file_type, "text") !== false) {
       header("Location: modules/dPfiles/images/text.png");
