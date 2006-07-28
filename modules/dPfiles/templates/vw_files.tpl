@@ -20,21 +20,16 @@ function ZoomFileAjax(file_id){
   VwFileUrl.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
 }
 
-function setData(key, val){
+function setData(selClass,keywords,key,val){
   var f = document.FrmClass;
   if (val != '') {
     f.selKey.value = key;
     f.selView.value = val;
+    f.selClass.value = selClass;
+    f.keywords.value = keywords;
     f.file_id.value = "";
     f.submit();
   }
-}
-function ResetValue(){
-   var f = document.FrmClass;
-   f.selKey.value  = "";
-   f.selView.value = "";
-   f.file_id.value = "";
-   f.submit();
 }
 
 function reloadListFile(){
@@ -59,20 +54,13 @@ function submitFileChangt(oForm){
       <input type="hidden" name="file_id" value="{{$file->file_id}}" />
       <table class="form">
         <tr>
-          <td>
+          <td  class="readonly">
             <label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label>
-            <select name="selClass" onchange="ResetValue()">
-              <option value="">&mdash; Choisissez un type</option>
-            {{foreach from=$listClass item=curr_listClass}}
-              <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{$curr_listClass}}</option>
-            {{/foreach}}
-            </select>
+            <input type="text" readonly="readonly" ondblclick="popSearch()" name="selClass" value="{{$selClass}}" />
           </td>
-          <td>
-            {{if $selClass}}
-            <input type="text" name="keywords" value="{{$keywords}}" />
+          <td class="readonly">
+            <input type="text" readonly="readonly" ondblclick="popSearch()" name="keywords" value="{{$keywords}}" />
             <button type="button" onclick="popSearch()" class="search">Rechercher</button>
-            {{/if}}
             <input type="hidden" name="selKey" value="{{$selKey}}" />
             <input type="hidden" name="selView" value="{{$selView}}" />
           </td>
@@ -81,6 +69,7 @@ function submitFileChangt(oForm){
             <select name="typeVue" onchange="submit()">
               <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>Avec Prévisualisation</option>
               <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Sans Prévisualisation</option>
+              <option value="2" {{if $typeVue == 2}}selected="selected"{{/if}}>Grands apperçu</option>
             </select>
           </td>
           {{/if}}
@@ -99,8 +88,12 @@ function submitFileChangt(oForm){
         <tr>
           {{if $typeVue}}
           <td colspan="2" id="listView">
+            {{if $typeVue==1}}
             {{include file="inc_list_view_colonne.tpl"}}
-          </td>
+            {{else $typeVue==2}}
+            {{include file="inc_list_view_gd_thumb.tpl"}}            
+            {{/if}}
+          </td>      
           {{else}}
           <td style="width: 400px;" id="listView">
             {{include file="inc_list_view.tpl"}}

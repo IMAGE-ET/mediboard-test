@@ -13,26 +13,35 @@ $selClass = mbGetValueFromGetOrSession("selClass", null);
 $keywords = mbGetValueFromGetOrSession("keywords", null);
 
 // Liste des Class
-$listClass = getChildClasses();
+$listClass = getChildClasses("CMbObject", array("_ref_files"));
+
 
 $keywords = trim($keywords);
-$keywords = explode(" ", $keywords);
-$keywords = array_filter($keywords);
+$keywords_search = explode(" ", $keywords);
+$keywords_search = array_filter($keywords_search);
 
-$object = new $selClass;
-$list = $object->seek($keywords);
-foreach($list as $key => $value) {
-  $list[$key]->loadRefsFwd();
+
+
+if($selClass){
+  $object = new $selClass;
+  $list = $object->seek($keywords_search);
+  foreach($list as $key => $value) {
+    $list[$key]->loadRefsFwd();
+  }
+  $key = $object->_tbl_key;
 }
-
-$key = $object->_tbl_key;
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("key"  , $key);
-$smarty->assign("list" , $list);
+if($selClass){
+  $smarty->assign("key"        , $key);
+  $smarty->assign("list"       , $list);
+}
+$smarty->assign("listClass"  , $listClass );
+$smarty->assign("keywords"   , $keywords  );
+$smarty->assign("selClass"   , $selClass  );
 
 $smarty->display("object_selector.tpl");
 ?>

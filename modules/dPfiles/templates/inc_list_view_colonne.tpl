@@ -1,14 +1,28 @@
 <div class="accordionMain" id="accordionConsult">
-{{foreach from=$listCategory item=curr_listCat}}
-  <div id="Acc{{$curr_listCat->file_category_id}}">
-    <div id="Acc{{$curr_listCat->file_category_id}}Header" class="accordionTabTitleBar">
-      {{$curr_listCat->nom}}
+{{foreach from=$affichageFile item=curr_listCat key=keyCat}}
+  <div id="Acc{{$keyCat}}">
+    <div id="Acc{{$keyCat}}Header" class="accordionTabTitleBar">
+      {{$curr_listCat.name}}
     </div>
-    <div id="Acc{{$curr_listCat->file_category_id}}Content"  class="accordionTabContentBox">
+    <div id="Acc{{$keyCat}}Content"  class="accordionTabContentBox">
       <table class="tbl">
+        <tr>
+          <td colspan="9">
+            <form name="uploadFrm{{$keyCat}}" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
+            <input type="hidden" name="m" value="dPfiles" />
+            <input type="hidden" name="dosql" value="do_file_aed" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="file_class" value="{{$selClass}}" />
+            <input type="hidden" name="file_object_id" value="{{$selKey}}" />
+            <input type="hidden" name="file_category_id" value="{{$keyCat}}" />
+            Ajouter un document
+            <input type="file" name="formfile" size="0" />
+            <button class="submit" type="submit">Ajouter</button>
+            </form>
+          </td>
+        </tr>
       {{counter start=0 skip=1 assign=curr_data}}
-      {{foreach from=$object->_ref_files item=curr_file}}
-        {{if $curr_file->file_category_id == $curr_listCat->file_category_id}}
+      {{foreach from=$curr_listCat.file item=curr_file}}
         {{if $curr_data is div by 3 || $curr_data==0}}
         <tr>
         {{/if}}
@@ -29,6 +43,7 @@
               <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
               <input type="hidden" name="del" value="0" />
               <select name="file_category_id" onchange="submitFileChangt(this.form)">
+                <option value="" {{if $curr_file->file_category_id == ""}}selected="selected"{{/if}}>&mdash; Aucune</option>
                 {{foreach from=$listCategory item=curr_cat}}
                 <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $curr_file->file_category_id}}selected="selected"{{/if}} >
                   {{$curr_cat->nom}}
@@ -45,15 +60,17 @@
         </tr>
         {{/if}}
         {{counter}}
-        {{/if}}
-      {{/foreach}}
-      {{if !(($curr_data-1) is div by 3) && $curr_data!=0}}
+      {{foreachelse}}
+      <tr>
+        <td colspan="9" class="button">
+          Pas de documents            
+        </td>
       </tr>
-      {{/if}}
+      {{/foreach}}
       </table>
     </div>
   </div>
-{{/foreach}}            
+{{/foreach}}      
 </div>
 <script language="Javascript" type="text/javascript">
 new Rico.Accordion( $('accordionConsult'), {panelHeight:350} );

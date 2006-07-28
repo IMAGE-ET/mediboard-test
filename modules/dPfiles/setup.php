@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPfiles";
-$config["mod_version"]     = "0.11";
+$config["mod_version"]     = "0.12";
 $config["mod_directory"]   = "dPfiles";
 $config["mod_setup_class"] = "CSetupdPfiles";
 $config["mod_type"]        = "user";
@@ -162,7 +162,10 @@ class CSetupdPfiles {
         db_exec($sql); db_error();
       
       case "0.11":  
-        return "0.11";
+        $sql="ALTER TABLE `files_mediboard` CHANGE `file_category_id` `file_category_id` INT( 11 ) NULL ";
+        db_exec($sql); db_error();
+      case "0.12";
+        return "0.12";
     }
     return false;
   }

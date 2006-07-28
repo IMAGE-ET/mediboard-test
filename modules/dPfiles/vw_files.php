@@ -24,11 +24,9 @@ $selView  = mbGetValueFromGetOrSession("selView" , null);
 $file_id  = mbGetValueFromGetOrSession("file_id" , null);
 $typeVue  = mbGetValueFromGetOrSession("typeVue" , 0);
 
+
 $file = new CFile;
 $file->load($file_id);
-
-// Liste des Class
-$listClass = getChildClasses("CMbObject", array("_ref_files"));
 
 $listCategory = CFilesCategory::listCatClass($selClass);
 
@@ -42,10 +40,23 @@ if($selClass && $selKey){
   $object = new $selClass;
   $object->load($selKey);
   $object->loadRefsFiles();
+
+  // Classement des fichiers
+  $affichageFile = array();
+  $affichageFile[""] = array();
+  $affichageFile[""]["name"] = "Aucune Catégorie";
+  $affichageFile[""]["file"] = array();
+  foreach($listCategory as $keyCat => $curr_Cat){
+    $affichageFile[$keyCat]["name"] = $curr_Cat->nom;
+    $affichageFile[$keyCat]["file"] = array();
+  }
+  foreach($object->_ref_files as $keyFile =>$FileData){
+    $affichageFile[$FileData->file_category_id]["file"][]=$FileData;
+  }
+  $smarty->assign("affichageFile",$affichageFile);
 }
 
 $smarty->assign("listCategory", $listCategory);
-$smarty->assign("listClass"   , $listClass   );
 $smarty->assign("selClass"    , $selClass    );
 $smarty->assign("selKey"      , $selKey      );
 $smarty->assign("selView"     , $selView     );

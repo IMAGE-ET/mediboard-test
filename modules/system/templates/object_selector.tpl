@@ -1,12 +1,42 @@
 <script type="text/javascript">
 
-function setClose(key, val){
-  window.opener.setData(key,val);
+function setClose(selClass,keywords,key,val){
+  window.opener.setData(selClass,keywords,key,val);
   window.close();
 }
 </script>
 
+<form action="index.php" target="_self" name="frmSelector" method="get" onsubmit="return checkForm(this)">
 
+<input type="hidden" name="m" value="system" />
+<input type="hidden" name="a" value="object_selector" />
+<input type="hidden" name="dialog" value="1" />
+
+<table class="form">
+  <tr>
+    <th class="category" colspan="3">Critères de sélection</th>
+  </tr>
+  <tr>
+    <th><label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label></th>
+    <td>
+      <select title="str|notNull" name="selClass">
+        <option value="">&mdash; Choisissez un type</option>
+        {{foreach from=$listClass item=curr_listClass}}
+        <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{$curr_listClass}}</option>
+        {{/foreach}}
+      </select>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <th><label for="keywords" title="Veuillez saisir un ou plusieurs mot clé">Mots Clés</label></th>
+    <td><input title="str|notNull" type="text" name="keywords" value="{{$keywords}}" /></td>
+    <td><button class="search" type="submit">rechercher</button></td>
+  </tr>
+</table>
+</form>
+
+{{if $selClass}}
 <table class="tbl">
   <tr>
     <th align="center" colspan="2">Résultat de la recherche</th>
@@ -15,7 +45,8 @@ function setClose(key, val){
   {{foreach from=$list item=curr_list}}
     <tr>
       <td>{{$curr_list->_view}}</td>     
-      <td class="button"><button type="button" onclick="setClose({{$curr_list->$key}}, '{{$curr_list->_view|escape:javascript}}')">selectionner</button></td>
+      <td class="button"><button type="button" onclick="setClose('{{$selClass}}', '{{$keywords|escape:javascript}}', {{$curr_list->$key}}, '{{$curr_list->_view|escape:javascript}}')">selectionner</button></td>
     </tr>
   {{/foreach}}
 </table>
+{{/if}}

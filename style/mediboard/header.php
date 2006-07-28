@@ -79,34 +79,6 @@ foreach ($nav as $module) {
 					</ul>
 				</td>
 				<td id="new">
-					<form id="formNew" method="get" action="./index.php">
-						<input type="hidden" name="a" value="addedit" />
-
-<?php
-
-	$newItem[""] = "- New Item -";
-	$newItem["companies"] = "Company";
-	$newItem["contacts"] = "Contact";
-	$newItem["calendar"] = "Event";
-	$newItem["files"] = "File";
-	$newItem["projects"] = "Project";
-
-	$s = arraySelect( $newItem, "m", "onchange='if (this.options[this.selectedIndex].value) this.form.submit()'", "", true);
-
-	// build URI string
-	if (isset( $company_id )) {		
-		$s .= "<input type='hidden' name='company_id' value='$company_id' />";
-	}
-	if (isset( $task_id )) {
-		$s .= "<input type='hidden' name='task_parent' value='$task_id' />";
-	}
-	if (isset( $file_id )) {
-		$s.= "<input type='hidden' name='file_id' value='$file_id' />";
-	}
-  
-//  echo $s;
-?>
-					</form>
 				</td>
 			</tr>
 		</table>
