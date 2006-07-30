@@ -8,7 +8,7 @@
 
 $dPconfig = array();
 
-if (!is_file("./includes/config.php")) {
+if(!is_file("./includes/config.php")) {
   header("location: install/");
   die("Redirection vers l'assistant d'installation");
 }
@@ -33,20 +33,20 @@ ini_set("memory_limit", "64M");
 
 // manage the session variable(s)
 session_name("dotproject");
-if (get_cfg_var("session.auto_start") > 0) {
+if(get_cfg_var("session.auto_start") > 0) {
 	session_write_close();
 }
 session_start();
 session_register("AppUI"); 
   
 // write the HTML headers
-header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");	// Date in the past
-header ("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");	// always modified
-header ("Cache-Control: no-cache, must-revalidate");	// HTTP/1.1
-header ("Pragma: no-cache");	// HTTP/1.0
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");	// Date in the past
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");	// always modified
+header("Cache-Control: no-cache, must-revalidate");	// HTTP/1.1
+header("Pragma: no-cache");	// HTTP/1.0
 
 // check if session has previously been initialised
-if (!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
+if(!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
     $_SESSION["AppUI"] = new CAppUI();
 }
 
@@ -63,17 +63,17 @@ require_once($AppUI->getSystemClass("dp"));
 require_once($AppUI->getSystemClass("mbmodule"));
 
 // load default preferences if not logged in
-if ($AppUI->doLogin()) {
+if($AppUI->doLogin()) {
     $AppUI->loadPrefs(0);
 }
 
 // check if the user is trying to log in
-if (isset($_POST["login"])) {
+if(isset($_POST["login"])) {
 	$username = dPgetParam($_POST, "username", "");
 	$password = dPgetParam($_POST, "password", "");
 	$redirect = dPgetParam($_REQUEST, "redirect", "");
 	$ok = $AppUI->login($username, $password);
-	if (!$ok) {
+	if(!$ok) {
 		@include_once("./locales/core.php");
 		$AppUI->setMsg("Login Failed", UI_MSG_ERROR);
 	}
@@ -90,19 +90,19 @@ $a = "";
 $u = "";
 
 // check if we are logged in
-if ($AppUI->doLogin()) {
-    $AppUI->setUserLocale();
+if($AppUI->doLogin()) {
+  $AppUI->setUserLocale();
 	// load basic locale settings
 	@include_once("./locales/$AppUI->user_locale/locales.php");
 	@include_once("./locales/core.php");
 	setlocale(LC_TIME, $AppUI->user_locale);
 
 	$redirect = @$_SERVER["QUERY_STRING"];
-	if (strpos($redirect, "logout") !== false) {
+	if(strpos($redirect, "logout") !== false) {
 		$redirect = "";
 	}
 
-	if (isset($locale_char_set)) {
+	if(isset($locale_char_set)) {
 		header("Content-type: text/html;charset=$locale_char_set");
 	}
 
@@ -123,7 +123,7 @@ $a     = $AppUI->checkFileName(mbGetValueFromGet("a", "index"));
 $u     = $AppUI->checkFileName(mbGetValueFromGet("u", ""));
 $dosql = $AppUI->checkFileName(mbGetValueFromPost("dosql", ""));
 
-// load module based locale settings
+// load locale settings
 @include_once("./locales/$AppUI->user_locale/locales.php");
 @include_once("./locales/core.php");
 
@@ -144,17 +144,17 @@ $suppressHeaders = dPgetParam($_GET, "suppressHeaders");
 // Output the charset header in cas of an ajax request
 $ajax = dPgetParam($_GET, "ajax", false);
 
-if (!$suppressHeaders || $ajax) {
+if(!$suppressHeaders || $ajax) {
 	// output the character set header
-	if (isset($locale_char_set)) {
+	if(isset($locale_char_set)) {
 		header("Content-type: text/html;charset=$locale_char_set");
 	}
 }
 
 // do some db work if dosql is set
-if (isset($_REQUEST["dosql"])) {
+if(isset($_REQUEST["dosql"])) {
     $mDo = isset($_REQUEST["m"]) ? $_REQUEST["m"] : $m;
-    require ("./modules/$mDo/$dosql.php");
+    require("./modules/$mDo/$dosql.php");
 }
 
 // start output proper
@@ -166,7 +166,7 @@ if(!$suppressHeaders) {
  require "./style/$uistyle/header.php";
 }
 
-require "./modules/$m/" . ($u ? "$u/" : "") . "$a.php";
+require "./modules/$m/".($u ? "$u/" : "")."$a.php";
 
 $phpChrono->stop();
 

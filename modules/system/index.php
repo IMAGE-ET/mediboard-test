@@ -11,6 +11,7 @@ require_once($AppUI->getSystemClass("tabindex"));
 
 $tabs = array();
 $tabs[] = array("view_dpadmin", "Configuration générale", 0);
+$tabs[] = array("view_modules", "Modules", 0);
 $tabs[] = array("view_history", "Historique", 0);
 $tabs[] = array("view_messages", "Messagerie", 0);
 $tabs[] = array("view_logs", "Logs système", 0);

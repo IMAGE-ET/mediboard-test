@@ -121,6 +121,8 @@ foreach ($modules as $row) {
 	echo "<tr>$s</tr>";
 }
 
+mbTrace($modFiles);
+
 foreach ($modFiles as $v) {
 	// clear the file system entry
 	if ($v) {

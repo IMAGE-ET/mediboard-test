@@ -52,7 +52,7 @@ global $AppUI, $canRead, $canEdit, $m;
     <?php echo dPshowImage( dPfindImage( 'power-management.png', $m ), 42, 42, '' ); ?>
   </td>
   <td>
-    <h2><?php echo $AppUI->_( 'Modules' );?></h2>
+    <h2><?php echo $AppUI->_( 'Modules' );?> (accessible maintenant depuis l'onglet <strong>Modules</strong>)</h2>
   </td>
 </tr>
 
