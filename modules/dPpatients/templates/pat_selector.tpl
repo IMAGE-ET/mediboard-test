@@ -30,12 +30,12 @@ function setClose(key, val){
 </tr>
 
 <tr>
-  <th>Nom:</th>
+  <th><label for="name" title="Nom du patient à rechercher, au moins les premières lettres">Nom</label></th>
   <td><input name="name" value="{{$name}}" size="30" /></td>
   <td></td>
 </tr>
 <tr>
-  <th>Prénom:</th>
+  <th><label for="firstName" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
   <td><input name="firstName" value="{{$firstName}}" size="30" /></td>
   <td><button class="search" type="submit">rechercher</button></td>
 </tr>
@@ -50,9 +50,9 @@ function setClose(key, val){
 <tr>
   <th align="center">Patient</th>
   <th align="center">Date de naissance</th>
-  <th align="center">Telephone</th>
+  <th align="center">Téléphone</th>
   <th align="center">Mobile</th>
-  <th align="center">Selectionner</th>
+  <th align="center">Sélectionner</th>
 </tr>
 {{foreach from=$list item=curr_patient}}
 <tr>
@@ -60,7 +60,9 @@ function setClose(key, val){
   <td>{{$curr_patient->_naissance}}</td>
   <td>{{$curr_patient->tel}}</td>
   <td>{{$curr_patient->tel2}}</td>
-  <td class="button"><button type="button" onclick="setClose({{$curr_patient->patient_id}}, '{{$curr_patient->_view|escape:javascript}}')">selectionner</button></td>
+  <td class="button">
+    <button class="tick" type="button" onclick="setClose({{$curr_patient->patient_id}}, '{{$curr_patient->_view|escape:javascript}}')">Sélectionner</button>
+  </td>
 </tr>
 {{/foreach}}
 </table>
