@@ -19,12 +19,13 @@ class CFunctions extends CMbObject {
   // DB Table key
 	var $function_id = null;
 
+  // DB References
+  var $group_id = null;
+
   // DB Fields
+  var $type  = null;
 	var $text  = null;
 	var $color = null;
-
-  // DB References
-	var $group_id = null;
   
   // Object References
   var $_ref_group = null;
@@ -33,14 +34,17 @@ class CFunctions extends CMbObject {
 	function CFunctions() {
 		$this->CMbObject("functions_mediboard", "function_id");
     
-    $this->_props["text"] = "str|notNull|confidential";
-    $this->_props["color"] = "str|length|6|notNull";
     $this->_props["group_id"] = "ref|notNull";
+    $this->_props["type"]     = "enum|administratif|cabinet|notNull";
+    $this->_props["text"]     = "str|notNull|confidential";
+    $this->_props["color"]    = "str|length|6|notNull";
     
     $this->_seek["text"] = "like";
+    
+    $this->buildEnums();
 	}
   
-  function updateFormFields () {
+  function updateFormFields() {
 		parent::updateFormFields();
 
     $this->_view = $this->text;
@@ -84,12 +88,11 @@ class CFunctions extends CMbObject {
   
   // @todo : ameliorer le choix des spécialités
   // (loadfunction($groupe, $permtype) par exemple)
-  function loadSpecialites ($perm_type = null) {
-    $sql = "SELECT $this->_tbl.*" .
-      "\nFROM $this->_tbl, groups_mediboard" .
-      "\nWHERE $this->_tbl.group_id = groups_mediboard.group_id" .
-      "\nAND groups_mediboard.text IN ('Cabinets')" .
-      "\nORDER BY $this->_tbl.text";
+  function loadSpecialites($perm_type = null) {
+    $sql = "SELECT `$this->_tbl`.*" .
+      "\nFROM `$this->_tbl`" .
+      "\nWHERE `$this->_tbl`.`type` = 'cabinet'" .
+      "\nORDER BY `$this->_tbl`.`text`";
   
     $basespecs = db_loadObjectList($sql, $this);
     $specs = null;

@@ -13,13 +13,14 @@ function setColor(color) {
     f.color.value = color;
   }
   document.getElementById('test').style.background = '#' + f.color.value;
+  f.color.onchange();
 }
 </script>
 
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;userfunction=0"><strong>Créer une fonction</strong></a>
+      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;function_id=0"><strong>Créer une fonction</strong></a>
       <table class="tbl">
       {{foreach from=$listGroups item=curr_group}}
         <tr><th>Groupe {{$curr_group->text}} &mdash; {{$curr_group->_ref_functions|@count}} fonction(s)</th><th>Utilisateurs</th></tr>
@@ -75,12 +76,21 @@ function setColor(color) {
           </td>
         </tr>
         <tr>
+          <th><label for="type" title="Type de fonction. Obligatoire">Type</label></th>
+          <td>
+            <select name="type" title="{{$userfunction->_props.type}}">
+              <option value="">&mdash; Choisir un type</option>
+              {{html_options values=$userfunction->_enums.type output=$userfunction->_enums.type selected=$userfunction->type}}
+            </select>
+          </td>
+        </tr>
+        <tr>
           <th><label for="color" title="Couleur de visualisation des fonctions dans les plannings">Couleur</label></th>
           <td>
             <span id="test" title="test" style="background: #{{$userfunction->color}};">
             <a href="javascript:popColor()">cliquez ici</a>
             </span>
-            <input type="hidden" name="color" value="{{$userfunction->color}}" />
+            <input type="hidden" name="color" title="{{$userfunction->_props.color}}" value="{{$userfunction->color}}" />
           </td>
         </tr>
         <tr>
