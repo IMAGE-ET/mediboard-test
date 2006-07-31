@@ -14,6 +14,10 @@ $suppressHeaders = mbGetValueFromPost("suppressHeaders", 0);
 unset($_POST["ajax"]);
 unset($_POST["suppressHeaders"]);
 
+if(isset($_POST["cat_id"])){
+  $cat_id   = mbGetValueFromPostOrSession("cat_id"  , 0);
+}
+
 function doRedirect() {
   global $ajax, $AppUI;
   if($ajax) {

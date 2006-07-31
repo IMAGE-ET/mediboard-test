@@ -4,7 +4,7 @@
     <div id="Acc{{$keyCat}}Header" class="accordionTabTitleBar">
       {{$curr_listCat.name}}
     </div>
-    <div id="Acc{{$keyCat}}Content"  class="accordionTabContentBox">
+    <div id="Acc{{$keyCat}}Content" class="accordionTabContentBox">
       <table class="tbl">
         <tr>
           <td colspan="3">
@@ -12,6 +12,7 @@
             <input type="hidden" name="m" value="dPfiles" />
             <input type="hidden" name="dosql" value="do_file_aed" />
             <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="cat_id" value="{{$keyCat}}" />
             <input type="hidden" name="file_class" value="{{$selClass}}" />
             <input type="hidden" name="file_object_id" value="{{$selKey}}" />
             <input type="hidden" name="file_category_id" value="{{$keyCat}}" />
@@ -38,7 +39,7 @@
               <input type="hidden" name="m" value="dPfiles" />
               <input type="hidden" name="dosql" value="do_file_aed" />
               <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
-              <input type="hidden" name="del" value="0" />        
+              <input type="hidden" name="del" value="0" />      
               <select name="file_category_id" onchange="submitFileChangt(this.form)">
                 <option value="" {{if $curr_file->file_category_id == ""}}selected="selected"{{/if}}>&mdash; Aucune</option>
                 {{foreach from=$listCategory item=curr_cat}}
@@ -48,7 +49,7 @@
                 {{/foreach}}        
               </select>
               <br />
-              <button type="button" class="trash" onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
+              <button type="button" class="trash" onclick="saveCatId({{$keyCat}});confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
                 Supprimer
               </button>
             </form>
@@ -64,8 +65,8 @@
       </table>
     </div>
   </div>
-{{/foreach}}      
+{{/foreach}}     
 </div>
 <script language="Javascript" type="text/javascript">
-new Rico.Accordion( $('accordionConsult'), {panelHeight:350} );
+new Rico.Accordion( $('accordionConsult'), {panelHeight:350{{if $accordion_open}},onLoadShowTab : {{$accordion_open}}{{/if}}} );
 </script>

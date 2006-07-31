@@ -293,13 +293,13 @@ function reloadVwPatient(){
           <td class="catergory">Fichiers</td>
           <td class="catergory"></td>                    
         </tr>
-        {{foreach from=$affichageNbFile item=curr_nbfile}}
+        {{foreach from=$affichageNbFile item=curr_nbfile key=keyCat}}
         <tr>
           <td class="catergory">{{$curr_nbfile.name}}</td>
           <td class="catergory">{{$curr_nbfile.nb}}</td>
           <td class="catergory">
             {{if $curr_nbfile.nb>=1}}
-            <a class="buttonsearch" href="index.php?m=dPfiles&amp;selClass=CPatient&amp;selKey={{$patient->patient_id}}">
+            <a class="buttonsearch" href="index.php?m=dPfiles&amp;selClass=CPatient&amp;selKey={{$patient->patient_id}}&amp;cat_id={{$keyCat}}">
             Visualiser les fichiers
             </a>
             {{/if}}

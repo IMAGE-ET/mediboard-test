@@ -20,6 +20,10 @@ function ZoomFileAjax(file_id){
   VwFileUrl.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
 }
 
+function saveCatId(Keyid){
+   document.FrmClass.cat_id.value = Keyid;
+}
+
 function setData(selClass,keywords,key,val){
   var f = document.FrmClass;
   if (val != '') {
@@ -31,13 +35,17 @@ function setData(selClass,keywords,key,val){
     f.submit();
   }
 }
+function saveCatId(key){
+  document.FrmClass.cat_id.value = key;
+}
 
 function reloadListFile(){
   var listFileUrl = new Url;
   listFileUrl.setModuleAction("dPfiles", "httpreq_vw_listfiles");
   listFileUrl.addParam("selKey", document.FrmClass.selKey.value);
   listFileUrl.addParam("selClass", document.FrmClass.selClass.value);  
-  listFileUrl.addParam("typeVue", document.FrmClass.typeVue.value);    
+  listFileUrl.addParam("typeVue", document.FrmClass.typeVue.value);
+  listFileUrl.addParam("cat_id", document.FrmClass.cat_id.value);
   listFileUrl.requestUpdate('listView', { waitingText : null });
 }
 
@@ -52,6 +60,7 @@ function submitFileChangt(oForm){
       <form name="FrmClass" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="file_id" value="{{$file->file_id}}" />
+      <input type="hidden" name="cat_id" value="{{$cat_id}}" />
       <table class="form">
         <tr>
           <td  class="readonly">
