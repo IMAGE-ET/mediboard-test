@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"] = "dPbloc";
-$config["mod_version"] = "0.13";
+$config["mod_version"] = "0.14";
 $config["mod_directory"] = "dPbloc";
 $config["mod_setup_class"] = "CSetupdPbloc";
 $config["mod_type"] = "user";
@@ -83,7 +83,12 @@ class CSetupdPbloc {
         $sql = "ALTER TABLE `sallesbloc` ADD `stats` TINYINT DEFAULT '0' NOT NULL AFTER `nom` ;";
         db_exec( $sql ); db_error();
       case "0.13":
-        return "0.13";
+        $sql = "ALTER TABLE `sallesbloc` ADD `group_id` INT UNSIGNED NOT NULL DEFAULT 1 AFTER `id`;";
+        db_exec($sql); db_error();
+        $sql = "ALTER TABLE `sallesbloc` ADD INDEX ( `group_id` ) ;";
+        db_exec( $sql ); db_error();
+      case "0.14":
+        return "0.14";
     }
     return false;
   }

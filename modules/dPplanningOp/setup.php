@@ -497,6 +497,8 @@ class CSetupdPplanningOp {
       case "0.51":
         $sql = "ALTER TABLE `sejour` ADD `group_id` INT UNSIGNED NOT NULL DEFAULT 1 AFTER `praticien_id`";
         db_exec($sql); db_error();
+        $sql = "ALTER TABLE `sejour` ADD INDEX ( `group_id` ) ;";
+        db_exec( $sql ); db_error();
       case "0.52":
         return "0.52";
     }

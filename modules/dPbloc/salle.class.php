@@ -16,16 +16,20 @@ require_once( $AppUI->getSystemClass("mbobject"));
 class CSalle extends CMbObject {
   // DB Table key
 	var $id = null;
+  
+  // DB references
+  var $group_id = null;
 	
   // DB Fields
-  var $nom = null;
+  var $nom   = null;
   var $stats = null;
 
 	function CSalle() {
 		$this->CMbObject("sallesbloc", "id");
 
-    $this->_props["nom"]   = "str|notNull|confidential";
-    $this->_props["stats"] = "enum|0|1|notNull";
+    $this->_props["group_id"] = "ref|notNull";
+    $this->_props["nom"]      = "str|notNull";
+    $this->_props["stats"]    = "enum|0|1|notNull";
     
     $this->_seek["nom"] = "like";
 	}
@@ -38,7 +42,7 @@ class CSalle extends CMbObject {
       "joinfield" => "id_salle"
     );
     
-    return CDpObject::canDelete( $msg, $oid, $tables );
+    return CDpObject::canDelete($msg, $oid, $tables);
   }
 }
 ?>

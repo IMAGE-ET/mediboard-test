@@ -48,6 +48,12 @@ class CGroups extends CMbObject {
       "idfield"   => "function_id", 
       "joinfield" => "group_id"
     );
+    $tables[] = array (
+      "label"     => "Sejours", 
+      "name"      => "sejour", 
+      "idfield"   => "sejour_id", 
+      "joinfield" => "group_id"
+    );
     
     return CDpObject::canDelete( $msg, $oid, $tables );
   }
@@ -56,7 +62,7 @@ class CGroups extends CMbObject {
   function loadRefsBack() {
   	$where = array(
       "group_id" => "= '$this->group_id'");
-    $order = "text";
+    $order = "type, text";
     $this->_ref_functions = new CFunctions;
     $this->_ref_functions = $this->_ref_functions->loadList($where, $order);
   }

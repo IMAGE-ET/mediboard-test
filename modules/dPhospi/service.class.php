@@ -18,6 +18,9 @@ require_once($AppUI->getModuleClass("dPhospi", "chambre"));
 class CService extends CMbObject {
   // DB Table key
 	var $service_id = null;	
+  
+  // DB references
+  var $group_id = null;
 
   // DB Fields
   var $nom = null;
@@ -28,10 +31,11 @@ class CService extends CMbObject {
 
 	function CService() {
 		$this->CMbObject("service", "service_id");
-    
+
+    $this->_props["group_id"]    = "ref|notNull";
     $this->_props["nom"]         = "str|notNull|confidential";
     $this->_props["description"] = "str|confidential";
-    
+
     $this->_seek["nom"]         = "like";
     $this->_seek["description"] = "like";
 	}

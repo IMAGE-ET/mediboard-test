@@ -1,13 +1,26 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;usergroup=0"><strong>Créer un groupe</strong></a>
+      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;group_id=0" class="buttonnew">
+        Créer un groupe
+      </a>
       <table class="tbl">
-        <tr><th>liste des groupes</th><th>Fonctions associées</th></tr>
+        <tr>
+          <th>liste des groupes</th>
+          <th>Fonctions associées</th>
+        </tr>
         {{foreach from=$listGroups item=curr_group}}
         <tr>
-          <td><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$curr_group->group_id}}">{{$curr_group->text}}</a></td>
-          <td><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$curr_group->group_id}}">{{$curr_group->_ref_functions|@count}}</a></td>
+          <td>
+            <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$curr_group->group_id}}">
+              {{$curr_group->text}}
+            </a>
+          </td>
+          <td>
+            <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$curr_group->group_id}}">
+              {{$curr_group->_ref_functions|@count}}
+            </a>
+          </td>
         </tr>
         {{/foreach}}
       </table>

@@ -20,14 +20,32 @@ function setColor(color) {
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;function_id=0"><strong>Créer une fonction</strong></a>
+      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;function_id=0" class="buttonnew">
+        Créer une fonction
+      </a>
       <table class="tbl">
       {{foreach from=$listGroups item=curr_group}}
-        <tr><th>Groupe {{$curr_group->text}} &mdash; {{$curr_group->_ref_functions|@count}} fonction(s)</th><th>Utilisateurs</th></tr>
+        <tr>
+          <th>Groupe {{$curr_group->text}} &mdash; {{$curr_group->_ref_functions|@count}} fonction(s)</th>
+          <th>Type</th>
+          <th>Utilisateurs</th>
+        </tr>
         {{foreach from=$curr_group->_ref_functions item=curr_function}}
         <tr>
-          <td style="background: #fff"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;function_id={{$curr_function->function_id}}">{{$curr_function->text}}</a></td>
-          <td style="background: #{{$curr_function->color}}"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;function_id={{$curr_function->function_id}}">{{$curr_function->_ref_users|@count}}</a></td></tr>
+          <td>
+            <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;function_id={{$curr_function->function_id}}">
+              {{$curr_function->text}}
+            </a>
+          </td>
+          <td>
+            {{$curr_function->type}}
+          </td>
+          <td style="background: #{{$curr_function->color}}">
+            <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;function_id={{$curr_function->function_id}}">
+              {{$curr_function->_ref_users|@count}}
+            </a>
+          </td>
+        </tr>
         {{/foreach}}
       {{/foreach}}
       </table>

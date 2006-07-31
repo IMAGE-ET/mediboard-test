@@ -56,7 +56,9 @@ function toggleFunction(function_id) {
 <table class="main">
   <tr>
     <td class="greedyPane">
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;user_id=0"><strong>Créer un utilisateur</strong></a>
+      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;user_id=0" class="buttonnew">
+        Créer un utilisateur
+      </a>
       <table class="tbl">
         <tr>
           <th style="width: 32px;">
