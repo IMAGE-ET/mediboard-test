@@ -258,7 +258,11 @@ function cancelOperation() {
   }
       
   if (oElement.value == "1") {
-    if (confirm("Voulez-vous vraiment rétablir l'opération ?")) {
+    var txtalert = "";
+    if(document.editSejour.annule.value == 1){
+      txtalert = "\n\n ATTENTION ! Cette opération va rétablir le séjour choisi.";
+    }      
+    if (confirm("Voulez-vous vraiment rétablir l'opération ?" + txtalert)) {
       oElement.value = "0";
       oForm.submit();
       return;

@@ -77,6 +77,19 @@ for ($i = $sejourConfig["heure_deb"]; $i <= $sejourConfig["heure_fin"]; $i++) {
 for ($i = 0; $i < 60; $i += $sejourConfig["min_intervalle"]) {
     $mins[] = $i;
 }
+// Préparation de l'alerte dans le cas d'annulation d'un sejour avec opération
+$msg_alert = "";
+if($sejour->_ref_operations){
+  foreach($sejour->_ref_operations as $keyOp => $dataOp){
+    if($dataOp->annulee == 0){
+      $msg_alert .= "\\n".addslashes($dataOp->_view)." le ".substr($dataOp->_datetime, 8, 2)."/".substr($dataOp->_datetime, 5, 2)."/".substr($dataOp->_datetime, 0, 4);
+    }
+  }
+  if($msg_alert!=""){
+   	$msg_alert = "\\n\\nATTENTION ! Vous vous appretez à annuler des opérations :".$msg_alert;
+  }
+}
+
 
 // Création du template
 require_once($AppUI->getSystemClass ("smartydp" ));
@@ -86,6 +99,7 @@ $smarty->assign("sejour"    , $sejour);
 $smarty->assign("praticien" , $praticien);
 $smarty->assign("patient"   , $patient);
 $smarty->assign("sejours"   , $sejours);
+$smarty->assign("msg_alert" , $msg_alert);
 
 $smarty->assign("listPraticiens", $listPraticiens);
 

@@ -306,6 +306,12 @@ class COperation extends CMbObject {
     // Cas d'une annulation
     if ($this->annulee) {
       $this->reorder();
+    }else{
+      // Si pas une annulation on recupére le sejour
+      // et on regarde s'il n'ets pas annulé
+      $this->loadRefSejour();
+      $this->_ref_sejour->annule = 0;
+      $this->_ref_sejour->store();
     }
     
     // Vérification qu'on a pas des actes CCAM codés obsolètes
