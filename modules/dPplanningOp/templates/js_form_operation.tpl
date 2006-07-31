@@ -251,8 +251,11 @@ function cancelOperation() {
   
   if (oElement.value == "0") {
     if (confirm("Voulez-vous vraiment annuler l'opération ?")) {
+      if (confirm("Souhaitez-vous annuler le Séjour correspondant ?\n\nATTENTION, cette action annulera toutes les opérations de ce séjour !")) {
+        document.editSejour.annule.value = 1;
+      }
       oElement.value = "1";
-      oForm.submit();
+      submitForms();
       return;
     }
   }

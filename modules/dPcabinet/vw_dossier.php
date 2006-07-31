@@ -73,20 +73,7 @@ if ($pat_id) {
 
 $canEditCabinet = !getDenyEdit("dPcabinet");
 
-$afficahgeNbFile = array();
-$affichageNbFile[""] = array();
-$affichageNbFile[""]["name"] = "Aucune Catégorie";
-$affichageNbFile[""]["nb"]   = 0;
-foreach($listCategory as $keyCat => $currCat){
-  $affichageNbFile["$keyCat"] = array();
-  $affichageNbFile["$keyCat"]["name"] = $currCat->nom;
-  $affichageNbFile["$keyCat"]["nb"]   = 0;
-}
-if ($patient->patient_id) {
-  foreach($patient->_ref_files as $keyFile => $curr_file){
-    $affichageNbFile["".$curr_file->file_category_id.""]["nb"] ++;
-  }
-}
+$affichageNbFile = CFile::loadNbFilesByCategory($patient);
 
 // Création du template
 require_once( $AppUI->getSystemClass("smartydp"));

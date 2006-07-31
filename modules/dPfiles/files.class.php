@@ -182,5 +182,31 @@ class CFile extends CMbObject {
     $listFile = $listFile->loadList($where);
     return $listFile;
   }
+  
+  function loadNbFilesByCategory($object){
+    $key = $object->_tbl_key;
+    
+    // Liste des Category pour les fichiers de cet objet
+    $listCategory = new CFilesCategory;
+    $listCategory = $listCategory->listCatClass(get_class($object));
+    
+    // Création du tableau de catégorie initialisé à 0
+    $affichageNbFile = array();
+    $affichageNbFile[""]["name"] = "Aucune Catégorie";
+    $affichageNbFile[""]["nb"]   = 0;
+    foreach($listCategory as $keyCat => $currCat){
+      $affichageNbFile[$keyCat] = array();
+      $affichageNbFile[$keyCat]["name"] = $currCat->nom;
+      $affichageNbFile[$keyCat]["nb"]   = 0;
+    }
+   
+    // S'il objet valide
+    if($object->$key){
+      foreach($object->_ref_files as $keyFile => $curr_file){
+        $affichageNbFile[$curr_file->file_category_id]["nb"] ++;
+      }
+    }
+    return $affichageNbFile;
+  }
 }
 ?>
