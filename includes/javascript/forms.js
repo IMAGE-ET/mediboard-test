@@ -37,10 +37,10 @@ function watchFormModified(id, oldval, newval) {
 }
 
 function getLabelFor(oElement) {
-  var aLabels = document.getElementsByTagName("label");
+  var aLabels = oElement.form.getElementsByTagName("label");
   var iLabel = 0;
   while (oLabel = aLabels[iLabel++]) {
-    if (oElement.id == oLabel.getAttribute("for")) {
+    if (oElement.id == oLabel.htmlFor) {
       return oLabel;
     }  
   } 
@@ -98,6 +98,12 @@ function pasteHelperContent(oHelpElement) {
   oHelpElement.value = 0;
 }
 
+function notNullOK(oElement) {
+  if (oLabel = getLabelFor(oElement)) {
+    oLabel.className = oElement.value ? "notNullOK" : "notNull";
+  } 
+}
+
 function getBoundingForm(oElement) {
   if (!oElement) {
     return null;
@@ -120,9 +126,10 @@ function prepareForm(oForm) {
   aLabels = oForm.getElementsByTagName("label");
   iLabel = 0;
   while (oLabel = aLabels[iLabel++]) {
-    if (sFor = oLabel.getAttribute("for")) {
+    // oLabel.getAttribute("for") is not accessible in IE
+    if (sFor = oLabel.htmlFor) { 
       if (sFor.indexOf(sFormName) != 0) {
-        oLabel.setAttribute("for", sFormName + "_" + sFor);
+        oLabel.htmlFor = sFormName + "_" + sFor;
       }
     } 
   } 
@@ -147,23 +154,8 @@ function prepareForm(oForm) {
     if (sPropSpec = oElement.getAttribute("title")) {
       aSpecFragments = sPropSpec.split("|");
       if (aSpecFragments.contains("notNull")) {
-        if (oLabel = getLabelFor(oElement)) {
-          if(oElement.value) {
-            oLabel.className = "notNullOK";
-          } else {
-            oLabel.className = "notNull";
-          }
-          var onchangeFct = "";
-          if(oElement.getAttribute("onchange")) {
-            if(oElement.getAttribute("onchange").indexOf("notNullOK(this)") == -1) {
-              onchangeFct = "notNullOK(this); ";
-            }
-            onchangeFct = onchangeFct + oElement.getAttribute("onchange");
-          } else {
-            onchangeFct = "notNullOK(this); ";
-          }
-          oElement.setAttribute("onchange", onchangeFct);
-        }
+          notNullOK(oElement);
+          new Form.Element.EventObserver(oElement, notNullOK);
       }
     }
    
@@ -184,16 +176,6 @@ function prepareForms() {
   while (oForm = document.forms[iForm++]) {
     prepareForm(oForm);
   }
-}
-
-function notNullOK(oElement) {
-  if (oLabel = getLabelFor(oElement)) {
-    if(oElement.value) {
-      oLabel.className = "notNullOK";
-    } else {
-      oLabel.className = "notNull";
-    }
-  } 
 }
 
 function checkMoreThan(oElement, aSpecFragments) {

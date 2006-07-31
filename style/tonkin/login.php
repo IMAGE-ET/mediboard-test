@@ -33,7 +33,7 @@
 
 <body onload="main()">
 <div id="login">
-  <form name="loginFrm" action="./index.php" method="post">
+  <form name="loginFrm" action="./index.php" method="post" onsubmit="return checkForm(this)">
   
 	<input type="hidden" name="login" value="<?php echo time();?>" />
 	<input type="hidden" name="redirect" value="<?php echo $redirect;?>" />
@@ -80,7 +80,11 @@
     </tr>
     
     <tr>
-      <td colspan="2" class="button"><input type="submit" name="login" value="<?php echo $AppUI->_('login'); ?>" /></td>
+      <td colspan="2" class="button">
+        <button class="tick" type="submit" name="login">
+          <?php echo $AppUI->_('login'); ?>
+        </button>
+      </td>
     </tr>
 
     <tr>

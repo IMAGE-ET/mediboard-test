@@ -45,3 +45,15 @@ function debugArray(arr, name) {
     
     debug(s, name);
 }
+
+function debugElement(oElement) {
+  debug(oElement, "DOM Element");
+  for (kAttribute in oElement.attributes) {
+    oAttribute = oElement.attributes[kAttribute];
+    if (oAttribute) {
+      if (oAttribute.nodeName) {
+        debug("Attribute." + oAttribute.nodeName + " = " + oAttribute.nodeValue);
+      }
+    }
+  }
+}
