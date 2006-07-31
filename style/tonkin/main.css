@@ -250,12 +250,12 @@ table.tabmenu td.normal a {
 
 table.tabmenu td.normalLeft {
   width: 15px;
-  background: url(./images/tabLeft.png) no-repeat bottom right;
+  background: url(./images/tabLeft.gif) no-repeat bottom right;
 }
 
 table.tabmenu td.normalRight {
   width: 15px;
-  background: url(./images/tabRight.png) no-repeat bottom left;
+  background: url(./images/tabRight.gif) no-repeat bottom left;
 }
 
 table.tabmenu td.selected {
@@ -264,12 +264,12 @@ table.tabmenu td.selected {
 
 table.tabmenu td.selectedLeft {
   width: 15px;
-  background: url(./images/tabSelectedLeft.png) no-repeat bottom right;
+  background: url(./images/tabSelectedLeft.gif) no-repeat bottom right;
 }
 
 table.tabmenu td.selectedRight {
   width: 15px;
-  background: url(./images/tabSelectedRight.png) no-repeat bottom left;
+  background: url(./images/tabSelectedRight.gif) no-repeat bottom left;
 }
 
 /* Inputs */
