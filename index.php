@@ -127,7 +127,7 @@ $dosql = $AppUI->checkFileName(mbGetValueFromPost("dosql", ""));
 // set the group in use, put the user group if not allowed
 $g = mbGetValueFromGetOrSession("g", $AppUI->user_group);
 
-if(!isMbAllowed($perm_type, "mediusers", $g)) {
+if(!isMbAllowed(PERM_READ, "mediusers", $g)) {
   mbSetValueToSession("g", $AppUI->user_group);
   $g = $AppUI->user_group;
 }
