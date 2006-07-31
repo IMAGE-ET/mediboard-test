@@ -49,22 +49,6 @@ global $AppUI, $canRead, $canEdit, $m;
 
 <tr>
   <td>
-    <?php echo dPshowImage( dPfindImage( 'power-management.png', $m ), 42, 42, '' ); ?>
-  </td>
-  <td>
-    <h2><?php echo $AppUI->_( 'Modules' );?> (accessible maintenant depuis l'onglet <strong>Modules</strong>)</h2>
-  </td>
-</tr>
-
-<tr>
-  <td />
-  <td>
-    <a href="?m=system&amp;a=viewmods"><?php echo $AppUI->_('View Modules');?></a>
-  </td>
-</tr>
-
-<tr>
-  <td>
     <?php echo dPshowImage( dPfindImage( 'main-settings.png', $m ), 42, 42, '' ); ?>
   </td>
   <td>
