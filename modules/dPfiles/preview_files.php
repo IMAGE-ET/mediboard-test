@@ -14,6 +14,7 @@ require_once($AppUI->getModuleClass("dPfiles", "filescategory"));
 
 $file_id = mbGetValueFromGetOrSession("file_id", null);
 $popup = mbGetValueFromGet("popup", 0);
+$navig = mbGetValueFromGet("navig", null);
 
 $largeur = null;
 $hauteur = null;
@@ -27,14 +28,40 @@ $smarty = new CSmartyDP(1);
 
 $smarty->assign("file_id", $file_id);
 $smarty->assign("file"   , $file   );
-
 if($popup==1){
   // Ouverture en Pop-up : si Image ou PDF : Preview
-  if(strpos($file->file_type, "image") !== false || strpos($file->file_type, "pdf") !== false) {
+  if($navig || (strpos($file->file_type, "image") !== false || strpos($file->file_type, "pdf") !== false)) {
     //Popup avec seconde previsualisation
+    
+    //Récupération de la liste des fichiers
+    $listFiles = new CFile;
+    $where = array();
+    $where["file_class"] = "='$file->file_class'";
+    $where["file_object_id"] = "= '$file->file_object_id'";
+    $order = "nom,file_date";
+    $leftjoin = array();
+    $leftjoin["files_category"] = "files_mediboard.file_category_id=files_category.file_category_id";
+    $listFiles = $listFiles->loadList($where, $order, null, null, $leftjoin);
+    // Récupération du fichier précédent et suivant
+    $filePrev = 0;
+    $fileNext = 0;
+    $en_cours = 0;
+    foreach($listFiles as $keyFile => $dataFile){
+      if($keyFile == $file_id){
+        $filePrev = $en_cours;
+      }
+      if($en_cours == $file_id){
+        $fileNext = $keyFile;
+      }  
+      $en_cours = $keyFile;
+    }
+    
+    //Récupération de la catégorie du fichier en cours
     $listCat = new CFilesCategory;
     $listCat->load($file->file_category_id);
     
+    $smarty->assign("filePrev", $filePrev);
+    $smarty->assign("fileNext", $fileNext);
     $smarty->assign("listCat" , $listCat);
     $smarty->display("inc_preview_file_popup.tpl");
   }else{

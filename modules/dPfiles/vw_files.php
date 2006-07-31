@@ -21,7 +21,7 @@ $selClass = mbGetValueFromGetOrSession("selClass", null);
 $keywords = mbGetValueFromGetOrSession("keywords", null);
 $selKey   = mbGetValueFromGetOrSession("selKey"  , null);
 $selView  = mbGetValueFromGetOrSession("selView" , null);
-$file_id  = mbGetValueFromGetOrSession("file_id" , null);
+$file_id  = mbGetValueFromGet("file_id" , null);
 $typeVue  = mbGetValueFromGetOrSession("typeVue" , 0);
 
 
