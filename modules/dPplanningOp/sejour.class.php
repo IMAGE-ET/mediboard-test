@@ -32,13 +32,14 @@ class CSejour extends CMbObject {
   // DB Réference
   var $patient_id   = null; // remplace $op->pat_id
   var $praticien_id = null; // clone $op->chir_id
-  
+  var $group_id     = null;
+
   // DB Fields
   var $type          = null; // remplace $op->type_adm
   var $modalite      = null;
   var $annule        = null; // complète $op->annule
   var $chambre_seule = null; // remplace $op->chambre
-  
+
   var $entree_prevue = null;
   var $sortie_prevue = null;
   var $entree_reelle = null;
@@ -52,9 +53,9 @@ class CSejour extends CMbObject {
   var $pathologie    = null; // remplace $operation->pathologie
   var $septique      = null; // remplace $operation->septique
   var $convalescence = null; // remplace $operation->convalescence
-  
+
   var $rques = null;
-  
+
   // Form Fields
   var $_duree_prevue       = null;
   var $_date_entree_prevue = null;
@@ -65,21 +66,22 @@ class CSejour extends CMbObject {
   var $_min_sortie_prevue  = null;
   var $_venue_SHS_guess    = null;
 
-  // Object References  
-  var $_ref_patient = null;
-  var $_ref_praticien = null;
-  var $_ref_operations = null;
-  var $_ref_last_operation = null;
-  var $_ref_affectations = null;
+  // Object References
+  var $_ref_patient           = null;
+  var $_ref_praticien         = null;
+  var $_ref_operations        = null;
+  var $_ref_last_operation    = null;
+  var $_ref_affectations      = null;
   var $_ref_first_affectation = null;
-  var $_ref_last_affectation = null;
-  var $_ref_GHM = array();
-  
+  var $_ref_last_affectation  = null;
+  var $_ref_GHM               = array();
+
 	function CSejour() {
-		$this->CMbObject("sejour", "sejour_id");
-    
+    $this->CMbObject("sejour", "sejour_id");
+ 
     $this->_props["patient_id"]    = "ref|notNull";
     $this->_props["praticien_id"]  = "ref|notNull";
+    $this->_props["group_id"]      = "ref|notNull";
     $this->_props["type"]          = "enum|comp|ambu|exte";
     $this->_props["modalite"]      = "enum|office|libre|tiers";
     $this->_props["annule"]        = "enum|0|1";

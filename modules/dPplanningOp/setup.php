@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.51";
+$config["mod_version"]     = "0.52";
 $config["mod_directory"]   = "dPplanningOp";
 $config["mod_setup_class"] = "CSetupdPplanningOp";
 $config["mod_type"]        = "user";
@@ -495,7 +495,10 @@ class CSetupdPplanningOp {
         $sql = "ALTER TABLE `operations` ADD `anesth_id` INT UNSIGNED DEFAULT NULL AFTER `chir_id`";
         db_exec($sql); db_error();
       case "0.51":
-        return "0.51";
+        $sql = "ALTER TABLE `sejour` ADD `group_id` INT UNSIGNED NOT NULL DEFAULT 1 AFTER `praticien_id`";
+        db_exec($sql); db_error();
+      case "0.52":
+        return "0.52";
     }
     return false;
   }
