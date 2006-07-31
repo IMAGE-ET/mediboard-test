@@ -42,6 +42,8 @@ class CAppUI {
 	var $user_email = null;
 /** @var int */
 	var $user_type = null;
+/** @var int */
+  var $user_group = null;
 /** @var array */
 	var $user_prefs=null;
 /** @var int Unix time stamp */
@@ -546,10 +548,10 @@ class CAppUI {
         "\nuser_password AS pwd, " .
         "\npassword('$password') AS pwdpwd, " .
         "\nmd5('$password') AS pwdmd5 " .
-      "\nFROM users, permissions " .
-      "\nWHERE user_username = '$username' " .
-      "\nAND users.user_id = permissions.permission_user " .
-      "\nAND permission_value <> 0";
+        "\nFROM users, permissions " .
+        "\nWHERE user_username = '$username' " .
+        "\nAND users.user_id = permissions.permission_user " .
+        "\nAND permission_value <> 0";
 
 		$obj = null;
 		if (!db_loadObject($sql, $obj)) {
@@ -558,18 +560,24 @@ class CAppUI {
     
     $export = var_export($obj, true); //echo "<pre>obj: $export</pre>";
 
-    $sql = "SELECT remote FROM users_mediboard WHERE user_id = $obj->user_id";
+    $sql = "SELECT remote FROM users_mediboard WHERE user_id = '$obj->user_id'";
     // If can't find remote info, remote info doesn't exist so don't check
     $remote = 1; // 1 IS don't check value
     $sql = "SHOW TABLES LIKE 'users_mediboard'";
     $result = db_loadList($sql);
     
     if(count($result)) {
-      if ($cur = db_exec($sql)) {
-        if ($row = db_fetch_row($cur)) {
+      if($cur = db_exec($sql)) {
+        if($row = db_fetch_row($cur)) {
           $remote = intval($row[0]);
         }
       }
+      $sql = "SELECT groups_mediboard.group_id" .
+          "\nFROM groups_mediboard, functions_mediboard, users_mediboard" .
+          "\nWHERE groups_mediboard.group_id = functions_mediboard.group_id" .
+          "\nAND functions_mediboard.function_id = users_mediboard.function_id" .
+          "\nAND users_mediboard.user_id = '$obj->user_id'";
+      $this->user_group = db_loadResult($sql);
     }
     
     $export = var_export($remote, true); //echo "<pre>remote: $export</pre>";

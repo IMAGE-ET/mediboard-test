@@ -88,6 +88,7 @@ $uistyle = $AppUI->getPref("UISTYLE");
 $m = "";
 $a = "";
 $u = "";
+$g = "";
 
 // check if we are logged in
 if($AppUI->doLogin()) {
@@ -122,6 +123,14 @@ $m     = $AppUI->checkFileName(mbGetValueFromGet("m", getReadableModule()));
 $a     = $AppUI->checkFileName(mbGetValueFromGet("a", "index"));
 $u     = $AppUI->checkFileName(mbGetValueFromGet("u", ""));
 $dosql = $AppUI->checkFileName(mbGetValueFromPost("dosql", ""));
+
+// set the group in use, put the user group if not allowed
+$g = mbGetValueFromGetOrSession("g", $AppUI->user_group);
+
+if(!isMbAllowed($perm_type, "mediusers", $g)) {
+  mbSetValueToSession("g", $AppUI->user_group);
+  $g = $AppUI->user_group;
+}
 
 // load locale settings
 @include_once("./locales/$AppUI->user_locale/locales.php");
