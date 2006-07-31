@@ -15,7 +15,7 @@
             <input type="hidden" name="file_class" value="{{$selClass}}" />
             <input type="hidden" name="file_object_id" value="{{$selKey}}" />
             <input type="hidden" name="file_category_id" value="{{$keyCat}}" />
-            Ajouter un document
+            <label for="formfile">Ajouter un document</label>
             <input type="file" name="formfile" size="0" />
             <button class="submit" type="submit">Ajouter</button>
             </form>

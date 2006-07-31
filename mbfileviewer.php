@@ -98,14 +98,29 @@ if ($file_id = mbGetValueFromGet("file_id")) {
   }
   
   if(mbGetValueFromGet("phpThumb")) {
-    $hp = mbGetValueFromGet("hp", 64);
-    $wl = mbGetValueFromGet("wl", 64);
+    $w  = mbGetValueFromGet("w" , "");
+    $h  = mbGetValueFromGet("h" , "");
+    $hp = mbGetValueFromGet("hp", "");
+    $wl = mbGetValueFromGet("wl", "");
     $f  = mbGetValueFromGet("f" , "jpg");
     $q  = mbGetValueFromGet("q" , 90);
+    //creation fin URL
+    $finUrl="";
+    if($f){ $finUrl.="&f=$f";}    
+    if($q){ $finUrl.="&q=$q";}  
+    
     if(strpos($file->file_type, "image") !== false) {
-      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path&hp=$hp&wl=$wl&f=$f&q=$q");
+      if($hp){$finUrl.="&hp=$hp";}
+      if($wl){$finUrl.="&wl=$wl";}
+      if($h){$finUrl.="&h=$h";}
+      if($w){$finUrl.="&w=$w";}
+      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
     } elseif(strpos($file->file_type, "pdf") !== false) {
-      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path&h=$hp&w=$wl&f=$f&q=$q");
+      if($hp){$finUrl.="&h=$hp";}
+      if($wl){$finUrl.="&w=$wl";}
+      if($h){$finUrl.="&h=$h";}
+      if($w){$finUrl.="&w=$w";}
+      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
       //header("Location: modules/dPfiles/images/acroread.png");
     } elseif(strpos($file->file_type, "text") !== false) {
       header("Location: modules/dPfiles/images/text.png");
