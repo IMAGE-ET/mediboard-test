@@ -61,6 +61,13 @@ if ($sejour_id) {
     $operation->loadRefsFwd();
   }
 
+  foreach ($sejour->_ref_affectations as $keyAff => $valueAff) {
+    $affectation =& $sejour->_ref_affectations[$keyAff];
+    $affectation->loadRefLit();
+    $lit =& $affectation->_ref_lit;
+    $lit->loadCompleteView();
+  }
+
   $praticien =& $sejour->_ref_praticien;
   $patient =& $sejour->_ref_patient;
 }

@@ -71,6 +71,7 @@ function pageMain() {
     </td>
     <td>
       {{include file="inc_infos_operation.tpl"}}
+      {{include file="inc_infos_hospitalisation.tpl"}}
     </td>
   </tr>
 
