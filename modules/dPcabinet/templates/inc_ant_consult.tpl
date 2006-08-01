@@ -75,6 +75,7 @@ function incAntecedantsMain() {
     <td class="text">
       <strong>Ajouter un diagnostic</strong>
       <form name="editDiagFrm" action="?m={{$m}}" method="post">
+
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="tab" value="edit_consultation" />
       <input type="hidden" name="del" value="0" />

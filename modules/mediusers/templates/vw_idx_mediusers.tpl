@@ -1,54 +1,23 @@
 <script type="text/javascript">
-function pageMain() {
-  toggleFunction({{$mediuserSel->function_id}});
+
+function expandFunctions() {
+  {{foreach from=$functions item=curr_function}}
+  oElement = $("function{{$curr_function->function_id}}");
+  Element.show(oElement);
+  {{/foreach}}
 }
 
 function collapseFunctions() {
-  var trs = getElementsByClassName("tr", "function", false);
-  
-  var trsIt = 0;
-  while (tr = trs[trsIt++]) {
-    tr.style.display = "none";
-  }
-  
-  var imgs = getElementsByClassName("img", "action");
-
-  imgIt = 0;
-  while (img = imgs[imgIt++]) {
-    img.src = img.src.replace(/collapse/, "expand");
-  }
+  {{foreach from=$functions item=curr_function}}
+  oElement = $("function{{$curr_function->function_id}}");
+  Element.hide(oElement);
+  {{/foreach}}
 }
 
-function expandFunctions() {
-  var trs = getElementsByClassName("tr", "function", false);
-  
-  var trsIt = 0;
-  while (tr = trs[trsIt++]) {
-    tr.style.display = "";
-  }
-  
-  var imgs = getElementsByClassName("img", "action");
-  
-  imgIt = 0;
-  while (img = imgs[imgIt++]) {
-    img.src = img.src.replace(/expand/, "collapse");
-  }
-}
-
-function toggleFunction(function_id) {
-  var trs = getElementsByClassName("tr", "function" + function_id, true);
-  
-  var trsIt = 0;
-  while (tr = trs[trsIt++]) {
-    tr.style.display = tr.style.display == "none" ? "" : "none";
-  }
-  
-  var img = document.getElementById("function" + function_id);
-  if (img.src.indexOf("expand") != -1) {
-    img.src = img.src.replace(/expand/, "collapse");
-  } else {
-    img.src = img.src.replace(/collapse/, "expand");
-  }
+function pageMain() {
+  {{foreach from=$functions item=curr_function}}
+  initEffectClass("function{{$curr_function->function_id}}", "trigger{{$curr_function->function_id}}");
+  {{/foreach}}
 }
 
 </script>
@@ -71,9 +40,8 @@ function toggleFunction(function_id) {
           <th>Type</th>
         </tr>
         {{foreach from=$functions item=curr_function}}
-        <tr>
-          <td style="background: #{{$curr_function->color}}" onclick="toggleFunction({{$curr_function->function_id}})">
-            <img class="action" id="function{{$curr_function->function_id}}" src="modules/{{$m}}/images/expand.gif"  style="background: #{{$curr_function->color}}" alt="toggle" />
+        <tr id="trigger{{$curr_function->function_id}}" class="triggerShow" onclick="flipEffectElement('function{{$curr_function->function_id}}', 'SlideDown', 'SlideUp', 'trigger{{$curr_function->function_id}}')">
+          <td style="background-color: #{{$curr_function->color}}">
           </td>
           <td colspan="4" style="background: #{{$curr_function->color}}" >
             <strong>{{$curr_function->text}}</strong> -
@@ -81,9 +49,10 @@ function toggleFunction(function_id) {
             groupe {{$curr_function->_ref_group->text}}
           </td>
         </tr>
+        <tbody id="function{{$curr_function->function_id}}">
         {{foreach from=$curr_function->_ref_users item=curr_user}}
-        <tr class="function{{$curr_function->function_id}}" style="display: none">
-          <td style="background: #{{$curr_function->color}}"></td>
+        <tr>
+          <td style="background-color: #{{$curr_function->color}}"></td>
           {{eval var=$curr_user->user_id assign=user_id}}
           {{assign var="href" value="index.php?m=$m&amp;tab=$tab&amp;user_id=$user_id"}}
           <td><a href="{{$href}}">{{$curr_user->_user_username}}</a></td>
@@ -92,6 +61,7 @@ function toggleFunction(function_id) {
           <td><a href="{{$href}}">{{$curr_user->_user_type}}</a></td>
         </tr>
         {{/foreach}}
+        </tbody>
         {{/foreach}}
       </table>
     </td>

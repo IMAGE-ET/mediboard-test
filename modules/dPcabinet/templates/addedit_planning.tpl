@@ -118,8 +118,8 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
               <option value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
                 {{$curr_praticien->_view}}
               </option>
-        {{/foreach}}
-      </select>
+             {{/foreach}}
+            </select>
           </td>
         </tr>
 

@@ -94,12 +94,10 @@ function submitAllForms(operation_id) {
 }
 
 function pageMain() {
-  initGroups("sejour");
-  {{foreach from=$patient->_ref_sejours item=curr_sejour}}
-  {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
-//  exporterDossier({{$curr_op->operation_id}}, {onlySentFiles : true});
+  {{foreach from=$patient->_ref_sejours key=sejour_id item=curr_sejour}}
+  initEffectClass("sejour{{$sejour_id}}", "trigger{{$sejour_id}}");
   {{/foreach}}
-  {{/foreach}}
+  
 }
 
 </script>
@@ -109,14 +107,15 @@ function pageMain() {
     <td>
       <form name="patFrm" action="index.php" method="get">
       <table class="form">
-        <tr><th>Choix du patient :</th>
+        <tr>
+          <th><label for="patNom" title="Merci de choisir un patient pour voir son dossier">Choix du patient</label></th>
           <td class="readonly">
             <input type="hidden" name="m" value="dPpmsi" />
             <input type="hidden" name="pat_id" value="{{$patient->patient_id}}" />
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
           </td>
           <td class="button">
-            <button class="search" type="button" onclick="popPat()">chercher</button>
+            <button class="search" type="button" onclick="popPat()">Chercher</button>
           </td>
         </tr>
       </table>
@@ -135,14 +134,15 @@ function pageMain() {
         </tr>
         {{foreach from=$patient->_ref_sejours item=curr_sejour}}
         {{assign var="GHM" value=$curr_sejour->_ref_GHM}}
-        <tr class="groupcollapse" id="sejour{{$curr_sejour->sejour_id}}" onclick="flipGroup({{$curr_sejour->sejour_id}}, 'sejour')">
+        <tr id="trigger{{$curr_sejour->sejour_id}}" class="triggerShow" onclick="flipEffectElement('sejour{{$curr_sejour->sejour_id}}', 'SlideDown', 'SlideUp', 'trigger{{$curr_sejour->sejour_id}}')">
           <td colspan="4" style="background-color:#aaf;">
           	Dr. {{$curr_sejour->_ref_praticien->_view}} -
           	Séjour du {{$curr_sejour->entree_prevue|date_format:"%d %b %Y (%Hh%M)"}}
           	au {{$curr_sejour->sortie_prevue|date_format:"%d %b %Y (%Hh%M)"}}
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tbody id="sejour{{$curr_sejour->sejour_id}}" style="display: none">
+        <tr>
           <th>Diagnostics du patient</th>
           <td class="text" colspan="3">
             <ul>
@@ -156,7 +156,7 @@ function pageMain() {
             </ul>
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th>Antécedents du patient</th>
           <td class="text" colspan="3">
             <ul>
@@ -171,7 +171,7 @@ function pageMain() {
             </ul>
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th>Traitements du patient</th>
           <td class="text" colspan="3">
             <ul>
@@ -192,7 +192,7 @@ function pageMain() {
           </td>
         </tr>
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th class="category" colspan="4">
             Dr. {{$curr_op->_ref_chir->_view}}
             &mdash; {{$curr_op->_datetime|date_format:"%A %d %B %Y"}}
@@ -200,50 +200,50 @@ function pageMain() {
           </th>
         </tr>
         {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th>{{$curr_code->code}}</th>
           <td class="text" colspan="3">{{$curr_code->libelleLong}}</td>
         </tr>
         {{/foreach}}
         {{if $curr_op->_ref_consult_anesth->consultation_anesth_id}}
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <td colspan="4">
             <strong>Consultation pré-anesthésique</strong>
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th>Consultation</th>
           <td class="text" colspan="3">
             Le {{$curr_op->_ref_consult_anesth->_ref_plageconsult->date|date_format:"%A %d %b %Y"}}
             avec le Dr. {{$curr_op->_ref_consult_anesth->_ref_plageconsult->_ref_chir->_view}}
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <td class="button">Poids</td>
           <td class="button">Taille</td>
           <td class="button">Groupe</td>
           <td class="button">Tension</td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <td class="button">{{$curr_op->_ref_consult_anesth->poid}} kg</td>
           <td class="button">{{$curr_op->_ref_consult_anesth->taille}} cm</td>
           <td class="button">{{$curr_op->_ref_consult_anesth->groupe}} {{$curr_op->_ref_consult_anesth->rhesus}}</td>
           <td class="button">{{$curr_op->_ref_consult_anesth->tasys}}/{{$curr_op->_ref_consult_anesth->tadias}}</td>
         </tr>
         {{/if}}
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <td colspan="4">
             <strong>Intervention</strong>
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th>Date</th>
           <td class="text" colspan="3">
             Le {{$curr_op->_datetime|date_format:"%A %d %b %Y"}}
             par le Dr. {{$curr_op->_ref_chir->_view}},
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th rowspan="6">Heures</th>
           <th>Entrée en salle</th>
           <td>
@@ -377,44 +377,44 @@ function pageMain() {
             </table>
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th>Pose du garrot</th>
           <td>
             {{$curr_op->pose_garrot|date_format:"%Hh%M"}}
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th>Début d'intervention</th>
           <td>
             {{$curr_op->debut_op|date_format:"%Hh%M"}}
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th>Fin d'intervention</th>
           <td>
             {{$curr_op->fin_op|date_format:"%Hh%M"}}
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th>Retrait du garrot</th>
           <td>
             {{$curr_op->retrait_garrot|date_format:"%Hh%M"}}
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th>Sortie de salle</th>
           <td>
             {{$curr_op->sortie_bloc|date_format:"%Hh%M"}}
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <td class="button">supprimer</td>
           <td class="button"><strong>Code</strong></td>
           <td class="button"><strong>Activité</strong></td>
           <td class="button"><strong>Phase &mdash; Modificateurs</strong></td>
         </tr>
         {{foreach from=$curr_op->_ref_actes_ccam item=curr_acte}}
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <td class="button">
             <form name="formActe-{{$curr_acte->_view}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="m" value="dPsalleOp" />
@@ -435,7 +435,7 @@ function pageMain() {
         </tr>
         {{/foreach}}
         {{foreach from=$curr_op->_ref_documents item=document}}
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th>{{$document->nom}}</th>
           {{if $document->source}}
           <td colspan="3">
@@ -448,28 +448,28 @@ function pageMain() {
           {{/if}}
         </tr>
         {{/foreach}}
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <td class="button" colspan="4">
-            <a class="button" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={{$curr_op->operation_id}}">
+            <a class="buttonedit" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={{$curr_op->operation_id}}">
               Modifier les actes
             </a>
-            <button onclick="exporterDossier({{$curr_op->operation_id}})">Exporter vers S@nté.com</button>
+            <button class="tick" onclick="exporterDossier({{$curr_op->operation_id}})">Exporter vers S@nté.com</button>
           </td>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <td class="text" id="hprim_export{{$curr_op->operation_id}}" colspan="4">
           </td>
         </tr>
         {{/foreach}}
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <th class="category" colspan="4">
             Groupage
-            <a href="index.php?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$curr_sejour->sejour_id}}">
+            <a href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$curr_sejour->sejour_id}}">
               (envoyer vers le labo)
             </a>
           </th>
         </tr>
-        <tr class="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
           <td colspan="4">
             <form name="editFrm" action="?m={{$m}}" method="post">
             <input type="hidden" name="m" value="dPplanningOp" />
@@ -478,7 +478,7 @@ function pageMain() {
             <input type="hidden" name="sejour_id" value="{{$curr_sejour->sejour_id}}" />
             Diagnostic principal :
             <input type="text" name="DP" value="{{$curr_sejour->DP}}"/>
-            <button class="modify" type="submit">Modifier</button>
+            <button class="modify" type="submit">Valider</button>
             </form>
             {{if $curr_sejour->_ref_GHM->_CM}}
             <strong>Catégorie majeure CM{{$GHM->_CM}}</strong> : {{$GHM->_CM_nom}}
@@ -497,9 +497,12 @@ function pageMain() {
             {{/if}}
           </td>
         </tr>
+        </tbody>
         {{/foreach}}
-       </table></td>
-      {{/if}}
+
+       </table>
+     </td>
+     {{/if}}
     
   </tr>
 </table>
