@@ -104,7 +104,7 @@ class CSejour extends CMbObject {
     $msg = null;
     global $pathos;
 
-    if ($this->pathologie != null && (!in_array($this->pathologie, $pathos->dispo))) {
+    if($this->pathologie != null && (!in_array($this->pathologie, $pathos->dispo))) {
       $msg.= "Pathologie non disponible<br />";
     }
 
@@ -119,29 +119,29 @@ class CSejour extends CMbObject {
       "joinfield" => "sejour_id"
     );
     
-    return CDpObject::canDelete( $msg, $oid, $tables );
+    return CDpObject::canDelete($msg, $oid, $tables);
   }
   
   function store() {
-    if ($msg = parent::store()) {
+    if($msg = parent::store()) {
       return $msg;
     }
 
-    if ($this->annule) {
+    if($this->annule) {
       $this->delAffectations();
       $this->delOperations();
     }
 
     // Cas où on a une premiere affectation différente de l'heure d'admission
-    if ($this->entree_prevue) {
+    if($this->entree_prevue) {
       $this->loadRefsAffectations();
       $firstAff =& $this->_ref_first_affectation;
-      if ($firstAff->affectation_id && ($firstAff->entree != $this->entree_prevue)) {
+      if($firstAff->affectation_id && ($firstAff->entree != $this->entree_prevue)) {
         $firstAff->entree = $this->entree_prevue;
         $firstAff->store();
       }
       $lastAff =& $this->_ref_last_affectation;
-      if ($lastAff->affectation_id && ($lastAff->sortie != $this->sortie_prevue)) {
+      if($lastAff->affectation_id && ($lastAff->sortie != $this->sortie_prevue)) {
         $lastAff->sortie = $this->sortie_prevue;
         $lastAff->store();
       }
@@ -150,7 +150,7 @@ class CSejour extends CMbObject {
   
   function delete() {
     $msg = parent::delete();
-    if ($msg == null) {
+    if($msg == null) {
       // Suppression des affectations
       $this->delAffectations();
     }
@@ -174,13 +174,13 @@ class CSejour extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
-    $this->_duree_prevue = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
+    $this->_duree_prevue       = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
     $this->_date_entree_prevue = mbDate(null, $this->entree_prevue);
     $this->_date_sortie_prevue = mbDate(null, $this->sortie_prevue);
     $this->_hour_entree_prevue = mbTranformTime(null, $this->entree_prevue, "%H");
     $this->_hour_sortie_prevue = mbTranformTime(null, $this->sortie_prevue, "%H");
-    $this->_min_entree_prevue = mbTranformTime(null, $this->entree_prevue, "%M");
-    $this->_min_sortie_prevue = mbTranformTime(null, $this->sortie_prevue, "%M");
+    $this->_min_entree_prevue  = mbTranformTime(null, $this->entree_prevue, "%M");
+    $this->_min_sortie_prevue  = mbTranformTime(null, $this->sortie_prevue, "%M");
     
     $this->_venue_SHS_guess = mbTranformTime(null, $this->entree_prevue, "%y");
     $this->_venue_SHS_guess .= 
@@ -195,12 +195,12 @@ class CSejour extends CMbObject {
   }
   
   function updateDBFields() {
-    if ($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
+    if($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
       $time_entree_prevue = mbTime(null, "$this->_hour_entree_prevue:$this->_min_entree_prevue");
       $this->entree_prevue = mbAddDateTime($time_entree_prevue, $this->_date_entree_prevue);
     }
     
-    if ($this->_hour_sortie_prevue !== null and $this->_min_sortie_prevue !== null) {
+    if($this->_hour_sortie_prevue !== null and $this->_min_sortie_prevue !== null) {
       $time_sortie_prevue = mbTime(null, "$this->_hour_sortie_prevue:$this->_min_sortie_prevue");
       $this->sortie_prevue = mbAddDateTime($time_sortie_prevue, $this->_date_sortie_prevue);
     }
@@ -235,7 +235,7 @@ class CSejour extends CMbObject {
     $this->_ref_affectations = new CAffectation();
     $this->_ref_affectations = $this->_ref_affectations->loadList($where, $order);
 
-    if (count($this->_ref_affectations) > 0) {
+    if(count($this->_ref_affectations) > 0) {
       $this->_ref_first_affectation =& end($this->_ref_affectations);
       $this->_ref_last_affectation =& reset($this->_ref_affectations);
     } else {
@@ -258,7 +258,7 @@ class CSejour extends CMbObject {
     $operations = new COperation;
     $this->_ref_operations = $operations->loadList($where);
     
-    if (count($this->_ref_operations) > 0) {
+    if(count($this->_ref_operations) > 0) {
       $this->_ref_last_operation =& reset($this->_ref_operations);
     } else {
       $this->_ref_last_operation =& new COperation;
@@ -270,7 +270,7 @@ class CSejour extends CMbObject {
     $this->loadRefsOperations();
   }
   
-  function loadRefGHM () {
+  function loadRefGHM() {
     $this->_ref_GHM = new CGHM;
     $where["sejour_id"] = "= '$this->sejour_id'";
     $this->_ref_GHM->loadObject($where);

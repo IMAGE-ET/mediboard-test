@@ -47,7 +47,6 @@ class CAffectation extends CMbObject {
 		$this->CMbObject("affectation", "affectation_id");
     
     $this->_props["lit_id"]       = "ref|notNull";
-    $this->_props["operation_id"] = "ref|notNull";
     $this->_props["sejour_id"]    = "ref|notNull";
     $this->_props["entree"]       = "dateTime|notNull";
     $this->_props["sortie"]       = "dateTime|notNull";
