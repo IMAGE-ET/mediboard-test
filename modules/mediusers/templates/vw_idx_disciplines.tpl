@@ -6,19 +6,13 @@
       </a>
       <table class="tbl">
         <tr>
-          <th>id</th>
           <th>Spécialité Médicale</th>
         </tr>
         {{foreach from=$listDiscipline item=curr_discipline}}
         <tr>
-          <td>
-            <a href="index.php?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id={{$curr_discipline->discipline_id}}" title="Modifier la spécialité">
-              {{$curr_discipline->discipline_id}}
-            </a>
-          </td>
           <td class="text">
             <a href="index.php?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id={{$curr_discipline->discipline_id}}" title="Modifier la spécialité">
-              {{$curr_discipline->text}}
+              {{$curr_discipline->_view}}
             </a>
           </td>        
         </tr>
@@ -66,7 +60,7 @@
          </tr>
          {{foreach from=$specialite->_ref_users item=curr_user}}
          <tr>
-           <td class="text">Dr. {{$curr_user->_view}}</td>
+           <td class="text"><a href="index.php?m=mediusers&amp;tab=vw_idx_mediusers&amp;user_id={{$curr_user->user_id}}" title="Modifier cet utilisateur">Dr. {{$curr_user->_view}}</a></td>
          </tr>
          {{foreachelse}}
          <tr>
