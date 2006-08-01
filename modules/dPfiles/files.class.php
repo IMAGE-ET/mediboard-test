@@ -192,8 +192,8 @@ class CFile extends CMbObject {
     
     // Création du tableau de catégorie initialisé à 0
     $affichageNbFile = array();
-    $affichageNbFile[""]["name"] = "Aucune Catégorie";
-    $affichageNbFile[""]["nb"]   = 0;
+    $affichageNbFile[0]["name"] = "Aucune Catégorie";
+    $affichageNbFile[0]["nb"]   = 0;
     foreach($listCategory as $keyCat => $currCat){
       $affichageNbFile[$keyCat] = array();
       $affichageNbFile[$keyCat]["name"] = $currCat->nom;

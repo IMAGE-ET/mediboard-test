@@ -279,43 +279,28 @@ function reloadVwPatient(){
   </tr>
   {{/foreach}}
   {{/if}}
-  <tr><th class="category" colspan="2">Documents</th></tr>
+  <tr>
+    <th class="category" colspan="2">Fichiers</th>
+  </tr>
   <tr>
     <td colspan="2">
-      
-      
+      {{if $patient->_ref_files}}
       <table class="form">
-        <tr>
-          <td colspan="3"><strong>Fichiers</strong></td>
-        </tr>
-        <tr>
-          <td class="catergory">Rubrique</td>
-          <td class="catergory">Fichiers</td>
-          <td class="catergory"></td>                    
-        </tr>
         {{foreach from=$affichageNbFile item=curr_nbfile key=keyCat}}
         <tr>
-          <td class="catergory">{{$curr_nbfile.name}}</td>
-          <td class="catergory">{{$curr_nbfile.nb}}</td>
-          <td class="catergory">
+          <td>{{$curr_nbfile.name}}</td>
+          <td>{{$curr_nbfile.nb}}</td>
+          <td>
             {{if $curr_nbfile.nb>=1}}
             <a class="buttonsearch" href="index.php?m=dPfiles&amp;selClass=CPatient&amp;selKey={{$patient->patient_id}}&amp;cat_id={{$keyCat}}">
-            Visualiser les fichiers
+            Voir ces fichiers
             </a>
             {{/if}}
 		  </td>            
         </tr>
         {{/foreach}}
-        {{if $patient->_ref_files}}
-        <tr>
-          <td colspan="3" class="button"> 
-            <a class="buttonsearch" href="index.php?m=dPfiles&amp;selClass=CPatient&amp;selKey={{$patient->patient_id}}">
-              Visualiser les fichiers
-            </a>
-          </td>
-        </tr>
-        {{/if}}
       </table>
+      {{/if}}
       {{if $canEdit}}
       <form name="uploadFrm" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="m" value="dPfiles" />
