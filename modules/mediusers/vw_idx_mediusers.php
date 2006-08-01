@@ -29,7 +29,7 @@ $functions = $functions->loadList(null, $order);
 
 // Récupération des disciplines
 $disciplines = new CDiscipline;
-$disciplines = $disciplines->loadUsedDisciplines();
+$disciplines = $disciplines->loadList();
 
 // Récuperation des utilisateurs
 foreach ($functions as $key => $function) {
