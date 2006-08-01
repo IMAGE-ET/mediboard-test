@@ -144,7 +144,7 @@ function popCode(type) {
 function setCode( key, type ) {
   if (key) {
     var form = document.editFrm;
-    var field = form.CIM10_code;
+    var field = form.DP;
     if (type == 'ccam')  field = form._codeCCAM;
     field.value = key;
   }
