@@ -56,13 +56,15 @@ class CAffectation extends CMbObject {
 	}
 
   function check() {
+    if($msg = parent::check()) {
+      return $msg;
+    }
+    if(!$this->affectation_id) {
+      return null;
+    }
   	$obj = new CAffectation();
   	$obj->load($this->affectation_id);
   	$obj->loadRefsFwd();
-  	if(!$this->entree && $obj->affectation_id)
-  	  $this->entree = $obj->entree;
-  	if(!$this->sortie && $obj->affectation_id)
-  	  $this->sortie = $obj->sortie;
   	if($obj->_ref_next->affectation_id && ($this->sortie != $obj->sortie))
   	  return "Le patient a subi un déplacement";
   	if($obj->_ref_prev->affectation_id && ($this->entree != $obj->entree))
@@ -70,8 +72,7 @@ class CAffectation extends CMbObject {
     if ($this->sortie <= $this->entree) {
       return "La date de sortie doit être supérieure à la date d'entrée";
     }
-    else
-      return null;
+    return null;
   }
   
   function delete() {
