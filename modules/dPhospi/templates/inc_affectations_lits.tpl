@@ -132,6 +132,7 @@
               <input type="hidden" name="sejour_id" value="{{$curr_affectation->sejour_id}}" />
               <input type="hidden" name="entree" value="{{$curr_affectation->entree}}" />
               <input type="hidden" name="sortie" value="{{$curr_affectation->sortie}}" />
+              <input type="hidden" name="no_synchro" value="1" />
               <input type="hidden" name="_new_lit_id" value="" />
               <input type="hidden" name="_date_split" value="{{$curr_affectation->sortie}}" />
 
