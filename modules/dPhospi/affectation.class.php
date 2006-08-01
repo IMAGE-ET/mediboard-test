@@ -65,6 +65,10 @@ class CAffectation extends CMbObject {
   	$obj = new CAffectation();
   	$obj->load($this->affectation_id);
   	$obj->loadRefsFwd();
+  	if(!$this->entree && $obj->affectation_id)
+  	  $this->entree = $obj->entree;
+  	if(!$this->sortie && $obj->affectation_id)
+  	  $this->sortie = $obj->sortie;
   	if($obj->_ref_next->affectation_id && ($this->sortie != $obj->sortie))
   	  return "Le patient a subi un déplacement";
   	if($obj->_ref_prev->affectation_id && ($this->entree != $obj->entree))
