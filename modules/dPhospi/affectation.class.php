@@ -94,7 +94,9 @@ class CAffectation extends CMbObject {
   }
   
   function store() {
-    $msg = parent::store();
+    if($msg = parent::store()) {
+      return $msg;
+    }
     // Modification de la date d'admission et de la durée de l'hospi
     $this->load($this->affectation_id);
     $this->loadRefsFwd();
