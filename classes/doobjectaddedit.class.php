@@ -110,16 +110,19 @@ class CDoObjectAddEdit {
   
   function doRedirect() {
     global $AppUI;
+
     if ($this->ajax) {
       $idName = $this->objectKeyGetVarName;
       $idValue = $this->_obj->$idName;
       $callBack = $this->callBack;
       echo $AppUI->getMsg();
-      if($callBack) {
+      if ($callBack) {
         echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
       }
       exit;
-    } elseif ($this->redirect !== null) {
+    } 
+    
+    if ($this->redirect !== null) {
       $AppUI->redirect($this->redirect);
     }
   }

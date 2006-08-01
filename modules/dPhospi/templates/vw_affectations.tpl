@@ -66,7 +66,7 @@ function setupCalendar(affectation_id) {
   if (form = eval("document.entreeAffectation" + affectation_id)) {
     Calendar.setup( {
         inputField  : form.name + "_entree",
-        ifFormat    : "%Y-%m-%d %H:%M",
+        ifFormat    : "%Y-%m-%d %H:%M:%S",
         button      : form.name + "__trigger_entree",
         showsTime   : true,
         onUpdate    : function() { 
@@ -83,7 +83,7 @@ function setupCalendar(affectation_id) {
   if (form = eval("document.sortieAffectation" + affectation_id)) {
     Calendar.setup( {
         inputField  : form.name + "_sortie",
-        ifFormat    : "%Y-%m-%d %H:%M",
+        ifFormat    : "%Y-%m-%d %H:%M:%S",
         button      : form.name + "__trigger_sortie",
         showsTime   : true,
         onUpdate    : function() { 
@@ -99,7 +99,7 @@ function setupCalendar(affectation_id) {
   if (form = eval("document.splitAffectation" + affectation_id)) {
     Calendar.setup( {
         inputField  : form.name + "__date_split",
-        ifFormat    : "%Y-%m-%d %H:%M",
+        ifFormat    : "%Y-%m-%d %H:%M:%S",
         button      : form.name + "__trigger_split",
         showsTime   : true,
         onUpdate    : function() { 

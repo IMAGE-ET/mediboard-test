@@ -9,7 +9,7 @@
 
 global $AppUI, $m;
 
-require_once($AppUI->getModuleClass($m, "affectation"));
+require_once($AppUI->getModuleClass("dPhospi", "affectation"));
 require_once($AppUI->getSystemClass("doobjectaddedit"));
 
 $entree = $_POST["entree"];
@@ -24,6 +24,7 @@ $do->deleteMsg = "Affectation supprimée";
 $_POST["entree"] = $entree;
 $_POST["sortie"] = $_POST["_date_split"];
 
+$do->redirect = null;
 $do->redirectStore = null;
 $do->doIt();
 
