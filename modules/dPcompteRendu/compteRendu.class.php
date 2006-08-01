@@ -57,13 +57,13 @@ class CCompteRendu extends CMbObject {
     $this->_props["source"]      = "html";
     $this->_props["type"]        = "enum|consultAnesth|operation|hospitalisation|consultation|notNull";
   }
-  
-  
+
+
   function loadModeles($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     if (!isset($where["object_id"])) {
       $where["object_id"] = "IS NULL";
     }
-    
+
     return parent::loadList($where, $order, $limit, $group, $leftjoin);
   }
 
