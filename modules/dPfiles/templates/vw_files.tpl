@@ -11,7 +11,6 @@ function popSearch() {
 function StoreKeyCat(objAcc){
   var cat_id = objAcc.titleBar.id;
   cat_id = cat_id.substring(3, cat_id.indexOf("Header"));
-  if(cat_id == "") cat_id = 0;
   document.FrmClass.cat_id.value = cat_id;
 }
 

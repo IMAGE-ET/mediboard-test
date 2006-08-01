@@ -50,9 +50,9 @@ if($selClass && $selKey){
 
   // Classement des fichiers
   $affichageFile = array();
-  $affichageFile[""] = array();
-  $affichageFile[""]["name"] = "Aucune Catégorie";
-  $affichageFile[""]["file"] = array();
+  $affichageFile[0] = array();
+  $affichageFile[0]["name"] = "Aucune Catégorie";
+  $affichageFile[0]["file"] = array();
   foreach($listCategory as $keyCat => $curr_Cat){
     $affichageFile[$keyCat]["name"] = $curr_Cat->nom;
     $affichageFile[$keyCat]["file"] = array();
