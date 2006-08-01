@@ -154,8 +154,19 @@ function prepareForm(oForm) {
     if (sPropSpec = oElement.getAttribute("title")) {
       aSpecFragments = sPropSpec.split("|");
       if (aSpecFragments.contains("notNull")) {
-          notNullOK(oElement);
-          new Form.Element.EventObserver(oElement, notNullOK);
+        notNullOK(oElement);
+//        new Form.Element.EventObserver(oElement, notNullOK);
+
+        var onchangeFct = "";
+        if(oElement.getAttribute("onchange")) {
+          if(oElement.getAttribute("onchange").indexOf("notNullOK(this)") == -1) {
+            onchangeFct = "notNullOK(this); ";
+          }
+        onchangeFct = onchangeFct + oElement.getAttribute("onchange");
+        } else {
+          onchangeFct = "notNullOK(this); ";
+        }
+        oElement.setAttribute("onchange", onchangeFct);
       }
     }
    
