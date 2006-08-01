@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
 require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
 require_once($AppUI->getModuleClass("dPcompteRendu", "listeChoix"));
 require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
-require_once($AppUI->getSystemClass('doobjectaddedit'));
+require_once($AppUI->getSystemClass("doobjectaddedit"));
 
 $do = new CDoObjectAddEdit("CCompteRendu", "compte_rendu_id");
 $do->createMsg = "Document créé";
@@ -42,12 +42,13 @@ if(isset($_POST["source"])) {
 }
 
 $do->doBind();
-if (intval(dPgetParam($_POST, 'del'))) {
+if (intval(dPgetParam($_POST, "del"))) {
   $do->doDelete();
 } else {
  $do->doStore();
 }
-if($do->_obj->object_id && !intval(dPgetParam($_POST, 'del'))) {
+
+if($do->_obj->object_id && !intval(dPgetParam($_POST, "del"))) {
   $do->redirectStore = "m=$m&a=edit_compte_rendu&dialog=1&compte_rendu_id=".$do->_obj->compte_rendu_id;
 ?>
   <script language="javascript">
