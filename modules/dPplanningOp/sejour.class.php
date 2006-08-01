@@ -135,11 +135,15 @@ class CSejour extends CMbObject {
     // Cas où on a une premiere affectation différente de l'heure d'admission
     if ($this->entree_prevue) {
       $this->loadRefsAffectations();
-      $affectation =& $this->_ref_first_affectation;
-      $admission = $this->entree_prevue;
-      if ($affectation->affectation_id && ($affectation->entree != $this->entree_prevue)) {
-        $affectation->entree = $this->entree_prevue;
-        $affectation->store();
+      $firstAff =& $this->_ref_first_affectation;
+      if ($firstAff->affectation_id && ($firstAff->entree != $this->entree_prevue)) {
+        $firstAff->entree = $this->entree_prevue;
+        $firstAff->store();
+      }
+      $lastAff =& $this->_ref_last_affectation;
+      if ($lastAff->affectation_id && ($lastAff->sortie != $this->sortie_prevue)) {
+        $lastAff->sortie = $this->sortie_prevue;
+        $lastAff->store();
       }
     }
   }

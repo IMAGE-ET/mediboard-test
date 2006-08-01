@@ -83,7 +83,7 @@ class CAffectation extends CMbObject {
 	  if (!db_exec( $sql )) {
       return db_error();
 	  } else {
-		  return NULL;
+		  return null;
 	  }
   }
   
@@ -107,6 +107,12 @@ class CAffectation extends CMbObject {
       }
     }
     if($changeSejour) {
+      $this->_ref_sejour->_date_entree_prevue = null;
+      $this->_ref_sejour->_date_sortie_prevue = null;
+      $this->_ref_sejour->_hour_entree_prevue = null;
+      $this->_ref_sejour->_hour_sortie_prevue = null;
+      $this->_ref_sejour->_min_entree_prevue  = null;
+      $this->_ref_sejour->_min_sortie_prevue  = null;
       $this->_ref_sejour->store();
     }
     return $msg;
