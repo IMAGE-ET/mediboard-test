@@ -12,7 +12,6 @@
             <input type="hidden" name="m" value="dPfiles" />
             <input type="hidden" name="dosql" value="do_file_aed" />
             <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="cat_id" value="{{$keyCat}}" />
             <input type="hidden" name="file_class" value="{{$selClass}}" />
             <input type="hidden" name="file_object_id" value="{{$selKey}}" />
             <input type="hidden" name="file_category_id" value="{{$keyCat}}" />
@@ -49,7 +48,7 @@
                 {{/foreach}}        
               </select>
               <br />
-              <button type="button" class="trash" onclick="saveCatId({{$keyCat}});confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
+              <button type="button" class="trash" onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
                 Supprimer
               </button>
             </form>
@@ -68,5 +67,5 @@
 {{/foreach}}     
 </div>
 <script language="Javascript" type="text/javascript">
-new Rico.Accordion( $('accordionConsult'), {panelHeight:350{{if $accordion_open}},onLoadShowTab : {{$accordion_open}}{{/if}}} );
+new Rico.Accordion( $('accordionConsult'), {panelHeight:350,onShowTab: StoreKeyCat{{if $accordion_open}},onLoadShowTab : {{$accordion_open}}{{/if}}} );
 </script>

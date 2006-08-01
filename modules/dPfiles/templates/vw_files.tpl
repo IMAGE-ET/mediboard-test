@@ -8,6 +8,13 @@ function popSearch() {
   url.popup(600, 300, "-");
 }
 
+function StoreKeyCat(objAcc){
+  var cat_id = objAcc.titleBar.id;
+  cat_id = cat_id.substring(3, cat_id.indexOf("Header"));
+  if(cat_id == "") cat_id = 0;
+  document.FrmClass.cat_id.value = cat_id;
+}
+
 function popFile(file_id){
   var url = new Url;
   url.ViewFilePopup(file_id);
@@ -18,10 +25,6 @@ function ZoomFileAjax(file_id){
   VwFileUrl.setModuleAction("dPfiles", "preview_files");
   VwFileUrl.addParam("file_id", file_id);
   VwFileUrl.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
-}
-
-function saveCatId(Keyid){
-   document.FrmClass.cat_id.value = Keyid;
 }
 
 function setData(selClass,keywords,key,val){

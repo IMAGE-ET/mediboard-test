@@ -27,10 +27,14 @@ $listClass = getChildClasses("CMbObject", array("_ref_files"));
 
 $listCategory = CFilesCategory::listCatClass($selClass);
 
-$tabCat = array_keys($listCategory);
-$accordion_open = array_search($cat_id , $tabCat);
-if($accordion_open){
-  $accordion_open++;
+if($cat_id != 0){
+   $tabCat = array_keys($listCategory);
+   $accordion_open = array_search($cat_id , $tabCat);
+  if($accordion_open!==""){
+    $accordion_open++;
+  };
+}else{
+  $accordion_open = null;
 }
 
 // Création du template

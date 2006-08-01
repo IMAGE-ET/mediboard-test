@@ -48,7 +48,7 @@
             {{/foreach}}
           </select>
           <br />
-          <button type="button" class="trash" onclick="saveCatId({{$keyCat}});confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
+          <button type="button" class="trash" onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
             Supprimer ce fichier
           </button>
           </form>
@@ -70,5 +70,5 @@
 {{/foreach}}      
 </div>
 <script language="Javascript" type="text/javascript">
-new Rico.Accordion( $('accordionConsult'), {panelHeight:350{{if $accordion_open}},onLoadShowTab : {{$accordion_open}}{{/if}}} );
+new Rico.Accordion( $('accordionConsult'), {panelHeight:350,onShowTab: StoreKeyCat{{if $accordion_open}},onLoadShowTab : {{$accordion_open}}{{/if}}} );
 </script>

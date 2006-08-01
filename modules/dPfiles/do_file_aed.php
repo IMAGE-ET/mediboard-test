@@ -14,17 +14,21 @@ $suppressHeaders = mbGetValueFromPost("suppressHeaders", 0);
 unset($_POST["ajax"]);
 unset($_POST["suppressHeaders"]);
 
-if(isset($_POST["cat_id"])){
-  $cat_id   = mbGetValueFromPostOrSession("cat_id"  , 0);
+if(isset($_POST["cat_id_redirect"])){
+  $cat_id_redirect = mbGetValueFromPostOrSession("cat_id_redirect"  , 0);
 }
 
-function doRedirect() {
-  global $ajax, $AppUI;
+function doRedirect($cat_id = null) {
+  global $ajax, $AppUI, $m;
   if($ajax) {
     echo $AppUI->getMsg();
     exit(0);
   } else {
-    $AppUI->redirect();
+    if($cat_id !== null) {
+      $AppUI->redirect("m=$m&cat_id=$cat_id");
+    } else {
+      $AppUI->redirect();
+    }
   }
 }
 
@@ -61,7 +65,7 @@ if(isset($_FILES["formfile"])) {
 	if ($upload["size"] < 1) {
 		if (!$file_id) {
 			$AppUI->setMsg("Taille de fichier nulle. Echec de l'opération.", UI_MSG_ERROR);
-			doRedirect();
+			doRedirect($obj->file_category_id);
 		}
 	} else {
 
@@ -92,6 +96,6 @@ if (($msg = $obj->store())) {
   //$obj->indexStrings();
 }
 
-doRedirect();
+doRedirect($obj->file_category_id);
 
 ?>
