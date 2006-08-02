@@ -1,6 +1,12 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
+function view_history_patient(id){
+  url = new Url();
+  url.setModuleAction("dPpatients", "vw_history");
+  url.addParam("patient_id", id);
+  url.popup(600, 500, "history");
+}
 
 function printPatient(id) {
   var url = new Url;
@@ -31,7 +37,12 @@ function reloadVwPatient(){
 
 <table class="form">
   <tr>
-    <th class="category" colspan="2">Identité</th>
+    <th class="category" colspan="2">
+      <a style="float:right;" href="javascript:view_history_patient({{$patient->patient_id}})">
+        <img src="images/history.gif" alt="historique" />
+      </a>
+      Identité
+    </th>
     <th class="category" colspan="2">Informations médicales</th>
   </tr>
 

@@ -20,7 +20,7 @@ if (!$canRead) {
 }
 
 // Définition des variables
-$patient_id = mbGetValueFromGetOrSession("id", 0);
+$patient_id = mbGetValueFromGet("patient_id", 0);
 
 //Récupération du dossier complet patient
 $patient = new CPatient;
