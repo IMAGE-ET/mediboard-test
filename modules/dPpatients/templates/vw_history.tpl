@@ -27,7 +27,7 @@
   {{if $curr_object->_ref_logs}}
   <tr>
     <th colspan="3" class="category">
-      <strong>Consultation du {{$curr_object->_ref_plageconsult->date|date_format:"%A %d %b %Y"}} par le Dr. {{$curr_object->_ref_plageconsult->_ref_chir->_view}}</strong> 
+      <strong>{{$curr_object->_ref_plageconsult->date|date_format:"%A %d %b %Y"}} par le Dr. {{$curr_object->_ref_plageconsult->_ref_chir->_view}}</strong> 
     </th>
   </tr>
   {{foreach from=$curr_object->_ref_logs item=curr_log}}
