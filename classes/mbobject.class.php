@@ -41,6 +41,8 @@ class CMbObject extends CDpObject {
   var $_props = array();
   var $_enums = array();
   var $_seek  = array();
+  
+  var $_ref_logs = null;
 
   /**
    *  Generic check method
@@ -783,6 +785,27 @@ class CMbObject extends CDpObject {
       $this->_aides[$aide->field][$aide->text] = $aide->name;  
     }
     
+  }
+  
+  function loadLogs($type = null){
+    $class = get_class($this);
+    $key = $this->_tbl_key;
+    $obj_id = $this->$key;
+    $where = array();
+    
+    if($obj_id !== "" && $obj_id !== null)
+      $where["object_id"] = "= '$obj_id'";
+    if($class)
+      $where["object_class"] = "= '$class'";
+    if($type)
+      $where["type"] = "= '$type'";
+    $order = "date DESC";
+    $list = new CUserLog;
+    $list = $list->loadList($where, $order, "0, 100");
+    foreach($list as $key => $value) {
+      $list[$key]->loadRefsFwd();
+    }   
+    $this->_ref_logs = $list; 
   }
 }
 ?>

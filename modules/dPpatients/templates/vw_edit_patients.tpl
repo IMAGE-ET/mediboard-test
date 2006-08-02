@@ -1,6 +1,13 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
+function view_history_patient(id){
+  url = new Url();
+  url.setModuleAction("dPpatients", "vw_history");
+  url.addParam("patient_id", id);
+  url.popup(600, 500, "history");
+}
+
 function confirmCreation(id, bDialog, sSiblingsText) {
   if (!confirm(sSiblingsText)) {
     var form = document.editFrm;
@@ -110,7 +117,7 @@ function pageMain() {
       <tr>
       {{if $patient->patient_id}}
         <th class="title" colspan="5" style="color: #f00;">
-          <a style="float:right;" href="javascript:view_log('CPatient',{{$patient->patient_id}})">
+          <a style="float:right;" href="javascript:view_history_patient({{$patient->patient_id}})">
             <img src="images/history.gif" alt="historique" />
           </a>
           Modification du dossier de {{$patient->_view}}
