@@ -104,6 +104,7 @@ if ($file_id = mbGetValueFromGet("file_id")) {
     $wl = mbGetValueFromGet("wl", "");
     $f  = mbGetValueFromGet("f" , "jpg");
     $q  = mbGetValueFromGet("q" , 90);
+    $sfn  = mbGetValueFromGet("sfn" , 0);
     //creation fin URL
     $finUrl="";
     if($f){ $finUrl.="&f=$f";}    
@@ -120,6 +121,7 @@ if ($file_id = mbGetValueFromGet("file_id")) {
       if($wl){$finUrl.="&w=$wl";}
       if($h){$finUrl.="&h=$h";}
       if($w){$finUrl.="&w=$w";}
+      if($sfn){$finUrl.="&sfn=$sfn";}
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
       //header("Location: modules/dPfiles/images/acroread.png");
     } elseif(strpos($file->file_type, "text") !== false) {

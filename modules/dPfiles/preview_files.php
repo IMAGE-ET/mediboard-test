@@ -13,11 +13,15 @@ require_once($AppUI->getModuleClass("dPfiles", "files"));
 require_once($AppUI->getModuleClass("dPfiles", "filescategory"));
 
 $file_id = mbGetValueFromGetOrSession("file_id", null);
+$sfn = mbGetValueFromGet("sfn", 0);
 $popup = mbGetValueFromGet("popup", 0);
 $navig = mbGetValueFromGet("navig", null);
 
 $largeur = null;
 $hauteur = null;
+
+$page_prev = null;
+$page_next = null;
 
 $file = new CFile;
 $file->load($file_id);
@@ -60,9 +64,22 @@ if($popup==1){
     $listCat = new CFilesCategory;
     $listCat->load($file->file_category_id);
     
-    $smarty->assign("filePrev", $filePrev);
-    $smarty->assign("fileNext", $fileNext);
-    $smarty->assign("listCat" , $listCat);
+    //navigatino par pages (PDF)
+    if($file->_nb_pages){
+      if($sfn>$file->_nb_pages || $sfn<0){$sfn = 0;}
+      if($sfn!=0){
+        $page_prev = $sfn - 1; 
+      }
+      if($sfn<($file->_nb_pages-1)){
+        $page_next = $sfn + 1;
+      }
+    }
+    $smarty->assign("page_prev", $page_prev);
+    $smarty->assign("page_next", $page_next);
+    $smarty->assign("filePrev" , $filePrev);
+    $smarty->assign("fileNext" , $fileNext);
+    $smarty->assign("listCat"  , $listCat);
+    $smarty->assign("sfn"      , $sfn);
     $smarty->display("inc_preview_file_popup.tpl");
   }else{
     header("Location: mbfileviewer.php?file_id=$file_id");

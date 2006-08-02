@@ -31,6 +31,7 @@ class CFile extends CMbObject {
   var $_file_size = null;
   var $_sub_dir   = null;
   var $_file_path = null;
+  var $_nb_pages  = null;
 
   function CFile() {
     $this->CMbObject("files_mediboard", "file_id");
@@ -52,7 +53,7 @@ class CFile extends CMbObject {
   function updateFormFields() {
     global $filesDir;
     
-    $this->_file_size = mbConvertDecaBinary($this->file_size);
+    $this->_file_size = mbConvertDecaBinary($this->file_size);    
 
     if (!$this->file_object_id) {
       trigger_error("No object_id associated with file (file_id = $this->file_id)", E_USER_WARNING);
@@ -66,6 +67,11 @@ class CFile extends CMbObject {
     
     $this->_shortview = $this->file_name;
     $this->_view = $this->file_name." (".$this->_file_size.")";
+    
+    $this->loadNbPages();    
+    if($this->_nb_pages !==null){
+      $this->_view .= " - $this->_nb_pages page(s)";	
+    }
   }
   
   function delete() {
@@ -207,6 +213,43 @@ class CFile extends CMbObject {
       }
     }
     return $affichageNbFile;
+  }
+  
+  function loadNbPages(){
+    if(strpos($this->file_type, "pdf") !== false){
+      // Fichier PDF Tentative de récupération
+      $string_recherche = "/Count";
+      $dataFile = file_get_contents($this->_file_path);
+      $nb_count = substr_count($dataFile, $string_recherche);
+      if(strpos($dataFile, "%PDF-1.4") !== false && $nb_count>=2){
+        // Fichier PDF 1.4 avec plusieurs occurence
+        //echo($dataFile);
+        /*$splitFile = preg_split("/obj\r<</",$dataFile);
+        foreach($splitFile as $splitval){
+          $splitval =ereg_replace("\r","",$splitval);
+          $splitval =ereg_replace("\n","",$splitval);
+          if(isset($tabVal)){unset($tabVal);}
+          $position_fin = stripos($splitval, ">>");
+          if($position_fin !== false){
+            $splitval = substr($splitval,0,$position_fin);
+            // Test de l'existence de prant page
+            $tabVal = explode ("/",$splitval);
+            mbTrace(array_filter($tabVal,"Parent"));
+          }
+        }
+        
+       mbTrace(substr_count($dataFile, "obj\r<<"));
+       */
+        
+        
+      }elseif(strpos($dataFile, "%PDF-1.3") !== false || $nb_count==1){
+        // Fichier PDF 1.3 ou 1 seule occurence
+        $position_count = strripos($dataFile, $string_recherche) + strlen($string_recherche);
+        $nombre_temp = explode ("/", substr($dataFile,$position_count,strlen($dataFile)-$position_count) , 2 );
+        $this->_nb_pages = intval(trim($nombre_temp[0]));
+      }
+      //mbTrace($this->_nb_pages,"Nombre de pages");
+    }
   }
 }
 ?>
