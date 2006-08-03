@@ -25,7 +25,7 @@ function checkForm(oForm) {
   }
   
   if (oForm.password1.value.length < 5) {
-    alert("Le mot de passe est trop court (< 5 caractères)");
+    alert("Le mot de passe est trop court (moins de 5 caractères)");
     oForm.reset();
     oForm.password1.focus();
     return false;
@@ -136,7 +136,7 @@ if (@$_POST["changePassword"] and $password != "admin") {
 </p>
 
 <div class="wizard-navigation">
-  <a href="../index.php?m=system&amp;a=viewmods">
+  <a href="../index.php?m=system&amp;tabs=view_modules">
     Me rendre à la page d'administration des modules
   </a>
 </div>

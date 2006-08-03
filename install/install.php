@@ -26,7 +26,7 @@ class CLibraryPatch {
     $oldPath = $targetPath . ".old";
     
     if (!is_file($targetPath)) {
-      trigger("Source '$targetPath' is not existing");
+      trigger_error("Source '$targetPath' is not existing");
     }
 
     @unlink($oldPath);
@@ -241,6 +241,13 @@ $library->url = "http://phpthumb.sourceforge.net/";
 $library->fileName = "phpThumb_1.7.4_beta.zip";
 $library->description = "Composant de création de thumbnails";
 $library->extraDir = "phpThumb";
+
+$patch = new CLibraryPatch;
+$patch->dirName = "phpThumb";
+$patch->sourceName = "phpThumb.config.php";
+$patch->targetDir = "";
+
+$library->patches[] = $patch;
 
 $libraries[] = $library;
 
