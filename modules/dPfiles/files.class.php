@@ -223,24 +223,26 @@ class CFile extends CMbObject {
       $nb_count = substr_count($dataFile, $string_recherche);
       if(strpos($dataFile, "%PDF-1.4") !== false && $nb_count>=2){
         // Fichier PDF 1.4 avec plusieurs occurence
-        //echo($dataFile);
-        /*$splitFile = preg_split("/obj\r<</",$dataFile);
+        $splitFile = preg_split("/obj\r<</",$dataFile);
         foreach($splitFile as $splitval){
-          $splitval =ereg_replace("\r","",$splitval);
-          $splitval =ereg_replace("\n","",$splitval);
-          if(isset($tabVal)){unset($tabVal);}
-          $position_fin = stripos($splitval, ">>");
-          if($position_fin !== false){
-            $splitval = substr($splitval,0,$position_fin);
-            // Test de l'existence de prant page
-            $tabVal = explode ("/",$splitval);
-            mbTrace(array_filter($tabVal,"Parent"));
+          if(!$this->_nb_pages){
+            $splitval =ereg_replace("\r","",$splitval);
+            $splitval =ereg_replace("\n","",$splitval);
+            $position_fin = stripos($splitval, ">>");
+            if($position_fin !== false){
+              $splitval = substr($splitval,0,$position_fin);
+              if(strpos($splitval, "/Title") === false
+                 && strpos($splitval, "/Parent") === false
+                 && strpos($splitval, "/Pages") !== false
+                 && strpos($splitval, $string_recherche) !== false){
+                // Nombre de page ici
+                $position_count = strripos($splitval, $string_recherche) + strlen($string_recherche);
+                $nombre_temp = explode ("/", substr($splitval,$position_count,strlen($splitval)-$position_count) , 2 );
+                $this->_nb_pages = intval(trim($nombre_temp[0]));
+              }
+            }
           }
         }
-        
-       mbTrace(substr_count($dataFile, "obj\r<<"));
-       */
-        
         
       }elseif(strpos($dataFile, "%PDF-1.3") !== false || $nb_count==1){
         // Fichier PDF 1.3 ou 1 seule occurence

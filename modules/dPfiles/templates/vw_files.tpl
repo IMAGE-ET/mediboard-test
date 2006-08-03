@@ -19,10 +19,13 @@ function popFile(file_id){
   url.ViewFilePopup(file_id);
 }
 
-function ZoomFileAjax(file_id){
+function ZoomFileAjax(file_id, sfn){
   var VwFileUrl = new Url;
   VwFileUrl.setModuleAction("dPfiles", "preview_files");
   VwFileUrl.addParam("file_id", file_id);
+  if(sfn!=0){
+    VwFileUrl.addParam("sfn", sfn);
+  }
   VwFileUrl.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
 }
 

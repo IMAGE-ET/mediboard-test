@@ -22,16 +22,34 @@ $hauteur = null;
 
 $page_prev = null;
 $page_next = null;
+$pageEnCours = null;
 
 $file = new CFile;
 $file->load($file_id);
+
+//navigation par pages (PDF)
+if($file->_nb_pages){
+  if($sfn>$file->_nb_pages || $sfn<0){$sfn = 0;}
+  if($sfn!=0){
+    $page_prev = $sfn - 1; 
+  }
+  if($sfn<($file->_nb_pages-1)){
+    $page_next = $sfn + 1;
+  }
+  $pageEnCours = "Page ".($sfn+1)." / $file->_nb_pages";
+}
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("file_id", $file_id);
-$smarty->assign("file"   , $file   );
+$smarty->assign("file_id"  , $file_id);
+$smarty->assign("file"     , $file   );
+$smarty->assign("page_prev", $page_prev);
+$smarty->assign("page_next", $page_next);
+$smarty->assign("sfn"      , $sfn);
+$smarty->assign("pageEnCours"  , $pageEnCours);
+    
 if($popup==1){
   // Ouverture en Pop-up : si Image ou PDF : Preview
   if($navig || (strpos($file->file_type, "image") !== false || strpos($file->file_type, "pdf") !== false)) {
@@ -64,22 +82,9 @@ if($popup==1){
     $listCat = new CFilesCategory;
     $listCat->load($file->file_category_id);
     
-    //navigatino par pages (PDF)
-    if($file->_nb_pages){
-      if($sfn>$file->_nb_pages || $sfn<0){$sfn = 0;}
-      if($sfn!=0){
-        $page_prev = $sfn - 1; 
-      }
-      if($sfn<($file->_nb_pages-1)){
-        $page_next = $sfn + 1;
-      }
-    }
-    $smarty->assign("page_prev", $page_prev);
-    $smarty->assign("page_next", $page_next);
     $smarty->assign("filePrev" , $filePrev);
     $smarty->assign("fileNext" , $fileNext);
-    $smarty->assign("listCat"  , $listCat);
-    $smarty->assign("sfn"      , $sfn);
+    $smarty->assign("listCat"  , $listCat);    
     $smarty->display("inc_preview_file_popup.tpl");
   }else{
     header("Location: mbfileviewer.php?file_id=$file_id");

@@ -20,6 +20,7 @@
             {{if $page_prev !== null}}
             <a class="button" href="index.php?m=dPfiles&amp;a=preview_files&amp;popup=1&amp;file_id={{$file->file_id}}&amp;dialog=1&amp;navig=1&amp;sfn={{$page_prev}}"><img align="top" src="modules/{{$m}}/images/prev.png" alt="Page précédente" /> Page précédente</a>
             {{/if}}
+            {{$pageEnCours}}
             {{if $page_next}}
             <a class="button" href="index.php?m=dPfiles&amp;a=preview_files&amp;popup=1&amp;file_id={{$file->file_id}}&amp;dialog=1&amp;navig=1&amp;sfn={{$page_next}}">Page suivante <img align="top" src="modules/{{$m}}/images/next.png" alt="Page suivante" /></a>
             {{/if}}
