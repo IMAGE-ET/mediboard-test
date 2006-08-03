@@ -11,24 +11,7 @@
   <?php mbLinkShortcutIcon("style/$uistyle/images/favicon.ico"); ?>
   <?php mbLinkStyleSheet("style/mediboard/main.css"); ?>
   <?php mbLinkStyleSheet("style/$uistyle/main.css"); ?>
-  <?php mbLoadScript("includes/javascript/gosu/array.js"); ?>
-  <?php mbLoadScript("includes/javascript/gosu/cookie.js"); ?>
-  <?php mbLoadScript("includes/javascript/gosu/debug.js"); ?>
-  <?php mbLoadScript("includes/javascript/gosu/ie5.js"); ?>
-  <?php mbLoadScript("includes/javascript/gosu/keyboard.js"); ?>
-  <?php mbLoadScript("includes/javascript/gosu/string.js"); ?>
-  <?php mbLoadScript("includes/javascript/gosu/validate.js"); ?>
-  <?php mbLoadScript("includes/javascript/functions.js"); ?>
-  <?php mbLoadScript("includes/javascript/cjl_cookie.js"); ?>
-  <?php mbLoadScript("includes/javascript/url.js"); ?>
-  <?php mbLoadScript("includes/javascript/forms.js"); ?>
-  <?php mbLoadScript("includes/javascript/printf.js"); ?>
-  <?php mbLoadScript("lib/jscalendar/calendar.js"); ?>
-  <?php mbLoadScript("lib/jscalendar/lang/calendar-fr.js"); ?>
-  <?php mbLoadScript("lib/jscalendar/calendar-setup.js"); ?>
-  <?php mbLoadScript("lib/scriptaculous/lib/prototype.js"); ?>
-  <?php mbLoadScript("lib/scriptaculous/src/scriptaculous.js"); ?>
-  <?php mbLoadScript("lib/rico/rico.js"); ?>
+  <?php mbLoadScripts(); ?>
 </head>
 
 <?php $dialog = dPgetParam( $_GET, 'dialog'); ?>

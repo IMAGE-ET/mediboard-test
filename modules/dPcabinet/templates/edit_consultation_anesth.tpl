@@ -53,38 +53,36 @@ function submitAll() {
   submitFormAjax(oForm1, 'systemMsg');
 }
 
+function updateList() {
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
+
+  url.addParam("selConsult", "{{$consult->consultation_id}}");
+  url.addParam("prat_id", "{{$userSel->user_id}}");
+  url.addParam("date", "{{$date}}");
+  url.addParam("vue2", "{{$vue}}");
+
+  url.periodicalUpdate('listConsult', { frequency: 60 });
+}
+
 function pageMain() {
-    
+  updateList();
 
   {{if $consult->consultation_id}}
   incPatientHistoryMain();
   incAntecedantsMain();
-  initEffectClass("listConsult", "triggerList");
+  initEffectClassPlus("listConsult", "triggerList", { sEffect : "appear", bStartVisible : true });
   regFieldCalendar("editAntFrm", "date");
   regFieldCalendar("editTrmtFrm", "debut");
   regFieldCalendar("editTrmtFrm", "fin");
   {{/if}}
-
-  
-  var listUpdater = new Url;
-  listUpdater.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
-
-  listUpdater.addParam("selConsult", "{{$consult->consultation_id}}");
-  listUpdater.addParam("prat_id", "{{$userSel->user_id}}");
-  listUpdater.addParam("date", "{{$date}}");
-  listUpdater.addParam("vue2", "{{$vue}}");
-
-  listUpdater.periodicalUpdate('listConsult', { frequency: 60 });
-  
 }
-
 
 </script>
 
 <table class="main">
   <tr>
-    <td id="listConsult" style="vertical-align: top;">
-    </td>
+    <td id="listConsult" style="width: 200px; vertical-align: top;" />
     {{if $consult->consultation_id}}
     <td class="greedyPane">
     {{else}}
@@ -99,7 +97,6 @@ function pageMain() {
       </div>
       
       {{include file="inc_accord_ant_consultAnesth.tpl"}}
-
     {{/if}}
 
     </td>

@@ -1,18 +1,18 @@
 <script language="JavaScript" type="text/javascript">
 
 function incPatientHistoryMain() {
-  initEffectClass("groupoperations"   , "triggeroperations"      );
-  initEffectClass("groupconsultations", "triggerconsultations"   );
+  initEffectClassPlus("groupoperations"   , "triggeroperations"   , { sEffect : "slide"} );
+  initEffectClassPlus("groupconsultations", "triggerconsultations", { sEffect : "slide"} );
 }
 
 </script>
   
 
 <table class="form">
-  <tr class="triggerShow" id="triggeroperations" onclick="flipEffectElement('groupoperations', 'SlideDown', 'SlideUp', 'triggeroperations')">
+  <tr id="triggeroperations">
     <td>Hospitalisations ({{$patient->_ref_sejours|@count}})</td>
   </tr>
-  <tbody id="groupoperations" style="display:none">
+  <tbody id="groupoperations">
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
     <tr>
       <td>
@@ -39,10 +39,10 @@ function incPatientHistoryMain() {
     </tr>
     {{/foreach}}
   </tbody>
-  <tr class="triggerShow" id="triggerconsultations" onclick="flipEffectElement('groupconsultations', 'SlideDown', 'SlideUp', 'triggerconsultations')">
+  <tr id="triggerconsultations">
     <td>Consultations ({{$patient->_ref_consultations|@count}})</td>
   </tr>
-  <tbody id="groupconsultations" style="display:none">
+  <tbody id="groupconsultations">
     {{foreach from=$patient->_ref_consultations item=curr_consult}}
     <tr>
       <td>

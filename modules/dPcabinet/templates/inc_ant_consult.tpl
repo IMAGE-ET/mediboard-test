@@ -64,7 +64,7 @@ function submitAnt(oForm) {
 
 function incAntecedantsMain() {
   {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}
-  initEffectClass("group{{$cat}}", "trigger{{$cat}}");
+  initEffectClassPlus("group{{$cat}}", "trigger{{$cat}}", { sEffect : "slide"});
   {{/foreach}}
 }
 
@@ -84,10 +84,10 @@ function incAntecedantsMain() {
       <input type="hidden" name="listCim10" value="{{$patient->listCim10}}" />
       <table style="width: 100%">
       {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}
-        <tr id="trigger{{$cat}}" class="triggerShow" onclick="flipEffectElement('group{{$cat}}', 'SlideDown', 'SlideUp', 'trigger{{$cat}}')">
+        <tr id="trigger{{$cat}}">
           <td>{{$cat}}</td>
         </tr>
-        <tbody id="group{{$cat}}" style="display: none">
+        <tbody id="group{{$cat}}">
           {{foreach from=$curr_cat item=curr_code}}
           <tr class="{{$cat}}">
             <td class="text">

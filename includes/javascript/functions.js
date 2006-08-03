@@ -2,15 +2,22 @@
 
 function main() {
   prepareForms();
-  initHTMLArea();
   initFCKEditor();
+  BrowserDetect.init();
   pageMain();
 }
 
 function pageMain() {}
-
-function initHTMLArea () {}
 function initFCKEditor() {}
+
+Element.addEventHandler = function(oElement, sEvent, oHandler) {
+  var sEventMethod = "on" + sEvent;
+  var oPreviousHandler = oElement[sEventMethod] || function() {};
+  oElement[sEventMethod] = function () {
+    oPreviousHandler();
+    oHandler(oElement);
+  };
+}
 
 function getElementsByClassName(tagName, className, exactMatch) {
   var els = document.getElementsByTagName(tagName); 
@@ -69,7 +76,7 @@ function flipEffectElement(idTarget, sShowEffect, sHideEffect, idTrigger) {
   	default: throwError(printf("Trigger element class name should be either 'triggerShow' or 'triggerHide', instead of '%s'", oTriggerElement.className));
   }
   
-  eval('new Effect.' + sEffect + '(oTargetElement)');
+  new Effect[sEffect](oTargetElement);
   flipElementClass(idTrigger, "triggerShow", "triggerHide", idTrigger);
 }
 
@@ -79,6 +86,41 @@ function initEffectClass(idTarget, idTrigger) {
   var oTriggerElement = document.getElementById(idTrigger);
   var oTargetElement = document.getElementById(idTarget);
   oTargetElement.style.display = (oTriggerElement.className == "triggerShow") ? "none" : "";
+}
+
+function flipEffectElementPlus(idTarget, idTrigger, sEffect) {
+  
+  if (sEffect && BrowserDetect.browser != "Explorer") {
+    new Effect.toggle(idTarget, sEffect);
+  } else {
+    Element.toggle(idTarget);
+  }
+  
+  flipElementClass(idTrigger, "triggerShow", "triggerHide", idTrigger);
+}
+
+function initEffectClassPlus(idTarget, idTrigger, oOptions) {
+  var oDefaultOptions = {
+    sEffect: null, // could be "appear", "slide", "blind"
+    bStartVisible: false
+  };
+  
+  Object.extend(oDefaultOptions, oOptions);
+
+  var oTarget = $(idTarget);
+  var oTrigger = $(idTrigger);
+  
+  // Initialize the trigger and target element
+  Element.addClassName(oTrigger, oDefaultOptions.bStartVisible ? "triggerHide" : "triggerShow");
+  Event.observe(oTrigger, "click",
+    function () { 
+      flipEffectElementPlus(idTarget, idTrigger, oDefaultOptions.sEffect);
+    }
+  );
+  
+  // Load the cookie and adapt visibility
+  initElementClass(idTrigger, idTrigger);
+  Element[Element.hasClassName(oTrigger, "triggerShow") ? "hide" : "show"](oTarget);   
 }
 
 function initGroups(groupname) {

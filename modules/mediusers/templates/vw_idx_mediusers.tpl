@@ -16,7 +16,7 @@ function collapseFunctions() {
 
 function pageMain() {
   {{foreach from=$functions item=curr_function}}
-  initEffectClass("function{{$curr_function->function_id}}", "trigger{{$curr_function->function_id}}");
+  initEffectClassPlus("function{{$curr_function->function_id}}", "trigger{{$curr_function->function_id}}", { sEffect : "slide" });
   {{/foreach}}
 }
 
@@ -25,7 +25,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="greedyPane">
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;user_id=0" class="buttonnew">
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id=0" class="buttonnew">
         Créer un utilisateur
       </a>
       <table class="tbl">
@@ -40,7 +40,7 @@ function pageMain() {
           <th>Type</th>
         </tr>
         {{foreach from=$functions item=curr_function}}
-        <tr id="trigger{{$curr_function->function_id}}" class="triggerShow" onclick="flipEffectElement('function{{$curr_function->function_id}}', 'SlideDown', 'SlideUp', 'trigger{{$curr_function->function_id}}')">
+        <tr id="trigger{{$curr_function->function_id}}">
           <td style="background-color: #{{$curr_function->color}}">
           </td>
           <td colspan="4" style="background: #{{$curr_function->color}}" >

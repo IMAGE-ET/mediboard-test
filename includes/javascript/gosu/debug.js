@@ -14,7 +14,7 @@ function debug(s, name) {
 }
 
 function debugObject(oObject, sName) {
-	sInfo = "";
+	sInfo = "Type = " + typeof oObject;
 
 	for (var sPropName in oObject) {
 		var oProp = oObject[sPropName];

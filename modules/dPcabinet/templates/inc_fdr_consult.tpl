@@ -89,7 +89,6 @@ function reloadFdr() {
 function submitFdr(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadFdr });
 }
-
 </script>
 
 
@@ -100,6 +99,9 @@ function submitFdr(oForm) {
     <th colspan="2" class="category">Règlement</th>
   </tr>
   <tr>
+
+    <!-- Files -->
+
     <td class="text">
       <form name="newExamen" action="?m=dPcabinet">
         <label for="type_examen" title="Type d'examen complémentaire à effectuer"><strong>Examens complémentaires :</strong></label>
@@ -137,6 +139,9 @@ function submitFdr(oForm) {
         <button class="submit" type="submit">Ajouter</button>
       </form>
     </td>
+
+	<!-- Documents -->
+
     <td>
     
     <table class="form">
@@ -187,6 +192,9 @@ function submitFdr(oForm) {
     </form>
     
     </td>
+
+    <!-- Règlements -->	
+    
     <td>
       <form name="tarifFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
@@ -221,6 +229,7 @@ function submitFdr(oForm) {
           </td>
         </tr>
         {{/if}}
+        
         {{if $consult->paye == "0"}}
         <tr>
           <th><label for="_somme" title="Somme à régler. Obligatoire.">Somme à régler</label></th>
@@ -250,6 +259,7 @@ function submitFdr(oForm) {
           </td>
         </tr>
         {{/if}}
+        
         {{if $consult->tarif && $consult->paye == "0"}}
         <tr>
           <th>
@@ -287,8 +297,11 @@ function submitFdr(oForm) {
         </tr>
         {{/if}}
       </table>
+      
       </form>
     </td>
+        
+
   </tr>
 </table>
           

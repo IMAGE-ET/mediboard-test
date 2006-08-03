@@ -400,6 +400,31 @@ function mbPortalLink( $page="Accueil", $title="Portail Mediboard" ) {
     $url = "\"http://www.mediboard.org/public/tiki-index.php?page=$page\"";
   return "\n<a href=$url target=\"_blank\">$title</a>";
 }
+/**
+ * Loads all scripts
+ */
+function mbLoadScripts() {
+  mbLoadScript("lib/jscalendar/calendar.js");
+  mbLoadScript("lib/jscalendar/lang/calendar-fr.js");
+  mbLoadScript("lib/jscalendar/calendar-setup.js");
+  mbLoadScript("lib/scriptaculous/lib/prototype.js");
+  mbLoadScript("lib/scriptaculous/src/scriptaculous.js");
+  mbLoadScript("lib/rico/rico.js");
+  mbLoadScript("includes/javascript/gosu/array.js");
+  mbLoadScript("includes/javascript/gosu/cookie.js");
+  mbLoadScript("includes/javascript/gosu/debug.js");
+  mbLoadScript("includes/javascript/gosu/ie5.js");
+  mbLoadScript("includes/javascript/gosu/keyboard.js");
+  mbLoadScript("includes/javascript/gosu/string.js");
+  mbLoadScript("includes/javascript/gosu/validate.js");
+  mbLoadScript("includes/javascript/functions.js");
+  mbLoadScript("includes/javascript/cjl_cookie.js");
+  mbLoadScript("includes/javascript/url.js");
+  mbLoadScript("includes/javascript/forms.js");
+  mbLoadScript("includes/javascript/printf.js");
+  mbLoadScript("includes/javascript/browser.js");
+}
+
 
 /**
  * Reomve accents and some strange characters
@@ -453,7 +478,7 @@ function mbForceDirectory($dir, $mode = 0755) {
 
 
 /**
- * Clears out any file a sub-directory from target path
+ * Clears out any file or sub-directory from target path
  * @return boolean jobdone-value */
 function mbClearPath($dir) {
   if (!($dir = dir($dir))) {
@@ -564,5 +589,6 @@ function getChildClasses($parent = "CMbObject", $properties = array()) {
   sort($listClasses);
   return $listClasses;
 }
+
 
 ?>

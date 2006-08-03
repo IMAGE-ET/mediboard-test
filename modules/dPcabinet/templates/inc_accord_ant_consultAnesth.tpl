@@ -53,5 +53,5 @@
 </div>
 
 <script language="Javascript" type="text/javascript">
-new Rico.Accordion( $('accordionConsult'), {panelHeight:340} );
+new Rico.Accordion( $('accordionConsult'), { panelHeight:340 } );
 </script>

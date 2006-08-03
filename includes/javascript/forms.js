@@ -155,18 +155,7 @@ function prepareForm(oForm) {
       aSpecFragments = sPropSpec.split("|");
       if (aSpecFragments.contains("notNull")) {
         notNullOK(oElement);
-//        new Form.Element.EventObserver(oElement, notNullOK);
-
-        var onchangeFct = "";
-        if(oElement.getAttribute("onchange")) {
-          if(oElement.getAttribute("onchange").indexOf("notNullOK(this)") == -1) {
-            onchangeFct = "notNullOK(this); ";
-          }
-        onchangeFct = onchangeFct + oElement.getAttribute("onchange");
-        } else {
-          onchangeFct = "notNullOK(this); ";
-        }
-        oElement.setAttribute("onchange", onchangeFct);
+		Element.addEventHandler(oElement, "change", notNullOK);
       }
     }
    

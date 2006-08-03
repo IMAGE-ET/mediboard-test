@@ -2,7 +2,7 @@
 
 function pageMain() {
   {{foreach from=$services item=curr_service}}
-  initEffectClass("groupservice{{$curr_service->service_id}}", "triggerservice{{$curr_service->service_id}}");
+  initEffectClassPlus("groupservice{{$curr_service->service_id}}", "triggerservice{{$curr_service->service_id}}", { sEffect : "slide" });
   {{/foreach}}
 }
 
@@ -26,23 +26,23 @@ function pageMain() {
     </tr>
     
 	{{foreach from=$services item=curr_service}}
-	<tr class="triggerShow" id="triggerservice{{$curr_service->service_id}}" onclick="flipEffectElement('groupservice{{$curr_service->service_id}}', 'SlideDown', 'SlideUp', 'triggerservice{{$curr_service->service_id}}')">
+	<tr id="triggerservice{{$curr_service->service_id}}">
 	  <td colspan="4">{{$curr_service->nom}}</td>
 	</tr>
-  <tbody id="groupservice{{$curr_service->service_id}}" style="display: none">
-	{{foreach from=$curr_service->_ref_chambres item=curr_chambre}}
-    <tr>
-      <td><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_chambre->chambre_id}}&amp;lit_id=0">{{$curr_chambre->nom}}</a></td>
-      <td class="text">{{$curr_chambre->caracteristiques|nl2br}}</td>
-      <td>
-      {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
-        <a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_lit->chambre_id}}&amp;lit_id={{$curr_lit->lit_id}}">{{$curr_lit->nom}}</a>
+    <tbody id="groupservice{{$curr_service->service_id}}" style="display: none">
+     {{foreach from=$curr_service->_ref_chambres item=curr_chambre}}
+      <tr>
+        <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_chambre->chambre_id}}&amp;lit_id=0">{{$curr_chambre->nom}}</a></td>
+        <td class="text">{{$curr_chambre->caracteristiques|nl2br}}</td>
+        <td>
+        {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
+          <a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_lit->chambre_id}}&amp;lit_id={{$curr_lit->lit_id}}">{{$curr_lit->nom}}</a>
+        {{/foreach}}
+        </td>
+      </tr>
       {{/foreach}}
-      </td>
-    </tr>
+    </tbody>
     {{/foreach}}
-  </tbody>
-  {{/foreach}}
       
     </table>
 
