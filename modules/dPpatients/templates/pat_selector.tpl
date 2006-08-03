@@ -37,7 +37,7 @@ function setClose(key, val){
 <tr>
   <th><label for="firstName" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
   <td><input name="firstName" value="{{$firstName}}" size="30" /></td>
-  <td><button class="search" type="submit">rechercher</button></td>
+  <td><button class="search" type="submit">Rechercher</button></td>
 </tr>
 
 <tr>
