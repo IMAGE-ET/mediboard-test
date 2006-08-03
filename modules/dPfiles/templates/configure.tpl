@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="index.php?m={{$m}}&amp;a=configure&amp;file_category_id=0">
+      <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=configure&amp;file_category_id=0">
         Créer une nouvelle catégorie de fichiers
       </a>
       <table class="tbl">
@@ -13,12 +13,12 @@
         {{foreach from=$listCategory item=curr_category}}
         <tr>
           <td>
-            <a href="index.php?m={{$m}}&amp;a=configure&amp;file_category_id={{$curr_category->file_category_id}}" title="Modifier la catégorie">
+            <a href="index.php?m={{$m}}&amp;tab=configure&amp;file_category_id={{$curr_category->file_category_id}}" title="Modifier la catégorie">
               {{$curr_category->file_category_id}}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m={{$m}}&amp;a=configure&amp;file_category_id={{$curr_category->file_category_id}}" title="Modifier le catégorie">
+            <a href="index.php?m={{$m}}&amp;tab=configure&amp;file_category_id={{$curr_category->file_category_id}}" title="Modifier le catégorie">
               {{$curr_category->nom}}
             </a>
           </td>
@@ -30,7 +30,7 @@
       </table>  
     </td>
     <td class="halfPane">
-      <form name="editCat" action="./index.php?m={{$m}}&amp;a=configure" method="post" onsubmit="return checkForm(this)">
+      <form name="editCat" action="./index.php?m={{$m}}&amp;tab=configure" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPfiles" />
       <input type="hidden" name="dosql" value="do_filescategory_aed" />
 	  <input type="hidden" name="file_category_id" value="{{$category->file_category_id}}" />
