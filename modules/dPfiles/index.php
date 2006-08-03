@@ -10,8 +10,7 @@
 require_once($AppUI->getSystemClass("tabindex"));
 
 $tabs = array();
-$tabs[] = array("vw_files", "test", 0);
-$default = "test";
+$tabs[] = array("vw_files", "Visualiser les fichiers", 0);
 
 $index = new CTabIndex($tabs, $default);
 $index->show();
