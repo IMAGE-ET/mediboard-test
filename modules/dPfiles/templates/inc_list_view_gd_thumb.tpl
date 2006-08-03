@@ -33,7 +33,7 @@
           <input type="hidden" name="dosql" value="do_file_aed" />
           <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
           <input type="hidden" name="del" value="0" />
-          <a href="javascript:popFile({{$curr_file->file_id}});">
+          <a href="javascript:popFile({{$curr_file->file_id}},0);">
             <img src="mbfileviewer.php?file_id={{$curr_file->file_id}}&amp;phpThumb=1&amp;hp=450&amp;wl=450" alt="-" border="0" />
             <br />{{$curr_file->_shortview}} {{$curr_file->_file_size}}<br />
             le {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
@@ -70,5 +70,5 @@
 {{/foreach}}      
 </div>
 <script language="Javascript" type="text/javascript">
-new Rico.Accordion( $('accordionConsult'), {panelHeight:350,onShowTab: StoreKeyCat{{if $accordion_open}},onLoadShowTab : {{$accordion_open}}{{/if}}} );
+new Rico.Accordion( $('accordionConsult'), {panelHeight:380,onShowTab: StoreKeyCat{{if $accordion_open}},onLoadShowTab : {{$accordion_open}}{{/if}}} );
 </script>

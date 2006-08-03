@@ -14,9 +14,9 @@ function StoreKeyCat(objAcc){
   document.FrmClass.cat_id.value = cat_id;
 }
 
-function popFile(file_id){
+function popFile(file_id, sfn){
   var url = new Url;
-  url.ViewFilePopup(file_id);
+  url.ViewFilePopup(file_id, sfn);
 }
 
 function ZoomFileAjax(file_id, sfn){

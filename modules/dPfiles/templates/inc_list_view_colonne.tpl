@@ -28,7 +28,7 @@
         <tr>
         {{/if}}
           <td class="{{cycle name=cellicon values="dark, light"}}">
-            <a href="javascript:popFile({{$curr_file->file_id}});">
+            <a href="javascript:popFile({{$curr_file->file_id}},0);">
               <img src="mbfileviewer.php?file_id={{$curr_file->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
             </a>
           </td>
@@ -74,5 +74,5 @@
 {{/foreach}}      
 </div>
 <script language="Javascript" type="text/javascript">
-new Rico.Accordion( $('accordionConsult'), {panelHeight:350,onShowTab: StoreKeyCat{{if $accordion_open}},onLoadShowTab : {{$accordion_open}}{{/if}}} );
+new Rico.Accordion( $('accordionConsult'), {panelHeight:380,onShowTab: StoreKeyCat{{if $accordion_open}},onLoadShowTab : {{$accordion_open}}{{/if}}} );
 </script>

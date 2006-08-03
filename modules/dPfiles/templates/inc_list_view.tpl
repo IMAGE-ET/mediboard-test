@@ -67,5 +67,5 @@
 {{/foreach}}     
 </div>
 <script language="Javascript" type="text/javascript">
-new Rico.Accordion( $('accordionConsult'), {panelHeight:350,onShowTab: StoreKeyCat{{if $accordion_open}},onLoadShowTab : {{$accordion_open}}{{/if}}} );
+new Rico.Accordion( $('accordionConsult'), {panelHeight:380,onShowTab: StoreKeyCat{{if $accordion_open}},onLoadShowTab : {{$accordion_open}}{{/if}}} );
 </script>

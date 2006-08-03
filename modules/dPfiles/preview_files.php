@@ -27,9 +27,7 @@ $pageEnCours = null;
 $file = new CFile;
 $file->load($file_id);
 $file->loadNbPages();    
-if($file->_nb_pages !==null){
-  $file->_view .= " - $file->_nb_pages page(s)";	
-}
+
 //navigation par pages (PDF)
 if($file->_nb_pages){
   if($sfn>$file->_nb_pages || $sfn<0){$sfn = 0;}
