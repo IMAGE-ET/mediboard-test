@@ -7,7 +7,7 @@
     <div id="Acc{{$keyCat}}Content" class="accordionTabContentBox">
       <table class="tbl">
         <tr>
-          <td colspan="3">
+          <td colspan="2">
             <form name="uploadFrm{{$keyCat}}" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="m" value="dPfiles" />
             <input type="hidden" name="dosql" value="do_file_aed" />
@@ -29,11 +29,9 @@
             </a>        
           </td>
           <td class="text {{cycle name=celltxt values="dark, light"}}" style="vertical-align: middle;">
-            {{$curr_file->_shortview}}<br />
-            {{$curr_file->_file_size}}<br />
-            le {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
-          </td>        
-          <td class="button {{cycle name=cellform values="dark, light"}}">
+            <strong>{{$curr_file->_view}}</strong>
+            <br />Date : {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
+            <hr />
             <form name="editFile{{$curr_file->file_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPfiles" />
               <input type="hidden" name="dosql" value="do_file_aed" />
@@ -47,7 +45,6 @@
                 </option>
                 {{/foreach}}        
               </select>
-              <br />
               <button type="button" class="trash" onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
                 Supprimer
               </button>
@@ -56,7 +53,7 @@
         </tr>
       {{foreachelse}}
       <tr>
-        <td colspan="3" class="button">
+        <td colspan="2" class="button">
           Pas de documents            
         </td>
       </tr>

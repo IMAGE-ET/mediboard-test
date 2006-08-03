@@ -47,7 +47,6 @@
             </option>
             {{/foreach}}
           </select>
-          <br />
           <button type="button" class="trash" onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
             Supprimer ce fichier
           </button>
