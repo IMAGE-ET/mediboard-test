@@ -12,7 +12,7 @@ global $AppUI, $canRead, $canEdit, $m;
 require_once($AppUI->getModuleClass("dPfiles", "files"));
 require_once($AppUI->getModuleClass("dPfiles", "filescategory"));
 
-$file_id = mbGetValueFromGetOrSession("file_id", null);
+$file_id = mbGetValueFromGet("file_id", 0);
 $sfn = mbGetValueFromGet("sfn", 0);
 $popup = mbGetValueFromGet("popup", 0);
 $navig = mbGetValueFromGet("navig", null);
@@ -26,7 +26,10 @@ $pageEnCours = null;
 
 $file = new CFile;
 $file->load($file_id);
-
+$file->loadNbPages();    
+if($file->_nb_pages !==null){
+  $file->_view .= " - $file->_nb_pages page(s)";	
+}
 //navigation par pages (PDF)
 if($file->_nb_pages){
   if($sfn>$file->_nb_pages || $sfn<0){$sfn = 0;}

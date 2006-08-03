@@ -67,11 +67,7 @@ class CFile extends CMbObject {
     
     $this->_shortview = $this->file_name;
     $this->_view = $this->file_name." (".$this->_file_size.")";
-    
-    $this->loadNbPages();    
-    if($this->_nb_pages !==null){
-      $this->_view .= " - $this->_nb_pages page(s)";	
-    }
+       
   }
   
   function delete() {
@@ -237,7 +233,7 @@ class CFile extends CMbObject {
                  && strpos($splitval, $string_recherche) !== false){
                 // Nombre de page ici
                 $position_count = strripos($splitval, $string_recherche) + strlen($string_recherche);
-                $nombre_temp = explode ("/", substr($splitval,$position_count,strlen($splitval)-$position_count) , 2 );
+                $nombre_temp = explode (" ", trim(substr($splitval,$position_count,strlen($splitval)-$position_count)) , 2 );
                 $this->_nb_pages = intval(trim($nombre_temp[0]));
               }
             }
@@ -247,10 +243,9 @@ class CFile extends CMbObject {
       }elseif(strpos($dataFile, "%PDF-1.3") !== false || $nb_count==1){
         // Fichier PDF 1.3 ou 1 seule occurence
         $position_count = strripos($dataFile, $string_recherche) + strlen($string_recherche);
-        $nombre_temp = explode ("/", substr($dataFile,$position_count,strlen($dataFile)-$position_count) , 2 );
+        $nombre_temp = explode (" ", trim(substr($dataFile,$position_count,strlen($dataFile)-$position_count)) , 2 );
         $this->_nb_pages = intval(trim($nombre_temp[0]));
       }
-      //mbTrace($this->_nb_pages,"Nombre de pages");
     }
   }
 }
