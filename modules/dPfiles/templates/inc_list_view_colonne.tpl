@@ -2,7 +2,7 @@
 {{foreach from=$affichageFile item=curr_listCat key=keyCat}}
   <div id="Acc{{$keyCat}}">
     <div id="Acc{{$keyCat}}Header" class="accordionTabTitleBar">
-      {{$curr_listCat.name}}
+      {{$curr_listCat.name}} ({{$curr_listCat.file|@count}})
     </div>
     <div id="Acc{{$keyCat}}Content"  class="accordionTabContentBox">
       <table class="tbl">
