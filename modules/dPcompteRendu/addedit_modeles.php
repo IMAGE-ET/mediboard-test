@@ -9,15 +9,13 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'templatemanager') );
+require_once( $AppUI->getModuleClass("mediusers") );
+require_once( $AppUI->getModuleClass("dPcompteRendu", "compteRendu") );
+require_once( $AppUI->getModuleClass("dPcompteRendu", "templatemanager") );
 
 if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
-
-global $ECompteRenduType;
 
 // Liste des praticiens accessibles
 $listPrat = new CMediusers();
@@ -55,16 +53,15 @@ if ($compte_rendu->compte_rendu_id) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
+require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('prat_id', $prat_id);
-$smarty->assign('compte_rendu_id', $compte_rendu_id);
-$smarty->assign('listPrat', $listPrat);
-$smarty->assign('listFunc', $listFunc);
-$smarty->assign('ECompteRenduType', $ECompteRenduType);
-$smarty->assign('compte_rendu', $compte_rendu);
+$smarty->assign("prat_id", $prat_id);
+$smarty->assign("compte_rendu_id", $compte_rendu_id);
+$smarty->assign("listPrat", $listPrat);
+$smarty->assign("listFunc", $listFunc);
+$smarty->assign("compte_rendu", $compte_rendu);
 
-$smarty->display('addedit_modeles.tpl');
+$smarty->display("addedit_modeles.tpl");
 
 ?>

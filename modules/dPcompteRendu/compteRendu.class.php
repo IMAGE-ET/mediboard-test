@@ -15,13 +15,6 @@ require_once($AppUI->getModuleClass("dPcabinet"   , "consultation"));
 require_once($AppUI->getModuleClass("dPcabinet"   , "consultAnesth"));
 require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
 
-$ECompteRenduType = array(
-  "consultation", 
-  "operation", 
-  "hospitalisation", 
-  "autre"
-);
-
 class CCompteRendu extends CMbObject {
   // DB Table key
   var $compte_rendu_id = null;
@@ -56,6 +49,8 @@ class CCompteRendu extends CMbObject {
     $this->_props["nom"]         = "str|notNull";
     $this->_props["source"]      = "html";
     $this->_props["type"]        = "enum|consultAnesth|operation|hospitalisation|consultation|notNull";
+    
+    $this->buildEnums();
   }
 
 

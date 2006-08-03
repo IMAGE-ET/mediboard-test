@@ -80,12 +80,11 @@ function supprimer() {
     <th><label for="type" title="Contexte dans lequel est utilisé le modèle">Type de modèle: </label></th>
     <td>
       <select name="type">
-        {{foreach from=$ECompteRenduType item=curr_type}}
-          <option value="{{$curr_type}}" {{if $curr_type == $compte_rendu->type}} selected="selected" {{/if}}>
-            {{$curr_type}}
-          </option>
+        {{foreach from=$compte_rendu->_enums.type item=curr_type}}
+        <option value="{{$curr_type}}" {{if $curr_type == $compte_rendu->type}} selected="selected" {{/if}}>
+          {{$curr_type}}
+        </option>
         {{/foreach}}
-      </select>
     </td>
   </tr>
   
