@@ -21,6 +21,7 @@ $cat_id   = mbGetValueFromGetOrSession("cat_id"  , 0);
 $selClass = mbGetValueFromGetOrSession("selClass", null);
 $selKey   = mbGetValueFromGetOrSession("selKey"  , null);
 $typeVue  = mbGetValueFromGetOrSession("typeVue" , 0);
+$reloadlist = 1;
 
 // Liste des Class
 $listClass = getChildClasses("CMbObject", array("_ref_files"));
@@ -63,6 +64,7 @@ if($selClass && $selKey){
   $smarty->assign("affichageFile",$affichageFile);
 }
 
+$smarty->assign("reloadlist"  , $reloadlist  );
 $smarty->assign("accordion_open" , $accordion_open);
 $smarty->assign("cat_id"      , $cat_id      ); 
 $smarty->assign("listCategory", $listCategory);

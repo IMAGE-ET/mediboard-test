@@ -24,7 +24,7 @@ $selKey   = mbGetValueFromGetOrSession("selKey"  , null);
 $selView  = mbGetValueFromGetOrSession("selView" , null);
 $file_id  = mbGetValueFromGet("file_id" , null);
 $typeVue  = mbGetValueFromGetOrSession("typeVue" , 0);
-
+$reloadlist = 0;
 
 $file = new CFile;
 $file->load($file_id);
@@ -76,6 +76,7 @@ $smarty->assign("file"        , $file        );
 $smarty->assign("keywords"    , $keywords    );
 $smarty->assign("object"      , $object      );
 $smarty->assign("typeVue"     , $typeVue     );
+$smarty->assign("reloadlist"  , $reloadlist  );
 
 $smarty->display("vw_files.tpl");
 

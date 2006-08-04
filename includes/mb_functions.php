@@ -429,6 +429,7 @@ function mbLoadScripts() {
   mbLoadScript("includes/javascript/forms.js");
   mbLoadScript("includes/javascript/printf.js");
   mbLoadScript("includes/javascript/browser.js");  
+  mbLoadScript("includes/javascript/window.js");
 }
 
 

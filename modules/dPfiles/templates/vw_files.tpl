@@ -1,4 +1,19 @@
 <script type="text/javascript">
+
+function initAccord(OpenTab){
+  var HeightDivTitle = 0;
+  var elementList = document.getElementsByClassName("accordionTabTitleBar");
+  for( var i = 0 ; i < elementList.length ; i++ ){
+    HeightDivTitle = HeightDivTitle + elementList[i].offsetHeight + 2;
+  }
+  hauteur_div = window.getInnerDimensions().x - Position.cumulativeOffset($('accordionConsult'))[1] - HeightDivTitle;
+  new Rico.Accordion( $('accordionConsult'), {panelHeight:hauteur_div,onShowTab: StoreKeyCat,onLoadShowTab : OpenTab} );
+}
+
+function pageMain() {
+  initAccord(0);
+}
+
 function popSearch() {
   var f = document.FrmClass;
   var url = new Url;
