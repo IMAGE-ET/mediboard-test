@@ -1,27 +1,15 @@
 <script type="text/javascript">
-
-function calcHeightParentBottom(oDiv){
-  var oParent = oDiv;
-  var fHeightBot = 0;
-  while(oParent.nodeName!="HTML"){
-    aBorderBot = Element.getStyle(oParent,"border-bottom-width").split("px");
-    aMarginBot = Element.getStyle(oParent,"margin-bottom").split("px");
-    aPaddingBot= Element.getStyle(oParent,"padding-bottom").split("px");
-    fHeightBot += parseFloat(aBorderBot[0]) + parseFloat(aMarginBot[0]) + parseFloat(aPaddingBot[0]);
-    oParent = oParent.parentNode;
-  }
-  return fHeightBot;
-}
-
 function initAccord(OpenTab){
+  var oAccordionDiv = $("accordionConsult");
+  if (!oAccordionDiv) {
+    return;
+  }
   var fHeightDivTitle = 0;
   var fhauteur_div = 0;
   fHeightDivTitle = Element.getOffsetHeightByClassName("accordionTabTitleBar");
   fhauteur_div = window.getInnerDimensions().x - Position.cumulativeOffset($('accordionConsult'))[1] - fHeightDivTitle;
   aAccordBorderTop = Element.getStyle("accordionConsult","border-top-width").split("px");
-  fhauteur_div = fhauteur_div - parseFloat(aAccordBorderTop[0]);
-  fHeightBot = calcHeightParentBottom($('accordionConsult'));
-  fhauteur_div = fhauteur_div - fHeightBot;
+  fhauteur_div = fhauteur_div - parseFloat(aAccordBorderTop[0]) - 14; //-14 pour les marges et bordures en bas des tableaux
   new Rico.Accordion( $('accordionConsult'), {panelHeight:fhauteur_div,onShowTab: storeKeyCat,onLoadShowTab : OpenTab} );
 }
 
