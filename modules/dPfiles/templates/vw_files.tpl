@@ -1,5 +1,11 @@
 <script type="text/javascript">
-function initAccord(OpenTab){
+var oCookie = new CJL_CookieUtil("fileAccordion");
+var fHeight = 380;
+if(oCookie.getSubValue("height")){
+  var fHeight = oCookie.getSubValue("height");
+}
+
+function initAccord(init_redirect){
   var oAccordionDiv = $("accordionConsult");
   if (!oAccordionDiv) {
     return;
@@ -9,12 +15,16 @@ function initAccord(OpenTab){
   fHeightDivTitle = Element.getOffsetHeightByClassName("accordionTabTitleBar");
   fhauteur_div = window.getInnerDimensions().x - Position.cumulativeOffset($('accordionConsult'))[1] - fHeightDivTitle;
   aAccordBorderTop = Element.getStyle("accordionConsult","border-top-width").split("px");
-  fhauteur_div = fhauteur_div - parseFloat(aAccordBorderTop[0]) - 14; //-14 pour les marges et bordures en bas des tableaux
-  new Rico.Accordion( $('accordionConsult'), {panelHeight:fhauteur_div,onShowTab: storeKeyCat,onLoadShowTab : OpenTab} );
+  fHeight = fhauteur_div - parseFloat(aAccordBorderTop[0]) - 14; //-14 pour les marges et bordures en bas des tableaux  
+  oCookie.setSubValue("height", fHeight);
+  if(init_redirect){
+    oAccord.lastExpandedTab.content.style.height = fHeight + "px";
+    oAccord.setOptions( { panelHeight: fHeight } );
+  }
 }
 
 function pageMain() {
-  initAccord(0);
+  initAccord(true);
 }
 
 function popSearch() {
@@ -64,6 +74,7 @@ function saveCatId(key){
 
 function reloadListFile(){
   var url = new Url;
+  initAccord(false);
   url.setModuleAction("dPfiles", "httpreq_vw_listfiles");
   url.addParam("selKey", document.FrmClass.selKey.value);
   url.addParam("selClass", document.FrmClass.selClass.value);  

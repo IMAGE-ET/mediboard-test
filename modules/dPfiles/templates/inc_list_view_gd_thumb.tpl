@@ -68,8 +68,10 @@
   </div>
 {{/foreach}}      
 </div>
-{{if $reloadlist}}
 <script language="Javascript" type="text/javascript">
-initAccord({{if $accordion_open}}{{$accordion_open}}{{else}}0{{/if}})
+var oAccord = new Rico.Accordion( $('accordionConsult'), {
+  panelHeight: fHeight, 
+  onShowTab: storeKeyCat,
+  onLoadShowTab: {{if $accordion_open}}{{$accordion_open}}{{else}}0{{/if}}
+});
 </script>
-{{/if}}
