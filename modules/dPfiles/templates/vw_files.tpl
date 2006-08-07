@@ -5,7 +5,7 @@ if(oCookie.getSubValue("height")){
   var fHeight = oCookie.getSubValue("height");
 }
 
-function initAccord(init_redirect){
+function initAccord(init_resize){
   var oAccordionDiv = $("accordionConsult");
   if (!oAccordionDiv) {
     return;
@@ -17,7 +17,7 @@ function initAccord(init_redirect){
   aAccordBorderTop = Element.getStyle("accordionConsult","border-top-width").split("px");
   fHeight = fhauteur_div - parseFloat(aAccordBorderTop[0]) - 14; //-14 pour les marges et bordures en bas des tableaux  
   oCookie.setSubValue("height", fHeight);
-  if(init_redirect){
+  if(init_resize){
     oAccord.lastExpandedTab.content.style.height = fHeight + "px";
     oAccord.setOptions( { panelHeight: fHeight } );
   }
