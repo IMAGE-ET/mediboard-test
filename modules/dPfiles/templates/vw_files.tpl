@@ -16,6 +16,9 @@ function initAccord(init_resize){
   fhauteur_div = window.getInnerDimensions().x - Position.cumulativeOffset($('accordionConsult'))[1] - fHeightDivTitle;
   aAccordBorderTop = Element.getStyle("accordionConsult","border-top-width").split("px");
   fHeight = fhauteur_div - parseFloat(aAccordBorderTop[0]) - 14; //-14 pour les marges et bordures en bas des tableaux  
+  if(fHeight<=120){
+    fHeight = 120;
+  }
   oCookie.setSubValue("height", fHeight);
   if(init_resize){
     oAccord.lastExpandedTab.content.style.height = fHeight + "px";
