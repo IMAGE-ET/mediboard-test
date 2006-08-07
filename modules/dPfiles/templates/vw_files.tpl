@@ -1,13 +1,28 @@
 <script type="text/javascript">
 
-function initAccord(OpenTab){
-  var HeightDivTitle = 0;
-  var elementList = document.getElementsByClassName("accordionTabTitleBar");
-  for( var i = 0 ; i < elementList.length ; i++ ){
-    HeightDivTitle = HeightDivTitle + elementList[i].offsetHeight + 2;
+function calcHeightParentBottom(oDiv){
+  var oParent = oDiv;
+  var fHeightBot = 0;
+  while(oParent.nodeName!="HTML"){
+    aBorderBot = Element.getStyle(oParent,"border-bottom-width").split("px");
+    aMarginBot = Element.getStyle(oParent,"margin-bottom").split("px");
+    aPaddingBot= Element.getStyle(oParent,"padding-bottom").split("px");
+    fHeightBot += parseFloat(aBorderBot[0]) + parseFloat(aMarginBot[0]) + parseFloat(aPaddingBot[0]);
+    oParent = oParent.parentNode;
   }
-  hauteur_div = window.getInnerDimensions().x - Position.cumulativeOffset($('accordionConsult'))[1] - HeightDivTitle;
-  new Rico.Accordion( $('accordionConsult'), {panelHeight:hauteur_div,onShowTab: StoreKeyCat,onLoadShowTab : OpenTab} );
+  return fHeightBot;
+}
+
+function initAccord(OpenTab){
+  var fHeightDivTitle = 0;
+  var fhauteur_div = 0;
+  fHeightDivTitle = Element.getOffsetHeightByClassName("accordionTabTitleBar");
+  fhauteur_div = window.getInnerDimensions().x - Position.cumulativeOffset($('accordionConsult'))[1] - fHeightDivTitle;
+  aAccordBorderTop = Element.getStyle("accordionConsult","border-top-width").split("px");
+  fhauteur_div = fhauteur_div - parseFloat(aAccordBorderTop[0]);
+  fHeightBot = calcHeightParentBottom($('accordionConsult'));
+  fhauteur_div = fhauteur_div - fHeightBot;
+  new Rico.Accordion( $('accordionConsult'), {panelHeight:fhauteur_div,onShowTab: storeKeyCat,onLoadShowTab : OpenTab} );
 }
 
 function pageMain() {
@@ -23,7 +38,7 @@ function popSearch() {
   url.popup(600, 300, "-");
 }
 
-function StoreKeyCat(objAcc){
+function storeKeyCat(objAcc){
   var cat_id = objAcc.titleBar.id;
   cat_id = cat_id.substring(3, cat_id.indexOf("Header"));
   document.FrmClass.cat_id.value = cat_id;
@@ -35,13 +50,13 @@ function popFile(file_id, sfn){
 }
 
 function ZoomFileAjax(file_id, sfn){
-  var VwFileUrl = new Url;
-  VwFileUrl.setModuleAction("dPfiles", "preview_files");
-  VwFileUrl.addParam("file_id", file_id);
+  var url = new Url;
+  url.setModuleAction("dPfiles", "preview_files");
+  url.addParam("file_id", file_id);
   if(sfn!=0){
-    VwFileUrl.addParam("sfn", sfn);
+    url.addParam("sfn", sfn);
   }
-  VwFileUrl.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
+  url.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
 }
 
 function setData(selClass,keywords,key,val){
@@ -60,13 +75,13 @@ function saveCatId(key){
 }
 
 function reloadListFile(){
-  var listFileUrl = new Url;
-  listFileUrl.setModuleAction("dPfiles", "httpreq_vw_listfiles");
-  listFileUrl.addParam("selKey", document.FrmClass.selKey.value);
-  listFileUrl.addParam("selClass", document.FrmClass.selClass.value);  
-  listFileUrl.addParam("typeVue", document.FrmClass.typeVue.value);
-  listFileUrl.addParam("cat_id", document.FrmClass.cat_id.value);
-  listFileUrl.requestUpdate('listView', { waitingText : null });
+  var url = new Url;
+  url.setModuleAction("dPfiles", "httpreq_vw_listfiles");
+  url.addParam("selKey", document.FrmClass.selKey.value);
+  url.addParam("selClass", document.FrmClass.selClass.value);  
+  url.addParam("typeVue", document.FrmClass.typeVue.value);
+  url.addParam("cat_id", document.FrmClass.cat_id.value);
+  url.requestUpdate('listView', { waitingText : null });
 }
 
 function submitFileChangt(oForm){
