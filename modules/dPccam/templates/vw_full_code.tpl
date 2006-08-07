@@ -14,7 +14,7 @@ function updateFields(selected) {
 }
 
 function pageMain() {
-  initGroups("chap");
+  initEffectGroupPlus("chapEffect", { sEffect : "slide"} );
   
   new Ajax.Autocompleter(
     'selection_codeacte',
@@ -163,14 +163,24 @@ function pageMain() {
         </tr>
         
         {{foreach from=$chap item=curr_chap}}
-        <tr class="groupcollapse" id="chap{{$curr_chap.rang}}" onclick="flipGroup('{{$curr_chap.rang}}', 'chap')">
+        <tr id="chap{{$curr_chap.rang}}-trigger">
           <th style="text-align:left">{{$curr_chap.rang}}</th>
           <td>{{$curr_chap.nom}}<br /></td>
         </tr>
-        <tr class="chap{{$curr_chap.rang}}">
-          <td></td>
-          <td><em>{{if $curr_chap.rq}}{{$curr_chap.rq|nl2br}}{{else}}* Pas d'informations{{/if}}</em></td>
-        </tr>
+        <tbody class="chapEffect" id="chap{{$curr_chap.rang}}">
+          <tr>
+            <td />
+            <td>
+              <em>
+                {{if $curr_chap.rq}}
+                {{$curr_chap.rq|nl2br}}
+                {{else}}
+                * Pas d'informations
+                {{/if}}
+              </em>
+            </td>
+          </tr>
+        </tbody>
         {{/foreach}}
         
       </table>

@@ -409,7 +409,7 @@ function mbLoadScripts() {
   mbLoadScript("lib/jscalendar/calendar-setup.js");
   
   // Gosu doit etre définit avant Prototype
-  // Car Prototype redéfit les méthode de Array
+  // Car Prototype redéfinit les méthodes de Array
   mbLoadScript("includes/javascript/gosu/array.js");
   mbLoadScript("includes/javascript/gosu/cookie.js");
   mbLoadScript("includes/javascript/gosu/debug.js");
@@ -423,6 +423,7 @@ function mbLoadScripts() {
   mbLoadScript("lib/scriptaculous/src/scriptaculous.js");
   mbLoadScript("lib/rico/rico.js");
   
+  mbLoadScript("includes/javascript/prototypex.js");
   mbLoadScript("includes/javascript/functions.js");
   mbLoadScript("includes/javascript/cjl_cookie.js");
   mbLoadScript("includes/javascript/url.js");

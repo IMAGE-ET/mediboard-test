@@ -8,13 +8,13 @@ function alertAction() {
 }
 
 function pageMain() {
-  initGroups("impayes");
-  initGroups("inf15");
-  initGroups("sup15");
-  
+  {{if $isprat}}
+  initEffectClassPlus("impayes", null, { sEffect : "slide"} );
+  initEffectClassPlus("inf15", null, { sEffect : "slide"} );
+  initEffectClassPlus("sup15", null, { sEffect : "slide"} );
+  {{/if}}
   regFieldCalendar("addPlage", "date");
-
-  regRedirectPopupCal("{{$debut}}", "index.php?m={{$m}}&tab={{$tab}}&debut="); 
+  regRedirectPopupCal("{{$debut}}", "?m={{$m}}&tab={{$tab}}&debut="); 
 }
 
 </script>
@@ -75,7 +75,7 @@ function pageMain() {
                   <input type='hidden' name='plageressource_id' value='{{$curr_plage->plageressource_id}}' />
                     {{if $curr_plage->_state == $smarty.const.PR_FREE}}
                     <input type='hidden' name='prat_id' value='{{$app->user_id}}' />
-                    <button type="submit">Réserver</button>
+                    <button class="tick" type="submit">Réserver</button>
                     {{else}}
                     <input type='hidden' name='prat_id' value='' />
                     <button class="cancel" type="submit">Annuler</button>
@@ -99,12 +99,13 @@ function pageMain() {
     <td>
       <table class="form">
         {{if $isprat}}
-        <tr class="groupcollapse" id="impayes" onclick="flipGroup('', 'impayes')">
-          <th style="background:#ddf">Plages à régler:</th>
+        <tr id="impayes-trigger">
+          <th style="background:#ddf">Plages à régler</th>
           <td>{{$compte.impayes.total}} ({{$compte.impayes.somme}} €)</td>
         </tr>
-        {{foreach from=$compte.impayes.plages item=curr_plage}}
-          <tr class="impayes">
+        <tbody id="impayes">
+          {{foreach from=$compte.impayes.plages item=curr_plage}}
+          <tr>
             <td colspan="2" class="text">
               <a href="index.php?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
               {{$curr_plage->date|date_format:"%A %d %B %Y"}} &mdash;
@@ -116,13 +117,21 @@ function pageMain() {
               </a>
             </td>
           </tr>
-        {{/foreach}}
-        <tr class="groupcollapse" id="inf15" onclick="flipGroup('', 'inf15')">
-          <th style="background:#ddf">Plages réservées et bloquées:</th>
+          {{foreachelse}}
+          <tr>
+            <td colspan="2" class="text">
+              <em>Aucun</em>
+            </td>
+          </tr>
+          {{/foreach}}
+        </tbody>
+        <tr id="inf15-trigger">
+          <th style="background:#ddf">Plages réservées et bloquées</th>
           <td>{{$compte.inf15.total}} ({{$compte.inf15.somme}} €)</td>
         </tr>
-        {{foreach from=$compte.inf15.plages item=curr_plage}}
-          <tr class="inf15">
+        <tbody id="inf15">
+          {{foreach from=$compte.inf15.plages item=curr_plage}}
+          <tr>
             <td colspan="2" class="text">
               <a href="index.php?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
               {{$curr_plage->date|date_format:"%A %d %B %Y"}} &mdash;
@@ -134,13 +143,21 @@ function pageMain() {
               </a>
             </td>
           </tr>
-        {{/foreach}}
-        <tr class="groupcollapse" id="sup15" onclick="flipGroup('', 'sup15')">
-          <th style="background:#ddf">Plages réservées à plus de 15 jours:</th>
+          {{foreachelse}}
+          <tr>
+            <td colspan="2" class="text">
+              <em>Aucun</em>
+            </td>
+          </tr>
+          {{/foreach}}
+        </tbody>
+        <tr id="sup15-trigger">
+          <th style="background:#ddf">Plages réservées à plus de 15 jours</th>
           <td>{{$compte.sup15.total}} ({{$compte.sup15.somme}} €)</td>
         </tr>
+        <tbody id="sup15">
         {{foreach from=$compte.sup15.plages item=curr_plage}}
-          <tr class="sup15">
+          <tr>
             <td colspan="2" class="text">
               <a href="index.php?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
               {{$curr_plage->date|date_format:"%A %d %B %Y"}} &mdash;
@@ -152,7 +169,14 @@ function pageMain() {
               </a>
             </td>
           </tr>
-        {{/foreach}}
+          {{foreachelse}}
+          <tr>
+            <td colspan="2" class="text">
+              <em>Aucun</em>
+            </td>
+          </tr>
+          {{/foreach}}
+        </tbody>
         {{/if}}
         <tr>
           <th colspan="2" class="category">Légende</th>

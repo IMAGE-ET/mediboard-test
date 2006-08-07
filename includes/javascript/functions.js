@@ -7,161 +7,104 @@ function main() {
   pageMain();
 }
 
-function pageMain() {}
+function pageMain() {
+}
+
 function initFCKEditor() {}
 
-Element.addEventHandler = function(oElement, sEvent, oHandler) {
-  var sEventMethod = "on" + sEvent;
-  var oPreviousHandler = oElement[sEventMethod] || function() {};
-  oElement[sEventMethod] = function () {
-    oPreviousHandler();
-    oHandler(oElement);
-  };
-}
+/**
+ * Element.ClassNames class
+ */
 
-function getElementsByClassName(tagName, className, exactMatch) {
-  var els = document.getElementsByTagName(tagName); 
-  var elsTag = new Array;
-
-  var elIt = 0;
-  while (el = els[elIt++]) {
-    // el.getAttribute("class") DOES NOT work in IE
-    if (exactMatch ? el.className == className : el.className.indexOf(className) != -1) {
-      elsTag.push(el);
+Class.extend(Element.ClassNames, {
+  load: function (sCookieName) {
+    var oCookie = new CJL_CookieUtil(sCookieName);
+    if (sValue = oCookie.getSubValue(this.element.id)) {
+      this.set(sValue);
     }
-  }
+  },
   
-  return elsTag;
-}
+  save: function (sCookieName) {
+    var oCookie = new CJL_CookieUtil(sCookieName);
+    oCookie.setSubValue(this.element.id, this.toString());
+  }
+});
 
-function flipElementClass(elementId, firstClass, secondClass, cookieName) {
-  var element = document.getElementById(elementId);
-  
-  if (!element) {
-    return;
-  }
-
-  if (element.className != firstClass && element.className != secondClass) {
-    throwError("The element class of '" + elementId + "' is neither '" + firstClass + "' nor '" + secondClass + "'.");
-  }
-  
-  element.className = element.className == firstClass ? secondClass : firstClass;
-  
-  if (cookieName) {
-    var cookie = new CJL_CookieUtil(cookieName);
-    cookie.setSubValue(elementId, element.className);
-  }
-}
-
-function initElementClass(elementId, cookieName) {
-  var cookie = new CJL_CookieUtil(cookieName);
-  value = cookie.getSubValue(elementId);
-  if (value) {
-	var oElement = document.getElementById(elementId);
+function initElementClass(idElement, sCookieName) {
+  var oCookie = new CJL_CookieUtil(sCookieName);
+  sValue = cookie.oCookie(idElement);
+  if (sValue) {
+	var oElement = $(idElement);
 	if (!oElement) {
-		throwError(printf("Element with id '%s' doesn't exist", elementId));
+		throwError(printf("Element with id '%s' doesn't exist", idElements));
 	}
-    oElement.className = value;
-    
+    oElement.className = sValue;
   }
 }
 
-function flipEffectElement(idTarget, sShowEffect, sHideEffect, idTrigger) {
-  var oTargetElement = document.getElementById(idTarget);
-  var oTriggerElement = document.getElementById(idTrigger);
-  var sEffect = "";
-  switch (oTriggerElement.className) {
-  	case "triggerShow" : sEffect = sShowEffect; break;
-  	case "triggerHide" : sEffect = sHideEffect; break;
-  	default: throwError(printf("Trigger element class name should be either 'triggerShow' or 'triggerHide', instead of '%s'", oTriggerElement.className));
-  }
-  
-  new Effect[sEffect](oTargetElement);
-  flipElementClass(idTrigger, "triggerShow", "triggerHide", idTrigger);
-}
-
-function initEffectClass(idTarget, idTrigger) {
-  initElementClass(idTrigger, idTrigger);
-  
-  var oTriggerElement = document.getElementById(idTrigger);
-  var oTargetElement = document.getElementById(idTarget);
-  oTargetElement.style.display = (oTriggerElement.className == "triggerShow") ? "none" : "";
-}
-
-function flipEffectElementPlus(idTarget, idTrigger, sEffect) {
-  
-  if (sEffect && BrowserDetect.browser != "Explorer") {
-    new Effect.toggle(idTarget, sEffect);
+function flipEffectElementPlus(idTarget, idTrigger, oOptions) {
+  if (oOptions.sEffect && BrowserDetect.browser != "Explorer") {
+    new Effect.toggle(idTarget, oOptions.sEffect);
   } else {
     Element.toggle(idTarget);
   }
   
-  flipElementClass(idTrigger, "triggerShow", "triggerHide", idTrigger);
+  var aCNs = Element.classNames(idTrigger);
+  aCNs.flip("triggerShow", "triggerHide");
+  if (oOptions.bStore) {
+    aCNs.save(oOptions.sCookieName);
+  }
+}
+
+function initEffectGroupPlus(classTarget, oOptions) {
+  oOptions.sCookieName = classTarget;
+  document.getElementsByClassName(classTarget).each( 
+    function(oElement) {
+      initEffectClassPlus(oElement.id, null, oOptions);
+    }
+  );
 }
 
 function initEffectClassPlus(idTarget, idTrigger, oOptions) {
+  if (!idTrigger) {
+    idTrigger = idTarget + "-trigger";
+  }
+  
   var oDefaultOptions = {
     sEffect: null, // could be "appear", "slide", "blind"
-    bStartVisible: false
+    bStartVisible: false,
+    bStore: true,
+    sCookieName: "effect"
   };
   
-  Object.extend(oDefaultOptions, oOptions);
+  oDefaultOptions.extend(oOptions);
 
   var oTarget = $(idTarget);
   var oTrigger = $(idTrigger);
   
-  // Initialize the trigger and target element
-  Element.addClassName(oTrigger, oDefaultOptions.bStartVisible ? "triggerHide" : "triggerShow");
+  // Initialize the effect
   Event.observe(oTrigger, "click",
     function () { 
-      flipEffectElementPlus(idTarget, idTrigger, oDefaultOptions.sEffect);
+      flipEffectElementPlus(idTarget, idTrigger, oDefaultOptions);
     }
   );
   
-  // Load the cookie and adapt visibility
-  initElementClass(idTrigger, idTrigger);
-  Element[Element.hasClassName(oTrigger, "triggerShow") ? "hide" : "show"](oTarget);   
-}
-
-function initGroups(groupname) {
-  var trs = getElementsByClassName("tr", groupname, false);
-  var trsit = 0;
-  while(tr = trs[trsit++]) {
-    tr.style.display = "none";
+  // Initialize classnames and adapt visibility
+  var aCNs = Element.classNames(oTrigger);
+  aCNs.add(oDefaultOptions.bStartVisible ? "triggerHide" : "triggerShow");
+  if (oDefaultOptions.bStore) {
+    aCNs.load(oDefaultOptions.sCookieName);
   }
-  var cookie = new CJL_CookieUtil(groupname);
-  groupvalues = cookie.getAllSubValues();
-  for (groupid in groupvalues) {
-    groupclass = groupvalues[groupid];
-    if(groupclass == "groupexpand")
-      flipGroup(groupid, "");
-  }
-}
-
-function flipGroup(id, groupname) {
-  flipElementClass(groupname + id, "groupcollapse", "groupexpand", groupname);
-  var trs = getElementsByClassName("tr", groupname + id, true);
-  var trsit = 0;
-  while(tr = trs[trsit++]) {
-    tr.style.display = tr.style.display == "table-row" ? "none" : "table-row";
-  }
-}
-
-function getFunctionName(oFunction) {
-  var sFunction = oFunction.toString();
-  var re = /function ([^{]*)/;
-  var sFuncProt = sFunction.match(re)[0];
-  return sFuncProt;
+  Element[aCNs.include("triggerShow") ? "hide" : "show"](oTarget);   
 }
 
 function throwError(sMsg) {
   var oCaller = throwError.caller;
-  debug(getFunctionName(oCaller), printf("Error: %s", sMsg));
- 
+  debug(oCaller, "Error " + sMsg + " in function");
+
   while (oCaller = oCaller.caller) {
-    debug(getFunctionName(oCaller), "backtrace");
+    debug(oCaller, "Backtrace");
   }
- 
 }
 
 function makeDateFromDATE(sDate) {

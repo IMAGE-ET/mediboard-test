@@ -1,8 +1,9 @@
+{{assign var="href" value="?m=dPfiles&amp;a=preview_files&amp;popup=1&amp;dialog=1"}}
 <table class="form">
   <tr>
-    <td style="width:20%">
+    <td style="width: 20%">
     {{if $filePrev}}
-    <a class="button" href="index.php?m=dPfiles&amp;a=preview_files&amp;popup=1&amp;file_id={{$filePrev}}&amp;dialog=1&amp;navig=1">
+    <a class="button" href="{{$href}}&amp;file_id={{$filePrev}}&amp;navig=1">
       <img align="top" src="modules/{{$m}}/images/prev.png" alt="Fichier précédent" />
       Fichier précédent
     </a>
@@ -18,7 +19,7 @@
     </td>
     <th style="width:20%">
     {{if $fileNext}}
-    <a class="button" href="index.php?m=dPfiles&amp;a=preview_files&amp;popup=1&amp;file_id={{$fileNext}}&amp;dialog=1&amp;navig=1">
+    <a class="button" href="{{$href}}&amp;file_id={{$fileNext}}&amp;navig=1">
       Fichier suivant <img align="top" src="modules/{{$m}}/images/next.png" alt="Fichier suivant" />
     </a>
     {{/if}}
@@ -29,21 +30,21 @@
       {{if $file->file_id}}
         {{if $file->_nb_pages}}
             {{if $page_prev !== null}}
-            <a class="button" href="index.php?m=dPfiles&amp;a=preview_files&amp;popup=1&amp;file_id={{$file->file_id}}&amp;dialog=1&amp;navig=1&amp;sfn={{$page_prev}}">
+            <a class="button" href="{{$href}}&amp;file_id={{$file->file_id}}&amp;navig=1&amp;sfn={{$page_prev}}">
               <img align="top" src="modules/{{$m}}/images/prev.png" alt="Page précédente" />
               Page précédente
             </a>
             {{/if}}
             {{$pageEnCours}}
             {{if $page_next}}
-            <a class="button" href="index.php?m=dPfiles&amp;a=preview_files&amp;popup=1&amp;file_id={{$file->file_id}}&amp;dialog=1&amp;navig=1&amp;sfn={{$page_next}}">
+            <a class="button" href="{{$href}}&amp;file_id={{$file->file_id}}&amp;navig=1&amp;sfn={{$page_next}}">
               Page suivante 
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Page suivante" />
             </a>
             {{/if}}
         {{/if}}<br />
         <a href="mbfileviewer.php?file_id={{$file->file_id}}" title="Télécharger le fichier">
-          <img src="mbfileviewer.php?file_id={{$file->file_id}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" border="0" />
+          <img src="mbfileviewer.php?file_id={{$file->file_id}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" alt="Grand aperçu" />
         </a>
       {{/if}}
     </td>

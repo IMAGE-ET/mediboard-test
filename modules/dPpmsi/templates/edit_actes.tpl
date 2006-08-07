@@ -1,6 +1,6 @@
 <script type="text/javascript">
 function pageMain() {
-  initGroups("acte");
+  initEffectGroupPlus("acteEffect", { sEffect : "slide"} );
 }
 </script>
 

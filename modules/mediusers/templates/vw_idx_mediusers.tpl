@@ -1,23 +1,22 @@
 <script type="text/javascript">
 
 function expandFunctions() {
-  {{foreach from=$functions item=curr_function}}
-  oElement = $("function{{$curr_function->function_id}}");
-  Element.show(oElement);
-  {{/foreach}}
+  document.getElementsByClassName("functionEffect").each( function(oElement) {
+    Element.show(oElement);
+  });
 }
 
 function collapseFunctions() {
-  {{foreach from=$functions item=curr_function}}
-  oElement = $("function{{$curr_function->function_id}}");
-  Element.hide(oElement);
-  {{/foreach}}
+  document.getElementsByClassName("functionEffect").each( function(oElement) {
+    Element.hide(oElement);
+  });
 }
 
 function pageMain() {
-  {{foreach from=$functions item=curr_function}}
-  initEffectClassPlus("function{{$curr_function->function_id}}", "trigger{{$curr_function->function_id}}", { sEffect : "slide" });
-  {{/foreach}}
+  initEffectGroupPlus("functionEffect", { 
+    sEffect: "slide",
+    bStore: false
+  });
 }
 
 </script>
@@ -40,7 +39,7 @@ function pageMain() {
           <th>Type</th>
         </tr>
         {{foreach from=$functions item=curr_function}}
-        <tr id="trigger{{$curr_function->function_id}}">
+        <tr id="function{{$curr_function->function_id}}-trigger">
           <td style="background-color: #{{$curr_function->color}}">
           </td>
           <td colspan="4" style="background: #{{$curr_function->color}}" >
@@ -49,7 +48,7 @@ function pageMain() {
             groupe {{$curr_function->_ref_group->text}}
           </td>
         </tr>
-        <tbody id="function{{$curr_function->function_id}}">
+        <tbody class="functionEffect" id="function{{$curr_function->function_id}}">
         {{foreach from=$curr_function->_ref_users item=curr_user}}
         <tr>
           <td style="background-color: #{{$curr_function->color}}"></td>

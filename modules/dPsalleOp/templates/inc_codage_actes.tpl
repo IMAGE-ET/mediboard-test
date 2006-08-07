@@ -32,7 +32,7 @@
 
     <table class="form">
       
-      <tr id="trigger{{$key}}" class="triggerShow" onclick="flipEffectElement('group{{$key}}', 'SlideDown', 'SlideUp', 'trigger{{$key}}')">  
+      <tr id="acte{{$key}}-trigger">  
         <td colspan="2">
           Activité {{$curr_activite->numero}} ({{$curr_activite->type|escape}}) &mdash; 
           Phase {{$curr_phase->phase}} : {{$curr_phase->libelle|escape}}
@@ -47,7 +47,7 @@
         </td>
       </tr>
       
-      <tbody id="group{{$key}}" style="display: none">
+      <tbody class="acteEffect" id="acte{{$key}}">
       
       <tr class="{{$key}}">
         <th><label for="executant_id" title="Professionnel de santé exécutant l'acte">Exécutant</label></th>

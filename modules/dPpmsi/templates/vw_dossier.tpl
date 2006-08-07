@@ -95,7 +95,7 @@ function submitAllForms(operation_id) {
 
 function pageMain() {
   {{foreach from=$patient->_ref_sejours key=sejour_id item=curr_sejour}}
-  initEffectClass("sejour{{$sejour_id}}", "trigger{{$sejour_id}}");
+  initEffectClassPlus("sejour{{$sejour_id}}", "trigger{{$sejour_id}}", { sEffect : "slide"});
   {{/foreach}}
   
 }
@@ -134,14 +134,14 @@ function pageMain() {
         </tr>
         {{foreach from=$patient->_ref_sejours item=curr_sejour}}
         {{assign var="GHM" value=$curr_sejour->_ref_GHM}}
-        <tr id="trigger{{$curr_sejour->sejour_id}}" class="triggerShow" onclick="flipEffectElement('sejour{{$curr_sejour->sejour_id}}', 'SlideDown', 'SlideUp', 'trigger{{$curr_sejour->sejour_id}}')">
+        <tr id="trigger{{$curr_sejour->sejour_id}}"">
           <td colspan="4" style="background-color:#aaf;">
           	Dr. {{$curr_sejour->_ref_praticien->_view}} -
           	Séjour du {{$curr_sejour->entree_prevue|date_format:"%d %b %Y (%Hh%M)"}}
           	au {{$curr_sejour->sortie_prevue|date_format:"%d %b %Y (%Hh%M)"}}
           </td>
         </tr>
-        <tbody id="sejour{{$curr_sejour->sejour_id}}" style="display: none">
+        <tbody id="sejour{{$curr_sejour->sejour_id}}">
         <tr>
           <th>Diagnostics du patient</th>
           <td class="text" colspan="3">

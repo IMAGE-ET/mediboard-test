@@ -26,8 +26,8 @@
   <td>
     {{$map_tonal_droite}}
     {{$map_tonal_gauche}}
-    <img id="tonal_droite" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite" usemap="#graph_tonal_droite" onclick="changeTonalValueMouseDroite(event)" />
-    <img id="tonal_gauche" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche" usemap="#graph_tonal_gauche" onclick="changeTonalValueMouseGauche(event)" />
+    <img id="tonal_droite" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite" usemap="#graph_tonal_droite" onclick="changeTonalValueMouseDroite(event)" alt="Audio tonal gauche" />
+    <img id="tonal_gauche" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche" usemap="#graph_tonal_gauche" onclick="changeTonalValueMouseGauche(event)" alt="Audio tonal droite" />
   </td>
 </tr>
 <tr>
@@ -48,10 +48,10 @@
   <td>
 
     <table class="form" id="allvalues">
-      <tr class="triggerShow" id="triggertonal" onclick="flipEffectElement('grouptonal', 'SlideDown', 'SlideUp', 'triggertonal')">
+      <tr id="triggertonal">
         <th class="category" colspan="9">Toutes les valeurs</th>
       </tr>
-      <tbody id="grouptonal" style="display: none">
+      <tbody id="grouptonal">
         <tr>
           <th class="category" colspan="9">Oreille droite</th>
         </tr>
@@ -252,15 +252,15 @@
       <tr>
         <td>
           {{$map_vocal}}
-          <img id="image_vocal" src="?m=dPcabinet&amp;a=graph_audio_vocal&amp;suppressHeaders=1&amp;" usemap="#graph_vocal" onclick="changeVocalValueMouse(event)" />
+          <img id="image_vocal" src="?m=dPcabinet&amp;a=graph_audio_vocal&amp;suppressHeaders=1&amp;" usemap="#graph_vocal" onclick="changeVocalValueMouse(event)" alt="Audiogramme vocal" />
         </td>
         
         <td rowspan="2">
           {{$map_tympan_droite}}
-          <img id="tympan_droite" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite" usemap="#graph_tympan_droite" onclick="changeTympanValueMouseDroite(event)" />
+          <img id="tympan_droite" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite" usemap="#graph_tympan_droite" onclick="changeTympanValueMouseDroite(event)" alt="Tympan droit" />
           {{$map_tympan_gauche}}
           <br />
-          <img id="tympan_gauche" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche" usemap="#graph_tympan_gauche" onclick="changeTympanValueMouseGauche(event)" />
+          <img id="tympan_gauche" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche" usemap="#graph_tympan_gauche" onclick="changeTympanValueMouseGauche(event)" alt="Tympa Gauche" />
         </td>
       </tr>
       <tr>
@@ -278,10 +278,10 @@
 <tr>
   <td class="radiointeractive">
     <table class="form" id="allvocales">
-      <tr class="triggerShow" id="triggervocal" onclick="flipEffectElement('groupvocal', 'SlideDown', 'SlideUp', 'triggervocal')">
+      <tr id="triggervocal">
         <th class="category" colspan="9">Toutes les valeurs</th>
       </tr>
-      <tbody id="groupvocal" style="display: none">
+      <tbody id="groupvocal">
         <tr>
           <th class="category">Audiométrie vocale</th>
           {{foreach from=$frequences key=index item=frequence}}

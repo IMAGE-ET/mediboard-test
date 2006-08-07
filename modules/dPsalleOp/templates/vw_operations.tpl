@@ -2,7 +2,7 @@
 
 function pageMain() {
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
-  initGroups("acte");
+  initEffectGroupPlus("acteEffect", { sEffect : "slide"} );
 }
 
 </script>

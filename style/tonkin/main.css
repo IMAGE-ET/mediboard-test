@@ -96,9 +96,8 @@ table.form th.text {
 table.form td {
   white-space: nowrap;
   vertical-align: top;
-  background: #eef;
+  background-color: #eef;
   text-align: left;
-  padding: 1px 4px;
 }
 
 table.form td.dark {
@@ -513,7 +512,6 @@ table.tbl th.title {
 
 table.tbl td {
   background-color: #eef;
-  padding: 2px;
   white-space: nowrap;
 }
 

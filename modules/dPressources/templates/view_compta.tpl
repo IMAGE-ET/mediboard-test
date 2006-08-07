@@ -3,7 +3,7 @@
 function checkFormPrint() {
   var form = document.paramFrm;
     
-  if(!(checkForm(form))){
+  if (!checkForm(form)){
     return false;
   }
 
@@ -22,7 +22,7 @@ function popRapport() {
 }
 
 function pageMain() {
-  initGroups("plages");
+  initEffectGroupPlus("effectPlage");
   regFieldCalendar("paramFrm", "deb");
   regFieldCalendar("paramFrm", "fin");  
 }
@@ -34,7 +34,9 @@ function pageMain() {
     <td>
       <table class="tbl">
         <tr>
-          <th colspan="3" class="title">Plages en attente de paiement &mdash; {{$today|date_format:"%A %d %B %Y"}}</th>
+          <th colspan="3" class="title">
+            Plages en attente de paiement &mdash; {{$today|date_format:"%A %d %B %Y"}}
+          </th>
         </tr>
         <tr>
           <th>Praticien</th>
@@ -42,26 +44,28 @@ function pageMain() {
           <th>Montant</th>
         </tr>
         {{foreach from=$list item=curr_prat}}
-        <tr class="groupcollapse" id="plages{{$curr_prat.prat_id}}" onclick="flipGroup('{{$curr_prat.prat_id}}', 'plages')">
+        <tr id="plages{{$curr_prat.prat_id}}-trigger">
           <td>Dr. {{$curr_prat.praticien->_view}}</td>
           <td>{{$curr_prat.total}} plage(s)</td>
           <td>{{$curr_prat.somme}} €</td>
         </tr>
+        <tbody class="effectPlage" id="plages{{$curr_prat.prat_id}}">
           {{foreach from=$curr_prat.plages item=curr_plage}}
-            <tr class="plages{{$curr_prat.prat_id}}">
-              <td>
-                <form name="editPlage{{$curr_plage->plageressource_id}}" action="?m={{$m}}" method="post">
-                <input type='hidden' name='dosql' value='do_plageressource_aed' />
-                <input type='hidden' name='del' value='0' />
-                <input type='hidden' name='plageressource_id' value='{{$curr_plage->plageressource_id}}' />
-                <input type='hidden' name='paye' value='1' />
-                <button type="submit" class="submit">Valider le paiement</button>
-                </form>
-              </td>
-              <td>{{$curr_plage->date|date_format:"%A %d %B %Y"}}</td>
-              <td>{{$curr_plage->tarif}} €</td>
-            </tr>
+          <tr>
+            <td>
+              <form name="editPlage{{$curr_plage->plageressource_id}}" action="?m={{$m}}" method="post">
+              <input type="hidden" name="dosql" value="do_plageressource_aed" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="plageressource_id" value="{{$curr_plage->plageressource_id}}" />
+              <input type="hidden" name="paye" value="1" />
+              <button type="submit" class="submit">Valider le paiement</button>
+              </form>
+            </td>
+            <td>{{$curr_plage->date|date_format:"%A %d %B %Y"}}</td>
+            <td>{{$curr_plage->tarif}} €</td>
+          </tr>
           {{/foreach}}
+        </tbody>
         {{/foreach}}
         <tr>
           <th>{{$total.prat}} praticien(s)</th>
