@@ -3,8 +3,8 @@
 <script type="text/javascript">
 
 function pageMain() {
-  initEffectGroupPlus("operEffect", { sEffect : "slide"} );
-  initEffectGroupPlus("consEffect", { sEffect : "slide"} );
+  PairEffect.initGroup("consEffect");
+  PairEffect.initGroup("operEffect");
 }
 
 function popPat() {
@@ -56,7 +56,7 @@ function printDocument(doc_id) {
             <input type="text" size="40" readonly="readonly" ondblclick="popPat()" name="patNom" value="{{$patSel->_view}}" />
           </td>
           <td class="button">
-            <button class="search" type="button" onclick="popPat()">chercher</button>
+            <button class="search" type="button" onclick="popPat()">Chercher</button>
           </td>
         </tr>
       </table>
@@ -170,8 +170,8 @@ function printDocument(doc_id) {
         {{foreach from=$patSel->_ref_sejours item=curr_sejour}}
         <tr>
           <th class="category" colspan="2">
-          	Séjour du {{$curr_sejour->entree_prevue}}
-          	au {{$curr_sejour->sortie_prevue}}
+          	Séjour du {{$curr_sejour->entree_prevue|date_format:"%d %B %Y à %Hh%M"}}
+          	au {{$curr_sejour->sortie_prevue|date_format:"%d %B %Y à %Hh%M"}}
           </th>
         </tr>
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
@@ -179,7 +179,7 @@ function printDocument(doc_id) {
           <td colspan="2">
             <strong>
             Dr. {{$curr_op->_ref_chir->_view}} &mdash;
-            {{$curr_op->_ref_plageop->date|date_format:"%A %d %B %Y"}} &mdash;
+            {{$curr_op->_ref_plageop->date|date_format:"%d %B %Y"}} &mdash;
             {{$curr_op->_ref_files|@count}} fichier(s)
             </strong>
           </td>

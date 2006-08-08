@@ -48,10 +48,10 @@
   <td>
 
     <table class="form" id="allvalues">
-      <tr id="triggertonal">
+      <tr id="dataTonal-trigger">
         <th class="category" colspan="9">Toutes les valeurs</th>
       </tr>
-      <tbody id="grouptonal">
+      <tbody id="dataTonal">
         <tr>
           <th class="category" colspan="9">Oreille droite</th>
         </tr>
@@ -278,10 +278,10 @@
 <tr>
   <td class="radiointeractive">
     <table class="form" id="allvocales">
-      <tr id="triggervocal">
+      <tr id="dataVocal-trigger">
         <th class="category" colspan="9">Toutes les valeurs</th>
       </tr>
-      <tbody id="groupvocal">
+      <tbody id="dataVocal">
         <tr>
           <th class="category">Audiométrie vocale</th>
           {{foreach from=$frequences key=index item=frequence}}
@@ -291,7 +291,7 @@
           {{/foreach}}
         </tr>
         <tr>
-          <th>Oreille droite :</th>
+          <th>Oreille droite</th>
           {{foreach from=$frequences key=index item=frequence}}
           <td>
             <input type="text" name="_droite_vocale[{{$index}}][0]" title="num|minMax|0|120" value="{{$exam_audio->_droite_vocale.$index.0}}" tabindex="{{$index*2+220}}" size="1" maxlength="3" />
@@ -300,7 +300,7 @@
           {{/foreach}}
         </tr>
         <tr>
-          <th>Oreille gauche :</th>
+          <th>Oreille gauche</th>
           {{foreach from=$frequences key=index item=frequence}}
           <td>
             <input type="text" name="_gauche_vocale[{{$index}}][0]" title="num|minMax|0|120" value="{{$exam_audio->_gauche_vocale.$index.0}}" tabindex="{{$index*2+200}}" size="1" maxlength="3" />

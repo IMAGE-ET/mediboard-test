@@ -13,9 +13,9 @@ function collapseFunctions() {
 }
 
 function pageMain() {
-  initEffectGroupPlus("functionEffect", { 
-    sEffect: "slide",
-    bStore: false
+  PairEffect.initGroup("functionEffect", { 
+    bStoreInCookie: false,
+    idStartVisible: "function{{$mediuserSel->function_id}}"
   });
 }
 

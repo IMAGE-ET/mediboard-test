@@ -14,7 +14,7 @@ function updateFields(selected) {
 }
 
 function pageMain() {
-  initEffectGroupPlus("chapEffect", { sEffect : "slide"} );
+  PairEffect.initGroup("chapEffect");
   
   new Ajax.Autocompleter(
     'selection_codeacte',

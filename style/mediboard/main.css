@@ -1434,6 +1434,7 @@ table.sejourcollapse td.date {
 
 table#weeklyPlanning {
   width: 100%;
+  border-spacing: 1px;
 }
 
 table#weeklyPlanning td {
@@ -1442,11 +1443,16 @@ table#weeklyPlanning td {
 }
 
 table#weeklyPlanning td.selectedPlage {
-  background: #ccc; 
+  background: #ddd;
 }
 
 table#weeklyPlanning td.nonEmpty {
-  background: #ddd; 
+  background: #ccc; 
+}
+
+table#weeklyPlanning td.empty {
+  background: #eee;
+  height: 3px; 
 }
 
 table#weeklyPlanning td.empty {
@@ -1457,6 +1463,7 @@ table#weeklyPlanning td.empty {
 
 table#weeklyPlanning div.progressBar {
   background: #fff;
+  margin: 0 auto;
   width: 100px;
   height: 10px;
   border: solid #888 1px;

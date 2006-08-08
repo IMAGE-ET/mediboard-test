@@ -12,6 +12,39 @@ function pageMain() {
 
 function initFCKEditor() {}
 
+function throwError(sMsg) {
+  var oCaller = throwError.caller;
+  debug(oCaller, "Error " + sMsg + " in function");
+
+  while (oCaller = oCaller.caller) {
+    debug(oCaller, "Backtrace");
+  }
+}
+
+/**
+ * Assert utility object
+ */ 
+ 
+var Assert = {
+  debug: function (sMsg) {
+    var oCaller = this.debug.caller.caller;
+    debug(oCaller.getName(), "Error " + sMsg + " in function");
+
+    var aTraces = new Array;
+    while (oCaller = oCaller.caller) {
+      aTraces.push(oCaller.getName());
+    }
+    
+    debug(aTraces.join("\n"), "Backtraces");
+  },
+
+  that: function (bPredicate, sMsg) {
+    if (!bPredicate) {
+      this.debug(sMsg);
+    }
+  }
+}
+
 /**
  * Element.ClassNames class
  */
@@ -30,82 +63,90 @@ Class.extend(Element.ClassNames, {
   }
 });
 
-function initElementClass(idElement, sCookieName) {
-  var oCookie = new CJL_CookieUtil(sCookieName);
-  sValue = cookie.oCookie(idElement);
-  if (sValue) {
-	var oElement = $(idElement);
-	if (!oElement) {
-		throwError(printf("Element with id '%s' doesn't exist", idElements));
-	}
-    oElement.className = sValue;
-  }
-}
+/**
+ * PairEffect Class
+ */
 
-function flipEffectElementPlus(idTarget, idTrigger, oOptions) {
-  if (oOptions.sEffect && BrowserDetect.browser != "Explorer") {
-    new Effect.toggle(idTarget, oOptions.sEffect);
-  } else {
-    Element.toggle(idTarget);
-  }
+var PairEffect = Class.create();
+
+// PairEffect Methods
+Class.extend(PairEffect, {
+
+  // Constructor
+  initialize: function(idTarget, oOptions) {
+  	
+    var oDefaultOptions = {
+      idTrigger: idTarget + "-trigger",
+      sEffect: "slide", // could be null, "appear", "slide", "blind"
+      bStartVisible: false, // Make it visible at start
+      bStoreInCookie: true,
+      sCookieName: "effect"
+	};
+
+    oDefaultOptions.extend(oOptions);
+    this.oOptions = oDefaultOptions;
+    this.oTarget = $(idTarget);
+    this.oTrigger = $(this.oOptions.idTrigger);
+
+    Assert.that(this.oTarget, "Target element is undefined for id" + idTarget);
+    Assert.that(this.oTrigger, "Trigger element is undefined " + this.oOptions.idTrigger);
+	
+    // Initialize the effect
+    Event.observe(this.oTrigger, "click", this.flip.bind(this));
   
-  var aCNs = Element.classNames(idTrigger);
-  aCNs.flip("triggerShow", "triggerHide");
-  if (oOptions.bStore) {
-    aCNs.save(oOptions.sCookieName);
-  }
-}
-
-function initEffectGroupPlus(classTarget, oOptions) {
-  oOptions.sCookieName = classTarget;
-  document.getElementsByClassName(classTarget).each( 
-    function(oElement) {
-      initEffectClassPlus(oElement.id, null, oOptions);
+    // Initialize classnames and adapt visibility
+    var aCNs = Element.classNames(this.oTrigger);
+    aCNs.add(this.oOptions.bStartVisible ? "triggerHide" : "triggerShow");
+    if (this.oOptions.bStoreInCookie) {
+      aCNs.load(this.oOptions.sCookieName);
     }
-  );
-}
-
-function initEffectClassPlus(idTarget, idTrigger, oOptions) {
-  if (!idTrigger) {
-    idTrigger = idTarget + "-trigger";
-  }
+    Element[aCNs.include("triggerShow") ? "hide" : "show"](this.oTarget);   
+  },
   
-  var oDefaultOptions = {
-    sEffect: null, // could be "appear", "slide", "blind"
-    bStartVisible: false,
-    bStore: true,
-    sCookieName: "effect"
-  };
-  
-  oDefaultOptions.extend(oOptions);
-
-  var oTarget = $(idTarget);
-  var oTrigger = $(idTrigger);
-  
-  // Initialize the effect
-  Event.observe(oTrigger, "click",
-    function () { 
-      flipEffectElementPlus(idTarget, idTrigger, oDefaultOptions);
+  // Flipper callback
+  flip: function() {
+    if (this.oOptions.sEffect && BrowserDetect.browser != "Explorer") {
+      new Effect.toggle(this.oTarget, this.oOptions.sEffect);
+    } else {
+      Element.toggle(this.oTarget);
     }
-  );
   
-  // Initialize classnames and adapt visibility
-  var aCNs = Element.classNames(oTrigger);
-  aCNs.add(oDefaultOptions.bStartVisible ? "triggerHide" : "triggerShow");
-  if (oDefaultOptions.bStore) {
-    aCNs.load(oDefaultOptions.sCookieName);
+    var aCNs = Element.classNames(this.oTrigger);
+    aCNs.flip("triggerShow", "triggerHide");
+    if (this.oOptions.bStoreInCookie) {
+      aCNs.save(this.oOptions.sCookieName);
+    }
   }
-  Element[aCNs.include("triggerShow") ? "hide" : "show"](oTarget);   
-}
+} );
 
-function throwError(sMsg) {
-  var oCaller = throwError.caller;
-  debug(oCaller, "Error " + sMsg + " in function");
+/**
+ * PairEffect utiliy function
+ */
 
-  while (oCaller = oCaller.caller) {
-    debug(oCaller, "Backtrace");
+Object.extend(PairEffect, {
+
+  // Initialize a whole group giving the className for all targets
+  initGroup: function(sTargetsClass, oOptions) {
+    var oDefaultOptions = {
+      idStartVisible : null, // Forces one element to start visible
+      sCookieName: sTargetsClass,
+    }
+    
+    oDefaultOptions.extend(oOptions);
+    
+    document.getElementsByClassName(sTargetsClass).each( 
+      function(oElement) {
+        oDefaultOptions.bStartVisible = oElement.id == oDefaultOptions.idStartVisible;
+        new PairEffect(oElement.id, oDefaultOptions);
+      }
+    );
   }
-}
+});
+
+/**
+ * Date utility functions
+ * @todo: extend Date class
+ */
 
 function makeDateFromDATE(sDate) {
   // sDate must be: YYYY-MM-DD

@@ -39,7 +39,7 @@ function pageMain() {
   {{if $consult->consultation_id}}
   incPatientHistoryMain();
   incAntecedantsMain();
-  initEffectClassPlus("listConsult", "triggerList", { sEffect : "appear", bStartVisible : true });
+  new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
   regFieldCalendar("editAntFrm", "date");
   regFieldCalendar("editTrmtFrm", "debut");
   regFieldCalendar("editTrmtFrm", "fin");

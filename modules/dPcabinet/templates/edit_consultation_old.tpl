@@ -38,7 +38,7 @@ function pageMain() {
   
   {{if $consult->consultation_id}}
   incPatientHistoryMain();
-  initEffectClassPlus("listConsult", "triggerList", { sEffect : "appear", bStartVisible : true });
+  new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
   {{/if}}
 }
 

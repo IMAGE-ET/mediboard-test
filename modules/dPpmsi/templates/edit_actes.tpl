@@ -1,22 +1,24 @@
 <script type="text/javascript">
 function pageMain() {
-  initEffectGroupPlus("acteEffect", { sEffect : "slide"} );
+  PairEffect.initGroup("acteEffect");
 }
 </script>
 
 <table class="tbl">
   <tr>
     <th class="title" colspan="2">
-      {{$selOp->_ref_sejour->_ref_patient->_view}} &mdash; {{$selOp->_datetime|date_format:"%A %d %B %Y"}}<br />
-      Chirurgien : Dr. {{$selOp->_ref_chir->_view}}<br />
-      Anesthésiste probable : Dr. {{$selOp->_ref_anesth->_view}} 
-      
+      {{$selOp->_ref_sejour->_ref_patient->_view}} 
+      &mdash; {{$selOp->_datetime|date_format:"%A %d %B %Y"}}
+      <br /> Chirurgien : Dr. {{$selOp->_ref_chir->_view}}
+      <br /> Anesthésiste probable : Dr. {{$selOp->_ref_anesth->_view}} 
     </th>
   </tr>
+
   <tr>
     <th>Patient</th>
     <td>{{$selOp->_ref_sejour->_ref_patient->_view}} &mdash; {{$selOp->_ref_sejour->_ref_patient->_age}} ans</td>
   </tr>
+
   <tr>
     <th>Actes</th>
     <td class="text">

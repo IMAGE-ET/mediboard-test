@@ -63,9 +63,7 @@ function submitAnt(oForm) {
 }
 
 function incAntecedantsMain() {
-  {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}
-  initEffectClassPlus("group{{$cat}}", "trigger{{$cat}}", { sEffect : "slide"});
-  {{/foreach}}
+  PairEffect.initGroup("effectCategory");
 }
 
 </script>
@@ -82,18 +80,19 @@ function incAntecedantsMain() {
       <input type="hidden" name="dosql" value="do_patients_aed" />
       <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
       <input type="hidden" name="listCim10" value="{{$patient->listCim10}}" />
+      
       <table style="width: 100%">
       {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}
-        <tr id="trigger{{$cat}}">
+        <tr id="category{{$cat}}-trigger">
           <td>{{$cat}}</td>
         </tr>
-        <tbody id="group{{$cat}}">
+        <tbody class="effectCategory" id="category{{$cat}}">
           {{foreach from=$curr_cat item=curr_code}}
-          <tr class="{{$cat}}">
+          <tr>
             <td class="text">
               <button class="tick notext" type="button" onclick="putCim10('{{$curr_code->code}}')"></button>
               <button type="button" onclick="selectCim10('{{$curr_code->code}}')">
-                <img src="modules/dPcabinet/images/downarrow.png" alt=""/>
+                <img src="modules/dPcabinet/images/downarrow.png" alt="" />
               </button>
               {{$curr_code->code}}: {{$curr_code->libelle}}
             </td>
@@ -102,6 +101,7 @@ function incAntecedantsMain() {
         </tbody>
       {{/foreach}}
       </table>
+      
       </form>
       
       <hr />

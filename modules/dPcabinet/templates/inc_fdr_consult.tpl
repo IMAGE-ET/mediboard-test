@@ -80,10 +80,25 @@ function newExam(oSelect, consultation_id) {
 }
 
 function reloadFdr() {
-  var mainUrl = new Url;
-  mainUrl.setModuleAction("dPcabinet", "httpreq_vw_fdr_consult");
-  mainUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  mainUrl.requestUpdate('fdrConsultContent', { waitingText : null });
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "httpreq_vw_fdr_consult");
+  url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
+  url.requestUpdate('fdrConsultContent', { waitingText : null });
+}
+
+function confirmFileDeletion(oButton) {
+  oOptions = {
+    typeName: 'le fichier',
+    objName: oButton.form._view.value,
+    ajax: 1,
+    target: 'systemMsg'
+  };
+  
+  oAjaxOptions = {
+    onComplete: reloadFdr
+  }
+  
+  confirmDeletion(oButton, oOptions, oAjaxOptions);
 }
 
 function submitFdr(oForm) {
@@ -104,7 +119,7 @@ function submitFdr(oForm) {
 
     <td class="text">
       <form name="newExamen" action="?m=dPcabinet">
-        <label for="type_examen" title="Type d'examen complémentaire à effectuer"><strong>Examens complémentaires :</strong></label>
+        <label for="type_examen" title="Type d'examen complémentaire à effectuer"><strong>Examens complémentaires</strong></label>
         <select name="type_examen" onchange="newExam(this, {{$consult->consultation_id}})">
           <option value="">&mdash; Choisir un type d'examen</option>
           <option value="exam_audio">Audiogramme</option>
@@ -121,8 +136,8 @@ function submitFdr(oForm) {
             <input type="hidden" name="dosql" value="do_file_aed" />
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
-            <button class="cancel notext" type="button"
-              onclick="confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadFdr})" />
+            <input type="hidden" name="_view" value="{{$curr_file->_view}}" />
+            <button class="trash notext" type="button" onclick="confirmFileDeletion(this)" />
           </form>
         </li>
         {{foreachelse}}

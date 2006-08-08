@@ -9,9 +9,7 @@ function alertAction() {
 
 function pageMain() {
   {{if $isprat}}
-  initEffectClassPlus("impayes", null, { sEffect : "slide"} );
-  initEffectClassPlus("inf15", null, { sEffect : "slide"} );
-  initEffectClassPlus("sup15", null, { sEffect : "slide"} );
+  PairEffect.initGroup("effectCategory");
   {{/if}}
   regFieldCalendar("addPlage", "date");
   regRedirectPopupCal("{{$debut}}", "?m={{$m}}&tab={{$tab}}&debut="); 
@@ -103,7 +101,7 @@ function pageMain() {
           <th style="background:#ddf">Plages à régler</th>
           <td>{{$compte.impayes.total}} ({{$compte.impayes.somme}} €)</td>
         </tr>
-        <tbody id="impayes">
+        <tbody class="effectCategory" id="impayes">
           {{foreach from=$compte.impayes.plages item=curr_plage}}
           <tr>
             <td colspan="2" class="text">
@@ -129,7 +127,7 @@ function pageMain() {
           <th style="background:#ddf">Plages réservées et bloquées</th>
           <td>{{$compte.inf15.total}} ({{$compte.inf15.somme}} €)</td>
         </tr>
-        <tbody id="inf15">
+        <tbody class="effectCategory" id="inf15">
           {{foreach from=$compte.inf15.plages item=curr_plage}}
           <tr>
             <td colspan="2" class="text">
@@ -155,7 +153,7 @@ function pageMain() {
           <th style="background:#ddf">Plages réservées à plus de 15 jours</th>
           <td>{{$compte.sup15.total}} ({{$compte.sup15.somme}} €)</td>
         </tr>
-        <tbody id="sup15">
+        <tbody class="effectCategory" id="sup15">
         {{foreach from=$compte.sup15.plages item=curr_plage}}
           <tr>
             <td colspan="2" class="text">

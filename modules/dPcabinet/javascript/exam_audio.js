@@ -263,6 +263,6 @@ function changeVocalValueMouse(event) {
 }
 
 function pageMain() {
-  initEffectClassPlus("grouptonal", "triggertonal", { sEffect : "slide" } );
-  initEffectClassPlus("groupvocal", "triggervocal", { sEffect : "slide" } );
+  new PairEffect("dataTonal");
+  new PairEffect("dataVocal");
 }

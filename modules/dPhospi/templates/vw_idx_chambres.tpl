@@ -1,9 +1,7 @@
 <script type="text/javascript">
 
 function pageMain() {
-  {{foreach from=$services item=curr_service}}
-  initEffectClassPlus("groupservice{{$curr_service->service_id}}", "triggerservice{{$curr_service->service_id}}", { sEffect : "slide" });
-  {{/foreach}}
+  PairEffect.initGroup("serviceEffect");
 }
 
 </script>
@@ -12,6 +10,10 @@ function pageMain() {
 
 <tr>
   <td class="halfPane">
+
+    <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id=0">
+      Créer un chambre
+    </a>
 
     <table class="tbl">
       
@@ -26,10 +28,10 @@ function pageMain() {
     </tr>
     
 	{{foreach from=$services item=curr_service}}
-	<tr id="triggerservice{{$curr_service->service_id}}">
+	<tr id="service{{$curr_service->service_id}}-trigger">
 	  <td colspan="4">{{$curr_service->nom}}</td>
 	</tr>
-    <tbody id="groupservice{{$curr_service->service_id}}" style="display: none">
+    <tbody class="serviceEffect" id="service{{$curr_service->service_id}}">
      {{foreach from=$curr_service->_ref_chambres item=curr_chambre}}
       <tr>
         <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_chambre->chambre_id}}&amp;lit_id=0">{{$curr_chambre->nom}}</a></td>
@@ -49,8 +51,6 @@ function pageMain() {
   </td>
   
   <td class="halfPane">
-
-    <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id=0"><strong>Créer un chambre</strong></a>
 
     <form name="editChambre" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
@@ -111,7 +111,9 @@ function pageMain() {
 	</form>
 
   {{if $chambreSel->chambre_id}}
-  <strong><a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_lit->chambre_id}}&amp;lit_id=0">Ajouter un lit<a/></strong>
+  <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_lit->chambre_id}}&amp;lit_id=0">
+    Ajouter un lit
+  </a>
 
   <form name="editLit" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
@@ -125,7 +127,7 @@ function pageMain() {
       <th class="category" colspan="2">Lits</th>
     {{foreach from=$chambreSel->_ref_lits item=curr_lit}}
     <tr>
-      <th>Lit:</th>
+      <th>Lit</th>
       <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_lit->chambre_id}}&amp;lit_id={{$curr_lit->lit_id}}">{{$curr_lit->nom}}</a></td>
     </tr>
 	  {{/foreach}}

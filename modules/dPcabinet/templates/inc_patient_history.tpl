@@ -1,18 +1,18 @@
 <script language="JavaScript" type="text/javascript">
 
 function incPatientHistoryMain() {
-  initEffectClassPlus("groupoperations"   , "triggeroperations"   , { sEffect : "slide"} );
-  initEffectClassPlus("groupconsultations", "triggerconsultations", { sEffect : "slide"} );
+  new PairEffect("sejours");
+  new PairEffect("consultations");
 }
 
 </script>
   
 
 <table class="form">
-  <tr id="triggeroperations">
-    <td>Hospitalisations ({{$patient->_ref_sejours|@count}})</td>
+  <tr id="sejours-trigger">
+    <td>Séjours ({{$patient->_ref_sejours|@count}})</td>
   </tr>
-  <tbody id="groupoperations">
+  <tbody id="sejours">
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
     <tr>
       <td>
@@ -22,7 +22,7 @@ function incPatientHistoryMain() {
         <ul>
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
           <li>
-            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+            <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
               <strong>Dr. {{$curr_op->_ref_chir->_view}}</strong>
               le {{$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}}
             </a>
@@ -39,14 +39,14 @@ function incPatientHistoryMain() {
     </tr>
     {{/foreach}}
   </tbody>
-  <tr id="triggerconsultations">
+  <tr id="consultations-trigger">
     <td>Consultations ({{$patient->_ref_consultations|@count}})</td>
   </tr>
-  <tbody id="groupconsultations">
+  <tbody id="consultations">
     {{foreach from=$patient->_ref_consultations item=curr_consult}}
     <tr>
       <td>
-        <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+        <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
           <strong>Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}</strong>
           {{$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}}
         </a>

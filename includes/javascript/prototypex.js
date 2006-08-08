@@ -13,7 +13,7 @@ Class.extend = function (oClass, oExtension) {
 Class.extend(Function, {
   getName: function() {
     var re = /function ([^\(]*)/;
-    return this.toString().match(re)[1];
+    return this.toString().match(re)[1] || "anonymous";
   }
 });
 

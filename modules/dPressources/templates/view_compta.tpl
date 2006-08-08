@@ -22,7 +22,7 @@ function popRapport() {
 }
 
 function pageMain() {
-  initEffectGroupPlus("effectPlage");
+  PairEffect.initGroup("effectPlage");
   regFieldCalendar("paramFrm", "deb");
   regFieldCalendar("paramFrm", "fin");  
 }

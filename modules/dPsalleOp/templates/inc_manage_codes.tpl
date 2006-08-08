@@ -78,16 +78,16 @@ function delCode() {
       <td style="vertical-align:middle; text-align:right;">
         Ajouter un code
         <input type="text" size="7" name="_newCode" />
-        <button class="tick notext" type="button" onclick="addCode()"></button>
+        <button class="tick" type="button" onclick="addCode()">Ajouter</button>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align:middle;">
-        <button class="cancel notext" type="button" onclick="delCode()"></button>
+      <td style="vertical-align: middle;">
+        <button class="trash" type="button" onclick="delCode()">Supprimer</button>
         <div id="codename" style="vertical-align:middle; display:inline; white-space:normal">Selectionnez un code</div>
       </td>
       <td style="vertical-align:middle; text-align:right;">
-        <button class="search" type="button" onclick="popCode()">Rechercher...</button>
+        <button class="search" type="button" onclick="popCode()">Rechercher</button>
       </td>
     </tr>
   </table>
