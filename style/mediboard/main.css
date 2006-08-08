@@ -1457,9 +1457,15 @@ table#weeklyPlanning td.empty {
 
 table#weeklyPlanning div.progressBar {
   background: #fff;
-  width: 100%;
-  height: 5px;
+  width: 100px;
+  height: 10px;
   border: solid #888 1px;
+}
+table#weeklyPlanning div.progressBarView {
+  vertical-align: text-top;
+  position:relative;
+  top: -2px;
+  width: 100px;
 }
 
 tr.groupexpand td,

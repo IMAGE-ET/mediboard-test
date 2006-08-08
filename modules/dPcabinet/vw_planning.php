@@ -85,16 +85,78 @@ for($i = 8; $i <= 20; $i++) {
 
 // Liste des minutes
 $listMins = array();
-$listMins[] = "00";
-$listMins[] = "15";
-$listMins[] = "30";
-$listMins[] = "45";
+$listMins[] = 00;
+$listMins[] = 15;
+$listMins[] = 30;
+$listMins[] = 45;
+
+
+// Création du tableau de visualisation
+$arrayAffichage = array();
+foreach($plages as $keyDate=>$valDate){
+  foreach($listHours as $keyHours=>$valHours){
+    foreach($listMins as $kayMins=>$valMins){
+      // Initialisation du tableau
+      $arrayAffichage["$keyDate $valHours:$valMins"] = "empty";
+    }
+  }
+}
+foreach($plages as $keyPlages=>$valPlages){
+  foreach($valPlages as $keyvalPlages=>$valvalPlages){
+    // Mémorisation des objets
+    $nbquartheure = ($valvalPlages->_hour_fin-$valvalPlages->_hour_deb)*4;
+    $nbquartheure = $nbquartheure - array_search($valvalPlages->_min_deb,$listMins) + array_search($valvalPlages->_min_fin,$listMins);
+    
+    $valvalPlages->_nbQuartHeure = $nbquartheure;
+    $arrayAffichage[$valvalPlages->date." ".$valvalPlages->_hour_deb.":".$valvalPlages->_min_deb] = $valvalPlages;
+    // Détermination des horaire non vides
+    $heure_encours = array_search($valvalPlages->_hour_deb,$listHours);
+    $min_encours   = array_search($valvalPlages->_min_deb,$listMins);    
+    $dans_plage = true;
+    while($dans_plage == true){      
+      $min_encours ++;
+      if(!array_key_exists($min_encours,$listMins)){
+        $min_encours=0;
+        $heure_encours ++;
+        if(!array_key_exists($heure_encours,$listHours)){
+          $heure_encours=8;
+        }
+      }      
+      if($heure_encours==$valvalPlages->_hour_fin && $listMins[$min_encours]==$valvalPlages->_min_fin){
+        $dans_plage = false;
+      }else{
+        $arrayAffichage[$valvalPlages->date." ".$heure_encours.":".$listMins[$min_encours]] = "full";	
+      }          
+    }    
+  }
+}
+// Recherche d'heure completement vides
+foreach($plages as $keyDate=>$valDate){
+  foreach($listHours as $keyHours=>$valHours){
+    $heure_vide = 1;
+    foreach($listMins as $kayMins=>$valMins){
+      // Vérification données
+      if(!is_string($arrayAffichage["$keyDate $valHours:$valMins"]) || (is_string($arrayAffichage["$keyDate $valHours:$valMins"]) && $arrayAffichage["$keyDate $valHours:$valMins"]!= "empty")){
+        $heure_vide = 0;
+      }
+    }
+    if($heure_vide==1){
+      $first = "hours";
+      foreach($listMins as $kayMins=>$valMins){
+        // Mémorisation heure vide
+        $arrayAffichage["$keyDate $valHours:$valMins"] = $first;
+        $first = "full";
+      }
+    }
+  }
+}
 
 
 // Création du template
 require_once( $AppUI->getSystemClass ("smartydp") );
 $smarty = new CSmartyDP(1);
 
+$smarty->assign("arrayAffichage", $arrayAffichage);
 $smarty->assign("plageconsult_id", $plageconsult_id);
 $smarty->assign("vue", $vue);
 $smarty->assign("chirSel", $chirSel);

@@ -34,6 +34,7 @@ class CPlageconsult extends CMbObject {
   var $_freq     = null;
   var $_affected = null;
   var $_total    = null;
+  var $_fill_rate= null;
 
   // Object References
   var $_ref_chir          = null;
@@ -67,6 +68,10 @@ class CPlageconsult extends CMbObject {
     $this->_affected = 0;
     foreach($this->_ref_consultations as $consult) {
       $this->_affected += $consult->duree;
+    }
+    if($this->_total){
+      $this->_fill_rate= round($this->_affected/$this->_total*100);
+      if($this->_fill_rate>100){$this->_fill_rate=100;}
     }
   }
   
@@ -162,7 +167,7 @@ class CPlageconsult extends CMbObject {
     $tmpHdebut       = substr($this->debut, 0, 2);
     $tmpMdebut       = substr($this->debut, 3, 2);
     $tmpfreq         = 60 / substr($this->freq, 3, 2);
-    $this->_total    = (($tmpHfin + $tmpMfin/60) - ($tmpHdebut + $tmpMdebut/60)) * $tmpfreq;
+    $this->_total    = (($tmpHfin + $tmpMfin/60) - ($tmpHdebut + $tmpMdebut/60)) * $tmpfreq;    
   }
   
   function updateDBFields() {
