@@ -129,7 +129,7 @@ Object.extend(PairEffect, {
   initGroup: function(sTargetsClass, oOptions) {
     var oDefaultOptions = {
       idStartVisible : null, // Forces one element to start visible
-      sCookieName: sTargetsClass,
+      sCookieName: sTargetsClass
     }
     
     oDefaultOptions.extend(oOptions);
