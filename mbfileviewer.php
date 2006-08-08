@@ -122,7 +122,7 @@ if ($file_id = mbGetValueFromGet("file_id")) {
       if($h){$finUrl.="&h=$h";}
       if($w){$finUrl.="&w=$w";}
       if($sfn){$finUrl.="&sfn=$sfn";}
-      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
+      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl."&fltr[]=usm|80|5|1");
       //header("Location: modules/dPfiles/images/acroread.png");
     } elseif(strpos($file->file_type, "text") !== false) {
       header("Location: modules/dPfiles/images/text.png");
