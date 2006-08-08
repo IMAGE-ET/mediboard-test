@@ -61,7 +61,7 @@ foreach ($nav as $module) {
       </tbody>
       <tr>
         <td class="noHover">
-          <button id="triggerMenu" class="triggerHide" type="button" onclick="flipEffectElementPlus('menuIcons', 'triggerMenu', 'slide');" style="float:left" />
+          <button id="menuIcons-trigger" type="button" style="float:left" />
         </td>
 <?php
 foreach ($nav as $module) {
@@ -109,7 +109,7 @@ foreach ($nav as $module) {
 </tr>
 </table>
 <script language="JavaScript" type="text/javascript">
-  initEffectClass("menuIcons", "triggerMenu");
+  initEffectClassPlus("menuIcons", "menuIcons-trigger", { sEffect : "slide"} );
 </script>
 <?php } // (!$dialog) ?>
 <table id="main" class="<?php echo $m ?>">
