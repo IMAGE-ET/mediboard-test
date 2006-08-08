@@ -157,7 +157,7 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
             <label for="_check_premiere" title="Première consultation de ce patient avec le praticien">Première consultation</label>
           </td>
           <td rowspan="4" class="button">
-            <button type="button" onclick="popRDV()">Sélectionner</button>
+            <button class="tick" type="button" onclick="popRDV()">Sélectionner</button>
           </td>
         </tr>
 

@@ -9,8 +9,8 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPcabinet', 'plageconsult') );
-require_once( $AppUI->getModuleClass('mediusers') );
+require_once( $AppUI->getModuleClass("dPcabinet", "plageconsult") );
+require_once( $AppUI->getModuleClass("mediusers") );
 
 if (!$canEdit) {
 	$AppUI->redirect( "m=system&a=access_denied" );
@@ -86,25 +86,28 @@ for($i = 8; $i <= 20; $i++) {
 // Liste des minutes
 $listMins = array();
 $listMins[] = "00";
+$listMins[] = "15";
 $listMins[] = "30";
+$listMins[] = "45";
+
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once( $AppUI->getSystemClass ("smartydp") );
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('vue', $vue);
-$smarty->assign('chirSel', $chirSel);
-$smarty->assign('plageSel', $plageSel);
-$smarty->assign('listChirs', $listChirs);
-$smarty->assign('plages', $plages);
-$smarty->assign('today', $today);
-$smarty->assign('debut', $debut);
-$smarty->assign('fin', $fin);
-$smarty->assign('prec', $prec);
-$smarty->assign('suiv', $suiv);
-$smarty->assign('listHours', $listHours);
-$smarty->assign('listMins', $listMins);
+$smarty->assign("plageconsult_id", $plageconsult_id);
+$smarty->assign("vue", $vue);
+$smarty->assign("chirSel", $chirSel);
+$smarty->assign("plageSel", $plageSel);
+$smarty->assign("listChirs", $listChirs);
+$smarty->assign("plages", $plages);
+$smarty->assign("today", $today);
+$smarty->assign("debut", $debut);
+$smarty->assign("fin", $fin);
+$smarty->assign("prec", $prec);
+$smarty->assign("suiv", $suiv);
+$smarty->assign("listHours", $listHours);
+$smarty->assign("listMins", $listMins);
 
-$smarty->display('vw_planning.tpl');
-
+$smarty->display("vw_planning.tpl");
 ?>

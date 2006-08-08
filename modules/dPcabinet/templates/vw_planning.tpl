@@ -90,23 +90,54 @@ function pageMain() {
           {{foreach from=$plages key=curr_day item=plagesPerDay}}
           <th>{{$curr_day|date_format:"%A %d"}}</th>
           {{/foreach}}
-        </tr>
+        </tr>        
         {{foreach from=$listHours item=curr_hour}}
         <tr>
-          <th>{{$curr_hour}}h</th>
+          <th rowspan="4">{{$curr_hour}}h</th>
+          {{foreach from=$listMins item=curr_mins key=keyMins}}
+          {{if $keyMins}}
+          </tr><tr>
+          {{/if}}
           {{foreach from=$plages key=curr_day item=plagesPerDay}}
             {{assign var="isNotIn" value=1}}
             {{foreach from=$plagesPerDay item=curr_plage}}
-              {{if $curr_plage->_hour_deb == $curr_hour}}
-                <td class="nonEmpty" rowspan="{{$curr_plage->_hour_fin-$curr_plage->_hour_deb}}">
+              {{if $curr_plage->_hour_deb == $curr_hour && $curr_plage->_min_deb == $curr_mins}}
+                
+                {{assign var="nbCelPlage" value=$curr_plage->_hour_fin-$curr_plage->_hour_deb}}
+                {{assign var="nbCelPlage" value=$nbCelPlage*4}}
+                {{if $curr_plage->_min_deb is div by 15}}
+                  {{assign var="nbCelDebut" value=$curr_plage->_min_deb/15}}
+                  {{assign var="nbCelPlage" value=$nbCelPlage-$nbCelDebut}}
+                {{/if}} 
+                    
+                {{if $curr_plage->_min_fin is div by 15}}
+                  {{assign var="nbCelFin" value=$curr_plage->_min_fin/15}}
+                  {{assign var="nbCelPlage" value=$nbCelPlage+$nbCelFin}}
+                {{/if}}
+                
+                <td class="{{if $plageconsult_id == $curr_plage->plageconsult_id}}selectedPlage{{else}}nonEmpty{{/if}}" rowspan="{{$nbCelPlage}}">
                   <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id={{$curr_plage->plageconsult_id}}">
-                    {{if $curr_plage->libelle}}{{$curr_plage->libelle}}<br />{{/if}}
+                    {{$nbCelPlage}}{{if $curr_plage->libelle}}{{$curr_plage->libelle}}<br />{{/if}}
                     {{$curr_plage->debut|date_format:"%Hh%M"}} - {{$curr_plage->fin|date_format:"%Hh%M"}}<br />
-                    {{$curr_plage->_ref_consultations|@count}} consult(s)
-                  </a>
+                    {{$curr_plage->_affected}} consult(s)
+                  </a><br />
+                  {{assign var="pct" value=$curr_plage->_affected/$curr_plage->_total*100|intval}}
+                  {{if $pct gt 100}}
+                  {{assign var="pct" value=100}}
+                  {{/if}}
+                  {{if $pct lt 50}}{{assign var="img" value="pempty.png"}}
+                  {{elseif $pct lt 90}}{{assign var="img" value="pnormal.png"}}
+                  {{elseif $pct lt 100}}{{assign var="img" value="pbooked.png"}}
+                  {{else}}{{assign var="img" value="pfull.png"}}
+                  {{/if}}  
+                  <div class="progressBar"><span style="float: left; width: {{$pct}}%; height: 100%; background:url(./modules/dPcabinet/images/{{$img}}) repeat;" /></span></div>
                 </td>
               {{/if}}
-              {{if ($curr_plage->_hour_deb <= $curr_hour) && ($curr_plage->_hour_fin > $curr_hour)}}
+              {{if (
+              ($curr_plage->_hour_deb < $curr_hour) || (($curr_plage->_hour_deb <= $curr_hour) && ($curr_plage->_min_deb <= $curr_mins))
+              ) && (
+              ($curr_plage->_hour_fin > $curr_hour) || (($curr_plage->_hour_fin == $curr_hour) && ($curr_plage->_min_fin > $curr_mins))
+              )}}
                 {{assign var="isNotIn" value=0}}
               {{/if}}
             {{/foreach}}
@@ -114,7 +145,8 @@ function pageMain() {
               <td class="empty"></td>
             {{/if}}
           {{/foreach}}
-        </tr>
+          {{/foreach}}
+        </tr>        
         {{/foreach}}
       </table>
 

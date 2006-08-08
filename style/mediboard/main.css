@@ -1441,14 +1441,26 @@ table#weeklyPlanning td {
   vertical-align: middle;
 }
 
+table#weeklyPlanning td.selectedPlage {
+  background: #ccc; 
+}
+
 table#weeklyPlanning td.nonEmpty {
-  background: #aaa; 
+  background: #ddd; 
 }
 
 table#weeklyPlanning td.empty {
-  background: #eee; 
+  background: #eee;
+  height: 3px; 
 }
   /* @import "./collapser.css"; */
+
+table#weeklyPlanning div.progressBar {
+  background: #fff;
+  width: 100%;
+  height: 5px;
+  border: solid #888 1px;
+}
 
 tr.groupexpand td,
 tr.groupcollapse td {
