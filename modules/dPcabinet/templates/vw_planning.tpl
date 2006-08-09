@@ -123,8 +123,8 @@ function pageMain() {
               {{else}}{{assign var="img" value="pfull.png"}}
               {{/if}}  
               <div class="progressBar">
-                <span style="float: left; width: {{$arrayAffichage.$keyAff->_fill_rate}}%; height: 100%; background:url(./modules/dPcabinet/images/{{$img}}) repeat;" />
-                <div class="progressBarView">{{$arrayAffichage.$keyAff->_affected}} / {{$arrayAffichage.$keyAff->_total}}</div>
+                <div class="bar" style="width: {{$arrayAffichage.$keyAff->_fill_rate}}%; background-image: url(./modules/dPcabinet/images/{{$img}});" ></div>
+                <div class="text">{{$arrayAffichage.$keyAff->_affected}} / {{$arrayAffichage.$keyAff->_total}}</div>
               </div>
             </td>
           {{/if}}

@@ -1461,19 +1461,31 @@ table#weeklyPlanning td.empty {
 }
   /* @import "./collapser.css"; */
 
-table#weeklyPlanning div.progressBar {
+div.progressBar {
+  font-size: 80%;
   background: #fff;
   margin: 0 auto;
-  width: 100px;
-  height: 10px;
-  border: solid #888 1px;
+  height: 12px;
+  width: 90%;
+  text-align: left;
+  border: 1px solid #888;
 }
-table#weeklyPlanning div.progressBarView {
-  vertical-align: text-top;
-  position:relative;
-  top: -2px;
-  width: 100px;
+
+div.progressBar div {
+  padding: 0;
+  margin: 0;
 }
+
+div.progressBar div.bar {
+  height: 12px;
+  background-repeat: repeat;
+}
+
+div.progressBar div.text {
+  margin-top: -11px;
+  text-align: center;
+}
+
 
 tr.groupexpand td,
 tr.groupcollapse td {
