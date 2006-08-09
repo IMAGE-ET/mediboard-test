@@ -51,10 +51,12 @@ function pageMain() {
       {{/if}} 
       <tr style="{{if $curr_plage->plageconsult_id == $plageconsult_id}}font-weight: bold;{{/if}}">
         <td>
-          <div class="progressBar">
-            <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-            <div class="text">{{$curr_plage->date|date_format:"%A %d"}}</div>
-          </div>
+          <a href="index.php?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;plageconsult_id={{$curr_plage->plageconsult_id}}&amp;chir_id={{$chir_id}}&amp;date={{$date}}">
+            <div class="progressBar">
+              <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
+              <div class="text">{{$curr_plage->date|date_format:"%A %d"}}</div>
+            </div>
+          </a>
         </td>
         <td class="text">
           {{$curr_plage->_ref_chir->_view}}
@@ -87,7 +89,7 @@ function pageMain() {
       {{/if}}
       {{foreach from=$listPlace item=curr_place}}
       <tr>
-        <td><button type="button" onclick="setClose('{{$curr_place.time|date_format:"%H:%M"}}')">+</button>{{$curr_place.time|date_format:"%Hh%M"}}</td>
+        <td><button type="button" class="tick" onclick="setClose('{{$curr_place.time|date_format:"%H:%M"}}')">{{$curr_place.time|date_format:"%Hh%M"}}</button></td>
         <td class="text">
           {{foreach from=$curr_place.consultations item=curr_consultation}}
           <div {{if $curr_consultation->premiere}}style="background: #faa;" {{/if}}>

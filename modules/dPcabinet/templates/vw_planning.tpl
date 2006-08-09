@@ -123,6 +123,10 @@ function pageMain() {
           
           {{else}}
             <td class="{{if $plageconsult_id == $arrayAffichage.$keyAff->plageconsult_id}}selectedPlage{{else}}nonEmpty{{/if}}" rowspan="{{$arrayAffichage.$keyAff->_nbQuartHeure}}">
+              {{if $arrayAffichage.$keyAff->_affected < $arrayAffichage.$keyAff->_total}}
+                <a class="buttonnew" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$arrayAffichage.$keyAff->plageconsult_id}}" style="float:left;" title="Ajouter une consultation dans cette plage">
+                </a>
+              {{/if}}
               <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id={{$arrayAffichage.$keyAff->plageconsult_id}}">
                 {{if $arrayAffichage.$keyAff->libelle}}{{$arrayAffichage.$keyAff->libelle}}<br />{{/if}}
                 {{$arrayAffichage.$keyAff->debut|date_format:"%Hh%M"}} - {{$arrayAffichage.$keyAff->fin|date_format:"%Hh%M"}}

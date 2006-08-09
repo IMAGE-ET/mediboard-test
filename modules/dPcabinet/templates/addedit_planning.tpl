@@ -165,7 +165,7 @@ function pageMain() {
             <label for="_check_premiere" title="Première consultation de ce patient avec le praticien">Première consultation</label>
           </td>
           <td rowspan="4" class="button">
-            <button class="tick" type="button" onclick="popRDV()">Sélectionner</button>
+            <button class="search" type="button" onclick="popRDV()">Rechercher un horaire</button>
           </td>
         </tr>
 
