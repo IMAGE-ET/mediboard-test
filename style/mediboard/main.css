@@ -411,6 +411,19 @@ table.tbl td.button {
   vertical-align: middle;
 }
 
+div.previewfile{
+  white-space: normal;
+  text-align:left;
+  font-family: lucida console;
+}
+
+div.previewfileMinus{
+  font-size: 70%;
+  max-width:450px;
+  max-height:450px;
+  overflow:auto;
+}
+
 table.tbl tr.clear,
 table.tbl tr.clear a {
   background-color: #ddf;

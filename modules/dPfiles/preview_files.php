@@ -27,10 +27,10 @@ $includeInfosFile = null;
 
 $file = new CFile;
 $file->load($file_id);
-$file->loadNbPages();  
+$file->loadNbPages();
 if($file->file_type == "text/plain"){
   // Fichier texte, on récupére le contenu
-  $includeInfosFile = nl2br(utf8_decode(file_get_contents($file->_file_path)));
+  $includeInfosFile = nl2br(htmlspecialchars(utf8_decode(file_get_contents($file->_file_path))));
 }
 
 //navigation par pages (PDF)
