@@ -123,11 +123,7 @@ function pageMain() {
           
           {{else}}
             <td class="{{if $plageconsult_id == $arrayAffichage.$keyAff->plageconsult_id}}selectedPlage{{else}}nonEmpty{{/if}}" rowspan="{{$arrayAffichage.$keyAff->_nbQuartHeure}}">
-              {{if $arrayAffichage.$keyAff->_affected < $arrayAffichage.$keyAff->_total}}
-                <a class="buttonnew" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$arrayAffichage.$keyAff->plageconsult_id}}" style="float:left;" title="Ajouter une consultation dans cette plage">
-                </a>
-              {{/if}}
-              <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id={{$arrayAffichage.$keyAff->plageconsult_id}}">
+              <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id={{$arrayAffichage.$keyAff->plageconsult_id}}" title="Voir le contenu de la plage">
                 {{if $arrayAffichage.$keyAff->libelle}}{{$arrayAffichage.$keyAff->libelle}}<br />{{/if}}
                 {{$arrayAffichage.$keyAff->debut|date_format:"%Hh%M"}} - {{$arrayAffichage.$keyAff->fin|date_format:"%Hh%M"}}
               </a>
@@ -139,18 +135,22 @@ function pageMain() {
               {{elseif $pct lt 90}}{{assign var="backgroundClass" value="normal"}}
               {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
               {{else}}{{assign var="backgroundClass" value="full"}}
-              {{/if}}  
-              <div class="progressBar">
-                <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-                <div class="text">{{$arrayAffichage.$keyAff->_affected}} / {{$arrayAffichage.$keyAff->_total}}</div>
-              </div>
+              {{/if}} 
+              <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$arrayAffichage.$keyAff->plageconsult_id}}" title="Planifier une consultation dans cette plage"> 
+                <div class="progressBar">
+                  <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
+                  <div class="text">{{$arrayAffichage.$keyAff->_affected}} / {{$arrayAffichage.$keyAff->_total}}</div>
+                </div>
+              </a>
             </td>
           {{/if}}
           {{/foreach}}
           {{/foreach}}
         {{/foreach}}
       </table>
-
+    {{if $plageSel->plageconsult_id}}
+    <a class="buttonnew" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id=0">Créer une nouvelle plage</a>
+    {{/if}}
     <form name='editFrm' action='?m=dPcabinet' method='post' onsubmit='return checkPlage()'>
 
     <input type='hidden' name='dosql' value='do_plageconsult_aed' />
@@ -299,8 +299,9 @@ function pageMain() {
       {{/if}}
     </td>
     <td>
-      <a class="buttonnew" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id=0">Créer une nouvelle plage</a>
-      
+      {{if $plageSel->plageconsult_id}}
+      <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->plageconsult_id}}">Planifier une consultation dans cette plage</a>
+      {{/if}}
       <table class="tbl">
         <tr>
           <th colspan="10">
