@@ -16,10 +16,8 @@ if (!$canEdit) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$firstconsult_hour = null;
-$firstconsult_min  = null;
-$lastconsult_hour  = null;
-$lastconsult_min   = null;
+$_firstconsult_time  = null;
+$_lastconsult_time   = null;
 
 // L'utilisateur est-il praticien?
 $chir = null;
@@ -56,13 +54,11 @@ if ($plageSel->chir_id != $chirSel) {
 if($plageSel->_affected){
   reset($plageSel->_ref_consultations);
   $firstconsult = current($plageSel->_ref_consultations)->heure;
-  $firstconsult_hour = intval(substr($firstconsult, 0, 2));
-  $firstconsult_min  = intval(substr($firstconsult, 3, 2));
+  $_firstconsult_time = substr($firstconsult, 0, 5);
 
   end($plageSel->_ref_consultations);
   $lastconsult = current($plageSel->_ref_consultations)->heure;
-  $lastconsult_hour  = intval(substr($lastconsult, 0, 2));
-  $lastconsult_min   = intval(substr($lastconsult, 3, 2));
+  $_lastconsult_time  = substr($lastconsult, 0, 5);
 }
 // Liste des chirurgiens
 $mediusers = new CMediusers();
@@ -170,10 +166,8 @@ foreach($plages as $keyDate=>$valDate){
 require_once( $AppUI->getSystemClass ("smartydp") );
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("firstconsult_hour", $firstconsult_hour);
-$smarty->assign("firstconsult_min", $firstconsult_min);
-$smarty->assign("lastconsult_hour", $lastconsult_hour);
-$smarty->assign("lastconsult_min", $lastconsult_min);
+$smarty->assign("_firstconsult_time", $_firstconsult_time);
+$smarty->assign("_lastconsult_time", $_lastconsult_time);
 $smarty->assign("arrayAffichage", $arrayAffichage);
 $smarty->assign("plageconsult_id", $plageconsult_id);
 $smarty->assign("vue", $vue);

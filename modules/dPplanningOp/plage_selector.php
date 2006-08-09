@@ -18,6 +18,8 @@ require_once($AppUI->getModuleClass("mediusers"));
 $chir   = mbGetValueFromGet("chir" , 0);
 $month  = mbGetValueFromGet("month", date("m"));
 $year   = mbGetValueFromGet("year" , date("Y"));
+$oper_id= mbGetValueFromGet("oper_id", null);
+
 $pmonth = $month - 1;
 if($pmonth == 0) {
   $pyear = $year - 1;
@@ -73,6 +75,7 @@ foreach($list as $key => $value) {
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
+$smarty->assign("oper_id"     , $oper_id);
 $smarty->assign("month"       , $month);
 $smarty->assign("nameMonth"   , $nameMonth);
 $smarty->assign("pmonth"      , $pmonth);

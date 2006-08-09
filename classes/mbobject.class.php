@@ -368,9 +368,6 @@ class CMbObject extends CDpObject {
             }
             
             break;
-        
-          default:
-            return "Spécification de chaîne numérique invalide";
         }
         
         break;

@@ -432,10 +432,6 @@ function checkElement(oElement, aSpecFragments) {
             }
             
             break;
-            
-  
-          default:
-            return "Spécification de chaîne numérique invalide";
         }
       };
       

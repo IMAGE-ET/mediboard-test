@@ -67,13 +67,13 @@ function setClose(date) {
     <td>
       <strong>Admission du patient</strong>
       <br />
-      <input type="radio" name="admission" value="veille" checked="checked" />
+      <input type="radio" name="admission" value="veille"{{if !$oper_id}} checked="checked"{{/if}} />
       <label for="admission_veille">La veille</label>
       <br />
       <input type="radio" name="admission" value="jour" />
       <label for="admission_jour">Le jour même</label>
       <br />
-      <input type="radio" name="admission" value="aucune" />
+      <input type="radio" name="admission" value="aucune"{{if $oper_id}} checked="checked"{{/if}} />
       <label for="admission_jour">Ne pas modifier</label>
       <br />
     </td>
@@ -102,7 +102,7 @@ function setClose(date) {
   <tr>
     <td class="button" colspan="2">
       <button class="cancel" type="button" onclick="window.close()">annuler</button>
-      <button type="button" onclick="setClose('')">selectionner</button>
+      <button class="tick" type="button" onclick="setClose('')">Sélectionner</button>
     </td>
   </tr>
 

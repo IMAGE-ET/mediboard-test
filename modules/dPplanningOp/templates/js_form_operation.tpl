@@ -204,6 +204,9 @@ function popPlage() {
     url.addElement(oForm.chir_id, "chir");
     url.addElement(oForm._hour_op, "curr_op_hour");
     url.addElement(oForm._min_op, "curr_op_min");
+    {{if $op->operation_id}}
+    url.addElement("{{$op->operation_id}}", "oper_id");
+    {{/if}}
     url.popup(400, 250, 'Plage');
   }
 }

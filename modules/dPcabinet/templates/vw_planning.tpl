@@ -3,42 +3,14 @@
 <script type="text/javascript">
 function checkPlage() {
   var form = document.editFrm;
-  var field = null;
-  
-  if (field = form.chir_id) {
-    if (!field.value) {
-      alert("Merci de choisir un praticien");
-      field.focus();
-      return false;
-    }
-  }
-  
-  if (field = form.date) {
-    if (!field.value) {
-      alert("Merci de choisir un jour de la semaine");
-      field.focus();
-      return false;
-    }
-  }
-
-  var fieldDeb = form._hour_deb;
-  var fieldFin = form._hour_fin;
-  if (fieldDeb && fieldFin) {
-    if (fieldDeb.value >= fieldFin.value) {
-      alert("L'heure de début doit être inférieure à la l'heure de fin");
-      fieldFin.focus();
-      return false;
-    }
+  if(!checkForm(form)){
+    return false;
   }
   
   if(form.nbaffected.value!= 0 && form.nbaffected.value!=""){
-    var alertUser = 0;
-    if(
-      parseInt(form._hour_deb.value) > parseInt(form.firstconsult_hour.value) ||
-      (parseInt(form._hour_deb.value) == parseInt(form.firstconsult_hour.value) && parseInt(form._min_deb.value) > parseInt(form.firstconsult_min.value)) ||
-      parseInt(form._hour_fin.value) < parseInt(form.lastconsult_hour.value) ||
-      (parseInt(form._hour_fin.value) == parseInt(form.lastconsult_hour.value) && parseInt(form._min_fin.value) < parseInt(form.lastconsult_min.value))
-      ){
+    var timeDebut = form._hour_deb.value + ":" +form._min_deb.value;
+    var timeFin   = form._hour_fin.value + ":" +form._min_fin.value;
+    if(timeDebut > form._firstconsult_time.value || timeFin < form._lastconsult_time.value){
       if(!(confirm("Certaines consultations se trouvent en dehors de la plage de consultation.\n\nVoulez-vous appliquer les modifications ?"))){
         return false;
       }
@@ -157,10 +129,8 @@ function pageMain() {
     <input type='hidden' name='del' value='0' />
     <input type='hidden' name='plageconsult_id' value='{{$plageSel->plageconsult_id}}' />
     <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
-    <input type='hidden' name='firstconsult_hour' value='{{$firstconsult_hour}}' />
-    <input type='hidden' name='firstconsult_min' value='{{$firstconsult_min}}' />
-    <input type='hidden' name='lastconsult_hour' value='{{$lastconsult_hour}}' />
-    <input type='hidden' name='lastconsult_min' value='{{$lastconsult_min}}' />
+    <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
+    <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
     
     <table class="form">
       <tr>
@@ -178,7 +148,7 @@ function pageMain() {
 
       <tr>
         <th><label for="chir_id" title="Praticien concerné par la plage de consultation">Praticien</label></th>
-        <td><select name="chir_id">
+        <td><select name="chir_id" title="{{$plageSel->_props.chir_id}}">
             <option value="">&mdash; Choisir un praticien</option>
             {{foreach from=$listChirs item=curr_chir}}
               <option value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
@@ -188,12 +158,12 @@ function pageMain() {
             </select>
         </td>
         <th><label for="libelle" title="Libellé de la plage de consultation">Libellé</label></th>
-        <td><input type="text" name="libelle" value="{{$plageSel->libelle}}" />
+        <td><input type="text" title="{{$plageSel->_props.libelle}}" name="libelle" value="{{$plageSel->libelle}}" />
       </tr>
 
       <tr>
         <th><label for="_hour_deb" title="Début de la plage de consultation">Début</label></th>
-        <td><select name="_hour_deb">
+        <td><select name="_hour_deb" title="num|notNull">
             {{foreach from=$listHours item=curr_hour}}
               <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_deb}} selected="selected" {{/if}}>
                 {{$curr_hour|string_format:"%02d"}}
@@ -210,7 +180,7 @@ function pageMain() {
         </td>
         <th><label for="date" title="Jour de la semaine pour la plage de consultation">Jour de la semaine</label></th>
         <td>
-          <select name="date">
+          <select name="date" title="{{$plageSel->_props.date}}">
             <option value="">&mdash; Choisir le jour de la semaine</option>
             {{foreach from=$plages key=curr_day item=plagesPerDay}}
             <option value="{{$curr_day}}" {{if $curr_day == $plageSel->date}} selected="selected" {{/if}}>
@@ -224,7 +194,7 @@ function pageMain() {
       <tr>
         <th><label for="_hour_fin" title="Fin de la plage de consultation">Fin</label></th>
         <td>
-          <select name="_hour_fin">
+          <select name="_hour_fin" title="num|moreThan|_hour_deb|notNull">
             {{foreach from=$listHours item=curr_hour}}
               <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_fin}} selected="selected" {{/if}}>
                 {{$curr_hour|string_format:"%02d"}}
