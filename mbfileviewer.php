@@ -71,7 +71,7 @@ if ($file_path) {
     header("MIME-Version: 1.0");
     header("Content-length: $file_size");
     header("Content-type: $file_type");
-    header("Content-disposition: inline; filename=$file_name");
+    header("Content-disposition: attachment; filename=$file_name");
     readfile($file_path);
     return;
   } else {
@@ -158,7 +158,7 @@ if ($file_id = mbGetValueFromGet("file_id")) {
     header("MIME-Version: 1.0");
     header("Content-length: {$file->file_size}");
     header("Content-type: {$file->file_type}");
-    header("Content-disposition: inline; filename={$file->file_name}");
+    header("Content-disposition: attachment; filename={$file->file_name}");
     readfile($file->_file_path);
   }
 } else {
