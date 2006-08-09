@@ -7,6 +7,26 @@ Class.extend = function (oClass, oExtension) {
 }
 
 /**
+ * Try utility object
+ */
+
+Try.extend( { 
+  // Try as many functions as possible and returns array of return values
+  allThese : function() {
+    var aReturnValues = [];
+    for (var i = 0; i < arguments.length; i++) {
+      var oLambda = arguments[i];
+      try {
+        aReturnValues.push(oLambda());
+      } catch (e) {
+        aReturnValues.push(false);
+      }
+    }
+    return aReturnValues;
+  }
+});
+ 
+/**
  * Function class
  */
  
@@ -55,3 +75,5 @@ Class.extend(Element.ClassNames, {
     }
   }
 });
+
+

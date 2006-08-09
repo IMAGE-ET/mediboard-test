@@ -314,10 +314,10 @@ function pageMain() {
             <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->_ref_patient->_view}}</a>
           </td>
           <td class="text" {{$style}}>
-            <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->motif|nl2br|truncate:35:"...":false}}</a>
+            <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->motif|truncate:35:"...":false|nl2br}}</a>
           </td>
           <td class="text" {{$style}}>
-            <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->rques|nl2br|truncate:35:"...":false}}</a>
+            <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->rques|truncate:35:"...":false|nl2br}}</a>
           </td>
           <td {{$style}}>
             <form name="etatFrm{{$curr_consult->consultation_id}}" action="?m=dPcabinet" method="post">

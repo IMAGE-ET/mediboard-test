@@ -7,28 +7,17 @@ function main() {
   pageMain();
 }
 
-function pageMain() {
-}
-
 function initFCKEditor() {}
-
-function throwError(sMsg) {
-  var oCaller = throwError.caller;
-  debug(oCaller, "Error " + sMsg + " in function");
-
-  while (oCaller = oCaller.caller) {
-    debug(oCaller, "Backtrace");
-  }
-}
+function pageMain() {}
 
 /**
  * Assert utility object
  */ 
  
 var Assert = {
-  debug: function (sMsg) {
+  trace: function (sMsg) {
     var oCaller = this.debug.caller.caller;
-    debug(oCaller.getName(), "Error " + sMsg + " in function");
+    debug(printf.apply(null, arguments), printf("Error in function '%s'", oCaller.getName()));
 
     var aTraces = new Array;
     while (oCaller = oCaller.caller) {
@@ -40,10 +29,12 @@ var Assert = {
 
   that: function (bPredicate, sMsg) {
     if (!bPredicate) {
-      this.debug(sMsg);
+      var aArgs = $A(arguments);
+      aArgs.shift();
+      this.trace.apply(this, aArgs);
     }
   }
-}
+};
 
 /**
  * Element.ClassNames class
@@ -151,7 +142,7 @@ Object.extend(PairEffect, {
 function makeDateFromDATE(sDate) {
   // sDate must be: YYYY-MM-DD
   var aParts = sDate.split("-");
-  if (aParts.length != 3) throwError("'" + sDate + "' :Bad DATE format");
+  Assert.that(aParts.length == 3, "'%s' is not a valid Date format", sDate);
 
   var year  = parseInt(aParts[0], 10);
   var month = parseInt(aParts[1], 10);
@@ -163,14 +154,14 @@ function makeDateFromDATE(sDate) {
 function makeDateFromDATETIME(sDateTime) {
   // sDateTime must be: YYYY-MM-DD HH:MM:SS
   var aHalves = sDateTime.split(" ");
-  if (aHalves.length != 2) throwError("'" + sDateTime + "' :Bad DATETIME format");
+  Assert.that(aHalves.length == 2, "'%s' is not a valid DATETIME", sDateTime);
 
   var sDate = aHalves[0];
   var date = makeDateFromDATE(sDate);
 
   var sTime = aHalves[1];
   var aParts = sTime.split(":");
-  if (aParts.length != 3) throwError("'" + sTime + "' :Bad TIME format");
+  Assert.that(aParts.length == 3, "'%s' is not a valid TIME", sTime);
 
   date.setHours  (parseInt(aParts[0], 10));
   date.setMinutes(parseInt(aParts[1], 10));
@@ -180,10 +171,9 @@ function makeDateFromDATETIME(sDateTime) {
 }
 
 function makeDateFromLocaleDate(sDate) {
-//  debug(sDate, "sDate");
   // sDate must be: dd/mm/yyyy
   var aParts = sDate.split("/");
-  if (aParts.length != 3) throwError(printf("Bad Display date format : '%s'", sDate));
+  Assert.that(aParts.length == 3, "'%s' is not a valid display date", sDate);
 
   var year  = parseInt(aParts[2], 10);
   var month = parseInt(aParts[1], 10);

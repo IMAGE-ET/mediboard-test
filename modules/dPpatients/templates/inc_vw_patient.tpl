@@ -178,7 +178,7 @@ function reloadVwPatient(){
           </option>
         {{/foreach}}
       </select>
-      <button class="new" type="submit">Consulter maintenant</button>
+      <button class="new" type="submit">Consulter</button>
       </form>
     </td>
   </tr>
