@@ -11,6 +11,8 @@
     {{/if}}
   {{/if}}<br />
   <a href="javascript:popFile({{$file->file_id}},{{if $sfn}}{{$sfn}}{{else}}0{{/if}})"><img src="mbfileviewer.php?file_id={{$file->file_id}}&amp;phpThumb=1&amp;hp=450&amp;wl=450{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" title="Afficher le grand aperçu" border="0" />  </a>
+  {{assign var="stylecontenu" value="max-width:450px; max-height:450px; overflow:auto;"}}
+  {{include file="inc_preview_contenu_file.tpl"}}
 {{else}}
   Selectionnez un fichier
 {{/if}}

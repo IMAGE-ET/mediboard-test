@@ -46,6 +46,7 @@
         <a href="mbfileviewer.php?file_id={{$file->file_id}}" title="Télécharger le fichier">
           <img src="mbfileviewer.php?file_id={{$file->file_id}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" alt="Grand aperçu" />
         </a>
+        {{include file="inc_preview_contenu_file.tpl"}}
       {{/if}}
     </td>
   </tr>

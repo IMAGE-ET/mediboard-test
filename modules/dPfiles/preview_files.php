@@ -23,10 +23,15 @@ $hauteur = null;
 $page_prev = null;
 $page_next = null;
 $pageEnCours = null;
+$includeInfosFile = null;
 
 $file = new CFile;
 $file->load($file_id);
-$file->loadNbPages();    
+$file->loadNbPages();  
+if($file->file_type == "text/plain"){
+  // Fichier texte, on récupére le contenu
+  $includeInfosFile = utf8_decode(file_get_contents($file->_file_path));
+}
 
 //navigation par pages (PDF)
 if($file->_nb_pages){
@@ -44,18 +49,15 @@ if($file->_nb_pages){
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("file_id"  , $file_id);
-$smarty->assign("file"     , $file   );
-$smarty->assign("page_prev", $page_prev);
-$smarty->assign("page_next", $page_next);
-$smarty->assign("sfn"      , $sfn);
-$smarty->assign("pageEnCours"  , $pageEnCours);
-    
+$smarty->assign("file_id"         , $file_id     );
+$smarty->assign("file"            , $file        );
+$smarty->assign("page_prev"       , $page_prev   );
+$smarty->assign("page_next"       , $page_next   );
+$smarty->assign("sfn"             , $sfn         );
+$smarty->assign("pageEnCours"     , $pageEnCours );
+$smarty->assign("includeInfosFile", $includeInfosFile);    
+
 if($popup==1){
-  // Ouverture en Pop-up : si Image ou PDF : Preview
-  if($navig || (strpos($file->file_type, "image") !== false || strpos($file->file_type, "pdf") !== false)) {
-    //Popup avec seconde previsualisation
-    
     //Récupération de la liste des fichiers
     $listFiles = new CFile;
     $where = array();
@@ -85,11 +87,9 @@ if($popup==1){
     
     $smarty->assign("filePrev" , $filePrev);
     $smarty->assign("fileNext" , $fileNext);
-    $smarty->assign("listCat"  , $listCat);    
+    $smarty->assign("listCat"  , $listCat);
+      
     $smarty->display("inc_preview_file_popup.tpl");
-  }else{
-    header("Location: mbfileviewer.php?file_id=$file_id");
-  }
 }else{
   $smarty->display("inc_preview_file.tpl");
 }
