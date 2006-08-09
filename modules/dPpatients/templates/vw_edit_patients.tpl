@@ -1,13 +1,6 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-function view_history_patient(id){
-  url = new Url();
-  url.setModuleAction("dPpatients", "vw_history");
-  url.addParam("patient_id", id);
-  url.popup(600, 500, "history");
-}
-
 function confirmCreation(id, bDialog, sSiblingsText) {
   if (!confirm(sSiblingsText)) {
     var form = document.editFrm;
@@ -117,7 +110,7 @@ function pageMain() {
       <tr>
       {{if $patient->patient_id}}
         <th class="title" colspan="5" style="color: #f00;">
-          <a style="float:right;" href="javascript:view_history_patient({{$patient->patient_id}})">
+          <a style="float:right;" href="javascript:view_log('CPatient',{{$patient->patient_id}})">
             <img src="images/history.gif" alt="historique" />
           </a>
           Modification du dossier de {{$patient->_view}}
@@ -205,7 +198,7 @@ function pageMain() {
           <input type="text" name="_medecin_traitant_name" size="30" value="Dr. {{$patient->_ref_medecin_traitant->_view}}" ondblclick="popMed('_traitant')" readonly="readonly" />
           <button class="cancel notext" type="button" onclick="delMed('_traitant')"></button>
         </td>
-        <td class="button"><button class="search" tabindex="26" type="button" onclick="popMed('_traitant')">choisir un médecin</button></td>
+        <td class="button"><button class="search" tabindex="26" type="button" onclick="popMed('_traitant')">Choisir un médecin</button></td>
       </tr>
       
       <tr>
@@ -222,7 +215,7 @@ function pageMain() {
           <input type="text" name="_medecin1_name" size="30" value="Dr. {{$patient->_ref_medecin1->_view}}" ondblclick="popMed('1')" readonly="readonly" />
           <button class="cancel notext" type="button" onclick="delMed('1')"></button>
         </td>
-        <td class="button"><button class="search" tabindex="28" type="button" onclick="popMed('1')">choisir un médecin</button></td>
+        <td class="button"><button class="search" tabindex="28" type="button" onclick="popMed('1')">Choisir un médecin</button></td>
       </tr>
       
       <tr>
@@ -239,7 +232,7 @@ function pageMain() {
           <input type="text" name="_medecin2_name" size="30" value="{{if ($patient->_ref_medecin2)}}Dr. {{$patient->_ref_medecin2->_view}}{{/if}}" ondblclick="popMed('2')" readonly="readonly" />
           <button class="cancel notext" type="button" onclick="delMed('2')"></button>
         </td>
-        <td class="button"><button class="search" tabindex="29" type="button" onclick="popMed('2')">choisir un médecin</button></td>
+        <td class="button"><button class="search" tabindex="29" type="button" onclick="popMed('2')">Choisir un médecin</button></td>
       </tr>
       
       <tr>
@@ -259,7 +252,7 @@ function pageMain() {
           <input type="text" name="_medecin3_name" size="30" value="{{if ($patient->_ref_medecin3)}}Dr. {{$patient->_ref_medecin3->_view}}{{/if}}" ondblclick="popMed('3')" readonly="readonly" />
           <button class="cancel notext" type="button" onclick="delMed('3')"></button>
         </td>
-        <td class="button"><button class="search" tabindex="30" type="button" onclick="popMed('3')">choisir un médecin</button></td>
+        <td class="button"><button class="search" tabindex="30" type="button" onclick="popMed('3')">Choisir un médecin</button></td>
       </tr>
       
       <tr>
