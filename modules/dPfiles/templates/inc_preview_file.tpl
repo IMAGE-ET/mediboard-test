@@ -12,7 +12,7 @@
   {{/if}}<br />
   <a href="javascript:popFile({{$file->file_id}},{{if $sfn}}{{$sfn}}{{else}}0{{/if}})">
     {{if $includeInfosFile}}
-    {{assign var="stylecontenu" value="font-size: 50%; max-width:450px; max-height:450px; overflow:auto;"}}
+    {{assign var="stylecontenu" value="font-size: 70%; max-width:450px; max-height:450px; overflow:auto;"}}
     {{include file="inc_preview_contenu_file.tpl"}}
     {{else}}
     <img src="mbfileviewer.php?file_id={{$file->file_id}}&amp;phpThumb=1&amp;hp=450&amp;wl=450{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" title="Afficher le grand aperçu" border="0" />
