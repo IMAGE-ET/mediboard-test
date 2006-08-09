@@ -1,6 +1,8 @@
 <script type="text/javascript">
 var oCookie = new CJL_CookieUtil("fileAccordion");
 var fHeight = 380;
+var file_preview = null;
+var file_deleted = null;
 if(oCookie.getSubValue("height")){
   var fHeight = oCookie.getSubValue("height");
 }
@@ -51,6 +53,7 @@ function popFile(file_id, sfn){
 }
 
 function ZoomFileAjax(file_id, sfn){
+  file_preview = file_id;
   var url = new Url;
   url.setModuleAction("dPfiles", "preview_files");
   url.addParam("file_id", file_id);
@@ -73,9 +76,13 @@ function setData(selClass,keywords,key,val){
 }
 function saveCatId(key){
   document.FrmClass.cat_id.value = key;
+  file_preview
 }
 
 function reloadListFile(){
+  if(file_deleted && file_preview == file_deleted){
+    ZoomFileAjax("", 0);
+  }
   var url = new Url;
   initAccord(false);
   url.setModuleAction("dPfiles", "httpreq_vw_listfiles");
@@ -87,6 +94,7 @@ function reloadListFile(){
 }
 
 function submitFileChangt(oForm){
+  file_deleted = null;
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadListFile });
 }
 </script>
