@@ -30,7 +30,7 @@ $file->load($file_id);
 $file->loadNbPages();  
 if($file->file_type == "text/plain"){
   // Fichier texte, on récupére le contenu
-  $includeInfosFile = utf8_decode(file_get_contents($file->_file_path));
+  $includeInfosFile = nl2br(utf8_decode(file_get_contents($file->_file_path)));
 }
 
 //navigation par pages (PDF)
