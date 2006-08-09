@@ -40,21 +40,21 @@ function pageMain() {
         <th>Etat</th>
       </tr>
       {{foreach from=$listPlage item=curr_plage}}
-      {{assign var="pct" value=$curr_plage->_affected/$curr_plage->_total*100|intval}}
+      {{assign var="pct" value=$curr_plage->_fill_rate}}
       {{if $pct gt 100}}
       {{assign var="pct" value=100}}
       {{/if}}
-      {{if $pct lt 50}}{{assign var="img" value="pempty.png"}}
-      {{elseif $pct lt 90}}{{assign var="img" value="pnormal.png"}}
-      {{elseif $pct lt 100}}{{assign var="img" value="pbooked.png"}}
-      {{else}}{{assign var="img" value="pfull.png"}}
-      {{/if}}
+      {{if $pct lt 50}}{{assign var="backgroundClass" value="empty"}}
+      {{elseif $pct lt 90}}{{assign var="backgroundClass" value="normal"}}
+      {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
+      {{else}}{{assign var="backgroundClass" value="full"}}
+      {{/if}} 
       <tr style="{{if $curr_plage->plageconsult_id == $plageconsult_id}}font-weight: bold;{{/if}}">
         <td>
-          <span style="float: left; width: {{$pct}}%; height: 100%; background:url(./modules/dPcabinet/images/{{$img}}) repeat;" />
-          <a href="index.php?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;plageconsult_id={{$curr_plage->plageconsult_id}}&amp;chir_id={{$chir_id}}&amp;date={{$date}}">
-          {{$curr_plage->date|date_format:"%A %d"}}
-          </a>
+          <div class="progressBar">
+            <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
+            <div class="text">{{$curr_plage->date|date_format:"%A %d"}}</div>
+          </div>
         </td>
         <td class="text">
           {{$curr_plage->_ref_chir->_view}}

@@ -109,7 +109,7 @@ foreach ($nav as $module) {
 </tr>
 </table>
 <script language="JavaScript" type="text/javascript">
-  initEffectClassPlus("menuIcons", "menuIcons-trigger", { sEffect : "slide"} );
+  new PairEffect("menuIcons");
 </script>
 <?php } // (!$dialog) ?>
 <table id="main" class="<?php echo $m ?>">

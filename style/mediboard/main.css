@@ -1480,6 +1480,18 @@ div.progressBar div.bar {
   height: 12px;
   background-repeat: repeat;
 }
+div.progressBar div.empty {
+  background-image: url(./images/pempty.png);
+}
+div.progressBar div.normal {
+  background-image: url(./images/pnormal.png);
+}
+div.progressBar div.booked {
+  background-image: url(./images/pbooked.png);
+}
+div.progressBar div.full {
+  background-image: url(./images/pfull.png);
+}
 
 div.progressBar div.text {
   margin-top: -11px;

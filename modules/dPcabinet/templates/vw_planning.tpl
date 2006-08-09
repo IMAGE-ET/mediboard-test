@@ -31,6 +31,20 @@ function checkPlage() {
     }
   }
   
+  if(form.nbaffected.value!= 0 && form.nbaffected.value!=""){
+    var alertUser = 0;
+    if(
+      parseInt(form._hour_deb.value) > parseInt(form.firstconsult_hour.value) ||
+      (parseInt(form._hour_deb.value) == parseInt(form.firstconsult_hour.value) && parseInt(form._min_deb.value) > parseInt(form.firstconsult_min.value)) ||
+      parseInt(form._hour_fin.value) < parseInt(form.lastconsult_hour.value) ||
+      (parseInt(form._hour_fin.value) == parseInt(form.lastconsult_hour.value) && parseInt(form._min_fin.value) < parseInt(form.lastconsult_min.value))
+      ){
+      if(!(confirm("Certaines consultations se trouvent en dehors de la plage de consultation.\n\nVoulez-vous appliquer les modifications ?"))){
+        return false;
+      }
+    }  
+  }
+    
   return true;
 }
 
@@ -117,13 +131,13 @@ function pageMain() {
               {{if $pct gt 100}}
               {{assign var="pct" value=100}}
               {{/if}}
-              {{if $pct lt 50}}{{assign var="img" value="pempty.png"}}
-              {{elseif $pct lt 90}}{{assign var="img" value="pnormal.png"}}
-              {{elseif $pct lt 100}}{{assign var="img" value="pbooked.png"}}
-              {{else}}{{assign var="img" value="pfull.png"}}
+              {{if $pct lt 50}}{{assign var="backgroundClass" value="empty"}}
+              {{elseif $pct lt 90}}{{assign var="backgroundClass" value="normal"}}
+              {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
+              {{else}}{{assign var="backgroundClass" value="full"}}
               {{/if}}  
               <div class="progressBar">
-                <div class="bar" style="width: {{$arrayAffichage.$keyAff->_fill_rate}}%; background-image: url(./modules/dPcabinet/images/{{$img}});" ></div>
+                <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
                 <div class="text">{{$arrayAffichage.$keyAff->_affected}} / {{$arrayAffichage.$keyAff->_total}}</div>
               </div>
             </td>
@@ -138,6 +152,11 @@ function pageMain() {
     <input type='hidden' name='dosql' value='do_plageconsult_aed' />
     <input type='hidden' name='del' value='0' />
     <input type='hidden' name='plageconsult_id' value='{{$plageSel->plageconsult_id}}' />
+    <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
+    <input type='hidden' name='firstconsult_hour' value='{{$firstconsult_hour}}' />
+    <input type='hidden' name='firstconsult_min' value='{{$firstconsult_min}}' />
+    <input type='hidden' name='lastconsult_hour' value='{{$lastconsult_hour}}' />
+    <input type='hidden' name='lastconsult_min' value='{{$lastconsult_min}}' />
     
     <table class="form">
       <tr>

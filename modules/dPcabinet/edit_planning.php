@@ -10,6 +10,7 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
+require_once($AppUI->getModuleClass("dPcabinet", "plageconsult"));
 
 if (!$canEdit) {
 	$AppUI->redirect( "m=system&a=access_denied" );
@@ -30,16 +31,23 @@ if ($mediuser->isPraticien()) {
 $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
 
 $consultation_id = mbGetValueFromGetOrSession("consultation_id");
-if (!$consultation_id) {
-  
-  // A t'on fourni l'id du praticien
-  if ($chir_id = mbGetValueFromGetOrSession("chir_id")) {
-    $chir->load($chir_id);
-  }
+$plageconsult_id = mbGetValueFromGet("plageconsult_id", null);
 
-  // A t'on fourni l'id du patient
-  if ($pat_id = mbGetValueFromGet("pat_id")) {
-    $pat->load($pat_id);
+if (!$consultation_id) {
+  // A t'on fourni une plage de consultation
+  if($plageconsult_id){
+    $plagesConsult = new CPlageconsult();
+    $plagesConsult->load($plageconsult_id);    
+  }else{
+    // A t'on fourni l'id du praticien
+    if ($chir_id = mbGetValueFromGetOrSession("chir_id")) {
+      $chir->load($chir_id);
+    }
+
+    // A t'on fourni l'id du patient
+    if ($pat_id = mbGetValueFromGet("pat_id")) {
+      $pat->load($pat_id);
+    }
   }
 } else {
   $consult->load($consultation_id);
@@ -53,6 +61,9 @@ if (!$consultation_id) {
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
+if($plageconsult_id && !$consultation_id){
+  $smarty->assign("plagesConsult"     , $plagesConsult     );
+}
 $smarty->assign("consult"           , $consult           );
 $smarty->assign("chir"              , $chir              );
 $smarty->assign("pat"               , $pat               );

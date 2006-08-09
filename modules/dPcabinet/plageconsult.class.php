@@ -71,7 +71,6 @@ class CPlageconsult extends CMbObject {
     }
     if($this->_total){
       $this->_fill_rate= round($this->_affected/$this->_total*100);
-      if($this->_fill_rate>100){$this->_fill_rate=100;}
     }
   }
   
