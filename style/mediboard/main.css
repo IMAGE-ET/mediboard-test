@@ -1456,6 +1456,11 @@ table#planningBloc th {
   font-weight: normal;
   white-space: nowrap;
 }
+
+table#planningBloc th a {
+  color: #fff;
+}
+
 table#planningBloc th.heure {
   text-align: left;
   width: 6%;
