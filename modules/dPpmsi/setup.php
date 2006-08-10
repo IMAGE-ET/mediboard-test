@@ -14,7 +14,7 @@ require_once($AppUI->getSystemClass("mbmodule"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpmsi";
-$config["mod_version"]     = "0.12";
+$config["mod_version"]     = "0.13";
 $config["mod_directory"]   = "dPpmsi";
 $config["mod_setup_class"] = "CSetupdPpmsi";
 $config["mod_type"]        = "user";
@@ -55,7 +55,7 @@ class CSetupdPpmsi {
           ) TYPE=MyISAM COMMENT = 'Table des GHM';";
           db_exec( $sql ); db_error();
   
-      case "0.11" :
+      case "0.11":
         $module = @CMbModule::getInstalled("dPplanningOp");
         if (!$module || $module->mod_version < "0.38") {
           return "0.11";
@@ -70,8 +70,13 @@ class CSetupdPpmsi {
           "\nWHERE `ghm`.`operation_id` = `operations`.`operation_id`";
         db_exec($sql); db_error();
   
-      case "0.12" :
-        return "0.12";
+      case "0.12":
+        $sql = "ALTER TABLE `ghm` DROP `operation_id` ;";
+        db_exec($sql); db_error();
+        $sql = "ALTER TABLE `ghm` ADD INDEX ( `sejour_id` ) ;";
+        db_exec($sql); db_error();
+      case "0.13":
+        return "0.13";
     }
     return false;
   }

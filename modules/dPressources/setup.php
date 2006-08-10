@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPressources";
-$config["mod_version"]     = "0.1";
+$config["mod_version"]     = "0.11";
 $config["mod_directory"]   = "dPressources";
 $config["mod_setup_class"] = "CSetupdPressources";
 $config["mod_type"]        = "user";
@@ -52,7 +52,10 @@ class CSetupdPressources {
                ) TYPE=MyISAM COMMENT = 'Table des plages de ressource';";
         db_exec( $sql ); db_error();
       case "0.1":
-        return "0.1";
+        $sql = "ALTER TABLE `plageressource` ADD INDEX ( `prat_id` ) ;";
+        db_exec($sql); db_error();
+      case "0.11":
+        return "0.11";
       }
     return false;
   }

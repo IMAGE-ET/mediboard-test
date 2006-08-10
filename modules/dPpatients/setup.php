@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.29";
+$config["mod_version"]     = "0.30";
 $config["mod_directory"]   = "dPpatients";
 $config["mod_setup_class"] = "CSetupdPpatients";
 $config["mod_type"]        = "user";
@@ -166,7 +166,16 @@ class CSetupdPpatients {
         db_exec( $sql ); db_error();
         
       case "0.29":
-        return "0.29";
+        $sql = "ALTER TABLE `patients` DROP INDEX `patient_id` ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` DROP INDEX `nom` ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD INDEX ( `nom` ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD INDEX ( `prenom` ) ;";
+        db_exec( $sql ); db_error();
+      case "0.30":
+        return "0.30";
     }
     return false;
   }

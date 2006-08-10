@@ -9,17 +9,17 @@
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
-$config["mod_name"] = "system";
-$config["mod_version"] = "1.0.2";
-$config["mod_directory"] = "system";
+$config["mod_name"]        = "system";
+$config["mod_version"]     = "1.0.3";
+$config["mod_directory"]   = "system";
 $config["mod_setup_class"] = "CSetupSystem";
-$config["mod_type"] = "core";
-$config["mod_ui_name"] = "Administration";
-$config["mod_ui_icon"] = "system.png";
+$config["mod_type"]        = "core";
+$config["mod_ui_name"]     = "Administration";
+$config["mod_ui_icon"]     = "system.png";
 $config["mod_description"] = "Administration système";
-$config["mod_config"] = true;
+$config["mod_config"]      = true;
 
-if (@$a == "setup") {
+if(@$a == "setup") {
   echo dPshowModuleConfig($config);
 }
 
@@ -27,7 +27,7 @@ class CSetupSystem {
 
   function configure() {
     global $AppUI;
-    $AppUI->redirect( "m=system&a=configure" );
+    $AppUI->redirect("m=system&a=configure");
     return true;
   }
 
@@ -72,7 +72,10 @@ class CSetupSystem {
          db_exec($sql); db_error();
 
       case "1.0.2":
-        return "1.0.2";
+        $sql = "ALTER TABLE `access_log` DROP INDEX `action_2` ;";
+         db_exec($sql); db_error();
+      case "1.0.3":
+        return "1.0.3";
     }
     return false;
   }

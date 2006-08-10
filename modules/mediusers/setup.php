@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "Mediusers";
-$config["mod_version"]     = "0.15";
+$config["mod_version"]     = "0.16";
 $config["mod_directory"]   = "mediusers";
 $config["mod_setup_class"] = "CSetupMediusers";
 $config["mod_type"]        = "user";
@@ -245,7 +245,20 @@ class CSetupMediusers {
             "\nAND `groups_mediboard`.`text` = 'Cabinets'";
         db_exec($sql); db_error();
       case "0.15":
-        return "0.15";
+        $sql = "ALTER TABLE `groups_mediboard` DROP INDEX `group_id` ;";
+        db_exec($sql); db_error();
+        $sql = "ALTER TABLE `functions_mediboard` DROP INDEX `function_id` ;";
+        db_exec($sql); db_error();
+        $sql = "ALTER TABLE `functions_mediboard` ADD INDEX ( `group_id` ) ;";
+        db_exec($sql); db_error();
+        $sql = "ALTER TABLE `users_mediboard` DROP INDEX `user_id` ;";
+        db_exec($sql); db_error();
+        $sql = "ALTER TABLE `users_mediboard` ADD INDEX ( `function_id` ) ;";
+        db_exec($sql); db_error();
+        $sql = "ALTER TABLE `users_mediboard` ADD INDEX ( `discipline_id` ) ;";
+        db_exec($sql); db_error();
+      case "0.16":
+        return "0.16";
     }
 
     return false;

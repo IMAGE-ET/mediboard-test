@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.52";
+$config["mod_version"]     = "0.53";
 $config["mod_directory"]   = "dPplanningOp";
 $config["mod_setup_class"] = "CSetupdPplanningOp";
 $config["mod_type"]        = "user";
@@ -500,7 +500,20 @@ class CSetupdPplanningOp {
         $sql = "ALTER TABLE `sejour` ADD INDEX ( `group_id` ) ;";
         db_exec( $sql ); db_error();
       case "0.52":
-        return "0.52";
+        $sql = "ALTER TABLE `operations` DROP INDEX `operation_id` ;";
+        db_exec($sql); db_error();
+        $sql = "ALTER TABLE `operations` ADD INDEX ( `anesth_id` ) ;";
+        db_exec($sql); db_error();
+        $sql = "ALTER TABLE `operations`" .
+            "\nDROP `pat_id`, DROP `CCAM_code`, DROP `CCAM_code2`," .
+            "\nDROP `compte_rendu`, DROP `cr_valide`, DROP `date_adm`," .
+            "\nDROP `time_adm`, DROP `chambre`, DROP `type_adm`," .
+            "\nDROP `venue_SHS`, DROP `saisie`, DROP `modifiee`," .
+            "\nDROP `CIM10_code`, DROP `convalescence`, DROP `pathologie`," .
+            "\nDROP `septique` ;";
+        db_exec($sql); db_error();
+      case "0.53":
+        return "0.53";
     }
     return false;
   }

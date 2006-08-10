@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.42";
+$config["mod_version"]     = "0.43";
 $config["mod_directory"]   = "dPcabinet";
 $config["mod_setup_class"] = "CSetupdPcabinet";
 $config["mod_type"]        = "user";
@@ -289,8 +289,22 @@ class CSetupdPcabinet {
       case "0.40":
       case "0.41":
         
-      case "0.42";
-        return "0.42";
+      case "0.42":
+        set_time_limit(1800);
+        $sql = "ALTER TABLE `consultation` DROP INDEX `plageconsult_id`  ;";
+         db_exec($sql); db_error();
+        $sql = "ALTER TABLE `consultation` ADD INDEX ( `plageconsult_id` ) ;";
+         db_exec($sql); db_error();
+        $sql = "ALTER TABLE `consultation` ADD INDEX ( `patient_id` ) ;";
+         db_exec($sql); db_error();
+        $sql = "ALTER TABLE `tarifs` DROP INDEX `chir_id` ;";
+         db_exec($sql); db_error();
+        $sql = "ALTER TABLE `tarifs` ADD INDEX ( `chir_id` ) ;";
+         db_exec($sql); db_error();
+        $sql = "ALTER TABLE `tarifs` ADD INDEX ( `function_id` ) ;";
+         db_exec($sql); db_error();
+      case "0.43":
+        return "0.43";
     }
     return false;
   }
