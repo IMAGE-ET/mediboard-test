@@ -51,7 +51,7 @@
    
    </td>
    <td>
-     {{include file="vw_idx_planning.tpl"}}
+     {{include file="inc_legende_planning.tpl"}}
    </td>
   </tr>
 </table>
