@@ -4,7 +4,11 @@
       <table id="planningBloc">
       {{foreach from=$listDays key=curr_day item=plagesPerDay}}
         <tr>
-          <th><strong>{{$curr_day|date_format:"%a %d %b"}}</strong></th>
+          <th>
+            <a href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;date={{$curr_day}}">
+              <strong>{{$curr_day|date_format:"%a %d %b"}}</strong>
+            </a>
+          </th>
           {{foreach from=$listHours item=curr_hours}}
           <th colspan="4" class="heure">{{$curr_hours}}:00</th>
           {{/foreach}}         
