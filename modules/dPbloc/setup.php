@@ -9,15 +9,15 @@
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
-$config["mod_name"] = "dPbloc";
-$config["mod_version"] = "0.14";
-$config["mod_directory"] = "dPbloc";
+$config["mod_name"]        = "dPbloc";
+$config["mod_version"]     = "0.15";
+$config["mod_directory"]   = "dPbloc";
 $config["mod_setup_class"] = "CSetupdPbloc";
-$config["mod_type"] = "user";
-$config["mod_ui_name"] = "Planning Bloc";
-$config["mod_ui_icon"] = "dPbloc.png";
+$config["mod_type"]        = "user";
+$config["mod_ui_name"]     = "Planning Bloc";
+$config["mod_ui_icon"]     = "dPbloc.png";
 $config["mod_description"] = "Gestion du bloc opératoire";
-$config["mod_config"] = true;
+$config["mod_config"]      = true;
 
 if (@$a == "setup") {
   echo dPshowModuleConfig( $config );
@@ -27,13 +27,13 @@ class CSetupdPbloc {
 
   function configure() {
     global $AppUI;
-    $AppUI->redirect( "m=dPbloc&a=configure" );
+    $AppUI->redirect("m=dPbloc&a=configure");
     return true;
   }
 
   function remove() {
-    db_exec( "DROP TABLE plagesop;" );
-    db_exec( "DROP TABLE sallesbloc;" );
+    db_exec("DROP TABLE plagesop;");
+    db_exec("DROP TABLE sallesbloc;");
     return null;
   }
 
@@ -88,16 +88,21 @@ class CSetupdPbloc {
         $sql = "ALTER TABLE `sallesbloc` ADD INDEX ( `group_id` ) ;";
         db_exec( $sql ); db_error();
       case "0.14":
-        return "0.14";
+        $sql = "ALTER TABLE `plagesop` DROP `id_chir` ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `plagesop` DROP `id_anesth` ;";
+        db_exec( $sql ); db_error();
+      case "0.15":
+        return "0.15";
     }
     return false;
   }
 
   function swapPratIds() {
     global $AppUI;
-    set_time_limit( 1800 );
-    ignore_user_abort( 1 );
-    require_once( $AppUI->getModuleClass("admin") );
+    set_time_limit(1800);
+    ignore_user_abort(1);
+    require_once($AppUI->getModuleClass("admin"));
     $user = new CUser;
     
     // Changement des chirurgiens

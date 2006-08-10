@@ -23,8 +23,6 @@ class CPlageOp extends CMbObject {
   // DB References
   var $chir_id   = null;
   var $anesth_id = null;
-  var $id_chir   = null;
-  var $id_anesth = null;
   var $id_spec   = null;
   var $id_salle  = null;
 
@@ -54,8 +52,6 @@ class CPlageOp extends CMbObject {
 
     $this->_props["chir_id"]   = "ref";
     $this->_props["anesth_id"] = "ref";
-    $this->_props["id_chir"]   = "str";
-    $this->_props["id_anesth"] = "str";
     $this->_props["id_spec"]   = "ref|xor|chir_id";
     $this->_props["id_salle"]  = "ref|notNull";
     $this->_props["date"]      = "date|notNull";
