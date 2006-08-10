@@ -10,10 +10,10 @@
 require_once($AppUI->getSystemClass("tabindex"));
 
 $tabs = array();
-$tabs[] = array("vw_idx_planning", "Planning de la semaine", 1);
-$tabs[] = array("vw_planning_week", "Planning de la semaine 2", 1);
-$tabs[] = array("vw_edit_plages", "Planning du jour", 1);
-$tabs[] = array("vw_edit_planning", "Planning du jour 2", 1);
+//$tabs[] = array("vw_idx_planning", "Planning de la semaine", 1);
+$tabs[] = array("vw_planning_week", "Planning de la semaine", 1);
+//$tabs[] = array("vw_edit_plages", "Planning du jour", 1);
+$tabs[] = array("vw_edit_planning", "Planning du jour", 1);
 $tabs[] = array("vw_edit_interventions", "Gestion des interventions", 1);
 $tabs[] = array("vw_urgences", "Voir les urgences", 1);
 $tabs[] = array("vw_idx_materiel", "Commande de matériel", 1);
