@@ -1443,6 +1443,42 @@ table.sejourcollapse td.date {
   display: none;
 }
 
+table#planningBloc {
+  width: 100%;
+  border-spacing: 1px;
+}
+
+table#planningBloc th {
+  background-color: #888;
+  padding: 2px;
+  color: #fff;
+  border: outset #ccc 1px;
+  font-weight: normal;
+  white-space: nowrap;
+}
+table#planningBloc th.heure {
+  text-align: left;
+  width: 6%;
+}
+
+table#planningBloc td.salle {
+  background-color: #eee;
+  text-align: center;
+}
+
+table#planningBloc td {
+  vertical-align: middle;
+  background-color: #888;
+}
+table#planningBloc td.empty {
+  background: #eee;
+  width: 1.5%;
+}
+
+table#planningBloc td.firsthour {
+  background: #ddd;
+}
+
 /* @import "./dPpatients.css" */
 
 table#weeklyPlanning {

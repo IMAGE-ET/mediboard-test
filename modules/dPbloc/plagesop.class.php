@@ -46,6 +46,7 @@ class CPlageOp extends CMbObject {
   var $_ref_spec       = null;
   var $_ref_salle      = null;
   var $_ref_operations = null;
+  var $_nb_operations  = null;
 
   function CPlageOp() {
     $this->CMbObject("plagesop", "id");
@@ -76,6 +77,15 @@ class CPlageOp extends CMbObject {
 
     $this->_ref_salle = new CSalle;
     $this->_ref_salle->load($this->id_salle);
+    
+    if($this->chir_id){
+      $this->_view = "Dr. ".$this->_ref_chir->_view;
+    }elseif($this->id_spec){
+      $this->_view = $this->_ref_spec->_shortview;
+    }
+    if($this->anesth_id){
+      $this->_view .= " &mdash; ".$this->_ref_anesth->_shortview;
+    }
   }
   
   function loadRefsBack($annulee = 1) {
@@ -178,6 +188,11 @@ class CPlageOp extends CMbObject {
     $this->fin = $fin;
     $this->updateFormFields();
     return $msg;
+  }
+  
+  function GetNbOperations(){
+    $sql = "SELECT COUNT(operation_id) FROM operations WHERE plageop_id = '$this->id' and annulee = '0'";
+    $this->_nb_operations = db_loadResult($sql);
   }    
 }
 ?>
