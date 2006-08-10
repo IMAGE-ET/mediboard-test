@@ -24,7 +24,7 @@ $fin = mbGetValueFromGet("fin", mbDate());
 $sql = "SELECT COUNT(user_log.user_log_id) AS total," .
     "\nDATE_FORMAT(user_log.date, '%Y-%m-%d') AS day" .
     "\nFROM user_log" .
-    "\nWHERE user_log.date BETWEEN '$debut' AND '$fin'" .
+    "\nWHERE user_log.date BETWEEN '$debut' AND '$fin 23:59:59'" .
     "\nAND user_log.user_id = '$user_id'" .
     "\nGROUP BY day" .
     "\nORDER BY day";
