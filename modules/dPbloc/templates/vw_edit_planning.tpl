@@ -25,11 +25,21 @@ function pageMain() {
   regRedirectFlatCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
 }
 
+function popPlanning(debut) {
+  var url = new Url;
+  url.setModuleAction("dPbloc", "view_planning");
+  url.addParam("deb", debut);
+  url.addParam("fin", debut);
+  url.popup(700, 550, "Planning");
+}
 </script>
-
 <table class="main">
   <tr>
-    <td class="greedyPane">
+    <td class="greedyPane" style="text-align:center;">
+      <a href="javascript:popPlanning('{{$date}}');">
+        <strong>{{$date|date_format:"%A %d %B"}}</strong><br />
+        <img src="modules/dPbloc/images/print.png" height="15" width="15" alt="imprimer" border="0" />
+      </a>
       <table id="planningBloc">
         <tr>
           <th><strong>{{$date|date_format:"%a %d %b"}}</strong></th>
@@ -70,7 +80,11 @@ function pageMain() {
         </tr>
         {{/foreach}} 
       </table>
-
+      {{if $plagesel->plageop_id}}
+      <a class="buttonnew" href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id=0">
+        Créer une nouvelle plage opératoire
+      </a>
+      {{/if}}
       {{if $canEdit}}
       <form name='editFrm' action='?m={{$m}}' method='post' onsubmit='return checkPlage()'>
       <input type='hidden' name='dosql' value='do_plagesop_aed' />
