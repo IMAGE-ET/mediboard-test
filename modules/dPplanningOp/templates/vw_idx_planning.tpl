@@ -92,7 +92,7 @@ function pageMain() {
         </tr>
         {{else}}
         <tr>
-          <td align="right"><a href="index.php?m={{$m}}&amp;tab=0&amp;date={{$curr_plage.date|date_format:"%Y-%m-%d"}}&amp;urgences=0">{{$curr_plage.date|date_format:"%a %d %b %Y"}}</a></td>
+          <td align="right"><a href="index.php?m={{$m}}&amp;tab=vw_idx_planning&amp;date={{$curr_plage.date|date_format:"%Y-%m-%d"}}&amp;urgences=0">{{$curr_plage.date|date_format:"%a %d %b %Y"}}</a></td>
           <td align="center">{{$curr_plage.debut|date_format:"%Hh%M"}} à {{$curr_plage.fin|date_format:"%Hh%M"}}</td>
           <td align="center">{{$curr_plage.total}}</td>
           <td align="center">{{$curr_plage.duree|date_format:"%Hh%M"}}</td>
@@ -101,7 +101,7 @@ function pageMain() {
         {{/foreach}}
         {{if $listUrgences|@count}}
         <tr>
-          <td align="right"><a href="index.php?m={{$m}}&amp;tab=0&amp;urgences=1">Urgences</a></td>
+          <td align="right"><a href="index.php?m={{$m}}&amp;tab=vw_idx_planning&amp;urgences=1">Urgences</a></td>
           <td align="center">-</td>
           <td align="center">{{$listUrgences|@count}}</td>
           <td align="center">-</td>

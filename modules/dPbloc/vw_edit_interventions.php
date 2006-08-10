@@ -18,7 +18,7 @@ require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
 
 if(!($plageop_id = mbGetValueFromGetOrSession("plageop_id"))) {
   $AppUI->msg = "Vous devez choisir une plage opératoire";
-  $AppUI->redirect("m=dPbloc&tab=1");
+  $AppUI->redirect("m=dPbloc&tab=vw_edit_planning");
 }
 
 $anesth = dPgetSysVal("AnesthType");
