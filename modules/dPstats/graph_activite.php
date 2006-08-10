@@ -47,7 +47,7 @@ $salles = db_loadlist($sql);
 $opbysalle = array();
 foreach($salles as $salle) {
   $curr_salle_id = $salle["salle_id"];
-  $opbysalle[$id]["nom"] = $salle["nom"];
+  $opbysalle[$curr_salle_id]["nom"] = $salle["nom"];
   $sql = "SELECT COUNT(operations.operation_id) AS total," .
     "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .
     "\nDATE_FORMAT(plagesop.date, '%Y%m') AS orderitem," .
