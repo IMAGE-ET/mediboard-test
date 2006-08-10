@@ -34,7 +34,7 @@ class CDiscipline extends CMbObject {
   
   function loadUsedDisciplines($where = array(), $order = null) {
     $ljoin["users_mediboard"] = "`users_mediboard`.`discipline_id` = `discipline`.`discipline_id`";
-    $where["users_mediboard`.`discipline_id"] = "IS NOT NULL";
+    $where["users_mediboard.discipline_id"] = "IS NOT NULL";
     if(!$order) {
       $order = "`discipline`.`text`";
     }

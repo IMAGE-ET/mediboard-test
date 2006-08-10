@@ -86,7 +86,13 @@ class CDpObject {
     if (is_array($where)) {
       foreach ($where as $field => $eq) {
         if (is_string($field)) {
-          $where[$field] = "`$this->_tbl`.`$field` $eq";
+          if($pos = strpos($field, ".")) {
+            $point_table = substr($field, 0, $pos);
+            $point_field = substr($field, $pos + 1);
+            $where[$field] = "`$point_table`.`$point_field` $eq";
+          } else {
+            $where[$field] = "`$field` $eq";
+          }
         }
         
         $where[$field] = "(" . $where[$field] . ")";

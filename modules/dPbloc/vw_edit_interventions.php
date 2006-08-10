@@ -31,7 +31,7 @@ $plage->loadRefsFwd();
 // Liste de droite
 $list1 = new COperation;
 $where = array();
-$where["plageop_id"] = "= '$plageop_id'";
+$where["operations.plageop_id"] = "= '$plageop_id'";
 $where["rank"] = "= '0'";
 $ljoin = array();
 $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
