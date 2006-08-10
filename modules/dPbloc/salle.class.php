@@ -15,7 +15,7 @@ require_once( $AppUI->getSystemClass("mbobject"));
  */
 class CSalle extends CMbObject {
   // DB Table key
-	var $id = null;
+	var $salle_id = null;
   
   // DB references
   var $group_id = null;
@@ -25,7 +25,7 @@ class CSalle extends CMbObject {
   var $stats = null;
 
 	function CSalle() {
-		$this->CMbObject("sallesbloc", "id");
+		$this->CMbObject("sallesbloc", "salle_id");
 
     $this->_props["group_id"] = "ref|notNull";
     $this->_props["nom"]      = "str|notNull";
@@ -38,8 +38,8 @@ class CSalle extends CMbObject {
     $tables[] = array (
       "label"     => "plages opératoires", 
       "name"      => "plagesop", 
-      "idfield"   => "id", 
-      "joinfield" => "id_salle"
+      "idfield"   => "plageop_id", 
+      "joinfield" => "salle_id"
     );
     
     return CDpObject::canDelete($msg, $oid, $tables);

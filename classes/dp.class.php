@@ -72,13 +72,13 @@ class CDpObject {
  *  @return the objects array
  */
   function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
-    $sql = "SELECT $this->_tbl.* FROM `$this->_tbl`";
+    $sql = "SELECT `$this->_tbl`.* FROM `$this->_tbl`";
 
     // Left join clauses
     if ($leftjoin) {
       assert(is_array($leftjoin));
       foreach ($leftjoin as $table => $condition) {
-        $sql .= "\nLEFT JOIN $table ON $condition";
+        $sql .= "\nLEFT JOIN `$table` ON $condition";
       }
     }
     
@@ -86,7 +86,7 @@ class CDpObject {
     if (is_array($where)) {
       foreach ($where as $field => $eq) {
         if (is_string($field)) {
-          $where[$field] = "`$field` $eq";
+          $where[$field] = "`$this->_tbl`.`$field` $eq";
         }
         
         $where[$field] = "(" . $where[$field] . ")";

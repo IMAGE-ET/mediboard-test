@@ -16,7 +16,7 @@
             <select name="salle" onchange="this.form.submit()">
               <option value="0">&mdash; Aucune salle</option>
               {{foreach from=$listSalles item=curr_salle}}
-              <option value="{{$curr_salle->id}}" {{if $curr_salle->id == $salle}} selected="selected" {{/if}}>
+              <option value="{{$curr_salle->salle_id}}" {{if $curr_salle->salle_id == $salle}} selected="selected" {{/if}}>
                 {{$curr_salle->nom}}
               </option>
               {{/foreach}}
@@ -30,20 +30,20 @@
       {{foreach from=$plages item=curr_plage}}
       <hr />
       
-      <form name="anesth{{$curr_plage->id}}" action="index.php" method="post">
+      <form name="anesth{{$curr_plage->plageop_id}}" action="index.php" method="post">
 
       <input type="hidden" name="m" value="dPbloc" />
       <input type="hidden" name="otherm" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_plagesop_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="_repeat" value="1" />
-      <input type="hidden" name="id" value="{{$curr_plage->id}}" />
+      <input type="hidden" name="plageop_id" value="{{$curr_plage->plageop_id}}" />
       <input type="hidden" name="chir_id" value="{{$curr_plage->chir_id}}" />
 
       <table class="form">
         <tr>
           <th class="category" colspan="2">
-            <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;id={{$curr_plage->id}}" title="Administrer la plage">
+            <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$curr_plage->plageop_id}}" title="Administrer la plage">
               Plage du Dr. {{$curr_plage->_ref_chir->_view}}
               de {{$curr_plage->debut|date_format:"%Hh%M"}} à {{$curr_plage->fin|date_format:"%Hh%M"}}
             </a>

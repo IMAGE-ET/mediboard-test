@@ -64,12 +64,12 @@ $sql = "SELECT plagesop.*," .
 		"\nCOUNT(operations.operation_id) AS total" .
 		"\nFROM plagesop" .
 		"\nLEFT JOIN operations" .
-		"\nON plagesop.id = operations.plageop_id" .
+		"\nON plagesop.plageop_id = operations.plageop_id" .
     "\nAND operations.annulee = 0" .
-		"\nWHERE (plagesop.chir_id = '$selChirLogin' OR plagesop.id_spec = '$specialite')" .
+		"\nWHERE (plagesop.chir_id = '$selChirLogin' OR plagesop.spec_id = '$specialite')" .
 		"\nAND plagesop.date LIKE '".mbTranformTime("+ 0 day", $date, "%Y-%m")."-__'" .
-		"\nGROUP BY plagesop.id" .
-		"\nORDER BY plagesop.date, plagesop.debut, plagesop.id";
+		"\nGROUP BY plagesop.plageop_id" .
+		"\nORDER BY plagesop.date, plagesop.debut, plagesop.plageop_id";
 if($selChirLogin)
   $listPlages = db_loadList($sql);
 else

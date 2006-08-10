@@ -49,10 +49,10 @@ function setClose(date) {
           <option value="0" ondblclick="setClose('{{$curr_plage.date|date_format:"%d/%m/%Y"}}')"
           onclick="document.frmSelector.fmtdate.value='{{$curr_plage.date|date_format:"%d/%m/%Y"}}'"
         {{else}}
-          <option value="{{$curr_plage.id}}" ondblclick="setClose('{{$curr_plage.date|date_format:"%d/%m/%Y"}}')"
+          <option value="{{$curr_plage.plageop_id}}" ondblclick="setClose('{{$curr_plage.date|date_format:"%d/%m/%Y"}}')"
           onclick="document.frmSelector.fmtdate.value='{{$curr_plage.date|date_format:"%d/%m/%Y"}}'"
         {{/if}}
-        {{if $curr_plage.id_spec }}
+        {{if $curr_plage.spec_id}}
           style="background:#aae"
         {{elseif $curr_plage.free_time < 0}}
           style="background:#eaa"

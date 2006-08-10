@@ -33,7 +33,7 @@ if ($del) {
 
   while ($repeat--) {
     $msg = NULL;
-    if ($obj->id) {
+    if ($obj->plageop_id) {
       if ($obj->canDelete($msg)) {
         if ($msg = $obj->delete()) {
           $not_deleted++;
@@ -73,7 +73,7 @@ if ($del) {
 
   while ($repeat-- > 0) {
     $msg = null;
-    if ($obj->id) {
+    if ($obj->plageop_id) {
       if ($msg = $obj->store()) {
         $not_updated++;
       } else {

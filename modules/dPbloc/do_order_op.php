@@ -26,8 +26,8 @@ switch($cmd)
     $sql = "SELECT operations.rank AS rank, operations.time_operation AS time,
             operations.temp_operation as duree, plagesop.debut AS debut
             FROM operations, plagesop
-            WHERE plagesop.id = '$plageop'
-            AND operations.plageop_id = plagesop.id
+            WHERE plagesop.plageop_id = '$plageop'
+            AND operations.plageop_id = plagesop.plageop_id
             ORDER BY operations.rank DESC";
     $result = db_loadlist($sql);
     $sql = "UPDATE operations
@@ -85,8 +85,8 @@ switch($cmd)
     break;
   }
   case "sethour" : {
-    $hour = dPgetParam( $_GET, 'hour', '00' );
-    $min = dPgetParam( $_GET, 'min', '00' );
+    $hour = dPgetParam( $_GET, "hour", "00" );
+    $min = dPgetParam( $_GET, "min", "00" );
     $sql = "UPDATE operations
 			SET pause = '".$hour.":".$min.":00'
 			WHERE operations.operation_id = '$id'";
@@ -95,7 +95,7 @@ switch($cmd)
     break;
   }
   case "setanesth" : {
-    $type = dPgetParam( $_GET, 'type', NULL);
+    $type = dPgetParam( $_GET, "type", NULL);
     $anesth = dPgetSysVal("AnesthType");
     foreach($anesth as $key => $value) {
       if(trim($value) == $type) {
@@ -122,7 +122,7 @@ function cleanOrderOp($plageop, $type = "rank") {
           "\nplagesop.debut" .
           "\nFROM operations" .
           "\nLEFT JOIN plagesop" .
-          "\nON plagesop.id = operations.plageop_id" .
+          "\nON plagesop.plageop_id = operations.plageop_id" .
           "\nWHERE operations.plageop_id = '$plageop'" .
           "\nAND operations.rank != 0" .
           "\nORDER BY operations.time_operation ASC";
@@ -144,7 +144,7 @@ function cleanOrderOp($plageop, $type = "rank") {
           "\nplagesop.debut" .
           "\nFROM operations" .
           "\nLEFT JOIN plagesop" .
-          "\nON plagesop.id = operations.plageop_id" .
+          "\nON plagesop.plageop_id = operations.plageop_id" .
           "\nWHERE operations.plageop_id = '$plageop'" .
           "\nAND operations.rank != 0" .
           "\nORDER BY operations.rank ASC";

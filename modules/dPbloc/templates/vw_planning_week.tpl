@@ -28,10 +28,10 @@
               {{/if}}
               <td nowrap="nowrap" style="text-align: center;white-space: normal;background-color:#{{$colorCell}};" colspan="{{$arrayAffichage.$keyAff->_nbQuartHeure}}">
                 <strong>
-                <a href="index.php?m=dPbloc&amp;tab=vw_edit_interventions&amp;id={{$arrayAffichage.$keyAff->id}}" target="_self">
+                <a href="index.php?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$arrayAffichage.$keyAff->plageop_id}}" target="_self">
                   {{$arrayAffichage.$keyAff->_view}}
                 </a> ({{$arrayAffichage.$keyAff->_nb_operations}})
-                <a href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;id={{$arrayAffichage.$keyAff->id}}&amp;date={{$curr_day}}">
+                <a href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id={{$arrayAffichage.$keyAff->plageop_id}}&amp;date={{$curr_day}}">
                   <img src="./modules/dPbloc/images/edit.png" alt="editer la plage" border="0" height="16" width="16" />
                 </a>
                 </strong>

@@ -15,7 +15,7 @@
     
     {{foreach from=$salles item=curr_salle}}
     <tr>
-      <td><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;salle_id={{$curr_salle->id}}">{{$curr_salle->nom}}</a></td>
+      <td><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;salle_id={{$curr_salle->salle_id}}">{{$curr_salle->nom}}</a></td>
     </tr>
     {{/foreach}}
       
@@ -28,14 +28,14 @@
     <form name="salle" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
     <input type="hidden" name="dosql" value="do_salle_aed" />
-    <input type="hidden" name="id" value="{{$salleSel->id}}" />
+    <input type="hidden" name="id" value="{{$salleSel->salle_id}}" />
     <input type="hidden" name="del" value="0" />
 
     <table class="form">
 
     <tr>
       <th class="category" colspan="2">
-      {{if $salleSel->id}}
+      {{if $salleSel->salle_id}}
         Modification de la salle &lsquo;{{$salleSel->nom}}&rsquo;
       {{else}}
         Création d'une salle
@@ -53,14 +53,14 @@
       <td>
         <input type="radio" name="stats" value="1" {{if $salleSel->stats}}checked="checked"{{/if}} />
         <label for="stats_1" title="La prendre en compte dans les statistiques">Oui</label>
-        <input type="radio" name="stats" value="0" {{if !$salleSel->stats || !$salleSel->id}}checked="checked"{{/if}} />
+        <input type="radio" name="stats" value="0" {{if !$salleSel->stats || !$salleSel->salle_id}}checked="checked"{{/if}} />
         <label for="stats_0" title="Ne pas la prendre en compte dans les statistiques">Non</label>
       </td>
     </tr>
     
     <tr>
       <td class="button" colspan="2">
-        {{if $salleSel->id}}
+        {{if $salleSel->salle_id}}
         <button class="submit" type="submit">Valider</button>
         <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'la salle',objName:'{{$salleSel->nom|escape:javascript}}'})">
           Supprimer

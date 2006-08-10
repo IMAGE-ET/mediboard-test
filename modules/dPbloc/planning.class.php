@@ -36,18 +36,18 @@ class Cplanning {
 	  $this->month = $month;
 	  $this->year = $year;
 	  unset($this->salles);
-    $sql = "SELECT id, nom FROM sallesbloc";
+    $sql = "SELECT salle_id, nom FROM sallesbloc";
     $this->salles = db_loadlist($sql);
 	  foreach($this->salles as $key => $value) {
-	    $sql = "SELECT plagesop.id AS id, plagesop.debut AS debut, plagesop.fin AS fin, plagesop.chir_id AS chir, plagesop.anesth_id AS anesth, plagesop.id_spec AS spec, functions_mediboard.color AS couleur, COUNT( operations.operation_id ) AS numop
+	    $sql = "SELECT plagesop.plageop_id AS plageop_id, plagesop.debut AS debut, plagesop.fin AS fin, plagesop.chir_id AS chir, plagesop.anesth_id AS anesth, plagesop.spec_id AS spec, functions_mediboard.color AS couleur, COUNT( operations.operation_id ) AS numop
                 FROM plagesop
-                LEFT JOIN operations on (operations.plageop_id=plagesop.id AND operations.annulee = '0')
+                LEFT JOIN operations on (operations.plageop_id=plagesop.plageop_id AND operations.annulee = '0')
                 LEFT JOIN users_mediboard ON (users_mediboard.user_id = plagesop.chir_id)
-                LEFT JOIN functions_mediboard ON (plagesop.id_spec = functions_mediboard.function_id OR users_mediboard.function_id = functions_mediboard.function_id)
-                WHERE (plagesop.chir_id IS NOT NULL OR plagesop.id_spec IS NOT NULL)
-                AND plagesop.id_salle = '".$value["id"]."'    
+                LEFT JOIN functions_mediboard ON (plagesop.spec_id = functions_mediboard.function_id OR users_mediboard.function_id = functions_mediboard.function_id)
+                WHERE (plagesop.chir_id IS NOT NULL OR plagesop.spec_id IS NOT NULL)
+                AND plagesop.salle_id = '".$value["salle_id"]."'    
                 AND plagesop.date = '".$year."-".$month."-".$day."'
-                GROUP BY plagesop.id";
+                GROUP BY plagesop.plageop_id";
 	    $this->salles[$key]["plages"] = db_loadlist($sql);
 	    foreach($this->salles[$key]["plages"] as $key2 => $value2) {
 	  	  $this->salles[$key]["plages"][$key2]["debut"] = substr($value2["debut"], 0, 5);

@@ -16,11 +16,11 @@ require_once($AppUI->getModuleClass("mediusers"));
 
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
-$id = mbGetValueFromGetOrSession("id");
+$plageop_id = mbGetValueFromGetOrSession("plageop_id");
 
 // Informations sur la plage demandée
 $plagesel = new CPlageOp;
-$plagesel->load($id);
+$plagesel->load($plageop_id);
 
 // Liste des Specialités
 $function = new CFunctions;
@@ -75,7 +75,7 @@ foreach($listPlages as $keyPlages=>$valPlages){
   $nbquartheure = ($valPlages->_heurefin-$valPlages->_heuredeb)*4;
   $nbquartheure = $nbquartheure - array_search($valPlages->_minutedeb,$listMins) + array_search($valPlages->_minutefin,$listMins);
   $valPlages->_nbQuartHeure = $nbquartheure;
-  $arrayAffichage[$valPlages->id_salle."-".intval($valPlages->_heuredeb).":".$valPlages->_minutedeb] = $valPlages;
+  $arrayAffichage[$valPlages->salle_id."-".intval($valPlages->_heuredeb).":".$valPlages->_minutedeb] = $valPlages;
   
   // Détermination des horaire non vides
   $heure_encours = array_search(intval($valPlages->_heuredeb),$listHours);
@@ -93,7 +93,7 @@ foreach($listPlages as $keyPlages=>$valPlages){
     if($heure_encours==$valPlages->_heurefin && $listMins[$min_encours]==$valPlages->_minutefin){
       $dans_plage = false;
     }else{
-      $arrayAffichage[$valPlages->id_salle."-".$heure_encours.":".$listMins[$min_encours]] = "full";       
+      $arrayAffichage[$valPlages->salle_id."-".$heure_encours.":".$listMins[$min_encours]] = "full";       
     }
   }  
 }

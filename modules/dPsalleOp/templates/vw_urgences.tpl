@@ -35,7 +35,7 @@ function pageMain() {
             <select name="salle_id" onchange="submitFormAjax(this.form, 'systemMsg')">
               <option value="">&mdash; Choix de la salle</option>
               {{foreach from=$listSalles item=curr_salle}}
-              <option value="{{$curr_salle->id}}" {{if $curr_salle->id == $curr_op->_ref_salle->id}}selected="selected"{{/if}}>
+              <option value="{{$curr_salle->salle_id}}" {{if $curr_salle->salle_id == $curr_op->_ref_salle->salle_id}}selected="selected"{{/if}}>
                 {{$curr_salle->nom}}
               </option>
               {{/foreach}}

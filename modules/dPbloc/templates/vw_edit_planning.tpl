@@ -6,7 +6,7 @@ function checkPlage() {
     return false;
    }
     
-  if (form.chir_id.value == 0 && form.id_spec.value == 0) {
+  if (form.chir_id.value == 0 && form.spec_id.value == 0) {
     alert("Merci de choisir un chirurgien ou une spécialité");
     form.chir_id.focus();
     return false;
@@ -56,10 +56,10 @@ function pageMain() {
               {{/if}}
               <td nowrap="nowrap" style="text-align: center;white-space: normal;background-color:#{{$colorCell}};" colspan="{{$arrayAffichage.$keyAff->_nbQuartHeure}}">
                 <strong>
-                <a href="index.php?m=dPbloc&amp;tab=vw_edit_interventions&amp;id={{$arrayAffichage.$keyAff->id}}" target="_self">
+                <a href="index.php?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$arrayAffichage.$keyAff->plageop_id}}" target="_self">
                   {{$arrayAffichage.$keyAff->_view}}
                 </a> ({{$arrayAffichage.$keyAff->_nb_operations}})
-                <a href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;id={{$arrayAffichage.$keyAff->id}}&amp;date={{$date}}">
+                <a href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id={{$arrayAffichage.$keyAff->plageop_id}}&amp;date={{$date}}">
                   <img src="./modules/dPbloc/images/edit.png" alt="editer la plage" border="0" height="16" width="16" />
                 </a>
                 </strong>
@@ -75,13 +75,13 @@ function pageMain() {
       <form name='editFrm' action='?m={{$m}}' method='post' onsubmit='return checkPlage()'>
       <input type='hidden' name='dosql' value='do_plagesop_aed' />
       <input type='hidden' name='del' value='0' />
-      <input type='hidden' name='id' value='{{$plagesel->id}}' />
+      <input type='hidden' name='plageop_id' value='{{$plagesel->plageop_id}}' />
 
       <table class="form">
         <tr>
           <th class="category" colspan="6">
-            {{if $plagesel->id}}
-            <a style="float:right;" href="javascript:view_log('CPlageOp',{{$plagesel->id}})">
+            {{if $plagesel->plageop_id}}
+            <a style="float:right;" href="javascript:view_log('CPlageOp',{{$plagesel->plageop_id}})">
               <img src="images/history.gif" alt="historique" />
             </a>
             Modifier la plage opératoire
@@ -113,13 +113,13 @@ function pageMain() {
           </select>
         </td>
         <th>
-          <label for="id_salle" title="Nom de la salle. Obligatoire.">Salle</label>
+          <label for="salle_id" title="Nom de la salle. Obligatoire.">Salle</label>
         </th>
         <td>
-          <select name="id_salle" title="{{$plagesel->_props.id_salle}}">
+          <select name="salle_id" title="{{$plagesel->_props.salle_id}}">
             <option value="">&mdash; Choisir une salle</option>
             {{foreach from=$listSalles item=salle}}
-            <option value="{{$salle->id}}" {{if $plagesel->id_salle == $salle->id}} selected="selected"{{/if}} >
+            <option value="{{$salle->salle_id}}" {{if $plagesel->salle_id == $salle->salle_id}} selected="selected"{{/if}} >
               {{$salle->nom}}
             </option>
             {{/foreach}}
@@ -145,12 +145,12 @@ function pageMain() {
         </td>
       </tr>
       <tr>
-        <th><label for="id_spec" title="Spécialité associée à la plage opératoire">Spécialité</label></th>
+        <th><label for="spec_id" title="Spécialité associée à la plage opératoire">Spécialité</label></th>
         <td>
-          <select name="id_spec" title="{{$plagesel->_props.id_spec}}">
+          <select name="spec_id" title="{{$plagesel->_props.spec_id}}">
             <option value="">&mdash; Choisir une spécialité</option>
             {{foreach from=$specs item=spec}}
-              <option value="{{$spec->function_id}}" {{if $spec->function_id == $plagesel->id_spec}} selected="selected" {{/if}} >
+              <option value="{{$spec->function_id}}" {{if $spec->function_id == $plagesel->spec_id}} selected="selected" {{/if}} >
                 {{$spec->text}}
               </option>
             {{/foreach}}
@@ -158,7 +158,7 @@ function pageMain() {
         </td>
         <th><label for="date" title="Date de la plage opératoire.">Date</label></th>
         <td class="date">
-          {{if $plagesel->id}}
+          {{if $plagesel->plageop_id}}
           <div id="editFrm_date_da">{{$plagesel->date|date_format:"%d/%m/%Y"}}</div>
           <input type="hidden" name="date" value="{{$plagesel->date}}" />
           {{else}}
@@ -218,7 +218,7 @@ function pageMain() {
       </tr>
       <tr>
         <td class="button" colspan="6">
-        {{if $plagesel->id}}
+        {{if $plagesel->plageop_id}}
           <button type="submit" class="modify">Modifier</button>
         {{else}}
           <button type="submit" class="new">Ajouter</button>
@@ -228,11 +228,11 @@ function pageMain() {
     </table>
     </form>
 
-    {{if $plagesel->id}}
+    {{if $plagesel->plageop_id}}
       <form name='removeFrm' action='?m={{$m}}' method='post'>
       <input type='hidden' name='dosql' value='do_plagesop_aed' />
       <input type='hidden' name='del' value='1' />
-      <input type='hidden' name='id' value='{{$plagesel->id}}' /> 
+      <input type='hidden' name='plageop_id' value='{{$plagesel->plageop_id}}' /> 
       <table class="form">
         <tr>
           <th class="category" colspan="2">Supprimer la plage opératoire</th>

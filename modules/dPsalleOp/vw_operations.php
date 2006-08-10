@@ -39,7 +39,7 @@ $listSalles = $listSalles->loadList();
 $plages = new CplageOp;
 $where = array();
 $where["date"] = "= '$date'";
-$where["id_salle"] = "= '$salle'";
+$where["salle_id"] = "= '$salle'";
 $order = "debut";
 $plages = $plages->loadList($where, $order);
 foreach($plages as $key => $value) {

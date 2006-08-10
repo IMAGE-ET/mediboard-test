@@ -18,13 +18,13 @@ require_once($AppUI->getModuleClass("dPbloc"   , "salle"));
  */
 class CPlageOp extends CMbObject {
   // DB Table key
-  var $id = null;
+  var $plageop_id = null;
   
   // DB References
   var $chir_id   = null;
   var $anesth_id = null;
-  var $id_spec   = null;
-  var $id_salle  = null;
+  var $spec_id   = null;
+  var $salle_id  = null;
 
   // DB fields
   var $date  = null;
@@ -49,12 +49,12 @@ class CPlageOp extends CMbObject {
   var $_nb_operations  = null;
 
   function CPlageOp() {
-    $this->CMbObject("plagesop", "id");
+    $this->CMbObject("plagesop", "plageop_id");
 
     $this->_props["chir_id"]   = "ref";
     $this->_props["anesth_id"] = "ref";
-    $this->_props["id_spec"]   = "ref|xor|chir_id";
-    $this->_props["id_salle"]  = "ref|notNull";
+    $this->_props["spec_id"]   = "ref|xor|chir_id";
+    $this->_props["salle_id"]  = "ref|notNull";
     $this->_props["date"]      = "date|notNull";
     $this->_props["debut"]     = "time|notNull";
     $this->_props["fin"]       = "time|notNull";
@@ -73,14 +73,14 @@ class CPlageOp extends CMbObject {
     $this->_ref_anesth->load($this->anesth_id);
 
     $this->_ref_spec = new CFunctions;
-    $this->_ref_spec->load($this->id_spec);
+    $this->_ref_spec->load($this->spec_id);
 
     $this->_ref_salle = new CSalle;
-    $this->_ref_salle->load($this->id_salle);
+    $this->_ref_salle->load($this->salle_id);
     
     if($this->chir_id){
       $this->_view = "Dr. ".$this->_ref_chir->_view;
-    }elseif($this->id_spec){
+    }elseif($this->spec_id){
       $this->_view = $this->_ref_spec->_shortview;
     }
     if($this->anesth_id){
@@ -90,9 +90,9 @@ class CPlageOp extends CMbObject {
   
   function loadRefsBack($annulee = 1) {
     if($annulee)
-      $sql = "SELECT * FROM operations WHERE plageop_id = '$this->id' order by rank";
+      $sql = "SELECT * FROM operations WHERE plageop_id = '$this->plageop_id' order by rank";
     else
-      $sql = "SELECT * FROM operations WHERE plageop_id = '$this->id' and annulee = '0' order by rank";
+      $sql = "SELECT * FROM operations WHERE plageop_id = '$this->plageop_id' and annulee = '0' order by rank";
     $this->_ref_operations = db_loadObjectList($sql, new COperation);
   }
 
@@ -112,10 +112,11 @@ class CPlageOp extends CMbObject {
  */
   function hasCollisions() {
     // Get all other plages the same day
-    $sql = "SELECT * FROM plagesop " .
-        "WHERE id_salle = '$this->id_salle' " .
-        "AND date = '$this->date' " .
-        "AND id != '$this->id'";
+    $sql = "SELECT debut, fin" .
+        "\nFROM plagesop" .
+        "\nWHERE salle_id = '$this->salle_id'" .
+        "\nAND date = '$this->date'" .
+        "\nAND plageop_id != '$this->plageop_id'";
     $row = db_loadlist($sql);
     $msg = null;
     foreach ($row as $key => $value) {
@@ -132,8 +133,8 @@ class CPlageOp extends CMbObject {
     // Data checking
     $msg = null;
 
-    if(!$this->id) {
-      if (!$this->chir_id && !$this->id_spec) {
+    if(!$this->plageop_id) {
+      if (!$this->chir_id && !$this->spec_id) {
         $msg .= "Vous devez choisir un praticien ou une spécialité<br />";
       }
     }
@@ -171,11 +172,11 @@ class CPlageOp extends CMbObject {
   
   function becomeNext() {
     $this->date = mbDate("+7 DAYS", $this->date);
-    $sql = "SELECT id" .
+    $sql = "SELECT plageop_id" .
       "\nFROM plagesop" .
-      "\nWHERE date = '{$this->date}'" .
-      "\nAND id_salle = '{$this->id_salle}'" .
-      ($this->chir_id ? "\nAND chir_id = '$this->chir_id'" : "\nAND id_spec = '$this->id_spec'");
+      "\nWHERE date = '$this->date'" .
+      "\nAND salle_id = '$this->salle_id'" .
+      ($this->chir_id ? "\nAND chir_id = '$this->chir_id'" : "\nAND spec_id = '$this->spec_id'");
     $row = db_loadlist($sql);
     $debut = $this->debut;
     $fin = $this->fin;
@@ -183,7 +184,7 @@ class CPlageOp extends CMbObject {
     if(count($row) > 0)
       $msg = $this->load($row[0]["id"]);
     else
-      $this->id = null;
+      $this->plageop_id = null;
     $this->debut = $debut;
     $this->fin = $fin;
     $this->updateFormFields();
@@ -191,7 +192,7 @@ class CPlageOp extends CMbObject {
   }
   
   function GetNbOperations(){
-    $sql = "SELECT COUNT(operation_id) FROM operations WHERE plageop_id = '$this->id' and annulee = '0'";
+    $sql = "SELECT COUNT(operation_id) FROM operations WHERE plageop_id = '$this->plageop_id' and annulee = '0'";
     $this->_nb_operations = db_loadResult($sql);
   }    
 }

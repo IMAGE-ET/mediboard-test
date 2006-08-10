@@ -56,14 +56,14 @@ $sql = "SELECT plagesop.*, sallesbloc.nom," .
 		"\nCOUNT(operations.operation_id) AS total" .
 		"\nFROM plagesop" .
 		"\nLEFT JOIN operations" .
-		"\nON plagesop.id = operations.plageop_id" .
+		"\nON plagesop.plageop_id = operations.plageop_id" .
     "\nAND operations.annulee = 0" .
     "\nLEFT JOIN sallesbloc" .
-    "\nON plagesop.id_salle = sallesbloc.id" .
+    "\nON plagesop.salle_id = sallesbloc.salle_id" .
 		"\nWHERE plagesop.date LIKE '$year-$month-__'" .
-		"\nAND (plagesop.chir_id = '$mediChir->user_id' OR plagesop.id_spec = '$mediChir->function_id')" .
-		"\nGROUP BY plagesop.id" .
-		"\nORDER BY plagesop.date, plagesop.debut, sallesbloc.nom, plagesop.id";
+		"\nAND (plagesop.chir_id = '$mediChir->user_id' OR plagesop.spec_id = '$mediChir->function_id')" .
+		"\nGROUP BY plagesop.plageop_id" .
+		"\nORDER BY plagesop.date, plagesop.debut, sallesbloc.nom, plagesop.plageop_id";
 $list = db_loadlist($sql);
 
 foreach($list as $key => $value) {

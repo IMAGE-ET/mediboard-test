@@ -44,9 +44,9 @@ $sql = "SELECT COUNT(operations.operation_id) AS total," .
   "\nDATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem" .
   "\nFROM plagesop" .
   "\nINNER JOIN sallesbloc" .
-  "\nON plagesop.id_salle = sallesbloc.id" .
+  "\nON plagesop.salle_id = sallesbloc.salle_id" .
   "\nLEFT JOIN operations" .
-  "\nON operations.plageop_id = plagesop.id" .
+  "\nON operations.plageop_id = plagesop.plageop_id" .
   "\nAND operations.annulee = 0" .
   "\nWHERE sallesbloc.stats = 1" .
   "\nAND plagesop.date BETWEEN '$debut' AND '$fin'";
@@ -55,7 +55,7 @@ $sql = "SELECT COUNT(operations.operation_id) AS total," .
   if($codeCCAM)
     $sql .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   if($salle_id)
-    $sql .= "\nAND plagesop.id_salle = '$salle_id'";
+    $sql .= "\nAND plagesop.salle_id = '$salle_id'";
 $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
 $result = db_loadlist($sql);

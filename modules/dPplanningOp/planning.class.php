@@ -189,7 +189,7 @@ class COperation extends CMbObject {
     	operations.pause, plagesop.debut
       FROM operations
       LEFT JOIN plagesop
-      ON plagesop.id = operations.plageop_id
+      ON plagesop.plageop_id = operations.plageop_id
       WHERE operations.plageop_id = '$this->plageop_id'
       AND operations.rank != 0
       AND operations.operation_id != '$this->operation_id'
@@ -327,8 +327,8 @@ class COperation extends CMbObject {
     // Cas de la création dans une plage de spécialité
     $plageTmp = new CPlageOp;
     $plageTmp->load($this->plageop_id);
-    if ($plageTmp->id_spec) {
-      $plageTmp->id_spec = 0;
+    if ($plageTmp->spec_id) {
+      $plageTmp->spec_id = 0;
       $chirTmp = new CMediusers;
       $chirTmp->load($this->chir_id);
       $plageTmp->chir_id = $chirTmp->user_id;

@@ -250,7 +250,7 @@ class CSejour extends CMbObject {
     );
     
     $ljoin = array (
-      "plagesop" => "plagesop.id = operation.plageop_id"
+      "plagesop" => "plagesop.plageop_id = operation.plageop_id"
     );
     
     $order = "plagesop.date DESC";

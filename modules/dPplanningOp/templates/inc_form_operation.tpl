@@ -133,7 +133,7 @@
       <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention</label>
       <input type="hidden" name="date" value="" />
       <input type="hidden" name="_date" value="{{$plage->date}}" />
-      <input type="hidden" name="plageop_id" title="{{$op->_props.plageop_id}}|notNull" ondblclick="popPlage()" value="{{$plage->id}}" />
+      <input type="hidden" name="plageop_id" title="{{$op->_props.plageop_id}}|notNull" ondblclick="popPlage()" value="{{$plage->plageop_id}}" />
     </th>
     <td class="readonly"><input type="text" name="_datestr" readonly="readonly" size="10" ondblclick="popPlage()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" /></td>
     <td class="button"><button type="button" class="search" onclick="popPlage()">Choisir une date</button></td>

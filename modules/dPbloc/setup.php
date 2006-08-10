@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPbloc";
-$config["mod_version"]     = "0.15";
+$config["mod_version"]     = "0.16";
 $config["mod_directory"]   = "dPbloc";
 $config["mod_setup_class"] = "CSetupdPbloc";
 $config["mod_type"]        = "user";
@@ -93,7 +93,16 @@ class CSetupdPbloc {
         $sql = "ALTER TABLE `plagesop` DROP `id_anesth` ;";
         db_exec( $sql ); db_error();
       case "0.15":
-        return "0.15";
+        $sql = "ALTER TABLE `plagesop` CHANGE `id` `plageop_id` BIGINT( 20 ) NOT NULL AUTO_INCREMENT ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `sallesbloc` CHANGE `id` `salle_id` BIGINT( 20 ) NOT NULL AUTO_INCREMENT ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `plagesop` CHANGE `id_spec` `spec_id` INT( 10 ) DEFAULT NULL ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `plagesop` CHANGE `id_salle` `salle_id` INT( 10 ) DEFAULT '0' NOT NULL ;";
+        db_exec( $sql ); db_error();
+      case "0.16":
+        return "0.16";
     }
     return false;
   }

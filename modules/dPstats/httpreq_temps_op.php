@@ -32,7 +32,7 @@ $sql .="\nFROM operations" .
        "\nLEFT JOIN users" .
        "\nON operations.chir_id = users.user_id" .
        "\nLEFT JOIN plagesop" .
-       "\nON operations.plageop_id = plagesop.id" .
+       "\nON operations.plageop_id = plagesop.plageop_id" .
        "\nWHERE operations.entree_bloc IS NOT NULL" .
        "\nAND operations.debut_op IS NOT NULL" .
        "\nAND operations.fin_op IS NOT NULL" .

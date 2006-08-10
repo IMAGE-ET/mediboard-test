@@ -37,7 +37,7 @@ $where["date"] =  "BETWEEN '$deb' AND '$fin'";
 
 $order = array();
 $order[] = "date";
-$order[] = "id_salle";
+$order[] = "salle_id";
 $order[] = "debut";
 
 // En fonction du chirurgien
@@ -61,7 +61,7 @@ if ($spe) {
 
 // En fonction de la salle
 if ($salle) {
-  $where["id_salle"] = "= '$salle'";
+  $where["salle_id"] = "= '$salle'";
 }
 
 $plagesop = $plagesop->loadList($where, $order);
@@ -73,7 +73,7 @@ foreach($plagesop as $keyPlage => $valuePlage) {
   
   $listOp = new COperation;
   $where = array();
-  $where["plageop_id"] = "= '".$valuePlage->id."'";
+  $where["plageop_id"] = "= '".$valuePlage->plageop_id."'";
   switch ($type) {
     case "1" : $where["rank"] = "!= '0'"; break;
     case "2" : $where["rank"] = "= '0'"; break;

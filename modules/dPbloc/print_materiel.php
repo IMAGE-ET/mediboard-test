@@ -20,7 +20,7 @@ $fin = mbGetValueFromGetOrSession("fin", mbDate());
 
 // Récupération des opérations
 $ljoin = array();
-$ljoin["plagesop"] = "operations.plageop_id = plagesop.id";
+$ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 $where = array();
 $where["materiel"] = "!= ''";
 $where["plageop_id"] = "IS NOT NULL";

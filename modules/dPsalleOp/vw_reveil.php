@@ -40,7 +40,7 @@ $where["date"] = "= '$date'";
 $plages = $plages->loadList($where);
 $listIdPlages = array();
 foreach($plages as $key => $value) {
-  $listIdPlages[] = "'".$value->id."'";
+  $listIdPlages[] = "'".$value->salle_id."'";
 }
 
 $timing = array();

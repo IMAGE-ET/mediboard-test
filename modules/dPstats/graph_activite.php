@@ -41,12 +41,12 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
 
 $sql = "SELECT * FROM sallesbloc WHERE stats = 1";
 if($salle_id)
-  $sql .= "\nAND id = '$salle_id'";
+  $sql .= "\nAND salle_id = '$salle_id'";
 $salles = db_loadlist($sql);
 
 $opbysalle = array();
 foreach($salles as $salle) {
-  $id = $salle["id"];
+  $curr_salle_id = $salle["salle_id"];
   $opbysalle[$id]["nom"] = $salle["nom"];
   $sql = "SELECT COUNT(operations.operation_id) AS total," .
     "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .
@@ -54,9 +54,9 @@ foreach($salles as $salle) {
     "\nsallesbloc.nom AS nom" .
     "\nFROM plagesop" .
     "\nINNER JOIN sallesbloc" .
-    "\nON plagesop.id_salle = sallesbloc.id" .
+    "\nON plagesop.salle_id = sallesbloc.salle_id" .
     "\nINNER JOIN operations" .
-    "\nON operations.plageop_id = plagesop.id" .
+    "\nON operations.plageop_id = plagesop.plageop_id" .
     "\nAND operations.annulee = 0" .
     "\nINNER JOIN users_mediboard" .
     "\nON operations.chir_id = users_mediboard.user_id" .
@@ -67,7 +67,7 @@ foreach($salles as $salle) {
     $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if($codeCCAM)
     $sql .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-  $sql .= "\nAND sallesbloc.id = '$id'" .
+  $sql .= "\nAND sallesbloc.salle_id = '$curr_salle_id'" .
     "\nGROUP BY mois" .
     "\nORDER BY orderitem";
   $result = db_loadlist($sql);
@@ -75,13 +75,13 @@ foreach($salles as $salle) {
     $f = true;
     foreach($result as $totaux) {
       if($x == $totaux["mois"]) {
-        $opbysalle[$id]["op"][] = $totaux["total"];
+        $opbysalle[$curr_salle_id]["op"][] = $totaux["total"];
         $total += $totaux["total"];
         $f = false;
       }
     }
     if($f) {
-      $opbysalle[$id]["op"][] = 0;
+      $opbysalle[$curr_salle_id]["op"][] = 0;
     }
   }
 }

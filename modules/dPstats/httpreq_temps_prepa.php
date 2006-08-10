@@ -39,7 +39,7 @@ foreach($listPrats as $_prat) {
   	"\nTIME_TO_SEC(sortie_bloc) AS sec_sortie" .
     "\nFROM operations" .
     "\nINNER JOIN plagesop" .
-    "\nON operations.plageop_id = plagesop.id" .
+    "\nON operations.plageop_id = plagesop.plageop_id" .
     "\nWHERE operations.chir_id = '$_prat->user_id'" .
     "\nAND annulee = 0" .
     "\nAND entree_bloc IS NOT NULL" .

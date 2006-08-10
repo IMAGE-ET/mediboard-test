@@ -119,7 +119,7 @@ function pageMain() {
           <td><select name="salle">
             <option value="0">&mdash; Toutes les salles &mdash;</option>
             {{foreach from=$listSalles item=curr_salle}}
-	            <option value="{{$curr_salle->id}}">{{$curr_salle->nom}}</option>
+	            <option value="{{$curr_salle->salle_id}}">{{$curr_salle->nom}}</option>
             {{/foreach}}
           </select></td>
         </tr>

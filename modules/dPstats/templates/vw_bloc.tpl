@@ -28,7 +28,7 @@ function pageMain() {
             <select name="salle_id">
               <option value="0">&mdash; Toutes les salles</option>
               {{foreach from=$listSalles item=curr_salle}}
-              <option value="{{$curr_salle->id}}" {{if $curr_salle->id == $salle_id}}selected="selected"{{/if}}>
+              <option value="{{$curr_salle->salle_id}}" {{if $curr_salle->salle_id == $salle_id}}selected="selected"{{/if}}>
                 {{$curr_salle->nom}}
               </option>
               {{/foreach}}

@@ -65,8 +65,8 @@ class CFunctions extends CMbObject {
     $tables[] = array (
       "label"     => "plages opératoires", 
       "name"      => "plagesop", 
-      "idfield"   => "id", 
-      "joinfield" => "id_spec"
+      "idfield"   => "plageop_id", 
+      "joinfield" => "spec_id"
     );
     
     return parent::canDelete( $msg, $oid, $tables );

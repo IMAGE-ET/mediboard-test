@@ -83,7 +83,7 @@ function pageMain() {
           <th>Temps pris</th>
         </tr>
         {{foreach from=$listPlages item=curr_plage}}
-        {{if $curr_plage.id_spec}}
+        {{if $curr_plage.spec_id}}
         <tr>
           <td style="background: #aae" align="right">{{$curr_plage.date|date_format:"%a %d %b %Y"}}</td>
           <td style="background: #aae" align="center">{{$curr_plage.debut|date_format:"%Hh%M"}} à {{$curr_plage.fin|date_format:"%Hh%M"}}</td>
