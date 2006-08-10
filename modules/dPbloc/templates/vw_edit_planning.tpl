@@ -86,10 +86,10 @@ function popPlanning(debut) {
       </a>
       {{/if}}
       {{if $canEdit}}
-      <form name='editFrm' action='?m={{$m}}' method='post' onsubmit='return checkPlage()'>
-      <input type='hidden' name='dosql' value='do_plagesop_aed' />
-      <input type='hidden' name='del' value='0' />
-      <input type='hidden' name='plageop_id' value='{{$plagesel->plageop_id}}' />
+      <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkPlage()">
+      <input type="hidden" name="dosql" value="do_plagesop_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="plageop_id" value="{{$plagesel->plageop_id}}" />
 
       <table class="form">
         <tr>
@@ -149,7 +149,7 @@ function popPlanning(debut) {
           {{/foreach}}
           </select>
           :
-          <select name='_minutedeb'>
+          <select name="_minutedeb">
           {{foreach from=$listMins item=minute}}
             <option {{if $plagesel->_minutedeb == $minute}} selected="selected" {{/if}} >
               {{$minute|string_format:"%02d"}}
@@ -193,7 +193,7 @@ function popPlanning(debut) {
             {{/foreach}}
           </select>
           :
-          <select name='_minutefin'>
+          <select name="_minutefin">
             {{foreach from=$listMins item=minute}}
             <option {{if $plagesel->_minutefin == $minute}} selected="selected" {{/if}} >
               {{$minute|string_format:"%02d"}}
@@ -243,17 +243,17 @@ function popPlanning(debut) {
     </form>
 
     {{if $plagesel->plageop_id}}
-      <form name='removeFrm' action='?m={{$m}}' method='post'>
-      <input type='hidden' name='dosql' value='do_plagesop_aed' />
-      <input type='hidden' name='del' value='1' />
-      <input type='hidden' name='plageop_id' value='{{$plagesel->plageop_id}}' /> 
+      <form name="removeFrm" action="?m={{$m}}" method="post">
+      <input type="hidden" name="dosql" value="do_plagesop_aed" />
+      <input type="hidden" name="del" value="1" />
+      <input type="hidden" name="plageop_id" value="{{$plagesel->plageop_id}}" /> 
       <table class="form">
         <tr>
           <th class="category" colspan="2">Supprimer la plage opératoire</th>
         </tr>  
         <tr>
           <th>Supprimer cette plage pendant</th> 
-          <td><input type='text' name='_repeat' size="1" value='1' /> semaine(s)</td>
+          <td><input type="text" name="_repeat" size="1" value="1" /> semaine(s)</td>
         </tr>   
         <tr>
           <td class="button" colspan="2">
