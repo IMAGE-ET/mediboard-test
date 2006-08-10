@@ -1,54 +1,22 @@
-<?php /* $Id$ */
+<?php /* $Id: mbfileviewer.php 587 2006-08-10 07:46:47Z maskas $ */
 
 /**
 * @package Mediboard
-* @version $Revision$
+* @version $Revision: 587 $
 * @author Romain Ollivier
 */
 
-$dPconfig = array();
-
-if (!is_file("./includes/config.php")) {
-  header("location: install/");
-  die("Redirection vers l'assistant d'installation");
-}
-
-require_once("./classes/ui.class.php");
-require_once("./includes/config.php");
 require_once("./lib/phpThumb/phpthumb.class.php");
 
 // Check that the user has correctly set the root directory
 is_file($dPconfig["root_dir"]."/includes/config.php") 
   or die("ERREUR FATALE: le repertoire racine est probablement mal configuré");
 
-require_once("./includes/main_functions.php");
-require_once("./includes/errors.php");
 
 // PHP Configuration
 ini_set("memory_limit", "64M");
 
-// Manage the session variable(s)
-session_name("dotproject");
-if (get_cfg_var("session.auto_start") > 0) {
-  session_write_close();
-}
-session_start();
-session_register("AppUI"); 
-  
-// Check if session has previously been initialised
-if (!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
-    $_SESSION["AppUI"] = new CAppUI();
-}
 
-$AppUI =& $_SESSION["AppUI"];
-$AppUI->setConfig($dPconfig);
-
-require "./includes/db_connect.php";
-
-// load the commonly used classes
-require_once($AppUI->getSystemClass("date"));
-require_once($AppUI->getSystemClass("dp"));
-require_once($AppUI->getSystemClass("mbmodule"));
 
 // Direct acces needs Administrator rights
 $file_path = mbGetValueFromGet("file_path");
@@ -81,7 +49,7 @@ if ($file_path) {
 }
 
 // Check permissions on dPcabinet. to be refactored with PEAR::Auth
-include "./includes/permissions.php";
+
 $canRead = !getDenyRead("dPcabinet");
 if (!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");

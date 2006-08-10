@@ -139,7 +139,7 @@ function printDocument(doc_id) {
                   <input type="hidden" name="dosql" value="do_file_aed" />
                   <input type="hidden" name="del" value="1" />
                   <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
-                  <a href="mbfileviewer.php?file_id={{$curr_file->file_id}}">{{$curr_file->file_name}}</a>
+                  <a href="javascript:popFile({{$curr_file->file_id}});">{{$curr_file->file_name}}</a>
                   ({{$curr_file->_file_size}}) 
                   <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}'})">
                     Supprimer

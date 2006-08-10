@@ -25,7 +25,7 @@
         <tr>
           <td class="{{cycle name=cellicon values="dark, light"}}">
             <a href="javascript:ZoomFileAjax({{$curr_file->file_id}},0);" title="Afficher l'aperçu">
-              <img src="mbfileviewer.php?file_id={{$curr_file->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
+              <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$curr_file->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
             </a>        
           </td>
           <td class="text {{cycle name=celltxt values="dark, light"}}" style="vertical-align: middle;">

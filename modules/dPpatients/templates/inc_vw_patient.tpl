@@ -17,7 +17,7 @@ function printPatient(id) {
 
 function popFile(file_id){
   var url = new Url;
-  url.ViewFilePopup(file_id);
+  url.ViewFilePopup(file_id,0);
 }
 
 function printIntervention(id) {

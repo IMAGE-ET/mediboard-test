@@ -15,7 +15,7 @@
     {{assign var="stylecontenu" value="previewfileMinus"}}
     {{include file="inc_preview_contenu_file.tpl"}}
     {{else}}
-    <img src="mbfileviewer.php?file_id={{$file->file_id}}&amp;phpThumb=1&amp;hp=450&amp;wl=450{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" title="Afficher le grand aperçu" border="0" />
+    <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$file->file_id}}&amp;phpThumb=1&amp;hp=450&amp;wl=450{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" title="Afficher le grand aperçu" border="0" />
     {{/if}}
   </a>  
 {{else}}

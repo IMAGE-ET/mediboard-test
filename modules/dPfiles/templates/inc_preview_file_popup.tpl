@@ -43,11 +43,11 @@
             </a>
             {{/if}}
         {{/if}}<br />
-        <a href="mbfileviewer.php?file_id={{$file->file_id}}" title="Télécharger le fichier">
+        <a href="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$file->file_id}}" title="Télécharger le fichier">
           {{if $includeInfosFile}}
           {{include file="inc_preview_contenu_file.tpl"}}
           {{else}}
-          <img src="mbfileviewer.php?file_id={{$file->file_id}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" alt="Grand aperçu" />
+          <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$file->file_id}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" alt="Grand aperçu" />
           {{/if}}
         </a>        
       {{/if}}
