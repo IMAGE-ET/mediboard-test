@@ -182,7 +182,7 @@ class CPlageOp extends CMbObject {
     $fin = $this->fin;
     $msg = null;
     if(count($row) > 0)
-      $msg = $this->load($row[0]["id"]);
+      $msg = $this->load($row[0]["plageop_id"]);
     else
       $this->plageop_id = null;
     $this->debut = $debut;
