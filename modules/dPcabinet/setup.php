@@ -283,8 +283,6 @@ class CSetupdPcabinet {
         	    ADD `conclusion` VARCHAR(50),
         	    ADD `position` ENUM( 'DD', 'DV', 'DL', 'GP', 'AS', 'TO' );";
         db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'trans', 'obst', 'chir', 'med', 'fam', 'alle' ) NOT NULL DEFAULT 'med';";
-        db_exec( $sql ); db_error();
       
       case "0.40":
       case "0.41":
