@@ -42,7 +42,7 @@ function mbGetValueFromPost($valName, $valDefault = null) {
 
 /**
  * Returns the value of a variable retreived it from HTTP Get, then from the session
- * Stores it in _SESSION in all cases, with at least a default value
+ * Stores it in _SESSION[$m] in all cases, with at least a default value
  * @access public
  * @return any 
  **/
@@ -57,8 +57,22 @@ function mbGetValueFromGetOrSession($valName, $valDefault = null) {
 }
 
 /**
- * Returns the value of a variable retreived it from HTTP Post, then from the session
+ * Returns the value of a variable retreived it from HTTP Get, then from the session
  * Stores it in _SESSION in all cases, with at least a default value
+ * @access public
+ * @return any 
+ **/
+function mbGetAbsValueFromGetOrSession($valName, $valDefault = null) {
+  if (isset($_GET[$valName])) {
+    $_SESSION[$valName] = $_GET[$valName];
+  }
+  
+  return dPgetParam($_SESSION, $valName, $valDefault);
+}
+
+/**
+ * Returns the value of a variable retreived it from HTTP Post, then from the session
+ * Stores it in _SESSION[$m] in all cases, with at least a default value
  * @access public
  * @return any 
  **/
@@ -73,7 +87,22 @@ function mbGetValueFromPostOrSession($valName, $valDefault = null) {
 }
 
 /**
- * Sets a value to the session. Very useful to nullify object ids after deletion
+ * Returns the value of a variable retreived it from HTTP Post, then from the session
+ * Stores it in _SESSION[$m] in all cases, with at least a default value
+ * @access public
+ * @return any 
+ **/
+function mbGetAbsValueFromPostOrSession($valName, $valDefault = null) {
+
+  if (isset($_POST[$valName])) {
+    $_SESSION[$valName] = $_POST[$valName];
+  }
+  
+  return dPgetParam($_SESSION, $valName, $valDefault);
+}
+
+/**
+ * Sets a value to the session[$m]. Very useful to nullify object ids after deletion
  * @access public
  * @return void
  **/
@@ -81,6 +110,16 @@ function mbSetValueToSession($valName, $value = null) {
   global $m;
 
   $_SESSION[$m][$valName] = $value;
+}
+
+/**
+ * Sets a value to the session. Very useful to nullify object ids after deletion
+ * @access public
+ * @return void
+ **/
+function mbSetAbsValueToSession($valName, $value = null) {
+
+  $_SESSION[$valName] = $value;
 }
 
 /**
