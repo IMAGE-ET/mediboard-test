@@ -63,6 +63,7 @@ foreach($listDays as $keyDate=>$valDate){
 foreach($listDays as $keyDate=>$valDate){
   // Récupération des plages par jour
   $listPlages = new CPlageOp();
+  $where = array();
   $where["date"] = "= '$keyDate'";
   $order = "debut";
   $listPlages = $listPlages->loadList($where,$order);

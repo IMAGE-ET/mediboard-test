@@ -65,6 +65,7 @@ foreach($listSalles as $keySalle=>$valSalle){
 
 // Récupération des plages pour le jour demandé
 $listPlages = new CPlageOp();
+$where = array();
 $where["date"] = "= '$date'";
 $order = "debut";
 $listPlages = $listPlages->loadList($where,$order);
