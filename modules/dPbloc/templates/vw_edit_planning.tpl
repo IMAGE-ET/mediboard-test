@@ -93,15 +93,16 @@ function popPlanning(debut) {
 
       <table class="form">
         <tr>
-          <th class="category" colspan="6">
-            {{if $plagesel->plageop_id}}
+          {{if $plagesel->plageop_id}}
+          <th class="category" colspan="6" style="color: #f00;">
             <a style="float:right;" href="javascript:view_log('CPlageOp',{{$plagesel->plageop_id}})">
               <img src="images/history.gif" alt="historique" />
             </a>
             Modifier la plage opératoire
-            {{else}}
+          {{else}}
+          <th class="category" colspan="6">
             Ajouter une plage opératoire
-            {{/if}}
+          {{/if}}
           </th>
         </tr>
         <tr>

@@ -18,9 +18,25 @@ require_once($AppUI->getModuleClass("mediusers"));
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $plageop_id = mbGetValueFromGetOrSession("plageop_id");
 
+// Liste des Salles
+$listSalles = new CSalle();
+$where = array();
+$where["group_id"] = "= '$g'";
+$order = "'nom'";
+$listSalles = $listSalles->loadList($where, $order);
+
+
 // Informations sur la plage demandée
 $plagesel = new CPlageOp;
 $plagesel->load($plageop_id);
+if($plagesel->plageop_id){
+  $arrKeySalle = array_keys($listSalles);
+  if(!in_array($plagesel->salle_id,$arrKeySalle)){
+    $plageop_id = 0;
+    $plagesel = new CPlageOp;
+  }
+}
+
 
 // Liste des Specialités
 $function = new CFunctions;
@@ -43,13 +59,6 @@ $listMins[] = "00";
 $listMins[] = "15";
 $listMins[] = "30";
 $listMins[] = "45";
-
-// Liste des Salles
-$listSalles = new CSalle();
-$where = array();
-$where["group_id"] = "= '$g'";
-$order = "'nom'";
-$listSalles = $listSalles->loadList($where, $order);
 
 
 // Création du tableau de visualisation
