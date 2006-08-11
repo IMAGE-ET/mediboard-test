@@ -28,7 +28,7 @@ $litSel->loadRefs();
 // Récupération des chambres/services
 $services = new CService;
 $where = array();
-$where["goup_id"] = "= '$g'";
+$where["group_id"] = "= '$g'";
 $order = "nom";
 $services = $services->loadList($where, $order);
 foreach ($services as $service_id => $service) {
