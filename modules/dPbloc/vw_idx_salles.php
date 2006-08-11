@@ -22,7 +22,9 @@ $etablissements = new CMediusers();
 $etablissements = $etablissements->loadEtablissements(PERM_READ);
 
 // Récupération des salles
+$order = array();
 $order[] = "group_id, nom";
+$where = array();
 $where["group_id"] = "IN (".implode(array_keys($etablissements),", ").")";
 $salles = new CSalle;
 $salles = $salles->loadList($where, $order);
