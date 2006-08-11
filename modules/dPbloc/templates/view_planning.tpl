@@ -1,7 +1,6 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-//<![CDATA[
 
 function printAdmission(id) {
   var url = new Url;
@@ -10,7 +9,6 @@ function printAdmission(id) {
   url.popup(700, 550, "Patient");
 }
 
-//]]>
 </script>
 
 

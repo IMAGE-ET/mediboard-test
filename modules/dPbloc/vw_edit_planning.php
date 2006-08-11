@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $g;
 
 require_once($AppUI->getModuleClass("dPbloc"     , "plagesop"  ));
 require_once($AppUI->getModuleClass("dPbloc"     , "salle"     ));
@@ -46,8 +46,10 @@ $listMins[] = "45";
 
 // Liste des Salles
 $listSalles = new CSalle();
+$where = array();
+$where["group_id"] = "= '$g'";
 $order = "'nom'";
-$listSalles = $listSalles->loadList(null,$order);
+$listSalles = $listSalles->loadList($where, $order);
 
 
 // Création du tableau de visualisation

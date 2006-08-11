@@ -9,23 +9,23 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-if (!$canRead) {			// lock out users that do not have at least readPermission on this module
-	$AppUI->redirect( "m=system&a=access_denied" );
+if (!$canRead) {
+	$AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once( $AppUI->getModuleClass('dPbloc', 'plagesop'));
-require_once( $AppUI->getModuleClass('dPhospi', 'affectation'));
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
+require_once($AppUI->getModuleClass("dPbloc", "plagesop"));
+require_once($AppUI->getModuleClass("dPhospi", "affectation"));
 
 $deb = mbGetValueFromGetOrSession("deb", mbDate());
 $fin = mbGetValueFromGetOrSession("fin", mbDate());
 
-$vide = dPgetParam( $_GET, 'vide', false );
-$type = dPgetParam( $_GET, 'type', 0 );
-$chir = dPgetParam( $_GET, 'chir', 0 );
-$spe = dPgetParam( $_GET, 'spe', 0);
-$salle = dPgetParam( $_GET, 'salle', 0 );
-$CCAM = dPgetParam( $_GET, 'CCAM', '' );
+$vide  = mbGetValueFromGet("vide" , false);
+$type  = mbGetValueFromGet("type" , 0);
+$chir  = mbGetValueFromGet("chir" , 0);
+$spe   = mbGetValueFromGet("spe"  , 0);
+$salle = mbGetValueFromGet("salle", 0);
+$CCAM  = mbGetValueFromGet("CCAM" , "");
 
 //On sort les plages opératoires
 //  Chir - Salle - Horaires
@@ -104,13 +104,13 @@ foreach($plagesop as $keyPlage => $valuePlage) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('deb', $deb);
-$smarty->assign('fin', $fin);
-$smarty->assign('plagesop', $plagesop);
+$smarty->assign("deb"     , $deb);
+$smarty->assign("fin"     , $fin);
+$smarty->assign("plagesop", $plagesop);
 
-$smarty->display('view_planning.tpl');
+$smarty->display("view_planning.tpl");
 
 ?>
