@@ -10,10 +10,10 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
+	$AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
 
 $typeAff = mbGetValueFromGetOrSession("typeAff");
 
@@ -40,14 +40,14 @@ foreach($op as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('typeAff', $typeAff);
-$smarty->assign('deb', $deb);
-$smarty->assign('fin', $fin);
-$smarty->assign('op', $op);
+$smarty->assign("typeAff", $typeAff);
+$smarty->assign("deb"    , $deb);
+$smarty->assign("fin"    , $fin);
+$smarty->assign("op"     , $op);
 
-$smarty->display('vw_idx_materiel.tpl');
+$smarty->display("vw_idx_materiel.tpl");
 
 ?>
