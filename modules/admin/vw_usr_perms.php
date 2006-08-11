@@ -26,6 +26,14 @@ if (array_key_exists("mediusers", $modules)) {
     "name_field"  => "text"
   );
 }
+if (array_key_exists("dPetablissement", $modules)) {
+  $pgos["dPetablissement"] = array(
+    "table"       => "groups_mediboard", 
+    "table_alias" => "gr", 
+    "id_field"    => "group_id",
+    "name_field"  => "text"
+  );
+}
 
 $permItemValues = array(
   PERM_EDIT => "ReadWrite",
