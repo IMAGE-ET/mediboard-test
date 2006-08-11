@@ -10,17 +10,23 @@
 global $AppUI, $canRead, $canEdit, $m, $tab;
 
 require_once($AppUI->getModuleClass("dPpatients", "patients"));
+require_once($AppUI->getModuleClass("dPetablissement"  , "groups" ));
 
 $patient_id = mbGetValueFromGet("patient_id", 0);
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefsSejours();
 
+// Liste des Etablissements selon Permissions
+$etablissements = new CMediusers();
+$etablissements = $etablissements->loadEtablissements(PERM_READ);
+
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("sejours", $patient->_ref_sejours);
+$smarty->assign("etablissements", $etablissements);
 
 $smarty->display("inc_get_sejours.tpl");
 

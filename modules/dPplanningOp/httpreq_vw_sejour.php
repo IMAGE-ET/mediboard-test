@@ -12,10 +12,15 @@ global $AppUI, $canRead, $canEdit, $m, $tab, $dPconfig;
 require_once($AppUI->getModuleClass("mediusers"));
 require_once($AppUI->getModuleClass("dPplanningOp", "sejour"  ));
 require_once($AppUI->getModuleClass("dPpatients"  , "patients"));
+require_once($AppUI->getModuleClass("dPetablissement"  , "groups" ));
 
 $mode_operation = mbGetValueFromGet("mode_operation", 0);
 $sejour_id      = mbGetValueFromGet("sejour_id"     , 0);
 $patient_id     = mbGetValueFromGet("patient_id"    , 0);
+
+// Liste des Etablissements selon Permissions
+$etablissements = new CMediusers();
+$etablissements = $etablissements->loadEtablissements(PERM_READ);
 
 $sejour = new CSejour;
 $praticien = new CMediusers;
@@ -62,6 +67,7 @@ $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("hours"      , $hours);
 $smarty->assign("mins"       , $mins);
 $smarty->assign("mode_operation", $mode_operation);
+$smarty->assign("etablissements", $etablissements);
 
 $smarty->display("inc_form_sejour.tpl");
 

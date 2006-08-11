@@ -8,11 +8,12 @@
  */
 
 require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"   ));
-require_once($AppUI->getModuleClass("dPpatients"  , "patients"   ));
-require_once($AppUI->getModuleClass("dPplanningOp", "pathologie" ));
-require_once($AppUI->getModuleClass("dPpmsi"      , "GHM"        ));
-require_once($AppUI->getModuleClass("dPhospi"     , "affectation"));
+require_once($AppUI->getModuleClass("dPplanningOp"    , "planning"   ));
+require_once($AppUI->getModuleClass("dPpatients"      , "patients"   ));
+require_once($AppUI->getModuleClass("dPplanningOp"    , "pathologie" ));
+require_once($AppUI->getModuleClass("dPpmsi"          , "GHM"        ));
+require_once($AppUI->getModuleClass("dPhospi"         , "affectation"));
+require_once($AppUI->getModuleClass("dPetablissement" , "groups"     ));
 
 // @todo: Put the following in $config_dist;
 $dPconfig["dPplanningOp"]["sejour"] = array (
@@ -75,6 +76,7 @@ class CSejour extends CMbObject {
   var $_ref_first_affectation = null;
   var $_ref_last_affectation  = null;
   var $_ref_GHM               = array();
+  var $_ref_group             = null;
 
 	function CSejour() {
     $this->CMbObject("sejour", "sejour_id");
@@ -224,9 +226,16 @@ class CSejour extends CMbObject {
     $this->_ref_praticien->loadObject($where);
   }
   
+  function loadRefEtablisemment(){
+    // Chargement de l'établissement correspondant
+    $this->_ref_group = new CGroups;
+    $this->_ref_group->load($this->group_id);
+  }
+  
   function loadRefsFwd() {
     $this->loadRefPatient();
     $this->loadRefPraticien();
+    $this->loadRefEtablisemment();
   }
   
   function loadRefsAffectations() {

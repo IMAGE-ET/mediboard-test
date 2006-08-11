@@ -54,6 +54,19 @@
 
 <tr>
   <th>
+    <label for="group_id" title="Etablissement ou se déroule le séjour. Obligatoire">Etablissement</label>
+  </th>
+  <td colspan="2">
+    <select title="{{$sejour->_props.group_id}}" name="group_id">
+    {{foreach from=$etablissements item=curr_etab}}
+      <option value="{{$curr_etab->group_id}}" {{if ($sejour->sejour_id && $sejour->group_id==$curr_etab->group_id) || (!$sejour->sejour_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
+    {{/foreach}}
+    </select>
+  </td>
+</tr>
+
+<tr>
+  <th>
     <label for="praticien_id" title="Praticien responsable. Obligatoire">Praticien</label>
   </th>
   <td colspan="2">

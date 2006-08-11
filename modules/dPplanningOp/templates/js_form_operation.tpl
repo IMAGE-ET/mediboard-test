@@ -198,12 +198,14 @@ function updateEntreePrevue() {
 
 function popPlage() {
   var oForm = document.editOp;
+  var oSejourForm = document.editSejour;
   if (checkChir() && checkDuree()) {
     var url = new Url();
     url.setModuleAction("dPplanningOp", "plage_selector");
     url.addElement(oForm.chir_id, "chir");
     url.addElement(oForm._hour_op, "curr_op_hour");
     url.addElement(oForm._min_op, "curr_op_min");
+    url.addElement(oSejourForm.group_id, "group_id");
     {{if $op->operation_id}}
     url.addElement("{{$op->operation_id}}", "oper_id");
     {{/if}}

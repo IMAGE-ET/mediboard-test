@@ -34,8 +34,8 @@ function setClose(date) {
 
   <tr>
     <th class="category" colspan="2">
-      <a style="float:left;" href="index.php?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;month={{$pmonth}}&amp;year={{$pyear}}">&lt; &lt;</a>
-      <a style="float:right;" href="index.php?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;month={{$nmonth}}&amp;year={{$nyear}}">&gt; &gt;</a>
+      <a style="float:left;" href="index.php?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;month={{$pmonth}}&amp;year={{$pyear}}&amp;group_id={{$group_id}}&amp;oper_id={{$oper_id}}">&lt; &lt;</a>
+      <a style="float:right;" href="index.php?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;month={{$nmonth}}&amp;year={{$nyear}}&amp;group_id={{$group_id}}&amp;oper_id={{$oper_id}}">&gt; &gt;</a>
       <div>{{$nameMonth}} {{$year}}</div>
     </th>
   </tr>

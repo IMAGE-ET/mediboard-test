@@ -12,6 +12,7 @@ global $AppUI, $canRead, $canEdit, $m, $tab, $dPconfig;
 require_once($AppUI->getModuleClass("mediusers"));
 require_once($AppUI->getModuleClass("dPplanningOp", "sejour"  ));
 require_once($AppUI->getModuleClass("dPpatients"  , "patients"));
+require_once($AppUI->getModuleClass("dPetablissement"  , "groups" ));
 
 if(!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
@@ -20,6 +21,10 @@ if(!$canRead) {
 $sejour_id    = mbGetValueFromGetOrSession("sejour_id");
 $patient_id   = mbGetValueFromGet("patient_id");
 $praticien_id = mbGetValueFromGetOrSession("praticien_id");
+
+// Liste des Etablissements selon Permissions
+$etablissements = new CMediusers();
+$etablissements = $etablissements->loadEtablissements(PERM_READ);
 
 // L'utilisateur est-il un praticien
 $mediuser = new CMediusers;
@@ -108,6 +113,7 @@ $smarty->assign("patient"   , $patient);
 $smarty->assign("sejours"   , $sejours);
 $smarty->assign("msg_alert" , $msg_alert);
 
+$smarty->assign("etablissements", $etablissements);
 $smarty->assign("listPraticiens", $listPraticiens);
 
 $smarty->assign("hours", $hours);

@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $g;
 
 if(!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
@@ -15,10 +15,11 @@ if(!$canRead) {
 
 require_once($AppUI->getModuleClass("mediusers"));
 
-$chir   = mbGetValueFromGet("chir" , 0);
-$month  = mbGetValueFromGet("month", date("m"));
-$year   = mbGetValueFromGet("year" , date("Y"));
-$oper_id= mbGetValueFromGet("oper_id", null);
+$chir      = mbGetValueFromGet("chir"     , 0);
+$month     = mbGetValueFromGet("month"    , date("m"));
+$year      = mbGetValueFromGet("year"     , date("Y"));
+$group_id = mbGetValueFromGet("group_id" , $g);
+$oper_id   = mbGetValueFromGet("oper_id"  , null);
 
 $pmonth = $month - 1;
 if($pmonth == 0) {
@@ -61,6 +62,7 @@ $sql = "SELECT plagesop.*, sallesbloc.nom," .
     "\nLEFT JOIN sallesbloc" .
     "\nON plagesop.salle_id = sallesbloc.salle_id" .
 		"\nWHERE plagesop.date LIKE '$year-$month-__'" .
+		"\nAND sallesbloc.group_id = '$group_id'" .
 		"\nAND (plagesop.chir_id = '$mediChir->user_id' OR plagesop.spec_id = '$mediChir->function_id')" .
 		"\nGROUP BY plagesop.plageop_id" .
 		"\nORDER BY plagesop.date, plagesop.debut, sallesbloc.nom, plagesop.plageop_id";
@@ -87,7 +89,7 @@ $smarty->assign("curr_op_hour", $curr_op_hour);
 $smarty->assign("curr_op_min" , $curr_op_min);
 $smarty->assign("chir"        , $chir);
 $smarty->assign("list"        , $list);
-
+$smarty->assign("group_id"    , $group_id);
 $smarty->display("plage_selector.tpl");
 
 ?>

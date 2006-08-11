@@ -10,14 +10,19 @@
 global $AppUI, $canRead, $canEdit, $m, $tab, $dPconfig;
 
 require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPplanningOp" , "planning"));
-require_once($AppUI->getModuleClass("dPplanningOp" , "sejour"  ));
-require_once($AppUI->getModuleClass("dPpatients"   , "patients"));
-require_once($AppUI->getModuleClass("dPcompteRendu", "pack"    ));
+require_once($AppUI->getModuleClass("dPplanningOp"    , "planning"));
+require_once($AppUI->getModuleClass("dPplanningOp"    , "sejour"  ));
+require_once($AppUI->getModuleClass("dPpatients"      , "patients"));
+require_once($AppUI->getModuleClass("dPcompteRendu"   , "pack"    ));
+require_once($AppUI->getModuleClass("dPetablissement" , "groups"  ));
 
 if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
+
+// Liste des Etablissements selon Permissions
+$etablissements = new CMediusers();
+$etablissements = $etablissements->loadEtablissements(PERM_READ);
 
 $operation_id = mbGetValueFromGetOrSession("operation_id");
 $sejour_id    = mbGetValueFromGetOrSession("sejour_id");
@@ -156,6 +161,7 @@ $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listModelePrat", $listModelePrat);
 $smarty->assign("listModeleFunc", $listModeleFunc);
 $smarty->assign("listPack"      , $listPack      );
+$smarty->assign("etablissements", $etablissements);
 
 $smarty->assign("hours"        , $hours);
 $smarty->assign("mins"         , $mins);
