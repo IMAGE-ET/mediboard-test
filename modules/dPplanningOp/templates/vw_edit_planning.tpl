@@ -141,7 +141,7 @@ function deleteSejour() {
 function deleteObjects() {
   var oOptions = {
   	objName : '{{$op->_view}}',
-  	ajax : true,
+  	ajax : true
   }
   
   var oAjaxOptions = {

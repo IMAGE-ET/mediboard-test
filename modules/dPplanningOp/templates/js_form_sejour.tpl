@@ -2,6 +2,20 @@
 
 <script type="text/javascript">
 
+function removePlageOp(bIgnoreGroup){
+  var oFormOp = document.editOp;  
+  var oFormSejour = document.editSejour;
+  if(oFormOp){
+    if((oFormOp._group_id.value != oFormSejour.group_id.value) || bIgnoreGroup){
+      oFormOp._group_id.value = oFormSejour.group_id.value;
+      oFormOp._datestr.value = "";
+      oFormOp.plageop_id.value = "";
+      oFormOp._date.value = "";
+      oFormOp.date.value = "";
+    }
+  }
+}
+
 function cancelSejour() {
   var oForm = document.editSejour;
   var oElement = oForm.annule;

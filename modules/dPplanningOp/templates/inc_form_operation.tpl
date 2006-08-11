@@ -10,6 +10,7 @@
 <input type="hidden" name="commande_mat" value="{{$op->commande_mat}}" />
 <input type="hidden" name="rank" value="{{$op->rank}}" />
 <input type="hidden" name="annulee" value="{{$op->annulee}}" />
+<input type="hidden" name="_group_id" value="{{$sejour->group_id}}" />
      
 <table class="form">
   <tr>
@@ -31,7 +32,7 @@
       <label for="chir_id" title="Chirurgien Responsable. Obligatoire">Chirurgien</label>
     </th>
     <td colspan="2">
-      <select name="chir_id" title="{{$op->_props.chir_id}}" onchange="synchroPrat()">
+      <select name="chir_id" title="{{$op->_props.chir_id}}" onchange="synchroPrat();removePlageOp(true);">
         <option value="">&mdash; Choisir un chirurgien</option>
         {{foreach from=$listPraticiens item=curr_praticien}}
         <option value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
