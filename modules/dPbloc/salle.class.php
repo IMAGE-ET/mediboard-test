@@ -9,6 +9,7 @@
 
 
 require_once( $AppUI->getSystemClass("mbobject"));
+require_once($AppUI->getModuleClass("dPetablissement"  , "groups" ));
 
 /**
  * The CSalle class
@@ -23,6 +24,8 @@ class CSalle extends CMbObject {
   // DB Fields
   var $nom   = null;
   var $stats = null;
+  
+  var $_ref_group = null;
 
 	function CSalle() {
 		$this->CMbObject("sallesbloc", "salle_id");
@@ -43,6 +46,12 @@ class CSalle extends CMbObject {
     );
     
     return CDpObject::canDelete($msg, $oid, $tables);
+  }
+  
+  function loadRefsFwd(){
+    // Chargement de l'établissement correspondant
+    $this->_ref_group = new CGroups;
+    $this->_ref_group->load($this->group_id);
   }
 }
 ?>

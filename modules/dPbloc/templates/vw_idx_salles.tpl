@@ -11,11 +11,13 @@
       
     <tr>
       <th>liste des salles</th>
+      <th>Etablissement</th>
     </tr>
     
     {{foreach from=$salles item=curr_salle}}
     <tr>
       <td><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;salle_id={{$curr_salle->salle_id}}">{{$curr_salle->nom}}</a></td>
+      <td>{{$curr_salle->_ref_group->text}}</td>
     </tr>
     {{/foreach}}
       
@@ -28,7 +30,7 @@
     <form name="salle" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
     <input type="hidden" name="dosql" value="do_salle_aed" />
-    <input type="hidden" name="id" value="{{$salleSel->salle_id}}" />
+    <input type="hidden" name="salle_id" value="{{$salleSel->salle_id}}" />
     <input type="hidden" name="del" value="0" />
 
     <table class="form">
@@ -43,6 +45,17 @@
       </th>
     </tr>
 
+    <tr>
+      <th><label for="group_id" title="Etablissement de la salle. Obligatoire">Etablissement</label></th>
+      <td>
+        <select title="{{$salleSel->_props.group_id}}" name="group_id">
+        {{foreach from=$etablissements item=curr_etab}}
+          <option value="{{$curr_etab->group_id}}" {{if ($salleSel->salle_id && $salleSel->group_id==$curr_etab->group_id) || (!$salleSel->salle_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
+        {{/foreach}}
+        </select>
+      </td>
+    </tr>
+    
     <tr>
       <th><label for="nom" title="Intitulé de la salle. Obligatoire">Intitulé</label></th>
       <td><input type="text" title="{{$salleSel->_props.nom}}" name="nom" value="{{$salleSel->nom}}" /></td>
