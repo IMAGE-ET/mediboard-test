@@ -26,7 +26,7 @@ $listSpec = $listSpec->loadSpecialites(PERM_READ);
 $listServ = new CService();
 $where = array();
 $where["group_id"] = "= '$g'";
-$listServ = $listServ->loadlist();
+$listServ = $listServ->loadlist($where);
 
 // Création du template
 require_once($AppUI->getSystemClass ("smartydp"));
