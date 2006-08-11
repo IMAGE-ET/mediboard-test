@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $g;
 
 if(!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
@@ -29,8 +29,9 @@ $sejours = new CSejour;
 
 $ljoin["patients"] = "patients.patient_id = sejour.patient_id";
 
-$where[] = "sejour.entree_prevue >= '$deb'";
-$where[] = "sejour.entree_prevue <= '$fin'";
+$where["sejour.entree_prevue"] = ">= '$deb'";
+$where["sejour.entree_prevue"] = "<= '$fin'";
+$where["sejour.group_id"] = "= '$g'";
 $where["annule"] = "= 0";
 // Clause de filtre par spécialité
 if ($spe) {

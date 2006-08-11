@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
  
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $g;
 
 require_once($AppUI->getModuleClass("mediusers"));
 require_once($AppUI->getModuleClass("mediusers", "functions"));
@@ -24,6 +24,8 @@ $listSpec = new CFunctions();
 $listSpec = $listSpec->loadSpecialites(PERM_READ);
 
 $listServ = new CService();
+$where = array();
+$where["group_id"] = "= '$g'";
 $listServ = $listServ->loadlist();
 
 // Création du template

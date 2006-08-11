@@ -7,7 +7,7 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $g;
 
 require_once($AppUI->getModuleClass("dPhospi", "affectation"));
 
@@ -27,20 +27,22 @@ $date  = mbGetValueFromGetOrSession("date" , mbDate());
 
 $limit1 = $date." 00:00:00";
 $limit2 = $date." 23:59:59";
-$ljoin["sejour"] = "sejour.sejour_id = affectation.sejour_id";
+$ljoin["sejour"]   = "sejour.sejour_id = affectation.sejour_id";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
-$ljoin["lit"] = "lit.lit_id = affectation.lit_id";
-$ljoin["chambre"] = "chambre.chambre_id = lit.chambre_id";
-$ljoin["service"] = "service.service_id = chambre.service_id";
-$where["sortie"] = "BETWEEN '$limit1' AND '$limit2'";
-$where["type"] = "!= 'exte'";
+$ljoin["lit"]      = "lit.lit_id = affectation.lit_id";
+$ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
+$ljoin["service"]  = "service.service_id = chambre.service_id";
+$where["sortie"]   = "BETWEEN '$limit1' AND '$limit2'";
+$where["type"]     = "!= 'exte'";
+$where["service.group_id"] = "= '$g'";
 if($vue) {
   $where["confirme"] = "= 0";
 }
-if($typeOrder)
+if($typeOrder) {
   $order = "service.nom, chambre.nom, lit.nom";
-else
+} else {
   $order = "patients.nom, patients.prenom";
+}
 
 // Récupération des déplacements du jour
 $deplacements = new CAffectation;

@@ -7,7 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $g;
 
 require_once($AppUI->getModuleClass("mediusers"   , "functions" ));
 require_once($AppUI->getModuleClass("dPhospi"     , "service"   ));
@@ -40,6 +40,7 @@ $totalLits = 0;
 
 // Récupération des chambres/services
 $services = new CService;
+$where["group_id"] = "= '$g'";
 $services = $services->loadList();
 foreach ($services as $service_id => $service) {
   $services[$service_id]->loadRefsBack();
@@ -100,13 +101,14 @@ foreach ($services as $service_id => $service) {
 
 // Récupération des admissions à affecter
 function loadSejourNonAffectes($where) {
-  global $listChirs, $listPats, $listFunctions;
+  global $listChirs, $listPats, $listFunctions, $g;
   
   $leftjoin = array(
     "affectation"     => "sejour.sejour_id = affectation.sejour_id",
     "users_mediboard" => "sejour.praticien_id = users_mediboard.user_id",
-    "patients" => "sejour.patient_id = patients.patient_id"
+    "patients"        => "sejour.patient_id = patients.patient_id"
   );
+  $where["sejour.group_id"] = "= '$g'";
   $where[] = "affectation.affectation_id IS NULL";
   $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
   
