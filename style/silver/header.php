@@ -95,9 +95,9 @@ foreach ($nav as $module) {
             <select name="g" onchange="ChangeGroup.submit();">
             <?php
             require_once( $AppUI->getModuleClass("mediusers", "mediusers") );
-            $Etablissement = new CMediusers();
-            $Etablissement = $Etablissement->loadEtablissement(PERM_EDIT);
-            foreach($Etablissement as $key=>$group){
+            $Etablissements = new CMediusers();
+            $Etablissements = $Etablissements->loadEtablissements(PERM_EDIT);
+            foreach($Etablissements as $key=>$group){
               echo("<option value=\"$key\"");
               if($g==$key) echo(" selected=\"selected\"");
               echo(">".$group->_view."</option>");          

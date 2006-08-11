@@ -330,7 +330,7 @@ class CMediusers extends CMbObject {
     
   }
   
-  function loadEtablissement($perm_type = null){
+  function loadEtablissements($perm_type = null){
   	// Liste de Tous les établissements
     $sql = "SELECT *" .
       "\nFROM groups_mediboard" .
@@ -340,8 +340,8 @@ class CMediusers extends CMbObject {
     $groups = array();
     // Filtre
     if ($perm_type) {
-      foreach($basegroups as $keyGroupe=>$Groupe){
-        if(isMbAllowed($perm_type, "dPetablissement", $Groupe->group_id)){
+      foreach($basegroups as $keyGroupe=>$groupe){
+        if(isMbAllowed($perm_type, "dPetablissement", $groupe->group_id)){
           $groups[$keyGroupe] = $basegroups[$keyGroupe];
         }
       }
