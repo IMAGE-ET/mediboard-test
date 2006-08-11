@@ -11,7 +11,7 @@
 require_once( $AppUI->getSystemClass("mbobject"));
 
 /**
- * The CGroups class
+ * The CSalle class
  */
 class CSalle extends CMbObject {
   // DB Table key

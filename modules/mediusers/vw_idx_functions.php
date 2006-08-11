@@ -13,8 +13,8 @@ if(!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once($AppUI->getModuleClass("mediusers", "functions"));
-require_once($AppUI->getModuleClass("mediusers", "groups"   ));
+require_once($AppUI->getModuleClass("mediusers"      , "functions"));
+require_once($AppUI->getModuleClass("dPetablissement", "groups"   ));
 
 // Récupération des fonctions
 $listGroups = new CGroups;

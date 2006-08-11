@@ -9,8 +9,8 @@
 
 require_once($AppUI->getSystemClass("mbobject"));
 
-require_once($AppUI->getModuleClass("mediusers", "groups"));
-require_once($AppUI->getModuleClass("mediusers", "mediusers"));
+require_once($AppUI->getModuleClass("dPetablissement", "groups"   ));
+require_once($AppUI->getModuleClass("mediusers"      , "mediusers"));
 
 /**
  * The CFunction Class

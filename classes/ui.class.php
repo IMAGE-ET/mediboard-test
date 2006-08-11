@@ -564,9 +564,11 @@ class CAppUI {
     // If can't find remote info, remote info doesn't exist so don't check
     $remote = 1; // 1 IS don't check value
     $sql = "SHOW TABLES LIKE 'users_mediboard'";
-    $result = db_loadList($sql);
+    $result1 = db_loadList($sql);
+    $sql = "SHOW TABLES LIKE 'groups_mediboard'";
+    $result2 = db_loadList($sql);
     
-    if(count($result)) {
+    if(count($result1) && count($result2)) {
       if($cur = db_exec($sql)) {
         if($row = db_fetch_row($cur)) {
           $remote = intval($row[0]);

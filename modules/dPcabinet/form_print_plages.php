@@ -8,13 +8,13 @@
 */
  
 GLOBAL $AppUI, $canRead, $canEdit, $m;
-require_once( $AppUI->getModuleClass('dPcabinet', 'plageconsult') );
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('mediusers', 'functions') );
-require_once( $AppUI->getModuleClass('mediusers', 'groups') );
+require_once($AppUI->getModuleClass("mediusers"));
+require_once($AppUI->getModuleClass("dPcabinet"      , "plageconsult"));
+require_once($AppUI->getModuleClass("mediusers"      , "functions"   ));
+require_once($AppUI->getModuleClass("dPetablissement", "groups"      ));
 
 if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
+	$AppUI->redirect("m=system&a=access_denied");
 }
 
 $deb = mbDate();
@@ -25,13 +25,13 @@ $mediusers = new CMediusers();
 $listChir = $mediusers->loadPraticiens(PERM_EDIT);
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('deb', $deb);
-$smarty->assign('fin', $fin);
-$smarty->assign('listChir', $listChir);
+$smarty->assign("deb"     , $deb     );
+$smarty->assign("fin"     , $fin     );
+$smarty->assign("listChir", $listChir);
 
-$smarty->display('form_print_plages.tpl');
+$smarty->display("form_print_plages.tpl");
 
 ?>
