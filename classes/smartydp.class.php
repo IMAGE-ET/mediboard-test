@@ -59,7 +59,7 @@ class CSmartyDP extends Smarty {
    * Standard data assignment
    */
   function CSmartyDP($doubleTagMod = 0) {
-    global $AppUI, $dbChronos, $dPconfig, $canRead, $canEdit, $m, $a, $tab, $dialog, $mb_version_build;
+    global $AppUI, $dbChronos, $dPconfig, $canRead, $canEdit, $m, $a, $tab, $g, $dialog, $mb_version_build;
     $root = $AppUI->getConfig( 'root_dir' );
     
     // Directories initialisation
@@ -88,6 +88,7 @@ class CSmartyDP extends Smarty {
     $this->assign("m", $m);
     $this->assign("a", $a);
     $this->assign("tab", $tab);
+    $this->assign("g", $g);
     $this->assign("dialog", $dialog);
     $this->assign("mb_version_build", $mb_version_build);
     
