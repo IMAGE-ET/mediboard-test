@@ -42,8 +42,9 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
         $msg = $user->copyPermissionsFrom($profile_id, true);
       }
         
-      // insert new function permission
+      // insert new group and function permission
       $this->_obj->insFunctionPermission();
+      $this->_obj->insGroupPermission();
       
       $isNotNew = @$_POST[$this->objectKeyGetVarName];
       $this->doLog("store");

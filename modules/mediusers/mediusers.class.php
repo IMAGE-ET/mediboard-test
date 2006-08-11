@@ -272,6 +272,16 @@ class CMediusers extends CMbObject {
     $perm->permission_item = $this->function_id;
     $perm->store();
   }
+  
+  function insGroupPermission() {
+    $perm = new CPermission;
+    $perm->permission_user = $this->user_id; 
+    $perm->permission_grant_on = "dPetablissement";
+    $function = new CFunctions;
+    $function->load($this->function_id);
+    $perm->permission_item = $function->group_id;
+    $perm->store();
+  }
 
   function loadListFromType($user_types = null, $perm_type = null, $function_id = null, $name = null) {
     global $utypes_flip;
