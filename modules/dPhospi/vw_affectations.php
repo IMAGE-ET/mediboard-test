@@ -40,8 +40,9 @@ $totalLits = 0;
 
 // Récupération des chambres/services
 $services = new CService;
+$where = array();
 $where["group_id"] = "= '$g'";
-$services = $services->loadList();
+$services = $services->loadList($where);
 foreach ($services as $service_id => $service) {
   $services[$service_id]->loadRefsBack();
   $services[$service_id]->_nb_lits_dispo = 0;
