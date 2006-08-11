@@ -66,11 +66,26 @@ function popChgPwd() {
       </tr>
       <tr>
         <td colspan="2" id="menubar1">
+          <form name="ChangeGroup" action="" method="get">
+          <input type="hidden" name="m" value="<?php echo($m); ?>" />
+          <select name="g" onchange="ChangeGroup.submit();">
+          <?php
+          require_once( $AppUI->getModuleClass("mediusers", "mediusers") );
+          $Etablissement = new CMediusers();
+          $Etablissement = $Etablissement->loadEtablissement(PERM_EDIT);
+          foreach($Etablissement as $key=>$group){
+            echo("<option value=\"$key\"");
+            if($g==$key) echo(" selected=\"selected\"");
+            echo(">".$group->_view."</option>");					
+          }
+          ?>
+          </select>
           <?php
             echo "| ".mbPortalLink( $m, "Aide" )." | ";
           ?>
           <a href="javascript:popChgPwd();">Changez votre mot de passe</a> |
           <a href="?logout=-1"><?php echo $AppUI->_('Logout'); ?></a> |
+          </form>
         </td>
       </tr>
       <tr>

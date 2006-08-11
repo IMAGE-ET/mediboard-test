@@ -2,9 +2,9 @@
 
 function checkIntegrity() {
   var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_check_file_integrity");
-//  url.requestUpdate("checkIntegrity");
-  url.redirect();  
+  url.setModuleAction("dPfiles", "httpreq_check_file_integrity");
+  url.requestUpdate("checkIntegrity");
+  //url.redirect();  
 }
 
 </script>

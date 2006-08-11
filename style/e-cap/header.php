@@ -61,9 +61,24 @@ function popChgPwd() {
           </div>
         </td>
         <td class="welcome">
+          <form name="ChangeGroup" action="" method="get">
+          <input type="hidden" name="m" value="<?php echo($m); ?>" />
           CAPIO Santé
+          <select name="g" onchange="ChangeGroup.submit();">
+          <?php
+          require_once( $AppUI->getModuleClass("mediusers", "mediusers") );
+          $Etablissement = new CMediusers();
+          $Etablissement = $Etablissement->loadEtablissement(PERM_EDIT);
+          foreach($Etablissement as $key=>$group){
+            echo("<option value=\"$key\"");
+            if($g==$key) echo(" selected=\"selected\"");
+            echo(">".$group->_view."</option>");					
+          }
+          ?>
+          </select>
           <br />
           <?php echo $AppUI->_('Welcome') . " $AppUI->user_first_name $AppUI->user_last_name"; ?>
+          </form>
         </td>
       </tr>
     </table>

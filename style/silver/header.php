@@ -88,7 +88,24 @@ foreach ($nav as $module) {
 	<td id="user">
 		<table>
 			<tr>
-				<td id="userWelcome"><?php echo $AppUI->_('Welcome') . " $AppUI->user_first_name $AppUI->user_last_name"; ?></td>
+				<td id="userWelcome">
+                  <form name="ChangeGroup" action="" method="get">
+                  <?php echo $AppUI->_('Welcome') . " $AppUI->user_first_name $AppUI->user_last_name"; ?>
+                  <input type="hidden" name="m" value="<?php echo($m); ?>" />
+                  <select name="g" onchange="ChangeGroup.submit();">
+                  <?php
+                  require_once( $AppUI->getModuleClass("mediusers", "mediusers") );
+                  $Etablissement = new CMediusers();
+                  $Etablissement = $Etablissement->loadEtablissement(PERM_EDIT);
+                  foreach($Etablissement as $key=>$group){
+                    echo("<option value=\"$key\"");
+                    if($g==$key) echo(" selected=\"selected\"");
+                    echo(">".$group->_view."</option>");					
+                  }
+                  ?>
+                  </select>
+                  </form>
+				</td>
 				<td id="userMenu">
 					<?php echo mbPortalLink( $m, "Aide en ligne" );?> |
           <?php echo mbPortalLink( "bugTracker", "Suggérer une amélioration" );?> |

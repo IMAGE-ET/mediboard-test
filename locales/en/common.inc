@@ -1,7 +1,6 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-"module-dPetablissement-long"=>"Gestion des etablissements",
 "About",
 "Active Projects",
 "Add",
@@ -155,6 +154,7 @@
 "module-dPcompteRendu-court"=>"Comptes-rendus",
 "module-dPcompteRendu-long"=>"Gestion des comptes-rendus",
 "module-dPetablissement-court"=>"Etablissements",
+"module-dPetablissement-long"=>"Gestion des établissements",
 "module-dPfiles-court"=>"Files",
 "module-dPfiles-long"=>"Files management",
 "module-dPgestionCab-court"=>"Gestion cab",

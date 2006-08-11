@@ -202,6 +202,11 @@ td#menubar1 a:hover {
   color: #cbecf3;
 }
 
+td#menubar1 select{
+  font-size: 8px;
+  height: 12px;
+}
+
 td#menubar2 {
   text-align: right;
   color: #fff;

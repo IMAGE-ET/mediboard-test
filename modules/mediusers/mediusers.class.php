@@ -330,6 +330,27 @@ class CMediusers extends CMbObject {
     
   }
   
+  function loadEtablissement($perm_type = null){
+  	// Liste de Tous les établissements
+    $sql = "SELECT *" .
+      "\nFROM groups_mediboard" .
+      "\nORDER BY text";
+    $basegroups = db_loadObjectList($sql, new CGroups);  
+    
+    $groups = array();
+    // Filtre
+    if ($perm_type) {
+      foreach($basegroups as $keyGroupe=>$Groupe){
+        if(isMbAllowed($perm_type, "dPetablissement", $Groupe->group_id)){
+          $groups[$keyGroupe] = $basegroups[$keyGroupe];
+        }
+      }
+    }else{
+      $groups = $basegroups;    
+    }
+    return $groups;
+  }
+  
   function loadUsers($perm_type = null, $function_id = null, $name = null) {
     return $this->loadListFromType(null, $perm_type, $function_id, $name);
   }

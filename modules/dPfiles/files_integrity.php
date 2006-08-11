@@ -13,6 +13,6 @@ global $AppUI, $canRead, $canEdit, $m;
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->display("configure.tpl");
+$smarty->display("files_integrity.tpl");
 
 ?>
