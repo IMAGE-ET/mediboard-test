@@ -7,7 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $g;
 
 require_once($AppUI->getModuleClass("dPhospi", "service"));
 
@@ -27,8 +27,10 @@ $litSel->loadRefs();
 
 // Récupération des chambres/services
 $services = new CService;
+$where = array();
+$where["goup_id"] = "= '$g'";
 $order = "nom";
-$services = $services->loadList(null, $order);
+$services = $services->loadList($where, $order);
 foreach ($services as $service_id => $service) {
   $services[$service_id]->loadRefs();
   $chambres =& $services[$service_id]->_ref_chambres;

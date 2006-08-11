@@ -7,7 +7,7 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $g;
 
 if(!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
@@ -57,6 +57,7 @@ $sql = "SELECT lit.nom AS lit, chambre.nom AS chambre, service.nom AS service, M
 		"\nLEFT JOIN service" .
 		"\nON service.service_id = chambre.service_id" .
 		"\nWHERE lit.lit_id NOT IN($notIn)" .
+    "\nAND service.group_id = '$g'" .
 		"\nGROUP BY lit.lit_id" .
 		"\nORDER BY service.nom, limite DESC, chambre.nom, lit.nom";
 $libre = db_loadlist($sql);
@@ -83,6 +84,7 @@ if ($typeVue == 1) {
 		"\nWHERE affectation.entree < '$date 23:59:59'" .
 		"\nAND affectation.sortie > '$date 00:00:00'" .
 		"\nAND sejour.praticien_id = '$selPrat'" .
+    "\nAND sejour.group_id = '$g'" .
 		"\nORDER BY service.nom, chambre.nom, lit.nom";
   $listAff = new CAffectation;
   $listAff = db_loadObjectList($sql, $listAff);
