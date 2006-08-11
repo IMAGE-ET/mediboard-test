@@ -63,7 +63,7 @@ function popChgPwd() {
         <td class="welcome">
           <form name="ChangeGroup" action="" method="get">
           <input type="hidden" name="m" value="<?php echo($m); ?>" />
-          CAPIO Santé
+          CAPIO Santé -
           <select name="g" onchange="ChangeGroup.submit();">
           <?php
           require_once( $AppUI->getModuleClass("mediusers", "mediusers") );

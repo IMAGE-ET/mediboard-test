@@ -19,7 +19,7 @@
 	$dialog = dPgetParam( $_GET, 'dialog');
 	if (!$dialog) {
 		// top navigation menu
-		$nav = $AppUI->getMenuModules();
+		$nav = CMbModule::getVisible();
 ?>
 
 <?php 
@@ -46,14 +46,16 @@
 					<ul>
 <?php
 foreach ($nav as $module) {
-	$modDirectory = $module['mod_directory'];
-	if (isMbModuleVisible($modDirectory)) {
-		$modName = $AppUI->_($module['mod_ui_name']);
-		$modIcon = dPfindImage($module['mod_ui_icon'], $module['mod_directory']);
-    $modImage = dPshowImage($modIcon, 48, 48, $modName);
-    $liClass = $modDirectory == $m ? "class='selected'" : "";
-		echo "<li $liClass><a href='?m=$modDirectory'>$modImage " .
-        $AppUI->_("module-".$modDirectory."-court") .
+	if (isMbModuleVisible($module->mod_name)) {
+    $modNameCourt = $AppUI->_("module-$module->mod_name-court");
+    $modNameCourtEscaped = strtr($modNameCourt, "'", "\'");
+    $modNameLong = $AppUI->_("module-$module->mod_name-long");
+    $modNameLongEscaped = strtr($modNameLong, "'", "\'");
+    $modIcon = "modules/$module->mod_name/images/$module->mod_name.png";
+    $liClass = $module->mod_name == $m ? "class='selected'" : "";
+		echo "<li $liClass><a href='?m=$module->mod_name'>" .
+        "<img src='$modIcon' alt='$modNameCourtEscaped' height='48' width ='48' />" .
+        $AppUI->_("module-$module->mod_name-court") .
         "</a></li>\n";
 	}
 }
@@ -71,7 +73,24 @@ foreach ($nav as $module) {
 	<td id="user">
 		<table>
 			<tr>
-				<td id="userWelcome"><?php echo $AppUI->_('Welcome') . " $AppUI->user_first_name $AppUI->user_last_name"; ?></td>
+				<td id="userWelcome">
+          <form name="ChangeGroup" action="" method="get">
+            <?php echo $AppUI->_('Welcome') . " $AppUI->user_first_name $AppUI->user_last_name - "; ?>
+            <input type="hidden" name="m" value="<?php echo($m); ?>" />
+            <select name="g" onchange="ChangeGroup.submit();">
+            <?php
+            require_once( $AppUI->getModuleClass("mediusers", "mediusers") );
+            $Etablissement = new CMediusers();
+            $Etablissement = $Etablissement->loadEtablissement(PERM_EDIT);
+            foreach($Etablissement as $key=>$group){
+              echo("<option value=\"$key\"");
+              if($g==$key) echo(" selected=\"selected\"");
+              echo(">".$group->_view."</option>");          
+            }
+            ?>
+            </select>
+          </form>
+        </td>
 				<td id="userMenu">
           <?php echo mbPortalLink( $m, "Aide en ligne" );?> |
           <?php echo mbPortalLink( "bugTracker", "Suggérer une amélioration" );?> |

@@ -17,10 +17,10 @@
 <body onload="main()">
 
 <?php 
-	$dialog = dPgetParam( $_GET, 'dialog');
-	if (!$dialog) {
-		// top navigation menu
-		$nav = $AppUI->getMenuModules();
+  $dialog = dPgetParam( $_GET, 'dialog');
+  if (!$dialog) {
+    // top navigation menu
+    $nav = $AppUI->getMenuModules();
 ?>
 
 <?php 
@@ -34,53 +34,53 @@
 
 <table id="header" cellspacing="0"><!-- IE Hack: cellspacing should be useless --> 
 <tr>
-	<td id="menubar">
-		<table>
-			<tr>
+  <td id="menubar">
+    <table>
+      <tr>
 <?php
 foreach ($nav as $module) {
-	$modDirectory = $module['mod_directory'];
-	if (isMbModuleVisible($modDirectory)) {
-		$modName = $AppUI->_($module['mod_ui_name']);
-		$modIcon = dPfindImage($module['mod_ui_icon'], $module['mod_directory']);
+  $modDirectory = $module['mod_directory'];
+  if (isMbModuleVisible($modDirectory)) {
+    $modName = $AppUI->_($module['mod_ui_name']);
+    $modIcon = dPfindImage($module['mod_ui_icon'], $module['mod_directory']);
     $modImage = dPshowImage($modIcon, 48, 48, $modName);
     $liClass = $modDirectory == $m ? "class='selected'" : "";
-		echo "<td align='center'><a href='?m=$modDirectory'><b>" .
+    echo "<td align='center' style='border-right: 1px solid #000'><a href='?m=$modDirectory'><b>" .
         $AppUI->_("module-".$modDirectory."-court") .
         "</b></a></td>\n";
-	}
+  }
 }
 
 ?>
-				<td id="new">
-				</td>
-			</tr>
-		</table>
-	</td>
+        <td id="new">
+        </td>
+      </tr>
+    </table>
+  </td>
 </tr>
 <tr>
-	<td id="user">
-		<table>
-			<tr>
-				<td id="userWelcome">
-                  <form name="ChangeGroup" action="" method="get">
-                  <?php echo $AppUI->_('Welcome') . " $AppUI->user_first_name $AppUI->user_last_name"; ?>
-                  <input type="hidden" name="m" value="<?php echo($m); ?>" />
-                  <select name="g" onchange="ChangeGroup.submit();">
-                  <?php
-                  require_once( $AppUI->getModuleClass("mediusers", "mediusers") );
-                  $Etablissement = new CMediusers();
-                  $Etablissement = $Etablissement->loadEtablissement(PERM_EDIT);
-                  foreach($Etablissement as $key=>$group){
-                    echo("<option value=\"$key\"");
-                    if($g==$key) echo(" selected=\"selected\"");
-                    echo(">".$group->_view."</option>");					
-                  }
-                  ?>
-                  </select>
-                  </form>
-				</td>
-				<td id="userMenu">
+  <td id="user">
+    <table>
+      <tr>
+        <td id="userWelcome">
+          <form name="ChangeGroup" action="" method="get">
+            <?php echo $AppUI->_('Welcome') . " $AppUI->user_first_name $AppUI->user_last_name - "; ?>
+            <input type="hidden" name="m" value="<?php echo($m); ?>" />
+            <select name="g" onchange="ChangeGroup.submit();">
+            <?php
+            require_once( $AppUI->getModuleClass("mediusers", "mediusers") );
+            $Etablissement = new CMediusers();
+            $Etablissement = $Etablissement->loadEtablissement(PERM_EDIT);
+            foreach($Etablissement as $key=>$group){
+              echo("<option value=\"$key\"");
+              if($g==$key) echo(" selected=\"selected\"");
+              echo(">".$group->_view."</option>");          
+            }
+            ?>
+            </select>
+          </form>
+        </td>
+        <td id="userMenu">
           <?php echo mbPortalLink( $m, "Aide en ligne" );?> |
           <?php echo mbPortalLink( "bugTracker", "Suggérer une amélioration" );?> |
           <a href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id;?>"><?php echo $AppUI->_('My Info');?></a> |
@@ -94,9 +94,9 @@ foreach ($nav as $module) {
 ?>
           <a href="./index.php?logout=-1"><?php echo $AppUI->_('Logout');?></a>
         </td>
-			</tr>
-		</table>
-	</td>
+      </tr>
+    </table>
+  </td>
 </tr>
 </table>
 <?php } // (!$dialog) ?>
