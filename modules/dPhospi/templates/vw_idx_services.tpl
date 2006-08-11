@@ -8,18 +8,20 @@
     <table class="tbl">
       
     <tr>
-      <th colspan="2">Liste des services</th>
+      <th colspan="3">Liste des services</th>
     </tr>
     
     <tr>
       <th>Intitulé</th>
-      <th>Desccription</th>
+      <th>Description</th>
+      <th>Etablissement</th>
     </tr>
     
 	{{foreach from=$services item=curr_service}}
     <tr>
       <td><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;service_id={{$curr_service->service_id}}">{{$curr_service->nom}}</a></td>
       <td class="text">{{$curr_service->description|nl2br}}</td>
+      <td>{{$curr_service->_ref_group->text}}</td>
     </tr>
     {{/foreach}}
       
@@ -48,10 +50,21 @@
     </tr>
 
     <tr>
+      <th><label for="group_id" title="Etablissement du service. Obligatoire">Etablissement</label></th>
+      <td>
+        <select title="{{$serviceSel->_props.group_id}}" name="group_id">
+        {{foreach from=$etablissements item=curr_etab}}
+          <option value="{{$curr_etab->group_id}}" {{if ($serviceSel->service_id && $serviceSel->group_id==$curr_etab->group_id) || (!$serviceSel->service_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
+        {{/foreach}}
+        </select>
+      </td>
+    </tr>
+
+    <tr>
       <th><label for="nom" title="intitulé du service, obligatoire.">Intitulé</label></th>
       <td><input type="text" title="{{$serviceSel->_props.nom}}" name="nom" value="{{$serviceSel->nom}}" /></td>
     </tr>
-    
+        
     <tr>
       <th><label for="description" title="Description du service, responsabilités, lignes de conduite.">Description</label></th>
       <td><textarea name="description" rows="4">{{$serviceSel->description}}</textarea></td>

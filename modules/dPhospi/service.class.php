@@ -9,6 +9,7 @@
 
 require_once($AppUI->getSystemClass("mbobject"));
 require_once($AppUI->getModuleClass("dPhospi", "chambre"));
+require_once($AppUI->getModuleClass("dPetablissement", "groups"));
 
 /**
  * Classe CService. 
@@ -28,6 +29,7 @@ class CService extends CMbObject {
   
   // Object references
   var $_ref_chambres = null;
+  var $_ref_group    = null;
 
 	function CService() {
 		$this->CMbObject("service", "service_id");
@@ -48,6 +50,12 @@ class CService extends CMbObject {
     $this->_ref_chambres = $this->_ref_chambres->loadList($where, $order);
   }
 
+  function loadRefsFwd(){
+    // Chargement de l'établissement correspondant
+    $this->_ref_group = new CGroups;
+    $this->_ref_group->load($this->group_id);
+  }
+  
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
       "label"     => "Chambres", 
