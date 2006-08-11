@@ -33,7 +33,6 @@ class CSetupMediusers {
   function remove() {
     db_exec("DROP TABLE `users_mediboard`;")    ; db_error();
     db_exec("DROP TABLE `functions_mediboard`;"); db_error();
-    db_exec("DROP TABLE `groups_mediboard`;")   ; db_error();
     db_exec("DROP TABLE `discipline`;")         ; db_error();
     return null;
   }
@@ -56,27 +55,6 @@ class CSetupMediusers {
           "\n`color` VARCHAR(6) NOT NULL DEFAULT 'ffffff'," .
           "\nPRIMARY KEY (`function_id`)" .
           "\n) TYPE=MyISAM;";
-        db_exec($sql); db_error();
-        
-        $sql = "CREATE TABLE `groups_mediboard` (" .
-          "\n`group_id` TINYINT(4) UNSIGNED NOT NULL AUTO_INCREMENT," .
-          "\n`text` VARCHAR(50) NOT NULL," .
-          "\nPRIMARY KEY  (`group_id`)" .
-          "\n) TYPE=MyISAM;";
-        db_exec($sql); db_error();
-        
-        $sql = "INSERT INTO `groups_mediboard` (`text`) VALUES ('Cabinets');";
-        db_exec($sql); db_error();
-        $sql = "INSERT INTO `groups_mediboard` (`text`) VALUES ('Administration');";
-        db_exec($sql); db_error();
-        
-        $sql = "INSERT INTO `functions_mediboard` (`group_id`, `text`, `color`) VALUES (1, 'Chirurgie orthopédique et traumatologique', '99FF66');";
-        db_exec($sql); db_error();
-        $sql = "INSERT INTO `functions_mediboard` (`group_id`, `text`, `color`) VALUES (1, 'Anesthésie - Réanimation', 'FFFFFF');";
-        db_exec($sql); db_error();
-        $sql = "INSERT INTO `functions_mediboard` (`group_id`, `text`, `color`) VALUES (2, 'Direction', 'CCFFFF');";
-        db_exec($sql); db_error();
-        $sql = "INSERT INTO `functions_mediboard` (`group_id`, `text`, `color`) VALUES (2, 'PMSI', 'FF3300');";
         db_exec($sql); db_error();
       case "0.1":
         $sql = "ALTER TABLE `users_mediboard` ADD `remote` TINYINT DEFAULT NULL;";
@@ -239,14 +217,16 @@ class CSetupMediusers {
       case "0.14":
         $sql = "ALTER TABLE `functions_mediboard` ADD `type` ENUM('administratif', 'cabinet') DEFAULT 'administratif' NOT NULL AFTER `group_id`;";
         db_exec($sql); db_error();
-        $sql = "UPDATE `functions_mediboard`, `groups_mediboard`" .
-            "\nSET `functions_mediboard`.`type` = 'cabinet'" .
-            "\nWHERE `functions_mediboard`.`group_id` = `groups_mediboard`.`group_id`" .
-            "\nAND `groups_mediboard`.`text` = 'Cabinets'";
-        db_exec($sql); db_error();
+        $sql = "SHOW TABLE STATUS LIKE 'groups_mediboard'";
+        $result = db_loadResult($sql);
+        if($result) {
+          $sql = "UPDATE `functions_mediboard`, `groups_mediboard`" .
+              "\nSET `functions_mediboard`.`type` = 'cabinet'" .
+              "\nWHERE `functions_mediboard`.`group_id` = `groups_mediboard`.`group_id`" .
+              "\nAND `groups_mediboard`.`text` = 'Cabinets'";
+          db_exec($sql); db_error();
+        }
       case "0.15":
-        $sql = "ALTER TABLE `groups_mediboard` DROP INDEX `group_id` ;";
-        db_exec($sql); db_error();
         $sql = "ALTER TABLE `functions_mediboard` DROP INDEX `function_id` ;";
         db_exec($sql); db_error();
         $sql = "ALTER TABLE `functions_mediboard` ADD INDEX ( `group_id` ) ;";
