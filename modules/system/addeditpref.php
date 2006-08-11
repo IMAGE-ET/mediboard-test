@@ -63,6 +63,7 @@ function submitIt(){
 <?php
 	// read the installed languages
 	$locales = $AppUI->readDirs( 'locales' );
+  mbRemoveValuesInArray(".svn", $locales);
 	$temp = $AppUI->setWarning( false );
 	echo arraySelect( $locales, 'pref_name[LOCALE]', 'class=text size=1', @$prefs['LOCALE'], true );
 	$AppUI->setWarning( $temp );

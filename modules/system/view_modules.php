@@ -21,6 +21,7 @@ $modules = db_loadList($sql);
 
 // get the modules actually installed on the file system
 $modFiles = $AppUI->readDirs("modules");
+mbRemoveValuesInArray(".svn", $modFiles);
 
 // do the modules that are installed on the system
 foreach ($modules as $keyRow => $row) {
@@ -33,8 +34,6 @@ foreach ($modules as $keyRow => $row) {
     unset($modFiles[$row["mod_directory"]]);
   } 
 }
-
-mbRemoveValuesInArray(".svn", $modFiles);
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
