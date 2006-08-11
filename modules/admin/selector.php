@@ -47,6 +47,11 @@ case 'functions_mediboard':
   $select = "function_id, text";
   $order = "text";
   break;
+case 'groups_mediboard':
+  $title = "un établissement";
+  $select = "group_id, text";
+  $order = "text";
+  break;
 default:
 	$ok = false;
 	break;
