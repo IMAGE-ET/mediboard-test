@@ -17,7 +17,7 @@
 <body onload="main()">
 
 <?php 
-	$dialog = dPgetParam( $_GET, 'dialog');
+	$dialog = dPgetParam( $_GET, "dialog");
 	if (!$dialog) {
 		// top navigation menu
 		$nav = CMbModule::getVisible();
@@ -38,7 +38,7 @@
 		<table>
       <tbody id="menuIcons">
 			<tr>
-        <td class="noHover" />
+        <td />
 <?php
 foreach ($nav as $module) {
 	if (isMbModuleVisible($module->mod_name)) {
@@ -60,7 +60,7 @@ foreach ($nav as $module) {
 			</tr>
       </tbody>
       <tr>
-        <td class="noHover">
+        <td>
           <button id="menuIcons-trigger" type="button" style="float:left" />
         </td>
 <?php
@@ -109,7 +109,7 @@ foreach ($nav as $module) {
 </tr>
 </table>
 <script language="JavaScript" type="text/javascript">
-  new PairEffect("menuIcons");
+  new PairEffect("menuIcons", { bStartVisible: true });
 </script>
 <?php } // (!$dialog) ?>
 <table id="main" class="<?php echo $m ?>">
