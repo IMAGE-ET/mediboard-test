@@ -16,7 +16,7 @@ function pageMain() {}
  
 var Assert = {
   trace: function (sMsg) {
-    var oCaller = this.debug.caller.caller;
+    var oCaller = this.trace.caller.caller;
     debug(printf.apply(null, arguments), printf("Error in function '%s'", oCaller.getName()));
 
     var aTraces = new Array;
@@ -79,8 +79,8 @@ Class.extend(PairEffect, {
     this.oTarget = $(idTarget);
     this.oTrigger = $(this.oOptions.idTrigger);
 
-    Assert.that(this.oTarget, "Target element is undefined for id" + idTarget);
-    Assert.that(this.oTrigger, "Trigger element is undefined " + this.oOptions.idTrigger);
+    Assert.that(this.oTarget, "Target element '%s' is undefined", idTarget);
+    Assert.that(this.oTrigger, "Trigger element '%s' is undefined ", this.oOptions.idTrigger);
 	
     // Initialize the effect
     Event.observe(this.oTrigger, "click", this.flip.bind(this));

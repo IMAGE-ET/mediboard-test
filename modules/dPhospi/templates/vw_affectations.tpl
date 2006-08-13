@@ -1,10 +1,10 @@
 <script language="JavaScript" type="text/javascript">
 function flipChambre(chambre_id) {
-  flipElementClass("chambre" + chambre_id, "chambrecollapse", "chambreexpand", "chambres");
+  Element.classNames("chambre" + chambre_id).flip("chambrecollapse", "chambreexpand");
 }
 
 function flipSejour(sejour_id) {
-  flipElementClass("sejour" + sejour_id, "sejourcollapse", "sejourexpand");
+  Element.classNames("sejour" + sejour_id).flip("sejourcollapse", "sejourexpand");
 }
 
 var selected_hospitalisation = null;
