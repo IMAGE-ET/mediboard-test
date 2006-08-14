@@ -81,6 +81,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $pattern = "$this->finalpath/$this->documentfinalprefix-*.xml";
     foreach(glob($pattern) as $sentFile) {
       $baseName = basename($sentFile);
+      $matches = null;
       preg_match("`^op[[:digit:]]{6}-([[:digit:]]*)\.xml$`", $baseName, $matches);
       $timeStamp = $matches[1];
       $this->sentFiles[] = array (

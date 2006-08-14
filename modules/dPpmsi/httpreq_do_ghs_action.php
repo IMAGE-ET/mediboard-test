@@ -137,6 +137,8 @@ function adddiagcm() {
   $nDiags = 0;
   while (!feof($file) ) {
     $line = fgets($file, 1024);
+    $cmd = null;
+    $diag = null;
     if(preg_match("`^Diagnostics d'entrée dans la CMD n° ([[:digit:]]{2})`", $line, $cmd)) {
       $curr_cmd = $cmd[1];
       $nCM++;
@@ -228,6 +230,10 @@ function addactes() {
   $nDiags = 0;
   while (!feof($file) ) {
     $line = fgets($file, 1024);
+    $cmd = null;
+    $liste = null;
+    $acte = null;
+    $diag = null;
     if(preg_match("`^CMD ([[:digit:]]{2})`", $line, $cmd)) {
       $curr_cmd = $cmd[1];
       $nCM++;
@@ -339,6 +345,9 @@ function addghm() {
   // Ajout des lignes
   while (!feof($file)) {
     $line = fgets($file, 1024);
+    $cm = null;
+    $groupe = null;
+    $GHM = null;
     if(preg_match("`^CATÉGORIE MAJEURE DE DIAGNOSTIC : ([[:digit:]]{2})`", $line, $cm)) {
       $curr_CM = $cm[1];
       //echo "<div class='message'> Curr_CM = $curr_CM</div>";
@@ -451,6 +460,7 @@ function addcma() {
     // Ajout des lignes
     while (!feof($file)) {
       $line = fgets($file, 1024);
+      $CMA = null;
       if(preg_match("`^($regCim10)`", $line, $CMA)) {
         $sql = "INSERT INTO $typeCM values('$CMA[1]');";
         db_exec($sql, $base);
@@ -506,6 +516,8 @@ function addincomp() {
   $tabIncomp = array();
   while (!feof($file)) {
     $line = fgets($file, 1024);
+    $incomp = null;
+    $duplicata = null;
     // A t'on au moins un code au début
     if(preg_match_all("`$regCim10`", $line, $incomp)) {
       $listIncomp = $incomp[0];

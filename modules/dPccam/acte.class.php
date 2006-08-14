@@ -151,6 +151,7 @@ class CCodeCCAM {
       
       // Libellés des activités
       foreach($this->remarques as $remarque) {
+        $match = null;
         if (preg_match("/Activité (\d) : (.*)/i", $remarque, $match)) {
           $this->activites[$match[1]]->libelle = $match[2];
         }

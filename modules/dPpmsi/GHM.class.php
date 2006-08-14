@@ -165,6 +165,8 @@ class CGHM  extends CMbObject {
     $liste_ids = array();
     $column1 = null;
     $column2 = null;
+    $cma = null;
+    $cm = null;
     switch($type) {
       case "DP" :
         $table = "diag";
@@ -329,6 +331,10 @@ class CGHM  extends CMbObject {
   // Vérification des conditions de l'arbre
   function checkCondition($type, $cond) {
     $n = 0;
+    $ageTest = null;
+    $agePat  = null;
+    $duree   = null;
+    $seances = null;
     $this->_chemin .= "On teste ($type : $cond) -> ";
     if($type == "1A" || $type == "2A" || $type == "nA") {
       if($cond == "non opératoires" || $cond == "operatoire" || $cond == "non médical") {

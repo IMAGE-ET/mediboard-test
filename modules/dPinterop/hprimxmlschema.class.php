@@ -57,6 +57,7 @@ class CHPrimXMLSchema extends CMbXMLDocument {
   function purgeImportedNamespaces() {
     $xpath = new domXPath($this);
     foreach ($xpath->query('//*[@type]') as $node) {
+      $matches = null;
       if (preg_match("/insee:(.*)/", $node->getAttribute("type"), $matches)) {
         $node->setAttribute("type", $matches[1]);
       }

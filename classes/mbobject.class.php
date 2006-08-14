@@ -470,6 +470,7 @@ class CMbObject extends CDpObject {
             break;
 
           case "insee":
+            $matches = null;
             if (!preg_match ("/^([1-2][0-9]{2}[0-9]{2}[0-9]{2}[0-9]{3}[0-9]{3})([0-9]{2})$/i", $propValue, $matches)) {
               return "Matricule incorrect, doit contenir exactement 15 chiffres (commençant par 1 ou 2)";
             }

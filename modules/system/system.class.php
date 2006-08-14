@@ -85,7 +85,8 @@ class CModule extends CDpObject {
 
 	function install() {
 		$sql = "SELECT mod_directory FROM modules WHERE mod_directory = '$this->mod_directory'";
-		if (db_loadHash( $sql, $temp )) {
+    $temp = null;
+		if (db_loadHash($sql, $temp)) {
 			// the module is already installed
 			// TODO: check for older version - upgrade
 			return false;

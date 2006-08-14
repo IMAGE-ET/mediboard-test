@@ -8,7 +8,7 @@
 */
 
 require_once($AppUI->getModuleClass("dPsalleOp", "acteccam"));
-require_once($AppUI->getSystemClass('doobjectaddedit'));
+require_once($AppUI->getSystemClass("doobjectaddedit"));
 
 class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
   function CDoActeCCAMAddEdit() {
@@ -25,6 +25,7 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
     
     $this->_obj->modificateurs = "";
     foreach ($_POST as $propName => $propValue) {
+      $matches = null;
       if (preg_match("/modificateur_(.)/", $propName, $matches)) {
         $modificateur = $matches[1];
         $this->_obj->modificateurs .= $modificateur;

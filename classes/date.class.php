@@ -4,28 +4,28 @@
 * @subpackage utilites
 */
 
-//require_once( $AppUI->getLibraryClass( 'PEAR/Date' ) );
+//require_once($AppUI->getLibraryClass("PEAR/Date"));
 
 require_once("Date.php");
 
-define( 'FMT_DATEISO', '%Y%m%dT%H%M%S' );
-define( 'FMT_DATELDAP', '%Y%m%d%H%M%SZ' );
-define( 'FMT_DATETIME_MYSQL', '%Y-%m-%d %H:%M:%S' );
-define( 'FMT_DATERFC822', '%a, %d %b %Y %H:%M:%S' );
-define( 'FMT_TIMESTAMP', '%Y%m%d%H%M%S' );
-define( 'FMT_TIMESTAMP_DATE', '%Y%m%d' );
-define( 'FMT_TIMESTAMP_TIME', '%H%M%S' );
-define( 'FMT_UNIX', '3' );
-define( 'WDAY_SUNDAY',    0 );
-define( 'WDAY_MONDAY',    1 );
-define( 'WDAY_TUESDAY',   2 );
-define( 'WDAY_WENESDAY',  3 );
-define( 'WDAY_THURSDAY',  4 );
-define( 'WDAY_FRIDAY',    5 );
-define( 'WDAY_SATURDAY',  6 );
-define( 'SEC_MINUTE',    60 );
-define( 'SEC_HOUR',    3600 );
-define( 'SEC_DAY',    86400 );
+define("FMT_DATEISO", "%Y%m%dT%H%M%S");
+define("FMT_DATELDAP", "%Y%m%d%H%M%SZ");
+define("FMT_DATETIME_MYSQL", "%Y-%m-%d %H:%M:%S");
+define("FMT_DATERFC822", "%a, %d %b %Y %H:%M:%S");
+define("FMT_TIMESTAMP", "%Y%m%d%H%M%S");
+define("FMT_TIMESTAMP_DATE", "%Y%m%d");
+define("FMT_TIMESTAMP_TIME", "%H%M%S");
+define("FMT_UNIX", "3");
+define("WDAY_SUNDAY",    0);
+define("WDAY_MONDAY",    1);
+define("WDAY_TUESDAY",   2);
+define("WDAY_WENESDAY",  3);
+define("WDAY_THURSDAY",  4);
+define("WDAY_FRIDAY",    5);
+define("WDAY_SATURDAY",  6);
+define("SEC_MINUTE",    60);
+define("SEC_HOUR",    3600);
+define("SEC_DAY",    86400);
 
 /**
 * dotProject implementation of the Pear Date class
@@ -44,8 +44,8 @@ class CDate extends Date {
     function compare($d1, $d2, $convertTZ=false)
     {
 		if ($convertTZ) {
-			$d1->convertTZ(new Date_TimeZone('UTC'));
-			$d2->convertTZ(new Date_TimeZone('UTC'));
+			$d1->convertTZ(new Date_TimeZone("UTC"));
+			$d2->convertTZ(new Date_TimeZone("UTC"));
 		}
         $days1 = Date_Calc::dateToDays($d1->day, $d1->month, $d1->year);
         $days2 = Date_Calc::dateToDays($d2->day, $d2->month, $d2->year);
@@ -66,8 +66,8 @@ class CDate extends Date {
 * @param int Positive or negative number of days
 * @author J. Christopher Pereira <kripper@users.sf.net>
 */
-	function addDays( $n ) {
-		$this->setDate( $this->getTime() + 60 * 60 * 24 * $n, DATE_FORMAT_UNIXTIME);
+	function addDays($n) {
+		$this->setDate($this->getTime() + 60 * 60 * 24 * $n, DATE_FORMAT_UNIXTIME);
 	}
 	
 /**
@@ -75,9 +75,9 @@ class CDate extends Date {
 * @param int Positive or negative number of months
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 */
-	function addMonths( $n ) {
-		$an = abs( $n );
-		$years = floor( $an / 12 );
+	function addMonths($n) {
+		$an = abs($n);
+		$years = floor($an / 12);
 		$months = $an % 12;
 
 		if ($n < 0) {
@@ -102,7 +102,7 @@ class CDate extends Date {
 * @param Date The date to compare to
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 */
-	function dateDiff( $when ) {
+	function dateDiff($when) {
 		return Date_calc::dateDiff(
 			$this->getDay(), $this->getMonth(), $this->getYear(),
 			$when->getDay(), $when->getMonth(), $when->getYear()
@@ -116,10 +116,10 @@ class CDate extends Date {
 * @param int second
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 */
-	function setTime( $h=0, $m=0, $s=0 ) {
-		$this->setHour( $h );
-		$this->setMinute( $m );
-		$this->setSecond( $s );
+	function setTime($h=0, $m=0, $s=0) {
+		$this->setHour($h);
+		$this->setMinute($m);
+		$this->setSecond($s);
 	}
 	
 	function isWorkingDay(){
@@ -127,7 +127,7 @@ class CDate extends Date {
 		
 		$working_days = $AppUI->getConfig("cal_working_days");
 		if(is_null($working_days)){
-			$working_days = array('1','2','3','4','5');
+			$working_days = array("1","2","3","4","5");
 		} else {
 			$working_days = explode(",", $working_days);
 		}
@@ -136,7 +136,7 @@ class CDate extends Date {
 	}
 	
 	function getAMPM() {
-		if ( $this->getHour() > 11 ) {
+		if ($this->getHour() > 11) {
 			return "pm";
 		} else {
 			return "am";

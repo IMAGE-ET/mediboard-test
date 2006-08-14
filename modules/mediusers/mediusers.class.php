@@ -142,6 +142,7 @@ class CMediusers extends CMbObject {
 	function delete() {
     // @todo delete Favoris CCAM et CIM en cascade
     
+    $msg = null;
     // Delete corresponding dP user first
     if ($this->canDelete($msg)) {
       $dPuser = $this->createUser();

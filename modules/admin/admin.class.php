@@ -79,6 +79,7 @@ class CUser extends CDpObject {
 		if( $this->user_id ) {
 		// save the old password
 			$sql = "SELECT user_password FROM users WHERE user_id = $this->user_id";
+      $hash = null;
 			db_loadHash($sql, $hash);
 			$pwd = $hash["user_password"];	// this will already be encrypted
 
