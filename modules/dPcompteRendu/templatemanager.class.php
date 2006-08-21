@@ -162,7 +162,6 @@ class CTemplateManager {
     } else {
       $this->helpers = array();
     }
-    mbTrace($this->helpers, "user :".$user_id);
   }
   
   function renderDocument($source) {
