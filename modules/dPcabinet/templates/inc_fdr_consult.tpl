@@ -98,7 +98,7 @@ function confirmFileDeletion(oButton) {
     onComplete: reloadFdr
   }
   
-  confirmDeletion(oButton, oOptions, oAjaxOptions);
+  confirmDeletion(oButton.form, oOptions, oAjaxOptions);
 }
 
 function submitFdr(oForm) {
