@@ -52,7 +52,7 @@ $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;
 
 $medichir = new CMediusers;
-$medichir->load($compte_rendu->chir_id);
+$medichir->load($compte_rendu->_ref_chir->user_id);
 
 // Gestion du template
 $templateManager = new CTemplateManager;

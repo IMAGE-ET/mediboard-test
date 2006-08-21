@@ -147,20 +147,22 @@ class CTemplateManager {
   }
   
   function loadHelpers($user_id, $modeleType) {
-    switch ($modeleType) {
+    switch($modeleType) {
       case TMT_CONSULTATION   : $object = new CConsultation; break;
       case TMT_OPERATION      : $object = new COperation   ; break;
       case TMT_HOSPITALISATION: $object = new COperation   ; break;
     }
     
-    if (isset($object)) {
+    if(isset($object)) {
       $object->loadAides($user_id);
-      if (is_array($helpers = @$object->_aides["compte_rendu"])) {
+      if(is_array($helpers = @$object->_aides["compte_rendu"])) {
         // Caution, keys and values have to been flipped out
         $this->helpers = array_flip($helpers);
       }
-    } else
+    } else {
       $this->helpers = array();
+    }
+    mbTrace($this->helpers, "user :".$user_id);
   }
   
   function renderDocument($source) {
