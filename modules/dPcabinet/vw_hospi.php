@@ -63,6 +63,16 @@ foreach ($boucle_req as $keyBoucleReq => $curr_BoucleReq){
     if($loadData){
       ${"Aff".$curr_BoucleReq}[$key]->_ref_sejour->loadRefsFwd();
       ${"Aff".$curr_BoucleReq}[$key]->_ref_sejour->loadRefsOperations();
+      
+      if($keyBoucleReq=="sortie"){
+        // Rowspan pour la cellule de l'heure
+        ${"Aff".$curr_BoucleReq}[$key]->_nb_rows =count(${"Aff".$curr_BoucleReq}[$key]->_ref_sejour->_ref_operations) + 1;
+        // Récupération des Références pour les opérations
+        foreach(${"Aff".$curr_BoucleReq}[$key]->_ref_sejour->_ref_operations as $keyOper => $curr_oper) {
+          ${"Aff".$curr_BoucleReq}[$key]->_ref_sejour->_ref_operations[$keyOper]->loadRefs();
+        }
+      }
+      
       ${"Aff".$curr_BoucleReq}[$key]->_ref_lit->loadCompleteView();
     }else{
       unset(${"Aff".$curr_BoucleReq}[$key]);
@@ -70,6 +80,20 @@ foreach ($boucle_req as $keyBoucleReq => $curr_BoucleReq){
   }
 
 }
+
+// récupération des modèles de compte-rendu disponibles
+$crList = new CCompteRendu;
+$where = array();
+$where["chir_id"] = "= '$selPrat'";
+$where["type"] = "= 'operation'";
+$order[] = "nom";
+$crList = $crList->loadList($where, $order);
+$hospiList = new CCompteRendu;
+$where = array();
+$where["chir_id"] = "= '$selPrat'";
+$where["type"] = "= 'hospitalisation'";
+$order[] = "nom";
+$hospiList = $hospiList->loadList($where, $order);
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
@@ -80,6 +104,8 @@ $smarty->assign("selPrat"       , $selPrat       );
 $smarty->assign("listPrat"      , $listPrat      );
 $smarty->assign("AfflistEntree" , $AfflistEntree );
 $smarty->assign("AfflistSortie" , $AfflistSortie );
+$smarty->assign("crList"        , $crList        );
+$smarty->assign("hospiList"     , $hospiList     );
 
 $smarty->display("vw_hospi.tpl");
 
