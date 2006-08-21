@@ -6,7 +6,7 @@ function setClose(selClass,keywords,key,val){
 }
 </script>
 
-<form action="index.php" target="_self" name="frmSelector" method="get" onsubmit="return checkForm(this)">
+<form action="index.php" name="frmSelector" method="get" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="system" />
 <input type="hidden" name="a" value="object_selector" />

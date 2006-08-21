@@ -17,7 +17,7 @@ function setClose(key, val){
 }
 </script>
 
-<form action="index.php" target="_self" name="frmSelector" method="get">
+<form action="index.php" name="frmSelector" method="get">
 
 <input type="hidden" name="m" value="dPpatients" />
 <input type="hidden" name="a" value="pat_selector" />

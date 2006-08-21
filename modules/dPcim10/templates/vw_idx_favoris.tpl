@@ -1,7 +1,7 @@
 <table class="bookCode">
   <tr>
     <th colspan="4">
-      <form action="index.php" target="_self" name="selection" method="get">
+      <form action="index.php" name="selection" method="get">
       <select name="lang" style="float:right;" onchange="this.form.submit()">
         <option value="{{$smarty.const.LANG_FR}}" {{if $lang == $smarty.const.LANG_FR}}selected="selected"{{/if}}>
           Français

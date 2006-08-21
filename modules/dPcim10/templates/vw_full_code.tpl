@@ -17,7 +17,7 @@ function selectCode(code) {
 <table class="fullCode">
   <tr>
     <th colspan="2">
-      <form action="index.php" target="_self" name="selectLang" method="get" >
+      <form action="index.php" name="selectLang" method="get" >
       <select name="lang" style="float:right;" onchange="this.form.submit()">
         <option value="{{$smarty.const.LANG_FR}}" {{if $lang == $smarty.const.LANG_FR}}selected="selected"{{/if}}>
           Français

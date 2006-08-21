@@ -24,7 +24,7 @@ function setClose(date) {
 }
 </script>
 
-<form action="index.php" target="_self" name="frmSelector" method="get">
+<form action="index.php" name="frmSelector" method="get">
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="a" value="plage_selector" />
 <input type="hidden" name="dialog" value="1" />
