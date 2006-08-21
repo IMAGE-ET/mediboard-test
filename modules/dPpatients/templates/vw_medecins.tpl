@@ -98,7 +98,7 @@ function setClose() {
         {{assign var="medecin_id" value=$curr_medecin->medecin_id"}}
         <tr>
           {{if !$dialog}}
-            <th><input type="checkbox" name="fusion_{{$medecin_id}}" /></th>
+            <td><input type="checkbox" name="fusion_{{$medecin_id}}" /></td>
           {{/if}}
           {{if $dialog}}
             {{assign var="href" value="?m=$m&amp;a=vw_medecins&amp;dialog=1&amp;medecin_id=$medecin_id"}}
