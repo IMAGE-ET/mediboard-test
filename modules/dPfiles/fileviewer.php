@@ -48,21 +48,24 @@ if ($file_path) {
   }
 }
 
-// Check permissions on dPcabinet. to be refactored with PEAR::Auth
-
-$canRead = !getDenyRead("dPcabinet");
-if (!$canRead) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+// Permission d'affichage du fichier a revoir. droit dPfiles mais si visu depuis consult pb !
+//$canRead = !getDenyRead("dPfiles");
+//if (!$canRead) {
+//  $AppUI->redirect("m=system&a=access_denied");
+//}
 
 require_once($AppUI->getModuleClass("dPfiles", "files"));
 
 if ($file_id = mbGetValueFromGet("file_id")) {
   $file = new CFile();
   $file->load($file_id);
+  $file->loadRefsFwd();
   if (!is_file($file->_file_path)) {
-    $AppUI->setMsg("Fichier manquant", UI_MSG_ERROR);
-    $AppUI->redirect();
+    header("Location: modules/dPfiles/images/notfound.png");
+    return;
+  }elseif(!isMbAllowed(PERM_READ, "mediusers", $file->_ref_file_owner->function_id)){
+    header("Location: modules/dPfiles/images/accessdenied.png");
+    return;
   }
   
   if(mbGetValueFromGet("phpThumb")) {

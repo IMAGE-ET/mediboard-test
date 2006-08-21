@@ -27,12 +27,15 @@ $includeInfosFile = null;
 
 $file = new CFile;
 $file->load($file_id);
+$file->loadRefsFwd();
+$acces_denied = (!isMbAllowed(PERM_READ, "mediusers", $file->_ref_file_owner->function_id));
 $file->loadNbPages();
-if($file->file_type == "text/plain"){
-  // Fichier texte, on récupére le contenu
-  $includeInfosFile = nl2br(htmlspecialchars(utf8_decode(file_get_contents($file->_file_path))));
+if(!$acces_denied){
+  if($file->file_type == "text/plain"){
+    // Fichier texte, on récupére le contenu
+    $includeInfosFile = nl2br(htmlspecialchars(utf8_decode(file_get_contents($file->_file_path))));
+  }
 }
-
 //navigation par pages (PDF)
 if($file->_nb_pages){
   if($sfn>$file->_nb_pages || $sfn<0){$sfn = 0;}

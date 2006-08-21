@@ -110,10 +110,11 @@ class CConsultation extends CMbObject {
     
     static $seek = array(
       "motif"           => "like",
-      "remarques"       => "like",
+      "rques"           => "like",
       "examen"          => "like",
       "traitement"      => "like"
     ); 
+    $this->_seek =& $seek;
   }
   
   function updateFormFields() {

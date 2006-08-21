@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("mediusers"));
 require_once($AppUI->getModuleClass("dPfiles", "filescategory"));
 require_once($AppUI->getModuleClass("dPfiles", "files"        ));
 
-if (!$canEdit) {
+if (!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
 }
 

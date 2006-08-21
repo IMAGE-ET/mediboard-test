@@ -9,6 +9,7 @@
 
 require_once($AppUI->getSystemClass("mbobject"));
 require_once($AppUI->getSystemClass("mbpath"));
+require_once($AppUI->getModuleClass("mediusers"));
 
 $filesDir = $AppUI->cfg["root_dir"]."/files";
 
@@ -28,10 +29,11 @@ class CFile extends CMbObject {
   var $file_size          = null;
 
   // Form fields
-  var $_file_size = null;
-  var $_sub_dir   = null;
-  var $_file_path = null;
-  var $_nb_pages  = null;
+  var $_file_size      = null;
+  var $_sub_dir        = null;
+  var $_file_path      = null;
+  var $_nb_pages       = null;
+  var $_ref_file_owner = null;
 
   function CFile() {
     $this->CMbObject("files_mediboard", "file_id");
@@ -49,7 +51,12 @@ class CFile extends CMbObject {
     $this->file_id = intval($this->file_id);
     //$this->file_object_id = intval($this->file_object_id);
   }
-
+  
+  function loadRefsFwd(){
+    $this->_ref_file_owner = new CMediusers;
+    $this->_ref_file_owner->load($this->file_owner);
+  }
+  
   function updateFormFields() {
     global $filesDir;
     

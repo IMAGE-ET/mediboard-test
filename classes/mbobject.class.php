@@ -104,6 +104,7 @@ class CMbObject extends CDpObject {
       $sql .= "\n$keySeek,";
     }
     $sql .= "\n $this->_tbl_key";
+    $sql .=" LIMIT 0,100";
     return db_loadObjectList($sql, $this);
   }
   

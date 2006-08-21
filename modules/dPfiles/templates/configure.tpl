@@ -50,12 +50,16 @@
         <tr>
           <th><label for="class" title="Class de la catégorie">Class</label></th>
           <td>
+            {{if $category->file_category_id}}
+            {{$category->class}}
+            {{else}}
             <select name="class">
             <option value="">&mdash; Toutes</option>
             {{foreach from=$listClass item=curr_listClass}}
             <option value="{{$curr_listClass}}"{{if $category->class==$curr_listClass}} selected="selected"{{/if}}>{{$curr_listClass}}</option>
             {{/foreach}}
             </select>
+            {{/if}}
           </td>
         </tr>        
         <tr>
