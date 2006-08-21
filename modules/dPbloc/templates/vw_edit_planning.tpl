@@ -74,8 +74,8 @@ function popPlanning(debut) {
               {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
               {{else}}{{assign var="backgroundClass" value="full"}}
               {{/if}}
-              <td nowrap="nowrap" style="text-align: center;white-space: normal;background-color:#{{$colorCell}};" colspan="{{$arrayAffichage.$keyAff->_nbQuartHeure}}" title="{{$arrayAffichage.$keyAff->_fill_rate}} % du temps occupé">
-                <div class="progressBar" style="height: 3px;border-color: #aaa;">
+              <td nowrap="nowrap" style="vertical-align: top; text-align: center;white-space: normal;background-color:#{{$colorCell}};" colspan="{{$arrayAffichage.$keyAff->_nbQuartHeure}}" title="{{$arrayAffichage.$keyAff->_fill_rate}} % du temps occupé">
+                <div class="progressBar" style="height: 3px;">
                   <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;height: 3px;border-right: 2px solid #000;">
                   </div>
                 </div>
