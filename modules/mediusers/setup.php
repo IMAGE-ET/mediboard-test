@@ -8,12 +8,12 @@
 */
 
 $config = array();
-$config["mod_name"]        = "Mediusers";
+$config["mod_name"]        = "mediusers";
 $config["mod_version"]     = "0.16";
 $config["mod_directory"]   = "mediusers";
 $config["mod_setup_class"] = "CSetupMediusers";
 $config["mod_type"]        = "user";
-$config["mod_ui_name"]     = "Mediusers";
+$config["mod_ui_name"]     = "mediusers";
 $config["mod_ui_icon"]     = "mediusers.png";
 $config["mod_description"] = "Gestion des utilisateurs";
 $config["mod_config"]      = true;
