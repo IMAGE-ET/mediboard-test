@@ -30,7 +30,21 @@
               {{else}}
                 {{assign var=colorCell value=$arrayAffichage.$keyAff->_ref_spec->color}}
               {{/if}}
+              
+              {{assign var="pct" value=$arrayAffichage.$keyAff->_fill_rate}}
+              {{if $pct gt 100}}
+              {{assign var="pct" value=100}}
+              {{/if}}
+              {{if $pct lt 50}}{{assign var="backgroundClass" value="empty"}}
+              {{elseif $pct lt 90}}{{assign var="backgroundClass" value="normal"}}
+              {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
+              {{else}}{{assign var="backgroundClass" value="full"}}
+              {{/if}}
               <td nowrap="nowrap" style="text-align: center;white-space: normal;background-color:#{{$colorCell}};" colspan="{{$arrayAffichage.$keyAff->_nbQuartHeure}}">
+                <div class="progressBar" style="height: 3px;">
+                  <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;height: 3px;">
+                  </div>
+                </div>
                 <strong>
                 <a href="index.php?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$arrayAffichage.$keyAff->plageop_id}}" target="_self">
                   {{$arrayAffichage.$keyAff->_view}}
