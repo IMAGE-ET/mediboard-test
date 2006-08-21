@@ -9,8 +9,8 @@
 
 global $AppUI;
 
-require_once( $AppUI->getModuleClass('dPpatients', 'traitement') );
-require_once($AppUI->getSystemClass('doobjectaddedit'));
+require_once($AppUI->getModuleClass("dPpatients", "traitement"));
+require_once($AppUI->getSystemClass("doobjectaddedit"));
 
 $do = new CDoObjectAddEdit("CTraitement", "traitement_id");
 $do->createMsg = "Traitement créé";

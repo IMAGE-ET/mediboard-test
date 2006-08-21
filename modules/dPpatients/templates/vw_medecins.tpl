@@ -70,9 +70,18 @@ function setClose() {
       </table>
 
       </form>
+
+      {{if !$dialog}}
+      <form name="fusion" action="index.php" method="get">
+      <input type="hidden" name="m" value="dPpatients" />
+      <input type="hidden" name="a" value="fusion_medecin" />
+      {{/if}}
       
       <table class="tbl">
         <tr>
+          {{if !$dialog}}
+          <th><button type="submit" class="search">Fusion</button></th>
+          {{/if}}
           <th>Nom - Prénom</th>
           {{if !$dialog}}
           <th>Adresse</th>
@@ -88,24 +97,31 @@ function setClose() {
         {{foreach from=$medecins item=curr_medecin}}
         {{assign var="medecin_id" value=$curr_medecin->medecin_id"}}
         <tr>
+          {{if !$dialog}}
+            <th><input type="checkbox" name="fusion_{{$medecin_id}}" /></th>
+          {{/if}}
           {{if $dialog}}
-          {{assign var="href" value="?m=$m&amp;a=vw_medecins&amp;dialog=1&amp;medecin_id=$medecin_id"}}
-          <td><a href="{{$href}}">{{$curr_medecin->_view}}</a></td>
-          <td class="text"><a href="{{$href}}">{{$curr_medecin->ville}}</a></td>
-          <td><a href="{{$href}}">{{$curr_medecin->cp}}</a></td>
+            {{assign var="href" value="?m=$m&amp;a=vw_medecins&amp;dialog=1&amp;medecin_id=$medecin_id"}}
+            <td><a href="{{$href}}">{{$curr_medecin->_view}}</a></td>
+            <td class="text"><a href="{{$href}}">{{$curr_medecin->ville}}</a></td>
+            <td><a href="{{$href}}">{{$curr_medecin->cp}}</a></td>
           {{else}}
-          {{assign var="href" value="?m=$m&amp;tab=$tab&amp;medecin_id=$medecin_id"}}
-          <td><a href="{{$href}}">{{$curr_medecin->_view}}</a></td>
-          <td class="text"><a href="{{$href}}">{{$curr_medecin->adresse}}</a></td>
-          <td class="text"><a href="{{$href}}">{{$curr_medecin->ville}}</a></td>
-          <td><a href="{{$href}}">{{$curr_medecin->cp}}</a></td>
-          <td><a href="{{$href}}">{{$curr_medecin->tel}}</a></td>
-          <td><a href="{{$href}}">{{$curr_medecin->fax}}</a></td>
+            {{assign var="href" value="?m=$m&amp;tab=$tab&amp;medecin_id=$medecin_id"}}
+            <td><a href="{{$href}}">{{$curr_medecin->_view}}</a></td>
+            <td class="text"><a href="{{$href}}">{{$curr_medecin->adresse}}</a></td>
+            <td class="text"><a href="{{$href}}">{{$curr_medecin->ville}}</a></td>
+            <td><a href="{{$href}}">{{$curr_medecin->cp}}</a></td>
+            <td><a href="{{$href}}">{{$curr_medecin->tel}}</a></td>
+            <td><a href="{{$href}}">{{$curr_medecin->fax}}</a></td>
           {{/if}}
         </tr>
         {{/foreach}}
         
       </table>
+
+      {{if !$dialog}}
+      </form>
+      {{/if}}
 
     </td>
 

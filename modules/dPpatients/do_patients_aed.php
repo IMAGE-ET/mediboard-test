@@ -9,8 +9,8 @@
 
 global $AppUI, $m;
 
-require_once($AppUI->getModuleClass('dPpatients', 'patients') );
-require_once($AppUI->getSystemClass('doobjectaddedit'));
+require_once($AppUI->getModuleClass("dPpatients", "patients"));
+require_once($AppUI->getSystemClass("doobjectaddedit"));
 
 class CDoPatientAddEdit extends CDoObjectAddEdit {
   function CDoPatientAddEdit() {
@@ -20,12 +20,12 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
     $this->modifyMsg = "Patient modifié";
     $this->deleteMsg = "Patient supprimé";
 	  
-    if ($dialog = dPgetParam($_POST, 'dialog')) {
+    if ($dialog = dPgetParam($_POST, "dialog")) {
       $this->redirectDelete .= $this->redirect."&a=pat_selector&dialog=1";
       $this->redirectStore  .= $this->redirect."&a=vw_edit_patients&dialog=1";
     }
     else {
-      $tab = dPgetParam($_POST, 'tab', 'vw_edit_patients');
+      $tab = dPgetParam($_POST, "tab", "vw_edit_patients");
       $this->redirectDelete .= $this->redirect."&tab=$tab";
       $this->redirectStore  .= $this->redirect."&tab=$tab";
     }
@@ -34,8 +34,8 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
   function doStore() {
     parent::doStore();
     
-    $dialog = dPgetParam($_POST, 'dialog');
-    $isNew = !dPgetParam($_POST, 'patient_id');
+    $dialog = dPgetParam($_POST, "dialog");
+    $isNew = !dPgetParam($_POST, "patient_id");
     $patient_id = $this->_obj->patient_id;
     
     if ($isNew) {
@@ -48,7 +48,7 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
   function doDelete() {
     parent::doDelete();
     
-    $dialog = dPgetParam($_POST, 'dialog');
+    $dialog = dPgetParam($_POST, "dialog");
     if($dialog) {
       $this->redirectDelete .= "&name=".$this->_obj->nom."&firstName=".$this->_obj->prenom."&id=0";
     }
