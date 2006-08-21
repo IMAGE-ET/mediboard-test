@@ -47,7 +47,7 @@ class CPlageOp extends CMbObject {
   var $_ref_salle      = null;
   var $_ref_operations = null;
   var $_nb_operations  = null;
-  var $_rate           = null;
+  var $_fill_rate      = null;
 
   function CPlageOp() {
     $this->CMbObject("plagesop", "plageop_id");
@@ -200,7 +200,7 @@ class CPlageOp extends CMbObject {
     $result = null;
     db_loadHash($sql, $result);
     $this->_nb_operations = $result["total"];
-    $this->_rate = number_format($result["time"]*100/(strtotime($this->fin)-strtotime($this->debut)), 2);
+    $this->_fill_rate = number_format($result["time"]*100/(strtotime($this->fin)-strtotime($this->debut)), 2);
   }    
 }
 ?>
