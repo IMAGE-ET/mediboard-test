@@ -47,6 +47,7 @@ class CPlageOp extends CMbObject {
   var $_ref_salle      = null;
   var $_ref_operations = null;
   var $_nb_operations  = null;
+  var $_rate           = null;
 
   function CPlageOp() {
     $this->CMbObject("plagesop", "plageop_id");
@@ -192,8 +193,14 @@ class CPlageOp extends CMbObject {
   }
   
   function GetNbOperations(){
-    $sql = "SELECT COUNT(operation_id) FROM operations WHERE plageop_id = '$this->plageop_id' and annulee = '0'";
-    $this->_nb_operations = db_loadResult($sql);
+    $sql = "SELECT COUNT(operation_id) AS total," .
+        "\nSUM(TIME_TO_SEC(temp_operation)) AS time" .
+        "\nFROM operations" .
+        "\nWHERE plageop_id = '$this->plageop_id' AND annulee = '0'";
+    $result = null;
+    db_loadHash($sql, $result);
+    $this->_nb_operations = $result["total"];
+    $this->_rate = number_format($result["time"]*100/(strtotime($this->fin)-strtotime($this->debut)), 2);
   }    
 }
 ?>
