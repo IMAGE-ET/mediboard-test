@@ -64,13 +64,27 @@ function popPlanning(debut) {
               {{else}}
                 {{assign var=colorCell value=$arrayAffichage.$keyAff->_ref_spec->color}}
               {{/if}}
-              <td nowrap="nowrap" style="text-align: center;white-space: normal;background-color:#{{$colorCell}};" colspan="{{$arrayAffichage.$keyAff->_nbQuartHeure}}">
+              
+              {{assign var="pct" value=$arrayAffichage.$keyAff->_fill_rate}}
+              {{if $pct gt 100}}
+              {{assign var="pct" value=100}}
+              {{/if}}
+              {{if $pct lt 50}}{{assign var="backgroundClass" value="empty"}}
+              {{elseif $pct lt 90}}{{assign var="backgroundClass" value="normal"}}
+              {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
+              {{else}}{{assign var="backgroundClass" value="full"}}
+              {{/if}}
+              <td nowrap="nowrap" style="text-align: center;white-space: normal;background-color:#{{$colorCell}};" colspan="{{$arrayAffichage.$keyAff->_nbQuartHeure}}" title="{{$arrayAffichage.$keyAff->_fill_rate}} % du temps occupé">
+                <div class="progressBar" style="height: 3px;border-color: #aaa;">
+                  <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;height: 3px;border-right: 2px solid #000;">
+                  </div>
+                </div>
                 <strong>
-                <a href="index.php?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$arrayAffichage.$keyAff->plageop_id}}" target="_self">
+                <a href="index.php?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$arrayAffichage.$keyAff->plageop_id}}" title="Agencer les interventions">
                   {{$arrayAffichage.$keyAff->_view}}
                 </a> ({{$arrayAffichage.$keyAff->_nb_operations}})
                 <a href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id={{$arrayAffichage.$keyAff->plageop_id}}&amp;date={{$date}}">
-                  <img src="./modules/dPbloc/images/edit.png" alt="editer la plage" border="0" height="16" width="16" />
+                  <img src="./modules/dPbloc/images/edit.png" alt="editer la plage" title="Editer la plage" border="0" height="16" width="16" />
                 </a>
                 </strong>
               </td>
