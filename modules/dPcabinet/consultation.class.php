@@ -252,6 +252,24 @@ class CConsultation extends CMbObject {
     $template->addProperty("Consultation - examen"    , nl2br($this->examen));
     $template->addProperty("Consultation - traitement", nl2br($this->traitement));
   }
+
+  function canDelete(&$msg, $oid = null) {
+    $tables[] = array (
+      "label" => "fichier(s)", 
+      "name" => "files_mediboard", 
+      "idfield" => "file_id", 
+      "joinfield" => "file_object_id",
+      "joinon" => "`file_class`='CConsultation'"
+    );
+    $tables[] = array (
+      "label" => "document(s)", 
+      "name" => "compte_rendu", 
+      "idfield" => "compte_rendu_id", 
+      "joinfield" => "object_id",
+      "joinon" => "(`type` = 'consultation' OR `type` = 'consultAnesth')"
+    );
+    return parent::canDelete( $msg, $oid, $tables );
+  }  
 }
 
 ?>

@@ -29,9 +29,7 @@ if (intval(dPgetParam($_POST, 'del'))) {
   if($consultAnesth->consultation_anesth_id)
     $consultAnesth->delete();
   $do->doDelete();
-  $curr_consult = mbGetValueFromGetOrSession("consultation_id", null);
-  if($curr_consult == $do->_obj->consultation_id)
-    mbSetValueToSession("consultation_id");
+
 } else {
   $do->doStore();
   if(isset($_POST["_dialog"]))

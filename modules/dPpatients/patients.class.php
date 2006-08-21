@@ -252,6 +252,13 @@ class CPatient extends CMbObject {
       "idfield" => "traitement_id", 
       "joinfield" => "patient_id"
     );
+    $tables[] = array (
+      "label" => "fichier(s)", 
+      "name" => "files_mediboard", 
+      "idfield" => "file_id", 
+      "joinfield" => "file_object_id",
+      "joinon" => "`file_class`='CPatient'"
+    );
     
     return parent::canDelete( $msg, $oid, $tables );
   }

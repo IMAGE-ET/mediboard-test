@@ -224,12 +224,25 @@ class COperation extends CMbObject {
       "idfield"   => "affectation_id", 
       "joinfield" => "operation_id"
     );
-
+    $tables[] = array (
+      "label" => "document(s)", 
+      "name" => "compte_rendu", 
+      "idfield" => "compte_rendu_id", 
+      "joinfield" => "object_id",
+      "joinon" => "(`type` = 'hospitalisation' OR `type` = 'operation')"
+    );
+    $tables[] = array (
+      "label" => "fichier(s)", 
+      "name" => "files_mediboard", 
+      "idfield" => "file_id", 
+      "joinfield" => "file_object_id",
+      "joinon" => "`file_class`='COperation'"
+    );    
     return parent::canDelete($msg, $oid, $tables);
   }
   
   function delete() {
-    // Re-numérotation des autres plages de la même plage
+    // Re-numérotation des autres opérations de la même plage
     if ($this->rank)
   	  $this->reorder();
     $msg = parent::delete();

@@ -719,7 +719,7 @@ class CMbObject extends CDpObject {
  *  @param array Optional array to compiles standard joins: format [label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
  *  @return true|false
  */
-  function canDelete( &$msg, $oid=null, $joins=null ) {
+  function canDelete( &$msg, $oid=null, $joins=null) {
     global $AppUI;
     $k = $this->_tbl_key;
     if ($oid) {
@@ -728,18 +728,25 @@ class CMbObject extends CDpObject {
       $oid = $this->$k;
     }
     
-    $msg = array();
+    $msgs = array();
     $select = "SELECT $this->_tbl.$k,";
     $from = "\nFROM $this->_tbl ";
-    $where  = "\nWHERE $this->_tbl.$k = '$oid' GROUP BY $this->_tbl.$k";
+    $sql_where  = "\nWHERE $this->_tbl.$k = '$oid'";
+    $sql_groupBy = "\nGROUP BY $this->_tbl.$k";
     
     if (is_array( $joins )) {
       foreach( $joins as $table ) {
+        
         $count = "\nCOUNT(DISTINCT {$table['name']}.{$table['idfield']}) AS number";
         $join = "\nLEFT JOIN {$table['name']} ON {$table['name']}.{$table['joinfield']} = $this->_tbl.$k";
 
-        $sql = $select . $count . $from . $join . $where;
-        
+        $join_on = null;
+        if(isset($table["joinon"])){
+          $join_on = "\nAND " . $table["joinon"];
+        }
+         
+        $sql = $select . $count . $from . $join . $join_on . $sql_where . $sql_groupBy;
+     
         $obj = null;
         if (!db_loadObject( $sql, $obj )) {
           $msg = db_error();
@@ -747,13 +754,14 @@ class CMbObject extends CDpObject {
         }
 
         if ($obj->number) {
-          $msg[] = $obj->number. " " . $AppUI->_( $table['label'] );
+          $msgs[] = $obj->number. " " . $AppUI->_( $table['label'] );
         }
+        
       }
     }
-
-    if (count( $msg )) {
-      $msg = $AppUI->_( "noDeleteRecord" ) . ": " . implode( ', ', $msg );
+        
+    if (count( $msgs )) {
+      $msg = $AppUI->_( "noDeleteRecord" ) . ": " . implode( ', ', $msgs );
       return false;
     }
 
