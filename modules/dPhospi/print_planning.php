@@ -29,8 +29,7 @@ $sejours = new CSejour;
 
 $ljoin["patients"] = "patients.patient_id = sejour.patient_id";
 
-$where["sejour.entree_prevue"] = ">= '$deb'";
-$where["sejour.entree_prevue"] = "<= '$fin'";
+$where[] = "`sejour`.`entree_prevue` >= '$deb' AND `sejour`.`entree_prevue` <= '$fin'";
 $where["sejour.group_id"] = "= '$g'";
 $where["annule"] = "= 0";
 // Clause de filtre par spécialité
@@ -61,7 +60,7 @@ if($ordre == "heure") {
   $order .= ", patients.nom, patients.prenom";
 }
 
-$sejours = $sejours->loadList($where, $order, null, null, $ljoin);
+$sejours = $sejours->loadList($where, $order, null, null);
 
 $listDays = array();
 $listPrats = array();
