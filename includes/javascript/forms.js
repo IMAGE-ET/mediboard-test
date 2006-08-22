@@ -87,12 +87,12 @@ function setRadioValue(oElement, sValue) {
 
 function pasteHelperContent(oHelpElement) {
   var aFound = oHelpElement.name.match(/_helpers_(.*)/);
-  Assert.that(aFound.length == 3, "Helper element '%s' is not of the form '_helpers_propname'", oHelpElement.name);
+  Assert.that(aFound.length == 2, "Helper element '%s' is not of the form '_helpers_propname'", oHelpElement.name);
   
   var oForm = oHelpElement.form;    
   var sPropName = aFound[1];
   var oAreaField = oForm.elements[sPropName];
-  Assert.that(oAreaField == "toto", "Helper element '%s' has no corresponding text area '%s' in the same form", oHelpElement.name, sPropName);
+  //Assert.that(oAreaField == "toto", "Helper element '%s' has no corresponding text area '%s' in the same form", oHelpElement.name, sPropName);
 
   insertAt(oAreaField, oHelpElement.value + '\n')
   oHelpElement.value = 0;
