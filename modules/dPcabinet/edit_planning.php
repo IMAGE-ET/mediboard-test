@@ -20,6 +20,9 @@ $consult = new CConsultation();
 $chir = new CMediusers;
 $pat = new CPatient;
 
+//Chargement des aides
+$consult->loadAides($AppUI->user_id);
+
 // L'utilisateur est-il praticien?
 $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);

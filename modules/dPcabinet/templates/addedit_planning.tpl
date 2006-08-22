@@ -141,12 +141,24 @@ function pageMain() {
         </tr>
         
         <tr>
-          <th><label for="motif" title="Motif de la consultation">Motif</label></th>
+          <th>
+            <label for="motif" title="Motif de la consultation">Motif</label><br />
+            <select name="_helpers_motif" size="1" onchange="pasteHelperContent(this)">
+              <option value="0">&mdash; Choisir une aide</option>
+              {{html_options options=$consult->_aides.motif}}
+            </select>
+          </th>
           <td colspan="2"><textarea name="motif" title="{{$consult->_props.motif}}" rows="3">{{$consult->motif}}</textarea></td>
         </tr>
 
         <tr>
-          <th><label for="rques" title="Remarques de la consultation" >Remarques</label></th>
+          <th>
+            <label for="rques" title="Remarques de la consultation" >Remarques</label><br />
+            <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
+              <option value="0">&mdash; Choisir une aide</option>
+              {{html_options options=$consult->_aides.rques}}
+            </select>
+          </th>
           <td colspan="2"><textarea name="rques" title="{{$consult->_props.rques}}" rows="3">{{$consult->rques}}</textarea></td>
         </tr>
 
@@ -180,7 +192,7 @@ function pageMain() {
         <tr>
           <th><label for="heure" title="Heure du rendez-vous de consultation">Heure</label></th>
           <td class="readonly">
-            <input type="text" name="heure" value="{{$consult->heure|date_format:"%H:%M"}}" size="3" readonly="readonly" />
+            <input type="text" name="heure" value="{{$consult->heure|date_format:"%H:%M"}}" size="4" readonly="readonly" />
           </td>
         </tr>
         <tr>

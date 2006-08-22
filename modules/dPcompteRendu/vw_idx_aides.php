@@ -28,7 +28,7 @@ $classes = array (
 
 // Liste des praticiens accessibles
 $users = new CMediusers();
-$users = $users->loadPraticiens(PERM_EDIT);
+$users = $users->loadUsers(PERM_READ);
 
 $user_id = array_key_exists($AppUI->user_id, $users) ? $AppUI->user_id : null;
 
