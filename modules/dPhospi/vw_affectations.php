@@ -24,6 +24,10 @@ $date       = mbGetValueFromGetOrSession("date", mbDate());
 $heureLimit = "16:00:00";
 $mode       = mbGetValueFromGetOrSession("mode");
 
+// Nombre de patients à placer pour la semaine qui vient
+$today   = mbDate()." 01:00:00";
+$endWeek = mbDate("+7 days", $today);
+
 // Initialisation de la liste des chirs, patients et plagesop
 global $listChirs;
 $listChirs = array();
@@ -147,12 +151,23 @@ function loadSejourNonAffectes($where) {
   return $sejourNonAffectes;
 }
 
+// Nombre de patients à placer pour la semaine qui vient (alerte)
+$today   = mbDate()." 01:00:00";
+$endWeek = mbDate("+7 days", $today);
+$where = array(
+  "entree_prevue" => "BETWEEN '$today' AND '$endWeek'",
+  "type" => "!= 'exte'",
+  "annule" => "= 0"
+);
+
+$alerte = loadSejourNonAffectes($where);
+
 // Admissions de la veille
 $dayBefore = mbDate("-1 days", $date);
 $where = array(
   "entree_prevue" => "BETWEEN '$dayBefore 00:00:00' AND '$date 00:00:00'",
   "type" => "!= 'exte'",
-  "annule" => "= 0",
+  "annule" => "= 0"
 );
 
 $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where);
@@ -161,7 +176,7 @@ $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where);
 $where = array(
   "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'",
   "type" => "!= 'exte'",
-  "annule" => "= 0",
+  "annule" => "= 0"
 );
 
 $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where);
@@ -170,7 +185,7 @@ $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where);
 $where = array(
   "entree_prevue" => "BETWEEN '$date $heureLimit' AND '$date 23:59:59'",
   "type" => "!= 'exte'",
-  "annule" => "= 0",
+  "annule" => "= 0"
 );
 
 $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where);
@@ -179,7 +194,7 @@ $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where);
 $twoDaysBefore = mbDate("-2 days", $date);
 $where = array(
   "annule" => "= 0",
-  "'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue",
+  "'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue"
 );
 
 $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where);
@@ -196,6 +211,7 @@ $smarty->assign("heureLimit"             , $heureLimit);
 $smarty->assign("mode"                   , $mode);
 $smarty->assign("totalLits"              , $totalLits);
 $smarty->assign("services"               , $services);
+$smarty->assign("alerte"                 , $alerte);
 $smarty->assign("groupSejourNonAffectes" , $groupSejourNonAffectes);
 
 $smarty->display("vw_affectations.tpl");

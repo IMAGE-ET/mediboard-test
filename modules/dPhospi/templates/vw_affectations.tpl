@@ -134,6 +134,14 @@ function showLegend() {
 
 <table class="main">
 
+{{if $alerte|@count}}
+<tr>
+  <td colspan="3">
+    <div class="warning">Il y a {{$alerte|@count}} patients à placer dans la semaine qui vient</div>
+  </td>
+</tr>
+{{/if}}
+
 <tr>
   <td>
     <a href="javascript:showLegend()" class="buttonsearch">Légende</a>
