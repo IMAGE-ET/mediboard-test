@@ -100,6 +100,10 @@ class CSejour extends CMbObject {
     $this->_props["septique"]      = "enum|0|1";
     $this->_props["convalescence"] = "str|confidential";
     $this->_props["rques"]         = "text";
+    
+    $this->_seek["patient_id"]    = "ref|CPatient";
+    $this->_seek["praticien_id"]  = "ref|CMediusers";
+    $this->_seek["convalescence"] = "like";
 	}
 
   function check() {

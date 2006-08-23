@@ -58,6 +58,7 @@ class CPlageressource extends CMbObject {
     $this->_props["libelle"] = "str|confidential";
     $this->_props["paye"]    = "enum|0|1";
     
+    $this->_seek["prat_id"] = "ref|CMediusers";
     $this->_seek["libelle"] = "like";
   }
   

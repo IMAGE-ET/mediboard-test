@@ -89,6 +89,11 @@ class CConsultAnesth extends CMbObject {
     $this->_props["position"]        = "enum|DD|DV|DL|GP|AS|TO";
     
     $this->buildEnums();
+    
+    $this->_seek["chir_id"]         = "ref|CMediusers";
+    $this->_seek["consultation_id"] = "ref|CConsultation";
+    $this->_seek["operation_id"]    = "ref|COperation";
+    $this->_seek["conclusion"]      = "like";
   }
   
   function updateFormFields() {

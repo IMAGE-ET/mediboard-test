@@ -109,6 +109,8 @@ class CConsultation extends CMbObject {
     $this->_props =& $props;
     
     static $seek = array(
+      "plageconsult_id" => "ref|CPlageconsult",
+      "patient_id"      => "ref|CPatient",
       "motif"           => "like",
       "rques"           => "like",
       "examen"          => "like",
@@ -138,6 +140,8 @@ class CConsultation extends CMbObject {
       $this->_etat = "Ann.";
     }
     $this->_check_premiere = $this->premiere;
+    
+    $this->_view = "Consultation ".$this->_etat;
   }
    
   function updateDBFields() {
@@ -185,6 +189,8 @@ class CConsultation extends CMbObject {
   function loadRefsFwd() {
     $this->loadRefPatient();
     $this->loadRefPlageConsult();
+    $this->_view = "Consult. de ".$this->_ref_patient->_view." par le Dr. ".$this->_ref_plageconsult->_ref_chir->_view;
+    $this->_view .= " (".mbTranformTime(null, $this->_ref_plageconsult->date, "%d/%m/%Y").")";
   }
 
   function loadRefsFiles() {

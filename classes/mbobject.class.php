@@ -79,7 +79,9 @@ class CMbObject extends CDpObject {
       foreach($keywords as $key) {
         $sql .= "\nAND (0";
         foreach($this->_seek as $keySeek => $spec) {
-          switch($spec) {
+          $listSpec = array();
+          $listSpec = explode("|", $spec);
+          switch($listSpec[0]) {
             case "equal":
               $sql .= "\nOR `$keySeek` = '$key'";
               break;
@@ -91,6 +93,14 @@ class CMbObject extends CDpObject {
               break;
             case "likeEnd":
               $sql .= "\nOR `$keySeek` LIKE '%$key'";
+              break;
+            case "ref":
+              $refObj = new $listSpec[1];
+              $refObj = $refObj->seek($keywords);
+              if(count($refObj)) {
+                $listIds = implode(",", array_keys($refObj));
+                $sql .= "\nOR `$keySeek` IN ($listIds)";
+              }
               break;
           }
         }

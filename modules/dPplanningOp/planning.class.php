@@ -150,6 +150,8 @@ class COperation extends CMbObject {
     $this->_props["depassement"]    = "currency|confidential";
     $this->_props["annulee"]        = "enum|0|1";
     
+    $this->_seek["chir_id"]    = "ref|CMediusers";
+    $this->_seek["plageop_id"] = "ref|CPlageOp";
     $this->_seek["libelle"]    = "like";
     $this->_seek["materiel"]   = "like";
     

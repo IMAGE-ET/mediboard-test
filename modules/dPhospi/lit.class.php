@@ -42,6 +42,7 @@ class CLit extends CMbObject {
     $this->_props["nom"]        = "str|notNull|confidential";
     
     $this->_seek["nom"]        = "like";
+    $this->_seek["chambre_id"] = "ref|CChambre";
 	}
 
   function loadAffectations($date) {

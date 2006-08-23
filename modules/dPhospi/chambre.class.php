@@ -50,7 +50,8 @@ class CChambre extends CMbObject {
     $this->_props["caracteristiques"] = "str|confidential";
     
     $this->_seek["nom"]        = "like";
-	}
+    $this->_seek["service_id"] = "ref|CService";
+  }
 
   function loadRefsFwd() {
     $this->_ref_service = new CService;

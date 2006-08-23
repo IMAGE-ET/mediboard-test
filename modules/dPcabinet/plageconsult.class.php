@@ -49,6 +49,9 @@ class CPlageconsult extends CMbObject {
     $this->_props["debut"]   = "time|notNull";
     $this->_props["fin"]     = "time|notNull";
     $this->_props["libelle"] = "str";
+    
+    $this->_seek["chir_id"] = "ref|CMediusers";
+    $this->_seek["libelle"] = "like";
   }
   
   function loadRefs($withCanceled = true) {

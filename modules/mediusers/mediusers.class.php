@@ -60,19 +60,21 @@ class CMediusers extends CMbObject {
 	function CMediusers() {
 		$this->CMbObject( "users_mediboard", "user_id" );
 
-    $this->_props["remote"] = "enum|0|1";
-    $this->_props["adeli"] = "num|length|9|confidential";
-    $this->_props["function_id"] = "ref|notNull";
+    $this->_props["remote"]        = "enum|0|1";
+    $this->_props["adeli"]         = "num|length|9|confidential";
+    $this->_props["function_id"]   = "ref|notNull";
     $this->_props["discipline_id"] = "ref";
     
-    $this->_user_props["_user_username"] = "notNull|str|minLength|3";
+    $this->_user_props["_user_username"]   = "notNull|str|minLength|3";
     $this->_user_props["_user_first_name"] = "str";
-    $this->_user_props["_user_last_name"] = "notNull|str|confidential";
-    $this->_user_props["_user_email"] = "str|confidential";
-    $this->_user_props["_user_phone"] = "num|length|10|confidential";
-    $this->_user_props["_user_adresse"] = "str|confidential";
-    $this->_user_props["_user_cp"] = "num|length|5|confidential";
-    $this->_user_props["_user_ville"] = "str|confidential";
+    $this->_user_props["_user_last_name"]  = "notNull|str|confidential";
+    $this->_user_props["_user_email"]      = "str|confidential";
+    $this->_user_props["_user_phone"]      = "num|length|10|confidential";
+    $this->_user_props["_user_adresse"]    = "str|confidential";
+    $this->_user_props["_user_cp"]         = "num|length|5|confidential";
+    $this->_user_props["_user_ville"]      = "str|confidential";
+    
+    $this->_seek["user_id"]  = "ref|CUser";
 	}
 
   function createUser() {

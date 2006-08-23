@@ -61,7 +61,9 @@ class CProtocole extends CMbObject {
     $this->_props["rques_operation"] = "str|confidential";
     $this->_props["depassement"]     = "currency|confidential";
 
+    $this->_seek["chir_id"]  = "ref|CMediusers";
     $this->_seek["libelle"]  = "like";
+    $this->_seek["examen"]   = "like";
     $this->_seek["materiel"] = "like";
   }
 

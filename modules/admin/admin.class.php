@@ -28,9 +28,9 @@ $utypes = array(
 * User Class
 */
 
-require_once($AppUI->getSystemClass("dp"));
+require_once($AppUI->getSystemClass("mbobject"));
 
-class CUser extends CDpObject {
+class CUser extends CMbObject {
 	var $user_id         = null;
 	var $user_username   = null;
 	var $user_password   = null;
@@ -59,6 +59,10 @@ class CUser extends CDpObject {
 
 	function CUser() {
 		$this->CDpObject("users", "user_id");
+    
+    $this->_seek = array();
+    $this->_seek["user_last_name"]  = "likeBegin";
+    $this->_seek["user_first_name"] = "likeBegin";
 	}
 
 	function check() {
