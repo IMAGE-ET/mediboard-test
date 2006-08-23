@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"] = "dPcompteRendu";
-$config["mod_version"] = "0.20";
+$config["mod_version"] = "0.21";
 $config["mod_directory"] = "dPcompteRendu";
 $config["mod_setup_class"] = "CSetupdPcompteRendu";
 $config["mod_type"] = "user";
@@ -122,6 +122,7 @@ class CSetupdPcompteRendu {
         $sql = "ALTER TABLE `compte_rendu` CHANGE `type` `type` ENUM('consultation', 'consultAnesth', 'operation', 'hospitalisation', 'autre') DEFAULT 'autre' NOT NULL";
         db_exec($sql); db_error();
       case "0.20":
+        set_time_limit(1800);
         $sql = "ALTER TABLE `compte_rendu` CHANGE `type` `type` ENUM('patient', 'consultation', 'consultAnesth', 'operation', 'hospitalisation', 'autre') DEFAULT 'autre' NOT NULL";
         db_exec($sql); db_error();
       case "0.21":
