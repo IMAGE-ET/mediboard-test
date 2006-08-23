@@ -1,10 +1,10 @@
 <!-- $Id$ -->
 <script type="text/javascript">
-function createPat(){
+function createEditPat(id_sel){
   var form = document.frmSelector;
   var url = new Url();
   url.setModuleAction("dPpatients", "vw_edit_patients");
-  url.addParam("patient_id", "0");
+  url.addParam("patient_id", id_sel);
   url.addParam("dialog", "1");
   url.addElement(form.name);
   url.addElement(form.firstName);
@@ -56,7 +56,7 @@ function setClose(key, val){
 </tr>
 {{foreach from=$list item=curr_patient}}
 <tr>
-  <td>{{$curr_patient->_view}}</td>
+  <td><a href="javascript:createEditPat({{$curr_patient->patient_id}})" class="buttonedit notext" style="float:left;"></a>{{$curr_patient->_view}}</td>
   <td>{{$curr_patient->_naissance}}</td>
   <td>{{$curr_patient->tel}}</td>
   <td>{{$curr_patient->tel2}}</td>
@@ -71,7 +71,7 @@ function setClose(key, val){
 
 <tr>
   <td class="button" colspan="2">
-    <button class="submit" type="button" onclick="createPat()">Créer un patient</button>
+    <button class="submit" type="button" onclick="createEditPat(0)">Créer un patient</button>
     <button class="cancel" type="button" onclick="window.close()">Annuler</button>
   </td>
 </tr>

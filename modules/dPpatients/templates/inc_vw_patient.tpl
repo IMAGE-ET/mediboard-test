@@ -330,4 +330,11 @@ function reloadVwPatient(){
       {{/if}}
     </td>
   </tr>
+  <tr>
+    <th class="category" colspan="2">Documents</th>
+  </tr>
+  <tr>
+    <td colspan="2">Bientôt Disponible
+    </td>
+  </tr>
 </table>

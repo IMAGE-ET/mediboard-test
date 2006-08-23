@@ -41,7 +41,7 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
     if ($isNew) {
       $this->redirectStore .= "&patient_id=$patient_id&created=$patient_id";
 		} elseif($dialog) {
-      $this->redirectStore .= "&name=".$this->_obj->nom."&firstname=".$this->_obj->prenom;
+      $this->redirectStore .= "&a=pat_selector&dialog=1&name=".$this->_obj->nom."&firstName=".$this->_obj->prenom;
     }
   }
   

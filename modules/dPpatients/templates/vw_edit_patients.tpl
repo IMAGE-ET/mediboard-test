@@ -11,6 +11,8 @@ function confirmCreation(id, bDialog, sSiblingsText) {
     if (bDialog) {
       url.setModuleAction("dPpatients", "pat_selector");
       url.addParam("dialog", "1");
+      url.addParam("name", "{{$patient->nom}}");
+      url.addParam("firstName", "{{$patient->prenom}}");
     } else {
       url.addParam("m", "dPpatients");
       url.addParam("tab", "vw_idx_patients");

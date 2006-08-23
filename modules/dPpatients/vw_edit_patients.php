@@ -15,7 +15,7 @@ if (!$canRead) {
 }
 
 $patient_id = mbGetValueFromGetOrSession("patient_id");
-$dialog     = mbGetValueFromGet("dialog");
+$dialog     = mbGetValueFromGet("dialog",0);
 $name       = mbGetValueFromGet("name");
 $firstName  = mbGetValueFromGet("firstName");
 

@@ -88,6 +88,7 @@ function affNaissance() {
           <th>Nom - Prénom</th>
           <th>Date de naissance</th>
           <th>Adresse</th>
+          <th>Code Postal</th>
           <th>Ville</th>
         </tr>
 
@@ -97,6 +98,7 @@ function affNaissance() {
           <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;id={{$curr_patient->patient_id}}">{{$curr_patient->_view}}</a></td>
           <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;id={{$curr_patient->patient_id}}">{{$curr_patient->_naissance}}</a></td>
           <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;id={{$curr_patient->patient_id}}">{{$curr_patient->adresse}}</a></td>
+          <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;id={{$curr_patient->patient_id}}">{{$curr_patient->cp}}</a></td>
           <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;id={{$curr_patient->patient_id}}">{{$curr_patient->ville}}</a></td>
         </tr>
         {{/foreach}}

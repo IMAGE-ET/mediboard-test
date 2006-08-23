@@ -113,6 +113,9 @@ function printForm() {
 
 function submitForms() {
   var oSejourForm = document.editSejour;
+  if(!checkDureeHospi()) {
+    return;
+  }
   if(!checkForm(oSejourForm)) {
     return;
   }

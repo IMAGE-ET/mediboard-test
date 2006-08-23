@@ -1,6 +1,6 @@
 <!-- $Id: $ -->
 
-<form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editSejour" action="?m={{$m}}" method="post" onsubmit="if(checkDureeHospi()){return checkForm(this);}">
 
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -133,7 +133,7 @@
     <label for="_duree_prevue" title="Choisir une durée prévue de séjour">Durée du séjour</label>
   </th>
   <td colspan="2">
-    <input type="text" name="_duree_prevue" value="{{if $sejour->sejour_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" size="4" onchange="updateSortiePrevue()" />
+    <input type="text" name="_duree_prevue" title="num|min|0" value="{{if $sejour->sejour_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" size="4" onchange="updateSortiePrevue()" />
     jours
   </td>
 </tr>
@@ -179,7 +179,7 @@
   <td colspan="2">
     <input name="type" value="comp" type="radio" {{if !$sejour->sejour_id || $sejour->type == "comp"}}checked="checked"{{/if}} onchange="modifSejour()" />
     <label for="type_comp">{{tr}}comp{{/tr}}</label><br />
-    <input name="type" value="ambu" type="radio" {{if $sejour->type == "ambu"}}checked="checked"{{/if}} onchange="modifSejour()" />
+    <input name="type" value="ambu" type="radio" {{if $sejour->type == "ambu"}}checked="checked"{{/if}} onchange="reinitDureeSejour();modifSejour()" />
     <label for="type_ambu">{{tr}}ambu{{/tr}}</label><br />
     <input name="type" value="exte" type="radio" {{if $sejour->type == "exte"}}checked="checked"{{/if}} onchange="modifSejour()" />
     <label for="type_exte">{{tr}}exte{{/tr}}</label><br />

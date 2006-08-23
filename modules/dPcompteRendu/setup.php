@@ -122,7 +122,10 @@ class CSetupdPcompteRendu {
         $sql = "ALTER TABLE `compte_rendu` CHANGE `type` `type` ENUM('consultation', 'consultAnesth', 'operation', 'hospitalisation', 'autre') DEFAULT 'autre' NOT NULL";
         db_exec($sql); db_error();
       case "0.20":
-        return "0.20";
+        $sql = "ALTER TABLE `compte_rendu` CHANGE `type` `type` ENUM('patient', 'consultation', 'consultAnesth', 'operation', 'hospitalisation', 'autre') DEFAULT 'autre' NOT NULL";
+        db_exec($sql); db_error();
+      case "0.21":
+        return "0.21";
     }
     return false;
   }

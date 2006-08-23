@@ -48,7 +48,7 @@ class CCompteRendu extends CMbObject {
     $this->_props["object_id"]   = "ref";
     $this->_props["nom"]         = "str|notNull";
     $this->_props["source"]      = "html";
-    $this->_props["type"]        = "enum|consultAnesth|operation|hospitalisation|consultation|notNull";
+    $this->_props["type"]        = "enum|patient|consultAnesth|operation|hospitalisation|consultation|notNull";
     
     $this->buildEnums();
   }

@@ -2,6 +2,32 @@
 
 <script type="text/javascript">
 
+function checkDureeHospi() {
+  var form = document.editSejour;
+  field1 = form.type;
+  field2 = form._duree_prevue;
+  if (field1 && field2) {
+    if (field1[0].checked && (field2.value == 0 || field2.value == '')) {
+      field2.value = prompt("Veuillez saisir une durée prévue d'hospitalisation d'au moins 1 jour", "1");
+      field2.onchange();
+      field2.focus();
+      return false;
+    }
+    if (field1[1].checked && field2.value != 0 && field2.value != '') {
+      alert('Pour une admission de type ambulatoire, la durée du séjour doit être de 0 jour.');
+      field2.focus();
+      return false;
+    }
+  }
+  return true;
+}
+
+function reinitDureeSejour(){
+  var form = document.editSejour;
+  field2 = form._duree_prevue;
+  field2.value = '0';
+}
+
 function removePlageOp(bIgnoreGroup){
   var oFormOp = document.editOp;  
   var oFormSejour = document.editSejour;
@@ -80,11 +106,16 @@ function updateDureePrevue() {
 
 function updateHeureSortie() {
   var oForm = document.editSejour
-  
-  if(oForm._date_entree_prevue.value == oForm._date_sortie_prevue.value) {
-    oForm._hour_sortie_prevue.value = oForm._hour_entree_prevue.value;
-    oForm._min_sortie_prevue.value = oForm._min_entree_prevue.value;
+
+  duree_prevu  = oForm._duree_prevue; 
+  heure_sortie = oForm._hour_sortie_prevue;
+  min_sortie   = oForm._min_sortie_prevue;
+  if(duree_prevu.value <= 1){
+    heure_sortie.value = "18";
+  }else{
+    heure_sortie.value = "10";
   }
+  min_sortie.sortie = "00";
 }
 
 function popPat() {
