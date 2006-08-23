@@ -354,6 +354,27 @@ class CMediusers extends CMbObject {
     return $groups;
   }
   
+  function loadFonctions($perm_type = null){
+  	// Liste de Toutes les fonctions accessibles
+    $sql = "SELECT *" .
+      "\nFROM functions_mediboard" .
+      "\nORDER BY text";
+    $basefct = db_loadObjectList($sql, new CFunctions);  
+    
+    $listFct = array();
+    // Filtre
+    if ($perm_type) {
+      foreach($basefct as $keyFct=>$fct){
+        if(isMbAllowed($perm_type, "mediusers", $fct->function_id)){
+          $listFct[$keyFct] = $basefct[$keyFct];
+        }
+      }
+    }else{
+      $listFct = $basefct;    
+    }
+    return $listFct;
+  }
+  
   function loadUsers($perm_type = null, $function_id = null, $name = null) {
     return $this->loadListFromType(null, $perm_type, $function_id, $name);
   }

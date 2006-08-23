@@ -38,6 +38,10 @@ function supprimerCompteRendu(form) {
   }
 }
 
+function reloadAfterSaveDoc(){
+  window.location.href = window.location.href;
+}
+
 function pageMain() {
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
 }

@@ -23,29 +23,29 @@ require_once($AppUI->getModuleClass("dPcim10"     , "codecim10") );
  */
 class CPatient extends CMbObject {
   // DB Table key
-	var $patient_id = null;
+  var $patient_id = null;
 
   // DB Fields
-	var $nom              = null;
-	var $nom_jeune_fille  = null;
-	var $prenom           = null;
-	var $naissance        = null;
-	var $sexe             = null;
-	var $adresse          = null;
-	var $ville            = null;
-	var $cp               = null;
-	var $tel              = null;
-	var $tel2             = null;
-	var $medecin_traitant = null;
-	var $medecin1         = null;
-	var $medecin2         = null;
-	var $medecin3         = null;
-	var $incapable_majeur = null;
-	var $ATNC             = null;
-	var $matricule        = null;
-	var $SHS              = null;
+  var $nom              = null;
+  var $nom_jeune_fille  = null;
+  var $prenom           = null;
+  var $naissance        = null;
+  var $sexe             = null;
+  var $adresse          = null;
+  var $ville            = null;
+  var $cp               = null;
+  var $tel              = null;
+  var $tel2             = null;
+  var $medecin_traitant = null;
+  var $medecin1         = null;
+  var $medecin2         = null;
+  var $medecin3         = null;
+  var $incapable_majeur = null;
+  var $ATNC             = null;
+  var $matricule        = null;
+  var $SHS              = null;
   var $regime_sante     = null;
-	var $rques            = null;
+  var $rques            = null;
   var $listCim10        = null;
   
   // Other fields
@@ -54,20 +54,20 @@ class CPatient extends CMbObject {
   // Form fields
   var $_naissance   = null;
   var $_jour        = null;
-	var $_mois        = null;
-	var $_annee       = null;
-	var $_tel1        = null;
-	var $_tel2        = null;
-	var $_tel3        = null;
-	var $_tel4        = null;
-	var $_tel5        = null;
-	var $_tel21       = null;
-	var $_tel22       = null;
-	var $_tel23       = null;
-	var $_tel24       = null;
-	var $_tel25       = null;
-	var $_age         = null;
-    var $_codes_cim10 = null;
+  var $_mois        = null;
+  var $_annee       = null;
+  var $_tel1        = null;
+  var $_tel2        = null;
+  var $_tel3        = null;
+  var $_tel4        = null;
+  var $_tel5        = null;
+  var $_tel21       = null;
+  var $_tel22       = null;
+  var $_tel23       = null;
+  var $_tel24       = null;
+  var $_tel25       = null;
+  var $_age         = null;
+  var $_codes_cim10 = null;
   
   // HPRIM Fields
   var $_prenoms        = null; // multiple
@@ -77,7 +77,9 @@ class CPatient extends CMbObject {
   var $_pays           = null;
 
   // Object References
+  var $_nb_docs              = null;
   var $_ref_files            = null;
+  var $_ref_documents        = null;
   var $_ref_sejours          = null;
   var $_ref_consultations    = null;
   var $_ref_antecedents      = null;
@@ -329,9 +331,32 @@ class CPatient extends CMbObject {
     $this->_ref_files = new CFile();
     $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
   }
+  
+  
+  function loadRefsDocs() {
+    $this->_ref_documents = array();
+    $this->_ref_documents = new CCompteRendu();
+    
+    $where = array();
+    $where["type"] = " = 'patient'";
+    $where["object_id"] = "= '$this->patient_id'";
+    $order = "nom";
+    
+    $this->_ref_documents = $this->_ref_documents->loadList($where, $order);
+    $docs_valid = 0;
+    foreach ($this->_ref_documents as $curr_doc) {
+      if ($curr_doc->source) {
+        $docs_valid++;
+      }
+    }
+    if($docs_valid)
+      $this->_nb_docs .= "$docs_valid";
+  }
+
 
   function loadRefsBack() {
     $this->loadRefsFiles();
+    $this->loadRefsDocs();
     $this->loadRefsConsultations();
     $this->loadRefsAntecedents();
     $this->loadRefsTraitements();

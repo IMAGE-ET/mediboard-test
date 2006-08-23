@@ -17,9 +17,12 @@ function refreshCR() {
   sourceUrl.requestUpdate('htmlarea');
 }
 
+    if(window.opener.reloadAfterSaveDoc){
+      window.opener.reloadAfterSaveDoc();
+    }
 </script>
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return submitCR();">
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
 
 <input type="hidden" name="m" value="dPcompteRendu" />
 <input type="hidden" name="del" value="0" />

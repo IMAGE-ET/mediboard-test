@@ -72,6 +72,9 @@ class CCompteRendu extends CMbObject {
   
   function updateFormFields() {
     switch($this->type) {
+      case "patient" :
+        $this->_object_className = "CPatient";
+        break;
       case "consultation" :
         $this->_object_className = "CConsultation";
         break;

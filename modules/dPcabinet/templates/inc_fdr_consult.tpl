@@ -1,5 +1,4 @@
 <script type="text/javascript">
-
 function cancelTarif() {
   var oForm = document.tarifFrm;
   oForm.secteur1.value = 0;
@@ -84,6 +83,10 @@ function reloadFdr() {
   url.setModuleAction("dPcabinet", "httpreq_vw_fdr_consult");
   url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   url.requestUpdate('fdrConsultContent', { waitingText : null });
+}
+
+function reloadAfterSaveDoc(){
+  reloadFdr();
 }
 
 function confirmFileDeletion(oButton) {
@@ -179,6 +182,9 @@ function submitFdr(oForm) {
       {{/foreach}}
     </table>
     
+    {{if $_is_anesth && !$consult->_ref_consult_anesth->consultation_anesth_id}}
+    Pour afficher les modèles d'anesthésie, veuillez séléctionner une opération
+    {{/if}}
     <form name="newDocumentFrm" action="?m={{$m}}" method="post">
     <table class="form">
       <tr>
@@ -203,7 +209,6 @@ function submitFdr(oForm) {
         </td>
       </tr>
     </table>
-    
     </form>
     
     </td>

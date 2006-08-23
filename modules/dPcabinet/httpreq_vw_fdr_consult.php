@@ -64,7 +64,11 @@ if ($selConsult) {
 
 // Récupération des modèles
 $whereCommon = array();
-$whereCommon[] = "`type` = 'consultation' OR `type` = 'consultAnesth'";
+if($consult->_ref_consult_anesth->consultation_anesth_id){
+  $whereCommon[] = "`type` = 'consultation' OR `type` = 'consultAnesth'";
+}else{
+  $whereCommon[] = "`type` = 'consultation'";
+}
 $order = "nom";
 
 // Modèles de l'utilisateur
@@ -99,6 +103,13 @@ $tarifsCab = $tarifsCab->loadList($where, $order);
 // Création du template
 require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
+
+if($consult->_ref_chir->isFromType(array("Anesthésiste")) || $consult->_ref_consult_anesth->consultation_anesth_id) {
+  $_is_anesth=true;	
+} else {
+  $_is_anesth=false;
+}
+$smarty->assign("_is_anesth", $_is_anesth);  
 
 $smarty->assign("listModelePrat", $listModelePrat);
 $smarty->assign("listModeleFunc", $listModeleFunc);

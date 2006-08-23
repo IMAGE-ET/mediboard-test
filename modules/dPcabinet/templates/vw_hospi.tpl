@@ -14,6 +14,10 @@ function createDocument(modele_id, operation_id) {
   url.popup(700, 700, "Document");
 }
 
+function reloadAfterSaveDoc(){
+  window.location.href = window.location.href;
+}
+
 function pageMain() {
   PairEffect.initGroup("functionEffect", { 
     bStoreInCookie: true

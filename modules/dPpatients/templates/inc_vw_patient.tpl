@@ -20,6 +20,24 @@ function popFile(file_id){
   url.ViewFilePopup(file_id,0);
 }
 
+function editDocument(compte_rendu_id) {
+  var url = new Url;
+  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+  url.addParam("compte_rendu_id", compte_rendu_id);
+  url.popup(700, 700, "Document");
+}
+
+function createDocument(oSelect, patient_id) {
+  if (modele_id = oSelect.value) {
+    var url = new Url;
+    url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+    url.addParam("modele_id", modele_id);
+    url.addParam("object_id", patient_id);
+    url.popup(700, 700, "Document");
+  }
+  oSelect.value = "";
+}
+
 function printIntervention(id) {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "view_planning");
@@ -32,6 +50,10 @@ function reloadVwPatient(){
   mainUrl.setModuleAction("dPpatients", "httpreq_vw_patient");
   mainUrl.addParam("id", document.modif.patient_id.value);
   mainUrl.requestUpdate('vwPatient', { waitingText : null });
+}
+
+function reloadAfterSaveDoc(){
+  reloadVwPatient();
 }
 </script>
 
@@ -290,6 +312,8 @@ function reloadVwPatient(){
   </tr>
   {{/foreach}}
   {{/if}}
+  
+  {{if $canReadFiles}}
   <tr>
     <th class="category" colspan="2">Fichiers</th>
   </tr>
@@ -312,7 +336,7 @@ function reloadVwPatient(){
         {{/foreach}}
       </table>
       {{/if}}
-      {{if $canEdit}}
+      {{if $canEditFiles}}
       <form name="uploadFrm" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="m" value="dPfiles" />
         <input type="hidden" name="dosql" value="do_file_aed" />
@@ -330,11 +354,61 @@ function reloadVwPatient(){
       {{/if}}
     </td>
   </tr>
+  {{/if}}
+  
+  {{if $canReadCptRendus}}
   <tr>
     <th class="category" colspan="2">Documents</th>
   </tr>
   <tr>
-    <td colspan="2">Bientôt Disponible
+    <td colspan="2">
+      <table class="form">
+        {{foreach from=$patient->_ref_documents item=document}}
+        <tr>
+          <th>{{$document->nom}}</th>
+          <td class="button">
+            <form name="editDocumentFrm{{$document->compte_rendu_id}}" action="?m={{$m}}" method="post">
+            <input type="hidden" name="m" value="dPcompteRendu" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="dosql" value="do_modele_aed" />
+            <input type="hidden" name="object_id" value="{{$patient->patient_id}}" />
+            <input type="hidden" name="compte_rendu_id" value="{{$document->compte_rendu_id}}" />
+            <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})"></button>
+            <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadVwPatient})">
+            </button>
+            </form>
+          </td>
+        </tr>
+        {{/foreach}}
+      </table>
+      {{if $canEditCptRendus}}
+      <form name="newDocumentFrm" action="?m={{$m}}" method="post">
+      <table class="form">
+        <tr>
+          <td>
+            <select name="_choix_modele" onchange="createDocument(this, {{$patient->patient_id}})">
+              <option value="">&mdash; Choisir un modèle</option>
+              {{if $listModelePrat|@count}}
+              <optgroup label="Modèles des Praticiens">
+                {{foreach from=$listModelePrat item=curr_modele}}
+                <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
+                {{/foreach}}
+              </optgroup>
+              {{/if}}
+              {{if $listModeleFct|@count}}
+              <optgroup label="Modèles des Cabinets">
+                {{foreach from=$listModeleFct item=curr_modele}}
+                <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
+                {{/foreach}}
+              </optgroup>
+              {{/if}}
+            </select>
+          </td>
+        </tr>
+      </table>
+      </form>
+      {{/if}}
     </td>
   </tr>
+  {{/if}}
 </table>

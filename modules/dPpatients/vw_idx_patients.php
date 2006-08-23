@@ -9,15 +9,51 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
+require_once($AppUI->getModuleClass("mediusers"));
 require_once($AppUI->getModuleClass("dPpatients"  , "patients"));
 require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
 require_once($AppUI->getModuleClass("dPcabinet"   , "consultation"));
 require_once($AppUI->getModuleClass("dPfiles"     , "filescategory"));
 require_once($AppUI->getModuleClass("dPfiles"     , "files"));
+require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
+
+$patient_id = mbGetValueFromGetOrSession("id", 0);
+
+
+$canReadFiles     = isMbModuleVisible("dPfiles") and isMbModuleReadAll("dPfiles");
+$canEditFiles     = isMbModuleVisible("dPfiles") and isMbModuleEditAll("dPfiles");
+$canReadCptRendus = isMbModuleVisible("dPcompteRendu") and isMbModuleReadAll("dPcompteRendu");
+$canEditCptRendus = isMbModuleVisible("dPcompteRendu") and isMbModuleEditAll("dPcompteRendu");
+
+// Liste des modèles
+$listModeleAuth = array();
+if ($patient_id) {
+  $listPrat = new CMediusers();
+  $listPrat = $listPrat->loadPraticiens(PERM_READ);
+  $listFct = new CMediusers();
+  $listFct = $listFct->loadFonctions(PERM_READ);
+  
+  $where = array();
+  $where["chir_id"] = "IN (".implode(", ",array_keys($listPrat)).")";
+  $where["object_id"] = "IS NULL";
+  $where["type"] = "= 'patient'";
+  $order = "chir_id, nom";
+  $listModelePrat = new CCompteRendu;
+  $listModelePrat = $listModelePrat->loadlist($where, $order);
+ 
+  $where = array();
+  $where["function_id"] = "IN (".implode(", ",array_keys($listFct)).")";
+  $where["object_id"] = "IS NULL";
+  $where["type"] = "= 'patient'";
+  $order = "chir_id, nom";
+  $listModeleFct = new CCompteRendu;
+  $listModeleFct = $listModeleFct->loadlist($where, $order);
+}
+
 
 // Liste des Category pour les fichiers
 $listCategory = new CFilesCategory;
@@ -40,8 +76,6 @@ if ($mediuser->isFromType(array("Anesthésiste"))) {
 } else {
   $anesth = null;
 }
-
-$patient_id = mbGetValueFromGetOrSession("id", 0);
 
 // Récuperation du patient sélectionné
 $patient = new CPatient;
@@ -100,6 +134,11 @@ $smarty->assign("anesth"        , $anesth                                    );
 $smarty->assign("listPrat"      , $listPrat                                  );
 $smarty->assign("canEditCabinet", $canEditCabinet                            );
 $smarty->assign("listCategory"  , $listCategory                              );
-
+$smarty->assign("canReadFiles"  , $canReadFiles                              );
+$smarty->assign("canEditFiles"  , $canEditFiles                              );
+$smarty->assign("canReadCptRendus", $canReadCptRendus                        );
+$smarty->assign("canEditCptRendus", $canEditCptRendus                        );
+$smarty->assign("listModelePrat", $listModelePrat                            );
+$smarty->assign("listModeleFct" , $listModeleFct                             );
 $smarty->display("vw_idx_patients.tpl");
 ?>

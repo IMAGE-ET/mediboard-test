@@ -40,10 +40,6 @@ switch ($mode) {
         "\nSET sejour.saisi_SHS = '$value', sejour.modif_SHS = '0'" .
         "\nWHERE sejour.sejour_id = '$id';";
       $result = db_exec($sql); db_error();
-      $sql = "UPDATE operations" .
-        "\nSET operations.saisie = '$value'" .
-        "\nWHERE operations.sejour_id = '$id';";
-      $result = db_exec($sql); db_error();
     }
     break;
   }
@@ -51,11 +47,6 @@ switch ($mode) {
       $sql = "UPDATE sejour" .
         "\nSET sejour.saisi_SHS = '$value', sejour.modif_SHS = '0'" .
         "\nWHERE sejour.entree_prevue LIKE '$id __:__:__';";
-    $result = db_exec($sql); db_error();
-      $sql = "UPDATE sejour, operations" .
-        "\nSET operations.saisie = '$value'" .
-        "\nWHERE sejour.sejour_id = operations.sejour_id" .
-        "\nAND entree_prevue LIKE '$id __:__:__';";
     $result = db_exec($sql); db_error();
     $id = 0;
     break;
