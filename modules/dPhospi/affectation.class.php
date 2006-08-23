@@ -129,31 +129,6 @@ class CAffectation extends CMbObject {
     return $msg;
   }
   
-  function updateDBFields() {
-
-  	$this->loadRefsFwd();
-    
-    $flag = !$this->_ref_next->affectation_id && !$this->_ref_prev->affectation_id && !$this->affectation_id;
-    $flagComp = $flag && ($this->_ref_sejour->type == "comp");
-    $flagAmbu = $flag && ($this->_ref_sejour->type == "ambu");
-    
-    if($flagComp) {
-      $this->sortie = mbDate("", $this->sortie)." 10:00:00";
-    }
-    if($flagAmbu) {
-      $this->sortie = mbDate("", $this->sortie)." "."18:00:00";
-      /*
-      if($this->_ref_sejour->_ref_operation->time_operation != "00:00:00") {
-        if($this->_ref_operation->time_operation >= "18:00:00")
-          $this->sortie = mbDate("", $this->sortie)." "."23:59:00";
-        else
-          $this->sortie = mbDate("", $this->sortie)." ".mbTime("+ 6 hours", $this->_ref_operation->time_operation);
-      } else
-        $this->sortie = mbDate("", $this->sortie)." "."18:00:00";
-      */
-    }
-  }
-  
   function loadRefLit() {
     $where = array (
       "lit_id" => "= '$this->lit_id'"
