@@ -130,6 +130,12 @@ function showLegend() {
   url.popup(500, 500, "Legend");
 }
 
+function showAlerte() {
+  url = new Url;
+  url.setModuleAction("dPhospi", "vw_etat_semaine");
+  url.popup(500, 250, "Alerte");
+}
+
 </script>
 
 <table class="main">
@@ -137,7 +143,9 @@ function showLegend() {
 {{if $alerte|@count}}
 <tr>
   <td colspan="3">
-    <div class="warning">Il y a {{$alerte|@count}} patient(s) à placer dans la semaine qui vient</div>
+    <div class="warning">
+      <a href="javascript:showAlerte()">Il y a {{$alerte|@count}} patient(s) à placer dans la semaine qui vient</a>
+    </div>
   </td>
 </tr>
 {{/if}}

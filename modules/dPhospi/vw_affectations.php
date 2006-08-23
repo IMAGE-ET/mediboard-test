@@ -11,6 +11,7 @@ global $AppUI, $canRead, $canEdit, $m, $g;
 
 require_once($AppUI->getModuleClass("mediusers"   , "functions" ));
 require_once($AppUI->getModuleClass("dPhospi"     , "service"   ));
+require_once($AppUI->getModuleClass("dPplanningOp", "sejour"    ));
 require_once($AppUI->getModuleClass("dPplanningOp", "planning"  ));
 require_once($AppUI->getModuleClass("dPplanningOp", "pathologie"));
 
@@ -153,7 +154,7 @@ function loadSejourNonAffectes($where) {
 
 // Nombre de patients à placer pour la semaine qui vient (alerte)
 $today   = mbDate()." 01:00:00";
-$endWeek = mbDate("+7 days", $today);
+$endWeek = mbDateTime("+7 days", $today);
 $where = array(
   "entree_prevue" => "BETWEEN '$today' AND '$endWeek'",
   "type" => "!= 'exte'",
