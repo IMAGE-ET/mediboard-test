@@ -172,8 +172,8 @@ class CAffectation extends CMbObject {
   
   function checkDaysRelative($date) {
     if ($this->entree and $this->sortie) {
-      $this->_entree_relative = mbDaysRelative($date, $this->entree);
-      $this->_sortie_relative = mbDaysRelative($date, $this->sortie);
+      $this->_entree_relative = mbDaysRelative($date." 10:00:00", $this->entree, 1);
+      $this->_sortie_relative = mbDaysRelative($date." 10:00:00", $this->sortie, 1);
     }
   }
   
