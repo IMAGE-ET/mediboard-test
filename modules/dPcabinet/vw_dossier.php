@@ -29,6 +29,8 @@ $canEditCptRendus = isMbModuleVisible("dPcompteRendu") and isMbModuleEditAll("dP
 
 // Liste des modèles
 $listModeleAuth = array();
+$listModelePrat = new CCompteRendu;
+$listModeleFct = new CCompteRendu;
 if ($pat_id) {
   $listPrat = new CMediusers();
   $listPrat = $listPrat->loadPraticiens(PERM_READ);
@@ -40,7 +42,6 @@ if ($pat_id) {
   $where["object_id"] = "IS NULL";
   $where["type"] = "= 'patient'";
   $order = "chir_id, nom";
-  $listModelePrat = new CCompteRendu;
   $listModelePrat = $listModelePrat->loadlist($where, $order);
  
   $where = array();
@@ -48,7 +49,6 @@ if ($pat_id) {
   $where["object_id"] = "IS NULL";
   $where["type"] = "= 'patient'";
   $order = "chir_id, nom";
-  $listModeleFct = new CCompteRendu;
   $listModeleFct = $listModeleFct->loadlist($where, $order);
 }
 

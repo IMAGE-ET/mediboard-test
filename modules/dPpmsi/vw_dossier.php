@@ -22,7 +22,7 @@ if (!$canEdit) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$patient_id = mbGetValueFromGetOrSession("id", 0);
+$pat_id = mbGetValueFromGetOrSession("pat_id");
 
 $canReadFiles     = isMbModuleVisible("dPfiles") and isMbModuleReadAll("dPfiles");
 $canEditFiles     = isMbModuleVisible("dPfiles") and isMbModuleEditAll("dPfiles");
@@ -31,7 +31,9 @@ $canEditCptRendus = isMbModuleVisible("dPcompteRendu") and isMbModuleEditAll("dP
 
 // Liste des modèles
 $listModeleAuth = array();
-if ($patient_id) {
+$listModelePrat = new CCompteRendu;
+$listModeleFct = new CCompteRendu;
+if ($pat_id) {
   $listPrat = new CMediusers();
   $listPrat = $listPrat->loadPraticiens(PERM_READ);
   $listFct = new CMediusers();
@@ -42,7 +44,6 @@ if ($patient_id) {
   $where["object_id"] = "IS NULL";
   $where["type"] = "= 'patient'";
   $order = "chir_id, nom";
-  $listModelePrat = new CCompteRendu;
   $listModelePrat = $listModelePrat->loadlist($where, $order);
  
   $where = array();
@@ -50,7 +51,6 @@ if ($patient_id) {
   $where["object_id"] = "IS NULL";
   $where["type"] = "= 'patient'";
   $order = "chir_id, nom";
-  $listModeleFct = new CCompteRendu;
   $listModeleFct = $listModeleFct->loadlist($where, $order);
 }
 
