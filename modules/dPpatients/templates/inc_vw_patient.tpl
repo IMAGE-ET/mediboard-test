@@ -301,7 +301,7 @@ function reloadAfterSaveDoc(){
       </a>
       {{/if}}
       <a class="actionPat" href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
-        Le {{$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}}
+        Le {{$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}} - {{$curr_consult->_etat}}
       </a>
     </td>
     <td>

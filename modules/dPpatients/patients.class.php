@@ -445,6 +445,7 @@ class CPatient extends CMbObject {
     foreach ($this->_ref_consultations as $keyConsult => $valueConsult) {
       $consult =& $this->_ref_consultations[$keyConsult];
       $consult->loadRefs();
+      $consult->getNumDocs();
     }
     
     // Sejours

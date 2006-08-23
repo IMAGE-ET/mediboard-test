@@ -119,16 +119,7 @@ class CConsultation extends CMbObject {
     $this->_seek =& $seek;
   }
   
-  function updateFormFields() {
-    parent::updateFormFields();
-
-  	$this->_somme = $this->secteur1 + $this->secteur2;
-
-    if($this->date_paiement == "0000-00-00")
-      $this->date_paiement = null;
-    $this->_hour = intval(substr($this->heure, 0, 2));
-    $this->_min  = intval(substr($this->heure, 3, 2));
-
+  function getEtat() {
     $etat = array();
     $etat[CC_PLANIFIE]       = "Planif.";
     $etat[CC_PATIENT_ARRIVE] = "Arrivé ".mbTranformTime(null, $this->arrivee, "%Hh%M");
@@ -139,8 +130,21 @@ class CConsultation extends CMbObject {
     if ($this->annule) {
       $this->_etat = "Ann.";
     }
-    $this->_check_premiere = $this->premiere;
+  }
+  
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+
+  	$this->_somme = $this->secteur1 + $this->secteur2;
+
+    if($this->date_paiement == "0000-00-00")
+      $this->date_paiement = null;
+    $this->_hour = intval(substr($this->heure, 0, 2));
+    $this->_min  = intval(substr($this->heure, 3, 2));
     
+    $this->_check_premiere = $this->premiere;
+    $this->getEtat();
     $this->_view = "Consultation ".$this->_etat;
   }
    
@@ -218,10 +222,28 @@ class CConsultation extends CMbObject {
         $docs_valid++;
       }
     }
-    if($docs_valid)
+    if($docs_valid) {
+      $this->getEtat();
       $this->_etat .= " ($docs_valid Doc.)";
+    }
   }
 
+  function getNumDocs(){
+  	$sql = "SELECT count(compte_rendu_id) FROM compte_rendu WHERE (";  
+  	$this->loadRefConsultAnesth();
+    if($this->_ref_consult_anesth->consultation_anesth_id) {
+      $where = "(`type` = 'consultation' OR `type` = 'consultAnesth')";
+    }else{
+      $where = "(`type` = 'consultation')";
+    }
+    $where .= "\n AND object_id = '$this->consultation_id')";
+  	$nbDocs = db_loadResult($sql . $where);
+    if($nbDocs) {
+      $this->getEtat();
+      $this->_etat .= " ($nbDocs Doc.)";
+    }
+  }
+  
   function loadRefConsultAnesth() {
     $this->_ref_consult_anesth = new CConsultAnesth;
     $where = array();
