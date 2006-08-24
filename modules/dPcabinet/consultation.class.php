@@ -282,6 +282,12 @@ class CConsultation extends CMbObject {
   }
 
   function canDelete(&$msg, $oid = null) {
+    $this->loadRefPlageConsult();
+    if($this->_ref_plageconsult->date < mbDate()){
+      $msg = "Imposible de supprimer une consultation passée";
+      return false;
+    }
+    
     $tables[] = array (
       "label"     => "consultation(s) d'anesthésie", 
       "name"      => "consultation_anesth", 
@@ -303,7 +309,7 @@ class CConsultation extends CMbObject {
       "joinon"    => "(`type` = 'consultation' OR `type` = 'consultAnesth')"
     );
     return parent::canDelete( $msg, $oid, $tables );
-  }  
+  }
 }
 
 ?>

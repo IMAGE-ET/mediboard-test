@@ -107,6 +107,7 @@
             Intervention
           </th>
         </tr>
+        {{if $consult_anesth->consultation_anesth_id}}
         <tr>
           <td colspan="2">
             Intervention le <strong>{{$consult_anesth->_ref_operation->_ref_plageop->date|date_format:"%a %d %b %Y"}}</strong>
@@ -123,6 +124,11 @@
           <th>Anesthésie prévue </th>
           <td>{{$consult_anesth->_ref_operation->_lu_type_anesth}}</td>
         </tr>
+        {{else}}
+        <tr>
+          <td colspan="2">Aucune Intervention Sélectionnée</td>
+        </tr>
+        {{/if}}
       </table>
     </td>
   </tr>  
