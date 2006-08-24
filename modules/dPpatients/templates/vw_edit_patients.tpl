@@ -38,6 +38,11 @@ function popMed(type) {
   url.popup(700, 400, "Medecin");
 }
 
+function delCmu(){
+  form = document.editFrm;
+  form._fin_cmu.value = "";
+}
+
 function delMed(sElementName) {
   form = document.editFrm;
   
@@ -85,6 +90,7 @@ function pageMain() {
       updateElement: updateFields
     }
   );
+  regFieldCalendar("editFrm", "cmu");
 }
 
 </script>
@@ -124,36 +130,49 @@ function pageMain() {
 
       <tr>
         <th class="category" colspan="2">Identité</th>
-        <th class="category" colspan="3">Informations médicales</th>
+        <th class="category" colspan="3">Médecins correpondants</th>
       </tr>
       
       <tr>
         <th><label for="nom" title="Nom du patient. Obligatoire">Nom </label></th>
         <td><input tabindex="1" type="text" name="nom" value="{{$patient->nom}}" title="{{$patient->_props.nom}}" /></td>
-        <th><label for="incapable_majeur" title="Patient reconnu incapable majeur">Incapable majeur </label></th>
-        <td colspan="2">
-          <input tabindex="21" type="radio" name="incapable_majeur" value="o" {{if $patient->incapable_majeur == "o"}} checked="checked" {{/if}} />oui
-          <input tabindex="22" type="radio" name="incapable_majeur" value="n" {{if $patient->incapable_majeur == "n"}} checked="checked" {{/if}} />non
+        <th>
+          <label for="medecin_traitant" title="Choisir un médecin traitant">Medecin traitant</label>
+          <input type="hidden" name="medecin_traitant" title="{{$patient->_props.medecin_traitant}}" value="{{$patient->medecin_traitant}}" />
+        </th>
+        <td class="readonly">
+          <input type="text" name="_medecin_traitant_name" size="30" value="Dr. {{$patient->_ref_medecin_traitant->_view}}" ondblclick="popMed('_traitant')" readonly="readonly" />
+          <button class="cancel notext" type="button" onclick="delMed('_traitant')"></button>
         </td>
+        <td class="button"><button class="search" tabindex="29" type="button" onclick="popMed('_traitant')">Choisir un médecin</button></td>
       </tr>
       
       <tr>
         <th><label for="prenom" title="Prénom du patient. Obligatoire">Prénom </label></th>
         <td><input tabindex="2" type="text" name="prenom" value="{{$patient->prenom}}" title="{{$patient->_props.prenom}}" /></td>
-        <th><label for="ATNC" title="Patient présentant un risque ATNC">ATNC </label></th>
-        <td colspan="2">
-          <input tabindex="23" type="radio" name="ATNC" value="o" {{if $patient->ATNC == "o"}} checked="checked" {{/if}} />oui
-          <input tabindex="24" type="radio" name="ATNC" value="n" {{if $patient->ATNC == "n"}} checked="checked" {{/if}} />non
+        <th>
+          <label for="medecin1" title="Choisir un médecin correspondant">Médecin correspondant 1</label>
+          <input type="hidden" name="medecin1" value="{{$patient->_ref_medecin1->medecin_id}}" title="{{$patient->_props.medecin1}}" />
+        </th>
+        <td class="readonly">
+          <input type="text" name="_medecin1_name" size="30" value="Dr. {{$patient->_ref_medecin1->_view}}" ondblclick="popMed('1')" readonly="readonly" />
+          <button class="cancel notext" type="button" onclick="delMed('1')"></button>
         </td>
+        <td class="button"><button class="search" tabindex="30" type="button" onclick="popMed('1')">Choisir un médecin</button></td>
       </tr>
       
       <tr>
         <th><label for="nom_jeune_fille" title="Nom de jeune fille d'une femme mariée">Nom de jeune fille</label></th>
         <td><input tabindex="3" type="text" name="nom_jeune_fille" title="{{$patient->_props.nom_jeune_fille}}" value="{{$patient->nom_jeune_fille}}" /></td>
-        <th><label for="matricule" title="Matricule valide d'assuré social (13 chiffres + 2 pour la clé)">Numéro d'assuré social</label></th>
-        <td colspan="2">
-          <input tabindex="25" type="text" size="17" maxlength="15" name="matricule" title="{{$patient->_props.matricule}}" value="{{$patient->matricule}}" />
+<th>
+          <input type="hidden" name="medecin2" value="{{$patient->_ref_medecin2->medecin_id}}" title="{{$patient->_props.medecin2}}" />
+          <label for="medecin2" title="Choisir un second médecin correspondant">Médecin correspondant 2</label>
+        </th>
+        <td class="readonly">
+          <input type="text" name="_medecin2_name" size="30" value="{{if ($patient->_ref_medecin2)}}Dr. {{$patient->_ref_medecin2->_view}}{{/if}}" ondblclick="popMed('2')" readonly="readonly" />
+          <button class="cancel notext" type="button" onclick="delMed('2')"></button>
         </td>
+        <td class="button"><button class="search" tabindex="31" type="button" onclick="popMed('2')">Choisir un médecin</button></td>
       </tr>
       
       <tr>
@@ -163,10 +182,15 @@ function pageMain() {
           <input tabindex="5" type="text" name="_mois"  size="2" maxlength="2" value="{{if $patient->_mois != "00"}}{{$patient->_mois}}{{/if}}" onkeyup="followUp(this, '_annee', 2)" /> -
           <input tabindex="6" type="text" name="_annee" size="4" maxlength="4" value="{{if $patient->_annee != "0000"}}{{$patient->_annee}}{{/if}}" />
         </td>
-        <th><label for="SHS" title="Code Administratif SHS">Code administratif</label></th>
-        <td colspan="2">
-          <input tabindex="26" type="text" size="8" maxlength="8" name="SHS" title="{{$patient->_props.SHS}}" value="{{$patient->SHS}}" />
+        <th>
+          <input type="hidden" name="medecin3" value="{{$patient->_ref_medecin3->medecin_id}}" title="{{$patient->_props.medecin3}}" />
+          <label for="medecin3" title="Choisir un troisième médecin correspondant">Médecin correspondant 3</label>
+        </th>
+        <td class="readonly">
+          <input type="text" name="_medecin3_name" size="30" value="{{if ($patient->_ref_medecin3)}}Dr. {{$patient->_ref_medecin3->_view}}{{/if}}" ondblclick="popMed('3')" readonly="readonly" />
+          <button class="cancel notext" type="button" onclick="delMed('3')"></button>
         </td>
+        <td class="button"><button class="search" tabindex="32" type="button" onclick="popMed('3')">Choisir un médecin</button></td>
       </tr>
       
       <tr>
@@ -178,46 +202,41 @@ function pageMain() {
             <option value="j" {{if $patient->sexe == "j"}} selected="selected" {{/if}}>femme célibataire</option>
           </select>
         </td>
-        <th><label for="regime_sante" title="Regime d'assurance santé">Régime d'assurance santé</label></th>
-        <td colspan="2">
-          <input tabindex="26" type="text" size="40" maxlength="40" name="regime_sante" title="{{$patient->_props.regime_sante}}" value="{{$patient->regime_sante}}" />
+        <td colspan="3">
         </td>
       </tr>
       
       <tr>
         <th class="category" colspan="2">Coordonnées</th>
-        <th class="category" colspan="3">Médecins correpondants</th>
+        <th class="category" colspan="3">Informations médicales</th>
       </tr>
       
       <tr>
-        <th><label for="adresse" title="Adresse du patient">Adresse</label></th>
-        <td><textarea tabindex="8" name="adresse" title="{{$patient->_props.adresse}}" rows="1">{{$patient->adresse}}</textarea></td>
-        <th>
-          <label for="medecin_traitant" title="Choisir un médecin traitant">Medecin traitant</label>
-          <input type="hidden" name="medecin_traitant" title="{{$patient->_props.medecin_traitant}}" value="{{$patient->medecin_traitant}}" />
-        </th>
-        <td class="readonly">
-          <input type="text" name="_medecin_traitant_name" size="30" value="Dr. {{$patient->_ref_medecin_traitant->_view}}" ondblclick="popMed('_traitant')" readonly="readonly" />
-          <button class="cancel notext" type="button" onclick="delMed('_traitant')"></button>
+        <th rowspan="2"><label for="adresse" title="Adresse du patient">Adresse</label></th>
+        <td rowspan="2"><textarea tabindex="8" name="adresse" title="{{$patient->_props.adresse}}" rows="1">{{$patient->adresse}}</textarea></td>
+        <th><label for="incapable_majeur" title="Patient reconnu incapable majeur">Incapable majeur </label></th>
+        <td colspan="2">
+          <input tabindex="22" type="radio" name="incapable_majeur" value="o" {{if $patient->incapable_majeur == "o"}} checked="checked" {{/if}} />oui
+          <input tabindex="23" type="radio" name="incapable_majeur" value="n" {{if $patient->incapable_majeur == "n"}} checked="checked" {{/if}} />non
         </td>
-        <td class="button"><button class="search" tabindex="26" type="button" onclick="popMed('_traitant')">Choisir un médecin</button></td>
       </tr>
-      
+      <tr>
+        <th><label for="ATNC" title="Patient présentant un risque ATNC">ATNC </label></th>
+        <td colspan="2">
+          <input tabindex="24" type="radio" name="ATNC" value="o" {{if $patient->ATNC == "o"}} checked="checked" {{/if}} />oui
+          <input tabindex="25" type="radio" name="ATNC" value="n" {{if $patient->ATNC == "n"}} checked="checked" {{/if}} />non
+        </td>
+      </tr>
       <tr>
         <th><label for="cp" title="Code postal">Code Postal</label></th>
         <td>
           <input tabindex="9" size="31" maxlength="5" type="text" name="cp" value="{{$patient->cp}}" title="{{$patient->_props.cp}}" />
           <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
         </td>
-        <th>
-          <label for="medecin1" title="Choisir un médecin correspondant">Médecin correspondant 1</label>
-          <input type="hidden" name="medecin1" value="{{$patient->_ref_medecin1->medecin_id}}" title="{{$patient->_props.medecin1}}" />
-        </th>
-        <td class="readonly">
-          <input type="text" name="_medecin1_name" size="30" value="Dr. {{$patient->_ref_medecin1->_view}}" ondblclick="popMed('1')" readonly="readonly" />
-          <button class="cancel notext" type="button" onclick="delMed('1')"></button>
+        <th><label for="matricule" title="Matricule valide d'assuré social (13 chiffres + 2 pour la clé)">Numéro d'assuré social</label></th>
+        <td colspan="2">
+          <input tabindex="26" type="text" size="17" maxlength="15" name="matricule" title="{{$patient->_props.matricule}}" value="{{$patient->matricule}}" />
         </td>
-        <td class="button"><button class="search" tabindex="28" type="button" onclick="popMed('1')">Choisir un médecin</button></td>
       </tr>
       
       <tr>
@@ -226,15 +245,10 @@ function pageMain() {
           <input tabindex="10" size="31" type="text" name="ville" value="{{$patient->ville}}" title="{{$patient->_props.ville}}" />
           <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
         </td>
-        <th>
-          <input type="hidden" name="medecin2" value="{{$patient->_ref_medecin2->medecin_id}}" title="{{$patient->_props.medecin2}}" />
-          <label for="medecin2" title="Choisir un second médecin correspondant">Médecin correspondant 2</label>
-        </th>
-        <td class="readonly">
-          <input type="text" name="_medecin2_name" size="30" value="{{if ($patient->_ref_medecin2)}}Dr. {{$patient->_ref_medecin2->_view}}{{/if}}" ondblclick="popMed('2')" readonly="readonly" />
-          <button class="cancel notext" type="button" onclick="delMed('2')"></button>
+        <th><label for="SHS" title="Code Administratif SHS">Code administratif</label></th>
+        <td colspan="2">
+          <input tabindex="27" type="text" size="8" maxlength="8" name="SHS" title="{{$patient->_props.SHS}}" value="{{$patient->SHS}}" />
         </td>
-        <td class="button"><button class="search" tabindex="29" type="button" onclick="popMed('2')">Choisir un médecin</button></td>
       </tr>
       
       <tr>
@@ -246,15 +260,10 @@ function pageMain() {
           <input tabindex="14" type="text" name="_tel4" size="2" maxlength="2" value="{{$patient->_tel4}}" title="num|length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
           <input tabindex="15" type="text" name="_tel5" size="2" maxlength="2" value="{{$patient->_tel5}}" title="num|length|2" onkeyup="followUp(this, '_tel21', 2)" />
         </td>
-        <th>
-          <input type="hidden" name="medecin3" value="{{$patient->_ref_medecin3->medecin_id}}" title="{{$patient->_props.medecin3}}" />
-          <label for="medecin3" title="Choisir un troisième médecin correspondant">Médecin correspondant 3</label>
-        </th>
-        <td class="readonly">
-          <input type="text" name="_medecin3_name" size="30" value="{{if ($patient->_ref_medecin3)}}Dr. {{$patient->_ref_medecin3->_view}}{{/if}}" ondblclick="popMed('3')" readonly="readonly" />
-          <button class="cancel notext" type="button" onclick="delMed('3')"></button>
+        <th><label for="regime_sante" title="Regime d'assurance santé">Régime d'assurance santé</label></th>
+        <td colspan="2">
+          <input tabindex="28" type="text" size="40" maxlength="40" name="regime_sante" title="{{$patient->_props.regime_sante}}" value="{{$patient->regime_sante}}" />
         </td>
-        <td class="button"><button class="search" tabindex="30" type="button" onclick="popMed('3')">Choisir un médecin</button></td>
       </tr>
       
       <tr>
@@ -266,20 +275,30 @@ function pageMain() {
           <input tabindex="19" type="text" name="_tel24" size="2" maxlength="2" value="{{$patient->_tel24}}" title="num|length|2" onkeyup="followUp(this, '_tel25', 2)" /> -
           <input tabindex="20" type="text" name="_tel25" size="2" maxlength="2" value="{{$patient->_tel25}}" title="num|length|2" />
         </td>
-        <th colspan="3"></th>
+        <th><label for="cmu" title="Couverture Mutuelle Universelle">CMU</label></th>
+        <td colspan="2" class="date">
+          <div id="editFrm_cmu_da">{{$patient->cmu|date_format:"%d/%m/%Y"}}</div>
+          <input type="hidden" name="cmu" title="date" value="{{$patient->cmu}}" />
+          <img id="editFrm_cmu_trigger" src="./images/calendar.gif" alt="calendar"/>
+          <button class="cancel notext" type="button" onclick="delCmu()"></button>
+        </td>
       </tr>
       
       <tr>
         <th><label for="rques" title="Remarques générales concernant le patient">Remarques</label></th>
-        <td colspan="4">
-          <textarea tabindex="31" title="{{$patient->_props.rques}}" name="rques">{{$patient->rques}}</textarea>
+        <td>
+          <textarea tabindex="21" title="{{$patient->_props.rques}}" name="rques">{{$patient->rques}}</textarea>
+        </td>
+        <th><label for="ald" title="Affection longue Durée">ALD</label></th>
+        <td colspan="2">
+          <textarea tabindex="33" title="{{$patient->_props.ald}}" name="ald">{{$patient->ald}}</textarea>
         </td>
       </tr>
       
       <tr>
         <td class="button" colspan="5">
           {{if $patient->patient_id}}
-            <button type="submit" class="submit">Valider</button>
+            <button tabindex="34" type="submit" class="submit">Valider</button>
             <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
               Imprimer
             </button>
@@ -287,7 +306,7 @@ function pageMain() {
               Supprimer
             </button>
           {{else}}
-            <button tabindex="32" type="submit" class="submit">Créer</button>
+            <button tabindex="34" type="submit" class="submit">Créer</button>
           {{/if}}
         </td>
       </tr>

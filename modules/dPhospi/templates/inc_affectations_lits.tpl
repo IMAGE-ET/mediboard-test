@@ -19,6 +19,9 @@
   {{else}}
   <td class="text">
   {{/if}}
+  {{if $curr_affectation->_ref_sejour->_ref_patient->_fin_cmu}}
+    <div style="float: right;"><strong>CMU</strong></div>
+  {{/if}}
     {{if !$curr_affectation->_ref_sejour->entree_reelle || ($curr_affectation->_ref_prev->affectation_id && $curr_affectation->_ref_prev->effectue == 0)}}
 <font style="color:#a33">
     {{else}}
@@ -47,7 +50,10 @@
     {{if $curr_affectation->_ref_sejour->type == "ambu"}}
     <em>{{$patient_view}}</em>
     {{else}}
-    <strong>{{$patient_view}}</strong>
+    <strong>
+      {{$patient_view}}
+      
+    </strong>
     {{/if}}
     {{if (!$curr_affectation->_ref_sejour->entree_reelle) || ($curr_affectation->_ref_prev->affectation_id && $curr_affectation->_ref_prev->effectue == 0)}}
     {{$curr_affectation->entree|date_format:"%d/%m %Hh%M"}}

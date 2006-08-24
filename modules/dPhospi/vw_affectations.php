@@ -96,6 +96,7 @@ foreach ($services as $service_id => $service) {
             $sejour->_ref_operations[$operation_id]->loadRefCCAM();
         } else
           unset($affectations[$affectation_id]);
+        $affectations[$affectation_id]->_ref_sejour->_ref_patient->verifCmuEtat($affectations[$affectation_id]->_ref_sejour->_date_entree_prevue);
       }
     }
 

@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.31";
+$config["mod_version"]     = "0.32";
 $config["mod_directory"]   = "dPpatients";
 $config["mod_setup_class"] = "CSetupdPpatients";
 $config["mod_type"]        = "user";
@@ -178,7 +178,12 @@ class CSetupdPpatients {
         $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'trans', 'obst', 'chir', 'med', 'fam', 'alle' ) NOT NULL DEFAULT 'med';";
         db_exec( $sql ); db_error();
       case "0.31":
-        return "0.31";
+        $sql = "ALTER TABLE `patients` ADD `cmu` date NULL AFTER `matricule` ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `ald` text AFTER `rques` ;";
+        db_exec( $sql ); db_error();
+      case "0.32":
+        return "0.32";
     }
     return false;
   }

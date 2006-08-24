@@ -47,6 +47,8 @@ class CPatient extends CMbObject {
   var $regime_sante     = null;
   var $rques            = null;
   var $listCim10        = null;
+  var $cmu              = null;
+  var $ald              = null;
   
   // Other fields
   var $_static_cim10 = null;
@@ -78,6 +80,7 @@ class CPatient extends CMbObject {
 
   // Object References
   var $_nb_docs              = null;
+  var $_fin_cmu              = null;
   var $_ref_files            = null;
   var $_ref_documents        = null;
   var $_ref_sejours          = null;
@@ -115,7 +118,9 @@ class CPatient extends CMbObject {
       "ATNC"             => "enum|o|n",
       "naissance"        => "date|confidential",
       "rques"            => "text",
-      "listCim10"        => "str"
+      "listCim10"        => "str",
+      "cmu"              => "date",
+      "ald"              => "text"
     );
     
     $this->_props =& $props;
@@ -456,6 +461,15 @@ class CPatient extends CMbObject {
         $operation =& $sejour->_ref_operations[$keyOp];
         $operation->loadRefsFwd();
       }
+    }
+  }
+  
+  function verifCmuEtat($dateref = null){
+    if(!$dateref){
+      $dateref = mbDate();
+    }
+    if($dateref <= $this->cmu){
+      $this->_fin_cmu = true; 
     }
   }
   
