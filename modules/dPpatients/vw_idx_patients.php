@@ -21,7 +21,7 @@ if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$patient_id = mbGetValueFromGetOrSession("id", 0);
+$patient_id = mbGetValueFromGetOrSession("patient_id", 0);
 
 
 $canReadFiles     = isMbModuleVisible("dPfiles") and isMbModuleReadAll("dPfiles");
@@ -81,9 +81,9 @@ if ($mediuser->isFromType(array("Anesthésiste"))) {
 
 // Récuperation du patient sélectionné
 $patient = new CPatient;
-if(dPgetParam($_GET, "new", 0)) {
-  $patient->load(NULL);
-  mbSetValueToSession("id", null);
+if(mbGetValueFromGet("new", 0)) {
+  $patient->load(null);
+  mbSetValueToSession("patient_id", null);
 } else {
   $patient->load($patient_id);
 }

@@ -94,10 +94,10 @@ function affNaissance() {
         {{foreach from=$patients item=curr_patient}}
         <tr>
           <td><input type="checkbox" name="fusion_{{$curr_patient->patient_id}}" /></td>
-          <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;id={{$curr_patient->patient_id}}">{{$curr_patient->_view}}</a></td>
-          <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;id={{$curr_patient->patient_id}}">{{$curr_patient->_naissance}}</a></td>
-          <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;id={{$curr_patient->patient_id}}">{{$curr_patient->adresse}}</a></td>
-          <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;id={{$curr_patient->patient_id}}">{{$curr_patient->cp}} - {{$curr_patient->ville}}</a></td>
+          <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;patient_id={{$curr_patient->patient_id}}">{{$curr_patient->_view}}</a></td>
+          <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;patient_id={{$curr_patient->patient_id}}">{{$curr_patient->_naissance}}</a></td>
+          <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;patient_id={{$curr_patient->patient_id}}">{{$curr_patient->adresse}}</a></td>
+          <td class="text"><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;patient_id={{$curr_patient->patient_id}}">{{$curr_patient->cp}} - {{$curr_patient->ville}}</a></td>
         </tr>
         {{/foreach}}
         

@@ -16,7 +16,7 @@ function confirmCreation(id, bDialog, sSiblingsText) {
     } else {
       url.addParam("m", "dPpatients");
       url.addParam("tab", "vw_idx_patients");
-      url.addParam("id", id);
+      url.addParam("patient_id", id);
       url.addParam("nom", "");
       url.addParam("prenom", "");
     }
