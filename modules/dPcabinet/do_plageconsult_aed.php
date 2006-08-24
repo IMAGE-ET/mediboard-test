@@ -16,13 +16,13 @@ if (!$obj->bind( $_POST )) {
 	$AppUI->redirect();
 }
 
-$del = dPgetParam( $_POST, 'del', 0 );
-$repeat = dPgetParam( $_POST, '_repeat', 0 );
-$double = dPgetParam( $_POST, '_double', 0 );
+$del         = dPgetParam( $_POST, "del", 0 );
+$repeat      = dPgetParam( $_POST, "_repeat", 0 );
+$type_repeat = dPgetParam( $_POST, "_type_repeat", 1 );
 
 $body_msg = null;
-$header = array();
-$msgNo = null;
+$header   = array();
+$msgNo    = null;
 
 if ($del) {
   $obj->load();
@@ -37,23 +37,19 @@ if ($del) {
       if ($obj->canDelete($msg)) {
         if ($msg = $obj->delete()) {
           $not_deleted++;
-        } 
-        else {
+        } else {
           $msg = "plage supprimée";
           $deleted++;
         }
-      }
-      else {
+      } else {
         $not_deleted++;
       } 
-    }
-    else {
+    } else {
       $not_found++;
       $msg = "Impossible de supprimer, plage non trouvée";
     }
     
     $body_msg .= "<br />Plage du $obj->date: $msg";
-    
     $obj->becomeNext();
   }
   
@@ -64,41 +60,36 @@ if ($del) {
   $msgNo = $deleted ? UI_MSG_ALERT : UI_MSG_ERROR;
 
   mbSetValueToSession("plageconsult_id");
+
 } else {
   $created = 0;
   $updated = 0;
   $not_created = 0;
-  $not_updated = 0;
-
-  while ($repeat--  > 0) {
+  $not_updated = 0;  
+  
+  while ($repeat-- > 0) {    
     $msg = null;
     if ($obj->plageconsult_id) {
       if ($msg = $obj->store()) {
         $not_updated++;
-      } 
-      else {
+      } else {
         $msg = "plage mise à jour";
         $updated++;
       }
-    }
-    else {
+    } else {
       if ($msg = $obj->store()) {
         $not_created++;
-      } 
-      else {
+      } else {
         $msg = "plage créée";
         $created++;
       }
     }
-    
     $body_msg .= "<br />Plage du $obj->date: " . $msg;
-  
-    $obj->becomeNext();
     
-    if ($double) {
-      $repeat--;
+    for($i=1;$i<=$type_repeat;$i++){
       $obj->becomeNext();
-	  }
+    }
+	
   }
 
   if ($created) $header [] = "$created plage(s) créée(s)";

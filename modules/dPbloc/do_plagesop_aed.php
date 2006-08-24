@@ -16,9 +16,9 @@ if (!$obj->bind( $_POST )) {
 	$AppUI->redirect();
 }
 
-$del = dPgetParam( $_POST, 'del', 0 );
-$repeat = dPgetParam( $_POST, '_repeat', 0 );
-$double = dPgetParam( $_POST, '_double', 0 );
+$del = dPgetParam( $_POST, "del", 0 );
+$repeat = dPgetParam( $_POST, "_repeat", 0 );
+$type_repeat = dPgetParam( $_POST, "_type_repeat", 1 );
 
 $body_msg = null;
 $header = array();
@@ -91,10 +91,7 @@ if ($del) {
     
     $body_msg .= "<br />Plage du $obj->_day-$obj->_month-$obj->_year: " . $msg;
     
-    $obj->becomeNext();
-    
-    if ($double) {
-	  $repeat--;
+    for($i=1;$i<=$type_repeat;$i++){
       $obj->becomeNext();
     }
   }

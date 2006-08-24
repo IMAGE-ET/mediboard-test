@@ -210,7 +210,7 @@ function pageMain() {
           </select> min
           
         </td>
-        <th><label for="_repeat" title="Nombre de répétitions hébdomadaires">Nombre de répétitions</label></th>
+        <th><label for="_repeat" title="Nombre de plages à créer">Nombre de plages</label></th>
         <td><input type="text" size="2" name="_repeat" value="1" /></td>
       </tr>
       
@@ -224,11 +224,14 @@ function pageMain() {
             <option value="30" {{if ($plageSel->_freq == "30")}} selected="selected" {{/if}}>30</option>
          </select> minutes</td>
         <th>
-          <label for="_double" title="Type de répétition hébdomadaire pour la plage">Type de répétition</label>
+          <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>
         </th>
         <td>
-          <input type="checkbox" name="_double" />
-          <label for="_double" title="Répéter une semaine sur deux">Une semaine sur deux</label>
+          <select name="_type_repeat">
+            <option value="1">Normale</option>
+            <option value="2">Une semaine sur deux</option>
+            <option value="3">Une semaine sur trois</option>
+          </select>
         </td>
       </tr>
       <tr>

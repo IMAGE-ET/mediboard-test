@@ -234,15 +234,20 @@ function popPlanning(debut) {
       
       <tr>
         <th>
-          <label for="_repeat" title="Nombre de répétitions hébdomadaire pour cette plage">Durée de répétition</label>
+          <label for="_repeat" title="Nombre de plages à créer">Nombre de plages</label>
         </th>
         <td>
           <input type="text" title="notNull|num|min|1" name="_repeat" size="1" value="1" />
-          semaine(s)
         </td>
-        <td colspan="4">
-          <input type="checkbox" name="_double" />
-          <label for="_double" title="Appliquer les répétitions une semaine sur deux">Une semaine sur deux</label>
+        <th>
+          <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>
+        </th>
+        <td colspan="3">
+          <select name="_type_repeat">
+            <option value="1">Normale</option>
+            <option value="2">Une semaine sur deux</option>
+            <option value="3">Une semaine sur trois</option>
+          </select>
         </td>
       </tr>
       <tr>
