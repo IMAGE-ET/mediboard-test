@@ -283,18 +283,24 @@ class CConsultation extends CMbObject {
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      "label" => "fichier(s)", 
-      "name" => "files_mediboard", 
-      "idfield" => "file_id", 
-      "joinfield" => "file_object_id",
-      "joinon" => "`file_class`='CConsultation'"
+      "label"     => "consultation(s) d'anesthésie", 
+      "name"      => "consultation_anesth", 
+      "idfield"   => "consultation_anesth_id", 
+      "joinfield" => "consultation_id"
     );
     $tables[] = array (
-      "label" => "document(s)", 
-      "name" => "compte_rendu", 
-      "idfield" => "compte_rendu_id", 
+      "label"     => "fichier(s)", 
+      "name"      => "files_mediboard", 
+      "idfield"   => "file_id", 
+      "joinfield" => "file_object_id",
+      "joinon"    => "`file_class`='CConsultation'"
+    );
+    $tables[] = array (
+      "label"     => "document(s)", 
+      "name"      => "compte_rendu", 
+      "idfield"   => "compte_rendu_id", 
       "joinfield" => "object_id",
-      "joinon" => "(`type` = 'consultation' OR `type` = 'consultAnesth')"
+      "joinon"    => "(`type` = 'consultation' OR `type` = 'consultAnesth')"
     );
     return parent::canDelete( $msg, $oid, $tables );
   }  
