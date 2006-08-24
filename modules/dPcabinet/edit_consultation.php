@@ -14,22 +14,37 @@ require_once($AppUI->getModuleClass("dPcabinet"    , "plageconsult"));
 require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
 require_once($AppUI->getModuleClass("dPcabinet"    , "tarif"));
 require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
-  
+
 if (!$canEdit) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
+
 
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 $vue   = mbGetValueFromGetOrSession("vue2", 0);
 $today = mbDate();
 $hour  = mbTime(null);
-
-// Utilisateur sélectionné ou utilisateur courant
-$prat_id = mbGetValueFromGetOrSession("chirSel", 0);
 $_is_anesth = false;
 
+$prat_id    = mbGetValueFromGetOrSession("chirSel", 0);
+$selConsult = mbGetValueFromGetOrSession("selConsult", 0);
+
+// On récupère la consultation demandée
+if($selConsult){
+  $consult = new CConsultation();
+  $consult->load($selConsult);
+  $consult->loadRefs();
+  // On mémorise le praticien demandé
+  $prat_id = $consult->_ref_plageconsult->chir_id;
+  mbSetValueToSession("chirSel", $prat_id);
+}else{
+  // Si un chirurgien est passé en parametre
+  if(!$prat_id) $prat_id = $AppUI->user_id;
+}
+
+// Vérification des droits pour le praticien demandé (via chirSel ou par la consultation)
 $userSel = new CMediusers;
-$userSel->load($prat_id ? $prat_id : $AppUI->user_id);
+$userSel->load($prat_id);
 $userSel->loadRefs();
 
 // Vérification des droits sur les praticiens
@@ -41,18 +56,20 @@ if (!$userSel->isPraticien()) {
 }
 
 if (!$userSel->isAllowed(PERM_EDIT)) {
+  mbSetValueToSession("chirSel", 0);
   $AppUI->setMsg("Vous n'avez pas les droits suffisants", UI_MSG_ALERT);
   $AppUI->redirect("m=dPcabinet&tab=0");
 }
 
-$selConsult = mbGetValueFromGetOrSession("selConsult", 0);
 if (isset($_GET["date"])) {
   $selConsult = null;
   mbSetValueToSession("selConsult", 0);
 }
 
+
 //Liste des types d'anesthésie
 $anesth = dPgetSysVal("AnesthType");
+
 
 // Consultation courante
 $consult = new CConsultation();
@@ -64,17 +81,7 @@ if ($selConsult) {
   $userSel->load($consult->_ref_plageconsult->chir_id);
   $userSel->loadRefs();
   $consult->loadAides($userSel->user_id);
-  
-  // On vérifie que l'utilisateur a les droits sur la consultation
-  $right = false;
-  foreach($listChir as $key => $value) {
-    if($value->user_id == $consult->_ref_plageconsult->chir_id)
-      $right = true;
-  }
-  if(!$right) {
-    $AppUI->setMsg("Vous n'avez pas accès à cette consultation", UI_MSG_ALERT);
-    $AppUI->redirect("m=dPpatients&tab=0&id=$consult->patient_id");
-  }
+
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
     $consult->_ref_consult_anesth->loadRefs();
   }
