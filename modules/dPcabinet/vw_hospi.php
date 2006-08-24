@@ -17,7 +17,7 @@ require_once($AppUI->getModuleClass("mediusers"));
 require_once($AppUI->getModuleClass("dPhospi", "affectation"));
 
 // Récupération des paramètres
-$selPrat = mbGetValueFromGetOrSession("selPrat");
+$chirSel = mbGetValueFromGetOrSession("chirSel");
 $dateRecherche = mbGetValueFromGetOrSession("dateRecherche", mbDate());
 
 // Liste des chirurgiens
@@ -41,7 +41,7 @@ foreach ($boucle_req as $keyBoucleReq => $curr_BoucleReq){
 		 "\nON sejour.sejour_id = affectation.sejour_id" .
 		 "\nWHERE affectation.$keyBoucleReq < '$dateRecherche 23:59:59'" .
 		 "\nAND affectation.$keyBoucleReq > '$dateRecherche 00:00:00'" .
-		 "\nAND sejour.praticien_id = '$selPrat'" .
+		 "\nAND sejour.praticien_id = '$chirSel'" .
 		 "\nORDER BY affectation.$keyBoucleReq, service.nom, chambre.nom, lit.nom";
 
   ${"Aff".$curr_BoucleReq} = new CAffectation;
@@ -84,13 +84,13 @@ foreach ($boucle_req as $keyBoucleReq => $curr_BoucleReq){
 // récupération des modèles de compte-rendu disponibles
 $crList = new CCompteRendu;
 $where = array();
-$where["chir_id"] = "= '$selPrat'";
+$where["chir_id"] = "= '$chirSel'";
 $where["type"] = "= 'operation'";
 $order[] = "nom";
 $crList = $crList->loadList($where, $order);
 $hospiList = new CCompteRendu;
 $where = array();
-$where["chir_id"] = "= '$selPrat'";
+$where["chir_id"] = "= '$chirSel'";
 $where["type"] = "= 'hospitalisation'";
 $order[] = "nom";
 $hospiList = $hospiList->loadList($where, $order);
@@ -100,7 +100,7 @@ require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("dateRecherche" , $dateRecherche);
-$smarty->assign("selPrat"       , $selPrat       );
+$smarty->assign("chirSel"       , $chirSel       );
 $smarty->assign("listPrat"      , $listPrat      );
 $smarty->assign("AfflistEntree" , $AfflistEntree );
 $smarty->assign("AfflistSortie" , $AfflistSortie );

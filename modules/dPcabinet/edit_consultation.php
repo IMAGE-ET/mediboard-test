@@ -19,30 +19,44 @@ if (!$canEdit) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
 
-
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 $vue   = mbGetValueFromGetOrSession("vue2", 0);
 $today = mbDate();
 $hour  = mbTime(null);
 $_is_anesth = false;
 
-$prat_id    = mbGetValueFromGetOrSession("chirSel", 0);
-$selConsult = mbGetValueFromGetOrSession("selConsult", 0);
+$prat_id    = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
+$selConsult = mbGetValueFromGetOrSession("selConsult", null);
 
-// On récupère la consultation demandée
-if($selConsult){
-  $consult = new CConsultation();
-  $consult->load($selConsult);
-  $consult->loadRefs();
-  // On mémorise le praticien demandé
-  $prat_id = $consult->_ref_plageconsult->chir_id;
-  mbSetValueToSession("chirSel", $prat_id);
-}else{
-  // Si un chirurgien est passé en parametre
-  if(!$prat_id) $prat_id = $AppUI->user_id;
+$consult = new CConsultation();
+
+if(isset($_GET["date"])) {
+  $selConsult = null;
+  mbSetValueToSession("selConsult", null);
 }
 
-// Vérification des droits pour le praticien demandé (via chirSel ou par la consultation)
+// Test compliqué afin de savoir quelle consultation charger
+if(isset($_GET["selConsult"])) {
+  if($consult->load($selConsult)) {
+    $consult->loadRefsFwd();
+    $prat_id = $consult->_ref_plageconsult->chir_id;
+    mbSetValueToSession("chirSel", $prat_id);
+  } else {
+    $selConsult = null;
+    mbSetValueToSession("selConsult");
+  }
+} else {
+  if($consult->load($selConsult)) {
+    $consult->loadRefsFwd();
+    if($prat_id !== $consult->_ref_plageconsult->chir_id) {
+      $consult = new CConsultation();
+      $selConsult = null;
+      mbSetValueToSession("selConsult");
+    }
+  }
+}
+
+// On charge le praticien
 $userSel = new CMediusers;
 $userSel->load($prat_id);
 $userSel->loadRefs();
@@ -61,25 +75,14 @@ if (!$userSel->isAllowed(PERM_EDIT)) {
   $AppUI->redirect("m=dPcabinet&tab=0");
 }
 
-if (isset($_GET["date"])) {
-  $selConsult = null;
-  mbSetValueToSession("selConsult", 0);
-}
-
-
 //Liste des types d'anesthésie
 $anesth = dPgetSysVal("AnesthType");
 
 
 // Consultation courante
-$consult = new CConsultation();
-$consult->_ref_chir = $userSel;
-$consult->_ref_consult_anesth->consultation_anesth_id = 0;
-if ($selConsult) {
-  $consult->load($selConsult);
+$consult->_ref_chir =& $userSel;
+if($consult->consultation_id) {
   $consult->loadRefs();
-  $userSel->load($consult->_ref_plageconsult->chir_id);
-  $userSel->loadRefs();
   $consult->loadAides($userSel->user_id);
 
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
@@ -102,7 +105,8 @@ if ($selConsult) {
   
   // Affecter la date de la consultation
   $date = $consult->_ref_plageconsult->date;
-  
+} else {
+  $consult->_ref_consult_anesth->consultation_anesth_id = 0;
 }
 
 // Récupération des modèles
@@ -144,6 +148,21 @@ $where["function_id"] = "= '$userSel->function_id'";
 $tarifsCab = new CTarif;
 $tarifsCab = $tarifsCab->loadList($where, $order);
 
+// Chargement des aides à la saisie
+$antecedent = new CAntecedent();
+$antecedent->loadAides($userSel->user_id);
+
+$traitement = new CTraitement();
+$traitement->loadAides($userSel->user_id);
+
+// Vérification du cas anesthésie
+if($consult->_ref_chir->isFromType(array("Anesthésiste")) || $consult->_ref_consult_anesth->consultation_anesth_id) {
+  $_is_anesth=true; 
+} else {
+  $_is_anesth=false;
+}
+
+
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
@@ -159,21 +178,9 @@ $smarty->assign("tarifsChir"    , $tarifsChir);
 $smarty->assign("tarifsCab"     , $tarifsCab);
 $smarty->assign("anesth"        , $anesth);
 $smarty->assign("consult"       , $consult);
-
-$antecedent = new CAntecedent();
-$antecedent->loadAides($userSel->user_id);
-$smarty->assign("antecedent", $antecedent);
-
-$traitement = new CTraitement();
-$traitement->loadAides($userSel->user_id);
-$smarty->assign("traitement", $traitement);
-
-if($consult->_ref_chir->isFromType(array("Anesthésiste")) || $consult->_ref_consult_anesth->consultation_anesth_id) {
-  $_is_anesth=true;	
-} else {
-  $_is_anesth=false;
-}
-$smarty->assign("_is_anesth", $_is_anesth);  
+$smarty->assign("antecedent"    , $antecedent);
+$smarty->assign("traitement"    , $traitement);
+$smarty->assign("_is_anesth"    , $_is_anesth);  
 
 if($_is_anesth) {
   $smarty->assign("consult_anesth", $consult->_ref_consult_anesth);

@@ -21,12 +21,35 @@ $date = mbGetValueFromGetOrSession("date", mbDate());
 $today = mbDate();
 $hour = mbTime(null);
 
-// Utilisateur sélectionné ou utilisateur courant
-$prat_id = mbGetValueFromGetOrSession("chirSel", 0);
+$prat_id    = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
+$selConsult = mbGetValueFromGetOrSession("selConsult", null);
 
+$consult = new CConsultation;
+
+// Test compliqué afin de savoir quelle consultation charger
+if(isset($_GET["selConsult"])) {
+  if($consult->load($selConsult)) {
+    $consult->loadRefsFwd();
+    $prat_id = $consult->_ref_plageconsult->chir_id;
+    mbSetValueToSession("chirSel", $prat_id);
+  } else {
+    $selConsult = null;
+    mbSetValueToSession("selConsult");
+  }
+} else {
+  if($consult->load($selConsult)) {
+    $consult->loadRefsFwd();
+    if($prat_id !== $consult->_ref_plageconsult->chir_id) {
+      $consult = new CConsultation();
+      $selConsult = null;
+      mbSetValueToSession("selConsult");
+    }
+  }
+}
+
+// On charge le praticien
 $userSel = new CMediusers;
-$userSel->load($prat_id ? $prat_id : $AppUI->user_id);
-$userSel->loadRefs();
+$userSel->load($prat_id);
 
 // Vérification des droits sur les praticiens
 $listChir = $userSel->loadPraticiens(PERM_EDIT);
@@ -37,17 +60,15 @@ if (!$userSel->isPraticien()) {
 }
 
 if (!$userSel->isAllowed(PERM_EDIT)) {
+  mbSetValueToSession("chirSel", 0);
   $AppUI->setMsg("Vous n'avez pas les droits suffisants", UI_MSG_ALERT);
   $AppUI->redirect("m=dPcabinet&tab=0");
 }
 
-// Consultation courante
-$selConsult = mbGetValueFromGet("selConsult", 0);
-$consult = new CConsultation();
-if ($selConsult)
-  $consult->consultation_id = $selConsult;
-else
-  $consult->consultation_id = 0;
+if($consult->consultation_id) {
+  $date = $consult->_ref_plageconsult->date;
+  mbSetValueToSession("date", $date);
+}
 
 // Récupération des plages de consultation du jour et chargement des références
 $listPlage = new CPlageconsult();
