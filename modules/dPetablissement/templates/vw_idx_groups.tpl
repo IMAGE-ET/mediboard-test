@@ -2,11 +2,11 @@
   <tr>
     <td class="halfPane">
       <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;group_id=0" class="buttonnew">
-        Créer un groupe
+        Créer un établissement
       </a>
       <table class="tbl">
         <tr>
-          <th>liste des groupes</th>
+          <th>liste des établissements</th>
           <th>Fonctions associées</th>
         </tr>
         {{foreach from=$listGroups item=curr_group}}
@@ -37,15 +37,15 @@
             <a style="float:right;" href="javascript:view_log('CGroups',{{$usergroup->group_id}})">
               <img src="images/history.gif" alt="historique" />
             </a>
-            Modification du groupe &lsquo;{{$usergroup->text}}&rsquo;
+            Modification de l'établissement &lsquo;{{$usergroup->text}}&rsquo;
           {{else}}
-            Création d'un groupe
+            Création d'un établissement
           {{/if}}
           </th>
         </tr>
         <tr>
           <th>
-            <label for="text" title="intitulé du groupe, obligatoire.">Intitulé</label>
+            <label for="text" title="intitulé de l'établissement, obligatoire.">Intitulé</label>
           </th>
           <td>
             <input type="text" title="{{$usergroup->_props.text}}" name="text" size="30" id="group_text" value="{{$usergroup->text}}" />
@@ -55,7 +55,7 @@
           <td class="button" colspan="2">
           {{if $usergroup->group_id}}
             <button class="modify" type="submit">Valider</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le groupe',objName:'{{$usergroup->text|escape:javascript}}'})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'établissement,objName:'{{$usergroup->text|escape:javascript}}'})">
               Supprimer
             </button>
           {{else}}

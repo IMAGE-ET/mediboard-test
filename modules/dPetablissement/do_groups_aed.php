@@ -13,9 +13,9 @@ require_once($AppUI->getModuleClass("dPetablissement", "groups"));
 require_once($AppUI->getSystemClass("doobjectaddedit"));
 
 $do = new CDoObjectAddEdit("CGroups", "group_id");
-$do->createMsg = "Groupe créé";
-$do->modifyMsg = "Groupe modifié";
-$do->deleteMsg = "Groupe supprimé";
+$do->createMsg = "Etablissement créé";
+$do->modifyMsg = "Etablissement modifié";
+$do->deleteMsg = "Etablissement supprimé";
 $do->doIt();
 
 ?>
