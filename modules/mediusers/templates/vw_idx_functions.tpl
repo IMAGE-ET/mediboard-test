@@ -26,7 +26,7 @@ function setColor(color) {
       <table class="tbl">
       {{foreach from=$listGroups item=curr_group}}
         <tr>
-          <th>Groupe {{$curr_group->text}} &mdash; {{$curr_group->_ref_functions|@count}} fonction(s)</th>
+          <th>Etablissement {{$curr_group->text}} &mdash; {{$curr_group->_ref_functions|@count}} fonction(s)</th>
           <th>Type</th>
           <th>Utilisateurs</th>
         </tr>
@@ -80,11 +80,11 @@ function setColor(color) {
         
         <tr>
           <th>
-            <label for="group_id" title="Groupe auquel se rattache la fonction">Groupe</label>
+            <label for="group_id" title="Etablissement auquel se rattache la fonction">Etablissement</label>
           </th>
           <td>
             <select name="group_id" title="{{$userfunction->_props.group_id}}">
-              <option value="">&mdash; choisir un groupe</option>
+              <option value="">&mdash; choisir un Etablissement</option>
               {{foreach from=$listGroups item=curr_group}}
               <option value="{{$curr_group->group_id}}" {{if $curr_group->group_id == $userfunction->group_id}} selected="selected" {{/if}}>
                 {{$curr_group->text}}

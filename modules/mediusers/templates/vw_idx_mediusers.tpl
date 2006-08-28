@@ -45,7 +45,7 @@ function pageMain() {
           <td colspan="4" style="background: #{{$curr_function->color}}" >
             <strong>{{$curr_function->text}}</strong> -
             {{$curr_function->_ref_users|@count}} utilisateur(s) -
-            groupe {{$curr_function->_ref_group->text}}
+            Etablissement {{$curr_function->_ref_group->text}}
           </td>
         </tr>
         <tbody class="functionEffect" id="function{{$curr_function->function_id}}">
