@@ -40,7 +40,9 @@ if (!$prat_id) {
 $compte_rendu_id = mbGetValueFromGetOrSession("compte_rendu_id");
 $compte_rendu = new CCompteRendu();
 $compte_rendu->load($compte_rendu_id);
-
+if($compte_rendu->object_id){
+  $AppUI->redirect("m=$m&tab=vw_modeles");
+}
 // Gestion du modèle
 if ($compte_rendu->compte_rendu_id) {
   $prat_id = $compte_rendu->chir_id;
