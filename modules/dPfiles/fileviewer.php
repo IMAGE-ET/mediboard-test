@@ -75,6 +75,7 @@ if ($file_id = mbGetValueFromGet("file_id")) {
     $wl = mbGetValueFromGet("wl", "");
     $f  = mbGetValueFromGet("f" , "png");
     $q  = mbGetValueFromGet("q" , 100);
+    $dpi  = mbGetValueFromGet("dpi" , 150);
     $sfn  = mbGetValueFromGet("sfn" , 0);
     //creation fin URL
     $finUrl="";
@@ -93,6 +94,7 @@ if ($file_id = mbGetValueFromGet("file_id")) {
       if($h){$finUrl.="&h=$h";}
       if($w){$finUrl.="&w=$w";}
       if($sfn){$finUrl.="&sfn=$sfn";}
+      if($dpi){$finUrl.="&dpi=$dpi";}
       // Sharp filter to unblur raster
 //      $finUrl .= "&fltr[]=usm|80|5|1";
 //      $finUrl .= "&fltr[]=usm";

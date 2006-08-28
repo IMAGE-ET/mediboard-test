@@ -238,7 +238,7 @@ $libraries[] = $library;
 $library = new CLibrary;
 $library->name = "phpThumb";
 $library->url = "http://phpthumb.sourceforge.net/";
-$library->fileName = "phpThumb_1.7.4_beta.zip";
+$library->fileName = "phpThumb_1.7.4_beta2.zip";
 $library->description = "Composant de création de thumbnails";
 $library->extraDir = "phpThumb";
 
