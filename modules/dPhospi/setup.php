@@ -118,6 +118,10 @@ class CSetupdPhospi {
             "\nWHERE `affectation`.`operation_id` = `operations`.`operation_id`;";
         db_exec($sql); db_error();
       case "0.15":
+        $module = @CMbModule::getInstalled("dPetablissement");
+        if (!$module || $module->mod_version < "0.1") {
+          return "0.15";
+        }
         $sql = "ALTER TABLE `service` ADD `group_id` INT UNSIGNED NOT NULL DEFAULT 1 AFTER `service_id`;";
         db_exec($sql); db_error();
         $sql = "ALTER TABLE `service` ADD INDEX ( `group_id` ) ;";

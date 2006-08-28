@@ -495,6 +495,10 @@ class CSetupdPplanningOp {
         $sql = "ALTER TABLE `operations` ADD `anesth_id` INT UNSIGNED DEFAULT NULL AFTER `chir_id`";
         db_exec($sql); db_error();
       case "0.51":
+        $module = @CMbModule::getInstalled("dPetablissement");
+        if (!$module || $module->mod_version < "0.1") {
+          return "0.51";
+        }
         $sql = "ALTER TABLE `sejour` ADD `group_id` INT UNSIGNED NOT NULL DEFAULT 1 AFTER `praticien_id`";
         db_exec($sql); db_error();
         $sql = "ALTER TABLE `sejour` ADD INDEX ( `group_id` ) ;";

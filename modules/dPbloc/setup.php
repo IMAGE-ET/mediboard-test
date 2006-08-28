@@ -83,6 +83,10 @@ class CSetupdPbloc {
         $sql = "ALTER TABLE `sallesbloc` ADD `stats` TINYINT DEFAULT '0' NOT NULL AFTER `nom` ;";
         db_exec( $sql ); db_error();
       case "0.13":
+        $module = @CMbModule::getInstalled("dPetablissement");
+        if (!$module || $module->mod_version < "0.1") {
+          return "0.13";
+        }
         $sql = "ALTER TABLE `sallesbloc` ADD `group_id` INT UNSIGNED NOT NULL DEFAULT 1 AFTER `id`;";
         db_exec($sql); db_error();
         $sql = "ALTER TABLE `sallesbloc` ADD INDEX ( `group_id` ) ;";
