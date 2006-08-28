@@ -10,7 +10,7 @@
 require_once($AppUI->getSystemClass("tabindex"));
 
 $tabs = array();
-$tabs[] = array("vw_idx_groups", "Groupes d'utilisateurs", 0);
+$tabs[] = array("vw_idx_groups", "Gestion des établissements", 0);
 $default = "vw_idx_groups";
 
 $index = new CTabIndex($tabs, $default);
