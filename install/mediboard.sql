@@ -44,8 +44,8 @@ CREATE TABLE `modules` (
 -- Dumping data for table `modules`
 -- 
 
-INSERT INTO `modules` VALUES (18, 'User Administration', 'admin', '1.0.0', '', 'core', 1, 'User Admin', 'admin.png', 9, 1, '');
-INSERT INTO `modules` VALUES (19, 'System Administration', 'system', '1.0.0', '', 'core', 1, 'System Admin', 'system.png', 10, 1, '');
+INSERT INTO `modules` VALUES (1, 'User Administration', 'admin', '1.0.0', '', 'core', 1, 'User Admin', 'admin.png', 9, 1, '');
+INSERT INTO `modules` VALUES (2, 'System Administration', 'system', '1.0.0', '', 'core', 1, 'System Admin', 'system.png', 10, 1, '');
 
 -- --------------------------------------------------------
 

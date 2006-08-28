@@ -574,12 +574,7 @@ function mbRemovePath($dir) {
  * @return string Mediboard version */
 function mbVersion() {
   // Manual numbering
-  $mb_version_major = 0;
-  $mb_version_minor = 3;
-  $mb_version_patch = 3;
-  
-  // Automated numbering (should be incremented at each commit)
-  $mb_version_build = 21;
+  global $mb_version_major, $mb_version_minor, $mb_version_patch, $mb_version_build;
   
   return "v$mb_version_major.$mb_version_minor.$mb_version_patch b$mb_version_build";
 }

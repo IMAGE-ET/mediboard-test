@@ -1,3 +1,13 @@
+{{if $coreModules|@count}}
+  <div class="big-warning">
+    Un ou plusieurs des modules de base ne sont pas à jour.<br />
+    Des erreurs risquent de s'afficher et le système ne fonctionnera pas correctement.<br />
+    Veuillez les mettre à jour afin de supprimer ces erreurs résultantes et avoir accès aux autres modules
+  </div>
+  {{assign var="modules" value=$coreModules}}
+  {{assign var="modFiles" value=null}}
+{{/if}}
+
 <h2>Administration des modules</h2>
 
 <table border="0" cellpadding="2" cellspacing="1" width="98%" class="tbl">

@@ -136,7 +136,7 @@ if (@$_POST["changePassword"] and $password != "admin") {
 </p>
 
 <div class="wizard-navigation">
-  <a href="../index.php?m=system&amp;tabs=view_modules">
+  <a href="../index.php?m=system&amp;tab=view_modules">
     Me rendre à la page d'administration des modules
   </a>
 </div>
