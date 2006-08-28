@@ -10,10 +10,10 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
+	$AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
+require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
 
 $deb = mbGetValueFromGetOrSession("deb", mbDate());
 $fin = mbGetValueFromGetOrSession("fin", mbDate());
@@ -23,7 +23,7 @@ $ljoin = array();
 $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 $where = array();
 $where["materiel"] = "!= ''";
-$where["plageop_id"] = "IS NOT NULL";
+$where["operations.plageop_id"] = "IS NOT NULL";
 $where[] = "plagesop.date BETWEEN '$deb' AND '$fin'";
 $order = array();
 $order[] = "plagesop.date";
@@ -48,12 +48,12 @@ foreach($op2 as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('op1', $op1);
-$smarty->assign('op2', $op2);
+$smarty->assign("op1", $op1);
+$smarty->assign("op2", $op2);
 
-$smarty->display('print_materiel.tpl');
+$smarty->display("print_materiel.tpl");
 
 ?>
