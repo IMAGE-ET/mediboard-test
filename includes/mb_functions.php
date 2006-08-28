@@ -463,6 +463,7 @@ function mbLoadScripts() {
   mbLoadScript("lib/rico/rico.js");
   
   mbLoadScript("includes/javascript/prototypex.js");
+  mbLoadScript("includes/javascript/ricoex.js");
   mbLoadScript("includes/javascript/functions.js");
   mbLoadScript("includes/javascript/cjl_cookie.js");
   mbLoadScript("includes/javascript/url.js");
