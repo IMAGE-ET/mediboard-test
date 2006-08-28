@@ -84,7 +84,7 @@ function setColor(color) {
           </th>
           <td>
             <select name="group_id" title="{{$userfunction->_props.group_id}}">
-              <option value="">&mdash; choisir un Etablissement</option>
+              <option value="">&mdash; choisir un établissement</option>
               {{foreach from=$listGroups item=curr_group}}
               <option value="{{$curr_group->group_id}}" {{if $curr_group->group_id == $userfunction->group_id}} selected="selected" {{/if}}>
                 {{$curr_group->text}}
