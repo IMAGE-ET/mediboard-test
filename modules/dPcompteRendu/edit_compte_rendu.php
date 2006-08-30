@@ -20,8 +20,6 @@ if(!$canEdit) {
   $AppUI->redirect("m=system&a=access_denied");
 }
 
-mbTrace($_SESSION["dPcompteRendu"]);
-
 $compte_rendu_id = mbGetValueFromGet("compte_rendu_id"   , 0);
 $modele_id       = mbGetValueFromGet("modele_id"         , 0);
 $praticien_id    = mbGetValueFromGet("praticien_id"      , 0);
