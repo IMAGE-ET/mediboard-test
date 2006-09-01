@@ -39,28 +39,31 @@ function popMed(type) {
 }
 
 function delCmu(){
-  form = document.editFrm;
-  form._fin_cmu.value = "";
+  oForm = document.editFrm;
+  oForm.cmu.value = "";
+  oDateDiv = $("editFrm_cmu_da");
+  oDateDiv.innerHTML = "";
+  
 }
 
 function delMed(sElementName) {
-  form = document.editFrm;
+  oForm = document.editFrm;
   
-  fieldMedecin = eval("form.medecin" + sElementName);
-  fieldMedecinName = eval("form._medecin" + sElementName + "_name");
+  oFieldMedecin = eval("oForm.medecin" + sElementName);
+  oFieldMedecinName = eval("oForm._medecin" + sElementName + "_name");
 	
-  fieldMedecin.value = "";
-  fieldMedecinName.value = "";
+  oFieldMedecin.value = "";
+  oFieldMedecinName.value = "";
 }
 
 function setMed( key, nom, prenom, sElementName ){
-  form = document.editFrm;
+  oForm = document.editFrm;
   
-  fieldMedecin = eval("form.medecin" + sElementName);
-  fieldMedecinName = eval("form._medecin" + sElementName + "_name");
+  oFieldMedecin = eval("oForm.medecin" + sElementName);
+  oFieldMedecinName = eval("oForm._medecin" + sElementName + "_name");
 	
-  fieldMedecin.value = key;
-  fieldMedecinName.value = "Dr. " + nom + " " + prenom;
+  oFieldMedecin.value = key;
+  oFieldMedecinName.value = "Dr. " + nom + " " + prenom;
 }
 
 function updateFields(selected) {

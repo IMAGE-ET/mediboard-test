@@ -8,6 +8,20 @@ function view_history_patient(id){
   url.popup(600, 500, "history");
 }
 
+function viewPatient() {
+  var oForm = document.actionPat;
+  var oTabField = oForm.tab;
+  oTabField.value = "vw_full_patients";
+  oForm.submit();
+}
+
+function editPatient() {
+  var oForm = document.actionPat;
+  var oTabField = oForm.tab;
+  oTabField.value = "vw_edit_patients";
+  oForm.submit();
+}
+
 function printPatient(id) {
   var url = new Url;
   url.setModuleAction("dPpatients", "print_patient");
@@ -48,7 +62,7 @@ function printIntervention(id) {
 function reloadVwPatient(){
   var mainUrl = new Url;
   mainUrl.setModuleAction("dPpatients", "httpreq_vw_patient");
-  mainUrl.addParam("id", document.modif.patient_id.value);
+  mainUrl.addParam("patient_id", document.modif.patient_id.value);
   mainUrl.requestUpdate('vwPatient', { waitingText : null });
 }
 
@@ -65,119 +79,94 @@ function reloadAfterSaveDoc(){
       </a>
       Identité
     </th>
-    <th class="category" colspan="2">Informations médicales</th>
+    <th class="category" colspan="2">Coordonnées</th>
   </tr>
 
   <tr>
-    <th>Nom:</th>
+    <th>Nom</th>
     <td>{{$patient->nom}}</td>
-    <th>Incapable majeur:</th>
-    <td>
-      {{if $patient->incapable_majeur == "o"}} oui {{/if}}
-      {{if $patient->incapable_majeur == "n"}} non {{/if}}
-    </td>
+    <th>Adresse</th>
+    <td class="text">{{$patient->adresse|nl2br}}</td>
   </tr>
   
   <tr>
-    <th>Prénom:</th>
+    <th>Prénom</th>
     <td>{{$patient->prenom}}</td>
-    <th>ATNC:</th>
-    <td>
-      {{if $patient->ATNC == "o"}} oui {{/if}}
-      {{if $patient->ATNC == "n"}} non {{/if}}
-    </td>
+    <th>Code Postal</th>
+    <td>{{$patient->cp}}</td>
   </tr>
   
   <tr>
-    <th>Nom de jeune fille:</th>
+    <th>Nom de naissance</th>
     <td>{{$patient->nom_jeune_fille}}</td>
-    <th>Code administratif:</th>
-    <td>{{$patient->SHS}}</td>
+    <th>Ville</th>
+    <td>{{$patient->ville}}</td>
   </tr>
   
   <tr>
-    <th>Date de naissance:</th>
-    <td>{{$patient->_jour}} / {{$patient->_mois}} / {{$patient->_annee}}</td>
-    <th>Numéro d'assuré social:</th>
-    <td>{{$patient->matricule}}</td>
+    <th>Date de naissance</th>
+    <td>{{$patient->_naissance}}</td>
+    <th>Téléphone</th>
+    <td>{{$patient->_tel1}} {{$patient->_tel2}} {{$patient->_tel3}} {{$patient->_tel4}} {{$patient->_tel5}}</td>
   </tr>
   
   <tr>
-    <th>Sexe:</th>
+    <th>Sexe</th>
     <td>
       {{if $patient->sexe == "m"}} masculin {{/if}}
       {{if $patient->sexe == "f"}} féminin {{/if}}
       {{if $patient->sexe == "j"}} femme célibataire {{/if}} 
     </td>
-    <td colspan="2"></td>
+    <th>Portable</th>
+    <td>{{$patient->_tel21}} {{$patient->_tel22}} {{$patient->_tel23}} {{$patient->_tel24}} {{$patient->_tel25}}</td>
   </tr>
   
   <tr>
-    <th class="category" colspan="2">Coordonnées</th>
-    <th class="category" colspan="2">Remarques</th>
+    <th class="category" colspan="4">Remarques</th>
   </tr>
   
   <tr>
-    <th>Adresse:</th>
-    <td class="text">{{$patient->adresse|nl2br:php}}</td>
-    <td rowspan="5" colspan="2" class="text">{{$patient->rques|nl2br:php}}</td>
+    <td colspan="4" class="text">{{$patient->rques|nl2br}}</td>
   </tr>
-  
-  <tr>
-    <th>Code Postal:</th>
-    <td>{{$patient->cp}}</td>
-  </tr>
-  
-  <tr>
-    <th>Ville:</th>
-    <td>{{$patient->ville}}</td>
-  </tr>
-  
-  <tr>
-    <th>Téléphone:</th>
-    <td>{{$patient->_tel1}} {{$patient->_tel2}} {{$patient->_tel3}} {{$patient->_tel4}} {{$patient->_tel5}}</td>
-  </tr>
-  
-  <tr>
-    <th>Portable:</th>
-    <td>{{$patient->tel2}}</td>
-  </tr>
-  
-  {{if $canEdit}}
   <tr>
     <td class="button" colspan="4">
-      <form name="modif" action="./index.php" method="get">
+      <form name="actionPat" action="./index.php" method="get">
       <input type="hidden" name="m" value="dPpatients" />
-      <input type="hidden" name="tab" value="vw_edit_patients" />
+      <input type="hidden" name="tab" value="vw_idx_patients" />
       <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
-      <button type="submit" class="modify">
-        Modifier
+      <button type="button" class="search" onclick="viewPatient()">
+        Afficher
       </button>
       <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
         Imprimer
       </button>
+      {{if $canEdit}}
+      <button type="button" class="modify" onclick="editPatient()">
+        Modifier
+      </button>
+      {{/if}}
       </form>
-
     </td>
   </tr>
-  {{/if}}
 </table>
 
 <table class="form">
-  <tr><th class="category" colspan="3">Planifier</th></tr>
+  <tr>
+    <th class="category" colspan="3">Planifier</th>
+  </tr>
   <tr>
     <td class="button">
-      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
+      <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
         Une intervention
       </a>
     </td>
     <td class="button">
-      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
+      <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
         Un séjour
       </a>
     </td>
     <td class="button">
-      <a href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
+      <a class="buttonnew" href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
         Une consultation
       </a>
     </td>
@@ -344,7 +333,7 @@ function reloadAfterSaveDoc(){
         <input type="hidden" name="file_class" value="CPatient" />
         <input type="hidden" name="file_object_id" value="{{$patient->patient_id}}" />
         <input type="file" name="formfile" size="0" /><br />
-        Dans : <select name="file_category_id">
+        Dans  <select name="file_category_id">
         {{foreach from=$affichageNbFile item=curr_listCat key=keyCat}}
         <option value="{{$keyCat}}">{{$curr_listCat.name}}</option>
         {{/foreach}}

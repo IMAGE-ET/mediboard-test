@@ -33,7 +33,7 @@ $canEditCptRendus = isMbModuleVisible("dPcompteRendu") and isMbModuleEditAll("dP
 $listModeleAuth = array();
 
 $listModelePrat = new CCompteRendu;
-$listModeleFct = new CCompteRendu;
+$listModeleFct  = new CCompteRendu;
 
 if ($patient_id) {
   $listPrat = new CMediusers();

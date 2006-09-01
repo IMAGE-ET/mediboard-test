@@ -19,7 +19,7 @@ if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$patient_id = mbGetValueFromGetOrSession("id", 0);
+$patient_id = mbGetValueFromGetOrSession("patient_id", 0);
 
 $canReadFiles     = isMbModuleVisible("dPfiles") and isMbModuleReadAll("dPfiles");
 $canEditFiles     = isMbModuleVisible("dPfiles") and isMbModuleEditAll("dPfiles");

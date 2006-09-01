@@ -29,7 +29,7 @@
         {{/if}}
           <td class="{{cycle name=cellicon values="dark, light"}}">
             <a href="javascript:popFile({{$curr_file->file_id}},0);">
-              <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suprressHeaders=1&amp;file_id={{$curr_file->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" title="Afficher le grand aperçu" />
+              <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suprressHeaders=1&amp;file_id={{$curr_file->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="Petit aperçu" title="Afficher le grand aperçu" />
             </a>
           </td>
           <td class="text {{cycle name=celltxt values="dark, light"}}" style="vertical-align: middle;">

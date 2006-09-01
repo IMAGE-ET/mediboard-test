@@ -22,8 +22,8 @@ $selClass = mbGetValueFromGetOrSession("selClass", null);
 $keywords = mbGetValueFromGetOrSession("keywords", null);
 $selKey   = mbGetValueFromGetOrSession("selKey"  , null);
 $selView  = mbGetValueFromGetOrSession("selView" , null);
-$file_id  = mbGetValueFromGet("file_id" , null);
 $typeVue  = mbGetValueFromGetOrSession("typeVue" , 0);
+$file_id  = mbGetValueFromGet("file_id" , null);
 $reloadlist = 0;
 
 $file = new CFile;
@@ -67,16 +67,16 @@ if($selClass && $selKey){
 }
 
 $smarty->assign("accordion_open" , $accordion_open);
-$smarty->assign("cat_id"      , $cat_id      );
-$smarty->assign("listCategory", $listCategory);
-$smarty->assign("selClass"    , $selClass    );
-$smarty->assign("selKey"      , $selKey      );
-$smarty->assign("selView"     , $selView     );
-$smarty->assign("file"        , $file        );
-$smarty->assign("keywords"    , $keywords    );
-$smarty->assign("object"      , $object      );
-$smarty->assign("typeVue"     , $typeVue     );
-$smarty->assign("reloadlist"  , $reloadlist  );
+$smarty->assign("cat_id"         , $cat_id      );
+$smarty->assign("listCategory"   , $listCategory);
+$smarty->assign("selClass"       , $selClass    );
+$smarty->assign("selKey"         , $selKey      );
+$smarty->assign("selView"        , $selView     );
+$smarty->assign("file"           , $file        );
+$smarty->assign("keywords"       , $keywords    );
+$smarty->assign("object"         , $object      );
+$smarty->assign("typeVue"        , $typeVue     );
+$smarty->assign("reloadlist"     , $reloadlist  );
 
 $smarty->display("vw_files.tpl");
 
