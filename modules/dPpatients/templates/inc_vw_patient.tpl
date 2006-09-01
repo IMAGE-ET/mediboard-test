@@ -62,7 +62,7 @@ function printIntervention(id) {
 function reloadVwPatient(){
   var mainUrl = new Url;
   mainUrl.setModuleAction("dPpatients", "httpreq_vw_patient");
-  mainUrl.addParam("patient_id", document.modif.patient_id.value);
+  mainUrl.addParam("patient_id", document.actionPat.patient_id.value);
   mainUrl.requestUpdate('vwPatient', { waitingText : null });
 }
 
