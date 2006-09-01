@@ -1,8 +1,11 @@
 <table class="form">
   <tr>
-    <th class="category">Patient</th>
-    <th class="category">Informations</th>
-    <th class="category">Correpondants</th>
+    <th class="category">
+      <button id="listConsult-trigger" type="button" style="float:left">+/-</button>
+      Patient
+    </th>
+    <th class="category">Intervention</th>
+    <th class="category">Correspondants</th>
     <th class="category">
       <a style="float:right;" href="javascript:view_log('CConsultation',{{$consult->consultation_id}})">
         <img src="images/history.gif" alt="historique" />
@@ -15,7 +18,7 @@
       {{include file="inc_patient_infos.tpl"}}
     </td>
     <td class="text" id="consultAnesth">
-      {{include file="inc_vw_consult_anesth.tpl"}}
+      {{include file="inc_consult_anesth/interventions.tpl"}}
     </td>
     <td class="text">
       {{include file="inc_patient_medecins.tpl"}}

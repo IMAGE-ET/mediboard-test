@@ -6,6 +6,7 @@
 "DL"=>"DL",
 "DV"=>"DV",
 "GP"=>"GP",
+"GYN"=>"Gynécologique",
 "TO"=>"Table orthopédique",
 "classe1"=>"Classe 1",
 "classe2"=>"Classe 2",

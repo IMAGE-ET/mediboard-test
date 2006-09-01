@@ -15,13 +15,16 @@ if (!$canRead) {
 
 require_once($AppUI->getModuleClass("dPbloc"      , "plagesop"));
 require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
+require_once($AppUI->getModuleClass("dPplanningOp", "typeanesth"));
 
 if(!($plageop_id = mbGetValueFromGetOrSession("plageop_id"))) {
   $AppUI->msg = "Vous devez choisir une plage opératoire";
   $AppUI->redirect("m=dPbloc&tab=vw_edit_planning");
 }
 
-$anesth = dPgetSysVal("AnesthType");
+$anesth = new CTypeAnesth;
+$orderanesth = "name";
+$anesth = $anesth->loadList(null,$orderanesth);
 
 // Infos sur la plage opératoire
 $plage = new CPlageOp;

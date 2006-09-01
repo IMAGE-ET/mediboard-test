@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.43";
+$config["mod_version"]     = "0.44";
 $config["mod_directory"]   = "dPcabinet";
 $config["mod_setup_class"] = "CSetupdPcabinet";
 $config["mod_type"]        = "user";
@@ -302,7 +302,51 @@ class CSetupdPcabinet {
         $sql = "ALTER TABLE `tarifs` ADD INDEX ( `function_id` ) ;";
          db_exec($sql); db_error();
       case "0.43":
-        return "0.43";
+        $sql = "ALTER TABLE `consultation_anesth`" .
+          "CHANGE `position` `position` ENUM( 'DD', 'DV', 'DL', 'GP', 'AS', 'TO', 'GYN');";
+        db_exec($sql); db_error();  
+        $sql = "CREATE TABLE `techniques_anesth` (
+               `technique_id` INT NOT NULL AUTO_INCREMENT ,
+               `consultAnesth_id` INT NOT NULL ,
+               `technique` TEXT NOT NULL ,
+               PRIMARY KEY ( `technique_id` )) TYPE=MyISAM";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `consultation_anesth`
+        		ADD `rai` float default NULL,
+        		ADD `hb` float default NULL,
+        		ADD `tp` float default NULL,
+        		ADD `tca` time NOT NULL default '00:00:00',
+        	    ADD `creatinine` float default NULL,
+        		ADD `na` float default NULL,
+        		ADD `k` float default NULL,
+        		ADD `tsivy` time NOT NULL default '00:00:00',
+        		ADD `plaquettes` INT(7) default NULL,
+        		ADD `ht` float default NULL,
+        		ADD `ecbu` ENUM( '?', 'NEG', 'POS' ) DEFAULT '?' NOT NULL,
+        		ADD `ecbu_detail` TEXT,
+        		ADD `pouls` INT(4) default NULL,
+        		ADD `spo2` float default NULL
+        		;";
+        db_exec( $sql ); db_error(); 
+        $sql = "ALTER TABLE `consultation_anesth` CHANGE `operation_id` `operation_id` BIGINT( 20 ) NULL DEFAULT NULL;";
+        db_exec( $sql ); db_error();         
+        $sql = "ALTER TABLE `consultation_anesth` " .
+        		"\nCHANGE `etatBucco` `etatBucco` TEXT DEFAULT NULL ," .
+        		"\nCHANGE `conclusion` `conclusion` TEXT DEFAULT NULL ";
+        db_exec( $sql ); db_error(); 
+        $sql = "ALTER TABLE `consultation_anesth` " .
+        		"\nCHANGE `tabac` `tabac` TEXT DEFAULT NULL ," .
+        		"\nCHANGE `oenolisme` `oenolisme` TEXT DEFAULT NULL ";
+        db_exec( $sql ); db_error(); 
+        $sql = "CREATE TABLE `exams_comp` (
+               `exam_id` INT NOT NULL AUTO_INCREMENT ,
+               `consult_id` INT NOT NULL ,
+               `examen` TEXT NOT NULL ,
+               `fait` tinyint(1) NOT NULL default 0,
+               PRIMARY KEY ( `exam_id` )) TYPE=MyISAM";
+        db_exec( $sql ); db_error();
+      case "0.44":
+        return "0.44";
     }
     return false;
   }

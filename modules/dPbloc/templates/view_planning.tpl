@@ -68,7 +68,7 @@ function printAdmission(id) {
         {{/foreach}}
       </td>
 		  <td>{{$curr_op->cote|truncate:1:""|capitalize}}</td>
-          <td>{{if $curr_op->_lu_type_anesth != ''}}{{$curr_op->_lu_type_anesth}}{{else}}Non Définie{{/if}}</td>
+          <td>{{if $curr_op->type_anesth != null}}{{$curr_op->_lu_type_anesth}}{{else}}Non Disponible{{/if}}</td>
           <td>{{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}}</td>
 		  <td class="text">{{$curr_op->rques|nl2br}}</td>
 		  <td class="text">

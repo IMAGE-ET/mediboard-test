@@ -418,9 +418,56 @@ class CMbObject extends CDpObject {
     
       // Currrency format
       case "currency":
-        if (!preg_match ("/^([0-9]+)(\.[0-9]{0,2}){0,1}$/", $propValue)) {
-          return "n'est pas une valeur monétaire (utilisez le . pour la virgule)";
+        //if (!preg_match ("/^([0-9]+)(\.[0-9]{0,2}){0,1}$/", $propValue)) {
+        if(!is_numeric($propValue)){
+          return "n'est pas une valeur décimale (utilisez le . pour la virgule)";
         }
+        
+        switch (@$specFragments[1]) {
+          case null:
+            break;
+            
+          case "min":
+            if (!is_numeric($min = @$specFragments[2])) {
+              return "Spécification de minimum numérique invalide";
+            }
+            
+            $min = intval($min);
+            if ($propValue < $min) {
+              return "Soit avoir une valeur minimale de $min";
+            }
+            
+            break;
+
+          case "max":
+            if (!is_numeric($max = @$specFragments[2])) {
+              return "Spécification de maximum numérique invalide";
+            }
+            
+            $max = intval($max);
+            if ($propValue > $max) {
+              return "Soit avoir une valeur maximale de $max";
+            }
+            
+            break;
+          
+          case "pos":            
+            if ($propValue <= 0) {
+              return "Doit avoir une valeur positive";
+            }
+            
+            break;
+          
+          case "minMax":
+            if (!is_numeric($min = @$specFragments[2]) || !is_numeric($max = @$specFragments[3])) {
+              return "Spécification de maximum numérique invalide";
+            } 
+            if($propValue>$max || $propValue<$min){
+              return "N'est pas compris entre $min et $max";
+            }
+            break;
+            
+        }     
         
         break;
     
@@ -779,7 +826,7 @@ class CMbObject extends CDpObject {
   }
   
   function loadAides($user_id) {
-    $class = substr(get_class($this), 1);
+    $class = get_class($this);
     
     // Initialisation to prevent understandable smarty notices
     foreach ($this->_props as $propName => $propSpec) {
@@ -793,9 +840,9 @@ class CMbObject extends CDpObject {
     $where = array();
     $where["user_id"] = " = '$user_id'";
     $where["class"] = " = '$class'";
-    
+    $order = "name";
     $aides = new CAideSaisie();
-    $aides = $aides->loadList($where);
+    $aides = $aides->loadList($where,$order);
         
     // Aides mapping suitable for select options
     foreach ($aides as $aide) {

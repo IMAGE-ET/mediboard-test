@@ -1,6 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
+"GYN"=>"Gynécologique",
 "AS"=>"Assise",
 "DD",
 "DL",

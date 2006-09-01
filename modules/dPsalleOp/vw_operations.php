@@ -18,6 +18,7 @@ require_once($AppUI->getModuleClass("mediusers"   , "functions"));
 require_once($AppUI->getModuleClass("dPbloc"      , "salle"    ));
 require_once($AppUI->getModuleClass("dPbloc"      , "plagesop" ));
 require_once($AppUI->getModuleClass("dPplanningOp", "planning" ));
+require_once($AppUI->getModuleClass("dPplanningOp", "typeanesth"));
 
 $salle = mbGetValueFromGetOrSession("salle");
 $op    = mbGetValueFromGetOrSession("op");
@@ -98,6 +99,10 @@ if($op) {
   }
 }
 
+$listAnesthType = new CTypeAnesth;
+$orderanesth = "name";
+$listAnesthType = $listAnesthType->loadList(null,$orderanesth);
+
 // Création du template
 require_once( $AppUI->getSystemClass ("smartydp" ) );
 $smarty = new CSmartyDP(1);
@@ -106,7 +111,7 @@ $smarty->debugging = false;
 
 $smarty->assign("salle"         , $salle                   );
 $smarty->assign("listSalles"    , $listSalles              );
-$smarty->assign("listAnesthType", dPgetSysVal("AnesthType"));
+$smarty->assign("listAnesthType", $listAnesthType          );
 $smarty->assign("listAnesths"   , $listAnesths             );
 $smarty->assign("listChirs"     , $listChirs               );
 $smarty->assign("plages"        , $plages                  );

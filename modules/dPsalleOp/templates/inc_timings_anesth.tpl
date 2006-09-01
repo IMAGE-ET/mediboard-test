@@ -147,11 +147,11 @@
             <hr />
             <select name="type_anesth" onchange="submitFormAjax(this.form, 'systemMsg');">
               <option value="">&mdash; Type d'anesthésie</option>
-              {{foreach from=$listAnesthType item=curr_type key=curr_key}}
-              <option value="{{$curr_key}}" {{if $selOp->_lu_type_anesth == $curr_type}} selected="selected" {{/if}}>
-                {{$curr_type}}
+              {{foreach from=$listAnesthType item=curr_anesth}}
+              <option value="{{$curr_anesth->type_anesth_id}}" {{if $selOp->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >
+                {{$curr_anesth->name}}
               </option>
-              {{/foreach}}
+             {{/foreach}}
             </select>
             par le Dr.
             <select name="anesth_id" onchange="submit()">

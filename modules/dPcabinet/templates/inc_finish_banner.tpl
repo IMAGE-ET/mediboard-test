@@ -25,11 +25,15 @@ function reloadFinishBanner() {
 <table class="form">
   <tr>
     <th class="category" colspan="4">
-      <button id="listConsult-trigger" type="button" style="float:left">+/-</button>
       {{if $_is_anesth}}
       <button class="print" type="button" style="float: left;" onclick="printFiche()">
         Imprimer la fiche
       </button>
+      <button class="print" type="button" style="float: left;" onclick="printAllDocs()">
+        Imprimer les documents
+      </button>      
+      {{else}}
+      <button id="listConsult-trigger" type="button" style="float:left">+/-</button>
       {{/if}}
         Consultation
         (Etat : {{$consult->_etat}}

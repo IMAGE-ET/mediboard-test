@@ -23,7 +23,7 @@
               <img src="images/history.gif" alt="historique" />
             </a>
 		    <strong>
-		    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
+		    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
 		    {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
 		    </a>
 		    </strong>
@@ -46,9 +46,11 @@
             <input type="hidden" name="cmd" value="setanesth" />
             <input type="hidden" name="id" value="{{$curr_op->operation_id}}" />
             <select name="type" onchange="this.form.submit()">
-              <option value="NULL">&mdash; Anesthésie &mdash;</option>
+              <option value="">&mdash; Anesthésie &mdash;</option>
               {{foreach from=$anesth item=curr_anesth}}
-              <option {{if $curr_op->_lu_type_anesth == $curr_anesth}} selected="selected" {{/if}}>{{$curr_anesth}}</option>
+              <option value="{{$curr_anesth->type_anesth_id}}" {{if $curr_op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >
+                {{$curr_anesth->name}}
+              </option>
               {{/foreach}}
             </select>
             </form>
@@ -85,7 +87,7 @@
             <input type="hidden" name="cmd" value="sethour" />
             <input type="hidden" name="id" value="{{$curr_op->operation_id}}" />
 		    <strong>
-		    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
+		    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
 		    {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
 		    </a>
 		    </strong>
@@ -130,7 +132,9 @@
             <select name="type" onchange="this.form.submit()">
               <option value="">&mdash; Anesthésie &mdash;</option>
               {{foreach from=$anesth item=curr_anesth}}
-              <option {{if $curr_op->_lu_type_anesth == $curr_anesth}} selected="selected" {{/if}}>{{$curr_anesth}}</option>
+              <option value="{{$curr_anesth->type_anesth_id}}" {{if $curr_op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >
+                {{$curr_anesth->name}}
+              </option>
               {{/foreach}}
             </select>
             </form>

@@ -27,6 +27,23 @@ function delCim10(code) {
   submitAnt(oForm);
 }
 
+function dateAntecedent(){
+  var oForm = document.editAntFrm;
+  var oEnCours = oForm._date_ant;
+  var oHiddenField = oForm.date;
+  var oViewField = document.getElementById('editAntFrm_date_da');
+  var oTriggerField = document.getElementById('editAntFrm_date_trigger');
+  if (oEnCours.checked) {
+    oHiddenField.value = "{{$today}}";
+    oViewField.innerHTML = "{{$today|date_format:"%d/%m/%Y"}}";
+    oTriggerField.style.display = "inline";
+  }else{
+    oHiddenField.value = "";
+    oViewField.innerHTML = "";
+    oTriggerField.style.display = "none";
+  }   
+}
+
 function finTrmt() {
   var oForm = document.editTrmtFrm;
   var oEnCours = oForm._en_cours;
@@ -124,7 +141,10 @@ function incAntecedantsMain() {
 
         </tr>
         <tr>
-          <th><label for="date" title="Date de l'antécédent">Date</label></th>
+          <th>
+            <input type="checkbox" checked="checked" name="_date_ant" onclick="dateAntecedent()" />
+            <label for="date" title="Date de l'antécédent">Date</label>
+          </th>
           <td class="date">
             <div id="editAntFrm_date_da">{{$today|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="date" value="{{$today}}" />
@@ -149,7 +169,7 @@ function incAntecedantsMain() {
         </tr>
         <tr>
           <td class="button" colspan="3">
-            <button class="submit" type="button" onclick="submitAnt(this.form)">Ajouter</button>
+            <button class="submit" type="button" onclick="submitAnt(this.form);dateAntecedent();">Ajouter</button>
           </td>
         </tr>
       </table>
@@ -199,11 +219,54 @@ function incAntecedantsMain() {
         </tr>
         <tr>
           <td class="button" colspan="3">
-            <button class="submit" type="button" onclick="submitAnt(this.form)">Ajouter</button>
+            <button class="submit" type="button" onclick="submitAnt(this.form);finTrmt();">Ajouter</button>
           </td>
         </tr>
       </table>
       </form>
+      
+      {{if $_is_anesth}}
+      <hr />
+      <form name="editTabacFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+      <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
+      <table class="form">
+      <tr>
+        <td>
+          <label for="tabac" title="Comportement tabagique">Tabac</label>
+          <select name="_helpers_tabac" size="1" onchange="pasteHelperContent(this)">
+            <option value="0">&mdash; Choisir une aide</option>
+            {{html_options options=$consult_anesth->_aides.tabac}}
+          </select>
+        </td>
+        <td>
+          <label for="oenolisme" title="Comportement alcoolique">Oenolisme</label>
+          <select name="_helpers_oenolisme" size="1" onchange="pasteHelperContent(this)">
+            <option value="0">&mdash; Choisir une aide</option>
+            {{html_options options=$consult_anesth->_aides.oenolisme}}
+          </select>
+        </td>
+      </tr>
+      <tr>  
+        <td>
+          <textarea name="tabac">{{$consult_anesth->tabac}}</textarea>
+        </td>
+        <td>
+          <textarea name="oenolisme">{{$consult_anesth->oenolisme}}</textarea>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="button">
+          <button type="button" class="submit" onclick="submitForm(this.form);">
+            Valider
+          </button>
+        </td>
+      </tr>
+      </table>
+      </form>
+      {{/if}}
       
     </td>
     <td class="text" id="listAnt">

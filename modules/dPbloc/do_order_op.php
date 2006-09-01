@@ -95,17 +95,9 @@ switch($cmd)
     break;
   }
   case "setanesth" : {
-    $type = dPgetParam( $_GET, "type", NULL);
-    $anesth = dPgetSysVal("AnesthType");
-    foreach($anesth as $key => $value) {
-      if(trim($value) == $type) {
-        $lu = $key;
-      }
-    }
-    if(!isset($lu))
-      $lu = NULL;
+    $type = dPgetParam( $_GET, "type", null);
     $sql = "UPDATE operations
-            SET type_anesth = '$lu'
+            SET type_anesth = '$type'
             WHERE operations.operation_id = '$id'";
     $result = db_exec($sql);
     break;

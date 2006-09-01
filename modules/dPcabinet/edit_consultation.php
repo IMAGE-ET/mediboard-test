@@ -14,6 +14,9 @@ require_once($AppUI->getModuleClass("dPcabinet"    , "plageconsult"));
 require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
 require_once($AppUI->getModuleClass("dPcabinet"    , "tarif"));
 require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
+require_once($AppUI->getModuleClass("dPplanningOp" , "typeanesth"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "techniqueComp"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "examComp"));
 
 if (!$canEdit) {
 	$AppUI->redirect("m=system&a=access_denied");
@@ -75,16 +78,16 @@ if (!$userSel->isAllowed(PERM_EDIT)) {
   $AppUI->redirect("m=dPcabinet&tab=0");
 }
 
-//Liste des types d'anesthésie
-$anesth = dPgetSysVal("AnesthType");
-
+$anesth = new CTypeAnesth;
+$orderanesth = "name";
+$anesth = $anesth->loadList(null,$orderanesth);
 
 // Consultation courante
 $consult->_ref_chir =& $userSel;
 if($consult->consultation_id) {
   $consult->loadRefs();
   $consult->loadAides($userSel->user_id);
-
+  $consult->_ref_consult_anesth->loadAides($userSel->user_id);
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
     $consult->_ref_consult_anesth->loadRefs();
   }
@@ -155,18 +158,21 @@ $antecedent->loadAides($userSel->user_id);
 $traitement = new CTraitement();
 $traitement->loadAides($userSel->user_id);
 
+$techniquesComp = new CTechniqueComp();
+$techniquesComp->loadAides($userSel->user_id);
+
+$examComp = new CExamComp();
+$examComp->loadAides($userSel->user_id);
+
 // Vérification du cas anesthésie
-if($consult->_ref_chir->isFromType(array("Anesthésiste")) || $consult->_ref_consult_anesth->consultation_anesth_id) {
+if($consult->_ref_chir->isFromType(array("Anesthésiste"))) {
   $_is_anesth=true; 
 } else {
   $_is_anesth=false;
 }
-
-
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
-
 $smarty->assign("date"          , $date);
 $smarty->assign("hour"          , $hour);
 $smarty->assign("vue"           , $vue);
@@ -180,9 +186,22 @@ $smarty->assign("anesth"        , $anesth);
 $smarty->assign("consult"       , $consult);
 $smarty->assign("antecedent"    , $antecedent);
 $smarty->assign("traitement"    , $traitement);
+$smarty->assign("techniquesComp", $techniquesComp);
+$smarty->assign("examComp"      , $examComp);
 $smarty->assign("_is_anesth"    , $_is_anesth);  
 
 if($_is_anesth) {
+  $secs = array();
+  for ($i = 0; $i < 60; $i++) {
+    $secs[] = $i;
+  }
+  $mins = array();
+  for ($i = 0; $i < 15; $i++) {
+    $mins[] = $i;
+  }
+  
+  $smarty->assign("secs"          , $secs);
+  $smarty->assign("mins"          , $mins);
   $smarty->assign("consult_anesth", $consult->_ref_consult_anesth);
   $smarty->display("edit_consultation_anesth.tpl");
 } else {

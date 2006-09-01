@@ -18,6 +18,7 @@ require_once($AppUI->getModuleClass("dPcabinet"   , "consultAnesth"));
 require_once($AppUI->getModuleClass("dPfiles"     , "files"        ));
 require_once($AppUI->getModuleClass("dPplanningOp", "sejour"       ));
 require_once($AppUI->getModuleClass("dPsalleOp"   , "acteccam"     ));
+require_once($AppUI->getModuleClass("dPplanningOp", "typeanesth"   ));
 
 // @todo: Put the following in $config_dist;
 $dPconfig["dPplanningOp"]["operation"] = array (
@@ -147,7 +148,7 @@ class COperation extends CMbObject {
     $this->_props["ATNC"]           = "enum|o|n";
     $this->_props["rques"]          = "str|confidential";
     $this->_props["rank"]           = "num";
-    $this->_props["depassement"]    = "currency|confidential";
+    $this->_props["depassement"]    = "currency|pos|confidential";
     $this->_props["annulee"]        = "enum|0|1";
     
     $this->_seek["chir_id"]    = "ref|CMediusers";
@@ -267,8 +268,10 @@ class COperation extends CMbObject {
     $this->_min_urgence  = intval(substr($this->time_operation, 3, 2));
 
     if ($this->type_anesth != null) {
-      $anesth = dPgetSysVal("AnesthType");
-      $this->_lu_type_anesth = $anesth[$this->type_anesth];
+      $anesth = new CTypeAnesth;
+      $orderanesth = "name";
+      $anesth->load($this->type_anesth);;
+      $this->_lu_type_anesth = $anesth->name;
     }
 
     $this->_hour_anesth = substr($this->time_anesth, 0, 2);
@@ -293,14 +296,6 @@ class COperation extends CMbObject {
         $this->_hour_anesth.":".
         $this->_min_anesth.":00";
   	}
-    if($this->_lu_type_anesth) {
-      $anesth = dPgetSysVal("AnesthType");
-      foreach($anesth as $key => $value) {
-        if(trim($value) == $this->_lu_type_anesth) {
-          $this->type_anesth = $key;
-        }
-      }
-    }
     if($this->_hour_op !== null and $this->_min_op !== null) {
       $this->temp_operation = 
         $this->_hour_op.":".

@@ -13,7 +13,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.53";
+$config["mod_version"]     = "0.54";
 $config["mod_directory"]   = "dPplanningOp";
 $config["mod_setup_class"] = "CSetupdPplanningOp";
 $config["mod_type"]        = "user";
@@ -517,7 +517,34 @@ class CSetupdPplanningOp {
             "\nDROP `septique` ;";
         db_exec($sql); db_error();
       case "0.53":
-        return "0.53";
+        $sql = "CREATE TABLE `type_anesth` ( " .
+          "`type_anesth_id` INT UNSIGNED NOT NULL auto_increment," .
+          "`name` VARCHAR(50) DEFAULT NULL," .
+          "PRIMARY KEY  (type_anesth_id)" .
+          ") TYPE=MyISAM;";
+        db_exec($sql); db_error();
+        $sql = "INSERT INTO `type_anesth` VALUES ('1', 'Non définie');";
+        db_exec($sql); db_error();
+        $sql = "INSERT INTO `type_anesth` VALUES ('2', 'Rachi');";
+        db_exec($sql); db_error();
+        $sql = "INSERT INTO `type_anesth` VALUES ('3', 'Rachi + bloc');";
+        db_exec($sql); db_error();
+        $sql = "INSERT INTO `type_anesth` VALUES ('4', 'Anesthésie loco-régionale');";
+        db_exec($sql); db_error();
+        $sql = "INSERT INTO `type_anesth` VALUES ('5', 'Anesthésie locale');";
+        db_exec($sql); db_error();
+        $sql = "INSERT INTO `type_anesth` VALUES ('6', 'Neurolept');";
+        db_exec($sql); db_error();
+        $sql = "INSERT INTO `type_anesth` VALUES ('7', 'Anesthésie générale');";
+        db_exec($sql); db_error();
+        $sql = "INSERT INTO `type_anesth` VALUES ('8', 'Anesthesie generale + bloc');";
+        db_exec($sql); db_error();
+        $sql = "INSERT INTO `type_anesth` VALUES ('9', 'Anesthesie peribulbaire');";
+        db_exec($sql); db_error();
+        $sql="UPDATE `operations` SET `type_anesth`=`type_anesth`+1;";
+        db_exec($sql); db_error();
+      case "0.54":
+        return "0.54";
     }
     return false;
   }

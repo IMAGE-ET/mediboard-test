@@ -133,6 +133,7 @@ a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange {
   background-repeat: no-repeat;
   background-position: center left;
   height: 18px;
+  white-space: nowrap;
 }
 
 a.button:hover, button:hover, a.buttonedit:hover, a.buttontrash:hover, a.buttonsubmit:hover,

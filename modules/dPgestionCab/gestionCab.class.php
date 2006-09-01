@@ -42,7 +42,7 @@ class CGestionCab extends CMbObject {
     $this->_props["libelle"]          = "str|notNull";
     $this->_props["date"]             = "date|notNull";
     $this->_props["rubrique_id"]      = "ref|notNull";
-    $this->_props["montant"]          = "currency|notNull";
+    $this->_props["montant"]          = "currency|pos|notNull";
     $this->_props["mode_paiement_id"] = "ref|notNull";
     $this->_props["num_facture"]      = "num|notNull";
     $this->_props["rques"]            = "text";

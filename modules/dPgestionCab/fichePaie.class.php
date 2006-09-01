@@ -68,10 +68,10 @@ class CFichePaie extends CMbObject {
     $this->_props["params_paie_id"] = "ref|notNull";
     $this->_props["debut"]          = "date|notNull";
     $this->_props["fin"]            = "date|moreEquals|debut|notNull";
-    $this->_props["salaire"]        = "currency|notNull";
+    $this->_props["salaire"]        = "currency|pos|notNull";
     $this->_props["heures"]         = "num|notNull";
     $this->_props["heures_sup"]     = "num|notNull";
-    $this->_props["mutuelle"]       = "currency|notNull";
+    $this->_props["mutuelle"]       = "currency|pos|notNull";
     $this->_props["anciennete"]     = "pct|notNull";
     $this->_props["precarite"]      = "pct|notNull";
     $this->_props["conges_payes"]   = "pct|notNull";

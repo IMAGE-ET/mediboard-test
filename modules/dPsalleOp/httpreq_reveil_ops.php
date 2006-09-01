@@ -76,7 +76,6 @@ require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("listSalles"    , $listSalles              );
-$smarty->assign("listAnesthType", dPgetSysVal("AnesthType"));
 $smarty->assign("listAnesths"   , $listAnesths             );
 $smarty->assign("listChirs"     , $listChirs               );
 $smarty->assign("plages"        , $plages                  );

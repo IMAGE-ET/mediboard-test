@@ -10,6 +10,7 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
+require_once($AppUI->getModuleClass("dPplanningOp" , "typeanesth"));
   
 if (!$canEdit) {
   $AppUI->redirect("m=system&a=access_denied");
@@ -41,11 +42,10 @@ if (isset($_GET["date"])) {
   mbSetValueToSession("selConsult", 0);
 }
 
-//Liste des types d'anesthésie
-$anesth = dPgetSysVal("AnesthType");
+$anesth = new CTypeAnesth;
+$orderanesth = "name";
+$anesth = $anesth->loadList(null,$orderanesth);
 
-//Liste des types d'anesthésie
-$anesth = dPgetSysVal("AnesthType");
 
 // Consultation courante
 $consult = new CConsultation();
@@ -74,13 +74,18 @@ if ($selConsult) {
   
 }
 
+$techniquesComp = new CTechniqueComp();
+$techniquesComp->loadAides($userSel->user_id);
+
+
 // Création du template
 require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
+$smarty->assign("consult"       , $consult       );
 $smarty->assign("consult_anesth", $consult_anesth);
 $smarty->assign("anesth"        , $anesth        );
-
-$smarty->display("inc_type_anesth.tpl");
+$smarty->assign("techniquesComp", $techniquesComp);
+$smarty->display("inc_consult_anesth/acc_infos_anesth.tpl");
 
 ?>

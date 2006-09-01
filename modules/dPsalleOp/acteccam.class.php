@@ -48,7 +48,7 @@ class CActeCCAM extends CMbObject {
     $this->_props["code_phase"]          = "notNull|num|maxLength|2";
     $this->_props["execution"]           = "notNull|dateTime";
     $this->_props["modificateurs"]       = "str|maxLength|4";
-    $this->_props["montant_depassement"] = "currency";
+    $this->_props["montant_depassement"] = "currency|pos";
     $this->_props["commentaire"]         = "text";
     $this->_props["operation_id"]        = "notNull|ref";
     $this->_props["executant_id"]        = "notNull|ref";

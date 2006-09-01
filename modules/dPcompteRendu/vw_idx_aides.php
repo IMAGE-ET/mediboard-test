@@ -9,8 +9,8 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'aidesaisie'));
-require_once( $AppUI->getModuleClass('mediusers', 'mediusers'));
+require_once( $AppUI->getModuleClass("dPcompteRendu", "aidesaisie"));
+require_once( $AppUI->getModuleClass("mediusers", "mediusers"));
 
 if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
@@ -18,11 +18,14 @@ if (!$canRead) {
 
 // Class and fields
 $classes = array (
-    "Consultation" => array ("motif", "rques", "examen", "traitement", "compte_rendu"),
-    "Operation" => array ("examen", "materiel", "convalescence", "compte_rendu"),
-    "Patient" => array ("remarques"),
-    "Antecedent" => array ("rques"),
-    "Traitement" => array ("traitement"),
+    "CConsultation" => array ("motif", "rques", "examen", "traitement", "compte_rendu"),
+    "CConsultAnesth" => array ("tabac", "oenolisme"),
+    "COperation" => array ("examen", "materiel", "convalescence", "compte_rendu"),
+    "CPatient" => array ("remarques"),
+    "CAntecedent" => array ("rques"),
+    "CTraitement" => array ("traitement"),
+    "CTechniqueComp" => array("technique"),
+    "CExamComp" => array("examen")
   );
   
 
@@ -69,16 +72,16 @@ if (!$aide_id) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
+require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('users', $users);
-$smarty->assign('classes', $classes);
-$smarty->assign('filter_user_id', $filter_user_id);
-$smarty->assign('filter_class', $filter_class);
-$smarty->assign('aides', $aides);
-$smarty->assign('aide', $aide);
+$smarty->assign("users", $users);
+$smarty->assign("classes", $classes);
+$smarty->assign("filter_user_id", $filter_user_id);
+$smarty->assign("filter_class", $filter_class);
+$smarty->assign("aides", $aides);
+$smarty->assign("aide", $aide);
 
-$smarty->display('vw_idx_aides.tpl');
+$smarty->display("vw_idx_aides.tpl");
 
 ?>

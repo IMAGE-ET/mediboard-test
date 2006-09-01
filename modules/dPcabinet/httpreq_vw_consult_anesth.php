@@ -87,7 +87,6 @@ if ($selConsult) {
   $consult_anesth =& $consult->_ref_consult_anesth;
   
 }
-
 // Création du template
 require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
@@ -96,6 +95,6 @@ $smarty->assign("consult"       , $consult);
 $smarty->assign("consult_anesth", $consult_anesth);
 $smarty->assign("patient"       , $patient);
 
-$smarty->display("inc_vw_consult_anesth.tpl");
+$smarty->display("inc_consult_anesth/interventions.tpl");
 
 ?>

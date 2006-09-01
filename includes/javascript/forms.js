@@ -467,10 +467,49 @@ function checkElement(oElement, aSpecFragments) {
       break;
     
     case "currency":
-      if (!oElement.value.match(/^(\d+)(\.\d{1,2})?$/)) {
+      //if (!oElement.value.match(/^(\d+)(\.\d{1,2})?$/)) {
+      if(isNaN(parseFloat(oElement.value)) || parseFloat(oElement.value)!=oElement.value){
         return "N'est pas une valeur décimale (utilisez le . pour la virgule)";
       }
-      
+
+      if (sFragment1 = aSpecFragments[1]) {
+        switch (sFragment1) {
+          case "min":
+            iMin = parseFloat(aSpecFragments[2], 10);
+            if (iMin == NaN) {
+              return "Spécification de minimum numérique invalide";
+            }
+            if (oElement.value < iMin) {
+              return printf("Soit avoir une valeur minimale de %s", iMin);
+            }
+            break;
+            
+          case "max":
+            iMax = parseFloat(aSpecFragments[2], 10);
+            if (iMax == NaN) {
+              return "Spécification de maximum numérique invalide";
+            }
+            if (oElement.value > iMax) {
+              return printf("Soit avoir une valeur maximale de %s", iMin);
+            }
+            break;
+
+          case "pos":
+            if (oElement.value <= 0) {
+              return "Doit avoir une valeur positive";
+            }
+            break;
+          
+          case "minMax":
+            var iMin = parseFloat(aSpecFragments[2], 10);
+            var iMax = parseFloat(aSpecFragments[3], 10);
+            if (oElement.value > iMax || oElement.value < iMin) {
+              return printf("N'est pas compris entre %i et %i", iMin, iMax);
+            }
+            break;
+        };
+      };  
+
       break;
     
     case "pct":
