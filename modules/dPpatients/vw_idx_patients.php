@@ -42,18 +42,22 @@ if ($patient_id) {
   $listFct = $listFct->loadFonctions(PERM_READ);
   
   $where = array();
-  $where["chir_id"] = "IN (".implode(", ",array_keys($listPrat)).")";
-  $where["object_id"] = "IS NULL";
-  $where["type"] = "= 'patient'";
-  $order = "chir_id, nom";  
-  $listModelePrat = $listModelePrat->loadlist($where, $order);
+  if(count(array_keys($listPrat))) {
+    $where["chir_id"] = "IN (".implode(", ",array_keys($listPrat)).")";
+    $where["object_id"] = "IS NULL";
+    $where["type"] = "= 'patient'";
+    $order = "chir_id, nom";  
+    $listModelePrat = $listModelePrat->loadlist($where, $order);
+  }
  
-  $where = array();
-  $where["function_id"] = "IN (".implode(", ",array_keys($listFct)).")";
-  $where["object_id"] = "IS NULL";
-  $where["type"] = "= 'patient'";
-  $order = "chir_id, nom";  
-  $listModeleFct = $listModeleFct->loadlist($where, $order);
+  if(count(array_keys($listFct))) {
+    $where = array();
+    $where["function_id"] = "IN (".implode(", ",array_keys($listFct)).")";
+    $where["object_id"] = "IS NULL";
+    $where["type"] = "= 'patient'";
+    $order = "chir_id, nom";  
+    $listModeleFct = $listModeleFct->loadlist($where, $order);
+  }
 }
 
 
