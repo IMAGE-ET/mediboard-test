@@ -30,10 +30,9 @@ $canReadCptRendus = isMbModuleVisible("dPcompteRendu") and isMbModuleReadAll("dP
 $canEditCptRendus = isMbModuleVisible("dPcompteRendu") and isMbModuleEditAll("dPcompteRendu");
 
 // Liste des modèles
-$listModeleAuth = array();
-
-$listModelePrat = new CCompteRendu;
-$listModeleFct  = new CCompteRendu;
+$listModelePrat = array(); 
+$listModeleFct  = array();
+$compteRendu = new CCompteRendu;
 
 if ($patient_id) {
   $listPrat = new CMediusers();
@@ -42,21 +41,20 @@ if ($patient_id) {
   $listFct = $listFct->loadFonctions(PERM_READ);
   
   $where = array();
-  if(count(array_keys($listPrat))) {
+  $where["object_id"] = "IS NULL";
+  $where["type"] = "= 'patient'";
+  $order = "chir_id, nom";  
+
+  if (count(array_keys($listPrat))) {
     $where["chir_id"] = "IN (".implode(", ",array_keys($listPrat)).")";
-    $where["object_id"] = "IS NULL";
-    $where["type"] = "= 'patient'";
-    $order = "chir_id, nom";  
-    $listModelePrat = $listModelePrat->loadlist($where, $order);
+    $listModelePrat = $compteRendu->loadlist($where, $order);
+    unset($where["chir_id"]);
   }
  
   if(count(array_keys($listFct))) {
-    $where = array();
     $where["function_id"] = "IN (".implode(", ",array_keys($listFct)).")";
-    $where["object_id"] = "IS NULL";
-    $where["type"] = "= 'patient'";
-    $order = "chir_id, nom";  
-    $listModeleFct = $listModeleFct->loadlist($where, $order);
+    $listModeleFct = $compteRendu->loadlist($where, $order);
+    unset($where["function_id"]);
   }
 }
 
