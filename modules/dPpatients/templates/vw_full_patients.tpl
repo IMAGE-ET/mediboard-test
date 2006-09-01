@@ -35,15 +35,17 @@ function pageMain() {
   <tr>
     <td class="halfPane">
 
-      <form name="FrmClass" action="?m={{$m}}" method="get">
-      <input type="hidden" name="m"        value="{{$m}}" />
+      <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFile(); return false;">
       <input type="hidden" name="selKey"   value="{{$selKey}}" />
       <input type="hidden" name="selClass" value="{{$selClass}}" />
+      <input type="hidden" name="selView"  value="{{$selView}}" />
+      <input type="hidden" name="keywords" value="" />
+      <input type="hidden" name="file_id"  value="" />
       <input type="hidden" name="typeVue"  value="1" />
       <input type="hidden" name="cat_id"   value="{{$cat_id}}" />
       </form>
       
-      {{assign var="href" value="index.php?m=dPpatients&tab=vw_full_patients"}}
+      {{assign var="href" value="index.php?m=dPpatients&amp;tab=vw_full_patients"}}
 
       <table class="form">
         <tr>
@@ -54,9 +56,10 @@ function pageMain() {
             Identité
           </th>
           <th class="category" colspan="2">
-            <a class="button" style="float:right;" href="{{$href}}&amp;patient_id={{$patient->patient_id}}">
+            <button type="button" style="float:right;" onclick="setData('CPatient','',{{$patient->patient_id}},'{{$patient->_view}}')">
+              {{$patient->_ref_files|@count}} fichier(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
-            </a>
+            </button>
             Coordonnées
           </th>
         </tr>
@@ -162,6 +165,47 @@ function pageMain() {
             </form>
           </td>
         </tr>
+        <tr>
+          <th colspan="4" class="category">Séjours</th>
+        </tr>
+        {{foreach from=$patient->_ref_sejours item=curr_sejour}}
+        <tr>
+          <td colspan="4">
+            <button type="button" style="float:right;" onclick="setData('CSejour','',{{$curr_sejour->sejour_id}},'{{$curr_sejour->_view}}')">
+              {{$curr_sejour->_ref_files|@count}} fichier(s)
+              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
+            </button>
+            {{$curr_sejour->_view}}
+          </td>
+        </tr>
+        {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
+        <tr>
+          <td colspan="4">
+            <ul><li>
+            <button type="button" style="float:right;" onclick="setData('COperation','',{{$curr_op->operation_id}},'{{$curr_op->_view}}')">
+              {{$curr_op->_ref_files|@count}} fichier(s)
+              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
+            </button>
+            {{$curr_op->_view}}
+            </li></ul>
+          </td>
+        </tr>
+        {{/foreach}}
+        {{/foreach}}
+        <tr>
+          <th colspan="4" class="category">Consultations</th>
+        </tr>
+        {{foreach from=$patient->_ref_consultations item=curr_consult}}
+        <tr>
+          <td colspan="4">
+            <button type="button" style="float:right;" onclick="setData('CConsultation','',{{$curr_consult->consultation_id}},'{{$curr_consult->_view}}')">
+              {{$curr_consult->_ref_files|@count}} fichier(s)
+              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
+            </button>
+            {{$curr_consult->_view}}
+          </td>
+        </tr>
+        {{/foreach}}
       </table>
     </td>
     <td class="halfPane" id="listView">

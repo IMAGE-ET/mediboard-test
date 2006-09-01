@@ -136,6 +136,7 @@ $smarty->assign("listCategory"    , $listCategory    );
 $smarty->assign("accordion_open"  , $accordion_open  );
 $smarty->assign("selClass"        , $selClass        );
 $smarty->assign("selKey"          , $selKey          );
+$smarty->assign("selView"         , $object->_view   );
 $smarty->assign("typeVue"         , $typeVue         );
 $smarty->assign("cat_id"          , $cat_id          );
 

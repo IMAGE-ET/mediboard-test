@@ -20,7 +20,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td>
-      <form name="FrmClass" action="?m={{$m}}" method="get">
+      <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="return checkForm(this);">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="file_id" value="{{$file->file_id}}" />
       <input type="hidden" name="cat_id" value="{{$cat_id}}" />
@@ -38,7 +38,7 @@ function pageMain() {
           </td>
           {{if $selKey}}
           <td>
-            <select name="typeVue" onchange="submit()">
+            <select name="typeVue" onchange="if(this.form.onsubmit()) { this.form.submit() };">
               <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>Miniatures et aperçus</option>
               <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Miniatures seuls</option>
               <option value="2" {{if $typeVue == 2}}selected="selected"{{/if}}>Aperçus seuls</option>

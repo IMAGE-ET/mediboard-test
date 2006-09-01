@@ -77,6 +77,7 @@ class CSejour extends CMbObject {
   var $_ref_last_affectation  = null;
   var $_ref_GHM               = array();
   var $_ref_group             = null;
+  var $_ref_files             = array();
 
 	function CSejour() {
     $this->CMbObject("sejour", "sejour_id");
@@ -278,7 +279,13 @@ class CSejour extends CMbObject {
     }
   }
   
+  function loadRefsFiles() {
+    $this->_ref_files = new CFile();
+    $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
+  }
+  
   function loadRefsBack() {
+    $this->loadRefsFiles();
     $this->loadRefsAffectations();
     $this->loadRefsOperations();
   }

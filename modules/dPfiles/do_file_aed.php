@@ -18,17 +18,16 @@ if(isset($_POST["cat_id_redirect"])){
   $cat_id_redirect = mbGetValueFromPostOrSession("cat_id_redirect"  , 0);
 }
 
-function doRedirect($cat_id = null) {
-  global $ajax, $AppUI, $m;
+function doRedirect($cat_id = 0) {
+  global $ajax, $AppUI, $m, $_POST;
+  $cat_id   = intval(mbGetValueFromPost("file_category_id"));
+  $selKey   = intval(mbGetValueFromPost("file_object_id", 0));
+  $selClass = mbGetValueFromPost("file_class"    , "");
   if($ajax) {
     echo $AppUI->getMsg();
     exit(0);
   } else {
-    if($cat_id !== null) {
-      $AppUI->redirect("m=$m&cat_id=$cat_id");
-    } else {
-      $AppUI->redirect();
-    }
+    $AppUI->redirect("m=$m&cat_id=$cat_id&selKey=$selKey&selClass=$selClass");
   }
 }
 
@@ -96,6 +95,6 @@ if (($msg = $obj->store())) {
   //$obj->indexStrings();
 }
 
-doRedirect($obj->file_category_id);
+doRedirect();
 
 ?>

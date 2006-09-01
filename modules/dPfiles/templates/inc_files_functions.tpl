@@ -52,14 +52,16 @@ function ZoomFileAjax(file_id, sfn){
 }
 
 function setData(selClass,keywords,key,val){
-  var f = document.FrmClass;
+  var oForm = document.FrmClass;
   if (val != '') {
-    f.selKey.value = key;
-    f.selView.value = val;
-    f.selClass.value = selClass;
-    f.keywords.value = keywords;
-    f.file_id.value = "";
-    f.submit();
+    oForm.selKey.value = key;
+    oForm.selView.value = val;
+    oForm.selClass.value = selClass;
+    oForm.keywords.value = keywords;
+    oForm.file_id.value = "";
+    if(oForm.onsubmit()) {
+      oForm.submit();
+    }
   }
 }
 
@@ -69,7 +71,7 @@ function reloadListFile(){
   }
   var url = new Url;
   initAccord(false);
-  url.setModuleAction("dPfiles", "httpreq_vw_listfiles");
+  url.setModuleAction("{{$m}}", "httpreq_vw_listfiles");
   url.addParam("selKey", document.FrmClass.selKey.value);
   url.addParam("selClass", document.FrmClass.selClass.value);  
   url.addParam("typeVue", document.FrmClass.typeVue.value);
