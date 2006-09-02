@@ -113,8 +113,12 @@
       <input type="hidden" name="_date" value="" />
       <input type="hidden" name="_datestr" value="" />
       <select name="date" onchange="{{if !$op->operation_id}}updateEntreePrevue();{{/if}} modifSejour()">
-        <option value="{{$today|date_format:"%Y-%m-%d"}}">{{$today|date_format:"%d/%m/%Y"}} (ajourd'hui)</option>
-        <option value="{{$tomorow|date_format:"%Y-%m-%d"}}">{{$tomorow|date_format:"%d/%m/%Y"}} (demain)</option>
+        <option value="{{$today}}" {{if $op->date == $today}}selected="selected"{{/if}}>
+          {{$today|date_format:"%d/%m/%Y"}} (ajourd'hui)
+        </option>
+        <option value="{{$tomorow}}" {{if $op->date == $tomorow}}selected="selected"{{/if}}>
+          {{$tomorow|date_format:"%d/%m/%Y"}} (demain)
+        </option>
       </select>
     </td>
     <td>
