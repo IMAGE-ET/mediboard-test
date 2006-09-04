@@ -3,6 +3,7 @@
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
+<input type="hidden" name="_check_premiere" value="{{$consult->_check_premiere}}" />
       <select name="_operation_id" onchange="submitOpConsult()">
         <option value="">Pas d'Intervention</option>
         {{foreach from=$patient->_ref_sejours item=curr_sejour}}
