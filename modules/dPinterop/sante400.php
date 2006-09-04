@@ -1,5 +1,25 @@
 <?php 
 
+global $AppUI, $m;
+
+require_once($Appui->getSystemClass("mbconfig"));
+
+$dPconfig['dPinterop']['sante400']['site_base'] = 'PICLIN927';
+
+$mbConfig = new CMbConfig;
+$mbConfig->update($dPconfig);
+$mbConfig->load();
+
+die();
+
+
+
+$etablissements = array(
+  "310" => "St Louis",
+  "474" => "Sauvegarde",
+  "927" => "clinique du Tonkin",
+);
+
 require_once "DB.php";
 
 $chrono = new Chronometer();
@@ -7,7 +27,9 @@ $chrono = new Chronometer();
 $db_user = "GMB";
 $db_pass = "GMB";
 
-$sql = "SELECT * FROM API";
+$sql = "SELECT * FROM PICLIN310.MDP01";
+
+$chrono->start();
 
 switch ($mode = mbGetValueFromGet("mode", "pear")) {
   /**
@@ -17,36 +39,33 @@ switch ($mode = mbGetValueFromGet("mode", "pear")) {
   $dsn = array (
       "phptype"  => "odbc",
       "username" => "GMB",
-      "password" => "GMB  ",
+      "password" => "GMB",
       "hostspec" => "sante400",
-  //    "database" => "sante400",
+      "database" => "",
   );
   
-  for ($index = 0; $index < 1; $index++) {
-    $chrono->start();
+  $chrono->start();
 
-    // Create a new DB connection object and connect to the ODBC database.
-    $db =& DB::connect($dsn);
-    if (DB::isError($db)) {
-      die("Unable to connect to database: " 
-        . $db->getMessage() . "\n"
-        . $db->getDebugInfo() . "\n");
-    }
-    
-  
-    mbTrace("Yes", "Connection successful");
-    
-    // Execute Query
-    $list = $db->getAll($sql);
-    if (PEAR::isError($list)) {
-        
-        mbTrace($list->getMessage(), "Erreur");
-        mbTrace($list->getDebugInfo(), "Debug Info");
-        die();
-    }
-   
-    $chrono->stop();
+  // Create a new DB connection object and connect to the ODBC database.
+  $db =& DB::connect($dsn);
+  if (DB::isError($db)) {
+      $error = "Unable to connect to DSN '$dsn'";
+      $error .= "\nError: " . $db->getMessage();
+      $error .= "\nDebug: " . $db->getDebugInfo();
+      trigger_error(nl2br($error), E_USER_ERROR);
   }
+    
+  // Execute Query
+  $db->setFetchMode(DB_FETCHMODE_ASSOC);
+  $praticien = $db->getRow($sql);
+  if (DB::isError($praticien)) {
+      $error = "Unable to execute query '$sql'";
+      $error .= "\nError: " . $praticien->getMessage();
+      $error .= "\nDebug: " . $praticien->getDebugInfo();
+      trigger_error(nl2br($error), E_USER_WARNING);
+  }
+ 
+  mbTrace($praticien, "Premier praticien trouvé");
 		
 	break;
 
@@ -56,8 +75,6 @@ switch ($mode = mbGetValueFromGet("mode", "pear")) {
   case "odbc":
   $dsn = "sante400";
 
-  for ($index = 0; $index < 1; $index++) {
-    $chrono->start();
 
     // Connect to the ODBC database.
     $link = odbc_connect($dsn, $db_user, $db_pass);
@@ -66,14 +83,15 @@ switch ($mode = mbGetValueFromGet("mode", "pear")) {
       die;
     }
 
+    mbTrace("Yes", "Connection successful");
+    
     // Execute Query
     $res = odbc_exec($link, $sql);
     while ($obj = odbc_fetch_object($res)) {
-  //    mbTrace($obj, "Found Object");
+      mbTrace($obj, "Found Object");
     }
   
-    $chrono->stop();
-  }
+  $chrono->stop();
   
   break;
 
@@ -82,22 +100,8 @@ switch ($mode = mbGetValueFromGet("mode", "pear")) {
 	break;
 }
 
+$chrono->stop();
 
-//$dsn = "sante400";
-
-//  $link = odbc_connect($dsn, $db_user, $db_pass);
-//  if (odbc_error()) {
-//    mbTrace(odbc_errormsg(), "Could no connect");
-//    die;
-//  }
-
-//  $res = odbc_exec($link, $sql);
-//  while ($obj = odbc_fetch_object($res)) {
-////    mbTrace($obj, "Found Object");
-//  }
-
-
-mbTrace($index, "How many identical selects");
 mbTrace($chrono, "Chrono");
 
 ?>

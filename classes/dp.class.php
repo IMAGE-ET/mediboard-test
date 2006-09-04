@@ -348,6 +348,7 @@ class CDpObject {
 		if (!db_exec( $sql )) {
 			return db_error();
 		} else {
+      $this->$k = null;
 			return NULL;
 		}
 	}

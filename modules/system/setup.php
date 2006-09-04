@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "system";
-$config["mod_version"]     = "1.0.3";
+$config["mod_version"]     = "1.0.4";
 $config["mod_directory"]   = "system";
 $config["mod_setup_class"] = "CSetupSystem";
 $config["mod_type"]        = "core";
@@ -73,9 +73,23 @@ class CSetupSystem {
 
       case "1.0.2":
         $sql = "ALTER TABLE `access_log` DROP INDEX `action_2` ;";
-         db_exec($sql); db_error();
+        db_exec($sql); db_error();
+         
       case "1.0.3":
-        return "1.0.3";
+        $old = set_time_limit(300);
+
+        $sql = "ALTER TABLE `user_log` DROP INDEX `type` ;";
+        db_exec($sql); db_error();
+        
+        $sql = "ALTER TABLE `user_log` CHANGE `type` `type` ENUM( 'create', 'store', 'delete' ) NOT NULL; ";
+        db_exec($sql); db_error();
+        
+        $sql = "ALTER TABLE `user_log` ADD `fields` TEXT;";
+        db_exec($sql); db_error();
+
+        set_time_limit($old);
+      case "1.0.4":
+        return "1.0.4";
     }
     return false;
   }

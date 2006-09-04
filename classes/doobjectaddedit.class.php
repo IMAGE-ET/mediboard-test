@@ -25,6 +25,7 @@ class CDoObjectAddEdit {
   var $callBack = null;
   var $suppressHeaders = null;
   var $_obj = null;
+  var $_objBefore = null;
   var $_logIt = null;
     
   function CDoObjectAddEdit($className, $objectKeyGetVarName) {
@@ -40,27 +41,28 @@ class CDoObjectAddEdit {
     $this->modifyMsg           = "Object of type $className modified";
     $this->deleteMsg           = "Object of type $className deleted";
     $this->_logIt              = true;
+    $this->_obj                = new $this->className();
+    $this->_objBefore          = new $this->className();
   }
   
   function doBind() {
     global $AppUI;
     
-    $this->ajax = mbGetValueFromPost("ajax", 0);
-    $this->suppressHeaders = mbGetValueFromPost("suppressHeaders", 0);
-    $this->callBack = mbGetValueFromPost("callback", null);
+    $this->ajax = mbGetValueFromPost("ajax");
+    $this->suppressHeaders = mbGetValueFromPost("suppressHeaders");
+    $this->callBack = mbGetValueFromPost("callback");
     unset($_POST["ajax"]);
     unset($_POST["suppressHeaders"]);
     unset($_POST["callback"]);
     
-    //UTF8 issue for Ajax
-    if($this->ajax) {
+    // UTF8 issue for Ajax
+    if ($this->ajax) {
       foreach($_POST as $key => $value) {
         $_POST[$key] = utf8_decode($value);
       }
     }
     
     // Object binding
-    $this->_obj = new $this->className();
     if (!$this->_obj->bind( $_POST )) {
       $AppUI->setMsg( $this->_obj->getError(), UI_MSG_ERROR );
       if ($this->redirectError) {
@@ -68,6 +70,8 @@ class CDoObjectAddEdit {
       }
       $this->doRedirect();
     }
+    
+    $this->_objBefore->load($this->_obj->_id);
   }
   
   function doDelete() {
@@ -129,13 +133,37 @@ class CDoObjectAddEdit {
   
   function doLog($type) {
     global $AppUI;
-    if($this->_logIt) {
+
+    $fields = array();
+    foreach (get_object_vars($this->_obj) as $propName => $propValue) {
+      if ($propName[0] != "_") {
+        $propValueBefore = $this->_objBefore->$propName;
+        if ($propValueBefore != $propValue) {
+          $fields[] = $propName;
+        }
+      }
+    }
+    
+    $object_id = $this->_obj->_id;
+    $type = "store";
+    if ($this->_objBefore->_id == null) {
+      $type = "create"; 
+      $fields = array();
+    } 
+    
+    if ($this->_obj->_id == null) {
+      $type = "delete"; 
+      $object_id = $this->_objBefore->_id;
+      $fields = array();
+    } 
+
+    if ($this->_logIt) {
       $log = new CuserLog;
       $log->user_id = $AppUI->user_id;
-      $objectKey = $this->_obj->_tbl_key;
-      $log->object_id = $this->_obj->$objectKey;
+      $log->object_id = $object_id;
       $log->object_class = $this->className;
       $log->type = $type;
+      $log->_fields = $fields;
       $log->date = mbDateTime();
       $log->store();
     }

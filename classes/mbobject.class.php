@@ -35,6 +35,8 @@ function purgeHtmlText($regexps, &$source) {
 class CMbObject extends CDpObject {
   
   var $_aides = array();
+  var $_id = null;
+
   /**
    * Properties  specification
    */
@@ -43,6 +45,14 @@ class CMbObject extends CDpObject {
   var $_seek  = array();
   
   var $_ref_logs = null;
+
+  /**
+   * Constructor
+   */
+  function CMbObject($table, $key) {
+    $this->CDpObject($table, $key);
+    $this->_id =& $this->$key;
+  }
 
   /**
    *  Generic check method

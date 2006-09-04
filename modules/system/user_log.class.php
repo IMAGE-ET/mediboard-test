@@ -21,12 +21,14 @@ class CUserLog extends CMbObject {
 
   // DB Fields
   var $user_id      = null;
+  var $date         = null;
   var $object_id    = null;
   var $object_class = null;
   var $type         = null;
-  var $date         = null;
+  var $fields       = null;
 
   // Object References
+  var $_fields = null;
   var $_ref_user = null;
   var $_ref_object = null;
 
@@ -34,16 +36,31 @@ class CUserLog extends CMbObject {
     $this->CMbObject("user_log", "user_log_id");
     
     $this->_props["user_id"]      = "ref|notNull";
+    $this->_props["date"]         = "dateTime|notNull";
     $this->_props["object_id"]    = "ref|notNull";
     $this->_props["object_class"] = "str|maxLength|25|notNull";
-    $this->_props["type"]         = "enum|store|delete|notNull";
-    $this->_props["date"]         = "dateTime|notNull";
+    $this->_props["type"]         = "enum|create|store|delete|notNull";
+    $this->_props["fields"]       = "text";
   }
   
   function canDelete(&$msg, $oid = null) {
     $tables = array ();
     
     return parent::canDelete( $msg, $oid, $tables );
+  }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    if ($this->fields) {
+      $this->_fields = split(" ", $this->fields);
+    }
+  }
+  
+  function updateDBFields() {
+    parent::updateDBFields();
+    if ($this->_fields) {
+      $this->fields = join($this->_fields, " ");
+    }
   }
   
   function loadRefsFwd() {

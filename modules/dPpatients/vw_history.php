@@ -27,31 +27,30 @@ $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadDossierComplet();
 
-
 $patient->loadLogs();
 
 // log pour les séjours
-foreach($patient->_ref_sejours as $key => $value) {
-  $patient->_ref_sejours[$key]->loadLogs();
+foreach($patient->_ref_sejours as $sejour) {
+  $sejour->loadLogs();
   
-  $patient->_ref_sejours[$key]->loadRefsOperations();
   // log pour les opérations de ce séjour
-  foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $valueOp) {
-  	$patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
-    $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadLogs();
+  $sejour->loadRefsOperations();
+  foreach($sejour->_ref_operations as $operation) {
+  	$operation->loadRefsFwd();
+    $operation->loadLogs();
   }
   
-  $patient->_ref_sejours[$key]->loadRefsAffectations();  
-  // log pour les Affectations de ce séjour
-  foreach($patient->_ref_sejours[$key]->_ref_affectations as $keyAf => $valueAf) {
-    $patient->_ref_sejours[$key]->_ref_affectations[$keyAf]->loadLogs();
-    $patient->_ref_sejours[$key]->_ref_affectations[$keyAf]->loadRefsFwd();
+  // log pour les affectations de ce séjour
+  $sejour->loadRefsAffectations();  
+  foreach($sejour->_ref_affectations as $affectation) {
+    $affectation->loadLogs();
+    $affectation->loadRefsFwd();
   }
 }
 
 // log pour les consultations
-foreach($patient->_ref_consultations as $key => $value) {
-  $patient->_ref_consultations[$key]->loadLogs();
+foreach($patient->_ref_consultations as $consultation) {
+  $consultation->loadLogs();
 }
 
 // Création du template

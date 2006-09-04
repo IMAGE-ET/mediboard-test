@@ -1,11 +1,13 @@
 {{if !$dialog}}
-<form name="filterFrm" action="index.php?m={{$m}}" method="get" onsubmit="return checkForm(this)">
+<form name="filterFrm" action="?m={{$m}}" method="get" onsubmit="return checkForm(this)">
+
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
 <input type="hidden" name="dialog" value="{{$dialog}}" />
+
 <table class="form">
   <tr>
-    <th class="category" colspan="4">
+    <th class="category" colspan="5">
       {{if $list|@count == 100}}
       Plus de 100 historiques, seuls les 100 premiers sont affichés
       {{else}}
@@ -42,7 +44,7 @@
     <td>
       <select name="type" title="enum|0|store|delete">
         <option value="0">&mdash; Tous les types</option>
-        {{foreach from=$listTypes item=curr_type}}
+        {{foreach from=$userLog->_enums.type item=curr_type}}
         <option value="{{$curr_type}}" {{if $curr_type == $type}}selected="selected"{{/if}}>
           {{$curr_type}}
         </option>
@@ -55,7 +57,7 @@
     </td>
   </tr>
   <tr>
-    <td class="button" colspan="4"><button>Go</button></td>
+    <td class="button" colspan="5"><button>Go</button></td>
   </tr>
 </table>
 </form>
@@ -63,7 +65,7 @@
 <table class="tbl">
   {{if $dialog}}
   <tr>
-    <th colspan="3" class="title">
+    <th colspan="4" class="title">
       {{if $list|@count > 0}}
       Historique de {{$item}}
       {{else}}
@@ -80,6 +82,7 @@
     {{/if}}
     <th>Date</th>
     <th>Action</th>
+    <th>Champs</th>
   </tr>
   {{foreach from=$list item=curr_object}}
   <tr>
@@ -90,6 +93,11 @@
     {{/if}}
     <td>{{$curr_object->date|date_format:"%d/%m/%Y à %Hh%M (%A)"}}</td>
     <td>{{$curr_object->type}}</td>
+    <td>
+      {{foreach from=$curr_object->_fields item=curr_field}}
+      {{$curr_field}}<br />
+      {{/foreach}}
+    </td>
   </tr>
   {{/foreach}}
 </table>
