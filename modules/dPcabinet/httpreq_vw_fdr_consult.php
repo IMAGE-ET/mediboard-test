@@ -65,7 +65,7 @@ if ($selConsult) {
 // Récupération des modèles
 $whereCommon = array();
 if($consult->_ref_consult_anesth->consultation_anesth_id){
-  $whereCommon[] = "`type` = 'consultation' OR `type` = 'consultAnesth'";
+  $whereCommon[] = "`type` = 'consultAnesth'";
 }else{
   $whereCommon[] = "`type` = 'consultation'";
 }

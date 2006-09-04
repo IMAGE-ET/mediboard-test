@@ -2,14 +2,14 @@
 function calculClairance(){
   var oForm1 = document.editExamCompFrm;
   var oForm2 = document.editAnesthPatFrm; 
-   if({{if $patient->_age && $patient->_age>=18 && $patient->_age<=110}}1{{else}}0{{/if}}
+   if({{if $patient->_age && $patient->_age!="??" && $patient->_age>=18 && $patient->_age<=110}}1{{else}}0{{/if}}
       && oForm2.poid.value && !isNaN(parseFloat(oForm2.poid.value)) && parseFloat(oForm2.poid.value)>0
       && oForm1.creatinine.value && !isNaN(parseFloat(oForm1.creatinine.value)) && parseFloat(oForm1.creatinine.value)>0
       && parseFloat(oForm2.poid.value)>=35 && parseFloat(oForm2.poid.value)<=120
       && parseFloat(oForm1.creatinine.value)>=6 && parseFloat(oForm1.creatinine.value)<=70
       ){
      
-     oForm1._clairance.value = round({{if $patient->sexe!="m"}}0.85*{{/if}}parseFloat(oForm2.poid.value)*(140-{{$patient->_age}})/(parseFloat(oForm1.creatinine.value)*7.2),2);
+     oForm1._clairance.value = round({{if $patient->sexe!="m"}}0.85*{{/if}}parseFloat(oForm2.poid.value)*(140-{{if $patient->_age!="??"}}{{$patient->_age}}{{else}}0{{/if}})/(parseFloat(oForm1.creatinine.value)*7.2),2);
    }else{
      oForm1._clairance.value = "";
    }

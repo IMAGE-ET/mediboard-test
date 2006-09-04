@@ -153,6 +153,7 @@ class CTemplateManager {
       $fields[] = $property["fieldHTML"];
       $values[] = $property["valueHTML"];
     }
+
     $this->document = str_replace($fields, $values, $source);
   }
   

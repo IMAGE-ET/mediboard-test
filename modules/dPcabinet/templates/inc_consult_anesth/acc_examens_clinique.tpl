@@ -94,7 +94,7 @@ function calculImcVst(){
       </button>
       </form>
     </td>
-  <tr>
+  </tr>
 </table>      
       
 {{include file="inc_consult_anesth/intubation.tpl"}}

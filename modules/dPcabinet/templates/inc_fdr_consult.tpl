@@ -171,7 +171,11 @@ function submitFdr(oForm) {
           <input type="hidden" name="m" value="dPcompteRendu" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="do_modele_aed" />
+          {{if $consult->_ref_consult_anesth->consultation_anesth_id}}
+          <input type="hidden" name="object_id" value="{{$consult->_ref_consult_anesth->consultation_anesth_id}}" />
+          {{else}}
           <input type="hidden" name="object_id" value="{{$consult->consultation_id}}" />
+          {{/if}}          
           <input type="hidden" name="compte_rendu_id" value="{{$document->compte_rendu_id}}" />
           <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})"></button>
           <button class="trash notext" type="button" onclick="this.form.del.value = 1; submitFdr(this.form)">
@@ -189,7 +193,11 @@ function submitFdr(oForm) {
     <table class="form">
       <tr>
         <td>
+          {{if $consult->_ref_consult_anesth->consultation_anesth_id}}
+          <select name="_choix_modele" onchange="createDocument(this, {{$consult->_ref_consult_anesth->consultation_anesth_id}})">
+          {{else}}
           <select name="_choix_modele" onchange="createDocument(this, {{$consult->consultation_id}})">
+          {{/if}}           
             <option value="">&mdash; Choisir un modèle</option>
             {{if $listModelePrat|@count}}
             <optgroup label="Modèles du praticien">

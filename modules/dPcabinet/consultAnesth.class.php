@@ -89,7 +89,7 @@ class CConsultAnesth extends CMbObject {
     $this->_props["consultation_id"] = "ref|notNull";
     $this->_props["operation_id"]    = "ref";
     // @todo : un type particulier pour le poid et la taille
-    $this->_props["poid"]            = "currency|minMax|-10|100";
+    $this->_props["poid"]            = "currency|pos";
     $this->_props["taille"]          = "currency|min|0";
     $this->_props["groupe"]          = "enum|?|O|A|B|AB";
     $this->_props["rhesus"]          = "enum|?|-|+";

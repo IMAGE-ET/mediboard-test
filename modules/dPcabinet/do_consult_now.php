@@ -13,6 +13,7 @@ require_once($AppUI->getModuleClass("mediusers"));
 require_once($AppUI->getModuleClass("dPpatients", "patients"));
 require_once($AppUI->getModuleClass("dPcabinet" , "plageconsult"));
 require_once($AppUI->getModuleClass("dPcabinet" , "consultation"));
+require_once($AppUI->getModuleClass("dPcabinet" , "consultAnesth"));
 
 $canEdit = !getDenyEdit($m);
 if (!$canEdit) {
@@ -42,6 +43,8 @@ if(!$plage->plageconsult_id) {
   $plage->libelle = "automatique";
   $plage->store();
 }
+$plage->loadRefsFwd();
+$ref_chir = $plage->_ref_chir;
 
 $consult = new CConsultation;
 $consult->plageconsult_id = $plage->plageconsult_id;
@@ -52,6 +55,18 @@ $consult->duree = 1;
 $consult->chrono = CC_PATIENT_ARRIVE;
 $consult->motif = "Consultation immédiate";
 $consult->store();
+
+if($ref_chir->isFromType(array("Anesthésiste"))) {
+  // Un Anesthesiste a été choisi 
+  $consultAnesth = new CConsultAnesth;
+  $where = array();
+  $where["consultation_id"] = "= '".$consult->consultation_id."'";
+  $consultAnesth->loadObject($where);  
+  $consultAnesth->consultation_id = $consult->consultation_id;
+  $consultAnesth->operation_id = "";
+  $consultAnesth->store();
+}
+
 
 $AppUI->redirect("m=dPcabinet&tab=edit_consultation&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
 

@@ -7,13 +7,14 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
+global $AppUI, $utypes;
 require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
+require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.44";
+$config["mod_version"]     = "0.45";
 $config["mod_directory"]   = "dPcabinet";
 $config["mod_setup_class"] = "CSetupdPcabinet";
 $config["mod_type"]        = "user";
@@ -44,6 +45,7 @@ class CSetupdPcabinet {
   }
 
   function upgrade( $old_version ) {
+    global $utypes;
     switch ($old_version) {
       case "all":
         $sql = "CREATE TABLE consultation (
@@ -316,7 +318,7 @@ class CSetupdPcabinet {
         		ADD `hb` float default NULL,
         		ADD `tp` float default NULL,
         		ADD `tca` time NOT NULL default '00:00:00',
-        	    ADD `creatinine` float default NULL,
+        	  ADD `creatinine` float default NULL,
         		ADD `na` float default NULL,
         		ADD `k` float default NULL,
         		ADD `tsivy` time NOT NULL default '00:00:00',
@@ -346,7 +348,33 @@ class CSetupdPcabinet {
                PRIMARY KEY ( `exam_id` )) TYPE=MyISAM";
         db_exec( $sql ); db_error();
       case "0.44":
-        return "0.44";
+        $utypes_flip = array_flip($utypes);
+        $id_anesth = $utypes_flip["Anesthésiste"];
+        $sql = "SELECT users.user_id" .
+               "\nFROM users, users_mediboard" .
+               "\nWHERE users.user_id = users_mediboard.user_id" .
+               "\nAND users.user_type='$id_anesth'";
+        $result = db_loadList($sql);
+        foreach($result as $keyresult => $resultAnesth){
+          $listAnesthid[$keyresult] = $result[$keyresult]["user_id"];
+        } 
+        $inClause = implode(", ", $listAnesthid);
+         
+        $sql = "SELECT consultation.consultation_id FROM consultation" .
+               "\nLEFT JOIN consultation_anesth ON consultation.consultation_id = consultation_anesth.consultation_id" .
+               "\nLEFT JOIN plageconsult ON consultation.plageconsult_id = plageconsult.plageconsult_id" .
+               "\nWHERE plageconsult.chir_id IN ($inClause)" .
+               "\nAND consultation_anesth.consultation_anesth_id IS NULL" ;  
+        $result = db_loadList($sql);
+
+        foreach($result as $keyresult => $resultAnesth){
+          $consultAnesth = new CConsultAnesth;
+          $consultAnesth->consultation_anesth_id = 0;
+          $consultAnesth->consultation_id = $result[$keyresult]["consultation_id"];
+          $consultAnesth->store();
+        }
+      case "0.45":
+        return "0.45";
     }
     return false;
   }

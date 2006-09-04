@@ -58,7 +58,6 @@ $medichir->load($compte_rendu->_ref_chir->user_id);
 $templateManager = new CTemplateManager;
 
 $object->fillTemplate($templateManager);
-
 $templateManager->document = $compte_rendu->source;
 $templateManager->loadHelpers($medichir->user_id, $compte_rendu->type);
 $templateManager->loadLists($medichir->user_id);
