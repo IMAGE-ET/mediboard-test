@@ -57,7 +57,7 @@ class CParamsPaie extends CMbObject {
     $this->CMbObject("params_paie", "params_paie_id");
     
     $this->_props["user_id"]   = "ref|notNull";
-    $this->_props["smic"]      = "currency|pos|notNull";
+    $this->_props["smic"]      = "currency|min|0|notNull";
     $this->_props["csgds"]     = "pct|notNull";
     $this->_props["csgnds"]    = "pct|notNull";
     $this->_props["ssms"]      = "pct|notNull";

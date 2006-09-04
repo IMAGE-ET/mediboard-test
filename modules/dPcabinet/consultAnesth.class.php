@@ -90,7 +90,7 @@ class CConsultAnesth extends CMbObject {
     $this->_props["operation_id"]    = "ref";
     // @todo : un type particulier pour le poid et la taille
     $this->_props["poid"]            = "currency|minMax|-10|100";
-    $this->_props["taille"]          = "currency|pos";
+    $this->_props["taille"]          = "currency|min|0";
     $this->_props["groupe"]          = "enum|?|O|A|B|AB";
     $this->_props["rhesus"]          = "enum|?|-|+";
     $this->_props["antecedents"]     = "str|confidential";
@@ -107,18 +107,18 @@ class CConsultAnesth extends CMbObject {
     
     // Données examens complementaires
     $this->_props["rai"]             = "currency";
-    $this->_props["hb"]              = "currency|pos";
+    $this->_props["hb"]              = "currency|min|0";
     $this->_props["tp"]              = "currency|minMax|0|100";
     $this->_props["tca"]             = "time";
     $this->_props["creatinine"]      = "currency";
-    $this->_props["na"]              = "currency|pos";
-    $this->_props["k"]               = "currency|pos";
+    $this->_props["na"]              = "currency|min|0";
+    $this->_props["k"]               = "currency|min|0";
     $this->_props["tsivy"]           = "time";
     $this->_props["plaquettes"]      = "num|pos";
     $this->_props["ecbu"]            = "enum|?|NEG|POS";
     $this->_props["ecbu_detail"]     = "str";
     $this->_props["pouls"]           = "num|pos";
-    $this->_props["spo2"]            = "currency|pos";
+    $this->_props["spo2"]            = "currency|min|0";
     $this->_props["ht"]              = "currency|minMax|0|100";
     
     // Champs pour les conditions d'intubation
