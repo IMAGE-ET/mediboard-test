@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"] = "dPcompteRendu";
-$config["mod_version"] = "0.22";
+$config["mod_version"] = "0.23";
 $config["mod_directory"] = "dPcompteRendu";
 $config["mod_setup_class"] = "CSetupdPcompteRendu";
 $config["mod_type"] = "user";
@@ -129,7 +129,11 @@ class CSetupdPcompteRendu {
         $sql = "UPDATE `aide_saisie` SET `class`=CONCAT(\"C\",`class`);";
         db_exec($sql); db_error();
       case "0.22":
-        return "0.22";
+        set_time_limit(1800);
+        $sql = "ALTER TABLE `compte_rendu` CHANGE `type` `type`  VARCHAR(30) NOT NULL DEFAULT 'autre'";
+        db_exec($sql); db_error();
+      case "0.23":
+        return "0.23";
     }
     return false;
   }

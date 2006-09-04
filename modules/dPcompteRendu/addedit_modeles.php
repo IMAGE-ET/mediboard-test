@@ -44,15 +44,19 @@ if($compte_rendu->object_id){
   $AppUI->redirect("m=$m&tab=vw_modeles");
 }
 // Gestion du modèle
+$templateManager = new CTemplateManager;
 if ($compte_rendu->compte_rendu_id) {
   $prat_id = $compte_rendu->chir_id;
-  $templateManager = new CTemplateManager;
   $templateManager->valueMode = false;
   $templateManager->loadLists($compte_rendu->chir_id, $compte_rendu->compte_rendu_id);
   $templateManager->loadHelpers($compte_rendu->chir_id, $compte_rendu->type);
   $templateManager->applyTemplate($compte_rendu);
   $templateManager->initHTMLArea();
 }
+
+// Liste des Types de documents
+$listType = $templateManager->listType;
+ksort($listType);
 
 // Création du template
 require_once( $AppUI->getSystemClass("smartydp"));
@@ -62,6 +66,7 @@ $smarty->assign("prat_id", $prat_id);
 $smarty->assign("compte_rendu_id", $compte_rendu_id);
 $smarty->assign("listPrat", $listPrat);
 $smarty->assign("listFunc", $listFunc);
+$smarty->assign("listType", $listType);
 $smarty->assign("compte_rendu", $compte_rendu);
 
 $smarty->display("addedit_modeles.tpl");

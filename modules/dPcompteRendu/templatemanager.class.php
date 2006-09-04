@@ -17,17 +17,6 @@ require_once( $AppUI->getModuleClass("mediusers"    , "functions"));
 require_once( $AppUI->getModuleClass("mediusers"));
 require_once( $AppUI->getSystemClass("smartydp"));
 
-define("TMT_CONSULTATION"   , "consultation"   );
-define("TMT_HOSPITALISATION", "hospitalisation");
-define("TMT_OPERATION"      , "operation"      );
-define("TMT_AUTRE"          , "autre"          );
-
-$listTypes = array();
-$listType[] = TMT_CONSULTATION;
-$listType[] = TMT_HOSPITALISATION;
-$listType[] = TMT_OPERATION;
-$listType[] = TMT_AUTRE;
-
 class CTemplateManager {
   var $editor = "fckeditor";
   
@@ -41,7 +30,14 @@ class CTemplateManager {
   
   var $valueMode = true; // @todo : changer en applyMode
   
+  var $listType = array();
+
   function CTemplateManager() {
+    $this->listType["consultation"]     = "CConsultation";
+    $this->listType["hospitalisation"]  = "COperation";
+    $this->listType["operation"]        = "COperation";
+    $this->listType["consultAnesth"]    = "CConsultAnesth";
+    $this->listType["patient"]          = "CPatient";
   }
 
   function makeSpan($spanClass, $text) {
@@ -84,7 +80,7 @@ class CTemplateManager {
     if(is_a($template, "CCompteRendu")) {
     
       if (!$this->valueMode) {
-        $this->SetFields($template->type, $template->chir_id);
+        $this->setFields($template->type, $template->chir_id);
       }
 
       $this->renderDocument($template->source);
@@ -92,7 +88,7 @@ class CTemplateManager {
     } else {
     
       if (!$this->valueMode) {
-        $this->SetFields("hospitalisation", $template->chir_id);
+        $this->setFields("hospitalisation", $template->chir_id);
       }
 
       $this->renderDocument($template->_source);
@@ -104,26 +100,17 @@ class CTemplateManager {
     $_SESSION["dPcompteRendu"]["templateManager"] = $this;
    
     $smarty = new CSmartyDP(1);
-    $smarty->template_dir = "modules/dPcompteRendu/templates/";
+   /* $smarty->template_dir = "modules/dPcompteRendu/templates/";
     $smarty->compile_dir = "modules/dPcompteRendu/templates_c/";
     $smarty->config_dir = "modules/dPcompteRendu/configs/";
-    $smarty->cache_dir = "modules/dPcompteRendu/cache/";
+    $smarty->cache_dir = "modules/dPcompteRendu/cache/";*/
     $smarty->assign("templateManager", $this);
     $smarty->display("init_htmlarea.tpl");
 	}
   
   function setFields($modeleType) {
-    // Général Patient
-    $patient = new CPatient;
-    $patient->fillTemplate($this);
-    // Général Praticien
-    $prat = new CMediusers();
-    $prat->fillTemplate($this);
-        
-    switch ($modeleType) {
-      case TMT_CONSULTATION   : $object = new CConsultation; break;
-      case TMT_OPERATION      : $object = new COperation   ; break;
-      case TMT_HOSPITALISATION: $object = new COperation   ; break;
+    if (array_key_exists("$modeleType", $this->listType)){
+      $object = new $this->listType[$modeleType];
     }
     
     if(isset($object))
@@ -140,19 +127,15 @@ class CTemplateManager {
     
     $lists = new CListeChoix();
     $lists = $lists->loadList($where);
-    
     foreach ($lists as $list) {
       $this->addList($list->nom);
     }
   }
   
   function loadHelpers($user_id, $modeleType) {
-    switch($modeleType) {
-      case TMT_CONSULTATION   : $object = new CConsultation; break;
-      case TMT_OPERATION      : $object = new COperation   ; break;
-      case TMT_HOSPITALISATION: $object = new COperation   ; break;
+    if (array_key_exists("$modeleType", $this->listType)){
+      $object = new $this->listType[$modeleType];
     }
-    
     if(isset($object)) {
       $object->loadAides($user_id);
       if(is_array($helpers = @$object->_aides["compte_rendu"])) {
