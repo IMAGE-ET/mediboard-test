@@ -83,7 +83,7 @@
                 <th>Taille</th>
                 <td style="white-space: nowrap;">{{$consult->_ref_consult_anesth->taille}} cm</td>
                 <th>TA</th>
-                <td style="white-space: nowrap;">{{$consult->_ref_consult_anesth->tasys}} - {{$consult->_ref_consult_anesth->tadias}}</td>
+                <td style="white-space: nowrap;">{{$consult->_ref_consult_anesth->tasys}} / {{$consult->_ref_consult_anesth->tadias}}</td>
               </tr> 
               <tr>
                 <th>Groupe sanguin</th>

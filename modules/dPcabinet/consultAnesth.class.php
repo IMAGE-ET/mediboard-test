@@ -240,6 +240,15 @@ class CConsultAnesth extends CMbObject {
   }
   
   function fillLimitedTemplate(&$template) {
+    $template->addProperty("Anesthésie - poids"          , $this->poid." kg");
+    $template->addProperty("Anesthésie - taille"         , $this->taille." cm");
+    $template->addProperty("Anesthésie - IMC"            , $this->_imc);
+    $template->addProperty("Anesthésie - tabac"          , nl2br($this->tabac));
+    $template->addProperty("Anesthésie - oenolisme"      , nl2br($this->oenolisme));
+    $template->addProperty("Anesthésie - TA"             , $this->tasys." / ".$this->tadias);
+    $template->addProperty("Anesthésie - Pouls"          , $this->pouls);
+    $template->addProperty("Anesthésie - Groupe Sanguin" , $this->groupe." ".$this->rhesus);
+    $template->addProperty("Anesthésie - ASA"            , $this->ASA);
   }
 }
 

@@ -35,7 +35,7 @@ function calculImcVst(){
           <th><label for="tasys" title="Pression arterielle">TA</label></th>
           <td>
             <input type="text" size="2" name="tasys" title="{{$consult_anesth->_props.tasys}}" value="{{$consult_anesth->tasys}}" />
-            -
+            /
             <input type="text" size="2" name="tadias" title="{{$consult_anesth->_props.tadias}}" value="{{$consult_anesth->tadias}}" />
           </td>
         </tr>
