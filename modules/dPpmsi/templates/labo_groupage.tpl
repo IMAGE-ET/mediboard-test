@@ -129,7 +129,12 @@
             <br />
             <i>Appartenance aux groupes {{$GHM->_GHM_groupe}}</i>
             <br />
-            <strong>Bornes d'hospitalisation</strong> : de {{$GHM->_borne_basse}} jour(s) à {{$GHM->_borne_haute}} jours
+            <strong>Bornes d'hospitalisation</strong> :
+            {{if $GHM->_borne_basse == $GHM->_borne_haute && $GHM->_borne_haute == 0}}
+            moins de 2 jours
+            {{else}}
+            de {{$GHM->_borne_basse}} jour(s) à {{$GHM->_borne_haute}} jours
+            {{/if}}
             <br />
             <strong>Chemin :</strong> <br />
             {{$GHM->_chemin}}
