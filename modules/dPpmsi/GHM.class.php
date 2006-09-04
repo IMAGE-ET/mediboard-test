@@ -121,7 +121,7 @@ class CGHM  extends CMbObject {
     $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
   }
   
-  // Liaison à une intervention
+  // Liaison à un sejour
   function bindInfos() {
     // Infos patient
     $adm = $this->_ref_sejour->entree_prevue;    
@@ -141,7 +141,7 @@ class CGHM  extends CMbObject {
     $this->_ref_patient->sexe == "m" ? $this->_sexe = "Masculin" : $this->_sexe = "Féminin";
     // Infos hospi
     $this->_type_hospi = $this->_ref_sejour->type;
-    $this->_duree = mbDaysRelative($this->_ref_sejour->entree_prevue, $this->_ref_sejour->sortie_prevue);
+    $this->_duree = $this->_ref_sejour->_duree_prevue;
     $this->_motif = "hospi";
     $this->_destination = "MCO";
     // Infos codage
@@ -237,12 +237,15 @@ class CGHM  extends CMbObject {
         $isNO = 0;
         foreach($listeNO as $liste) {
           $sql = "SELECT code FROM acte" .
+              "\nWHERE code = '".$acte["code"]."'";
+          $resultExists = db_exec($sql, $this->_dbghm);
+          $sql = "SELECT code FROM acte" .
               "\nWHERE code = '".$acte["code"]."'" .
               "\nAND phase = '".$acte["phase"]."'" .
               "\nAND liste_id = '".$liste["liste_id"]."'" .
               "\nAND CM_id = '$this->_CM'";
-          $result = db_exec($sql, $this->_dbghm);
-          if (mysql_num_rows($result))
+          $resultNO = db_exec($sql, $this->_dbghm);
+          if (!mysql_num_rows($resultExists) || mysql_num_rows($resultNO))
             $isNO = 1;
         }
         if($isNO)
@@ -300,7 +303,8 @@ class CGHM  extends CMbObject {
     // Vérification du type d'hospitalisation
     if($this->_type_hospi == "séance") {
       $this->_CM = "28";
-    } else if($this->_type_hospi == "ambu" || $this->_type_hospi == "exte") {
+    //} else if($this->_type_hospi == "ambu" || $this->_type_hospi == "exte") {
+    } else if($this->_duree < 2) {
       $this->_CM = "24";
     } else if($this->isFromList("Actes", "transplantation")) {
       $this->_CM = "27";
