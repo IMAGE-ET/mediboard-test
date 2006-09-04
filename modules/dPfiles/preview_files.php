@@ -31,7 +31,7 @@ $file->loadRefsFwd();
 $acces_denied = (!isMbAllowed(PERM_READ, "mediusers", $file->_ref_file_owner->function_id));
 $file->loadNbPages();
 if(!$acces_denied){
-  if($file->file_type == "text/plain"){
+  if($file->file_type == "text/plain" && file_exists($file->_file_path)){
     // Fichier texte, on récupére le contenu
     $includeInfosFile = nl2br(htmlspecialchars(utf8_decode(file_get_contents($file->_file_path))));
   }
