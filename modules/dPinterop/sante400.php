@@ -10,8 +10,6 @@ $etablissements = array(
 */
 require_once "DB.php";
 
-dl("ibm_db2.so");
-
 $chrono = new Chronometer();
 
 $db_base = "PICLIN927";
@@ -94,7 +92,7 @@ switch ($mode = mbGetValueFromGet("mode", "pear")) {
     
     // Connect to the database.
     try {
-      $dbh = new PDO('mysql:host=localhost;dbname=test', $user, $pass);
+      $dbh = new PDO('odbc:sante400');
       foreach ($dbh->query($sql) as $row) {
         print_r($row);
       }
