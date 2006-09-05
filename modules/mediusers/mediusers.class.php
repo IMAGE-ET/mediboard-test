@@ -269,21 +269,37 @@ class CMediusers extends CMbObject {
   }
   
   function insFunctionPermission() {
+    $where = array();
+    $where["permission_user"    ] = "= '$this->user_id'";
+    $where["permission_grant_on"] = "= 'mediusers'";
+    $where["permission_item"    ] = "= '$this->function_id'";
+    
     $perm = new CPermission;
-    $perm->permission_user = $this->user_id; 
-    $perm->permission_grant_on = "mediusers";
-    $perm->permission_item = $this->function_id;
-    $perm->store();
+    if (!$perm->loadObject($where)) {
+      $perm = new CPermission;
+      $perm->permission_user = $this->user_id; 
+      $perm->permission_grant_on = "mediusers";
+      $perm->permission_item = $this->function_id;
+      $perm->store();
+    }
   }
   
   function insGroupPermission() {
-    $perm = new CPermission;
-    $perm->permission_user = $this->user_id; 
-    $perm->permission_grant_on = "dPetablissement";
     $function = new CFunctions;
     $function->load($this->function_id);
-    $perm->permission_item = $function->group_id;
-    $perm->store();
+    $where = array();
+    $where["permission_user"    ] = "= '$this->user_id'";
+    $where["permission_grant_on"] = "= 'dPetablissement'";
+    $where["permission_item"    ] = "= '$function->group_id'";
+    
+    $perm = new CPermission;
+    if (!$perm->loadObject($where)) {
+      $perm = new CPermission;
+      $perm->permission_user = $this->user_id; 
+      $perm->permission_grant_on = "dPetablissement";
+      $perm->permission_item = $function->group_id;
+      $perm->store();
+    }
   }
 
   function loadListFromType($user_types = null, $perm_type = null, $function_id = null, $name = null) {

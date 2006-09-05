@@ -32,8 +32,6 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
         $AppUI->redirect($this->redirectError);
       }
     } else {
-      // delete older function permission
-      $old->delFunctionPermission();
 
       // copy permissions
       if ($profile_id = dPgetParam($_POST, "_profile_id")) {
