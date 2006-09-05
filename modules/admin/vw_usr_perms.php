@@ -56,7 +56,7 @@ $permModuleValues = array(
 $sql = "SELECT ";
 
 foreach($pgos as $module => $pgo) {
-  $sql .= "\n{$pgo['table_alias']}.{$pgo['id_field']}, {$pgo['table_alias']}.{$pgo['name_field']},";
+  $sql .= "\n{$pgo['table_alias']}.{$pgo['id_field']}, {$pgo['table_alias']}.{$pgo['name_field']} AS {$pgo['table_alias']}{$pgo['name_field']},";
 }  
  
 $sql .= "\np.permission_item, p.permission_id, p.permission_grant_on, p.permission_value" .
@@ -77,7 +77,7 @@ $userPerms = array();
 while ($row = db_fetch_assoc( $res )) {
   // Mediboard version 
   $module = $row["permission_grant_on"];
-  $name_field = @$pgos[$module]["name_field"];
+  $name_field = @$pgos[$module]["table_alias"].@$pgos[$module]["name_field"];
   $item_name = $row["permission_item"] == PERM_ALL ? "module" : $row[$name_field];
   $perm_value_name = $row["permission_item"] == PERM_ALL ? $permModuleValues[$row["permission_value"]] : $permItemValues[$row["permission_value"]];
   
