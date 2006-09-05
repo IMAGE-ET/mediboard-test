@@ -181,6 +181,8 @@
 "module-dPstats-long"=>"Reporting",
 "module-mediusers-court"=>"Mediusers",
 "module-mediusers-long"=>"Gestion des utilisateurs",
+"module-dPsante400-court"=>"Santé400",
+"module-dPsante400-long"=>"Intégration de Santé400",
 "module-system-court"=>"Administration",
 "module-system-long"=>"Administration système",
 "new department"=>"nouveau service",

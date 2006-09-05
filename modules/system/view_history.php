@@ -10,11 +10,9 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getModuleClass("system", "user_log"));
-
-// Add the user class
 require_once($AppUI->getModuleClass("admin"));
 
-$dialog = mbGetValueFromGet("dialog", 0);
+$dialog = mbGetValueFromGet("dialog");
 
 if (!$canRead && !$dialog) {
   $AppUI->redirect( "m=system&a=access_denied" );

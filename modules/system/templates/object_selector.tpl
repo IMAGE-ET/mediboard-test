@@ -1,7 +1,14 @@
 <script type="text/javascript">
 
 function setClose(selClass,keywords,key,val){
-  window.opener.setData(selClass,keywords,key,val);
+  var oObject = {
+    class : selClass,
+    id : key,
+    view : val,
+    keywords : keywords
+  }
+
+  window.opener.setObject(oObject);
   window.close();
 }
 </script>
@@ -31,7 +38,7 @@ function setClose(selClass,keywords,key,val){
   <tr>
     <th><label for="keywords" title="Veuillez saisir un ou plusieurs mot clé">Mots Clés</label></th>
     <td><input title="str|notNull" type="text" name="keywords" value="{{$keywords}}" /></td>
-    <td><button class="search" type="submit">rechercher</button></td>
+    <td><button class="search" type="submit">Rechercher</button></td>
   </tr>
 </table>
 </form>

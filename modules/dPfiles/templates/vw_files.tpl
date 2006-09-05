@@ -2,12 +2,12 @@
 
 <script type="text/javascript">
 
-function popSearch() {
-  var f = document.FrmClass;
+function popObject() {
+  var oForm = document.FrmClass;
   var url = new Url;
   url.setModuleAction("system", "object_selector");
-  url.addParam("keywords", f.keywords.value);
-  url.addParam("selClass", f.selClass.value);  
+  url.addElement(oForm.keywords);
+  url.addElement(oForm.selClass);  
   url.popup(600, 300, "-");
 }
 
@@ -28,17 +28,17 @@ function pageMain() {
         <tr>
           <td  class="readonly">
             <label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label>
-            <input type="text" readonly="readonly" ondblclick="popSearch()" name="selClass" value="{{$selClass}}" />
+            <input type="text" readonly="readonly" ondblclick="popObject()" name="selClass" value="{{$selClass}}" />
           </td>
           <td class="readonly">
-            <input type="text" readonly="readonly" ondblclick="popSearch()" name="keywords" value="{{$keywords}}" />
-            <button type="button" onclick="popSearch()" class="search">Rechercher</button>
+            <input type="text" size="80" readonly="readonly" ondblclick="popObject()" name="selView" value="{{$selView}}" />
+            <button type="button" onclick="popObject()" class="search">Rechercher</button>
             <input type="hidden" name="selKey" value="{{$selKey}}" />
-            <input type="hidden" name="selView" value="{{$selView}}" />
+            <input type="hidden" name="keywords" value="{{$keywords}}" />
           </td>
           {{if $selKey}}
           <td>
-            <select name="typeVue" onchange="if(this.form.onsubmit()) { this.form.submit() };">
+            <select name="typeVue" onchange="if (this.form.onsubmit()) { this.form.submit() };">
               <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>Miniatures et aperçus</option>
               <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Miniatures seuls</option>
               <option value="2" {{if $typeVue == 2}}selected="selected"{{/if}}>Aperçus seuls</option>

@@ -56,7 +56,11 @@ function pageMain() {
             Identité
           </th>
           <th class="category" colspan="2">
-            <button type="button" style="float:right;" onclick="setData('CPatient','',{{$patient->patient_id}},'{{$patient->_view}}')">
+            <button type="button" style="float:right;" onclick="setObject( {
+              class: 'CPatient', 
+              keywords: '', 
+              id: {{$patient->patient_id}}, 
+              view: '{{$patient->_view}}' })">
               {{$patient->_ref_files|@count}} fichier(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
             </button>
@@ -171,7 +175,11 @@ function pageMain() {
         {{foreach from=$patient->_ref_sejours item=curr_sejour}}
         <tr>
           <td colspan="4">
-            <button type="button" style="float:right;" onclick="setData('CSejour','',{{$curr_sejour->sejour_id}},'{{$curr_sejour->_view}}')">
+            <button type="button" style="float:right;" onclick="setObject( {
+              class: 'CSejour', 
+              keywords: '', 
+              id: {{$curr_sejour->sejour_id}}, 
+              view:'{{$curr_sejour->_view}}'} )">
               {{$curr_sejour->_ref_files|@count}} fichier(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
             </button>
@@ -182,7 +190,11 @@ function pageMain() {
         <tr>
           <td colspan="4">
             <ul><li>
-            <button type="button" style="float:right;" onclick="setData('COperation','',{{$curr_op->operation_id}},'{{$curr_op->_view}}')">
+            <button type="button" style="float:right;" onclick="setObject( {
+              class: 'COperation', 
+              keywords: '', 
+              id: {{$curr_op->operation_id}}, 
+              view:'{{$curr_op->_view}}'} )">
               {{$curr_op->_ref_files|@count}} fichier(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
             </button>
@@ -198,7 +210,11 @@ function pageMain() {
         {{foreach from=$patient->_ref_consultations item=curr_consult}}
         <tr>
           <td colspan="4">
-            <button type="button" style="float:right;" onclick="setData('CConsultation','',{{$curr_consult->consultation_id}},'{{$curr_consult->_view}}')">
+            <button type="button" style="float:right;" onclick="setObject( {
+              class: 'CConsultation', 
+              keywords: '', 
+              id: {{$curr_consult->consultation_id}}, 
+              view: '{{$curr_consult->_view}}'} )">
               {{$curr_consult->_ref_files|@count}} fichier(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
             </button>

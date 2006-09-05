@@ -51,17 +51,15 @@ function ZoomFileAjax(file_id, sfn){
   url.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
 }
 
-function setData(selClass,keywords,key,val){
+function setObject(oObject){
   var oForm = document.FrmClass;
-  if (val != '') {
-    oForm.selKey.value = key;
-    oForm.selView.value = val;
-    oForm.selClass.value = selClass;
-    oForm.keywords.value = keywords;
-    oForm.file_id.value = "";
-    if(oForm.onsubmit()) {
-      oForm.submit();
-    }
+  oForm.selKey.value = oObject.id;
+  oForm.selView.value = oObject.view;
+  oForm.selClass.value = oObject.class;
+  oForm.keywords.value = oObject.keywords;
+  oForm.file_id.value = "";
+  if (oForm.onsubmit()) {
+    oForm.submit();
   }
 }
 

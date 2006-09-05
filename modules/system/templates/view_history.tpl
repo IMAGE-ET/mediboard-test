@@ -9,7 +9,7 @@
   <tr>
     <th class="category" colspan="5">
       {{if $list|@count == 100}}
-      Plus de 100 historiques, seuls les 100 premiers sont affichés
+      Plus de 100 historiques, seuls les 100 plus récents sont affichés
       {{else}}
       {{$list|@count}} historiques trouvés
       {{/if}}
