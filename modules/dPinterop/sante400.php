@@ -88,10 +88,31 @@ switch ($mode = mbGetValueFromGet("mode", "pear")) {
   break;
 
   /**
+   * Mode pdo
+   */
+  case "pdo":
+    
+    // Connect to the database.
+    try {
+      $dbh = new PDO('mysql:host=localhost;dbname=test', $user, $pass);
+      foreach ($dbh->query($sql) as $row) {
+        print_r($row);
+      }
+      $dbh = null;
+    } catch (PDOException $e) {
+      print "Erreur ! : " . $e->getMessage() . "<br/>";
+      die();
+    }
+  
+  $chrono->stop();
+  
+  break;
+
+  /**
    * Mode ibm_db2
    */
   case "ibm":
-
+    
     // Connect to the DB2 database.
     $conn = db2_connect($db_base, $db_user, $db_pass);
 
