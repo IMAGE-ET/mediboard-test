@@ -1,13 +1,13 @@
 <?php 
 
 global $AppUI, $m;
-
+/*
 $etablissements = array(
   "310" => "St Louis",
   "474" => "Sauvegarde",
   "927" => "clinique du Tonkin"
 );
-
+*/
 require_once "DB.php";
 
 dl("ibm_db2.so");
