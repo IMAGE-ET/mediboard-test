@@ -15,6 +15,7 @@ dl("ibm_db2.so");
 $chrono = new Chronometer();
 
 $db_base = "PICLIN927";
+$db_base = "PICLIN310";
 $db_user = "GMB";
 $db_pass = "GMB";
 
