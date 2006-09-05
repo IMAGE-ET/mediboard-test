@@ -92,13 +92,12 @@ switch ($mode = mbGetValueFromGet("mode", "pear")) {
   case "ibm":
 
     // Connect to the DB2 database.
-    $link = db2_connect($db_base, $db_user, $db_pass);
-    /*
-    if (odbc_error()) {
+    $conn = db2_connect($db_base, $db_user, $db_pass);
+
+    if (!$conn) {
       mbTrace(odbc_errormsg(), "Could no connect");
       die;
     }
-    */
 
     mbTrace("Yes", "Connection successful");
     
