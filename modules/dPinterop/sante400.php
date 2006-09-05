@@ -95,6 +95,32 @@ switch ($mode = mbGetValueFromGet("mode", "pear")) {
   
   break;
 
+  /**
+   * Mode ibm_db2
+   */
+  case "ibm":
+
+    // Connect to the DB2 database.
+    $link = db2_connect($dPconfig['dPinterop']['sante400']['site_base'], $db_user, $db_pass);
+    /*
+    if (odbc_error()) {
+      mbTrace(odbc_errormsg(), "Could no connect");
+      die;
+    }
+    */
+
+    mbTrace("Yes", "Connection successful");
+    
+    // Execute Query
+    $res = db2_exec($link, $sql);
+    while ($obj = db2_fetch_object($res)) {
+      mbTrace($obj, "Found Object");
+    }
+  
+  $chrono->stop();
+  
+  break;
+
 	default:
   mbTrace($mode, "mode not available");
 	break;
