@@ -2,18 +2,6 @@
 
 global $AppUI, $m;
 
-require_once($Appui->getSystemClass("mbconfig"));
-
-$dPconfig['dPinterop']['sante400']['site_base'] = 'PICLIN927';
-
-$mbConfig = new CMbConfig;
-$mbConfig->update($dPconfig);
-$mbConfig->load();
-
-die();
-
-
-
 $etablissements = array(
   "310" => "St Louis",
   "474" => "Sauvegarde",
@@ -22,8 +10,11 @@ $etablissements = array(
 
 require_once "DB.php";
 
+dl("ibm_db2.so");
+
 $chrono = new Chronometer();
 
+$db_base = "PICLIN927";
 $db_user = "GMB";
 $db_pass = "GMB";
 
@@ -101,7 +92,7 @@ switch ($mode = mbGetValueFromGet("mode", "pear")) {
   case "ibm":
 
     // Connect to the DB2 database.
-    $link = db2_connect($dPconfig['dPinterop']['sante400']['site_base'], $db_user, $db_pass);
+    $link = db2_connect($db_base, $db_user, $db_pass);
     /*
     if (odbc_error()) {
       mbTrace(odbc_errormsg(), "Could no connect");
