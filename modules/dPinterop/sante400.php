@@ -1,6 +1,9 @@
 <?php 
 
 global $AppUI, $m;
+
+phpinfo();
+
 /*
 $etablissements = array(
   "310" => "St Louis",
@@ -8,6 +11,7 @@ $etablissements = array(
   "927" => "clinique du Tonkin"
 );
 */
+
 require_once "DB.php";
 
 $chrono = new Chronometer();
@@ -93,9 +97,9 @@ switch ($mode = mbGetValueFromGet("mode", "pear")) {
     // Connect to the database.
     try {
       $dbh = new PDO("odbc:sante400", $db_user, $db_pass);
-      //foreach ($dbh->query($sql) as $row) {
-      //  print_r($row);
-      //}
+      foreach ($dbh->query($sql) as $row) {
+        print_r($row);
+      }
       $dbh = null;
     } catch (PDOException $e) {
       print "Erreur ! : " . $e->getMessage() . "<br/>";
