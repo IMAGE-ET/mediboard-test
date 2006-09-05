@@ -95,7 +95,7 @@ switch ($mode = mbGetValueFromGet("mode", "pear")) {
     $conn = db2_connect($db_base, $db_user, $db_pass);
 
     if (!$conn) {
-      mbTrace(odbc_errormsg(), "Could no connect");
+      mbTrace(db2_conn_errormsg(), "Could no connect");
       die;
     }
 
