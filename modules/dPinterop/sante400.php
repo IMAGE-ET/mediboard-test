@@ -92,10 +92,10 @@ switch ($mode = mbGetValueFromGet("mode", "pear")) {
     
     // Connect to the database.
     try {
-      $dbh = new PDO("odbc:mysql");
-      foreach ($dbh->query($sql) as $row) {
-        print_r($row);
-      }
+      $dbh = new PDO("odbc:sante400");
+      //foreach ($dbh->query($sql) as $row) {
+      //  print_r($row);
+      //}
       $dbh = null;
     } catch (PDOException $e) {
       print "Erreur ! : " . $e->getMessage() . "<br/>";
