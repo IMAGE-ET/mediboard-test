@@ -265,7 +265,7 @@ function popPlanning(debut) {
     {{if $plagesel->plageop_id}}
       <form name="removeFrm" action="?m={{$m}}" method="post">
       <input type="hidden" name="dosql" value="do_plagesop_aed" />
-      <input type="hidden" name="del" value="1" />
+      <input type="hidden" name="del" value="0" />
       <input type="hidden" name="plageop_id" value="{{$plagesel->plageop_id}}" /> 
       <table class="form">
         <tr>
@@ -277,7 +277,9 @@ function popPlanning(debut) {
         </tr>   
         <tr>
           <td class="button" colspan="2">
-            <button type="submit" class="trash">Supprimer</button>
+            <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'la plage opératoire',objName:'{{$plagesel->_view|escape:javascript}}'})">
+              Supprimer
+            </button>
           </td>
         </tr>
       </table>
