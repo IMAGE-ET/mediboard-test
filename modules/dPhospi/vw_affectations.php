@@ -92,11 +92,13 @@ foreach ($services as $service_id => $service) {
             $sejour->loadRefPatient();
             $listPats[$sejour->patient_id] =& $sejour->_ref_patient;
           }
-          foreach($sejour->_ref_operations as $operation_id => $curr_operation)
+          foreach($sejour->_ref_operations as $operation_id => $curr_operation) {
             $sejour->_ref_operations[$operation_id]->loadRefCCAM();
-        } else
+          }
+          $affectations[$affectation_id]->_ref_sejour->_ref_patient->verifCmuEtat($affectations[$affectation_id]->_ref_sejour->_date_entree_prevue);
+        } else {
           unset($affectations[$affectation_id]);
-        $affectations[$affectation_id]->_ref_sejour->_ref_patient->verifCmuEtat($affectations[$affectation_id]->_ref_sejour->_date_entree_prevue);
+        }
       }
     }
 
