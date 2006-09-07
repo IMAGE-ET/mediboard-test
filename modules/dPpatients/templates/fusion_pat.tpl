@@ -26,6 +26,7 @@ function setChecked(oField, sValue) {
     <th width="30%" class="category">1er patient</th>
     <th width="30%" class="category">2ème patient</th>
     <th width="30%" class="category">Résultat</th>
+  </tr>
   <tr>
     <th><label for="nom" title="Nom du patient. Obligatoire">Nom</label></th>
     <td>
@@ -202,6 +203,96 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
+    <th><label for="rques" title="Remarques générales concernant le patient">Remarques</label></th>
+    <td class="text">
+      <input type="radio" name="_choix_rques" value="{{$patient1->rques}}" checked="checked" onclick="setField(this.form.rques, '{{$patient1->rques|escape:javascript}}')" />
+      {{$patient1->rques|nl2br}}
+    </td>
+    <td class="text">
+      <input type="radio" name="_choix_rques" value="{{$patient2->rques}}" onclick="setField(this.form.rques, '{{$patient2->rques|escape:javascript}}')" />
+      {{$patient2->rques|nl2br}}
+    </td>
+    <td class="text">
+      <textarea tabindex="21" rows="3" title="{{$finalPatient->_props.rques}}" name="rques">{{$finalPatient->rques}}</textarea>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <label for="medecin_traitant" title="Choisir un médecin traitant">Medecin traitant</label>
+    </th>
+    <td>
+      <input type="radio" name="_choix_medecin_traitant" value="{{$patient1->medecin_traitant}}" checked="checked"
+      onclick="setField(this.form.medecin_traitant, '{{$patient1->medecin_traitant}}'); setField(this.form._medecin_traitant_view, '{{$patient1->_ref_medecin_traitant->_view}}')" />
+      {{$patient1->_ref_medecin_traitant->_view}}
+    </td>
+    <td>
+      <input type="radio" name="_choix_medecin_traitant" value="{{$patient2->medecin_traitant}}"
+      onclick="setField(this.form.medecin_traitant, '{{$patient2->medecin_traitant}}'); setField(this.form._medecin_traitant_view, '{{$patient2->_ref_medecin_traitant->_view}}')" />
+      {{$patient2->_ref_medecin_traitant->_view}}
+    </td>
+    <td>
+      <input type="hidden" name="medecin_traitant" value="{{$finalPatient->medecin_traitant}}" />
+      <input type="text" readonly="readonly" name="_medecin_traitant_view" value="{{$finalPatient->_ref_medecin_traitant->_view}}" />
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <label for="medecin1" title="Choisir un médecin correspondant">Correspondant 1</label>
+    </th>
+    <td>
+      <input type="radio" name="_choix_medecin1" value="{{$patient1->medecin1}}" checked="checked"
+      onclick="setField(this.form.medecin1, '{{$patient1->medecin1}}'); setField(this.form._medecin1_view, '{{$patient1->_ref_medecin1->_view}}')" />
+      {{$patient1->_ref_medecin1->_view}}
+    </td>
+    <td>
+      <input type="radio" name="_choix_medecin1" value="{{$patient2->medecin1}}"
+      onclick="setField(this.form.medecin1, '{{$patient2->medecin1}}'); setField(this.form._medecin1_view, '{{$patient2->_ref_medecin1->_view}}')" />
+      {{$patient2->_ref_medecin1->_view}}
+    </td>
+    <td>
+      <input type="hidden" name="medecin1" value="{{$finalPatient->medecin1}}" />
+      <input type="text" readonly="readonly" name="_medecin1_view" value="{{$finalPatient->_ref_medecin1->_view}}" />
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <label for="medecin2" title="Choisir un médecin correspondant">Correspondant 2</label>
+    </th>
+    <td>
+      <input type="radio" name="_choix_medecin2" value="{{$patient1->medecin2}}" checked="checked"
+      onclick="setField(this.form.medecin2, '{{$patient1->medecin2}}'); setField(this.form._medecin2_view, '{{$patient1->_ref_medecin2->_view}}')" />
+      {{$patient1->_ref_medecin2->_view}}
+    </td>
+    <td>
+      <input type="radio" name="_choix_medecin2" value="{{$patient2->medecin2}}"
+      onclick="setField(this.form.medecin2, '{{$patient2->medecin2}}'); setField(this.form._medecin2_view, '{{$patient2->_ref_medecin2->_view}}')" />
+      {{$patient2->_ref_medecin2->_view}}
+    </td>
+    <td>
+      <input type="hidden" name="medecin2" value="{{$finalPatient->medecin2}}" />
+      <input type="text" readonly="readonly" name="_medecin2_view" value="{{$finalPatient->_ref_medecin2->_view}}" />
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <label for="medecin3" title="Choisir un médecin correspondant">Correspondant 3</label>
+    </th>
+    <td>
+      <input type="radio" name="_choix_medecin3" value="{{$patient1->medecin3}}" checked="checked"
+      onclick="setField(this.form.medecin3, '{{$patient1->medecin3}}'); setField(this.form._medecin3_view, '{{$patient1->_ref_medecin3->_view}}')" />
+      {{$patient1->_ref_medecin3->_view}}
+    </td>
+    <td>
+      <input type="radio" name="_choix_medecin3" value="{{$patient2->medecin3}}"
+      onclick="setField(this.form.medecin3, '{{$patient2->medecin3}}'); setField(this.form._medecin3_view, '{{$patient2->_ref_medecin3->_view}}')" />
+      {{$patient2->_ref_medecin3->_view}}
+    </td>
+    <td>
+      <input type="hidden" name="medecin3" value="{{$finalPatient->medecin3}}" />
+      <input type="text" readonly="readonly" name="_medecin3_view" value="{{$finalPatient->_ref_medecin3->_view}}" />
+    </td>
+  </tr>
+  <tr>
     <th><label for="incapable_majeur" title="Patient reconnu incapable majeur">Incapable majeur</label></th>
     <td>
       <input type="radio" name="_choix_incapable majeur" value="{{$patient1->incapable_majeur}}" checked="checked" onclick="setChecked(this.form.incapable_majeur, '{{$patient1->incapable_majeur|escape:javascript}}')" />
@@ -212,8 +303,8 @@ function setChecked(oField, sValue) {
       {{$patient2->incapable_majeur}}
     </td>
     <td>
-      <input tabindex="21" type="radio" name="incapable_majeur" value="o" {{if $finalPatient->incapable_majeur == "o"}} checked="checked" {{/if}} />oui
-      <input tabindex="22" type="radio" name="incapable_majeur" value="n" {{if $finalPatient->incapable_majeur == "n"}} checked="checked" {{/if}} />non
+      <input tabindex="22" type="radio" name="incapable_majeur" value="o" {{if $finalPatient->incapable_majeur == "o"}} checked="checked" {{/if}} />oui
+      <input tabindex="23" type="radio" name="incapable_majeur" value="n" {{if $finalPatient->incapable_majeur == "n"}} checked="checked" {{/if}} />non
     </td>
   </tr>
   <tr>
@@ -227,8 +318,8 @@ function setChecked(oField, sValue) {
       {{$patient2->ATNC}}
     </td>
     <td>
-      <input tabindex="23" type="radio" name="ATNC" value="o" {{if $finalPatient->ATNC == "o"}} checked="checked" {{/if}} />oui
-      <input tabindex="24" type="radio" name="ATNC" value="n" {{if $finalPatient->ATNC == "n"}} checked="checked" {{/if}} />non
+      <input tabindex="24" type="radio" name="ATNC" value="o" {{if $finalPatient->ATNC == "o"}} checked="checked" {{/if}} />oui
+      <input tabindex="25" type="radio" name="ATNC" value="n" {{if $finalPatient->ATNC == "n"}} checked="checked" {{/if}} />non
     </td>
   </tr>
   <tr>
@@ -242,7 +333,7 @@ function setChecked(oField, sValue) {
       {{$patient2->matricule}}
     </td>
     <td>
-      <input tabindex="25" type="text" size="15" maxlength="15" name="matricule" title="{{$finalPatient->_props.matricule}}" value="{{$finalPatient->matricule}}" />
+      <input tabindex="26" type="text" size="15" maxlength="15" name="matricule" title="{{$finalPatient->_props.matricule}}" value="{{$finalPatient->matricule}}" />
     </td>
   </tr>
   <tr>
@@ -255,76 +346,39 @@ function setChecked(oField, sValue) {
       <input type="radio" name="_choix_SHS" value="{{$patient2->SHS}}" onclick="setField(this.form.SHS, '{{$patient2->SHS|escape:javascript}}')" />
       {{$patient2->SHS}}
     </td>
-    <td><input tabindex="26" type="text" size="10" maxlength="10" name="SHS" title="{{$finalPatient->_props.SHS}}" value="{{$finalPatient->SHS}}" /></td>
+    <td><input tabindex="27" type="text" size="10" maxlength="10" name="SHS" title="{{$finalPatient->_props.SHS}}" value="{{$finalPatient->SHS}}" /></td>
   </tr>
   <tr>
-    <th><label for="rques" title="Remarques générales concernant le patient">Remarques</label></th>
+    <th>
+      <label for="cmu" title="Choisir la date de fin de cmu">cmu</label>
+    </th>
+    <td>
+      <input type="radio" name="_choix_cmu" value="{{$patient1->cmu}}" checked="checked"
+      onclick="setField(this.form.cmu, '{{$patient1->cmu}}'); setField(this.form._cmu_view, '{{$patient1->cmu|date_format:"%d/%m/%Y"}}')" />
+      {{$patient1->cmu|date_format:"%d/%m/%Y"}}
+    </td>
+    <td>
+      <input type="radio" name="_choix_cmu" value="{{$patient2->cmu}}"
+      onclick="setField(this.form.cmu, '{{$patient2->cmu}}'); setField(this.form._cmu_view, '{{$patient2->cmu|date_format:"%d/%m/%Y"}}')" />
+      {{$patient2->cmu|date_format:"%d/%m/%Y"}}
+    </td>
+    <td>
+      <input type="hidden" name="cmu" value="{{$finalPatient->cmu}}" />
+      <input type="text" readonly="readonly" name="_cmu_view" value="{{$finalPatient->cmu|date_format:"%d/%m/%Y"}}" />
+    </td>
+  </tr>
+  <tr>
+    <th><label for="ald" title="Information sur une affection longue duree">ald</label></th>
     <td class="text">
-      <input type="radio" name="_choix_rques" value="{{$patient1->rques}}" checked="checked" onclick="setField(this.form.rques, '{{$patient1->rques|escape:javascript}}')" />
-      {{$patient1->rques}}
+      <input type="radio" name="_choix_ald" value="{{$patient1->ald}}" checked="checked" onclick="setField(this.form.ald, '{{$patient1->ald|escape:javascript}}')" />
+      {{$patient1->ald|nl2br}}
     </td>
     <td class="text">
-      <input type="radio" name="_choix_rques" value="{{$patient2->rques}}" onclick="setField(this.form.rques, '{{$patient2->rques|escape:javascript}}')" />
-      {{$patient2->rques}}
+      <input type="radio" name="_choix_ald" value="{{$patient2->ald}}" onclick="setField(this.form.ald, '{{$patient2->ald|escape:javascript}}')" />
+      {{$patient2->ald|nl2br}}
     </td>
-    <td class="text" rowspan="5">
-      <textarea tabindex="27" rows="7" title="{{$finalPatient->_props.rques}}" name="rques">{{$finalPatient->rques}}</textarea>
-    </td>
-  </tr>
-  <tr>
-    <th>
-      <label for="medecin_traitant" title="Choisir un médecin traitant">Medecin traitant</label>
-      <input type="hidden" name="medecin_traitant" value="{{$patient1->medecin_traitant}}" />
-    </th>
-    <td>
-      <input type="radio" name="_choix_medecin_traitant" value="{{$patient1->medecin_traitant}}" checked="checked" onclick="setField(this.form.medecin_traitant, '{{$patient1->medecin_traitant}}')" />
-      {{$patient1->_ref_medecin_traitant->_view}}
-    </td>
-    <td>
-      <input type="radio" name="_choix_medecin_traitant" value="{{$patient2->medecin_traitant}}" onclick="setField(this.form.medecin_traitant, '{{$patient2->medecin_traitant}}')" />
-      {{$patient2->_ref_medecin_traitant->_view}}
-    </td>
-  </tr>
-  <tr>
-    <th>
-      <label for="medecin1" title="Choisir un médecin correspondant">Médecin correspondant 1</label>
-      <input type="hidden" name="medecin1" value="{{$patient1->medecin1}}" />
-    </th>
-    <td>
-      <input type="radio" name="_choix_medecin1" value="{{$patient1->medecin1}}" checked="checked" onclick="setField(this.form.medecin1, '{{$patient1->medecin1}}')" />
-      {{$patient1->_ref_medecin1->_view}}
-    </td>
-    <td>
-      <input type="radio" name="_choix_medecin1" value="{{$patient2->medecin1}}" onclick="setField(this.form.medecin1, '{{$patient2->medecin1}}')" />
-      {{$patient2->_ref_medecin1->_view}}
-    </td>
-  </tr>
-  <tr>
-    <th>
-      <label for="medecin2" title="Choisir un médecin correspondant">Médecin correspondant 2</label>
-      <input type="hidden" name="medecin2" value="{{$patient1->medecin2}}" />
-    </th>
-    <td>
-      <input type="radio" name="_choix_medecin2" value="{{$patient1->medecin2}}" checked="checked" onclick="setField(this.form.medecin2, '{{$patient1->medecin2}}')" />
-      {{$patient1->_ref_medecin2->_view}}
-    </td>
-    <td>
-      <input type="radio" name="_choix_medecin2" value="{{$patient2->medecin2}}"  onclick="setField(this.form.medecin2, '{{$patient2->medecin2}}')"/>
-      {{$patient2->_ref_medecin2->_view}}
-    </td>
-  </tr>
-  <tr>
-    <th>
-      <label for="medecin3" title="Choisir un médecin correspondant">Médecin correspondant 3</label>
-      <input type="hidden" name="medecin3" value="{{$patient1->medecin3}}" />
-    </th>
-    <td>
-      <input type="radio" name="_choix_medecin3" value="{{$patient1->medecin3}}" checked="checked" onclick="setField(this.form.medecin3, '{{$patient1->medecin3}}')" />
-      {{$patient1->_ref_medecin3->_view}}
-    </td>
-    <td>
-      <input type="radio" name="_choix_medecin3" value="{{$patient2->medecin3}}" onclick="setField(this.form.medecin3, '{{$patient2->medecin3}}')" />
-      {{$patient2->_ref_medecin3->_view}}
+    <td class="text">
+      <textarea tabindex="21" rows="3" title="{{$finalPatient->_props.ald}}" name="ald">{{$finalPatient->ald}}</textarea>
     </td>
   </tr>
   <tr>

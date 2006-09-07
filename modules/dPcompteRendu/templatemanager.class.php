@@ -100,10 +100,10 @@ class CTemplateManager {
     $_SESSION["dPcompteRendu"]["templateManager"] = $this;
    
     $smarty = new CSmartyDP(1);
-   /* $smarty->template_dir = "modules/dPcompteRendu/templates/";
+    $smarty->template_dir = "modules/dPcompteRendu/templates/";
     $smarty->compile_dir = "modules/dPcompteRendu/templates_c/";
     $smarty->config_dir = "modules/dPcompteRendu/configs/";
-    $smarty->cache_dir = "modules/dPcompteRendu/cache/";*/
+    $smarty->cache_dir = "modules/dPcompteRendu/cache/";
     $smarty->assign("templateManager", $this);
     $smarty->display("init_htmlarea.tpl");
 	}

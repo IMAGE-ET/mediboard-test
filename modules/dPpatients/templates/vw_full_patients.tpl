@@ -122,13 +122,21 @@ function pageMain() {
           <th>N° SS</th>
           <td>{{$patient->matricule}}</td>
           <th>Traitant</th>
-          <td>Dr. {{$patient->_ref_medecin_traitant->_view}}</td>
+          <td>
+            {{if $patient->medecin_traitant}}
+            Dr. {{$patient->_ref_medecin_traitant->_view}}
+            {{/if}}
+          </td>
         </tr>
         <tr>
           <th>Régime de santé</th>
           <td>{{$patient->regime_sante}}</td>
           <th rowspan="3">Correspondants</th>
-          <td>Dr. {{$patient->_ref_medecin1->_view}}</td>
+          <td>
+            {{if $patient->medecin1}}
+            Dr. {{$patient->_ref_medecin1->_view}}
+            {{/if}}
+          </td>
         </tr>
         <tr>
           <th>CMU</th>
@@ -139,7 +147,11 @@ function pageMain() {
             -
             {{/if}}
           </td>
-          <td>Dr. {{$patient->_ref_medecin2->_view}}</td>
+          <td>
+            {{if $patient->medecin2}}
+            Dr. {{$patient->_ref_medecin2->_view}}
+            {{/if}}
+          </td>
         </tr>
         <tr>
           <th>ALD</th>
@@ -150,7 +162,11 @@ function pageMain() {
             -
             {{/if}}
           </td>
-          <td>Dr. {{$patient->_ref_medecin3->_view}}</td>
+          <td>
+            {{if $patient->medecin3}}
+            Dr. {{$patient->_ref_medecin3->_view}}
+            {{/if}}
+          </td>
         </tr>
         <tr>
           <td class="button" colspan="4">

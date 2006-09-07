@@ -102,6 +102,40 @@ $sql = "UPDATE antecedent SET" .
     "\nWHERE patient_id = '$patient2->patient_id'";
 db_exec( $sql ); $msg .= db_error();
 
+$sql = "UPDATE traitement SET" .
+    "\npatient_id = '$patient_id'" .
+    "\nWHERE patient_id = '$patient1->patient_id'";
+db_exec( $sql ); $msg .= db_error();
+
+$sql = "UPDATE traitement SET" .
+    "\npatient_id = '$patient_id'" .
+    "\nWHERE patient_id = '$patient2->patient_id'";
+db_exec( $sql ); $msg .= db_error();
+
+$sql = "UPDATE files_mediboard SET" .
+    "\nfile_object_id = '$patient_id'" .
+    "\nWHERE file_object_id = '$patient1->patient_id'" .
+    "\nAND file_class = 'CPatient'";
+db_exec( $sql ); $msg .= db_error();
+
+$sql = "UPDATE files_mediboard SET" .
+    "\nfile_object_id = '$patient_id'" .
+    "\nWHERE file_object_id = '$patient2->patient_id'" .
+    "\nAND file_class = 'CPatient'";
+db_exec( $sql ); $msg .= db_error();
+
+$sql = "UPDATE compte_rendu SET" .
+    "\nobject_id = '$patient_id'" .
+    "\nWHERE object_id = '$patient1->patient_id'" .
+    "\nAND type = 'patient'";
+db_exec( $sql ); $msg .= db_error();
+
+$sql = "UPDATE compte_rendu SET" .
+    "\nobject_id = '$patient_id'" .
+    "\nWHERE object_id = '$patient2->patient_id'" .
+    "\nAND type = 'patient'";
+db_exec( $sql ); $msg .= db_error();
+
 if($msg) {
   mbTrace($msg, "erreur sql", true);
   exit(0);
