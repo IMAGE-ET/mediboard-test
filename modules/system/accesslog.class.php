@@ -29,6 +29,7 @@ class CAccessLog extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     if ($this->hits) {
       $this->_average_duration = $this->duration / $this->hits;
       $this->_average_request = $this->request / $this->hits;

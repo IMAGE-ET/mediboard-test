@@ -138,6 +138,7 @@ class CConsultAnesth extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
   	// Vérification si intubation difficile
   	if(
   	  ($this->mallampati && ($this->mallampati=="classe3" || $this->mallampati=="classe4"))
@@ -155,8 +156,6 @@ class CConsultAnesth extends CMbObject {
     $this->_min_tca  = intval(substr($this->tca, 3, 2));
     $this->_sec_tsivy = intval(substr($this->tsivy, 6, 2));
     $this->_min_tsivy  = intval(substr($this->tsivy, 3, 2));
-    
-    parent::updateFormFields();
   }
    
   function updateDBFields() {
@@ -196,7 +195,6 @@ class CConsultAnesth extends CMbObject {
   }
   
   function loadRefsFwd() {
-    // Forward references
     $this->loadRefConsultation();
     $this->_ref_consultation->loadRefsFwd();
     $this->_ref_plageconsult =& $this->_ref_consultation->_ref_plageconsult;

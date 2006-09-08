@@ -56,7 +56,6 @@ class CListeChoix extends CMbObject {
   }
   
   function loadRefsFwd() {
-    // Forward references
     $this->_ref_chir = new CMediusers;
     $this->_ref_chir->load($this->chir_id);
     $this->_ref_function = new CFunctions;
@@ -66,6 +65,7 @@ class CListeChoix extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     if($this->valeurs != "")
       $this->_valeurs = explode("|", $this->valeurs);
     else

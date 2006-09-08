@@ -157,6 +157,7 @@ class CMediusers extends CMbObject {
 	}
 
   function updateFormFields() {
+    parent::updateFormFields();
     global $utypes;
     $user = new CUser();
     if ($user->load($this->user_id)) {

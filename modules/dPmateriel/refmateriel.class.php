@@ -41,13 +41,13 @@ class CRefMateriel extends CMbObject {
   }	  	
   
   function updateFormFields() {
+    parent::updateFormFields();
     if($this->quantite!=0){
       $this->_prix_unitaire = $this->prix / $this->quantite;
     }
   }
   
-  function loadRefsFwd(){
-    // Forward references    
+  function loadRefsFwd(){  
     $this->_ref_fournisseur = new CFournisseur;
     $this->_ref_fournisseur->load($this->fournisseur_id);
     

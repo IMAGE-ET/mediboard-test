@@ -33,7 +33,6 @@ class CGroups extends CMbObject {
   
   function updateFormFields () {
     parent::updateFormFields();
-
     $this->_view = $this->text;
     if(strlen($this->text) > 25)
       $this->_shortview = substr($this->text, 0, 23)."...";

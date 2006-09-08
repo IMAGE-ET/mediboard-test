@@ -137,14 +137,11 @@ class CConsultation extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-
   	$this->_somme = $this->secteur1 + $this->secteur2;
-
     if($this->date_paiement == "0000-00-00")
       $this->date_paiement = null;
     $this->_hour = intval(substr($this->heure, 0, 2));
     $this->_min  = intval(substr($this->heure, 3, 2));
-    
     $this->_check_premiere = $this->premiere;
     $this->getEtat();
     $this->_view = "Consultation ".$this->_etat;

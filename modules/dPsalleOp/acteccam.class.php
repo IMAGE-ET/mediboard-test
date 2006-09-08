@@ -64,11 +64,9 @@ class CActeCCAM extends CMbObject {
    
   function updateFormFields() {
     parent::updateFormFields();
-    
     for ($index = 0; $index < strlen($this->modificateurs); $index++) {
     	$this->_modificateurs[] = $this->modificateurs[$index];
     }
-    
     $this->_view = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs"; 
   }
   

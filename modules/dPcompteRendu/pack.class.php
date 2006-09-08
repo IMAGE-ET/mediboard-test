@@ -42,12 +42,12 @@ class CPack extends CMbObject {
   }
   
   function loadRefsFwd() {
-    // Forward references
     $this->_ref_chir = new CMediusers;
     $this->_ref_chir->load($this->chir_id);
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
   	$this->_modeles = array();
     $this->_source = "";
     if($this->modeles != "") {

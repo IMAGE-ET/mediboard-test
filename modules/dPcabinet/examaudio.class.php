@@ -204,7 +204,6 @@ class CExamAudio extends CMbObject {
   }
   
   function loadRefsFwd() {
-    // Forward references
     $this->_ref_consult = new CConsultation;
     $this->_ref_consult->load($this->consultation_id);
   }

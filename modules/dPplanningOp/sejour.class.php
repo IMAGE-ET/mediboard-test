@@ -180,7 +180,6 @@ class CSejour extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    
     $this->_duree_prevue       = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
     $this->_date_entree_prevue = mbDate(null, $this->entree_prevue);
     $this->_date_sortie_prevue = mbDate(null, $this->sortie_prevue);
@@ -188,13 +187,11 @@ class CSejour extends CMbObject {
     $this->_hour_sortie_prevue = mbTranformTime(null, $this->sortie_prevue, "%H");
     $this->_min_entree_prevue  = mbTranformTime(null, $this->entree_prevue, "%M");
     $this->_min_sortie_prevue  = mbTranformTime(null, $this->sortie_prevue, "%M");
-    
     $this->_venue_SHS_guess = mbTranformTime(null, $this->entree_prevue, "%y");
     $this->_venue_SHS_guess .= 
       $this->type == "exte" ? "5" :
       $this->type == "ambu" ? "4" : "0";
     $this->_venue_SHS_guess .="xxxxx";
-
     $this->_view = "Séjour du ";
     $this->_view .= mbTranformTime(null, $this->entree_prevue, "%d/%m/%Y");
     $this->_view .= " au ";

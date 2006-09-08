@@ -164,6 +164,7 @@ class CPlageOp extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     $this->_year      = substr($this->date, 0, 4);
     $this->_month     = substr($this->date, 5, 2);
     $this->_day       = substr($this->date, 8, 2);

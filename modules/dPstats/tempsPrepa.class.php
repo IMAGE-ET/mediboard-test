@@ -39,8 +39,7 @@ class CTempsPrepa extends CMbObject {
     $this->_props["duree_ecart"]    = "time";
   }	  	
   
-  function loadRefsFwd(){
-    // Forward references    
+  function loadRefsFwd(){ 
     $this->_ref_praticien = new CMediusers;
     $this->_ref_praticien->load($this->chir_id);
 

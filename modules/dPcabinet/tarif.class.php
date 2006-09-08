@@ -45,6 +45,7 @@ class CTarif extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     if($this->chir_id == 0)
       $_type = "chir";
     else
@@ -61,7 +62,6 @@ class CTarif extends CMbObject {
   }
   
   function loadRefsFwd() {
-    // Forward references
     $this->_ref_chir = new CMediusers();
     $this->_ref_chir->load($this->chir_id);
     $this->_ref_function = new CFunctions();

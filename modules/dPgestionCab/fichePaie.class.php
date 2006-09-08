@@ -81,6 +81,7 @@ class CFichePaie extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     $this->_view = "Fiche de paie du ".$this->debut." au ".$this->fin;
     if($this->fiche_paie_id) {
       // On charge cette référence dès le load

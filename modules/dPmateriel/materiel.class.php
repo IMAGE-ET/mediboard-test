@@ -55,8 +55,7 @@ class CMateriel extends CMbObject {
     $this->_ref_refMateriel = $this->_ref_refMateriel->loadList($where);
   } 
   
-  function loadRefsFwd(){
-    // Forward references    
+  function loadRefsFwd(){ 
     $this->_ref_category = new CCategory;
     $this->_ref_category->load($this->category_id);  
   }

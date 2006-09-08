@@ -65,6 +65,7 @@ class CFile extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     global $filesDir;
     
     $this->_file_size = mbConvertDecaBinary($this->file_size);    

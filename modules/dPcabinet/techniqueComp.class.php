@@ -32,7 +32,6 @@ class CTechniqueComp extends CMbObject {
   }
   
   function loadRefsFwd() {
-    // Forward references
     $this->_ref_consult_anesth = new CConsultAnesth;
     $this->_ref_consult_anesth->load($this->consultation_anesth_id);
   }

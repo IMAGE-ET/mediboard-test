@@ -70,6 +70,7 @@ class CMedecin extends CMbObject {
 	}
   
   function updateFormFields() {
+    parent::updateFormFields();
     $this->_view = "$this->nom $this->prenom";
     
     $this->_tel1 = substr($this->tel, 0, 2);

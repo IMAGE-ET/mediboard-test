@@ -71,6 +71,7 @@ class CCompteRendu extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     switch($this->type) {
       case "patient" :
         $this->_object_className = "CPatient";
@@ -99,7 +100,6 @@ class CCompteRendu extends CMbObject {
 
 
   function loadRefsFwd() {
-    // Forward references
 
     // Objet
     $this->_ref_object = new $this->_object_className;

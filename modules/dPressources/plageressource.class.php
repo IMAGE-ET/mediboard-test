@@ -63,7 +63,6 @@ class CPlageressource extends CMbObject {
   }
   
   function loadRefsFwd() {
-    // Forward references
     $this->_ref_prat = new CMediusers();
     $this->_ref_prat->load($this->prat_id);
   }
@@ -128,6 +127,7 @@ class CPlageressource extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     $this->_hour_deb = intval(substr($this->debut, 0, 2));
     $this->_min_deb  = intval(substr($this->debut, 3, 2));
     $this->_hour_fin = intval(substr($this->fin, 0, 2));

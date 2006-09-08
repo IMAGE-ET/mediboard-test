@@ -38,7 +38,6 @@ class CAideSaisie extends CMbObject {
   }
   
   function loadRefsFwd() {
-    // Forward references
     $this->_ref_user = new CMediusers;
     $this->_ref_user->load($this->user_id);
   }

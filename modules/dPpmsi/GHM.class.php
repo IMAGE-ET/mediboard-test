@@ -76,6 +76,7 @@ class CGHM  extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     if($this->ghm_id) {
       if($this->DASs) {
         $this->_DASs = explode("|", $this->DASs);
@@ -114,7 +115,6 @@ class CGHM  extends CMbObject {
   }
   
   function loadRefsFwd() {
-    $this->loadRefSejour();
     $this->_ref_sejour->loadRefs();
     $this->_ref_actes_ccam = array();
     foreach($this->_ref_sejour->_ref_operations as $keyOp => $op) {

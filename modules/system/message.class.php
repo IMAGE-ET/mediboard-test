@@ -61,6 +61,7 @@ class CMessage extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     $this->_view = $this->titre;
   }
   

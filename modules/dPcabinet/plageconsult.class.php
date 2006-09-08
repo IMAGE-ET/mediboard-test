@@ -78,7 +78,6 @@ class CPlageconsult extends CMbObject {
   }
   
   function loadRefsFwd() {
-    // Forward references
     $this->_ref_chir = new CMediusers();
     $this->_ref_chir->load($this->chir_id);
   }
@@ -175,6 +174,7 @@ class CPlageconsult extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     $this->_hour_deb = intval(substr($this->debut, 0, 2));
     $this->_min_deb  = intval(substr($this->debut, 3, 2));
     $this->_hour_fin = intval(substr($this->fin, 0, 2));

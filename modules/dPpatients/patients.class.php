@@ -137,6 +137,7 @@ class CPatient extends CMbObject {
 	}
   
   function updateFormFields() {
+    parent::updateFormFields();
 
     $this->nom = strtoupper($this->nom);
     $this->nom_jeune_fille = strtoupper($this->nom_jeune_fille);

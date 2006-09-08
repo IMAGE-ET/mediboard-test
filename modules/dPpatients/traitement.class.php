@@ -38,7 +38,6 @@ class CTraitement extends CMbObject {
   }
   
   function loadRefsFwd() {
-    // Forward references
     $this->_ref_patient = new CPatient;
     $this->_ref_patient->load($this->patient_id);
   }

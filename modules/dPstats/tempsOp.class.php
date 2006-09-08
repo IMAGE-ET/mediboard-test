@@ -46,7 +46,6 @@ class CTempsOp extends CMbObject {
   
   
   function loadRefsFwd(){
-    // Forward references    
     $this->_ref_praticien = new CMediusers;
     $this->_ref_praticien->load($this->chir_id);
   }

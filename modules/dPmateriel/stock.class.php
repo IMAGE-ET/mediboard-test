@@ -37,8 +37,7 @@ class CStock extends CMbObject {
     $this->_props["quantite"] = "num|pos";
   }
   
-  function loadRefsFwd(){
-    // Forward references    
+  function loadRefsFwd(){  
     $this->_ref_group = new CGroups;
     $this->_ref_group->load($this->group_id);
     
