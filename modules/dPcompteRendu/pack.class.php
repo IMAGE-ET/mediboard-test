@@ -87,14 +87,18 @@ class CPack extends CMbObject {
     }
   }
   
-  function canRead() {
-    $this->loadRefsFwd();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canRead = $this->_ref_chir->canRead();
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefsFwd();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canEdit = $this->_ref_chir->canEdit();
     return $this->_canEdit;
   }

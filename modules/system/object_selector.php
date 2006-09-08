@@ -27,6 +27,9 @@ if($selClass){
   $list = $object->seek($keywords_search);
   foreach($list as $key => $value) {
     $list[$key]->loadRefsFwd();
+    if(!$list[$key]->canRead()) {
+      unset($list[$key]);
+    }
   }
   $key = $object->_tbl_key;
 }

@@ -126,7 +126,7 @@ class CSejour extends CMbObject {
       "joinfield" => "sejour_id"
     );
     
-    return CDpObject::canDelete($msg, $oid, $tables);
+    return CMbObject::canDelete($msg, $oid, $tables);
   }
   
   function store() {
@@ -243,16 +243,20 @@ class CSejour extends CMbObject {
     $this->loadRefEtablisemment();
   }
   
-  function canRead() {
-    $this->loadRefPraticien();
-    $this->loadRefEtablisemment();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefPraticien();
+      $this->loadRefEtablisemment();
+    }
     $this->_canRead = $this->_ref_group->canRead() && $this->_ref_praticien->canRead();
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefPraticien();
-    $this->loadRefEtablisemment();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefPraticien();
+      $this->loadRefEtablisemment();
+    }
     $this->_canEdit = $this->_ref_group->canEdit() && $this->_ref_praticien->canEdit();
     return $this->_canEdit;
   }

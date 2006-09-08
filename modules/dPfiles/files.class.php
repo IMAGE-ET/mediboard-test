@@ -29,11 +29,14 @@ class CFile extends CMbObject {
   var $file_size          = null;
 
   // Form fields
-  var $_file_size      = null;
-  var $_sub_dir        = null;
-  var $_file_path      = null;
-  var $_nb_pages       = null;
+  var $_file_size = null;
+  var $_sub_dir   = null;
+  var $_file_path = null;
+  var $_nb_pages  = null;
+  
+  // References
   var $_ref_file_owner = null;
+  var $_ref_object     = null;
 
   function CFile() {
     $this->CMbObject("files_mediboard", "file_id");
@@ -55,6 +58,10 @@ class CFile extends CMbObject {
   function loadRefsFwd(){
     $this->_ref_file_owner = new CMediusers;
     $this->_ref_file_owner->load($this->file_owner);
+    if(class_exists($this->file_class)) {
+      $this->_ref_object = new $this->file_class;
+      $this->_ref_object->load($this->file_object_id);
+    }
   }
   
   function updateFormFields() {
@@ -73,8 +80,33 @@ class CFile extends CMbObject {
     $this->_file_path = "$filesDir/$this->_sub_dir/$this->file_object_id/$this->file_real_filename";
     
     $this->_shortview = $this->file_name;
-    $this->_view = $this->file_name." (".$this->_file_size.")";
-       
+    $this->_view = $this->file_name." (".$this->_file_size.")";  
+  }
+  
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
+    if($this->_ref_object->_id) {
+      $objectPerm = $this->_ref_object->canRead();
+    } else {
+      $objectPerm = false;
+    }
+    $this->_canRead = $this->_ref_file_owner->canRead() && $objectPerm;
+    return $this->_canRead;
+  }
+
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
+    if($this->_ref_object->_id) {
+      $objectPerm = $this->_ref_object->canEdit();
+    } else {
+      $objectPerm = false;
+    }
+    $this->_canEdit = $this->_ref_file_owner->canEdit() && $objectPerm;
+    return $this->_canEdit;
   }
   
   function delete() {
@@ -219,7 +251,7 @@ class CFile extends CMbObject {
   }
   
   function loadNbPages(){
-    if(strpos($this->file_type, "pdf") !== false){
+    if(strpos($this->file_type, "pdf") !== false && file_exists($this->_file_path)){
       // Fichier PDF Tentative de récupération
       $string_recherche = "/Count";
       $dataFile = file_get_contents($this->_file_path);
@@ -254,18 +286,6 @@ class CFile extends CMbObject {
         $this->_nb_pages = intval(trim($nombre_temp[0]));
       }
     }
-  }
-  
-  function canRead() {
-    $this->loadRefsFwd();
-    $this->_canRead = $this->_ref_file_owner->canRead();
-    return $this->_canRead;
-  }
-
-  function canEdit() {
-    $this->loadRefsFwd();
-    $this->_canEdit = $this->_ref_file_owner->canEdit();
-    return $this->_canEdit;
   }
 }
 ?>

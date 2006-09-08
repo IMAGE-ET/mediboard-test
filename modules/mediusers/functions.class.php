@@ -86,12 +86,12 @@ class CFunctions extends CMbObject {
     $this->_ref_users = $this->_ref_users->loadList($where);
   }
   
-  function canRead() {
+  function canRead($withRefs = true) {
     $this->_canRead = isMbAllowed(PERM_READ, "mediusers", $this->function_id);
     return $this->_canRead;
   }
 
-  function canEdit() {
+  function canEdit($withRefs = true) {
     $this->_canEdit = isMbAllowed(PERM_EDIT, "mediusers", $this->function_id);
     return $this->_canEdit;
   }

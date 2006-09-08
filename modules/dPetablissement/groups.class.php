@@ -55,7 +55,7 @@ class CGroups extends CMbObject {
       "joinfield" => "group_id"
     );
     
-    return CDpObject::canDelete( $msg, $oid, $tables );
+    return CMbObject::canDelete( $msg, $oid, $tables );
   }
 
   // Backward References
@@ -67,12 +67,12 @@ class CGroups extends CMbObject {
     $this->_ref_functions = $this->_ref_functions->loadList($where, $order);
   }
   
-  function canRead() {
+  function canRead($withRefs = true) {
     $this->_canRead = isMbAllowed(PERM_READ, "dPetablissement", $this->group_id);
     return $this->_canRead;
   }
 
-  function canEdit() {
+  function canEdit($withRefs = true) {
     $this->_canEdit = isMbAllowed(PERM_EDIT, "dPetablissement", $this->group_id);
     return $this->_canEdit;
   }

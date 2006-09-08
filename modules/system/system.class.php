@@ -1,5 +1,7 @@
 <?php /* SYSTEM $Id$ */
 
+require_once($AppUI->getSystemClass("mbobject"));
+
 /**
 * Preferences class
 */
@@ -54,7 +56,7 @@ class CPreferences {
 /**
 * Module class
 */
-class CModule extends CDpObject {
+class CModule extends CMbObject {
 	var $mod_id=null;
 	var $mod_name=null;
 	var $mod_directory=null;
@@ -69,7 +71,7 @@ class CModule extends CDpObject {
 	var $mod_description=null;
 
 	function CModule() {
-		$this->CDpObject("modules", "mod_id");
+		$this->CMbObject("modules", "mod_id");
 	}
   
   function reorder() {

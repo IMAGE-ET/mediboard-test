@@ -266,20 +266,24 @@ class CConsultation extends CMbObject {
     
     $this->_ref_examcomp = new CExamComp;
     $where = array();
-    $where["consult_id"] = "= '$this->consultation_id'";
+    $where["consultation_id"] = "= '$this->consultation_id'";
     $order = "examen";
     $this->_ref_examcomp = $this->_ref_examcomp->loadList($where,$order);
   }
   
-  function canRead() {
-    $this->loadRefPlageConsult();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefPlageConsult();
+    }
     $this->_canRead = $this->_ref_plageconsult->canRead();
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefPlageConsult();
-    $this->_canEdit = $this->_ref_plageconsult->canEdit();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefPlageConsult();
+    }
+    $this->_canEdit = $this->_ref_plageconsult->canEdit() && isMbModuleEditAll("dPcabinet");
     return $this->_canEdit;
   }
   

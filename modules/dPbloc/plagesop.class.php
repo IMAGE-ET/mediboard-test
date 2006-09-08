@@ -215,8 +215,10 @@ class CPlageOp extends CMbObject {
     $this->_fill_rate = number_format($result["time"]*100/(strtotime($this->fin)-strtotime($this->debut)), 2);
   }
   
-  function canRead() {
-    $this->loadRefsFwd();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canRead = $this->_ref_salle->canRead();
     if($this->chir_id) {
       $pratCanRead = $this->_ref_chir->canRead();
@@ -227,8 +229,10 @@ class CPlageOp extends CMbObject {
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefsFwd();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canEdit = $this->_ref_salle->canEdit();
     if($this->chir_id) {
       $pratCanEdit = $this->_ref_chir->canEdit();

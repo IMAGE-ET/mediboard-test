@@ -61,14 +61,18 @@ class CMateriel extends CMbObject {
     $this->_ref_category->load($this->category_id);  
   }
   
-  function canRead() {
-    $this->loadRefsFwd();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canRead = $this->_ref_category->canRead();
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefsFwd();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canEdit = $this->_ref_category->canEdit();
     return $this->_canEdit;
   }
@@ -81,7 +85,7 @@ class CMateriel extends CMbObject {
       "joinfield" => "materiel_id"
     );
     
-    return CDpObject::canDelete( $msg, $oid, $tables );
+    return CMbObject::canDelete( $msg, $oid, $tables );
   }
 }
 ?>

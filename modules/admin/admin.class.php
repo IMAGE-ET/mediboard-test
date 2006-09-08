@@ -58,7 +58,7 @@ class CUser extends CMbObject {
 	var $user_signature  = null;
 
 	function CUser() {
-		$this->CDpObject("users", "user_id");
+		$this->CMbObject("users", "user_id");
     
     $this->_seek = array();
     $this->_seek["user_last_name"]  = "likeBegin";
@@ -197,7 +197,7 @@ $module_permission_matrix =
     )
   );
 
-class CPermission extends CDpObject {
+class CPermission extends CMbObject {
   // DB Table key
 	var $permission_id = null;
 
@@ -216,7 +216,7 @@ class CPermission extends CDpObject {
   var $_item_edit = null;
   
 	function CPermission() {
-		$this->CDpObject("permissions", "permission_id");
+		$this->CMbObject("permissions", "permission_id");
 	}
   
   function updateFormFields() {

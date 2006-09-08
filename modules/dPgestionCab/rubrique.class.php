@@ -43,14 +43,18 @@ class CRubrique extends CMbObject {
     $this->_ref_function->load($this->function_id);
   }
   
-  function canRead() {
-    $this->loadRefsFwd();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canRead = $this->_ref_function->canRead();
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefsFwd();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canEdit = $this->_ref_function->canEdit();
     return $this->_canEdit;
   }

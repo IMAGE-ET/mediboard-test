@@ -79,14 +79,18 @@ class CLit extends CMbObject {
     $this->_view = "{$this->_ref_chambre->nom} - $this->nom";
   }
   
-  function canRead() {
-    $this->loadRefsFwd();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canRead = $this->_ref_chambre->canRead();
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefsFwd();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canEdit = $this->_ref_chambre->canEdit();
     return $this->_canEdit;
   }
@@ -99,7 +103,7 @@ class CLit extends CMbObject {
       "joinfield" => "lit_id"
     );
         
-    return CDpObject::canDelete($msg, $oid, $tables);
+    return CMbObject::canDelete($msg, $oid, $tables);
   }
   
   function checkOverBooking() {

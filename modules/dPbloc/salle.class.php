@@ -45,7 +45,7 @@ class CSalle extends CMbObject {
       "joinfield" => "salle_id"
     );
     
-    return CDpObject::canDelete($msg, $oid, $tables);
+    return CMbObject::canDelete($msg, $oid, $tables);
   }
   
   function loadRefsFwd(){

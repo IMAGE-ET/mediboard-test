@@ -112,7 +112,7 @@ $res = db_loadList($sql);
 // Creates the array of other users
 $otherUsers = array();
 foreach ( $res as $row ) {
-	$otherUsers[$row['user_username']]= $row['user_username'];
+	$otherUsers[$row["user_username"]]= $row["user_username"];
 }
 
 // Create Perm object to Edit

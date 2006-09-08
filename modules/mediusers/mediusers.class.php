@@ -206,14 +206,18 @@ class CMediusers extends CMbObject {
     $this->_ref_packs = $this->_ref_packs->loadList($where);
   }
   
-  function canRead() {
-    $this->loadRefFunction();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefFunction();
+    }
     $this->_canRead = $this->_ref_function->canRead();
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefFunction();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefFunction();
+    }
     $this->_canEdit = $this->_ref_function->canEdit();
     return $this->_canEdit;
   }

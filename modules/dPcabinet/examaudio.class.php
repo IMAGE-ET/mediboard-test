@@ -209,14 +209,18 @@ class CExamAudio extends CMbObject {
     $this->_ref_consult->load($this->consultation_id);
   }
   
-  function canRead() {
-    $this->loadRefFwd();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canRead = $this->_ref_consult->canRead();
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefFwd();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canEdit = $this->_ref_consult->canEdit();
     return $this->_canEdit;
   }

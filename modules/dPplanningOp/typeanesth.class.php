@@ -31,7 +31,7 @@ class CTypeAnesth extends CMbObject {
       "idfield"   => "operation_id", 
       "joinfield" => "type_anesth"
     );
-    return CDpObject::canDelete( $msg, $oid, $tables );
+    return CMbObject::canDelete( $msg, $oid, $tables );
   }
 }
 ?>

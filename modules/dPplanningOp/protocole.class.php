@@ -146,14 +146,18 @@ class CProtocole extends CMbObject {
     }
   }
   
-  function canRead() {
-    $this->loadRefChir();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefChir();
+    }
     $this->_canRead = $this->_ref_chir->canRead();
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefChir();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefChir();
+    }
     $this->_canEdit = $this->_ref_chir->canEdit();
     return $this->_canEdit;
   }

@@ -7,65 +7,237 @@
  *  @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass("dp"));
 require_once($AppUI->getModuleClass("dPcompteRendu", "aidesaisie"));
-
-function htmlReplace($find, $replace, &$source) {
-  $matches = array();
-  $nbFound = preg_match_all("/$find/", $source, $matches);
-  $source = preg_replace("/$find/", $replace, $source);
-  return $nbFound;
-}
-
-function purgeHtmlText($regexps, &$source) {
-  $total = 0;
-  foreach ($regexps as $find => $replace) {
-    $total += htmlReplace($find, $replace, $source); 
-  }
-
-//  echo "<h1>Total found: $total<h1><hr />";
-  
-  return $total;
-}
 
 /**
  * Class CMbObject 
  * @abstract Adds Mediboard abstraction layer functionality
  */
-class CMbObject extends CDpObject {
-  
-  var $_aides = array();
-  var $_id = null;
+class CMbObject {
   
   /**
-   * Permission fields
+   * Global properties
    */
-  var $_canRead = null;
-  var $_canEdit = null;
+  
+  var $_tbl       = null; // table name
+  var $_tbl_key   = null; // primary key name
+  var $_error     = null; // error message
+  var $_id        = null; // universal shortcut for the object id
+  var $_view      = null; // universal view of the object
+  var $_shortview = null; // universal shortview for the object
+  var $_canRead   = null; // read permission for the object
+  var $_canEdit   = null; // write permission for the object
 
   /**
    * Properties  specification
    */
-  var $_props = array();
-  var $_enums = array();
-  var $_seek  = array();
   
-  var $_ref_logs = null;
+  var $_aides = array(); // aides à la saisie
+  var $_props = array(); // properties specifications
+  var $_enums = array(); // enums fields elements
+  var $_seek  = array(); // seekable fields
+  
+  /**
+   * References
+   */
+  
+  var $_ref_logs = null; // history of the object
 
   /**
    * Constructor
    */
+ 
   function CMbObject($table, $key) {
-    $this->CDpObject($table, $key);
+    $this->_tbl = $table;
+    $this->_tbl_key = $key;
     $this->_id =& $this->$key;
+  }
+  
+  /**
+   * Set/get functions
+   */
+  function getError() {
+    return $this->_error;
+  }
+
+  /**
+   * Read/Write Permission generic check
+   * return true or false
+   */
+
+  function canRead($withRefs = true) {
+    return true;
+  }
+  
+  function canEdit($withRefs = true) {
+    return true;
+  }
+  
+  /**
+   * Bind an object with an array
+   */
+
+  function bind($hash) {
+    if (!is_array($hash)) {
+      $this->_error = get_class($this)."::bind failed.";
+      return false;
+    } else {
+      bindHashToObject($hash, $this);
+      return true;
+    }
+  }
+  
+  /**
+   * Object(s) Loaders
+   */
+
+  // One object by ID
+  function load($oid = null, $strip = true) {
+    $k = $this->_tbl_key;
+    if ($oid) {
+      $this->$k = intval($oid);
+    }
+    $oid = $this->$k;
+    if ($oid === null) {
+      return false;
+    }
+    $sql = "SELECT * FROM $this->_tbl WHERE $this->_tbl_key=$oid";
+    $object = db_loadObject($sql, $this, false, $strip);
+    $this->checkConfidential();
+    
+    $this->updateFormFields();
+    if($object)
+      return $this;
+    else
+      return false;
+  }
+  
+  // One object by a request constructor
+  function loadObject($where = null, $order = null, $group = null, $leftjoin = null) {
+    $list =& $this->loadList($where, $order, "0,1", $group, $leftjoin);
+    foreach ($list as $object) {
+      foreach(get_object_vars($object) as $key => $value) {
+        $this->$key = $value;
+      }
+      return true;
+    }
+    return false;
+  }
+  
+  // Object list by a request constructor
+  function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
+    $sql = "SELECT `$this->_tbl`.* FROM `$this->_tbl`";
+
+    // Left join clauses
+    if ($leftjoin) {
+      assert(is_array($leftjoin));
+      foreach ($leftjoin as $table => $condition) {
+        $sql .= "\nLEFT JOIN `$table` ON $condition";
+      }
+    }
+    
+    // Where clauses
+    if (is_array($where)) {
+      foreach ($where as $field => $eq) {
+        if (is_string($field)) {
+          if($pos = strpos($field, ".")) {
+            $point_table = substr($field, 0, $pos);
+            $point_field = substr($field, $pos + 1);
+            $where[$field] = "`$point_table`.`$point_field` $eq";
+          } else {
+            $where[$field] = "`$field` $eq";
+          }
+        }
+        
+        $where[$field] = "(" . $where[$field] . ")";
+      }
+    }
+    
+    if ($where) {
+      $sql .= "\nWHERE ";
+      $sql .= is_array($where) ? implode("\nAND ", $where) : $where;
+    }
+      
+    // Group by fields
+    if (is_array($group)) {
+      foreach ($group as $key => $field) {
+        $group[$key] = "`$field`";
+      }
+    }
+    
+    if ($group) {
+      $sql .= "\nGROUP BY ";
+      $sql .= is_array($group) ? implode(", ", $group) : $group;
+    }
+      
+    // Order by fields
+    if (is_array($order)) {
+      foreach ($order as $key => $field) {
+        // We cannot use the `` syntax because it wont work
+        // with table.field syntax, neither the ASC/DESC one
+        //$order[$key] = "`$field`";
+        $order[$key] = "$field";
+      }
+    }
+    
+    if ($order) {
+      $sql .= "\nORDER BY ";
+      $sql .= is_array($order) ? implode(", ", $order) : $order;
+    }
+    
+    // Limits
+    if ($limit) {
+      $sql .= "\nLIMIT $limit";
+    }
+
+    return db_loadObjectList($sql, $this);
+  }
+
+  /**
+   *  Clone the current record
+   *  @return object  The new record object or null if error
+   */
+
+  function cloneObject() {
+    $_key = $this->_tbl_key;
+    
+    $newObj = $this;
+    // blanking the primary key to ensure that's a new record
+    $newObj->$_key = "";
+    
+    return $newObj;
+  }
+  
+  /**
+   * Update the form fields from the DB fields
+   */
+
+  function updateFormFields() {
+    $k = $this->_tbl_key;
+    $this->_view = $this->_tbl . " #" . $this->$k;
+    $this->_shortview = "#" . $this->$k;
+  }
+  
+  /**
+   * References loaders
+   */
+
+  function loadRefs() {
+    $this->loadRefsBack();
+    $this->loadRefsFwd();
+  }
+
+  function loadRefsBack() {
+  }
+
+  function loadRefsFwd() {
   }
 
   /**
    *  Generic check method
-   *
-   *  Can be overloaded/supplemented by the child class
    *  @return null if the object is ok a message if not
    */
+
   function check() {
     global $dPconfig;
     $msg = null;
@@ -88,11 +260,119 @@ class CMbObject extends CDpObject {
     
     return $msg;
   }
+  
+  /**
+   * Update the form fields from the DB fields
+   */
+
+  function updateDBFields() {
+  }
+  
+  /**
+   *  Inserts a new row if id is zero or updates an existing row in the database table
+   *  @return null|string null if successful otherwise returns and error message
+   */
+
+  function store($updateNulls = false) {
+    global $AppUI;
+    
+    // Properties checking
+    $this->updateDBFields();
+    if($msg = $this->check()) {
+      return $AppUI->_(get_class($this)) . 
+        $AppUI->_("::store-check failed:") .
+        $AppUI->_($msg);
+    }
+    
+    // DB query
+    $k = $this->_tbl_key;
+    if($this->$k) {
+      $ret = db_updateObject($this->_tbl, $this, $k, $updateNulls);
+    } else {
+      $ret = db_insertObject($this->_tbl, $this, $k);
+    }
+    
+    if (!$ret) {
+      return get_class($this)."::store failed <br />" . db_error();
+    } 
+
+    // Load the object to get all properties
+    $this->load();
+    return null;
+  }
+
+  /**
+   * Generic check for whether dependancies exist for this object in the db schema
+   * @param string $msg Error message returned
+   * @param int Optional key index
+   * @param array Optional array to compiles standard joins: format [label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
+   * @return true|false
+   */
+  function canDelete(&$msg, $oid = null, $joins = null) {
+    global $AppUI;
+    $k = $this->_tbl_key;
+    if($oid) {
+      $this->$k = intval($oid);
+    } else {
+      $oid = $this->$k;
+    }
+    $msgs = array();
+    $select = "SELECT $this->_tbl.$k,";
+    $from = "\nFROM $this->_tbl ";
+    $sql_where  = "\nWHERE $this->_tbl.$k = '$oid'";
+    $sql_groupBy = "\nGROUP BY $this->_tbl.$k";
+    if (is_array($joins)) {
+      foreach($joins as $table) {
+        $count = "\nCOUNT(DISTINCT {$table['name']}.{$table['idfield']}) AS number";
+        $join = "\nLEFT JOIN {$table['name']} ON {$table['name']}.{$table['joinfield']} = $this->_tbl.$k";
+        $join_on = null;
+        if(isset($table["joinon"])){
+          $join_on = "\nAND " . $table["joinon"];
+        }
+        $sql = $select . $count . $from . $join . $join_on . $sql_where . $sql_groupBy;
+        $obj = null;
+        if (!db_loadObject($sql, $obj)) {
+          $msg = db_error();
+          return false;
+        }
+        if ($obj->number) {
+          $msgs[] = $obj->number. " " . $AppUI->_($table["label"]);
+        }
+      }
+    }
+    if (count($msgs)) {
+      $msg = $AppUI->_("noDeleteRecord") . ": " . implode(", ", $msgs);
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Default delete method
+   * @return null|string null if successful otherwise returns and error message
+   */
+  function delete($oid = null) {
+    $k = $this->_tbl_key;
+    if ($oid) {
+      $this->$k = intval($oid);
+    }
+    $msg = null;
+    if (!$this->canDelete($msg)) {
+      return $msg;
+    }
+
+    $sql = "DELETE FROM $this->_tbl WHERE $this->_tbl_key = '".$this->$k."'";
+    if (!db_exec($sql)) {
+      return db_error();
+    } else {
+      $this->$k = null;
+      return NULL;
+    }
+  }
+  
 
   /**
    *  Generic seek method
-   *
-   *  Can be overloaded/supplemented by the child class
    *  @return the first 100 records which fits the keywords
    */
   function seek($keywords) {
@@ -150,6 +430,10 @@ class CMbObject extends CDpObject {
       }
     }
   }
+  
+  /**
+   * Functions to check the object's properties
+   */
   
   function lookupSpec($specFragment, &$specFragments) {
     $fragmentPosition = array_search($specFragment, $specFragments);
@@ -215,7 +499,7 @@ class CMbObject extends CDpObject {
       array_splice($specFragments, $notNull, 1);
     }
 
-    if(!in_array("xor", $specFragments) and !in_array("nand", $specFragments) ){
+    if(!in_array("xor", $specFragments) and !in_array("nand", $specFragments)){
       if ($propValue == "") {
         return $notNull ? "Ne pas peut pas avoir une valeur nulle" : null;
       }
@@ -233,7 +517,7 @@ class CMbObject extends CDpObject {
           return "ne peut pas être une référence nulle";
         }
 
-        if ($propValue < 0 ) {
+        if ($propValue < 0) {
           return "N'est pas une référence (entier négatif)";
         }
         
@@ -584,26 +868,6 @@ class CMbObject extends CDpObject {
     return null;
   }
   
-  function load( $oid=null , $strip = true) {
-    $k = $this->_tbl_key;
-    if ($oid) {
-      $this->$k = intval( $oid );
-    }
-    $oid = $this->$k;
-    if ($oid === null) {
-      return false;
-    }
-    $sql = "SELECT * FROM $this->_tbl WHERE $this->_tbl_key=$oid";
-    $object = db_loadObject( $sql, $this, false, $strip );
-    $this->checkConfidential();
-    
-    $this->updateFormFields();
-    if($object)
-      return $this;
-    else
-      return false;
-  }
-  
   function checkConfidential($props = null) {
     global $dPconfig;
     if($dPconfig["hide_confidential"]) {
@@ -789,88 +1053,90 @@ class CMbObject extends CDpObject {
     return null;
   }
 
-/**
- *  Generic check for whether dependancies exist for this object in the db schema
- *
- *  Can be overloaded/supplemented by the child class
- *  @param string $msg Error message returned
- *  @param int Optional key index
- *  @param array Optional array to compiles standard joins: format [label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
- *  @return true|false
- */
-  function canDelete( &$msg, $oid=null, $joins=null) {
-    global $AppUI;
-    $k = $this->_tbl_key;
-    if ($oid) {
-      $this->$k = intval( $oid );
-    } else {
-      $oid = $this->$k;
-    }
-    
-    $msgs = array();
-    $select = "SELECT $this->_tbl.$k,";
-    $from = "\nFROM $this->_tbl ";
-    $sql_where  = "\nWHERE $this->_tbl.$k = '$oid'";
-    $sql_groupBy = "\nGROUP BY $this->_tbl.$k";
-    
-    if (is_array( $joins )) {
-      foreach( $joins as $table ) {
-        
-        $count = "\nCOUNT(DISTINCT {$table['name']}.{$table['idfield']}) AS number";
-        $join = "\nLEFT JOIN {$table['name']} ON {$table['name']}.{$table['joinfield']} = $this->_tbl.$k";
-
-        $join_on = null;
-        if(isset($table["joinon"])){
-          $join_on = "\nAND " . $table["joinon"];
-        }
-         
-        $sql = $select . $count . $from . $join . $join_on . $sql_where . $sql_groupBy;
-     
-        $obj = null;
-        if (!db_loadObject( $sql, $obj )) {
-          $msg = db_error();
-          return false;
-        }
-
-        if ($obj->number) {
-          $msgs[] = $obj->number. " " . $AppUI->_( $table['label'] );
-        }
-        
-      }
-    }
-        
-    if (count( $msgs )) {
-      $msg = $AppUI->_( "noDeleteRecord" ) . ": " . implode( ', ', $msgs );
-      return false;
-    }
-
-     return true;
-  }
-  
   function loadAides($user_id) {
     $class = get_class($this);
-    
     // Initialisation to prevent understandable smarty notices
-    foreach ($this->_props as $propName => $propSpec) {
+    foreach($this->_props as $propName => $propSpec) {
       $specFragments = explode("|", $propSpec);
       if (array_search("text", $specFragments) !== false) {
         $this->_aides[$propName] = null;
       }
     }
-
     // Load appropriate Aides
     $where = array();
     $where["user_id"] = " = '$user_id'";
     $where["class"] = " = '$class'";
     $order = "name";
     $aides = new CAideSaisie();
-    $aides = $aides->loadList($where,$order);
-        
+    $aides = $aides->loadList($where,$order);  
     // Aides mapping suitable for select options
     foreach ($aides as $aide) {
       $this->_aides[$aide->field][$aide->text] = $aide->name;  
     }
+  }
+
+  /**
+   * Get specifically denied records from a table/module based on a user
+   * @param int User id number
+   * @return array
+   */
+
+  function getDeniedRecords($uid) {
+    $uid = intval($uid);
+    $uid || exit ("FATAL ERROR<br />" . get_class($this) . "::getDeniedRecords failed, user id = 0");
+
+    // get read denied projects
+    $deny = array();
+    $sql = "
+    SELECT $this->_tbl_key
+    FROM $this->_tbl, permissions
+    WHERE permission_user = $uid
+      AND permission_grant_on = '$this->_tbl'
+      AND permission_item = $this->_tbl_key
+      AND permission_value = 0
+    ";
+    return db_loadColumn($sql);
+  }
+
+  /**
+   * Returns a list of records exposed to the user
+   * @param int User id number
+   * @param string Optional fields to be returned by the query, default is all
+   * @param string Optional sort order for the query
+   * @param string Optional name of field to index the returned array
+   * @param array Optional array of additional sql parameters (from and where supported)
+   * @return array
+   */
+
+  // returns a list of records exposed to the user
+  function getAllowedRecords($uid, $fields = "*", $orderby = "", $index = null, $extra = null) {
+    $uid = intval($uid);
+    $uid || exit ("FATAL ERROR<br />" . get_class($this) . "::getAllowedRecords failed");
+    $deny = $this->getDeniedRecords($uid);
+
+    $sql = "SELECT $fields"
+      . "\nFROM $this->_tbl, permissions";
+
+    if (@$extra["from"]) {
+      $sql .= "," . $extra["from"];
+    }
     
+    $sql .= "\nWHERE permission_user = $uid"
+      . "\n AND permission_value <> 0"
+      . "\n AND ("
+      . "\n   (permission_grant_on = 'all')"
+      . "\n   OR (permission_grant_on = '$this->_tbl' AND permission_item = -1)"
+      . "\n   OR (permission_grant_on = '$this->_tbl' AND permission_item = $this->_tbl_key)"
+      . "\n )"
+      . (count($deny) > 0 ? "\n\tAND $this->_tbl_key NOT IN (" . implode(",", $deny) . ")" : "");
+    
+    if (@$extra["where"]) {
+      $sql .= "\n\t" . $extra["where"];
+    }
+
+    $sql .= ($orderby ? "\nORDER BY $orderby" : "");
+
+    return db_loadHashList($sql, $index);
   }
   
   function loadLogs($type = null){
@@ -893,21 +1159,34 @@ class CMbObject extends CDpObject {
     }   
     $this->_ref_logs = $list; 
   }
-  
-  /**
-   * Read Permission generic check
-   * return true or false
-   */
-  function canRead() {
-    return true;
+
+/**
+ * This function register this object to a templateManager object
+ */
+    // Register object and references
+    function fillTemplate(&$template){
+    }
+    
+    // Register only the fields of this object
+    function fillLimitedTemplate(&$template){
+    }
+}
+
+function htmlReplace($find, $replace, &$source) {
+  $matches = array();
+  $nbFound = preg_match_all("/$find/", $source, $matches);
+  $source = preg_replace("/$find/", $replace, $source);
+  return $nbFound;
+}
+
+function purgeHtmlText($regexps, &$source) {
+  $total = 0;
+  foreach ($regexps as $find => $replace) {
+    $total += htmlReplace($find, $replace, $source); 
   }
+
+//  echo "<h1>Total found: $total<h1><hr />";
   
-  /**
-   * Edit Permission generic check
-   * return true or false
-   */
-  function canEdit() {
-    return true;
-  }
+  return $total;
 }
 ?>

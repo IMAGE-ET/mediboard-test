@@ -398,16 +398,20 @@ class COperation extends CMbObject {
     $this->loadRefsDocuments();
   }
   
-  function canRead() {
-    $this->loadRefChir();
-    $this->loadRefPlageOp();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefChir();
+      $this->loadRefPlageOp();
+    }
     $this->_canRead = $this->_ref_chir->canRead() || $this->_ref_anesth->canRead() || $this->_ref_plageop->canRead();
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefChir();
-    $this->loadRefPlageOp();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefChir();
+      $this->loadRefPlageOp();
+    }
     $this->_canEdit = $this->_ref_chir->canEdit() || $this->_ref_anesth->canEdit() || $this->_ref_plageop->canEdit();
     return $this->_canEdit;
   }

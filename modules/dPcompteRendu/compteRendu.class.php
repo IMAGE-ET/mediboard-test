@@ -132,15 +132,22 @@ class CCompteRendu extends CMbObject {
       $this->_ref_function->load($this->function_id);
   }
   
-  function canRead() {
-    $this->loadRefsFwd();
-    $this->_canRead = ($this->_ref_chir->canRead() || $this->_ref_function->canRead()) && $this->_ref_object->canRead();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
+    $this->_canRead = ($this->_ref_chir->canRead() || $this->_ref_function->canRead())
+      && $this->_ref_object->canRead();
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefsFwd();
-    $this->_canEdit = ($this->_ref_chir->canEdit() || $this->_ref_function->canEdit()) && $this->_ref_object->canEdit();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
+    $this->_canEdit = ($this->_ref_chir->canEdit() || $this->_ref_function->canEdit())
+      && $this->_ref_object->canEdit()
+      && isMbModuleEditAll("dPcompteRendu");
     return $this->_canEdit;
   }
 }

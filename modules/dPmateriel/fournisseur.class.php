@@ -63,7 +63,7 @@ class CFournisseur extends CMbObject {
       "idfield"   => "reference_id", 
       "joinfield" => "fournisseur_id"
     );
-    return CDpObject::canDelete( $msg, $oid, $tables );
+    return CMbObject::canDelete( $msg, $oid, $tables );
   }
 }
 ?>

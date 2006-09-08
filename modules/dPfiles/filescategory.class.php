@@ -38,7 +38,7 @@ class CFilesCategory extends CMbObject {
       "joinfield" => "file_category_id"
     );
     
-  return CDpObject::canDelete( $msg, $oid, $tables );	
+  return CMbObject::canDelete( $msg, $oid, $tables );	
   }
   
   function listCatClass($paramclass = null){

@@ -36,12 +36,12 @@ class CCategory extends CMbObject {
     $this->_ref_materiel = $this->_ref_materiel->loadList($where);
   }
   
-  function canRead() {
+  function canRead($withRefs = true) {
     $this->_canRead = isMbAllowed(PERM_READ, "dPmateriel", $this->category_id);
     return $this->_canRead;
   }
 
-  function canEdit() {
+  function canEdit($withRefs = true) {
     $this->_canEdit = isMbAllowed(PERM_EDIT, "dPmateriel", $this->category_id);
     return $this->_canEdit;
   }
@@ -54,7 +54,7 @@ class CCategory extends CMbObject {
       "joinfield" => "category_id"
     );
     
-    return CDpObject::canDelete( $msg, $oid, $tables );	
+    return CMbObject::canDelete( $msg, $oid, $tables );	
   }
 
 }

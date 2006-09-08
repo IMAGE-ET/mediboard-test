@@ -83,6 +83,22 @@ class CPlageconsult extends CMbObject {
     $this->_ref_chir->load($this->chir_id);
   }
   
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
+    $this->_canRead = $this->_ref_chir->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
+    $this->_canEdit = $this->_ref_chir->canEdit() && isMbModuleEditAll("dPcabinet");
+    return $this->_canEdit;
+  }
+  
   function checkFrequence() {
   	return true;
 

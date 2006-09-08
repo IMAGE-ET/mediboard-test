@@ -240,16 +240,20 @@ class CConsultAnesth extends CMbObject {
     $this->_ref_techniques = $this->_ref_techniques->loadList($where,$order);
   }
   
-  function canRead() {
-    $this->loadRefConsultation();
-    $this->loadRefOperation();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefConsultation();
+      $this->loadRefOperation();
+    }
     $this->_canRead = $this->_ref_consult->canRead() || $this->_ref_operation->canRead();
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefConsultation();
-    $this->loadRefOperation();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefConsultation();
+      $this->loadRefOperation();
+    }
     $this->_canEdit = $this->_ref_consult->canEdit() || $this->_ref_operation->canEdit();
     return $this->_canEdit;
   }

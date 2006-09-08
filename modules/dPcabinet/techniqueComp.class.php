@@ -37,14 +37,18 @@ class CTechniqueComp extends CMbObject {
     $this->_ref_consult_anesth->load($this->consultation_anesth_id);
   }
   
-  function canRead() {
-    $this->loadRefFwd();
+  function canRead($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canRead = $this->_ref_consult_anesth->canRead();
     return $this->_canRead;
   }
 
-  function canEdit() {
-    $this->loadRefFwd();
+  function canEdit($withRefs = true) {
+    if($withRefs) {
+      $this->loadRefsFwd();
+    }
     $this->_canEdit = $this->_ref_consult_anesth->canEdit();
     return $this->_canEdit;
   }

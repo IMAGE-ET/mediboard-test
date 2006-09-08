@@ -59,7 +59,7 @@ require_once("./includes/db_connect.php");
 
 // load the commonly used classes
 require_once($AppUI->getSystemClass("date"));
-require_once($AppUI->getSystemClass("dp"));
+require_once($AppUI->getSystemClass("mbobject"));
 require_once($AppUI->getSystemClass("mbmodule"));
 
 // load default preferences if not logged in
