@@ -38,11 +38,11 @@ class COperation extends CMbObject {
   var $chir_id    = null; // dupliqué en $sejour->praticien_id
   var $anesth_id  = null; // dupliqué en $plageop->anesth_id
   var $plageop_id = null;
-  
+
   // DB Fields S@nté.com communication
   var $code_uf    = null;
   var $libelle_uf = null;
-  
+
   // DB Fields
   var $salle_id       = null;
   var $date           = null;
@@ -71,10 +71,10 @@ class COperation extends CMbObject {
   var $ATNC           = null;
   var $rques          = null;
   var $rank           = null;
-  
+
   var $depassement    = null;
   var $annulee        = null;    // completé par $sejour->annule
-    
+
   // Form fields
   var $_hour_op        = null;
   var $_min_op         = null;
@@ -84,10 +84,10 @@ class COperation extends CMbObject {
   var $_min_anesth     = null;
   var $_lu_type_anesth = null;
   var $_codes_ccam     = array();
-  
+
   // Shortcut fields
   var $_datetime = null;
-  
+
   // DB References
   var $_ref_chir           = null;
   var $_ref_plageop        = null;
@@ -98,29 +98,9 @@ class COperation extends CMbObject {
   var $_ref_files          = array();
   var $_ref_actes_ccam     = array(); 
   var $_ref_documents      = array();
-  
+
   // External references
   var $_ext_codes_ccam = null;
-  
-  // Old fields
-//  var $pat_id = null; // remplacé par $sejour->patient_id
-//  var $CCAM_code = null;  // DB Field to be removed
-//  var $CCAM_code2 = null;  // DB Field to be removed
-//  var $compte_rendu = null;  // DB Field to be removed
-//  var $cr_valide = null;  // DB Field to be removed
-//  var $date_adm = null; // remplacé par $sejour->entree_prevue
-//  var $time_adm = null; // remplacé par $sejour->entree_prevue
-//  var $chambre = null; // remplacée par $sejour->chambre_seule
-//  var $type_adm = null; // remplacé $sejour->type
-//  var $venue_SHS = null; // remplacé par $sejour->venue_SHS
-//  var $saisie = null; // remplacé par $sejour->saisi_SHS
-//  var $modifiee = null;  // remplace $sejour->modif_SHS
-//  var $CIM10_code = null; // remplacé par $sejour->DP
-//  var $convalescence = null; // remplacé par $sejour->convalescence
-//  var $pathologie = null; // remplacé par $sejour->pathologie
-//  var $septique = null;   // remplacé par $sejour->septique
-//  var $_hour_adm = null;
-//  var $_min_adm = null;
 
   function COperation() {
     $this->CMbObject("operations", "operation_id");
@@ -155,37 +135,19 @@ class COperation extends CMbObject {
     $this->_seek["plageop_id"] = "ref|CPlageOp";
     $this->_seek["libelle"]    = "like";
     $this->_seek["materiel"]   = "like";
-    
-//    $this->_props["pat_id"]        = "ref";
-//    $this->_props["CCAM_code"]     = "code|ccam";
-//    $this->_props["CCAM_code2"]    = "code|ccam";
-//    $this->_props["CIM10_code"]    = "code|cim10";
-//    $this->_props["convalescence"] = "str|confidential";
-//    $this->_props["date_adm"]      = "date";
-//    $this->_props["time_adm"]      = "time";
-//    $this->_props["type_adm"]      = "enum|comp|ambu|exte";
-//    $this->_props["venue_SHS"]     = "num|length|8|confidential";
-//    $this->_props["chambre"]       = "enum|o|n";
-//    $this->_props["saisie"]        = "enum|o|n";
-//    $this->_props["modifiee"]      = "enum|0|1";
-//    $this->_props["compte_rendu"]  = "html|confidential";
-//    $this->_props["cr_valide"]     = "enum|0|1";
   }
 
   function check() {
     // Data checking
     $msg = null;
-
     if(!$this->operation_id) {
       if (!$this->chir_id) {
         $msg .= "Praticien non valide";
       }
     }
-    
     return $msg . parent::check();
-    
   }
-  
+
   // Only use when current operation is deleted or canceled
   function reorder() {
     $sql = "SELECT operations.operation_id, operations.temp_operation,
@@ -380,15 +342,12 @@ class COperation extends CMbObject {
       $ext_code_ccam->LoadLite();
       $this->_ext_codes_ccam[] = $ext_code_ccam;
     }
-    
     $ext_code_ccam =& $this->_ext_codes_ccam[0];
     $code_ccam = @$this->_codes_ccam[0];
-
     if ($this->libelle !== null && $this->libelle != "") {
       $ext_code_ccam->libelleCourt = "<em>[$this->libelle]</em><br />".$ext_code_ccam->libelleCourt;
       $ext_code_ccam ->libelleLong = "<em>[$this->libelle]</em><br />".$ext_code_ccam->libelleLong;
     }
-    
   }
   
   function loadRefsConsultAnesth() {
@@ -439,9 +398,22 @@ class COperation extends CMbObject {
     $this->loadRefsDocuments();
   }
   
+  function canRead() {
+    $this->loadRefChir();
+    $this->loadRefPlageOp();
+    $this->_canRead = $this->_ref_chir->canRead() || $this->_ref_anesth->canRead() || $this->_ref_plageop->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefChir();
+    $this->loadRefPlageOp();
+    $this->_canEdit = $this->_ref_chir->canEdit() || $this->_ref_anesth->canEdit() || $this->_ref_plageop->canEdit();
+    return $this->_canEdit;
+  }
+
   function loadPossibleActes () {
     $depassement_affecte = false;
-  
     // existing acts may only be affected once to possible acts
     $used_actes = array();
     foreach ($this->_ext_codes_ccam as $codeKey => $codeValue) {

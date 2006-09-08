@@ -146,6 +146,18 @@ class CFichePaie extends CMbObject {
       $this->_salaire_net = $this->_salaire_a_payer + $this->_csgnds;
     }
   }
+  
+  function canRead() {
+    $this->loadRefsFwd();
+    $this->_canRead = $this->_ref_params_paie->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefsFwd();
+    $this->_canEdit = $this->_ref_params_paie->canEdit();
+    return $this->_canEdit;
+  }
 }
 
 ?>

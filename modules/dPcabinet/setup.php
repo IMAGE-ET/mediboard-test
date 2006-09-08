@@ -14,7 +14,7 @@ require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.45";
+$config["mod_version"]     = "0.46";
 $config["mod_directory"]   = "dPcabinet";
 $config["mod_setup_class"] = "CSetupdPcabinet";
 $config["mod_type"]        = "user";
@@ -373,8 +373,15 @@ class CSetupdPcabinet {
           $consultAnesth->consultation_id = $result[$keyresult]["consultation_id"];
           $consultAnesth->store();
         }
-      case "0.45":
-        return "0.45";
+      case "0.45": 
+        $sql = "ALTER TABLE `exams_comp` " .
+            "\nCHANGE `consult_id` `consultation_id` INT NOT NULL ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `techniques_anesth` " .
+            "\nCHANGE `consultAnesth_id` `consultation_anesth_id` INT NOT NULL ;";
+        db_exec( $sql ); db_error();
+      case "0.46":
+        return "0.46";
     }
     return false;
   }

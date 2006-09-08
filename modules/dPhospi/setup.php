@@ -14,7 +14,7 @@ require_once($AppUI->getSystemClass("mbmodule"));
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPhospi";
-$config["mod_version"]     = "0.16";
+$config["mod_version"]     = "0.17";
 $config["mod_directory"]   = "dPhospi";
 $config["mod_setup_class"] = "CSetupdPhospi";
 $config["mod_type"]        = "user";
@@ -127,7 +127,10 @@ class CSetupdPhospi {
         $sql = "ALTER TABLE `service` ADD INDEX ( `group_id` ) ;";
         db_exec( $sql ); db_error();
       case "0.16":
-        return "0.16";
+        $sql = "ALTER TABLE `affectation` DROP `operation_id`";
+        db_exec( $sql ); db_error();
+      case "0.17":
+        return "0.17";
     }
     return false;
   }

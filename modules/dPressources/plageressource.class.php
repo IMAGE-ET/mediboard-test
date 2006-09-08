@@ -67,6 +67,18 @@ class CPlageressource extends CMbObject {
     $this->_ref_prat = new CMediusers();
     $this->_ref_prat->load($this->prat_id);
   }
+  
+  function canRead() {
+    $this->loadRefsFwd();
+    $this->_canRead = $this->_ref_prat->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefsFwd();
+    $this->_canEdit = $this->_ref_prat->canEdit();
+    return $this->_canEdit;
+  }
 /*  
   function canDelete(&$msg, $oid = null) {
     $tables[] = array ();

@@ -22,7 +22,6 @@ class CAffectation extends CMbObject {
   
   // DB References
   var $lit_id       = null;
-  var $operation_id = null;
   var $sejour_id    = null;
 
   // DB Fields
@@ -37,7 +36,6 @@ class CAffectation extends CMbObject {
   
   // Object references
   var $_ref_lit       = null;
-  var $_ref_operation = null;
   var $_ref_sejour    = null;
   var $_ref_prev      = null;
   var $_ref_next      = null;
@@ -168,6 +166,19 @@ class CAffectation extends CMbObject {
     
     $this->_ref_next = new CAffectation;
     $this->_ref_next->loadObject($where);
+  }
+  
+  function canRead() {
+    $this->loadRefLit();
+    $this->loadRefSejour();
+    $this->_canRead = $this->_ref_lit->canRead() && $this->_ref_sejour->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefsFwd();
+    $this->_canEdit = $this->_ref_lit->canEdit() && $this->_ref_sejour->canEdit();
+    return $this->_canEdit;
   }
   
   function checkDaysRelative($date) {

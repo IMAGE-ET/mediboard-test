@@ -42,6 +42,18 @@ class CModePaiement extends CMbObject {
     $this->_ref_function = new CFunctions();
     $this->_ref_function->load($this->function_id);
   }
+  
+  function canRead() {
+    $this->loadRefsFwd();
+    $this->_canRead = $this->_ref_function->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefsFwd();
+    $this->_canEdit = $this->_ref_function->canEdit();
+    return $this->_canEdit;
+  }
 }
 
 ?>

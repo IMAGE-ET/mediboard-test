@@ -38,9 +38,9 @@ class CFavoricim10 extends CMbObject {
 	
 	function store() {
 		$sql = "SELECT *" .
-        "\nFROM cim10favoris" .
-        "\nWHERE favoris_code = '$this->favoris_code'" .
-        "\nAND favoris_user = '$this->favoris_user'";
+        "\nFROM `cim10favoris`" .
+        "\nWHERE `favoris_code  = '$this->favoris_code'" .
+        "\nAND `favoris_user` = '$this->favoris_user'";
 		$issingle = db_loadList( $sql );
 		if(sizeof($issingle) == 0) {
 			$sql = "INSERT" .

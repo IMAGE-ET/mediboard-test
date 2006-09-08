@@ -271,6 +271,18 @@ class CConsultation extends CMbObject {
     $this->_ref_examcomp = $this->_ref_examcomp->loadList($where,$order);
   }
   
+  function canRead() {
+    $this->loadRefPlageConsult();
+    $this->_canRead = $this->_ref_plageconsult->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefPlageConsult();
+    $this->_canEdit = $this->_ref_plageconsult->canEdit();
+    return $this->_canEdit;
+  }
+  
   function fillTemplate(&$template) {
   	$this->loadRefsFwd();
     $this->_ref_plageconsult->loadRefsFwd();

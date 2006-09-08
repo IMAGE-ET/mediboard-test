@@ -45,6 +45,18 @@ class CStock extends CMbObject {
     $this->_ref_materiel = new CMateriel;
     $this->_ref_materiel->load($this->materiel_id);
   }
+  
+  function canRead() {
+    $this->loadRefsFwd();
+    $this->_canRead = $this->_ref_group->canRead() && $this->_ref_materiel->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefsFwd();
+    $this->_canEdit = $this->_ref_group->canEdit() && $this->_ref_materiel->canEdit();
+    return $this->_canEdit;
+  }
     
    function check() {
      if(!$this->stock_id) {

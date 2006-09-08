@@ -31,16 +31,28 @@ class CAideSaisie extends CMbObject {
     $this->CMbObject("aide_saisie", "aide_id");
 
     $this->_props["user_id"] = "ref|notNull";
-    $this->_props["class"]  = "str|notNull";
-    $this->_props["field"]  = "str|notNull";
-    $this->_props["name"]   = "str|notNull";
-    $this->_props["text"]   = "text|notNull";
+    $this->_props["class"]   = "str|notNull";
+    $this->_props["field"]   = "str|notNull";
+    $this->_props["name"]    = "str|notNull";
+    $this->_props["text"]    = "text|notNull";
   }
   
   function loadRefsFwd() {
     // Forward references
     $this->_ref_user = new CMediusers;
     $this->_ref_user->load($this->user_id);
+  }
+  
+  function canRead() {
+    $this->loadRefsFwd();
+    $this->_canRead = $this->_ref_user->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefsFwd();
+    $this->_canEdit = $this->_ref_user->canEdit();
+    return $this->_canEdit;
   }
 }
 

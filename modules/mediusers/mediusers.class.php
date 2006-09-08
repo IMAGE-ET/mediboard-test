@@ -186,11 +186,15 @@ class CMediusers extends CMbObject {
       }
     }
   }
+  
+  function loadRefFunction() {
+    $this->_ref_function = new CFunctions;
+    $this->_ref_function->load($this->function_id);
+  }
 
   function loadRefsFwd() {
     // Forward references
-    $this->_ref_function = new CFunctions;
-    $this->_ref_function->load($this->function_id);
+    $this->loadRefFunction();
     $this->_ref_discipline = new CDiscipline;
     $this->_ref_discipline->load($this->discipline_id);
   }
@@ -200,6 +204,18 @@ class CMediusers extends CMbObject {
       "chir_id" => "= '$this->user_id'");
     $this->_ref_packs = new CPack;
     $this->_ref_packs = $this->_ref_packs->loadList($where);
+  }
+  
+  function canRead() {
+    $this->loadRefFunction();
+    $this->_canRead = $this->_ref_function->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefFunction();
+    $this->_canEdit = $this->_ref_function->canEdit();
+    return $this->_canEdit;
   }
   
   function loadProtocoles() {

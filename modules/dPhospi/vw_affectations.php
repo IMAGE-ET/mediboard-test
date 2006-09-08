@@ -25,10 +25,6 @@ $date       = mbGetValueFromGetOrSession("date", mbDate());
 $heureLimit = "16:00:00";
 $mode       = mbGetValueFromGetOrSession("mode");
 
-// Nombre de patients à placer pour la semaine qui vient
-$today   = mbDate()." 01:00:00";
-$endWeek = mbDate("+7 days", $today);
-
 // Initialisation de la liste des chirs, patients et plagesop
 global $listChirs;
 $listChirs = array();

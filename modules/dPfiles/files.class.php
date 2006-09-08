@@ -255,5 +255,17 @@ class CFile extends CMbObject {
       }
     }
   }
+  
+  function canRead() {
+    $this->loadRefsFwd();
+    $this->_canRead = $this->_ref_file_owner->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefsFwd();
+    $this->_canEdit = $this->_ref_file_owner->canEdit();
+    return $this->_canEdit;
+  }
 }
 ?>

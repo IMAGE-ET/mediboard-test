@@ -14,7 +14,6 @@ class CGHM  extends CMbObject {
   var $ghm_id = null;
   
   // DB fields
-  var $operation_id = null; // A supprimer
   var $sejour_id    = null;
   var $DR           = null; // Diagnostic relié
   var $DASs         = null; // Diagnostics associés significatifs sérialisés
@@ -109,9 +108,13 @@ class CGHM  extends CMbObject {
     $this->DADs = implode("|", $this->_DADs);
   }
   
-  function loadRefsFwd() {
+  function loadRefSejour() {
     $this->_ref_sejour = new CSejour;
     $this->_ref_sejour->load($this->sejour_id);
+  }
+  
+  function loadRefsFwd() {
+    $this->loadRefSejour();
     $this->_ref_sejour->loadRefs();
     $this->_ref_actes_ccam = array();
     foreach($this->_ref_sejour->_ref_operations as $keyOp => $op) {
@@ -119,6 +122,18 @@ class CGHM  extends CMbObject {
       $this->_ref_actes_ccam = array_merge($this->_ref_actes_ccam, $this->_ref_sejour->_ref_operations[$keyOp]->_ref_actes_ccam);
     }
     $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
+  }
+  
+  function canRead() {
+    $this->loadRefSejour();
+    $this->_canRead = $this->_ref_sejour->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefSejour();
+    $this->_canEdit = $this->_ref_sejour->canEdit();
+    return $this->_canEdit;
   }
   
   // Liaison à un sejour

@@ -61,6 +61,18 @@ class CMateriel extends CMbObject {
     $this->_ref_category->load($this->category_id);  
   }
   
+  function canRead() {
+    $this->loadRefsFwd();
+    $this->_canRead = $this->_ref_category->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefsFwd();
+    $this->_canEdit = $this->_ref_category->canEdit();
+    return $this->_canEdit;
+  }
+  
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
       "label"     => "stock(s)", 

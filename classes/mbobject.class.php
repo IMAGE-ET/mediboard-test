@@ -36,6 +36,12 @@ class CMbObject extends CDpObject {
   
   var $_aides = array();
   var $_id = null;
+  
+  /**
+   * Permission fields
+   */
+  var $_canRead = null;
+  var $_canEdit = null;
 
   /**
    * Properties  specification
@@ -82,7 +88,13 @@ class CMbObject extends CDpObject {
     
     return $msg;
   }
-  
+
+  /**
+   *  Generic seek method
+   *
+   *  Can be overloaded/supplemented by the child class
+   *  @return the first 100 records which fits the keywords
+   */
   function seek($keywords) {
     $sql = "SELECT * FROM `$this->_tbl` WHERE 1";
     if(count($keywords) and count($this->_seek)) {
@@ -880,6 +892,22 @@ class CMbObject extends CDpObject {
       $list[$key]->loadRefsFwd();
     }   
     $this->_ref_logs = $list; 
+  }
+  
+  /**
+   * Read Permission generic check
+   * return true or false
+   */
+  function canRead() {
+    return true;
+  }
+  
+  /**
+   * Edit Permission generic check
+   * return true or false
+   */
+  function canEdit() {
+    return true;
   }
 }
 ?>

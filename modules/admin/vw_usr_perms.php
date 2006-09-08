@@ -34,6 +34,14 @@ if (array_key_exists("dPetablissement", $modules)) {
     "name_field"  => "text"
   );
 }
+if (array_key_exists("dPmateriel", $modules)) {
+  $pgos["dPmateriel"] = array(
+    "table"       => "materiel_category", 
+    "table_alias" => "mat", 
+    "id_field"    => "category_id",
+    "name_field"  => "category_name"
+  );
+}
 
 $permItemValues = array(
   PERM_EDIT => "ReadWrite",

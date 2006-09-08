@@ -243,6 +243,20 @@ class CSejour extends CMbObject {
     $this->loadRefEtablisemment();
   }
   
+  function canRead() {
+    $this->loadRefPraticien();
+    $this->loadRefEtablisemment();
+    $this->_canRead = $this->_ref_group->canRead() && $this->_ref_praticien->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefPraticien();
+    $this->loadRefEtablisemment();
+    $this->_canEdit = $this->_ref_group->canEdit() && $this->_ref_praticien->canEdit();
+    return $this->_canEdit;
+  }
+  
   function loadRefsAffectations() {
     $where = array("sejour_id" => "= '$this->sejour_id'");
     $order = "sortie DESC";

@@ -91,6 +91,18 @@ class CParamsPaie extends CMbObject {
     $this->_ref_user->load($this->user_id);
   }
   
+  function canRead() {
+    $this->loadRefsFwd();
+    $this->_canRead = $this->_ref_user->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefsFwd();
+    $this->_canEdit = $this->_ref_user->canEdit();
+    return $this->_canEdit;
+  }
+  
   function loadFromUser($user_id) {
     $where = array();
     $where["user_id"] = "= '$user_id'";

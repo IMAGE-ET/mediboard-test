@@ -185,14 +185,22 @@ class CConsultAnesth extends CMbObject {
     return $msg . parent::check();
   }
   
-  function loadRefsFwd() {
-    // Forward references
+  function loadRefConsultation() {
     $this->_ref_consultation = new CConsultation;
     $this->_ref_consultation->load($this->consultation_id);
-    $this->_ref_consultation->loadRefsFwd();
-    $this->_ref_plageconsult =& $this->_ref_consultation->_ref_plageconsult;
+  }
+  
+  function loadRefOperation() {
     $this->_ref_operation = new COperation;
     $this->_ref_operation->load($this->operation_id);
+  }
+  
+  function loadRefsFwd() {
+    // Forward references
+    $this->loadRefConsultation();
+    $this->_ref_consultation->loadRefsFwd();
+    $this->_ref_plageconsult =& $this->_ref_consultation->_ref_plageconsult;
+    $this->loadRefOperation();
     $this->_ref_operation->loadRefsFwd();    
     $this->_date_consult =& $this->_ref_consultation->_date;
     $this->_date_op =& $this->_ref_operation->_ref_plageop->date;
@@ -230,6 +238,20 @@ class CConsultAnesth extends CMbObject {
     $where["consultAnesth_id"] = "= '$this->consultation_anesth_id'";
     $order = "technique";
     $this->_ref_techniques = $this->_ref_techniques->loadList($where,$order);
+  }
+  
+  function canRead() {
+    $this->loadRefConsultation();
+    $this->loadRefOperation();
+    $this->_canRead = $this->_ref_consult->canRead() || $this->_ref_operation->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefConsultation();
+    $this->loadRefOperation();
+    $this->_canEdit = $this->_ref_consult->canEdit() || $this->_ref_operation->canEdit();
+    return $this->_canEdit;
   }
   
   function fillTemplate(&$template) {

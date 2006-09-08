@@ -34,10 +34,10 @@ class CFavoriCCAM extends CMbObject {
 	}
 
   function check() {
-    $sql = "SELECT * " .
-      "FROM ccamfavoris " .
-      "WHERE favoris_code = '$this->favoris_code' " .
-      "AND favoris_user = '$this->favoris_user'";
+    $sql = "SELECT *" .
+      "\nFROM `ccamfavoris`" .
+      "\nWHERE `favoris_code` = '$this->favoris_code'" .
+      "\nAND `favoris_user` = '$this->favoris_user'";
     $copies = db_loadList($sql);
 
     if (count($copies))

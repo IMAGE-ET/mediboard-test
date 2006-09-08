@@ -86,6 +86,16 @@ class CFunctions extends CMbObject {
     $this->_ref_users = $this->_ref_users->loadList($where);
   }
   
+  function canRead() {
+    $this->_canRead = isMbAllowed(PERM_READ, "mediusers", $this->function_id);
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->_canEdit = isMbAllowed(PERM_EDIT, "mediusers", $this->function_id);
+    return $this->_canEdit;
+  }
+  
   // @todo : ameliorer le choix des spécialités
   // (loadfunction($groupe, $permtype) par exemple)
   function loadSpecialites($perm_type = null) {

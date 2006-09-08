@@ -78,6 +78,18 @@ class CLit extends CMbObject {
     
     $this->_view = "{$this->_ref_chambre->nom} - $this->nom";
   }
+  
+  function canRead() {
+    $this->loadRefsFwd();
+    $this->_canRead = $this->_ref_chambre->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefsFwd();
+    $this->_canEdit = $this->_ref_chambre->canEdit();
+    return $this->_canEdit;
+  }
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (

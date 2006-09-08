@@ -65,23 +65,35 @@ class CPlageOp extends CMbObject {
     $this->loadRefsFwd();
     $this->loadRefsBack($annulee);
   }
-
-  function loadRefsFwd() {
+  
+  function loadRefChir() {
     $this->_ref_chir = new CMediusers;
     $this->_ref_chir->load($this->chir_id);
-    
+  }
+  
+  function loadRefAnesth() {
     $this->_ref_anesth = new CMediusers;
     $this->_ref_anesth->load($this->anesth_id);
-
+  }
+  
+  function loadRefSpec() {
     $this->_ref_spec = new CFunctions;
     $this->_ref_spec->load($this->spec_id);
-
+  }
+  
+  function loadRefSalle() {
     $this->_ref_salle = new CSalle;
     $this->_ref_salle->load($this->salle_id);
-    
+  }
+
+  function loadRefsFwd() {
+    $this->loadRefChir();
+    $this->loadRefAnesth();
+    $this->loadRefSpec();
+    $this->loadRefSalle();
     if($this->chir_id){
       $this->_view = "Dr. ".$this->_ref_chir->_view;
-    }elseif($this->spec_id){
+    } elseif($this->spec_id){
       $this->_view = $this->_ref_spec->_shortview;
     }
     if($this->anesth_id){
@@ -201,6 +213,31 @@ class CPlageOp extends CMbObject {
     db_loadHash($sql, $result);
     $this->_nb_operations = $result["total"];
     $this->_fill_rate = number_format($result["time"]*100/(strtotime($this->fin)-strtotime($this->debut)), 2);
-  }    
+  }
+  
+  function canRead() {
+    $this->loadRefsFwd();
+    $this->_canRead = $this->_ref_salle->canRead();
+    if($this->chir_id) {
+      $pratCanRead = $this->_ref_chir->canRead();
+    } elseif($this->spec_id) {
+      $pratCanRead = $this->_ref_spec->canRead();
+    }
+    $this->_canRead = $this->_ref_salle->canRead() && $pratCanRead;
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefsFwd();
+    $this->_canEdit = $this->_ref_salle->canEdit();
+    if($this->chir_id) {
+      $pratCanEdit = $this->_ref_chir->canEdit();
+    } elseif($this->spec_id) {
+      $pratCanEdit = $this->_ref_spec->canEdit();
+    }
+    $this->_canEdit = $this->_ref_salle->canEdit() && $pratCanEdit;
+    return $this->_canEdit;
+  }
 }
+
 ?>

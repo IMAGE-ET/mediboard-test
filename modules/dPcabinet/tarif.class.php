@@ -67,6 +67,18 @@ class CTarif extends CMbObject {
     $this->_ref_function = new CFunctions();
     $this->_ref_function->load($this->function_id);
   }
+  
+  function canRead() {
+    $this->loadRefFwd();
+    $this->_canRead = $this->_ref_chir->canRead() || $this->_ref_function->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefFwd();
+    $this->_canEdit = $this->_ref_chir->canEdit() || $this->_ref_function->canEdit();
+    return $this->_canEdit;
+  }
 }
 
 ?>

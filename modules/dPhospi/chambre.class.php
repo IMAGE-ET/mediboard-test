@@ -68,6 +68,18 @@ class CChambre extends CMbObject {
     $this->_ref_lits = new CLit;
     $this->_ref_lits = $this->_ref_lits->loadList($where, $order);
   }
+  
+  function canRead() {
+    $this->loadRefsFwd();
+    $this->_canRead = $this->_ref_service->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefsFwd();
+    $this->_canEdit = $this->_ref_service->canEdit();
+    return $this->_canEdit;
+  }
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (

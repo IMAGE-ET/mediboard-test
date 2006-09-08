@@ -71,16 +71,38 @@ class CActeCCAM extends CMbObject {
     
     $this->_view = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs"; 
   }
-   
-  function loadRefsFwd() {
+  
+  function loadRefOperation() {
     $this->_ref_operation = new COperation;
     $this->_ref_operation->load($this->operation_id);
-
+  }
+  
+  function loadRefExecutant() {
     $this->_ref_executant = new CMediusers;
     $this->_ref_executant->load($this->executant_id);
-    
+  }
+  
+  function loadRefCodeCCAM() {
     $this->_ref_code_ccam = new CCodeCCAM($this->code_acte);
     $this->_ref_code_ccam->load();
+  }
+   
+  function loadRefsFwd() {
+    $this->loadRefOperation();
+    $this->loadRefExecutant();
+    $this->loadRefCodeCCAM();
+  }
+  
+  function canRead() {
+    $this->loadRefOperation();
+    $this->_canRead = $this->_ref_operation->canRead();
+    return $this->_canRead;
+  }
+
+  function canEdit() {
+    $this->loadRefOperation();
+    $this->_canEdit = $this->_ref_operation->canEdit();
+    return $this->_canEdit;
   }
 }
 
