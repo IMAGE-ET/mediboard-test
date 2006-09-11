@@ -136,7 +136,7 @@ class CDoObjectAddEdit {
 
     $fields = array();
     foreach (get_object_vars($this->_obj) as $propName => $propValue) {
-      if ($propName[0] != "_") {
+      if ($propName[0] != "_" && $propValue !== null) {
         $propValueBefore = $this->_objBefore->$propName;
         if ($propValueBefore != $propValue) {
           $fields[] = $propName;
