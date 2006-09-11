@@ -15,7 +15,7 @@ require_once($AppUI->getModuleClass("dPfiles", "filescategory"));
 $file_id = mbGetValueFromGet("file_id", 0);
 $sfn = mbGetValueFromGet("sfn", 0);
 $popup = mbGetValueFromGet("popup", 0);
-$navig = mbGetValueFromGet("navig", null);
+$nonavig = mbGetValueFromGet("nonavig", null);
 
 $largeur = null;
 $hauteur = null;
@@ -37,6 +37,7 @@ if(!$acces_denied){
   }
 }
 //navigation par pages (PDF)
+$arrNumPages = array();
 if($file->_nb_pages){
   if($sfn>$file->_nb_pages || $sfn<0){$sfn = 0;}
   if($sfn!=0){
@@ -45,19 +46,23 @@ if($file->_nb_pages){
   if($sfn<($file->_nb_pages-1)){
     $page_next = $sfn + 1;
   }
-  $pageEnCours = "Page ".($sfn+1)." / $file->_nb_pages";
+  for($i=1;$i<=$file->_nb_pages;$i++){
+    $arrNumPages[] = $i;
+  }
 }
+
+
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
+$smarty->assign("arrNumPages"     , $arrNumPages);
 $smarty->assign("file_id"         , $file_id     );
 $smarty->assign("file"            , $file        );
 $smarty->assign("page_prev"       , $page_prev   );
 $smarty->assign("page_next"       , $page_next   );
 $smarty->assign("sfn"             , $sfn         );
-$smarty->assign("pageEnCours"     , $pageEnCours );
 $smarty->assign("includeInfosFile", $includeInfosFile);    
 
 if($popup==1){
@@ -88,6 +93,7 @@ if($popup==1){
     $listCat = new CFilesCategory;
     $listCat->load($file->file_category_id);
     
+    $smarty->assign("nonavig"  , $nonavig);
     $smarty->assign("filePrev" , $filePrev);
     $smarty->assign("fileNext" , $fileNext);
     $smarty->assign("listCat"  , $listCat);

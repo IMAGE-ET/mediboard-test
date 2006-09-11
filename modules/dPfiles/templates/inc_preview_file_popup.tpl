@@ -1,9 +1,16 @@
 {{assign var="href" value="?m=dPfiles&amp;a=preview_files&amp;popup=1&amp;dialog=1"}}
+<script language="Javascript" type="text/javascript">
+
+function goToPage(numpage){
+  window.location.href = "?m=dPfiles&a=preview_files&popup=1&dialog=1&file_id={{$file->file_id}}&nonavig={{$nonavig}}&sfn=" + numpage;
+}
+
+</script>
 <table class="form">
   <tr>
     <td style="width: 20%">
-    {{if $filePrev}}
-    <a class="button" href="{{$href}}&amp;file_id={{$filePrev}}&amp;navig=1">
+    {{if $filePrev && !$nonavig}}
+    <a class="button" href="{{$href}}&amp;file_id={{$filePrev}}">
       <img align="top" src="modules/{{$m}}/images/prev.png" alt="Fichier précédent" />
       Fichier précédent
     </a>
@@ -18,8 +25,8 @@
      {{/if}}
     </td>
     <th style="width:20%">
-    {{if $fileNext}}
-    <a class="button" href="{{$href}}&amp;file_id={{$fileNext}}&amp;navig=1">
+    {{if $fileNext && !$nonavig}}
+    <a class="button" href="{{$href}}&amp;file_id={{$fileNext}}">
       Fichier suivant <img align="top" src="modules/{{$m}}/images/next.png" alt="Fichier suivant" />
     </a>
     {{/if}}
@@ -30,14 +37,25 @@
       {{if $file->file_id}}
         {{if $file->_nb_pages}}
             {{if $page_prev !== null}}
-            <a class="button" href="{{$href}}&amp;file_id={{$file->file_id}}&amp;navig=1&amp;sfn={{$page_prev}}">
+            <a class="button" href="{{$href}}&amp;file_id={{$file->file_id}}&amp;nonavig={{$nonavig}}&amp;sfn={{$page_prev}}">
               <img align="top" src="modules/{{$m}}/images/prev.png" alt="Page précédente" />
               Page précédente
             </a>
             {{/if}}
-            {{$pageEnCours}}
+            {{if $file->_nb_pages && $file->_nb_pages>=2}}
+              <select name="_num_page" onchange="javascript:goToPage(this.value);">
+              {{foreach from=$arrNumPages item=currPage}}
+              <option value="{{$currPage-1}}" {{if $currPage-1==$sfn}}selected="selected" {{/if}}>
+                Page {{$currPage}} / {{$file->_nb_pages}}
+              </option>
+              {{/foreach}}
+              </select>
+            {{elseif $file->_nb_pages}}
+            Page {{$sfn+1}} / {{$file->_nb_pages}}
+            {{/if}}
+
             {{if $page_next}}
-            <a class="button" href="{{$href}}&amp;file_id={{$file->file_id}}&amp;navig=1&amp;sfn={{$page_next}}">
+            <a class="button" href="{{$href}}&amp;file_id={{$file->file_id}}&amp;nonavig={{$nonavig}}&amp;sfn={{$page_next}}">
               Page suivante 
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Page suivante" />
             </a>
