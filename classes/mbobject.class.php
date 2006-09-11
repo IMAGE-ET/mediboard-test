@@ -66,11 +66,13 @@ class CMbObject {
    */
 
   function canRead($withRefs = true) {
-    return true;
+    $this->_canRead = true;
+    return $this->_canRead;
   }
   
   function canEdit($withRefs = true) {
-    return true;
+    $this->_canEdit = true;
+    return $this->_canEdit;
   }
   
   /**
