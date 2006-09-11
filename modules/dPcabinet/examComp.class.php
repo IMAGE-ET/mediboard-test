@@ -29,7 +29,7 @@ class CExamComp extends CMbObject {
 
     $this->_props["exam_id"]         = "ref|notNull";
     $this->_props["consultation_id"] = "ref|notNull";
-    $this->_props["examen"]          = "str";
+    $this->_props["examen"]          = "text";
     $this->_props["fait"]            = "num|minMax|0|1";
   }
   

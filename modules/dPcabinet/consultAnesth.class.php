@@ -95,8 +95,8 @@ class CConsultAnesth extends CMbObject {
     $this->_props["rhesus"]          = "enum|?|-|+";
     $this->_props["antecedents"]     = "str|confidential";
     $this->_props["traitements"]     = "str|confidential";
-    $this->_props["tabac"]           = "str";
-    $this->_props["oenolisme"]       = "str";
+    $this->_props["tabac"]           = "text";
+    $this->_props["oenolisme"]       = "text";
     $this->_props["transfusions"]    = "enum|?|-|+";
     $this->_props["tasys"]           = "num";
     $this->_props["tadias"]          = "num";
@@ -116,7 +116,7 @@ class CConsultAnesth extends CMbObject {
     $this->_props["tsivy"]           = "time";
     $this->_props["plaquettes"]      = "num|pos";
     $this->_props["ecbu"]            = "enum|?|NEG|POS";
-    $this->_props["ecbu_detail"]     = "str";
+    $this->_props["ecbu_detail"]     = "text";
     $this->_props["pouls"]           = "num|pos";
     $this->_props["spo2"]            = "currency|min|0";
     $this->_props["ht"]              = "currency|minMax|0|100";
@@ -125,8 +125,8 @@ class CConsultAnesth extends CMbObject {
     $this->_props["mallampati"]      = "enum|classe1|classe2|classe3|classe4";
     $this->_props["bouche"]          = "enum|m20|m35|p35";
     $this->_props["distThyro"]       = "enum|m65|p65";
-    $this->_props["etatBucco"]       = "str";
-    $this->_props["conclusion"]      = "str";
+    $this->_props["etatBucco"]       = "text";
+    $this->_props["conclusion"]      = "text";
     $this->_props["position"]        = "enum|DD|DV|DL|GP|AS|TO|GYN";
     
     $this->buildEnums();

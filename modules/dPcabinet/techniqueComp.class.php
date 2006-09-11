@@ -28,7 +28,7 @@ class CTechniqueComp extends CMbObject {
 
     $this->_props["technique_id"]           = "ref|notNull";
     $this->_props["consultation_anesth_id"] = "ref|notNull";
-    $this->_props["technique"]              = "str";
+    $this->_props["technique"]              = "text";
   }
   
   function loadRefsFwd() {
