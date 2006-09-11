@@ -71,11 +71,11 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
   f.chir_id.value = chirid;
 }
 
-{{if $plagesConsult && $plagesConsult->plageconsult_id && !$consult->consultation_id}}
+{{if $plageConsult->plageconsult_id && !$consult->consultation_id}}
 function pageMain() {
   var oForm = document.editFrm;
-  oForm.plageconsult_id.value = {{$plagesConsult->plageconsult_id}};
-  oForm.chir_id.value = {{$plagesConsult->chir_id}};
+  oForm.plageconsult_id.value = {{$plageConsult->plageconsult_id}};
+  oForm.chir_id.value = {{$plageConsult->chir_id}};
   popRDV();
 }
 {{/if}}

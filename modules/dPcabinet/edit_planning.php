@@ -19,6 +19,7 @@ if (!$canEdit) {
 $consult = new CConsultation();
 $chir = new CMediusers;
 $pat = new CPatient;
+$plageConsult = new CPlageconsult();
 
 //Chargement des aides
 $consult->loadAides($AppUI->user_id);
@@ -36,19 +37,18 @@ $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
 $consultation_id = mbGetValueFromGetOrSession("consultation_id");
 $plageconsult_id = mbGetValueFromGet("plageconsult_id", null);
 
-if (!$consultation_id) {
+if(!$consultation_id) {
   // A t'on fourni une plage de consultation
   if($plageconsult_id){
-    $plagesConsult = new CPlageconsult();
-    $plagesConsult->load($plageconsult_id);    
-  }else{
+    $plageConsult->load($plageconsult_id);    
+  } else {
     // A t'on fourni l'id du praticien
-    if ($chir_id = mbGetValueFromGetOrSession("chir_id")) {
+    if($chir_id = mbGetValueFromGetOrSession("chir_id")) {
       $chir->load($chir_id);
     }
 
     // A t'on fourni l'id du patient
-    if ($pat_id = mbGetValueFromGet("pat_id")) {
+    if($pat_id = mbGetValueFromGet("pat_id")) {
       $pat->load($pat_id);
     }
   }
@@ -64,9 +64,7 @@ if (!$consultation_id) {
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-if($plageconsult_id && !$consultation_id){
-  $smarty->assign("plagesConsult"     , $plagesConsult     );
-}
+$smarty->assign("plageConsult"     , $plageConsult     );
 $smarty->assign("consult"           , $consult           );
 $smarty->assign("chir"              , $chir              );
 $smarty->assign("pat"               , $pat               );
