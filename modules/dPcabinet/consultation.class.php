@@ -207,8 +207,7 @@ class CConsultation extends CMbObject {
     $where = array();
     $this->loadRefConsultAnesth();
     if($this->_ref_consult_anesth->consultation_anesth_id) {
-      $where[] = "`type` = 'consultation' OR `type` = 'consultAnesth'";
-      $where[] = "`object_id` = '$this->consultation_id' OR `object_id` = '".$this->_ref_consult_anesth->consultation_anesth_id."'";
+    	$where[] = "(`type` = 'consultation' && `object_id` = '$this->consultation_id') || (`type` = 'consultAnesth' && `object_id` = '".$this->_ref_consult_anesth->consultation_anesth_id."')";
     } else {
       $where["type"] = "= 'consultation'";
       $where["object_id"] = "= '$this->consultation_id'";
