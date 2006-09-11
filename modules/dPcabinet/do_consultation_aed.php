@@ -27,7 +27,7 @@ if (intval(mbGetValueFromPost("del"))) {
   $where = array();
   $where["consultation_id"] = "= '".$do->_obj->consultation_id."'";
   $consultAnesth->loadObject($where);
-  if($do->_obj->canDelete() && $consultAnesth->consultation_anesth_id) {
+  if($do->_obj->canDelete($msg) && $consultAnesth->consultation_anesth_id) {
     if($consultAnesth->delete()) {
       $do->doDelete();
     } else {
