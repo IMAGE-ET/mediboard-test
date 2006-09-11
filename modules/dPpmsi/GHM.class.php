@@ -115,6 +115,7 @@ class CGHM  extends CMbObject {
   }
   
   function loadRefsFwd() {
+    $this->loadRefSejour();
     $this->_ref_sejour->loadRefs();
     $this->_ref_actes_ccam = array();
     foreach($this->_ref_sejour->_ref_operations as $keyOp => $op) {
