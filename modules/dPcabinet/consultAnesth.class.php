@@ -233,7 +233,7 @@ class CConsultAnesth extends CMbObject {
     // Backward references    
     $this->_ref_techniques = new CTechniqueComp;
     $where = array();
-    $where["consultAnesth_id"] = "= '$this->consultation_anesth_id'";
+    $where["consultation_anesth_id"] = "= '$this->consultation_anesth_id'";
     $order = "technique";
     $this->_ref_techniques = $this->_ref_techniques->loadList($where,$order);
   }
