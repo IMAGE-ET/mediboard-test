@@ -49,7 +49,7 @@ function reloadListTech() {
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_technique_aed" />
-      <input type="hidden" name="consultAnesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
+      <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
       <label for="technique" title="Ajouter une technique complementaire">Technique Complémentaire</label>
       <select name="_helpers_technique" size="1" onchange="pasteHelperContent(this)">
         <option value="0">&mdash; Choisir une aide</option>
