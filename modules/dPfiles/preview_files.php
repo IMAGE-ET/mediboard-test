@@ -28,7 +28,8 @@ $includeInfosFile = null;
 $file = new CFile;
 $file->load($file_id);
 $file->loadRefsFwd();
-$acces_denied = (!isMbAllowed(PERM_READ, "mediusers", $file->_ref_file_owner->function_id));
+
+$acces_denied = $file->canRead();
 $file->loadNbPages();
 if(!$acces_denied){
   if($file->file_type == "text/plain" && file_exists($file->_file_path)){
@@ -50,8 +51,6 @@ if($file->_nb_pages){
     $arrNumPages[] = $i;
   }
 }
-
-
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));

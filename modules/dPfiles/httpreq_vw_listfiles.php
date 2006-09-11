@@ -13,9 +13,11 @@ require_once($AppUI->getModuleClass("mediusers"));
 require_once($AppUI->getModuleClass("dPfiles", "filescategory"));
 require_once($AppUI->getModuleClass("dPfiles", "files"        ));
 
-if (!$canEdit) {
+if (!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
 }
+
+$canEditFiles = isMbModuleEditAll("dPfiles");
 
 $cat_id   = mbGetValueFromGetOrSession("cat_id"  , 0);
 $selClass = mbGetValueFromGetOrSession("selClass", null);
@@ -64,14 +66,15 @@ if($selClass && $selKey){
   $smarty->assign("affichageFile",$affichageFile);
 }
 
-$smarty->assign("reloadlist"  , $reloadlist  );
+$smarty->assign("canEditFiles"   , $canEditFiles);
+$smarty->assign("reloadlist"     , $reloadlist  );
 $smarty->assign("accordion_open" , $accordion_open);
-$smarty->assign("cat_id"      , $cat_id      ); 
-$smarty->assign("listCategory", $listCategory);
-$smarty->assign("selClass"    , $selClass    );
-$smarty->assign("selKey"      , $selKey      );
-$smarty->assign("object"      , $object      );
-$smarty->assign("typeVue"     , $typeVue     );
+$smarty->assign("cat_id"         , $cat_id      ); 
+$smarty->assign("listCategory"   , $listCategory);
+$smarty->assign("selClass"       , $selClass    );
+$smarty->assign("selKey"         , $selKey      );
+$smarty->assign("object"         , $object      );
+$smarty->assign("typeVue"        , $typeVue     );
 if($typeVue==1){
   $smarty->display("inc_list_view_colonne.tpl");
 }elseif($typeVue==2){

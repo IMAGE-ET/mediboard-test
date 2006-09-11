@@ -6,6 +6,7 @@
     </div>
     <div id="Acc{{$keyCat}}Content" class="accordionTabContentBox">
       <table class="tbl">
+        {{if $canEditFiles}}
         <tr>
           <td colspan="2">
             <form name="uploadFrm{{$keyCat}}" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
@@ -21,6 +22,7 @@
             </form>
           </td>
         </tr>
+        {{/if}}
         {{foreach from=$curr_listCat.file item=curr_file}}
         <tr>
           <td class="{{cycle name=cellicon values="dark, light"}}">
@@ -32,6 +34,7 @@
             <strong>{{$curr_file->_view}}</strong>
             <br />Date : {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
             <hr />
+            {{if $canEditFiles}}
             <form name="editFile{{$curr_file->file_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPfiles" />
               <input type="hidden" name="dosql" value="do_file_aed" />
@@ -49,6 +52,7 @@
                 Supprimer
               </button>
             </form>
+            {{/if}}
           </td>
         </tr>
       {{foreachelse}}

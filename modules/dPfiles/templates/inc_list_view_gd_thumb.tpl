@@ -6,6 +6,7 @@
     </div>
     <div id="Acc{{$keyCat}}Content"  class="accordionTabContentBox">
       <table class="tbl">
+        {{if $canEditFiles}}
         <tr>
           <td colspan="9">
             <form name="uploadFrm{{$keyCat}}" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
@@ -22,8 +23,9 @@
             </form>
           </td>
         </tr>
-      {{counter start=0 skip=1 assign=curr_data}}
-      {{foreach from=$curr_listCat.file item=curr_file}}
+        {{/if}}
+        {{counter start=0 skip=1 assign=curr_data}}
+        {{foreach from=$curr_listCat.file item=curr_file}}
         {{if $curr_data is div by 2 || $curr_data==0}}
         <tr>
         {{/if}}
@@ -39,6 +41,7 @@
             le {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
           </a>
           <br />
+          {{if $canEditFiles}}
           Déplacer vers <select name="file_category_id" onchange="submitFileChangt(this.form)">
             <option value="" {{if $curr_file->file_category_id == ""}}selected="selected"{{/if}}>&mdash; Aucune</option>
             {{foreach from=$listCategory item=curr_cat}}
@@ -50,19 +53,20 @@
           <button type="button" class="trash" onclick="file_deleted={{$curr_file->file_id}};confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
             Supprimer ce fichier
           </button>
+          {{/if}}
           </form>
         </td>
         {{if ($curr_data+1) is div by 2}}
         </tr>
         {{/if}}
         {{counter}}
-      {{foreachelse}}
-      <tr>
-        <td colspan="2" class="button">
-          Pas de documents            
-        </td>
-      </tr>
-      {{/foreach}}
+        {{foreachelse}}
+        <tr>
+          <td colspan="2" class="button">
+            Pas de documents            
+          </td>
+        </tr>
+        {{/foreach}}
       </table>
     </div>
   </div>

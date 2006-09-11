@@ -17,6 +17,8 @@ if (!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
 }
 
+$canEditFiles = isMbModuleEditAll("dPfiles");
+
 $cat_id   = mbGetValueFromGetOrSession("cat_id"  , 0);
 $selClass = mbGetValueFromGetOrSession("selClass", null);
 $keywords = mbGetValueFromGetOrSession("keywords", null);
@@ -60,12 +62,17 @@ if($selClass && $selKey){
     $affichageFile[$keyCat]["name"] = $curr_Cat->nom;
     $affichageFile[$keyCat]["file"] = array();
   }
-  foreach($object->_ref_files as $keyFile =>$FileData){
-    $affichageFile[$FileData->file_category_id]["file"][]=$FileData;
+  foreach($object->_ref_files as $keyFile =>$FileData) {
+    $object->_ref_files[$keyFile]->canRead();
+    $object->_ref_files[$keyFile]->canEdit();
+    if($object->_ref_files[$keyFile]->_canRead) {
+      $affichageFile[$FileData->file_category_id]["file"][] =& $object->_ref_files[$keyFile];
+    }
   }
   $smarty->assign("affichageFile",$affichageFile);
 }
 
+$smarty->assign("canEditFiles"   , $canEditFiles);
 $smarty->assign("accordion_open" , $accordion_open);
 $smarty->assign("cat_id"         , $cat_id      );
 $smarty->assign("listCategory"   , $listCategory);

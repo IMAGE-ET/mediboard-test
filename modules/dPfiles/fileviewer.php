@@ -56,14 +56,14 @@ if ($file_path) {
 
 require_once($AppUI->getModuleClass("dPfiles", "files"));
 
-if ($file_id = mbGetValueFromGet("file_id")) {
+if($file_id = mbGetValueFromGet("file_id")) {
   $file = new CFile();
   $file->load($file_id);
   $file->loadRefsFwd();
-  if (!is_file($file->_file_path)) {
+  if(!is_file($file->_file_path)) {
     header("Location: modules/dPfiles/images/notfound.png");
     return;
-  }elseif(!isMbAllowed(PERM_READ, "mediusers", $file->_ref_file_owner->function_id)){
+  } elseif(!$file->canRead()) {
     header("Location: modules/dPfiles/images/accessdenied.png");
     return;
   }

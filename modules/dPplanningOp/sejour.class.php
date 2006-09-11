@@ -255,6 +255,7 @@ class CSejour extends CMbObject {
       $this->loadRefEtablisemment();
     }
     $this->_canEdit = $this->_ref_group->canEdit() && $this->_ref_praticien->canEdit();
+    $this->_canEdit = $this->_canEdit && isMbModuleEditAll("dPplanningOp");
     return $this->_canEdit;
   }
   

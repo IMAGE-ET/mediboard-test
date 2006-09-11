@@ -56,6 +56,7 @@ function pageMain() {
             Identité
           </th>
           <th class="category" colspan="2">
+            {{if $patient->_canEdit}}
             <button type="button" style="float:right;" onclick="setObject( {
               class: 'CPatient', 
               keywords: '', 
@@ -64,6 +65,7 @@ function pageMain() {
               {{$patient->_ref_files|@count}} fichier(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
             </button>
+            {{/if}}
             Coordonnées
           </th>
         </tr>
@@ -191,6 +193,7 @@ function pageMain() {
         {{foreach from=$patient->_ref_sejours item=curr_sejour}}
         <tr>
           <td colspan="4">
+            {{if $curr_sejour->_canEdit}}
             <button type="button" style="float:right;" onclick="setObject( {
               class: 'CSejour', 
               keywords: '', 
@@ -199,6 +202,7 @@ function pageMain() {
               {{$curr_sejour->_ref_files|@count}} fichier(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
             </button>
+            {{/if}}
             {{$curr_sejour->_view}}
           </td>
         </tr>
@@ -206,6 +210,7 @@ function pageMain() {
         <tr>
           <td colspan="4">
             <ul><li>
+            {{if $curr_op->_canEdit}}
             <button type="button" style="float:right;" onclick="setObject( {
               class: 'COperation', 
               keywords: '', 
@@ -214,6 +219,7 @@ function pageMain() {
               {{$curr_op->_ref_files|@count}} fichier(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
             </button>
+            {{/if}}
             {{$curr_op->_view}}
             </li></ul>
           </td>
@@ -226,6 +232,7 @@ function pageMain() {
         {{foreach from=$patient->_ref_consultations item=curr_consult}}
         <tr>
           <td colspan="4">
+            {{if $curr_consult->_canEdit}}
             <button type="button" style="float:right;" onclick="setObject( {
               class: 'CConsultation', 
               keywords: '', 
@@ -234,6 +241,7 @@ function pageMain() {
               {{$curr_consult->_ref_files|@count}} fichier(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
             </button>
+            {{/if}}
             {{$curr_consult->_view}}
           </td>
         </tr>
