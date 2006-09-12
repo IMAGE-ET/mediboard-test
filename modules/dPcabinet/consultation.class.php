@@ -307,13 +307,13 @@ class CConsultation extends CMbObject {
       $msg = "Imposible de supprimer une consultation passée";
       return false;
     }
-    
+    /*
     $tables[] = array (
       "label"     => "consultation(s) d'anesthésie", 
       "name"      => "consultation_anesth", 
       "idfield"   => "consultation_anesth_id", 
       "joinfield" => "consultation_id"
-    );
+    );*/
     $tables[] = array (
       "label"     => "fichier(s)", 
       "name"      => "files_mediboard", 
@@ -326,9 +326,21 @@ class CConsultation extends CMbObject {
       "name"      => "compte_rendu", 
       "idfield"   => "compte_rendu_id", 
       "joinfield" => "object_id",
-      "joinon"    => "(`type` = 'consultation' OR `type` = 'consultAnesth')"
+      "joinon"    => "`type` = 'consultation'"
     );
-    return parent::canDelete( $msg, $oid, $tables );
+    return parent::canDelete($msg, $oid, $tables);
+  }
+  
+  function delete() {
+    $msg1 = null;
+    $msg2 = null;
+    $this->loadRefConsultAnesth();
+    if($this->_ref_consult_anesth->canDelete($msg1) && $this->canDelete($msg2)) {
+      $this->_ref_consult_anesth->delete();
+      parent::delete();
+    } else {
+      return $msg1." et ".$msg2;
+    }
   }
 }
 

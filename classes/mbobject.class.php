@@ -368,7 +368,7 @@ class CMbObject {
       return db_error();
     } else {
       $this->$k = null;
-      return NULL;
+      return null;
     }
   }
   
