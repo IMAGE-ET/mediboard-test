@@ -72,8 +72,20 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
 }
 
 function annuleConsult(oForm, etat) {
+  if(etat) {
+    if(confirm("Voulez-vous vraiment annuler cette consultation ?")) {
+      oForm.chrono.value = {{$smarty.const.CC_TERMINE}};
+    } else {
+      return;
+    }
+  } else {
+    if(confirm("Voulez-vous vraiment rétablir cette consultation ?")) {
+      oForm.chrono.value = {{$smarty.const.CC_PLANIFIE}};
+    } else {
+      return;
+    }
+  }
   oForm.annule.value = etat;
-  oForm.chrono.value = {{$smarty.const.CC_TERMINE}};
   if(checkForm(oForm)) {
     oForm.submit();
   }
