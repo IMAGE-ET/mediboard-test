@@ -185,9 +185,6 @@ function submitFdr(oForm) {
       {{/foreach}}
     </table>
     
-    {{if $_is_anesth && !$consult->_ref_consult_anesth->consultation_anesth_id}}
-    Pour afficher les modèles d'anesthésie, veuillez séléctionner une opération
-    {{/if}}
     <form name="newDocumentFrm" action="?m={{$m}}" method="post">
     <table class="form">
       <tr>
