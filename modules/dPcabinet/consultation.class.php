@@ -339,7 +339,13 @@ class CConsultation extends CMbObject {
       $this->_ref_consult_anesth->delete();
       return parent::delete();
     } else {
-      return $msg1." et ".$msg2;
+      if($msg1 && $msg2) {
+        return $msg1." et ".$msg2;
+      } elseif($msg1) {
+        return $msg1;
+      } else {
+        return $msg2;
+      }
     }
   }
 }
