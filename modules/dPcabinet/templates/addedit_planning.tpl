@@ -62,13 +62,21 @@ function popRDV() {
 }
 
 function setRDV(heure, id, date, freq, chirid, chirname ) {
-  var f = document.editFrm;
-  f.plageconsult_id.value = id;
-  f.plageconsult_id.onchange();
-  f._date.value = date;
-  f.heure.value = heure;
-  f.duree.value = freq;
-  f.chir_id.value = chirid;
+  var oForm = document.editFrm;
+  oForm.plageconsult_id.value = id;
+  oForm.plageconsult_id.onchange();
+  oForm._date.value = date;
+  oForm.heure.value = heure;
+  oForm.duree.value = freq;
+  oForm.chir_id.value = chirid;
+}
+
+function annuleConsult(oForm, etat) {
+  oForm.annule.value = etat;
+  oForm.chrono.value = {{$smarty.const.CC_TERMINE}};
+  if(checkForm(oForm)) {
+    oForm.submit();
+  }
 }
 
 {{if $plageConsult->plageconsult_id && !$consult->consultation_id}}
@@ -87,11 +95,11 @@ function pageMain() {
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
 <input type="hidden" name="compte_rendu" value="{{$consult->compte_rendu|escape:"html"}}" />
-<input type="hidden" name="annule" value="0" />
+<input type="hidden" name="annule" value="{{$consult->annule}}" />
 <input type="hidden" name="arrivee" value="" />
 <input type="hidden" name="chrono" value="{{$smarty.const.CC_PLANIFIE}}" />
 
-<table class="main" style="margin: 4px; border-spacing: 0px;">
+<table class="form">
   {{if $consult->consultation_id}}
   <tr>
     <td><a class="buttonnew" href="?m={{$m}}&amp;consultation_id=0">Créer une nouvelle consultation</a></td>
@@ -109,6 +117,13 @@ function pageMain() {
       <th class="title" colspan="5">Création d'une consultation</th>
     {{/if}}
   </tr>
+  {{if $consult->annule == 1}}
+  <tr>
+    <th class="category" colspan="3" style="background: #f00;">
+    CONSULTATION ANNULEE
+    </th>
+  </tr>
+  {{/if}}
   <tr>
     <td>
   
@@ -238,6 +253,11 @@ function pageMain() {
           <td class="button">
           {{if $consult->consultation_id}}
             <button class="modify" type="submit">Modifier</button>
+            {{if $consult->annule}}
+            <button class="change" type="button" onclick="annuleConsult(this.form, 0)">Retablir</button>
+            {{else}}
+            <button class="cancel" type="button" onclick="annuleConsult(this.form, 1)">Annuler</button>
+            {{/if}}
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la consultation de',objName:'{{$consult->_ref_patient->_view|escape:javascript}}'})">
               Supprimer
             </button>
