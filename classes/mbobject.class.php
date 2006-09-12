@@ -362,7 +362,6 @@ class CMbObject {
     if (!$this->canDelete($msg)) {
       return $msg;
     }
-
     $sql = "DELETE FROM $this->_tbl WHERE $this->_tbl_key = '".$this->$k."'";
     if (!db_exec($sql)) {
       return db_error();
