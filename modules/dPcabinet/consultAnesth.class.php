@@ -274,6 +274,23 @@ class CConsultAnesth extends CMbObject {
     $template->addProperty("Anesthésie - Groupe Sanguin" , $this->groupe." ".$this->rhesus);
     $template->addProperty("Anesthésie - ASA"            , $this->ASA);
   }
+  
+  function canDelete(&$msg, $oid = null) {
+    $tables[] = array (
+      "label"     => "document(s)", 
+      "name"      => "compte_rendu", 
+      "idfield"   => "compte_rendu_id", 
+      "joinfield" => "object_id",
+      "joinon"    => "(`type` = 'consultAnesth')"
+    );
+    $tables[] = array (
+      "label"     => "Technique(s) Complémentaire(s)", 
+      "name"      => "techniques_anesth", 
+      "idfield"   => "technique_id", 
+      "joinfield" => "consultation_anesth_id"
+    );
+    return parent::canDelete( $msg, $oid, $tables );
+  }
 }
 
 ?>
