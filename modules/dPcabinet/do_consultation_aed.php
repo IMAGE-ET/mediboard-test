@@ -24,6 +24,10 @@ $do->deleteMsg = "Consultation supprimée";
 $do->doBind();
 if (intval(mbGetValueFromPost("del"))) {
     $do->doDelete();
+    if(!$do->_obj->consultation_id){
+      $selConsult = null;
+      mbSetValueToSession("selConsult");
+    }
 } else {
   $do->doStore();
   if(isset($_POST["_dialog"]))
