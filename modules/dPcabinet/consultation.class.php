@@ -335,7 +335,13 @@ class CConsultation extends CMbObject {
     $msg1 = null;
     $msg2 = null;
     $this->loadRefConsultAnesth();
-    if($this->canDelete($msg1) && $this->_ref_consult_anesth->canDelete($msg2)) {
+    $test1 = $this->canDelete($msg1);
+    if($this->_ref_consult_anesth->consultation_anesth_id) {
+      $test2 = $this->_ref_consult_anesth->canDelete($msg2);
+    } else {
+      $test2 = true;
+    }
+    if($test1 && $test2) {
       $this->_ref_consult_anesth->delete();
       return parent::delete();
     } else {
