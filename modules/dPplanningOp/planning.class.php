@@ -182,13 +182,6 @@ class COperation extends CMbObject {
       "idfield"   => "acte_id", 
       "joinfield" => "operation_id"
     );
-
-    $tables[] = array (
-      "label"     => "affectation(s) d'hospitalisation", 
-      "name"      => "affectation", 
-      "idfield"   => "affectation_id", 
-      "joinfield" => "operation_id"
-    );
     $tables[] = array (
       "label" => "document(s)", 
       "name" => "compte_rendu", 
