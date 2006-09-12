@@ -349,7 +349,7 @@ function pageMain() {
             <a class="action" href="javascript:putArrivee(document.etatFrm{{$curr_consult->consultation_id}})">
               <img src="modules/{{$m}}/images/check.png" title="Notifier l'arrivée du patient" alt="arrivee" />
             </a>
-            <a class="action" href="javascript:document.cancelFrm{{$curr_consult->consultation_id}}.submit()">
+            <a class="action" href="javascript:if(confirm('Voulez-vous vraiment annuler cette consultation ?')) {document.cancelFrm{{$curr_consult->consultation_id}}.submit()}">
               <img src="modules/{{$m}}/images/cancel.png" title="Annuler ce rendez-vous" alt="annuler" />
             </a>
             {{/if}}
