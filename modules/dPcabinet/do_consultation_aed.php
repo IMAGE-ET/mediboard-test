@@ -23,21 +23,7 @@ $do->modifyMsg = "Consultation modifiée";
 $do->deleteMsg = "Consultation supprimée";
 $do->doBind();
 if (intval(mbGetValueFromPost("del"))) {
-  $consultAnesth = new CConsultAnesth;
-  $where = array();
-  $where["consultation_id"] = "= '".$do->_obj->consultation_id."'";
-  $consultAnesth->loadObject($where);
-  if($do->_obj->canDelete($msg) && $consultAnesth->consultation_anesth_id) {
-    if($consultAnesth->delete()) {
-      $do->doDelete();
-    } else {
-      $AppUI->setMsg("Impossible de supprimer la consultation d'anesthésie associée", UI_MSG_ERROR );
-      $do->doRedirect();
-    }
-  } else {
     $do->doDelete();
-  }
-
 } else {
   $do->doStore();
   if(isset($_POST["_dialog"]))
