@@ -319,7 +319,7 @@ class CConsultation extends CMbObject {
       "name"      => "files_mediboard", 
       "idfield"   => "file_id", 
       "joinfield" => "file_object_id",
-      "joinon"    => "`file_class`='CConsultation'"
+      "joinon"    => "`file_class` = 'CConsultation'"
     );
     $tables[] = array (
       "label"     => "document(s)", 
@@ -339,13 +339,7 @@ class CConsultation extends CMbObject {
       $this->_ref_consult_anesth->delete();
       return parent::delete();
     } else {
-      if($msg1 && $msg2) {
-        return $msg1." et ".$msg2;
-      } elseif($msg1) {
-        return $msg1;
-      } else {
-        return $msg2;
-      }
+      return $msg1." ".$msg2;
     }
   }
 }
