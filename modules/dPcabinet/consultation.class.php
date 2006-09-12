@@ -349,6 +349,7 @@ class CConsultation extends CMbObject {
         return $msg1;
       } else {
         return $msg2;
+      }
     }
   }
 }
