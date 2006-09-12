@@ -29,7 +29,7 @@ $file = new CFile;
 $file->load($file_id);
 $file->loadRefsFwd();
 
-$acces_denied = $file->canRead();
+$acces_denied = !$file->canRead();
 $file->loadNbPages();
 if(!$acces_denied){
   if($file->file_type == "text/plain" && file_exists($file->_file_path)){
