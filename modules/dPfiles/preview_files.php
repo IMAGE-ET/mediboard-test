@@ -63,6 +63,7 @@ $smarty->assign("page_prev"       , $page_prev   );
 $smarty->assign("page_next"       , $page_next   );
 $smarty->assign("sfn"             , $sfn         );
 $smarty->assign("includeInfosFile", $includeInfosFile);    
+$smarty->assign("popup"           , $popup);
 
 if($popup==1){
     //Récupération de la liste des fichiers
