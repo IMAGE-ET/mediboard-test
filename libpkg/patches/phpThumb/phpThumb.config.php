@@ -37,12 +37,8 @@ $PHPTHUMB_CONFIG['document_root'] = realpath((getenv('DOCUMENT_ROOT') && ereg('^
 //$PHPTHUMB_CONFIG['cache_directory'] = $PHPTHUMB_CONFIG['document_root'].'/phpthumb/cache/'; // set the cache directory to an absolute directory for all source images
 //$PHPTHUMB_CONFIG['cache_directory'] = './cache/';                                           // set the cache directory relative to the source image - must start with '.' (will not work to cache URL- or database-sourced images, please use an absolute directory name)
 //$PHPTHUMB_CONFIG['cache_directory'] = null;                                                 // disable thumbnail caching (not recommended)
-if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
-  $PHPTHUMB_CONFIG['cache_directory'] = dirname(__FILE__).'/cache/'; // set the cache directory to an absolute directory for all source images
-} else {
-//  $PHPTHUMB_CONFIG['cache_directory'] = '/tmp/persistent/phpthumb/cache/';
-        $PHPTHUMB_CONFIG['cache_directory'] = $PHPTHUMB_CONFIG['mediboard_root'] . "/tmp/phpthumb/";
-}
+//$PHPTHUMB_CONFIG['cache_directory'] = '/tmp/persistent/phpthumb/cache/';
+$PHPTHUMB_CONFIG['cache_directory'] = $PHPTHUMB_CONFIG['mediboard_root'] . "/tmp/phpthumb/";
 
 require_once($PHPTHUMB_CONFIG['mediboard_root'] . "/classes/mbpath.class.php");
 CMbPath::forceDir($PHPTHUMB_CONFIG['cache_directory']);
