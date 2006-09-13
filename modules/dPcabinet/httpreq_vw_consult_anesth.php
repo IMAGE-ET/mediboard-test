@@ -10,6 +10,7 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
+require_once($AppUI->getModuleClass("dPplanningOp", "typeanesth"));
   
 if (!$canEdit) {
   $AppUI->redirect("m=system&a=access_denied");
@@ -42,7 +43,9 @@ if (isset($_GET["date"])) {
 }
 
 //Liste des types d'anesthésie
-$anesth = dPgetSysVal("AnesthType");
+$anesth = new CTypeAnesth;
+$orderanesth = "name";
+$anesth = $listAnesthType->loadList(null,$orderanesth);
 
 // Consultation courante
 $consult = new CConsultation();
