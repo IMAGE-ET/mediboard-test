@@ -29,7 +29,7 @@ function pageMain() {
       <form name="choosePrat" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <select name="selPrat" onchange="submit()">
-      <option value="0" {{if $selPrat == 0}}selected="selected"{{/if}}>&mdash; Selectionner un praticien &mdash;</option>
+      <option value="">&mdash; Selectionner un praticien &mdash;</option>
       {{foreach from=$listPrat item=curr_prat}}
         <option value="{{$curr_prat->user_id}}" {{if $selPrat == $curr_prat->user_id}}selected="selected"{{/if}}>
           {{$curr_prat->_view}}

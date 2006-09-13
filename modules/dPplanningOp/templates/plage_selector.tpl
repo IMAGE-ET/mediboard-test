@@ -42,11 +42,11 @@ function setClose(date) {
 
   <tr>
     <td rowspan="3">
-      <select name="list"  size="14">
-        <option value="0" selected="selected">&mdash; Choisir une date &mdash;</option>
+      <select name="list" size="14">
+        <option value="" selected="selected">&mdash; Choisir une date &mdash;</option>
         {{foreach from=$list item=curr_plage}}
         {{if $curr_plage.free_time < 0}}
-          <option value="0" ondblclick="setClose('{{$curr_plage.date|date_format:"%d/%m/%Y"}}')"
+          <option value="" ondblclick="setClose('{{$curr_plage.date|date_format:"%d/%m/%Y"}}')"
           onclick="document.frmSelector.fmtdate.value='{{$curr_plage.date|date_format:"%d/%m/%Y"}}'"
         {{else}}
           <option value="{{$curr_plage.plageop_id}}" ondblclick="setClose('{{$curr_plage.date|date_format:"%d/%m/%Y"}}')"

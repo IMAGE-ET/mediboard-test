@@ -77,25 +77,25 @@
               </tr>
               <tr>
                 <td class="button">
-                  {{if $selOp->fin_op}}
-                  Fin opération:
+                  {{if $selOp->sortie_bloc}}
+                  Sortie patient:
                   {{if $canEdit}}
-                  <input name="fin_op" size="5" type="text" value="{{$selOp->fin_op|date_format:"%H:%M"}}">
+                  <input name="sortie_bloc" size="5" type="text" value="{{$selOp->sortie_bloc|date_format:"%H:%M"}}">
                   <button class="tick notext" type="submit"></button>
                   {{else}}
-                  <select name="fin_op" onchange="this.form.submit()">
+                  <select name="sortie_bloc" onchange="this.form.submit()">
                     <option value="">-</option>
-                    {{foreach from=$timing.fin_op item=curr_time}}
-                    <option value="{{$curr_time}}" {{if $curr_time == $selOp->fin_op}}selected="selected"{{/if}}>
+                    {{foreach from=$timing.sortie_bloc item=curr_time}}
+                    <option value="{{$curr_time}}" {{if $curr_time == $selOp->sortie_bloc}}selected="selected"{{/if}}>
                       {{$curr_time|date_format:"%Hh%M"}}
                     </option>
                     {{/foreach}}
                   </select>
                   {{/if}}
-                  <button class="cancel notext" type="submit" onclick="this.form.fin_op.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.sortie_bloc.value = ''"></button>
                   {{else}}
-                  <input type="hidden" name="fin_op" value="" />
-                  <button class="submit" type="submit" onclick="this.form.fin_op.value = 'current'">fin intervention</button>
+                  <input type="hidden" name="sortie_bloc" value="" />
+                  <button class="submit" type="submit" onclick="this.form.sortie_bloc.value = 'current'">sortie patient</button>
                   {{/if}}
                 </td>
                 <td class="button">
@@ -121,25 +121,25 @@
                   {{/if}}
                 </td>
                 <td class="button">
-                  {{if $selOp->sortie_bloc}}
-                  Sortie patient:
+                  {{if $selOp->fin_op}}
+                  Fin opération:
                   {{if $canEdit}}
-                  <input name="sortie_bloc" size="5" type="text" value="{{$selOp->sortie_bloc|date_format:"%H:%M"}}">
+                  <input name="fin_op" size="5" type="text" value="{{$selOp->fin_op|date_format:"%H:%M"}}">
                   <button class="tick notext" type="submit"></button>
                   {{else}}
-                  <select name="sortie_bloc" onchange="this.form.submit()">
+                  <select name="fin_op" onchange="this.form.submit()">
                     <option value="">-</option>
-                    {{foreach from=$timing.sortie_bloc item=curr_time}}
-                    <option value="{{$curr_time}}" {{if $curr_time == $selOp->sortie_bloc}}selected="selected"{{/if}}>
+                    {{foreach from=$timing.fin_op item=curr_time}}
+                    <option value="{{$curr_time}}" {{if $curr_time == $selOp->fin_op}}selected="selected"{{/if}}>
                       {{$curr_time|date_format:"%Hh%M"}}
                     </option>
                     {{/foreach}}
                   </select>
                   {{/if}}
-                  <button class="cancel notext" type="submit" onclick="this.form.sortie_bloc.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.fin_op.value = ''"></button>
                   {{else}}
-                  <input type="hidden" name="sortie_bloc" value="" />
-                  <button class="submit" type="submit" onclick="this.form.sortie_bloc.value = 'current'">sortie patient</button>
+                  <input type="hidden" name="fin_op" value="" />
+                  <button class="submit" type="submit" onclick="this.form.fin_op.value = 'current'">fin intervention</button>
                   {{/if}}
                 </td>
               </tr>
@@ -155,7 +155,7 @@
             </select>
             par le Dr.
             <select name="anesth_id" onchange="submit()">
-              <option value="0">&mdash; Anesthésiste</option>
+              <option value="">&mdash; Anesthésiste</option>
               {{foreach from=$listAnesths item=curr_anesth}}
               <option value="{{$curr_anesth->user_id}}" {{if $selOp->_ref_anesth->user_id == $curr_anesth->user_id}} selected="selected" {{/if}}>
                 {{$curr_anesth->_view}}

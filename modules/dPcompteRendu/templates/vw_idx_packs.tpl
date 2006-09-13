@@ -107,7 +107,7 @@ function checkForm() {
       </th>
       <td>
         <select name="chir_id" title="{{$pack->_props.chir_id}}">
-          <option value="0">&mdash; Choisir un utilisateur</option>
+          <option value="">&mdash; Choisir un utilisateur</option>
           {{foreach from=$users item=curr_user}}
           <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $pack->chir_id}} selected="selected" {{/if}}>
             {{$curr_user->_view}}

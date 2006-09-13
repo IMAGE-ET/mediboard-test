@@ -48,7 +48,7 @@ function setClose(){
 <tr>
   <td colspan="2">
     <select name="list"  size="8">
-      <option value="0" selected="selected">&mdash; Choisir un praticien</option>
+      <option value="" selected="selected">&mdash; Choisir un praticien</option>
       {{foreach from=$prats item=curr_prat}}
       <option value="{{$curr_prat->user_id}}" ondblclick="setClose()">{{$curr_prat->_view}}</option>
       {{/foreach}}

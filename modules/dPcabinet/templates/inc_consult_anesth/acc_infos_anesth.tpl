@@ -52,7 +52,7 @@ function reloadListTech() {
       <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
       <label for="technique" title="Ajouter une technique complementaire">Technique Complémentaire</label>
       <select name="_helpers_technique" size="1" onchange="pasteHelperContent(this)">
-        <option value="0">&mdash; Choisir une aide</option>
+        <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$techniquesComp->_aides.technique}}
       </select><br />
       <textarea name="technique"></textarea>
@@ -73,7 +73,7 @@ function reloadListTech() {
       <input type="hidden" name="_check_premiere" value="{{$consult->_check_premiere}}" />
       <label for="rques" title="Remarques concernant la consultation">Remarques</label>
       <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
-        <option value="0">&mdash; Choisir une aide</option>
+        <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.rques}}
       </select><br />
       <textarea name="rques" rows="5">{{$consult->rques}}</textarea><br />

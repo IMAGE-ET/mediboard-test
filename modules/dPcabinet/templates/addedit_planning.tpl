@@ -171,7 +171,7 @@ function pageMain() {
           <th>
             <label for="motif" title="Motif de la consultation">Motif</label><br />
             <select name="_helpers_motif" size="1" onchange="pasteHelperContent(this)">
-              <option value="0">&mdash; Choisir une aide</option>
+              <option value="">&mdash; Choisir une aide</option>
               {{html_options options=$consult->_aides.motif}}
             </select>
           </th>
@@ -182,7 +182,7 @@ function pageMain() {
           <th>
             <label for="rques" title="Remarques de la consultation" >Remarques</label><br />
             <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
-              <option value="0">&mdash; Choisir une aide</option>
+              <option value="">&mdash; Choisir une aide</option>
               {{html_options options=$consult->_aides.rques}}
             </select>
           </th>

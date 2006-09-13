@@ -501,7 +501,7 @@ class CMbObject {
     }
 
     if(!in_array("xor", $specFragments) and !in_array("nand", $specFragments)){
-      if ($propValue == "") {
+      if ($propValue === null || $propValue === "") {
         return $notNull ? "Ne pas peut pas avoir une valeur nulle" : null;
       }
     }
@@ -514,7 +514,7 @@ class CMbObject {
 
         $propValue = intval($propValue);
         
-        if ($propValue == 0 and $notNull) {
+        if ($propValue === 0 and $notNull) {
           return "ne peut pas être une référence nulle";
         }
 

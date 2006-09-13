@@ -64,7 +64,7 @@ function pageMain() {
           <th><label for="chir" title="Praticien">Praticien</label></th>
           <td>
             <select name="chir">
-              <!-- <option value="0">&mdash; Tous &mdash;</option> -->
+              <!-- <option value="">&mdash; Tous &mdash;</option> -->
               {{foreach from=$listPrat item=curr_prat}}
               <option value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
               {{/foreach}}

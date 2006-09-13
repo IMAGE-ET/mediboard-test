@@ -128,7 +128,7 @@ function pageMain() {
           <th><label for="prat_id" title="Praticien. Optionnel">Praticien</label></th>
           <td>
             <select name="prat_id">
-              <option value="0">&mdash; Choix du praticien</option>
+              <option value="">&mdash; Choix du praticien</option>
               {{foreach from=$listPrat item=curr_prat}}
                 <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $plage->prat_id}}selected="selected"{{/if}}>
                   {{$curr_prat->_view}}

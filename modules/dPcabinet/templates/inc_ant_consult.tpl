@@ -134,7 +134,7 @@ function incAntecedantsMain() {
           <td>
             <label for="rques" title="Remarques sur l'antécédent">Remarques</label>
             <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
-              <option value="0">&mdash; Choisir une aide</option>
+              <option value="">&mdash; Choisir une aide</option>
               {{html_options options=$antecedent->_aides.rques}}
             </select>
           </td>
@@ -190,7 +190,7 @@ function incAntecedantsMain() {
           <td>
             <label for="traitement" title="Traitement">Traitement</label>
             <select name="_helpers_traitement" size="1" onchange="pasteHelperContent(this)">
-              <option value="0">&mdash; Choisir une aide</option>
+              <option value="">&mdash; Choisir une aide</option>
               {{html_options options=$traitement->_aides.traitement}}
             </select>
           </td>
@@ -237,14 +237,14 @@ function incAntecedantsMain() {
         <td>
           <label for="tabac" title="Comportement tabagique">Tabac</label>
           <select name="_helpers_tabac" size="1" onchange="pasteHelperContent(this)">
-            <option value="0">&mdash; Choisir une aide</option>
+            <option value="">&mdash; Choisir une aide</option>
             {{html_options options=$consult_anesth->_aides.tabac}}
           </select>
         </td>
         <td>
           <label for="oenolisme" title="Comportement alcoolique">Oenolisme</label>
           <select name="_helpers_oenolisme" size="1" onchange="pasteHelperContent(this)">
-            <option value="0">&mdash; Choisir une aide</option>
+            <option value="">&mdash; Choisir une aide</option>
             {{html_options options=$consult_anesth->_aides.oenolisme}}
           </select>
         </td>

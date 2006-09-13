@@ -144,7 +144,7 @@ function pageMain() {
       <th><label for="user_id" title="Utilisateur concerné, obligatoire.">Utilisateur</label></th>
       <td>
         <select name="user_id" title="{{$aide->_props.user_id}}">
-          <option value="0">&mdash; Choisir un utilisateur</option>
+          <option value="">&mdash; Choisir un utilisateur</option>
           {{foreach from=$users item=curr_user}}
           <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $aide->user_id}} selected="selected" {{/if}}>
             {{$curr_user->_view}}

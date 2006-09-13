@@ -85,7 +85,7 @@ function calculImcVst(){
       <input type="hidden" name="_check_premiere" value="{{$consult->_check_premiere}}" />
       <label for="examen" title="Bilan de l'examen clinique">Examens</label>
       <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this)">
-        <option value="0">&mdash; Choisir une aide</option>
+        <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.examen}}
       </select><br />
       <textarea name="examen">{{$consult->examen}}</textarea><br />

@@ -133,7 +133,7 @@ function pageMain() {
           <th><label for="_profile_id" title="Profil de droits utilisateur. Obligatoire">Profil</label></th>
           <td>
             <select name="_profile_id">
-              <option value="0">&mdash; Choisir un profil</option>	
+              <option value="">&mdash; Choisir un profil</option>	
               {{foreach from=$profiles item=curr_profile}}
               <option value="{{$curr_profile->user_id}}">{{$curr_profile->user_username}}</option>
               {{/foreach}}

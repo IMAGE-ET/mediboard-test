@@ -11,7 +11,7 @@
     </th>
     <th>
       <select name="_helpers_motif" size="1" onchange="pasteHelperContent(this)">
-        <option value="0">&mdash; Choisir une aide</option>
+        <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.motif}}
       </select>
     </th>
@@ -20,7 +20,7 @@
     </th>
     <th>
       <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
-        <option value="0">&mdash; Choisir une aide</option>
+        <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.rques}}
       </select>
     </th>
@@ -35,7 +35,7 @@
     </th>
     <th>
       <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this)">
-        <option value="0">&mdash; Choisir une aide</option>
+        <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.examen}}
       </select>
     </th>
@@ -44,7 +44,7 @@
     </th>
     <th>
       <select name="_helpers_traitement" size="1" onchange="pasteHelperContent(this)">
-        <option value="0">&mdash; Choisir une aide</option>
+        <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.traitement}}
       </select>
     </th>

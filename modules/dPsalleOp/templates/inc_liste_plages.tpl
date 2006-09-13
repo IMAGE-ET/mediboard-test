@@ -14,7 +14,7 @@
           <th><label for="salle" title="Salle d'opération">Salle</label></th>
           <td>
             <select name="salle" onchange="this.form.submit()">
-              <option value="0">&mdash; Aucune salle</option>
+              <option value="">&mdash; Aucune salle</option>
               {{foreach from=$listSalles item=curr_salle}}
               <option value="{{$curr_salle->salle_id}}" {{if $curr_salle->salle_id == $salle}} selected="selected" {{/if}}>
                 {{$curr_salle->nom}}
@@ -54,7 +54,7 @@
           <th><label for="anesth_id" title="Anesthésiste associé à la plage d'opération">Anesthésiste</label></th>
           <td>
             <select name="anesth_id" onchange="submit()">
-              <option value="0">&mdash; Choisir un anesthésiste</option>
+              <option value="">&mdash; Choisir un anesthésiste</option>
               {{foreach from=$listAnesths item=curr_anesth}}
               <option value="{{$curr_anesth->user_id}}" {{if $curr_plage->anesth_id == $curr_anesth->user_id}} selected="selected" {{/if}}>
                 {{$curr_anesth->_view}}
