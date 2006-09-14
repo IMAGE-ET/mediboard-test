@@ -96,11 +96,22 @@ $cat_id         = mbGetValueFromGetOrSession("cat_id", 0);
 $selClass       = mbGetValueFromGet("selClass", "CPatient");
 $selKey         = mbGetValueFromGet("selKey"  , $patient_id);
 
+
+$listCategory = CFilesCategory::listCatClass($selClass);
+if($cat_id != 0){
+   $tabCat = array_keys($listCategory);
+   $accordion_open = array_search($cat_id , $tabCat);
+  if($accordion_open!==""){
+    $accordion_open++;
+  };
+}else{
+  $accordion_open = null;
+}
+
+
 $object = new $selClass;
 $object->load($selKey);
 $object->loadRefsFiles();
-
-$listCategory = CFilesCategory::listCatClass($selClass);
 
 $affichageFile = array();
 $affichageFile[0] = array();
