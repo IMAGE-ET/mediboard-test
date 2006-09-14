@@ -9,6 +9,7 @@
 
 $tabs = array();
 $tabs[] = array("view_identifiants", "Identifiants Santé400", 1);
+$tabs[] = array("sante400", "Intégration santé 400", 0);
 $default = "view_identifiants";
 
 $index = new CTabIndex($tabs, $default);

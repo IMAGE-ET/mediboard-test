@@ -15,44 +15,33 @@ if (!$canRead && !$dialog) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$object_id    = mbGetValueFromGetOrSession("object_id"   );
-$object_class = mbGetValueFromGetOrSession("object_class");
-$tag          = mbGetValueFromGetOrSession("tag"         );
-
 // Récupération de la liste des classes disponibles
 $listClasses = getChildClasses();
 
-// Chargement de la liste des praticiens pour l'historique
-$idSante400 = new CIdSante400;
-
-$where = array();
-if ($object_id) {
-  $where["object_id"] = "= '$object_id'";
-}
-
-if ($object_class) {
-  $where["object_class"] = "= '$object_class'";
-}
-
-if ($tag) {
-  $where["tag"] = "= '$tag'";
-}
+// Chargement de la liste des id4Sante400 pour le filtre
+$filter = new CIdSante400;
+$filter->object_id    = mbGetValueFromGetOrSession("object_id");
+$filter->object_class = mbGetValueFromGetOrSession("object_class");
+$filter->tag          = mbGetValueFromGetOrSession("tag"         );
 
 $order = "last_update DESC";
 $limit = "0, 100";
 
-$list_idSante400 = $idSante400->loadList($where, $order, $limit);
-foreach($list_idSante400 as $idSante400) {
-  $idSante400->loadRefs();
+$list_idSante400 = $filter->loadMatchingList($order, $limit);
+foreach ($list_idSante400 as $curr_idSante400) {
+  $curr_idSante400->loadRefs();
 }
+
+// Chargment de l'IdSante400 courant
+$idSante400 = new CIdSante400;
+$idSante400->load(mbGetValueFromGetOrSession("id_sante400_id"));
 
 // Création du template
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("listClasses", $listClasses);
-$smarty->assign("object_id", $object_id);
-$smarty->assign("object_class", $object_class);
-$smarty->assign("tag", $tag);
+$smarty->assign("filter", $filter);
+$smarty->assign("idSante400", $idSante400);
 $smarty->assign("list_idSante400", $list_idSante400);
 
 $smarty->display("view_identifiants.tpl");

@@ -104,18 +104,51 @@ class CMbObject {
     if ($oid === null) {
       return false;
     }
+    
     $sql = "SELECT * FROM $this->_tbl WHERE $this->_tbl_key=$oid";
     $object = db_loadObject($sql, $this, false, $strip);
-    $this->checkConfidential();
-    
-    $this->updateFormFields();
-    if($object)
-      return $this;
-    else
+
+    if (!$object) {
+      $this->_id = null;
       return false;
+    }
+
+    $this->checkConfidential();
+    $this->updateFormFields();
+    return $this;
   }
   
-  // One object by a request constructor
+  /**
+   * Loads the first object matching defined properties
+   */
+  function loadMatchingObject($order = null, $group = null, $leftjoin = null) {
+    $where = array();
+    foreach(get_object_vars($this) as $key => $value) {
+      if ($key[0] != "_" and $value !== null) {
+        $where[$key] = "= '$value'";
+      }
+    }
+    
+    $this->loadObject($where, $order, $group, $leftjoin);
+  }
+  
+  /**
+   * Loads the list which objects match defined properties
+   */
+  function loadMatchingList($order = null, $limit = null, $group = null, $leftjoin = null) {
+    $where = array();
+    foreach(get_object_vars($this) as $key => $value) {
+      if ($key[0] != "_" and $value !== null) {
+        $where[$key] = "= '$value'";
+      }
+    }
+    
+    return $this->loadList($where, $order, $limit, $group, $leftjoin);
+  }
+  
+  /**
+   * Loads the first object matching the query
+   */
   function loadObject($where = null, $order = null, $group = null, $leftjoin = null) {
     $list =& $this->loadList($where, $order, "0,1", $group, $leftjoin);
     foreach ($list as $object) {
