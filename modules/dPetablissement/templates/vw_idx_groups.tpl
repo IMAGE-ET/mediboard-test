@@ -52,6 +52,75 @@
           </td>
         </tr>
         <tr>
+          <th>
+            <label for="raison_sociale" title="Veuillez saisir la raison sociale de l'établissement">Raison Sociale</label>
+          </th>
+          <td>
+            <input type="text" title="{{$usergroup->_props.raison_sociale}}" name="raison_sociale" size="30" value="{{$usergroup->raison_sociale}}" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="adresse" title="Veuillez saisir l'adresse l'établissement">Adresse</label>
+          </th>
+          <td>
+            <textarea title="{{$usergroup->_props.adresse}}" name="adresse">{{$usergroup->adresse}}</textarea>
+          </td>
+        </tr>
+        <tr>
+          <th><label for="cp" title="Code postal">Code Postal</label></th>
+          <td>
+            <input size="6" maxlength="5" type="text" name="cp" value="{{$usergroup->cp}}" title="{{$usergroup->_props.cp}}" />
+          </td>
+        </tr>
+        
+        <tr>
+          <th><label for="ville" title="Ville de l'établissement">Ville</label></th>
+          <td>
+            <input size="30" type="text" name="ville" value="{{$usergroup->ville}}" title="{{$usergroup->_props.ville}}" />
+          </td>
+        </tr>
+        <tr>
+          <th><label for="_tel1" title="Numéro de téléphone filaire">Téléphone</label></th>
+          <td>
+            <input type="text" name="_tel1" size="2" maxlength="2" value="{{$usergroup->_tel1}}" title="num|length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
+            <input type="text" name="_tel2" size="2" maxlength="2" value="{{$usergroup->_tel2}}" title="num|length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
+            <input type="text" name="_tel3" size="2" maxlength="2" value="{{$usergroup->_tel3}}" title="num|length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
+            <input type="text" name="_tel4" size="2" maxlength="2" value="{{$usergroup->_tel4}}" title="num|length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
+            <input type="text" name="_tel5" size="2" maxlength="2" value="{{$usergroup->_tel5}}" title="num|length|2" onkeyup="followUp(this, '_tel21', 2)" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="directeur" title="Veuillez saisir le nom du directeur de l'établissement">Nom du Directeur</label>
+          </th>
+          <td>
+            <input type="text" title="{{$usergroup->_props.directeur}}" name="directeur" size="30" value="{{$usergroup->directeur}}" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="domiciliation">Domiciliation</label>
+          </th>
+          <td>
+            <input type="text" title="{{$usergroup->_props.domiciliation}}" name="domiciliation" size="10" value="{{$usergroup->domiciliation}}" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="siret" title="Veuillez saisir le n° siret de l'établissement">N° SIRET</label>
+          </th>
+          <td>
+            <input type="text" title="{{$usergroup->_props.siret}}" maxlength="14" name="siret" size="15" value="{{$usergroup->siret}}" />
+          </td>
+        </tr>
+        
+        
+        
+        
+        
+        
+        <tr>
           <td class="button" colspan="2">
           {{if $usergroup->group_id}}
             <button class="modify" type="submit">Valider</button>

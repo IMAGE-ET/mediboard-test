@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "dPetablissement";
-$config["mod_version"]     = "0.1";
+$config["mod_version"]     = "0.11";
 $config["mod_directory"]   = "dPetablissement";
 $config["mod_setup_class"] = "CSetupdPetablissement";
 $config["mod_type"]        = "user";
@@ -52,7 +52,18 @@ class CSetupdPetablissement {
           db_exec($sql); db_error();
         }
       case "0.1":
-        return "0.1";
+        $sql = "ALTER TABLE `groups_mediboard`" .
+            "\nADD `raison_sociale` VARCHAR( 50 ) ," .
+            "\nADD `adresse` TEXT ," .
+            "\nADD `cp` VARCHAR( 5 ) ," .
+            "\nADD `ville` VARCHAR( 50 ) ," .
+            "\nADD `tel` VARCHAR( 10 ) ," .
+            "\nADD `directeur` VARCHAR( 50 ) ," .
+            "\nADD `domiciliation` VARCHAR( 9 ) ," .
+            "\nADD `siret` VARCHAR( 14 );";
+        db_exec( $sql ); db_error();
+      case "0.11":
+        return "0.11";
     }
 
     return false;
