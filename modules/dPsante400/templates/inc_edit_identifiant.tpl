@@ -9,7 +9,7 @@
 <tr>
   <th class="category" colspan="2">
   {{if $idSante400->_id}}
-    <a style="float:right;" href="javascript:view_log('CIDSante400', {{$idSante400->_id}})">
+    <a style="float:right;" href="javascript:view_log('CIDSante400',{{$idSante400->_id}})">
       <img src="images/history.gif" alt="historique" />
     </a>
     Modification de l'ID400 &lsquo;{{$idSante400->_view}}&rsquo;
@@ -41,6 +41,10 @@
     <td>
       <input name="object_id" title="ref" value="{{$idSante400->object_id}}" />
       <button class="search" type="button" onclick="popObject(this)">Chercher</button>
+      {{if $idSante400->_id}}
+      <br />
+      {{$idSante400->_ref_object->_view}}
+      {{/if}}      
     </td>
   </tr>
 
@@ -49,7 +53,7 @@
       <label for="id400" title="Identifiant Santé 400 de l'objet">ID400</label>
     </th>
     <td>
-      <input name="id400" title="str" title="{{$idSante400->_props.id400}}" value="{{$idSante400->id400}}" />
+      <input name="id400" title="{{$idSante400->_props.id400}}" value="{{$idSante400->id400}}" />
     </td>
   </tr>
 
@@ -58,7 +62,7 @@
       <label for="tag" title="Etiquette (sémantique) de l'identifiant">Etiquette</label>
     </th>
     <td>
-      <input name="tag" title="str" title="{{$idSante400->_props.tag}}" value="{{$idSante400->tag}}" />
+      <input name="tag" title="{{$idSante400->_props.tag}}" value="{{$idSante400->tag}}" />
     </td>
   </tr>
 

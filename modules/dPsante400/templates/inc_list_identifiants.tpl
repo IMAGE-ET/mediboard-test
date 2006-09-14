@@ -14,11 +14,12 @@
   <tr>
     {{if !$dialog}}
     <th>classe</th>
-    <th>ID</th>
+    <th>ID Mediboard</th>
     <th>Objet</th>
     {{/if}}
     <th>Dernière mise à jour</th>
     <th>Etiquette</th>
+    <th>ID Santé400</th>
   </tr>
   {{foreach from=$list_idSante400 item=curr_idSante400}}
   <tr>
@@ -36,13 +37,14 @@
     {{/if}}
     <td>
       {{if !$dialog}}
-      <a href="?m=dPsante400&amp;tab=view_identifiants&amp;id_sante400_id={{$curr_idSante400->_id}}" />
+      <a href="?m=dPsante400&amp;tab=view_identifiants&amp;id_sante400_id={{$curr_idSante400->_id}}" >
         {{$curr_idSante400->last_update|date_format:"%d/%m/%Y à %Hh%M (%A)"}}
       </a>
       {{else}}
       {{$curr_idSante400->last_update|date_format:"%d/%m/%Y à %Hh%M (%A)"}}
       {{/if}}
     </td>
+    <td>{{$curr_idSante400->id400}}</td>
     <td>{{$curr_idSante400->tag}}</td>
   </tr>
   {{/foreach}}

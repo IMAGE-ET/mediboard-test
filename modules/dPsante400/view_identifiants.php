@@ -35,6 +35,7 @@ foreach ($list_idSante400 as $curr_idSante400) {
 // Chargment de l'IdSante400 courant
 $idSante400 = new CIdSante400;
 $idSante400->load(mbGetValueFromGetOrSession("id_sante400_id"));
+$idSante400->loadRefs();
 
 // Création du template
 $smarty = new CSmartyDP(1);

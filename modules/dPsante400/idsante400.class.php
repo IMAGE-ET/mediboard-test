@@ -31,6 +31,7 @@
     
     $this->_props["object_id"]    = "ref|notNull";
     $this->_props["object_class"] = "str|maxLength|25";
+    $this->_props["id400"]        = "str|maxLength|8";
     $this->_props["tag"]          = "str|maxLength|80";
     $this->_props["last_update"]  = "dateTime|notNull";
   }
