@@ -9,18 +9,13 @@
 
 global $AppUI;
 
-require_once($AppUI->getSystemClass("mbmodule"));
+require_once($AppUI->getModuleClass("system", "module"));
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPhospi";
 $config["mod_version"]     = "0.17";
-$config["mod_directory"]   = "dPhospi";
-$config["mod_setup_class"] = "CSetupdPhospi";
 $config["mod_type"]        = "user";
-$config["mod_ui_name"]     = "Planning Hospi";
-$config["mod_ui_icon"]     = "dPhospi.png";
-$config["mod_description"] = "Gestion de l'hospitalisation";
 $config["mod_config"]      = true;
 
 if (@$a == "setup") {
@@ -98,7 +93,7 @@ class CSetupdPhospi {
         db_exec($sql); db_error();
 
       case "0.14":
-        $module = @CMbModule::getInstalled("dPplanningOp");
+        $module = @CModule::getInstalled("dPplanningOp");
         if (!$module || $module->mod_version < "0.38") {
           return "0.14";
         }
@@ -118,7 +113,7 @@ class CSetupdPhospi {
             "\nWHERE `affectation`.`operation_id` = `operations`.`operation_id`;";
         db_exec($sql); db_error();
       case "0.15":
-        $module = @CMbModule::getInstalled("dPetablissement");
+        $module = @CModule::getInstalled("dPetablissement");
         if (!$module || $module->mod_version < "0.1") {
           return "0.15";
         }

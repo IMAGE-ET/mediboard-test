@@ -9,17 +9,17 @@ require_once($AppUI->getModuleClass("system", "system"));
 
 $cmd = mbGetValueFromGet("cmd", "0");
 $mod_id = intval(mbGetValueFromGet("mod_id", "0"));
-$mod_directory = mbGetValueFromGet("mod_directory", "0");
+$mod_name = mbGetValueFromGet("mod_name", "0");
 
 $obj = new CModule();
 if ($mod_id) {
 	$obj->load( $mod_id );
 } else {
   $obj->mod_version = "all";
-	$obj->mod_directory = $mod_directory;
+	$obj->mod_name = $mod_name;
 }
 
-$ok = @include_once($AppUI->cfg["root_dir"]."/modules/$obj->mod_directory/setup.php");
+$ok = @include_once($AppUI->cfg["root_dir"]."/modules/$obj->mod_name/setup.php");
 
 if (!$ok) {
 	if ($obj->mod_type != "core") {
@@ -27,7 +27,7 @@ if (!$ok) {
 		$AppUI->redirect();
 	}
 }
-$setupclass = $config["mod_setup_class"];
+$setupclass = "CSetup".$config["mod_name"];
 if (! $setupclass) {
   if ($obj->mod_type != "core") {
     $AppUI->setMsg("Module does not have a valid setup class defined", UI_MSG_ERROR);

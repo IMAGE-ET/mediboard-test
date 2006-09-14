@@ -9,18 +9,13 @@
 
 global $AppUI;
 
-require_once($AppUI->getSystemClass("mbmodule"));
+require_once($AppUI->getModuleClass("system", "module"));
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpmsi";
 $config["mod_version"]     = "0.13";
-$config["mod_directory"]   = "dPpmsi";
-$config["mod_setup_class"] = "CSetupdPpmsi";
 $config["mod_type"]        = "user";
-$config["mod_ui_name"]     = "PMSI";
-$config["mod_ui_icon"]     = "dPpmsi.png";
-$config["mod_description"] = "Gestion des actes PMSI";
 $config["mod_config"]      = true;
 
 if (@$a == "setup") {
@@ -56,7 +51,7 @@ class CSetupdPpmsi {
           db_exec( $sql ); db_error();
   
       case "0.11":
-        $module = @CMbModule::getInstalled("dPplanningOp");
+        $module = @CModule::getInstalled("dPplanningOp");
         if (!$module || $module->mod_version < "0.38") {
           return "0.11";
         }

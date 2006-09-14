@@ -9,15 +9,10 @@
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
-$config["mod_name"] = "dPgestionCab";
-$config["mod_version"] = "0.12";
-$config["mod_directory"] = "dPgestionCab";
-$config["mod_setup_class"] = "CSetupdPgestionCab";
-$config["mod_type"] = "user";
-$config["mod_ui_name"] = "Gestion Cab.";
-$config["mod_ui_icon"] = "dPgestionCab.png";
-$config["mod_description"] = "Gestion comptable de cabinet";
-$config["mod_config"] = true;
+$config["mod_name"]        = "dPgestionCab";
+$config["mod_version"]     = "0.12";
+$config["mod_type"]        = "user";
+$config["mod_config"]      = true;
 
 if (@$a == "setup") {
   echo dPshowModuleConfig( $config );

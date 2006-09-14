@@ -683,7 +683,7 @@ class CAppUI {
 */
 	function getMenuModules() {
 		$sql = "
-		SELECT mod_directory, mod_ui_name, mod_ui_icon
+		SELECT mod_name
 		FROM modules
 		WHERE mod_active > 0 AND mod_ui_active > 0
 		ORDER BY mod_ui_order

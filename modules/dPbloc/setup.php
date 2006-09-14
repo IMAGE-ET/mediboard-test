@@ -11,12 +11,7 @@
 $config = array();
 $config["mod_name"]        = "dPbloc";
 $config["mod_version"]     = "0.16";
-$config["mod_directory"]   = "dPbloc";
-$config["mod_setup_class"] = "CSetupdPbloc";
 $config["mod_type"]        = "user";
-$config["mod_ui_name"]     = "Planning Bloc";
-$config["mod_ui_icon"]     = "dPbloc.png";
-$config["mod_description"] = "Gestion du bloc opératoire";
 $config["mod_config"]      = true;
 
 if (@$a == "setup") {
@@ -83,7 +78,7 @@ class CSetupdPbloc {
         $sql = "ALTER TABLE `sallesbloc` ADD `stats` TINYINT DEFAULT '0' NOT NULL AFTER `nom` ;";
         db_exec( $sql ); db_error();
       case "0.13":
-        $module = @CMbModule::getInstalled("dPetablissement");
+        $module = @CModule::getInstalled("dPetablissement");
         if (!$module || $module->mod_version < "0.1") {
           return "0.13";
         }

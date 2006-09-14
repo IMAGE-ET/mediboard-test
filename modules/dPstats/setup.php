@@ -11,12 +11,7 @@
 $config = array();
 $config["mod_name"]        = "dPstats";
 $config["mod_version"]     = "0.12";
-$config["mod_directory"]   = "dPstats";
-$config["mod_setup_class"] = "CSetupdPstats";
 $config["mod_type"]        = "user";
-$config["mod_ui_name"]     = "Stats";
-$config["mod_ui_icon"]     = "dPstats.png";
-$config["mod_description"] = "Reporting";
 $config["mod_config"]      = true;
 
 if (@$a == "setup") {

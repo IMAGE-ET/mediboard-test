@@ -11,12 +11,7 @@
 $config = array();
 $config["mod_name"]        = "dPsante400";
 $config["mod_version"]     = "0.1";
-$config["mod_directory"]   = "dPsante400";
-$config["mod_setup_class"] = "CSetupdPsante400";
 $config["mod_type"]        = "user";
-$config["mod_ui_name"]     = "Sante400";
-$config["mod_ui_icon"]     = "dPsante400.png";
-$config["mod_description"] = "Intégration de Santé400";
 $config["mod_config"]      = true;
 
 if (@$a == "setup") {

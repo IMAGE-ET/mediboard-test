@@ -9,15 +9,10 @@
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
-$config["mod_name"] = "dPccam";
-$config["mod_version"] = "0.1";
-$config["mod_directory"] = "dPccam";
-$config["mod_setup_class"] = "CSetupdPccam";
-$config["mod_type"] = "user";
-$config["mod_ui_name"] = "CCAM";
-$config["mod_ui_icon"] = "dPccam.png";
-$config["mod_description"] = "Aide au codage CCAM";
-$config["mod_config"] = true;
+$config["mod_name"]        = "dPccam";
+$config["mod_version"]     = "0.1";
+$config["mod_type"]        = "user";
+$config["mod_config"]      = true;
 
 if (@$a == "setup") {
 	echo dPshowModuleConfig($config);

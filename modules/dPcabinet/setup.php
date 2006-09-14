@@ -15,12 +15,7 @@ require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
 $config = array();
 $config["mod_name"]        = "dPcabinet";
 $config["mod_version"]     = "0.46";
-$config["mod_directory"]   = "dPcabinet";
-$config["mod_setup_class"] = "CSetupdPcabinet";
 $config["mod_type"]        = "user";
-$config["mod_ui_name"]     = "Cabinet";
-$config["mod_ui_icon"]     = "dPcabinet.png";
-$config["mod_description"] = "Gestion de cabinet de consultation";
 $config["mod_config"]      = true;
 
 if (@$a == "setup") {

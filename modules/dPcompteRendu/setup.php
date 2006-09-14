@@ -9,15 +9,10 @@
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
-$config["mod_name"] = "dPcompteRendu";
-$config["mod_version"] = "0.23";
-$config["mod_directory"] = "dPcompteRendu";
-$config["mod_setup_class"] = "CSetupdPcompteRendu";
-$config["mod_type"] = "user";
-$config["mod_ui_name"] = "Compte Rendu";
-$config["mod_ui_icon"] = "dPcompteRendu.png";
-$config["mod_description"] = "Gestion des comptes-rendus";
-$config["mod_config"] = true;
+$config["mod_name"]        = "dPcompteRendu";
+$config["mod_version"]     = "0.23";
+$config["mod_type"]        = "user";
+$config["mod_config"]      = true;
 
 if (@$a == "setup") {
   echo dPshowModuleConfig($config);

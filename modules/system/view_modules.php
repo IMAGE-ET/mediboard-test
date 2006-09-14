@@ -27,19 +27,19 @@ $coreModules = array();
 
 // do the modules that are installed on the system
 foreach ($modules as $keyRow => $row) {
-  $modules[$keyRow]["is_setup"]     = @include_once($AppUI->cfg["root_dir"]."/modules/".$row["mod_directory"]."/setup.php");
+  $modules[$keyRow]["is_setup"]     = @include_once($AppUI->cfg["root_dir"]."/modules/".$row["mod_name"]."/setup.php");
   $modules[$keyRow]["is_upToDate"]  = $config["mod_version"] == $row["mod_version"];
-  $modules[$keyRow]["is_config"]    = is_file("modules/".$row["mod_directory"]."/configure.php");
+  $modules[$keyRow]["is_config"]    = is_file("modules/".$row["mod_name"]."/configure.php");
   $modules[$keyRow]["href"]         = "?m=$m&amp;a=domodsql&amp;mod_id=".$row["mod_id"];
   
-  if($row["mod_directory"] == "system" || $row["mod_directory"] == "admin") {
+  if($row["mod_name"] == "system" || $row["mod_name"] == "admin") {
     if(!$modules[$keyRow]["is_upToDate"]) {
       $coreModules[] = $modules[$keyRow];
     }
   }
 
-  if(isset($modFiles[$row["mod_directory"]])) {
-    unset($modFiles[$row["mod_directory"]]);
+  if(isset($modFiles[$row["mod_name"]])) {
+    unset($modFiles[$row["mod_name"]]);
   } 
 }
 

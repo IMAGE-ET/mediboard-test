@@ -14,12 +14,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
 $config["mod_version"]     = "0.54";
-$config["mod_directory"]   = "dPplanningOp";
-$config["mod_setup_class"] = "CSetupdPplanningOp";
 $config["mod_type"]        = "user";
-$config["mod_ui_name"]     = "Planning Chir.";
-$config["mod_ui_icon"]     = "dPplanningOp.png";
-$config["mod_description"] = "Gestion des plannings opératoires des chirurgiens";
 $config["mod_config"]      = true;
 
 if (@$a == "setup") {
@@ -231,7 +226,7 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
     
       case "0.36":
-        $module = @CMbModule::getInstalled("dPbloc");
+        $module = @CModule::getInstalled("dPbloc");
         if (!$module || $module->mod_version < "0.1") {
           return "0.36";
         }
@@ -495,7 +490,7 @@ class CSetupdPplanningOp {
         $sql = "ALTER TABLE `operations` ADD `anesth_id` INT UNSIGNED DEFAULT NULL AFTER `chir_id`";
         db_exec($sql); db_error();
       case "0.51":
-        $module = @CMbModule::getInstalled("dPetablissement");
+        $module = @CModule::getInstalled("dPetablissement");
         if (!$module || $module->mod_version < "0.1") {
           return "0.51";
         }

@@ -30,7 +30,7 @@ require_once( $AppUI->getModuleClass('admin'));
 // TODO: getDeny* should return true/false instead of 1/0
 
 function getReadableModule() {
-	$sql = "SELECT mod_directory FROM modules WHERE mod_active > 0 ORDER BY mod_ui_order";
+	$sql = "SELECT mod_name FROM modules WHERE mod_active > 0 ORDER BY mod_ui_order";
 	$modules = db_loadColumn( $sql );
 	foreach ($modules as $mod) {
 		if (!getDenyRead($mod)) {

@@ -9,15 +9,10 @@
  
 // MODULE CONFIGURATION DEFINITION
 $config = array();
-$config["mod_name"] = "dPmateriel";
-$config["mod_version"] = "0.12";
-$config["mod_directory"] = "dPmateriel";
-$config["mod_setup_class"] = "CSetupdPmateriel";
-$config["mod_type"] = "user";
-$config["mod_ui_name"] = "Stocks Matériel";
-$config["mod_ui_icon"] = "dPmateriel.png";
-$config["mod_description"] = "Gestion du stock du matériel";
-$config["mod_config"] = true;
+$config["mod_name"]        = "dPmateriel";
+$config["mod_version"]     = "0.12";
+$config["mod_type"]        = "user";
+$config["mod_config"]      = true;
 
 if (@$a == "setup") {
   echo dPshowModuleConfig( $config );

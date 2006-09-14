@@ -4,11 +4,11 @@ global $AppUI, $user_id, $canEdit, $tab, $mb_module_active;
 // Get the installed modules
 
 // Create fake 'all' module
-$moduleAll = new CMbModule();
+$moduleAll = new CModule();
 $moduleAll->mod_name = "all";
 $modules["all"] = $moduleAll;
 
-$modules = array_merge($modules, CMbModule::getInstalled());
+$modules = array_merge($modules, CModule::getInstalled());
 
 $pgos["admin"] = array(
   "table"       => "users", 

@@ -9,15 +9,10 @@
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
-$config["mod_name"] = "dPinterop";
-$config["mod_version"] = "0.1";
-$config["mod_directory"] = "dPinterop";
-$config["mod_setup_class"] = "CSetupdPinterop";
-$config["mod_type"] = "user";
-$config["mod_ui_name"] = "Interop";
-$config["mod_ui_icon"] = "dPinterop.png";
-$config["mod_description"] = "Module d'interopérabilité pour Mediboard";
-$config["mod_config"] = true;
+$config["mod_name"]        = "dPinterop";
+$config["mod_version"]     = "0.1";
+$config["mod_type"]        = "user";
+$config["mod_config"]      = true;
 
 if (@$a == "setup") {
   echo dPshowModuleConfig($config);

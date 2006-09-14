@@ -14,12 +14,7 @@ require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 $config = array();
 $config["mod_name"]        = "dPfiles";
 $config["mod_version"]     = "0.14";
-$config["mod_directory"]   = "dPfiles";
-$config["mod_setup_class"] = "CSetupdPfiles";
 $config["mod_type"]        = "user";
-$config["mod_ui_name"]     = "Gestion de documents";
-$config["mod_ui_icon"]     = "dPfiles.png";
-$config["mod_description"] = "Gestion électronique de documents";
 $config["mod_config"]      = true;
 
 if (@$a == "setup") {

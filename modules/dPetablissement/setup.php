@@ -10,12 +10,7 @@
 $config = array();
 $config["mod_name"]        = "dPetablissement";
 $config["mod_version"]     = "0.11";
-$config["mod_directory"]   = "dPetablissement";
-$config["mod_setup_class"] = "CSetupdPetablissement";
 $config["mod_type"]        = "user";
-$config["mod_ui_name"]     = "Etablissements";
-$config["mod_ui_icon"]     = "etablissements.png";
-$config["mod_description"] = "Gestion des établissements";
 $config["mod_config"]      = true;
 
 if(@$a == "setup") {

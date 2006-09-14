@@ -89,9 +89,9 @@ function popChgPwd() {
 <?php
 echo "| ".mbPortalLink( $m, "Aide" )." | ";
 foreach ($nav as $module) {
-  $modDirectory = $module['mod_directory'];
+  $modDirectory = $module['mod_name'];
   if (isMbModuleVisible($modDirectory)) {
-    $modName = $AppUI->_($module['mod_ui_name']);
+    $modName = $AppUI->_("module-".$module['mod_name']."-court");
     $textClass = $modDirectory == $m ? "class='textSelected'" : "class='textNonSelected'";
     echo "<a href='?m=$modDirectory' $textClass>" .
         $AppUI->_("module-".$modDirectory."-court") .

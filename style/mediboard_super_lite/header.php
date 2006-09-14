@@ -39,10 +39,10 @@
       <tr>
 <?php
 foreach ($nav as $module) {
-  $modDirectory = $module['mod_directory'];
+  $modDirectory = $module['mod_name'];
   if (isMbModuleVisible($modDirectory)) {
-    $modName = $AppUI->_($module['mod_ui_name']);
-    $modIcon = dPfindImage($module['mod_ui_icon'], $module['mod_directory']);
+    $modName = $AppUI->_("module-".$module['mod_ui_name']."-court");
+    $modIcon = dPfindImage($module['mod_name'].".png", $module['mod_name']);
     $modImage = dPshowImage($modIcon, 48, 48, $modName);
     $liClass = $modDirectory == $m ? "class='selected'" : "";
     echo "<td align='center' style='border-right: 1px solid #000'><a href='?m=$modDirectory'><b>" .

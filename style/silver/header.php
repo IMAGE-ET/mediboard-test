@@ -20,7 +20,7 @@
   $dialog = dPgetParam( $_GET, "dialog");
   if (!$dialog) {
     // top navigation menu
-    $nav = CMbModule::getVisible();
+    $nav = CModule::getVisible();
 ?>
 
 <?php 

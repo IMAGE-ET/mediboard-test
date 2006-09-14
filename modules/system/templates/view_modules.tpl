@@ -73,7 +73,7 @@
     <td>{{$module.mod_type}}</td>
     <td>{{$module.mod_version}}</td>
     <td>{{tr}}module-{{$module.mod_name}}-long{{/tr}}</td>
-    <td>{{$module.mod_ui_icon}}</td>
+    <td>{{$module.mod_name}}.png</td>
     <td>
       {{if $module.mod_ui_active}}
         {{assign var="src" value="./images/obj/dotgreen.gif"}}
@@ -103,7 +103,7 @@
     <td>
       <img alt="not installed" src="./images/obj/dotgrey.gif" width="12" height="12" />
       {{if $canEdit}}
-        <a class="action" href="?m={{$m}}&amp;a=domodsql&amp;cmd=install&amp;mod_directory={{$module}}">
+        <a class="action" href="?m={{$m}}&amp;a=domodsql&amp;cmd=install&amp;mod_name={{$module}}">
           {{tr}}install{{/tr}}
         </a>
       {{/if}}

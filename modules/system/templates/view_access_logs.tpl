@@ -39,8 +39,8 @@ function pageMain() {
     <label for="module" title="Type de vue des graphiques">Module</label>
     <select name="module" onchange="this.form.submit()">
       {{foreach from=$listModules item=curr_module}}
-      <option value="{{$curr_module.mod_directory}}" {{if $curr_module.mod_directory == $module}} selected="selected" {{/if}}>
-        {{$curr_module.mod_ui_name}}
+      <option value="{{$curr_module.mod_name}}" {{if $curr_module.mod_name == $module}} selected="selected" {{/if}}>
+        {{tr}}module-{{$curr_module.mod_name}}-court{{/tr}}
       </option>
       {{/foreach}}
     </select>

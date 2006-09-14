@@ -11,12 +11,7 @@
 $config = array();
 $config["mod_name"]        = "dPsalleOp";
 $config["mod_version"]     = "0.14";
-$config["mod_directory"]   = "dPsalleOp";
-$config["mod_setup_class"] = "CSetupdPsalleOp";
 $config["mod_type"]        = "user";
-$config["mod_ui_name"]     = "Salle d'op";
-$config["mod_ui_icon"]     = "dPsalleOp.png";
-$config["mod_description"] = "Gestion des salles d'opération";
 $config["mod_config"]      = true;
 
 if (@$a == "setup") {

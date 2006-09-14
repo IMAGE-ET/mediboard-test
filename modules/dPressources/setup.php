@@ -11,12 +11,7 @@
 $config = array();
 $config["mod_name"]        = "dPressources";
 $config["mod_version"]     = "0.11";
-$config["mod_directory"]   = "dPressources";
-$config["mod_setup_class"] = "CSetupdPressources";
 $config["mod_type"]        = "user";
-$config["mod_ui_name"]     = "Ressources";
-$config["mod_ui_icon"]     = "dPressources.png";
-$config["mod_description"] = "Gestion des salles d'exploration fonctionnelle";
 $config["mod_config"]      = true;
 
 if (@$a == "setup") {

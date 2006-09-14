@@ -11,12 +11,7 @@
 $config = array();
 $config["mod_name"]        = "dPpatients";
 $config["mod_version"]     = "0.32";
-$config["mod_directory"]   = "dPpatients";
-$config["mod_setup_class"] = "CSetupdPpatients";
 $config["mod_type"]        = "user";
-$config["mod_ui_name"]     = "Dossier patient";
-$config["mod_ui_icon"]     = "dPpatients.png";
-$config["mod_description"] = "Gestion des dossiers patient";
 $config["mod_config"]      = true;
 
 if (@$a == "setup") {

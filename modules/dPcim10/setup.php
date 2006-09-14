@@ -9,15 +9,10 @@
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
-$config["mod_name"] = "dPcim10";
-$config["mod_version"] = "0.1";
-$config["mod_directory"] = "dPcim10";
-$config["mod_setup_class"] = "CSetupdPcim10";
-$config["mod_type"] = "user";
-$config["mod_ui_name"] = "CIM10";
-$config["mod_ui_icon"] = "dPcim10.png";
-$config["mod_description"] = "Aide au codage CIM10";
-$config["mod_config"] = true;
+$config["mod_name"]        = "dPcim10";
+$config["mod_version"]     = "0.1";
+$config["mod_type"]        = "user";
+$config["mod_config"]      = true;
 
 if (@$a == "setup") {
   echo dPshowModuleConfig( $config );
