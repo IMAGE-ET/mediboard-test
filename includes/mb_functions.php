@@ -406,26 +406,38 @@ function mbInsertCSV( $fileName, $tableName, $oldid = false )
 /**
  * Loads a javascript with build version postfix to prevent nasty cache effects
  * while updating the system.  */
-function mbLoadScript ($filepath) {
+function mbLoadScript ($filepath,$modeReturn = 0) {
   global $mb_version_build;
-  echo "\n<script type='text/javascript' src='$filepath?build=$mb_version_build'></script>";
+  if($modeReturn){
+    return "\n<script type='text/javascript' src='$filepath?build=$mb_version_build'></script>";
+  }else{
+    echo "\n<script type='text/javascript' src='$filepath?build=$mb_version_build'></script>";
+  }
 }
 
 
 /**
  * Links a style sheet with build version postfix to prevent nasty cache effects
  * Only to be called while in the HTML header.  */
-function mbLinkStylesheet ($filepath, $media = "all") {
+function mbLinkStylesheet ($filepath, $media = "all",$modeReturn = 0) {
   global $mb_version_build;
-  echo "\n<link rel='stylesheet' type='text/css' href='$filepath?build=$mb_version_build' media='$media' />";
+  if($modeReturn){
+    return "\n<link rel='stylesheet' type='text/css' href='$filepath?build=$mb_version_build' media='$media' />";
+  }else{
+    echo "\n<link rel='stylesheet' type='text/css' href='$filepath?build=$mb_version_build' media='$media' />";
+  }
 }
 
 /**
  * Links a shotcut icon version postfix to prevent nasty cache effects 
  * Only to be called while in the HTML header.  */
-function mbLinkShortcutIcon($filepath) {
+function mbLinkShortcutIcon($filepath,$modeReturn = 0) {
   global $mb_version_build;
-  echo "\n<link rel='shortcut icon' type='image/ico' href='$filepath?build=$mb_version_build' />";
+  if($modeReturn){
+    return "\n<link rel='shortcut icon' type='image/ico' href='$filepath?build=$mb_version_build' />";
+  }else{
+    echo "\n<link rel='shortcut icon' type='image/ico' href='$filepath?build=$mb_version_build' />";
+  }
 }
 
 /**
@@ -442,35 +454,39 @@ function mbPortalLink( $page="Accueil", $title="Portail Mediboard" ) {
 /**
  * Loads all scripts
  */
-function mbLoadScripts() {
-  mbLoadScript("lib/jscalendar/calendar.js");
-  mbLoadScript("lib/jscalendar/lang/calendar-fr.js");
-  mbLoadScript("lib/jscalendar/calendar-setup.js");
+function mbLoadScripts($modeReturn = 0) {
+	$affichageScript = null;
+    
+  $affichageScript .= mbLoadScript("lib/jscalendar/calendar.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/jscalendar/lang/calendar-fr.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/jscalendar/calendar-setup.js",$modeReturn);
   
   // Gosu doit etre définit avant Prototype
   // Car Prototype redéfinit les méthodes de Array
-  mbLoadScript("includes/javascript/gosu/array.js");
-  mbLoadScript("includes/javascript/gosu/cookie.js");
-  mbLoadScript("includes/javascript/gosu/debug.js");
-  mbLoadScript("includes/javascript/gosu/ie5.js");
-  mbLoadScript("includes/javascript/gosu/keyboard.js");
-  mbLoadScript("includes/javascript/gosu/string.js");
-  mbLoadScript("includes/javascript/gosu/validate.js");
+  $affichageScript .= mbLoadScript("includes/javascript/gosu/array.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/gosu/cookie.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/gosu/debug.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/gosu/ie5.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/gosu/keyboard.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/gosu/string.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/gosu/validate.js",$modeReturn);
   
   // Prototype doit être définit après Gosu (cf ci-dessus)
-  mbLoadScript("lib/scriptaculous/lib/prototype.js");
-  mbLoadScript("lib/scriptaculous/src/scriptaculous.js");
-  mbLoadScript("lib/rico/rico.js");
+  $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/rico/rico.js",$modeReturn);
   
-  mbLoadScript("includes/javascript/prototypex.js");
-  mbLoadScript("includes/javascript/ricoex.js");
-  mbLoadScript("includes/javascript/functions.js");
-  mbLoadScript("includes/javascript/cjl_cookie.js");
-  mbLoadScript("includes/javascript/url.js");
-  mbLoadScript("includes/javascript/forms.js");
-  mbLoadScript("includes/javascript/printf.js");
-  mbLoadScript("includes/javascript/browser.js");  
-  mbLoadScript("includes/javascript/window.js");
+  $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/ricoex.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/functions.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/cjl_cookie.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/url.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/forms.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/printf.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/browser.js",$modeReturn);  
+  $affichageScript .= mbLoadScript("includes/javascript/window.js",$modeReturn);
+  if($modeReturn)
+    return $affichageScript;
 }
 
 

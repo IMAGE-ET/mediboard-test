@@ -868,7 +868,7 @@ class CTitleBlock_core {
 /**
 * The drawing function
 */
-	function show() {
+	function show($modeReturn = 0) {
 		global $AppUI;
 		$CR = "\n";
 		$CT = "\n\t";
@@ -913,7 +913,11 @@ class CTitleBlock_core {
 
 			$s .= "\n</tr>\n</table>";
 		}
-		echo "$s";
+    if($modeReturn){
+      return $s;
+    }else{
+		  echo "$s";
+    }
 	}
 }
 // !! Ensure there is no white space after this close php tag.

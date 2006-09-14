@@ -4,7 +4,7 @@
 // This overrides the show() function of the CTitleBlock_core class
 //
 class CTitleBlock extends CTitleBlock_core {
-	function show() {
+	function show($modeReturn = 0) {
 		global $AppUI;
     
 		$s = "\n<table class='titleblock'>";
@@ -21,6 +21,14 @@ class CTitleBlock extends CTitleBlock_core {
 		foreach ($this->cells1 as $c) {
 			$s .= "\n$c[2]<td $c[0]>$c[1]</td>$c[3]";
 		}
+
+//		if ($this->showhelp) {
+//			$s .= "\n<td>";
+//			$s .= "\n\t<a href='#$this->helpref' onclick=\"javascript:window.open('?m=help&amp;dialog=1&amp;hid=$this->helpref', 'contexthelp', 'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')\" title='".$AppUI->_( 'Help' )."'>";
+//			$s .= "\n\t\t" . dPshowImage( './images/icons/stock_help-16.png', '16', '16', $AppUI->_( 'Help' ) );
+//			$s .= "\n\t</a>";
+//			$s .= "\n</td>";
+//		}
     
 		$s .= "\n</tr>";
 		$s .= "\n</table>";
@@ -54,7 +62,11 @@ class CTitleBlock extends CTitleBlock_core {
       $s .= "\n</table>";
 		}
 
-		echo "$s";
+		if($modeReturn){
+      return $s;
+    }else{
+          echo "$s";
+    }
 	}
 }
 
@@ -63,7 +75,10 @@ class CTitleBlock extends CTitleBlock_core {
 //
 class CTabBox extends CTabBox_core {
   function CTabBox($baseHRef, $baseInc, $active) {
-    parent::CTabBox($baseHRef, $baseInc, $active);
+    $this->tabs = array();
+    $this->active = $active;
+    $this->baseHRef = ($baseHRef ? "$baseHRef&amp;" : "?");
+    $this->baseInc = $baseInc;
   }
 
   function show( $extra='' ) {

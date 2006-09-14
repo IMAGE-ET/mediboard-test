@@ -4,7 +4,7 @@
 // This overrides the show() function of the CTitleBlock_core class
 //
 class CTitleBlock extends CTitleBlock_core {
-	function show() {
+	function show($modeReturn = 0) {
 		global $AppUI;
     
 		$s = "\n<table class='titleblock'>";
@@ -54,7 +54,11 @@ class CTitleBlock extends CTitleBlock_core {
       $s .= "\n</table>";
 		}
 
-		echo "$s";
+		if($modeReturn){
+      return $s;
+    }else{
+      echo "$s";
+    }
 	}
 }
 
