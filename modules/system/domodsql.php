@@ -10,11 +10,11 @@ $mod_id   = intval(mbGetValueFromGet("mod_id", "0"));
 $mod_name = mbGetValueFromGet("mod_name", "0");
 
 $obj = new CModule();
-if ($mod_id) {
-	$obj->load( $mod_id );
+if($mod_id) {
+	$obj->load($mod_id);
 } else {
   $obj->mod_version = "all";
-	$obj->mod_name = $mod_name;
+	$obj->mod_name    = $mod_name;
 }
 
 $ok = @include_once($AppUI->cfg["root_dir"]."/modules/$obj->mod_name/setup.php");
@@ -32,8 +32,9 @@ if (! $setupclass) {
     $AppUI->redirect();
   }
 }
-else
+else {
   $setup = new $setupclass();
+}
 
 switch ($cmd) {
 	case "moveup":
@@ -48,10 +49,10 @@ switch ($cmd) {
 		$AppUI->setMsg("Module state changed", UI_MSG_OK);
 		break;
 	case "toggleMenu":
-	// just toggle the active state of the table entry
+	  // just toggle the active state of the table entry
 		$obj->mod_ui_active = 1 - $obj->mod_ui_active;
 		$obj->store();
-		$AppUI->setMsg("Module menu state changed", UI_MSG_OK);
+    $AppUI->setMsg("Module menu state changed", UI_MSG_OK);
 		break;
 	case "remove":
     $msg = $setup->remove();

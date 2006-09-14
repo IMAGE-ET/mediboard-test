@@ -100,11 +100,11 @@ class CAppUI {
   
   function getAllClasses() {
     global $utypes;
-    // Require all global class
+    // Require all global classes
     foreach(glob("classes/*.class.php") as $fileName) {
       require_once($this->getConfig("root_dir")."/".$fileName);
     }
-    // Require all core modules class
+    // Require all modules classes
     foreach(glob("modules/*/*.class.php") as $fileName) {
       require_once($this->getConfig("root_dir")."/".$fileName);
     }

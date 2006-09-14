@@ -49,7 +49,7 @@ class CModule extends CMbObject {
     $this->_props["mod_type"]      = "notNull|enum|core|user";
     $this->_props["mod_version"]   = "notNull|str|maxLength|6";
     $this->_props["mod_ui_active"] = "notNull|num|length|1"; // should be "bool"
-    $this->_props["mod_ui_order"]  = "notNull|nul|length|2";
+    $this->_props["mod_ui_order"]  = "notNull|num";
   }
   
   function updateFormFields() {
