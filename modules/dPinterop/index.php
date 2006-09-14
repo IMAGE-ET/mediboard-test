@@ -10,7 +10,6 @@
 $tabs = array();
 $tabs[] = array("export_hprim", "Export HPRIM", 0);
 $tabs[] = array("send_mail", "Envoie de mails", 0);
-$tabs[] = array("sante400", "Intégration santé 400", 0);
 $tabs[] = array("benchmark", "Montée en charge", 0);
 
 //$tabs[] = array("import_orl", "Import ORL", 0);

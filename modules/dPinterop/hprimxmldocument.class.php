@@ -7,16 +7,12 @@
 * @author Thomas Despoix
 */
 
-if (!class_exists("DOMDocument")) {
-  trigger_error("sorry, DOMDocument is needed");
-  return;
-}
+global $AppUI;
+require_once($AppUI->getModuleClass("dPinterop", "mbxmldocument"));
 
 if (!class_exists("CMbXMLDocument")) {
-  //trigger_error("sorry, DOMDocument is needed");
   return;
 }
-
 
 global $AppUI, $m;
 

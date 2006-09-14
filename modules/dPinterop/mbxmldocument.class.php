@@ -8,7 +8,6 @@
 */
 
 if (!class_exists("DOMDocument")) {
-  trigger_error("sorry, DOMDocument is needed");
   return;
 }
 
