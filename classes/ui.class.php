@@ -167,19 +167,6 @@ class CAppUI {
   }
   
 /**
-* Used to load a php module function file from the funciton directory
-* @param string $name module (excluding _func.php)
-* @return string The path to the include file
- */
-  function getModuleFunctions($name = null) {
-    if ($name) {
-      if ($root = $this->getConfig("root_dir")) {
-        return "$root/functions/{$name}_func.php";
-      }
-    }
-  }
-  
-/**
 * Used to store information in tmp directory
 * @param string $subpath in tmp directory
 * @return string The path to the include file
@@ -310,21 +297,6 @@ class CAppUI {
 
 	}
 
-
-
-/**
-* Utility function to make a file name "safe"
-*
-* Strips out mallicious insertion of relative directories (eg ../../dealyfile.php);
-* @param string The file name.
-* @return array A named array of the files (the key and value are identical).
-*/
-	function makeFileNameSafe($file) {
-		$file = str_replace("../", "", $file);
-		$file = str_replace("..\\", "", $file);
-		return $file;
-	}
-
 /**
 * Sets the user locale.
 *
@@ -406,19 +378,7 @@ class CAppUI {
 			$this->state["SAVEDPLACE"] = $query;
 		}
 	}
-/**
-* Resets the internal variable
-*/
-	function resetPlace() {
-		$this->state["SAVEDPLACE"] = "";
-	}
-/**
-* Get the saved place (usually one that could contain an edit button)
-* @return string
-*/
-	function getPlace() {
-		return @$this->state["SAVEDPLACE"];
-	}
+
 /**
 * Redirects the browser to a new page.
 *
@@ -638,11 +598,7 @@ class CAppUI {
 		$this->checkStyle();
 		return true;
 	}
-/**
-* @deprecated
-*/
-	function logout() {
-	}
+
 /**
 * Checks whether there is any user logged in.
 */
@@ -917,15 +873,6 @@ class CTitleBlock_core {
 			$s .= $c[1] ? $CT . $c[1] : '&nbsp;';
 			$s .= $CR . '</td>';
 			$s .= $c[3] ? $CR . $c[3] : '';
-		}
-		if ($this->showhelp) {
-			$s .= '<td nowrap="nowrap" width="20" align="right">';
-			//$s .= $CT . contextHelp('<img src="./images/obj/help.gif" width="14" height="16" border="0" alt="'.$AppUI->_('Help').'" />', $this->helpref);
-
-			$s .= "\n\t<a href=\"#$this->helpref\" onClick=\"javascript:window.open('?m=help&dialog=1&hid=$this->helpref', 'contexthelp', 'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')\" title=\"".$AppUI->_('Help')."\">";
-			$s .= "\n\t\t" . dPshowImage('./images/icons/stock_help-16.png', '16', '16', $AppUI->_('Help'));
-			$s .= "\n\t</a>";
-			$s .= "\n</td>";
 		}
 		$s .= "\n</tr>";
 		$s .= "\n</table>";
