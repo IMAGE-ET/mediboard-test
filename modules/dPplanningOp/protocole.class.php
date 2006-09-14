@@ -45,6 +45,8 @@ class CProtocole extends CMbObject {
 
   function CProtocole() {
     $this->CMbObject("protocole","protocole_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["chir_id"]         = "ref|notNull";
     $this->_props["type"]            = "enum|comp|ambu|exte";

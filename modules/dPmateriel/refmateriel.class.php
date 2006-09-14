@@ -30,6 +30,8 @@ class CRefMateriel extends CMbObject {
   function CRefMateriel() {
     $this->CMbObject("ref_materiel", "reference_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["fournisseur_id"] = "ref|notNull";
     $this->_props["materiel_id"] = "ref|notNull";
     $this->_props["quantite"] = "num|pos|notNull";

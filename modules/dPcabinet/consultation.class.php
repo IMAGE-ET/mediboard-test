@@ -73,6 +73,8 @@ class CConsultation extends CMbObject {
 
   function CConsultation() {
     $this->CMbObject("consultation", "consultation_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     static $props = array (
       "plageconsult_id" => "ref|notNull",

@@ -24,6 +24,8 @@ class CRubrique extends CMbObject {
   function CRubrique() {
     $this->CMbObject("rubrique_gestioncab", "rubrique_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["function_id"] = "ref|notNull";
     $this->_props["nom"]         = "str|notNull";
     

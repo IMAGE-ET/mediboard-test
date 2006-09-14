@@ -31,6 +31,8 @@ class CTempsOp extends CMbObject {
   function CTempsOp() {
     $this->CMbObject("temps_op", "temps_op_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["temps_op_id"]     = "ref";
     $this->_props["chir_id"]         = "ref";
     $this->_props["nb_intervention"] = "num|pos";

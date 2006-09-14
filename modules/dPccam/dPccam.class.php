@@ -25,6 +25,8 @@ class CFavoriCCAM extends CMbObject {
 	function CFavoriCCAM() {
 		$this->CMbObject("ccamfavoris", "favoris_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["favoris_user"] = "ref|notNull";
     $this->_props["favoris_code"] = "str|notNull";
     

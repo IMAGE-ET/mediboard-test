@@ -38,6 +38,8 @@ class CActeCCAM extends CMbObject {
 
 	function CActeCCAM() {
 		$this->CMbObject( "acte_ccam", "acte_id" );
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["code_acte"]           = "notNull|code|ccam";
     $this->_props["code_activite"]       = "notNull|num|maxLength|2";

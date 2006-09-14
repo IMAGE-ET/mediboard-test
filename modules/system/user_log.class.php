@@ -32,6 +32,8 @@ class CUserLog extends CMbObject {
   function CUserLog() {
     $this->CMbObject("user_log", "user_log_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["user_id"]      = "ref|notNull";
     $this->_props["date"]         = "dateTime|notNull";
     $this->_props["object_id"]    = "ref|notNull";

@@ -91,6 +91,8 @@ class COperation extends CMbObject {
 
   function COperation() {
     $this->CMbObject("operations", "operation_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["chir_id"]        = "ref|notNull";
     $this->_props["plageop_id"]     = "ref";

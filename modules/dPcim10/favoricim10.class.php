@@ -17,6 +17,8 @@ class CFavoricim10 extends CMbObject {
 
 	function CFavoricim10() {
 		$this->CMbObject("cim10favoris", "favoris_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["favoris_code"] = "str|notNull";
     $this->_props["favoris_user"] = "ref|notNull";

@@ -34,6 +34,8 @@ class CCompteRendu extends CMbObject {
 
   function CCompteRendu() {
     $this->CMbObject("compte_rendu", "compte_rendu_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["chir_id"]     = "ref|xor|function_id";
     $this->_props["function_id"] = "ref";

@@ -29,6 +29,8 @@
   function CIdSante400() {
     $this->CMbObject("id_sante400", "id_sante400_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["object_id"]    = "ref|notNull";
     $this->_props["object_class"] = "str|maxLength|25";
     $this->_props["id400"]        = "str|maxLength|8";

@@ -19,6 +19,8 @@ class CFilesCategory extends CMbObject {
   
   function CFilesCategory() {
     $this->CMbObject("files_category", "file_category_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["file_category_id"]  = "ref";
     $this->_props["nom"]               = "str|maxLength|50|notNull";

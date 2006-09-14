@@ -23,6 +23,8 @@ class CExamComp extends CMbObject {
 
   function CExamComp() {
     $this->CMbObject("exams_comp", "exam_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["exam_id"]         = "ref|notNull";
     $this->_props["consultation_id"] = "ref|notNull";

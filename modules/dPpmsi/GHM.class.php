@@ -61,6 +61,9 @@ class CGHM  extends CMbObject {
   // Constructeur
   function CGHM() {
     $this->CMbObject("ghm", "ghm_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
+
     global $AppUI;
     
     // Connection à la base

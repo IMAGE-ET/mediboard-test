@@ -28,6 +28,8 @@ class CTempsPrepa extends CMbObject {
   function CTempsPrepa() {
     $this->CMbObject("temps_prepa", "temps_prepa_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["temps_prepa_id"] = "ref";
     $this->_props["chir_id"]        = "ref";
     $this->_props["nb_plage"]       = "num|pos";

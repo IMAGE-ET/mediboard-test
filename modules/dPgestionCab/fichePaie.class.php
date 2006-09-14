@@ -62,6 +62,8 @@ class CFichePaie extends CMbObject {
   function CFichePaie() {
     $this->CMbObject("fiche_paie", "fiche_paie_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["params_paie_id"] = "ref|notNull";
     $this->_props["debut"]          = "date|notNull";
     $this->_props["fin"]            = "date|moreEquals|debut|notNull";

@@ -27,6 +27,8 @@ class CMateriel extends CMbObject {
   
   function CMateriel() {
     $this->CMbObject("materiel", "materiel_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["nom"] = "str|maxLength|50|notNull";
     $this->_props["code_barre"] = "num";

@@ -37,6 +37,8 @@ class CFile extends CMbObject {
   function CFile() {
     $this->CMbObject("files_mediboard", "file_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["file_class"]         = "str|notNull";
     $this->_props["file_object_id"]     = "ref|notNull";
     $this->_props["file_category_id"]   = "ref";

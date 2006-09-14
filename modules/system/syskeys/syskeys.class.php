@@ -14,6 +14,7 @@ class CSysKey extends CMbObject {
 
 	function CSysKey($name = null, $label = null, $type = "0", $sep1 = "\n", $sep2 = "|") {
 		$this->CMbObject("syskeys", "syskey_id");
+    $this->loadRefModule(basename(dirname(__FILE__)));
 		$this->syskey_name  = $name;
 		$this->syskey_label = $label;
 		$this->syskey_type  = $type;
@@ -34,6 +35,7 @@ class CSysVal extends CMbObject {
 
 	function CSysVal( $key = null, $title = null, $value = null ) {
 		$this->CMbObject("sysvals", "sysval_id");
+    $this->loadRefModule(basename(dirname(__FILE__)));
 		$this->sysval_key_id = $key;
 		$this->sysval_title  = $title;
 		$this->sysval_value  = $value;

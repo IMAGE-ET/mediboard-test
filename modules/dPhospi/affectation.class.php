@@ -39,6 +39,8 @@ class CAffectation extends CMbObject {
 	function CAffectation() {
 		$this->CMbObject("affectation", "affectation_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["lit_id"]       = "ref|notNull";
     $this->_props["sejour_id"]    = "ref|notNull";
     $this->_props["entree"]       = "dateTime|notNull";

@@ -38,6 +38,8 @@ class CPlageconsult extends CMbObject {
   function CPlageconsult() {
     $this->CMbObject("plageconsult", "plageconsult_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["chir_id"] = "ref|notNull";
     $this->_props["date"]    = "date|notNull";
     $this->_props["freq"]    = "time|notNull";

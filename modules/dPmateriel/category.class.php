@@ -20,6 +20,8 @@ class CCategory extends CMbObject {
   
   function CCategory() {
     $this->CMbObject("materiel_category", "category_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["category_name"] = "str|maxLength|50|notNull";
     

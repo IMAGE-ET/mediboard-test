@@ -11,14 +11,14 @@ define("PERM_READ", "1" );
 define("PERM_ALL" , "-1");
 
 // Flags for Mediboard modules 
-define ("HIDDEN_READNONE_EDITNONE" ,  0); // PERM_DENY in dotProject
-define ("HIDDEN_READNONE_EDITALL"  ,  2);
-define ("HIDDEN_READALL_EDITNONE"  ,  3);
-define ("HIDDEN_READALL_EDITALL"   ,  4);
-define ("VISIBLE_READNONE_EDITNONE",  5);
-define ("VISIBLE_READNONE_EDITALL" ,  6);
-define ("VISIBLE_READALL_EDITNONE" ,  1); // PERM_READ in dotProject
-define ("VISIBLE_READALL_EDITALL"  , -1); // PERM_EDIT 
+define ("HIDDEN_READNONE_EDITNONE" ,  0); // PERM_DENY / HIDE
+define ("HIDDEN_READNONE_EDITALL"  ,  2); // ..
+define ("HIDDEN_READALL_EDITNONE"  ,  3); // PERM_READ / HIDE
+define ("HIDDEN_READALL_EDITALL"   ,  4); // PERM_EDIT / HIDE
+define ("VISIBLE_READNONE_EDITNONE",  5); // PERM_DENY / SHOW
+define ("VISIBLE_READNONE_EDITALL" ,  6); // ..
+define ("VISIBLE_READALL_EDITNONE" ,  1); // PERM_READ / SHOW
+define ("VISIBLE_READALL_EDITALL"  , -1); // PERM_EDIT / SHOW
 
 // Access
 $module_permission_matrix = 
@@ -65,6 +65,8 @@ class CPermission extends CMbObject {
   
   function CPermission() {
     $this->CMbObject("permissions", "permission_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
   function updateFormFields() {

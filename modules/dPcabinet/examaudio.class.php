@@ -79,6 +79,8 @@ class CExamAudio extends CMbObject {
     global $frequences;
     
     $this->CMbObject("examaudio", "examaudio_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["consultation_id"] = "ref|notNull";
     $this->_props["remarques"]       = "text";

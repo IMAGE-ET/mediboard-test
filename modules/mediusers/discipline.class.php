@@ -22,6 +22,8 @@ class CDiscipline extends CMbObject {
 
   function CDiscipline() {
     $this->CMbObject("discipline", "discipline_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["text"] = "str|notNull";
     

@@ -26,6 +26,9 @@ class CStock extends CMbObject {
 
 	function CStock() {
 	  $this->CMbObject("stock", "stock_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
+
     $this->_props["materiel_id"] = "ref|notNull";
     $this->_props["group_id"] = "ref|notNull";
     $this->_props["seuil_cmd"] = "num|pos|notNull";

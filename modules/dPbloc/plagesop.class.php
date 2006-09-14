@@ -45,6 +45,8 @@ class CPlageOp extends CMbObject {
 
   function CPlageOp() {
     $this->CMbObject("plagesop", "plageop_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["chir_id"]   = "ref";
     $this->_props["anesth_id"] = "ref";

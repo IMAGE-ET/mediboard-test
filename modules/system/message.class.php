@@ -31,6 +31,8 @@ class CMessage extends CMbObject {
 	function CMessage() {
 		$this->CMbObject("message", "message_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["deb"]   = "dateTime|notNull";
     $this->_props["fin"]   = "dateTime|notNull";
     $this->_props["titre"] = "str|maxLength|40|notNull";

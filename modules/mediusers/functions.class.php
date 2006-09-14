@@ -29,6 +29,8 @@ class CFunctions extends CMbObject {
 	function CFunctions() {
 		$this->CMbObject("functions_mediboard", "function_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["group_id"] = "ref|notNull";
     $this->_props["type"]     = "enum|administratif|cabinet|notNull";
     $this->_props["text"]     = "str|notNull|confidential";

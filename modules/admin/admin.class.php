@@ -58,6 +58,8 @@ class CUser extends CMbObject {
 	function CUser() {
 		$this->CMbObject("users", "user_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_seek = array();
     $this->_seek["user_last_name"]  = "likeBegin";
     $this->_seek["user_first_name"] = "likeBegin";

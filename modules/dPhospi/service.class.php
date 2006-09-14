@@ -29,6 +29,8 @@ class CService extends CMbObject {
 
 	function CService() {
 		$this->CMbObject("service", "service_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["group_id"]    = "ref|notNull";
     $this->_props["nom"]         = "str|notNull|confidential";

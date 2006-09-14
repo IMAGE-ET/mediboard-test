@@ -31,6 +31,8 @@ class CPack extends CMbObject {
   function CPack() {
     $this->CMbObject("pack", "pack_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["chir_id"] = "ref|notNull";
     $this->_props["nom"]     = "str|notNull|confidential";
     $this->_props["modeles"] = "str";

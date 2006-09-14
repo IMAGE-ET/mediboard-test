@@ -46,6 +46,8 @@ class CPlageressource extends CMbObject {
   function CPlageressource() {
     $this->CMbObject("plageressource", "plageressource_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["prat_id"] = "ref";
     $this->_props["date"]    = "date|notNull";
     $this->_props["debut"]   = "time|notNull";

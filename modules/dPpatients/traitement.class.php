@@ -24,6 +24,8 @@ class CTraitement extends CMbObject {
 
   function CTraitement() {
     $this->CMbObject("traitement", "traitement_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["patient_id"] = "ref|notNull";
     $this->_props["debut"]      = "date|notNull";

@@ -21,6 +21,8 @@ class CTypeAnesth extends CMbObject {
   function CTypeAnesth() {
     $this->CMbObject("type_anesth", "type_anesth_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["name"] = "str|notNull";
   }
   

@@ -24,6 +24,8 @@ class CAccessLog extends CMbObject {
   
   function CAccessLog () {
     $this->CMbObject("access_log", "accesslog_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
   function updateFormFields() {

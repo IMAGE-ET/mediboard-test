@@ -32,6 +32,8 @@ class CListeChoix extends CMbObject {
 
   function CListeChoix() {
     $this->CMbObject("liste_choix", "liste_choix_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["chir_id"]         = "ref";
     $this->_props["function_id"]     = "ref";

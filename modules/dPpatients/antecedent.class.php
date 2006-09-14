@@ -24,6 +24,8 @@ class CAntecedent extends CMbObject {
 
   function CAntecedent() {
     $this->CMbObject("antecedent", "antecedent_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["patient_id"] = "ref|notNull";
     $this->_props["type"]       = "enum|alle|trans|obst|chir|med|fam|notNull";

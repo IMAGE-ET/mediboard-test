@@ -25,6 +25,8 @@ class CAideSaisie extends CMbObject {
 
   function CAideSaisie() {
     $this->CMbObject("aide_saisie", "aide_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["user_id"] = "ref|notNull";
     $this->_props["class"]   = "str|notNull";

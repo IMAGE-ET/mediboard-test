@@ -86,6 +86,8 @@ class CPatient extends CMbObject {
 	function CPatient() {
 		$this->CMbObject("patients", "patient_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     static $props = array (
       "nom"              => "str|notNull|confidential",
       "prenom"           => "str|notNull",

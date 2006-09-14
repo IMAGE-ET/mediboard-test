@@ -32,6 +32,8 @@ class CGestionCab extends CMbObject {
   function CGestionCab() {
     $this->CMbObject("gestioncab", "gestioncab_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["function_id"]      = "ref|notNull";
     $this->_props["libelle"]          = "str|notNull";
     $this->_props["date"]             = "date|notNull";

@@ -31,6 +31,8 @@ class CFournisseur extends CMbObject {
   function CFournisseur() {
     $this->CMbObject("fournisseur", "fournisseur_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["societe"]    = "str|maxLength|50|notNull";
     $this->_props["adresse"]    = "str";
     $this->_props["codepostal"] = "num|length|5";

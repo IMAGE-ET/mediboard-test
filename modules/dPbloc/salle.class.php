@@ -25,6 +25,8 @@ class CSalle extends CMbObject {
 
 	function CSalle() {
 		$this->CMbObject("sallesbloc", "salle_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["group_id"] = "ref|notNull";
     $this->_props["nom"]      = "str|notNull";

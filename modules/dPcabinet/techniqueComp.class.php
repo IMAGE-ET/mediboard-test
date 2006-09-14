@@ -23,6 +23,8 @@ class CTechniqueComp extends CMbObject {
   
   function CTechniqueComp() {
     $this->CMbObject("techniques_anesth", "technique_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["technique_id"]           = "ref|notNull";
     $this->_props["consultation_anesth_id"] = "ref|notNull";

@@ -46,6 +46,8 @@ class CMedecin extends CMbObject {
 	function CMedecin() {
 		$this->CMbObject("medecin", "medecin_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["nom"]             = "str|notNull|confidential";
     $this->_props["prenom"]          = "str|confidential";
     $this->_props["nom_jeunefille"]  = "str|confidential";

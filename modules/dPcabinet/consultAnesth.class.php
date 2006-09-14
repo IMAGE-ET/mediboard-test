@@ -74,6 +74,8 @@ class CConsultAnesth extends CMbObject {
 
   function CConsultAnesth() {
     $this->CMbObject("consultation_anesth", "consultation_anesth_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["consultation_id"] = "ref|notNull";
     $this->_props["operation_id"]    = "ref";

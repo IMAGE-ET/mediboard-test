@@ -42,7 +42,8 @@ class CMbObject {
    * References
    */
   
-  var $_ref_logs = null; // history of the object
+  var $_ref_module = null; // Parent module
+  var $_ref_logs   = null; // history of the object
 
   /**
    * Constructor
@@ -62,18 +63,12 @@ class CMbObject {
   }
 
   /**
-   * Read/Write Permission generic check
+   * Permission generic check
    * return true or false
    */
 
-  function canRead($withRefs = true) {
-    $this->_canRead = true;
-    return $this->_canRead;
-  }
-  
-  function canEdit($withRefs = true) {
-    $this->_canEdit = true;
-    return $this->_canEdit;
+  function getPerm($user_id, $permType) {
+    return(CPermObject::getPermObject($user_id, $this, $permType));
   }
   
   /**
@@ -267,6 +262,11 @@ class CMbObject {
   }
 
   function loadRefsFwd() {
+  }
+  
+  function loadRefModule($name) {
+    $this->_ref_module = new CModule;
+    $this->_ref_module->loadByName($name);
   }
 
   /**

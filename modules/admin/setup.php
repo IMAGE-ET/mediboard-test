@@ -43,7 +43,7 @@ class CSetupadmin {
                   `user_id` MEDIUMINT NOT NULL ,
                   `mod_id` MEDIUMINT NOT NULL ,
                   `permission` TINYINT NOT NULL ,
-                  `show` TINYINT NOT NULL ,
+                  `view` TINYINT NOT NULL ,
                   PRIMARY KEY ( `perm_module_id` ) ,
                   UNIQUE ( `user_id`, `mod_id` )
                 ) TYPE=MyISAM COMMENT = 'table des permissions sur les modules';";
@@ -65,13 +65,10 @@ class CSetupadmin {
         $moduleClasses = array();
         $moduleClasses["dPetablissement"] = "CGroups";
         $moduleClasses["mediusers"] = "CMediusers";
-        $listOldPerms = new CPermission;
-        $listOldPerms = $listOldPerms->loadList();
+        $listOldPerms = CPermission::loadList();
         foreach($listOldPerms as $key => $value) {
           $module = new CModule;
-          $where = array();
-          $where["mod_name"] = "= '$value->permission_grant_on'";
-          $module->loadObject($where);
+          $module->loadByName($value->permission_grant_on);
           if($value->permission_item == -1) {
             $newPerm = new CPermModule;
             $newPerm->user_id = $value->permission_user;
@@ -84,9 +81,9 @@ class CSetupadmin {
               $newPerm->permission = 0;
             }
             if($value->_module_visible) {
-              $newPerm->show = 1;
+              $newPerm->view = 1;
             } else {
-              $newPerm->show = 0;
+              $newPerm->view = 0;
             }
           } else {
             $newPerm = new CPermObject;

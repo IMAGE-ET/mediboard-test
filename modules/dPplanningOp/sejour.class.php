@@ -73,6 +73,8 @@ class CSejour extends CMbObject {
 
 	function CSejour() {
     $this->CMbObject("sejour", "sejour_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
  
     $this->_props["patient_id"]    = "ref|notNull";
     $this->_props["praticien_id"]  = "ref|notNull";

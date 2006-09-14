@@ -37,6 +37,8 @@ class CGroups extends CMbObject {
   
   function CGroups() {
     $this->CMbObject("groups_mediboard", "group_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["text"]           = "str|notNull|confidential";
     $this->_props["raison_sociale"] = "str|maxLength|50|confidential";

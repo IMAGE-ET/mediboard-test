@@ -52,6 +52,8 @@ class CParamsPaie extends CMbObject {
   function CParamsPaie() {
     $this->CMbObject("params_paie", "params_paie_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["user_id"]   = "ref|notNull";
     $this->_props["smic"]      = "currency|min|0|notNull";
     $this->_props["csgds"]     = "pct|notNull";

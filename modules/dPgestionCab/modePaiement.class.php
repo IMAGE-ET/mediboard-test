@@ -24,6 +24,8 @@ class CModePaiement extends CMbObject {
   function CModePaiement() {
     $this->CMbObject("mode_paiement", "mode_paiement_id");
     
+    $this->loadRefModule(basename(dirname(__FILE__)));
+    
     $this->_props["function_id"] = "ref|notNull";
     $this->_props["nom"]         = "str|notNull";
     

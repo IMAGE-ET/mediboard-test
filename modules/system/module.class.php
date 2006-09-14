@@ -75,8 +75,7 @@ class CModule extends CMbObject {
   function loadModules() {
     $modules = new CModule;
     $order = "mod_ui_order";
-    $where = array();
-    $modules = $modules->loadList($where, $order);
+    $modules = $modules->loadList(null, $order);
     
     global $module_installed;
     global $module_active;
@@ -86,16 +85,16 @@ class CModule extends CMbObject {
     $module_active = array();
     $module_visible = array();
     
-    foreach ($modules as $keyModule => $valModule) {
+    foreach($modules as $keyModule => $valModule) {
       $module =& $modules[$keyModule];
         
       $module_installed[$module->mod_name] = $module;
       
-      if ($module->mod_active == 1) {
+      if($module->mod_active == 1) {
         $module_active[$module->mod_name] =& $module;
       }
     
-      if ($module->mod_ui_active == 1) {
+      if($module->mod_ui_active == 1) {
         $module_visible[$module->mod_name] =& $module;
       }
     }
