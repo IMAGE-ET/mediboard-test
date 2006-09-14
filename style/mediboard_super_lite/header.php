@@ -40,7 +40,7 @@
 foreach ($nav as $module) {
   $modDirectory = $module['mod_name'];
   if (isMbModuleVisible($modDirectory)) {
-    $modName = $AppUI->_("module-".$module['mod_ui_name']."-court");
+    $modName = $AppUI->_("module-".$module['mod_name']."-court");
     $modIcon = dPfindImage($module['mod_name'].".png", $module['mod_name']);
     $modImage = dPshowImage($modIcon, 48, 48, $modName);
     $liClass = $modDirectory == $m ? "class='selected'" : "";
