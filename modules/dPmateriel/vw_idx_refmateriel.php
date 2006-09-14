@@ -13,10 +13,6 @@ if(!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once($AppUI->getModuleClass("dPmateriel", "refmateriel"));
-require_once($AppUI->getModuleClass("dPmateriel", "category"   ));
-require_once($AppUI->getModuleClass("dPmateriel", "fournisseur"));
-
 $reference_id = mbGetValueFromGetOrSession("reference_id");
 
 // Chargement de la reference demandé
@@ -46,7 +42,6 @@ $Fournisseur = new CFournisseur;
 $listFournisseur = $Fournisseur->loadList();
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("listCategory"   ,$listCategory   );

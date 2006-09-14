@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPcim10', 'codecim10') );
-
 if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -34,7 +32,6 @@ if($i >= 0)
   $up =& $cim10->_levelsSup[$i];
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
 $smarty->assign('up', $up);

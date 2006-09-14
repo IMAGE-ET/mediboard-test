@@ -9,11 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m, $tab, $dPconfig;
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPplanningOp", "sejour"  ));
-require_once($AppUI->getModuleClass("dPpatients"  , "patients"));
-require_once($AppUI->getModuleClass("dPetablissement"  , "groups" ));
-
 if(!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
@@ -104,7 +99,6 @@ if($sejour->_ref_operations){
 
 
 // Création du template
-require_once($AppUI->getSystemClass ("smartydp" ));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("sejour"    , $sejour);

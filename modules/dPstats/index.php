@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("tabindex"));
-
 $tabs = array();
 $tabs[] = array("vw_hospitalisation", "Hospitalisation", 0);
 $tabs[] = array("vw_bloc", "Bloc opératoire", 0);

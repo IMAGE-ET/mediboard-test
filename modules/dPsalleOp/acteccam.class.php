@@ -7,10 +7,6 @@
  *  @author Thomas Despoix
  */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
-require_once($AppUI->getModuleClass("dPccam", "acte"));
-
 /**
  * Classe servant à gérer les enregistrements des actes CCAM pendant les
  * interventions

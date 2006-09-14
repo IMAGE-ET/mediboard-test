@@ -7,9 +7,6 @@
 * @author Sébastien Fillonneau
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
-
 class CExamComp extends CMbObject {
   // DB Table key
   var $exam_id = null;

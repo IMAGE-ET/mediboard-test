@@ -7,8 +7,6 @@
 * @author Romain OLLIVIER
 */
 
-require_once($AppUI->getSystemClass("tabindex"));
-
 $tabs = array();
 $tabs[] = array("view_planning", "Planning réservations", 0);
 $tabs[] = array("edit_planning", "Administration des plages", 1);

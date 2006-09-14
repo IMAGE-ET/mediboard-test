@@ -110,7 +110,6 @@ class CSetupdPbloc {
     global $AppUI;
     set_time_limit(1800);
     ignore_user_abort(1);
-    require_once($AppUI->getModuleClass("admin"));
     $user = new CUser;
     
     // Changement des chirurgiens

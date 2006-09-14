@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass("dPfiles", "files"));
-
 if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -95,7 +93,6 @@ foreach($files as $filePath) {
 
 
 // Création du template
-require_once( $AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("show", $show);

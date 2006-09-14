@@ -13,8 +13,6 @@ if(!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once($AppUI->getModuleClass("dPplanningOp", "sejour"));
-
 $deb     = mbGetValueFromGet("deb"    , date("Y-m-d")." 06:00:00");
 $fin     = mbGetValueFromGet("fin"    , date("Y-m-d")." 21:00:00");
 $service = mbGetValueFromGet("service", 0                        );
@@ -86,7 +84,6 @@ if(count($sejours)) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("deb"      , $deb           );

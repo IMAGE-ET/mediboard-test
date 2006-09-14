@@ -7,8 +7,6 @@
 * @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass("tabindex"));
-
 $tabs = array();
 $tabs[] = array("export_hprim", "Export HPRIM", 0);
 $tabs[] = array("send_mail", "Envoie de mails", 0);

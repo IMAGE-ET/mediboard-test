@@ -9,9 +9,6 @@
 
 global $AppUI;
 
-require_once( $AppUI->getModuleClass('dPpatients', 'antecedent') );
-require_once($AppUI->getSystemClass('doobjectaddedit'));
-
 $do = new CDoObjectAddEdit("CAntecedent", "antecedent_id");
 $do->createMsg = "Antecedent créé";
 $do->modifyMsg = "Antecedent modifié";

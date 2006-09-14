@@ -97,6 +97,19 @@ class CAppUI {
 		$this->user_locale = $this->base_locale;
 		$this->user_prefs = array();
 	}
+  
+  function getAllClasses() {
+    global $utypes;
+    // Require all global class
+    foreach(glob("classes/*.class.php") as $fileName) {
+      require_once($this->getConfig("root_dir")."/".$fileName);
+    }
+    // Require all core modules class
+    foreach(glob("modules/*/*.class.php") as $fileName) {
+      require_once($this->getConfig("root_dir")."/".$fileName);
+    }
+  }
+
 /**
 * Used to load a php class file from the system classes directory
 * @param string $name The class root file name (excluding .class.php)

@@ -7,9 +7,6 @@
  *  @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-require_once($AppUI->getModuleClass("mediusers", "functions"));
-
 /**
  * The CGroups class
  */

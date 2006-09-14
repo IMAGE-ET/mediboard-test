@@ -9,8 +9,6 @@
 
 global $AppUI, $m;
 
-require_once($AppUI->getModuleClass("dPpatients", "medecin"));
-
 set_time_limit(300);
 
 if (!class_exists("DOMDocument")) {
@@ -138,7 +136,6 @@ file_put_contents($path, $result);
 $str = @file_get_contents($path);
 if (!$str) {
   // Création du template
-  require_once( $AppUI->getSystemClass ('smartydp' ) );
   $smarty = new CSmartyDP(1);
   
   $smarty->assign("end_of_process", true);
@@ -248,20 +245,19 @@ foreach ($medecins as &$medecin) {
 $chrono->stop();
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
 $smarty->debugging = false;
 $smarty->assign("long_display", false);
 
 $smarty->assign("end_of_process", false);
-$smarty->assign("step", $step);
-$smarty->assign("from", $from);
-$smarty->assign("to", $to);
-$smarty->assign("medecins", $medecins);
-$smarty->assign("chrono", $chrono);
-$smarty->assign("parse_errors", $parse_errors);
-$smarty->assign("stores", $stores);
+$smarty->assign("step"          , $step);
+$smarty->assign("from"          , $from);
+$smarty->assign("to"            , $to);
+$smarty->assign("medecins"      , $medecins);
+$smarty->assign("chrono"        , $chrono);
+$smarty->assign("parse_errors"  , $parse_errors);
+$smarty->assign("stores"        , $stores);
 $smarty->assign("sibling_errors", $sibling_errors);
 
 $smarty->display("medecin.tpl");

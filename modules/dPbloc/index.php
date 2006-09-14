@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("tabindex"));
-
 $tabs = array();
 $tabs[] = array("vw_planning_week", "Planning de la semaine", 1);
 $tabs[] = array("vw_edit_planning", "Planning du jour", 1);

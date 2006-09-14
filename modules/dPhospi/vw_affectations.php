@@ -9,12 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m, $g;
 
-require_once($AppUI->getModuleClass("mediusers"   , "functions" ));
-require_once($AppUI->getModuleClass("dPhospi"     , "service"   ));
-require_once($AppUI->getModuleClass("dPplanningOp", "sejour"    ));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"  ));
-require_once($AppUI->getModuleClass("dPplanningOp", "pathologie"));
-
 global $pathos;
 
 if(!$canRead) {
@@ -200,7 +194,6 @@ $where = array(
 $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where);
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->debugging = false;

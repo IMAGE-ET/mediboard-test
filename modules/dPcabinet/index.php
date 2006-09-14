@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("tabindex"));
-
 $tabs = array();
 $tabs[] = array("vw_planning", "Programmes de consultation", 0);
 $tabs[] = array("edit_planning", "Créer / Modifier un rendez-vous", 0);

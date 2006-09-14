@@ -13,9 +13,6 @@ if(!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPhospi", "affectation"));
-
 // Récupération des paramètres
 $chirSel = mbGetValueFromGetOrSession("chirSel");
 $dateRecherche = mbGetValueFromGetOrSession("dateRecherche", mbDate());
@@ -96,7 +93,6 @@ $order[] = "nom";
 $hospiList = $hospiList->loadList($where, $order);
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("dateRecherche" , $dateRecherche);

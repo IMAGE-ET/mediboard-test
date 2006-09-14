@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("system", "user_log"));
-require_once($AppUI->getModuleClass("admin"));
-
 $dialog = mbGetValueFromGet("dialog");
 
 if (!$canRead && !$dialog) {
@@ -58,7 +55,6 @@ foreach($list as $key => $value) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("dialog"      , $dialog      );

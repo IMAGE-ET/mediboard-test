@@ -9,10 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPbloc"      , "salle"   ));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-
 require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"        ));
 require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_line"   ));
 require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_regstat"));

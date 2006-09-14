@@ -9,9 +9,6 @@
 
 global $AppUI;
 
-require_once($AppUI->getModuleClass("dPmateriel", "materiel"));
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-
 $do = new CDoObjectAddEdit("CMateriel", "materiel_id");
 $do->createMsg = "Matériel créé";
 $do->modifyMsg = "Matériel modifié";

@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-
 if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -53,7 +50,6 @@ $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens();
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("selOp"      , $selOp      );

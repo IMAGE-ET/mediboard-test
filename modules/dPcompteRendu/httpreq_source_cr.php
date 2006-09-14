@@ -9,11 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('mediusers'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'listeChoix'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'templatemanager'));
-
 if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }

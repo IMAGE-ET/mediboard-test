@@ -9,6 +9,6 @@
 
 $from = "./";
 
-require_once("$from/modules/dPfiles/httpreq_vw_listfiles.php");
+require_once($AppUI->getModuleFile("dPfiles", "httpreq_vw_listfiles"));
 
 ?>

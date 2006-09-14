@@ -7,12 +7,13 @@
  *  @author Thomas Despoix
 */
 
-require_once($AppUI->getModuleClass("dPcompteRendu", "aidesaisie"));
-
 /**
  * Class CMbObject 
  * @abstract Adds Mediboard abstraction layer functionality
  */
+
+require_once("./includes/db_connect.php");
+ 
 class CMbObject {
   
   /**

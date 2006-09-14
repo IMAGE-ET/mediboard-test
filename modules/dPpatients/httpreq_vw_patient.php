@@ -9,12 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("dPpatients"  , "patients"));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-require_once($AppUI->getModuleClass("dPcabinet"   , "consultation"));
-require_once($AppUI->getModuleClass("dPfiles"     , "filescategory"));
-require_once($AppUI->getModuleClass("dPfiles"     , "files"));
-
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -96,22 +90,21 @@ $canEditCabinet = !getDenyEdit("dPcabinet");
 $affichageNbFile = CFile::loadNbFilesByCategory($patient);
 
 // Création du template
-require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("affichageNbFile",$affichageNbFile                           );
-$smarty->assign("patient"       , $patient                                   );
-$smarty->assign("chir"          , $chir                                      );
-$smarty->assign("anesth"        , $anesth                                    );
-$smarty->assign("listPrat"      , $listPrat                                  );
-$smarty->assign("canEditCabinet", $canEditCabinet                            );
-$smarty->assign("listCategory"  , $listCategory                              );
-$smarty->assign("canReadFiles"  , $canReadFiles                              );
-$smarty->assign("canEditFiles"  , $canEditFiles                              );
+$smarty->assign("affichageNbFile" ,$affichageNbFile                           );
+$smarty->assign("patient"         , $patient                                   );
+$smarty->assign("chir"            , $chir                                      );
+$smarty->assign("anesth"          , $anesth                                    );
+$smarty->assign("listPrat"        , $listPrat                                  );
+$smarty->assign("canEditCabinet"  , $canEditCabinet                            );
+$smarty->assign("listCategory"    , $listCategory                              );
+$smarty->assign("canReadFiles"    , $canReadFiles                              );
+$smarty->assign("canEditFiles"    , $canEditFiles                              );
 $smarty->assign("canReadCptRendus", $canReadCptRendus                        );
 $smarty->assign("canEditCptRendus", $canEditCptRendus                        );
-$smarty->assign("listModelePrat", $listModelePrat                            );
-$smarty->assign("listModeleFct" , $listModeleFct                             );
+$smarty->assign("listModelePrat"  , $listModelePrat                            );
+$smarty->assign("listModeleFct"   , $listModeleFct                             );
 
 $smarty->display("inc_vw_patient.tpl");
 ?>

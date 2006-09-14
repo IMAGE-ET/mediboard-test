@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getSystemClass("mbpath"));
-
 $action = mbGetValueFromGet("action");
 
 switch ($action) {

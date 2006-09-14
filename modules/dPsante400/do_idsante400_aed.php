@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getModuleClass("dPressources", "plageressource"));
-
 // Object binding
 $obj = new CPlageressource();
 if (!$obj->bind( $_POST )) {

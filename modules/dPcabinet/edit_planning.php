@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
-require_once($AppUI->getModuleClass("dPcabinet", "plageconsult"));
-
 if (!$canEdit) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -61,7 +58,6 @@ if(!$consultation_id) {
   $pat  =& $consult->_ref_patient;
 }
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("plageConsult"     , $plageConsult     );

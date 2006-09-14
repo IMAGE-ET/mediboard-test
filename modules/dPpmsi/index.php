@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("tabindex"));
-
 $tabs = array();
 $tabs[] = array("vw_dossier", "Dossiers patient", 0);
 $tabs[] = array("edit_actes", "Codage des actes", 0);

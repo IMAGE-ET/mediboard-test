@@ -12,7 +12,6 @@ if(function_exists("date_default_timezone_set")) {
 }
 
 global $AppUI, $canRead, $canEdit, $m;
-require_once($AppUI->getModuleClass("mediusers"));
 
 $intervalle = mbGetValueFromGet("intervalle", "none");
 

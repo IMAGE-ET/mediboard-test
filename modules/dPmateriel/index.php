@@ -7,8 +7,6 @@
  *  @author Sébastien Fillonneau
  */
 
-require_once($AppUI->getSystemClass("tabindex"));
-
 $tabs = array();
 $tabs[] = array("vw_idx_stock", "Edition des stocks", 0);
 $tabs[] = array("vw_idx_materiel", "Edition des Fiches matériel", 0);

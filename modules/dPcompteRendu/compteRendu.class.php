@@ -7,14 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("mbobject" ));
-
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("mediusers"   , "functions"));
-require_once($AppUI->getModuleClass("dPcabinet"   , "consultation"));
-require_once($AppUI->getModuleClass("dPcabinet"   , "consultAnesth"));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-
 class CCompteRendu extends CMbObject {
   // DB Table key
   var $compte_rendu_id = null;

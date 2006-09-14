@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPcabinet', 'consultAnesth') );
-require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
-
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }

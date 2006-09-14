@@ -9,9 +9,6 @@
 
 global $AppUI, $m, $tab, $a, $dosql;
 
-//require_once($AppUI->getSystemClass("accesslog"));
-require_once($AppUI->getModuleClass("system", "accesslog"));
-
 $module = $m;
 $action = mbGetValue(@$tab, $a, $dosql);
 $period = mbTranformTime(null, null, "%Y-%m-%d %H:00:00");

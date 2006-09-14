@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass("dPcompteRendu", "aidesaisie"));
-require_once( $AppUI->getModuleClass("mediusers", "mediusers"));
-
 if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -72,15 +69,14 @@ if (!$aide_id) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("users", $users);
-$smarty->assign("classes", $classes);
+$smarty->assign("users"         , $users);
+$smarty->assign("classes"       , $classes);
 $smarty->assign("filter_user_id", $filter_user_id);
-$smarty->assign("filter_class", $filter_class);
-$smarty->assign("aides", $aides);
-$smarty->assign("aide", $aide);
+$smarty->assign("filter_class"  , $filter_class);
+$smarty->assign("aides"         , $aides);
+$smarty->assign("aide"          , $aide);
 
 $smarty->display("vw_idx_aides.tpl");
 

@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("dPsante400", "idsante400"));
-
 $dialog = mbGetValueFromGet("dialog");
 
 if (!$canRead && !$dialog) {
@@ -49,7 +47,6 @@ foreach($list_idSante400 as $idSante400) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("listClasses", $listClasses);

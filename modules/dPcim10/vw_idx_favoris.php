@@ -15,9 +15,6 @@ if (!$canRead) {
 
 $user = $AppUI->user_id;
 
-require_once($AppUI->getModuleClass("dPcim10", "favoricim10"));
-require_once($AppUI->getModuleClass("dPcim10", "codecim10"));
-
 $lang = mbGetValueFromGetOrSession("lang", LANG_FR);
 
 // Recherche des codes favoris
@@ -38,7 +35,6 @@ foreach($favoris as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
 $smarty->assign('lang', $lang);

@@ -9,11 +9,11 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleFile("dPcabinet", "jpgraph_bezier"));
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph'));
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph_line'));
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph_scatter'));
-require_once( $AppUI->getLibraryClass('jpgraph/src/jpgraph_regstat'));
+require_once($AppUI->getModuleFile("dPcabinet", "jpgraph_bezier"));
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"));
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_line"));
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_scatter"));
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_regstat"));
 
 function xPseudoAxisFormatCb ($value) {
 	$value -= 50;

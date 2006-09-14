@@ -9,10 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-require_once( $AppUI->getModuleClass("dPplanningOp", "sejour"));
-require_once( $AppUI->getModuleClass("dPplanningOp", "planning"));
-
 if ($praticien_id = mbGetValueFromPost("praticien_id")) {
   mbSetValueToSession("praticien_id", $praticien_id);
 }

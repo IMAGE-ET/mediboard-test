@@ -5,7 +5,9 @@
 * @todo Encapsulate into a database object
 */
 
-require_once($AppUI->getSystemClass("chrono"));
+global $AppUI;
+
+$AppUI->getSystemClass("chrono");
 
 $dbChronos = array();
 

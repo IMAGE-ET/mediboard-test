@@ -9,8 +9,6 @@
  
 global $AppUI, $m;
 
-require_once($AppUI->getSystemClass("mbobject"));
-
 /**
 * Module class
 */

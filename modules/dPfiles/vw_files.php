@@ -9,10 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPfiles", "filescategory"));
-require_once($AppUI->getModuleClass("dPfiles", "files"        ));
-
 if (!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
 }
@@ -43,7 +39,6 @@ if($cat_id != 0){
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $object = null;

@@ -8,8 +8,6 @@
 */
 
 global $AppUI, $utypes;
-require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();

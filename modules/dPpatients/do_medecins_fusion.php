@@ -9,9 +9,6 @@
 
 global $AppUI, $m;
 
-require_once($AppUI->getModuleClass("dPpatients", "medecin"));
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-
 $medecin1 = new CMedecin;
 $medecin1->load($_POST["medecin1_id"]);
 $medecin2 = new CMedecin;

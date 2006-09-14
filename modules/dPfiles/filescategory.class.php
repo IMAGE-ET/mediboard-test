@@ -7,8 +7,6 @@
  *  @author Sébastien Fillonneau
  */
 
-require_once( $AppUI->getSystemClass("mbobject"));
-
 /**
  * The CFilesCategory class
  */

@@ -7,10 +7,6 @@
 * @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
-require_once($AppUI->getModuleClass("mediusers"));
-
 class CAideSaisie extends CMbObject {
   // DB Table key
   var $aide_id = null;

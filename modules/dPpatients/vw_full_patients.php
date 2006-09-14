@@ -9,14 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPpatients"  , "patients"));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-require_once($AppUI->getModuleClass("dPcabinet"   , "consultation"));
-require_once($AppUI->getModuleClass("dPfiles"     , "filescategory"));
-require_once($AppUI->getModuleClass("dPfiles"     , "files"));
-require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
-
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -126,7 +118,6 @@ foreach($object->_ref_files as $keyFile => $FileData){
 }
 
 // Création du template
-require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("patient"         , $patient         );

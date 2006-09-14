@@ -7,10 +7,6 @@
  *  @author Sébastien Fillonneau
  */
 
-require_once($AppUI->getSystemClass("mbobject"));
-require_once($AppUI->getModuleClass("dPmateriel", "fournisseur"));
-require_once($AppUI->getModuleClass("dPmateriel", "materiel"));
-
 /**
  * The CRefMateriel class
  */

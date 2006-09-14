@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m, $tab;
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPplanningOp", "protocole"));
-
 if(!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
@@ -62,7 +59,6 @@ for ($i = 0; $i < 60; $i += $step) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("protocole", $protocole);

@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -57,11 +55,10 @@ for ($i = 0; $i < 5; $i++) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass('smartydp'));
 $smarty = new CSmartyDP(1);
-$smarty->assign('list1' , $list1 );
-$smarty->assign('list2' , $list2 );
+$smarty->assign("list1" , $list1 );
+$smarty->assign("list2" , $list2 );
 
-$smarty->display('vw_urgences.tpl');
+$smarty->display("vw_urgences.tpl");
 
 ?>

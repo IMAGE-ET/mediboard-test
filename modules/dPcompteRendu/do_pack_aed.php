@@ -7,8 +7,6 @@
 * @author Romain OLLIVIER
 */
 
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'pack'));
-
 $obj = new CPack();
 $msg = null;
 

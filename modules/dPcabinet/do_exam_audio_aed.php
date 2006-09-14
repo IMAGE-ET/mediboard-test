@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-require_once($AppUI->getModuleClass("dPcabinet", "examaudio"));
-
 mbSetValueToSession("_conduction", $_POST["_conduction"]);
 mbSetValueToSession("_oreille", $_POST["_oreille"]);
 

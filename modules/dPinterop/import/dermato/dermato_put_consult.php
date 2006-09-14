@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("dPcabinet", "plageconsult"));
-require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
-
 $limit = mbGetValueFromGetOrSession("limit", 0);
 
 if ($limit == -1) {

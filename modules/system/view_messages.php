@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("system", "message"));
-
 global $mp_status;
 
 if (!$canRead) {
@@ -28,7 +26,6 @@ $messages = new CMessage;
 $messages = $messages->loadPublications($filter_status);
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("message"      , $message      );

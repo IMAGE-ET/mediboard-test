@@ -7,9 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
-
 $frequences = array(
   "125Hz",
   "250Hz",

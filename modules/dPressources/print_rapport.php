@@ -13,9 +13,6 @@ if(!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPressources", "plageressource"));
-
 $prat_id = mbGetValueFromGet("prat_id", 0);
 if(!$prat_id) {
   echo "Vous devez choisir un praticien valide";
@@ -47,7 +44,6 @@ foreach($plages as $key => $value) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->debugging = false;

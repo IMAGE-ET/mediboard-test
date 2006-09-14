@@ -9,9 +9,6 @@
 
 global $AppUI, $m;
 
-require_once($AppUI->getModuleClass("dPhospi", "affectation"));
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-
 $entree = $_POST["entree"];
 $sortie = $_POST["sortie"];
 

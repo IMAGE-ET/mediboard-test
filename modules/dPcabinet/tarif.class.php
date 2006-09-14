@@ -7,11 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("mediusers", "functions"));
-
 class CTarif extends CMbObject {
   // DB Table key
   var $tarif_id = null;

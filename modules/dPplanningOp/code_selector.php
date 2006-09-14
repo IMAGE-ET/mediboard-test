@@ -14,9 +14,6 @@ global $AppUI, $canRead, $canEdit, $m;
 //  $AppUI->redirect( "m=system&a=access_denied" );
 //}
 
-require_once($AppUI->getModuleClass("dPccam" , "acte"     ));
-require_once($AppUI->getModuleClass("dPcim10", "codecim10"));
-
 $list = array();
 $type = mbGetValueFromGet("type", 0 );
 $chir = mbGetValueFromGet("chir", 0 );
@@ -57,7 +54,6 @@ switch($type) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("type", $type);

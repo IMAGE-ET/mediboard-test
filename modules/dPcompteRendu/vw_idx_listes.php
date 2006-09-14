@@ -9,10 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'listeChoix'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu'));
-require_once( $AppUI->getModuleClass('mediusers', 'mediusers'));
-
 if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -109,19 +105,18 @@ $liste->loadRefsFwd();
 //}
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('users'     , $listPrat  );
-$smarty->assign('user_id'   , $user_id   );
-$smarty->assign('listPrat'  , $listPrat  );
-$smarty->assign('listFunc'  , $listFunc  );
-$smarty->assign('listCrPrat', $listCrPrat);
-$smarty->assign('listCrFunc', $listCrFunc);
-$smarty->assign('listesPrat', $listesPrat);
-$smarty->assign('listesFunc', $listesFunc);
-$smarty->assign('liste'     , $liste     );
+$smarty->assign("users"     , $listPrat  );
+$smarty->assign("user_id"   , $user_id   );
+$smarty->assign("listPrat"  , $listPrat  );
+$smarty->assign("listFunc"  , $listFunc  );
+$smarty->assign("listCrPrat", $listCrPrat);
+$smarty->assign("listCrFunc", $listCrFunc);
+$smarty->assign("listesPrat", $listesPrat);
+$smarty->assign("listesFunc", $listesFunc);
+$smarty->assign("liste"     , $liste     );
 
-$smarty->display('vw_idx_listes.tpl');
+$smarty->display("vw_idx_listes.tpl");
 
 ?>

@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
-require_once($AppUI->getModuleClass("dPcabinet", "examaudio"));
-
 if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -28,7 +25,7 @@ $exam_audio->loadRefs();
 $exam_audio->_ref_consult->loadRefsFwd();
 
 
-require_once( $AppUI->getModuleFile("$m", "inc_graph_audio_tonal"));
+require_once($AppUI->getModuleFile("$m", "inc_graph_audio_tonal"));
 
 $graph_tonal_gauche->Stroke("tmp/graphtmp.png");
 $map_tonal_gauche = $graph_tonal_gauche->GetHTMLImageMap("graph_tonal_gauche");
@@ -36,14 +33,14 @@ $map_tonal_gauche = $graph_tonal_gauche->GetHTMLImageMap("graph_tonal_gauche");
 $graph_tonal_droite->Stroke("tmp/graphtmp.png");
 $map_tonal_droite = $graph_tonal_droite->GetHTMLImageMap("graph_tonal_droite");
 
-require_once( $AppUI->getModuleFile("$m", "inc_graph_audio_tympan"));
+require_once($AppUI->getModuleFile("$m", "inc_graph_audio_tympan"));
 $graph_tympan_gauche->Stroke("tmp/graphtmp.png");
 $map_tympan_gauche = $graph_tympan_gauche->GetHTMLImageMap("graph_tympan_gauche");
 
 $graph_tympan_droite->Stroke("tmp/graphtmp.png");
 $map_tympan_droite = $graph_tympan_droite->GetHTMLImageMap("graph_tympan_droite");
 
-require_once( $AppUI->getModuleFile("$m", "inc_graph_audio_vocal"));
+require_once($AppUI->getModuleFile("$m", "inc_graph_audio_vocal"));
 $graph_vocal->Stroke("tmp/graphtmp.png");
 $map_vocal = $graph_vocal->GetHTMLImageMap("graph_vocal");
 
@@ -70,7 +67,6 @@ foreach ($bilan as $frequence => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("_conduction", $_conduction);

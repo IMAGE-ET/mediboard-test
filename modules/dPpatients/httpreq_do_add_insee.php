@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getSystemClass("mbpath"));
-
 $filepath = "modules/dPpatients/INSEE/insee.tar.gz";
 $filedir = "tmp/insee";
 

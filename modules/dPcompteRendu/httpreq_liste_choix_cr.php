@@ -9,11 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('mediusers'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'listeChoix'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'templatemanager'));
-
 if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -46,14 +41,13 @@ $lists = $templateManager->getUsedLists($chirLists);
 $templateManager->initHTMLArea();
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
 
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('templateManager', $templateManager);
-$smarty->assign('compte_rendu', $compte_rendu);
-$smarty->assign('lists', $lists);
+$smarty->assign("templateManager", $templateManager);
+$smarty->assign("compte_rendu"   , $compte_rendu);
+$smarty->assign("lists"          , $lists);
 
-$smarty->display('inc_liste_choix_cr.tpl');
+$smarty->display("inc_liste_choix_cr.tpl");
 
 ?>

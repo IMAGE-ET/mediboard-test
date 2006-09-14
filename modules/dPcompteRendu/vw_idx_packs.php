@@ -9,10 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'pack'));
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu'));
-require_once( $AppUI->getModuleClass('mediusers', 'mediusers'));
-
 if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -85,16 +81,15 @@ if($pack_id) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('users', $users);
-$smarty->assign('user_id', $user_id);
-$smarty->assign('listModelePrat', $listModelePrat);
-$smarty->assign('listModeleFunc', $listModeleFunc);
-$smarty->assign('packs', $packs);
-$smarty->assign('pack', $pack);
+$smarty->assign("users"         , $users);
+$smarty->assign("user_id"       , $user_id);
+$smarty->assign("listModelePrat", $listModelePrat);
+$smarty->assign("listModeleFunc", $listModeleFunc);
+$smarty->assign("packs"         , $packs);
+$smarty->assign("pack"          , $pack);
 
-$smarty->display('vw_idx_packs.tpl');
+$smarty->display("vw_idx_packs.tpl");
 
 ?>

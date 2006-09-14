@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("dPressources", "plageressource"));
-
 if(!$canEdit) {
   $AppUI->redirect("m=system&a=access_denied");
 }
@@ -53,7 +51,6 @@ for ($i = 8; $i <= 20; $i++) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("debut"    , $debut    );

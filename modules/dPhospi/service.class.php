@@ -7,10 +7,6 @@
  *  @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-require_once($AppUI->getModuleClass("dPhospi", "chambre"));
-require_once($AppUI->getModuleClass("dPetablissement", "groups"));
-
 /**
  * Classe CService. 
  * @abstract Gère les services d'hospitalisation

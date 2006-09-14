@@ -7,19 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass ("mbobject"));
-
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPpatients"  , "patients"     ));
-require_once($AppUI->getModuleClass("dPbloc"      , "plagesop"     ));
-require_once($AppUI->getModuleClass("dPbloc"      , "salle"        ));
-require_once($AppUI->getModuleClass("dPccam"      , "acte"         ));
-require_once($AppUI->getModuleClass("dPcabinet"   , "consultAnesth"));
-require_once($AppUI->getModuleClass("dPfiles"     , "files"        ));
-require_once($AppUI->getModuleClass("dPplanningOp", "sejour"       ));
-require_once($AppUI->getModuleClass("dPsalleOp"   , "acteccam"     ));
-require_once($AppUI->getModuleClass("dPplanningOp", "typeanesth"   ));
-
 // @todo: Put the following in $config_dist;
 $dPconfig["dPplanningOp"]["operation"] = array (
   "duree_deb"        => "0",

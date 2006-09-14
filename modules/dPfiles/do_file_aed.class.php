@@ -7,9 +7,6 @@
 * @author Sébastien Fillonneau
 */
 
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-require_once($AppUI->getModuleClass("dPfiles", "files"));
-
 set_time_limit(600);
 ignore_user_abort(1);
 

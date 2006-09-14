@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPplanningOp", "protocole"));
-
 // L'utilisateur est-il chirurgien?
 $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
@@ -57,7 +54,6 @@ if ($protocole_id = mbGetValueFromGetOrSession("protocole_id")) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("protocoles", $protocoles);

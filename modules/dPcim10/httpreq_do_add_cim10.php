@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getSystemClass("mbpath"));
-
 set_time_limit(360);
 ini_set("memory_limit", "64M");
 

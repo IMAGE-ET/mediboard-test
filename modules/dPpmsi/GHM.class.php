@@ -7,8 +7,6 @@
  * @author Romain Ollivier
  */
 
-require_once($AppUI->getModuleClass("dPplanningOp", "sejour"));
-
 class CGHM  extends CMbObject {
   // DB Table key
   var $ghm_id = null;

@@ -13,8 +13,6 @@ if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once( $AppUI->getModuleClass('mediusers') );
-
 set_time_limit( 1800 );
 
 $sql = "SELECT * FROM dermato_import_praticiens";

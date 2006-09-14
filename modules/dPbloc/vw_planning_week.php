@@ -9,11 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m, $g;
 
-require_once($AppUI->getModuleClass("dPbloc"     , "plagesop"  ));
-require_once($AppUI->getModuleClass("dPbloc"     , "salle"     ));
-require_once($AppUI->getModuleClass("mediusers"  , "functions" ));
-
-
 $date = mbGetValueFromGetOrSession("date", mbDate());
 
 $date = mbDate("last sunday", $date);
@@ -109,7 +104,6 @@ $listSpec = $listSpec->loadSpecialites();
 
 
 //Création du template
-require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("listDays"       , $listDays      );

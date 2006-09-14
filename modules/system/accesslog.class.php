@@ -7,8 +7,6 @@
  * @author Thomas Despoix
  */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
 class CAccessLog extends CMbObject {
   var $accesslog_id = null;
   

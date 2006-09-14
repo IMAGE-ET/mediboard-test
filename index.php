@@ -14,11 +14,6 @@ if(!is_file("./includes/config.php")) {
 }
 
 require_once("./classes/ui.class.php");
-require_once("./classes/chrono.class.php");
-
-$phpChrono = new Chronometer;
-$phpChrono->start();
-
 require_once("./includes/config.php");
 
 // Check that the user has correctly set the root directory
@@ -51,16 +46,15 @@ if(!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
 }
 
 $AppUI =& $_SESSION["AppUI"];
+$AppUI->getAllClasses();
+
+$phpChrono = new Chronometer;
+$phpChrono->start();
+
 $AppUI->setConfig($dPconfig);
 $AppUI->checkStyle();
  
-// load the db handler
-require_once("./includes/db_connect.php");
 
-// load the commonly used classes
-require_once($AppUI->getSystemClass("date"));
-require_once($AppUI->getSystemClass("mbobject"));
-require_once($AppUI->getModuleClass("system", "module"));
 
 // load default preferences if not logged in
 if($AppUI->doLogin()) {

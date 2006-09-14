@@ -9,15 +9,6 @@
 
 global $utypes, $utypes_flip;
 
-require_once($AppUI->getSystemClass("mbobject"));
-
-require_once($AppUI->getModuleClass("admin"));
-require_once($AppUI->getModuleClass("mediusers"    , "functions"));
-require_once($AppUI->getModuleClass("mediusers"    , "discipline"));
-require_once($AppUI->getModuleClass("dPcompteRendu", "pack"));
-require_once($AppUI->getModuleClass("dPplanningOp" , "planning"));
-require_once($AppUI->getModuleClass("dPplanningOp" , "protocole"));
-
 $utypes_flip = array_flip($utypes);
 
 /**

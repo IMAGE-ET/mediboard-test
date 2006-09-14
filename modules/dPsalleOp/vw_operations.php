@@ -13,13 +13,6 @@ if (!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("mediusers"   , "functions"));
-require_once($AppUI->getModuleClass("dPbloc"      , "salle"    ));
-require_once($AppUI->getModuleClass("dPbloc"      , "plagesop" ));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning" ));
-require_once($AppUI->getModuleClass("dPplanningOp", "typeanesth"));
-
 $salle = mbGetValueFromGetOrSession("salle");
 $op    = mbGetValueFromGetOrSession("op");
 $date  = mbGetValueFromGetOrSession("date", mbDate());
@@ -104,7 +97,6 @@ $orderanesth = "name";
 $listAnesthType = $listAnesthType->loadList(null,$orderanesth);
 
 // Création du template
-require_once( $AppUI->getSystemClass ("smartydp" ) );
 $smarty = new CSmartyDP(1);
 
 $smarty->debugging = false;

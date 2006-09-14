@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getSystemClass("mbpath"));
-
 $type = mbGetValueFromGet("type");
 
 $filepath = "modules/dPpmsi/ghm/ghm.tar.gz";

@@ -9,9 +9,6 @@
 
 global $AppUI;
 
-require_once($AppUI->getModuleClass("dPmateriel", "refmateriel"));
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-
 $do = new CDoObjectAddEdit("CRefMateriel", "reference_id");
 $do->createMsg = "Référence créée";
 $do->modifyMsg = "Référence modifiée";

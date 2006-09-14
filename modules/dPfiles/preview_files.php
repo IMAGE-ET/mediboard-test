@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("dPfiles", "files"));
-require_once($AppUI->getModuleClass("dPfiles", "filescategory"));
-
 $file_id = mbGetValueFromGet("file_id", 0);
 $sfn = mbGetValueFromGet("sfn", 0);
 $popup = mbGetValueFromGet("popup", 0);
@@ -53,7 +50,6 @@ if($file->_nb_pages){
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("arrNumPages"     , $arrNumPages);

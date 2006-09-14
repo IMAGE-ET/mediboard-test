@@ -9,15 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
-require_once($AppUI->getModuleClass("dPplanningOp" , "planning"    ));
-require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu" ));
-require_once($AppUI->getModuleClass("dPcompteRendu", "pack"        ));
-require_once($AppUI->getModuleClass("dPpatients"   , "patients"    ));
-require_once($AppUI->getModuleClass("dPfiles"      , "filescategory"));
-require_once($AppUI->getModuleClass("dPfiles"      , "files"));
-
 if (!$canEdit) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -102,7 +93,6 @@ $canEditCabinet = !getDenyEdit("dPcabinet");
 $affichageNbFile = CFile::loadNbFilesByCategory($patient);
 
 // Création du template
-require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->debugging = false;

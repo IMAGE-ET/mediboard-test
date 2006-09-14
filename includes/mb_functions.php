@@ -613,11 +613,6 @@ function mbConvertDecaBinary($number) {
 }
 
 function getChildClasses($parent = "CMbObject", $properties = array()) {
-  global $AppUI;
-  // Require all dPmodules class
-  foreach(glob("modules/dP*/*.class.php") as $fileName) {
-    require_once($AppUI->getConfig("root_dir")."/".$fileName);
-  }
   $listClasses = get_declared_classes();
   foreach($listClasses as $key => $class) {
     if(!is_subclass_of($class, $parent)) {

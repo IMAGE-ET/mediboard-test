@@ -35,7 +35,6 @@ if($selClass){
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 if($selClass){

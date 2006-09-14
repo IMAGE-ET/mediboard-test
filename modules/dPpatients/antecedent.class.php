@@ -7,10 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
-require_once($AppUI->getModuleClass("dPpatients", "patients"));
-
 class CAntecedent extends CMbObject {
   // DB Table key
   var $antecedent_id = null;

@@ -12,11 +12,13 @@ if (!class_exists("DOMDocument")) {
   return;
 }
 
+if (!class_exists("CMbXMLDocument")) {
+  //trigger_error("sorry, DOMDocument is needed");
+  return;
+}
+
 
 global $AppUI, $m;
-
-require_once($AppUI->getModuleClass("dPinterop", "mbxmldocument"));
-require_once($AppUI->getModuleClass("dPinterop", "hprimxmlschema"));
 
 class CHPrimXMLDocument extends CMbXMLDocument {
   var $pmsipath = "modules/dPinterop/hprim";

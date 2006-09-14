@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("tabindex"));
-
 $tabs = array();
 $tabs[] = array("view_dpadmin", "Configuration générale", 0);
 $tabs[] = array("view_modules", "Modules", 0);

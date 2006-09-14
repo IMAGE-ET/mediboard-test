@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("dPpatients", "patients"));
-
 if (!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
@@ -37,7 +35,6 @@ foreach($patient->_ref_consultations as $key => $value) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("patient", $patient);

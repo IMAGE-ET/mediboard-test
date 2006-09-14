@@ -24,7 +24,6 @@
 ?>
 
 <?php 
-  require_once($AppUI->getModuleClass("system", "message"));
   $messages = new CMessage();
   $messages = $messages->loadPublications("present");
   foreach ($messages as $message) {

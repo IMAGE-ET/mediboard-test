@@ -7,11 +7,6 @@
  *  @author Sébastien Fillonneau
  */
 
-
-require_once($AppUI->getSystemClass("mbobject"));
-require_once($AppUI->getModuleClass("dPetablissement" , "groups"  ));
-require_once($AppUI->getModuleClass("dPmateriel"      , "materiel"));
-
 /**
  * The CStock class
  */

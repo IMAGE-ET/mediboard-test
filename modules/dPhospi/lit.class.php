@@ -7,11 +7,6 @@
  *  @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
-require_once($AppUI->getModuleClass("dPhospi", "chambre"));
-require_once($AppUI->getModuleClass("dPhospi", "affectation"));
-
 /**
  * Classe CLit. 
  * @abstract Gère les lits d'hospitalisation

@@ -9,8 +9,6 @@
 
 GLOBAL $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-
 $id = mbGetValueFromGetOrSession("id");
 
 $admission = new CSejour();
@@ -23,11 +21,10 @@ foreach($admission->_ref_operations as $keyOp => $op) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('admission', $admission);
+$smarty->assign("admission", $admission);
 
-$smarty->display('print_admission.tpl');
+$smarty->display("print_admission.tpl");
 
 ?>

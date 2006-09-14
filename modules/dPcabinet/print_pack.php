@@ -11,13 +11,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-require_once( $AppUI->getModuleClass('dPpatients', 'patients') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'templatemanager') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'compteRendu') );
-require_once( $AppUI->getModuleClass('dPcompteRendu', 'pack') );
-
 // Récupération des paramètres
 $operation_id = dPgetParam($_GET, "operation_id", null);
 $op = new COperation;
@@ -42,12 +35,10 @@ foreach($pack->_modeles as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
 $smarty = new CSmartyDP(1);
-$smarty->debugging = false;
 
-$smarty->assign('listCr', $listCr);
+$smarty->assign("listCr", $listCr);
 
-$smarty->display('print_pack.tpl');
+$smarty->display("print_pack.tpl");
 
 ?>

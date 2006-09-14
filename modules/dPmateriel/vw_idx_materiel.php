@@ -12,9 +12,6 @@ global $AppUI, $canRead, $canEdit, $m;
 if(!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
- 
-require_once($AppUI->getModuleClass("dPmateriel", "materiel"));
-require_once($AppUI->getModuleClass("dPmateriel", "category"));
 
 $materiel_id = mbGetValueFromGetOrSession("materiel_id", null);
 
@@ -45,7 +42,6 @@ foreach($listMateriel as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("listMateriel"  , $listMateriel  );

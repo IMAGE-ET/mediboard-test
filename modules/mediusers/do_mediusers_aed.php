@@ -9,8 +9,6 @@
 
 global $AppUI, $m;
 
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-
 class CDoMediuserAddEdit extends CDoObjectAddEdit {
   function CDoMediuserAddEdit() {
     $this->CDoObjectAddEdit("CMediusers", "user_id");

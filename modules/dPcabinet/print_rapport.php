@@ -11,10 +11,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPcabinet", "plageconsult"));
-require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
-
 // Récupération des paramètres
 $today = mbDate();
 $deb = mbGetValueFromGetOrSession("deb", mbDate());
@@ -120,7 +116,6 @@ foreach($listPlage as $key => $value) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("today"    , $today);

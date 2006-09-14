@@ -1,7 +1,5 @@
 <?php /* ADMIN $Id$ */
 
-require_once($AppUI->getModuleClass("admin", "permission"));
-
 // user types
 $utypes = array(
 // DEFAULT USER (nothing special)
@@ -29,8 +27,6 @@ $utypes = array(
 /**
 * User Class
 */
-
-require_once($AppUI->getSystemClass("mbobject"));
 
 class CUser extends CMbObject {
 	var $user_id         = null;

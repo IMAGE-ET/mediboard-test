@@ -2,8 +2,6 @@
 
 global $AppUI;
 
-require_once($AppUI->getModuleClass("admin", "admin"));
-
 $del = isset($_REQUEST["del"]) ? $_REQUEST["del"] : false;
 
 $obj = new CUser();

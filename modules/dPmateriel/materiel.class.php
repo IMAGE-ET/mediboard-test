@@ -7,12 +7,6 @@
  *  @author Sébastien Fillonneau
  */
 
-
-require_once($AppUI->getSystemClass("mbobject"));
-require_once($AppUI->getModuleClass("dPmateriel", "stock"));
-require_once($AppUI->getModuleClass("dPmateriel", "category"));
-require_once($AppUI->getModuleClass("dPmateriel", "refmateriel"));
-
 /**
  * The CMateriel class
  */

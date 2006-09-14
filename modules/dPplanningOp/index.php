@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("tabindex"));
-
 $tabs = array();
 $tabs[] = array("vw_idx_planning", "Consulter le planning", 1);
 $tabs[] = array("vw_edit_planning", "Planifier / Modifier une intervention", 1);

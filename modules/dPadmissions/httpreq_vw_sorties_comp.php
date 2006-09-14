@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("dPhospi", "affectation"));
-
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -50,13 +48,12 @@ foreach($listComp as $key => $value) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass('smartydp'));
 $smarty = new CSmartyDP(1);
-$smarty->assign('date' , $date );
-$smarty->assign('now' , $now );
-$smarty->assign('vue' , $vue );
-$smarty->assign('listComp' , $listComp );
+$smarty->assign("date"     , $date );
+$smarty->assign("now"      , $now );
+$smarty->assign("vue"      , $vue );
+$smarty->assign("listComp" , $listComp );
 
-$smarty->display('inc_vw_sorties_comp.tpl');
+$smarty->display("inc_vw_sorties_comp.tpl");
 
 ?>

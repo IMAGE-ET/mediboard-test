@@ -7,11 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getModuleClass("admin"));
-require_once($AppUI->getModuleClass("admin", "permModule"));
-require_once($AppUI->getModuleClass("admin", "permObject"));
-require_once($AppUI->getModuleClass("system"));
-
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "admin";

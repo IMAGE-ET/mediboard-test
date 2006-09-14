@@ -9,8 +9,6 @@
 
 global $AppUI;
 
-require_once($AppUI->getModuleClass("system", "module"));
-
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpmsi";

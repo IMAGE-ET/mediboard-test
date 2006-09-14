@@ -12,8 +12,6 @@ global $AppUI, $canRead, $canEdit, $m;
 if(!$canEdit) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
- 
-require_once($AppUI->getModuleClass("dPplanningOp", "typeanesth"));
 
 $type_anesth_id = mbGetValueFromGetOrSession("type_anesth_id");
 
@@ -27,7 +25,6 @@ $listTypeAnesth = $listTypeAnesth->loadList(null, "name");
 
 
 // Création du template
-require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("listTypeAnesth", $listTypeAnesth);

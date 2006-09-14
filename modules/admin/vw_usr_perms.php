@@ -120,7 +120,6 @@ $permSel = new CPermission;
 $permSel->load(mbGetValueFromGetOrSession("perm_id"));
 
 // Template creation
-require_once( $AppUI->getSystemClass ("smartydp" ) );
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("user_id", $user_id);

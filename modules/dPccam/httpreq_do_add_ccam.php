@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getSystemClass("mbpath"));
-
 set_time_limit(360);
 
 $filepath = "modules/dPccam/base/ccamV2.tar.gz";

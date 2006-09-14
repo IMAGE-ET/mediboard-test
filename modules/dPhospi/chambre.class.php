@@ -7,11 +7,6 @@
  *  @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-require_once($AppUI->getModuleClass("dPhospi"     , "lit"));
-require_once($AppUI->getModuleClass("dPhospi"     , "service"));
-require_once($AppUI->getModuleClass("dPplanningOp", "pathologie"));
-
 /**
  * Classe CChambre. 
  * @abstract Gère les chambre d'hospitalisation

@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("dPpatients", "patients"));
-
 if(!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -30,7 +28,6 @@ $order = "patients.nom, patients.prenom";
 $list = $list->loadList($where, $order, $limit);
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("name"     , $name     );

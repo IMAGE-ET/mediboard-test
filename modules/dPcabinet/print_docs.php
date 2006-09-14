@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
-require_once($AppUI->getModuleClass("mediusers"));
-
 if (!$canEdit) {
   $AppUI->redirect("m=system&a=access_denied");
 }
@@ -26,7 +23,6 @@ if ($consultation_id) {
 }  
 
 // Création du template
-require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("documents", $consult->_ref_documents);

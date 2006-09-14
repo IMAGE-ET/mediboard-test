@@ -7,8 +7,6 @@
  *  @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
 $mp_status = array(
   "all"     => "Tous les messages",
   "past"    => "Déjà publiés",

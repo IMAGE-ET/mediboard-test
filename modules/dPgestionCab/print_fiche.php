@@ -8,8 +8,6 @@
  */
 
 global $AppUI, $canRead, $canEdit, $m;
-require_once( $AppUI->getModuleClass('dPgestionCab', 'fichePaie') );
-require_once( $AppUI->getModuleClass('mediusers') );
 
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
@@ -34,12 +32,11 @@ if(!$fichePaie->fiche_paie_id) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('user', $user);
-$smarty->assign('fichePaie', $fichePaie);
-$smarty->assign('paramsPaie', $paramsPaie);
+$smarty->assign("user"      , $user);
+$smarty->assign("fichePaie" , $fichePaie);
+$smarty->assign("paramsPaie", $paramsPaie);
 
-$smarty->display('print_fiche.tpl');
+$smarty->display("print_fiche.tpl");
 ?>

@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getModuleClass("dPcabinet", "plageconsult"));
-
 // Object binding
 $obj = new CPlageconsult();
 if (!$obj->bind( $_POST )) {

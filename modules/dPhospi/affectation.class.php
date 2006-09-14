@@ -7,11 +7,6 @@
  *  @author Thomas Despoix
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-require_once($AppUI->getModuleClass("dPhospi"     , "lit"));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-require_once($AppUI->getModuleClass("dPplanningOp", "sejour"));
-
 /**
  * Classe CAffectation. 
  * @abstract Gère les affectation des séjours dans des lits

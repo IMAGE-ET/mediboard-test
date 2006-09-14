@@ -25,8 +25,6 @@
  * - project p => tasks, files, events of project p
  */
 
-require_once( $AppUI->getModuleClass('admin'));
-
 // TODO: getDeny* should return true/false instead of 1/0
 
 function getReadableModule() {

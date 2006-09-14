@@ -9,9 +9,6 @@
 
 global $AppUI, $m;
 
-require_once($AppUI->getModuleClass($m, "service"));
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-
 $do = new CDoObjectAddEdit("CService", "service_id");
 $do->createMsg = "Service créé";
 $do->modifyMsg = "Service modifié";

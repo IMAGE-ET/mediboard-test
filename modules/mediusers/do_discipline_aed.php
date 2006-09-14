@@ -9,9 +9,6 @@
 
 global $AppUI;
 
-require_once($AppUI->getModuleClass("mediusers", "discipline"));
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-
 $do = new CDoObjectAddEdit("CDiscipline", "discipline_id");
 $do->createMsg = "Discipline créée";
 $do->modifyMsg = "Discipline modifiée";

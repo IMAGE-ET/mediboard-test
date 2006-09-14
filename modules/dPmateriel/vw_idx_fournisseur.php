@@ -13,8 +13,6 @@ if(!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once($AppUI->getModuleClass("dPmateriel", "fournisseur"));
-
 $fournisseur_id = mbGetValueFromGetOrSession("fournisseur_id");
 
 // Chargement du fournisseur demandé
@@ -31,7 +29,6 @@ $where = array();
 $listFournisseur = $lstfournisseur->loadList($where);
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("listFournisseur", $listFournisseur);

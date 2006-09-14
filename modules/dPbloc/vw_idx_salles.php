@@ -9,10 +9,6 @@
  
 global $AppUI, $canRead, $canEdit, $m, $g;
 
-require_once($AppUI->getModuleClass($m, "salle"));
-require_once($AppUI->getModuleClass("dPetablissement"  , "groups" ));
-
-
 if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -37,7 +33,6 @@ $salleSel = new CSalle;
 $salleSel->load(mbGetValueFromGetOrSession("salle_id"));
 
 // Création du template
-require_once( $AppUI->getSystemClass ("smartydp") );
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("salles"          , $salles        );

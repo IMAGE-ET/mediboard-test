@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("tabindex"));
-
 $tabs = array();
 $tabs[] = array("vw_idx_mediusers", "Utilisateurs", 0);
 $tabs[] = array("vw_idx_functions", "Fonctions des utilisateurs", 0);

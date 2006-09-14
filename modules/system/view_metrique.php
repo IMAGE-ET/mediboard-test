@@ -37,7 +37,6 @@ foreach ($listesTables as $keyListTables => $currListTables){
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("result" , $result);

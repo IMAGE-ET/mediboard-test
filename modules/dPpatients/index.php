@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("tabindex"));
-
 $tabs = array();
 
 $tabs[] = array("vw_idx_patients" , "Chercher un dossier"        , 0);

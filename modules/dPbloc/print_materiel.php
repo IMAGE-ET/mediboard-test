@@ -13,8 +13,6 @@ if (!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-
 $deb = mbGetValueFromGetOrSession("deb", mbDate());
 $fin = mbGetValueFromGetOrSession("fin", mbDate());
 
@@ -48,7 +46,6 @@ foreach($op2 as $key => $value) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("op1", $op1);

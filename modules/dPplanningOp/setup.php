@@ -8,7 +8,6 @@
 */
 
 global $AppUI;
-require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();

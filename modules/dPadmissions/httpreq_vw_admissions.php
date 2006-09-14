@@ -13,8 +13,6 @@ if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'sejour') );
-
 // Initialisation de variables
 
 $selAdmis = mbGetValueFromGetOrSession("selAdmis", "0");
@@ -55,15 +53,14 @@ foreach ($today as $keySejour => $valueSejour) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('date', $date);
-$smarty->assign('selAdmis', $selAdmis);
-$smarty->assign('selSaisis', $selSaisis);
-$smarty->assign('selTri', $selTri);
-$smarty->assign('today', $today);
+$smarty->assign("date"     , $date);
+$smarty->assign("selAdmis" , $selAdmis);
+$smarty->assign("selSaisis", $selSaisis);
+$smarty->assign("selTri"   , $selTri);
+$smarty->assign("today"    , $today);
 
-$smarty->display('inc_vw_admissions.tpl');
+$smarty->display("inc_vw_admissions.tpl");
 
 ?>

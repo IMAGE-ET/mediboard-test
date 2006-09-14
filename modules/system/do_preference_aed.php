@@ -2,8 +2,6 @@
 
 global $AppUI;
 
-require_once($AppUI->getModuleClass("system", "system"));
-
 $del = isset($_POST["del"]) ? $_POST["del"] : 0;
 
 $obj = new CPreferences();

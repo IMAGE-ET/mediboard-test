@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-//require_once($AppUI->getSystemClass("accesslog"));
-require_once($AppUI->getModuleClass("system", "accesslog"));
-
 $date     = mbGetValueFromGetOrSession("date", mbDate());
 $groupmod = mbGetValueFromGetOrSession("groupmod", 1);
 $module   = mbGetValueFromGetOrSession("module", "system");
@@ -23,13 +20,12 @@ $logs = $logs->loadAgregation($date, $next, $groupmod, $module);
 $listModules = $AppUI->getMenuModules();
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("logs", $logs);
-$smarty->assign("date", $date);
-$smarty->assign("groupmod", $groupmod);
-$smarty->assign("module", $module);
+$smarty->assign("logs"       , $logs);
+$smarty->assign("date"       , $date);
+$smarty->assign("groupmod"   , $groupmod);
+$smarty->assign("module"     , $module);
 $smarty->assign("listModules", $listModules);
 
 $smarty->display("view_access_logs.tpl");

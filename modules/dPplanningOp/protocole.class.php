@@ -7,9 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("mbobject" ));
-require_once($AppUI->getModuleClass("mediusers"));
-
 class CProtocole extends CMbObject {
   // DB Table key
   var $protocole_id = null;

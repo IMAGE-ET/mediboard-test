@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('system', 'user_log') );
-
 class CDoObjectAddEdit {
   var $className = null;
   var $objectKeyGetVarName = null;

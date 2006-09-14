@@ -13,8 +13,6 @@ if (!$canEdit) {
   $AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once($AppUI->getModuleClass("dPplanningOp", "sejour"));
-
 $sejour_id  = mbGetValueFromGetOrSession("sejour_id", null);
 
 if(!$sejour_id) {
@@ -32,7 +30,6 @@ foreach($sejour->_ref_operations as $keyOp => $value) {
 $sejour->loadRefGHM();
 
 // Création du template
-require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("sejour" , $sejour              );

@@ -9,10 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('mediusers', 'functions') );
-require_once( $AppUI->getModuleClass('mediusers') );
-require_once( $AppUI->getModuleClass('dPcabinet', 'tarif') );
-
 $deb = mbDate();
 $fin = mbDate("+ 0 day");
 
@@ -53,7 +49,6 @@ else
   $listPrat[0] = $user;
 
 // Création du template
-require_once( $AppUI->getSystemClass('smartydp'));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign('deb', $deb);

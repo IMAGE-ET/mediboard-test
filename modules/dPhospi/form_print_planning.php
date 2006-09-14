@@ -9,10 +9,6 @@
  
 global $AppUI, $canRead, $canEdit, $m, $g;
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("mediusers", "functions"));
-require_once($AppUI->getModuleClass("dPhospi"  , "service"  ));
-
 if(!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -29,7 +25,6 @@ $where["group_id"] = "= '$g'";
 $listServ = $listServ->loadlist($where);
 
 // Création du template
-require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("today"   , date("Y-m-d")." 06:00:00");

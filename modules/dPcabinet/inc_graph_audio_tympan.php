@@ -9,9 +9,8 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("dPcabinet", "examaudio"));
-require_once($AppUI->getLibraryClass('jpgraph/src/jpgraph'));
-require_once($AppUI->getLibraryClass('jpgraph/src/jpgraph_line'));
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"));
+require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_line"));
 
 class AudiogrammeTympano extends Graph {
   function setTitle($title) {

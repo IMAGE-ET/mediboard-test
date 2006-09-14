@@ -9,12 +9,6 @@
 
 global $AppUI, $m;
 
-require_once($AppUI->getModuleClass("dPcabinet", "consultation"));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-require_once($AppUI->getModuleClass("dPcompteRendu", "listeChoix"));
-require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-
 $do = new CDoObjectAddEdit("CCompteRendu", "compte_rendu_id");
 $do->createMsg = "Document créé";
 $do->modifyMsg = "Document modifié";

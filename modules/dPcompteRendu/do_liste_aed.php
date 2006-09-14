@@ -7,9 +7,6 @@
 * @author Romain OLLIVIER
 */
 
-require_once( $AppUI->getModuleClass("dPcompteRendu", "listeChoix"));
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-
 $do = new CDoObjectAddEdit("CListeChoix", "liste_choix_id");
 $do->createMsg = "Liste créée";
 $do->modifyMsg = "Liste modifiée";

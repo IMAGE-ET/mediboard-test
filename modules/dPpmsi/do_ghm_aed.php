@@ -9,9 +9,6 @@
 
 global $AppUI;
 
-require_once($AppUI->getModuleClass('dPpmsi', 'GHM'));
-require_once($AppUI->getSystemClass('doobjectaddedit'));
-
 $do = new CDoObjectAddEdit("CGHM", "ghm_id");
 $do->createMsg = "GHM créée";
 $do->modifyMsg = "GHM modifiée";

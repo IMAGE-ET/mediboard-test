@@ -9,9 +9,6 @@
 
 global $AppUI;
 
-require_once($AppUI->getModuleClass("dPetablissement", "groups"));
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-
 $do = new CDoObjectAddEdit("CGroups", "group_id");
 $do->createMsg = "Etablissement créé";
 $do->modifyMsg = "Etablissement modifié";

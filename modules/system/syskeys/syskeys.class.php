@@ -1,7 +1,5 @@
 <?php /* SYSKEYS $Id$ */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
 ##
 ## CSysKey Class
 ##

@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getModuleClass("dPbloc", "plagesop"));
-
 // Object binding
 $obj = new CPlageOp();
 if (!$obj->bind( $_POST )) {

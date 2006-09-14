@@ -9,11 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("mediusers"   , "discipline"));
-require_once($AppUI->getModuleClass("dPhospi"     , "service"   ));
-require_once($AppUI->getModuleClass("dPplanningOp", "sejour"    ));
-
 if(!$canEdit) {
   $AppUI->redirect("m=system&a=access_denied");
 }
@@ -49,7 +44,6 @@ $listHospis[2]["code"] = "exte";
 $listHospis[2]["view"] = "Externes";
 
 // Création du template
-require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("debutact"       , $debutact);

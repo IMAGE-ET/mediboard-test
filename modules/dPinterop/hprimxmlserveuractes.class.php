@@ -12,10 +12,12 @@ if (!class_exists("DOMDocument")) {
   return;
 }
 
-global $AppUI, $m;
+if (!class_exists("CHPrimXMLDocument")) {
+  //trigger_error("sorry, DOMDocument is needed");
+  return;
+}
 
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-require_once($AppUI->getModuleClass("dPinterop", "hprimxmldocument"));
+global $AppUI, $m;
 
 class CHPrimXMLServeurActes extends CHPrimXMLDocument {
   function __construct() {

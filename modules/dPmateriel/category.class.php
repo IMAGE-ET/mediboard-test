@@ -7,9 +7,6 @@
  *  @author Sébastien Fillonneau
  */
 
-require_once($AppUI->getSystemClass("mbobject"));
-require_once($AppUI->getModuleClass("dPmateriel", "materiel"));
-
 /**
  * The CCategory class
  */

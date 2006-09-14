@@ -14,9 +14,8 @@ if (!$canRead) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
-$smarty->display('import_dermato.tpl');
+$smarty->display("import_dermato.tpl");
 
 ?>

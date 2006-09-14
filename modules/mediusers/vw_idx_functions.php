@@ -13,9 +13,6 @@ if(!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once($AppUI->getModuleClass("mediusers"      , "functions"));
-require_once($AppUI->getModuleClass("dPetablissement", "groups"   ));
-
 // Récupération des fonctions
 $listGroups = new CGroups;
 $listGroups = $listGroups->loadList();
@@ -33,7 +30,6 @@ $userfunction->load(mbGetValueFromGetOrSession("function_id", 0));
 $userfunction->loadRefsFwd();
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("userfunction", $userfunction);

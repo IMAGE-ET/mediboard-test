@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getModuleClass("dPstats", "tempsOp"));
-
 $codeCCAM   = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
 $prat_id    = mbGetValueFromGetOrSession("prat_id", 0);
 

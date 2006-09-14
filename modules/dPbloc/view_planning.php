@@ -13,10 +13,6 @@ if (!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-require_once($AppUI->getModuleClass("dPbloc", "plagesop"));
-require_once($AppUI->getModuleClass("dPhospi", "affectation"));
-
 $deb = mbGetValueFromGetOrSession("deb", mbDate());
 $fin = mbGetValueFromGetOrSession("fin", mbDate());
 
@@ -104,7 +100,6 @@ foreach($plagesop as $keyPlage => $valuePlage) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("deb"     , $deb);

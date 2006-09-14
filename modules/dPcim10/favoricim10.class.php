@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
 /**
  * The dPcim10 Class
  */

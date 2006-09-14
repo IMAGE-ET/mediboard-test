@@ -2,8 +2,6 @@
 
 global $AppUI;
 
-require_once($AppUI->getModuleClass("admin", "admin"));
-
 $tempUserName    = mbGetValueFromPost("temp_user_name", "");
 $permission_user = mbGetValueFromPost("permission_user", "");
 $delPermissions  = mbGetValueFromPost("delPerms", false);

@@ -5,10 +5,8 @@
 
 global $AppUI;
 
-require_once($AppUI->getModuleClass("system", "system"));
-
-$cmd = mbGetValueFromGet("cmd", "0");
-$mod_id = intval(mbGetValueFromGet("mod_id", "0"));
+$cmd      = mbGetValueFromGet("cmd", "0");
+$mod_id   = intval(mbGetValueFromGet("mod_id", "0"));
 $mod_name = mbGetValueFromGet("mod_name", "0");
 
 $obj = new CModule();

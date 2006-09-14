@@ -13,10 +13,6 @@ if(!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once($AppUI->getModuleClass("dPmateriel"     , "stock"   ));
-require_once($AppUI->getModuleClass("dPmateriel"     , "category"));
-require_once($AppUI->getModuleClass("dPetablissement", "groups"  ));
-
 getChildClasses();
 
 $stock_id = mbGetValueFromGetOrSession("stock_id");
@@ -48,7 +44,6 @@ foreach($listCategory as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("stock"       , $stock       );

@@ -9,12 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m, $g;
 
-require_once($AppUI->getModuleClass("dPbloc"     , "plagesop"  ));
-require_once($AppUI->getModuleClass("dPbloc"     , "salle"     ));
-require_once($AppUI->getModuleClass("mediusers"  , "functions" ));
-require_once($AppUI->getModuleClass("mediusers"));
-
-
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $plageop_id = mbGetValueFromGetOrSession("plageop_id");
 
@@ -116,7 +110,6 @@ $listSpec = $listSpec->loadSpecialites();
 
 
 //Création du template
-require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("listSalles"     , $listSalles    );

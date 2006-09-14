@@ -9,8 +9,6 @@
 
 GLOBAL $AppUI, $canRead, $canEdit, $m;
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-
 if (!$canRead) {			// lock out users that do not have at least readPermission on this module
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
@@ -24,7 +22,6 @@ $admission->_ref_sejour->loadRefsFwd();
 $admission->_ref_plageop->loadRefs();
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
 $smarty->assign('admission', $admission);

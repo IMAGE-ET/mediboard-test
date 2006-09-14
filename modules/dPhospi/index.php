@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("tabindex"));
-
 $tabs = array();
 $tabs[] = array("form_print_planning", "Impression des plannings", 0);
 $tabs[] = array("edit_sorties", "Déplacements / Sorties", 0);

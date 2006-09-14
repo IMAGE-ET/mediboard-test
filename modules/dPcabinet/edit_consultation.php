@@ -9,15 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "plageconsult"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "tarif"));
-require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
-require_once($AppUI->getModuleClass("dPplanningOp" , "typeanesth"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "techniqueComp"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "examComp"));
-
 if (!$canEdit) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
@@ -171,7 +162,6 @@ if($consult->_ref_chir->isFromType(array("Anesthésiste"))) {
   $_is_anesth=false;
 }
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 $smarty->assign("date"          , $date);
 $smarty->assign("hour"          , $hour);

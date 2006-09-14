@@ -7,16 +7,6 @@
 * @author Thomas Despoix
 */
 
-require_once( $AppUI->getModuleClass("dPcompteRendu", "compteRendu") );
-require_once( $AppUI->getModuleClass("dPcompteRendu", "listeChoix") );
-require_once( $AppUI->getModuleClass("dPcompteRendu", "aidesaisie") );
-require_once( $AppUI->getModuleClass("dPplanningOp" , "planning") );
-require_once( $AppUI->getModuleClass("dPcabinet"    , "consultation") );
-require_once( $AppUI->getModuleClass("dPpatients"   , "patients") );
-require_once( $AppUI->getModuleClass("mediusers"    , "functions"));
-require_once( $AppUI->getModuleClass("mediusers"));
-require_once( $AppUI->getSystemClass("smartydp"));
-
 class CTemplateManager {
   var $editor = "fckeditor";
   

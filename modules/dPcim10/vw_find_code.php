@@ -13,8 +13,6 @@ if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once($AppUI->getModuleClass("dPcim10", "codecim10"));
-
 $lang = mbGetValueFromGetOrSession("lang", LANG_FR);
 $keys = mbGetValueFromGetOrSession("keys", "");
 
@@ -24,7 +22,6 @@ $master = $cim10->findCodes($keys, $lang);
 $numresults = count($master);
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
 $smarty->assign('lang', $lang);

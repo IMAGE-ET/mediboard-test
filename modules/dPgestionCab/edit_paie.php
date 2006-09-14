@@ -8,8 +8,6 @@
  */
 
 global $AppUI, $canRead, $canEdit, $m;
-require_once( $AppUI->getModuleClass('dPgestionCab', 'fichePaie') );
-require_once( $AppUI->getModuleClass('mediusers') );
 
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
@@ -45,14 +43,13 @@ $listeFiches = $listeFiches->loadList($where, $order);
 $listUsers = $user->loadUsers(PERM_EDIT);
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('user', $user);
-$smarty->assign('fichePaie', $fichePaie);
-$smarty->assign('paramsPaie', $paramsPaie);
-$smarty->assign('listFiches', $listeFiches);
-$smarty->assign('listUsers', $listUsers);
+$smarty->assign("user"      , $user);
+$smarty->assign("fichePaie" , $fichePaie);
+$smarty->assign("paramsPaie", $paramsPaie);
+$smarty->assign("listFiches", $listeFiches);
+$smarty->assign("listUsers" , $listUsers);
 
-$smarty->display('edit_paie.tpl');
+$smarty->display("edit_paie.tpl");
 ?>

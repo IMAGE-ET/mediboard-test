@@ -7,17 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once( $AppUI->getSystemClass ("mbobject"));
-
-require_once($AppUI->getModuleClass("dPcim10"      , "favoricim10"));
-require_once($AppUI->getModuleClass("dPcim10"      , "codecim10"));
-require_once($AppUI->getModuleClass("dPpatients"   , "patients"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "plageconsult"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "techniqueComp"));
-require_once($AppUI->getModuleClass("dPfiles"      , "files"));
-require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
-
 class CConsultAnesth extends CMbObject {
   // DB Table key
   var $consultation_anesth_id = null;

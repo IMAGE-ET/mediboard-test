@@ -22,8 +22,7 @@
 		$nav = CModule::getVisible();
 ?>
 
-<?php 
-  require_once($AppUI->getModuleClass("system", "message"));
+<?php
   $messages = new CMessage();
   $messages = $messages->loadPublications("present");
   foreach ($messages as $message) {

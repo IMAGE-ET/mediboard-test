@@ -1,7 +1,5 @@
 <?php /* SYSTEM $Id$ */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
 /**
 * Preferences class
 */

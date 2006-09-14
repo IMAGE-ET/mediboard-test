@@ -7,9 +7,6 @@
 * @author Thomas Despoix
 */
 
-require_once($AppUI->getModuleClass("dPsalleOp", "acteccam"));
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-
 class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
   function CDoActeCCAMAddEdit() {
     $this->CDoObjectAddEdit("CActeCCAM", "acte_id");

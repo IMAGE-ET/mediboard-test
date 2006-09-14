@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("tabindex"));
-
 $tabs = array();
 $tabs[] = array("edit_compta", "Comptabilité", 0);
 $tabs[] = array("edit_paie", "Fiche de paie", 0);

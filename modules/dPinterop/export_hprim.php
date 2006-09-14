@@ -18,7 +18,6 @@ if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once($AppUI->getModuleClass($m, "hprimxmlserveuractes"));
 $mbOp = new COperation();
 $doc = new CHPrimXMLServeurActes;
 
@@ -51,8 +50,6 @@ if ($mbOp->load($mb_operation_id)) {
 //$doc->addNameSpaces();
 
 $doc->saveTempFile();
-
-require_once($AppUI->getSystemClass("ftp"));
 
 // HPRIM export FTP settings
 $HPrimConfig = $dPconfig["dPinterop"]["hprim_export"];
@@ -95,7 +92,6 @@ if (isset($_POST["hostname"]) or ($ajax and $doc_valid and !$sent_files)) {
 $doc->getSentFiles();
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("doc", $doc);

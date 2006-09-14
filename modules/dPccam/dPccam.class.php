@@ -9,20 +9,18 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
 /**
  * The CFavoriCCAM Class
  */
 class CFavoriCCAM extends CMbObject {
   // DB Table key
-	var $favoris_id = NULL;
+	var $favoris_id = null;
   
   // DB References
-	var $favoris_user = NULL;
+	var $favoris_user = null;
 
   // DB fields
-  var $favoris_code = NULL;
+  var $favoris_code = null;
 
 	function CFavoriCCAM() {
 		$this->CMbObject("ccamfavoris", "favoris_id");

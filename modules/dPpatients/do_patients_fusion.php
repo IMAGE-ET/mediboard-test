@@ -9,9 +9,6 @@
 
 global $AppUI, $m;
 
-require_once($AppUI->getModuleClass("dPpatients", "patients"));
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-
 class CDoPatientAddEdit extends CDoObjectAddEdit {
   function CDoPatientAddEdit() {
     $this->CDoObjectAddEdit("CPatient", "patient_id");

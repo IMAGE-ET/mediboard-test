@@ -7,11 +7,8 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getModuleClass('dPplanningOp', 'planning'));
-require_once($AppUI->getModuleClass('dPhospi', 'affectation'));
-
-$cmd = dPgetParam( $_GET, 'cmd', '0' );
-$id = dPgetParam( $_GET, 'id', '0' );
+$cmd = dPgetParam( $_GET, "cmd", "0" );
+$id  = dPgetParam( $_GET, "id",  "0" );
 
 $sql = "SELECT operations.plageop_id, operations.rank
         FROM operations

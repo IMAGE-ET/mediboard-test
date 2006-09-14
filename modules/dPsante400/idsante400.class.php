@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
 /**
  * Stores id linkage between Mediboard and Sante400 records
  */

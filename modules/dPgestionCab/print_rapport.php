@@ -8,8 +8,6 @@
  */
 
 global $AppUI, $canRead, $canEdit, $m;
-require_once( $AppUI->getModuleClass('dPgestionCab', 'gestionCab') );
-require_once( $AppUI->getModuleClass('mediusers') );
 
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
@@ -74,19 +72,18 @@ $sql .= "\nGROUP BY invar";
 $total = db_loadResult($sql);
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('date'             , $date);
-$smarty->assign('datefin'          , $datefin);
-$smarty->assign('libelle'          , $libelle);
-$smarty->assign('rubrique_id'      , $rubrique_id);
-$smarty->assign('mode_paiement_id' , $mode_paiement_id);
-$smarty->assign('listRubriques'    , $listRubriques);
-$smarty->assign('listModesPaiement', $listModesPaiement);
-$smarty->assign('listGestionCab'   , $listGestionCab);
-$smarty->assign('totaux'           , $totaux);
-$smarty->assign('total'            , $total);
+$smarty->assign("date"             , $date);
+$smarty->assign("datefin"          , $datefin);
+$smarty->assign("libelle"          , $libelle);
+$smarty->assign("rubrique_id"      , $rubrique_id);
+$smarty->assign("mode_paiement_id" , $mode_paiement_id);
+$smarty->assign("listRubriques"    , $listRubriques);
+$smarty->assign("listModesPaiement", $listModesPaiement);
+$smarty->assign("listGestionCab"   , $listGestionCab);
+$smarty->assign("totaux"           , $totaux);
+$smarty->assign("total"            , $total);
 
-$smarty->display('print_rapport.tpl');
+$smarty->display("print_rapport.tpl");
 ?>

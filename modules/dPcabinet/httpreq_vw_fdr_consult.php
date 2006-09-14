@@ -8,12 +8,6 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m;
-
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "plageconsult"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "consultation"));
-require_once($AppUI->getModuleClass("dPcabinet"    , "tarif"));
-require_once($AppUI->getModuleClass("dPcompteRendu", "compteRendu"));
   
 if (!$canEdit) {
   $AppUI->redirect("m=system&a=access_denied");
@@ -101,7 +95,6 @@ $tarifsCab = new CTarif;
 $tarifsCab = $tarifsCab->loadList($where, $order);
 
 // Création du template
-require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
 if($consult->_ref_chir->isFromType(array("Anesthésiste")) || $consult->_ref_consult_anesth->consultation_anesth_id) {

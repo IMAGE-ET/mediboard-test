@@ -9,11 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m, $tab, $dPconfig;
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPplanningOp", "sejour"  ));
-require_once($AppUI->getModuleClass("dPpatients"  , "patients"));
-require_once($AppUI->getModuleClass("dPetablissement"  , "groups" ));
-
 $mode_operation = mbGetValueFromGet("mode_operation", 0);
 $sejour_id      = mbGetValueFromGet("sejour_id"     , 0);
 $patient_id     = mbGetValueFromGet("patient_id"    , 0);
@@ -55,7 +50,6 @@ for ($i = 0; $i < 60; $i += $sejourConfig["min_intervalle"]) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("sejour"   , $sejour);

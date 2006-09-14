@@ -14,7 +14,6 @@ if(!$canRead) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->display("view_logs.tpl");

@@ -7,17 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
-require_once($AppUI->getModuleClass("dPplanningOp", "planning") );
-require_once($AppUI->getModuleClass("dPplanningOp", "sejour") );
-require_once($AppUI->getModuleClass("dPpatients"  , "medecin") );
-require_once($AppUI->getModuleClass("dPpatients"  , "antecedent") );
-require_once($AppUI->getModuleClass("dPpatients"  , "traitement") );
-require_once($AppUI->getModuleClass("dPcabinet"   , "consultation") );
-require_once($AppUI->getModuleClass("dPhospi"     , "affectation") );
-require_once($AppUI->getModuleClass("dPcim10"     , "codecim10") );
-
 /**
  * The CPatient Class
  */

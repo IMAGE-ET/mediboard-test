@@ -7,14 +7,6 @@
  *  @author Thomas Despoix
  */
 
-require_once($AppUI->getModuleClass("mediusers"));
-require_once($AppUI->getModuleClass("dPplanningOp"    , "planning"   ));
-require_once($AppUI->getModuleClass("dPpatients"      , "patients"   ));
-require_once($AppUI->getModuleClass("dPplanningOp"    , "pathologie" ));
-require_once($AppUI->getModuleClass("dPpmsi"          , "GHM"        ));
-require_once($AppUI->getModuleClass("dPhospi"         , "affectation"));
-require_once($AppUI->getModuleClass("dPetablissement" , "groups"     ));
-
 // @todo: Put the following in $config_dist;
 $dPconfig["dPplanningOp"]["sejour"] = array (
   "heure_deb"      => "0",

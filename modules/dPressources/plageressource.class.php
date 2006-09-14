@@ -7,10 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-
-require_once($AppUI->getModuleClass("mediusers"));
-
 // Enum for Plageressource.state
 if(!defined("PR_FREE")) {
   define("PR_OUT"    , "#aaa");  // plage échue

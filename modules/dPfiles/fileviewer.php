@@ -54,8 +54,6 @@ if ($file_path) {
 //  $AppUI->redirect("m=system&a=access_denied");
 //}
 
-require_once($AppUI->getModuleClass("dPfiles", "files"));
-
 if($file_id = mbGetValueFromGet("file_id")) {
   $file = new CFile();
   $file->load($file_id);

@@ -13,8 +13,6 @@ if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once( $AppUI->getModuleClass('dPplanningOp', 'planning') );
-
 // Initialisation de variables
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $month = mbTranformTime("+ 0 day", $date, "%Y-%m-__ __:__:__");
@@ -72,7 +70,6 @@ foreach($list1 as $key => $value) {
 }
 
 // Création du template
-require_once( $AppUI->getSystemClass ('smartydp' ) );
 $smarty = new CSmartyDP(1);
 
 

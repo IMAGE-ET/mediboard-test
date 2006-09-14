@@ -25,7 +25,6 @@ $result = db_loadList($sql, 30, $AppUI->cfg["baseINSEE"]);
 
 if ($canRead) {
   // Création du template
-  require_once($AppUI->getSystemClass ("smartydp"));
   $smarty = new CSmartyDP(1);
   $smarty->debugging = false;
 

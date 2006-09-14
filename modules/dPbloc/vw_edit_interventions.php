@@ -13,10 +13,6 @@ if (!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
 
-require_once($AppUI->getModuleClass("dPbloc"      , "plagesop"));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-require_once($AppUI->getModuleClass("dPplanningOp", "typeanesth"));
-
 if(!($plageop_id = mbGetValueFromGetOrSession("plageop_id"))) {
   $AppUI->msg = "Vous devez choisir une plage opératoire";
   $AppUI->redirect("m=dPbloc&tab=vw_edit_planning");
@@ -56,7 +52,6 @@ foreach($list2 as $key => $value) {
 }
 
 // Création du template
-require_once($AppUI->getSystemClass ("smartydp"));
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("plage" , $plage);

@@ -13,8 +13,6 @@ if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
-require_once( $AppUI->getModuleClass('mediusers') );
-
 $sql = "SELECT * FROM import_praticiens";
 $listImport = db_loadlist($sql);
 

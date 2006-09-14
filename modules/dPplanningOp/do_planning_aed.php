@@ -9,9 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getSystemClass("doobjectaddedit"));
-require_once($AppUI->getModuleClass("dPplanningOp", "planning"));
-
 $chir_id = mbGetValueFromPostOrSession("chir_id", null);
 
 // lignes pour rentrer l'heure courante du serveur dans certains champs

@@ -7,10 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getSystemClass("mbobject"));
-require_once($AppUI->getSystemClass("mbpath"));
-require_once($AppUI->getModuleClass("mediusers"));
-
 $filesDir = $AppUI->cfg["root_dir"]."/files";
 
 class CFile extends CMbObject {
