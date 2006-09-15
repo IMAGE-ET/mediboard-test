@@ -41,7 +41,9 @@ class CPermObject extends CMbObject {
   
   // Those functions are statics
   
-  function getPermObject($user_id, $object, $permType) {
+  function getPermObject($object, $permType) {
+    global $AppUI;
+    $user_id = $AppUI->user_id;
     $where = array();
     $where["user_id"]      = "= '$user_id'";
     $where["object_id"]    = "= '0'";
@@ -61,44 +63,9 @@ class CPermObject extends CMbObject {
       if(count($this->loadList($where))) {
         return false;
       } else {
-        return $object->_ref_module->getPerm($user_id, $permType);
+        return $object->_ref_module->getPerm($permType);
       }
     }
-  }
-  
-  function getViewModule($user_id, $mod_id, $permType) {
-    $where = array();
-    $where["user_id"] = "= '$user_id'";
-    $where["mod_id"]  = "= '0'";
-    $where["view"]    = ">= '$permType'";
-    if(count($this->loadList($where))) {
-      $where["mod_id"] = "= '$mod_id'";
-      $where["view"]   = "< '$permType'";
-      if(count($this->loadList($where))) {
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      $where["mod_id"] = "= '$mod_id'";
-      $where["view"]   = ">= '$permType'";
-      if(count($this->loadList($where))) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  }
-
-  // Return the first readable module
-  function getReadableModule($user_id) {
-    $listModules = CModule::getVisible();
-    foreach($listModules as $module) {
-      if($this->getViewModule($user_id, $module->mod_id, PERM_READ)) {
-        return $module->mod_name;
-      }
-    }
-    return false;
   }
 }
 ?>

@@ -67,8 +67,21 @@ class CMbObject {
    * return true or false
    */
 
-  function getPerm($user_id, $permType) {
-    return(CPermObject::getPermObject($user_id, $this, $permType));
+  function getPerm($permType) {
+    return(CPermObject::getPermObject($this, $permType));
+  }
+  
+  function canRead() {
+    $this->_canRead = getPerm(PERM_READ);
+    return $this->_canRead;
+  }
+  
+  function canEdit() {
+    $this->_canEdit = getPerm(PERM_EDIT);
+    return $this->_canEdit;
+  }
+  
+  function loadListWithPerms($permType, $params) {
   }
   
   /**
@@ -265,8 +278,7 @@ class CMbObject {
   }
   
   function loadRefModule($name) {
-    $this->_ref_module = new CModule;
-    $this->_ref_module->loadByName($name);
+    $this->_ref_module = CModule::getVisible($name);
   }
 
   /**
