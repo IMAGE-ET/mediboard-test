@@ -278,7 +278,7 @@ class CMbObject {
   }
   
   function loadRefModule($name) {
-    $this->_ref_module = CModule::getVisible($name);
+    $this->_ref_module = CModule::getInstalled($name);
   }
 
   /**
