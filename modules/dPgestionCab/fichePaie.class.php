@@ -147,20 +147,11 @@ class CFichePaie extends CMbObject {
     }
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
+  function getPerm($permType) {
+    if(!$this->_ref_params_paie) {
       $this->loadRefsFwd();
     }
-    $this->_canRead = $this->_ref_params_paie->canRead();
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefsFwd();
-    }
-    $this->_canEdit = $this->_ref_params_paie->canEdit();
-    return $this->_canEdit;
+    return ($this->_ref_params_paie->getPerm($permType));
   }
 }
 

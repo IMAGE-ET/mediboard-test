@@ -53,20 +53,11 @@ class CService extends CMbObject {
     $this->_ref_group->load($this->group_id);
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
+  function getPerm($permType) {
+    if(!$this->_ref_group) {
       $this->loadRefsFwd();
     }
-    $this->_canRead = $this->_ref_group->canRead();
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefsFwd();
-    }
-    $this->_canEdit = $this->_ref_group->canEdit();
-    return $this->_canEdit;
+    return ($this->_ref_group->getPerm($permType));
   }
   
   function canDelete(&$msg, $oid = null) {

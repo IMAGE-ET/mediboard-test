@@ -165,22 +165,14 @@ class CAffectation extends CMbObject {
     $this->_ref_next->loadObject($where);
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
+  function getPerm($permType) {
+    if(!$this->_ref_lit) {
       $this->loadRefLit();
+    }
+    if(!$this->_ref_sejour) {
       $this->loadRefSejour();
     }
-    $this->_canRead = $this->_ref_lit->canRead() && $this->_ref_sejour->canRead();
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefLit();
-      $this->loadRefSejour();
-    }
-    $this->_canEdit = $this->_ref_lit->canEdit() && $this->_ref_sejour->canEdit();
-    return $this->_canEdit;
+    return ($this->_ref_lit->getPerm($permType) && $this->_ref_sejour->getPerm($permType));
   }
   
   function checkDaysRelative($date) {

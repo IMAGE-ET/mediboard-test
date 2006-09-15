@@ -445,21 +445,21 @@ class CPatient extends CMbObject {
       $consult =& $this->_ref_consultations[$keyConsult];
       $consult->loadRefs();
       $consult->getNumDocs();
-      $consult->canRead(false);
-      $consult->canEdit(false);
+      $consult->canRead();
+      $consult->canEdit();
     }
     
     // Sejours
     foreach ($this->_ref_sejours as $keySejour => $valueSejour) {
       $sejour =& $this->_ref_sejours[$keySejour];
       $sejour->loadRefs();
-      $sejour->canRead(false);
-      $sejour->canEdit(false);
+      $sejour->canRead();
+      $sejour->canEdit();
       foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
         $operation =& $sejour->_ref_operations[$keyOp];
         $operation->loadRefsFwd();
-        $operation->canRead(false);
-        $operation->canEdit(false);
+        $operation->canRead();
+        $operation->canEdit();
       }
     }
   }

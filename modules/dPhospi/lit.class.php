@@ -77,20 +77,11 @@ class CLit extends CMbObject {
     $this->_view = "{$this->_ref_chambre->nom} - $this->nom";
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
+  function getPerm($permType) {
+    if(!$this->_ref_chambre) {
       $this->loadRefsFwd();
     }
-    $this->_canRead = $this->_ref_chambre->canRead();
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefsFwd();
-    }
-    $this->_canEdit = $this->_ref_chambre->canEdit();
-    return $this->_canEdit;
+    return ($this->_ref_chambre->getPerm($permType));
   }
 
   function canDelete(&$msg, $oid = null) {
