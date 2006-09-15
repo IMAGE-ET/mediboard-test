@@ -200,20 +200,11 @@ class CMediusers extends CMbObject {
     $this->_ref_packs = $this->_ref_packs->loadList($where);
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
+  function getPerm($permType) {
+    if(!$this->_ref_function) {
       $this->loadRefFunction();
     }
-    $this->_canRead = $this->_ref_function->canRead();
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefFunction();
-    }
-    $this->_canEdit = $this->_ref_function->canEdit();
-    return $this->_canEdit;
+    return $this->_ref_function->getPerm($permType);
   }
   
   function loadProtocoles() {

@@ -212,32 +212,26 @@ class CPlageOp extends CMbObject {
     $this->_fill_rate = number_format($result["time"]*100/(strtotime($this->fin)-strtotime($this->debut)), 2);
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefsFwd();
+  function getPerm($permType) {
+    // Chargement
+    if(!$this->_ref_salle){
+      $this->loadRefSalle();
     }
-    $this->_canRead = $this->_ref_salle->canRead();
-    if($this->chir_id) {
-      $pratCanRead = $this->_ref_chir->canRead();
-    } elseif($this->spec_id) {
-      $pratCanRead = $this->_ref_spec->canRead();
+    if($this->chir_id && !$this->_ref_chir){
+      $this->loadRefChir();
     }
-    $this->_canRead = $this->_ref_salle->canRead() && $pratCanRead;
-    return $this->_canRead;
-  }
+    if($this->spec_id && !$this->_ref_spec){
+      $this->loadRefSpec();
+    }
 
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefsFwd();
-    }
-    $this->_canEdit = $this->_ref_salle->canEdit();
+    //Test de Permission
     if($this->chir_id) {
-      $pratCanEdit = $this->_ref_chir->canEdit();
+      $pratPerm = $this->_ref_chir->getPerm($permType);
     } elseif($this->spec_id) {
-      $pratCanEdit = $this->_ref_spec->canEdit();
+      $pratPerm = $this->_ref_spec->getPerm($permType);
     }
-    $this->_canEdit = $this->_ref_salle->canEdit() && $pratCanEdit;
-    return $this->_canEdit;
+    
+    return ($this->_ref_salle->getPerm($permType) && $pratPerm);
   }
 }
 

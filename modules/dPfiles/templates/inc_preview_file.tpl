@@ -1,7 +1,7 @@
 {{if $file->file_id}}
   <strong>{{$file->_view}}</strong><br />
   {{$file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}<br />
-  {{if $file->_nb_pages}}
+  {{if $file->_nb_pages && !$acces_denied}}
     {{if $page_prev !== null}}
     <a class="button" href="javascript:ZoomFileAjax({{$file->file_id}},{{$page_prev}});"><img align="top" src="modules/{{$m}}/images/prev.png" alt="Page précédente" /> Page précédente</a>
     {{/if}}

@@ -25,8 +25,8 @@ $includeInfosFile = null;
 $file = new CFile;
 $file->load($file_id);
 $file->loadRefsFwd();
-
 $acces_denied = !$file->canRead();
+
 $file->loadNbPages();
 if(!$acces_denied){
   if($file->file_type == "text/plain" && file_exists($file->_file_path)){
@@ -51,7 +51,7 @@ if($file->_nb_pages){
 
 // Création du template
 $smarty = new CSmartyDP(1);
-
+mbTrace($file);
 $smarty->assign("arrNumPages"     , $arrNumPages);
 $smarty->assign("file_id"         , $file_id     );
 $smarty->assign("file"            , $file        );
@@ -60,7 +60,7 @@ $smarty->assign("page_next"       , $page_next   );
 $smarty->assign("sfn"             , $sfn         );
 $smarty->assign("includeInfosFile", $includeInfosFile);    
 $smarty->assign("popup"           , $popup);
-
+$smarty->assign("acces_denied"    , $acces_denied);
 if($popup==1){
     //Récupération de la liste des fichiers
     $listFiles = new CFile;

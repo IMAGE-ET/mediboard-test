@@ -375,28 +375,13 @@ class COperation extends CMbObject {
     $this->loadRefsDocuments();
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
+  function getPerm($permType) {
+    if(!$this->_ref_chir){
       $this->loadRefChir();
+    }if(!$this->_ref_anesth){
       $this->loadRefPlageOp();
     }
-    $this->_canRead = $this->_ref_chir->canRead() || $this->_ref_anesth->canRead();
-    if($this->_ref_plageop->plageop_id) {
-      $this->_canRead = $this->_canRead || $this->_ref_plageop->canRead();
-    }
-    return $this->_canRead;
-  }
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefChir();
-      $this->loadRefPlageOp();
-    }
-    $this->_canEdit = $this->_ref_chir->canEdit() || $this->_ref_anesth->canEdit();
-    if($this->_ref_plageop->plageop_id) {
-      $this->_canEdit = $this->_canEdit || $this->_ref_plageop->canEdit();
-    }
-    $this->_canEdit = $this->_canEdit && isMbModuleEditAll("dPplanningOp");
-    return $this->_canEdit;
+    return ($this->_ref_chir->getPerm($permType) && $this->_ref_anesth->getPerm($permType));
   }
 
   function loadPossibleActes () {

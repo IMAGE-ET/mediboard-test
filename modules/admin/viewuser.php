@@ -34,7 +34,7 @@ if (!db_loadHash( $sql, $user )) {
 	}
 	$titleBlock->show();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function popChgPwd() {
 	window.open( './index.php?m=admin&a=chpwd&dialog=1', 'chpwd', 'top=250,left=250,width=350, height=220, scollbars=false' );
 }

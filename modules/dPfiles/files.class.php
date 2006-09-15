@@ -68,44 +68,28 @@ class CFile extends CMbObject {
     
     $this->_file_size = mbConvertDecaBinary($this->file_size);    
 
-    if (!$this->file_object_id) {
-      trigger_error("No object_id associated with file (file_id = $this->file_id)", E_USER_WARNING);
-    }
-    
-    // Computes complete file path
-    $this->_sub_dir = "$this->file_class";
-    $this->_sub_dir .= "/".intval($this->file_object_id / 1000);
+    if ($this->file_object_id) {
+      // Computes complete file path
+      $this->_sub_dir = "$this->file_class";
+      $this->_sub_dir .= "/".intval($this->file_object_id / 1000);
 
-    $this->_file_path = "$filesDir/$this->_sub_dir/$this->file_object_id/$this->file_real_filename";
+      $this->_file_path = "$filesDir/$this->_sub_dir/$this->file_object_id/$this->file_real_filename";
+    }
     
     $this->_shortview = $this->file_name;
     $this->_view = $this->file_name." (".$this->_file_size.")";  
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
+  function getPerm($permType) {
+    if(!$this->_ref_file_owner){
       $this->loadRefsFwd();
     }
     if($this->_ref_object->_id) {
-      $objectPerm = $this->_ref_object->canRead();
-    } else {
+      $objectPerm = $this->_ref_object->getPerm($permType);
+    }else{
       $objectPerm = false;
     }
-    $this->_canRead = $this->_ref_file_owner->canRead() && $objectPerm;
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefsFwd();
-    }
-    if($this->_ref_object->_id) {
-      $objectPerm = $this->_ref_object->canEdit();
-    } else {
-      $objectPerm = false;
-    }
-    $this->_canEdit = $this->_ref_file_owner->canEdit() && $objectPerm;
-    return $this->_canEdit;
+    return ($this->_ref_file_owner->getPerm($permType) && $objectPerm);
   }
   
   function delete() {

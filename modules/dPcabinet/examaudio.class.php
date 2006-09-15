@@ -207,20 +207,11 @@ class CExamAudio extends CMbObject {
     $this->_ref_consult->load($this->consultation_id);
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
+  function getPerm($permType) {
+    if(!$this->_ref_consult) {
       $this->loadRefsFwd();
     }
-    $this->_canRead = $this->_ref_consult->canRead();
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefsFwd();
-    }
-    $this->_canEdit = $this->_ref_consult->canEdit();
-    return $this->_canEdit;
+    return $this->_ref_consult->getPerm($permType);
   }
 }
 

@@ -259,20 +259,11 @@ class CConsultation extends CMbObject {
     $this->_ref_examcomp = $this->_ref_examcomp->loadList($where,$order);
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
+  function getPerm($permType) {
+    if(!$this->_ref_plageconsult) {
       $this->loadRefPlageConsult();
     }
-    $this->_canRead = $this->_ref_plageconsult->canRead();
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefPlageConsult();
-    }
-    $this->_canEdit = $this->_ref_plageconsult->canEdit() && isMbModuleEditAll("dPcabinet");
-    return $this->_canEdit;
+    return $this->_ref_plageconsult->getPerm($permType);
   }
   
   function fillTemplate(&$template) {

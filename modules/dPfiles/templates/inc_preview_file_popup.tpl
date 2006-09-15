@@ -35,7 +35,7 @@ function goToPage(numpage){
   <tr>
     <td class="button" colspan="3">      
       {{if $file->file_id}}
-        {{if $file->_nb_pages}}
+        {{if $file->_nb_pages && !$acces_denied}}
             {{if $page_prev !== null}}
             <a class="button" href="{{$href}}&amp;file_id={{$file->file_id}}&amp;nonavig={{$nonavig}}&amp;sfn={{$page_prev}}">
               <img align="top" src="modules/{{$m}}/images/prev.png" alt="Page précédente" />
