@@ -165,7 +165,66 @@ include "./style/$uistyle/overrides.php";
 ob_start();
 
 if(!$suppressHeaders) {
- require "./style/$uistyle/header.php";
+// ---------------------------------------------------------------------------------------------------
+// ------------------------------- DEBUT  CODE  HEADER  ----------------------------------------------
+// ---------------------------------------------------------------------------------------------------
+// Définition du CharSet
+if(!isset( $locale_char_set )){
+  $locale_char_set = "UTF-8";
+}
+//Liste des Etablissements
+$Etablissements = new CMediusers();
+$Etablissements = $Etablissements->loadEtablissements(PERM_EDIT);
+// Liste des Modules
+$dialog = dPgetParam( $_GET, "dialog");
+if (!$dialog) {
+  //top navigation menu
+  $nav = CModule::getVisible();
+  $iKey = 0;
+  foreach ($nav as $module) {
+    if (isMbModuleVisible($module->mod_name)) {
+      $affModule[$iKey]["modName"] = "$module->mod_name";
+      $affModule[$iKey]["modNameCourt"] = $AppUI->_("module-$module->mod_name-court");
+      $affModule[$iKey]["modNameLong"] = $AppUI->_("module-$module->mod_name-long");
+      $iKey++;
+    }
+  }  
+}
+// Message
+$messages = new CMessage();
+$messages = $messages->loadPublications("present");
+// Titre et Image MOdule en cours
+$titleBlock = new CTitleBlock( "module-$m-long", "$m.png", $m, "$m.$a" );
+$titleBlock->addCell();
+//Creation du Template
+require_once( $AppUI->getSystemClass("smartydp"));
+$smarty = new CSmartyDP(1);
+$smarty->template_dir = "style/$uistyle/templates/";
+$smarty->compile_dir  = "style/$uistyle/templates_c/";
+$smarty->config_dir   = "style/$uistyle/configs/";
+$smarty->cache_dir    = "style/$uistyle/cache/";
+if (!$dialog) {
+  $smarty->assign("affModule" , $affModule);
+}
+$smarty->assign("localeCharSet"        , $locale_char_set);
+$smarty->assign("mediboardVersion"     , @$AppUI->getVersion());
+$smarty->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/favicon.ico",1));
+$smarty->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
+$smarty->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
+$smarty->assign("mediboardScript"      , mbLoadScripts(1));
+$smarty->assign("dialog"               , $dialog);
+$smarty->assign("messages"             , $messages);
+$smarty->assign("uistyle"              , $uistyle);
+$smarty->assign("AppUI"                , $AppUI);
+$smarty->assign("Etablissements"       , $Etablissements);
+$smarty->assign("helpOnline"           , mbPortalLink( $m, "Aide" ));
+$smarty->assign("suggestion"           , mbPortalLink( "bugTracker", "Suggérer une amélioration" ));
+$smarty->assign("errorMessage"         , $AppUI->getMsg());
+$smarty->assign("titleBlock"           , $titleBlock->show(1));
+$smarty->display("header.tpl");
+// ---------------------------------------------------------------------------------------------------
+// -------------------------------- FIN  CODE  HEADER  -----------------------------------------------
+// ---------------------------------------------------------------------------------------------------
 }
 
 require "./modules/$m/".($u ? "$u/" : "")."$a.php";

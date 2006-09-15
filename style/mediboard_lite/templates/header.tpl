@@ -26,9 +26,9 @@
       <table>
         <tr>
           {{foreach from=$affModule item=currModule}}
-          <td align='center'>
+          <td align="center">
             <a href="?m={{$currModule.modName}}">
-              <img src="modules/{{$currModule.modName}}/images/{{$currModule.modName}}.png" alt='{{$currModule.modNameCourt|escape:javascript}}' height='48' width ='48' />
+              <img src="modules/{{$currModule.modName}}/images/{{$currModule.modName}}.png" alt="{{$currModule.modNameCourt}}" height="48" width="48" />
               <br />{{$currModule.modNameCourt}}
             </a>
           </td>

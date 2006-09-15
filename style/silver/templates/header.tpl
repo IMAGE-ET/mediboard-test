@@ -28,9 +28,9 @@
         <tr>
           <td />
           {{foreach from=$affModule item=currModule}}    
-          <td align='center' class="{{if $currModule.modName==$m}}iconSelected{{else}}iconNonSelected{{/if}}">
-            <a href='?m={{$currModule.modName}}' title='{{$currModule.modNameLong|escape:javascript}}'>
-              <img src="modules/{{$currModule.modName}}/images/{{$currModule.modName}}.png" alt='{{$currModule.modNameCourt|escape:javascript}}' height='48' width ='48' />
+          <td align="center" class="{{if $currModule.modName==$m}}iconSelected{{else}}iconNonSelected{{/if}}">
+            <a href="?m={{$currModule.modName}}" title="{{$currModule.modNameLong}}">
+              <img src="modules/{{$currModule.modName}}/images/{{$currModule.modName}}.png" alt="{{$currModule.modNameCourt}}" height="48" width="48" />
             </a>
           </td>
           {{/foreach}}
@@ -41,8 +41,8 @@
             <button id="menuIcons-trigger" type="button" style="float:left" />
           </td>
           {{foreach from=$affModule item=currModule}}
-          <td align='center' class="{{if $currModule.modName==$m}}textSelected{{else}}textNonSelected{{/if}}" title='{{$currModule.modNameLong|escape:javascript}}'>
-            <a href='?m={{$currModule.modName}}'>
+          <td align="center" class="{{if $currModule.modName==$m}}textSelected{{else}}textNonSelected{{/if}}" title="{{$currModule.modNameLong}}">
+            <a href="?m={{$currModule.modName}}">
               <strong>{{$currModule.modNameCourt}}</strong>
             </a>
           </td>
