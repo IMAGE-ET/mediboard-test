@@ -93,6 +93,18 @@ class CPermModule extends CMbObject {
     }
     return false;
   }
+  
+  // Return all the readable modules
+  function getReadableModules() {
+    $listReadable = array();
+    $listModules = CModule::getVisible();
+    foreach($listModules as $module) {
+      if($this->getViewModule($module->mod_id, PERM_READ)) {
+        $listReadable[] = $module;
+      }
+    }
+    return $listReadable;
+  }
 }
 
 ?>
