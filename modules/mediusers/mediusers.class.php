@@ -341,7 +341,7 @@ class CMediusers extends CMbObject {
     // Filter with permissions
     foreach ($baseUsers as $key => $mediuser) {
       if($mediuser->getPerm($permType)) {
-        $users[$key] = $mediusers[$key];
+        $users[$key] = $baseUsers[$key];
       }          
     }
     
