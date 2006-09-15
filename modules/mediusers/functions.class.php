@@ -83,31 +83,19 @@ class CFunctions extends CMbObject {
     $this->_ref_users = $this->_ref_users->loadList($where);
   }
   
-  function canRead($withRefs = true) {
-    $this->_canRead = isMbAllowed(PERM_READ, "mediusers", $this->function_id);
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    $this->_canEdit = isMbAllowed(PERM_EDIT, "mediusers", $this->function_id);
-    return $this->_canEdit;
-  }
-  
   // @todo : ameliorer le choix des spécialités
   // (loadfunction($groupe, $permtype) par exemple)
   function loadSpecialites($perm_type = null) {
-    $sql = "SELECT `$this->_tbl`.*" .
-      "\nFROM `$this->_tbl`" .
-      "\nWHERE `$this->_tbl`.`type` = 'cabinet'" .
-      "\nORDER BY `$this->_tbl`.`text`";
-  
-    $basespecs = db_loadObjectList($sql, $this);
+    $where = array();
+    $where["type"] = "= 'cabinet'";
+    $order = "text";
+    $basespecs = $this->loadList($where, $order);
     $specs = null;
   
     // Filter with permissions
     if ($perm_type) {
       foreach ($basespecs as $spec) {
-        if (isMbAllowed($perm_type, "mediusers", $spec->function_id)) {
+        if($spec->canRead()) {
           $specs[] = $spec;
         }          
       }

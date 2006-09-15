@@ -35,16 +35,6 @@ class CCategory extends CMbObject {
     $this->_ref_materiel = $this->_ref_materiel->loadList($where);
   }
   
-  function canRead($withRefs = true) {
-    $this->_canRead = isMbAllowed(PERM_READ, "dPmateriel", $this->category_id);
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    $this->_canEdit = isMbAllowed(PERM_EDIT, "dPmateriel", $this->category_id);
-    return $this->_canEdit;
-  }
-  
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
       "label"     => "matériel(s)", 

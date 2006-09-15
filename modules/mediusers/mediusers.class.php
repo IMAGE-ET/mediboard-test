@@ -316,18 +316,17 @@ class CMediusers extends CMbObject {
     }
   }
 
-  function loadListFromType($user_types = null, $perm_type = null, $function_id = null, $name = null) {
+  function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null) {
     global $utypes_flip;
-    $sql = "SELECT *" .
-      "\nFROM users, users_mediboard" .
-      "\nWHERE users.user_id = users_mediboard.user_id";
-      
+    $ljoin = array();
+    $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
+    $where = array();
+    $where["users_mediboard.user_id"] = "= `users`.`user_id`";
     if ($function_id) {
-      $sql .= "\nAND users_mediboard.function_id = $function_id";
+      $where["users_mediboard.function_id"] = "= '$function_id'";
     }
-    
     if ($name) {
-      $sql .= "\nAND users.user_last_name LIKE '$name%'";
+      $where["users.user_last_name"] = "LIKE '$name%'";
     }
     
     if (is_array($user_types)) {
@@ -337,26 +336,22 @@ class CMediusers extends CMbObject {
       }
       
       $inClause = implode(", ", $user_types);
-      $sql .= "\nAND users.user_type IN ($inClause)";
+      $where["users.user_type"] = "IN ($inClause)";
     }
 
-    $sql .= "\nORDER BY users.user_last_name";
+    $order = "users.user_last_name";
 
     // Get all users
-    $baseusers = db_loadObjectList($sql, new CUser);
-    $mediusers = db_loadObjectList($sql, new CMediusers);
+    $mediuser = new CMediusers;
+    $baseUsers = $mediuser->loadList($where, $order, null, null, $ljoin);
    
     $users = array();
      
     // Filter with permissions
-    if ($perm_type) {
-      foreach ($mediusers as $key => $mediuser) {
-        if (isMbAllowed($perm_type, "mediusers", $mediuser->function_id)) {
-          $users[$key] = $mediusers[$key];
-        }          
-      }
-    } else {
-      $users = $baseusers;
+    foreach ($baseUsers as $key => $mediuser) {
+      if($mediuser->getPerm($permType)) {
+        $users[$key] = $mediusers[$key];
+      }          
     }
     
     return $users;
@@ -383,25 +378,19 @@ class CMediusers extends CMbObject {
     return $groups;
   }
   
-  function loadFonctions($perm_type = null){
-  	// Liste de Toutes les fonctions accessibles
-    $sql = "SELECT *" .
-      "\nFROM functions_mediboard" .
-      "\nORDER BY text";
-    $basefct = db_loadObjectList($sql, new CFunctions);  
+  function loadFonctions($permType = PERM_READ){
+    $function = new CFunctions;
+    $order = "text";
+    $baseFunctions = $function->loadList(null, $order); 
     
-    $listFct = array();
+    $functions = array();
     // Filtre
-    if ($perm_type) {
-      foreach($basefct as $keyFct=>$fct){
-        if(isMbAllowed($perm_type, "mediusers", $fct->function_id)){
-          $listFct[$keyFct] = $basefct[$keyFct];
-        }
+    foreach($baseFunctions as $keyFct => $fct){
+      if($fct->getPerm($permType)){
+        $functions[$keyFct] = $baseFunctions[$keyFct];
       }
-    }else{
-      $listFct = $basefct;    
     }
-    return $listFct;
+    return $functions;
   }
   
   function loadUsers($perm_type = null, $function_id = null, $name = null) {
@@ -418,11 +407,6 @@ class CMediusers extends CMbObject {
   
   function loadPraticiens($perm_type = null, $function_id = null, $name = null) {
     return $this->loadListFromType(array("Chirurgien", "Anesthésiste"), $perm_type, $function_id, $name);
-  }
-  
-  function isAllowed($perm_type = PERM_READ) {
-    assert($this->function_id);
-    return isMbAllowed($perm_type, "mediusers", $this->function_id);
   }
   
   function isFromType($user_types) {

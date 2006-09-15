@@ -28,7 +28,7 @@ if (!$userSel->isPraticien()) {
   $AppUI->redirect("m=dPcabinet&tab=0");
 }
 
-if (!$userSel->isAllowed(PERM_EDIT)) {
+if (!$userSel->canEdit()) {
   $AppUI->setMsg("Vous n'avez pas les droits suffisants", UI_MSG_ALERT);
   $AppUI->redirect("m=dPcabinet&tab=0");
 }

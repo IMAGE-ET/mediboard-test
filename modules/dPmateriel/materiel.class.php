@@ -56,20 +56,11 @@ class CMateriel extends CMbObject {
     $this->_ref_category->load($this->category_id);  
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
+  function getPerm($permType) {
+    if(!$this->_ref_category) {
       $this->loadRefsFwd();
     }
-    $this->_canRead = $this->_ref_category->canRead();
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefsFwd();
-    }
-    $this->_canEdit = $this->_ref_category->canEdit();
-    return $this->_canEdit;
+    return ($this->_ref_category->getPerm($permType));
   }
   
   function canDelete(&$msg, $oid = null) {

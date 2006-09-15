@@ -65,21 +65,13 @@ class CPlageressource extends CMbObject {
     $this->_ref_prat->load($this->prat_id);
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
+  function getPerm($permType) {
+    if(!$this->_ref_prat) {
       $this->loadRefsFwd();
     }
-    $this->_canRead = $this->_ref_prat->canRead();
-    return $this->_canRead;
+    return $this->_ref_prat->getPerm($permType);
   }
 
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefsFwd();
-    }
-    $this->_canEdit = $this->_ref_prat->canEdit();
-    return $this->_canEdit;
-  }
 /*  
   function canDelete(&$msg, $oid = null) {
     $tables[] = array ();

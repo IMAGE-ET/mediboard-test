@@ -89,20 +89,11 @@ class CActeCCAM extends CMbObject {
     $this->loadRefCodeCCAM();
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
+  function getPerm($permType) {
+    if(!$this->_ref_operation) {
       $this->loadRefOperation();
     }
-    $this->_canRead = $this->_ref_operation->canRead();
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefOperation();
-    }
-    $this->_canEdit = $this->_ref_operation->canEdit();
-    return $this->_canEdit;
+    return $this->_ref_operation->getPerm($permType);
   }
 }
 

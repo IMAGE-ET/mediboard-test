@@ -43,20 +43,11 @@ class CStock extends CMbObject {
     $this->_ref_materiel->load($this->materiel_id);
   }
   
-  function canRead($withRefs = true) {
-    if($withRefs) {
+  function getPerm($permType) {
+    if(!$this->_ref_group || !$this->_ref_materiel) {
       $this->loadRefsFwd();
     }
-    $this->_canRead = $this->_ref_group->canRead() && $this->_ref_materiel->canRead();
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    if($withRefs) {
-      $this->loadRefsFwd();
-    }
-    $this->_canEdit = $this->_ref_group->canEdit() && $this->_ref_materiel->canEdit();
-    return $this->_canEdit;
+    return ($this->_ref_group->getPerm($permType) && $this->_ref_materiel->getPerm($permType));
   }
     
    function check() {

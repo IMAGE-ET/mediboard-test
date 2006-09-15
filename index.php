@@ -107,9 +107,6 @@ if($AppUI->doLogin()) {
 	exit;
 }
 
-// bring in the rest of the support and localisation files
-//require_once("./includes/permissions.php");
-
 
 // set the module and action from the url
 $m     = $AppUI->checkFileName(mbGetValueFromGet("m"     , CPermModule::getVisibleModule()));
