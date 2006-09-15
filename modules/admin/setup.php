@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "admin";
-$config["mod_version"]     = "1.0.1";
+$config["mod_version"]     = "1.0.2";
 $config["mod_type"]        = "core";
 $config["mod_config"]      = false;
 
@@ -37,7 +37,7 @@ class CSetupadmin {
         $sql = "ALTER TABLE `users` CHANGE `user_address1` `user_address1` VARCHAR( 50 );";
         db_exec( $sql ); db_error();
       case "1.0.1":
-        return "1.0.1";
+        require_once("legacy/permission.class.php");
         $sql = "CREATE TABLE `perm_module` (
                   `perm_module_id` MEDIUMINT NOT NULL AUTO_INCREMENT ,
                   `user_id` MEDIUMINT NOT NULL ,
@@ -65,7 +65,8 @@ class CSetupadmin {
         $moduleClasses = array();
         $moduleClasses["dPetablissement"] = "CGroups";
         $moduleClasses["mediusers"] = "CMediusers";
-        $listOldPerms = CPermission::loadList();
+        $perm = new CPermission;
+        $listOldPerms = $perm->loadList();
         foreach($listOldPerms as $key => $value) {
           $module = new CModule;
           $module->loadByName($value->permission_grant_on);

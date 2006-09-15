@@ -61,6 +61,24 @@ class CModule extends CMbObject {
     $where["mod_name"] = "= '$name'";
     return $this->loadObject($where);
   }
+  
+  function getPerm($permType) {
+    return CPermModule::getPermModule($this->mod_id, $permType);
+  }
+  
+  function getView($permType) {
+    return CPermModule::getViewModule($this->mod_id, $permType);
+  }
+  
+  function canView() {
+    $this->_canView = $this->getView(PERM_READ);
+    return $this->_canView;
+  }
+  
+  function canEdit() {
+    $this->_canEdit = $this->getView(PERM_EDIT);
+    return $this->_canEdit;
+  }
     
   function registerSetup() {
     global $registeredModules;

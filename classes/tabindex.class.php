@@ -13,8 +13,6 @@ class CTabIndex {
     
   function CTabIndex($tabs = array(), $default = 0) {
     global $AppUI, $canRead, $canEdit, $m, $tab, $_GET;
-    $canRead = !getDenyRead($m);
-    $canEdit = !getDenyEdit($m);
     if(!$canRead) {
       $AppUI->redirect("m=system&a=access_denied");
     }

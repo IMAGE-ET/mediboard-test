@@ -105,15 +105,5 @@ class CGroups extends CMbObject {
     $this->_ref_functions = new CFunctions;
     $this->_ref_functions = $this->_ref_functions->loadList($where, $order);
   }
-  
-  function canRead($withRefs = true) {
-    $this->_canRead = isMbAllowed(PERM_READ, "dPetablissement", $this->group_id);
-    return $this->_canRead;
-  }
-
-  function canEdit($withRefs = true) {
-    $this->_canEdit = isMbAllowed(PERM_EDIT, "dPetablissement", $this->group_id);
-    return $this->_canEdit;
-  }
 }
 ?>

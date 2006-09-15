@@ -824,7 +824,6 @@ class CTitleBlock_core {
 		$this->cells1 = array();
 		$this->cells2 = array();
 		$this->crumbs = array();
-		$this->showhelp = !getDenyRead("help");
 	}
 /**
 * Adds a table "cell" beside the Title string

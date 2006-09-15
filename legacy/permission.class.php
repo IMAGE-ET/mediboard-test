@@ -5,10 +5,10 @@
 */
 
 // Permission flags used in the DB
-define("PERM_EDIT", "-1");
-define("PERM_DENY", "0" );
-define("PERM_READ", "1" );
-define("PERM_ALL" , "-1");
+define("OLD_PERM_EDIT", "-1");
+define("OLD_PERM_DENY", "0" );
+define("OLD_PERM_READ", "1" );
+define("OLD_PERM_ALL" , "-1");
 
 // Flags for Mediboard modules 
 define ("HIDDEN_READNONE_EDITNONE" ,  0); // PERM_DENY / HIDE
@@ -52,8 +52,8 @@ class CPermission extends CMbObject {
   // DB Fields
   var $permission_user = null;
   var $permission_grant_on = "all";
-  var $permission_item = PERM_ALL;
-  var $permission_value = PERM_EDIT;
+  var $permission_item = OLD_PERM_ALL;
+  var $permission_value = OLD_PERM_EDIT;
 
   // DB Form Fields
   var $_module_visible = null;
@@ -65,12 +65,10 @@ class CPermission extends CMbObject {
   
   function CPermission() {
     $this->CMbObject("permissions", "permission_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
   function updateFormFields() {
-    if ($this->permission_item == PERM_ALL) {
+    if ($this->permission_item == OLD_PERM_ALL) {
       switch ($this->permission_value) {
         case HIDDEN_READNONE_EDITNONE : $this->_module_visible = false; $this->_module_readall = false; $this->_module_editall = false; break;
         case HIDDEN_READNONE_EDITALL  : $this->_module_visible = false; $this->_module_readall = false; $this->_module_editall = true ; break;
@@ -86,9 +84,9 @@ class CPermission extends CMbObject {
       $this->_item_read = null;
       $this->_item_edit = null;
     } else {
-      $this->_item_deny = $this->permission_value == PERM_DENY;
-      $this->_item_read = $this->permission_value == PERM_READ;
-      $this->_item_edit = $this->permission_value == PERM_EDIT;
+      $this->_item_deny = $this->permission_value == OLD_PERM_DENY;
+      $this->_item_read = $this->permission_value == OLD_PERM_READ;
+      $this->_item_edit = $this->permission_value == OLD_PERM_EDIT;
             
       $this->_module_visible = null; 
       $this->_module_readall = null; 
@@ -98,7 +96,7 @@ class CPermission extends CMbObject {
   }
   
   function updateDBFields() {
-    if ($this->permission_item != PERM_ALL) {
+    if ($this->permission_item != OLD_PERM_ALL) {
       return;
     }
  

@@ -6,8 +6,12 @@
  *  @version $Revision: $
  *  @author Romain Ollivier
  */
+
+global $permissionSystemeDown;
+$sql = "SHOW TABLE STATUS LIKE 'perm_module'";
+$permissionSystemeDown = !db_loadResult($sql);
  
-if(!defined("PERM_DENY") && 0) {
+if(!defined("PERM_DENY")) {
   define("PERM_DENY" , "0");
   define("PERM_READ" , "1");
   define("PERM_EDIT" , "2");
@@ -37,69 +41,55 @@ class CPermModule extends CMbObject {
     $this->_props["view"]        = "num|notNull";
   }
   
-  function getPerm($permType) {
-    return $this->getPermModule($this->mod_id, $permType);
-  }
-  
-  function getView($permType) {
-    return $this->getViewModule($this->mod_id, $permType);
-  }
-  
-  function canView() {
-    $this->_canView = $this->getView(PERM_READ);
-    return $this->_canView;
-  }
-  
-  function canEdit() {
-    $this->_canEdit = $this->getView(PERM_EDIT);
-    return $this->_canEdit;
-  }
-  
   // Those functions are statics
   
   function getPermModule($mod_id, $permType) {
-    return($this->getInfoModule("permission", $mod_id, $permType));
+    return(CPermModule::getInfoModule("permission", $mod_id, $permType));
   }
   
   function getViewModule($mod_id, $permType) {
-    return($this->getInfoModule("view", $mod_id, $permType));
+    return(CPermModule::getInfoModule("view", $mod_id, $permType));
   }
   
   function getInfoModule($field, $mod_id, $permType) {
-    global $AppUI;
+    global $AppUI, $permissionSystemeDown;
+    if($permissionSystemeDown) {
+      return true;
+    }
     $user_id = $AppUI->user_id;
+    $permModule = new CPermModule;
     $where = array();
     $where["user_id"] = "= '$user_id'";
     $where["mod_id"]  = "= '0'"; // Tous les modules
     $where["$field"]    = ">= '$permType'";
-    if(count($this->loadList($where))) {
+    if(count($permModule->loadList($where))) {
       $where["mod_id"] = "= '$mod_id'";
       $where["$field"]   = "< '$permType'";
-      return !count($this->loadList($where));
+      return !count($permModule->loadList($where));
     } else {
       $where["mod_id"] = "= '$mod_id'";
       $where["$field"]   = ">= '$permType'";
-      return !count($this->loadList($where));
+      return count($permModule->loadList($where));
     }
   }
 
-  // Return the first readable module
-  function getReadableModule() {
+  // Return the first visible module
+  function getVisibleModule() {
     $listModules = CModule::getVisible();
     foreach($listModules as $module) {
-      if($this->getViewModule($module->mod_id, PERM_READ)) {
+      if(CPermModule::getViewModule($module->mod_id, PERM_READ)) {
         return $module->mod_name;
       }
     }
     return false;
   }
   
-  // Return all the readable modules
-  function getReadableModules() {
+  // Return all the visible modules
+  function getVisibleModules() {
     $listReadable = array();
     $listModules = CModule::getVisible();
     foreach($listModules as $module) {
-      if($this->getViewModule($module->mod_id, PERM_READ)) {
+      if(CPermModule::getViewModule($module->mod_id, PERM_READ)) {
         $listReadable[] = $module;
       }
     }

@@ -108,19 +108,22 @@ if($AppUI->doLogin()) {
 }
 
 // bring in the rest of the support and localisation files
-require_once("./includes/permissions.php");
+//require_once("./includes/permissions.php");
 
 
 // set the module and action from the url
-$m     = $AppUI->checkFileName(mbGetValueFromGet("m", getReadableModule()));
-$a     = $AppUI->checkFileName(mbGetValueFromGet("a", "index"));
-$u     = $AppUI->checkFileName(mbGetValueFromGet("u", ""));
+$m     = $AppUI->checkFileName(mbGetValueFromGet("m"     , CPermModule::getVisibleModule()));
+$a     = $AppUI->checkFileName(mbGetValueFromGet("a"     , "index"));
+$u     = $AppUI->checkFileName(mbGetValueFromGet("u"     , ""));
 $dosql = $AppUI->checkFileName(mbGetValueFromPost("dosql", ""));
 
 // set the group in use, put the user group if not allowed
 $g = mbGetAbsValueFromGetOrSession("g", $AppUI->user_group);
 
-if(!isMbAllowed(PERM_READ, "dPetablissement", $g)) {
+$indexGroup = new CGroups;
+$indexGroup->load($g);
+
+if(!$indexGroup->canRead()) {
   mbSetAbsValueToSession("g", $AppUI->user_group);
   $g = $AppUI->user_group;
 }
@@ -135,10 +138,12 @@ setlocale(LC_TIME, $user_locale);
 
 // check overall module permissions
 // these can be further modified by the included action files
-$canRead = isMbModuleVisible($m) and isMbModuleReadAll($m);
-$canEdit = isMbModuleVisible($m) and isMbModuleEditAll($m);
-$canAuthor = $canEdit;
-$canDelete = $canEdit;
+
+$indexModule = CModule::getInstalled($m);
+$canRead     = $indexModule->canRead();
+$canEdit     = $indexModule->canEdit();;
+$canAuthor   = $canEdit;
+$canDelete   = $canEdit;
 
 // Don't output anything. Usefull for fileviewers, popup dialogs, ajax requests, etc.
 $suppressHeaders = dPgetParam($_GET, "suppressHeaders");
@@ -179,15 +184,13 @@ $Etablissements = $Etablissements->loadEtablissements(PERM_EDIT);
 $dialog = dPgetParam( $_GET, "dialog");
 if (!$dialog) {
   //top navigation menu
-  $nav = CModule::getVisible();
+  $nav = CPermModule::getVisibleModules();
   $iKey = 0;
   foreach ($nav as $module) {
-    if (isMbModuleVisible($module->mod_name)) {
-      $affModule[$iKey]["modName"] = "$module->mod_name";
-      $affModule[$iKey]["modNameCourt"] = $AppUI->_("module-$module->mod_name-court");
-      $affModule[$iKey]["modNameLong"] = $AppUI->_("module-$module->mod_name-long");
-      $iKey++;
-    }
+    $affModule[$iKey]["modName"] = "$module->mod_name";
+    $affModule[$iKey]["modNameCourt"] = $AppUI->_("module-$module->mod_name-court");
+    $affModule[$iKey]["modNameLong"] = $AppUI->_("module-$module->mod_name-long");
+    $iKey++;
   }  
 }
 // Message

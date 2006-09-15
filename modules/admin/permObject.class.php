@@ -7,7 +7,7 @@
  *  @author Romain Ollivier
  */
 
-if(!defined("PERM_DENY") && 0) {
+if(!defined("PERM_DENY")) {
   define("PERM_DENY" , "0");
   define("PERM_READ" , "1");
   define("PERM_EDIT" , "2");
@@ -42,25 +42,25 @@ class CPermObject extends CMbObject {
   // Those functions are statics
   
   function getPermObject($object, $permType) {
-    global $AppUI;
+    global $AppUI, $permissionSystemeDown;
+    if($permissionSystemeDown) {
+      return true;
+    }
     $user_id = $AppUI->user_id;
+    $permObject = new CPermObject;
     $where = array();
     $where["user_id"]      = "= '$user_id'";
     $where["object_id"]    = "= '0'";
     $where["object_class"] = "= '".get_class($object)."'";
     $where["permission"]   = ">= '$permType'";
-    if(count($this->loadList($where))) {
+    if(count($permObject->loadList($where))) {
       $where["object_id"]  = "= '$object->_id'";
       $where["permission"] = "< '$permType'";
-      if(count($this->loadList($where))) {
-        return false;
-      } else {
-        return true;
-      }
+      return !count($permObject->loadList($where));
     } else {
       $where["object_id"]  = "= '$object->_id'";
       $where["permission"] = ">= '$permType'";
-      if(count($this->loadList($where))) {
+      if(!count($permObject->loadList($where))) {
         return false;
       } else {
         return $object->_ref_module->getPerm($permType);

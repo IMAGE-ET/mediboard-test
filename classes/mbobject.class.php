@@ -72,12 +72,12 @@ class CMbObject {
   }
   
   function canRead() {
-    $this->_canRead = getPerm(PERM_READ);
+    $this->_canRead = $this->getPerm(PERM_READ);
     return $this->_canRead;
   }
   
   function canEdit() {
-    $this->_canEdit = getPerm(PERM_EDIT);
+    $this->_canEdit = $this->getPerm(PERM_EDIT);
     return $this->_canEdit;
   }
   
