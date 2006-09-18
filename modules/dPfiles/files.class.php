@@ -6,7 +6,7 @@
 * @version $Revision$
 * @author Romain Ollivier
 */
-
+global $filesDir;
 $filesDir = $AppUI->cfg["root_dir"]."/files";
 
 class CFile extends CMbObject {
@@ -65,10 +65,10 @@ class CFile extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     global $filesDir;
-    
     $this->_file_size = mbConvertDecaBinary($this->file_size);    
 
     if ($this->file_object_id) {
+    
       // Computes complete file path
       $this->_sub_dir = "$this->file_class";
       $this->_sub_dir .= "/".intval($this->file_object_id / 1000);
