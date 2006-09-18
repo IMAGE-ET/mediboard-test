@@ -9,7 +9,9 @@
 
 global $AppUI, $m;
 
-$canEdit = !getDenyEdit($m);
+$module = CModule::getInstalled($m);
+$canEdit = $module->canEdit();
+
 if (!$canEdit) {
   $AppUI->redirect("m=system&a=access_denied");
 }

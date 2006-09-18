@@ -98,7 +98,8 @@ if ($pat_id) {
   }
 }
 
-$canEditCabinet = !getDenyEdit("dPcabinet");
+$moduleCabinet = CModule::getInstalled("dPcabinet");
+$canEditCabinet = $moduleCabinet->canEdit();
 
 $affichageNbFile = CFile::loadNbFilesByCategory($patient);
 

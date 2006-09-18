@@ -112,7 +112,8 @@ if ($where) {
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
-$canEditCabinet = !getDenyEdit("dPcabinet");
+$moduleCabinet = CModule::getInstalled("dPcabinet");
+$canEditCabinet = $moduleCabinet->canEdit();
 
 $affichageNbFile = CFile::loadNbFilesByCategory($patient);
 

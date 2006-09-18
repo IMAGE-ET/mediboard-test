@@ -81,7 +81,8 @@ $patient->load($patient_id);
 
 $patient->loadDossierComplet();
 
-$canEditCabinet = !getDenyEdit("dPcabinet");
+$moduleCabinet = CModule::getInstalled("dPcabinet");
+$canEditCabinet = $moduleCabinet->canEdit();
 
 // Chargement des fichiers
 

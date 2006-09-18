@@ -49,7 +49,8 @@ if ($file_path) {
 }
 
 // Permission d'affichage du fichier a revoir. droit dPfiles mais si visu depuis consult pb !
-//$canRead = !getDenyRead("dPfiles");
+//$moduleFiles = CModule::getInstalled("dPfiles");
+//$canRead = $moduleFiles->canRead();
 //if (!$canRead) {
 //  $AppUI->redirect("m=system&a=access_denied");
 //}
