@@ -2,7 +2,7 @@
 
 function setClose(selClass,keywords,key,val){
   var oObject = {
-    class : selClass,
+    objClass : selClass,
     id : key,
     view : val,
     keywords : keywords
