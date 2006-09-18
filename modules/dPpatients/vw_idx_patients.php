@@ -98,7 +98,7 @@ $patient_year      = mbGetValueFromGetOrSession("Date_Year" , date("Y"));
 
 $where = null;
 if ($patient_nom   ) $where["nom"]    = "LIKE '".addslashes($patient_nom)."%'";
-if ($patient_prenom) $where["prenom"] = "prenom LIKE '".addslashes($patient_prenom)."%'";
+if ($patient_prenom) $where["prenom"] = "LIKE '".addslashes($patient_prenom)."%'";
 if ($patient_naissance == "on") {
   $where["naissance"] = "= '$patient_year-$patient_month-$patient_day'";
 }
