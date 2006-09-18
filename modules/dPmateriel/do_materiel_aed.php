@@ -2,7 +2,7 @@
 
 /**
 * @package Mediboard
-* @subpackage mediusers
+* @subpackage dPmateriel
 * @version $Revision: $
 * @author Romain Ollivier
 */

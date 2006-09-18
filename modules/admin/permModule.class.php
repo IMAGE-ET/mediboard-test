@@ -29,6 +29,10 @@ class CPermModule extends CMbObject {
   var $mod_id     = null;
   var $permission = null;
   var $view       = null;
+  
+  // References
+  var $_ref_db_user   = null;
+  var $_ref_db_module = null;
 
   function CPermModule() {
     $this->CMbObject("perm_module", "perm_module_id");
@@ -39,6 +43,21 @@ class CPermModule extends CMbObject {
     $this->_props["mod_id"]      = "num|notNull";
     $this->_props["permission"]  = "num|notNull";
     $this->_props["view"]        = "num|notNull";
+  }
+  
+  function loadRefDBModule() {
+    $this->_ref_db_module = new CModule;
+    $this->_ref_db_module->load($this->mod_id);
+  }
+
+  function loadRefDBUser() {
+    $this->_ref_db_user = new CUser;
+    $this->_ref_db_user->load($this->user_id);
+  }
+  
+  function loadRefsFwd() {
+    $this->loadRefDBModule();
+    $this->loadRefDBUser();
   }
   
   // Those functions are statics

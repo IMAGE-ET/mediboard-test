@@ -13,7 +13,7 @@ $selClass = mbGetValueFromGetOrSession("selClass", null);
 $keywords = mbGetValueFromGetOrSession("keywords", null);
 
 // Liste des Class
-$listClass = getChildClasses("CMbObject", array("_ref_files"));
+$listClass = getChildClasses("CMbObject");
 
 
 $keywords = trim($keywords);

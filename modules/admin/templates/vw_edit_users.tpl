@@ -8,7 +8,7 @@
 
     {{if $user->user_id}}
     <td class="halfPane">
-      {{if $canEdit && 0}}
+      {{if $canEdit}}
       {{include file="inc_edit_user.tpl"}}
       {{else}}
       {{include file="inc_vw_user.tpl"}}

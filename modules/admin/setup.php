@@ -64,7 +64,7 @@ class CSetupadmin {
         db_exec( $sql ); db_error();
         $moduleClasses = array();
         $moduleClasses["dPetablissement"] = "CGroups";
-        $moduleClasses["mediusers"] = "CMediusers";
+        $moduleClasses["mediusers"] = "CFunctions";
         $perm = new CPermission;
         $listOldPerms = $perm->loadList();
         foreach($listOldPerms as $key => $value) {

@@ -26,6 +26,10 @@ class CPermObject extends CMbObject {
   var $object_class = null;
   var $permission   = null;
   
+  // References
+  var $_ref_db_user   = null;
+  var $_ref_db_object = null;
+  
   function CPermObject() {
     $this->CMbObject("perm_object", "perm_object_id");
     
@@ -37,7 +41,20 @@ class CPermObject extends CMbObject {
     $this->_props["permission"]   = "num|notNull";
   }
   
+  function loadRefDBObject() {
+    $this->_ref_db_object = new $this->object_class;
+    $this->_ref_db_object->load($this->object_id);
+  }
+
+  function loadRefDBUser() {
+    $this->_ref_db_user = new CUser;
+    $this->_ref_db_user->load($this->user_id);
+  }
   
+  function loadRefsFwd() {
+    $this->loadRefDBObject();
+    $this->loadRefDBUser();
+  }
   
   // Those functions are statics
   
