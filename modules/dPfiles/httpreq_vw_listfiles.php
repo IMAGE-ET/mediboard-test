@@ -13,7 +13,8 @@ if (!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
 }
 
-$canEditFiles = isMbModuleEditAll("dPfiles");
+$moduleFiles = CModule::getInstalled("dPfiles");
+$canEditFiles = $moduleFiles->canEdit();
 
 $cat_id   = mbGetValueFromGetOrSession("cat_id"  , 0);
 $selClass = mbGetValueFromGetOrSession("selClass", null);
