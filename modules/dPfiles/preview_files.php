@@ -51,7 +51,7 @@ if($file->_nb_pages){
 
 // Création du template
 $smarty = new CSmartyDP(1);
-mbTrace($file);
+
 $smarty->assign("arrNumPages"     , $arrNumPages);
 $smarty->assign("file_id"         , $file_id     );
 $smarty->assign("file"            , $file        );
