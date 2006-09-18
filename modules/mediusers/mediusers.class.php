@@ -349,7 +349,7 @@ class CMediusers extends CMbObject {
     
   }
   
-  function loadEtablissements($permType = CAN_READ){
+  function loadEtablissements($permType = PERM_READ){
   	// Liste de Tous les établissements
     $group = new CGroups;
     $order = "text";
@@ -357,14 +357,10 @@ class CMediusers extends CMbObject {
     
     $groups = array();
     // Filtre
-    if ($permType) {
-      foreach($basegroups as $keyGroupe=>$groupe){
-        if($groupe->getPerm($permType)) {
-          $groups[$keyGroupe] = $basegroups[$keyGroupe];
-        }
+    foreach($basegroups as $keyGroupe=>$groupe){
+      if($groupe->getPerm($permType)) {
+        $groups[$keyGroupe] = $basegroups[$keyGroupe];
       }
-    }else{
-      $groups = $basegroups;    
     }
     return $groups;
   }

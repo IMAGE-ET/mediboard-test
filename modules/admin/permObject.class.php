@@ -60,8 +60,8 @@ class CPermObject extends CMbObject {
     } else {
       $where["object_id"]  = "= '$object->_id'";
       $where["permission"] = ">= '$permType'";
-      if(!count($permObject->loadList($where))) {
-        return false;
+      if(count($permObject->loadList($where))) {
+        return true;
       } else {
         return $object->_ref_module->getPerm($permType);
       }

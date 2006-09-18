@@ -175,8 +175,7 @@ if(!isset( $locale_char_set )){
   $locale_char_set = "UTF-8";
 }
 //Liste des Etablissements
-$Etablissements = new CMediusers();
-$Etablissements = $Etablissements->loadEtablissements(PERM_EDIT);
+$Etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 // Liste des Modules
 $dialog = dPgetParam( $_GET, "dialog");
 if (!$dialog) {
