@@ -55,7 +55,7 @@ function setObject(oObject){
   var oForm = document.FrmClass;
   oForm.selKey.value = oObject.id;
   oForm.selView.value = oObject.view;
-  oForm.selClass.value = oObject.class;
+  oForm.selClass.value = oObject.objClass;
   oForm.keywords.value = oObject.keywords;
   oForm.file_id.value = "";
   if (oForm.onsubmit()) {

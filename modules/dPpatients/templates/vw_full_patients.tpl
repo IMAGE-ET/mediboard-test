@@ -58,7 +58,7 @@ function pageMain() {
           <th class="category" colspan="2">
             {{if $patient->_canEdit}}
             <button type="button" style="float:right;" onclick="setObject( {
-              class: 'CPatient', 
+              objClass: 'CPatient', 
               keywords: '', 
               id: {{$patient->patient_id}}, 
               view: '{{$patient->_view}}' })">
@@ -195,7 +195,7 @@ function pageMain() {
           <td colspan="4">
             {{if $curr_sejour->_canEdit}}
             <button type="button" style="float:right;" onclick="setObject( {
-              class: 'CSejour', 
+              objClass: 'CSejour', 
               keywords: '', 
               id: {{$curr_sejour->sejour_id}}, 
               view:'{{$curr_sejour->_view}}'} )">
@@ -212,7 +212,7 @@ function pageMain() {
             <ul><li>
             {{if $curr_op->_canEdit}}
             <button type="button" style="float:right;" onclick="setObject( {
-              class: 'COperation', 
+              objClass: 'COperation', 
               keywords: '', 
               id: {{$curr_op->operation_id}}, 
               view:'{{$curr_op->_view}}'} )">
@@ -234,7 +234,7 @@ function pageMain() {
           <td colspan="4">
             {{if $curr_consult->_canEdit}}
             <button type="button" style="float:right;" onclick="setObject( {
-              class: 'CConsultation', 
+              objClass: 'CConsultation', 
               keywords: '', 
               id: {{$curr_consult->consultation_id}}, 
               view: '{{$curr_consult->_view}}'} )">
