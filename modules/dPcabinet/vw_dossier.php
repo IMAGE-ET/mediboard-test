@@ -15,10 +15,13 @@ if (!$canEdit) {
 
 $pat_id = mbGetValueFromGetOrSession("patSel");
 
-$canReadFiles     = isMbModuleVisible("dPfiles") and isMbModuleReadAll("dPfiles");
-$canEditFiles     = isMbModuleVisible("dPfiles") and isMbModuleEditAll("dPfiles");
-$canReadCptRendus = isMbModuleVisible("dPcompteRendu") and isMbModuleReadAll("dPcompteRendu");
-$canEditCptRendus = isMbModuleVisible("dPcompteRendu") and isMbModuleEditAll("dPcompteRendu");
+$fileModule    = CModule::getInstalled("dPfiles");
+$fileCptRendus = CModule::getInstalled("dPcompteRendu");
+
+$canReadFiles     = $fileModule->canRead();
+$canEditFiles     = $fileModule->canEdit();
+$canReadCptRendus = $fileCptRendus->canRead();
+$canEditCptRendus = $fileCptRendus->canEdit();
 
 // Liste des modèles
 $listModeleAuth = array();

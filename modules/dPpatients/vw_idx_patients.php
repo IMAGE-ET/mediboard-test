@@ -15,11 +15,13 @@ if (!$canRead) {
 
 $patient_id = mbGetValueFromGetOrSession("patient_id", 0);
 
+$fileModule    = CModule::getInstalled("dPfiles");
+$fileCptRendus = CModule::getInstalled("dPcompteRendu");
 
-$canReadFiles     = isMbModuleVisible("dPfiles") and isMbModuleReadAll("dPfiles");
-$canEditFiles     = isMbModuleVisible("dPfiles") and isMbModuleEditAll("dPfiles");
-$canReadCptRendus = isMbModuleVisible("dPcompteRendu") and isMbModuleReadAll("dPcompteRendu");
-$canEditCptRendus = isMbModuleVisible("dPcompteRendu") and isMbModuleEditAll("dPcompteRendu");
+$canReadFiles     = $fileModule->canRead();
+$canEditFiles     = $fileModule->canEdit();
+$canReadCptRendus = $fileCptRendus->canRead();
+$canEditCptRendus = $fileCptRendus->canEdit();
 
 // Liste des modèles
 $listModelePrat = array(); 
@@ -95,10 +97,10 @@ $patient_month     = mbGetValueFromGetOrSession("Date_Month", date("m"));
 $patient_year      = mbGetValueFromGetOrSession("Date_Year" , date("Y"));
 
 $where = null;
-if ($patient_nom   ) $where[] = "nom LIKE '".addslashes($patient_nom)."%'";
-if ($patient_prenom) $where[] = "prenom LIKE '".addslashes($patient_prenom)."%'";
+if ($patient_nom   ) $where["nom"]    = "LIKE '".addslashes($patient_nom)."%'";
+if ($patient_prenom) $where["prenom"] = "prenom LIKE '".addslashes($patient_prenom)."%'";
 if ($patient_naissance == "on") {
-  $where["naissance"] = "= '$patient_year/$patient_month/$patient_day'";
+  $where["naissance"] = "= '$patient_year-$patient_month-$patient_day'";
 }
 
 $patients = null;

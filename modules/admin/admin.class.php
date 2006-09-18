@@ -1,6 +1,7 @@
 <?php /* ADMIN $Id$ */
 
 // user types
+global $utypes;
 $utypes = array(
 // DEFAULT USER (nothing special)
   0  => "",
@@ -32,12 +33,12 @@ class CUser extends CMbObject {
 	var $user_id         = null;
 	var $user_username   = null;
 	var $user_password   = null;
-	var $user_parent     = null;
+	var $user_parent     = null; // to be removed ?
 	var $user_type       = null;
 	var $user_first_name = null;
 	var $user_last_name  = null;
-	var $user_company    = null;
-	var $user_department = null;
+	var $user_company    = null; // to be removed
+	var $user_department = null; // to be removed
 	var $user_email      = null;
 	var $user_phone      = null;
 	var $user_home_phone = null;
@@ -45,14 +46,14 @@ class CUser extends CMbObject {
 	var $user_address1   = null;
 	var $user_address2   = null;
 	var $user_city       = null;
-	var $user_state      = null;
+	var $user_state      = null; // to be removed
 	var $user_zip        = null;
 	var $user_country    = null;
-	var $user_icq        = null;
-	var $user_aol        = null;
+	var $user_icq        = null; // to be removed
+	var $user_aol        = null; // to be removed
 	var $user_birthday   = null;
 	var $user_pic        = null;
-	var $user_owner      = null;
+	var $user_owner      = null; // to be removed
 	var $user_signature  = null;
 
 	function CUser() {

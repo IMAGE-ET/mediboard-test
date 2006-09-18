@@ -75,8 +75,18 @@ class CModule extends CMbObject {
     return $this->_canView;
   }
   
+  function canAdmin() {
+    $this->_canView = $this->getView(PERM_EDIT);
+    return $this->_canView;
+  }
+  
+  function canRead() {
+    $this->_canEdit = $this->getPerm(PERM_READ);
+    return $this->_canEdit;
+  }
+  
   function canEdit() {
-    $this->_canEdit = $this->getView(PERM_EDIT);
+    $this->_canEdit = $this->getPerm(PERM_EDIT);
     return $this->_canEdit;
   }
     
