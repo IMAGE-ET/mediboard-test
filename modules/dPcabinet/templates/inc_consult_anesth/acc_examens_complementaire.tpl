@@ -60,7 +60,7 @@ function reloadListExamComp() {
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_examcomp_aed" />
-      <input type="hidden" name="consult_id" value="{{$consult->consultation_id}}" />
+      <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
       <label for="examen" title="Ajouter un examen complementaire">Examen Complémentaire</label>
       <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this)">
         <option value="">&mdash; Choisir une aide</option>
