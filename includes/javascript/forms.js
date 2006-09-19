@@ -585,7 +585,7 @@ function checkElement(oElement, aSpecFragments) {
 }
 
 function checkForm(oForm) {
-  var oElementFocus = null;
+  var oElementFirstFailed = null;
   var aMsgFailed = new Array;
   var iElement = 0;
   while (oElement = oForm.elements[iElement++]) {
@@ -598,8 +598,8 @@ function checkForm(oForm) {
         sMsgFailed += "\n => " + sMsg;
         aMsgFailed.push("- " + sMsgFailed);
         
-        if (!oElementFocus) {
-          oElementFocus = oElement;
+        if (!oElementFirstFailed) {
+          oElementFirstFailed = oElement;
         }
       }
 
@@ -614,11 +614,13 @@ function checkForm(oForm) {
   	sMsg += aMsgFailed.join("\n")
     alert(sMsg);
     
-    if (oElementFocus) {
-    oElementFocus.focus();
-      if (sDoubleClickAction = oElementFocus.getAttribute("ondblclick")) {
-        eval(sDoubleClickAction);
+    if (oElementFirstFailed) {
+      if (oElementFirstFailed.type != "hidden") {
+        oElementFirstFailed.focus();
       }
+      
+      var oDoubleClick = oElementFirstFailed["ondblclick"] || Prototype.emptyfunction;
+      oDoubleClick();
     }
     
     return false;

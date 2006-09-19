@@ -11,19 +11,6 @@ function requestInfoPat() {
   });
 }
 
-function popChir() {
-  var url = new Url;
-  url.setModuleAction("mediusers", "chir_selector");
-  url.popup(400, 250, "Praticien");
-}
-
-function setChir( key, val ){
-  var f = document.editFrm;
-  f.chir_id.value = key;
-  f.chir_id.onchange();
-  f._chir_name.value = val;
-}
-
 function popPat() {
   var url = new Url;
   url.setModuleAction("dPpatients", "pat_selector");
@@ -160,10 +147,10 @@ function pageMain() {
 
         <tr>
           <th>
-            <input type="hidden" title="{{$consult->_props.patient_id}}" name="patient_id" value="{{$pat->patient_id}}" />
+            <input type="hidden" title="{{$consult->_props.patient_id}}" name="patient_id" value="{{$pat->patient_id}}" ondblclick="popPat()" />
             <label for="patient_id" title="Patient pour la consultation">Patient</label>
           </th>
-          <td class="readonly"><input type="text" name="_pat_name" size="30" value="{{$pat->_view}}" ondblclick="popPat()" readonly="readonly" /></td>
+          <td class="readonly"><input type="text" name="_pat_name" size="30" value="{{$pat->_view}}" readonly="readonly"  ondblclick="popPat()" /></td>
           <td class="button"><button class="search" type="button" onclick="popPat()">Rechercher un patient</button></td>
         </tr>
         
