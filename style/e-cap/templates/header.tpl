@@ -49,6 +49,8 @@ function popChgPwd() {
                 </td>
               </tr>
             </table>
+          </td>
+          <td>
             <div id="systemMsg">
               {{$errorMessage}}
             </div>

@@ -229,8 +229,7 @@ td.tabox {
 }
 
 table.tabmenu {
-  margin-top: 20px;
-  margin-left: 20px;
+  margin: 5px 10px;
   border-spacing: 0px;
 }
 
@@ -508,6 +507,7 @@ th.title {
 
 /* System message */
 #systemMsg {
+  font-size: 80%;
   float : none;
   text-align: center;
   width: 100%;
