@@ -8,22 +8,48 @@
 
 <table class="form">
   <tr>
+    <th class="title" colspan="4">
+      {{if $user->user_id}}
+      Utilisateur : {{$user->_view}}
+      {{else}}
+      Création d'utilisateur
+      {{/if}}
+    </th>
+  </tr>
+
+
+  <tr>
+    <th class="category" colspan="4">Informations de connexion</th>
+  </tr>
+
+  <tr>
+    <th rowspan="2">Nom d'utilisateur</th>
+    <td rowspan="2"><input type="text" name="user_username" value="{{$user->user_username}}" /></td>
+    <th>Mot de passe</th>
+    <td><input type="password" name="user_password" value="{{$user->user_password}}" /></td>
+  </tr>
+  <tr>
+    <th>Mot de passe (vérif.)</th>
+    <td><input type="password" name="_user_password" value="{{$user->user_password}}" /></td>
+  </tr>
+
+  <tr>
     <th class="category" colspan="2">Identité</th>
     <th class="category" colspan="2">Coordonnées</th>
   </tr>
 
   <tr>
     <th>Nom</th>
-    <td><input name="user_last_name" value="{{$user->user_last_name}}" /></td>
+    <td><input type="text" name="user_last_name" value="{{$user->user_last_name}}" /></td>
     <th>Adresse</th>
-    <td><input name="user_address1" value="{{$user->user_address1}}" /></td>
+    <td><input type="text" name="user_address1" value="{{$user->user_address1}}" /></td>
   </tr>
   
   <tr>
     <th>Prénom</th>
-    <td><input name="user_first_name" value="{{$user->user_first_name}}" /></td>
+    <td><input type="text" name="user_first_name" value="{{$user->user_first_name}}" /></td>
     <th>Code Postal</th>
-    <td><input name="user_zip" value="{{$user->user_zip}}" /></td>
+    <td><input type="text" name="user_zip" value="{{$user->user_zip}}" /></td>
   </tr>
   
   <tr>
@@ -36,14 +62,14 @@
       </select>
     </td>
     <th>Ville</th>
-    <td><input name="user_city" value="{{$user->user_city}}" /></td>
+    <td><input type="text" name="user_city" value="{{$user->user_city}}" /></td>
   </tr>
   
   <tr>
     <th>email</th>
-    <td><input name="user_email" value="{{$user->user_email}}" /></td>
+    <td><input type="text" name="user_email" value="{{$user->user_email}}" /></td>
     <th>Téléphone</th>
-    <td><input name="user_phone" value="{{$user->user_phone}}" /></td>
+    <td><input type="text" name="user_phone" value="{{$user->user_phone}}" /></td>
   </tr>
   <tr>
     <td class="button" colspan="4">

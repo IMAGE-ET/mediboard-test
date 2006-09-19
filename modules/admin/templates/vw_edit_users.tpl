@@ -3,10 +3,11 @@
 <table class="main">
   <tr>
     <td class="halfPane">
+      <a class="buttonnew" href="index.php?m={{$m}}&amp;user_id=0">
+        Créer un nouvel utilisateur
+      </a>
       {{include file="inc_list_users.tpl"}}
     </td>
-
-    {{if $user->user_id}}
     <td class="halfPane">
       {{if $canEdit}}
       {{include file="inc_edit_user.tpl"}}
@@ -14,6 +15,5 @@
       {{include file="inc_vw_user.tpl"}}
       {{/if}}
     </td>
-    {{/if}}
   </tr>
 </table>
