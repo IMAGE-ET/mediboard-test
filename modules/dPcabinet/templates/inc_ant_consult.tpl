@@ -16,7 +16,7 @@ function putCim10(code) {
   aCim10.push(code);
   aCim10.removeDuplicates();
   oForm.listCim10.value = aCim10.join("|");
-  submitAnt(oForm);
+  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
 }
 
 function delCim10(code) {
@@ -24,7 +24,7 @@ function delCim10(code) {
   var aCim10 = oForm.listCim10.value.split("|");
   aCim10.removeByValue(code);
   oForm.listCim10.value = aCim10.join("|");
-  submitAnt(oForm);
+  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
 }
 
 function dateAntecedent(){
