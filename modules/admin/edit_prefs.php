@@ -58,5 +58,5 @@ $smarty->assign("locales"  , $locales);
 $smarty->assign("styles"   , $styles);
 $smarty->assign("prefs"    , $prefs);
 
-$smarty->display("addeditpref.tpl");
+$smarty->display("edit_prefs.tpl");
 ?>

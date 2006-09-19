@@ -8,7 +8,7 @@
 <input type="hidden" name="del" value="0" />
 
 {{if $tab && $canEdit && $user_id}}
-<a href="index.php?m={{$m}}&amp;tab=addeditpref&amp;user_id=0" class="buttonedit">
+<a href="index.php?m={{$m}}&amp;tab=edit_prefs&amp;user_id=0" class="buttonedit">
   Editer les Préférences par Défaut
 </a>
 {{/if}}
