@@ -6,6 +6,12 @@
 <input type="hidden" name="dosql" value="do_preference_aed" />
 <input type="hidden" name="pref_user" value="{{$user_id}}" />
 <input type="hidden" name="del" value="0" />
+
+{{if $tab && $canEdit && $user_id}}
+<a href="index.php?m={{$m}}&amp;tab=addeditpref&amp;user_id=0" class="buttonedit">
+  Editer les Préférences par Défaut
+</a>
+{{/if}}
 <table class="form">
   <tr>
     <th colspan="2" class="title">

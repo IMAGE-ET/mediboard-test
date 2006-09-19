@@ -10,5 +10,6 @@
 $tabs = array();
 $tabs[] = array("vw_edit_users", "Utilisateurs", 0);
 $tabs[] = array("edit_perms", "Gestion des droits", 1);
+$tabs[] = array("addeditpref", "Préférences Utilisateur", 1);
 $default = "vw_edit_users";
 ?>

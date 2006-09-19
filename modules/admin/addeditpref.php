@@ -13,9 +13,11 @@ global $AppUI, $canRead, $canEdit, $m, $utypes;
 $user_id = mbGetValueFromGet("user_id" , 0);
 
 // Vérification des droit
-if (!$canEdit && $user_id != $AppUI->user_id) {
-  $AppUI->redirect("m=system&a=access_denied" );
-}
+if ($canEdit){
+  $user_id = mbGetValueFromGetOrSession("user_id", $AppUI->user_id);
+}else{
+  $user_id = $AppUI->user_id;
+}  
 
 // Chargement User demandé
 $user = null;
