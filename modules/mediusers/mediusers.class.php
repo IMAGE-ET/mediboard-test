@@ -263,28 +263,28 @@ class CMediusers extends CMbObject {
   
   function delFunctionPermission() {
     $where = array();
-    $where["permission_user"    ] = "= '$this->user_id'";
-    $where["permission_grant_on"] = "= 'mediusers'";
-    $where["permission_item"    ] = "= '$this->function_id'";
+    $where["user_id"]      = "= '$this->user_id'";
+    $where["object_class"] = "= 'CFunctions'";
+    $where["object_id"]    = "= '$this->function_id'";
     
-    $perm = new CPermission;
-    if ($perm->loadObject($where)) {
+    $perm = new CPermObject;
+    if($perm->loadObject($where)) {
       $perm->delete();
     }
   }
   
   function insFunctionPermission() {
     $where = array();
-    $where["permission_user"    ] = "= '$this->user_id'";
-    $where["permission_grant_on"] = "= 'mediusers'";
-    $where["permission_item"    ] = "= '$this->function_id'";
+    $where["user_id"]      = "= '$this->user_id'";
+    $where["object_class"] = "= 'CFunctions'";
+    $where["object_id"]    = "= '$this->function_id'";
     
-    $perm = new CPermission;
-    if (!$perm->loadObject($where)) {
-      $perm = new CPermission;
-      $perm->permission_user = $this->user_id; 
-      $perm->permission_grant_on = "mediusers";
-      $perm->permission_item = $this->function_id;
+    $perm = new CPermObject;
+    if(!$perm->loadObject($where)) {
+      $perm = new CPermObject;
+      $perm->user_id      = $this->user_id; 
+      $perm->object_class = "CFunctions";
+      $perm->object_id    = $this->function_id;
       $perm->store();
     }
   }
@@ -293,16 +293,16 @@ class CMediusers extends CMbObject {
     $function = new CFunctions;
     $function->load($this->function_id);
     $where = array();
-    $where["permission_user"    ] = "= '$this->user_id'";
-    $where["permission_grant_on"] = "= 'dPetablissement'";
-    $where["permission_item"    ] = "= '$function->group_id'";
+    $where["user_id"]      = "= '$this->user_id'";
+    $where["object_class"] = "= 'CGroups";
+    $where["object_id"]    = "= '$function->group_id'";
     
-    $perm = new CPermission;
-    if (!$perm->loadObject($where)) {
-      $perm = new CPermission;
-      $perm->permission_user = $this->user_id; 
-      $perm->permission_grant_on = "dPetablissement";
-      $perm->permission_item = $function->group_id;
+    $perm = new CPermObject;
+    if(!$perm->loadObject($where)) {
+      $perm = new CPermObject;
+      $perm->user_id      = $this->user_id; 
+      $perm->object_class = "CGroups";
+      $perm->object_id    = $function->group_id;
       $perm->store();
     }
   }
