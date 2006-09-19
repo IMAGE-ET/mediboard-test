@@ -619,7 +619,7 @@ function checkForm(oForm) {
         oElementFirstFailed.focus();
       }
       
-      var oDoubleClick = oElementFirstFailed["ondblclick"] || Prototype.emptyfunction;
+      var oDoubleClick = oElementFirstFailed["ondblclick"] || Prototype.emptyFunction;
       oDoubleClick();
     }
     
