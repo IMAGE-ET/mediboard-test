@@ -139,6 +139,8 @@ setlocale(LC_TIME, $user_locale);
 $indexModule = CModule::getInstalled($m);
 $canRead     = $indexModule->canRead();
 $canEdit     = $indexModule->canEdit();
+$canView     = $indexModule->canView();
+$canAdmin    = $indexModule->canAdmin();
 $canAuthor   = $canEdit;
 $canDelete   = $canEdit;
 

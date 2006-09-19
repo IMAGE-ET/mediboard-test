@@ -13,7 +13,9 @@
     <th class="category" colspan="3">
       Ajouter un droit sur :
       <select name="mod_id">
+        {{if !isAdminPermSet}}
         <option value="0">Droits généraux</option>
+        {{/if}}
         {{foreach from=$modulesInstalled item=module}}
         <option value="{{$module->mod_id}}">
           {{tr}}module-{{$module->mod_name}}-court{{/tr}}

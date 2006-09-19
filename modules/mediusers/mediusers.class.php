@@ -285,6 +285,7 @@ class CMediusers extends CMbObject {
       $perm->user_id      = $this->user_id; 
       $perm->object_class = "CFunctions";
       $perm->object_id    = $this->function_id;
+      $perm->permission   = PERM_EDIT;
       $perm->store();
     }
   }
@@ -303,6 +304,7 @@ class CMediusers extends CMbObject {
       $perm->user_id      = $this->user_id; 
       $perm->object_class = "CGroups";
       $perm->object_id    = $function->group_id;
+      $perm->permission   = PERM_EDIT;
       $perm->store();
     }
   }
@@ -380,20 +382,20 @@ class CMediusers extends CMbObject {
     return $functions;
   }
   
-  function loadUsers($perm_type = null, $function_id = null, $name = null) {
-    return $this->loadListFromType(null, $perm_type, $function_id, $name);
+  function loadUsers($permType = PERM_READ, $function_id = null, $name = null) {
+    return $this->loadListFromType(null, $permType, $function_id, $name);
   }
 
-  function loadChirurgiens($perm_type = null, $function_id = null, $name = null) {
-    return $this->loadListFromType(array("Chirurgien"), $perm_type, $function_id, $name);
+  function loadChirurgiens($permType = PERM_READ, $function_id = null, $name = null) {
+    return $this->loadListFromType(array("Chirurgien"), $permType, $function_id, $name);
   }
   
-  function loadAnesthesistes($perm_type = null, $function_id = null, $name = null) {
-    return $this->loadListFromType(array("Anesthésiste"), $perm_type, $function_id, $name);
+  function loadAnesthesistes($permType = PERM_READ, $function_id = null, $name = null) {
+    return $this->loadListFromType(array("Anesthésiste"), $permType, $function_id, $name);
   }
   
-  function loadPraticiens($perm_type = null, $function_id = null, $name = null) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste"), $perm_type, $function_id, $name);
+  function loadPraticiens($permType = null, $function_id = null, $name = null) {
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste"), $permType, $function_id, $name);
   }
   
   function isFromType($user_types) {

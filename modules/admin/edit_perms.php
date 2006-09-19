@@ -20,10 +20,14 @@ if(!$user_id) {
   $AppUI->redirect("m=$m&tab=vw_edit_users");
 }
 
+$modulesInstalled = CModule::getInstalled();
+$isAdminPermSet   = false;
+
+$listClasses = getChildClasses("CMbObject", null);
+
 // Récuperation de l'utilisateur sélectionné
 $user = new CUser;
 $user->load($user_id);
-
 
 $where = array();
 $where["user_id"] = "= '$user->user_id'";
@@ -32,7 +36,13 @@ $order = "mod_id";
 $permModule = new CPermModule;
 $listPermsModules = $permModule->loadList($where, $order);
 foreach($listPermsModules as $keyMod => $mod) {
+  if($listPermsModules[$keyMod]->mod_id == 0) {
+    $isAdminPermSet = true;
+  }
   $listPermsModules[$keyMod]->loadRefDBModule();
+  if(isset($modulesInstalled[$mod->_ref_db_module->mod_name])) {
+    unset($modulesInstalled[$mod->_ref_db_module->mod_name]);
+  }
 }
 
 $order = "object_class";
@@ -50,15 +60,12 @@ $visibility = array(PERM_DENY => "caché",
                     PERM_READ => "vue",
                     PERM_EDIT => "administration");
 
-$modulesInstalled = CModule::getInstalled();
-
-$listClasses = getChildClasses("CMbObject", null);
-
 // Création du template
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("user"            , $user            );
 $smarty->assign("modulesInstalled", $modulesInstalled);
+$smarty->assign("isAdminPermSet"  , $isAdminPermSet  );
 $smarty->assign("listClasses"     , $listClasses     );
 $smarty->assign("listPermsModules", $listPermsModules);
 $smarty->assign("listPermsObjects", $listPermsObjects);
