@@ -1,7 +1,8 @@
 <?php /* SYSTEM $Id$ */
 
-global $AppUI;
+global $AppUI,$a,$tab;
 
+$a = mbGetValueFromGet("a",null);
 $del = isset($_POST["del"]) ? $_POST["del"] : 0;
 
 $obj = new CPreferences();
@@ -32,5 +33,11 @@ foreach ($_POST["pref_name"] as $name => $value) {
 		}
 	}
 }
+
+if($a){
+  $AppUI->defaultRedirect = "m=$m&a=$a&user_id=".$_POST["pref_user"];
+  $AppUI->state["SAVEDPLACE"] = null;
+}
+
 $AppUI->redirect();
 ?>

@@ -82,7 +82,7 @@ function popChgPwd() {
         {{$currModule.modNameCourt}}
       </a> |
       {{/foreach}}
-      <a href='#' onclick='popChgPwd();return false'>Changez votre mot de passe</a> | <a href="./index.php?m=system&amp;a=addeditpref&amp;user_id={{$AppUI->user_id}}">Préférences</a> |
+      <a href='#' onclick='popChgPwd();return false'>Changez votre mot de passe</a> | <a href="./index.php?m=admin&amp;a=addeditpref&amp;user_id={{$AppUI->user_id}}">Préférences</a> |
       <a href="./index.php?logout=-1">{{tr}}Logout{{/tr}}</a> |
     </td>
   </tr>
