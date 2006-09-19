@@ -1,17 +1,14 @@
 <!--  $Id$ -->
+
 <script type="text/javascript">
 
-var classes = {
-  {{foreach from=$classes key=key_class item=fields}}
-  "{{$key_class}}" : {
-    {{foreach from=$fields item=field}}
-      "{{$field|escape:javascript}}" : null,
-    {{/foreach}}
-  },
-  {{/foreach}}
-};
+var classes = {{$classes|@json}};
 
-function loadItems(select, options, value) {
+function loadClasses(value) {
+  var form = document.editFrm;
+  var select = form.elements['class'];
+  var options = classes;
+  
   // delete all former options
   while (select.length > 1) {
     select.options[1] = null;
@@ -23,22 +20,28 @@ function loadItems(select, options, value) {
       select.options[select.length] = new Option(elm, elm, elm == value);
     }
   }
-}
 
-function loadClasses(value) {
-  var form = document.editFrm;
-  var select = form.elements['class'];
-
-  loadItems(select, classes, value);
   loadFields();
 }
 
 function loadFields(value) {
   var form = document.editFrm;
   var select = form.elements['field'];
-  var className  = form.elements['class' ].value;
-  var fields = classes[className];
-  loadItems(select, fields, value);
+  var className  = form.elements['class'].value;
+  var options = classes[className];
+
+  // delete all former options
+  while (select.length > 1) {
+    select.options[1] = null;
+  }
+
+  // insert new ones
+  for (var elm in options) {
+    var option = options[elm];
+	if (typeof(option) != "function") { // to filter prototype functions
+      select.options[select.length] = new Option(option, option, option == value);
+    }
+  }
 }
 
 function pageMain() {
