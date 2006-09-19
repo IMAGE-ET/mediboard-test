@@ -135,21 +135,38 @@ class CUser extends CMbObject {
         
     // Delete existing permissions
     if ($delExistingPerms) {
-      if (!db_delete("permissions", "permission_user", $this->user_id)) {
-        return "Can't delete permissions";
+      if (!db_delete("perm_module", "user_id", $this->user_id)) {
+        return "Can't delete modules permissions";
+      }
+      if (!db_delete("perm_object", "user_id", $this->user_id)) {
+        return "Can't delete objects permissions";
       }
 		}    
 
-    // Get other user's permissions 
-    $perms = new CPermission;
-    $perms = $perms->loadList("permission_user = $user_id");
+    // Get other user's permissions
+
+    // Module permissions
+    $perms = new CPermModule;
+    $perms = $perms->loadList("user_id = '$user_id'");
 
     // Copy them
     foreach($perms as $perm) {
-      $perm->permission_id = null;
-      $perm->permission_user = $this->user_id;
+      $perm->perm_module_id = null;
+      $perm->user_id = $this->user_id;
       $perm->store();
-    } 
+    }
+
+    //Object permissions
+    $perms = new CPermObject;
+    $perms = $perms->loadList("user_id = '$user_id'");
+
+    // Copy them
+    foreach($perms as $perm) {
+      $perm->perm_object_id = null;
+      $perm->user_id = $this->user_id;
+      $perm->store();
+    }
+ 
     return null;
   }
 }

@@ -22,11 +22,13 @@ $user->load($user_id);
 // Récuperation des utilisateurs recherchés
 $user_last_name  = mbGetValueFromGetOrSession("user_last_name" , "");
 $user_first_name = mbGetValueFromGetOrSession("user_first_name", "");
+$user_username   = mbGetValueFromGetOrSession("user_username"  , "");
 $user_type       = mbGetValueFromGetOrSession("user_type"      , 0);
 
 $where = null;
 if ($user_last_name ) $where["user_last_name"]  = "LIKE '".addslashes($user_last_name )."%'";
 if ($user_first_name) $where["user_first_name"] = "LIKE '".addslashes($user_first_name)."%'";
+if ($user_username  ) $where["user_username"]   = "LIKE '".addslashes($user_username)."%'";
 if ($user_type      ) $where["user_type"]       = "= '".addslashes($user_type)."'";
 
 $users = null;
@@ -39,6 +41,7 @@ $smarty = new CSmartyDP(1);
 
 $smarty->assign("user_last_name" , $user_last_name );
 $smarty->assign("user_first_name", $user_first_name);
+$smarty->assign("user_username"  , $user_username  );
 $smarty->assign("user_type"      , $user_type      );
 $smarty->assign("utypes"         , $utypes         );
 $smarty->assign("users"          , $users          );
