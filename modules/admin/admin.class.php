@@ -33,7 +33,7 @@ class CUser extends CMbObject {
 	var $user_id         = null;
 	var $user_username   = null;
 	var $user_password   = null;
-	var $user_parent     = null; // to be removed ?
+	var $user_parent     = null; // to be removed
 	var $user_type       = null;
 	var $user_first_name = null;
 	var $user_last_name  = null;
@@ -41,10 +41,10 @@ class CUser extends CMbObject {
 	var $user_department = null; // to be removed
 	var $user_email      = null;
 	var $user_phone      = null;
-	var $user_home_phone = null;
+	var $user_home_phone = null; // to be removed
 	var $user_mobile     = null;
 	var $user_address1   = null;
-	var $user_address2   = null;
+	var $user_address2   = null; // to be removed
 	var $user_city       = null;
 	var $user_state      = null; // to be removed
 	var $user_zip        = null;

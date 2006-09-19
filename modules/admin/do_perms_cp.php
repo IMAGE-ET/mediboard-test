@@ -7,13 +7,14 @@ $permission_user = mbGetValueFromPost("permission_user", "");
 $delPermissions  = mbGetValueFromPost("delPerms", false);
 
 // pull user_id for unique user_username (templateUser)
-$sql = "SELECT user_id FROM users WHERE user_username = '$tempUserName'";
-$res = db_loadList($sql);
-$tempUserId = $res[0]["user_id"];
+$tempUser = new CUser;
+$where = array();
+$where["user_username"] = "= '$tempUserName'";
+$tempUser->loadObject($where);
 
 $user = new CUser;
 $user->user_id = $permission_user;
-$msg = $user->copyPermissionsFrom($tempUserId, $delPermissions);
+$msg = $user->copyPermissionsFrom($tempUser->user_id, $delPermissions);
 
 $AppUI->setMsg("Permissions");
 $AppUI->setMsg($msg ? $msg : "copied from template", $msg ? UI_MSG_ERROR : UI_MSG_OK, true);
