@@ -221,6 +221,7 @@ function pageMain() {
             <option value="05" {{if ($plageSel->_freq == "05")}} selected="selected" {{/if}}>05</option>
             <option value="10" {{if ($plageSel->_freq == "10")}} selected="selected" {{/if}}>10</option>
             <option value="15" {{if ($plageSel->_freq == "15") || (!$plageSel->plageconsult_id)}} selected="selected" {{/if}}>15</option>
+            <option value="20" {{if ($plageSel->_freq == "20")}} selected="selected" {{/if}}>20</option>
             <option value="30" {{if ($plageSel->_freq == "30")}} selected="selected" {{/if}}>30</option>
          </select> minutes</td>
         <th>
