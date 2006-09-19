@@ -294,7 +294,7 @@ class CMediusers extends CMbObject {
     $function->load($this->function_id);
     $where = array();
     $where["user_id"]      = "= '$this->user_id'";
-    $where["object_class"] = "= 'CGroups";
+    $where["object_class"] = "= 'CGroups'";
     $where["object_id"]    = "= '$function->group_id'";
     
     $perm = new CPermObject;
