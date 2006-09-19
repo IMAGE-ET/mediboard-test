@@ -9,15 +9,16 @@ function loadClasses(value) {
   var select = form.elements['class'];
   var options = classes;
   
-  // delete all former options
+  // delete all former options except first
   while (select.length > 1) {
     select.options[1] = null;
   }
 
   // insert new ones
   for (var elm in options) {
-	if (typeof(options[elm]) != "function") { // to filter prototype functions
-      select.options[select.length] = new Option(elm, elm, elm == value);
+    var option = elm;
+    if (typeof(option) != "function") { // to filter prototype functions
+      select.options[select.length] = new Option(option, option, option == value);
     }
   }
 
@@ -30,7 +31,7 @@ function loadFields(value) {
   var className  = form.elements['class'].value;
   var options = classes[className];
 
-  // delete all former options
+  // delete all former options except first
   while (select.length > 1) {
     select.options[1] = null;
   }
@@ -38,7 +39,7 @@ function loadFields(value) {
   // insert new ones
   for (var elm in options) {
     var option = options[elm];
-	if (typeof(option) != "function") { // to filter prototype functions
+    if (typeof(option) != "function") { // to filter prototype functions
       select.options[select.length] = new Option(option, option, option == value);
     }
   }
