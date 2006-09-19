@@ -62,6 +62,15 @@ foreach(glob("$mbpath/modules/*/templates_c") as $templates_c) {
   $pathAccesses[] = $pathAccess;  
 }
 
+foreach(glob("$mbpath/style/*/templates_c") as $templates_c) {
+  $style = basename(dirname($templates_c));
+  $pathAccess = new CPathAccess;
+  $pathAccess->path = "style/$style/templates_c/";
+  $pathAccess->description = "Templates compilés pour le style '$style'";
+  
+  $pathAccesses[] = $pathAccess;  
+}
+
 ?>
 
 <?php showHeader(); ?>
