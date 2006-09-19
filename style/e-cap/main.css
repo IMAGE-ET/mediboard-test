@@ -284,6 +284,50 @@ a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, a.buttonsearch:
 a.buttontick:hover, a.buttonchange:hover {
   background-color: #8ae;
 }
+button.edit, a.buttonedit {
+  background-image: url(images/buttons/edit.gif);
+  padding-left: 16px;
+}
+
+button.trash, a.buttontrash {
+  background-image: url(images/buttons/trash.gif);
+  padding-left: 18px; 
+}
+
+button.submit, a.buttonsubmit {
+  background-image: url(images/buttons/save.gif);
+  padding-left: 18px;
+}
+button.new, a.buttonnew {
+  background-image: url(images/buttons/new.gif);
+  padding-left: 18px;
+}
+button.print, a.buttonprint {
+  background-image: url(images/buttons/print.gif);
+  padding-left: 18px;
+}
+button.cancel, a.buttoncancel {
+  background-image: url(images/buttons/cancel.gif);
+  padding-left: 18px;
+}
+
+button.modify, a.buttonmodify {
+  background-image: url(images/buttons/save.gif);
+  padding-left: 18px;
+}
+button.search, a.buttonsearch {
+  background-image: url(images/buttons/search.gif);
+  padding-left: 18px;
+}
+button.tick, a.buttontick {
+  background-image: url(images/buttons/tick.gif);
+  padding-left: 18px;
+}
+
+button.change, a.buttonchange {
+  background-image: url(images/buttons/change.gif);
+  padding-left: 18px;
+}
 
 input {
   border: 1px #a5acb2 solid;
@@ -443,6 +487,14 @@ table.tbl td.date img {
   margin-top: 3px;
 }
 
+table.titleblock td.titlecell {
+  font-family: Arial;
+  font-size: 20px; 
+  color: #638cc9;
+  width: 100%;
+  padding-bottom: 5px;
+}
+
 /* Main table */
 
 th.title {
@@ -456,5 +508,11 @@ th.title {
 
 /* System message */
 #systemMsg {
+  float : none;
   text-align: center;
+  width: 100%;
+}
+div.message, div.loading, div.error, div.warning {
+   width: 10%;
+   white-space: nowrap;
 }
