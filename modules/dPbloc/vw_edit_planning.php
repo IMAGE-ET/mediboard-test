@@ -15,7 +15,7 @@ $plageop_id = mbGetValueFromGetOrSession("plageop_id");
 // Liste des Salles
 $listSalles = new CSalle();
 $where = array();
-//$where["group_id"] = "= '$g'";
+$where["group_id"] = "= '$g'";
 $order = "'nom'";
 $listSalles = $listSalles->loadList($where, $order);
 
@@ -25,7 +25,7 @@ $plagesel = new CPlageOp;
 $plagesel->load($plageop_id);
 if($plagesel->plageop_id){
   $arrKeySalle = array_keys($listSalles);
-  if(!in_array($plagesel->salle_id,$arrKeySalle)){
+  if(!in_array($plagesel->salle_id,$arrKeySalle)) {
     $plageop_id = 0;
     $plagesel = new CPlageOp;
   }
