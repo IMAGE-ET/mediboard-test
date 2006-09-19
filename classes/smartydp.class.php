@@ -6,6 +6,7 @@
  */
 
 require_once($AppUI->getLibraryClass( "smarty/libs/Smarty.class"));
+require_once($AppUI->getLibraryClass( "json/JSON"));
 
 /**
  * Delegates the actual translation to $AppUI framework object
@@ -16,6 +17,12 @@ function do_translation($params, $content, &$smarty, &$repeat) {
   if (isset($content)) {
     return $AppUI->_($content);
   }
+}
+
+function smarty_modifier_json($object) {
+  // create a new instance of Services_JSON
+  $json = new Services_JSON();
+  return $json->encode($object);
 }
 
 function include_script($params, &$smarty) {
@@ -94,6 +101,7 @@ class CSmartyDP extends Smarty {
     
     // Configure dotProject localisation framework
     $this->register_block("tr", "do_translation"); 
+    $this->register_modifier("json", "smarty_modifier_json"); 
   }
 
 }
