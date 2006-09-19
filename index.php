@@ -138,7 +138,7 @@ setlocale(LC_TIME, $user_locale);
 
 $indexModule = CModule::getInstalled($m);
 $canRead     = $indexModule->canRead();
-$canEdit     = $indexModule->canEdit();;
+$canEdit     = $indexModule->canEdit();
 $canAuthor   = $canEdit;
 $canDelete   = $canEdit;
 
@@ -161,21 +161,18 @@ if(isset($_REQUEST["dosql"])) {
     require("./modules/$mDo/$dosql.php");
 }
 
-// start output proper
-include "./style/$uistyle/overrides.php";
-
 ob_start();
 
 if(!$suppressHeaders) {
-// ---------------------------------------------------------------------------------------------------
-// ------------------------------- DEBUT  CODE  HEADER  ----------------------------------------------
-// ---------------------------------------------------------------------------------------------------
+
+// -- Code pour le HEADER --
+
 // Définition du CharSet
 if(!isset( $locale_char_set )){
   $locale_char_set = "UTF-8";
 }
 //Liste des Etablissements
-$Etablissements = CMediusers::loadEtablissements(PERM_EDIT);
+$etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 // Liste des Modules
 $dialog = dPgetParam( $_GET, "dialog");
 if (!$dialog) {
@@ -192,46 +189,65 @@ if (!$dialog) {
 // Message
 $messages = new CMessage();
 $messages = $messages->loadPublications("present");
-// Titre et Image MOdule en cours
-$titleBlock = new CTitleBlock( "module-$m-long", "$m.png", $m, "$m.$a" );
-$titleBlock->addCell();
+
+// Titre et Image Module en cours
+$titleBlockData["name"]="module-$m-long";
+$titleBlockData["icon"]=dPshowImage( dPFindImage( "$m.png", $m ), "24", "24" );
+
 //Creation du Template
 require_once( $AppUI->getSystemClass("smartydp"));
-$smarty = new CSmartyDP(1);
-$smarty->template_dir = "style/$uistyle/templates/";
-$smarty->compile_dir  = "style/$uistyle/templates_c/";
-$smarty->config_dir   = "style/$uistyle/configs/";
-$smarty->cache_dir    = "style/$uistyle/cache/";
+$smartyStyle = new CSmartyDP(1);
+$smartyStyle->template_dir = "style/$uistyle/templates/";
+$smartyStyle->compile_dir  = "style/$uistyle/templates_c/";
+$smartyStyle->config_dir   = "style/$uistyle/configs/";
+$smartyStyle->cache_dir    = "style/$uistyle/cache/";
 if (!$dialog) {
-  $smarty->assign("affModule" , $affModule);
+  $smartyStyle->assign("affModule" , $affModule);
 }
-$smarty->assign("localeCharSet"        , $locale_char_set);
-$smarty->assign("mediboardVersion"     , @$AppUI->getVersion());
-$smarty->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/favicon.ico",1));
-$smarty->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
-$smarty->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
-$smarty->assign("mediboardScript"      , mbLoadScripts(1));
-$smarty->assign("dialog"               , $dialog);
-$smarty->assign("messages"             , $messages);
-$smarty->assign("uistyle"              , $uistyle);
-$smarty->assign("AppUI"                , $AppUI);
-$smarty->assign("Etablissements"       , $Etablissements);
-$smarty->assign("helpOnline"           , mbPortalLink( $m, "Aide" ));
-$smarty->assign("suggestion"           , mbPortalLink( "bugTracker", "Suggérer une amélioration" ));
-$smarty->assign("errorMessage"         , $AppUI->getMsg());
-$smarty->assign("titleBlock"           , $titleBlock->show(1));
-$smarty->display("header.tpl");
-// ---------------------------------------------------------------------------------------------------
-// -------------------------------- FIN  CODE  HEADER  -----------------------------------------------
-// ---------------------------------------------------------------------------------------------------
+$smartyStyle->assign("includeFooter"        , false);
+$smartyStyle->assign("titleBlockData"       , $titleBlockData);
+$smartyStyle->assign("localeCharSet"        , $locale_char_set);
+$smartyStyle->assign("mediboardVersion"     , @$AppUI->getVersion());
+$smartyStyle->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/favicon.ico",1));
+$smartyStyle->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
+$smartyStyle->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
+$smartyStyle->assign("mediboardScript"      , mbLoadScripts(1));
+$smartyStyle->assign("dialog"               , $dialog);
+$smartyStyle->assign("messages"             , $messages);
+$smartyStyle->assign("uistyle"              , $uistyle);
+$smartyStyle->assign("AppUI"                , $AppUI);
+$smartyStyle->assign("Etablissements"       , $etablissements);
+$smartyStyle->assign("helpOnline"           , mbPortalLink( $m, "Aide" ));
+$smartyStyle->assign("suggestion"           , mbPortalLink( "bugTracker", "Suggérer une amélioration" ));
+$smartyStyle->assign("errorMessage"         , $AppUI->getMsg());
+$smartyStyle->display("header.tpl");
 }
 
+// -- Code pour les tabBox et Inclusion du fichier demandé --
 require "./modules/$m/".($u ? "$u/" : "")."$a.php";
+if(isset($tabs) && is_array($tabs)){
+	$index = new CTabIndex($tabs, $default);
+  $index->show();
+}
 
 $phpChrono->stop();
 
 if(!$suppressHeaders) {
- require "./style/$uistyle/footer.php";
+  // -- Inclusion du footer --
+  if( !function_exists("memory_get_usage") ) {
+    function memory_get_usage() {
+      return "-";
+    }
+  }
+  $performance = array();
+  $performance["genere"] = number_format($phpChrono->total, 3);
+  $performance["memoire"] = mbConvertDecaBinary(memory_get_usage());;
+  $smartyStyle->assign("includeFooter" , true);
+  $smartyStyle->assign("debugMode"     , $dPconfig["debug"]);
+  $smartyStyle->assign("performance"   , $performance);
+  $smartyStyle->assign("errorMessage"  , $AppUI->getMsg());
+  $smartyStyle->assign("demoVersion"   , $dPconfig["demo_version"]);
+  $smartyStyle->display("header.tpl");
 }
 
 ob_end_flush();

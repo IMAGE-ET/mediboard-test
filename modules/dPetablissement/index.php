@@ -10,8 +10,4 @@
 $tabs = array();
 $tabs[] = array("vw_idx_groups", "Gestion des établissements", 0);
 $default = "vw_idx_groups";
-
-$index = new CTabIndex($tabs, $default);
-$index->show();
-
 ?>

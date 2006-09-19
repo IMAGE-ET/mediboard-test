@@ -14,7 +14,4 @@ $tabs[] = array("vw_full_code", "Affichage d'un code", 0);
 $tabs[] = array("vw_idx_chapter", "Sommaire de la CIM10", 0);
 $default = "vw_find_code";
 
-$index = new CTabIndex($tabs, $default);
-$index->show();
-
 ?>

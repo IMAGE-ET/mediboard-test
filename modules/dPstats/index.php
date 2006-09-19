@@ -15,7 +15,4 @@ $tabs[] = array("vw_users", "Utilisateurs", 0);
 //$tabs[] = array("vw_activite", "Activite", 0);
 $default = "vw_hospitalisation";
 
-$index = new CTabIndex($tabs, $default);
-$index->show();
-
 ?>

@@ -14,8 +14,4 @@ $tabs[] = array("vw_idx_aides", "Aides à la saisie", 0);
 $tabs[] = array("vw_idx_listes", "Listes de choix", 0);
 $tabs[] = array("vw_idx_packs", "Packs d'hospitalisation", 0);
 $default = "vw_modeles";
-
-$index = new CTabIndex($tabs, $default);
-$index->show();
-
 ?>

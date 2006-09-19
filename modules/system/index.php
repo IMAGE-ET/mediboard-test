@@ -17,7 +17,4 @@ $tabs[] = array("view_access_logs", "Logs d'accès", 0);
 $tabs[] = array("view_metrique", "Métrique", 0);
 $default = "view_dpadmin";
 
-$index = new CTabIndex($tabs, $default);
-$index->show();
-
 ?>

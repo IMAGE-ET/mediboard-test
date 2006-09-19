@@ -21,7 +21,4 @@ $tabs[] = array("benchmark", "Montée en charge", 0);
 
 $default = "send_mail";
 
-$index = new CTabIndex($tabs, $default);
-$index->show();
-
 ?>

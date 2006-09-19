@@ -15,8 +15,4 @@ $tabs[] = array("vw_affectations", "Affectations", 0);
 $tabs[] = array("vw_idx_chambres", "Chambres", 1);
 $tabs[] = array("vw_idx_services", "Services", 1);
 $default = "form_print_planning";
-
-$index = new CTabIndex($tabs, $default);
-$index->show();
-
 ?>

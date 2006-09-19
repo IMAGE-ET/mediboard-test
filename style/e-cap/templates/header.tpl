@@ -1,9 +1,10 @@
+{{if !$includeFooter}}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
   <title>Mediboard :: Système de gestion des structures de santé</title>
-  <meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset( $locale_char_set ) ? $locale_char_set : 'UTF-8';?>" />
+  <meta http-equiv="Content-Type" content="text/html;charset={{$localeCharSet}}" />
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissement de Santé" />
   <meta name="Version" content="{{$mediboardVersion}}" />
   {{$mediboardShortIcon}}
@@ -35,10 +36,19 @@ function popChgPwd() {
           <td class="logo">
             <img src="./style/{{$uistyle}}/images/e-cap.jpg" alt="eCap logo" />
           </td>
-          <th width="1%">
-            {{$titleBlock}}
-          </th>
-          <td>
+          <td width="1%">
+            <table class="titleblock">
+              <tr>
+                {{if $titleBlockData.icon}}
+                <td>
+                  {{$titleBlockData.icon}}
+                </td>
+                {{/if}}
+                <td class="titlecell">
+                  {{tr}}{{$titleBlockData.name}}{{/tr}}
+                </td>
+              </tr>
+            </table>
             <div id="systemMsg">
               {{$errorMessage}}
             </div>
@@ -70,7 +80,7 @@ function popChgPwd() {
         {{$currModule.modNameCourt}}
       </a> |
       {{/foreach}}
-      <a href='#' onclick='popChgPwd();return false'>Changez votre mot de passe</a> |
+      <a href='#' onclick='popChgPwd();return false'>Changez votre mot de passe</a> | <a href="./index.php?m=system&amp;a=addeditpref&amp;user_id={{$AppUI->user_id}}">Préférences</a> |
       <a href="./index.php?logout=-1">{{tr}}Logout{{/tr}}</a> |
     </td>
   </tr>
@@ -79,3 +89,6 @@ function popChgPwd() {
 <table id="main" class="{{$m}}">
 <tr>
   <td>
+{{else}}
+  {{include file="../../mediboard/templates/footer.tpl"}}
+{{/if}}

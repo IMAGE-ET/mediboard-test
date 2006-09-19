@@ -62,7 +62,9 @@ function verifIntubDifficileAndSave(oForm){
   <tr>
     <td colspan="6" class="button">
       <div id="divAlertIntubDiff" style="float:right;color:#F00;{{if !$consult_anesth->_intub_difficile}}visibility:hidden;{{/if}}"><strong>Intubation Difficile</strong></div>
-      <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">Sauver</button>
+      <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">
+        Valider
+      </button>
     </td>
   </tr>
 </table>

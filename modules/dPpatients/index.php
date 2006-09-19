@@ -15,8 +15,4 @@ $tabs[] = array("vw_edit_patients", "Créer / Modifier un dossier", 1);
 $tabs[] = array("vw_medecins"     , "Médecins correspondants"    , 1);
 
 $default = "vw_idx_patients";
-
-$index = new CTabIndex($tabs, $default);
-$index->show();
-
 ?>

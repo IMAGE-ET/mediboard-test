@@ -1,6 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
+"module-dPqualite-long"=>"Management qualité",
 "About",
 "Active Projects",
 "Add",
@@ -171,6 +172,7 @@
 "module-dPplanningOp-long"=>"Planning des chirurgiens",
 "module-dPpmsi-court"=>"PMSI",
 "module-dPpmsi-long"=>"Reccueil des actes PMSI",
+"module-dPqualite-court"=>"Qualité",
 "module-dPressources-court"=>"Ressources",
 "module-dPressources-long"=>"Gestion des salles d'exploration fonctionnelles",
 "module-dPsalleOp-court"=>"Salle d'op",

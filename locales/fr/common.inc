@@ -173,6 +173,8 @@
 "module-dPplanningOp-long"=>"Planning des chirurgiens",
 "module-dPpmsi-court"=>"PMSI",
 "module-dPpmsi-long"=>"Reccueil des actes PMSI",
+"module-dPqualite-court"=>"Qualité",
+"module-dPqualite-long"=>"Management qualité",
 "module-dPressources-court"=>"Ressources",
 "module-dPressources-long"=>"Gestion des salles d'exploration fonctionnelles",
 "module-dPsalleOp-court"=>"Salle d'op",

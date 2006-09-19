@@ -1,3 +1,4 @@
+{{if !$includeFooter}}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
@@ -76,5 +77,25 @@
         {{$errorMessage}}
       </div>
       {{if !$dialog}}
-      {{$titleBlock}}
+      <table class='titleblock'>
+        <tr>
+          {{if $titleBlockData.icon}}
+          <td>
+            {{$titleBlockData.icon}}
+          </td>
+          {{/if}}
+          <td class='titlecell'>
+            {{tr}}{{$titleBlockData.name}}{{/tr}}
+          </td>
+        </tr>
+      </table>
       {{/if}}
+
+{{else}}
+        {{$errorMessage}}
+    </td>
+  </tr>
+</table>
+</body>
+</html>
+{{/if}}

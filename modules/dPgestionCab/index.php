@@ -13,7 +13,4 @@ $tabs[] = array("edit_paie", "Fiche de paie", 0);
 $tabs[] = array("edit_params", "Paramètres", 0);
 $default = "edit_compta";
 
-$index = new CTabIndex($tabs, $default);
-$index->show();
-
 ?>

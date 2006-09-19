@@ -17,7 +17,4 @@ $tabs[] = array("vw_compta", "Comptabilité", 0);
 $tabs[] = array("vw_hospi", "Hospi", 0);
 $default = "vw_planning";
 
-$index = new CTabIndex($tabs, $default);
-$index->show();
-
 ?>

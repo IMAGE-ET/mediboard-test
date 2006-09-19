@@ -90,7 +90,7 @@ function calculImcVst(){
       </select><br />
       <textarea name="examen">{{$consult->examen}}</textarea><br />
       <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">
-        sauver
+        Valider
       </button>
       </form>
     </td>

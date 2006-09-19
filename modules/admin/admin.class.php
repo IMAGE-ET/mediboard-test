@@ -56,6 +56,8 @@ class CUser extends CMbObject {
 	var $user_owner      = null; // to be removed
 	var $user_signature  = null;
 
+  var $_ref_preferences= null;
+  
 	function CUser() {
 		$this->CMbObject("users", "user_id");
     

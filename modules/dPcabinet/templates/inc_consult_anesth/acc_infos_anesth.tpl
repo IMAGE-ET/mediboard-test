@@ -78,7 +78,7 @@ function reloadListTech() {
       </select><br />
       <textarea name="rques" rows="5">{{$consult->rques}}</textarea><br />
       <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">
-        sauver
+        Valider
       </button>
       </form>
     </td>
