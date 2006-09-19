@@ -63,6 +63,22 @@ class CUser extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
     
+    $this->_props["user_username"]   = "str|maxLength|20|notNull";
+    $this->_props["user_password"]   = "str|notNull";
+    $this->_props["user_type"]       = "num|notNull";
+    $this->_props["user_first_name"] = "str|maxLength|50";
+    $this->_props["user_last_name"]  = "str|maxLength|50|notNull";
+    $this->_props["user_email"]      = "str|maxLength|255";
+    $this->_props["user_phone"]      = "str|maxLength|30";
+    $this->_props["user_mobile"]     = "str|maxLength|30";
+    $this->_props["user_address1"]   = "str|maxLength|50";
+    $this->_props["user_city"]       = "str|maxLength|30";
+    $this->_props["user_zip"]        = "str|maxLength|11";
+    $this->_props["user_country"]    = "str|maxLength|30";
+    $this->_props["user_birthday"]   = "dateTime";
+    $this->_props["user_pic"]        = "text";
+    $this->_props["user_signature"]  = "text";
+    
     $this->_seek = array();
     $this->_seek["user_last_name"]  = "likeBegin";
     $this->_seek["user_first_name"] = "likeBegin";
