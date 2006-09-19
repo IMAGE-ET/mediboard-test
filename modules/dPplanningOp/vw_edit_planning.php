@@ -14,8 +14,7 @@ if (!$canRead) {
 }
 
 // Liste des Etablissements selon Permissions
-$etablissements = new CMediusers();
-$etablissements = $etablissements->loadEtablissements(PERM_READ);
+$etablissements = CMediusers::loadEtablissements(PERM_READ);
 
 $operation_id = mbGetValueFromGetOrSession("operation_id");
 $sejour_id    = mbGetValueFromGetOrSession("sejour_id");
@@ -112,6 +111,7 @@ if($chir->user_id) {
 }
 
 $sejourConfig =& $dPconfig["dPplanningOp"]["sejour"];
+
 for ($i = $sejourConfig["heure_deb"]; $i <= $sejourConfig["heure_fin"]; $i++) {
     $hours[] = $i;
 }

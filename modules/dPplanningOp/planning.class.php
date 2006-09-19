@@ -8,6 +8,7 @@
 */
 
 // @todo: Put the following in $config_dist;
+global $dPconfig;
 $dPconfig["dPplanningOp"]["operation"] = array (
   "duree_deb"        => "0",
   "duree_fin"        => "10",
