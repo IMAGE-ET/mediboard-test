@@ -8,7 +8,7 @@
       <table class="tbl">
         {{if $canEditFiles}}
         <tr>
-          <td colspan="6">
+          <td colspan="6" class="text">
             <form name="uploadFrm{{$keyCat}}" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="m" value="dPfiles" />
             <input type="hidden" name="dosql" value="do_file_aed" />
@@ -34,7 +34,7 @@
               <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suprressHeaders=1&amp;file_id={{$curr_file->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="Petit aperçu" title="Afficher le grand aperçu" />
             </a>
           </td>
-          <td class="text {{cycle name=celltxt values="dark, light"}}" style="vertical-align: middle;">
+          <td class="{{cycle name=celltxt values="dark, light"}} text" style="vertical-align: middle;">
             <strong>{{$curr_file->_view}}</strong>
             <br />Date : {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
             <hr />
@@ -51,7 +51,7 @@
                   {{$curr_cat->nom}}
                 </option>
                 {{/foreach}}
-              </select>
+              </select><br />
               <button type="button" class="trash" onclick="file_deleted={{$curr_file->file_id}};confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
                 Supprimer
               </button>

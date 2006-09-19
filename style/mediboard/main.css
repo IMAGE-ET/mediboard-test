@@ -1296,6 +1296,14 @@ div.accordionTabTitleBar {
 div.accordionTabContentBox {
 }
 
+div.accordionTabContentBox table.tbl{
+  width:96%;
+}
+
+div.accordionTabContentBox table.form{
+  width:96%;
+}
+
   /* @import "./hospitalisation.css"; */
 
 /* Chambres */

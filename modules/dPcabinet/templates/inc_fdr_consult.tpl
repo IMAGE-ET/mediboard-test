@@ -140,7 +140,8 @@ function submitFdr(oForm) {
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
             <input type="hidden" name="_view" value="{{$curr_file->_view}}" />
-            <button class="trash notext" type="button" onclick="confirmFileDeletion(this)" />
+            <button class="trash notext" type="button" onclick="confirmFileDeletion(this)">
+            </button>
           </form>
         </li>
         {{foreachelse}}
