@@ -15,7 +15,7 @@ $plageop_id = mbGetValueFromGetOrSession("plageop_id");
 // Liste des Salles
 $listSalles = new CSalle();
 $where = array();
-$where["group_id"] = "= '$g'";
+//$where["group_id"] = "= '$g'";
 $order = "'nom'";
 $listSalles = $listSalles->loadList($where, $order);
 
