@@ -66,8 +66,6 @@
           <td>
             <a class="buttonsearch" href="index.php?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$curr_user->user_id}}">Préférences</a>
           </td>
-          <td>
-          </td>
         </tr>
         {{/foreach}}
         
