@@ -10,7 +10,6 @@
 require_once("checkconfig.php");
 require_once("checkauth.php");
 
-require_once("dbconnection.php");
 $dbConfigs = $dPconfig["db"];
 unset($dbConfigs["ccam"]);
 
