@@ -1,5 +1,56 @@
 <script type="text/javascript">
 
+var oCookie = new CJL_CookieUtil("AnesthAccordion");
+var fHeight = 340;
+if(oCookie.getSubValue("height")){
+  var fHeight = oCookie.getSubValue("height");
+}
+
+function initAccord(init_resize){
+  var oAccordionDiv = $("accordionConsult");
+  if (!oAccordionDiv) {
+    return;
+  }
+  var fHeightDivTitle = 0;
+  var fhauteur_div = 0;
+  
+  // Cumul des AccordTitle
+  fHeightDivTitle = Element.getOffsetHeightByClassName("accordionTabTitleBar");
+  
+  // Position Top des infos patient
+  fposTop_tdConsultAnesth = Position.cumulativeOffset($("tdConsultation"))[1];
+  
+  // Position Top de l'accord
+  fposTop_div = Position.cumulativeOffset(oAccordionDiv)[1]; 
+  
+  fhauteur_div = window.getInnerDimensions().x - (fposTop_div - fposTop_tdConsultAnesth) - fHeightDivTitle;
+  aAccordBorderTop = Element.getStyle("accordionConsult","border-top-width").split("px");
+  fHeight = fhauteur_div - parseFloat(aAccordBorderTop[0]) - 14;
+  //-14 pour les marges et bordures en bas des tableaux
+  if(fHeight<=340){
+    fHeight = 340;
+  }
+  oCookie.setSubValue("height", fHeight);
+  if(init_resize){
+    oAccord.lastExpandedTab.content.style.height = fHeight + "px";
+    oAccord.setOptions( { panelHeight: fHeight } );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function submitForm(oForm) {
   submitFormAjax(oForm, 'systemMsg');
 }
@@ -71,8 +122,8 @@ function reloadConsultAnesth() {
 
 
 function pageMain() {
-  updateList();
-
+  updateList();  
+  
   {{if $consult->consultation_id}}
   incPatientHistoryMain();
   incAntecedantsMain();
@@ -81,6 +132,8 @@ function pageMain() {
   regFieldCalendar("editTrmtFrm", "debut");
   regFieldCalendar("editTrmtFrm", "fin");
   {{/if}}
+  
+  initAccord(true);
 }
 
 </script>
@@ -89,7 +142,7 @@ function pageMain() {
   <tr>
     <td id="listConsult" style="width: 200px; vertical-align: top;" />
     {{if $consult->consultation_id}}
-    <td class="greedyPane">
+    <td class="greedyPane" id="tdConsultation">
     {{else}}
     <td class="halfPane">
     {{/if}}

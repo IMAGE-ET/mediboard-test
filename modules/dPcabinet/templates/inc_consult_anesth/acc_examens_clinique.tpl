@@ -37,6 +37,7 @@ function calculImcVst(){
             <input type="text" size="2" name="tasys" title="{{$consult_anesth->_props.tasys}}" value="{{$consult_anesth->tasys}}" />
             /
             <input type="text" size="2" name="tadias" title="{{$consult_anesth->_props.tadias}}" value="{{$consult_anesth->tadias}}" />
+            cm Hg
           </td>
         </tr>
         <tr>
@@ -48,6 +49,7 @@ function calculImcVst(){
           <th><label for="pouls" title="Pouls du patient">Pouls</label></th>
           <td>
             <input type="text" size="4" name="pouls" title="{{$consult_anesth->_props.pouls}}" value="{{$consult_anesth->pouls}}" />
+            / min
           </td>
         </tr>
         <tr>
@@ -58,6 +60,7 @@ function calculImcVst(){
           <th><label for="spo2" title="Spo2">Spo2</label></th>
           <td>
             <input type="text" size="4" name="spo2" title="{{$consult_anesth->_props.spo2}}" value="{{$consult_anesth->spo2}}" />
+            %
           </td>
         </tr>
         <tr>

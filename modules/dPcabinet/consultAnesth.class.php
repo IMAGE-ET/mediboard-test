@@ -24,7 +24,6 @@ class CConsultAnesth extends CMbObject {
   var $traitements   = null;
   var $tabac         = null;
   var $oenolisme     = null;
-  var $transfusions  = null;
   var $tasys         = null;
   var $tadias        = null;
   var $intubation    = null;
@@ -41,6 +40,7 @@ class CConsultAnesth extends CMbObject {
   var $hb            = null;
   var $tp            = null;
   var $tca           = null;
+  var $tca_temoin    = null;
   var $creatinine    = null;
   var $na            = null;
   var $k             = null;
@@ -51,6 +51,7 @@ class CConsultAnesth extends CMbObject {
   var $pouls         = null;
   var $spo2          = null;
   var $ht            = null;
+  var $ht_final      = null;
 
   // Form fields
   var $_date_consult = null;
@@ -88,7 +89,6 @@ class CConsultAnesth extends CMbObject {
     $this->_props["traitements"]     = "str|confidential";
     $this->_props["tabac"]           = "text";
     $this->_props["oenolisme"]       = "text";
-    $this->_props["transfusions"]    = "enum|?|-|+";
     $this->_props["tasys"]           = "num";
     $this->_props["tadias"]          = "num";
     $this->_props["intubation"]      = "enum|?|dents|bouche|cou";
@@ -97,10 +97,11 @@ class CConsultAnesth extends CMbObject {
     $this->_props["ASA"]             = "enum|1|2|3|4|5";
     
     // Données examens complementaires
-    $this->_props["rai"]             = "currency";
+    $this->_props["rai"]             = "enum|?|NEG|POS";
     $this->_props["hb"]              = "currency|min|0";
     $this->_props["tp"]              = "currency|minMax|0|100";
-    $this->_props["tca"]             = "time";
+    $this->_props["tca"]             = "num|0|59";
+    $this->_props["tca_temoin"]      = "num|0|59";
     $this->_props["creatinine"]      = "currency";
     $this->_props["na"]              = "currency|min|0";
     $this->_props["k"]               = "currency|min|0";
@@ -109,8 +110,9 @@ class CConsultAnesth extends CMbObject {
     $this->_props["ecbu"]            = "enum|?|NEG|POS";
     $this->_props["ecbu_detail"]     = "text";
     $this->_props["pouls"]           = "num|pos";
-    $this->_props["spo2"]            = "currency|min|0";
+    $this->_props["spo2"]            = "currency|minMax|0|100";
     $this->_props["ht"]              = "currency|minMax|0|100";
+    $this->_props["ht_final"]        = "currency|minMax|0|100";
     
     // Champs pour les conditions d'intubation
     $this->_props["mallampati"]      = "enum|classe1|classe2|classe3|classe4";
@@ -143,20 +145,11 @@ class CConsultAnesth extends CMbObject {
   	  $this->_imc = round($this->poid / ($this->taille * $this->taille * 0.0001),2);
   	}
   	
-  	$this->_sec_tca = intval(substr($this->tca, 6, 2));
-    $this->_min_tca  = intval(substr($this->tca, 3, 2));
     $this->_sec_tsivy = intval(substr($this->tsivy, 6, 2));
     $this->_min_tsivy  = intval(substr($this->tsivy, 3, 2));
   }
    
   function updateDBFields() {
-    $this->tca = "00:";
-    if($this->_min_tca){
-      $this->tca .= $this->_min_tca.":";
-    }else{$this->tca .= "00:";}
-    if($this->_sec_tca){
-      $this->tca .= $this->_sec_tca;
-    }else{$this->tca .= "00";}
     
     $this->tsivy = "00:";
     if($this->_min_tsivy){

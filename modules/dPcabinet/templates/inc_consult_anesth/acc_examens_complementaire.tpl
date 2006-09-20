@@ -18,9 +18,10 @@ function calculPSA(){
   var oForm1 = document.editExamCompFrm;
   var oForm2 = document.editAnesthPatFrm;
   if(oForm2._vst.value && !isNaN(parseFloat(oForm2._vst.value))
-     && oForm1.ht.value && !isNaN(parseFloat(oForm1.ht.value)) && parseFloat(oForm1.ht.value)>0){
+     && oForm1.ht.value && !isNaN(parseFloat(oForm1.ht.value)) && parseFloat(oForm1.ht.value)>0
+     && oForm1.ht_final.value && !isNaN(parseFloat(oForm1.ht_final.value)) && parseFloat(oForm1.ht_final.value)>0){
     
-    oForm1._psa.value = round(parseFloat(oForm2._vst.value)* (parseFloat(oForm1.ht.value) - 30)/100,0);
+    oForm1._psa.value = round(parseFloat(oForm2._vst.value)* (parseFloat(oForm1.ht.value) - parseFloat(oForm1.ht_final.value))/100,0);
   }else{
     oForm1._psa.value = "";
   }
@@ -95,25 +96,10 @@ function reloadListExamComp() {
               <option value="%2B" {{if $consult_anesth->rhesus == "+"}}selected="selected"{{/if}}>+</option>
             </select>
           </td>
-          <th><label for="transfusions" title="Antécédents de transfusions">Transfusion</label></th>
-          <td>
-            <select name="transfusions" title="{{$consult_anesth->_props.transfusions}}|%2B">
-              <option value="?" {{if $consult_anesth->transfusions == "?"}}selected="selected"{{/if}}>?</option>
-              <option value="-" {{if $consult_anesth->transfusions == "-"}}selected="selected"{{/if}}>-</option>
-              <option value="%2B" {{if $consult_anesth->transfusions == "+"}}selected="selected"{{/if}}>+</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
           <th><label for="ht" title="Hématocrite">Ht</label></th>
           <td>
             <input type="text" size="4" name="ht" title="{{$consult_anesth->_props.ht}}" value="{{$consult_anesth->ht}}" onchange="calculPSA();" />
             %
-          </td>
-          <th><label for="_psa" title="Pertes Sanguines Acceptables">PSA</label></th>
-          <td class="readonly">
-            <input type="text" size="4" name="_psa" value="{{$consult_anesth->_psa}}" readonly="readonly" />
-            ml/GR
           </td>
         </tr>
         <tr>
@@ -122,10 +108,22 @@ function reloadListExamComp() {
             <input type="text" size="4" name="creatinine" title="{{$consult_anesth->_props.creatinine}}" value="{{$consult_anesth->creatinine}}" onchange="calculClairance();" />
             mg/l
           </td>
+          <th><label for="ht_final" title="Hématocrite">Ht final</label></th>
+          <td>
+            <input type="text" size="4" name="ht_final" title="{{$consult_anesth->_props.ht_final}}" value="{{$consult_anesth->ht_final}}" onchange="calculPSA();" />
+            %
+          </td>
+        </tr>
+        <tr>
           <th><label for="_clairance" title="Clairance Créatinine">Clairance</label></th>
           <td class="readonly">
             <input type="text" size="4" name="_clairance" value="{{$consult_anesth->_clairance}}" readonly="readonly" />
-            mg/l
+            ml/min
+          </td>
+          <th><label for="_psa" title="Pertes Sanguines Acceptables">PSA</label></th>
+          <td class="readonly">
+            <input type="text" size="4" name="_psa" value="{{$consult_anesth->_psa}}" readonly="readonly" />
+            ml/GR
           </td>
         </tr>
         <tr> 
@@ -148,16 +146,10 @@ function reloadListExamComp() {
           </td>
           <th><label for="tca" title="Temps de Céphaline avec Activateur">TCA</label></th>
           <td>
-            <select name="_min_tca">
-            {{foreach from=$mins item=minute}}
-              <option value="{{$minute}}" {{if $consult_anesth->_min_tca == $minute}} selected="selected" {{/if}}>{{$minute}}</option>
-            {{/foreach}}
-            </select> min
-            <select name="_sec_tca">
-            {{foreach from=$secs item=seconde}}
-              <option value="{{$seconde}}" {{if $consult_anesth->_sec_tca == $seconde}} selected="selected" {{/if}}>{{$seconde}}</option>
-            {{/foreach}}     
-            </select> s
+            <input type="text" name="tca_temoin" maxlength="2" size="2" title="{{$consult_anesth->_props.tca_temoin}}" value="{{$consult_anesth->tca_temoin}}" />
+            s /
+            <input type="text" name="tca" maxlength="2" size="2" title="{{$consult_anesth->_props.tca}}" value="{{$consult_anesth->tca}}" />
+             s
           </td>
         </tr>
         <tr>
@@ -189,13 +181,15 @@ function reloadListExamComp() {
           <td>
             <select name="ecbu" title="{{$consult_anesth->_props.ecbu}}">
             {{html_options values=$consult_anesth->_enums.ecbu output=$consult_anesth->_enums.ecbu selected=$consult_anesth->ecbu}}
-            </select><br />            
+            </select>            
           </td>
         </tr>
         <tr>
           <th><label for="rai" title="Recherche d'agglutinines irrégulières">RAI</label></th>
           <td>
-            <input type="text" size="4" name="rai" title="{{$consult_anesth->_props.rai}}" value="{{$consult_anesth->rai}}" />
+            <select name="rai" title="{{$consult_anesth->_props.rai}}">
+            {{html_options values=$consult_anesth->_enums.rai output=$consult_anesth->_enums.rai selected=$consult_anesth->rai}}
+            </select>
           </td>
           <td></td>
           <td>

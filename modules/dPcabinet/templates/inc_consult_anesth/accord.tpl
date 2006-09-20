@@ -48,5 +48,9 @@
 </div>
 
 <script language="Javascript" type="text/javascript">
-new Rico.Accordion( $('accordionConsult'), { panelHeight:340, showDelay:50, showSteps:3 } );
+var oAccord = new Rico.Accordion( $('accordionConsult'), { 
+  panelHeight: fHeight, 
+  showDelay:50, 
+  showSteps:3 
+} );
 </script>

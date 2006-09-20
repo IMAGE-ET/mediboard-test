@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.46";
+$config["mod_version"]     = "0.47";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -373,8 +373,19 @@ class CSetupdPcabinet {
         $sql = "ALTER TABLE `techniques_anesth` " .
             "\nCHANGE `consultAnesth_id` `consultation_anesth_id` INT NOT NULL ;";
         db_exec( $sql ); db_error();
+        
       case "0.46":
-        return "0.46";
+        $sql = "ALTER TABLE `consultation_anesth` " .
+            "\nCHANGE `tca` `tca` TINYINT(2) NULL ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `consultation_anesth` " .
+            "\nADD `tca_temoin` TINYINT(2) NULL AFTER `tca`," .
+            "\nADD `ht_final` FLOAT DEFAULT NULL AFTER `ht`;" ;
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `consultation_anesth` DROP `transfusions`";
+        db_exec( $sql ); db_error();
+      case "0.47":
+        return "0.47";
     }
     return false;
   }

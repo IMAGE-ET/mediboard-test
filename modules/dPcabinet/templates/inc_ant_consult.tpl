@@ -142,13 +142,13 @@ function incAntecedantsMain() {
         </tr>
         <tr>
           <th>
-            <input type="checkbox" checked="checked" name="_date_ant" onclick="dateAntecedent()" />
+            <input type="checkbox" name="_date_ant" onclick="dateAntecedent()" />
             <label for="date" title="Date de l'antécédent">Date</label>
           </th>
           <td class="date">
-            <div id="editAntFrm_date_da">{{$today|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="date" value="{{$today}}" />
-            <img id="editAntFrm_date_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            <div id="editAntFrm_date_da"></div>
+            <input type="hidden" name="date" value="" />
+            <img id="editAntFrm_date_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
           </td>
           <td rowspan="2">
             <textarea name="rques"></textarea>
