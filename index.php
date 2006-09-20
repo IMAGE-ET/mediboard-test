@@ -52,8 +52,6 @@ $AppUI->getAllClasses();
 
 $phpChrono = new Chronometer;
 $phpChrono->start();
- 
-
 
 // load default preferences if not logged in
 if($AppUI->doLogin()) {
@@ -72,7 +70,6 @@ if(isset($_POST["login"])) {
 	}
 	$AppUI->redirect("$redirect");
 }
-
 
 // Get the user preference
 $uistyle = $AppUI->getPref("UISTYLE");
@@ -106,7 +103,6 @@ if($AppUI->doLogin()) {
 	session_destroy();
 	exit;
 }
-
 
 // set the module and action from the url
 $m     = $AppUI->checkFileName(mbGetValueFromGet("m"     , CPermModule::getVisibleModule()));
@@ -171,7 +167,6 @@ foreach($listModules as $module) {
   require_once "./modules/".$module->mod_name."/index.php";
 }
   
-
 if(!$suppressHeaders) {
   
   // -- Code pour le HEADER --
@@ -241,7 +236,6 @@ if($tab !== null) {
   $currentModule->showAction();
 }
 
-
 $phpChrono->stop();
 
 if(!$suppressHeaders) {
@@ -265,4 +259,5 @@ if(!$suppressHeaders) {
 ob_end_flush();
 
 require "./includes/access_log.php";
+
 ?>
