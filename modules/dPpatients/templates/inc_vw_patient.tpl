@@ -121,6 +121,7 @@ function reloadAfterSaveDoc(){
     <td>{{$patient->_tel21}} {{$patient->_tel22}} {{$patient->_tel23}} {{$patient->_tel24}} {{$patient->_tel25}}</td>
   </tr>
   
+  {{if $patient->rques}}
   <tr>
     <th class="category" colspan="4">Remarques</th>
   </tr>
@@ -128,6 +129,8 @@ function reloadAfterSaveDoc(){
   <tr>
     <td colspan="4" class="text">{{$patient->rques|nl2br}}</td>
   </tr>
+  {{/if}}
+  
   <tr>
     <td class="button" colspan="4">
       <form name="actionPat" action="./index.php" method="get">
