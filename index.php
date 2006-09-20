@@ -114,6 +114,9 @@ $a     = $AppUI->checkFileName(mbGetValueFromGet("a"     , "index"));
 $u     = $AppUI->checkFileName(mbGetValueFromGet("u"     , ""));
 $dosql = $AppUI->checkFileName(mbGetValueFromPost("dosql", ""));
 
+$currentModule = CModule::getInstalled($m);
+$listModules   = CPermModule::getVisibleModules();
+
 // set the group in use, put the user group if not allowed
 $g = mbGetAbsValueFromGetOrSession("g", $AppUI->user_group);
 $indexGroup = new CGroups;
@@ -164,6 +167,11 @@ if(isset($_REQUEST["dosql"])) {
 
 ob_start();
 
+foreach($listModules as $module) {
+  require_once "./modules/".$module->mod_name."/index.php";
+}
+  
+
 if(!$suppressHeaders) {
   
   // -- Code pour le HEADER --
@@ -178,9 +186,8 @@ if(!$suppressHeaders) {
   $dialog = dPgetParam( $_GET, "dialog");
   if (!$dialog) {
     //top navigation menu
-    $nav = CPermModule::getVisibleModules();
     $iKey = 0;
-    foreach ($nav as $module) {
+    foreach ($listModules as $module) {
       $affModule[$iKey]["modName"]      = "$module->mod_name";
       $affModule[$iKey]["modNameCourt"] = $AppUI->_("module-$module->mod_name-court");
       $affModule[$iKey]["modNameLong"]  = $AppUI->_("module-$module->mod_name-long");
@@ -228,14 +235,14 @@ if(!$suppressHeaders) {
 
 $tab = $a == "index"  ? mbGetValueFromGetOrSession("tab", 1) : mbGetValueFromGet("tab");
 
-$action = mbGetValue($tab, $a);
-$actionType = $tab ? "tab" : "a";
-require "./modules/$m/".($u ? "$u/" : "")."$a.php";
-if($actionType == "tab") {
-  $module = CModule::getInstalled($m);
-  $module->showTabs();
-  $action = mbGetValue($tab, $a);
+if($tab) {
+  $currentModule->showTabs();
+} else {
+  $currentModule->showAction();
 }
+
+$action     = mbGetValue($tab, $a);
+$actionType = $tab ? "tab" : "a";
 
 
 $phpChrono->stop();

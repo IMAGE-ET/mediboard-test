@@ -174,10 +174,15 @@ class CModule extends CMbObject {
     $smartyStyle->assign("fintab" , false);
       
     $smartyStyle->display("tabbox.tpl");
-    require($AppUI->cfg["root_dir"]."/modules/".$this->mod_name."/".$tab.".php");
+    require_once "./modules/".$this->mod_name."/".$tab.".php";
   
     $smartyStyle->assign("fintab", true);
     $smartyStyle->display("tabbox.tpl");
+  }
+  
+  function showAction() {
+    global $u, $a;
+    require_once "./modules/".$this->mod_name."/".($u ? "$u/" : "")."$a.php";
   }
   
   /**
