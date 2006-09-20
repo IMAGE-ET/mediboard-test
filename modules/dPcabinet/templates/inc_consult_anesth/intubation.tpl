@@ -24,7 +24,7 @@ function verifIntubDifficileAndSave(oForm){
   <tr>
     {{foreach from=$consult_anesth->_enums.mallampati item=curr_mallampati}}
     <td rowspan="4" class="button">
-      <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{tr}}{{$curr_mallampati}}{{/tr}}"><img src="modules/{{$m}}/images/mallampati/{{$curr_mallampati}}.png" alt="{{tr}}{{$curr_mallampati}}{{/tr}}" /></label>
+      <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{tr}}{{$curr_mallampati}}{{/tr}}"><img src="modules/{{$m}}/images/mallampati/{{$curr_mallampati}}.gif" alt="{{tr}}{{$curr_mallampati}}{{/tr}}" /></label>
       <br /><input type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked"{{/if}} onclick="verifIntubDifficileAndSave(this.form);" /><label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{tr}}{{$curr_mallampati}}{{/tr}}">{{tr}}{{$curr_mallampati}}{{/tr}}</label>
     </td>
     {{/foreach}}

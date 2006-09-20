@@ -1299,11 +1299,16 @@ div.accordionTabContentBox {
 div.accordionTabContentBox table.tbl{
   width:96%;
 }
+div.accordionTabContentBox table[class="tbl"]{
+  width:100%;
+}
 
 div.accordionTabContentBox table.form{
   width:96%;
 }
-
+div.accordionTabContentBox table[class="form"]{
+  width:100%;
+}
   /* @import "./hospitalisation.css"; */
 
 /* Chambres */
