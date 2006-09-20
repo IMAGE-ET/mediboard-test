@@ -7,9 +7,9 @@
 * @author Romain Ollivier
 */
 
-GLOBAL $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m;
 
-if (!$canRead) {			// lock out users that do not have at least readPermission on this module
+if(!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
@@ -21,9 +21,9 @@ $chapter = $cim10->getSommaire($lang);
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('lang', $lang);
-$smarty->assign('chapter', $chapter);
+$smarty->assign("lang"   , $lang);
+$smarty->assign("chapter", $chapter);
 
-$smarty->display('vw_idx_chapter.tpl');
+$smarty->display("vw_idx_chapter.tpl");
 
 ?>

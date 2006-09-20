@@ -37,9 +37,9 @@ foreach($favoris as $key => $value) {
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('lang', $lang);
-$smarty->assign('codes', $codes);
+$smarty->assign("lang" , $lang);
+$smarty->assign("codes", $codes);
 
-$smarty->display('vw_idx_favoris.tpl');
+$smarty->display("vw_idx_favoris.tpl");
 
 ?>

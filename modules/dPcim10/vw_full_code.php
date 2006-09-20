@@ -23,9 +23,9 @@ $cim10->loadRefs();
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign('lang', $lang);
-$smarty->assign('cim10', $cim10);
+$smarty->assign("lang" , $lang);
+$smarty->assign("cim10", $cim10);
 
-$smarty->display('vw_full_code.tpl');
+$smarty->display("vw_full_code.tpl");
 
 ?>

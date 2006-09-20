@@ -31,6 +31,7 @@
       <br />
 
       {{$curr_code->libelle}}
+      {{if $canEdit}}
       <br />
 
       <form name="delFavoris" action="?m={{$m}}" method="post">
@@ -44,6 +45,7 @@
 	  </button>
 	  
 	  </form>
+	  {{/if}}
     </td>
   {{if $curr_key+1 is div by 4 or $curr_key+1 == $codes|@count}}
   </tr>
