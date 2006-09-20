@@ -3,6 +3,11 @@ function setClose(code) {
   window.opener.putCim10(code);
   //window.close();
 }
+
+function goToCode(code){
+  window.location.href = "index.php?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code=" + code;
+}
+
 </script>
 
 <table class="tbl">
@@ -10,12 +15,12 @@ function setClose(code) {
   <tr>
     <th class="category" colspan="2">
       <a href="index.php?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={{$up->code}}">
-        <img src="modules/dPcim10/images/uparrow.png" />
+        <img src="modules/dPcim10/images/uparrow.png" alt="" />
         {{$up->code}}: {{$up->libelle}}
-        <img src="modules/dPcim10/images/uparrow.png" />
+        <img src="modules/dPcim10/images/uparrow.png" alt="" />
       </a>
     </th>
-  <tr>
+  </tr>
   {{/if}}
   <tr>
     <th class="category" colspan="2">
@@ -24,8 +29,8 @@ function setClose(code) {
       {{/if}}
       <strong>{{$cim10->code}}: {{$cim10->libelle}}</strong>
     </th>
-  <tr>
   </tr>
+  <tr>  
     <td class="text" style="vertical-align:top;">
       <strong>Informations sur ce code:</strong>
       {{if $cim10->_isInfo}}
@@ -97,8 +102,8 @@ function setClose(code) {
           <li>
             <button class="tick notext" type="button" onclick="setClose('{{$curr_code->code}}')"></button>
             <a class="action" href="index.php?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={{$curr_code->code}}">
-              <button type="button">
-                <img src="modules/dPcim10/images/downarrow.png" />
+              <button type="button" onclick="goToCode('{{$curr_code->code}}');">
+                <img src="modules/dPcim10/images/downarrow.png" alt="" />
               </button>
               {{$curr_code->code}}: {{$curr_code->libelle}}
             </a>
@@ -114,8 +119,8 @@ function setClose(code) {
           <li>
             <button class="tick notext" type="button" onclick="setClose('{{$curr_code->code}}')"></button>
             <a class="action" href="index.php?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={{$curr_code->code}}">
-              <button type="button">
-                <img src="modules/dPcim10/images/downarrow.png" />
+              <button type="button" onclick="goToCode('{{$curr_code->code}}');">
+                <img src="modules/dPcim10/images/downarrow.png" alt=""/>
               </button>
               {{$curr_code->code}}: {{$curr_code->libelle}}
             </a>
