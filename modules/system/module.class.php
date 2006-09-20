@@ -187,7 +187,6 @@ class CModule extends CMbObject {
   
   function showAction() {
     global $AppUI, $u, $a;
-    $AppUI->savePlace();
     $action     = $a;
     $actionType = "a";
     require_once "./modules/".$this->mod_name."/".($u ? "$u/" : "")."$a.php";
