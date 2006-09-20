@@ -7,10 +7,9 @@
  * @author Thomas Despoix
  */
 
-global $AppUI, $m, $tab, $a, $dosql;
+global $AppUI, $m, $tab, $a, $dosql, $action;
 
 $module = $m;
-$action = mbGetValue(@$tab, $a, $dosql);
 $period = mbTranformTime(null, null, "%Y-%m-%d %H:00:00");
 
 $where = array();

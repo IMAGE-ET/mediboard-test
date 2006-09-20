@@ -1,18 +1,7 @@
-{{if $dialog}}
-{{assign var="action" value="dialog=1&amp;a"}}
-{{else}}
-{{assign var="action" value="tab"}}
-{{/if}}
-
 <form  name="selection" action="?" method="get" >
 
-{{if $dialog}}
-<input type="hidden" name="a" value="{{$a}}" />
-{{else}}
-<input type="hidden" name="tab" value="{{$tab}}" />
-{{/if}}
-
 <input type="hidden" name="m" value="{{$m}}" />
+<input type="hidden" name="{{$actionType}}" value="{{$action}}" />
 <input type="hidden" name="dialog" value="{{$dialog}}" />
 
 <table class="form">
@@ -89,7 +78,7 @@
   {{/if}}
     <td>
       <strong>
-        <a href="?m={{$m}}&amp;{{$action}}=vw_full_code&amp;codeacte={{$curr_code.code}}">
+        <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_full_code&amp;codeacte={{$curr_code.code}}">
           {{$curr_code.code}}
         </a>
       </strong>

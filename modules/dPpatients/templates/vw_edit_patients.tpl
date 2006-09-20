@@ -67,6 +67,7 @@ function setMed( key, nom, prenom, sElementName ){
 }
 
 function updateFields(selected) {
+  debugArray(selected.childNodes, "Item selected");
   Element.cleanWhitespace(selected);
   dn = selected.childNodes;
   $('editFrm_cp').value = dn[0].firstChild.firstChild.nodeValue;

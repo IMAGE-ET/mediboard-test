@@ -116,7 +116,6 @@ $dosql = $AppUI->checkFileName(mbGetValueFromPost("dosql", ""));
 
 // set the group in use, put the user group if not allowed
 $g = mbGetAbsValueFromGetOrSession("g", $AppUI->user_group);
-
 $indexGroup = new CGroups;
 $indexGroup->load($g);
 
@@ -226,11 +225,22 @@ if(!$suppressHeaders) {
 }
 
 // -- Code pour les tabBox et Inclusion du fichier demandé --
+
+$tab = $a == "index"  ? mbGetValueFromGetOrSession("tab") : mbGetValueFromGet("tab");
+
+$action = mbGetValue($tab, $a);
+$actionType = $tab ? "tab" : "a";
 require "./modules/$m/".($u ? "$u/" : "")."$a.php";
-if(isset($tabs) && is_array($tabs)){
+if (isset($tabs) && is_array($tabs)){
 	$index = new CTabIndex($tabs, $default);
+
+  // Recheck as TabIndex may change $tab to default value 
+  $action = mbGetValue($tab, $a);
+  $actionType = $tab ? "tab" : "a";
+  
   $index->show();
 }
+
 
 $phpChrono->stop();
 

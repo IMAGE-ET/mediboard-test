@@ -29,12 +29,6 @@ function pageMain() {
   
 </script>
 
-{{if $dialog}}
-{{assign var="action" value="dialog=1&amp;a"}}
-{{else}}
-{{assign var="action" value="tab"}}
-{{/if}}
-
 <table class="fullCode">
   <tr>
       <td class="pane">
@@ -44,14 +38,9 @@ function pageMain() {
            <td colspan="2">
             <form action="?" name="selection" method="get" >
 
-            {{if $dialog}}
-            <input type="hidden" name="a" value="{{$a}}" />
-            {{else}}
-            <input type="hidden" name="tab" value="{{$tab}}" />
-            {{/if}}
-            
-            <input type="hidden" name="dialog" value="{{$dialog}}" />
             <input type="hidden" name="m" value="{{$m}}" />
+            <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
+            <input type="hidden" name="dialog" value="{{$dialog}}" />
 
             <table class="form">
               <tr>
@@ -74,7 +63,7 @@ function pageMain() {
               <tr>
                 <td class="button">
                   {{if $canEdit}}
-                  <form name="addFavoris" action="?m={{$m}}&amp;{{$action}}={{$a}}" method="post">
+                  <form name="addFavoris" action="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}" method="post">
             
                   <input type="hidden" name="dosql" value="do_favoris_aed" />
                   <input type="hidden" name="del" value="0" />
@@ -147,7 +136,7 @@ function pageMain() {
         
         <tr>
           <td>
-            <a href="?m={{$m}}&amp;{{$action}}=vw_full_code&amp;codeacte={{$codeproc}}"><strong>{{$codeproc}}</strong></a>
+            <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;codeacte={{$codeproc}}"><strong>{{$codeproc}}</strong></a>
             <br />
             {{$textproc}}
           </td>
@@ -197,7 +186,7 @@ function pageMain() {
         
         {{foreach name=associations from=$asso item=curr_asso}}
         <tr>
-          <th><a href="?m={{$m}}&amp;{{$action}}=vw_full_code&amp;codeacte={{$curr_asso.code}}">{{$curr_asso.code}}</a></th>
+          <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;codeacte={{$curr_asso.code}}">{{$curr_asso.code}}</a></th>
           <td>{{$curr_asso.texte}}</td>
         </tr>
         {{/foreach}}
@@ -213,7 +202,7 @@ function pageMain() {
         
         {{foreach name=incompatibilites from=$incomp item=curr_incomp}}
         <tr>
-          <th><a href="index.php?m={{$m}}&amp;{{$action}}=vw_full_code&amp;codeacte={{$curr_incomp.code}}">{{$curr_incomp.code}}</a></th>
+          <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;codeacte={{$curr_incomp.code}}">{{$curr_incomp.code}}</a></th>
           <td>{{$curr_incomp.texte}}</td>
         </tr>
         {{/foreach}}

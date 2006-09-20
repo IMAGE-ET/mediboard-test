@@ -14,15 +14,12 @@ class CTabIndex {
   var $tabBox = null;
     
   function CTabIndex($tabs = array(), $default = 0) {
-    global $AppUI, $canRead, $canEdit, $m, $tab, $_GET;
+    global $AppUI, $canRead, $canEdit, $m, $tab;
     if(!$canRead) {
       $AppUI->redirect("m=system&a=access_denied");
     }
     $AppUI->savePlace();
-    if(isset($_GET["tab"])) {
-      $AppUI->setState($m."IdxTab", $_GET["tab"]);
-    }
-    
+
     // For each tabs :
     // 0 : file name, 1 : tab name, 2 : can edit right needed
     foreach($tabs as $key => $curr_tab) {
@@ -35,8 +32,7 @@ class CTabIndex {
       }
     }
     
-    $tab = $AppUI->getState($m."IdxTab") !== null ? $AppUI->getState($m."IdxTab") : $default;
-    if(is_numeric($tab)){
+    if(!is_string($tab)){
       if(array_key_exists($tab,$this->tabBox)){
         $tab = $this->tabBox[$tab][0];
       }else{ 
