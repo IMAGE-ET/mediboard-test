@@ -156,11 +156,14 @@ class CModule extends CMbObject {
   }
   
   function showTabs() {
-    global $uistyle, $AppUI, $tab;
-    
+    global $uistyle, $AppUI, $tab, $a;
+
     if(is_numeric($tab)) {
       $tab = $this->_tabs[0][0];
     }
+
+    $action     = $tab;
+    $actionType = "tab";
 
     require_once($AppUI->getSystemClass("smartydp"));
     $smartyStyle = new CSmartyDP(1);
@@ -182,6 +185,8 @@ class CModule extends CMbObject {
   
   function showAction() {
     global $u, $a;
+    $action     = $a;
+    $actionType = "a";
     require_once "./modules/".$this->mod_name."/".($u ? "$u/" : "")."$a.php";
   }
   

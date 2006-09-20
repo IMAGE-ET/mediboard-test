@@ -241,9 +241,6 @@ if($tab !== null) {
   $currentModule->showAction();
 }
 
-$action     = mbGetValue($tab, $a);
-$actionType = $tab ? "tab" : "a";
-
 
 $phpChrono->stop();
 
