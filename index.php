@@ -166,63 +166,63 @@ if(isset($_REQUEST["dosql"])) {
 ob_start();
 
 if(!$suppressHeaders) {
-
-// -- Code pour le HEADER --
-
-// Définition du CharSet
-if(!isset( $locale_char_set )){
-  $locale_char_set = "UTF-8";
-}
-//Liste des Etablissements
-$etablissements = CMediusers::loadEtablissements(PERM_EDIT);
-// Liste des Modules
-$dialog = dPgetParam( $_GET, "dialog");
-if (!$dialog) {
-  //top navigation menu
-  $nav = CPermModule::getVisibleModules();
-  $iKey = 0;
-  foreach ($nav as $module) {
-    $affModule[$iKey]["modName"] = "$module->mod_name";
-    $affModule[$iKey]["modNameCourt"] = $AppUI->_("module-$module->mod_name-court");
-    $affModule[$iKey]["modNameLong"] = $AppUI->_("module-$module->mod_name-long");
-    $iKey++;
-  }  
-}
-// Message
-$messages = new CMessage();
-$messages = $messages->loadPublications("present");
-
-// Titre et Image Module en cours
-$titleBlockData["name"]="module-$m-long";
-$titleBlockData["icon"]=dPshowImage( dPFindImage( "$m.png", $m ), "24", "24" );
-
-//Creation du Template
-require_once( $AppUI->getSystemClass("smartydp"));
-$smartyStyle = new CSmartyDP(1);
-$smartyStyle->template_dir = "style/$uistyle/templates/";
-$smartyStyle->compile_dir  = "style/$uistyle/templates_c/";
-$smartyStyle->config_dir   = "style/$uistyle/configs/";
-$smartyStyle->cache_dir    = "style/$uistyle/cache/";
-if (!$dialog) {
-  $smartyStyle->assign("affModule" , $affModule);
-}
-$smartyStyle->assign("includeFooter"        , false);
-$smartyStyle->assign("titleBlockData"       , $titleBlockData);
-$smartyStyle->assign("localeCharSet"        , $locale_char_set);
-$smartyStyle->assign("mediboardVersion"     , @$AppUI->getVersion());
-$smartyStyle->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/favicon.ico",1));
-$smartyStyle->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
-$smartyStyle->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
-$smartyStyle->assign("mediboardScript"      , mbLoadScripts(1));
-$smartyStyle->assign("dialog"               , $dialog);
-$smartyStyle->assign("messages"             , $messages);
-$smartyStyle->assign("uistyle"              , $uistyle);
-$smartyStyle->assign("AppUI"                , $AppUI);
-$smartyStyle->assign("Etablissements"       , $etablissements);
-$smartyStyle->assign("helpOnline"           , mbPortalLink( $m, "Aide" ));
-$smartyStyle->assign("suggestion"           , mbPortalLink( "bugTracker", "Suggérer une amélioration" ));
-$smartyStyle->assign("errorMessage"         , $AppUI->getMsg());
-$smartyStyle->display("header.tpl");
+  
+  // -- Code pour le HEADER --
+  
+  // Définition du CharSet
+  if(!isset( $locale_char_set )){
+    $locale_char_set = "UTF-8";
+  }
+  //Liste des Etablissements
+  $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
+  // Liste des Modules
+  $dialog = dPgetParam( $_GET, "dialog");
+  if (!$dialog) {
+    //top navigation menu
+    $nav = CPermModule::getVisibleModules();
+    $iKey = 0;
+    foreach ($nav as $module) {
+      $affModule[$iKey]["modName"]      = "$module->mod_name";
+      $affModule[$iKey]["modNameCourt"] = $AppUI->_("module-$module->mod_name-court");
+      $affModule[$iKey]["modNameLong"]  = $AppUI->_("module-$module->mod_name-long");
+      $iKey++;
+    }  
+  }
+  // Message
+  $messages = new CMessage();
+  $messages = $messages->loadPublications("present");
+  
+  // Titre et Image Module en cours
+  $titleBlockData["name"]="module-$m-long";
+  $titleBlockData["icon"]=dPshowImage( dPFindImage( "$m.png", $m ), "24", "24" );
+  
+  //Creation du Template
+  require_once( $AppUI->getSystemClass("smartydp"));
+  $smartyStyle = new CSmartyDP(1);
+  $smartyStyle->template_dir = "style/$uistyle/templates/";
+  $smartyStyle->compile_dir  = "style/$uistyle/templates_c/";
+  $smartyStyle->config_dir   = "style/$uistyle/configs/";
+  $smartyStyle->cache_dir    = "style/$uistyle/cache/";
+  if (!$dialog) {
+    $smartyStyle->assign("affModule" , $affModule);
+  }
+  $smartyStyle->assign("includeFooter"        , false);
+  $smartyStyle->assign("titleBlockData"       , $titleBlockData);
+  $smartyStyle->assign("localeCharSet"        , $locale_char_set);
+  $smartyStyle->assign("mediboardVersion"     , @$AppUI->getVersion());
+  $smartyStyle->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/favicon.ico",1));
+  $smartyStyle->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
+  $smartyStyle->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
+  $smartyStyle->assign("mediboardScript"      , mbLoadScripts(1));
+  $smartyStyle->assign("dialog"               , $dialog);
+  $smartyStyle->assign("messages"             , $messages);
+  $smartyStyle->assign("uistyle"              , $uistyle);
+  $smartyStyle->assign("AppUI"                , $AppUI);
+  $smartyStyle->assign("Etablissements"       , $etablissements);
+  $smartyStyle->assign("helpOnline"           , mbPortalLink($m, "Aide"));
+  $smartyStyle->assign("suggestion"           , mbPortalLink("bugTracker", "Suggérer une amélioration"));
+  $smartyStyle->assign("errorMessage"         , $AppUI->getMsg());
+  $smartyStyle->display("header.tpl");
 }
 
 // -- Code pour les tabBox et Inclusion du fichier demandé --
