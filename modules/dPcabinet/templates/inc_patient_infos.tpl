@@ -1,4 +1,5 @@
-            <a href="index.php?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->patient_id}}" class="buttonedit notext"></a>
+            <button class="edit notext" type="button" onclick="javascript:window.location.href='index.php?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->patient_id}}'">
+            </button>
             {{$patient->_view}}
             <br />
             Age : {{$patient->_age}} ans
