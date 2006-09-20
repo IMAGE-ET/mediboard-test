@@ -19,6 +19,12 @@ $service_id    = mbGetValueFromGet("service_id"   , 0                );
 $type_adm      = mbGetValueFromGet("type_adm"     , 0                );
 $discipline_id = mbGetValueFromGet("discipline_id", 0                );
 
+$listHospis = array();
+$listHospis[1] = "Hospi complètes + ambu";
+$listHospis["comp"] = "Hospi complètes";
+$listHospis["ambu"] = "Ambulatoires";
+$listHospis["exte"] = "Externes";
+
 $total = 0;
 
 $pratSel = new CMediusers;
@@ -61,10 +67,19 @@ foreach($services as $service) {
     "\nON chambre.service_id = service.service_id" .
     "\nAND service.service_id = '$id'" .
     "\nWHERE sejour.annule = 0";
-  if($prat_id)
+  if($prat_id) {
     $sql .= "\nAND sejour.praticien_id = '$prat_id'";
-  if($discipline_id)
+  }
+  if($discipline_id) {
     $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  }
+  if($type_adm) {
+    if($type_adm == 1) {
+      $sql .= "\nAND (sejour.type = 'comp' OR sejour.type = 'ambu')";
+    } else {
+      $sql .= "\nAND sejour.type = '$type_adm'";
+    }
+  }
   $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
   $result = db_loadlist($sql);
@@ -97,6 +112,9 @@ if($prat_id) {
 }
 if($discipline_id) {
   $subtitle .= " $disciplineSel->_view -";
+}
+if($type_adm) {
+  $subtitle .= " ".$listHospis[$type_adm]." -";
 }
 $graph->title->Set($title);
 $graph->title->SetFont(FF_ARIAL,FS_NORMAL,10);
