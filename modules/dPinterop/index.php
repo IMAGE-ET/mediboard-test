@@ -7,18 +7,17 @@
 * @author Thomas Despoix
 */
 
-$tabs = array();
-$tabs[] = array("export_hprim", "Export HPRIM", 0);
-$tabs[] = array("send_mail", "Envoie de mails", 0);
-$tabs[] = array("benchmark", "Montée en charge", 0);
+$module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-//$tabs[] = array("import_orl", "Import ORL", 0);
-//$tabs[] = array("import_dermato", "Import Dermato", 0);
+$module->registerTab("send_mail"     , "Envoie de mails"   , TAB_READ);
+$module->registerTab("export_hprim"  , "Export HPRIM"      , TAB_READ);
+$module->registerTab("benchmark"     , "Montée en charge"  , TAB_READ);
 
-//$tabs[] = array("consult_anesth", "maj consult anesth", 0);
-//$tabs[] = array("codes_ccam", "maj codes ccam", 0);
-//$tabs[] = array("diag_patient", "maj diagnostics patients", 0);
+//$module->registerTab("import_orl"    , "Import ORL"        , TAB_READ);
+//$module->registerTab("import_dermato", "Import Dermato"    , TAB_READ);
 
-$default = "send_mail";
+//$module->registerTab("consult_anesth", "maj consult anesth", TAB_READ);
+//$module->registerTab("codes_ccam"    , "maj codes ccam"    , TAB_READ);
+//$module->registerTab("diag_patient"  , "maj diags patients", TAB_READ);
 
 ?>

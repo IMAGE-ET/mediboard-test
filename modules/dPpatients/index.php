@@ -7,12 +7,11 @@
 * @author Romain Ollivier
 */
 
-$tabs = array();
+$module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$tabs[] = array("vw_idx_patients" , "Chercher un dossier"        , 0);
-$tabs[] = array("vw_full_patients", "Consulter un dossier"       , 0);
-$tabs[] = array("vw_edit_patients", "Edition d'un dossier"       , 1);
-$tabs[] = array("vw_medecins"     , "Médecins correspondants"    , 1);
+$module->registerTab("vw_idx_patients" , "Chercher un dossier"    , TAB_READ);
+$module->registerTab("vw_full_patients", "Consulter un dossier"   , TAB_READ);
+$module->registerTab("vw_edit_patients", "Edition d'un dossier"   , TAB_EDIT);
+$module->registerTab("vw_medecins"     , "Médecins correspondants", TAB_EDIT);
 
-$default = "vw_idx_patients";
 ?>

@@ -7,9 +7,10 @@
 * @author Romain Ollivier
 */
 
-$tabs = array();
-$tabs[] = array("vw_operations", "Salles d'opération", 0);
-$tabs[] = array("vw_reveil"    , "Salle de reveil"   , 0);
-$tabs[] = array("vw_urgences"  , "Liste des urgences", 0);
-$default = "vw_operations";
+$module = CModule::getInstalled(basename(dirname(__FILE__)));
+
+$module->registerTab("vw_operations", "Salles d'opération", TAB_READ);
+$module->registerTab("vw_reveil"    , "Salle de reveil"   , TAB_READ);
+$module->registerTab("vw_urgences"  , "Liste des urgences", TAB_READ);
+
 ?>

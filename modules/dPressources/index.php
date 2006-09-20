@@ -7,9 +7,10 @@
 * @author Romain OLLIVIER
 */
 
-$tabs = array();
-$tabs[] = array("view_planning", "Planning réservations", 0);
-$tabs[] = array("edit_planning", "Administration des plages", 1);
-$tabs[] = array("view_compta", "Comptabilité", 1);
-$default = "view_planning";
+$module = CModule::getInstalled(basename(dirname(__FILE__)));
+
+$module->registerTab("view_planning", "Planning réservations"    , TAB_READ);
+$module->registerTab("edit_planning", "Administration des plages", TAB_EDIT);
+$module->registerTab("view_compta"  , "Comptabilité"             , TAB_EDIT);
+
 ?>

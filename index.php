@@ -226,19 +226,15 @@ if(!$suppressHeaders) {
 
 // -- Code pour les tabBox et Inclusion du fichier demandé --
 
-$tab = $a == "index"  ? mbGetValueFromGetOrSession("tab") : mbGetValueFromGet("tab");
+$tab = $a == "index"  ? mbGetValueFromGetOrSession("tab", 1) : mbGetValueFromGet("tab");
 
 $action = mbGetValue($tab, $a);
 $actionType = $tab ? "tab" : "a";
 require "./modules/$m/".($u ? "$u/" : "")."$a.php";
-if (isset($tabs) && is_array($tabs)){
-	$index = new CTabIndex($tabs, $default);
-
-  // Recheck as TabIndex may change $tab to default value 
+if($actionType == "tab") {
+  $module = CModule::getInstalled($m);
+  $module->showTabs();
   $action = mbGetValue($tab, $a);
-  $actionType = $tab ? "tab" : "a";
-  
-  $index->show();
 }
 
 

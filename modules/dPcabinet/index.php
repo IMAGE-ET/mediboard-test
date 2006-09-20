@@ -7,14 +7,14 @@
 * @author Romain Ollivier
 */
 
-$tabs = array();
-$tabs[] = array("vw_planning", "Programmes de consultation", 0);
-$tabs[] = array("edit_planning", "Créer / Modifier un rendez-vous", 0);
-$tabs[] = array("edit_consultation", "Consultation", 0);
-$tabs[] = array("vw_dossier", "Dossiers", 0);
-$tabs[] = array("form_print_plages", "Impression des plannings", 0);
-$tabs[] = array("vw_compta", "Comptabilité", 0);
-$tabs[] = array("vw_hospi", "Hospi", 0);
-$default = "vw_planning";
+$module = CModule::getInstalled(basename(dirname(__FILE__)));
+
+$module->registerTab("vw_planning"      , "Programme de consultation", TAB_READ);
+$module->registerTab("edit_planning"    , "Prise de rendez-vous"      , TAB_READ);
+$module->registerTab("edit_consultation", "Consultation"              , TAB_READ);
+$module->registerTab("vw_dossier"       , "Dossiers"                  , TAB_READ);
+$module->registerTab("form_print_plages", "Impression plannings"      , TAB_READ);
+$module->registerTab("vw_compta"        , "Comptabilité"              , TAB_READ);
+$module->registerTab("vw_hospi"         , "Hospi"                     , TAB_READ);
 
 ?>

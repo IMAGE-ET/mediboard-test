@@ -7,14 +7,14 @@
 * @author Romain Ollivier
 */
 
-$tabs = array();
-$tabs[] = array("view_dpadmin", "Configuration générale", 0);
-$tabs[] = array("view_modules", "Modules", 0);
-$tabs[] = array("view_history", "Historique", 0);
-$tabs[] = array("view_messages", "Messagerie", 0);
-$tabs[] = array("view_logs", "Logs système", 0);
-$tabs[] = array("view_access_logs", "Logs d'accès", 0);
-$tabs[] = array("view_metrique", "Métrique", 0);
-$default = "view_dpadmin";
+$module = CModule::getInstalled(basename(dirname(__FILE__)));
+
+$module->registerTab("view_dpadmin"    , "Configuration générale", TAB_READ);
+$module->registerTab("view_modules"    , "Modules"               , TAB_READ);
+$module->registerTab("view_history"    , "Historique"            , TAB_READ);
+$module->registerTab("view_messages"   , "Messagerie"            , TAB_READ);
+$module->registerTab("view_logs"       , "Logs système"          , TAB_READ);
+$module->registerTab("view_access_logs", "Logs d'accès"          , TAB_READ);
+$module->registerTab("view_metrique"   , "Métrique"              , TAB_READ);
 
 ?>

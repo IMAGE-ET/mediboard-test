@@ -7,13 +7,14 @@
 * @author Romain Ollivier
 */
 
-$tabs = array();
-$tabs[] = array("vw_planning_week", "Planning de la semaine", 1);
-$tabs[] = array("vw_edit_planning", "Planning du jour", 1);
-$tabs[] = array("vw_edit_interventions", "Gestion des interventions", 1);
-$tabs[] = array("vw_urgences", "Voir les urgences", 1);
-$tabs[] = array("vw_idx_materiel", "Commande de matériel", 1);
-$tabs[] = array("vw_idx_salles", "Gestion des salles", 1);
-$tabs[] = array("print_planning", "Impression des plannings", 0);
-$default = 0;
+$module = CModule::getInstalled(basename(dirname(__FILE__)));
+
+$module->registerTab("vw_planning_week"     , "Planning de la semaine"   , TAB_EDIT);
+$module->registerTab("vw_edit_planning"     , "Planning du jour"         , TAB_EDIT);
+$module->registerTab("vw_edit_interventions", "Gestion des interventions", TAB_EDIT);
+$module->registerTab("vw_urgences"          , "Voir les urgences"        , TAB_EDIT);
+$module->registerTab("vw_idx_materiel"      , "Commande de matériel"     , TAB_EDIT);
+$module->registerTab("vw_idx_salles"        , "Gestion des salles"       , TAB_EDIT);
+$module->registerTab("print_planning"       , "Impression des plannings" , TAB_READ);
+
 ?>

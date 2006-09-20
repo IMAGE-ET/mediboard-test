@@ -7,9 +7,10 @@
 * @author Romain Ollivier
 */
 
-$tabs = array();
-$tabs[] = array("vw_find_code"  , "Rechercher un code" , 0);
-$tabs[] = array("vw_full_code"  , "Affichage d'un code", 0);
-$tabs[] = array("vw_idx_favoris", "Mes favoris"        , 0);
-$default = "vw_find_code";
+$module = CModule::getInstalled(basename(dirname(__FILE__)));
+
+$module->registerTab("vw_find_code"  , "Rechercher un code" , TAB_READ);
+$module->registerTab("vw_full_code"  , "Affichage d'un code", TAB_READ);
+$module->registerTab("vw_idx_favoris", "Mes favoris"        , TAB_READ);
+
 ?>

@@ -7,10 +7,10 @@
 * @author Romain Ollivier
 */
 
-$tabs = array();
-$tabs[] = array("edit_compta", "Comptabilité", 0);
-$tabs[] = array("edit_paie", "Fiche de paie", 0);
-$tabs[] = array("edit_params", "Paramètres", 0);
-$default = "edit_compta";
+$module = CModule::getInstalled(basename(dirname(__FILE__)));
+
+$module->registerTab("edit_compta", "Comptabilité" , TAB_READ);
+$module->registerTab("edit_paie"  , "Fiche de paie", TAB_READ);
+$module->registerTab("edit_params", "Paramètres"   , TAB_READ);
 
 ?>

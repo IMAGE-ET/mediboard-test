@@ -9,6 +9,12 @@
  
 global $AppUI, $m;
 
+if(!defined("TAB_READ")) {
+  define("TAB_READ"  , "0");
+  define("TAB_EDIT"  , "1");
+  define("TAB_ADMIN" , "2");
+}
+
 /**
 * Module class
 */
@@ -29,8 +35,9 @@ class CModule extends CMbObject {
   var $mod_active    = null; // active module
   var $mod_ui_active = null; // visible module
   var $mod_ui_order  = null; // UI Position
-    
+
   // Form Fields
+  var $_tabs      = null;  // List of tabs with permission
   var $_upgradable = null; // Check if upgradable
   
   // Static Collections
@@ -126,6 +133,51 @@ class CModule extends CMbObject {
         $module_visible[$module->mod_name] =& $module;
       }
     }
+  }
+  
+  function registerTab($file, $name, $permType) {
+    switch($permType) {
+      case TAB_READ:
+        if($this->canRead()) {
+          $this->_tabs[] = array($file, $name);
+        }
+        break;
+      case TAB_EDIT:
+        if($this->canEdit()) {
+          $this->_tabs[] = array($file, $name);
+        }
+        break;
+      case TAB_ADMIN:
+        if($this->canAdmin()) {
+          $this->_tabs[] = array($file, $name);
+        }
+        break;
+    }
+  }
+  
+  function showTabs() {
+    global $uistyle, $AppUI, $tab;
+    
+    if(is_numeric($tab)) {
+      $tab = $this->_tabs[0][0];
+    }
+
+    require_once($AppUI->getSystemClass("smartydp"));
+    $smartyStyle = new CSmartyDP(1);
+    $smartyStyle->template_dir = "style/$uistyle/templates/";
+    $smartyStyle->compile_dir  = "style/$uistyle/templates_c/";
+    $smartyStyle->config_dir   = "style/$uistyle/configs/";
+    $smartyStyle->cache_dir    = "style/$uistyle/cache/";
+    
+    $smartyStyle->assign("tabs"   , $this->_tabs);
+    $smartyStyle->assign("tab"    , $tab);
+    $smartyStyle->assign("fintab" , false);
+      
+    $smartyStyle->display("tabbox.tpl");
+    require($AppUI->cfg["root_dir"]."/modules/".$this->mod_name."/".$tab.".php");
+  
+    $smartyStyle->assign("fintab", true);
+    $smartyStyle->display("tabbox.tpl");
   }
   
   /**

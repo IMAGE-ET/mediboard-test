@@ -7,10 +7,11 @@
 * @author Romain Ollivier
 */
 
-$tabs = array();
-$tabs[] = array("vw_dossier", "Dossiers patient", 0);
-$tabs[] = array("edit_actes", "Codage des actes", 0);
-$tabs[] = array("labo_groupage", "Groupage GHM", 0);
-$tabs[] = array("vw_list_hospi", "Liste des hospitalisations", 0);
-$default = "vw_dossier";
+$module = CModule::getInstalled(basename(dirname(__FILE__)));
+
+$module->registerTab("vw_dossier"   , "Dossiers patient"          , TAB_READ);
+$module->registerTab("edit_actes"   , "Codage des actes"          , TAB_READ);
+$module->registerTab("labo_groupage", "Groupage GHM"              , TAB_READ);
+$module->registerTab("vw_list_hospi", "Liste des hospitalisations", TAB_READ);
+
 ?>

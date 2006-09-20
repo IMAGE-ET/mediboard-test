@@ -7,9 +7,10 @@
 * @author Romain Ollivier
 */
 
-$tabs = array();
-$tabs[] = array("vw_edit_users", "Utilisateurs", 0);
-$tabs[] = array("edit_perms", "Gestion des droits", 1);
-$tabs[] = array("edit_prefs", "Préférences Utilisateur", 1);
-$default = "vw_edit_users";
+$module = CModule::getInstalled(basename(dirname(__FILE__)));
+
+$module->registerTab("vw_edit_users", "Utilisateurs"           , TAB_READ);
+$module->registerTab("edit_perms"   , "Gestion des droits"     , TAB_EDIT);
+$module->registerTab("edit_prefs"   , "Préférences Utilisateur", TAB_EDIT);
+
 ?>
