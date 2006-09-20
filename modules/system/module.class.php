@@ -161,6 +161,8 @@ class CModule extends CMbObject {
     if(is_numeric($tab)) {
       $tab = $this->_tabs[0][0];
     }
+    
+    $AppUI->savePlace();
 
     $action     = $tab;
     $actionType = "tab";
@@ -184,7 +186,8 @@ class CModule extends CMbObject {
   }
   
   function showAction() {
-    global $u, $a;
+    global $AppUI, $u, $a;
+    $AppUI->savePlace();
     $action     = $a;
     $actionType = "a";
     require_once "./modules/".$this->mod_name."/".($u ? "$u/" : "")."$a.php";
