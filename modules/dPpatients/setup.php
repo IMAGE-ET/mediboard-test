@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.32";
+$config["mod_version"]     = "0.33";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -178,7 +178,24 @@ class CSetupdPpatients {
         $sql = "ALTER TABLE `patients` ADD `ald` text AFTER `rques` ;";
         db_exec( $sql ); db_error();
       case "0.32":
-        return "0.32";
+        $sql = "UPDATE `medecin` SET `tel` = NULL WHERE `tel`='NULL' ;";
+        db_exec( $sql ); db_error();
+        $sql = "UPDATE `medecin` SET `fax` = NULL WHERE `fax`='NULL' ;";
+        db_exec( $sql ); db_error();
+        $sql = "UPDATE `medecin` SET `email` = NULL WHERE `email`='NULL' ;";
+        db_exec( $sql ); db_error();
+        $sql = "UPDATE `medecin` SET `specialite` = NULL WHERE `specialite`='NULL' ;";
+        db_exec( $sql ); db_error();
+        $sql = "UPDATE `medecin` SET `disciplines` = NULL WHERE `disciplines`='NULL' ;";
+        db_exec( $sql ); db_error();
+        $sql = "UPDATE `medecin` SET `adresse` = NULL WHERE `adresse`='NULL' ;";
+        db_exec( $sql ); db_error();
+        $sql = "UPDATE `medecin` SET `ville` = NULL WHERE `ville`='NULL' ;";
+        db_exec( $sql ); db_error();
+        $sql = "UPDATE `medecin` SET `cp` = NULL WHERE `cp` LIKE '%NULL%' ;";
+        db_exec( $sql ); db_error();
+      case "0.33":
+        return "0.33";
     }
     return false;
   }
