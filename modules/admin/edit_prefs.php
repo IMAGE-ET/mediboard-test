@@ -8,7 +8,6 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m, $utypes;
-
 // Utilisateur demandé
 $user_id = mbGetValueFromGet("user_id" , 0);
 
@@ -39,6 +38,9 @@ if(!array_key_exists("LOCALE",$prefs)){
 }
 if(!array_key_exists("UISTYLE",$prefs)){
   $prefs["UISTYLE"] = null;
+}
+if(!array_key_exists("DEPARTEMENT",$prefs)){
+  $prefs["DEPARTEMENT"] = null;
 }
 
 // Chargement des languages

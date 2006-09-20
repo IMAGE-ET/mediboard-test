@@ -1,7 +1,7 @@
 {{if !$tab}}
-<form name="changeuser" action="./index.php?m=admin&amp;a={{$a}}" method="post">
+<form name="changeuser" action="./index.php?m=admin&amp;a={{$a}}" method="post" onsubmit="return checkForm(this)">
 {{else}}
-<form name="changeuser" action="./index.php?m=admin&amp;tab={{$tab}}" method="post">
+<form name="changeuser" action="./index.php?m=admin&amp;tab={{$tab}}" method="post" onsubmit="return checkForm(this)">
 {{/if}}
 <input type="hidden" name="dosql" value="do_preference_aed" />
 <input type="hidden" name="pref_user" value="{{$user_id}}" />
@@ -25,7 +25,7 @@
   </tr>
   <tr>
     <th>
-      {{tr}}Locale{{/tr}}
+      <label for="pref_name[LOCALE]" title="Veuillez choisir le langage que vous souhaiter utiliser">{{tr}}Locale{{/tr}}</label>
     </th>
     <td>
       <select name="pref_name[LOCALE]" class="text" size="1">
@@ -39,7 +39,7 @@
   </tr>
   <tr>
     <th>
-      {{tr}}User Interface Style{{/tr}}
+      <label for="pref_name[UISTYLE]" title="Veuillez chosiir le skin que vous souhaiter utiliser">{{tr}}User Interface Style{{/tr}}</label>
     </th>
     <td>
       <select name="pref_name[UISTYLE]" class="text" size="1">
@@ -49,6 +49,14 @@
         </option>
         {{/foreach}}
       </select>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <label for="pref_name[DEPARTEMENT]" title="Veuillez choisir le numéro du département par défaut à utiliser">{{tr}}N° du département par Défaut{{/tr}}</label>
+    </th>
+    <td>
+      <input type="text" name="pref_name[DEPARTEMENT]" value="{{$prefs.DEPARTEMENT}}" maxlength="3" size="4" title="num|minMax|0|999"/>
     </td>
   </tr>
   <tr>

@@ -27,15 +27,17 @@ else {
   $medecin->load($medecin_id);
 }
 
+$code_default = str_pad(@$AppUI->user_prefs["DEPARTEMENT"], 2, "0", STR_PAD_LEFT);
+
 // Récuperation des patients recherchés
 if($dialog) {
   $medecin_nom    = mbGetValueFromGet("medecin_nom"   , ""  );
   $medecin_prenom = mbGetValueFromGet("medecin_prenom", ""  );
-  $medecin_dept   = mbGetValueFromGet("medecin_dept"  , "17");
+  $medecin_dept   = mbGetValueFromGet("medecin_dept"  , $code_default);
 } else {
   $medecin_nom    = mbGetValueFromGetOrSession("medecin_nom"       );
   $medecin_prenom = mbGetValueFromGetOrSession("medecin_prenom"    );
-  $medecin_dept   = mbGetValueFromGetOrSession("medecin_dept", "17");
+  $medecin_dept   = mbGetValueFromGetOrSession("medecin_dept", $code_default);
 }
 
 $where = array();
