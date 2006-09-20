@@ -41,6 +41,27 @@ Class.extend(Function, {
  * Element utility object
  */
 
+// Hack because IE won't be able to extend TextNodes (nodeType == 3). 
+// Useful for Element.cleanWhitespance used in Scriptaculous auto-completion
+Element.extend = function(element) {
+  if (!element) return;
+  
+  // The Hack line
+  if (element.nodeType == 3) return element; 
+  
+  if (!element._extended && element.tagName && element != window) {
+    var methods = Element.Methods;
+    for (property in methods) {
+      var value = methods[property];
+      if (typeof value == 'function')
+        element[property] = value.bind(null, element);
+    }
+  }
+
+  element._extended = true;
+  return element;
+}
+
 // Caution: Object.extend syntax causes weird exceptions to be thrown further on execution
 
 Element.addEventHandler = function(oElement, sEvent, oHandler) {

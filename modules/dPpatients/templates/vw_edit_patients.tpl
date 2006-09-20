@@ -67,7 +67,6 @@ function setMed( key, nom, prenom, sElementName ){
 }
 
 function updateFields(selected) {
-  debugArray(selected.childNodes, "Item selected");
   Element.cleanWhitespace(selected);
   dn = selected.childNodes;
   $('editFrm_cp').value = dn[0].firstChild.firstChild.nodeValue;
@@ -102,13 +101,13 @@ function pageMain() {
 <table class="main">
   {{if $patient->patient_id}}
   <tr>
-    <td><a class="buttonnew" href="index.php?m={{$m}}&amp;patient_id=0">Créer un nouveau patient</a></td>
+    <td><a class="buttonnew" href="?m={{$m}}&amp;patient_id=0">Créer un nouveau patient</a></td>
   </tr>
   {{/if}}
   <tr>
     <td>
 
-      <form name="editFrm" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
       <input type="hidden" name="dosql" value="do_patients_aed" />
       <input type="hidden" name="del" value="0" />

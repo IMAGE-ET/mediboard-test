@@ -43,9 +43,15 @@ Url.prototype.redirect = function() {
 
 Url.prototype.pop = function(iWidth, iHeight, sWindowName) {
   this.addParam("dialog", "1");
-  params = 'left=50, top=50, height=' + iHeight + ', width=' + iWidth;
-  params += ', resizable=yes, scrollbars=yes, menubar=yes';
-  this.oWindow = window.open(this.make(), name, params);  
+  var aFeatures = new Array;
+  aFeatures.push("left=50");
+  aFeatures.push("top=50");
+  aFeatures.push("height=" + iHeight);
+  aFeatures.push("width=" + iWidth);
+  aFeatures.push("scrollbars=yes");
+  aFeatures.push("resizable=yes");
+  aFeatures.push("menubar=yes");
+  this.oWindow = window.open(this.make(), sWindowName, aFeatures.join(", "));  
 }
 
 Url.prototype.popunder = function(iWidth, iHeight, sWindowName) {
