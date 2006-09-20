@@ -9,10 +9,6 @@
 
 global $AppUI, $canView, $m;
 
-if (!$canView) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
-
 $tabs = array();
 $tabs[] = array("vw_idx_mediusers", "Utilisateurs", 0);
 $tabs[] = array("vw_idx_functions", "Fonctions des utilisateurs", 0);
