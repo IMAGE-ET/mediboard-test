@@ -15,6 +15,7 @@
       <br />
 
       {{$curr_code->libelleLong}}
+      {{if $canEdit}}
       <br />
       <form name="delFavoris" action="./index.php?m={{$m}}" method="post">
       <input type="hidden" name="dosql" value="do_favoris_aed" />
@@ -24,6 +25,7 @@
         Retirer de mes favoris
       </button>
 	  </form>
+	  {{/if}}
     </td>
   {{if ($curr_key+1) is div by 4 or ($curr_key+1) == $codes|@count}}
   </tr>

@@ -9,12 +9,12 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-if (!$canRead) {			// lock out users that do not have at least readPermission on this module
+if (!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$clefs = mbGetValueFromGetOrSession("clefs");
-$code  = mbGetValueFromGetOrSession("code" );
+$clefs    = mbGetValueFromGetOrSession("clefs");
+$code     = mbGetValueFromGetOrSession("code");
 $selacces = mbGetValueFromGetOrSession("selacces");
 $seltopo1 = mbGetValueFromGetOrSession("seltopo1");
 $seltopo2 = mbGetValueFromGetOrSession("seltopo2");
@@ -101,15 +101,15 @@ while($row = db_fetch_array($result)) {
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("clefs", $clefs);
+$smarty->assign("clefs"   , $clefs);
 $smarty->assign("selacces", $selacces);
 $smarty->assign("seltopo1", $seltopo1);
 $smarty->assign("seltopo2", $seltopo2);
-$smarty->assign("code", $code);
-$smarty->assign("acces", $acces);
-$smarty->assign("topo1", $topo1);
-$smarty->assign("topo2", $topo2);
-$smarty->assign("codes", $codes);
+$smarty->assign("code"    , $code);
+$smarty->assign("acces"   , $acces);
+$smarty->assign("topo1"   , $topo1);
+$smarty->assign("topo2"   , $topo2);
+$smarty->assign("codes"   , $codes);
 $smarty->assign("numcodes", $numcodes);
 
 $smarty->display("vw_find_code.tpl");
