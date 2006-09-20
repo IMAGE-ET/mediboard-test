@@ -1,0 +1,1 @@
+{{include file="../../mediboard/templates/tabbox.tpl"}}
