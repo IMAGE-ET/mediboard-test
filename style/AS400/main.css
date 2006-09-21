@@ -325,49 +325,12 @@ a.buttontick:hover, a.buttonchange:hover {
   color: #000;
   background-color: #ff0;
 }
-button.edit, a.buttonedit {
-  background-image: url(images/buttons/edit.gif);
-  padding-left: 16px;
-}
-
-button.trash, a.buttontrash {
-  background-image: url(images/buttons/trash.gif);
-  padding-left: 18px; 
-}
-
-button.submit, a.buttonsubmit {
-  background-image: url(images/buttons/save.gif);
-  padding-left: 18px;
-}
-button.new, a.buttonnew {
-  background-image: url(images/buttons/new.gif);
-  padding-left: 18px;
-}
-button.print, a.buttonprint {
-  background-image: url(images/buttons/print.gif);
-  padding-left: 18px;
-}
-button.cancel, a.buttoncancel {
-  background-image: url(images/buttons/cancel.gif);
-  padding-left: 18px;
-}
-
-button.modify, a.buttonmodify {
-  background-image: url(images/buttons/save.gif);
-  padding-left: 18px;
-}
-button.search, a.buttonsearch {
-  background-image: url(images/buttons/search.gif);
-  padding-left: 18px;
-}
-button.tick, a.buttontick {
-  background-image: url(images/buttons/tick.gif);
-  padding-left: 18px;
-}
-
+button.edit, a.buttonedit, button.trash, a.buttontrash, button.submit, a.buttonsubmit,
+button.new, a.buttonnew, button.print, a.buttonprint, button.cancel, a.buttoncancel,
+button.modify, a.buttonmodify, button.search, a.buttonsearch, button.tick, a.buttontick,
 button.change, a.buttonchange {
-  background-image: url(images/buttons/change.gif);
-  padding-left: 18px;
+  background-image: none;
+  padding: 1px;
 }
 
 input {
