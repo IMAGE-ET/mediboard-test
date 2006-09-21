@@ -34,10 +34,6 @@ $finalPatient->load($listIds[0]);
 $finalPatient->loadRefsFwd();
 $finalPatient->patient_id = null;
 
-$titleBlock = new CTitleBlock("Fusion de dossiers patient", "$m.png", $m, "$m.$a");
-$titleBlock->addCell();
-$titleBlock->show();
-
 // Création du template
 $smarty = new CSmartyDP(1);
 

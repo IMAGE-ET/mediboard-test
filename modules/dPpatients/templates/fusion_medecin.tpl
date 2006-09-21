@@ -13,6 +13,8 @@ function setChecked(oField, sValue) {
 
 </script>
 
+<h2 class="module {{$m}}">Fusion de médecins</h2>
+
 <form name="editFrm" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="dosql" value="do_medecins_fusion" />

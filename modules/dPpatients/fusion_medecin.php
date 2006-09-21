@@ -34,10 +34,6 @@ $finalMedecin->load($listIds[0]);
 $finalMedecin->loadRefsFwd();
 $finalMedecin->medecin_id = null;
 
-$titleBlock = new CTitleBlock("Fusion de medecins", "$m.png", $m, "$m.$a");
-$titleBlock->addCell();
-$titleBlock->show();
-
 // Création du template
 $smarty = new CSmartyDP(1);
 

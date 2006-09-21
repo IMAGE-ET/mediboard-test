@@ -98,7 +98,18 @@ h2 {
   font-size: 18px;
   font-weight: bold;
   color: #494;
-  margin: 10px 10px;
+  margin: 5px 10px;
+}
+
+h2.module {
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding: 10px 0;
+  padding-left: 55px;
+}
+
+h2.dPpatients{
+  background-image: url(../../modules/dPpatients/images/dPpatients.png);
 }
 
 h3 {
