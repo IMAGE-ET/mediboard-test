@@ -7,6 +7,8 @@
  *  @author Thomas Despoix
 */
 
+global $mp_status;
+
 $mp_status = array(
   "all"     => "Tous les messages",
   "past"    => "Déjà publiés",
