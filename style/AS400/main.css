@@ -322,6 +322,7 @@ a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange {
 a.button:hover, button:hover, a.buttontrash:hover, a.buttonsubmit:hover, a.buttonnew:hover,
 a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, a.buttonsearch:hover, 
 a.buttontick:hover, a.buttonchange:hover {
+  color: #000;
   background-color: #ff0;
 }
 button.edit, a.buttonedit {
