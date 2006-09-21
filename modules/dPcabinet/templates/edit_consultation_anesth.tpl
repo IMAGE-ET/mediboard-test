@@ -33,7 +33,7 @@ function initAccord(init_resize){
   oCookie.setSubValue("height", fHeight);
   if(init_resize){
     oAccord.lastExpandedTab.content.style.height = fHeight + "px";
-    oAccord.setOptions( { panelHeight: fHeight } );
+    oAccord.options.panelHeight = fHeight;
   }
 }
 
