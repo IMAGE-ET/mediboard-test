@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $m;
+global $AppUI, $m, $exam_audio, $graph_tympan_gauche, $graph_tympan_droite;
 
 $consultation_id = mbGetValueFromGetOrSession("consultation_id");
 $where["consultation_id"] = "= '$consultation_id'";

@@ -8,6 +8,7 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m;
+global $frequences, $pressions, $exam_audio, $graph_tympan_gauche, $graph_tympan_droite;
 
 if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );

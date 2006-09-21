@@ -7,7 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $exam_audio;
 
 $consultation_id = mbGetValueFromGetOrSession("consultation_id");
 $where["consultation_id"] = "= '$consultation_id'";

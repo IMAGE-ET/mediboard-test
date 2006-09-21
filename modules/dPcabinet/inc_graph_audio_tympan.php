@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $graph_tympan_gauche, $graph_tympan_droite;
 
 require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"));
 require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_line"));

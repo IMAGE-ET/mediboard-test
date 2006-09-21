@@ -7,6 +7,8 @@
 * @author Romain Ollivier
 */
 
+global $frequences, $pressions;
+
 $frequences = array(
   "125Hz",
   "250Hz",
