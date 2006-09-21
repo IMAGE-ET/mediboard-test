@@ -70,12 +70,14 @@ class CPermModule extends CMbObject {
     return(CPermModule::getInfoModule("view", $mod_id, $permType));
   }
   
-  function getInfoModule($field, $mod_id, $permType) {
+  function getInfoModule($field, $mod_id, $permType, $user_id = null) {
     global $AppUI, $permissionSystemeDown;
     if($permissionSystemeDown) {
       return true;
     }
-    $user_id = $AppUI->user_id;
+    if(!$user_id) {
+      $user_id = $AppUI->user_id;
+    }
     $permModule = new CPermModule;
     $where = array();
     $where["user_id"] = "= '$user_id'";
