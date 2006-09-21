@@ -192,7 +192,7 @@ class CSetupdPpatients {
         db_exec( $sql ); db_error();
         $sql = "UPDATE `medecin` SET `ville` = NULL WHERE `ville`='NULL' ;";
         db_exec( $sql ); db_error();
-        $sql = "UPDATE `medecin` SET `cp` = NULL WHERE `cp` LIKE '%NULL%' ;";
+        $sql = "UPDATE `medecin` SET `cp` = NULL WHERE `cp` LIKE 'NULL%' ;";
         db_exec( $sql ); db_error();
       case "0.33":
         return "0.33";
