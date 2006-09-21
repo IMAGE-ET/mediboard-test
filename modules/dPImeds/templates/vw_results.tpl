@@ -46,7 +46,7 @@ function setPat(key, val) {
           <td>
             <input type="hidden" name="m" value="{{$m}}" />
             <select name="sejour_id" onchange="this.form.submit()">
-              <option value="">&mdash séjours disponibles</option>
+              <option value="">&mdash; séjours disponibles</option>
               {{foreach from=$patient->_ref_sejours item=curr_sejour}}
               <option value="{{$curr_sejour->sejour_id}}" {{if $curr_sejour->sejour_id == $sejour->sejour_id}}selected="selected"{{/if}}>
                 {{$curr_sejour->_view}}
