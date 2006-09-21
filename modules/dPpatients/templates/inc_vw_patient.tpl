@@ -305,7 +305,7 @@ function reloadAfterSaveDoc(){
   {{/foreach}}
   {{/if}}
   
-  {{if $canReadFiles}}
+  {{if $canReadFiles && 0}}
   <tr>
     <th class="category" colspan="2">Fichiers</th>
   </tr>
@@ -348,7 +348,7 @@ function reloadAfterSaveDoc(){
   </tr>
   {{/if}}
   
-  {{if $canReadCptRendus}}
+  {{if $canReadCptRendus && 0}}
   <tr>
     <th class="category" colspan="2">Documents</th>
   </tr>
