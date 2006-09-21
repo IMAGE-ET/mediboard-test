@@ -164,6 +164,8 @@
 "module-dPhospi-long"=>"Planning des hospitalisations",
 "module-dPinterop-court"=>"Interop",
 "module-dPinterop-long"=>"Interopérabilité mediboard",
+"module-dPImeds-court"=>"Imeds",
+"module-dPImeds-long"=>"Interface Imeds",
 "module-dPmateriel-court"=>"Matériel",
 "module-dPmateriel-long"=>"Gestion du matériel",
 "module-dPpatients-court"=>"Dossiers patient",

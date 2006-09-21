@@ -163,6 +163,8 @@
 "module-dPgestionCab-long"=>"Gestion comptable de cabinet",
 "module-dPhospi-court"=>"Planning hospi",
 "module-dPhospi-long"=>"Planning des hospitalisations",
+"module-dPImeds-court"=>"Imeds",
+"module-dPImeds-long"=>"Interface Imeds",
 "module-dPinterop-court"=>"Interop",
 "module-dPinterop-long"=>"Interopérabilité mediboard",
 "module-dPmateriel-court"=>"Matériel",

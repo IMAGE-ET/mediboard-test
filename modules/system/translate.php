@@ -1,5 +1,7 @@
 <?php /* SYSTEM $Id$ */
 
+global $canEdit, $AppUI;
+
 // only user_type of Administrator (1) can access this page
 if (!$canEdit || $AppUI->user_type != 1) {
 	$AppUI->redirect( "m=system&a=access_denied" );
