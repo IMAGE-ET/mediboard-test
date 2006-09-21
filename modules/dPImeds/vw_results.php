@@ -7,7 +7,7 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $canRead, $canEdit, $m, $g;
+global $AppUI, $canRead, $canEdit, $m, $g, $dPconfig;
 
 if(!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
@@ -35,6 +35,7 @@ $smarty = new CSmartyDP(1);
 
 $smarty->assign("patient", $patient);
 $smarty->assign("sejour" , $sejour );
+$smarty->assign("url"    , $dPconfig["dPImeds"]["url"]);
 
 $smarty->display("vw_results.tpl");
 
