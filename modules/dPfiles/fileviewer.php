@@ -8,16 +8,6 @@
 
 require_once("./lib/phpThumb/phpthumb.class.php");
 
-// Check that the user has correctly set the root directory
-is_file($dPconfig["root_dir"]."/includes/config.php") 
-  or die("ERREUR FATALE: le repertoire racine est probablement mal configuré");
-
-
-// PHP Configuration
-ini_set("memory_limit", "64M");
-
-
-
 // Direct acces needs Administrator rights
 $file_path = mbGetValueFromGet("file_path");
 if ($file_path) {
