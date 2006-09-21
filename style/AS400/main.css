@@ -3,11 +3,16 @@
 /* Body */
 
 body {
-  font-family: arial, sans-serif;
+  font-family: "Courier New", Courier, mono;
   color: #0f0;
   font-size: 11px;  
   background: #000;
   margin: 0px;
+}
+
+table {
+  font-family: "Courier New", Courier, mono;
+  font-size: 11px;
 }
 
 /* Login */
@@ -526,7 +531,7 @@ table.tbl td.date img {
 }
 
 table.titleblock td.titlecell {
-  font-family: Arial;
+  font-family: "Courier New", Courier, mono;
   font-size: 20px; 
   color: #0f0;
   width: 100%;
