@@ -3,16 +3,16 @@
 /* Body */
 
 body {
-  font-family: "Courier New", Courier, mono;
+  font-family: "Lucida Console", "Courier New", Courier, mono;
   color: #0f0;
-  font-size: 11px;  
+  font-size: 9px;  
   background: #000;
   margin: 0px;
 }
 
 table {
-  font-family: "Courier New", Courier, mono;
-  font-size: 11px;
+  font-family: "Lucida Console", "Courier New", Courier, mono;
+  font-size: 9px;
 }
 
 /* Login */
@@ -37,7 +37,7 @@ table {
 }
 
 #login table td.logo a{
-  font-size: 40px;
+  font-size: 30px;
   white-space: normal;
 }
 
@@ -81,7 +81,7 @@ table.form th {
 
 table.form th.title {
   color: #fff;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold; 
   text-align: center;
   background-color: #000;
@@ -177,7 +177,7 @@ table.form td.button {
 }
 
 table.form td.date div {
-  font-size: 11px;
+  font-size: 9px;
   border: 1px dotted #0f0;
   padding: 0px 1px;
   margin: 1px;
@@ -228,7 +228,7 @@ td#mainHeader td.logo {
 
 td#mainHeader td.welcome {
   text-align: right;
-  font-size: 14px;
+  font-size: 12px;
   font-style: italic;
 }
 
@@ -314,6 +314,7 @@ table.tabmenu td.selectedRight {
 
 a.button, button, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
 a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange {
+  font-family: "Lucida Console", "Courier New", Courier, mono;
   color: #fff;
   background-color: #0f0;
 }
@@ -369,8 +370,9 @@ button.change, a.buttonchange {
 }
 
 input {
+  font-family: "Lucida Console", "Courier New", Courier, mono;
   border: 1px #0f0 dashed;
-  font-size: 12px;
+  font-size: 10px;
   margin: 1px;
   padding: 0px 2px;
 }
@@ -378,6 +380,7 @@ input {
 input[type=submit],
 input[type=reset],
 input[type=button] {
+  font-family: "Lucida Console", "Courier New", Courier, mono;
   border-color: #0f0;
   background: #0f0;
   margin: 0 10px;
@@ -392,15 +395,17 @@ input[type=button]:hover {
 }
 
 select {
+  font-family: "Lucida Console", "Courier New", Courier, mono;
   border: 1px #0f0 dashed;
-  font-size: 10px;
+  font-size: 9px;
   padding: 0;
 }
 
 optgroup {
+  font-family: "Lucida Console", "Courier New", Courier, mono;
   color: #fff;
   font-style: normal;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: bold;
   padding: 0px;
   padding-left: 5px;
@@ -408,9 +413,10 @@ optgroup {
 }
 
 option {
+  font-family: "Lucida Console", "Courier New", Courier, mono;
   color: #fff;
   font-style: normal;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: normal;
   padding: 0px;
   padding-right: 4px;
@@ -420,6 +426,7 @@ option {
 input,
 select,
 textarea {
+  font-family: "Lucida Console", "Courier New", Courier, mono;
   color: #fff;
   padding: 1px;
   border: 1px #0f0 solid;
@@ -478,7 +485,7 @@ table.tbl th {
 }
 
 table.tbl th.title {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;  
   text-align: center;
   background: #000;
@@ -517,7 +524,7 @@ table.tbl tr.clear th {
 }
 
 table.tbl td.date div {
-  font-size: 11px;
+  font-size: 9px;
   border: 1px dotted;
   padding: 0px 1px;
   margin: 1px;
@@ -531,8 +538,8 @@ table.tbl td.date img {
 }
 
 table.titleblock td.titlecell {
-  font-family: "Courier New", Courier, mono;
-  font-size: 20px; 
+  font-family: "Lucida Console", "Courier New", Courier, mono;
+  font-size: 16px; 
   color: #0f0;
   width: 100%;
   padding-bottom: 5px;
@@ -541,7 +548,7 @@ table.titleblock td.titlecell {
 /* Main table */
 
 th.title {
-  font-size: 14px;
+  font-size: 12px;
   color: #0f0;
   font-weight: bold;  
   text-align: center;
@@ -557,6 +564,7 @@ th.title {
   width: 100%;
 }
 div.message, div.loading, div.error, div.warning {
+   color: #f00;
    width: 10%;
    white-space: nowrap;
 }
