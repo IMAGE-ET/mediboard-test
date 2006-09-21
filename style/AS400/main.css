@@ -558,13 +558,12 @@ th.title {
 
 /* System message */
 #systemMsg {
-  font-size: 80%;
   float : none;
   text-align: center;
   width: 100%;
 }
 div.message, div.loading, div.error, div.warning {
-   color: #f00;
+   color: #f66;
    width: 10%;
    white-space: nowrap;
 }
