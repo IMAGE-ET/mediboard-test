@@ -38,9 +38,9 @@ if ($user_id) {
   }
   $where ["chir_id"] = "IN (".implode(",", $inUsers).")";
 }
-
+$order = "chir_id ASC, nom ASC";
 $listesPrat = new CListeChoix();
-$listesPrat = $listesPrat->loadList($where);
+$listesPrat = $listesPrat->loadList($where, $order);
 foreach($listesPrat as $key => $value) {
   $listesPrat[$key]->loadRefsFwd();
 }
@@ -56,9 +56,9 @@ if($user_id) {
   }
   $where ["function_id"] = "IN (".implode(",", $inFuncs).")";
 }
-
+$order = "function_id ASC, nom ASC";
 $listesFunc = new CListeChoix();
-$listesFunc = $listesFunc->loadList($where);
+$listesFunc = $listesFunc->loadList($where, $order);
 foreach($listesFunc as $key => $value) {
   $listesFunc[$key]->loadRefsFwd();
 }

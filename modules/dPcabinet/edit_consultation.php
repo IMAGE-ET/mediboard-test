@@ -13,8 +13,10 @@ if (!$canEdit) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
 
+$vue2_default = isset($AppUI->user_prefs["CABCONSULT"]) ? $AppUI->user_prefs["CABCONSULT"] : 0 ;
+
 $date  = mbGetValueFromGetOrSession("date", mbDate());
-$vue   = mbGetValueFromGetOrSession("vue2", 0);
+$vue   = mbGetValueFromGetOrSession("vue2", $vue2_default);
 $today = mbDate();
 $hour  = mbTime(null);
 $_is_anesth = false;

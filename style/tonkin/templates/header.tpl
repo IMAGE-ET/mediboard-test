@@ -70,6 +70,7 @@ function popChgPwd() {
             </select>
             {{$helpOnline}} |
             <a href="javascript:popChgPwd();">Changez votre mot de passe</a> |
+            <a href="./index.php?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a> |
             <a href="?logout=-1">{{tr}}Logout{{/tr}}</a> |
             </form>
           </td>

@@ -33,15 +33,36 @@ WHERE pref_user = $user_id
 ";
 $prefs = db_loadHashList( $sql );
 
-if(!array_key_exists("LOCALE",$prefs)){
-  $prefs["LOCALE"] = null;
+$prefsUser = array();
+
+// Préférences Globales
+$array_list_pref_generale = array("LOCALE","UISTYLE");
+foreach($array_list_pref_generale as $namePref){
+  if(!array_key_exists("$namePref",$prefs)){
+    $prefs["$namePref"] = null;
+  }
+  $prefsUser["GENERALE"]["$namePref"] = $prefs["$namePref"];
 }
-if(!array_key_exists("UISTYLE",$prefs)){
-  $prefs["UISTYLE"] = null;
+
+
+// Préférences par Module
+$array_list_module_pref = array();
+$array_list_module_pref["dPpatients"] = array("DEPARTEMENT");
+$array_list_module_pref["dPcabinet"]  = array("CABCONSULT");
+
+foreach($array_list_module_pref as $modulename => $listPrefs){
+  $prefsUser["$modulename"] = array();	
+  $prefModule = CModule::getInstalled($modulename);
+  if(($user_id!==0 && $prefModule->mod_id && CPermModule::getInfoModule("view", $prefModule->mod_id, PERM_READ, $user_id)) || $user_id===0){
+    foreach($listPrefs as $namePref){
+    	if(!array_key_exists("$namePref",$prefs)){
+    	  $prefs["$namePref"] = null;
+    	}
+      $prefsUser["$modulename"]["$namePref"] = $prefs["$namePref"];
+    }    
+  }
 }
-if(!array_key_exists("DEPARTEMENT",$prefs)){
-  $prefs["DEPARTEMENT"] = null;
-}
+
 
 // Chargement des languages
 $locales = $AppUI->readDirs("locales");
@@ -58,7 +79,7 @@ $smarty->assign("user"     , $user);
 $smarty->assign("user_id"  , $user_id);
 $smarty->assign("locales"  , $locales);
 $smarty->assign("styles"   , $styles);
-$smarty->assign("prefs"    , $prefs);
+$smarty->assign("prefsUser"    , $prefsUser);
 
 $smarty->display("edit_prefs.tpl");
 ?>

@@ -114,9 +114,9 @@ class CTemplateManager {
     $where = array();
     $where[] = "(chir_id = '$chir->user_id' OR function_id = '$chir->function_id')";
     $where["compte_rendu_id"] = "IN ('0', '$compte_rendu_id')";
-    
+    $order = "nom ASC";
     $lists = new CListeChoix();
-    $lists = $lists->loadList($where);
+    $lists = $lists->loadList($where, $order);
     foreach ($lists as $list) {
       $this->addList($list->nom);
     }

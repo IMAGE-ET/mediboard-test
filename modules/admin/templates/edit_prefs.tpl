@@ -30,7 +30,7 @@
     <td>
       <select name="pref_name[LOCALE]" class="text" size="1">
         {{foreach from=$locales item=currLocale key=keyLocale}}
-        <option value="{{$keyLocale}}" {{if $keyLocale==$prefs.LOCALE}}selected="selected"{{/if}}>
+        <option value="{{$keyLocale}}" {{if $keyLocale==$prefsUser.GENERALE.LOCALE}}selected="selected"{{/if}}>
           {{tr}}{{$currLocale}}{{/tr}}
         </option>
         {{/foreach}}
@@ -44,21 +44,40 @@
     <td>
       <select name="pref_name[UISTYLE]" class="text" size="1">
         {{foreach from=$styles item=currStyles key=keyStyles}}
-        <option value="{{$keyStyles}}" {{if $keyStyles==$prefs.UISTYLE}}selected="selected"{{/if}}>
+        <option value="{{$keyStyles}}" {{if $keyStyles==$prefsUser.GENERALE.UISTYLE}}selected="selected"{{/if}}>
           {{tr}}{{$currStyles}}{{/tr}}
         </option>
         {{/foreach}}
       </select>
     </td>
   </tr>
+  {{if $prefsUser.dPpatients}}
   <tr>
     <th>
       <label for="pref_name[DEPARTEMENT]" title="Veuillez choisir le numéro du département par défaut à utiliser">{{tr}}N° du département par Défaut{{/tr}}</label>
     </th>
     <td>
-      <input type="text" name="pref_name[DEPARTEMENT]" value="{{$prefs.DEPARTEMENT}}" maxlength="3" size="4" title="num|minMax|0|999"/>
+      <input type="text" name="pref_name[DEPARTEMENT]" value="{{$prefsUser.dPpatients.DEPARTEMENT}}" maxlength="3" size="4" title="num|minMax|0|999"/>
     </td>
   </tr>
+  {{/if}}
+  
+  {{if $prefsUser.dPcabinet}}
+  <tr>
+    <th>
+      <label for="pref_name[CABCONSULT]" title="Type de vue par défaut des consultations">{{tr}}Vue des Consultations par défaut{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[CABCONSULT]">
+        <option value="0"{{if $prefsUser.dPcabinet.CABCONSULT == "0"}}selected="selected"{{/if}}>Tout afficher</option>
+        <option value="1"{{if $prefsUser.dPcabinet.CABCONSULT == "1"}}selected="selected"{{/if}}>Cacher les Terminées</option>
+      </select>
+    </td>
+  </tr>
+  {{/if}}
+
+  
+  
   <tr>
     <td class="button" colspan="2">
       <button type="submit" class="submit">

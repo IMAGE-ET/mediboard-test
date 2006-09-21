@@ -60,7 +60,7 @@
           <td id="userMenu">
             {{$helpOnline}} |
             {{$suggestion}} |
-            <a href="./index.php?m=admin&amp;a=viewuser&amp;user_id={{$AppUI->user_id}}">{{tr}}My Info{{/tr}}</a> |
+            <a href="./index.php?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a> |
             <a href="./index.php?logout=-1">{{tr}}Logout{{/tr}}</a>
           </td>
         </tr>
