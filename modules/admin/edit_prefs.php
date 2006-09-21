@@ -26,12 +26,7 @@ if($user_id){
 }
 
 // load the preferences
-$sql = "
-SELECT pref_name, pref_value
-FROM user_preferences
-WHERE pref_user = $user_id
-";
-$prefs = db_loadHashList( $sql );
+$prefs = $AppUI->user_prefs;
 
 $prefsUser = array();
 
