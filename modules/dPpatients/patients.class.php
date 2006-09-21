@@ -285,7 +285,7 @@ class CPatient extends CMbObject {
     $this->_ref_antecedents = new CAntecedent;
     $where = array();
     $where["patient_id"] = "= '$this->patient_id'";
-    $order = "type, date DESC";
+    $order = "type ASC";
     $this->_ref_antecedents = $this->_ref_antecedents->loadList($where, $order);
   }
 

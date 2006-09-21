@@ -16,7 +16,7 @@ if (!$canRead) {
 // Class and fields
 $classes = array (
   "CConsultation" => array ("motif", "rques", "examen", "traitement", "compte_rendu"),
-  "CConsultAnesth" => array ("tabac", "oenolisme","etatBucco" , "conclusion"),
+  "CConsultAnesth" => array ("tabac", "oenolisme", "etatBucco" , "conclusion", "premedication", "prepa_preop"),
   "COperation" => array ("examen", "materiel", "convalescence", "compte_rendu"),
   "CPatient" => array ("remarques"),
   "CAntecedent" => array ("rques"),

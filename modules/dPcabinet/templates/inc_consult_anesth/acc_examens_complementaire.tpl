@@ -86,31 +86,31 @@ function reloadListExamComp() {
         <tr>
           <th><label for="groupe" title="Groupe sanguin">Groupe</label></th>
           <td>
-            <select name="groupe" title="{{$consult_anesth->_props.groupe}}">
+            <select name="groupe" title="{{$consult_anesth->_props.groupe}}" onchange="submitForm(this.form)">
               {{html_options values=$consult_anesth->_enums.groupe output=$consult_anesth->_enums.groupe selected=$consult_anesth->groupe}}
             </select>
             /
-            <select name="rhesus" title="{{$consult_anesth->_props.rhesus}}|%2B">
+            <select name="rhesus" title="{{$consult_anesth->_props.rhesus}}" onchange="submitForm(this.form)">
               <option value="?" {{if $consult_anesth->rhesus == "?"}}selected="selected"{{/if}}>?</option>
-              <option value="-" {{if $consult_anesth->rhesus == "-"}}selected="selected"{{/if}}>-</option>
-              <option value="%2B" {{if $consult_anesth->rhesus == "+"}}selected="selected"{{/if}}>+</option>
+              <option value="NEG" {{if $consult_anesth->rhesus == "NEG"}}selected="selected"{{/if}}>NEG</option>
+              <option value="POS" {{if $consult_anesth->rhesus == "POS"}}selected="selected"{{/if}}>POS</option>
             </select>
           </td>
           <th><label for="ht" title="Hématocrite">Ht</label></th>
           <td>
-            <input type="text" size="4" name="ht" title="{{$consult_anesth->_props.ht}}" value="{{$consult_anesth->ht}}" onchange="calculPSA();" />
+            <input type="text" size="4" name="ht" title="{{$consult_anesth->_props.ht}}" value="{{$consult_anesth->ht}}" onchange="calculPSA();submitForm(this.form);" />
             %
           </td>
         </tr>
         <tr>
           <th><label for="creatinine" title="Créatinine">Créatinine</label></th>
           <td>
-            <input type="text" size="4" name="creatinine" title="{{$consult_anesth->_props.creatinine}}" value="{{$consult_anesth->creatinine}}" onchange="calculClairance();" />
+            <input type="text" size="4" name="creatinine" title="{{$consult_anesth->_props.creatinine}}" value="{{$consult_anesth->creatinine}}" onchange="calculClairance();submitForm(this.form);" />
             mg/l
           </td>
           <th><label for="ht_final" title="Hématocrite">Ht final</label></th>
           <td>
-            <input type="text" size="4" name="ht_final" title="{{$consult_anesth->_props.ht_final}}" value="{{$consult_anesth->ht_final}}" onchange="calculPSA();" />
+            <input type="text" size="4" name="ht_final" title="{{$consult_anesth->_props.ht_final}}" value="{{$consult_anesth->ht_final}}" onchange="calculPSA();submitForm(this.form);" />
             %
           </td>
         </tr>
@@ -129,43 +129,43 @@ function reloadListExamComp() {
         <tr> 
           <th><label for="hb" title="Hb">Hb</label></th>
           <td>
-            <input type="text" size="4" name="hb" title="{{$consult_anesth->_props.hb}}" value="{{$consult_anesth->hb}}" />
+            <input type="text" size="4" name="hb" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.hb}}" value="{{$consult_anesth->hb}}" />
             g/dl
           </td>
           <th><label for="tp" title="Taux de prothrombine">TP</label></th>
           <td>
-            <input type="text" size="4" name="tp" title="{{$consult_anesth->_props.tp}}" value="{{$consult_anesth->tp}}" />
+            <input type="text" size="4" name="tp" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.tp}}" value="{{$consult_anesth->tp}}" />
             %
           </td>
         </tr>
         <tr>
           <th><label for="na" title="Na+">Na+</label></th>
           <td>
-            <input type="text" size="4" name="na" title="{{$consult_anesth->_props.na}}" value="{{$consult_anesth->na}}" />
+            <input type="text" size="4" name="na" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.na}}" value="{{$consult_anesth->na}}" />
             mmol/l
           </td>
           <th><label for="tca" title="Temps de Céphaline avec Activateur">TCA</label></th>
           <td>
-            <input type="text" name="tca_temoin" maxlength="2" size="2" title="{{$consult_anesth->_props.tca_temoin}}" value="{{$consult_anesth->tca_temoin}}" />
+            <input type="text" name="tca_temoin" maxlength="2" size="2" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.tca_temoin}}" value="{{$consult_anesth->tca_temoin}}" />
             s /
-            <input type="text" name="tca" maxlength="2" size="2" title="{{$consult_anesth->_props.tca}}" value="{{$consult_anesth->tca}}" />
+            <input type="text" name="tca" maxlength="2" size="2" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.tca}}" value="{{$consult_anesth->tca}}" />
              s
           </td>
         </tr>
         <tr>
           <th><label for="k" title="K+">K+</label></th>
           <td>
-            <input type="text" size="4" name="k" title="{{$consult_anesth->_props.k}}" value="{{$consult_anesth->k}}" />
+            <input type="text" size="4" name="k" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.k}}" value="{{$consult_anesth->k}}" />
             mmol/l
           </td>
           <th><label for="tsivy" title="Temps de saignement par la méthode d'Ivy">TS Ivy</label></th>
           <td>
-            <select name="_min_tsivy">
+            <select name="_min_tsivy" onchange="submitForm(this.form)">
             {{foreach from=$mins item=minute}}
               <option value="{{$minute}}" {{if $consult_anesth->_min_tsivy == $minute}} selected="selected" {{/if}}>{{$minute}}</option>
             {{/foreach}}
             </select> min
-            <select name="_sec_tsivy">
+            <select name="_sec_tsivy" onchange="submitForm(this.form)">
             {{foreach from=$secs item=seconde}}
               <option value="{{$seconde}}" {{if $consult_anesth->_sec_tsivy == $seconde}} selected="selected" {{/if}}>{{$seconde}}</option>
             {{/foreach}}     
@@ -175,11 +175,11 @@ function reloadListExamComp() {
         <tr>
           <th><label for="plaquettes" title="Plaquettes">Plaquettes</label></th>
           <td>
-            <input type="text" size="6" name="plaquettes" title="{{$consult_anesth->_props.plaquettes}}" value="{{$consult_anesth->plaquettes}}" />
+            <input type="text" size="6" name="plaquettes" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.plaquettes}}" value="{{$consult_anesth->plaquettes}}" />
           </td>
           <th><label for="ecbu" title="Examen Cytobactériologique des Urines">ECBU</label></th>
           <td>
-            <select name="ecbu" title="{{$consult_anesth->_props.ecbu}}">
+            <select name="ecbu" title="{{$consult_anesth->_props.ecbu}}" onchange="submitForm(this.form)">
             {{html_options values=$consult_anesth->_enums.ecbu output=$consult_anesth->_enums.ecbu selected=$consult_anesth->ecbu}}
             </select>            
           </td>
@@ -187,21 +187,12 @@ function reloadListExamComp() {
         <tr>
           <th><label for="rai" title="Recherche d'agglutinines irrégulières">RAI</label></th>
           <td>
-            <select name="rai" title="{{$consult_anesth->_props.rai}}">
+            <select name="rai" title="{{$consult_anesth->_props.rai}}" onchange="submitForm(this.form)">
             {{html_options values=$consult_anesth->_enums.rai output=$consult_anesth->_enums.rai selected=$consult_anesth->rai}}
             </select>
           </td>
-          <td></td>
-          <td>
-            <textarea name="ecbu_detail" title="{{$consult_anesth->_props.ecbu_detail}}">{{$consult_anesth->ecbu_detail}}</textarea>
-          </td>
+          <td colspan="2"></td>
         </tr>
-        <tr>
-          <td class="button" colspan="4">
-            <button class="submit" type="button" onclick="submitForm(this.form)">Valider</button>
-          </td>
-        </tr>  
-          
       </table>    
       </form>
     </td>

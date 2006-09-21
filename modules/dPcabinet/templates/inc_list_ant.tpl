@@ -1,45 +1,32 @@
-      <strong>Diagnostics du patient</strong>
-      <ul>
-        {{foreach from=$patient->_codes_cim10 item=curr_code}}
-        <li>
-          <button class="trash notext" type="button" onclick="delCim10('{{$curr_code->code}}')">
-          </button>
-          {{$curr_code->code}}: {{$curr_code->libelle}}
-        </li>
-        {{foreachelse}}
-        <li>Pas de diagnostic</li>
-        {{/foreach}}
-      </ul>
       <strong>Antécédents du patient</strong>
       <ul>
-        {{assign var="antecedentGroup" value=""}}
-        {{foreach from=$patient->_ref_antecedents item=curr_ant}}
-          {{if $antecedentGroup!=$curr_ant->type}}
-            {{if $antecedentGroup!=""}}
-              </li>
+      {{if $patient->_ref_antecedents}}
+        {{foreach from=$listAnt key=keyAnt item=currTypeAnt}}
+        {{if $currTypeAnt}}
+        <li>
+          {{tr}}{{$keyAnt}}{{/tr}}
+          {{foreach from=$currTypeAnt item=currAnt}}
+          <ul><li>
+            <form name="delAntFrm" action="?m=dPcabinet" method="post">
+            <input type="hidden" name="m" value="dPpatients" />
+            <input type="hidden" name="del" value="1" />
+            <input type="hidden" name="dosql" value="do_antecedent_aed" />
+            <input type="hidden" name="antecedent_id" value="{{$currAnt->antecedent_id}}" />
+            <button class="trash notext" type="button" onclick="submitAnt(this.form)">
+            </button>          
+            {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+              {{$currAnt->date|date_format:"%d/%m/%Y"}} :
             {{/if}}
-            <li>
-            {{$curr_ant->type}}
-            {{assign var="antecedentGroup" value=$curr_ant->type}}
-          {{/if}}
-        
-        <ul><li>
-          <form name="delAntFrm" action="?m=dPcabinet" method="post">
-          <input type="hidden" name="m" value="dPpatients" />
-          <input type="hidden" name="del" value="1" />
-          <input type="hidden" name="dosql" value="do_antecedent_aed" />
-          <input type="hidden" name="antecedent_id" value="{{$curr_ant->antecedent_id}}" />
-          <button class="trash notext" type="button" onclick="submitAnt(this.form)">
-          </button>
-          {{if $curr_ant->date|date_format:"%d/%m/%Y"}}
-            {{$curr_ant->date|date_format:"%d/%m/%Y"}} :
-          {{/if}}
-          <i>{{$curr_ant->rques}}</i>
-          </form>
-        </li></ul>
-        {{foreachelse}}
-        <li>Pas d'antécédents</li>
+            <i>{{$currAnt->rques}}</i>
+            </form>
+          </li></ul>
+          {{/foreach}}
+        </li>
+        {{/if}}
         {{/foreach}}
+      {{else}}
+        <li>Pas d'antécédents</li>
+      {{/if}}
       </ul>
       <strong>Traitements du patient</strong>
       <ul>
@@ -62,5 +49,17 @@
         </li>
         {{foreachelse}}
         <li>Pas de traitements</li>
+        {{/foreach}}
+      </ul>
+      <strong>Diagnostics du patient</strong>
+      <ul>
+        {{foreach from=$patient->_codes_cim10 item=curr_code}}
+        <li>
+          <button class="trash notext" type="button" onclick="delCim10('{{$curr_code->code}}')">
+          </button>
+          {{$curr_code->code}}: {{$curr_code->libelle}}
+        </li>
+        {{foreachelse}}
+        <li>Pas de diagnostic</li>
         {{/foreach}}
       </ul>

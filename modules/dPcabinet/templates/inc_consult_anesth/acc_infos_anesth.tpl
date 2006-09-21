@@ -42,6 +42,25 @@ function reloadListTech() {
       <select name="ASA" onchange="submitFormAjax(this.form, 'systemMsg')">
         {{html_options values=$consult_anesth->_enums.ASA output=$consult_anesth->_enums.ASA selected=$consult_anesth->ASA}}
       </select>
+      
+      <br /><br />
+      <label for="premedication" title="Informatinos concernant la prémédication">Prémédication</label>
+      <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();">
+        <option value="">&mdash; Choisir une aide</option>
+        {{html_options options=$consult_anesth->_aides.premedication}}
+      </select><br />
+      <textarea name="premedication" onchange="submitFormAjax(this.form, 'systemMsg')">{{$consult_anesth->premedication}}</textarea>
+      
+      <br /><br />
+      <label for="prepa_preop" title="Informations concernant la préparation pré-opératoire">Préparation Pré-opératoire</label>
+      <select name="_helpers_prepa_preop" size="1" onchange="pasteHelperContent(this);this.form.prepa_preop.onchange();">
+        <option value="">&mdash; Choisir une aide</option>
+        {{html_options options=$consult_anesth->_aides.prepa_preop}}
+      </select><br />
+      <textarea name="prepa_preop" onchange="submitFormAjax(this.form, 'systemMsg')">{{$consult_anesth->prepa_preop}}</textarea>
+      
+      
+      
       </form>
       <br />
       
@@ -72,14 +91,11 @@ function reloadListTech() {
       <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
       <input type="hidden" name="_check_premiere" value="{{$consult->_check_premiere}}" />
       <label for="rques" title="Remarques concernant la consultation">Remarques</label>
-      <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
+      <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.rques}}
       </select><br />
-      <textarea name="rques" rows="5">{{$consult->rques}}</textarea><br />
-      <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">
-        Valider
-      </button>
+      <textarea name="rques" onchange="submitFormAjax(this.form, 'systemMsg')">{{$consult->rques}}</textarea><br />
       </form>
     </td>
   </tr>

@@ -6,7 +6,7 @@
 <table class="form" id="admission">
   <tr>
     <td>
-      <table width="100%" style="font-size: 110%; padding-bottom: 20px;">
+      <table width="100%" style="font-size: 110%;">
         <tr>
           <th class="title" colspan="4">
             <a href="javascript:window.print()">
@@ -28,16 +28,13 @@
 
 <table class="form" id="admission">
   <tr>
-    <td class="halfPane">        
-      <table width="100%" style="font-size: 100%; padding-bottom: 20px;">        
+    <td class="halfPane">
+      <table width="100%" style="font-size: 100%;">
         <tr>
-          <th class="category" colspan="2">
-            Informations sur le patient
-          </th>
+          <th class="category" colspan="2">Informations sur le patient</th>
         </tr>
         <tr>
-          <th>Nom / Prenom</th>
-          <td>{{$patient->_view}}</td>
+          <td colspan="2">{{$patient->_view}}</td>
         </tr>
         {{if $patient->nom_jeune_fille}}
         <tr>
@@ -46,33 +43,15 @@
         </tr>
         {{/if}}
         <tr>
-          <th>Date de naissance</th>
-          <td>
-            {{$patient->_jour}}/{{$patient->_mois}}/{{$patient->_annee}}
-            <br />({{$patient->_age}} ans)
+          <td colspan="2">
+            Né{{if $patient->sexe != "m"}}e{{/if}} le {{$patient->_jour}}/{{$patient->_mois}}/{{$patient->_annee}}
+            ({{$patient->_age}} ans)
+            - sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}
           </td>
         </tr>
-        <tr>
-          <th>Sexe</th>
-          <td>
-            {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <th>Tabac</th>
-          <td>
-            {{$consult->_ref_consult_anesth->tabac}}
-          </td>
-        </tr>
-        <tr>
-          <th>Oenolisme</th>
-          <td>
-            {{$consult->_ref_consult_anesth->oenolisme}}
-          </td>
-        </tr>    
         <tr>
           <td colspan="2">
-            <table style="font-size: 100%;"> 
+            <table style="font-size: 100%;">
               <tr>
                 <th width="25%">Poids</th>
                 <td style="white-space: nowrap;">{{$consult->_ref_consult_anesth->poid}} kg</td>
@@ -82,15 +61,16 @@
               <tr>
                 <th>Taille</th>
                 <td style="white-space: nowrap;">{{$consult->_ref_consult_anesth->taille}} cm</td>
-                <th>TA</th>
-                <td style="white-space: nowrap;">{{$consult->_ref_consult_anesth->tasys}} / {{$consult->_ref_consult_anesth->tadias}}</td>
-              </tr> 
+                <td colspan="2"></td>
+              </tr>
               <tr>
-                <th>Groupe sanguin</th>
-                <td style="white-space: nowrap;">{{$consult->_ref_consult_anesth->groupe}} {{$consult->_ref_consult_anesth->rhesus}}</td>
-                <th>Transfusions</th>
-                <td>{{$consult->_ref_consult_anesth->transfusions}}</td>
-              </tr> 
+                <th colspan="2">Groupe sanguin</th>
+                <td colspan="2" style="white-space: nowrap;font-weight:bold;font-size:130%;">&nbsp;{{$consult->_ref_consult_anesth->groupe}} &nbsp;{{$consult->_ref_consult_anesth->rhesus}}</td>
+              </tr>
+              <tr>
+                <th colspan="2">RAI</th>
+                <td colspan="2" style="white-space: nowrap;font-weight:bold;font-size:130%;">&nbsp;{{$consult->_ref_consult_anesth->rai}}</td>
+              </tr>
               <tr>
                 <th>VST</th>
                 <td style="white-space: nowrap;">{{$consult->_ref_consult_anesth->_vst}} ml</td>
@@ -102,17 +82,23 @@
                 <td style="white-space: nowrap;">{{$consult->_ref_consult_anesth->_psa}} ml/GR</td>
                 <td colspan="2"></td>
               </tr>
+              <tr>
+                <th>Tabac</th>
+                <td colspan="3">{{$consult->_ref_consult_anesth->tabac|nl2br}}</td>
+              </tr>
+              <tr>
+                <th>Oenolisme</th>
+                <td colspan="3">{{$consult->_ref_consult_anesth->oenolisme|nl2br}}</td>
+              </tr>
             </table>
           </td>
-        </tr> 
+        </tr>
       </table>
     </td>
     <td class="halfPane">
-      <table width="100%" style="font-size: 100%; padding-bottom: 10px;">
+      <table width="100%" style="font-size: 100%;">
         <tr>
-          <th class="category" colspan="2">
-            Intervention
-          </th>
+          <th class="category" colspan="2">Intervention</th>
         </tr>
         {{if $consult_anesth->operation_id}}
         <tr>
@@ -134,6 +120,11 @@
           <td class="text"><strong>Anesthésie prévue</strong></td>
           <td class="text">{{$consult_anesth->_ref_operation->_lu_type_anesth}}</td>
         </tr>
+        {{else}}
+        <tr>
+          <td colspan="2">Aucune Intervention</td>
+        </tr>
+        {{/if}}
         <tr>
           <td colspan="2"><strong>Techniques Complémentaires</strong></td>
         </tr>
@@ -148,24 +139,45 @@
               <li>Pas de technique complémentaire</li>
               {{/foreach}}
             </ul>
-        {{else}}
-        <tr>
-          <td colspan="2">Aucune Intervention</td>
+          </td>
         </tr>
-        {{/if}}
       </table>
     </td>
-  </tr>  
+  </tr>
+
     <tr>
     <td class="halfPane">
       <table width="100%" style="font-size: 100%;">
         <tr>
-          <th class="category">
-            Antécédents / Traitements
-          </th>
+          <th class="category">Antécédents</th>
         </tr>
         <tr>
           <td>
+            {{if $patient->_ref_antecedents}}
+              {{foreach name=nameForeach from=$listAnt key=keyAnt item=currTypeAnt}}
+              {{if $currTypeAnt}}
+              {{if !$smarty.foreach.nameForeach.first}}
+              <br />
+              {{/if}}
+              <strong>{{tr}}{{$keyAnt}}{{/tr}}</strong>
+              {{foreach from=$currTypeAnt item=currAnt}}
+              <ul>
+                <li>
+                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{/if}}
+                {{$currAnt->rques}}
+                </li>
+              </ul>
+              {{/foreach}}
+              {{/if}}
+              {{/foreach}}
+            {{else}}
+            <li>Pas d'antécédents</li>
+            {{/if}}
+
+            {{if $patient->_codes_cim10}}
+            <br />
             <strong>Diagnostics du patient</strong>
             <ul>
               {{foreach from=$patient->_codes_cim10 item=curr_code}}
@@ -176,29 +188,18 @@
               <li>Pas de diagnostic</li>
               {{/foreach}}
             </ul>
-            <strong>Antécédents du patient</strong>
-            <ul>
-              {{assign var="antecedentGroup" value=""}}
-              {{foreach from=$patient->_ref_antecedents item=curr_ant}}
-                {{if $antecedentGroup!=$curr_ant->type}}
-                  {{if $antecedentGroup!=""}}
-                    </li>
-                  {{/if}}
-                  <li>
-                  {{$curr_ant->type}}
-                  {{assign var="antecedentGroup" value=$curr_ant->type}}
-                {{/if}}
-              <ul><li>  
-                {{if $curr_ant->date|date_format:"%d/%m/%Y"}}
-                  {{$curr_ant->date|date_format:"%d/%m/%Y"}} :
-                {{/if}}
-                <i>{{$curr_ant->rques}}</i>
-              </li></ul>
-              {{foreachelse}}
-              <li>Pas d'antécédents</li>
-              {{/foreach}}
-            </ul>
-            <strong>Traitements du patient</strong>
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td class="halfPane">
+      <table width="100%" style="font-size: 100%;">
+        <tr>
+          <th class="category">Traitements</th>
+        </tr>
+        <tr>
+          <td>
             <ul>
               {{foreach from=$patient->_ref_traitements item=curr_trmt}}
               <li>
@@ -217,55 +218,37 @@
         </tr>
       </table>
     </td>
-    <td class="halfPane">
-      <table width="100%" style="font-size: 100%;;">
+  </tr>  
+  <tr>
+    <td colspan="2">
+      <table width="100%" style="font-size: 100%; padding-bottom: 15px;">
         <tr>
-          <th class="category">
-            Conditions d'intubation
-          </th>
+          <th class="category" colspan="4">Examens Clinique</th>
         </tr>
         <tr>
-          <td>
-             <table width="100%" style="font-size: 100%;">
-               <tr>
-               {{if $consult->_ref_consult_anesth->mallampati}}
-                 <td rowspan="4" class="button">
-                   <img src="modules/{{$m}}/images/mallampati/{{$consult->_ref_consult_anesth->mallampati}}.gif" alt="{{tr}}{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}" />
-                   <br />Mallampati<br />de {{tr}}{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}
-                 </td>
-               {{/if}}
-                 <th>Ouverture de<br />la bouche</th>
-                 <td>{{tr}}{{$consult->_ref_consult_anesth->bouche}}{{/tr}}</td>
-               </tr>
-               <tr>
-                 <th>Distance<br />thyro-mentonnière</th>
-                 <td>{{tr}}{{$consult->_ref_consult_anesth->distThyro}}{{/tr}}</td>
-               </tr>
-               <tr>
-                 <th>Etat<br />bucco-dentaire</th>
-                 <td class="text">{{$consult->_ref_consult_anesth->etatBucco}}</td>
-               </tr>
-               <tr>
-                 <th>Conclusion</th>
-                 <td class="text">{{$consult->_ref_consult_anesth->conclusion}}</td>
-               </tr>
-               {{if $consult->_ref_consult_anesth->_intub_difficile}}
-               <tr>
-                 <td colspan="3" style="text-align:center;color:#F00;"><strong>Intubation Difficile Prévisible</strong></td>
-               </tr>
-               {{/if}}
-             </table>
+          <th>Pouls</th>
+          <td style="white-space: nowrap;">
+            {{$consult->_ref_consult_anesth->pouls}} / min
           </td>
+          <th>TA</th>
+          <td style="white-space: nowrap;">
+            {{$consult->_ref_consult_anesth->tasys}} / {{$consult->_ref_consult_anesth->tadias}} cm Hg
+          </td>
+        </tr>
+        <tr>
+          <th>Examens</th>
+          <td colspan="3" class="text">{{$consult->examen|nl2br}}</td>
         </tr>
       </table>
     </td>
-  </tr>  
+  </tr>
 </table>
+
 <br style="page-break-after: always;" />
 <table class="form" id="admission">
   <tr>
     <td>
-      <table width="100%" style="font-size: 110%; padding-bottom: 20px;">
+      <table width="100%" style="font-size: 110%;">
         <tr>
           <th class="title" colspan="4">
             <a href="javascript:window.print()">
@@ -273,7 +256,6 @@
             </a>
           </th>
         </tr>
-        
         <tr>
           <th>Date </th>
           <td>{{$consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}}</td>
@@ -289,28 +271,80 @@
     </td>
   </tr>
 </table>
+        
 <table class="form" id="admission">
   <tr>
     <td>
-      <table width="100%" style="font-size: 100%; padding-bottom: 20px;">
+      <table width="100%" style="font-size: 100%;">
+        <tr>
+          <th colspan="3" class="category">Conditions d'intubation</th>
+        </tr>
+        <tr>
+          {{if $consult->_ref_consult_anesth->mallampati}}
+          <td rowspan="4" class="button" style="white-space: nowrap;">
+            <img src="modules/{{$m}}/images/mallampati/{{$consult->_ref_consult_anesth->mallampati}}.gif" alt="{{tr}}{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}" />
+            <br />Mallampati<br />de {{tr}}{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}
+          </td>
+          {{/if}}
+          <th>Ouverture de la bouche</th>
+          <td>
+            {{tr}}{{$consult->_ref_consult_anesth->bouche}}{{/tr}}
+          </td>
+        </tr>
+        <tr>
+          <th>Distance thyro-mentonnière</th>
+          <td>{{tr}}{{$consult->_ref_consult_anesth->distThyro}}{{/tr}}</td>
+        </tr>
+        <tr>
+          <th>Etat bucco-dentaire</th>
+          <td class="text">{{$consult->_ref_consult_anesth->etatBucco}}</td>
+        </tr>
+        <tr>
+          <th>Conclusion</th>
+          <td class="text">{{$consult->_ref_consult_anesth->conclusion}}</td>
+        </tr>
+        
+        {{if $consult->_ref_consult_anesth->_intub_difficile}}
+        <tr>
+          <td colspan="3" style="text-align:center;color:#F00;"><strong>Intubation Difficile Prévisible</strong></td>
+        </tr>
+        {{/if}}    
+      </table>    
+
+      <table width="100%" style="font-size: 100%;">
         <tr>
           <th class="category" colspan="6">
             Examens Complémentaires
           </th>
         </tr>
-        
         <tr>
-          <th>Pouls</th>
-          <td style="white-space: nowrap;">
-            {{$consult->_ref_consult_anesth->pouls}}
-          </td>
-          <th>RAI</th>
-          <td style="white-space: nowrap;">
-            {{$consult->_ref_consult_anesth->rai}}
+          <th>Ht</th>
+          <td>
+            {{$consult->_ref_consult_anesth->ht}} %
           </td>
           <th>Créatinine</th>
           <td style="white-space: nowrap;">
             {{$consult->_ref_consult_anesth->creatinine}} mg/l
+          </td>
+          <th>Na+</th>
+          <td style="white-space: nowrap;">
+            {{$consult->_ref_consult_anesth->na}} mmol/l
+          </td>
+        </tr>
+        <tr>
+          <th>Ht final</th>
+          <td>
+            {{$consult->_ref_consult_anesth->ht_final}} %
+          </td>
+          <th>
+            Clairance de Créatinine
+          </th>
+          <td style="white-space: nowrap;">
+            {{$consult->_ref_consult_anesth->_clairance}} ml/min
+          </td>
+          <th>K+</th>
+          <td style="white-space: nowrap;">
+            {{$consult->_ref_consult_anesth->k}} mmol/l
           </td>
         </tr>
         <tr>
@@ -322,63 +356,40 @@
             Spo2
           </th>
           <td style="white-space: nowrap;">
-            {{$consult->_ref_consult_anesth->spo2}}
+            {{$consult->_ref_consult_anesth->spo2}} %
           </td>
-          <th>
-            Clairance de Créatinine
-          </th>
+          <th>TCA</th>
           <td style="white-space: nowrap;">
-            {{$consult->_ref_consult_anesth->_clairance}} mg/l
+            {{$consult->_ref_consult_anesth->tca_temoin}} s / {{$consult->_ref_consult_anesth->tca}} s
           </td>
         </tr>
         <tr>
           <th>TP</th>
           <td style="white-space: nowrap;">
             {{$consult->_ref_consult_anesth->tp}} %
-          </td>
-          <th>Ht</th>
-          <td>
-            {{$consult->_ref_consult_anesth->ht}} %
-          </td>
+          </td>          
           <th>Plaquettes</th>
           <td style="white-space: nowrap;">
             {{$consult->_ref_consult_anesth->plaquettes}}
-          </td>
-        </tr>
-        <tr>
-          <th>Na+</th>
-          <td style="white-space: nowrap;">
-            {{$consult->_ref_consult_anesth->na}} mmol/l
-          </td>
-          <th>K+</th>
-          <td style="white-space: nowrap;">
-            {{$consult->_ref_consult_anesth->k}} mmol/l
-          </td>
-          <th>ECBU</th>
-          <td>
-            {{$consult->_ref_consult_anesth->ecbu}}
-          </td>
-        </tr>
-        <tr>
-          <th>TCA</th>
-          <td style="white-space: nowrap;">
-            {{$consult->_ref_consult_anesth->tca|date_format:"%Mm%Ss"}}
           </td>
           <th>TS Ivy</th>
           <td style="white-space: nowrap;">
             {{$consult->_ref_consult_anesth->tsivy|date_format:"%Mm%Ss"}}
           </td>
-          <th>Detail ECBU</th>
-          <td class="text">
-            {{$consult->_ref_consult_anesth->ecbu_detail}}<br />
+        </tr>
+        <tr> 
+          <th>ECBU</th>
+          <td>
+            {{$consult->_ref_consult_anesth->ecbu}}
           </td>
+          <td colspan="4"></td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table width="100%" style="font-size: 100%; padding-bottom: 20px;">
+      <table width="100%" style="font-size: 100%;">
         <tr>
           <th>
             Examens Complémentaires
@@ -401,16 +412,84 @@
           </td>
         </tr>
       </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table width="100%" style="font-size: 100%; padding-bottom: 20px;">
+      <table width="100%" style="font-size: 100%;padding-bottom: 10px;">
         <tr>
-          <th class="category" colspan="6">
-            Visite pré-anesthésique
+          <th class="category">
+            Liste des Documents Edités
           </th>
         </tr>
+        <tr>
+          <td>
+            <ul>
+            {{foreach from=$consult->_ref_documents item=currDoc}}
+              <li>{{$currDoc->nom}}<br />
+            {{foreachelse}}
+            Aucun Document
+            {{/foreach}}
+            </ul>
+          </td>
+        </tr>
+      </table>
+      <table width="100%" style="font-size: 100%;padding-bottom: 10px;">
+        <tr>
+          <th class="category">
+            Prémédication
+          </th>
+        </tr>
+        <tr>
+          <td>
+            {{$consult->_ref_consult_anesth->premedication|nl2br}}
+          </td>
+        </tr>
+      </table>
+      <table width="100%" style="font-size: 100%;">
+        <tr>
+          <th class="category">
+            Préparation pré-opératoire
+          </th>
+        </tr>
+        <tr>
+          <td>
+            {{$consult->_ref_consult_anesth->prepa_preop|nl2br}}
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<br style="page-break-after: always;" />
+<table class="form" id="admission">
+  <tr>
+    <td>
+      <table width="100%" style="font-size: 110%;">
+        <tr>
+          <th class="title" colspan="4">
+            <a href="javascript:window.print()">
+              Visite pré-anesthésique
+            </a>
+          </th>
+        </tr>
+        <tr>
+          <th>Date </th>
+          <td>{{$consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}}</td>
+          <th>Anesthésiste </th>
+          <td>Dr. {{$consult->_ref_chir->_view}}</td>
+        </tr>
+        <tr>
+          <th>Patient </th>
+          <td>{{$patient->_view}}</td>
+          <td colspan="2"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<table class="form" id="admission">
+  <tr>
+    <td>
+      <table width="100%" style="font-size: 100%;">
         <tr>
           <td class="text">
             {{$consult->rques|nl2br}}

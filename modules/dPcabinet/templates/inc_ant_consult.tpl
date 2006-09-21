@@ -88,39 +88,41 @@ function incAntecedantsMain() {
 <table class="form">
   <tr>
     <td class="text">
-      <strong>Ajouter un diagnostic</strong>
-      <form name="editDiagFrm" action="?m={{$m}}" method="post">
-
-      <input type="hidden" name="m" value="dPpatients" />
-      <input type="hidden" name="tab" value="edit_consultation" />
+      {{if $_is_anesth}}
+      <hr />
+      <form name="editTabacFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+      <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_patients_aed" />
-      <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
-      <input type="hidden" name="listCim10" value="{{$patient->listCim10}}" />
-      
-      <table style="width: 100%">
-      {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}
-        <tr id="category{{$cat}}-trigger">
-          <td>{{$cat}}</td>
-        </tr>
-        <tbody class="effectCategory" id="category{{$cat}}">
-          {{foreach from=$curr_cat item=curr_code}}
-          <tr>
-            <td class="text">
-              <button class="tick notext" type="button" onclick="putCim10('{{$curr_code->code}}')"></button>
-              <button type="button" onclick="selectCim10('{{$curr_code->code}}')">
-                <img src="modules/dPcabinet/images/downarrow.png" alt="" />
-              </button>
-              {{$curr_code->code}}: {{$curr_code->libelle}}
-            </td>
-          </tr>
-           {{/foreach}}
-        </tbody>
-      {{/foreach}}
+      <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+      <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
+      <table class="form">
+      <tr>
+        <td>
+          <label for="tabac" title="Comportement tabagique">Tabac</label>
+          <select name="_helpers_tabac" size="1" onchange="pasteHelperContent(this);this.form.tabac.onchange();">
+            <option value="">&mdash; Choisir une aide</option>
+            {{html_options options=$consult_anesth->_aides.tabac}}
+          </select>
+        </td>
+        <td>
+          <label for="oenolisme" title="Comportement alcoolique">Oenolisme</label>
+          <select name="_helpers_oenolisme" size="1" onchange="pasteHelperContent(this);this.form.oenolisme.onchange();">
+            <option value="">&mdash; Choisir une aide</option>
+            {{html_options options=$consult_anesth->_aides.oenolisme}}
+          </select>
+        </td>
+      </tr>
+      <tr>  
+        <td>
+          <textarea name="tabac" onchange="submitForm(this.form);">{{$consult_anesth->tabac}}</textarea>
+        </td>
+        <td>
+          <textarea name="oenolisme" onchange="submitForm(this.form);">{{$consult_anesth->oenolisme}}</textarea>
+        </td>
+      </tr>
       </table>
-      
       </form>
-      
+      {{/if}}
       <hr />
       
       <form name="editAntFrm" action="?m=dPcabinet" method="post">
@@ -158,12 +160,9 @@ function incAntecedantsMain() {
           <th><label for="type" title="Type d'antécédent">Type</label></th>
           <td>
             <select name="type">
-              <option value="chir">Chirurgical</option>
-              <option value="fam">Familial</option>
-              <option value="alle">Allergie</option>
-              <option value="obst">Obstétrique</option>
-              <option value="med">Medical</option>
-              <option value="trans">Transfusion</option>
+              {{section name=rows loop=$antecedent->_enums.type}}
+              <option value="{{$antecedent->_enums.type[rows]}}">{{tr}}{{$antecedent->_enums.type[rows]}}{{/tr}}</option>
+              {{/section}}
             </select>
           </td>
         </tr>
@@ -225,49 +224,38 @@ function incAntecedantsMain() {
       </table>
       </form>
       
-      {{if $_is_anesth}}
       <hr />
-      <form name="editTabacFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-      <input type="hidden" name="m" value="{{$m}}" />
+      <strong>Ajouter un diagnostic</strong>
+      <form name="editDiagFrm" action="?m={{$m}}" method="post">
+
+      <input type="hidden" name="m" value="dPpatients" />
+      <input type="hidden" name="tab" value="edit_consultation" />
       <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-      <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
-      <table class="form">
-      <tr>
-        <td>
-          <label for="tabac" title="Comportement tabagique">Tabac</label>
-          <select name="_helpers_tabac" size="1" onchange="pasteHelperContent(this)">
-            <option value="">&mdash; Choisir une aide</option>
-            {{html_options options=$consult_anesth->_aides.tabac}}
-          </select>
-        </td>
-        <td>
-          <label for="oenolisme" title="Comportement alcoolique">Oenolisme</label>
-          <select name="_helpers_oenolisme" size="1" onchange="pasteHelperContent(this)">
-            <option value="">&mdash; Choisir une aide</option>
-            {{html_options options=$consult_anesth->_aides.oenolisme}}
-          </select>
-        </td>
-      </tr>
-      <tr>  
-        <td>
-          <textarea name="tabac">{{$consult_anesth->tabac}}</textarea>
-        </td>
-        <td>
-          <textarea name="oenolisme">{{$consult_anesth->oenolisme}}</textarea>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2" class="button">
-          <button type="button" class="submit" onclick="submitForm(this.form);">
-            Valider
-          </button>
-        </td>
-      </tr>
-      </table>
-      </form>
-      {{/if}}
+      <input type="hidden" name="dosql" value="do_patients_aed" />
+      <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
+      <input type="hidden" name="listCim10" value="{{$patient->listCim10}}" />
       
+      <table style="width: 100%">
+      {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}
+        <tr id="category{{$cat}}-trigger">
+          <td>{{$cat}}</td>
+        </tr>
+        <tbody class="effectCategory" id="category{{$cat}}">
+          {{foreach from=$curr_cat item=curr_code}}
+          <tr>
+            <td class="text">
+              <button class="tick notext" type="button" onclick="putCim10('{{$curr_code->code}}')"></button>
+              <button type="button" onclick="selectCim10('{{$curr_code->code}}')">
+                <img src="modules/dPcabinet/images/downarrow.png" alt="" />
+              </button>
+              {{$curr_code->code}}: {{$curr_code->libelle}}
+            </td>
+          </tr>
+           {{/foreach}}
+        </tbody>
+      {{/foreach}}
+      </table>
+      </form>      
     </td>
     <td class="text" id="listAnt">
       {{include file="inc_list_ant.tpl"}}

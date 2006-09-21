@@ -29,26 +29,26 @@ function calculImcVst(){
         <tr>
           <th><label for="poid" title="Poids du patient">Poids</label></th>
           <td>
-            <input type="text" size="4" name="poid" title="{{$consult_anesth->_props.poid}}" value="{{$consult_anesth->poid}}" onchange="javascript:calculImcVst();"/>
+            <input type="text" size="4" name="poid" title="{{$consult_anesth->_props.poid}}" value="{{$consult_anesth->poid}}" onchange="javascript:calculImcVst();submitForm(this.form);"/>
             kg
           </td>
           <th><label for="tasys" title="Pression arterielle">TA</label></th>
           <td>
-            <input type="text" size="2" name="tasys" title="{{$consult_anesth->_props.tasys}}" value="{{$consult_anesth->tasys}}" />
+            <input type="text" size="2" name="tasys" onchange="submitForm(this.form);" title="{{$consult_anesth->_props.tasys}}" value="{{$consult_anesth->tasys}}" />
             /
-            <input type="text" size="2" name="tadias" title="{{$consult_anesth->_props.tadias}}" value="{{$consult_anesth->tadias}}" />
+            <input type="text" size="2" name="tadias" onchange="submitForm(this.form);" title="{{$consult_anesth->_props.tadias}}" value="{{$consult_anesth->tadias}}" />
             cm Hg
           </td>
         </tr>
         <tr>
           <th><label for="taille" title="Taille du patient">Taille</label></th>
           <td>
-            <input type="text" size="4" name="taille" title="{{$consult_anesth->_props.taille}}" value="{{$consult_anesth->taille}}" onchange="javascript:calculImcVst();"/>
+            <input type="text" size="4" name="taille" title="{{$consult_anesth->_props.taille}}" value="{{$consult_anesth->taille}}" onchange="javascript:calculImcVst();submitForm(this.form);"/>
             cm
           </td>
           <th><label for="pouls" title="Pouls du patient">Pouls</label></th>
           <td>
-            <input type="text" size="4" name="pouls" title="{{$consult_anesth->_props.pouls}}" value="{{$consult_anesth->pouls}}" />
+            <input type="text" size="4" name="pouls" onchange="submitForm(this.form);" title="{{$consult_anesth->_props.pouls}}" value="{{$consult_anesth->pouls}}" />
             / min
           </td>
         </tr>
@@ -59,7 +59,7 @@ function calculImcVst(){
           </td>
           <th><label for="spo2" title="Spo2">Spo2</label></th>
           <td>
-            <input type="text" size="4" name="spo2" title="{{$consult_anesth->_props.spo2}}" value="{{$consult_anesth->spo2}}" />
+            <input type="text" size="4" name="spo2" onchange="submitForm(this.form);" title="{{$consult_anesth->_props.spo2}}" value="{{$consult_anesth->spo2}}" />
             %
           </td>
         </tr>
@@ -70,11 +70,6 @@ function calculImcVst(){
             ml
           </td>
           <td colspan="2"></td>
-        </tr>
-        <tr>
-          <td class="button" colspan="4">
-            <button class="submit" type="button" onclick="submitForm(this.form)">Valider</button>
-          </td>
         </tr>
         </table>
       </form>
@@ -87,14 +82,11 @@ function calculImcVst(){
       <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
       <input type="hidden" name="_check_premiere" value="{{$consult->_check_premiere}}" />
       <label for="examen" title="Bilan de l'examen clinique">Examens</label>
-      <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this)">
+      <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this);this.form.examen.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.examen}}
       </select><br />
-      <textarea name="examen">{{$consult->examen}}</textarea><br />
-      <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">
-        Valider
-      </button>
+      <textarea name="examen" onchange="submitFormAjax(this.form, 'systemMsg')">{{$consult->examen}}</textarea><br />
       </form>
     </td>
   </tr>

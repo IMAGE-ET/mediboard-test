@@ -47,11 +47,12 @@ class CConsultAnesth extends CMbObject {
   var $tsivy         = null;
   var $plaquettes    = null;
   var $ecbu          = null;
-  var $ecbu_detail   = null;
   var $pouls         = null;
   var $spo2          = null;
   var $ht            = null;
   var $ht_final      = null;
+  var $premedication = null;
+  var $prepa_preop   = null;
 
   // Form fields
   var $_date_consult = null;
@@ -84,7 +85,7 @@ class CConsultAnesth extends CMbObject {
     $this->_props["poid"]            = "currency|pos";
     $this->_props["taille"]          = "currency|min|0";
     $this->_props["groupe"]          = "enum|?|O|A|B|AB";
-    $this->_props["rhesus"]          = "enum|?|-|+";
+    $this->_props["rhesus"]          = "enum|?|NEG|POS";
     $this->_props["antecedents"]     = "str|confidential";
     $this->_props["traitements"]     = "str|confidential";
     $this->_props["tabac"]           = "text";
@@ -108,11 +109,12 @@ class CConsultAnesth extends CMbObject {
     $this->_props["tsivy"]           = "time";
     $this->_props["plaquettes"]      = "num|pos";
     $this->_props["ecbu"]            = "enum|?|NEG|POS";
-    $this->_props["ecbu_detail"]     = "text";
     $this->_props["pouls"]           = "num|pos";
     $this->_props["spo2"]            = "currency|minMax|0|100";
     $this->_props["ht"]              = "currency|minMax|0|100";
     $this->_props["ht_final"]        = "currency|minMax|0|100";
+    $this->_props["premedication"]   = "text";
+    $this->_props["prepa_preop"]     = "text";
     
     // Champs pour les conditions d'intubation
     $this->_props["mallampati"]      = "enum|classe1|classe2|classe3|classe4";

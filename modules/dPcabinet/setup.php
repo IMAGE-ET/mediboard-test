@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.47";
+$config["mod_version"]     = "0.48";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -385,7 +385,24 @@ class CSetupdPcabinet {
         $sql = "ALTER TABLE `consultation_anesth` DROP `transfusions`";
         db_exec( $sql ); db_error();
       case "0.47":
-        return "0.47";
+        $sql = "ALTER TABLE `consultation_anesth` CHANGE `rhesus` `rhesus` ENUM( '?', '+', '-', 'POS', 'NEG') DEFAULT '?' NOT NULL ;";
+        db_exec( $sql ); db_error();
+        $sql = "UPDATE `consultation_anesth` SET `rhesus`='POS' WHERE `rhesus`='+';";
+        db_exec( $sql ); db_error();
+        $sql = "UPDATE `consultation_anesth` SET `rhesus`='NEG' WHERE `rhesus`='-';";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `consultation_anesth` CHANGE `rhesus` `rhesus` ENUM( '?', 'POS', 'NEG') DEFAULT '?' NOT NULL ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `consultation_anesth` CHANGE `rai` `rai` ENUM( '?', 'POS', 'NEG') DEFAULT '?' NOT NULL ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `consultation_anesth` DROP `ecbu_detail`";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `consultation_anesth` ".
+               "\nADD `premedication` TEXT," .
+               "\nADD `prepa_preop` TEXT;" ;
+        db_exec( $sql ); db_error();
+      case "0.48":
+        return "0.48";
     }
     return false;
   }

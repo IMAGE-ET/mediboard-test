@@ -49,30 +49,27 @@ function verifIntubDifficileAndSave(oForm){
   <tr>
     <th><label for="etatBucco" title="Etat bucco-dentaire">Etat bucco-dentaire</label></th>
     <td>
-      <select name="_helpers_etatBucco" size="1" onchange="pasteHelperContent(this)">
+      <select name="_helpers_etatBucco" size="1" onchange="pasteHelperContent(this);this.form.etatBucco.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult_anesth->_aides.etatBucco}}
       </select><br />
-      <textarea name="etatBucco" title="{{$consult_anesth->_props.etatBucco}}">{{$consult_anesth->etatBucco}}</textarea>
+      <textarea name="etatBucco" onchange="submitFormAjax(this.form, 'systemMsg')" title="{{$consult_anesth->_props.etatBucco}}">{{$consult_anesth->etatBucco}}</textarea>
     </td>
   </tr>
   
   <tr>
     <th><label for="conclusion" title="Remarques et Conclusion sur les conditions d'intubation">Remarques / Conclusion</label></th>
     <td>
-      <select name="_helpers_conclusion" size="1" onchange="pasteHelperContent(this)">
+      <select name="_helpers_conclusion" size="1" onchange="pasteHelperContent(this);this.form.conclusion.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult_anesth->_aides.conclusion}}
       </select><br />
-      <textarea name="conclusion" title="{{$consult_anesth->_props.conclusion}}">{{$consult_anesth->conclusion}}</textarea>
+      <textarea name="conclusion" onchange="submitFormAjax(this.form, 'systemMsg')" title="{{$consult_anesth->_props.conclusion}}">{{$consult_anesth->conclusion}}</textarea>
     </td>
   </tr>
   <tr>
     <td colspan="6" class="button">
       <div id="divAlertIntubDiff" style="float:right;color:#F00;{{if !$consult_anesth->_intub_difficile}}visibility:hidden;{{/if}}"><strong>Intubation Difficile Prévisible</strong></div>
-      <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">
-        Valider
-      </button>
     </td>
   </tr>
 </table>
