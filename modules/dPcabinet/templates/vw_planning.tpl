@@ -309,7 +309,7 @@ function pageMain() {
           {{/if}}
           
           <td {{$style}}>
-            <a href="{{$href_consult}}" title="Voir la consultation">{{$curr_consult->_hour}}h{{if $curr_consult->_min}}{{$curr_consult->_min}}{{/if}}</a>
+            <a href="{{$href_consult}}" title="Voir la consultation">{{$curr_consult->heure|date_format:"%Hh%M"}}</a>
           </td>
           <td class="text" {{$style}}>
             <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_consult->_ref_patient->patient_id}}">
