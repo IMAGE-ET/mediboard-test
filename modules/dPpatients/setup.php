@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.33";
+$config["mod_version"]     = "0.34";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -195,7 +195,16 @@ class CSetupdPpatients {
         $sql = "UPDATE `medecin` SET `cp` = NULL WHERE `cp` LIKE 'NULL%' ;";
         db_exec( $sql ); db_error();
       case "0.33":
-        return "0.33";
+        $sql = "ALTER TABLE `medecin` ADD `jeunefille` VARCHAR( 50 ) AFTER `prenom` ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `medecin` ADD `complementaires` TEXT AFTER `disciplines` ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `medecin` ADD `orientations` TEXT AFTER `disciplines` ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `medecin` DROP `specialite` ;";
+        db_exec( $sql ); db_error();
+      case "0.34":
+        return "0.34";
     }
     return false;
   }

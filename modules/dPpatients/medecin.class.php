@@ -17,7 +17,7 @@ class CMedecin extends CMbObject {
   // DB Fields
 	var $nom             = null;
   var $prenom          = null;
-  var $nom_jeunefille  = null;
+  var $jeunefille      = null;
 	var $adresse         = null;
 	var $ville           = null;
 	var $cp              = null;
@@ -50,10 +50,10 @@ class CMedecin extends CMbObject {
     
     $this->_props["nom"]             = "str|notNull|confidential";
     $this->_props["prenom"]          = "str|confidential";
-    $this->_props["nom_jeunefille"]  = "str|confidential";
+    $this->_props["jeunefille"]  = "str|confidential";
     $this->_props["adresse"]         = "str|confidential";
     $this->_props["ville"]           = "str|confidential";
-    $this->_props["cp"]              = "num|length|5|confidential";
+    $this->_props["cp"]              = "num|maxLength|5|confidential";
     $this->_props["tel"]             = "num|length|10|confidential";
     $this->_props["fax"]             = "num|length|10|confidential";
     $this->_props["email"]           = "str|confidential";
@@ -85,7 +85,7 @@ class CMedecin extends CMbObject {
   }
   
   function updateDBFields() {
-    if(($this->_tel1 !== null) && ($this->_tel2 !== null) && ($this->_tel3 !== null) && ($this->_tel4 !== null) && ($this->_tel5 !== null)) {
+    if ($this->_tel1 !== null) {
       $this->tel = 
         $this->_tel1 .
         $this->_tel2 .
@@ -93,7 +93,8 @@ class CMedecin extends CMbObject {
         $this->_tel4 .
         $this->_tel5;
     }
-    if(($this->_fax1 !== null) && ($this->_fax2 !== null) && ($this->_fax3 !== null) && ($this->_fax4 !== null) && ($this->_fax5 !== null)) {
+    
+    if ($this->_fax1 !== null) {
       $this->fax = 
         $this->_fax1 .
         $this->_fax2 .
@@ -137,26 +138,14 @@ class CMedecin extends CMbObject {
   
   function getExactSiblings() {
   	$where = array();
-  	$where["medecin_id"] = "!= '".addslashes($this->medecin_id)."'";
-  	$where["nom"] = "= '".addslashes($this->nom)."'";
-  	$where["prenom"] = "= '".addslashes($this->prenom)."'";
-  	if($this->cp == null)
-      $where["cp"] = "IS NULL";
-  	else
-  	  $where["cp"] = "= '".addslashes($this->cp)."'";
+  	$where["medecin_id"] = db_prepare("!= %", $this->medecin_id);
+  	$where["nom"]        = db_prepare("= %", $this->nom);
+  	$where["prenom"]     = db_prepare("= %", $this->prenom);
+    $where["cp"] = $this->cp == null ? "IS NULL" : db_prepare("= %", $this->cp);
       
   	$siblings = new CMedecin;
   	$siblings = $siblings->loadList($where);
   	return $siblings;
-  }
-
-  function getSiblings() {
-    $sql = "SELECT medecin_id, nom, prenom, adresse, ville, CP " .
-      		"FROM medecin WHERE " .
-      		"medecin_id != '$this->medecin_id' " .
-      		"AND nom = '$this->nom' AND prenom = '$this->prenom'";
-    $siblings = db_loadlist($sql);
-    return $siblings;
   }
 }
 ?>

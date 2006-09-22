@@ -9,7 +9,7 @@
 
 global $AppUI, $m;
 
-set_time_limit(300);
+//set_time_limit(300);
 
 if (!class_exists("DOMDocument")) {
   trigger_error("sorry, DOMDocument is needed");
@@ -36,7 +36,7 @@ class CMbXPath extends DOMXPath {
     $node = $this->queryUniqueNode($query, $contextNode);
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = $node->textContent;
-      $text = str_replace($purgeChars, "", $text);
+      $text = str_replace(mbArrayFromString($purgeChars), "", $text);
       $text = trim($text);
     }
     
@@ -46,11 +46,11 @@ class CMbXPath extends DOMXPath {
   function queryMultilineTextNode($query, DOMNode $contextNode, $purgeChars = "") {
     $text = null;
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
-      $textLines = explode("\n", $node->textContent);
+      $textLines = explode("\n", utf8_decode($node->textContent));
       if (count($textLines) > 1) {
       }
       foreach ($textLines as &$textLine) {
-        $textLine = str_replace($purgeChars, "", $textLine);
+        $textLine = str_replace(mbArrayFromString($purgeChars), "", $textLine);
         $textLine = trim($textLine);
       }
       
@@ -108,39 +108,45 @@ function logParseError($str) {
 $chrono = new Chronometer;
 $chrono->start();
 
-$step = @$_GET["step"];
-
-// Emulates an HTTP request
+$path = $AppUI->getTmpPath("medecin.htm");
 $segment = 1000;
+$step = @$_GET["step"];
 $from = $step ? 100 + $segment * ($step -1) : 0;
 $to = $step ? 100 + $step * $segment : 100;
-$cookiepath = $AppUI->getTmpPath("cookie.txt");
-$baseurl = "http://www.conseil-national.medecin.fr/";
-$fileurl = $step ? "index.php?url=annuaire/result.php&from=$from&to=$to" : "annuaire.php?cp=";
-$url = $baseurl . $fileurl;
 
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiepath);
-curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiepath);
-curl_setopt($ch, CURLOPT_VERBOSE, 1);
-curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); 
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-$result = curl_exec ($ch);
-curl_close($ch);
-
-$path = $AppUI->getTmpPath("medecin.htm");
-file_put_contents($path, $result);
-
-// -- Step: Get data from html file
-$str = @file_get_contents($path);
-if (!$str) {
-  // Création du template
-  $smarty = new CSmartyDP(1);
+if (mbGetValueFromGet("curl", 1)) {
   
-  $smarty->assign("end_of_process", true);
-  $smarty->display("medecin.tpl");
-  return;
+  // Emulates an HTTP request
+  $cookiepath = $AppUI->getTmpPath("cookie.txt");
+  $baseurl = "http://www.conseil-national.medecin.fr/";
+  $fileurl = $step ? "index.php?url=annuaire/result.php&from=$from&to=$to" : "annuaire.php?cp=";
+  $url = $baseurl . $fileurl;
+  
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiepath);
+  curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiepath);
+  curl_setopt($ch, CURLOPT_VERBOSE, 1);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); 
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  $result = curl_exec ($ch);
+  curl_close($ch);
+  
+  $path = $AppUI->getTmpPath("medecin.htm");
+  file_put_contents($path, $result);
+  
+  // -- Step: Get data from html file
+  $str = @file_get_contents($path);
+  if (!$str) {
+    // Création du template
+    $smarty = new CSmartyDP(1);
+    
+    $smarty->assign("end_of_process", true);
+    $smarty->display("import_medecin.tpl");
+    return;
+  }
+} else {
+  $str = file_get_contents($path);
 }
  
 $str = purgeHTML($str); 
@@ -163,6 +169,7 @@ foreach ($xpath->query($query) as $key => $nodeMainTr) {
     
   $ndx = intval($key / 3);
   $mod = intval($key % 3);
+    
   if (!isset($medecins[$ndx])) {
     $medecins[$ndx] = new CMedecin;
   }
@@ -182,7 +189,7 @@ foreach ($xpath->query($query) as $key => $nodeMainTr) {
 
     // Nom de jeune fille
     $query = "td[2]/table/tr[2]/td";
-    $medecin->nom_jeunefille = $xpath2->queryTextNode($query, $nodeMainTr);
+    $medecin->jeunefille = $xpath2->queryTextNode($query, $nodeMainTr);
             
     break;
       
@@ -234,10 +241,13 @@ foreach ($medecins as &$medecin) {
   $medecin->_has_siblings = count($medecin->getExactSiblings());
   if ($medecin->_has_siblings) {
     $sibling_errors++;
+    continue;
   } 
-//  elseif (!$medecin->store()) {
-//    $stores++;
-//  }
+  
+  if (null != $msg = $medecin->store()) {
+    $stores++;
+    mbTrace($msg);
+  }
   
   $medecin->updateFormFields();  
 }
@@ -260,5 +270,5 @@ $smarty->assign("parse_errors"  , $parse_errors);
 $smarty->assign("stores"        , $stores);
 $smarty->assign("sibling_errors", $sibling_errors);
 
-$smarty->display("medecin.tpl");
+$smarty->display("import_medecin.tpl");
 ?>

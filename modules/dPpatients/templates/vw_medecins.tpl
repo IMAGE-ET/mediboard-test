@@ -1,6 +1,7 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
+
 function checkMedecin() {
   var form = document.editFrm;
     
@@ -200,6 +201,27 @@ function setClose() {
         <tr>
           <th><label for="email" title="Email du médecin">Email</label></th>
           <td {{if $dialog}} class="readonly" {{/if}}><input type="text" {{if $dialog}} readonly {{/if}} name="email" value="{{$medecin->email}}" /></td>
+        </tr>
+
+        <tr>
+          <th><label for="disciplines" title="Disciplines qualifiantes du médecin">Disciplines</label></th>
+          <td {{if $dialog}} class="readonly" {{/if}}>
+            <textarea title="{{$medecin->_props.disciplines}}"{{if $dialog}} readonly {{/if}} name="adresse">{{$medecin->disciplines|nl2br}}</textarea>
+          </td>
+        </tr>
+        
+        <tr>
+          <th><label for="orientations" title="Mentions et orientations reconnue par l'Ordre des médecins">Orientations</label></th>
+          <td {{if $dialog}} class="readonly" {{/if}}>
+            <textarea title="{{$medecin->_props.orientations}}"{{if $dialog}} readonly {{/if}} name="orientations">{{$medecin->orientations|nl2br}}</textarea>
+          </td>
+        </tr>
+
+        <tr>
+          <th><label for="complementaires" title="Disciplines complémentaires d'exercice">Complémentaires</label></th>
+          <td {{if $dialog}} class="readonly" {{/if}}>
+            <textarea title="{{$medecin->_props.complementaires}}"{{if $dialog}} readonly {{/if}} name="adresse">{{$medecin->complementaires|nl2br}}</textarea>
+          </td>
         </tr>
 
         <tr>

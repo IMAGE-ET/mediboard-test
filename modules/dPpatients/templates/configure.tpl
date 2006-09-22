@@ -76,9 +76,10 @@ var step = 0;
 function startStep() {
   setRunning(true);
   url = new Url();
-  url.setModuleAction("dPpatients", "medecin");
-  url.addParam("step", step)
-  url.popup(400, 100, 'import');
+  url.setModuleAction("dPpatients", "import_medecin");
+  url.addParam("step", step);
+  url.addParam("curl", 0);
+  url.popup(600, 600, 'import');
 }
 
 function startProcess() {
@@ -108,9 +109,9 @@ function endProcess() {
 }
 
 function startINSEE() {
-  var INSEEUrl = new Url;
-  INSEEUrl.setModuleAction("dPpatients", "httpreq_do_add_insee");
-  INSEEUrl.requestUpdate("INSEE");
+  var url = new Url;
+  url.setModuleAction("dPpatients", "httpreq_do_add_insee");
+  url.requestUpdate("INSEE");
 }
 
 function pageMain() {

@@ -8,7 +8,7 @@ function pageMain() {
 {{else}}
 
 <script language="JavaScript" type="text/javascript">
-function pageMain() {
+function pageMainOld() {
   window.opener.endStep(
     {{$from}},
     {{$to}}, 
@@ -36,6 +36,7 @@ function pageMain() {
   <tr>
   	<th>Nom</th>
     <th>Prénom</th>
+    <th>Doublons ?</th>
     <th>Nom de jeune fille</th>
   	<th>Adresse</th>
   	<th>Ville</th>
@@ -43,16 +44,17 @@ function pageMain() {
   	<th>Tél</th>
   	<th>Fax</th>
   	<th>Mél</th>
-    <th>Disciplines qualifiantes</th>
-    <th>Disciplines complémentaires d'exercice</th>
-    <th>Mentions et orientations reconnue par l'Ordre</th>
+    <th>Disciplines</th>
+    <th>Complémentaires</th>
+    <th>Orientations</th>
   </tr>
   
   {{foreach from=$medecins item=curr_medecin}}
   <tr>
   	<td {{if $curr_medecin->_has_siblings}}style="background: #eef"{{/if}}>{{$curr_medecin->nom}}</td>
     <td>{{$curr_medecin->prenom}}</td>
-    <td>{{$curr_medecin->nom_jeunefille}}</td>
+    <td>{{$curr_medecin->_has_siblings}}</td>
+    <td>{{$curr_medecin->jeunefille}}</td>
   	<td>{{$curr_medecin->adresse|nl2br}}</td>
   	<td>{{$curr_medecin->ville}}</td>
   	<td>{{$curr_medecin->cp}}</td>
