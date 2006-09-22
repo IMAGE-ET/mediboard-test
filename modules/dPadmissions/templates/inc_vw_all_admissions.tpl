@@ -1,9 +1,9 @@
       <table class="tbl">
         <tr>
           <th colspan="4">
-            <a style="display: inline;" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
+            <a style="display: inline;" href="index.php?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
             {{$date|date_format:"%B %Y"}}
-            <a style="display: inline;" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
+            <a style="display: inline;" href="index.php?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
           </th>
         <tr>
           <th class="text">Date</th>
@@ -14,7 +14,7 @@
         {{foreach from=$list1 item=curr_list}}
         <tr>
           <td align="right">
-            <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;date={{$curr_list.date|date_format:"%Y-%m-%d"}}">
+            <a href="index.php?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$curr_list.date|date_format:"%Y-%m-%d"}}">
             {{$curr_list.date|date_format:"%A %d"}}
             </a>
           </td>
