@@ -122,12 +122,12 @@ function pageMain() {
           <td>
             <select name="_incident_heure">
             {{foreach from=$heures item=curr_heure}}
-              <option value="{{$curr_heure}}">{{$curr_heure}}</option>
+              <option value="{{$curr_heure}}"{{if $curr_heure==$heurenow}}selected="seelcted"{{/if}}>{{$curr_heure}}</option>
             {{/foreach}}
             </select> h
             <select name="_incident_min">
             {{foreach from=$mins item=minute}}
-              <option value="{{$minute}}">{{$minute}}</option>
+              <option value="{{$minute}}"{{if $minute==$minnow}}selected="seelcted"{{/if}}>{{$minute}}</option>
             {{/foreach}}
             </select> min
           </td>

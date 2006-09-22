@@ -1,3 +1,12 @@
+<script type="text/javascript">
+function printIncident(ficheId){
+  var url = new Url;
+  url.setModuleAction("dPqualite", "print_fiche"); 
+  url.addParam("fiche_ei_id", ficheId);
+  url.popup(700, 500, url, "printFicheEi");
+  return;
+}
+</script>
 <table class="main">
   <tr>
     <td class="halfPane">
@@ -151,25 +160,25 @@
         {{if $fiche->autre}}
         <tr>
           <th>Autre</th>
-          <td>{{$fiche->autre|nl2br}}</td>
+          <td class="text">{{$fiche->autre|nl2br}}</td>
         </tr>
         {{/if}}
         {{if $fiche->descr_faits}}
         <tr>
           <th>Description des faits</th>
-          <td>{{$fiche->descr_faits|nl2br}}</td>
+          <td class="text">{{$fiche->descr_faits|nl2br}}</td>
         </tr>
         {{/if}}
         {{if $fiche->mesures}}
         <tr>
           <th>Mesures Prises</th>
-          <td>{{$fiche->mesures|nl2br}}</td>
+          <td class="text">{{$fiche->mesures|nl2br}}</td>
         </tr>
         {{/if}}
         {{if $fiche->descr_consequences}}
         <tr>
           <th>Description des conséquences</th>
-          <td>{{$fiche->descr_consequences|nl2br}}</td>
+          <td class="text">{{$fiche->descr_consequences|nl2br}}</td>
         </tr>
         {{/if}}
         <tr>
@@ -221,7 +230,14 @@
           <th>Validée par</th>
           <td>
             {{$fiche->_ref_user_valid->_view}}
-            <br />le {{$currFiche->date_validation|date_format:"%d %b %Y à %Hh%M"}}
+            <br />le {{$fiche->date_validation|date_format:"%d %b %Y à %Hh%M"}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="button">
+            <button class="print" type="button" onclick="printIncident({{$fiche->fiche_ei_id}});">
+              Imprimer la fiche
+            </button>
           </td>
         </tr>
       </table>
