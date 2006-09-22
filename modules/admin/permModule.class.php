@@ -84,8 +84,6 @@ class CPermModule extends CMbObject {
   }
   
   function getViewModule($mod_id, $permType) {
-      $result = CPermModule::getInfoModule("view", $mod_id, $permType);
-      //mbTrace($result, "result for $mod_id ($permType)");
     return(CPermModule::getInfoModule("view", $mod_id, $permType));
   }
   
