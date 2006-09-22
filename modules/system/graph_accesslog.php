@@ -15,7 +15,7 @@ require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_regstat"));
 
 $date   = mbGetValueFromGet("date"   , mbDate());
 $module = mbGetValueFromGet("module" , 0);
-$action = mbGetValueFromGet("action" , 0);
+$actionName = mbGetValueFromGet("actionName" , 0);
 $size   = mbGetValueFromGet("size", 1);
 
 for($i = 0; $i <= 23; $i++) {
@@ -33,8 +33,8 @@ $sql = "SELECT accesslog_id, module, action, period," .
       "\nWHERE period LIKE '$date __:__:__'";
 if($module)
   $sql .= "\nAND module = '$module'";
-if($action)
-  $sql .= "\nAND action = '$action'";
+if($actionName)
+  $sql .= "\nAND action = '$actionName'";
 $sql .= "\nGROUP BY period" .
     "\nORDER BY period";
 
@@ -70,7 +70,7 @@ $graph->SetMarginColor("lightblue");
 // Set up the title for the graph
 $title = mbTranformTime(null, $date, "%A %d %b %Y");
 if($module) $title .= " :  $module";
-if($action) $title .= "- $action";
+if($actionName) $title .= "- $actionName";
 $graph->title->Set($title);
 $graph->title->SetFont(FF_ARIAL,FS_NORMAL,7+$size);
 $graph->title->SetColor("darkred");
