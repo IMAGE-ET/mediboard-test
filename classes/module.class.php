@@ -9,6 +9,8 @@
  
 global $AppUI, $m;
 
+require_once($AppUI->getSystemClass("mbobject"));
+
 if(!defined("TAB_READ")) {
   define("TAB_READ"  , "0");
   define("TAB_EDIT"  , "1");

@@ -62,36 +62,46 @@ class CPermModule extends CMbObject {
   
   // Those functions are statics
   
+  function loadUserPerms() {
+    global $AppUI, $userPermsModules, $permissionSystemeDown;
+    if($permissionSystemeDown) {
+      return true;
+    }
+    $perm = new CPermModule;
+    $listPermsModules = array();
+    $where = array();
+    $where["user_id"] = "= '$AppUI->user_id'";
+    $listPermsModules = $perm->loadList($where);
+    $userPermsModules = array();
+    foreach($listPermsModules as $perm_mod) {
+      $userPermsModules[$perm_mod->mod_id] = $perm_mod;
+    }
+    //mbTrace($userPermsModules);
+  }
+  
   function getPermModule($mod_id, $permType) {
     return(CPermModule::getInfoModule("permission", $mod_id, $permType));
   }
   
   function getViewModule($mod_id, $permType) {
+      $result = CPermModule::getInfoModule("view", $mod_id, $permType);
+      //mbTrace($result, "result for $mod_id ($permType)");
     return(CPermModule::getInfoModule("view", $mod_id, $permType));
   }
   
   function getInfoModule($field, $mod_id, $permType, $user_id = null) {
-    global $AppUI, $permissionSystemeDown;
+    global $userPermsModules, $permissionSystemeDown;
     if($permissionSystemeDown) {
       return true;
     }
-    if(!$user_id) {
-      $user_id = $AppUI->user_id;
+    $result = PERM_DENY;
+    if(isset($userPermsModules[0])) {
+      $result = $userPermsModules[0]->$field;
     }
-    $permModule = new CPermModule;
-    $where = array();
-    $where["user_id"] = "= '$user_id'";
-    $where["mod_id"]  = "= '0'"; // Tous les modules
-    $where["$field"]    = ">= '$permType'";
-    if(count($permModule->loadList($where))) {
-      $where["mod_id"] = "= '$mod_id'";
-      $where["$field"]   = "< '$permType'";
-      return !count($permModule->loadList($where));
-    } else {
-      $where["mod_id"] = "= '$mod_id'";
-      $where["$field"]   = ">= '$permType'";
-      return count($permModule->loadList($where));
+    if(isset($userPermsModules[$mod_id])) {
+      $result = $userPermsModules[$mod_id]->$field;
     }
+    return $result >= $permType;
   }
 
   // Return the first visible module
@@ -117,5 +127,7 @@ class CPermModule extends CMbObject {
     return $listReadable;
   }
 }
+
+CPermModule::loadUserPerms();
 
 ?>

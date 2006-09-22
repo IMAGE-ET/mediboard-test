@@ -58,37 +58,44 @@ class CPermObject extends CMbObject {
   
   // Those functions are statics
   
-  function getPermObject($object, $permType) {
-    global $AppUI, $permissionSystemeDown;
+  function loadUserPerms() {
+    global $AppUI, $userPermsObjects, $permissionSystemeDown;
     if($permissionSystemeDown) {
       return true;
     }
-    $user_id = $AppUI->user_id;
-    $permObject = new CPermObject;
+    $perm = new CPermObject;
+    $listPermsModules = array();
     $where = array();
-    $where["user_id"]      = "= '$user_id'";
-    $where["object_id"]    = "= '0'";
-    $where["object_class"] = "= '".get_class($object)."'";
-    $where["permission"]   = ">= '$permType'";
-    if(count($permObject->loadList($where))) {
-      $where["object_id"]  = "= '$object->_id'";
-      $where["permission"] = "< '$permType'";
-      return !count($permObject->loadList($where));
-    } else {
-      $where["object_id"]  = "= '$object->_id'";
-      $where["permission"] = ">= '$permType'";
-      if(count($permObject->loadList($where))) {
-        return true;
-      } else {
-        $where["object_id"]  = "= '0'";
-        $where["permission"] = "< '$permType'";
-        if(count($permObject->loadList($where))) {
-          return false;
-        } else {
-          return $object->_ref_module->getPerm($permType);
-        }
-      }
+    $where["user_id"] = "= '$AppUI->user_id'";
+    $listPermsObjects = $perm->loadList($where);
+    $userPermsObjects = array();
+    foreach($listPermsObjects as $perm_obj) {
+      $userPermsObjects[$perm_obj->object_class][$perm_obj->object_id] = $perm_obj;
     }
   }
+  
+  function getPermObject($object, $permType) {
+    global $AppUI, $userPermsObjects, $permissionSystemeDown;
+    if($permissionSystemeDown) {
+      return true;
+    }
+    $result = PERM_DENY;
+    $object_class = get_class($object);
+    $object_id    = $object->_id;
+    if(isset($userPermsObjects[$object_class])) {
+      if(isset($userPermsObjects[$object_class][0])) {
+        $result = $userPermsObjects[$object_class][0]->permission;
+      }
+      if(isset($userPermsObjects[$object_class][$object_id])) {
+        $result = $userPermsObjects[$object_class][$object_id]->permission;
+      }
+    } else {
+      return $object->_ref_module->getPerm($permType);
+    }
+    return $result >= $permType;
+  }
 }
+
+CPermObject::loadUserPerms();
+
 ?>
