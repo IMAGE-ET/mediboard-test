@@ -36,7 +36,7 @@ class CPermObject extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
 
     $this->_props["user_id"]      = "ref|notNull";
-    $this->_props["object_id"]    = "ref|notNull";
+    $this->_props["object_id"]    = "num|notNull";
     $this->_props["object_class"] = "str|notNull";
     $this->_props["permission"]   = "num|notNull";
   }

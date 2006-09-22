@@ -394,7 +394,7 @@ class CMediusers extends CMbObject {
     return $this->loadListFromType(array("Anesthésiste"), $permType, $function_id, $name);
   }
   
-  function loadPraticiens($permType = null, $function_id = null, $name = null) {
+  function loadPraticiens($permType = PERM_READ, $function_id = null, $name = null) {
     return $this->loadListFromType(array("Chirurgien", "Anesthésiste"), $permType, $function_id, $name);
   }
   

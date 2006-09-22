@@ -19,10 +19,10 @@ $date  = mbGetValueFromGetOrSession("date", mbDate());
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;
-$listAnesths = $listAnesths->loadAnesthesistes();
+$listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
 
 $listChirs = new CMediusers;
-$listChirs = $listChirs->loadPraticiens();
+$listChirs = $listChirs->loadPraticiens(PERM_READ);
 
 
 // Selection des salles
