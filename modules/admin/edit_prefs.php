@@ -55,7 +55,7 @@ $array_list_module_pref["dPpatients"] = array("DEPARTEMENT");
 $array_list_module_pref["dPcabinet"]  = array("CABCONSULT");
 
 foreach($array_list_module_pref as $modulename => $listPrefs){
-  $prefsUser["$modulename"] = array();	
+  $prefsUser[$modulename] = array();	
   $prefModule = CModule::getInstalled($modulename);
   if(($user_id!==0 && $prefModule->mod_id && CPermModule::getInfoModule("view", $prefModule->mod_id, PERM_READ, $user_id)) || $user_id===0){
     foreach($listPrefs as $namePref){

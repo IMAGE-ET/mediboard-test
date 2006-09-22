@@ -47,10 +47,10 @@ if ($consultation_id) {
 $antecedent = new CAntecedent();
 $listAnt = array();
 foreach($antecedent->_enums["type"] as $nameantecedent){
-  $listAnt["$nameantecedent"] = array();
+  $listAnt[$nameantecedent] = array();
 }
 foreach($patient->_ref_antecedents as $keyAnt=>$currAnt){
-  $listAnt["$currAnt->type"][$keyAnt] = $currAnt;
+  $listAnt[$currAnt->type][$keyAnt] = $currAnt;
 }
 // Création du template
 $smarty = new CSmartyDP(1);

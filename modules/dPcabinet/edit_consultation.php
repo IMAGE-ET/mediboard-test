@@ -161,11 +161,11 @@ $examComp->loadAides($userSel->user_id);
 // Classement des antecedents
 $listAnt = array();
 foreach($antecedent->_enums["type"] as $nameantecedent){
-  $listAnt["$nameantecedent"] = array();
+  $listAnt[$nameantecedent] = array();
 }
 if($consult->consultation_id) {
   foreach($patient->_ref_antecedents as $keyAnt=>$currAnt){
-    $listAnt["$currAnt->type"][$keyAnt] = $currAnt;
+    $listAnt[$currAnt->type][$keyAnt] = $currAnt;
   }
 }
 

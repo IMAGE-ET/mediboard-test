@@ -24,10 +24,10 @@ $patient->loadRefsTraitements();
 $antecedent = new CAntecedent();
 $listAnt = array();
 foreach($antecedent->_enums["type"] as $antecedent){
-  $listAnt["$antecedent"] = array();
+  $listAnt[$antecedent] = array();
 }
 foreach($patient->_ref_antecedents as $keyAnt=>$currAnt){
-  $listAnt["$currAnt->type"][$keyAnt] = $currAnt;
+  $listAnt[$currAnt->type][$keyAnt] = $currAnt;
 }
 
 
