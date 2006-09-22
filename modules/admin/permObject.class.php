@@ -82,7 +82,7 @@ class CPermObject extends CMbObject {
     $result = PERM_DENY;
     $object_class = get_class($object);
     $object_id    = $object->_id;
-    if(isset($userPermsObjects[$object_class])) {
+    if(isset($userPermsObjects[$object_class][0]) || isset($userPermsObjects[$object_class][$object_id])) {
       if(isset($userPermsObjects[$object_class][0])) {
         $result = $userPermsObjects[$object_class][0]->permission;
       }
