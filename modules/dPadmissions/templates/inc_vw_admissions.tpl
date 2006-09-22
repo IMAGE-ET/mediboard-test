@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_idx_admission&date=");
 
 </script>
 
@@ -22,9 +22,9 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
     </th>
   </tr>
   <tr>
-    <th><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;selAdmis=0&amp;selTri=nom">Nom</a></th>
+    <th><a href="index.php?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selTri=nom">Nom</a></th>
     <th>Chirurgien</th>
-    <th><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;selAdmis=0&amp;selTri=heure">Heure</a></th>
+    <th><a href="index.php?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selTri=heure">Heure</a></th>
     <th>Chambre</th>
     <th>Admis</th>
     <th>
