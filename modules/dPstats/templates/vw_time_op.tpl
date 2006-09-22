@@ -1,3 +1,20 @@
+<script>
+
+function popCode(type) {
+  var url = new Url;
+  url.setModuleAction("dPplanningOp", "code_selector");
+  url.addParam("type", type);
+  url.popup(600, 500, type);
+}
+
+function setCode(code, type) {
+  var oForm = document.bloc;
+  var oField = oForm.codeCCAM;
+  oField.value = code;
+}
+
+</script>
+
 <table class="main">
   <tr>
     <td>
@@ -18,7 +35,8 @@
           <th><label for="codeCCAM" title="Acte CCAM">Acte CCAM</label></th>
           <td>
             <input type="text" name="codeCCAM" value="{{$codeCCAM}}" />
-          </td>   
+            <button type="button" class="search" onclick="popCode('ccam')">Sélectionner un code</button>
+          </td>
         </tr>
         <tr>
           <th><label for="prat_id" title="Praticien">Praticien</label></th>
