@@ -337,17 +337,15 @@ class CMediusers extends CMbObject {
     // Get all users
     $mediuser = new CMediusers;
     $baseUsers = $mediuser->loadList($where, $order, null, null, $ljoin);
-   
-    $users = array();
      
     // Filter with permissions
     foreach ($baseUsers as $key => $mediuser) {
-      if($mediuser->getPerm($permType)) {
-        $users[$key] = $baseUsers[$key];
+      if(!$mediuser->getPerm($permType)) {
+        unset($baseUsers[$key]);
       }          
     }
     
-    return $users;
+    return $baseUsers;
     
   }
   

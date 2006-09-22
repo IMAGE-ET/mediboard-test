@@ -14,10 +14,13 @@ if (!$canRead) {
 }
 
 $patient_id = mbGetValueFromGetOrSession("patient_id", 0);
+$new        = mbGetValueFromGet("new", 0);
 
 $fileModule    = CModule::getInstalled("dPfiles");
 $fileCptRendus = CModule::getInstalled("dPcompteRendu");
+$moduleCabinet = CModule::getInstalled("dPcabinet");
 
+$canEditCabinet = $moduleCabinet->canEdit();
 $canReadFiles     = $fileModule->canRead();
 $canEditFiles     = $fileModule->canEdit();
 $canReadCptRendus = $fileCptRendus->canRead();
@@ -28,7 +31,7 @@ $listModelePrat = array();
 $listModeleFct  = array();
 $compteRendu = new CCompteRendu;
 
-if ($patient_id) {
+if($patient_id && !$new) {
   $listPrat = new CMediusers();
   $listPrat = $listPrat->loadPraticiens(PERM_READ);
   $listFct = new CMediusers();
@@ -37,7 +40,7 @@ if ($patient_id) {
   $where = array();
   $where["object_id"] = "IS NULL";
   $where["type"] = "= 'patient'";
-  $order = "chir_id, nom";  
+  $order = "chir_id, nom"; 
 
   if (count(array_keys($listPrat))) {
     $where["chir_id"] = "IN (".implode(", ",array_keys($listPrat)).")";
@@ -77,16 +80,23 @@ if ($mediuser->isFromType(array("Anesthésiste"))) {
 
 // Récuperation du patient sélectionné
 $patient = new CPatient;
-if(mbGetValueFromGet("new", 0)) {
+if($new) {
   $patient->load(null);
   mbSetValueToSession("patient_id", null);
 } else {
   $patient->load($patient_id);
 }
 
+$listPrat = array();
+$affichageNbFile = null;
+
 if ($patient->patient_id) {
   $patient->loadDossierComplet();
+  $prat = new CMediusers();
+  $listPrat = $prat->loadPraticiens(PERM_EDIT);
+  $affichageNbFile = CFile::loadNbFilesByCategory($patient);
 }
+
 
 // Récuperation des patients recherchés
 $patient_nom       = mbGetValueFromGetOrSession("nom"       , ""       );
@@ -108,14 +118,6 @@ if ($where) {
   $patients = new CPatient();
   $patients = $patients->loadList($where, "nom, prenom, naissance", "0, 100");
 }
-
-$listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
-
-$moduleCabinet = CModule::getInstalled("dPcabinet");
-$canEditCabinet = $moduleCabinet->canEdit();
-
-$affichageNbFile = CFile::loadNbFilesByCategory($patient);
 
 // Création du template
 $smarty = new CSmartyDP(1);
