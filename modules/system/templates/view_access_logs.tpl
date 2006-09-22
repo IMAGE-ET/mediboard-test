@@ -9,7 +9,7 @@ function zoom(date, module, action) {
   url.addParam("size"  , 2);
   url.addParam("date"  , date);
   url.addParam("module", module);
-  url.addParam("action", action);
+  url.addParam("actionName", action);
   url.popup(670, 270, date + " " + module + " " + action);
 }
 
