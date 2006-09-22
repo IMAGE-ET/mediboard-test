@@ -163,8 +163,10 @@ $listAnt = array();
 foreach($antecedent->_enums["type"] as $nameantecedent){
   $listAnt["$nameantecedent"] = array();
 }
-foreach($patient->_ref_antecedents as $keyAnt=>$currAnt){
-  $listAnt["$currAnt->type"][$keyAnt] = $currAnt;
+if($consult->consultation_id) {
+  foreach($patient->_ref_antecedents as $keyAnt=>$currAnt){
+    $listAnt["$currAnt->type"][$keyAnt] = $currAnt;
+  }
 }
 
 // Vérification du cas anesthésie
