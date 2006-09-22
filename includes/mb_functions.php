@@ -521,6 +521,13 @@ function mbArrayMergeRecursive($paArray1, $paArray2) {
   return $paArray1;
 }
 
+function mbArrayFromString($str) {
+  $array = array();
+  for ($i = 0; $i < strlen($str); $i++) {
+    $array[] = $str[$i];
+  }
+  return $array;
+}
 
 /**
  * Ensures a directory path exists. Creates it if needed.
