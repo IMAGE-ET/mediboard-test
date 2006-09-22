@@ -7,6 +7,8 @@
 * @author Romain Ollivier
 */
 
+global $AppUI, $m;
+
 $cmd = dPgetParam( $_GET, "cmd", "0" );
 $id  = dPgetParam( $_GET, "id",  "0" );
 
