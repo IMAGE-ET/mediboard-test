@@ -50,7 +50,9 @@ $consult->_ref_chir = $userSel;
 $consult->_ref_consult_anesth->consultation_anesth_id = 0;
 if ($selConsult) {
   $consult->load($selConsult);
+  $consult->loadAides($userSel->user_id);
   $consult->loadRefConsultAnesth();
+  $consult->_ref_consult_anesth->loadAides($userSel->user_id);
   $consult->loadRefPlageConsult();
   
   // On vérifie que l'utilisateur a les droits sur la consultation
