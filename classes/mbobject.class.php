@@ -476,9 +476,9 @@ class CMbObject {
         $this->lookupSpec("confidential", $specFragments);
         $this->lookupSpec("notNull", $specFragments);
         $this->_enums[$propName] = $specFragments;
-        $this->_enumsTrans = array_flip($specFragments);
-        foreach($this->_enumsTrans as $key => $item) {
-          $this->_enumsTrans[$key] = $AppUI->_($key);
+        $this->_enumsTrans[$propName] = array_flip($specFragments);
+        foreach($this->_enumsTrans[$propName] as $key => $item) {
+          $this->_enumsTrans[$propName][$key] = $AppUI->_($key);
         }
       }
     }
