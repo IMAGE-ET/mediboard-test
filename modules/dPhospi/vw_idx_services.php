@@ -21,11 +21,10 @@ $etablissements = $etablissements->loadEtablissements(PERM_READ);
 $serviceSel = new CService;
 $serviceSel->load(mbGetValueFromGetOrSession("service_id"));
 
-
 // Récupération des services
 $order = "group_id, nom";
 $where = array();
-$where["group_id"] = "IN (".implode(array_keys($etablissements),", ").")";
+$where["group_id"] = db_prepare_in(array_keys($etablissements));
 $services = new CService;
 $services = $services->loadList($where, $order);
 foreach($services as $keyService=>$valService){

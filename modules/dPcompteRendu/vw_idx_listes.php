@@ -21,7 +21,6 @@ $listFunc = new CFunctions();
 $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 
 // Liste des comptes-rendus persos
-$where = array();
 $user_id = mbGetValueFromGetOrSession("filter_user_id", $AppUI->user_id);
 $user = new CMediusers;
 $user->load($user_id);
@@ -29,15 +28,12 @@ if(!$user->isPraticien()) {
   $user_id = 0;
   $user->load($user_id);
 }
-if ($user_id) {
-	$where["chir_id"] = "= '$user_id'";
-} else {
-  $inUsers = array();
-  foreach($listPrat as $key => $value) {
-    $inUsers[] = $key;
-  }
-  $where ["chir_id"] = "IN (".implode(",", $inUsers).")";
-}
+
+$where = array();
+$where["chir_id"] = $user_id ? 
+  "= '$user_id'" : 
+  db_prepare_in(array_keys($listPrat));
+
 $order = "chir_id ASC, nom ASC";
 $listesPrat = new CListeChoix();
 $listesPrat = $listesPrat->loadList($where, $order);
@@ -47,18 +43,14 @@ foreach($listesPrat as $key => $value) {
 
 // Liste des comptes-rendus de cabinet
 $where = array();
-$inFuncs = array();
-if($user_id) {
-  $where["function_id"] = "= '$user->function_id'";
-} else {
-  foreach($listFunc as $key => $value) {
-    $inFuncs[] = $listFunc[$key]->function_id;
-  }
-  $where ["function_id"] = "IN (".implode(",", $inFuncs).")";
-}
+$where["function_id"] = $user_id ? 
+  "= '$user->function_id'" : 
+  db_prepare_in(array_keys($listFunc));
+  
 $order = "function_id ASC, nom ASC";
 $listesFunc = new CListeChoix();
 $listesFunc = $listesFunc->loadList($where, $order);
+
 foreach($listesFunc as $key => $value) {
   $listesFunc[$key]->loadRefsFwd();
 }
@@ -66,33 +58,25 @@ foreach($listesFunc as $key => $value) {
 // Liste des compte-rendus selectionnables
   // Praticien
 $where = array();
-$listCrPrat = new CCompteRendu;
-if($user_id)
-  $where["chir_id"] = "= '$user_id'";
-else {
-  $inChir = array();
-  foreach($listPrat as $key => $value) {
-    $inChir[] = $key;
-  }
-  $where["chir_id"] = "IN (".implode(",", $inChir).")";
-}
+$where["chir_id"] = $user_id ? 
+  "= '$user_id'" : 
+  db_prepare_in(array_keys($listPrat));
+
 $order = "type, nom";
+
+$listCrPrat = new CCompteRendu;
 $listCrPrat = $listCrPrat->loadList($where, $order);
+
   // Cabinet
 $where = array();
-$listCrFunc = new CCompteRendu;
-if($user_id)
-  $where["function_id"] = "= '$user->function_id'";
-else {
-  $inFunc = array();
-  foreach($listFunc as $key => $value) {
-    $inFunc[] = $key;
-  }
-  $where["function_id"] = "IN (".implode(",", $inFunc).")";
-}
-$order = "type, nom";
-$listCrFunc = $listCrFunc->loadList($where, $order);
+$where["function_id"] = $user_id ? 
+  "= '$user->function_id'" : 
+  db_prepare_in(array_keys($listFunc));
 
+$order = "type, nom";
+
+$listCrFunc = new CCompteRendu;
+$listCrFunc = $listCrFunc->loadList($where, $order);
 
 // liste sélectionnée
 $liste_id = mbGetValueFromGetOrSession("liste_id");

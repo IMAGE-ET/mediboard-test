@@ -301,18 +301,9 @@ class CPatient extends CMbObject {
     $this->loadRefsSejours();
     
     // Affectation actuelle et prochaine affectation
-    $inArray = array ("'0'"); // Utile quand aucun séjour
-    foreach($this->_ref_sejours as $keySejour => $valueSejour) {
-      $inArray[] = "'$keySejour'";
-    }
-    $in = join($inArray, ", ");
-
-    $where = array();
-    $where["sejour_id"] ="IN ($in)";
-    
-    $now = mbDateTime();
-
+    $where["sejour_id"] = db_prepare_in(array_keys($this->_ref_sejours));
     $order = "entree";
+    $now = mbDateTime();
     
     $this->_ref_curr_affectation = new CAffectation();
     $where["entree"] = "< '$now'";

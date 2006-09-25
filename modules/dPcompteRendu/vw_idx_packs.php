@@ -29,17 +29,9 @@ $users = new CMediusers;
 $users = $users->loadPraticiens(PERM_EDIT);
 
 // Filtres sur la liste des packs
-$where = null;
-
-if ($userSel->user_id) {
-	$where["chir_id"] = "= '$userSel->user_id'";
-} else {
-  $inUsers = array();
-  foreach($users as $key => $value) {
-    $inUsers[] = $key;
-  }
-  $where ["chir_id"] = "IN (".implode(",", $inUsers).")";
-}
+$where["chir_id"] = $userSel->user_id ? 
+  "= '$userSel->user_id'" : 
+  db_prepare_in(array_keys($users));
 
 $packs = new CPack();
 $packs = $packs->loadList($where);

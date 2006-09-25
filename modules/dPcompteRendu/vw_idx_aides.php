@@ -32,18 +32,11 @@ $users = $users->loadUsers(PERM_READ);
 $user_id = array_key_exists($AppUI->user_id, $users) ? $AppUI->user_id : null;
 
 // Filtres sur la liste d'aides
-$where = null;
-
+$where = array();
 $filter_user_id = mbGetValueFromGetOrSession("filter_user_id", $user_id);
-if ($filter_user_id) {
-  $where["user_id"] = "= '$filter_user_id'";
-} else {
-  $inUsers = array();
-  foreach($users as $key => $value) {
-    $inUsers[] = $key;
-  }
-  $where ["user_id"] = "IN (".implode(",", $inUsers).")";
-}
+$where["user_id"] = $filter_user_id ? 
+  "= '$filter_user_id'" : 
+  db_prepare_in(array_keys($users));
 
 $filter_class = mbGetValueFromGetOrSession("filter_class");
 if ($filter_class) {

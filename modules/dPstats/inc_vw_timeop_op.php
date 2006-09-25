@@ -22,13 +22,7 @@ $total["duree_somme"] = 0;
 $listTemps = new CTempsOp;
 
 $where = array();
-if($prat_id) {
-  $where["chir_id"] = "= '$prat_id'";
-} elseif(count($listPrats)) {
-  $where["chir_id"] = "IN (".implode(",", array_keys($listPrats)).")";
-} else {
-  $where[] = "0 = 1";
-}
+$where["chir_id"] = db_prepare_in(array_keys($listPrats), $prat_id);
 
 if($codeCCAM) {
   $codeCCAM = trim($codeCCAM);

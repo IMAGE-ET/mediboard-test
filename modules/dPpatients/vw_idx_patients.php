@@ -31,7 +31,7 @@ $listModelePrat = array();
 $listModeleFct  = array();
 $compteRendu = new CCompteRendu;
 
-if($patient_id && !$new) {
+if ($patient_id && !$new) {
   $listPrat = new CMediusers();
   $listPrat = $listPrat->loadPraticiens(PERM_READ);
   $listFct = new CMediusers();
@@ -40,19 +40,16 @@ if($patient_id && !$new) {
   $where = array();
   $where["object_id"] = "IS NULL";
   $where["type"] = "= 'patient'";
-  $order = "chir_id, nom"; 
+  $order = "nom"; 
 
-  if (count(array_keys($listPrat))) {
-    $where["chir_id"] = "IN (".implode(", ",array_keys($listPrat)).")";
-    $listModelePrat = $compteRendu->loadlist($where, $order);
-    unset($where["chir_id"]);
-  }
- 
-  if(count(array_keys($listFct))) {
-    $where["function_id"] = "IN (".implode(", ",array_keys($listFct)).")";
-    $listModeleFct = $compteRendu->loadlist($where, $order);
-    unset($where["function_id"]);
-  }
+  $where["chir_id"] = db_prepare_in(array_keys($listPrat));
+  $listModelePrat = $compteRendu->loadlist($where, $order);
+  unset($where["chir_id"]);
+  
+  $where["function_id"] = db_prepare_in(array_keys($listFct));
+  $listModeleFct = $compteRendu->loadlist($where, $order);
+  unset($where["function_id"]);
+
 }
 
 

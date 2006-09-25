@@ -15,11 +15,7 @@ $total["moyenne"] = 0;
 $listTemps = new CTempsPrepa;
 
 $where = array();
-if(count($listPrats)) {
-  $where["chir_id"] = "IN (".implode(",", array_keys($listPrats)).")";
-} else {
-  $where[] = "0 = 1";
-}
+$where["chir_id"] = db_prepare_in(array_keys($listPrats));
 
 $ljoin = array();
 $ljoin["users"] = "users.user_id = temps_prepa.chir_id";

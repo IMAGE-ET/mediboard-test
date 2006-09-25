@@ -324,12 +324,10 @@ class CMediusers extends CMbObject {
     
     if (is_array($user_types)) {
       foreach ($user_types as $key => $value) {
-        $value = $utypes_flip[$value];
-        $user_types[$key] = "'$value'";
+        $user_types[$key] = $utypes_flip[$value];
       }
       
-      $inClause = implode(", ", $user_types);
-      $where["users.user_type"] = "IN ($inClause)";
+      $where["users.user_type"] = db_prepare_in($user_types);
     }
 
     $order = "users.user_last_name";

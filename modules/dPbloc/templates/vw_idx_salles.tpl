@@ -49,9 +49,10 @@
       <th><label for="group_id" title="Etablissement de la salle. Obligatoire">Etablissement</label></th>
       <td>
         <select title="{{$salleSel->_props.group_id}}" name="group_id">
-        {{foreach from=$etablissements item=curr_etab}}
+          <option value="">&mdash; Choisir un établissement</option>
+          {{foreach from=$etablissements item=curr_etab}}
           <option value="{{$curr_etab->group_id}}" {{if ($salleSel->salle_id && $salleSel->group_id==$curr_etab->group_id) || (!$salleSel->salle_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
-        {{/foreach}}
+          {{/foreach}}
         </select>
       </td>
     </tr>

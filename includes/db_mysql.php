@@ -10,6 +10,10 @@
 	originally written for WEBO project, see webo source for "real life" usages
 */
 
+
+global $db_trace;
+$db_trace = null;
+
 function db_connect( $dbid = "std", $host="localhost", $dbname, $user="root", $passwd="", $port="3306", $persist=false ) {
   global $links_db;
   global $dbChronos;
@@ -36,6 +40,46 @@ function db_connect( $dbid = "std", $host="localhost", $dbname, $user="root", $p
   }
 }
 
+/**
+ * Escapes up to nine values for SQL queries
+ * => db_prepare("INSERT INTO table_name VALUES (%)", $value);
+ * => db_prepare("INSERT INTO table_name VALUES (%1, %2)", $value1, $value2);
+ */
+function db_prepare($sql) {
+  $values = func_get_args();
+  array_shift($values);
+  $trans = array();
+  for ($i = 0; $i < count($values); $i++) {
+    $escaped = db_escape($values[$i]);
+    $quoted = "'$escaped'";
+    if ($i == 0) {
+      $trans["%"] = $quoted;
+    }
+    
+    $key = $i+1;
+    $trans["%$key"] = $quoted;
+  }
+  
+  return strtr($sql, $trans);
+}
+
+/**
+ * Prepares an IN where clause with a given array of values
+ * Prepares a standard = where clause when alternate value is supplied
+ */
+function db_prepare_in($values, $alternate = null) {
+  if ($alternate) {
+    return "= '$alternate'";
+  }
+  
+  if (!count($values)) {
+    return "IS NULL AND 0";
+  }
+  
+  $str = join($values, ", ");
+  return "IN ($str)";
+}
+
 function db_error($dbid = "std") {
   global $links_db;
   if(!isset($links_db[$dbid]))
@@ -58,8 +102,7 @@ function db_insert_id($dbid = "std") {
 }
 
 function db_exec($sql, $dbid = "std") {
-  global $dbChronos;
-  global $links_db;
+  global $dbChronos, $links_db, $db_trace;
   if(!isset($links_db[$dbid]))
     trigger_error( "FATAL ERROR: link to $dbid not found.", E_USER_ERROR );
 
@@ -67,8 +110,12 @@ function db_exec($sql, $dbid = "std") {
 	$cur = mysql_query( $sql, $links_db[$dbid] );
   $dbChronos[$dbid]->stop();
 
-	if( !$cur ) {
-    trigger_error("Erreur sql : ".db_error(), E_USER_WARNING);
+  if ($db_trace) {
+    trigger_error("Exécution SQL : $sql", E_USER_NOTICE);
+  }
+
+	if (!$cur) {
+    trigger_error("Erreur SQL : ".db_error(), E_USER_WARNING);
 		return false;
 	}
   

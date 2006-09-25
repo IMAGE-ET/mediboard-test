@@ -36,13 +36,10 @@ $where = array();
 
 // Praticiens sélectionnés
 $chir_id = mbGetValueFromGet("chir_id");
-if (!$chir_id) {
-  $listChir = new CMediusers;
-  $listChir = $listChir->loadPraticiens(PERM_EDIT);
-  $inChir = join(array_keys($listChir), ", ");
-}
+$listPrat = new CMediusers;
+$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
-$where["chir_id"] = $chir_id ? "= '$chir_id'" : "IN ($inChir)";
+$where["chir_id"] = db_prepare_in(array_keys($listPrat), $chir_id);
 
 // Choix du mois
 $month = mbTranformTime(null, $date, "%Y-%m-__");

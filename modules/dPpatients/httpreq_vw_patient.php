@@ -24,29 +24,24 @@ $canReadCptRendus = $fileCptRendus->canRead();
 $canEditCptRendus = $fileCptRendus->canEdit();
 
 // Liste des modèles
-$listModeleAuth = array();
-if ($patient_id) {
-  $listPrat = new CMediusers();
-  $listPrat = $listPrat->loadPraticiens(PERM_READ);
-  $listFct = new CMediusers();
-  $listFct = $listFct->loadFonctions(PERM_READ);
+$modele = new CCompteRendu;
   
-  $where = array();
-  $where["chir_id"] = "IN (".implode(", ",array_keys($listPrat)).")";
-  $where["object_id"] = "IS NULL";
-  $where["type"] = "= 'patient'";
-  $order = "chir_id, nom";
-  $listModelePrat = new CCompteRendu;
-  $listModelePrat = $listModelePrat->loadlist($where, $order);
- 
-  $where = array();
-  $where["function_id"] = "IN (".implode(", ",array_keys($listFct)).")";
-  $where["object_id"] = "IS NULL";
-  $where["type"] = "= 'patient'";
-  $order = "chir_id, nom";
-  $listModeleFct = new CCompteRendu;
-  $listModeleFct = $listModeleFct->loadlist($where, $order);
-}
+$where = array();
+$where["object_id"] = "IS NULL";
+$where["type"] = "= 'patient'";
+$order = "nom"; 
+
+$listPrat = new CMediusers();
+$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
+$where["chir_id"] = db_prepare_in(array_keys($listPrat));
+$listModelePrat = $modele->loadlist($where, $order);
+unset($where["chir_id"]);
+
+$listFct = new CMediusers();
+$listFct = $listFct->loadFonctions(PERM_EDIT);
+$where["function_id"] = db_prepare_in(array_keys($listFct));
+$listModeleFct = $modele->loadlist($where, $order);
+unset($where["function_id"]);
 
 // Liste des Category pour les fichiers
 $listCategory = new CFilesCategory;

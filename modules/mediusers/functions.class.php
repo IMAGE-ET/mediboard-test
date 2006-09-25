@@ -94,9 +94,9 @@ class CFunctions extends CMbObject {
   
     // Filter with permissions
     if ($perm_type) {
-      foreach ($basespecs as $spec) {
+      foreach ($basespecs as $key => $spec) {
         if($spec->canRead()) {
-          $specs[] = $spec;
+          $specs[$key] = $spec;
         }          
       }
     } else {

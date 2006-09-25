@@ -28,18 +28,11 @@ $aff  = mbGetValueFromGetOrSession("aff" , 1);
 $where = array();
 $where[] = "date >= '$deb'";
 $where[] = "date <= '$fin'";
-if($chir)
-  $where["chir_id"] = "= '$chir'";
-else {
-  $listPrat = new CMediusers();
-  $listPrat = $listPrat->loadPraticiens(PERM_READ);
-  $in = array();
-  foreach($listPrat as $key => $value) {
-    $in[] = "'$key'";
-  }
-  $in = implode(", ", $in);
-  $where["chir_id"] = "IN ($in)";
-}
+
+$listPrat = new CMediusers();
+$listPrat = $listPrat->loadPraticiens(PERM_READ);
+$where["chir_id"] = db_prepare(array_keys($listPrat), $chir);
+
 $listPlage = new CPlageconsult;
 $listPlage = $listPlage->loadList($where, "date, chir_id");
 

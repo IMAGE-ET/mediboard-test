@@ -17,24 +17,16 @@ $deb  = mbGetValueFromGetOrSession("deb", mbDate());
 $fin  = mbGetValueFromGetOrSession("fin", mbDate());
 $chir = mbGetValueFromGetOrSession("chir");
 
-// Liste des praticiens
-if(!$chir) {
-  $mediusers = new CMediusers();
-  $listChir = $mediusers->loadPraticiens(PERM_EDIT);
-  $inArray = array();
-  foreach($listChir as $key => $value) {
-    $inArray[] = $key;
-    $in = "IN (".implode(", ", $inArray).")";
-  }
-} else {
-  $in = "= '$chir'";
-}
-
 // On selectionne les plages
 $listPlage = new CPlageconsult;
 $where = array();
 $where["date"] = "BETWEEN '$deb' AND '$fin'";
-$where["chir_id"] = "$in";
+
+// Liste des praticiens
+$mediusers = new CMediusers();
+$listPrat = $mediusers->loadPraticiens(PERM_EDIT);
+$where["chir_id"] = db_prepare_in(array_keys($listPrat), $chir);
+
 $order = array();
 $order[] = "date";
 $order[] = "chir_id";
