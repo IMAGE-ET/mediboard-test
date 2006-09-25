@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPbloc";
-$config["mod_version"]     = "0.16";
+$config["mod_version"]     = "0.17";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -101,7 +101,10 @@ class CSetupdPbloc {
         $sql = "ALTER TABLE `plagesop` CHANGE `id_salle` `salle_id` INT( 10 ) DEFAULT '0' NOT NULL ;";
         db_exec( $sql ); db_error();
       case "0.16":
-        return "0.16";
+        $sql = "ALTER TABLE `plagesop` ADD `temps_inter_op` TIME NOT NULL DEFAULT '00:15:00' ;";
+        db_exec( $sql ); db_error();
+      case "0.17":
+        return "0.17";
     }
     return false;
   }

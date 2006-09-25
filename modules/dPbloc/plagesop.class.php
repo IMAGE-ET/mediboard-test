@@ -24,16 +24,17 @@ class CPlageOp extends CMbObject {
   var $date           = null;
   var $debut          = null;
   var $fin            = null;
-  //var $temps_inter_op = null;
+  var $temps_inter_op = null;
     
   // Form Fields
-  var $_day       = null;
-  var $_month     = null;
-  var $_year      = null;
-  var $_heuredeb  = null;
-  var $_minutedeb = null;
-  var $_heurefin  = null;
-  var $_minutefin = null;
+  var $_day          = null;
+  var $_month        = null;
+  var $_year         = null;
+  var $_heuredeb     = null;
+  var $_minutedeb    = null;
+  var $_heurefin     = null;
+  var $_minutefin    = null;
+  var $_min_inter_op = null;
   
   // Object References
   var $_ref_chir       = null;
@@ -49,13 +50,14 @@ class CPlageOp extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["chir_id"]   = "ref";
-    $this->_props["anesth_id"] = "ref";
-    $this->_props["spec_id"]   = "ref|xor|chir_id";
-    $this->_props["salle_id"]  = "ref|notNull";
-    $this->_props["date"]      = "date|notNull";
-    $this->_props["debut"]     = "time|notNull";
-    $this->_props["fin"]       = "time|notNull";
+    $this->_props["chir_id"]        = "ref";
+    $this->_props["anesth_id"]      = "ref";
+    $this->_props["spec_id"]        = "ref|xor|chir_id";
+    $this->_props["salle_id"]       = "ref|notNull";
+    $this->_props["date"]           = "date|notNull";
+    $this->_props["debut"]          = "time|notNull";
+    $this->_props["fin"]            = "time|notNull";
+    $this->_props["temps_inter_op"] = "time|notNull";
 
   }
   
@@ -163,22 +165,28 @@ class CPlageOp extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_year      = substr($this->date, 0, 4);
-    $this->_month     = substr($this->date, 5, 2);
-    $this->_day       = substr($this->date, 8, 2);
-    $this->_heuredeb  = substr($this->debut, 0, 2);
-    $this->_minutedeb = substr($this->debut, 3, 2);
-    $this->_heurefin  = substr($this->fin, 0, 2);
-    $this->_minutefin = substr($this->fin, 3, 2);
+    $this->_year         = substr($this->date, 0, 4);
+    $this->_month        = substr($this->date, 5, 2);
+    $this->_day          = substr($this->date, 8, 2);
+    $this->_heuredeb     = substr($this->debut, 0, 2);
+    $this->_minutedeb    = substr($this->debut, 3, 2);
+    $this->_heurefin     = substr($this->fin, 0, 2);
+    $this->_minutefin    = substr($this->fin, 3, 2);
+    $this->_min_inter_op = substr($this->temps_inter_op, 3, 2);
   }
   
   function updateDBFields() {
-    if(($this->_heuredeb !== null) && ($this->_minutedeb !== null))
+    if(($this->_heuredeb !== null) && ($this->_minutedeb !== null)) {
       $this->debut = $this->_heuredeb.":".$this->_minutedeb.":00";
-    if(($this->_heurefin !== null) && ($this->_minutefin !== null))
+    }
+    if(($this->_heurefin !== null) && ($this->_minutefin !== null)) {
       $this->fin   = $this->_heurefin.":".$this->_minutefin.":00";
+    }
     if(($this->_year !== null) && ($this->_month !== null) && ($this->_day !== null)) {
       $this->date = $this->_year."-".$this->_month."-".$this->_day;
+    }
+    if($this->_min_inter_op !== null) {
+      $this->temps_inter_op = "00:$this->_min_inter_op:00";
     }
   }
   
@@ -207,10 +215,12 @@ class CPlageOp extends CMbObject {
   }
   
   function GetNbOperations() {
-    $sql = "SELECT COUNT(operation_id) AS total," .
-        "\nSUM(TIME_TO_SEC(temp_operation)) AS time" .
-        "\nFROM operations" .
-        "\nWHERE plageop_id = '$this->plageop_id' AND annulee = '0'";
+    $sql = "SELECT COUNT(`operations`.`operation_id`) AS total," .
+        "\nSUM(TIME_TO_SEC(`operations`.`temp_operation`) + TIME_TO_SEC(`plagesop`.`temps_inter_op`)) AS time" .
+        "\nFROM `operations`, `plagesop`" .
+        "\nWHERE `operations`.`plageop_id` = '$this->plageop_id'" .
+        "\nAND `operations`.`plageop_id` = `plagesop`.`plageop_id`" .
+        "\nAND `operations`.`annulee` = '0'";
     $result = null;
     db_loadHash($sql, $result);
     $this->_nb_operations = $result["total"];

@@ -16,7 +16,7 @@ if(!$canRead) {
 $chir      = mbGetValueFromGet("chir"     , 0);
 $month     = mbGetValueFromGet("month"    , date("m"));
 $year      = mbGetValueFromGet("year"     , date("Y"));
-$group_id = mbGetValueFromGet("group_id" , $g);
+$group_id  = mbGetValueFromGet("group_id" , $g);
 $oper_id   = mbGetValueFromGet("oper_id"  , null);
 
 $pmonth = $month - 1;
@@ -50,7 +50,8 @@ $mediChir->load($chir);
 
 // Selection des plages opératoires ayant suffisament de temps pour  caser l'opération
 $sql = "SELECT plagesop.*, sallesbloc.nom," .
-		"\nSUM(TIME_TO_SEC(operations.temp_operation)) AS duree," .
+		//"\nSUM(TIME_TO_SEC(operations.temp_operation)+TIME_TO_SEC(plagesop.temps_inter_op)) AS duree," .
+    "\nSUM(TIME_TO_SEC(operations.temp_operation)) AS duree," .
     "\nTIME_TO_SEC(plagesop.fin)-TIME_TO_SEC(plagesop.debut) AS plage," .
 		"\nCOUNT(operations.operation_id) AS total" .
 		"\nFROM plagesop" .

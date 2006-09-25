@@ -220,7 +220,7 @@ function popPlanning(debut) {
       
       <tr>
         <th><label for="anest_id" title="Anesthésiste associé à la plage opératoire">Anesthésiste</label></th>
-        <td colspan="5">
+        <td>
           <select name="anesth_id">
             <option value="">&mdash; Choisir un anesthésiste</option>
             {{foreach from=$anesths item=anesth}}
@@ -229,6 +229,12 @@ function popPlanning(debut) {
             </option>
             {{/foreach}}
     	  </select>
+        </td>
+        <th colspan="3"><label for="_min_inter_op" title="Nombre de minutes entre chaque patient">Minutes entre les interventions</label></th>
+        <td>
+          <input type="text" name="_min_inter_op" size="3" title="num|pos|notNull"
+                 value="{{if $plagesel->plageop_id}}{{$plagesel->_min_inter_op}}{{else}}{{15}}{{/if}}" />
+          min
         </td>
       </tr>
       

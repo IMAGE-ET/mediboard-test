@@ -140,27 +140,24 @@ class COperation extends CMbObject {
 
   // Only use when current operation is deleted or canceled
   function reorder() {
-    $sql = "SELECT operations.operation_id, operations.temp_operation,
-    	operations.pause, plagesop.debut
-      FROM operations
-      LEFT JOIN plagesop
-      ON plagesop.plageop_id = operations.plageop_id
-      WHERE operations.plageop_id = '$this->plageop_id'
-      AND operations.rank != 0
-      AND operations.operation_id != '$this->operation_id'
-      ORDER BY operations.rank";
-    $result = db_loadlist($sql);
-    if(count($result)) {
-      $new_time = $result[0]["debut"];
+    $this->loadRefPlageOp();
+    $where = array();
+    $where["plageop_id"]   = " = '$this->plageop_id'";
+    $where["rank"]         = "!= '0'";
+    $where["operation_id"] = "!= '$this->operation_id'";
+    $order = "rank";
+    $operations = $this->loadList($where, $order);
+    if(count($operations)) {
+      $new_time = $this->_ref_plageop->debut;
     }
     $i = 1;
-    foreach ($result as $key => $value) {
-      $sql = "UPDATE operations SET rank = '$i', time_operation = '$new_time' " .
-             "WHERE operation_id = '".$value["operation_id"]."'";
-      db_exec( $sql );
-      $new_time = mbAddTime($value["temp_operation"], $new_time);
-      $new_time = mbAddTime("00:15:00", $new_time);
-      $new_time = mbAddTime($value["pause"], $new_time);
+    foreach ($operations as $keyOp => $op) {
+      $operations[$keyOp]->rank = $i;
+      $operations[$keyOp]->time_operation = $new_time;
+      $operations[$keyOp]->store();
+      $new_time = mbAddTime($op->temp_operation, $new_time);
+      $new_time = mbAddTime($this->_ref_plageop->temps_inter_op, $new_time);
+      $new_time = mbAddTime($op->pause, $new_time);
       $i++;
     }
   }
