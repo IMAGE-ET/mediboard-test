@@ -33,10 +33,11 @@ class CMbObject {
    * Properties  specification
    */
   
-  var $_aides = array(); // aides à la saisie
-  var $_props = array(); // properties specifications
-  var $_enums = array(); // enums fields elements
-  var $_seek  = array(); // seekable fields
+  var $_aides      = array(); // aides à la saisie
+  var $_props      = array(); // properties specifications
+  var $_enums      = array(); // enums fields elements
+  var $_enumsTrans = array(); // enums fields translated elements
+  var $_seek       = array(); // seekable fields
   
   /**
    * References
@@ -468,12 +469,17 @@ class CMbObject {
   }
   
   function buildEnums() {
+    global $AppUI;
     foreach ($this->_props as $propName => $propSpec) {
       $specFragments = explode("|", $propSpec);
       if ($this->lookupSpec("enum", $specFragments)) {
         $this->lookupSpec("confidential", $specFragments);
         $this->lookupSpec("notNull", $specFragments);
         $this->_enums[$propName] = $specFragments;
+        $this->_enumsTrans = array_flip($specFragments);
+        foreach($this->_enumsTrans as $key => $item) {
+          $this->_enumsTrans[$key] = $AppUI->_($key);
+        }
       }
     }
   }
