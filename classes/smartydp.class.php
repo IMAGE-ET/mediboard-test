@@ -66,7 +66,7 @@ class CSmartyDP extends Smarty {
    * Standard data assignment
    */
   function CSmartyDP($doubleTagMod = 0) {
-    global $AppUI, $dbChronos, $dPconfig, $canRead, $canEdit, $m, $a, $tab, $g, $action, $actionType, $dialog, $mb_version_build;
+    global $AppUI, $dbChronos, $dPconfig, $canRead, $canEdit, $canAdmin, $m, $a, $tab, $g, $action, $actionType, $dialog, $mb_version_build;
 
     $root = $AppUI->getConfig( 'root_dir' );
     
@@ -93,6 +93,7 @@ class CSmartyDP extends Smarty {
     $this->assign("user", $AppUI->user_id); // shouldn't be necessary
     $this->assign("canEdit", $canEdit);
     $this->assign("canRead", $canRead);
+    $this->assign("canAdmin", $canAdmin);
     $this->assign("m", $m);
     $this->assign("a", $a);
     $this->assign("tab", $tab);
