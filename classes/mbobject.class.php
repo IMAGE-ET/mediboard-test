@@ -480,6 +480,7 @@ class CMbObject {
         foreach($this->_enumsTrans[$propName] as $key => $item) {
           $this->_enumsTrans[$propName][$key] = $AppUI->_($key);
         }
+        asort($this->_enumsTrans[$propName]);
       }
     }
   }
