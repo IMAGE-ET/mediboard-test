@@ -21,9 +21,10 @@ class CPlageOp extends CMbObject {
   var $salle_id  = null;
 
   // DB fields
-  var $date  = null;
-  var $debut = null;
-  var $fin   = null;
+  var $date           = null;
+  var $debut          = null;
+  var $fin            = null;
+  //var $temps_inter_op = null;
     
   // Form Fields
   var $_day       = null;
@@ -55,6 +56,7 @@ class CPlageOp extends CMbObject {
     $this->_props["date"]      = "date|notNull";
     $this->_props["debut"]     = "time|notNull";
     $this->_props["fin"]       = "time|notNull";
+
   }
   
   function loadRefs($annulee = 1) {
@@ -98,11 +100,14 @@ class CPlageOp extends CMbObject {
   }
   
   function loadRefsBack($annulee = 1) {
-    if($annulee)
-      $sql = "SELECT * FROM operations WHERE plageop_id = '$this->plageop_id' order by rank";
-    else
-      $sql = "SELECT * FROM operations WHERE plageop_id = '$this->plageop_id' and annulee = '0' order by rank";
-    $this->_ref_operations = db_loadObjectList($sql, new COperation);
+    $where = array();
+    $where["plageop_id"] = "= '$this->plageop_id'";
+    if(!$annulee) {
+      $where["annulee"] = "= '0'";
+    }
+    $order = "rank";
+    $op = new COperation;
+    $this->_ref_operations = $op->loadList($where, $order);
   }
 
   function canDelete(&$msg, $oid = null) {
@@ -121,18 +126,17 @@ class CPlageOp extends CMbObject {
  */
   function hasCollisions() {
     // Get all other plages the same day
-    $sql = "SELECT debut, fin" .
-        "\nFROM plagesop" .
-        "\nWHERE salle_id = '$this->salle_id'" .
-        "\nAND date = '$this->date'" .
-        "\nAND plageop_id != '$this->plageop_id'";
-    $row = db_loadlist($sql);
+    $where = array();
+    $where["salle_id"]   = "= '$this->salle_id'";
+    $where["date"]       = "= '$this->date'";
+    $where["plageop_id"] = "!= '$this->plageop_id'";
+    $plages = $this->loadList($where);
     $msg = null;
-    foreach ($row as $key => $value) {
-      if (($value["debut"] < $this->fin and $value["fin"] > $this->fin)
-        or($value["debut"] < $this->debut and $value["fin"] > $this->debut)
-        or($value["debut"] >= $this->debut and $value["fin"] <= $this->fin)) {
-        $msg .= "Collision avec la plage du $this->date, de {$value['debut']} à {$value['fin']}. ";
+    foreach ($plages as $key => $plage) {
+      if (($plage->debut < $this->fin and $plage->fin > $this->fin)
+        or($plage->debut < $this->debut and $plage->fin > $this->debut)
+        or($plage->debut >= $this->debut and $plage->fin <= $this->fin)) {
+        $msg .= "Collision avec la plage du $plage->date, de $plage->debut à $plage->fin. ";
       }
     }
     return $msg;   
@@ -141,13 +145,11 @@ class CPlageOp extends CMbObject {
   function check() {
     // Data checking
     $msg = null;
-
     if(!$this->plageop_id) {
       if (!$this->chir_id && !$this->spec_id) {
         $msg .= "Vous devez choisir un praticien ou une spécialité<br />";
       }
     }
-
     return $msg . parent::check();
   }
   
@@ -182,17 +184,20 @@ class CPlageOp extends CMbObject {
   
   function becomeNext() {
     $this->date = mbDate("+7 DAYS", $this->date);
-    $sql = "SELECT plageop_id" .
-      "\nFROM plagesop" .
-      "\nWHERE date = '$this->date'" .
-      "\nAND salle_id = '$this->salle_id'" .
-      ($this->chir_id ? "\nAND chir_id = '$this->chir_id'" : "\nAND spec_id = '$this->spec_id'");
-    $row = db_loadlist($sql);
+    $where = array();
+    $where["date"] = "= '$this->date'";
+    $where["salle_id"] = "= '$this->salle_id'";
+    if($this->chir_id) {
+      $where["chir_id"] = "= '$this->chir_id'";
+    } else {
+      $where["spec_id"] = "= '$this->spec_id'";
+    }
+    $plages = $this->loadList($where);
     $debut = $this->debut;
     $fin = $this->fin;
     $msg = null;
-    if(count($row) > 0)
-      $msg = $this->load($row[0]["plageop_id"]);
+    if(count($plages) > 0)
+      $msg = $this->load(reset($plages)->plageop_id);
     else
       $this->plageop_id = null;
     $this->debut = $debut;
@@ -201,7 +206,7 @@ class CPlageOp extends CMbObject {
     return $msg;
   }
   
-  function GetNbOperations(){
+  function GetNbOperations() {
     $sql = "SELECT COUNT(operation_id) AS total," .
         "\nSUM(TIME_TO_SEC(temp_operation)) AS time" .
         "\nFROM operations" .
