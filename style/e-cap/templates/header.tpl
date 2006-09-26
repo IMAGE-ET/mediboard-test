@@ -82,8 +82,9 @@ function popChgPwd() {
         {{$currModule.modNameCourt}}
       </a> |
       {{/foreach}}
-      <a href='#' onclick='popChgPwd();return false'>Changez votre mot de passe</a> | <a href="./index.php?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">Préférences</a> |
-      <a href="./index.php?logout=-1">{{tr}}Logout{{/tr}}</a> |
+      <a href="javascript:popChgPwd()">Changez votre mot de passe</a> | 
+      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a> |
+      <a href="?logout=-1">{{tr}}Logout{{/tr}}</a>
     </td>
   </tr>
 </table>

@@ -213,8 +213,12 @@ td#menubar a.textSelected {
   font-weight: bold;
 }
 
-td#menubar a {
+td#menubar a.textNonSelected {
   color: #fff;
+}
+
+td#menubar a {
+  color: #000;
 }
 
 td#menubar a:hover {
