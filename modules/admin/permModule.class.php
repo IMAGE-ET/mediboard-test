@@ -106,7 +106,7 @@ class CPermModule extends CMbObject {
     }
     $result = PERM_DENY;
     if($user_id !== null) {
-      $perms =& $this->loadUserPerms($user_id);
+      $perms =& CPermModule::loadUserPerms($user_id);
     } else {
       $perms =& $userPermsModules;
     }
