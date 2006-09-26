@@ -12,7 +12,7 @@ BASH_PATH=$(dirname $BASH_SOURCE)
 announce_script "Mediboard synchronisation"
 
 # Backups directory
-rsync -eL ssh -avz $1:/var/backup /var/
+rsync -e ssh -avz $1:/var/backup /var/
 
 # system directory
-rsync -eL ssh -avz $1:/var/www/html/mediboard /var/www/html/
+rsync -e ssh -avz $1:/var/www/html/mediboard /var/www/html/
