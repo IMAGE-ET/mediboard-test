@@ -29,26 +29,26 @@ function calculImcVst(){
         <tr>
           <th><label for="poid" title="Poids du patient">Poids</label></th>
           <td>
-            <input type="text" size="4" name="poid" title="{{$consult_anesth->_props.poid}}" value="{{$consult_anesth->poid}}" onchange="javascript:calculImcVst();submitForm(this.form);"/>
+            <input tabindex="1" type="text" size="4" name="poid" title="{{$consult_anesth->_props.poid}}" value="{{$consult_anesth->poid}}" onchange="javascript:calculImcVst();submitForm(this.form);"/>
             kg
           </td>
           <th><label for="tasys" title="Pression arterielle">TA</label></th>
           <td>
-            <input type="text" size="2" name="tasys" onchange="submitForm(this.form);" title="{{$consult_anesth->_props.tasys}}" value="{{$consult_anesth->tasys}}" />
+            <input tabindex="3" type="text" size="2" name="tasys" onchange="submitForm(this.form);" title="{{$consult_anesth->_props.tasys}}" value="{{$consult_anesth->tasys}}" />
             /
-            <input type="text" size="2" name="tadias" onchange="submitForm(this.form);" title="{{$consult_anesth->_props.tadias}}" value="{{$consult_anesth->tadias}}" />
+            <input tabindex="4" type="text" size="2" name="tadias" onchange="submitForm(this.form);" title="{{$consult_anesth->_props.tadias}}" value="{{$consult_anesth->tadias}}" />
             cm Hg
           </td>
         </tr>
         <tr>
           <th><label for="taille" title="Taille du patient">Taille</label></th>
           <td>
-            <input type="text" size="4" name="taille" title="{{$consult_anesth->_props.taille}}" value="{{$consult_anesth->taille}}" onchange="javascript:calculImcVst();submitForm(this.form);"/>
+            <input tabindex="2" type="text" size="4" name="taille" title="{{$consult_anesth->_props.taille}}" value="{{$consult_anesth->taille}}" onchange="javascript:calculImcVst();submitForm(this.form);"/>
             cm
           </td>
           <th><label for="pouls" title="Pouls du patient">Pouls</label></th>
           <td>
-            <input type="text" size="4" name="pouls" onchange="submitForm(this.form);" title="{{$consult_anesth->_props.pouls}}" value="{{$consult_anesth->pouls}}" />
+            <input tabindex="5" type="text" size="4" name="pouls" onchange="submitForm(this.form);" title="{{$consult_anesth->_props.pouls}}" value="{{$consult_anesth->pouls}}" />
             / min
           </td>
         </tr>
@@ -59,7 +59,7 @@ function calculImcVst(){
           </td>
           <th><label for="spo2" title="Spo2">Spo2</label></th>
           <td>
-            <input type="text" size="4" name="spo2" onchange="submitForm(this.form);" title="{{$consult_anesth->_props.spo2}}" value="{{$consult_anesth->spo2}}" />
+            <input tabindex="6" type="text" size="4" name="spo2" onchange="submitForm(this.form);" title="{{$consult_anesth->_props.spo2}}" value="{{$consult_anesth->spo2}}" />
             %
           </td>
         </tr>
