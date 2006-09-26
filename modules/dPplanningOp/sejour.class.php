@@ -59,6 +59,7 @@ class CSejour extends CMbObject {
   var $_min_entree_prevue  = null;
   var $_min_sortie_prevue  = null;
   var $_venue_SHS_guess    = null;
+  var $_at_midnight        = null;
 
   // Object References
   var $_ref_patient           = null;
@@ -187,6 +188,7 @@ class CSejour extends CMbObject {
       $this->type == "exte" ? "5" :
       $this->type == "ambu" ? "4" : "0";
     $this->_venue_SHS_guess .="xxxxx";
+    $this->_at_midnight = ($this->_date_entree_prevue != $this->_date_sortie_prevue);
     $this->_view = "Séjour du ";
     $this->_view .= mbTranformTime(null, $this->entree_prevue, "%d/%m/%Y");
     $this->_view .= " au ";

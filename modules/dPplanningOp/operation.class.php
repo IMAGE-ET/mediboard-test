@@ -39,14 +39,6 @@ class COperation extends CMbObject {
   var $cote           = null;
   var $temp_operation = null;
   var $pause          = null;
-  var $entree_bloc    = null;
-  var $pose_garrot    = null;
-  var $debut_op       = null;
-  var $fin_op         = null;
-  var $retrait_garrot = null;
-  var $sortie_bloc    = null;
-  var $entree_reveil  = null;
-  var $sortie_reveil  = null;
   var $time_operation = null;
   var $examen         = null;
   var $materiel       = null;
@@ -62,6 +54,16 @@ class COperation extends CMbObject {
 
   var $depassement    = null;
   var $annulee        = null;    // completé par $sejour->annule
+  
+  //timings enregistrés
+  var $entree_bloc    = null;
+  var $pose_garrot    = null;
+  var $debut_op       = null;
+  var $fin_op         = null;
+  var $retrait_garrot = null;
+  var $sortie_bloc    = null;
+  var $entree_reveil  = null;
+  var $sortie_reveil  = null;
 
   // Form fields
   var $_hour_op        = null;

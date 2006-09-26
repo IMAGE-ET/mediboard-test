@@ -68,6 +68,7 @@ function pageMain() {
               {{/foreach}}
             </select>
           </td>
+        </tr>
         <tr>
           <td colspan="4" class="button"><button class="search" type="submit">Go</button></td>
         </tr>

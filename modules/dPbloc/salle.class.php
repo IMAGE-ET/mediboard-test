@@ -34,6 +34,10 @@ class CSalle extends CMbObject {
     
     $this->_seek["nom"] = "like";
 	}
+  
+  function updateFormFields() {
+    $this->_view = $this->nom;
+  }
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (

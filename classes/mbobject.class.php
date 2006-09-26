@@ -43,8 +43,10 @@ class CMbObject {
    * References
    */
   
-  var $_ref_module = null; // Parent module
-  var $_ref_logs   = null; // history of the object
+  var $_ref_module    = null; // Parent module
+  var $_ref_logs      = null; // history of the object
+  var $_ref_first_log = null;
+  var $_ref_last_log  = null;
 
   /**
    * Constructor
@@ -1211,7 +1213,9 @@ class CMbObject {
     foreach($list as $key => $value) {
       $list[$key]->loadRefsFwd();
     }   
-    $this->_ref_logs = $list; 
+    $this->_ref_logs  = $list;
+    $this->_ref_first_log = reset($list);
+    $this->_ref_last_log  = end($list);
   }
 
 /**
