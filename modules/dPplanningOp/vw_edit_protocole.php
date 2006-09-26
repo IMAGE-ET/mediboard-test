@@ -19,7 +19,7 @@ $chir_id      = mbGetValueFromGetOrSession("chir_id"     , 0);
 // L'utilisateur est-il un praticien
 $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
-if ($mediuser->isPraticien() and !$praticien_id) {
+if ($mediuser->isPraticien() and !$chir_id) {
   $chir_id = $mediuser->user_id;
 }
 
