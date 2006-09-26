@@ -41,7 +41,7 @@ function pageMain() {
           <th rowspan="2">Code ASA</th>
           <th rowspan="2">Création admission</th>
           <th rowspan="2">Placement programme</th>
-          <th colspan="7">Timings opération</th>
+          <th colspan="8">Timings opération</th>
           <th colspan="2">Timings reveil</th>
         </tr>
         <tr>
