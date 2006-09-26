@@ -62,7 +62,7 @@ class CPermModule extends CMbObject {
   
   // Those functions are statics
   
-  function loadUserPerms() {
+  function loadUserPerms($user_id = null) {
     global $AppUI, $userPermsModules, $permissionSystemeDown;
     if($permissionSystemeDown) {
       return true;
@@ -70,13 +70,25 @@ class CPermModule extends CMbObject {
     $perm = new CPermModule;
     $listPermsModules = array();
     $where = array();
-    $where["user_id"] = "= '$AppUI->user_id'";
-    $listPermsModules = $perm->loadList($where);
-    $userPermsModules = array();
-    foreach($listPermsModules as $perm_mod) {
-      $userPermsModules[$perm_mod->mod_id] = $perm_mod;
+    if($user_id !== null) {
+      $where["user_id"] = "= '$user_id'";
+    } else {
+      $where["user_id"] = "= '$AppUI->user_id'";
     }
-    //mbTrace($userPermsModules);
+    $listPermsModules = $perm->loadList($where);
+    if($user_id !== null) {
+      $currPermsModules = array();
+      foreach($listPermsModules as $perm_mod) {
+        $currPermsModules[$perm_mod->mod_id] = $perm_mod;
+      }
+      return $currPermsModules;
+    } else {
+      $userPermsModules = array();
+      foreach($listPermsModules as $perm_mod) {
+        $userPermsModules[$perm_mod->mod_id] = $perm_mod;
+      }
+      return $userPermsModules;
+    }
   }
   
   function getPermModule($mod_id, $permType) {
@@ -93,11 +105,16 @@ class CPermModule extends CMbObject {
       return true;
     }
     $result = PERM_DENY;
-    if(isset($userPermsModules[0])) {
-      $result = $userPermsModules[0]->$field;
+    if($user_id !== null) {
+      $perms =& $this->loadUserPerms($user_id);
+    } else {
+      $perms =& $userPermsModules;
     }
-    if(isset($userPermsModules[$mod_id])) {
-      $result = $userPermsModules[$mod_id]->$field;
+    if(isset($perms[0])) {
+      $result = $perms[0]->$field;
+    }
+    if(isset($perms[$mod_id])) {
+      $result = $perms[$mod_id]->$field;
     }
     return $result >= $permType;
   }
