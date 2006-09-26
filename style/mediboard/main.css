@@ -1292,6 +1292,14 @@ table.selectCode td {
   border: #aaa 2px dotted;
 }
 
+#admission .Bold{
+  font-weight: bold;
+}
+
+#admission .NotBold{
+  font-weight: normal;
+}
+
 /* Accordion rico */
 
 div.accordionMain {
