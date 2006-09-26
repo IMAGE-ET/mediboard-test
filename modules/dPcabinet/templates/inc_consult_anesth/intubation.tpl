@@ -22,27 +22,27 @@ function verifIntubDifficileAndSave(oForm){
     <th colspan="6" class="category">Condition d'intubation</th>
   </tr>
   <tr>
-    {{foreach from=$consult_anesth->_enums.mallampati item=curr_mallampati}}
+    {{foreach from=$consult_anesth->_enumsTrans.mallampati key=curr_mallampati item=trans_mallampati}}
     <td rowspan="4" class="button">
-      <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{tr}}{{$curr_mallampati}}{{/tr}}"><img src="modules/{{$m}}/images/mallampati/{{$curr_mallampati}}.gif" alt="{{tr}}{{$curr_mallampati}}{{/tr}}" /></label>
-      <br /><input type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked"{{/if}} onclick="verifIntubDifficileAndSave(this.form);" /><label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{tr}}{{$curr_mallampati}}{{/tr}}">{{tr}}{{$curr_mallampati}}{{/tr}}</label>
+      <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{$trans_mallampati}}">
+        <img src="modules/{{$m}}/images/mallampati/{{$curr_mallampati}}.gif" alt="{{$trans_mallampati}}" />
+        <br />
+        <input type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked"{{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
+        {{$trans_mallampati}}
+      </label>
     </td>
     {{/foreach}}
 
     <th><label for="bouche_m20" title="Ouverture de la bouche">Ouverture de la bouche</label></th>
     <td>
-      {{foreach from=$consult_anesth->_enums.bouche item=curr_bouche}}
-      <input type="radio" name="bouche" value="{{$curr_bouche}}" {{if $consult_anesth->bouche == $curr_bouche}}checked="checked"{{/if}} onclick="verifIntubDifficileAndSave(this.form);" /><label for="bouche_{{$curr_bouche}}" title="{{tr}}{{$curr_bouche}}{{/tr}}">{{tr}}{{$curr_bouche}}{{/tr}}</label><br />
-      {{/foreach}}
+      {{html_radios name="bouche" options=$consult_anesth->_enumsTrans.bouche selected=$consult_anesth->bouche separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
     </td>
   </tr>
   
   <tr>
     <th><label for="distThyro_m65" title="Distance thyro-mentonnière">Distance thyro-mentonnière</label></th>
     <td>
-      {{foreach from=$consult_anesth->_enums.distThyro item=curr_distThyro}}
-      <input type="radio" name="distThyro" value="{{$curr_distThyro}}" {{if $consult_anesth->distThyro == $curr_distThyro}}checked="checked"{{/if}} onclick="verifIntubDifficileAndSave(this.form);" /><label for="distThyro_{{$curr_distThyro}}" title="{{tr}}{{$curr_distThyro}}{{/tr}}">{{tr}}{{$curr_distThyro}}{{/tr}}</label><br />
-      {{/foreach}}
+      {{html_radios name="distThyro" options=$consult_anesth->_enumsTrans.distThyro selected=$consult_anesth->distThyro separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
     </td>
   </tr>
 

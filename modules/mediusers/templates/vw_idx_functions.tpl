@@ -98,7 +98,7 @@ function setColor(color) {
           <td>
             <select name="type" title="{{$userfunction->_props.type}}">
               <option value="">&mdash; Choisir un type</option>
-              {{html_options values=$userfunction->_enums.type output=$userfunction->_enums.type selected=$userfunction->type}}
+              {{html_options options=$userfunction->_enumsTrans.type selected=$userfunction->type}}
             </select>
           </td>
         </tr>

@@ -44,11 +44,7 @@
     <td>
       <select name="type" title="enum|0|store|delete">
         <option value="0">&mdash; Tous les types</option>
-        {{foreach from=$userLog->_enums.type item=curr_type}}
-        <option value="{{$curr_type}}" {{if $curr_type == $type}}selected="selected"{{/if}}>
-          {{$curr_type}}
-        </option>
-        {{/foreach}}
+        {{html_options options=$userLog->_enumsTrans.type selected=$type}}
       </select>
     </td>
     <th><label for="object_id" title="Identifiant de l'object">Objet</label></th>

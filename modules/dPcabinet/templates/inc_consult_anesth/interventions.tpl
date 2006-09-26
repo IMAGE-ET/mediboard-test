@@ -30,12 +30,8 @@
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
 <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
-<label for="position" title="Veuillez choisir la position du patient">Position</label>          
-<select name="position" onchange="submitFormAjax(this.form, 'systemMsg')">
-  {{section name=rows loop=$consult_anesth->_enums.position}}
-  <option value="{{$consult_anesth->_enums.position[rows]}}" {{if $consult_anesth->position == $consult_anesth->_enums.position[rows]}}selected="selected"{{/if}}>{{tr}}{{$consult_anesth->_enums.position[rows]}}{{/tr}}</option>
-  {{/section}}
-</select>
+<label for="position" title="Veuillez choisir la position du patient">Position</label>
+{{html_options name="position" options=$consult_anesth->_enumsTrans.position selected=$consult_anesth->position onchange="submitFormAjax(this.form, 'systemMsg')"}}
 {{if $consult_anesth->operation_id}}
  - Type d'admission : <strong>{{tr}}{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}</strong>{{if $consult_anesth->_ref_operation->_ref_sejour->type=="comp"}} {{$consult_anesth->_ref_operation->_ref_sejour->_duree_prevue}} jour(s){{/if}}
 {{/if}}

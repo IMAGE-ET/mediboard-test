@@ -33,7 +33,6 @@ class CAntecedent extends CMbObject {
     $this->_props["rques"]      = "text";
     
     $this->buildEnums();
-    sort($this->_enums["type"]);
   }
   
   function loadRefsFwd() {

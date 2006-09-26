@@ -39,10 +39,7 @@ function reloadListTech() {
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
       <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
       <label for="ASA" title="Score ASA">ASA</label>
-      <select name="ASA" onchange="submitFormAjax(this.form, 'systemMsg')">
-        {{html_options values=$consult_anesth->_enums.ASA output=$consult_anesth->_enums.ASA selected=$consult_anesth->ASA}}
-      </select>
-      
+      {{html_options name="ASA" options=$consult_anesth->_enumsTrans.ASA selected=$consult_anesth->ASA onchange="submitFormAjax(this.form, 'systemMsg')"}}
       <br /><br />
       <label for="premedication" title="Informatinos concernant la prémédication">Prémédication</label>
       <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();">

@@ -159,11 +159,7 @@ function incAntecedantsMain() {
         <tr>
           <th><label for="type" title="Type d'antécédent">Type</label></th>
           <td>
-            <select name="type">
-              {{section name=rows loop=$antecedent->_enums.type}}
-              <option value="{{$antecedent->_enums.type[rows]}}">{{tr}}{{$antecedent->_enums.type[rows]}}{{/tr}}</option>
-              {{/section}}
-            </select>
+            {{html_options name="type" options=$antecedent->_enumsTrans.type}}
           </td>
         </tr>
         <tr>

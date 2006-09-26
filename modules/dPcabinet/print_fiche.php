@@ -43,15 +43,16 @@ if ($consultation_id) {
   }
 }
 
-// Classement des antecedents
+// Classement des antécédents
 $antecedent = new CAntecedent();
 $listAnt = array();
-foreach($antecedent->_enums["type"] as $nameantecedent){
-  $listAnt[$nameantecedent] = array();
+foreach($antecedent->_enumsTrans["type"] as $keyAnt => $currAnt){
+  $listAnt[$keyAnt] = array();
 }
-foreach($patient->_ref_antecedents as $keyAnt=>$currAnt){
+foreach($patient->_ref_antecedents as $keyAnt => $currAnt){
   $listAnt[$currAnt->type][$keyAnt] = $currAnt;
 }
+
 // Création du template
 $smarty = new CSmartyDP(1);
 

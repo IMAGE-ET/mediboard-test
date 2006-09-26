@@ -20,13 +20,13 @@ $patient->load($patient_id);
 $patient->loadRefsAntecedents();
 $patient->loadRefsTraitements();
 
-// Classement des antécédets
+// Classement des antécédents
 $antecedent = new CAntecedent();
 $listAnt = array();
-foreach($antecedent->_enums["type"] as $antecedent){
-  $listAnt[$antecedent] = array();
+foreach($antecedent->_enumsTrans["type"] as $keyAnt => $currAnt){
+  $listAnt[$keyAnt] = array();
 }
-foreach($patient->_ref_antecedents as $keyAnt=>$currAnt){
+foreach($patient->_ref_antecedents as $keyAnt => $currAnt){
   $listAnt[$currAnt->type][$keyAnt] = $currAnt;
 }
 
@@ -34,7 +34,7 @@ foreach($patient->_ref_antecedents as $keyAnt=>$currAnt){
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("listAnt"       , $listAnt);
+$smarty->assign("listAnt", $listAnt);
 $smarty->assign("patient", $patient);
 
 $smarty->display("inc_list_ant.tpl");
