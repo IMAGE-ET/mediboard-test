@@ -465,13 +465,17 @@ class CPatient extends CMbObject {
   }
   
   function getSiblings() {
-    $sql = "SELECT patient_id, nom, prenom, naissance, adresse, ville, CP " .
-      		"FROM patients WHERE " .
-      		"patient_id != '$this->patient_id' " .
-      		"AND ((nom    = '".addslashes($this->nom)."'    AND prenom    = '".addslashes($this->prenom)."'   ) " .
-      		  "OR (nom    = '".addslashes($this->nom)."'    AND naissance = '$this->naissance' AND naissance != '0000-00-00') " .
-      		  "OR (prenom = '".addslashes($this->prenom)."' AND naissance = '$this->naissance' AND naissance != '0000-00-00'))";
-    $siblings = db_loadlist($sql);
+  	$where = array();
+    $where["patient_id"] = db_prepare("!= %", $this->patient_id);
+    
+    
+    $where[] = db_prepare("((nom = %1 AND prenom = %2) " .
+                            "OR (nom = %1 AND naissance = %3 AND naissance != '0000-00-00') " .
+                            "OR (prenom = %2 AND naissance = %3 AND naissance != '0000-00-00'))",
+                          $this->nom, $this->prenom, $this->naissance);
+
+    $siblings = new CPatient;
+    $siblings = $siblings->loadList($where);
     return $siblings;
   }
 

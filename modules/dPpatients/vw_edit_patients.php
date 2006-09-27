@@ -46,9 +46,9 @@ if($created = mbGetValueFromGet("created", 0)){
   else {
   	$textSiblings = "Risque de doublons :";
     foreach($siblings as $key => $value) {
-      $textSiblings .= "\n>> ".$value["nom"]." ".$value["prenom"].
-                       " né(e) le ".$value["naissance"].
-                       " habitant ".$value["adresse"]." ".$value["CP"]." ".$value["ville"];
+      $textSiblings .= "\n>> ".$value->nom." ".$value->prenom.
+                       " né(e) le ".$value->naissance.
+                       " habitant ".$value->adresse." ".$value->cp." ".$value->ville;
     }
     $textSiblings .= "\nVoulez-vous tout de même le créer ?";
   }
