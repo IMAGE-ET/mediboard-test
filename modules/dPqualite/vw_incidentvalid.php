@@ -9,7 +9,7 @@
 
 global $AppUI, $canRead, $canEdit, $canAdmin, $m, $g;
 
-if (!$canAdmin) {
+if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
@@ -17,7 +17,7 @@ $fiche_ei_id = mbGetValueFromGetOrSession("fiche_ei_id",null);
 $catFiche = array();
 
 $fiche = new CFicheEi;
-if(!$fiche->load($fiche_ei_id)){
+if(!$fiche->load($fiche_ei_id) || (!$canAdmin && $fiche->service_valid_user_id!=$AppUI->user_id)){
   // Cette fiche n'est pas valide
   $fiche_ei_id = null;
   mbSetValueToSession("fiche_ei_id");
@@ -46,34 +46,61 @@ if(!$fiche->load($fiche_ei_id)){
 
 }
 
+// Liste des Fiches en Attente de Traitement
 
-// Liste des Fiches Traitées
-$listFichesTermine = new CFicheEi;
-$where = "`valid_user_id` IS NOT NULL";
-$order = "date_incident DESC";
-$listFichesTermine = $listFichesTermine->loadlist($where,$order);
-foreach($listFichesTermine as $key=>$value){
-  $listFichesTermine[$key]->loadRefsFwd();
-}
-
-// Liste des Fiches A Traiter
 $listFichesEnCours = new CFicheEi;
-$where = "`valid_user_id` IS NULL";
+$where = array();
+if(!$canAdmin){
+  $where["service_date_validation"] = " IS NULL";
+  $where["service_valid_user_id"] = "= '$AppUI->user_id'";
+}else{
+  $where["valid_user_id"] = " IS NULL";
+}
 $order = "date_incident DESC";
 $listFichesEnCours = $listFichesEnCours->loadlist($where,$order);
 foreach($listFichesEnCours as $key=>$value){
   $listFichesEnCours[$key]->loadRefsFwd();
 }
 
+
+// Liste des Fiches Traitées
+$listFichesTermine = new CFicheEi;
+$where = array();
+if(!$canAdmin){
+  $where["service_date_validation"] = " IS NOT NULL";
+  $where["service_valid_user_id"] = "= '$AppUI->user_id'";
+}else{
+  $where["valid_user_id"] = "IS NOT NULL";
+}
+$order = "date_incident DESC";
+$listFichesTermine = $listFichesTermine->loadlist($where,$order);
+foreach($listFichesTermine as $key=>$value){
+  $listFichesTermine[$key]->loadRefsFwd();
+}
+
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("catFiche"          , $catFiche);
-$smarty->assign("user_id"           , $AppUI->user_id);
-$smarty->assign("fiche"             , $fiche);
+$smarty->assign("user_id"   , $AppUI->user_id);
+$smarty->assign("catFiche"  , $catFiche);  
+$smarty->assign("fiche"     , $fiche);
 $smarty->assign("listFichesTermine" , $listFichesTermine);
-$smarty->assign("listFichesEnCours" , $listFichesEnCours);
-
+$smarty->assign("listFichesEnCours" , $listFichesEnCours); 
+  
+if($canAdmin){ 
+  // Chargement de la liste des Chef de services / utilisateur
+  $module = CModule::getInstalled("dPqualite");
+  $permUserEdit = new CPermModule;
+  $listUsersEdit = new CMediusers;
+  $listUsersEdit = $listUsersEdit->loadUsers(PERM_READ, null, null);
+  foreach($listUsersEdit as $keyUser=>$infoUser){
+    if(!$permUserEdit->getInfoModule("permission", $module->mod_id, PERM_EDIT, $keyUser)){
+      unset($listUsersEdit[$keyUser]);
+    }
+  }
+  $smarty->assign("listUsersEdit" , $listUsersEdit);
+  
+}
 $smarty->display("vw_incidentvalid.tpl");
 ?>

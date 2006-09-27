@@ -37,7 +37,7 @@ class CDocGedSuivi extends CMbObject {
     $this->_props["doc_ged_id"]       = "ref|notNull";
     $this->_props["file_id"]          = "ref";
     $this->_props["remarques"]        = "str|notNull";
-    $this->_props["etat"]             = "enum|16|32|48|64|notNull";
+    $this->_props["etat"]             = "enum|0|16|32|48|64|notNull";
     $this->_props["date"]             = "dateTime";
     $this->_props["actif"]            = "enum|0|1";
     

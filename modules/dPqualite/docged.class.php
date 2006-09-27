@@ -12,6 +12,7 @@
  */
 
 if(!defined("CDOC_DEMANDE")) {
+  define("CDOC_MODELE"     , 0);
   define("CDOC_DEMANDE"    , 16);
   define("CDOC_REDAC"      , 32);
   define("CDOC_VALID"      , 48);
@@ -59,10 +60,10 @@ class CDocGed extends CMbObject {
     $this->_props["doc_theme_id"]     = "ref";
     $this->_props["doc_categorie_id"] = "ref";
     $this->_props["titre"]            = "str|maxLength|50";
-    $this->_props["etat"]             = "enum|16|32|48|64|notNull";
+    $this->_props["etat"]             = "enum|0|16|32|48|64|notNull";
     $this->_props["version"]          = "currency|min|0";
     $this->_props["annule"]           = "enum|0|1";
-    $this->_props["num_ref"]          = "num"; 
+    $this->_props["num_ref"]          = "num";
     
     $this->buildEnums();
   }
@@ -72,7 +73,11 @@ class CDocGed extends CMbObject {
     $etat[CDOC_DEMANDE]   = "Demande en cours de traitement";
     $etat[CDOC_REDAC]     = "En Attente de Rédaction";
     $etat[CDOC_VALID]     = "En Cours de Validation";
-    $etat[CDOC_TERMINE]   = "Document Disponible";
+    if($this->annule){
+      $etat[CDOC_TERMINE]   = "Document Non Disponible";
+    }else{
+      $etat[CDOC_TERMINE]   = "Document Disponible";  
+    }
     if($this->etat)
       $this->_etat_actuel = $etat[$this->etat];
   }
@@ -82,7 +87,11 @@ class CDocGed extends CMbObject {
     $etat[CDOC_DEMANDE]   = "Demande de Procédure";
     $etat[CDOC_REDAC]     = "En Cours de Rédaction";
     $etat[CDOC_VALID]     = "En Attente de Validation";
-    $etat[CDOC_TERMINE]   = "Document Disponible";
+    if($this->annule){
+      $etat[CDOC_TERMINE]   = "Document Non Disponible";
+    }else{
+      $etat[CDOC_TERMINE]   = "Document Disponible";  
+    }
     if($this->etat)
       $this->_etat_actuel = $etat[$this->etat];
   }
@@ -187,7 +196,9 @@ class CDocGed extends CMbObject {
     if($this->etat==CDOC_DEMANDE 
        || $this->etat==CDOC_REDAC 
        || $this->etat==CDOC_VALID
+       || $this->etat==CDOC_MODELE
        || ($this->etat==CDOC_TERMINE && !$this->_lastactif->doc_ged_suivi_id)
+       || ($this->etat==CDOC_TERMINE && $this->_lastactif->doc_ged_suivi_id!=$this->_lastentry->doc_ged_suivi_id)
        ){
       return true;
     }else{
@@ -199,7 +210,12 @@ class CDocGed extends CMbObject {
   function delete() {
     // Suppression ou non de document en cours de modification
     $this->load($this->doc_ged_id);
-    $this->loadLastActif();
+    if(!$this->_lastactif){
+      $this->loadLastActif();
+    }
+    if(!$this->_lastentry){
+      $this->loadLastEntry();
+    }
     $msg = null;
     if (!$this->canDelete( $msg )) {
       return $msg;

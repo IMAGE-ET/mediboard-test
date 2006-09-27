@@ -6,6 +6,10 @@ function printIncident(ficheId){
   url.popup(700, 500, url, "printFicheEi");
   return;
 }
+
+function refuseFiche(){
+
+}
 </script>
 <table class="main">
   <tr>
@@ -40,13 +44,13 @@ function printIncident(ficheId){
         
       <table class="form">
         <tr>
-          <th class="category" colspan="4">Fiches d'EI traitée</th>
+          <th class="category" colspan="4">Fiches d'EI en cours de traitement</th>
         </tr>
         <tr>
           <th class="category">Date de l'événement</th>
           <th class="category">Auteur</th>
-          <th class="category">Validation</th>
-          <th class="category">Degré d'Urgence</th>
+          <th class="category">Urgence</th>
+          <th class="category">Etat</th>
         </tr>        
         {{foreach from=$listFichesTermine item=currFiche}}
         <tr>
@@ -62,12 +66,12 @@ function printIncident(ficheId){
           </td>
           <td class="text">
             <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-              {{$currFiche->_ref_user_valid->_view}}
+              {{$currFiche->degre_urgence}}
             </a>
           </td>
           <td class="text">
             <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-              {{$currFiche->degre_urgence}}
+              {{$currFiche->_etat_actuel}}
             </a>
           </td>
         </tr>
@@ -82,157 +86,99 @@ function printIncident(ficheId){
     </td>
     <td class="halfPane">
       {{if $fiche->fiche_ei_id}}
-      {{if !$fiche->valid_user_id}}
+      
       <form name="ProcEditFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_ficheEi_aed" />
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="fiche_ei_id" value="{{$fiche->fiche_ei_id}}" />
       <input type="hidden" name="valid_user_id" value="{{$user_id}}" />
-      {{/if}}
+
       <table class="form">
+        {{include file="inc_incident_infos.tpl"}}
+        
+      {{if $canAdmin && !$fiche->valid_user_id}}
         <tr>
-          {{if !$fiche->valid_user_id}}
-          <th colspan="2" class="title" style="color:#f00;">
-            Validation d'une fiche
-          {{else}}
-          <th colspan="2" class="title">
-            Visualisation d'une fiche
-          {{/if}}
+          <th><label for="degre_urgence" title="Veuillez sélectionner le degré d'urgence">Degré d'Urgence</label></th>
+          <td>
+            <select name="degre_urgence" title="{{$fiche->_props.degre_urgence}}|notNull">
+            <option value="">&mdash; Veuillez Choisir</option>
+            {{html_options options=$fiche->_enumsTrans.degre_urgence}}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th><label for="service_valid_user_id" title="Veuillez sélectionner le chef de service à qui transmettre la fiche">Chef de Service à qui transmettre la fiche</label></th>
+          <td>
+            <select name="service_valid_user_id" title="{{$fiche->_props.service_valid_user_id}}|notNull">
+            <option value="">&mdash; Veuillez Choisir &mdash;</option>
+            {{foreach from=$listUsersEdit item=currUser}}
+            <option value="{{$currUser->user_id}}">{{$currUser->_view}}</option>
+            {{/foreach}}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="button">
+            <button class="edit" type="button" onclick="window.location.href='index.php?m={{$m}}&amp;tab=vw_incident&amp;fiche_ei_id={{$fiche->fiche_ei_id}}';">
+              Editer la Fiche
+            </button>
+            <button class="modify" type="submit">
+              Transmettre
+            </button>
+            <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'cette fiche d\'EI '})" title="Supprimer la Fiche d'EI">
+              Supprimer
+            </button>
+          </td>
+        </tr>
+      {{/if}}
+      
+      {{if $fiche->service_valid_user_id && $fiche->service_valid_user_id==$user && !$fiche->service_date_validation}}
+        <tr>
+          <th colspan="2" class="category">
+            Validation du Chef de Service
           </th>
         </tr>
         <tr>
-          <th>Evenement</th>
+          <th>
+            <label for="service_actions" title="Veuillez décrire les actions mises en place">Actions mises en Place</label>
+          </th>
           <td>
-            <strong>Signalement d'un
-            {{if $fiche->type_incident}}
-            risque d'incident
-            {{else}}
-            incident
-            {{/if}}</strong>
-            <br /> le {{$fiche->date_incident|date_format:"%A %d %B %Y à %Hh%M"}}
-          </td>
-        </tr>        
-        <tr>
-          <th>Auteur de la Fiche</th>
-          <td class="text">
-            {{$fiche->_ref_user->_view}}
-            <br />{{$fiche->_ref_user->_ref_function->_view}}
+            <textarea name="service_actions" title="{{$fiche->_props.service_actions}}|notNull"></textarea>
           </td>
         </tr>
         <tr>
-          <th>Concernant</th>
-          <td class="text">
-            {{if $fiche->elem_concerne==4}}    un matériel
-            {{elseif $fiche->elem_concerne==3}}un médicament
-            {{elseif $fiche->elem_concerne==2}}un membre du personnel
-            {{elseif $fiche->elem_concerne==1}}un visiteur
-            {{else}}                           un Patient
-            {{/if}}<br />
-            {{$fiche->elem_concerne_detail|nl2br}}
-          </td>
-        </tr>
-        <tr>
-          <th>Lieu</th>
-          <td class="text">
-            {{$fiche->lieu}}
-          </td>
-        </tr>
-        <tr>
-          <th colspan="2" class="category">Description de l'événement</th>
-        </tr>
-        {{foreach from=$catFiche item=currEven key=keyEven}}
-        <tr>
-          <th><strong>{{$keyEven}}</strong></th>
+          <th>
+            <label for="service_descr_consequences" title="Veuillez décrire les conséquences">Description des conséquences</label>
+          </th>
           <td>
-            <ul>
-              {{foreach from=$currEven item=currItem}}
-              <li>{{$currItem->nom}}</li>
-              {{/foreach}}
-            </ul>
+            <textarea name="service_descr_consequences" title="{{$fiche->_props.service_descr_consequences}}|notNull"></textarea>
           </td>
-        </tr>  
-        {{/foreach}}
-        <tr>
-          <th colspan="2" class="category">Informations complémentaires</th>
         </tr>
-        
-        {{if $fiche->autre}}
         <tr>
-          <th>Autre</th>
-          <td class="text">{{$fiche->autre|nl2br}}</td>
+          <td colspan="2" class="button">
+            <button class="modify" type="submit">
+              Transmettre
+            </button>
+          </td>
         </tr>
+      {{/if}}
+      
+      {{if $canAdmin && $fiche->service_date_validation}}
+        {{if !$fiche->qualite_date_validation}}
+        <tr>
+          <td colspan="2" class="button">
+            <button class="modify" type="submit">
+              Valider ces mesures
+            </button>
+          </td>
+        </tr>
+        {{else}}
+      
         {{/if}}
-        {{if $fiche->descr_faits}}
-        <tr>
-          <th>Description des faits</th>
-          <td class="text">{{$fiche->descr_faits|nl2br}}</td>
-        </tr>
-        {{/if}}
-        {{if $fiche->mesures}}
-        <tr>
-          <th>Mesures Prises</th>
-          <td class="text">{{$fiche->mesures|nl2br}}</td>
-        </tr>
-        {{/if}}
-        {{if $fiche->descr_consequences}}
-        <tr>
-          <th>Description des conséquences</th>
-          <td class="text">{{$fiche->descr_consequences|nl2br}}</td>
-        </tr>
-        {{/if}}
-        <tr>
-          <th>Gravité estimée</th>
-          <td>
-            {{if $fiche->gravite==2}}    Importante
-            {{elseif $fiche->gravite==1}}Modérée
-            {{else}}                     Nulle
-            {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <th>Plainte prévisible</th>
-          <td>
-            {{if $fiche->plainte}} Oui
-            {{else}}               Non
-            {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <th>Commission concialition</th>
-          <td>
-            {{if $fiche->commission}} Oui
-            {{else}}               Non
-            {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <th>Evénement déjà survenu à<br /> la connaissance de l'auteur</th>
-          <td>
-            {{if $fiche->deja_survenu!==null}}
-              {{if $fiche->deja_survenu}} Oui
-              {{else}}                    Non
-              {{/if}}
-            {{else}}                      Ne sais pas
-            {{/if}}
-          </td>
-        </tr>
-        
-        <tr>
-          <th colspan="2" class="category">Validation de la Fiche</th>
-        </tr>
-        {{if $fiche->valid_user_id}}
-        <tr>
-          <th>Degré d'Urgence</th>
-          <td>{{$fiche->degre_urgence}}</td>
-        </tr>
-        <tr>
-          <th>Validée par</th>
-          <td>
-            {{$fiche->_ref_user_valid->_view}}
-            <br />le {{$fiche->date_validation|date_format:"%d %b %Y à %Hh%M"}}
-          </td>
-        </tr>
+      {{/if}}
+      
+      {{if $canAdmin && $fiche->valid_user_id}}
         <tr>
           <td colspan="2" class="button">
             <button class="print" type="button" onclick="printIncident({{$fiche->fiche_ei_id}});">
@@ -240,28 +186,26 @@ function printIncident(ficheId){
             </button>
           </td>
         </tr>
-      </table>
-        {{else}}
-        <tr>
-          <th><label for="degre_urgence" title="Veuillez sélectionenr le degré d'urgence">Degré d'Urgence</label></th>
-          <td>
-            <select name="degre_urgence" title="{{$fiche->_props.degre_urgence}}|notNull">
-            <option value="">&mdash; Veuillez Choisir &mdash;</option>
-            {{html_options values=$fiche->_enums.degre_urgence output=$fiche->_enums.degre_urgence}}
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" class="button">
-            <button class="modify" type="submit">
-              Valider la Fiche
-            </button>
-          </td>
-        </tr>
+      {{/if}}
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+            
       </table>
       </form>
-        {{/if}}
-      
       {{/if}}
     </td>
   </tr>

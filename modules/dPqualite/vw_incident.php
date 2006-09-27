@@ -7,16 +7,25 @@
 * @author Sébastien Fillonneau
 */
 
-
-global $AppUI, $canRead, $canEdit, $m, $g;
+global $AppUI, $canRead, $canEdit, $canAdmin, $m, $g;
 
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
+$fiche_ei_id = mbGetValueFromGet("fiche_ei_id",0);
+
+
 $fiche = new CFicheEi;
 
-
+if($canAdmin && $fiche_ei_id){
+  // Droit admin et edition de fiche
+  $fiche->load($fiche_ei_id);
+}
+$fiche->loadRefsFwd();
+if(!$fiche->_ref_evenement){
+  $fiche->_ref_evenement = array();
+}
 // Liste des Catégories
 $firstdiv = null;
 $listCategories = new CEiCategorie;
@@ -26,6 +35,19 @@ foreach ($listCategories as $key=>$value){
     $firstdiv = $key;
   }
   $listCategories[$key]->loadRefsBack();
+  $listCategories[$key]->checked = null;
+  foreach($listCategories[$key]->_ref_items as $keyItem=>$valueItem){
+    if(in_array($keyItem,$fiche->_ref_evenement)){
+      $listCategories[$key]->_ref_items[$keyItem]->checked = true;
+      if($listCategories[$key]->checked){
+        $listCategories[$key]->checked .= "|". $keyItem;
+      }else{
+        $listCategories[$key]->checked = $keyItem;
+      }
+    }else{
+    	$listCategories[$key]->_ref_items[$keyItem]->checked = false;
+    }
+  }
 }
 
 // Liste minutes

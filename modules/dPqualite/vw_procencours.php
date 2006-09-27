@@ -17,7 +17,7 @@ if (!$canEdit) {
 $doc_ged_id = mbGetValueFromGetOrSession("doc_ged_id",0);
 
 $docGed = new CDocGed;
-if(!$docGed->load($doc_ged_id) || $docGed->annule){
+if(!$docGed->load($doc_ged_id)){
   // Ce document n'est pas valide
   $doc_ged_id = null;
   mbSetValueToSession("doc_ged_id");
@@ -35,7 +35,7 @@ if($docGed->etat==CDOC_TERMINE){
 
 //Procédure Terminé et/ou Refusé
 $procTermine = new CDocGed;
-$procTermine = $procTermine->loadProcTermineOuRefuse($AppUI->user_id,0);
+$procTermine = $procTermine->loadProcTermineOuRefuse($AppUI->user_id);
 foreach($procTermine as $keyProc => $currProc){
   $procTermine[$keyProc]->loadRefsBack();
   $procTermine[$keyProc]->getEtatRedac();
@@ -47,7 +47,7 @@ foreach($procTermine as $keyProc => $currProc){
 
 // Procédure en Cours de demande
 $procDemande = new CDocGed;
-$procDemande = $procDemande->loadProcDemande($AppUI->user_id,0);
+$procDemande = $procDemande->loadProcDemande($AppUI->user_id);
 foreach($procDemande as $keyProc => $currProc){
   $procDemande[$keyProc]->loadRefsBack();
   $procDemande[$keyProc]->getEtatRedac();
@@ -57,7 +57,7 @@ foreach($procDemande as $keyProc => $currProc){
 
 // Procédure en Attente de Rédaction
 $procEnCours = new CDocGed;
-$procEnCours = $procEnCours->loadProcRedacAndValid($AppUI->user_id,0);
+$procEnCours = $procEnCours->loadProcRedacAndValid($AppUI->user_id);
 foreach($procEnCours as $keyProc => $currProc){
 	$procEnCours[$keyProc]->loadRefsBack();
   $procEnCours[$keyProc]->getEtatRedac();

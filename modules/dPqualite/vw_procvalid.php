@@ -14,10 +14,12 @@ if (!$canAdmin) {
 }
 
 
-$doc_ged_id = mbGetValueFromGetOrSession("doc_ged_id",0);
+$doc_ged_id        = mbGetValueFromGetOrSession("doc_ged_id",0);
+$procAnnuleVisible = mbGetValueFromGetOrSession("procAnnuleVisible" , 0);
+$lastactif         = mbGetvalueFromGet("lastactif", 0);
 
 $docGed = new CDocGed;
-if(!$docGed->load($doc_ged_id) || $docGed->etat == CDOC_TERMINE){
+if(!$docGed->load($doc_ged_id)){
   // Ce document n'est pas valide
   $doc_ged_id = null;
   mbSetValueToSession("doc_ged_id");
@@ -29,10 +31,9 @@ if(!$docGed->load($doc_ged_id) || $docGed->etat == CDOC_TERMINE){
 
 $docGed->loadLastEntry();
 
-
 // Procédure en Cours de demande
 $procDemande = new CDocGed;
-$procDemande = $procDemande->loadProcDemande($AppUI->user_id);
+$procDemande = $procDemande->loadProcDemande();
 foreach($procDemande as $keyProc => $currProc){
   $procDemande[$keyProc]->loadRefsBack();
   $procDemande[$keyProc]->getEtatRedac();
@@ -42,11 +43,24 @@ foreach($procDemande as $keyProc => $currProc){
 
 // Procédure non terminé Hors demande
 $procEnCours = new CDocGed;
-$procEnCours = $procEnCours->loadProcRedacAndValid($AppUI->user_id);
+$procEnCours = $procEnCours->loadProcRedacAndValid();
 foreach($procEnCours as $keyProc => $currProc){
-    $procEnCours[$keyProc]->loadRefsBack();
+  $procEnCours[$keyProc]->loadRefsBack();
   $procEnCours[$keyProc]->getEtatValid();
   $procEnCours[$keyProc]->loadLastEntry();
+}
+
+// Procédures Terminée et Annulée
+$procTermine = new CDocGed;
+$where = array();
+$where["annule"] = "= '1'";
+$procTermine = $procTermine->loadList($where);
+if($procAnnuleVisible){
+  foreach($procTermine as $keyProc => $currProc){
+    $procTermine[$keyProc]->loadRefsBack();
+    $procTermine[$keyProc]->getEtatValid();
+    $procTermine[$keyProc]->loadLastEntry();
+  }
 }
 
 $order = "code";
@@ -73,15 +87,18 @@ if($docGed->version){
 require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("procDemande"    , $procDemande);
-$smarty->assign("procEnCours"    , $procEnCours);
-$smarty->assign("listCategories" , $listCategories);
-$smarty->assign("listThemes"     , $listThemes);
-$smarty->assign("listChapitres"  , $listChapitres);
-$smarty->assign("docGed"         , $docGed);
-$smarty->assign("g"              , $g);
-$smarty->assign("versionDoc"     , $versionDoc);
-$smarty->assign("user_id"        , $AppUI->user_id);
+$smarty->assign("lastactif"         , $lastactif);
+$smarty->assign("procAnnuleVisible" , $procAnnuleVisible);
+$smarty->assign("procTermine"       , $procTermine);
+$smarty->assign("procDemande"       , $procDemande);
+$smarty->assign("procEnCours"       , $procEnCours);
+$smarty->assign("listCategories"    , $listCategories);
+$smarty->assign("listThemes"        , $listThemes);
+$smarty->assign("listChapitres"     , $listChapitres);
+$smarty->assign("docGed"            , $docGed);
+$smarty->assign("g"                 , $g);
+$smarty->assign("versionDoc"        , $versionDoc);
+$smarty->assign("user_id"           , $AppUI->user_id);
 
 $smarty->display("vw_procvalid.tpl");
 ?>

@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]    = "dPqualite";
-$config["mod_version"] = "0.1";
+$config["mod_version"] = "0.11";
 $config["mod_type"]    = "user";
 $config["mod_config"]  = true;
 
@@ -139,7 +139,25 @@ class CSetupdPqualite {
                 ) TYPE = MYISAM COMMENT ='Table des fiches incidents'";
         db_exec( $sql ); db_error();
       case "0.1":
-        return "0.1";  
+        $sql = "ALTER TABLE `fiches_ei`".
+               "\nADD `service_valid_user_id` int ( 11 ) DEFAULT NULL," .
+               "\nADD `service_date_validation` DATETIME," .
+               "\nADD `service_actions` TEXT DEFAULT NULL," .
+               "\nADD `service_descr_consequences` TEXT DEFAULT NULL," .
+               "\nADD `qualite_user_id` int ( 11 ) DEFAULT NULL," .
+               "\nADD `qualite_date_validation` DATETIME," .
+               "\nADD `qualite_date_verification` DATETIME," .
+               "\nADD `qualite_date_controle` DATETIME," .
+               "\nADD `suite_even` ENUM('trans', 'plong', 'deces', 'autre') NOT NULL DEFAULT 'autre' AFTER `gravite`, " .
+               "\nCHANGE `type_incident` `type_incident` ENUM('inc', 'ris') NOT NULL DEFAULT 'inc'," .
+               "\nCHANGE `elem_concerne` `elem_concerne` ENUM( 'pat', 'vis', 'pers', 'med', 'mat' ) NOT NULL DEFAULT 'pat'," .
+               "\nCHANGE `gravite` `gravite` ENUM('nul', 'mod', 'imp') NOT NULL DEFAULT 'nul'," .
+               "\nCHANGE `plainte` `plainte` ENUM('non', 'oui') NOT NULL DEFAULT 'non'," .
+               "\nCHANGE `commission` `commission` ENUM('non', 'oui') NOT NULL DEFAULT 'non'," .
+               "\nCHANGE `deja_survenu` `deja_survenu` ENUM('non', 'oui') DEFAULT NULL;";
+        db_exec( $sql ); db_error();
+      case "0.11":
+        return "0.11";
     }
     return false;
   }
