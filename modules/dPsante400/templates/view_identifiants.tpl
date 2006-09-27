@@ -2,8 +2,8 @@
 
 var oForm = null;
 
-function setObject(oObject){
-  oForm.object_class.value = oObject.class;
+function setObject(oObject) {
+  oForm.object_class.value = oObject.objClass;
   oForm.object_id.value = oObject.id;
 }
 
@@ -12,7 +12,7 @@ function popObject(oElement) {
   var url = new Url;
   url.setModuleAction("system", "object_selector");
   url.addElement(oForm.object_class, "selClass");  
-  url.popup(600, 300, "-");
+  url.popup(600, 300, "Object Selector-Plus");
 }
 
 </script>

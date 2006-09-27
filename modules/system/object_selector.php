@@ -13,14 +13,11 @@ $selClass = mbGetValueFromGetOrSession("selClass", null);
 $keywords = mbGetValueFromGetOrSession("keywords", null);
 
 // Liste des Class
-$listClass = getChildClasses("CMbObject");
-
+$listClass = getInstalledClasses();
 
 $keywords = trim($keywords);
 $keywords_search = explode(" ", $keywords);
 $keywords_search = array_filter($keywords_search);
-
-
 
 if($selClass){
   $object = new $selClass;

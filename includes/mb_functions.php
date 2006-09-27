@@ -637,8 +637,8 @@ function mbConvertDecaBinary($number) {
 
 function getChildClasses($parent = "CMbObject", $properties = array()) {
   $listClasses = get_declared_classes();
-  foreach($listClasses as $key => $class) {
-    if(!is_subclass_of($class, $parent)) {
+  foreach ($listClasses as $key => $class) {
+    if (!is_subclass_of($class, $parent)) {
       unset($listClasses[$key]);
     } else {
       if(is_array($properties)) {
@@ -654,5 +654,15 @@ function getChildClasses($parent = "CMbObject", $properties = array()) {
   return $listClasses;
 }
 
-
+function getInstalledClasses($properties = array()) {
+  $listClasses = getChildClasses("CMbObject", $properties);
+  foreach ($listClasses as $key => $class) {
+    $object = new $class;
+    if ($object->_ref_module === null) {
+      unset($listClasses[$key]);
+    }
+  }
+  
+  return $listClasses;
+}
 ?>

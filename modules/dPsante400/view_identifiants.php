@@ -16,11 +16,11 @@ if (!$canRead && !$dialog) {
 }
 
 // Récupération de la liste des classes disponibles
-$listClasses = getChildClasses();
+$listClasses = getInstalledClasses();
 
 // Chargement de la liste des id4Sante400 pour le filtre
 $filter = new CIdSante400;
-$filter->object_id    = mbGetValueFromGetOrSession("object_id");
+$filter->object_id    = mbGetValueFromGetOrSession("object_id"   );
 $filter->object_class = mbGetValueFromGetOrSession("object_class");
 $filter->tag          = mbGetValueFromGetOrSession("tag"         );
 

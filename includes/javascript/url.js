@@ -31,7 +31,7 @@ Url.prototype.addElement = function(oElement, sParamName) {
 }
 
 Url.prototype.make = function() {
-  return "index.php?" + this.aParams.join("&");
+  return "?" + this.aParams.join("&");
 }
 
 Url.prototype.redirect = function() {
@@ -51,6 +51,10 @@ Url.prototype.pop = function(iWidth, iHeight, sWindowName) {
   aFeatures.push("scrollbars=yes");
   aFeatures.push("resizable=yes");
   aFeatures.push("menubar=yes");
+
+  // Forbidden characters for IE
+  sWindowName = sWindowName.replace(/[ -]/gi, "_");
+  
   this.oWindow = window.open(this.make(), sWindowName, aFeatures.join(", "));  
 }
 

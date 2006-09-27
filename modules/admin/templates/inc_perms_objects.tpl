@@ -5,7 +5,7 @@ function popObject() {
   var url = new Url;
   url.setModuleAction("system", "object_selector");
   url.addParam("selClass", oForm.object_class.value); 
-  url.popup(600, 300, "-");
+  url.popup(600, 300, "Object");
 }
 
 function setObject(oObject) {

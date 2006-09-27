@@ -8,7 +8,7 @@ function popObject() {
   url.setModuleAction("system", "object_selector");
   url.addElement(oForm.keywords);
   url.addElement(oForm.selClass);  
-  url.popup(600, 300, "-");
+  url.popup(600, 300, "Object Selector");
 }
 
 function pageMain() {
