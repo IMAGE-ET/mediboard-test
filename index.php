@@ -25,6 +25,7 @@ require_once("./includes/errors.php");
 
 // PHP Configuration
 ini_set("memory_limit", "64M");
+ini_set("magic_quotes_gpc", 1);
 
 // manage the session variable(s)
 session_name("dotproject");
@@ -32,7 +33,7 @@ if(get_cfg_var("session.auto_start") > 0) {
 	session_write_close();
 }
 session_start();
-session_register("AppUI"); 
+session_register("AppUI");
   
 // write the HTML headers
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");	// Date in the past
