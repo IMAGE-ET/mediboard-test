@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "dPetablissement";
-$config["mod_version"]     = "0.11";
+$config["mod_version"]     = "0.12";
 $config["mod_type"]        = "core";
 $config["mod_config"]      = false;
 
@@ -57,7 +57,11 @@ class CSetupdPetablissement {
             "\nADD `siret` VARCHAR( 14 );";
         db_exec( $sql ); db_error();
       case "0.11":
-        return "0.11";
+        $sql = "ALTER TABLE `groups_mediboard`" .
+            "\nADD `ape` VARCHAR( 4 ) DEFAULT NULL;";
+        db_exec( $sql ); db_error();
+      case "0.12":
+        return "0.12";
     }
 
     return false;

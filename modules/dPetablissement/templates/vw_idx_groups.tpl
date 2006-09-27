@@ -124,12 +124,14 @@ function pageMain() {
             <input type="text" title="{{$usergroup->_props.siret}}" maxlength="14" name="siret" size="15" value="{{$usergroup->siret}}" />
           </td>
         </tr>
-        
-        
-        
-        
-        
-        
+        <tr>
+          <th>
+            <label for="ape" title="Veuillez saisir le code APE de l'établissement">Code APE</label>
+          </th>
+          <td>
+            <input type="text" title="{{$usergroup->_props.ape}}" maxlength="4" name="ape" size="5" value="{{$usergroup->ape}}" />
+          </td>
+        </tr>
         <tr>
           <td class="button" colspan="2">
           {{if $usergroup->group_id}}
