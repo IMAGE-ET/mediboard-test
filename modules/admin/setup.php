@@ -37,6 +37,7 @@ class CSetupadmin {
         $sql = "ALTER TABLE `users` CHANGE `user_address1` `user_address1` VARCHAR( 50 );";
         db_exec( $sql ); db_error();
       case "1.0.1":
+        $error = "";
         require_once("legacy/permission.class.php");
         $sql = "CREATE TABLE `perm_module` (
                   `perm_module_id` MEDIUMINT NOT NULL AUTO_INCREMENT ,
@@ -69,7 +70,12 @@ class CSetupadmin {
         $listOldPerms = $perm->loadList();
         foreach($listOldPerms as $key => $value) {
           $module = new CModule;
-          $module->loadByName($value->permission_grant_on);
+          if($value->permission_grant_on == "all") {
+            $module->mod_id = 0;
+          } else {
+            $module->loadByName($value->permission_grant_on);
+          }
+          if($module->mod_id !== null) {
           if($value->permission_item == -1) {
             $newPerm = new CPermModule;
             $newPerm->user_id = $value->permission_user;
@@ -99,12 +105,12 @@ class CSetupadmin {
               $newPerm->permission = 0;
             }
           }
-          $error = "";
           $user = new CUser;
           if($user->load($value->permission_user)) {
             if($msg = $newPerm->store()) {
               $error .= $msg."<br />";
             }
+          }
           }
         }
         if($error !== "") {
