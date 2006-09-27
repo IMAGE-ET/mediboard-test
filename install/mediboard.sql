@@ -173,7 +173,7 @@ CREATE TABLE `groups_mediboard` (
   `group_id` TINYINT(4) UNSIGNED NOT NULL AUTO_INCREMENT,
   `text` VARCHAR(50) NOT NULL,
   PRIMARY KEY  (`group_id`)
-) TYPE=MyISAM;";
+) TYPE=MyISAM;
 
 -- --------------------------------------------------------
 
