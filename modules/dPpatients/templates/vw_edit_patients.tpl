@@ -1,5 +1,5 @@
 <!-- $Id$ -->
-
+<script type="text/javascript" src="modules/dPpatients/javascript/autocomplete.js?build={{$mb_version_build}}"></script>
 <script type="text/javascript">
 function confirmCreation(id, bDialog, sSiblingsText) {
   if (!confirm(sSiblingsText)) {
@@ -66,33 +66,16 @@ function setMed( key, nom, prenom, sElementName ){
   oFieldMedecinName.value = "Dr. " + nom + " " + prenom;
 }
 
-function updateFields(selected) {
+function updateFields(selected, sFormName, sFieldCP, sFieldCity) {
   Element.cleanWhitespace(selected);
   dn = selected.childNodes;
-  $('editFrm_cp').value = dn[0].firstChild.firstChild.nodeValue;
-  $('editFrm_ville').value = dn[2].firstChild.nodeValue;
-  $('editFrm__tel1').focus();
+  $(sFormName + '_' + sFieldCP).value = dn[0].firstChild.firstChild.nodeValue;
+  $(sFormName + '_' + sFieldCity).value = dn[2].firstChild.nodeValue;
+  $(sFormName + '__tel1').focus();
 }
 
 function pageMain() {
-  new Ajax.Autocompleter(
-    'editFrm_cp',
-    'cp_auto_complete',
-    'index.php?m=dPpatients&ajax=1&suppressHeaders=1&a=httpreq_do_insee_autocomplete', {
-      minChars: 2,
-      frequency: 0.15,
-      updateElement: updateFields
-    }
-  );
-  new Ajax.Autocompleter(
-    'editFrm_ville',
-    'ville_auto_complete',
-    'index.php?m=dPpatients&ajax=1&suppressHeaders=1&a=httpreq_do_insee_autocomplete', {
-      minChars: 4,
-      frequency: 0.15,
-      updateElement: updateFields
-    }
-  );
+  initInseeFields("editFrm", "cp", "ville");
   regFieldCalendar("editFrm", "cmu");
 }
 

@@ -1,3 +1,11 @@
+<script type="text/javascript" src="modules/dPpatients/javascript/autocomplete.js?build={{$mb_version_build}}"></script>
+
+<script type="text/javascript">
+function pageMain() {
+  initInseeFields("group", "cp", "ville");
+}
+</script>
+
 <table class="main">
   <tr>
     <td class="halfPane">
@@ -70,14 +78,16 @@
         <tr>
           <th><label for="cp" title="Code postal">Code Postal</label></th>
           <td>
-            <input size="6" maxlength="5" type="text" name="cp" value="{{$usergroup->cp}}" title="{{$usergroup->_props.cp}}" />
+            <input size="31" maxlength="5" type="text" name="cp" value="{{$usergroup->cp}}" title="{{$usergroup->_props.cp}}" />
+            <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
           </td>
         </tr>
         
         <tr>
           <th><label for="ville" title="Ville de l'établissement">Ville</label></th>
           <td>
-            <input size="30" type="text" name="ville" value="{{$usergroup->ville}}" title="{{$usergroup->_props.ville}}" />
+            <input size="31" type="text" name="ville" value="{{$usergroup->ville}}" title="{{$usergroup->_props.ville}}" />
+            <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
           </td>
         </tr>
         <tr>

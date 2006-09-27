@@ -1,32 +1,9 @@
+<script type="text/javascript" src="modules/dPpatients/javascript/autocomplete.js?build={{$mb_version_build}}"></script>
+
 <script type="text/javascript">
-function updateFields(selected) {
-  Element.cleanWhitespace(selected);
-  dn = selected.childNodes;
-  $('editFournisseur_codepostal').value = dn[0].firstChild.firstChild.nodeValue;
-  $('editFournisseur_ville').value = dn[2].firstChild.nodeValue;
-}
-
 function pageMain() {
-  new Ajax.Autocompleter(
-    'editFournisseur_codepostal',
-    'codepostal_auto_complete',
-    'index.php?m=dPmateriel&ajax=1&suppressHeaders=1&a=httpreq_do_insee_autocomplete', {
-      minChars: 2,
-      frequency: 0.15,
-      updateElement: updateFields
-    }
-  );
-  new Ajax.Autocompleter(
-    'editFournisseur_ville',
-    'ville_auto_complete',
-    'index.php?m=dPmateriel&ajax=1&suppressHeaders=1&a=httpreq_do_insee_autocomplete', {
-      minChars: 4,
-      frequency: 0.15,
-      updateElement: updateFields
-    }
-  );
+  initInseeFields("editFournisseur", "codepostal", "ville");
 }
-
 </script>
 
 <table class="main">
