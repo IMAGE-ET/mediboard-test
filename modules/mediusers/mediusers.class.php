@@ -53,21 +53,44 @@ class CMediusers extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["remote"]        = "enum|0|1";
-    $this->_props["adeli"]         = "num|length|9|confidential";
-    $this->_props["function_id"]   = "ref|notNull";
-    $this->_props["discipline_id"] = "ref";
+    static $props = array (
+      "remote"        => "enum|0|1",
+      "adeli"         => "num|length|9|confidential",
+      "function_id"   => "ref|notNull",
+      "discipline_id" => "ref"
+    );
+    $this->_props =& $props;
     
-    $this->_user_props["_user_username"]   = "notNull|str|minLength|3";
-    $this->_user_props["_user_first_name"] = "str";
-    $this->_user_props["_user_last_name"]  = "notNull|str|confidential";
-    $this->_user_props["_user_email"]      = "str|confidential";
-    $this->_user_props["_user_phone"]      = "num|length|10|confidential";
-    $this->_user_props["_user_adresse"]    = "str|confidential";
-    $this->_user_props["_user_cp"]         = "num|length|5|confidential";
-    $this->_user_props["_user_ville"]      = "str|confidential";
+    static $user_props = array (
+      "_user_username"   => "notNull|str|minLength|3",
+      "_user_first_name" => "str",
+      "_user_last_name"  => "notNull|str|confidential",
+      "_user_email"      => "str|confidential",
+      "_user_phone"      => "num|length|10|confidential",
+      "_user_adresse"    => "str|confidential",
+      "_user_cp"         => "num|length|5|confidential",
+      "_user_ville"      => "str|confidential"
+    );
+    $this->_user_props =& $user_props;
+
+    static $seek = array (
+      "user_id"  => "ref|CUser"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_seek["user_id"]  = "ref|CUser";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
 	}
 
   function createUser() {

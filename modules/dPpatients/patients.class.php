@@ -113,7 +113,6 @@ class CPatient extends CMbObject {
       "cmu"              => "date",
       "ald"              => "text"
     );
-    
     $this->_props =& $props;
     
     static $seek = array(
@@ -121,10 +120,21 @@ class CPatient extends CMbObject {
       "prenom" => "likeBegin",
       "ville"  => "like"
     );
-    
     $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->buildEnums();
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
 	}
   
   function updateFormFields() {

@@ -30,13 +30,33 @@ class CMateriel extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["nom"] = "str|maxLength|50|notNull";
-    $this->_props["code_barre"] = "num";
-    $this->_props["description"] = "str";
-    $this->_props["category_id"] = "ref|notNull";
+    static $props = array (
+      "nom" => "str|maxLength|50|notNull",
+      "code_barre" => "num",
+      "description" => "str",
+      "category_id" => "ref|notNull"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "nom"         => "like",
+      "description" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_seek["nom"]         = "like";
-    $this->_seek["description"] = "like";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsBack(){

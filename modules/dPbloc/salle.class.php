@@ -28,11 +28,31 @@ class CSalle extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["group_id"] = "ref|notNull";
-    $this->_props["nom"]      = "str|notNull";
-    $this->_props["stats"]    = "enum|0|1|notNull";
+    static $props = array (
+      "group_id" => "ref|notNull",
+      "nom"      => "str|notNull",
+      "stats"    => "enum|0|1|notNull"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "nom" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_seek["nom"] = "like";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
 	}
   
   function updateFormFields() {

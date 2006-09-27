@@ -32,12 +32,32 @@ class CService extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["group_id"]    = "ref|notNull";
-    $this->_props["nom"]         = "str|notNull|confidential";
-    $this->_props["description"] = "str|confidential";
+    static $props = array (
+      "group_id"    => "ref|notNull",
+      "nom"         => "str|notNull|confidential",
+      "description" => "str|confidential"
+    );
+    $this->_props =& $props;
 
-    $this->_seek["nom"]         = "like";
-    $this->_seek["description"] = "like";
+    static $seek = array (
+      "nom"         => "like",
+      "description" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
+    
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
 	}
 
   function loadRefsBack() {

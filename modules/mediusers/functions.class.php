@@ -30,15 +30,33 @@ class CFunctions extends CMbObject {
 		$this->CMbObject("functions_mediboard", "function_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "group_id" => "ref|notNull",
+      "type"     => "enum|administratif|cabinet|notNull",
+      "text"     => "str|notNull|confidential",
+      "color"    => "str|length|6|notNull"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "text" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["group_id"] = "ref|notNull";
-    $this->_props["type"]     = "enum|administratif|cabinet|notNull";
-    $this->_props["text"]     = "str|notNull|confidential";
-    $this->_props["color"]    = "str|length|6|notNull";
+    $this->_enums =& $enums;
     
-    $this->_seek["text"] = "like";
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
     
-    $this->buildEnums();
+    $this->_enumsTrans =& $enumsTrans;
 	}
   
   function updateFormFields() {

@@ -25,9 +25,29 @@ class CDiscipline extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["text"] = "str|notNull";
+    static $props = array (
+      "text" => "str|notNull"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "text" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_seek["text"] = "like";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadUsedDisciplines($where = array(), $order = null) {

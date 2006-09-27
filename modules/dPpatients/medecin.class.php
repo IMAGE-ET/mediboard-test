@@ -47,24 +47,44 @@ class CMedecin extends CMbObject {
 		$this->CMbObject("medecin", "medecin_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "nom"             => "str|notNull|confidential",
+      "prenom"          => "str|confidential",
+      "jeunefille"      => "str|confidential",
+      "adresse"         => "str|confidential",
+      "ville"           => "str|confidential",
+      "cp"              => "num|maxLength|5|confidential",
+      "tel"             => "num|length|10|confidential",
+      "fax"             => "num|length|10|confidential",
+      "email"           => "str|confidential",
+      "disciplines"     => "str|confidential",
+      "orientations"    => "str|confidential",
+      "complementaires" => "str|confidential"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "nom"         => "likeBegin",
+      "prenom"      => "likeBegin",
+      "ville"       => "like",
+      "disciplines" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["nom"]             = "str|notNull|confidential";
-    $this->_props["prenom"]          = "str|confidential";
-    $this->_props["jeunefille"]  = "str|confidential";
-    $this->_props["adresse"]         = "str|confidential";
-    $this->_props["ville"]           = "str|confidential";
-    $this->_props["cp"]              = "num|maxLength|5|confidential";
-    $this->_props["tel"]             = "num|length|10|confidential";
-    $this->_props["fax"]             = "num|length|10|confidential";
-    $this->_props["email"]           = "str|confidential";
-    $this->_props["disciplines"]     = "str|confidential";
-    $this->_props["orientations"]    = "str|confidential";
-    $this->_props["complementaires"] = "str|confidential";
+    $this->_enums =& $enums;
     
-    $this->_seek["nom"]         = "likeBegin";
-    $this->_seek["prenom"]      = "likeBegin";
-    $this->_seek["ville"]       = "like";
-    $this->_seek["disciplines"] = "like";
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
 	}
   
   function updateFormFields() {

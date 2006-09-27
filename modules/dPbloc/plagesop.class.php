@@ -50,14 +50,32 @@ class CPlageOp extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["chir_id"]        = "ref";
-    $this->_props["anesth_id"]      = "ref";
-    $this->_props["spec_id"]        = "ref|xor|chir_id";
-    $this->_props["salle_id"]       = "ref|notNull";
-    $this->_props["date"]           = "date|notNull";
-    $this->_props["debut"]          = "time|notNull";
-    $this->_props["fin"]            = "time|notNull";
-    $this->_props["temps_inter_op"] = "time|notNull";
+    static $props = array (
+      "chir_id"        => "ref",
+      "anesth_id"      => "ref",
+      "spec_id"        => "ref|xor|chir_id",
+      "salle_id"       => "ref|notNull",
+      "date"           => "date|notNull",
+      "debut"          => "time|notNull",
+      "fin"            => "time|notNull",
+      "temps_inter_op" => "time|notNull"
+    );
+    
+    $this->_props =& $props;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
+    
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
 
   }
   

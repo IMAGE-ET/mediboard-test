@@ -32,10 +32,31 @@ class CPack extends CMbObject {
     $this->CMbObject("pack", "pack_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "chir_id" => "ref|notNull",
+      "nom"     => "str|notNull|confidential",
+      "modeles" => "str"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["chir_id"] = "ref|notNull";
-    $this->_props["nom"]     = "str|notNull|confidential";
-    $this->_props["modeles"] = "str";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsFwd() {

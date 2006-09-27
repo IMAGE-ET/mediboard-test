@@ -64,6 +64,29 @@ class CGHM  extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
+    static $props = array (
+      "sejour_id" => "ref|notNull"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
+    
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
+
     global $AppUI;
     
     // Connection à la base

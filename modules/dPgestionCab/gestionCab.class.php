@@ -33,19 +33,37 @@ class CGestionCab extends CMbObject {
     $this->CMbObject("gestioncab", "gestioncab_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-    
-    $this->_props["function_id"]      = "ref|notNull";
-    $this->_props["libelle"]          = "str|notNull";
-    $this->_props["date"]             = "date|notNull";
-    $this->_props["rubrique_id"]      = "ref|notNull";
-    $this->_props["montant"]          = "currency|min|0|notNull";
-    $this->_props["mode_paiement_id"] = "ref|notNull";
-    $this->_props["num_facture"]      = "num|notNull";
-    $this->_props["rques"]            = "text";
-    
-    $this->_seek["libelle"] = "like";
 
-    $this->buildEnums();
+    static $props = array (
+      "function_id"      => "ref|notNull",
+      "libelle"          => "str|notNull",
+      "date"             => "date|notNull",
+      "rubrique_id"      => "ref|notNull",
+      "montant"          => "currency|min|0|notNull",
+      "mode_paiement_id" => "ref|notNull",
+      "num_facture"      => "num|notNull",
+      "rques"            => "text"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "libelle" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
+    
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function updateFormFields() {

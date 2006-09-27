@@ -53,19 +53,38 @@ class CDocGed extends CMbObject {
     $this->CMbObject("doc_ged", "doc_ged_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "group_id"         => "ref|notNull",
+      "user_id"          => "ref",
+      "doc_chapitre_id"  => "ref",
+      "doc_theme_id"     => "ref",
+      "doc_categorie_id" => "ref",
+      "titre"            => "str|maxLength|50",
+      "etat"             => "enum|0|16|32|48|64|notNull",
+      "version"          => "currency|min|0",
+      "annule"           => "enum|0|1",
+      "num_ref"          => "num"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["group_id"]         = "ref|notNull";
-    $this->_props["user_id"]          = "ref";
-    $this->_props["doc_chapitre_id"]  = "ref";
-    $this->_props["doc_theme_id"]     = "ref";
-    $this->_props["doc_categorie_id"] = "ref";
-    $this->_props["titre"]            = "str|maxLength|50";
-    $this->_props["etat"]             = "enum|0|16|32|48|64|notNull";
-    $this->_props["version"]          = "currency|min|0";
-    $this->_props["annule"]           = "enum|0|1";
-    $this->_props["num_ref"]          = "num";
+    $this->_enums =& $enums;
     
-    $this->buildEnums();
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
 
   function getEtatRedac() {

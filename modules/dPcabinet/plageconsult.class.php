@@ -39,16 +39,36 @@ class CPlageconsult extends CMbObject {
     $this->CMbObject("plageconsult", "plageconsult_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "chir_id" => "ref|notNull",
+      "date"    => "date|notNull",
+      "freq"    => "time|notNull",
+      "debut"   => "time|notNull",
+      "fin"     => "time|notNull",
+      "libelle" => "str"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "chir_id" => "ref|CMediusers",
+      "libelle" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["chir_id"] = "ref|notNull";
-    $this->_props["date"]    = "date|notNull";
-    $this->_props["freq"]    = "time|notNull";
-    $this->_props["debut"]   = "time|notNull";
-    $this->_props["fin"]     = "time|notNull";
-    $this->_props["libelle"] = "str";
+    $this->_enums =& $enums;
     
-    $this->_seek["chir_id"] = "ref|CMediusers";
-    $this->_seek["libelle"] = "like";
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefs($withCanceled = true) {

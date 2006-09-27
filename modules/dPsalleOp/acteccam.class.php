@@ -41,17 +41,37 @@ class CActeCCAM extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["code_acte"]           = "notNull|code|ccam";
-    $this->_props["code_activite"]       = "notNull|num|maxLength|2";
-    $this->_props["code_phase"]          = "notNull|num|maxLength|2";
-    $this->_props["execution"]           = "notNull|dateTime";
-    $this->_props["modificateurs"]       = "str|maxLength|4";
-    $this->_props["montant_depassement"] = "currency|min|0";
-    $this->_props["commentaire"]         = "text";
-    $this->_props["operation_id"]        = "notNull|ref";
-    $this->_props["executant_id"]        = "notNull|ref";
+    static $props = array (
+      "code_acte"           => "notNull|code|ccam",
+      "code_activite"       => "notNull|num|maxLength|2",
+      "code_phase"          => "notNull|num|maxLength|2",
+      "execution"           => "notNull|dateTime",
+      "modificateurs"       => "str|maxLength|4",
+      "montant_depassement" => "currency|min|0",
+      "commentaire"         => "text",
+      "operation_id"        => "notNull|ref",
+      "executant_id"        => "notNull|ref"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "code_acte" => "equal"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_seek["code_acte"] = "equal";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
 	}
   
   function check() {

@@ -33,13 +33,34 @@ class CUserLog extends CMbObject {
     $this->CMbObject("user_log", "user_log_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "user_id"      => "ref|notNull",
+      "date"         => "dateTime|notNull",
+      "object_id"    => "ref|notNull",
+      "object_class" => "str|maxLength|25|notNull",
+      "type"         => "enum|create|store|delete|notNull",
+      "fields"       => "text"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["user_id"]      = "ref|notNull";
-    $this->_props["date"]         = "dateTime|notNull";
-    $this->_props["object_id"]    = "ref|notNull";
-    $this->_props["object_class"] = "str|maxLength|25|notNull";
-    $this->_props["type"]         = "enum|create|store|delete|notNull";
-    $this->_props["fields"]       = "text";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function canDelete(&$msg, $oid = null) {

@@ -26,10 +26,32 @@ class CExamComp extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["exam_id"]         = "ref|notNull";
-    $this->_props["consultation_id"] = "ref|notNull";
-    $this->_props["examen"]          = "text";
-    $this->_props["fait"]            = "num|minMax|0|1";
+    static $props = array (
+      "exam_id"         => "ref|notNull",
+      "consultation_id" => "ref|notNull",
+      "examen"          => "text",
+      "fait"            => "num|minMax|0|1"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
+    
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsFwd() {

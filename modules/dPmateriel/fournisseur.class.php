@@ -32,20 +32,40 @@ class CFournisseur extends CMbObject {
     $this->CMbObject("fournisseur", "fournisseur_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "societe"    => "str|maxLength|50|notNull",
+      "adresse"    => "str",
+      "codepostal" => "num|length|5",
+      "ville"      => "str",
+      "telephone"  => "num",
+      "mail"       => "email",
+      "nom"        => "str|maxLength|50",
+      "prenom"     => "str|maxLength|50"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "societe" => "like",
+      "ville"   => "like",
+      "nom"     => "like",
+      "prenom"  => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["societe"]    = "str|maxLength|50|notNull";
-    $this->_props["adresse"]    = "str";
-    $this->_props["codepostal"] = "num|length|5";
-    $this->_props["ville"]      = "str";
-    $this->_props["telephone"]  = "num";
-    $this->_props["mail"]       = "email";
-    $this->_props["nom"]        = "str|maxLength|50";
-    $this->_props["prenom"]     = "str|maxLength|50";
+    $this->_enums =& $enums;
     
-    $this->_seek["societe"] = "like";
-    $this->_seek["ville"]   = "like";
-    $this->_seek["nom"]     = "like";
-    $this->_seek["prenom"]  = "like";
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }	 
   
   function loadRefsBack(){

@@ -27,12 +27,32 @@ class CTraitement extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["patient_id"] = "ref|notNull";
-    $this->_props["debut"]      = "date|notNull";
-    $this->_props["fin"]        = "date|moreEquals|debut";
-    $this->_props["traitement"] = "text";
+    static $props = array (
+      "patient_id" => "ref|notNull",
+      "debut"      => "date|notNull",
+      "fin"        => "date|moreEquals|debut",
+      "traitement" => "text"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "traitement" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_seek["traitement"] = "like";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsFwd() {

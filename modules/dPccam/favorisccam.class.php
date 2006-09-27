@@ -19,11 +19,31 @@ class CFavoriCCAM extends CMbObject {
 		$this->CMbObject("ccamfavoris", "favoris_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "favoris_user" => "ref|notNull",
+      "favoris_code" => "str|notNull"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "favoris_code" => "equal"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["favoris_user"] = "ref|notNull";
-    $this->_props["favoris_code"] = "str|notNull";
+    $this->_enums =& $enums;
     
-    $this->_seek["favoris_code"] = "equal";
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
 	}
 }
 ?>

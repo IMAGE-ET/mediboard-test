@@ -38,13 +38,35 @@ class CFile extends CMbObject {
     $this->CMbObject("files_mediboard", "file_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "file_class"         => "str|notNull",
+      "file_object_id"     => "ref|notNull",
+      "file_category_id"   => "ref",
+      "file_date"          => "dateTime|notNull",
+      "file_size"          => "num|pos",
+      "file_real_filename" => "str|notNull"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["file_class"]         = "str|notNull";
-    $this->_props["file_object_id"]     = "ref|notNull";
-    $this->_props["file_category_id"]   = "ref";
-    $this->_props["file_date"]          = "dateTime|notNull";
-    $this->_props["file_size"]          = "num|pos";
-    $this->_props["file_real_filename"] = "str|notNull";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
 
   function check() {

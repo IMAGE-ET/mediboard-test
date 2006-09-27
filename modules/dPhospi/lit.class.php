@@ -34,12 +34,32 @@ class CLit extends CMbObject {
 		$this->CMbObject("lit", "lit_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "chambre_id" => "ref|notNull",
+      "nom"        => "str|notNull|confidential"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "nom"        => "like",
+      "chambre_id" => "ref|CChambre"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["chambre_id"] = "ref|notNull";
-    $this->_props["nom"]        = "str|notNull|confidential";
+    $this->_enums =& $enums;
     
-    $this->_seek["nom"]        = "like";
-    $this->_seek["chambre_id"] = "ref|CChambre";
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
 	}
 
   function loadAffectations($date) {

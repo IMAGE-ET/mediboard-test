@@ -32,16 +32,35 @@ class CDocGedSuivi extends CMbObject {
     $this->CMbObject("doc_ged_suivi", "doc_ged_suivi_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "user_id"          => "ref|notNull",
+      "doc_ged_id"       => "ref|notNull",
+      "file_id"          => "ref",
+      "remarques"        => "str|notNull",
+      "etat"             => "enum|0|16|32|48|64|notNull",
+      "date"             => "dateTime",
+      "actif"            => "enum|0|1"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["user_id"]          = "ref|notNull";
-    $this->_props["doc_ged_id"]       = "ref|notNull";
-    $this->_props["file_id"]          = "ref";
-    $this->_props["remarques"]        = "str|notNull";
-    $this->_props["etat"]             = "enum|0|16|32|48|64|notNull";
-    $this->_props["date"]             = "dateTime";
-    $this->_props["actif"]            = "enum|0|1";
+    $this->_enums =& $enums;
     
-    $this->buildEnums();
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsFwd() {

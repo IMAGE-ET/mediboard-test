@@ -40,13 +40,35 @@ class CAffectation extends CMbObject {
 		$this->CMbObject("affectation", "affectation_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "lit_id"       => "ref|notNull",
+      "sejour_id"    => "ref|notNull",
+      "entree"       => "dateTime|notNull",
+      "sortie"       => "dateTime|notNull",
+      "confirme"     => "enum|0|1",
+      "effectue"     => "enum|0|1"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["lit_id"]       = "ref|notNull";
-    $this->_props["sejour_id"]    = "ref|notNull";
-    $this->_props["entree"]       = "dateTime|notNull";
-    $this->_props["sortie"]       = "dateTime|notNull";
-    $this->_props["confirme"]     = "enum|0|1";
-    $this->_props["effectue"]     = "enum|0|1";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
 	}
 
   function check() {

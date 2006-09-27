@@ -79,57 +79,73 @@ class CConsultAnesth extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["consultation_id"] = "ref|notNull";
-    $this->_props["operation_id"]    = "ref";
-    // @todo : un type particulier pour le poid et la taille
-    $this->_props["poid"]            = "currency|pos";
-    $this->_props["taille"]          = "currency|min|0";
-    $this->_props["groupe"]          = "enum|?|O|A|B|AB";
-    $this->_props["rhesus"]          = "enum|?|NEG|POS";
-    $this->_props["antecedents"]     = "str|confidential";
-    $this->_props["traitements"]     = "str|confidential";
-    $this->_props["tabac"]           = "text";
-    $this->_props["oenolisme"]       = "text";
-    $this->_props["tasys"]           = "num";
-    $this->_props["tadias"]          = "num";
-    $this->_props["intubation"]      = "enum|?|dents|bouche|cou";
-    $this->_props["biologie"]        = "enum|?|NF|COAG|IONO";
-    $this->_props["commande_sang"]   = "enum|?|clinique|CTS|autologue";
-    $this->_props["ASA"]             = "enum|1|2|3|4|5";
+    static $props = array (
+      "consultation_id" => "ref|notNull",
+      "operation_id"    => "ref",
+      // @todo : un type particulier pour le poid et la taille
+      "poid"            => "currency|pos",
+      "taille"          => "currency|min|0",
+      "groupe"          => "enum|?|O|A|B|AB",
+      "rhesus"          => "enum|?|NEG|POS",
+      "antecedents"     => "str|confidential",
+      "traitements"     => "str|confidential",
+      "tabac"           => "text",
+      "oenolisme"       => "text",
+      "tasys"           => "num",
+      "tadias"          => "num",
+      "intubation"      => "enum|?|dents|bouche|cou",
+      "biologie"        => "enum|?|NF|COAG|IONO",
+      "commande_sang"   => "enum|?|clinique|CTS|autologue",
+      "ASA"             => "enum|1|2|3|4|5",
+      // Données examens complementaires
+      "rai"             => "enum|?|NEG|POS",
+      "hb"              => "currency|min|0",
+      "tp"              => "currency|minMax|0|100",
+      "tca"             => "num|0|59",
+      "tca_temoin"      => "num|0|59",
+      "creatinine"      => "currency",
+      "na"              => "currency|min|0",
+      "k"               => "currency|min|0",
+      "tsivy"           => "time",
+      "plaquettes"      => "num|pos",
+      "ecbu"            => "enum|?|NEG|POS",
+      "pouls"           => "num|pos",
+      "spo2"            => "currency|minMax|0|100",
+      "ht"              => "currency|minMax|0|100",
+      "ht_final"        => "currency|minMax|0|100",
+      "premedication"   => "text",
+      "prepa_preop"     => "text",
+      // Champs pour les conditions d'intubation
+      "mallampati"      => "enum|classe1|classe2|classe3|classe4",
+      "bouche"          => "enum|m20|m35|p35",
+      "distThyro"       => "enum|m65|p65",
+      "etatBucco"       => "text",
+      "conclusion"      => "text",
+      "position"        => "enum|DD|DV|DL|GP|AS|TO|GYN"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "chir_id"         => "ref|CMediusers",
+      "consultation_id" => "ref|CConsultation",
+      "operation_id"    => "ref|COperation",
+      "conclusion"      => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    // Données examens complementaires
-    $this->_props["rai"]             = "enum|?|NEG|POS";
-    $this->_props["hb"]              = "currency|min|0";
-    $this->_props["tp"]              = "currency|minMax|0|100";
-    $this->_props["tca"]             = "num|0|59";
-    $this->_props["tca_temoin"]      = "num|0|59";
-    $this->_props["creatinine"]      = "currency";
-    $this->_props["na"]              = "currency|min|0";
-    $this->_props["k"]               = "currency|min|0";
-    $this->_props["tsivy"]           = "time";
-    $this->_props["plaquettes"]      = "num|pos";
-    $this->_props["ecbu"]            = "enum|?|NEG|POS";
-    $this->_props["pouls"]           = "num|pos";
-    $this->_props["spo2"]            = "currency|minMax|0|100";
-    $this->_props["ht"]              = "currency|minMax|0|100";
-    $this->_props["ht_final"]        = "currency|minMax|0|100";
-    $this->_props["premedication"]   = "text";
-    $this->_props["prepa_preop"]     = "text";
+    $this->_enums =& $enums;
     
-    // Champs pour les conditions d'intubation
-    $this->_props["mallampati"]      = "enum|classe1|classe2|classe3|classe4";
-    $this->_props["bouche"]          = "enum|m20|m35|p35";
-    $this->_props["distThyro"]       = "enum|m65|p65";
-    $this->_props["etatBucco"]       = "text";
-    $this->_props["conclusion"]      = "text";
-    $this->_props["position"]        = "enum|DD|DV|DL|GP|AS|TO|GYN";
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
     
-    $this->buildEnums();
-    
-    $this->_seek["chir_id"]         = "ref|CMediusers";
-    $this->_seek["consultation_id"] = "ref|CConsultation";
-    $this->_seek["operation_id"]    = "ref|COperation";
-    $this->_seek["conclusion"]      = "like";
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function updateFormFields() {

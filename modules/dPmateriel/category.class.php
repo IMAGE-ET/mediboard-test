@@ -23,9 +23,31 @@ class CCategory extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["category_name"] = "str|maxLength|50|notNull";
+    static $props = array (
+      "category_name" => "str|maxLength|50|notNull"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "category_name" => "like"
+    );
+    $this->_seek =& $seek;
+
+
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_seek["category_name"] = "like";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
 	
   function loadRefsBack(){

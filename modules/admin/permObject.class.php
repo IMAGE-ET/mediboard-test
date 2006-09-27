@@ -35,10 +35,31 @@ class CPermObject extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["user_id"]      = "ref|notNull";
-    $this->_props["object_id"]    = "num|notNull";
-    $this->_props["object_class"] = "str|notNull";
-    $this->_props["permission"]   = "num|notNull";
+    static $props = array (
+      "user_id"      => "ref|notNull",
+      "object_id"    => "num|notNull",
+      "object_class" => "str|notNull",
+      "permission"   => "num|notNull"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
+    
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefDBObject() {

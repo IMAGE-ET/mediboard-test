@@ -23,9 +23,30 @@ class CCategorieDoc extends CMbObject {
     $this->CMbObject("doc_categories", "doc_categorie_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "nom"              => "str|maxLength|50|notNull",
+      "code"             => "str|maxLength|1|notNull"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["nom"]              = "str|maxLength|50|notNull";
-    $this->_props["code"]             = "str|maxLength|1|notNull";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function updateFormFields() {

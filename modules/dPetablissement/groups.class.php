@@ -41,18 +41,38 @@ class CGroups extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["text"]           = "str|notNull";
-    $this->_props["raison_sociale"] = "str|maxLength|50";
-    $this->_props["adresse"]        = "text";
-    $this->_props["cp"]             = "num|length|5";
-    $this->_props["ville"]          = "str|maxLength|50";
-    $this->_props["tel"]            = "num|length|10";
-    $this->_props["directeur"]      = "str|maxLength|50";
-    $this->_props["domiciliation"]  = "str|maxLength|9";
-    $this->_props["siret"]          = "str|length|14";
-    $this->_props["ape"]            = "str|length|4";
+    static $props = array (
+      "text"           => "str|notNull",
+      "raison_sociale" => "str|maxLength|50",
+      "adresse"        => "text",
+      "cp"             => "num|length|5",
+      "ville"          => "str|maxLength|50",
+      "tel"            => "num|length|10",
+      "directeur"      => "str|maxLength|50",
+      "domiciliation"  => "str|maxLength|9",
+      "siret"          => "str|length|14",
+      "ape"            => "str|length|4"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "text" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_seek["text"] = "like";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
  
   function updateFormFields () {

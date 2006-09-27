@@ -63,20 +63,39 @@ class CFichePaie extends CMbObject {
     $this->CMbObject("fiche_paie", "fiche_paie_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-    
-    $this->_props["params_paie_id"] = "ref|notNull";
-    $this->_props["debut"]          = "date|notNull";
-    $this->_props["fin"]            = "date|moreEquals|debut|notNull";
-    $this->_props["salaire"]        = "currency|min|0|notNull";
-    $this->_props["heures"]         = "num|notNull";
-    $this->_props["heures_sup"]     = "num|notNull";
-    $this->_props["mutuelle"]       = "currency|min|0|notNull";
-    $this->_props["anciennete"]     = "pct|notNull";
-    $this->_props["precarite"]      = "pct|notNull";
-    $this->_props["conges_payes"]   = "pct|notNull";
-    $this->_props["prime_speciale"] = "pct|notNull";
 
-    $this->buildEnums();
+    static $props = array (
+      "params_paie_id" => "ref|notNull",
+      "debut"          => "date|notNull",
+      "fin"            => "date|moreEquals|debut|notNull",
+      "salaire"        => "currency|min|0|notNull",
+      "heures"         => "num|notNull",
+      "heures_sup"     => "num|notNull",
+      "mutuelle"       => "currency|min|0|notNull",
+      "anciennete"     => "pct|notNull",
+      "precarite"      => "pct|notNull",
+      "conges_payes"   => "pct|notNull",
+      "prime_speciale" => "pct|notNull"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
+    
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function updateFormFields() {

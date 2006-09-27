@@ -37,14 +37,33 @@ class CCompteRendu extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["chir_id"]     = "ref|xor|function_id";
-    $this->_props["function_id"] = "ref";
-    $this->_props["object_id"]   = "ref";
-    $this->_props["nom"]         = "str|notNull";
-    $this->_props["source"]      = "html";
-    $this->_props["type"]        = "enum|patient|consultAnesth|operation|hospitalisation|consultation|notNull";
+    static $props = array (
+      "chir_id"     => "ref|xor|function_id",
+      "function_id" => "ref",
+      "object_id"   => "ref",
+      "nom"         => "str|notNull",
+      "source"      => "html",
+      "type"        => "enum|patient|consultAnesth|operation|hospitalisation|consultation|notNull"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->buildEnums();
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
 
 

@@ -48,22 +48,42 @@ class CProtocole extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["chir_id"]         = "ref|notNull";
-    $this->_props["type"]            = "enum|comp|ambu|exte";
-    $this->_props["DP"]              = "code|cim10";
-    $this->_props["convalescence"]   = "str|confidential";
-    $this->_props["rques_sejour"]    = "str|confidential";
-    $this->_props["libelle"]         = "str|confidential";
-    $this->_props["examen"]          = "str|confidential";
-    $this->_props["materiel"]        = "str|confidential";
-    $this->_props["duree_hospi"]     = "notNull|num|min|0";
-    $this->_props["rques_operation"] = "str|confidential";
-    $this->_props["depassement"]     = "currency|min|0|confidential";
+    static $props = array (
+      "chir_id"         => "ref|notNull",
+      "type"            => "enum|comp|ambu|exte",
+      "DP"              => "code|cim10",
+      "convalescence"   => "str|confidential",
+      "rques_sejour"    => "str|confidential",
+      "libelle"         => "str|confidential",
+      "examen"          => "str|confidential",
+      "materiel"        => "str|confidential",
+      "duree_hospi"     => "notNull|num|min|0",
+      "rques_operation" => "str|confidential",
+      "depassement"     => "currency|min|0|confidential"
+    );
+    $this->_props =& $props;
 
-    $this->_seek["chir_id"]  = "ref|CMediusers";
-    $this->_seek["libelle"]  = "like";
-    $this->_seek["examen"]   = "like";
-    $this->_seek["materiel"] = "like";
+    static $seek = array (
+      "chir_id"  => "ref|CMediusers",
+      "libelle"  => "like",
+      "examen"   => "like",
+      "materiel" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
+    
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
 
   function check() {    

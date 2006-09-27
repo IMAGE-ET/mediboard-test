@@ -29,13 +29,34 @@ class CTempsPrepa extends CMbObject {
     $this->CMbObject("temps_prepa", "temps_prepa_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "temps_prepa_id" => "ref",
+      "chir_id"        => "ref",
+      "nb_plage"       => "num|pos",
+      "nb_prepa"       => "num|pos",
+      "duree_moy"      => "time",
+      "duree_ecart"    => "time"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["temps_prepa_id"] = "ref";
-    $this->_props["chir_id"]        = "ref";
-    $this->_props["nb_plage"]       = "num|pos";
-    $this->_props["nb_prepa"]       = "num|pos";
-    $this->_props["duree_moy"]      = "time";
-    $this->_props["duree_ecart"]    = "time";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }	  	
   
   function loadRefsFwd(){ 

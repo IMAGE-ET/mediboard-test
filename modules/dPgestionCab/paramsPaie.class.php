@@ -53,33 +53,52 @@ class CParamsPaie extends CMbObject {
     $this->CMbObject("params_paie", "params_paie_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-    
-    $this->_props["user_id"]   = "ref|notNull";
-    $this->_props["smic"]      = "currency|min|0|notNull";
-    $this->_props["csgds"]     = "pct|notNull";
-    $this->_props["csgnds"]    = "pct|notNull";
-    $this->_props["ssms"]      = "pct|notNull";
-    $this->_props["ssmp"]      = "pct|notNull";
-    $this->_props["ssvs"]      = "pct|notNull";
-    $this->_props["ssvp"]      = "pct|notNull";
-    $this->_props["rcs"]       = "pct|notNull";
-    $this->_props["rcp"]       = "pct|notNull";
-    $this->_props["agffs"]     = "pct|notNull";
-    $this->_props["agffp"]     = "pct|notNull";
-    $this->_props["aps"]       = "pct|notNull";
-    $this->_props["app"]       = "pct|notNull";
-    $this->_props["acs"]       = "pct|notNull";
-    $this->_props["acp"]       = "pct|notNull";
-    $this->_props["aatp"]      = "pct|notNull";
-    $this->_props["nom"]       = "str|notNull|confidential";
-    $this->_props["adresse"]   = "str|confidential";
-    $this->_props["cp"]        = "num|length|5|confidential";
-    $this->_props["ville"]     = "str|confidential";
-    $this->_props["siret"]     = "num|length|14|confidential";
-    $this->_props["ape"]       = "str|length|4|confidential";
-    $this->_props["matricule"] = "code|insee|confidential";
 
-    $this->buildEnums();
+    static $props = array (
+      "user_id"   => "ref|notNull",
+      "smic"      => "currency|min|0|notNull",
+      "csgds"     => "pct|notNull",
+      "csgnds"    => "pct|notNull",
+      "ssms"      => "pct|notNull",
+      "ssmp"      => "pct|notNull",
+      "ssvs"      => "pct|notNull",
+      "ssvp"      => "pct|notNull",
+      "rcs"       => "pct|notNull",
+      "rcp"       => "pct|notNull",
+      "agffs"     => "pct|notNull",
+      "agffp"     => "pct|notNull",
+      "aps"       => "pct|notNull",
+      "app"       => "pct|notNull",
+      "acs"       => "pct|notNull",
+      "acp"       => "pct|notNull",
+      "aatp"      => "pct|notNull",
+      "nom"       => "str|notNull|confidential",
+      "adresse"   => "str|confidential",
+      "cp"        => "num|length|5|confidential",
+      "ville"     => "str|confidential",
+      "siret"     => "num|length|14|confidential",
+      "ape"       => "str|length|4|confidential",
+      "matricule" => "code|insee|confidential"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
+    
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
 
   // Forward references

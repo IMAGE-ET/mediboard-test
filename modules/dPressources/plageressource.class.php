@@ -47,17 +47,37 @@ class CPlageressource extends CMbObject {
     $this->CMbObject("plageressource", "plageressource_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "prat_id" => "ref",
+      "date"    => "date|notNull",
+      "debut"   => "time|notNull",
+      "fin"     => "time|notNull",
+      "tarif"   => "currency|min|0|notNull|confidential",
+      "libelle" => "str|confidential",
+      "paye"    => "enum|0|1"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "prat_id" => "ref|CMediusers",
+      "libelle" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["prat_id"] = "ref";
-    $this->_props["date"]    = "date|notNull";
-    $this->_props["debut"]   = "time|notNull";
-    $this->_props["fin"]     = "time|notNull";
-    $this->_props["tarif"]   = "currency|min|0|notNull|confidential";
-    $this->_props["libelle"] = "str|confidential";
-    $this->_props["paye"]    = "enum|0|1";
+    $this->_enums =& $enums;
     
-    $this->_seek["prat_id"] = "ref|CMediusers";
-    $this->_seek["libelle"] = "like";
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsFwd() {

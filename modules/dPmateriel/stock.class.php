@@ -29,10 +29,32 @@ class CStock extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["materiel_id"] = "ref|notNull";
-    $this->_props["group_id"] = "ref|notNull";
-    $this->_props["seuil_cmd"] = "num|pos|notNull";
-    $this->_props["quantite"] = "num|pos";
+    static $props = array (
+      "materiel_id" => "ref|notNull",
+      "group_id"    => "ref|notNull",
+      "seuil_cmd"   => "num|pos|notNull",
+      "quantite"    => "num|pos"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
+    
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsFwd(){  

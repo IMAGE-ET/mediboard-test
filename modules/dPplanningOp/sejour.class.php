@@ -77,30 +77,50 @@ class CSejour extends CMbObject {
     $this->CMbObject("sejour", "sejour_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
- 
-    $this->_props["patient_id"]    = "ref|notNull";
-    $this->_props["praticien_id"]  = "ref|notNull";
-    $this->_props["group_id"]      = "ref|notNull";
-    $this->_props["type"]          = "enum|comp|ambu|exte";
-    $this->_props["modalite"]      = "enum|office|libre|tiers";
-    $this->_props["annule"]        = "enum|0|1";
-    $this->_props["chambre_seule"] = "enum|o|n";
-    $this->_props["entree_prevue"] = "dateTime|notNull";
-    $this->_props["sortie_prevue"] = "dateTime|moreEquals|entree_prevue|notNull";
-    $this->_props["entree_reelle"] = "dateTime";
-    $this->_props["sortie_reelle"] = "dateTime";
-    $this->_props["venue_SHS"]     = "num|length|8|confidential";
-    $this->_props["saisi_SHS"]     = "enum|o|n";
-    $this->_props["modif_SHS"]     = "enum|0|1";
-    $this->_props["DP"]            = "code|cim10";
-    $this->_props["pathologie"]    = "str|length|3";
-    $this->_props["septique"]      = "enum|0|1";
-    $this->_props["convalescence"] = "str|confidential";
-    $this->_props["rques"]         = "text";
+
+    static $props = array (
+      "patient_id"    => "ref|notNull",
+      "praticien_id"  => "ref|notNull",
+      "group_id"      => "ref|notNull",
+      "type"          => "enum|comp|ambu|exte",
+      "modalite"      => "enum|office|libre|tiers",
+      "annule"        => "enum|0|1",
+      "chambre_seule" => "enum|o|n",
+      "entree_prevue" => "dateTime|notNull",
+      "sortie_prevue" => "dateTime|moreEquals|entree_prevue|notNull",
+      "entree_reelle" => "dateTime",
+      "sortie_reelle" => "dateTime",
+      "venue_SHS"     => "num|length|8|confidential",
+      "saisi_SHS"     => "enum|o|n",
+      "modif_SHS"     => "enum|0|1",
+      "DP"            => "code|cim10",
+      "pathologie"    => "str|length|3",
+      "septique"      => "enum|0|1",
+      "convalescence" => "str|confidential",
+      "rques"         => "text"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "patient_id"    => "ref|CPatient",
+      "praticien_id"  => "ref|CMediusers",
+      "convalescence" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_seek["patient_id"]    = "ref|CPatient";
-    $this->_seek["praticien_id"]  = "ref|CMediusers";
-    $this->_seek["convalescence"] = "like";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
 	}
 
   function check() {

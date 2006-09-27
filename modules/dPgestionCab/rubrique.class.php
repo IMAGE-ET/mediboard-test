@@ -25,13 +25,31 @@ class CRubrique extends CMbObject {
     $this->CMbObject("rubrique_gestioncab", "rubrique_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-    
-    $this->_props["function_id"] = "ref|notNull";
-    $this->_props["nom"]         = "str|notNull";
-    
-    $this->_seek["nom"] = "like";
 
-    $this->buildEnums();
+    static $props = array (
+      "function_id" => "ref|notNull",
+      "nom"         => "str|notNull"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "nom" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
+    
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
 
   // Forward references

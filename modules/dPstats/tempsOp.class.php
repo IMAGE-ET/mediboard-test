@@ -32,15 +32,37 @@ class CTempsOp extends CMbObject {
     $this->CMbObject("temps_op", "temps_op_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "temps_op_id"     => "ref",
+      "chir_id"         => "ref",
+      "nb_intervention" => "num|pos",
+      "estimation"      => "time",
+      "occup_moy"       => "time",
+      "occup_ecart"     => "time",
+      "duree_moy"       => "time",
+      "duree_ecart"     => "time"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["temps_op_id"]     = "ref";
-    $this->_props["chir_id"]         = "ref";
-    $this->_props["nb_intervention"] = "num|pos";
-    $this->_props["estimation"]      = "time";
-    $this->_props["occup_moy"]       = "time";
-    $this->_props["occup_ecart"]     = "time";
-    $this->_props["duree_moy"]       = "time";
-    $this->_props["duree_ecart"]     = "time";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }	  	
   
   

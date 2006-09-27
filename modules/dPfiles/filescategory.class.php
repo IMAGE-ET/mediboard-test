@@ -22,11 +22,31 @@ class CFilesCategory extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["file_category_id"]  = "ref";
-    $this->_props["nom"]               = "str|maxLength|50|notNull";
-    $this->_props["class"]             = "str|maxLength|30";
+    static $props = array (
+      "file_category_id"  => "ref",
+      "nom"               => "str|maxLength|50|notNull",
+      "class"             => "str|maxLength|30"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "nom" => "like"
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_seek["nom"] = "like";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
 	
   

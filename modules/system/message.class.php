@@ -34,11 +34,32 @@ class CMessage extends CMbObject {
 		$this->CMbObject("message", "message_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "deb"   => "dateTime|notNull",
+      "fin"   => "dateTime|notNull",
+      "titre" => "str|maxLength|40|notNull",
+      "corps" => "text"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["deb"]   = "dateTime|notNull";
-    $this->_props["fin"]   = "dateTime|notNull";
-    $this->_props["titre"] = "str|maxLength|40|notNull";
-    $this->_props["corps"] = "text";
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
 	}
 
   // Loads messages from a publication date perspective : all, past, present, future

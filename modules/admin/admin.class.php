@@ -62,26 +62,46 @@ class CUser extends CMbObject {
 		$this->CMbObject("users", "user_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "user_username"   => "str|maxLength|20|notNull",
+      "user_password"   => "str|notNull",
+      "user_type"       => "num|notNull",
+      "user_first_name" => "str|maxLength|50",
+      "user_last_name"  => "str|maxLength|50|notNull",
+      "user_email"      => "str|maxLength|255",
+      "user_phone"      => "str|maxLength|30",
+      "user_mobile"     => "str|maxLength|30",
+      "user_address1"   => "str|maxLength|50",
+      "user_city"       => "str|maxLength|30",
+      "user_zip"        => "str|maxLength|11",
+      "user_country"    => "str|maxLength|30",
+      "user_birthday"   => "dateTime",
+      "user_pic"        => "text",
+      "user_signature"  => "text"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+      "user_last_name"  => "likeBegin",
+      "user_first_name" => "likeBegin"
+    );
+    $this->_seek =& $seek;
+
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["user_username"]   = "str|maxLength|20|notNull";
-    $this->_props["user_password"]   = "str|notNull";
-    $this->_props["user_type"]       = "num|notNull";
-    $this->_props["user_first_name"] = "str|maxLength|50";
-    $this->_props["user_last_name"]  = "str|maxLength|50|notNull";
-    $this->_props["user_email"]      = "str|maxLength|255";
-    $this->_props["user_phone"]      = "str|maxLength|30";
-    $this->_props["user_mobile"]     = "str|maxLength|30";
-    $this->_props["user_address1"]   = "str|maxLength|50";
-    $this->_props["user_city"]       = "str|maxLength|30";
-    $this->_props["user_zip"]        = "str|maxLength|11";
-    $this->_props["user_country"]    = "str|maxLength|30";
-    $this->_props["user_birthday"]   = "dateTime";
-    $this->_props["user_pic"]        = "text";
-    $this->_props["user_signature"]  = "text";
+    $this->_enums =& $enums;
     
-    $this->_seek = array();
-    $this->_seek["user_last_name"]  = "likeBegin";
-    $this->_seek["user_first_name"] = "likeBegin";
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
 	}
 
 	function check() {

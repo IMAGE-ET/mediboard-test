@@ -63,40 +63,59 @@ class CFicheEi extends CMbObject {
     $this->CMbObject("fiches_ei", "fiche_ei_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    static $props = array (
+      "user_id"                      => "ref|notNull",    
+      "date_fiche"                   => "dateTime|notNull",
+      "date_incident"                => "dateTime|notNull",
+      "evenements"                   => "str|maxLength|255|notNull",
+      "lieu"                         => "str|maxLength|50|notNull",
+      "type_incident"                => "enum|inc|ris|notNull",
+      "elem_concerne"                => "enum|pat|vis|pers|med|mat|notNull",
+      "elem_concerne_detail"         => "text|notNull",
+      "autre"                        => "text",
+      "descr_faits"                  => "text|notNull",
+      "mesures"                      => "text|notNull",
+      "descr_consequences"           => "text|notNull",
+      "gravite"                      => "enum|nul|mod|imp|notNull",
+      "suite_even"                   => "enum|trans|prolo|deces|autre|notNull",
+      "plainte"                      => "enum|non|oui|notNull",
+      "commission"                   => "enum|non|oui|notNull",
+      "deja_survenu"                 => "enum|non|oui",
+      "degre_urgence"                => "enum|1|2|3|4",
+      //1ere Validation Qualité
+      "valid_user_id"                => "ref",
+      "date_validation"              => "dateTime",
+      //Validation Chef de Projet
+      "service_valid_user_id"        => "ref",
+      "service_date_validation"      => "dateTime",
+      "service_actions"              => "text",
+      "service_descr_consequences"   => "text",
+      //2nde Validation Qualité
+      "qualite_user_id"              => "ref",
+      "qualite_date_validation"      => "dateTime",
+      "qualite_date_verification"    => "dateTime",
+      "qualite_date_controle"        => "dateTime"
+    );
+    $this->_props =& $props;
+
+    static $seek = array (
+    );
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
     
-    $this->_props["user_id"]                      = "ref|notNull";    
-    $this->_props["date_fiche"]                   = "dateTime|notNull";
-    $this->_props["date_incident"]                = "dateTime|notNull";
-    $this->_props["evenements"]                   = "str|maxLength|255|notNull";
-    $this->_props["lieu"]                         = "str|maxLength|50|notNull";
-    $this->_props["type_incident"]                = "enum|inc|ris|notNull";
-    $this->_props["elem_concerne"]                = "enum|pat|vis|pers|med|mat|notNull";
-    $this->_props["elem_concerne_detail"]         = "text|notNull";
-    $this->_props["autre"]                        = "text";
-    $this->_props["descr_faits"]                  = "text|notNull";
-    $this->_props["mesures"]                      = "text|notNull";
-    $this->_props["descr_consequences"]           = "text|notNull";
-    $this->_props["gravite"]                      = "enum|nul|mod|imp|notNull";
-    $this->_props["suite_even"]                   = "enum|trans|prolo|deces|autre|notNull";
-    $this->_props["plainte"]                      = "enum|non|oui|notNull";
-    $this->_props["commission"]                   = "enum|non|oui|notNull";
-    $this->_props["deja_survenu"]                 = "enum|non|oui";
-    $this->_props["degre_urgence"]                = "enum|1|2|3|4";
-    //1ere Validation Qualité
-    $this->_props["valid_user_id"]                = "ref";
-    $this->_props["date_validation"]              = "dateTime";
-    //Validation Chef de Projet
-    $this->_props["service_valid_user_id"]        = "ref";
-    $this->_props["service_date_validation"]      = "dateTime";
-    $this->_props["service_actions"]              = "text";
-    $this->_props["service_descr_consequences"]   = "text";
-    //2nde Validation Qualité
-    $this->_props["qualite_user_id"]              = "ref";
-    $this->_props["qualite_date_validation"]      = "dateTime";
-    $this->_props["qualite_date_verification"]    = "dateTime";
-    $this->_props["qualite_date_controle"]        = "dateTime";
-   
-    $this->buildEnums();
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsFwd() {
