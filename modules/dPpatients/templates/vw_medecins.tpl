@@ -206,7 +206,7 @@ function setClose() {
         <tr>
           <th><label for="disciplines" title="Disciplines qualifiantes du médecin">Disciplines</label></th>
           <td {{if $dialog}} class="readonly" {{/if}}>
-            <textarea title="{{$medecin->_props.disciplines}}"{{if $dialog}} readonly {{/if}} name="adresse">{{$medecin->disciplines|nl2br}}</textarea>
+            <textarea title="{{$medecin->_props.disciplines}}"{{if $dialog}} readonly {{/if}} name="disciplines">{{$medecin->disciplines|nl2br}}</textarea>
           </td>
         </tr>
         
@@ -220,7 +220,7 @@ function setClose() {
         <tr>
           <th><label for="complementaires" title="Disciplines complémentaires d'exercice">Complémentaires</label></th>
           <td {{if $dialog}} class="readonly" {{/if}}>
-            <textarea title="{{$medecin->_props.complementaires}}"{{if $dialog}} readonly {{/if}} name="adresse">{{$medecin->complementaires|nl2br}}</textarea>
+            <textarea title="{{$medecin->_props.complementaires}}"{{if $dialog}} readonly {{/if}} name="complementaires">{{$medecin->complementaires|nl2br}}</textarea>
           </td>
         </tr>
 
