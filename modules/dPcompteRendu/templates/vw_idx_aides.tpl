@@ -17,7 +17,7 @@ function loadClasses(value) {
   // insert new ones
   for (var elm in options) {
     var option = elm;
-    if (typeof(option) != "function") { // to filter prototype functions
+    if (typeof(options[option]) != "function") { // to filter prototype functions
       select.options[select.length] = new Option(option, option, option == value);
     }
   }
