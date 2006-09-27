@@ -6,7 +6,8 @@
 {{if $debugMode}}
 <div style="margin: 10px; text-align: center;">
   Page générée en {{$performance.genere}} secondes
-  par PHP, utilisant {{$performance.memoire}} de mémoire
+  par PHP, utilisant {{$performance.memoire}} de mémoire 
+  sur  {{$performance.objets}} objets métier
   {{foreach from=$dbChronos item=currdbChrono key=keydbConfigName}}
   <br />
   {{$currdbChrono->total|string_format:"%.3f"}} secondes prises

@@ -97,36 +97,58 @@ class COperation extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["chir_id"]        = "ref|notNull";
-    $this->_props["plageop_id"]     = "ref";
-    $this->_props["date"]           = "date";
-    $this->_props["code_uf"]        = "str|maxLength|10";
-    $this->_props["libelle_uf"]     = "str|maxLength|35";
-    $this->_props["libelle"]        = "str|confidential";
-    $this->_props["cote"]           = "notNull|enum|droit|gauche|bilatéral|total";
-    $this->_props["temp_operation"] = "time";
-    $this->_props["entree_bloc"]    = "time";
-    $this->_props["sortie_bloc"]    = "time";
-    $this->_props["time_operation"] = "time";
-    $this->_props["examen"]         = "str|confidential";
-    $this->_props["materiel"]       = "str|confidential";
-    $this->_props["commande_mat"]   = "enum|o|n";
-    $this->_props["info"]           = "enum|o|n";
-    $this->_props["date_anesth"]    = "date";
-    $this->_props["time_anesth"]    = "time";
-    $this->_props["type_anesth"]    = "num";
-    $this->_props["date_anesth"]    = "date";
-    $this->_props["duree_hospi"]    = "num";
-    $this->_props["ATNC"]           = "enum|o|n";
-    $this->_props["rques"]          = "str|confidential";
-    $this->_props["rank"]           = "num";
-    $this->_props["depassement"]    = "currency|min|0|confidential";
-    $this->_props["annulee"]        = "enum|0|1";
+    static $props = array (
+      "chir_id"        => "ref|notNull",
+      "plageop_id"     => "ref",
+      "date"           => "date",
+      "code_uf"        => "str|maxLength|10",
+      "libelle_uf"     => "str|maxLength|35",
+      "libelle"        => "str|confidential",
+      "cote"           => "notNull|enum|droit|gauche|bilatéral|total",
+      "temp_operation" => "time",
+      "entree_bloc"    => "time",
+      "sortie_bloc"    => "time",
+      "time_operation" => "time",
+      "examen"         => "str|confidential",
+      "materiel"       => "str|confidential",
+      "commande_mat"   => "enum|o|n",
+      "info"           => "enum|o|n",
+      "date_anesth"    => "date",
+      "time_anesth"    => "time",
+      "type_anesth"    => "num",
+      "date_anesth"    => "date",
+      "duree_hospi"    => "num",
+      "ATNC"           => "enum|o|n",
+      "rques"          => "str|confidential",
+      "rank"           => "num",
+      "depassement"    => "currency|min|0|confidential",
+      "annulee"        => "enum|0|1",
+    );
     
-    $this->_seek["chir_id"]    = "ref|CMediusers";
-    $this->_seek["plageop_id"] = "ref|CPlageOp";
-    $this->_seek["libelle"]    = "like";
-    $this->_seek["materiel"]   = "like";
+    $this->_props =& $props;
+
+    static $seek = array (
+      "chir_id"    => "ref|CMediusers",
+      "plageop_id" => "ref|CPlageOp",
+      "libelle"    => "like",
+      "materiel"   => "like",
+    );
+
+    $this->_seek =& $seek;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums = $this->getEnums();
+    }
+    
+    $this->_enums =& $enums;
+    
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
 
   function check() {

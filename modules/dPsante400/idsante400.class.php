@@ -55,8 +55,8 @@
     $this->loadMatchingObject("`last_update` DESC");
     $this->last_update = mbDateTime();
     
-    mbTrace($this, "ID400 before binding");
-    mbTrace($mbObject, "Object before binding");
+//    mbTrace($this, "ID400 before binding");
+//    mbTrace($mbObject, "Object before binding");
 
     // Object not found
     if (!$this->_id) {
@@ -64,14 +64,14 @@
       if ($msg = $mbObject->store()) {
         throw new Exception($msg);
       }
-      mbTrace($mbObject, "Object after creating");
+//      mbTrace($mbObject, "Object after creating");
       
       // Create IdSante400
       $this->object_id = $mbObject->_id;
       if ($msg = $this->store()) {
         throw new Exception($msg);
       }
-      mbTrace($mbObject, "Object after creating");
+//      mbTrace($mbObject, "Object after creating");
       
       return;
     }
@@ -82,13 +82,13 @@
     if ($msg = $mbObject->store()) {
       throw new Exception($msg);
     }
-    mbTrace($mbObject, "Object after updating");
+//    mbTrace($mbObject, "Object after updating");
     
     // Update IdSante400
     if ($msg = $this->store()) {
       throw new Exception($msg);
     }
-    mbTrace($this, "ID400 after updating");
+//    mbTrace($this, "ID400 after updating");
   }
   
   function setIdentifier($mbObject, $id400, $tag = null) {

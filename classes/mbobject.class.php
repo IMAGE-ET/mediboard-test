@@ -12,6 +12,9 @@
  * @abstract Adds Mediboard abstraction layer functionality
  */
 
+global $mbObjectCount;
+$mbObjectCount = 0;
+
 require_once("./includes/db_connect.php");
  
 class CMbObject {
@@ -53,6 +56,9 @@ class CMbObject {
    */
  
   function CMbObject($table, $key) {
+    global $mbObjectCount;
+    $mbObjectCount++;
+    
     $this->_tbl = $table;
     $this->_tbl_key = $key;
     $this->_id =& $this->$key;
@@ -468,6 +474,41 @@ class CMbObject {
     $sql .= "\n $this->_tbl_key";
     $sql .=" LIMIT 0,100";
     return db_loadObjectList($sql, $this);
+  }
+  
+  /**
+   * Build Enums variant returning values
+   */
+  function getEnums() {
+    global $AppUI;
+    $enums = array();
+    foreach ($this->_props as $propName => $propSpec) {
+      $specFragments = explode("|", $propSpec);
+      if ($this->lookupSpec("enum", $specFragments)) {
+        $this->lookupSpec("confidential", $specFragments);
+        $this->lookupSpec("notNull", $specFragments);
+        $enums[$propName] = $specFragments;
+      }
+    }
+    
+    return $enums;
+  }
+  
+  /**
+   * Build Enums variant returning values
+   */
+  function getEnumsTrans() {
+    global $AppUI;
+    $enumsTrans = array();
+    foreach ($this->_enums as $propName => $enumValues) {
+      $enumsTrans[$propName] = array_flip($enumValues);
+      foreach($enumsTrans[$propName] as $key => $item) {
+        $enumsTrans[$propName][$key] = $AppUI->_($key);
+      }
+      asort($enumsTrans[$propName]);
+    }
+    
+    return $enumsTrans;
   }
   
   function buildEnums() {

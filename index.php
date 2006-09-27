@@ -251,9 +251,11 @@ if(!$suppressHeaders) {
       return "-";
     }
   }
+  
   $performance = array();
   $performance["genere"] = number_format($phpChrono->total, 3);
-  $performance["memoire"] = mbConvertDecaBinary(memory_get_usage());;
+  $performance["memoire"] = mbConvertDecaBinary(memory_get_usage());
+  $performance["objets"] = $mbObjectCount;
   $smartyStyle->assign("includeFooter" , true);
   $smartyStyle->assign("debugMode"     , $dPconfig["debug"]);
   $smartyStyle->assign("performance"   , $performance);
