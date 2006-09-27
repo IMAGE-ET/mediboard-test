@@ -115,6 +115,7 @@ function db_exec($sql, $dbid = "std") {
   }
 
 	if (!$cur) {
+    trigger_error("Exécution SQL : $sql", E_USER_NOTICE);
     trigger_error("Erreur SQL : ".db_error(), E_USER_WARNING);
 		return false;
 	}

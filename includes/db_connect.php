@@ -175,10 +175,6 @@ function db_loadColumn($sql, $maxrows=NULL) {
  */
 function db_loadObjectList($sql, $object, $maxrows = NULL) {
 	$cur = db_exec($sql);
-	if (!$cur) {
-    mbTrace($sql, "sql");
-		mbTrace("db_loadObjectList : " . db_error(), "error");
-	}
 	$list = array();
 	$cnt = 0;
 	$class = get_class($object);
