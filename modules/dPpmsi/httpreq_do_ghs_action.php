@@ -8,6 +8,7 @@
 */
 
 global $AppUI, $canRead, $canEdit, $m;
+global $filepath, $filedir, $regCim10, $regCCAM, $alnum, $alpha;
 
 $type = mbGetValueFromGet("type");
 
@@ -133,7 +134,9 @@ function adddiagcm() {
   $curr_cmd = null;
   $nCM = 0;
   $nDiags = 0;
-  while (!feof($file) ) {
+  
+  
+  while (!feof($file)) {
     $line = fgets($file, 1024);
     $cmd = null;
     $diag = null;
@@ -237,11 +240,14 @@ function addactes() {
       $nCM++;
     } else if(preg_match("`^Liste ([AD]-[[:digit:]]*) : ([{$alnum}[:space:][:punct:]]*)`", $line, $liste) && $curr_cmd) {
       $curr_liste = $liste[1];
-      $sql = "INSERT INTO liste VALUES('".$liste[1]."', '".addslashes($liste[2])."')";
-      db_exec($sql, $base);
+      $sql = "SELECT `liste_id` FROM `liste` WHERE `liste_id` = '".$liste[1]."'";
+      $isListe = db_loadResult($sql, $base);
+      if(!$isListe) {
+        $sql = "INSERT INTO liste VALUES('".$liste[1]."', '".addslashes($liste[2])."')";
+        db_exec($sql, $base);
+      }
       if($error = db_error($base)) {
-        // L'erreur est commentée car certaines listes sont entrées en doublon
-        //echo "<div class='error'>$error ($sql)</div>";
+        echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nListes++;
         //echo "<div class='message'> ".$liste[1]." : ".$liste[2]." (".$curr_cmd.")</div>"; 
@@ -636,6 +642,6 @@ function addarbre() {
       $nPass++;
     }
   }
-  echo "<div class='message'> $nPass lignes créés, $nFailed lignes échouées</div>";
+  echo "<div class='message'> $nPass lignes créés, $nFailed lignes échouées (l'echec de la dernière ligne est normal)</div>";
 }
 ?>
