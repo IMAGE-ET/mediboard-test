@@ -15,14 +15,15 @@ if (!$canRead) {
 
 // Class and fields
 $classes = array (
-  "CConsultation" => array ("motif", "rques", "examen", "traitement", "compte_rendu"),
+  "CConsultation"  => array ("motif", "rques", "examen", "traitement", "compte_rendu"),
   "CConsultAnesth" => array ("tabac", "oenolisme", "etatBucco" , "conclusion", "premedication", "prepa_preop"),
-  "COperation" => array ("examen", "materiel", "convalescence", "compte_rendu"),
-  "CPatient" => array ("remarques"),
-  "CAntecedent" => array ("rques"),
-  "CTraitement" => array ("traitement"),
-  "CTechniqueComp" => array("technique"),
-  "CExamComp" => array("examen")
+  "COperation"     => array ("examen", "materiel", "convalescence", "compte_rendu"),
+  "CPatient"       => array ("remarques"),
+  "CAntecedent"    => array ("rques"),
+  "CTraitement"    => array ("traitement"),
+  "CTechniqueComp" => array ("technique"),
+  "CExamComp"      => array ("examen"),
+  "CExamAudio"     => array ("remarques")
 );  
 
 // Liste des praticiens accessibles

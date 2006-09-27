@@ -24,7 +24,7 @@ $exam_audio->loadObject($where);
 $exam_audio->consultation_id = $consultation_id;
 $exam_audio->loadRefs();
 $exam_audio->_ref_consult->loadRefsFwd();
-
+$exam_audio->loadAides($exam_audio->_ref_consult->_ref_plageconsult->chir_id);
 
 require_once($AppUI->getModuleFile("$m", "inc_graph_audio_tonal"));
 

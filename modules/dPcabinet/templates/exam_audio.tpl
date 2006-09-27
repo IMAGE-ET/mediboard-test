@@ -12,7 +12,7 @@
 
 <tr>
   <th class="title">
-    Consultation de {{$exam_audio->_ref_consult->_ref_patient->_view}}
+    Consultation de <span style="color:#f00;">{{$exam_audio->_ref_consult->_ref_patient->_view}}</span>
     le {{$exam_audio->_ref_consult->_date|date_format:"%A %d/%m/%Y"}}
     par le Dr. {{$exam_audio->_ref_consult->_ref_chir->_view}}
   </th>
@@ -347,7 +347,11 @@
         <th class="category">Remarques</th>
       </tr>
       <tr>
-        <td>
+        <td style="text-align:left;">
+          <select name="_helpers_remarques" size="1" onchange="pasteHelperContent(this);">
+            <option value="">&mdash; Choisir une aide</option>
+            {{html_options options=$exam_audio->_aides.remarques}}
+          </select><br />
           <textarea name="remarques" rows="4">{{$exam_audio->remarques}}</textarea>
         </td>
       </tr>
