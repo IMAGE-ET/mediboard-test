@@ -468,9 +468,9 @@ class CPatient extends CMbObject {
     $sql = "SELECT patient_id, nom, prenom, naissance, adresse, ville, CP " .
       		"FROM patients WHERE " .
       		"patient_id != '$this->patient_id' " .
-      		"AND ((nom    = '$this->nom'    AND prenom    = '$this->prenom'   ) " .
-      		  "OR (nom    = '$this->nom'    AND naissance = '$this->naissance' AND naissance != '0000-00-00') " .
-      		  "OR (prenom = '$this->prenom' AND naissance = '$this->naissance' AND naissance != '0000-00-00'))";
+      		"AND ((nom    = '".addslashes($this->nom)."'    AND prenom    = '".addslashes($this->prenom)."'   ) " .
+      		  "OR (nom    = '".addslashes($this->nom)."'    AND naissance = '$this->naissance' AND naissance != '0000-00-00') " .
+      		  "OR (prenom = '".addslashes($this->prenom)."' AND naissance = '$this->naissance' AND naissance != '0000-00-00'))";
     $siblings = db_loadlist($sql);
     return $siblings;
   }
@@ -479,8 +479,8 @@ class CPatient extends CMbObject {
     $sql = "SELECT patient_id, nom, prenom, naissance, adresse, ville, CP " .
       		"FROM patients WHERE " .
       		"patient_id != '$this->patient_id' " .
-      		"AND nom    = '$this->nom'" .
-      		"AND prenom = '$this->prenom'" .
+      		"AND nom    = '".addslashes($this->nom)."'" .
+      		"AND prenom = '".addslashes($this->prenom)."'" .
       		"AND naissance = '$this->naissance'";
     $siblings = db_loadlist($sql);
     return $siblings;
