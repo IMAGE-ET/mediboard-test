@@ -163,7 +163,9 @@ if(isset($_REQUEST["dosql"])) {
 
 ob_start();
 
-foreach($listModules as $module) {
+$listActiveModules = CModule::getActive();
+
+foreach($listActiveModules as $module) {
   require_once "./modules/".$module->mod_name."/index.php";
 }
   
