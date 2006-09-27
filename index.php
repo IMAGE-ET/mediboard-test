@@ -42,7 +42,7 @@ header("Pragma: no-cache");	// HTTP/1.0
 
 // check if session has previously been initialised
 if(!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
-    $_SESSION["AppUI"] = new CAppUI();
+  $_SESSION["AppUI"] = new CAppUI();
 }
 
 $AppUI =& $_SESSION["AppUI"];
@@ -135,6 +135,9 @@ setlocale(LC_TIME, $user_locale);
 // these can be further modified by the included action files
 
 $indexModule = CModule::getInstalled($m);
+if(!$indexModule) {
+  $AppUI->redirect("m=system&a=access_denied");
+}
 $canRead     = $indexModule->canRead();
 $canEdit     = $indexModule->canEdit();
 $canView     = $indexModule->canView();
