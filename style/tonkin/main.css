@@ -290,7 +290,7 @@ textarea {
 }
 
 a.button, button, a.buttonedit, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
-a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange,
+a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange, a.buttondown,
 input[type=submit],
 input[type=reset],
 input[type=button] {
@@ -410,6 +410,19 @@ button.tick:hover, a.buttontick:hover {
   background-position: left bottom;
   padding-left: 18px;
 }
+
+button.down, a.buttondown {
+  background-image: url(./images/buttons/down.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.down:hover, a.buttondown:hover {
+  background-image: url(./images/buttons/downover.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
 button.change, a.buttonchange {
   background-image: url(./images/buttons/change.png);
   background-position: left bottom;
