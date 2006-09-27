@@ -201,7 +201,7 @@ class CModule extends CMbObject {
     global $module_installed;
 
     if ($moduleName) {
-      return $module_installed[$moduleName];
+      return @$module_installed[$moduleName];
     }
 
     return $module_installed;
@@ -214,7 +214,7 @@ class CModule extends CMbObject {
     global $module_active;
 
     if ($moduleName) {
-      return $module_active[$moduleName];
+      return @$module_active[$moduleName];
     }
 
     return $module_active;
@@ -227,7 +227,7 @@ class CModule extends CMbObject {
     global $module_visible;
 
     if ($moduleName) {
-      return $module_visible[$moduleName];
+      return @$module_visible[$moduleName];
     }
 
     return $module_visible;
