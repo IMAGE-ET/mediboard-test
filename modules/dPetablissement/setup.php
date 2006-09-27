@@ -10,8 +10,8 @@
 $config = array();
 $config["mod_name"]        = "dPetablissement";
 $config["mod_version"]     = "0.11";
-$config["mod_type"]        = "user";
-$config["mod_config"]      = true;
+$config["mod_type"]        = "core";
+$config["mod_config"]      = false;
 
 if(@$a == "setup") {
   echo dPshowModuleConfig($config);
@@ -26,8 +26,7 @@ class CSetupdPetablissement {
   }
 
   function remove() {
-    db_exec("DROP TABLE `groups_mediboard`;")   ; db_error();
-    return null;
+    return "Impossible de supprimer le module 'dPetablissement'";
   }
 
 

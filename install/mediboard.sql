@@ -44,8 +44,9 @@ CREATE TABLE `modules` (
 -- Dumping data for table `modules`
 -- 
 
-INSERT INTO `modules` VALUES (1, 'admin', 'admin', '1.0.0', '', 'core', 1, 'User Admin', 'admin.png', 9, 1, '');
-INSERT INTO `modules` VALUES (2, 'system', 'system', '1.0.0', '', 'core', 1, 'System Admin', 'system.png', 10, 1, '');
+INSERT INTO `modules` VALUES (1, 'admin', 'admin', '1.0.0', '', 'core', 1, 'User Admin', 'admin.png', 1, 1, '');
+INSERT INTO `modules` VALUES (2, 'system', 'system', '1.0.0', '', 'core', 1, 'System Admin', 'system.png', 2, 1, '');
+INSERT INTO `modules` VALUES (2, 'dPetablissement', 'dPetablissement', '0.1', '', 'core', 1, 'Groups admin', 'dPetablissement.png', 3, 1, '');
 
 -- --------------------------------------------------------
 
@@ -161,6 +162,18 @@ INSERT INTO `user_preferences` VALUES ('0', 'SHDATEFORMAT', '%d/%m/%Y');
 INSERT INTO `user_preferences` VALUES ('0', 'TIMEFORMAT', '%I:%M %p');
 INSERT INTO `user_preferences` VALUES ('0', 'UISTYLE', 'mediboard');
 INSERT INTO `user_preferences` VALUES ('0', 'CURRENCYFORMAT', 'es_FR');
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `groups_mediboard`
+-- 
+
+CREATE TABLE `groups_mediboard` (
+  `group_id` TINYINT(4) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `text` VARCHAR(50) NOT NULL,
+  PRIMARY KEY  (`group_id`)
+) TYPE=MyISAM;";
 
 -- --------------------------------------------------------
 
