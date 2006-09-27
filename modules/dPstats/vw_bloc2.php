@@ -38,7 +38,19 @@ $listPlages = $plage->loadList($where, $order);
 // Récupération des interventions
 foreach($listPlages as $keyPlage => $curr_plage) {
   $listPlages[$keyPlage]->loadRefs(0);
+  $listPlages[$keyPlage]->loadRefsFwd();
+  $listPlages[$keyPlage]->loadRefsBack(0, "entree_bloc");
+  $i = 1;
   foreach($listPlages[$keyPlage]->_ref_operations as $keyOp => $curr_op) {
+    $listPlages[$keyPlage]->_ref_operations[$keyOp]->_rank_reel = $i;
+    $i++;
+    $next = next($listPlages[$keyPlage]->_ref_operations);
+    //prev($listPlages[$keyPlage]->_ref_operations);
+    if($next !== false) {
+      $listPlages[$keyPlage]->_ref_operations[$keyOp]->_pat_next = $next->entree_bloc;
+    } else {
+      $listPlages[$keyPlage]->_ref_operations[$keyOp]->_pat_next = null;
+    }
     $listPlages[$keyPlage]->_ref_operations[$keyOp]->loadRefs();
     $listPlages[$keyPlage]->_ref_operations[$keyOp]->loadLogs();
     $listPlages[$keyPlage]->_ref_operations[$keyOp]->_ref_sejour->loadRefs();

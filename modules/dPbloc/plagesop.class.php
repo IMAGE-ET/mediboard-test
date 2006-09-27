@@ -101,13 +101,12 @@ class CPlageOp extends CMbObject {
     }
   }
   
-  function loadRefsBack($annulee = 1) {
+  function loadRefsBack($annulee = 1, $order = "rank") {
     $where = array();
     $where["plageop_id"] = "= '$this->plageop_id'";
     if(!$annulee) {
       $where["annulee"] = "= '0'";
     }
-    $order = "rank";
     $op = new COperation;
     $this->_ref_operations = $op->loadList($where, $order);
   }

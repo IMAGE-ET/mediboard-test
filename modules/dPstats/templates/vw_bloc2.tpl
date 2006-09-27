@@ -31,20 +31,22 @@ function pageMain() {
           <th rowspan="2">Date</th>
           <th rowspan="2">Salle</th>
           <th rowspan="2">Plage</th>
-          <th rowspan="2">N° d'ordre</th>
+          <th colspan="2">N° d'ordre</th>
           <th rowspan="2">Patient</th>
           <th colspan="2">Prise en charge</th>
           <th rowspan="2">Chirurgien</th>
           <th rowspan="2">Anesthésiste</th>
           <th colspan="2">Nature</th>
-          <th rowspan="2">Type d'anesthésie</th>
-          <th rowspan="2">Code ASA</th>
-          <th rowspan="2">Création admission</th>
-          <th rowspan="2">Placement programme</th>
+          <th rowspan="2">Type<br />d'anesthésie</th>
+          <th rowspan="2">Code<br />ASA</th>
+          <th rowspan="2">Placement<br />programme</th>
+          <th rowspan="2">Attribution<br />n° d'ordre</th>
           <th colspan="8">Timings opération</th>
           <th colspan="2">Timings reveil</th>
         </tr>
         <tr>
+          <th>Prévu</th>
+          <th>Réèl</th>
           <th>Type</th>
           <th>Présent à minuit</th>
           <th>libelle</th>
@@ -67,13 +69,14 @@ function pageMain() {
           <td>{{$curr_plage->_ref_salle->_view}}</td>
           <td class="text">{{$curr_plage->debut|date_format:"%Hh%M"}}-{{$curr_plage->fin|date_format:"%Hh%M"}}</td>
           <td class="text">{{$curr_op->rank}}</td>
+          <td class="text">{{$curr_op->_rank_reel}}</td>
           <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
           <td class="text">{{tr}}{{$curr_op->_ref_sejour->type}}{{/tr}}</td>
           <td class="text">{{if $curr_op->_ref_sejour->_at_midnight}}Oui{{else}}Non{{/if}}</td>
           <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
           <td class="text">Dr. {{$curr_op->_ref_anesth->_view}}</td>
           <td class="text">{{$curr_op->libelle}}</td>
-          <td class="text">{{$curr_op->codes_ccam}}</td>
+          <td class="text">{{$curr_op->codes_ccam|replace:'|':' '}}</td>
           <td class="text">{{$curr_op->_lu_type_anesth}}</td>
           <td class="text">{{$curr_op->_ref_consult_anesth->ASA}}</td>
           <td class="text">{{$curr_op->_ref_first_log->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
@@ -85,7 +88,7 @@ function pageMain() {
           <td class="text">{{$curr_op->fin_op|date_format:"%Hh%M"}}</td>
           <td class="text">{{$curr_op->retrait_garrot|date_format:"%Hh%M"}}</td>
           <td class="text">{{$curr_op->sortie_bloc|date_format:"%Hh%M"}}</td>
-          <td class="text">?</td>
+          <td class="text">{{$curr_op->_pat_next|date_format:"%Hh%M"}}</td>
           <td class="text">{{$curr_op->entree_reveil|date_format:"%Hh%M"}}</td>
           <td class="text">{{$curr_op->sortie_reveil|date_format:"%Hh%M"}}</td>
         </tr>
