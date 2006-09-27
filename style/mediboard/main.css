@@ -132,7 +132,7 @@ textarea {
 }
 
 a.button, button, a.buttonedit, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
-a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange {
+a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange, a.buttondown {
   color: #000;
   text-decoration: none;
   cursor: default;
@@ -145,11 +145,12 @@ a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange {
   background-position: center left;
   height: 18px;
   white-space: nowrap;
+  vertical-align: text-bottom;
 }
 
 a.button:hover, button:hover, a.buttonedit:hover, a.buttontrash:hover, a.buttonsubmit:hover,
 a.buttonnew:hover, a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, 
-a.buttonsearch:hover, a.buttontick:hover, a.buttonchange:hover {
+a.buttonsearch:hover, a.buttontick:hover, a.buttonchange:hover, a.buttondown:hover {
   background-color: #bbb;
 }
 
@@ -188,8 +189,14 @@ button.search, a.buttonsearch {
   background-image: url(images/buttons/search.png);
   padding-left: 18px;
 }
+
 button.tick, a.buttontick {
   background-image: url(images/buttons/tick.png);
+  padding-left: 18px;
+}
+
+button.down, a.buttondown {
+  background-image: url(images/buttons/down.png);
   padding-left: 18px;
 }
 
@@ -199,11 +206,15 @@ button.change, a.buttonchange {
 }
 
 button.notext{
-  padding : 0px 0px 0px 10px;
+  padding : 1px 0px 0px 0px;
+  margin  : 1px 1px;
+  width: 19px;
 }
 
 a.notext{
-  padding : 0px 0px 1px 16px;
+  padding : 0px 0px 0px 16px;
+  margin  : 1px 1px;
+  height: 16px;
 }
 
 input {

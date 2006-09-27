@@ -5,29 +5,6 @@ function pageMain() {
   if(oForm = document.addFrm)
     document.addFrm._new.focus();
 }
-
-function checkForm() {
-  var form = document.editFrm;
-  var field = null;
-   
-  if (field = form.elements['user_id']) {
-    if (field.value == 0) {
-      alert("Utilisateur indéterminé");
-      field.focus();
-      return false;
-    }
-  }
-
-  if (field = form.elements['nom']) {    
-    if (field.value == 0) {
-      alert("Intitulé indéterminé");
-      field.focus();
-      return false;
-    }
-  }
-    
-  return true;
-}
 </script>
 
 <table class="main">
@@ -115,7 +92,7 @@ function checkForm() {
   
   <td class="pane">
 
-    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
+    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
     <input type="hidden" name="dosql" value="do_liste_aed" />
     <input type="hidden" name="liste_choix_id" value="{{$liste->liste_choix_id}}" />
@@ -136,7 +113,7 @@ function checkForm() {
     <tr>
       <th><label for="function_id" title="Fonction à laquelle le modèle est associé">Fonction</label></th>
       <td>
-        <select name="function_id" onchange="this.form.chir_id.value = 0">
+        <select name="function_id" title="{{$liste->_props.function_id}}" onchange="this.form.chir_id.value = ''">
           <option value="">&mdash; Associer à une fonction &mdash;</option>
           {{foreach from=$listFunc item=curr_func}}
             <option value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $liste->function_id}} selected="selected" {{/if}}>
@@ -150,7 +127,7 @@ function checkForm() {
     <tr>
       <th><label for="chir_id" title="Praticien auquel le modèle est associé">Praticien</label></th>
       <td>
-        <select name="chir_id" onchange="this.form.function_id.value = 0">
+        <select name="chir_id" title="{{$liste->_props.chir_id}}" onchange="this.form.function_id.value = ''">
           <option value="">&mdash; Associer à un praticien &mdash;</option>
           {{foreach from=$listPrat item=curr_prat}}
             <option value="{{$curr_prat->user_id}}" {{if ($liste->liste_choix_id && ($curr_prat->user_id == $liste->chir_id)) || (!$liste->liste_choix_id && ($curr_prat->user_id == $user_id))}}selected="selected"{{/if}}>

@@ -35,7 +35,7 @@ class CListeChoix extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["chir_id"]         = "ref";
+    $this->_props["chir_id"]         = "ref|xor|function_id";
     $this->_props["function_id"]     = "ref";
     $this->_props["nom"]             = "str|notNull";
     $this->_props["valeurs"]         = "str|confidential";

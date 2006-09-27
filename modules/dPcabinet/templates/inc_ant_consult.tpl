@@ -241,9 +241,7 @@ function incAntecedantsMain() {
           <tr>
             <td class="text">
               <button class="tick notext" type="button" onclick="putCim10('{{$curr_code->code}}')"></button>
-              <button type="button" onclick="selectCim10('{{$curr_code->code}}')">
-                <img src="modules/dPcabinet/images/downarrow.png" alt="" />
-              </button>
+              <button class="down notext" type="button" onclick="selectCim10('{{$curr_code->code}}')"></button>
               {{$curr_code->code}}: {{$curr_code->libelle}}
             </td>
           </tr>

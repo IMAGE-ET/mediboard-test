@@ -276,17 +276,19 @@ table.tabmenu td.selectedRight {
 
 /* Inputs */
 
-a.button, button, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
-a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange {
+a.button, button, a.buttonedit, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
+a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange, a.buttondown {
   color: #fff;
+  height: 18px;
   background-color: #638cc9;
 }
 
-a.button:hover, button:hover, a.buttontrash:hover, a.buttonsubmit:hover, a.buttonnew:hover,
-a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, a.buttonsearch:hover, 
-a.buttontick:hover, a.buttonchange:hover {
+a.button:hover, button:hover, a.buttonedit:hover, a.buttontrash:hover, a.buttonsubmit:hover, 
+a.buttonnew:hover, a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, 
+a.buttonsearch:hover, a.buttontick:hover, a.buttonchange:hover, a.buttondown:hover {
   background-color: #8ae;
 }
+
 button.edit, a.buttonedit {
   background-image: url(images/buttons/edit.gif);
   padding-left: 16px;
@@ -327,9 +329,24 @@ button.tick, a.buttontick {
   padding-left: 18px;
 }
 
+button.down, a.buttondown {
+  background-image: url(images/buttons/down.gif);
+  padding-left: 18px;
+}
+
 button.change, a.buttonchange {
   background-image: url(images/buttons/change.gif);
   padding-left: 18px;
+}
+button.notext{
+  padding : 0px 0px 0px 0px;
+  margin  : 1px 1px;
+  width: 19px;
+}
+a.notext{
+  padding : 0px 0px 0px 16px;
+  margin  : 1px 1px;
+  height: 16px;
 }
 
 input {

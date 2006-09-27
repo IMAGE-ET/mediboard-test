@@ -102,9 +102,7 @@ function goToCode(code){
           <li>
             <button class="tick notext" type="button" onclick="setClose('{{$curr_code->code}}')"></button>
             <a class="action" href="index.php?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={{$curr_code->code}}">
-              <button type="button" onclick="goToCode('{{$curr_code->code}}');">
-                <img src="modules/dPcim10/images/downarrow.png" alt="" />
-              </button>
+              <button class="down notext" type="button" onclick="goToCode('{{$curr_code->code}}');"></button>
               {{$curr_code->code}}: {{$curr_code->libelle}}
             </a>
           </li>
@@ -119,8 +117,7 @@ function goToCode(code){
           <li>
             <button class="tick notext" type="button" onclick="setClose('{{$curr_code->code}}')"></button>
             <a class="action" href="index.php?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={{$curr_code->code}}">
-              <button type="button" onclick="goToCode('{{$curr_code->code}}');">
-                <img src="modules/dPcim10/images/downarrow.png" alt=""/>
+              <button class="down notext" type="button" onclick="goToCode('{{$curr_code->code}}');">
               </button>
               {{$curr_code->code}}: {{$curr_code->libelle}}
             </a>
