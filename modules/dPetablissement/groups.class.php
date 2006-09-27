@@ -24,6 +24,7 @@ class CGroups extends CMbObject {
   var $directeur      = null;
   var $domiciliation  = null;
   var $siret          = null;
+  var $ape            = null;
 
   // Object References
   var $_ref_functions = null;
@@ -40,15 +41,16 @@ class CGroups extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    $this->_props["text"]           = "str|notNull|confidential";
-    $this->_props["raison_sociale"] = "str|maxLength|50|confidential";
-    $this->_props["adresse"]        = "text|confidential";
-    $this->_props["cp"]             = "num|length|5|confidential";
-    $this->_props["ville"]          = "str|maxLength|50|confidential";
-    $this->_props["tel"]            = "num|length|10|confidential";
-    $this->_props["directeur"]      = "str|maxLength|50|confidential";
-    $this->_props["domiciliation"]  = "str|maxLength|9|confidential";
-    $this->_props["siret"]          = "num|length|14|confidential";
+    $this->_props["text"]           = "str|notNull";
+    $this->_props["raison_sociale"] = "str|maxLength|50";
+    $this->_props["adresse"]        = "text";
+    $this->_props["cp"]             = "num|length|5";
+    $this->_props["ville"]          = "str|maxLength|50";
+    $this->_props["tel"]            = "num|length|10";
+    $this->_props["directeur"]      = "str|maxLength|50";
+    $this->_props["domiciliation"]  = "str|maxLength|9";
+    $this->_props["siret"]          = "str|length|14";
+    $this->_props["ape"]            = "str|length|4";
     
     $this->_seek["text"] = "like";
   }
