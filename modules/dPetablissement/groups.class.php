@@ -52,8 +52,7 @@ class CGroups extends CMbObject {
     
     $this->_seek["text"] = "like";
   }
-  
-    
+ 
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = $this->text;
