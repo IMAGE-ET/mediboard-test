@@ -115,7 +115,7 @@ function updateHeureSortie() {
   }else{
     heure_sortie.value = "10";
   }
-  min_sortie.sortie = "00";
+  min_sortie.value = "00";
 }
 
 function popPat() {

@@ -1,6 +1,6 @@
 <!-- $Id: $ -->
 
-<form name="editSejour" action="?m={{$m}}" method="post" onsubmit="if(checkDureeHospi()){return checkForm(this);}">
+<form name="editSejour" action="?m={{$m}}" method="post" onsubmit="if(checkDureeHospi()){return checkForm(this);}else{return false;}">
 
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_sejour_aed" />
