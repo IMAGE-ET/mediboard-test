@@ -115,12 +115,14 @@ $listModules   = CPermModule::getVisibleModules();
 
 // set the group in use, put the user group if not allowed
 $g = mbGetAbsValueFromGetOrSession("g", $AppUI->user_group);
-$indexGroup = new CGroups;
-$indexGroup->load($g);
+if(CModule::getInstalled("dPetablissement")) {
+  $indexGroup = new CGroups;
+  $indexGroup->load($g);
 
-if(!$indexGroup->canRead()) {
-  mbSetAbsValueToSession("g", $AppUI->user_group);
-  $g = $AppUI->user_group;
+  if(!$indexGroup->canRead()) {
+    mbSetAbsValueToSession("g", $AppUI->user_group);
+    $g = $AppUI->user_group;
+  }
 }
 
 // load locale settings
