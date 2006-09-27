@@ -25,7 +25,6 @@ require_once("./includes/errors.php");
 
 // PHP Configuration
 ini_set("memory_limit", "64M");
-ini_set("magic_quotes_gpc", 1);
 
 // manage the session variable(s)
 session_name("dotproject");
