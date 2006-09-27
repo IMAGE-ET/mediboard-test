@@ -46,7 +46,7 @@ CREATE TABLE `modules` (
 
 INSERT INTO `modules` VALUES (1, 'admin', 'admin', '1.0.0', '', 'core', 1, 'User Admin', 'admin.png', 1, 1, '');
 INSERT INTO `modules` VALUES (2, 'system', 'system', '1.0.0', '', 'core', 1, 'System Admin', 'system.png', 2, 1, '');
-INSERT INTO `modules` VALUES (2, 'dPetablissement', 'dPetablissement', '0.1', '', 'core', 1, 'Groups admin', 'dPetablissement.png', 3, 1, '');
+INSERT INTO `modules` VALUES (3, 'dPetablissement', 'dPetablissement', '0.1', '', 'core', 1, 'Groups admin', 'dPetablissement.png', 3, 1, '');
 
 -- --------------------------------------------------------
 
