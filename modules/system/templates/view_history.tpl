@@ -42,7 +42,7 @@
   <tr>
     <th><label for="type" title="Action effectuée">Action</label></th>
     <td>
-      <select name="type" title="enum|0|store|delete">
+      <select name="type" title="enum|0|create|store|delete">
         <option value="0">&mdash; Tous les types</option>
         {{html_options options=$userLog->_enumsTrans.type selected=$type}}
       </select>
