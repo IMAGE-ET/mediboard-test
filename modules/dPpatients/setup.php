@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.34";
+$config["mod_version"]     = "0.35";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -38,20 +38,20 @@ class CSetupdPpatients {
     switch ($old_version) {
       case "all":
         $sql = "CREATE TABLE `patients` (
-              `patient_id` int(11) NOT NULL auto_increment,
-              `nom` varchar(50) NOT NULL default '',
-              `prenom` varchar(50) NOT NULL default '',
-              `naissance` date NOT NULL default '0000-00-00',
-              `sexe` enum('m','f') NOT NULL default 'm',
-              `adresse` varchar(50) NOT NULL default '',
-              `ville` varchar(50) NOT NULL default '',
-              `cp` varchar(5) NOT NULL default '',
-              `tel` varchar(10) NOT NULL default '',
-              `medecin_traitant` int(11) NOT NULL default '0',
-              `incapable_majeur` enum('o','n') NOT NULL default 'n',
-              `ATNC` enum('o','n') NOT NULL default 'n',
-              `matricule` varchar(15) NOT NULL default '',
-              `SHS` varchar(10) NOT NULL default '',
+              `patient_id` INT(11) NOT NULL AUTO_INCREMENT,
+              `nom` VARCHAR(50) NOT NULL DEFAULT '',
+              `prenom` VARCHAR(50) NOT NULL DEFAULT '',
+              `naissance` DATE NOT NULL DEFAULT '0000-00-00',
+              `sexe` ENUM('m','f') NOT NULL DEFAULT 'm',
+              `adresse` VARCHAR(50) NOT NULL DEFAULT '',
+              `ville` VARCHAR(50) NOT NULL DEFAULT '',
+              `cp` VARCHAR(5) NOT NULL DEFAULT '',
+              `tel` VARCHAR(10) NOT NULL DEFAULT '',
+              `medecin_traitant` INT(11) NOT NULL DEFAULT '0',
+              `incapable_majeur` ENUM('o','n') NOT NULL DEFAULT 'n',
+              `ATNC` ENUM('o','n') NOT NULL DEFAULT 'n',
+              `matricule` VARCHAR(15) NOT NULL DEFAULT '',
+              `SHS` VARCHAR(10) NOT NULL DEFAULT '',
               PRIMARY KEY  (`patient_id`),
               UNIQUE KEY `patient_id` (`patient_id`),
               KEY `matricule` (`matricule`,`SHS`),
@@ -68,16 +68,16 @@ class CSetupdPpatients {
         db_exec( $sql ); db_error();
         
         $sql = "CREATE TABLE medecin (" .
-            "\nmedecin_id int(11) NOT NULL auto_increment," .
-            "\nnom varchar(50) NOT NULL default ''," .
-            "\nprenom varchar(50) NOT NULL default ''," .
-            "\ntel varchar(10) default NULL," .
-            "\nfax varchar(10) default NULL," .
-            "\nemail varchar(50) default NULL," .
-            "\nadresse varchar(50) default NULL," .
-            "\nville varchar(50) default NULL," .
-            "\ncp varchar(5) default NULL," .
-            "\nPRIMARY KEY  (medecin_id))" .
+            "\nmedecin_id INT(11) NOT NULL AUTO_INCREMENT," .
+            "\nnom VARCHAR(50) NOT NULL DEFAULT ''," .
+            "\nprenom VARCHAR(50) NOT NULL DEFAULT ''," .
+            "\ntel VARCHAR(10) DEFAULT NULL," .
+            "\nfax VARCHAR(10) DEFAULT NULL," .
+            "\nemail VARCHAR(50) DEFAULT NULL," .
+            "\nadresse VARCHAR(50) DEFAULT NULL," .
+            "\nville VARCHAR(50) DEFAULT NULL," .
+            "\ncp VARCHAR(5) DFAULT NULL," .
+            "\nPRIMARY KEY  (`medecin_id`))" .
             "\nTYPE=MyISAM COMMENT='Table des medecins correspondants';";
         db_exec( $sql ); db_error();
       case "0.2":
@@ -204,7 +204,42 @@ class CSetupdPpatients {
         $sql = "ALTER TABLE `medecin` DROP `specialite` ;";
         db_exec( $sql ); db_error();
       case "0.34":
-        return "0.34";
+        $sql = "ALTER TABLE `patients` ADD `pays` VARCHAR( 50 ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `nationalite` ENUM( 'local', 'etranger' ) NOT NULL DEFAULT 'local';";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `lieu_naissance` VARCHAR( 50 ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `profession` VARCHAR( 50 ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `employeur_nom` VARCHAR( 50 ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `employeur_adresse` TEXT ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `employeur_cp` VARCHAR( 5 ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `employeur_ville` VARCHAR( 50 ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `employeur_tel` VARCHAR( 10 ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `employeur_urssaf` VARCHAR( 11 ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `prevenir_nom` VARCHAR( 50 ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `prevenir_prenom` VARCHAR( 50 ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `prevenir_adresse` TEXT ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `prevenir_cp` VARCHAR( 5 ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `prevenir_ville` VARCHAR( 50 ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `prevenir_tel` VARCHAR( 10 ) ;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `patients` ADD `prevenir_parente` ENUM( 'conjoint', 'enfant', 'ascendant', 'colateral', 'divers' ) ;";
+        db_exec( $sql ); db_error();
+      case "0.35":
+        return "0.35";
     }
     return false;
   }

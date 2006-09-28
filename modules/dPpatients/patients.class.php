@@ -120,7 +120,7 @@ class CPatient extends CMbObject {
       "medecin2"         => "ref",
       "medecin3"         => "ref",
       "matricule"        => "code|insee|confidential",
-      "regime_sante"     => "str|",
+      "regime_sante"     => "str",
       "SHS"              => "num|length|8",
       "sexe"             => "enum|m|f|j",
       "adresse"          => "str|confidential",
@@ -137,7 +137,7 @@ class CPatient extends CMbObject {
       "ald"              => "text",
       
       "pays"             => "str",
-      "nationalite"      => "enum|francais|etranger",
+      "nationalite"      => "enum|local|etranger|notNull",
       "lieu_naissance"   => "str",
       "profession"       => "str",
       
