@@ -39,6 +39,29 @@ class CPatient extends CMbObject {
   var $cmu              = null;
   var $ald              = null;
   
+  // A rajouter dans la base
+  var $pays             = null;
+  var $nationalite      = null;
+  var $lieu_naissance   = null;
+  var $proffession      = null;
+  
+  // A rajouter dans la base
+  var $employeur_nom     = null;
+  var $employeur_adresse = null;
+  var $employeur_cp      = null;
+  var $employeur_ville   = null;
+  var $employeur_tel     = null;
+  var $employeur_urssaf  = null;
+
+  // A rajouter dans la base
+  var $prevenir_nom     = null;
+  var $prevenir_prenom  = null;
+  var $prevenir_adresse = null;
+  var $prevenir_cp      = null;
+  var $prevenir_ville   = null;
+  var $prevenir_tel     = null;
+  var $prevenir_lien    = null;
+  
   // Other fields
   var $_static_cim10 = null;
 
@@ -111,7 +134,28 @@ class CPatient extends CMbObject {
       "rques"            => "text",
       "listCim10"        => "str",
       "cmu"              => "date",
-      "ald"              => "text"
+      "ald"              => "text",
+      
+      "pays"             => "str",
+      "nationalite"      => "enum|francais|etranger",
+      "lieu_naissance"   => "str",
+      "profession"       => "str",
+      
+      "employeur_nom"     => "str|confidential",
+      "employeur_adresse" => "text",
+      "employeur_cp"      => "num|length|5",
+      "employeur_ville"   => "str|confidential",
+      "employeur_tel"     => "num|length|10|confidential",
+      "employeur_urssaf"  => "num|length|11|confidential",
+
+      "prevenir_nom"      => "str|confidential",
+      "prevenir_prenom"   => "str",
+      "prevenir_adresse"  => "text",
+      "prevenir_cp"       => "num|length|5",
+      "prevenir_ville"    => "str|confidential",
+      "prevenir_tel"      => "num|length|10|confidential",
+      "prevenir_lien"     => "enum|conjoint|enfant|ascendant|colateral|divers",
+      
     );
     $this->_props =& $props;
     
