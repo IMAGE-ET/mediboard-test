@@ -34,7 +34,7 @@ function setCode(code, type) {
         <tr>
           <th><label for="codeCCAM" title="Acte CCAM">Acte CCAM</label></th>
           <td>
-            <input type="text" name="codeCCAM" value="{{$codeCCAM}}" />
+            <input type="text" name="codeCCAM" value="{{$codeCCAM|stripslashes}}" />
             <button type="button" class="search" onclick="popCode('ccam')">Sélectionner un code</button>
           </td>
         </tr>

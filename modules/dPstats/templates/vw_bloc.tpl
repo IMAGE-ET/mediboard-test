@@ -56,7 +56,7 @@ function pageMain() {
         </tr>
         <tr>
           <th><label for="codeCCAM" title="Acte CCAM">Acte CCAM</label></th>
-          <td><input type="text" name="codeCCAM" value="{{$codeCCAM}}" /></td>
+          <td><input type="text" name="codeCCAM" value="{{$codeCCAM|stripslashes}}" /></td>
           <th><label for="discipline_id" title="Spécialité">Spécialité</label></th>
           <td>
             <select name="discipline_id" onchange="this.form.prat_id.value = 0">

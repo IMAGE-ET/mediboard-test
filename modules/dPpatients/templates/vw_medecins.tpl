@@ -52,17 +52,17 @@ function setClose() {
   
         <tr>
           <th><label for="medecin_nom" title="Nom complet ou partiel du médecin recherché">Nom</label></th>
-          <td><input tabindex="1" type="text" name="medecin_nom" value="{{$nom}}" /></td>
+          <td><input tabindex="1" type="text" name="medecin_nom" value="{{$nom|stripslashes}}" /></td>
         </tr>
         
         <tr>
           <th><label for="medecin_prenom" title="Prénom complet ou partiel du médecin recherché">Prénom</label></th>
-          <td><input tabindex="2" type="text" name="medecin_prenom" value="{{$prenom}}" /></td>
+          <td><input tabindex="2" type="text" name="medecin_prenom" value="{{$prenom|stripslashes}}" /></td>
         </tr>
         
         <tr>
           <th><label for="medecin_dept" title="Département du médecin recherché">Département (00 pour tous)</label></th>
-          <td><input tabindex="3" type="text" name="medecin_dept" value="{{$departement}}" /></td>
+          <td><input tabindex="3" type="text" name="medecin_dept" value="{{$departement|stripslashes}}" /></td>
         </tr>
         
         <tr>

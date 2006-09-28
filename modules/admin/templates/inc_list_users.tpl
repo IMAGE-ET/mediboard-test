@@ -10,14 +10,14 @@
   
         <tr>
           <th><label for="user_last_name" title="Nom de l'utilisateur à rechercher, au moins les premières lettres">Nom</label></th>
-          <td><input tabindex="1" type="text" name="user_last_name" value="{{$user_last_name}}" /></td>
+          <td><input tabindex="1" type="text" name="user_last_name" value="{{$user_last_name|stripslashes}}" /></td>
           <th><label for="user_first_name" title="Nom d'utilisateur (login) à rechercher, au moins les premières lettres">Nom d'utilisateur</label></th>
-          <td><input tabindex="3" type="text" name="user_username" value="{{$user_username}}" /></td>
+          <td><input tabindex="3" type="text" name="user_username" value="{{$user_username|stripslashes}}" /></td>
         </tr>
         
         <tr>
           <th><label for="user_first_name" title="Prénom de l'utilisateur à rechercher, au moins les premières lettres">Prénom</label></th>
-          <td><input tabindex="2" type="text" name="user_first_name" value="{{$user_first_name}}" /></td>
+          <td><input tabindex="2" type="text" name="user_first_name" value="{{$user_first_name|stripslashes}}" /></td>
           <th><label for="user_type" title="Type de l'utilisateur">Type</label></th>
           <td>
             <select tabindex="4" name="user_type">

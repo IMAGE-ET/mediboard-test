@@ -37,7 +37,7 @@ function setClose(selClass,keywords,key,val){
   </tr>
   <tr>
     <th><label for="keywords" title="Veuillez saisir un ou plusieurs mot clé">Mots Clés</label></th>
-    <td><input title="str|notNull" type="text" name="keywords" value="{{$keywords}}" /></td>
+    <td><input title="str|notNull" type="text" name="keywords" value="{{$keywords|stripslashes}}" /></td>
     <td><button class="search" type="submit">Rechercher</button></td>
   </tr>
 </table>

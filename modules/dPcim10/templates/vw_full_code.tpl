@@ -47,7 +47,7 @@ function selectCode(code) {
         <tr>
           <th><label for="code" title="Code total ou partiel de l'acte">Code de l'acte</label></th>
           <td>
-            <input tabindex="1" type="text" title="str" name="code" value="{{$cim10->code}}" />
+            <input tabindex="1" type="text" title="str" name="code" value="{{$cim10->code|stripslashes}}" />
             <button tabindex="2" class="search" type="submit">Afficher</button>
           </td>
         </tr>

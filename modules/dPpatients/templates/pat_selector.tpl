@@ -31,12 +31,12 @@ function setClose(key, val){
 
 <tr>
   <th><label for="name" title="Nom du patient à rechercher, au moins les premières lettres">Nom</label></th>
-  <td><input name="name" value="{{$name}}" size="30" /></td>
+  <td><input name="name" value="{{$name|stripslashes}}" size="30" /></td>
   <td></td>
 </tr>
 <tr>
   <th><label for="firstName" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
-  <td><input name="firstName" value="{{$firstName}}" size="30" /></td>
+  <td><input name="firstName" value="{{$firstName|stripslashes}}" size="30" /></td>
   <td><button class="search" type="submit">Rechercher</button></td>
 </tr>
 
