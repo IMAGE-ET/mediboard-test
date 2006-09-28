@@ -43,7 +43,7 @@ class CPatient extends CMbObject {
   var $pays             = null;
   var $nationalite      = null;
   var $lieu_naissance   = null;
-  var $proffession      = null;
+  var $profession       = null;
   
   // A rajouter dans la base
   var $employeur_nom     = null;
