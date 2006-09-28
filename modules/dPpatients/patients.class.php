@@ -60,7 +60,7 @@ class CPatient extends CMbObject {
   var $prevenir_cp      = null;
   var $prevenir_ville   = null;
   var $prevenir_tel     = null;
-  var $prevenir_lien    = null;
+  var $prevenir_parente = null;
   
   // Other fields
   var $_static_cim10 = null;
@@ -154,7 +154,7 @@ class CPatient extends CMbObject {
       "prevenir_cp"       => "num|length|5",
       "prevenir_ville"    => "str|confidential",
       "prevenir_tel"      => "num|length|10|confidential",
-      "prevenir_lien"     => "enum|conjoint|enfant|ascendant|colateral|divers",
+      "prevenir_parente"  => "enum|conjoint|enfant|ascendant|colateral|divers",
       
     );
     $this->_props =& $props;
