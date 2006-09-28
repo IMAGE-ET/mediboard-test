@@ -92,7 +92,7 @@ function supprimer() {
     <td class="button" colspan="2">
     {{if $compte_rendu->compte_rendu_id}}
       <button class="modify" type="submit">Modifier</button>
-      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$compte_rendu->nom|escape:javascript}}'})">
+      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$compte_rendu->nom|escape:"javascript"}}'})">
         Supprimer
       </button>
     {{else}}

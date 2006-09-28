@@ -153,7 +153,7 @@ function pageMain() {
           <td class="button" colspan="2">
             <button class="submit" type="submit">Sauver</button>
             {{if $fichePaie->fiche_paie_id}}
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la ',objName:'{{$fichePaie->_view|escape:javascript}}'})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la ',objName:'{{$fichePaie->_view|escape:"javascript"}}'})">
               Supprimer
             </button>
             <button class="print" type="button" onclick="printFiche()">
@@ -178,7 +178,7 @@ function pageMain() {
             <input type="hidden" name="m" value="dPgestionCab" />
             <input type="hidden" name="fiche_paie_id" value="{{$curr_fiche->fiche_paie_id}}" />
             <input type="hidden" name="del" value="0" />
-            <button class="trash" type="button" style="float:right;" onclick="confirmDeletion(this.form,{typeName:'la ',objName:'{{$curr_fiche->_view|escape:javascript}}'})">
+            <button class="trash" type="button" style="float:right;" onclick="confirmDeletion(this.form,{typeName:'la ',objName:'{{$curr_fiche->_view|escape:"javascript"}}'})">
               Supprimer
             </button>
             </form>

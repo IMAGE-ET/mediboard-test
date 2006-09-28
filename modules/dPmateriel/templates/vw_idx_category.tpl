@@ -46,7 +46,7 @@
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
             {{if $category->category_id}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la catégorie',objName:'{{$category->_view|escape:javascript}}'})">Supprimer</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la catégorie',objName:'{{$category->_view|escape:"javascript"}}'})">Supprimer</button>
             {{/if}}
           </td>
         </tr>  

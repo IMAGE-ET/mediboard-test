@@ -109,7 +109,7 @@ function cancelObject(oObject) {
       {{/foreach}}
       </select>
       <button class="modify" type="submit">Valider</button>
-      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la permission sur',objName:'{{$perm->_ref_db_object->_view|escape:javascript}}'})">Supprimer</button>
+      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la permission sur',objName:'{{$perm->_ref_db_object->_view|escape:"javascript"}}'})">Supprimer</button>
       </form>
     </td>
   </tr>

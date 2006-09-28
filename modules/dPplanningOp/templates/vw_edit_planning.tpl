@@ -143,7 +143,7 @@ function deleteSejour() {
 
 function deleteObjects() {
   var oOptions = {
-  	objName : '{{$op->_view|escape:javascript}}',
+  	objName : '{{$op->_view|escape:"javascript"}}',
   	ajax : true
   }
   

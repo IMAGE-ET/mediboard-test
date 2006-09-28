@@ -179,7 +179,7 @@ function submitFdr(oForm) {
           {{/if}}          
           <input type="hidden" name="compte_rendu_id" value="{{$document->compte_rendu_id}}" />
           <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})"></button>
-          <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|escape:javascript}}',ajax:1,target:'systemMsg'},{onComplete:reloadFdr})" />
+          <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|escape:"javascript"}}',ajax:1,target:'systemMsg'},{onComplete:reloadFdr})" />
           </form>
         </td>
       </tr>

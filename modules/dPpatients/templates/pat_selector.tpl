@@ -61,7 +61,7 @@ function setClose(key, val){
   <td>{{$curr_patient->tel}}</td>
   <td>{{$curr_patient->tel2}}</td>
   <td class="button">
-    <button class="tick" type="button" onclick="setClose({{$curr_patient->patient_id}}, '{{$curr_patient->_view|escape:javascript}}')">Sélectionner</button>
+    <button class="tick" type="button" onclick="setClose({{$curr_patient->patient_id}}, '{{$curr_patient->_view|escape:"javascript"}}')">Sélectionner</button>
   </td>
 </tr>
 {{/foreach}}

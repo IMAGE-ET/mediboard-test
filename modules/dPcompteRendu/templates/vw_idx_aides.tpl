@@ -194,7 +194,7 @@ function pageMain() {
         <button class="submit" type="submit">
           Valider
         </button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'aide',objName:'{{$aide->name|escape:javascript}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'aide',objName:'{{$aide->name|escape:"javascript"}}'})">
           Supprimer
         </button>
         {{else}}

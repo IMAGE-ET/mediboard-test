@@ -31,11 +31,11 @@ function setChecked(oField, sValue) {
   <tr>
     <th><label for="nom" title="Nom du medecin. Obligatoire">Nom</label></th>
     <td>
-      <input type="radio" name="_choix_nom" value="{{$medecin1->nom}}" checked="checked" onclick="setField(this.form.nom, '{{$medecin1->nom|escape:javascript}}')" />
+      <input type="radio" name="_choix_nom" value="{{$medecin1->nom}}" checked="checked" onclick="setField(this.form.nom, '{{$medecin1->nom|escape:"javascript"}}')" />
       {{$medecin1->nom}}
     </td>
     <td>
-      <input type="radio" name="_choix_nom" value="{{$medecin2->nom}}" onclick="setField(this.form.nom, '{{$medecin2->nom|escape:javascript}}')" />
+      <input type="radio" name="_choix_nom" value="{{$medecin2->nom}}" onclick="setField(this.form.nom, '{{$medecin2->nom|escape:"javascript"}}')" />
       {{$medecin2->nom}}
     </td>
     <td>
@@ -45,11 +45,11 @@ function setChecked(oField, sValue) {
   <tr>
     <th><label for="prenom" title="Prénom du medecin. Obligatoire">Prénom</label></th>
     <td>
-      <input type="radio" name="_choix_prenom" value="{{$medecin1->prenom}}" checked="checked" onclick="setField(this.form.prenom, '{{$medecin1->prenom|escape:javascript}}')" />
+      <input type="radio" name="_choix_prenom" value="{{$medecin1->prenom}}" checked="checked" onclick="setField(this.form.prenom, '{{$medecin1->prenom|escape:"javascript"}}')" />
       {{$medecin1->prenom}}
     </td>
     <td>
-      <input type="radio" name="_choix_prenom" value="{{$medecin2->prenom}}" onclick="setField(this.form.prenom, '{{$medecin2->prenom|escape:javascript}}')" />
+      <input type="radio" name="_choix_prenom" value="{{$medecin2->prenom}}" onclick="setField(this.form.prenom, '{{$medecin2->prenom|escape:"javascript"}}')" />
       {{$medecin2->prenom}}
     </td>
     <td>
@@ -58,11 +58,11 @@ function setChecked(oField, sValue) {
   <tr>
     <th><label for="adresse" title="Adresse du medecin">Adresse</label></th>
     <td>
-      <input type="radio" name="_choix_adresse" value="{{$medecin1->adresse}}" checked="checked" onclick="setField(this.form.adresse, '{{$medecin1->adresse|escape:javascript}}')" />
+      <input type="radio" name="_choix_adresse" value="{{$medecin1->adresse}}" checked="checked" onclick="setField(this.form.adresse, '{{$medecin1->adresse|escape:"javascript"}}')" />
       {{$medecin1->adresse}}
     </td>
     <td>
-      <input type="radio" name="_choix_adresse" value="{{$medecin2->adresse}}" onclick="setField(this.form.adresse, '{{$medecin2->adresse|escape:javascript}}')" />
+      <input type="radio" name="_choix_adresse" value="{{$medecin2->adresse}}" onclick="setField(this.form.adresse, '{{$medecin2->adresse|escape:"javascript"}}')" />
       {{$medecin2->adresse}}
     </td>
     <td>
@@ -72,25 +72,25 @@ function setChecked(oField, sValue) {
   <tr>
     <th><label for="cp" title="Code postal">Code Postal</label></th>
     <td>
-      <input type="radio" name="_choix_cp" value="{{$medecin1->cp}}" checked="checked" onclick="setField(this.form.cp, '{{$medecin1->cp|escape:javascript}}')" />
+      <input type="radio" name="_choix_cp" value="{{$medecin1->cp}}" checked="checked" onclick="setField(this.form.cp, '{{$medecin1->cp|escape:"javascript"}}')" />
       {{$medecin1->cp}}
     </td>
     <td>
-      <input type="radio" name="_choix_cp" value="{{$medecin2->cp}}" onclick="setField(this.form.cp, '{{$medecin2->cp|escape:javascript}}')" />
+      <input type="radio" name="_choix_cp" value="{{$medecin2->cp}}" onclick="setField(this.form.cp, '{{$medecin2->cp|escape:"javascript"}}')" />
       {{$medecin2->cp}}
     </td>
     <td>
-      <input tabindex="9" type="text" name="cp" value="{{$finalMedecin->cp}}" title="{{$finalMedecin->_props.cp}}" onclick="setField(this.form.cp, '{{$medecin2->cp|escape:javascript}}')" />
+      <input tabindex="9" type="text" name="cp" value="{{$finalMedecin->cp}}" title="{{$finalMedecin->_props.cp}}" onclick="setField(this.form.cp, '{{$medecin2->cp|escape:"javascript"}}')" />
     </td>
   </tr>
   <tr>
     <th><label for="ville" title="Ville du medecin">Ville</label></th>
     <td>
-      <input type="radio" name="_choix_ville" value="{{$medecin1->ville}}" checked="checked" onclick="setField(this.form.ville, '{{$medecin1->ville|escape:javascript}}')" />
+      <input type="radio" name="_choix_ville" value="{{$medecin1->ville}}" checked="checked" onclick="setField(this.form.ville, '{{$medecin1->ville|escape:"javascript"}}')" />
       {{$medecin1->ville}}
     </td>
     <td>
-      <input type="radio" name="_choix_ville" value="{{$medecin2->ville}}" onclick="setField(this.form.ville, '{{$medecin2->ville|escape:javascript}}')" />
+      <input type="radio" name="_choix_ville" value="{{$medecin2->ville}}" onclick="setField(this.form.ville, '{{$medecin2->ville|escape:"javascript"}}')" />
       {{$medecin2->ville}}
     </td>
     <td>
@@ -144,11 +144,11 @@ function setChecked(oField, sValue) {
   <tr>
     <th><label for="disciplines" title="Disciplines du medecin">Discipline</label></th>
     <td class="text">
-      <input type="radio" name="_choix_disciplines" value="{{$medecin1->disciplines}}" checked="checked" onclick="setField(this.form.disciplines, '{{$medecin1->disciplines|escape:javascript}}')" />
+      <input type="radio" name="_choix_disciplines" value="{{$medecin1->disciplines}}" checked="checked" onclick="setField(this.form.disciplines, '{{$medecin1->disciplines|escape:"javascript"}}')" />
       {{$medecin1->disciplines|nl2br}}
     </td>
     <td class="text">
-      <input type="radio" name="_choix_disciplines" value="{{$medecin2->disciplines}}" onclick="setField(this.form.disciplines, '{{$medecin2->disciplines|escape:javascript}}')" />
+      <input type="radio" name="_choix_disciplines" value="{{$medecin2->disciplines}}" onclick="setField(this.form.disciplines, '{{$medecin2->disciplines|escape:"javascript"}}')" />
       {{$medecin2->disciplines|nl2br}}
     </td>
     <td class="text">
@@ -158,11 +158,11 @@ function setChecked(oField, sValue) {
   <tr>
     <th><label for="orientations" title="Orientations du medecin">Orientations</label></th>
     <td class="text">
-      <input type="radio" name="_choix_orientations" value="{{$medecin1->orientations}}" checked="checked" onclick="setField(this.form.orientations, '{{$medecin1->orientations|escape:javascript}}')" />
+      <input type="radio" name="_choix_orientations" value="{{$medecin1->orientations}}" checked="checked" onclick="setField(this.form.orientations, '{{$medecin1->orientations|escape:"javascript"}}')" />
       {{$medecin1->orientations|nl2br}}
     </td>
     <td class="text">
-      <input type="radio" name="_choix_orientations" value="{{$medecin2->orientations}}" onclick="setField(this.form.orientations, '{{$medecin2->orientations|escape:javascript}}')" />
+      <input type="radio" name="_choix_orientations" value="{{$medecin2->orientations}}" onclick="setField(this.form.orientations, '{{$medecin2->orientations|escape:"javascript"}}')" />
       {{$medecin2->orientations|nl2br}}
     </td>
     <td class="text">
@@ -172,11 +172,11 @@ function setChecked(oField, sValue) {
   <tr>
     <th><label for="complementaires" title="Complementaires du medecin">Complementaires</label></th>
     <td class="text">
-      <input type="radio" name="_choix_complementaires" value="{{$medecin1->complementaires}}" checked="checked" onclick="setField(this.form.complementaires, '{{$medecin1->complementaires|escape:javascript}}')" />
+      <input type="radio" name="_choix_complementaires" value="{{$medecin1->complementaires}}" checked="checked" onclick="setField(this.form.complementaires, '{{$medecin1->complementaires|escape:"javascript"}}')" />
       {{$medecin1->complementaires|nl2br}}
     </td>
     <td class="text">
-      <input type="radio" name="_choix_complementaires" value="{{$medecin2->complementaires}}" onclick="setField(this.form.complementaires, '{{$medecin2->complementaires|escape:javascript}}')" />
+      <input type="radio" name="_choix_complementaires" value="{{$medecin2->complementaires}}" onclick="setField(this.form.complementaires, '{{$medecin2->complementaires|escape:"javascript"}}')" />
       {{$medecin2->complementaires|nl2br}}
     </td>
     <td class="text">

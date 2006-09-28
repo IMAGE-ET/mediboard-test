@@ -109,7 +109,7 @@ aToolbarSet.splice(11, 1);
 sMbPath = "../../../";
 
 {{if $configAlert}}
-alert('{{$configAlert|escape:javascript}}');
+alert('{{$configAlert|escape:"javascript"}}');
 {{/if}}
 
 FCKConfig.Plugins.Add( 'tablecommands', null);

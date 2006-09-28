@@ -255,7 +255,7 @@ function popFile(file_id){
                 Modifier
               </button>
               {{assign var="date_proc" value=$docGed->_lastentry->date|date_format:"%d %b %Y à %Hh%M"}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'la demande de procédure du ',objName:'{{$date_proc|escape:javascript}}'})" title="Supprimer cette demande de Procédure">
+              <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'la demande de procédure du ',objName:'{{$date_proc|escape:"javascript"}}'})" title="Supprimer cette demande de Procédure">
                 Supprimer
               </button>              
               {{else}}

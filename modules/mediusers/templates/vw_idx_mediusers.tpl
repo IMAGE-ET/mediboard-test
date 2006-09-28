@@ -164,7 +164,7 @@ function pageMain() {
           <td class="button" colspan="2">
             {{if $mediuserSel->user_id}}
             <button class="modify" type="submit">Valider</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'utilisateur',objName:'{{$mediuserSel->_user_username|escape:javascript}}'})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'utilisateur',objName:'{{$mediuserSel->_user_username|escape:"javascript"}}'})">
               Supprimer
             </button>
             {{else}}

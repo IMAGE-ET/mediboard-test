@@ -418,7 +418,7 @@ function pageMain() {
             <input type="hidden" name="dosql" value="do_acteccam_aed" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
-            <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'l\'acte',objName:'{{$curr_acte->code_acte|escape:javascript}}'})" />
+            <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'l\'acte',objName:'{{$curr_acte->code_acte|escape:"javascript"}}'})" />
             </form>
           </td>
           <td class="text">{{$curr_acte->_ref_executant->_view}} : {{$curr_acte->code_acte}}</td>

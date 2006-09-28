@@ -83,7 +83,7 @@
       <button class="cancel" type="button" onclick="redactionDoc(this.form);">
         Renvoyer le document
       </button>
-      <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'La procédure ',objName:'{{$docGed->_reference_doc|escape:javascript}}'})" title="Supprimer la Procédure">
+      <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'La procédure ',objName:'{{$docGed->_reference_doc|escape:"javascript"}}'})" title="Supprimer la Procédure">
         Supprimer
       </button>
     </td>

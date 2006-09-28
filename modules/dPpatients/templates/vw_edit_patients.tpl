@@ -288,7 +288,7 @@ function pageMain() {
             <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
               Imprimer
             </button>
-            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le patient',objName:'{{$patient->_view|escape:javascript}}'})">
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le patient',objName:'{{$patient->_view|escape:"javascript"}}'})">
               Supprimer
             </button>
           {{else}}
@@ -307,6 +307,6 @@ function pageMain() {
 
 <script type="text/javascript">
 {{if $textSiblings}}
-  confirmCreation({{$created}}, {{if $dialog}}1{{else}}0{{/if}}, "{{$textSiblings|escape:javascript}}");
+  confirmCreation({{$created}}, {{if $dialog}}1{{else}}0{{/if}}, "{{$textSiblings|escape:"javascript"}}");
 {{/if}}
 </script>

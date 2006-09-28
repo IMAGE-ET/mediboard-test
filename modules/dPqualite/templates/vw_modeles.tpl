@@ -140,7 +140,7 @@ function ZoomFileAjax(file_id, sfn){
             <button class="modify" type="submit">
               Modifier
             </button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'Le modèle ',objName:'{{$docGed->titre|escape:javascript}}'})" title="Supprimer la Procédure">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'Le modèle ',objName:'{{$docGed->titre|escape:"javascript"}}'})" title="Supprimer la Procédure">
               Supprimer
             </button>
             {{else}}

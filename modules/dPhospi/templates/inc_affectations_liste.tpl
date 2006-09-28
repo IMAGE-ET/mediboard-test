@@ -92,7 +92,7 @@
       {{if $curr_sejour->rques != ""}}
       <tr>
         <td class="date" colspan="2" style="background-color: #ff5">
-          <em>Séjour</em>: {{$curr_sejour->rques|escape:nl2br}}
+          <em>Séjour</em>: {{$curr_sejour->rques|nl2br}}
         </td>
       </tr>
       {{/if}}
@@ -100,7 +100,7 @@
       {{if $curr_operation->rques != ""}}
       <tr>
         <td class="date" colspan="2" style="background-color: #ff5">
-          <em>Intervention</em>: {{$curr_operation->rques|escape:nl2br}}
+          <em>Intervention</em>: {{$curr_operation->rques|nl2br}}
         </td>
       </tr>
       {{/if}}
@@ -108,7 +108,7 @@
       {{if $curr_sejour->_ref_patient->rques != ""}}
       <tr>
         <td class="date" colspan="2" style="background-color: #ff5">
-          <em>Patient</em>: {{$curr_sejour->_ref_patient->rques|escape:nl2br}}
+          <em>Patient</em>: {{$curr_sejour->_ref_patient->rques|nl2br}}
         </td>
       </tr>
       {{/if}}

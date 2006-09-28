@@ -257,7 +257,7 @@ function pageMain() {
             {{else}}
             <button class="cancel" type="button" onclick="annuleConsult(this.form, 1)">Annuler</button>
             {{/if}}
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la consultation de',objName:'{{$consult->_ref_patient->_view|escape:javascript}}'})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la consultation de',objName:'{{$consult->_ref_patient->_view|escape:"javascript"}}'})">
               Supprimer
             </button>
           {{else}}

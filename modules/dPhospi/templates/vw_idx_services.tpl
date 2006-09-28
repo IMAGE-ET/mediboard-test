@@ -75,7 +75,7 @@
       <td class="button" colspan="2">
         {{if $serviceSel->service_id}}
         <button class="modify" type="submit">Valider</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le service ',objName:'{{$serviceSel->nom|escape:javascript}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le service ',objName:'{{$serviceSel->nom|escape:"javascript"}}'})">
           Supprimer
         </button>
         {{else}}

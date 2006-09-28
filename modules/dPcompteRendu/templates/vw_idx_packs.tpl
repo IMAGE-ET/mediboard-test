@@ -128,7 +128,7 @@ function checkForm() {
         <button class="submit" type="submit">
           Valider
         </button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le pack',objName:'{{$pack->nom|escape:javascript}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le pack',objName:'{{$pack->nom|escape:"javascript"}}'})">
           Supprimer
         </button>
         {{else}}
@@ -158,7 +158,7 @@ function checkForm() {
           <input type="hidden" name="dosql" value="do_pack_aed" />
           <input type="hidden" name="pack_id" value="{{$pack->pack_id}}" />
           <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="modeles" value="{{$pack->modeles|escape:javascript}}" />
+          <input type="hidden" name="modeles" value="{{$pack->modeles|escape:"javascript"}}" />
           <input type="hidden" name="_del" value="{{$curr_modele->compte_rendu_id}}" />
           <button class="trash notext" type="submit"></button>
           </form>
@@ -172,7 +172,7 @@ function checkForm() {
         <input type="hidden" name="dosql" value="do_pack_aed" />
         <input type="hidden" name="pack_id" value="{{$pack->pack_id}}" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="modeles" value="{{$pack->modeles|escape:javascript}}" />
+        <input type="hidden" name="modeles" value="{{$pack->modeles|escape:"javascript"}}" />
         <select name="_new">
           <option value="">&mdash; Choisir un modèle</option>
           <optgroup label="Modèles du praticien">

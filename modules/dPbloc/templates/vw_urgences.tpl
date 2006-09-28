@@ -29,7 +29,7 @@
           </td>
           <td class="text">
             <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_urgence->operation_id}}">
-            {{$curr_urgence->rques|escape:javascript}}
+            {{$curr_urgence->rques|escape:"javascript"}}
             </a>
           </td>
         </tr>
@@ -66,7 +66,7 @@
           </td>
           <td class="text">
             <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_urgence->operation_id}}">
-            {{$curr_urgence->rques|escape:javascript}}
+            {{$curr_urgence->rques|escape:"javascript"}}
             </a>
           </td>
         </tr>

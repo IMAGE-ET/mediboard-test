@@ -92,7 +92,7 @@
         <td class="button" colspan="2">
           {{if $acte->acte_id}}
           <button class="modify" type="submit">Modifier cet acte</button>
-          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|escape:javascript}}'})">
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|escape:"javascript"}}'})">
             Supprimer cet acte
           </button>
           {{else}}

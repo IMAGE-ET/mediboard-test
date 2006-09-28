@@ -36,7 +36,7 @@
   </tr>
   <tr>
     <td colspan="2" class="button">
-      <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'La procédure ',objName:'{{$docGed->_reference_doc|escape:javascript}}'})" title="Supprimer la Procédure">
+      <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'La procédure ',objName:'{{$docGed->_reference_doc|escape:"javascript"}}'})" title="Supprimer la Procédure">
         Supprimer
       </button>
     </td>

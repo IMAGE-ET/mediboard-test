@@ -170,7 +170,7 @@ function pageMain() {
         <button class="submit" type="submit">
           Valider
         </button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la liste',objName:'{{$liste->nom|escape:javascript}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la liste',objName:'{{$liste->nom|escape:"javascript"}}'})">
           Supprimer
         </button>
         {{else}}
@@ -200,7 +200,7 @@ function pageMain() {
           <input type="hidden" name="dosql" value="do_liste_aed" />
           <input type="hidden" name="liste_choix_id" value="{{$liste->liste_choix_id}}" />
           <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="valeurs" value="{{$liste->valeurs|escape:javascript}}" />
+          <input type="hidden" name="valeurs" value="{{$liste->valeurs|escape:"javascript"}}" />
           <input type="hidden" name="chir_id" value="{{$liste->chir_id}}" />
           <input type="hidden" name="function_id" value="{{$liste->function_id}}" />
           <input type="hidden" name="_del" value="{{$curr_valeur}}" />
@@ -216,7 +216,7 @@ function pageMain() {
         <input type="hidden" name="dosql" value="do_liste_aed" />
         <input type="hidden" name="liste_choix_id" value="{{$liste->liste_choix_id}}" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="valeurs" value="{{$liste->valeurs|escape:javascript}}" />
+        <input type="hidden" name="valeurs" value="{{$liste->valeurs|escape:"javascript"}}" />
         <input type="hidden" name="chir_id" value="{{$liste->chir_id}}" />
         <input type="hidden" name="function_id" value="{{$liste->function_id}}" />
         <input type="text" name="_new" value="" />

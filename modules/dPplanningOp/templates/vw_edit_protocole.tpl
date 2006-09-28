@@ -312,7 +312,7 @@ function pageMain() {
           <td class="button">
           {{if $protocole->protocole_id}}
             <button class="modify" type="submit">Modifier</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$protocole->_view|escape:javascript}}'})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$protocole->_view|escape:"javascript"}}'})">
               Supprimer
             </button>
           {{else}}

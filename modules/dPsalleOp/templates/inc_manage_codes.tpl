@@ -7,7 +7,7 @@ function showCode(form) {
   var aItemsList = new Array();
   aItemsList["0"] = "Sélectionnez un code";
   {{foreach from=$selOp->_ext_codes_ccam item=curr_code}}
-    aItemsList["{{$curr_code->code}}"] = "{{$curr_code->libelleLong|escape:javascript}}";
+    aItemsList["{{$curr_code->code}}"] = "{{$curr_code->libelleLong|escape:"javascript"}}";
   {{/foreach}}
   myNode = document.getElementById("codename");
   myNode.innerHTML = aItemsList[code];

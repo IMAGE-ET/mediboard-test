@@ -62,7 +62,7 @@
           <td class="button" colspan="2">            
             {{if $chapitre->doc_chapitre_id}}
               <button class="modify" type="submit">Modifier</button>
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le chapitre',objName:'{{$chapitre->_view|escape:javascript}}'})">Supprimer</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le chapitre',objName:'{{$chapitre->_view|escape:"javascript"}}'})">Supprimer</button>
             {{else}}
               <button class="submit" type="submit">Créer</button>
             {{/if}}
