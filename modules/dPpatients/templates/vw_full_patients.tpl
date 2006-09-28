@@ -45,7 +45,7 @@ function pageMain() {
       <input type="hidden" name="cat_id"   value="{{$cat_id}}" />
       </form>
       
-      {{assign var="href" value="index.php?m=dPpatients&amp;tab=vw_full_patients"}}
+      {{assign var="href" value="index.php?m=dPpatients&tab=vw_full_patients"}}
 
       <table class="form">
         <tr>

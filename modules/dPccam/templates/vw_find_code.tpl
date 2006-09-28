@@ -18,7 +18,7 @@
         <option value="">&mdash; Choisir une voie d'accès</option>
         {{foreach from=$acces item=curr_acces}}
         <option value="{{$curr_acces.code}}" {{if $curr_acces.code == $selacces}} selected="selected" {{/if}}>
-          {{$curr_acces.texte|escape|lower}}
+          {{$curr_acces.texte|lower}}
         </option>
         {{/foreach}}
       </select>
@@ -34,7 +34,7 @@
         <option value="">&mdash; Choisir un appareil</option>
         {{foreach from=$topo1 item=curr_topo1}}
         <option value="{{$curr_topo1.code}}" {{if $curr_topo1.code == $seltopo1}} selected="selected" {{/if}}>
-          {{$curr_topo1.texte|escape|lower}}
+          {{$curr_topo1.texte|lower}}
         </option>
         {{/foreach}}
       </select>
@@ -50,7 +50,7 @@
       <select tabindex="5" name="seltopo2" onchange="this.form.submit()">
         <option value="">&mdash; Choisir un système</option>
         {{foreach from=$topo2 item=curr_topo2}}
-        <option value="{{$curr_topo2.code}}" {{if $curr_topo2.code == $seltopo2}} selected="selected" {{/if}}>{{$curr_topo2.texte|escape}}</option>
+        <option value="{{$curr_topo2.code}}" {{if $curr_topo2.code == $seltopo2}} selected="selected" {{/if}}>{{$curr_topo2.texte}}</option>
         {{/foreach}}
       </select>
     </td>

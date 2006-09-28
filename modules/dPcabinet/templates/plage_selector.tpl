@@ -8,7 +8,7 @@ function setClose(time) {
     "{{$plage->date|date_format:"%A %d/%m/%Y"}}",
     "{{$plage->freq}}",
     "{{$plage->chir_id}}",
-    "{{$plage->_ref_chir->_view|escape:"javascript"}}");
+    "{{$plage->_ref_chir->_view|smarty:nodefaults|escape:"javascript"}}");
   window.close();
 }
 {{/if}}

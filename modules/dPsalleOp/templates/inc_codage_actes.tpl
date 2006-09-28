@@ -4,7 +4,7 @@
 <ul>
   {{foreach from=$selOp->_ext_codes_ccam item=curr_code key=curr_key}}
   <li>
-    <strong>{{$curr_code->libelleLong|escape}}</strong> 
+    <strong>{{$curr_code->libelleLong}}</strong> 
     <em>(<a class="action" href="?m=dPccam&amp;tab=vw_full_code&amp;codeacte={{$curr_code->code}}">{{$curr_code->code}}</a>)</em>
     <br />Codes associés :
     <select name="asso" onchange="setCode(this.value, 'ccam')">
@@ -34,8 +34,8 @@
       
       <tr id="acte{{$key}}-trigger">  
         <td colspan="2">
-          Activité {{$curr_activite->numero}} ({{$curr_activite->type|escape}}) &mdash; 
-          Phase {{$curr_phase->phase}} : {{$curr_phase->libelle|escape}}
+          Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
+          Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
         </td>
       </tr>
     
@@ -73,8 +73,8 @@
         <td class="text">
           {{foreach from=$curr_phase->_modificateurs item=curr_mod}}
           <input type="checkbox" name="modificateur_{{$curr_mod->code}}" {{if $curr_mod->_value}}checked="checked"{{/if}} />
-          <label for="modificateur_{{$curr_mod->code}}" title="{{$curr_mod->libelle|escape}}">
-            {{$curr_mod->code}} : {{$curr_mod->libelle|escape}}
+          <label for="modificateur_{{$curr_mod->code}}" title="{{$curr_mod->libelle}}">
+            {{$curr_mod->code}} : {{$curr_mod->libelle}}
           </label>
           <br />
           {{/foreach}}
@@ -92,7 +92,7 @@
         <td class="button" colspan="2">
           {{if $acte->acte_id}}
           <button class="modify" type="submit">Modifier cet acte</button>
-          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|escape:"javascript"}}'})">
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}'})">
             Supprimer cet acte
           </button>
           {{else}}

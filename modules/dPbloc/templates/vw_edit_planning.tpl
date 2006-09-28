@@ -283,7 +283,7 @@ function popPlanning(debut) {
         </tr>   
         <tr>
           <td class="button" colspan="2">
-            <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'la plage opératoire',objName:'{{$plagesel->_view|escape:"javascript"}}'})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'la plage opératoire',objName:'{{$plagesel->_view|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
           </td>

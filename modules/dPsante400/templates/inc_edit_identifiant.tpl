@@ -71,7 +71,7 @@
     <td class="button" colspan="2">
     {{if $idSante400->_id}}
       <button class="modify" type="submit">Valider</button>
-      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'identifiant',objName:'{{$idSante400->_view|escape:"javascript"}}'})">
+      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'identifiant',objName:'{{$idSante400->_view|smarty:nodefaults|JSAttribute}}'})">
         Supprimer
       </button>
     {{else}}

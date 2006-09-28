@@ -213,7 +213,7 @@ function pageMain() {
                 <td class="button" colspan="2">
                   {{if $tarif->tarif_id}}
                   <button class="modify" type="submit">Modifier</button>
-                  <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le tarif',objName:'{{$tarif->description|escape:"javascript"}}'})">
+                  <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le tarif',objName:'{{$tarif->description|smarty:nodefaults|JSAttribute}}'})">
                     Supprimer
                   </button>
                   {{else}}

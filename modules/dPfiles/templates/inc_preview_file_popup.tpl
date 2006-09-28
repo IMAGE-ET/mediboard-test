@@ -1,4 +1,4 @@
-{{assign var="href" value="?m=dPfiles&amp;a=preview_files&amp;popup=1&amp;dialog=1"}}
+{{assign var="href" value="?m=dPfiles&a=preview_files&popup=1&dialog=1"}}
 <script language="Javascript" type="text/javascript">
 
 function goToPage(numpage){

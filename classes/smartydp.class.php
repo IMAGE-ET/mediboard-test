@@ -25,6 +25,19 @@ function smarty_modifier_json($object) {
   return $json->encode($object);
 }
 
+function JSAttribute($string){
+  return strtr($string, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'&quot;',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
+}
+
+
+function smarty_modifier_cleanField($string){
+  if (!is_scalar($string)) {
+    return $string;
+  }else {
+    return htmlspecialchars($string);
+  }
+}
+
 function include_script($params, &$smarty) {
     global $m;  
 
@@ -85,6 +98,15 @@ class CSmartyDP extends Smarty {
       $this->left_delimiter = "{{";
       $this->right_delimiter = "}}";
     }
+    
+    // Default modifier for security reason
+    $this->default_modifiers = array("cleanField");
+    
+    // Register mediboard functions
+    $this->register_block("tr"            , "do_translation"); 
+    $this->register_modifier("json"       , "smarty_modifier_json");
+    $this->register_modifier("cleanField" , "smarty_modifier_cleanField");
+    $this->register_modifier("JSAttribute" , "JSAttribute");
 
     // Standard data assignment
     $this->assign("app", $AppUI);
@@ -102,10 +124,7 @@ class CSmartyDP extends Smarty {
     $this->assign("g", $g);
     $this->assign("dialog", $dialog);
     $this->assign("mb_version_build", $mb_version_build);
-    
-    // Configure dotProject localisation framework
-    $this->register_block("tr", "do_translation"); 
-    $this->register_modifier("json", "smarty_modifier_json"); 
+
   }
 
 }

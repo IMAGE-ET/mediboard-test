@@ -136,7 +136,7 @@ function pageMain() {
           <td class="button" colspan="2">
           {{if $usergroup->group_id}}
             <button class="modify" type="submit">Valider</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'établissement',objName:'{{$usergroup->text|escape:"javascript"}}'})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'établissement',objName:'{{$usergroup->text|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
           {{else}}

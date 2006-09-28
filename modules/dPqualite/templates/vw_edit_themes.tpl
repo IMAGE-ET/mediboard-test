@@ -56,7 +56,7 @@
           <td class="button" colspan="2">            
             {{if $theme->doc_theme_id}}
               <button class="modify" type="submit">Modifier</button>
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le thème',objName:'{{$theme->_view|escape:"javascript"}}'})">Supprimer</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le thème',objName:'{{$theme->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
             {{else}}
               <button class="submit" type="submit">Créer</button>
             {{/if}}

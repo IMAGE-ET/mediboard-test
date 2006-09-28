@@ -111,7 +111,7 @@ function pageMain() {
     {{foreach from=$aides item=curr_aide}}
     <tr>
       {{eval var=$curr_aide->aide_id assign="aide_id"}}
-      {{assign var="href" value="?m=$m&amp;tab=$tab&amp;aide_id=$aide_id"}}
+      {{assign var="href" value="?m=$m&tab=$tab&aide_id=$aide_id"}}
       <td><a href="{{$href}}">{{$curr_aide->_ref_user->_view}}</a></td>
       <td><a href="{{$href}}">{{$curr_aide->class}}</a></td>
       <td><a href="{{$href}}">{{$curr_aide->field}}</a></td>
@@ -194,7 +194,7 @@ function pageMain() {
         <button class="submit" type="submit">
           Valider
         </button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'aide',objName:'{{$aide->name|escape:"javascript"}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'aide',objName:'{{$aide->name|smarty:nodefaults|JSAttribute}}'})">
           Supprimer
         </button>
         {{else}}

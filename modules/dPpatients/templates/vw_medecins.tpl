@@ -23,9 +23,9 @@ function checkMedecin() {
 function setClose() {
   window.opener.setMed(
     "{{$medecin->medecin_id}}",
-    "{{$medecin->nom|escape:"javascript"}}",
-    "{{$medecin->prenom|escape:"javascript"}}",
-    "{{$type|escape:"javascript"}}");
+    "{{$medecin->nom|smarty:nodefaults|escape:"javascript"}}",
+    "{{$medecin->prenom|smarty:nodefaults|escape:"javascript"}}",
+    "{{$type|smarty:nodefaults|escape:"javascript"}}");
   window.close();
 }
 
@@ -102,12 +102,12 @@ function setClose() {
             <td><input type="checkbox" name="fusion_{{$medecin_id}}" /></td>
           {{/if}}
           {{if $dialog}}
-            {{assign var="href" value="?m=$m&amp;a=vw_medecins&amp;dialog=1&amp;medecin_id=$medecin_id"}}
+            {{assign var="href" value="?m=$m&a=vw_medecins&dialog=1&medecin_id=$medecin_id"}}
             <td><a href="{{$href}}">{{$curr_medecin->_view}}</a></td>
             <td class="text"><a href="{{$href}}">{{$curr_medecin->ville}}</a></td>
             <td><a href="{{$href}}">{{$curr_medecin->cp}}</a></td>
           {{else}}
-            {{assign var="href" value="?m=$m&amp;tab=$tab&amp;medecin_id=$medecin_id"}}
+            {{assign var="href" value="?m=$m&tab=$tab&medecin_id=$medecin_id"}}
             <td><a href="{{$href}}">{{$curr_medecin->_view}}</a></td>
             <td class="text"><a href="{{$href}}">{{$curr_medecin->adresse}}</a></td>
             <td class="text"><a href="{{$href}}">{{$curr_medecin->ville}}</a></td>
@@ -232,7 +232,7 @@ function setClose() {
             {{if $medecin->medecin_id}}
             <input type="hidden" name="medecin_id" value="{{$medecin->medecin_id}}" />
             <button class="modify" type="submit">Modifier</button>
-            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le médecin',objName:'{{$medecin->_view|escape:"javascript"}}'})">
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le médecin',objName:'{{$medecin->_view|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
             {{else}}

@@ -59,7 +59,7 @@
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="dosql" value="do_modele_aed" />
             <input type="hidden" name="compte_rendu_id" value="{{$curr_modele->compte_rendu_id}}" />
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$curr_modele->nom|escape:"javascript"}}'})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$curr_modele->nom|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
             </form>
@@ -94,7 +94,7 @@
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="dosql" value="do_modele_aed" />
             <input type="hidden" name="compte_rendu_id" value="{{$curr_modele->compte_rendu_id}}" />
-            <button  type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$curr_modele->nom|escape:"javascript"}}'})">
+            <button  type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$curr_modele->nom|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
             </form>

@@ -53,7 +53,7 @@ function pageMain() {
         <tr>
           <td style="background-color: #{{$curr_function->color}}"></td>
           {{eval var=$curr_user->user_id assign=user_id}}
-          {{assign var="href" value="index.php?m=$m&amp;tab=$tab&amp;user_id=$user_id"}}
+          {{assign var="href" value="index.php?m=$m&tab=$tab&user_id=$user_id"}}
           <td><a href="{{$href}}">{{$curr_user->_user_username}}</a></td>
           <td><a href="{{$href}}">{{$curr_user->_user_last_name}}</a></td>
           <td><a href="{{$href}}">{{$curr_user->_user_first_name}}</a></td>
@@ -164,7 +164,7 @@ function pageMain() {
           <td class="button" colspan="2">
             {{if $mediuserSel->user_id}}
             <button class="modify" type="submit">Valider</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'utilisateur',objName:'{{$mediuserSel->_user_username|escape:"javascript"}}'})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'utilisateur',objName:'{{$mediuserSel->_user_username|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
             {{else}}

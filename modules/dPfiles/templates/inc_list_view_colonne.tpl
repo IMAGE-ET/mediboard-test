@@ -52,7 +52,7 @@
                 </option>
                 {{/foreach}}
               </select><br />
-              <button type="button" class="trash" onclick="file_deleted={{$curr_file->file_id}};confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|escape:"javascript"}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
+              <button type="button" class="trash" onclick="file_deleted={{$curr_file->file_id}};confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
                 Supprimer
               </button>
             </form>

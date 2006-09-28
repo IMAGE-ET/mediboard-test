@@ -105,19 +105,19 @@ function pageMain() {
         <tr>
           <td style="vertical-align: top; width: 100%">
             <ul>
-              <li>Activité {{$curr_act->numero}} ({{$curr_act->type|escape}}) : {{$curr_act->libelle|escape}}
+              <li>Activité {{$curr_act->numero}} ({{$curr_act->type}}) : {{$curr_act->libelle}}
                 <ul>
                   <li>Phase(s) :
                     <ul>
                       {{foreach from=$curr_act->phases item=curr_phase}}
-                      <li>Phase {{$curr_phase->phase}} : {{$curr_phase->libelle|escape}} : {{$curr_phase->tarif}}&euro;</li>
+                      <li>Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}} : {{$curr_phase->tarif}}&euro;</li>
                       {{/foreach}}
                     </ul>
                   </li>
                   <li>Modificateur(s) :
                     <ul>
                       {{foreach from=$curr_act->modificateurs item=curr_mod}}
-                      <li>{{$curr_mod->code}} : {{$curr_mod->libelle|escape}}</li>
+                      <li>{{$curr_mod->code}} : {{$curr_mod->libelle}}</li>
                       {{foreachelse}}
                       <li><em>Aucun modificateur applicable à cet acte</em></li>
                       {{/foreach}}

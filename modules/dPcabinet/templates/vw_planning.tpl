@@ -300,8 +300,8 @@ function pageMain() {
         {{foreach from=$plageSel->_ref_consultations item=curr_consult}}
         <tr>
           {{eval var=$curr_consult->consultation_id assign="consult_id"}}
-          {{assign var="href_consult" value="index.php?m=$m&amp;tab=edit_consultation&amp;selConsult=$consult_id"}}
-          {{assign var="href_planning" value="index.php?m=$m&amp;tab=edit_planning&amp;consultation_id=$consult_id"}}
+          {{assign var="href_consult" value="index.php?m=$m&tab=edit_consultation&selConsult=$consult_id"}}
+          {{assign var="href_planning" value="index.php?m=$m&tab=edit_planning&consultation_id=$consult_id"}}
           {{if $curr_consult->premiere}} 
             {{assign var="style" value="style='background: #faa;'"}}
           {{else}} 

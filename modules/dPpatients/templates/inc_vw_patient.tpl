@@ -366,7 +366,7 @@ function reloadAfterSaveDoc(){
             <input type="hidden" name="object_id" value="{{$patient->patient_id}}" />
             <input type="hidden" name="compte_rendu_id" value="{{$document->compte_rendu_id}}" />
             <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})"></button>
-            <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|escape:"javascript"}}',ajax:1,target:'systemMsg'},{onComplete:reloadVwPatient})">
+            <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadVwPatient})">
             </button>
             </form>
           </td>

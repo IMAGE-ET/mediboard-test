@@ -37,12 +37,12 @@ aMbCombos.push(oMbCombo);
 
 {{foreach from=$templateManager->properties item=property}}
   aOptions.push( {
-    view: "{{$property.field|escape:"htmlall"|escape:"javascript"}}" ,
+    view: "{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}" ,
     item: 
       {{if $templateManager->valueMode}} 
-        "{{$property.value|escape:"htmlall"|nl2br|escape:"javascript"}}" 
+        "{{$property.value|smarty:nodefaults|escape:"htmlall"|nl2br|escape:"javascript"}}" 
       {{else}} 
-        "[{{$property.field|escape:"htmlall"|escape:"javascript"}}]" 
+        "[{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]" 
       {{/if}}
     });
 {{/foreach}}
@@ -60,8 +60,8 @@ aMbCombos.push(oMbCombo);
 
 {{foreach from=$templateManager->lists item=list}}
   aOptions.push( { 
-    view: "{{$list.name|escape:"htmlall"|escape:"javascript"}}" ,
-    item: "[Liste - {{$list.name|escape:"htmlall"|escape:"javascript"}}]"
+    view: "{{$list.name|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}" ,
+    item: "[Liste - {{$list.name|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]"
     });
 {{/foreach}}
 {{/if}}
@@ -78,8 +78,8 @@ aMbCombos.push(oMbCombo);
 
 {{foreach from=$templateManager->helpers key=helperName item=helperText}}
   aOptions.push( { 
-    view: "{{$helperName|escape:"htmlall"|escape:"javascript"}}" ,
-    item: "{{$helperText|escape:"htmlall"|nl2br|escape:"javascript"}}"
+    view: "{{$helperName|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}" ,
+    item: "{{$helperText|smarty:nodefaults|escape:"htmlall"|nl2br|escape:"javascript"}}"
     });
 {{/foreach}}
 
@@ -109,7 +109,7 @@ aToolbarSet.splice(11, 1);
 sMbPath = "../../../";
 
 {{if $configAlert}}
-alert('{{$configAlert|escape:"javascript"}}');
+alert('{{$configAlert|smarty:nodefaults|escape:"javascript"}}');
 {{/if}}
 
 FCKConfig.Plugins.Add( 'tablecommands', null);

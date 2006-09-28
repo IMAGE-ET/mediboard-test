@@ -83,7 +83,7 @@
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
             {{if $reference->reference_id}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la référence',objName:'{{$reference->_view|escape:"javascript"}}'})">Supprimer</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la référence',objName:'{{$reference->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
             {{/if}}
           </td>
         </tr>        

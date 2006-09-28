@@ -51,7 +51,7 @@ function pageMain() {
     {{foreach from=$messages item=curr_message}}
     <tr>
       {{eval var=$curr_message->message_id assign="message_id"}}
-      {{assign var="href" value="?m=$m&amp;tab=$tab&amp;message_id=$message_id"}}
+      {{assign var="href" value="?m=$m&tab=$tab&message_id=$message_id"}}
       <td><a href="{{$href}}">{{$curr_message->deb|date_format:"%d/%m/%Y %H:%M"}}</a></td>
       <td><a href="{{$href}}">{{$curr_message->fin|date_format:"%d/%m/%Y %H:%M"}}</a></td>
       <td class="text"><a href="{{$href}}">{{$curr_message->titre}}</a></td>
@@ -119,7 +119,7 @@ function pageMain() {
       <td class="button" colspan="2">
         {{if $message->message_id}}
         <button class="modify" type="submit">Valider</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,typeName:'message',objName:'{{$message->_view|escape:"javascript"}}')">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,typeName:'message',objName:'{{$message->_view|smarty:nodefaults|JSAttribute}}')">
           Supprimer
         </button>
         {{else}}

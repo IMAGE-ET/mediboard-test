@@ -101,7 +101,7 @@ function pageMain() {
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
             {{if $fournisseur->fournisseur_id}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le fournisseur',objName:'{{$fournisseur->_view|escape:"javascript"}}'})">Supprimer</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le fournisseur',objName:'{{$fournisseur->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
             {{/if}}
           </td>
         </tr> 

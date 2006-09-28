@@ -115,7 +115,7 @@ function setColor(color) {
           <td class="button" colspan="2">
           {{if $userfunction->function_id}}
             <button class="modify" type="submit">Valider</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la fonction',objName:'{{$userfunction->text|escape:"javascript"}}'})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la fonction',objName:'{{$userfunction->text|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
           {{else}}

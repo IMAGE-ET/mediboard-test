@@ -76,7 +76,7 @@
     <td class="button" colspan="2">            
       {{if $item->ei_item_id}}
       <button class="modify" type="submit">Modifier</button>
-      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'item',objName:'{{$item->_view|escape:"javascript"}}'})">Supprimer</button>
+      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'item',objName:'{{$item->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
       {{else}}
       <button class="submit" type="submit">Créer</button>
       {{/if}}

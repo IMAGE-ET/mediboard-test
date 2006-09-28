@@ -11,8 +11,8 @@ function confirmCreation(id, bDialog, sSiblingsText) {
     if (bDialog) {
       url.setModuleAction("dPpatients", "pat_selector");
       url.addParam("dialog", "1");
-      url.addParam("name", "{{$patient->nom}}");
-      url.addParam("firstName", "{{$patient->prenom}}");
+      url.addParam("name", "{{$patient->nom|smarty:nodefaults|escape:"javascript"}}");
+      url.addParam("firstName", "{{$patient->prenom|smarty:nodefaults|escape:"javascript"}}");
     } else {
       url.addParam("m", "dPpatients");
       url.addParam("tab", "vw_idx_patients");
@@ -288,7 +288,7 @@ function pageMain() {
             <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
               Imprimer
             </button>
-            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le patient',objName:'{{$patient->_view|escape:"javascript"}}'})">
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le patient',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
           {{else}}
@@ -307,6 +307,6 @@ function pageMain() {
 
 <script type="text/javascript">
 {{if $textSiblings}}
-  confirmCreation({{$created}}, {{if $dialog}}1{{else}}0{{/if}}, "{{$textSiblings|escape:"javascript"}}");
+  confirmCreation({{$created}}, {{if $dialog}}1{{else}}0{{/if}}, "{{$textSiblings|smarty:nodefaults|escape:"javascript"}}");
 {{/if}}
 </script>

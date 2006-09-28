@@ -47,7 +47,7 @@
           <td class="button" colspan="2">
             {{if $type_anesth->type_anesth_id}}
               <button class="submit" type="modify">Modifier</button>
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le type d\'anesthésie',objName:'{{$type_anesth->name|escape:"javascript"}}'})">Supprimer</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le type d\'anesthésie',objName:'{{$type_anesth->name|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
             {{else}}
               <button class="submit" type="submit">Créer</button>
             {{/if}}

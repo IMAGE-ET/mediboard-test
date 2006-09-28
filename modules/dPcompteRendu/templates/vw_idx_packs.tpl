@@ -1,29 +1,4 @@
 <!--  $Id$ -->
-<script type="text/javascript">
-
-function checkForm() {
-  var form = document.editFrm;
-  var field = null;
-   
-  if (field = form.elements['user_id']) {
-    if (field.value == 0) {
-      alert("Utilisateur indéterminé");
-      field.focus();
-      return false;
-    }
-  }
-
-  if (field = form.elements['nom']) {    
-    if (field.value == 0) {
-      alert("Intitulé indéterminé");
-      field.focus();
-      return false;
-    }
-  }
-    
-  return true;
-}
-</script>
 
 <table class="main">
 
@@ -70,7 +45,7 @@ function checkForm() {
     {{foreach from=$packs item=curr_pack}}
     <tr>
       {{eval var=$curr_pack->pack_id assign="pack_id"}}
-      {{assign var="href" value="?m=$m&amp;tab=$tab&amp;pack_id=$pack_id"}}
+      {{assign var="href" value="?m=$m&tab=$tab&pack_id=$pack_id"}}
       <td><a href="{{$href}}">{{$curr_pack->_ref_chir->_view}}</a></td>
       <td><a href="{{$href}}">{{$curr_pack->nom}}</a></td>
       <td><a href="{{$href}}">{{$curr_pack->_modeles|@count}}</a></td>
@@ -83,7 +58,7 @@ function checkForm() {
   
   <td class="pane">
 
-    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
+    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
     <input type="hidden" name="dosql" value="do_pack_aed" />
     <input type="hidden" name="pack_id" value="{{$pack->pack_id}}" />
@@ -128,7 +103,7 @@ function checkForm() {
         <button class="submit" type="submit">
           Valider
         </button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le pack',objName:'{{$pack->nom|escape:"javascript"}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le pack',objName:'{{$pack->nom|smarty:nodefaults|JSAttribute}}'})">
           Supprimer
         </button>
         {{else}}
@@ -158,7 +133,7 @@ function checkForm() {
           <input type="hidden" name="dosql" value="do_pack_aed" />
           <input type="hidden" name="pack_id" value="{{$pack->pack_id}}" />
           <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="modeles" value="{{$pack->modeles|escape:"javascript"}}" />
+          <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
           <input type="hidden" name="_del" value="{{$curr_modele->compte_rendu_id}}" />
           <button class="trash notext" type="submit"></button>
           </form>
@@ -172,7 +147,7 @@ function checkForm() {
         <input type="hidden" name="dosql" value="do_pack_aed" />
         <input type="hidden" name="pack_id" value="{{$pack->pack_id}}" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="modeles" value="{{$pack->modeles|escape:"javascript"}}" />
+        <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
         <select name="_new">
           <option value="">&mdash; Choisir un modèle</option>
           <optgroup label="Modèles du praticien">

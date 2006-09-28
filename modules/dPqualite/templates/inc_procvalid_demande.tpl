@@ -118,7 +118,7 @@
       <button class="tick" type="button" onclick="redactionDoc(this.form);">
         Accepter la demande 
       </button>
-      <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'La procédure ',objName:'{{$info_proc|escape:"javascript"}}'})" title="Supprimer la Procédure">
+      <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'La procédure ',objName:'{{$info_proc|smarty:nodefaults|JSAttribute}}'})" title="Supprimer la Procédure">
         Supprimer
       </button>
     </td>

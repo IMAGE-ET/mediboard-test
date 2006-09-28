@@ -87,7 +87,7 @@
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
             {{if $stock->stock_id}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le stock',objName:'{{$stock->_view|escape:"javascript"}}'})">Supprimer</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le stock',objName:'{{$stock->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
             {{/if}}
           </td>
         </tr>        

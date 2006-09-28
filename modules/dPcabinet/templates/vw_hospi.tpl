@@ -113,7 +113,7 @@ function pageMain() {
                   <input type="hidden" name="compte_rendu_id" value="{{$curr_oper_doc->compte_rendu_id}}" />
                   <button class="edit notext" type="button" onclick="editDocument({{$curr_oper_doc->compte_rendu_id}})">
                   </button>
-                  <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$curr_oper_doc->nom|escape:"javascript"}}'})" />
+                  <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$curr_oper_doc->nom|smarty:nodefaults|JSAttribute}}'})" />
                   <button class="trash notext" type="button" onclick="this.form.del.value = 1; this.form.submit()"></button>
                   </form>
                 </td>

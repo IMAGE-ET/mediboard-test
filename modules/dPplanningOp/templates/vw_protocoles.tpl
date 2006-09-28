@@ -10,17 +10,17 @@ aProtocoles[{{$curr_protocole->protocole_id}}] = {
   chir_id          : {{$curr_protocole->chir_id}},
   codes_ccam       : "{{$curr_protocole->codes_ccam}}",
   DP               : "{{$curr_protocole->DP}}",
-  libelle          : "{{$curr_protocole->libelle|escape:"javascript"}}",
+  libelle          : "{{$curr_protocole->libelle|smarty:nodefaults|escape:"javascript"}}",
   _hour_op         : "{{$curr_protocole->_hour_op}}",
   _min_op          : "{{$curr_protocole->_min_op}}",
-  examen           : "{{$curr_protocole->examen|escape:"javascript"}}",
-  materiel         : "{{$curr_protocole->materiel|escape:"javascript"}}",
-  convalescence    : "{{$curr_protocole->convalescence|escape:"javascript"}}",
+  examen           : "{{$curr_protocole->examen|smarty:nodefaults|escape:"javascript"}}",
+  materiel         : "{{$curr_protocole->materiel|smarty:nodefaults|escape:"javascript"}}",
+  convalescence    : "{{$curr_protocole->convalescence|smarty:nodefaults|escape:"javascript"}}",
   depassement      : "{{$curr_protocole->depassement}}",
   type             : "{{$curr_protocole->type}}",
   duree_hospi      : {{$curr_protocole->duree_hospi}},
-  rques_sejour     : "{{$curr_protocole->rques_sejour|escape:"javascript"}}",
-  rques_operation  : "{{$curr_protocole->rques_operation|escape:"javascript"}}"
+  rques_sejour     : "{{$curr_protocole->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
+  rques_operation  : "{{$curr_protocole->rques_operation|smarty:nodefaults|escape:"javascript"}}"
 }
 {{/foreach}}
 

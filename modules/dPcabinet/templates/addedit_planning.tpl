@@ -93,7 +93,7 @@ function pageMain() {
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
-<input type="hidden" name="compte_rendu" value="{{$consult->compte_rendu|escape:"html"}}" />
+<input type="hidden" name="compte_rendu" value="{{$consult->compte_rendu}}" />
 <input type="hidden" name="annule" value="{{$consult->annule}}" />
 <input type="hidden" name="arrivee" value="" />
 <input type="hidden" name="chrono" value="{{$smarty.const.CC_PLANIFIE}}" />
@@ -257,7 +257,7 @@ function pageMain() {
             {{else}}
             <button class="cancel" type="button" onclick="annuleConsult(this.form, 1)">Annuler</button>
             {{/if}}
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la consultation de',objName:'{{$consult->_ref_patient->_view|escape:"javascript"}}'})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la consultation de',objName:'{{$consult->_ref_patient->_view|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
           {{else}}

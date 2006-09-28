@@ -55,7 +55,7 @@ function pageMain() {
     {{foreach from=$listesPrat item=curr_liste}}
     <tr>
       {{eval var=$curr_liste->liste_choix_id assign="liste_id"}}
-      {{assign var="href" value="?m=$m&amp;tab=$tab&amp;liste_id=$liste_id"}}
+      {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
       <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_chir->_view}}</a></td>
       <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
       <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
@@ -74,7 +74,7 @@ function pageMain() {
     {{foreach from=$listesFunc item=curr_liste}}
     <tr>
       {{eval var=$curr_liste->liste_choix_id assign="liste_id"}}
-      {{assign var="href" value="?m=$m&amp;tab=$tab&amp;liste_id=$liste_id"}}
+      {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
       <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_function->text}}</a></td>
       <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
       <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
@@ -170,7 +170,7 @@ function pageMain() {
         <button class="submit" type="submit">
           Valider
         </button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la liste',objName:'{{$liste->nom|escape:"javascript"}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la liste',objName:'{{$liste->nom|smarty:nodefaults|JSAttribute}}'})">
           Supprimer
         </button>
         {{else}}
@@ -200,7 +200,7 @@ function pageMain() {
           <input type="hidden" name="dosql" value="do_liste_aed" />
           <input type="hidden" name="liste_choix_id" value="{{$liste->liste_choix_id}}" />
           <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="valeurs" value="{{$liste->valeurs|escape:"javascript"}}" />
+          <input type="hidden" name="valeurs" value="{{$liste->valeurs|smarty:nodefaults|JSAttribute}}" />
           <input type="hidden" name="chir_id" value="{{$liste->chir_id}}" />
           <input type="hidden" name="function_id" value="{{$liste->function_id}}" />
           <input type="hidden" name="_del" value="{{$curr_valeur}}" />
@@ -216,7 +216,7 @@ function pageMain() {
         <input type="hidden" name="dosql" value="do_liste_aed" />
         <input type="hidden" name="liste_choix_id" value="{{$liste->liste_choix_id}}" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="valeurs" value="{{$liste->valeurs|escape:"javascript"}}" />
+        <input type="hidden" name="valeurs" value="{{$liste->valeurs|smarty:nodefaults|JSAttribute}}" />
         <input type="hidden" name="chir_id" value="{{$liste->chir_id}}" />
         <input type="hidden" name="function_id" value="{{$liste->function_id}}" />
         <input type="text" name="_new" value="" />

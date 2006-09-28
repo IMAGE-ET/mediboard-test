@@ -97,7 +97,7 @@ function pageMain() {
       <td class="button" colspan="2">
         {{if $chambreSel->chambre_id}}
         <button class="submit" type="submit">Valider</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la chambre',objName:'{{$chambreSel->nom|escape:"javascript"}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la chambre',objName:'{{$chambreSel->nom|smarty:nodefaults|JSAttribute}}'})">
           Supprimer
         </button>
         {{else}}
@@ -137,7 +137,7 @@ function pageMain() {
         <input type="text" name="nom" title="{{$litSel->_props.nom}}" value="{{$litSel->nom}}" />
         {{if $litSel->lit_id}}
         <button class="modify" type="submit">Modifier</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le lit',objName:'{{$litSel->nom|escape:"javascript"}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le lit',objName:'{{$litSel->nom|smarty:nodefaults|JSAttribute}}'})">
           Supprimer
         </button>
         {{else}}

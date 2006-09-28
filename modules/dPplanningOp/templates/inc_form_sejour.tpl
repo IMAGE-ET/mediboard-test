@@ -248,7 +248,7 @@
   <td class="button" colspan="3">
   {{if $sejour->sejour_id}}
     <button class="modify" type="submit">Modifier</button>
-    <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|escape:"javascript"}}'});">
+    <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|smarty:nodefaults|JSAttribute}}'});">
       Supprimer
     </button>
     {{if $sejour->annule == "0"}}

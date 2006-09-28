@@ -96,7 +96,7 @@ function pageMain() {
           <td class="button" colspan="5">
             {{if $gestioncab->gestioncab_id}}
             <button class="modify" type="submit">Modifier</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la fiche',objName:'{{$gestioncab->_view|escape:"javascript"}}'})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la fiche',objName:'{{$gestioncab->_view|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
             {{else}}
