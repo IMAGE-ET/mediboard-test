@@ -44,6 +44,8 @@ class CFicheEi extends CMbObject {
   var $qualite_date_verification  = null;
   var $qualite_date_controle      = null;
   var $suite_even                 = null;
+  var $annulee                    = null;
+  var $remarques                  = null;
   
   // Object References
   var $_ref_user            = null;
@@ -83,6 +85,8 @@ class CFicheEi extends CMbObject {
       "commission"                   => "enum|non|oui|notNull",
       "deja_survenu"                 => "enum|non|oui",
       "degre_urgence"                => "enum|1|2|3|4",
+      "annulee"                      => "enum|0|1",
+      "remarques"                    => "text",
       //1ere Validation Qualité
       "valid_user_id"                => "ref",
       "date_validation"              => "dateTime",
@@ -94,8 +98,8 @@ class CFicheEi extends CMbObject {
       //2nde Validation Qualité
       "qualite_user_id"              => "ref",
       "qualite_date_validation"      => "dateTime",
-      "qualite_date_verification"    => "dateTime",
-      "qualite_date_controle"        => "dateTime"
+      "qualite_date_verification"    => "date",
+      "qualite_date_controle"        => "date"
     );
     $this->_props =& $props;
 
@@ -158,6 +162,7 @@ class CFicheEi extends CMbObject {
     }elseif(!$this->qualite_date_controle){
       $this->_etat_actuel = "Att. de Contrôle";
     }
+    $this->_view = str_pad($this->fiche_ei_id, 3, "0", STR_PAD_LEFT). " - ".substr($this->date_fiche,8,2)."/".substr($this->date_fiche,5,2)."/".substr($this->date_fiche,0,4);
   }
   
   function loadRefItems() {
@@ -178,13 +183,8 @@ class CFicheEi extends CMbObject {
   }
   
   function canDelete(&$msg, $oid = null) {
-    $this->load($this->fiche_ei_id);
-    if($this->date_validation){
-      $msg = "Il n'est pas possible de supprimer cette fiche d'EI.";
-      return false;
-    }else{
-      return true;
-    }
+    $msg = "Il n'est pas possible de supprimer une fiche d'EI.";
+    return false;
   }
 }
 ?>

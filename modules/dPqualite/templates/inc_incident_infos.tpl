@@ -1,10 +1,10 @@
         <tr>
           {{if !$fiche->valid_user_id}}
           <th colspan="2" class="title" style="color:#f00;">
-            Validation d'une fiche
+            Validation de la fiche {{$fiche->_view}}
           {{else}}
           <th colspan="2" class="title">
-            Visualisation d'une fiche
+            Visualisation de la fiche {{$fiche->_view}}
           {{/if}}
           </th>
         </tr>
@@ -83,20 +83,26 @@
         <tr>
           <th>Plainte prévisible</th>
           <td>
-            {{$fiche->plainte}}
+            {{tr}}{{$fiche->plainte}}{{/tr}}
           </td>
         </tr>
         <tr>
           <th>Commission concialition</th>
           <td>
-            {{$fiche->commission}}
+            {{tr}}{{$fiche->commission}}{{/tr}}
+          </td>
+        </tr>
+        <tr>
+          <th>Suite de l'évènement</th>
+          <td>
+            {{tr}}{{$fiche->suite_even}}{{/tr}}
           </td>
         </tr>
         <tr>
           <th>Evénement déjà survenu à<br /> la connaissance de l'auteur</th>
           <td>
             {{if $fiche->deja_survenu!==null}}
-              {{$fiche->deja_survenu}}
+              {{tr}}{{$fiche->deja_survenu}}{{/tr}}
             {{else}}
               Ne sais pas
             {{/if}}
@@ -105,7 +111,7 @@
         <tr>
           <th colspan="2" class="category">Validation de la Fiche</th>
         </tr>
-        {{if $fiche->valid_user_id}}
+        {{if $fiche->date_validation}}
         <tr>
           <th>Degré d'Urgence</th>
           <td>{{$fiche->degre_urgence}}</td>
@@ -130,7 +136,7 @@
           <th colspan="2" class="category">Validation du Chef de Service</th>
         </tr>
         <tr>
-          <th>Validée par</th>
+          <th>Mesures Prises par</th>
           <td>
             {{$fiche->_ref_service_valid->_view}}
             <br />le {{$fiche->service_date_validation|date_format:"%d %b %Y à %Hh%M"}}
@@ -160,13 +166,13 @@
         {{if $fiche->qualite_date_verification}}
         <tr>
           <th>Vérifié le</th>
-          <td>{{$fiche->qualite_date_verification|date_format:"%d %b %Y à %Hh%M"}}</td>
+          <td>{{$fiche->qualite_date_verification|date_format:"%d %b %Y"}}</td>
         </tr>
         {{/if}}
         {{if $fiche->qualite_date_controle}}
         <tr>
           <th>Contrôlé le</th>
-          <td>{{$fiche->qualite_date_controle|date_format:"%d %b %Y à %Hh%M"}}</td>
+          <td>{{$fiche->qualite_date_controle|date_format:"%d %b %Y"}}</td>
         </tr>
         {{/if}}
         {{/if}}

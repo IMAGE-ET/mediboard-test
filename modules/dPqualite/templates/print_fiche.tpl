@@ -1,4 +1,14 @@
+    </td>
+  </tr>
+</table>
 <table class="form" id="admission">
+  <tr>
+    <td>
+      <div style="float:right;">
+      {{$fiche->_view}}
+      </div>
+    </td>
+  </tr>
   <tr>
     <td>
       <table width="100%" style="font-size: 110%;padding-bottom: 10px;">
@@ -104,62 +114,69 @@
           <td class="text">{{$fiche->autre|nl2br}}</td>
         </tr>
         {{/if}}
-        {{if $fiche->descr_faits}}
         <tr>
           <th>Description des faits</th>
           <td class="text">{{$fiche->descr_faits|nl2br}}</td>
         </tr>
-        {{/if}}
-        {{if $fiche->mesures}}
         <tr>
           <th>Mesures Prises</th>
           <td class="text">{{$fiche->mesures|nl2br}}</td>
         </tr>
-        {{/if}}
-        {{if $fiche->descr_consequences}}
         <tr>
           <th>Description des conséquences</th>
           <td class="text">{{$fiche->descr_consequences|nl2br}}</td>
         </tr>
-        {{/if}}
         <tr>
           <th>Gravité estimée</th>
           <td>
-            {{if $fiche->gravite==2}}    Importante
-            {{elseif $fiche->gravite==1}}Modérée
-            {{else}}                     Nulle
-            {{/if}}
+            {{tr}}{{$fiche->gravite}}{{/tr}}
           </td>
         </tr>
         <tr>
           <th>Plainte prévisible</th>
           <td class="greedyPane">
-            {{if $fiche->plainte}} Oui
-            {{else}}               Non
-            {{/if}}
+            {{tr}}{{$fiche->plainte}}{{/tr}}
           </td>
         </tr>
         <tr>
           <th>Commission concialition</th>
           <td>
-            {{if $fiche->commission}} Oui
-            {{else}}               Non
-            {{/if}}
+            {{tr}}{{$fiche->commission}}{{/tr}}
+          </td>
+        </tr>
+        <tr>
+          <th>Suite de l'évènement</th>
+          <td>
+            {{tr}}{{$fiche->suite_even}}{{/tr}}
           </td>
         </tr>
         <tr>
           <th>Evénement déjà survenu à la connaissance de l'auteur</th>
           <td>
             {{if $fiche->deja_survenu!==null}}
-              {{if $fiche->deja_survenu}} Oui
-              {{else}}                    Non
-              {{/if}}
-            {{else}}                      Ne sais pas
+              {{tr}}{{$fiche->deja_survenu}}{{/tr}}
+            {{else}}
+              Ne sais pas
             {{/if}}
           </td>
         </tr>
       </table>
-      <table width="100%" style="font-size: 100%;">
+    </td>
+  </tr>
+</table>
+
+<br style="page-break-after: always;" />
+<table class="form" id="admission">      
+  <tr>
+    <td>
+      <div style="float:right;">
+      {{$fiche->_view}}
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table width="100%" style="font-size: 100%;padding-bottom:20px;">
         <tr>
           <th class="category" colspan="4">
             Validation de la Fiche
@@ -169,12 +186,99 @@
           <th>Degré d'Urgence</th>
           <td>{{$fiche->degre_urgence}}</td>
           <th>Validée par</th>
-          <td>
+          <td class="text">
             {{$fiche->_ref_user_valid->_view}}
             <br />le {{$fiche->date_validation|date_format:"%d %b %Y à %Hh%M"}}
           </td>
         </tr>
+        <tr>
+          <td colspan="2"></td>
+          <th>Transmise à</th>
+          <td class="text">
+            {{$fiche->_ref_service_valid->_view}}
+          </td>
+        </tr>
+      </table>
+      
+      <table width="100%" style="font-size: 100%;">
+        <tr>
+          <th class="category" colspan="2">
+            Validation du Chef de Service
+          </th>
+        </tr>
+        {{if $fiche->service_date_validation}}
+        <tr>
+          <th>Mesures Prises par</th>
+          <td>
+            {{$fiche->_ref_service_valid->_view}}
+            <br />le {{$fiche->service_date_validation|date_format:"%d %b %Y à %Hh%M"}}
+          </td>
+        </tr>
+        <tr>
+          <th>Actions mises en place</th>
+          <td class="text">{{$fiche->service_actions|nl2br}}</td>
+        </tr>
+        <tr>
+          <th>Description des conséquences</th>
+          <td class="text">{{$fiche->service_descr_consequences|nl2br}}</td>
+        </tr>
+        {{else}}
+        <tr>
+          <td colspan="2">
+            Aucune Mesures Prises actuellement
+          </td>
+        </tr>
+        {{/if}}
+      
+        {{if $fiche->service_date_validation}}
+        <tr>
+          <td colspan="2" style="padding-bottom:20px;"></td>
+        </tr>
+        <tr>
+          <th class="category" colspan="2">
+            Validation du Service Qualité
+          </th>
+        </tr>
+        {{if $fiche->qualite_date_validation}}
+        <tr>
+          <th>Validée par</th>
+          <td>
+           {{$fiche->_ref_qualite_valid->_view}}
+            <br />le {{$fiche->qualite_date_validation|date_format:"%d %b %Y à %Hh%M"}}
+          </td>
+        </tr>
+        <tr>
+          <th>Vérification</th>
+          <td>
+            {{if $fiche->qualite_date_verification}}
+              le {{$fiche->qualite_date_verification|date_format:"%d %B %Y"}}
+            {{else}}
+            Actions Non Vérifiées
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <th>Contrôle</th>
+          <td>
+            {{if $fiche->qualite_date_controle}}
+              le {{$fiche->qualite_date_controle|date_format:"%d %B %Y"}}            
+            {{else}}
+            Actions Non Contrôlées
+            {{/if}}          
+          </td>
+        </tr>
+        {{else}}
+        <tr>
+          <td colspan="2">
+            Ces mesures n'ont pas encore été validées
+          </td>
+        </tr>
+        {{/if}}
+        {{/if}}
       </table>
     </td>
   </tr>
-</table>    
+</table>
+<table class="main">
+  <tr>
+    <td>

@@ -27,7 +27,6 @@ class CDoFicheEiAddEdit extends CDoObjectAddEdit {
     if(!$_validation){
       // Pas de $_validation ==> pas d'edition de la fiche
       
-      
       if(!$this->_objBefore->fiche_ei_id){
         // Nouvelle fiche
         $this->_obj->date_fiche = mbDateTime();
@@ -47,7 +46,7 @@ class CDoFicheEiAddEdit extends CDoObjectAddEdit {
       
     }else{
       // Edition de la fiche ==> Redirection a faire
-      $this->redirectStore = "index.php?m=$m&tab=vw_incidentvalid&fiche_ei_id=".$this->_obj->fiche_ei_id;
+      $this->redirectStore = "m=$m&tab=vw_incidentvalid&fiche_ei_id=".$this->_obj->fiche_ei_id;
     }
     parent::doStore();
   }
