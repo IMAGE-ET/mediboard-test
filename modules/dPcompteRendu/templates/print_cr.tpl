@@ -2,7 +2,7 @@
     </td>
   </tr>
 </table>
-{{$cr}}
+{{$cr|smarty:nodefaults}}
 <table class="main">
   <tr>
     <td>

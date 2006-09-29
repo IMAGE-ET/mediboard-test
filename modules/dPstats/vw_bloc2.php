@@ -45,7 +45,6 @@ foreach($listPlages as $keyPlage => $curr_plage) {
     $listPlages[$keyPlage]->_ref_operations[$keyOp]->_rank_reel = $i;
     $i++;
     $next = next($listPlages[$keyPlage]->_ref_operations);
-    //prev($listPlages[$keyPlage]->_ref_operations);
     if($next !== false) {
       $listPlages[$keyPlage]->_ref_operations[$keyOp]->_pat_next = $next->entree_bloc;
     } else {

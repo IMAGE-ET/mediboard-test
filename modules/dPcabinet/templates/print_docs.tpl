@@ -5,7 +5,7 @@
   </tr>
 </table>
 {{foreach from=$documents item=curr_doc}}
-  {{$curr_doc->source}}
+  {{$curr_doc->source|smarty:nodefaults}}
   <br style="page-break-after: always;" />
 {{/foreach}}
 <table class="main">
