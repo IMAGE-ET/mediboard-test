@@ -44,6 +44,10 @@ function pageMain() {
           </td>
           <td>{{$curr_op->cote}}</td>
           <td class="text">
+            {{if $curr_op->libelle}}
+              <em>[{{$curr_op->libelle}}]</em>
+              <br />
+            {{/if}}
             {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
               <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
             {{/foreach}}

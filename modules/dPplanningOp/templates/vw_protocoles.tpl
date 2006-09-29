@@ -102,6 +102,10 @@ function setClose(protocole_id) {
                 {{/foreach}}
               </strong>
             </a>
+            {{if $curr_protocole->libelle}}
+              <em>[{{$curr_protocole->libelle}}]</em>
+              <br />
+            {{/if}}
             {{foreach from=$curr_protocole->_ext_codes_ccam item=curr_code}}
             {{$curr_code->libelleLong}} <br />
             {{/foreach}}
@@ -124,6 +128,13 @@ function setClose(protocole_id) {
           <th>Chirurgien :</th>
           <td colspan="3"><strong>{{$protSel->_ref_chir->_view}}</strong></td>
         </tr>
+
+        {{if $curr_operation->libelle}}
+        <tr>
+          <th>Libellé :</th>
+          <td><em>{{$protSel->libelle}}</em></td>
+        </tr>
+        {{/if}}
 
         <tr>
           <th>Acte Médical :</th>

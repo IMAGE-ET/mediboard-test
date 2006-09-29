@@ -16,6 +16,13 @@
     <td>{{$admission->_ref_plageop->_day}}/{{$admission->_ref_plageop->_month}}/{{$admission->_ref_plageop->_year}}</td>
   </tr>
   
+  {{if $admission->libelle}}
+  <tr>
+    <th>Libellé :</th>
+    <td class="text">{{$admission->libelle}}</td>
+  </tr>
+  {{/if}}
+  
   {{foreach from=$admission->_ext_codes_ccam item=curr_acte}}
   <tr>
     <th>Acte médical :</th>

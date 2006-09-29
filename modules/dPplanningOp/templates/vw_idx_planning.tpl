@@ -132,6 +132,10 @@ function pageMain() {
           </td>
           <td class="text">
             <a href="index.php?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->operation_id}}">
+              {{if $curr_op->libelle}}
+                <em>[{{$curr_op->libelle}}]</em>
+                <br />
+              {{/if}}
               {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
               <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
               {{/foreach}}
@@ -209,6 +213,10 @@ function pageMain() {
           </td>
           <td class="text">
             <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+              {{if $curr_op->libelle}}
+                <em>[{{$curr_op->libelle}}]</em>
+                <br />
+              {{/if}}
               {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
               <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
               {{/foreach}}

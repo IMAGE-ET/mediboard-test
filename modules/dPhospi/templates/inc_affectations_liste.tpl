@@ -52,9 +52,13 @@
       <tr>
         <td class="date" colspan="2">
           {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
-          {{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
-          <em>{{$curr_code->code}}</em> : {{$curr_code->libelleLong}}<br />
-          {{/foreach}}
+            {{if $curr_operation->libelle}}
+              <em>[{{$curr_operation->libelle}}]</em>
+              <br />
+            {{/if}}
+            {{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
+              <em>{{$curr_code->code}}</em> : {{$curr_code->libelleLong}}<br />
+            {{/foreach}}
           {{/foreach}}
         </td>
       </tr>

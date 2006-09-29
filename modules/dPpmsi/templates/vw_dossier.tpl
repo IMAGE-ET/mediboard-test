@@ -196,6 +196,11 @@ function pageMain() {
             &mdash; {{$curr_op->_ref_salle->nom}}
           </th>
         </tr>
+        {{if $curr_op->libelle}}
+        <tr>
+          <th>Libellé</th>
+          <td class="text"><em>{{$curr_op->libelle}}</em></td>
+        {{/if}}
         {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
         <tr>
           <th>{{$curr_code->code}}</th>

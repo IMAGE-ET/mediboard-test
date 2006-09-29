@@ -95,6 +95,10 @@ function pageMain() {
         <tr>
           <td></td>
           <td>
+            {{if $curr_oper->libelle}}
+              <em>[{{$curr_oper->libelle}}]</em>
+              <br />
+            {{/if}}
             {{foreach from=$curr_oper->_ext_codes_ccam item=curr_code}}
               <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
             {{/foreach}}

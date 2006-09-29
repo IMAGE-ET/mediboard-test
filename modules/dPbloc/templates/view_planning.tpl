@@ -59,9 +59,13 @@ function printAdmission(id) {
 		  <td>{{$curr_op->time_operation|date_format:"%Hh%M"}}</td>
 		  {{/if}}
 		  <td class="text">
+        {{if $curr_op->libelle}}
+        <em>[{{$curr_op->libelle}}]</em>
+        <br />
+        {{/if}}
         {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
         {{if !$curr_code->_code7}}<strong>{{/if}}
-        {{$curr_code->libelleLong|truncate:80:"...":false}}
+        {{$curr_code->libelleLong|truncate:60:"...":false}}
         <em>({{$curr_code->code}})</em>
         {{if !$curr_code->_code7}}</strong>{{/if}}
         <br/>

@@ -39,6 +39,9 @@
           
             Intervention le <strong>{{$consult_anesth->_ref_operation->_ref_plageop->date|date_format:"%a %d %b %Y"}}</strong>
             <ul>
+              {{if $consult_anesth->_ref_operation->libelle}}
+                <li><em>[{{$consult_anesth->_ref_operation->libelle}}]</em></li>
+              {{/if}}
               {{foreach from=$consult_anesth->_ref_operation->_ext_codes_ccam item=curr_code}}
               <li><em>{{$curr_code->libelleLong}}</em> ({{$curr_code->code}}) (coté {{$consult_anesth->_ref_operation->cote}})</li>
               {{/foreach}}

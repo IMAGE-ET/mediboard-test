@@ -343,10 +343,6 @@ class COperation extends CMbObject {
     }
     $ext_code_ccam =& $this->_ext_codes_ccam[0];
     $code_ccam = @$this->_codes_ccam[0];
-    if ($this->libelle !== null && $this->libelle != "") {
-      $ext_code_ccam->libelleCourt = "<em>[$this->libelle]</em><br />".$ext_code_ccam->libelleCourt;
-      $ext_code_ccam ->libelleLong = "<em>[$this->libelle]</em><br />".$ext_code_ccam->libelleLong;
-    }
   }
   
   function loadRefsConsultAnesth() {

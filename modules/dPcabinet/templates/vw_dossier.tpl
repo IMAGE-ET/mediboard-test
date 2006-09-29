@@ -196,6 +196,9 @@ function printDocument(doc_id) {
             <th>Actes Médicaux :</th>
             <td class="text">
               <ul>
+                {{if $curr_op->libelle}}
+                <li><em>[{{$curr_op->libelle}}]</em></li>
+                {{/if}}
                 {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
                 <li><strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}</li>
                 {{/foreach}}

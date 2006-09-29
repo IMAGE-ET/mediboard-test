@@ -14,10 +14,13 @@
       <input type="radio" name="_operation_id" value="{{$curr_op->operation_id}}" />
       Intervention le {{$curr_op->_datetime|date_format:"%d/%m/%Y"}}
       avec le Dr. {{$curr_op->_ref_chir->_view}}
-      {{if $curr_op->_ext_codes_ccam|@count}}
+      {{if $curr_op->_ext_codes_ccam|@count || $curr_op->libelle}}
       <ul>
+        {{if $curr_op->libelle}}
+        <li><em>[{{$curr_op->libelle}}]</em></li>
+        {{/if}}
         {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-        <li><i>{{$curr_code->libelleLong}}</i></li>
+        <li>{{$curr_code->libelleLong}}</li>
         {{/foreach}}
       </ul>
       {{/if}}

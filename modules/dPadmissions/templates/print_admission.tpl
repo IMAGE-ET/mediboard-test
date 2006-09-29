@@ -160,6 +160,13 @@
     <th>Bilan pré-opératoire :</th>
     <td class="text">{{$curr_op->examen}}</td>
   </tr>
+  
+  {{if $curr_op->libelle}}
+  <tr>
+    <th>Libellé :</th>
+    <td class="text">{{$curr_op->libelle}}</td>
+  </tr>
+  {{/if}}
 
   {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
   <tr>

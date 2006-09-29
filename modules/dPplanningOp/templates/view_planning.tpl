@@ -93,6 +93,13 @@
     <td>le {{$operation->_datetime|date_format:"%A %d/%m/%Y"}}</td>
   </tr>
 
+  {{if $operation->libelle}}
+  <tr>
+    <th>Libellé </th>
+    <td class="text"><em>{{$operation->libelle}}</em></td>
+  </tr>
+  {{/if}}
+
   <tr>
     <th>Actes médicaux </th>
     <td class="text">

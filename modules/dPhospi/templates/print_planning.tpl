@@ -82,8 +82,12 @@ function printAdmission(id) {
           </td>
           <td class="text">
             {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
+              {{if $curr_operation->libelle}}
+                <em>[{{$curr_operation->libelle}}]</em>
+                <br />
+              {{/if}}
               {{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
-              {{$curr_code->libelleLong|truncate:80:"...":false}} <em>({{$curr_code->code}})</em>
+                {{$curr_code->libelleLong|truncate:60:"...":false}} <em>({{$curr_code->code}})</em>
               {{/foreach}}
               <br />
             {{/foreach}}

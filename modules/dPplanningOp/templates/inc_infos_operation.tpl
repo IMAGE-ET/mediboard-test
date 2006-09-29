@@ -25,6 +25,10 @@
 	</td>
     {{else}}
     <td class="text">
+      {{if $curr_operation->libelle}}
+      <em>[{{$curr_operation->libelle}}]</em>
+      <br />
+      {{/if}}
       {{foreach from=$curr_operation->_ext_codes_ccam item=curr_ext_code}}
       <strong>{{$curr_ext_code->code}}</strong> :
       {{$curr_ext_code->libelleLong}}

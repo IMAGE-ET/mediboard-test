@@ -2,6 +2,9 @@
   <em>[{{$selOp->libelle}}]</em>
 {{/if}}
 <ul>
+  {{if $selOp->libelle}}
+  <li><em>[{{$selOp->libelle}}]</em></li>
+  {{/if}}
   {{foreach from=$selOp->_ext_codes_ccam item=curr_code key=curr_key}}
   <li>
     <strong>{{$curr_code->libelleLong}}</strong> 
