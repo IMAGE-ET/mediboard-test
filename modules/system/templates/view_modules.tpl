@@ -96,7 +96,7 @@
     <td>{{$module.mod_ui_order}}</td>
   </tr>
   {{/foreach}}
-  {{foreach from=$modFiles item=module}}
+  {{foreach from=$modFiles|smarty:nodefaults item=module}}
   <tr>
     <td></td>
     <td>{{$module}}</td>

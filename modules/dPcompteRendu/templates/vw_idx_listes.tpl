@@ -1,4 +1,5 @@
 <!--  $Id$ -->
+
 <script type="text/javascript">
 
 function pageMain() {
@@ -193,14 +194,14 @@ function pageMain() {
     <table class="form">
       {{if $liste->_valeurs|@count}}
       <tr><th class="category" colspan="2">Choix diponibles</th></tr>
-      {{foreach from=$liste->_valeurs item=curr_valeur}}
+      {{foreach from=$liste->_valeurs|smarty:nodefaults item=curr_valeur}}
       <tr><td>{{$curr_valeur}}</td>
         <td>
           <form name="delFrm{{$liste->liste_choix_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
           <input type="hidden" name="dosql" value="do_liste_aed" />
           <input type="hidden" name="liste_choix_id" value="{{$liste->liste_choix_id}}" />
           <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="valeurs" value="{{$liste->valeurs|smarty:nodefaults|JSAttribute}}" />
+          <input type="hidden" name="valeurs" value="{{$liste->valeurs}}" />
           <input type="hidden" name="chir_id" value="{{$liste->chir_id}}" />
           <input type="hidden" name="function_id" value="{{$liste->function_id}}" />
           <input type="hidden" name="_del" value="{{$curr_valeur}}" />
@@ -216,7 +217,7 @@ function pageMain() {
         <input type="hidden" name="dosql" value="do_liste_aed" />
         <input type="hidden" name="liste_choix_id" value="{{$liste->liste_choix_id}}" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="valeurs" value="{{$liste->valeurs|smarty:nodefaults|JSAttribute}}" />
+        <input type="hidden" name="valeurs" value="{{$liste->valeurs}}" />
         <input type="hidden" name="chir_id" value="{{$liste->chir_id}}" />
         <input type="hidden" name="function_id" value="{{$liste->function_id}}" />
         <input type="text" name="_new" value="" />

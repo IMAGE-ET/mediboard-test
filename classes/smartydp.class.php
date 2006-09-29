@@ -34,7 +34,7 @@ function smarty_modifier_cleanField($string){
   if (!is_scalar($string)) {
     return $string;
   }else {
-    return htmlspecialchars($string);
+    return htmlspecialchars($string,ENT_QUOTES);
   }
 }
 

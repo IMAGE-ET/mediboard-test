@@ -197,8 +197,8 @@ function pageMain() {
             <button type="button" style="float:right;" onclick="setObject( {
               objClass: 'CSejour', 
               keywords: '', 
-              id: {{$curr_sejour->sejour_id}}, 
-              view:'{{$curr_sejour->_view}}'} )">
+              id: {{$curr_sejour->sejour_id|smarty:nodefaults|JSAttribute}}, 
+              view:'{{$curr_sejour->_view|smarty:nodefaults|JSAttribute}}'} )">
               {{$curr_sejour->_ref_files|@count}} fichier(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
             </button>
@@ -214,8 +214,8 @@ function pageMain() {
             <button type="button" style="float:right;" onclick="setObject( {
               objClass: 'COperation', 
               keywords: '', 
-              id: {{$curr_op->operation_id}}, 
-              view:'{{$curr_op->_view}}'} )">
+              id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
+              view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )">
               {{$curr_op->_ref_files|@count}} fichier(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
             </button>
@@ -236,8 +236,8 @@ function pageMain() {
             <button type="button" style="float:right;" onclick="setObject( {
               objClass: 'CConsultation', 
               keywords: '', 
-              id: {{$curr_consult->consultation_id}}, 
-              view: '{{$curr_consult->_view}}'} )">
+              id: {{$curr_consult->consultation_id|smarty:nodefaults|JSAttribute}}, 
+              view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
               {{$curr_consult->_ref_files|@count}} fichier(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
             </button>

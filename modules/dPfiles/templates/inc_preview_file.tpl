@@ -8,7 +8,7 @@
     
     {{if $file->_nb_pages && $file->_nb_pages>=2}}
       <select name="_num_page" onchange="javascript:ZoomFileAjax({{$file->file_id}},this.value);">
-      {{foreach from=$arrNumPages item=currPage}}
+      {{foreach from=$arrNumPages|smarty:nodefaults item=currPage}}
       <option value="{{$currPage-1}}" {{if $currPage-1==$sfn}}selected="selected" {{/if}}>
       Page {{$currPage}} / {{$file->_nb_pages}}
       </option>

@@ -109,7 +109,7 @@ function newExam(sAction, consultation_id) {
         <li>
           Dr. {{$curr_op->_ref_chir->_view}}
           &mdash; {{$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}}
-          {{foreach from=$curr_op->_codes_ccam item=curr_code}}
+          {{foreach from=$curr_op->_codes_ccam|smarty:nodefaults item=curr_code}}
             <br />
             {{$curr_code}}
           {{/foreach}}

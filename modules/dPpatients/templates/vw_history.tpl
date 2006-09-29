@@ -16,7 +16,7 @@
     <td>{{$curr_object->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
     <td>{{$curr_object->type}}</td>
     <td>
-      {{foreach from=$curr_object->_fields item=curr_field}}
+      {{foreach from=$curr_object->_fields|smarty:nodefaults item=curr_field}}
       {{$curr_field}}<br />
       {{/foreach}}
     </td>
@@ -42,7 +42,7 @@
     <td>{{$curr_log->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
     <td>{{$curr_log->type}}</td>
     <td>
-      {{foreach from=$curr_log->_fields item=curr_field}}
+      {{foreach from=$curr_log->_fields|smarty:nodefaults item=curr_field}}
       {{$curr_field}}<br />
       {{/foreach}}
     </td>
@@ -70,7 +70,7 @@
     <td>{{$curr_log->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
     <td>{{$curr_log->type}}</td>
     <td>
-      {{foreach from=$curr_log->_fields item=curr_field}}
+      {{foreach from=$curr_log->_fields|smarty:nodefaults item=curr_field}}
       {{$curr_field}}<br />
       {{/foreach}}
     </td>
@@ -88,7 +88,7 @@
     <td>{{$curr_log->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
     <td>{{$curr_log->type}}</td>
     <td>
-      {{foreach from=$curr_log->_fields item=curr_field}}
+      {{foreach from=$curr_log->_fields|smarty:nodefaults item=curr_field}}
       {{$curr_field}}<br />
       {{/foreach}}
     </td>
@@ -107,7 +107,7 @@
     <td>{{$curr_log->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
     <td>{{$curr_log->type}}</td>
     <td>
-      {{foreach from=$curr_log->_fields item=curr_field}}
+      {{foreach from=$curr_log->_fields|smarty:nodefaults item=curr_field}}
       {{$curr_field}}<br />
       {{/foreach}}
     </td>

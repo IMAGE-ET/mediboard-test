@@ -55,7 +55,7 @@
             {{else}}
             <select name="class">
             <option value="">&mdash; Toutes</option>
-            {{foreach from=$listClass item=curr_listClass}}
+            {{foreach from=$listClass|smarty:nodefaults item=curr_listClass}}
             <option value="{{$curr_listClass}}"{{if $category->class==$curr_listClass}} selected="selected"{{/if}}>{{$curr_listClass}}</option>
             {{/foreach}}
             </select>

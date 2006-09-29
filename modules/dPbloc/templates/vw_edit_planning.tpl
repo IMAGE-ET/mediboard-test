@@ -43,15 +43,15 @@ function popPlanning(debut) {
       <table id="planningBloc">
         <tr>
           <th><strong>{{$date|date_format:"%a %d %b"}}</strong></th>
-          {{foreach from=$listHours item=curr_hours}}
+          {{foreach from=$listHours|smarty:nodefaults item=curr_hours}}
           <th colspan="4" class="heure">{{$curr_hours}}:00</th>
           {{/foreach}}         
         </tr>
         {{foreach from=$listSalles item=curr_salle key=keySalle}}
         <tr>
           <td class="salle">{{$curr_salle->nom}}</td>
-          {{foreach from=$listHours item=curr_hour}}
-          {{foreach from=$listMins item=curr_min key=keymin}}
+          {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
+          {{foreach from=$listMins|smarty:nodefaults item=curr_min key=keymin}}
             {{assign var="keyAff" value="$keySalle-$curr_hour:$curr_min"}}
             
             {{if is_string($arrayAffichage.$keyAff) &&  $arrayAffichage.$keyAff== "empty"}}
@@ -157,7 +157,7 @@ function popPlanning(debut) {
         <th><label for="_heuredeb" title="Heure de début de la plage. Obligatoire">Début</label></th>
         <td>
           <select name="_heuredeb" title="notNull|num">
-          {{foreach from=$listHours item=heure}}
+          {{foreach from=$listHours|smarty:nodefaults item=heure}}
             <option {{if $plagesel->_heuredeb == $heure}} selected="selected" {{/if}} >
               {{$heure|string_format:"%02d"}}
             </option>
@@ -165,7 +165,7 @@ function popPlanning(debut) {
           </select>
           :
           <select name="_minutedeb">
-          {{foreach from=$listMins item=minute}}
+          {{foreach from=$listMins|smarty:nodefaults item=minute}}
             <option {{if $plagesel->_minutedeb == $minute}} selected="selected" {{/if}} >
               {{$minute|string_format:"%02d"}}
             </option>
@@ -201,7 +201,7 @@ function popPlanning(debut) {
         <th><label for="_heurefin" title="Heure de fin de la plage. Obligatoire">Fin</label></th>
         <td>
           <select name="_heurefin" title="notNull|num">
-            {{foreach from=$listHours item=heure}}
+            {{foreach from=$listHours|smarty:nodefaults item=heure}}
             <option {{if $plagesel->_heurefin == $heure}} selected="selected" {{/if}} >
               {{$heure|string_format:"%02d"}}
             </option>
@@ -209,7 +209,7 @@ function popPlanning(debut) {
           </select>
           :
           <select name="_minutefin">
-            {{foreach from=$listMins item=minute}}
+            {{foreach from=$listMins|smarty:nodefaults item=minute}}
             <option {{if $plagesel->_minutefin == $minute}} selected="selected" {{/if}} >
               {{$minute|string_format:"%02d"}}
             </option>

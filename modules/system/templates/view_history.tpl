@@ -31,7 +31,7 @@
     <td>
       <select name="object_class" title="str|maxLength|25">
         <option value="0">&mdash; Toutes les classes</option>
-        {{foreach from=$listClasses item=curr_class}}
+        {{foreach from=$listClasses|smarty:nodefaults item=curr_class}}
         <option value="{{$curr_class}}" {{if $curr_class == $object_class}}selected="selected"{{/if}}>
           {{$curr_class}}
         </option>
@@ -90,7 +90,7 @@
     <td>{{$curr_object->date|date_format:"%d/%m/%Y à %Hh%M (%A)"}}</td>
     <td>{{$curr_object->type}}</td>
     <td>
-      {{foreach from=$curr_object->_fields item=curr_field}}
+      {{foreach from=$curr_object->_fields|smarty:nodefaults item=curr_field}}
       {{$curr_field}}<br />
       {{/foreach}}
     </td>

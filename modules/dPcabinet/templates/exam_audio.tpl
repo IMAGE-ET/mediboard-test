@@ -57,42 +57,42 @@
         </tr>
         <tr>
           <th>Conduction aérienne</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <td><input type="text" name="_droite_aerien[{{$index}}]" title="num|minMax|-10|120" value="{{$exam_audio->_droite_aerien.$index}}" tabindex="{{$index+110}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>
         
         <tr>
           <th>Conduction osseuse</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <td><input type="text" name="_droite_osseux[{{$index}}]" title="num|minMax|-10|120" value="{{$exam_audio->_droite_osseux.$index}}" tabindex="{{$index+120}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>
   
         <tr>
           <th>stapédien ipsilatéral</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <td><input type="text" name="_droite_ipslat[{{$index}}]" title="num|minMax|-10|120" value="{{$exam_audio->_droite_ipslat.$index}}" tabindex="{{$index+130}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>
   
         <tr>
           <th>stapédien controlatéral</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <td><input type="text" name="_droite_conlat[{{$index}}]" title="num|minMax|-10|120" value="{{$exam_audio->_droite_conlat.$index}}" tabindex="{{$index+140}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>
   
         <tr>
           <th>pas de réponse</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <td><input type="text" name="_droite_pasrep[{{$index}}]" title="num|minMax|-10|120" value="{{$exam_audio->_droite_pasrep.$index}}" tabindex="{{$index+150}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>
   
         <tr>
           <th class="category">Fréquences</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <th class="category">
             {{$frequence}}
           </th>
@@ -103,35 +103,35 @@
         </tr>
         <tr>
           <th>Conduction aérienne</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <td><input type="text" name="_gauche_aerien[{{$index}}]" title="num|minMax|-10|120" value="{{$exam_audio->_gauche_aerien.$index}}" tabindex="{{$index+10}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>
         
         <tr>
           <th>Conduction osseuse</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <td><input type="text" name="_gauche_osseux[{{$index}}]" title="num|minMax|-10|120" value="{{$exam_audio->_gauche_osseux.$index}}" tabindex="{{$index+20}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>
   
         <tr>
           <th>Stapédien ipsilatéral</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <td><input type="text" name="_gauche_ipslat[{{$index}}]" title="num|minMax|-10|120" value="{{$exam_audio->_gauche_ipslat.$index}}" tabindex="{{$index+30}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>
   
         <tr>
           <th>Stapédien controlatéral</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <td><input type="text" name="_gauche_conlat[{{$index}}]" title="num|minMax|-10|120" value="{{$exam_audio->_gauche_conlat.$index}}" tabindex="{{$index+40}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>
   
         <tr>
           <th>Pas de réponse</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <td><input type="text" name="_gauche_pasrep[{{$index}}]" title="num|minMax|-10|120" value="{{$exam_audio->_gauche_pasrep.$index}}" tabindex="{{$index+50}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>
@@ -284,7 +284,7 @@
       <tbody id="dataVocal">
         <tr>
           <th class="category">Audiométrie vocale</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <th class="category">
             Point #{{$index}}<br />dB / %
           </th>
@@ -292,7 +292,7 @@
         </tr>
         <tr>
           <th>Oreille droite</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <td>
             <input type="text" name="_droite_vocale[{{$index}}][0]" title="num|minMax|0|120" value="{{$exam_audio->_droite_vocale.$index.0}}" tabindex="{{$index*2+220}}" size="1" maxlength="3" />
             <input type="text" name="_droite_vocale[{{$index}}][1]" title="num|minMax|0|100" value="{{$exam_audio->_droite_vocale.$index.1}}" tabindex="{{$index*2+221}}" size="1" maxlength="3" />
@@ -301,7 +301,7 @@
         </tr>
         <tr>
           <th>Oreille gauche</th>
-          {{foreach from=$frequences key=index item=frequence}}
+          {{foreach from=$frequences|smarty:nodefaults key=index item=frequence}}
           <td>
             <input type="text" name="_gauche_vocale[{{$index}}][0]" title="num|minMax|0|120" value="{{$exam_audio->_gauche_vocale.$index.0}}" tabindex="{{$index*2+200}}" size="1" maxlength="3" />
             <input type="text" name="_gauche_vocale[{{$index}}][1]" title="num|minMax|0|100" value="{{$exam_audio->_gauche_vocale.$index.1}}" tabindex="{{$index*2+201}}" size="1" maxlength="3" />
@@ -311,7 +311,7 @@
   
         <tr>
           <th class="category">Tympanométrie</th>
-          {{foreach from=$pressions item=pression}}
+          {{foreach from=$pressions|smarty:nodefaults item=pression}}
           <th class="category">
             {{$pression}} mm H²O
           </th>
@@ -319,13 +319,13 @@
         </tr>
         <tr>
           <th>Oreille droite</th>
-          {{foreach from=$pressions key=index item=pression}}
+          {{foreach from=$pressions|smarty:nodefaults key=index item=pression}}
           <td><input type="text" name="_droite_tympan[{{$index}}]" title="num|minMax|-10|120" value="{{$exam_audio->_droite_tympan.$index}}" tabindex="{{$index+310}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>
         <tr>
           <th>Oreille gauche</th>
-          {{foreach from=$pressions key=index item=pression}}
+          {{foreach from=$pressions|smarty:nodefaults key=index item=pression}}
           <td><input type="text" name="_gauche_tympan[{{$index}}]" title="num|minMax|-10|120" value="{{$exam_audio->_gauche_tympan.$index}}" tabindex="{{$index+300}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>

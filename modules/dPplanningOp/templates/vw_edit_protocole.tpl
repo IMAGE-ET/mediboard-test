@@ -217,12 +217,12 @@ function pageMain() {
           </th>
           <td colspan="2">
             <select name="_hour_op" title="notNull|num|min|0">
-            {{foreach from=$hours key=key item=hour}}
+            {{foreach from=$hours|smarty:nodefaults key=key item=hour}}
               <option value="{{$key}}" {{if (!$protocole && $key == 1) || $protocole->_hour_op == $key}} selected="selected" {{/if}}>{{$key}}</option>
             {{/foreach}}
             </select> h 
             <select name="_min_op">
-            {{foreach from=$mins item=min}}
+            {{foreach from=$mins|smarty:nodefaults item=min}}
               <option value="{{$min}}" {{if (!$protocole && $min == 0) || $protocole->_min_op == $min}} selected="selected" {{/if}}>{{$min}}</option>
             {{/foreach}}
             </select> mn

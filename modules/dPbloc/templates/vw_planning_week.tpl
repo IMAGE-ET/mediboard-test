@@ -9,15 +9,15 @@
               <strong>{{$curr_day|date_format:"%a %d %b"}}</strong>
             </a>
           </th>
-          {{foreach from=$listHours item=curr_hours}}
+          {{foreach from=$listHours|smarty:nodefaults item=curr_hours}}
           <th colspan="4" class="heure">{{$curr_hours}}:00</th>
           {{/foreach}}         
         </tr>
         {{foreach from=$listSalles item=curr_salle key=keySalle}}
         <tr>
           <td class="salle">{{$curr_salle->nom}}</td>
-          {{foreach from=$listHours item=curr_hour}}
-          {{foreach from=$listMins item=curr_min key=keymin}}
+          {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
+          {{foreach from=$listMins|smarty:nodefaults item=curr_min key=keymin}}
             {{assign var="keyAff" value="$curr_day-s$keySalle-$curr_hour:$curr_min"}}
             
             {{if is_string($arrayAffichage.$keyAff) &&  $arrayAffichage.$keyAff== "empty"}}

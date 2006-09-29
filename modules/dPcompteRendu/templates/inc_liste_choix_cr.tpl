@@ -4,7 +4,7 @@
         <li>
           <select name="_liste{{$curr_list->liste_choix_id}}">
             <option value="undef">&mdash; {{$curr_list->nom}} &mdash;</option>
-            {{foreach from=$curr_list->_valeurs item=curr_valeur}}
+            {{foreach from=$curr_list->_valeurs|smarty:nodefaults item=curr_valeur}}
             <option>{{$curr_valeur}}</option>
             {{/foreach}}
           </select>

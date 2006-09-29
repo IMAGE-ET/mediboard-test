@@ -82,7 +82,7 @@ function pageMain() {
         <td>
           <select name="filter_class" onchange="this.form.submit()">
             <option value="0">&mdash; Tous les types d'objets</option>
-            {{foreach from=$classes key=class_name item=fields}}
+            {{foreach from=$classes|smarty:nodefaults key=class_name item=fields}}
             <option {{if $class_name == $filter_class}} selected="selected" {{/if}}>
               {{$class_name}}
             </option>

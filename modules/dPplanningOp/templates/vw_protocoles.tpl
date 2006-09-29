@@ -61,7 +61,7 @@ function setClose(protocole_id) {
           <td>
             <select name="code_ccam" onchange="this.form.submit()">
               <option value="" >&mdash; Tous les codes</option>
-              {{foreach from=$listCodes key=curr_code item=code_nomber}}
+              {{foreach from=$listCodes|smarty:nodefaults key=curr_code item=code_nomber}}
               <option value="{{$curr_code}}" {{if $code_ccam == $curr_code}} selected="selected" {{/if}}>
                 {{$curr_code}} ({{$code_nomber}})
               </option>

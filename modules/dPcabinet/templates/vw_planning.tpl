@@ -73,14 +73,14 @@ function pageMain() {
       <table id="weeklyPlanning">
         <tr>
           <th></th>
-          {{foreach from=$plages key=curr_day item=plagesPerDay}}
+          {{foreach from=$plages|smarty:nodefaults key=curr_day item=plagesPerDay}}
           <th>{{$curr_day|date_format:"%A %d"}}</th>
           {{/foreach}}
         </tr>       
-        {{foreach from=$listHours item=curr_hour}}
+        {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
         <tr>
           <th rowspan="4">{{$curr_hour}}h</th>
-          {{foreach from=$listMins item=curr_mins key=keyMins}}
+          {{foreach from=$listMins|smarty:nodefaults item=curr_mins key=keyMins}}
           {{if $keyMins}}
           </tr><tr>
           {{/if}}
@@ -164,14 +164,14 @@ function pageMain() {
       <tr>
         <th><label for="_hour_deb" title="Début de la plage de consultation">Début</label></th>
         <td><select name="_hour_deb" title="num|notNull">
-            {{foreach from=$listHours item=curr_hour}}
+            {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
               <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_deb}} selected="selected" {{/if}}>
                 {{$curr_hour|string_format:"%02d"}}
               </option>
             {{/foreach}}
             </select> h
           <select name="_min_deb">
-            {{foreach from=$listMins item=curr_min}}
+            {{foreach from=$listMins|smarty:nodefaults item=curr_min}}
               <option value="{{$curr_min|string_format:"%02d"}}" {{if $curr_min == $plageSel->_min_deb}} selected="selected" {{/if}}>
                 {{$curr_min|string_format:"%02d"}}
               </option>
@@ -182,7 +182,7 @@ function pageMain() {
         <td>
           <select name="date" title="{{$plageSel->_props.date}}">
             <option value="">&mdash; Choisir le jour de la semaine</option>
-            {{foreach from=$plages key=curr_day item=plagesPerDay}}
+            {{foreach from=$plages|smarty:nodefaults key=curr_day item=plagesPerDay}}
             <option value="{{$curr_day}}" {{if $curr_day == $plageSel->date}} selected="selected" {{/if}}>
               {{$curr_day|date_format:"%A"}}
             </option>
@@ -195,14 +195,14 @@ function pageMain() {
         <th><label for="_hour_fin" title="Fin de la plage de consultation">Fin</label></th>
         <td>
           <select name="_hour_fin" title="num|moreThan|_hour_deb|notNull">
-            {{foreach from=$listHours item=curr_hour}}
+            {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
               <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_fin}} selected="selected" {{/if}}>
                 {{$curr_hour|string_format:"%02d"}}
               </option>
             {{/foreach}}
           </select> h
           <select name="_min_fin">
-            {{foreach from=$listMins item=curr_min}}
+            {{foreach from=$listMins|smarty:nodefaults item=curr_min}}
               <option value="{{$curr_min|string_format:"%02d"}}" {{if $curr_min == $plageSel->_min_fin}} selected="selected" {{/if}}>
                 {{$curr_min|string_format:"%02d"}}
               </option>

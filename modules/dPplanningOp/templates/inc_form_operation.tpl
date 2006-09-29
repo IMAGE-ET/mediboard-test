@@ -89,12 +89,12 @@
     </th>
     <td>
       <select name="_hour_op" title="notNull|num">
-      {{foreach from=$hours_duree item=hour}}
+      {{foreach from=$hours_duree|smarty:nodefaults item=hour}}
         <option value="{{$hour}}" {{if (!$op && $hour == 1) || $op->_hour_op == $hour}} selected="selected" {{/if}}>{{$hour}}</option>
       {{/foreach}}
       </select> h
       <select name="_min_op">
-      {{foreach from=$mins_duree item=min}}
+      {{foreach from=$mins_duree|smarty:nodefaults item=min}}
         <option value="{{$min}}" {{if (!$op && $min == 0) || $op->_min_op == $min}} selected="selected" {{/if}}>{{$min}}</option>
       {{/foreach}}
       </select> mn
@@ -124,12 +124,12 @@
     <td>
       à
       <select name="_hour_urgence">
-      {{foreach from=$hours_urgence item=hour}}
+      {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
         <option value="{{$hour}}" {{if $op->_hour_urgence == $hour || (!$op->operation_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
       {{/foreach}}
       </select> h
       <select name="_min_urgence">
-      {{foreach from=$mins_duree item=min}}
+      {{foreach from=$mins_duree|smarty:nodefaults item=min}}
         <option value="{{$min}}" {{if $op->_min_urgence == $min}} selected="selected" {{/if}}>{{$min}}</option>
       {{/foreach}}
       </select> mn
@@ -189,11 +189,11 @@
     <td colspan="2">
       à
       <select name="_hour_anesth">
-      {{foreach from=$hours item=hour}}
+      {{foreach from=$hours|smarty:nodefaults item=hour}}
         <option {{if $op->_hour_anesth == $hour}} selected="selected" {{/if}}>{{$hour}}</option>
       {{/foreach}}
       </select> h      <select name="_min_anesth">
-      {{foreach from=$mins item=min}}
+      {{foreach from=$mins|smarty:nodefaults item=min}}
         <option {{if $op->_min_anesth == $min}} selected="selected" {{/if}}>{{$min}}</option>
       {{/foreach}}
       </select> mn

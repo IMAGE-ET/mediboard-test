@@ -22,7 +22,7 @@ function verifIntubDifficileAndSave(oForm){
     <th colspan="6" class="category">Condition d'intubation</th>
   </tr>
   <tr>
-    {{foreach from=$consult_anesth->_enumsTrans.mallampati key=curr_mallampati item=trans_mallampati}}
+    {{foreach from=$consult_anesth->_enumsTrans.mallampati|smarty:nodefaults key=curr_mallampati item=trans_mallampati}}
     <td rowspan="4" class="button">
       <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{$trans_mallampati}}">
         <img src="modules/{{$m}}/images/mallampati/{{$curr_mallampati}}.gif" alt="{{$trans_mallampati}}" />

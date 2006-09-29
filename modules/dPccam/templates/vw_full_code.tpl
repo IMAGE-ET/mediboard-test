@@ -91,7 +91,7 @@ function pageMain() {
           <td><strong>Description</strong><br />{{$libelle}}</td>
         </tr>
 
-        {{foreach from=$rq item=curr_rq}}
+        {{foreach from=$rq|smarty:nodefaults item=curr_rq}}
         <tr>
           <td><em>{{$curr_rq}}</em></td>
         </tr>
