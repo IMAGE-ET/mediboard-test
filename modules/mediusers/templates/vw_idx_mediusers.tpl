@@ -52,7 +52,7 @@ function pageMain() {
         {{foreach from=$curr_function->_ref_users item=curr_user}}
         <tr>
           <td style="background-color: #{{$curr_function->color}}"></td>
-          {{eval var=$curr_user->user_id assign=user_id}}
+          {{assign var=user_id value=$curr_user->user_id}}
           {{assign var="href" value="index.php?m=$m&tab=$tab&user_id=$user_id"}}
           <td><a href="{{$href}}">{{$curr_user->_user_username}}</a></td>
           <td><a href="{{$href}}">{{$curr_user->_user_last_name}}</a></td>

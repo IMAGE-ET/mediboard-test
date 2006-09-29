@@ -44,7 +44,7 @@
 
     {{foreach from=$packs item=curr_pack}}
     <tr>
-      {{eval var=$curr_pack->pack_id assign="pack_id"}}
+      {{assign var="pack_id" value=$curr_pack->pack_id}}
       {{assign var="href" value="?m=$m&tab=$tab&pack_id=$pack_id"}}
       <td><a href="{{$href}}">{{$curr_pack->_ref_chir->_view}}</a></td>
       <td><a href="{{$href}}">{{$curr_pack->nom}}</a></td>

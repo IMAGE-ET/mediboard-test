@@ -12,7 +12,7 @@
   </td>
 </tr>
 {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
-{{eval var=$curr_affectation->_ref_sejour->_ref_patient->_view assign="patient_view"}}
+{{assign var="patient_view" value=$curr_affectation->_ref_sejour->_ref_patient->_view}}
 <tr class="patient">
   {{if $curr_affectation->confirme}}
   <td class="text" style="background-image:url(modules/{{$m}}/images/ray.gif); background-repeat:repeat;">
@@ -51,7 +51,7 @@
     <em>{{$patient_view}}</em>
     {{else}}
     <strong>
-      {{$patient_view}}
+    {{$patient_view}}
       
     </strong>
     {{/if}}

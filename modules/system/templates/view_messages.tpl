@@ -50,7 +50,7 @@ function pageMain() {
 
     {{foreach from=$messages item=curr_message}}
     <tr>
-      {{eval var=$curr_message->message_id assign="message_id"}}
+      {{assign var="message_id" value=$curr_message->message_id}}
       {{assign var="href" value="?m=$m&tab=$tab&message_id=$message_id"}}
       <td><a href="{{$href}}">{{$curr_message->deb|date_format:"%d/%m/%Y %H:%M"}}</a></td>
       <td><a href="{{$href}}">{{$curr_message->fin|date_format:"%d/%m/%Y %H:%M"}}</a></td>
