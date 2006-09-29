@@ -115,7 +115,7 @@ class CPlageOp extends CMbObject {
       $this->_view = $this->_ref_spec->_shortview;
     }
     if($this->anesth_id){
-      $this->_view .= " &mdash; ".$this->_ref_anesth->_shortview;
+      $this->_view .= " - ".$this->_ref_anesth->_shortview;
     }
   }
   

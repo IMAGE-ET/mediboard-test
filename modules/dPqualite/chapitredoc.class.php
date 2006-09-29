@@ -50,7 +50,7 @@ class CChapitreDoc extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->code ." &mdash; " . $this->nom;
+    $this->_view = $this->code ." - " . $this->nom;
     $this->_shortview = $this->code; 
   }
   
