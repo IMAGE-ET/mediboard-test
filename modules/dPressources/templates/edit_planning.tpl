@@ -21,11 +21,11 @@ function pageMain() {
       <table width="100%">
         <tr>
           <th></th>
-          {{foreach from=$plages key=curr_day item=plagesPerDay}}
+          {{foreach from=$plages|smarty:nodefaults key=curr_day item=plagesPerDay}}
           <th>{{$curr_day|date_format:"%A %d"}}</th>
           {{/foreach}}
         </tr>
-        {{foreach from=$listHours item=curr_hour}}
+        {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
         <tr>
           <th>{{$curr_hour}}h</th>
           {{foreach from=$plages key=curr_day item=plagesPerDay}}
@@ -96,7 +96,7 @@ function pageMain() {
           <th><label for="_hour_deb" title="Heure de début">Début</label></th>
           <td>
             <select name="_hour_deb">
-              {{foreach from=$listHours item=curr_hour}}
+              {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
               <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plage->_hour_deb}} selected="selected" {{/if}}>
               {{$curr_hour|string_format:"%02d"}}
               </option>
@@ -110,7 +110,7 @@ function pageMain() {
           <th><label for="_hour_fin" title="Heure de fin">Fin:</label</th>
           <td>
             <select name="_hour_fin">
-              {{foreach from=$listHours item=curr_hour}}
+              {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
               <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plage->_hour_fin}} selected="selected" {{/if}}>
               {{$curr_hour|string_format:"%02d"}}
               </option>

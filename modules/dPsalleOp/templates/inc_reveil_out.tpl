@@ -67,7 +67,7 @@
               {{else}}
               <select name="sortie_reveil" onchange="this.form.submit()">
                 <option value="">-</option>
-                {{foreach from=$timing.$key.sortie_reveil item=curr_time}}
+                {{foreach from=$timing.$key.sortie_reveil|smarty:nodefaults item=curr_time}}
                 <option value="{{$curr_time}}" {{if $curr_time == $curr_op->sortie_reveil}}selected="selected"{{/if}}>
                   {{$curr_time|date_format:"%Hh%M"}}
                 </option>

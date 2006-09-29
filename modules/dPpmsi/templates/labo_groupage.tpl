@@ -48,7 +48,7 @@
           <td><input type="text" name="DR" value="{{$GHM->DR}}" size="7" /></td>
           <td>
             {{counter start=0 print=false assign=curr}}
-            {{foreach from=$GHM->_DASs item=DAS key=key}}
+            {{foreach from=$GHM->_DASs|smarty:nodefaults item=DAS key=key}}
             <input type="text" name="_DASs[{{$curr}}]" value="{{$DAS}}" size="7" /><br />
             {{counter}}
             {{/foreach}}
@@ -56,7 +56,7 @@
           </td>
           <td>
             {{counter start=0 print=false assign=curr}}
-            {{foreach from=$GHM->_DADs item=DAD key=key}}
+            {{foreach from=$GHM->_DADs|smarty:nodefaults item=DAD key=key}}
             <input type="text" name="_DADs[{{$curr}}]" value="{{$DAD}}" size="7" /><br />
             {{counter}}
             {{/foreach}}

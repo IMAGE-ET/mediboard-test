@@ -71,7 +71,7 @@
         <em>Pathologie:</em>
         <select name="pathologie">
           <option value="">&mdash; Choisir &mdash;</option>
-          {{foreach from=$pathos->dispo item=curr_patho}}
+          {{foreach from=$pathos->dispo|smarty:nodefaults item=curr_patho}}
           <option {{if $curr_patho == $curr_sejour->pathologie}}selected="selected"{{/if}}>
           {{$curr_patho}}
           </option>

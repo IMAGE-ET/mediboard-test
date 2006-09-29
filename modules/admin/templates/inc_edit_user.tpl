@@ -56,7 +56,7 @@
     <th><label for="user_type" title="Veuillez choisir un type d'utilisateur">Type</label></th>
     <td>
       <select tabindex="106" name="user_type" title="{{$user->_props.user_type}}">
-        {{foreach from=$utypes key=curr_key item=type}}
+        {{foreach from=$utypes|smarty:nodefaults key=curr_key item=type}}
         <option value="{{$curr_key}}" {{if $curr_key == $user->user_type}}selected="selected"{{/if}}>{{$type}}</option>
         {{/foreach}}
       </select>

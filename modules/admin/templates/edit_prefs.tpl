@@ -29,7 +29,7 @@
     </th>
     <td>
       <select name="pref_name[LOCALE]" class="text" size="1">
-        {{foreach from=$locales item=currLocale key=keyLocale}}
+        {{foreach from=$locales|smarty:nodefaults item=currLocale key=keyLocale}}
         <option value="{{$keyLocale}}" {{if $keyLocale==$prefsUser.GENERALE.LOCALE}}selected="selected"{{/if}}>
           {{tr}}{{$currLocale}}{{/tr}}
         </option>
@@ -43,7 +43,7 @@
     </th>
     <td>
       <select name="pref_name[UISTYLE]" class="text" size="1">
-        {{foreach from=$styles item=currStyles key=keyStyles}}
+        {{foreach from=$styles|smarty:nodefaults item=currStyles key=keyStyles}}
         <option value="{{$keyStyles}}" {{if $keyStyles==$prefsUser.GENERALE.UISTYLE}}selected="selected"{{/if}}>
           {{tr}}{{$currStyles}}{{/tr}}
         </option>

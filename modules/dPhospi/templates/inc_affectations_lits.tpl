@@ -179,9 +179,9 @@
 <tr class="dates">
   <td class="text" colspan="2">
     {{foreach from=$curr_affectation->_ref_sejour->_ref_operations item=curr_operation}}
-{{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
-<em>{{$curr_code->code}}</em> : {{$curr_code->libelleLong}}<br />
-{{/foreach}}
+      {{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
+      <em>{{$curr_code->code}}</em> : {{$curr_code->libelleLong}}<br />
+      {{/foreach}}
     {{/foreach}}
   </td>
 </tr>

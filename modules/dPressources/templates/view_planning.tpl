@@ -32,11 +32,11 @@ function pageMain() {
       <table width="100%">
         <tr>
           <th></th>
-          {{foreach from=$plages key=curr_day item=plagesPerDay}}
+          {{foreach from=$plages|smarty:nodefaults key=curr_day item=plagesPerDay}}
           <th>{{$curr_day|date_format:"%A %d"}}</th>
           {{/foreach}}
         </tr>
-        {{foreach from=$listHours item=curr_hour}}
+        {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
         <tr>
           <th>{{$curr_hour}}h</th>
           {{foreach from=$plages key=curr_day item=plagesPerDay}}

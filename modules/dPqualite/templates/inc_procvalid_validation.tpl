@@ -66,7 +66,7 @@
     <th><label for="ged[version]">Valider pour la version</label></th>
     <td>
       <select name="ged[version]" title="currency|notNull">
-        {{foreach from=$versionDoc item=currVersion}}
+        {{foreach from=$versionDoc|smarty:nodefaults item=currVersion}}
         <option value="{{$currVersion}}">{{$currVersion}}</option>
         {{/foreach}}
       </select>

@@ -125,12 +125,12 @@ function pageMain() {
           <th><label for="_incident_heure" title="Heure de l'événement">Heure de l'événement</label></th>
           <td>
             <select name="_incident_heure">
-            {{foreach from=$heures item=curr_heure}}
+            {{foreach from=$heures|smarty:nodefaults item=curr_heure}}
               <option value="{{$curr_heure}}"{{if (!$fiche->fiche_ei_id && $curr_heure==$heurenow) || ($fiche->fiche_ei_id && $curr_heure==$fiche->_incident_heure)}}selected="selected"{{/if}}>{{$curr_heure}}</option>
             {{/foreach}}
             </select> h
             <select name="_incident_min">
-            {{foreach from=$mins item=minute}}
+            {{foreach from=$mins|smarty:nodefaults item=minute}}
               <option value="{{$minute}}"{{if (!$fiche->fiche_ei_id && $minute==$minnow) || ($fiche->fiche_ei_id && $minute==$fiche->_incident_min)}}selected="selected"{{/if}}>{{$minute}}</option>
             {{/foreach}}
             </select> min

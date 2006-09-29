@@ -127,7 +127,7 @@ function choosePreselection(oSelect) {
   {{if $ftp->logs|@count}}
   <h3>Envoi du document au serveur S@nté.com</h3>
   <ul>
-  {{foreach from=$ftp->logs item=log}}
+  {{foreach from=$ftp->logs|smarty:nodefaults item=log}}
     <li>{{$log}}</li>
   {{/foreach}}
   </ul>

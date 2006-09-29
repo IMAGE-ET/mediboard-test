@@ -17,7 +17,7 @@
                   {{else}}
                   <select name="entree_bloc" onchange="this.form.submit()">
                     <option value="">-</option>
-                    {{foreach from=$timing.entree_bloc item=curr_time}}
+                    {{foreach from=$timing.entree_bloc|smarty:nodefaults item=curr_time}}
                     <option value="{{$curr_time}}" {{if $curr_time == $selOp->entree_bloc}}selected="selected"{{/if}}>
                       {{$curr_time|date_format:"%Hh%M"}}
                     </option>
@@ -39,7 +39,7 @@
                   {{else}}
                   <select name="pose_garrot" onchange="this.form.submit()">
                     <option value="">-</option>
-                    {{foreach from=$timing.pose_garrot item=curr_time}}
+                    {{foreach from=$timing.pose_garrot|smarty:nodefaults item=curr_time}}
                     <option value="{{$curr_time}}" {{if $curr_time == $selOp->pose_garrot}}selected="selected"{{/if}}>
                       {{$curr_time|date_format:"%Hh%M"}}
                     </option>
@@ -61,7 +61,7 @@
                   {{else}}
                   <select name="debut_op" onchange="this.form.submit()">
                     <option value="">-</option>
-                    {{foreach from=$timing.debut_op item=curr_time}}
+                    {{foreach from=$timing.debut_op|smarty:nodefaults item=curr_time}}
                     <option value="{{$curr_time}}" {{if $curr_time == $selOp->debut_op}}selected="selected"{{/if}}>
                       {{$curr_time|date_format:"%Hh%M"}}
                     </option>
@@ -85,7 +85,7 @@
                   {{else}}
                   <select name="sortie_bloc" onchange="this.form.submit()">
                     <option value="">-</option>
-                    {{foreach from=$timing.sortie_bloc item=curr_time}}
+                    {{foreach from=$timing.sortie_bloc|smarty:nodefaults item=curr_time}}
                     <option value="{{$curr_time}}" {{if $curr_time == $selOp->sortie_bloc}}selected="selected"{{/if}}>
                       {{$curr_time|date_format:"%Hh%M"}}
                     </option>
@@ -107,7 +107,7 @@
                   {{else}}
                   <select name="retrait_garrot" onchange="this.form.submit()">
                     <option value="">-</option>
-                    {{foreach from=$timing.retrait_garrot item=curr_time}}
+                    {{foreach from=$timing.retrait_garrot|smarty:nodefaults item=curr_time}}
                     <option value="{{$curr_time}}" {{if $curr_time == $selOp->retrait_garrot}}selected="selected"{{/if}}>
                       {{$curr_time|date_format:"%Hh%M"}}
                     </option>
@@ -129,7 +129,7 @@
                   {{else}}
                   <select name="fin_op" onchange="this.form.submit()">
                     <option value="">-</option>
-                    {{foreach from=$timing.fin_op item=curr_time}}
+                    {{foreach from=$timing.fin_op|smarty:nodefaults item=curr_time}}
                     <option value="{{$curr_time}}" {{if $curr_time == $selOp->fin_op}}selected="selected"{{/if}}>
                       {{$curr_time|date_format:"%Hh%M"}}
                     </option>

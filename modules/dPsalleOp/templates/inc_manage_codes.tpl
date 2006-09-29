@@ -70,7 +70,7 @@ function delCode() {
       <td style="vertical-align:middle;">
         <select name="_selCode" onchange="showCode(this.form)">
           <option value="0">&mdash; Codes</option>
-          {{foreach from=$selOp->_codes_ccam item=curr_code}}
+          {{foreach from=$selOp->_codes_ccam|smarty:nodefaults item=curr_code}}
           <option value="{{$curr_code}}">{{$curr_code}}</option>
           {{/foreach}}
         </select>

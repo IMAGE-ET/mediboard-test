@@ -88,7 +88,7 @@ function selectCode(code) {
         <li>
           Description:
           <ul>
-            {{foreach from=$cim10->descr item=curr_descr}}
+            {{foreach from=$cim10->descr|smarty:nodefaults item=curr_descr}}
             <li>{{$curr_descr}}</li>
             {{/foreach}}
           </ul>
@@ -108,7 +108,7 @@ function selectCode(code) {
         <li>
           Glossaire:
           <ul>
-            {{foreach from=$cim10->glossaire item=curr_glossaire}}
+            {{foreach from=$cim10->glossaire|smarty:nodefaults item=curr_glossaire}}
             <li>{{$curr_glossaire}}</li>
             {{/foreach}}
           </ul>
@@ -118,7 +118,7 @@ function selectCode(code) {
         <li>
           Inclusions:
           <ul>
-            {{foreach from=$cim10->include item=curr_include}}
+            {{foreach from=$cim10->include|smarty:nodefaults item=curr_include}}
             <li>{{$curr_include}}</li>
             {{/foreach}}
           </ul>
@@ -128,7 +128,7 @@ function selectCode(code) {
         <li>
           Exclusions indirectes:
           <ul>
-            {{foreach from=$cim10->indir item=curr_indir}}
+            {{foreach from=$cim10->indir|smarty:nodefaults item=curr_indir}}
             <li>{{$curr_indir}}</li>
             {{/foreach}}
           </ul>
@@ -138,7 +138,7 @@ function selectCode(code) {
         <li>
           Notes:
           <ul>
-            {{foreach from=$cim10->notes item=curr_note}}
+            {{foreach from=$cim10->notes|smarty:nodefaults item=curr_note}}
             <li>{{$curr_note}}</li>
             {{/foreach}}
           </ul>

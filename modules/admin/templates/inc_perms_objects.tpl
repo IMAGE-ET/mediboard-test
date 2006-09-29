@@ -38,7 +38,7 @@ function cancelObject(oObject) {
     <th class="category" colspan="3">
       Ajouter un droit sur :
       <select name="object_class">
-        {{foreach from=$listClasses item=class}}
+        {{foreach from=$listClasses|smarty:nodefaults item=class}}
         <option value="{{$class}}">
           {{tr}}{{$class}}{{/tr}}
         </option>
@@ -61,7 +61,7 @@ function cancelObject(oObject) {
     <td class="button">
       Permission :
       <select name="permission">
-      {{foreach from=$permission key=key_perm item=curr_perm}}
+      {{foreach from=$permission|smarty:nodefaults key=key_perm item=curr_perm}}
         <option value="{{$key_perm}}">
           {{$curr_perm}}
         </option>
@@ -102,7 +102,7 @@ function cancelObject(oObject) {
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="perm_object_id" value="{{$perm->perm_object_id}}" />
       <select name="permission">
-      {{foreach from=$permission key=key_perm item=curr_perm}}
+      {{foreach from=$permission|smarty:nodefaults key=key_perm item=curr_perm}}
         <option value="{{$key_perm}}" {{if $key_perm == $perm->permission}}selected="selected"{{/if}}>
           {{$curr_perm}}
         </option>

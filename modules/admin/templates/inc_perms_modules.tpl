@@ -28,7 +28,7 @@
     <td class="button">
       Permission :
       <select name="permission">
-      {{foreach from=$permission key=key_perm item=curr_perm}}
+      {{foreach from=$permission|smarty:nodefaults key=key_perm item=curr_perm}}
         <option value="{{$key_perm}}">
           {{$curr_perm}}
         </option>
@@ -38,7 +38,7 @@
     <td class="button">
       Visibilité :
       <select name="view">
-      {{foreach from=$visibility key=key_view item=curr_view}}
+      {{foreach from=$visibility|smarty:nodefaults key=key_view item=curr_view}}
         <option value="{{$key_view}}">
           {{$curr_view}}
         </option>
@@ -77,7 +77,7 @@
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="perm_module_id" value="{{$perm->perm_module_id}}" />
       <select name="permission">
-      {{foreach from=$permission key=key_perm item=curr_perm}}
+      {{foreach from=$permission|smarty:nodefaults key=key_perm item=curr_perm}}
         <option value="{{$key_perm}}" {{if $key_perm == $perm->permission}}selected="selected"{{/if}}>
           {{$curr_perm}}
         </option>
@@ -85,7 +85,7 @@
       </select>
       -
       <select name="view">
-      {{foreach from=$visibility key=key_view item=curr_view}}
+      {{foreach from=$visibility|smarty:nodefaults key=key_view item=curr_view}}
         <option value="{{$key_view}}" {{if $key_view == $perm->view}}selected="selected"{{/if}}>
           {{$curr_view}}
         </option>

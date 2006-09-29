@@ -53,7 +53,7 @@
               {{else}}
               <select name="entree_reveil" onchange="this.form.submit()">
                 <option value="">-</option>
-                {{foreach from=$timing.$key.entree_reveil item=curr_time}}
+                {{foreach from=$timing.$key.entree_reveil|smarty:nodefaults item=curr_time}}
                 <option value="{{$curr_time}}" {{if $curr_time == $curr_op->entree_reveil}}selected="selected"{{/if}}>
                   {{$curr_time|date_format:"%Hh%M"}}
                 </option>
