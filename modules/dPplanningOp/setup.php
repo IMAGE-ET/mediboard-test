@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.54";
+$config["mod_version"]     = "0.55";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -535,10 +535,14 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
         $sql = "INSERT INTO `type_anesth` VALUES ('9', 'Anesthesie peribulbaire');";
         db_exec($sql); db_error();
-        $sql="UPDATE `operations` SET `type_anesth`=`type_anesth`+1;";
+        $sql = "UPDATE `operations` SET `type_anesth`=`type_anesth`+1;";
         db_exec($sql); db_error();
       case "0.54":
-        return "0.54";
+        $sql = "ALTER TABLE `operations`" .
+            "\nADD `induction` TIME AFTER `sortie_reveil`";
+        db_exec($sql); db_error();
+      case "0.55":
+        return "0.55";
     }
     return false;
   }

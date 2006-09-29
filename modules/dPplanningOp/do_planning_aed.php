@@ -14,7 +14,7 @@ $chir_id = mbGetValueFromPostOrSession("chir_id", null);
 // lignes pour rentrer l'heure courante du serveur dans certains champs
 $listTimes = array("entree_bloc", "pose_garrot", "debut_op",
                    "sortie_bloc", "retrait_garrot", "fin_op",
-                   "entree_reveil", "sortie_reveil");
+                   "entree_reveil", "sortie_reveil", "induction");
 foreach($listTimes as $curr_item) {
   if(isset($_POST[$curr_item])) {
     if($_POST[$curr_item] == "current") {

@@ -85,6 +85,7 @@ if($op) {
   $timing["fin_op"]         = array();
   $timing["retrait_garrot"] = array();
   $timing["sortie_bloc"]    = array();
+  $timing["induction"]      = array();
   foreach($timing as $key => $value) {
     for($i = -10; $i < 10 && $selOp->$key !== null; $i++) {
       $timing[$key][] = mbTime("+ $i minutes", $selOp->$key);

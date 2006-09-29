@@ -162,6 +162,27 @@
               </option>
               {{/foreach}}
             </select>
+            -
+            {{if $selOp->induction}}
+            Induction:
+            {{if $canEdit}}
+            <input name="induction" size="5" type="text" value="{{$selOp->induction|date_format:"%H:%M"}}">
+            <button class="tick notext" type="submit"></button>
+            {{else}}
+            <select name="induction" onchange="this.form.submit()">
+              <option value="">-</option>
+              {{foreach from=$timing.induction|smarty:nodefaults item=curr_time}}
+              <option value="{{$curr_time}}" {{if $curr_time == $selOp->induction}}selected="selected"{{/if}}>
+                {{$curr_time|date_format:"%Hh%M"}}
+              </option>
+              {{/foreach}}
+            </select>
+            {{/if}}
+            <button class="cancel notext" type="submit" onclick="this.form.induction.value = ''"></button>
+            {{else}}
+            <input type="hidden" name="induction" value="" />
+            <button class="submit" type="submit" onclick="this.form.induction.value = 'current'">induction</button>
+            {{/if}}
             </form>
           </td>
         </tr>

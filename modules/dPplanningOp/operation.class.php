@@ -64,6 +64,7 @@ class COperation extends CMbObject {
   var $sortie_bloc    = null;
   var $entree_reveil  = null;
   var $sortie_reveil  = null;
+  var $induction      = null;
 
   // Form fields
   var $_hour_op        = null;

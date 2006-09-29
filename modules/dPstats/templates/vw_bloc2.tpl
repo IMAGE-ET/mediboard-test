@@ -52,8 +52,8 @@ function pageMain() {
           <th>libelle</th>
           <th>CCAM</th>
           <th>entrée salle</th>
-          <th>pose garrot</th>
           <th>induction</th>
+          <th>pose garrot</th>
           <th>début intervention</th>
           <th>fin intervention</th>
           <th>retrait garrot</th>
@@ -82,8 +82,8 @@ function pageMain() {
           <td class="text">{{$curr_op->_ref_first_log->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
           <td class="text">?</td>
           <td class="text">{{$curr_op->entree_bloc|date_format:"%Hh%M"}}</td>
+          <td class="text">{{$curr_op->induction|date_format:"%Hh%M"}}</td>
           <td class="text">{{$curr_op->pose_garrot|date_format:"%Hh%M"}}</td>
-          <td class="text">?</td>
           <td class="text">{{$curr_op->debut_op|date_format:"%Hh%M"}}</td>
           <td class="text">{{$curr_op->fin_op|date_format:"%Hh%M"}}</td>
           <td class="text">{{$curr_op->retrait_garrot|date_format:"%Hh%M"}}</td>
