@@ -63,6 +63,7 @@ function goToPage(numpage){
         {{/if}}<br />
         <a href="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$file->file_id}}" title="Télécharger le fichier">
           {{if $includeInfosFile}}
+          {{assign var="stylecontenu" value=null}}
           {{include file="inc_preview_contenu_file.tpl"}}
           {{else}}
           <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$file->file_id}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" alt="Grand aperçu" />
