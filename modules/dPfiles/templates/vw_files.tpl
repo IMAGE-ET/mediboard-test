@@ -28,13 +28,13 @@ function pageMain() {
         <tr>
           <td  class="readonly">
             <label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label>
-            <input type="text" readonly="readonly" ondblclick="popObject()" name="selClass" value="{{$selClass}}" />
+            <input type="text" readonly="readonly" ondblclick="popObject()" name="selClass" value="{{$selClass|stripslashes}}" />
           </td>
           <td class="readonly">
-            <input type="text" size="80" readonly="readonly" ondblclick="popObject()" name="selView" value="{{$selView}}" />
+            <input type="text" size="80" readonly="readonly" ondblclick="popObject()" name="selView" value="{{$selView|stripslashes}}" />
             <button type="button" onclick="popObject()" class="search">Rechercher</button>
-            <input type="hidden" name="selKey" value="{{$selKey}}" />
-            <input type="hidden" name="keywords" value="{{$keywords}}" />
+            <input type="hidden" name="selKey" value="{{$selKey|stripslashes}}" />
+            <input type="hidden" name="keywords" value="{{$keywords|stripslashes}}" />
           </td>
           {{if $selKey}}
           <td>

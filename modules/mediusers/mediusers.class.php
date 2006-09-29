@@ -136,14 +136,14 @@ class CMediusers extends CMbObject {
     $tables[] = array (
       "label"     => "plage(s) opératoire(s) (chirurgien)", 
       "name"      => "plagesop", 
-      "idfield"   => "id", 
+      "idfield"   => "plageop_id", 
       "joinfield" => "chir_id"
     );
 
     $tables[] = array (
       "label"     => "plage(s) opératoire(s) (anesthésiste)", 
       "name"      => "plagesop", 
-      "idfield"   => "id", 
+      "idfield"   => "plageop_id", 
       "joinfield" => "anesth_id"
     );
 

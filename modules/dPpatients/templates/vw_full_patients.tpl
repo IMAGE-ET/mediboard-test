@@ -60,8 +60,8 @@ function pageMain() {
             <button type="button" style="float:right;" onclick="setObject( {
               objClass: 'CPatient', 
               keywords: '', 
-              id: {{$patient->patient_id}}, 
-              view: '{{$patient->_view}}' })">
+              id: {{$patient->patient_id|smarty:nodefaults|JSAttribute}}, 
+              view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' })">
               {{$patient->_ref_files|@count}} fichier(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
             </button>
