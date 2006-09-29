@@ -477,6 +477,19 @@ class CMbObject {
   }
   
   /**
+   * Return the object properties in an array
+   */
+  function getProps() {
+    $result = array();
+    foreach(get_object_vars($this) as $key => $value) {
+      if ($key[0] != "_") {
+        $result[] = $value;
+      }
+    }
+    return $result;
+  }
+  
+  /**
    * Build Enums variant returning values
    */
   function getEnums() {
@@ -1248,7 +1261,7 @@ class CMbObject {
       $where["object_class"] = "= '$class'";
     if($type)
       $where["type"] = "= '$type'";
-    $order = "date DESC";
+    $order = "date ASC";
     $list = new CUserLog;
     $list = $list->loadList($where, $order, "0, 100");
     foreach($list as $key => $value) {
