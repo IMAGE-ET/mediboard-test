@@ -19,7 +19,7 @@ foreach(glob("modules/*/templates_c/*.tpl.php") as $tplPath) {
   $i++;
   mbRemovePath($tplPath);
 }
-foreach(glob("styles/*/templates_c/*.tpl.php") as $tplPath) {
+foreach(glob("style/*/templates_c/*.tpl.php") as $tplPath) {
   $i++;
   mbRemovePath($tplPath);
 }
