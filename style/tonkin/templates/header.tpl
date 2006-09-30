@@ -7,10 +7,10 @@
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeCharSet}}" />
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissement de Santé" />
   <meta name="Version" content="{{$mediboardVersion}}" />
-  {{$mediboardShortIcon}}
-  {{$mediboardCommonStyle}}
-  {{$mediboardStyle}}
-  {{$mediboardScript}}
+  {{$mediboardShortIcon|smarty:nodefaults}}
+  {{$mediboardCommonStyle|smarty:nodefaults}}
+  {{$mediboardStyle|smarty:nodefaults}}
+  {{$mediboardScript|smarty:nodefaults}}
 </head>
 
 <body onload="main()">
@@ -42,7 +42,7 @@ function popChgPwd() {
               <tr>
                 {{if $titleBlockData.icon}}
                 <td>
-                  {{$titleBlockData.icon}}
+                  {{$titleBlockData.icon|smarty:nodefaults}}
                 </td>
                 {{/if}}
                 <td class='titlecell'>
@@ -53,7 +53,7 @@ function popChgPwd() {
           </th>
           <td width="100%">
             <div id="systemMsg">
-              {{$errorMessage}}
+              {{$errorMessage|smarty:nodefaults}}
             </div>
           </td>
         </tr>
@@ -68,7 +68,7 @@ function popChgPwd() {
               </option>
               {{/foreach}}
             </select>
-            {{$helpOnline}} |
+            {{$helpOnline|smarty:nodefaults}} |
             <a href="javascript:popChgPwd();">Changez votre mot de passe</a> |
             <a href="./index.php?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a> |
             <a href="?logout=-1">{{tr}}Logout{{/tr}}</a> |
@@ -93,7 +93,7 @@ function popChgPwd() {
 </table>
 {{else}}
 <div id="systemMsg" style="display: block;">
-  {{$errorMessage}}
+  {{$errorMessage|smarty:nodefaults}}
 </div>
 {{/if}}
 <table id="main" class="{{$m}}">

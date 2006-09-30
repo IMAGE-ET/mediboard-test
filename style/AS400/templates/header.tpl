@@ -7,10 +7,10 @@
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeCharSet}}" />
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissement de Santé" />
   <meta name="Version" content="{{$mediboardVersion}}" />
-  {{$mediboardShortIcon}}
-  {{$mediboardCommonStyle}}
-  {{$mediboardStyle}}
-  {{$mediboardScript}}
+  {{$mediboardShortIcon|smarty:nodefaults}}
+  {{$mediboardCommonStyle|smarty:nodefaults}}
+  {{$mediboardStyle|smarty:nodefaults}}
+  {{$mediboardScript|smarty:nodefaults}}
 </head>
 
 <body onload="main()">
@@ -40,7 +40,7 @@ function popChgPwd() {
               <tr>
                 {{if $titleBlockData.icon}}
                 <td>
-                  {{$titleBlockData.icon}}
+                  {{$titleBlockData.icon|smarty:nodefaults}}
                 </td>
                 {{/if}}
                 <td class="titlecell">
@@ -51,7 +51,7 @@ function popChgPwd() {
           </td>
           <td>
             <div id="systemMsg">
-              {{$errorMessage}}
+              {{$errorMessage|smarty:nodefaults}}
             </div>
           </td>
           <td class="welcome">
@@ -73,7 +73,7 @@ function popChgPwd() {
   </tr>
   <tr>
     <td id="menubar">
-      | {{$helpOnline}} | 
+      | {{$helpOnline|smarty:nodefaults}} | 
       {{foreach from=$affModule item=currModule}}
       <a href="?m={{$currModule.modName}}" class="{{if $currModule.modName==$m}}textSelected{{else}}textNonSelected{{/if}}">
         {{$currModule.modNameCourt}}

@@ -7,10 +7,10 @@
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeCharSet}}" />
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissement de Santé" />
   <meta name="Version" content="{{$mediboardVersion}}" />
-  {{$mediboardShortIcon}}
-  {{$mediboardCommonStyle}}
-  {{$mediboardStyle}}
-  {{$mediboardScript}}
+  {{$mediboardShortIcon|smarty:nodefaults}}
+  {{$mediboardCommonStyle|smarty:nodefaults}}
+  {{$mediboardStyle|smarty:nodefaults}}
+  {{$mediboardScript|smarty:nodefaults}}
 </head>
 
 <body onload="main()">
@@ -67,8 +67,8 @@
             </form>
           </td>
           <td id="userMenu">
-            {{$helpOnline}} |
-            {{$suggestion}} |
+            {{$helpOnline|smarty:nodefaults}} |
+            {{$suggestion|smarty:nodefaults}} |
             <a href="./index.php?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a> |
             <a href="./index.php?logout=-1">{{tr}}Logout{{/tr}}</a>
           </td>
@@ -82,14 +82,14 @@
   <tr>
     <td>
       <div id="systemMsg">
-        {{$errorMessage}}
+        {{$errorMessage|smarty:nodefaults}}
       </div>
       {{if !$dialog}}
       <table class='titleblock'>
         <tr>
           {{if $titleBlockData.icon}}
           <td>
-            {{$titleBlockData.icon}}
+            {{$titleBlockData.icon|smarty:nodefaults}}
           </td>
           {{/if}}
           <td class='titlecell'>

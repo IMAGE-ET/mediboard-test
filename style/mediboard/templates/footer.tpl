@@ -1,4 +1,4 @@
-      {{$errorMessage}}
+      {{$errorMessage|smarty:nodefaults}}
     </td>
   </tr>
 </table>
