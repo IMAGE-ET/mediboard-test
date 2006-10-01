@@ -483,7 +483,7 @@ class CMbObject {
     $result = array();
     foreach(get_object_vars($this) as $key => $value) {
       if ($key[0] != "_") {
-        $result[] = $value;
+        $result[$key] = $value;
       }
     }
     return $result;

@@ -208,6 +208,14 @@ class COperation extends CMbObject {
       "joinfield" => "file_object_id",
       "joinon" => "`file_class`='COperation'"
     );    
+
+//    $tables[] = array (
+//      "label" => "naissance(s)", 
+//      "name" => "naissance", 
+//      "idfield" => "naissance_id", 
+//      "joinfield" => "operation_id",
+//    );    
+
     return parent::canDelete($msg, $oid, $tables);
   }
   
