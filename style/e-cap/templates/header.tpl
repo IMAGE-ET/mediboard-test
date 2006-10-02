@@ -17,7 +17,7 @@
 
 <script type="text/javascript">
 function popChgPwd() {
-  url = new Url();
+  var url = new Url();
   url.setModuleAction("admin", "chpwd");
   url.popup(350, 220, "password");
 }

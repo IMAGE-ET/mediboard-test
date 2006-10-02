@@ -15,6 +15,14 @@
 
 <body onload="main()">
 
+<script type="text/javascript">
+function popChgPwd() {
+  var url = new Url;
+  url.setModuleAction("admin", "chpwd");
+  url.popup(400, 300, "ChangePassword");
+}
+</script>
+
 {{if !$dialog}}
 
 {{foreach from=$messages item=currMsg}}
@@ -72,6 +80,7 @@
           <td id="userMenu">
             {{$helpOnline|smarty:nodefaults}} |
             {{$suggestion|smarty:nodefaults}} |
+            <a href="javascript:popChgPwd();">Changez votre mot de passe</a> |
             <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a> |
             <a href="?logout=-1">{{tr}}Logout{{/tr}}</a>
           </td>
