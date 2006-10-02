@@ -105,7 +105,7 @@ class CSmartyDP extends Smarty {
     }
     
     // Default modifier for security reason
-    $this->default_modifiers = array("cleanField");
+    $this->default_modifiers = array("@cleanField");
     
     // Register mediboard functions
     $this->register_block("tr"              , "do_translation"); 
