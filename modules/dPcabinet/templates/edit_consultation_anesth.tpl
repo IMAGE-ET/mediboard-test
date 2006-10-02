@@ -81,7 +81,7 @@ function printFiche() {
   var url = new Url;
   url.setModuleAction("dPcabinet", "print_fiche"); 
   url.addElement(document.editFrmFinish.consultation_id);
-  url.popup(700, 500, url, "printFiche");
+  url.popup(700, 500, "printFiche");
   return;
 }
 
@@ -89,7 +89,7 @@ function printAllDocs() {
   var url = new Url;
   url.setModuleAction("dPcabinet", "print_docs"); 
   url.addElement(document.editFrmFinish.consultation_id);
-  url.popup(700, 500, url, "printDocuments");
+  url.popup(700, 500, "printDocuments");
   return;
 }
 

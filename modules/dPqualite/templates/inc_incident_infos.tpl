@@ -109,7 +109,7 @@
           </td>
         </tr>
         <tr>
-          <th colspan="2" class="category">Validation de la Fiche</th>
+          <th colspan="2" class="category">Enregistrement Qualité</th>
         </tr>
         {{if $fiche->date_validation}}
         <tr>

@@ -179,7 +179,7 @@
       <table width="100%" style="font-size: 100%;padding-bottom:20px;">
         <tr>
           <th class="category" colspan="4">
-            Validation de la Fiche
+            Enregistrement Qualité
           </th>
         </tr>
         <tr>
