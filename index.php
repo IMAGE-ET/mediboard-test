@@ -256,7 +256,8 @@ if(!$suppressHeaders) {
   $performance["memoire"] = mbConvertDecaBinary(memory_get_usage());
   $performance["objets"] = $mbObjectCount;
   $smartyStyle->assign("includeFooter" , true);
-  $smartyStyle->assign("debugMode"     , $dPconfig["debug"]);
+  //$smartyStyle->assign("debugMode"     , $dPconfig["debug"]);
+  $smartyStyle->assign("debugMode"     , @$AppUI->user_prefs["INFOSYSTEM"]);
   $smartyStyle->assign("performance"   , $performance);
   $smartyStyle->assign("errorMessage"  , $AppUI->getMsg());
   $smartyStyle->assign("demoVersion"   , $dPconfig["demo_version"]);
