@@ -44,6 +44,28 @@ $sql = "LOAD DATA LOCAL INFILE '$fileTmpPath'" .
     "\nLINES TERMINATED BY '\r\n'";
 db_exec($sql, $base);
 if(!($msg = db_error($base)))
-  echo '<div class="message">import effectué avec succès</div>';
+  echo '<div class="message">import villes INSEE effectué avec succès</div>';
+else
+  echo '<div class="error"><strong>une erreur s\'est produite</strong> : $msg</div>';
+
+$sql = "DROP TABLE IF EXISTS `pays`";
+db_exec($sql, $base);
+$sql = "CREATE TABLE `pays` (
+          `ISO` varchar(2) NOT NULL default 'FR',
+          `nom_fr` varchar(50) NOT NULL default 'FRANCE',
+          PRIMARY KEY (`ISO`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des nom de pays';";
+db_exec($sql, $base);
+
+$fileTmpPath = $AppUI->cfg["root_dir"]."/$filedir/pays-iso.csv";
+
+$sql = "LOAD DATA LOCAL INFILE '$fileTmpPath'" .
+    "\nINTO TABLE `pays`" .
+    "\nFIELDS TERMINATED BY ','" .
+    "\nENCLOSED BY '\"'" .
+    "\nLINES TERMINATED BY '\r\n'";
+db_exec($sql, $base);
+if(!($msg = db_error($base)))
+  echo '<div class="message">import pays ISO effectué avec succès</div>';
 else
   echo '<div class="error"><strong>une erreur s\'est produite</strong> : $msg</div>';

@@ -114,6 +114,12 @@ function startINSEE() {
   url.requestUpdate("INSEE");
 }
 
+function startPays() {
+  var url = new Url;
+  url.setModuleAction("dPpatients", "httpreq_do_add_pays");
+  url.requestUpdate("pays");
+}
+
 function pageMain() {
   setRunning(false);
 }
@@ -149,7 +155,7 @@ function pageMain() {
   </tfoot>
 </table>
 
-<h2>Import de la base de données des codes INSEE</h2>
+<h2>Import de la base de données des codes INSEE / ISO</h2>
 
 <table class="tbl">
 
@@ -161,7 +167,7 @@ function pageMain() {
 <tr>
   <td>
     <button onclick="startINSEE()">
-      Importer les codes INSEE
+      Importer les codes INSEE / ISO
     </button>
   </td>
   <td id="INSEE" />
