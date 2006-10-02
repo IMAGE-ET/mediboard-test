@@ -107,7 +107,7 @@ function printForm() {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "view_planning"); 
   url.addElement(document.editOp.operation_id);
-  url.popup(700, 500, url, "printPlanning");
+  url.popup(700, 500, "printPlanning");
   return;
 }
 
