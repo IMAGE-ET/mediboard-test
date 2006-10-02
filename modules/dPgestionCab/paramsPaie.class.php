@@ -15,7 +15,7 @@ class CParamsPaie extends CMbObject {
   var $params_paie_id = null;
 
   // DB Fields
-  var $user_id = null;
+  var $employecab_id = null;
   
   // Fiscalité
   var $smic    = null; // valeur du smic horaire
@@ -55,7 +55,7 @@ class CParamsPaie extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
 
     static $props = array (
-      "user_id"   => "ref|notNull",
+      "employecab_id"   => "ref|notNull",
       "smic"      => "currency|min|0|notNull",
       "csgds"     => "pct|notNull",
       "csgnds"    => "pct|notNull",
@@ -103,9 +103,8 @@ class CParamsPaie extends CMbObject {
 
   // Forward references
   function loadRefsFwd() {
-    // user
-    $this->_ref_user = new CMediusers();
-    $this->_ref_user->load($this->user_id);
+    $this->_ref_employe = new CEmployeCab;
+    $this->_ref_employe->load($this->employecab_id);
   }
   
   function getPerm($permType) {
@@ -115,9 +114,9 @@ class CParamsPaie extends CMbObject {
     return ($this->_ref_user->getPerm($permType));
   }
   
-  function loadFromUser($user_id) {
+  function loadFromUser($employecab_id) {
     $where = array();
-    $where["user_id"] = "= '$user_id'";
+    $where["employecab_id"] = "= '$employecab_id'";
     $this->loadObject($where);
   }
 }

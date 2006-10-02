@@ -16,13 +16,26 @@ if (!$canRead) {
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 
-$user_id = mbGetValueFromGetOrSession("user_id", $user->user_id);
+$employecab_id = mbGetValueFromGetOrSession("employecab_id", null);
 $fiche_paie_id = mbGetValueFromGetOrSession("fiche_paie_id", null);
 
-$user->load($user_id);
+$employe = new CEmployeCab;
+$where = array();
+$where["function_id"] = "= '$user->function_id'";
 
-$paramsPaie = new CParamsPaie();
-$paramsPaie->loadFromUser($user_id);
+$listEmployes = $employe->loadList($where);
+if(!count($listEmployes)) {
+  $AppUI->setMsg("Vous devez avoir au moins un employé", MSG_ERROR);
+  $AppUI->redirect( "m=dPgestionCab&tab=edit_params" );
+}
+if($employecab_id) {
+  $employe =& $listEmployes[$employecab_id];
+} else {
+  $employe = reset($listEmployes);
+}
+
+$paramsPaie = new CParamsPaie;
+$paramsPaie->loadFromUser($employe->employecab_id);
 
 $fichePaie = new CFichePaie();
 $fichePaie->load($fiche_paie_id);
@@ -40,16 +53,14 @@ else
 $order = "debut DESC";
 $listeFiches = $listeFiches->loadList($where, $order);
 
-$listUsers = $user->loadUsers(PERM_EDIT);
-
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("user"      , $user);
-$smarty->assign("fichePaie" , $fichePaie);
-$smarty->assign("paramsPaie", $paramsPaie);
-$smarty->assign("listFiches", $listeFiches);
-$smarty->assign("listUsers" , $listUsers);
+$smarty->assign("employe"      , $employe);
+$smarty->assign("fichePaie"    , $fichePaie);
+$smarty->assign("paramsPaie"   , $paramsPaie);
+$smarty->assign("listFiches"   , $listeFiches);
+$smarty->assign("listEmployes" , $listEmployes);
 
 $smarty->display("edit_paie.tpl");
 ?>

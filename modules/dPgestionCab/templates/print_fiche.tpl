@@ -39,26 +39,26 @@
     </tr>
     <tr>
       <td colspan="2" height="17" align="center">
-        <strong>{{$paramsPaie->nom}}</strong>
+        <strong>{{$fichePaie->_ref_params_paie->nom}}</strong>
       </td>
       <td colspan="3" align="center">
-        <strong>{{$user->_view}}</strong>
+        <strong>{{$fichePaie->_ref_params_paie->_ref_employe->_view}}</strong>
       </td>
     </tr>
     <tr>
       <td colspan="2" height="18" align="left">
-        {{$paramsPaie->adresse}}
+        {{$fichePaie->_ref_params_paie->adresse}}
       </td>
       <td colspan="3" align="left">
-        {{$user->_user_adresse}}
+        {{$fichePaie->_ref_params_paie->_ref_employe->adresse}}
       </td>
     </tr>
     <tr>
       <td colspan="2" height="17" align="left">
-        {{$paramsPaie->cp}} {{$paramsPaie->ville}}
+        {{$fichePaie->_ref_params_paie->cp}} {{$fichePaie->_ref_params_paie->ville}}
       </td>
       <td colspan="3" align="left">
-        {{$user->_user_cp}} {{$user->_user_ville}}
+        {{$fichePaie->_ref_params_paie->_ref_employe->cp}} {{$fichePaie->_ref_params_paie->_ref_employe->ville}}
       </td>
     </tr>
     <tr>
@@ -66,13 +66,13 @@
         <strong>Siret :</strong>
       </td>
       <td align="left">
-        {{$paramsPaie->siret}}
+        {{$fichePaie->_ref_params_paie->siret}}
       </td>
       <td align="right">
         <strong>Fonction :</strong>
       </td>
       <td colspan="2" align="left">
-        {{$user->_user_type}}
+        {{$fichePaie->_ref_params_paie->_ref_employe->function}}
       </td>
     </tr>
     <tr>
@@ -80,13 +80,13 @@
         <strong>Code APE :</strong>
       </td>
       <td align=left>
-        {{$paramsPaie->ape}}
+        {{$fichePaie->_ref_params_paie->ape}}
       </td>
       <td align="right">
         <strong>Sécurité sociale :</strong>
       </td>
       <td colspan="2" align="left">
-        {{$paramsPaie->matricule}}
+        {{$fichePaie->_ref_params_paie->matricule}}
       </td>
     </tr>
   </tbody>
@@ -111,7 +111,7 @@
         <font color="#fff">Valeur du SMIC</font>
       </td>
       <td align="right">
-        {{$paramsPaie->smic|string_format:"%.2f"}} €
+        {{$fichePaie->_ref_params_paie->smic|string_format:"%.2f"}} €
       </td>
       <td align="center"></td>
       <td align="center"></td>
@@ -229,7 +229,7 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
-        <font color="#3e3">{{$paramsPaie->csgds|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->csgds|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
         <font color="#fff">CSG déductible</font>
@@ -242,7 +242,7 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
-        <font color="#3e3">{{$paramsPaie->csgnds|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->csgnds|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
         <font color="#fff">CSG non déductible</font>
@@ -263,14 +263,14 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
-        <font color="#3e3">{{$paramsPaie->ssms|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->ssms|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
         <font color="#fff">S.S. maladie</font>
       </td>
       <td align="right">{{$fichePaie->_ssms|string_format:"%.2f"}} €</td>
       <td align="right">
-        <font color="#3e3">{{$paramsPaie->ssmp|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->ssmp|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_ssmp|string_format:"%.2f"}} €</td>
     </tr>
@@ -278,14 +278,14 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
-        <font color="#3e3">{{$paramsPaie->ssvs|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->ssvs|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
         <font color="#fff">S.S. vieillesse</font>
       </td>
       <td align="right">{{$fichePaie->_ssvs|string_format:"%.2f"}} €</td>
       <td align="right">
-        <font color="#3e3">{{$paramsPaie->ssvp|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->ssvp|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_ssvp|string_format:"%.2f"}} €</td>
     </tr>
@@ -293,14 +293,14 @@
   <tbody>
     <tr>
       <td height="17" align=right bgcolor="#e63">
-        <font color="#3e3">{{$paramsPaie->rcs|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->rcs|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
         <font color="#fff">Retraite complémentaire</font>
       </td>
       <td align="right">{{$fichePaie->_rcs|string_format:"%.2f"}} €</td>
       <td align="right">
-        <font color="#3e3">{{$paramsPaie->rcp|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->rcp|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_rcp|string_format:"%.2f"}} €</td>
     </tr>
@@ -308,14 +308,14 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
-        <font color="#3e3">{{$paramsPaie->agffs|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->agffs|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
         <font color="#fff">AGFF</font>
       </td>
       <td align="right">{{$fichePaie->_agffs|string_format:"%.2f"}} €</td>
       <td align="right">
-        <font color="#3e3">{{$paramsPaie->agffp|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->agffp|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_agffp|string_format:"%.2f"}} €</td>
     </tr>
@@ -323,14 +323,14 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
-        <font color="#3e3">{{$paramsPaie->aps|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->aps|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
         <font color="#fff">Prévoyance</font>
       </td>
       <td align="right">{{$fichePaie->_aps|string_format:"%.2f"}} €</td>
       <td align="right">
-        <font color="#3e3">{{$paramsPaie->app|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->app|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_app|string_format:"%.2f"}} €</td>
     </tr>
@@ -338,14 +338,14 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
-        <font color="#3e3">{{$paramsPaie->acs|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->acs|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
         <font color="#fff">Chomage</font>
       </td>
       <td align="right">{{$fichePaie->_acs|string_format:"%.2f"}} €</td>
       <td align="right">
-        <font color="#3e3">{{$paramsPaie->acp|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->acp|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_acp|string_format:"%.2f"}} €</td>
     </tr>
@@ -358,7 +358,7 @@
       </td>
       <td align="left"></td>
       <td align="right">
-        <font color="#3e3">{{$paramsPaie->aatp|string_format:"%.2f"}} %</font>
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->aatp|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_aatp|string_format:"%.2f"}} €</td>
     </tr>

@@ -13,25 +13,34 @@ if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$user = new CMediusers();
+$employecab_id = mbGetValueFromGetOrSession("employecab_id", null);
+
+$user = new CMediusers;
 $user->load($AppUI->user_id);
 
-$user_id = mbGetValueFromGetOrSession("user_id", $user->user_id);
+$employe = new CEmployeCab;
+$where = array();
+$where["function_id"] = "= '$user->function_id'";
 
-$user->load($user_id);
+$listEmployes = $employe->loadList($where);
+if($employecab_id) {
+  $employe =& $listEmployes[$employecab_id];
+} else {
+  $employe->function_id = $user->function_id;
+}
 
 $paramsPaie = new CParamsPaie();
-$paramsPaie->loadFromUser($user_id);
-$paramsPaie->loadRefsFwd();
-
-$listUsers = $user->loadUsers(PERM_EDIT);
+if($employe->employecab_id) {
+  $paramsPaie->loadFromUser($employe->employecab_id);
+  $paramsPaie->loadRefsFwd();
+}
 
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("user"      , $user);
-$smarty->assign("paramsPaie", $paramsPaie);
-$smarty->assign("listUsers" , $listUsers);
+$smarty->assign("employe"      , $employe);
+$smarty->assign("paramsPaie"   , $paramsPaie);
+$smarty->assign("listEmployes" , $listEmployes);
 
 $smarty->display("edit_params.tpl");
 ?>

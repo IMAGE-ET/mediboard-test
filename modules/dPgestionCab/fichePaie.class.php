@@ -166,6 +166,11 @@ class CFichePaie extends CMbObject {
     }
   }
   
+  function loadRefsFwd() {
+    $this->_ref_params_paie = new CParamsPaie;
+    $this->_ref_params_paie->load($this->params_paie_id);
+  }
+  
   function getPerm($permType) {
     if(!$this->_ref_params_paie) {
       $this->loadRefsFwd();

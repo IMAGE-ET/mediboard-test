@@ -22,11 +22,11 @@ function pageMain() {
     <td colspan="2">
       <form name="userSelector" action="index.php" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
-      <label for="user_id" title="Veuillez sélectionner l'utilisateur concerné">Utilisateur Concerné</label>
-      <select name="user_id" onchange="this.form.submit()">
-      {{foreach from=$listUsers item=curr_user}}
-        <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $user->user_id}}selected="selected"{{/if}}>
-          {{$curr_user->_view}}
+      <label for="employecab_id" title="Veuillez sélectionner l'employé concerné">Eployé Concerné</label>
+      <select name="employecab_id" onchange="this.form.submit()">
+      {{foreach from=$listEmployes item=curr_emp}}
+        <option value="{{$curr_emp->employecab_id}}" {{if $curr_emp->employecab_id == $employe->employecab_id}}selected="selected"{{/if}}>
+          {{$curr_emp->_view}}
         </option>
       {{/foreach}}
       </select>

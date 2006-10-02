@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPgestionCab";
-$config["mod_version"]     = "0.12";
+$config["mod_version"]     = "0.13";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -143,7 +143,44 @@ class CSetupdPgestionCab {
             "\nADD `matricule` VARCHAR(15)";
         db_exec( $sql ); db_error();
       case "0.12":
-        return "0.12";
+        $module = @CModule::getInstalled("mediusers");
+        if (!$module || $module->mod_version < "0.1") {
+          return "0.12";
+        }
+        $sql = "CREATE TABLE `employecab` (" .
+            "\n`employecab_id` INT NOT NULL AUTO_INCREMENT," .
+            "\n`function_id` INT NOT NULL DEFAULT '0'," .
+            "\n`nom` VARCHAR( 50 ) NOT NULL DEFAULT ''," .
+            "\n`prenom` VARCHAR( 50 ) NOT NULL DEFAULT ''," .
+            "\n`function` VARCHAR( 50 ) NOT NULL DEFAULT ''," .
+            "\n`adresse` VARCHAR( 50 )," .
+            "\n`cp` VARCHAR( 5 )," .
+            "\n`ville` VARCHAR( 50 )," .
+            "PRIMARY KEY ( `employecab_id` ) ," .
+            "INDEX ( `function_id` )" .
+            ") TYPE=MyISAM COMMENT = 'Table des employes';";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `params_paie` CHANGE `user_id` `employecab_id` INT NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        $param = new CParamsPaie;
+        $params = $param->loadList();
+        foreach($params as $key => $curr_param) {
+          $user = new CMediusers;
+          $user->load($params[$key]->employecab_id);
+          $employe = new CEmployeCab;
+          $employe->function_id = $user->function_id;
+          $employe->nom         = $user->_user_last_name;
+          $employe->prenom      = $user->_user_first_name;
+          $employe->function    = $user->_user_type;
+          $employe->adresse     = $user->_user_adresse;
+          $employe->cp          = $user->_user_cp;
+          $employe->ville       = $user->_user_ville;
+          $employe->store();
+          $params[$key]->employecab_id = $employe->employecab_id;
+          $params[$key]->store();
+        }
+      case "0.13":
+        return "0.13";
     }
     return false;
   }

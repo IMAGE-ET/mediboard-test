@@ -12,31 +12,21 @@ global $AppUI, $canRead, $canEdit, $m;
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
-
-$user = new CMediusers();
-$user->load($AppUI->user_id);
-
-$user_id = mbGetValueFromGetOrSession("user_id", $user->user_id);
 $fiche_paie_id = mbGetValueFromGetOrSession("fiche_paie_id", null);
-
-$user->load($user_id);
-
-$paramsPaie = new CParamsPaie();
-$paramsPaie->loadFromUser($user_id);
 
 $fichePaie = new CFichePaie();
 $fichePaie->load($fiche_paie_id);
 if(!$fichePaie->fiche_paie_id) {
-  $fichePaie->debut = mbDate();
-  $fichePaie->fin = mbDate();
+  $AppUI->setMsg("Vous n'avez pas choisi de fiche de paie", MSG_ERROR);
+  $AppUI->redirect( "m=dPgestionCab&tab=edit_paie" );
 }
+$fichePaie->loadRefsFwd();
+$fichePaie->_ref_params_paie->loadRefsFwd();
 
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("user"      , $user);
 $smarty->assign("fichePaie" , $fichePaie);
-$smarty->assign("paramsPaie", $paramsPaie);
 
 $smarty->display("print_fiche.tpl");
 ?>

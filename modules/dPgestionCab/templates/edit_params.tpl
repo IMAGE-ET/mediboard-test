@@ -1,13 +1,14 @@
 <table class="main">
   <tr>
     <td colspan="2">
-      <form name="userSelector" action="index.php" method="get">
+      <form name="employeSelector" action="index.php" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
-      <label for="user_id" title="Veuillez sélectionner l'utilisateur concerné">Utilisateur Concerné</label>
-      <select name="user_id" onchange="this.form.submit()">
-      {{foreach from=$listUsers item=curr_user}}
-        <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $user->user_id}}selected="selected"{{/if}}>
-          {{$curr_user->_view}}
+      <label for="employecab_id" title="Veuillez sélectionner l'utilisateur concerné">Employé Concerné</label>
+      <select name="employecab_id" onchange="this.form.submit()">
+        <option value="">&mdash; Nouvel employé</option>
+      {{foreach from=$listEmployes item=curr_emp}}
+        <option value="{{$curr_emp->employecab_id}}" {{if $curr_emp->employecab_id == $employe->employecab_id}}selected="selected"{{/if}}>
+          {{$curr_emp->_view}}
         </option>
       {{/foreach}}
       </select>
@@ -16,46 +17,60 @@
   </tr>
   <tr>
     <td class="halfPane">
-      <form name="mediuser" action="./index.php?m={{$m}}" method="post" onSubmit="return checkForm(this)">
-      <input type="hidden" name="dosql" value="do_mediusers_aed" />
-      <input type="hidden" name="m" value="mediusers" />
-      <input type="hidden" name="user_id" value="{{$user->user_id}}" />
-      <input type="hidden" name="function_id" value="{{$user->function_id}}" />
+      <form name="editEmploye" action="./index.php?m={{$m}}" method="post" onSubmit="return checkForm(this)">
+      <input type="hidden" name="dosql" value="do_employe_aed" />
+      <input type="hidden" name="m" value="dPgestionCab" />
+      <input type="hidden" name="employecab_id" value="{{$employe->employecab_id}}" />
+      <input type="hidden" name="function_id" value="{{$employe->function_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          <th class="title" colspan="2">Informations sur l'utilisateur</th>
+          {{if $employe->employecab_id}}
+          <th class="title" colspan="2">Modification de {{$employe->_view}}</th>
+          {{else}}
+          <th class="title" colspan="2">Création d'un employé</th>
+          {{/if}}
         </tr>
         <tr>
-          <th><label title="Nom de l'employé">Nom</label></th>
-          <td>{{$user->_view}}</td>
-        </tr>
-        <tr>
-          <th><label title="Fonction de l'employé">Fonction</label></th>
-          <td>{{$user->_user_type}}</td>
-        </tr>
-        <tr>
-          <th>
-            <label for="_user_adresse" title="Adresse de l'employé">Adresse</label>
-          </th>
+          <th><label for="nom" title="Nom de l'employé">Nom</label></th>
           <td>
-            <input type="text" size="30" name="_user_adresse" title="{{$user->_user_props._user_adresse}}" value="{{$user->_user_adresse}}" />
+            <input type="text" name="nom" title="{{$employe->_props.nom}}" value="{{$employe->nom}}" />
+          </td>
+        </tr>
+        <tr>
+          <th><label for="prenom" title="Prénom de l'employé">Prénom</label></th>
+          <td>
+            <input type="text" name="prenom" title="{{$employe->_props.prenom}}" value="{{$employe->prenom}}" />
+          </td>
+        </tr>
+        <tr>
+          <th><label for="function" title="Fonction de l'employé">Fonction</label></th>
+          <td>
+            <input type="text" name="function" title="{{$employe->_props.function}}" value="{{$employe->function}}" />
           </td>
         </tr>
         <tr>
           <th>
-            <label for="_user_cp" title="Code postal de l'employé">Code Postal</label>
+            <label for="adresse" title="Adresse de l'employé">Adresse</label>
           </th>
           <td>
-            <input type="text" size="6" name="_user_cp" title="{{$user->_user_props._user_cp}}" value="{{$user->_user_cp}}" />
+            <input type="text" size="30" name="adresse" title="{{$employe->_props.adresse}}" value="{{$employe->adresse}}" />
           </td>
         </tr>
         <tr>
           <th>
-            <label for="_user_ville" title="Ville de l'employé">Ville</label>
+            <label for="cp" title="Code postal de l'employé">Code Postal</label>
           </th>
           <td>
-            <input type="text" name="_user_ville" title="{{$user->_user_props._user_ville}}" value="{{$user->_user_ville}}" />
+            <input type="text" size="6" name="cp" title="{{$employe->_props.cp}}" value="{{$employe->cp}}" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="ville" title="Ville de l'employé">Ville</label>
+          </th>
+          <td>
+            <input type="text" name="ville" title="{{$employe->_props.ville}}" value="{{$employe->ville}}" />
           </td>
         </tr>
         <tr>
@@ -67,6 +82,7 @@
       </form>
     </td>
     <td class="halfPane">
+      {{if $employe->employecab_id}}
       <form name="params" action="./index.php?m={{$m}}" method="post" onSubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_paramsPaie_aed" />
       <input type="hidden" name="m" value="dPgestionCab" />
@@ -236,6 +252,15 @@
         </tr>
       </table>
       </form>
+      {{else}}
+      <table class="form">
+        <tr>
+          <th class="title">
+            Veuillez sélectionner ou créer un employé
+          </th>
+        </tr>
+      </table>
+      {{/if}}
     </td>
   </tr>
 </table>
