@@ -24,8 +24,8 @@
 
 <tr>
   <td>
-    {{$map_tonal_droite}}
-    {{$map_tonal_gauche}}
+    {{$map_tonal_droite|smarty:nodefaults}}
+    {{$map_tonal_gauche|smarty:nodefaults}}
     <img id="tonal_droite" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite" usemap="#graph_tonal_droite" onclick="changeTonalValueMouseDroite(event)" alt="Audio tonal gauche" />
     <img id="tonal_gauche" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche" usemap="#graph_tonal_gauche" onclick="changeTonalValueMouseGauche(event)" alt="Audio tonal droite" />
   </td>
@@ -251,14 +251,14 @@
       </tr>
       <tr>
         <td>
-          {{$map_vocal}}
+          {{$map_vocal|smarty:nodefaults}}
           <img id="image_vocal" src="?m=dPcabinet&amp;a=graph_audio_vocal&amp;suppressHeaders=1&amp;" usemap="#graph_vocal" onclick="changeVocalValueMouse(event)" alt="Audiogramme vocal" />
         </td>
         
         <td rowspan="2">
-          {{$map_tympan_droite}}
+          {{$map_tympan_droite|smarty:nodefaults}}
           <img id="tympan_droite" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite" usemap="#graph_tympan_droite" onclick="changeTympanValueMouseDroite(event)" alt="Tympan droit" />
-          {{$map_tympan_gauche}}
+          {{$map_tympan_gauche|smarty:nodefaults}}
           <br />
           <img id="tympan_gauche" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche" usemap="#graph_tympan_gauche" onclick="changeTympanValueMouseGauche(event)" alt="Tympa Gauche" />
         </td>
