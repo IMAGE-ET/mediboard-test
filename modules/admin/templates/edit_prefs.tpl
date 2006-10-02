@@ -76,6 +76,19 @@
   </tr>
   {{/if}}
 
+  {{if $prefsUser.admin}}
+  <tr>
+    <th>
+      <label for="pref_name[INFOSYSTEM]" title="Afficher les informations système">{{tr}}Afficher les informations système{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[INFOSYSTEM]">
+        <option value="0"{{if $prefsUser.admin.INFOSYSTEM == "0"}}selected="selected"{{/if}}>Cacher</option>
+        <option value="1"{{if $prefsUser.admin.INFOSYSTEM == "1"}}selected="selected"{{/if}}>Visible</option>
+      </select>
+    </td>
+  </tr>
+  {{/if}}
   
   
   <tr>
