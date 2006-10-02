@@ -17,7 +17,7 @@ if (!$canEdit) {
 $doc_ged_id = mbGetValueFromGetOrSession("doc_ged_id",0);
 
 $docGed = new CDocGed;
-if(!$docGed->load($doc_ged_id)){
+if(!$docGed->load($doc_ged_id) || $docGed->etat==0){
   // Ce document n'est pas valide
   $doc_ged_id = null;
   mbSetValueToSession("doc_ged_id");

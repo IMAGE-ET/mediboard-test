@@ -80,6 +80,16 @@ class CPatient extends CMbObject {
   var $_tel23       = null;
   var $_tel24       = null;
   var $_tel25       = null;
+  var $_tel31       = null;
+  var $_tel32       = null;
+  var $_tel33       = null;
+  var $_tel34       = null;
+  var $_tel35       = null;
+  var $_tel41       = null;
+  var $_tel42       = null;
+  var $_tel43       = null;
+  var $_tel44       = null;
+  var $_tel45       = null;
   var $_age         = null;
   var $_codes_cim10 = null;
   
@@ -207,6 +217,17 @@ class CPatient extends CMbObject {
     $this->_tel23 = substr($this->tel2, 4, 2);
     $this->_tel24 = substr($this->tel2, 6, 2);
     $this->_tel25 = substr($this->tel2, 8, 2);
+    $this->_tel31 = substr($this->prevenir_tel, 0, 2);
+    $this->_tel32 = substr($this->prevenir_tel, 2, 2);
+    $this->_tel33 = substr($this->prevenir_tel, 4, 2);
+    $this->_tel34 = substr($this->prevenir_tel, 6, 2);
+    $this->_tel35 = substr($this->prevenir_tel, 8, 2);
+    $this->_tel41 = substr($this->employeur_tel, 0, 2);
+    $this->_tel42 = substr($this->employeur_tel, 2, 2);
+    $this->_tel43 = substr($this->employeur_tel, 4, 2);
+    $this->_tel44 = substr($this->employeur_tel, 6, 2);
+    $this->_tel45 = substr($this->employeur_tel, 8, 2);
+
 
     if($this->naissance != "0000-00-00") {
       $annais = substr($this->naissance, 0, 4);
@@ -254,7 +275,7 @@ class CPatient extends CMbObject {
       $this->prenom = ucwords(strtolower($this->prenom));
     }
 
-  	if (($this->_tel1 != null) && ($this->_tel2 != null) && ($this->_tel3 != null) && ($this->_tel4 !== null) && ($this->_tel5 !== null)) {
+  	if (($this->_tel1 !== null) && ($this->_tel2 !== null) && ($this->_tel3 !== null) && ($this->_tel4 !== null) && ($this->_tel5 !== null)) {
       $this->tel = 
         $this->_tel1 .
         $this->_tel2 .
@@ -263,14 +284,32 @@ class CPatient extends CMbObject {
         $this->_tel5;
     }
 
-  	if(($this->_tel21 != null) && ($this->_tel22 != null) && ($this->_tel23 != null) && ($this->_tel24 !== null) && ($this->_tel25 !== null)) {
+  	if(($this->_tel21 !== null) && ($this->_tel22 !== null) && ($this->_tel23 !== null) && ($this->_tel24 !== null) && ($this->_tel25 !== null)) {
       $this->tel2 = 
         $this->_tel21 .
         $this->_tel22 .
         $this->_tel23 .
         $this->_tel24 .
         $this->_tel25;
-  	}
+    }
+    
+    if(($this->_tel31 !== null) && ($this->_tel32 !== null) && ($this->_tel33 !== null) && ($this->_tel34 !== null) && ($this->_tel35 !== null)) {
+      $this->prevenir_tel = 
+        $this->_tel31 .
+        $this->_tel32 .
+        $this->_tel33 .
+        $this->_tel34 .
+        $this->_tel35;
+    }
+    
+    if(($this->_tel41 !== null) && ($this->_tel42 !== null) && ($this->_tel43 !== null) && ($this->_tel44 !== null) && ($this->_tel45 !== null)) {
+      $this->employeur_tel = 
+        $this->_tel41 .
+        $this->_tel42 .
+        $this->_tel43 .
+        $this->_tel44 .
+        $this->_tel45;
+    }
 
   	if(($this->_annee != null) && ($this->_mois != null) && ($this->_jour != null)) {
       $this->naissance = 

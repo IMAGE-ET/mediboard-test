@@ -1,21 +1,26 @@
 // $Id: $
 
-function updateFields(selected, sFormName, sFieldCP, sFieldCity) {
+function updateFields(selected, sFormName, sFieldFocus, sFirstField, sSecondField) {
   Element.cleanWhitespace(selected);
   dn = selected.childNodes;
-  $(sFormName + '_' + sFieldCP).value = dn[0].firstChild.firstChild.nodeValue;
-  $(sFormName + '_' + sFieldCity).value = dn[2].firstChild.nodeValue;
+  $(sFormName + '_' + sFirstField).value = dn[0].firstChild.firstChild.nodeValue;
+  if(sSecondField){
+    $(sFormName + '_' + sSecondField).value = dn[2].firstChild.nodeValue;
+  }
+  if(sFieldFocus){
+    $(sFormName + '_' + sFieldFocus).focus();
+  }
 }
 
 
-function initInseeFields(sFormName, sFieldCP, sFieldCity){
+function initInseeFields(sFormName, sFieldCP, sFieldCity, sFieldFocus){
   new Ajax.Autocompleter(
     sFormName + '_' + sFieldCP,
     sFieldCP + '_auto_complete',
     'index.php?m=dPpatients&ajax=1&suppressHeaders=1&a=httpreq_do_insee_autocomplete&fieldcp='+sFieldCP, {
       minChars: 2,
       frequency: 0.15,
-      updateElement : function(element) { updateFields(element, sFormName, sFieldCP, sFieldCity) }
+      updateElement : function(element) { updateFields(element, sFormName, sFieldFocus, sFieldCP, sFieldCity) }
     }
   );
   new Ajax.Autocompleter(
@@ -24,7 +29,19 @@ function initInseeFields(sFormName, sFieldCP, sFieldCity){
     'index.php?m=dPpatients&ajax=1&suppressHeaders=1&a=httpreq_do_insee_autocomplete&fieldcity='+sFieldCity, {
       minChars: 4,
       frequency: 0.15,
-      updateElement : function(element) { updateFields(element, sFormName, sFieldCP, sFieldCity) }
+      updateElement : function(element) { updateFields(element, sFormName, sFieldFocus, sFieldCP, sFieldCity) }
+    }
+  );
+}
+
+function initPaysField(sFormName, sFieldPays, sFieldFocus){
+  new Ajax.Autocompleter(
+    sFormName + '_' + sFieldPays,
+    sFieldPays + '_auto_complete',
+    'index.php?m=dPpatients&ajax=1&suppressHeaders=1&a=httpreq_do_pays_autocomplete&fieldpays='+sFieldPays, {
+      minChars: 2,
+      frequency: 0.15,
+      updateElement : function(element) { updateFields(element, sFormName, sFieldFocus, sFieldPays) }
     }
   );
 }

@@ -66,16 +66,12 @@ function setMed( key, nom, prenom, sElementName ){
   oFieldMedecinName.value = "Dr. " + nom + " " + prenom;
 }
 
-function updateFields(selected, sFormName, sFieldCP, sFieldCity) {
-  Element.cleanWhitespace(selected);
-  dn = selected.childNodes;
-  $(sFormName + '_' + sFieldCP).value = dn[0].firstChild.firstChild.nodeValue;
-  $(sFormName + '_' + sFieldCity).value = dn[2].firstChild.nodeValue;
-  $(sFormName + '__tel1').focus();
-}
 
 function pageMain() {
-  initInseeFields("editFrm", "cp", "ville");
+  initInseeFields("editFrm", "cp", "ville","pays");
+  initInseeFields("editFrm", "prevenir_cp", "prevenir_ville", "_tel31");
+  initInseeFields("editFrm", "employeur_cp", "employeur_ville", "_tel41");
+  initPaysField("editFrm", "pays","_tel1");
   regFieldCalendar("editFrm", "cmu");
 }
 
@@ -87,6 +83,7 @@ function pageMain() {
     <td><a class="buttonnew" href="?m={{$m}}&amp;patient_id=0">Créer un nouveau patient</a></td>
   </tr>
   {{/if}}
+
   <tr>
     <td>
 
@@ -99,7 +96,7 @@ function pageMain() {
       <input type="hidden" name="dialog" value="{{$dialog}}" />
       {{/if}}
       
-      <table class="form">
+      <table class="main">
 
       <tr>
       {{if $patient->patient_id}}
@@ -113,176 +110,41 @@ function pageMain() {
         <th class="title" colspan="5">Création d'un dossier</th>
       {{/if}}
       </tr>
-
-      <tr>
-        <th class="category" colspan="2">Identité</th>
-        <th class="category" colspan="3">Médecins correpondants</th>
-      </tr>
       
       <tr>
-        <th><label for="nom" title="Nom du patient. Obligatoire">Nom </label></th>
-        <td><input tabindex="1" type="text" name="nom" value="{{$patient->nom}}" title="{{$patient->_props.nom}}" /></td>
-        <th>
-          <label for="medecin_traitant" title="Choisir un médecin traitant">Medecin traitant</label>
-          <input type="hidden" name="medecin_traitant" title="{{$patient->_props.medecin_traitant}}" value="{{$patient->medecin_traitant}}" />
-        </th>
-        <td class="readonly">
-          <input type="text" name="_medecin_traitant_name" size="30" value="Dr. {{$patient->_ref_medecin_traitant->_view}}" ondblclick="popMed('_traitant')" readonly="readonly" />
-          <button class="cancel notext" type="button" onclick="delMed('_traitant')"></button>
-        </td>
-        <td class="button"><button class="search" tabindex="29" type="button" onclick="popMed('_traitant')">Choisir un médecin</button></td>
-      </tr>
-      
-      <tr>
-        <th><label for="prenom" title="Prénom du patient. Obligatoire">Prénom </label></th>
-        <td><input tabindex="2" type="text" name="prenom" value="{{$patient->prenom}}" title="{{$patient->_props.prenom}}" /></td>
-        <th>
-          <label for="medecin1" title="Choisir un médecin correspondant">Médecin correspondant 1</label>
-          <input type="hidden" name="medecin1" value="{{$patient->_ref_medecin1->medecin_id}}" title="{{$patient->_props.medecin1}}" />
-        </th>
-        <td class="readonly">
-          <input type="text" name="_medecin1_name" size="30" value="Dr. {{$patient->_ref_medecin1->_view}}" ondblclick="popMed('1')" readonly="readonly" />
-          <button class="cancel notext" type="button" onclick="delMed('1')"></button>
-        </td>
-        <td class="button"><button class="search" tabindex="30" type="button" onclick="popMed('1')">Choisir un médecin</button></td>
-      </tr>
-      
-      <tr>
-        <th><label for="nom_jeune_fille" title="Nom de jeune fille d'une femme mariée">Nom de jeune fille</label></th>
-        <td><input tabindex="3" type="text" name="nom_jeune_fille" title="{{$patient->_props.nom_jeune_fille}}" value="{{$patient->nom_jeune_fille}}" /></td>
-<th>
-          <input type="hidden" name="medecin2" value="{{$patient->_ref_medecin2->medecin_id}}" title="{{$patient->_props.medecin2}}" />
-          <label for="medecin2" title="Choisir un second médecin correspondant">Médecin correspondant 2</label>
-        </th>
-        <td class="readonly">
-          <input type="text" name="_medecin2_name" size="30" value="{{if ($patient->_ref_medecin2)}}Dr. {{$patient->_ref_medecin2->_view}}{{/if}}" ondblclick="popMed('2')" readonly="readonly" />
-          <button class="cancel notext" type="button" onclick="delMed('2')"></button>
-        </td>
-        <td class="button"><button class="search" tabindex="31" type="button" onclick="popMed('2')">Choisir un médecin</button></td>
-      </tr>
-      
-      <tr>
-        <th><label for="_jour" title="Date de naissance du patient, au format JJ-MM-AAAA">Date de naissance</label></th>
-        <td>
-          <input tabindex="4" type="text" name="_jour"  size="2" maxlength="2" value="{{if $patient->_jour != "00"}}{{$patient->_jour}}{{/if}}" onkeyup="followUp(this, '_mois', 2)" /> -
-          <input tabindex="5" type="text" name="_mois"  size="2" maxlength="2" value="{{if $patient->_mois != "00"}}{{$patient->_mois}}{{/if}}" onkeyup="followUp(this, '_annee', 2)" /> -
-          <input tabindex="6" type="text" name="_annee" size="4" maxlength="4" value="{{if $patient->_annee != "0000"}}{{$patient->_annee}}{{/if}}" />
-        </td>
-        <th>
-          <input type="hidden" name="medecin3" value="{{$patient->_ref_medecin3->medecin_id}}" title="{{$patient->_props.medecin3}}" />
-          <label for="medecin3" title="Choisir un troisième médecin correspondant">Médecin correspondant 3</label>
-        </th>
-        <td class="readonly">
-          <input type="text" name="_medecin3_name" size="30" value="{{if ($patient->_ref_medecin3)}}Dr. {{$patient->_ref_medecin3->_view}}{{/if}}" ondblclick="popMed('3')" readonly="readonly" />
-          <button class="cancel notext" type="button" onclick="delMed('3')"></button>
-        </td>
-        <td class="button"><button class="search" tabindex="32" type="button" onclick="popMed('3')">Choisir un médecin</button></td>
-      </tr>
-      
-      <tr>
-        <th><label for="sexe" title="Sexe du patient">Sexe</label></th>
-        <td>
-          <select tabindex="7" name="sexe" title="{{$patient->_props.sexe}}">
-            <option value="m" {{if $patient->sexe == "m"}} selected="selected" {{/if}}>masculin</option>
-            <option value="f" {{if $patient->sexe == "f"}} selected="selected" {{/if}}>féminin</option>
-            <option value="j" {{if $patient->sexe == "j"}} selected="selected" {{/if}}>femme célibataire</option>
-          </select>
-        </td>
-        <td colspan="3">
+        <td colspan="5">
+          <div class="accordionMain" id="accordionConsult">
+          
+            <div id="Identite">
+              <div id="IdentiteHeader" class="accordionTabTitleBar">
+                Identité
+              </div>
+              <div id="IdentiteContent"  class="accordionTabContentBox">
+              {{include file="inc_acc_identite.tpl"}}
+              </div>
+            </div>
+            <div id="Medical">
+              <div id="MedicalHeader" class="accordionTabTitleBar">
+                Médical
+              </div>
+              <div id="MedicalContent"  class="accordionTabContentBox">
+              {{include file="inc_acc_medical.tpl"}}
+              </div>
+            </div>
+            <div id="Corresp">
+              <div id="CorrespHeader" class="accordionTabTitleBar">
+                Correspondance
+              </div>
+              <div id="CorrespContent"  class="accordionTabContentBox">
+              {{include file="inc_acc_corresp.tpl"}}
+              </div>
+            </div>
+          </div>
         </td>
       </tr>
       
       <tr>
-        <th class="category" colspan="2">Coordonnées</th>
-        <th class="category" colspan="3">Informations médicales</th>
-      </tr>
-      
-      <tr>
-        <th rowspan="2"><label for="adresse" title="Adresse du patient">Adresse</label></th>
-        <td rowspan="2"><textarea tabindex="8" name="adresse" title="{{$patient->_props.adresse}}" rows="1">{{$patient->adresse}}</textarea></td>
-        <th><label for="incapable_majeur" title="Patient reconnu incapable majeur">Incapable majeur </label></th>
-        <td colspan="2">
-          <input tabindex="22" type="radio" name="incapable_majeur" value="o" {{if $patient->incapable_majeur == "o"}} checked="checked" {{/if}} />oui
-          <input tabindex="23" type="radio" name="incapable_majeur" value="n" {{if $patient->incapable_majeur == "n"}} checked="checked" {{/if}} />non
-        </td>
-      </tr>
-      <tr>
-        <th><label for="ATNC" title="Patient présentant un risque ATNC">ATNC </label></th>
-        <td colspan="2">
-          <input tabindex="24" type="radio" name="ATNC" value="o" {{if $patient->ATNC == "o"}} checked="checked" {{/if}} />oui
-          <input tabindex="25" type="radio" name="ATNC" value="n" {{if $patient->ATNC == "n"}} checked="checked" {{/if}} />non
-        </td>
-      </tr>
-      <tr>
-        <th><label for="cp" title="Code postal">Code Postal</label></th>
-        <td>
-          <input tabindex="9" size="31" maxlength="5" type="text" name="cp" value="{{$patient->cp}}" title="{{$patient->_props.cp}}" />
-          <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
-        </td>
-        <th><label for="matricule" title="Matricule valide d'assuré social (13 chiffres + 2 pour la clé)">Numéro d'assuré social</label></th>
-        <td colspan="2">
-          <input tabindex="26" type="text" size="17" maxlength="15" name="matricule" title="{{$patient->_props.matricule}}" value="{{$patient->matricule}}" />
-        </td>
-      </tr>
-      
-      <tr>
-        <th><label for="ville" title="Ville du patient">Ville</label></th>
-        <td>
-          <input tabindex="10" size="31" type="text" name="ville" value="{{$patient->ville}}" title="{{$patient->_props.ville}}" />
-          <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
-        </td>
-        <th><label for="SHS" title="Code Administratif SHS">Code administratif</label></th>
-        <td colspan="2">
-          <input tabindex="27" type="text" size="8" maxlength="8" name="SHS" title="{{$patient->_props.SHS}}" value="{{$patient->SHS}}" />
-        </td>
-      </tr>
-      
-      <tr>
-        <th><label for="_tel1" title="Numéro de téléphone filaire">Téléphone</label></th>
-        <td>
-          <input tabindex="11" type="text" name="_tel1" size="2" maxlength="2" value="{{$patient->_tel1}}" title="num|length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
-          <input tabindex="12" type="text" name="_tel2" size="2" maxlength="2" value="{{$patient->_tel2}}" title="num|length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
-          <input tabindex="13" type="text" name="_tel3" size="2" maxlength="2" value="{{$patient->_tel3}}" title="num|length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
-          <input tabindex="14" type="text" name="_tel4" size="2" maxlength="2" value="{{$patient->_tel4}}" title="num|length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
-          <input tabindex="15" type="text" name="_tel5" size="2" maxlength="2" value="{{$patient->_tel5}}" title="num|length|2" onkeyup="followUp(this, '_tel21', 2)" />
-        </td>
-        <th><label for="regime_sante" title="Regime d'assurance santé">Régime d'assurance santé</label></th>
-        <td colspan="2">
-          <input tabindex="28" type="text" size="40" maxlength="40" name="regime_sante" title="{{$patient->_props.regime_sante}}" value="{{$patient->regime_sante}}" />
-        </td>
-      </tr>
-      
-      <tr>
-        <th><label for="_tel21" title="Numéro de téléphone portable">Portable</label></th>
-        <td>
-          <input tabindex="16" type="text" name="_tel21" size="2" maxlength="2" value="{{$patient->_tel21}}" title="num|length|2" onkeyup="followUp(this, '_tel22', 2)" /> - 
-          <input tabindex="17" type="text" name="_tel22" size="2" maxlength="2" value="{{$patient->_tel22}}" title="num|length|2" onkeyup="followUp(this, '_tel23', 2)" /> -
-          <input tabindex="18" type="text" name="_tel23" size="2" maxlength="2" value="{{$patient->_tel23}}" title="num|length|2" onkeyup="followUp(this, '_tel24', 2)" /> -
-          <input tabindex="19" type="text" name="_tel24" size="2" maxlength="2" value="{{$patient->_tel24}}" title="num|length|2" onkeyup="followUp(this, '_tel25', 2)" /> -
-          <input tabindex="20" type="text" name="_tel25" size="2" maxlength="2" value="{{$patient->_tel25}}" title="num|length|2" />
-        </td>
-        <th><label for="cmu" title="Couverture Mutuelle Universelle">CMU</label></th>
-        <td colspan="2" class="date">
-          <div id="editFrm_cmu_da">{{$patient->cmu|date_format:"%d/%m/%Y"}}</div>
-          <input type="hidden" name="cmu" title="date" value="{{$patient->cmu}}" />
-          <img id="editFrm_cmu_trigger" src="./images/calendar.gif" alt="calendar"/>
-          <button class="cancel notext" type="button" onclick="delCmu()"></button>
-        </td>
-      </tr>
-      
-      <tr>
-        <th><label for="rques" title="Remarques générales concernant le patient">Remarques</label></th>
-        <td>
-          <textarea tabindex="21" title="{{$patient->_props.rques}}" name="rques">{{$patient->rques}}</textarea>
-        </td>
-        <th><label for="ald" title="Affection longue Durée">ALD</label></th>
-        <td colspan="2">
-          <textarea tabindex="33" title="{{$patient->_props.ald}}" name="ald">{{$patient->ald}}</textarea>
-        </td>
-      </tr>
-      
-      <tr>
-        <td class="button" colspan="5">
+        <td class="button" colspan="5" style="text-align:center;">
           {{if $patient->patient_id}}
             <button tabindex="34" type="submit" class="submit">Valider</button>
             <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
@@ -296,16 +158,19 @@ function pageMain() {
           {{/if}}
         </td>
       </tr>
-      
+
       </table>
-
       </form>
-
     </td>
   </tr>
 </table>
+<script language="Javascript" type="text/javascript">
+var oAccord = new Rico.Accordion( $('accordionConsult'), { 
+  panelHeight: 250, 
+  showDelay:50, 
+  showSteps:3 
+} );
 
-<script type="text/javascript">
 {{if $textSiblings}}
   confirmCreation({{$created}}, {{if $dialog}}1{{else}}0{{/if}}, "{{$textSiblings|smarty:nodefaults|escape:"javascript"}}");
 {{/if}}

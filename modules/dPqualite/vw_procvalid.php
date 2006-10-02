@@ -19,7 +19,7 @@ $procAnnuleVisible = mbGetValueFromGetOrSession("procAnnuleVisible" , 0);
 $lastactif         = mbGetvalueFromGet("lastactif", 0);
 
 $docGed = new CDocGed;
-if(!$docGed->load($doc_ged_id)){
+if(!$docGed->load($doc_ged_id) || $docGed->etat==0){
   // Ce document n'est pas valide
   $doc_ged_id = null;
   mbSetValueToSession("doc_ged_id");
