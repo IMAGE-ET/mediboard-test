@@ -18,6 +18,7 @@ function initInseeFields(sFormName, sFieldCP, sFieldCity, sFieldFocus){
     sFormName + '_' + sFieldCP,
     sFieldCP + '_auto_complete',
     'index.php?m=dPpatients&ajax=1&suppressHeaders=1&a=httpreq_do_insee_autocomplete&fieldcp='+sFieldCP, {
+      method: 'get',
       minChars: 2,
       frequency: 0.15,
       updateElement : function(element) { updateFields(element, sFormName, sFieldFocus, sFieldCP, sFieldCity) }
@@ -27,6 +28,7 @@ function initInseeFields(sFormName, sFieldCP, sFieldCity, sFieldFocus){
     sFormName + '_' + sFieldCity,
     sFieldCity + '_auto_complete',
     'index.php?m=dPpatients&ajax=1&suppressHeaders=1&a=httpreq_do_insee_autocomplete&fieldcity='+sFieldCity, {
+      method: 'get',
       minChars: 4,
       frequency: 0.15,
       updateElement : function(element) { updateFields(element, sFormName, sFieldFocus, sFieldCP, sFieldCity) }
@@ -39,6 +41,7 @@ function initPaysField(sFormName, sFieldPays, sFieldFocus){
     sFormName + '_' + sFieldPays,
     sFieldPays + '_auto_complete',
     'index.php?m=dPpatients&ajax=1&suppressHeaders=1&a=httpreq_do_pays_autocomplete&fieldpays='+sFieldPays, {
+      method: 'get',
       minChars: 2,
       frequency: 0.15,
       updateElement : function(element) { updateFields(element, sFormName, sFieldFocus, sFieldPays) }

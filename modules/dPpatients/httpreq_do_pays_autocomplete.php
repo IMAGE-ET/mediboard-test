@@ -13,7 +13,7 @@ global $AppUI, $canRead, $canEdit, $m;
 do_connect($AppUI->cfg["baseINSEE"]);
 
 
-if($pays = @$_POST[$_GET["fieldpays"]]) {
+if($pays = @$_GET[$_GET["fieldpays"]]) {
   $sql = "SELECT nom_fr FROM pays" .
       "\nWHERE nom_fr LIKE '$pays%'" .
       "\nORDER BY nom_fr";

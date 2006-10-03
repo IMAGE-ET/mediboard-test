@@ -11,12 +11,12 @@ global $AppUI, $canRead, $canEdit, $m;
 
 do_connect($AppUI->cfg["baseINSEE"]);
 
-if($cp = @$_POST[$_GET["fieldcp"]]) {
+if($cp = @$_GET[$_GET["fieldcp"]]) {
   $sql = "SELECT commune, code_postal FROM communes_france" .
       "\nWHERE code_postal LIKE '$cp%'" .
       "\nORDER BY code_postal, commune";
 }
-if($ville = @$_POST[$_GET["fieldcity"]]) {
+if($ville = @$_GET[$_GET["fieldcity"]]) {
   $sql = "SELECT commune, code_postal FROM communes_france" .
       "\nWHERE commune LIKE '%$ville%'" .
       "\nORDER BY code_postal, commune";
