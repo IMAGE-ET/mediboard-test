@@ -177,15 +177,12 @@
 <tr>
   <th><label for="type_ambu" title="Type d'admission">{{tr}}Type d'admission{{/tr}}</label></th>
   <td colspan="2">
-  <!--
-    <input name="type" value="comp" type="radio" {{if !$sejour->sejour_id || $sejour->type == "comp"}}checked="checked"{{/if}} onchange="modifSejour()" />
-    <label for="type_comp">{{tr}}comp{{/tr}}</label><br />
-    <input name="type" value="ambu" type="radio" {{if $sejour->type == "ambu"}}checked="checked"{{/if}} onchange="reinitDureeSejour();modifSejour()" />
-    <label for="type_ambu">{{tr}}ambu{{/tr}}</label><br />
-    <input name="type" value="exte" type="radio" {{if $sejour->type == "exte"}}checked="checked"{{/if}} onchange="modifSejour()" />
-    <label for="type_exte">{{tr}}exte{{/tr}}</label><br />
-  -->
-    {{html_radios name="type" options=$sejour->_enumsTrans.type separator="<br />" checked=$sejour->type}}
+    {{if $sejour->sejour_id}}
+    {{assign var="checked" value=$sejour->type}}
+    {{else}}
+    {{assign var="checked" value="ambu"}}
+    {{/if}}
+    {{html_radios name="type" options=$sejour->_enumsTrans.type separator="<br />" title=$sejour->_props.type checked=$checked}}
   </td>
 </tr>
 
@@ -195,12 +192,12 @@
     <label for="modalite_libre" title="modalite d'admission">{{tr}}Modalité d'admission{{/tr}}</label>
   </th>
   <td colspan="2">
-    <input name="modalite" value="libre" type="radio" {{if !$sejour->sejour_id || $sejour->modalite == "libre"}}checked="checked"{{/if}} onchange="modifSejour()" />
-    <label for="modalite_libre">Libre</label><br />
-    <input name="modalite" value="office" type="radio" {{if $sejour->modalite == "office"}}checked="checked"{{/if}} onchange="modifSejour()" />
-    <label for="modalite_office">Office</label><br />
-    <input name="modalite" value="tiers" type="radio" {{if $sejour->modalite == "tiers"}}checked="checked"{{/if}} onchange="modifSejour()" />
-    <label for="modalite_tiers">Tiers</label><br />
+    {{if $sejour->sejour_id}}
+    {{assign var="checked" value=$sejour->modalite}}
+    {{else}}
+    {{assign var="checked" value="libre"}}
+    {{/if}}
+    {{html_radios name="modalite" options=$sejour->_enumsTrans.modalite separator="<br />" title=$sejour->_props.modalite checked=$checked}}
   </td>
 </tr>
 {{/if}}
