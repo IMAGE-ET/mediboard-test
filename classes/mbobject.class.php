@@ -15,6 +15,8 @@
 global $mbObjectCount;
 $mbObjectCount = 0;
 
+require_once("./classes/request.class.php");
+
 require_once("./includes/db_connect.php");
  
 class CMbObject {
@@ -139,37 +141,48 @@ class CMbObject {
    * Loads the first object matching defined properties
    */
   function loadMatchingObject($order = null, $group = null, $leftjoin = null) {
-    $where = array();
-    foreach(get_object_vars($this) as $key => $value) {
-      if ($key[0] != "_" and $value !== null) {
-        $where[$key] = "= '$value'";
+    $request = new CRequest;
+    $request->addLJoin($leftjoin);
+    $request->addGroup($group);
+    $request->addOrder($order);
+    foreach($this->getProps() as $key => $value) {
+      if($value !== null) {
+        $request->addWhereClause($key, "= '$value'");
       }
     }
-    
-    $this->loadObject($where, $order, $group, $leftjoin);
+    $this->loadObject($request->where, $request->order, $request->group, $request->ljoin);
   }
   
   /**
    * Loads the list which objects match defined properties
    */
   function loadMatchingList($order = null, $limit = null, $group = null, $leftjoin = null) {
-    $where = array();
-    foreach(get_object_vars($this) as $key => $value) {
-      if ($key[0] != "_" and $value !== null) {
-        $where[$key] = "= '$value'";
+    $request = new CRequest;
+    $request->addLJoin($leftjoin);
+    $request->addGroup($group);
+    $request->addOrder($order);
+    $request->setLimit($limit);
+    foreach($this->getProps() as $key => $value) {
+      if($value !== null) {
+        $request->addWhereClause($key, "= '$value'");
       }
     }
-    
-    return $this->loadList($where, $order, $limit, $group, $leftjoin);
+    return $this->loadList($request->where, $request->order, $request->limit, $request->group, $request->ljoin);
   }
   
   /**
    * Loads the first object matching the query
    */
   function loadObject($where = null, $order = null, $group = null, $leftjoin = null) {
-    $list =& $this->loadList($where, $order, "0,1", $group, $leftjoin);
+    $request = new CRequest;
+    $request->addLJoin($leftjoin);
+    $request->addWhere($where);
+    $request->addGroup($group);
+    $request->addOrder($order);
+    $request->setLimit("0,1");
+    $list =& $this->loadList($request->where, $request->order, $request->limit, $request->group, $request->ljoin);
     foreach ($list as $object) {
-      foreach(get_object_vars($object) as $key => $value) {
+      foreach($object->getProps() as $key => $value) {
         $this->$key = $value;
       }
       return true;
@@ -179,71 +192,13 @@ class CMbObject {
   
   // Object list by a request constructor
   function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
-    $sql = "SELECT `$this->_tbl`.* FROM `$this->_tbl`";
-
-    // Left join clauses
-    if ($leftjoin) {
-      assert(is_array($leftjoin));
-      foreach ($leftjoin as $table => $condition) {
-        $sql .= "\nLEFT JOIN `$table` ON $condition";
-      }
-    }
-    
-    // Where clauses
-    if (is_array($where)) {
-      foreach ($where as $field => $eq) {
-        if (is_string($field)) {
-          if($pos = strpos($field, ".")) {
-            $point_table = substr($field, 0, $pos);
-            $point_field = substr($field, $pos + 1);
-            $where[$field] = "`$point_table`.`$point_field` $eq";
-          } else {
-            $where[$field] = "`$field` $eq";
-          }
-        }
-        
-        $where[$field] = "(" . $where[$field] . ")";
-      }
-    }
-    
-    if ($where) {
-      $sql .= "\nWHERE ";
-      $sql .= is_array($where) ? implode("\nAND ", $where) : $where;
-    }
-      
-    // Group by fields
-    if (is_array($group)) {
-      foreach ($group as $key => $field) {
-        $group[$key] = "`$field`";
-      }
-    }
-    
-    if ($group) {
-      $sql .= "\nGROUP BY ";
-      $sql .= is_array($group) ? implode(", ", $group) : $group;
-    }
-      
-    // Order by fields
-    if (is_array($order)) {
-      foreach ($order as $key => $field) {
-        // We cannot use the `` syntax because it wont work
-        // with table.field syntax, neither the ASC/DESC one
-        //$order[$key] = "`$field`";
-        $order[$key] = "$field";
-      }
-    }
-    
-    if ($order) {
-      $sql .= "\nORDER BY ";
-      $sql .= is_array($order) ? implode(", ", $order) : $order;
-    }
-    
-    // Limits
-    if ($limit) {
-      $sql .= "\nLIMIT $limit";
-    }
-
-    return db_loadObjectList($sql, $this);
+    $request = new CRequest();
+    $request->addLJoin($leftjoin);
+    $request->addWhere($where);
+    $request->addGroup($group);
+    $request->addOrder($order);
+    $request->setLimit($limit);
+    return db_loadObjectList($request->getRequest($this), $this);
   }
 
   /**

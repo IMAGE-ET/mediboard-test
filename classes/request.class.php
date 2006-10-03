@@ -9,8 +9,6 @@
 
 // Request
 class CRequest {
-  //Table name
-  var $tbl = "";
   
   // params
   var $ljoin = array();
@@ -19,8 +17,7 @@ class CRequest {
   var $order = array();
   var $limit = "";
     
-  function CRequest($tbl) {
-    $this->tbl = $tbl;
+  function CRequest() {
   }
   
   function resetParams() {
@@ -44,6 +41,14 @@ class CRequest {
       $this->where[] = $where;
     }
   }
+  
+  function addWhereClause($key, $value) {
+    if($key) {
+      $this->where[$key] = $value;
+    } else {
+      $this->where[] = $value;
+    }
+  }
 
   function addGroup($group) {
     if(is_array($group)) {
@@ -65,8 +70,11 @@ class CRequest {
     $this->limit = $limit;
   }
 
-  function getRequest() {
-    $sql = "SELECT `$this->tbl`.* FROM `$this->tbl`";
+  function getRequest($obj) {
+    
+    $tbl = $obj->_tbl;
+    
+    $sql = "SELECT `$tbl`.* FROM `$tbl`";
 
     // Left join clauses
     if ($this->ljoin) {
