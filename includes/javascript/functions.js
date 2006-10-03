@@ -276,3 +276,11 @@ function view_log(classe, id) {
   url.addParam("type", "");
   url.popup(600, 500, "history");
 }
+
+function view_idsante400(classe, id) {
+  url = new Url();
+  url.setModuleAction("dPsante400", "view_identifiants");
+  url.addParam("object_class", classe);
+  url.addParam("object_id", id);
+  url.popup(600, 500, "sante400");
+}

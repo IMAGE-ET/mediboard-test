@@ -13,6 +13,9 @@ if (!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
 }
 
+// Droit de lecture dPsante400
+$readIdSante400 = ($moduleSante400 = CModule::getInstalled("dPsante400")) ? $moduleSante400->canRead() : false;
+
 // Récupération du user à ajouter/editer
 $mediuserSel = new CMediusers;
 $mediuserSel->load(mbGetValueFromGetOrSession("user_id"));
@@ -41,10 +44,11 @@ $profiles = $profiles->loadList($where);
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("mediuserSel", $mediuserSel);
-$smarty->assign("profiles"   , $profiles   );
-$smarty->assign("functions"  , $functions  );
-$smarty->assign("disciplines", $disciplines);
+$smarty->assign("readIdSante400", $readIdSante400);
+$smarty->assign("mediuserSel"   , $mediuserSel   );
+$smarty->assign("profiles"      , $profiles      );
+$smarty->assign("functions"     , $functions     );
+$smarty->assign("disciplines"   , $disciplines   );
 
 $smarty->display("vw_idx_mediusers.tpl");
 

@@ -73,8 +73,13 @@ function pageMain() {
         <tr>
           <th class="category" colspan="2">
             {{if $mediuserSel->user_id}}
+            {{if $readIdSante400}}
+            <a style="float:right;" href="javascript:view_idsante400('CMediusers',{{$mediuserSel->user_id}})">
+              <img src="images/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
+            </a>
+            {{/if}}
             <a style="float:right;" href="javascript:view_log('CMediusers',{{$mediuserSel->user_id}})">
-              <img src="images/history.gif" alt="historique" />
+              <img src="images/history.gif" alt="historique" title="historique"/>
             </a>
             Modification de l'utilisateur &lsquo;{{$mediuserSel->_user_username}}&rsquo;
             {{else}}
