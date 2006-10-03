@@ -12,7 +12,7 @@
 <input type="hidden" name="modif_SHS" value="{{$sejour->modif_SHS}}" />
 <input type="hidden" name="annule" value="{{$sejour->annule}}" />
 {{if !$mode_operation}}
-<input type="hidden" name="sejour_id" value="{{$sejour->sejour_id}}" />
+  <input type="hidden" name="sejour_id" value="{{$sejour->sejour_id}}" />
 {{/if}}
 
 
@@ -175,14 +175,17 @@
 {{/if}}
 
 <tr>
-  <th><label for="type_comp" title="Type d'admission">{{tr}}Type d'admission{{/tr}}</label></th>
+  <th><label for="type_ambu" title="Type d'admission">{{tr}}Type d'admission{{/tr}}</label></th>
   <td colspan="2">
+  <!--
     <input name="type" value="comp" type="radio" {{if !$sejour->sejour_id || $sejour->type == "comp"}}checked="checked"{{/if}} onchange="modifSejour()" />
     <label for="type_comp">{{tr}}comp{{/tr}}</label><br />
     <input name="type" value="ambu" type="radio" {{if $sejour->type == "ambu"}}checked="checked"{{/if}} onchange="reinitDureeSejour();modifSejour()" />
     <label for="type_ambu">{{tr}}ambu{{/tr}}</label><br />
     <input name="type" value="exte" type="radio" {{if $sejour->type == "exte"}}checked="checked"{{/if}} onchange="modifSejour()" />
     <label for="type_exte">{{tr}}exte{{/tr}}</label><br />
+  -->
+    {{html_radios name="type" options=$sejour->_enumsTrans.type separator="<br />" checked=$sejour->type}}
   </td>
 </tr>
 

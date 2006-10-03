@@ -536,7 +536,7 @@ class CMbObject {
     foreach ($this->_enums as $propName => $enumValues) {
       $enumsTrans[$propName] = array_flip($enumValues);
       foreach($enumsTrans[$propName] as $key => $item) {
-        $enumsTrans[$propName][$key] = $AppUI->_($key);
+        $enumsTrans[$propName][$key] = $AppUI->_(get_class($this).".$propName.$key");
       }
       asort($enumsTrans[$propName]);
     }
