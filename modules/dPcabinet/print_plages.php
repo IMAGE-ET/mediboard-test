@@ -9,7 +9,7 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-if (!$canRead) {			// lock out users that do not have at least readPermission on this module
+if (!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
 
@@ -34,13 +34,10 @@ $order[] = "debut";
 $listPlage = $listPlage->loadList($where, $order);
 
 // Pour chaque plage on selectionne les consultations
-foreach($listPlage as $key => $value) {
-  $listPlage[$key]->loadRefs();
-  foreach($listPlage[$key]->_ref_consultations as $key2 => $value2) {
-  	if($listPlage[$key]->_ref_consultations[$key2]->annule)
-  	  unset($listPlage[$key]->_ref_consultations[$key2]);
-  	else
-      $listPlage[$key]->_ref_consultations[$key2]->loadRefs();
+foreach($listPlage as $keyPlage => $plage) {
+  $listPlage[$keyPlage]->loadRefs(false);
+  foreach($listPlage[$keyPlage]->_ref_consultations as $keyCons => $consult) {
+    $listPlage[$keyPlage]->_ref_consultations[$keyCons]->loadRefPatient();
   }
 }
 

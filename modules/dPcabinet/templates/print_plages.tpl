@@ -47,7 +47,7 @@
     </td>
     <td class="text">{{$curr_consult->motif|nl2br}}</td>
     <td class="text">{{$curr_consult->rques|nl2br}}</td>
-    <td class="text">{{$curr_consult->duree}} x {{$curr_consult->_ref_plageconsult->freq|date_format:"%M"}} min</td>
+    <td class="text">{{$curr_consult->duree}} x {{$curr_plage->freq|date_format:"%M"}} min</td>
   </tr>
   {{/foreach}}
   {{/foreach}}
