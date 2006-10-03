@@ -65,7 +65,7 @@ function pageMain() {
       </table>
     </td>
     <td class="pane">
-      <form name="mediuser" action="./index.php?m={{$m}}" method="post" onSubmit="return checkForm(this)">
+      <form name="mediuser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_mediusers_aed" />
       <input type="hidden" name="user_id" value="{{$mediuserSel->user_id}}" />
       <input type="hidden" name="del" value="0" />
@@ -93,11 +93,11 @@ function pageMain() {
         </tr>
         <tr>
           <th><label for="_user_password" title="Mot de passe pour se connecter à Mediboard. Obligatoire">Mot de passe</label></th>
-          <td><input type="password" name="_user_password" title="notNull|str" value="{{$mediuserSel->_user_password}}" /></td>
+          <td><input type="password" name="_user_password" title="{{$mediuserSel->_user_props._user_password}}{{if !$mediuserSel->user_id}}|notNull{{/if}}" value="" /></td>
         </tr>
         <tr>
           <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (vérif.)</label></th>
-          <td><input type="password" name="_user_password2" title="notNull|str|sameAs|_user_password" value="{{$mediuserSel->_user_password}}" /></td>
+          <td><input type="password" name="_user_password2" title="str|sameAs|_user_password" value="" /></td>
         </tr>
         <tr>
           <th><label for="remote_0" title="Permet ou non à l'utilisateur de se connecter à distance">Accès distant</label></th>

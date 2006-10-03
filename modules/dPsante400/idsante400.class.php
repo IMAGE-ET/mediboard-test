@@ -68,48 +68,52 @@
   
   /**
    * Binds the id400 to an object, and updates the object
+   * Will only bind default object properties when it's created
    */
-  function bindObject(&$mbObject, $id400, $tag = null) {
+  function bindObject(&$mbObject, $id400, $mbObjectDefault = null, $tag = null) {
     $this->object_class = get_class($mbObject);
     $this->id400 = $id400;
     $this->tag = $tag;
     $this->loadMatchingObject("`last_update` DESC");
     $this->last_update = mbDateTime();
     
-//    mbTrace($this, "ID400 before binding");
-//    mbTrace($mbObject, "Object before binding");
-
-    // Object not found
+    //-- Object not found
     if (!$this->_id) {
+      if ($mbObjectDefault) {
+        foreach ($mbObjectDefault->getProps() as $propName => $propValue) {
+          $mbObject->$propName = $propValue;
+        }
+      }
+      
       // Create object
       if ($msg = $mbObject->store()) {
         throw new Exception($msg);
       }
-//      mbTrace($mbObject, "Object after creating");
       
       // Create IdSante400
       $this->object_id = $mbObject->_id;
       if ($msg = $this->store()) {
         throw new Exception($msg);
       }
-//      mbTrace($mbObject, "Object after creating");
       
       return;
     }
     
-    // Object Found
+    // !!!! Use default when recreated
+    //-- Object Found
     // Update object
     $mbObject->_id = $this->object_id;
+    
+    mbTrace($mbObject->_id, "ID to store for " . get_class($mbObject));
     if ($msg = $mbObject->store()) {
       throw new Exception($msg);
     }
-//    mbTrace($mbObject, "Object after updating");
     
-    // Update IdSante400
+    // Update IdSante400 
+    $this->object_id = $mbObject->_id; // Object might have been re-recreated
     if ($msg = $this->store()) {
       throw new Exception($msg);
     }
-//    mbTrace($this, "ID400 after updating");
   }
   
   function setIdentifier($mbObject, $id400, $tag = null) {

@@ -4,7 +4,7 @@
 global $utypes;
 $utypes = array(
 // DEFAULT USER (nothing special)
-  0  => "",
+  0  => "-- Choisir un type",
 // DO NOT CHANGE ADMINISTRATOR INDEX !
   1  => "Administrator",
 // you can modify the terms below to suit your organisation
@@ -65,7 +65,7 @@ class CUser extends CMbObject {
 
     static $props = array (
       "user_username"   => "str|maxLength|20|notNull",
-      "user_password"   => "str|notNull",
+      "user_password"   => "str|minLength|4",
       "user_type"       => "num|notNull",
       "user_first_name" => "str|maxLength|50",
       "user_last_name"  => "str|maxLength|50|notNull",
@@ -104,46 +104,11 @@ class CUser extends CMbObject {
     $this->_enumsTrans =& $enumsTrans;
 	}
 
-	function check() {
-		if ($this->user_id === null) {
-			return "user id is null";
-		}
-		if ($this->user_password !== null) {
-			$this->user_password = db_escape(trim($this->user_password));
-		}
-		return null;
-	}
-
-	function store() {
-		$msg = $this->check();
-		if($msg) {
-			return get_class($this)."::store-check failed";
-		}
-		if( $this->user_id ) {
-		// save the old password
-			$sql = "SELECT user_password FROM users WHERE user_id = $this->user_id";
-      $hash = null;
-			db_loadHash($sql, $hash);
-			$pwd = $hash["user_password"];	// this will already be encrypted
-
-			$ret = db_updateObject("users", $this, "user_id", false);
-
-		// update password if there has been a change
-			$sql = "UPDATE users SET user_password = MD5('$this->user_password')"
-				."\nWHERE user_id = $this->user_id AND user_password != '$pwd'";
-			db_exec($sql);
-		} else {
-			$ret = db_insertObject("users", $this, "user_id");
-		// encrypt password
-			$sql = "UPDATE users SET user_password = MD5('$this->user_password')"
-				."\nWHERE user_id = $this->user_id";
-			db_exec( $sql );
-		}
-		if( !$ret ) {
-			return get_class( $this )."::store failed <br />" . db_error();
-		} else {
-			return null;
-		}
+	function updateDBFields() {
+    parent::updateDBFields();
+    
+    // Nullify no to empty in database
+		$this->user_password = $this->user_password ? md5($this->user_password) : null;
 	}
   
   function updateFormFields () {

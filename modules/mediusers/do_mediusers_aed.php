@@ -20,10 +20,10 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
   function doStore () {
     global $AppUI;
 
-    // get older function permission
+    // Get older function permission
     $old = new CMediusers();
     $old->load($this->_obj->user_id);
-
+    
     if ($msg = $this->_obj->store()) {
       if ($this->redirectError) {
         $AppUI->setMsg($msg, UI_MSG_ERROR);
@@ -31,14 +31,14 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
       }
     } else {
 
-      // copy permissions
+      // Copy permissions
       if ($profile_id = dPgetParam($_POST, "_profile_id")) {
         $user = new CUser;
         $user->load($this->_obj->user_id);
         $msg = $user->copyPermissionsFrom($profile_id, true);
       }
         
-      // insert new group and function permission
+      // Insert new group and function permission
       $this->_obj->insFunctionPermission();
       $this->_obj->insGroupPermission();
       

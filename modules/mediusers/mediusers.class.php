@@ -62,7 +62,8 @@ class CMediusers extends CMbObject {
     $this->_props =& $props;
     
     static $user_props = array (
-      "_user_username"   => "notNull|str|minLength|3",
+      "_user_username"   => "notNull|str|minLength|4",
+      "_user_password"   => "str|minLength|4",
       "_user_first_name" => "str",
       "_user_last_name"  => "notNull|str|confidential",
       "_user_email"      => "str|confidential",
@@ -259,6 +260,11 @@ class CMediusers extends CMbObject {
       return $msg;
     }
 
+    // User might have been re-created
+    if ($this->user_id != $dPuser->user_id) {
+      $this->user_id = null;
+    }
+    
     // Can't use parent::store cuz user_id don't auto-increment
     // SQL coded instead
     if ($this->user_id) {

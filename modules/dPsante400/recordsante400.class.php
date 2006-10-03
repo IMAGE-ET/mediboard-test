@@ -45,6 +45,12 @@ class CRecordSante400 {
     return trim($value);    
   }
 
+  function consumeMulti($valueName1, $valueName2) {
+    $value1 = $this->consume($valueName1);
+    $value2 = $this->consume($valueName2);
+    return $value2 ? "$value1\n$value2" : "$value1";    
+  }
+
   function consumeDate($valueName) {
     $date = $this->consume($valueName);
     if ($date == "0") {

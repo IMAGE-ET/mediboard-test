@@ -37,7 +37,7 @@
     {{/if}}
     <td>
       {{if !$dialog}}
-      <a href="?m=dPsante400&amp;tab=view_identifiants&amp;id_sante400_id={{$curr_idSante400->_id}}" >
+      <a href="?m=dPsante400&amp;{{$actionType}}={{$action}}&amp;id_sante400_id={{$curr_idSante400->_id}}" >
         {{$curr_idSante400->last_update|date_format:"%d/%m/%Y à %Hh%M (%A)"}}
       </a>
       {{else}}

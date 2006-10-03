@@ -3,7 +3,7 @@
 global $AppUI;
 require_once $AppUI->getModuleClass("dPsante400", "recordsante400");
 
-class CMouvSejourTonkin extends CRecordSante400{
+class CMouvSejourTonkin extends CRecordSante400 {
   var $dbh = null;
   var $base = "GT_EAI";
   var $table = "SEJMDB";
@@ -44,6 +44,7 @@ class CMouvSejourTonkin extends CRecordSante400{
     }
 
     mbTrace($this->data, "Mouvement de séjour");
+    mbTrace($this->status, "Status de l'import");
   }
   
   function synchronize() {
@@ -56,7 +57,7 @@ class CMouvSejourTonkin extends CRecordSante400{
     $this->etablissement = new CGroups;
     $this->etablissement->text           = $etp01->consume("ETRSOC");
     $this->etablissement->raison_sociale = $this->etablissement->text;
-    $this->etablissement->adresse        = $etp01->consume("ETADRE") . "\n" . $etp01->consume("ETADRS");
+    $this->etablissement->adresse        = $etp01->consumeMulti("ETADRE", "ETADRS");
     $this->etablissement->cp             = $etp01->consume("ETCODP");
     $this->etablissement->ville          = $etp01->consume("ETVILE");
     $this->etablissement->tel            = $etp01->consume("ETTLPH");
@@ -83,30 +84,30 @@ class CMouvSejourTonkin extends CRecordSante400{
     $this->markStatus("F");
 
     // Praticien
-    $CODMEDCHI = $this->consume("CODMEDCHI");
+    $CODMEDREF = $this->consume("CODMEDREF");
     $mdp01 = new CRecordSante400();
-    $mdp01->query("SELECT * FROM PICLIN$CODETB.MDP01 WHERE MDPRAT = $CODMEDCHI");
+    $mdp01->query("SELECT * FROM PICLIN$CODETB.MDP01 WHERE MDPRAT = $CODMEDREF");
     
     $nomsPraticien     = split(" ", $mdp01->consume("MDNOMS"));
     $prenomsPraticiens = split(" ", $mdp01->consume("MDPRES"));
 
     $this->praticien = new CMediusers;
-    $this->praticien->function_id = $this->fonction->function_id;
-    $this->praticien->_user_username =  strtolower($prenomsPraticiens[0] . $nomsPraticien[1]);
+    $this->praticien->_user_username = strtolower($prenomsPraticiens[0] . $nomsPraticien[1]);
     $this->praticien->_user_last_name  = $nomsPraticien[1];
     $this->praticien->_user_first_name = join(" ", $prenomsPraticiens);
     $this->praticien->_user_email      = null;
-    $this->praticien->_user_phone      = null;
-    $this->praticien->_user_adresse    = null;
-    $this->praticien->_user_cp         = null;
-    $this->praticien->_user_ville      = null;
+    $this->praticien->_user_phone      = mbGetValue($mdp01->consume("MDTLPB"), $mdp01->consume("MDTLPH"));
+    $this->praticien->_user_adresse    = $mdp01->consumeMulti("MDADRE", "MDADS1");
+    $this->praticien->_user_cp         = $mdp01->consume("MDCODP");
+    $this->praticien->_user_ville      = $mdp01->consume("MDVIL1");
     $this->praticien->adeli            = $mdp01->consume("MDNIOM");
-
-    mbTrace($mdp01->data, "Praticien Santé400");
-    mbTrace($this->praticien, "Praticien Mediboard");
-
     
-    $this->praticien = new CMediusers;
+    $praticien = new CMediusers;
+    $praticien->function_id = $this->fonction->function_id;
+    $praticien->_user_password = $praticien->_user_username;
+
+    $id400Prat = new CIdSante400();
+    $id400Prat->bindObject($this->praticien, $CODMEDREF, $praticien);
     
     $this->markStatus("C");
 
@@ -164,23 +165,25 @@ class CMouvSejourTonkin extends CRecordSante400{
     $this->patient->prevenir_tel     = $this->consume("TELPRV");
     $this->patient->prevenir_parente = @$transformParente[$this->consume("PARPRV")];
     
-//    $this->patient->tel2             = $this->;
-//    $this->patient->medecin_traitant = $this->;
-//    $this->patient->medecin1         = $this->;
-//    $this->patient->medecin2         = $this->;
-//    $this->patient->medecin3         = $this->;
-//    $this->patient->incapable_majeur = $this->;
-//    $this->patient->ATNC             = $this->;
-//    $this->patient->SHS              = $this->;
-//    $this->patient->regime_sante     = $this->;
-//    $this->patient->rques            = $this->;
-//    $this->patient->listCim10        = $this->;
-//    $this->patient->cmu              = $this->;
-//    $this->patient->ald              = $this->;
+    $this->patient->tel2             = null;
+    $this->patient->medecin_traitant = null;
+    $this->patient->medecin1         = null;
+    $this->patient->medecin2         = null;
+    $this->patient->medecin3         = null;
+    $this->patient->incapable_majeur = null;
+    $this->patient->ATNC             = null;
+    $this->patient->SHS              = null;
+    $this->patient->regime_sante     = null;
+    $this->patient->rques            = null;
+    $this->patient->listCim10        = null;
+    $this->patient->cmu              = null;
+    $this->patient->ald              = null;
 
     $id400Pat = new CIdSante400();
     $id400Pat->bindObject($this->patient, $this->consume("NIP"));
-    
+
+    $this->markStatus("P");
+
     // Import du séjour
     static $transformHospi = array (
       "HO" => "hospi",
@@ -197,7 +200,7 @@ class CMouvSejourTonkin extends CRecordSante400{
 
     $this->sejour = new CSejour;
     $this->sejour->entree_prevue = $this->consumeDateTime("DATENTPRV", "HREENTPRV");
-    $this->sejour->sortie_prevue = $this->consumeDateTime("DATDORPRV", "HRESORPRV");
+    $this->sejour->sortie_prevue = $this->consumeDateTime("DATSORPRV", "HRESORPRV");
     $this->sejour->entree_reelle = $this->consumeDateTime("DATENT", "HREENT");
     $this->sejour->sortie_rellle = $this->consumeDateTime("DATSOR", "HRESOR");
 
@@ -220,7 +223,7 @@ class CMouvSejourTonkin extends CRecordSante400{
 //      $id400Nais->bindObject($this->naissance, );
 //    }
     
-    // TESTER L'INJECTION SQL
+    $this->markStatus("N");
   }
 }
 ?>

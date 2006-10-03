@@ -285,6 +285,17 @@ class CMbObject {
 
   function loadRefsFwd() {
   }
+
+  /**
+   * Nullify object properties that evaluate to false
+   */
+  function nullifyEmptyFields() {
+    foreach ($this->getProps() as $propName => $propValue) {
+      if (!$propValue) {
+        $this->$propName = null;
+      }
+    }
+  }
   
   function loadRefModule($name) {
     $this->_ref_module = CModule::getInstalled($name);
@@ -341,9 +352,18 @@ class CMbObject {
         $AppUI->_($msg);
     }
     
-    // DB query
+    // The object may not existe in database anymore : re-insert it
     $k = $this->_tbl_key;
-    if($this->$k) {
+    $query = db_prepare("SELECT * FROM `$this->_tbl` WHERE `$k` = %", $this->_id);
+    if ($this->_id) {
+        if (!db_loadResult($query)) {
+        $this->_id = null;
+        trigger_error("Store query check failed: $query", E_USER_NOTICE);
+      }
+    }
+    
+    // DB query
+    if ($this->_id) {
       $ret = db_updateObject($this->_tbl, $this, $k, $updateNulls);
     } else {
       $ret = db_insertObject($this->_tbl, $this, $k);

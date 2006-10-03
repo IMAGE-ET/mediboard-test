@@ -511,6 +511,7 @@ class CAppUI {
 		$username = trim(db_escape($username));
 		$password = trim(db_escape($password));
 
+
 		$sql = 
       "SELECT " .
         "\nusers.user_id, " .
@@ -518,10 +519,10 @@ class CAppUI {
         "\nuser_password AS pwd, " .
         "\npassword('$password') AS pwdpwd, " .
         "\nmd5('$password') AS pwdmd5 " .
-        "\nFROM users, permissions " .
+        "\nFROM users, perm_module " .
         "\nWHERE user_username = '$username' " .
-        "\nAND users.user_id = permissions.permission_user " .
-        "\nAND permission_value <> 0";
+        "\nAND users.user_id = perm_module.user_id " .
+        "\nAND perm_module.view <> 0";
 
 		$obj = null;
 		if (!db_loadObject($sql, $obj)) {

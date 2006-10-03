@@ -71,11 +71,7 @@ class CPlageconsult extends CMbObject {
     $this->_enumsTrans =& $enumsTrans;
   }
   
-  function loadRefs($withCanceled = true) {
-    // Forward references
-    $this->loadRefsFwd();
-    
-    // Backward references
+  function loadRefsBack($withCanceled = true) {
     if (!$withCanceled) {
       $where["annule"] = "= 0";
     }
@@ -86,12 +82,18 @@ class CPlageconsult extends CMbObject {
     $this->_ref_consultations = new CConsultation();
     $this->_ref_consultations = $this->_ref_consultations->loadList($where, $order);
     $this->_affected = 0;
-    foreach($this->_ref_consultations as $consult) {
+    foreach ($this->_ref_consultations as $consult) {
       $this->_affected += $consult->duree;
     }
-    if($this->_total){
+
+    if ($this->_total) {
       $this->_fill_rate= round($this->_affected/$this->_total*100);
     }
+  }
+  
+  function loadRefs($withCanceled = true) {
+    $this->loadRefsFwd();
+    $this->loadRefsBack($withCanceled);
   }
   
   function loadRefsFwd() {

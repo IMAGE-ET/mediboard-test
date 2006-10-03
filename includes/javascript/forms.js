@@ -218,7 +218,7 @@ function checkElement(oElement, aSpecFragments) {
   aSpecFragments.removeByValue("confidential");
   
   bNotNull = aSpecFragments.removeByValue("notNull") > 0;
-  if(!aSpecFragments.include("xor") && !aSpecFragments.include("nand")){
+  if(!aSpecFragments.include("xor") && !aSpecFragments.include("nand") && !aSpecFragments.include("sameAs")){
     if (oElement.value == "") {
       return bNotNull ? "Ne pas peut pas être vide" : null;
     }
@@ -329,7 +329,7 @@ function checkElement(oElement, aSpecFragments) {
 			if (!oTargetElement) {
 	          return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
 			}
-			        
+			
 			if (oElement.value != oTargetElement.value) {
 			  var oTargetLabel = getLabelFor(oTargetElement);
 			  var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : oElement.name;
@@ -574,7 +574,7 @@ function checkElement(oElement, aSpecFragments) {
 
       break;
     default:
-      return "Spécification invalide";
+      return printf("Spécification invalide '%s'", aSpecFragments.join("|"));
   }
   
   if (sCheckMessage = checkMoreThan(oElement, aSpecFragments)) {

@@ -23,6 +23,7 @@ $filter = new CIdSante400;
 $filter->object_id    = mbGetValueFromGetOrSession("object_id"   );
 $filter->object_class = mbGetValueFromGetOrSession("object_class");
 $filter->tag          = mbGetValueFromGetOrSession("tag"         );
+$filter->nullifyEmptyFields();
 
 $order = "last_update DESC";
 $limit = "0, 100";

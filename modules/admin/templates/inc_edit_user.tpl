@@ -21,16 +21,16 @@
   <tr>
     <th class="category" colspan="4">Informations de connexion</th>
   </tr>
-
+  
   <tr>
     <th rowspan="2"><label for="user_username" title="Veuillez choisir un nom d'utilisateur">Nom d'utilisateur</label></th>
     <td rowspan="2"><input tabindex="101" type="text" name="user_username" value="{{$user->user_username}}" title="{{$user->_props.user_username}}" /></td>
-    <th><label for="user_password" title="Veuillez choisir un mot de passe">Mot de passe</label></th>
-    <td><input tabindex="102" type="password" name="user_password" value="{{$user->user_password}}" title="{{$user->_props.user_password}}"/></td>
+    <th><label for="user_password" title="Mot de passe pour se connecter à Mediboard. Obligatoire">Mot de passe</label></th>
+    <td><input type="password" name="user_password" title="{{$user->_props.user_password}}{{if !$user->user_id}}|notNull{{/if}}" value="" /></td>
   </tr>
   <tr>
-    <th><label for="_user_password" title="Veuillez saisir une nouvelle fois votre mot de passe">Mot de passe (vérif.)</label></th>
-    <td><input tabindex="103" type="password" name="_user_password" value="{{$user->user_password}}" title="{{$user->_props.user_password}}|sameAs|user_password"/></td>
+    <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (vérif.)</label></th>
+    <td><input type="password" name="_user_password2" title="str|sameAs|user_password" value="" /></td>
   </tr>
 
   <tr>
@@ -73,7 +73,17 @@
   </tr>
   <tr>
     <td class="button" colspan="4">
-      <button class="submit" type="submit">Sauver</button>
+      {{if $user->user_id}}
+      <button class="modify" type="submit">Valider</button>
+      <button class="trash" type="button" onclick="confirmDeletion(this.form, {
+      	  typeName:'l\'utilisateur',
+      	  objName:'{{$user->user_username|smarty:nodefaults|JSAttribute}}'
+        })">
+        Supprimer
+      </button>
+      {{else}}
+      <button class="submit" type="submit">Créer</button>
+      {{/if}}
     </td>
   </tr>
 </table>
