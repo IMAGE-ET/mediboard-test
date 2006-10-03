@@ -1,4 +1,10 @@
 <script type="text/javascript">
+function view_history_consult(id){
+  url = new Url();
+  url.setModuleAction("dPcabinet", "vw_history");
+  url.addParam("consultation_id", id);
+  url.popup(600, 500, "consult_history");
+}
 
 var oCookie = new CJL_CookieUtil("AnesthAccordion");
 var fHeight = 340;

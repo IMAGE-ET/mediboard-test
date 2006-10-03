@@ -1,10 +1,9 @@
 <form name="addOpFrm" action="?m={{$m}}" method="post">
-<input type="hidden" name="dosql" value="do_consultation_aed" />
+<input type="hidden" name="dosql" value="do_consult_anesth_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="m" value="dPcabinet" />
-<input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
-<input type="hidden" name="_check_premiere" value="{{$consult->_check_premiere}}" />
-      <select name="_operation_id" onchange="submitOpConsult()">
+<input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
+      <select name="operation_id" onchange="submitOpConsult()">
         <option value="">Pas d'Intervention</option>
         {{foreach from=$patient->_ref_sejours item=curr_sejour}}
         <optgroup label="Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}">
