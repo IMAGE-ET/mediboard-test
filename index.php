@@ -60,15 +60,16 @@ if($AppUI->doLogin()) {
 
 // check if the user is trying to log in
 if(isset($_POST["login"])) {
-	$username = dPgetParam($_POST, "username", "");
-	$password = dPgetParam($_POST, "password", "");
+	$username = dPgetParam($_POST   , "username", "");
+	$password = dPgetParam($_POST   , "password", "");
+  $md5      = dPgetParam($_POST   , "md5"     , 0);
 	$redirect = dPgetParam($_REQUEST, "redirect", "");
-	$ok = $AppUI->login($username, $password);
+  $ok = $AppUI->login($username, $password, $md5);
 	if(!$ok) {
 		@include_once("./locales/core.php");
 		$AppUI->setMsg("Login Failed", UI_MSG_ERROR);
 	}
-	$AppUI->redirect("$redirect");
+	$AppUI->redirect($redirect);
 }
 
 // Get the user preference

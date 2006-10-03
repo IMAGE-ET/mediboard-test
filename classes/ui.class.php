@@ -27,76 +27,76 @@ define("UI_CASE_UPPERFIRST", 3);
 */
 class CAppUI {
 /** @var array generic array for holding the state of anything */
-	var $state = null;
+  var $state = null;
 /** @var int */
-	var $user_id = null;
+  var $user_id = null;
 /** @var string */
-	var $user_first_name = null;
+  var $user_first_name = null;
 /** @var string */
-	var $user_last_name = null;
+  var $user_last_name = null;
 /** @var string */
-	var $user_company = null;
+  var $user_company = null;
 /** @var int */
-	var $user_department = null;
+  var $user_department = null;
 /** @var string */
-	var $user_email = null;
+  var $user_email = null;
 /** @var int */
-	var $user_type = null;
+  var $user_type = null;
 /** @var int */
   var $user_group = null;
 /** @var array */
-	var $user_prefs=null;
+  var $user_prefs=null;
 /** @var int Unix time stamp */
-	var $day_selected=null;
+  var $day_selected=null;
 
 // localisation
 /** @var string */
-	var $user_locale=null;
+  var $user_locale=null;
 /** @var string */
-	var $base_locale = "en"; // do not change - the base "keys" will always be in english
+  var $base_locale = "en"; // do not change - the base "keys" will always be in english
 
 /** @var string Message string*/
-	var $msg = "";
+  var $msg = "";
 /** @var string */
-	var $msgNo = "";
+  var $msgNo = "";
 /** @var string Default page for a redirect call*/
-	var $defaultRedirect = "";
+  var $defaultRedirect = "";
 
 /** @var array Configuration variable array*/
-	var $cfg=null;
+  var $cfg=null;
 
 /** @var integer Version major */
-	var $version_major = null;
+  var $version_major = null;
 
 /** @var integer Version minor */
-	var $version_minor = null;
+  var $version_minor = null;
 
 /** @var integer Version patch level */
-	var $version_patch = null;
+  var $version_patch = null;
 
 /** @var string Version string */
-	var $version_string = null;
+  var $version_string = null;
 
 /**
 * CAppUI Constructor
 */
-	function CAppUI() {
-		$this->state = array();
+  function CAppUI() {
+    $this->state = array();
 
-		$this->user_id = -1;
-		$this->user_first_name = "";
-		$this->user_last_name = "";
-		$this->user_company = 0;
-		$this->user_department = 0;
-		$this->user_type = 0;
+    $this->user_id = -1;
+    $this->user_first_name = "";
+    $this->user_last_name = "";
+    $this->user_company = 0;
+    $this->user_department = 0;
+    $this->user_type = 0;
 
-		$this->project_id = 0;
+    $this->project_id = 0;
 
-		$this->defaultRedirect = "";
+    $this->defaultRedirect = "";
 // set up the default preferences
-		$this->user_locale = $this->base_locale;
-		$this->user_prefs = array();
-	}
+    $this->user_locale = $this->base_locale;
+    $this->user_prefs = array();
+  }
   
   function getAllClasses() {
     global $utypes;
@@ -115,13 +115,13 @@ class CAppUI {
 * @param string $name The class root file name (excluding .class.php)
 * @return string The path to the include file
  */
-	function getSystemClass($name=null) {
-		if ($name) {
-			if ($root = $this->getConfig("root_dir")) {
-				return "$root/classes/$name.class.php";
-			}
-		}
-	}
+  function getSystemClass($name=null) {
+    if ($name) {
+      if ($root = $this->getConfig("root_dir")) {
+        return "$root/classes/$name.class.php";
+      }
+    }
+  }
 
 /**
 * Used to load a php class file from the lib directory
@@ -129,13 +129,13 @@ class CAppUI {
 * @param string $name The class root file name (excluding .class.php)
 * @return string The path to the include file
 */
-	function getLibraryClass($name=null) {
-		if ($name) {
-			if ($root = $this->getConfig("root_dir")) {
-				return "$root/lib/$name.php";
-			}
-		}
-	}
+  function getLibraryClass($name=null) {
+    if ($name) {
+      if ($root = $this->getConfig("root_dir")) {
+        return "$root/lib/$name.php";
+      }
+    }
+  }
 
 /**
 * Used to load a php class file from the module directory
@@ -197,54 +197,54 @@ class CAppUI {
 * Sets the internal confuration settings array.
 * @param array A named array of configuration variables (usually from config.php)
 */
-	function setConfig(&$cfg) {
-		$this->cfg = $cfg;
-	}
+  function setConfig(&$cfg) {
+    $this->cfg = $cfg;
+  }
 
 /**
 * Retrieves a configuration setting.
 * @param string The name of a configuration setting
 * @return The value of the setting, otherwise null if the key is not found in the configuration array
 */
-	function getConfig($key) {
-		if (array_key_exists($key, $this->cfg)) {
-			return $this->cfg[$key];
-		} else {
-			return null;
-		}
-	}
+  function getConfig($key) {
+    if (array_key_exists($key, $this->cfg)) {
+      return $this->cfg[$key];
+    } else {
+      return null;
+    }
+  }
 
 /**
 * Determines the version.
 * @return String value indicating the current dotproject version
 */
-	function getVersion() {
-		if (! isset($this->version_major)) {
-			include_once $this->cfg["root_dir"] . "/includes/version.php";
-			$this->version_major = $dp_version_major;
-			$this->version_minor = $dp_version_minor;
-			$this->version_patch = $dp_version_patch;
-			$this->version_string = $this->version_major . "." . $this->version_minor;
-			if (isset($this->version_patch))
-			  $this->version_string .= "." . $this->version_patch;
-			if (isset($dp_version_prepatch))
-			  $this->version_string .= "-" . $dp_version_prepatch;
-		}
-		return $this->version_string;
-	}
+  function getVersion() {
+    if (! isset($this->version_major)) {
+      include_once $this->cfg["root_dir"] . "/includes/version.php";
+      $this->version_major = $dp_version_major;
+      $this->version_minor = $dp_version_minor;
+      $this->version_patch = $dp_version_patch;
+      $this->version_string = $this->version_major . "." . $this->version_minor;
+      if (isset($this->version_patch))
+        $this->version_string .= "." . $this->version_patch;
+      if (isset($dp_version_prepatch))
+        $this->version_string .= "-" . $dp_version_prepatch;
+    }
+    return $this->version_string;
+  }
 
 /**
 * Checks that the current user preferred style is valid/exists.
 */
-	function checkStyle() {
-		// check if default user's uistyle is installed
-		$uistyle = $this->getPref("UISTYLE");
+  function checkStyle() {
+    // check if default user's uistyle is installed
+    $uistyle = $this->getPref("UISTYLE");
 
-		if ($uistyle && !is_dir($this->cfg["root_dir"]."/style/$uistyle")) {
-			// fall back to host_style if user style is not installed
-			$this->setPref("UISTYLE", $this->cfg["host_style"]);
-		}
-	}
+    if ($uistyle && !is_dir($this->cfg["root_dir"]."/style/$uistyle")) {
+      // fall back to host_style if user style is not installed
+      $this->setPref("UISTYLE", $this->cfg["host_style"]);
+    }
+  }
 
 /**
 * Utility function to read the "directories" under "path"
@@ -253,17 +253,17 @@ class CAppUI {
 * @param string The path to read.
 * @return array A named array of the directories (the key and value are identical).
 */
-	function readDirs($path) {
-		$dirs = array();
-		$d = dir($this->cfg["root_dir"]."/$path");
-		while (false !== ($name = $d->read())) {
-			if(is_dir($this->cfg["root_dir"]."/$path/$name") && $name != "." && $name != ".." && $name != "CVS") {
-				$dirs[$name] = $name;
-			}
-		}
-		$d->close();
-		return $dirs;
-	}
+  function readDirs($path) {
+    $dirs = array();
+    $d = dir($this->cfg["root_dir"]."/$path");
+    while (false !== ($name = $d->read())) {
+      if(is_dir($this->cfg["root_dir"]."/$path/$name") && $name != "." && $name != ".." && $name != "CVS") {
+        $dirs[$name] = $name;
+      }
+    }
+    $d->close();
+    return $dirs;
+  }
 
 /**
 * Utility function to read the "files" under "path"
@@ -271,19 +271,19 @@ class CAppUI {
 * @param string A regular expression to filter by.
 * @return array A named array of the files (the key and value are identical).
 */
-	function readFiles($path, $filter=".") {
-		$files = array();
+  function readFiles($path, $filter=".") {
+    $files = array();
 
-		if ($handle = opendir($path)) {
-			while (false !== ($file = readdir($handle))) { 
-				if ($file != "." && $file != ".." && preg_match("/$filter/", $file)) { 
-					$files[$file] = $file; 
-				} 
-			}
-			closedir($handle); 
-		}
-		return $files;
-	}
+    if ($handle = opendir($path)) {
+      while (false !== ($file = readdir($handle))) { 
+        if ($file != "." && $file != ".." && preg_match("/$filter/", $file)) { 
+          $files[$file] = $file; 
+        } 
+      }
+      closedir($handle); 
+    }
+    return $files;
+  }
 
 
 /**
@@ -293,22 +293,22 @@ class CAppUI {
 * @param string The file name.
 * @return array A named array of the files (the key and value are identical).
 */
-	function checkFileName($file) {
-		global $AppUI;
+  function checkFileName($file) {
+    global $AppUI;
 
-		// define bad characters and their replacement
-		$bad_chars = ";.\\";
-		$bad_replace = "..."; // Needs the same number of chars as $bad_chars
+    // define bad characters and their replacement
+    $bad_chars = ";.\\";
+    $bad_replace = "..."; // Needs the same number of chars as $bad_chars
 
-		// check whether the filename contained bad characters
-		if (strpos(strtr($file, $bad_chars, $bad_replace), ".") !== false) {
-			$AppUI->redirect("m=system&a=access_denied");
-		}
-		else {
-			return $file;
-		}
+    // check whether the filename contained bad characters
+    if (strpos(strtr($file, $bad_chars, $bad_replace), ".") !== false) {
+      $AppUI->redirect("m=system&a=access_denied");
+    }
+    else {
+      return $file;
+    }
 
-	}
+  }
 
 /**
 * Sets the user locale.
@@ -316,13 +316,13 @@ class CAppUI {
 * Looks in the user preferences first.  If this value has not been set by the user it uses the system default set in config.php.
 * @param string Locale abbreviation corresponding to the sub-directory name in the locales directory (usually the abbreviated language code).
 */
-	function setUserLocale($loc="") {
-		if ($loc) {
-			$this->user_locale = $loc;
-		} else {
-			$this->user_locale = @$this->user_prefs["LOCALE"] ? $this->user_prefs["LOCALE"] : $this->cfg["host_locale"];
-		}
-	}
+  function setUserLocale($loc="") {
+    if ($loc) {
+      $this->user_locale = $loc;
+    } else {
+      $this->user_locale = @$this->user_prefs["LOCALE"] ? $this->user_prefs["LOCALE"] : $this->cfg["host_locale"];
+    }
+  }
 /**
 * Translate string to the local language [same form as the gettext abbreviation]
 *
@@ -337,43 +337,43 @@ class CAppUI {
 * @param int Option to change the case of the string
 * @return string
 */
-	function _($str, $case=0) {
-		$str = trim($str);
-		if (empty($str)) {
-			return "";
-		}
-		$x = @$GLOBALS["translate"][$str];
-		if ($x) {
-			$str = $x;
-		} else if (@$this->cfg["locale_warn"]) {
-			if ($this->base_locale != $this->user_locale ||
-				($this->base_locale == $this->user_locale && !in_array($str, @$GLOBALS["translate"]))) {
-				$str .= @$this->cfg["locale_alert"];
-			}
-		}
-		switch ($case) {
-			case UI_CASE_UPPER:
-				$str = strtoupper($str);
-				break;
-			case UI_CASE_LOWER:
-				$str = strtolower($str);
-				break;
-			case UI_CASE_UPPERFIRST:
-				break;
-		}
-		/* stripslashes added to fix #811242 on 2004 Jan 10
-		 * if no problems occur, delete this comment. (gregor) */
-		return $str;
-	}
+  function _($str, $case=0) {
+    $str = trim($str);
+    if (empty($str)) {
+      return "";
+    }
+    $x = @$GLOBALS["translate"][$str];
+    if ($x) {
+      $str = $x;
+    } else if (@$this->cfg["locale_warn"]) {
+      if ($this->base_locale != $this->user_locale ||
+        ($this->base_locale == $this->user_locale && !in_array($str, @$GLOBALS["translate"]))) {
+        $str .= @$this->cfg["locale_alert"];
+      }
+    }
+    switch ($case) {
+      case UI_CASE_UPPER:
+        $str = strtoupper($str);
+        break;
+      case UI_CASE_LOWER:
+        $str = strtolower($str);
+        break;
+      case UI_CASE_UPPERFIRST:
+        break;
+    }
+    /* stripslashes added to fix #811242 on 2004 Jan 10
+     * if no problems occur, delete this comment. (gregor) */
+    return $str;
+  }
 /**
 * Set the display of warning for untranslated strings
 * @param string
 */
-	function setWarning($state=true) {
-		$temp = @$this->cfg["locale_warn"];
-		$this->cfg["locale_warn"] = $state;
-		return $temp;
-	}
+  function setWarning($state=true) {
+    $temp = @$this->cfg["locale_warn"];
+    $this->cfg["locale_warn"] = $state;
+    return $temp;
+  }
 /**
 * Save the url query string
 *
@@ -382,15 +382,15 @@ class CAppUI {
 * would be a nonsense in this case.
 * @param string If not set then the current url query string is used
 */
-	function savePlace($query="") {
-		if (!$query) {
-			$query = @$_SERVER["QUERY_STRING"];
-		}
-		if ($query != @$this->state["SAVEDPLACE"]) {
-			$this->state["SAVEDPLACE-1"] = @$this->state["SAVEDPLACE"];
-			$this->state["SAVEDPLACE"] = $query;
-		}
-	}
+  function savePlace($query="") {
+    if (!$query) {
+      $query = @$_SERVER["QUERY_STRING"];
+    }
+    if ($query != @$this->state["SAVEDPLACE"]) {
+      $this->state["SAVEDPLACE-1"] = @$this->state["SAVEDPLACE"];
+      $this->state["SAVEDPLACE"] = $query;
+    }
+  }
 
 /**
 * Redirects the browser to a new page.
@@ -402,25 +402,25 @@ class CAppUI {
 * @param string The URL query string to append to the URL
 * @param string A marker for a historic "place", only -1 or an empty string is valid.
 */
-	function redirect($params="", $hist="") {
-		$session_id = SID;
+  function redirect($params="", $hist="") {
+    $session_id = SID;
 
-		session_write_close();
-	// are the params empty
-		if (!$params) {
-		// has a place been saved
-			$params = !empty($this->state["SAVEDPLACE$hist"]) ? $this->state["SAVEDPLACE$hist"] : $this->defaultRedirect;
-		}
-		// Fix to handle cookieless sessions
-		if ($session_id != "") {
-		  if (!$params)
-		    $params = $session_id;
-		  else
-		    $params .= "&" . $session_id;
-		}
-		header("Location: index.php?$params");
-		exit();	// stop the PHP execution
-	}
+    session_write_close();
+  // are the params empty
+    if (!$params) {
+    // has a place been saved
+      $params = !empty($this->state["SAVEDPLACE$hist"]) ? $this->state["SAVEDPLACE$hist"] : $this->defaultRedirect;
+    }
+    // Fix to handle cookieless sessions
+    if ($session_id != "") {
+      if (!$params)
+        $params = $session_id;
+      else
+        $params .= "&" . $session_id;
+    }
+    header("Location: index.php?$params");
+    exit(); // stop the PHP execution
+  }
 /**
 * Set the page message.
 *
@@ -436,34 +436,34 @@ class CAppUI {
 * @param boolean If true, $msg is appended to the current string otherwise
 * the existing message is overwritten with $msg.
 */
-	function setMsg($msg, $msgNo=0, $append=false) {
-		$msg = $this->_($msg);
-		$this->msg = $append ? $this->msg." ".$msg : $msg;
-		$this->msgNo = $msgNo;
-	}
+  function setMsg($msg, $msgNo=0, $append=false) {
+    $msg = $this->_($msg);
+    $this->msg = $append ? $this->msg." ".$msg : $msg;
+    $this->msgNo = $msgNo;
+  }
 /**
 * Display the formatted message and icon
 * @param boolean If true the current message state is cleared.
 */
-	function getMsg($reset=true) {
-		$msg = $this->msg;
+  function getMsg($reset=true) {
+    $msg = $this->msg;
 
-		switch($this->msgNo) {
-  		case UI_MSG_OK      : $class = "message"; break;
-  		case UI_MSG_ALERT   : $class = "message"; break;
+    switch($this->msgNo) {
+      case UI_MSG_OK      : $class = "message"; break;
+      case UI_MSG_ALERT   : $class = "message"; break;
       case UI_MSG_WARNING : $class = "warning"; break;
-  		case UI_MSG_ERROR   : $class = "error" ; break;
-  		default: $class = "message"; break;
-		}
+      case UI_MSG_ERROR   : $class = "error" ; break;
+      default: $class = "message"; break;
+    }
 
-		if ($reset) {
-			$this->msg = "";
-			$this->msgNo = 0;
-		}
+    if ($reset) {
+      $this->msg = "";
+      $this->msgNo = 0;
+    }
     
 
-		return $msg ? "<div class='$class'>$msg</div>" : "";
-	}
+    return $msg ? "<div class='$class'>$msg</div>" : "";
+  }
 /**
 * Set the value of a temporary state variable.
 *
@@ -471,16 +471,16 @@ class CAppUI {
 * @param string The label or key of the state variable
 * @param mixed Value to assign to the label/key
 */
-	function setState($label, $value) {
-		$this->state[$label] = $value;
-	}
+  function setState($label, $value) {
+    $this->state[$label] = $value;
+  }
 /**
 * Get the value of a temporary state variable.
 * @return mixed
 */
-	function getState($label) {
-		return array_key_exists($label, $this->state) ? $this->state[$label] : NULL;
-	}
+  function getState($label) {
+    return array_key_exists($label, $this->state) ? $this->state[$label] : NULL;
+  }
 /**
 * Login function
 *
@@ -507,53 +507,52 @@ class CAppUI {
 * @param string The user password
 * @return boolean True if successful, false if not
 */
-	function login($username, $password) {
-		$username = trim(db_escape($username));
-		$password = trim(db_escape($password));
+  function login($username, $password, $md5 = 0) {
 
+    // Test login and password validity
+    $username = trim(db_escape($username));
+    $password = trim(db_escape($password));
+    if($md5) {
+      $sql = "SELECT `user_id`," .
+          "\n`user_type`," .
+          "\n`user_password`" .
+          "\nFROM `users`" .
+          "\nWHERE `user_username` = '$username' " .
+          "\nAND `user_password` = '$password'";
+    } else {
+      $sql = "SELECT `user_id`," .
+          "\n`user_type`," .
+          "\n`user_password`" .
+          "\nFROM `users`" .
+          "\nWHERE `user_username` = '$username' " .
+          "\nAND `user_password` = MD5('$password')";
+    }
 
-		$sql = 
-      "SELECT " .
-        "\nusers.user_id, " .
-        "\nusers.user_type, " .
-        "\nuser_password AS pwd, " .
-        "\npassword('$password') AS pwdpwd, " .
-        "\nmd5('$password') AS pwdmd5 " .
-        "\nFROM users, perm_module " .
-        "\nWHERE user_username = '$username' " .
-        "\nAND users.user_id = perm_module.user_id " .
-        "\nAND perm_module.view <> 0";
-
-		$obj = null;
-		if (!db_loadObject($sql, $obj)) {
-			return false;
-		}
+    $obj = null;
+    if (!db_loadObject($sql, $obj)) {
+      return false;
+    }
     
-    $export = var_export($obj, true); //echo "<pre>obj: $export</pre>";
-
-    $sql = "SELECT remote FROM users_mediboard WHERE user_id = '$obj->user_id'";
-    // If can't find remote info, remote info doesn't exist so don't check
-    $remote = 1; // 1 IS don't check value
+    // Put user_group in AppUI
     $sql = "SHOW TABLES LIKE 'users_mediboard'";
     $result1 = db_loadList($sql);
     $sql = "SHOW TABLES LIKE 'groups_mediboard'";
     $result2 = db_loadList($sql);
-    
+    $remote = 1;
     if(count($result1) && count($result2)) {
+      $sql = "SELECT `remote` FROM `users_mediboard` WHERE `user_id` = '$obj->user_id'";
       if($cur = db_exec($sql)) {
         if($row = db_fetch_row($cur)) {
           $remote = intval($row[0]);
         }
       }
-      $sql = "SELECT groups_mediboard.group_id" .
-          "\nFROM groups_mediboard, functions_mediboard, users_mediboard" .
-          "\nWHERE groups_mediboard.group_id = functions_mediboard.group_id" .
-          "\nAND functions_mediboard.function_id = users_mediboard.function_id" .
-          "\nAND users_mediboard.user_id = '$obj->user_id'";
+      $sql = "SELECT `groups_mediboard`.`group_id`" .
+          "\nFROM `groups_mediboard`, `functions_mediboard`, `users_mediboard`" .
+          "\nWHERE `groups_mediboard`.`group_id` = `functions_mediboard`.`group_id`" .
+          "\nAND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`" .
+          "\nAND `users_mediboard`.`user_id` = '$obj->user_id'";
       $this->user_group = db_loadResult($sql);
     }
-    
-    $export = var_export($remote, true); //echo "<pre>remote: $export</pre>";
     
     // Test if remote connection is allowed
     $browserIP = explode(".", $_SERVER["REMOTE_ADDR"]);
@@ -561,105 +560,86 @@ class CAppUI {
     $ip1 = intval($browserIP[1]);
     $ip2 = intval($browserIP[2]);
     $ip3 = intval($browserIP[3]);
-    
     $is_local[1] = ($ip0 == 127 && $ip1 == 0 && $ip2 == 0 && $ip3 == 1); 
     $is_local[2] = ($ip0 == 10);
     $is_local[3] = ($ip0 == 172 && $ip1 >= 16 && $ip1 < 32);
     $is_local[4] = ($ip0 == 192 && $ip1 == 168);
     $is_local[0] = $is_local[1] || $is_local[2] || $is_local[3] || $is_local[4];
-    
     if (!$is_local[0] && $remote == 1 && $obj->user_type != 1) {
-        return false;
-      }
-      
+      return false;
+    }
 
-		if (strcmp($obj->pwd, $obj->pwdmd5)) {
-			if ($this->cfg["check_legacy_password"]) {
-			/* next check the legacy password */
-				if (strcmp($obj->pwd, $obj->pwdpwd)) {
-					/* no match - failed login */
-					return false;
-				} else {
-					/* valid legacy login - update the md5 password */
-					$sql = "UPDATE users SET user_password=MD5('$password') WHERE user_id=$obj->user_id";
-					db_exec($sql) or die("Password update failed.");
-					$this->setMsg("Password updated", UI_MSG_ALERT);
-				}
-			} else {
-				return false;
-			}
-		}
+    // Load the user in AppUI
+    $sql = "SELECT " .
+        "\n`user_id`, " .
+        "\n`user_first_name`, " .
+        "\n`user_last_name`, " .
+        "\n`user_company`, " .
+        "\n`user_department`, " .
+        "\n`user_email`, " .
+        "\n`user_type`" .
+        "\nFROM `users`" .
+        "\nWHERE `user_id` = '$obj->user_id' " .
+        "\nAND `user_username` = '$username'";
 
-		$sql = "SELECT " .
-        "\nuser_id, " .
-        "\nuser_first_name, " .
-        "\nuser_last_name, " .
-        "\nuser_company, " .
-        "\nuser_department, " .
-        "\nuser_email, " .
-        "\nuser_type" .
-        "\nFROM users" .
-        "\nWHERE user_id = '$obj->user_id' " .
-        "\nAND user_username = '$username'";
+    if(!db_loadObject($sql, $this)) {
+      return false;
+    }
 
-		if(!db_loadObject($sql, $this)) {
-			return false;
-		}
-
-// load the user preferences
-		$this->loadPrefs($this->user_id);
-		$this->setUserLocale();
-		$this->checkStyle();
-		return true;
-	}
+    // load the user preferences
+    $this->loadPrefs($this->user_id);
+    $this->setUserLocale();
+    $this->checkStyle();
+    return true;
+  }
 
 /**
 * Checks whether there is any user logged in.
 */
-	function doLogin() {
-		return ($this->user_id < 0) ? true : false;
-	}
+  function doLogin() {
+    return ($this->user_id < 0) ? true : false;
+  }
 /**
 * Gets the value of the specified user preference
 * @param string Name of the preference
 */
-	function getPref($name) {
-		return @$this->user_prefs[$name];
-	}
+  function getPref($name) {
+    return @$this->user_prefs[$name];
+  }
 /**
 * Sets the value of a user preference specified by name
 * @param string Name of the preference
 * @param mixed The value of the preference
 */
-	function setPref($name, $val) {
-		$this->user_prefs[$name] = $val;
-	}
+  function setPref($name, $val) {
+    $this->user_prefs[$name] = $val;
+  }
 /**
 * Loads the stored user preferences from the database into the internal
 * preferences variable.
 * @param int User id number
 */
-	function loadPrefs($uid=0) {
-		$sql = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = $uid";
-		//writeDebug($sql, "Preferences for user $uid, SQL", __FILE__, __LINE__);
-		$prefs = db_loadHashList($sql);
-		$this->user_prefs = array_merge($this->user_prefs, db_loadHashList($sql));
-	}
+  function loadPrefs($uid=0) {
+    $sql = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = '$uid'";
+    //writeDebug($sql, "Preferences for user $uid, SQL", __FILE__, __LINE__);
+    $prefs = db_loadHashList($sql);
+    $this->user_prefs = array_merge($this->user_prefs, db_loadHashList($sql));
+  }
 
 /**
 * Gets a list of the modules that should appear in the menu
 * @return array Named array list in the form
 * ["module directory", "module name", "module_icon"]
 */
-	function getMenuModules() {
-		$sql = "
-		SELECT mod_name
-		FROM modules
-		WHERE mod_active > 0 AND mod_ui_active > 0
-		ORDER BY mod_ui_order
-		";
-		return (db_loadList($sql));
-	}
+  function getMenuModules() {
+    $sql = "
+    SELECT mod_name
+    FROM modules
+    WHERE mod_active > 0 AND mod_ui_active > 0
+    ORDER BY mod_ui_order
+    ";
+    return (db_loadList($sql));
+  }
 }
 
 ?>
