@@ -4,7 +4,7 @@
         {{foreach from=$listAnt key=keyAnt item=currTypeAnt}}
         {{if $currTypeAnt}}
         <li>
-          {{tr}}{{$keyAnt}}{{/tr}}
+          {{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}
           {{foreach from=$currTypeAnt item=currAnt}}
           <ul><li>
             <form name="delAntFrm" action="?m=dPcabinet" method="post">

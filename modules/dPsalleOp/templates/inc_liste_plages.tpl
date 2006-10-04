@@ -103,7 +103,7 @@
               {{/foreach}}
             </a>
           </td>
-          <td>{{$curr_operation->cote}}</td>
+          <td>{{tr}}COperation.cote.{{$curr_operation->cote}}{{/tr}}</td>
           <td>{{$curr_operation->temp_operation|date_format:"%Hh%M"}}</td>
         </tr>
         {{/foreach}}
@@ -155,7 +155,7 @@
               {{/foreach}}
             </a>
           </td>
-          <td>{{$curr_operation->cote}}</td>
+          <td>{{tr}}COperation.cote.{{$curr_operation->cote}}{{/tr}}</td>
         </tr>
         {{/foreach}}
       </table>

@@ -51,7 +51,7 @@
             <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{$curr_modele->type}}</a>
+            <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{tr}}CCompteRendu.type.{{$curr_modele->type}}{{/tr}}</a>
           </td>
           <td>
             <form name="editFrm" action="?m={{$m}}" method="post">
@@ -86,7 +86,7 @@
             <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{$curr_modele->type}}</a>
+            <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{tr}}CCompteRendu.type.{{$curr_modele->type}}{{/tr}}</a>
           </td>
           <td>
             <form name="editFrm" action="?m={{$m}}" method="post">

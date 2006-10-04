@@ -23,13 +23,15 @@ $canEditFiles     = $fileModule->canEdit();
 $canReadCptRendus = $fileCptRendus->canRead();
 $canEditCptRendus = $fileCptRendus->canEdit();
 
+// Liste des Praticiens
+$listPrat = new CMediusers();
+$listPrat = $listPrat->loadPraticiens(PERM_READ);
+
 // Liste des modèles
 $listModeleAuth = array();
 $listModelePrat = new CCompteRendu;
 $listModeleFct = new CCompteRendu;
 if ($pat_id) {
-  $listPrat = new CMediusers();
-  $listPrat = $listPrat->loadPraticiens(PERM_READ);
   $listFct = new CMediusers();
   $listFct = $listFct->loadFonctions(PERM_READ);
   
@@ -52,46 +54,33 @@ if ($pat_id) {
 $listCategory = new CFilesCategory;
 $listCategory = $listCategory->listCatClass("CPatient");
 
-// L'utilisateur est-il praticien?
-$chirSel = new CMediusers;
-$mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
-if ($mediuser->isPraticien()) {
-  $chirSel = $mediuser;
-}
-
-$patSel = new CPatient;
-$patSel->load($pat_id);
 $patient = new CPatient;
 $patient->load($pat_id);
-$listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_READ);
 
 // Chargement des références du patient
 if ($pat_id) {
-  
   // Infos patient complètes (tableau de droite)
   $patient->loadDossierComplet();
-  
-  // Infos patient du cabinet (tableau de gauche)
-  $patSel = clone $patient;
-  foreach ($patSel->_ref_consultations as $key => $value) {
+
+  foreach ($patient->_ref_consultations as $key => $value) {
     if (!array_key_exists($value->_ref_plageconsult->chir_id, $listPrat)) {
-    	unset($patSel->_ref_consultations[$key]);
+        unset($patient->_ref_consultations[$key]);
     }
   }
 
-  foreach ($patSel->_ref_sejours as $key => $sejour) {
+  foreach ($patient->_ref_sejours as $key => $sejour) {
     if (!array_key_exists($sejour->praticien_id, $listPrat)) {
-      unset($patSel->_ref_sejours[$key]);
+      unset($patient->_ref_sejours[$key]);
     } else {
-      $patSel->_ref_sejours[$key]->loadRefsFwd();
-      $patSel->_ref_sejours[$key]->loadRefsOperations();
-      foreach($patSel->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
+      $patient->_ref_sejours[$key]->loadRefsFwd();
+      $patient->_ref_sejours[$key]->loadRefsOperations();
+      foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
         if (!array_key_exists($op->chir_id, $listPrat)) {
-          unset($patSel->_ref_sejours[$key]->_ref_operations[$keyOp]);
+          unset($patient->_ref_sejours[$key]->_ref_operations[$keyOp]);
         } else {
-          $patSel->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
+          //$patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
+          $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefPlageOp();
+          $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefChir();
         }
       }
     }
@@ -106,19 +95,17 @@ $affichageNbFile = CFile::loadNbFilesByCategory($patient);
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("affichageNbFile",$affichageNbFile                           );
-$smarty->assign("patSel", $patSel);
-$smarty->assign("patient", $patient);
-$smarty->assign("chirSel", $chirSel);
-$smarty->assign("listPrat", $listPrat);
-$smarty->assign("canEditCabinet", $canEditCabinet);
-$smarty->assign("listCategory"  , $listCategory );
-$smarty->assign("canReadFiles"  , $canReadFiles                              );
-$smarty->assign("canEditFiles"  , $canEditFiles                              );
-$smarty->assign("canReadCptRendus", $canReadCptRendus                        );
-$smarty->assign("canEditCptRendus", $canEditCptRendus                        );
-$smarty->assign("listModelePrat", $listModelePrat                            );
-$smarty->assign("listModeleFct" , $listModeleFct                             );
+$smarty->assign("affichageNbFile",$affichageNbFile     );
+$smarty->assign("patient", $patient                    );
+$smarty->assign("listPrat", $listPrat                  );
+$smarty->assign("canEditCabinet", $canEditCabinet      );
+$smarty->assign("listCategory"  , $listCategory        );
+$smarty->assign("canReadFiles"  , $canReadFiles        );
+$smarty->assign("canEditFiles"  , $canEditFiles        );
+$smarty->assign("canReadCptRendus", $canReadCptRendus  );
+$smarty->assign("canEditCptRendus", $canEditCptRendus  );
+$smarty->assign("listModelePrat", $listModelePrat      );
+$smarty->assign("listModeleFct" , $listModeleFct       );
 
 $smarty->display("vw_dossier.tpl");
 

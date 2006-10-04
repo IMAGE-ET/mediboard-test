@@ -86,9 +86,19 @@ function reloadListExamComp() {
         <tr>
           <th><label for="groupe" title="Groupe sanguin">Groupe</label></th>
           <td>
-            {{html_options tabindex="101" name="groupe" title=$consult_anesth->_props.groupe options=$consult_anesth->_enumsTrans.groupe selected=$consult_anesth->groupe onchange="submitForm(this.form)"}}
+            {{if $consult_anesth->groupe}}
+            {{assign var="selected" value=$consult_anesth->groupe}}
+            {{else}}
+            {{assign var="selected" value=$consult_anesth->_enums.groupe.0}}
+            {{/if}}
+            {{html_options tabindex="101" name="groupe" title=$consult_anesth->_props.groupe options=$consult_anesth->_enumsTrans.groupe selected=$selected onchange="submitForm(this.form)"}}
             /
-            {{html_options tabindex="102"  name="rhesus" title=$consult_anesth->_props.rhesus options=$consult_anesth->_enumsTrans.rhesus selected=$consult_anesth->rhesus onchange="submitForm(this.form)"}}
+            {{if $consult_anesth->rhesus}}
+            {{assign var="selected" value=$consult_anesth->rhesus}}
+            {{else}}
+            {{assign var="selected" value=$consult_anesth->_enums.rhesus.0}}
+            {{/if}}
+            {{html_options tabindex="102"  name="rhesus" title=$consult_anesth->_props.rhesus options=$consult_anesth->_enumsTrans.rhesus selected=$selected onchange="submitForm(this.form)"}}
           </td>
           <th><label for="creatinine" title="Créatinine">Créatinine</label></th>
           <td>
@@ -99,7 +109,12 @@ function reloadListExamComp() {
         <tr>
           <th><label for="rai" title="Recherche d'agglutinines irrégulières">RAI</label></th>
           <td>
-            {{html_options tabindex="103" name="rai" title=$consult_anesth->_props.rai options=$consult_anesth->_enumsTrans.rai selected=$consult_anesth->rai onchange="submitForm(this.form)"}}
+            {{if $consult_anesth->rai}}
+            {{assign var="selected" value=$consult_anesth->rai}}
+            {{else}}
+            {{assign var="selected" value=$consult_anesth->_enums.rai.0}}
+            {{/if}}
+            {{html_options tabindex="103" name="rai" title=$consult_anesth->_props.rai options=$consult_anesth->_enumsTrans.rai selected=$selected onchange="submitForm(this.form)"}}
           </td>
           <th><label for="_clairance" title="Clairance Créatinine">Clairance</label></th>
           <td class="readonly">
@@ -174,7 +189,12 @@ function reloadListExamComp() {
           <td colspan="2"></td>
           <th><label for="ecbu" title="Examen Cytobactériologique des Urines">ECBU</label></th>
           <td>
-            {{html_options tabindex="116" name="ecbu" title=$consult_anesth->_props.ecbu options=$consult_anesth->_enumsTrans.ecbu selected=$consult_anesth->ecbu onchange="submitForm(this.form)"}}
+            {{if $consult_anesth->ecbu}}
+            {{assign var="selected" value=$consult_anesth->ecbu}}
+            {{else}}
+            {{assign var="selected" value=$consult_anesth->_enums.ecbu.0}}
+            {{/if}}
+            {{html_options tabindex="116" name="ecbu" title=$consult_anesth->_props.ecbu options=$consult_anesth->_enumsTrans.ecbu selected=$selected onchange="submitForm(this.form)"}}
           </td>
         </tr>
       </table>    

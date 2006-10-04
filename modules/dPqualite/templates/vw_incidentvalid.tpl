@@ -94,7 +94,7 @@ function pageMain() {
           </td>
           <td class="text">
             <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-              {{$currFiche->degre_urgence}}
+              {{tr}}CFicheEi.degre_urgence.{{$currFiche->degre_urgence}}{{/tr}}
             </a>
           </td>
           <td class="text">

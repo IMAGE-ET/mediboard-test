@@ -42,7 +42,7 @@
               <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
             {{/foreach}}
             </a>
-            Côté : {{$curr_op->cote}}
+            Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}
             <br />
             <form name="editFrm{{$curr_op->operation_id}}" action="index.php" method="get">
             <input type="hidden" name="m" value="{{$m}}" />
@@ -130,7 +130,7 @@
             <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
             {{/foreach}}
             </a>
-            Côté : {{$curr_op->cote}}
+            Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}
             <br />
             <form name="editFrm{{$curr_op->operation_id}}" action="index.php" method="get">
             <input type="hidden" name="m" value="{{$m}}" />

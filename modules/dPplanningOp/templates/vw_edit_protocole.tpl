@@ -286,11 +286,11 @@ function pageMain() {
           <th><label for="type_comp" title="Type d'admission">{{tr}}type_adm{{/tr}}</label></th>
           <td colspan="2">
             <input name="type" value="comp" type="radio" {{if !$protocole->protocole_id || $protocole->type == "comp"}}checked="checked"{{/if}} />
-            <label for="type_comp">{{tr}}comp{{/tr}}</label><br />
+            <label for="type_comp">{{tr}}CProtocole.type.comp{{/tr}}</label><br />
             <input name="type" value="ambu" type="radio" {{if $protocole->type == "ambu"}}checked="checked"{{/if}} />
-            <label for="type_ambu">{{tr}}ambu{{/tr}}</label><br />
+            <label for="type_ambu">{{tr}}CProtocole.type.ambu{{/tr}}</label><br />
             <input name="type" value="exte" type="radio" {{if $protocole->type == "exte"}}checked="checked"{{/if}} />
-            <label for="type_exte">{{tr}}exte{{/tr}}</label><br />
+            <label for="type_exte">{{tr}}CProtocole.type.exte{{/tr}}</label><br />
           </td>
         </tr>
         <tr>

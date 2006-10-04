@@ -71,14 +71,14 @@ function pageMain() {
           <td class="text">{{$curr_op->rank}}</td>
           <td class="text">{{$curr_op->_rank_reel}}</td>
           <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
-          <td class="text">{{tr}}{{$curr_op->_ref_sejour->type}}{{/tr}}</td>
+          <td class="text">{{tr}}CSejour.type.{{$curr_op->_ref_sejour->type}}{{/tr}}</td>
           <td class="text">{{if $curr_op->_ref_sejour->_at_midnight}}Oui{{else}}Non{{/if}}</td>
           <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
           <td class="text">Dr. {{$curr_op->_ref_anesth->_view}}</td>
           <td class="text">{{$curr_op->libelle}}</td>
           <td class="text">{{$curr_op->codes_ccam|replace:'|':' '}}</td>
           <td class="text">{{$curr_op->_lu_type_anesth}}</td>
-          <td class="text">{{$curr_op->_ref_consult_anesth->ASA}}</td>
+          <td class="text">{{tr}}CConsultAnesth.ASA.{{$curr_op->_ref_consult_anesth->ASA}}{{/tr}}</td>
           <td class="text">{{$curr_op->_ref_first_log->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
           <td class="text">?</td>
           <td class="text">{{$curr_op->entree_bloc|date_format:"%Hh%M"}}</td>

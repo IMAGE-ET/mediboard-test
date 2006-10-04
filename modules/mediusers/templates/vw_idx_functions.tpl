@@ -38,7 +38,7 @@ function setColor(color) {
             </a>
           </td>
           <td>
-            {{$curr_function->type}}
+            {{tr}}CFunctions.type.{{$curr_function->type}}{{/tr}}
           </td>
           <td style="background: #{{$curr_function->color}}">
             <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;function_id={{$curr_function->function_id}}">

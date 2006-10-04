@@ -43,7 +43,7 @@
                 <li><em>[{{$consult_anesth->_ref_operation->libelle}}]</em></li>
               {{/if}}
               {{foreach from=$consult_anesth->_ref_operation->_ext_codes_ccam item=curr_code}}
-              <li><em>{{$curr_code->libelleLong}}</em> ({{$curr_code->code}}) (coté {{$consult_anesth->_ref_operation->cote}})</li>
+              <li><em>{{$curr_code->libelleLong}}</em> ({{$curr_code->code}}) (coté {{tr}}COperation.cote.{{$consult_anesth->_ref_operation->cote}}{{/tr}})</li>
               {{/foreach}}
             </ul>
           {{else}}
@@ -55,8 +55,8 @@
           <td class="halfPane">
             {{if $consult_anesth->operation_id}}
             par le <strong>Dr. {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong><br />
-            Position : <strong>{{tr}}{{$consult_anesth->position}}{{/tr}}</strong><br />
-            Admission : {{tr}}{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}{{if $consult_anesth->_ref_operation->_ref_sejour->type=="comp"}} {{$consult_anesth->_ref_operation->_ref_sejour->_duree_prevue}} jour(s){{/if}}
+            Position : <strong>{{tr}}CConsultAnesth.position.{{$consult_anesth->position}}{{/tr}}</strong><br />
+            Admission : {{tr}}CSejour.type.{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}{{if $consult_anesth->_ref_operation->_ref_sejour->type=="comp"}} {{$consult_anesth->_ref_operation->_ref_sejour->_duree_prevue}} jour(s){{/if}}
             <br /><br />
             Anesthésie prévue :
             <strong>{{$consult_anesth->_ref_operation->_lu_type_anesth}}</strong>
@@ -108,15 +108,15 @@
             <table style="font-size: 100%;">
               <tr>
                 <th class="NotBold">Groupe sanguin</th>
-                <td class="Bold" style="white-space: nowrap;font-size:130%;">&nbsp;{{$consult->_ref_consult_anesth->groupe}} &nbsp;{{$consult->_ref_consult_anesth->rhesus}}</td>
+                <td class="Bold" style="white-space: nowrap;font-size:130%;">&nbsp;{{tr}}CConsultAnesth.groupe.{{$consult->_ref_consult_anesth->groupe}}{{/tr}} &nbsp;{{tr}}CConsultAnesth.rhesus.{{$consult->_ref_consult_anesth->rhesus}}{{/tr}}</td>
               </tr>
               <tr>
                 <th class="NotBold">RAI</th>
-                <td class="Bold" style="white-space: nowrap;font-size:130%;">&nbsp;{{$consult->_ref_consult_anesth->rai}}</td>
+                <td class="Bold" style="white-space: nowrap;font-size:130%;">&nbsp;{{tr}}CConsultAnesth.rai.{{$consult->_ref_consult_anesth->rai}}{{/tr}}</td>
               </tr>
               <tr>
                 <th class="NotBold">ASA</th>
-                <td class="Bold">{{$consult_anesth->ASA}}</td>
+                <td class="Bold">{{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}}</td>
               </tr>
               <tr>
                 <th class="NotBold">VST</th>
@@ -153,7 +153,7 @@
               {{if !$smarty.foreach.nameForeach.first}}
               <br />
               {{/if}}
-              <strong>{{tr}}{{$keyAnt}}{{/tr}}</strong>
+              <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong>
               {{foreach from=$currTypeAnt item=currAnt}}
               <ul>
                 <li>
@@ -280,18 +280,18 @@
         <tr>
           {{if $consult->_ref_consult_anesth->mallampati}}
           <td rowspan="4" class="button" style="white-space: nowrap;">
-            <img src="modules/{{$m}}/images/mallampati/{{$consult->_ref_consult_anesth->mallampati}}.gif" alt="{{tr}}{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}" />
-            <br />Mallampati<br />de {{tr}}{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}
+            <img src="modules/{{$m}}/images/mallampati/{{$consult->_ref_consult_anesth->mallampati}}.gif" alt="{{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}" />
+            <br />Mallampati<br />de {{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}
           </td>
           {{/if}}
           <th class="NotBold">Ouverture de la bouche</th>
           <td class="Bold">
-            {{tr}}{{$consult->_ref_consult_anesth->bouche}}{{/tr}}
+            {{tr}}CConsultAnesth.bouche.{{$consult->_ref_consult_anesth->bouche}}{{/tr}}
           </td>
         </tr>
         <tr>
           <th class="NotBold">Distance thyro-mentonnière</th>
-          <td class="Bold">{{tr}}{{$consult->_ref_consult_anesth->distThyro}}{{/tr}}</td>
+          <td class="Bold">{{tr}}CConsultAnesth.distThyro.{{$consult->_ref_consult_anesth->distThyro}}{{/tr}}</td>
         </tr>
         <tr>
           <th class="NotBold">Etat bucco-dentaire</th>
@@ -376,7 +376,7 @@
           </td>
           <th class="NotBold">ECBU</th>
           <td class="Bold">
-            {{$consult->_ref_consult_anesth->ecbu}}
+            {{tr}}CConsultAnesth.ecbu.{{$consult->_ref_consult_anesth->ecbu}}{{/tr}}
           </td>
         </tr>
       </table>

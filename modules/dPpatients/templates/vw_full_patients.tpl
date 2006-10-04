@@ -101,21 +101,21 @@ function pageMain() {
         <tr>
           <th>Sexe</th>
           <td>
-            {{if $patient->sexe == "m"}} masculin {{/if}}
-            {{if $patient->sexe == "f"}} féminin {{/if}}
-            {{if $patient->sexe == "j"}} femme célibataire {{/if}} 
+            {{tr}}CPatient.sexe.{{$patient->sexe}}{/tr}}
           </td>
           <th>Portable</th>
           <td>{{$patient->_tel21}} {{$patient->_tel22}} {{$patient->_tel23}} {{$patient->_tel24}} {{$patient->_tel25}}</td>
         </tr>
-
+        
+        {{if $patient->rques}}
         <tr>
           <th class="category" colspan="4">Remarques</th>
         </tr>
-
         <tr>
           <td colspan="4" class="text">{{$patient->rques|nl2br}}</td>
         </tr>
+        {{/if}}
+        
         <tr>
           <th colspan="2" class="category">Infos médicales</th>
           <th colspan="2" class="category">Médecins</th>

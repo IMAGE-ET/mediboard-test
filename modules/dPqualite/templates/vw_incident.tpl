@@ -274,7 +274,7 @@ function pageMain() {
           </th>
           <td colspan="2">
             <select name="deja_survenu" title="{{$fiche->_props.deja_survenu}}">
-              <option value=""{{if $fiche->deja_survenu===null}} selected="selected"{{/if}}>Je ne sais pas</option>
+              <option value=""{{if $fiche->deja_survenu===null}} selected="selected"{{/if}}>{{tr}}CFicheEi.deja_survenu.{{/tr}}</option>
               {{html_options options=$fiche->_enumsTrans.deja_survenu selected=$fiche->deja_survenu}}
             </select>
           </td>

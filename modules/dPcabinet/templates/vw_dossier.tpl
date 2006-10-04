@@ -52,8 +52,8 @@ function printDocument(doc_id) {
         <tr><th>Choix du patient :</th>
           <td class="readonly">
             <input type="hidden" name="m" value="{{$m}}" />
-            <input type="hidden" name="patSel" value="{{$patSel->patient_id}}" />
-            <input type="text" size="40" readonly="readonly" ondblclick="popPat()" name="patNom" value="{{$patSel->_view}}" />
+            <input type="hidden" name="patSel" value="{{$patient->patient_id}}" />
+            <input type="text" size="40" readonly="readonly" ondblclick="popPat()" name="patNom" value="{{$patient->_view}}" />
           </td>
           <td class="button">
             <button class="search" type="button" onclick="popPat()">Chercher</button>
@@ -63,7 +63,7 @@ function printDocument(doc_id) {
       </form>
     </td>
   </tr>
-  {{if $patSel->patient_id}}
+  {{if $patient->patient_id}}
   <tr>
     <td>
       <table class="form">
@@ -71,7 +71,7 @@ function printDocument(doc_id) {
         <tr>
           <th class="category" colspan="2">Consultations</th>
         </tr>
-        {{foreach from=$patSel->_ref_consultations item=curr_consult}}
+        {{foreach from=$patient->_ref_consultations item=curr_consult}}
         <tr id="cons{{$curr_consult->consultation_id}}-trigger">
           <td colspan="2">
             <strong>
@@ -167,7 +167,7 @@ function printDocument(doc_id) {
         {{/foreach}}
         
 		<!-- Sejours -->
-        {{foreach from=$patSel->_ref_sejours item=curr_sejour}}
+        {{foreach from=$patient->_ref_sejours item=curr_sejour}}
         <tr>
           <th class="category" colspan="2">
           	Séjour du {{$curr_sejour->entree_prevue|date_format:"%d %B %Y à %Hh%M"}}
@@ -250,7 +250,7 @@ function printDocument(doc_id) {
               <input type="hidden" name="file_class" value="COperation" />
               <input type="hidden" name="file_object_id" value="{{$curr_op->operation_id}}" />
               <input type="file" name="formfile" />
-              <input type="submit" value="ajouter" />
+              <button class="submit" type="submit">Ajouter</button>
 
               </form>
             </td>

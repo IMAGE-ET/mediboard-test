@@ -33,7 +33,7 @@ function pageMain() {
           <th>
             Intervention
             <br />
-            Côté {{$selOp->cote}}
+            Côté {{tr}}COperation.cote.{{$selOp->cote}}{{/tr}}
             <br />
             ({{$selOp->temp_operation|date_format:"%Hh%M"}})
           </th>

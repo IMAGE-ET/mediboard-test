@@ -22,12 +22,12 @@
 
   <tr>
     <th>Date de naissance / Sexe : </th>
-    <td>né(e) le {{$patient->_jour}}/{{$patient->_mois}}/{{$patient->_annee}} de sexe {{$patient->sexe}}</td>
+    <td>né(e) le {{$patient->_jour}}/{{$patient->_mois}}/{{$patient->_annee}} de sexe {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}}</td>
   </tr>
 
   <tr>
     <th>Incapable majeur :</th>
-    <td>{{$patient->incapable_majeur}}</td>
+    <td>{{tr}}CPatient.incapable_majeur.{{$patient->incapable_majeur}}{{/tr}}</td>
   </tr>
 
   <tr>
@@ -132,12 +132,12 @@
 
   <tr>
     <th>Admission en :</th>
-    <td>{{$admission->type}}</td>
+    <td>{{tr}}CSejour.type.{{$admission->type}}{{/tr}}</td>
   </tr>
 
   <tr>
     <th>Chambre particulière :</th>
-    <td>{{$admission->chambre_seule}}</td>
+    <td>{{tr}}CSejour.chambre_seule.{{$admission->chambre_seule}}{{/tr}}</td>
   </tr>
 
   <tr>
@@ -177,7 +177,7 @@
 
   <tr>
     <th>Côté :</th>
-    <td>{{$curr_op->cote}}</td>
+    <td>{{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}</td>
   </tr>
 
   <tr>

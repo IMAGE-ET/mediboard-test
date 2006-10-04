@@ -197,9 +197,7 @@ function setClose(protocole_id) {
         <tr>
           <th>Admission en:</th>
           <td>
-            {{if $protSel->type == "comp"}} Hospitalisation complète{{/if}}
-            {{if $protSel->type == "ambu"}} Ambulatoire{{/if}}
-            {{if $protSel->type == "exte"}} Externe{{/if}}
+            {{tr}}CProtocole.type.{{$protSel->type}}{{/tr}}
           </td>
         </tr>
 

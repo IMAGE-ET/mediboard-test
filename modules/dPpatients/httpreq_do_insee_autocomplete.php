@@ -10,6 +10,7 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 do_connect($AppUI->cfg["baseINSEE"]);
+$sql = null;
 
 if($cp = @$_GET[$_GET["fieldcp"]]) {
   $sql = "SELECT commune, code_postal FROM communes_france" .
@@ -21,9 +22,9 @@ if($ville = @$_GET[$_GET["fieldcity"]]) {
       "\nWHERE commune LIKE '%$ville%'" .
       "\nORDER BY code_postal, commune";
 }
-$result = db_loadList($sql, 30, $AppUI->cfg["baseINSEE"]);
 
-if ($canRead) {
+if ($canRead && $sql) {
+	 $result = db_loadList($sql, 30, $AppUI->cfg["baseINSEE"]);
   // Création du template
   $smarty = new CSmartyDP(1);
 

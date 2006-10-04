@@ -41,7 +41,7 @@
       <input tabindex="304" size="31" maxlength="5" type="text" name="prevenir_cp" value="{{$patient->prevenir_cp}}" title="{{$patient->_props.prevenir_cp}}" />
       <div style="display:none;" class="autocomplete" id="prevenir_cp_auto_complete"></div>
     </td>
-    <th><label for="prevenir_ville" title="Ville de la personne à prévenir">Ville</label></th>
+    <th><label for="employeur_ville" title="Ville de l'employeur">Ville</label></th>
     <td>
       <input tabindex="354" size="31" type="text" name="employeur_ville" value="{{$patient->employeur_ville}}" title="{{$patient->_props.employeur_ville}}" />
       <div style="display:none;" class="autocomplete" id="employeur_ville_auto_complete"></div>
@@ -54,7 +54,7 @@
       <input tabindex="305" size="31" type="text" name="prevenir_ville" value="{{$patient->prevenir_ville}}" title="{{$patient->_props.prevenir_ville}}" />
       <div style="display:none;" class="autocomplete" id="prevenir_ville_auto_complete"></div>
     </td>
-    <th><label for="employeur_tel" title="Téléphone de l'employeur">Téléphone</label></th>
+    <th><label for="_tel41" title="Téléphone de l'employeur">Téléphone</label></th>
     <td>
       <input tabindex="355" type="text" name="_tel41" size="2" maxlength="2" value="{{$patient->_tel41}}" title="num|length|2" onkeyup="followUp(this, '_tel42', 2)" /> - 
       <input tabindex="356" type="text" name="_tel42" size="2" maxlength="2" value="{{$patient->_tel42}}" title="num|length|2" onkeyup="followUp(this, '_tel43', 2)" /> -
@@ -65,7 +65,7 @@
   </tr>
   
   <tr>
-    <th><label for="prevenir_tel" title="Téléphone de la personne à prévenir">Téléphone</label></th>
+    <th><label for="_tel31" title="Téléphone de la personne à prévenir">Téléphone</label></th>
     <td>
       <input tabindex="306" type="text" name="_tel31" size="2" maxlength="2" value="{{$patient->_tel31}}" title="num|length|2" onkeyup="followUp(this, '_tel32', 2)" /> - 
       <input tabindex="307" type="text" name="_tel32" size="2" maxlength="2" value="{{$patient->_tel32}}" title="num|length|2" onkeyup="followUp(this, '_tel33', 2)" /> -

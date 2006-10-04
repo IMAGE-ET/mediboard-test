@@ -74,11 +74,8 @@
     <th><label for="cote" title="Côté concerné par l'intervention">Côté</label></th>
     <td colspan="2">
       <select name="cote" title="{{$op->_props.cote}}" onchange="modifOp()">
-        <option value=""          {{if !$op->operation_id}} selected="selected" {{/if}}>&mdash; Choisir un côté</option>
-        <option value="total"     {{if $op->cote == "total"        }} selected="selected" {{/if}}>total    </option>
-        <option value="droit"     {{if $op->cote == "droit"        }} selected="selected" {{/if}}>droit    </option>
-        <option value="gauche"    {{if $op->cote == "gauche"       }} selected="selected" {{/if}}>gauche   </option>
-        <option value="bilatéral" {{if $op->cote == "bilatéral"    }} selected="selected" {{/if}}>bilatéral</option>
+        <option value="" {{if !$op->operation_id}} selected="selected" {{/if}}>&mdash; Choisir un côté</option>
+        {{html_options options=$op->_enumsTrans.cote selected=$op->cote}}
       </select>
     </td>
   </tr> 

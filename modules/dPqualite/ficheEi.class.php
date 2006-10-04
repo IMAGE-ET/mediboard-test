@@ -82,7 +82,7 @@ class CFicheEi extends CMbObject {
       "mesures"                      => "text|notNull",
       "descr_consequences"           => "text|notNull",
       "gravite"                      => "enum|nul|mod|imp|notNull",
-      "suite_even"                   => "enum|trans|prolo|deces|autre|notNull",
+      "suite_even"                   => "enum|trans|plong|deces|autre|notNull",
       "plainte"                      => "enum|non|oui|notNull",
       "commission"                   => "enum|non|oui|notNull",
       "deja_survenu"                 => "enum|non|oui",

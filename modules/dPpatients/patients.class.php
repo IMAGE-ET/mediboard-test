@@ -351,9 +351,11 @@ class CPatient extends CMbObject {
     $this->_ref_sejours = $sejour->loadList($where, $order);
   }
   
-  function loadRefsConsultations() {
+  function loadRefsConsultations($where = null) {
     $this->_ref_consultations = new CConsultation();
-    $where = array();
+    if($where === null) {
+      $where = array();
+    }
     $where["patient_id"] = "= '$this->patient_id'";
     $order = "plageconsult.date DESC";
     $leftjoin = array();

@@ -81,3 +81,7 @@
 "visible"=>"Visible",
 "zh"=>"Chinois",
 "zh_tw"=>"Chinois (Taiwan)",
+"CUserLog.type."=>" ",
+"CUserLog.type.create"=>"create",
+"CUserLog.type.store"=>"store",
+"CUserLog.type.delete"=>"delete",

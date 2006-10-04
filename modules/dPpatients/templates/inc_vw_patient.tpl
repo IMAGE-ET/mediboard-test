@@ -113,9 +113,7 @@ function reloadAfterSaveDoc(){
   <tr>
     <th>Sexe</th>
     <td>
-      {{if $patient->sexe == "m"}} masculin {{/if}}
-      {{if $patient->sexe == "f"}} féminin {{/if}}
-      {{if $patient->sexe == "j"}} femme célibataire {{/if}} 
+      {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}}
     </td>
     <th>Portable</th>
     <td>{{$patient->_tel21}} {{$patient->_tel22}} {{$patient->_tel23}} {{$patient->_tel24}} {{$patient->_tel25}}</td>

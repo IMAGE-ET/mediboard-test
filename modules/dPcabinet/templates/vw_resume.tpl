@@ -28,6 +28,83 @@ function newExam(sAction, consultation_id) {
 
 <table class="tbl">
   <tr>
+    <th colspan="3" class="title">{{$patient->_view}}</th>
+  </tr>
+  <tr>
+    <th>Antécédents</th>
+    <th>Documents</th>
+    <th>Fichiers</th>
+  </tr>
+  
+  <tr>
+    <td class="text" valign="top">
+      <ul>
+      {{if $patient->_ref_antecedents}}
+        {{foreach from=$listAnt key=keyAnt item=currTypeAnt}}
+        {{if $currTypeAnt}}
+        <li>
+          <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong>
+          {{foreach from=$currTypeAnt item=currAnt}}
+          <ul><li>         
+            {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+              {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+            {{/if}}
+            {{$currAnt->rques}}
+          </li></ul>
+          {{/foreach}}
+        </li>
+        {{/if}}
+        {{/foreach}}
+      {{else}}
+        <li>Pas d'antécédents</li>
+      {{/if}}
+      </ul>
+    </td>
+    <td rowspan="3" class="text" valign="top">
+      <ul>
+      {{foreach from=$patient->_ref_documents item=curr_doc}}
+        <li>
+          {{$curr_doc->nom}}
+          <button class="print notext" onclick="printDocument({{$curr_doc->compte_rendu_id}})">
+          </button>
+        </li>
+      {{/foreach}}
+      </ul>
+    </td>
+    <td rowspan="3" class="text" valign="top">
+      <ul>
+      {{foreach from=$patient->_ref_files item=curr_file}}
+        <li>
+          <a href="#" OnClick="popFile({{$curr_file->file_id}})">{{$curr_file->file_name}}</a>
+          ({{$curr_file->_file_size}})
+        </li>
+      {{/foreach}}
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <th>Traitements</th>
+  </tr>
+  <tr>
+    <td class="text" valign="top">
+      <ul>
+        {{foreach from=$patient->_ref_traitements item=curr_trmt}}
+        <li>
+          {{if $curr_trmt->fin}}
+            Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}}
+          {{else}}
+            Depuis le {{$curr_trmt->debut|date_format:"%d/%m/%Y"}}
+          {{/if}}
+          : <i>{{$curr_trmt->traitement}}</i>
+        </li>
+        {{foreachelse}}
+        <li>Pas de traitements</li>
+        {{/foreach}}
+      </ul>
+    </td>
+  </tr>
+  
+  <tr>
     <th colspan="3" class="title">Consultations</th>
   </tr>
   <tr>

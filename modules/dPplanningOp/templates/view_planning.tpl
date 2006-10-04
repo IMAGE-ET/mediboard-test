@@ -41,7 +41,7 @@
   
   <tr>
     <th>Incapable majeur </th>
-    <td>{{if $patient->incapable_majeur == "o"}}oui{{else}}non{{/if}}</td>
+    <td>{{tr}}CPatient.incapable_majeur.{{$patient->incapable_majeur == "o"}}{{/tr}}</td>
   </tr>
 
   <tr>
@@ -77,15 +77,13 @@
   <tr>
     <th>Hospitalisation </th>
     <td>
-      {{if $sejour->type == "comp"}}Complète{{/if}}
-      {{if $sejour->type == "ambu"}}Ambulatoire{{/if}}
-      {{if $sejour->type == "exte"}}Externe{{/if}}
+      {{tr}}CSejour.type.{{$sejour->type}}{{/tr}}
     </td>
   </tr>
   
   <tr>
     <th>Chambre particulière </th>
-    <td>{{if $operation->_ref_sejour->chambre_seule == "o"}}oui{{else}}non{{/if}}</td>
+    <td>{{tr}}CSejour.chambre_seule.{{$operation->_ref_sejour->chambre_seule}}{{/tr}}</td>
   </tr>
  
   <tr>
@@ -111,7 +109,7 @@
   
   <tr>
     <th>Côté </th>
-    <td>{{$operation->cote}}</td>
+    <td>{{tr}}COperation.cote.{{$operation->cote}}{{/tr}}</td>
   </tr>
 
   <tr>

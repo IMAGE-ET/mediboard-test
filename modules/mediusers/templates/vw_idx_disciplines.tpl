@@ -41,7 +41,7 @@
           <td class="button" colspan="2">
             {{if $specialite->discipline_id}}
               <button class="modify" type="submit">Modifier</button>
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la spécialité médicale',objName:'{{$fournisseur->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la spécialité médicale',objName:'{{$specialite->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
             {{else}}
               <button class="submit" type="submit">Créer</button>
             {{/if}}

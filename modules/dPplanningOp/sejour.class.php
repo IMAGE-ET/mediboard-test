@@ -266,16 +266,11 @@ class CSejour extends CMbObject {
     }
   }
   
-  function loadRefsOperations() {
-    $where = array (
-      "sejour_id" => "= '$this->sejour_id'"
-    );
-    
-    $ljoin = array (
-      "plagesop" => "plagesop.plageop_id = operation.plageop_id"
-    );
-    
-    $order = "plagesop.date DESC";
+  function loadRefsOperations($where = null) {
+    if($where === null) {
+      $where = array();
+    }
+    $where["sejour_id"] = "= '$this->sejour_id'";
 
     $operations = new COperation;
     $this->_ref_operations = $operations->loadList($where);

@@ -8,7 +8,7 @@
   <tr><th>Nom / Prenom: </th><td>{{$patient->_view}}</td></tr>
   <tr><th>Date de naissance / Sexe: </th><td>né(e) le {{$patient->_jour}}/{{$patient->_mois}}/{{$patient->_annee}}
   de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}</td></tr>
-  <tr><th>Incapable majeur: </th><td>{{if $patient->incapable_majeur == "n"}} non {{else}} oui {{/if}}</td></tr>
+  <tr><th>Incapable majeur: </th><td>{{tr}}CPatient.incapable_majeur.{{$patient->incapable_majeur == "n"}}{{/tr}}</td></tr>
   <tr><th>Telephone: </th><td>{{$patient->tel}}</td></tr>
   <tr><th>Portable: </th><td>{{$patient->tel2}}</td></tr>
   <tr><th>Adresse: </th><td>{{$patient->adresse|nl2br}} - {{$patient->cp}} {{$patient->ville}}</td></tr>

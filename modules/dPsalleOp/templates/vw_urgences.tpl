@@ -42,7 +42,7 @@ function pageMain() {
             </select>
             </form>
           </td>
-          <td>{{$curr_op->cote}}</td>
+          <td>{{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}</td>
           <td class="text">
             {{if $curr_op->libelle}}
               <em>[{{$curr_op->libelle}}]</em>

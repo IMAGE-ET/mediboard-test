@@ -122,7 +122,14 @@ class CMbObject {
     return $this->_canEdit;
   }
   
-  function loadListWithPerms($permType, $params) {
+  function loadListWithPerms($permType = PERM_READ, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
+    $list = $this->loadList($where, $order, $limit, $group, $leftjoin);	
+    foreach($list as $key=>$element){
+      if(!$element->getPerm($permType)){
+        unset($list[$key]);
+      }
+    }
+    return $list;
   }
   
   /**

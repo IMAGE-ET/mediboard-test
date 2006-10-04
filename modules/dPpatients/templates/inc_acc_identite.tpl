@@ -34,9 +34,12 @@
     <th><label for="sexe" title="Sexe du patient">Sexe</label></th>
     <td>
       <select tabindex="104" name="sexe" title="{{$patient->_props.sexe}}">
-        <option value="m" {{if $patient->sexe == "m"}} selected="selected" {{/if}}>masculin</option>
-        <option value="f" {{if $patient->sexe == "f"}} selected="selected" {{/if}}>féminin</option>
-        <option value="j" {{if $patient->sexe == "j"}} selected="selected" {{/if}}>femme célibataire</option>
+        {{if $patient->patient_id}}
+        {{assign var="selected" value=$patient->sexe}}
+        {{else}}
+        {{assign var="selected" value=$patient->_enums.sexe.0}}
+        {{/if}}
+        {{html_options options=$patient->_enumsTrans.sexe selected=$selected}}
       </select>
     </td>
     <th><label for="ville" title="Ville du patient">Ville</label></th>
@@ -77,8 +80,12 @@
     <th><label for="nationalite" title="Nationnalité du patient">Nationnalité</label></th>
     <td>
       <select tabindex="109" name="nationalite" title="{{$patient->_props.nationalite}}">
-        <option value="local" {{if $patient->nationalite == "local"}} selected="selected" {{/if}}>{{tr}}local{{/tr}}</option>
-        <option value="etranger" {{if $patient->nationalite == "etranger"}} selected="selected" {{/if}}>{{tr}}etranger{{/tr}}</option>
+        {{if $patient->patient_id}}
+        {{assign var="selected" value=$patient->nationalite}}
+        {{else}}
+        {{assign var="selected" value=$patient->_enums.nationalite.0}}
+        {{/if}}
+        {{html_options options=$patient->_enumsTrans.nationalite selected=$selected}}
       </select>
     </td>
     <th><label for="_tel21" title="Numéro de téléphone portable">Portable</label></th>

@@ -48,6 +48,7 @@
 "Translation Management",
 "Unknown Command",
 "User Interface Style",
+
 "User Preferences",
 "User Roles",
 "Values",
@@ -80,3 +81,7 @@
 "visible",
 "zh"=>"Chinese",
 "zh_tw"=>"Chinese (Taiwan)",
+"CUserLog.type."=>" ",
+"CUserLog.type.create"=>"create",
+"CUserLog.type.store"=>"store",
+"CUserLog.type.delete"=>"delete",

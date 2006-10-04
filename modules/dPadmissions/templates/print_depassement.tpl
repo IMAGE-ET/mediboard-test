@@ -32,7 +32,7 @@
 
   <tr>
     <th>Côté: </th>
-    <td>{{$admission->cote}}</td>
+    <td>{{tr}}COperation.cote.{{$admission->cote}}{{/tr}}</td>
   </tr>
   
   <tr>

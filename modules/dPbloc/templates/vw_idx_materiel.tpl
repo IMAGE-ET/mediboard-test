@@ -53,7 +53,7 @@ function pageMain() {
         {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
         {{$curr_code->code}} : <em>{{$curr_code->libelleLong}}</em><br />
         {{/foreach}}
-        (Côté : {{$curr_op->cote}})
+        (Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}})
       </td>
 		  <td class="text">{{$curr_op->materiel|nl2br}}</td>
 		  <td>

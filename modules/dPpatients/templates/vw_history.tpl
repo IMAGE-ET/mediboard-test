@@ -14,7 +14,7 @@
   <tr>
     <td>{{$curr_object->_ref_user->_view}}</td>
     <td>{{$curr_object->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
-    <td>{{$curr_object->type}}</td>
+    <td>{{tr}}CUserLog.type.{{$curr_object->type}}{{/tr}}</td>
     <td>
       {{foreach from=$curr_object->_fields|smarty:nodefaults item=curr_field}}
       {{$curr_field}}<br />
@@ -40,7 +40,7 @@
   <tr>
     <td>{{$curr_log->_ref_user->_view}}</td>
     <td>{{$curr_log->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
-    <td>{{$curr_log->type}}</td>
+    <td>{{tr}}CUserLog.type.{{$curr_log->type}}{{/tr}}</td>
     <td>
       {{foreach from=$curr_log->_fields|smarty:nodefaults item=curr_field}}
       {{$curr_field}}<br />
@@ -68,7 +68,7 @@
   <tr>
     <td>{{$curr_log->_ref_user->_view}}</td>
     <td>{{$curr_log->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
-    <td>{{$curr_log->type}}</td>
+    <td>{{tr}}CUserLog.type.{{$curr_log->type}}{{/tr}}</td>
     <td>
       {{foreach from=$curr_log->_fields|smarty:nodefaults item=curr_field}}
       {{$curr_field}}<br />
@@ -86,7 +86,7 @@
   <tr>
     <td>{{$curr_log->_ref_user->_view}}</td>
     <td>{{$curr_log->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
-    <td>{{$curr_log->type}}</td>
+    <td>{{tr}}CUserLog.type.{{$curr_log->type}}{{/tr}}</td>
     <td>
       {{foreach from=$curr_log->_fields|smarty:nodefaults item=curr_field}}
       {{$curr_field}}<br />
@@ -105,7 +105,7 @@
   <tr>
     <td>{{$curr_log->_ref_user->_view}}</td>
     <td>{{$curr_log->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
-    <td>{{$curr_log->type}}</td>
+    <td>{{tr}}CUserLog.type.{{$curr_log->type}}{{/tr}}</td>
     <td>
       {{foreach from=$curr_log->_fields|smarty:nodefaults item=curr_field}}
       {{$curr_field}}<br />

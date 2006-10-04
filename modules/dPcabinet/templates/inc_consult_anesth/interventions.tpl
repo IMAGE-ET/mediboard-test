@@ -16,7 +16,7 @@
 </form>
 {{if $consult_anesth->operation_id}}
   Intervention le <strong>{{$consult_anesth->_ref_operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
-  par le <strong>Dr. {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong> (coté {{$consult_anesth->_ref_operation->cote}})<br />
+  par le <strong>Dr. {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong> (coté {{tr}}COperation.cote.{{$consult_anesth->_ref_operation->cote}}{{/tr}})<br />
   <ul>
     {{if $consult_anesth->_ref_operation->libelle}}
     <li><em>[{{$consult_anesth->_ref_operation->libelle}}]</em></li>
@@ -33,8 +33,17 @@
 <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
 <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
 <label for="position" title="Veuillez choisir la position du patient">Position</label>
-{{html_options name="position" options=$consult_anesth->_enumsTrans.position selected=$consult_anesth->position onchange="submitFormAjax(this.form, 'systemMsg')"}}
+
+<select name="position" onchange="submitFormAjax(this.form, 'systemMsg')">
+<option value="">&mdash; Veuillez Choisir</option>
+{{foreach from=$consult_anesth->_enumsTrans.position item=curr_pos key=key_pos}}
+<option value="{{$key_pos}}" {{if $key_pos == $consult_anesth->position}} selected="selected" {{/if}} >
+  {{$curr_pos}}
+</option>
+{{/foreach}}
+</select>
+
 {{if $consult_anesth->operation_id}}
- - Type d'admission : <strong>{{tr}}{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}</strong>{{if $consult_anesth->_ref_operation->_ref_sejour->type=="comp"}} {{$consult_anesth->_ref_operation->_ref_sejour->_duree_prevue}} jour(s){{/if}}
+ - Type d'admission : <strong>{{tr}}CSejour.type.{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}</strong>{{if $consult_anesth->_ref_operation->_ref_sejour->type=="comp"}} {{$consult_anesth->_ref_operation->_ref_sejour->_duree_prevue}} jour(s){{/if}}
 {{/if}}
 </form>

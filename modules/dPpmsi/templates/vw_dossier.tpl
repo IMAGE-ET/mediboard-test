@@ -159,7 +159,7 @@ function pageMain() {
             <ul>
               {{foreach from=$patient->_ref_antecedents item=curr_ant}}
               <li>
-                {{$curr_ant->type}} le {{$curr_ant->date|date_format:"%d %b %Y"}} :
+                {{tr}}CAntecedent.type.{{$curr_ant->type}}{{/tr}} le {{$curr_ant->date|date_format:"%d %b %Y"}} :
                 <em>{{$curr_ant->rques}}</em>
               </li>
               {{foreachelse}}
@@ -229,7 +229,7 @@ function pageMain() {
         <tr>
           <td class="button">{{$curr_op->_ref_consult_anesth->poid}} kg</td>
           <td class="button">{{$curr_op->_ref_consult_anesth->taille}} cm</td>
-          <td class="button">{{$curr_op->_ref_consult_anesth->groupe}} {{$curr_op->_ref_consult_anesth->rhesus}}</td>
+          <td class="button">{{tr}}CConsultAnesth.groupe.{{$curr_op->_ref_consult_anesth->groupe}}{{/tr}} {{tr}}CConsultAnesth.rhesus.{{$curr_op->_ref_consult_anesth->rhesus}}{{/tr}}</td>
           <td class="button">{{$curr_op->_ref_consult_anesth->tasys}}/{{$curr_op->_ref_consult_anesth->tadias}}</td>
         </tr>
         {{/if}}

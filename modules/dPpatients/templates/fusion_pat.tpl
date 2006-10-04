@@ -93,29 +93,15 @@ function setChecked(oField, sValue) {
     <th><label for="sexe" title="Sexe du patient">Sexe</label></th>
     <td>
       <input type="radio" name="_choix_sexe" value="{{$patient1->sexe}}" checked="checked" onclick="setField(this.form.sexe, '{{$patient1->sexe}}')" />
-      {{if $patient1->sexe == "m"}}
-        masculin
-      {{elseif $patient1->sexe == "f"}}
-        féminin
-      {{elseif $patient1->sexe == "j"}}
-        femme célibataire
-      {{/if}}
+      {{tr}}CPatient.sexe.{{$patient1->sexe}}{{/tr}}
     </td>
     <td>
       <input type="radio" name="_choix_sexe" value="{{$patient2->sexe}}" onclick="setField(this.form.sexe, '{{$patient2->sexe}}')" />
-      {{if $patient2->sexe == "m"}}
-        masculin
-      {{elseif $patient2->sexe == "f"}}
-        féminin
-      {{elseif $patient2->sexe == "j"}}
-        femme célibataire
-      {{/if}}
+      {{tr}}CPatient.sexe.{{$patient2->sexe}}{{/tr}}
     </td>
     <td>
       <select tabindex="7" name="sexe" title="{{$finalPatient->_props.sexe}}">
-        <option value="m" {{if $finalPatient->sexe == "m"}} selected="selected" {{/if}}>masculin</option>
-        <option value="f" {{if $finalPatient->sexe == "f"}} selected="selected" {{/if}}>féminin</option>
-        <option value="j" {{if $finalPatient->sexe == "j"}} selected="selected" {{/if}}>femme célibataire</option>
+        {{html_options options=$finalPatient->_enumsTrans.sexe selected=$finalPatient->sexe}}
       </select>
     </td>
   </tr>
@@ -299,11 +285,11 @@ function setChecked(oField, sValue) {
     <th><label for="incapable_majeur" title="Patient reconnu incapable majeur">Incapable majeur</label></th>
     <td>
       <input type="radio" name="_choix_incapable majeur" value="{{$patient1->incapable_majeur}}" checked="checked" onclick="setChecked(this.form.incapable_majeur, '{{$patient1->incapable_majeur|smarty:nodefaults|JSAttribute}}')" />
-      {{$patient1->incapable_majeur}}
+      {{tr}}CPatient.incapable_majeur.{{$patient1->incapable_majeur}}{{/tr}}
     </td>
     <td>
       <input type="radio" name="_choix_incapable majeur" value="{{$patient2->incapable_majeur}}" onclick="setChecked(this.form.incapable_majeur, '{{$patient2->incapable_majeur|smarty:nodefaults|JSAttribute}}')" />
-      {{$patient2->incapable_majeur}}
+      {{tr}}CPatient.incapable_majeur.{{$patient2->incapable_majeur}}{{/tr}}
     </td>
     <td>
       <input tabindex="22" type="radio" name="incapable_majeur" value="o" {{if $finalPatient->incapable_majeur == "o"}} checked="checked" {{/if}} />oui
@@ -314,11 +300,11 @@ function setChecked(oField, sValue) {
     <th><label for="ATNC" title="Patient présentant un risque ATNC">ATNC</label></th>
     <td>
       <input type="radio" name="_choix_ATNC" value="{{$patient1->ATNC}}" checked="checked" onclick="setChecked(this.form.ATNC, '{{$patient1->ATNC|smarty:nodefaults|JSAttribute}}')" />
-      {{$patient1->ATNC}}
+      {{tr}}CPatient.ATNC.{{$patient1->ATNC}}{{/tr}}
     </td>
     <td>
       <input type="radio" name="_choix_ATNC" value="{{$patient2->ATNC}}" onclick="setChecked(this.form.ATNC, '{{$patient2->ATNC|smarty:nodefaults|JSAttribute}}')" />
-      {{$patient2->ATNC}}
+      {{tr}}CPatient.ATNC.{{$patient2->ATNC}}{{/tr}}
     </td>
     <td>
       <input tabindex="24" type="radio" name="ATNC" value="o" {{if $finalPatient->ATNC == "o"}} checked="checked" {{/if}} />oui

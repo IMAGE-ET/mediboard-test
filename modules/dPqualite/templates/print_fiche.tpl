@@ -24,12 +24,8 @@
         <tr>
           <td style="text-align:center;">
             <strong>Signalement d'un
-            {{if $fiche->type_incident}}
-            risque d'incident
-            {{else}}
-            incident
-            {{/if}}<br />
-            survenu le {{$fiche->date_incident|date_format:"%A %d %B %Y à %Hh%M"}}
+            {{tr}}CFicheEi.type_incident.{{$fiche->type_incident}}{{/tr}}
+            <br />survenu le {{$fiche->date_incident|date_format:"%A %d %B %Y à %Hh%M"}}
             </strong>
           </td>
         </tr>
@@ -62,13 +58,7 @@
         </tr>
         <tr>
           <th>
-            Un
-            {{if $fiche->elem_concerne==4}}    Matériel
-            {{elseif $fiche->elem_concerne==3}}Médicament
-            {{elseif $fiche->elem_concerne==2}}Membre du Personnel
-            {{elseif $fiche->elem_concerne==1}}Visiteur
-            {{else}}                           Patient
-            {{/if}}
+            {{tr}}CFicheEi.elem_concerne.{{$fiche->elem_concerne}}{{/tr}}
           </th>
           <td>{{$fiche->elem_concerne_detail|nl2br}}</td>
         </tr>
@@ -129,35 +119,31 @@
         <tr>
           <th>Gravité estimée</th>
           <td>
-            {{tr}}{{$fiche->gravite}}{{/tr}}
+            {{tr}}CFicheEi.gravite.{{$fiche->gravite}}{{/tr}}
           </td>
         </tr>
         <tr>
           <th>Plainte prévisible</th>
           <td class="greedyPane">
-            {{tr}}{{$fiche->plainte}}{{/tr}}
+            {{tr}}CFicheEi.plainte.{{$fiche->plainte}}{{/tr}}
           </td>
         </tr>
         <tr>
           <th>Commission concialition</th>
           <td>
-            {{tr}}{{$fiche->commission}}{{/tr}}
+            {{tr}}CFicheEi.commission.{{$fiche->commission}}{{/tr}}
           </td>
         </tr>
         <tr>
           <th>Suite de l'évènement</th>
           <td>
-            {{tr}}{{$fiche->suite_even}}{{/tr}}
+            {{tr}}CFicheEi.suite_even.{{$fiche->suite_even}}{{/tr}}
           </td>
         </tr>
         <tr>
           <th>Evénement déjà survenu à la connaissance de l'auteur</th>
           <td>
-            {{if $fiche->deja_survenu!==null}}
-              {{tr}}{{$fiche->deja_survenu}}{{/tr}}
-            {{else}}
-              Ne sais pas
-            {{/if}}
+            {{tr}}CFicheEi.deja_survenu.{{$fiche->deja_survenu}}{{/tr}}
           </td>
         </tr>
       </table>
@@ -184,7 +170,7 @@
         </tr>
         <tr>
           <th>Degré d'Urgence</th>
-          <td>{{$fiche->degre_urgence}}</td>
+          <td>{{tr}}CFicheEi.degre_urgence.{{$fiche->degre_urgence}}{{/tr}}</td>
           <th>Validée par</th>
           <td class="text">
             {{$fiche->_ref_user_valid->_view}}

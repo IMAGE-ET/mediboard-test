@@ -82,7 +82,7 @@ function supprimer() {
       <select name="type">
         {{foreach from=$listType item=curr_type key=key_type}}
         <option value="{{$key_type}}" {{if $key_type == $compte_rendu->type}} selected="selected" {{/if}}>
-          {{$key_type}}
+          {{tr}}CCompteRendu.type.{{$key_type}}{{/tr}}
         </option>
         {{/foreach}}
     </td>
