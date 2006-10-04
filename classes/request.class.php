@@ -12,6 +12,7 @@ class CRequest {
   
   // params
   var $ljoin = array();
+  var $rjoin = array();
   var $where = array();
   var $group = array();
   var $order = array();
@@ -22,6 +23,7 @@ class CRequest {
   
   function resetParams() {
     $this->ljoin = array();
+    $this->rjoin = array();
     $this->where = array();
     $this->group = array();
     $this->order = array();
@@ -32,6 +34,20 @@ class CRequest {
     if(is_array($ljoin)) {
       $this->ljoin = array_merge($this->ljoin, $ljoin);
     }
+  }
+
+  function addLJoinClause($key, $value) {
+    $this->ljoin[$key] = $value;
+  }
+
+  function addRJoin($ljoin) {
+    if(is_array($ljoin)) {
+      $this->rjoin = array_merge($this->rjoin, $ljoin);
+    }
+  }
+
+  function addRJoinClause($key, $value) {
+    $this->rjoin[$key] = $value;
   }
 
   function addWhere($where) {
@@ -81,6 +97,14 @@ class CRequest {
       assert(is_array($this->ljoin));
       foreach ($this->ljoin as $table => $condition) {
         $sql .= "\nLEFT JOIN `$table` ON $condition";
+      }
+    }
+
+    // Right join clauses
+    if ($this->rjoin) {
+      assert(is_array($this->rjoin));
+      foreach ($this->rjoin as $table => $condition) {
+        $sql .= "\nRIGHT JOIN `$table` ON $condition";
       }
     }
     
