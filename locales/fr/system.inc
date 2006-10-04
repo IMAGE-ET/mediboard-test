@@ -85,3 +85,7 @@
 "CUserLog.type.create"=>"create",
 "CUserLog.type.store"=>"store",
 "CUserLog.type.delete"=>"delete",
+"CAccessLog"=>"Log d'accès",
+"CMessage"=>"Message",
+"CPreferences"=>"Préférences Utilisateur",
+"CUserLog"=>"Log d'utilisateur",

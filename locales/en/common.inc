@@ -204,3 +204,4 @@
 "tabbed",
 "test",
 "updated",
+"CModule"=>"Module",

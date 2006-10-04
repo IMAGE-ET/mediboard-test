@@ -7,3 +7,6 @@
 "CAffectation.effectue."=>"",
 "CAffectation.effectue.0"=>"0",
 "CAffectation.effectue.1"=>"1",
+"CAffectation"=>"Affectations",
+"CChambre"=>"Chambres",
+"CService"=>"Services",

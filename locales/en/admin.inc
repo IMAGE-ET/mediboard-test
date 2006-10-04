@@ -73,3 +73,6 @@
 "updated",
 "users list",
 "view this user",
+"CUser"=>"Utilisateurs",
+"CPermModule"=>"Permissions Modules",
+"CPermObject"=>"Permissions Objets",

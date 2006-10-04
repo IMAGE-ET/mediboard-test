@@ -7,3 +7,5 @@
 "CMediusers.remote."=>" ",
 "CMediusers.remote.0"=>"0",
 "CMediusers.remote.1"=>"1",
+"CDiscipline"=>"Disciplines",
+"CMediusers"=>"Utilisateurs Médiboard",

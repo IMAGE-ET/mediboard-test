@@ -206,3 +206,4 @@
 "tabbed"=>"tabulations",
 "test"=>"test",
 "updated"=>"mis à jour",
+"CModule"=>"Module",

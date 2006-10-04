@@ -26,3 +26,7 @@
 "CPatient.prevenir_parente.conjoint"=>"Conjoint",
 "CPatient.prevenir_parente.divers"=>"Divers",
 "CPatient.prevenir_parente.enfant"=>"Enfant",
+"CAntecedent"=>"Antécédents",
+"CMedecin"=>"Médecins",
+"CPatient"=>"Patients",
+"CTraitement"=>"Traitements",

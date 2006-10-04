@@ -7,3 +7,7 @@
 "CCompteRendu.type.operation"=>"Operation",
 "CCompteRendu.type.hospitalisation"=>"Hospitalisation",
 "CCompteRendu.type.consultation"=>"Consultation",
+"CAideSaisie"=>"Aide à la Saisie",
+"CCompteRendu"=>"Compte Rendus",
+"CListeChoix"=>"Liste de Choix",
+"CPack"=>"Pack",

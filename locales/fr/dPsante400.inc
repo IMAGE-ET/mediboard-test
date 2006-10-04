@@ -1,4 +1,4 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-"CGHM"=>"Groupement Homogène de Malade",
+"CIdSante400"=>"Identifiant Sante 400",

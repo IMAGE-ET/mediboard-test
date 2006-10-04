@@ -1,4 +1,4 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-"CGHM"=>"Groupement Homogène de Malade",
+"CFilesCategory"=>"Catégorie de Fichier",

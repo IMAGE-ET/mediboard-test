@@ -4,3 +4,4 @@
 "CPlageressource.paye."=>" ",
 "CPlageressource.paye.0"=>"0",
 "CPlageressource.paye.1"=>"1",
+"CPlageressource"=>"Plage de Ressources",
