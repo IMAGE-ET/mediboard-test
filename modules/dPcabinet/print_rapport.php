@@ -31,7 +31,7 @@ $where[] = "date <= '$fin'";
 
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
-$where["chir_id"] = db_prepare(array_keys($listPrat), $chir);
+$where["chir_id"] = db_prepare_in(array_keys($listPrat), $chir);
 
 $listPlage = new CPlageconsult;
 $listPlage = $listPlage->loadList($where, "date, chir_id");
