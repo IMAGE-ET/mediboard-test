@@ -53,33 +53,16 @@ class CModule extends CMbObject {
 */
   function CModule() {
     $this->CMbObject("modules", "mod_id");
+  }
 
-    static $props = array (
+  function getSpecs() {
+    return array (
       "mod_name"      => "notNull|str|maxLength|20",
       "mod_type"      => "notNull|enum|core|user",
       "mod_version"   => "notNull|str|maxLength|6",
       "mod_ui_active" => "notNull|num|length|1", // should be "bool"
       "mod_ui_order"  => "notNull|num"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
-    );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function updateFormFields() {
