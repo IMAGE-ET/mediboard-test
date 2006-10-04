@@ -24,7 +24,7 @@
 "CProtocole.type.exte"=>"Externe",
 "CSejour.type."=>" ",
 "CSejour.type.ambu"=>"Ambulatoire",
-"CSejour.type.comp"=>"Complète",
+"CSejour.type.comp"=>"Hospitalisation Complète",
 "CSejour.type.exte"=>"Externe",
 "CSejour.modalite."=>" ",
 "CSejour.modalite.office"=>"Office",
