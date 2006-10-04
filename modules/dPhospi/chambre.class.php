@@ -41,33 +41,21 @@ class CChambre extends CMbObject {
 		$this->CMbObject("chambre", "chambre_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+  }
+  
+  function getSpecs() {
+    return array (
       "service_id"       => "ref|notNull",
       "nom"              => "str|notNull|confidential",
       "caracteristiques" => "str|confidential"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "nom"        => "like",
       "service_id" => "ref|CService"
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
 
   function loadRefsFwd() {

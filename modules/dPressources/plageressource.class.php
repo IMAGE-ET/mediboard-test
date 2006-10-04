@@ -47,8 +47,10 @@ class CPlageressource extends CMbObject {
     $this->CMbObject("plageressource", "plageressource_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+  }
+  
+  function getSpecs() {
+    return array (
       "prat_id" => "ref",
       "date"    => "date|notNull",
       "debut"   => "time|notNull",
@@ -57,27 +59,13 @@ class CPlageressource extends CMbObject {
       "libelle" => "str|confidential",
       "paye"    => "enum|0|1"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "prat_id" => "ref|CMediusers",
       "libelle" => "like"
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsFwd() {

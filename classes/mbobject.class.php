@@ -64,6 +64,41 @@ class CMbObject {
     $this->_tbl = $table;
     $this->_tbl_key = $key;
     $this->_id =& $this->$key;
+    
+    $class = get_class($this);
+    
+    static $props = null;
+    if (!$props) {
+      $props =& $this->getSpecs();
+    }
+        
+    $this->_props =& $props;
+    
+    static $seeks = null;
+    if (!$seeks) {
+      $seeks =& $this->getSeeks();
+    }
+        
+    $this->_seek =& $seeks;
+
+    static $enums = null;
+    if (!$enums) {
+      $enums =& $this->getEnums();
+    }
+        
+    $this->_props =& $props;
+
+    static $enumsTrans = null;
+    if (!$props) {
+      $props =& $this->getSpecs();
+    }
+        
+    static $enumsTrans = null;
+    if (!$enumsTrans) {
+      $enumsTrans = $this->getEnumsTrans();
+    }
+    
+    $this->_enumsTrans =& $enumsTrans;
   }
   
   /**
@@ -185,6 +220,7 @@ class CMbObject {
       foreach($object->getProps() as $key => $value) {
         $this->$key = $value;
       }
+      $this->updateFormFields();
       return true;
     }
     return false;
@@ -482,6 +518,20 @@ class CMbObject {
     return $result;
   }
   
+  /**
+   * Get properties specifications
+   */
+  function getSeeks() {
+    return array();
+  }
+
+  /**
+   * Get seek specifications
+   */
+  function getSpecs() {
+    return array();
+  }
+
   /**
    * Build Enums variant returning values
    */

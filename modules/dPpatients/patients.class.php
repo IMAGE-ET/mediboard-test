@@ -120,8 +120,10 @@ class CPatient extends CMbObject {
 		$this->CMbObject("patients", "patient_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-    
-    static $props = array (
+	}
+
+  function getSpecs() {
+    return array (
       "nom"              => "str|notNull|confidential",
       "prenom"           => "str|notNull",
       "nom_jeune_fille"  => "str|confidential",
@@ -165,31 +167,16 @@ class CPatient extends CMbObject {
       "prevenir_ville"    => "str|confidential",
       "prevenir_tel"      => "num|length|10|confidential",
       "prevenir_parente"  => "enum|conjoint|enfant|ascendant|colateral|divers",
-      
     );
-    $this->_props =& $props;
-    
-    static $seek = array(
+  }
+  
+  function getSeeks() {
+    return array(
       "nom"    => "likeBegin",
       "prenom" => "likeBegin",
       "ville"  => "like"
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
-	}
+  }
   
   function updateFormFields() {
     parent::updateFormFields();

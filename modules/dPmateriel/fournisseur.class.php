@@ -66,7 +66,29 @@ class CFournisseur extends CMbObject {
     }
     
     $this->_enumsTrans =& $enumsTrans;
-  }	 
+  }
+
+  function getSpecs() {
+    return array (
+      "societe"    => "str|maxLength|50|notNull",
+      "adresse"    => "str",
+      "codepostal" => "num|length|5",
+      "ville"      => "str",
+      "telephone"  => "num",
+      "mail"       => "email",
+      "nom"        => "str|maxLength|50",
+      "prenom"     => "str|maxLength|50"
+    );
+  }
+  
+  function getSeeks() {
+    return array (
+      "societe" => "like",
+      "ville"   => "like",
+      "nom"     => "like",
+      "prenom"  => "like"
+    );
+  }
   
   function loadRefsBack(){
     $this->_ref_references = new CRefMateriel;

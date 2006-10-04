@@ -34,33 +34,16 @@ class CListeChoix extends CMbObject {
     $this->CMbObject("liste_choix", "liste_choix_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+  }
 
-    static $props = array (
+  function getSpecs() {
+    return array (
       "chir_id"         => "ref|xor|function_id",
       "function_id"     => "ref",
       "nom"             => "str|notNull",
       "valeurs"         => "str|confidential",
       "compte_rendu_id" => "ref"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
-    );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function check() {

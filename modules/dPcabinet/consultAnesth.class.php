@@ -78,8 +78,10 @@ class CConsultAnesth extends CMbObject {
     $this->CMbObject("consultation_anesth", "consultation_anesth_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+  }
+  
+  function getSpecs() {
+    return array (
       "consultation_id" => "ref|notNull",
       "operation_id"    => "ref",
       // @todo : un type particulier pour le poid et la taille
@@ -123,29 +125,15 @@ class CConsultAnesth extends CMbObject {
       "conclusion"      => "text",
       "position"        => "enum|DD|DV|DL|GP|AS|TO|GYN"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "chir_id"         => "ref|CMediusers",
       "consultation_id" => "ref|CConsultation",
       "operation_id"    => "ref|COperation",
       "conclusion"      => "like"
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function updateFormFields() {

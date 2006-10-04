@@ -26,32 +26,15 @@ class CAntecedent extends CMbObject {
     $this->CMbObject("antecedent", "antecedent_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+  }
 
-    static $props = array (
+  function getSpecs() {
+    return array (
       "patient_id" => "ref|notNull",
       "type"       => "enum|alle|trans|obst|chir|med|fam|notNull",
       "date"       => "date",
       "rques"      => "text"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
-    );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsFwd() {

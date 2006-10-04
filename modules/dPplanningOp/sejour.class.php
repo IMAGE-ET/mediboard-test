@@ -77,8 +77,10 @@ class CSejour extends CMbObject {
     $this->CMbObject("sejour", "sejour_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+	}
+  
+  function getSpecs() {
+    return array (
       "patient_id"    => "ref|notNull",
       "praticien_id"  => "ref|notNull",
       "group_id"      => "ref|notNull",
@@ -99,29 +101,15 @@ class CSejour extends CMbObject {
       "convalescence" => "str|confidential",
       "rques"         => "text"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "patient_id"    => "ref|CPatient",
       "praticien_id"  => "ref|CMediusers",
       "convalescence" => "like"
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
-	}
+  }
 
   function check() {
     $msg = null;
@@ -237,12 +225,8 @@ class CSejour extends CMbObject {
   }
   
   function loadRefPraticien() {
-    $where = array (
-      "user_id" => "= '$this->praticien_id'"
-    );
-
     $this->_ref_praticien = new CMediusers;
-    $this->_ref_praticien->loadObject($where);
+    $this->_ref_praticien->load($this->praticien_id);
   }
   
   function loadRefEtablissement(){

@@ -75,8 +75,10 @@ class CConsultation extends CMbObject {
     $this->CMbObject("consultation", "consultation_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+  }
+  
+  function getSpecs() {
+    return array (
       "plageconsult_id" => "ref|notNull",
       "patient_id"      => "ref|notNull",
       "heure"           => "time|notNull",
@@ -99,10 +101,10 @@ class CConsultation extends CMbObject {
       "tarif"           => "str",
       "type_tarif"      => "str" // En faire un enum
     );
-    
-    $this->_props =& $props;
-    
-    static $seek = array(
+  }
+  
+  function getSeeks() {
+    return array(
       "plageconsult_id" => "ref|CPlageconsult",
       "patient_id"      => "ref|CPatient",
       "motif"           => "like",
@@ -110,21 +112,6 @@ class CConsultation extends CMbObject {
       "examen"          => "like",
       "traitement"      => "like"
     ); 
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function getEtat() {

@@ -19,29 +19,19 @@ class CFavoricim10 extends CMbObject {
 		$this->CMbObject("cim10favoris", "favoris_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+	}
+  
+  function getSpecs() {
+    return array (
       "favoris_user" => "ref|notNull",
       "favoris_code" => "str|notNull"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "favoris_code" => "equal"
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    $this->_enumsTrans =& $enumsTrans;
-	}
+  }
 }
 ?>

@@ -33,33 +33,16 @@
     $this->CMbObject("id_sante400", "id_sante400_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+  }
+  
+  function getSpecs() {
+    return array (
       "object_id"    => "ref|notNull",
       "object_class" => "str|maxLength|25",
       "id400"        => "str|maxLength|8",
       "tag"          => "str|maxLength|80",
       "last_update"  => "dateTime|notNull"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
-    );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsFwd() {

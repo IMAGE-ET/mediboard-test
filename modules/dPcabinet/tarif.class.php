@@ -31,34 +31,22 @@ class CTarif extends CMbObject {
     $this->CMbObject("tarifs", "tarif_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+  }
+  
+  function getSpecs() {
+    return array (
       "chir_id"     => "ref",
       "function_id" => "ref",
       "description" => "str|notNull|confidential",
       "secteur1"    => "currency|min|0|notNull",
       "secteur2"    => "currency|min|0"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "description" => "like"
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function updateFormFields() {

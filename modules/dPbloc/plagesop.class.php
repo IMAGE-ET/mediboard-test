@@ -49,8 +49,10 @@ class CPlageOp extends CMbObject {
     $this->CMbObject("plagesop", "plageop_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+  }
 
-    static $props = array (
+  function getSpecs() {
+    return array (
       "chir_id"        => "ref",
       "anesth_id"      => "ref",
       "spec_id"        => "ref|xor|chir_id",
@@ -60,23 +62,6 @@ class CPlageOp extends CMbObject {
       "fin"            => "time|notNull",
       "temps_inter_op" => "time|notNull"
     );
-    
-    $this->_props =& $props;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
-
   }
   
   function loadRefs($annulee = 1) {

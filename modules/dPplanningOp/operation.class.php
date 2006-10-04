@@ -97,8 +97,10 @@ class COperation extends CMbObject {
     $this->CMbObject("operations", "operation_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+  }
+  
+  function getSpecs() {
+    return array (
       "chir_id"        => "ref|notNull",
       "plageop_id"     => "ref",
       "date"           => "date",
@@ -125,31 +127,15 @@ class COperation extends CMbObject {
       "depassement"    => "currency|min|0|confidential",
       "annulee"        => "enum|0|1",
     );
-    
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "chir_id"    => "ref|CMediusers",
       "plageop_id" => "ref|CPlageOp",
       "libelle"    => "like",
       "materiel"   => "like",
     );
-
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
 
   function check() {

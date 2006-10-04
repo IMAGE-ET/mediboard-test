@@ -62,8 +62,10 @@ class CUser extends CMbObject {
 		$this->CMbObject("users", "user_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+	}
+  
+  function getSpecs() {
+    return array (
       "user_username"   => "str|maxLength|20|notNull",
       "user_password"   => "str|minLength|4",
       "user_type"       => "num|notNull",
@@ -80,29 +82,14 @@ class CUser extends CMbObject {
       "user_pic"        => "text",
       "user_signature"  => "text"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "user_last_name"  => "likeBegin",
       "user_first_name" => "likeBegin"
     );
-    $this->_seek =& $seek;
-
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
-	}
+  }
 
 	function updateDBFields() {
     parent::updateDBFields();

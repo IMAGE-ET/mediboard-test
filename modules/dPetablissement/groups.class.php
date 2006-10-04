@@ -40,8 +40,10 @@ class CGroups extends CMbObject {
     $this->CMbObject("groups_mediboard", "group_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+  }
+  
+  function getSpecs() {
+    return array (
       "text"           => "str|notNull",
       "raison_sociale" => "str|maxLength|50",
       "adresse"        => "text",
@@ -53,26 +55,12 @@ class CGroups extends CMbObject {
       "siret"          => "str|length|14",
       "ape"            => "str|length|4"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "text" => "like"
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
  
   function updateFormFields () {

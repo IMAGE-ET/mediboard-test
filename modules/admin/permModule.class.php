@@ -38,32 +38,15 @@ class CPermModule extends CMbObject {
     $this->CMbObject("perm_module", "perm_module_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+  }
+  
+  function getSpecs() {
+    return array (
       "user_id"     => "ref|notNull",
       "mod_id"      => "num|notNull",
       "permission"  => "num|notNull",
       "view"        => "num|notNull",
     );
-    $this->_props =& $props;
-
-    static $seek = array (
-    );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefDBModule() {

@@ -26,14 +26,16 @@ class CEmployeCab extends CMbObject {
   var $ville    = null;
 
   // Object References
-  var $_ref_function      = null;
+  var $_ref_function = null;
 
   function CEmployeCab() {
     $this->CMbObject("employecab", "employecab_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+  }
 
-    static $props = array (
+  function getSpecs() {
+    return array (
       "function_id" => "ref|notNull",
       "nom"         => "str|notNull",
       "prenom"      => "str|notNull",
@@ -42,27 +44,13 @@ class CEmployeCab extends CMbObject {
       "ville"       => "str",
       "cp"          => "num|length|5|confidential"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "nom"    => "likeBegin",
       "prenom" => "likeBegin"
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function updateFormFields() {

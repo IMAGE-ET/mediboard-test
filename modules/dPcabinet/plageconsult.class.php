@@ -39,8 +39,10 @@ class CPlageconsult extends CMbObject {
     $this->CMbObject("plageconsult", "plageconsult_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+  }
+  
+  function getSpecs() {
+    return array (
       "chir_id" => "ref|notNull",
       "date"    => "date|notNull",
       "freq"    => "time|notNull",
@@ -48,27 +50,13 @@ class CPlageconsult extends CMbObject {
       "fin"     => "time|notNull",
       "libelle" => "str"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "chir_id" => "ref|CMediusers",
       "libelle" => "like"
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsBack($withCanceled = true) {

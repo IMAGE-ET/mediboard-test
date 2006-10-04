@@ -15,11 +15,11 @@ if (!$canRead) {
 
 // Initialisation de variables
 
-$selAdmis = mbGetValueFromGetOrSession("selAdmis", "0");
+$selAdmis  = mbGetValueFromGetOrSession("selAdmis", "0");
 $selSaisis = mbGetValueFromGetOrSession("selSaisis", "0");
-$selTri = mbGetValueFromGetOrSession("selTri", "nom");
-$date = mbGetValueFromGetOrSession("date", mbDate());
-$next = mbDate("+1 DAY", $date);
+$selTri    = mbGetValueFromGetOrSession("selTri", "nom");
+$date      = mbGetValueFromGetOrSession("date", mbDate());
+$next      = mbDate("+1 DAY", $date);
 
 // Operations de la journée
 $today = new CSejour;
@@ -45,6 +45,7 @@ $today = $today->loadList($where, $order, null, null, $ljoin);
 foreach ($today as $keySejour => $valueSejour) {
   $sejour =& $today[$keySejour];
   $sejour->loadRefs();
+  $user = new CMediusers;
   $affectation =& $sejour->_ref_first_affectation;
   if ($affectation->affectation_id) {
     $affectation->loadRefsFwd();

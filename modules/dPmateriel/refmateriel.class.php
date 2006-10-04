@@ -31,34 +31,16 @@ class CRefMateriel extends CMbObject {
     $this->CMbObject("ref_materiel", "reference_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+  }	  
 
-    static $props = array (
+  function getSpecs() {
+    return array (
       "fournisseur_id" => "ref|notNull",
       "materiel_id"    => "ref|notNull",
       "quantite"       => "num|pos|notNull",
       "prix"           => "num|pos|notNull"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
-    );
-    $this->_seek =& $seek;
-
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
-  }	  	
+  }
   
   function updateFormFields() {
     parent::updateFormFields();

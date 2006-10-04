@@ -36,8 +36,10 @@ class CCompteRendu extends CMbObject {
     $this->CMbObject("compte_rendu", "compte_rendu_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+  }
 
-    static $props = array (
+  function getSpecs() {
+    return array (
       "chir_id"     => "ref|xor|function_id",
       "function_id" => "ref",
       "object_id"   => "ref",
@@ -45,27 +47,7 @@ class CCompteRendu extends CMbObject {
       "source"      => "html",
       "type"        => "enum|patient|consultAnesth|operation|hospitalisation|consultation|notNull"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
-    );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
-
 
   function loadModeles($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     if (!isset($where["object_id"])) {

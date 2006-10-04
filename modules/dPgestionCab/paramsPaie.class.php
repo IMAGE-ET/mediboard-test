@@ -53,52 +53,35 @@ class CParamsPaie extends CMbObject {
     $this->CMbObject("params_paie", "params_paie_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+  }
 
-    static $props = array (
-      "employecab_id"   => "ref|notNull",
-      "smic"      => "currency|min|0|notNull",
-      "csgds"     => "pct|notNull",
-      "csgnds"    => "pct|notNull",
-      "ssms"      => "pct|notNull",
-      "ssmp"      => "pct|notNull",
-      "ssvs"      => "pct|notNull",
-      "ssvp"      => "pct|notNull",
-      "rcs"       => "pct|notNull",
-      "rcp"       => "pct|notNull",
-      "agffs"     => "pct|notNull",
-      "agffp"     => "pct|notNull",
-      "aps"       => "pct|notNull",
-      "app"       => "pct|notNull",
-      "acs"       => "pct|notNull",
-      "acp"       => "pct|notNull",
-      "aatp"      => "pct|notNull",
-      "nom"       => "str|notNull|confidential",
-      "adresse"   => "str|confidential",
-      "cp"        => "num|length|5|confidential",
-      "ville"     => "str|confidential",
-      "siret"     => "num|length|14|confidential",
-      "ape"       => "str|length|4|confidential",
-      "matricule" => "code|insee|confidential"
+  function getSpecs() {
+    return array (
+      "employecab_id" => "ref|notNull",
+      "smic"          => "currency|min|0|notNull",
+      "csgds"         => "pct|notNull",
+      "csgnds"        => "pct|notNull",
+      "ssms"          => "pct|notNull",
+      "ssmp"          => "pct|notNull",
+      "ssvs"          => "pct|notNull",
+      "ssvp"          => "pct|notNull",
+      "rcs"           => "pct|notNull",
+      "rcp"           => "pct|notNull",
+      "agffs"         => "pct|notNull",
+      "agffp"         => "pct|notNull",
+      "aps"           => "pct|notNull",
+      "app"           => "pct|notNull",
+      "acs"           => "pct|notNull",
+      "acp"           => "pct|notNull",
+      "aatp"          => "pct|notNull",
+      "nom"           => "str|notNull|confidential",
+      "adresse"       => "str|confidential",
+      "cp"            => "num|length|5|confidential",
+      "ville"         => "str|confidential",
+      "siret"         => "num|length|14|confidential",
+      "ape"           => "str|length|4|confidential",
+      "matricule"     => "code|insee|confidential"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
-    );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
 
   // Forward references

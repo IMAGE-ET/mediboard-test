@@ -52,14 +52,6 @@ class CMediusers extends CMbObject {
 		$this->CMbObject( "users_mediboard", "user_id" );
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
-      "remote"        => "enum|0|1",
-      "adeli"         => "num|length|9|confidential",
-      "function_id"   => "ref|notNull",
-      "discipline_id" => "ref"
-    );
-    $this->_props =& $props;
     
     static $user_props = array (
       "_user_username"   => "notNull|str|minLength|4",
@@ -73,26 +65,22 @@ class CMediusers extends CMbObject {
       "_user_ville"      => "str|confidential"
     );
     $this->_user_props =& $user_props;
+	}
 
-    static $seek = array (
+  function getSpecs() {
+    return array (
+      "remote"        => "enum|0|1",
+      "adeli"         => "num|length|9|confidential",
+      "function_id"   => "ref|notNull",
+      "discipline_id" => "ref"
+    );
+  }
+  
+  function getSeeks() {
+    return array (
       "user_id"  => "ref|CUser"
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
-	}
+  }
 
   function createUser() {
     $user = new CUser();
@@ -177,7 +165,7 @@ class CMediusers extends CMbObject {
     parent::updateFormFields();
     global $utypes;
     $user = new CUser();
-    if ($user->load($this->user_id)) {
+    if($user->load($this->user_id)) {
       $this->_user_type       = $utypes[$user->user_type];
       $this->_user_username   = $user->user_username;
       $this->_user_password   = $user->user_password;

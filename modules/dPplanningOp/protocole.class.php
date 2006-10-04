@@ -47,8 +47,10 @@ class CProtocole extends CMbObject {
     $this->CMbObject("protocole","protocole_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+  }
+  
+  function getSpecs() {
+    return array (
       "chir_id"         => "ref|notNull",
       "type"            => "enum|comp|ambu|exte",
       "DP"              => "code|cim10",
@@ -61,29 +63,15 @@ class CProtocole extends CMbObject {
       "rques_operation" => "str|confidential",
       "depassement"     => "currency|min|0|confidential"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "chir_id"  => "ref|CMediusers",
       "libelle"  => "like",
       "examen"   => "like",
       "materiel" => "like"
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
 
   function check() {    

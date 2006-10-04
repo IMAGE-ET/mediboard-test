@@ -65,8 +65,10 @@ class CFicheEi extends CMbObject {
     $this->CMbObject("fiches_ei", "fiche_ei_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+  }
 
-    static $props = array (
+  function getSpecs() {
+    return array (
       "user_id"                      => "ref|notNull",    
       "date_fiche"                   => "dateTime|notNull",
       "date_incident"                => "dateTime|notNull",
@@ -101,25 +103,6 @@ class CFicheEi extends CMbObject {
       "qualite_date_verification"    => "date",
       "qualite_date_controle"        => "date"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
-    );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsFwd() {

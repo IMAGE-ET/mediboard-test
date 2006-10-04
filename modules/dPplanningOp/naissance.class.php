@@ -28,8 +28,10 @@ class CNaissance extends CMbObject {
     $this->CMbObject("naissance","naissance_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+  }
+  
+  function getSpecs() {
+    return array (
       "operation_id"    => "ref|notNull",
       "nom_enfant"      => "str|notNull|confidential",
       "prenom_enfant"   => "str",
@@ -37,27 +39,13 @@ class CNaissance extends CMbObject {
       "date_reelle"     => "dateTime",
       "debut_grossesse" => "date",
     );
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "nom"    => "likeBegin",
       "prenom" => "likeBegin",
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function loadRefsFwd() {

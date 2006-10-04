@@ -63,8 +63,10 @@ class CFichePaie extends CMbObject {
     $this->CMbObject("fiche_paie", "fiche_paie_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+  }
 
-    static $props = array (
+  function getSpecs() {
+    return array (
       "params_paie_id" => "ref|notNull",
       "debut"          => "date|notNull",
       "fin"            => "date|moreEquals|debut|notNull",
@@ -77,25 +79,6 @@ class CFichePaie extends CMbObject {
       "conges_payes"   => "pct|notNull",
       "prime_speciale" => "pct|notNull"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
-    );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
   
   function updateFormFields() {

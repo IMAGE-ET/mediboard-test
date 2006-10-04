@@ -40,8 +40,10 @@ class CActeCCAM extends CMbObject {
 		$this->CMbObject( "acte_ccam", "acte_id" );
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
+	}
+  
+  function getSpecs() {
+    return array (
       "code_acte"           => "notNull|code|ccam",
       "code_activite"       => "notNull|num|maxLength|2",
       "code_phase"          => "notNull|num|maxLength|2",
@@ -52,27 +54,13 @@ class CActeCCAM extends CMbObject {
       "operation_id"        => "notNull|ref",
       "executant_id"        => "notNull|ref"
     );
-    $this->_props =& $props;
-
-    static $seek = array (
+  }
+  
+  function getSeeks() {
+    return array (
       "code_acte" => "equal"
     );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
-	}
+  }
   
   function check() {
     return parent::check(); 
