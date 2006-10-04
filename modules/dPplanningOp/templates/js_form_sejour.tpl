@@ -47,7 +47,7 @@ function cancelSejour() {
   var oElement = oForm.annule;
   
   if (oElement.value == "0") {
-    if (confirm("Voulez-vous vraiment annuler le séjour ?\nTous les placements dans les lits seront supprimés.\n{{$msg_alert}}")) {
+    if (confirm("Voulez-vous vraiment annuler le séjour ?\nTous les placements dans les lits seront supprimés.\n{{$msg_alert|smarty:nodefaults|escape:"javascript"}}")) {
       oElement.value = "1";
       oForm.submit();
       return;

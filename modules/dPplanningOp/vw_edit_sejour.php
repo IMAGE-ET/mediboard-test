@@ -89,14 +89,13 @@ $msg_alert = "";
 if($sejour->_ref_operations){
   foreach($sejour->_ref_operations as $keyOp => $dataOp){
     if($dataOp->annulee == 0){
-      $msg_alert .= "\\n".addslashes($dataOp->_view)." le ".substr($dataOp->_datetime, 8, 2)."/".substr($dataOp->_datetime, 5, 2)."/".substr($dataOp->_datetime, 0, 4);
+      $msg_alert .= "\n".$dataOp->_view." le ".substr($dataOp->_datetime, 8, 2)."/".substr($dataOp->_datetime, 5, 2)."/".substr($dataOp->_datetime, 0, 4);
     }
   }
   if($msg_alert!=""){
-   	$msg_alert = "\\n\\nATTENTION ! Vous vous appretez à annuler des opérations :".$msg_alert;
+   	$msg_alert = "\n\nATTENTION ! Vous vous appretez à annuler des opérations :".$msg_alert;
   }
 }
-
 
 // Création du template
 $smarty = new CSmartyDP(1);
