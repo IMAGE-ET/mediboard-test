@@ -252,6 +252,24 @@ class CMbObject {
     }
   }
   
+  /**
+   * Extends object properties with target object (of the same class) properties
+   */
+  function extendsWith($mbObject) {
+    $targetClass = get_class($mbObject);
+    $thisClass = get_class($this);
+    if ($targetClass != $thisClass) {
+      trigger_error(printf("Target object has not the same class (%s) as this (%s)", $targetClass, $thisClass), E_USER_WARNING);
+      return;
+    }
+    
+    foreach ($mbObject->getProps() as $propName => $propValue) {
+      if ($propValue !== null) {
+        $this->$propName = $propValue;
+      }
+    }
+  }
+  
   function loadRefModule($name) {
     $this->_ref_module = CModule::getInstalled($name);
   }

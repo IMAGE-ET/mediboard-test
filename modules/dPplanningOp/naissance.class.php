@@ -32,7 +32,7 @@ class CNaissance extends CMbObject {
     static $props = array (
       "operation_id"    => "ref|notNull",
       "nom_enfant"      => "str|notNull|confidential",
-      "prenom_enfant "  => "str",
+      "prenom_enfant"   => "str",
       "date_prevue"     => "date",
       "date_reelle"     => "dateTime",
       "debut_grossesse" => "date",

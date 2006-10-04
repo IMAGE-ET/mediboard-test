@@ -625,21 +625,6 @@ class CAppUI {
     $prefs = db_loadHashList($sql);
     $this->user_prefs = array_merge($this->user_prefs, db_loadHashList($sql));
   }
-
-/**
-* Gets a list of the modules that should appear in the menu
-* @return array Named array list in the form
-* ["module directory", "module name", "module_icon"]
-*/
-  function getMenuModules() {
-    $sql = "
-    SELECT mod_name
-    FROM modules
-    WHERE mod_active > 0 AND mod_ui_active > 0
-    ORDER BY mod_ui_order
-    ";
-    return (db_loadList($sql));
-  }
 }
 
 ?>

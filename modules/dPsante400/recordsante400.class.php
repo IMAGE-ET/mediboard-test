@@ -54,7 +54,7 @@ class CRecordSante400 {
   function consumeDate($valueName) {
     $date = $this->consume($valueName);
     if ($date == "0") {
-      $date = "";
+      return null;
     }
     
     return preg_replace("/(\d{4})(\d{2})(\d{2})/i", "$1-$2-$3", $date);
@@ -63,7 +63,7 @@ class CRecordSante400 {
   function consumeTime($valueName) {
     $time = $this->consume($valueName);
     if ($time == "0") {
-      $time = "";
+      return null;
     }
 
     return preg_replace("/(\d{2})(\d{2})/i", "$1:$2:00", $time);
@@ -72,6 +72,7 @@ class CRecordSante400 {
   function consumeDateTime($dateName, $timeName) {
     $date = $this->consumeDate($dateName);
     $time = $this->consumeTime($timeName);
+    
     return $time ? "$date $time" : $date;
   }
 }

@@ -17,7 +17,7 @@ $next     = mbDate("+ 1 day", $date);
 $logs = new CAccessLog;
 $logs = $logs->loadAgregation($date, $next, $groupmod, $module);
 
-$listModules = $AppUI->getMenuModules();
+$listModules = CModule::getInstalled();
 
 // Création du template
 $smarty = new CSmartyDP(1);

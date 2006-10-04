@@ -23,6 +23,9 @@
   var $tag           = null;
   var $last_update   = null;
 
+  // Derivate fields
+  var $_last_id      = null;
+  
   // Object References
   var $_ref_object   = null;
 
@@ -70,53 +73,32 @@
    * Binds the id400 to an object, and updates the object
    * Will only bind default object properties when it's created
    */
-  function bindObject(&$mbObject, $id400, $mbObjectDefault = null, $tag = null) {
+  function bindObject(&$mbObject, $mbObjectDefault = null) {
     $this->object_class = get_class($mbObject);
-    $this->id400 = $id400;
-    $this->tag = $tag;
     $this->loadMatchingObject("`last_update` DESC");
-    $this->last_update = mbDateTime();
+    $this->loadRefs();
     
-    //-- Object not found
-    if (!$this->_id) {
-      if ($mbObjectDefault) {
-        foreach ($mbObjectDefault->getProps() as $propName => $propValue) {
-          $mbObject->$propName = $propValue;
-        }
-      }
-      
-      // Create object
-      if ($msg = $mbObject->store()) {
-        throw new Exception($msg);
-      }
-      
-      // Create IdSante400
-      $this->object_id = $mbObject->_id;
-      if ($msg = $this->store()) {
-        throw new Exception($msg);
-      }
-      
-      return;
+    // Object has not been found : never created or deleted since last binding
+    if (!$this->_ref_object->_id && $mbObjectDefault) {
+      $mbObject->extendsWith($mbObjectDefault);
     }
     
-    // !!!! Use default when recreated
-    //-- Object Found
-    // Update object
+    // Create/update bound object
     $mbObject->_id = $this->object_id;
-    
-    mbTrace($mbObject->_id, "ID to store for " . get_class($mbObject));
     if ($msg = $mbObject->store()) {
       throw new Exception($msg);
     }
     
-    // Update IdSante400 
-    $this->object_id = $mbObject->_id; // Object might have been re-recreated
+    $this->object_id = $mbObject->_id;
+    $this->last_update = mbDateTime();
+
+    // Create/update the idSante400    
     if ($msg = $this->store()) {
       throw new Exception($msg);
     }
   }
   
-  function setIdentifier($mbObject, $id400, $tag = null) {
+  function setObject($mbObject) {
     $object_class = get_class($mbObject);
     if (!is_a($mbObject, "CMbObject")) {
       trigger_error("Impossible d'associer un identifiant Santé 400 à un objet de classe '$object_class'");
@@ -124,7 +106,6 @@
     
     $this->object_class = $object_class;
     $this->object_id = $mbObject->_id;
-    $this->tag = $tag;
     $this->last_update = mbDate();
   }
 }

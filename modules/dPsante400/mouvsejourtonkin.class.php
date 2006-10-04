@@ -67,7 +67,8 @@ class CMouvSejourTonkin extends CRecordSante400 {
     $this->etablissement->ape            = $etp01->consume("ETCAPE");
 
     $id400Etab = new CIdSante400();
-    $id400Etab->bindObject($this->etablissement, $CODETB);
+    $id400Etab->id400 = $CODETB;
+    $id400Etab->bindObject($this->etablissement);
     
     $this->markStatus("E");
 
@@ -79,7 +80,8 @@ class CMouvSejourTonkin extends CRecordSante400 {
     $this->fonction->color = "00FF00";
 
     $id400Func = new CIdSante400();
-    $id400Func->bindObject($this->fonction, $CODETB);
+    $id400Func->id400 = $CODETB;
+    $id400Func->bindObject($this->fonction);
     
     $this->markStatus("F");
 
@@ -92,6 +94,7 @@ class CMouvSejourTonkin extends CRecordSante400 {
     $prenomsPraticiens = split(" ", $mdp01->consume("MDPRES"));
 
     $this->praticien = new CMediusers;
+    $this->praticien->_user_type = 3; // Chirurgien
     $this->praticien->_user_username = strtolower($prenomsPraticiens[0] . $nomsPraticien[1]);
     $this->praticien->_user_last_name  = $nomsPraticien[1];
     $this->praticien->_user_first_name = join(" ", $prenomsPraticiens);
@@ -104,10 +107,10 @@ class CMouvSejourTonkin extends CRecordSante400 {
     
     $praticien = new CMediusers;
     $praticien->function_id = $this->fonction->function_id;
-    $praticien->_user_password = $praticien->_user_username;
 
     $id400Prat = new CIdSante400();
-    $id400Prat->bindObject($this->praticien, $CODMEDREF, $praticien);
+    $id400Prat->id400 = $CODMEDREF;
+    $id400Prat->bindObject($this->praticien, $praticien);
     
     $this->markStatus("C");
 
@@ -180,17 +183,24 @@ class CMouvSejourTonkin extends CRecordSante400 {
     $this->patient->ald              = null;
 
     $id400Pat = new CIdSante400();
-    $id400Pat->bindObject($this->patient, $this->consume("NIP"));
+    $id400Pat->id400 = $this->consume("NIP");
+    $id400Pat->bindObject($this->patient);
 
     $this->markStatus("P");
 
     // Import du séjour
     static $transformHospi = array (
-      "HO" => "hospi",
+      "HO" => "comp",
       "AM" => "ambu",
       "EX" => "exte",
       "CH" => "ambu",
       "DI" => "ambu",
+    );
+
+    static $prevDays = array (
+      "comp" => 5,
+      "ambu" => 1,
+      "exte" => 0,
     );
 
     static $transformHospiDP = array (
@@ -198,17 +208,47 @@ class CMouvSejourTonkin extends CRecordSante400 {
       "DI" => "Z49",
     );
 
-    $this->sejour = new CSejour;
-    $this->sejour->entree_prevue = $this->consumeDateTime("DATENTPRV", "HREENTPRV");
-    $this->sejour->sortie_prevue = $this->consumeDateTime("DATSORPRV", "HRESORPRV");
-    $this->sejour->entree_reelle = $this->consumeDateTime("DATENT", "HREENT");
-    $this->sejour->sortie_rellle = $this->consumeDateTime("DATSOR", "HRESOR");
-
     $hospi = $this->consume("TYPSEJ");
+
+    $this->sejour = new CSejour;
+    $this->sejour->patient_id   = $this->patient->_id;
+    $this->sejour->praticien_id = $this->praticien->_id;
+    
+    @$transformHospi[$hospi];
     $this->sejour->type = @$transformHospi[$hospi];
     $this->sejour->DP   = @$transformHospiDP[$hospi];
 
-    mbTrace($this->sejour->getProps(), "Sejour");
+    switch ($this->consume("ETASEJ")) {
+    	case "F": // Prévu
+      $this->sejour->entree_prevue = $this->consumeDateTime("DATENT", "HREENT");
+      $this->sejour->sortie_prevue = $this->consumeDateTime("DATSOR", "HRESOR");
+  		break;
+    
+      case "P": // Présent
+      case "S": // Sorti
+      $this->sejour->entree_reelle = $this->consumeDateTime("DATENT", "HREENT");
+      $this->sejour->sortie_reelle = $this->consumeDateTime("DATSOR", "HRESOR");
+      break;
+    }
+
+    $id400Sej = new CIdSante400();
+    $id400Sej->id400 = $this->consume("NUMDOS");
+    $id400Sej->_last_id = $this->consume("DOSPRV");
+    $id400Sej->bindObject($this->sejour);
+    
+    // Rectifications sur les dates prévues
+    if ($this->sejour->entree_prevue == "0000-00-00 00:00:00") {
+      $this->sejour->entree_prevue = $this->sejour->entree_reelle;
+    }
+    
+    if ($this->sejour->sortie_prevue == "0000-00-00 00:00:00") {
+      $nbDays = $prevDays[$this->sejour->type];
+      $this->sejour->sortie_prevue = mbDate("+ $nbDays DAYS", $this->sejour->entree_prevue);
+    }
+    
+    $this->sejour->store();
+    
+    $this->markStatus("S");
         
     // Import de la naissance
     $this->naissance = new CNaissance(); 
@@ -218,10 +258,11 @@ class CMouvSejourTonkin extends CRecordSante400 {
     $this->naissance->date_reelle     = $this->consume("DATACC");
     $this->naissance->debut_grossesse = $this->consume("DATDEBGRO");
     
-//    if ($this->naissance->check()) {
-//      $id400Nais = new CIdSante400();
-//      $id400Nais->bindObject($this->naissance, );
-//    }
+    if (!$this->naissance->check()) {
+      $id400Nais = new CIdSante400();
+      $id400Nais->id400 = $id400Sej->id400;
+      $id400Nais->bindObject($this->naissance);
+    }
     
     $this->markStatus("N");
   }
