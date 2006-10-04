@@ -132,7 +132,8 @@ function cleanOrderOp($plageop, $type = "rank") {
           "\noperations.rank," .
           "\noperations.temp_operation," .
           "\noperations.pause," .
-          "\nplagesop.debut" .
+          "\nplagesop.debut," .
+          "\nplagesop.temps_inter_op" .
           "\nFROM operations" .
           "\nLEFT JOIN plagesop" .
           "\nON plagesop.plageop_id = operations.plageop_id" .
@@ -149,7 +150,7 @@ function cleanOrderOp($plageop, $type = "rank") {
         db_exec($sql);
         changeAffect($curr_id);
         $debut = mbAddTime($value["temp_operation"], $debut); // durée de l'opération
-        $debut = mbAddTime("00:15:00", $debut);               // pause d'1/4h
+        $debut = mbAddTime($value["temps_inter_op"], $debut);               // pause d'1/4h
         $debut = mbAddTime($value["pause"], $debut);          // Pause
       }
       break;

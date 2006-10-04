@@ -113,6 +113,26 @@ class CPlageOp extends CMbObject {
     $op = new COperation;
     $this->_ref_operations = $op->loadList($where, $order);
   }
+  
+  function reorderOp() {
+    if(!count($this->_ref_operations)) {
+      $this->loadRefsBack();
+    }
+    $new_time = $this->debut;
+    $i = 0;
+    foreach ($this->_ref_operations as $keyOp => $op) {
+      if($this->_ref_operations[$keyOp]->rank) {
+        $i++;
+        $this->_ref_operations[$keyOp]->rank = $i;
+        $this->_ref_operations[$keyOp]->time_operation = $new_time;
+        $this->_ref_operations[$keyOp]->updateFormFields();
+        $this->_ref_operations[$keyOp]->store(false);
+        $new_time = mbAddTime($op->temp_operation, $new_time);
+        $new_time = mbAddTime($this->temps_inter_op, $new_time);
+        $new_time = mbAddTime($op->pause, $new_time);
+      }
+    }
+  }
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
@@ -161,7 +181,7 @@ class CPlageOp extends CMbObject {
     $this->updateDBFields();
     if ($msg = $this->hasCollisions()) {
       return $msg;
-    }    
+    }
     return parent::store();
   }
   
@@ -190,6 +210,7 @@ class CPlageOp extends CMbObject {
     if($this->_min_inter_op !== null) {
       $this->temps_inter_op = "00:$this->_min_inter_op:00";
     }
+    $this->reorderOp(); 
   }
   
   function becomeNext() {

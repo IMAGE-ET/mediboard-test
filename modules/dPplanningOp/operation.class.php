@@ -119,7 +119,6 @@ class COperation extends CMbObject {
       "date_anesth"    => "date",
       "time_anesth"    => "time",
       "type_anesth"    => "num",
-      "date_anesth"    => "date",
       "duree_hospi"    => "num",
       "ATNC"           => "enum|o|n",
       "rques"          => "str|confidential",
@@ -264,15 +263,13 @@ class COperation extends CMbObject {
     }
   }
 
-  function store() {
+  function store($reorder = true) {
     if ($msg = parent::store()) {
       return $msg;
     }
 
     // Cas d'une annulation
-    if ($this->annulee) {
-      $this->reorder();
-    }else{
+    if (!$this->annulee) {
       // Si pas une annulation on recupére le sejour
       // et on regarde s'il n'ets pas annulé
       $this->loadRefSejour();
@@ -298,6 +295,8 @@ class COperation extends CMbObject {
       $chirTmp = new CMediusers;
       $chirTmp->load($this->chir_id);
       $plageTmp->chir_id = $chirTmp->user_id;
+      $plageTmp->store();
+    } elseif($reorder) {
       $plageTmp->store();
     }
     
