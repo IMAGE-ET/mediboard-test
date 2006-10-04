@@ -86,16 +86,11 @@ class CMbObject {
       $enums =& $this->getEnums();
     }
         
-    $this->_props =& $props;
+    $this->_enums =& $enums;
 
     static $enumsTrans = null;
-    if (!$props) {
-      $props =& $this->getSpecs();
-    }
-        
-    static $enumsTrans = null;
     if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
+      $enumsTrans =& $this->getEnumsTrans();
     }
     
     $this->_enumsTrans =& $enumsTrans;
