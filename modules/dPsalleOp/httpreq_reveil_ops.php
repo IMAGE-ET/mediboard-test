@@ -33,20 +33,12 @@ $plages = new CPlageOp;
 $where = array();
 $where["date"] = "= '$date'";
 $plages = $plages->loadList($where);
-$listIdPlages = array();
-foreach($plages as $key => $value) {
-  $listIdPlages[] = "'".$value->plageop_id."'";
-}
 
 $timing = array();
 
 $listOps = new COperation;
 $where = array();
-if(count($listIdPlages)) {
-  $where[] = "`plageop_id` IN(".implode(",", $listIdPlages).") OR (`plageop_id` IS NULL AND `date` = '$date')";
-} else {
-  $where[] = "`plageop_id` IS NULL AND `date` = '$date'";
-}
+$where[] = "`plageop_id` ".db_prepare_in(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
 $where["sortie_bloc"] = "IS NOT NULL";
 $where["entree_reveil"] = "IS NULL";
 $order = "sortie_bloc";
