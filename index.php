@@ -6,6 +6,8 @@
 * @author Thomas Despoix
 */
 
+include_once("./includes/magic_quotes_gpc.php");
+
 $dPconfig = array();
 
 if(!is_file("./includes/config.php")) {
@@ -253,9 +255,10 @@ if(!$suppressHeaders) {
   }
   
   $performance = array();
-  $performance["genere"] = number_format($phpChrono->total, 3);
+  $performance["genere"]  = number_format($phpChrono->total, 3);
   $performance["memoire"] = mbConvertDecaBinary(memory_get_usage());
-  $performance["objets"] = $mbObjectCount;
+  $performance["objets"]  = $mbObjectCount;
+  $performance["cache"]   = $mbCacheObjectCount;
   $smartyStyle->assign("includeFooter" , true);
   //$smartyStyle->assign("debugMode"     , $dPconfig["debug"]);
   $smartyStyle->assign("debugMode"     , @$AppUI->user_prefs["INFOSYSTEM"]);

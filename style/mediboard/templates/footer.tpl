@@ -7,7 +7,7 @@
 <div style="margin: 10px; text-align: center;">
   Page générée en {{$performance.genere}} secondes
   par PHP, utilisant {{$performance.memoire}} de mémoire 
-  sur  {{$performance.objets}} objets métier
+  sur  {{$performance.objets}} objets métier + {{$performance.cache}} en cache
   {{foreach from=$dbChronos item=currdbChrono key=keydbConfigName}}
   <br />
   {{$currdbChrono->total|string_format:"%.3f"}} secondes prises

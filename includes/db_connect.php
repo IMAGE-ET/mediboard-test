@@ -58,20 +58,30 @@ function db_loadResult($sql, $dbid = "std") {
 * @param string The SQL query
 * @param object The address of variable
 */
-function db_loadObject($sql, &$object, $bindAll = false , $strip = true) {
+function db_loadObject($sql, &$object) {
+  global $mbCacheObjectCount;
+  $class = get_class($object);
   if ($object != null) {
-    $hash = array();
-    if(!db_loadHash($sql, $hash)) {
-      return false;
+    if($object->_id && isset($object->_objectsTable[$object->_id])) {
+      bindObjectToObject($object->_objectsTable[$object->_id], $object);
+      $mbCacheObjectCount++;
+      return $object;
+    } else {
+      $hash = array();
+      if(!db_loadHash($sql, $hash)) {
+        return false;
+      }
+      bindHashToObject($hash, $object);
+      $object->_objectsTable[$object->_id] = $object;
+      return $object;
     }
-    bindHashToObject($hash, $object, null, $strip, $bindAll);
-    return true;
   } else {
     $cur = db_exec($sql);
     $cur or exit(db_error());
     if ($object = db_fetch_object($cur)) {
       db_free_result($cur);
-      return true;
+      $object->_objectsTable[$object->_id] = $object;
+      return $object;
     } else {
       $object = null;
       return false;
@@ -127,7 +137,7 @@ function db_loadHashList($sql, $index = "") {
 * @return array the query result
 */
 function db_loadList($sql, $maxrows = null, $dbid = "std") {
-  GLOBAL $AppUI;
+  global $AppUI;
   if (!($cur = db_exec($sql, $dbid))) {;
     $AppUI->setMsg(db_error(), UI_MSG_ERROR);
     return false;
@@ -174,17 +184,25 @@ function db_loadColumn($sql, $maxrows = null) {
  * @note to optimize request, only select object oids in $sql
  */
 function db_loadObjectList($sql, $object, $maxrows = null) {
+  global $mbCacheObjectCount;
   $cur = db_exec($sql);
   $list = array();
   $cnt = 0;
   $class = get_class($object);
-  while ($row = db_fetch_array($cur)) {    
-    $object = new $class();
-    $keyname = $object->_tbl_key;
-    $object->bind($row);
-    $object->checkConfidential();
-    $object->updateFormFields();
-    $list[$object->$keyname] = $object;
+  $table_key = $object->_tbl_key;
+  while ($row = db_fetch_array($cur)) {
+    $key = $row[$table_key];
+    if(isset($object->_objectsTable[$key])) {
+      $list[$key] = $object->_objectsTable[$key];
+      $mbCacheObjectCount++;
+    } else {
+      $newObject = new $class();
+      $newObject->bind($row);
+      $newObject->checkConfidential();
+      $newObject->updateFormFields();
+      $object->_objectsTable[$newObject->_id] = $newObject;
+      $list[$newObject->_id] = $newObject;
+    }
     if($maxrows && $maxrows == $cnt++) {
       break;
     }
@@ -378,10 +396,16 @@ function db_dateTime2locale($dateTime, $format) {
   }
 }
 
-function stripslashes_deep($value) {
-  return is_array($value) ?
-    array_map("stripslashes_deep", $value) :
-    stripslashes($value);
+if(get_magic_quotes_gpc()) {
+  function stripslashes_deep($value) {
+    return is_array($value) ?
+      array_map("stripslashes_deep", $value) :
+      stripslashes($value);
+  }
+} else {
+  function stripslashes_deep($value) {
+    return $value;
+  }
 }
 
 /*
@@ -393,27 +417,22 @@ function stripslashes_deep($value) {
 * @param boolean
 * @param boolean
 */
-function bindHashToObject($hash, &$obj, $prefix = null, $checkSlashes = true, $bindAll = false) {
+function bindHashToObject($hash, &$obj) {
   is_array($hash) or die("bindHashToObject : hash expected");
   is_object($obj) or die("bindHashToObject : object expected");
 
-  if ($bindAll) {
-    foreach ($hash as $k => $v) {
-      $obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes_deep($hash[$k]) : $hash[$k];
-    }
-  } else if ($prefix) {
-    foreach (get_object_vars($obj) as $k => $v) {
-      if (isset($hash[$prefix . $k ])) {
-        $obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes_deep($hash[$k]) : $hash[$k];
-      }
-    }
-  } else {
-    foreach (get_object_vars($obj) as $k => $v) {
-      if (isset($hash[$k])) {
-        $obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes_deep($hash[$k]) : $hash[$k];
-      }
+  foreach (get_object_vars($obj) as $k => $v) {
+    if (isset($hash[$k])) {
+      $obj->$k = (get_magic_quotes_gpc()) ? stripslashes_deep($hash[$k]) : $hash[$k];
     }
   }
-  //echo "obj="; print_r($obj); exit;
+}
+
+function bindObjectToObject($obj1, &$obj) {
+  is_object($obj1) or die("bindHashToObject : object expected");
+  is_object($obj) or die("bindHashToObject : object expected");
+  foreach ($obj1->getProps() as $k => $v) {
+    $obj->$k = $v;
+  }
 }
 ?>

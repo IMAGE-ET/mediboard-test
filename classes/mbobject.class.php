@@ -12,8 +12,9 @@
  * @abstract Adds Mediboard abstraction layer functionality
  */
 
-global $mbObjectCount;
+global $mbObjectCount, $mbCacheObjectCount;
 $mbObjectCount = 0;
+$mbCacheObjectCount = 0;
 
 require_once("./classes/request.class.php");
 
@@ -24,6 +25,8 @@ class CMbObject {
   /**
    * Global properties
    */
+  
+  var $_objectsTable = null; // list of loaded objects
   
   var $_tbl       = null; // table name
   var $_tbl_key   = null; // primary key name
@@ -37,7 +40,7 @@ class CMbObject {
   /**
    * Properties  specification
    */
-  
+
   var $_aides      = array(); // aides à la saisie
   var $_props      = array(); // properties specifications
   var $_enums      = array(); // enums fields elements
@@ -66,6 +69,9 @@ class CMbObject {
     $this->_id =& $this->$key;
     
     $class = get_class($this);
+    
+    static $objectsTable = array();
+    $this->_objectsTable =& $objectsTable;
     
     static $props = null;
     if (!$props) {
@@ -161,8 +167,8 @@ class CMbObject {
       return false;
     }
     
-    $sql = "SELECT * FROM $this->_tbl WHERE $this->_tbl_key=$oid";
-    $object = db_loadObject($sql, $this, false, $strip);
+    $sql = "SELECT * FROM `$this->_tbl` WHERE `$this->_tbl_key` = '$oid'";
+    $object = db_loadObject($sql, $this);
 
     if (!$object) {
       $this->_id = null;
@@ -385,6 +391,7 @@ class CMbObject {
     } 
 
     // Load the object to get all properties
+    unset($this->_objectsTable[$this->_id]);
     $this->load();
     return null;
   }

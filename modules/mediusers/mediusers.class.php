@@ -165,7 +165,7 @@ class CMediusers extends CMbObject {
     parent::updateFormFields();
     global $utypes;
     $user = new CUser();
-    if($user->load($this->user_id)) {
+    if($result = $user->load($this->user_id)) {
       $this->_user_type       = $utypes[$user->user_type];
       $this->_user_username   = $user->user_username;
       $this->_user_password   = $user->user_password;
