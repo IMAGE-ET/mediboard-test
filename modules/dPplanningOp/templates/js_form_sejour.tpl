@@ -7,14 +7,21 @@ function checkDureeHospi() {
   field1 = form.type;
   field2 = form._duree_prevue;
   if (field1 && field2) {
-    if (field1[1].checked && (field2.value == 0 || field2.value == '')) {
+    var sTypeAdmission = "";
+    for(i=0; i<field1.length; i++){
+      if(field1[i].checked){
+        sTypeAdmission = field1[i].value;
+      }
+    }
+    
+    if (sTypeAdmission=="comp" && (field2.value == 0 || field2.value == '')) {
       field2.value = prompt("Veuillez saisir une durée prévue d'hospitalisation d'au moins 1 jour", "1");
       field2.onchange();
       field2.focus();
       return false;
     }
-    if (field1[0].checked && field2.value != 0 && field2.value != '') {
-      alert('Pour une admission de type ambulatoire, la durée du séjour doit être de 0 jour.');
+    if (sTypeAdmission=="ambu" && field2.value != 0 && field2.value != '') {
+      alert('Pour une admission de type Ambulatoire, la durée du séjour doit être de 0 jour.');
       field2.focus();
       return false;
     }
