@@ -48,12 +48,11 @@ if (intval(mbGetValueFromPost("del"))) {
     $where["consultation_id"] = "= '".$do->_obj->consultation_id."'";
     $consultAnesth->loadObject($where);
     $consultAnesth->consultation_id = $do->_obj->consultation_id;
-    if(@$_POST["_operation_id"]) {
+    
+    if(isset($_POST["_operation_id"])){
       $consultAnesth->operation_id = $_POST["_operation_id"];
-    }else{
-      $consultAnesth->operation_id = "";
+      $consultAnesth->store();
     }
-    $consultAnesth->store();
   }
 }
 
