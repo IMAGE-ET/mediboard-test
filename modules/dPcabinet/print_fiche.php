@@ -22,25 +22,18 @@ $consultation_id = mbGetValueFromGet("consultation_id");
 $consult = new CConsultation();
 if ($consultation_id) {
   $consult->load($consultation_id);
-  $consult->loadRefs();
+  $consult->loadRefsDocs();
+  $consult->loadRefConsultAnesth();
+  $consult->loadRefsFwd();
+
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
     $consult->_ref_consult_anesth->loadRefs();
   }
+
   $praticien =& $consult->_ref_chir;
-  $praticien->loadRefs();
   $patient =& $consult->_ref_patient;
-  $patient->loadRefs();
-  foreach ($patient->_ref_consultations as $key => $value) {
-    $patient->_ref_consultations[$key]->loadRefs();
-    $patient->_ref_consultations[$key]->_ref_plageconsult->loadRefs();
-  }
-  foreach ($patient->_ref_sejours as $key => $sejour) {
-    $patient->_ref_sejours[$key]->loadRefsFwd();
-    $patient->_ref_sejours[$key]->loadRefsOperations();
-    foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
-      $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
-    }
-  }
+  $patient->loadRefsAntecedents();
+  $patient->loadRefsTraitements();
 }
 
 // Classement des antécédents

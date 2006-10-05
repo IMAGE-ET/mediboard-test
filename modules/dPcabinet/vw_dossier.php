@@ -15,44 +15,10 @@ if (!$canEdit) {
 
 $pat_id = mbGetValueFromGetOrSession("patSel");
 
-$fileModule    = CModule::getInstalled("dPfiles");
-$fileCptRendus = CModule::getInstalled("dPcompteRendu");
-
-$canReadFiles     = $fileModule->canRead();
-$canEditFiles     = $fileModule->canEdit();
-$canReadCptRendus = $fileCptRendus->canRead();
-$canEditCptRendus = $fileCptRendus->canEdit();
-
 // Liste des Praticiens
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
 
-// Liste des modèles
-$listModeleAuth = array();
-$listModelePrat = new CCompteRendu;
-$listModeleFct = new CCompteRendu;
-if ($pat_id) {
-  $listFct = new CMediusers();
-  $listFct = $listFct->loadFonctions(PERM_READ);
-  
-  $where = array();
-  $where["chir_id"] = db_prepare_in(array_keys($listPrat));
-  $where["object_id"] = "IS NULL";
-  $where["type"] = "= 'patient'";
-  $order = "chir_id, nom";
-  $listModelePrat = $listModelePrat->loadlist($where, $order);
- 
-  $where = array();
-  $where["function_id"] = db_prepare_in(array_keys($listFct));
-  $where["object_id"] = "IS NULL";
-  $where["type"] = "= 'patient'";
-  $order = "chir_id, nom";
-  $listModeleFct = $listModeleFct->loadlist($where, $order);
-}
-
-// Liste des Category pour les fichiers
-$listCategory = new CFilesCategory;
-$listCategory = $listCategory->listCatClass("CPatient");
 
 $patient = new CPatient;
 $patient->load($pat_id);
@@ -90,22 +56,12 @@ if ($pat_id) {
 $moduleCabinet = CModule::getInstalled("dPcabinet");
 $canEditCabinet = $moduleCabinet->canEdit();
 
-$affichageNbFile = CFile::loadNbFilesByCategory($patient);
-
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("affichageNbFile",$affichageNbFile     );
 $smarty->assign("patient", $patient                    );
 $smarty->assign("listPrat", $listPrat                  );
 $smarty->assign("canEditCabinet", $canEditCabinet      );
-$smarty->assign("listCategory"  , $listCategory        );
-$smarty->assign("canReadFiles"  , $canReadFiles        );
-$smarty->assign("canEditFiles"  , $canEditFiles        );
-$smarty->assign("canReadCptRendus", $canReadCptRendus  );
-$smarty->assign("canEditCptRendus", $canEditCptRendus  );
-$smarty->assign("listModelePrat", $listModelePrat      );
-$smarty->assign("listModeleFct" , $listModeleFct       );
 
 $smarty->display("vw_dossier.tpl");
 
