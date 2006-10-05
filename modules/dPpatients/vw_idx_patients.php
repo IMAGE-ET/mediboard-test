@@ -16,46 +16,11 @@ if (!$canRead) {
 $patient_id = mbGetValueFromGetOrSession("patient_id", 0);
 $new        = mbGetValueFromGet("new", 0);
 
-$fileModule    = CModule::getInstalled("dPfiles");
-$fileCptRendus = CModule::getInstalled("dPcompteRendu");
 $moduleCabinet = CModule::getInstalled("dPcabinet");
 
-$canEditCabinet = $moduleCabinet->canEdit();
-$canReadFiles     = $fileModule->canRead();
-$canEditFiles     = $fileModule->canEdit();
-$canReadCptRendus = $fileCptRendus->canRead();
-$canEditCptRendus = $fileCptRendus->canEdit();
+$canEditCabinet   = $moduleCabinet->canEdit();
 
-// Liste des modèles
-$listModelePrat = array(); 
-$listModeleFct  = array();
-$compteRendu = new CCompteRendu;
-
-if ($patient_id && !$new) {
-  $listPrat = new CMediusers();
-  $listPrat = $listPrat->loadPraticiens(PERM_READ);
-  $listFct = new CMediusers();
-  $listFct = $listFct->loadFonctions(PERM_READ);
-  
-  $where = array();
-  $where["object_id"] = "IS NULL";
-  $where["type"] = "= 'patient'";
-  $order = "nom"; 
-
-  $where["chir_id"] = db_prepare_in(array_keys($listPrat));
-  $listModelePrat = $compteRendu->loadlist($where, $order);
-  unset($where["chir_id"]);
-  
-  $where["function_id"] = db_prepare_in(array_keys($listFct));
-  $listModeleFct = $compteRendu->loadlist($where, $order);
-  unset($where["function_id"]);
-
-}
-
-
-// Liste des Category pour les fichiers
-$listCategory = new CFilesCategory;
-$listCategory = $listCategory->listCatClass("CPatient");
+$listPrat = array();
 
 // L'utilisateur est-il un chirurgien
 $mediuser = new CMediusers;
@@ -84,14 +49,11 @@ if($new) {
   $patient->load($patient_id);
 }
 
-$listPrat = array();
-$affichageNbFile = null;
 
-if ($patient->patient_id) {
+if ($patient_id && !$new) {
+  $listPrat = new CMediusers();
+  $listPrat = $listPrat->loadPraticiens(PERM_READ);
   $patient->loadDossierComplet();
-  $prat = new CMediusers();
-  $listPrat = $prat->loadPraticiens(PERM_EDIT);
-  $affichageNbFile = CFile::loadNbFilesByCategory($patient);
 }
 
 
@@ -119,7 +81,6 @@ if ($where) {
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("affichageNbFile",$affichageNbFile                           );
 $smarty->assign("nom"           , $patient_nom                               );
 $smarty->assign("prenom"        , $patient_prenom                            );
 $smarty->assign("naissance"     , $patient_naissance                         );
@@ -130,12 +91,5 @@ $smarty->assign("chir"          , $chir                                      );
 $smarty->assign("anesth"        , $anesth                                    );
 $smarty->assign("listPrat"      , $listPrat                                  );
 $smarty->assign("canEditCabinet", $canEditCabinet                            );
-$smarty->assign("listCategory"  , $listCategory                              );
-$smarty->assign("canReadFiles"  , $canReadFiles                              );
-$smarty->assign("canEditFiles"  , $canEditFiles                              );
-$smarty->assign("canReadCptRendus", $canReadCptRendus                        );
-$smarty->assign("canEditCptRendus", $canEditCptRendus                        );
-$smarty->assign("listModelePrat", $listModelePrat                            );
-$smarty->assign("listModeleFct" , $listModeleFct                             );
 $smarty->display("vw_idx_patients.tpl");
 ?>
