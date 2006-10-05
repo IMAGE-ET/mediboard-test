@@ -4,23 +4,33 @@ global $AppUI;
 require_once $AppUI->getModuleClass("dPsante400", "recordsante400");
 
 class CMouvSejourTonkin extends CRecordSante400 {
-  var $dbh = null;
-  var $base = "GT_EAI";
-  var $table = "SEJMDB";
-  var $status = null;
+  static $base = "GT_EAI";
+  static $table = "SEJMDB";
   
-  var $sejour = null;
-  var $etablissement = null;
-  var $fonction = null;
-  var $patient = null;
-  var $praticien = null;
-  var $naissance = null;
+  public $status = null;
+  
+  public $sejour = null;
+  public $etablissement = null;
+  public $fonction = null;
+  public $patient = null;
+  public $praticien = null;
+  public $naissance = null;
   
   function __construct() {
   }
 
+  function multipleLoad() {
+    $base  = CMouvSejourTonkin::$base;
+    $table = CMouvSejourTonkin::$table;
+    $query = "SELECT * FROM $base.$table";
+    return CRecordSante400::multipleLoad($query, 100, "CMouvSejourTonkin");
+  }
+
   function load() {
-    $this->query("SELECT * FROM $this->base.$this->table");
+    $base  = CMouvSejourTonkin::$base;
+    $table = CMouvSejourTonkin::$table;
+    $query = "SELECT * FROM $base.$table";
+    $this->query($query);
   }
   
   function deleteRow() {

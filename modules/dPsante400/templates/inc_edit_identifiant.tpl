@@ -1,5 +1,8 @@
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editFrm" action="?m={{$m}}&amp;dialog={{$dialog}}" method="post" onsubmit="return checkForm(this)">
 
+<input type="hidden" name="m" value="{{$m}}" />
+<input type="hidden" name="{{$actionType}}" value="{{$action}}" />
+<input type="hidden" name="dialog" value="{{$dialog}}" />
 <input type="hidden" name="dosql" value="do_idsante400_aed" />
 <input type="hidden" name="id_sante400_id" value="{{$idSante400->_id}}" />
 <input type="hidden" name="del" value="0" />
@@ -23,6 +26,10 @@
       <label for="object_class" title="Classe de l'object ciblé par Sante400">Classe</label>
     </th>
     <td>
+      {{if $dialog && $target}}
+      <input type="hidden" name="object_class" title="{{$filter->_props.object_class}}" value="{{$filter->object_class}}" />
+      {{tr}}{{$filter->object_class}}{{/tr}}
+      {{else}}
       <select name="object_class" title="{{$idSante400->_props.object_class}}">
         <option value="">&mdash; Choisir une classe</option>
         {{foreach from=$listClasses|smarty:nodefaults item=curr_class}}
@@ -31,20 +38,26 @@
         </option>
         {{/foreach}}
       </select>
+      {{/if}}
     </td>
   </tr>
 
   <tr>
     <th>
-      <label for="object_id" title="Identifiant de l'object">Objet</label>
+      <label for="object_id" title="Objet Mediboard">Objet</label>
     </th>
     <td>
-      <input name="object_id" title="ref" value="{{$idSante400->object_id}}" />
+	  {{if $dialog && $target}}
+	  <input type="hidden" name="object_id" title="{{$filter->_props.object_id}}" value="{{$filter->object_id}}" />
+      {{$target->_view}}
+	  {{else}}
+      <input name="object_id" title="{{$filter->_props.object_id}}" value="{{$idSante400->object_id}}" />
       <button class="search" type="button" onclick="popObject(this)">Chercher</button>
       {{if $idSante400->_id}}
       <br />
       {{$idSante400->_ref_object->_view}}
-      {{/if}}      
+      {{/if}}
+      {{/if}}
     </td>
   </tr>
 
@@ -66,12 +79,26 @@
     </td>
   </tr>
 
+  <tr>
+    <th>
+      <label for="last_update" title="Date et heure de la dernière mise à jour par synchronisation">Dernière mise à jour</label>
+    </th>
+    <td class="date">
+      <div id="editFrm_last_update_da">{{$last_update|date_format:"%d/%m/%Y %H:%M:%S"}}</div>
+      <input type="hidden" name="last_update" title="{{$idSante400->_props.last_update}}" value="{{$last_update}}" />
+      <img id="editFrm_last_update_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date"/>
+    </td>
+  </tr>
+
         
   <tr>
     <td class="button" colspan="2">
     {{if $idSante400->_id}}
       <button class="modify" type="submit">Valider</button>
-      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'identifiant',objName:'{{$idSante400->_view|smarty:nodefaults|JSAttribute}}'})">
+      <button class="trash" type="button" onclick="confirmDeletion(this.form, {
+        typeName: 'l\'identifiant',
+        objName: '{{$idSante400->_view|smarty:nodefaults|JSAttribute}}'
+      })">
         Supprimer
       </button>
     {{else}}

@@ -2,10 +2,10 @@
   {{if $dialog}}
   <tr>
     <th colspan="4" class="title">
-      {{if $list_idSante400|@count > 0}}
-      Historique de {{$item}}
+      {{if $target}}
+      Identifiants 400 pour '{{$target->_view}}'
       {{else}}
-      Pas d'historique
+      Identifiants 400
       {{/if}}
     </th>
   </tr>
@@ -18,8 +18,8 @@
     <th>Objet</th>
     {{/if}}
     <th>Dernière mise à jour</th>
-    <th>Etiquette</th>
     <th>ID Santé400</th>
+    <th>Etiquette</th>
   </tr>
   {{foreach from=$list_idSante400 item=curr_idSante400}}
   <tr>
@@ -36,13 +36,9 @@
     </td>
     {{/if}}
     <td>
-      {{if !$dialog}}
-      <a href="?m=dPsante400&amp;{{$actionType}}={{$action}}&amp;id_sante400_id={{$curr_idSante400->_id}}" >
+      <a href="?m=dPsante400&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;id_sante400_id={{$curr_idSante400->_id}}" >
         {{$curr_idSante400->last_update|date_format:"%d/%m/%Y à %Hh%M (%A)"}}
       </a>
-      {{else}}
-      {{$curr_idSante400->last_update|date_format:"%d/%m/%Y à %Hh%M (%A)"}}
-      {{/if}}
     </td>
     <td>{{$curr_idSante400->id400}}</td>
     <td>{{$curr_idSante400->tag}}</td>

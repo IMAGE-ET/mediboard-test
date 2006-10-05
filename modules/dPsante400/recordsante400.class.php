@@ -1,29 +1,58 @@
 <?php
 
-global $AppUI;
-
-$etablissements = array(
-  "310" => "St Louis",
-  "474" => "Sauvegarde",
-  "927" => "clinique du Tonkin"
-);
-
 class CRecordSante400 {
-  var $data = array();
+  static $dsn = "sante400";
+  static $dbh = null;
+  static $chrono = null;
+ 
+  public $data = array();
   
   function __construct() {
   }
 
+  function connect() {
+    if (!self::$dbh) {
+      $dsn = self::$dsn;
+      global $dbChronos;
+      self::$chrono =& $dbChronos[$dsn];
+      self::$dbh = new PDO("odbc:$dsn", "", "");
+    }
+  }
+
+  function multipleLoad($sql, $max, $class = "CRecordSante400") {
+    if (!is_a(new $class, "CRecordSante400")) {
+      trigger_error("instances of '$class' are not instances of 'CRecordSante400'", E_USER_WARNING);
+    }
+    
+    $records = array();
+    try {
+      self::connect();
+      $sth = self::$dbh->prepare($sql);
+      self::$chrono->start();
+      $sth->execute();
+      self::$chrono->stop();
+      while ($data = $sth->fetch(PDO::FETCH_ASSOC) and $max--) {
+          $record = new $class;
+        $record->data = $data;
+        $records[] = $record;
+      }
+    } catch (PDOException $e) {
+      trigger_error("Error querying '$sql' on data source name '$dsn' ! : " . $e->getMessage(), E_USER_ERROR);
+      throw $e;
+    }
+    
+    return $records;
+  }
+  
   function query($sql) {
-    static $dsn = "sante400";
-    static $dbh = null;
+    $dsn = self::$dsn;
     
     try {
-      if (!$dbh) {
-        $dbh = new PDO("odbc:$dsn", "", "");
-      }
-      $sth = $dbh->prepare($sql);
+      self::connect();
+      $sth = self::$dbh->prepare($sql);
+      self::$chrono->start();
       $sth->execute();
+      self::$chrono->stop();
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
       trigger_error("Error querying '$sql' on data source name '$dsn' ! : " . $e->getMessage(), E_USER_ERROR);
@@ -76,4 +105,7 @@ class CRecordSante400 {
     return $time ? "$date $time" : $date;
   }
 }
+
+global $dbChronos;
+$dbChronos[CRecordSante400::$dsn] = new Chronometer;
 ?>

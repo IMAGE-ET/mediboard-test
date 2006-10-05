@@ -5,6 +5,7 @@ var oForm = null;
 function setObject(oObject) {
   oForm.object_class.value = oObject.objClass;
   oForm.object_id.value = oObject.id;
+  oForm.object_id.onchange();
 }
 
 function popObject(oElement) {
@@ -15,11 +16,18 @@ function popObject(oElement) {
   url.popup(600, 300, "Object Selector-Plus");
 }
 
+function pageMain() {
+  regFieldCalendar("editFrm", "last_update");
+}
+
 </script>
 
 <table class="main">
   <tr>
     <td>
+      <a class="buttonnew" href="?{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;id_sante400_id=0">
+        Création d'un identifiant
+      </a>
       {{if !$dialog}}
       {{include file="inc_filter_identifiants.tpl"}}
       {{/if}}

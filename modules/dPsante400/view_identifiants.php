@@ -9,6 +9,7 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
+
 $dialog = mbGetValueFromGet("dialog");
 
 if (!$canRead && !$dialog) {
@@ -25,6 +26,13 @@ $filter->object_class = mbGetValueFromGetOrSession("object_class");
 $filter->tag          = mbGetValueFromGetOrSession("tag"         );
 $filter->nullifyEmptyFields();
 
+// Chargment de la cible si ojet unique
+$target = null;
+if ($filter->object_id && $filter->object_class) {
+  $target = new $filter->object_class;
+  $target->load($filter->object_id);
+}
+
 $order = "last_update DESC";
 $limit = "0, 100";
 
@@ -38,10 +46,13 @@ $idSante400 = new CIdSante400;
 $idSante400->load(mbGetValueFromGetOrSession("id_sante400_id"));
 $idSante400->loadRefs();
 
+$last_update = mbGetValue($idSante400->last_update, mbDateTime());
 // Création du template
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("listClasses", $listClasses);
+$smarty->assign("last_update", $last_update);
+$smarty->assign("target", $target);
 $smarty->assign("filter", $filter);
 $smarty->assign("idSante400", $idSante400);
 $smarty->assign("list_idSante400", $list_idSante400);

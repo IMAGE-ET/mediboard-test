@@ -37,11 +37,11 @@
   
   function getSpecs() {
     return array (
-      "object_id"    => "ref|notNull",
-      "object_class" => "str|maxLength|25",
-      "id400"        => "str|maxLength|8",
+      "object_class" => "notNull|str|maxLength|25",
+      "object_id"    => "notNull|ref",
+      "id400"        => "notNull|str|maxLength|8",
       "tag"          => "str|maxLength|80",
-      "last_update"  => "dateTime|notNull"
+      "last_update"  => "notNull|dateTime"
     );
   }
   

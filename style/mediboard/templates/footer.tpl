@@ -14,6 +14,7 @@
   par la base de données <strong>{{$keydbConfigName}}</strong> en 
   {{$currdbChrono->nbSteps}} requêtes SQL.
   {{/foreach}}
+  <br />
 </div>
 {{/if}}
 

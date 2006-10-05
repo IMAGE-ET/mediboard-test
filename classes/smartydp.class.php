@@ -114,7 +114,6 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("stripslashes" , "smarty_modifier_stripslashes");
     $this->register_modifier("JSAttribute"  , "JSAttribute");
     
-
     // Standard data assignment
     $this->assign("app", $AppUI);
     $this->assign("dbChronos", $dbChronos);
