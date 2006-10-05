@@ -253,7 +253,11 @@ class CConsultation extends CMbObject {
     $where["consultation_id"] = "= '$this->consultation_id'";
     $this->_ref_examaudio->loadObject($where);
     
-    $this->_ref_examcomp = new CExamComp;
+    $this->loadExamsComp();
+  }
+  
+  function loadExamsComp(){
+  	$this->_ref_examcomp = new CExamComp;
     $where = array();
     $where["consultation_id"] = "= '$this->consultation_id'";
     $order = "examen";
