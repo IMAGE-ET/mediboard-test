@@ -396,16 +396,10 @@ function db_dateTime2locale($dateTime, $format) {
   }
 }
 
-if(get_magic_quotes_gpc()) {
-  function stripslashes_deep($value) {
-    return is_array($value) ?
-      array_map("stripslashes_deep", $value) :
-      stripslashes($value);
-  }
-} else {
-  function stripslashes_deep($value) {
-    return $value;
-  }
+function stripslashes_deep($value) {
+  return is_array($value) ?
+    array_map("stripslashes_deep", $value) :
+    stripslashes($value);
 }
 
 /*
@@ -429,8 +423,8 @@ function bindHashToObject($hash, &$obj) {
 }
 
 function bindObjectToObject($obj1, &$obj) {
-  is_object($obj1) or die("bindHashToObject : object expected");
-  is_object($obj) or die("bindHashToObject : object expected");
+  is_object($obj1) or die("bindObjectToObject : object expected");
+  is_object($obj) or die("bindObjectToObject : object expected");
   foreach ($obj1->getProps() as $k => $v) {
     $obj->$k = $v;
   }
