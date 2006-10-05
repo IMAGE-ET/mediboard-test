@@ -87,7 +87,7 @@
       <input type="hidden" name="dosql" value="do_paramsPaie_aed" />
       <input type="hidden" name="m" value="dPgestionCab" />
       <input type="hidden" name="params_paie_id" value="{{$paramsPaie->params_paie_id}}" />
-      <input type="hidden" name="user_id" value="{{$user->user_id}}" />
+      <input type="hidden" name="employecab_id" value="{{$employe->employecab_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
