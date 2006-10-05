@@ -45,14 +45,9 @@ if ($chir) {
 
 // En fonction du cabinet
 if ($spe) {
-  $sql = "SELECT user_id" .
-  		"\nFROM users_mediboard" .
-  		"\nWHERE function_id = '$spe'";
-  $listChirs = db_loadlist($sql);
-  $inSpe = array();
-  foreach($listChirs as $key =>$value)
-    $inSpe[] = "'".$value["user_id"]."'";
-  $where["chir_id"] = "IN(".implode(", ", $inSpe).")";
+  $mediuser = new CMediusers;
+  $listChirs = $mediusers->loadPraticiens(PERM_READ, $spe);
+  $where["chir_id"] = db_prepare_in(array_keys($listChirs));
 }
 
 // En fonction de la salle
