@@ -146,7 +146,7 @@ function pageMain() {
       <tr>
         <td class="button" colspan="5" style="text-align:center;">
           {{if $patient->patient_id}}
-            <button tabindex="34" type="submit" class="submit">Valider</button>
+            <button tabindex="400" type="submit" class="submit">Valider</button>
             <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
               Imprimer
             </button>
@@ -154,7 +154,7 @@ function pageMain() {
               Supprimer
             </button>
           {{else}}
-            <button tabindex="34" type="submit" class="submit">Créer</button>
+            <button tabindex="400" type="submit" class="submit">Créer</button>
           {{/if}}
         </td>
       </tr>

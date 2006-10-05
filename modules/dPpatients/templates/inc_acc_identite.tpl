@@ -104,7 +104,7 @@
       <textarea tabindex="110" title="{{$patient->_props.rques}}" name="rques">{{$patient->rques}}</textarea>
     </td>
     <th><label for="profession" title="Profession du patient">Profession</label></th>
-    <td><input tabindex="165" type="text" name="profession" value="{{$patient->profession}}" title="{{$patient->_props.profession}}" /></td>
+    <td><input onblur="oAccord.changeTabAndFocus(1, this.form.regime_sante);" tabindex="165" type="text" name="profession" value="{{$patient->profession}}" title="{{$patient->_props.profession}}" /></td>
   </tr>
 
 </table>

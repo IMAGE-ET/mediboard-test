@@ -55,5 +55,10 @@ Class.extend(Rico.Accordion, {
          this.lastExpandedTab = accordionTab;
          this.showTabDone(lastExpandedTab);
       }
+   },
+   
+   changeTabAndFocus: function(iIntexTab,oField ){
+     this.showTabByIndex(iIntexTab);
+     oField.focus();
    }
 });
