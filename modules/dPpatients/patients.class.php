@@ -349,6 +349,9 @@ class CPatient extends CMbObject {
     $where["patient_id"] = "= '$this->patient_id'";
     $order = "entree_prevue DESC";
     $this->_ref_sejours = $sejour->loadList($where, $order);
+    if(!is_array($this->_ref_sejours)) {
+      mbTrace($this->_ref_sejours, $this->_view);
+    }
   }
   
   function loadRefsConsultations($where = null) {

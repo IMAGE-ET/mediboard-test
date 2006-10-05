@@ -65,23 +65,21 @@ function db_loadObject($sql, &$object) {
     if($object->_id && isset($object->_objectsTable[$object->_id])) {
       bindObjectToObject($object->_objectsTable[$object->_id], $object);
       $mbCacheObjectCount++;
-      return $object;
+      return true;
     } else {
       $hash = array();
       if(!db_loadHash($sql, $hash)) {
         return false;
       }
       bindHashToObject($hash, $object);
-      $object->_objectsTable[$object->_id] = $object;
-      return $object;
+      return true;
     }
   } else {
     $cur = db_exec($sql);
     $cur or exit(db_error());
     if ($object = db_fetch_object($cur)) {
       db_free_result($cur);
-      $object->_objectsTable[$object->_id] = $object;
-      return $object;
+      return true;
     } else {
       $object = null;
       return false;
@@ -426,6 +424,7 @@ function bindObjectToObject($obj1, &$obj) {
   is_object($obj1) or die("bindObjectToObject : object expected");
   is_object($obj) or die("bindObjectToObject : object expected");
   foreach ($obj1->getProps() as $k => $v) {
+  //foreach (get_object_vars($obj1) as $k => &$v) {
     $obj->$k = $v;
   }
 }

@@ -175,6 +175,7 @@ class CMbObject {
       return false;
     }
 
+    //$this->_objectsTable[$oid] = $this;
     $this->checkConfidential();
     $this->updateFormFields();
     return $this;
@@ -242,7 +243,11 @@ class CMbObject {
     $request->addGroup($group);
     $request->addOrder($order);
     $request->setLimit($limit);
-    return db_loadObjectList($request->getRequest($this), $this);
+    $result = db_loadObjectList($request->getRequest($this), $this);
+    if(!is_array($result))
+      mbTrace(count($result), "Pas d'array");
+    return $result;
+    //return db_loadObjectList($request->getRequest($this), $this);
   }
 
   /**

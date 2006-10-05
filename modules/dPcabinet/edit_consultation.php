@@ -88,17 +88,16 @@ if($consult->consultation_id) {
   $patient =& $consult->_ref_patient;
   $patient->loadRefs();
   $patient->loadStaticCIM10($userSel->user_id);
-  foreach($patient->_ref_consultations as $key => $consul) {
+  foreach($patient->_ref_consultations as $key => $curr_cons) {
     $patient->_ref_consultations[$key]->loadRefsFwd();
   }
-  foreach($patient->_ref_sejours as $key => $sejour) {
+  foreach($patient->_ref_sejours as $key => $curr_sejour) {
     $patient->_ref_sejours[$key]->loadRefsFwd();
     $patient->_ref_sejours[$key]->loadRefsOperations();
     foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
       $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
     }
   }
-  
   // Affecter la date de la consultation
   $date = $consult->_ref_plageconsult->date;
 } else {
