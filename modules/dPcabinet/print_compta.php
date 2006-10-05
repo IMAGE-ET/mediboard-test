@@ -33,12 +33,7 @@ if ($chir)
 else {
   $listPrat = new CMediusers();
   $listPrat = $listPrat->loadPraticiens(PERM_READ);
-  $in = array();
-  foreach($listPrat as $key => $value) {
-    $in[] = "'$key'";
-  }
-  $in = implode(", ", $in);
-  $sql .= "\n WHERE chir_id IN ($in)";
+  $sql .= "\n WHERE chir_id ".db_prepare_in(array_keys($listPrat));
 }
 $sql .= "\n AND date_paiement >= '$deb'";
 $sql .= "\n AND date_paiement <= '$fin'";
@@ -86,7 +81,7 @@ foreach($listPlage as $key => $value) {
   $listPlage[$key]["total1"] = 0;
   $listPlage[$key]["total2"] = 0;
   foreach($listPlage[$key]["_ref_consultations"] as $key2 => $value2) {
-    $listPlage[$key]["_ref_consultations"][$key2]->loadRefs();
+    $listPlage[$key]["_ref_consultations"][$key2]->loadRefPatient();
     if($etat == -1 && $listPlage[$key]["_ref_consultations"][$key2]->paye){
       $listPlage[$key]["total1"] += $value2->secteur1;
       $listPlage[$key]["total2"] += $value2->secteur2;
