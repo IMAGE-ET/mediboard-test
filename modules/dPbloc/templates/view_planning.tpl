@@ -80,12 +80,12 @@ function printAdmission(id) {
 		    {{$curr_op->materiel|nl2br}}
 		  </td>
 		  <td>
-		    <a href="javascript:printAdmission({{$curr_op->operation_id}})">
+		    <a href="javascript:printAdmission({{$curr_op->_ref_sejour->sejour_id}})">
 		      {{$curr_op->_ref_sejour->_ref_patient->_view}}
 		    </a>
 		  </td>
 		  <td>
-		    <a href="javascript:printAdmission({{$curr_op->operation_id}})">
+		    <a href="javascript:printAdmission({{$curr_op->_ref_sejour->sejour_id}})">
 		      {{$curr_op->_ref_sejour->_ref_patient->_age}} ans
 		    </a>
 		  </td>
