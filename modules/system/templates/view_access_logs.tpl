@@ -29,21 +29,21 @@ function pageMain() {
     <form action="index.php" name="typevue" method="get">
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="tab" value="{{$tab}}" />
-    <label for="groupmod" title="Type de vue des graphiques">Type de vue</label>
-    <select name="groupmod" onchange="this.form.submit()">
-      <option value="0"{{if $groupmod == 0}}selected="selected"{{/if}}>Pas de regroupement</option>
-      <option value="1"{{if $groupmod == 1}}selected="selected"{{/if}}>Regrouper par module</option>
-      <option value="2"{{if $groupmod == 2}}selected="selected"{{/if}}>Regrouper toute la journée</option>
-    </select>
-    <br />
     <label for="interval" title="Echelle d'affichage">Intervalle</label>
     <select name="interval" onchange="this.form.submit()">
       <option value="day" {{if $interval == "day"}} selected="selected" {{/if}}>Journée</option>
       <option value="month" {{if $interval == "month"}} selected="selected" {{/if}}>Mois</option>
       <option value="hyear" {{if $interval == "hyear"}} selected="selected" {{/if}}>Semestre</option>
     </select>
-    {{if $groupmod == 0}}
     <br />
+    <label for="groupmod" title="Type de vue des graphiques">Type de vue</label>
+    <select name="groupmod" onchange="this.form.submit()">
+      <option value="0"{{if $groupmod == 0}}selected="selected"{{/if}}>Pas de regroupement</option>
+      <option value="1"{{if $groupmod == 1}}selected="selected"{{/if}}>Regrouper par module</option>
+      <option value="2"{{if $groupmod == 2}}selected="selected"{{/if}}>Regrouper toute la journée</option>
+    </select>
+    {{if $groupmod == 0}}
+    &gt;
     <label for="module" title="Type de vue des graphiques">Module</label>
     <select name="module" onchange="this.form.submit()">
       {{foreach from=$listModules item=curr_module}}

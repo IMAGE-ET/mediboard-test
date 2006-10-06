@@ -13,7 +13,7 @@ function pageMain() {
       <input type="hidden" name="m" value="dPstats" />
       <table class="form">
         <tr>
-          <th colspan="2" class="category">Tableau d'activité du bloc sur une semaine</th>
+          <th colspan="2" class="category">Tableau d'activité du bloc sur une journée</th>
         </tr>
         <tr>
           <th><label for="debutlist" title="Date de début">Début</label></th>

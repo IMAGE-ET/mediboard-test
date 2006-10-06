@@ -14,7 +14,7 @@ if(!$canEdit) {
 }
 
 $deblist = mbGetValueFromGetOrSession("deblist", mbDate("-1 WEEK"));
-$finlist = mbDate("+1 WEEK", $deblist);
+$finlist = mbDate("+1 DAY", $deblist);
 
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
