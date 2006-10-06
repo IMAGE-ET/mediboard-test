@@ -1,56 +1,51 @@
-<?php /* STYLE/DEFAULT $Id: login.php 15 2006-05-04 14:16:39Z MyttO $ */
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
 <head>
-  <title><?php echo $AppUI->cfg['company_name'];?> :: Mediboard Login</title>
-  <meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset( $locale_char_set ) ? $locale_char_set : 'UTF-8';?>" />
-  <meta http-equiv="Pragma" content="no-cache" />
+  <title>{{$app->cfg.company_name}} :: Mediboard Login</title>
+  <meta http-equiv="Content-Type" content="text/html;charset={{$localeCharSet}}" />
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissement de Santé" />
-  <meta name="Version" content="<?php echo @$AppUI->getVersion();?>" />
-  <?php mbLinkShortcutIcon("style/$uistyle/images/favicon.ico"); ?>
-  <?php mbLinkStyleSheet("style/mediboard/main.css"); ?>
-  <?php mbLinkStyleSheet("style/$uistyle/main.css"); ?>
-  <?php mbLoadScripts(); ?>
+  <meta name="Version" content="{{$mediboardVersion}}" />
+  {{$mediboardShortIcon|smarty:nodefaults}}
+  {{$mediboardCommonStyle|smarty:nodefaults}}
+  {{$mediboardStyle|smarty:nodefaults}}
+  {{$mediboardScript|smarty:nodefaults}}
 </head>
 
 <body onload="main()">
+
 <div id="login">
   <form name="loginFrm" action="./index.php" method="post">
-  
-	<input type="hidden" name="login" value="<?php echo time();?>" />
-	<input type="hidden" name="redirect" value="<?php echo $redirect;?>" />
-	<table class="form">
-		<tr>
-      <th class="category" colspan="3">
-        <?php echo $AppUI->cfg["company_name"];?>
-      </th>
+  <input type="hidden" name="login" value="{{$time}}" />
+  <input type="hidden" name="redirect" value="{{$redirect|smarty:nodefaults}}" />
+  <table class="form">
+    <tr>
+      <th class="category" colspan="3">{{$app->cfg.company_name}}</th>
     </tr>
-
-		<tr>
+    
+    <tr>
       <td class="logo" colspan="3 ">
         <a href="http://www.mediboard.org/">
           Mediboard
         </a>
         <p>
           Plateforme Open Source pour les Etablissements de Santé<br/>
-          Version <?php echo "$mb_version_major.$mb_version_minor.$mb_version_patch"; ?>
+          Version {{$mb_version_major}}.{{$mb_version_minor}}.{{$mb_version_patch}}
         </p>
       </td>
     </tr>
 
     <tr>
       <th class="category" colspan="2">Connexion</th>
-<?php if ($dPconfig['demo_version']) { ?>
+      {{if $demoVersion}}
       <th class="category">Comptes disponibles</th>
-<?php } ?>
+      {{/if}}
     </tr>
 
     <tr>
-      <th><label for="username" title="Nom de l'utilisateur pour s'authentifier"><?php echo $AppUI->_('Username'); ?></label></th>
+      <th><label for="username" title="Nom de l'utilisateur pour s'authentifier">{{tr}}Username{{/tr}}</label></th>
       <td><input type="text" title="str|notNull" size="25" maxlength="20" name="username" class="text" /></td>
-<?php if ($dPconfig['demo_version']) { ?>
+      {{if $demoVersion}}
       <td rowspan="3" class="category">
         <strong>Administrateur</strong>: admin/admin<br />
         <strong>Chirurgien</strong>: chir/chir<br />
@@ -58,35 +53,34 @@
         <strong>Surveillante de bloc</strong>: survbloc/survbloc<br />
         <strong>Hospitalisation</strong>: hospi/hospi
       </td>
-<?php } ?>
+      {{/if}}
     </tr>
 
     <tr>
-      <th><label for="password" title="Mot de passe d'authentification"><?php echo $AppUI->_('Password'); ?></label></th>
+      <th><label for="password" title="Mot de passe d'authentification">{{tr}}Password{{/tr}}</label></th>
       <td><input type="password"  title="str|notNull" size="25" maxlength="32" name="password" class="text" /></td>
     </tr>
-    
+
     <tr>
-      <td colspan="2" class="button"><input type="submit" name="login" value="<?php echo $AppUI->_('login'); ?>" /></td>
+      <td colspan="2" class="button"><input type="submit" name="login" value="{{tr}}login{{/tr}}" /></td>
     </tr>
 
     <tr>
-<?php if ($dPconfig['demo_version']) { ?>
+      {{if $demoVersion}}
       <th class="category">Hébergé chez</th>
-<?php } ?>
+      {{/if}}
       <th class="category" colspan="2">Propulsé par</th>
     </tr>
 
     <tr>
-
-<?php if ($dPconfig['demo_version']) { ?>
+      {{if $demoVersion}}
       <td class="logo">
         <a href="http://www.sourceforge.net/projects/mediboard/" title="Projet Mediboard sur Sourceforge">
           <img src="http://www.sourceforge.net/sflogo.php?group_id=112072&amp;type=2" alt="Sourceforge Project Logo" />
         </a>
         <p>Hébergement du code source</p>
       </td>
-<?php } ?>
+      {{/if}}
 
       <td class="logo" colspan="2">
         <a href="http://www.mozilla-europe.org/fr/products/firefox/" title="Télécharger Firefox">
@@ -94,19 +88,13 @@
         </a>
         <p>Pour un meilleur confort et plus de sécurité, nous recommandons d'utiliser le navigateur Firefox</p>
       </td>
-
     </tr>
-
-	</table>
-  
+    </table>
   </form>
 </div>
 
-<?php
-if ($errorMsg = $AppUI->getMsg())
-    echo $errorMsg;
-?>
-
-
+{{if $errorMessage}}
+  {{$errorMessage|smarty:nodefaults}}
+{{/if}}
 </body>
 </html>

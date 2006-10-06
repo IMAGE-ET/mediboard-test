@@ -1,12 +1,26 @@
+{{assign var="sejour" value=$operation->_ref_sejour}}
 <table class="form" id="admission">
-  <tr><th class="title" colspan="2">
-  <a href="javascript:window.print()">Fiche d'admission</a></th></tr>
+  <tr>
+    <th class="title" colspan="2">
+      <span style="float:right;font-size:12px;">
+        {{$sejour->_ref_group->text}}
+      </span>
+      <a href="javascript:window.print()">Fiche d'admission</a>
+    </th>
+  </tr>
   <tr>
     <td class="info" colspan="2">
     (Prière de vous munir pour la consultation d'anesthésie de la photocopie
      de vos cartes de sécurité sociale, de mutuelle et du résultat de votre
      bilan sanguin et la liste des médicaments que vous prennez)<br />
-     Pour tout renseignement, téléphonez au 05 46 00 40 40
+     {{if $sejour->_ref_group->tel}}
+       Pour tout renseignement, téléphonez au 
+       {{$sejour->_ref_group->_tel1}}
+       {{$sejour->_ref_group->_tel2}}
+       {{$sejour->_ref_group->_tel3}}
+       {{$sejour->_ref_group->_tel4}}
+       {{$sejour->_ref_group->_tel5}}
+     {{/if}}
     </td>
   </tr>
   
@@ -68,8 +82,7 @@
   
   <tr>
     <th>Admission </th>
-    <td>
-      {{assign var="sejour" value=$operation->_ref_sejour}}
+    <td>      
       le {{$sejour->entree_prevue|date_format:"%A %d/%m/%Y à %Hh%M"}} 
     </td>
   </tr>
