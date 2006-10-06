@@ -24,7 +24,7 @@ $where[] = "plageressource.prat_id <> 0";
 $ljoin = array();
 $ljoin["plageressource"] = "plageressource.prat_id = users_mediboard.user_id";
 $ljoin["users"] = "users.user_id = users_mediboard.user_id";
-$group = "plageressource.prat_id";
+$group = "prat_id";
 $order = "users.user_last_name";
 
 $listPrats = $listPrats->loadList($where, $order, null, $group, $ljoin);
