@@ -120,7 +120,7 @@ function pageMain() {
                 Identité
               </div>
               <div id="IdentiteContent"  class="accordionTabContentBox">
-              {{include file="inc_acc_identite.tpl"}}
+              {{include file="inc_acc/inc_acc_identite.tpl"}}
               </div>
             </div>
             <div id="Medical">
@@ -128,7 +128,7 @@ function pageMain() {
                 Médical
               </div>
               <div id="MedicalContent"  class="accordionTabContentBox">
-              {{include file="inc_acc_medical.tpl"}}
+              {{include file="inc_acc/inc_acc_medical.tpl"}}
               </div>
             </div>
             <div id="Corresp">
@@ -136,7 +136,7 @@ function pageMain() {
                 Correspondance
               </div>
               <div id="CorrespContent"  class="accordionTabContentBox">
-              {{include file="inc_acc_corresp.tpl"}}
+              {{include file="inc_acc/inc_acc_corresp.tpl"}}
               </div>
             </div>
           </div>

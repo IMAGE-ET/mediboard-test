@@ -14,6 +14,7 @@ foreach($_GET as $key => $value) {
   if(strpos($key, "fusion_") !== false)
     $listIds[] = substr($key, 7);
 }
+
 if(count($listIds) < 2) {
   $AppUI->setMsg("Veuillez selectionner deux patients", UI_MSG_ALERT);
   $AppUI->redirect("m=dPpatients&tab=vw_idx_patients");
@@ -21,11 +22,16 @@ if(count($listIds) < 2) {
 
 // Instance des patients
 $patient1 = new CPatient;
-$patient1->load($listIds[0]);
-$patient1->loadRefsFwd();
-
 $patient2 = new CPatient;
-$patient2->load($listIds[1]);
+
+if (!$patient1->load($listIds[0]) || !$patient2->load($listIds[1])){
+  // Erreur sur les ID du patient
+  $AppUI->setMsg("Fusion Impossible", UI_MSG_ERROR );
+  $AppUI->redirect("m=dPpatients&tab=vw_idx_patients");
+}
+
+
+$patient1->loadRefsFwd();
 $patient2->loadRefsFwd();
 
 // On base le résultat sur patient1

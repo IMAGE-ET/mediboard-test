@@ -51,95 +51,75 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
   }
 }
 
-$patient1 = new CPatient;
-$patient1->load($_POST["patient1_id"]);
-$patient2 = new CPatient;
-$patient2->load($_POST["patient2_id"]);
 
 $do = new CDoPatientAddEdit;
+
+// Test sur les Patient
+$patient1 = new CPatient;
+$patient2 = new CPatient;
+if (!$patient1->load($_POST["patient1_id"]) || !$patient2->load($_POST["patient2_id"])){
+  // Erreur sur les ID du patient
+  $AppUI->setMsg("Fusion Impossible", UI_MSG_ERROR );
+  $do->redirect = "";
+  $do->doRedirect();
+}
+
+
 $do->doBind();
 
 // Création du nouveau patient
 if (intval(dPgetParam($_POST, "del"))) {
-  $do->doDelete();
+  // Suppression Impossible
+  $AppUI->setMsg("Fusion Impossible", UI_MSG_ERROR );
+  $do->redirect = "";
+  $do->doRedirect();
 } else {
   $do->doStore();
 }
+
 
 $patient_id = $do->_obj->patient_id;
 
 // Régularisation des liens étrangers
 $sql = "UPDATE sejour SET" .
     "\npatient_id = '$patient_id'" .
-    "\nWHERE patient_id = '$patient1->patient_id'";
+    "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
 db_exec( $sql ); $msg = db_error();
 
-$sql = "UPDATE sejour SET" .
-    "\npatient_id = '$patient_id'" .
-    "\nWHERE patient_id = '$patient2->patient_id'";
-db_exec( $sql ); $msg .= db_error();
-
 $sql = "UPDATE consultation SET" .
     "\npatient_id = '$patient_id'" .
-    "\nWHERE patient_id = '$patient1->patient_id'";
-db_exec( $sql ); $msg .= db_error();
-
-$sql = "UPDATE consultation SET" .
-    "\npatient_id = '$patient_id'" .
-    "\nWHERE patient_id = '$patient2->patient_id'";
+    "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
 db_exec( $sql ); $msg .= db_error();
 
 $sql = "UPDATE antecedent SET" .
     "\npatient_id = '$patient_id'" .
-    "\nWHERE patient_id = '$patient1->patient_id'";
-db_exec( $sql ); $msg .= db_error();
-
-$sql = "UPDATE antecedent SET" .
-    "\npatient_id = '$patient_id'" .
-    "\nWHERE patient_id = '$patient2->patient_id'";
+    "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
 db_exec( $sql ); $msg .= db_error();
 
 $sql = "UPDATE traitement SET" .
     "\npatient_id = '$patient_id'" .
-    "\nWHERE patient_id = '$patient1->patient_id'";
-db_exec( $sql ); $msg .= db_error();
-
-$sql = "UPDATE traitement SET" .
-    "\npatient_id = '$patient_id'" .
-    "\nWHERE patient_id = '$patient2->patient_id'";
+    "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
 db_exec( $sql ); $msg .= db_error();
 
 $sql = "UPDATE files_mediboard SET" .
     "\nfile_object_id = '$patient_id'" .
-    "\nWHERE file_object_id = '$patient1->patient_id'" .
-    "\nAND file_class = 'CPatient'";
-db_exec( $sql ); $msg .= db_error();
-
-$sql = "UPDATE files_mediboard SET" .
-    "\nfile_object_id = '$patient_id'" .
-    "\nWHERE file_object_id = '$patient2->patient_id'" .
+    "\nWHERE file_object_id IN ('$patient1->patient_id','$patient2->patient_id')";
     "\nAND file_class = 'CPatient'";
 db_exec( $sql ); $msg .= db_error();
 
 $sql = "UPDATE compte_rendu SET" .
     "\nobject_id = '$patient_id'" .
-    "\nWHERE object_id = '$patient1->patient_id'" .
-    "\nAND type = 'patient'";
-db_exec( $sql ); $msg .= db_error();
-
-$sql = "UPDATE compte_rendu SET" .
-    "\nobject_id = '$patient_id'" .
-    "\nWHERE object_id = '$patient2->patient_id'" .
+    "\nWHERE object_id IN ('$patient1->patient_id','$patient2->patient_id')";
     "\nAND type = 'patient'";
 db_exec( $sql ); $msg .= db_error();
 
 if($msg) {
-  mbTrace($msg, "erreur sql", true);
-  exit(0);
+  $AppUI->setMsg($msg, UI_MSG_ERROR );
+  $do->redirect = "";
+}else{
+  $patient1->delete();
+  $patient2->delete();
 }
-
-$patient1->delete();
-$patient2->delete();
 
 $do->doRedirect();
 
