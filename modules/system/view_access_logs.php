@@ -9,9 +9,10 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-$date     = mbGetValueFromGetOrSession("date", mbDate());
+$date     = mbGetValueFromGetOrSession("date"    , mbDate());
 $groupmod = mbGetValueFromGetOrSession("groupmod", 1);
-$module   = mbGetValueFromGetOrSession("module", "system");
+$module   = mbGetValueFromGetOrSession("module"  , "system");
+$interval = mbGetValueFromGetOrSession("interval", "day");
 $next     = mbDate("+ 1 day", $date);
 
 $logs = new CAccessLog;
@@ -26,6 +27,7 @@ $smarty->assign("logs"       , $logs);
 $smarty->assign("date"       , $date);
 $smarty->assign("groupmod"   , $groupmod);
 $smarty->assign("module"     , $module);
+$smarty->assign("interval"   , $interval);
 $smarty->assign("listModules", $listModules);
 
 $smarty->display("view_access_logs.tpl");

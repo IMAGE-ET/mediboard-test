@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 
-function zoom(date, module, action) {
+function zoom(date, module, action, interval) {
   url = new Url();
   url.setModuleAction("dPstats", "graph_accesslog");
   url.addParam("suppressHeaders", 1);
@@ -10,6 +10,7 @@ function zoom(date, module, action) {
   url.addParam("date"  , date);
   url.addParam("module", module);
   url.addParam("actionName", action);
+  url.addParam("interval", interval);
   url.popup(670, 270, date + " " + module + " " + action);
 }
 
@@ -33,6 +34,13 @@ function pageMain() {
       <option value="0"{{if $groupmod == 0}}selected="selected"{{/if}}>Pas de regroupement</option>
       <option value="1"{{if $groupmod == 1}}selected="selected"{{/if}}>Regrouper par module</option>
       <option value="2"{{if $groupmod == 2}}selected="selected"{{/if}}>Regrouper toute la journée</option>
+    </select>
+    <br />
+    <label for="interval" title="Echelle d'affichage">Intervalle</label>
+    <select name="interval" onchange="this.form.submit()">
+      <option value="day" {{if $interval == "day"}} selected="selected" {{/if}}>Journée</option>
+      <option value="month" {{if $interval == "month"}} selected="selected" {{/if}}>Mois</option>
+      <option value="hyear" {{if $interval == "hyear"}} selected="selected" {{/if}}>Semestre</option>
     </select>
     {{if $groupmod == 0}}
     <br />
@@ -59,16 +67,16 @@ function pageMain() {
       {{/if}}
         <td class="button">
           {{if $groupmod == 2}}
-          <a href="javascript:zoom('{{$date}}', 0, 0)" title="Agrandir">
-            <img src="index.php?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;actionName=0" alt="Graphique pour la journée" />
+          <a href="javascript:zoom('{{$date}}', 0, 0, '{{$interval}}')" title="Agrandir">
+            <img src="index.php?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;actionName=0&amp;interval={{$interval}}" alt="Graphique pour la journée" />
           </a>
           {{elseif $groupmod == 1}}
-          <a href="javascript:zoom('{{$date}}', '{{$log->module}}', 0)" title="Agrandir">
-            <img src="index.php?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;actionName=0" alt="Graphique pour {{$log->module}}" />
+          <a href="javascript:zoom('{{$date}}', '{{$log->module}}', 0, '{{$interval}}')" title="Agrandir">
+            <img src="index.php?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;actionName=0&amp;interval={{$interval}}" alt="Graphique pour {{$log->module}}" />
           </a>
           {{else}}
-          <a href="javascript:zoom('{{$date}}', '{{$log->module}}', '{{$log->action}}')" title="Agrandir">
-            <img src="index.php?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;actionName={{$log->action}}" alt="Graphique pour {{$log->module}} - {{$log->action}}" />
+          <a href="javascript:zoom('{{$date}}', '{{$log->module}}', '{{$log->action}}', '{{$interval}}')" title="Agrandir">
+            <img src="index.php?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;actionName={{$log->action}}&amp;interval={{$interval}}" alt="Graphique pour {{$log->module}} - {{$log->action}}" />
           </a>
           {{/if}}
         </td>

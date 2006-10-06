@@ -18,26 +18,51 @@ $date       = mbGetValueFromGet("date"       , mbDate());
 $module     = mbGetValueFromGet("module"     , 0);
 $actionName = mbGetValueFromGet("actionName" , 0);
 $size       = mbGetValueFromGet("size"       , 1);
+$interval   = mbGetValueFromGet("interval"   , "day");
 
-for($i = 0; $i <= 23; $i++) {
-  if($i <= 9)
-    $datax[] = "0$i h";
-  else
-    $datax[] = "$i h";
+$datax = array();
+
+switch($interval) {
+  case "day":
+    $startx = "$date 00:00:00";
+    $endx   = "$date 23:59:59";
+    $step = "+1 HOUR";
+    $date_format = "%Hh";
+    break;
+  case "month":
+    $startx = mbDateTime("-1 MONTH", "$date 00:00:00");
+    $endx   = "$date 23:59:59";
+    $step = "+1 DAY";
+    $date_format = "%d/%m";
+    break;
+  case "hyear":
+    $startx = mbDateTime("-27 WEEKS", "$date 00:00:00");
+    $endx   = "$date 23:59:59";
+    $step = "+1 WEEK";
+    $date_format = "%U";
+}
+
+for($i = $startx; $i <= $endx; $i = mbDateTime($step, $i)) {
+  $datax[] = mbTranformTime(null, $i, $date_format);
 }
 
 $logs = new CAccessLog();
 
 $sql = "SELECT accesslog_id, module, action, period," .
-      "\nSUM(hits) AS hits, SUM(duration) AS duration, SUM(request) AS request" .
+      "\nSUM(hits) AS hits, SUM(duration) AS duration, SUM(request) AS request," .
+      "\nDATE_FORMAT(period, '$date_format') AS gperiod" .
       "\nFROM access_log" .
-      "\nWHERE period LIKE '$date __:__:__'";
-if($module)
+      "\nWHERE DATE(period) BETWEEN '$startx' AND '$endx'";
+if($module) {
   $sql .= "\nAND module = '$module'";
-if($actionName)
+}
+if($actionName) {
   $sql .= "\nAND action = '$actionName'";
-$sql .= "\nGROUP BY period" .
+}
+$sql .= "\nGROUP BY gperiod" .
     "\nORDER BY period";
+
+//mbTrace($sql);
 
 $logs = db_loadObjectList($sql, $logs);
 
@@ -47,7 +72,7 @@ $request = array();
 foreach($datax as $x) {
   $f = true;
   foreach($logs as $log) {
-    if($x == mbTranformTime(null, $log->period, "%H h")) {
+    if($x == mbTranformTime(null, $log->period, $date_format)) {
       $nbHits[] = $log->hits;
       $duration[] = $log->_average_duration;
       $request[] = $log->_average_request;
@@ -70,8 +95,8 @@ $graph->SetMarginColor("lightblue");
 
 // Set up the title for the graph
 $title = mbTranformTime(null, $date, "%A %d %b %Y");
-if($module) $title .= " :  $module";
-if($actionName) $title .= "- $actionName";
+if($module) $title .= " : ".$AppUI->_($module);
+if($actionName) $title .= " - $actionName";
 $graph->title->Set($title);
 $graph->title->SetFont(FF_ARIAL,FS_NORMAL,7+$size);
 $graph->title->SetColor("darkred");
