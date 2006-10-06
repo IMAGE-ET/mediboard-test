@@ -52,7 +52,7 @@ $sql = "SELECT accesslog_id, module, action, period," .
       "\nSUM(hits) AS hits, SUM(duration) AS duration, SUM(request) AS request," .
       "\nDATE_FORMAT(period, '$date_format') AS gperiod" .
       "\nFROM access_log" .
-      "\nWHERE DATE(period) BETWEEN '$startx' AND '$endx'";
+      "\nWHERE DATE(period) BETWEEN '".mbDate($startx)."' AND '".mbDate($endx)."'";
 if($module) {
   $sql .= "\nAND module = '$module'";
 }
@@ -61,8 +61,6 @@ if($actionName) {
 }
 $sql .= "\nGROUP BY gperiod" .
     "\nORDER BY period";
-
-//mbTrace($sql);
 
 $logs = db_loadObjectList($sql, $logs);
 
