@@ -62,6 +62,29 @@ function db_loadObject($sql, &$object) {
   global $mbCacheObjectCount;
   $class = get_class($object);
   if ($object != null) {
+    $hash = array();
+    if(!db_loadHash($sql, $hash)) {
+      return false;
+    }
+    bindHashToObject($hash, $object);
+    return true;
+  } else {
+    $cur = db_exec($sql);
+    $cur or exit(db_error());
+    if ($object = db_fetch_object($cur)) {
+      db_free_result($cur);
+      return true;
+    } else {
+      $object = null;
+      return false;
+    }
+  }
+}
+
+function db_loadObjectWithOpt($sql, &$object) {
+  global $mbCacheObjectCount;
+  $class = get_class($object);
+  if ($object != null) {
     if($object->_id && isset($object->_objectsTable[$object->_id])) {
       bindObjectToObject($object->_objectsTable[$object->_id], $object);
       $mbCacheObjectCount++;
@@ -182,6 +205,28 @@ function db_loadColumn($sql, $maxrows = null) {
  * @note to optimize request, only select object oids in $sql
  */
 function db_loadObjectList($sql, $object, $maxrows = null) {
+  global $mbCacheObjectCount;
+  $cur = db_exec($sql);
+  $list = array();
+  $cnt = 0;
+  $class = get_class($object);
+  $table_key = $object->_tbl_key;
+  while ($row = db_fetch_array($cur)) {
+    $key = $row[$table_key];
+    $newObject = new $class();
+    $newObject->bind($row);
+    $newObject->checkConfidential();
+    $newObject->updateFormFields();
+    $list[$newObject->_id] = $newObject;
+    if($maxrows && $maxrows == $cnt++) {
+      break;
+    }
+  }
+  db_free_result($cur);
+  return $list;
+}
+
+function db_loadObjectListWithOpt($sql, $object, $maxrows = null) {
   global $mbCacheObjectCount;
   $cur = db_exec($sql);
   $list = array();
