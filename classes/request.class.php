@@ -105,13 +105,19 @@ class CRequest {
     $this->limit = $limit;
   }
 
-  function getRequest($obj) {
+  function getRequest($obj = null) {
     if(!count($this->select)) {
+      if($obj === null) {
+        trigger_error("You have to choose either an object or select(s)");
+      }
       $select = "`$obj->_tbl`.*";
     } else {
       $select = implode(", ", $this->select);
     }
     if(!count($this->table)) {
+      if($obj === null) {
+        trigger_error("You have to choose either an object or table(s)");
+      }
       $table = "`$obj->_tbl`";
     } else {
       $table = implode(", ", $this->table);
