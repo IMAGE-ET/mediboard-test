@@ -2060,6 +2060,7 @@ div.generated {
 div.chargementMask{
   width: 100%;
   position: absolute;
+  background-color:#000 ;
   z-index: 10;
 }
 
@@ -2067,4 +2068,10 @@ div.chargementText{
   width: 20%;
   position: absolute;
   z-index: 11;
+}
+div.chargementText table.tbl th{
+  background-color:#fff;
+  color:#000 ;
+  padding: 20px 5px;
+  text-align: center;
 }

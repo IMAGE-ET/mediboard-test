@@ -18,8 +18,8 @@
 <div id="waitingMsgText" class="chargementText" style="display: none;">
   <table class="tbl">
     <tr>
-      <th class="title" style="color:#f00">
-        <div class="loading">Chargement en cours</div>
+      <th class="title">
+        <div class="loading"><span id="waitingInnerMsgText">Chargement en cours</span></div>
       </th>
     </tr>
   </table>
