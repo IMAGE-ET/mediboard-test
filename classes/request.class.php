@@ -11,23 +11,42 @@
 class CRequest {
   
   // params
-  var $ljoin = array();
-  var $rjoin = array();
-  var $where = array();
-  var $group = array();
-  var $order = array();
-  var $limit = "";
+  var $select = array();
+  var $table  = array();
+  var $ljoin  = array();
+  var $rjoin  = array();
+  var $where  = array();
+  var $group  = array();
+  var $order  = array();
+  var $limit  = "";
     
   function CRequest() {
   }
   
   function resetParams() {
-    $this->ljoin = array();
-    $this->rjoin = array();
-    $this->where = array();
-    $this->group = array();
-    $this->order = array();
-    $this->limit = "";
+    $this->select = array();
+    $this->ljoin  = array();
+    $this->rjoin  = array();
+    $this->where  = array();
+    $this->group  = array();
+    $this->order  = array();
+    $this->limit  = "";
+  }
+  
+  function addSelect($select) {
+    if(is_array($select)) {
+      $this->select = array_merge($this->select, $select);
+    } elseif(is_string($select)) {
+      $this->select[] = $select;
+    }
+  }
+  
+  function addTable($table) {
+    if(is_array($table)) {
+      $this->table = array_merge($this->table, $table);
+    } elseif(is_string($table)) {
+      $this->table[] = $table;
+    }
   }
 
   function addLJoin($ljoin) {
@@ -87,10 +106,18 @@ class CRequest {
   }
 
   function getRequest($obj) {
+    if(!count($this->select)) {
+      $select = "`$obj->_tbl`.*";
+    } else {
+      $select = implode(", ", $this->select);
+    }
+    if(!count($this->table)) {
+      $table = "`$obj->_tbl`";
+    } else {
+      $table = implode(", ", $this->table);
+    }
     
-    $tbl = $obj->_tbl;
-    
-    $sql = "SELECT `$tbl`.* FROM `$tbl`";
+    $sql = "SELECT $select FROM $table";
 
     // Left join clauses
     if ($this->ljoin) {
