@@ -2060,7 +2060,6 @@ div.generated {
 div.chargementMask{
   width: 100%;
   position: absolute;
-  background-image: url(images/back_load.gif);
   z-index: 10;
 }
 
