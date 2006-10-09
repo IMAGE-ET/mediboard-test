@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPsante400";
-$config["mod_version"]     = "0.11";
+$config["mod_version"]     = "0.12";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -49,7 +49,10 @@ class CSetupdPsante400 {
         db_exec( $sql ); db_error();
         
       case "0.11":
-        return "0.11";
+        $sql = "ALTER TABLE `id_sante400` ADD `id400` VARCHAR( 8 ) NOT NULL ;";
+        db_exec( $sql ); db_error();
+      case "0.12":
+        return "0.12";
       }
     return false;
   }
