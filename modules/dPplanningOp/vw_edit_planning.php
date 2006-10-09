@@ -61,18 +61,21 @@ if($sejour_id && !$operation_id) {
 $op = new COperation;
 if ($operation_id) {
   $op->load($operation_id);
-
-  // On vérifie que l'utilisateur a les droits sur l'operation
-  if (!array_key_exists($op->chir_id, $listPraticiens)) {
-    $AppUI->setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
-    $AppUI->redirect("m=$m&tab=$tab&operation_id=0");
-  }
-
   $op->loadRefs();
   $sejour =& $op->_ref_sejour;
   $sejour->loadRefsFwd();
   $chir =& $op->_ref_chir;
   $patient =& $sejour->_ref_patient;
+  // On vérifie que l'utilisateur a les droits sur l'operation et le sejour
+  if(!$op->canEdit() || !$sejour->canEdit()) {
+    $AppUI->setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
+    $AppUI->redirect("m=$m&tab=$tab&operation_id=0");
+  }
+  /* Ancienne methode
+  if (!array_key_exists($op->chir_id, $listPraticiens)) {
+    $AppUI->setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
+    $AppUI->redirect("m=$m&tab=$tab&operation_id=0");
+  }*/
 }
 
 $patient->loadRefsSejours();

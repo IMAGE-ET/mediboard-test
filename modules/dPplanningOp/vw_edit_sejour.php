@@ -48,11 +48,17 @@ $sejour = new CSejour;
 if ($sejour_id) {
   $sejour->load($sejour_id);
 
-  // On vérifie que l'utilisateur a les droits sur l'operation
+  // On vérifie que l'utilisateur a les droits sur le sejour
+  if (!$sejour->canEdit()) {
+    $AppUI->setMsg("Vous n'avez pas accès à ce séjour", UI_MSG_WARNING);
+    $AppUI->redirect("m=$m&tab=$tab&sejour_id=0");
+  }
+  /* Ancienne methode
   if (!array_key_exists($sejour->praticien_id, $listPraticiens)) {
     $AppUI->setMsg("Vous n'avez pas accès à ce séjour", UI_MSG_WARNING);
     $AppUI->redirect("m=$m&tab=$tab&sejour_id=0");
   }
+  */
 
   $sejour->loadRefs();
   
