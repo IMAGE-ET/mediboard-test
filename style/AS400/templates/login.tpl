@@ -14,6 +14,17 @@
 
 <body onload="main()">
 
+<div id="waitingMsgMask" class="chargementMask" style="display: none;"></div>
+<div id="waitingMsgText" class="chargementText" style="display: none;">
+  <table class="tbl">
+    <tr>
+      <th class="title">
+        <div class="loading"><span id="waitingInnerMsgText">Chargement en cours</span></div>
+      </th>
+    </tr>
+  </table>
+</div>
+
 <div id="login">
   <form name="loginFrm" action="./index.php" method="post">
   <input type="hidden" name="login" value="{{$time}}" />
