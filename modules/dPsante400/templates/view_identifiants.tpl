@@ -17,7 +17,7 @@ function popObject(oElement) {
 }
 
 function pageMain() {
-  regFieldCalendar("editFrm", "last_update");
+  regFieldCalendar("editFrm", "last_update", true);
 }
 
 </script>

@@ -37,8 +37,7 @@ class CRecordSante400 {
         $records[] = $record;
       }
     } catch (PDOException $e) {
-      trigger_error("Error querying '$sql' on data source name '$dsn' ! : " . $e->getMessage(), E_USER_ERROR);
-      throw $e;
+      trigger_error("Error querying '$sql' on data source name '$dsn' : " . $e->getMessage(), E_USER_ERROR);
     }
     
     return $records;
@@ -55,8 +54,7 @@ class CRecordSante400 {
       self::$chrono->stop();
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
-      trigger_error("Error querying '$sql' on data source name '$dsn' ! : " . $e->getMessage(), E_USER_ERROR);
-      throw $e;
+      trigger_error("Error querying '$sql' on data source name '$dsn' : " . $e->getMessage(), E_USER_ERROR);
     }    
   }
   
@@ -65,13 +63,22 @@ class CRecordSante400 {
    */
   function consumeDateInverse($valueName) {
     $date = $this->consume($valueName);
-    return preg_replace("/(\d{2})(\d{2})(\d{4})/i", "$3-$2-$1", $date);
+    return preg_replace("/(\d{1,2})(\d{2})(\d{4})/i", "$3-$2-$1", $date);
   }
   
   function consume($valueName) {
     $value = $this->data[$valueName];
     unset($this->data[$valueName]);
     return trim($value);    
+  }
+
+  function consumeTel($valueName) {
+    $value = $this->consume($valueName);
+    $value = preg_replace("/(\D)/", "", $value);
+    if ($value) {
+      $value = str_pad($value, 10, "0", STR_PAD_LEFT);
+    }
+    return $value;
   }
 
   function consumeMulti($valueName1, $valueName2) {

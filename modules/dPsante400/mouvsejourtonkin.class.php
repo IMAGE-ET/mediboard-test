@@ -22,18 +22,29 @@ class CMouvSejourTonkin extends CRecordSante400 {
   function __construct() {
   }
 
-  function multipleLoad($max = 100) {
+  function getMarkedQuery($marked) {
+    $complete = self::$complete;
+    return $marked ? 
+      "\n WHERE RETPRODST != '$complete'" : 
+      "\n WHERE RETPRODST IS NULL";
+  }
+
+  function multipleLoad($marked = false, $max = 100) {
     $base  = self::$base;
     $table = self::$table;
     $query = "SELECT * FROM $base.$table";
+    $query .= self::getMarkedQuery($marked);
+    
     return CRecordSante400::multipleLoad($query, $max, "CMouvSejourTonkin");
   }
 
-  function count() {
+  function count($marked = false) {
     $base  = self::$base;
     $table = self::$table;
     $req = new CRecordSante400();
     $query = "SELECT COUNT(*) AS COUNT FROM $base.$table";
+    $query .= self::getMarkedQuery($marked);
+    
     $req->query($query);
     return ($req->consume("COUNT"));
   }
@@ -45,21 +56,25 @@ class CMouvSejourTonkin extends CRecordSante400 {
 
     if ($rec !== null) {
       $rec = intval($rec);
-      $query .= " WHERE IDUENR = $rec";
+      $query .= "\n WHERE IDUENR = $rec";
     }
     
     $this->query($query);
   }
-  
-  function deleteRow() {
-  }
-  
+    
   function markRow() {
     $base  = self::$base;
     $table = self::$table;
-    $query = "UPDATE $base.$table SET RETPRODST = \"START\" WHERE IDUENR = $this->rec";
-    mbTrace($query);
-   $this->query($query);
+    
+    if ($this->status == self::$complete) {
+//      $query = "DELETE FROM $base.$table WHERE IDUENR = $this->rec";
+      $query = "UPDATE $base.$table SET RETPRODST = '$this->status' WHERE IDUENR = $this->rec";
+    } else {
+      $query = "UPDATE $base.$table SET RETPRODST = '$this->status' WHERE IDUENR = $this->rec";
+    }
+    
+    $rec = new CRecordSante400;
+    $rec->query($query);
   }
   
   function markStatus($letter) {
@@ -74,19 +89,20 @@ class CMouvSejourTonkin extends CRecordSante400 {
   
   function proceed() {
     $this->status = ">";
+    $this->trace($this->data, "Données à traiter dans le mouvement");
     try {
       $this->synchronize();
-      $this->deleteRow();
-      return true;
+      $return = true;
     } catch (Exception $e) {
       if (self::$verbose) {
         trigger_error($e->getMessage(), E_USER_WARNING);
       }
-      $this->markRow();
-      $this->trace($this->data, "Données non traitées dans le mouvements");
-      return false;
+      $return = false;
     }
     
+    $this->markRow();
+    $this->trace($this->data, "Données non traitées dans le mouvement");
+    return $return;
   }
   
   function synchronize() {
@@ -188,7 +204,7 @@ class CMouvSejourTonkin extends CRecordSante400 {
     $this->patient->adresse          = $this->consume("ADRPAT") . "\n" . $this->consume("ADRSUIPAT");
     $this->patient->ville            = $this->consume("VILPAT");
     $this->patient->cp               = $this->consume("CODPOSPAT");
-    $this->patient->tel              = $this->consume("TELPAT");
+    $this->patient->tel              = $this->consumeTel("TELPAT");
     $this->patient->matricule        = $this->consume("NSSPAT") . $this->consume("CSSPAT");
 
     $this->patient->profession       = $this->consume("PROPAT");
@@ -200,7 +216,7 @@ class CMouvSejourTonkin extends CRecordSante400 {
     $this->patient->employeur_adresse = $this->consume("ADREMP") . "\n" . $this->consume("ADRSUIEMP");
     $this->patient->employeur_ville   = $this->consume("VILEMP");
     $this->patient->employeur_cp      = $this->consume("CODPOSEMP");
-    $this->patient->employeur_tel     = $this->consume("TELEMP");
+    $this->patient->employeur_tel     = $this->consumeTel("TELEMP");
     $this->patient->employeur_urssaf  = $this->consume("URSSAFEMP");
 
     $this->patient->prevenir_nom     = $this->consume("NOMPRV");
@@ -208,7 +224,7 @@ class CMouvSejourTonkin extends CRecordSante400 {
     $this->patient->prevenir_adresse = $this->consume("ADRPREV");
     $this->patient->prevenir_ville   = $this->consume("VILPRV");
     $this->patient->prevenir_cp      = $this->consume("CODPOSPRV");
-    $this->patient->prevenir_tel     = $this->consume("TELPRV");
+    $this->patient->prevenir_tel     = $this->consumeTel("TELPRV");
     $this->patient->prevenir_parente = @$transformParente[$this->consume("PARPRV")];
     
     $this->patient->tel2             = null;
@@ -240,12 +256,6 @@ class CMouvSejourTonkin extends CRecordSante400 {
       "DI" => "ambu",
     );
 
-    static $prevDays = array (
-      "comp" => 5,
-      "ambu" => 1,
-      "exte" => 0,
-    );
-
     static $transformHospiDP = array (
       "CH" => "Z082",
       "DI" => "Z49",
@@ -253,7 +263,8 @@ class CMouvSejourTonkin extends CRecordSante400 {
 
     $hospi = $this->consume("TYPSEJ");
 
-    $this->sejour = new CSejour;
+    $this->sejour = new CSejour;  
+    $this->sejour->group_id     = $this->etablissement->_id;
     $this->sejour->patient_id   = $this->patient->_id;
     $this->sejour->praticien_id = $this->praticien->_id;
     
@@ -275,21 +286,43 @@ class CMouvSejourTonkin extends CRecordSante400 {
     }
 
     $id400Sej = new CIdSante400();
+ 
+    if ($last_id = $this->consume("NUMDOSPRC")) {
+      $id400Sej->id400 = $last_id;
+      $id400Sej->bindObject($this->sejour);
+    }
+
     $id400Sej->id400 = $this->consume("NUMDOS");
-    $id400Sej->_last_id = $this->consume("DOSPRV");
     $id400Sej->bindObject($this->sejour);
-    
+        
     // Rectifications sur les dates prévues
-    if ($this->sejour->entree_prevue == "0000-00-00 00:00:00") {
+    if (mbDateTime(null, $this->sejour->entree_prevue) == mbDateTime(null, "0000-00-00 00:00:00")) {
       $this->sejour->entree_prevue = $this->sejour->entree_reelle;
+      $this->sejour->_hour_entree_prevue = null;
     }
     
-    if ($this->sejour->sortie_prevue == "0000-00-00 00:00:00") {
-      $nbDays = $prevDays[$this->sejour->type];
-      $this->sejour->sortie_prevue = mbDate("+ $nbDays DAYS", $this->sejour->entree_prevue);
+    static $prevDays = array (
+      "comp" => 5,
+      "ambu" => 1,
+      "exte" => 0,
+    );
+
+    if (mbDateTime(null, $this->sejour->sortie_prevue) == mbDateTime(null, "0000-00-00 00:00:00")) {
+      // Date de sortie fournié, on l'utilise
+      if ($this->sejour->sortie_reelle > $this->sejour->entree_reelle) {
+        
+        $this->sejour->sortie_prevue = $this->sejour->sortie_reelle; 
+      } else { // On simule la date de sortie
+        $nbDays = $prevDays[$this->sejour->type];
+        $this->sejour->sortie_prevue = mbDateTime("+ $nbDays DAYS", $this->sejour->entree_prevue);
+      }
+
+      $this->sejour->_hour_sortie_prevue = null; // pour ne pas faire un updateFormField();
     }
     
-    $this->sejour->store();
+    if ($msg = $this->sejour->store()) {
+      throw new Exception($msg);
+    }
     
     $this->markStatus("S");
         

@@ -73,7 +73,7 @@ function pageMain() {
         <tr>
           <th class="category" colspan="2">
             {{if $mediuserSel->user_id}}
-            {{if $readIdSante400}}
+            {{if $canReadSante400}}
             <a style="float:right;" href="javascript:view_idsante400('CMediusers',{{$mediuserSel->user_id}})">
               <img src="images/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
             </a>

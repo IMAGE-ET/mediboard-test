@@ -9,12 +9,36 @@ function explain(iRec) {
   
 </script>
   
+{{if !$connection}}
+<div class="big-error">
+Impossible d'établir la connexion avec le serveur Santé400<br/>
+Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante400'
+</div>
+{{/if}}
 
 <table class="main">
 
 <tr>
+  <td style="text-align: right">
 
-<td>
+    <form action="?" name="markFilter" method="get">
+
+    <input type="hidden" name="m" value="{{$m}}" />
+    <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
+
+    <label for="marked" title="Types de mouvements">Type de mouvements</label>
+    <select name="marked" onchange="this.form.submit()">
+      <option value="0"{{if !$marked}}selected="selected"{{/if}}>Mouvements à traiter</option>
+      <option value="1"{{if  $marked}}selected="selected"{{/if}}>Mouvement traités avec un erreur</option>
+    </select>
+
+    </form>
+  
+  </td>
+</tr>
+
+<tr>
+  <td>
 
 <table class="tbl">
 
@@ -62,9 +86,7 @@ function explain(iRec) {
 
   {{if !$dialog}}
   <td>
-    {{if @$curr_mouv->status.6 != "N"}}
-    <button class="search" onclick="explain({{$curr_mouv->data.IDUENR}})">Explications</button>
-    {{/if}}  
+    <button class="search" onclick="explain({{$curr_mouv->rec}})">Explications</button>
   </td>
   {{/if}}
 
@@ -73,8 +95,7 @@ function explain(iRec) {
 
 </table>
 
-</td>
-
+  </td>
 </tr>
 
 </table>

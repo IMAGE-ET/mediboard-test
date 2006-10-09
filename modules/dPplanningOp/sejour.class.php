@@ -134,25 +134,25 @@ class CSejour extends CMbObject {
   }
   
   function store() {
-    if($msg = parent::store()) {
+    if ($msg = parent::store()) {
       return $msg;
     }
 
-    if($this->annule) {
+    if ($this->annule) {
       $this->delAffectations();
       $this->delOperations();
     }
 
     // Cas où on a une premiere affectation différente de l'heure d'admission
-    if($this->entree_prevue) {
+    if ($this->entree_prevue) {
       $this->loadRefsAffectations();
       $firstAff =& $this->_ref_first_affectation;
-      if($firstAff->affectation_id && ($firstAff->entree != $this->entree_prevue)) {
+      if ($firstAff->affectation_id && ($firstAff->entree != $this->entree_prevue)) {
         $firstAff->entree = $this->entree_prevue;
         $firstAff->store();
       }
       $lastAff =& $this->_ref_last_affectation;
-      if($lastAff->affectation_id && ($lastAff->sortie != $this->sortie_prevue)) {
+      if ($lastAff->affectation_id && ($lastAff->sortie != $this->sortie_prevue)) {
         $lastAff->sortie = $this->sortie_prevue;
         $lastAff->store();
       }
@@ -204,12 +204,12 @@ class CSejour extends CMbObject {
   }
   
   function updateDBFields() {
-    if($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
+    if ($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
       $time_entree_prevue = mbTime(null, "$this->_hour_entree_prevue:$this->_min_entree_prevue");
       $this->entree_prevue = mbAddDateTime($time_entree_prevue, $this->_date_entree_prevue);
     }
     
-    if($this->_hour_sortie_prevue !== null and $this->_min_sortie_prevue !== null) {
+    if ($this->_hour_sortie_prevue !== null and $this->_min_sortie_prevue !== null) {
       $time_sortie_prevue = mbTime(null, "$this->_hour_sortie_prevue:$this->_min_sortie_prevue");
       $this->sortie_prevue = mbAddDateTime($time_sortie_prevue, $this->_date_sortie_prevue);
     }

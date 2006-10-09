@@ -286,5 +286,5 @@ function view_idsante400(classe, id) {
   url.setModuleAction("dPsante400", "view_identifiants");
   url.addParam("object_class", classe);
   url.addParam("object_id", id);
-  url.popup(700, 400, "sante400");
+  url.popup(750, 400, "sante400");
 }

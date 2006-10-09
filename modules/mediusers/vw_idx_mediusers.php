@@ -14,7 +14,8 @@ if (!$canRead) {
 }
 
 // Droit de lecture dPsante400
-$readIdSante400 = ($moduleSante400 = CModule::getInstalled("dPsante400")) ? $moduleSante400->canRead() : false;
+$moduleSante400 = CModule::getInstalled("dPsante400");
+$canReadSante400 = $moduleSante400 ? $moduleSante400->canRead() : false;
 
 // Récupération du user à ajouter/editer
 $mediuserSel = new CMediusers;
@@ -44,7 +45,7 @@ $profiles = $profiles->loadList($where);
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("readIdSante400", $readIdSante400);
+$smarty->assign("canReadSante400", $canReadSante400);
 $smarty->assign("mediuserSel"   , $mediuserSel   );
 $smarty->assign("profiles"      , $profiles      );
 $smarty->assign("functions"     , $functions     );

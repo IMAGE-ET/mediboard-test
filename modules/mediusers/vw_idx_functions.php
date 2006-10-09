@@ -13,6 +13,10 @@ if(!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
+// Droit de lecture dPsante400
+$moduleSante400 = CModule::getInstalled("dPsante400");
+$canReadSante400 = $moduleSante400 ? $moduleSante400->canRead() : false;
+
 // Récupération des fonctions
 $listGroups = new CGroups;
 $listGroups = $listGroups->loadList();
@@ -32,6 +36,7 @@ $userfunction->loadRefsFwd();
 // Création du template
 $smarty = new CSmartyDP(1);
 
+$smarty->assign("canReadSante400", $canReadSante400);
 $smarty->assign("userfunction", $userfunction);
 $smarty->assign("listGroups"  , $listGroups  );
 

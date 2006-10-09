@@ -39,7 +39,7 @@
     return array (
       "object_class" => "notNull|str|maxLength|25",
       "object_id"    => "notNull|ref",
-      "id400"        => "notNull|str|maxLength|8",
+      "id400"        => "notNull|str|maxLength|10",
       "tag"          => "str|maxLength|80",
       "last_update"  => "notNull|dateTime"
     );
@@ -51,6 +51,7 @@
       $this->_ref_object->load($this->object_id);
     }
   }
+  
   
   /**
    * Binds the id400 to an object, and updates the object

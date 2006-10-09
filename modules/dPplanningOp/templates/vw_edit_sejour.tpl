@@ -54,6 +54,11 @@ function pageMain() {
       <a style="float:right;" href="javascript:view_log('CSejour',{{$sejour->sejour_id}})">
         <img src="images/history.gif" alt="historique" />
       </a>
+      {{if $canReadSante400}}
+      <a style="float:right;" href="javascript:view_idsante400('CSejour',{{$sejour->sejour_id}})">
+        <img src="images/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
+      </a>
+      {{/if}}
       Modification du séjour {{$sejour->_view}}
     </th>
     {{else}}
