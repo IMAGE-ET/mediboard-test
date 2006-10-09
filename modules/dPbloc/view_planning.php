@@ -45,7 +45,7 @@ if ($chir) {
 
 // En fonction du cabinet
 if ($spe) {
-  $mediuser = new CMediusers;
+  $mediusers = new CMediusers;
   $listChirs = $mediusers->loadPraticiens(PERM_READ, $spe);
   $where["chir_id"] = db_prepare_in(array_keys($listChirs));
 }
