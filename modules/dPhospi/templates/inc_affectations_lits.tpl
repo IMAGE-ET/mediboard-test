@@ -19,6 +19,9 @@
   {{else}}
     <td class="text">
   {{/if}}
+    <a style="float: right;" href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->patient_id}}">
+      <img src="modules/{{$m}}/images/edit.png" alt="edit" title="Editer le patient" />
+    </a>
   {{if $curr_affectation->_ref_sejour->_ref_patient->_fin_cmu}}
     <div style="float: right;"><strong>CMU</strong></div>
   {{/if}}
@@ -46,13 +49,11 @@
         <img src="modules/{{$m}}/images/Oo.png" alt="Oo" title="Sortant aujourd'hui" />
       {{/if}}
     {{/if}}
-    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->patient_id}}" alt="Voir le patient" title="Voir le patient" />
     {{if $curr_affectation->_ref_sejour->type == "ambu"}}
       <em>{{$patient->_view}}</em>
     {{else}}
       <strong>{{$patient->_view}}</strong>
     {{/if}}
-    </a>
     {{if (!$curr_affectation->_ref_sejour->entree_reelle) || ($curr_affectation->_ref_prev->affectation_id && $curr_affectation->_ref_prev->effectue == 0)}}
       {{$curr_affectation->entree|date_format:"%d/%m %Hh%M"}}
     {{/if}}
@@ -80,7 +81,7 @@
     </form>
     
     <a style="float: right;" href="javascript:confirmDeletion(document.rmvAffectation{{$curr_affectation->affectation_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|addslashes}}'})">
-<img src="modules/{{$m}}/images/trash.png" alt="trash" title="Supprimer l'affectation" />
+      <img src="modules/{{$m}}/images/trash.png" alt="trash" title="Supprimer l'affectation" />
     </a>
     {{/if}}
   </td>
