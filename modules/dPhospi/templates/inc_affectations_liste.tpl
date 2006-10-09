@@ -11,7 +11,7 @@
     </table>
 
     {{foreach from=$sejourNonAffectes item=curr_sejour}}
-    <form name="addAffectation{{$curr_sejour->sejour_id}}" action="?m={{$m}}" method="post">
+    <form name="addAffectationsejour{{$curr_sejour->sejour_id}}" action="?m={{$m}}" method="post">
 
     <input type="hidden" name="dosql" value="do_affectation_aed" />
     <input type="hidden" name="lit_id" value="" />
@@ -26,6 +26,7 @@
         <td class="selectsejour" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
           {{if $curr_sejour->pathologie != ""}}  
           <input type="radio" id="hospitalisation{{$curr_sejour->sejour_id}}" onclick="selectHospitalisation({{$curr_sejour->sejour_id}})" />
+          <script type="text/javascript">new Draggable('sejour{{$curr_sejour->sejour_id}}', {revert:true})</script>
           {{/if}}
         </td>
         <td class="patient" onclick="flipSejour({{$curr_sejour->sejour_id}})">
@@ -36,7 +37,7 @@
           ({{$curr_sejour->type|truncate:1:""|capitalize}})
           {{/if}}
         </td>
-      </tr>
+      </tr>      
       <tr>
         <td class="date" colspan="2"><em>Entrée</em> : {{$curr_sejour->entree_prevue|date_format:"%A %d %B %H:%M"}}</td>
       </tr>

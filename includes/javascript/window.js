@@ -28,3 +28,24 @@ Element.getInnerHeight = function(element){
   var fheightElem = element.offsetHeight - parseFloat(aBorderTop[0]) - parseFloat(aBorderBottom[0])
   return fheightElem; 
 }
+
+function waitingMessage(visibility){  
+  if($('waitingMsgMask') && $('waitingMsgText')){
+    if(visibility){
+      
+      $('waitingMsgText').show();
+      var posTop  = document.documentElement.scrollTop + (document.documentElement.clientHeight/2) - ($('waitingMsgText').offsetHeight/2);
+      var posLeft = document.documentElement.scrollLeft + (document.documentElement.clientWidth/2) - ($('waitingMsgText').offsetWidth/2);
+      $('waitingMsgText').style.top = posTop + "px";
+      $('waitingMsgText').style.left = posLeft + "px";
+      
+      $('waitingMsgMask').show();
+      $('waitingMsgMask').style.height = document.documentElement.scrollHeight + "px";
+      $('waitingMsgMask').style.width = document.documentElement.scrollWidth + "px";
+      
+    }else{
+      $('waitingMsgText').hide();
+      $('waitingMsgMask').hide();
+    }
+  }
+}

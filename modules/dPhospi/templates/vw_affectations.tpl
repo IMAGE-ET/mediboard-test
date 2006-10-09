@@ -35,10 +35,17 @@ function selectLit(lit_id) {
 
 function submitAffectation() {
   if (selected_lit && selected_hospitalisation) {
-    var form = eval("document.addAffectation" + selected_hospitalisation);
+    var form = eval("document.addAffectationsejour" + selected_hospitalisation);
     form.lit_id.value = selected_lit;
     form.submit();
   }
+}
+
+function DragDropSejour(sejour_id, lit_id){
+  var form = eval("document.addAffectation" + sejour_id);
+  $(sejour_id).style.display="none";
+  form.lit_id.value = lit_id;
+  form.submit();
 }
 
 function submitAffectationSplit(form) {
@@ -137,7 +144,6 @@ function showAlerte() {
 }
 
 </script>
-
 <table class="main">
 
 {{if $alerte}}

@@ -7,6 +7,10 @@ function main() {
   pageMain();
 }
 
+function quitPage(){
+  waitingMessage(true);
+}
+
 function initFCKEditor() {}
 function pageMain() {}
 

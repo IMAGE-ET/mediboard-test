@@ -1411,6 +1411,11 @@ table.chambreexpand tr.lit td {
   color: #000;
 }
 
+table.chambrecollapse tr.litselected td,
+table.chambreexpand tr.litselected td {
+  background: #f00;
+}
+
 table.chambrecollapse tr.patient td,
 table.chambreexpand tr.patient td {
   background: #eee;
@@ -2052,4 +2057,15 @@ div.generated {
   color: #0f0;
 }
 
+div.chargementMask{
+  width: 100%;
+  position: absolute;
+  background-image: url(images/back_load.gif);
+  z-index: 10;
+}
 
+div.chargementText{
+  width: 20%;
+  position: absolute;
+  z-index: 11;
+}

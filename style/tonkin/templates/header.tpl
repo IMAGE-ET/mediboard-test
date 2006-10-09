@@ -12,7 +12,18 @@
   {{$mediboardScript|smarty:nodefaults}}
 </head>
 
-<body onload="main()">
+<body onload="main()" onunload="quitPage()">
+
+<div id="waitingMsgMask" class="chargementMask" style="display: none;"></div>
+<div id="waitingMsgText" class="chargementText" style="display: none;">
+  <table class="tbl">
+    <tr>
+      <th class="title" style="color:#f00">
+        <div class="loading">Chargement en cours</div>
+      </th>
+    </tr>
+  </table>
+</div>
 
 <script type="text/javascript">
 function popChgPwd() {

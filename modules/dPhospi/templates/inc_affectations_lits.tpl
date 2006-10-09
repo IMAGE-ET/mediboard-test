@@ -1,4 +1,4 @@
-<tr class="lit" >
+<tr class="lit" id="lit{{$curr_lit->lit_id}}">
   <td>
     {{if $curr_lit->_overbooking}}
       <img src="modules/{{$m}}/images/warning.png" alt="warning" title="Over-booking: {{$curr_lit->_overbooking}} collisions" />
@@ -8,6 +8,14 @@
   <td class="action">
     {{if $canEdit}}
       <input type="radio" id="lit{{$curr_lit->lit_id}}" onclick="selectLit({{$curr_lit->lit_id}})" />
+      <script type="text/javascript">
+        Droppables.add('lit{{$curr_lit->lit_id}}', { 
+          onDrop:function(element){
+            DragDropSejour(element.id,{{$curr_lit->lit_id}})
+          }, 
+          hoverclass:'litselected'
+        })
+      </script>
     {{/if}}
   </td>
 </tr>
