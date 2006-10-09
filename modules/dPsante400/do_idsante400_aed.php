@@ -2,7 +2,7 @@
 
 /**
 * @package Mediboard
-* @subpackage dPcabinet
+* @subpackage dPsante400
 * @version $Revision: 23 $
 * @author Thomas Despoix
 **/
@@ -13,6 +13,7 @@ $do = new CDoObjectAddEdit("CIDSante400", "id_sante400_id");
 $do->createMsg = "ID Santé 400 créé";
 $do->modifyMsg = "ID Santé 400 modifié";
 $do->deleteMsg = "ID Santé 400 supprimé";
+$do->redirect = null;
 $do->doIt();
 
 

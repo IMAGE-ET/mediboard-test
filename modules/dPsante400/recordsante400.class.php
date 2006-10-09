@@ -86,16 +86,18 @@ class CRecordSante400 {
       return null;
     }
     
-    return preg_replace("/(\d{4})(\d{2})(\d{2})/i", "$1-$2-$3", $date);
+    $reg = "/(\d{4})(\d{2})(\d{2})/i";
+    return preg_replace($reg, "$1-$2-$3", $date);
   }
 
   function consumeTime($valueName) {
     $time = $this->consume($valueName);
-    if ($time == "0") {
+    if (!$time === "0") {
       return null;
     }
-
-    return preg_replace("/(\d{2})(\d{2})/i", "$1:$2:00", $time);
+    
+    $reg = "/(\d{1,2})(\d{2})/i";
+    return preg_replace($reg, "$1:$2:00", $time);
   }
 
   function consumeDateTime($dateName, $timeName) {

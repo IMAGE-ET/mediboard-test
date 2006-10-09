@@ -68,6 +68,7 @@
     
     // Create/update bound object
     $mbObject->_id = $this->object_id;
+//    $mbObject->repair();
     if ($msg = $mbObject->store()) {
       throw new Exception($msg);
     }

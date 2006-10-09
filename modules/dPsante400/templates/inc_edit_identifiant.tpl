@@ -1,8 +1,6 @@
-<form name="editFrm" action="?m={{$m}}&amp;dialog={{$dialog}}" method="post" onsubmit="return checkForm(this)">
+<form name="editFrm" action="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="{{$m}}" />
-<input type="hidden" name="{{$actionType}}" value="{{$action}}" />
-<input type="hidden" name="dialog" value="{{$dialog}}" />
 <input type="hidden" name="dosql" value="do_idsante400_aed" />
 <input type="hidden" name="id_sante400_id" value="{{$idSante400->_id}}" />
 <input type="hidden" name="del" value="0" />

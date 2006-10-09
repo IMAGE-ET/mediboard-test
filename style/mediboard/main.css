@@ -131,8 +131,19 @@ textarea {
   width: 99%;
 }
 
-a.button, button, a.buttonedit, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
-a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange, a.buttondown {
+button,
+a.button,  
+a.buttonedit, 
+a.buttontrash, 
+a.buttonsubmit, 
+a.buttonnew, 
+a.buttonprint, 
+a.buttoncancel, 
+a.buttonmodify, 
+a.buttonsearch, 
+a.buttontick, 
+a.buttonchange, 
+a.buttondown {
   color: #000;
   text-decoration: none;
   cursor: default;

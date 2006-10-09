@@ -6,8 +6,11 @@ require_once $AppUI->getModuleClass("dPsante400", "recordsante400");
 class CMouvSejourTonkin extends CRecordSante400 {
   static $base = "GT_EAI";
   static $table = "SEJMDB";
+  static $complete = ">EFCPSN";
+  static $verbose = false;
   
   public $status = null;
+  public $rec = null;
   
   public $sejour = null;
   public $etablissement = null;
@@ -19,17 +22,32 @@ class CMouvSejourTonkin extends CRecordSante400 {
   function __construct() {
   }
 
-  function multipleLoad() {
-    $base  = CMouvSejourTonkin::$base;
-    $table = CMouvSejourTonkin::$table;
+  function multipleLoad($max = 100) {
+    $base  = self::$base;
+    $table = self::$table;
     $query = "SELECT * FROM $base.$table";
-    return CRecordSante400::multipleLoad($query, 100, "CMouvSejourTonkin");
+    return CRecordSante400::multipleLoad($query, $max, "CMouvSejourTonkin");
   }
 
-  function load() {
-    $base  = CMouvSejourTonkin::$base;
-    $table = CMouvSejourTonkin::$table;
+  function count() {
+    $base  = self::$base;
+    $table = self::$table;
+    $req = new CRecordSante400();
+    $query = "SELECT COUNT(*) AS COUNT FROM $base.$table";
+    $req->query($query);
+    return ($req->consume("COUNT"));
+  }
+  
+  function load($rec = null) {
+    $base  = self::$base;
+    $table = self::$table;
     $query = "SELECT * FROM $base.$table";
+
+    if ($rec !== null) {
+      $rec = intval($rec);
+      $query .= " WHERE IDUENR = $rec";
+    }
+    
     $this->query($query);
   }
   
@@ -37,27 +55,42 @@ class CMouvSejourTonkin extends CRecordSante400 {
   }
   
   function markRow() {
+    $base  = self::$base;
+    $table = self::$table;
+    $query = "UPDATE $base.$table SET RETPRODST = \"START\" WHERE IDUENR = $this->rec";
+    mbTrace($query);
+   $this->query($query);
   }
   
   function markStatus($letter) {
     $this->status .= $letter;
   }
 
+  function trace($value, $title) {
+    if (self::$verbose) {
+      mbTrace($value, $title);
+    }
+  }
+  
   function proceed() {
-    $this->status = "";
+    $this->status = ">";
     try {
       $this->synchronize();
       $this->deleteRow();
+      return true;
     } catch (Exception $e) {
-      trigger_error($e->getMessage(), E_USER_WARNING);
+      if (self::$verbose) {
+        trigger_error($e->getMessage(), E_USER_WARNING);
+      }
       $this->markRow();
+      $this->trace($this->data, "Données non traitées dans le mouvements");
+      return false;
     }
-
-    mbTrace($this->data, "Mouvement de séjour");
-    mbTrace($this->status, "Status de l'import");
+    
   }
   
   function synchronize() {
+    $this->rec = $this->consume("IDUENR");
     
     // Etablissement
     $CODETB = $this->consume("CODETB");

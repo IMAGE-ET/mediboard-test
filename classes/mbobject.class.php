@@ -328,6 +328,31 @@ class CMbObject {
    *  @return null if the object is ok a message if not
    */
 
+  function repair() {
+    global $dPconfig;
+    $properties = get_object_vars($this);
+    foreach($this->_props as $propName => $propSpec) {
+      if (!array_key_exists($propName, $properties)) {
+        trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$class'", E_USER_WARNING);
+        continue;
+      } 
+
+      $propValue =& $this->$propName;
+      if ($propValue !== null) {
+        if ($msg = $this->checkProperty($propName)) {
+          if (!in_array("notNull", explode("|", $propSpec))) {
+            $propValue = "";
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   *  Generic check method
+   *  @return null if the object is ok a message if not
+   */
+
   function check() {
     global $dPconfig;
     $msg = null;

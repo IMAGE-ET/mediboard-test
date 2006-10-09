@@ -18,9 +18,6 @@ $vue       = mbGetValueFromGetOrSession("vue"      , 0);
 $typeOrder = mbGetValueFromGetOrSession("typeOrder", 1);
 
 // Récupération de la journée à afficher
-$year  = mbGetValueFromGetOrSession("year" , date("Y"));
-$month = mbGetValueFromGetOrSession("month", date("m")-1) + 1;
-$day   = mbGetValueFromGetOrSession("day"  , date("d"));
 $date  = mbGetValueFromGetOrSession("date" , mbDate());
 
 $limit1 = $date." 00:00:00";
@@ -33,10 +30,10 @@ $ljoin["service"]  = "service.service_id = chambre.service_id";
 $where["sortie"]   = "BETWEEN '$limit1' AND '$limit2'";
 $where["type"]     = "!= 'exte'";
 $where["service.group_id"] = "= '$g'";
-if($vue) {
+if ($vue) {
   $where["confirme"] = "= 0";
 }
-if($typeOrder) {
+if ($typeOrder) {
   $order = "service.nom, chambre.nom, lit.nom";
 } else {
   $order = "patients.nom, patients.prenom";
