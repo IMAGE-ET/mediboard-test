@@ -157,9 +157,7 @@ class COperation extends CMbObject {
     $where["operation_id"] = "!= '$this->operation_id'";
     $order = "rank";
     $operations = $this->loadList($where, $order);
-    if(count($operations)) {
-      $new_time = $this->_ref_plageop->debut;
-    }
+    $new_time = $this->_ref_plageop->debut;
     $i = 1;
     foreach ($operations as $keyOp => $op) {
       $operations[$keyOp]->rank = $i;
@@ -271,7 +269,7 @@ class COperation extends CMbObject {
     // Cas d'une annulation
     if (!$this->annulee) {
       // Si pas une annulation on recupére le sejour
-      // et on regarde s'il n'ets pas annulé
+      // et on regarde s'il n'est pas annulé
       $this->loadRefSejour();
       $this->_ref_sejour->annule = 0;
       $this->_ref_sejour->store();
