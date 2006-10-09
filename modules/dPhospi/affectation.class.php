@@ -16,8 +16,8 @@ class CAffectation extends CMbObject {
 	var $affectation_id = null;
   
   // DB References
-  var $lit_id       = null;
-  var $sejour_id    = null;
+  var $lit_id    = null;
+  var $sejour_id = null;
 
   // DB Fields
   var $entree   = null;
@@ -30,11 +30,11 @@ class CAffectation extends CMbObject {
   var $_sortie_relative;
   
   // Object references
-  var $_ref_lit       = null;
-  var $_ref_sejour    = null;
-  var $_ref_prev      = null;
-  var $_ref_next      = null;
-  var $_no_synchro    = null;
+  var $_ref_lit    = null;
+  var $_ref_sejour = null;
+  var $_ref_prev   = null;
+  var $_ref_next   = null;
+  var $_no_synchro = null;
 
 	function CAffectation() {
 		$this->CMbObject("affectation", "affectation_id");
@@ -44,12 +44,12 @@ class CAffectation extends CMbObject {
   
   function getSpecs() {
     return array (
-      "lit_id"       => "ref|notNull",
-      "sejour_id"    => "ref|notNull",
-      "entree"       => "dateTime|notNull",
-      "sortie"       => "dateTime|notNull",
-      "confirme"     => "enum|0|1",
-      "effectue"     => "enum|0|1"
+      "lit_id"    => "ref|notNull",
+      "sejour_id" => "ref|notNull",
+      "entree"    => "dateTime|notNull",
+      "sortie"    => "dateTime|notNull",
+      "confirme"  => "enum|0|1",
+      "effectue"  => "enum|0|1"
     );
   }
 
@@ -98,12 +98,11 @@ class CAffectation extends CMbObject {
     // Modification de la date d'admission et de la durée de l'hospi
     $this->load($this->affectation_id);
     $this->loadRefsFwd();
+    $changeSejour = 0;
 
     if($this->_no_synchro) {
       return $msg;
     }
-
-    $changeSejour = 0;
     if(!$this->_ref_prev->affectation_id) {
       if($this->entree != $this->_ref_sejour->entree_prevue) {
         $this->_ref_sejour->entree_prevue = $this->entree;

@@ -213,6 +213,14 @@ class CSejour extends CMbObject {
       $time_sortie_prevue = mbTime(null, "$this->_hour_sortie_prevue:$this->_min_sortie_prevue");
       $this->sortie_prevue = mbAddDateTime($time_sortie_prevue, $this->_date_sortie_prevue);
     }
+    
+    // Synchro durée d'hospi / type d'hospi
+    $this->_at_midnight = (mbDate(null, $this->entree_prevue) != mbDate(null, $this->sortie_prevue));
+    if($this->_at_midnight && $this->type == "ambu") {
+      $this->type = "comp";
+    } elseif(!$this->_at_midnight && $this->type == "comp") {
+      $this->type = "ambu";
+    }
   }
   
   function loadRefPatient() {

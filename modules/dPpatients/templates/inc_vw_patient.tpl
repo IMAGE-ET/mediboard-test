@@ -153,29 +153,34 @@ function reloadAfterSaveDoc(){
 
 <table class="form">
   <tr>
-    <th class="category" colspan="3">Planifier</th>
+    <th class="category" colspan="4">Planifier</th>
   </tr>
   <tr>
     <td class="button">
       <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
-        Une intervention
+        Intervention
+      </a>
+    </td>
+    <td class="button">
+      <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
+        Urgence
       </a>
     </td>
     <td class="button">
       <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
-        Un séjour
+        Séjour
       </a>
     </td>
     <td class="button">
       <a class="buttonnew" href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
-        Une consultation
+        Consultation
       </a>
     </td>
   </tr>
   {{if $listPrat|@count && $canEditCabinet}}
-  <tr><th class="category" colspan="3">Consultation immédiate</th></tr>
+  <tr><th class="category" colspan="4">Consultation immédiate</th></tr>
   <tr>
-    <td class="button" colspan="3">
+    <td class="button" colspan="4">
       <form name="addConsFrm" action="index.php?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="dosql" value="do_consult_now" />
