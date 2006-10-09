@@ -1,64 +1,62 @@
 <tr class="lit" >
   <td>
     {{if $curr_lit->_overbooking}}
-    <img src="modules/{{$m}}/images/warning.png" alt="warning" title="Over-booking: {{$curr_lit->_overbooking}} collisions" />
+      <img src="modules/{{$m}}/images/warning.png" alt="warning" title="Over-booking: {{$curr_lit->_overbooking}} collisions" />
     {{/if}}
     {{$curr_lit->nom}}
   </td>
   <td class="action">
     {{if $canEdit}}
-    <input type="radio" id="lit{{$curr_lit->lit_id}}" onclick="selectLit({{$curr_lit->lit_id}})" />
+      <input type="radio" id="lit{{$curr_lit->lit_id}}" onclick="selectLit({{$curr_lit->lit_id}})" />
     {{/if}}
   </td>
 </tr>
 {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
-{{assign var="patient_view" value=$curr_affectation->_ref_sejour->_ref_patient->_view}}
+{{assign var="patient" value=$curr_affectation->_ref_sejour->_ref_patient}}
 <tr class="patient">
   {{if $curr_affectation->confirme}}
-  <td class="text" style="background-image:url(modules/{{$m}}/images/ray.gif); background-repeat:repeat;">
+    <td class="text" style="background-image:url(modules/{{$m}}/images/ray.gif); background-repeat:repeat;">
   {{else}}
-  <td class="text">
+    <td class="text">
   {{/if}}
   {{if $curr_affectation->_ref_sejour->_ref_patient->_fin_cmu}}
     <div style="float: right;"><strong>CMU</strong></div>
   {{/if}}
     {{if !$curr_affectation->_ref_sejour->entree_reelle || ($curr_affectation->_ref_prev->affectation_id && $curr_affectation->_ref_prev->effectue == 0)}}
-<font style="color:#a33">
+      <font style="color:#a33">
     {{else}}
-{{if $curr_affectation->_ref_sejour->septique == 1}}
-<font style="color:#3a3">
-{{else}}
-<font>
-{{/if}}
+      {{if $curr_affectation->_ref_sejour->septique == 1}}
+        <font style="color:#3a3">
+      {{else}}
+        <font>
+     {{/if}}
     {{/if}}
-    
     {{if $curr_affectation->_ref_sejour->type == "ambu"}}
-    <img src="modules/{{$m}}/images/X.png" alt="X" title="Sortant ce soir" />
+      <img src="modules/{{$m}}/images/X.png" alt="X" title="Sortant ce soir" />
     {{elseif $curr_affectation->sortie|date_format:"%Y-%m-%d" == $demain}}
-{{if $curr_affectation->_ref_next->affectation_id}}
-<img src="modules/{{$m}}/images/OC.png" alt="OC" title="Sortant demain" />
-{{else}}
-<img src="modules/{{$m}}/images/O.png" alt="O" title="Sortant demain" />
-{{/if}}
+      {{if $curr_affectation->_ref_next->affectation_id}}
+        <img src="modules/{{$m}}/images/OC.png" alt="OC" title="Sortant demain" />
+      {{else}}
+        <img src="modules/{{$m}}/images/O.png" alt="O" title="Sortant demain" />
+      {{/if}}
     {{elseif $curr_affectation->sortie|date_format:"%Y-%m-%d" == $date}}
-{{if $curr_affectation->_ref_next->affectation_id}}
-<img src="modules/{{$m}}/images/OoC.png" alt="OoC" title="Sortant aujourd'hui" />
-{{else}}
-<img src="modules/{{$m}}/images/Oo.png" alt="Oo" title="Sortant aujourd'hui" />
-{{/if}}
+      {{if $curr_affectation->_ref_next->affectation_id}}
+        <img src="modules/{{$m}}/images/OoC.png" alt="OoC" title="Sortant aujourd'hui" />
+      {{else}}
+        <img src="modules/{{$m}}/images/Oo.png" alt="Oo" title="Sortant aujourd'hui" />
+      {{/if}}
     {{/if}}
+    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->patient_id}}" alt="Voir le patient" title="Voir le patient" />
     {{if $curr_affectation->_ref_sejour->type == "ambu"}}
-    <em>{{$patient_view}}</em>
+      <em>{{$patient->_view}}</em>
     {{else}}
-    <strong>
-    {{$patient_view}}
-      
-    </strong>
+      <strong>{{$patient->_view}}</strong>
     {{/if}}
+    </a>
     {{if (!$curr_affectation->_ref_sejour->entree_reelle) || ($curr_affectation->_ref_prev->affectation_id && $curr_affectation->_ref_prev->effectue == 0)}}
-    {{$curr_affectation->entree|date_format:"%d/%m %Hh%M"}}
+      {{$curr_affectation->entree|date_format:"%d/%m %Hh%M"}}
     {{/if}}
-  </font>
+    </font>
   </td>
   <td class="action" style="background:#{{$curr_affectation->_ref_sejour->_ref_praticien->_ref_function->color}}">
     {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}
@@ -81,7 +79,7 @@
 
     </form>
     
-    <a style="float: right;" href="javascript:confirmDeletion(document.rmvAffectation{{$curr_affectation->affectation_id}},{typeName:'l\'affectation',objName:'{{$patient_view|addslashes}}'})">
+    <a style="float: right;" href="javascript:confirmDeletion(document.rmvAffectation{{$curr_affectation->affectation_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|addslashes}}'})">
 <img src="modules/{{$m}}/images/trash.png" alt="trash" title="Supprimer l'affectation" />
     </a>
     {{/if}}
@@ -96,8 +94,8 @@
     <input type="hidden" name="affectation_id" value="{{$curr_affectation->affectation_id}}" />
 
     </form>
-    <a style="float: right;" href="javascript:confirmDeletion(document.rmvAffectation{{$curr_affectation->affectation_id}},{typeName:'l\'affectation',objName:'{{$patient_view|addslashes}}'})">
-<img src="modules/{{$m}}/images/trash.png" alt="trash" title="Supprimer l'affectation" />
+    <a style="float: right;" href="javascript:confirmDeletion(document.rmvAffectation{{$curr_affectation->affectation_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|addslashes}}'})">
+      <img src="modules/{{$m}}/images/trash.png" alt="trash" title="Supprimer l'affectation" />
     </a>
     {{/if}}
     <em>Entrée</em>:
