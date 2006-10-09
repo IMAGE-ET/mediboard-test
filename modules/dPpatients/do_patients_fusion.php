@@ -81,37 +81,50 @@ if (intval(dPgetParam($_POST, "del"))) {
 $patient_id = $do->_obj->patient_id;
 
 // Régularisation des liens étrangers
-$sql = "UPDATE sejour SET" .
-    "\npatient_id = '$patient_id'" .
+$sql = "UPDATE sejour" .
+    "\nSET patient_id = '$patient_id'" .
     "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
 db_exec( $sql ); $msg = db_error();
 
-$sql = "UPDATE consultation SET" .
-    "\npatient_id = '$patient_id'" .
+$sql = "UPDATE consultation" .
+    "\nSET patient_id = '$patient_id'" .
     "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
 db_exec( $sql ); $msg .= db_error();
 
-$sql = "UPDATE antecedent SET" .
-    "\npatient_id = '$patient_id'" .
+$sql = "UPDATE antecedent" .
+    "\nSET patient_id = '$patient_id'" .
     "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
 db_exec( $sql ); $msg .= db_error();
 
-$sql = "UPDATE traitement SET" .
-    "\npatient_id = '$patient_id'" .
+$sql = "UPDATE traitement" .
+    "\nSET patient_id = '$patient_id'" .
     "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
 db_exec( $sql ); $msg .= db_error();
 
-$sql = "UPDATE files_mediboard SET" .
-    "\nfile_object_id = '$patient_id'" .
-    "\nWHERE file_object_id IN ('$patient1->patient_id','$patient2->patient_id')";
-    "\nAND file_class = 'CPatient'";
-db_exec( $sql ); $msg .= db_error();
+if(CModule::getInstalled("dPfiles")) {
+  $sql = "UPDATE files_mediboard" .
+      "\nSET file_object_id = '$patient_id'" .
+      "\nWHERE file_object_id IN ('$patient1->patient_id','$patient2->patient_id')" .
+      "\nAND file_class = 'CPatient'";
+  db_exec( $sql ); $msg .= db_error();
+}
 
-$sql = "UPDATE compte_rendu SET" .
-    "\nobject_id = '$patient_id'" .
-    "\nWHERE object_id IN ('$patient1->patient_id','$patient2->patient_id')";
-    "\nAND type = 'patient'";
-db_exec( $sql ); $msg .= db_error();
+
+if(CModule::getInstalled("dPcompteRendu")) {
+  $sql = "UPDATE compte_rendu" .
+      "\nSET object_id = '$patient_id'" .
+      "\nWHERE object_id IN ('$patient1->patient_id','$patient2->patient_id')" .
+      "\nAND type = 'patient'";
+  db_exec( $sql ); $msg .= db_error();
+}
+
+if(CModule::getInstalled("dPsante400")) {
+  $sql = "UPDATE id_sante400" .
+      "\nSET object_id = '$patient_id'" .
+      "\nWHERE object_id IN ('$patient1->patient_id','$patient2->patient_id')" .
+      "\nAND object_class = 'CPatient'";
+  db_exec( $sql ); $msg .= db_error();
+}
 
 if($msg) {
   $AppUI->setMsg($msg, UI_MSG_ERROR );
