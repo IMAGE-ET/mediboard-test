@@ -140,11 +140,11 @@ function showAlerte() {
 
 <table class="main">
 
-{{if $alerte|@count}}
+{{if $alerte}}
 <tr>
   <td colspan="3">
     <div class="warning">
-      <a href="javascript:showAlerte()">Il y a {{$alerte|@count}} patient(s) à placer dans la semaine qui vient</a>
+      <a href="javascript:showAlerte()">Il y a {{$alerte}} patient(s) à placer dans la semaine qui vient</a>
     </div>
   </td>
 </tr>

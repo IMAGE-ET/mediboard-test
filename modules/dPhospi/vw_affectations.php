@@ -38,6 +38,7 @@ $services = new CService;
 $where = array();
 $where["group_id"] = "= '$g'";
 $services = $services->loadList($where);
+
 foreach ($services as $service_id => $service) {
   $services[$service_id]->loadRefsBack();
   $services[$service_id]->_nb_lits_dispo = 0;
@@ -113,7 +114,7 @@ function loadSejourNonAffectes($where) {
   
   $sejourNonAffectes = new CSejour;
   $sejourNonAffectes = $sejourNonAffectes->loadList($where, $order, null, null, $leftjoin);
-  
+
   foreach ($sejourNonAffectes as $keySejour => $valSejour) {
     $sejour =& $sejourNonAffectes[$keySejour];
     
@@ -153,8 +154,23 @@ $where = array(
   "type" => "!= 'exte'",
   "annule" => "= 0"
 );
+$where["sejour.group_id"] = "= '$g'";
+$where[] = "affectation.affectation_id IS NULL";
 
-$alerte = loadSejourNonAffectes($where);
+$leftjoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+
+$select = "count(sejour.sejour_id) AS total";  
+$table = "sejour";
+
+$sql = new CRequest();
+$sql->addTable($table);
+$sql->addSelect($select);
+$sql->addWhere($where);
+$sql->addLJoin($leftjoin);
+
+$alerte = db_loadResult($sql->getRequest());
+
+
 
 // Admissions de la veille
 $dayBefore = mbDate("-1 days", $date);
@@ -193,6 +209,7 @@ $where = array(
 
 $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where);
 
+
 // Création du template
 $smarty = new CSmartyDP(1);
 
@@ -206,7 +223,5 @@ $smarty->assign("totalLits"              , $totalLits);
 $smarty->assign("services"               , $services);
 $smarty->assign("alerte"                 , $alerte);
 $smarty->assign("groupSejourNonAffectes" , $groupSejourNonAffectes);
-
 $smarty->display("vw_affectations.tpl");
-
 ?>
