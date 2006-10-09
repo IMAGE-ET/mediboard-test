@@ -39,13 +39,27 @@
   </tr>
   <tr>
     <th>
-      <label for="pref_name[UISTYLE]" title="Veuillez chosiir le skin que vous souhaiter utiliser">{{tr}}User Interface Style{{/tr}}</label>
+      <label for="pref_name[UISTYLE]" title="Veuillez choisir l'apparence que vous souhaiter utiliser">{{tr}}User Interface Style{{/tr}}</label>
     </th>
     <td>
       <select name="pref_name[UISTYLE]" class="text" size="1">
         {{foreach from=$styles|smarty:nodefaults item=currStyles key=keyStyles}}
         <option value="{{$keyStyles}}" {{if $keyStyles==$prefsUser.GENERALE.UISTYLE}}selected="selected"{{/if}}>
           {{tr}}{{$currStyles}}{{/tr}}
+        </option>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <label for="pref_name[DEFMODULE]" title="Veuillez choisir le module par défaut à afficher">{{tr}}Module par défaut{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[DEFMODULE]" class="text" size="1">
+        {{foreach from=$modules|smarty:nodefaults item=currModule key=keyModule}}
+        <option value="{{$keyModule}}" {{if $keyModule==$prefsUser.GENERALE.DEFMODULE}}selected="selected"{{/if}}>
+          {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
         </option>
         {{/foreach}}
       </select>

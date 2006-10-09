@@ -40,9 +40,9 @@ if($user_id!==null){
 $prefsUser = array();
 
 // Préférences Globales
-$array_list_pref_generale = array("LOCALE","UISTYLE");
+$array_list_pref_generale = array("LOCALE","UISTYLE","DEFMODULE");
 foreach($array_list_pref_generale as $namePref){
-  if(!array_key_exists("$namePref",$prefs)){
+  if(!array_key_exists($namePref,$prefs)){
     $prefs[$namePref] = null;
   }
   $prefsUser["GENERALE"][$namePref] = $prefs[$namePref];
@@ -60,7 +60,7 @@ foreach($array_list_module_pref as $modulename => $listPrefs){
   $prefModule = CModule::getInstalled($modulename);
   if(($user_id!==0 && $prefModule->mod_id && CPermModule::getInfoModule("view", $prefModule->mod_id, PERM_READ, $user_id)) || $user_id===0){
     foreach($listPrefs as $namePref){
-    	if(!array_key_exists("$namePref",$prefs)){
+    	if(!array_key_exists($namePref,$prefs)){
     	  $prefs[$namePref] = null;
     	}
       $prefsUser[$modulename][$namePref] = $prefs[$namePref];
@@ -68,6 +68,8 @@ foreach($array_list_module_pref as $modulename => $listPrefs){
   }
 }
 
+// Chargement des modules
+$modules = CModule::getInstalled();
 
 // Chargement des languages
 $locales = $AppUI->readDirs("locales");
@@ -84,7 +86,8 @@ $smarty->assign("user"     , $user);
 $smarty->assign("user_id"  , $user_id);
 $smarty->assign("locales"  , $locales);
 $smarty->assign("styles"   , $styles);
-$smarty->assign("prefsUser"    , $prefsUser);
+$smarty->assign("modules"  , $modules);
+$smarty->assign("prefsUser", $prefsUser);
 
 $smarty->display("edit_prefs.tpl");
 ?>
