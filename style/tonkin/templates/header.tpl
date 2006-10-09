@@ -12,7 +12,7 @@
   {{$mediboardScript|smarty:nodefaults}}
 </head>
 
-<body onload="main()" onunload="quitPage()">
+<body onload="main()">
 
 <div id="waitingMsgMask" class="chargementMask" style="display: none;"></div>
 <div id="waitingMsgText" class="chargementText" style="display: none;">

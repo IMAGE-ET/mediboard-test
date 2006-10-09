@@ -7,7 +7,7 @@ function main() {
   pageMain();
 }
 
-function quitPage(){
+window.onbeforeunload= function () {
   waitingMessage(true);
 }
 
