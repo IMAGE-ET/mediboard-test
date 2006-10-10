@@ -238,6 +238,23 @@ $dPconfig = $mbConfig->values;
 <table class="form">
 
   <tr>
+    <th class="category" colspan="2">Paramètres de compatibilité</th>
+  </tr>
+
+  <tr>
+    <th><label for="compat_mode" title="Mode de compatibilité">Mode de compatibilité :</label></th>
+    <td>
+      <select name="compat_mode">
+        <option value="default" <?php if($dPconfig['compat_mode'] == 'default'){echo 'selected="selected"';} ?> >Par défaut</option>
+        <option value="medicap" <?php if($dPconfig['compat_mode'] == 'medicap'){echo 'selected="selected"';} ?> >Medicap</option>
+      </select>
+  </tr>
+
+</table>
+
+<table class="form">
+
+  <tr>
     <th class="category">Validation obligatoire</th>
   </tr>
 

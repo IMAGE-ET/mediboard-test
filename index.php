@@ -16,6 +16,7 @@ if(!is_file("./includes/config.php")) {
 }
 
 require_once("./classes/ui.class.php");
+require_once("./includes/config_dist.php");
 require_once("./includes/config.php");
 
 // Check that the user has correctly set the root directory
