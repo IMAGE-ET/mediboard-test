@@ -52,6 +52,20 @@
     }
   }
   
+  /**
+   * Loads a specific id400 for a given object (and optionnaly tag)
+   */
+  function loadLatestFor($mbobject, $tag = null) {
+    $object_class = get_class($mbObject);
+    if (!is_a($mbObject, "CMbObject")) {
+      trigger_error("Impossible d'associer un identifiant Santé 400 à un objet de classe '$object_class'");
+    }
+    
+    $this->_id = null;
+    $this->object_class = $object_class;
+    $this->object_id = $mbObject->_id;
+    $this->loadMatchingObject("`last_update` DESC");
+  }
   
   /**
    * Binds the id400 to an object, and updates the object
