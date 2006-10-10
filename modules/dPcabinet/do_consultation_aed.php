@@ -50,9 +50,9 @@ if (intval(mbGetValueFromPost("del"))) {
     $consultAnesth->consultation_id = $do->_obj->consultation_id;
     
     if(isset($_POST["_operation_id"])){
-      $consultAnesth->operation_id = $_POST["_operation_id"];
-      $consultAnesth->store();
+      $consultAnesth->operation_id = $_POST["_operation_id"];      
     }
+    $consultAnesth->store();
   }
 }
 
