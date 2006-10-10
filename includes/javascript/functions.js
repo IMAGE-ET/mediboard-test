@@ -8,7 +8,9 @@ function main() {
 }
 
 window.onbeforeunload= function () {
-  waitingMessage(true);
+  if(BrowserDetect.browser != "Explorer"){
+    waitingMessage(true);
+  }
 }
 
 function initFCKEditor() {}
