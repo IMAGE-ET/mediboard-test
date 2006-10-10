@@ -49,7 +49,7 @@ class CSetupdPsante400 {
         db_exec( $sql ); db_error();
         
       case "0.11":
-        $sql = "ALTER TABLE `id_sante400` ADD `id400` VARCHAR( 8 ) NOT NULL ;";
+        $sql = "ALTER TABLE `id_sante400` CHANGE `id400` `id400` VARCHAR( 10 ) NOT NULL ;";
         db_exec( $sql ); db_error();
       case "0.12":
         return "0.12";
