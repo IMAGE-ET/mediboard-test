@@ -27,6 +27,9 @@ function printPatient(id) {
 
 function pageMain() {
   initAccord(true);
+  PairEffect.initGroup("patientEffect", { 
+    bStoreInCookie: false
+  });
 }
 
 </script>
@@ -48,6 +51,13 @@ function pageMain() {
       {{assign var="href" value="index.php?m=dPpatients&tab=vw_full_patients"}}
 
       <table class="form">
+        <tr id="mainInfo-trigger">
+          <th class="title" colspan="4">
+            {{$patient->_view}} ({{$patient->_age}} ans)
+          </th>
+        </tr>
+
+        <tbody class="patientEffect" id="mainInfo">
         <tr>
           <th class="category" colspan="2">
             <a style="float:right;" href="javascript:view_history_patient({{$patient->patient_id}})">
@@ -62,42 +72,37 @@ function pageMain() {
               keywords: '', 
               id: {{$patient->patient_id|smarty:nodefaults|JSAttribute}}, 
               view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' })">
-              {{$patient->_ref_files|@count}} fichier(s)
-              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
+              {{$patient->_ref_files|@count}} doc(s)
+              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les Documents" />
             </button>
             {{/if}}
             Coordonnées
           </th>
         </tr>
-
         <tr>
           <th>Nom</th>
           <td>{{$patient->nom}}</td>
           <th>Adresse</th>
           <td class="text">{{$patient->adresse|nl2br}}</td>
         </tr>
-  
         <tr>
           <th>Prénom</th>
           <td>{{$patient->prenom}}</td>
           <th>Code Postal</th>
           <td>{{$patient->cp}}</td>
         </tr>
-  
         <tr>
           <th>Nom de naissance</th>
           <td>{{$patient->nom_jeune_fille}}</td>
           <th>Ville</th>
           <td>{{$patient->ville}}</td>
         </tr>
-  
         <tr>
           <th>Date de naissance</th>
           <td>{{$patient->_naissance}}</td>
           <th>Téléphone</th>
           <td>{{$patient->_tel1}} {{$patient->_tel2}} {{$patient->_tel3}} {{$patient->_tel4}} {{$patient->_tel5}}</td>
         </tr>
-  
         <tr>
           <th>Sexe</th>
           <td>
@@ -106,7 +111,6 @@ function pageMain() {
           <th>Portable</th>
           <td>{{$patient->_tel21}} {{$patient->_tel22}} {{$patient->_tel23}} {{$patient->_tel24}} {{$patient->_tel25}}</td>
         </tr>
-        
         {{if $patient->rques}}
         <tr>
           <th class="category" colspan="4">Remarques</th>
@@ -115,7 +119,6 @@ function pageMain() {
           <td colspan="4" class="text">{{$patient->rques|nl2br}}</td>
         </tr>
         {{/if}}
-        
         <tr>
           <th colspan="2" class="category">Infos médicales</th>
           <th colspan="2" class="category">Médecins</th>
@@ -187,9 +190,13 @@ function pageMain() {
             </form>
           </td>
         </tr>
-        <tr>
-          <th colspan="4" class="category">Séjours</th>
+        </tbody>
+
+        <tr id="sejours-trigger">
+          <th colspan="4" class="title">{{$patient->_ref_sejours|@count}} séjour(s)</th>
         </tr>
+        
+        <tbody class="patientEffect" id="sejours">
         {{foreach from=$patient->_ref_sejours item=curr_sejour}}
         <tr>
           <td colspan="4">
@@ -199,11 +206,13 @@ function pageMain() {
               keywords: '', 
               id: {{$curr_sejour->sejour_id|smarty:nodefaults|JSAttribute}}, 
               view:'{{$curr_sejour->_view|smarty:nodefaults|JSAttribute}}'} )">
-              {{$curr_sejour->_ref_files|@count}} fichier(s)
-              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
+              {{$curr_sejour->_ref_files|@count}} doc(s)
+              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les documents" />
             </button>
             {{/if}}
-            {{$curr_sejour->_view}}
+            Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
+            au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
+            - Dr. {{$curr_sejour->_ref_praticien->_view}}
           </td>
         </tr>
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
@@ -216,19 +225,23 @@ function pageMain() {
               keywords: '', 
               id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
               view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )">
-              {{$curr_op->_ref_files|@count}} fichier(s)
-              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
+              {{$curr_op->_ref_files|@count}} doc(s)
+              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les documents" />
             </button>
             {{/if}}
-            {{$curr_op->_view}}
+            {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} - Intervention du Dr. {{$curr_op->_ref_chir->_view}}
             </li></ul>
           </td>
         </tr>
         {{/foreach}}
         {{/foreach}}
-        <tr>
-          <th colspan="4" class="category">Consultations</th>
+        </tbody>
+
+        <tr id="consultations-trigger">
+          <th colspan="4" class="title">{{$patient->_ref_consultations|@count}} consultation(s)</th>
         </tr>
+
+        <tbody class="patientEffect" id="consultations">
         {{foreach from=$patient->_ref_consultations item=curr_consult}}
         <tr>
           <td colspan="4">
@@ -238,11 +251,11 @@ function pageMain() {
               keywords: '', 
               id: {{$curr_consult->consultation_id|smarty:nodefaults|JSAttribute}}, 
               view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
-              {{$curr_consult->_ref_files|@count}} fichier(s)
-              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les fichiers" />
+              {{$curr_consult->_ref_files|@count}} doc(s)
+              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les documents" />
             </button>
             {{/if}}
-            {{$curr_consult->_view}}
+            {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_consult->_ref_chir->_view}}
           </td>
         </tr>
         {{/foreach}}
