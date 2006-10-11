@@ -27,7 +27,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td>
-      <a class="buttonnew" href="?{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;id_sante400_id=0">
+      <a class="buttonnew" href="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;id_sante400_id=0">
         Création d'un identifiant
       </a>
       {{if !$dialog}}
