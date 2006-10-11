@@ -5,7 +5,9 @@ var oForm = null;
 function setObject(oObject) {
   oForm.object_class.value = oObject.objClass;
   oForm.object_id.value = oObject.id;
-  oForm.object_id.onchange();
+  if(oForm.object_id.onchange) {
+    oForm.object_id.onchange();
+  }
 }
 
 function popObject(oElement) {

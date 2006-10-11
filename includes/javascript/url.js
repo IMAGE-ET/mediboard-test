@@ -58,6 +58,22 @@ Url.prototype.pop = function(iWidth, iHeight, sWindowName) {
   this.oWindow = window.open(this.make(), sWindowName, aFeatures.join(", "));  
 }
 
+Url.prototype.popDirect = function(iWidth, iHeight, sWindowName, sBaseUrl) {
+  var aFeatures = new Array;
+  aFeatures.push("left=50");
+  aFeatures.push("top=50");
+  aFeatures.push("height=" + iHeight);
+  aFeatures.push("width=" + iWidth);
+  aFeatures.push("scrollbars=yes");
+  aFeatures.push("resizable=yes");
+  aFeatures.push("menubar=yes");
+
+  // Forbidden characters for IE
+  sWindowName = sWindowName.replace(/[ -]/gi, "_");
+  
+  this.oWindow = window.open(sBaseUrl + this.make(), sWindowName, aFeatures.join(", ")); 
+}
+
 Url.prototype.popunder = function(iWidth, iHeight, sWindowName) {
   this.pop(iWidth, iHeight, sWindowName);
   this.oWindow.blur();

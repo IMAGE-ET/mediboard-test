@@ -242,12 +242,18 @@ $dPconfig = $mbConfig->values;
   </tr>
 
   <tr>
-    <th><label for="compat_mode" title="Mode de compatibilité">Mode de compatibilité :</label></th>
+    <th><label for="interop[mode_compat]" title="Mode de compatibilité">Mode de compatibilité :</label></th>
     <td>
-      <select name="compat_mode">
-        <option value="default" <?php if($dPconfig['compat_mode'] == 'default'){echo 'selected="selected"';} ?> >Par défaut</option>
-        <option value="medicap" <?php if($dPconfig['compat_mode'] == 'medicap'){echo 'selected="selected"';} ?> >Medicap</option>
+      <select name="interop[mode_compat]">
+        <option value="default" <?php if($dPconfig['interop']['mode_compat'] == 'default'){echo 'selected="selected"';} ?> >Par défaut</option>
+        <option value="medicap" <?php if($dPconfig['interop']['mode_compat'] == 'medicap'){echo 'selected="selected"';} ?> >Medicap</option>
       </select>
+    </td>
+  </tr>
+
+  <tr>
+    <th><label for="interop[base_url]" title="Adresse externe">Adresse de l'appli externe</label></th>
+    <td><input type="text" size="40" name="interop[base_url]" value="<?php echo $dPconfig['interop']['base_url'] ?>" /></td>
   </tr>
 
 </table>

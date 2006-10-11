@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $dPconfig;
 
 if (!$canEdit) {
 	$AppUI->redirect("m=system&a=access_denied");
@@ -24,6 +24,7 @@ $_is_anesth = false;
 $prat_id    = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
 $selConsult = mbGetValueFromGetOrSession("selConsult", null);
 
+$etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 $consult = new CConsultation();
 
 if(isset($_GET["date"])) {
@@ -84,7 +85,6 @@ if($consult->consultation_id) {
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
     $consult->_ref_consult_anesth->loadRefs();
   }
-  
   $patient =& $consult->_ref_patient;
   $patient->loadRefs();
   $patient->loadStaticCIM10($userSel->user_id);
@@ -100,6 +100,50 @@ if($consult->consultation_id) {
   }
   // Affecter la date de la consultation
   $date = $consult->_ref_plageconsult->date;
+  $codePraticienEc = null;
+  $urlDHE = "#";
+  if(CModule::getInstalled("dPsante400") && ($dPconfig["interop"]["mode_compat"] == "medicap")) {
+    $tmpEtab = array();
+    foreach($etablissements as $etab) {
+      $idExt = new CIdSante400;
+      $idExt->loadLatestFor($etab);
+      if($idExt->id400) {
+        $tmpEtab[$idExt->id400] = $etab;
+      }
+    }
+    $etablissements = $tmpEtab;
+    
+    // Construction de l'URL
+    $urlDHE = $dPconfig["interop"]["base_url"];
+    $urlDHEParams = array();
+    $urlDHEParams["logineCap"]       = "";
+    $urlDHEParams["codeAppliExt"]    = "mediboard";
+    $urlDHEParams["patIdentLogExt"]  = $patient->patient_id;
+    $urlDHEParams["patNom"]          = $patient->nom;
+    $urlDHEParams["patPrenom"]       = $patient->prenom;
+    $urlDHEParams["patNomJF"]        = $patient->nom_jeune_fille;
+    $urlDHEParams["patSexe"]         = $patient->sexe == "m" ? "1" : "2";
+    $urlDHEParams["patDateNaiss"]    = $patient->_naissance;
+    $urlDHEParams["patAd1"]          = $patient->adresse;
+    $urlDHEParams["patCP"]           = $patient->cp;
+    $urlDHEParams["patVille"]        = $patient->ville;
+    $urlDHEParams["patTel1"]         = $patient->tel;
+    $urlDHEParams["patTel2"]         = $patient->tel2;
+    $urlDHEParams["patTel3"]         = "";
+    $urlDHEParams["patNumSecu"]      = substr($patient->matricule, 0, 13);
+    $urlDHEParams["patCleNumSecu"]   = substr($patient->matricule, 13, 2);
+    $urlDHEParams["interDatePrevue"] = "";
+
+    $idExt = new CIdSante400;
+    $idExt->loadLatestFor($patient);
+    $patIdentEc = $idExt->id400;
+    $urlDHEParams["patIdentEc"]      = $patIdentEc;
+
+    $idExt = new CIdSante400;
+    $idExt->loadLatestFor($userSel);
+    $codePraticienEc = $idExt->id400;
+    $urlDHEParams["codePraticienEc"] = $codePraticienEc;
+  }
 } else {
   $consult->_ref_consult_anesth->consultation_anesth_id = 0;
 }
@@ -176,23 +220,27 @@ if($consult->_ref_chir->isFromType(array("Anesthésiste"))) {
 }
 // Création du template
 $smarty = new CSmartyDP(1);
-$smarty->assign("listAnt"       , $listAnt);
-$smarty->assign("date"          , $date);
-$smarty->assign("hour"          , $hour);
-$smarty->assign("vue"           , $vue);
-$smarty->assign("today"         , $today);
-$smarty->assign("userSel"       , $userSel);
-$smarty->assign("listModelePrat", $listModelePrat);
-$smarty->assign("listModeleFunc", $listModeleFunc);
-$smarty->assign("tarifsChir"    , $tarifsChir);
-$smarty->assign("tarifsCab"     , $tarifsCab);
-$smarty->assign("anesth"        , $anesth);
-$smarty->assign("consult"       , $consult);
-$smarty->assign("antecedent"    , $antecedent);
-$smarty->assign("traitement"    , $traitement);
-$smarty->assign("techniquesComp", $techniquesComp);
-$smarty->assign("examComp"      , $examComp);
-$smarty->assign("_is_anesth"    , $_is_anesth);  
+$smarty->assign("codePraticienEc", $codePraticienEc);
+$smarty->assign("urlDHE"         , $urlDHE);
+$smarty->assign("urlDHEParams"   , $urlDHEParams);
+$smarty->assign("etablissements" , $etablissements);
+$smarty->assign("listAnt"        , $listAnt);
+$smarty->assign("date"           , $date);
+$smarty->assign("hour"           , $hour);
+$smarty->assign("vue"            , $vue);
+$smarty->assign("today"          , $today);
+$smarty->assign("userSel"        , $userSel);
+$smarty->assign("listModelePrat" , $listModelePrat);
+$smarty->assign("listModeleFunc" , $listModeleFunc);
+$smarty->assign("tarifsChir"     , $tarifsChir);
+$smarty->assign("tarifsCab"      , $tarifsCab);
+$smarty->assign("anesth"         , $anesth);
+$smarty->assign("consult"        , $consult);
+$smarty->assign("antecedent"     , $antecedent);
+$smarty->assign("traitement"     , $traitement);
+$smarty->assign("techniquesComp" , $techniquesComp);
+$smarty->assign("examComp"       , $examComp);
+$smarty->assign("_is_anesth"     , $_is_anesth);  
 
 if($_is_anesth) {
   $secs = array();

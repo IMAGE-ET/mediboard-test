@@ -165,7 +165,8 @@ $dPconfig["cal_day_increment"] = 15;          // Increment, in minutes
 $dPconfig["cal_working_days"]  = "1,2,3,4,5"; // days of week that the company works 0=Sunday
 
 // Compatibility mode
-$dPconfig["mode_compat"] = "default";
+$dPconfig["interop"]["mode_compat"] = "default";
+$dPconfig["interop"]["base_url"]    = "http://myserver/mypage";
 
 // File parsers to return indexing information about uploaded files
 $dPconfig["ft"] = array(
