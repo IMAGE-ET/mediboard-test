@@ -119,7 +119,7 @@ function pageMain() {
       <td class="button" colspan="2">
         {{if $message->message_id}}
         <button class="modify" type="submit">Valider</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,typeName:'message',objName:'{{$message->_view|smarty:nodefaults|JSAttribute}}')">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'message',objName:'{{$message->_view|smarty:nodefaults|JSAttribute}}'})">
           Supprimer
         </button>
         {{else}}
