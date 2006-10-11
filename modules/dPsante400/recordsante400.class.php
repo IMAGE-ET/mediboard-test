@@ -15,7 +15,7 @@ class CRecordSante400 {
       $dsn = self::$dsn;
       global $dbChronos;
       self::$chrono =& $dbChronos[$dsn];
-      self::$dbh = new PDO("odbc:$dsn", "", "");
+      self::$dbh = new PDO("odbc:$dsn");
     }
   }
 
