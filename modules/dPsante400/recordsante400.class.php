@@ -19,7 +19,7 @@ class CRecordSante400 {
     }
   }
 
-  function multipleLoad($sql, $max, $class = "CRecordSante400") {
+  function multipleLoad($sql, $max = 100, $class = "CRecordSante400") {
     if (!is_a(new $class, "CRecordSante400")) {
       trigger_error("instances of '$class' are not instances of 'CRecordSante400'", E_USER_WARNING);
     }
@@ -32,7 +32,7 @@ class CRecordSante400 {
       $sth->execute();
       self::$chrono->stop();
       while ($data = $sth->fetch(PDO::FETCH_ASSOC) and $max--) {
-          $record = new $class;
+        $record = new $class;
         $record->data = $data;
         $records[] = $record;
       }
@@ -45,7 +45,7 @@ class CRecordSante400 {
   
   function query($sql) {
     $dsn = self::$dsn;
-    
+
     try {
       self::connect();
       $sth = self::$dbh->prepare($sql);

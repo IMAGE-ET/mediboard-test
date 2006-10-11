@@ -28,8 +28,8 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 
     <label for="marked" title="Types de mouvements">Type de mouvements</label>
     <select name="marked" onchange="this.form.submit()">
-      <option value="0"{{if !$marked}}selected="selected"{{/if}}>Mouvements à traiter</option>
-      <option value="1"{{if  $marked}}selected="selected"{{/if}}>Mouvement traités avec un erreur</option>
+      <option value="0" {{if !$marked}}selected="selected"{{/if}}>Mouvements à traiter</option>
+      <option value="1" {{if  $marked}}selected="selected"{{/if}}>Mouvement traités avec un erreur</option>
     </select>
 
     </form>

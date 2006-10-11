@@ -1,6 +1,6 @@
 <?php 
 
-global $AppUI, $m;
+global $AppUI, $m, $dbChronos;
 
 require_once($AppUI->getModuleClass("dPsante400", "mouvsejourtonkin"));
 
@@ -10,18 +10,14 @@ if ($dPconfig["mode_compat"] = "medicap") {
 
 $dbChronos[CRecordSante400::$dsn] = new Chronometer;
 
-CRecordSante400::connect();
-mbTrace(get_class(CRecordSante400::$dbh), "Type de connnexion");
-mbTrace(CRecordSante400::query("SELECT * FROM ECAPFILE.TRSJ0", "Premier record TRSJ0"));
-die();
-
-CMouvSejourTonkin::$verbose = mbGetValueFromGet("verbose");
-
 $marked = mbGetValueFromGetOrSession("marked");
 $max = mbGetValueFromGet("max", 10);
 
 $count = CMouvSejourTonkin::count($marked);
 $procs = 0;
+
+CMouvSejourTonkin::$verbose = mbGetValueFromGet("verbose");
+
 
 $mouvs = array();
 if ($rec = mbGetValueFromGet("rec")) {

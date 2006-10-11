@@ -4,6 +4,7 @@ global $AppUI;
 require_once $AppUI->getModuleClass("dPsante400", "recordsante400");
 
 class CMouvSejourTonkin extends CRecordSante400 {
+  static $base = "ECAPFILE";
   static $table = "TRSJ0";
   static $complete = ">EFCPSN";
   static $verbose = false;
@@ -27,21 +28,23 @@ class CMouvSejourTonkin extends CRecordSante400 {
     $prodret = self::$prodret;
     return $marked ? 
       "\n WHERE $prodret != '$complete'" : 
-      "\n WHERE $prodret IS NULL";
+      "\n WHERE $prodret = 0";
   }
 
   function multipleLoad($marked = false, $max = 100) {
+    $base  = self::$base;
     $table = self::$table;
-    $query = "SELECT * FROM $table";
+    $query = "SELECT * FROM $base.$table";
     $query .= self::getMarkedQuery($marked);
     
     return CRecordSante400::multipleLoad($query, $max, "CMouvSejourTonkin");
   }
 
   function count($marked = false) {
+    $base  = self::$base;
     $table = self::$table;
     $req = new CRecordSante400();
-    $query = "SELECT COUNT(*) AS COUNT FROM $table";
+    $query = "SELECT COUNT(*) AS COUNT FROM $base.$table";
     $query .= self::getMarkedQuery($marked);
     
     $req->query($query);
@@ -68,9 +71,9 @@ class CMouvSejourTonkin extends CRecordSante400 {
     
     if ($this->status == self::$complete) {
 //      $query = "DELETE FROM $table WHERE IDUENR = $this->rec";
-      $query = "UPDATE $table SET $prodret = '$this->status' WHERE IDUENR = $this->rec";
+      $query = "UPDATE $base.$table SET $prodret = '$this->status' WHERE IDUENR = $this->rec";
     } else {
-      $query = "UPDATE $table SET $prodret = '$this->status' WHERE IDUENR = $this->rec";
+      $query = "UPDATE $base.$table SET $prodret = '$this->status' WHERE IDUENR = $this->rec";
     }
     
     $rec = new CRecordSante400;
@@ -88,7 +91,7 @@ class CMouvSejourTonkin extends CRecordSante400 {
   }
   
   function proceed() {
-    $this->status = ">";
+    $this->status = "1";
     $this->trace($this->data, "Données à traiter dans le mouvement");
     try {
       $this->synchronize();
@@ -100,13 +103,15 @@ class CMouvSejourTonkin extends CRecordSante400 {
       $return = false;
     }
     
-    $this->markRow();
+//    $this->markRow();
     $this->trace($this->data, "Données non traitées dans le mouvement");
     return $return;
   }
   
   function synchronize() {
-    $this->rec = $this->consume("IDUENR");
+//    $this->rec = $this->consume("IDUENR");
+  $this->data["CODACT"] = "not mapped yet";
+  $this->data["RETPRODST"] = "undefinied";
     
   }
 }
