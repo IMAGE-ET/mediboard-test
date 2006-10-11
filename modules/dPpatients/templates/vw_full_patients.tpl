@@ -33,7 +33,7 @@ function pageMain() {
 
 <table class="main">
   <tr>
-    <td class="halfPane">
+    <td>
 
       <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFile(); return false;">
       <input type="hidden" name="selKey"   value="{{$selKey}}" />
@@ -248,7 +248,7 @@ function pageMain() {
         {{/foreach}}
       </table>
     </td>
-    <td class="halfPane" id="listView">
+    <td class="greedyPane" id="listView">
       {{include file="../../dPfiles/templates/inc_list_view_colonne.tpl"}}
     </td>
   </tr>
