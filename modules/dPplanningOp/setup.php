@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.55";
+$config["mod_version"]     = "0.56";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -485,9 +485,11 @@ class CSetupdPplanningOp {
       case "0.49":
         $sql = "UPDATE `operations` SET `date` = NULL;";
         db_exec($sql); db_error();
+        
       case "0.50":
         $sql = "ALTER TABLE `operations` ADD `anesth_id` INT UNSIGNED DEFAULT NULL AFTER `chir_id`";
         db_exec($sql); db_error();
+        
       case "0.51":
         $module = @CModule::getInstalled("dPetablissement");
         if (!$module || $module->mod_version < "0.1") {
@@ -510,6 +512,7 @@ class CSetupdPplanningOp {
             "\nDROP `CIM10_code`, DROP `convalescence`, DROP `pathologie`," .
             "\nDROP `septique` ;";
         db_exec($sql); db_error();
+        
       case "0.53":
         $sql = "CREATE TABLE `type_anesth` ( " .
           "`type_anesth_id` INT UNSIGNED NOT NULL auto_increment," .
@@ -537,12 +540,27 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
         $sql = "UPDATE `operations` SET `type_anesth`=`type_anesth`+1;";
         db_exec($sql); db_error();
+        
       case "0.54":
         $sql = "ALTER TABLE `operations`" .
             "\nADD `induction` TIME AFTER `sortie_reveil`";
         db_exec($sql); db_error();
+        
       case "0.55":
-        return "0.55";
+        $sql = "CREATE TABLE `naissance` (" .
+            "\n`naissance_id` INT UNSIGNED NOT NULL auto_increment," .
+            "\n`operation_id` INT UNSIGNED NOT NULL ," .
+            "\n`nom_enfant` VARCHAR( 50 ) ," .
+            "\n`prenom_enfant` VARCHAR( 50 ) ," .
+            "\n`date_prevue` DATE," .
+            "\n`date_reelle` DATETIME," .
+            "\n`debut_grossesse` DATE," .
+            "\nPRIMARY KEY ( `naissance_id` ) ," .
+            "\nINDEX ( `operation_id` ))";
+        db_exec($sql); db_error();
+        
+      case "0.56":
+        return "0.56";
     }
     return false;
   }

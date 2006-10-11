@@ -3,7 +3,7 @@
 global $AppUI;
 require_once $AppUI->getModuleClass("dPsante400", "recordsante400");
 
-class CMouvSejourTonkin extends CRecordSante400 {
+class CMouvSejourTonkinOld extends CRecordSante400 {
   static $base = "GT_EAI";
   static $table = "SEJMDB";
   static $complete = ">EFCPSN";
