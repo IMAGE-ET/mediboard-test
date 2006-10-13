@@ -74,13 +74,7 @@ function newDHE(oForm) {
           </td>
           <td class="button">
             <form name="newAction" action="" method="get">
-            {{if $dPconfig.interop.mode_compat == "default"}}
-            <button style="margin: 1px;" class="new" type="button" onclick="newOperation      ({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}})">Nouvelle intervention</button>
-            <br/>
-            <button style="margin: 1px;" class="new" type="button" onclick="newHospitalisation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}})">Nouveau séjour</button>
-            <br/>
-            <button style="margin: 1px;" class="new" type="button" onclick="newConsultation   ({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}})">Nouvelle consultation</button>
-            {{elseif $dPconfig.interop.mode_compat == "medicap"}}
+            {{if $dPconfig.interop.mode_compat == "medicap"}}
             <button style="margin: 1px;" class="new" type="button" onclick="newDHE(this.form)">Nouvelle DHE</button>
             <br />
             <select name="etablissement">
@@ -91,8 +85,12 @@ function newDHE(oForm) {
               {{/foreach}}
             </select>
             {{else}}
-            Pas d'action disponible
+            <button style="margin: 1px;" class="new" type="button" onclick="newOperation      ({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}})">Nouvelle intervention</button>
+            <br/>
+            <button style="margin: 1px;" class="new" type="button" onclick="newHospitalisation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}})">Nouveau séjour</button>
             {{/if}}
+            <br/>
+            <button style="margin: 1px;" class="new" type="button" onclick="newConsultation   ({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}})">Nouvelle consultation</button>
             </form>
           </td>
         </tr>
