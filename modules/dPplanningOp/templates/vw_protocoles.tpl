@@ -129,7 +129,7 @@ function setClose(protocole_id) {
           <td colspan="3"><strong>{{$protSel->_ref_chir->_view}}</strong></td>
         </tr>
 
-        {{if $curr_operation->libelle}}
+        {{if $protSel->libelle}}
         <tr>
           <th>Libellé :</th>
           <td><em>{{$protSel->libelle}}</em></td>

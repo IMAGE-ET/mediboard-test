@@ -100,6 +100,7 @@ if ($chir->user_id) {
 // Packs d'hospitalisation
 $listPack = array();
 if($chir->user_id) {
+	$order = "nom";
   $where = array();
   $where["chir_id"] = "= '".$chir->user_id."'";
   $listPack = new CPack;

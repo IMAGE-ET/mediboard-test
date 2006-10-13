@@ -273,10 +273,13 @@ function pageMain() {
         </tbody>
 
         <tr>
+        
+        {{if $diagnosticsInstall}}
           <th colspan="4" class="title" onclick="view_labo()">
             Laboratoires
           </th>
         </tr>
+        {{/if}}
 
       </table>
     </td>

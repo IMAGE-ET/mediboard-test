@@ -29,7 +29,7 @@ function setClose(selClass,keywords,key,val){
       <select title="str|notNull" name="selClass">
         <option value="">&mdash; Choisissez un type</option>
         {{foreach from=$listClass|smarty:nodefaults item=curr_listClass}}
-        <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{$curr_listClass}}</option>
+        <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{tr}}{{$curr_listClass}}{{/tr}}</option>
         {{/foreach}}
       </select>
     </td>

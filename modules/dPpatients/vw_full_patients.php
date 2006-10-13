@@ -28,6 +28,8 @@ $canEditFiles     = $fileModule->canEdit();
 $canReadCptRendus = $fileCptRendus->canRead();
 $canEditCptRendus = $fileCptRendus->canEdit();
 
+$diagnosticsInstall = CModule::getActive("dPImeds") && CModule::getActive("dPsante400");
+
 // Liste des modèles 
 $where = array();
 
@@ -135,6 +137,8 @@ $smarty->assign("selKey"          , $selKey          );
 $smarty->assign("selView"         , $object->_view   );
 $smarty->assign("typeVue"         , $typeVue         );
 $smarty->assign("cat_id"          , $cat_id          );
+
+$smarty->assign("diagnosticsInstall" , $diagnosticsInstall);
 
 $smarty->display("vw_full_patients.tpl");
 
