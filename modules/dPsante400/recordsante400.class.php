@@ -14,6 +14,7 @@ class CRecordSante400 {
     if (!self::$dbh) {
       $dsn = self::$dsn;
       global $dbChronos;
+      $dbChronos[$dsn] = new Chronometer;
       self::$chrono =& $dbChronos[$dsn];
       self::$dbh = new PDO("odbc:$dsn");
     }
@@ -28,6 +29,7 @@ class CRecordSante400 {
     try {
       self::connect();
       $sth = self::$dbh->prepare($sql);
+      
       self::$chrono->start();
       $sth->execute();
       self::$chrono->stop();
@@ -55,7 +57,7 @@ class CRecordSante400 {
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
       trigger_error("Error querying '$sql' on data source name '$dsn' : " . $e->getMessage(), E_USER_ERROR);
-    }    
+    }
   }
   
   /**
@@ -67,6 +69,14 @@ class CRecordSante400 {
   }
   
   function consume($valueName) {
+    if (!is_array($this->data)) {
+      throw new Exception("The value '$valueName' doesn't exist in this record, which has NO value");
+    }
+
+    if (!array_key_exists($valueName, $this->data)) {
+      throw new Exception("The value '$valueName' doesn't exist in this record");
+    }
+    
     $value = $this->data[$valueName];
     unset($this->data[$valueName]);
     return trim($value);    
@@ -103,7 +113,11 @@ class CRecordSante400 {
       return null;
     }
     
-    $reg = "/(\d{1,2})(\d{2})/i";
+    if (strlen($time) == 2) {
+      $time = "00" . $time;
+    }
+    
+    $reg = "/(\d{0,2})(\d{2})/i";
     return preg_replace($reg, "$1:$2:00", $time);
   }
 
@@ -114,7 +128,4 @@ class CRecordSante400 {
     return $time ? "$date $time" : $date;
   }
 }
-
-global $dbChronos;
-$dbChronos[CRecordSante400::$dsn] = new Chronometer;
 ?>

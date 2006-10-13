@@ -1,23 +1,30 @@
 <?php 
 
-global $AppUI, $m, $dbChronos;
+global $AppUI, $m, $dbChronos, $dPconfig;
 
 require_once($AppUI->getModuleClass("dPsante400", "mouvsejourtonkin"));
 
-if ($dPconfig["mode_compat"] = "medicap") {
+switch ($mode_compat = @$dPconfig["interop"]["mode_compat"]) {
+  case "medicap" : 
   CRecordSante400::$dsn = "ecap";
-}
+  $mouvFactory = new CMouvSejourEcap;
+  break;
 
-$dbChronos[CRecordSante400::$dsn] = new Chronometer;
+  case "tonkin" : 
+  CRecordSante400::$dsn = "sante400";
+  $mouvFactory = new CMouvSejourTonkin;
+  break;
+  
+  default: 
+  trigger_error($mode_compat ? "Mode de compatibilité '$mode_compat' inconnu" : "Mode de compatibilité non initalisé", E_USER_ERROR);
+  die();
+}
 
 $marked = mbGetValueFromGetOrSession("marked");
 $max = mbGetValueFromGet("max", 10);
 
-$count = CMouvSejourTonkin::count($marked);
+$count = $mouvFactory->count($marked);
 $procs = 0;
-
-CMouvSejourTonkin::$verbose = mbGetValueFromGet("verbose");
-
 
 $mouvs = array();
 if ($rec = mbGetValueFromGet("rec")) {
@@ -25,10 +32,11 @@ if ($rec = mbGetValueFromGet("rec")) {
   $mouv->load($rec);
   $mouvs = array($mouv);
 } else {
-  $mouvs = CMouvSejourTonkin::multipleLoad($marked, $max);
+  $mouvs = $mouvFactory->multipleLoad($marked, $max);
 }
 
 foreach ($mouvs as $mouv) {
+  $mouv->verbose = mbGetValueFromGet("verbose");
   if ($mouv->proceed()) {
     $procs++;
   }

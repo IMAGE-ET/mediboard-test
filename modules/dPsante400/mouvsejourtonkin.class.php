@@ -3,11 +3,16 @@
 global $AppUI;
 require_once $AppUI->getModuleClass("dPsante400", "recordsante400");
 
-class CMouvSejourTonkinOld extends CRecordSante400 {
-  static $base = "GT_EAI";
-  static $table = "SEJMDB";
-  static $complete = ">EFCPSN";
-  static $verbose = false;
+class CMouvement400 extends CRecordSante400 {
+}
+
+class CMouvSejourTonkin extends CMouvement400 {
+  protected $base = "GT_EAI";
+  protected $table = "SEJMDB";
+  protected $complete = ">EFCPSN";
+  protected $prodret = "RETPRODST";
+
+  public $verbose = false;
   
   public $status = null;
   public $rec = null;
@@ -23,36 +28,29 @@ class CMouvSejourTonkinOld extends CRecordSante400 {
   }
 
   function getMarkedQuery($marked) {
-    $complete = self::$complete;
     return $marked ? 
-      "\n WHERE RETPRODST != '$complete'" : 
-      "\n WHERE RETPRODST IS NULL";
+      "\n WHERE $this->prodret != '$this->complete'" : 
+      "\n WHERE $this->prodret IS NULL";
   }
 
   function multipleLoad($marked = false, $max = 100) {
-    $base  = self::$base;
-    $table = self::$table;
-    $query = "SELECT * FROM $base.$table";
-    $query .= self::getMarkedQuery($marked);
+    $query = "SELECT * FROM $this->base.$this->table";
+    $query .= $this->getMarkedQuery($marked);
     
     return CRecordSante400::multipleLoad($query, $max, "CMouvSejourTonkin");
   }
 
   function count($marked = false) {
-    $base  = self::$base;
-    $table = self::$table;
     $req = new CRecordSante400();
-    $query = "SELECT COUNT(*) AS COUNT FROM $base.$table";
-    $query .= self::getMarkedQuery($marked);
+    $query = "SELECT COUNT(*) AS COUNT FROM $this->base.$this->table";
+    $query .= $this->getMarkedQuery($marked);
     
     $req->query($query);
     return ($req->consume("COUNT"));
   }
   
   function load($rec = null) {
-    $base  = self::$base;
-    $table = self::$table;
-    $query = "SELECT * FROM $base.$table";
+    $query = "SELECT * FROM $this->base.$this->table";
 
     if ($rec !== null) {
       $rec = intval($rec);
@@ -63,14 +61,11 @@ class CMouvSejourTonkinOld extends CRecordSante400 {
   }
     
   function markRow() {
-    $base  = self::$base;
-    $table = self::$table;
-    
-    if ($this->status == self::$complete) {
-//      $query = "DELETE FROM $base.$table WHERE IDUENR = $this->rec";
-      $query = "UPDATE $base.$table SET RETPRODST = '$this->status' WHERE IDUENR = $this->rec";
+    if ($this->status == $this->complete) {
+//      $query = "DELETE FROM $this->base.$this->table WHERE IDUENR = $this->rec";
+      $query = "UPDATE $this->base.$this->table SET $this->prodret = '$this->status' WHERE IDUENR = $this->rec";
     } else {
-      $query = "UPDATE $base.$table SET RETPRODST = '$this->status' WHERE IDUENR = $this->rec";
+      $query = "UPDATE $this->base.$this->table SET $this->prodret = '$this->status' WHERE IDUENR = $this->rec";
     }
     
     $rec = new CRecordSante400;
@@ -82,7 +77,7 @@ class CMouvSejourTonkinOld extends CRecordSante400 {
   }
 
   function trace($value, $title) {
-    if (self::$verbose) {
+    if ($this->verbose) {
       mbTrace($value, $title);
     }
   }
@@ -94,7 +89,7 @@ class CMouvSejourTonkinOld extends CRecordSante400 {
       $this->synchronize();
       $return = true;
     } catch (Exception $e) {
-      if (self::$verbose) {
+      if ($this->verbose) {
         trigger_error($e->getMessage(), E_USER_WARNING);
       }
       $return = false;
