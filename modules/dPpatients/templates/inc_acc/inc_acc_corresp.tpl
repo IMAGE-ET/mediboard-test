@@ -19,12 +19,12 @@
     <th><label for="prevenir_prenom" title="Prénom de la personne à prévenir">Prénom</label></th>
     <td><input tabindex="302" type="text" name="prevenir_prenom" value="{{$patient->prevenir_prenom}}" title="{{$patient->_props.prevenir_prenom}}" /></td>
     <th rowspan="2"><label for="employeur_adresse" title="Adresse de l'employeur">Adresse de l'employeur</label></th>
-    <td rowspan="2"><textarea tabindex="352" name="employeur_adresse" title="{{$patient->_props.employeur_adresse}}" rows="1">{{$patient->employeur_adresse}}</textarea></td>
+    <td rowspan="2"><textarea tabindex="352" name="employeur_adresse" title="{{$patient->_props.employeur_adresse}}">{{$patient->employeur_adresse}}</textarea></td>
   </tr>
   
   <tr>
     <th rowspan="2"><label for="prevenir_adresse" title="Adresse de la personne à prévenir">Adresse</label></th>
-    <td rowspan="2"><textarea tabindex="303" name="prevenir_adresse" title="{{$patient->_props.prevenir_adresse}}" rows="1">{{$patient->prevenir_adresse}}</textarea></td>
+    <td rowspan="2"><textarea tabindex="303" name="prevenir_adresse" title="{{$patient->_props.prevenir_adresse}}">{{$patient->prevenir_adresse}}</textarea></td>
   </tr>
   
   <tr>

@@ -26,6 +26,11 @@ $classes = array (
   "CExamAudio"     => array ("remarques")
 );  
 
+$listObjectAffichage = array();
+foreach($classes as $sClass=>$aChamps){
+	$listObjectAffichage[$sClass] = $AppUI->_($sClass);
+}
+
 // Liste des praticiens accessibles
 $users = new CMediusers();
 $users = $users->loadUsers(PERM_READ);
@@ -70,6 +75,7 @@ $smarty->assign("filter_user_id", $filter_user_id);
 $smarty->assign("filter_class"  , $filter_class);
 $smarty->assign("aides"         , $aides);
 $smarty->assign("aide"          , $aide);
+$smarty->assign("listObjectAffichage" , $listObjectAffichage);
 
 $smarty->display("vw_idx_aides.tpl");
 

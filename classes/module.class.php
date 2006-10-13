@@ -267,6 +267,8 @@ class CModule extends CMbObject {
       return db_error();
     } else {
       $this->reorder();
+      $sql = "DELETE FROM perm_module WHERE mod_id = $this->mod_id";
+      db_exec( $sql );
       return null;
     }
   }

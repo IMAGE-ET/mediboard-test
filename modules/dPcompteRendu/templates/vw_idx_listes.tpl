@@ -61,7 +61,7 @@ function pageMain() {
       <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
       <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
       {{if $curr_liste->_ref_modele->compte_rendu_id}}
-      <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}CCompteRendu.type.{{$curr_liste->_ref_modele->type}}{{/tr}})</a></td>
+      <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}{{$curr_liste->_ref_modele->object_class}}{{/tr}})</a></td>
       {{else}}
       <td><a href="{{$href}}">&mdash; Tous &mdash;</a></td>
       {{/if}}
@@ -80,7 +80,7 @@ function pageMain() {
       <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
       <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
       {{if $curr_liste->_ref_modele->compte_rendu_id}}
-      <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}CCompteRendu.type.{{$curr_liste->_ref_modele->type}}{{/tr}})</a></td>
+      <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}{{$curr_liste->_ref_modele->object_class}}{{/tr}})</a></td>
       {{else}}
       <td><a href="{{$href}}">&mdash; Tous &mdash;</a></td>
       {{/if}}

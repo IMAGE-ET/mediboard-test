@@ -9,28 +9,29 @@
 
 class CCompteRendu extends CMbObject {
   // DB Table key
-  var $compte_rendu_id = null;
+  var $compte_rendu_id   = null;
 
   // DB References
-  var $chir_id     = null; // not null when is a template associated to a user
-  var $function_id = null; // not null when is a template associated to a function
-  var $object_id   = null; // null when is a template, not null when a document
+  var $chir_id           = null; // not null when is a template associated to a user
+  var $function_id       = null; // not null when is a template associated to a function
+  var $object_id         = null; // null when is a template, not null when a document
 
   // DB fields
-  var $nom    = null;
-  var $source = null;
-  var $type   = null;
-  var $valide = null;
+  var $nom               = null;
+  var $source            = null;
+  var $object_class      = null;
+  var $valide            = null;
+  var $file_category_id  = null;
   
   /// Form fields
   var $_is_document      = false;
   var $_is_modele        = false;
-  var $_object_className = null;
   
   // Referenced objects
-  var $_ref_chir     = null;
-  var $_ref_function = null;
-  var $_ref_object   = null;
+  var $_ref_chir         = null;
+  var $_ref_category     = null;
+  var $_ref_function     = null;
+  var $_ref_object       = null;
 
   function CCompteRendu() {
     $this->CMbObject("compte_rendu", "compte_rendu_id");
@@ -40,12 +41,13 @@ class CCompteRendu extends CMbObject {
 
   function getSpecs() {
     return array (
-      "chir_id"     => "ref|xor|function_id",
-      "function_id" => "ref",
-      "object_id"   => "ref",
-      "nom"         => "str|notNull",
-      "source"      => "html",
-      "type"        => "enum|patient|consultAnesth|operation|hospitalisation|consultation|notNull"
+      "chir_id"          => "ref|xor|function_id",
+      "function_id"      => "ref",
+      "object_id"        => "ref",
+      "nom"              => "str|notNull",
+      "source"           => "html",
+      "object_class"     => "enum|CPatient|CConsultAnesth|COperation|CConsultation|notNull",
+      "file_category_id" => "ref"
     );
   }
 
@@ -67,25 +69,6 @@ class CCompteRendu extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    switch($this->type) {
-      case "patient" :
-        $this->_object_className = "CPatient";
-        break;
-      case "consultation" :
-        $this->_object_className = "CConsultation";
-        break;
-      case "consultAnesth" :
-        $this->_object_className = "CConsultAnesth";
-        break;
-      case "operation" :
-        $this->_object_className = "COperation";
-        break;
-      case "hospitalisation" :
-        $this->_object_className = "COperation";
-        break;
-      case "autre" :
-        $this->_object_className = "COperation";
-    }
     if($this->object_id == null)
       $this->_view = "Modèle : ";
     else
@@ -93,21 +76,30 @@ class CCompteRendu extends CMbObject {
     $this->_view .= $this->nom;
   }
 
+  function loadCategory(){
+    // Categorie
+    $this->_ref_category = new CFilesCategory;
+    if($this->file_category_id){
+      $this->_ref_category->load($this->file_category_id);
+    }
+  }
 
   function loadRefsFwd() {
 
     // Objet
-    $this->_ref_object = new $this->_object_className;
+    $this->_ref_object = new $this->object_class;
     if($this->object_id)
       $this->_ref_object->load($this->object_id);
       $this->_ref_object->loadRefsFwd();
 
+    $this->loadCategory();
+    
     // Chirurgien
     $this->_ref_chir = new CMediusers;
     if($this->chir_id) {
       $this->_ref_chir->load($this->chir_id);
     } elseif($this->object_id) {
-      switch($this->_object_className) {
+      switch($this->object_class) {
         case "CConsultation" :
           $this->_ref_chir->load($this->_ref_object->_ref_plageconsult->chir_id);
           break;
@@ -126,6 +118,37 @@ class CCompteRendu extends CMbObject {
     if($this->function_id)
       $this->_ref_function->load($this->function_id);
   }
+  
+  function loadModeleByCat($catName, $where1 = null, $order = "nom"){
+    $where = array();
+    if(is_array($catName)) {
+      $where = array_merge($where, $catName);
+    }elseif(is_string($catName)){
+      $where["nom"] = db_prepare("= %", $catName);
+    }
+    $category = new CFilesCategory;
+    $resultCategory = $category->loadList($where);
+    $documents = array();
+    
+    if(count($resultCategory)){
+      foreach($resultCategory as $keyCat=>$category){
+      	$where = array();
+        $where["object_id"] = " IS NULL";
+        $where["file_category_id"] = db_prepare("= %", $category->file_category_id);
+        if($where1){
+          if(is_array($where1)) {
+            $where = array_merge($where, $where1);
+          }elseif(is_string($where1)){
+            $where[] = $where1;
+          }
+        }
+        $resultDoc = new CCompteRendu;
+        $resultDoc = $resultDoc->loadList($where,$order);
+        $documents = array_merge($documents,$resultDoc);
+      }
+    }
+    return $documents;
+  }  
   
   function getPerm($permType) {
     if(!($this->_ref_chir || $this->_ref_function) || !$this->_ref_object) {

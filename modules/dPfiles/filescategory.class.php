@@ -45,12 +45,18 @@ class CFilesCategory extends CMbObject {
       "joinfield" => "file_category_id"
     );
     
+    $tables[] = array (
+      "label"     => "compte(s) rendu(s)", 
+      "name"      => "compte_rendu", 
+      "idfield"   => "compte_rendu_id", 
+      "joinfield" => "file_category_id"
+    );
   return CMbObject::canDelete( $msg, $oid, $tables );	
   }
   
   function listCatClass($paramclass = null){
     $where = array();
-    $where[] = "`class` IS NULL OR `class` = '$paramclass'";
+    $where[] = db_prepare("`class` IS NULL OR `class` = %", $paramclass);
     
     $listCat = new CFilesCategory;
     return $listCat->loadList($where);

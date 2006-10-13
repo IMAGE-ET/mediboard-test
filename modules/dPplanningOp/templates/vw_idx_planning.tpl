@@ -181,12 +181,12 @@ function pageMain() {
                 <td>
                   <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$curr_op->operation_id}})">
                     <option value="">&mdash; Choisir un modèle</option>
-                    <optgroup label="CRO">
+                    <optgroup label="Opération">
                     {{foreach from=$crList item=curr_cr}}
                     <option value="{{$curr_cr->compte_rendu_id}}">{{$curr_cr->nom}}</option>
                     {{/foreach}}
                     </optgroup>
-                    <optgroup label="Document d'hospi">
+                    <optgroup label="Hospitalisation">
                     {{foreach from=$hospiList item=curr_hospi}}
                     <option value="{{$curr_hospi->compte_rendu_id}}">{{$curr_hospi->nom}}</option>
                     {{/foreach}}
@@ -262,12 +262,12 @@ function pageMain() {
                 <td>
                   <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$curr_op->operation_id}})">
                     <option value="">&mdash; Choisir un modèle</option>
-                    <optgroup label="CRO">
+                    <optgroup label="Opération">
                     {{foreach from=$crList item=curr_cr}}
                     <option value="{{$curr_cr->compte_rendu_id}}">{{$curr_cr->nom}}</option>
                     {{/foreach}}
                     </optgroup>
-                    <optgroup label="Document d'hospi">
+                    <optgroup label="Hospitalisation">
                     {{foreach from=$hospiList item=curr_hospi}}
                     <option value="{{$curr_hospi->compte_rendu_id}}">{{$curr_hospi->nom}}</option>
                     {{/foreach}}

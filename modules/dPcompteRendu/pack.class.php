@@ -9,24 +9,24 @@
 
 class CPack extends CMbObject {
   // DB Table key
-  var $pack_id = null;
+  var $pack_id       = null;
 
   // DB References
-  var $chir_id = null;
+  var $chir_id       = null;
 
   // DB fields
-  var $nom     = null;
-  var $modeles = null;
+  var $nom           = null;
+  var $modeles       = null;
   
   // Form fields
-  var $_modeles = null;
-  var $_new     = null;
-  var $_del     = null;
-  var $_source  = null;
-  var $_type    = null;
+  var $_modeles      = null;
+  var $_new          = null;
+  var $_del          = null;
+  var $_source       = null;
+  var $_object_class = null;
   
   // Referenced objects
-  var $_ref_chir = null;
+  var $_ref_chir     = null;
 
   function CPack() {
     $this->CMbObject("pack", "pack_id");
@@ -57,12 +57,12 @@ class CPack extends CMbObject {
         $this->_modeles[$value] = new CCompteRendu;
         $this->_modeles[$value]->load($value);
         $this->_source .= $this->_modeles[$value]->source."<br style='page-break-after:always' />";        
-        if($this->_type == null)
-          $this->_type = $this->_modeles[$value]->type;
+        if($this->_object_class == null)
+          $this->_object_class = $this->_modeles[$value]->object_class;
       }
     }
-    if($this->_type == null)
-      $this->_type = "autre";
+    if($this->_object_class == null)
+      $this->_object_class = "COperation";
   }
   
   function updateDBFields() {

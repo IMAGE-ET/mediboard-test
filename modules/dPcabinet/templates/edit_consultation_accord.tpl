@@ -9,9 +9,9 @@ function showAll(patient_id) {
 }
 
 function pasteText(formName) {
-  var form = document.editFrm;
-  var aide = eval("form._aide_" + formName);
-  var area = eval("form." + formName);
+  var oForm = document.editFrmExams;
+  var aide = eval("oForm._aide_" + formName);
+  var area = eval("oForm." + formName);
   insertAt(area, aide.value + '\n')
   aide.value = 0;
 }
@@ -35,7 +35,7 @@ function updateList() {
 
 function pageMain() {
   updateList();
-
+  
   {{if $consult->consultation_id}}
   incPatientHistoryMain();
   incAntecedantsMain();
@@ -45,9 +45,7 @@ function pageMain() {
   regFieldCalendar("editTrmtFrm", "fin");
   {{/if}}
 }
-
 </script>
-
 
 <table class="main">
   <tr>
@@ -63,11 +61,9 @@ function pageMain() {
       <div id="finishBanner">
       {{include file="inc_finish_banner.tpl"}}
       </div>
-      
-      {{include file="inc_accord_ant_consult.tpl"}}
-
+      {{include file="inc_patient_infos_accord_consult.tpl"}}
+      {{include file="acc_consultation.tpl"}}
       {{/if}}
-
     </td>
   </tr>
 </table>

@@ -4,6 +4,11 @@
 
 var classes = {{$classes|@json}};
 
+var aTraducClass = new Array();
+{{foreach from=$listObjectAffichage key=key item=currClass}}
+aTraducClass["{{$key}}"] = "{{$currClass}}";
+{{/foreach}}
+
 function loadClasses(value) {
   var form = document.editFrm;
   var select = form.elements['class'];
@@ -18,7 +23,7 @@ function loadClasses(value) {
   for (var elm in options) {
     var option = elm;
     if (typeof(options[option]) != "function") { // to filter prototype functions
-      select.options[select.length] = new Option(option, option, option == value);
+      select.options[select.length] = new Option(aTraducClass[option], option, option == value);
     }
   }
 
@@ -84,7 +89,7 @@ function pageMain() {
             <option value="0">&mdash; Tous les types d'objets</option>
             {{foreach from=$classes|smarty:nodefaults key=class_name item=fields}}
             <option {{if $class_name == $filter_class}} selected="selected" {{/if}}>
-              {{$class_name}}
+              {{tr}}{{$class_name}}{{/tr}}
             </option>
             {{/foreach}}
           </select>

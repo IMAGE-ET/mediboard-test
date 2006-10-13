@@ -182,7 +182,7 @@ class COperation extends CMbObject {
       "name" => "compte_rendu", 
       "idfield" => "compte_rendu_id", 
       "joinfield" => "object_id",
-      "joinon" => "(`type` = 'hospitalisation' OR `type` = 'operation')"
+      "joinon" => "(`object_class` = 'COperation')"
     );
     $tables[] = array (
       "label" => "fichier(s)", 
@@ -373,7 +373,7 @@ class COperation extends CMbObject {
   function loadRefsDocuments() {
     $this->_ref_documents = new CCompteRendu();
     $where = array();
-    $where[] = "(type = 'operation' OR type = 'hospitalisation')";
+    $where["object_class"] = " = 'COperation'";
     $where["object_id"] = "= '$this->operation_id'";
     $order = "nom";
     $this->_ref_documents = $this->_ref_documents->loadList($where, $order);

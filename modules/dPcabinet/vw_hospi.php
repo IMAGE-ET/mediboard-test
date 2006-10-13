@@ -79,18 +79,10 @@ foreach ($boucle_req as $keyBoucleReq => $curr_BoucleReq){
 }
 
 // récupération des modèles de compte-rendu disponibles
-$crList = new CCompteRendu;
 $where = array();
-$where["chir_id"] = "= '$chirSel'";
-$where["type"] = "= 'operation'";
-$order[] = "nom";
-$crList = $crList->loadList($where, $order);
-$hospiList = new CCompteRendu;
-$where = array();
-$where["chir_id"] = "= '$chirSel'";
-$where["type"] = "= 'hospitalisation'";
-$order[] = "nom";
-$hospiList = $hospiList->loadList($where, $order);
+$where["chir_id"] = db_prepare("= %", $chirSel);
+$crList    = CCompteRendu::loadModeleByCat("Opération", $where);
+$hospiList = CCompteRendu::loadModeleByCat("Hospitalisation", $where);
 
 // Création du template
 $smarty = new CSmartyDP(1);

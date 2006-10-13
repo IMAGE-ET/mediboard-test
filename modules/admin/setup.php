@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "admin";
-$config["mod_version"]     = "1.0.3";
+$config["mod_version"]     = "1.0.4";
 $config["mod_type"]        = "core";
 $config["mod_config"]      = false;
 
@@ -121,7 +121,10 @@ class CSetupadmin {
         $sql = "DELETE FROM `user_preferences` WHERE (`pref_name`!='LOCALE' && `pref_name`!='UISTYLE');";
         db_exec( $sql ); db_error();
       case "1.0.3":
-        return "1.0.3";
+        $sql = "UPDATE `user_preferences` SET `pref_name`='AFFCONSULT' WHERE `pref_name`='CABCONSULT';";
+        db_exec( $sql ); db_error();
+      case "1.0.4":
+        return "1.0.4";
     }
     
 

@@ -338,7 +338,13 @@ class CPatient extends CMbObject {
       "joinfield" => "file_object_id",
       "joinon" => "`file_class`='CPatient'"
     );
-    
+    $tables[] = array (
+      "label" => "document(s)", 
+      "name" => "compte_rendu", 
+      "idfield" => "compte_rendu_id", 
+      "joinfield" => "object_id",
+      "joinon" => "`object_class` = 'CPatient'"
+    );
     return parent::canDelete( $msg, $oid, $tables );
   }
   
@@ -411,7 +417,7 @@ class CPatient extends CMbObject {
     $this->_ref_documents = new CCompteRendu();
     
     $where = array();
-    $where["type"] = " = 'patient'";
+    $where["object_class"] = " = 'CPatient'";
     $where["object_id"] = "= '$this->patient_id'";
     $order = "nom";
     
@@ -520,7 +526,8 @@ class CPatient extends CMbObject {
     foreach ($this->_ref_consultations as $keyConsult => $valueConsult) {
       $consult =& $this->_ref_consultations[$keyConsult];
       $consult->loadRefs();
-      $consult->getNumDocs();
+      // Compteur de docs inclus dans le loadRefsDocs
+      //$consult->getNumDocs();
       $consult->canRead();
       $consult->canEdit();
     }

@@ -29,13 +29,21 @@ function refreshCR() {
 <input type="hidden" name="dosql" value="do_modele_aed" />
 <input type="hidden" name="compte_rendu_id" value="{{$compte_rendu->compte_rendu_id}}" />
 <input type="hidden" name="object_id" value="{{$compte_rendu->object_id}}" />
-<input type="hidden" name="type" value="{{$compte_rendu->type}}" />
+<input type="hidden" name="object_class" value="{{$compte_rendu->object_class}}" />
 
 <table class="form">
   <tr>
     <th class="category">
       <strong>Nom du document :</strong>
       <input name="nom" size="50" value="{{$compte_rendu->nom}}">
+      &mdash;
+      <strong>Catégorie :</strong>
+      <select name="file_category_id">
+      <option value="0"{{if $compte_rendu->file_category_id==0}} selected="selected"{{/if}}>&mdash; Aucune Catégorie</option>
+      {{foreach from=$listCategory item=currCat}}
+      <option value="{{$currCat->file_category_id}}"{{if $currCat->file_category_id==$compte_rendu->file_category_id}} selected="selected"{{/if}}>{{$currCat->nom}}</otpion>
+      {{/foreach}}
+      </select>
     </th>
   <tr>
     <td class="listeChoixCR" id="liste">

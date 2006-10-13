@@ -1,13 +1,4 @@
 <div class="accordionMain" id="accordionConsult">
-
-  <div id="Infos">
-    <div id="InfosHeader" class="accordionTabTitleBar">
-      Informations sur le patient
-    </div>
-    <div id="InfosContent"  class="accordionTabContentBox">
-      {{include file="inc_patient_infos_accord_consult.tpl"}}
-    </div>
-  </div>
   
   <div id="AntTrait">
     <div id="AntTraitHeader" class="accordionTabTitleBar">
@@ -41,5 +32,9 @@
 </div>
 
 <script language="Javascript" type="text/javascript">
-new Rico.Accordion( $('accordionConsult'), {panelHeight:340} );
+var oAccord = new Rico.Accordion( $('accordionConsult'), { 
+  panelHeight: 320, 
+  showDelay:50, 
+  showSteps:3 
+} );
 </script>

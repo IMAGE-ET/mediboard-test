@@ -1,5 +1,4 @@
-<script language="JavaScript" type="text/javascript">
-
+<script type="text/javascript">
 function nouveau() {
   var url = new Url;
   url.setModuleTab("dPcompteRendu", "addedit_modeles");
@@ -12,7 +11,55 @@ function supprimer() {
   form.del.value = 1;
   form.submit();
 }
+{{if !$compte_rendu->compte_rendu_id}}
+var listObjectClass = {{$listObjectClass|@json}};
 
+var aTraducClass = new Array();
+{{foreach from=$listObjectAffichage key=key item=currClass}}
+aTraducClass["{{$key}}"] = "{{$currClass}}";
+{{/foreach}}
+
+function loadObjectClass(value) {
+  var form = document.editFrm;
+  var select = form.elements['object_class'];
+  var options = listObjectClass;
+  // delete all former options except first
+  while (select.length > 1) {
+    select.options[1] = null;
+  }
+  // insert new ones
+  for (var elm in options) {
+    var option = elm;
+    if (typeof(options[option]) != "function") { // to filter prototype functions
+      select.options[select.length] = new Option(aTraducClass[option], option, option == value);
+    }
+  }
+  loadCategory();
+}
+
+function loadCategory(value){
+  var form = document.editFrm;
+  var select = form.elements['file_category_id'];
+  var className  = form.elements['object_class'].value;
+  var options = listObjectClass[className];
+  // delete all former options except first
+  while (select.length > 1) {
+    select.options[1] = null;
+  }
+  // insert new ones
+  for (var elm in options) {
+    var option = options[elm];
+    if (typeof(option) != "function") { // to filter prototype functions
+      select.options[select.length] = new Option(option, elm, elm == value);
+    }
+  }
+}
+
+function pageMain() {
+  loadObjectClass('{{$compte_rendu->object_class}}');
+  loadCategory('{{$compte_rendu->file_category_id}}');
+}
+{{/if}}
 </script>
 
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -77,14 +124,32 @@ function supprimer() {
   </tr>
   
   <tr>
-    <th><label for="type" title="Contexte dans lequel est utilisé le modèle">Type de modèle: </label></th>
+    <th><label for="object_class" title="Type d'objet concerné, obligatoire.">Objet</label></th>
     <td>
-      <select name="type">
-        {{foreach from=$listType item=curr_type key=key_type}}
-        <option value="{{$key_type}}" {{if $key_type == $compte_rendu->type}} selected="selected" {{/if}}>
-          {{tr}}CCompteRendu.type.{{$key_type}}{{/tr}}
-        </option>
-        {{/foreach}}
+      {{if !$compte_rendu->compte_rendu_id}}
+      <select name="object_class" title="{{$compte_rendu->_props.object_class}}" onchange="loadCategory()">
+        <option value="">&mdash; Choisir un objet</option>
+      </select>
+      {{else}}
+      {{$compte_rendu->object_class}}
+      {{/if}}
+    </td>
+  </tr>
+  
+  <tr>
+    <th><label for="file_category_id" title="Catégorie du document">Catégorie</label></th>
+    <td>
+      {{if !$compte_rendu->compte_rendu_id}}
+      <select name="file_category_id" title="{{$compte_rendu->_props.file_category_id}}">
+        <option value="0">&mdash; Aucune Catégorie</option>
+      </select>
+      {{else}}
+        {{if $compte_rendu->_ref_category->file_category_id}}
+        {{$compte_rendu->_ref_category->nom}}
+        {{else}}
+        Aucune Catégorie
+        {{/if}}
+      {{/if}}
     </td>
   </tr>
   

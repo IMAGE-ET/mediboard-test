@@ -42,7 +42,7 @@
 		</tr>
         <tr>
           <th>Nom</th>
-          <th>Type</th>
+          <th>Class</th>
           <th>Supprimer</th>
         </tr>
         {{foreach from=$listModelePrat item=curr_modele}}
@@ -51,7 +51,7 @@
             <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{tr}}CCompteRendu.type.{{$curr_modele->type}}{{/tr}}</a>
+            <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{tr}}{{$curr_modele->object_class}}{{/tr}}</a>
           </td>
           <td>
             <form name="editFrm" action="?m={{$m}}" method="post">
@@ -86,7 +86,7 @@
             <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{tr}}CCompteRendu.type.{{$curr_modele->type}}{{/tr}}</a>
+            <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{tr}}{{$curr_modele->object_class}}{{/tr}}</a>
           </td>
           <td>
             <form name="editFrm" action="?m={{$m}}" method="post">

@@ -200,9 +200,9 @@ class CConsultation extends CMbObject {
     $where = array();
     $this->loadRefConsultAnesth();
     if($this->_ref_consult_anesth->consultation_anesth_id) {
-    	$where[] = "(`type` = 'consultation' && `object_id` = '$this->consultation_id') || (`type` = 'consultAnesth' && `object_id` = '".$this->_ref_consult_anesth->consultation_anesth_id."')";
+    	$where[] = "(`object_class` = 'CConsultation' && `object_id` = '$this->consultation_id') || (`object_class` = 'CConsultAnesth' && `object_id` = '".$this->_ref_consult_anesth->consultation_anesth_id."')";
     } else {
-      $where["type"] = "= 'consultation'";
+      $where["object_class"] = "= 'CConsultation'";
       $where["object_id"] = "= '$this->consultation_id'";
     }
     $order = "nom";
@@ -220,15 +220,26 @@ class CConsultation extends CMbObject {
   }
 
   function getNumDocs(){
-  	$sql = "SELECT count(compte_rendu_id) FROM compte_rendu WHERE (";  
-  	$this->loadRefConsultAnesth();
+  	$select = "count(compte_rendu_id) AS total";  
+    $table  = "compte_rendu";
+    $where  = array();
+    $ljoin = array();
+    
+    $this->loadRefConsultAnesth();
     if($this->_ref_consult_anesth->consultation_anesth_id) {
-      $where = "(`type` = 'consultation' OR `type` = 'consultAnesth')";
+      $where[] = "(`files_category`.`nom` = 'Consultation' AND object_id = '".$this->consultation_id."' ) OR (`files_category`.`nom` = 'Consultation Anesthésique' AND object_id = '".$this->_ref_consult_anesth->consultation_anesth_id."')";
     }else{
-      $where = "(`type` = 'consultation')";
+      $where[] = "`files_category`.`nom` = 'Consultation' AND object_id = '".$this->consultation_id."'";
     }
-    $where .= "\n AND object_id = '$this->consultation_id')";
-  	$nbDocs = db_loadResult($sql . $where);
+    
+    $ljoin["files_category"] = "compte_rendu.file_category_id = files_category.file_category_id";
+    
+    $sql = new CRequest();
+    $sql->addTable($table);
+    $sql->addSelect($select);
+    $sql->addWhere($where);
+    $sql->addLJoin($ljoin);
+    $nbDocs = db_loadResult($sql->getRequest());
     if($nbDocs) {
       $this->getEtat();
       $this->_etat .= " ($nbDocs Doc.)";
@@ -314,7 +325,7 @@ class CConsultation extends CMbObject {
       "name"      => "compte_rendu", 
       "idfield"   => "compte_rendu_id", 
       "joinfield" => "object_id",
-      "joinon"    => "`type` = 'consultation'"
+      "joinon"    => "`object_class` = 'CConsultation'"
     );
     return parent::canDelete($msg, $oid, $tables);
   }

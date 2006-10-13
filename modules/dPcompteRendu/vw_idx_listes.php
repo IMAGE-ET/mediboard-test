@@ -61,8 +61,7 @@ $where = array();
 $where["chir_id"] = $user_id ? 
   "= '$user_id'" : 
   db_prepare_in(array_keys($listPrat));
-
-$order = "type, nom";
+$order = "object_class, nom";
 
 $listCrPrat = new CCompteRendu;
 $listCrPrat = $listCrPrat->loadList($where, $order);
@@ -72,8 +71,7 @@ $where = array();
 $where["function_id"] = $user_id ? 
   "= '$user->function_id'" : 
   db_prepare_in(array_keys($listFunc));
-
-$order = "type, nom";
+$order = "object_class, nom";
 
 $listCrFunc = new CCompteRendu;
 $listCrFunc = $listCrFunc->loadList($where, $order);

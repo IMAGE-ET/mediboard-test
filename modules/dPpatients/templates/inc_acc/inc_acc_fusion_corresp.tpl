@@ -49,7 +49,7 @@
       {{$patient2->prevenir_adresse}}
     </td>
     <td>
-      <textarea tabindex="302" name="prevenir_adresse" title="{{$finalPatient->_props.prevenir_adresse}}" rows="1">{{$finalPatient->prevenir_adresse}}</textarea>
+      <textarea tabindex="302" name="prevenir_adresse" title="{{$finalPatient->_props.prevenir_adresse}}">{{$finalPatient->prevenir_adresse}}</textarea>
     </td>
   </tr>
   <tr>
@@ -150,7 +150,7 @@
       {{$patient2->employeur_adresse}}
     </td>
     <td>
-      <textarea tabindex="312" name="employeur_adresse" title="{{$finalPatient->_props.employeur_adresse}}" rows="1">{{$finalPatient->employeur_adresse}}</textarea>
+      <textarea tabindex="312" name="employeur_adresse" title="{{$finalPatient->_props.employeur_adresse}}">{{$finalPatient->employeur_adresse}}</textarea>
     </td>
   </tr>
   <tr>

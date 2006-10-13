@@ -95,7 +95,7 @@ function pasteHelperContent(oHelpElement) {
   //Assert.that(oAreaField == "toto", "Helper element '%s' has no corresponding text area '%s' in the same form", oHelpElement.name, sPropName);
 
   insertAt(oAreaField, oHelpElement.value + '\n')
-  oHelpElement.value = 0;
+  oHelpElement.value = "";
 }
 
 function notNullOK(oElement) {

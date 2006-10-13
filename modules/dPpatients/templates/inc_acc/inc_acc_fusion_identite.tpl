@@ -145,7 +145,7 @@
       {{$patient2->adresse}}
     </td>
     <td>
-      <textarea tabindex="111" name="adresse" title="{{$finalPatient->_props.adresse}}" rows="1">{{$finalPatient->adresse}}</textarea>
+      <textarea tabindex="111" name="adresse" title="{{$finalPatient->_props.adresse}}">{{$finalPatient->adresse}}</textarea>
     </td>
   </tr>
   <tr>

@@ -40,18 +40,10 @@ $mediuser = new CMediusers;
 $listChir = $mediuser->loadPraticiens(PERM_EDIT);
 
 // récupération des modèles de compte-rendu disponibles
-$crList = new CCompteRendu;
 $where = array();
 $where["chir_id"] = "= '$selChir'";
-$where["type"] = "= 'operation'";
-$order[] = "nom";
-$crList = $crList->loadList($where, $order);
-$hospiList = new CCompteRendu;
-$where = array();
-$where["chir_id"] = "= '$selChir'";
-$where["type"] = "= 'hospitalisation'";
-$order[] = "nom";
-$hospiList = $hospiList->loadList($where, $order);
+$crList    = CCompteRendu::loadModeleByCat("Opération", $where);
+$hospiList = CCompteRendu::loadModeleByCat("Hospitalisation", $where);
 
 // Planning du mois
 $sql = "SELECT plagesop.*," .

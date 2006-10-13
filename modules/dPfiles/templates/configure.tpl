@@ -23,7 +23,7 @@
             </a>
           </td>
           <td class="text">
-              {{$curr_category->class}}
+              {{tr}}{{$curr_category->class}}{{/tr}}
           </td>
         </tr>
         {{/foreach}}        
@@ -51,12 +51,12 @@
           <th><label for="class" title="Class de la catégorie">Class</label></th>
           <td>
             {{if $category->file_category_id}}
-            {{$category->class}}
+            {{tr}}{{$category->class}}{{/tr}}
             {{else}}
             <select name="class">
             <option value="">&mdash; Toutes</option>
             {{foreach from=$listClass|smarty:nodefaults item=curr_listClass}}
-            <option value="{{$curr_listClass}}"{{if $category->class==$curr_listClass}} selected="selected"{{/if}}>{{$curr_listClass}}</option>
+            <option value="{{$curr_listClass}}"{{if $category->class==$curr_listClass}} selected="selected"{{/if}}>{{tr}}{{$curr_listClass}}{{/tr}}</option>
             {{/foreach}}
             </select>
             {{/if}}

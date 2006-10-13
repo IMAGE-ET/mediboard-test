@@ -33,7 +33,7 @@
         <option value="0">&mdash; Toutes les classes</option>
         {{foreach from=$listClasses|smarty:nodefaults item=curr_class}}
         <option value="{{$curr_class}}" {{if $curr_class == $object_class}}selected="selected"{{/if}}>
-          {{$curr_class}}
+          {{tr}}{{$curr_class}}{{/tr}}
         </option>
         {{/foreach}}
       </select>

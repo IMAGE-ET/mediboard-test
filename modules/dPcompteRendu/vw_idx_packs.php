@@ -41,25 +41,22 @@ foreach($packs as $key => $value) {
 
 // Récupération des modèles
 $whereCommon = array();
-$whereCommon[] = "type = 'hospitalisation' OR type = 'operation'";
-$order = "nom";
+$whereCommon[] = "nom = 'Hospitalisation' OR nom = 'operation'";
 
 // Modèles de l'utilisateur
 $listModelePrat = array();
 if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["chir_id"] = "= '$userSel->user_id'";
-  $listModelePrat = new CCompteRendu;
-  $listModelePrat = $listModelePrat->loadlist($where, $order);
+  $where = array();
+  $where["chir_id"] = db_prepare("= %", $userSel->user_id);
+  $listModelePrat = CCompteRendu::loadModeleByCat($whereCommon, $where);
 }
 
 // Modèles de la fonction
 $listModeleFunc = array();
 if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["function_id"] = "= '$userSel->function_id'";
-  $listModeleFunc = new CCompteRendu;
-  $listModeleFunc = $listModeleFunc->loadlist($where, $order);
+  $where = array();
+  $where["function_id"] = db_prepare("= %", $userSel->function_id);
+  $listModeleFunc = CCompteRendu::loadModeleByCat($whereCommon, $where);
 }
 
 // pack sélectionné

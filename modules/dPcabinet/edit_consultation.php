@@ -13,16 +13,18 @@ if (!$canEdit) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
 
-$vue2_default = isset($AppUI->user_prefs["CABCONSULT"]) ? $AppUI->user_prefs["CABCONSULT"] : 0 ;
+$vue2_default = isset($AppUI->user_prefs["AFFCONSULT"]) ? $AppUI->user_prefs["AFFCONSULT"] : 0 ;
 
-$date  = mbGetValueFromGetOrSession("date", mbDate());
-$vue   = mbGetValueFromGetOrSession("vue2", $vue2_default);
-$today = mbDate();
-$hour  = mbTime(null);
-$_is_anesth = false;
+$date         = mbGetValueFromGetOrSession("date", mbDate());
+$vue          = mbGetValueFromGetOrSession("vue2", $vue2_default);
+$today        = mbDate();
+$hour         = mbTime(null);
+$_is_anesth   = false;
+$urlDHEParams = array();
 
-$prat_id    = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
-$selConsult = mbGetValueFromGetOrSession("selConsult", null);
+$prat_id      = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
+$selConsult   = mbGetValueFromGetOrSession("selConsult", null);
+
 
 $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 $consult = new CConsultation();
@@ -115,7 +117,6 @@ if($consult->consultation_id) {
     
     // Construction de l'URL
     $urlDHE = $dPconfig["interop"]["base_url"];
-    $urlDHEParams = array();
     $urlDHEParams["logineCap"]       = "";
     $urlDHEParams["codeAppliExt"]    = "mediboard";
     $urlDHEParams["patIdentLogExt"]  = $patient->patient_id;
@@ -151,29 +152,25 @@ if($consult->consultation_id) {
 // Récupération des modèles
 $whereCommon = array();
 if($consult->_ref_consult_anesth->consultation_anesth_id){
-  $whereCommon[] = "`type` = 'consultAnesth'";
+  $catCptRendu = "Consultation Anesthésique";
 }else{
-  $whereCommon[] = "`type` = 'consultation'";
+  $catCptRendu = "Consultation";
 }
-
-$order = "nom";
 
 // Modèles de l'utilisateur
 $listModelePrat = array();
 if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["chir_id"] = "= '$userSel->user_id'";
-  $listModelePrat = new CCompteRendu;
-  $listModelePrat = $listModelePrat->loadlist($where, $order);
+	$where = array();
+  $where["chir_id"] = db_prepare("= %", $userSel->user_id);
+  $listModelePrat = CCompteRendu::loadModeleByCat($catCptRendu, $where);
 }
 
 // Modèles de la fonction
 $listModeleFunc = array();
 if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["function_id"] = "= '$userSel->function_id'";
-  $listModeleFunc = new CCompteRendu;
-  $listModeleFunc = $listModeleFunc->loadlist($where, $order);
+	$where = array();
+	$where["function_id"] = db_prepare("= %", $userSel->function_id);
+  $listModeleFunc = CCompteRendu::loadModeleByCat($catCptRendu, $where);
 }
 
 // Récupération des tarifs
@@ -257,6 +254,11 @@ if($_is_anesth) {
   $smarty->assign("consult_anesth", $consult->_ref_consult_anesth);
   $smarty->display("edit_consultation_anesth.tpl");
 } else {
-  $smarty->display("edit_consultation_old.tpl");
+	$vue_accord = isset($AppUI->user_prefs["MODCONSULT"]) ? $AppUI->user_prefs["MODCONSULT"] : 0 ;
+  if($vue_accord){
+    $smarty->display("edit_consultation_accord.tpl");
+  }else{  
+    $smarty->display("edit_consultation_classique.tpl");
+  }
 }
 ?>

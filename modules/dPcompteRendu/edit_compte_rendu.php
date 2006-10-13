@@ -35,7 +35,7 @@ if($compte_rendu_id) {
     $pack = new CPack;
     $pack->load($pack_id);
     $compte_rendu->nom = $pack->nom;
-    $compte_rendu->type = $pack->_type;
+    $compte_rendu->object_class = $pack->_object_class;
     $compte_rendu->source = $pack->_source;
   }
   $compte_rendu->updateFormFields();
@@ -47,12 +47,15 @@ $object =& $compte_rendu->_ref_object;
 $medichir = new CMediusers;
 $medichir->load($compte_rendu->_ref_chir->user_id);
 
+//Chargement des catégories
+$listCategory = CFilesCategory::listCatClass($compte_rendu->object_class);
+
 // Gestion du template
 $templateManager = new CTemplateManager;
 
 $object->fillTemplate($templateManager);
 $templateManager->document = $compte_rendu->source;
-$templateManager->loadHelpers($medichir->user_id, $compte_rendu->type);
+$templateManager->loadHelpers($medichir->user_id, $compte_rendu->object_class);
 $templateManager->loadLists($medichir->user_id);
 $templateManager->applyTemplate($compte_rendu);
 
@@ -69,6 +72,7 @@ $templateManager->initHTMLArea();
 
 $smarty = new CSmartyDP(1);
 
+$smarty->assign("listCategory"   , $listCategory);
 $smarty->assign("templateManager", $templateManager);
 $smarty->assign("compte_rendu"   , $compte_rendu);
 $smarty->assign("lists"          , $lists);

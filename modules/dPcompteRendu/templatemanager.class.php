@@ -19,15 +19,8 @@ class CTemplateManager {
   var $usedLists = array();
   
   var $valueMode = true; // @todo : changer en applyMode
-  
-  var $listType = array();
 
   function CTemplateManager() {
-    $this->listType["consultation"]     = "CConsultation";
-    $this->listType["hospitalisation"]  = "COperation";
-    $this->listType["operation"]        = "COperation";
-    $this->listType["consultAnesth"]    = "CConsultAnesth";
-    $this->listType["patient"]          = "CPatient";
   }
 
   function makeSpan($spanClass, $text) {
@@ -70,7 +63,7 @@ class CTemplateManager {
     if(is_a($template, "CCompteRendu")) {
     
       if (!$this->valueMode) {
-        $this->setFields($template->type, $template->chir_id);
+        $this->setFields($template->object_class, $template->chir_id);
       }
 
       $this->renderDocument($template->source);
@@ -99,8 +92,8 @@ class CTemplateManager {
 	}
   
   function setFields($modeleType) {
-    if (array_key_exists("$modeleType", $this->listType)){
-      $object = new $this->listType[$modeleType];
+    if ($modeleType){
+      $object = new $modeleType;
     }
     
     if(isset($object))
@@ -123,8 +116,8 @@ class CTemplateManager {
   }
   
   function loadHelpers($user_id, $modeleType) {
-    if (array_key_exists("$modeleType", $this->listType)){
-      $object = new $this->listType[$modeleType];
+    if ($modeleType){
+      $object = new $modeleType;
     }
     if(isset($object)) {
       $object->loadAides($user_id);

@@ -79,12 +79,23 @@
   {{if $prefsUser.dPcabinet}}
   <tr>
     <th>
-      <label for="pref_name[CABCONSULT]" title="Type de vue par défaut des consultations">{{tr}}Vue des Consultations par défaut{{/tr}}</label>
+      <label for="pref_name[AFFCONSULT]" title="Type de vue par défaut des consultations">{{tr}}Vue des Consultations par défaut{{/tr}}</label>
     </th>
     <td>
-      <select name="pref_name[CABCONSULT]">
-        <option value="0"{{if $prefsUser.dPcabinet.CABCONSULT == "0"}}selected="selected"{{/if}}>Tout afficher</option>
-        <option value="1"{{if $prefsUser.dPcabinet.CABCONSULT == "1"}}selected="selected"{{/if}}>Cacher les Terminées</option>
+      <select name="pref_name[AFFCONSULT]">
+        <option value="0"{{if $prefsUser.dPcabinet.AFFCONSULT == "0"}}selected="selected"{{/if}}>Tout afficher</option>
+        <option value="1"{{if $prefsUser.dPcabinet.AFFCONSULT == "1"}}selected="selected"{{/if}}>Cacher les Terminées</option>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <label for="pref_name[MODCONSULT]" title="Mode d'affichage des consultations">{{tr}}Mode d'affichage des Consultations{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[MODCONSULT]">
+        <option value="0"{{if $prefsUser.dPcabinet.MODCONSULT == "0"}}selected="selected"{{/if}}>Classique</option>
+        <option value="1"{{if $prefsUser.dPcabinet.MODCONSULT == "1"}}selected="selected"{{/if}}>Avancée</option>
       </select>
     </td>
   </tr>

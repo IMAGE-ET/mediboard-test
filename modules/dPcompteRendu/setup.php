@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcompteRendu";
-$config["mod_version"]     = "0.23";
+$config["mod_version"]     = "0.24";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -128,7 +128,38 @@ class CSetupdPcompteRendu {
         $sql = "ALTER TABLE `compte_rendu` CHANGE `type` `type`  VARCHAR(30) NOT NULL DEFAULT 'autre'";
         db_exec($sql); db_error();
       case "0.23":
-        return "0.23";
+        set_time_limit(1800);
+        
+        $module = @CModule::getInstalled("dPfiles");
+        if (!$module || $module->mod_version < "0.14") {
+          return "0.23";
+        }
+        
+        $sql = "ALTER TABLE `compte_rendu` CHANGE `type` `object_class` VARCHAR(30) DEFAULT NULL;";
+        db_exec($sql); db_error();
+        $sql = "ALTER TABLE `compte_rendu` ADD `file_category_id` INT(11) DEFAULT 0;";
+        db_exec($sql); db_error();
+        
+        $aConversion = array();
+        $aConversion["operation"]       = array("class"=>"COperation",    "nom"=>"Opération");
+        $aConversion["hospitalisation"] = array("class"=>"COperation",    "nom"=>"Hospitalisation");
+        $aConversion["consultation"]    = array("class"=>"CConsultation", "nom"=>"Consultation");
+        $aConversion["consultAnesth"]   = array("class"=>"CConsultAnesth","nom"=>"Consultation Anesthésique");
+        $aConversion["patient"]         = array("class"=>"CPatient",      "nom"=>"Patient");
+        
+        foreach($aConversion as $sKey=>$aValue){
+          $category = new CFilesCategory();
+          $category->nom    = $aValue["nom"];
+          $category->class = $aValue["class"];
+          $category->store();
+          
+          
+          $sql = "UPDATE `compte_rendu` SET `file_category_id`='".$category->file_category_id."', 
+                 `object_class`='".$aValue["class"]."' WHERE `object_class`='$sKey'";
+          db_exec($sql); db_error();          
+        }
+      case "0.24":
+        return "0.24";
     }
     return false;
   }

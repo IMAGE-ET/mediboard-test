@@ -34,7 +34,7 @@ if ($userSel->user_id) {
   $where = array();
   $where["chir_id"] = "= '$userSel->user_id'";
   $where["object_id"] = "IS NULL";
-  $order = "type, nom";
+  $order = "object_class, nom";
   $listModelePrat = new CCompteRendu;
   $listModelePrat = $listModelePrat->loadlist($where, $order);
 }
@@ -45,7 +45,7 @@ if ($userSel->user_id) {
   $where = array();
   $where["function_id"] = "= '$userSel->function_id'";
   $where["object_id"] = "IS NULL";
-  $order = "type, nom";
+  $order = "object_class, nom";
   $listModeleFunc = new CCompteRendu;
   $listModeleFunc = $listModeleFunc->loadlist($where, $order);
 }

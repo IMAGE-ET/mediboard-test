@@ -12,7 +12,7 @@
     <th><label for="nom" title="Nom du patient. Obligatoire">Nom </label></th>
     <td><input tabindex="101" type="text" name="nom" value="{{$patient->nom}}" title="{{$patient->_props.nom}}" /></td>
     <th rowspan="2"><label for="adresse" title="Adresse du patient">Adresse</label></th>
-    <td rowspan="2"><textarea tabindex="151" name="adresse" title="{{$patient->_props.adresse}}" rows="1">{{$patient->adresse}}</textarea></td>
+    <td rowspan="2"><textarea tabindex="151" name="adresse" title="{{$patient->_props.adresse}}">{{$patient->adresse}}</textarea></td>
   </tr>
   
   <tr>

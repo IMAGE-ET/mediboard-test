@@ -263,7 +263,7 @@ class CConsultAnesth extends CMbObject {
       "name"      => "compte_rendu", 
       "idfield"   => "compte_rendu_id", 
       "joinfield" => "object_id",
-      "joinon"    => "(`type` = 'consultAnesth')"
+      "joinon"    => "(`object_class` = 'CConsultAnesth')"
     );
     $tables[] = array (
       "label"     => "Technique(s) Complémentaire(s)", 

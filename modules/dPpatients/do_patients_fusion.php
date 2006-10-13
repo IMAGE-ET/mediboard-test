@@ -114,7 +114,7 @@ if(CModule::getInstalled("dPcompteRendu")) {
   $sql = "UPDATE compte_rendu" .
       "\nSET object_id = '$patient_id'" .
       "\nWHERE object_id IN ('$patient1->patient_id','$patient2->patient_id')" .
-      "\nAND type = 'patient'";
+      "\nAND object_class = 'CPatient'";
   db_exec( $sql ); $msg .= db_error();
 }
 

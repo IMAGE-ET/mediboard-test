@@ -60,7 +60,7 @@
 "CConsultation.premiere.0"=>"0",
 "CConsultation.premiere.1"=>"1",
 "CConsultAnesth"=>"Consultation Anesthésique",
-"CConsultation"=>"COnsultation",
+"CConsultation"=>"Consultation",
 "CExamAudio"=>"Examen Audio",
 "CExamComp"=>"Examen Complémentaire",
 "CPlageconsult"=>"Plage de Consultation",
