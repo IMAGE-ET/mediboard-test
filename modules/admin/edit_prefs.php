@@ -69,7 +69,7 @@ foreach($array_list_module_pref as $modulename => $listPrefs){
 }
 
 // Chargement des modules
-$modules = CModule::getInstalled();
+$modules = CPermModule::getVisibleModules();
 
 // Chargement des languages
 $locales = $AppUI->readDirs("locales");

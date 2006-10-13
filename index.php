@@ -137,11 +137,13 @@ if($AppUI->doLogin()) {
 // Select the default module
 $defmodule = null;
 if($pref_defmodule = $AppUI->getPref("DEFMODULE")) {
-  $defmodule = CModule::getVisible($AppUI->getPref("DEFMODULE"));
+  $defmodule = CPermModule::getViewModule($AppUI->getPref("DEFMODULE"), PERM_READ);
 }
+
 if(!$defmodule) {
   $defmodule_name = CPermModule::getVisibleModule();
 } else {
+	$defmodule = CModule::getVisible($AppUI->getPref("DEFMODULE"));
   $defmodule_name = $defmodule->mod_name;
 }
 
