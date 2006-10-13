@@ -244,10 +244,12 @@ class CMbObject {
     $request->addOrder($order);
     $request->setLimit($limit);
     $result = db_loadObjectList($request->getRequest($this), $this);
-    if(!is_array($result))
-      mbTrace(count($result), "Pas d'array");
     return $result;
-    //return db_loadObjectList($request->getRequest($this), $this);
+  }
+  
+  function loadListByReq($request) {
+    $result = db_loadObjectList($request->getRequest($this), $this);
+    return $result;
   }
 
   /**
