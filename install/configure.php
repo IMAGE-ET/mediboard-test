@@ -247,7 +247,7 @@ $dPconfig = $mbConfig->values;
       <select name="interop[mode_compat]">
         <option value="default" <?php if($dPconfig['interop']['mode_compat'] == 'default'){echo 'selected="selected"';} ?> >Par défaut</option>
         <option value="medicap" <?php if($dPconfig['interop']['mode_compat'] == 'medicap'){echo 'selected="selected"';} ?> >Medicap</option>
-        <option value="medicap" <?php if($dPconfig['interop']['mode_compat'] == 'tonkin' ){echo 'selected="selected"';} ?> >Tonkin</option>
+        <option value="tonkin"  <?php if($dPconfig['interop']['mode_compat'] == 'tonkin' ){echo 'selected="selected"';} ?> >Tonkin</option>
       </select>
     </td>
   </tr>
