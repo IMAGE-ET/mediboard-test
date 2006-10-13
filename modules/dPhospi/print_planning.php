@@ -25,53 +25,57 @@ $total   = 0;
 
 $sejours = new CSejour;
 
-$ljoin["patients"] = "patients.patient_id = sejour.patient_id";
+$sejourReq = new CRequest;
 
-$where[] = "`sejour`.`entree_prevue` >= '$deb' AND `sejour`.`entree_prevue` <= '$fin'";
-$where["sejour.group_id"] = "= '$g'";
-$where["annule"] = "= 0";
-// Clause de filtre par spécialité
+$sejourReq->addLJoinClause("patients", "patients.patient_id = sejour.patient_id");
+
+$sejourReq->addWhereClause("sejour.entree_prevue", "BETWEEN '$deb' AND '$fin'");
+$sejourReq->addWhereClause("sejour.group_id", "= '$g'");
+$sejourReq->addWhereClause("sejour.annule", "= '0'");
+// Clause de filtre par spécialité / chir
 if ($spe) {
   $speChirs = new CMediusers;
   $speChirs = $speChirs->loadList(array ("function_id" => "= '$spe'"));
-  $idChirs = join(array_keys($speChirs), ", ");
-  $where[] = "sejour.praticien_id IN ($idChirs)";
-}
-// Clause de filtre par chirurgien
-if($chir) {
-  $where[] = "sejour.praticien_id = '$chir'";
+  $sejourReq->addWhereClause("sejour.praticien_id", db_prepare_in(array_keys($speChirs), $chir));
 }
 if ($type) {
-  $where["type"] = "= '$type'";
+  $sejourReq->addWhereClause("sejour.type", "= '$type'");
 }
 if ($conv == "o") {
-  $where[] = "(sejour.convalescence IS NOT NULL AND sejour.convalescence != '')";
+  $sejourReq->addWhereClause(null, "(sejour.convalescence IS NOT NULL AND sejour.convalescence != '')");
 }
 if ($conv == "n") {
-  $where[] = "(sejour.convalescence IS NULL OR sejour.convalescence = '')";
+  $sejourReq->addWhereClause(null, "(sejour.convalescence IS NULL OR sejour.convalescence = '')");
 }
 
-$order = "DATE_FORMAT(sejour.entree_prevue, '%Y-%m-%d'), sejour.praticien_id";
+$sejourReq->addOrder("DATE(sejour.entree_prevue)");
+$sejourReq->addOrder("sejour.praticien_id");
 if($ordre == "heure") {
-  $order .= ", sejour.entree_prevue";
+  $sejourReq->addOrder("sejour.entree_prevue");
 } else {
-  $order .= ", patients.nom, patients.prenom";
+  $sejourReq->addOrder("patients.nom");
+  $sejourReq->addOrder("patients.prenom");
 }
 
-$sejours = $sejours->loadList($where, $order, null, null);
+$sejours = $sejours->loadListByReq($sejourReq);
 
 $listDays = array();
 $listPrats = array();
 if(count($sejours)) {
   foreach($sejours as $key => $sejour) {
-    $sejours[$key]->loadRefs();
-    $sejours[$key]->_ref_first_affectation->loadRefsFwd();
+    $sejours[$key]->loadRefsAffectations();
+    $sejours[$key]->loadRefsOperations();
+    $sejours[$key]->loadRefPatient();
+    $sejours[$key]->_ref_first_affectation->loadRefLit();
     $sejours[$key]->_ref_first_affectation->_ref_lit->loadCompleteView();
     if($service && ($sejours[$key]->_ref_first_affectation->_ref_lit->_ref_chambre->_ref_service->service_id != $service)) {
       unset($sejours[$key]);
     } else {
       if(!isset($listPrats[$sejour->praticien_id])) {
+        $sejours[$key]->loadRefPraticien();
         $listPrats[$sejour->praticien_id] =& $sejours[$key]->_ref_praticien;
+      } else {
+        $sejours[$key]->_ref_praticien =& $listPrats[$sejour->praticien_id];
       }
       foreach($sejours[$key]->_ref_operations as $keyOp => $operation) {
         $sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
