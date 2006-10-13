@@ -39,7 +39,7 @@ function setPat(key, val) {
       </form>
     </td>
     <td class="halfPane">
-      <form name="patFrm" action="index.php" method="get">
+      <form name="sejourFrm" action="index.php" method="get">
       <table class="form">
         <tr>
           <th><label for="_view" title="Merci de choisir un sejour pour voir ses résultats">Choix du sejour</label></th>
@@ -61,12 +61,12 @@ function setPat(key, val) {
   </tr>
   <tr>
     <td>
-      {{if $patient->patient_id}}
+      {{if $patient400}}
       {{include file="inc_patient_results.tpl"}}
       {{/if}}
     </td>
     <td>
-      {{if $sejour->sejour_id}}
+      {{if $sejour400}}
       {{include file="inc_sejour_results.tpl"}}
       {{/if}}
     </td>

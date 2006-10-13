@@ -21,30 +21,11 @@ $id400 = new CIdSante400;
 $id400->loadLatestFor($patient);
 $patient400 = $id400->id400;
 
-$sejour_id = mbGetValueFromGetOrSession("sejour_id");
-if($sejour_id) {
-  if(isset($patient->_ref_sejours[$sejour_id])) {
-    $sejour =& $patient->_ref_sejours[$sejour_id];
-  } else {
-    mbSetValueToSession("sejour_id");
-    $sejour = new CSejour;
-  }
-} else {
-  $sejour = new CSejour;
-}
-$id400 = new CIdSante400;
-$id400->loadLatestFor($sejour);
-$sejour400 = $id400->id400;
-
 // Création du template
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("patient"   , $patient);
 $smarty->assign("patient400", $patient400);
-$smarty->assign("sejour"    , $sejour);
-$smarty->assign("sejour400" , $sejour400);
 $smarty->assign("url"       , $dPconfig["dPImeds"]["url"]);
 
-$smarty->display("vw_results.tpl");
-
-?>
+$smarty->display("inc_patient_results.tpl");

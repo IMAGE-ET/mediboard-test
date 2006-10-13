@@ -4,6 +4,17 @@
 
 <script type="text/javascript">
 
+function view_labo() {
+  var url = new Url;
+  initAccord(false);
+  url.setModuleAction("dPImeds", "httpreq_vw_patient_results");
+  url.addParam("patient_id", "{{$patient->_id}}");
+  url.addParam("selClass", document.FrmClass.selClass.value);  
+  url.addParam("typeVue", document.FrmClass.typeVue.value);
+  url.addParam("cat_id", document.FrmClass.cat_id.value);
+  url.requestUpdate('listView', { waitingText : null });
+}
+
 function view_history_patient(id){
   url = new Url();
   url.setModuleAction("dPpatients", "vw_history");
@@ -259,6 +270,14 @@ function pageMain() {
           </td>
         </tr>
         {{/foreach}}
+        </tbody>
+
+        <tr>
+          <th colspan="4" class="title" onclick="view_labo()">
+            Laboratoires
+          </th>
+        </tr>
+
       </table>
     </td>
     <td class="greedyPane" id="listView">
