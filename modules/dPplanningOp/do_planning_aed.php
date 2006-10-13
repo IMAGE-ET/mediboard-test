@@ -38,6 +38,11 @@ if(intval(mbGetValueFromPost("del", null))) {
   $do->modifyMsg = "Opération modifiée";
   $do->createMsg = "Opération créée";
   $do->doStore();
+  if($do->_objBefore->plageop_id && ($do->_objBefore->plageop_id != $do->_obj->plageop_id)) {
+    $plageop = new CPlageOp;
+    $plageop->load($do->_objBefore->plageop_id);
+    $plageop->store();
+  }
   $m = mbGetValueFromPost("otherm", $m);
   if($m == "dPhospi") {
     $do->redirectStore = "m=$m#operation".$do->_obj->operation_id;

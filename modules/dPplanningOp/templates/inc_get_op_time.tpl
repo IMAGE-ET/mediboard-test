@@ -4,4 +4,8 @@ periodicalTimeUpdater.currentlyExecuting = true;
 
 </script>
 
-<i>Temps estimé : {{$temps|date_format:"%Hh%M"}}</i>
+{{if $temps}}
+  <i>Temps estimé : {{$temps|date_format:"%Hh%M"}}</i>
+{{else}}
+  <i>Temps estimé : -</i>
+{{/if}}
