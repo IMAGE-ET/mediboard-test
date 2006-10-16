@@ -12,7 +12,7 @@ announce_script "Mediboard request launcher"
 if [ "$#" -lt 4 ]
 then 
   echo "Usage: $0 <url> <username> <password> \"<param>\""
-  echo "  <url is root url for mediboard, ie https://localhost/mediboard"
+  echo "  <url> is root url for mediboard, ie https://localhost/mediboard"
   echo "  <username> is the name of the user requesting, ie cron"
   echo "  <password is the password of the user requesting, ie ****"
   echo "  <params> is the GET param string for request, ie m=dPpatients&tab=vw_medecins"
