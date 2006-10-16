@@ -85,24 +85,26 @@ $sejours =& $patient->_ref_sejours;
 
 // Modèles de l'utilisateur
 $listModelePrat = array();
+$order = "nom";
 if ($chir->user_id) {
   $where = array();
+  $where["object_class"] = "= 'COperation'";
   $where["chir_id"] = "= '".$chir->user_id."'";
-  $listModelePrat = CCompteRendu::loadModeleByCat("Hospitalisation", $where);
+  $listModelePrat = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
 }
 
 // Modèles de la fonction
 $listModeleFunc = array();
 if ($chir->user_id) {
   $where = array();
+  $where["object_class"] = "= 'COperation'";
   $where["function_id"] = "= '".$chir->function_id."'";
-  $listModeleFunc = CCompteRendu::loadModeleByCat("Hospitalisation", $where);
+  $listModeleFunc = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
 }
 
 // Packs d'hospitalisation
 $listPack = array();
 if($chir->user_id) {
-  $order = "nom";
   $where = array();
   $where["chir_id"] = "= '".$chir->user_id."'";
   $listPack = new CPack;

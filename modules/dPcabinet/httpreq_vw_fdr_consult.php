@@ -58,26 +58,31 @@ if ($selConsult) {
 
 // Récupération des modèles
 $whereCommon = array();
+$whereCommon["object_id"] = "IS NULL";
 if($consult->_ref_consult_anesth->consultation_anesth_id){
-  $catCptRendu = "Consultation Anesthésique";
+  $whereCommon[] = "`object_class` = 'CConsultAnesth'";
 }else{
-  $catCptRendu = "Consultation";
+  $whereCommon[] = "`object_class` = 'CConsultation'";
 }
+
+$order = "nom";
 
 // Modèles de l'utilisateur
 $listModelePrat = array();
 if ($userSel->user_id) { 
-  $where = array();
-  $where["chir_id"] = db_prepare("= %", $userSel->user_id); 
-  $listModelePrat = CCompteRendu::loadModeleByCat($catCptRendu, $where);
+  $where = $whereCommon;
+  $where["chir_id"] = db_prepare("= %", $userSel->user_id);
+  $listModelePrat = new CCompteRendu;
+  $listModelePrat = $listModelePrat->loadlist($where, $order);
 }
 
 // Modèles de la fonction
 $listModeleFunc = array();
 if ($userSel->user_id) {
-  $where = array();
+  $where = $whereCommon;
   $where["function_id"] = db_prepare("= %", $userSel->function_id);
-  $listModeleFunc = CCompteRendu::loadModeleByCat($catCptRendu, $where);
+  $listModeleFunc = new CCompteRendu;
+  $listModeleFunc = $listModeleFunc->loadlist($where, $order);
 }
 
 // Récupération des tarifs

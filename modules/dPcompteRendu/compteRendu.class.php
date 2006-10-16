@@ -119,7 +119,7 @@ class CCompteRendu extends CMbObject {
       $this->_ref_function->load($this->function_id);
   }
   
-  function loadModeleByCat($catName, $where1 = null, $order = "nom"){
+  function loadModeleByCat($catName, $where1 = null, $order = "nom", $horsCat = null){
     $where = array();
     if(is_array($catName)) {
       $where = array_merge($where, $catName);
@@ -130,22 +130,22 @@ class CCompteRendu extends CMbObject {
     $resultCategory = $category->loadList($where);
     $documents = array();
     
-    if(count($resultCategory)){
-      foreach($resultCategory as $keyCat=>$category){
-      	$where = array();
-        $where["object_id"] = " IS NULL";
-        $where["file_category_id"] = db_prepare("= %", $category->file_category_id);
-        if($where1){
-          if(is_array($where1)) {
-            $where = array_merge($where, $where1);
-          }elseif(is_string($where1)){
-            $where[] = $where1;
-          }
-        }
-        $resultDoc = new CCompteRendu;
-        $resultDoc = $resultDoc->loadList($where,$order);
-        $documents = array_merge($documents,$resultDoc);
+    if(count($resultCategory) || $horsCat){
+    	if($horsCat){
+        $resultCategory[0] = "";
       }
+      $where = array();
+      $where["object_id"] = " IS NULL";
+      $where["file_category_id"] = db_prepare_in(array_keys($resultCategory));
+      if($where1){
+        if(is_array($where1)) {
+          $where = array_merge($where, $where1);
+        }elseif(is_string($where1)){
+          $where[] = $where1;
+        }
+      }
+      $resultDoc = new CCompteRendu;$okiii = 1;
+      $documents = $resultDoc->loadList($where,$order);
     }
     return $documents;
   }  

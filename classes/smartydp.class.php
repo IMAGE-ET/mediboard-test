@@ -22,7 +22,9 @@ function do_translation($params, $content, &$smarty, &$repeat) {
 function smarty_modifier_json($object) {
   // create a new instance of Services_JSON
   $json = new Services_JSON();
-  return $json->encode($object);
+  $sJson = html_entity_decode($json->encode($object),ENT_NOQUOTES);
+  
+  return strtr($sJson, array("&quot;"=>"\\\""));
 }
 
 function JSAttribute($string){

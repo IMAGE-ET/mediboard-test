@@ -30,19 +30,21 @@ $canEditCptRendus = $fileCptRendus->canEdit();
 
 $diagnosticsInstall = CModule::getActive("dPImeds") && CModule::getActive("dPsante400");
 
-// Liste des modèles 
 $where = array();
+$where["object_id"] = "IS NULL";
+$where["object_class"] = "= 'CPatient'";
+$order = "nom"; 
 
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 $where["chir_id"] = db_prepare_in(array_keys($listPrat));
-$listModelePrat = CCompteRendu::loadModeleByCat("CPatient", $where);
+$listModelePrat = $modele->loadlist($where, $order);
 unset($where["chir_id"]);
 
 $listFct = new CMediusers();
 $listFct = $listFct->loadFonctions(PERM_EDIT);
 $where["function_id"] = db_prepare_in(array_keys($listFct));
-$listModeleFct = CCompteRendu::loadModeleByCat("CPatient", $where);
+$listModeleFct = $modele->loadlist($where, $order);
 unset($where["function_id"]);
 
 // Liste des Category pour les fichiers

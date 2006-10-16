@@ -80,9 +80,11 @@ foreach ($boucle_req as $keyBoucleReq => $curr_BoucleReq){
 
 // récupération des modèles de compte-rendu disponibles
 $where = array();
+$order = "nom";
+$where["object_class"] = "= 'COperation'";
 $where["chir_id"] = db_prepare("= %", $chirSel);
-$crList    = CCompteRendu::loadModeleByCat("Opération", $where);
-$hospiList = CCompteRendu::loadModeleByCat("Hospitalisation", $where);
+$crList    = CCompteRendu::loadModeleByCat("Opération", $where, $order, true);
+$hospiList = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
 
 // Création du template
 $smarty = new CSmartyDP(1);

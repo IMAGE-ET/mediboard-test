@@ -143,16 +143,19 @@ class CSetupdPcompteRendu {
         $aConversion = array();
         $aConversion["operation"]       = array("class"=>"COperation",    "nom"=>"Opération");
         $aConversion["hospitalisation"] = array("class"=>"COperation",    "nom"=>"Hospitalisation");
-        $aConversion["consultation"]    = array("class"=>"CConsultation", "nom"=>"Consultation");
-        $aConversion["consultAnesth"]   = array("class"=>"CConsultAnesth","nom"=>"Consultation Anesthésique");
-        $aConversion["patient"]         = array("class"=>"CPatient",      "nom"=>"Patient");
+        $aConversion["consultation"]    = array("class"=>"CConsultation", "nom"=>null);
+        $aConversion["consultAnesth"]   = array("class"=>"CConsultAnesth","nom"=>null);
+        $aConversion["patient"]         = array("class"=>"CPatient",      "nom"=>null);
         
         foreach($aConversion as $sKey=>$aValue){
           $category = new CFilesCategory();
-          $category->nom    = $aValue["nom"];
-          $category->class = $aValue["class"];
-          $category->store();
-          
+          if($aValue["nom"]){
+            $category->nom    = $aValue["nom"];
+            $category->class = $aValue["class"];
+            $category->store();
+          }else{
+            $category->file_category_id = 0;
+          }
           
           $sql = "UPDATE `compte_rendu` SET `file_category_id`='".$category->file_category_id."', 
                  `object_class`='".$aValue["class"]."' WHERE `object_class`='$sKey'";
