@@ -116,7 +116,7 @@ class CPlageOp extends CMbObject {
   
   function reorderOp() {
     if(!count($this->_ref_operations)) {
-      $this->loadRefsBack();
+      $this->loadRefsBack(0);
     }
     $new_time = $this->debut;
     $i = 0;

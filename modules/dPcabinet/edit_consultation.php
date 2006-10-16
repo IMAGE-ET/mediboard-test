@@ -20,7 +20,6 @@ $vue          = mbGetValueFromGetOrSession("vue2", $vue2_default);
 $today        = mbDate();
 $hour         = mbTime(null);
 $_is_anesth   = false;
-$urlDHEParams = array();
 
 $prat_id      = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
 $selConsult   = mbGetValueFromGetOrSession("selConsult", null);
@@ -104,6 +103,7 @@ if($consult->consultation_id) {
   $date = $consult->_ref_plageconsult->date;
   $codePraticienEc = null;
   $urlDHE = "#";
+  $urlDHEParams = array();
   if(CModule::getInstalled("dPsante400") && ($dPconfig["interop"]["mode_compat"] == "medicap")) {
     $tmpEtab = array();
     foreach($etablissements as $etab) {
@@ -147,6 +147,9 @@ if($consult->consultation_id) {
   }
 } else {
   $consult->_ref_consult_anesth->consultation_anesth_id = 0;
+  $codePraticienEc = null;
+  $urlDHE = "#";
+  $urlDHEParams = array();
 }
 
 // Récupération des modèles
