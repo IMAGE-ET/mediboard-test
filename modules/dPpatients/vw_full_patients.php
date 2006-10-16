@@ -38,12 +38,14 @@ $order = "nom";
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 $where["chir_id"] = db_prepare_in(array_keys($listPrat));
+$modele = new CCompteRendu();
 $listModelePrat = $modele->loadlist($where, $order);
 unset($where["chir_id"]);
 
 $listFct = new CMediusers();
 $listFct = $listFct->loadFonctions(PERM_EDIT);
 $where["function_id"] = db_prepare_in(array_keys($listFct));
+$modele = new CCompteRendu();
 $listModeleFct = $modele->loadlist($where, $order);
 unset($where["function_id"]);
 
