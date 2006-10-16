@@ -20,8 +20,7 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
     if ($dialog = dPgetParam($_POST, "dialog")) {
       $this->redirectDelete .= $this->redirect."&a=pat_selector&dialog=1";
       $this->redirectStore  .= $this->redirect."&a=vw_edit_patients&dialog=1";
-    }
-    else {
+    }else {
       $tab = dPgetParam($_POST, "tab", "vw_edit_patients");
       $this->redirectDelete .= $this->redirect."&tab=$tab";
       $this->redirectStore  .= $this->redirect."&tab=$tab";
@@ -31,14 +30,12 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
   function doStore() {
     parent::doStore();
     
-    $dialog = dPgetParam($_POST, "dialog");
-    $isNew = !dPgetParam($_POST, "patient_id");
-    $patient_id = $this->_obj->patient_id;
+    $dialog = dPgetParam($_POST, "dialog");  
     
-    if ($isNew) {
-      $this->redirectStore .= "&patient_id=$patient_id&created=$patient_id";
-		} elseif($dialog) {
+    if($dialog){
       $this->redirectStore .= "&a=pat_selector&dialog=1&name=".$this->_obj->nom."&firstName=".$this->_obj->prenom;
+    }else{
+      $this->redirectStore .= "m=dPpatients&tab=vw_idx_patients&id=".$this->_obj->patient_id."&nom=&prenom=";
     }
   }
   

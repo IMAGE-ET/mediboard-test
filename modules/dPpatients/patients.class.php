@@ -558,8 +558,6 @@ class CPatient extends CMbObject {
   
   function getSiblings() {
   	$where = array();
-    $where["patient_id"] = db_prepare("!= %", $this->patient_id);
-    
     
     $where[] = db_prepare("((nom = %1 AND prenom = %2) " .
                             "OR (nom = %1 AND naissance = %3 AND naissance != '0000-00-00') " .

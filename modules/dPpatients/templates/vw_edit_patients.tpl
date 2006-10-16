@@ -1,27 +1,19 @@
 <!-- $Id$ -->
 <script type="text/javascript" src="modules/dPpatients/javascript/autocomplete.js?build={{$mb_version_build}}"></script>
 <script type="text/javascript">
-function confirmCreation(id, bDialog, sSiblingsText) {
-  if (!confirm(sSiblingsText)) {
-    var form = document.editFrm;
-    form.del.value = 1;
-    form.submit();
-  } else {
-    url = new Url();
-    if (bDialog) {
-      url.setModuleAction("dPpatients", "pat_selector");
-      url.addParam("dialog", "1");
-      url.addParam("name", "{{$patient->nom|smarty:nodefaults|escape:"javascript"}}");
-      url.addParam("firstName", "{{$patient->prenom|smarty:nodefaults|escape:"javascript"}}");
-    } else {
-      url.addParam("m", "dPpatients");
-      url.addParam("tab", "vw_idx_patients");
-      url.addParam("patient_id", id);
-      url.addParam("nom", "");
-      url.addParam("prenom", "");
-    }
-    url.redirect();
+function confirmCreation(oForm){
+  if(!checkForm(oForm)){
+    return false;
   }
+  var url = new Url;
+  url.setModuleAction("dPpatients", "httpreq_get_siblings");
+  url.addParam("nom", oForm.nom.value);
+  url.addParam("prenom", oForm.prenom.value);  
+  if(oForm._annee.value!="" && oForm._mois.value!="" && oForm._jour.value!=""){
+    url.addParam("naissance", oForm._annee.value + "-" + oForm._mois.value + "-" + oForm._jour.value);
+  }
+  url.requestUpdate('divSiblings', { evalScripts: true, waitingText: null });
+  return false;
 }
 
 function printPatient(id) {
@@ -86,9 +78,11 @@ function pageMain() {
 
   <tr>
     <td>
-
+      {{if $patient->patient_id}}
       <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-
+      {{else}}
+      <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return confirmCreation(this)">
+      {{/if}}
       <input type="hidden" name="dosql" value="do_patients_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
@@ -159,6 +153,7 @@ function pageMain() {
               Supprimer
             </button>
           {{else}}
+            <div id="divSiblings" style="display:none;"></div>
             <button tabindex="400" type="submit" class="submit">Créer</button>
           {{/if}}
         </td>
@@ -175,8 +170,4 @@ var oAccord = new Rico.Accordion( $('accordionConsult'), {
   showDelay:50, 
   showSteps:3 
 } );
-
-{{if $textSiblings}}
-  confirmCreation({{$created}}, {{if $dialog}}1{{else}}0{{/if}}, "{{$textSiblings|smarty:nodefaults|escape:"javascript"}}");
-{{/if}}
 </script>
