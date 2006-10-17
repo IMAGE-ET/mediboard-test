@@ -121,10 +121,6 @@ function setupCalendar(affectation_id) {
 
 }
 
-function pageMain() {
-  regRedirectFlatCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
-}
-
 function popPlanning() {
   url = new Url;
   url.setModuleAction("dPhospi", "vw_affectations");
@@ -143,78 +139,105 @@ function showAlerte() {
   url.popup(500, 250, "Alerte");
 }
 
+var serviceToReload = 0;
+
+function chgVwService(oElement) {
+  var oForm          = document.listServiceVw;
+  serviceToReload = oElement.value;
+  var sTargetName = "vwService[" + serviceToReload + "]";
+  var oTargetElement = oForm.elements[sTargetName];
+  if(oElement.checked) {
+    oTargetElement.value="1";
+  } else {
+    oTargetElement.value="0";
+  }
+  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadService });
+}
+
+function reloadService() {
+  var url = new Url;
+  url.setModuleAction("dPhospi", "httpreq_vw_aff_service");
+  url.addParam("service_id", serviceToReload);
+  url.addParam("mode", {{$mode}});
+  url.requestUpdate("service" + serviceToReload);
+}
+
+function pageMain() {
+  regRedirectFlatCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+}
+
 </script>
+
 <table class="main">
 
-{{if $alerte}}
-<tr>
-  <td colspan="3">
-    <div class="warning">
-      <a href="javascript:showAlerte()">Il y a {{$alerte}} patient(s) à placer dans la semaine qui vient</a>
-    </div>
-  </td>
-</tr>
-{{/if}}
+  {{if $alerte}}
+  <tr>
+    <td colspan="3">
+      <div class="warning">
+        <a href="javascript:showAlerte()">Il y a {{$alerte}} patient(s) à placer dans la semaine qui vient</a>
+      </div>
+    </td>
+  </tr>
+  {{/if}}
 
-<tr>
-  <td>
-    <a href="javascript:showLegend()" class="buttonsearch">Légende</a>
-  </td>
-  <th>
-    Planning du {{$date|date_format:"%A %d %B %Y"}} : {{$totalLits}} place(s) de libre
-  </th>
-  <td>
-    <form name="chgMode" action="?m={{$m}}" method="get">
-    <input type="hidden" name="m" value="{{$m}}" />
-    <label for="mode" title="Veuillez choisir un type de vue">Type de vue</label>
-    <select name="mode" onchange="submit()">
-      <option value="0" {{if $mode == 0}}selected="selected"{{/if}}>Vue instantanée</option>
-      <option value="1" {{if $mode == 1}}selected="selected"{{/if}}>Vue de la journée</option>
-    </select>
-    </form>
-  </td>
-</tr>
+  <tr>
+    <td>
+      <a href="javascript:showLegend()" class="buttonsearch">Légende</a>
+    </td>
+    <th>
+      Planning du {{$date|date_format:"%A %d %B %Y"}} : {{$totalLits}} place(s) de libre
+    </th>
+    <td>
+      <form name="chgMode" action="?m={{$m}}" method="get">
+      <input type="hidden" name="m" value="{{$m}}" />
+      <label for="mode" title="Veuillez choisir un type de vue">Type de vue</label>
+      <select name="mode" onchange="submit()">
+        <option value="0" {{if $mode == 0}}selected="selected"{{/if}}>Vue instantanée</option>
+        <option value="1" {{if $mode == 1}}selected="selected"{{/if}}>Vue de la journée</option>
+      </select>
+      </form>
+    </td>
+  </tr>
 
-<tr>
-  <td class="greedyPane" colspan="2">
-
-    <table class="tbl">
-
-    <tr>
-    {{foreach from=$services item=curr_service}}
-      <th>
-        <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;service_id={{$curr_service->service_id}}">
-        {{$curr_service->nom}} / {{$curr_service->_nb_lits_dispo}} lit(s) dispo</a>
-      </th>
-    {{/foreach}}
-    </tr>
-
-    <tr>
-    {{foreach from=$services item=curr_service}}
-      <td>
-      {{foreach from=$curr_service->_ref_chambres item=curr_chambre}}
-        {{include file="inc_affectations_chambres.tpl"}}
+  <tr>
+    <td class="greedyPane" colspan="2">
+      <form name="listServiceVw" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+        <input type="hidden" name="m" value="dPhospi" />
+        <input type="hidden" name="dosql" value="do_services_vw_modify" />
+        {{foreach from=$vwService key=key_vw item=curr_vw}}
+        <input type="hidden" name="vwService[{{$key_vw}}]" value="{{$curr_vw}}" />
+        {{/foreach}}
+      </form>
+      <table class="tbl">
+        <tr>
+        {{foreach from=$services item=curr_service}}
+          <th>
+            <input type="checkbox" name="service{{$curr_service->service_id}}" value="{{$curr_service->service_id}}" style="float:right"
+            onchange="chgVwService(this);" {{if $curr_service->_vwService}}checked="checked"{{/if}}/>
+            {{$curr_service->nom}}
+            {{if $curr_service->_vwService}}
+            / {{$curr_service->_nb_lits_dispo}} lit(s) dispo
+            {{/if}}
+          </th>
+        {{/foreach}}
+        </tr>
+        <tr>
+        {{foreach from=$services item=curr_service}}
+          <td id="service{{$curr_service->service_id}}">
+          {{include file="inc_affectations_services.tpl"}}
+          </td>
+        {{/foreach}}
+        </tr>
+      </table>
+    </td>
+    <td class="pane">
+      <div id="calendar-container"></div>
+      {{if $canEdit}}
+      {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
+        {{include file="inc_affectations_liste.tpl"}}
       {{/foreach}}
-      </td>
-    {{/foreach}}
-    </tr>
-    
-    </table>
-    
-  </td>
-  <td class="pane">
-    
-    <div id="calendar-container"></div>
-    
-    {{if $canEdit}}
-  
-    {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
-      {{include file="inc_affectations_liste.tpl"}}
-    {{/foreach}}
-    
-    {{/if}}
-
-  </td>
-</tr>
+      {{/if}}
+    </td>
+  </tr>
 
 </table>
