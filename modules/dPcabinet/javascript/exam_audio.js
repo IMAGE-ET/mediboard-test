@@ -31,7 +31,12 @@ function changeTonalValue(sCote, sConduction, iFrequence, iNewValue) {
   }
   
   oElement.value = iNewValue;
-  oForm.submit();
+  if(oForm.examaudio_id.value==""){
+    oForm.submit();
+  }else{
+    var fctReloadOnComplete = eval("reloadGraphTonale"+sCote);
+    submitFormAjax(oForm, 'systemMsg', { onComplete : fctReloadOnComplete});
+  }
 }
 
 function changeTonalValueMouse(event, sCote) {
@@ -110,7 +115,12 @@ function changeTympanValue(sCote, iPression, iNewValue) {
   
   oElement.value = iNewValue;
   oForm.action += "#tympan";
-  oForm.submit();
+  if(oForm.examaudio_id.value==""){
+    oForm.submit();
+  }else{
+    var fctReloadOnComplete = eval("reloadGraphTympan"+sCote);
+    submitFormAjax(oForm, 'systemMsg', { onComplete : fctReloadOnComplete});
+  }
 }
 
 
@@ -206,7 +216,11 @@ function changeVocalValue(sCote, iKey, iNewDBValue, iNewPcValue) {
   oElementDB.value = iNewDBValue;
   oElementPc.value = iNewPcValue;
   oForm.action += "#vocal";
-  oForm.submit();
+  if(oForm.examaudio_id.value==""){
+    oForm.submit();
+  }else{
+    submitFormAjax(oForm, 'systemMsg', { onComplete : reloadGraphVocale});
+  }
 }
 
 function changeVocalValueMouse(event) {

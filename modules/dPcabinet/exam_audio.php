@@ -81,6 +81,7 @@ $smarty->assign("map_tonal_droite", $map_tonal_droite);
 $smarty->assign("map_tympan_gauche", $map_tympan_gauche);
 $smarty->assign("map_tympan_droite", $map_tympan_droite);
 $smarty->assign("map_vocal", $map_vocal);
+$smarty->assign("time"     , time());
 
 
 $smarty->display('exam_audio.tpl');

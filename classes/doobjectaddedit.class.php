@@ -56,7 +56,9 @@ class CDoObjectAddEdit {
     // UTF8 issue for Ajax
     if ($this->ajax) {
       foreach($_POST as $key => $value) {
-        $_POST[$key] = utf8_decode($value);
+      	if(is_scalar($value)){
+          $_POST[$key] = utf8_decode($value);
+        }
       }
     }
     

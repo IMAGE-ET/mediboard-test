@@ -90,23 +90,20 @@ class AudiogrammeTympano extends Graph {
     $cote = $words[1];
     $labels = array();
     $jscalls = array();
+      // Remove empty values to connect distant points
+      $datax = array();
+      $datay = array();
     foreach ($values as $key => $value) {
-      $pression = $pressions[$key];
-      $jstitle = strtr($title, "\n", " ");
-      $labels[] = "Modifier l'admittance {$value} ml pour $jstitle à la pression $pression mm H²0";
-      $jscalls[] = "javascript:changeTympanValue('$cote',$key)";
-    }
-    
-    // Remove empty values to connect distant points
-    $datax = array();
-    $datay = array();
-    foreach($values as $key => $value) {
-      if ($value !== "") {
+      if($value !== "" && $value!== null){
+      	$pression = $pressions[$key];
+        $jstitle = strtr($title, "\n", " ");
+        $labels[] = "Modifier l'admittance {$value} ml pour $jstitle à la pression $pression mm H²0";
+        $jscalls[] = "javascript:changeTympanValue('$cote',$key)";
         $datay[] = $value;
         $datax[] = "$key"; // Needs to be a string when null
       }
     }
-    
+
     $p1 = new LinePlot($datay, $datax);
 
     // Create the first line
@@ -125,13 +122,17 @@ class AudiogrammeTympano extends Graph {
   }
 }
 
-global $exam_audio;
+global $exam_audio,$reloadGraph;
 
-$graph_tympan_gauche = new AudiogrammeTympano();
-$graph_tympan_gauche->setTitle("Oreille gauche");
-$graph_tympan_gauche->addAudiogramme($exam_audio->_gauche_tympan, "blue");
+if(!$reloadGraph || $reloadGraph=="gauche"){
+  $graph_tympan_gauche = new AudiogrammeTympano();
+  $graph_tympan_gauche->setTitle("Oreille gauche");
+  $graph_tympan_gauche->addAudiogramme($exam_audio->_gauche_tympan, "blue");
+}
 
-$graph_tympan_droite = new AudiogrammeTympano();
-$graph_tympan_droite->setTitle("Oreille droite");
-$graph_tympan_droite->addAudiogramme($exam_audio->_droite_tympan, "red");
+if(!$reloadGraph || $reloadGraph=="droite"){
+  $graph_tympan_droite = new AudiogrammeTympano();
+  $graph_tympan_droite->setTitle("Oreille droite");
+  $graph_tympan_droite->addAudiogramme($exam_audio->_droite_tympan, "red");
+}
 ?>

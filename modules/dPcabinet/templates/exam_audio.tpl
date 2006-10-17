@@ -1,5 +1,67 @@
 <script type="text/javascript" src="modules/{{$m}}/javascript/exam_audio.js?build={{$mb_version_build}}"></script>
 
+<script type="text/javascript">
+function reloadBilan(){
+  var oForm = document.editFrm;
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_bilan");
+  url.addParam("examaudio_id", oForm.examaudio_id.value);
+  url.requestUpdate('td_bilan', { waitingText : null });
+}
+
+function reloadGraphTonale(sCote){
+  var oForm = document.editFrm;
+  if(sCote=="droite" || sCote=="gauche"){
+    var url = new Url;
+    url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_tonal");
+    url.addParam("side", sCote);
+    url.addParam("examaudio_id", oForm.examaudio_id.value);
+    url.requestUpdate('td_graph_tonal_'+sCote, { waitingText : null });
+  }else{
+    reloadGraphTonale('gauche');
+    reloadGraphTonale('droite');
+    reloadBilan();
+  }
+}
+function reloadGraphTonaledroite(){
+  reloadGraphTonale('droite');
+  reloadBilan();
+}
+function reloadGraphTonalegauche(){
+  reloadGraphTonale('gauche');
+  reloadBilan();
+}
+
+function reloadGraphTympan(sCote){
+  var oForm = document.editFrm;
+  if(sCote=="droite" || sCote=="gauche"){
+    var url = new Url;
+    url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_tympan");
+    url.addParam("side", sCote);
+    url.addParam("examaudio_id", oForm.examaudio_id.value);
+    url.requestUpdate('td_graph_tympan_'+sCote, { waitingText : null });
+  }else{
+    reloadGraphVocale();
+    reloadGraphTympan('droite');
+    reloadGraphTympan('gauche');
+  }
+}
+function reloadGraphTympandroite(){
+  reloadGraphTympan('droite');
+}
+function reloadGraphTympangauche(){
+  reloadGraphTympan('gauche');
+}
+
+function reloadGraphVocale(){
+  var oForm = document.editFrm;
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_vocale");
+  url.addParam("examaudio_id", oForm.examaudio_id.value);
+  url.requestUpdate('td_graph_vocal', { waitingText : null });
+}
+
+</script>
 <form name="editFrm" action="?m=dPcabinet&amp;a=exam_audio&amp;dialog=1" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="dPcabinet" />
@@ -11,7 +73,7 @@
 <table class="main" id="weber">
 
 <tr>
-  <th class="title">
+  <th class="title" colspan="2">
     Consultation de <span style="color:#f00;">{{$exam_audio->_ref_consult->_ref_patient->_view}}</span>
     le {{$exam_audio->_ref_consult->_date|date_format:"%A %d/%m/%Y"}}
     par le Dr. {{$exam_audio->_ref_consult->_ref_chir->_view}}
@@ -19,19 +81,21 @@
 </tr>
   
 <tr>
-  <th class="title">Audiométrie tonale (Test de Weber)</th>
+  <th class="title" colspan="2">Audiométrie tonale (Test de Weber)</th>
 </tr>
 
 <tr>
-  <td>
-    {{$map_tonal_droite|smarty:nodefaults}}
+  <td id="td_graph_tonal_droite" class="halfPane" style="height: 250px;">
+    {{$map_tonal_droite|smarty:nodefaults}}    
+    <img id="tonal_droite" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite&amp;time={{$time}}" usemap="#graph_tonal_droite" onclick="changeTonalValueMouseDroite(event)" alt="Audio tonal gauche" />
+  </td>
+  <td id="td_graph_tonal_gauche" class="halfPane" style="height: 250px;">
     {{$map_tonal_gauche|smarty:nodefaults}}
-    <img id="tonal_droite" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite" usemap="#graph_tonal_droite" onclick="changeTonalValueMouseDroite(event)" alt="Audio tonal gauche" />
-    <img id="tonal_gauche" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche" usemap="#graph_tonal_gauche" onclick="changeTonalValueMouseGauche(event)" alt="Audio tonal droite" />
+    <img id="tonal_gauche" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche&amp;time={{$time}}" usemap="#graph_tonal_gauche" onclick="changeTonalValueMouseGauche(event)" alt="Audio tonal droite" />
   </td>
 </tr>
 <tr>
-  <td class="radiointeractive">
+  <td class="radiointeractive" colspan="2">
     <input type="radio" name="_conduction" value="aerien" {{if $_conduction == "aerien"}}checked="checked"{{/if}} />
     <label for="_conduction_aerien" title="Conduction aérienne pour la saisie intéractive">Conduction aérienne</label>
     <input type="radio" name="_conduction" value="osseux" {{if $_conduction == "osseux"}}checked="checked"{{/if}} />
@@ -45,7 +109,7 @@
   </td>
 </tr>
 <tr>
-  <td>
+  <td colspan="2">
 
     <table class="form" id="allvalues">
       <tr id="dataTonal-trigger">
@@ -138,7 +202,11 @@
   
         <tr>
           <td class="button" colspan="9">
+            {{if $exam_audio->examaudio_id}}
+            <button class="submit" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete : reloadGraphTonale})">Valider</button>
+            {{else}}
             <button class="submit" type="submit">Valider</button>
+            {{/if}}
           </td>
         </tr>
       </tbody>
@@ -147,102 +215,17 @@
 </tr>
 
 <tr>
-  <th class="title">Bilan comparé</th>
+  <th class="title" colspan="2">Bilan comparé</th>
 </tr>
 
 <tr>
-  <td>
-  
-    <table class="tbl">
-      <tr>
-        <th class="text">Fréquences</th>
-        {{foreach from=$bilan key=frequence item=pertes}}
-          <th>{{$frequence}}</th>
-        {{/foreach}}
-      </tr>
-      <tr>
-        <th />
-        <th colspan="8">Conduction aérienne</th>
-      </tr>
-      <tr class="moyenne">
-        <th class="text">
-          Moyenne droite
-        </th>
-        <td colspan="2" />
-        <td class="aerien" colspan="4">{{$exam_audio->_moyenne_droite_aerien}}dB</td>
-        <td colspan="2" />
-      </tr>
-      <tr class="moyenne">
-        <th class="text">
-          Moyenne gauche
-        </th>
-        <td colspan="2" />
-        <td class="aerien" colspan="4">{{$exam_audio->_moyenne_gauche_aerien}}dB</td>
-        <td colspan="2" />
-      </tr>
-      <tr>
-        <th class="text">
-          Comparaison<br />
-          (droite / gauche)
-        </th>
-        {{foreach from=$bilan item=pertes}}
-        <td>
-          {{$pertes.aerien.droite}}dB / {{$pertes.aerien.gauche}}dB<br />
-          {{assign var="delta" value=$pertes.aerien.delta}}
-          {{if $delta lt -20}}&lt;&lt;
-          {{elseif $delta lt 0}}&lt;=
-          {{elseif $delta eq 0}}==
-          {{elseif $delta lt 20}}=&gt;
-          {{else}}&gt;&gt;
-          {{/if}}
-        </td>
-        {{/foreach}}
-      </tr>
-      <tr>
-        <th />
-        <th colspan="8">Conduction osseuse</th>
-      </tr>
-      <tr class="moyenne">
-        <th class="text">
-          Moyenne droite
-        </th>
-        <td colspan="2" />
-        <td class="osseux" colspan="4">{{$exam_audio->_moyenne_droite_osseux}}dB</td>
-        <td colspan="2" />
-      </tr>
-      <tr class="moyenne">
-        <th class="text">
-          Moyenne gauche
-        </th>
-        <td colspan="2" />
-        <td class="osseux" colspan="4">{{$exam_audio->_moyenne_gauche_osseux}}dB</td>
-        <td colspan="2" />
-      </tr>
-      <tr>
-        <th class="text">
-          Comparaison<br />
-          (droite / gauche)
-        </th>
-        {{foreach from=$bilan item=pertes}}
-        <td>
-          {{$pertes.osseux.droite}}dB / {{$pertes.osseux.gauche}}dB<br />
-          {{assign var="delta" value=$pertes.osseux.delta}}
-          {{if $delta lt -20}}&lt;&lt;
-          {{elseif $delta lt 0}}&lt;=
-          {{elseif $delta eq 0}}==
-          {{elseif $delta lt 20}}=&gt;
-          {{else}}&gt;&gt;
-          {{/if}}
-        </td>
-        {{/foreach}}
-      </tr>
-    </table>
-
+  <td colspan="2" id="td_bilan">
+    {{include file="inc_exam_audio/inc_examaudio_bilan.tpl"}}
   </td>
 </tr>
 
 <tr>
-  <td>
+  <td colspan="2">
     <table style="width: 100%">
       <tr>
       
@@ -250,19 +233,22 @@
         <th class="title"><a name="tympan"></a>Tympanométrie</th>
       </tr>
       <tr>
-        <td>
+        <td id="td_graph_vocal" rowspan="2" style="height:318px;width:534px;">
           {{$map_vocal|smarty:nodefaults}}
-          <img id="image_vocal" src="?m=dPcabinet&amp;a=graph_audio_vocal&amp;suppressHeaders=1&amp;" usemap="#graph_vocal" onclick="changeVocalValueMouse(event)" alt="Audiogramme vocal" />
+          <img id="image_vocal" src="?m=dPcabinet&amp;a=graph_audio_vocal&amp;suppressHeaders=1&amp;time={{$time}}" usemap="#graph_vocal" onclick="changeVocalValueMouse(event)" alt="Audiogramme vocal" />
         </td>
-        
-        <td rowspan="2">
+        <td id="td_graph_tympan_droite" style="height:176px;">
           {{$map_tympan_droite|smarty:nodefaults}}
-          <img id="tympan_droite" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite" usemap="#graph_tympan_droite" onclick="changeTympanValueMouseDroite(event)" alt="Tympan droit" />
-          {{$map_tympan_gauche|smarty:nodefaults}}
-          <br />
-          <img id="tympan_gauche" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche" usemap="#graph_tympan_gauche" onclick="changeTympanValueMouseGauche(event)" alt="Tympa Gauche" />
+          <img id="tympan_droite" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite&amp;time={{$time}}" usemap="#graph_tympan_droite" onclick="changeTympanValueMouseDroite(event)" alt="Tympan droit" />
         </td>
       </tr>
+      <tr>
+        <td id="td_graph_tympan_gauche" rowspan="2" style="height:162px;">
+          {{$map_tympan_gauche|smarty:nodefaults}}
+          <img id="tympan_gauche" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche&amp;time={{$time}}" usemap="#graph_tympan_gauche" onclick="changeTympanValueMouseGauche(event)" alt="Tympa Gauche" />
+        </td>
+      </tr>  
+        
       <tr>
         <td class="radiointeractive">
           <input type="radio" name="_oreille" value="gauche" {{if $_oreille == "gauche"}}checked="checked"{{/if}} />
@@ -276,7 +262,7 @@
 </tr>
 
 <tr>
-  <td class="radiointeractive">
+  <td colspan="2" class="radiointeractive">
     <table class="form" id="allvocales">
       <tr id="dataVocal-trigger">
         <th class="category" colspan="9">Toutes les valeurs</th>
@@ -332,7 +318,11 @@
   
         <tr>
           <td class="button" colspan="9">
+            {{if $exam_audio->examaudio_id}}
+            <button class="submit" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete : reloadGraphTympan})">Valider</button>
+            {{else}}
             <button class="submit" type="submit">Valider</button>
+            {{/if}}
           </td>
         </tr>
       </tbody>
@@ -341,7 +331,7 @@
   </td>
 </tr>
 <tr>
-  <td>
+  <td colspan="2">
     <table class="form">
       <tr>
         <th class="category">Remarques</th>

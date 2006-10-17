@@ -1,0 +1,2 @@
+{{$map_tonal|smarty:nodefaults}}
+<img id="tonal_{{$side}}" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side={{$side}}&amp;time={{$time}}" usemap="#graph_tonal_{{$side}}" onclick="changeTonalValueMouse{{$fctOnClick}}(event)" alt="Audio tonal {{$side}}" />
