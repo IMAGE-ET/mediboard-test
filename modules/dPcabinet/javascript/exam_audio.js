@@ -280,3 +280,63 @@ function pageMain() {
   new PairEffect("dataTonal");
   new PairEffect("dataVocal");
 }
+
+function reloadBilan(){
+  var oForm = document.editFrm;
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_bilan");
+  url.addParam("examaudio_id", oForm.examaudio_id.value);
+  url.requestUpdate('td_bilan', { waitingText : null });
+}
+
+function reloadGraphTonale(sCote){
+  var oForm = document.editFrm;
+  if(sCote=="droite" || sCote=="gauche"){
+    var url = new Url;
+    url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_tonal");
+    url.addParam("side", sCote);
+    url.addParam("examaudio_id", oForm.examaudio_id.value);
+    url.requestUpdate('td_graph_tonal_'+sCote, { waitingText : null });
+  }else{
+    reloadGraphTonale('gauche');
+    reloadGraphTonale('droite');
+    reloadBilan();
+  }
+}
+function reloadGraphTonaledroite(){
+  reloadGraphTonale('droite');
+  reloadBilan();
+}
+function reloadGraphTonalegauche(){
+  reloadGraphTonale('gauche');
+  reloadBilan();
+}
+
+function reloadGraphTympan(sCote){
+  var oForm = document.editFrm;
+  if(sCote=="droite" || sCote=="gauche"){
+    var url = new Url;
+    url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_tympan");
+    url.addParam("side", sCote);
+    url.addParam("examaudio_id", oForm.examaudio_id.value);
+    url.requestUpdate('td_graph_tympan_'+sCote, { waitingText : null });
+  }else{
+    reloadGraphVocale();
+    reloadGraphTympan('droite');
+    reloadGraphTympan('gauche');
+  }
+}
+function reloadGraphTympandroite(){
+  reloadGraphTympan('droite');
+}
+function reloadGraphTympangauche(){
+  reloadGraphTympan('gauche');
+}
+
+function reloadGraphVocale(){
+  var oForm = document.editFrm;
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_vocale");
+  url.addParam("examaudio_id", oForm.examaudio_id.value);
+  url.requestUpdate('td_graph_vocal', { waitingText : null });
+}
