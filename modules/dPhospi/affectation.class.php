@@ -148,6 +148,10 @@ class CAffectation extends CMbObject {
   function loadRefsFwd() {
     $this->loadRefLit();
     $this->loadRefSejour();
+    $this->loadRefsAffectations();
+  }
+  
+  function loadRefsAffectations() {
     
     $where = array (
       "affectation_id" => "!= '$this->affectation_id'",

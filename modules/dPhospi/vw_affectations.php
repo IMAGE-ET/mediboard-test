@@ -24,6 +24,8 @@ global $listChirs;
 $listChirs = array();
 global $listPats;
 $listPats = array();
+global $listLits;
+$listLists = array();
 
 // Récupération des fonctions
 global $listFunctions;
@@ -62,19 +64,30 @@ foreach ($services as $service_id => $service) {
         $affectations =& $lits[$lit_id]->_ref_affectations;
         foreach ($affectations as $affectation_id => $affectation) {
         	if(!$affectations[$affectation_id]->effectue || $mode) {
-            $affectations[$affectation_id]->loadRefs();
+            $affectations[$affectation_id]->loadRefSejour();
+            $affectations[$affectation_id]->loadRefsAffectations();
             $affectations[$affectation_id]->checkDaysRelative($date);
   
             $aff_prev =& $affectations[$affectation_id]->_ref_prev;
             if ($aff_prev->affectation_id) {
-              $aff_prev->loadRefsFwd();
-              $aff_prev->_ref_lit->loadRefsFwd();
+              if(isset($listLits[$aff_prev->lit_id])) {
+                $aff_prev->_ref_lit =& $listLits[$aff_prev->lit_id];
+              } else {
+                $aff_prev->loadRefLit();
+                $aff_prev->_ref_lit->loadRefChambre();
+                $listLits[$aff_prev->lit_id] =& $aff_prev->_ref_lit;
+              }
             }
   
             $aff_next =& $affectations[$affectation_id]->_ref_next;
             if ($aff_next->affectation_id) {
-              $aff_next->loadRefsFwd();
-              $aff_next->_ref_lit->loadRefsFwd();
+              if(isset($listLits[$aff_next->lit_id])) {
+                $aff_prev->_ref_lit =& $listLits[$aff_next->lit_id];
+              } else {
+                $aff_next->loadRefLit();
+                $aff_next->_ref_lit->loadRefChambre();
+                $listLits[$aff_next->lit_id] =& $aff_next->_ref_lit;
+              }
             }
   
             $sejour =& $affectations[$affectation_id]->_ref_sejour;

@@ -60,8 +60,9 @@ class CLit extends CMbObject {
     
     $this->_ref_affectations = new CAffectation;
     $this->_ref_affectations = $this->_ref_affectations->loadList($where, $order);
-    
-    $this->checkDispo($date);
+    if(!count($this->_ref_affectations)) {
+      $this->checkDispo($date);
+    }
   }
   
   function updateFormFields() {
@@ -77,11 +78,14 @@ class CLit extends CMbObject {
     
     $this->_view = "{$chambre->_ref_service->nom} - $chambre->nom - $this->nom";
   }
-
-  function loadRefsFwd() {
+  
+  function loadRefChambre() {
     $this->_ref_chambre = new CChambre;
     $this->_ref_chambre->load($this->chambre_id);
-    
+  }
+
+  function loadRefsFwd() {
+    $this->loadRefChambre();
     $this->_view = "{$this->_ref_chambre->nom} - $this->nom";
   }
   
