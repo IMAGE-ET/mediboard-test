@@ -138,20 +138,22 @@ function cleanOrderOp($plageop, $type = "rank") {
           "\nLEFT JOIN plagesop" .
           "\nON plagesop.plageop_id = operations.plageop_id" .
           "\nWHERE operations.plageop_id = '$plageop'" .
-          "\nAND operations.rank != 0" .
+          "\nAND operations.rank != '0'" .
           "\nORDER BY operations.rank ASC";
       $result = db_loadlist($sql);
-      $debut = $result[0]["debut"];
-      foreach($result as $key => $value) {
-        $curr_id = $value["operation_id"];
-        $sql = "UPDATE operations" .
-            "\nSET operations.time_operation = '$debut'" .
-            "\nWHERE operations.operation_id = '$curr_id'";
-        db_exec($sql);
-        changeAffect($curr_id);
-        $debut = mbAddTime($value["temp_operation"], $debut); // durée de l'opération
-        $debut = mbAddTime($value["temps_inter_op"], $debut);               // pause d'1/4h
-        $debut = mbAddTime($value["pause"], $debut);          // Pause
+      if(count($result)) {
+        $debut = $result[0]["debut"];
+        foreach($result as $key => $value) {
+          $curr_id = $value["operation_id"];
+          $sql = "UPDATE operations" .
+              "\nSET operations.time_operation = '$debut'" .
+              "\nWHERE operations.operation_id = '$curr_id'";
+          db_exec($sql);
+          changeAffect($curr_id);
+          $debut = mbAddTime($value["temp_operation"], $debut); // durée de l'opération
+          $debut = mbAddTime($value["temps_inter_op"], $debut); // pause d'1/4h
+          $debut = mbAddTime($value["pause"], $debut);          // Pause
+        }
       }
       break;
   }
