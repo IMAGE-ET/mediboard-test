@@ -191,8 +191,8 @@ class CAffectation extends CMbObject {
   
   function colide($aff) {
   	if (($aff->entree < $this->sortie and $aff->sortie > $this->sortie)
-            or ($aff->entree < $this->entree and $aff->sortie > $this->entree)
-            or ($aff->entree >= $this->entree and $aff->sortie <= $this->sortie))
+     or ($aff->entree < $this->entree and $aff->sortie > $this->entree)
+     or ($aff->entree >= $this->entree and $aff->sortie <= $this->sortie))
       return true;
     return false;
   }

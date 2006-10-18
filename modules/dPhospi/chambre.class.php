@@ -58,6 +58,11 @@ class CChambre extends CMbObject {
     );
   }
 
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->nom;
+  }
+  
   function loadRefsFwd() {
     $this->_ref_service = new CService;
     $this->_ref_service->load($this->service_id);
@@ -126,50 +131,45 @@ class CChambre extends CMbObject {
 
     foreach ($listAff as $affectation1) {
       $sejour1 =& $affectation1->_ref_sejour;
-      assert($sejour1);
       $patient1 =& $sejour1->_ref_patient;
-      assert($patient1);
       $chirurgien1 =& $sejour1->_ref_praticien;
-      assert($chirurgien1);
-      if((count($this->_ref_lits) == 1) && $sejour1->chambre_seule == "n")
+      if ((count($this->_ref_lits) == 1) && $sejour1->chambre_seule == "n")
         $this->_chambre_double++;
-      if((count($this->_ref_lits) > 1) && $sejour1->chambre_seule == "o")
+      if ((count($this->_ref_lits) > 1) && $sejour1->chambre_seule == "o")
         $this->_chambre_seule++;
       
-      foreach($listAff as $affectation2) {
-      	$flag = $affectation1->affectation_id != $affectation2->affectation_id;
-      	$flag = $flag && $affectation1->colide($affectation2);
-      	$flag = $flag && ($affectation1->lit_id != $affectation2->lit_id);
-   	    if($flag) {
-          $sejour2 =& $affectation2->_ref_sejour;
-          assert($sejour2);
-          $patient2 =& $sejour2->_ref_patient;
-          assert($patient2);
-          $chirurgien2 =& $sejour2->_ref_praticien;
-          assert($chirurgien2);
-
-          // Conflits de pathologies
-          $pathologie1 = array(
-            "pathologie" => $sejour1->pathologie,
-            "septique" => $sejour1->septique);
-          $pathologie2 = array(
-            "pathologie" => $sejour2->pathologie,
-            "septique" => $sejour2->septique);
-          if (!$pathos->isCompat($pathologie1["pathologie"], $pathologie2["pathologie"], $pathologie1["septique"], $pathologie2["septique"]))
-            $this->_conflits_pathologies++;
-
-          // Ecart d'âge
-          $ecart = max($patient1->_age, $patient2->_age)-min($patient1->_age, $patient2->_age);
-          $this->_ecart_age = max($ecart, $this->_ecart_age);
-
-          // Genres mélangés
-          if(($patient1->sexe != $patient2->sexe) && (($patient1->sexe == "m") || ($patient2->sexe == "m")))
-            $this->_genres_melanges = true;
-        
-          // Conflit de chirurgiens
-          if(($chirurgien1->user_id != $chirurgien2->user_id) && ($chirurgien1->function_id == $chirurgien2->function_id))
-            $this->_conflits_chirurgiens++;
+      foreach ($listAff as $affectation2) {
+        if ($affectation1->affectation_id == $affectation2->affectation_id) {
+          continue;
         }
+        
+        if ($affectation1->lit_id == $affectation2->lit_id) {
+          continue;
+        }
+        
+        if (!$affectation1->colide($affectation2)) {
+          continue;
+        }
+        
+        $sejour2 =& $affectation2->_ref_sejour;
+        $patient2 =& $sejour2->_ref_patient;
+        $chirurgien2 =& $sejour2->_ref_praticien;
+
+        // Conflits de pathologies
+        if (!$pathos->isCompat($sejour1->pathologie, $sejour2->pathologie, $sejour1->septique, $sejour2->septique))
+          $this->_conflits_pathologies++;
+
+        // Ecart d'âge
+        $ecart = max($patient1->_age, $patient2->_age) - min($patient1->_age, $patient2->_age);
+        $this->_ecart_age = max($ecart, $this->_ecart_age);
+
+        // Genres mélangés
+        if (($patient1->sexe != $patient2->sexe) && (($patient1->sexe == "m") || ($patient2->sexe == "m")))
+          $this->_genres_melanges = true;
+      
+        // Conflit de chirurgiens
+        if (($chirurgien1->user_id != $chirurgien2->user_id) && ($chirurgien1->function_id == $chirurgien2->function_id))
+           $this->_conflits_chirurgiens++;
       }
     }
     $this->_conflits_pathologies /= 2;
