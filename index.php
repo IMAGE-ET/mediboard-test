@@ -143,7 +143,7 @@ if(!$m) {
   if(CPermModule::getViewModule($pref_module->mod_name, PERM_READ)) {
     $m = $pref_module->mod_name;
   } else {
-    $defmodule = $firstmodule;
+    $m = $firstmodule;
   }
 }
 $a     = $AppUI->checkFileName(mbGetValueFromGet("a"     , "index"));
