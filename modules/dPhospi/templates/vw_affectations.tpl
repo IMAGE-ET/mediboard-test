@@ -151,8 +151,6 @@ function reloadService(oElement) {
 }
 
 function pageMain() {
-  regRedirectFlatCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
-
   // PairEffect.InitGroup can't be used because it scans all DOM nodes
   {{foreach from=$services item=curr_service}}
   new PairEffect("service{{$curr_service->service_id}}", {
@@ -161,6 +159,8 @@ function pageMain() {
     sCookieName: "fullService"
   } );
   {{/foreach}}
+
+  regRedirectFlatCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
 }
 
 </script>
