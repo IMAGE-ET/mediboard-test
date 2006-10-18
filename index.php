@@ -134,21 +134,18 @@ if($AppUI->doLogin()) {
 	exit;
 }
 
-// Select the default module
-$defmodule = null;
-if($pref_defmodule = $AppUI->getPref("DEFMODULE")) {
-  $defmodule = CPermModule::getViewModule($AppUI->getPref("DEFMODULE"), PERM_READ);
-}
-
-if(!$defmodule) {
-  $defmodule_name = CPermModule::getVisibleModule();
-} else {
-	$defmodule = CModule::getVisible($AppUI->getPref("DEFMODULE"));
-  $defmodule_name = $defmodule->mod_name;
-}
-
 // set the module and action from the url
-$m     = $AppUI->checkFileName(mbGetValueFromGet("m"     , $defmodule_name));
+$m = $AppUI->checkFileName(mbGetValueFromGet("m", 0));
+if(!$m) {
+  // Select the default module
+  $firstmodule = CPermModule::getVisibleModule();
+  $pref_module = CModule::getVisible($AppUI->getPref("DEFMODULE"));
+  if(CPermModule::getViewModule($pref_module->mod_name, PERM_READ)) {
+    $m = $pref_module->mod_name;
+  } else {
+    $defmodule = $firstmodule->mod_name;
+  }
+}
 $a     = $AppUI->checkFileName(mbGetValueFromGet("a"     , "index"));
 $u     = $AppUI->checkFileName(mbGetValueFromGet("u"     , ""));
 $dosql = $AppUI->checkFileName(mbGetValueFromPost("dosql", ""));
