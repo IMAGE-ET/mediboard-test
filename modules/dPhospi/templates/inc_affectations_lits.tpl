@@ -12,7 +12,11 @@
   </td>
 </tr>
 {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
-{{assign var="patient" value=$curr_affectation->_ref_sejour->_ref_patient}}
+{{assign var="sejour" value=$curr_affectation->_ref_sejour}}
+{{assign var="patient" value=$sejour->_ref_patient}}
+{{assign var="aff_prev" value=$curr_affectation->_ref_prev}}
+{{assign var="aff_next" value=$curr_affectation->_ref_next}}
+
 <tr class="patient">
   {{if $curr_affectation->confirme}}
     <td class="text" style="background-image:url(modules/{{$m}}/images/ray.gif); background-repeat:repeat;">
@@ -22,51 +26,51 @@
     <a style="float: right;" href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->patient_id}}">
       <img src="modules/{{$m}}/images/edit.png" alt="edit" title="Editer le patient" />
     </a>
-  {{if $curr_affectation->_ref_sejour->_ref_patient->_fin_cmu}}
+  {{if $patient->_fin_cmu}}
     <div style="float: right;"><strong>CMU</strong></div>
   {{/if}}
-    {{if !$curr_affectation->_ref_sejour->entree_reelle || ($curr_affectation->_ref_prev->affectation_id && $curr_affectation->_ref_prev->effectue == 0)}}
+    {{if !$sejour->entree_reelle || ($aff_prev->affectation_id && $aff_prev->effectue == 0)}}
       <font style="color:#a33">
     {{else}}
-      {{if $curr_affectation->_ref_sejour->septique == 1}}
+      {{if $sejour->septique == 1}}
         <font style="color:#3a3">
       {{else}}
         <font>
      {{/if}}
     {{/if}}
-    {{if $curr_affectation->_ref_sejour->type == "ambu"}}
+    {{if $sejour->type == "ambu"}}
       <img src="modules/{{$m}}/images/X.png" alt="X" title="Sortant ce soir" />
     {{elseif $curr_affectation->sortie|date_format:"%Y-%m-%d" == $demain}}
-      {{if $curr_affectation->_ref_next->affectation_id}}
+      {{if $aff_next->affectation_id}}
         <img src="modules/{{$m}}/images/OC.png" alt="OC" title="Sortant demain" />
       {{else}}
         <img src="modules/{{$m}}/images/O.png" alt="O" title="Sortant demain" />
       {{/if}}
     {{elseif $curr_affectation->sortie|date_format:"%Y-%m-%d" == $date}}
-      {{if $curr_affectation->_ref_next->affectation_id}}
+      {{if $aff_next->affectation_id}}
         <img src="modules/{{$m}}/images/OoC.png" alt="OoC" title="Sortant aujourd'hui" />
       {{else}}
         <img src="modules/{{$m}}/images/Oo.png" alt="Oo" title="Sortant aujourd'hui" />
       {{/if}}
     {{/if}}
-    {{if $curr_affectation->_ref_sejour->type == "ambu"}}
+    {{if $sejour->type == "ambu"}}
       <em>{{$patient->_view}}</em>
     {{else}}
       <strong>{{$patient->_view}}</strong>
     {{/if}}
-    {{if (!$curr_affectation->_ref_sejour->entree_reelle) || ($curr_affectation->_ref_prev->affectation_id && $curr_affectation->_ref_prev->effectue == 0)}}
+    {{if (!$sejour->entree_reelle) || ($aff_prev->affectation_id && $aff_prev->effectue == 0)}}
       {{$curr_affectation->entree|date_format:"%d/%m %Hh%M"}}
     {{/if}}
     </font>
   </td>
-  <td class="action" style="background:#{{$curr_affectation->_ref_sejour->_ref_praticien->_ref_function->color}}">
-    {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}
+  <td class="action" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}">
+    {{$sejour->_ref_praticien->_shortview}}
   </td>
 </tr>
 <tr class="dates">
-  {{if $curr_affectation->_ref_prev->affectation_id}}
+  {{if $aff_prev->affectation_id}}
   <td class="text">
-    <em>Déplacé</em> (chambre: {{$curr_affectation->_ref_prev->_ref_lit->_ref_chambre->nom}}):
+    <em>Déplacé</em> (chambre: {{$aff_prev->_ref_lit->_ref_chambre->nom}}):
     {{$curr_affectation->entree|date_format:"%A %d %B %H:%M"}}
     ({{$curr_affectation->_entree_relative}} jours)
   </td>
@@ -121,9 +125,9 @@
   {{/if}}
 </tr>
 <tr class="dates">
-  {{if $curr_affectation->_ref_next->affectation_id}}
+  {{if $aff_next->affectation_id}}
   <td class="text" colspan="2">
-    <em>Déplacé</em> (chambre: {{$curr_affectation->_ref_next->_ref_lit->_ref_chambre->nom}}):
+    <em>Déplacé</em> (chambre: {{$aff_next->_ref_lit->_ref_chambre->nom}}):
     {{$curr_affectation->sortie|date_format:"%A %d %B %H:%M"}}
     ({{$curr_affectation->_sortie_relative}} jours)
   </td>
@@ -170,14 +174,14 @@
   {{/if}}
 </tr>
 <tr class="dates">
-  <td colspan="2"><em>Age</em>: {{$curr_affectation->_ref_sejour->_ref_patient->_age}} ans</td>
+  <td colspan="2"><em>Age</em>: {{$patient->_age}} ans</td>
 </tr>
 <tr class="dates">
-  <td class="text" colspan="2"><em>Dr. {{$curr_affectation->_ref_sejour->_ref_praticien->_view}}</em></td>
+  <td class="text" colspan="2"><em>Dr. {{$sejour->_ref_praticien->_view}}</em></td>
 </tr>
 <tr class="dates">
   <td class="text" colspan="2">
-    {{foreach from=$curr_affectation->_ref_sejour->_ref_operations item=curr_operation}}
+    {{foreach from=$sejour->_ref_operations item=curr_operation}}
       {{if $curr_operation->libelle}}
       <em>[{{$curr_operation->libelle}}]</em>
       <br />
@@ -190,23 +194,23 @@
 </tr>
 <tr class="dates">
   <td class="text" colspan="2">
-    <form name="SeptieSejour{{$curr_affectation->_ref_sejour->sejour_id}}" action="?m=dPhospi" method="post">
+    <form name="SeptieSejour{{$sejour->sejour_id}}" action="?m=dPhospi" method="post">
 
     <input type="hidden" name="m" value="dPplanningOp" />
     <input type="hidden" name="otherm" value="dPhospi" />
     <input type="hidden" name="dosql" value="do_sejour_aed" />
-    <input type="hidden" name="sejour_id" value="{{$curr_affectation->_ref_sejour->sejour_id}}" />
+    <input type="hidden" name="sejour_id" value="{{$sejour->sejour_id}}" />
     
     <em>Pathologie</em>:
-    {{$curr_affectation->_ref_sejour->pathologie}}
+    {{$sejour->pathologie}}
     -
     {{if $canEdit}}
-    <input type="radio" name="septique" value="0" {{if $curr_affectation->_ref_sejour->septique == 0}} checked="checked" {{/if}} onclick="this.form.submit()" />
+    <input type="radio" name="septique" value="0" {{if $sejour->septique == 0}} checked="checked" {{/if}} onclick="this.form.submit()" />
     <label for="septique_0" title="Séjour propre">Propre</label>
-    <input type="radio" name="septique" value="1" {{if $curr_affectation->_ref_sejour->septique == 1}} checked="checked" {{/if}} onclick="this.form.submit()" />
+    <input type="radio" name="septique" value="1" {{if $sejour->septique == 1}} checked="checked" {{/if}} onclick="this.form.submit()" />
     <label for="septique_1" title="Séjour septique">Septique</label>
     {{else}}
-{{if $curr_affectation->_ref_sejour->septique == 0}}
+{{if $sejour->septique == 0}}
 Propre
 {{else}}
 Septique
@@ -216,14 +220,14 @@ Septique
 
   </td>
 </tr>
-{{if $curr_affectation->_ref_sejour->rques != ""}}
+{{if $sejour->rques != ""}}
 <tr class="dates">
   <td class="text" colspan="2" style="background-color: #ff5">
-    <em>Séjour</em>: {{$curr_affectation->_ref_sejour->rques|nl2br}}
+    <em>Séjour</em>: {{$sejour->rques|nl2br}}
   </td>
 </tr>
 {{/if}}
-{{foreach from=$curr_affectation->_ref_sejour->_ref_operations item=curr_operation}}
+{{foreach from=$sejour->_ref_operations item=curr_operation}}
 {{if $curr_operation->rques != ""}}
 <tr class="dates">
   <td class="text" colspan="2" style="background-color: #ff5">
@@ -232,21 +236,21 @@ Septique
 </tr>
 {{/if}}
 {{/foreach}}
-{{if $curr_affectation->_ref_sejour->_ref_patient->rques != ""}}
+{{if $patient->rques != ""}}
 <tr class="dates">
   <td class="text" colspan="2" style="background-color: #ff5">
-    <em>Patient</em>: {{$curr_affectation->_ref_sejour->_ref_patient->rques|nl2br}}
+    <em>Patient</em>: {{$patient->rques|nl2br}}
   </td>
 </tr>
 {{/if}}
 <tr class="dates">
   <td class="text" colspan="2">
     {{if $canEdit}}
-    <form name="editChFrm{{$curr_affectation->_ref_sejour->sejour_id}}" action="index.php" method="post">
+    <form name="editChFrm{{$sejour->sejour_id}}" action="index.php" method="post">
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="dosql" value="do_edit_chambre" />
-    <input type="hidden" name="id" value="{{$curr_affectation->_ref_sejour->sejour_id}}" />
-    {{if $curr_affectation->_ref_sejour->chambre_seule == 'o'}}
+    <input type="hidden" name="id" value="{{$sejour->sejour_id}}" />
+    {{if $sejour->chambre_seule == 'o'}}
     <input type="hidden" name="value" value="n" />
     <button class="change" type="submit" style="background-color: #f55;">
 chambre simple
