@@ -58,7 +58,7 @@
     <td>
       <select name="pref_name[DEFMODULE]" class="text" size="1">
         {{foreach from=$modules|smarty:nodefaults item=currModule key=keyModule}}
-        <option value="{{$keyModule}}" {{if $keyModule==$prefsUser.GENERALE.DEFMODULE}}selected="selected"{{/if}}>
+        <option value="{{$currModule->mod_name}}" {{if $currModule->mod_name==$prefsUser.GENERALE.DEFMODULE}}selected="selected"{{/if}}>
           {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
         </option>
         {{/foreach}}
