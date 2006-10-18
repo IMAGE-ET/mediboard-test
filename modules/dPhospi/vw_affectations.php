@@ -78,6 +78,7 @@ function &getCachedLit($lit_id) {
   if (!array_key_exists($lit_id, $listLits)) {
     $lit = new CLit;
     $lit->load($lit_id);
+    $lit->loadRefChambre();
     $listLits[$lit_id] =& $lit;
   }
 
