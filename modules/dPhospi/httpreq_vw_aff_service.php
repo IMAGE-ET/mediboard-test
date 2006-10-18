@@ -125,6 +125,7 @@ if($vwService[$service_id]) {
       }
     }
     $chambres[$chambre_id]->checkChambre();
+    $service->_nb_lits_dispo += $chambres[$chambre_id]->_nb_lits_dispo;
   }
 } else {
   $service->_vwService = 0;
