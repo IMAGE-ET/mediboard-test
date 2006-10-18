@@ -178,6 +178,7 @@ function pageMain() {
       <a href="javascript:showLegend()" class="buttonsearch">Légende</a>
     </td>
     <td>
+      <form name="chgAff" action="?m={{$m}}" method="get">
       {{foreach from=$services item=curr_service}}
         <input
           type="checkbox"
@@ -191,6 +192,7 @@ function pageMain() {
           {{$curr_service->nom}}
         </label>
       {{/foreach}}
+      </form>
     </td>
     <th>
       Planning du {{$date|date_format:"%A %d %B %Y"}} : {{$totalLits}} place(s) de libre
