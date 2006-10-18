@@ -33,16 +33,30 @@ $listFunctions = new CFunctions;
 $listFunctions = $listFunctions->loadList();
 
 // Récupération du service
+$services = new CService;
+$where = array();
+$where["group_id"] = "= '$g'";
+$services = $services->loadList($where);
 $service_id = mbGetValueFromGet("service_id");
-$service = new CService;
-$service->load($service_id);
+$service =& $services[$service_id];
 
 // Affichage ou non des services
-$defaultVwService = array();
-$vwService = mbGetValueFromPostOrSession("vwService", array());
-$defaultVwService[$service_id] = 1;
-$vwService = $vwService + $defaultVwService;
-mbSetValueToSession("vwService", $vwService);
+$vwService = array();
+$vwServiceCookie = mbGetValueFromCookie("fullService", null);
+foreach ($services as $curr_service_id => $curr_service) {
+  $vwService[$curr_service_id] = 1;
+}
+if($vwServiceCookie) {
+  $vwServiceCookieArray = explode("@", $vwServiceCookie);
+  mbRemoveValuesInArray("", $vwServiceCookieArray);
+  foreach($vwServiceCookieArray as $element) {
+    $matches = null;
+    preg_match("/service(\d+)-trigger:trigger(Show|Hide)/i", $element, $matches);
+    if($matches[2] == "Show") {
+      $vwService[$matches[1]] = 0;
+    }
+  }
+}
 
 
 if($vwService[$service_id]) {

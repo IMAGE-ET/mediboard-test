@@ -139,27 +139,15 @@ function showAlerte() {
   url.popup(500, 250, "Alerte");
 }
 
-var serviceToReload = 0;
-
-function chgVwService(oElement) {
-  var oForm          = document.listServiceVw;
-  serviceToReload    = oElement.value;
-  var sTargetName    = "vwService[" + serviceToReload + "]";
-  var oTargetElement = oForm.elements[sTargetName];
+function reloadService(oElement) {
   if(oElement.checked) {
-    oTargetElement.value="1";
-  } else {
-    oTargetElement.value="0";
+    idService = oElement.value;
+    var url = new Url;
+    url.setModuleAction("dPhospi", "httpreq_vw_aff_service");
+    url.addParam("service_id", idService);
+    url.addParam("mode", {{$mode}});
+    url.requestUpdate("service" + idService);
   }
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadService });
-}
-
-function reloadService() {
-  var url = new Url;
-  url.setModuleAction("dPhospi", "httpreq_vw_aff_service");
-  url.addParam("service_id", serviceToReload);
-  url.addParam("mode", {{$mode}});
-  url.requestUpdate("service" + serviceToReload);
 }
 
 function pageMain() {
@@ -191,10 +179,14 @@ function pageMain() {
     </td>
     <td>
       {{foreach from=$services item=curr_service}}
-        <input type="checkbox" name="service{{$curr_service->service_id}}"
-        id="service{{$curr_service->service_id}}-trigger"
-        value="{{$curr_service->service_id}}" onchange="chgVwService(this);"
-        {{if $curr_service->_vwService}}checked="checked"{{/if}} />
+        <input
+          type="checkbox"
+          name="service{{$curr_service->service_id}}"
+          id="service{{$curr_service->service_id}}-trigger"
+          value="{{$curr_service->service_id}}"
+          onchange="reloadService(this);"
+          {{if $curr_service->_vwService}}checked="checked"{{/if}}
+        />
         {{$curr_service->nom}}
       {{/foreach}}
     </td>
@@ -215,13 +207,6 @@ function pageMain() {
 
   <tr>
     <td class="greedyPane" colspan="3">
-      <form name="listServiceVw" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-        <input type="hidden" name="m" value="dPhospi" />
-        <input type="hidden" name="dosql" value="do_services_vw_modify" />
-        {{foreach from=$vwService key=key_vw item=curr_vw}}
-        <input type="hidden" name="vwService[{{$key_vw}}]" value="{{$curr_vw}}" />
-        {{/foreach}}
-      </form>
       <table class="tbl">
         <tr>
         {{foreach from=$services item=curr_service}}

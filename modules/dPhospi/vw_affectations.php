@@ -42,13 +42,22 @@ $where["group_id"] = "= '$g'";
 $services = $services->loadList($where);
 
 // Affichage ou non des services
-$defaultVwService = array();
-$vwService = mbGetValueFromPostOrSession("vwService", array());
-foreach ($services as $service_id => $service) {
-  $defaultVwService[$service_id] = 1;
+$vwService = array();
+$vwServiceCookie = mbGetValueFromCookie("fullService", null);
+foreach ($services as $curr_service_id => $curr_service) {
+  $vwService[$curr_service_id] = 1;
 }
-$vwService = $vwService + $defaultVwService;
-mbSetValueToSession("vwService", $vwService);
+if($vwServiceCookie) {
+  $vwServiceCookieArray = explode("@", $vwServiceCookie);
+  mbRemoveValuesInArray("", $vwServiceCookieArray);
+  foreach($vwServiceCookieArray as $element) {
+    $matches = null;
+    preg_match("/service(\d+)-trigger:trigger(Show|Hide)/i", $element, $matches);
+    if($matches[2] == "Show") {
+      $vwService[$matches[1]] = 0;
+    }
+  }
+}
 
 foreach ($services as $service_id => $service) {
   if($vwService[$service_id]) {
