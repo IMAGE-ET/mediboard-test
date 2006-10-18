@@ -26,6 +26,16 @@ function mbGetValue() {
  * @access public
  * @return any 
  **/
+function mbGetValueFromCookie($valName, $valDefault = null) {
+  return isset($_COOKIE[$valName]) ? $_COOKIE[$valName] : $valDefault;
+}
+
+/**
+ * Returns the value of a variable retreived it from HTTP Get, with at least a
+ * default value
+ * @access public
+ * @return any 
+ **/
 function mbGetValueFromGet($valName, $valDefault = null) {
   return isset($_GET[$valName]) ? $_GET[$valName] : $valDefault;
 }
