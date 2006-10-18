@@ -81,6 +81,7 @@ Class.extend(PairEffect, {
 	};
 
     oDefaultOptions.extend(oOptions);
+    
     this.oOptions = oDefaultOptions;
     this.oTarget = $(idTarget);
     this.oTrigger = $(this.oOptions.idTrigger);
@@ -110,6 +111,7 @@ Class.extend(PairEffect, {
   
     var aCNs = Element.classNames(this.oTrigger);
     aCNs.flip("triggerShow", "triggerHide");
+    
     if (this.oOptions.bStoreInCookie) {
       aCNs.save(this.oOptions.sCookieName);
     }

@@ -140,7 +140,7 @@ function showAlerte() {
 }
 
 function reloadService(oElement) {
-  if(oElement.checked) {
+  if (oElement.checked) {
     idService = oElement.value;
     var url = new Url;
     url.setModuleAction("dPhospi", "httpreq_vw_aff_service");
@@ -152,11 +152,15 @@ function reloadService(oElement) {
 
 function pageMain() {
   regRedirectFlatCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
-  PairEffect.initGroup("fullService", { 
-    bStoreInCookie  : true,
-    bStartAllVisible: true,
-    sEffect         : "appear"
-  });
+
+  // PairEffect.InitGroup can't be used because it scans all DOM nodes
+  {{foreach from=$services item=curr_service}}
+  new PairEffect("service{{$curr_service->service_id}}", {
+    bStartVisible: true,
+    sEffect: "appear",
+    sCookieName: "fullService"
+  } );
+  {{/foreach}}
 }
 
 </script>

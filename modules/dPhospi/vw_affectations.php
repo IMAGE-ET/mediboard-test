@@ -29,7 +29,7 @@ function &getCachedPraticien($praticien_id) {
   if (!array_key_exists($praticien_id, $listPraticiens)) {
     $praticien = new CMediusers;
     $praticien->load($praticien_id);
-    $praticien->_ref_function =& getCachedFunctions($praticien->function_id);
+    $praticien->_ref_function =& getCachedFunction($praticien->function_id);
     $listPraticiens[$praticien_id] =& $praticien;
   }
   
@@ -40,7 +40,7 @@ function &getCachedPraticien($praticien_id) {
  * Retourne une référence sur une fonction donnée, 
  * après mise en cache si nécessaire
  */
-function &getCachedFunctions($function_id) {
+function &getCachedFunction($function_id) {
   static $listFunctions = array();
   
   if (!array_key_exists($function_id, $listFunctions)) {
@@ -53,26 +53,36 @@ function &getCachedFunctions($function_id) {
 }
 
 /**
+ * Retourne une référence sur un patient donné, 
+ * après mise en cache si nécessaire
+ */
+function &getCachedPatient($patient_id) {
+  static $listPatients = array();
+  
+  if (!array_key_exists($patient_id, $listPatients)) {
+    $patient = new CPatient;
+    $patient->load($patient_id);
+    $listPatients[$patient_id] =& $patient;
+  } 
+  
+  return $listPatients[$patient_id];  
+}
+
+/**
  * Retourne une référence sur un lit donné, 
  * après mise en cache si nécessaire
  */
-function &getCachedLits($lit_id) {
+function &getCachedLit($lit_id) {
   static $listLits = array();
   
   if (!array_key_exists($lit_id, $listLits)) {
     $lit = new CLit;
     $lit->load($lit_id);
-    $lit->loadRefChambre();
     $listLits[$lit_id] =& $lit;
   }
-    
+
   return $listLits[$lit_id];  
 }
-
-
-// Initialisation de la liste des chirs, patients et plagesop
-global $listPats;
-$listPats = array();
 
 // Récupération du service à ajouter/éditer
 $totalLits = 0;
@@ -85,10 +95,12 @@ $services = $services->loadList($where);
 
 // Affichage ou non des services
 $vwService = array();
-$vwServiceCookie = mbGetValueFromCookie("fullService", null);
+$vwServiceCookie = mbGetValueFromCookie("fullService");
+
 foreach ($services as $curr_service_id => $curr_service) {
   $vwService[$curr_service_id] = 1;
 }
+
 if($vwServiceCookie) {
   $vwServiceCookieArray = explode("@", $vwServiceCookie);
   mbRemoveValuesInArray("", $vwServiceCookieArray);
@@ -121,25 +133,19 @@ foreach ($services as $service_id => $service) {
   
             $aff_prev =& $affectations[$affectation_id]->_ref_prev;
             if ($aff_prev->affectation_id) {
-              $aff_prev->_ref_lit =& getCachedLits($aff_prev->lit_id);
+              $aff_prev->_ref_lit =& getCachedLit($aff_prev->lit_id);
             }
   
             $aff_next =& $affectations[$affectation_id]->_ref_next;
             if ($aff_next->affectation_id) {
-              $aff_next->_ref_lit =& getCachedLits($aff_next->lit_id);
+              $aff_next->_ref_lit =& getCachedLit($aff_next->lit_id);
             }
   
             $sejour =& $affectations[$affectation_id]->_ref_sejour;
             $sejour->loadRefsOperations();
             $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
+            $sejour->_ref_patient =& getCachedPatient($sejour->patient_id);
 
-            if(isset($listPats[$sejour->patient_id])) {
-              $sejour->_ref_patient =& $listPats[$sejour->patient_id];
-            }
-            else {
-              $sejour->loadRefPatient();
-              $listPats[$sejour->patient_id] =& $sejour->_ref_patient;
-            }
             foreach($sejour->_ref_operations as $operation_id => $curr_operation) {
               $sejour->_ref_operations[$operation_id]->loadRefCCAM();
             }
@@ -160,7 +166,7 @@ foreach ($services as $service_id => $service) {
 
 // Récupération des admissions à affecter
 function loadSejourNonAffectes($where) {
-  global $listPats, $g;
+  global $g;
   
   $leftjoin = array(
     "affectation"     => "sejour.sejour_id = affectation.sejour_id",
@@ -178,15 +184,8 @@ function loadSejourNonAffectes($where) {
     $sejour =& $sejourNonAffectes[$keySejour];
 
     $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
+    $sejour->_ref_patient   =& getCachedPatient($sejour->patient_id);
      
-    // Chargement optimisé du patient
-    if (array_key_exists($sejour->patient_id, $listPats)) {
-      $sejour->_ref_patient =& $listPats[$sejour->patient_id];
-    } else {
-      $sejour->loadRefPatient();
-      $listPats[$sejour->patient_id] =& $sejour->_ref_patient;
-    }
-
     // Chargement des opérations
     $sejour->loadRefsOperations();
     foreach($sejour->_ref_operations as $keyOp => $valueOp) {
