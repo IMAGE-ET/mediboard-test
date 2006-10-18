@@ -138,12 +138,12 @@ if($AppUI->doLogin()) {
 $m = $AppUI->checkFileName(mbGetValueFromGet("m", 0));
 if(!$m) {
   // Select the default module
-  $firstmodule = CPermModule::getVisibleModule();
-  $pref_module = CModule::getVisible($AppUI->getPref("DEFMODULE"));
-  if(CPermModule::getViewModule($pref_module->mod_name, PERM_READ)) {
-    $m = $pref_module->mod_name;
+  $first_module = CPermModule::getVisibleModule();
+  $pref_module = $AppUI->getPref("DEFMODULE");
+  if(CPermModule::getViewModule(CModule::getInstalled($pref_module)->mod_id, PERM_READ)) {
+    $m = $pref_module;
   } else {
-    $m = $firstmodule;
+    $m = $first_module;
   }
 }
 $a     = $AppUI->checkFileName(mbGetValueFromGet("a"     , "index"));
