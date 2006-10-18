@@ -125,15 +125,16 @@ Object.extend(PairEffect, {
   // Initialize a whole group giving the className for all targets
   initGroup: function(sTargetsClass, oOptions) {
     var oDefaultOptions = {
-      idStartVisible : null, // Forces one element to start visible
-      sCookieName: sTargetsClass
+      idStartVisible   : null, // Forces one element to start visible
+      bStartAllVisible : false,
+      sCookieName      : sTargetsClass
     }
     
     oDefaultOptions.extend(oOptions);
     
     document.getElementsByClassName(sTargetsClass).each( 
       function(oElement) {
-        oDefaultOptions.bStartVisible = oElement.id == oDefaultOptions.idStartVisible;
+        oDefaultOptions.bStartVisible = oDefaultOptions.bStartAllVisible || (oElement.id == oDefaultOptions.idStartVisible);
         new PairEffect(oElement.id, oDefaultOptions);
       }
     );

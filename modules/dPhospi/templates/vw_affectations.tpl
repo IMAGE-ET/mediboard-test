@@ -143,8 +143,8 @@ var serviceToReload = 0;
 
 function chgVwService(oElement) {
   var oForm          = document.listServiceVw;
-  serviceToReload = oElement.value;
-  var sTargetName = "vwService[" + serviceToReload + "]";
+  serviceToReload    = oElement.value;
+  var sTargetName    = "vwService[" + serviceToReload + "]";
   var oTargetElement = oForm.elements[sTargetName];
   if(oElement.checked) {
     oTargetElement.value="1";
@@ -164,6 +164,11 @@ function reloadService() {
 
 function pageMain() {
   regRedirectFlatCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+  PairEffect.initGroup("fullService", { 
+    bStoreInCookie  : true,
+    bStartAllVisible: true,
+    sEffect         : "appear"
+  });
 }
 
 </script>
@@ -184,6 +189,15 @@ function pageMain() {
     <td>
       <a href="javascript:showLegend()" class="buttonsearch">Légende</a>
     </td>
+    <td>
+      {{foreach from=$services item=curr_service}}
+        <input type="checkbox" name="service{{$curr_service->service_id}}"
+        id="service{{$curr_service->service_id}}-trigger"
+        value="{{$curr_service->service_id}}" onchange="chgVwService(this);"
+        {{if $curr_service->_vwService}}checked="checked"{{/if}} />
+        {{$curr_service->nom}}
+      {{/foreach}}
+    </td>
     <th>
       Planning du {{$date|date_format:"%A %d %B %Y"}} : {{$totalLits}} place(s) de libre
     </th>
@@ -200,7 +214,7 @@ function pageMain() {
   </tr>
 
   <tr>
-    <td class="greedyPane" colspan="2">
+    <td class="greedyPane" colspan="3">
       <form name="listServiceVw" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
         <input type="hidden" name="m" value="dPhospi" />
         <input type="hidden" name="dosql" value="do_services_vw_modify" />
@@ -211,19 +225,7 @@ function pageMain() {
       <table class="tbl">
         <tr>
         {{foreach from=$services item=curr_service}}
-          <th>
-            <input type="checkbox" name="service{{$curr_service->service_id}}" value="{{$curr_service->service_id}}" style="float:right"
-            onchange="chgVwService(this);" {{if $curr_service->_vwService}}checked="checked"{{/if}}/>
-            {{$curr_service->nom}}
-            {{if $curr_service->_vwService}}
-            / {{$curr_service->_nb_lits_dispo}} lit(s) dispo
-            {{/if}}
-          </th>
-        {{/foreach}}
-        </tr>
-        <tr>
-        {{foreach from=$services item=curr_service}}
-          <td id="service{{$curr_service->service_id}}">
+          <td class="fullService" id="service{{$curr_service->service_id}}">
           {{include file="inc_affectations_services.tpl"}}
           </td>
         {{/foreach}}
