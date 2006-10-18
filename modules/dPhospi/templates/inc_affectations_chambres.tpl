@@ -2,6 +2,12 @@
           <tr>
             <th class="chambre" colspan="2" onclick="javascript:flipChambre({{$curr_chambre->chambre_id}});
                 {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
+                Droppables.add('lit{{$curr_lit->lit_id}}', { 
+                  onDrop:function(element){
+                    DragDropSejour(element.id,{{$curr_lit->lit_id}})
+                  }, 
+                  hoverclass:'litselected'
+                });
                 {{foreach from=$curr_lit->_ref_affectations item=curr_aff}}
                 setupCalendar({{$curr_aff->affectation_id}});
                 {{/foreach}}

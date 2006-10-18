@@ -187,7 +187,9 @@ function pageMain() {
           onchange="reloadService(this);"
           {{if $curr_service->_vwService}}checked="checked"{{/if}}
         />
-        {{$curr_service->nom}}
+        <label for="service{{$curr_service->service_id}}" title="Afficher le service {{$curr_service->nom}}">
+          {{$curr_service->nom}}
+        </label>
       {{/foreach}}
     </td>
     <th>
