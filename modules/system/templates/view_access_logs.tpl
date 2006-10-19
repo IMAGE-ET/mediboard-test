@@ -40,7 +40,7 @@ function pageMain() {
     <select name="groupmod" onchange="this.form.submit()">
       <option value="0"{{if $groupmod == 0}}selected="selected"{{/if}}>Pas de regroupement</option>
       <option value="1"{{if $groupmod == 1}}selected="selected"{{/if}}>Regrouper par module</option>
-      <option value="2"{{if $groupmod == 2}}selected="selected"{{/if}}>Regrouper toute la journée</option>
+      <option value="2"{{if $groupmod == 2}}selected="selected"{{/if}}>Regrouper tout</option>
     </select>
     {{if $groupmod == 0}}
     &gt;

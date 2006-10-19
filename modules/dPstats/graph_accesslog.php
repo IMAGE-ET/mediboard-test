@@ -40,6 +40,7 @@ switch($interval) {
     $endx   = "$date 23:59:59";
     $step = "+1 WEEK";
     $date_format = "%U";
+    break;
 }
 
 for($i = $startx; $i <= $endx; $i = mbDateTime($step, $i)) {
@@ -48,19 +49,19 @@ for($i = $startx; $i <= $endx; $i = mbDateTime($step, $i)) {
 
 $logs = new CAccessLog();
 
-$sql = "SELECT accesslog_id, module, action, period," .
-      "\nSUM(hits) AS hits, SUM(duration) AS duration, SUM(request) AS request," .
-      "\nDATE_FORMAT(period, '$date_format') AS gperiod" .
-      "\nFROM access_log" .
-      "\nWHERE DATE(period) BETWEEN '".mbDate($startx)."' AND '".mbDate($endx)."'";
+$sql = "SELECT `accesslog_id`, `module`, `action`, `period`," .
+      "\nSUM(`hits`) AS `hits`, SUM(`duration`) AS `duration`, SUM(`request`) AS `request`," .
+      "\nDATE_FORMAT(`period`, '$date_format') AS `gperiod`" .
+      "\nFROM `access_log`" .
+      "\nWHERE DATE(`period`) BETWEEN '".mbDate($startx)."' AND '".mbDate($endx)."'";
 if($module) {
-  $sql .= "\nAND module = '$module'";
+  $sql .= "\nAND `module` = '$module'";
 }
 if($actionName) {
-  $sql .= "\nAND action = '$actionName'";
+  $sql .= "\nAND `action` = '$actionName'";
 }
-$sql .= "\nGROUP BY gperiod" .
-    "\nORDER BY period";
+$sql .= "\nGROUP BY `gperiod`" .
+    "\nORDER BY `period`";
 
 $logs = db_loadObjectList($sql, $logs);
 
