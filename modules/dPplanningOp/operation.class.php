@@ -148,28 +148,6 @@ class COperation extends CMbObject {
     return $msg . parent::check();
   }
 
-  // Only use when current operation is deleted or canceled
-  function reorder() {
-    $this->loadRefPlageOp();
-    $where = array();
-    $where["plageop_id"]   = " = '$this->plageop_id'";
-    $where["rank"]         = "!= '0'";
-    $where["operation_id"] = "!= '$this->operation_id'";
-    $order = "rank";
-    $operations = $this->loadList($where, $order);
-    $new_time = $this->_ref_plageop->debut;
-    $i = 1;
-    foreach ($operations as $keyOp => $op) {
-      $operations[$keyOp]->rank = $i;
-      $operations[$keyOp]->time_operation = $new_time;
-      $operations[$keyOp]->store();
-      $new_time = mbAddTime($op->temp_operation, $new_time);
-      $new_time = mbAddTime($this->_ref_plageop->temps_inter_op, $new_time);
-      $new_time = mbAddTime($op->pause, $new_time);
-      $i++;
-    }
-  }
-
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
       "label"     => "acte(s) CCAM", 
@@ -203,10 +181,9 @@ class COperation extends CMbObject {
   }
   
   function delete() {
-    // Re-numérotation des autres opérations de la même plage
-    if ($this->rank)
-  	  $this->reorder();
     $msg = parent::delete();
+    $this->loadRefPlageOp();
+    $this->_ref_plageop->reorderOp();
     return $msg;
   }
   
