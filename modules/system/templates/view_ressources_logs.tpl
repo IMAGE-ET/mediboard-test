@@ -65,7 +65,7 @@ function pageMain() {
       {{/if}}
         <td class="button">
           {{if $groupres == 1}}
-          <a href="javascript:zoom('{{$date}}', 0, '{{$element}}', '{{$interval}}', '{{$numeleme}}')" title="Agrandir">
+          <a href="javascript:zoom('{{$date}}', 0, '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
             <img src="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" alt="Graphique pour la journée" />
           </a>
           {{else}}
