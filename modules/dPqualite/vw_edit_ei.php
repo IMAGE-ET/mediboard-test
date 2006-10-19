@@ -15,7 +15,9 @@ if (!$canAdmin) {
 }
 
 $ei_categorie_id = mbGetValueFromGetOrSession("ei_categorie_id",0);
-$ei_item_id = mbGetValueFromGetOrSession("ei_item_id",0);
+$ei_item_id      = mbGetValueFromGetOrSession("ei_item_id",0);
+$vue_item        = mbGetValueFromGetOrSession("vue_item",0);
+
 
 // Catégorie demandée
 $categorie = new CEiCategorie;
@@ -45,7 +47,11 @@ $listCategories = $listCategories->loadList(null,"nom");
 
 // Liste des Items
 $listItems = new CEiItem;
-$listItems = $listItems->loadList(null,"nom");
+$where = null;
+if($vue_item){
+  $where = "ei_categorie_id = '$vue_item'";
+}
+$listItems = $listItems->loadList($where,"ei_categorie_id, nom");
 foreach($listItems as $key => $value) {
   $listItems[$key]->loadRefsFwd();
 }
@@ -57,6 +63,7 @@ $smarty->assign("categorie"      , $categorie);
 $smarty->assign("item"           , $item);
 $smarty->assign("listCategories" , $listCategories);
 $smarty->assign("listItems"      , $listItems);
+$smarty->assign("vue_item"       , $vue_item);
 
 $smarty->display("vw_edit_ei.tpl"); 
 ?>

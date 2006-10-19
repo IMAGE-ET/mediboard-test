@@ -16,6 +16,6 @@ $module->registerTab("vw_edit_classification", "Classifications"            , TA
 $module->registerTab("vw_modeles"            , "Modèles"                    , TAB_EDIT);
 $module->registerTab("vw_edit_ei"            , "Gestion des Evenements"     , TAB_ADMIN);
 $module->registerTab("vw_incident"           , "Nouvel Incident"            , TAB_READ);
-$module->registerTab("vw_incidentvalid"      , "Fiches Incidents"           , TAB_EDIT);
+$module->registerTab("vw_incidentvalid"      , "Fiches Incidents"           , TAB_READ);
 
 ?>

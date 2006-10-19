@@ -1,9 +1,20 @@
 <script type="text/javascript">
 
+function choixSuiteEven(){
+  var oForm = document.FrmEI;
+  if(oForm.suite_even.value=="autre"){
+    $('suiteEvenAutre').show();
+    oForm.suite_even_descr.title="{{$fiche->_props.suite_even_descr}}|notNull";
+  }else{
+    $('suiteEvenAutre').hide();
+    oForm.suite_even_descr.title="{{$fiche->_props.suite_even_descr}}";
+  }
+}
+
 function viewItems(iCategorie){
   var oForm = document.FrmEI;
-  $('Items' + oForm._elemOpen.value).style.display = "none";
-  $('Items' + iCategorie).style.display = "";
+  $('Items' + oForm._elemOpen.value).hide();
+  $('Items' + iCategorie).show();
   oForm._elemOpen.value = iCategorie;
 }
 
@@ -79,11 +90,40 @@ function pageMain() {
       <form name="FrmEI" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_ficheEi_aed" />
       <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="del" value="0" /> 
-      <input type="hidden" name="user_id" value="{{if $fiche->fiche_ei_id}}{{$fiche->user_id}}{{else}}{{$user_id}}{{/if}}" />    
+      <input type="hidden" name="del" value="0" />       
       <input type="hidden" name="fiche_ei_id" value="{{$fiche->fiche_ei_id}}" />
     
       <table class="form">
+        {{if $canAdmin}}
+        <tr>
+          <th colspan="2">
+            <label for="user_id" title="Auteur de la fiche">Auteur de la fiche</label>
+          </th>
+          <td colspan="2">
+            <select name="user_id" title="{{$fiche->_props.user_id}}">
+              {{foreach from=$listFct item=currFct key=keyFct}}
+              {{if $aUsers.$keyFct|@count}}
+              <optgroup label="{{$currFct->_view}}">
+                {{foreach from=$aUsers.$keyFct item=currUser}}
+                <option value="{{$currUser->user_id}}" 
+                {{if ($fiche->fiche_ei_id && $fiche->user_id==$currUser->user_id)
+                      || (!$fiche->fiche_ei_id && $user_id==$currUser->user_id)}}
+                  selected="selected"
+                {{/if}}
+                >
+                  {{$currUser->_view}}
+                </option>
+                {{/foreach}}
+              </optgroup>
+              {{/if}}
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
+        {{else}}
+        <input type="hidden" name="user_id" value="{{if $fiche->fiche_ei_id}}{{$fiche->user_id}}{{else}}{{$user_id}}{{/if}}" />
+        {{/if}}
+        
         <tr>
           {{if $fiche->fiche_ei_id}}
           <th colspan="4" class="title" style="color:#f00;">
@@ -91,7 +131,7 @@ function pageMain() {
           {{else}}
           <th colspan="4" class="title">
           {{/if}}
-            Fiche d'Incident Prévention - Gestion des Riques
+            Fiche d'Incident Prévention - Gestion des Risques
           </th>
         </tr>
         
@@ -138,14 +178,14 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="elem_concerne_detail" title="Détails concernant l'objet ou la personne concerné">
-              Détails
+            <label for="elem_concerne_detail" title="Précision concernant l'objet ou la personne concerné">
+              Précisez
             </label>
           </th>
           <td>
             <textarea name="elem_concerne_detail" title="{{$fiche->_props.elem_concerne_detail}}">{{$fiche->elem_concerne_detail}}</textarea>
           </td>
-          <th><label for="lieu" title="Veuillez saisir le lieu de l'événement">Lieu</label></th>
+          <th><label for="lieu" title="Veuillez saisir le service ou à eu lieu l'événement">Service</label></th>
           <td>
             <input type="text" name="lieu" title="{{$fiche->_props.lieu}}" value="{{$fiche->lieu}}" />
           </td>
@@ -154,12 +194,12 @@ function pageMain() {
           <th colspan="4" class="category"><label for="evenements" title="Veuillez choisir ce qui décrit le mieux l'événement">Description de l'événement</label></th>
         </tr>
 
-        <tr style="height:1%;">
+        <tr>
           <td colspan="2"rowspan="2" class="halfPane" id="listChoix"></td>
           <th>
             <label for="_cat_evenement" title="Veuillez Sélectionner un catégorie d'événement">Catégorie d'événement</label>
           </th>
-          <td>
+          <td style="height:1%;">
             <input type="hidden" name="evenements" title="{{$fiche->_props.evenements}}" value="{{$fiche->evenements}}"/>
             <input type="hidden" name="_elemOpen" value="{{$firstdiv}}" />
             <select name="_cat_evenement" onchange="javascript:viewItems(this.value);">
@@ -171,40 +211,37 @@ function pageMain() {
             </select>
           </td>
         </tr>
-        {{foreach from=$listCategories item=curr_evenement}}        
-        <tr id="Items{{$curr_evenement->ei_categorie_id}}" {{if $curr_evenement->ei_categorie_id!=$firstdiv}}style="display:none;"{{/if}}>
-          <td colspan="2">
-            <input type="hidden" name="_ItemsSel_cat_{{$curr_evenement->ei_categorie_id}}" value="{{$curr_evenement->checked}}" />
-            <table class="tbl">
-            {{counter start=0 skip=1 assign=curr_data}}
-            {{foreach name=itemEvenement from=$curr_evenement->_ref_items item=curr_item}}
-            {{if $curr_data is div by 3 || $curr_data==0}}
-            <tr>
-            {{/if}}
-              <td class="text">
-                <input type="checkbox" name="{{$curr_item->ei_item_id}}" onchange="javascript:checkCode(this);" {{if $curr_item->checked}}checked="checked"{{/if}}/><label for="{{$curr_item->ei_item_id}}" id="titleItem{{$curr_item->ei_item_id}}" title="{{$curr_item->nom}}">{{$curr_item->nom}}</label>
-              </td>
-            {{if (($curr_data+1) is div by 3 || $smarty.foreach.itemEvenement.last)}}
-            </tr>
-            {{/if}}
-            {{counter}}
-            {{foreachelse}}
-            <tr>
-              <td>
-                Pas d'Item dans cette catégorie
-              </td>
-            </tr>
-            {{/foreach}}
-            </table>
-          </td>
-        </tr>
-        {{foreachelse}}
         <tr>
          <td colspan="2">
+           {{foreach from=$listCategories item=curr_evenement}}
+           <input type="hidden" name="_ItemsSel_cat_{{$curr_evenement->ei_categorie_id}}" value="{{$curr_evenement->checked}}" />
+           <table class="tbl" id="Items{{$curr_evenement->ei_categorie_id}}" {{if $curr_evenement->ei_categorie_id!=$firstdiv}}style="display:none;"{{/if}}>
+             {{counter start=0 skip=1 assign=curr_data}}
+             {{foreach name=itemEvenement from=$curr_evenement->_ref_items item=curr_item}}
+             {{if $curr_data is div by 3 || $curr_data==0}}
+             <tr>
+             {{/if}}
+               <td class="text">
+                 <input type="checkbox" name="{{$curr_item->ei_item_id}}" onclick="javascript:checkCode(this);" {{if $curr_item->checked}}checked="checked"{{/if}}/><label for="{{$curr_item->ei_item_id}}" id="titleItem{{$curr_item->ei_item_id}}" title="{{$curr_item->nom}}">{{$curr_item->nom}}</label>
+               </td>
+             {{if (($curr_data+1) is div by 3 || $smarty.foreach.itemEvenement.last)}}
+             </tr>
+             {{/if}}
+             {{counter}}
+             {{foreachelse}}
+             <tr>
+               <td>
+                 Pas d'Item dans cette catégorie
+               </td>
+             </tr>
+             {{/foreach}}
+           </table>
+           {{foreachelse}}
            Aucun Item disponible
+           {{/foreach}}
          </td>
-        </tr>
-        {{/foreach}}
+       </tr>
+
         <tr>
           <th colspan="4" class="category">Informations complémentaires</th>
         </tr>
@@ -262,10 +299,20 @@ function pageMain() {
           </td>
           <th><label for="suite_even" title="Veuillez choisir la suite de l'évènement">Suite de l'évènement</label></th>
           <td>
-            <select name="suite_even" title="{{$fiche->_props.suite_even}}">
+            <select name="suite_even" title="{{$fiche->_props.suite_even}}" onchange="javascript:choixSuiteEven();">
               <option value=""{{if $fiche->suite_even===null}} selected="selected"{{/if}}>&mdash;Veuillez Choisir &mdash;</option>
               {{html_options options=$fiche->_enumsTrans.suite_even selected=$fiche->suite_even}}
             </select>
+            <table id="suiteEvenAutre" style="width:100%;{{if $fiche->suite_even!="autre"}}display:none;{{/if}}">
+            <tr>
+              <td><label for="suite_even_descr" title="Précisez les suite de l'évènement">Précisez :</label></td>
+            </tr>
+            <tr>
+              <td>
+                <textarea name="suite_even_descr" title="{{$fiche->_props.suite_even_descr}}{{if $fiche->suite_even=="autre"}}|notNull{{/if}}">{{$fiche->suite_even_descr}}</textarea>
+              </td>
+            </tr>
+            </table>
           </td>
         </tr>
         <tr>

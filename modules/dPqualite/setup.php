@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]    = "dPqualite";
-$config["mod_version"] = "0.12";
+$config["mod_version"] = "0.13";
 $config["mod_type"]    = "user";
 $config["mod_config"]  = true;
 
@@ -161,7 +161,10 @@ class CSetupdPqualite {
                                      "\nADD `remarques` TEXT DEFAULT NULL;";
         db_exec( $sql ); db_error();
       case "0.12":     
-        return "0.12";
+        $sql = "ALTER TABLE `fiches_ei` ADD `suite_even_descr` TEXT DEFAULT NULL AFTER `suite_even`;";
+        db_exec( $sql ); db_error();
+      case "0.13":     
+        return "0.13";
     }
     return false;
   }

@@ -15,13 +15,32 @@ if (!$canRead) {
 
 $fiche_ei_id = mbGetValueFromGet("fiche_ei_id",0);
 
-
-$fiche = new CFicheEi;
+$fiche  = new CFicheEi;
+$aUsers = array();
+$listFct = new CFunctions();
 
 if($canAdmin && $fiche_ei_id){
   // Droit admin et edition de fiche
   $fiche->load($fiche_ei_id);
 }
+
+// Chargement des Utilisateurs
+if($canAdmin){
+  $listFct = $listFct->loadList(null, "text");
+
+  $listUsers = new CMediusers;
+  $listUsers = $listUsers->loadListFromType();
+
+  foreach($listUsers as $valueUser){
+    $aUsers[$valueUser->function_id][] = $valueUser;
+  }
+  foreach($listFct as $keyFct=>$valueFct){
+  	if(!isset($aUsers[$keyFct])){
+  		unset($listFct[$keyFct]);
+  	}
+  }
+}
+
 $fiche->loadRefsFwd();
 if(!$fiche->_ref_evenement){
   $fiche->_ref_evenement = array();
@@ -74,6 +93,7 @@ $smarty->assign("fiche"          , $fiche);
 $smarty->assign("firstdiv"       , $firstdiv);
 $smarty->assign("user_id"        , $AppUI->user_id);
 $smarty->assign("listCategories" , $listCategories);
-
+$smarty->assign("aUsers"         , $aUsers);
+$smarty->assign("listFct"        , $listFct);
 $smarty->display("vw_incident.tpl");
 ?>

@@ -44,6 +44,7 @@ class CFicheEi extends CMbObject {
   var $qualite_date_verification  = null;
   var $qualite_date_controle      = null;
   var $suite_even                 = null;
+  var $suite_even_descr           = null;
   var $annulee                    = null;
   var $remarques                  = null;
   
@@ -83,6 +84,7 @@ class CFicheEi extends CMbObject {
       "descr_consequences"           => "text|notNull",
       "gravite"                      => "enum|nul|mod|imp|notNull",
       "suite_even"                   => "enum|trans|plong|deces|autre|notNull",
+      "suite_even_descr"             => "text",
       "plainte"                      => "enum|non|oui|notNull",
       "commission"                   => "enum|non|oui|notNull",
       "deja_survenu"                 => "enum|non|oui",
@@ -105,11 +107,15 @@ class CFicheEi extends CMbObject {
     );
   }
   
-  function loadRefsFwd() {
-    // Forward references
+  function loadRefsAuthor(){
     $this->_ref_user = new CMediusers;
     $this->_ref_user->load($this->user_id);
     $this->_ref_user->loadRefFunction();
+  }
+  
+  function loadRefsFwd() {
+    // Forward references
+    $this->loadRefsAuthor();
     
     $this->_ref_user_valid = new CMediusers;
     if($this->valid_user_id){
@@ -140,6 +146,8 @@ class CFicheEi extends CMbObject {
       $this->_etat_actuel = "Att. de Validation du Chef de Service";
     }elseif(!$this->qualite_user_id){
     	$this->_etat_actuel = "Att. de Validation Qualité";
+    }elseif(!$this->qualite_date_validation){
+      $this->_etat_actuel = "Att. de Validation des mesures";
     }elseif(!$this->qualite_date_verification){
       $this->_etat_actuel = "Att. de Vérification";
     }elseif(!$this->qualite_date_controle){
@@ -168,6 +176,66 @@ class CFicheEi extends CMbObject {
   function canDelete(&$msg, $oid = null) {
     $msg = "Il n'est pas possible de supprimer une fiche d'EI.";
     return false;
+  }
+  
+  function loadFichesEtat($etat,$user_id = null, $where_termine = null, $annule = 0){
+    $where = array();
+    $where["annulee"] = "= '$annule'";
+    $limit = null;
+    
+    switch ($etat) {
+      case "AUTHOR":
+        $where["user_id"] = "= '$user_id'";
+        break;
+      case "VALID_FICHE":
+        $where["date_validation"] = " IS NULL";
+        break;
+      case "ATT_CS":
+        $where["date_validation"]         = " IS NOT NULL";
+        $where["service_date_validation"] = " IS NULL";
+        if($user_id){
+          $where["service_valid_user_id"]   = "= '$user_id'";
+        }
+        break;
+      case "ATT_QUALITE":
+        $where["service_date_validation"] = " IS NOT NULL";
+        $where["qualite_date_validation"] = " IS NULL";
+        if($user_id){
+          $where["service_valid_user_id"]   = "= '$user_id'";
+        }
+        break;
+      case "ATT_VERIF":
+        $where["qualite_date_validation"]   = " IS NOT NULL";
+        $where["qualite_date_verification"] = " IS NULL";
+        break;
+      case "ATT_CTRL":
+        $where["qualite_date_verification"] = " IS NOT NULL";
+        $where["qualite_date_controle"]     = " IS NULL";
+        break;
+      case "ALL_TERM":
+        //
+        if($user_id){
+          $where["service_valid_user_id"]   = "= '$user_id'";
+          $where["qualite_date_validation"] = " IS NOT NULL";
+        }else{
+          if($where_termine){
+            $where = array_merge($where,$where_termine);
+          }
+          $where["qualite_date_controle"]     = " IS NOT NULL";
+        }
+        $limit = "0, 100";
+        break;
+      case "ANNULE":
+        $where["annulee"] = "= '1'";
+        break;
+    }
+    $order = "date_incident DESC";
+    $listFiches = new CFicheEi;
+    $listFiches = $listFiches->loadList($where,$order,$limit);
+    foreach($listFiches as $key=>$value){
+      $listFiches[$key]->loadRefsAuthor();
+    }
+    return $listFiches;
   }
 }
 ?>

@@ -16,23 +16,21 @@
       </a>
       <table class="tbl">
         <tr>
-          <th>id</th>
           <th>Nom</th>
           <th>Code</th>
         </tr>
         {{foreach from=$listChapitres item=curr_chapitre}}
         <tr>
-          <td>
-            <a href="index.php?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_chapitre_id={{$curr_chapitre->doc_chapitre_id}}" title="Modifier le chapitre">
-              {{$curr_chapitre->doc_chapitre_id}}
-            </a>
-          </td>
           <td class="text">
             <a href="index.php?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_chapitre_id={{$curr_chapitre->doc_chapitre_id}}" title="Modifier le chapitre">
               {{$curr_chapitre->nom}}
             </a>
           </td>
-          <td class="text">{{$curr_chapitre->code}}</td>
+          <td class="text">
+            <a href="index.php?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_chapitre_id={{$curr_chapitre->doc_chapitre_id}}" title="Modifier le chapitre">
+              {{$curr_chapitre->code}}
+            </a>
+          </td>
         </tr>
         {{/foreach}}        
       </table>

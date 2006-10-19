@@ -1,34 +1,3 @@
-<table class="tbl">
-  <tr>
-    <th>id</th>
-    <th>Nom</th>
-    <th>Catégorie</th>
-  </tr>
-  {{foreach from=$listItems item=curr_item}}
-  <tr>
-    <td>
-      <a href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_item_id={{$curr_item->ei_item_id}}" title="Modifier l'item">
-        {{$curr_item->ei_item_id}}
-      </a>
-    </td>
-    <td class="text">
-      <a href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_item_id={{$curr_item->ei_item_id}}" title="Modifier l'item">
-        {{$curr_item->nom}}
-      </a>
-    </td>
-    <td class="text">
-      {{$curr_item->_ref_categorie->nom}}
-    </td>
-  </tr>
-  {{foreachelse}}
-  <tr>
-    <td colspan="3">
-      Actuellement, il n'y a aucun Item.
-    </td>
-  </tr>
-  {{/foreach}}
-</table><br />
-
 {{if $item->ei_item_id}}
 <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_item_id=0">
   Créer un nouvel Item
@@ -84,3 +53,41 @@
   </tr>  
 </table>
 </form>
+<br />
+
+<table class="tbl">
+  <tr>
+    <th>Nom</th>
+    <th>
+      <form name="chgMode" action="?m={{$m}}" method="get">
+      <input type="hidden" name="m" value="{{$m}}" />
+      <select name="vue_item" onchange="submit()">
+        <option value="">&mdash; Toute les Catégories</option>
+        {{foreach from=$listCategories item=curr_cat}}        
+          <option value="{{$curr_cat->ei_categorie_id}}"{{if $curr_cat->ei_categorie_id==$vue_item}} selected="selected"{{/if}}>
+            {{$curr_cat->nom}}
+          </option>
+        {{/foreach}}
+      </select>
+      </form>
+    </th>
+  </tr>
+  {{foreach from=$listItems item=curr_item}}
+  <tr>
+    <td class="text">
+      <a href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_item_id={{$curr_item->ei_item_id}}" title="Modifier l'item">
+        {{$curr_item->nom}}
+      </a>
+    </td>
+    <td class="text">
+      {{$curr_item->_ref_categorie->nom}}
+    </td>
+  </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="3">
+      Actuellement, il n'y a aucun Item.
+    </td>
+  </tr>
+  {{/foreach}}
+</table>

@@ -1,30 +1,3 @@
-<table class="tbl">
-  <tr>
-    <th>id</th>
-    <th>Nom</th>
-  </tr>
-  {{foreach from=$listCategories item=curr_cat}}
-  <tr>
-    <td>
-      <a href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id={{$curr_cat->ei_categorie_id}}" title="Modifier la catégorie">
-        {{$curr_cat->ei_categorie_id}}
-      </a>
-    </td>
-    <td class="text">
-      <a href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id={{$curr_cat->ei_categorie_id}}" title="Modifier la catégorie">
-        {{$curr_cat->nom}}
-      </a>
-    </td>
-  </tr>
-  {{foreachelse}}
-  <tr>
-    <td colspan="2">
-      Actuellement, il n'y a aucune catégorie.
-    </td>
-  </tr>
-  {{/foreach}}
-</table><br />
-
 {{if $categorie->ei_categorie_id}}
 <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id=0">
   Créer une nouvelle Catégorie
@@ -65,3 +38,24 @@
   </tr>  
 </table>
 </form>
+<br />
+<table class="tbl">
+  <tr>
+    <th>Nom</th>
+  </tr>
+  {{foreach from=$listCategories item=curr_cat}}
+  <tr>
+    <td class="text">
+      <a href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id={{$curr_cat->ei_categorie_id}}" title="Modifier la catégorie">
+        {{$curr_cat->nom}}
+      </a>
+    </td>
+  </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="2">
+      Actuellement, il n'y a aucune catégorie.
+    </td>
+  </tr>
+  {{/foreach}}
+</table>

@@ -1,4 +1,36 @@
 <script language="Javascript" type="text/javascript">
+{{if $canEdit}}
+var oCookie = new CJL_CookieUtil("EIAccordion");
+var showTabAcc = 0;
+
+if(oCookie.getSubValue("showTab")){
+  showTabAcc = oCookie.getSubValue("showTab");
+}
+
+function storeVoletAcc(objAcc){
+  var aArray = oAccord.accordionTabs;
+  for ( var i=0 ; i < aArray.length ; i++ ){
+    if(objAcc == aArray[i]){
+      oCookie.setSubValue("showTab", i.toString());
+    }
+  }
+}
+
+function writeHeader(iId, sValue){
+  $(iId).innerHTML = sValue;
+}
+{{/if}}
+
+{{if $canAdmin}}
+function search_AllEI(){
+  var oForm = document.EiALL_TERM;
+  var url = new Url;
+  url.setModuleAction("dPqualite", "httpreq_vw_allEi");
+  url.addParam("allEi_user_id", oForm.allEi_user_id.value);
+  url.requestUpdate('QualAllEIContent');
+  // , { waitingText : null }
+}
+
 function annuleFiche(oForm,annulation){
   oForm.annulee.value = annulation;
   oForm._validation.value = 1;
@@ -20,6 +52,7 @@ function saveVerifControle(oForm){
   oForm._validation.value= 1;
   oForm.submit();  
 }
+{{/if}}
 
 function printIncident(ficheId){
   var url = new Url;
@@ -39,150 +72,130 @@ function pageMain() {
 }
 {{/if}}
 </script>
+{{assign var="listeFichesTitle" value=""}}
+{{assign var="voletAcc" value=""}}
 <table class="main">
   <tr>
     <td class="halfPane">
-      {{if $listFichesAttente|@count}}
-      <table class="form">
-        <tr>
-          <th class="category" colspan="4">
-            Fiche d'EI en Attente
-          </th>
-        </tr>
-        <tr>
-          <th class="category">Date de l'événement</th>
-          <th class="category">Auteur de la fiche</th>
-        </tr>
-        {{foreach from=$listFichesAttente item=currFiche}}
-        <tr>
-          <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-              {{$currFiche->date_incident|date_format:"%A %d %B %Y à %Hh%M"}}
-            </a>
-          </td>
-          <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-              {{$currFiche->_ref_user->_view}}
-            </a>
-          </td>
-        </tr>
-        {{/foreach}}
-      </table><br /><br />
-      {{/if}}
+      {{if $canAdmin || $canEdit}}
+      <div class="accordionMain" id="accordionConsult">
+        {{if !$canAdmin}}
         
-      <table class="form">
-        <tr>
-          <th class="category" colspan="4">Fiches d'EI en cours de traitement</th>
-        </tr>
-        <tr>
-          <th class="category">Date de l'événement</th>
-          <th class="category">Auteur</th>
-          <th class="category">Urgence</th>
-          <th class="category">Etat</th>
-        </tr>        
-        {{foreach from=$listFichesEnCours item=currFiche}}
-        <tr>
-          <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-              {{$currFiche->date_incident|date_format:"%d %b %Y à %Hh%M"}}
-            </a>
-          </td>
-          <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-              {{$currFiche->_ref_user->_view}}
-            </a>
-          </td>
-          <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-              {{tr}}CFicheEi.degre_urgence.{{$currFiche->degre_urgence}}{{/tr}}
-            </a>
-          </td>
-          <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-              {{$currFiche->_etat_actuel}}
-            </a>
-          </td>
-        </tr>
-        {{foreachelse}}
-        <tr>
-          <td colspan="4">
-            Aucune Fiche traitée actuellement
-          </td>
-        </tr>
-        {{/foreach}}
-      </table>
-      
-      {{if $listFichesTermine|@count}}
-        <br />
-        {{if !$ficheTermineVisible}}
-        <a class="buttonsearch" href="index.php?m={{$m}}&amp;ficheTermineVisible=1">
-        Afficher les Fiches Terminées
-        </a><br />
+        <div id="CSATraiter">
+          <div id="CSATraiterHeader" class="accordionTabTitleBar">
+		    Fiches à Traiter ({{$listFiches.ATT_CS|@count}})
+		  </div>
+		  <div id="CSATraiterContent"  class="accordionTabContentBox">
+            {{assign var="listeFiches" value=$listFiches.ATT_CS}}
+            {{include file="inc_ei_liste.tpl"}}
+		  </div>
+		</div>
+		<div id="CSEnCours">
+          <div id="CSEnCoursHeader" class="accordionTabTitleBar">
+		    En attente de Validation du service Qualité ({{$listFiches.ATT_QUALITE|@count}})
+		  </div>
+		  <div id="CSEnCoursContent"  class="accordionTabContentBox">
+            {{assign var="listeFiches" value=$listFiches.ATT_QUALITE}}
+            {{include file="inc_ei_liste.tpl"}}
+		  </div>
+		</div>
+		
+		<div id="CSAllEI">
+          <div id="CSAllEIHeader" class="accordionTabTitleBar">
+		    Fiches d'EI Traitées ({{$listFiches.ALL_TERM|@count}})
+		  </div>
+		  <div id="CSAllEIContent"  class="accordionTabContentBox">
+            {{assign var="listeFiches" value=$listFiches.ALL_TERM}}
+            {{include file="inc_ei_liste.tpl"}}
+		  </div>
+		</div>
         {{else}}
-        <a class="buttoncancel" href="index.php?m={{$m}}&amp;ficheTermineVisible=0">
-        Cacher les Fiches Terminées
-        </a>
-        <table class="form">
-          <tr>
-            <th class="category" colspan="2">Fiches d'EI Traitées</th>
-          </tr>
-          <tr>
-            <th class="category">Fiches</th>
-            <th class="category">Auteur de la fiche</th>
-          </tr>
-          {{foreach from=$listFichesTermine item=currFiche}}
-          <tr>
-            <td class="text">
-              <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-                {{$currFiche->_view}}
-              </a>
-            </td>
-            <td class="text">
-              <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-                {{$currFiche->_ref_user->_view}}
-              </a>
-            </td>
-          </tr>
-          {{/foreach}}
-          </table>
-          {{/if}}
+        
+        <div id="QualNewFiches">
+          <div id="QualNewFichesHeader" class="accordionTabTitleBar">
+		    Nouvelles fiches à Traiter ({{$listFiches.VALID_FICHE|@count}})
+		  </div>
+		  <div id="QualNewFichesContent"  class="accordionTabContentBox">
+            {{assign var="listeFiches" value=$listFiches.VALID_FICHE}}
+            {{include file="inc_ei_liste.tpl"}}
+		  </div>
+		</div>
+		<div id="QualAttCS">
+          <div id="QualAttCSHeader" class="accordionTabTitleBar">
+		    En Attente du chef de Service ({{$listFiches.ATT_CS|@count}})
+		  </div>
+		  <div id="QualAttCSContent"  class="accordionTabContentBox">
+            {{assign var="listeFiches" value=$listFiches.ATT_CS}}
+            {{include file="inc_ei_liste.tpl"}}
+		  </div>
+		</div>
+		<div id="QualValidMesures">
+          <div id="QualValidMesuresHeader" class="accordionTabTitleBar">
+		    Mesures à valider ({{$listFiches.ATT_QUALITE|@count}})
+		  </div>
+		  <div id="QualValidMesuresContent"  class="accordionTabContentBox">
+            {{assign var="listeFiches" value=$listFiches.ATT_QUALITE}}
+            {{include file="inc_ei_liste.tpl"}}
+		  </div>
+		</div>
+		<div id="QualVerif">
+          <div id="QualVerifHeader" class="accordionTabTitleBar">
+		    Fiches en Attente de Vérification ({{$listFiches.ATT_VERIF|@count}})
+		  </div>
+		  <div id="QualVerifContent"  class="accordionTabContentBox">
+            {{assign var="listeFiches" value=$listFiches.ATT_VERIF}}
+            {{include file="inc_ei_liste.tpl"}}
+		  </div>
+		</div>
+		<div id="QualCtrl">
+          <div id="QualCtrlHeader" class="accordionTabTitleBar">
+		    Fiches en Attente de Contrôle ({{$listFiches.ATT_CTRL|@count}})
+		  </div>
+		  <div id="QualCtrlContent"  class="accordionTabContentBox">
+            {{assign var="listeFiches" value=$listFiches.ATT_CTRL}}
+            {{include file="inc_ei_liste.tpl"}}
+		  </div>
+		</div>
+		
+		<div id="QualAllEI">
+          <div id="QualAllEIHeader" class="accordionTabTitleBar">
+		    Toutes les fiches d'EI Traitées {{if $allEi_user_id}}pour {{$listUsersTermine.$allEi_user_id->_view}}{{/if}} ({{$listFiches.ALL_TERM|@count}})
+		  </div>
+		  <div id="QualAllEIContent"  class="accordionTabContentBox">
+            {{assign var="listeFiches" value=$listFiches.ALL_TERM}}
+            {{assign var="voletAcc" value="ALL_TERM"}}
+            {{include file="inc_ei_liste.tpl"}}
+            {{assign var="voletAcc" value=""}}
+		  </div>
+		</div>
+		
+		<div id="QualAnnuleEI">
+          <div id="QualAnnuleEIHeader" class="accordionTabTitleBar">
+		    Fiches d'Ei annulées ({{$listFiches.ANNULE|@count}})
+		  </div>
+		  <div id="QualAnnuleEIContent"  class="accordionTabContentBox">
+            {{assign var="listeFiches" value=$listFiches.ANNULE}}
+            {{include file="inc_ei_liste.tpl"}}
+		  </div>
+		</div>
+		
+        {{/if}}
+
+      </div>
+      <script language="Javascript" type="text/javascript">
+      var oAccord = new Rico.Accordion( $('accordionConsult'), { 
+        panelHeight: 300,
+        showDelay:50,
+        onShowTab: storeVoletAcc,
+        showSteps:3,
+        onLoadShowTab: showTabAcc
+      } );
+      </script>
       {{/if}}
-      
-      {{if $listFichesAnnulees|@count}}
-        <br />
-        {{if !$ficheAnnuleVisible}}
-        <a class="buttonsearch" href="index.php?m={{$m}}&amp;ficheAnnuleVisible=1">
-        Afficher les Fiches Annulées
-        </a>
-        {{else}}
-        <a class="buttoncancel" href="index.php?m={{$m}}&amp;ficheAnnuleVisible=0">
-        Cacher les Fiches Annulées
-        </a>
-        <table class="form">
-          <tr>
-            <th class="category" colspan="2">Fiches d'EI Annulées</th>
-          </tr>
-          <tr>
-            <th class="category">Date de l'événement</th>
-            <th class="category">Auteur de la fiche</th>
-          </tr>
-          {{foreach from=$listFichesAnnulees item=currFiche}}
-          <tr>
-            <td class="text">
-              <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-                {{$currFiche->date_incident|date_format:"%A %d %B %Y à %Hh%M"}}
-              </a>
-            </td>
-            <td class="text">
-              <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-                {{$currFiche->_ref_user->_view}}
-              </a>
-            </td>
-          </tr>
-          {{/foreach}}
-          </table>
-          {{/if}}
-      {{/if}}
+      <br />
+      {{assign var="listeFichesTitle" value="Mes fiches d'EI"}}
+      {{assign var="listeFiches" value=$listFiches.AUTHOR}}
+      {{include file="inc_ei_liste.tpl"}}
     </td>
     <td class="halfPane">
       {{if $fiche->fiche_ei_id}}
@@ -336,7 +349,7 @@ function pageMain() {
         {{/if}}
       {{/if}}
       
-      {{if $canAdmin && $fiche->valid_user_id}}
+      {{if $canAdmin && ($fiche->annulee || $fiche->date_validation)}}
         <tr>
           <td colspan="2" class="button">
             {{if $fiche->annulee}}

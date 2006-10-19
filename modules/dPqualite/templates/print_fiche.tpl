@@ -64,7 +64,7 @@
         </tr>
         <tr>
           <th>
-            Lieu
+            Service
           </th>
           <td>{{$fiche->lieu}}</td>
         </tr>
@@ -138,6 +138,9 @@
           <th>Suite de l'évènement</th>
           <td>
             {{tr}}CFicheEi.suite_even.{{$fiche->suite_even}}{{/tr}}
+            {{if $fiche->suite_even=="autre"}}
+              <br />{{$fiche->suite_even_descr|nl2br}}
+            {{/if}}
           </td>
         </tr>
         <tr>

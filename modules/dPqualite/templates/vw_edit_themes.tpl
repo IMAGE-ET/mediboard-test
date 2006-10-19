@@ -16,16 +16,10 @@
       </a>
       <table class="tbl">
         <tr>
-          <th>id</th>
           <th>Nom</th>
         </tr>
         {{foreach from=$listThemes item=curr_theme}}
         <tr>
-          <td>
-            <a href="index.php?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_theme_id={{$curr_theme->doc_theme_id}}" title="Modifier le thème">
-              {{$curr_theme->doc_theme_id}}
-            </a>
-          </td>
           <td class="text">
             <a href="index.php?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_theme_id={{$curr_theme->doc_theme_id}}" title="Modifier le thème">
               {{$curr_theme->nom}}

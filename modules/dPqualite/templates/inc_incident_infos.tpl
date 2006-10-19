@@ -33,7 +33,7 @@
           </td>
         </tr>
         <tr>
-          <th>Lieu</th>
+          <th>Service</th>
           <td class="text">
             {{$fiche->lieu}}
           </td>
@@ -96,6 +96,9 @@
           <th>Suite de l'évènement</th>
           <td>
             {{tr}}CFicheEi.suite_even.{{$fiche->suite_even}}{{/tr}}
+            {{if $fiche->suite_even=="autre"}}
+              <br />{{$fiche->suite_even_descr|nl2br}}
+            {{/if}}
           </td>
         </tr>
         <tr>
@@ -171,4 +174,12 @@
           <td>{{$fiche->qualite_date_controle|date_format:"%d %b %Y"}}</td>
         </tr>
         {{/if}}
+        {{/if}}
+        
+        {{if !$canAdmin}}
+        <tr>
+          <td colspan="2" class="button">
+            {{$fiche->_etat_actuel}}
+          </td>
+        </tr>
         {{/if}}
