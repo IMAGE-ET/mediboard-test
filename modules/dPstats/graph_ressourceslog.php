@@ -12,13 +12,12 @@ global $AppUI, $canRead, $canEdit, $m;
 require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"));
 require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_pie"));
 
-$date       = mbGetValueFromGet("date"       , mbDate());
-$module     = mbGetValueFromGet("module"     , 0);
-$size       = mbGetValueFromGet("size"       , 1);
-$element    = mbGetValueFromGet("element"    , "duration");
-$interval   = mbGetValueFromGet("interval"   , "day");
-
-$datax = array();
+$date     = mbGetValueFromGet("date"       , mbDate());
+$module   = mbGetValueFromGet("module"     , 0);
+$size     = mbGetValueFromGet("size"       , 1);
+$element  = mbGetValueFromGet("element"    , "duration");
+$interval = mbGetValueFromGet("interval"   , "day");
+$numelem  = mbGetValueFromGet("numelem"    , 4);
 
 switch($interval) {
   case "day":
@@ -68,7 +67,7 @@ function compare($a, $b) {
 }
 
 usort($datas, "compare");
-$datas = array_slice($datas, 0, 4);
+$datas = array_slice($datas, 0, $numelem);
 
 $values  = array();
 $legends = array();
