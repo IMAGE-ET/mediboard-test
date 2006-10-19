@@ -308,22 +308,22 @@ function pageMain() {
             {{assign var="style" value=""}}
           {{/if}}
           
-          <td {{$style}}>
+          <td {{$style|smarty:nodefaults}}>
             <a href="{{$href_consult}}" title="Voir la consultation">{{$curr_consult->heure|date_format:"%Hh%M"}}</a>
           </td>
-          <td class="text" {{$style}}>
+          <td class="text" {{$style|smarty:nodefaults}}>
             <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_consult->_ref_patient->patient_id}}">
               <img src="modules/{{$m}}/images/edit.png" alt="modifier" />
             </a>
             <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->_ref_patient->_view}}</a>
           </td>
-          <td class="text" {{$style}}>
+          <td class="text" {{$style|smarty:nodefaults}}>
             <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->motif|truncate:35:"...":false|nl2br}}</a>
           </td>
-          <td class="text" {{$style}}>
+          <td class="text" {{$style|smarty:nodefaults}}>
             <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->rques|truncate:35:"...":false|nl2br}}</a>
           </td>
-          <td {{$style}}>
+          <td {{$style|smarty:nodefaults}}>
             <form name="etatFrm{{$curr_consult->consultation_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
@@ -355,7 +355,7 @@ function pageMain() {
             </a>
             {{/if}}
           </td>
-          <td {{$style}}>{{$curr_consult->_etat}}</td>
+          <td {{$style|smarty:nodefaults}}>{{$curr_consult->_etat}}</td>
         </tr>
         {{/foreach}}
       </table>
