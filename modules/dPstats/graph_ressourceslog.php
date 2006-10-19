@@ -51,14 +51,30 @@ if($module) {
 $logs = db_loadObjectList($sql, $logs);
 
 $datas   = array();
-$legends = array();
+$i = 0;
 foreach($logs as $data) {
-  $datas[] = $data->$element;
+  $datas[$i]["value"] = $data->$element;
   if($module) {
-    $legends[]= $data->action;
+    $datas[$i]["legend"]= $data->action;
   } else {
-    $legends[]= $data->module;
+    $datas[$i]["legend"]= $data->module;
   }
+  $i++;
+}
+
+function compare($a, $b) {
+  global $element;
+  return $a["value"] < $b["value"];
+}
+
+usort($datas, "compare");
+$datas = array_slice($datas, 0, 4);
+
+$values  = array();
+$legends = array();
+foreach($datas as $data) {
+  $values[]  = $data["value"];
+  $legends[] = $data["legend"];
 }
 
 // Setup the graph.
@@ -79,7 +95,7 @@ $graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
 $graph->legend->Pos(0.015,0.1, "right", "top");
 
 // Create the Pie plot
-$pplot = new PiePlot($datas);
+$pplot = new PiePlot($values);
 $pplot->SetLegends($legends);
 $pplot->SetCenter(0.25+($size*0.07), 0.55);
 $pplot->SetSize(0.3);
