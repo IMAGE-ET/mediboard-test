@@ -11,6 +11,7 @@
         <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{tr}}{{$curr_listClass}}{{/tr}}</option>
         {{/foreach}}
       </select>
+      </form>
     </th>
   </tr>
   <tr>
@@ -28,29 +29,50 @@
           <th>Default</th>
           <th>Index</th>
         </tr>
-        {{foreach from=$aChamps item=currChamp}}
+        {{assign var="styleColorConflit" value="style=\"background-color:#fc0;\""}}
+        
+        {{foreach from=$aChamps key=keyChamp item=currChamp}}
+        {{if $keytable==$currChamp.class_field && $currChamp.BDD_primary==true}}
+          {{assign var="styleColor" value="style=\"background-color:#afa;\""}}
+          {{assign var="colorTD" value="1"}}
+        {{else}}
+          {{assign var="colorTD" value="0"}}
+          {{assign var="styleColor" value="style=\"background-color:#f00;\""}}
+        {{/if}}
         <tr>
-          <td {{if !$currChamp.class_field}}style="background-color:#f00;"{{/if}}>
+          <td {{if !$currChamp.class_field || $colorTD}}{{$styleColor|smarty:nodefaults}}{{/if}}>
             {{$currChamp.class_field}}
           </td>
-          <td {{if !$currChamp.class_props}}style="background-color:#f00;"{{/if}}>
+          <td {{if !$currChamp.class_props || $colorTD}}{{$styleColor|smarty:nodefaults}}{{elseif $currChamp.error_class_props}}{{$styleColorConflit|smarty:nodefaults}}{{/if}}>
             {{$currChamp.class_props}}
+            {{if !$currChamp.class_field && $currChamp.class_props}}
+            &mdash; <strong>{{$keyChamp}}</strong>
+            {{/if}}
           </td>
           {{if !$currChamp.BDD_name}}
-          <td colspan="5" style="background-color:#f00;">
+          <td colspan="5" {{$styleColor|smarty:nodefaults}}>
           </td>
           {{else}}
-          <td>
+          <td {{if $colorTD}}{{$styleColor|smarty:nodefaults}}{{/if}}>
             {{$currChamp.BDD_name}}
           </td>
-          <td>{{$currChamp.BDD_type}}</td>
-          <td>
+          <td {{if $colorTD}}{{$styleColor|smarty:nodefaults}}{{elseif $currChamp.error_BDD_type}}{{$styleColorConflit|smarty:nodefaults}}{{/if}}>
+            {{$currChamp.BDD_type}}
+            {{if $currChamp.error_BDD_type}}
+              &mdash; <strong>{{$currChamp.error_BDD_type}}</strong>
+            {{/if}}
+          </td>
+          <td {{if $colorTD}}{{$styleColor|smarty:nodefaults}}{{elseif $currChamp.error_BDD_null}}{{$styleColorConflit|smarty:nodefaults}}{{/if}}>
             {{if $currChamp.BDD_null!="NO"}}
             {{$currChamp.BDD_null}}
             {{/if}}
           </td>
-          <td>{{$currChamp.BDD_default}}</td>
-          <td>{{$currChamp.BDD_index}}</td>
+          <td {{if $colorTD}}{{$styleColor|smarty:nodefaults}}{{/if}}>
+            {{$currChamp.BDD_default}}
+          </td>
+          <td {{if $colorTD}}{{$styleColor|smarty:nodefaults}}{{/if}}>
+            {{$currChamp.BDD_index}}
+          </td>
           {{/if}}
         </tr>
         {{/foreach}}
