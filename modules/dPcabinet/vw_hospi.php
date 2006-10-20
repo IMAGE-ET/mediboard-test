@@ -23,9 +23,12 @@ $listPrat = $listPrat->loadPraticiens(PERM_READ);
 
 // Recherche des patients du praticien
 
-$boucle_req=array("entree" => "listEntree","sortie" =>"listSortie");
+$listsAff = array(
+  "entree" => array(),
+  "sortie" => array()
+);
 
-foreach ($boucle_req as $keyBoucleReq => $curr_BoucleReq){
+foreach ($listsAff as $keyBoucleReq => &$listAff) {
   $sql = "SELECT affectation.*" .
 		 "\nFROM affectation" .
 		 "\nLEFT JOIN lit" .
@@ -41,38 +44,33 @@ foreach ($boucle_req as $keyBoucleReq => $curr_BoucleReq){
 		 "\nAND sejour.praticien_id = '$chirSel'" .
 		 "\nORDER BY affectation.$keyBoucleReq, service.nom, chambre.nom, lit.nom";
 
-  ${"Aff".$curr_BoucleReq} = new CAffectation;
-  ${"Aff".$curr_BoucleReq} = db_loadObjectList($sql, ${"Aff".$curr_BoucleReq});
+  $listAff = new CAffectation;
+  $listAff = db_loadObjectList($sql, $listAff);
   
-  foreach(${"Aff".$curr_BoucleReq} as $key => $currAff) {
+  foreach($listAff as $key => &$affectation) {
     $loadData = false;
-    ${"Aff".$curr_BoucleReq}[$key]->loadRefs();
-    if($keyBoucleReq=="entree"){
-      if(!${"Aff".$curr_BoucleReq}[$key]->_ref_prev->affectation_id){
-        $loadData = true;
-      }
-    }elseif($keyBoucleReq=="sortie"){
-      if(!${"Aff".$curr_BoucleReq}[$key]->_ref_next->affectation_id){
-        $loadData = true;
-      }    
-    }
+    $affectation->loadRefs();
     
-    if($loadData){
-      ${"Aff".$curr_BoucleReq}[$key]->_ref_sejour->loadRefsFwd();
-      ${"Aff".$curr_BoucleReq}[$key]->_ref_sejour->loadRefsOperations();
+    if ($keyBoucleReq == "entree") $affectation_connexe =& $affectation->_ref_prev;
+    if ($keyBoucleReq == "sortie") $affectation_connexe =& $affectation->_ref_next;
+    
+    if (!$affectation_connexe->_id) {
+      $sejour =& $affectation->_ref_sejour;
+      $sejour->loadRefsFwd();
+      $sejour->loadRefsOperations();
       
-      if($keyBoucleReq=="sortie"){
+      if ($keyBoucleReq=="sortie"){
         // Rowspan pour la cellule de l'heure
-        ${"Aff".$curr_BoucleReq}[$key]->_nb_rows =count(${"Aff".$curr_BoucleReq}[$key]->_ref_sejour->_ref_operations) + 1;
+        $affectation->_nb_rows = count($sejour->_ref_operations) + 1;
         // Récupération des Références pour les opérations
-        foreach(${"Aff".$curr_BoucleReq}[$key]->_ref_sejour->_ref_operations as $keyOper => $curr_oper) {
-          ${"Aff".$curr_BoucleReq}[$key]->_ref_sejour->_ref_operations[$keyOper]->loadRefs();
+        foreach($sejour->_ref_operations as &$operation) {
+          $operation->loadRefs();
         }
       }
       
-      ${"Aff".$curr_BoucleReq}[$key]->_ref_lit->loadCompleteView();
-    }else{
-      unset(${"Aff".$curr_BoucleReq}[$key]);
+      $affectation->_ref_lit->loadCompleteView();
+    } else {
+      unset($listAff[$key]);
     }
   }
 
@@ -92,8 +90,8 @@ $smarty = new CSmartyDP(1);
 $smarty->assign("dateRecherche" , $dateRecherche);
 $smarty->assign("chirSel"       , $chirSel       );
 $smarty->assign("listPrat"      , $listPrat      );
-$smarty->assign("AfflistEntree" , $AfflistEntree );
-$smarty->assign("AfflistSortie" , $AfflistSortie );
+$smarty->assign("AfflistEntree" , $listsAff["entree"]);
+$smarty->assign("AfflistSortie" , $listsAff["sortie"]);
 $smarty->assign("crList"        , $crList        );
 $smarty->assign("hospiList"     , $hospiList     );
 
