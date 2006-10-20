@@ -49,14 +49,14 @@ if($module) {
 
 $logs = db_loadObjectList($sql, $logs);
 
-$datas   = array();
+$datasTotal = array();
 $i = 0;
 foreach($logs as $data) {
-  $datas[$i]["value"] = $data->$element;
+  $datasTotal[$i]["value"] = $data->$element;
   if($module) {
-    $datas[$i]["legend"]= $data->action;
+    $datasTotal[$i]["legend"]= $data->action;
   } else {
-    $datas[$i]["legend"]= $data->module;
+    $datasTotal[$i]["legend"]= $data->module;
   }
   $i++;
 }
@@ -66,8 +66,19 @@ function compare($a, $b) {
   return $a["value"] < $b["value"];
 }
 
-usort($datas, "compare");
-$datas = array_slice($datas, 0, $numelem);
+usort($datasTotal, "compare");
+$datas = array_slice($datasTotal, 0, $numelem);
+if(count($datasTotal) > $numelem) {
+  $other = array_slice($datasTotal, $numelem);
+  $datas[$numelem]["value"]  = 0;
+  $datas[$numelem]["legend"] = "Autres";
+  $n = 0;
+  foreach($other as $curr_other) {
+    $datas[$numelem]["value"] += $curr_other["value"];
+    $n++;
+  }
+  $datas[$numelem]["legend"] .= " ($n)";
+}
 
 $values  = array();
 $legends = array();
