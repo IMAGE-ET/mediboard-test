@@ -193,7 +193,7 @@ class COperation extends CMbObject {
     if($this->codes_ccam)
       $this->_codes_ccam = explode("|", $this->codes_ccam);
     else
-      $this->_codes_ccam[0] = "-";
+      $this->_codes_ccam = array();
     $this->_hour_op = intval(substr($this->temp_operation, 0, 2));
     $this->_min_op  = intval(substr($this->temp_operation, 3, 2));
     $this->_hour_urgence = intval(substr($this->time_operation, 0, 2));
@@ -248,8 +248,13 @@ class COperation extends CMbObject {
       // Si pas une annulation on recupére le sejour
       // et on regarde s'il n'est pas annulé
       $this->loadRefSejour();
-      $this->_ref_sejour->annule = 0;
-      $this->_ref_sejour->store();
+      if($this->_ref_sejour->annule) {
+        $this->_ref_sejour->annule = 0;
+        $this->_ref_sejour->store();
+      }
+    } else {
+      $this->rank = 0;
+      $this->time_operation = "00:00:00";
     }
     
     // Vérification qu'on a pas des actes CCAM codés obsolètes
@@ -271,7 +276,9 @@ class COperation extends CMbObject {
       $chirTmp->load($this->chir_id);
       $plageTmp->chir_id = $chirTmp->user_id;
       $plageTmp->store();
-    } elseif($reorder) {
+    }
+    
+    if($reorder) {
       $plageTmp->store();
     }
     
@@ -310,8 +317,8 @@ class COperation extends CMbObject {
       $ext_code_ccam->LoadLite();
       $this->_ext_codes_ccam[] = $ext_code_ccam;
     }
-    $ext_code_ccam =& $this->_ext_codes_ccam[0];
-    $code_ccam = @$this->_codes_ccam[0];
+    //$ext_code_ccam =& $this->_ext_codes_ccam[0];
+    //$code_ccam = @$this->_codes_ccam[0];
   }
   
   function loadRefsConsultAnesth() {

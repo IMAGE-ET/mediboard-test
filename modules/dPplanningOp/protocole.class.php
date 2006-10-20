@@ -84,7 +84,7 @@ class CProtocole extends CMbObject {
     if($this->codes_ccam)
       $this->_codes_ccam = explode("|", $this->codes_ccam);
     else
-      $this->_codes_ccam[0] = "XXXXXX";
+      $this->_codes_ccam = array();
     $this->_hour_op = intval(substr($this->temp_operation, 0, 2));
     $this->_min_op  = intval(substr($this->temp_operation, 3, 2));
   }
@@ -128,8 +128,8 @@ class CProtocole extends CMbObject {
       $ext_code_ccam->LoadLite();
       $this->_ext_codes_ccam[] = $ext_code_ccam;
     }
-    $ext_code_ccam =& $this->_ext_codes_ccam[0];
-    $code_ccam = @$this->_codes_ccam[0];
+    //$ext_code_ccam =& $this->_ext_codes_ccam[0];
+    //$code_ccam = @$this->_codes_ccam[0];
   }
   
   function loadRefsFwd() {
