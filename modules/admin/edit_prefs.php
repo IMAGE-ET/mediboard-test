@@ -53,7 +53,7 @@ foreach($array_list_pref_generale as $namePref){
 $array_list_module_pref = array();
 $array_list_module_pref["dPpatients"] = array("DEPARTEMENT");
 $array_list_module_pref["dPcabinet"]  = array("AFFCONSULT","MODCONSULT");
-$array_list_module_pref["admin"]      = array("INFOSYSTEM");
+$array_list_module_pref["system"]     = array("INFOSYSTEM");
 
 foreach($array_list_module_pref as $modulename => $listPrefs){
   $prefsUser[$modulename] = array();	
