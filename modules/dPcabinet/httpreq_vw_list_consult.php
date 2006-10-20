@@ -84,7 +84,7 @@ foreach($listPlage as $key => $value) {
       unset($listPlage[$key]->_ref_consultations[$key2]);
     else {
       $listPlage[$key]->_ref_consultations[$key2]->loadRefPatient();
-      $listPlage[$key]->_ref_consultations[$key2]->loadRefsDocs();
+      $listPlage[$key]->_ref_consultations[$key2]->getNumDocs();
     }
   }
 }
