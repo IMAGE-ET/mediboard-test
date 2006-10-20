@@ -130,7 +130,7 @@ function pageMain() {
             <select name="prat_id">
               <option value="">&mdash; Choix du praticien</option>
               {{foreach from=$listPrat item=curr_prat}}
-                <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $plage->prat_id}}selected="selected"{{/if}}>
+                <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $plage->prat_id}}selected="selected"{{/if}}>
                   {{$curr_prat->_view}}
                 </option>
               {{/foreach}}

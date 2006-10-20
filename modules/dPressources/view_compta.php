@@ -28,6 +28,9 @@ $group = "prat_id";
 $order = "users.user_last_name";
 
 $listPrats = $listPrats->loadList($where, $order, null, $group, $ljoin);
+foreach ($listPrats as &$prat) {
+  $prat->loadRefFunction();
+}
 
 // Chargement de la liste des impayés
 $sql = "SELECT prat_id" .

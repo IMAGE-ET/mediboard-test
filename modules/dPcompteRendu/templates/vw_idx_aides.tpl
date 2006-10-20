@@ -77,7 +77,7 @@ function pageMain() {
           <select name="filter_user_id" onchange="this.form.submit()">
             <option value="0">&mdash; Tous les utilisateurs</option>
             {{foreach from=$users item=curr_user}}
-            <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $filter_user_id}} selected="selected" {{/if}}>
+            <option class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}};" value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $filter_user_id}} selected="selected" {{/if}}>
               {{$curr_user->_view}}
             </option>
             {{/foreach}}
@@ -155,7 +155,7 @@ function pageMain() {
         <select name="user_id" title="{{$aide->_props.user_id}}">
           <option value="">&mdash; Choisir un utilisateur</option>
           {{foreach from=$users item=curr_user}}
-          <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $aide->user_id}} selected="selected" {{/if}}>
+          <option class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}};" value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $aide->user_id}} selected="selected" {{/if}}>
             {{$curr_user->_view}}
           </option>
           {{/foreach}}

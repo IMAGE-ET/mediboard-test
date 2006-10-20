@@ -9,7 +9,7 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_modeles"           , "liste des modèles"      , TAB_READ);
+$module->registerTab("vw_modeles"           , "Liste des modèles"      , TAB_READ);
 $module->registerTab("addedit_modeles"      , "Edition des modèles"    , TAB_READ);
 $module->registerTab("vw_idx_aides"         , "Aides à la saisie"      , TAB_READ);
 $module->registerTab("vw_idx_listes"        , "Listes de choix"        , TAB_READ);

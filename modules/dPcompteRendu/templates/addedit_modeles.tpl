@@ -101,7 +101,7 @@ function pageMain() {
       <select name="function_id" title="{{$compte_rendu->_props.function_id}}">
         <option value="">&mdash; Associer à une fonction &mdash;</option>
         {{foreach from=$listFunc item=curr_func}}
-          <option value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $compte_rendu->function_id}} selected="selected" {{/if}}>
+          <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $compte_rendu->function_id}} selected="selected" {{/if}}>
             {{$curr_func->_view}}
           </option>
         {{/foreach}}
@@ -115,7 +115,7 @@ function pageMain() {
       <select name="chir_id" title="{{$compte_rendu->_props.chir_id}}">
         <option value="">&mdash; Associer à un praticien &mdash;</option>
         {{foreach from=$listPrat item=curr_prat}}
-          <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $prat_id}} selected="selected" {{/if}}>
+          <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $prat_id}} selected="selected" {{/if}}>
             {{$curr_prat->_view}}
           </option>
         {{/foreach}}

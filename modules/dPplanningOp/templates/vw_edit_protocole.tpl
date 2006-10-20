@@ -217,7 +217,7 @@ function pageMain() {
             <select name="chir_id" title="{{$protocole->_props.chir_id}}">
               <option value="">&mdash; Choisir un praticien</option>
               {{foreach from=$listPraticiens item=curr_praticien}}
-              <option value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
+              <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
               {{$curr_praticien->_view}}
               </option>
               {{/foreach}}

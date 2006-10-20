@@ -18,7 +18,7 @@
             <select name="prat_id" onchange="submit()">
               <option value="">&mdash; Choisir un utilisateur &mdash;</option>
               {{foreach from=$listPrat item=curr_prat}}
-                <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $userSel->user_id}} selected="selected" {{/if}}>
+                <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $userSel->user_id}} selected="selected" {{/if}}>
                   {{$curr_prat->_view}}
                 </option>
               {{/foreach}}

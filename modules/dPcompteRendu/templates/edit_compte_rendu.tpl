@@ -17,9 +17,9 @@ function refreshCR() {
   sourceUrl.requestUpdate('htmlarea');
 }
 
-    if(window.opener.reloadAfterSaveDoc){
-      window.opener.reloadAfterSaveDoc();
-    }
+if (window.opener.reloadAfterSaveDoc) {
+  window.opener.reloadAfterSaveDoc();
+}
 </script>
 
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">

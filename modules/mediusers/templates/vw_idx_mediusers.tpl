@@ -114,7 +114,7 @@ function pageMain() {
             <select name="function_id" title="{{$mediuserSel->_props.function_id}}">
               <option value="">&mdash; Choisir une fonction &mdash;</option>
               {{foreach from=$functions item=curr_function}}
-              <option value="{{$curr_function->function_id}}" {{if $curr_function->function_id == $mediuserSel->function_id}} selected="selected" {{/if}}>
+              <option class="mediuser" style="border-color: #{{$curr_function->color}};" value="{{$curr_function->function_id}}" {{if $curr_function->function_id == $mediuserSel->function_id}} selected="selected" {{/if}}>
                 {{$curr_function->text}}
               </option>
               {{/foreach}}

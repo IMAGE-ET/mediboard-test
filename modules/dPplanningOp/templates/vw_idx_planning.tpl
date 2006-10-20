@@ -58,7 +58,7 @@ function pageMain() {
       <select name="selChir" onchange="this.form.submit()">
         <option value="-1">&mdash; Choisir un chirurgien</option>
         {{foreach from=$listChir item=curr_chir}}
-        <option value="{{$curr_chir->user_id}}" {{if $curr_chir->user_id == $selChir}} selected="selected" {{/if}}>
+        <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $curr_chir->user_id == $selChir}} selected="selected" {{/if}}>
           {{$curr_chir->_view}}
         </option>
         {{/foreach}}

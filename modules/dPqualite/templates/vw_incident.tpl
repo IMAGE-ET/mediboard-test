@@ -105,7 +105,7 @@ function pageMain() {
               {{if $aUsers.$keyFct|@count}}
               <optgroup label="{{$currFct->_view}}">
                 {{foreach from=$aUsers.$keyFct item=currUser}}
-                <option value="{{$currUser->user_id}}" 
+                <option class="mediuser" style="border-color: #{{$currFct->color}};" value="{{$currUser->user_id}}" 
                 {{if ($fiche->fiche_ei_id && $fiche->user_id==$currUser->user_id)
                       || (!$fiche->fiche_ei_id && $user_id==$currUser->user_id)}}
                   selected="selected"

@@ -104,7 +104,7 @@ function pageMain() {
           <td><select name="chir">
             <option value="0">&mdash; Tous les praticiens &mdash;</option>
             {{foreach from=$listPrat item=curr_prat}}
-              <option value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
+              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
             {{/foreach}}
           </select></td>
         </tr>
@@ -113,7 +113,7 @@ function pageMain() {
           <td><select name="spe">
             <option value="0">&mdash; Toutes les spécialités &mdash;</option>
             {{foreach from=$listSpec item=curr_spec}}
-              <option value="{{$curr_spec->function_id}}">{{$curr_spec->text}}</option>
+              <option class="mediuser" style="border-color: #{{$curr_spec->color}};" value="{{$curr_spec->function_id}}">{{$curr_spec->text}}</option>
             {{/foreach}}
           </select></td>
         </tr>
