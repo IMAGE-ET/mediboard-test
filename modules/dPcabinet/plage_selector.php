@@ -48,11 +48,13 @@ $order = "date, debut";
 
 // Chargement des plages disponibles
 $listPlage = $listPlage->loadList($where, $order);
-foreach ($listPlage as $keyPlage => $valuePlage) {
-  if (!$plageconsult_id && $date == $valuePlage->date) {
-    $plageconsult_id = $valuePlage->plageconsult_id;
+foreach ($listPlage as $keyPlage => &$currPlage) {
+  if (!$plageconsult_id && $date == $currPlage->date) {
+    $plageconsult_id = $currPlage->plageconsult_id;
   }
-  $listPlage[$keyPlage]->loadRefs(false);
+
+  $currPlage->_ref_chir =& $listPrat[$currPlage->chir_id];
+  $currPlage->loadFillRate();
 }
 
 if($plageconsult_id) {

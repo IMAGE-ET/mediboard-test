@@ -92,22 +92,22 @@ class CFunctions extends CMbObject {
   // @todo : ameliorer le choix des spécialités
   // (loadfunction($groupe, $permtype) par exemple)
   function loadSpecialites($perm_type = null) {
+    global $g;
     $where = array();
     $where["type"] = "= 'cabinet'";
+    $where["group_id"] = "= '$g'";
     $order = "text";
-    $basespecs = $this->loadList($where, $order);
-    $specs = null;
+    $specs = $this->loadList($where, $order);
   
     // Filter with permissions
     if ($perm_type) {
-      foreach ($basespecs as $key => $spec) {
-        if($spec->canRead()) {
-          $specs[$key] = $spec;
+      foreach ($specs as $keySpec => $spec) {
+        if (!$spec->canRead()) {
+          unset($specs[$keySpec]);
         }          
       }
-    } else {
-      $specs = $basespecs;
     }
+    
     return $specs;
   }
 }

@@ -213,9 +213,10 @@ class CMediusers extends CMbObject {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_function) {
+    if (!$this->_ref_function) {
       $this->loadRefFunction();
     }
+    
     return $this->_ref_function->getPerm($permType);
   }
   
@@ -327,6 +328,53 @@ class CMediusers extends CMbObject {
   }
 
   function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null) {
+    global $utypes_flip;
+    
+    $function = new CFunctions;
+    $functions = $function->loadSpecialites($permType);
+    
+    // Filter on a single function
+    if ($function_id) {
+      $functions = array_key_exists($function_id, $functions) ?
+        array($function_id => $functions[$function_id]) :
+        array();
+    }
+
+    $where = array();
+    $where["users_mediboard.function_id"] = db_prepare_in(array_keys($functions));
+
+    // Filters on users' values
+    $ljoin = array();
+    $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
+
+    if ($name) {
+      $where["users.user_last_name"] = "LIKE '$name%'";
+    }
+    
+    if (is_array($user_types)) {
+      foreach ($user_types as $key => $value) {
+        $user_types[$key] = $utypes_flip[$value];
+      }
+      
+      $where["users.user_type"] = db_prepare_in($user_types);
+    }
+
+    $order = "`users`.`user_last_name`";
+
+    // Get all users
+    $mediuser = new CMediusers;
+    $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
+     
+    // Associate already loaded function
+    foreach ($mediusers as $keyUser => $mediuser) {
+      $mediuser->_ref_function =& $functions[$mediuser->function_id];
+    }
+    
+    return $mediusers;
+    
+  }
+
+  function loadListFromTypeOld($user_types = null, $permType = PERM_READ, $function_id = null, $name = null) {
     global $utypes_flip;
     $ljoin = array();
     $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";

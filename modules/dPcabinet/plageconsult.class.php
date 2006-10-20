@@ -69,10 +69,21 @@ class CPlageconsult extends CMbObject {
 
     $this->_ref_consultations = new CConsultation();
     $this->_ref_consultations = $this->_ref_consultations->loadList($where, $order);
-    $this->_affected = 0;
-    foreach ($this->_ref_consultations as $consult) {
-      $this->_affected += $consult->duree;
+
+    $this->loadFillRate();
+  }
+  
+  function loadFillRate() {
+    if (!$this->_id) {
+      return;
     }
+
+    $query = "SELECT SUM(duree) " .
+      "\nFROM `consultation` " .
+      "\nWHERE `plageconsult_id` = $this->_id" .
+      "\nAND `annule` = 0";
+      
+    $this->_affected = intval(db_loadResult($query));
 
     if ($this->_total) {
       $this->_fill_rate= round($this->_affected/$this->_total*100);

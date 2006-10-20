@@ -298,6 +298,13 @@ label.notNullOK {
 }
   /* @import "./common.css";  */
 
+/* classes Mediboard */
+
+option.mediuser {
+  border-left: 4px solid transparent; 
+  padding-left: 4px; 
+  margin-left: 0px;
+}
 
 /* Title block */
 

@@ -65,7 +65,7 @@ function pageMain() {
           <td><select name="chir">
             <option value="0">&mdash; Tous</option>
             {{foreach from=$listChir item=curr_chir}}
-	            <option value="{{$curr_chir->user_id}}">{{$curr_chir->_view}}</option>
+	            <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}">{{$curr_chir->_view}}</option>
             {{/foreach}}
           </select></td>
         </tr>

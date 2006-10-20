@@ -20,18 +20,17 @@ $tarif->load($tarif_id);
 // L'utilisateur est-il praticien ?
 $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);
-$user = $mediuser->createUser();
+$mediuser->loadRefFunction();
 
 // Liste des tarifs du praticien
+$listeTarifsChir = null;
 if ($mediuser->isPraticien()) {
   $where = array();
   $where["function_id"] = "= 0";
-  $where["chir_id"] = "= '$user->user_id'";
+  $where["chir_id"] = "= '$mediuser->user_id'";
   $listeTarifsChir = new CTarif();
   $listeTarifsChir = $listeTarifsChir->loadList($where);
 }
-else
-  $listeTarifsChir = null;
 
 // Liste des tarifs de la spécialité
 $where = array();
@@ -41,13 +40,10 @@ $listeTarifsSpe = new CTarif();
 $listeTarifsSpe = $listeTarifsSpe->loadList($where);
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
-if($user->user_type == 'Administrator' || $user->user_type == 'Secrétaire') {
-  $listPrat = new CMediusers();
-  $listPrat = $listPrat->loadPraticiens(PERM_READ);
-}
-else
-  $listPrat[0] = $user;
-
+$listPrat = in_array($mediuser->_user_type, array("Administrator", "Secrétaire")) ?
+  $mediuser->loadPraticiens(PERM_READ) :
+  array($mediuser->_id => $mediuser);
+  
 // Création du template
 $smarty = new CSmartyDP(1);
 
