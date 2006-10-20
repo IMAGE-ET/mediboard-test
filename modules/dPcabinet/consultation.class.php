@@ -220,16 +220,17 @@ class CConsultation extends CMbObject {
   }
 
   function getNumDocs(){
-  	$select = "count(compte_rendu_id) AS total";  
+  	$select = "count(`compte_rendu_id`) AS `total`";  
     $table  = "compte_rendu";
     $where  = array();
     $ljoin = array();
     
     $this->loadRefConsultAnesth();
     if($this->_ref_consult_anesth->consultation_anesth_id) {
-      $where[] = "(`files_category`.`nom` = 'Consultation' AND object_id = '".$this->consultation_id."' ) OR (`files_category`.`nom` = 'Consultation Anesthésique' AND object_id = '".$this->_ref_consult_anesth->consultation_anesth_id."')";
-    }else{
-      $where[] = "`files_category`.`nom` = 'Consultation' AND object_id = '".$this->consultation_id."'";
+      $where[] = "(`object_class` = 'CConsultation' && `object_id` = '$this->consultation_id') || (`object_class` = 'CConsultAnesth' && `object_id` = '".$this->_ref_consult_anesth->consultation_anesth_id."')";
+    } else {
+      $where["object_class"] = "= 'CConsultation'";
+      $where["object_id"] = "= '$this->consultation_id'";
     }
     
     $ljoin["files_category"] = "compte_rendu.file_category_id = files_category.file_category_id";
@@ -239,7 +240,8 @@ class CConsultation extends CMbObject {
     $sql->addSelect($select);
     $sql->addWhere($where);
     $sql->addLJoin($ljoin);
-    $nbDocs = db_loadResult($sql->getRequest());
+    $query = $sql->getRequest();
+    $nbDocs = db_loadResult($query);
     if($nbDocs) {
       $this->getEtat();
       $this->_etat .= " ($nbDocs Doc.)";

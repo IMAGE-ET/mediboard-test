@@ -40,7 +40,10 @@ $sql = "SELECT `accesslog_id`, `module`, `action`, `period`," .
       "\nSUM(`hits`) AS `hits`, SUM(`duration`) AS `duration`, SUM(`request`) AS `request`" .
       "\nFROM `access_log`" .
       "\nWHERE DATE(`period`) BETWEEN '".mbDate($startx)."' AND '".mbDate($endx)."'";
-if($module) {
+if($module == "total") {
+  $sql .= "\nGROUP BY `action`";
+}
+elseif($module) {
   $sql .= "\nAND `module` = '$module'";
   $sql .= "\nGROUP BY `action`";
 } else {

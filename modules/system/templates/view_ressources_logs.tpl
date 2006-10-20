@@ -68,6 +68,11 @@ function pageMain() {
           <a href="javascript:zoom('{{$date}}', 0, '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
             <img src="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" alt="Graphique pour la journée" />
           </a>
+          </td>
+          <td class="button">
+          <a href="javascript:zoom('{{$date}}', 'total', '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
+            <img src="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=total&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" alt="Graphique pour la journée" />
+          </a>
           {{else}}
           <a href="javascript:zoom('{{$date}}', '{{$log->module}}', '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
             <img src="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" alt="Graphique pour {{$log->module}}" />
