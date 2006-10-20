@@ -276,9 +276,7 @@ class COperation extends CMbObject {
       $chirTmp->load($this->chir_id);
       $plageTmp->chir_id = $chirTmp->user_id;
       $plageTmp->store();
-    }
-    
-    if($reorder) {
+    } elseif($reorder) {
       $plageTmp->store();
     }
     
