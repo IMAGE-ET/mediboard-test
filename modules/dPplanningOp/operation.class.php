@@ -193,7 +193,7 @@ class COperation extends CMbObject {
     if($this->codes_ccam)
       $this->_codes_ccam = explode("|", $this->codes_ccam);
     else
-      $this->_codes_ccam[0] = "XXXXXX";
+      $this->_codes_ccam[0] = "-";
     $this->_hour_op = intval(substr($this->temp_operation, 0, 2));
     $this->_min_op  = intval(substr($this->temp_operation, 3, 2));
     $this->_hour_urgence = intval(substr($this->time_operation, 0, 2));
@@ -214,7 +214,7 @@ class COperation extends CMbObject {
       $codes_ccam = explode("|", $this->codes_ccam);
       $XPosition = true;
       while($XPosition !== false) {
-        $XPosition = array_search("XXXXXXX", $codes_ccam);
+        $XPosition = array_search("-", $codes_ccam);
         if ($XPosition !== false) {
           array_splice($codes_ccam, $XPosition, 1);
         }

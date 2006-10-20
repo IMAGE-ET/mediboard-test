@@ -95,7 +95,7 @@ class CProtocole extends CMbObject {
       $codes_ccam = explode("|", $this->codes_ccam);
       $XPosition = true;
       while($XPosition !== false) {
-        $XPosition = array_search("XXXXXXX", $codes_ccam);
+        $XPosition = array_search("-", $codes_ccam);
         if ($XPosition !== false) {
           array_splice($codes_ccam, $XPosition, 1);
         }
