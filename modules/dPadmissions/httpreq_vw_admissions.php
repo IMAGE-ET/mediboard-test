@@ -48,7 +48,7 @@ foreach ($today as $keySejour => $valueSejour) {
   $user = new CMediusers;
   $affectation =& $sejour->_ref_first_affectation;
   if ($affectation->affectation_id) {
-    $affectation->loadRefsFwd();
+    $affectation->loadRefLit();
     $affectation->_ref_lit->loadCompleteView();
   }
 }
