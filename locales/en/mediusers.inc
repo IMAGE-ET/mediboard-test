@@ -9,3 +9,4 @@
 "CMediusers.remote.1"=>"1",
 "CDiscipline"=>"Disciplines",
 "CMediusers"=>"Utilisateurs Médiboard",
+"CFunctions"=>"Cabinet / Fonction",

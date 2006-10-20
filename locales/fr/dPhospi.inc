@@ -10,3 +10,4 @@
 "CAffectation"=>"Affectations",
 "CChambre"=>"Chambres",
 "CService"=>"Services",
+"CLit"=>"Lits",
