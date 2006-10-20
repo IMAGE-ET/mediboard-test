@@ -39,10 +39,14 @@ $plages = $plages->loadList($where, $order);
 foreach($plages as $key => $value) {
   $plages[$key]->loadRefs(0);
   foreach($plages[$key]->_ref_operations as $key2 => $value) {
-    if($plages[$key]->_ref_operations[$key2]->rank == 0)
+    if($plages[$key]->_ref_operations[$key2]->rank == 0) {
       unset($plages[$key]->_ref_operations[$key2]);
-    else
-      $plages[$key]->_ref_operations[$key2]->loadRefsFwd();
+    }
+    else {
+      $plages[$key]->_ref_operations[$key2]->loadRefSejour();
+      $plages[$key]->_ref_operations[$key2]->_ref_sejour->loadRefPatient();
+      $plages[$key]->_ref_operations[$key2]->loadRefCCAM();
+    }
   }
 }
 
@@ -53,8 +57,9 @@ $where["salle_id"] = "= '$salle'";
 $order = "chir_id";
 $urgences = $urgences->loadList($where);
 foreach($urgences as $keyOp => $curr_op) {
-  $urgences[$keyOp]->loadRefsFwd();
+  $urgences[$keyOp]->loadRefSejour();
   $urgences[$keyOp]->_ref_sejour->loadRefPatient();
+  $urgences[$keyOp]->loadRefCCAM();
 }
 
 // Opération selectionnée
