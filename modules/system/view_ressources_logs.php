@@ -10,7 +10,7 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 $date     = mbGetValueFromGetOrSession("date"    , mbDate());
-$groupres = mbGetValueFromGetOrSession("groupres", 0);
+$groupres = mbGetValueFromGetOrSession("groupres", 1);
 $element  = mbGetValueFromGetOrSession("element" , "duration");
 $interval = mbGetValueFromGetOrSession("interval", "day");
 $numelem  = mbGetValueFromGetOrSession("numelem" , 4);

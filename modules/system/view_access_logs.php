@@ -10,7 +10,7 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 $date     = mbGetValueFromGetOrSession("date"    , mbDate());
-$groupmod = mbGetValueFromGetOrSession("groupmod", 1);
+$groupmod = mbGetValueFromGetOrSession("groupmod", 2);
 $module   = mbGetValueFromGetOrSession("module"  , "system");
 $interval = mbGetValueFromGetOrSession("interval", "day");
 $next     = mbDate("+1 DAY", $date);
