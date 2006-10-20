@@ -23,21 +23,19 @@ $selConsult = mbGetValueFromGetOrSession("selConsult", null);
 $consult = new CConsultation;
 
 // Test compliqué afin de savoir quelle consultation charger
-if(isset($_GET["selConsult"])) {
+if (isset($_GET["selConsult"])) {
   if($consult->load($selConsult)) {
-    $consult->loadRefsFwd();
+    $consult->loadRefPlageConsult();
     $prat_id = $consult->_ref_plageconsult->chir_id;
     mbSetValueToSession("chirSel", $prat_id);
   } else {
-    $selConsult = null;
     mbSetValueToSession("selConsult");
   }
 } else {
-  if($consult->load($selConsult)) {
+  if ($consult->load($selConsult)) {
     $consult->loadRefsFwd();
-    if($prat_id !== $consult->_ref_plageconsult->chir_id) {
+    if ($prat_id !== $consult->_ref_plageconsult->chir_id) {
       $consult = new CConsultation();
-      $selConsult = null;
       mbSetValueToSession("selConsult");
     }
   }
@@ -46,9 +44,6 @@ if(isset($_GET["selConsult"])) {
 // On charge le praticien
 $userSel = new CMediusers;
 $userSel->load($prat_id);
-
-// Vérification des droits sur les praticiens
-$listChir = $userSel->loadPraticiens(PERM_EDIT);
 
 if (!$userSel->isPraticien()) {
   $AppUI->setMsg("Vous devez selectionner un praticien", UI_MSG_ALERT);
@@ -77,15 +72,16 @@ $listPlage = $listPlage->loadList($where, $order);
 $vue = mbGetValueFromGetOrSession("vue2", 0);
 
 
-foreach($listPlage as $key => $value) {
-  $listPlage[$key]->loadRefs();
-  foreach($listPlage[$key]->_ref_consultations as $key2 => $value2) {
-    if($vue && ($listPlage[$key]->_ref_consultations[$key2]->chrono == CC_TERMINE))
-      unset($listPlage[$key]->_ref_consultations[$key2]);
-    else {
-      $listPlage[$key]->_ref_consultations[$key2]->loadRefPatient();
-      $listPlage[$key]->_ref_consultations[$key2]->getNumDocs();
+foreach($listPlage as &$plage) {
+  $plage->loadRefs();
+  foreach($plage->_ref_consultations as $keyConsult => &$consultation) {
+    if ($vue && ($consultation->chrono == CC_TERMINE)) {
+      unset($plage->_ref_consultations[$keyConsult]);
+      continue;
     }
+
+    $consultation->loadRefPatient();
+    $consultation->getNumDocs();
   }
 }
 

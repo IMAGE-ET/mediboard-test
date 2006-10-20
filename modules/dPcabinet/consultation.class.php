@@ -233,16 +233,12 @@ class CConsultation extends CMbObject {
       $where["object_id"] = "= '$this->consultation_id'";
     }
     
-    $ljoin["files_category"] = "compte_rendu.file_category_id = files_category.file_category_id";
-    
     $sql = new CRequest();
     $sql->addTable($table);
     $sql->addSelect($select);
     $sql->addWhere($where);
-    $sql->addLJoin($ljoin);
-    $query = $sql->getRequest();
-    $nbDocs = db_loadResult($query);
-    if($nbDocs) {
+
+    if ($nbDocs = db_loadResult($sql->getRequest())) {
       $this->getEtat();
       $this->_etat .= " ($nbDocs Doc.)";
     }
