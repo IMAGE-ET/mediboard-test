@@ -94,7 +94,7 @@
         </tr>
         <tr>
           <th>Suite de l'évènement</th>
-          <td>
+          <td class="text">
             {{tr}}CFicheEi.suite_even.{{$fiche->suite_even}}{{/tr}}
             {{if $fiche->suite_even=="autre"}}
               <br />{{$fiche->suite_even_descr|nl2br}}
