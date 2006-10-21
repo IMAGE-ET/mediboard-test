@@ -22,7 +22,7 @@ function printAdmission(id) {
   </tr>
   {{foreach from=$listDays key=key_day item=curr_day}}
   {{foreach from=$curr_day key=key_prat item=curr_prat}}
-  {{assign var="praticien" value=$listPrats.$key_prat}}
+  {{assign var="praticien" value=$curr_prat.praticien}}
   <tr>
     <td>
       <strong>
@@ -55,7 +55,7 @@ function printAdmission(id) {
           <th>Naissance (Age)</th>
           <th>Remarques</th>
         </tr>
-        {{foreach from=$curr_prat item=curr_sejour}}
+        {{foreach from=$curr_prat.sejours item=curr_sejour}}
         <tr>
           <td>{{$curr_sejour->entree_prevue|date_format:"%Hh%M"}}</td>
           <td>{{$curr_sejour->type|truncate:1:""|capitalize}}</td>
