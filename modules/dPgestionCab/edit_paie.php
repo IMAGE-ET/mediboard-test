@@ -25,7 +25,7 @@ $where["function_id"] = "= '$user->function_id'";
 
 $listEmployes = $employe->loadList($where);
 if(!count($listEmployes)) {
-  $AppUI->setMsg("Vous devez avoir au moins un employé", MSG_ERROR);
+  $AppUI->setMsg("Vous devez avoir au moins un employé", UI_MSG_ERROR);
   $AppUI->redirect( "m=dPgestionCab&tab=edit_params" );
 }
 if($employecab_id) {
