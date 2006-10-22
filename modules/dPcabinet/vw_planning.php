@@ -79,7 +79,7 @@ for($i = 0; $i < 7; $i++) {
   $where["date"] = "= '$date'";
   $plagesPerDay = $plage->loadList($where);
   foreach($plagesPerDay as $key => $value) {
-    $plagesPerDay[$key]->loadRefs(false);
+    $plagesPerDay[$key]->loadFillRate();
   }
   $plages[$date] = $plagesPerDay;
 }
