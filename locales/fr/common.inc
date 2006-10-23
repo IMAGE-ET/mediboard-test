@@ -147,6 +147,8 @@
 "module-dPadmissions-long"=>"Gestion des admissions",
 "module-dPbloc-court"=>"Planning bloc",
 "module-dPbloc-long"=>"Planning du bloc opératoire",
+"module-dPboard-court"=>"Tableau de bord",
+"module-dPboard-long"=>"Tableau de bord",
 "module-dPcabinet-court"=>"Cabinet",
 "module-dPcabinet-long"=>"Gestion de cabinet de consultation",
 "module-dPccam-court"=>"CCAM",

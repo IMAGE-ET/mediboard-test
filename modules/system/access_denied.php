@@ -1,3 +1,3 @@
 <div class="big-info">
-Vous n'êtes pas authorisé à accéder à cette information !
+Vous n'êtes pas autorisé à accéder à cette information !
 </div>

@@ -2,12 +2,6 @@
 
 <script type="text/javascript">
 
-function selectCR(id, form) {
-  var modele = form.modele.value;
-  if(modele != 0)
-    editModele(id, modele);
-}
-
 function editDocument(compte_rendu_id) {
   var url = new Url();
   url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
@@ -23,26 +17,23 @@ function createDocument(modele_id, operation_id) {
   url.popup(700, 700, "Document");
 }
 
-function validerCompteRendu(form) {
-  if (confirm('Veuillez confirmer la validation du compte-rendu')) {
-    form.cr_valide.value = "1";
-    form.submit();
-  }
-}
-
-function supprimerCompteRendu(form) {
-  if (confirm('Veuillez confirmer la suppression')) {
-    form.compte_rendu.value = "";
-    form.cr_valide.value = "0";
-    form.submit();
-  }
-}
-
 function reloadAfterSaveDoc(){
-  window.location.href = window.location.href;
+  updateListOperations();
+}
+
+function updateListOperations(date) {
+  var url = new Url;
+  url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
+
+  url.addParam("chirSel" , "{{$selChir}}");
+  url.addParam("date"    , date);
+  url.addParam("urgences", "{{$urgences}}");
+
+  url.requestUpdate('operations');
 }
 
 function pageMain() {
+  updateListOperations("{{$date}}");
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
 }
 
@@ -113,176 +104,7 @@ function pageMain() {
         {{/if}}
       </table>
     </td>
-    <td>
-      <table class="tbl">
-        <tr>
-          <th>Patient</th>
-          <th>Actes médicaux</th>
-          <th>Heure prévue</th>
-          <th>Durée</th>
-          <th>Compte-rendu</th>
-        </tr>
-        {{if $urgences}}
-        {{foreach from=$listUrgences item=curr_op}}
-        <tr>
-          <td class="text">
-            <a href="index.php?m=dPcabinet&amp;tab=vw_dossier&amp;patSel={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
-              {{$curr_op->_ref_sejour->_ref_patient->_view}}
-            </a>
-          </td>
-          <td class="text">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->operation_id}}">
-              {{if $curr_op->libelle}}
-                <em>[{{$curr_op->libelle}}]</em>
-                <br />
-              {{/if}}
-              {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-              <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
-              {{/foreach}}
-            </a>
-          </td>
-          <td style="text-align: center;">
-            {{if $curr_op->annulee}}
-            [ANNULEE]
-            {{else}}
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->operation_id}}">
-              {{$curr_op->_datetime|date_format:"le %d/%m/%Y à %Hh%M"}}
-            </a>
-            {{/if}}
-          </td>
-          <td style="text-align: center;">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->operation_id}}">
-              {{$curr_op->temp_operation|date_format:"%Hh%M"}}
-            </a>
-          </td>
-          <td>
-            <table>
-            {{foreach from=$curr_op->_ref_documents item=document}}
-              <tr>
-                <th>{{$document->nom}}</th>
-                <td class="button">
-                  <form name="editDocumentFrm{{$document->compte_rendu_id}}" action="?m={{$m}}" method="post">
-                  <input type="hidden" name="m" value="dPcompteRendu" />
-                  <input type="hidden" name="del" value="0" />
-                  <input type="hidden" name="dosql" value="do_modele_aed" />
-                  <input type="hidden" name="object_id" value="{{$curr_op->operation_id}}" />
-                  <input type="hidden" name="compte_rendu_id" value="{{$document->compte_rendu_id}}" />
-                  <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">
-                  </button>
-                  <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}'})" />
-                  </form>
-                </td>
-              </tr>
-            {{/foreach}}
-            </table>
-            <form name="newDocumentFrm" action="?m={{$m}}" method="post">
-            <table>
-              <tr>
-                <td>
-                  <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$curr_op->operation_id}})">
-                    <option value="">&mdash; Choisir un modèle</option>
-                    <optgroup label="Opération">
-                    {{foreach from=$crList item=curr_cr}}
-                    <option value="{{$curr_cr->compte_rendu_id}}">{{$curr_cr->nom}}</option>
-                    {{/foreach}}
-                    </optgroup>
-                    <optgroup label="Hospitalisation">
-                    {{foreach from=$hospiList item=curr_hospi}}
-                    <option value="{{$curr_hospi->compte_rendu_id}}">{{$curr_hospi->nom}}</option>
-                    {{/foreach}}
-                    </optgroup>
-                  </select>
-                </td>
-              </tr>
-            </table>
-            </form>
-          </td>
-        </tr>
-        {{/foreach}}
-        {{else}}
-        {{foreach from=$listDay item=curr_plage}}
-        <tr>
-          <th colspan="6">{{$curr_plage->_ref_salle->nom}} : de {{$curr_plage->debut|date_format:"%Hh%M"}} à {{$curr_plage->fin|date_format:"%Hh%M"}}</th>
-        </tr>
-        {{foreach from=$curr_plage->_ref_operations item=curr_op}}
-        <tr>
-          <td class="text">
-            <a href="index.php?m=dPcabinet&amp;tab=vw_dossier&amp;patSel={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
-              {{$curr_op->_ref_sejour->_ref_patient->_view}}
-            </a>
-          </td>
-          <td class="text">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
-              {{if $curr_op->libelle}}
-                <em>[{{$curr_op->libelle}}]</em>
-                <br />
-              {{/if}}
-              {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-              <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
-              {{/foreach}}
-            </a>
-          </td>
-          <td style="text-align: center;">
-            {{if $curr_op->annulee}}
-            [ANNULEE]
-            {{else}}
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
-              {{$curr_op->time_operation|date_format:"%Hh%M"}}
-            </a>
-            {{/if}}
-          </td>
-          <td style="text-align: center;">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
-              {{$curr_op->temp_operation|date_format:"%Hh%M"}}
-            </a>
-          </td>
-          <td>
-            <table>
-            {{foreach from=$curr_op->_ref_documents item=document}}
-              <tr>
-                <th>{{$document->nom}}</th>
-                <td class="button">
-                  <form name="editDocumentFrm{{$document->compte_rendu_id}}" action="?m={{$m}}" method="post">
-                  <input type="hidden" name="m" value="dPcompteRendu" />
-                  <input type="hidden" name="del" value="0" />
-                  <input type="hidden" name="dosql" value="do_modele_aed" />
-                  <input type="hidden" name="object_id" value="{{$curr_op->operation_id}}" />
-                  <input type="hidden" name="compte_rendu_id" value="{{$document->compte_rendu_id}}" />
-                  <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">
-                  </button>
-                  <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadAfterSaveDoc})" />
-                  </form>
-                </td>
-              </tr>
-            {{/foreach}}
-            </table>
-            <form name="newDocumentFrm" action="?m={{$m}}" method="post">
-            <table>
-              <tr>
-                <td>
-                  <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$curr_op->operation_id}})">
-                    <option value="">&mdash; Choisir un modèle</option>
-                    <optgroup label="Opération">
-                    {{foreach from=$crList item=curr_cr}}
-                    <option value="{{$curr_cr->compte_rendu_id}}">{{$curr_cr->nom}}</option>
-                    {{/foreach}}
-                    </optgroup>
-                    <optgroup label="Hospitalisation">
-                    {{foreach from=$hospiList item=curr_hospi}}
-                    <option value="{{$curr_hospi->compte_rendu_id}}">{{$curr_hospi->nom}}</option>
-                    {{/foreach}}
-                    </optgroup>
-                  </select>
-                </td>
-              </tr>
-            </table>
-            </form>
-          </td>
-        </tr>
-        {{/foreach}}
-        {{/foreach}}
-        {{/if}}
-      </table>
+    <td id="operations">
     </td>
   </tr>
 </table>

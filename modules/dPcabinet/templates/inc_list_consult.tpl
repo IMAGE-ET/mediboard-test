@@ -1,3 +1,4 @@
+{{if !$board}}
 <script type="text/javascript">
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
 </script>
@@ -5,7 +6,6 @@
 <form name="changeView" action="index.php" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
-
   <table class="form">
     <tr>
       <td colspan="6" style="text-align: center; width: 100%; font-weight: bold;">
@@ -24,8 +24,9 @@
       </td>
     </tr>
   </table>
-
 </form>
+{{/if}}
+
 <table class="tbl">
 {{if $listPlage}}
 {{foreach from=$listPlage item=curr_plage}}

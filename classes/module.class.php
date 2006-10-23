@@ -164,11 +164,17 @@ class CModule extends CMbObject {
   function showTabs() {
     global $uistyle, $AppUI, $tab, $a, $action, $actionType;
 
-    if(is_numeric($tab)) {
+    if(!is_file("./modules/".$this->mod_name."/".$tab.".php")) {
       $tab = $this->_tabs[0][0];
     }
     
     $AppUI->savePlace();
+    
+    if(count($this->_tabs) == 1) {
+      $a = $tab;
+      $this->showAction();
+      return;
+    }
 
     $action     = $tab;
     $actionType = "tab";

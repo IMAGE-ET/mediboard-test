@@ -13,9 +13,10 @@ if (!$canEdit) {
   $AppUI->redirect("m=system&a=access_denied");
 }
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date  = mbGetValueFromGetOrSession("date", mbDate());
 $today = mbDate();
-$hour = mbTime(null);
+$hour  = mbTime(null);
+$board = mbGetValueFromGet("board", 0);
 
 $prat_id    = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
 $selConsult = mbGetValueFromGetOrSession("selConsult", null);
@@ -89,6 +90,7 @@ foreach($listPlage as &$plage) {
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("tab"      , "edit_consultation");
+$smarty->assign("board"    , $board);
 $smarty->assign("date"     , $date);
 $smarty->assign("hour"     , $hour);
 $smarty->assign("vue"      , $vue);
