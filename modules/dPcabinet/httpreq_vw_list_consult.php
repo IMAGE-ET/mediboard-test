@@ -73,9 +73,10 @@ $listPlage = $listPlage->loadList($where, $order);
 $vue = mbGetValueFromGetOrSession("vue2", 0);
 
 
-foreach($listPlage as &$plage) {
-  $plage->loadRefs();
-  foreach($plage->_ref_consultations as $keyConsult => &$consultation) {
+foreach ($listPlage as &$plage) {
+  $plage->_ref_chir =& $userSel;
+  $plage->loadRefsBack();
+  foreach ($plage->_ref_consultations as $keyConsult => &$consultation) {
     if ($vue && ($consultation->chrono == CC_TERMINE)) {
       unset($plage->_ref_consultations[$keyConsult]);
       continue;

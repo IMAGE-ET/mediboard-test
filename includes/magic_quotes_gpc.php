@@ -1,18 +1,24 @@
 <?php
 
-if (!get_magic_quotes_gpc()) {
-  foreach($_GET as $key => &$get) {
-    $get = addslashes($get);
+/**
+ * Recursively add slashes to array of strings
+ */
+function addslashes_deep(&$var) {
+  if (is_array($var)) {
+    array_map("addslashes_deep", $var);
   }
-  unset($get);
-  foreach($_POST as $key => &$post) {
-    $post = addslashes($post);
+  
+  if (is_string($var)) {
+    $var = addslashes($var);
   }
-  unset($post);
-  foreach($_COOKIE as $key => &$cookie) {
-    $cookie = addslashes($cookie);
-  }
-  unset($cookie);
 }
+ 
+// Emulates magic quotes when disabled
+if (!get_magic_quotes_gpc()) {
+  addslashes_deep($_GET);
+  addslashes_deep($_POST);
+  addslashes_deep($_COOKIE);
+}
+
 
 ?>
