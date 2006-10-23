@@ -274,7 +274,7 @@ if(!$suppressHeaders) {
 
 $tab = $a == "index"  ? mbGetValueFromGetOrSession("tab", 1) : mbGetValueFromGet("tab");
 
-if($tab !== null) {
+if ($tab !== null) {
   $currentModule->showTabs();
 } else {
   $currentModule->showAction();

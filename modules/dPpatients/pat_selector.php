@@ -25,6 +25,7 @@ if($name != "" || $firstName != "") {
   $where[] = "0";
 $limit = "0, 100";
 $order = "patients.nom, patients.prenom";
+
 $list = $list->loadList($where, $order, $limit);
 
 // Création du template

@@ -460,7 +460,7 @@ function bindHashToObject($hash, &$obj) {
 
   foreach (get_object_vars($obj) as $k => $v) {
     if (isset($hash[$k])) {
-      $obj->$k = (get_magic_quotes_gpc()) ? stripslashes_deep($hash[$k]) : $hash[$k];
+      $obj->$k = stripslashes_deep($hash[$k]);
     }
   }
 }

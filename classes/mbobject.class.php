@@ -401,7 +401,7 @@ class CMbObject {
         $AppUI->_($msg);
     }
     
-    // The object may not existe in database anymore : re-insert it
+    // The object may not exist in database anymore : re-insert it
     $k = $this->_tbl_key;
     $query = db_prepare("SELECT * FROM `$this->_tbl` WHERE `$k` = %", $this->_id);
     if ($this->_id) {

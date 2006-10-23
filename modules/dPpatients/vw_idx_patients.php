@@ -66,13 +66,14 @@ $patient_month     = mbGetValueFromGetOrSession("Date_Month", date("m"));
 $patient_year      = mbGetValueFromGetOrSession("Date_Year" , date("Y"));
 
 $where = null;
-if ($patient_nom   ) $where["nom"]    = "LIKE '".addslashes($patient_nom)."%'";
-if ($patient_prenom) $where["prenom"] = "LIKE '".addslashes($patient_prenom)."%'";
+if ($patient_nom   ) $where["nom"]    = "LIKE '$patient_nom%'";
+if ($patient_prenom) $where["prenom"] = "LIKE '$patient_prenom%'";
 if ($patient_naissance == "on") {
   $where["naissance"] = "= '$patient_year-$patient_month-$patient_day'";
 }
 
 $patients = null;
+
 if ($where) {
   $patients = new CPatient();
   $patients = $patients->loadList($where, "nom, prenom, naissance", "0, 100");
