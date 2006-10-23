@@ -140,7 +140,7 @@ function pageMain() {
     </td>
     <td class="halfPane" onmouseover="showIcon('operations')" onmouseout="hideIcon('operations')">
       <div style="position:absolute" id="icon-operations">
-        <a href="index.php?m=dPplanningOp&amp;tab=vw_idx_patients&amp;date={{$date}}">
+        <a href="index.php?m=dPplanningOp&amp;tab=vw_idx_patients">
           <img src="modules/dPplanningOp/images/dPplanningOp.png" height="24px" width="24px" />
         </a>
       </div>
