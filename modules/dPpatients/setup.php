@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.35";
+$config["mod_version"]     = "0.36";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -239,7 +239,10 @@ class CSetupdPpatients {
         $sql = "ALTER TABLE `patients` ADD `prevenir_parente` ENUM( 'conjoint', 'enfant', 'ascendant', 'colateral', 'divers' ) ;";
         db_exec( $sql ); db_error();
       case "0.35":
-        return "0.35";
+        $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'med', 'alle', 'trans', 'obst', 'chir', 'fam', 'anesth' ) NOT NULL DEFAULT 'med';";
+        db_exec( $sql ); db_error();
+      case "0.36":
+        return "0.36";
     }
     return false;
   }

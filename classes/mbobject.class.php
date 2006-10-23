@@ -1257,8 +1257,11 @@ class CMbObject {
       }
     }
     // Load appropriate Aides
+    $currUser = new CMediusers();
+    $currUser->load($user_id);
+    
     $where = array();
-    $where["user_id"] = " = '$user_id'";
+    $where[] = "(user_id = '$user_id' OR function_id = '$currUser->function_id')";
     $where["class"] = " = '$class'";
     $order = "name";
     $aides = new CAideSaisie();

@@ -7,6 +7,7 @@
 "CAntecedent.type.chir"=>"Chirurgical",
 "CAntecedent.type.med"=>"Médical",
 "CAntecedent.type.fam"=>"Familial",
+"CAntecedent.type.anesth"=>"Anesthésique",
 "CPatient.sexe."=>" ",
 "CPatient.sexe.m"=>"Masculin",
 "CPatient.sexe.f"=>"Féminin",

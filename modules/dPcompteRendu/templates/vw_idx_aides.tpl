@@ -75,8 +75,8 @@ function pageMain() {
         <th><label for="filter_user_id" title="Filtrer les aides pour cet utilisateur">Utilisateur</label></th>
         <td>
           <select name="filter_user_id" onchange="this.form.submit()">
-            <option value="0">&mdash; Tous les utilisateurs</option>
-            {{foreach from=$users item=curr_user}}
+            <option value="">&mdash; Choisir un utilisateur</option>
+            {{foreach from=$listPrat item=curr_user}}
             <option class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}};" value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $filter_user_id}} selected="selected" {{/if}}>
               {{$curr_user->_view}}
             </option>
@@ -88,7 +88,7 @@ function pageMain() {
           <select name="filter_class" onchange="this.form.submit()">
             <option value="0">&mdash; Tous les types d'objets</option>
             {{foreach from=$classes|smarty:nodefaults key=class_name item=fields}}
-            <option {{if $class_name == $filter_class}} selected="selected" {{/if}}>
+            <option value="{{$class_name}}" {{if $class_name == $filter_class}} selected="selected" {{/if}}>
               {{tr}}{{$class_name}}{{/tr}}
             </option>
             {{/foreach}}
@@ -102,7 +102,7 @@ function pageMain() {
     <table class="tbl">
     
     <tr>
-      <th colspan="6"><strong>Liste des aides à la saisie</strong></th>
+      <th colspan="6" class="title"><strong>Liste des aides à la saisie</strong></th>
     </tr>
     
     <tr>
@@ -113,11 +113,29 @@ function pageMain() {
       <th>Texte de remplacement</th>
     </tr>
 
-    {{foreach from=$aides item=curr_aide}}
+    <tr>
+      <th colspan="6"><strong>Aides du praticien</strong></th>
+    </tr>
+    {{foreach from=$aidesPrat item=curr_aide}}
     <tr>
       {{assign var="aide_id" value=$curr_aide->aide_id}}
       {{assign var="href" value="?m=$m&tab=$tab&aide_id=$aide_id"}}
       <td><a href="{{$href}}">{{$curr_aide->_ref_user->_view}}</a></td>
+      <td><a href="{{$href}}">{{tr}}{{$curr_aide->class}}{{/tr}}</a></td>
+      <td><a href="{{$href}}">{{$curr_aide->field}}</a></td>
+      <td><a href="{{$href}}">{{$curr_aide->name}}</a></td>
+      <td class="text">{{$curr_aide->text|nl2br}}</td>
+    </tr>
+    {{/foreach}}
+    
+    <tr>
+      <th colspan="6"><strong>Aides du cabinet</strong></th>
+    </tr>
+    {{foreach from=$aidesFunc item=curr_aide}}
+    <tr>
+      {{assign var="aide_id" value=$curr_aide->aide_id}}
+      {{assign var="href" value="?m=$m&tab=$tab&aide_id=$aide_id"}}
+      <td><a href="{{$href}}">{{$curr_aide->_ref_function->text}}</a></td>
       <td><a href="{{$href}}">{{tr}}{{$curr_aide->class}}{{/tr}}</a></td>
       <td><a href="{{$href}}">{{$curr_aide->field}}</a></td>
       <td><a href="{{$href}}">{{$curr_aide->name}}</a></td>
@@ -150,14 +168,28 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="user_id" title="Utilisateur concerné, obligatoire.">Utilisateur</label></th>
+      <th><label for="user_id" title="Utilisateur concerné">Utilisateur</label></th>
       <td>
         <select name="user_id" title="{{$aide->_props.user_id}}">
-          <option value="">&mdash; Choisir un utilisateur</option>
-          {{foreach from=$users item=curr_user}}
-          <option class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}};" value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $aide->user_id}} selected="selected" {{/if}}>
-            {{$curr_user->_view}}
-          </option>
+          <option value="">&mdash; Associer à un praticien &mdash;</option>
+          {{foreach from=$listPrat item=curr_prat}}
+            <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $aide->user_id}} selected="selected" {{/if}}>
+              {{$curr_prat->_view}}
+            </option>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+  
+    <tr>
+      <th><label for="function_id" title="Fonction concerné">Fonction</label></th>
+      <td>
+        <select name="function_id" title="{{$aide->_props.function_id}}">
+          <option value="">&mdash; Associer à une fonction &mdash;</option>
+          {{foreach from=$listFunc item=curr_func}}
+            <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $aide->function_id}} selected="selected" {{/if}}>
+              {{$curr_func->_view}}
+            </option>
           {{/foreach}}
         </select>
       </td>

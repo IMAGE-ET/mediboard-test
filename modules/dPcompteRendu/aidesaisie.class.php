@@ -12,16 +12,18 @@ class CAideSaisie extends CMbObject {
   var $aide_id = null;
 
   // DB References
-  var $user_id = null;
+  var $user_id     = null;
+  var $function_id = null;
 
   // DB fields
   var $class = null;
   var $field = null;
-  var $name = null;
-  var $text = null;
+  var $name  = null;
+  var $text  = null;
   
   // Referenced objects
-  var $_ref_user = null;
+  var $_ref_user     = null;
+  var $_ref_function = null;
 
   function CAideSaisie() {
     $this->CMbObject("aide_saisie", "aide_id");
@@ -31,17 +33,20 @@ class CAideSaisie extends CMbObject {
 
   function getSpecs() {
     return array (
-      "user_id" => "ref|notNull",
-      "class"   => "str|notNull",
-      "field"   => "str|notNull",
-      "name"    => "str|notNull",
-      "text"    => "text|notNull"
+      "user_id"     => "ref",
+      "function_id" => "ref|xor|user_id",
+      "class"       => "str|notNull",
+      "field"       => "str|notNull",
+      "name"        => "str|notNull",
+      "text"        => "text|notNull"
     );
   }
   
   function loadRefsFwd() {
     $this->_ref_user = new CMediusers;
     $this->_ref_user->load($this->user_id);
+    $this->_ref_function = new CFunctions;
+    $this->_ref_function->load($this->function_id);
   }
   
   function getPerm($permType) {

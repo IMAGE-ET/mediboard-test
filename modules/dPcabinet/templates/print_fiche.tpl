@@ -61,6 +61,8 @@
             Anesthésie prévue :
             <strong>{{$consult_anesth->_ref_operation->_lu_type_anesth}}</strong>
             
+            {{elseif $consult_anesth->position}}
+            Position : <strong>{{tr}}CConsultAnesth.position.{{$consult_anesth->position}}{{/tr}}</strong>
             {{/if}}
           </td>
           <td class="halfPane">
@@ -100,7 +102,9 @@
             Né{{if $patient->sexe != "m"}}e{{/if}} le {{$patient->_jour}}/{{$patient->_mois}}/{{$patient->_annee}}
             ({{$patient->_age}} ans)
             - sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}<br />
-            <strong>{{$consult->_ref_consult_anesth->poid}} kg</strong> - <strong>{{$consult->_ref_consult_anesth->taille}} cm</strong> - IMC : <strong>{{$consult->_ref_consult_anesth->_imc}}</strong>
+            {{if $consult->_ref_consult_anesth->poid}}<strong>{{$consult->_ref_consult_anesth->poid}} kg</strong> - {{/if}}
+            {{if $consult->_ref_consult_anesth->taille}}<strong>{{$consult->_ref_consult_anesth->taille}} cm</strong> - {{/if}}
+            {{if $consult->_ref_consult_anesth->_imc}}IMC : <strong>{{$consult->_ref_consult_anesth->_imc}}</strong>{{/if}}
           </td>
         </tr>
         <tr>
@@ -120,11 +124,17 @@
               </tr>
               <tr>
                 <th class="NotBold">VST</th>
-                <td class="Bold" style="white-space: nowrap;">{{$consult->_ref_consult_anesth->_vst}} ml</td>
+                <td class="Bold" style="white-space: nowrap;">
+                  {{if $consult->_ref_consult_anesth->_vst}}{{$consult->_ref_consult_anesth->_vst}} ml{{/if}}
+                </td>
               </tr>
               <tr>
                 <th class="NotBold">PSA</th>
-                <td class="Bold" style="white-space: nowrap;">{{$consult->_ref_consult_anesth->_psa}} ml/GR</td>
+                <td class="Bold" style="white-space: nowrap;">
+                  {{if $consult->_ref_consult_anesth->_psa}}
+                  {{$consult->_ref_consult_anesth->_psa}} ml/GR
+                  {{/if}}
+                </td>
                 <td colspan="2"></td>
               </tr>
               <tr>
@@ -222,21 +232,29 @@
         <tr>
           <th class="NotBold">Pouls</th>
           <td class="Bold" style="white-space: nowrap;">
+            {{if $consult->_ref_consult_anesth->pouls}}
             {{$consult->_ref_consult_anesth->pouls}} / min
+            {{/if}}
           </td>
           <th class="NotBold">TA</th>
           <td class="Bold" style="white-space: nowrap;">
+            {{if $consult->_ref_consult_anesth->tasys || $consult->_ref_consult_anesth->tadias}}
             {{$consult->_ref_consult_anesth->tasys}} / {{$consult->_ref_consult_anesth->tadias}} cm Hg
+            {{/if}}
           </td>
           <th class="NotBold">Spo2</th>
           <td class="Bold" style="white-space: nowrap;">
+            {{if $consult->_ref_consult_anesth->spo2}}
             {{$consult->_ref_consult_anesth->spo2}} %
+            {{/if}}
           </td>
         </tr>
+        {{if $consult->examen}}
         <tr>
           <th class="NotBold">Examens</th>
           <td colspan="5" class="text Bold">{{$consult->examen|nl2br}}</td>
         </tr>
+        {{/if}}
       </table>
     </td>
   </tr>
@@ -324,41 +342,57 @@
         <tr>
           <th class="NotBold">Hb</th>
           <td class="Bold" style="white-space: nowrap;">
+            {{if $consult->_ref_consult_anesth->hb}}
             {{$consult->_ref_consult_anesth->hb}} g/dl
+            {{/if}}
           </td>
           <th class="NotBold">Créatinine</th>
           <td class="Bold" style="white-space: nowrap;">
+            {{if $consult->_ref_consult_anesth->creatinine}}
             {{$consult->_ref_consult_anesth->creatinine}} mg/l
+            {{/if}}
           </td>
           <th class="NotBold">TP</th>
           <td class="Bold" style="white-space: nowrap;">
+            {{if $consult->_ref_consult_anesth->tp}}
             {{$consult->_ref_consult_anesth->tp}} %
+            {{/if}}
           </td>
         </tr>
         <tr>
           <th class="NotBold">Ht</th>
           <td class="Bold">
+            {{if $consult->_ref_consult_anesth->ht}}
             {{$consult->_ref_consult_anesth->ht}} %
+            {{/if}}
           </td>
           <th class="NotBold">
             Clairance de Créatinine
           </th>
           <td class="Bold" style="white-space: nowrap;">
+            {{if $consult->_ref_consult_anesth->_clairance}}
             {{$consult->_ref_consult_anesth->_clairance}} ml/min
+            {{/if}}
           </td>
           <th class="NotBold">TCA</th>
           <td class="Bold" style="white-space: nowrap;">
+            {{if $consult->_ref_consult_anesth->tca_temoin || $consult->_ref_consult_anesth->tca}}
             {{$consult->_ref_consult_anesth->tca_temoin}} s / {{$consult->_ref_consult_anesth->tca}} s
+            {{/if}}
           </td>
         </tr>
         <tr>
           <th class="NotBold">Ht final</th>
           <td class="Bold">
+            {{if $consult->_ref_consult_anesth->ht_final}}
             {{$consult->_ref_consult_anesth->ht_final}} %
+            {{/if}}
           </td>
           <th class="NotBold">Na+</th>
           <td class="Bold" style="white-space: nowrap;">
+            {{if $consult->_ref_consult_anesth->na}}
             {{$consult->_ref_consult_anesth->na}} mmol/l
+            {{/if}}
           </td>
           <th class="NotBold">TS Ivy</th>
           <td class="Bold" style="white-space: nowrap;">
@@ -372,7 +406,9 @@
           </td>
           <th class="NotBold">K+</th>
           <td class="Bold" style="white-space: nowrap;">
+            {{if $consult->_ref_consult_anesth->k}}
             {{$consult->_ref_consult_anesth->k}} mmol/l
+            {{/if}}
           </td>
           <th class="NotBold">ECBU</th>
           <td class="Bold">
@@ -384,6 +420,7 @@
   </tr>
   <tr>
     <td>
+      {{if $consult->_ref_examcomp|@count}}
       <table width="100%" style="font-size: 100%;">
         <tr>
           <th>
@@ -407,6 +444,20 @@
           </td>
         </tr>
       </table>
+      {{/if}}
+      {{if $consult->rques}}
+      <table width="100%" style="font-size: 100%;">
+        <tr>
+          <th>
+            Remarques
+          </th>
+          <td>
+            {{$consult->rques|nl2br}}
+          </td>
+        </tr>
+      </table>
+      {{/if}}
+
       <table width="100%" style="font-size: 100%;padding-bottom: 10px;">
         <tr>
           <th class="category">
@@ -425,6 +476,7 @@
           </td>
         </tr>
       </table>
+      {{if $consult->_ref_consult_anesth->premedication}}
       <table width="100%" style="font-size: 100%;padding-bottom: 10px;">
         <tr>
           <th class="category">
@@ -437,6 +489,8 @@
           </td>
         </tr>
       </table>
+      {{/if}}
+      {{if $consult->_ref_consult_anesth->prepa_preop}}
       <table width="100%" style="font-size: 100%;">
         <tr>
           <th class="category">
@@ -449,51 +503,11 @@
           </td>
         </tr>
       </table>
+      {{/if}}
     </td>
   </tr>
 </table>
 
-<br style="page-break-after: always;" />
-<table class="form" id="admission">
-  <tr>
-    <td>
-      <table width="100%" style="font-size: 110%;">
-        <tr>
-          <th class="title" colspan="4">
-            <a href="javascript:window.print()">
-              Visite pré-anesthésique
-            </a>
-          </th>
-        </tr>
-        <tr>
-          <th>Date </th>
-          <td>{{$consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}}</td>
-          <th>Anesthésiste </th>
-          <td>Dr. {{$consult->_ref_chir->_view}}</td>
-        </tr>
-        <tr>
-          <th>Patient </th>
-          <td>{{$patient->_view}}</td>
-          <td colspan="2"></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-
-<table class="form" id="admission">
-  <tr>
-    <td>
-      <table width="100%" style="font-size: 100%;">
-        <tr>
-          <td class="text">
-            {{$consult->rques|nl2br}}
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
 <table class="main">
   <tr>
     <td>

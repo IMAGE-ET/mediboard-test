@@ -23,7 +23,7 @@ function pageMain() {
         <th><label for="filter_user_id" title="Filtrer les listes pour cet utilisateur">Utilisateur</label></th>
         <td>
           <select name="filter_user_id" onchange="this.form.submit()">
-            <option value="0">&mdash; Tous les utilisateurs</option>
+            <option value="0">&mdash; Choisir un utilisateur</option>
             {{foreach from=$users item=curr_user}}
             <option class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}};" value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $user_id}} selected="selected" {{/if}}>
               {{$curr_user->_view}}

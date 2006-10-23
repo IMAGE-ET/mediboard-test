@@ -151,7 +151,7 @@ function pageMain() {
         <td><select name="chir_id" title="{{$plageSel->_props.chir_id}}">
             <option value="">&mdash; Choisir un praticien</option>
             {{foreach from=$listChirs item=curr_chir}}
-              <option value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
+              <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
               {{$curr_chir->_view}}
               </option>
             {{/foreach}}

@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcompteRendu";
-$config["mod_version"]     = "0.24";
+$config["mod_version"]     = "0.25";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -162,7 +162,10 @@ class CSetupdPcompteRendu {
           db_exec($sql); db_error();          
         }
       case "0.24":
-        return "0.24";
+        $sql = "ALTER TABLE `aide_saisie` ADD `function_id` int(10) unsigned NULL AFTER `user_id` ;";
+        db_exec($sql); db_error();
+      case "0.25":
+        return "0.25";
     }
     return false;
   }

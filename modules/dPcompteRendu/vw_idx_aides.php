@@ -32,51 +32,80 @@ foreach($classes as $sClass=>$aChamps){
 }
 
 // Liste des praticiens accessibles
-$users = new CMediusers();
-$users = $users->loadUsers(PERM_READ);
+$listPrat = new CMediusers();
+$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
-$user_id = array_key_exists($AppUI->user_id, $users) ? $AppUI->user_id : null;
+$listFunc = new CFunctions();
+$listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 
-// Filtres sur la liste d'aides
+
+// Utilisateur sélectionné ou utilisateur courant
+$filter_user_id = mbGetValueFromGetOrSession("filter_user_id");
+$filter_class   = mbGetValueFromGetOrSession("filter_class");
+$aide_id        = mbGetValueFromGetOrSession("aide_id");
+
+$userSel = new CMediusers;
+$userSel->load($filter_user_id ? $filter_user_id : $AppUI->user_id);
+$userSel->loadRefs();
+
+if ($userSel->isPraticien()) {
+  mbSetValueToSession("filter_user_id", $userSel->user_id);
+  $filter_user_id = $userSel->user_id;
+}
+
 $where = array();
-$filter_user_id = mbGetValueFromGetOrSession("filter_user_id", $user_id);
-$where["user_id"] = $filter_user_id ? 
-  "= '$filter_user_id'" : 
-  db_prepare_in(array_keys($users));
-
-$filter_class = mbGetValueFromGetOrSession("filter_class");
 if ($filter_class) {
   $where["class"] = "= '$filter_class'";
 }
 
 $order = array("user_id", "class", "field", "name");
-$aides = new CAideSaisie();
-$aides = $aides->loadList($where, $order);
-foreach($aides as $key => $aide) {
-  $aides[$key]->loadRefsFwd();
+
+// Liste des aides pour le praticien
+$aidesPrat = array();
+if ($userSel->user_id) {
+  $where["user_id"] = "= '$userSel->user_id'";
+  // $where["user_id"] = "= '$filter_user_id'";
+  $aidesPrat = new CAideSaisie();
+  $aidesPrat = $aidesPrat->loadlist($where, $order);
+  foreach($aidesPrat as $key => $aide) {
+    $aidesPrat[$key]->loadRefsFwd();
+  }
+  unset($where["user_id"]);
 }
 
+// Liste des aides pour la fonction du praticien
+$aidesFunc = array();
+if ($userSel->user_id) {
+  $where["function_id"] = "= '$userSel->function_id'";
+  $aidesFunc = new CAideSaisie();
+  $aidesFunc = $aidesFunc->loadlist($where, $order);
+  foreach($aidesFunc as $key => $aide) {
+    $aidesFunc[$key]->loadRefsFwd();
+  }
+}
+
+
 // Aide sélectionnée
-$aide_id = mbGetValueFromGetOrSession("aide_id");
 $aide = new CAideSaisie();
 $aide->load($aide_id); 
 $aide->loadRefs();
 
 if (!$aide_id) {
-  $aide->user_id = $user_id;
+  $aide->user_id = $userSel->user_id;
 }
 
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("users"         , $users);
+$smarty->assign("listPrat"      , $listPrat);
+$smarty->assign("listFunc"      , $listFunc);
 $smarty->assign("classes"       , $classes);
-$smarty->assign("filter_user_id", $filter_user_id);
-$smarty->assign("filter_class"  , $filter_class);
-$smarty->assign("aides"         , $aides);
 $smarty->assign("aide"          , $aide);
+$smarty->assign("aidesFunc"     , $aidesFunc);
+$smarty->assign("aidesPrat"     , $aidesPrat);
+$smarty->assign("filter_class"  , $filter_class);
+$smarty->assign("filter_user_id", $filter_user_id);
 $smarty->assign("listObjectAffichage" , $listObjectAffichage);
 
 $smarty->display("vw_idx_aides.tpl");
-
 ?>
