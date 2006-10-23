@@ -20,6 +20,14 @@ function reloadAfterSaveDoc(){
   updateListHospi("sortie");
 }
 
+function hideIcon(frame) {
+  $("icon-" + frame).hide();
+}
+
+function showIcon(frame) {
+  $("icon-" + frame).show();
+}
+
 function updateListConsults() {
   var url = new Url;
   url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
@@ -58,6 +66,10 @@ function updateListHospi(typeHospi) {
 }
 
 function pageMain() {
+  hideIcon("consultations");
+  hideIcon("operations");
+  hideIcon("entree");
+  hideIcon("sortie");
   updateListConsults();
   updateListOperations();
   updateListHospi("entree");
@@ -78,21 +90,37 @@ function pageMain() {
     </th>
   </tr>
   <tr>
-    <td class="halfPane">
+    <td class="halfPane" onmouseover="showIcon('consultations')" onmouseout="hideIcon('consultations')">
+      <div style="position:absolute" id="icon-consultations">
+        <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$date}}">
+          <img src="modules/dPcabinet/images/dPcabinet.png" height="24px" width="24px" />
+        </a>
+      </div>
       <div style="overflow: auto; height: 250px;" id="consultations">
       </div>
     </td>
-    <td class="halfPane">
+    <td class="halfPane" onmouseover="showIcon('operations')" onmouseout="hideIcon('operations')">
+      <div style="position:absolute" id="icon-operations">
+        <a href="index.php?m=dPplanningOp&tab=vw_idx_planning&amp;date={{$date}}">
+          <img src="modules/dPplanningOp/images/dPplanningOp.png" height="24px" width="24px" />
+        </a>
+      </div>
       <div style="overflow: auto; height: 250px;" id="operations">
       </div>
     </td>
   </tr>
   <tr>
-    <td>
+    <td onmouseover="showIcon('entree')" onmouseout="hideIcon('entree')">
+      <div style="position:absolute" id="icon-entree">
+        <img src="modules/dPhospi/images/dPhospi.png" height="24px" width="24px" />
+      </div>
       <div style="overflow: auto; height: 250px;" id="entree">
       </div>
     </td>
-    <td>
+    <td onmouseover="showIcon('sortie')" onmouseout="hideIcon('sortie')">
+      <div style="position:absolute" id="icon-sortie">
+        <img src="modules/dPhospi/images/dPhospi.png" height="24px" width="24px" />
+      </div>
       <div style="overflow: auto; height: 250px;" id="sortie">
       </div>
     </td>
