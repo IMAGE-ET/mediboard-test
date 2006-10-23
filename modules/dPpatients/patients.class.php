@@ -38,14 +38,12 @@ class CPatient extends CMbObject {
   var $listCim10        = null;
   var $cmu              = null;
   var $ald              = null;
-  
-  // A rajouter dans la base
+
   var $pays             = null;
   var $nationalite      = null;
   var $lieu_naissance   = null;
   var $profession       = null;
-  
-  // A rajouter dans la base
+
   var $employeur_nom     = null;
   var $employeur_adresse = null;
   var $employeur_cp      = null;
@@ -53,7 +51,6 @@ class CPatient extends CMbObject {
   var $employeur_tel     = null;
   var $employeur_urssaf  = null;
 
-  // A rajouter dans la base
   var $prevenir_nom     = null;
   var $prevenir_prenom  = null;
   var $prevenir_adresse = null;

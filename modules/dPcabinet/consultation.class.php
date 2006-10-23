@@ -41,15 +41,6 @@ class CConsultation extends CMbObject {
   var $tarif         = null;
   var $type_tarif    = null;
   var $arrivee       = null;
-  
-  // Document fields:  to be externalized
-  var $cr_valide  = null;
-  var $ordonnance = null;
-  var $or_valide  = null;
-  var $courrier1  = null;
-  var $c1_valide  = null;
-  var $courrier2  = null;
-  var $c2_valide  = null;
 
   // Form fields
   var $_etat           = null;
