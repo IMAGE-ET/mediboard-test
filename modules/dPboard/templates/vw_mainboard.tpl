@@ -20,6 +20,26 @@ function reloadAfterSaveDoc(){
   updateListHospi("sortie");
 }
 
+function affNaissance() {
+  var oForm      = document.find;
+  var oCheckNaissance = oForm.check_naissance;
+  var oNaissance = oForm.naissance;
+  var oDay       = oForm.Date_Day;
+  var oMonth     = oForm.Date_Month;
+  var oYear      = oForm.Date_Year;
+  if (oCheckNaissance.checked) {
+    oDay.style.display   = "inline";
+    oMonth.style.display = "inline";
+    oYear.style.display  = "inline";
+    oNaissance.value     = "on";
+  } else {
+    oDay.style.display   = "none";
+    oMonth.style.display = "none";
+    oYear.style.display  = "none";
+    oNaissance.value     = "off";
+  }
+}
+
 function hideIcon(frame) {
   $("icon-" + frame).hide();
 }
@@ -38,7 +58,7 @@ function updateListConsults() {
   url.addParam("selConsult", "");
   url.addParam("board"     , "1");
 
-  url.requestUpdate('consultations');
+  url.requestUpdate("consultations");
 }
 
 function updateListOperations() {
@@ -50,7 +70,25 @@ function updateListOperations() {
   url.addParam("urgences", "0");
   url.addParam("board"   , "1");
 
-  url.requestUpdate('operations');
+  url.requestUpdate("operations");
+}
+
+function updateListPatients() {
+  var url = new Url;
+  url.setModuleAction("dPpatients", "httpreq_list_patients");
+  
+  var oForm = document.find;
+  if(oForm) {
+    url.addElement(oForm.nom);
+    url.addElement(oForm.prenom);
+    url.addElement(oForm.naissance);
+    url.addElement(oForm.Date_Day);
+    url.addElement(oForm.Date_Month);
+    url.addElement(oForm.Date_Year);
+  }
+  url.addParam("board"   , "1");
+
+  url.requestUpdate("patients");
 }
 
 function updateListHospi(typeHospi) {
@@ -68,10 +106,11 @@ function updateListHospi(typeHospi) {
 function pageMain() {
   hideIcon("consultations");
   hideIcon("operations");
-  hideIcon("entree");
-  hideIcon("sortie");
+  hideIcon("hospi");
+  hideIcon("patients");
   updateListConsults();
   updateListOperations();
+  updateListPatients();
   updateListHospi("entree");
   updateListHospi("sortie");
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
@@ -101,7 +140,7 @@ function pageMain() {
     </td>
     <td class="halfPane" onmouseover="showIcon('operations')" onmouseout="hideIcon('operations')">
       <div style="position:absolute" id="icon-operations">
-        <a href="index.php?m=dPplanningOp&tab=vw_idx_planning&amp;date={{$date}}">
+        <a href="index.php?m=dPplanningOp&amp;tab=vw_idx_patients&amp;date={{$date}}">
           <img src="modules/dPplanningOp/images/dPplanningOp.png" height="24px" width="24px" />
         </a>
       </div>
@@ -110,18 +149,24 @@ function pageMain() {
     </td>
   </tr>
   <tr>
-    <td onmouseover="showIcon('entree')" onmouseout="hideIcon('entree')">
-      <div style="position:absolute" id="icon-entree">
-        <img src="modules/dPhospi/images/dPhospi.png" height="24px" width="24px" />
+    <td onmouseover="showIcon('patients')" onmouseout="hideIcon('patients')">
+      <div style="position:absolute" id="icon-patients">
+        <a href="index.php?m=dPpatients&amp;tab=vw_idx_planning&amp;date={{$date}}">
+          <img src="modules/dPpatients/images/dPpatients.png" height="24px" width="24px" />
+        </a>
       </div>
-      <div style="overflow: auto; height: 250px;" id="entree">
+      <div style="overflow: auto; height: 250px;" id="patients">
       </div>
     </td>
-    <td onmouseover="showIcon('sortie')" onmouseout="hideIcon('sortie')">
-      <div style="position:absolute" id="icon-sortie">
+    <td onmouseover="showIcon('hospi')" onmouseout="hideIcon('hospi')">
+      <div style="position:absolute" id="icon-hospi">
         <img src="modules/dPhospi/images/dPhospi.png" height="24px" width="24px" />
       </div>
-      <div style="overflow: auto; height: 250px;" id="sortie">
+      <div style="overflow: auto; height: 250px;">
+        <div id="sortie">
+        </div>
+        <div id="entree">
+        </div>
       </div>
     </td>
   </tr>

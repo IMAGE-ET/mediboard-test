@@ -30,13 +30,13 @@
           <td>
             {{if $naissance == "on"}}
             {{html_select_date
-                 time=$date
+                 time=$datePat
                  start_year=1900
                  field_order=DMY
                  all_extra="style='display:inline;'"}}
              {{else}}
             {{html_select_date
-                 time=$date
+                 time=$datePat
                  start_year=1900
                  field_order=DMY
                  all_extra="style='display:none;'"}}
@@ -45,7 +45,13 @@
         </tr>
         
         <tr>
-          <td class="button" colspan="2"><button class="search" type="submit">Rechercher</button></td>
+          <td class="button" colspan="2">
+            {{if $board}}
+            <button class="search" type="button" onclick="updateListPatients()">Rechercher</button>
+            {{else}}
+            <button class="search" type="submit">Rechercher</button>
+            {{/if}}
+          </td>
         </tr>
       </table>
       </form>
@@ -61,21 +67,26 @@
           <th>Adresse</th>
         </tr>
 
+        {{if $board}}
+        {{assign var="href" value="index.php?m=dPpatients&tab=vw_full_patients&patient_id="}}
+        {{else}}
+        {{assign var="href" value="index.php?m=dPpatients&tab=vw_idx_patients&patient_id="}}
+        {{/if}}
         {{foreach from=$patients item=curr_patient}}
         <tr>
           <td><input type="checkbox" name="fusion_{{$curr_patient->patient_id}}" /></td>
           <td class="text">
-            <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;patient_id={{$curr_patient->patient_id}}">
+            <a href="{{$href}}{{$curr_patient->patient_id}}">
               {{$curr_patient->_view}}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;patient_id={{$curr_patient->patient_id}}">
+            <a href="{{$href}}{{$curr_patient->patient_id}}">
               {{$curr_patient->_naissance}}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;patient_id={{$curr_patient->patient_id}}">
+            <a href="{{$href}}{{$curr_patient->patient_id}}">
               {{$curr_patient->adresse}}, {{$curr_patient->cp}} {{$curr_patient->ville}}
             </a>
           </td>

@@ -85,12 +85,14 @@ $smarty = new CSmartyDP(1);
 $smarty->assign("nom"           , $patient_nom                               );
 $smarty->assign("prenom"        , $patient_prenom                            );
 $smarty->assign("naissance"     , $patient_naissance                         );
-$smarty->assign("date"          , "$patient_year-$patient_month-$patient_day");
+$smarty->assign("datePat"       , "$patient_year-$patient_month-$patient_day");
 $smarty->assign("patients"      , $patients                                  );
 $smarty->assign("patient"       , $patient                                   );
 $smarty->assign("chir"          , $chir                                      );
 $smarty->assign("anesth"        , $anesth                                    );
 $smarty->assign("listPrat"      , $listPrat                                  );
 $smarty->assign("canEditCabinet", $canEditCabinet                            );
+$smarty->assign("board"         , 0                                          );
+
 $smarty->display("vw_idx_patients.tpl");
 ?>
