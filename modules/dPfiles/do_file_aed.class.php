@@ -7,9 +7,6 @@
 * @author Sébastien Fillonneau
 */
 
-set_time_limit(600);
-ignore_user_abort(1);
-
 class CFileAddEdit extends CDoObjectAddEdit {
 
   function CFileAddEdit() {
