@@ -25,12 +25,8 @@ class CLibraryPatch {
     $targetPath = "$libsDir/$this->dirName/$this->targetDir/$this->sourceName";
     $oldPath = $targetPath . ".old";
     
-    if (!is_file($targetPath)) {
-      trigger_error("Source '$targetPath' is not existing");
-    }
-
     @unlink($oldPath);
-    rename($targetPath, $oldPath);
+    @rename($targetPath, $oldPath);
     return copy($sourcePath, $targetPath);
   }
 }
