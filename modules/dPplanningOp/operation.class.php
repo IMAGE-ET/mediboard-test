@@ -101,8 +101,13 @@ class COperation extends CMbObject {
   
   function getSpecs() {
     return array (
+      "sejour_id"      => "ref|notNull",
       "chir_id"        => "ref|notNull",
+      "anesth_id"      => "ref",
       "plageop_id"     => "ref",
+      "pause"          => "time",
+      "salle_id"       => "ref",
+      "codes_ccam"     => "str",
       "date"           => "date",
       "code_uf"        => "str|maxLength|10",
       "libelle_uf"     => "str|maxLength|35",
@@ -125,6 +130,13 @@ class COperation extends CMbObject {
       "rank"           => "num",
       "depassement"    => "currency|min|0|confidential",
       "annulee"        => "enum|0|1",
+      "pose_garrot"    => "time",
+      "debut_op"       => "time",
+      "fin_op"         => "time",
+      "retrait_garrot" => "time",
+      "entree_reveil"  => "time",
+      "sortie_reveil"  => "time",
+      "induction"      => "time"
     );
   }
   

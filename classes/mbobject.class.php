@@ -801,6 +801,7 @@ class CMbObject {
         break;
 
       // numerical string
+      case "numchar":
       case "num":
         if (!is_numeric($propValue)) {
           return "N'est pas une chaîne numérique";

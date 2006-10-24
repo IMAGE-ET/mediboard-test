@@ -1,5 +1,18 @@
 <script type="text/javascript">
 
+function zoomGraphIntervention(date){
+  url = new Url();
+  url.setModuleAction("dPstats", "graph_activite_zoom");
+  url.addParam("suppressHeaders", 1);
+  url.addParam("date"         , date);
+  url.addParam("salle_id"     , "{{$salle_id}}");
+  url.addParam("prat_id"      , "{{$prat_id}}");
+  url.addParam("codeCCAM"     , "{{$codeCCAM|smarty:nodefaults|escape:"javascript"}}");
+  url.addParam("discipline_id", "{{$discipline_id}}");
+  url.addParam("size"         , 2);
+  url.popup(760, 400, "ZoomMonth");
+}
+
 function pageMain() {
   regFieldCalendar("bloc", "debutact");
   regFieldCalendar("bloc", "finact");
@@ -74,7 +87,8 @@ function pageMain() {
         </tr>
         <tr>
           <td colspan="4" class="button">
-            <img alt="Nombre d'interventions" src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;prat_id={{$prat_id}}&amp;codeCCAM={{$codeCCAM}}&amp;discipline_id={{$discipline_id}}' />
+            {{$map_graph_interventions|smarty:nodefaults}}
+            <img usemap="#graph_interventions" alt="Nombre d'interventions" src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;prat_id={{$prat_id}}&amp;codeCCAM={{$codeCCAM}}&amp;discipline_id={{$discipline_id}}' />
             {{if $prat_id}}
               <img alt="Occupation des plages" src='?m=dPstats&amp;a=graph_praticienbloc&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;prat_id={{$prat_id}}&amp;codeCCAM={{$codeCCAM}}' />
             {{elseif $discipline_id}}

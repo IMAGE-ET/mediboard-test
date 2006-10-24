@@ -85,11 +85,9 @@ class CConsultation extends CMbObject {
       "examen"          => "text",
       "traitement"      => "text",
       "compte_rendu"    => "html",
-      "ordonnance"      => "html",
-      "courrier1"       => "html",
-      "courrier2"       => "html",
       "premiere"        => "enum|0|1",
       "tarif"           => "str",
+      "arrivee"         => "dateTime",
       "type_tarif"      => "str" // En faire un enum
     );
   }

@@ -17,7 +17,6 @@ class CFournisseur extends CMbObject {
   // DB Fields
   var $societe       = null;
   var $adresse       = null;
-  var $adresse_suite = null;
   var $codepostal    = null;
   var $ville         = null;
   var $telephone     = null;
@@ -34,14 +33,14 @@ class CFournisseur extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
 
     static $props = array (
-      "societe"    => "str|maxLength|50|notNull",
-      "adresse"    => "str",
-      "codepostal" => "num|length|5",
+      "societe"    => "str|notNull",
+      "adresse"    => "text",
+      "codepostal" => "numchar|length|5",
       "ville"      => "str",
-      "telephone"  => "num",
+      "telephone"  => "numchar|maxLength|25",
       "mail"       => "email",
-      "nom"        => "str|maxLength|50",
-      "prenom"     => "str|maxLength|50"
+      "nom"        => "str",
+      "prenom"     => "str"
     );
     $this->_props =& $props;
 

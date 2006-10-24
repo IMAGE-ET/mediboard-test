@@ -26,6 +26,13 @@ $salle_id      = mbGetValueFromGetOrSession("salle_id", 0);
 $discipline_id = mbGetValueFromGetOrSession("discipline_id", 0);
 $codeCCAM      = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
 
+
+// map Graph Interventions
+require_once($AppUI->getModuleFile($m, "inc_graph_activite"));
+$graph->Stroke("tmp/graphtmp.png");
+$map_graph_interventions = $graph->GetHTMLImageMap("graph_interventions");
+
+
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
 
@@ -40,6 +47,7 @@ $listDisciplines = $listDisciplines->loadUsedDisciplines();
 // Création du template
 $smarty = new CSmartyDP(1);
 
+$smarty->assign("map_graph_interventions" , $map_graph_interventions);
 $smarty->assign("debutact"       , $debutact       );
 $smarty->assign("finact"         , $finact         );
 $smarty->assign("prat_id"        , $prat_id        );

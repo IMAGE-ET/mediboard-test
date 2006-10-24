@@ -15,12 +15,6 @@ if (!$canRead) {
 
 $selClass = mbGetValueFromGetOrSession("selClass", null);
 
-// Liste des Class
-$listClass = getInstalledClasses();
-if(!$selClass){
-  $selClass = current($listClass);
-}
-
 
 function getDBSpec($spec){
   $type_sql = null;
@@ -40,16 +34,23 @@ function getDBSpec($spec){
   
   switch ($specFragments[0]) {
     case "ref":
-      $type_sql = "int(10) unsigned";
+      $type_sql = "int(11) unsigned";
       break;
 
+    case "numchar":
     case "str":
       $type_sql = "varchar(255)";
       if(isset($specFragments[1])){
         switch ($specFragments[1]) {
-        	case "maxLength":
+          case "minMax":
+            $type_sql = "varchar(".strlen($specFragments[3]).")";
+            break;
+          case "maxLength":
           case "length":
             $type_sql = "varchar(".$specFragments[2].")";
+            break;
+          case "max":
+            $type_sql = "varchar(".strlen($specFragments[2]).")";
             break;
         }
       }
@@ -59,6 +60,9 @@ function getDBSpec($spec){
       $type_sql = "int(11)";
       if(isset($specFragments[1])){
         switch ($specFragments[1]) {
+          case "minMax":
+            $type_sql = "int(".strlen($specFragments[3]).")";
+            break;
           case "maxLength":
           case "length":
             $type_sql = "int(".$specFragments[2].")";
@@ -67,7 +71,7 @@ function getDBSpec($spec){
             $type_sql = "int(".strlen($specFragments[2]).")";
             break;
           case "pos":
-            $type_sql = "int(10) unsigned";
+            $type_sql = "int(11) unsigned";
             break;          
         }
       }
@@ -96,6 +100,9 @@ function getDBSpec($spec){
       break;
     
     case "email":
+      $type_sql = "varchar(50)";
+      break;
+      
     case "text":
       $type_sql = "text";
       break;
@@ -125,65 +132,124 @@ function getDBSpec($spec){
 }
 
 
-
+$classSelected = array();
 $aChamps = array();
-$object = new $selClass;
-$keytable = $object->_tbl_key;
+// Liste des Class
+$listClass = getInstalledClasses();
 
-// Extraction des champs
-foreach ($object->getProps() as $k => $v) {
-  $aChamps[$k]["class_field"] = $k;
-}  
-
-// Extraction des propriétés
-foreach($object->_props as $k => $v) {
-  $aChamps[$k]["class_props"] = $v;
-  getDBSpec($v);
+$class_exist = array_search($selClass, $listClass);
+if($class_exist=== false){
+  $selClass = null;
+  mbSetValueToSession("selClass", $selClass);
+  $classSelected =& $listClass;
+}else{
+  $classSelected[] = $selClass;
 }
 
-// Extraction des champs de la BDD
-$sql = "SHOW FULL FIELDS FROM `".$object->_tbl."`";
-$listFields = db_loadList($sql);
-foreach($listFields as $currField){
-  $aChamps[$currField["Field"]]["BDD_name"]    = $currField["Field"];
-  $aChamps[$currField["Field"]]["BDD_type"]    = $currField["Type"];
-  $aChamps[$currField["Field"]]["BDD_null"]    = $currField["Null"];
-  $aChamps[$currField["Field"]]["BDD_default"] = $currField["Default"];
-  $aChamps[$currField["Field"]]["BDD_index"]   = null;
-}
 
-// Extraction des Index
-$sql = "SHOW INDEX FROM `".$object->_tbl."`";
-$listIndex = db_loadList($sql);
-foreach($listIndex as $currIndex){
-  if($aChamps[$currIndex["Column_name"]]["BDD_index"]){
-    $aChamps[$currIndex["Column_name"]]["BDD_index"] .= ", ";
-  }
-  if($currIndex["Key_name"]=="PRIMARY"){
-    $aChamps[$currIndex["Column_name"]]["BDD_primary"] = true;
-  }
-  $aChamps[$currIndex["Column_name"]]["BDD_index"] .= $currIndex["Key_name"];
-}
 
-$aChampsObligatoire = array("class_field","class_props","BDD_name","BDD_type","BDD_null","BDD_default","BDD_index","BDD_primary");
-// Test de concordance
-foreach($aChamps as $k=>$valueChamps){
-  $curr_champ =& $aChamps[$k];
-	foreach($aChampsObligatoire as $VerifChamps){
-    if(!isset($curr_champ[$VerifChamps])){
-      $curr_champ[$VerifChamps] = null;
-    }
-  }
-  $curr_champ["error_BDD_null"]    = null;
-  $curr_champ["error_BDD_type"]    = null;
-  $curr_champ["error_class_props"] = null;
+foreach($classSelected as $selected){  
+  $object = new $selected;  
+  $nameKeyTable = $AppUI->_($selected)." - ".$selected." (".$object->_ref_module->mod_name.")";
   
-  if($curr_champ["BDD_name"] && $curr_champ["class_props"]){
-  	// Champs BDD et props
-    $type_sql = getDBSpec($curr_champ["class_props"]);
-    if($curr_champ["BDD_type"] != $type_sql){
-      $curr_champ["error_class_props"] = true;
-      $curr_champ["error_BDD_type"]    = $type_sql;
+  $aChamps[$nameKeyTable] = array();
+  $aClass =& $aChamps[$nameKeyTable];
+  
+  // CLé dela table
+  $aClass[$object->_tbl_key]["keytable"] = $object->_tbl_key;
+  
+  // Extraction des champs
+  foreach ($object->getProps() as $k => $v) {
+    $aClass[$k]["class_field"] = $k;
+  } 
+  
+  // Extraction des propriétés
+  foreach($object->_props as $k => $v) {
+    $aClass[$k]["class_props"] = $v;    
+  }
+  
+  //Extraction des champs de la BDD
+  $sql = "SHOW FULL FIELDS FROM `".$object->_tbl."`";
+  $listFields = db_loadList($sql);
+  foreach($listFields as $currField){
+  	$aBdd_field =& $aClass[$currField["Field"]];
+    $aBdd_field["BDD_name"]    = $currField["Field"];
+    $aBdd_field["BDD_type"]    = $currField["Type"];
+    $aBdd_field["BDD_null"]    = $currField["Null"];
+    $aBdd_field["BDD_default"] = $currField["Default"];
+    $aBdd_field["BDD_index"]   = null;
+  }
+  
+  // Extraction des Index
+  $sql = "SHOW INDEX FROM `".$object->_tbl."`";
+  $listIndex = db_loadList($sql);
+  foreach($listIndex as $currIndex){
+    if($aClass[$currIndex["Column_name"]]["BDD_index"]){
+      $aClass[$currIndex["Column_name"]]["BDD_index"] .= ", ";
+    }
+    if($currIndex["Key_name"]=="PRIMARY"){
+      $aClass[$currIndex["Column_name"]]["BDD_primary"] = true;
+    }
+    $aClass[$currIndex["Column_name"]]["BDD_index"] .= $currIndex["Key_name"];
+  }
+  
+}
+
+$aChampsObligatoire = array("keytable", "class_field","class_props","BDD_name","BDD_type",
+                             "BDD_null","BDD_default","BDD_index","BDD_primary");
+
+
+// Test de concordance
+foreach($aChamps as $nameClass=>$currClass){
+  foreach($currClass as $k=>$valueChamps){
+    $curr_champ =& $aChamps[$nameClass][$k];
+    
+    // Ajout des champs manquants
+    foreach($aChampsObligatoire as $VerifChamps){
+      if(!isset($curr_champ[$VerifChamps])){
+        $curr_champ[$VerifChamps] = null;
+      }
+    }
+    
+    // Ajout des champs de controle d'erreur
+    $curr_champ["error_BDD_null"]    = null;
+    $curr_champ["error_BDD_type"]    = null;
+    $curr_champ["error_class_props"] = null;
+    
+    // Test clé de table
+    if($curr_champ["BDD_type"] && $curr_champ["class_field"]){
+    	$type_sql = getDBSpec("ref");
+      if($curr_champ["class_field"]==$curr_champ["keytable"]
+        && $curr_champ["BDD_type"]!=$type_sql){
+        $curr_champ["error_BDD_type"] = $type_sql;
+      }
+    }
+    
+    // Test sur les propriétés
+    if($curr_champ["BDD_name"] && $curr_champ["class_props"]){
+      $specFragments = explode("|", $curr_champ["class_props"]);
+      // Champs BDD et props
+      $type_sql = getDBSpec($curr_champ["class_props"]);
+      if($curr_champ["BDD_type"] != $type_sql){
+        $curr_champ["error_class_props"] = true;
+        $curr_champ["error_BDD_type"]    = $type_sql;
+      }
+      //Test notNull et YES dans BDD
+      $notNull = array_search("notNull", $specFragments);
+      if($notNull && $curr_champ["BDD_null"]=="YES"){
+        $curr_champ["error_BDD_null"] = true;
+        $curr_champ["error_class_props"] = true;
+      }
+
+    }
+    
+    // Si tout a afficher : on supprime les lignes sans problèmes
+    if($selClass===null){
+      if(!$curr_champ["error_BDD_null"] && !$curr_champ["error_BDD_type"] && !$curr_champ["error_class_props"]
+         && !($curr_champ["keytable"] && $curr_champ["keytable"]==$curr_champ["class_field"] && $curr_champ["class_props"])
+         && $curr_champ["BDD_name"] && $curr_champ["class_props"] && $curr_champ["class_field"]){
+        unset($aChamps[$nameClass][$k]);
+      }
     }
   }
 }
@@ -195,6 +261,5 @@ $smarty = new CSmartyDP(1);
 $smarty->assign("aChamps"   , $aChamps);
 $smarty->assign("selClass"  , $selClass);
 $smarty->assign("listClass" , $listClass);
-$smarty->assign("keytable"  , $keytable);
 $smarty->display("mnt_table_classes.tpl");
 ?>

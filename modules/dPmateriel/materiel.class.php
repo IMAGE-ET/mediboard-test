@@ -35,7 +35,7 @@ class CMateriel extends CMbObject {
     return array (
       "nom" => "str|maxLength|50|notNull",
       "code_barre" => "num",
-      "description" => "str",
+      "description" => "text",
       "category_id" => "ref|notNull"
     );
   }

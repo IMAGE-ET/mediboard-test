@@ -47,7 +47,10 @@ class CFile extends CMbObject {
       "file_category_id"   => "ref",
       "file_date"          => "dateTime|notNull",
       "file_size"          => "num|pos",
-      "file_real_filename" => "str|notNull"
+      "file_real_filename" => "str|notNull",
+      "file_owner"         => "ref",
+      "file_type"          => "str",
+      "file_name"          => "str|notNull"
     );
   }
 

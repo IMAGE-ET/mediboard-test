@@ -25,9 +25,8 @@ class CFilesCategory extends CMbObject {
   
   function getSpecs() {
     return array (
-      "file_category_id"  => "ref",
-      "nom"               => "str|maxLength|50|notNull",
-      "class"             => "str|maxLength|30"
+      "nom"               => "str|notNull",
+      "class"             => "str"
     );
   }
   

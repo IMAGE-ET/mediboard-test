@@ -33,9 +33,8 @@ class CTempsPrepa extends CMbObject {
 
   function getSpecs() {
     return array (
-      "temps_prepa_id" => "ref",
       "chir_id"        => "ref",
-      "nb_plage"       => "num|pos",
+      "nb_plages"       => "num|pos",
       "nb_prepa"       => "num|pos",
       "duree_moy"      => "time",
       "duree_ecart"    => "time"

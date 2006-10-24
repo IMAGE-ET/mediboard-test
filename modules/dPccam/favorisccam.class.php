@@ -24,7 +24,7 @@ class CFavoriCCAM extends CMbObject {
   function getSpecs() {
     return array (
       "favoris_user" => "ref|notNull",
-      "favoris_code" => "str|notNull"
+      "favoris_code" => "str|length|7|notNull"
     );
   }
   

@@ -76,9 +76,9 @@ class CParamsPaie extends CMbObject {
       "aatp"          => "pct|notNull",
       "nom"           => "str|notNull|confidential",
       "adresse"       => "str|confidential",
-      "cp"            => "num|length|5|confidential",
+      "cp"            => "numchar|length|5|confidential",
       "ville"         => "str|confidential",
-      "siret"         => "num|length|14|confidential",
+      "siret"         => "numchar|length|14|confidential",
       "ape"           => "str|length|4|confidential",
       "matricule"     => "code|insee|confidential"
     );

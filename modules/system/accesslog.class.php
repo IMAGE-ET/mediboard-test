@@ -22,6 +22,18 @@ class CAccessLog extends CMbObject {
   var $_average_duration = null;
   var $_average_request = null;
   
+  function getSpecs() {
+    return array (
+      "module"   => "str",
+      "action"   => "str",
+      "period"   => "dateTime",
+      "hits"     => "num",
+      "duration" => "",
+      "request"  => ""
+    );
+  }
+  
+  
   function CAccessLog () {
     $this->CMbObject("access_log", "accesslog_id");
     

@@ -29,7 +29,6 @@ class CTechniqueComp extends CMbObject {
   
   function getSpecs() {
     return array (
-      "technique_id"           => "ref|notNull",
       "consultation_anesth_id" => "ref|notNull",
       "technique"              => "text"
     );

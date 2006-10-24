@@ -344,6 +344,7 @@ function checkElement(oElement, aSpecFragments) {
       
    	  break;
 
+    case "numchar":
     case "num":
       if (isNaN(oElement.value)) {
         return "N'est pas une chaîne numérique";

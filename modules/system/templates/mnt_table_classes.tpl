@@ -7,6 +7,7 @@
 
       <label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label>
       <select title="str|notNull" name="selClass" onchange="submit();">
+        <option value=""{{if !$selClass}} selected="selected"{{/if}}>&mdash; Tous les objets</option>
         {{foreach from=$listClass item=curr_listClass}}
         <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{tr}}{{$curr_listClass}}{{/tr}}</option>
         {{/foreach}}
@@ -29,52 +30,83 @@
           <th>Default</th>
           <th>Index</th>
         </tr>
+        {{assign var="styleColorKey"     value="style=\"background-color:#afa;\""}}
+        {{assign var="styleColorError"   value="style=\"background-color:#f00;\""}}
         {{assign var="styleColorConflit" value="style=\"background-color:#fc0;\""}}
         
-        {{foreach from=$aChamps key=keyChamp item=currChamp}}
-        {{if $keytable==$currChamp.class_field && $currChamp.BDD_primary==true}}
-          {{assign var="styleColor" value="style=\"background-color:#afa;\""}}
-          {{assign var="colorTD" value="1"}}
-        {{else}}
-          {{assign var="colorTD" value="0"}}
-          {{assign var="styleColor" value="style=\"background-color:#f00;\""}}
-        {{/if}}
+        {{foreach from=$aChamps key=keyClass item=currClass}}
+        
+        {{if $currClass|@count}}
         <tr>
-          <td {{if !$currChamp.class_field || $colorTD}}{{$styleColor|smarty:nodefaults}}{{/if}}>
+          <th colspan="7" class="title">
+            {{$keyClass}}
+          </th>
+        </tr>
+        {{foreach from=$currClass key=keyChamp item=currChamp}}
+        <tr>
+          <td {{if !$currChamp.class_field}}
+                {{$styleColorError|smarty:nodefaults}}
+              {{elseif $currChamp.keytable && $currChamp.keytable==$currChamp.class_field}}
+                {{$styleColorKey|smarty:nodefaults}}
+              {{/if}}>
             {{$currChamp.class_field}}
           </td>
-          <td {{if !$currChamp.class_props || $colorTD}}{{$styleColor|smarty:nodefaults}}{{elseif $currChamp.error_class_props}}{{$styleColorConflit|smarty:nodefaults}}{{/if}}>
+          <td {{if $currChamp.keytable && $currChamp.keytable==$currChamp.class_field && $currChamp.class_props}}
+                {{$styleColorError|smarty:nodefaults}}
+              {{elseif $currChamp.keytable && $currChamp.keytable==$currChamp.class_field}}
+                {{$styleColorKey|smarty:nodefaults}}
+              {{elseif $currChamp.error_class_props}}
+                {{$styleColorConflit|smarty:nodefaults}}
+              {{elseif !$currChamp.class_props}}
+                {{$styleColorError|smarty:nodefaults}}
+              {{/if}}>
             {{$currChamp.class_props}}
             {{if !$currChamp.class_field && $currChamp.class_props}}
             &mdash; <strong>{{$keyChamp}}</strong>
             {{/if}}
           </td>
           {{if !$currChamp.BDD_name}}
-          <td colspan="5" {{$styleColor|smarty:nodefaults}}>
+          <td colspan="5" {{$styleColorError|smarty:nodefaults}}>
           </td>
           {{else}}
-          <td {{if $colorTD}}{{$styleColor|smarty:nodefaults}}{{/if}}>
+          <td {{if $currChamp.keytable==$currChamp.BDD_name}}
+                {{$styleColorKey|smarty:nodefaults}}
+              {{/if}}>
             {{$currChamp.BDD_name}}
           </td>
-          <td {{if $colorTD}}{{$styleColor|smarty:nodefaults}}{{elseif $currChamp.error_BDD_type}}{{$styleColorConflit|smarty:nodefaults}}{{/if}}>
+          <td {{if $currChamp.error_BDD_type}}
+                {{$styleColorConflit|smarty:nodefaults}}
+              {{elseif $currChamp.keytable==$currChamp.BDD_name}}
+                {{$styleColorKey|smarty:nodefaults}}
+              {{/if}}>
             {{$currChamp.BDD_type}}
             {{if $currChamp.error_BDD_type}}
               &mdash; <strong>{{$currChamp.error_BDD_type}}</strong>
             {{/if}}
           </td>
-          <td {{if $colorTD}}{{$styleColor|smarty:nodefaults}}{{elseif $currChamp.error_BDD_null}}{{$styleColorConflit|smarty:nodefaults}}{{/if}}>
+          <td {{if $currChamp.error_BDD_null}}
+                {{$styleColorConflit|smarty:nodefaults}}
+              {{elseif $currChamp.keytable==$currChamp.BDD_name}}
+                {{$styleColorKey|smarty:nodefaults}}
+              {{/if}}>
             {{if $currChamp.BDD_null!="NO"}}
             {{$currChamp.BDD_null}}
             {{/if}}
           </td>
-          <td {{if $colorTD}}{{$styleColor|smarty:nodefaults}}{{/if}}>
+          <td {{if $currChamp.keytable==$currChamp.BDD_name}}
+                {{$styleColorKey|smarty:nodefaults}}
+              {{/if}}>
             {{$currChamp.BDD_default}}
           </td>
-          <td {{if $colorTD}}{{$styleColor|smarty:nodefaults}}{{/if}}>
+          <td {{if $currChamp.keytable==$currChamp.BDD_name}}
+                {{$styleColorKey|smarty:nodefaults}}
+              {{/if}}>
             {{$currChamp.BDD_index}}
           </td>
           {{/if}}
         </tr>
+        {{/foreach}}
+        {{/if}}
         {{/foreach}}
       </table>
     </td>
