@@ -115,10 +115,10 @@ $dPconfig["debug"] = true;
 
 // HPRIM export FTP settings
 $dPconfig["dPinterop"]["hprim_export"] = array (
-  "hostname" => "ftp.server.com",
-  "username" => "username",
-  "userpass" => "password",
-  "fileprefix" => "prefix",
+  "hostname" => "",
+  "username" => "",
+  "userpass" => "",
+  "fileprefix" => "",
 );
 
 /********* 
