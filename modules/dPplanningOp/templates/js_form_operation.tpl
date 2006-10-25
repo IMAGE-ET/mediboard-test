@@ -222,6 +222,9 @@ function setPlage(plage_id, sDate, bAdm) {
   }
 
   if (plage_id) {
+    if(oOpForm.plageop_id.value != plage_id) {
+      oOpForm.rank.value = 0;
+    }
     oOpForm.plageop_id.value = plage_id;
     oOpForm._datestr.value = sDate;
     var dAdm = makeDateFromLocaleDate(sDate);

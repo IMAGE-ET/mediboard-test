@@ -32,11 +32,11 @@ if(intval(mbGetValueFromPost("del", null))) {
   $do->redirectDelete = "m=$m&tab=vw_edit_planning";
   $do->doDelete();
 } else {
-  if($do->_obj->annulee) {
-    $do->_obj->rank = 0;
-  }
   $do->modifyMsg = "Opération modifiée";
   $do->createMsg = "Opération créée";
+  if($do->_objBefore->plageop_id && ($do->_objBefore->plageop_id != $do->_obj->plageop_id)) {
+    $do->_obj->rank = 0;
+  }
   $do->doStore();
   if($do->_objBefore->plageop_id && ($do->_objBefore->plageop_id != $do->_obj->plageop_id)) {
     $plageop = new CPlageOp;

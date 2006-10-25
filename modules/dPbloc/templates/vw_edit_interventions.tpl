@@ -63,7 +63,7 @@
 		    {{if $curr_op->annulee}}
 		    <img src="./modules/{{$m}}/images/cross.png" width="12" height="12" alt="annulée" border="0" />
 		    {{else}}
-		    <a href="index.php?m={{$m}}&a=do_order_op&cmd=insert&id={{$curr_op->operation_id}}">
+		    <a href="index.php?m={{$m}}&amp;a=do_order_op&amp;cmd=insert&amp;id={{$curr_op->operation_id}}">
 		    <img src="./modules/{{$m}}/images/tick.png" width="12" height="12" alt="ajouter" border="0" />
 			</a>
 			{{/if}}
@@ -149,17 +149,17 @@
 		  </td>
 		  <td>
 		    {{if $curr_op->rank != 1}}
-		    <a href="index.php?m={{$m}}&a=do_order_op&cmd=up&id={{$curr_op->operation_id}}">
+		    <a href="index.php?m={{$m}}&amp;a=do_order_op&amp;cmd=up&amp;id={{$curr_op->operation_id}}">
 		    <img src="./modules/{{$m}}/images/uparrow.png" width="12" height="12" alt="monter" border="0" />
 			</a>
 			<br />
 			{{/if}}
-			<a href="index.php?m={{$m}}&a=do_order_op&cmd=rm&id={{$curr_op->operation_id}}">
+			<a href="index.php?m={{$m}}&amp;a=do_order_op&amp;cmd=rm&amp;id={{$curr_op->operation_id}}">
 		    <img src="./modules/{{$m}}/images/cross.png" width="12" height="12" alt="supprimer" border="0" />
 			</a>
 			{{if $curr_op->rank != $max}}
 			<br />
-		    <a href="index.php?m={{$m}}&a=do_order_op&cmd=down&id={{$curr_op->operation_id}}">
+		    <a href="index.php?m={{$m}}&amp;a=do_order_op&amp;cmd=down&amp;id={{$curr_op->operation_id}}">
 		    <img src="./modules/{{$m}}/images/downarrow.png" width="12" height="12" alt="descendre" border="0" />
 			</a>
 			{{/if}}

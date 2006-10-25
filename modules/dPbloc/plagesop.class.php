@@ -115,6 +115,17 @@ class CPlageOp extends CMbObject {
   }
   
   function reorderOp() {
+    if(!$this->debut) {
+      ini_set("display_errors", 0);
+      global $AppUI;
+      $errorMsg = "Erreur : la plage n'as pas de début : ";
+      $errorMsg .= "[id : $this->plageop_id] - ";
+      $errorMsg .= "[user : $AppUI->user_id] -";
+      $errorMsg .= "[date : ".mbDate()."] -";
+      trigger_error($errorMsg);
+      $this->load($this->_id);
+      ini_set("display_errors", 1);
+    }
     if(!count($this->_ref_operations)) {
       $this->loadRefsBack(0);
     }
@@ -136,9 +147,9 @@ class CPlageOp extends CMbObject {
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      "label" => "Opérations", 
-      "name" => "operations", 
-      "idfield" => "operation_id", 
+      "label"     => "Opérations", 
+      "name"      => "operations", 
+      "idfield"   => "operation_id", 
       "joinfield" => "plageop_id"
     );
     
