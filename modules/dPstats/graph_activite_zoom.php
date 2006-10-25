@@ -40,6 +40,7 @@ $date_format = "%d";
 // Tableaux des jours
 for($i = $startx; $i <= $endx; $i = mbDateTime($step, $i)) {
   $datax[] = mbTranformTime(null, $i, $date_format);
+  $datax2[] = mbTranformTime(null, $i, "%a %d");
 }
 
 // Chargement des salles
@@ -54,8 +55,8 @@ foreach($salles as $salle) {
   $opbysalle[$curr_salle_id]["nom"] = $salle["nom"];
   
   $sql = "SELECT COUNT(operations.operation_id) AS total," .
-    "\nDATE_FORMAT(plagesop.date, '%d') AS jour," .
-    "\nDATE_FORMAT(plagesop.date, '%m%d') AS orderitem," .
+    "\nDATE_FORMAT(plagesop.date, '$date_format') AS jour," .
+    "\nDATE_FORMAT(plagesop.date, '%d') AS orderitem," .
     "\nsallesbloc.nom AS nom" .
     "\nFROM plagesop" .
     "\nINNER JOIN sallesbloc" .
@@ -79,6 +80,7 @@ foreach($salles as $salle) {
   foreach($datax as $x) {
     $f = true;
     foreach($result as $totaux) {
+      //echo "$x <=> ".$totaux["jour"]."<br />";
       if($x == $totaux["jour"]) {        
         $opbysalle[$curr_salle_id]["op"][] = $totaux["total"];
         $total += $totaux["total"];
@@ -89,6 +91,7 @@ foreach($salles as $salle) {
       $opbysalle[$curr_salle_id]["op"][] = 0;
     }
   }
+  //exit(0);
 }
 
 
@@ -129,7 +132,7 @@ $graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
 $graph->yscale->ticks->SupressZeroLabel(false);
 
 // Setup X-axis labels
-$graph->xaxis->SetTickLabels($datax);
+$graph->xaxis->SetTickLabels($datax2);
 $graph->xaxis->SetPosAbsDelta(15);
 $graph->yaxis->SetPosAbsDelta(-15);
 $graph->xaxis->SetLabelAngle(50);
