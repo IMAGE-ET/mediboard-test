@@ -28,14 +28,15 @@ class CMbObject {
   
   var $_objectsTable = null; // list of loaded objects
   
-  var $_tbl       = null; // table name
-  var $_tbl_key   = null; // primary key name
-  var $_error     = null; // error message
-  var $_id        = null; // universal shortcut for the object id
-  var $_view      = null; // universal view of the object
-  var $_shortview = null; // universal shortview for the object
-  var $_canRead   = null; // read permission for the object
-  var $_canEdit   = null; // write permission for the object
+  var $_class_name = null; // class name of the object
+  var $_tbl        = null; // table name
+  var $_tbl_key    = null; // primary key name
+  var $_error      = null; // error message
+  var $_id         = null; // universal shortcut for the object id
+  var $_view       = null; // universal view of the object
+  var $_shortview  = null; // universal shortview for the object
+  var $_canRead    = null; // read permission for the object
+  var $_canEdit    = null; // write permission for the object
 
   /**
    * Properties  specification
@@ -68,7 +69,12 @@ class CMbObject {
     $this->_tbl_key = $key;
     $this->_id =& $this->$key;
     
-    $class = get_class($this);
+    static $class = null;
+    if(!$class) {
+      $class = get_class($this);
+    }
+    
+    $this->_class_name =& $class;
     
     static $objectsTable = array();
     $this->_objectsTable =& $objectsTable;
@@ -335,7 +341,7 @@ class CMbObject {
     $properties = get_object_vars($this);
     foreach($this->_props as $propName => $propSpec) {
       if (!array_key_exists($propName, $properties)) {
-        trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$class'", E_USER_WARNING);
+        trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$this->_class_name'", E_USER_WARNING);
         continue;
       } 
 
@@ -359,11 +365,10 @@ class CMbObject {
     global $dPconfig;
     $msg = null;
     $properties = get_object_vars($this);
-    $class = get_class($this);
     
     foreach($this->_props as $propName => $propSpec) {
       if(!array_key_exists($propName, $properties)) {
-        trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$class'", E_USER_WARNING);
+        trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$this->_class_name'", E_USER_WARNING);
       } else {
         $propValue =& $this->$propName;
         if($propValue !== null) {
@@ -1249,7 +1254,6 @@ class CMbObject {
   }
 
   function loadAides($user_id) {
-    $class = get_class($this);
     // Initialisation to prevent understandable smarty notices
     foreach($this->_props as $propName => $propSpec) {
       $specFragments = explode("|", $propSpec);
@@ -1263,7 +1267,7 @@ class CMbObject {
     
     $where = array();
     $where[] = "(user_id = '$user_id' OR function_id = '$currUser->function_id')";
-    $where["class"] = " = '$class'";
+    $where["class"] = " = '$this->_class_name'";
     $order = "name";
     $aides = new CAideSaisie();
     $aides = $aides->loadList($where,$order);  
