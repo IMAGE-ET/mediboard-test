@@ -166,29 +166,34 @@
   <td colspan="2">
     <table style="width: 100%">
       <tr>
-      
         <th class="title"><a name="vocal"></a>Audiométrie vocale</th>
         <th class="title"><a name="tympan"></a>Tympanométrie</th>
       </tr>
       <tr>
-        <td id="td_graph_vocal" rowspan="2" style="height:318px;width:534px;">
+        <td id="td_graph_vocal" style="height:318px;width:534px;">
           {{$map_vocal|smarty:nodefaults}}
           <img id="image_vocal" src="?m=dPcabinet&amp;a=graph_audio_vocal&amp;suppressHeaders=1&amp;time={{$time}}" usemap="#graph_vocal" onclick="changeVocalValueMouse(event)" alt="Audiogramme vocal" />
         </td>
-        <td id="td_graph_tympan_droite" style="height:176px;">
-          {{$map_tympan_droite|smarty:nodefaults}}
-          <img id="tympan_droite" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite&amp;time={{$time}}" usemap="#graph_tympan_droite" onclick="changeTympanValueMouseDroite(event)" alt="Tympan droit" />
+        
+        <td rowspan="2">
+          <table style="width: 100%">
+            <tr>
+              <td id="td_graph_tympan_droite" style="height:176px;">
+                {{$map_tympan_droite|smarty:nodefaults}}
+                <img id="tympan_droite" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite&amp;time={{$time}}" usemap="#graph_tympan_droite" onclick="changeTympanValueMouseDroite(event)" alt="Tympan droit" />
+              </td>
+            </tr>
+            <tr>
+              <td id="td_graph_tympan_gauche" rowspan="2" style="height:162px;">
+                {{$map_tympan_gauche|smarty:nodefaults}}
+                <img id="tympan_gauche" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche&amp;time={{$time}}" usemap="#graph_tympan_gauche" onclick="changeTympanValueMouseGauche(event)" alt="Tympa Gauche" />
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
       <tr>
-        <td id="td_graph_tympan_gauche" rowspan="2" style="height:162px;">
-          {{$map_tympan_gauche|smarty:nodefaults}}
-          <img id="tympan_gauche" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche&amp;time={{$time}}" usemap="#graph_tympan_gauche" onclick="changeTympanValueMouseGauche(event)" alt="Tympa Gauche" />
-        </td>
-      </tr>  
-        
-      <tr>
-        <td class="radiointeractive">
+        <td class="radiointeractive" style="height:20px;width:534px;">
           <input type="radio" name="_oreille" value="gauche" {{if $_oreille == "gauche"}}checked="checked"{{/if}} />
           <label for="_oreille_gauche" title="Oreille gauche pour la saisie intéractive">Oreille gauche</label>
           <input type="radio" name="_oreille" value="droite" {{if $_oreille == "droite"}}checked="checked"{{/if}} />

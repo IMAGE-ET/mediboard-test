@@ -40,7 +40,7 @@ function changeTonalValue(sCote, sConduction, iFrequence, iNewValue) {
 }
 
 function changeTonalValueMouse(event, sCote) {
-  var oImg = document.getElementById("tonal_" + sCote);
+  var oImg = $("tonal_" + sCote);
 
   var iLegendMargin = 75; 
   var oGraphMargins = {
@@ -51,16 +51,16 @@ function changeTonalValueMouse(event, sCote) {
   }
   
   var oGraphRect = {
-    x : oImg.x + oGraphMargins.left,
-    y : oImg.y + oGraphMargins.top ,
+    x : Position.cumulativeOffset(oImg)[0] + oGraphMargins.left,
+    y : Position.cumulativeOffset(oImg)[1] + oGraphMargins.top ,
     w : oImg.width  - oGraphMargins.left - oGraphMargins.right ,
     h : oImg.height - oGraphMargins.top  - oGraphMargins.bottom
   }
-
+  
   var iStep = oGraphRect.w / (iMaxIndexFrequence+1);
-  var iRelatX = event.pageX - oGraphRect.x; 
-  var iRelatY = event.pageY - oGraphRect.y;
-
+  var iRelatX = Event.pointerX(event) - oGraphRect.x; 
+  var iRelatY = Event.pointerY(event) - oGraphRect.y;
+  
   var iSelectedIndex = parseInt(iRelatX / iStep);
   var iSelectedDb = parseInt(iMinTonalPerte - (iRelatY / oGraphRect.h * (iMinTonalPerte - iMaxTonalPerte)));
       
@@ -125,7 +125,7 @@ function changeTympanValue(sCote, iPression, iNewValue) {
 
 
 function changeTympanValueMouse(event, sCote) {
-  var oImg = document.getElementById("tympan_" + sCote);
+  var oImg = $("tympan_" + sCote);
 
   var oGraphMargins = {
     left  : 35,
@@ -135,15 +135,15 @@ function changeTympanValueMouse(event, sCote) {
   }
   
   var oGraphRect = {
-    x : oImg.x + oGraphMargins.left,
-    y : oImg.y + oGraphMargins.top ,
+    x : Position.cumulativeOffset(oImg)[0] + oGraphMargins.left,
+    y : Position.cumulativeOffset(oImg)[1] + oGraphMargins.top ,
     w : oImg.width  - oGraphMargins.left - oGraphMargins.right ,
     h : oImg.height - oGraphMargins.top  - oGraphMargins.bottom
   }
 
   var iStep = oGraphRect.w / (iMaxIndexPression+1);
-  var iRelatX = event.pageX - oGraphRect.x; 
-  var iRelatY = event.pageY - oGraphRect.y;
+  var iRelatX = Event.pointerX(event) - oGraphRect.x; 
+  var iRelatY = Event.pointerY(event) - oGraphRect.y;
 
   var iSelectedIndex = parseInt(iRelatX / iStep);
   var iSelectedAdmittance = parseInt(iMaxTympanAdmittance - (iRelatY / oGraphRect.h * (iMaxTympanAdmittance - iMinTympanAdmittance)));
@@ -224,7 +224,7 @@ function changeVocalValue(sCote, iKey, iNewDBValue, iNewPcValue) {
 }
 
 function changeVocalValueMouse(event) {
-  var oImg = document.getElementById("image_vocal");
+  var oImg = $("image_vocal");
 
   var oGraphMargins = {
     left  : 40,
@@ -234,14 +234,14 @@ function changeVocalValueMouse(event) {
   }
   
   var oGraphRect = {
-    x : oImg.x + oGraphMargins.left,
-    y : oImg.y + oGraphMargins.top ,
+    x : Position.cumulativeOffset(oImg)[0] + oGraphMargins.left,
+    y : Position.cumulativeOffset(oImg)[1] + oGraphMargins.top ,
     w : oImg.width  - oGraphMargins.left - oGraphMargins.right ,
     h : oImg.height - oGraphMargins.top  - oGraphMargins.bottom
   }
   
-  var iRelatX = event.pageX - oGraphRect.x; 
-  var iRelatY = event.pageY - oGraphRect.y;
+  var iRelatX = Event.pointerX(event) - oGraphRect.x; 
+  var iRelatY = Event.pointerY(event) - oGraphRect.y;
 
   if (iRelatX < 0 || iRelatX > oGraphRect.w || iRelatY < 0 || iRelatY > oGraphRect.h) {
     alert("Merci de cliquer à l'intérieur de l'audiogramme");
@@ -291,7 +291,7 @@ function reloadBilan(){
 
 function reloadGraphTonale(sCote){
   var oForm = document.editFrm;
-  if(sCote=="droite" || sCote=="gauche"){
+  if(typeof(sCote)=="string" && (sCote=="droite" || sCote=="gauche")){
     var url = new Url;
     url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_tonal");
     url.addParam("side", sCote);
@@ -314,7 +314,7 @@ function reloadGraphTonalegauche(){
 
 function reloadGraphTympan(sCote){
   var oForm = document.editFrm;
-  if(sCote=="droite" || sCote=="gauche"){
+  if(typeof(sCote)=="string" && (sCote=="droite" || sCote=="gauche")){
     var url = new Url;
     url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_tympan");
     url.addParam("side", sCote);
