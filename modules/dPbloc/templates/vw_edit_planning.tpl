@@ -124,21 +124,16 @@ function popPlanning(debut) {
          <td>
           <select name="chir_id" title="{{$plagesel->_props.chir_id}}">
             <option value="">&mdash; Choisir un chirurgien</option>
-            <optgroup label="Chirurgiens">
-            {{foreach from=$chirs item=chir}}
-              <option value="{{$chir->user_id}}" {{if $plagesel->chir_id == $chir->user_id}} selected="selected" {{/if}} >
-                {{$chir->_view}}
+            {{foreach from=$specs item=currFct key=keyFct}}
+            <optgroup label="{{$currFct->_view}}">
+              {{foreach from=$currFct->_ref_users item=currUser}}
+              <option class="mediuser" style="border-color: #{{$currFct->color}};" value="{{$currUser->user_id}}" 
+              {{if $plagesel->chir_id == $currUser->user_id}}selected="selected"{{/if}}>
+                {{$currUser->_view}}
               </option>
-            {{/foreach}}
+              {{/foreach}}
             </optgroup>
-
-            <optgroup label="Anesthésistes">
-            {{foreach from=$anesths item=anesth}}
-              <option value="{{$anesth->user_id}}" {{if $plagesel->chir_id == $anesth->user_id}} selected="selected" {{/if}} >
-                {{$anesth->_view}}
-              </option>
             {{/foreach}}
-            </optgroup>
           </select>
         </td>
         <th>
@@ -179,7 +174,8 @@ function popPlanning(debut) {
           <select name="spec_id" title="{{$plagesel->_props.spec_id}}">
             <option value="">&mdash; Choisir une spécialité</option>
             {{foreach from=$specs item=spec}}
-              <option value="{{$spec->function_id}}" {{if $spec->function_id == $plagesel->spec_id}} selected="selected" {{/if}} >
+              <option value="{{$spec->function_id}}" class="mediuser" style="border-color: #{{$spec->color}};"
+              {{if $spec->function_id == $plagesel->spec_id}}selected="selected"{{/if}}>
                 {{$spec->text}}
               </option>
             {{/foreach}}

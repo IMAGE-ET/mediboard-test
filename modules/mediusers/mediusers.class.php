@@ -358,7 +358,7 @@ class CMediusers extends CMbObject {
       $where["users.user_type"] = db_prepare_in($user_types);
     }
 
-    $order = "`users`.`user_last_name`";
+    $order = "`users`.`user_last_name`, `users`.`user_first_name`";
 
     // Get all users
     $mediuser = new CMediusers;

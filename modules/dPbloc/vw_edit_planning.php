@@ -34,11 +34,13 @@ if($plagesel->plageop_id){
 
 // Liste des Specialités
 $function = new CFunctions;
-$specs = $function->loadSpecialites();
+$specs = $function->loadSpecialites(PERM_READ);
+foreach($specs as $key => $spec) {
+  $specs[$key]->loadRefsUsers(array("Chirurgien", "Anesthésiste"));
+}
 
-// Liste des Chirurgiens
+// Liste des Anesthésistes
 $mediuser = new CMediusers;
-$chirs = $mediuser->loadChirurgiens();
 $anesths = $mediuser->loadAnesthesistes();
 
 // Liste des heures
@@ -121,7 +123,6 @@ $smarty->assign("listSpec"       , $listSpec      );
 $smarty->assign("plagesel"       , $plagesel      );
 $smarty->assign("specs"          , $specs         );
 $smarty->assign("anesths"        , $anesths       );
-$smarty->assign("chirs"          , $chirs         );
 
 $smarty->display("vw_edit_planning.tpl");
 ?>
