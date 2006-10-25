@@ -102,9 +102,8 @@ function pageMain() {
           <td colspan="2">
             <select name="user_id" title="{{$fiche->_props.user_id}}">
               {{foreach from=$listFct item=currFct key=keyFct}}
-              {{if $aUsers.$keyFct|@count}}
               <optgroup label="{{$currFct->_view}}">
-                {{foreach from=$aUsers.$keyFct item=currUser}}
+                {{foreach from=$currFct->_ref_users item=currUser}}
                 <option class="mediuser" style="border-color: #{{$currFct->color}};" value="{{$currUser->user_id}}" 
                 {{if ($fiche->fiche_ei_id && $fiche->user_id==$currUser->user_id)
                       || (!$fiche->fiche_ei_id && $user_id==$currUser->user_id)}}
@@ -115,7 +114,6 @@ function pageMain() {
                 </option>
                 {{/foreach}}
               </optgroup>
-              {{/if}}
               {{/foreach}}
             </select>
           </td>

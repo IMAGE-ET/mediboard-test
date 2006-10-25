@@ -21,10 +21,12 @@ $allEi_user_id       = mbGetValueFromGetOrSession("allEi_user_id",null);
 $catFiche = array();
 $fiche = new CFicheEi;
 
-if(!$fiche->load($fiche_ei_id)
-   || ($canRead && !$canEdit && $fiche->user_id!=$AppUI->user_id)
-   || ($canEdit && !$canAdmin && ($fiche->user_id!=$AppUI->user_id && $fiche->service_valid_user_id!=$AppUI->user_id))
-   ){
+$droitFiche = !$fiche->load($fiche_ei_id);
+$droitFiche = $droitFiche || (!$canEdit && $fiche->user_id!=$AppUI->user_id);
+$droitFiche = $droitFiche || ($canEdit && !$canAdmin && $fiche->user_id!=$AppUI->user_id && $fiche->service_valid_user_id!=$AppUI->user_id);
+
+
+if($droitFiche){
   // Cette fiche n'est pas valide
   $fiche_ei_id = null;
   mbSetValueToSession("fiche_ei_id");

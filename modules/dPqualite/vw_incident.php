@@ -25,19 +25,10 @@ if($canAdmin && $fiche_ei_id){
 }
 
 // Chargement des Utilisateurs
-if($canAdmin){
-  $listFct = $listFct->loadList(null, "text");
-
-  $listUsers = new CMediusers;
-  $listUsers = $listUsers->loadListFromType();
-
-  foreach($listUsers as $valueUser){
-    $aUsers[$valueUser->function_id][] = $valueUser;
-  }
-  foreach($listFct as $keyFct=>$valueFct){
-  	if(!isset($aUsers[$keyFct])){
-  		unset($listFct[$keyFct]);
-  	}
+if($canAdmin) {
+  $listFct = CMediusers::loadFonctions(PERM_READ);
+  foreach($listFct as $key => $fct) {
+    $listFct[$key]->loadRefsBack();
   }
 }
 
