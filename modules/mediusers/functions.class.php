@@ -83,10 +83,12 @@ class CFunctions extends CMbObject {
   
   // Backward references
   function loadRefsBack() {
-    $where = array(
-      "function_id" => "= '$this->function_id'");
+    $where = array();
+    $where["function_id"] = "= '$this->function_id'";
+    $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
+    $order = "`users`.`user_last_name`, `users`.`user_first_name`";
     $this->_ref_users = new CMediusers;
-    $this->_ref_users = $this->_ref_users->loadList($where);
+    $this->_ref_users = $this->_ref_users->loadList($where, $order, null, null, $ljoin);
   }
   
   // @todo : ameliorer le choix des spécialités

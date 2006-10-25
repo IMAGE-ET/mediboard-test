@@ -139,7 +139,7 @@ function pageMain() {
           </th>
           <td>
             <select name="type_incident" title="{{$fiche->_props.type_incident}}">
-            <option value="" {{if $fiche->type_incident===null}}selected="selected"{{/if}}>&mdash;Veuillez Choisir &mdash;</option>
+            <option value="">&mdash;Veuillez Choisir &mdash;</option>
             {{html_options options=$fiche->_enumsTrans.type_incident selected=$fiche->type_incident}}
             </select>
           </td>
@@ -156,7 +156,7 @@ function pageMain() {
           </th>
           <td>
             <select name="elem_concerne" title="{{$fiche->_props.elem_concerne}}">
-            <option value=""{{if $fiche->elem_concerne==null}} selected="selected"{{/if}}>&mdash;Veuillez Choisir &mdash;</option>
+            <option value="">&mdash;Veuillez Choisir &mdash;</option>
             {{html_options options=$fiche->_enumsTrans.elem_concerne selected=$fiche->elem_concerne}}
             </select>            
           </td>
@@ -253,7 +253,7 @@ function pageMain() {
           <th><label for="gravite" title="Veuillez Sélectionner la gravitée estimée de l'événement">Gravitée Estimée</label></th>
           <td>
             <select name="gravite" title="{{$fiche->_props.gravite}}">
-              <option value=""{{if $fiche->gravite===null}} selected="selected"{{/if}}>&mdash;Veuillez Choisir &mdash;</option>
+              <option value="">&mdash;Veuillez Choisir &mdash;</option>
               {{html_options options=$fiche->_enumsTrans.gravite selected=$fiche->gravite}}
             </select>
           </td>
@@ -268,7 +268,7 @@ function pageMain() {
           <th><label for="plainte" title="Une plainte est-elle prévisible pour cet événement">Plainte prévisible</label></th>
           <td>
             <select name="plainte" title="{{$fiche->_props.plainte}}">
-              <option value=""{{if $fiche->plainte===null}} selected="selected"{{/if}}>&mdash;Veuillez Choisir &mdash;</option>
+              <option value="">&mdash;Veuillez Choisir &mdash;</option>
               {{html_options options=$fiche->_enumsTrans.plainte selected=$fiche->plainte}}
             </select>
           </td>
@@ -283,7 +283,7 @@ function pageMain() {
           <th><label for="commission" title="Y aura t'il une Commission de conciliation">Commission conciliation</label></th>
           <td>
             <select name="commission" title="{{$fiche->_props.commission}}">
-              <option value=""{{if $fiche->commission===null}} selected="selected"{{/if}}>&mdash;Veuillez Choisir &mdash;</option>
+              <option value="">&mdash;Veuillez Choisir &mdash;</option>
               {{html_options options=$fiche->_enumsTrans.commission selected=$fiche->commission}}
             </select>
           </td>
@@ -298,7 +298,7 @@ function pageMain() {
           <th><label for="suite_even" title="Veuillez choisir la suite de l'évènement">Suite de l'évènement</label></th>
           <td>
             <select name="suite_even" title="{{$fiche->_props.suite_even}}" onchange="javascript:choixSuiteEven();">
-              <option value=""{{if $fiche->suite_even===null}} selected="selected"{{/if}}>&mdash;Veuillez Choisir &mdash;</option>
+              <option value="">&mdash;Veuillez Choisir &mdash;</option>
               {{html_options options=$fiche->_enumsTrans.suite_even selected=$fiche->suite_even}}
             </select>
             <table id="suiteEvenAutre" style="width:100%;{{if $fiche->suite_even!="autre"}}display:none;{{/if}}">
@@ -319,7 +319,7 @@ function pageMain() {
           </th>
           <td colspan="2">
             <select name="deja_survenu" title="{{$fiche->_props.deja_survenu}}">
-              <option value=""{{if $fiche->deja_survenu===null}} selected="selected"{{/if}}>{{tr}}CFicheEi.deja_survenu.{{/tr}}</option>
+              <option value="">{{tr}}CFicheEi.deja_survenu.{{/tr}}</option>
               {{html_options options=$fiche->_enumsTrans.deja_survenu selected=$fiche->deja_survenu}}
             </select>
           </td>

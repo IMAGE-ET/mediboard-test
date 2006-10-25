@@ -330,8 +330,7 @@ class CMediusers extends CMbObject {
   function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null) {
     global $utypes_flip;
     
-    $function = new CFunctions;
-    $functions = $function->loadSpecialites($permType);
+    $functions = $this->loadFonctions($permType);
     
     // Filter on a single function
     if ($function_id) {
@@ -429,9 +428,12 @@ class CMediusers extends CMbObject {
   }
   
   function loadFonctions($permType = PERM_READ){
+    global $g;
+    $where = array();
+    $where["group_id"] = "= '$g'";
     $function = new CFunctions;
     $order = "text";
-    $baseFunctions = $function->loadList(null, $order); 
+    $baseFunctions = $function->loadList($where, $order); 
     
     $functions = array();
     // Filtre
