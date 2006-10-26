@@ -381,7 +381,7 @@ function db_updateObject($table, &$object, $keyName, $updateNulls = true) {
     if ($v === null && !$updateNulls) {
       continue;
     }
-    if($v == "") {
+    if($v === "" || $v === null) {
       // Tries to nullify empty values but won't fail if not possible
       $val = "NULL";
     } else {
