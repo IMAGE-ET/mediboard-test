@@ -11,7 +11,7 @@ announce_script "Uptime logger"
 
 if [ "$#" -lt 1 ]
 then 
-  echo "Usage: $0 <file>
+  echo "Usage: $0 <file>"
   echo "  <file> is the target for log, ie /var/log/uptime.log"
   exit 1
 fi
