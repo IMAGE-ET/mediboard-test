@@ -2,7 +2,7 @@
 
 /**
  *	@package Mediboard
- *	@subpackage dPmateriel
+ *	@subpackage dPStats
  *	@version $Revision: $
  *  @author Sébastien Fillonneau
  */

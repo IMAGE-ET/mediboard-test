@@ -24,13 +24,20 @@ function setCode(code, type) {
         <tr>
           <th colspan="2" class="category">
             <select name="typeVue" onChange="this.form.submit();">
-              <option value="0">Moyenne des temps opératoires</option>
-              <option value="1"{{if $typeVue}} selected="selected"{{/if}}>Moyenne des temps de préparation</option>
+              <option value="0">
+                Moyenne des temps opératoires
+              </option>
+              <option value="1"{{if $typeVue == 1}} selected="selected"{{/if}}>
+                Moyenne des temps de préparation
+              </option>
+              <option value="2"{{if $typeVue == 2}} selected="selected"{{/if}}>
+                Moyenne des temps d'hospitalisation
+              </option>
             </select>
           </th>
         </tr>
 
-        {{if !$typeVue}}
+        {{if $typeVue == 0 || $typeVue == 2}}
         <tr>
           <th><label for="codeCCAM" title="Acte CCAM">Acte CCAM</label></th>
           <td>
@@ -52,15 +59,35 @@ function setCode(code, type) {
           </td>
         </tr>
         {{/if}}
+        {{if $typeVue == 2}}
+        <tr>
+          <th><label for="type" title="Type d'hospitalisation">Type</label></th>
+          <td>
+            <select name="type">
+              <option value="">
+                &mdash; Tous les types
+              </option>
+              <option value="ambu" {{if $type == "ambu"}}selected="selected"{{/if}}>
+                {{tr}}CSejour.type.ambu{{/tr}}
+              </option>
+              <option value="comp" {{if $type == "comp"}}selected="selected"{{/if}}>
+                {{tr}}CSejour.type.comp{{/tr}}
+              </option>
+            </select>
+          </td>
+        </tr>
+        {{/if}}
         <tr>
           <td colspan="2" class="button"><button type="submit" class="search">Afficher</button></td>
         </tr>
       </table>
       </form>
-      {{if $typeVue}}
+      {{if $typeVue == 0}}
+        {{include file="inc_vw_timeop_op.tpl"}}
+      {{elseif $typeVue == 1}}
         {{include file="inc_vw_timeop_prepa.tpl"}}
       {{else}}
-        {{include file="inc_vw_timeop_op.tpl"}}
+        {{include file="inc_vw_timehospi.tpl"}}
       {{/if}}
     </td>
   </tr>

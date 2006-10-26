@@ -83,9 +83,6 @@ function pageMain() {
           <td colspan="4" class="button"><button class="search" type="submit">Go</button></td>
         </tr>
         <tr>
-          <td colspan="4"><i>Note : le nombre d'admissions par type d'hospitalisation avant le 16 novembre 2005 est en dessous de la réalité dû à un mauvais remplissage des dates d'admission par certains cabinets</i></td>
-        </tr>
-        <tr>
           <td colspan="4" class="button">
             <img alt="Patients par service" src='?m=dPstats&amp;a=graph_patparservice&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;service_id={{$service_id}}&amp;prat_id={{$prat_id}}&amp;type_adm={{$type_adm}}&amp;discipline_id={{$discipline_id}}' />
             <img alt="Admissions par type d'hospitalisation" src='?m=dPstats&amp;a=graph_patpartypehospi&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;service_id={{$service_id}}&amp;prat_id={{$prat_id}}&amp;type_adm={{$type_adm}}&amp;discipline_id={{$discipline_id}}' />

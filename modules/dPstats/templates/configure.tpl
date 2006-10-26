@@ -61,6 +61,13 @@ function storeTemps(action) {
           </td>
         </tr>
         <tr>
+          <td class="button">
+            <button type="button" class="submit" onclick="storeTemps('httpreq_temps_hospi')">
+              Mémoriser les temps d'hospitalisation
+            </button>
+          </td>
+        </tr>
+        <tr>
           <td id="resultMsg"></td>
         </tr>
       </table>

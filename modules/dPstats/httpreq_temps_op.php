@@ -32,7 +32,8 @@ $sql .="\nFROM operations" .
        "\nON operations.chir_id = users.user_id" .
        "\nLEFT JOIN plagesop" .
        "\nON operations.plageop_id = plagesop.plageop_id" .
-       "\nWHERE operations.entree_bloc IS NOT NULL" .
+       "\nWHERE operations.annulee = 0" .
+       "\nAND operations.entree_bloc IS NOT NULL" .
        "\nAND operations.debut_op IS NOT NULL" .
        "\nAND operations.fin_op IS NOT NULL" .
        "\nAND operations.sortie_bloc IS NOT NULL" .
@@ -51,7 +52,7 @@ switch($intervalle) {
     $sql .= "\nAND plagesop.date BETWEEN '".mbDate("-1 year")."' AND '".mbDate()."'";
     break;
 }
-       
+
 $sql .= "\nGROUP BY operations.chir_id, ccam" .
         "\nORDER BY ccam";
        
@@ -73,5 +74,5 @@ foreach($listOps as $keylistOps => $curr_listOps){
   db_exec( $sql ); db_error();
 }
 
-echo "Liste des temps opératoire mise à jour";
+echo "Liste des temps opératoire mise à jour (".count($listOps)." lignes trouvées)";
 ?>

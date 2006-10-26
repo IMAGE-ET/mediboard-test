@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPstats";
-$config["mod_version"]     = "0.12";
+$config["mod_version"]     = "0.13";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -69,7 +69,21 @@ class CSetupdPstats {
         $sql = "ALTER TABLE `temps_prepa` ADD INDEX ( `chir_id` );";
         db_exec( $sql ); db_error();
       case "0.12":
-        return "0.12";
+        $sql = "CREATE TABLE `temps_hospi` (
+               `temps_hospi_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+               `praticien_id` INT(11) UNSIGNED NOT NULL,
+               `ccam` VARCHAR( 100 ) NOT NULL,
+               `type` ENUM('ambu','comp') DEFAULT 'ambu' NOT NULL,
+               `nb_sejour` INT(11) UNSIGNED DEFAULT NULL,
+               `duree_moy` FLOAT UNSIGNED DEFAULT NULL,
+               `duree_ecart` FLOAT UNSIGNED DEFAULT NULL,
+               PRIMARY KEY (`temps_hospi_id`),
+               INDEX (`praticien_id`),
+               INDEX (`ccam`)
+               ) TYPE=MyISAM COMMENT='Table temporaire des temps d\'hospitalisation';";
+        db_exec( $sql ); db_error();
+      case "0.13":
+        return "0.13";
     }
     return false;
   }
