@@ -115,16 +115,11 @@ class CPlageOp extends CMbObject {
   }
   
   function reorderOp() {
-    if(!$this->debut) {
-      ini_set("display_errors", 0);
-      global $AppUI;
-      $errorMsg = "Erreur : la plage n'as pas de début : ";
-      $errorMsg .= "[id : $this->plageop_id] - ";
-      $errorMsg .= "[user : $AppUI->user_id] -";
-      $errorMsg .= "[date : ".mbDateTime()."] -";
-      trigger_error($errorMsg);
-      $this->load($this->_id);
-      ini_set("display_errors", 1);
+    if(!$this->debut && $this->_id) {
+      $tmpPlage = new CPlageOp;
+      $tmpPlage->load($this->_id);
+      $this->debut = $tmpPlage->debut;
+      $this->temps_inter_op = $tmpPlage->temps_inter_op;
     }
     if(!count($this->_ref_operations)) {
       $this->loadRefsBack(0);
@@ -193,6 +188,7 @@ class CPlageOp extends CMbObject {
     if ($msg = $this->hasCollisions()) {
       return $msg;
     }
+    mbTrace($this, "plage", true);
     return parent::store();
   }
   

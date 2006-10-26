@@ -14,13 +14,13 @@ if (!$obj->bind( $_POST )) {
 	$AppUI->redirect();
 }
 
-$del = dPgetParam( $_POST, "del", 0 );
-$repeat = dPgetParam( $_POST, "_repeat", 0 );
+$del         = dPgetParam( $_POST, "del", 0 );
+$repeat      = dPgetParam( $_POST, "_repeat", 0 );
 $type_repeat = dPgetParam( $_POST, "_type_repeat", 1 );
 
 $body_msg = null;
-$header = array();
-$msgNo = null;
+$header   = array();
+$msgNo    = null;
 
 if ($del) {
   $obj->load();
