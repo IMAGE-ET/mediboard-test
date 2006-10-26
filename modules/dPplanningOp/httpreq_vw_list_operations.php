@@ -26,7 +26,7 @@ if($urgences) {
   $listUrgences = new COperation;
   $where = array();
   $where["date"] = "LIKE '".mbTranformTime("+ 0 day", $date, "%Y-%m")."-__'";
-  $where["chir_id"] = "= '$selChirLogin'";
+  $where["chir_id"] = "= '$userSel->user_id'";
   $order = "date";
   $listUrgences = $listUrgences->loadList($where, $order);
   if($urgences) {
