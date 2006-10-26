@@ -188,7 +188,6 @@ class CPlageOp extends CMbObject {
     if ($msg = $this->hasCollisions()) {
       return $msg;
     }
-    mbTrace($this, "plage", true);
     return parent::store();
   }
   
