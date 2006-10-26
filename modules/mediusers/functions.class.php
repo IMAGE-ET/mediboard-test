@@ -83,7 +83,7 @@ class CFunctions extends CMbObject {
   
   // Backward references
   function loadRefsBack() {
-    $this->loadRefUsers();
+    $this->loadRefsUsers();
   }
   
   function loadRefsUsers($type = null) {
