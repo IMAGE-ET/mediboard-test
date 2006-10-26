@@ -24,3 +24,4 @@ up=$(uptime | awk '{print $10 $11 $12 }');
 
 ## Log the line
 echo "$dt $up" >> /var/log/uptime.log
+check_errs $? "Failed to log uptime" "Uptime logged!"
