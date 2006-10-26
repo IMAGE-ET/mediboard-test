@@ -18,7 +18,7 @@ function createDocument(modele_id, operation_id) {
 }
 
 function reloadAfterSaveDoc(){
-  updateListOperations();
+  updateListOperations("{{$date}}");
 }
 
 function updateListOperations(date) {
