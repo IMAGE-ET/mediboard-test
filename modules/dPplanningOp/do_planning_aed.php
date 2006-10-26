@@ -34,9 +34,9 @@ if(intval(mbGetValueFromPost("del", null))) {
 } else {
   $do->modifyMsg = "Opération modifiée";
   $do->createMsg = "Opération créée";
-  if($do->_objBefore->plageop_id && ($do->_objBefore->plageop_id != $do->_obj->plageop_id)) {
-    $do->_obj->rank = 0;
-  }
+  //if($do->_objBefore->plageop_id && ($do->_objBefore->plageop_id != $do->_obj->plageop_id)) {
+  //  $do->_obj->rank = 0;
+  //}
   $do->doStore();
   if($do->_objBefore->plageop_id && ($do->_objBefore->plageop_id != $do->_obj->plageop_id)) {
     $plageop = new CPlageOp;
