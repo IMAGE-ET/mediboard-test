@@ -14,8 +14,9 @@ if(!$canRead) {
 }
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
+$chirSel = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
 $userSel = new CMediusers;
-$userSel->load($AppUI->user_id);
+$userSel->load($chirSel);
 $urgences = mbGetValueFromGetOrSession("urgences", 0);
 $board = mbGetValueFromGet("board", 0);
 
