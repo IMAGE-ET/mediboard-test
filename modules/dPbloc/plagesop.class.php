@@ -121,7 +121,7 @@ class CPlageOp extends CMbObject {
       $errorMsg = "Erreur : la plage n'as pas de début : ";
       $errorMsg .= "[id : $this->plageop_id] - ";
       $errorMsg .= "[user : $AppUI->user_id] -";
-      $errorMsg .= "[date : ".mbDate()."] -";
+      $errorMsg .= "[date : ".mbDateTime()."] -";
       trigger_error($errorMsg);
       $this->load($this->_id);
       ini_set("display_errors", 1);
