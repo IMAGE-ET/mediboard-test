@@ -4,12 +4,42 @@ function main() {
   prepareForms();
   initFCKEditor();
   BrowserDetect.init();
+  ObjectInitialisation.hackIt();
+  SystemMessage.init();
   pageMain();
 }
 
 window.onbeforeunload= function () {
   if(BrowserDetect.browser != "Explorer"){
     waitingMessage(true);
+  }
+}
+
+/**
+ * System message effects
+ */
+ 
+SystemMessage = {
+  id : "systemMsg",
+
+  effect : function (idElement, oOldValue, oNewValue) {
+    new Effect.Appear(this.id);
+    new Effect.Fade(this.id, { delay : 3 } );
+    return oNewValue;
+  },
+  
+  init : function () {
+    var oElement = $(this.id);
+    if (!oElement) {
+      return;
+    }
+    
+    if (!oElement.watch) {
+      Element.show(oElement);
+      return;
+    }
+    
+    oElement.watch("innerHTML", this.effect);
   }
 }
 
@@ -71,7 +101,6 @@ Class.extend(PairEffect, {
 
   // Constructor
   initialize: function(idTarget, oOptions) {
-  	
     var oDefaultOptions = {
       idTrigger: idTarget + "-trigger",
       sEffect: "slide", // could be null, "appear", "slide", "blind"
@@ -80,7 +109,7 @@ Class.extend(PairEffect, {
       sCookieName: "effect"
 	};
 
-    oDefaultOptions.extend(oOptions);
+    Object.extend(oDefaultOptions, oOptions);
     
     this.oOptions = oDefaultOptions;
     this.oTarget = $(idTarget);
@@ -132,7 +161,7 @@ Object.extend(PairEffect, {
       sCookieName      : sTargetsClass
     }
     
-    oDefaultOptions.extend(oOptions);
+    Object.extend(oDefaultOptions, oOptions);
     
     document.getElementsByClassName(sTargetsClass).each( 
       function(oElement) {

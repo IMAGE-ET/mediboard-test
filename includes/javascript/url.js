@@ -52,6 +52,9 @@ Url.prototype.pop = function(iWidth, iHeight, sWindowName) {
   aFeatures.push("resizable=yes");
   aFeatures.push("menubar=yes");
 
+  aFeatures.push("toolbar=yes");
+  aFeatures.push("location=yes");
+
   // Forbidden characters for IE
   sWindowName = sWindowName.replace(/[ -]/gi, "_");
   

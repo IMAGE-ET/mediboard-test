@@ -100,7 +100,12 @@ function popChgPwd() {
     </td>
   </tr>
 </table>
+{{else}}
+<div class="dialog" {{if !$errorMessage}} style="display: none"{{/if}} id="systemMsg">
+  {{$errorMessage|smarty:nodefaults}}
+</div>
 {{/if}}
+
 <table id="main" class="{{$m}}">
 <tr>
   <td>

@@ -691,8 +691,16 @@ td.tabox {
 
 /* Message styles */
 
-#systemMsg {
-  float:right;
+div.dialog#systemMsg {
+  background: #fff;
+  border: 1px solid #666;
+  padding: 5px;
+  position: fixed;
+  right: 5px;
+}
+
+div#systemMsg {
+  float: right;
 }
 
 div.warning {

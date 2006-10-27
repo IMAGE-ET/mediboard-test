@@ -18,10 +18,14 @@ $_conduction = mbGetValueFromGetOrSession("_conduction", "aerien");
 $_oreille = mbGetValueFromGetOrSession("_oreille", "gauche");
 
 $consultation_id = mbGetValueFromGetOrSession("consultation_id");
-$where["consultation_id"] = "= '$consultation_id'";
 $exam_audio = new CExamAudio;
-$exam_audio->loadObject($where);
 $exam_audio->consultation_id = $consultation_id;
+$exam_audio->loadMatchingObject();
+
+if (!$exam_audio->_id) {
+  $exam_audio->store();
+}
+
 $exam_audio->loadRefs();
 $exam_audio->_ref_consult->loadRefsFwd();
 $exam_audio->loadAides($exam_audio->_ref_consult->_ref_plageconsult->chir_id);

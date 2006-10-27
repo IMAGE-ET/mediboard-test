@@ -531,9 +531,12 @@ th.title {
   font-size: 80%;
   float : none;
   text-align: center;
-  width: 100%;
 }
+
+div.dialog#systemMsg {
+  float: right;
+}
+
 div.message, div.loading, div.error, div.warning {
-   width: 10%;
    white-space: nowrap;
 }
