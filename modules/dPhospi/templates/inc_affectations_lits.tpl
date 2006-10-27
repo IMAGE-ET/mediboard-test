@@ -84,7 +84,7 @@
 
     </form>
     
-    <a style="float: right;" href="javascript:confirmDeletion(document.rmvAffectation{{$curr_affectation->affectation_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|addslashes}}'})">
+    <a style="float: right;" href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->affectation_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|addslashes}}'})">
       <img src="modules/{{$m}}/images/trash.png" alt="trash" title="Supprimer l'affectation" />
     </a>
     {{/if}}
@@ -118,7 +118,7 @@
     </form>
     
     <a>
-<img id="entreeAffectation{{$curr_affectation->affectation_id}}__trigger_entree" src="modules/{{$m}}/images/planning.png" alt="Planning" title="Modifier la date d'entrée" />
+      <img id="entreeAffectation{{$curr_affectation->affectation_id}}__trigger_entree" src="modules/{{$m}}/images/planning.png" alt="Planning" title="Modifier la date d'entrée" />
     </a>
     {{/if}}
   </td>
