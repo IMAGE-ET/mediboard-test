@@ -9,7 +9,7 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-if(!$canEdit) {
+if(!$canAdmin) {
 	$AppUI->redirect("m=system&a=access_denied");
 }
 

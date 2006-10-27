@@ -15,6 +15,6 @@ $module->registerTab("vw_edit_sejour"    , "Edition de séjours"     , TAB_READ);
 $module->registerTab("vw_edit_urgence"   , "Edition d'urgences"     , TAB_READ);
 $module->registerTab("vw_protocoles"     , "Liste des protocoles"   , TAB_EDIT);
 $module->registerTab("vw_edit_protocole" , "Edition de protocoles"  , TAB_EDIT);
-$module->registerTab("vw_edit_typeanesth", "Types d'anesthesie"     , TAB_EDIT);
+$module->registerTab("vw_edit_typeanesth", "Types d'anesthesie"     , TAB_ADMIN);
 
 ?>
