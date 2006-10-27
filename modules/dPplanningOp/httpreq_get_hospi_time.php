@@ -15,7 +15,7 @@ $codes   = mbGetValueFromGet("codes"   , "");
 $arrayCodes = explode("|", $codes);
 $result = CTempsHospi::getTime($chir_id, $arrayCodes);
 if($result) {
-  $temps = sprintf("%.2f", $result)." jours";
+  $temps = sprintf("%.2f", $result)."j";
 } else {
   $temps = "-";
 }
