@@ -264,7 +264,7 @@ class COperation extends CMbObject {
         $this->_ref_sejour->annule = 0;
         $this->_ref_sejour->store();
       }
-    } else {
+    } elseif($this->rank != 0) {
       $this->rank = 0;
       $this->time_operation = "00:00:00";
       $this->store();
