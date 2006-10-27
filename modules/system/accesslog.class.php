@@ -27,9 +27,7 @@ class CAccessLog extends CMbObject {
       "module"   => "str",
       "action"   => "str",
       "period"   => "dateTime",
-      "hits"     => "num",
-      "duration" => "",
-      "request"  => ""
+      "hits"     => "num"
     );
   }
   

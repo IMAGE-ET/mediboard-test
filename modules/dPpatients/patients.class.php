@@ -163,7 +163,7 @@ class CPatient extends CMbObject {
       "prevenir_cp"       => "numchar|length|5",
       "prevenir_ville"    => "str|confidential",
       "prevenir_tel"      => "numchar|length|10|confidential",
-      "prevenir_parente"  => "enum|conjoint|enfant|ascendant|colateral|divers",
+      "prevenir_parente"  => "enum|conjoint|enfant|ascendant|colateral|divers"
     );
   }
   
