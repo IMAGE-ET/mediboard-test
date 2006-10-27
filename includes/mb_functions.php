@@ -340,6 +340,30 @@ function mbEcartType($array) {
 }
 
 /**
+ * 
+ */
+ 
+function array_neighbor($arr, $key){
+  $keys = array_keys($arr);
+  $keyIndexes = array_flip($keys);
+  
+  $return = array();
+  if (isset($keys[$keyIndexes[$key]-1])) {
+    $return["prev"] = $keys[$keyIndexes[$key]-1];
+  }else{
+    $return["prev"] = null;
+  }
+  
+  if(isset($keys[$keyIndexes[$key]+1])) {
+    $return["next"] = $keys[$keyIndexes[$key]+1];
+  }else{
+    $return["next"] = null;
+  }
+  
+  return $return;
+}
+
+/**
  * Inserts a CSV file into a mysql table 
  * Not a generic function : used for import of specials files
  * in dPinterop

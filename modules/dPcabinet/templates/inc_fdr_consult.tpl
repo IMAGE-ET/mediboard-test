@@ -9,9 +9,9 @@ function cancelTarif() {
   submitFdr(oForm);
 }
 
-function popFile(file_id){
+function popFile(objectClass, objectId, elementClass, elementId){
   var url = new Url;
-  url.ViewFilePopup(file_id, 0);
+  url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
 }
 
 function modifTarif() {
@@ -133,7 +133,7 @@ function submitFdr(oForm) {
         {{foreach from=$consult->_ref_files item=curr_file}}
         <li>
           <form name="delFrm{{$curr_file->file_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
-            <a href="javascript:popFile({{$curr_file->file_id}});">{{$curr_file->file_name}}</a>
+            <a href="javascript:popFile('{{$consult->_class_name}}','{{$consult->_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}');">{{$curr_file->file_name}}</a>
             ({{$curr_file->_file_size}})
             <input type="hidden" name="m" value="dPfiles" />
             <input type="hidden" name="dosql" value="do_file_aed" />

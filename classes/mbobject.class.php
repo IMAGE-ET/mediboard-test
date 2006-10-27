@@ -47,6 +47,7 @@ class CMbObject {
   var $_enums      = array(); // enums fields elements
   var $_enumsTrans = array(); // enums fields translated elements
   var $_seek       = array(); // seekable fields
+  var $_nb_files_docs = null;
   
   /**
    * References
@@ -56,6 +57,8 @@ class CMbObject {
   var $_ref_logs      = null; // history of the object
   var $_ref_first_log = null;
   var $_ref_last_log  = null;
+  var $_ref_documents = array(); // Documents
+  var $_ref_files     = array(); // Fichiers
 
   /**
    * Constructor
@@ -115,6 +118,71 @@ class CMbObject {
     return $this->_error;
   }
 
+  /**
+   * Chargement des Fichiers et Documents
+   */
+  function loadRefsFiles() {
+    $this->_ref_files = new CFile();
+    $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
+    $docs_valid = count($this->_ref_files);
+    return $docs_valid;
+  }
+
+  function loadRefsDocs() {
+    $key = $this->_tbl_key;
+    $this->_ref_documents = new CCompteRendu();
+    $where = array();
+    $where["object_class"] = " = '".get_class($this)."'";
+    $where["object_id"] = "= '".$this->$key."'";
+    $order = "nom";
+    $this->_ref_documents = $this->_ref_documents->loadList($where, $order);
+    $docs_valid = count($this->_ref_documents);
+    return $docs_valid;
+  }
+  
+  function loadRefsFilesAndDocs(){
+  	$nb_files = $this->loadRefsFiles();
+    $nb_docs  = $this->loadRefsDocs();
+    $this->_nb_files_docs = $nb_docs + $nb_files;
+  }
+  
+  function getNumDocs(){
+    $key = $this->_tbl_key;
+    $select = "count(`compte_rendu_id`) AS `total`";
+    $table  = "compte_rendu";
+    $where  = array();
+    $where["object_class"] = " = '".get_class($this)."'";
+    $where["object_id"] = "= '".$this->$key."'";
+    $sql = new CRequest();
+    $sql->addTable($table);
+    $sql->addSelect($select);
+    $sql->addWhere($where);
+    $nbDocs = db_loadResult($sql->getRequest());
+    
+    return $nbDocs;    
+  }
+  
+  function getNumFiles(){
+    $key = $this->_tbl_key;
+    $select = "count(`file_id`) AS `total`";
+    $table  = "files_mediboard";
+    $where  = array();
+    $where["file_class"] = " = '".get_class($this)."'";
+    $where["file_object_id"] = "= '".$this->$key."'";
+    $sql = new CRequest();
+    $sql->addTable($table);
+    $sql->addSelect($select);
+    $sql->addWhere($where);
+    $nbFiles = db_loadResult($sql->getRequest());
+    
+    return $nbFiles;
+  }
+  
+  function getNumDocsAndFiles(){
+  	$this->_nb_files_docs = $this->getNumFiles() + $this->getNumDocs();
+    return $this->_nb_files_docs;
+  }
+  
   /**
    * Permission generic check
    * return true or false

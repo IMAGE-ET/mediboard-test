@@ -1,11 +1,26 @@
 <script type="text/javascript">
-
 var oCookie = new CJL_CookieUtil("fileAccordion");
+
 var fHeight = 380;
 var file_preview = null;
 var file_deleted = null;
+var showTabAcc = 0;
+
+if(oCookie.getSubValue("showTab")){
+  showTabAcc = oCookie.getSubValue("showTab");
+}
 if(oCookie.getSubValue("height")){
-  var fHeight = oCookie.getSubValue("height");
+  fHeight = oCookie.getSubValue("height");
+}
+
+function storeKeyCat(objAcc){
+  var aArray = oAccord.accordionTabs;
+  for ( var i=0 ; i < aArray.length ; i++ ){
+    if(objAcc == aArray[i]){
+      oCookie.setSubValue("showTab", i.toString());
+      showTabAcc = i.toString();
+    }
+  }
 }
 
 function initAccord(init_resize){
@@ -25,27 +40,24 @@ function initAccord(init_resize){
   oCookie.setSubValue("height", fHeight);
   if(init_resize){
     oAccord.lastExpandedTab.content.style.height = fHeight + "px";
-    oAccord.setOptions( { panelHeight: fHeight } );
+    oAccord.options.panelHeight = fHeight;
   }
 }
 
-function storeKeyCat(objAcc){
-  var cat_id = objAcc.titleBar.id;
-  cat_id = cat_id.substring(3, cat_id.indexOf("Header"));
-  document.FrmClass.cat_id.value = cat_id;
-}
-
-function popFile(file_id, sfn){
+function popFile(objectClass, objectId, elementClass, elementId, sfn){
   var url = new Url;
-  url.ViewFilePopup(file_id, sfn);
+  url.ViewFilePopup(objectClass, objectId, elementClass, elementId, sfn);
 }
 
-function ZoomFileAjax(file_id, sfn){
-  file_preview = file_id;
+function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
+  file_preview = elementId;
   var url = new Url;
   url.setModuleAction("dPfiles", "preview_files");
-  url.addParam("file_id", file_id);
-  if(sfn!=0){
+  url.addParam("objectClass", objectClass);
+  url.addParam("objectId", objectId);
+  url.addParam("elementClass", elementClass);
+  url.addParam("elementId", elementId);
+  if(sfn && sfn!=0){
     url.addParam("sfn", sfn);
   }
   url.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
@@ -61,11 +73,15 @@ function setObject(oObject){
   if (oForm.onsubmit()) {
     oForm.submit();
   }
+  
+  if(window.saveObjectInfos){
+    saveObjectInfos(oObject);
+  }
 }
 
 function reloadListFile(){
   if(file_deleted && file_preview == file_deleted){
-    ZoomFileAjax("", 0);
+    ZoomAjax("","","","", 0);
   }
   var url = new Url;
   initAccord(false);
@@ -73,7 +89,6 @@ function reloadListFile(){
   url.addParam("selKey", document.FrmClass.selKey.value);
   url.addParam("selClass", document.FrmClass.selClass.value);  
   url.addParam("typeVue", document.FrmClass.typeVue.value);
-  url.addParam("cat_id", document.FrmClass.cat_id.value);
   url.requestUpdate('listView', { waitingText : null });
 }
 

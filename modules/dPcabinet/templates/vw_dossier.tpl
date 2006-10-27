@@ -33,14 +33,6 @@ function setPat( key, val ) {
   
   f.submit();
 }
-
-function printDocument(doc_id) {
-  var url = new Url;
-  url.setModuleAction("dPcompteRendu", "print_cr");
-  url.addParam("compte_rendu_id", doc_id);
-  url.popup(700, 600, 'CompteRendu');
-}
-
 </script>
 
 
@@ -77,8 +69,7 @@ function printDocument(doc_id) {
             <strong>
             Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}} &mdash;
             {{$curr_consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}} &mdash;
-            {{$curr_consult->_etat}} &mdash;
-            {{$curr_consult->_ref_files|@count}} fichier(s)
+            {{$curr_consult->_etat}}
             </strong>
           </td>
         </tr>
@@ -113,43 +104,18 @@ function printDocument(doc_id) {
            </tr>
           {{/if}}
           <tr>
-            <th>Documents créés :</th>
+            <th>Documents attachés :</th>
             <td>
             <ul>
-              {{foreach from=$curr_consult->_ref_documents item=document}}
+              {{if $curr_consult->_nb_files_docs}}
               <li>
-                {{$document->nom}}
-                <button class="print" onclick="printDocument({{$document->compte_rendu_id}})">
-                  Imprimer
-                </button>
+                <a href="index.php?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;selClass={{$curr_consult->_class_name}}&amp;selKey={{$curr_consult->_id}}">
+                  Consulter les documents
+                </a>
               </li>
-              {{foreachelse}}
+              {{else}}
               <li>Aucun document créé</li>
-              {{/foreach}}
-            </ul>
-         </tr> 
-         <tr>
-           <th>Fichiers attachés :</th>
-           <td>
-              <ul>
-                {{foreach from=$curr_consult->_ref_files item=curr_file}}
-                <li>
-                  <form name="uploadFrm{{$curr_file->file_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post">
-                  <input type="hidden" name="m" value="dPfiles" />
-                  <input type="hidden" name="dosql" value="do_file_aed" />
-                  <input type="hidden" name="del" value="1" />
-                  <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
-                  <a href="javascript:popFile({{$curr_file->file_id}});">{{$curr_file->file_name}}</a>
-                  ({{$curr_file->_file_size}}) 
-                  <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le fichier',objName:'{{$curr_file->file_name|smarty:nodefaults|JSAttribute}}'})">
-                    Supprimer
-                  </button>
-       
-                  </form>
-                </li>
-                {{foreachelse}}
-                <li>Aucun fichier attaché</li>
-                {{/foreach}}
+              {{/if}}
               </ul>
               <form name="uploadFrm" action="?m={{$m}}" enctype="multipart/form-data" method="post">
               <input type="hidden" name="m" value="dPfiles" />
@@ -179,8 +145,10 @@ function printDocument(doc_id) {
           <td colspan="2">
             <strong>
             Dr. {{$curr_op->_ref_chir->_view}} &mdash;
-            {{$curr_op->_ref_plageop->date|date_format:"%d %B %Y"}} &mdash;
-            {{$curr_op->_ref_files|@count}} fichier(s)
+            {{$curr_op->_ref_plageop->date|date_format:"%d %B %Y"}}
+            {{if $curr_op->_nb_files_docs}}
+              &mdash; {{$curr_op->_nb_files_docs}} Doc.
+            {{/if}}
             </strong>
           </td>
         </tr>
@@ -206,43 +174,21 @@ function printDocument(doc_id) {
             </td>
           </tr>
           <tr>
-            <th>Documents créés :</th>
+            <th>
+              Documents attachés :
+            </th>
             <td>
             <ul>
-              {{foreach from=$curr_op->_ref_documents item=document}}
+              {{if $curr_op->_nb_files_docs}}
               <li>
-                {{$document->nom}}
-                <button class="print notext" onclick="printDocument({{$document->compte_rendu_id}})">
-                </button>
+                <a href="index.php?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;selClass={{$curr_op->_class_name}}&amp;selKey={{$curr_op->_id}}">
+                  Consulter les documents
+                </a>
               </li>
-              {{foreachelse}}
+              {{else}}
               <li>Aucun document créé</li>
-              {{/foreach}}
+              {{/if}}
             </ul>
-          </tr>
-          <tr>
-            <th>Fichiers attachés :</th>
-            <td>
-              <ul>
-                {{foreach from=$curr_op->_ref_files item=curr_file}}
-                <li>
-                  <form name="uploadFrm{{$curr_file->file_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post">
-                  <input type="hidden" name="m" value="dPfiles" />
-                  <input type="hidden" name="dosql" value="do_file_aed" />
-                  <input type="hidden" name="del" value="1" />
-                  <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
-                  <a href="mbfileviewer.php?file_id={{$curr_file->file_id}}">{{$curr_file->file_name}}</a>
-                  ({{$curr_file->_file_size}}) 
-                  <button class="trash" type="button" onclick="confirmDeletion(this.form, 'le fichier', '{{$curr_file->file_name|smarty:nodefaults|JSAttribute}}')">
-                    supprimer
-                  </button>
-      
-                  </form>
-                </li>
-                {{foreachelse}}
-                <li>Aucun fichier attaché</li>
-                {{/foreach}}
-              </ul>
               <form name="uploadFrm" action="?m=dPcabinet" enctype="multipart/form-data" method="post">
               <input type="hidden" name="m" value="dPfiles" />
               <input type="hidden" name="dosql" value="do_file_aed" />

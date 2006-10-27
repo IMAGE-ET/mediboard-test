@@ -69,7 +69,7 @@ foreach($sejours as $key => $sejour) {
     $sejours[$key]->_ref_operations[$keyOp]->loadRefPlageOp();
     $sejours[$key]->_ref_operations[$keyOp]->loadRefChir();
     $sejours[$key]->_ref_operations[$keyOp]->loadRefsFiles();
-    $sejours[$key]->_ref_operations[$keyOp]->loadRefsDocuments();
+    $sejours[$key]->_ref_operations[$keyOp]->loadRefsDocs();
     if($sejours[$key]->_ref_operations[$keyOp]->_ref_documents) {
       $docsOp = array_merge($docsOp, $sejours[$key]->_ref_operations[$keyOp]->_ref_documents);
     }

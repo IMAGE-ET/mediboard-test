@@ -27,6 +27,9 @@ $canReadFiles     = $fileModule->canRead();
 $canEditFiles     = $fileModule->canEdit();
 $canReadCptRendus = $fileCptRendus->canRead();
 $canEditCptRendus = $fileCptRendus->canEdit();
+$canEditDoc       = $fileCptRendus->canEdit();
+
+
 
 $diagnosticsInstall = CModule::getActive("dPImeds") && CModule::getActive("dPsante400");
 
@@ -81,45 +84,23 @@ $moduleCabinet = CModule::getInstalled("dPcabinet");
 $canEditCabinet = $moduleCabinet->canEdit();
 
 // Chargement des fichiers
-
-$accordion_open = 0;
 $typeVue        = 1;
-$cat_id         = mbGetValueFromGetOrSession("cat_id", 0);
-$selClass       = mbGetValueFromGet("selClass", "CPatient");
-$selKey         = mbGetValueFromGet("selKey"  , $patient_id);
 
-
-$listCategory = CFilesCategory::listCatClass($selClass);
-if($cat_id != 0){
-   $tabCat = array_keys($listCategory);
-   $accordion_open = array_search($cat_id , $tabCat);
-  if($accordion_open!==""){
-    $accordion_open++;
-  };
-}else{
-  $accordion_open = null;
-}
-
+$selClass       = mbGetValueFromGetOrSession("selClass", "CPatient");
+$selKey         = mbGetValueFromGetOrSession("selKey"  , $patient_id);
 
 $object = new $selClass;
 $object->load($selKey);
-$object->loadRefsFiles();
 
-$affichageFile = array();
-$affichageFile[0] = array();
-$affichageFile[0]["name"] = "Aucune Catégorie";
-$affichageFile[0]["file"] = array();
-foreach($listCategory as $keyCat => $curr_Cat) {
-  $affichageFile[$keyCat]["name"] = $curr_Cat->nom;
-  $affichageFile[$keyCat]["file"] = array();
-}
-foreach($object->_ref_files as $keyFile => $FileData){
-  $affichageFile[$FileData->file_category_id]["file"][] = $FileData;
-}
+$affichageFile = CFile::loadFilesAndDocsByObject($object);
 
 // Création du template
 $smarty = new CSmartyDP(1);
 
+$canEditFileDoc = $canEditFiles || $canEditDoc;
+
+$smarty->assign("canEditFileDoc" , $canEditFileDoc);
+$smarty->assign("canEditDoc"     , $canEditDoc);
 $smarty->assign("patient"         , $patient         );
 $smarty->assign("chir"            , $chir            );
 $smarty->assign("anesth"          , $anesth          );
@@ -132,15 +113,11 @@ $smarty->assign("canReadCptRendus", $canReadCptRendus);
 $smarty->assign("canEditCptRendus", $canEditCptRendus);
 $smarty->assign("listModelePrat"  , $listModelePrat  );
 $smarty->assign("listModeleFct"   , $listModeleFct   );
-
 $smarty->assign("affichageFile"   , $affichageFile   );
-$smarty->assign("listCategory"    , $listCategory    );
-$smarty->assign("accordion_open"  , $accordion_open  );
 $smarty->assign("selClass"        , $selClass        );
 $smarty->assign("selKey"          , $selKey          );
 $smarty->assign("selView"         , $object->_view   );
 $smarty->assign("typeVue"         , $typeVue         );
-$smarty->assign("cat_id"          , $cat_id          );
 
 $smarty->assign("diagnosticsInstall" , $diagnosticsInstall);
 

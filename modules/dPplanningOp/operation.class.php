@@ -86,9 +86,7 @@ class COperation extends CMbObject {
   var $_ref_anesth         = null;
   var $_ref_sejour         = null;
   var $_ref_consult_anesth = null;
-  var $_ref_files          = array();
   var $_ref_actes_ccam     = array(); 
-  var $_ref_documents      = array();
 
   // External references
   var $_ext_codes_ccam = null;
@@ -354,30 +352,16 @@ class COperation extends CMbObject {
     $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr. {$this->_ref_chir->_view}";
   }
   
-  function loadRefsFiles() {
-    $this->_ref_files = new CFile();
-    $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
-  }
-  
   function loadRefsActesCCAM() {
     $where = array("operation_id" => "= '$this->operation_id'");
     $this->_ref_actes_ccam = new CActeCCAM;
     $this->_ref_actes_ccam = $this->_ref_actes_ccam->loadList($where);
   }
-  
-  function loadRefsDocuments() {
-    $this->_ref_documents = new CCompteRendu();
-    $where = array();
-    $where["object_class"] = " = 'COperation'";
-    $where["object_id"] = "= '$this->operation_id'";
-    $order = "nom";
-    $this->_ref_documents = $this->_ref_documents->loadList($where, $order);
-  }
 
   function loadRefsBack() {
     $this->loadRefsFiles();
     $this->loadRefsActesCCAM();
-    $this->loadRefsDocuments();
+    $this->loadRefsDocs();
   }
   
   function getPerm($permType) {

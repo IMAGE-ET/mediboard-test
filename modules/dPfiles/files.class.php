@@ -211,6 +211,13 @@ class CFile extends CMbObject {
     $where["file_object_id"] = "= '".$object->$key."'";
     $listFile = new CFile();
     $listFile = $listFile->loadList($where);
+    
+    foreach($listFile as $keyFile=>$currFile) {
+      $listFile[$keyFile]->canRead();
+      if(!$listFile[$keyFile]->_canRead){
+        unset($listFile[$keyFile]);
+      }
+    }
     return $listFile;
   }
   
@@ -276,6 +283,50 @@ class CFile extends CMbObject {
         $this->_nb_pages = intval(trim($nombre_temp[0]));
       }
     }
+  }
+  
+  function loadFilesAndDocsByObject($object){
+    $listCategory = CFilesCategory::listCatClass($object->_class_name);
+    
+    if(!$object->_ref_files){
+      $object->loadRefsFiles();
+    }
+    if(!$object->_ref_documents){
+      $object->loadRefsDocs();
+    }
+    
+    //Création du tableau des catégorie pour l'affichage
+    $affichageFile = array();
+    $affichageFile[0] = array();
+    $affichageFile[0]["name"] = "Aucune Catégorie";
+    $affichageFile[0]["DocsAndFiles"] = array();
+    foreach($listCategory as $keyCat => $curr_Cat){
+      $affichageFile[$keyCat]["name"] = $curr_Cat->nom;
+      $affichageFile[$keyCat]["DocsAndFiles"] = array();
+    }
+    
+    //Ajout des fichiers dans le tableau
+    foreach($object->_ref_files as $keyFile=>$FileData) {
+      $object->_ref_files[$keyFile]->canRead();
+      if($object->_ref_files[$keyFile]->_canRead) {
+        $affichageFile[$FileData->file_category_id]["DocsAndFiles"][$FileData->file_name."_CFile_".$FileData->file_id] =& $object->_ref_files[$keyFile];
+      }
+    }
+    
+    //Ajout des document dans le tableau
+    foreach($object->_ref_documents as $keyDoc=>$DocData) {
+      $object->_ref_documents[$keyDoc]->canRead();
+      if($object->_ref_documents[$keyDoc]->_canRead) {
+        $affichageFile[$DocData->file_category_id]["DocsAndFiles"][$DocData->nom."_CCompteRendu_".$DocData->compte_rendu_id] =& $object->_ref_documents[$keyDoc];
+      }
+    }
+    
+    // Classement des Fichiers et des document par Ordre alphabétique
+    foreach($affichageFile as $keyFile => $currFile){
+      ksort($affichageFile[$keyFile]["DocsAndFiles"]);
+    }
+
+    return $affichageFile;
   }
 }
 ?>

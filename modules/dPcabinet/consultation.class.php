@@ -56,8 +56,6 @@ class CConsultation extends CMbObject {
   var $_ref_chir         = null; //pseudo RefFwd, get that in plageConsult
 
   // Back References
-  var $_ref_files          = null;
-  var $_ref_documents      = null; // Pseudo backward references to documents
   var $_ref_consult_anesth = null;
   var $_ref_examaudio      = null;
   var $_ref_examcomp       = null;
@@ -178,59 +176,49 @@ class CConsultation extends CMbObject {
     $this->_view .= " (".mbTranformTime(null, $this->_ref_plageconsult->date, "%d/%m/%Y").")";
   }
 
-  function loadRefsFiles() {
-    $this->_ref_files = new CFile();
-    $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
-  }
-
   function loadRefsDocs() {
-    $this->_ref_documents = array();
-    $this->_ref_documents = new CCompteRendu();
-    $where = array();
-    $this->loadRefConsultAnesth();
+  	$this->loadRefConsultAnesth();
     if($this->_ref_consult_anesth->consultation_anesth_id) {
-    	$where[] = "(`object_class` = 'CConsultation' && `object_id` = '$this->consultation_id') || (`object_class` = 'CConsultAnesth' && `object_id` = '".$this->_ref_consult_anesth->consultation_anesth_id."')";
-    } else {
-      $where["object_class"] = "= 'CConsultation'";
-      $where["object_id"] = "= '$this->consultation_id'";
+      $this->_ref_documents = new CCompteRendu();
+      $where = array();
+      $where[] = "(`object_class` = 'CConsultation' && `object_id` = '$this->consultation_id')
+               || (`object_class` = 'CConsultAnesth' && `object_id` = '".$this->_ref_consult_anesth->consultation_anesth_id."')";
+      $order = "nom";
+      $this->_ref_documents = $this->_ref_documents->loadList($where, $order);
+      $docs_valid = count($this->_ref_documents);
+    }else{
+      $docs_valid = parent::loadRefsDocs();
     }
-    $order = "nom";
-    $this->_ref_documents = $this->_ref_documents->loadList($where, $order);
-    $docs_valid = 0;
-    foreach ($this->_ref_documents as $curr_doc) {
-      if ($curr_doc->source) {
-        $docs_valid++;
-      }
-    }
-    if($docs_valid) {
-      $this->getEtat();
-      $this->_etat .= " ($docs_valid Doc.)";
-    }
+    return $docs_valid;
   }
 
-  function getNumDocs(){
-  	$select = "count(`compte_rendu_id`) AS `total`";  
-    $table  = "compte_rendu";
-    $where  = array();
-    $ljoin = array();
-    
-    $this->loadRefConsultAnesth();
-    if($this->_ref_consult_anesth->consultation_anesth_id) {
-      $where[] = "(`object_class` = 'CConsultation' && `object_id` = '$this->consultation_id') || (`object_class` = 'CConsultAnesth' && `object_id` = '".$this->_ref_consult_anesth->consultation_anesth_id."')";
-    } else {
-      $where["object_class"] = "= 'CConsultation'";
-      $where["object_id"] = "= '$this->consultation_id'";
+  function getNumDocsAndFiles(){
+    if(!$this->_nb_files_docs){
+      parent::getNumDocsAndFiles();
     }
-    
-    $sql = new CRequest();
-    $sql->addTable($table);
-    $sql->addSelect($select);
-    $sql->addWhere($where);
-
-    if ($nbDocs = db_loadResult($sql->getRequest())) {
+    if($this->_nb_files_docs) {
       $this->getEtat();
-      $this->_etat .= " ($nbDocs Doc.)";
+      $this->_etat .= " ($this->_nb_files_docs Doc.)";
     }
+  }
+  
+  function getNumDocs(){
+  	$this->loadRefConsultAnesth();
+    if($this->_ref_consult_anesth->consultation_anesth_id) {
+      $select = "count(`compte_rendu_id`) AS `total`";  
+      $table  = "compte_rendu";
+      $where  = array();
+      $where[] = "(`object_class` = 'CConsultation' && `object_id` = '$this->consultation_id')
+               || (`object_class` = 'CConsultAnesth' && `object_id` = '".$this->_ref_consult_anesth->consultation_anesth_id."')";
+      $sql = new CRequest();
+      $sql->addTable($table);
+      $sql->addSelect($select);
+      $sql->addWhere($where);
+      $nbDocs = db_loadResult($sql->getRequest());
+    }else{
+      $nbDocs = parent::getNumDocs();
+    }
+    return $nbDocs;
   }
   
   function loadRefConsultAnesth() {
@@ -240,17 +228,20 @@ class CConsultation extends CMbObject {
     $this->_ref_consult_anesth->loadObject($where);
   }
   
-  function loadRefsBack() {
-    // Backward references
-    $this->loadRefsFiles();
-    $this->loadRefsDocs();
-    $this->loadRefConsultAnesth();
-    
-    $this->_ref_examaudio = new CExamAudio;
+  function loadRefsExamAudio(){
+  	$this->_ref_examaudio = new CExamAudio;
     $where = array();
     $where["consultation_id"] = "= '$this->consultation_id'";
     $this->_ref_examaudio->loadObject($where);
+  }
+  
+  function loadRefsBack() {
+    // Backward references
+    $this->loadRefsFilesAndDocs();
+    $this->getNumDocsAndFiles();
+    $this->loadRefConsultAnesth();
     
+    $this->loadRefsExamAudio();
     $this->loadExamsComp();
   }
   

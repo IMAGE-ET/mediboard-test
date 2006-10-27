@@ -100,8 +100,6 @@ class CPatient extends CMbObject {
   // Object References
   var $_nb_docs              = null;
   var $_fin_cmu              = null;
-  var $_ref_files            = null;
-  var $_ref_documents        = null;
   var $_ref_sejours          = null;
   var $_ref_consultations    = null;
   var $_ref_antecedents      = null;
@@ -402,29 +400,10 @@ class CPatient extends CMbObject {
     $where["entree"] = "> '$now'";
     $this->_ref_next_affectation->loadObject($where, $order);
   }
-
-  function loadRefsFiles() {
-    $this->_ref_files = new CFile();
-    $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
-  }
   
   
   function loadRefsDocs() {
-    $this->_ref_documents = array();
-    $this->_ref_documents = new CCompteRendu();
-    
-    $where = array();
-    $where["object_class"] = " = 'CPatient'";
-    $where["object_id"] = "= '$this->patient_id'";
-    $order = "nom";
-    
-    $this->_ref_documents = $this->_ref_documents->loadList($where, $order);
-    $docs_valid = 0;
-    foreach ($this->_ref_documents as $curr_doc) {
-      if ($curr_doc->source) {
-        $docs_valid++;
-      }
-    }
+    $docs_valid = parent::loadRefsDocs();
     if($docs_valid)
       $this->_nb_docs .= "$docs_valid";
   }
@@ -505,6 +484,7 @@ class CPatient extends CMbObject {
     $this->loadRefs();
     $this->canRead();
     $this->canEdit();
+    $this->getNumDocsAndFiles();
     
     // Affectations courantes
     $affectation =& $this->_ref_curr_affectation;
@@ -522,9 +502,13 @@ class CPatient extends CMbObject {
     // Consultations
     foreach ($this->_ref_consultations as $keyConsult => $valueConsult) {
       $consult =& $this->_ref_consultations[$keyConsult];
-      $consult->loadRefs();
-      // Compteur de docs inclus dans le loadRefsDocs
-      //$consult->getNumDocs();
+      
+      $consult->loadRefConsultAnesth();
+      $consult->loadRefsExamAudio();
+      $consult->loadExamsComp();
+      $consult->getNumDocsAndFiles();
+      
+      $consult->loadRefsFwd();
       $consult->canRead();
       $consult->canEdit();
     }
@@ -532,12 +516,19 @@ class CPatient extends CMbObject {
     // Sejours
     foreach ($this->_ref_sejours as $keySejour => $valueSejour) {
       $sejour =& $this->_ref_sejours[$keySejour];
-      $sejour->loadRefs();
+      
+      $sejour->loadRefsAffectations();
+      $sejour->loadRefsOperations();
+      $sejour->getNumDocsAndFiles();
+      
+      $sejour->loadRefsFwd();
       $sejour->canRead();
       $sejour->canEdit();
+      $sejour->getNumDocsAndFiles();
       foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
         $operation =& $sejour->_ref_operations[$keyOp];
         $operation->loadRefsFwd();
+        $operation->getNumDocsAndFiles();
         $operation->canRead();
         $operation->canEdit();
       }

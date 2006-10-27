@@ -60,7 +60,7 @@ if ($patient->patient_id) {
       $operation =& $sejour->_ref_operations[$keyOp];
       $operation->loadRefsFwd();
       
-      $operation->loadRefsDocuments();
+      $operation->getNumDocsAndFiles();
       $operation->loadRefsActesCCAM();
       foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {
         $acte =& $operation->_ref_actes_ccam[$keyActe];

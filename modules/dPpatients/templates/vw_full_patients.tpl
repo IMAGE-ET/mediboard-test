@@ -3,15 +3,18 @@
 {{include file="../../dPfiles/templates/inc_files_functions.tpl"}}
 
 <script type="text/javascript">
+function saveObjectInfos(oObject){
+  var url = new Url;
+  url.setModuleAction("dPpatients", "httpreq_do_savesession");
+  url.addParam("selClass", oObject.objClass);
+  url.addParam("selKey", oObject.id);
+  url.requestUpdate('systemMsg', { waitingText : null });
+}
 
 function view_labo() {
   var url = new Url;
-  initAccord(false);
   url.setModuleAction("dPImeds", "httpreq_vw_patient_results");
   url.addParam("patient_id", "{{$patient->_id}}");
-  url.addParam("selClass", document.FrmClass.selClass.value);  
-  url.addParam("typeVue", document.FrmClass.typeVue.value);
-  url.addParam("cat_id", document.FrmClass.cat_id.value);
   url.requestUpdate('listView', { waitingText : null });
 }
 
@@ -39,7 +42,7 @@ function printPatient(id) {
 function pageMain() {
   initAccord(true);
   PairEffect.initGroup("patientEffect", { 
-    bStoreInCookie: false
+    bStoreInCookie: true
   });
 }
 
@@ -56,7 +59,6 @@ function pageMain() {
       <input type="hidden" name="keywords" value="" />
       <input type="hidden" name="file_id"  value="" />
       <input type="hidden" name="typeVue"  value="1" />
-      <input type="hidden" name="cat_id"   value="{{$cat_id}}" />
       </form>
       
       {{assign var="href" value="index.php?m=dPpatients&tab=vw_full_patients"}}
@@ -83,7 +85,7 @@ function pageMain() {
               keywords: '', 
               id: {{$patient->patient_id|smarty:nodefaults|JSAttribute}}, 
               view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' })">
-              {{$patient->_ref_files|@count}} doc(s)
+              {{$patient->_nb_files_docs}} doc(s)
               <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les Documents" />
             </button>
             {{/if}}
@@ -202,71 +204,93 @@ function pageMain() {
           </td>
         </tr>
         </tbody>
-
+      </table>
+      <table class="form">
         <tr id="sejours-trigger">
-          <th colspan="4" class="title">{{$patient->_ref_sejours|@count}} séjour(s)</th>
+          <th colspan="2" class="title">{{$patient->_ref_sejours|@count}} séjour(s)</th>
         </tr>
         
         <tbody class="patientEffect" id="sejours">
         {{foreach from=$patient->_ref_sejours item=curr_sejour}}
         <tr>
-          <td colspan="4">
-            {{if $curr_sejour->_canEdit}}
-            <button type="button" style="float:right;" onclick="setObject( {
-              objClass: 'CSejour', 
-              keywords: '', 
-              id: {{$curr_sejour->sejour_id|smarty:nodefaults|JSAttribute}}, 
-              view:'{{$curr_sejour->_view|smarty:nodefaults|JSAttribute}}'} )">
-              {{$curr_sejour->_ref_files|@count}} doc(s)
-              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les documents" />
-            </button>
-            {{/if}}
+          <td>
+            <a title="Modifier le séjour" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
+              <img src="modules/dPpatients/images/planning.png" alt="Planifier"/>
+            </a>
             Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
             au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
             - Dr. {{$curr_sejour->_ref_praticien->_view}}
           </td>
+          <td style="text-align:right;">
+          {{if $curr_sejour->_canEdit}}
+            <a href="#" onclick="setObject( {
+              objClass: 'CSejour', 
+              keywords: '', 
+              id: {{$curr_sejour->sejour_id|smarty:nodefaults|JSAttribute}}, 
+              view:'{{$curr_sejour->_view|smarty:nodefaults|JSAttribute}}'} )"
+              title="{{$curr_sejour->_nb_files_docs}} doc(s)">
+              {{$curr_sejour->_nb_files_docs}}
+              <img align="top" src="modules/{{$m}}/images/next{{if !$curr_sejour->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_sejour->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+            </a>
+            {{/if}}         
+          </td>
         </tr>
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
         <tr>
-          <td colspan="4">
+          <td>
             <ul><li>
-            {{if $curr_op->_canEdit}}
-            <button type="button" style="float:right;" onclick="setObject( {
+            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+              <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
+            </a>
+            {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} - Intervention du Dr. {{$curr_op->_ref_chir->_view}}
+            </li></ul>
+          </td>
+          <td style="text-align:right;">
+          {{if $curr_op->_canEdit}}
+            <a href="#" onclick="setObject( {
               objClass: 'COperation', 
               keywords: '', 
               id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
-              view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )">
-              {{$curr_op->_ref_files|@count}} doc(s)
-              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les documents" />
-            </button>
-            {{/if}}
-            {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} - Intervention du Dr. {{$curr_op->_ref_chir->_view}}
-            </li></ul>
+              view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )"
+              title="{{$curr_op->_nb_files_docs}} doc(s)">
+              {{$curr_op->_nb_files_docs}}
+              <img align="top" src="modules/{{$m}}/images/next{{if !$curr_op->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_op->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+            </a>
+            {{/if}} 
           </td>
         </tr>
         {{/foreach}}
         {{/foreach}}
         </tbody>
-
         <tr id="consultations-trigger">
-          <th colspan="4" class="title">{{$patient->_ref_consultations|@count}} consultation(s)</th>
+          <th colspan="2" class="title">{{$patient->_ref_consultations|@count}} consultation(s)</th>
         </tr>
 
         <tbody class="patientEffect" id="consultations">
         {{foreach from=$patient->_ref_consultations item=curr_consult}}
         <tr>
-          <td colspan="4">
-            {{if $curr_consult->_canEdit}}
-            <button type="button" style="float:right;" onclick="setObject( {
+          <td>
+            {{if $curr_consult->annule}}
+            [ANNULE]<br />
+            {{else}}
+            <a href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}">
+              <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
+            </a>
+            {{/if}}
+            {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_consult->_ref_chir->_view}}
+          </td>
+          <td style="text-align:right;">
+          {{if $curr_consult->_canRead}}
+            <a href="#" onclick="setObject( {
               objClass: 'CConsultation', 
               keywords: '', 
               id: {{$curr_consult->consultation_id|smarty:nodefaults|JSAttribute}}, 
-              view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
-              {{$curr_consult->_ref_files|@count}} doc(s)
-              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les documents" />
-            </button>
+              view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )"
+              title="{{$curr_consult->_nb_files_docs}} doc(s)">
+              {{$curr_consult->_nb_files_docs}}
+              <img align="top" src="modules/{{$m}}/images/next{{if !$curr_consult->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+            </a>
             {{/if}}
-            {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_consult->_ref_chir->_view}}
           </td>
         </tr>
         {{/foreach}}

@@ -70,7 +70,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
     }
   }  
   
-  function doRedirect($cat_id = 0) {
+  function doRedirect() {
     global $AppUI, $_POST;
     
     $cat_id   = intval(mbGetValueFromPost("file_category_id"));
@@ -85,7 +85,6 @@ class CFileAddEdit extends CDoObjectAddEdit {
       exit;
     }     
     if ($this->redirect !== null) {
-    	$this->redirect .= "&cat_id=$cat_id";
       $AppUI->redirect($this->redirect);
     }
   }

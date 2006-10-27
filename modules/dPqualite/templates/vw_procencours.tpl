@@ -1,9 +1,9 @@
 <script language="Javascript" type="text/javascript">
 
-function popFile(file_id){
+function popFile(objectClass, objectId, elementClass, elementId){
   var url = new Url;
   url.addParam("nonavig", 1);
-  url.ViewFilePopup(file_id, 0);
+  url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
 }
 
 </script>
@@ -287,7 +287,7 @@ function popFile(file_id){
           <tr>
             <th>Dernier Fichier lié</th>
             <td>
-              <a href="javascript:popFile({{$docGed->_lastentry->file_id}})" title="Voir le Fichier">
+              <a href="javascript:popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="Voir le Fichier">
                 <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
               </a>
             </td>
@@ -326,7 +326,7 @@ function popFile(file_id){
               <br />Vous ne pouvez pas y apporter de modification.
               <br />
               <br />
-              <a href="javascript:popFile({{$docGed->_lastentry->file_id}})" title="Voir le Fichier">
+              <a href="javascript:popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="Voir le Fichier">
                 <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
               </a>
               <br />{{$docGed->_reference_doc}}

@@ -63,7 +63,7 @@ class CConsultAnesth extends CMbObject {
   var $_min_tca      = null;
 
   // Object References
-  var $_ref_consult            = null;
+  var $_ref_consultation       = null;
   var $_ref_techniques         = null;
   var $_ref_last_consultanesth = null;
   var $_ref_operation          = null;
@@ -129,7 +129,7 @@ class CConsultAnesth extends CMbObject {
   
   function getSeeks() {
     return array (
-      "chir_id"         => "ref|CMediusers",
+      //"chir_id"         => "ref|CMediusers",
       "consultation_id" => "ref|CConsultation",
       "operation_id"    => "ref|COperation",
       "conclusion"      => "like"
@@ -177,11 +177,20 @@ class CConsultAnesth extends CMbObject {
   function loadRefConsultation() {
     $this->_ref_consultation = new CConsultation;
     $this->_ref_consultation->load($this->consultation_id);
+    $this->_view = $this->_ref_consultation->_view;
   }
   
   function loadRefOperation() {
     $this->_ref_operation = new COperation;
     $this->_ref_operation->load($this->operation_id);
+  }
+  
+  function loadRefsFiles(){
+  	if(!$this->_ref_consultation){
+  		$this->loadRefConsultation();
+  	}
+    $this->_ref_consultation->loadRefsFiles();
+    $this->_ref_files =& $this->_ref_consultation->_ref_files;
   }
   
   function loadRefsFwd() {
@@ -229,13 +238,10 @@ class CConsultAnesth extends CMbObject {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_consult){
+    if(!$this->_ref_consultation){
       $this->loadRefConsultation();
-    } 
-    if (!$this->_ref_operation){
-      $this->loadRefOperation();
     }
-    return ($this->_ref_consult->getPerm($permType) && $this->_ref_operation->getPerm($permType));
+    return $this->_ref_consultation->getPerm($permType);
   }
   
   function fillTemplate(&$template) {

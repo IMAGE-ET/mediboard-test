@@ -13,11 +13,12 @@ if (!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
 }
 
-$fileModule = CModule::getInstalled("dPfiles");
+$fileModule     = CModule::getInstalled("dPfiles");
+$cptRenduModule = CModule::getInstalled("dPcompteRendu");
 
 $canEditFiles = $fileModule->canEdit();
+$canEditDoc   = $cptRenduModule->canEdit();
 
-$cat_id   = mbGetValueFromGetOrSession("cat_id"  , 0);
 $selClass = mbGetValueFromGetOrSession("selClass", null);
 $keywords = mbGetValueFromGetOrSession("keywords", null);
 $selKey   = mbGetValueFromGetOrSession("selKey"  , null);
@@ -30,15 +31,6 @@ $file = new CFile;
 $file->load($file_id);
 
 $listCategory = CFilesCategory::listCatClass($selClass);
-if($cat_id != 0){
-   $tabCat = array_keys($listCategory);
-   $accordion_open = array_search($cat_id , $tabCat);
-  if($accordion_open!==""){
-    $accordion_open++;
-  };
-}else{
-  $accordion_open = null;
-}
 
 // Création du template
 $smarty = new CSmartyDP(1);
@@ -46,32 +38,20 @@ $smarty = new CSmartyDP(1);
 $object = null;
 
 if($selClass && $selKey){
+  // Chargement de l'objet
   $object = new $selClass;
   $object->load($selKey);
-  $object->loadRefsFiles();
+  
+  $affichageFile = CFile::loadFilesAndDocsByObject($object);
 
-  // Classement des fichiers
-  $affichageFile = array();
-  $affichageFile[0] = array();
-  $affichageFile[0]["name"] = "Aucune Catégorie";
-  $affichageFile[0]["file"] = array();
-  foreach($listCategory as $keyCat => $curr_Cat){
-    $affichageFile[$keyCat]["name"] = $curr_Cat->nom;
-    $affichageFile[$keyCat]["file"] = array();
-  }
-  foreach($object->_ref_files as $keyFile =>$FileData) {
-    $object->_ref_files[$keyFile]->canRead();
-    $object->_ref_files[$keyFile]->canEdit();
-    if($object->_ref_files[$keyFile]->_canRead) {
-      $affichageFile[$FileData->file_category_id]["file"][] =& $object->_ref_files[$keyFile];
-    }
-  }
   $smarty->assign("affichageFile",$affichageFile);
 }
 
+$canEditFileDoc = $canEditFiles || $canEditDoc;
+
+$smarty->assign("canEditFileDoc" , $canEditFileDoc);
 $smarty->assign("canEditFiles"   , $canEditFiles);
-$smarty->assign("accordion_open" , $accordion_open);
-$smarty->assign("cat_id"         , $cat_id      );
+$smarty->assign("canEditDoc"     , $canEditDoc);
 $smarty->assign("listCategory"   , $listCategory);
 $smarty->assign("selClass"       , $selClass    );
 $smarty->assign("selKey"         , $selKey      );
@@ -81,6 +61,7 @@ $smarty->assign("keywords"       , $keywords    );
 $smarty->assign("object"         , $object      );
 $smarty->assign("typeVue"        , $typeVue     );
 $smarty->assign("reloadlist"     , $reloadlist  );
+$smarty->assign("fileSel"        , null);
 
 $smarty->display("vw_files.tpl");
 

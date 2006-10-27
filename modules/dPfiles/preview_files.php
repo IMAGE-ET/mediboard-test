@@ -9,92 +9,142 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-$file_id = mbGetValueFromGet("file_id", 0);
-$sfn = mbGetValueFromGet("sfn", 0);
-$popup = mbGetValueFromGet("popup", 0);
-$nonavig = mbGetValueFromGet("nonavig", null);
+// Récupération des variables
+$objectClass  = mbGetValueFromGet("objectClass"  , null);
+$objectId     = mbGetValueFromGet("objectId"     , null);
+$elementClass = mbGetValueFromGet("elementClass" , null);
+$elementId    = mbGetValueFromGet("elementId"    , null);
+$popup        = mbGetValueFromGet("popup"        , 0);
+$nonavig      = mbGetValueFromGet("nonavig"      , null);
+$sfn          = mbGetValueFromGet("sfn"          , 0);
 
-$largeur = null;
-$hauteur = null;
-
-$page_prev = null;
-$page_next = null;
-$pageEnCours = null;
+// Déclaration de variables
+$object           = null;
+$fileSel          = null;
+$keyFileSel       = null;
+$page_prev        = null;
+$page_next        = null;
+$pageEnCours      = null;
 $includeInfosFile = null;
-
-$file = new CFile;
-$file->load($file_id);
-$file->loadRefsFwd();
-$acces_denied = !$file->canRead();
-
-$file->loadNbPages();
-if(!$acces_denied){
-  if($file->file_type == "text/plain" && file_exists($file->_file_path)){
-    // Fichier texte, on récupére le contenu
-    $includeInfosFile = nl2br(htmlspecialchars(utf8_decode(file_get_contents($file->_file_path))));
-  }
-}
-//navigation par pages (PDF)
-$arrNumPages = array();
-if($file->_nb_pages){
-  if($sfn>$file->_nb_pages || $sfn<0){$sfn = 0;}
-  if($sfn!=0){
-    $page_prev = $sfn - 1; 
-  }
-  if($sfn<($file->_nb_pages-1)){
-    $page_next = $sfn + 1;
-  }
-  for($i=1;$i<=$file->_nb_pages;$i++){
-    $arrNumPages[] = $i;
-  }
-}
+$catFileSel       = null;
+$acces_denied     = true;      // droit d'affichage du fichier demandé
+$arrNumPages      = array();   // navigation par pages (PDF)
 
 // Création du template
 $smarty = new CSmartyDP(1);
 
+if($objectClass && $objectId && $elementClass && $elementId){
+  
+  // Chargement de l'objet
+  $object = new $objectClass;
+  if($object->load($objectId)){
+
+    // Chargement des fichiers et des Documents
+    $object->loadRefsFiles();
+    $object->loadRefsDocs();
+    
+    // Recherche du fichier/document demandé et Vérification droit Read
+    if($elementClass == "CFile"){
+    	$type = "_ref_files";
+        $nameFile = "file_name";
+    }elseif($elementClass == "CCompteRendu"){
+      $type = "_ref_documents";
+      $nameFile = "nom";
+    }
+    $aKeys = array_keys($object->$type);
+    $trouve_fileSel = array_search($elementId , $aKeys);
+    if($trouve_fileSel!== false){
+      $listFile =& $object->$type;
+      $listFile[$elementId]->canRead();
+      $acces_denied = !$listFile[$elementId]->_canRead;
+      if($listFile[$elementId]->_canRead) {
+        $fileSel = $listFile[$elementId];
+        $keyTable = $listFile[$elementId]->_tbl_key;
+        $keyFileSel = $listFile[$elementId]->$nameFile;
+        $keyFileSel .= "_" . $elementClass . "_";
+        $keyFileSel .= $listFile[$elementId]->$keyTable;
+        // Récupération de la catégorie
+        $catFileSel = new CFilesCategory;
+        $catFileSel->load($fileSel->file_category_id);
+      }
+    }
+    
+  }else{
+  	// Objet Inexistant
+    $object = null;
+  }
+}
+
+
+
+// Gestion des pages pour les Fichiers PDF et fichiers TXT
+if($fileSel && $elementClass == "CFile" && !$acces_denied){
+
+  if($fileSel->file_type == "text/plain" && file_exists($fileSel->_file_path)){
+    // Fichier texte, on récupére le contenu
+    $includeInfosFile = nl2br(htmlspecialchars(utf8_decode(file_get_contents($fileSel->_file_path))));
+  }
+
+  $fileSel->loadNbPages();
+  if($fileSel->_nb_pages){
+    if($sfn>$fileSel->_nb_pages || $sfn<0){$sfn = 0;}
+    if($sfn!=0){
+      $page_prev = $sfn - 1; 
+    }
+    if($sfn<($fileSel->_nb_pages-1)){
+      $page_next = $sfn + 1;
+    }
+    for($i=1;$i<=$fileSel->_nb_pages;$i++){
+      $arrNumPages[] = $i;
+    }
+  }
+}elseif($fileSel && $elementClass == "CCompteRendu" && !$acces_denied){
+  $includeInfosFile = $fileSel->source;
+}
+
+$smarty->assign("elementClass"    , $elementClass);
+$smarty->assign("elementId"       , $elementId);
+$smarty->assign("catFileSel"      , $catFileSel);
+$smarty->assign("fileSel"         , $fileSel);
+$smarty->assign("objectClass"     , $objectClass);
+$smarty->assign("objectId"        , $objectId);
 $smarty->assign("arrNumPages"     , $arrNumPages);
-$smarty->assign("file_id"         , $file_id     );
-$smarty->assign("file"            , $file        );
-$smarty->assign("page_prev"       , $page_prev   );
-$smarty->assign("page_next"       , $page_next   );
-$smarty->assign("sfn"             , $sfn         );
+$smarty->assign("object"          , $object);
+$smarty->assign("page_prev"       , $page_prev);
+$smarty->assign("page_next"       , $page_next);
+$smarty->assign("sfn"             , $sfn);
 $smarty->assign("includeInfosFile", $includeInfosFile);    
 $smarty->assign("popup"           , $popup);
 $smarty->assign("acces_denied"    , $acces_denied);
+
 if($popup==1){
-    //Récupération de la liste des fichiers
-    $listFiles = new CFile;
-    $where = array();
-    $where["file_class"] = "='$file->file_class'";
-    $where["file_object_id"] = "= '$file->file_object_id'";
-    $order = "nom,file_date";
-    $leftjoin = array();
-    $leftjoin["files_category"] = "files_mediboard.file_category_id=files_category.file_category_id";
-    $listFiles = $listFiles->loadList($where, $order, null, null, $leftjoin);
-    // Récupération du fichier précédent et suivant
-    $filePrev = 0;
-    $fileNext = 0;
-    $en_cours = 0;
-    foreach($listFiles as $keyFile => $dataFile){
-      if($keyFile == $file_id){
-        $filePrev = $en_cours;
+  $listCat  = null;
+  $fileprev = null;
+  $filenext = null;
+  if($object){	
+    $affichageFile = CFile::loadFilesAndDocsByObject($object);
+    
+    // Récupération du fichier/doc préc et suivant
+    $aAllFilesDocs = array();
+    foreach($affichageFile as $keyCat => $currCat){
+      $aAllFilesDocs = array_merge($aAllFilesDocs,$affichageFile[$keyCat]["DocsAndFiles"]);
+    }
+    $aFilePrevNext = array_neighbor($aAllFilesDocs, $keyFileSel);
+    foreach($aFilePrevNext as $key=>$value){
+      if($value){
+        $aFile =& $aAllFilesDocs[$aFilePrevNext[$key]];
+        $keyFile = $aFile->_tbl_key;
+        ${"file".$key} = array();
+        ${"file".$key}["elementId"]   = $aFile->$keyFile;
+        ${"file".$key}["elementClass"] = $aFile->_class_name;
       }
-      if($en_cours == $file_id){
-        $fileNext = $keyFile;
-      }  
-      $en_cours = $keyFile;
     }
     
-    //Récupération de la catégorie du fichier en cours
-    $listCat = new CFilesCategory;
-    $listCat->load($file->file_category_id);
-    
     $smarty->assign("nonavig"  , $nonavig);
-    $smarty->assign("filePrev" , $filePrev);
-    $smarty->assign("fileNext" , $fileNext);
-    $smarty->assign("listCat"  , $listCat);
-      
+    $smarty->assign("filePrev" , $fileprev);
+    $smarty->assign("fileNext" , $filenext);
     $smarty->display("inc_preview_file_popup.tpl");
+  }
 }else{
   $smarty->display("inc_preview_file.tpl");
 }

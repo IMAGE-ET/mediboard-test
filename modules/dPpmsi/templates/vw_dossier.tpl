@@ -436,20 +436,19 @@ function pageMain() {
           </td>
         </tr>
         {{/foreach}}
-        {{foreach from=$curr_op->_ref_documents item=document}}
+        
+        {{if $curr_op->_nb_files_docs}}
         <tr>
-          <th>{{$document->nom}}</th>
-          {{if $document->source}}
+          <th>Documents attachés :</th>
           <td colspan="3">
-            <button class="print notext" onclick="imprimerDocument({{$document->compte_rendu_id}})"></button>
+            <a href="index.php?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;selClass={{$curr_op->_class_name}}&amp;selKey={{$curr_op->_id}}">
+              Consulter les documents
+            </a>
+            ({{$curr_op->_nb_files_docs}} Doc.)
           </td>
-          {{else}}
-          <td colspan="3">
-            -
-          </td>
-          {{/if}}
         </tr>
-        {{/foreach}}
+        {{/if}}
+
         <tr>
           <td class="button" colspan="4">
             <a class="buttonedit" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={{$curr_op->operation_id}}">

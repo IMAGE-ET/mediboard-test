@@ -15,7 +15,7 @@ if (!$canRead) {
 
 $doc_ged_id = mbGetValueFromGetOrSession("doc_ged_id",0);
 $selTheme   = mbGetValueFromGetOrSession("selTheme", 0);
-$file = new CFile;
+$fileSel = null;
 
 $docGed = new CDocGed;
 if(!$docGed->load($doc_ged_id)){
@@ -67,7 +67,7 @@ $smarty->assign("selTheme"       , $selTheme);
 $smarty->assign("listThemes"     , $listThemes);
 $smarty->assign("procedures"     , $procedures);
 $smarty->assign("docGed"         , $docGed);
-$smarty->assign("file"           , $file);
+$smarty->assign("fileSel"        , $fileSel);
 
 $smarty->display("vw_procedures.tpl");
 ?>

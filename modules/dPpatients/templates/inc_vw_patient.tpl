@@ -29,9 +29,9 @@ function printPatient(id) {
   url.popup(700, 550, "Patient");
 }
 
-function popFile(file_id){
+function popFile(objectClass, objectId, elementClass, elementId){
   var url = new Url;
-  url.ViewFilePopup(file_id,0);
+  url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
 }
 
 function editDocument(compte_rendu_id) {
@@ -240,6 +240,9 @@ function reloadAfterSaveDoc(){
       <a class="actionPat" href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}#adm{{$curr_sejour->sejour_id}}">
         Séjour du {{$curr_sejour->entree_prevue|date_format:"%d %b %Y"}} 
         au {{$curr_sejour->sortie_prevue|date_format:"%d %b %Y"}}
+        {{if $curr_sejour->_nb_files_docs}}
+          - ({{$curr_sejour->_nb_files_docs}} Doc.)
+        {{/if}}
       </a>
 	</td>
     {{if $curr_sejour->annule}}
@@ -265,6 +268,9 @@ function reloadAfterSaveDoc(){
       </a>
       <a class="actionPat" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
         Intervention le {{$curr_op->_datetime|date_format:"%d %b %Y"}}
+        {{if $curr_op->_nb_files_docs}}
+          - ({{$curr_op->_nb_files_docs}} Doc.)
+        {{/if}}
       </a>
     </td>
     {{if $curr_op->annulee}}

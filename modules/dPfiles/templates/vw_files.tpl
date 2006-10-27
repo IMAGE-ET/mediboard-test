@@ -23,7 +23,6 @@ function pageMain() {
       <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="return checkForm(this);">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="file_id" value="{{$file->file_id}}" />
-      <input type="hidden" name="cat_id" value="{{$cat_id}}" />
       <table class="form">
         <tr>
           <td  class="readonly">

@@ -1,17 +1,20 @@
 <script language="Javascript" type="text/javascript">
 
-function popFile(file_id, sfn){
+function popFile(objectClass, objectId, elementClass, elementId, sfn){
   var url = new Url;
   url.addParam("nonavig", 1);
-  url.ViewFilePopup(file_id, sfn);
+  url.ViewFilePopup(objectClass, objectId, elementClass, elementId, sfn);
 }
 
-function ZoomFileAjax(file_id, sfn){
-  file_preview = file_id;
+function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
+  file_preview = elementId;
   var url = new Url;
   url.setModuleAction("dPfiles", "preview_files");
-  url.addParam("file_id", file_id);
-  if(sfn!=0){
+  url.addParam("objectClass", objectClass);
+  url.addParam("objectId", objectId);
+  url.addParam("elementClass", elementClass);
+  url.addParam("elementId", elementId);
+  if(sfn && sfn!=0){
     url.addParam("sfn", sfn);
   }
   url.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
@@ -67,12 +70,12 @@ function ZoomFileAjax(file_id, sfn){
           </td>
           {{/if}}
           <td>
-            <a href="javascript:ZoomFileAjax({{$currProc->_lastactif->file_id}}, 0);">
+            <a href="javascript:ZoomAjax('{{$currProc->_class_name}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
               {{$currProc->_reference_doc}} (version : {{$currProc->version}})
             </a>
           </td>
           <td class="text">
-            <a href="javascript:ZoomFileAjax({{$currProc->_lastactif->file_id}}, 0);">
+            <a href="javascript:ZoomAjax('{{$currProc->_class_name}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
               {{$currProc->titre}}
             </a>
           </td>

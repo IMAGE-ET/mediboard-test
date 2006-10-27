@@ -1,10 +1,10 @@
 {{if $docGed->doc_ged_id}}
 <script language="Javascript" type="text/javascript">
 
-function popFile(file_id){
+function popFile(objectClass, objectId, elementClass, elementId){
   var url = new Url;
   url.addParam("nonavig", 1);
-  url.ViewFilePopup(file_id, 0);
+  url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
 }
 
 function annuleDoc(oForm,annulation){

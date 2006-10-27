@@ -52,9 +52,6 @@ Url.prototype.pop = function(iWidth, iHeight, sWindowName) {
   aFeatures.push("resizable=yes");
   aFeatures.push("menubar=yes");
 
-  aFeatures.push("toolbar=yes");
-  aFeatures.push("location=yes");
-
   // Forbidden characters for IE
   sWindowName = sWindowName.replace(/[ -]/gi, "_");
   
@@ -132,10 +129,13 @@ Url.prototype.periodicalUpdate = function(ioTarget, oOptions) {
   new Ajax.PeriodicalUpdater(ioTarget, "index.php", oDefaultOptions);
 }
 
-Url.prototype.ViewFilePopup = function(file_id, sfn){
+Url.prototype.ViewFilePopup = function(objectClass, objectId, elementClass, elementId, sfn){
   this.setModuleAction("dPfiles", "preview_files");
   this.addParam("popup", "1");
-  this.addParam("file_id", file_id);
+  this.addParam("objectClass", objectClass);
+  this.addParam("objectId", objectId);
+  this.addParam("elementClass", elementClass);
+  this.addParam("elementId", elementId);
   if(sfn!=0){
 	  this.addParam("sfn", sfn);
   }

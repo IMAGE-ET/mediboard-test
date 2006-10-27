@@ -109,6 +109,7 @@ if($file_id = mbGetValueFromGet("file_id")) {
 
     // BEGIN extra headers to resolve IE caching bug (JRP 9 Feb 2003)
     // [http://bugs.php.net/bug.php?id=16173]
+
     header("Pragma: ");
     header("Cache-Control: ");
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -122,6 +123,7 @@ if($file_id = mbGetValueFromGet("file_id")) {
     header("Content-type: {$file->file_type}");
     header("Content-disposition: attachment; filename=\"".$file->file_name."\"");
     readfile($file->_file_path);
+    
   }
 } else {
   $AppUI->setMsg("fileIdError", UI_MSG_ERROR);

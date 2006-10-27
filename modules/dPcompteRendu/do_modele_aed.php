@@ -42,18 +42,32 @@ if (intval(dPgetParam($_POST, "del"))) {
  $do->doStore();
 }
 
-if($do->_obj->object_id && !intval(dPgetParam($_POST, "del"))) {
-  $do->redirectStore = "m=$m&a=edit_compte_rendu&dialog=1&compte_rendu_id=".$do->_obj->compte_rendu_id;
-?>
-  <script language="javascript">
-    var url = 'index.php?m=dPcompteRendu&a=edit_compte_rendu&dialog=1&compte_rendu_id=';
-    url += '<?php echo $do->_obj->compte_rendu_id ?>';
-    window.location.href = url;
-  </script>
-<?php
-} else { 
-  $do->redirectStore = "m=$m&compte_rendu_id=".$do->_obj->compte_rendu_id;
-  $do->doRedirect();
-}
 
+if($do->ajax){
+ $idName   = $do->objectKeyGetVarName;
+ $callBack = $do->callBack;
+ $idValue  = $do->_obj->$idName;
+ echo $AppUI->getMsg();
+ if ($callBack) {
+   echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
+ }
+ exit;
+ 
+}else{
+
+  if($do->_obj->object_id && !intval(dPgetParam($_POST, "del"))) {
+    $do->redirectStore = "m=$m&a=edit_compte_rendu&dialog=1&compte_rendu_id=".$do->_obj->compte_rendu_id;
+  ?>
+    <script language="javascript">
+      var url = 'index.php?m=dPcompteRendu&a=edit_compte_rendu&dialog=1&compte_rendu_id=';
+      url += '<?php echo $do->_obj->compte_rendu_id ?>';
+      window.location.href = url;
+    </script>
+  <?php
+  } else { 
+    $do->redirectStore = "m=$m&compte_rendu_id=".$do->_obj->compte_rendu_id;
+    $do->doRedirect();
+  }
+
+}
 ?>

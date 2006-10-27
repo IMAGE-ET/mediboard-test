@@ -40,7 +40,7 @@ foreach($plageSel->_ref_consultations as $key => $value) {
     unset($plageSel->_ref_consultations[$key]);
   else {
     $plageSel->_ref_consultations[$key]->loadRefPatient();
-    $plageSel->_ref_consultations[$key]->loadRefsDocs();
+    $plageSel->_ref_consultations[$key]->getNumDocsAndFiles();    
   }
 }
 if ($plageSel->chir_id != $chirSel) {

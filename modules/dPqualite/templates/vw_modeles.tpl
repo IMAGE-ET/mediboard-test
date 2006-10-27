@@ -1,17 +1,20 @@
 <script language="Javascript" type="text/javascript">
 
-function popFile(file_id, sfn){
+function popFile(objectClass, objectId, elementClass, elementId, sfn){
   var url = new Url;
   url.addParam("nonavig", 1);
-  url.ViewFilePopup(file_id, sfn);
+  url.ViewFilePopup(objectClass, objectId, elementClass, elementId, sfn);
 }
 
-function ZoomFileAjax(file_id, sfn){
-  file_preview = file_id;
+function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
+  file_preview = elementId;
   var url = new Url;
   url.setModuleAction("dPfiles", "preview_files");
-  url.addParam("file_id", file_id);
-  if(sfn!=0){
+  url.addParam("objectClass", objectClass);
+  url.addParam("objectId", objectId);
+  url.addParam("elementClass", elementClass);
+  url.addParam("elementId", elementId);
+  if(sfn && sfn!=0){
     url.addParam("sfn", sfn);
   }
   url.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
@@ -36,7 +39,7 @@ function ZoomFileAjax(file_id, sfn){
             {{if $canAdmin}}
             <a href="index.php?m={{$m}}&amp;tab=vw_modeles&amp;doc_ged_id={{$currModele->doc_ged_id}}">
             {{else}}
-            <a href="javascript:ZoomFileAjax({{$currModele->_lastentry->file_id}}, 0);">
+            <a href="javascript:ZoomAjax('{{$currModele->_class_name}}','{{$currModele->_id}}','CFile','{{$currModele->_lastentry->_id}}', 0);">
             {{/if}}
             {{$currModele->titre}}
             </a>
@@ -114,7 +117,7 @@ function ZoomFileAjax(file_id, sfn){
         <tr>
           <th>Fichier actuel</th>
           <td class="button">
-            <a href="javascript:popFile({{$docGed->_lastentry->file_id}})" title="Voir le Fichier">
+            <a href="javascript:popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="Voir le Fichier">
               <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
             </a>
           </td>

@@ -2,7 +2,7 @@
 {{foreach from=$affichageFile item=curr_listCat key=keyCat}}
   <div id="Acc{{$keyCat}}">
     <div id="Acc{{$keyCat}}Header" class="accordionTabTitleBar">
-      {{$curr_listCat.name}} ({{$curr_listCat.file|@count}})
+      {{$curr_listCat.name}} ({{$curr_listCat.DocsAndFiles|@count}})
     </div>
     <div id="Acc{{$keyCat}}Content" class="accordionTabContentBox">
       <table class="tbl">
@@ -23,32 +23,59 @@
           </td>
         </tr>
         {{/if}}
-        {{foreach from=$curr_listCat.file item=curr_file}}
+        {{foreach from=$curr_listCat.DocsAndFiles item=curr_file}}
         <tr>
           <td class="{{cycle name=cellicon values="dark, light"}}">
-            <a href="javascript:ZoomFileAjax({{$curr_file->file_id}},0);" title="Afficher l'aperçu">
-              <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$curr_file->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
-            </a>        
+            {{if $curr_file->_class_name=="CCompteRendu"}}
+              {{assign var="elementId" value=$curr_file->compte_rendu_id}}
+              {{assign var="srcImg" value="modules/dPfiles/images/medifile.png"}}
+            {{else}}
+              {{assign var="elementId" value=$curr_file->file_id}}
+              {{assign var="srcImg" value="index.php?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&wl=64&hp=64"}}
+            {{/if}}
+            
+            <a href="javascript:ZoomAjax('{{$selClass}}', '{{$selKey}}', '{{$curr_file->_class_name}}', '{{$elementId}}', '0');" title="Afficher l'aperçu">
+              <img src="{{$srcImg}}" alt="-" />
+            </a>
+   
           </td>
           <td class="text {{cycle name=celltxt values="dark, light"}}" style="vertical-align: middle;">
             <strong>{{$curr_file->_view}}</strong>
-            <br />Date : {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
+            {{if $curr_file->_class_name=="CFile"}}
+              <br />Date : {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
+            {{/if}}
             <hr />
-            {{if $canEditFiles}}
-            <form name="editFile{{$curr_file->file_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+
+            {{if $curr_file->_class_name=="CCompteRendu" && $canEditDoc}}
+              <form name="editDoc{{$curr_file->compte_rendu_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+              <input type="hidden" name="m" value="dPcompteRendu" />
+              <input type="hidden" name="dosql" value="do_modele_aed" />
+              <input type="hidden" name="compte_rendu_id" value="{{$curr_file->compte_rendu_id}}" />
+              <input type="hidden" name="del" value="0" />
+              {{assign var="confirmDeleteType" value="le document"}}
+              {{assign var="confirmDeleteName" value=$curr_file->nom}}
+              
+            {{elseif $curr_file->_class_name=="CFile" && $canEditFiles}}
+              <form name="editFile{{$curr_file->file_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPfiles" />
               <input type="hidden" name="dosql" value="do_file_aed" />
               <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
-              <input type="hidden" name="del" value="0" />      
+              <input type="hidden" name="del" value="0" />
+              {{assign var="confirmDeleteType" value="le fichier"}}
+              {{assign var="confirmDeleteName" value=$curr_file->file_name}}
+              
+            {{/if}}
+            
+            {{if $canEditFileDoc}}
               <select name="file_category_id" onchange="submitFileChangt(this.form)">
-                <option value="" {{if $curr_file->file_category_id == ""}}selected="selected"{{/if}}>&mdash; Aucune</option>
+                <option value="0" {{if $curr_file->file_category_id == 0}}selected="selected"{{/if}}>&mdash; Aucune</option>
                 {{foreach from=$listCategory item=curr_cat}}
                 <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $curr_file->file_category_id}}selected="selected"{{/if}} >
                   {{$curr_cat->nom}}
                 </option>
-                {{/foreach}}        
+                {{/foreach}}
               </select>
-              <button type="button" class="trash" onclick="file_deleted={{$curr_file->file_id}};confirmDeletion(this.form, {typeName:'le fichier',objName:'{{$curr_file->file_name|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
+              <button type="button" class="trash" onclick="file_deleted={{$elementId}};confirmDeletion(this.form, {typeName:'{{$confirmDeleteType}}',objName:'{{$confirmDeleteName|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadListFile})">
                 Supprimer
               </button>
             </form>
@@ -71,6 +98,8 @@
 var oAccord = new Rico.Accordion( $('accordionConsult'), {
   panelHeight: fHeight, 
   onShowTab: storeKeyCat,
-  onLoadShowTab: {{if $accordion_open}}{{$accordion_open}}{{else}}0{{/if}}
+  showDelay:50,
+  showSteps:3,
+  onLoadShowTab: showTabAcc
 });
 </script>
