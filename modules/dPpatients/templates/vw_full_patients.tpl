@@ -79,16 +79,19 @@ function pageMain() {
             Identité
           </th>
           <th class="category" colspan="2">
-            {{if $patient->_canEdit}}
-            <button type="button" style="float:right;" onclick="setObject( {
-              objClass: 'CPatient', 
-              keywords: '', 
-              id: {{$patient->patient_id|smarty:nodefaults|JSAttribute}}, 
-              view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' })">
-              {{$patient->_nb_files_docs}} doc(s)
-              <img align="top" src="modules/{{$m}}/images/next.png" alt="Afficher les Documents" />
-            </button>
-            {{/if}}
+            {{if $patient->_canRead}}
+            <div style="float:right;">
+              <a href="#" onclick="setObject( {
+                objClass: 'CPatient', 
+                keywords: '', 
+                id: {{$patient->patient_id|smarty:nodefaults|JSAttribute}}, 
+                view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' })"
+                title="{{$patient->_nb_files_docs}} doc(s)">
+                {{$patient->_nb_files_docs}}
+                <img align="top" src="modules/{{$m}}/images/next{{if !$patient->_nb_files_docs}}_red{{/if}}.png" title="{{$patient->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />                
+              </a>
+            </div>
+            {{/if}} 
             Coordonnées
           </th>
         </tr>
@@ -222,7 +225,7 @@ function pageMain() {
             - Dr. {{$curr_sejour->_ref_praticien->_view}}
           </td>
           <td style="text-align:right;">
-          {{if $curr_sejour->_canEdit}}
+          {{if $curr_sejour->_canRead}}
             <a href="#" onclick="setObject( {
               objClass: 'CSejour', 
               keywords: '', 
@@ -246,7 +249,7 @@ function pageMain() {
             </li></ul>
           </td>
           <td style="text-align:right;">
-          {{if $curr_op->_canEdit}}
+          {{if $curr_op->_canRead}}
             <a href="#" onclick="setObject( {
               objClass: 'COperation', 
               keywords: '', 
