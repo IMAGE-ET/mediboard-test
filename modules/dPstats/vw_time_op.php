@@ -17,7 +17,7 @@ if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$typeVue = mbGetValueFromGetOrSession("typeVue", 0);
+$typeVue = mbGetValueFromGetOrSession("typeVue", 2);
 
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
