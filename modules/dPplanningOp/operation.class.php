@@ -267,7 +267,7 @@ class COperation extends CMbObject {
     } elseif($this->rank != 0) {
       $this->rank = 0;
       $this->time_operation = "00:00:00";
-      $this->store();
+      $this->store($reorder);
     }
     
     // Vérification qu'on a pas des actes CCAM codés obsolètes
