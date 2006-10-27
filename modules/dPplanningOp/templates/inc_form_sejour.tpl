@@ -132,9 +132,11 @@
   <th>
     <label for="_duree_prevue" title="Choisir une durée prévue de séjour">Durée du séjour</label>
   </th>
-  <td colspan="2">
+  <td>
     <input type="text" name="_duree_prevue" title="num|min|0" value="{{if $sejour->sejour_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" size="4" onchange="updateSortiePrevue()" />
     jours
+  </td>
+  <td id="dureeEst">
   </td>
 </tr>
 

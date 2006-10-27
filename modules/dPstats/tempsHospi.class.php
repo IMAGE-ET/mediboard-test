@@ -47,14 +47,16 @@ class CTempsHospi extends CMbObject {
     $this->_ref_praticien->load($this->praticien_id);
   }
   
-  function getTime($praticien_id = 0, $type = "ambu", $ccam = null){
+  function getTime($praticien_id = 0, $ccam = null, $type = null){
     $time = 0;
     $where = array();
     $total = array();
-    $total["occup_somme"]     = 0;
-    $total["nbInterventions"] = 0;
-    $where["praticien_id"]    = "= '$praticien_id'";
-    $where["type"]            = "= '$type'";
+    $total["duree_somme"]  = 0;
+    $total["nbSejours"]    = 0;
+    $where["praticien_id"] = "= '$praticien_id'";
+    if($type) {
+      $where["type"] = "= '$type'";
+    }
     
     if(is_array($ccam)) {
       foreach($ccam as $keyccam => $code){
@@ -68,7 +70,7 @@ class CTempsHospi extends CMbObject {
     $liste = $temp->loadList($where);
     foreach($liste as $keyTemps => $temps) {
       $total["nbSejours"]   += $temps->nb_sejour;
-      $total["duree_somme"] += $temps->nb_sejour * strtotime($temps->duree_moy);
+      $total["duree_somme"] += $temps->nb_sejour * $temps->duree_moy;
     }
     if($total["nbSejours"]) {
       $time = $total["duree_somme"] / $total["nbSejours"];
