@@ -25,11 +25,11 @@
 <tr>
   <td id="td_graph_tonal_droite" class="halfPane" style="height: 250px;">
     {{$map_tonal_droite|smarty:nodefaults}}    
-    <img id="tonal_droite" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite&amp;time={{$time}}" usemap="#graph_tonal_droite" onclick="changeTonalValueMouseDroite(event)" alt="Audio tonal gauche" />
+    <img id="tonal_droite" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;examaudio_id={{$exam_audio->_id}}&amp;side=droite&amp;time={{$time}}" usemap="#graph_tonal_droite" onclick="changeTonalValueMouseDroite(event)" alt="Audio tonal gauche" />
   </td>
   <td id="td_graph_tonal_gauche" class="halfPane" style="height: 250px;">
     {{$map_tonal_gauche|smarty:nodefaults}}
-    <img id="tonal_gauche" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche&amp;time={{$time}}" usemap="#graph_tonal_gauche" onclick="changeTonalValueMouseGauche(event)" alt="Audio tonal droite" />
+    <img id="tonal_gauche" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;examaudio_id={{$exam_audio->_id}}&amp;side=gauche&amp;time={{$time}}" usemap="#graph_tonal_gauche" onclick="changeTonalValueMouseGauche(event)" alt="Audio tonal droite" />
   </td>
 </tr>
 <tr>
@@ -172,7 +172,7 @@
       <tr>
         <td id="td_graph_vocal" style="height:318px;width:534px;">
           {{$map_vocal|smarty:nodefaults}}
-          <img id="image_vocal" src="?m=dPcabinet&amp;a=graph_audio_vocal&amp;suppressHeaders=1&amp;time={{$time}}" usemap="#graph_vocal" onclick="changeVocalValueMouse(event)" alt="Audiogramme vocal" />
+          <img id="image_vocal" src="?m=dPcabinet&amp;a=graph_audio_vocal&amp;suppressHeaders=1&amp;examaudio_id={{$exam_audio->_id}}&amp;time={{$time}}" usemap="#graph_vocal" onclick="changeVocalValueMouse(event)" alt="Audiogramme vocal" />
         </td>
         
         <td rowspan="2">
@@ -180,13 +180,13 @@
             <tr>
               <td id="td_graph_tympan_droite" style="height:176px;">
                 {{$map_tympan_droite|smarty:nodefaults}}
-                <img id="tympan_droite" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=droite&amp;time={{$time}}" usemap="#graph_tympan_droite" onclick="changeTympanValueMouseDroite(event)" alt="Tympan droit" />
+                <img id="tympan_droite" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;examaudio_id={{$exam_audio->_id}}&amp;side=droite&amp;time={{$time}}" usemap="#graph_tympan_droite" onclick="changeTympanValueMouseDroite(event)" alt="Tympan droit" />
               </td>
             </tr>
             <tr>
               <td id="td_graph_tympan_gauche" rowspan="2" style="height:162px;">
                 {{$map_tympan_gauche|smarty:nodefaults}}
-                <img id="tympan_gauche" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;consultation_id={{$exam_audio->consultation_id}}&amp;side=gauche&amp;time={{$time}}" usemap="#graph_tympan_gauche" onclick="changeTympanValueMouseGauche(event)" alt="Tympa Gauche" />
+                <img id="tympan_gauche" src="?m=dPcabinet&amp;a=graph_audio_tympan&amp;suppressHeaders=1&amp;examaudio_id={{$exam_audio->_id}}&amp;side=gauche&amp;time={{$time}}" usemap="#graph_tympan_gauche" onclick="changeTympanValueMouseGauche(event)" alt="Tympa Gauche" />
               </td>
             </tr>
           </table>

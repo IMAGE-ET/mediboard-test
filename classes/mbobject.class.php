@@ -268,6 +268,7 @@ class CMbObject {
         $request->addWhereClause($key, "= '$value'");
       }
     }
+    
     $this->loadObject($request->where, $request->order, $request->group, $request->ljoin);
   }
   
@@ -299,6 +300,7 @@ class CMbObject {
     $request->addOrder($order);
     $request->setLimit("0,1");
     $list =& $this->loadList($request->where, $request->order, $request->limit, $request->group, $request->ljoin);
+
     foreach ($list as $object) {
       foreach($object->getProps() as $key => $value) {
         $this->$key = $value;

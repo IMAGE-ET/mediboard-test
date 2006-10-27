@@ -9,10 +9,8 @@
 
 global $AppUI, $m, $exam_audio, $graph_tympan_gauche, $graph_tympan_droite;
 
-$consultation_id = mbGetValueFromGetOrSession("consultation_id");
-$where["consultation_id"] = "= '$consultation_id'";
 $exam_audio = new CExamAudio;
-$exam_audio->loadObject($where);
+$exam_audio->load(mbGetValueFromGetOrSession("examaudio_id"));
 
 require_once($AppUI->getModuleFile("$m", "inc_graph_audio_tympan"));
 
