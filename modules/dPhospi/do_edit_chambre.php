@@ -11,7 +11,7 @@ global $AppUI, $m;
 
 $ajax  = mbGetValueFromPost("ajax", 0);
 $m     = mbGetValueFromPost("otherm", mbGetValueFromPost("m", ""));
-$value = mbGetValueFromPost("value", "o");
+$value = mbGetValueFromPost("value", 1);
 $id    = mbGetValueFromPost("id", 0);
 
 if($id) {

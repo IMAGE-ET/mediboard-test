@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPfiles";
-$config["mod_version"]     = "0.14";
+$config["mod_version"]     = "0.15";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -173,7 +173,25 @@ class CSetupdPfiles {
         $sql = "ALTER TABLE `files_category` ADD INDEX ( `class` ) ;";
         db_exec($sql); db_error();
       case "0.14":
-        return "0.14";
+        $sql = "ALTER TABLE `files_mediboard` " .
+               "\nCHANGE `file_id` `file_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `file_object_id` `file_object_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `file_class` `file_class` varchar(255) NOT NULL DEFAULT 'CPatients'," .
+               "\nCHANGE `file_type` `file_type` varchar(255) NULL," .
+               "\nCHANGE `file_category_id` `file_category_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `file_owner` `file_owner` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `file_date` `file_date` datetime NOT NULL," .
+               "\nCHANGE `file_size` `file_size` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `files_category` " .
+               "\nCHANGE `file_category_id` `file_category_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
+               "\nCHANGE `class` `class` varchar(255) NULL;";
+        db_exec( $sql ); db_error();
+        
+      case "0.15":
+        return "0.15";
     }
     return false;
   }

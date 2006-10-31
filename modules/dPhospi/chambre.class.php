@@ -47,7 +47,7 @@ class CChambre extends CMbObject {
     return array (
       "service_id"       => "ref|notNull",
       "nom"              => "str|notNull|confidential",
-      "caracteristiques" => "str|confidential"
+      "caracteristiques" => "text|confidential"
     );
   }
   
@@ -133,9 +133,9 @@ class CChambre extends CMbObject {
       $sejour1 =& $affectation1->_ref_sejour;
       $patient1 =& $sejour1->_ref_patient;
       $chirurgien1 =& $sejour1->_ref_praticien;
-      if ((count($this->_ref_lits) == 1) && $sejour1->chambre_seule == "n")
+      if ((count($this->_ref_lits) == 1) && $sejour1->chambre_seule == 0)
         $this->_chambre_double++;
-      if ((count($this->_ref_lits) > 1) && $sejour1->chambre_seule == "o")
+      if ((count($this->_ref_lits) > 1) && $sejour1->chambre_seule == 1)
         $this->_chambre_seule++;
       
       foreach ($listAff as $affectation2) {

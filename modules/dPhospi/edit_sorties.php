@@ -31,7 +31,7 @@ $where["sortie"]   = "BETWEEN '$limit1' AND '$limit2'";
 $where["type"]     = "!= 'exte'";
 $where["service.group_id"] = "= '$g'";
 if ($vue) {
-  $where["confirme"] = "= 0";
+  $where["confirme"] = "= '0'";
 }
 if ($typeOrder) {
   $order = "service.nom, chambre.nom, lit.nom";

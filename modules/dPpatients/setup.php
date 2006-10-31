@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.36";
+$config["mod_version"]     = "0.37";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -242,7 +242,75 @@ class CSetupdPpatients {
         $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'med', 'alle', 'trans', 'obst', 'chir', 'fam', 'anesth' ) NOT NULL DEFAULT 'med';";
         db_exec( $sql ); db_error();
       case "0.36":
-        return "0.36";
+        $sql = "ALTER TABLE `antecedent` " .
+               "\nCHANGE `antecedent_id` `antecedent_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `medecin` " .
+               "\nCHANGE `medecin_id` `medecin_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
+               "\nCHANGE `prenom` `prenom` varchar(255) NOT NULL," .
+               "\nCHANGE `jeunefille` `jeunefille` varchar(255) NULL," .
+               "\nCHANGE `ville` `ville` varchar(255) NULL," .
+               "\nCHANGE `cp` `cp` int(5) unsigned zerofill NULL," .
+               "\nCHANGE `tel` `tel` bigint(10) unsigned zerofill NULL," .
+               "\nCHANGE `fax` `fax` bigint(10) unsigned zerofill NULL," .
+               "\nCHANGE `email` `email` varchar(255) NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `patients` " .
+               "\nCHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
+               "\nCHANGE `nom_jeune_fille` `nom_jeune_fille` varchar(255) NULL," .
+               "\nCHANGE `prenom` `prenom` varchar(255) NOT NULL," .
+               "\nCHANGE `ville` `ville` varchar(255) NOT NULL," .
+               "\nCHANGE `medecin_traitant` `medecin_traitant` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `medecin1` `medecin1` int(11) unsigned NULL," .
+               "\nCHANGE `medecin2` `medecin2` int(11) unsigned NULL," .
+               "\nCHANGE `medecin3` `medecin3` int(11) unsigned NULL," .
+               "\nCHANGE `regime_sante` `regime_sante` varchar(255) NULL," .
+               "\nCHANGE `pays` `pays` varchar(255) NULL," .
+               "\nCHANGE `cp` `cp` int(5) unsigned zerofill NULL," .
+               "\nCHANGE `tel` `tel` bigint(10) unsigned zerofill NULL," .
+               "\nCHANGE `tel2` `tel2` bigint(10) unsigned zerofill NULL," .
+               "\nCHANGE `SHS` `SHS` int(8) unsigned zerofill NULL," .
+               "\nCHANGE `employeur_cp` `employeur_cp` int(5) unsigned zerofill NULL," .
+               "\nCHANGE `employeur_tel` `employeur_tel` bigint(10) unsigned zerofill NULL," .
+               "\nCHANGE `employeur_urssaf` `employeur_urssaf` bigint(11) unsigned zerofill NULL," .
+               "\nCHANGE `prevenir_cp` `prevenir_cp` int(5) unsigned zerofill NULL," .
+               "\nCHANGE `prevenir_tel` `prevenir_tel` bigint(10) unsigned zerofill NULL," .
+               "\nCHANGE `lieu_naissance` `lieu_naissance` varchar(255) NULL," .
+               "\nCHANGE `profession` `profession` varchar(255) NULL," .
+               "\nCHANGE `employeur_nom` `employeur_nom` varchar(255) NULL," .
+               "\nCHANGE `employeur_ville` `employeur_ville` varchar(255) NULL," .
+               "\nCHANGE `prevenir_nom` `prevenir_nom` varchar(255) NULL," .
+               "\nCHANGE `prevenir_prenom` `prevenir_prenom` varchar(255) NULL," .
+               "\nCHANGE `prevenir_ville` `prevenir_ville` varchar(255) NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `traitement` " .
+               "\nCHANGE `traitement_id` `traitement_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+              
+        $sql = "ALTER TABLE `patients` " .
+               "\nCHANGE `ATNC` `ATNC` enum('o','n','0','1') NOT NULL DEFAULT 'n'," .
+               "\nCHANGE `incapable_majeur` `incapable_majeur` enum('o','n','0','1') NOT NULL DEFAULT 'n';";
+        db_exec( $sql ); db_error();
+      
+        $sql = "UPDATE `patients` SET `ATNC`='0' WHERE `ATNC`='n';"; db_exec( $sql ); db_error();
+        $sql = "UPDATE `patients` SET `ATNC`='1' WHERE `ATNC`='o';"; db_exec( $sql ); db_error();
+        $sql = "UPDATE `patients` SET `incapable_majeur`='0' WHERE `incapable_majeur`='n';"; db_exec( $sql ); db_error();
+        $sql = "UPDATE `patients` SET `incapable_majeur`='1' WHERE `incapable_majeur`='o';"; db_exec( $sql ); db_error();
+      
+        $sql = "ALTER TABLE `patients` " .
+               "\nCHANGE `ATNC` `ATNC` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `incapable_majeur` `incapable_majeur` enum('0','1') NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+      case "0.37":
+        return "0.37";
     }
     return false;
   }

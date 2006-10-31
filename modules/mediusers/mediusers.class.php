@@ -69,8 +69,8 @@ class CMediusers extends CMbObject {
 
   function getSpecs() {
     return array (
-      "remote"        => "enum|0|1",
-      "adeli"         => "num|length|9|confidential",
+      "remote"        => "bool",
+      "adeli"         => "numchar|length|9|confidential",
       "function_id"   => "ref|notNull",
       "discipline_id" => "ref"
     );
@@ -257,25 +257,12 @@ class CMediusers extends CMbObject {
     // Can't use parent::store cuz user_id don't auto-increment
     // SQL coded instead
     if ($this->user_id) {
-      $sql = "UPDATE `users_mediboard` SET";
-      if($this->function_id !== null)
-        $sql .= "\n`function_id` = '$this->function_id',";
-      if($this->function_id !== null)
-        $sql .= "\n`discipline_id` = '$this->discipline_id',";
-      if($this->remote !== null)
-        $sql .= "\n`remote` = '$this->remote',";
-      if($this->adeli !== null)
-        $sql .= "\n`adeli` = '$this->adeli',";
-      $sql .= "\n`user_id` = '$this->user_id'" .
-              "\nWHERE `user_id` = '$this->user_id'";
+      $ret = db_updateObject($this->_tbl, $this, $this->_tbl_key, true);
     } else {
       $this->user_id = $dPuser->user_id;
-      $sql = "INSERT INTO `users_mediboard`" .
-          "( `user_id` , `function_id`, `discipline_id` ,  `remote`, `adeli`)" .
-          "VALUES ('$this->user_id', '$this->function_id', '$this->discipline_id' , '$this->remote', '$this->adeli')";
+      $ret = db_insertObject($this->_tbl, $this, $this->_tbl_key);
     }
-
-    db_exec($sql);
+    
     return db_error();
   }
   

@@ -33,7 +33,7 @@ class CSalle extends CMbObject {
     return array (
       "group_id" => "ref|notNull",
       "nom"      => "str|notNull",
-      "stats"    => "enum|0|1|notNull"
+      "stats"    => "bool|notNull"
     );
   }
   

@@ -38,7 +38,7 @@ class CRefMateriel extends CMbObject {
       "fournisseur_id" => "ref|notNull",
       "materiel_id"    => "ref|notNull",
       "quantite"       => "num|pos|notNull",
-      "prix"           => "num|pos|notNull"
+      "prix"           => "float|notNull"
     );
   }
   

@@ -61,7 +61,7 @@ class CPlageconsult extends CMbObject {
   
   function loadRefsBack($withCanceled = true) {
     if (!$withCanceled) {
-      $where["annule"] = "= 0";
+      $where["annule"] = "= '0'";
     }
     
     $where["plageconsult_id"] = "= '$this->plageconsult_id'";
@@ -81,7 +81,7 @@ class CPlageconsult extends CMbObject {
     $query = "SELECT SUM(duree) " .
       "\nFROM `consultation` " .
       "\nWHERE `plageconsult_id` = $this->_id" .
-      "\nAND `annule` = 0";
+      "\nAND `annule` = '0'";
       
     $this->_affected = intval(db_loadResult($query));
 

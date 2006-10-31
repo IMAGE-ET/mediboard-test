@@ -54,14 +54,18 @@ class CProtocole extends CMbObject {
       "chir_id"         => "ref|notNull",
       "type"            => "enum|comp|ambu|exte",
       "DP"              => "code|cim10",
-      "convalescence"   => "str|confidential",
-      "rques_sejour"    => "str|confidential",
+      "convalescence"   => "text|confidential",
+      "rques_sejour"    => "text|confidential",
       "libelle"         => "str|confidential",
-      "examen"          => "str|confidential",
-      "materiel"        => "str|confidential",
-      "duree_hospi"     => "notNull|num|min|0",
-      "rques_operation" => "str|confidential",
-      "depassement"     => "currency|min|0|confidential"
+      "examen"          => "text|confidential",
+      "materiel"        => "text|confidential",
+      "duree_hospi"     => "num|minMax|0|36500|notNull",
+      "rques_operation" => "text|confidential",
+      "depassement"     => "float|min|0|confidential",
+      "pathologie"      => "str|length|3",
+      "septique"        => "bool",
+      "codes_ccam"      => "str",
+      "temp_operation"  => "time"
     );
   }
   

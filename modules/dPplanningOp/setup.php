@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.56";
+$config["mod_version"]     = "0.57";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -560,7 +560,98 @@ class CSetupdPplanningOp {
         db_exec($sql); db_error();
         
       case "0.56":
-        return "0.56";
+        $sql = "ALTER TABLE `naissance` " .
+               "\nCHANGE `naissance_id` `naissance_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `operation_id` `operation_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `nom_enfant` `nom_enfant` varchar(255) NOT NULL," .
+               "\nCHANGE `prenom_enfant` `prenom_enfant` varchar(255) NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `operations` " .
+               "\nCHANGE `operation_id` `operation_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `sejour_id` `sejour_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `anesth_id` `anesth_id` int(11) unsigned NULL," .
+               "\nCHANGE `plageop_id` `plageop_id` int(11) unsigned NULL," .
+               "\nCHANGE `code_uf` `code_uf` varchar(3) NULL," .
+               "\nCHANGE `libelle_uf` `libelle_uf` varchar(35) NULL," .
+               "\nCHANGE `salle_id` `salle_id` int(11) unsigned NULL," .
+               "\nCHANGE `codes_ccam` `codes_ccam` varchar(255) NULL," .
+               "\nCHANGE `libelle` `libelle` varchar(255) NULL," .
+               "\nCHANGE `type_anesth` `type_anesth` int(11) unsigned NULL," .
+               "\nCHANGE `rank` `rank` tinyint NOT NULL DEFAULT '0'," .
+               "\nCHANGE `annulee` `annulee` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `depassement` `depassement` float NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `operations` " .
+               "\nDROP `duree_hospi`;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `protocole` " .
+               "\nCHANGE `protocole_id` `protocole_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `pathologie` `pathologie` varchar(3) NULL," .
+               "\nCHANGE `codes_ccam` `codes_ccam` varchar(255) NULL," .
+               "\nCHANGE `libelle` `libelle` varchar(255) NULL," .
+               "\nCHANGE `duree_hospi` `duree_hospi` mediumint NOT NULL DEFAULT '0'," .
+               "\nCHANGE `septique` `septique` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `depassement` `depassement` float NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `sejour` " .
+               "\nCHANGE `sejour_id` `sejour_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `praticien_id` `praticien_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `group_id` `group_id` int(11) unsigned NOT NULL DEFAULT '1'," .
+               "\nCHANGE `venue_SHS` `venue_SHS` int(8) unsigned zerofill NULL," .
+               "\nCHANGE `annule` `annule` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `modif_SHS` `modif_SHS` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `septique` `septique` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `pathologie` `pathologie` varchar(3) NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `type_anesth` " .
+               "\nCHANGE `type_anesth_id` `type_anesth_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `name` `name` varchar(255) NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `sejour` " .
+               "\nCHANGE `saisi_SHS` `saisi_SHS` enum('o','n','0','1') NOT NULL DEFAULT 'n'," .
+               "\nCHANGE `chambre_seule` `chambre_seule` enum('o','n','0','1') NOT NULL DEFAULT 'o';";
+        db_exec( $sql ); db_error();
+      
+        $sql = "UPDATE `sejour` SET `saisi_SHS`='0' WHERE `saisi_SHS`='n';"; db_exec( $sql ); db_error();
+        $sql = "UPDATE `sejour` SET `saisi_SHS`='1' WHERE `saisi_SHS`='o';"; db_exec( $sql ); db_error();
+        $sql = "UPDATE `sejour` SET `chambre_seule`='0' WHERE `chambre_seule`='n';"; db_exec( $sql ); db_error();
+        $sql = "UPDATE `sejour` SET `chambre_seule`='1' WHERE `chambre_seule`='o';"; db_exec( $sql ); db_error();
+      
+        $sql = "ALTER TABLE `sejour` " .
+               "\nCHANGE `saisi_SHS` `saisi_SHS` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `chambre_seule` `chambre_seule` enum('0','1') NOT NULL DEFAULT '1';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `operations` " .
+               "\nCHANGE `ATNC` `ATNC` enum('o','n','0','1') NOT NULL DEFAULT 'n'," .
+               "\nCHANGE `commande_mat` `commande_mat` enum('o','n','0','1') NOT NULL DEFAULT 'n'," .
+               "\nCHANGE `info` `info` enum('o','n','0','1') NOT NULL DEFAULT 'n';";
+        db_exec( $sql ); db_error();
+      
+        $sql = "UPDATE `operations` SET `ATNC`='0' WHERE `ATNC`='n';"; db_exec( $sql ); db_error();
+        $sql = "UPDATE `operations` SET `ATNC`='1' WHERE `ATNC`='o';"; db_exec( $sql ); db_error();
+        $sql = "UPDATE `operations` SET `info`='0' WHERE `info`='n';"; db_exec( $sql ); db_error();
+        $sql = "UPDATE `operations` SET `info`='1' WHERE `info`='o';"; db_exec( $sql ); db_error();
+        $sql = "UPDATE `operations` SET `commande_mat`='0' WHERE `commande_mat`='n';"; db_exec( $sql ); db_error();
+        $sql = "UPDATE `operations` SET `commande_mat`='1' WHERE `commande_mat`='o';"; db_exec( $sql ); db_error();
+      
+        $sql = "ALTER TABLE `operations` " .
+               "\nCHANGE `ATNC` `ATNC` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `commande_mat` `commande_mat` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `info` `info` enum('0','1') NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+      
+      case "0.57":
+        return "0.57";
     }
     return false;
   }

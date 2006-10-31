@@ -206,13 +206,13 @@
 
 <tr>
   <th>
-    <label for="chambre_seule_o" title="Patient à placer dans une chambre particulière">Chambre particulière</label>
+    <label for="chambre_seule_1" title="Patient à placer dans une chambre particulière">Chambre particulière</label>
   </th>
   <td colspan="2">
-    <input name="chambre_seule" value="o" type="radio" {{if $sejour->chambre_seule == "o"}} checked="checked" {{/if}} onchange="modifSejour()" />
-    <label for="chambre_seule_o">Oui</label>
-    <input name="chambre_seule" value="n" type="radio" {{if $sejour->chambre_seule == "n" || !$sejour->sejour_id}} checked="checked" {{/if}} onchange="modifSejour()" />
-    <label for="chambre_seule_n">Non</label>
+    <input name="chambre_seule" value="1" type="radio" {{if $sejour->chambre_seule}} checked="checked" {{/if}} onchange="modifSejour()" />
+    <label for="chambre_seule_1">Oui</label>
+    <input name="chambre_seule" value="0" type="radio" {{if !$sejour->chambre_seule || !$sejour->sejour_id}} checked="checked" {{/if}} onchange="modifSejour()" />
+    <label for="chambre_seule_0">Non</label>
 </tr>
 
 {{if !$mode_operation}}

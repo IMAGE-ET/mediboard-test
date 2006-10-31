@@ -46,7 +46,7 @@ for($i = 1; $i <= 7; $i++) {
   $where = array(
     "entree_prevue" => "BETWEEN '$from' AND '$to'",
     "type" => "!= 'exte'",
-    "annule" => "= 0"
+    "annule" => "= '0'"
   );
   $list[$from] = loadSejourNonAffectes($where);
 }

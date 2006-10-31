@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcompteRendu";
-$config["mod_version"]     = "0.25";
+$config["mod_version"]     = "0.26";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -165,7 +165,44 @@ class CSetupdPcompteRendu {
         $sql = "ALTER TABLE `aide_saisie` ADD `function_id` int(10) unsigned NULL AFTER `user_id` ;";
         db_exec($sql); db_error();
       case "0.25":
-        return "0.25";
+        set_time_limit(1800);
+        $sql = "ALTER TABLE `aide_saisie` " .
+               "\nCHANGE `aide_id` `aide_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `user_id` `user_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `function_id` `function_id` int(11) unsigned NULL," .
+               "\nCHANGE `class` `class` varchar(255) NOT NULL," .
+               "\nCHANGE `field` `field` varchar(255) NOT NULL," .
+               "\nCHANGE `name` `name` varchar(255) NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `compte_rendu` " .
+               "\nCHANGE `compte_rendu_id` `compte_rendu_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NULL," .
+               "\nCHANGE `function_id` `function_id` int(11) unsigned NULL," .
+               "\nCHANGE `object_id` `object_id` int(11) unsigned NULL," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
+               "\nCHANGE `source` `source` mediumtext NULL," .
+               "\nCHANGE `object_class` `object_class` enum('CPatient','CConsultAnesth','COperation','CConsultation') NOT NULL DEFAULT 'CPatient'," .
+               "\nCHANGE `valide` `valide` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0'," .
+               "\nCHANGE `file_category_id` `file_category_id` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `liste_choix` " .
+               "\nCHANGE `liste_choix_id` `liste_choix_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NULL," .
+               "\nCHANGE `function_id` `function_id` int(11) unsigned NULL," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
+               "\nCHANGE `compte_rendu_id` `compte_rendu_id` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `pack` " .
+               "\nCHANGE `pack_id` `pack_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+      case "0.26":
+        return "0.26";
     }
     return false;
   }

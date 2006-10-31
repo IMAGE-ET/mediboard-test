@@ -48,7 +48,7 @@ $endWeek = mbDateTime("+7 days", $today);
 $where = array(
   "entree_prevue" => "BETWEEN '$today' AND '$endWeek'",
   "type" => "!= 'exte'",
-  "annule" => "= 0"
+  "annule" => "= '0'"
 );
 $where["sejour.group_id"] = "= '$g'";
 $where[] = "affectation.affectation_id IS NULL";
@@ -74,7 +74,7 @@ if ($canEdit) {
   $where = array(
     "entree_prevue" => "BETWEEN '$dayBefore 00:00:00' AND '$date 00:00:00'",
     "type" => "!= 'exte'",
-    "annule" => "= 0"
+    "annule" => "= '0'"
   );
 
   $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where);
@@ -83,7 +83,7 @@ if ($canEdit) {
   $where = array(
     "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'",
     "type" => "!= 'exte'",
-    "annule" => "= 0"
+    "annule" => "= '0'"
   );
   
   $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where);
@@ -92,7 +92,7 @@ if ($canEdit) {
   $where = array(
     "entree_prevue" => "BETWEEN '$date $heureLimit' AND '$date 23:59:59'",
     "type" => "!= 'exte'",
-    "annule" => "= 0"
+    "annule" => "= '0'"
   );
   
   $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where);
@@ -100,7 +100,7 @@ if ($canEdit) {
   // Admissions antérieures
   $twoDaysBefore = mbDate("-2 days", $date);
   $where = array(
-    "annule" => "= 0",
+    "annule" => "= '0'",
     "'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue"
   );
   

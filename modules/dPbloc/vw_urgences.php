@@ -18,7 +18,7 @@ $today = date("Y-m-d");
 
 $where = array();
 $where["plageop_id"] = "IS NULL";
-$where["annulee"] = "= 0";
+$where["annulee"] = "= '0'";
 $order = "operations.date, operations.time_operation";
 
 // Récupération urgences de chaque jour

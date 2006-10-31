@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "admin";
-$config["mod_version"]     = "1.0.4";
+$config["mod_version"]     = "1.0.5";
 $config["mod_type"]        = "core";
 $config["mod_config"]      = false;
 
@@ -124,7 +124,43 @@ class CSetupadmin {
         $sql = "UPDATE `user_preferences` SET `pref_name`='AFFCONSULT' WHERE `pref_name`='CABCONSULT';";
         db_exec( $sql ); db_error();
       case "1.0.4":
-        return "1.0.4";
+        $sql = "ALTER TABLE `perm_module` " .
+               "\nCHANGE `perm_module_id` `perm_module_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `user_id` `user_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `mod_id` `mod_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `permission` `permission` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0'," .
+               "\nCHANGE `view` `view` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `perm_object` " .
+               "\nCHANGE `perm_object_id` `perm_object_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `user_id` `user_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `object_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `object_class` `object_class` varchar(255) NOT NULL," .
+               "\nCHANGE `permission` `permission` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `users` " .
+               "\nCHANGE `user_id` `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `user_password` `user_password` varchar(255) NOT NULL," .
+               "\nCHANGE `user_type` `user_type` tinyint(4) NOT NULL DEFAULT '0'," .
+               "\nCHANGE `user_last_name` `user_last_name` varchar(50) NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `users` " .
+               "\nDROP `user_parent`," .
+               "\nDROP `user_company`," .
+               "\nDROP `user_department`," .
+               "\nDROP `user_home_phone`," .
+               "\nDROP `user_address2`," .
+               "\nDROP `user_state`," .
+               "\nDROP `user_icq`," .
+               "\nDROP `user_aol`," .
+               "\nDROP `user_owner`;";
+        db_exec( $sql ); db_error();
+        
+      case "1.0.5":
+        return "1.0.5";
     }
     
 

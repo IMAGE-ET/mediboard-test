@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "system";
-$config["mod_version"]     = "1.0.4";
+$config["mod_version"]     = "1.0.5";
 $config["mod_type"]        = "core";
 $config["mod_config"]      = true;
 
@@ -84,7 +84,27 @@ class CSetupsystem {
 
         set_time_limit($old);
       case "1.0.4":
-        return "1.0.4";
+        $old = set_time_limit(300);
+        $sql = "ALTER TABLE `access_log` " .
+               "\nCHANGE `accesslog_id` `accesslog_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `module` `module` VARCHAR(255) NOT NULL," .
+               "\nCHANGE `action` `action` VARCHAR(255) NOT NULL," .
+               "\nCHANGE `hits` `hits` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `duration` `duration` float NOT NULL DEFAULT '0'," .
+               "\nCHANGE `request` `request` float NOT NULL DEFAULT '0'; ";
+        db_exec($sql); db_error();
+        
+        $sql = "ALTER TABLE `message` CHANGE `message_id` `message_id` int(11) unsigned NOT NULL AUTO_INCREMENT; ";
+        db_exec($sql); db_error();
+        
+        $sql = "ALTER TABLE `user_log` " .
+               "\nCHANGE `user_log_id` `user_log_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `user_id` `user_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `object_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0'; ";
+        db_exec($sql); db_error();
+        set_time_limit($old);
+      case "1.0.5":
+        return "1.0.5";
     }
     return false;
   }

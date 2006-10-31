@@ -46,7 +46,7 @@ class CActeCCAM extends CMbObject {
     return array (
       "code_acte"           => "notNull|code|ccam",
       "code_activite"       => "notNull|numchar|maxLength|2",
-      "code_phase"          => "notNull|numchar|maxLength|2",
+      "code_phase"          => "notNull|numchar|maxLength|1",
       "execution"           => "notNull|dateTime",
       "modificateurs"       => "str|maxLength|4",
       "montant_depassement" => "currency|min|0",

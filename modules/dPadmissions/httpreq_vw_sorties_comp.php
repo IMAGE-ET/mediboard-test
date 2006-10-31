@@ -32,7 +32,7 @@ $ljoin["service"] = "service.service_id = chambre.service_id";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $where["sortie"] = "BETWEEN '$limit1' AND '$limit2'";
 if($vue) {
-  $where["effectue"] = "= 0";
+  $where["effectue"] = "= '0'";
 }
 $order = "patients.nom, patients.prenom";
 $where["type"] = "= 'comp'";

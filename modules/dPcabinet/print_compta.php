@@ -65,7 +65,7 @@ foreach($listPlage as $key => $value) {
   $where["chir_id"] = "= '$curr_chir->user_id'";
   $where["date_paiement"] = "= '".$value["date"]."'";
   $where["chrono"] = ">= '".CC_TERMINE."'";
-  $where["annule"] = "= 0";
+  $where["annule"] = "= '0'";
   if($etat != -1)
     $where["paye"] = "= '$etat'";
   if($etat == 0)

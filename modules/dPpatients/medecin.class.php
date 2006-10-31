@@ -54,15 +54,15 @@ class CMedecin extends CMbObject {
       "nom"             => "str|notNull|confidential",
       "prenom"          => "str|confidential",
       "jeunefille"      => "str|confidential",
-      "adresse"         => "str|confidential",
+      "adresse"         => "text|confidential",
       "ville"           => "str|confidential",
-      "cp"              => "num|maxLength|5|confidential",
-      "tel"             => "num|length|10|confidential",
-      "fax"             => "num|length|10|confidential",
+      "cp"              => "numchar|maxLength|5|confidential",
+      "tel"             => "numchar|length|10|confidential",
+      "fax"             => "numchar|length|10|confidential",
       "email"           => "str|confidential",
-      "disciplines"     => "str|confidential",
-      "orientations"    => "str|confidential",
-      "complementaires" => "str|confidential"
+      "disciplines"     => "text|confidential",
+      "orientations"    => "text|confidential",
+      "complementaires" => "text|confidential"
     );
   }
   

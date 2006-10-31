@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPhospi";
-$config["mod_version"]     = "0.17";
+$config["mod_version"]     = "0.18";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -123,7 +123,34 @@ class CSetupdPhospi {
         $sql = "ALTER TABLE `affectation` DROP `operation_id`";
         db_exec( $sql ); db_error();
       case "0.17":
-        return "0.17";
+        $sql = "ALTER TABLE `affectation` " .
+               "\nCHANGE `affectation_id` `affectation_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `lit_id` `lit_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `confirme` `confirme` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `effectue` `effectue` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `sejour_id` `sejour_id` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `chambre` " .
+               "\nCHANGE `chambre_id` `chambre_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `service_id` `service_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `lit` " .
+               "\nCHANGE `lit_id` `lit_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `chambre_id` `chambre_id` int(11) unsigned NOT NULL," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `service` " .
+               "\nCHANGE `service_id` `service_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `group_id` `group_id` int(11) unsigned NOT NULL DEFAULT '1'," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+      case "0.18":
+        return "0.18";
     }
     return false;
   }

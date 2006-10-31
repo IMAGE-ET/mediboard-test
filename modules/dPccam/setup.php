@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPccam";
-$config["mod_version"]     = "0.1";
+$config["mod_version"]     = "0.11";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -44,7 +44,13 @@ class CSetupdPccam {
         db_exec( $sql );
         db_error();
 			case "0.1":
-				return "0.1";
+        $sql = "ALTER TABLE `ccamfavoris` " .
+               "\nCHANGE `favoris_id` `favoris_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `favoris_user` `favoris_user` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+      case "0.11":
+				return "0.11";
 		}
 		return false;
 	}

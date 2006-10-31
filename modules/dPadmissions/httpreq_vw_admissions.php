@@ -29,11 +29,11 @@ $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $where["entree_prevue"] = "BETWEEN '$date' AND '$next'";
 if($selAdmis != "0") {
   $where[] = "(entree_reelle IS NULL OR entree_reelle = '0000-00-00 00:00:00')";
-  $where["annule"] = "= 0";
+  $where["annule"] = "= '0'";
 }
 if($selSaisis != "0") {
   $where["saisi_SHS"] = "= '$selSaisis'";
-  $where["annule"] = "= 0";
+  $where["annule"] = "= '0'";
 }
 if($selTri == "nom")
   $order = "patients.nom, patients.prenom, sejour.entree_prevue";

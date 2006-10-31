@@ -59,7 +59,7 @@ class CUser extends CMbObject {
     return array (
       "user_username"   => "str|maxLength|20|notNull",
       "user_password"   => "str|minLength|4",
-      "user_type"       => "num|notNull",
+      "user_type"       => "num|max|20|notNull",
       "user_first_name" => "str|maxLength|50",
       "user_last_name"  => "str|maxLength|50|notNull",
       "user_email"      => "str|maxLength|255",

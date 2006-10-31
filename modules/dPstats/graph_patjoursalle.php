@@ -29,7 +29,7 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
   $datax[] = mbTranformTime("+0 DAY", $i, "%m/%Y");
 }
 
-$sql = "SELECT * FROM sallesbloc WHERE stats = 1";
+$sql = "SELECT * FROM sallesbloc WHERE stats = '1'";
 if($salle_id)
   $sql .= "\nAND salle_id = '$salle_id'";
 $salles = db_loadlist($sql);
@@ -43,8 +43,8 @@ $sql = "SELECT COUNT(operations.operation_id) AS total," .
   "\nON plagesop.salle_id = sallesbloc.salle_id" .
   "\nLEFT JOIN operations" .
   "\nON operations.plageop_id = plagesop.plageop_id" .
-  "\nAND operations.annulee = 0" .
-  "\nWHERE sallesbloc.stats = 1" .
+  "\nAND operations.annulee = '0'" .
+  "\nWHERE sallesbloc.stats = '1'" .
   "\nAND plagesop.date BETWEEN '$debut' AND '$fin'";
   if($prat_id)
     $sql .= "\nAND operations.chir_id = '$prat_id'";

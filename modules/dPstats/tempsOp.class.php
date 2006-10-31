@@ -42,7 +42,8 @@ class CTempsOp extends CMbObject {
       "occup_moy"       => "time",
       "occup_ecart"     => "time",
       "duree_moy"       => "time",
-      "duree_ecart"     => "time"
+      "duree_ecart"     => "time",
+      "ccam"            => "str"
     );
   }	
   

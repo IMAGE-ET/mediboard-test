@@ -250,13 +250,13 @@ Septique
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="dosql" value="do_edit_chambre" />
     <input type="hidden" name="id" value="{{$sejour->sejour_id}}" />
-    {{if $sejour->chambre_seule == 'o'}}
-    <input type="hidden" name="value" value="n" />
+    {{if $sejour->chambre_seule}}
+    <input type="hidden" name="value" value="0" />
     <button class="change" type="submit" style="background-color: #f55;">
 chambre simple
     </button>
     {{else}}
-    <input type="hidden" name="value" value="o" />
+    <input type="hidden" name="value" value="1" />
     <button class="change" type="submit">
 chambre double
     </button>

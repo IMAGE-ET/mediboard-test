@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPstats";
-$config["mod_version"]     = "0.13";
+$config["mod_version"]     = "0.14";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -83,7 +83,25 @@ class CSetupdPstats {
                ) TYPE=MyISAM COMMENT='Table temporaire des temps d\'hospitalisation';";
         db_exec( $sql ); db_error();
       case "0.13":
-        return "0.13";
+        $sql = "ALTER TABLE `temps_hospi` " .
+               "\nCHANGE `ccam` `ccam` varchar(255) NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `temps_op` " .
+               "\nCHANGE `temps_op_id` `temps_op_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `ccam` `ccam` varchar(255) NOT NULL," .
+               "\nCHANGE `nb_intervention` `nb_intervention` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `temps_prepa` " .
+               "\nCHANGE `temps_prepa_id` `temps_prepa_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `nb_prepa` `nb_prepa` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `nb_plages` `nb_plages` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+      case "0.14":
+        return "0.14";
     }
     return false;
   }

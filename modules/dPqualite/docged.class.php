@@ -65,7 +65,7 @@ class CDocGed extends CMbObject {
       "titre"            => "str|maxLength|50",
       "etat"             => "enum|0|16|32|48|64|notNull",
       "version"          => "currency|min|0",
-      "annule"           => "enum|0|1",
+      "annule"           => "bool",
       "num_ref"          => "num"
     );
   }

@@ -46,7 +46,7 @@ function reloadListTech() {
       {{/if}}
       {{html_options name="ASA" options=$consult_anesth->_enumsTrans.ASA selected=$selected onchange="submitFormAjax(this.form, 'systemMsg')"}}
       <br /><br />
-      <label for="premedication" title="Informatinos concernant la prémédication">Prémédication</label>
+      <label for="premedication" title="Informations concernant la prémédication">Prémédication</label>
       <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult_anesth->_aides.premedication}}

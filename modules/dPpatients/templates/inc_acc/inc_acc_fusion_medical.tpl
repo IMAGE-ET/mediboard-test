@@ -63,8 +63,8 @@
       {{tr}}CPatient.incapable_majeur.{{$patient2->incapable_majeur}}{{/tr}}
     </td>
     <td>
-      <input tabindex="202" type="radio" name="incapable_majeur" value="o" {{if $finalPatient->incapable_majeur == "o"}} checked="checked" {{/if}} />oui
-      <input tabindex="203" type="radio" name="incapable_majeur" value="n" {{if $finalPatient->incapable_majeur == "n"}} checked="checked" {{/if}} />non
+      <input tabindex="202" type="radio" name="incapable_majeur" value="1" {{if $finalPatient->incapable_majeur == "1"}} checked="checked" {{/if}} />oui
+      <input tabindex="203" type="radio" name="incapable_majeur" value="0" {{if $finalPatient->incapable_majeur == "0"}} checked="checked" {{/if}} />non
     </td>
   </tr>
   <tr>
@@ -78,8 +78,8 @@
       {{tr}}CPatient.ATNC.{{$patient2->ATNC}}{{/tr}}
     </td>
     <td>
-      <input tabindex="204" type="radio" name="ATNC" value="o" {{if $finalPatient->ATNC == "o"}} checked="checked" {{/if}} />oui
-      <input tabindex="205" type="radio" name="ATNC" value="n" {{if $finalPatient->ATNC == "n"}} checked="checked" {{/if}} />non
+      <input tabindex="204" type="radio" name="ATNC" value="1" {{if $finalPatient->ATNC == "1"}} checked="checked" {{/if}} />oui
+      <input tabindex="205" type="radio" name="ATNC" value="0" {{if $finalPatient->ATNC == "0"}} checked="checked" {{/if}} />non
     </td>
   </tr>
   <tr>

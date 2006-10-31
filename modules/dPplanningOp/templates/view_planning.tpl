@@ -55,7 +55,7 @@
   
   <tr>
     <th>Incapable majeur </th>
-    <td>{{tr}}CPatient.incapable_majeur.{{$patient->incapable_majeur == "o"}}{{/tr}}</td>
+    <td>{{tr}}CPatient.incapable_majeur.{{$patient->incapable_majeur}}{{/tr}}</td>
   </tr>
 
   <tr>

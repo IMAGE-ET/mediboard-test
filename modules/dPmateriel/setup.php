@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPmateriel";
-$config["mod_version"]     = "0.12";
+$config["mod_version"]     = "0.13";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -89,7 +89,43 @@ class CSetupdPmateriel {
             \n) TYPE=MyISAM;";
         db_exec($sql);  db_error();       
       case "0.12":
-        return "0.12";  
+        $sql = "ALTER TABLE `materiel_category` " .
+               "\nCHANGE `category_id` `category_id` int(11) unsigned NOT NULL AUTO_INCREMENT;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `fournisseur` " .
+               "\nCHANGE `fournisseur_id` `fournisseur_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `societe` `societe` varchar(255) NOT NULL," .
+               "\nCHANGE `ville` `ville` varchar(255) NULL," .
+               "\nCHANGE `mail` `mail` varchar(50) NULL," .
+               "\nCHANGE `prenom` `prenom` varchar(255) NOT NULL," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
+               "\nCHANGE `telephone` `telephone` bigint(10) unsigned zerofill," .
+               "\nCHANGE `codepostal` `codepostal` int(5) unsigned zerofill;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `materiel` " .
+               "\nCHANGE `materiel_id` `materiel_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `category_id` `category_id` int(11) unsigned NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `ref_materiel` " .
+               "\nCHANGE `reference_id` `reference_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `materiel_id` `materiel_id` int(11) unsigned NOT NULL," .
+               "\nCHANGE `fournisseur_id` `fournisseur_id` int(11) unsigned NOT NULL," .
+               "\nCHANGE `quantite` `quantite` int(11) unsigned NOT NULL," .
+               "\nCHANGE `prix` `prix` float NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `stock` " .
+               "\nCHANGE `stock_id` `stock_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `materiel_id` `materiel_id` int(11) unsigned NOT NULL," .
+               "\nCHANGE `group_id` `group_id` int(11) unsigned NOT NULL," .
+               "\nCHANGE `seuil_cmd` `seuil_cmd` int(11) unsigned NOT NULL," .
+               "\nCHANGE `quantite` `quantite` int(11) unsigned NOT NULL;";
+        db_exec( $sql ); db_error();
+      case "0.13":
+        return "0.13";  
     }
     return false;
   }

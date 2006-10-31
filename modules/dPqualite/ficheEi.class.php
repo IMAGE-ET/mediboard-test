@@ -89,7 +89,7 @@ class CFicheEi extends CMbObject {
       "commission"                   => "enum|non|oui|notNull",
       "deja_survenu"                 => "enum|non|oui",
       "degre_urgence"                => "enum|1|2|3|4",
-      "annulee"                      => "enum|0|1",
+      "annulee"                      => "bool",
       "remarques"                    => "text",
       //1ere Validation Qualité
       "valid_user_id"                => "ref",

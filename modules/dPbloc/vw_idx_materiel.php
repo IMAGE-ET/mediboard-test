@@ -24,7 +24,7 @@ $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 $where = array();
 $where["materiel"] = "!= ''";
 $where["operations.plageop_id"] = "IS NOT NULL";
-$where["commande_mat"] = $typeAff ? "= 'o'" : "!= 'o'";
+$where["commande_mat"] = $typeAff ? "= '1'" : "!= '1'";
 $where["annulee"]      = $typeAff ? "= '1'" : "!= '1'";
 $order = array();
 $order[] = "plagesop.date";

@@ -37,8 +37,9 @@ class CTempsHospi extends CMbObject {
       "praticien_id" => "ref|notNull",
       "type"         => "enum|ambu|comp|notNull",
       "nb_sejour"    => "num|pos",
-      "duree_moy"    => "currency",
-      "duree_ecart"  => "currency"
+      "duree_moy"    => "currency|pos",
+      "duree_ecart"  => "currency|pos",
+      "ccam"         => "str"
     );
   } 
 

@@ -38,7 +38,7 @@ class CPack extends CMbObject {
     return array (
       "chir_id" => "ref|notNull",
       "nom"     => "str|notNull|confidential",
-      "modeles" => "str"
+      "modeles" => "text"
     );
   }
   

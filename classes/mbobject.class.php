@@ -660,6 +660,9 @@ class CMbObject {
         $this->lookupSpec("confidential", $specFragments);
         $this->lookupSpec("notNull", $specFragments);
         $enums[$propName] = $specFragments;
+      }elseif($this->lookupSpec("bool", $specFragments)){
+        $enums[$propName][] = 0;
+        $enums[$propName][] = 1;
       }
     }
     
@@ -959,13 +962,22 @@ class CMbObject {
         
         break;
       
+      // Boolean
+      case "bool":
+        if (!is_numeric($propValue)) {
+          return "N'est pas une chaîne numérique";
+        }
+        if($propValue!=0 && $propValue!=1){
+          return "Ne peut être différent de 0 ou 1";
+        }
+        break;
+      
       // Enumeration
       case "enum":
         array_shift($specFragments);
         if (!in_array($propValue, $specFragments)) {
           return "N'a pas une valeur possible";
         }
-
         break;
     
       // Date
@@ -993,6 +1005,7 @@ class CMbObject {
         break;
     
       // Currrency format
+      case "float":
       case "currency":
         //if (!preg_match ("/^([0-9]+)(\.[0-9]{0,2}){0,1}$/", $propValue)) {
         if(!is_numeric($propValue)){

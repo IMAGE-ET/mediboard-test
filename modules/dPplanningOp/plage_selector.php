@@ -57,7 +57,7 @@ $sql = "SELECT plagesop.*, sallesbloc.nom," .
 		"\nFROM plagesop" .
 		"\nLEFT JOIN operations" .
 		"\nON plagesop.plageop_id = operations.plageop_id" .
-    "\nAND operations.annulee = 0" .
+    "\nAND operations.annulee = '0'" .
     "\nLEFT JOIN sallesbloc" .
     "\nON plagesop.salle_id = sallesbloc.salle_id" .
 		"\nWHERE plagesop.date LIKE '$year-$month-__'" .

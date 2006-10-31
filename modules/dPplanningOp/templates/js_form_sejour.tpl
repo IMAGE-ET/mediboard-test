@@ -72,9 +72,9 @@ function cancelSejour() {
 
 function modifSejour() {
   var oForm = document.editSejour;
-  if (oForm.saisi_SHS.value == 'o') {
+  if (oForm.saisi_SHS.value == '1') {
     oForm.modif_SHS.value = 1;
-    oForm.saisi_SHS.value = 'n';
+    oForm.saisi_SHS.value = '0';
   }
 }
 

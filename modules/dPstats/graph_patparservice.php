@@ -66,7 +66,7 @@ foreach($services as $service) {
     "\nINNER JOIN service" .
     "\nON chambre.service_id = service.service_id" .
     "\nAND service.service_id = '$id'" .
-    "\nWHERE sejour.annule = 0";
+    "\nWHERE sejour.annule = '0'";
   if($prat_id) {
     $sql .= "\nAND sejour.praticien_id = '$prat_id'";
   }

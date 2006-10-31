@@ -54,14 +54,14 @@ $sql = "SELECT prat_id," .
     "\nWHERE date < '".mbDate()."'" .
     "\nAND prat_id IS NOT NULL" .
     "\nAND prat_id <> 0" .
-    "\nAND paye = 0" .
+    "\nAND paye = '0'" .
     "\nGROUP BY prat_id" .
     "\nORDER BY somme DESC";
 $list = db_loadlist($sql);
 
 $where = array();
 $where["date"] = "< '".mbDate()."'";
-$where["paye"] = "= 0";
+$where["paye"] = "= '0'";
 $order = "date";
 foreach($list as $key => $value) {
   $total["total"] += $value["total"];

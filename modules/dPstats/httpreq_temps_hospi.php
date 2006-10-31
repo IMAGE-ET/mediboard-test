@@ -31,7 +31,7 @@ $sql .="\nFROM operations" .
        "\nLEFT JOIN users" .
        "\nON operations.chir_id = users.user_id" .
        "\nWHERE sejour.type != 'exte'" .
-       "\nAND sejour.annule = 0" .
+       "\nAND sejour.annule = '0'" .
        "\nAND sejour.entree_reelle IS NOT NULL" .
        "\nAND sejour.sortie_reelle IS NOT NULL" .
        "\nAND sejour.sortie_reelle > sejour.entree_reelle";

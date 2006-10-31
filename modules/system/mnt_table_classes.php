@@ -36,15 +36,38 @@ function getDBSpec($spec){
     case "ref":
       $type_sql = "int(11) unsigned";
       break;
-
+    
+    case "bool":
+      $type_sql = "enum('0','1')";
+      break;
+      
     case "numchar":
+      $type_sql = "bigint zerofill";
+      if(isset($specFragments[1])){
+      	switch ($specFragments[1]) {
+      	  case "maxLength":
+          case "length":
+            $length = $specFragments[2];
+            $valeur_max = pow(10,$length);
+            $type_sql = "tinyint";
+            if ($valeur_max > pow(2,8)) {
+              $type_sql = "mediumint";
+            }
+            if ($valeur_max > pow(2,16)) {
+              $type_sql = "int";
+            }
+            if ($valeur_max > pow(2,32)) {
+              $type_sql = "bigint";
+            }
+            $type_sql .= "($length) unsigned zerofill";
+        }
+      }
+      break;
+    
     case "str":
       $type_sql = "varchar(255)";
       if(isset($specFragments[1])){
         switch ($specFragments[1]) {
-          case "minMax":
-            $type_sql = "varchar(".strlen($specFragments[3]).")";
-            break;
           case "maxLength":
           case "length":
             $type_sql = "varchar(".$specFragments[2].")";
@@ -59,16 +82,24 @@ function getDBSpec($spec){
     case "num":
       $type_sql = "int(11)";
       if(isset($specFragments[1])){
+        $valeur_max = null;
         switch ($specFragments[1]) {
           case "minMax":
-            $type_sql = "int(".strlen($specFragments[3]).")";
-            break;
-          case "maxLength":
-          case "length":
-            $type_sql = "int(".$specFragments[2].")";
-            break;
+            $valeur_max = $specFragments[3];
           case "max":
-            $type_sql = "int(".strlen($specFragments[2]).")";
+            if(!$valeur_max){
+              $valeur_max = $specFragments[2];
+            }
+            $type_sql = "tinyint(4)";
+            if ($valeur_max > pow(2,8)) {
+              $type_sql = "mediumint(9)";
+            }
+            if ($valeur_max > pow(2,16)) {
+              $type_sql = "int";
+            }
+            if ($valeur_max > pow(2,32)) {
+              $type_sql = "bigint";
+            }
             break;
           case "pos":
             $type_sql = "int(11) unsigned";
@@ -78,8 +109,16 @@ function getDBSpec($spec){
       break;
     
     case "pct":
+    case "float":
     case "currency":
       $type_sql = "float";
+      if(isset($specFragments[1])){
+        switch ($specFragments[1]) {
+          case "pos":
+            $type_sql = "float unsigned";
+            break;          
+        }
+      }
       break;
 
     case "enum":
@@ -243,11 +282,17 @@ foreach($aChamps as $nameClass=>$currClass){
 
     }
     
-    // Si tout a afficher : on supprime les lignes sans problèmes
-    if($selClass===null){
-      if(!$curr_champ["error_BDD_null"] && !$curr_champ["error_BDD_type"] && !$curr_champ["error_class_props"]
-         && !($curr_champ["keytable"] && $curr_champ["keytable"]==$curr_champ["class_field"] && $curr_champ["class_props"])
-         && $curr_champ["BDD_name"] && $curr_champ["class_props"] && $curr_champ["class_field"]){
+    // Si tout a afficher : on supprime les lignes valides
+    if($selClass===null){ 
+    	// Aucun champs d'erreur
+      $test_champs_valide = !$curr_champ["error_BDD_null"] && !$curr_champ["error_BDD_type"] && !$curr_champ["error_class_props"];
+      // ET -- Correspondance  Field et BDD
+      $test_champs_valide = $test_champs_valide && $curr_champ["BDD_name"] && $curr_champ["class_field"];
+      // ET -- clé primaire sans spec OU spec sans clé primaire
+      $test_champs_valide = $test_champs_valide && ($curr_champ["class_props"] XOR $curr_champ["BDD_primary"]);
+      $test_champs_valide = $test_champs_valide && !($curr_champ["keytable"] && $curr_champ["keytable"]==$curr_champ["class_field"] && $curr_champ["class_props"]);
+      
+      if($test_champs_valide){
         unset($aChamps[$nameClass][$k]);
       }
     }

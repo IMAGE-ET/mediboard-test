@@ -438,6 +438,15 @@ function checkElement(oElement, aSpecFragments) {
       
    	  break;
     
+    case "bool":
+      if (isNaN(oElement.value)) {
+        return "N'est pas une chaîne numérique";
+      }
+      if(oElement.value!=0 && oElement.value!=1){
+        return "Ne peut être différent de 0 ou 1";
+      }
+      break;
+      
     case "enum":
       aSpecFragments.removeByIndex(0);
       if (!aSpecFragments.contains(oElement.value)) {
@@ -466,7 +475,8 @@ function checkElement(oElement, aSpecFragments) {
       }
       
       break;
-    
+      
+    case "float":
     case "currency":
       //if (!oElement.value.match(/^(\d+)(\.\d{1,2})?$/)) {
       if(isNaN(parseFloat(oElement.value)) || parseFloat(oElement.value)!=oElement.value){

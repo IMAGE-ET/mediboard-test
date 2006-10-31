@@ -32,7 +32,7 @@ $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entre
     "\nFROM `sejour`" .
     "\nWHERE `sejour`.`entree_prevue` LIKE '$month'" .
     "\nAND `sejour`.`entree_reelle` IS NULL" .
-    "\nAND `sejour`.`annule` = 0" .
+    "\nAND `sejour`.`annule` = '0'" .
     "\nGROUP BY `date`" .
     "\nORDER BY `date`";
 $list2 = db_loadlist($sql);
@@ -41,8 +41,8 @@ $list2 = db_loadlist($sql);
 $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
     "\nFROM `sejour`" .
     "\nWHERE `sejour`.`entree_prevue` LIKE '$month'" .
-    "\nAND `sejour`.`saisi_SHS` = 'n'" .
-    "\nAND `sejour`.`annule` = 0" .
+    "\nAND `sejour`.`saisi_SHS` = '0'" .
+    "\nAND `sejour`.`annule` = '0'" .
     "\nGROUP BY `date`" .
     "\nORDER BY `date`";
 $list3 = db_loadlist($sql);

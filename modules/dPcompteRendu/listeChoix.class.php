@@ -41,7 +41,7 @@ class CListeChoix extends CMbObject {
       "chir_id"         => "ref|xor|function_id",
       "function_id"     => "ref",
       "nom"             => "str|notNull",
-      "valeurs"         => "str|confidential",
+      "valeurs"         => "text|confidential",
       "compte_rendu_id" => "ref"
     );
   }

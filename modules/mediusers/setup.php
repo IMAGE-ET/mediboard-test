@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "mediusers";
-$config["mod_version"]     = "0.16";
+$config["mod_version"]     = "0.17";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -233,7 +233,27 @@ class CSetupmediusers {
         $sql = "ALTER TABLE `users_mediboard` ADD INDEX ( `discipline_id` ) ;";
         db_exec($sql); db_error();
       case "0.16":
-        return "0.16";
+        $sql = "ALTER TABLE `discipline` " .
+               "\nCHANGE `discipline_id` `discipline_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `text` `text` varchar(255) NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `functions_mediboard` " .
+               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `group_id` `group_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `text` `text` varchar(255) NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `users_mediboard` " .
+               "\nCHANGE `user_id` `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `adeli` `adeli` int(9) unsigned zerofill NULL," .
+               "\nCHANGE `remote` `remote` enum('0','1') NULL," .
+               "\nCHANGE `discipline_id` `discipline_id` int(11) unsigned NULL;";
+        db_exec( $sql ); db_error();
+        
+      case "0.17":
+        return "0.17";
     }
 
     return false;

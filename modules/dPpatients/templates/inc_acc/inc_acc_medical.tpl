@@ -65,8 +65,8 @@
   <tr>
     <th><label for="incapable_majeur" title="Patient reconnu incapable majeur">Incapable majeur</label></th>
     <td>
-      <input tabindex="204" type="radio" name="incapable_majeur" value="o" {{if $patient->incapable_majeur == "o"}} checked="checked" {{/if}} />oui
-      <input tabindex="205" type="radio" name="incapable_majeur" value="n" {{if $patient->incapable_majeur == "n"}} checked="checked" {{/if}} />non
+      <input tabindex="204" type="radio" name="incapable_majeur" value="1" {{if $patient->incapable_majeur == "1"}} checked="checked" {{/if}} />oui
+      <input tabindex="205" type="radio" name="incapable_majeur" value="0" {{if $patient->incapable_majeur == "0"}} checked="checked" {{/if}} />non
     </td>
     <th><label for="matricule" title="Matricule valide d'assuré social (13 chiffres + 2 pour la clé)">Numéro d'assuré social</label></th>
     <td colspan="2">
@@ -77,8 +77,8 @@
   <tr>
     <th><label for="ATNC" title="Patient présentant un risque ATNC">ATNC </label></th>
     <td>
-      <input tabindex="206" type="radio" name="ATNC" value="o" {{if $patient->ATNC == "o"}} checked="checked" {{/if}} />oui
-      <input tabindex="207" type="radio" name="ATNC" value="n" {{if $patient->ATNC == "n"}} checked="checked" {{/if}} />non
+      <input tabindex="206" type="radio" name="ATNC" value="1" {{if $patient->ATNC == "1"}} checked="checked" {{/if}} />oui
+      <input tabindex="207" type="radio" name="ATNC" value="0" {{if $patient->ATNC == "0"}} checked="checked" {{/if}} />non
     </td>
     <th><label for="SHS" title="Code Administratif SHS">Code administratif</label></th>
     <td colspan="2">

@@ -33,7 +33,7 @@ for($i = $debutact; $i <= $finact; $i = mbDate("+1 MONTH", $i)) {
   $jscalls[] = "javascript:zoomGraphIntervention('$nameMonth');";
 }
 
-$sql = "SELECT * FROM sallesbloc WHERE stats = 1";
+$sql = "SELECT * FROM sallesbloc WHERE stats = '1'";
 if($salle_id)
   $sql .= "\nAND salle_id = '$salle_id'";
 $salles = db_loadlist($sql);
@@ -52,7 +52,7 @@ foreach($salles as $salle) {
     "\nON plagesop.salle_id = sallesbloc.salle_id" .
     "\nINNER JOIN operations" .
     "\nON operations.plageop_id = plagesop.plageop_id" .
-    "\nAND operations.annulee = 0" .
+    "\nAND operations.annulee = '0'" .
     "\nINNER JOIN users_mediboard" .
     "\nON operations.chir_id = users_mediboard.user_id" .
     "\nWHERE plagesop.date BETWEEN '$debutact' AND '$finact'";

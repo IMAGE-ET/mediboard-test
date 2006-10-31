@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPgestionCab";
-$config["mod_version"]     = "0.13";
+$config["mod_version"]     = "0.14";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -180,7 +180,55 @@ class CSetupdPgestionCab {
           $params[$key]->store();
         }
       case "0.13":
-        return "0.13";
+        $sql = "ALTER TABLE `employecab` " .
+               "\nCHANGE `employecab_id` `employecab_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
+               "\nCHANGE `prenom` `prenom` varchar(255) NOT NULL," .
+               "\nCHANGE `function` `function` varchar(255) NOT NULL," .
+               "\nCHANGE `adresse` `adresse` varchar(255) NULL," .
+               "\nCHANGE `cp` `cp` int(5) unsigned zerofill NULL," .
+               "\nCHANGE `ville` `ville` varchar(255) NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `fiche_paie` " .
+               "\nCHANGE `fiche_paie_id` `fiche_paie_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `params_paie_id` `params_paie_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `heures` `heures` tinyint(4) NOT NULL DEFAULT '0'," .
+               "\nCHANGE `heures_sup` `heures_sup` tinyint(4) NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `gestioncab` " .
+               "\nCHANGE `gestioncab_id` `gestioncab_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `libelle` `libelle` varchar(255) NOT NULL DEFAULT 'inconnu'," .
+               "\nCHANGE `rubrique_id` `rubrique_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `mode_paiement_id` `mode_paiement_id` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `mode_paiement` " .
+               "\nCHANGE `mode_paiement_id` `mode_paiement_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL DEFAULT 'inconnu';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `params_paie` " .
+               "\nCHANGE `params_paie_id` `params_paie_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `employecab_id` `employecab_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
+               "\nCHANGE `adresse` `adresse` varchar(255) NOT NULL," .
+               "\nCHANGE `cp` `cp` int(5) unsigned zerofill NOT NULL," .
+               "\nCHANGE `ville` `ville` varchar(255) NOT NULL," .
+               "\nCHANGE `siret` `siret` bigint(14) unsigned zerofill NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `rubrique_gestioncab` " .
+               "\nCHANGE `rubrique_id` `rubrique_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL DEFAULT 'divers';";
+        db_exec( $sql ); db_error();
+      case "0.14":
+        return "0.14";
     }
     return false;
   }

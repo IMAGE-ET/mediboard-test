@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPbloc";
-$config["mod_version"]     = "0.17";
+$config["mod_version"]     = "0.18";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -104,7 +104,22 @@ class CSetupdPbloc {
         $sql = "ALTER TABLE `plagesop` ADD `temps_inter_op` TIME NOT NULL DEFAULT '00:15:00' ;";
         db_exec( $sql ); db_error();
       case "0.17":
-        return "0.17";
+        $sql = "ALTER TABLE `plagesop` " .
+               "\nCHANGE `plageop_id` `plageop_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `anesth_id` `anesth_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `spec_id` `spec_id` int(11) unsigned NULL," .
+               "\nCHANGE `salle_id` `salle_id` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `sallesbloc` " .
+               "\nCHANGE `salle_id` `salle_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `group_id` `group_id` int(11) unsigned NOT NULL DEFAULT '1'," .
+               "\nCHANGE `stats` `stats` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `nom` `nom` varchar(255) NOT NULL;";
+        db_exec( $sql ); db_error();
+      case "0.18":
+        return "0.18";
     }
     return false;
   }

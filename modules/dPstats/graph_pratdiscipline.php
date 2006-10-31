@@ -47,7 +47,7 @@ foreach($users as $user) {
     "\nFROM plagesop" .
     "\nINNER JOIN operations" .
     "\nON operations.plageop_id = plagesop.plageop_id" .
-    "\nAND operations.annulee = 0" .
+    "\nAND operations.annulee = '0'" .
     "\nINNER JOIN users_mediboard" .
     "\nON plagesop.chir_id = users_mediboard.user_id" .
     "\nAND users_mediboard.user_id = '$id'" .

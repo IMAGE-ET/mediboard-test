@@ -117,7 +117,7 @@
         </td>
       </tr>
       {{/if}}
-      {{if $curr_sejour->chambre_seule == "o"}}
+      {{if $curr_sejour->chambre_seule}}
       <tr>
         <td class="date" style="background-color: #f55;" colspan="2">
           <strong>Chambre seule</strong>

@@ -57,7 +57,7 @@ class CPlageressource extends CMbObject {
       "fin"     => "time|notNull",
       "tarif"   => "currency|min|0|notNull|confidential",
       "libelle" => "str|confidential",
-      "paye"    => "enum|0|1"
+      "paye"    => "bool"
     );
   }
   

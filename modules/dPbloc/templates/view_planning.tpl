@@ -76,7 +76,7 @@ function printAdmission(id) {
           <td>{{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}}</td>
 		  <td class="text">{{$curr_op->rques|nl2br}}</td>
 		  <td class="text">
-		    {{if $curr_op->commande_mat == 'n' && $curr_op->materiel != ''}}<em>Materiel manquant:</em>{{/if}}
+		    {{if $curr_op->commande_mat == '0' && $curr_op->materiel != ''}}<em>Materiel manquant:</em>{{/if}}
 		    {{$curr_op->materiel|nl2br}}
 		  </td>
 		  <td>

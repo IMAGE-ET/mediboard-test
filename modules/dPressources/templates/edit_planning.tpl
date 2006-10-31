@@ -109,7 +109,7 @@ function pageMain() {
           <td><input type="text" name="libelle" value="{{$plage->libelle}}" title="{{$plage->_props.libelle}}" /></td>
           <th><label for="_hour_fin" title="Heure de fin">Fin:</label</th>
           <td>
-            <select name="_hour_fin">
+            <select name="_hour_fin" title="num|moreThan|_hour_deb">
               {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
               <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plage->_hour_fin}} selected="selected" {{/if}}>
               {{$curr_hour|string_format:"%02d"}}

@@ -12,7 +12,7 @@ global $AppUI, $m;
 $ajax  = mbGetValueFromPost("ajax", 0);
 $m     = mbGetValueFromPost("m", 0);
 $mode  = mbGetValueFromPost("mode", 0);
-$value = mbGetValueFromPost("value", "o");
+$value = mbGetValueFromPost("value", 1);
 $id    = mbGetValueFromPost("id", 0);
 
 $dateTime = mbDateTime();

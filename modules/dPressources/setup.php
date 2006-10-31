@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPressources";
-$config["mod_version"]     = "0.11";
+$config["mod_version"]     = "0.12";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -50,7 +50,15 @@ class CSetupdPressources {
         $sql = "ALTER TABLE `plageressource` ADD INDEX ( `prat_id` ) ;";
         db_exec($sql); db_error();
       case "0.11":
-        return "0.11";
+        $sql = "ALTER TABLE `plageressource` " .
+               "\nCHANGE `plageressource_id` `plageressource_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `prat_id` `prat_id` int(11) unsigned NULL," .
+               "\nCHANGE `paye` `paye` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `libelle` `libelle` varchar(255) NULL;";
+        db_exec( $sql ); db_error();
+        
+      case "0.12":
+        return "0.12";
       }
     return false;
   }

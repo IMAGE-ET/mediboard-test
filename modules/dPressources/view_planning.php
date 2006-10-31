@@ -54,7 +54,7 @@ if($isprat) {
       "\nFROM plageressource" .
       "\nWHERE prat_id = '$prat->user_id'" .
       "\nAND date < '".mbDate()."'" .
-      "\nAND paye = 0";
+      "\nAND paye = '0'";
   $result = db_loadlist($sql);
   $compte["impayes"]["total"] = $result[0]["total"];
   $compte["impayes"]["somme"] = $result[0]["somme"];
@@ -62,7 +62,7 @@ if($isprat) {
   $where = array();
   $where["prat_id"] = "= '$prat->user_id'";
   $where["date"] = "< '".mbDate()."'";
-  $where["paye"] = "= 0";
+  $where["paye"] = "= '0'";
   $compte["impayes"]["plages"] = $compte["impayes"]["plages"]->loadList($where, $order);
   // Plages bloquées
   $sql = "SELECT COUNT(plageressource_id) AS total," .

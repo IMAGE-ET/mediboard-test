@@ -68,7 +68,7 @@ function printAdmission(id) {
             {{else}}
             Non placé
             {{/if}}
-            ({{$curr_sejour->chambre_seule}})
+            ({{tr}}chambre_seule.{{$curr_sejour->chambre_seule}}{{/tr}})
           </td>
           <td class="text">{{$curr_sejour->rques}}</td>
           <td>

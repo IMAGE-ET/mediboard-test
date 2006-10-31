@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpmsi";
-$config["mod_version"]     = "0.13";
+$config["mod_version"]     = "0.14";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -69,7 +69,13 @@ class CSetupdPpmsi {
         $sql = "ALTER TABLE `ghm` ADD INDEX ( `sejour_id` ) ;";
         db_exec($sql); db_error();
       case "0.13":
-        return "0.13";
+        $sql = "ALTER TABLE `ghm` " .
+               "\nCHANGE `ghm_id` `ghm_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `sejour_id` `sejour_id` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+      case "0.14":
+        return "0.14";
     }
     return false;
   }

@@ -35,10 +35,6 @@ class CAppUI {
 /** @var string */
   var $user_last_name = null;
 /** @var string */
-  var $user_company = null;
-/** @var int */
-  var $user_department = null;
-/** @var string */
   var $user_email = null;
 /** @var int */
   var $user_type = null;
@@ -86,8 +82,6 @@ class CAppUI {
     $this->user_id = -1;
     $this->user_first_name = "";
     $this->user_last_name = "";
-    $this->user_company = 0;
-    $this->user_department = 0;
     $this->user_type = 0;
 
     $this->project_id = 0;
@@ -574,8 +568,6 @@ class CAppUI {
         "\n`user_id`, " .
         "\n`user_first_name`, " .
         "\n`user_last_name`, " .
-        "\n`user_company`, " .
-        "\n`user_department`, " .
         "\n`user_email`, " .
         "\n`user_type`" .
         "\nFROM `users`" .

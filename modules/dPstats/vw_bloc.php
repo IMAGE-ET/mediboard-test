@@ -37,7 +37,7 @@ $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
 
 $listSalles = new CSalle;
-$where["stats"] = "= 1";
+$where["stats"] = "= '1'";
 $order = "nom";
 $listSalles = $listSalles->loadList($where, $order);
 

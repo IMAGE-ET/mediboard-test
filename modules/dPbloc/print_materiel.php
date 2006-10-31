@@ -28,7 +28,7 @@ $order[] = "plagesop.date";
 $order[] = "rank";
 
 $where1 = $where;
-$where1["commande_mat"] = "!= 'o'";
+$where1["commande_mat"] = "!= '1'";
 $op1 = new COperation();
 $op1 = $op1->loadList($where1, $order, null, null, $ljoin);
 foreach($op1 as $key => $value) {
@@ -37,7 +37,7 @@ foreach($op1 as $key => $value) {
 }
 
 $where2 = $where;
-$where2["commande_mat"] = "!= 'n'";
+$where2["commande_mat"] = "!= '0'";
 $op2 = new COperation();
 $op2 = $op2->loadList($where2, $order, null, null, $ljoin);
 foreach($op2 as $key => $value) {

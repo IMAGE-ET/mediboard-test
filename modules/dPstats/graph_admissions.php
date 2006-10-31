@@ -41,7 +41,7 @@ foreach($services as $service) {
     "\nDATE_FORMAT(sejour.entre_prevue, '%Y%m') AS orderitem," .
     "\nservice.nom AS nom" .
     "\nFROM sejour, affectation, services, chambre, lit" .
-    "\nWHERE sejour.annule = 0" .
+    "\nWHERE sejour.annule = '0'" .
     "\nAND sejour.entree_prevue BETWEEN '$debut' AND '$fin'";
   if($prat_id)
     $sql .= "\nAND sejour.praticien_id = '$prat_id'";

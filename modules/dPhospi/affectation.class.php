@@ -48,8 +48,8 @@ class CAffectation extends CMbObject {
       "sejour_id" => "ref|notNull",
       "entree"    => "dateTime|notNull",
       "sortie"    => "dateTime|notNull",
-      "confirme"  => "enum|0|1",
-      "effectue"  => "enum|0|1"
+      "confirme"  => "bool",
+      "effectue"  => "bool"
     );
   }
 

@@ -37,7 +37,7 @@ class CFournisseur extends CMbObject {
       "adresse"    => "text",
       "codepostal" => "numchar|length|5",
       "ville"      => "str",
-      "telephone"  => "numchar|maxLength|25",
+      "telephone"  => "numchar|maxLength|10",
       "mail"       => "email",
       "nom"        => "str",
       "prenom"     => "str"

@@ -62,10 +62,10 @@ function pageMain() {
           <input type="hidden" name="a" value="do_edit_mat" />
           <input type="hidden" name="id" value="{{$curr_op->operation_id}}" />
           {{if $typeAff}}
-          <input type="hidden" name="value" value="n" />
+          <input type="hidden" name="value" value="0" />
   		    <button type="submit" class="cancel">annulé</button>
   		    {{else}}
-          <input type="hidden" name="value" value="o" />
+          <input type="hidden" name="value" value="1" />
           <button type="submit" class="submit">commandé</button>
     			{{/if}}
   			</form>

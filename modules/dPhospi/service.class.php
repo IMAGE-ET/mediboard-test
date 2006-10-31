@@ -37,7 +37,7 @@ class CService extends CMbObject {
     return array (
       "group_id"    => "ref|notNull",
       "nom"         => "str|notNull|confidential",
-      "description" => "str|confidential"
+      "description" => "text|confidential"
     );
   }
   

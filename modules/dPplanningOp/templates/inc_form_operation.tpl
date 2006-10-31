@@ -165,12 +165,12 @@
   </tr>
   
   <tr>
-    <th><label for="info_n">Information du patient</label></th>
+    <th><label for="info_0">Information du patient</label></th>
     <td colspan="2">
-      <input name="info" value="o" type="radio" {{if $op->info == "o"}} checked="checked" {{/if}}/>
-      <label for="info_o">Oui</label>
-      <input name="info" value="n" type="radio" {{if !$op->operation_id || $op->info == "n"}} checked="checked" {{/if}}/>
-      <label for="info_n">Non</label>
+      <input name="info" value="1" type="radio" {{if $op->info == "1"}} checked="checked" {{/if}}/>
+      <label for="info_1">Oui</label>
+      <input name="info" value="0" type="radio" {{if !$op->operation_id || $op->info == "0"}} checked="checked" {{/if}}/>
+      <label for="info_0">Non</label>
     </td>
   </tr>
 

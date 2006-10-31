@@ -36,7 +36,6 @@ class CConsultation extends CMbObject {
   var $rques         = null;
   var $examen        = null;
   var $traitement    = null;
-  var $compte_rendu  = null;
   var $premiere      = null;
   var $tarif         = null;
   var $type_tarif    = null;
@@ -71,22 +70,21 @@ class CConsultation extends CMbObject {
       "plageconsult_id" => "ref|notNull",
       "patient_id"      => "ref|notNull",
       "heure"           => "time|notNull",
-      "duree"           => "num",
+      "duree"           => "numchar|maxLength|1",
       "secteur1"        => "currency|min|0",
       "secteur2"        => "currency|min|0",
       "chrono"          => "enum|16|32|48|64|notNull",
-      "annule"          => "enum|0|1",
-      "paye"            => "enum|0|1",
+      "annule"          => "bool",
+      "paye"            => "bool",
       "date_paiement"   => "date",
       "motif"           => "text",
       "rques"           => "text",
       "examen"          => "text",
       "traitement"      => "text",
-      "compte_rendu"    => "html",
-      "premiere"        => "enum|0|1",
+      "premiere"        => "bool",
       "tarif"           => "str",
       "arrivee"         => "dateTime",
-      "type_tarif"      => "str" // En faire un enum
+      "type_tarif"      => "enum|cheque|CB|especes|tiers|autre"
     );
   }
   

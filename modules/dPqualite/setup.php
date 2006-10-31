@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]    = "dPqualite";
-$config["mod_version"] = "0.13";
+$config["mod_version"] = "0.14";
 $config["mod_type"]    = "user";
 $config["mod_config"]  = true;
 
@@ -164,7 +164,72 @@ class CSetupdPqualite {
         $sql = "ALTER TABLE `fiches_ei` ADD `suite_even_descr` TEXT DEFAULT NULL AFTER `suite_even`;";
         db_exec( $sql ); db_error();
       case "0.13":     
-        return "0.13";
+        $sql = "ALTER TABLE `doc_categories`" .
+               "\nCHANGE `doc_categorie_id` `doc_categorie_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `nom` `nom` varchar(50) NOT NULL," .
+               "\nCHANGE `code` `code` varchar(1) NOT NULL;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `doc_chapitres`" .
+               "\nCHANGE `doc_chapitre_id` `doc_chapitre_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `nom` `nom` varchar(50) NOT NULL," .
+               "\nCHANGE `code` `code` varchar(10) NOT NULL;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `doc_ged`" .
+               "\nCHANGE `doc_ged_id` `doc_ged_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `group_id` `group_id` int(11) UNSIGNED NOT NULL," .
+               "\nCHANGE `doc_chapitre_id` `doc_chapitre_id` int(11) UNSIGNED NOT NULL," .
+               "\nCHANGE `doc_theme_id` `doc_theme_id` int(11) UNSIGNED NOT NULL," .
+               "\nCHANGE `doc_categorie_id` `doc_categorie_id` int(11) UNSIGNED NOT NULL," .
+               "\nCHANGE `user_id` `user_id` int(11) UNSIGNED NOT NULL," .
+               "\nCHANGE `etat` `etat` enum('0','16','32','48','64') NOT NULL DEFAULT '16'," .
+               "\nCHANGE `annule` `annule` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `num_ref` `num_ref` int(11) NULL;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `doc_ged_suivi`" .
+               "\nCHANGE `doc_ged_suivi_id` `doc_ged_suivi_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `user_id` `user_id` int(11) UNSIGNED NOT NULL," .
+               "\nCHANGE `doc_ged_id` `doc_ged_id` int(11) UNSIGNED NOT NULL," .
+               "\nCHANGE `etat` `etat` enum('0','16','32','48','64') NOT NULL DEFAULT '16'," .
+               "\nCHANGE `actif` `actif` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `remarques` `remarques` text NOT NULL," .
+               "\nCHANGE `file_id` `file_id` int(11) UNSIGNED;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `ei_categories`" .
+               "\nCHANGE `ei_categorie_id` `ei_categorie_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `nom` `nom` varchar(50) NOT NULL;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `ei_item`" .
+               "\nCHANGE `ei_item_id` `ei_item_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `ei_categorie_id` `ei_categorie_id` int(11) UNSIGNED NOT NULL," .
+               "\nCHANGE `nom` `nom` varchar(50) NOT NULL;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `fiches_ei`" .
+               "\nCHANGE `fiche_ei_id` `fiche_ei_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `user_id` `user_id` int(11) UNSIGNED NOT NULL," .
+               "\nCHANGE `valid_user_id` `valid_user_id` int(11) UNSIGNED NULL," .
+               "\nCHANGE `service_valid_user_id` `service_valid_user_id` int(11) UNSIGNED NULL," .
+               "\nCHANGE `qualite_user_id` `qualite_user_id` int(11) UNSIGNED NULL," . 
+               "\nCHANGE `annulee` `annulee` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `date_fiche` `date_fiche` datetime NOT NULL," .
+               "\nCHANGE `date_incident` `date_incident` datetime NOT NULL," .
+               "\nCHANGE `evenements` `evenements` VARCHAR(255) NOT NULL," .
+               "\nCHANGE `lieu` `lieu` VARCHAR(50) NOT NULL," .
+               "\nCHANGE `elem_concerne_detail` `elem_concerne_detail` TEXT NOT NULL ," .
+               "\nCHANGE `descr_faits` `descr_faits` TEXT NOT NULL ," .
+               "\nCHANGE `mesures` `mesures` TEXT NOT NULL ," .
+               "\nCHANGE `degre_urgence` `degre_urgence` enum('1','2','3','4') NULL ," .
+               "\nCHANGE `descr_consequences` `descr_consequences` TEXT NOT NULL ," .
+               "\nCHANGE `qualite_date_verification` `qualite_date_verification` DATE NULL," .
+               "\nCHANGE `qualite_date_controle` `qualite_date_controle` DATE NULL;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `doc_themes`" .
+               "\nCHANGE `doc_theme_id` `doc_theme_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `nom` `nom` varchar(50) NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+        
+      case "0.14":     
+        return "0.14";
     }
     return false;
   }

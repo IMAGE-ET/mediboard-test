@@ -7,7 +7,7 @@
 
       <label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label>
       <select title="str|notNull" name="selClass" onchange="submit();">
-        <option value=""{{if !$selClass}} selected="selected"{{/if}}>&mdash; Tous les objets</option>
+        <option value=""{{if !$selClass}} selected="selected"{{/if}}>&mdash; Liste des erreurs</option>
         {{foreach from=$listClass item=curr_listClass}}
         <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{tr}}{{$curr_listClass}}{{/tr}}</option>
         {{/foreach}}

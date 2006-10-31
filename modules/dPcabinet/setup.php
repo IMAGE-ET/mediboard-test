@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.48";
+$config["mod_version"]     = "0.49";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -402,7 +402,82 @@ class CSetupdPcabinet {
                "\nADD `prepa_preop` TEXT;" ;
         db_exec( $sql ); db_error();
       case "0.48":
-        return "0.48";
+        set_time_limit(1800);
+        
+        $sql = "ALTER TABLE `consultation_anesth` " .
+               "\nCHANGE `consultation_anesth_id` `consultation_anesth_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `consultation_id` `consultation_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `operation_id` `operation_id` int(11) unsigned NULL," .
+               "\nCHANGE `poid` `poid` float unsigned NULL," .
+               "\nCHANGE `rhesus` `rhesus` enum('?','NEG','POS') NOT NULL DEFAULT '?'," .
+               "\nCHANGE `rai` `rai` enum('?','NEG','POS') NOT NULL DEFAULT '?'," .
+               "\nCHANGE `tasys` `tasys` int(5) unsigned zerofill NULL," .
+               "\nCHANGE `tadias` `tadias` int(5) unsigned zerofill NULL," .
+               "\nCHANGE `plaquettes` `plaquettes` int(7) unsigned zerofill NULL," .
+               "\nCHANGE `pouls` `pouls` mediumint(4) unsigned zerofill NULL," .
+               "\nCHANGE `ASA` `ASA` enum('1','2','3','4','5') NULL," .
+               "\nCHANGE `tca` `tca` tinyint(2) unsigned zerofill NULL," .
+               "\nCHANGE `tca_temoin` `tca_temoin` tinyint(2) unsigned zerofill NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `consultation_anesth` " .
+               "\nDROP `listCim10`;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `consultation` " .
+               "\nCHANGE `consultation_id` `consultation_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `plageconsult_id` `plageconsult_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `duree` `duree` tinyint(1) unsigned zerofill NOT NULL DEFAULT '1'," .
+               "\nCHANGE `annule` `annule` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `chrono` `chrono` enum('16','32','48','64') NOT NULL DEFAULT '16'," .
+               "\nCHANGE `paye` `paye` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `premiere` `premiere` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `tarif` `tarif` varchar(255) NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `consultation` " .
+               "\nDROP `compte_rendu`," .
+               "\nDROP `cr_valide`," .
+               "\nDROP `ordonnance`," .
+               "\nDROP `or_valide`," .
+               "\nDROP `courrier1`," .
+               "\nDROP `c1_valide`," .
+               "\nDROP `courrier2`," .
+               "\nDROP `c2_valide`;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `examaudio` " .
+               "\nCHANGE `examaudio_id` `examaudio_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `consultation_id` `consultation_id` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `exams_comp` " .
+               "\nCHANGE `exam_id` `exam_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `consultation_id` `consultation_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `fait` `fait` tinyint(4) NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `plageconsult` " .
+               "\nCHANGE `plageconsult_id` `plageconsult_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `libelle` `libelle` varchar(255) NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `tarifs` " .
+               "\nCHANGE `tarif_id` `tarif_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
+               "\nCHANGE `description` `description` varchar(255) NOT NULL," .
+               "\nCHANGE `secteur1` `secteur1` float NOT NULL;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `techniques_anesth` " .
+               "\nCHANGE `technique_id` `technique_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `consultation_anesth_id` `consultation_anesth_id` int(11) unsigned NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+      case "0.49":
+        return "0.49";
     }
     return false;
   }

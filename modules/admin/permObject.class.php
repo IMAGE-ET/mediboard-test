@@ -39,9 +39,9 @@ class CPermObject extends CMbObject {
   function getSpecs() {
     return array (
       "user_id"      => "ref|notNull",
-      "object_id"    => "num|notNull",
+      "object_id"    => "ref|notNull",
       "object_class" => "str|notNull",
-      "permission"   => "num|notNull"
+      "permission"   => "numchar|maxLength|1|notNull"
     );
   }
   

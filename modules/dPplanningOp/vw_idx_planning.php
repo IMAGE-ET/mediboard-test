@@ -46,7 +46,7 @@ $sql = "SELECT plagesop.*," .
 		"\nFROM plagesop" .
 		"\nLEFT JOIN operations" .
 		"\nON plagesop.plageop_id = operations.plageop_id" .
-    "\nAND operations.annulee = 0" .
+    "\nAND operations.annulee = '0'" .
 		"\nWHERE (plagesop.chir_id = '$selChirLogin' OR plagesop.spec_id = '$specialite')" .
 		"\nAND plagesop.date LIKE '".mbTranformTime("+ 0 day", $date, "%Y-%m")."-__'" .
 		"\nGROUP BY plagesop.plageop_id" .

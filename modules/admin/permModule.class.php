@@ -43,9 +43,9 @@ class CPermModule extends CMbObject {
   function getSpecs() {
     return array (
       "user_id"     => "ref|notNull",
-      "mod_id"      => "num|notNull",
-      "permission"  => "num|notNull",
-      "view"        => "num|notNull",
+      "mod_id"      => "ref|notNull",
+      "permission"  => "numchar|maxLength|1|notNull",
+      "view"        => "numchar|maxLength|1|notNull",
     );
   }
   

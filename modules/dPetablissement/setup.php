@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "dPetablissement";
-$config["mod_version"]     = "0.12";
+$config["mod_version"]     = "0.13";
 $config["mod_type"]        = "core";
 $config["mod_config"]      = false;
 
@@ -61,7 +61,14 @@ class CSetupdPetablissement {
             "\nADD `ape` VARCHAR( 4 ) DEFAULT NULL;";
         db_exec( $sql ); db_error();
       case "0.12":
-        return "0.12";
+        $sql = "ALTER TABLE `groups_mediboard` " .
+               "\nCHANGE `group_id` `group_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
+               "\nCHANGE `cp` `cp` int(5) unsigned zerofill NULL," .
+               "\nCHANGE `tel` `tel` bigint(10) unsigned zerofill NULL," .
+               "\nCHANGE `text` `text` varchar(255) NOT NULL;";
+        db_exec( $sql ); db_error();
+      case "0.13":
+        return "0.13";
     }
 
     return false;

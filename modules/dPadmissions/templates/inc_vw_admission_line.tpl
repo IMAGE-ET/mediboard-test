@@ -35,13 +35,13 @@
     <input type="hidden" name="otherm" value="dPadmissions" />
     <input type="hidden" name="dosql" value="do_edit_chambre" />
     <input type="hidden" name="id" value="{{$curr_adm->sejour_id}}" />
-    {{if $curr_adm->chambre_seule == 'o'}}
-    <input type="hidden" name="value" value="n" />
+    {{if $curr_adm->chambre_seule}}
+    <input type="hidden" name="value" value="0" />
     <button class="change" type="button" style="background-color: #f55;" onclick="submitAdmission(this.form);">
       simple
     </button>
     {{else}}
-    <input type="hidden" name="value" value="o" />
+    <input type="hidden" name="value" value="1" />
     <button class="change" type="button" onclick="submitAdmission(this.form);">
       double
     </button>
@@ -81,13 +81,13 @@
   <input type="hidden" name="dosql" value="do_edit_admis" />
   <input type="hidden" name="id" value="{{$curr_adm->sejour_id}}" />
   <input type="hidden" name="mode" value="saisie" />
-  {{if $curr_adm->saisi_SHS == "n"}}
-  <input type="hidden" name="value" value="o" />
+  {{if !$curr_adm->saisi_SHS}}
+  <input type="hidden" name="value" value="1" />
   <button class="tick" type="button" onclick="submitAdmission(this.form);">
     Saisi
   </button>
   {{else}}
-  <input type="hidden" name="value" value="n" />
+  <input type="hidden" name="value" value="0" />
   <button class="cancel" type="button" onclick="submitAdmission(this.form);">
     Annuler
   </button>
