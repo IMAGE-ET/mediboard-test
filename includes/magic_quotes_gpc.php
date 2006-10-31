@@ -1,24 +1,24 @@
 <?php
 
 /**
- * Recursively add slashes to array of strings
+ * Recursively applies a function to values of an array
  */
-function addslashes_deep(&$var) {
-  if (is_array($var)) {
-    array_map("addslashes_deep", $var);
+function array_map_recursive($function, $array) {
+  foreach ($array as $key => $value ) {
+    $array[$key] = is_array($value) ? 
+      array_map_recursive($function, $value) : 
+      $function($value);
   }
   
-  if (is_string($var)) {
-    $var = addslashes($var);
-  }
-}
- 
-// Emulates magic quotes when disabled
-if (!get_magic_quotes_gpc()) {
-  addslashes_deep($_GET);
-  addslashes_deep($_POST);
-  addslashes_deep($_COOKIE);
+  return $array;
 }
 
+// Emulates magic quotes when disabled
+if (!get_magic_quotes_gpc()) {
+  $_GET     = array_map_recursive("addslashes", $_GET    );
+  $_POST    = array_map_recursive("addslashes", $_POST   );
+  $_COOKIE  = array_map_recursive("addslashes", $_COOKIE );
+  $_REQUEST = array_map_recursive("addslashes", $_REQUEST);
+}
 
 ?>
