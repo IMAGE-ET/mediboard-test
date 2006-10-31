@@ -242,6 +242,7 @@ class CSetupdPpatients {
         $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'med', 'alle', 'trans', 'obst', 'chir', 'fam', 'anesth' ) NOT NULL DEFAULT 'med';";
         db_exec( $sql ); db_error();
       case "0.36":
+        set_time_limit(1800);
         $sql = "ALTER TABLE `antecedent` " .
                "\nCHANGE `antecedent_id` `antecedent_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0';";
