@@ -80,6 +80,9 @@
             </a>
           </td>
           <td {{if $vueReduite}}class="text"{{/if}}>
+            {{if $vueReduite}}
+            <a class="buttonprint notext" href="javascript:printFeuilleBloc({{$curr_operation->operation_id}})" style="float:right;"></a>
+            {{/if}}
             <a href="index.php?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
               {{$curr_operation->_ref_sejour->_ref_patient->_view}}
             </a>

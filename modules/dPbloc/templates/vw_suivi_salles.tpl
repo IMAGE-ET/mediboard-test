@@ -5,6 +5,12 @@ function pageMain() {
   PairEffect.initGroup("acteEffect");
 }
 
+function printFeuilleBloc(oper_id) {
+  var url = new Url;
+  url.setModuleAction("dPsalleOp", "print_feuille_bloc");
+  url.addParam("operation_id", oper_id);
+  url.popup(700, 600, 'FeuilleBloc');
+}
 </script>
 
 <table class="main">

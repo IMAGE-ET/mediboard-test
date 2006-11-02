@@ -74,6 +74,8 @@ class COperation extends CMbObject {
   var $_min_anesth     = null;
   var $_lu_type_anesth = null;
   var $_codes_ccam     = array();
+  var $_duree_interv   = null;
+  var $_presence_salle = null;
 
   // Shortcut fields
   var $_datetime = null;
@@ -214,6 +216,13 @@ class COperation extends CMbObject {
     }
     $this->_hour_anesth = substr($this->time_anesth, 0, 2);
     $this->_min_anesth  = substr($this->time_anesth, 3, 2);
+    
+    if($this->debut_op && $this->fin_op && $this->fin_op>$this->debut_op){
+      $this->_duree_interv = mbSubTime($this->debut_op,$this->fin_op);
+    }
+    if($this->entree_bloc && $this->sortie_bloc && $this->sortie_bloc>$this->entree_bloc){
+      $this->_presence_salle = mbSubTime($this->entree_bloc,$this->sortie_bloc);
+    }
   }
   
   function updateDBFields() {

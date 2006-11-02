@@ -110,14 +110,18 @@
         <tr>
           <td colspan="2">
             <table style="font-size: 100%;">
+              {{if $consult->_ref_consult_anesth->groupe!="?" || $consult->_ref_consult_anesth->rhesus!="?"}}
               <tr>
                 <th class="NotBold">Groupe sanguin</th>
                 <td class="Bold" style="white-space: nowrap;font-size:130%;">&nbsp;{{tr}}CConsultAnesth.groupe.{{$consult->_ref_consult_anesth->groupe}}{{/tr}} &nbsp;{{tr}}CConsultAnesth.rhesus.{{$consult->_ref_consult_anesth->rhesus}}{{/tr}}</td>
               </tr>
+              {{/if}}
+              {{if $consult->_ref_consult_anesth->rai && $consult->_ref_consult_anesth->rai!="?"}}
               <tr>
                 <th class="NotBold">RAI</th>
                 <td class="Bold" style="white-space: nowrap;font-size:130%;">&nbsp;{{tr}}CConsultAnesth.rai.{{$consult->_ref_consult_anesth->rai}}{{/tr}}</td>
               </tr>
+              {{/if}}
               <tr>
                 <th class="NotBold">ASA</th>
                 <td class="Bold">{{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}}</td>
@@ -128,15 +132,15 @@
                   {{if $consult->_ref_consult_anesth->_vst}}{{$consult->_ref_consult_anesth->_vst}} ml{{/if}}
                 </td>
               </tr>
+              {{if $consult->_ref_consult_anesth->_psa}}
               <tr>
                 <th class="NotBold">PSA</th>
                 <td class="Bold" style="white-space: nowrap;">
-                  {{if $consult->_ref_consult_anesth->_psa}}
                   {{$consult->_ref_consult_anesth->_psa}} ml/GR
-                  {{/if}}
                 </td>
                 <td colspan="2"></td>
               </tr>
+              {{/if}}
               <tr>
                 <th class="NotBold">Tabac</th>
                 <td colspan="3" class="Bold">{{$consult->_ref_consult_anesth->tabac|nl2br}}</td>
@@ -230,19 +234,19 @@
           <th class="category" colspan="6">Examens Clinique</th>
         </tr>
         <tr>
-          <th class="NotBold">Pouls</th>
+          <th class="NotBold">{{if $consult->_ref_consult_anesth->pouls}}Pouls{{/if}}</th>
           <td class="Bold" style="white-space: nowrap;">
             {{if $consult->_ref_consult_anesth->pouls}}
             {{$consult->_ref_consult_anesth->pouls}} / min
             {{/if}}
           </td>
-          <th class="NotBold">TA</th>
+          <th class="NotBold">{{if $consult->_ref_consult_anesth->tasys || $consult->_ref_consult_anesth->tadias}}TA{{/if}}</th>
           <td class="Bold" style="white-space: nowrap;">
             {{if $consult->_ref_consult_anesth->tasys || $consult->_ref_consult_anesth->tadias}}
             {{$consult->_ref_consult_anesth->tasys}} / {{$consult->_ref_consult_anesth->tadias}} cm Hg
             {{/if}}
           </td>
-          <th class="NotBold">Spo2</th>
+          <th class="NotBold">{{if $consult->_ref_consult_anesth->spo2}}Spo2{{/if}}</th>
           <td class="Bold" style="white-space: nowrap;">
             {{if $consult->_ref_consult_anesth->spo2}}
             {{$consult->_ref_consult_anesth->spo2}} %
@@ -420,7 +424,6 @@
   </tr>
   <tr>
     <td>
-      {{if $consult->_ref_examcomp|@count}}
       <table width="100%" style="font-size: 100%;">
         <tr>
           <th>
@@ -444,7 +447,6 @@
           </td>
         </tr>
       </table>
-      {{/if}}
       {{if $consult->rques}}
       <table width="100%" style="font-size: 100%;">
         <tr>
