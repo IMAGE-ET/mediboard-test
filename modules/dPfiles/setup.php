@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPfiles";
-$config["mod_version"]     = "0.15";
+$config["mod_version"]     = "0.16";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -191,7 +191,10 @@ class CSetupdPfiles {
         db_exec( $sql ); db_error();
         
       case "0.15":
-        return "0.15";
+        $sql = "ALTER TABLE `files_mediboard` ADD INDEX ( `file_object_id` );";
+        db_exec( $sql ); db_error();
+      case "0.16":
+        return "0.16";
     }
     return false;
   }
