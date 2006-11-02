@@ -93,8 +93,8 @@ class CConsultAnesth extends CMbObject {
       "traitements"     => "text|confidential",
       "tabac"           => "text",
       "oenolisme"       => "text",
-      "tasys"           => "numchar|maxLength|5",
-      "tadias"          => "numchar|maxLength|5",
+      "tasys"           => "num|max|64",
+      "tadias"          => "num|max|64",
       "intubation"      => "enum|?|dents|bouche|cou",
       "biologie"        => "enum|?|NF|COAG|IONO",
       "commande_sang"   => "enum|?|clinique|CTS|autologue",
@@ -153,6 +153,10 @@ class CConsultAnesth extends CMbObject {
   	
     $this->_sec_tsivy = intval(substr($this->tsivy, 6, 2));
     $this->_min_tsivy  = intval(substr($this->tsivy, 3, 2));
+
+    // Hack for ZEROFILL issue
+    $this->tasys  = intval($this->tasys);
+    $this->tadias = intval($this->tadias);
   }
    
   function updateDBFields() {
