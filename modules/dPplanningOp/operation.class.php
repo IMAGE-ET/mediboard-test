@@ -324,8 +324,6 @@ class COperation extends CMbObject {
       $ext_code_ccam->LoadLite();
       $this->_ext_codes_ccam[] = $ext_code_ccam;
     }
-    //$ext_code_ccam =& $this->_ext_codes_ccam[0];
-    //$code_ccam = @$this->_codes_ccam[0];
   }
   
   function loadRefsConsultAnesth() {

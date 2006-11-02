@@ -61,8 +61,8 @@
           {{if !$vueReduite}}
           <th>Intervention</th>
           <th>Coté</th>
-          {{/if}}
           <th>Durée</th>
+          {{/if}}
         </tr>
         {{foreach from=$curr_plage->_ref_operations item=curr_operation}}
         <tr>
@@ -93,8 +93,8 @@
             </a>
           </td>
           <td>{{tr}}COperation.cote.{{$curr_operation->cote}}{{/tr}}</td>
-          {{/if}}
           <td>{{$curr_operation->temp_operation|date_format:"%Hh%M"}}</td>
+          {{/if}}
         </tr>
         {{/foreach}}
       </table>
@@ -115,19 +115,21 @@
         <tr>
           <th>praticien</th>
           <th>Patient</th>
+          {{if !$vueReduite}}
           <th>Intervention</th>
           <th>Coté</th>
+          {{/if}}
         </tr>
         {{foreach from=$urgences item=curr_operation}}
         <tr>
           {{if $curr_operation->entree_bloc && $curr_operation->sortie_bloc}}
-          <td style="background-image:url(modules/dPsalleOp/images/ray.gif); background-repeat:repeat;">
+          <td class="text" style="background-image:url(modules/dPsalleOp/images/ray.gif); background-repeat:repeat;">
           {{elseif $curr_operation->entree_bloc}}
-          <td style="background-color:#cfc">
+          <td class="text" style="background-color:#cfc">
           {{elseif $curr_operation->sortie_bloc}}
-          <td style="background-color:#fcc">
+          <td class="text" style="background-color:#fcc">
           {{else}}
-          <td>
+          <td class="text">
           {{/if}}
             <a href="index.php?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
               {{$curr_operation->_ref_chir->_view}}
@@ -138,6 +140,7 @@
               {{$curr_operation->_ref_sejour->_ref_patient->_view}}
             </a>
           </td>
+          {{if !$vueReduite}}
           <td>
             <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_operation->operation_id}}" title="Modifier l'intervention">
               {{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
@@ -146,6 +149,7 @@
             </a>
           </td>
           <td>{{tr}}COperation.cote.{{$curr_operation->cote}}{{/tr}}</td>
+          {{/if}}
         </tr>
         {{/foreach}}
       </table>
