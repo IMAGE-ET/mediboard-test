@@ -93,7 +93,6 @@ function pageMain() {
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
-<input type="hidden" name="compte_rendu" value="{{$consult->compte_rendu}}" />
 <input type="hidden" name="annule" value="{{$consult->annule}}" />
 <input type="hidden" name="arrivee" value="" />
 <input type="hidden" name="chrono" value="{{$smarty.const.CC_PLANIFIE}}" />
