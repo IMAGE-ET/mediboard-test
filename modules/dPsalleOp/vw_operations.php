@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $g;
 
 if (!$canRead) {
 	$AppUI->redirect("m=system&a=access_denied");
@@ -27,7 +27,8 @@ $listChirs = $listChirs->loadPraticiens(PERM_READ);
 
 // Selection des salles
 $listSalles = new CSalle;
-$listSalles = $listSalles->loadList();
+$where = array("group_id"=>"= '$g'");
+$listSalles = $listSalles->loadList($where);
 
 // Selection des plages opératoires de la journée
 $plages = new CplageOp;
@@ -107,6 +108,7 @@ $smarty = new CSmartyDP(1);
 
 $smarty->debugging = false;
 
+$smarty->assign("vueReduite"    , false                   );
 $smarty->assign("salle"         , $salle                   );
 $smarty->assign("listSalles"    , $listSalles              );
 $smarty->assign("listAnesthType", $listAnesthType          );
