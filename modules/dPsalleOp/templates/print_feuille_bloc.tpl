@@ -89,7 +89,7 @@
           </td>
         </tr>
         <tr>
-          <th>Personnels</th>
+          <th>Personnel</th>
           <td class="text">
             Non Disponible
           </td>
@@ -231,7 +231,7 @@
           </td>
         </tr>
         <tr>
-          <th>Entrée salle réveil</th>
+          <th>Durée d'intervention</th>
           <td class="halfPane">
             {{if $operation->_duree_interv}}
               {{$operation->_duree_interv|date_format:"%Hh%M"}}
@@ -261,7 +261,7 @@
         <tr>
           <td class="text" style="{{$styleBorder}}">
             <strong>{{$currActe->code_acte}}</strong><br />
-            {{$currActe->_ref_code_ccam->libelleCourt}}
+            {{$currActe->_ref_code_ccam->libelleLong}}
           </td>
           <td class="text" style="{{$styleBorder}}">{{$currActe->_ref_executant->_view}}</td>
           <td style="{{$styleBorder}}">{{$currActe->code_activite}}</td>
