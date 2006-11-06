@@ -7,7 +7,7 @@
   </td>
   <td class="action">
     {{if $canEdit}}
-      <input type="radio" id="lit{{$curr_lit->lit_id}}" onclick="selectLit({{$curr_lit->lit_id}})" />
+      <input name="choixLit" type="radio" id="lit{{$curr_lit->lit_id}}" onclick="selectLit({{$curr_lit->lit_id}})" />
     {{/if}}
   </td>
 </tr>

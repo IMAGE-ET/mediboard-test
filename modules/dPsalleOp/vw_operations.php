@@ -58,6 +58,7 @@ $where["salle_id"] = "= '$salle'";
 $order = "chir_id";
 $urgences = $urgences->loadList($where);
 foreach($urgences as $keyOp => $curr_op) {
+  $urgences[$keyOp]->loadRefChir();
   $urgences[$keyOp]->loadRefSejour();
   $urgences[$keyOp]->_ref_sejour->loadRefPatient();
   $urgences[$keyOp]->loadRefCCAM();
