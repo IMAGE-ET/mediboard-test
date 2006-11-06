@@ -36,14 +36,15 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
                 <input type="hidden" name="dosql" value="do_planning_aed" />
                 <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
                 <input type="hidden" name="del" value="0" />
-	            <input name="sortie_bloc" size="5" type="text" value="{{$curr_op->sortie_bloc|date_format:"%H:%M"}}">
+	            <input name="sortie_salle" size="5" type="text" value="{{$curr_op->sortie_salle|date_format:"%H:%M"}}">
 	            <button class="tick notext" type="submit"></button>
 	          </form>
             {{else}}
-              {{$curr_op->sortie_bloc|date_format:"%Hh%M"}}
+              {{$curr_op->sortie_salle|date_format:"%Hh%M"}}
             {{/if}}
           </td>
           <td class="button">
+            {{if $canEdit || $modif_operation}}
             <form name="editEntreeReveilFrm{{$curr_op->operation_id}}" action="index.php?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="dosql" value="do_planning_aed" />
@@ -52,6 +53,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
               <input type="hidden" name="entree_reveil" value="" />
               <button class="tick notext" type="submit" onclick="this.form.entree_reveil.value = 'current'"></button>
             </form>
+            {{else}}-{{/if}}
           </td>
         </tr>
         {{/foreach}}

@@ -39,14 +39,14 @@ $listPlages = $plage->loadList($where, $order);
 foreach($listPlages as $keyPlage => $curr_plage) {
   $listPlages[$keyPlage]->loadRefs(0);
   $listPlages[$keyPlage]->loadRefsFwd();
-  $listPlages[$keyPlage]->loadRefsBack(0, "entree_bloc");
+  $listPlages[$keyPlage]->loadRefsBack(0, "entree_salle");
   $i = 1;
   foreach($listPlages[$keyPlage]->_ref_operations as $keyOp => $curr_op) {
     $listPlages[$keyPlage]->_ref_operations[$keyOp]->_rank_reel = $i;
     $i++;
     $next = next($listPlages[$keyPlage]->_ref_operations);
     if($next !== false) {
-      $listPlages[$keyPlage]->_ref_operations[$keyOp]->_pat_next = $next->entree_bloc;
+      $listPlages[$keyPlage]->_ref_operations[$keyOp]->_pat_next = $next->entree_salle;
     } else {
       $listPlages[$keyPlage]->_ref_operations[$keyOp]->_pat_next = null;
     }

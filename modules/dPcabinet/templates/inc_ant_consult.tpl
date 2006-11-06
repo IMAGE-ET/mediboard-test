@@ -153,7 +153,7 @@ function incAntecedantsMain() {
             <img id="editAntFrm_date_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
           </td>
           <td rowspan="2">
-            <textarea name="rques"></textarea>
+            <textarea name="rques" onblur="if(this.value!=''){submitAnt(this.form);dateAntecedent();}"></textarea>
           </td>
         </tr>
         <tr>
@@ -164,7 +164,7 @@ function incAntecedantsMain() {
         </tr>
         <tr>
           <td class="button" colspan="3">
-            <button class="submit" type="button" onclick="submitAnt(this.form);dateAntecedent();">Ajouter</button>
+            <button class="submit" type="button" onclick="if(this.form.rques.value!=''){submitAnt(this.form);dateAntecedent();}">Ajouter</button>
           </td>
         </tr>
       </table>
@@ -198,7 +198,7 @@ function incAntecedantsMain() {
             <img id="editTrmtFrm_debut_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
           <td rowspan="2">
-            <textarea name="traitement"></textarea>
+            <textarea name="traitement" onblur="if(this.value!=''){submitAnt(this.form);finTrmt();}"></textarea>
           </td>
         </tr>
         <tr>
@@ -214,7 +214,7 @@ function incAntecedantsMain() {
         </tr>
         <tr>
           <td class="button" colspan="3">
-            <button class="submit" type="button" onclick="submitAnt(this.form);finTrmt();">Ajouter</button>
+            <button class="submit" type="button" onclick="if(this.form.traitement.value!=''){submitAnt(this.form);finTrmt();}">Ajouter</button>
           </td>
         </tr>
       </table>

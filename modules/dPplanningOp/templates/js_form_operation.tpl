@@ -288,7 +288,6 @@ function cancelOperation() {
 }
   
 function incFormOperationMain() {
-  regFieldCalendar("editOp", "date_anesth");
   refreshListCCAM();
   if({{$modurgence && !$op->operation_id}}) {
     updateEntreePrevue();

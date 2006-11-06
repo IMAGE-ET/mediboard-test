@@ -69,6 +69,13 @@ $sejours = $sejours->loadListByReq($sejourReq);
 $listDays = array();
 $listPrats = array();
 
+// Liste des services
+$services = new CService;
+$where = array();
+$where["group_id"] = "= '$g'";
+$order = "nom";
+$services = $services->loadListWithPerms(PERM_READ,$where, $order);
+
 foreach ($sejours as $key => &$sejour) {
   $sejour->loadRefsAffectations();
   $sejour->loadRefsOperations();
@@ -77,6 +84,9 @@ foreach ($sejours as $key => &$sejour) {
   $sejour->_ref_first_affectation->_ref_lit->loadCompleteView();
 
   if ($service && ($sejour->_ref_first_affectation->_ref_lit->_ref_chambre->service_id != $service)) {
+    unset($sejours[$key]);
+    continue;
+  }elseif(!$service && $sejour->_ref_first_affectation->affectation_id && !in_array($sejour->_ref_first_affectation->_ref_lit->_ref_chambre->service_id,array_keys($services))){
     unset($sejours[$key]);
     continue;
   } 

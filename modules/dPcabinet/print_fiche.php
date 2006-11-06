@@ -47,11 +47,52 @@ foreach($patient->_ref_antecedents as $keyAnt => $currAnt){
   $listAnt[$currAnt->type][$keyAnt] = $currAnt;
 }
 
+// Affichage des données
+$listChamps = array(
+                1=>array("hb","ht","ht_final","plaquettes"),
+                2=>array("creatinine","_clairance","na","k"),
+                3=>array("tp","tca","tsivy","ecbu")
+                );
+$cAnesth =& $consult->_ref_consult_anesth;
+foreach($listChamps as $keyCol=>$aColonne){
+	foreach($aColonne as $keyChamp=>$champ){
+	  $verifchamp = true;
+    if($champ=="tca"){
+	    $champ2 = $cAnesth->tca_temoin;
+	  }else{
+	    $champ2 = false;
+      if(($champ=="ecbu" && $cAnesth->ecbu=="?") || ($champ=="tsivy" && $cAnesth->tsivy=="00:00:00")){
+        $verifchamp = false;
+      }
+	  }
+    $champ_exist = $champ2 || ($verifchamp && $cAnesth->$champ);
+    if(!$champ_exist){
+      unset($listChamps[$keyCol][$keyChamp]);
+    }
+	}
+}
+//Tableau d'unités
+$unites = array();
+$unites["hb"]         = array("nom"=>"Hb","unit"=>"g/dl");
+$unites["ht"]         = array("nom"=>"Ht","unit"=>"%");
+$unites["ht_final"]   = array("nom"=>"Ht final","unit"=>"%");
+$unites["plaquettes"] = array("nom"=>"Plaquettes","unit"=>"");
+$unites["creatinine"] = array("nom"=>"Créatinine","unit"=>"mg/l");
+$unites["_clairance"] = array("nom"=>"Clairance de Créatinine","unit"=>"ml/min");
+$unites["na"]         = array("nom"=>"Na+","unit"=>"mmol/l");
+$unites["k"]          = array("nom"=>"K+","unit"=>"mmol/l");
+$unites["tp"]         = array("nom"=>"TP","unit"=>"%");
+$unites["tca"]        = array("nom"=>"TCA","unit"=>"s");
+$unites["tsivy"]      = array("nom"=>"TS Ivy","unit"=>"");
+$unites["ecbu"]       = array("nom"=>"ECBU","unit"=>"");
+
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("consult", $consult);
-$smarty->assign("listAnt", $listAnt);
+$smarty->assign("unites"    , $unites);
+$smarty->assign("listChamps", $listChamps);
+$smarty->assign("consult"   , $consult);
+$smarty->assign("listAnt"   , $listAnt);
 
 $smarty->display("print_fiche.tpl");
 ?>

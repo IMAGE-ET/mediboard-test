@@ -76,8 +76,8 @@ function reloadListTech() {
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$techniquesComp->_aides.technique}}
       </select><br />
-      <textarea name="technique"></textarea>
-      <button class="submit" type="button" onclick="submitTech(this.form);">Ajouter</button>
+      <textarea name="technique" onblur="if(this.value!=''){submitTech(this.form);}"></textarea>
+      <button class="submit" type="button" onclick="if(this.form.technique.value!=''){submitTech(this.form);}">Ajouter</button>
       </form>
     </td>
     <td class="text" rowspan="2" id="listTech">

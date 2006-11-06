@@ -44,8 +44,6 @@ class COperation extends CMbObject {
   var $materiel       = null;
   var $commande_mat   = null;
   var $info           = null;
-  var $date_anesth    = null;
-  var $time_anesth    = null;
   var $type_anesth    = null;  
   var $ATNC           = null;
   var $rques          = null;
@@ -56,11 +54,12 @@ class COperation extends CMbObject {
   
   //timings enregistrés
   var $entree_bloc    = null;
+  var $entree_salle   = null;
   var $pose_garrot    = null;
   var $debut_op       = null;
   var $fin_op         = null;
   var $retrait_garrot = null;
-  var $sortie_bloc    = null;
+  var $sortie_salle   = null;
   var $entree_reveil  = null;
   var $sortie_reveil  = null;
   var $induction      = null;
@@ -70,8 +69,6 @@ class COperation extends CMbObject {
   var $_min_op         = null;
   var $_hour_urgence   = null;
   var $_min_urgence    = null;
-  var $_hour_anesth    = null;
-  var $_min_anesth     = null;
   var $_lu_type_anesth = null;
   var $_codes_ccam     = array();
   var $_duree_interv   = null;
@@ -113,15 +110,13 @@ class COperation extends CMbObject {
       "libelle"        => "str|confidential",
       "cote"           => "notNull|enum|droit|gauche|bilatéral|total",
       "temp_operation" => "time",
-      "entree_bloc"    => "time",
-      "sortie_bloc"    => "time",
+      "entree_salle"    => "time",
+      "sortie_salle"    => "time",
       "time_operation" => "time",
       "examen"         => "text|confidential",
       "materiel"       => "text|confidential",
       "commande_mat"   => "bool",
       "info"           => "bool",
-      "date_anesth"    => "date",
-      "time_anesth"    => "time",
       "type_anesth"    => "ref",
       "ATNC"           => "bool",
       "rques"          => "text|confidential",
@@ -134,7 +129,8 @@ class COperation extends CMbObject {
       "retrait_garrot" => "time",
       "entree_reveil"  => "time",
       "sortie_reveil"  => "time",
-      "induction"      => "time"
+      "induction"      => "time",
+      "entree_bloc"    => "time"
     );
   }
   
@@ -214,14 +210,12 @@ class COperation extends CMbObject {
       $anesth->load($this->type_anesth);;
       $this->_lu_type_anesth = $anesth->name;
     }
-    $this->_hour_anesth = substr($this->time_anesth, 0, 2);
-    $this->_min_anesth  = substr($this->time_anesth, 3, 2);
     
     if($this->debut_op && $this->fin_op && $this->fin_op>$this->debut_op){
       $this->_duree_interv = mbSubTime($this->debut_op,$this->fin_op);
     }
-    if($this->entree_bloc && $this->sortie_bloc && $this->sortie_bloc>$this->entree_bloc){
-      $this->_presence_salle = mbSubTime($this->entree_bloc,$this->sortie_bloc);
+    if($this->entree_salle && $this->sortie_salle && $this->sortie_salle>$this->entree_salle){
+      $this->_presence_salle = mbSubTime($this->entree_salle,$this->sortie_salle);
     }
   }
   
@@ -238,11 +232,6 @@ class COperation extends CMbObject {
       }
       $this->codes_ccam = implode("|", $codes_ccam);
     }
-  	if($this->_hour_anesth !== null and $this->_min_anesth !== null) {
-      $this->time_anesth = 
-        $this->_hour_anesth.":".
-        $this->_min_anesth.":00";
-  	}
     if($this->_hour_op !== null and $this->_min_op !== null) {
       $this->temp_operation = 
         $this->_hour_op.":".
@@ -474,12 +463,12 @@ class COperation extends CMbObject {
     $template->addProperty("Opération - date"                 , mbTranformTime(null, $this->_datetime, $dateFormat));
     $template->addProperty("Opération - heure"                , mbTranformTime(null, $this->time_operation, $timeFormat));
     $template->addProperty("Opération - durée"                , mbTranformTime(null, $this->temp_operation, $timeFormat));
-    $template->addProperty("Opération - entrée bloc"          , mbTranformTime(null, $this->entree_bloc, $timeFormat));
+    $template->addProperty("Opération - entrée bloc"          , mbTranformTime(null, $this->entree_salle, $timeFormat));
     $template->addProperty("Opération - pose garrot"          , mbTranformTime(null, $this->pose_garrot, $timeFormat));
     $template->addProperty("Opération - début op"             , mbTranformTime(null, $this->debut_op, $timeFormat));
     $template->addProperty("Opération - fin op"               , mbTranformTime(null, $this->fin_op, $timeFormat));
     $template->addProperty("Opération - retrait garrot"       , mbTranformTime(null, $this->retrait_garrot, $timeFormat));
-    $template->addProperty("Opération - sortie bloc"          , mbTranformTime(null, $this->sortie_bloc, $timeFormat));
+    $template->addProperty("Opération - sortie bloc"          , mbTranformTime(null, $this->sortie_salle, $timeFormat));
     $template->addProperty("Opération - depassement"          , $this->depassement);
     $template->addProperty("Opération - exams pre-op"         , nl2br($this->examen));
     $template->addProperty("Opération - matériel"             , nl2br($this->materiel));

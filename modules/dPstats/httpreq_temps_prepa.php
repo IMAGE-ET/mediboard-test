@@ -34,15 +34,15 @@ db_exec("TRUNCATE `temps_prepa`"); db_error();
 foreach($listPrats as $_prat) {
   //Récupération des opérations par chirurgien
   
-  $sql="SELECT operations.plageop_id,TIME_TO_SEC(entree_bloc) AS sec_entree, " .
-  	"\nTIME_TO_SEC(sortie_bloc) AS sec_sortie" .
+  $sql="SELECT operations.plageop_id,TIME_TO_SEC(entree_salle) AS sec_entree, " .
+  	"\nTIME_TO_SEC(sortie_salle) AS sec_sortie" .
     "\nFROM operations" .
     "\nINNER JOIN plagesop" .
     "\nON operations.plageop_id = plagesop.plageop_id" .
     "\nWHERE operations.chir_id = '$_prat->user_id'" .
     "\nAND annulee = '0'" .
-    "\nAND entree_bloc IS NOT NULL" .
-    "\nAND sortie_bloc IS NOT NULL";
+    "\nAND entree_salle IS NOT NULL" .
+    "\nAND sortie_salle IS NOT NULL";
     
     switch($intervalle) {
       case "month":

@@ -22,7 +22,7 @@ $listSpec = $listSpec->loadSpecialites(PERM_READ);
 $listServ = new CService();
 $where = array();
 $where["group_id"] = "= '$g'";
-$listServ = $listServ->loadlist($where);
+$listServ = $listServ->loadListWithPerms(PERM_READ,$where);
 
 // Création du template
 $smarty = new CSmartyDP(1);

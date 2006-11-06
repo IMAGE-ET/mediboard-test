@@ -17,9 +17,18 @@ if(!$canRead) {
 $vue       = mbGetValueFromGetOrSession("vue"      , 0);
 $typeOrder = mbGetValueFromGetOrSession("typeOrder", 1);
 
+// Liste des services
+$services = new CService;
+$where = array();
+$where["group_id"] = "= '$g'";
+$order = "nom";
+$services = $services->loadListWithPerms(PERM_READ,$where, $order);
+
 // Récupération de la journée à afficher
 $date  = mbGetValueFromGetOrSession("date" , mbDate());
 
+$where = array();
+$ljoin = array();
 $limit1 = $date." 00:00:00";
 $limit2 = $date." 23:59:59";
 $ljoin["sejour"]   = "sejour.sejour_id = affectation.sejour_id";
@@ -30,6 +39,7 @@ $ljoin["service"]  = "service.service_id = chambre.service_id";
 $where["sortie"]   = "BETWEEN '$limit1' AND '$limit2'";
 $where["type"]     = "!= 'exte'";
 $where["service.group_id"] = "= '$g'";
+$where["service.service_id"] = db_prepare_in(array_keys($services));
 if ($vue) {
   $where["confirme"] = "= '0'";
 }
@@ -44,14 +54,24 @@ $deplacements = new CAffectation;
 $deplacements = $deplacements->loadList($where, $order, null, null, $ljoin);
 foreach($deplacements as $key => $value) {
   $deplacements[$key]->loadRefsFwd();
+  
   if(!$deplacements[$key]->_ref_next->affectation_id) {
     unset($deplacements[$key]);
   } else {
     $deplacements[$key]->_ref_sejour->loadRefsFwd();
     $deplacements[$key]->_ref_sejour->_ref_praticien->loadRefsFwd();
     $deplacements[$key]->_ref_lit->loadCompleteView();
+    $deplacements[$key]->_ref_lit->loadRefChambre();
     $deplacements[$key]->_ref_next->loadRefsFwd();
     $deplacements[$key]->_ref_next->_ref_lit->loadCompleteView();
+    $deplacements[$key]->_ref_next->_ref_lit->loadRefChambre();
+    
+    $service_actuel    = $deplacements[$key]->_ref_lit->_ref_chambre->service_id;
+    $service_transfert = $deplacements[$key]->_ref_next->_ref_lit->_ref_chambre->service_id;
+    
+    if(!in_array($service_actuel,array_keys($services)) && !in_array($service_transfert,array_keys($services))){
+      unset($deplacements[$key]);
+    }
   }
 }
 

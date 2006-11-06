@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 function pageMain() {
-  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&op=0&date=");
   PairEffect.initGroup("acteEffect");
 }
 
@@ -26,7 +26,11 @@ function pageMain() {
         <tr>
           <th>Actes</th>
           <td class="text">
+          {{if $canEdit || $modif_operation}}
           {{include file="inc_manage_codes.tpl"}}
+          {{else}}
+          Il n'est pas possible de modifier les actes d'une intervention antérieure.
+          {{/if}}
           </td>
         </tr>
         <tr>

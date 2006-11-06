@@ -249,7 +249,7 @@ function pageMain() {
           <th rowspan="6">Heures</th>
           <th>Entrée en salle</th>
           <td>
-            {{$curr_op->entree_bloc|date_format:"%Hh%M"}}
+            {{$curr_op->entree_salle|date_format:"%Hh%M"}}
           </td>
           <td rowspan="6">
             <form name="editPatFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -406,7 +406,7 @@ function pageMain() {
         <tr>
           <th>Sortie de salle</th>
           <td>
-            {{$curr_op->sortie_bloc|date_format:"%Hh%M"}}
+            {{$curr_op->sortie_salle|date_format:"%Hh%M"}}
           </td>
         </tr>
         <tr>

@@ -127,8 +127,8 @@
         <tr>
           <th>Entrée en salle</th>
           <td class="halfPane">
-            {{if $operation->entree_bloc}}
-              {{$operation->entree_bloc|date_format:"%Hh%M"}}
+            {{if $operation->entree_salle}}
+              {{$operation->entree_salle|date_format:"%Hh%M"}}
             {{else}}
             &mdash;
             {{/if}}
@@ -187,8 +187,8 @@
         <tr>
           <th>Sortie de salle</th>
           <td class="halfPane">
-            {{if $operation->sortie_bloc}}
-              {{$operation->sortie_bloc|date_format:"%Hh%M"}}
+            {{if $operation->sortie_salle}}
+              {{$operation->sortie_salle|date_format:"%Hh%M"}}
             {{else}}
             &mdash;
             {{/if}}

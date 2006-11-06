@@ -1,6 +1,9 @@
       <table class="form">
         <tr>
-          <th class="category">{{$listReveil|@count}} patients en salle de reveil</th>
+          <th class="category">
+            {{if $hour}}<div style="float: right;">{{$hour|date_format:"%Hh%M"}}</div>{{/if}}
+            {{$listReveil|@count}} patients en salle de reveil
+          </th>
         </tr>
       </table>
 
@@ -34,11 +37,11 @@
                 <input type="hidden" name="dosql" value="do_planning_aed" />
                 <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
                 <input type="hidden" name="del" value="0" />
-	            <input name="sortie_bloc" size="5" type="text" value="{{$curr_op->sortie_bloc|date_format:"%H:%M"}}">
+	            <input name="sortie_salle" size="5" type="text" value="{{$curr_op->sortie_salle|date_format:"%H:%M"}}">
 	            <button class="tick notext" type="submit"></button>
 	          </form>
             {{else}}
-            {{$curr_op->sortie_bloc|date_format:"%Hh%M"}}
+            {{$curr_op->sortie_salle|date_format:"%Hh%M"}}
             {{/if}}
           </td>
           <td class="button">
@@ -50,7 +53,8 @@
               {{if $canEdit}}
 	          <input name="entree_reveil" size="5" type="text" value="{{$curr_op->entree_reveil|date_format:"%H:%M"}}">
 	          <button class="tick notext" type="submit"></button>
-              {{else}}
+	          <button class="cancel notext" type="submit" onclick="this.form.entree_reveil.value = ''"></button>
+              {{elseif $modif_operation}}
               <select name="entree_reveil" onchange="this.form.submit()">
                 <option value="">-</option>
                 {{foreach from=$timing.$key.entree_reveil|smarty:nodefaults item=curr_time}}
@@ -59,11 +63,14 @@
                 </option>
                 {{/foreach}}
               </select>
-              {{/if}}
               <button class="cancel notext" type="submit" onclick="this.form.entree_reveil.value = ''"></button>
+              {{else}}
+                {{$curr_op->entree_reveil|date_format:"%Hh%M"}}
+              {{/if}}
             </form>
           </td>
           <td class="button">
+            {{if $canEdit || $modif_operation}}
             <form name="editEntreeReveilFrm{{$curr_op->operation_id}}" action="index.php?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="dosql" value="do_planning_aed" />
@@ -72,6 +79,7 @@
               <input type="hidden" name="sortie_reveil" value="" />
               <button class="tick notext" type="submit" onclick="this.form.sortie_reveil.value = 'current'"></button>
             </form>
+            {{else}}-{{/if}}
           </td>
         </tr>
         {{/foreach}}

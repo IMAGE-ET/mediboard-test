@@ -66,12 +66,14 @@
         </tr>
         {{foreach from=$curr_plage->_ref_operations item=curr_operation}}
         <tr>
-          {{if $curr_operation->entree_bloc && $curr_operation->sortie_bloc}}
+          {{if $curr_operation->entree_salle && $curr_operation->sortie_salle}}
           <td style="background-image:url(modules/dPsalleOp/images/ray.gif); background-repeat:repeat;">
-          {{elseif $curr_operation->entree_bloc}}
+          {{elseif $curr_operation->entree_salle}}
           <td style="background-color:#cfc">
-          {{elseif $curr_operation->sortie_bloc}}
+          {{elseif $curr_operation->sortie_salle}}
           <td style="background-color:#fcc">
+          {{elseif $curr_operation->entree_bloc}}
+          <td style="background-color:#ffa">
           {{else}}
           <td>
           {{/if}}
@@ -125,11 +127,11 @@
         </tr>
         {{foreach from=$urgences item=curr_operation}}
         <tr>
-          {{if $curr_operation->entree_bloc && $curr_operation->sortie_bloc}}
+          {{if $curr_operation->entree_salle && $curr_operation->sortie_salle}}
           <td class="text" style="background-image:url(modules/dPsalleOp/images/ray.gif); background-repeat:repeat;">
-          {{elseif $curr_operation->entree_bloc}}
+          {{elseif $curr_operation->entree_salle}}
           <td class="text" style="background-color:#cfc">
-          {{elseif $curr_operation->sortie_bloc}}
+          {{elseif $curr_operation->sortie_salle}}
           <td class="text" style="background-color:#fcc">
           {{else}}
           <td class="text">

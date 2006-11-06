@@ -174,32 +174,6 @@
     </td>
   </tr>
 
-  <tr>
-    <th class="category" colspan="3">RDV d'anesthésie</th>
-  </tr>
-
-  <tr>
-    <th>
-      <label for="date_anesth" title="Choisir une date rendez-vous d'anesthésie">Date de RdV</label>
-    </th>
-    <td class="date">
-      <div id="editOp_date_anesth_da">{{$op->date_anesth|date_format:"%d/%m/%Y"}}</div>
-      <input type="hidden" name="date_anesth" title="{{$op->_props.date_anesth}}" value="{{$op->date_anesth}}" onchange="modifOp()" />
-      <img id="editOp_date_anesth_trigger" src="./images/calendar.gif" alt="calendar"/>
-    </td>
-    <td colspan="2">
-      à
-      <select name="_hour_anesth">
-      {{foreach from=$hours|smarty:nodefaults item=hour}}
-        <option {{if $op->_hour_anesth == $hour}} selected="selected" {{/if}}>{{$hour}}</option>
-      {{/foreach}}
-      </select> h      <select name="_min_anesth">
-      {{foreach from=$mins|smarty:nodefaults item=min}}
-        <option {{if $op->_min_anesth == $min}} selected="selected" {{/if}}>{{$min}}</option>
-      {{/foreach}}
-      </select> mn
-    </td>
-  </tr>
 </table>
 
 </form>

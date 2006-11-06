@@ -16,6 +16,8 @@ if (!$canRead) {
 $salle = mbGetValueFromGetOrSession("salle");
 $op    = mbGetValueFromGetOrSession("op");
 $date  = mbGetValueFromGetOrSession("date", mbDate());
+$date_now = mbDate();
+$modif_operation = $date>=$date_now;
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;
@@ -86,12 +88,12 @@ if($op) {
   }*/
   $selOp->_ref_plageop->loadRefsFwd();
   // Tableau des timings
-  $timing["entree_bloc"]    = array();
+  $timing["entree_salle"]    = array();
   $timing["pose_garrot"]    = array();
   $timing["debut_op"]       = array();
   $timing["fin_op"]         = array();
   $timing["retrait_garrot"] = array();
-  $timing["sortie_bloc"]    = array();
+  $timing["sortie_salle"]    = array();
   $timing["induction"]      = array();
   foreach($timing as $key => $value) {
     for($i = -10; $i < 10 && $selOp->$key !== null; $i++) {
@@ -120,6 +122,7 @@ $smarty->assign("urgences"      , $urgences                );
 $smarty->assign("selOp"         , $selOp                   );
 $smarty->assign("timing"        , $timing                  );
 $smarty->assign("date"          , $date                    );
+$smarty->assign("modif_operation", $modif_operation        );
 
 $smarty->display("vw_operations.tpl");
 

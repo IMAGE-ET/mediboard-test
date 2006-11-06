@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.57";
+$config["mod_version"]     = "0.58";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -651,7 +651,19 @@ class CSetupdPplanningOp {
         db_exec( $sql ); db_error();
       
       case "0.57":
-        return "0.57";
+        $sql = "ALTER TABLE `operations` " .
+               "\nDROP `date_anesth`," .
+               "\nDROP `time_anesth`;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `operations` " .
+               "\nCHANGE `entree_bloc` `entree_salle` time NULL," .
+               "\nCHANGE `sortie_bloc` `sortie_salle` time NULL," .
+               "\nADD `entree_bloc` time NULL;";
+        db_exec( $sql ); db_error();
+      
+      case "0.58":
+        return "0.58";
     }
     return false;
   }

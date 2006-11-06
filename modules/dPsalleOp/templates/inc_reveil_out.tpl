@@ -34,11 +34,11 @@
               <input type="hidden" name="dosql" value="do_planning_aed" />
               <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
               <input type="hidden" name="del" value="0" />
-	          <input name="sortie_bloc" size="5" type="text" value="{{$curr_op->sortie_bloc|date_format:"%H:%M"}}">
+	          <input name="sortie_salle" size="5" type="text" value="{{$curr_op->sortie_salle|date_format:"%H:%M"}}">
 	          <button class="tick notext" type="submit"></button>
             </form>
             {{else}}
-            {{$curr_op->sortie_bloc|date_format:"%Hh%M"}}
+            {{$curr_op->sortie_salle|date_format:"%Hh%M"}}
             {{/if}}
           </td>
           <td class="button">
@@ -64,7 +64,8 @@
               {{if $canEdit}}
 	          <input name="sortie_reveil" size="5" type="text" value="{{$curr_op->sortie_reveil|date_format:"%H:%M"}}">
 	          <button class="tick notext" type="submit"></button>
-              {{else}}
+	          <button class="cancel notext" type="submit" onclick="this.form.sortie_reveil.value = ''"></button>
+              {{elseif $modif_operation}}
               <select name="sortie_reveil" onchange="this.form.submit()">
                 <option value="">-</option>
                 {{foreach from=$timing.$key.sortie_reveil|smarty:nodefaults item=curr_time}}
@@ -73,8 +74,10 @@
                 </option>
                 {{/foreach}}
               </select>
-              {{/if}}
               <button class="cancel notext" type="submit" onclick="this.form.sortie_reveil.value = ''"></button>
+              {{else}}
+                {{$curr_op->sortie_reveil|date_format:"%Hh%M"}}
+              {{/if}}
             </form>
           </td>
         </tr>

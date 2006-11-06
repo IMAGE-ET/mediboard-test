@@ -156,7 +156,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 
     $mbOpDebut = mbGetValue(
       $mbOp->debut_op, 
-      $mbOp->entree_bloc, 
+      $mbOp->entree_salle, 
       $mbOp->time_operation
     );
     

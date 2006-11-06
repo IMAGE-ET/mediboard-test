@@ -131,7 +131,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     
     $mbOpDebut = mbGetValue(
       $mbOp->debut_op, 
-      $mbOp->entree_bloc, 
+      $mbOp->entree_salle, 
       $mbOp->time_operation
     );
     
@@ -141,7 +141,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     
     $mbOpFin   = mbGetValue(
       $mbOp->fin_op, 
-      $mbOp->sortie_bloc, 
+      $mbOp->sortie_salle, 
       mbAddTime($mbOp->temp_operation, $mbOp->time_operation)
     );
     

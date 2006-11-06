@@ -67,8 +67,8 @@ function reloadListExamComp() {
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$examComp->_aides.examen}}
       </select><br />
-      <textarea name="examen"></textarea>
-      <button class="submit" type="button" onclick="submitExamComp(this.form);">Ajouter</button>
+      <textarea name="examen" onblur="if(this.value!=''){submitExamComp(this.form);}"></textarea>
+      <button class="submit" type="button" onclick="if(this.form.examen.value!=''){submitExamComp(this.form);}">Ajouter</button>
       </form>
     </td>
     <td class="text" id="listExamComp" rowspan="2">

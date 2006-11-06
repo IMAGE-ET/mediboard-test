@@ -15,6 +15,8 @@ if (!$canRead) {
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $hour = mbTime(null);
+$date_now = mbDate();
+$modif_operation = $date>=$date_now;
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;
@@ -39,9 +41,9 @@ $timing = array();
 $listOps = new COperation;
 $where = array();
 $where[] = "`plageop_id` ".db_prepare_in(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
-$where["sortie_bloc"] = "IS NOT NULL";
+$where["sortie_salle"] = "IS NOT NULL";
 $where["entree_reveil"] = "IS NULL";
-$order = "sortie_bloc";
+$order = "sortie_salle";
 $listOps = $listOps->loadList($where, $order);
 foreach($listOps as $key => $value) {
   $listOps[$key]->loadRefsFwd();
@@ -68,6 +70,7 @@ $smarty->assign("listOps"       , $listOps                 );
 $smarty->assign("timing"        , $timing                  );
 $smarty->assign("date"          , $date                    );
 $smarty->assign("hour"          , $hour                    );
+$smarty->assign("modif_operation", $modif_operation);
 
 $smarty->display("inc_reveil_ops.tpl");
 

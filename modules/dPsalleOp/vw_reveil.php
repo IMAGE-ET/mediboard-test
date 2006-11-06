@@ -14,6 +14,9 @@ if (!$canRead) {
 }
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
+$date_now = mbDate();
+$modif_operation = $date>=$date_now;
+$hour = null;
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;
@@ -90,14 +93,16 @@ foreach($listOut as $key => $value) {
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("listSalles"    , $listSalles              );
-$smarty->assign("listAnesths"   , $listAnesths             );
-$smarty->assign("listChirs"     , $listChirs               );
-$smarty->assign("plages"        , $plages                  );
-$smarty->assign("listReveil"    , $listReveil              );
-$smarty->assign("listOut"       , $listOut                 );
-$smarty->assign("timing"        , $timing                  );
-$smarty->assign("date"          , $date                    );
+$smarty->assign("listSalles"    , $listSalles  );
+$smarty->assign("listAnesths"   , $listAnesths );
+$smarty->assign("listChirs"     , $listChirs   );
+$smarty->assign("plages"        , $plages      );
+$smarty->assign("listReveil"    , $listReveil  );
+$smarty->assign("listOut"       , $listOut     );
+$smarty->assign("timing"        , $timing      );
+$smarty->assign("date"          , $date        );
+$smarty->assign("hour"          , $hour        );
+$smarty->assign("modif_operation", $modif_operation);
 
 $smarty->display("vw_reveil.tpl");
 

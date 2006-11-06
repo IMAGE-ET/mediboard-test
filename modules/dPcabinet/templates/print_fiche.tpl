@@ -339,85 +339,36 @@
 
       <table width="100%" style="font-size: 100%;">
         <tr>
-          <th class="category" colspan="6">
+          <th class="category" colspan="3">
             Examens Complémentaires
           </th>
         </tr>
+        
         <tr>
-          <th class="NotBold">Hb</th>
-          <td class="Bold" style="white-space: nowrap;">
-            {{if $consult->_ref_consult_anesth->hb}}
-            {{$consult->_ref_consult_anesth->hb}} g/dl
-            {{/if}}
+        {{foreach from=$listChamps item=aChamps}}
+          <td>
+            <table style="font-size: 100%;">
+            {{foreach from=$aChamps item=champ}}
+              {{assign var="donnees" value=$unites.$champ}}
+              <tr>
+                <th class="NotBold">{{$donnees.nom}}</th>
+                <td class="Bold" style="white-space: nowrap;">
+                  {{if $champ=="tca"}}
+                    {{$consult->_ref_consult_anesth->tca_temoin}} s / {{$consult->_ref_consult_anesth->tca}}
+                  {{elseif $champ=="tsivy"}}
+                    {{$consult->_ref_consult_anesth->tsivy|date_format:"%Mm%Ss"}}
+                  {{elseif $champ=="ecbu"}}
+                    {{tr}}CConsultAnesth.ecbu.{{$consult->_ref_consult_anesth->ecbu}}{{/tr}}
+                  {{else}}
+                    {{$consult->_ref_consult_anesth->$champ}}
+                  {{/if}}
+                  {{$donnees.unit}}
+                </td>
+              </tr>
+            {{/foreach}}
+            </table>
           </td>
-          <th class="NotBold">Créatinine</th>
-          <td class="Bold" style="white-space: nowrap;">
-            {{if $consult->_ref_consult_anesth->creatinine}}
-            {{$consult->_ref_consult_anesth->creatinine}} mg/l
-            {{/if}}
-          </td>
-          <th class="NotBold">TP</th>
-          <td class="Bold" style="white-space: nowrap;">
-            {{if $consult->_ref_consult_anesth->tp}}
-            {{$consult->_ref_consult_anesth->tp}} %
-            {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <th class="NotBold">Ht</th>
-          <td class="Bold">
-            {{if $consult->_ref_consult_anesth->ht}}
-            {{$consult->_ref_consult_anesth->ht}} %
-            {{/if}}
-          </td>
-          <th class="NotBold">
-            Clairance de Créatinine
-          </th>
-          <td class="Bold" style="white-space: nowrap;">
-            {{if $consult->_ref_consult_anesth->_clairance}}
-            {{$consult->_ref_consult_anesth->_clairance}} ml/min
-            {{/if}}
-          </td>
-          <th class="NotBold">TCA</th>
-          <td class="Bold" style="white-space: nowrap;">
-            {{if $consult->_ref_consult_anesth->tca_temoin || $consult->_ref_consult_anesth->tca}}
-            {{$consult->_ref_consult_anesth->tca_temoin}} s / {{$consult->_ref_consult_anesth->tca}} s
-            {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <th class="NotBold">Ht final</th>
-          <td class="Bold">
-            {{if $consult->_ref_consult_anesth->ht_final}}
-            {{$consult->_ref_consult_anesth->ht_final}} %
-            {{/if}}
-          </td>
-          <th class="NotBold">Na+</th>
-          <td class="Bold" style="white-space: nowrap;">
-            {{if $consult->_ref_consult_anesth->na}}
-            {{$consult->_ref_consult_anesth->na}} mmol/l
-            {{/if}}
-          </td>
-          <th class="NotBold">TS Ivy</th>
-          <td class="Bold" style="white-space: nowrap;">
-            {{$consult->_ref_consult_anesth->tsivy|date_format:"%Mm%Ss"}}
-          </td>
-        </tr>
-        <tr>
-          <th class="NotBold">Plaquettes</th>
-          <td class="Bold" style="white-space: nowrap;">
-            {{$consult->_ref_consult_anesth->plaquettes}}
-          </td>
-          <th class="NotBold">K+</th>
-          <td class="Bold" style="white-space: nowrap;">
-            {{if $consult->_ref_consult_anesth->k}}
-            {{$consult->_ref_consult_anesth->k}} mmol/l
-            {{/if}}
-          </td>
-          <th class="NotBold">ECBU</th>
-          <td class="Bold">
-            {{tr}}CConsultAnesth.ecbu.{{$consult->_ref_consult_anesth->ecbu}}{{/tr}}
-          </td>
+        {{/foreach}}
         </tr>
       </table>
     </td>

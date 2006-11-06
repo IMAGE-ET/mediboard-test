@@ -64,7 +64,7 @@ foreach($datax as $x) {
 }
 
 $doneHours = array();
-$sql = "SELECT SUM(TIME_TO_SEC(operations.sortie_bloc) - TIME_TO_SEC(operations.entree_bloc)) AS total," .
+$sql = "SELECT SUM(TIME_TO_SEC(operations.sortie_salle) - TIME_TO_SEC(operations.entree_salle)) AS total," .
   "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .
   "\nDATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem" .
   "\nFROM plagesop" .

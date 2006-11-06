@@ -65,7 +65,7 @@ class CService extends CMbObject {
     if(!$this->_ref_group) {
       $this->loadRefsFwd();
     }
-    return ($this->_ref_group->getPerm($permType));
+    return (CPermObject::getPermObject($this, $permType) && $this->_ref_group->getPerm($permType));
   }
   
   function canDelete(&$msg, $oid = null) {

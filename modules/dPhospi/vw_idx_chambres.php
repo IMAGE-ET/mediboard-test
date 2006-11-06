@@ -28,7 +28,7 @@ $services = new CService;
 $where = array();
 $where["group_id"] = "= '$g'";
 $order = "nom";
-$services = $services->loadList($where, $order);
+$services = $services->loadListWithPerms(PERM_READ,$where, $order);
 foreach ($services as $service_id => $service) {
   $services[$service_id]->loadRefs();
   $chambres =& $services[$service_id]->_ref_chambres;

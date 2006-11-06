@@ -23,6 +23,14 @@ $date_recherche = mbGetValueFromGetOrSession("date_recherche", mbDateTime());
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
 
+// Liste des services
+$services = new CService;
+$where = array();
+$where["group_id"] = "= '$g'";
+$order = "nom";
+$services = $services->loadListWithPerms(PERM_READ,$where, $order);
+
+
 //
 // Cas de l'affichage des lits libres
 //
@@ -55,6 +63,7 @@ $sql = "SELECT lit.nom AS lit, chambre.nom AS chambre, service.nom AS service, M
 		"\nON service.service_id = chambre.service_id" .
 		"\nWHERE lit.lit_id NOT IN($notIn)" .
     "\nAND service.group_id = '$g'" .
+    "\nAND service.service_id " . db_prepare_in(array_keys($services)) .
 		"\nGROUP BY lit.lit_id" .
 		"\nORDER BY service.nom, limite DESC, chambre.nom, lit.nom";
 $libre = db_loadlist($sql);
@@ -80,7 +89,8 @@ if ($typeVue == 1) {
 		"\nON sejour.sejour_id = affectation.sejour_id" .
 		"\nWHERE affectation.entree < '$date 23:59:59'" .
 		"\nAND affectation.sortie > '$date 00:00:00'" .
-		"\nAND sejour.praticien_id = '$selPrat'" .
+		"\nAND service.service_id " . db_prepare_in(array_keys($services)) .
+    "\nAND sejour.praticien_id = '$selPrat'" .
     "\nAND sejour.group_id = '$g'" .
 		"\nORDER BY service.nom, chambre.nom, lit.nom";
   $listAff = new CAffectation;
