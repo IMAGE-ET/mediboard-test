@@ -60,18 +60,22 @@ if($serviceSel->load($service_id)){
     foreach($listOps as $key => $value) {
       $oper =& $listOps[$key];
       // Chargement des infos de l'opération
+      $oper->loadRefChir();
       $oper->loadRefSejour();
       $oper->_ref_sejour->loadRefsFwd();
-      $oper->_ref_sejour->loadRefsAffectations();   
+      $oper->_ref_sejour->loadRefsAffectations();
+      $oper->_ref_sejour->_curr_affectation = null;   
       if(count($oper->_ref_sejour->_ref_affectations)){
         $dans_service = false;
         foreach($oper->_ref_sejour->_ref_affectations as $keyAff=>$currAff){
           $affect =& $oper->_ref_sejour->_ref_affectations[$keyAff];          
           if(mbDate($affect->entree) <= $date_suivi && mbDate($affect->sortie) >= $date_suivi && in_array($affect->lit_id,$listLit)){
-          	$dans_service = true;
+          	$affect->loadRefLit();
+            $affect->_ref_lit->loadCompleteView();
+            $oper->_ref_sejour->_curr_affectation =& $affect;
           }
         }
-        if(!$dans_service){
+        if(!$oper->_ref_sejour->_curr_affectation){
           unset($listOps[$key]);
         }
       }else{

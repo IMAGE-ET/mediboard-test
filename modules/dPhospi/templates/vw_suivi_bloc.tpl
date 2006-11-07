@@ -30,11 +30,14 @@ function pageMain() {
 {{if $listOps|@count}}
 <table class="tbl">  
   <tr>
+    <th class="category">Praticien</th>
     <th class="category">Patient</th>
     <th class="category">Etat</th>
+    <th class="category">Chambre</th>
   </tr>
   {{foreach from=$listOps item=currOp}}
   <tr>
+    <td>Dr. {{$currOp->_ref_chir->_view}}</td>
     <td>{{$currOp->_ref_sejour->_ref_patient->_view}}</td>
     <td>
       {{if !$currOp->entree_bloc && !$currOp->entree_salle}}       En Attente d'entrée au Bloc
@@ -45,6 +48,7 @@ function pageMain() {
       {{else}}                                                     Sorti du Bloc
       {{/if}}
     </td>
+    <td>{{$currOp->_ref_sejour->_curr_affectation->_ref_lit->_view}}</td>
   </tr>
   {{/foreach}}
 </table>
