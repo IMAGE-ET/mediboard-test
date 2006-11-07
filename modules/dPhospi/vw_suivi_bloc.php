@@ -14,7 +14,7 @@ if(!$canRead) {
 }
 
 $service_id = mbGetValueFromGetOrSession("service_id", null); 
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date_suivi = mbGetValueFromGetOrSession("date_suivi", mbDate());
 $listOps = array();
 
 // Liste des services
@@ -48,13 +48,13 @@ if($serviceSel->load($service_id)){
     // Selection des plages opératoires de la journée
     $plages = new CplageOp;
     $where = array();
-    $where["date"] = "= '$date'";
+    $where["date"] = "= '$date_suivi'";
     $plages = $plages->loadList($where);
     
     // Listes des opérations
     $listOps = new COperation;
     $where = array();
-    $where[] = "`plageop_id` ".db_prepare_in(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
+    $where[] = "`plageop_id` ".db_prepare_in(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date_suivi')";
     $order = "time_operation";
     $listOps = $listOps->loadList($where,$order);
     foreach($listOps as $key => $value) {
@@ -67,7 +67,7 @@ if($serviceSel->load($service_id)){
         $dans_service = false;
         foreach($oper->_ref_sejour->_ref_affectations as $keyAff=>$currAff){
           $affect =& $oper->_ref_sejour->_ref_affectations[$keyAff];          
-          if($affect->entree<=$date && $affect->sortie>=$date && in_array($affect->lit_id,$listLit)){
+          if(mbDate($affect->entree) <= $date_suivi && mbDate($affect->sortie) >= $date_suivi && in_array($affect->lit_id,$listLit)){
           	$dans_service = true;
           }
         }
@@ -85,6 +85,7 @@ if($serviceSel->load($service_id)){
 // Création du template
 $smarty = new CSmartyDP(1);
 
+$smarty->assign("date_suivi"  , $date_suivi);
 $smarty->assign("listOps"     , $listOps);
 $smarty->assign("service_id"  , $service_id);
 $smarty->assign("serviceSel"  , $serviceSel);

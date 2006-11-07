@@ -1,3 +1,11 @@
+<script type="text/javascript">
+
+function pageMain() {
+  regRedirectPopupCal("{{$date_suivi}}", "index.php?m={{$m}}&tab={{$tab}}&date_suivi=");
+}
+
+</script>
+
 <form name="chgService" action="?m={{$m}}" method="get">
 <input type="hidden" name="m" value="{{$m}}" />
 <table class="main">
@@ -12,6 +20,9 @@
         </option>
         {{/foreach}}
       </select>
+      le
+      {{$date_suivi|date_format:"%A %d %B %Y"}}
+      <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
   </tr>
 </table>
