@@ -40,12 +40,12 @@ function pageMain() {
     <td>Dr. {{$currOp->_ref_chir->_view}}</td>
     <td>{{$currOp->_ref_sejour->_ref_patient->_view}}</td>
     <td>
-      {{if !$currOp->entree_bloc && !$currOp->entree_salle}}       En Attente d'entrée au Bloc
-      {{elseif $currOp->entree_bloc && !$currOp->entree_salle}}    Entré au Bloc
-      {{elseif $currOp->entree_salle && !$currOp->sortie_salle}}   En Salle d'Op
-      {{elseif $currOp->sortie_salle && !$currOp->entree_reveil}}  En Attente Salle de Réveil
-      {{elseif $currOp->entree_reveil && !$currOp->sortie_reveil}} En Salle de Réveil
-      {{else}}                                                     Sorti du Bloc
+      {{if !$currOp->entree_bloc && !$currOp->entree_salle}}       En attente d'entrée au bloc
+      {{elseif $currOp->entree_bloc && !$currOp->entree_salle}}    Entré(e) au bloc
+      {{elseif $currOp->entree_salle && !$currOp->sortie_salle}}   En salle d'op
+      {{elseif $currOp->sortie_salle && !$currOp->entree_reveil}}  En attente salle de réveil
+      {{elseif $currOp->entree_reveil && !$currOp->sortie_reveil}} En salle de réveil
+      {{else}}                                                     Sorti(e) du bloc
       {{/if}}
     </td>
     <td>{{$currOp->_ref_sejour->_curr_affectation->_ref_lit->_view}}</td>
