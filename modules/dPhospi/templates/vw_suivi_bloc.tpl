@@ -13,7 +13,7 @@ function pageMain() {
     <th>
       <label for="service_id">Service</label>
       <select name="service_id" onchange="submit()">
-        <option value="">&mdash; Veuillez sélectionner un service</option>
+        <option value="0">&mdash; Tous les services</option>
         {{foreach from=$services item=currService}}
         <option value="{{$currService->service_id}}" {{if $currService->service_id==$service_id}}selected="selected"{{/if}}>
           {{$currService->nom}}
@@ -27,15 +27,20 @@ function pageMain() {
   </tr>
 </table>
 
-{{if $listOps|@count}}
-<table class="tbl">  
+<table class="tbl"> 
+{{foreach from=$affOper key=keyServ item=currService}} 
+  {{if $service_id==0}}
+  <tr>
+    <th class="title" colspan="4">{{$services.$keyServ->nom}}</th>
+  </th>
+  {{/if}}
   <tr>
     <th class="category">Praticien</th>
     <th class="category">Patient</th>
     <th class="category">Etat</th>
     <th class="category">Chambre</th>
   </tr>
-  {{foreach from=$listOps item=currOp}}
+  {{foreach from=$currService item=currOp}}
   <tr>
     <td>Dr. {{$currOp->_ref_chir->_view}}</td>
     <td>{{$currOp->_ref_sejour->_ref_patient->_view}}</td>
@@ -51,6 +56,6 @@ function pageMain() {
     <td>{{$currOp->_ref_sejour->_curr_affectation->_ref_lit->_view}}</td>
   </tr>
   {{/foreach}}
+{{/foreach}}
 </table>
-{{/if}}
 </form>
