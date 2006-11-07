@@ -9,6 +9,10 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
+if (!$canEdit) {
+  $AppUI->redirect( "m=system&a=access_denied" );
+}
+
 $deb = mbDate();
 $fin = mbDate("+ 0 day");
 
