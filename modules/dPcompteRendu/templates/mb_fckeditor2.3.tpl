@@ -11,18 +11,17 @@ FCKConfig.Debug = false;
 
 // Toolbar Configuration
 FCKConfig.ToolbarSets["Default"] = [
-	['Source','DocProps','-','Save','NewPage','Preview'],
-	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
+	['Save','Preview'],
+	['Cut','Copy','Paste','PasteText','PasteWord','-','Print'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-	['OrderedList','UnorderedList','-','Outdent','Indent'],
-	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Link','Unlink'],
-	['Table','Rule','Smiley','SpecialChar','PageBreak','UniversalKey'],
+	['Table','Rule','Smiley','SpecialChar','mbPageBreak'],
+	['FitWindow','Source','About'],
 	'/',
-	['Style','FontFormat','FontName','FontSize'],
-	['TextColor','BGColor'],
-	['FitWindow','-','About','mbPageBreak']
+	['FontFormat','FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+	['OrderedList','UnorderedList','-','Outdent','Indent'],
+	['TextColor','BGColor']
 ] ;
 
 // Add properties Combo
@@ -92,7 +91,6 @@ for (var i = 0; i < aMbCombos.length; i++) {
   aMbToolbar.push(aMbCombos[i].commandName);
 }
 aToolbarSet.push(aMbToolbar);
-
 
 FCKConfig.Plugins.Add( 'mbpagebreak', 'en,fr', sMbPluginsPath ) ;
 FCKConfig.Plugins.Add( 'mbcombo2.3.2', 'en,fr', sMbPluginsPath ) ;

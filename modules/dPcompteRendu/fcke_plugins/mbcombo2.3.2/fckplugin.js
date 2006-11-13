@@ -11,7 +11,6 @@
 if (!FCKBrowserInfo.IsIE && bAutoSelectSpans) {
   FCK.EditorDocument.addEventListener('click', clickListener, true ) ;
 }*/
-  
 
 for (var i = 0; i < aMbCombos.length; i++) {
 
@@ -53,7 +52,7 @@ for (var i = 0; i < aMbCombos.length; i++) {
   //Inherit from FCKToolbarSpecialCombo.
   FCKToolbarMbCombo.prototype = new FCKToolbarSpecialCombo;
   FCKToolbarMbCombo.prototype.GetLabel = function() {
-    return this.commandLabel;
+    return this.CommandLabel;
   }
   
   FCKToolbarMbCombo.prototype.CreateItems = function( targetSpecialCombo ) {
