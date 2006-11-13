@@ -43,7 +43,7 @@ FCKToolbarMbPageBreak.prototype.GetLabel = function() {
 
 var oMbPageBreakItem = new FCKToolbarMbPageBreak ;
 
-oMbPageBreakItem.IconPath = sMbPluginsPath + 'mbpagebreak/images/mbpagebreak.gif';
+oMbPageBreakItem.IconPath = sMbPluginsPath + 'mbpagebreak/images/mbpageBreak2.3.2.gif';
 
 // Registers toolbar item object
 FCKToolbarItems.RegisterItem("mbPageBreak", oMbPageBreakItem) ;

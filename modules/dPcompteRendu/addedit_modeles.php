@@ -43,6 +43,7 @@ if($compte_rendu->object_id){
 }
 // Gestion du modèle
 $templateManager = new CTemplateManager;
+$templateManager->editor = "fckeditor2.3.2";
 if ($compte_rendu->compte_rendu_id) {
   $prat_id = $compte_rendu->chir_id;
   $templateManager->valueMode = false;

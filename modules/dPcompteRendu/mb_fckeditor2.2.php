@@ -3,7 +3,7 @@ $mbPath = "../../";
 $m = "dPcompteRendu";
 $dPconfig = array();
 
-$connectorPath = "lib/fckeditor/editor/filemanager/browser/default/connectors/php/config.php";
+$connectorPath = "lib/fckeditor2.2/editor/filemanager/browser/default/connectors/php/config.php";
 require_once($mbPath . $connectorPath);
 
 $runningUserFilePath  = $Config['UserFilesPath'];
@@ -68,6 +68,6 @@ $smarty->assign("configAlert"     , $configAlert);
 $smarty->assign("templateManager" , $templateManager);
 $smarty->assign("mb_version_build", $mb_version_build);
 
-$smarty->display("mb_fckeditor.tpl");
+$smarty->display("mb_fckeditor2.2.tpl");
 
 ?>

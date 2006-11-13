@@ -549,7 +549,7 @@ function mbRemoveAccents( $str ) {
  * @return void */
 function mbRemoveValuesInArray($needle, &$haystack) {
   while(($key = array_search($needle,  $haystack)) !== false) {
-    array_splice($haystack, $key, 1);
+    unset($haystack[$key]);
   }
 }
 
