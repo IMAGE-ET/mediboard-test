@@ -2,7 +2,7 @@
 
 /**
 * @package Mediboard
-* @subpackage dPprotocoles
+* @subpackage dPsalleOp
 * @version $Revision: 331 $
 * @author Romain Ollivier
 */
