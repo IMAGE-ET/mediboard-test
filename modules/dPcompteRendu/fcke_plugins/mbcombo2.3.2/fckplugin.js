@@ -42,7 +42,9 @@ for (var i = 0; i < aMbCombos.length; i++) {
   var FCKToolbarMbCombo = function() {
     this.Command =  FCKCommands.GetCommand(oMbCombo.commandName);
     this.options = oMbCombo.options;
-    this.commandLabel = oMbCombo.commandLabel;
+    this.CommandName  = oMbCombo.commandName;
+    this.CommandLabel = oMbCombo.commandLabel;
+
     // Format combo way
     this.Style = FCK_TOOLBARITEM_ICONTEXT ;
     this.PanelWidth = 300 ;
