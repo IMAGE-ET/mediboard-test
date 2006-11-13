@@ -27,7 +27,7 @@ function printAdmission(id) {
     <td>
       <strong>
         {{$key_day|date_format:"%a %d %b %Y"}} 
-        &mdash; Dr. {{$praticien->_view}} : {{$curr_prat|@count}} admission(s)
+        &mdash; Dr. {{$praticien->_view}} : {{$curr_prat.sejours|@count}} admission(s)
       </strong>
     </td>
   </tr>
