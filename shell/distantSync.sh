@@ -19,10 +19,10 @@ fi
 location=$1
 
 # Backups directory
-rsync -e ssh -avz $location:/var/backup /var/
+rsync -e ssh -avzn --delete-after $location:/var/backup /var/
 check_errs $? "Failed to rsync Backups directory" "Succesfully rsync-ed Backups directory!"
 
 
 # system directory
-rsync -e ssh -avz $location:/var/www/html/mediboard /var/www/html/
+rsync -e ssh -avzn --delete-after $location:/var/www/html/mediboard /var/www/html/
 check_errs $? "Failed to rsync Mediboard directory" "Succesfully rsync-ed Mediboard directory!"
