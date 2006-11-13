@@ -76,7 +76,7 @@ $package->name = "DB";
 $package->description = "Package de manipulation de base de données";
 $package->mandatory = true;
 $package->reasons[] = "Assistant d'installation de Mediboard";
-$package->reasons[] = "A terme, probablement tout le sysytème";
+$package->reasons[] = "A terme, probablement tout le système";
 $packages[] = $package;
 
 $package = new CPearPackage;
@@ -84,7 +84,15 @@ $package->name = "Auth";
 $package->description = "Package d'authentification multi-support";
 $package->mandatory = true;
 $package->reasons[] = "Assistant d'installation de Mediboard";
-$package->reasons[] = "A terme, probablement tout le sysytème";
+$package->reasons[] = "A terme, probablement tout le système";
+$packages[] = $package;
+
+$package = new CPearPackage;
+$package->name = "phpUnit";
+$package->description = "Package de test unitaire";
+$package->mandatory = false;
+$package->reasons[] = "Tests unitaires et fonctionnels de Mediboard";
+$package->reasons[] = "cf. http://www.phpunit.de/pocket_guide/3.0/en/installation.html";
 $packages[] = $package;
 
 $extensions = array();
