@@ -1,22 +1,10 @@
 <?php
 
 global $AppUI;
-require_once $AppUI->getModuleClass("dPsante400", "recordsante400");
 
-class CMouvement400 extends CRecordSante400 {
-}
+require_once $AppUI->getModuleClass("dPsante400", "mouvement400");
 
-class CMouvSejourTonkin extends CMouvement400 {
-  protected $base = "GT_EAI";
-  protected $table = "SEJMDB";
-  protected $complete = ">EFCPSN";
-  protected $prodret = "RETPRODST";
-
-  public $verbose = false;
-  
-  public $status = null;
-  public $rec = null;
-  
+class CMouvSejourTonkin extends CMouvement400 {  
   public $sejour = null;
   public $etablissement = null;
   public $fonction = null;
@@ -25,83 +13,15 @@ class CMouvSejourTonkin extends CMouvement400 {
   public $naissance = null;
   
   function __construct() {
-  }
-
-  function getMarkedQuery($marked) {
-    return $marked ? 
-      "\n WHERE $this->prodret != '$this->complete'" : 
-      "\n WHERE $this->prodret IS NULL";
-  }
-
-  function multipleLoad($marked = false, $max = 100) {
-    $query = "SELECT * FROM $this->base.$this->table";
-    $query .= $this->getMarkedQuery($marked);
-    
-    return CRecordSante400::multipleLoad($query, $max, "CMouvSejourTonkin");
-  }
-
-  function count($marked = false) {
-    $req = new CRecordSante400();
-    $query = "SELECT COUNT(*) AS COUNT FROM $this->base.$this->table";
-    $query .= $this->getMarkedQuery($marked);
-    
-    $req->query($query);
-    return ($req->consume("COUNT"));
-  }
-  
-  function load($rec = null) {
-    $query = "SELECT * FROM $this->base.$this->table";
-
-    if ($rec !== null) {
-      $rec = intval($rec);
-      $query .= "\n WHERE IDUENR = $rec";
-    }
-    
-    $this->query($query);
+    $this->base = "GT_EAI";
+    $this->table = "SEJMDB";
+    $this->completeMark = ">EFCPSN";
+    $this->prodField = "RETPRODST";
+    $this->idField = "IDUENR";
   }
     
-  function markRow() {
-    if ($this->status == $this->complete) {
-//      $query = "DELETE FROM $this->base.$this->table WHERE IDUENR = $this->rec";
-      $query = "UPDATE $this->base.$this->table SET $this->prodret = '$this->status' WHERE IDUENR = $this->rec";
-    } else {
-      $query = "UPDATE $this->base.$this->table SET $this->prodret = '$this->status' WHERE IDUENR = $this->rec";
-    }
-    
-    $rec = new CRecordSante400;
-    $rec->query($query);
-  }
-  
-  function markStatus($letter) {
-    $this->status .= $letter;
-  }
-
-  function trace($value, $title) {
-    if ($this->verbose) {
-      mbTrace($value, $title);
-    }
-  }
-  
-  function proceed() {
-    $this->status = ">";
-    $this->trace($this->data, "Données à traiter dans le mouvement");
-    try {
-      $this->synchronize();
-      $return = true;
-    } catch (Exception $e) {
-      if ($this->verbose) {
-        trigger_error($e->getMessage(), E_USER_WARNING);
-      }
-      $return = false;
-    }
-    
-    $this->markRow();
-    $this->trace($this->data, "Données non traitées dans le mouvement");
-    return $return;
-  }
-  
   function synchronize() {
-    $this->rec = $this->consume("IDUENR");
+    $this->rec = $this->consume($this->idField);
     
     // Etablissement
     $CODETB = $this->consume("CODETB");
@@ -143,7 +63,7 @@ class CMouvSejourTonkin extends CMouvement400 {
     $CODMEDREF = $this->consume("CODMEDREF");
     $mdp01 = new CRecordSante400();
     $mdp01->query("SELECT * FROM PICLIN$CODETB.MDP01 WHERE MDPRAT = $CODMEDREF");
-    
+
     $nomsPraticien     = split(" ", $mdp01->consume("MDNOMS"));
     $prenomsPraticiens = split(" ", $mdp01->consume("MDPRES"));
 

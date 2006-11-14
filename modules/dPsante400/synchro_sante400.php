@@ -21,7 +21,7 @@ switch ($mode_compat = @$dPconfig["interop"]["mode_compat"]) {
 }
 
 $marked = mbGetValueFromGetOrSession("marked");
-$max = mbGetValueFromGet("max", 10);
+$max = mbGetValueFromGet("max", 1);
 
 $count = $mouvFactory->count($marked);
 $procs = 0;
@@ -36,7 +36,7 @@ if ($rec = mbGetValueFromGet("rec")) {
 }
 
 foreach ($mouvs as $mouv) {
-  $mouv->verbose = mbGetValueFromGet("verbose");
+  $mouv->verbose = mbGetValueFromGet("verbose", "1");
   if ($mouv->proceed()) {
     $procs++;
   }
