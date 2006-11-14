@@ -80,6 +80,10 @@ function submitAnt(oForm) {
   oForm.rques.value = "";
 }
 
+function submitAntDelete(oForm) {
+  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
+}
+
 function incAntecedantsMain() {
   PairEffect.initGroup("effectCategory");
 }

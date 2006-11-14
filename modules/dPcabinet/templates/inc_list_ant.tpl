@@ -12,7 +12,7 @@
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="dosql" value="do_antecedent_aed" />
             <input type="hidden" name="antecedent_id" value="{{$currAnt->antecedent_id}}" />
-            <button class="trash notext" type="button" onclick="submitAnt(this.form)">
+            <button class="trash notext" type="button" onclick="submitAntDelete(this.form)">
             </button>          
             {{if $currAnt->date|date_format:"%d/%m/%Y"}}
               {{$currAnt->date|date_format:"%d/%m/%Y"}} :
@@ -37,7 +37,7 @@
           <input type="hidden" name="del" value="1" />
           <input type="hidden" name="dosql" value="do_traitement_aed" />
           <input type="hidden" name="traitement_id" value="{{$curr_trmt->traitement_id}}" />
-          <button class="trash notext" type="button" onclick="submitAnt(this.form)">
+          <button class="trash notext" type="button" onclick="submitAntDelete(this.form)">
           </button>
           {{if $curr_trmt->fin}}
             Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}}
