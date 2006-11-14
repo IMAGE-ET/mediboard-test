@@ -64,6 +64,7 @@ function setPat( key, val ) {
           <th class="category" colspan="2">Consultations</th>
         </tr>
         {{foreach from=$patient->_ref_consultations item=curr_consult}}
+        {{if $curr_consult->_canEdit}}
         <tr id="cons{{$curr_consult->consultation_id}}-trigger">
           <td colspan="2">
             <strong>
@@ -130,10 +131,12 @@ function setPat( key, val ) {
             </td>
           </tr>
         </tbody>
+        {{/if}}
         {{/foreach}}
         
 		<!-- Sejours -->
         {{foreach from=$patient->_ref_sejours item=curr_sejour}}
+        {{if $curr_sejour->_canEdit}}
         <tr>
           <th class="category" colspan="2">
           	Séjour du {{$curr_sejour->entree_prevue|date_format:"%d %B %Y à %Hh%M"}}
@@ -203,6 +206,7 @@ function setPat( key, val ) {
           </tr>
         </tbody>
         {{/foreach}}
+        {{/if}}
         {{/foreach}}
       </table>
     </td>

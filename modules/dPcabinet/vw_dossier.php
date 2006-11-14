@@ -27,7 +27,7 @@ $patient->load($pat_id);
 if ($pat_id) {
   // Infos patient complètes (tableau de droite)
   $patient->loadDossierComplet();
-
+/*
   foreach ($patient->_ref_consultations as $key => $value) {
     if (!array_key_exists($value->_ref_plageconsult->chir_id, $listPrat)) {
         unset($patient->_ref_consultations[$key]);
@@ -52,6 +52,7 @@ if ($pat_id) {
       }
     }
   }
+  */
 }
 
 $moduleCabinet = CModule::getInstalled("dPcabinet");

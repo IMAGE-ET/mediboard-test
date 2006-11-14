@@ -51,6 +51,11 @@ if(!$consultation_id) {
   }
 } else {
   $consult->load($consultation_id);
+  if(!$consult->canRead()) {
+    mbSetValueToSession("consultation_id");
+    $AppUI->setMsg("Vous n'avez pas les droits suffisants", UI_MSG_ALERT);
+    $AppUI->redirect("m=dPcabinet&tab=0");
+  }
   $consult->loadRefs();
   $consult->_ref_plageconsult->loadRefs();
 
