@@ -34,6 +34,8 @@ class CSetupdPcabinet {
     db_exec("DROP TABLE plageconsult;");          db_error();
     db_exec("DROP TABLE tarifs;");                db_error();
     db_exec("DROP TABLE examaudio;");             db_error();
+    db_exec("DROP TABLE techniques_anesth;");     db_error();
+    db_exec("DROP TABLE exams_comp;");            db_error();
     return null;
   }
 
@@ -341,6 +343,11 @@ class CSetupdPcabinet {
                PRIMARY KEY ( `exam_id` )) TYPE=MyISAM";
         db_exec( $sql ); db_error();
       case "0.44":
+        $module = @CModule::getInstalled("mediusers");
+        if (!$module) {
+          return "0.44";
+        }
+       
         $utypes_flip = array_flip($utypes);
         $id_anesth = $utypes_flip["Anesthésiste"];
         $sql = "SELECT users.user_id" .
@@ -348,15 +355,15 @@ class CSetupdPcabinet {
                "\nWHERE users.user_id = users_mediboard.user_id" .
                "\nAND users.user_type='$id_anesth'";
         $result = db_loadList($sql);
+        $listAnesthid = array();
         foreach($result as $keyresult => $resultAnesth){
           $listAnesthid[$keyresult] = $result[$keyresult]["user_id"];
         } 
-        $inClause = implode(", ", $listAnesthid);
          
         $sql = "SELECT consultation.consultation_id FROM consultation" .
                "\nLEFT JOIN consultation_anesth ON consultation.consultation_id = consultation_anesth.consultation_id" .
                "\nLEFT JOIN plageconsult ON consultation.plageconsult_id = plageconsult.plageconsult_id" .
-               "\nWHERE plageconsult.chir_id IN ($inClause)" .
+               "\nWHERE plageconsult.chir_id " . db_prepare_in($listAnesthid) .
                "\nAND consultation_anesth.consultation_anesth_id IS NULL" ;  
         $result = db_loadList($sql);
 

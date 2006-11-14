@@ -75,29 +75,6 @@ INSERT INTO `permissions` VALUES (1, 1, 'all', -1, -1);
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `syskeys`
--- 
-
-CREATE TABLE `syskeys` (
-  `syskey_id` int(10) unsigned NOT NULL auto_increment,
-  `syskey_name` varchar(48) NOT NULL default '',
-  `syskey_label` varchar(255) NOT NULL default '',
-  `syskey_type` int(1) unsigned NOT NULL default '0',
-  `syskey_sep1` char(2) default '\n',
-  `syskey_sep2` char(2) NOT NULL default '|',
-  PRIMARY KEY  (`syskey_id`),
-  UNIQUE KEY `idx_syskey_name` (`syskey_id`)
-) ENGINE=MyISAM;
-
--- 
--- Dumping data for table `syskeys`
--- 
-
-INSERT INTO `syskeys` VALUES (1, 'SelectList', 'Enter values for list', 0, '\n', '|');
-
--- --------------------------------------------------------
-
--- 
 -- Table structure for table `sysvals`
 -- 
 

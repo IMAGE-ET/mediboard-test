@@ -29,6 +29,7 @@ class CSetupdPstats {
   function remove() {
     db_exec( "DROP TABLE `temps_op`;" );
     db_exec( "DROP TABLE `temps_prepa`;" );
+    db_exec( "DROP TABLE `temps_hospi`;");
     return null;
   }
 

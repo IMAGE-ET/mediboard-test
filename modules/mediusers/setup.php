@@ -222,11 +222,7 @@ class CSetupmediusers {
           db_exec($sql); db_error();
         }
       case "0.15":
-        $sql = "ALTER TABLE `functions_mediboard` DROP INDEX `function_id` ;";
-        db_exec($sql); db_error();
         $sql = "ALTER TABLE `functions_mediboard` ADD INDEX ( `group_id` ) ;";
-        db_exec($sql); db_error();
-        $sql = "ALTER TABLE `users_mediboard` DROP INDEX `user_id` ;";
         db_exec($sql); db_error();
         $sql = "ALTER TABLE `users_mediboard` ADD INDEX ( `function_id` ) ;";
         db_exec($sql); db_error();

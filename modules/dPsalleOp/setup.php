@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPsalleOp";
-$config["mod_version"]     = "0.15";
+$config["mod_version"]     = "0.16";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -78,9 +78,13 @@ class CSetupdPsalleOp {
                "\nCHANGE `code_activite` `code_activite` tinyint(2) unsigned zerofill NOT NULL," .
                "\nCHANGE `code_phase` `code_phase` tinyint(1) unsigned zerofill NOT NULL;";
         db_exec( $sql ); db_error();
-        
-      case "0.15":
-        return "0.15";
+      
+      case "0.15":  
+        $sql = "ALTER TABLE `acte_ccam` " .
+               "\nCHANGE `code_acte` `code_acte` varchar(7) NOT NULL;";
+        db_exec( $sql ); db_error();
+      case "0.16":
+        return "0.16";
     }
     return false;
   }

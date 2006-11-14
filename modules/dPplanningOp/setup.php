@@ -32,7 +32,8 @@ class CSetupdPplanningOp {
     db_exec("DROP TABLE operations;");
     db_exec("DROP TABLE sejour;");
     db_exec("DROP TABLE protocole;");
-    db_exec("DELETE FROM sysval WHERE  sysval_title = 'AnesthType';");
+    db_exec("DROP TABLE naissance;");
+    db_exec("DROP TABLE type_anesth;");
     return null;
   }
 
@@ -226,7 +227,7 @@ class CSetupdPplanningOp {
     
       case "0.36":
         $module = @CModule::getInstalled("dPbloc");
-        if (!$module || $module->mod_version < "0.1") {
+        if (!$module || $module->mod_version < "0.15") {
           return "0.36";
         }
       
@@ -235,7 +236,7 @@ class CSetupdPplanningOp {
             "\n`operations`.`date_adm` = `plagesop`.`date`," .
             "\n`operations`.`duree_hospi` = '1'" .
             "\nWHERE `operations`.`duree_hospi` = '255'" .
-            "\nAND `operations`.`plageop_id` = `plagesop`.`id`";
+            "\nAND `operations`.`plageop_id` = `plagesop`.`plageop_id`";
         db_exec($sql); db_error();
       
         // Création de la table
@@ -541,6 +542,7 @@ class CSetupdPplanningOp {
         $sql = "UPDATE `operations` SET `type_anesth`=`type_anesth`+1;";
         db_exec($sql); db_error();
         
+        db_exec("DROP TABLE sysvals;");
       case "0.54":
         $sql = "ALTER TABLE `operations`" .
             "\nADD `induction` TIME AFTER `sortie_reveil`";

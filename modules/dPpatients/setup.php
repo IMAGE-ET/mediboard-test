@@ -76,7 +76,7 @@ class CSetupdPpatients {
             "\nemail VARCHAR(50) DEFAULT NULL," .
             "\nadresse VARCHAR(50) DEFAULT NULL," .
             "\nville VARCHAR(50) DEFAULT NULL," .
-            "\ncp VARCHAR(5) DFAULT NULL," .
+            "\ncp VARCHAR(5) DEFAULT NULL," .
             "\nPRIMARY KEY  (`medecin_id`))" .
             "\nTYPE=MyISAM COMMENT='Table des medecins correspondants';";
         db_exec( $sql ); db_error();
