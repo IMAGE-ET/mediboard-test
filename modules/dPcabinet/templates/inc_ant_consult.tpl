@@ -76,7 +76,8 @@ function reloadAntecedents() {
 
 function submitAnt(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
-  oForm.reset();
+  oForm._helpers_rques.value = "";
+  oForm.rques.value = "";
 }
 
 function incAntecedantsMain() {
