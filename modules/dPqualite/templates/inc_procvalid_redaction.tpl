@@ -2,24 +2,23 @@
   <tr>
     <th class="title" colspan="2">
       <input type="hidden" name="suivi[etat]" value="{{$smarty.const.CDOC_REDAC}}" />
-      Procédure en cours de rédaction ({{$docGed->_reference_doc}})
+      {{tr}}_CDocGed_CDOC_REDAC{{/tr}} ({{$docGed->_reference_doc}})
     </th>
   </tr>
   <tr>
-    <td class="button" colspan="2">
-      <br />La procédure est en cours de rédaction.
-      <br />Vous ne pouvez pas y apporter de modification.
+    <td class="button text" colspan="2">
+      {{tr}}_CDocGed_Redac{{/tr}}
     </td>
   </tr>
   <tr>
-    <th>Visé par</th>
+    <th>{{tr}}_CDocGed_validBy{{/tr}}</th>
     <td>{{$docGed->_lastentry->_ref_user->_view}}</td>
   </tr>
   {{if $docGed->_lastentry->file_id}}
   <tr>
-    <th>Dernier Fichier lié</th>
+    <th>{{tr}}_CDocGed_lastfile{{/tr}}</th>
     <td>
-      <a href="javascript:popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="Voir le Fichier">
+      <a href="javascript:popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}msg-CFile-viewfile{{/tr}}">
         <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
       </a>
     </td>
@@ -27,7 +26,7 @@
   {{/if}}
   <tr>
     <th>
-      <strong>Dernier commentaire :</strong><br />
+      <strong>{{tr}}_CDocGed_lastcomm{{/tr}} :</strong><br />
       {{$docGed->_lastentry->date|date_format:"%d %B %Y - %Hh%M"}}
     </th>
     <td>
@@ -36,8 +35,8 @@
   </tr>
   <tr>
     <td colspan="2" class="button">
-      <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'La procédure ',objName:'{{$docGed->_reference_doc|smarty:nodefaults|JSAttribute}}'})" title="Supprimer la Procédure">
-        Supprimer
+      <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'{{tr escape="javascript"}}CDocGed.one{{/tr}}',objName:'{{$docGed->_reference_doc|smarty:nodefaults|JSAttribute}}'})">
+        {{tr}}Delete{{/tr}}
       </button>
     </td>
   </tr>

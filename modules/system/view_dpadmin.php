@@ -25,7 +25,7 @@ global $AppUI, $canRead, $canEdit, $m;
 <tr>
   <td />
   <td>
-    <a href="?m=system&amp;a=translate"><?php echo $AppUI->_( 'Translation Management' );?></a>
+    <a href="?m=system&amp;tab=translate"><?php echo $AppUI->_( 'Translation Management' );?></a>
   </td>
 </tr>
 

@@ -27,7 +27,7 @@ class CDoObjectAddEdit {
   var $_logIt = null;
     
   function CDoObjectAddEdit($className, $objectKeyGetVarName) {
-    global $m;
+    global $m,$AppUI;
     
     $this->className           = $className;
     $this->objectKeyGetVarName = $objectKeyGetVarName;
@@ -35,9 +35,11 @@ class CDoObjectAddEdit {
     $this->redirectStore       = null;
     $this->redirectError       = null;
     $this->redirectDelete      = null;
-    $this->createMsg           = "Object of type $className created";
-    $this->modifyMsg           = "Object of type $className modified";
-    $this->deleteMsg           = "Object of type $className deleted";
+    
+    $this->createMsg           = $AppUI->_("msg-".$className."-create");
+    $this->modifyMsg           = $AppUI->_("msg-".$className."-modify");
+    $this->deleteMsg           = $AppUI->_("msg-".$className."-delete");
+    
     $this->_logIt              = true;
     $this->_obj                = new $this->className();
     $this->_objBefore          = new $this->className();

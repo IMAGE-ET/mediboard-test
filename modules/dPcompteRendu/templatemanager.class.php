@@ -8,7 +8,7 @@
 */
 
 class CTemplateManager {
-  var $editor = "fckeditor";
+  var $editor = "fckeditor2.3.2";
   
   var $properties = array();
   var $helpers = array();

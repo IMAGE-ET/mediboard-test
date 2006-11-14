@@ -40,7 +40,7 @@ class CCategorieDoc extends CMbObject {
 
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      "label"     => "procédure(s)", 
+      "label"     => "msg-CDocGed-canDelete",
       "name"      => "doc_ged", 
       "idfield"   => "doc_ged_id", 
       "joinfield" => "doc_categorie_id"

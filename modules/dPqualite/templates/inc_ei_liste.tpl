@@ -10,11 +10,11 @@
   </tr>
   {{/if}}
   <tr>
-    <th class="category">Date</th>
+    <th class="category">{{tr}}Date{{/tr}}</th>
     <th class="category">
       {{if $voletAcc=="ALL_TERM"}}
         <select name="allEi_user_id" onchange="search_AllEI()">
-        <option value="">&mdash; Tous les Auteurs</option>
+        <option value="">&mdash; {{tr}}_CFicheEi_allusers{{/tr}}</option>
         {{foreach from=$listUsersTermine item=curr_user}}        
           <option value="{{$curr_user->user_id}}"{{if $curr_user->user_id==$allEi_user_id}} selected="selected"{{/if}}>
             {{$curr_user->_view}}
@@ -22,12 +22,12 @@
         {{/foreach}}
         </select>
       {{else}}
-        Auteur
+        {{tr}}CFicheEi-user_id-court{{/tr}}
       {{/if}}
     </th>
-    <th class="category">Deg. Urg.</th>
-    <th class="category">Verification</th>
-    <th class="category">Controle</th>
+    <th class="category">{{tr}}CFicheEi-degre_urgence-court{{/tr}}</th>
+    <th class="category">{{tr}}CFicheEi-qualite_date_verification-court{{/tr}}</th>
+    <th class="category">{{tr}}CFicheEi-qualite_date_controle-court{{/tr}}</th>
   </tr>
   {{if $listeFiches|@count}}
   {{foreach from=$listeFiches item=currFiche}}
@@ -62,7 +62,7 @@
   
   {{else}}
   <tr>
-    <td colspan="5">Aucune Fiches disponible</td>
+    <td colspan="5">{{tr}}CFicheEi.none{{/tr}}</td>
   </tr>
   {{/if}}
 </table>
@@ -71,6 +71,6 @@
 {{/if}}
 {{if $reloadAjax}}
 <script language="Javascript" type="text/javascript">
-writeHeader("QualAllEIHeader", "Toutes les fiches d'EI Traitées {{if $allEi_user_id}}pour {{$listUsersTermine.$allEi_user_id->_view}}{{/if}} ({{$listeFiches|@count}})");
+writeHeader("QualAllEIHeader", "{{if $allEi_user_id}}{{tr}}_CFicheEi_allfichesuser{{/tr}} {{$listUsersTermine.$allEi_user_id->_view}}{{else}}{{tr}}_CFicheEi_allfiches{{/tr}}{{/if}} ({{$listeFiches|@count}})");
 </script>
 {{/if}}

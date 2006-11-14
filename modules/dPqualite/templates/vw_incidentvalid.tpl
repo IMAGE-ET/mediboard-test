@@ -28,7 +28,6 @@ function search_AllEI(){
   url.setModuleAction("dPqualite", "httpreq_vw_allEi");
   url.addParam("allEi_user_id", oForm.allEi_user_id.value);
   url.requestUpdate('QualAllEIContent');
-  // , { waitingText : null }
 }
 
 function annuleFiche(oForm,annulation){
@@ -39,7 +38,7 @@ function annuleFiche(oForm,annulation){
 
 function refusMesures(oForm){
   if(oForm.remarques.value == ""){
-    alert("Veuillez saisir vos remarques dans la zone 'Remarques'.");
+    alert("{{tr}}msg-CFicheEi-validdoc{{/tr}}");
     oForm.remarques.focus();
   }else{
     oForm.service_date_validation.value = "";
@@ -83,7 +82,7 @@ function pageMain() {
         
         <div id="CSATraiter">
           <div id="CSATraiterHeader" class="accordionTabTitleBar">
-		    Fiches à Traiter ({{$listFiches.ATT_CS|@count}})
+		    {{tr}}_CFicheEi_acc-ATT_CS{{/tr}} ({{$listFiches.ATT_CS|@count}})
 		  </div>
 		  <div id="CSATraiterContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ATT_CS}}
@@ -92,7 +91,7 @@ function pageMain() {
 		</div>
 		<div id="CSEnCours">
           <div id="CSEnCoursHeader" class="accordionTabTitleBar">
-		    En attente de Validation du service Qualité ({{$listFiches.ATT_QUALITE|@count}})
+		    {{tr}}_CFicheEi_acc-ATT_QUALITE{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})
 		  </div>
 		  <div id="CSEnCoursContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ATT_QUALITE}}
@@ -102,7 +101,7 @@ function pageMain() {
 		
 		<div id="CSAllEI">
           <div id="CSAllEIHeader" class="accordionTabTitleBar">
-		    Fiches d'EI Traitées ({{$listFiches.ALL_TERM|@count}})
+		    {{tr}}_CFicheEi_acc-ALL_TERM{{/tr}} ({{$listFiches.ALL_TERM|@count}})
 		  </div>
 		  <div id="CSAllEIContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ALL_TERM}}
@@ -113,7 +112,7 @@ function pageMain() {
         
         <div id="QualNewFiches">
           <div id="QualNewFichesHeader" class="accordionTabTitleBar">
-		    Nouvelles fiches à Traiter ({{$listFiches.VALID_FICHE|@count}})
+		    {{tr}}_CFicheEi_acc-VALID_FICHE{{/tr}} ({{$listFiches.VALID_FICHE|@count}})
 		  </div>
 		  <div id="QualNewFichesContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.VALID_FICHE}}
@@ -122,7 +121,7 @@ function pageMain() {
 		</div>
 		<div id="QualAttCS">
           <div id="QualAttCSHeader" class="accordionTabTitleBar">
-		    En Attente du chef de Service ({{$listFiches.ATT_CS|@count}})
+		    {{tr}}_CFicheEi_acc-ATT_CS_adm{{/tr}} ({{$listFiches.ATT_CS|@count}})
 		  </div>
 		  <div id="QualAttCSContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ATT_CS}}
@@ -131,7 +130,7 @@ function pageMain() {
 		</div>
 		<div id="QualValidMesures">
           <div id="QualValidMesuresHeader" class="accordionTabTitleBar">
-		    Mesures à valider ({{$listFiches.ATT_QUALITE|@count}})
+		    {{tr}}_CFicheEi_acc-ATT_QUALITE_adm{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})
 		  </div>
 		  <div id="QualValidMesuresContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ATT_QUALITE}}
@@ -140,7 +139,7 @@ function pageMain() {
 		</div>
 		<div id="QualVerif">
           <div id="QualVerifHeader" class="accordionTabTitleBar">
-		    Fiches en Attente de Vérification ({{$listFiches.ATT_VERIF|@count}})
+		    {{tr}}_CFicheEi_acc-ATT_VERIF{{/tr}} ({{$listFiches.ATT_VERIF|@count}})
 		  </div>
 		  <div id="QualVerifContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ATT_VERIF}}
@@ -149,7 +148,7 @@ function pageMain() {
 		</div>
 		<div id="QualCtrl">
           <div id="QualCtrlHeader" class="accordionTabTitleBar">
-		    Fiches en Attente de Contrôle ({{$listFiches.ATT_CTRL|@count}})
+		    {{tr}}_CFicheEi_acc-ATT_CTRL{{/tr}} ({{$listFiches.ATT_CTRL|@count}})
 		  </div>
 		  <div id="QualCtrlContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ATT_CTRL}}
@@ -159,7 +158,7 @@ function pageMain() {
 		
 		<div id="QualAllEI">
           <div id="QualAllEIHeader" class="accordionTabTitleBar">
-		    Toutes les fiches d'EI Traitées {{if $allEi_user_id}}pour {{$listUsersTermine.$allEi_user_id->_view}}{{/if}} ({{$listFiches.ALL_TERM|@count}})
+		    {{if $allEi_user_id}}{{tr}}_CFicheEi_allfichesuser{{/tr}} {{$listUsersTermine.$allEi_user_id->_view}}{{else}}{{tr}}_CFicheEi_allfiches{{/tr}}{{/if}} ({{$listFiches.ALL_TERM|@count}})
 		  </div>
 		  <div id="QualAllEIContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ALL_TERM}}
@@ -171,7 +170,7 @@ function pageMain() {
 		
 		<div id="QualAnnuleEI">
           <div id="QualAnnuleEIHeader" class="accordionTabTitleBar">
-		    Fiches d'Ei annulées ({{$listFiches.ANNULE|@count}})
+		    {{tr}}_CFicheEi_acc-ANNULE{{/tr}} ({{$listFiches.ANNULE|@count}})
 		  </div>
 		  <div id="QualAnnuleEIContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ANNULE}}
@@ -214,19 +213,19 @@ function pageMain() {
         
       {{if $canAdmin && !$fiche->date_validation &&!$fiche->annulee}}
         <tr>
-          <th><label for="degre_urgence" title="Veuillez sélectionner le degré d'urgence">Degré d'Urgence</label></th>
+          <th><label for="degre_urgence" title="{{tr}}CFicheEi-degre_urgence-desc{{/tr}}">{{tr}}CFicheEi-degre_urgence{{/tr}}</label></th>
           <td>
             <select name="degre_urgence" title="{{$fiche->_props.degre_urgence}}|notNull">
-            <option value="">&mdash; Veuillez Choisir</option>
+            <option value="">&mdash; {{tr}}select-choice{{/tr}}</option>
             {{html_options options=$fiche->_enumsTrans.degre_urgence}}
             </select>
           </td>
         </tr>
         <tr>
-          <th><label for="service_valid_user_id" title="Veuillez sélectionner le chef de service à qui transmettre la fiche">Chef de Service à qui transmettre la fiche</label></th>
+          <th><label for="service_valid_user_id" title="{{tr}}CFicheEi-service_valid_user_id-desc{{/tr}}">{{tr}}CFicheEi-service_valid_user_id{{/tr}}</label></th>
           <td>
             <select name="service_valid_user_id" title="{{$fiche->_props.service_valid_user_id}}|notNull">
-            <option value="">&mdash; Veuillez Choisir &mdash;</option>
+            <option value="">&mdash; {{tr}}select-choice{{/tr}} &mdash;</option>
             {{foreach from=$listUsersEdit item=currUser}}
             <option value="{{$currUser->user_id}}">{{$currUser->_view}}</option>
             {{/foreach}}
@@ -237,13 +236,13 @@ function pageMain() {
           <td colspan="2" class="button">
             <input type="hidden" name="valid_user_id" value="{{$user_id}}" />
             <button class="edit" type="button" onclick="window.location.href='index.php?m={{$m}}&amp;tab=vw_incident&amp;fiche_ei_id={{$fiche->fiche_ei_id}}';">
-              Editer la Fiche
+              {{tr}}Edit{{/tr}}
             </button>
             <button class="modify" type="submit">
-              Transmettre
+              {{tr}}button-CFicheEi-transmit{{/tr}}
             </button>
-            <button class="cancel" type="button" onclick="annuleFiche(this.form,1);" title="Annuler la Fiche d'EI">
-              Annuler
+            <button class="cancel" type="button" onclick="annuleFiche(this.form,1);" title="{{tr}}_CFicheEi_cancel{{/tr}}">
+              {{tr}}Cancel{{/tr}}
             </button>
           </td>
         </tr>
@@ -252,18 +251,18 @@ function pageMain() {
       {{if $fiche->service_valid_user_id && $fiche->service_valid_user_id==$user && !$fiche->service_date_validation}}
         <tr>
           <th colspan="2" class="category">
-            Validation du Chef de Service
+            {{tr}}_CFicheEi_validchefserv{{/tr}}
           </th>
         </tr>
         {{if $fiche->remarques}}
         <tr>
-          <th><strong>Mesures refusé par</strong></th>
+          <th><strong>{{tr}}_CFicheEi_invalidBy{{/tr}}</strong></th>
           <td class="text">
             {{$fiche->_ref_qualite_valid->_view}}
           </td>
         </tr>
         <tr>
-          <th><strong>Remarques</strong></th>
+          <th><strong>{{tr}}CFicheEi-remarques-court{{/tr}}</strong></th>
           <td class="text" style="color:#f00;">
             <strong>{{$fiche->remarques|nl2br}}</strong>
           </td>
@@ -271,7 +270,7 @@ function pageMain() {
         {{/if}}
         <tr>
           <th>
-            <label for="service_actions" title="Veuillez décrire les actions mises en place">Actions mises en Place</label>
+            <label for="service_actions" title="{{tr}}CFicheEi-service_actions-desc{{/tr}}">{{tr}}CFicheEi-service_actions{{/tr}}</label>
           </th>
           <td>
             <textarea name="service_actions" title="{{$fiche->_props.service_actions}}|notNull">{{$fiche->service_actions}}</textarea>
@@ -279,7 +278,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="service_descr_consequences" title="Veuillez décrire les conséquences">Description des conséquences</label>
+            <label for="service_descr_consequences" title="{{tr}}CFicheEi-service_descr_consequences-desc{{/tr}}">{{tr}}CFicheEi-service_descr_consequences{{/tr}}</label>
           </th>
           <td>
             <textarea name="service_descr_consequences" title="{{$fiche->_props.service_descr_consequences}}|notNull">{{$fiche->service_descr_consequences}}</textarea>
@@ -289,7 +288,7 @@ function pageMain() {
           <td colspan="2" class="button">
             <input type="hidden" name="remarques" value="" />
             <button class="modify" type="submit">
-              Transmettre
+              {{tr}}button-CFicheEi-transmit{{/tr}}
             </button>
           </td>
         </tr>
@@ -300,17 +299,17 @@ function pageMain() {
           <td colspan="2" class="button">
             <input type="hidden" name="qualite_user_id" value="{{$user_id}}" />
             <button class="modify" type="submit">
-              Valider ces mesures
+              {{tr}}button-CFicheEi-valid{{/tr}}
             </button>
             <button class="cancel" type="button" onclick="refusMesures(this.form);">
-              Refuser ces mesures
+              {{tr}}button-CFicheEi-refus{{/tr}}
             </button>
           </td>
         </tr>
         <tr>
           <th>
-            <label for="remarques" title="Veuillez saisir vos remarques en cas de refus de ces mesures">
-              Remarques en cas de refus
+            <label for="remarques" title="{{tr}}CFicheEi-remarques-desc{{/tr}}">
+              {{tr}}CFicheEi-remarques{{/tr}}
             </label>
           </th>
           <td>
@@ -320,20 +319,20 @@ function pageMain() {
         {{else}}
         {{if !$fiche->qualite_date_verification}}
         <tr>
-          <th><label for="qualite_date_verification" title="Veuillez saisir la date de vérification">Date de Vérification</label></th>
+          <th><label for="qualite_date_verification" title="{{tr}}CFicheEi-qualite_date_verification-desc{{/tr}}">{{tr}}CFicheEi-qualite_date_verification{{/tr}}</label></th>
           <td class="date">
             <div id="ProcEditFrm_qualite_date_verification_da">{{$today|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="qualite_date_verification" value="{{$today|date_format:"%Y-%m-%d"}}" />
-            <img id="ProcEditFrm_qualite_date_verification_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de vérification" />
+            <img id="ProcEditFrm_qualite_date_verification_trigger" src="./images/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-qualite_date_verification-desc{{/tr}}" />
           </td>
         </tr>
         {{elseif !$fiche->qualite_date_controle}}
         <tr>
-          <th><label for="qualite_date_controle" title="Veuillez saisir la date de contrôle">Date de Contrôle</label></th>
+          <th><label for="qualite_date_controle" title="{{tr}}CFicheEi-qualite_date_controle-desc{{/tr}}">{{tr}}CFicheEi-qualite_date_controle{{/tr}}</label></th>
           <td class="date">
             <div id="ProcEditFrm_qualite_date_controle_da">{{$today|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="qualite_date_controle" value="{{$today|date_format:"%Y-%m-%d"}}" />
-            <img id="ProcEditFrm_qualite_date_controle_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de contrôle" />
+            <img id="ProcEditFrm_qualite_date_controle_trigger" src="./images/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-qualite_date_controle-desc{{/tr}}" />
           </td>
         </tr>
         {{/if}}
@@ -341,7 +340,7 @@ function pageMain() {
         <tr>
           <td colspan="2" class="button">
             <button class="modify" type="button" onclick="saveVerifControle(this.form);">
-              Enregister la date
+              {{tr}}Save{{/tr}}
             </button>
           </td>
         </tr>
@@ -353,12 +352,12 @@ function pageMain() {
         <tr>
           <td colspan="2" class="button">
             {{if $fiche->annulee}}
-            <button class="change" type="button" onclick="annuleFiche(this.form,0);" title="Rétablir la Fiche d'EI">
-              Rétablir
+            <button class="change" type="button" onclick="annuleFiche(this.form,0);" title="{{tr}}button-CFicheEi-retablir{{/tr}}">
+              {{tr}}button-CFicheEi-retablir{{/tr}}
             </button>
             {{else}}
             <button class="print" type="button" onclick="printIncident({{$fiche->fiche_ei_id}});">
-              Imprimer la fiche
+              {{tr}}Print{{/tr}}
             </button>
             {{/if}}
           </td>

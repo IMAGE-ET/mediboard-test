@@ -16,7 +16,7 @@ function annuleDoc(oForm,annulation){
 
 function validDoc(oForm){
   if(oForm.elements["suivi[remarques]"].value == ""){
-    alert("Veuillez saisir vos remarques dans la zone 'Remarques'.");
+    alert("{{tr}}msg-CDocGed-refusdoc{{/tr}}");
     oForm.elements["suivi[remarques]"].focus();
   }else{
     oForm.elements["suivi[doc_ged_suivi_id]"].value = "";
@@ -28,7 +28,7 @@ function validDoc(oForm){
 
 function refuseDoc(oForm){
   if(oForm.elements["suivi[remarques]"].value == ""){
-    alert("Veuillez saisir un motif de refus dans la zone 'Remarques'.");
+    alert("{{tr}}msg-CDocGed-refusdoc{{/tr}}");
     oForm.elements["suivi[remarques]"].focus();
   }else{
     oForm.elements["suivi[doc_ged_suivi_id]"].value = "";    
@@ -62,23 +62,23 @@ function redactionDoc(oForm){
       <table class="form">
         <tr>
           <th class="category" colspan="4">
-            Prodécure demandée en Attente
+            {{tr}}_CDocGed_attente_demande{{/tr}}
           </th>
         </tr>
         <tr>
-          <th class="category">Demande formulée</th>
-          <th class="category">Etablissement</th>
-          <th class="category">Date</th>
-          <th class="category">Remarques</th>
+          <th class="category">{{tr}}_CDocGed_demande{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-group_id{{/tr}}</th>
+          <th class="category">{{tr}}Date{{/tr}}</th>
+          <th class="category">{{tr}}CDocGedSuivi-remarques{{/tr}}</th>
         </tr>
         {{foreach from=$procDemande item=currProc}}
         <tr>
           <td class="text">
             <a href="index.php?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
               {{if $currProc->_lastactif->doc_ged_suivi_id}}
-                Révision de la procédure {{$currProc->_reference_doc}}
+                {{tr}}_CDocGed_revision{{/tr}} {{$currProc->_reference_doc}}
               {{else}}
-                Nouvelle Procédure
+                {{tr}}_CDocGed_new{{/tr}}
               {{/if}}
             </a>
           </td>
@@ -93,7 +93,7 @@ function redactionDoc(oForm){
             </a>
           </td>
           {{if $currProc->annule}}
-          <td class="text" style="background-color:#f00;">[ANNULE] {{$currProc->_lastentry->remarques|nl2br}}</td>
+          <td class="text" style="background-color:#f00;">[{{tr}}CANCEL{{/tr}}] {{$currProc->_lastentry->remarques|nl2br}}</td>
           {{else}}
           <td>{{$currProc->_lastentry->remarques|nl2br}}</td>
           {{/if}}
@@ -104,14 +104,14 @@ function redactionDoc(oForm){
       
       <table class="form">
         <tr>
-          <th class="category" colspan="5">Procédure En attente</th>
+          <th class="category" colspan="5">{{tr}}_CDocGed_attente{{/tr}}</th>
         </tr>
         <tr>
-          <th class="category">Titre</th>
-          <th class="category">Référence</th>
-          <th class="category">Etablissement</th>
-          <th class="category">Thème</th>
-          <th class="category">Etat</th>
+          <th class="category">{{tr}}CDocGed-titre{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-_reference_doc{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-group_id{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-doc_theme_id{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-etat{{/tr}}</th>
         </tr>
         {{foreach from=$procEnCours item=currProc}}
         <tr>
@@ -133,14 +133,14 @@ function redactionDoc(oForm){
           <td class="text">{{$currProc->_ref_theme->nom}}</td>
           <td class="text">
           {{if $currProc->annule}}
-          <span style="background-color:#f00;">[ANNULE]</span>
+          <span style="background-color:#f00;">[{{tr}}CANCEL{{/tr}}]</span>
           {{/if}}
           {{$currProc->_etat_actuel}}</td>
         </tr>
         {{foreachelse}}
         <tr>
           <td colspan="5">
-            Aucune Procédure En Cours
+            {{tr}}CDocGed.none{{/tr}}
           </td>
         </tr>
         {{/foreach}}
@@ -150,24 +150,24 @@ function redactionDoc(oForm){
         <br />
         {{if !$procAnnuleVisible}}
         <a class="buttontrash" href="index.php?m={{$m}}&amp;procAnnuleVisible=1">
-        Afficher les Procédures Annulées
+        {{tr}}button-CDocGed-viewcancel{{/tr}}
         </a>
         {{else}}
         <a class="buttoncancel" href="index.php?m={{$m}}&amp;procAnnuleVisible=0">
-        Cacher les Procédures Annulées
+        {{tr}}button-CDocGed-notviewcancel{{/tr}}
         </a>
         <table class="form">
           <tr>
             <th class="category" colspan="5">
-              Prodécure Annulées
+              {{tr}}_CDocGed_cancel{{/tr}}
             </th>
           </tr>
           <tr>
-            <th class="category">Titre</th>
-            <th class="category">Référence</th>
-            <th class="category">Etablissement</th>
-            <th class="category">Thème</th>
-            <th class="category">Etat</th>
+            <th class="category">{{tr}}CDocGed-titre{{/tr}}</th>
+            <th class="category">{{tr}}CDocGed-_reference_doc{{/tr}}</th>
+            <th class="category">{{tr}}CDocGed-group_id{{/tr}}</th>
+            <th class="category">{{tr}}CDocGed-doc_theme_id{{/tr}}</th>
+            <th class="category">{{tr}}CDocGed-etat{{/tr}}</th>
           </tr>
           {{foreach from=$procTermine item=currProc}}
           <tr>
@@ -201,12 +201,12 @@ function redactionDoc(oForm){
               <input type="hidden" name="ged[annule]" value="0" />
               <input type="hidden" name="ged[etat]" value="{{$currProc->etat}}" />
               <button class="change" type="submit">
-                Retablir
+                {{tr}}button-CDocGed-retablir{{/tr}}
               </button>
               {{if $currProc->etat==CDOC_TERMINE}}
-              Document Non Disponible
+              {{tr}}msg-CDocGed-etat_INDISPO{{/tr}}
               {{else}}
-              <strong>Document en Révision</strong>
+              <strong>{{tr}}_CDocGed_attente{{/tr}}</strong>
               {{/if}}
               </form>
             </td>

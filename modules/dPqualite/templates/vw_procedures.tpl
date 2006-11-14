@@ -17,7 +17,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   if(sfn && sfn!=0){
     url.addParam("sfn", sfn);
   }
-  url.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
+  url.requestUpdate('bigView', { waitingText : "{{tr}}msg-CFile-loadimgmini{{/tr}}" });
 }
 
 </script>
@@ -27,9 +27,9 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
       
       <form name="FrmThemeVue" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
-      <label for="selTheme" title="Veuillez sélectionner un thème">Thème</label>
+      <label for="selTheme" title="{{tr}}CDocGed-doc_theme_id-desc{{/tr}}">{{tr}}CDocGed-doc_theme_id{{/tr}}</label>
       <select name="selTheme" onchange="this.form.submit();">
-        <option value="0">&mdash; Tous les thèmes &mdash;</option>
+        <option value="0">&mdash; {{tr}}_CThemeDoc_alltheme{{/tr}}</option>
         {{foreach from=$listThemes item=currTheme}}
         <option value="{{$currTheme->doc_theme_id}}" {{if $selTheme==$currTheme->doc_theme_id}}selected="selected"{{/if}}>{{$currTheme->nom}}</option>
         {{/foreach}}
@@ -39,11 +39,11 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
       <table class="tbl">
         <tr>
           {{if $canEdit}}
-          <th>Action</th>
+          <th>-</th>
           {{/if}}
-          <th>Référence</th>
-          <th>Titre</th>
-          <th>Date</th>          
+          <th>{{tr}}CDocGed-_reference_doc{{/tr}}</th>
+          <th>{{tr}}CDocGed-titre{{/tr}}</th>
+          <th>{{tr}}Date{{/tr}}</th>          
         </tr>
         {{foreach from=$procedures item=currProc}}
         <tr>
@@ -60,18 +60,18 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             <input type="hidden" name="ged[group_id]" value="{{$currProc->group_id}}" />
             <input type="hidden" name="ged[annule]" value="1" />
             <input type="hidden" name="ged[etat]" value="{{$currProc->etat}}" />
-            <button class="cancel notext" style="float: left;" type="submit" title="Annuler la Procédure">
+            <button class="cancel notext" style="float: left;" type="submit" title="{{tr}}button-CDocGed-cancel{{/tr}}">
             </button>
             </form>
             {{/if}}
             {{if $currProc->etat==CDOC_TERMINE}}
-            <a class="buttonedit notext" style="float: left;" href="index.php?m={{$m}}&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}" title="Editer la procédure"></a>
+            <a class="buttonedit notext" style="float: left;" href="index.php?m={{$m}}&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}" title="{{tr}}button-CDocGed-edit{{/tr}}"></a>
             {{/if}}
           </td>
           {{/if}}
           <td>
             <a href="javascript:ZoomAjax('{{$currProc->_class_name}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
-              {{$currProc->_reference_doc}} (version : {{$currProc->version}})
+              {{$currProc->_reference_doc}} ({{tr}}CDocGed-version-court{{/tr}} : {{$currProc->version}})
             </a>
           </td>
           <td class="text">
@@ -90,7 +90,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           {{else}}
           <td colspan="3">
           {{/if}}
-            Aucune procédure disponible
+            {{tr}}CDocGed.none{{/tr}}
           </td>
         </tr>
         {{/foreach}}

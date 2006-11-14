@@ -30,7 +30,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
       $upload = $_FILES["formfile"];
       if ($upload["size"] < 1) {
         if (!$this->_obj->file_id) {
-          $AppUI->setMsg("Taille de fichier nulle. Echec de l'opération.", UI_MSG_ERROR);
+          $AppUI->setMsg("Taille de fichier trop importante. Echec de l'opération.", UI_MSG_ERROR);
           $this->doRedirect($this->_obj->file_category_id);
         }
       }else{

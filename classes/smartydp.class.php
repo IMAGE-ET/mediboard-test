@@ -6,16 +6,35 @@
  */
 
 require_once($AppUI->getLibraryClass( "smarty/libs/Smarty.class"));
+require_once($AppUI->getLibraryClass( "smarty/libs/plugins/modifier.escape"));
 require_once($AppUI->getLibraryClass( "json/JSON"));
 
 /**
  * Delegates the actual translation to $AppUI framework object
  */
 function do_translation($params, $content, &$smarty, &$repeat) {
-  global $AppUI;
+  global $dPconfig,$AppUI;
 
   if (isset($content)) {
-    return $AppUI->_($content);
+  	$content = $AppUI->_($content);
+    
+    foreach ($params as $_key => $_val) {
+      switch ($_key) {
+        case "escape":
+          if($_val=="JSAttribute"){
+          	$content = JSAttribute($content);
+          }else{
+          	$content = smarty_modifier_escape($content, $_val);
+          }
+          break;
+          
+        default:
+      }
+    }
+    if($dPconfig['debug']){
+    	$content = "^".$content."^";
+    }
+    return $content;
   }
 }
 

@@ -132,6 +132,7 @@ class CFicheEi extends CMbObject {
   }
     
   function updateFormFields() {
+    global $AppUI;
     parent::updateFormFields();
     if($this->date_incident){
       $this->_incident_heure = substr($this->date_incident, 11, 2);
@@ -143,15 +144,15 @@ class CFicheEi extends CMbObject {
     }
     
     if(!$this->service_date_validation && $this->service_valid_user_id){
-      $this->_etat_actuel = "Att. de Validation du Chef de Service";
+      $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_CS_adm");
     }elseif(!$this->qualite_user_id){
-    	$this->_etat_actuel = "Att. de Validation Qualité";
+    	$this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_QUALITE_adm");
     }elseif(!$this->qualite_date_validation){
-      $this->_etat_actuel = "Att. de Validation des mesures";
+      $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_QUALITE_adm");
     }elseif(!$this->qualite_date_verification){
-      $this->_etat_actuel = "Att. de Vérification";
+      $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_VERIF");
     }elseif(!$this->qualite_date_controle){
-      $this->_etat_actuel = "Att. de Contrôle";
+      $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_CTRL");
     }
     $this->_view = str_pad($this->fiche_ei_id, 3, "0", STR_PAD_LEFT). " - ".substr($this->date_fiche,8,2)."/".substr($this->date_fiche,5,2)."/".substr($this->date_fiche,0,4);
   }
@@ -174,7 +175,7 @@ class CFicheEi extends CMbObject {
   }
   
   function canDelete(&$msg, $oid = null) {
-    $msg = "Il n'est pas possible de supprimer une fiche d'EI.";
+    $msg = $AppUI->_("msg-CFicheEi-canDelete");
     return false;
   }
   

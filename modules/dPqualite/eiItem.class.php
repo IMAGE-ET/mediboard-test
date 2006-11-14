@@ -27,6 +27,10 @@ class CEiItem extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
 
+  function updateFormFields() {
+    $this->_view = $this->nom;
+  }
+  
   function getSpecs() {
     return array (
       "ei_categorie_id" => "ref|notNull",

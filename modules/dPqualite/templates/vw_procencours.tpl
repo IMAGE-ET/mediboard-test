@@ -11,21 +11,21 @@ function popFile(objectClass, objectId, elementClass, elementId){
   <tr>
     <td class="halfPane">
       <a class="buttonnew" href="index.php?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id=0">
-        Créer une nouvelle Procédure
+        {{tr}}CDocGed.create{{/tr}}
       </a>
       
       {{if $procTermine|@count}}
       <table class="form">
         <tr>
           <th class="category" colspan="5">
-            Informations
+            {{tr}}Informations{{/tr}}
           </th>
         </tr>
         <tr>
-          <th class="category">Date</th>
-          <th class="category">Demande formulée</th>
-          <th class="category">Conclusion</th>
-          <th class="category">Remarques</th>
+          <th class="category">{{tr}}Date{{/tr}}</th>
+          <th class="category">{{tr}}_CDocGed_demande{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-etat{{/tr}}</th>
+          <th class="category">{{tr}}CDocGedSuivi-remarques{{/tr}}</th>
           <th class="category"></th>
         </tr>
         {{foreach from=$procTermine item=currProc}}
@@ -35,18 +35,18 @@ function popFile(objectClass, objectId, elementClass, elementId){
           </td>
           <td class="text">
             {{if $currProc->_lastactif->doc_ged_suivi_id}}
-            Révision de la procédure {{$currProc->_reference_doc}}
+            {{tr}}_CDocGed_revision{{/tr}} {{$currProc->_reference_doc}}
             {{else}}
-            Nouvelle Procédure
+            {{tr}}_CDocGed_new{{/tr}}
             {{/if}}
           </td>
           
           {{if $currProc->_lastactif->doc_ged_suivi_id && $currProc->_lastactif->doc_ged_suivi_id>$currProc->_firstentry->doc_ged_suivi_id}} 
           <td class="text">
-            <strong>Accepté</strong>
+            <strong>{{tr}}_CDocGed_accepte{{/tr}}</strong>
           {{else}}
           <td class="text" style="color: #f00;">
-            <strong>Refusé</strong>
+            <strong>{{tr}}_CDocGed_refuse{{/tr}}</strong>
           {{/if}}
           </td>
           <td class="text">
@@ -62,12 +62,12 @@ function popFile(objectClass, objectId, elementClass, elementId){
             {{if $currProc->_lastactif->doc_ged_suivi_id && $currProc->_lastactif->doc_ged_suivi_id>$currProc->_firstentry->doc_ged_suivi_id}} 
             <input type="hidden" name="del" value="0" />  
             <button type="submit" class="tick">
-              OK
+              {{tr}}OK{{/tr}}
             </button>
             {{else}}
             <input type="hidden" name="del" value="1" />  
             <button type="submit" class="trash">
-              OK
+              {{tr}}OK{{/tr}}
             </button>
             {{/if}}            
             </form>
@@ -82,14 +82,14 @@ function popFile(objectClass, objectId, elementClass, elementId){
       <table class="form">
         <tr>
           <th class="category" colspan="4">
-            Prodécure en cours de demande
+            {{tr}}_CDocGed_attente_demande{{/tr}}
           </th>
         </tr>
         <tr>
-          <th class="category">Demande formulée</th>
-          <th class="category">Etablissement</th>
-          <th class="category">Date</th>
-          <th class="category">Remarques</th>
+          <th class="category">{{tr}}_CDocGed_demande{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-group_id{{/tr}}</th>
+          <th class="category">{{tr}}Date{{/tr}}</th>
+          <th class="category">{{tr}}CDocGedSuivi-remarques{{/tr}}</th>
         </tr>
         {{foreach from=$procDemande item=currProc}}
         <tr>
@@ -101,9 +101,9 @@ function popFile(objectClass, objectId, elementClass, elementId){
             <input type="hidden" name="del" value="0" />
             {{assign var="date_proc" value=$currProc->_lastentry->date|date_format:"%d %b %Y à %Hh%M"}}
             <a class="buttonedit notext" href="index.php?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}"></a>            {{if $currProc->_lastactif->doc_ged_suivi_id}}
-              Révision de la procédure {{$currProc->_reference_doc}}
+              {{tr}}_CDocGed_revision{{/tr}} {{$currProc->_reference_doc}}
             {{else}}
-              Nouvelle Procédure
+              {{tr}}_CDocGed_new{{/tr}}
             {{/if}}
             </form>
           </td>
@@ -125,14 +125,14 @@ function popFile(objectClass, objectId, elementClass, elementId){
       
       <table class="form">
         <tr>
-          <th class="category" colspan="5">Procédure En attente</th>
+          <th class="category" colspan="5">{{tr}}_CDocGed_attente_demande{{/tr}}</th>
         </tr>
         <tr>
-          <th class="category">Titre</th>
-          <th class="category">Référence</th>
-          <th class="category">Etablissement</th>
-          <th class="category">Thème</th>
-          <th class="category">Etat</th>
+          <th class="category">{{tr}}CDocGed-titre{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-_reference_doc{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-group_id{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-doc_theme_id{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-etat{{/tr}}</th>
         </tr>
         {{foreach from=$procEnCours item=currProc}}
         <tr>
@@ -157,7 +157,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
         {{foreachelse}}
         <tr>
           <td colspan="5">
-            Aucune Procédure En Cours
+            {{tr}}CDocGed.none{{/tr}}
           </td>
         </tr>
         {{/foreach}}
@@ -186,10 +186,10 @@ function popFile(objectClass, objectId, elementClass, elementId){
               <input type="hidden" name="suivi[etat]" value="{{$smarty.const.CDOC_DEMANDE}}" />
               {{if $docGed->etat==CDOC_TERMINE}}
               <input type="hidden" name="suivi[doc_ged_suivi_id]" value="" />
-              Demande de modification d'une Procédure
+              {{tr}}msg-CDocGed-title-modify-demande{{/tr}}
               {{else}}
               <input type="hidden" name="suivi[doc_ged_suivi_id]" value="{{$docGed->_lastentry->doc_ged_suivi_id}}" />              
-              Modification d'une demande de Procédure
+              {{tr}}msg-CDocGed-title-modify{{/tr}}
               {{/if}}
             </th>
           {{elseif $docGed->doc_ged_id && $docGed->etat==CDOC_REDAC}}
@@ -197,42 +197,42 @@ function popFile(objectClass, objectId, elementClass, elementId){
               <input type="hidden" name="ged[etat]" value="{{$smarty.const.CDOC_VALID}}" />
               <input type="hidden" name="suivi[etat]" value="{{$smarty.const.CDOC_REDAC}}" />
               <input type="hidden" name="suivi[doc_ged_suivi_id]" value="" />
-              Rédaction d'un document
+              {{tr}}msg-CDocGed-etatredac_CDOC_REDAC{{/tr}}
             </th>
           {{elseif $docGed->doc_ged_id}}
             <th class="title" colspan="2" style="color: #f00;">
-              Validation en cours
+              {{tr}}msg-CDocGed-title-valid{{/tr}}
             </th>
           {{else}}
             <th class="title" colspan="2">
               <input type="hidden" name="ged[etat]" value="{{$smarty.const.CDOC_DEMANDE}}" />
               <input type="hidden" name="suivi[etat]" value="{{$smarty.const.CDOC_DEMANDE}}" />
               <input type="hidden" name="suivi[doc_ged_suivi_id]" value="" />
-              Création d'une Procédure
+              {{tr}}msg-CDocGed-title-create{{/tr}}
             </th>
           {{/if}}                    
         </tr>       
         {{if $docGed->etat==CDOC_TERMINE || $docGed->etat==CDOC_DEMANDE || !$docGed->doc_ged_id}}
           {{if $docGed->doc_ged_id && $docGed->etat!=CDOC_TERMINE}}
           <tr>
-            <th>Date</th>
+            <th>{{tr}}Date{{/tr}}</th>
             <td>{{$docGed->_lastentry->date|date_format:"%A %d %B %Y à %Hh%M"}}</td>
           </tr>
           {{/if}}
           <tr>
-            <th>Procédure Associée</th>
+            <th>{{tr}}CDocGedSuivi-doc_ged_suivi_id-court{{/tr}}</th>
             <td>
               {{if $docGed->doc_ged_id && $docGed->_lastactif->doc_ged_suivi_id}}
-                Révision de la procédure {{$docGed->_reference_doc}}<br />
-                Thème : {{$docGed->_ref_theme->nom}}
+                {{tr}}_CDocGed_revision{{/tr}} {{$docGed->_reference_doc}}<br />
+                {{tr}}CDocGed-doc_theme_id{{/tr}} : {{$docGed->_ref_theme->nom}}
               {{else}}
-                Nouvelle Procédure
+                {{tr}}_CDocGed_new{{/tr}}
               {{/if}}
             </td>
           </tr>
           <tr>
             <th>
-              <label for="ged[group_id]" title="Etablissement où sera appliqué la procédure">Etablissement</label>
+              <label for="ged[group_id]" title="{{tr}}CDocGed-group_id-desc{{/tr}}">{{tr}}CDocGed-group_id{{/tr}}</label>
             </th>
             <td colspan="2">
               <select title="{{$docGed->_props.group_id}}" name="ged[group_id]">
@@ -243,7 +243,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
             </td>
           </tr>
           <tr>
-            <th><label for="suivi[remarques]" title="Veuillez saisir vos remarques">Remarques</label></th>
+            <th><label for="suivi[remarques]" title="{{tr}}CDocGedSuivi-remarques-desc{{/tr}}">{{tr}}CDocGedSuivi-remarques{{/tr}}</label></th>
             <td>
               <textarea name="suivi[remarques]" title="{{$docGed->_lastentry->_props.remarques}}|notNull">{{$docGed->_lastentry->remarques}}</textarea>
             </td>
@@ -252,22 +252,22 @@ function popFile(objectClass, objectId, elementClass, elementId){
             <td colspan="2" class="button">
               {{if $docGed->doc_ged_id && $docGed->etat!=CDOC_TERMINE}}
               <button class="modify" type="submit">
-                Modifier
+                {{tr}}Modify{{/tr}}
               </button>
               {{assign var="date_proc" value=$docGed->_lastentry->date|date_format:"%d %b %Y à %Hh%M"}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'la demande de procédure du ',objName:'{{$date_proc|smarty:nodefaults|JSAttribute}}'})" title="Supprimer cette demande de Procédure">
-                Supprimer
+              <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'{{tr escape="javascript"}}CDocGed.one{{/tr}}',objName:'{{$date_proc|smarty:nodefaults|JSAttribute}}'})" title="{{tr}}Delete{{/tr}}">
+                {{tr}}Delete{{/tr}}
               </button>              
               {{else}}
               <button class="modify" type="submit">
-                Créer
+                {{tr}}Create{{/tr}}
               </button>              
               {{/if}}
             </td>
           </tr>
         {{elseif $docGed->etat==CDOC_REDAC}}
           <tr>
-            <th>Procédure</th>
+            <th>{{tr}}CDocGed.one{{/tr}}</th>
             <td>
               {{$docGed->_reference_doc}}
               <input type="hidden" name="file_class" value="CDocGed" />
@@ -276,38 +276,38 @@ function popFile(objectClass, objectId, elementClass, elementId){
             </td>
           </tr>
           <tr>
-            <th>Titre</th>
+            <th>{{tr}}CDocGed-titre{{/tr}}</th>
             <td>{{$docGed->titre}}</td>
           </tr>
           <tr>
-            <th>Visé par</th>
+            <th>{{tr}}_CDocGed_validBy{{/tr}}</th>
             <td class="text">{{$docGed->_lastentry->_ref_user->_view}} ({{$docGed->_lastentry->date|date_format:"%d %B %Y - %Hh%M"}})</td>
           </tr>
           {{if $docGed->_lastentry->file_id}}
           <tr>
-            <th>Dernier Fichier lié</th>
+            <th>{{tr}}_CDocGed_lastfile{{/tr}}</th>
             <td>
-              <a href="javascript:popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="Voir le Fichier">
+              <a href="javascript:popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}msg-CFile-viewfile{{/tr}}">
                 <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
               </a>
             </td>
           </tr>
           {{/if}}
           <tr>
-            <th>Dernière Remarque</th>
+            <th>{{tr}}_CDocGed_lastcomm{{/tr}}</th>
             <td class="text">
               {{$docGed->_lastentry->remarques|nl2br}}
             </td>
           </tr>          
           
           <tr>
-            <th><label for="formfile">Fichier</label></th>
+            <th><label for="formfile">{{tr}}File{{/tr}}</label></th>
             <td>
               <input type="file" name="formfile" size="0" title="str|notNull" />
             </td>
           </tr>
           <tr>
-            <th><label for="suivi[remarques]" title="Veuillez saisir vos remarques">Remarques</label></th>
+            <th><label for="suivi[remarques]" title="{{tr}}CDocGedSuivi-remarques-desc{{/tr}}">{{tr}}CDocGedSuivi-remarques{{/tr}}</label></th>
             <td>
               <textarea name="suivi[remarques]" title="{{$docGed->_lastentry->_props.remarques}}|notNull"></textarea>
             </td>
@@ -315,18 +315,16 @@ function popFile(objectClass, objectId, elementClass, elementId){
           <tr>
             <td colspan="2" class="button">
               <button class="modify" type="submit">
-                Ajouter
+                {{tr}}Add{{/tr}}
               </button>
             </td>
           </tr>
         {{else}}
           <tr>
-            <td class="button" colspan="2">
-              <br />Le document suivant est en cours de validation auprès du service Qualité.
-              <br />Vous ne pouvez pas y apporter de modification.
+            <td class="button text" colspan="2">
+              <br />{{tr}}_CDocGed_valid{{/tr}}
               <br />
-              <br />
-              <a href="javascript:popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="Voir le Fichier">
+              <a href="javascript:popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}msg-CFile-viewfile{{/tr}}">
                 <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
               </a>
               <br />{{$docGed->_reference_doc}}

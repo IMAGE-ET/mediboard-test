@@ -71,28 +71,30 @@ class CDocGed extends CMbObject {
   }
 
   function getEtatRedac() {
+    global $AppUI;
     $etat = array();
-    $etat[CDOC_DEMANDE]   = "Demande en cours de traitement";
-    $etat[CDOC_REDAC]     = "En Attente de Rédaction";
-    $etat[CDOC_VALID]     = "En Cours de Validation";
+    $etat[CDOC_DEMANDE]   = $AppUI->_("msg-CDocGed-etatredac_CDOC_DEMANDE");
+    $etat[CDOC_REDAC]     = $AppUI->_("msg-CDocGed-etatredac_CDOC_REDAC");
+    $etat[CDOC_VALID]     = $AppUI->_("msg-CDocGed-etatredac_CDOC_VALID");
     if($this->annule){
-      $etat[CDOC_TERMINE]   = "Document Non Disponible";
+      $etat[CDOC_TERMINE]   = $AppUI->_("msg-CDocGed-etat_INDISPO");
     }else{
-      $etat[CDOC_TERMINE]   = "Document Disponible";  
+      $etat[CDOC_TERMINE]   = $AppUI->_("msg-CDocGed-etat_DISPO");  
     }
     if($this->etat)
       $this->_etat_actuel = $etat[$this->etat];
   }
   
   function getEtatValid() {
+    global $AppUI;
     $etat = array();
-    $etat[CDOC_DEMANDE]   = "Demande de Procédure";
-    $etat[CDOC_REDAC]     = "En Cours de Rédaction";
-    $etat[CDOC_VALID]     = "En Attente de Validation";
+    $etat[CDOC_DEMANDE]   = $AppUI->_("msg-CDocGed-etatvalid_CDOC_DEMANDE");
+    $etat[CDOC_REDAC]     = $AppUI->_("msg-CDocGed-etatvalid_CDOC_REDAC");
+    $etat[CDOC_VALID]     = $AppUI->_("msg-CDocGed-etatvalid_CDOC_VALID");
     if($this->annule){
-      $etat[CDOC_TERMINE]   = "Document Non Disponible";
+      $etat[CDOC_TERMINE]   = $AppUI->_("msg-CDocGed-etat_INDISPO");
     }else{
-      $etat[CDOC_TERMINE]   = "Document Disponible";  
+      $etat[CDOC_TERMINE]   = $AppUI->_("msg-CDocGed-etat_DISPO");  
     }
     if($this->etat)
       $this->_etat_actuel = $etat[$this->etat];
@@ -204,7 +206,7 @@ class CDocGed extends CMbObject {
        ){
       return true;
     }else{
-      $msg = "Cette procédure ne peut pas être supprimée.";
+      $msg = $AppUI->_("msg-CDocGed-error_delete");
       return false;
     }
   }

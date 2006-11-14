@@ -4,24 +4,24 @@
     
       <form name="FrmTypeVue" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
-      <label for="typeVue">Classification</label>
+      <label for="typeVue">{{tr}}_classification{{/tr}}</label>
       <select name="typeVue" onchange="this.form.submit();">
-        <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>Gestion des Chapitres</option>
-        <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Gestion des Thèmes</option>
+        <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>{{tr}}_CChapitreDoc_classification_chap{{/tr}}</option>
+        <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>{{tr}}_CThemeDoc_classification_theme{{/tr}}</option>
       </select>
       </form><br />
     
       <a class="buttonnew" href="index.php?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_theme_id=0">
-        Créer un nouveau Thème
+        {{tr}}CThemeDoc.create{{/tr}}
       </a>
       <table class="tbl">
         <tr>
-          <th>Nom</th>
+          <th>{{tr}}CThemeDoc-nom-court{{/tr}}</th>
         </tr>
         {{foreach from=$listThemes item=curr_theme}}
         <tr>
           <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_theme_id={{$curr_theme->doc_theme_id}}" title="Modifier le thème">
+            <a href="index.php?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_theme_id={{$curr_theme->doc_theme_id}}" title="{{tr}}CThemeDoc.modify{{/tr}}">
               {{$curr_theme->nom}}
             </a>
           </td>
@@ -37,22 +37,22 @@
       <table class="form">
         <tr>
           {{if $theme->doc_theme_id}}
-          <th class="title" colspan="2" style="color:#f00;">Modification du thème: {{$theme->_view}}</th>
+          <th class="title" colspan="2" style="color:#f00;">{{tr}}msg-CThemeDoc-title-modify{{/tr}}: {{$theme->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">Création d'un thème</th>
+          <th class="title" colspan="2">{{tr}}msg-CThemeDoc-title-create{{/tr}}</th>
           {{/if}}
         </tr>   
         <tr>
-          <th><label for="nom" title="Nom du thème, obligatoire">Nom</label></th>
+          <th><label for="nom" title="{{tr}}CThemeDoc-nom-desc{{/tr}}">{{tr}}CThemeDoc-nom{{/tr}}</label></th>
           <td><input name="nom" title="{{$theme->_props.nom}}" type="text" value="{{$theme->nom}}" /></td>
         </tr>
         <tr>
           <td class="button" colspan="2">            
             {{if $theme->doc_theme_id}}
-              <button class="modify" type="submit">Modifier</button>
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le thème',objName:'{{$theme->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+              <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'{{tr escape="javascript"}}CThemeDoc.one{{/tr}}',objName:'{{$theme->_view|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
             {{else}}
-              <button class="submit" type="submit">Créer</button>
+              <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
         </tr>        

@@ -5,7 +5,7 @@
 <script type="text/javascript">
 function saveObjectInfos(oObject){
   var url = new Url;
-  url.setModuleAction("dPpatients", "httpreq_do_savesession");
+  url.setModuleAction("dPpatients", "httpreq_save_classKey");
   url.addParam("selClass", oObject.objClass);
   url.addParam("selKey", oObject.id);
   url.requestUpdate('systemMsg', { waitingText : null });

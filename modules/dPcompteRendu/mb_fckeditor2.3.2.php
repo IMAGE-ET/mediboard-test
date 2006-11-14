@@ -48,5 +48,5 @@ $smarty = new CSmartyDP(1);
 
 $smarty->assign("templateManager" , $templateManager);
 
-$smarty->display("mb_fckeditor2.3.tpl");
+$smarty->display("mb_fckeditor2.3.2.tpl");
 ?>

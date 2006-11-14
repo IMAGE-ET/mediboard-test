@@ -17,7 +17,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   if(sfn && sfn!=0){
     url.addParam("sfn", sfn);
   }
-  url.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
+  url.requestUpdate('bigView', { waitingText : "{{tr}}msg-CFile-loadimgmini{{/tr}}" });
 }
 
 </script>
@@ -26,12 +26,12 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
     <td class="halfPane">
       {{if $canAdmin && $docGed->doc_ged_id}}
         <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_modeles&amp;doc_ged_id=0">
-        Créer un nouveau modèle
+        {{tr}}CDocGed.create_modele{{/tr}}
         </a>
       {{/if}}
       <table class="tbl">
         <tr>
-          <th class="category">Titre</th>
+          <th class="category">{{tr}}CDocGed-titre{{/tr}}</th>
         </tr>
         {{foreach from=$modeles item=currModele}}
         <tr>
@@ -48,7 +48,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         {{foreachelse}}
         <tr>
           <td>
-          Aucun modèle disponible
+          {{tr}}CDocGed.none-modele{{/tr}}
           </td>
         </tr>
         {{/foreach}}
@@ -84,18 +84,18 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         <tr>
           {{if $docGed->doc_ged_id}}
           <th class="title" style="color:#f00;" colspan="2">
-            Modification d'un modèle
+            {{tr}}msg-CDocGed-title-modify-modele{{/tr}}
             <input type="hidden" name="ged[user_id]" value="{{$docGed->user_id}}" />
           {{else}}
           <th class="title" colspan="2">
-            Création d'un nouveau Modèle
+            {{tr}}msg-CDocGed-title-create-modele{{/tr}}
             <input type="hidden" name="ged[user_id]" value="{{$user}}" />
           {{/if}}
           </th>
         </tr>
         <tr>
           <th>
-            <label for="ged[titre]" title="Veuillez saisir un titre pour ce modèle">Titre du modèle</label>
+            <label for="ged[titre]" title="{{tr}}CDocGed-titre-modele-desc{{/tr}}">{{tr}}CDocGed-titre-modele{{/tr}}</label>
           </th>
           <td>
             <input type="text" name="ged[titre]" value="{{$docGed->titre}}" title="{{$docGed->_props.titre}}|notNull" />
@@ -103,7 +103,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         </tr>
         <tr>
           <th>
-            <label for="ged[group_id]" title="Etablissement où sera visible ce modèle de Procédure">Etablissement</label>
+            <label for="ged[group_id]" title="{{tr}}CDocGed-group_id-desc-modele{{/tr}}">{{tr}}CDocGed-group_id{{/tr}}</label>
           </th>
           <td colspan="2">
             <select title="{{$docGed->_props.group_id}}" name="ged[group_id]">
@@ -115,9 +115,9 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         </tr>
         {{if $docGed->doc_ged_id}}
         <tr>
-          <th>Fichier actuel</th>
+          <th>{{tr}}File{{/tr}}</th>
           <td class="button">
-            <a href="javascript:popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="Voir le Fichier">
+            <a href="javascript:popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}msg-CFile-loadimgmini{{/tr}}">
               <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
             </a>
           </td>
@@ -127,9 +127,9 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           <th>
             <label for="formfile">
               {{if $docGed->doc_ged_id}}
-              Changer le fichier
+              {{tr}}CDocGedSuivi-file_id-modify{{/tr}}
               {{else}}
-              Ajouter un fichier
+              {{tr}}CDocGedSuivi-file_id-new{{/tr}}
               {{/if}}
             </label>
           </th>
@@ -141,14 +141,14 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           <td colspan="2" class="button">
             {{if $docGed->doc_ged_id}}
             <button class="modify" type="submit">
-              Modifier
+              {{tr}}Modify{{/tr}}
             </button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'Le modèle ',objName:'{{$docGed->titre|smarty:nodefaults|JSAttribute}}'})" title="Supprimer la Procédure">
-              Supprimer
+            <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'{{tr escape="javascript"}}CDocGed.one-modele{{/tr}}',objName:'{{$docGed->titre|smarty:nodefaults|JSAttribute}}'})" title="{{tr}}Delete{{/tr}}">
+              {{tr}}Delete{{/tr}}
             </button>
             {{else}}
             <button class="submit" type="submit">
-              Ajouter
+              {{tr}}Create{{/tr}}
             </button>
             {{/if}}
           </td>

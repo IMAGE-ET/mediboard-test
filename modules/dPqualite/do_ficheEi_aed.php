@@ -14,10 +14,6 @@ $_validation   = mbGetValueFromPost("_validation", null);
 class CDoFicheEiAddEdit extends CDoObjectAddEdit {
   function CDoFicheEiAddEdit() {
     $this->CDoObjectAddEdit("CFicheEi", "fiche_ei_id");
-    
-    $this->createMsg = "Votre fiche d'incident à bien été prise en compte";
-    $this->modifyMsg = "Fiche d'EI modifiée";
-    $this->deleteMsg = "Fiche d'EI supprimée";
   }
 
   function doStore() {

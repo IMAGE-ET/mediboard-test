@@ -1,5 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-"CFilesCategory"=>"Catégorie de Fichier",
+"msg-CFile-viewfile"=>"Voir le Fichier",
 "CFile"=>"Fichiers",
+"CFilesCategory"=>"Catégorie de Fichier",
+"msg-CFile-loadimgmini"=>"Chargement du miniature",

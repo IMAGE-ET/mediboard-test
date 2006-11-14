@@ -1,17 +1,18 @@
 <script type="text/javascript">
 
 function pageMain() {
-  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&op=0&date=");
   PairEffect.initGroup("acteEffect");
+  
+  var opsUpdater = new Url;
+  opsUpdater.setModuleAction("dPsalleOp", "httpreq_liste_plages");
+  opsUpdater.addParam("date", "{{$date}}");
+  opsUpdater.periodicalUpdate('listplages', { frequency: 60 });
 }
-
 </script>
 
 <table class="main">
   <tr>
-    <td style="width: 200px;">
-      {{include file="inc_liste_plages.tpl"}}
-    </td>
+    <td style="width: 200px;" id="listplages"></td>
     <td class="greedyPane">
       <table class="tbl">
         {{if $selOp->operation_id}}

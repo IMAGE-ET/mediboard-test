@@ -1,6 +1,6 @@
 {{if $item->ei_item_id}}
 <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_item_id=0">
-  Créer un nouvel Item
+  {{tr}}CEiItem.create{{/tr}}
 </a>
 {{/if}}
 <form name="editCategorie" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -11,16 +11,16 @@
   <tr>
     {{if $item->ei_item_id}}
     <th colspan="2" class="category" style="color:#f00;">
-      Modification de l'item : {{$item->nom}}
+      {{tr}}msg-CEiItem-title-modify{{/tr}} : {{$item->_view}}
     {{else}}
     <th colspan="2" class="category">
-      Création d'un nouvel item
+      {{tr}}msg-CEiItem-title-create{{/tr}}
     {{/if}}
     </th>
   </tr>
   <tr>
     <th>
-      <label for="nom" title="Veuillez saisir un nom pour l'item">Nom de l'item</label>
+      <label for="nom" title="{{tr}}CEiItem-nom-desc{{/tr}}">{{tr}}CEiItem-nom{{/tr}}</label>
     </th>
     <td>
       <input type="text" name="nom" value="{{$item->nom}}" title="{{$item->_props.nom}}" />
@@ -28,11 +28,11 @@
   </tr>
   <tr>
     <th>
-      <label for="ei_categorie_id" title="Veuillez choisir une catégorie">Catégorie</label>
+      <label for="ei_categorie_id" title="{{tr}}CEiItem-ei_categorie_id-desc{{/tr}}">{{tr}}CEiItem-ei_categorie_id{{/tr}}</label>
     </th>
     <td>
       <select name="ei_categorie_id" title="{{$item->_props.ei_categorie_id}}">
-        <option value="">&mdash; Veuillez choisir une Catégorie</option>
+        <option value="">&mdash; {{tr}}CEiItem-ei_categorie_id-desc{{/tr}}</option>
         {{foreach from=$listCategories item=curr_cat}}        
         <option value="{{$curr_cat->ei_categorie_id}}"{{if $curr_cat->ei_categorie_id==$item->ei_categorie_id}} selected="selected"{{/if}}>
           {{$curr_cat->nom}}
@@ -44,10 +44,10 @@
   <tr>
     <td class="button" colspan="2">            
       {{if $item->ei_item_id}}
-      <button class="modify" type="submit">Modifier</button>
-      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'item',objName:'{{$item->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'{{tr escape="javascript"}}CEiItem.one{{/tr}}',objName:'{{$item->_view|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
       {{else}}
-      <button class="submit" type="submit">Créer</button>
+      <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
       {{/if}}
     </td>
   </tr>  
@@ -57,12 +57,12 @@
 
 <table class="tbl">
   <tr>
-    <th>Nom</th>
+    <th>{{tr}}CEiItem-nom-court{{/tr}}</th>
     <th>
       <form name="chgMode" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <select name="vue_item" onchange="submit()">
-        <option value="">&mdash; Toute les Catégories</option>
+        <option value="">&mdash; {{tr}}_CEiItem_allcategorie{{/tr}}</option>
         {{foreach from=$listCategories item=curr_cat}}        
           <option value="{{$curr_cat->ei_categorie_id}}"{{if $curr_cat->ei_categorie_id==$vue_item}} selected="selected"{{/if}}>
             {{$curr_cat->nom}}
@@ -75,7 +75,7 @@
   {{foreach from=$listItems item=curr_item}}
   <tr>
     <td class="text">
-      <a href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_item_id={{$curr_item->ei_item_id}}" title="Modifier l'item">
+      <a href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_item_id={{$curr_item->ei_item_id}}" title="{{tr}}CEiItem.modify{{/tr}}">
         {{$curr_item->nom}}
       </a>
     </td>
@@ -86,7 +86,7 @@
   {{foreachelse}}
   <tr>
     <td colspan="3">
-      Actuellement, il n'y a aucun Item.
+      {{tr}}CEiItem.none{{/tr}}
     </td>
   </tr>
   {{/foreach}}

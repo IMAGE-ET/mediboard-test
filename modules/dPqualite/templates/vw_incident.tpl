@@ -97,7 +97,7 @@ function pageMain() {
         {{if $canAdmin}}
         <tr>
           <th colspan="2">
-            <label for="user_id" title="Auteur de la fiche">Auteur de la fiche</label>
+            <label for="user_id" title="{{tr}}CFicheEi-user_id{{/tr}}">{{tr}}CFicheEi-user_id{{/tr}}</label>
           </th>
           <td colspan="2">
             <select name="user_id" title="{{$fiche->_props.user_id}}">
@@ -129,38 +129,38 @@ function pageMain() {
           {{else}}
           <th colspan="4" class="title">
           {{/if}}
-            Fiche d'Incident Prévention - Gestion des Risques
+            {{tr}}_CFicheEi-titleFiche{{/tr}}
           </th>
         </tr>
         
         <tr>
           <th>
-            <label for="type_incident" title="Veuillez Sélectionner un type de signalement">Type de Signalement</label>
+            <label for="type_incident" title="{{tr}}CFicheEi-type_incident-desc{{/tr}}">{{tr}}CFicheEi-type_incident{{/tr}}</label>
           </th>
           <td>
             <select name="type_incident" title="{{$fiche->_props.type_incident}}">
-            <option value="">&mdash;Veuillez Choisir &mdash;</option>
+            <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
             {{html_options options=$fiche->_enumsTrans.type_incident selected=$fiche->type_incident}}
             </select>
           </td>
-          <th><label for="_incident_date" title="Date de l'événement">Date de l'événement</label></th>
+          <th><label for="_incident_date" title="{{tr}}CFicheEi-date_incident-desc{{/tr}}">{{tr}}CFicheEi-date_incident{{/tr}}</label></th>
           <td class="date">
             <div id="FrmEI__incident_date_da">{{if $fiche->fiche_ei_id}}{{$fiche->_incident_date|date_format:"%d/%m/%Y"}}{{else}}{{$datenow|date_format:"%d/%m/%Y"}}{{/if}}</div>
             <input type="hidden" name="_incident_date" title="date|notNull" value="{{if $fiche->fiche_ei_id}}{{$fiche->_incident_date}}{{else}}{{$datenow}}{{/if}}" />
-            <img id="FrmEI__incident_date_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date pour l'évènement"/>
+            <img id="FrmEI__incident_date_trigger" src="./images/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-date_incident-desc{{/tr}}"/>
          </td>
         </tr>
         <tr>
           <th>
-            <label for="elem_concerne" title="Veuillez choisir à qui ou à quoi se réfère cette fiche">Cette Fiche concerne</label>
+            <label for="elem_concerne" title="{{tr}}CFicheEi-elem_concerne-desc{{/tr}}">{{tr}}CFicheEi-elem_concerne{{/tr}}</label>
           </th>
           <td>
             <select name="elem_concerne" title="{{$fiche->_props.elem_concerne}}">
-            <option value="">&mdash;Veuillez Choisir &mdash;</option>
+            <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
             {{html_options options=$fiche->_enumsTrans.elem_concerne selected=$fiche->elem_concerne}}
             </select>            
           </td>
-          <th><label for="_incident_heure" title="Heure de l'événement">Heure de l'événement</label></th>
+          <th><label for="_incident_heure" title="{{tr}}CFicheEi-_incident_heure{{/tr}}">{{tr}}CFicheEi-_incident_heure{{/tr}}</label></th>
           <td>
             <select name="_incident_heure">
             {{foreach from=$heures|smarty:nodefaults item=curr_heure}}
@@ -176,26 +176,26 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="elem_concerne_detail" title="Précision concernant l'objet ou la personne concerné">
-              Précisez
+            <label for="elem_concerne_detail" title="{{tr}}CFicheEi-elem_concerne_detail-desc{{/tr}}">
+              {{tr}}CFicheEi-elem_concerne_detail{{/tr}}
             </label>
           </th>
           <td>
             <textarea name="elem_concerne_detail" title="{{$fiche->_props.elem_concerne_detail}}">{{$fiche->elem_concerne_detail}}</textarea>
           </td>
-          <th><label for="lieu" title="Veuillez saisir le service ou à eu lieu l'événement">Service</label></th>
+          <th><label for="lieu" title="{{tr}}CFicheEi-lieu-desc{{/tr}}">{{tr}}CFicheEi-lieu{{/tr}}</label></th>
           <td>
             <input type="text" name="lieu" title="{{$fiche->_props.lieu}}" value="{{$fiche->lieu}}" />
           </td>
         </tr>
         <tr>
-          <th colspan="4" class="category"><label for="evenements" title="Veuillez choisir ce qui décrit le mieux l'événement">Description de l'événement</label></th>
+          <th colspan="4" class="category"><label for="evenements" title="{{tr}}CFicheEi-evenements-desc{{/tr}}">{{tr}}CFicheEi-evenements{{/tr}}</label></th>
         </tr>
 
         <tr>
           <td colspan="2"rowspan="2" class="halfPane" id="listChoix"></td>
           <th>
-            <label for="_cat_evenement" title="Veuillez Sélectionner un catégorie d'événement">Catégorie d'événement</label>
+            <label for="_cat_evenement" title="{{tr}}CFicheEi-_cat_evenement-desc{{/tr}}">{{tr}}CFicheEi-_cat_evenement{{/tr}}</label>
           </th>
           <td style="height:1%;">
             <input type="hidden" name="evenements" title="{{$fiche->_props.evenements}}" value="{{$fiche->evenements}}"/>
@@ -229,81 +229,81 @@ function pageMain() {
              {{foreachelse}}
              <tr>
                <td>
-                 Pas d'Item dans cette catégorie
+                 {{tr}}_CFicheEi-noitemscat{{/tr}}
                </td>
              </tr>
              {{/foreach}}
            </table>
            {{foreachelse}}
-           Aucun Item disponible
+           {{tr}}CEiItem.none{{/tr}}
            {{/foreach}}
          </td>
        </tr>
 
         <tr>
-          <th colspan="4" class="category">Informations complémentaires</th>
+          <th colspan="4" class="category">{{tr}}_CFicheEi-infoscompl{{/tr}}</th>
         </tr>
         <tr>
           <th>
-            <label for="autre" title="Veuillez saisir les événements non listés ci-dessous">Autre</label>
+            <label for="autre" title="{{tr}}CFicheEi-autre-desc{{/tr}}">{{tr}}CFicheEi-autre{{/tr}}</label>
           </th>
           <td>
             <textarea name="autre" title="{{$fiche->_props.autre}}">{{$fiche->autre}}</textarea>
           </td>
-          <th><label for="gravite" title="Veuillez Sélectionner la gravitée estimée de l'événement">Gravitée Estimée</label></th>
+          <th><label for="gravite" title="{{tr}}CFicheEi-gravite-desc{{/tr}}">{{tr}}CFicheEi-gravite{{/tr}}</label></th>
           <td>
             <select name="gravite" title="{{$fiche->_props.gravite}}">
-              <option value="">&mdash;Veuillez Choisir &mdash;</option>
+              <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
               {{html_options options=$fiche->_enumsTrans.gravite selected=$fiche->gravite}}
             </select>
           </td>
         </tr>
         <tr>
           <th>
-            <label for="descr_faits" title="Veuillez décrire les faits">Description des faits</label>
+            <label for="descr_faits" title="{{tr}}CFicheEi-descr_faits-desc{{/tr}}">{{tr}}CFicheEi-descr_faits{{/tr}}</label>
           </th>
           <td>
             <textarea name="descr_faits" title="{{$fiche->_props.descr_faits}}">{{$fiche->descr_faits}}</textarea>
           </td>
-          <th><label for="plainte" title="Une plainte est-elle prévisible pour cet événement">Plainte prévisible</label></th>
+          <th><label for="plainte" title="{{tr}}CFicheEi-plainte-desc{{/tr}}">{{tr}}CFicheEi-plainte{{/tr}}</label></th>
           <td>
             <select name="plainte" title="{{$fiche->_props.plainte}}">
-              <option value="">&mdash;Veuillez Choisir &mdash;</option>
+              <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
               {{html_options options=$fiche->_enumsTrans.plainte selected=$fiche->plainte}}
             </select>
           </td>
         </tr>
         <tr>
           <th>
-            <label for="mesures" title="Veuillez décrire les mesures prises">Mesures Prises</label>
+            <label for="mesures" title="{{tr}}CFicheEi-mesures-desc{{/tr}}">{{tr}}CFicheEi-mesures{{/tr}}</label>
           </th>
           <td>
             <textarea name="mesures" title="{{$fiche->_props.mesures}}">{{$fiche->mesures}}</textarea>
           </td>
-          <th><label for="commission" title="Y aura t'il une Commission de conciliation">Commission conciliation</label></th>
+          <th><label for="commission" title="{{tr}}CFicheEi-commission-desc{{/tr}}">{{tr}}CFicheEi-commission{{/tr}}</label></th>
           <td>
             <select name="commission" title="{{$fiche->_props.commission}}">
-              <option value="">&mdash;Veuillez Choisir &mdash;</option>
+              <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
               {{html_options options=$fiche->_enumsTrans.commission selected=$fiche->commission}}
             </select>
           </td>
         </tr>
         <tr>
           <th>
-            <label for="descr_consequences" title="Veuillez décrire les conséquences">Description des conséquences</label>
+            <label for="descr_consequences" title="{{tr}}CFicheEi-descr_consequences-desc{{/tr}}">{{tr}}CFicheEi-descr_consequences{{/tr}}</label>
           </th>
           <td>
             <textarea name="descr_consequences" title="{{$fiche->_props.descr_consequences}}">{{$fiche->descr_consequences}}</textarea>
           </td>
-          <th><label for="suite_even" title="Veuillez choisir la suite de l'évènement">Suite de l'évènement</label></th>
+          <th><label for="suite_even" title="{{tr}}CFicheEi-suite_even-desc{{/tr}}">{{tr}}CFicheEi-suite_even{{/tr}}</label></th>
           <td>
             <select name="suite_even" title="{{$fiche->_props.suite_even}}" onchange="javascript:choixSuiteEven();">
-              <option value="">&mdash;Veuillez Choisir &mdash;</option>
+              <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
               {{html_options options=$fiche->_enumsTrans.suite_even selected=$fiche->suite_even}}
             </select>
             <table id="suiteEvenAutre" style="width:100%;{{if $fiche->suite_even!="autre"}}display:none;{{/if}}">
             <tr>
-              <td><label for="suite_even_descr" title="Précisez les suite de l'évènement">Précisez :</label></td>
+              <td><label for="suite_even_descr" title="{{tr}}CFicheEi-suite_even_descr-desc{{/tr}}">{{tr}}CFicheEi-suite_even_descr{{/tr}}</label></td>
             </tr>
             <tr>
               <td>
@@ -315,7 +315,7 @@ function pageMain() {
         </tr>
         <tr>
           <th colspan="2">
-            <label for="deja_survenu" title="Avez-vous déjà eu connaissance d'un evenement similaire">Evénement déjà survenu à votre connaissance</label>
+            <label for="deja_survenu" title="{{tr}}CFicheEi-deja_survenu-desc{{/tr}}">{{tr}}CFicheEi-deja_survenu{{/tr}}</label>
           </th>
           <td colspan="2">
             <select name="deja_survenu" title="{{$fiche->_props.deja_survenu}}">
@@ -328,9 +328,9 @@ function pageMain() {
           <td colspan="4" class="button">
             <button class="submit" type="submit">
               {{if $fiche->fiche_ei_id}}
-              Modifier la Fiche
+              {{tr}}Modify{{/tr}}
               {{else}}
-              Envoyer la Fiche
+              {{tr}}button-CFicheEi-send{{/tr}}
               {{/if}}
             </button>
           </td>

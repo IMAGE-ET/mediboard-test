@@ -1,3 +1,4 @@
+
       <form action="index.php" name="selection" method="get">
       
       <input type="hidden" name="m" value="{{$m}}" />
@@ -27,5 +28,7 @@
       </table>
       
       </form>
-      
+      <script type="text/javascript">
+      regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&op=0&date=");
+	  </script>      
       {{include file="inc_details_plages.tpl"}}

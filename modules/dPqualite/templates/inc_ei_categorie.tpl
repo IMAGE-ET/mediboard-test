@@ -1,6 +1,6 @@
 {{if $categorie->ei_categorie_id}}
 <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id=0">
-  Créer une nouvelle Catégorie
+  {{tr}}CEiCategorie.create{{/tr}}
 </a>
 {{/if}}
 <form name="editCategorie" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -11,16 +11,16 @@
   <tr>
     {{if $categorie->ei_categorie_id}}
     <th colspan="2" class="category" style="color:#f00;">
-      Modification de la catégorie : {{$categorie->nom}}
+      {{tr}}msg-CEiCategorie-title-modify{{/tr}} : {{$categorie->_view}}
     {{else}}
     <th colspan="2" class="category">
-      Création d'une nouvelle catégorie
+      {{tr}}msg-CEiCategorie-title-create{{/tr}}
     {{/if}}
     </th>
   </tr>
   <tr>
     <th>
-      <label for="nom" title="Veuillez saisir un nom pour la catégorie">Nom de la catégorie</label>
+      <label for="nom" title="{{tr}}CEiCategorie-nom-desc{{/tr}}">{{tr}}CEiCategorie-nom{{/tr}}</label>
     </th>
     <td>
       <input type="text" name="nom" value="{{$categorie->nom}}" title="{{$categorie->_props.nom}}" />
@@ -29,10 +29,10 @@
   <tr>
     <td class="button" colspan="2">            
       {{if $categorie->ei_categorie_id}}
-      <button class="modify" type="submit">Modifier</button>
-      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la catégorie',objName:'{{$categorie->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'{{tr escape="javascript"}}CEiCategorie.one{{/tr}}',objName:'{{$categorie->_view|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
       {{else}}
-      <button class="submit" type="submit">Créer</button>
+      <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
       {{/if}}
     </td>
   </tr>  
@@ -41,12 +41,12 @@
 <br />
 <table class="tbl">
   <tr>
-    <th>Nom</th>
+    <th>{{tr}}CEiCategorie-nom-court{{/tr}}</th>
   </tr>
   {{foreach from=$listCategories item=curr_cat}}
   <tr>
     <td class="text">
-      <a href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id={{$curr_cat->ei_categorie_id}}" title="Modifier la catégorie">
+      <a href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id={{$curr_cat->ei_categorie_id}}" title="{{tr}}CEiCategorie.modify{{/tr}}">
         {{$curr_cat->nom}}
       </a>
     </td>
@@ -54,7 +54,7 @@
   {{foreachelse}}
   <tr>
     <td colspan="2">
-      Actuellement, il n'y a aucune catégorie.
+      {{tr}}CEiCategorie.none{{/tr}}
     </td>
   </tr>
   {{/foreach}}

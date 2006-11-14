@@ -16,11 +16,12 @@ $erreur_file=null;
 
 class CDoDocGedAddEdit extends CDoObjectAddEdit {
   function CDoDocGedAddEdit() {
+    global $AppUI;
     $this->CDoObjectAddEdit("CDocGed", "doc_ged_id");
     
-    $this->createMsg = "Modèle de procédure créée";
-    $this->modifyMsg = "Modèle de procédure modifiée";
-    $this->deleteMsg = "Modèle de procédure supprimée";
+    $this->createMsg = $AppUI->_("msg-".$this->className."-create_modele");
+    $this->modifyMsg = $AppUI->_("msg-".$this->className."-modify_modele");
+    $this->deleteMsg = $AppUI->_("msg-".$this->className."-delete_modele");
   }
   
   function doBind() {
@@ -90,11 +91,12 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
 
 class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
   function CDoDocGedSuiviAddEdit() {
+    global $AppUI;
     $this->CDoObjectAddEdit("CDocGedSuivi", "doc_ged_suivi_id");
     
-    $this->createMsg = "Suivi de modèle de procédure créé";
-    $this->modifyMsg = "Suivi de modèle de procédure modifié";
-    $this->deleteMsg = "Suivi de modèle de procédure supprimé";
+    $this->createMsg = $AppUI->_("msg-".$this->className."-create_modele");
+    $this->modifyMsg = $AppUI->_("msg-".$this->className."-modify_modele");
+    $this->deleteMsg = $AppUI->_("msg-".$this->className."-delete_modele");
   }
   
   function doBind() {
@@ -128,7 +130,7 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
   function doStore() {
     global $AppUI,$doc_ged_id,$file_id,$_validation;
     $this->_obj->date       = mbDateTime();
-    $this->_obj->remarques  = "Modèle";
+    $this->_obj->remarques  = $AppUI->_("Modele");
     $this->_obj->doc_ged_id = $doc_ged_id;
     if($file_id !== null){
       $this->_obj->file_id  = $file_id;
@@ -155,6 +157,6 @@ if($file_id){
   $do2->doIt();
 }elseif($_firstModeleGed){
   $do1->dodelete();
-  $AppUI->setMsg("Veuillez Selectionner un fichier", UI_MSG_ERROR );
+  $AppUI->setMsg("msg-CDocGed-error_file", UI_MSG_ERROR );
 }
 ?>

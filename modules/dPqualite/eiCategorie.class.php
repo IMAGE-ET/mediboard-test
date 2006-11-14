@@ -42,9 +42,9 @@ class CEiCategorie extends CMbObject {
   
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (
-      "label" => "item(s)", 
-      "name" => "ei_item", 
-      "idfield" => "ei_item_id", 
+      "label"     => "msg-CEiItem-canDelete", 
+      "name"      => "ei_item", 
+      "idfield"   => "ei_item_id", 
       "joinfield" => "ei_categorie_id"
     );
     

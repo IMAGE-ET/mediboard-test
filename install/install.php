@@ -183,34 +183,6 @@ $library->renamer = $renamer;
 $libraries[] = $library;
 
 $library = new CLibrary;
-$library->name = "FCKEditor";
-$library->url = "http://www.fckeditor.net/";
-$library->fileName = "FCKeditor_2.2.tar.gz";
-$library->description = "Composant Javascript d'édition de texte au format HTML";
-
-$renamer = new CLibraryRenamer;
-$renamer->sourceDir = "FCKeditor";
-$renamer->targetDir = "fckeditor2.2";
-
-$library->renamer = $renamer;
-
-$patch = new CLibraryPatch;
-$patch->dirName = "fckeditor2.2";
-$patch->sourceName = "config.php";
-$patch->targetDir = "editor/filemanager/browser/default/connectors/php";
-
-$library->patches[] = $patch;
-
-$patch = new CLibraryPatch;
-$patch->dirName = "fckeditor2.2";
-$patch->sourceName = "fck_showtableborders_gecko.css";
-$patch->targetDir = "editor/css";
-
-$library->patches[] = $patch;
-
-$libraries[] = $library;
-
-$library = new CLibrary;
 $library->name = "JSCalendar";
 $library->url = "http://www.dynarch.com/projects/calendar/";
 $library->fileName = "jscalendar-1.0.zip";
@@ -234,7 +206,7 @@ $libraries[] = $library;
 $library = new CLibrary;
 $library->name = "phpThumb";
 $library->url = "http://phpthumb.sourceforge.net/";
-$library->fileName = "phpThumb_1.7.4_beta3.zip";
+$library->fileName = "phpThumb_1.7.5.zip";
 $library->description = "Composant de création de thumbnails";
 $library->extraDir = "phpThumb";
 
@@ -259,14 +231,20 @@ $renamer->targetDir = "fckeditor2.3.2";
 
 $library->renamer = $renamer;
 
-$libraries[] = $library;
-
 $patch = new CLibraryPatch;
 $patch->dirName = "fckeditor2.3.2";
 $patch->sourceName = "config.php";
 $patch->targetDir = "editor/filemanager/browser/default/connectors/php";
 
+$patch = new CLibraryPatch;
+$patch->dirName = "fckeditor2.3.2";
+$patch->sourceName = "fck_showtableborders_gecko.css";
+$patch->targetDir = "editor/css";
+
 $library->patches[] = $patch;
+
+$libraries[] = $library;
+
 ?>
 
 <?php showHeader(); ?>

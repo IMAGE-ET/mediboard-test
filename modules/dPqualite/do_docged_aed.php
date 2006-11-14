@@ -17,10 +17,6 @@ $_validation   = mbGetValueFromPost("_validation", null);
 class CDoDocGedAddEdit extends CDoObjectAddEdit {
   function CDoDocGedAddEdit() {
     $this->CDoObjectAddEdit("CDocGed", "doc_ged_id");
-    
-    $this->createMsg = "Procédure créée";
-    $this->modifyMsg = "Procédure modifiée";
-    $this->deleteMsg = "Procédure supprimée";
   }
 
   function doBind() {
@@ -116,10 +112,6 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
 class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
   function CDoDocGedSuiviAddEdit() {
     $this->CDoObjectAddEdit("CDocGedSuivi", "doc_ged_suivi_id");
-    
-    $this->createMsg = "Suivi de procédure créé";
-    $this->modifyMsg = "Suivi de procédure modifié";
-    $this->deleteMsg = "Suivi de procédure supprimé";
   }
 
   function doBind() {
