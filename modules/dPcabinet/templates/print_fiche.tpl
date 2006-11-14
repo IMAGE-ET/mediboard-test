@@ -167,16 +167,14 @@
               {{if !$smarty.foreach.nameForeach.first}}
               <br />
               {{/if}}
-              <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong>
+              <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong><br />
+              
               {{foreach from=$currTypeAnt item=currAnt}}
-              <ul>
-                <li>
+                <strong>&bull;</strong> 
                 {{if $currAnt->date|date_format:"%d/%m/%Y"}}
                 {{$currAnt->date|date_format:"%d/%m/%Y"}} :
                 {{/if}}
-                {{$currAnt->rques}}
-                </li>
-              </ul>
+                {{$currAnt->rques}} 
               {{/foreach}}
               {{/if}}
               {{/foreach}}
