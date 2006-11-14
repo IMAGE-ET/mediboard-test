@@ -6,20 +6,29 @@
       
       <table class="form">
         <tr>
-          <th class="category" colspan="2">Recherche d'un dossier patient</th>
+          <th class="category" colspan="4">Recherche d'un dossier patient</th>
         </tr>
   
         <tr>
           <th><label for="nom" title="Nom du patient à rechercher, au moins les premières lettres">Nom</label></th>
           <td><input tabindex="1" type="text" name="nom" value="{{$nom|stripslashes}}" /></td>
+          <th><label for="cp" title="Code postal du patient à rechercher">Code postal</label></th>
+          <td><input tabindex="3" type="text" name="cp" value="{{$cp|stripslashes}}" /></td>
         </tr>
         
         <tr>
           <th><label for="prenom" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
           <td><input tabindex="2" type="text" name="prenom" value="{{$prenom|stripslashes}}" /></td>
+          <th><label for="ville" title="Ville du patient à rechercher">Ville</label></th>
+          <td><input tabindex="4" type="text" name="ville" value="{{$ville|stripslashes}}" /></td>
         </tr>
         
         <tr>
+          <th><label for="soundex" title="Faire une recherche phonetique sur le patient">Utiliser la phonétique</label></th>
+          <td>
+            <input type="checkbox" name="check_soundex" onclick="chgSoundex()" {{if $soundex == "on"}}checked="checked"{{/if}}/>
+            <input type="hidden"   name="soundex" {{if $soundex == "on"}}value="on"{{else}}value="off"{{/if}} />
+          </td>
           <th>
             <label for="check_naissance" title="Date de naissance du patient à rechercher">
               <input type="checkbox" name="check_naissance" onclick="affNaissance()" {{if $naissance == "on"}}checked="checked"{{/if}}/>
@@ -45,7 +54,7 @@
         </tr>
         
         <tr>
-          <td class="button" colspan="2">
+          <td class="button" colspan="4">
             {{if $board}}
             <button class="search" type="button" onclick="updateListPatients()">Rechercher</button>
             {{else}}

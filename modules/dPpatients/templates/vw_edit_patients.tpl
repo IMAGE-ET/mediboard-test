@@ -7,6 +7,7 @@ function confirmCreation(oForm){
   }
   var url = new Url;
   url.setModuleAction("dPpatients", "httpreq_get_siblings");
+  url.addParam("patient_id", oForm.patient_id.value);
   url.addParam("nom", oForm.nom.value);
   url.addParam("prenom", oForm.prenom.value);  
   if(oForm._annee.value!="" && oForm._mois.value!="" && oForm._jour.value!=""){
@@ -78,11 +79,7 @@ function pageMain() {
 
   <tr>
     <td>
-      {{if $patient->patient_id}}
-      <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-      {{else}}
       <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return confirmCreation(this)">
-      {{/if}}
       <input type="hidden" name="dosql" value="do_patients_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
@@ -144,6 +141,7 @@ function pageMain() {
       
       <tr>
         <td class="button" colspan="5" style="text-align:center;">
+          <div id="divSiblings" style="display:none;"></div>
           {{if $patient->patient_id}}
             <button tabindex="400" type="submit" class="submit">Valider</button>
             <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
@@ -153,7 +151,6 @@ function pageMain() {
               Supprimer
             </button>
           {{else}}
-            <div id="divSiblings" style="display:none;"></div>
             <button tabindex="400" type="submit" class="submit">Créer</button>
           {{/if}}
         </td>

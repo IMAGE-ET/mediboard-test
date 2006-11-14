@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.37";
+$config["mod_version"]     = "0.38";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -311,7 +311,26 @@ class CSetupdPpatients {
         db_exec( $sql ); db_error();
         
       case "0.37":
-        return "0.37";
+        set_time_limit(1800);
+        $sql = "ALTER TABLE `patients` " .
+               "\nADD `nom_soundex2`    VARCHAR(255) DEFAULT NULL AFTER `nom_jeune_fille`," .
+               "\nADD `prenom_soundex2` VARCHAR(255) DEFAULT NULL AFTER `nom_soundex2`," .
+               "\nADD `nomjf_soundex2`  VARCHAR(255) DEFAULT NULL AFTER `prenom_soundex2`;";
+        db_exec( $sql ); db_error();
+        $where = array("nom_soundex2" => "IS NULL", "nom" => "!= ''");
+        $limit = "0,1000";
+        $pat = new CPatient;
+        $listPat = $pat->loadList($where, null, $limit);
+        while(count($listPat)) {
+          foreach($listPat as $key => $pat) {
+            if($msg = $listPat[$key]->store(false, false)) {
+              mbTrace($msg, "Erreur store [".$listPat[$key]->_id."]", true);
+            }
+          }
+          $listPat = $pat->loadList($where, null, $limit);
+        }
+      case "0.38":
+        return "0.38";
     }
     return false;
   }

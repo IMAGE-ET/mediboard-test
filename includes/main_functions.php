@@ -3,8 +3,6 @@
 ## Global General Purpose Functions
 ##
 
-require_once("mb_functions.php");
-
 $CR = "\n";
 
 // returns a select box based on an key,value array where selected is based on key

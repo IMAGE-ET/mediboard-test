@@ -18,6 +18,9 @@ class CPatient extends CMbObject {
   var $nom              = null;
   var $nom_jeune_fille  = null;
   var $prenom           = null;
+  var $nom_soundex2     = null;
+  var $nomjf_soundex2   = null;
+  var $prenom_soundex2  = null;
   var $naissance        = null;
   var $sexe             = null;
   var $adresse          = null;
@@ -122,6 +125,9 @@ class CPatient extends CMbObject {
       "nom"              => "str|notNull|confidential",
       "prenom"           => "str|notNull",
       "nom_jeune_fille"  => "str|confidential",
+      "nom_soundex2"     => "str",
+      "prenom_soundex2"  => "str",
+      "nomjf_soundex2"   => "str",
       "medecin_traitant" => "ref",
       "medecin1"         => "ref",
       "medecin2"         => "ref",
@@ -245,16 +251,20 @@ class CPatient extends CMbObject {
   }
   
   function updateDBFields() {
+    $soundex2 = new soundex2;
     if ($this->nom) {
   	  $this->nom = strtoupper($this->nom);
+      $this->nom_soundex2 = $soundex2->build($this->nom);
     }
     
     if ($this->nom_jeune_fille) {
   	  $this->nom_jeune_fille = strtoupper($this->nom_jeune_fille);
+      $this->nomjf_soundex2 = $soundex2->build($this->nom_jeune_fille);
     }
 
     if ($this->prenom) {
       $this->prenom = ucwords(strtolower($this->prenom));
+      $this->prenom_soundex2 = $soundex2->build($this->prenom);
     }
 
   	if (($this->_tel1 !== null) && ($this->_tel2 !== null) && ($this->_tel3 !== null) && ($this->_tel4 !== null) && ($this->_tel5 !== null)) {
@@ -265,8 +275,11 @@ class CPatient extends CMbObject {
         $this->_tel4 .
         $this->_tel5;
     }
+    if ($this->tel == "0000000000") {
+      $this->tel = "";
+    }
 
-  	if(($this->_tel21 !== null) && ($this->_tel22 !== null) && ($this->_tel23 !== null) && ($this->_tel24 !== null) && ($this->_tel25 !== null)) {
+  	if (($this->_tel21 !== null) && ($this->_tel22 !== null) && ($this->_tel23 !== null) && ($this->_tel24 !== null) && ($this->_tel25 !== null)) {
       $this->tel2 = 
         $this->_tel21 .
         $this->_tel22 .
@@ -274,14 +287,24 @@ class CPatient extends CMbObject {
         $this->_tel24 .
         $this->_tel25;
     }
+    if ($this->tel2 == "0000000000") {
+      $this->tel2 = "";
+    }
     
-    if(($this->_tel31 !== null) && ($this->_tel32 !== null) && ($this->_tel33 !== null) && ($this->_tel34 !== null) && ($this->_tel35 !== null)) {
+    if (($this->_tel31 !== null) && ($this->_tel32 !== null) && ($this->_tel33 !== null) && ($this->_tel34 !== null) && ($this->_tel35 !== null)) {
       $this->prevenir_tel = 
         $this->_tel31 .
         $this->_tel32 .
         $this->_tel33 .
         $this->_tel34 .
         $this->_tel35;
+    }
+    if ($this->prevenir_tel == "0000000000") {
+      $this->prevenir_tel = "";
+    }
+
+    if ($this->prevenir_tel == "0000000000") {
+      $this->prevenir_tel = "";
     }
     
     if(($this->_tel41 !== null) && ($this->_tel42 !== null) && ($this->_tel43 !== null) && ($this->_tel44 !== null) && ($this->_tel45 !== null)) {
@@ -291,6 +314,13 @@ class CPatient extends CMbObject {
         $this->_tel43 .
         $this->_tel44 .
         $this->_tel45;
+    }
+    if ($this->employeur_tel == "0000000000") {
+      $this->employeur_tel = "";
+    }
+
+    if ($this->cp == "00000") {
+      $this->cp = "";
     }
 
   	if(($this->_annee != null) && ($this->_mois != null) && ($this->_jour != null)) {
@@ -544,8 +574,19 @@ class CPatient extends CMbObject {
     }
   }
   
+  function checkSimilar($nom, $prenom) {
+    $soundex2 = new soundex2;
+    $testNom    = $this->nom_soundex2    == $soundex2->build($nom);
+    $testPrenom = $this->prenom_soundex2 == $soundex2->build($prenom);
+    return($testNom && $testPrenom);
+  }
+  
   function getSiblings() {
   	$where = array();
+    
+    if($this->patient_id) {
+      $where["patient_id"] = "!= '$this->patient_id'";
+    }
     
     $where[] = db_prepare("((nom = %1 AND prenom = %2) " .
                             "OR (nom = %1 AND naissance = %3 AND naissance != '0000-00-00') " .

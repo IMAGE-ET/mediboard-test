@@ -23,6 +23,7 @@ require_once("./includes/config.php");
 is_file($dPconfig["root_dir"]."/includes/config.php") 
   or die("ERREUR FATALE: le repertoire racine est probablement mal configuré");
 
+require_once("./includes/mb_functions.php");
 require_once("./includes/main_functions.php");
 require_once("./includes/errors.php");
 

@@ -465,15 +465,17 @@ class CMbObject {
    *  @return null|string null if successful otherwise returns and error message
    */
 
-  function store($updateNulls = false) {
+  function store($updateNulls = false, $checkobject = true) {
     global $AppUI;
     
     // Properties checking
     $this->updateDBFields();
-    if($msg = $this->check()) {
-      return $AppUI->_(get_class($this)) . 
-        $AppUI->_("::store-check failed:") .
-        $AppUI->_($msg);
+    if($checkobject) {
+      if($msg = $this->check()) {
+        return $AppUI->_(get_class($this)) . 
+          $AppUI->_("::store-check failed:") .
+          $AppUI->_($msg);
+      }
     }
     
     // The object may not exist in database anymore : re-insert it
