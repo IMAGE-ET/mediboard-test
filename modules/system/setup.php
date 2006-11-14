@@ -73,9 +73,6 @@ class CSetupsystem {
       case "1.0.3":
         $old = set_time_limit(300);
 
-        $sql = "ALTER TABLE `user_log` DROP INDEX `type` ;";
-        db_exec($sql); db_error();
-        
         $sql = "ALTER TABLE `user_log` CHANGE `type` `type` ENUM( 'create', 'store', 'delete' ) NOT NULL; ";
         db_exec($sql); db_error();
         

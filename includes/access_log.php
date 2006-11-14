@@ -9,6 +9,10 @@
 
 global $AppUI, $m, $tab, $a, $dosql, $action;
 
+if (!db_loadTable("access_log")) {
+  return;
+}
+
 $module = $m;
 $period = mbTranformTime(null, null, "%Y-%m-%d %H:00:00");
 

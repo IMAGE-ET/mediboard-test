@@ -445,7 +445,7 @@ function stripslashes_deep($value) {
     stripslashes($value);
 }
 
-/*
+/**
 * copy the hash array content into the object as properties
 * only existing properties of object are filled. when undefined in hash, properties wont be deleted
 * @param array the input array
@@ -473,4 +473,9 @@ function bindObjectToObject($obj1, &$obj) {
     $obj->$k = $v;
   }
 }
+
+function db_loadTable($table) {
+  $query = db_prepare("SHOW TABLES LIKE %", $table);
+  return db_loadResult($query);
+} 
 ?>
