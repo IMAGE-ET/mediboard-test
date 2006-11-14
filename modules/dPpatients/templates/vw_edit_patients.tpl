@@ -6,10 +6,10 @@ function confirmCreation(oForm){
   if(httpreq_running) {
     return false;
   }
-  httpreq_running = true;
   if(!checkForm(oForm)){
     return false;
   }
+  httpreq_running = true;
   var url = new Url;
   url.setModuleAction("dPpatients", "httpreq_get_siblings");
   url.addParam("patient_id", oForm.patient_id.value);
