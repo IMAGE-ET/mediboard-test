@@ -15,4 +15,5 @@ if (confirm("{{$textSiblings|smarty:nodefaults|escape:"javascript"}}")) {
 {{/if}}
 }
 etatGetSiblings();
+httpreq_running = false;
 </script>

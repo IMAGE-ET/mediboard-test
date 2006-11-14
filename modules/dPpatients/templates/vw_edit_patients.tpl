@@ -1,7 +1,12 @@
 <!-- $Id$ -->
 <script type="text/javascript" src="modules/dPpatients/javascript/autocomplete.js?build={{$mb_version_build}}"></script>
 <script type="text/javascript">
+var httpreq_running = false;
 function confirmCreation(oForm){
+  if(httpreq_running) {
+    return false;
+  }
+  httpreq_running = true;
   if(!checkForm(oForm)){
     return false;
   }
