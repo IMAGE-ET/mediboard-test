@@ -69,7 +69,7 @@
     
     <tr>
       <th><label for="password" title="Mot de passe d'authentification">{{tr}}Password{{/tr}}</label></th>
-      <td><input type="password" size="25" maxlength="32" name="password" class="text" /></td>
+      <td><input type="password" title="str|notNull" size="25" maxlength="32" name="password" class="text" /></td>
     </tr>
     
     <tr>
