@@ -227,17 +227,17 @@ $library->description = "Composant Javascript d'édition de texte au format HTML"
 
 $renamer = new CLibraryRenamer;
 $renamer->sourceDir = "FCKeditor";
-$renamer->targetDir = "fckeditor2.3.2";
+$renamer->targetDir = "fckeditor";
 
 $library->renamer = $renamer;
 
 $patch = new CLibraryPatch;
-$patch->dirName = "fckeditor2.3.2";
+$patch->dirName = "fckeditor";
 $patch->sourceName = "config.php";
 $patch->targetDir = "editor/filemanager/browser/default/connectors/php";
 
 $patch = new CLibraryPatch;
-$patch->dirName = "fckeditor2.3.2";
+$patch->dirName = "fckeditor";
 $patch->sourceName = "fck_showtableborders_gecko.css";
 $patch->targetDir = "editor/css";
 
