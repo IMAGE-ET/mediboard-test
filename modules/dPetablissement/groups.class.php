@@ -21,6 +21,9 @@ class CGroups extends CMbObject {
   var $cp             = null;
   var $ville          = null;
   var $tel            = null;
+  var $fax            = null;
+  var $mail           = null;
+  var $web            = null;
   var $directeur      = null;
   var $domiciliation  = null;
   var $siret          = null;
@@ -35,6 +38,11 @@ class CGroups extends CMbObject {
   var $_tel3        = null;
   var $_tel4        = null;
   var $_tel5        = null;
+  var $_fax1        = null;
+  var $_fax2        = null;
+  var $_fax3        = null;
+  var $_fax4        = null;
+  var $_fax5        = null;
   
   function CGroups() {
     $this->CMbObject("groups_mediboard", "group_id");
@@ -53,7 +61,10 @@ class CGroups extends CMbObject {
       "directeur"      => "str|maxLength|50",
       "domiciliation"  => "str|maxLength|9",
       "siret"          => "str|length|14",
-      "ape"            => "str|length|4"
+      "ape"            => "str|length|4",
+      "mail"           => "email",
+      "fax"            => "numchar|length|10",
+      "web"            => "str"
     );
   }
   
@@ -76,6 +87,12 @@ class CGroups extends CMbObject {
     $this->_tel3 = substr($this->tel, 4, 2);
     $this->_tel4 = substr($this->tel, 6, 2);
     $this->_tel5 = substr($this->tel, 8, 2);
+    
+    $this->_fax1 = substr($this->fax, 0, 2);
+    $this->_fax2 = substr($this->fax, 2, 2);
+    $this->_fax3 = substr($this->fax, 4, 2);
+    $this->_fax4 = substr($this->fax, 6, 2);
+    $this->_fax5 = substr($this->fax, 8, 2);
   }
   
   function updateDBFields() {
@@ -86,6 +103,15 @@ class CGroups extends CMbObject {
         $this->_tel3 .
         $this->_tel4 .
         $this->_tel5;
+    }
+    
+    if (($this->_fax1 != null) && ($this->_fax2 != null) && ($this->_fax3 != null) && ($this->_fax4 !== null) && ($this->_fax5 !== null)) {
+      $this->fax = 
+        $this->_fax1 .
+        $this->_fax2 .
+        $this->_fax3 .
+        $this->_fax4 .
+        $this->_fax5;
     }
   }
   

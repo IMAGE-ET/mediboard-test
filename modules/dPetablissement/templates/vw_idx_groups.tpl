@@ -97,9 +97,36 @@ function pageMain() {
             <input type="text" name="_tel2" size="2" maxlength="2" value="{{$usergroup->_tel2}}" title="num|length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
             <input type="text" name="_tel3" size="2" maxlength="2" value="{{$usergroup->_tel3}}" title="num|length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
             <input type="text" name="_tel4" size="2" maxlength="2" value="{{$usergroup->_tel4}}" title="num|length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
-            <input type="text" name="_tel5" size="2" maxlength="2" value="{{$usergroup->_tel5}}" title="num|length|2" onkeyup="followUp(this, '_tel21', 2)" />
+            <input type="text" name="_tel5" size="2" maxlength="2" value="{{$usergroup->_tel5}}" title="num|length|2" onkeyup="followUp(this, '_fax1', 2)" />
           </td>
         </tr>
+        <tr>
+          <th><label for="_fax1" title="Numéro de fax">Télécopie</label></th>
+          <td>
+            <input type="text" name="_fax1" size="2" maxlength="2" value="{{$usergroup->_fax1}}" title="num|length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
+            <input type="text" name="_fax2" size="2" maxlength="2" value="{{$usergroup->_fax2}}" title="num|length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
+            <input type="text" name="_fax3" size="2" maxlength="2" value="{{$usergroup->_fax3}}" title="num|length|2" onkeyup="followUp(this, '_fax4', 2)" /> -
+            <input type="text" name="_fax4" size="2" maxlength="2" value="{{$usergroup->_fax4}}" title="num|length|2" onkeyup="followUp(this, '_fax5', 2)" /> -
+            <input type="text" name="_fax5" size="2" maxlength="2" value="{{$usergroup->_fax5}}" title="num|length|2" onkeyup="followUp(this, 'mail', 2)" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="mail" title="Veuillez saisir une adresse e-mail">E-mail</label>
+          </th>
+          <td>
+            <input type="text" title="{{$usergroup->_props.mail}}" name="mail" value="{{$usergroup->mail}}" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="web" title="Veuillez saisir l'adresse d'un site internet">Site internet</label>
+          </th>
+          <td>
+            <input type="text" title="{{$usergroup->_props.web}}" name="web" value="{{$usergroup->web}}" />
+          </td>
+        </tr>
+        
         <tr>
           <th>
             <label for="directeur" title="Veuillez saisir le nom du directeur de l'établissement">Nom du Directeur</label>

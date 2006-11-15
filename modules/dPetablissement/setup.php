@@ -9,8 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "dPetablissement";
-$config["mod_version"]     = "0.13";
-$config["mod_type"]        = "core";
+$config["mod_version"]     = "0.14";
 $config["mod_config"]      = false;
 
 if(@$a == "setup") {
@@ -68,7 +67,13 @@ class CSetupdPetablissement {
                "\nCHANGE `text` `text` varchar(255) NOT NULL;";
         db_exec( $sql ); db_error();
       case "0.13":
-        return "0.13";
+        $sql = "ALTER TABLE `groups_mediboard`" .
+            "\nADD `fax` bigint(10) unsigned zerofill NULL AFTER `tel`,".
+            "\nADD `mail` varchar(50) DEFAULT NULL," .
+            "\nADD `web` varchar(255) DEFAULT NULL;" ;
+        db_exec( $sql ); db_error();
+      case "0.14":
+        return "0.14";
     }
 
     return false;
