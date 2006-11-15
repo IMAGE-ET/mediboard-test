@@ -18,11 +18,10 @@ class CMouvSejourTonkin extends CMouvement400 {
     $this->completeMark = ">EFCPSN";
     $this->prodField = "RETPRODST";
     $this->idField = "IDUENR";
+    $this->typeField = "CODACT";
   }
     
   function synchronize() {
-    $this->rec = $this->consume($this->idField);
-    
     // Etablissement
     $CODETB = $this->consume("CODETB");
     $etp01 = new CRecordSante400();

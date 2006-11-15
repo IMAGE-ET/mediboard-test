@@ -2,6 +2,8 @@
 
 class CRecordSante400 {
   static $dsn = "sante400";
+  static $user = null;
+  static $pass = null;
   static $dbh = null;
   static $chrono = null;
  
@@ -16,7 +18,7 @@ class CRecordSante400 {
       global $dbChronos;
       $dbChronos[$dsn] = new Chronometer;
       self::$chrono =& $dbChronos[$dsn];
-      self::$dbh = new PDO("odbc:$dsn");
+      self::$dbh = new PDO("odbc:$dsn", self::$user, self::$pass);
     }
   }
 
@@ -28,7 +30,9 @@ class CRecordSante400 {
     $records = array();
     try {
       self::connect();
-      $sth = self::$dbh->prepare($sql);
+      if (null == $sth = self::$dbh->prepare($sql)) {
+        throw new PDOException("Couldn't prepare query");
+      }
       
       self::$chrono->start();
       $sth->execute();
@@ -50,7 +54,10 @@ class CRecordSante400 {
 
     try {
       self::connect();
-      $sth = self::$dbh->prepare($sql);
+      if (null == $sth = self::$dbh->prepare($sql)) {
+        throw new PDOException("Couldn't prepare query");
+      }
+      
       self::$chrono->start();
       $sth->execute();
       self::$chrono->stop();

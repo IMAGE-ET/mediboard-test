@@ -7,6 +7,8 @@ require_once($AppUI->getModuleClass("dPsante400", "mouvsejourtonkin"));
 switch ($mode_compat = @$dPconfig["interop"]["mode_compat"]) {
   case "medicap" : 
   CRecordSante400::$dsn = "ecap";
+  CRecordSante400::$user = "MEDIBOARD";
+  CRecordSante400::$pass = "MEDIBOARD";
   $mouvFactory = new CMouvSejourEcap;
   break;
 
@@ -28,7 +30,7 @@ $procs = 0;
 
 $mouvs = array();
 if ($rec = mbGetValueFromGet("rec")) {
-  $mouv = new CMouvSejourTonkin;
+  $mouv = $mouvFactory;
   $mouv->load($rec);
   $mouvs = array($mouv);
 } else {
@@ -36,7 +38,7 @@ if ($rec = mbGetValueFromGet("rec")) {
 }
 
 foreach ($mouvs as $mouv) {
-  $mouv->verbose = mbGetValueFromGet("verbose", "1");
+  $mouv->verbose = mbGetValueFromGet("verbose");
   if ($mouv->proceed()) {
     $procs++;
   }

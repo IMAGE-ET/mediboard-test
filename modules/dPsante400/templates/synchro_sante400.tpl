@@ -74,8 +74,8 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 {{foreach from=$mouvs item=curr_mouv}}
 <tr>	
   <td>{{$curr_mouv->rec}}</td>
-  <td>{{$curr_mouv->data.CODACT}}</td>
-  <td>{{$curr_mouv->data.RETPRODST}}</td>
+  <td>{{$curr_mouv->type}}</td>
+  <td>{{$curr_mouv->prod}}</td>
   <td>{{if @$curr_mouv->status.1 == "E"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
   <td>{{if @$curr_mouv->status.2 == "F"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
   <td>{{if @$curr_mouv->status.3 == "C"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
