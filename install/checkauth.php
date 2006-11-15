@@ -12,7 +12,7 @@ require_once("mbdb.class.php");
 
 require_once("Auth.php");
 
-if (!@include_once("$mbpath/includes/config.php")) { 
+if (!@include_once($mbpath."includes/config.php")) { 
   return;
 }
 

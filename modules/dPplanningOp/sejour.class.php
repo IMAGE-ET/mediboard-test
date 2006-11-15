@@ -9,11 +9,6 @@
 
 // @todo: Put the following in $config_dist;
 global $dPconfig;
-$dPconfig["dPplanningOp"]["sejour"] = array (
-  "heure_deb"      => "0",
-  "heure_fin"      => "23",
-  "min_intervalle" => "15"
-);
 
 /**
  * Classe CSejour. 

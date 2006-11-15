@@ -9,13 +9,6 @@
 
 // @todo: Put the following in $config_dist;
 global $dPconfig;
-$dPconfig["dPplanningOp"]["operation"] = array (
-  "duree_deb"        => "0",
-  "duree_fin"        => "10",
-  "hour_urgence_deb" => "0",
-  "hour_urgence_fin" => "23",
-  "min_intervalle"   => "15"
-);
 
 class COperation extends CMbObject {
   // DB Table key

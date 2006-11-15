@@ -9,10 +9,10 @@
 
 set_time_limit(180);
 
-$mbpath = "..";
+$mbpath = "../";
 
-require_once("$mbpath/includes/mb_functions.php");
-require_once("$mbpath/classes/chrono.class.php");
+require_once($mbpath."includes/mb_functions.php");
+require_once($mbpath."classes/chrono.class.php");
 
 $stepsText = array (
   "check" => "Prérequis", 

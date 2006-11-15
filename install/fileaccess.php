@@ -16,7 +16,7 @@ class CPathAccess {
 
   function check() {
     global $mbpath;
-    return is_writable("$mbpath/$this->path");
+    return is_writable($mbpath.$this->path);
   }
 }
 
@@ -53,7 +53,7 @@ $pathAccess->description = "Répertoire des schemas HPRIM";
 $pathAccesses[] = $pathAccess;
 
 
-foreach(glob("$mbpath/modules/*/templates_c") as $templates_c) {
+foreach(glob($mbpath."modules/*/templates_c") as $templates_c) {
   $module = basename(dirname($templates_c));
   $pathAccess = new CPathAccess;
   $pathAccess->path = "modules/$module/templates_c/";
@@ -62,7 +62,7 @@ foreach(glob("$mbpath/modules/*/templates_c") as $templates_c) {
   $pathAccesses[] = $pathAccess;  
 }
 
-foreach(glob("$mbpath/style/*/templates_c") as $templates_c) {
+foreach(glob($mbpath."style/*/templates_c") as $templates_c) {
   $style = basename(dirname($templates_c));
   $pathAccess = new CPathAccess;
   $pathAccess->path = "style/$style/templates_c/";

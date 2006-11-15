@@ -18,8 +18,8 @@ class CLibraryPatch {
   
   function apply() {
     global $mbpath;
-    $pkgsDir = "$mbpath/libpkg";
-    $libsDir = "$mbpath/lib";
+    $pkgsDir = $mbpath."libpkg";
+    $libsDir = $mbpath."lib";
     $patchDir = "$pkgsDir/patches";
     $sourcePath = "$patchDir/$this->dirName/$this->sourceName";
     $targetPath = "$libsDir/$this->dirName/$this->targetDir/$this->sourceName";
@@ -37,7 +37,7 @@ class CLibraryRenamer {
   
   function apply() {
     global $mbpath;
-    $libsDir = "$mbpath/lib";
+    $libsDir = $mbpath."lib";
     $sourceDir = "$libsDir/$this->sourceDir";
     $targetDir = "$libsDir/$this->targetDir";
     assert(is_dir($sourceDir));
@@ -57,7 +57,7 @@ class CLibrary {
   
   function clearLibraries() {
     global $mbpath;
-    $libsDir = "$mbpath/lib";
+    $libsDir = $mbpath."lib";
 
     foreach (glob("$libsDir/*") as $libDir) {
       mbRemovePath($libDir);
@@ -66,7 +66,7 @@ class CLibrary {
   
   function countLibraries() {
     global $mbpath;
-    $libsDir = "$mbpath/lib";
+    $libsDir = $mbpath."lib";
     $libsCount = 0;
     
     foreach (glob("$libsDir/*") as $libDir) {
@@ -78,8 +78,8 @@ class CLibrary {
   
   function install() {
     global $mbpath;
-    $pkgsDir = "$mbpath/libpkg";
-    $libsDir = "$mbpath/lib";
+    $pkgsDir = $mbpath."libpkg";
+    $libsDir = $mbpath."lib";
     $filePath = "$pkgsDir/$this->fileName";
     
     // For libraries archive not contained in directory

@@ -18,8 +18,8 @@ class CMbConfig {
   
   function CMbConfig() {
     global $mbpath;
-    $this->sourcePath = "$mbpath/includes/config_dist.php";
-    $this->targetPath = "$mbpath/includes/config.php";
+    $this->sourcePath = $mbpath."includes/config_dist.php";
+    $this->targetPath = $mbpath."includes/config.php";
   }
   
   function guessValues() {
@@ -31,10 +31,12 @@ class CMbConfig {
   }
   
   function load() {
+    
     $loadPath = is_file($this->targetPath) ? $this->targetPath : $this->sourcePath;
     
     $config = new Config;
     $configContainer = $config->parseConfig($loadPath, $this->configType, $this->options);
+
     $rootConfig = $configContainer->toArray();
     $this->values = $rootConfig["root"];
     
