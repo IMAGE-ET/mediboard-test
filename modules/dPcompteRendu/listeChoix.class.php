@@ -76,14 +76,14 @@ class CListeChoix extends CMbObject {
   function updateDBFields() {
     if($this->_new !== null) {
       $this->updateFormFields();
-      $this->_valeurs[] = $this->_new;
+      $this->_valeurs[] = trim($this->_new);
       natcasesort($this->_valeurs);
       $this->valeurs = implode("|", $this->_valeurs);
     }
     if($this->_del !== null) {
       $this->updateFormFields();
       foreach($this->_valeurs as $key => $value) {
-        if($this->_del == $value)
+        if(trim($this->_del) == trim($value))
           unset($this->_valeurs[$key]);
       }
       $this->valeurs = implode("|", $this->_valeurs);
