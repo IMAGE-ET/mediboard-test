@@ -118,6 +118,19 @@ class CAppUI {
   }
 
 /**
+ * Used to load a php class file from the legacy classes directory
+ * @param string <b>$name</b> The class file name (excluding .class.php)
+ * @return string The path to the include file
+ */
+  function getLegacyClass($name=null) {
+    if ($name) {
+      if ($root = $this->getConfig("root_dir")) {
+        return "$root/legacy/$name.class.php";
+      }
+    }
+  }
+
+/**
  * Used to load a php class file from the lib directory
  *
  * @param string <b>$name</b> The class root file name (excluding .php)
