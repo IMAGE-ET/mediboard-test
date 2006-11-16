@@ -9,10 +9,10 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"));
-require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_bar"));
-require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_line"));
-require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_regstat"));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph"));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_bar"));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_regstat"));
 
 $date       = mbGetValueFromGet("date"       , mbDate());
 $module     = mbGetValueFromGet("module"     , 0);

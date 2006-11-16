@@ -118,12 +118,12 @@ class CAppUI {
   }
 
 /**
-* Used to load a php class file from the lib directory
-*
-* @param string $name The class root file name (excluding .class.php)
-* @return string The path to the include file
-*/
-  function getLibraryClass($name=null) {
+ * Used to load a php class file from the lib directory
+ *
+ * @param string <b>$name</b> The class root file name (excluding .php)
+ * @return string The path to the include file
+ */
+  function getLibraryFile($name=null) {
     if ($name) {
       if ($root = $this->getConfig("root_dir")) {
         return "$root/lib/$name.php";

@@ -9,7 +9,7 @@
 
 global $AppUI, $msg;
 
-require_once($AppUI->getLibraryClass("phpmailer/class.phpmailer"));
+require_once($AppUI->getLibraryFile("phpmailer/class.phpmailer"));
 
 $mail = new PHPMailer();
 

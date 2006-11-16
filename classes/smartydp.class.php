@@ -5,9 +5,9 @@
  * @author Thomas Despoix
  */
 
-require_once($AppUI->getLibraryClass( "smarty/libs/Smarty.class"));
-require_once($AppUI->getLibraryClass( "smarty/libs/plugins/modifier.escape"));
-require_once($AppUI->getLibraryClass( "json/JSON"));
+require_once($AppUI->getLibraryFile( "smarty/libs/Smarty.class"));
+require_once($AppUI->getLibraryFile( "smarty/libs/plugins/modifier.escape"));
+require_once($AppUI->getLibraryFile( "json/JSON"));
 
 /**
  * Delegates the actual translation to $AppUI framework object

@@ -9,8 +9,8 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"    ));
-require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_bar"));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph"    ));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_bar"));
 
 $size          = mbGetValueFromGet("size" , 1);
 $date          = mbGetValueFromGetOrSession("date", mbTranformTime("+0 DAY", mbDate(), "%m/%Y"));

@@ -9,8 +9,8 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"    ));
-require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_bar"));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph"    ));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_bar"));
 
 $debut    = mbGetValueFromGet("debut"       , mbDate("-1 YEAR"));
 $fin      = mbGetValueFromGet("fin"         , mbDate()         );

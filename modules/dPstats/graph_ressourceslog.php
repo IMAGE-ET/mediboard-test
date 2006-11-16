@@ -9,8 +9,8 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph"));
-require_once($AppUI->getLibraryClass("jpgraph/src/jpgraph_pie"));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph"));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_pie"));
 
 $date     = mbGetValueFromGet("date"       , mbDate());
 $module   = mbGetValueFromGet("module"     , 0);

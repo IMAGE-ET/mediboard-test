@@ -6,7 +6,10 @@
 * @author Romain Ollivier
 */
 
-require_once("./lib/phpThumb/phpthumb.class.php");
+global $AppUI;
+require_once($AppUI->getLibraryFile("phpThumb/phpthumb.class"));
+//require_once("./lib/phpThumb/phpthumb.class.php");
+trigger_error("Source is $file->_file");
 
 // Direct acces needs Administrator rights
 $file_path = mbGetValueFromGet("file_path");
@@ -76,6 +79,7 @@ if($file_id = mbGetValueFromGet("file_id")) {
       if($wl){$finUrl.="&wl=$wl";}
       if($h){$finUrl.="&h=$h";}
       if($w){$finUrl.="&w=$w";}
+      trigger_error("Source is $file->_file_path$finUrl");
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
     } elseif(strpos($file->file_type, "pdf") !== false) {
       if($hp){$finUrl.="&h=$hp";}
