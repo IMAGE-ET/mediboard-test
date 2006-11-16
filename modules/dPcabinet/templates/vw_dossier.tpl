@@ -1,10 +1,12 @@
 <!-- $Id$ -->
 
+{{include file="../../dPfiles/templates/inc_files_functions.tpl"}}
+
 <script type="text/javascript">
 
 function pageMain() {
-  PairEffect.initGroup("consEffect");
-  PairEffect.initGroup("operEffect");
+  PairEffect.initGroup("consEffect", { bStoreInCookie: false });
+  PairEffect.initGroup("operEffect", { bStoreInCookie: false });
 }
 
 function popPat() {
@@ -33,9 +35,21 @@ function setPat( key, val ) {
   
   f.submit();
 }
+
+function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
+  popFile(objectClass, objectId, elementClass, elementId, sfn);
+}
 </script>
 
-
+<form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFileDossier(); return false;">
+<input type="hidden" name="selKey"   value="" />
+<input type="hidden" name="selClass" value="" />
+<input type="hidden" name="selView"  value="" />
+<input type="hidden" name="keywords" value="" />
+<input type="hidden" name="file_id"  value="" />
+<input type="hidden" name="typeVue"  value="0" />
+</form>
+      
 <table class="main">
   <tr>
     <td class="greedyPane" colspan="2">
@@ -66,7 +80,11 @@ function setPat( key, val ) {
         {{foreach from=$patient->_ref_consultations item=curr_consult}}
         {{if $curr_consult->_canEdit}}
         <tr id="cons{{$curr_consult->consultation_id}}-trigger">
-          <td colspan="2">
+          <td colspan="2" onclick="setObject( {
+              objClass: '{{$curr_consult->_class_name}}', 
+              keywords: '', 
+              id: {{$curr_consult->consultation_id|smarty:nodefaults|JSAttribute}}, 
+              view:'{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
             <strong>
             Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}} &mdash;
             {{$curr_consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}} &mdash;
@@ -106,29 +124,7 @@ function setPat( key, val ) {
           {{/if}}
           <tr>
             <th>Documents attachés :</th>
-            <td>
-            <ul>
-              {{if $curr_consult->_nb_files_docs}}
-              <li>
-                <a href="index.php?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;selClass={{$curr_consult->_class_name}}&amp;selKey={{$curr_consult->_id}}">
-                  Consulter les documents
-                </a>
-              </li>
-              {{else}}
-              <li>Aucun document créé</li>
-              {{/if}}
-              </ul>
-              <form name="uploadFrm" action="?m={{$m}}" enctype="multipart/form-data" method="post">
-              <input type="hidden" name="m" value="dPfiles" />
-              <input type="hidden" name="dosql" value="do_file_aed" />
-              <input type="hidden" name="del" value="0" />
-              <input type="hidden" name="file_class" value="CConsultation" />
-              <input type="hidden" name="file_object_id" value="{{$curr_consult->consultation_id}}" />
-              <input type="file" name="formfile" />
-              <button class="submit" type="submit">Ajouter</button>
-
-              </form>
-            </td>
+            <td id="File{{$curr_consult->_class_name}}{{$curr_consult->_id}}"></td>
           </tr>
         </tbody>
         {{/if}}
@@ -145,7 +141,11 @@ function setPat( key, val ) {
         </tr>
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
         <tr id="oper{{$curr_op->operation_id}}-trigger">
-          <td colspan="2">
+          <td colspan="2" onclick="setObject( {
+              objClass: '{{$curr_op->_class_name}}', 
+              keywords: '', 
+              id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
+              view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )">
             <strong>
             Dr. {{$curr_op->_ref_chir->_view}} &mdash;
             {{$curr_op->_ref_plageop->date|date_format:"%d %B %Y"}}
@@ -180,29 +180,7 @@ function setPat( key, val ) {
             <th>
               Documents attachés :
             </th>
-            <td>
-            <ul>
-              {{if $curr_op->_nb_files_docs}}
-              <li>
-                <a href="index.php?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;selClass={{$curr_op->_class_name}}&amp;selKey={{$curr_op->_id}}">
-                  Consulter les documents
-                </a>
-              </li>
-              {{else}}
-              <li>Aucun document créé</li>
-              {{/if}}
-            </ul>
-              <form name="uploadFrm" action="?m=dPcabinet" enctype="multipart/form-data" method="post">
-              <input type="hidden" name="m" value="dPfiles" />
-              <input type="hidden" name="dosql" value="do_file_aed" />
-              <input type="hidden" name="del" value="0" />
-              <input type="hidden" name="file_class" value="COperation" />
-              <input type="hidden" name="file_object_id" value="{{$curr_op->operation_id}}" />
-              <input type="file" name="formfile" />
-              <button class="submit" type="submit">Ajouter</button>
-
-              </form>
-            </td>
+            <td id="File{{$curr_op->_class_name}}{{$curr_op->_id}}"></td>
           </tr>
         </tbody>
         {{/foreach}}

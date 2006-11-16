@@ -79,6 +79,24 @@ function setObject(oObject){
   }
 }
 
+function reloadListFileDossier(){
+  var sSelClass = document.FrmClass.selClass.value;
+  var sSelKey   = document.FrmClass.selKey.value;
+  if(eval($('accordion'+sSelClass+sSelKey))){
+    return false;
+  }
+  var url = new Url;
+  initAccord(false);
+  url.setModuleAction("dPfiles", "httpreq_vw_listfiles");
+  url.addParam("selKey", sSelKey);
+  url.addParam("selClass", sSelClass);  
+  url.addParam("typeVue", document.FrmClass.typeVue.value);
+  url.addParam("accordDossier", 1);
+  url.requestUpdate('File'+sSelClass+sSelKey);
+}
+
+
+
 function reloadListFile(){
   if(file_deleted && file_preview == file_deleted){
     ZoomAjax("","","","", 0);

@@ -1,4 +1,8 @@
+{{if $accordDossier}}
+<div class="accordionMain" id="accordion{{$selClass}}{{$selKey}}">
+{{else}}
 <div class="accordionMain" id="accordionConsult">
+{{/if}}
 {{foreach from=$affichageFile item=curr_listCat key=keyCat}}
   <div id="Acc{{$keyCat}}">
     <div id="Acc{{$keyCat}}Header" class="accordionTabTitleBar">
@@ -6,7 +10,7 @@
     </div>
     <div id="Acc{{$keyCat}}Content" class="accordionTabContentBox">
       <table class="tbl">
-        {{if $canEditFiles}}
+        {{if $canEditFiles && !$accordDossier}}
         <tr>
           <td colspan="2" class="text">
             <form name="uploadFrm{{$keyCat}}" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
@@ -46,7 +50,7 @@
             {{/if}}
             <hr />
 
-            {{if $curr_file->_class_name=="CCompteRendu" && $canEditDoc}}
+            {{if $curr_file->_class_name=="CCompteRendu" && $canEditDoc && !$accordDossier}}
               <form name="editDoc{{$curr_file->compte_rendu_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPcompteRendu" />
               <input type="hidden" name="dosql" value="do_modele_aed" />
@@ -55,7 +59,7 @@
               {{assign var="confirmDeleteType" value="le document"}}
               {{assign var="confirmDeleteName" value=$curr_file->nom}}
               
-            {{elseif $curr_file->_class_name=="CFile" && $canEditFiles}}
+            {{elseif $curr_file->_class_name=="CFile" && $canEditFiles && !$accordDossier}}
               <form name="editFile{{$curr_file->file_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPfiles" />
               <input type="hidden" name="dosql" value="do_file_aed" />
@@ -66,7 +70,7 @@
               
             {{/if}}
             
-            {{if $canEditFileDoc}}
+            {{if $canEditFileDoc && !$accordDossier}}
               <select name="file_category_id" onchange="submitFileChangt(this.form)">
                 <option value="0" {{if $curr_file->file_category_id == 0}}selected="selected"{{/if}}>&mdash; Aucune</option>
                 {{foreach from=$listCategory item=curr_cat}}
@@ -95,6 +99,13 @@
 {{/foreach}}     
 </div>
 <script language="Javascript" type="text/javascript">
+{{if $accordDossier}}
+var oAccord{{$selClass}}{{$selKey}} = new Rico.Accordion( $('accordion{{$selClass}}{{$selKey}}'), {
+  panelHeight: 200, 
+  showDelay:50,
+  showSteps:3
+});
+{{else}}
 var oAccord = new Rico.Accordion( $('accordionConsult'), {
   panelHeight: fHeight, 
   onShowTab: storeKeyCat,
@@ -102,4 +113,5 @@ var oAccord = new Rico.Accordion( $('accordionConsult'), {
   showSteps:3,
   onLoadShowTab: showTabAcc
 });
+{{/if}}
 </script>

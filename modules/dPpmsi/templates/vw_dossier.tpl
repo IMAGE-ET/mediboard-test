@@ -1,5 +1,7 @@
 <!-- $Id$ -->
 
+{{include file="../../dPfiles/templates/inc_files_functions.tpl"}}
+
 <script type="text/javascript">
 
 function choosePreselection(oSelect) {
@@ -97,7 +99,19 @@ function pageMain() {
   PairEffect.initGroup("effectSejour");
 }
 
+function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
+  popFile(objectClass, objectId, elementClass, elementId, sfn);
+}
 </script>
+
+<form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFileDossier(); return false;">
+<input type="hidden" name="selKey"   value="" />
+<input type="hidden" name="selClass" value="" />
+<input type="hidden" name="selView"  value="" />
+<input type="hidden" name="keywords" value="" />
+<input type="hidden" name="file_id"  value="" />
+<input type="hidden" name="typeVue"  value="0" />
+</form>
 
 <table class="main">
   <tr>
@@ -199,7 +213,7 @@ function pageMain() {
         {{if $curr_op->libelle}}
         <tr>
           <th>Libellé</th>
-          <td class="text"><em>{{$curr_op->libelle}}</em></td>
+          <td colspan="3" class="text"><em>{{$curr_op->libelle}}</em></td>
         {{/if}}
         {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
         <tr>
@@ -440,11 +454,14 @@ function pageMain() {
         {{if $curr_op->_nb_files_docs}}
         <tr>
           <th>Documents attachés :</th>
-          <td colspan="3">
-            <a href="index.php?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;selClass={{$curr_op->_class_name}}&amp;selKey={{$curr_op->_id}}">
-              Consulter les documents
+          <td colspan="3" id="File{{$curr_op->_class_name}}{{$curr_op->_id}}">
+            <a href="javascript:setObject( {
+              objClass: '{{$curr_op->_class_name}}', 
+              keywords: '', 
+              id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
+              view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )">
+              Voir les Documents ({{$curr_op->_nb_files_docs}})
             </a>
-            ({{$curr_op->_nb_files_docs}} Doc.)
           </td>
         </tr>
         {{/if}}

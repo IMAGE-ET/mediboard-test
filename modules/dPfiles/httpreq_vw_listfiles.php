@@ -19,9 +19,10 @@ $cptRenduModule = CModule::getInstalled("dPcompteRendu");
 $canEditFiles = $fileModule->canEdit();
 $canEditDoc   = $cptRenduModule->canEdit();
 
-$selClass = mbGetValueFromGetOrSession("selClass", null);
-$selKey   = mbGetValueFromGetOrSession("selKey"  , null);
-$typeVue  = mbGetValueFromGetOrSession("typeVue" , 0);
+$selClass      = mbGetValueFromGetOrSession("selClass", null);
+$selKey        = mbGetValueFromGetOrSession("selKey"  , null);
+$typeVue       = mbGetValueFromGetOrSession("typeVue" , 0);
+$accordDossier = mbGetValueFromGet("accordDossier"    , 0);
 $reloadlist = 1;
 
 // Liste des Class
@@ -55,6 +56,7 @@ $smarty->assign("selClass"       , $selClass    );
 $smarty->assign("selKey"         , $selKey      );
 $smarty->assign("object"         , $object      );
 $smarty->assign("typeVue"        , $typeVue     );
+$smarty->assign("accordDossier"  , $accordDossier);
 if($typeVue==1){
   $smarty->display("inc_list_view_colonne.tpl");
 }elseif($typeVue==2){

@@ -19,12 +19,13 @@ $cptRenduModule = CModule::getInstalled("dPcompteRendu");
 $canEditFiles = $fileModule->canEdit();
 $canEditDoc   = $cptRenduModule->canEdit();
 
-$selClass = mbGetValueFromGetOrSession("selClass", null);
-$keywords = mbGetValueFromGetOrSession("keywords", null);
-$selKey   = mbGetValueFromGetOrSession("selKey"  , null);
-$selView  = mbGetValueFromGetOrSession("selView" , null);
-$typeVue  = mbGetValueFromGetOrSession("typeVue" , 0);
-$file_id  = mbGetValueFromGet("file_id" , null);
+$selClass      = mbGetValueFromGetOrSession("selClass", null);
+$keywords      = mbGetValueFromGetOrSession("keywords", null);
+$selKey        = mbGetValueFromGetOrSession("selKey"  , null);
+$selView       = mbGetValueFromGetOrSession("selView" , null);
+$typeVue       = mbGetValueFromGetOrSession("typeVue" , 0);
+$file_id       = mbGetValueFromGet("file_id"          , null);
+$accordDossier = mbGetValueFromGet("accordDossier"    , 0);
 $reloadlist = 0;
 
 $file = new CFile;
@@ -62,7 +63,7 @@ $smarty->assign("object"         , $object      );
 $smarty->assign("typeVue"        , $typeVue     );
 $smarty->assign("reloadlist"     , $reloadlist  );
 $smarty->assign("fileSel"        , null);
-
+$smarty->assign("accordDossier"  , $accordDossier);
 $smarty->display("vw_files.tpl");
 
 ?>

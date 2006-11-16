@@ -1,4 +1,8 @@
+{{if $accordDossier}}
+<div class="accordionMain" id="accordion{{$selClass}}{{$selKey}}">
+{{else}}
 <div class="accordionMain" id="accordionConsult">
+{{/if}}
 {{foreach from=$affichageFile item=curr_listCat key=keyCat}}
   <div id="Acc{{$keyCat}}">
     <div id="Acc{{$keyCat}}Header" class="accordionTabTitleBar">
@@ -6,7 +10,7 @@
     </div>
     <div id="Acc{{$keyCat}}Content" class="accordionTabContentBox">
       <table class="tbl">
-        {{if $canEditFiles}}
+        {{if $canEditFiles && !$accordDossier}}
         <tr>
           <td colspan="9">
             <form name="uploadFrm{{$keyCat}}" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
@@ -63,7 +67,7 @@
           </a>
           <br />  
             
-          {{if $canEditFileDoc}}  
+          {{if $canEditFileDoc && !$accordDossier}}  
             Déplacer vers 
             <select name="file_category_id" onchange="submitFileChangt(this.form)">
               <option value="0" {{if $curr_file->file_category_id == ""}}selected="selected"{{/if}}>&mdash; Aucune</option>
@@ -96,6 +100,13 @@
 {{/foreach}}      
 </div>
 <script language="Javascript" type="text/javascript">
+{{if $accordDossier}}
+var oAccord{{$selClass}}{{$selKey}} = new Rico.Accordion( $('accordion{{$selClass}}{{$selKey}}'), {
+  panelHeight: 200, 
+  showDelay:50,
+  showSteps:3
+});
+{{else}}
 var oAccord = new Rico.Accordion( $('accordionConsult'), {
   panelHeight: fHeight, 
   onShowTab: storeKeyCat,
@@ -103,4 +114,5 @@ var oAccord = new Rico.Accordion( $('accordionConsult'), {
   showSteps:3,
   onLoadShowTab: showTabAcc
 });
+{{/if}}
 </script>

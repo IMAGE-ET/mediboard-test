@@ -118,6 +118,7 @@ $smarty->assign("selClass"        , $selClass        );
 $smarty->assign("selKey"          , $selKey          );
 $smarty->assign("selView"         , $object->_view   );
 $smarty->assign("typeVue"         , $typeVue         );
+$smarty->assign("accordDossier"   , 0                );
 
 $smarty->assign("diagnosticsInstall" , $diagnosticsInstall);
 
