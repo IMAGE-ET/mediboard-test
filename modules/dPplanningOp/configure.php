@@ -12,7 +12,7 @@ global $AppUI, $dPconfig, $canAdmin, $canRead, $canEdit, $m, $tab;
 if(!$canAdmin) {
     $AppUI->redirect("m=system&a=access_denied");
 }
-
+/*
 if(!isset($dPconfig["dPplanningOp"]["operation"])){
   $dPconfig["dPplanningOp"]["operation"] = array (
     "duree_deb"        => "0",
@@ -29,7 +29,7 @@ if(!isset($dPconfig["dPplanningOp"]["sejour"])){
     "min_intervalle" => "15"
   );
 }
-
+*/
 $listHours = array();
 for ($i = 0; $i <=23; $i++) {
   if($i<=9){

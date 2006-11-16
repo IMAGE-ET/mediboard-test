@@ -32,7 +32,9 @@
     </th>
     <td>
       <select title="num" name="dPplanningOp[operation][min_intervalle]">
-      {{html_options options=$listInterval selected=$configOper.min_intervalle}}
+      {{foreach from=$listInterval item=currInterval}}
+        <option value="{{$currInterval}}"{{if $currInterval==$configOper.min_intervalle}}selected="selected"{{/if}}>{{$currInterval}}</option>
+      {{/foreach}}
       </select>
     </td>
   </tr>
@@ -91,7 +93,9 @@
     </th>
     <td>
       <select title="num" name="dPplanningOp[sejour][min_intervalle]">
-      {{html_options options=$listInterval selected=$configSejour.min_intervalle}}
+      {{foreach from=$listInterval item=currInterval}}
+        <option value="{{$currInterval}}"{{if $currInterval==$configSejour.min_intervalle}}selected="selected"{{/if}}>{{$currInterval}}</option>
+      {{/foreach}}
       </select>
     </td>
   </tr>  
