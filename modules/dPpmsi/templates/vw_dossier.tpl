@@ -450,19 +450,6 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           </td>
         </tr>
         {{/foreach}}
-        
-        <tr>
-          <th>Documents attachés :</th>
-          <td colspan="3" id="File{{$curr_op->_class_name}}{{$curr_op->_id}}">
-            <a href="javascript:setObject( {
-              objClass: '{{$curr_op->_class_name}}', 
-              keywords: '', 
-              id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
-              view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )">
-              Voir les Documents ({{$curr_op->_nb_files_docs}})
-            </a>
-          </td>
-        </tr>
 
         <tr>
           <td class="button" colspan="4">
@@ -474,6 +461,19 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         </tr>
         <tr>
           <td class="text" id="hprim_export{{$curr_op->operation_id}}" colspan="4">
+          </td>
+        </tr>
+        
+        <tr>
+          <th>Documents attachés :</th>
+          <td colspan="3" id="File{{$curr_op->_class_name}}{{$curr_op->_id}}">
+            <a href="javascript:setObject( {
+              objClass: '{{$curr_op->_class_name}}', 
+              keywords: '', 
+              id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
+              view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )">
+              Voir les Documents ({{$curr_op->_nb_files_docs}})
+            </a>
           </td>
         </tr>
         {{/foreach}}
