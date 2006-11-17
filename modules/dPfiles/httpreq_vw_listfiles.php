@@ -9,9 +9,9 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-if (!$canRead) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+//if (!$canRead) {
+//  $AppUI->redirect("m=system&a=access_denied");
+//}
 
 $fileModule     = CModule::getInstalled("dPfiles");
 $cptRenduModule = CModule::getInstalled("dPcompteRendu");

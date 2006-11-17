@@ -451,7 +451,6 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         </tr>
         {{/foreach}}
         
-        {{if $curr_op->_nb_files_docs}}
         <tr>
           <th>Documents attachés :</th>
           <td colspan="3" id="File{{$curr_op->_class_name}}{{$curr_op->_id}}">
@@ -464,7 +463,6 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             </a>
           </td>
         </tr>
-        {{/if}}
 
         <tr>
           <td class="button" colspan="4">
