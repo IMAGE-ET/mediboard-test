@@ -33,7 +33,7 @@ function popMed(type) {
   var url = new Url();
   url.setModuleAction("dPpatients", "vw_medecins");
   url.addParam("type", type);
-  url.popup(700, 400, "Medecin");
+  url.popup(700, 450, "Medecin");
 }
 
 function delCmu(){
