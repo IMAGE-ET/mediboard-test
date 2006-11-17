@@ -17,8 +17,17 @@ function pageMain() {
     bStoreInCookie: false,
     idStartVisible: "function{{$mediuserSel->function_id}}"
   });
+  regFieldCalendar("mediuser", "deb_activite");
+  regFieldCalendar("mediuser", "fin_activite");
 }
 
+function deldate(sField){
+  oForm = document.mediuser;
+  ElemField = eval("oForm."+sField);
+  ElemField.value = "";
+  oDateDiv = $("mediuser_"+sField+"_da");
+  oDateDiv.innerHTML = "";
+}
 </script>
 
 <table class="main">
@@ -108,6 +117,27 @@ function pageMain() {
             <label for="actif_0" title="Compte désactivé">non</label>
           </td>
         </tr>
+        
+        <tr>
+          <th><label for="deb_activite" title="Date de début d'activité">Début d'activité</label></th>
+		  <td class="date">
+		    <div id="mediuser_deb_activite_da">{{$mediuserSel->deb_activite|date_format:"%d/%m/%Y"}}</div>
+		    <input type="hidden" name="deb_activite" title="date" value="{{$mediuserSel->deb_activite|date_format:"%Y-%m-%d"}}" />
+		    <img id="mediuser_deb_activite_trigger" src="./images/calendar.gif" alt="Date de début d'activité"/>
+		    <button class="cancel notext" type="button" onclick="deldate('deb_activite')"></button>
+		  </td>
+		</tr>
+		
+		<tr>
+          <th><label for="fin_activite" title="Date de fin d'activité">Fin d'activité</label></th>
+		  <td class="date">
+		    <div id="mediuser_fin_activite_da">{{$mediuserSel->fin_activite|date_format:"%d/%m/%Y"}}</div>
+		    <input type="hidden" name="fin_activite" title="date" value="{{$mediuserSel->fin_activite|date_format:"%Y-%m-%d"}}" />
+		    <img id="mediuser_fin_activite_trigger" src="./images/calendar.gif" alt="Date de fin d'activité"/>
+		    <button class="cancel notext" type="button" onclick="deldate('fin_activite')"></button>
+		  </td>
+		</tr>
+        
         <tr>
           <th><label for="remote_0" title="Permet ou non à l'utilisateur de se connecter à distance">Accès distant</label></th>
           <td>
