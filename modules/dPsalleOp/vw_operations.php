@@ -21,7 +21,7 @@ $modif_operation = $date>=$date_now;
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;
-$listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
+$listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 
 $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens(PERM_READ);
