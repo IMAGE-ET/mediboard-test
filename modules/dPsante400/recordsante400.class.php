@@ -1,9 +1,12 @@
 <?php
 
+$dPconfig["dPsante400"] = array (
+  "dsn" => "ecap",
+  "user" => "MEDIBOARD",
+  "pass" => "MEDIBOARD",
+);
+
 class CRecordSante400 {
-  static $dsn = "sante400";
-  static $user = null;
-  static $pass = null;
   static $dbh = null;
   static $chrono = null;
  
@@ -13,13 +16,19 @@ class CRecordSante400 {
   }
 
   function connect() {
-    if (!self::$dbh) {
-      $dsn = self::$dsn;
-      global $dbChronos;
-      $dbChronos[$dsn] = new Chronometer;
-      self::$chrono =& $dbChronos[$dsn];
-      self::$dbh = new PDO("odbc:$dsn", self::$user, self::$pass);
+    
+    if (self::$dbh) {
+      return;
     }
+
+    global $dPconfig;
+    $dsnConfig = $dPconfig["dPsante400"];
+    $dsn = $dsnConfig["dsn"];
+    
+    global $dbChronos;
+    $dbChronos[$dsn] = new Chronometer;
+    self::$chrono =& $dbChronos[$dsn];
+    self::$dbh = new PDO("odbc:$dsn", $dsnConfig["user"], $dsnConfig["pass"]);
   }
 
   function multipleLoad($sql, $max = 100, $class = "CRecordSante400") {
@@ -43,15 +52,13 @@ class CRecordSante400 {
         $records[] = $record;
       }
     } catch (PDOException $e) {
-      trigger_error("Error querying '$sql' on data source name '$dsn' : " . $e->getMessage(), E_USER_ERROR);
+      trigger_error("Error querying '$sql' : " . $e->getMessage(), E_USER_ERROR);
     }
     
     return $records;
   }
   
   function query($sql) {
-    $dsn = self::$dsn;
-
     try {
       self::connect();
       if (null == $sth = self::$dbh->prepare($sql)) {
@@ -63,7 +70,7 @@ class CRecordSante400 {
       self::$chrono->stop();
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
-      trigger_error("Error querying '$sql' on data source name '$dsn' : " . $e->getMessage(), E_USER_ERROR);
+      trigger_error("Error querying '$sql' : " . $e->getMessage(), E_USER_ERROR);
     }
   }
   
@@ -106,7 +113,7 @@ class CRecordSante400 {
 
   function consumeDate($valueName) {
     $date = $this->consume($valueName);
-    if ($date == "0") {
+    if ($date == "0" or $date = "99999999") {
       return null;
     }
     

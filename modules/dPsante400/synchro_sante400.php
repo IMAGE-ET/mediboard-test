@@ -6,14 +6,10 @@ require_once($AppUI->getModuleClass("dPsante400", "mouvsejourtonkin"));
 
 switch ($mode_compat = @$dPconfig["interop"]["mode_compat"]) {
   case "medicap" : 
-  CRecordSante400::$dsn = "ecap";
-  CRecordSante400::$user = "MEDIBOARD";
-  CRecordSante400::$pass = "MEDIBOARD";
   $mouvFactory = new CMouvSejourEcap;
   break;
 
   case "tonkin" : 
-  CRecordSante400::$dsn = "sante400";
   $mouvFactory = new CMouvSejourTonkin;
   break;
   

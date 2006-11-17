@@ -64,6 +64,7 @@
     $this->_id = null;
     $this->object_class = $object_class;
     $this->object_id = $mbObject->_id;
+    $this->tag = $tag;
     $this->loadMatchingObject("`last_update` DESC");
   }
   
@@ -105,7 +106,6 @@
     
     $this->object_class = $object_class;
     $this->object_id = $mbObject->_id;
-    $this->last_update = mbDate();
   }
 }
 
