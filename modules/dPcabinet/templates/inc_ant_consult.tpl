@@ -31,6 +31,8 @@ function dateAntecedent(){
   var oForm = document.editAntFrm;
   var oEnCours = oForm._date_ant;
   var oHiddenField = oForm.date;
+  oForm._helpers_rques.value = "";
+  oForm.rques.value = "";
   var oViewField = document.getElementById('editAntFrm_date_da');
   var oTriggerField = document.getElementById('editAntFrm_date_trigger');
   if (oEnCours.checked) {
@@ -46,6 +48,8 @@ function dateAntecedent(){
 
 function finTrmt() {
   var oForm = document.editTrmtFrm;
+  oForm.traitement.value = "";
+  oForm._helpers_traitement.value = "";
   var oEnCours = oForm._en_cours;
   var oHiddenField = oForm.fin;
   var oViewField = document.getElementById('editTrmtFrm_fin_da');
@@ -76,8 +80,6 @@ function reloadAntecedents() {
 
 function submitAnt(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
-  oForm._helpers_rques.value = "";
-  oForm.rques.value = "";
 }
 
 function submitAntDelete(oForm) {
