@@ -100,6 +100,15 @@ function pageMain() {
           <td><input type="password" name="_user_password2" title="str|sameAs|_user_password" value="" /></td>
         </tr>
         <tr>
+          <th><label for="actif_1" title="Permet ou non à d'activer le compte utilisateur">Compte actif</label></th>
+          <td>
+            <input type="radio" name="actif" value="1" {{if $mediuserSel->actif == "1" || !$mediuserSel->actif}} checked="checked" {{/if}} />
+            <label for="actif_1" title="Compte activé">oui</label>
+            <input type="radio" name="actif" value="0" {{if $mediuserSel->actif == "0"}} checked="checked" {{/if}} />
+            <label for="actif_0" title="Compte désactivé">non</label>
+          </td>
+        </tr>
+        <tr>
           <th><label for="remote_0" title="Permet ou non à l'utilisateur de se connecter à distance">Accès distant</label></th>
           <td>
             <input type="radio" name="remote" value="0" {{if $mediuserSel->remote == "0"}} checked="checked" {{/if}} />
@@ -164,6 +173,10 @@ function pageMain() {
         <tr>
           <th><label for="_user_phone" title="Numéro de téléphone de l'utilisateur">Tél</label></th>
           <td><input type="text" name="_user_phone" title="{{$mediuserSel->_user_props._user_phone}}" value="{{$mediuserSel->_user_phone}}" /></td>
+        </tr>
+        <tr>
+          <th><label for="commentaires" title="Veuillez saisir un commentaire">Commentaires</label></th>
+          <td><textarea name="commentaires" title="{{$mediuserSel->_props.commentaires}}">{{$mediuserSel->commentaires}}</textarea>
         </tr>
         <tr>
           <td class="button" colspan="2">

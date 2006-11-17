@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "mediusers";
-$config["mod_version"]     = "0.17";
+$config["mod_version"]     = "0.18";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -249,7 +249,13 @@ class CSetupmediusers {
         db_exec( $sql ); db_error();
         
       case "0.17":
-        return "0.17";
+        $sql = "ALTER TABLE `users_mediboard` " .
+               "\nADD `commentaires`  text NULL," .
+               "\nADD `actif` enum('0','1') NOT NULL DEFAULT '1';";
+        db_exec( $sql ); db_error();
+        
+      case "0.18":
+        return "0.18";
     }
 
     return false;

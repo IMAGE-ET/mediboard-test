@@ -25,6 +25,8 @@ class CMediusers extends CMbObject {
   // DB References
 	var $function_id   = null;
   var $discipline_id = null;
+  var $commentaires  = null;
+  var $actif         = null;
 
   // dotProject user fields
   var $_user_type       = null;
@@ -72,7 +74,9 @@ class CMediusers extends CMbObject {
       "remote"        => "bool",
       "adeli"         => "numchar|length|9|confidential",
       "function_id"   => "ref|notNull",
-      "discipline_id" => "ref"
+      "discipline_id" => "ref",
+      "commentaires"     => "text",
+      "actif"            => "bool"
     );
   }
   
