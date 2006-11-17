@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "mediusers";
-$config["mod_version"]     = "0.19";
+$config["mod_version"]     = "0.20";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -261,7 +261,13 @@ class CSetupmediusers {
         db_exec( $sql ); db_error();
         
       case "0.19":
-        return "0.19";
+        $sql = "ALTER TABLE `users_mediboard` " .
+               "\nCHANGE `deb_activite` `deb_activite` date NULL," .
+               "\nCHANGE `fin_activite` `fin_activite` date NULL;";
+        db_exec( $sql ); db_error();  
+      
+      case "0.20":
+        return "0.20";
     }
 
     return false;
