@@ -114,12 +114,6 @@ function startINSEE() {
   url.requestUpdate("INSEE");
 }
 
-function startPays() {
-  var url = new Url;
-  url.setModuleAction("dPpatients", "httpreq_do_add_pays");
-  url.requestUpdate("pays");
-}
-
 function pageMain() {
   setRunning(false);
 }

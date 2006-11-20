@@ -51,9 +51,12 @@ else
 $sql = "DROP TABLE IF EXISTS `pays`";
 db_exec($sql, $base);
 $sql = "CREATE TABLE `pays` (
-          `ISO` varchar(2) NOT NULL default 'FR',
-          `nom_fr` varchar(50) NOT NULL default 'FRANCE',
-          PRIMARY KEY (`ISO`)
+          `numerique` mediumint(3) unsigned zerofill NOT NULL,
+          `alpha_3` char(3) NOT NULL default '',
+          `alpha_2` char(2) NOT NULL default '',
+          `nom_fr` varchar(255) NOT NULL default '',
+          `nom_ISO` varchar(255) NOT NULL default '',
+          PRIMARY KEY (`alpha_3`)
         ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des nom de pays';";
 db_exec($sql, $base);
 
@@ -61,8 +64,8 @@ $fileTmpPath = $AppUI->cfg["root_dir"]."/$filedir/pays-iso.csv";
 
 $sql = "LOAD DATA LOCAL INFILE '$fileTmpPath'" .
     "\nINTO TABLE `pays`" .
-    "\nFIELDS TERMINATED BY ','" .
-    "\nENCLOSED BY '\"'" .
+    "\nFIELDS TERMINATED BY '|'" .
+    "\nENCLOSED BY ''" .
     "\nLINES TERMINATED BY '\r\n'";
 db_exec($sql, $base);
 if(!($msg = db_error($base)))
