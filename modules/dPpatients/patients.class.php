@@ -41,6 +41,7 @@ class CPatient extends CMbObject {
   var $listCim10        = null;
   var $cmu              = null;
   var $ald              = null;
+  var $rang_beneficiaire= null;
 
   var $pays             = null;
   var $nationalite      = null;
@@ -148,6 +149,7 @@ class CPatient extends CMbObject {
       "listCim10"        => "text",
       "cmu"              => "date",
       "ald"              => "text",
+      "rang_beneficiaire"=> "enum|1|2|11|12|13",
       
       "pays"             => "str",
       "nationalite"      => "enum|local|etranger|notNull",

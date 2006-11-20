@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.38";
+$config["mod_version"]     = "0.39";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -330,7 +330,12 @@ class CSetupdPpatients {
           $listPat = $pat->loadList($where, null, $limit);
         }
       case "0.38":
-        return "0.38";
+        $sql = "ALTER TABLE `patients` " .
+               "\nADD `rang_beneficiaire` enum('1','2','11','12','13') NULL AFTER `ald`;";
+        db_exec( $sql ); db_error();
+        
+      case "0.39":
+        return "0.39";
     }
     return false;
   }
