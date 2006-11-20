@@ -103,7 +103,7 @@
   {{foreach from=$curr_adm->_ref_operations item=curr_op}}
   {{if $curr_op->depassement}}
   <!-- Pas de possibilité d'imprimer les dépassements pour l'instant -->
-  <!-- <a href="javascript:printDepassement({{$curr_adm->sejour_id}})"></a> -->
+  <!-- <a href="#" onclick="printDepassement({{$curr_adm->sejour_id}})"></a> -->
   {{$curr_op->depassement}} €
   <br />
   {{/if}}
