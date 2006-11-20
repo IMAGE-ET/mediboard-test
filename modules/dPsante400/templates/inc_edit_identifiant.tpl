@@ -10,7 +10,7 @@
 <tr>
   <th class="category" colspan="2">
   {{if $idSante400->_id}}
-    <a style="float:right;" href="javascript:view_log('CIDSante400',{{$idSante400->_id}})">
+    <a style="float:right;" href="#" onclick="view_log('CIDSante400',{{$idSante400->_id}})">
       <img src="images/history.gif" alt="historique" />
     </a>
     Modification de l'ID400 &lsquo;{{$idSante400->_view}}&rsquo;

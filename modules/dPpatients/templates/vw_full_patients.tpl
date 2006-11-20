@@ -73,7 +73,7 @@ function pageMain() {
         <tbody class="patientEffect" id="mainInfo">
         <tr>
           <th class="category" colspan="2">
-            <a style="float:right;" href="javascript:view_history_patient({{$patient->patient_id}})">
+            <a style="float:right;" href="#" onclick="view_history_patient({{$patient->patient_id}})">
               <img src="images/history.gif" alt="historique" />
             </a>
             Identité

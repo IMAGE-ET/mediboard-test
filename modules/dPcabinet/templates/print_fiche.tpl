@@ -9,7 +9,7 @@
       <table width="100%" style="font-size: 110%;">
         <tr>
           <th class="title" colspan="4">
-            <a href="javascript:window.print()">
+            <a href="#" onclick="window.print()">
               Consultation pré-anesthésique
             </a>
           </th>
@@ -269,7 +269,7 @@
       <table width="100%" style="font-size: 110%;">
         <tr>
           <th class="title" colspan="4">
-            <a href="javascript:window.print()">
+            <a href="#" onclick="window.print()">
               Consultation pré-anesthésique
             </a>
           </th>

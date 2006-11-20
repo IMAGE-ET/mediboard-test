@@ -15,7 +15,7 @@ function printAdmission(id) {
 <table class="main">
   <tr>
     <th>
-      <a href="javascript:window.print()">
+      <a href="#" onclick="window.print()">
         Planning du {{$deb|date_format:"%d/%m/%Y"}}
         {{if $deb != $fin}}
         au {{$fin|date_format:"%d/%m/%Y"}}
@@ -80,12 +80,12 @@ function printAdmission(id) {
 		    {{$curr_op->materiel|nl2br}}
 		  </td>
 		  <td>
-		    <a href="javascript:printAdmission({{$curr_op->_ref_sejour->sejour_id}})">
+		    <a href="#" onclick="printAdmission({{$curr_op->_ref_sejour->sejour_id}})">
 		      {{$curr_op->_ref_sejour->_ref_patient->_view}}
 		    </a>
 		  </td>
 		  <td>
-		    <a href="javascript:printAdmission({{$curr_op->_ref_sejour->sejour_id}})">
+		    <a href="#" onclick="printAdmission({{$curr_op->_ref_sejour->sejour_id}})">
 		      {{$curr_op->_ref_sejour->_ref_patient->_age}} ans
 		    </a>
 		  </td>

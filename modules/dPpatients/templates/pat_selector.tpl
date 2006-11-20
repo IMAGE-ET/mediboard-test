@@ -56,7 +56,7 @@ function setClose(key, val){
 </tr>
 {{foreach from=$list item=curr_patient}}
 <tr>
-  <td><a href="javascript:createEditPat({{$curr_patient->patient_id}})" class="buttonedit notext" style="float:left;"></a>{{$curr_patient->_view}}</td>
+  <td><a href="#" onclick="createEditPat({{$curr_patient->patient_id}})" class="buttonedit notext" style="float:left;"></a>{{$curr_patient->_view}}</td>
   <td>{{$curr_patient->_naissance}}</td>
   <td>{{$curr_patient->tel}}</td>
   <td>{{$curr_patient->tel2}}</td>

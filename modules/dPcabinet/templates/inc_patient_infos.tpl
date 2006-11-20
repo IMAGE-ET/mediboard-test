@@ -8,6 +8,6 @@
               Dossier complet
             </a>
             <br />
-            <a class="buttonsearch" href="javascript:showAll({{$patient->patient_id}})">
+            <button class="search" onclick="showAll({{$patient->patient_id}})">
               Résumé
-            </a>
+            </button>

@@ -83,11 +83,11 @@ function deldate(sField){
           <th class="category" colspan="2">
             {{if $mediuserSel->user_id}}
             {{if $canReadSante400}}
-            <a style="float:right;" href="javascript:view_idsante400('CMediusers',{{$mediuserSel->user_id}})">
+            <a style="float:right;" href="#" onclick="view_idsante400('CMediusers',{{$mediuserSel->user_id}})">
               <img src="images/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
             </a>
             {{/if}}
-            <a style="float:right;" href="javascript:view_log('CMediusers',{{$mediuserSel->user_id}})">
+            <a style="float:right;" href="#" onclick="view_log('CMediusers',{{$mediuserSel->user_id}})">
               <img src="images/history.gif" alt="historique" title="historique"/>
             </a>
             Modification de l'utilisateur &lsquo;{{$mediuserSel->_user_username}}&rsquo;

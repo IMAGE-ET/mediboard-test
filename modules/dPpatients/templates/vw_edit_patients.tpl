@@ -98,11 +98,11 @@ function pageMain() {
       {{if $patient->patient_id}}
         <th class="title" colspan="5" style="color: #f00;">
           {{if $canReadSante400}}
-          <a style="float:right;" href="javascript:view_idsante400('CPatient',{{$patient->patient_id}})">
+          <a style="float:right;" href="#" onclick="view_idsante400('CPatient',{{$patient->patient_id}})">
             <img src="images/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
           </a>
           {{/if}}
-          <a style="float:right;" href="javascript:view_log('CPatient',{{$patient->patient_id}})">
+          <a style="float:right;" href="#" onclick="view_log('CPatient',{{$patient->patient_id}})">
             <img src="images/history.gif" alt="historique" />
           </a>
           Modification du dossier de {{$patient->_view}}

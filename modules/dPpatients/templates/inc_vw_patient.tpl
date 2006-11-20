@@ -74,7 +74,7 @@ function reloadAfterSaveDoc(){
 <table class="form">
   <tr>
     <th class="category" colspan="2">
-      <a style="float:right;" href="javascript:view_history_patient({{$patient->patient_id}})">
+      <a style="float:right;" href="#" onclick="view_history_patient({{$patient->patient_id}})">
         <img src="images/history.gif" alt="historique" />
       </a>
       Identité
@@ -260,7 +260,7 @@ function reloadAfterSaveDoc(){
   {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
   <tr>
     <td>
-      <a class="actionPat" href="javascript:printIntervention({{$curr_op->operation_id}})">
+      <a class="actionPat" href="#" onclick="printIntervention({{$curr_op->operation_id}})">
         <img src="modules/dPpatients/images/print.png" alt="Imprimer" title="Imprimer l'opération"/>
       </a>
       <a class="actionPat" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">

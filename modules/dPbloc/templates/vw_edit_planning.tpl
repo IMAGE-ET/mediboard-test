@@ -36,7 +36,7 @@ function popPlanning(debut) {
 <table class="main">
   <tr>
     <td class="greedyPane" style="text-align:center;">
-      <a href="javascript:popPlanning('{{$date}}');">
+      <a href="#" onclick="popPlanning('{{$date}}');">
         <strong>{{$date|date_format:"%A %d %B"}}</strong><br />
         <img src="modules/dPbloc/images/print.png" height="15" width="15" alt="imprimer" border="0" />
       </a>
@@ -109,7 +109,7 @@ function popPlanning(debut) {
         <tr>
           {{if $plagesel->plageop_id}}
           <th class="category" colspan="6" style="color: #f00;">
-            <a style="float:right;" href="javascript:view_log('CPlageOp',{{$plagesel->plageop_id}})">
+            <a style="float:right;" href="#" onclick="view_log('CPlageOp',{{$plagesel->plageop_id}})">
               <img src="images/history.gif" alt="historique" />
             </a>
             Modifier la plage opératoire

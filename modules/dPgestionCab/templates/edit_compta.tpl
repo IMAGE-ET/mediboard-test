@@ -35,7 +35,7 @@ function pageMain() {
         <tr>
           {{if $gestioncab->gestioncab_id}}
           <th class="title" colspan="4" style="color: #f00;">
-            <a style="float:right;" href="javascript:view_log('CGestionCab',{{$gestioncab->gestioncab_id}})">
+            <a style="float:right;" href="#" onclick="view_log('CGestionCab',{{$gestioncab->gestioncab_id}})">
               <img src="images/history.gif" alt="historique" />
             </a>
             Modification de la fiche {{$gestioncab->_view}}

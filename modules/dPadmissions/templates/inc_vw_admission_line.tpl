@@ -5,19 +5,19 @@
 {{/if}}
 
 <td class="text" style="background: {{$background}}">
-  <a name="adm{{$curr_adm->sejour_id}}" href="javascript:printAdmission({{$curr_adm->sejour_id}})">
+  <a name="adm{{$curr_adm->sejour_id}}" href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
   {{$curr_adm->_ref_patient->_view}}
   </a>
 </td>
 
 <td class="text" style="background: {{$background}}">
-  <a href="javascript:printAdmission({{$curr_adm->sejour_id}})">
+  <a href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
   Dr. {{$curr_adm->_ref_praticien->_view}}
   </a>
 </td>
 
 <td style="background: {{$background}}">
-  <a href="javascript:printAdmission({{$curr_adm->sejour_id}})">
+  <a href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
   {{$curr_adm->entree_prevue|date_format:"%Hh%M"}} ({{$curr_adm->type|truncate:1:"":true}})
   </a>
 </td>

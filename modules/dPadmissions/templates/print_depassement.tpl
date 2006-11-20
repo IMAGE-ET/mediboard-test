@@ -4,7 +4,7 @@
   <tr><th colspan="2">26 rue Moulin des justices</th></tr>
   <tr><th colspan="2">17138 &mdash; Puilboreau</th></tr>
   <tr><th colspan="2">Tel : 05 46 00 40 40</th></tr>
-  <tr><th class="title" colspan="2"><a href="javascript:window.print()">Supplément d'honoraire</a></th></tr>
+  <tr><th class="title" colspan="2"><a href="#" onclick="window.print()">Supplément d'honoraire</a></th></tr>
 
   <tr>
     <th>Nom / Prénom du patient :</th>

@@ -2,7 +2,7 @@
   <tr class="clear">
     <th colspan="100">
       <strong>
-      <a href="javascript:window.print()">
+      <a href="#" onclick="window.print()">
         Rapport comptable du {{$date|date_format:"%d/%m/%Y"}}
         {{if $date != $datefin}}
         au {{$datefin|date_format:"%d/%m/%Y"}}

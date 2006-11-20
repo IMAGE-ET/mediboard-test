@@ -3,7 +3,7 @@
 <table class="tbl">
   <tr class="clear">
     <th colspan="6">
-      <a href="javascript:window.print()">
+      <a href="#" onclick="window.print()">
         Rapport du {{$deb|date_format:"%d/%m/%Y"}}
         {{if $deb != $fin}}
         au {{$fin|date_format:"%d/%m/%Y"}}

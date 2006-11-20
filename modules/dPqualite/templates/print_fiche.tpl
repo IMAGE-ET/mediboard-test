@@ -14,7 +14,7 @@
       <table width="100%" style="font-size: 110%;padding-bottom: 10px;">
         <tr>
           <th class="title">
-            <a href="javascript:window.print()">
+            <a href="#" onclick="window.print()">
               {{tr}}_CFicheEi-titleFiche{{/tr}}
             </a>
           </th>

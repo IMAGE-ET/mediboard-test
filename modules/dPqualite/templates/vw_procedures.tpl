@@ -70,12 +70,12 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           </td>
           {{/if}}
           <td>
-            <a href="javascript:ZoomAjax('{{$currProc->_class_name}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
+            <a href="#" onclick="ZoomAjax('{{$currProc->_class_name}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
               {{$currProc->_reference_doc}} ({{tr}}CDocGed-version-court{{/tr}} : {{$currProc->version}})
             </a>
           </td>
           <td class="text">
-            <a href="javascript:ZoomAjax('{{$currProc->_class_name}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
+            <a href="#" onclick="ZoomAjax('{{$currProc->_class_name}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
               {{$currProc->titre}}
             </a>
           </td>

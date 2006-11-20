@@ -19,7 +19,7 @@
 		{{foreach from=$list1 item=curr_op}}
 		<tr>
 		  <td width="50%">
-		    <a style="float:right;" href="javascript:view_log('COperation',{{$curr_op->operation_id}})">
+		    <a style="float:right;" href="#" onclick="view_log('COperation',{{$curr_op->operation_id}})">
               <img src="images/history.gif" alt="historique" />
             </a>
 		    <strong>
@@ -82,7 +82,7 @@
 		{{foreach from=$list2 item=curr_op}}
 		<tr>
 		  <td width="50%">
-		    <a name="{{$curr_op->operation_id}}" style="float:right;" href="javascript:view_log('COperation',{{$curr_op->operation_id}})">
+		    <a name="{{$curr_op->operation_id}}" style="float:right;" href="#" onclick="view_log('COperation',{{$curr_op->operation_id}})">
               <img src="images/history.gif" alt="historique" />
             </a>
 			<form name="editFrm{{$curr_op->operation_id}}" action="index.php" method="get">

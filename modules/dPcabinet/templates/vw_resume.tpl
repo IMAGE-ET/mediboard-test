@@ -141,7 +141,7 @@ function newExam(sAction, consultation_id) {
           {{/if}}
           {{if $curr_consult->_ref_examaudio->examaudio_id}}
             <br />
-            <a href="javascript:newExam('exam_audio', {{$curr_consult->consultation_id}})">
+            <a href="#" onclick="newExam('exam_audio', {{$curr_consult->consultation_id}})">
               <strong>Audiogramme</strong>
             </a>
           {{/if}}

@@ -1,5 +1,5 @@
 <table class="form" id="admission">
-  <tr><th class="title" colspan="2"><a href="javascript:window.print()">Fiche Patient</a></th></tr>
+  <tr><th class="title" colspan="2"><a href="#" onclick="window.print()">Fiche Patient</a></th></tr>
   
   <tr><th>Date: </th><td>{{$today}}</td></tr>
   

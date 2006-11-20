@@ -7,7 +7,7 @@
     <th class="category">Intervention</th>
     <th class="category">Correspondants</th>
     <th class="category">
-      <a style="float:right;" href="javascript:view_history_consult({{$consult->consultation_id}})">
+      <a style="float:right;" href="#" onclick="view_history_consult({{$consult->consultation_id}})">
         <img src="images/history.gif" alt="historique" />
       </a>
       Historique

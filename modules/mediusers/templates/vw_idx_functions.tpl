@@ -59,7 +59,7 @@ function setColor(color) {
         <tr>
           <th class="category" colspan="2">
           {{if $userfunction->function_id}}
-            <a style="float:right;" href="javascript:view_log('CFunctions',{{$userfunction->function_id}})">
+            <a style="float:right;" href="#" onclick="view_log('CFunctions',{{$userfunction->function_id}})">
               <img src="images/history.gif" alt="historique" />
             </a>
             Modification de la fonction &lsquo;{{$userfunction->text}}&rsquo;

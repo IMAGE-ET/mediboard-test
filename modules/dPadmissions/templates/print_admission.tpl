@@ -1,7 +1,7 @@
 <table class="form" id="admission">
   <tr>
     <th class="title" colspan="2">
-      <a href="javascript:window.print()">Récapitulatif admission</a>
+      <a href="#" onclick="window.print()">Récapitulatif admission</a>
     </th>
   </tr>
 

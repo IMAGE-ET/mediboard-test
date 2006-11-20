@@ -139,7 +139,7 @@ function setClose() {
         <tr>
           <th class="category" colspan="2">
             {{if $medecin->medecin_id}}
-	         <a style="float:right;" href="javascript:view_log('CMedecin',{{$medecin->medecin_id}})">
+	         <a style="float:right;" href="#" onclick="view_log('CMedecin',{{$medecin->medecin_id}})">
                <img src="images/history.gif" alt="historique" />
               </a>
               Modification du Dr. {{$medecin->_view}}
