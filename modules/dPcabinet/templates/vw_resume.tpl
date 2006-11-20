@@ -75,7 +75,7 @@ function newExam(sAction, consultation_id) {
       <ul>
       {{foreach from=$patient->_ref_files item=curr_file}}
         <li>
-          <a href="#" OnClick="popFile('{{$patient->_class_name}}','{{$patient->_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">{{$curr_file->file_name}}</a>
+          <a href="#" onclick="popFile('{{$patient->_class_name}}','{{$patient->_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">{{$curr_file->file_name}}</a>
           ({{$curr_file->_file_size}})
         </li>
       {{/foreach}}
@@ -163,7 +163,7 @@ function newExam(sAction, consultation_id) {
       <ul>
       {{foreach from=$filesCons item=curr_file}}
         <li>
-          <a href="#" OnClick="popFile('{{$curr_file->file_class}}','{{$curr_file->file_object_id}}','{{$curr_file->_class_name}}','{{$curr_file->file_id}}')">{{$curr_file->file_name}}</a>
+          <a href="#" onclick="popFile('{{$curr_file->file_class}}','{{$curr_file->file_object_id}}','{{$curr_file->_class_name}}','{{$curr_file->file_id}}')">{{$curr_file->file_name}}</a>
           ({{$curr_file->_file_size}})
         </li>
       {{/foreach}}
@@ -215,7 +215,7 @@ function newExam(sAction, consultation_id) {
       <ul>
       {{foreach from=$filesOp item=curr_file}}
         <li>
-          <a href="#" OnClick="popFile('{{$curr_file->file_class}}','{{$curr_file->file_object_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">{{$curr_file->file_name}}</a>
+          <a href="#" onclick="popFile('{{$curr_file->file_class}}','{{$curr_file->file_object_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">{{$curr_file->file_name}}</a>
           ({{$curr_file->_file_size}})
         </li>
       {{/foreach}}

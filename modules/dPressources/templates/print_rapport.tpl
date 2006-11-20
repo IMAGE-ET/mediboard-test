@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <th>
-      <a href="#" onclcik="window.print()">
+      <a href="#" onclick="window.print()">
         &mdash; Dr. {{$prat->_view}} &mdash<br />
         Plages du {{$deb|date_format:"%A %d %b %Y"}}
         au {{$fin|date_format:"%A %d %B %Y"}}<br />
