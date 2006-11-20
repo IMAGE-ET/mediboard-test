@@ -91,7 +91,7 @@ function setClose(protocole_id) {
         <tr>    
           <td class="text">
             {{if $dialog}}
-            <a href="javascript:setClose({{$curr_protocole->protocole_id}})">
+            <a href="#" onclick="setClose({{$curr_protocole->protocole_id}})">
             {{else}}
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;protocole_id={{$curr_protocole->protocole_id}}">
             {{/if}}

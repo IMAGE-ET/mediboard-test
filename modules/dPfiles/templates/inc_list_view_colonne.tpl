@@ -41,7 +41,7 @@
               {{assign var="srcImg" value="index.php?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&wl=64&hp=64"}}
             {{/if}}
 
-            <a href="javascript:popFile('{{$selClass}}', '{{$selKey}}', '{{$curr_file->_class_name}}', '{{$elementId}}', '0');">
+            <a href="#" onclick="popFile('{{$selClass}}', '{{$selKey}}', '{{$curr_file->_class_name}}', '{{$elementId}}', '0');">
               <img src="{{$srcImg}}" alt="Petit aperçu" title="Afficher le grand aperçu" />
             </a>
           </td>

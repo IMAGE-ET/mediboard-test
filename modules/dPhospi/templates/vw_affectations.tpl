@@ -171,7 +171,7 @@ function pageMain() {
   <tr>
     <td colspan="3">
       <div class="warning">
-        <a href="javascript:showAlerte()">Il y a {{$alerte}} patient(s) à placer dans la semaine qui vient</a>
+        <a href="#" onclick="showAlerte()">Il y a {{$alerte}} patient(s) à placer dans la semaine qui vient</a>
       </div>
     </td>
   </tr>
@@ -179,7 +179,7 @@ function pageMain() {
 
   <tr>
     <td>
-      <a href="javascript:showLegend()" class="buttonsearch">Légende</a>
+      <a href="#" onclick="showLegend()" class="buttonsearch">Légende</a>
     </td>
     <td>
       <form name="chgAff" action="?m={{$m}}" method="get">

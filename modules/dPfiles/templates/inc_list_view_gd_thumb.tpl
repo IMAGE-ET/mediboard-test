@@ -58,7 +58,7 @@
             
           {{/if}} 
           
-          <a href="javascript:popFile('{{$selClass}}', '{{$selKey}}', '{{$curr_file->_class_name}}', '{{$elementId}}', '0');">
+          <a href="#" onclick="popFile('{{$selClass}}', '{{$selKey}}', '{{$curr_file->_class_name}}', '{{$elementId}}', '0');">
             <img src="{{$srcImg}}" alt="Petit aperçu" title="Afficher le grand aperçu" />
             <br />{{$curr_file->_view}}
             {{if $curr_file->_class_name=="CFile"}}

@@ -5,7 +5,7 @@
       <span style="float:right;font-size:12px;">
         {{$sejour->_ref_group->text}}
       </span>
-      <a href="javascript:window.print()">Fiche d'admission</a>
+      <a href="#" onclick="window.print()">Fiche d'admission</a>
     </th>
   </tr>
   <tr>

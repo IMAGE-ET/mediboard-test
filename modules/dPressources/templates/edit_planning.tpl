@@ -71,7 +71,7 @@ function pageMain() {
         </tr>
         <tr>
           <th colspan="4" class="category">
-	        <a style="float:right;" href="javascript:view_log('CPlageressource',{{$plage->plageressource_id}})">
+	        <a style="float:right;" href="#" onclick="view_log('CPlageressource',{{$plage->plageressource_id}})">
               <img src="images/history.gif" alt="historique" />
             </a>
             Modifier la plage du {{$plage->date|date_format:"%d/%m/%Y"}}

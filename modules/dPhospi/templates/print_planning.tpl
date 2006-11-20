@@ -14,7 +14,7 @@ function printAdmission(id) {
 <table class="main">
   <tr>
     <th>
-      <a href="javascript:window.print()">
+      <a href="#" onclick="window.print()">
         Planning du {{$deb|date_format:"%A %d %b %Y à %Hh%M"}}
         au {{$fin|date_format:"%A %d %B %Y à %Hh%M"}} ({{$total}} admissions)
       </a>
@@ -111,17 +111,17 @@ function printAdmission(id) {
             {{/foreach}}
           </td>
           <td>
-            <a href="javascript:printAdmission({{$curr_sejour->sejour_id}})">
+            <a href="#" onclick="printAdmission({{$curr_sejour->sejour_id}})">
               {{$curr_sejour->_ref_patient->_view}}
             </a>
           </td>
           <td>
-            <a href="javascript:printAdmission({{$curr_sejour->sejour_id}})">
+            <a href="#" onclick="printAdmission({{$curr_sejour->sejour_id}})">
               {{$curr_sejour->_ref_patient->_naissance}} ({{$curr_sejour->_ref_patient->_age}})
             </a>
           </td>
           <td class="text">
-            <a href="javascript:printAdmission({{$curr_sejour->sejour_id}})">
+            <a href="#" onclick="printAdmission({{$curr_sejour->sejour_id}})">
               {{$curr_sejour->_ref_patient->rques}}
             </a>
           </td>

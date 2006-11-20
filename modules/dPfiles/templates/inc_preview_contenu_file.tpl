@@ -7,7 +7,7 @@
           <a href="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->file_id}}" title="Télécharger le fichier">
         {{elseif !$popup}}
           {{assign var="link" value=1}}
-          <a href="javascript:popFile('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}',{{if $sfn}}{{$sfn}}{{else}}0{{/if}})">
+          <a href="#" onclick="popFile('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}',{{if $sfn}}{{$sfn}}{{else}}0{{/if}})">
         {{/if}}
         <div>
         {{$includeInfosFile|smarty:nodefaults}}

@@ -51,11 +51,11 @@ function pageMain() {
   <tr>
     {{if $sejour->sejour_id}}
     <th colspan="2" class="title" style="color: #f00;">
-      <a style="float:right;" href="javascript:view_log('CSejour',{{$sejour->sejour_id}})">
+      <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->sejour_id}})">
         <img src="images/history.gif" alt="historique" />
       </a>
       {{if $canReadSante400}}
-      <a style="float:right;" href="javascript:view_idsante400('CSejour',{{$sejour->sejour_id}})">
+      <a style="float:right;" href="#" onclick="view_idsante400('CSejour',{{$sejour->sejour_id}})">
         <img src="images/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
       </a>
       {{/if}}

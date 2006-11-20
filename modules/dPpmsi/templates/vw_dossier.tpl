@@ -467,7 +467,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         <tr>
           <th>Documents attachés :</th>
           <td colspan="3" id="File{{$curr_op->_class_name}}{{$curr_op->_id}}">
-            <a href="javascript:setObject( {
+            <a href="#" onclick="setObject( {
               objClass: '{{$curr_op->_class_name}}', 
               keywords: '', 
               id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
