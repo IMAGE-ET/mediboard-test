@@ -10,7 +10,7 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 require_once($AppUI->getModuleFile("dPcabinet", "jpgraph_bezier"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph"));
+require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_scatter"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_regstat"));

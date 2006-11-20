@@ -9,7 +9,7 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph"        ));
+require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"        ));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"   ));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_regstat"));
 
@@ -149,7 +149,7 @@ $graph->legend->Pos(0.02,0.02, "right", "top");
 // Create the first plot
 $lplot = new LinePlot($nbHours);
 $lplot->SetColor("blue");
-$lplot->SetWeight(0);
+$lplot->SetWeight(-10);
 $lplot->value->SetFormat("%01.2f");
 $lplot->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
 $lplot->value->SetMargin(10);
@@ -169,7 +169,7 @@ $splot->SetColor("black");
 // Create the second plot
 $lplot2 = new LinePlot($doneHours);
 $lplot2->SetColor("blue");
-$lplot2->SetWeight(0);
+$lplot2->SetWeight(-10);
 $lplot2->value->SetFormat("%01.2f");
 $lplot2->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
 $lplot2->value->SetMargin(10);

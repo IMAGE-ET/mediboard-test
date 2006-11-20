@@ -119,6 +119,13 @@ $renamer->targetDir = "jpgraph";
 
 $library->renamer = $renamer;
 
+$patch = new CLibraryPatch;
+$patch->dirName = "jpgraph";
+$patch->sourceName = "mbjpgraph.php";
+$patch->targetDir = "src";
+
+$library->patches[] = $patch;
+
 $libraries[] = $library;
 
 

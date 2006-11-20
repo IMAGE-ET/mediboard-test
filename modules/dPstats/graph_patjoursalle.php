@@ -9,7 +9,7 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph"        ));
+require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"        ));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"   ));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_regstat"));
 
@@ -118,7 +118,7 @@ $graph->yaxis->SetPosAbsDelta(-15);
 // Create the plot
 $lplot = new LinePlot($op);
 $lplot->SetColor("blue");
-$lplot->SetWeight(0);
+$lplot->SetWeight(-10);
 $lplot->value->SetFormat("%01.2f");
 $lplot->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
 $lplot->value->SetMargin(10);

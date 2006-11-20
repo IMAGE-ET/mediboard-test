@@ -9,7 +9,7 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph"    ));
+require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"    ));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_bar"));
 
 $user_id = mbGetValueFromGet("user_id", $AppUI->user_id);

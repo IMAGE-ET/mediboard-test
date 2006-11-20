@@ -9,7 +9,7 @@
 
 global $AppUI, $canRead, $canEdit, $m, $graph_tympan_gauche, $graph_tympan_droite;
 
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph"));
+require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
 
 class AudiogrammeTympano extends Graph {
