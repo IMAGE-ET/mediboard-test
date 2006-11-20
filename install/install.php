@@ -110,16 +110,17 @@ $libraries[] = $library;
 $library = new CLibrary;
 $library->name = "JPGraph";
 $library->url = "http://www.aditus.nu/jpgraph/";
-$library->fileName = "jpgraph-1.19.tar.gz";
+$library->fileName = "jpgraph-2.1.4.tar.gz";
 $library->description = "Composant PHP de génération de graphs aux formats d'image";
 
 $renamer = new CLibraryRenamer;
-$renamer->sourceDir = "jpgraph-1.19";
+$renamer->sourceDir = "jpgraph-2.1.4";
 $renamer->targetDir = "jpgraph";
 
 $library->renamer = $renamer;
 
 $libraries[] = $library;
+
 
 $library = new CLibrary;
 $library->name = "FPDF";

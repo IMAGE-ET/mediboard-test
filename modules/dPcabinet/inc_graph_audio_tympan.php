@@ -41,7 +41,7 @@ class AudiogrammeTympano extends Graph {
     $this->title->SetColor("darkred");
     
     // Setup font for axis
-    $this->xgrid->Show(true, true);
+    $this->xgrid->Show(true);
     $this->xgrid->SetColor("lightgray", "lightgray:1.8");
     
     $this->xaxis->SetFont(FF_ARIAL, FS_NORMAL, 7);
@@ -52,7 +52,7 @@ class AudiogrammeTympano extends Graph {
 
     
     // Setup Y-axis labels 
-    $this->ygrid->Show(true, true);
+    $this->ygrid->Show(true,true);
     $this->ygrid->SetColor("lightgray", "lightgray:1.8");
 
     $this->yaxis->SetFont(FF_ARIAL,FS_NORMAL, 7);

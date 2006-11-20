@@ -29,7 +29,8 @@ class AudiogrammeTonal extends Graph {
     $this->SetMarginColor("lightblue");
     
     // Image setup
-    $this->img->SetAntiAliasing();
+    //$this->img->SetAntiAliasing();
+    
     $this->img->SetMargin(45, 20 + $delta, 30, 15);
     
     // Legend setup
@@ -46,15 +47,14 @@ class AudiogrammeTonal extends Graph {
     $this->title->SetFont(FF_ARIAL,FS_NORMAL,10);
     $this->title->SetColor("darkred");
     
-    // Setup font for axis
-    $this->xgrid->Show(true, true);
+    //Setup X-axis labels
+    $this->xgrid->Show(true);
     $this->xgrid->SetColor("lightgray", "lightgray:1.8");
-    
     $this->xaxis->SetFont(FF_ARIAL, FS_NORMAL, 8);
-    $this->xaxis->scale->ticks->SupressTickMarks();
-    $this->xaxis->labelPos = 1;
-    $this->xaxis->SetLabelMargin(22);
     $this->xaxis->SetTickLabels($frequences);
+    $this->xaxis->SetLabelSide(1);
+    $this->xaxis->SetLabelMargin(22);
+    
     
     // Setup Y-axis labels 
     $this->ygrid->Show(true, true);
@@ -66,7 +66,7 @@ class AudiogrammeTonal extends Graph {
     $this->yaxis->scale->ticks->Set(20, 10);
     $this->yaxis->scale->ticks->SupressZeroLabel(false);
     $this->yaxis->scale->ticks->SupressMinorTickMarks(false);
-
+    
     // Empty plots for scale window
     foreach($frequences as $value) {
       $datay[] = 100;
@@ -108,21 +108,23 @@ class AudiogrammeTonal extends Graph {
     }
     
     $p1 = new LinePlot($datay, $datax);
-
+    $p1->mark->SetType($mark_type, $image_file, 1.0);
+    $this->Add($p1);    
+    
     // Create the first line
     $p1->SetColor($mark_color);
     $p1->SetCenter();
     $p1->SetLegend($title);
-    $p1->SetWeight($line ? 1 : 0);
+    $p1->SetWeight($line ? 1 : -10);
+    
     $p1->SetCSIMTargets($jscalls, $labels);
-
+    
     // Marks
-    $p1->mark->SetType($mark_type, $image_file, 1.0);
+    
     $p1->mark->SetColor($mark_color);
     $p1->mark->SetFillColor("$mark_color@0.6");
     $p1->mark->SetWidth(4);
-
-    $this->Add($p1);
+    
   }
 }
 
