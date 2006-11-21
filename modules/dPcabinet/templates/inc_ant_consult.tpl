@@ -20,6 +20,9 @@ function putCim10(code) {
 }
 
 function delCim10(code) {
+  if(!(confirm("Voulez-vous réellement supprimer ce diagnostic ?"))){
+    return false;
+  }
   var oForm = document.editDiagFrm;
   var aCim10 = oForm.listCim10.value.split("|");
   aCim10.removeByValue(code);
@@ -79,10 +82,6 @@ function reloadAntecedents() {
 }
 
 function submitAnt(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
-}
-
-function submitAntDelete(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
 }
 

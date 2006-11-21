@@ -9,10 +9,10 @@
           <ul><li>
             <form name="delAntFrm" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPpatients" />
-            <input type="hidden" name="del" value="1" />
+            <input type="hidden" name="del" value="0" />
             <input type="hidden" name="dosql" value="do_antecedent_aed" />
             <input type="hidden" name="antecedent_id" value="{{$currAnt->antecedent_id}}" />
-            <button class="trash notext" type="button" onclick="submitAntDelete(this.form)">
+            <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'cet antécédent',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedents})">
             </button>          
             {{if $currAnt->date|date_format:"%d/%m/%Y"}}
               {{$currAnt->date|date_format:"%d/%m/%Y"}} :
@@ -34,10 +34,10 @@
         <li>
           <form name="delTrmtFrm" action="?m=dPcabinet" method="post">
           <input type="hidden" name="m" value="dPpatients" />
-          <input type="hidden" name="del" value="1" />
+          <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="do_traitement_aed" />
           <input type="hidden" name="traitement_id" value="{{$curr_trmt->traitement_id}}" />
-          <button class="trash notext" type="button" onclick="submitAntDelete(this.form)">
+          <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'ce traitement',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedents})">
           </button>
           {{if $curr_trmt->fin}}
             Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}}
