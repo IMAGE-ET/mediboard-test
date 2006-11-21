@@ -106,7 +106,7 @@ function updateList() {
   url.addParam("prat_id", "{{$userSel->user_id}}");
   url.addParam("date", "{{$date}}");
   url.addParam("vue2", "{{$vue}}");
-  url.periodicalUpdate('listConsult', { frequency: 60 });
+  url.periodicalUpdate('listConsult', { frequency: 90 });
 }
 
 function reloadConsultAnesth() {

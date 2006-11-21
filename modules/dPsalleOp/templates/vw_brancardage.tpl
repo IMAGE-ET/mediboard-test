@@ -4,7 +4,7 @@ function pageMain() {
   var opsUpdater = new Url;
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_entree_bloc");
   opsUpdater.addParam("date", "{{$date}}");
-  opsUpdater.periodicalUpdate('ops', { frequency: 60 });
+  opsUpdater.periodicalUpdate('ops', { frequency: 90 });
   
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_brancardage&date=");
 }

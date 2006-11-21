@@ -6,7 +6,7 @@ function pageMain() {
   var opsUpdater = new Url;
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_liste_plages");
   opsUpdater.addParam("date", "{{$date}}");
-  opsUpdater.periodicalUpdate('listplages', { frequency: 60 });
+  opsUpdater.periodicalUpdate('listplages', { frequency: 90 });
 }
 </script>
 

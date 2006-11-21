@@ -30,13 +30,13 @@ function pageMain() {
   ambuUpdater.setModuleAction("dPadmissions", "httpreq_vw_sorties_ambu");
   ambuUpdater.addParam("date", "{{$date}}");
   ambuUpdater.addParam("vue", "{{$vue}}");
-  ambuUpdater.periodicalUpdate('sortiesAmbu', { frequency: 60 });
+  ambuUpdater.periodicalUpdate('sortiesAmbu', { frequency: 90 });
   
   var compUpdater = new Url;
   compUpdater.setModuleAction("dPadmissions", "httpreq_vw_sorties_comp");
   compUpdater.addParam("date", "{{$date}}");
   compUpdater.addParam("vue", "{{$vue}}");
-  compUpdater.periodicalUpdate('sortiesComp', { frequency: 60 });
+  compUpdater.periodicalUpdate('sortiesComp', { frequency: 90 });
 
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
 }

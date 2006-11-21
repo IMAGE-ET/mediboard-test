@@ -30,7 +30,7 @@ function updateList() {
   url.addParam("date", "{{$date}}");
   url.addParam("vue2", "{{$vue}}");
 
-  url.periodicalUpdate('listConsult', { frequency: 60 });
+  url.periodicalUpdate('listConsult', { frequency: 90 });
 }
 
 function pageMain() {

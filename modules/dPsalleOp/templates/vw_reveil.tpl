@@ -5,7 +5,7 @@ function pageMain() {
   var opsUpdater = new Url;
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_reveil_ops");
   opsUpdater.addParam("date", "{{$date}}");
-  opsUpdater.periodicalUpdate('ops', { frequency: 60 });
+  opsUpdater.periodicalUpdate('ops', { frequency: 90 });
   
 }
 
