@@ -92,19 +92,38 @@ function pageMain() {
         <td><button type="button" class="tick" onclick="setClose('{{$curr_place.time|date_format:"%H:%M"}}')">{{$curr_place.time|date_format:"%Hh%M"}}</button></td>
         <td class="text">
           {{foreach from=$curr_place.consultations item=curr_consultation}}
-          <div {{if $curr_consultation->premiere}}style="background: #faa;" {{/if}}>
-            {{$curr_consultation->_ref_patient->_view}}
-            {{if $curr_consultation->motif}}
-            ({{$curr_consultation->motif|truncate:"20"}})
+          
+          {{if !$curr_consultation->patient_id}}
+            {{assign var="style" value="style='background: #ffa;'"}}
+          {{elseif $curr_consultation->premiere}}
+            {{assign var="style" value="style='background: #faa;'"}}
+          {{else}} 
+            {{assign var="style" value=""}}
+          {{/if}}
+          <div {{$style|smarty:nodefaults}}>
+            {{if !$curr_consultation->patient_id}}
+              [PAUSE]
+            {{else}}
+              {{$curr_consultation->_ref_patient->_view}}
+              {{if $curr_consultation->motif}}
+              ({{$curr_consultation->motif|truncate:"20"}})
+              {{/if}}
             {{/if}}
           </div>
           {{/foreach}}
         </td>
         <td>
           {{foreach from=$curr_place.consultations item=curr_consultation}}
-          <div {{if $curr_consultation->premiere}}style="background: #faa;" {{/if}}>
-            {{$curr_consultation->duree}}
-          </div>
+            {{if !$curr_consultation->patient_id}}
+              {{assign var="style" value="style='background: #ffa;'"}}
+            {{elseif $curr_consultation->premiere}}
+              {{assign var="style" value="style='background: #faa;'"}}
+            {{else}} 
+              {{assign var="style" value=""}}
+            {{/if}}
+            <div {{$style|smarty:nodefaults}}>
+              {{$curr_consultation->duree}}
+            </div>
           {{/foreach}}
         </td>
       </tr>

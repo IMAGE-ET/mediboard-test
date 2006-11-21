@@ -123,21 +123,29 @@ class CMbObject {
    */
   function loadRefsFiles() {
     $this->_ref_files = new CFile();
-    $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
-    $docs_valid = count($this->_ref_files);
-    return $docs_valid;
+    if($this->_id){
+      $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
+      $docs_valid = count($this->_ref_files);
+      return $docs_valid;
+    }else{
+      return 0;
+    }
   }
 
   function loadRefsDocs() {
     $key = $this->_tbl_key;
     $this->_ref_documents = new CCompteRendu();
-    $where = array();
-    $where["object_class"] = " = '".get_class($this)."'";
-    $where["object_id"] = "= '".$this->$key."'";
-    $order = "nom";
-    $this->_ref_documents = $this->_ref_documents->loadList($where, $order);
-    $docs_valid = count($this->_ref_documents);
-    return $docs_valid;
+    if($this->_id){
+      $where = array();
+      $where["object_class"] = " = '".get_class($this)."'";
+      $where["object_id"] = "= '".$this->$key."'";
+      $order = "nom";
+      $this->_ref_documents = $this->_ref_documents->loadList($where, $order);
+      $docs_valid = count($this->_ref_documents);
+      return $docs_valid;
+    }else{
+      return 0;
+    }
   }
   
   function loadRefsFilesAndDocs(){
@@ -147,35 +155,41 @@ class CMbObject {
   }
   
   function getNumDocs(){
-    $key = $this->_tbl_key;
-    $select = "count(`compte_rendu_id`) AS `total`";
-    $table  = "compte_rendu";
-    $where  = array();
-    $where["object_class"] = " = '".get_class($this)."'";
-    $where["object_id"] = "= '".$this->$key."'";
-    $sql = new CRequest();
-    $sql->addTable($table);
-    $sql->addSelect($select);
-    $sql->addWhere($where);
-    $nbDocs = db_loadResult($sql->getRequest());
-    
-    return $nbDocs;    
+    if($this->_id){
+      $key = $this->_tbl_key;
+      $select = "count(`compte_rendu_id`) AS `total`";
+      $table  = "compte_rendu";
+      $where  = array();
+      $where["object_class"] = " = '".get_class($this)."'";
+      $where["object_id"] = "= '".$this->$key."'";
+      $sql = new CRequest();
+      $sql->addTable($table);
+      $sql->addSelect($select);
+      $sql->addWhere($where);
+      $nbDocs = db_loadResult($sql->getRequest());
+      return $nbDocs;
+    }else{
+      return 0;
+    }
   }
   
   function getNumFiles(){
-    $key = $this->_tbl_key;
-    $select = "count(`file_id`) AS `total`";
-    $table  = "files_mediboard";
-    $where  = array();
-    $where["file_class"] = " = '".get_class($this)."'";
-    $where["file_object_id"] = "= '".$this->$key."'";
-    $sql = new CRequest();
-    $sql->addTable($table);
-    $sql->addSelect($select);
-    $sql->addWhere($where);
-    $nbFiles = db_loadResult($sql->getRequest());
-    
-    return $nbFiles;
+    if($this->_id){
+      $key = $this->_tbl_key;
+      $select = "count(`file_id`) AS `total`";
+      $table  = "files_mediboard";
+      $where  = array();
+      $where["file_class"] = " = '".get_class($this)."'";
+      $where["file_object_id"] = "= '".$this->$key."'";
+      $sql = new CRequest();
+      $sql->addTable($table);
+      $sql->addSelect($select);
+      $sql->addWhere($where);
+      $nbFiles = db_loadResult($sql->getRequest());
+      return $nbFiles;
+    }else{
+      return 0;
+    }
   }
   
   function getNumDocsAndFiles(){
@@ -358,8 +372,10 @@ class CMbObject {
    */
 
   function loadRefs() {
-    $this->loadRefsBack();
-    $this->loadRefsFwd();
+    if($this->_id){  
+      $this->loadRefsBack();
+      $this->loadRefsFwd();
+    }
   }
 
   function loadRefsBack() {

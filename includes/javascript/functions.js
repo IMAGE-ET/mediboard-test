@@ -10,9 +10,9 @@ function main() {
 }
 
 window.onbeforeunload= function () {
-  if(BrowserDetect.browser != "Explorer"){
+  //if(BrowserDetect.browser != "Explorer"){
     waitingMessage(true);
-  }
+  //}
 }
 
 /**

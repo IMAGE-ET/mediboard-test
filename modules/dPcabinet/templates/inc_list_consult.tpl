@@ -41,7 +41,9 @@
     <th>Etat</th>
   </tr>
   {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
-  {{if $curr_consult->premiere}} 
+  {{if !$curr_consult->patient_id}}
+    {{assign var="style" value="style='background: #ffa;'"}}          
+  {{elseif $curr_consult->premiere}} 
     {{assign var="style" value="style='background: #faa;font-size: 9px;'"}}
   {{else}} 
     {{assign var="style" value="style='font-size: 9px;'"}}
@@ -52,27 +54,39 @@
     {{else}}
     <td {{$style|smarty:nodefaults}}>
     {{/if}}
-      <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">{{$curr_consult->heure|truncate:5:"":true}}</a>
+      {{if $curr_consult->patient_id}}
+        <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">{{$curr_consult->heure|truncate:5:"":true}}</a>
+      {{else}}
+        {{$curr_consult->heure|truncate:5:"":true}}
+      {{/if}}
     </td>
     <td class="text" {{$style|smarty:nodefaults}}>
-      <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+      {{if !$curr_consult->patient_id}}
+        [PAUSE]
+      {{else}}
+        <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
         {{$curr_consult->_ref_patient->_view}}
         {{if $curr_consult->_ref_patient->_age != "??"}}
           ({{$curr_consult->_ref_patient->_age}}&nbsp;ans)
         {{/if}}
+      {{/if}}
       </a>
     </td>
     <td class="text" {{$style|smarty:nodefaults}}>
-      <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+      {{if $curr_consult->patient_id}}
+        <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+          {{$curr_consult->motif|nl2br|truncate:10:"...":true}}
+        </a>
+      {{else}}
         {{$curr_consult->motif|nl2br|truncate:10:"...":true}}
-      </a>
+      {{/if}}
     </td>
     <td {{$style|smarty:nodefaults}}>
       <a href="index.php?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}" title="Modifier le RDV">
         <img src="modules/dPcabinet/images/planning.png" alt="modifier" />
       </a>
     </td>
-    <td {{$style|smarty:nodefaults}}>{{$curr_consult->_etat}}</td>
+    <td {{$style|smarty:nodefaults}}>{{if $curr_consult->patient_id}}{{$curr_consult->_etat}}{{/if}}</td>
   </tr>
   {{/foreach}}
 {{/foreach}}

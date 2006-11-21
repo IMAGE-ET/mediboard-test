@@ -68,7 +68,7 @@ class CConsultation extends CMbObject {
   function getSpecs() {
     return array (
       "plageconsult_id" => "ref|notNull",
-      "patient_id"      => "ref|notNull",
+      "patient_id"      => "ref",
       "heure"           => "time|notNull",
       "duree"           => "numchar|maxLength|1",
       "secteur1"        => "currency|min|0",
@@ -146,7 +146,7 @@ class CConsultation extends CMbObject {
       if (!$this->plageconsult_id) {
         $msg .= "Plage de consultation non valide<br />";
       }
-      if (!$this->patient_id) {
+      if ($this->patient_id === 0) {
         $msg .= "Patient non valide<br />";
       }
     }

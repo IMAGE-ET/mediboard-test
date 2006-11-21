@@ -81,7 +81,7 @@ class CPlageconsult extends CMbObject {
     $query = "SELECT SUM(duree) " .
       "\nFROM `consultation` " .
       "\nWHERE `plageconsult_id` = $this->_id" .
-      "\nAND `annule` = '0'";
+      "\nAND `consultation`.`patient_id` IS NOT NULL && `annule` = '0'";
       
     $this->_affected = intval(db_loadResult($query));
 

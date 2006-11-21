@@ -378,59 +378,65 @@ class CPatient extends CMbObject {
   // Backward references
   function loadRefsSejours() {
     $sejour = new CSejour;
-    $where = array();
-    $where["patient_id"] = "= '$this->patient_id'";
-    $order = "entree_prevue DESC";
-    $this->_ref_sejours = $sejour->loadList($where, $order);
-    if(!is_array($this->_ref_sejours)) {
-      mbTrace($this->_ref_sejours, $this->_view);
+    if($this->patient_id){
+      $where = array();
+      $where["patient_id"] = "= '$this->patient_id'";
+      $order = "entree_prevue DESC";
+      $this->_ref_sejours = $sejour->loadList($where, $order);
     }
   }
   
   function loadRefsConsultations($where = null) {
     $this->_ref_consultations = new CConsultation();
-    if($where === null) {
-      $where = array();
+    if($this->patient_id){
+      if($where === null) {
+        $where = array();
+      }
+      $where["patient_id"] = "= '$this->patient_id'";
+      $order = "plageconsult.date DESC";
+      $leftjoin = array();
+      $leftjoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
+      $this->_ref_consultations = $this->_ref_consultations->loadList($where, $order, null, null, $leftjoin);
     }
-    $where["patient_id"] = "= '$this->patient_id'";
-    $order = "plageconsult.date DESC";
-    $leftjoin = array();
-    $leftjoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
-    $this->_ref_consultations = $this->_ref_consultations->loadList($where, $order, null, null, $leftjoin);
   }
   
   function loadRefsAntecedents() {
     $this->_ref_antecedents = new CAntecedent;
-    $where = array();
-    $where["patient_id"] = "= '$this->patient_id'";
-    $order = "type ASC";
-    $this->_ref_antecedents = $this->_ref_antecedents->loadList($where, $order);
+    if($this->patient_id){
+      $where = array();
+      $where["patient_id"] = "= '$this->patient_id'";
+      $order = "type ASC";
+      $this->_ref_antecedents = $this->_ref_antecedents->loadList($where, $order);
+    }
   }
 
   function loadRefsTraitements() {
-    $this->_ref_traitements = new CTraitement;
-    $where = array();
-    $where["patient_id"] = "= '$this->patient_id'";
-    $order = "fin DESC, debut DESC";
-    $this->_ref_traitements = $this->_ref_traitements->loadList($where, $order);
+    if($this->patient_id){
+      $this->_ref_traitements = new CTraitement;
+      $where = array();
+      $where["patient_id"] = "= '$this->patient_id'";
+      $order = "fin DESC, debut DESC";
+      $this->_ref_traitements = $this->_ref_traitements->loadList($where, $order);
+    }
   }
   
   function loadRefsAffectations() {
     $this->loadRefsSejours();
-    
-    // Affectation actuelle et prochaine affectation
-    $where["sejour_id"] = db_prepare_in(array_keys($this->_ref_sejours));
-    $order = "entree";
-    $now = mbDateTime();
-    
-    $this->_ref_curr_affectation = new CAffectation();
-    $where["entree"] = "< '$now'";
-    $where["sortie"] = ">= '$now'";
-    $this->_ref_curr_affectation->loadObject($where, $order);
-    
-    $this->_ref_next_affectation = new CAffectation();
-    $where["entree"] = "> '$now'";
-    $this->_ref_next_affectation->loadObject($where, $order);
+    if($this->patient_id){
+      // Affectation actuelle et prochaine affectation
+      $where["sejour_id"] = db_prepare_in(array_keys($this->_ref_sejours));
+      $order = "entree";
+      $now = mbDateTime();
+      
+      $this->_ref_curr_affectation = new CAffectation();
+      $where["entree"] = "< '$now'";
+      $where["sortie"] = ">= '$now'";
+      $this->_ref_curr_affectation->loadObject($where, $order);
+      
+      $this->_ref_next_affectation = new CAffectation();
+      $where["entree"] = "> '$now'";
+      $this->_ref_next_affectation->loadObject($where, $order);
+    }
   }
   
   

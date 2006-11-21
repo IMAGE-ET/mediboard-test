@@ -302,26 +302,44 @@ function pageMain() {
           {{assign var="consult_id" value=$curr_consult->consultation_id}}
           {{assign var="href_consult" value="index.php?m=$m&tab=edit_consultation&selConsult=$consult_id"}}
           {{assign var="href_planning" value="index.php?m=$m&tab=edit_planning&consultation_id=$consult_id"}}
-          {{if $curr_consult->premiere}} 
+          {{if !$curr_consult->patient_id}}
+            {{assign var="style" value="style='background: #ffa;'"}}          
+          {{elseif $curr_consult->premiere}} 
             {{assign var="style" value="style='background: #faa;'"}}
           {{else}} 
             {{assign var="style" value=""}}
           {{/if}}
           
           <td {{$style|smarty:nodefaults}}>
-            <a href="{{$href_consult}}" title="Voir la consultation">{{$curr_consult->heure|date_format:"%Hh%M"}}</a>
+            {{if $curr_consult->patient_id!=0}}
+              <a href="{{$href_consult}}" title="Voir la consultation">{{$curr_consult->heure|date_format:"%Hh%M"}}</a>
+            {{else}}
+              {{$curr_consult->heure|date_format:"%Hh%M"}}
+            {{/if}}
           </td>
           <td class="text" {{$style|smarty:nodefaults}}>
+            {{if !$curr_consult->patient_id}}
+            [PAUSE]
+            {{else}}
             <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_consult->_ref_patient->patient_id}}">
               <img src="modules/{{$m}}/images/edit.png" alt="modifier" />
             </a>
             <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->_ref_patient->_view}}</a>
+            {{/if}}
           </td>
           <td class="text" {{$style|smarty:nodefaults}}>
-            <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->motif|truncate:35:"...":false|nl2br}}</a>
+            {{if $curr_consult->patient_id}}
+              <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->motif|truncate:35:"...":false|nl2br}}</a>
+            {{else}}
+              {{$curr_consult->motif|truncate:35:"...":false|nl2br}}
+            {{/if}}
           </td>
           <td class="text" {{$style|smarty:nodefaults}}>
-            <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->rques|truncate:35:"...":false|nl2br}}</a>
+            {{if $curr_consult->patient_id}}
+              <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->rques|truncate:35:"...":false|nl2br}}</a>
+            {{else}}
+              {{$curr_consult->rques|truncate:35:"...":false|nl2br}}
+            {{/if}}
           </td>
           <td {{$style|smarty:nodefaults}}>
             <form name="etatFrm{{$curr_consult->consultation_id}}" action="?m=dPcabinet" method="post">
@@ -346,7 +364,7 @@ function pageMain() {
               <img src="modules/{{$m}}/images/planning.png" title="Modifier le rendez-vous" alt="modifier" />
             </a>
 
-			{{if $curr_consult->chrono == $smarty.const.CC_PLANIFIE}}
+			{{if $curr_consult->chrono == $smarty.const.CC_PLANIFIE && $curr_consult->patient_id}}
             <a class="action" href="#" onclick="putArrivee(document.etatFrm{{$curr_consult->consultation_id}})">
               <img src="modules/{{$m}}/images/check.png" title="Notifier l'arrivée du patient" alt="arrivee" />
             </a>
@@ -355,7 +373,7 @@ function pageMain() {
             </a>
             {{/if}}
           </td>
-          <td {{$style|smarty:nodefaults}}>{{$curr_consult->_etat}}</td>
+          <td {{$style|smarty:nodefaults}}>{{if $curr_consult->patient_id}}{{$curr_consult->_etat}}{{/if}}</td>
         </tr>
         {{/foreach}}
       </table>

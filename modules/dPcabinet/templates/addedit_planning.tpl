@@ -2,6 +2,23 @@
 
 <script type="text/javascript">
 
+function changePause(){
+  oForm = document.editFrm;
+  if(oForm._pause.checked){
+    oForm.patient_id.value = "";
+    oForm._pat_name.value = "";
+    $('viewPatient').hide();
+    myNode = document.getElementById("infoPat");
+    myNode.innerHTML = "";
+    myNode = document.getElementById("clickPat");
+    myNode.innerHTML = "Infos patient (indisponibles)";
+    myNode.setAttribute("onclick", "");
+  }else{
+    $('viewPatient').show();
+  }
+}
+
+
 function requestInfoPat() {
   var url = new Url;
   url.setModuleAction("dPpatients", "httpreq_get_last_refs");
@@ -24,7 +41,6 @@ function setPat( key, val ) {
 
   if (val != '') {
     f.patient_id.value = key;
-    f.patient_id.onchange();
     f._pat_name.value = val;
     myNode = document.getElementById("clickPat");
     myNode.innerHTML = "++ Infos patient (cliquez pour afficher) ++";
@@ -86,9 +102,19 @@ function pageMain() {
   popRDV();
 }
 {{/if}}
+
+function checkFormRDV(oForm){
+  if(!oForm._pause.checked && oForm.patient_id.value == ""){
+    alert("Veuillez Selectionner un Patient");
+    popPat();
+    return false;
+  }else{
+    return checkForm(oForm);
+  }
+}
 </script>
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkFormRDV(this)">
 
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 <input type="hidden" name="del" value="0" />
@@ -124,7 +150,6 @@ function pageMain() {
   {{/if}}
   <tr>
     <td>
-  
       <table class="form">
         <tr><th class="category" colspan="3">Informations sur la consultation</th></tr>
         
@@ -132,7 +157,7 @@ function pageMain() {
           <th>
             <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
           </th>
-          <td colspan="2">
+          <td>
             <select name="chir_id" title="{{$consult->_props.patient_id}}" onChange="ClearRDV()">
               <option value="">&mdash; Choisir un praticien</option>
               {{foreach from=$listPraticiens item=curr_praticien}}
@@ -142,9 +167,13 @@ function pageMain() {
              {{/foreach}}
             </select>
           </td>
+          <td>
+            <input type="checkbox" name="_pause" value="1" onclick="changePause()" {{if $consult->consultation_id && $consult->patient_id==0}} checked="checked" {{/if}} />
+            <label for="_pause" title="Planification d'une pause">Pause</label>
+          </td>
         </tr>
 
-        <tr>
+        <tr id="viewPatient" {{if $consult->consultation_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
           <th>
             <input type="hidden" title="{{$consult->_props.patient_id}}" name="patient_id" value="{{$pat->patient_id}}" ondblclick="popPat()" />
             <label for="patient_id" title="Patient pour la consultation">Patient</label>

@@ -35,16 +35,17 @@ if(isset($_GET["date"])) {
 
 // Test compliqué afin de savoir quelle consultation charger
 if(isset($_GET["selConsult"])) {
-  if($consult->load($selConsult)) {
+  if($consult->load($selConsult) && $consult->patient_id) {
     $consult->loadRefsFwd();
     $prat_id = $consult->_ref_plageconsult->chir_id;
     mbSetValueToSession("chirSel", $prat_id);
   } else {
+    $consult = new CConsultation();
     $selConsult = null;
     mbSetValueToSession("selConsult");
   }
 } else {
-  if($consult->load($selConsult)) {
+  if($consult->load($selConsult) && $consult->patient_id) {
     $consult->loadRefsFwd();
     if($prat_id !== $consult->_ref_plageconsult->chir_id) {
       $consult = new CConsultation();
