@@ -14,7 +14,7 @@ if (!$canEdit) {
 }
 
 $doc_ged_id = mbGetValueFromGetOrSession("doc_ged_id",0);
-$file = new CFile;
+$fileSel = new CFile;
 
 $docGed = new CDocGed;
 if(!$docGed->load($doc_ged_id) || $docGed->etat!=0){
@@ -63,7 +63,7 @@ $smarty = new CSmartyDP(1);
 $smarty->assign("etablissements" , $etablissements);
 $smarty->assign("modeles"        , $modeles);
 $smarty->assign("docGed"         , $docGed);
-$smarty->assign("file"           , $file);
+$smarty->assign("fileSel"        , $fileSel);
 
 $smarty->display("vw_modeles.tpl");
 ?>
