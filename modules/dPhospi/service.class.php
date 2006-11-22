@@ -47,6 +47,10 @@ class CService extends CMbObject {
       "description" => "like"
     );
   }
+  
+  function updateFormFields(){
+    $this->_view = $this->nom;
+  }
 
   function loadRefsBack() {
     // Backward references
