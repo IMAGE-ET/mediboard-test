@@ -49,16 +49,39 @@ function dateAntecedent(){
   }   
 }
 
-function finTrmt() {
+function dateTrmt(){
   var oForm = document.editTrmtFrm;
-  oForm.traitement.value = "";
-  oForm._helpers_traitement.value = "";
+  var oDateTrmt = oForm._datetrmt
+  var oHiddenDebutField = oForm.debut;
+  var oViewDebutField = document.getElementById('editTrmtFrm_debut_da');
+  var oTriggerDebutField = document.getElementById('editTrmtFrm_debut_trigger');
+  var oHiddenFinField = oForm.fin;
+  var oViewFinField = document.getElementById('editTrmtFrm_fin_da');
+  var oTriggerFinField = document.getElementById('editTrmtFrm_fin_trigger');
+  if (oDateTrmt.checked) {
+    oHiddenDebutField.value = "{{$today}}";
+    oViewDebutField.innerHTML = "{{$today|date_format:"%d/%m/%Y"}}";
+    oTriggerDebutField.style.display = "inline";
+    oForm._en_cours.disabled = false;
+    dateFinTrmt();
+  }else{
+    oHiddenDebutField.value = "";
+    oViewDebutField.innerHTML = "";
+    oTriggerDebutField.style.display = "none";
+    oHiddenFinField.value = "";
+    oViewFinField.innerHTML = "";
+    oTriggerFinField.style.display = "none";
+    oForm._en_cours.disabled = true;
+  }
+}
+
+function dateFinTrmt(){
+  var oForm = document.editTrmtFrm;
   var oEnCours = oForm._en_cours;
   var oHiddenField = oForm.fin;
   var oViewField = document.getElementById('editTrmtFrm_fin_da');
   var oTriggerField = document.getElementById('editTrmtFrm_fin_trigger');
   if (oEnCours.checked) {
-
     oHiddenField.value = "{{$today}}";
     oViewField.innerHTML = "{{$today|date_format:"%d/%m/%Y"}}";
     oTriggerField.style.display = "inline";
@@ -68,6 +91,12 @@ function finTrmt() {
     oViewField.innerHTML = "En cours";
     oTriggerField.style.display = "none";
   }
+}
+
+function finTrmt() {
+  var oForm = document.editTrmtFrm;
+  oForm.traitement.value = "";
+  oForm._helpers_traitement.value = "";
 }
 
 function closeCIM10() {
@@ -197,11 +226,14 @@ function incAntecedantsMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="debut" title="Début du traitement">Début</label></th>
+          <th>
+            <input type="checkbox" name="_datetrmt" onclick="dateTrmt()" />
+            <label for="debut" title="Début du traitement">Début</label>
+          </th>
           <td class="date">
-            <div id="editTrmtFrm_debut_da">{{$today|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debut" title="{{$traitement->_props.debut}}" value="{{$today}}" />
-            <img id="editTrmtFrm_debut_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            <div id="editTrmtFrm_debut_da"></div>
+            <input type="hidden" name="debut" title="{{$traitement->_props.debut}}" value="" />
+            <img id="editTrmtFrm_debut_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
           </td>
           <td rowspan="2">
             <textarea name="traitement" onblur="if(this.value!=''){submitAnt(this.form);finTrmt();}"></textarea>
@@ -209,13 +241,13 @@ function incAntecedantsMain() {
         </tr>
         <tr>
           <th>
-            <input type="checkbox" checked="checked" name="_en_cours" onclick="finTrmt()" />
+            <input type="checkbox" name="_en_cours" disabled="disabled" onclick="dateFinTrmt()" />
             <label for="fin" title="Fin du traitement">Fin</label>
           </th>
           <td class="date">
-            <div id="editTrmtFrm_fin_da">{{$today|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" title="{{$traitement->_props.fin}}" value="{{$today}}" />
-            <img id="editTrmtFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
+            <div id="editTrmtFrm_fin_da"></div>
+            <input type="hidden" name="fin" title="{{$traitement->_props.fin}}" value="" />
+            <img id="editTrmtFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin" style="display:none;" />
           </td>
         </tr>
         <tr>

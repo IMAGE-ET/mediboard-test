@@ -31,7 +31,7 @@ class CTraitement extends CMbObject {
   function getSpecs() {
     return array (
       "patient_id" => "ref|notNull",
-      "debut"      => "date|notNull",
+      "debut"      => "date",
       "fin"        => "date|moreEquals|debut",
       "traitement" => "text"
     );

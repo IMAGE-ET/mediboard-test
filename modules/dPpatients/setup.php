@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.39";
+$config["mod_version"]     = "0.40";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -335,7 +335,12 @@ class CSetupdPpatients {
         db_exec( $sql ); db_error();
         
       case "0.39":
-        return "0.39";
+        $sql = "ALTER TABLE `traitement` " .
+               "\nCHANGE `debut` `debut` date NULL;";
+        db_exec( $sql ); db_error();
+      
+      case "0.40":
+        return "0.40";
     }
     return false;
   }
