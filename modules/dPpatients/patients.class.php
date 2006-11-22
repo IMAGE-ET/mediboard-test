@@ -618,10 +618,13 @@ class CPatient extends CMbObject {
   }
   
   function fillTemplate(&$template) {
-  	$this->loadRefsFwd();
+  	global $AppUI;
+    $this->loadRefsFwd();
+    $this->loadRefsAntecedents();
+    $this->loadRefsTraitements();
+    $template->addProperty("Patient - article"           , $this->_shortview );
     $template->addProperty("Patient - nom"               , $this->nom        );
     $template->addProperty("Patient - prénom"            , $this->prenom     );
-    $template->addProperty("Patient - article"           , $this->_shortview );
     $template->addProperty("Patient - adresse"           , $this->adresse    );
     $template->addProperty("Patient - ville"             , $this->ville      );
     $template->addProperty("Patient - cp"                , $this->cp         );
@@ -656,6 +659,73 @@ class CPatient extends CMbObject {
     } else {
       $template->addProperty("Patient - médecin correspondant 3");
       $template->addProperty("Patient - médecin correspondant 3 - adresse");
+    }
+    
+    if(is_array($this->_ref_antecedents)){
+      // Classement des antécédents
+      $antecedent = new CAntecedent();
+      $listAnt = array();
+      $sAntecedents = null;
+      foreach($antecedent->_enumsTrans["type"] as $keyAnt => $currAnt){
+        $listAnt[$keyAnt] = array();
+      }
+      foreach($this->_ref_antecedents as $keyAnt=>$currAnt){
+        $listAnt[$currAnt->type][$keyAnt] = $currAnt;
+      }
+      foreach($listAnt as $keyAnt=>$currTypeAnt){
+        if($currTypeAnt){
+          if($sAntecedents){$sAntecedents.="<br />";}
+          $sAntecedents .= $AppUI->_("CAntecedent.type.".$keyAnt)."<br />";
+          foreach($currTypeAnt as $currAnt){
+            $sAntecedents .= " &bull; ";
+            if($currAnt->date){
+              $sAntecedents .= substr($currAnt->date, 8, 2) ."/";
+              $sAntecedents .= substr($currAnt->date, 5, 2) ."/";
+              $sAntecedents .= substr($currAnt->date, 0, 4) ." : ";
+            }
+            $sAntecedents .= $currAnt->rques;
+          }
+        }
+      }
+      $template->addProperty("Patient - antécédents", $sAntecedents);
+    }else{
+      $template->addProperty("Patient - antécédents");
+    }
+    
+    if($this->_ref_traitements){
+      $sTrmt = null;
+      foreach($this->_ref_traitements as $curr_trmt){
+        if($sTrmt){$sTrmt.=" &bull; ";}
+        if ($curr_trmt->fin){
+          $sTrmt .= "Du ";
+          $sTrmt .= substr($curr_trmt->debut, 8, 2) ."/";
+          $sTrmt .= substr($curr_trmt->debut, 5, 2) ."/";
+          $sTrmt .= substr($curr_trmt->debut, 0, 4) ." au ";
+          $sTrmt .= substr($curr_trmt->fin, 8, 2) ."/";
+          $sTrmt .= substr($curr_trmt->fin, 5, 2) ."/";
+          $sTrmt .= substr($curr_trmt->fin, 0, 4) ." : ";
+        }elseif($curr_trmt->debut){
+          $sTrmt .= "Depuis le ";
+          $sTrmt .= substr($curr_trmt->debut, 8, 2) ."/";
+          $sTrmt .= substr($curr_trmt->debut, 5, 2) ."/";
+          $sTrmt .= substr($curr_trmt->debut, 0, 4) ." : ";
+        }
+        $sTrmt .= $curr_trmt->traitement;
+      }
+      $template->addProperty("Patient - traitements", $sTrmt);
+    }else{
+      $template->addProperty("Patient - traitements");
+    }
+    
+    if($this->_codes_cim10){
+      $sCim10 = null;
+      foreach($this->_codes_cim10 as $curr_code){
+        if($sCim10){$sCim10.=" &bull; ";}
+        $sCim10 .= $curr_code->code . " : " . $curr_code->libelle;
+      }
+      $template->addProperty("Patient - diagnostics", $sCim10);
+    }else{
+      $template->addProperty("Patient - diagnostics");
     }
   }
 }

@@ -212,11 +212,11 @@
               {{foreach from=$patient->_ref_traitements item=curr_trmt}}
               <li>
                 {{if $curr_trmt->fin}}
-                  Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}}
-                {{else}}
-                  Depuis le {{$curr_trmt->debut|date_format:"%d/%m/%Y"}}
+                  Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}} :
+                {{elseif $curr_trmt->debut}}
+                  Depuis le {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} :
                 {{/if}}
-                : <i>{{$curr_trmt->traitement}}</i>
+                <i>{{$curr_trmt->traitement}}</i>
               </li>
               {{foreachelse}}
               <li>Pas de traitements</li>
