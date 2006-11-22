@@ -18,14 +18,15 @@
 		  <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
 		  <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
 		  <td class="text">
-        {{if $curr_op->libelle}}
-        <em>[{{$curr_op->libelle}}]</em>
-        <br />
-        {{/if}}
-        {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-        {{$curr_code->code}} : <em>{{$curr_code->libelleLong}}</em><br />
-        {{/foreach}}
-        (Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}})
+            {{if $curr_op->libelle}}
+            <em>[{{$curr_op->libelle}}]</em>
+            <br />
+            {{/if}}
+            {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
+            {{$curr_code->code}} : <em>{{$curr_code->libelleLong}}</em><br />
+            {{/foreach}}
+            (Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}})
+          </td>
 		  <td class="text">{{$curr_op->materiel|nl2br}}</td>
 		</tr>
 		{{/foreach}}
