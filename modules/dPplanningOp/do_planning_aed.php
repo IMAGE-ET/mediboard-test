@@ -29,7 +29,7 @@ $do->doBind();
 if(intval(mbGetValueFromPost("del", null))) {
   mbSetValueToSession("operation_id");
   $do->deleteMsg = "Opération supprimée";
-  $do->redirectDelete = "m=$m&tab=vw_edit_planning";
+  $do->redirectDelete = "m=$m&tab=vw_edit_planning&operation_id=0";
   $do->doDelete();
 } else {
   $do->modifyMsg = "Opération modifiée";
