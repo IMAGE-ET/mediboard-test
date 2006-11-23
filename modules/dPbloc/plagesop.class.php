@@ -132,7 +132,7 @@ class CPlageOp extends CMbObject {
         $this->_ref_operations[$keyOp]->rank = $i;
         $this->_ref_operations[$keyOp]->time_operation = $new_time;
         $this->_ref_operations[$keyOp]->updateFormFields();
-        $this->_ref_operations[$keyOp]->store(false);
+        $this->_ref_operations[$keyOp]->store(true, false);
         $new_time = mbAddTime($op->temp_operation, $new_time);
         $new_time = mbAddTime($this->temps_inter_op, $new_time);
         $new_time = mbAddTime($op->pause, $new_time);

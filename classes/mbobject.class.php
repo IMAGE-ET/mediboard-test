@@ -481,7 +481,7 @@ class CMbObject {
    *  @return null|string null if successful otherwise returns and error message
    */
 
-  function store($updateNulls = false, $checkobject = true) {
+  function store($checkobject = true) {
     global $AppUI;
     
     // Properties checking
@@ -506,7 +506,7 @@ class CMbObject {
     
     // DB query
     if ($this->_id) {
-      $ret = db_updateObject($this->_tbl, $this, $k, $updateNulls);
+      $ret = db_updateObject($this->_tbl, $this, $k);
     } else {
       $ret = db_insertObject($this->_tbl, $this, $k);
     }

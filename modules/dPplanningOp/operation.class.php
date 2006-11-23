@@ -237,7 +237,7 @@ class COperation extends CMbObject {
     }
   }
 
-  function store($reorder = true) {
+  function store($checkobject = true, $reorder = true) {
     if ($msg = parent::store()) {
       return $msg;
     }

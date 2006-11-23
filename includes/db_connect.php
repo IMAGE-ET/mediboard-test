@@ -367,7 +367,7 @@ function db_insertObject($table, &$object, $keyName = null, $verbose = false) {
 *
 * @param [type] $updateNulls
 */
-function db_updateObject($table, &$object, $keyName, $updateNulls = true) {
+function db_updateObject($table, &$object, $keyName) {
   $fmtsql = "UPDATE $table SET %s WHERE %s";
   $tmp = array();
   foreach (get_object_vars($object) as $k => $v) {
@@ -378,10 +378,10 @@ function db_updateObject($table, &$object, $keyName, $updateNulls = true) {
       $where = "`$keyName`='" . db_escape($v) . "'";
       continue;
     }
-    if ($v === null && !$updateNulls) {
+    if ($v === null) {
       continue;
     }
-    if($v === "" || $v === null) {
+    if($v === "") {
       // Tries to nullify empty values but won't fail if not possible
       $val = "NULL";
     } else {

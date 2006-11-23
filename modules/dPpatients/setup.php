@@ -323,7 +323,7 @@ class CSetupdPpatients {
         $listPat = $pat->loadList($where, null, $limit);
         while(count($listPat)) {
           foreach($listPat as $key => $pat) {
-            if($msg = $listPat[$key]->store(false, false)) {
+            if($msg = $listPat[$key]->store(false)) {
               mbTrace($msg, "Erreur store [".$listPat[$key]->_id."]", true);
             }
           }
