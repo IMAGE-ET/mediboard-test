@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.58";
+$config["mod_version"]     = "0.59";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -665,7 +665,20 @@ class CSetupdPplanningOp {
         db_exec( $sql ); db_error();
       
       case "0.58":
-        return "0.58";
+        $sql = "ALTER TABLE `sejour` ADD `ATNC` enum('0','1') NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+        $sql = "UPDATE sejour SET ATNC = '1' WHERE sejour_id IN (SELECT sejour_id FROM `operations` WHERE ATNC = '1');";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `operations` DROP `ATNC`;";
+        db_exec( $sql ); db_error();
+        
+        $sql = "ALTER TABLE `sejour` ADD `hormone_croissance` enum('0','1') NOT NULL DEFAULT '0';";
+        db_exec( $sql ); db_error();
+        
+      case "0.59":
+        return "0.59";
     }
     return false;
   }

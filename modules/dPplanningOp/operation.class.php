@@ -38,7 +38,6 @@ class COperation extends CMbObject {
   var $commande_mat   = null;
   var $info           = null;
   var $type_anesth    = null;  
-  var $ATNC           = null;
   var $rques          = null;
   var $rank           = null;
 
@@ -111,7 +110,6 @@ class COperation extends CMbObject {
       "commande_mat"   => "bool",
       "info"           => "bool",
       "type_anesth"    => "ref",
-      "ATNC"           => "bool",
       "rques"          => "text|confidential",
       "rank"           => "num|max|255",
       "depassement"    => "currency|min|0|confidential",

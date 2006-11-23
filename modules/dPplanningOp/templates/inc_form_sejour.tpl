@@ -202,8 +202,27 @@
     {{html_radios name="modalite" options=$sejour->_enumsTrans.modalite separator="<br />" title=$sejour->_props.modalite checked=$checked}}
   </td>
 </tr>
-{{/if}}
 
+<tr>
+  <th><label for="ATNC_1">ATNC</label></th>
+  <td colspan="2">
+    <input name="ATNC" value="1" type="radio" {{if $sejour->ATNC == "1"}} checked="checked" {{/if}}/>
+    <label for="ATNC_1">Oui</label>
+    <input name="ATNC" value="0" type="radio" {{if !$sejour->ATNC || $sejour->ATNC == "0"}} checked="checked" {{/if}}/>
+    <label for="ATNC_0">Non</label>
+  </td>
+</tr>
+
+<tr>
+  <th><label for="hormone_croissance_1">Traitement hormonal</label></th>
+  <td colspan="2">
+    <input name="hormone_croissance" value="1" type="radio" {{if $sejour->hormone_croissance == "1"}} checked="checked" {{/if}}/>
+    <label for="hormone_croissance_1">Oui</label>
+    <input name="hormone_croissance" value="0" type="radio" {{if !$sejour->hormone_croissance || $sejour->hormone_croissance == "0"}} checked="checked" {{/if}}/>
+    <label for="hormone_croissance_0">Non</label>
+  </td>
+</tr>
+{{/if}}
 <tr>
   <th>
     <label for="chambre_seule_1" title="Patient à placer dans une chambre particulière">Chambre particulière</label>

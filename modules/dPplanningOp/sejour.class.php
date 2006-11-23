@@ -19,32 +19,34 @@ class CSejour extends CMbObject {
   var $sejour_id = null;
   
   // DB Réference
-  var $patient_id   = null; // remplace $op->pat_id
-  var $praticien_id = null; // clone $op->chir_id
-  var $group_id     = null;
+  var $patient_id         = null; // remplace $op->pat_id
+  var $praticien_id       = null; // clone $op->chir_id
+  var $group_id           = null;
 
   // DB Fields
-  var $type          = null; // remplace $op->type_adm
-  var $modalite      = null;
-  var $annule        = null; // complète $op->annule
-  var $chambre_seule = null; // remplace $op->chambre
+  var $type               = null; // remplace $op->type_adm
+  var $modalite           = null;
+  var $annule             = null; // complète $op->annule
+  var $chambre_seule      = null; // remplace $op->chambre
 
-  var $entree_prevue = null;
-  var $sortie_prevue = null;
-  var $entree_reelle = null;
-  var $sortie_reelle = null;
+  var $entree_prevue      = null;
+  var $sortie_prevue      = null;
+  var $entree_reelle      = null;
+  var $sortie_reelle      = null;
 
-  var $venue_SHS = null; // remplace $op->venue_SHS
-  var $saisi_SHS = null; // remplace $op->saisie
-  var $modif_SHS = null; // remplace $op->modifiee
+  var $venue_SHS          = null; // remplace $op->venue_SHS
+  var $saisi_SHS          = null; // remplace $op->saisie
+  var $modif_SHS          = null; // remplace $op->modifiee
 
-  var $DP            = null; // remplace $operation->CIM10_code
-  var $pathologie    = null; // remplace $operation->pathologie
-  var $septique      = null; // remplace $operation->septique
-  var $convalescence = null; // remplace $operation->convalescence
+  var $DP                 = null; // remplace $operation->CIM10_code
+  var $pathologie         = null; // remplace $operation->pathologie
+  var $septique           = null; // remplace $operation->septique
+  var $convalescence      = null; // remplace $operation->convalescence
 
-  var $rques = null;
-
+  var $rques              = null;
+  var $ATNC               = null;
+  var $hormone_croissance = null;
+  
   // Form Fields
   var $_duree_prevue       = null;
   var $_date_entree_prevue = null;
@@ -75,25 +77,27 @@ class CSejour extends CMbObject {
   
   function getSpecs() {
     return array (
-      "patient_id"    => "ref|notNull",
-      "praticien_id"  => "ref|notNull",
-      "group_id"      => "ref|notNull",
-      "type"          => "enum|comp|ambu|exte|notNull",
-      "modalite"      => "enum|office|libre|tiers|notNull",
-      "annule"        => "bool",
-      "chambre_seule" => "bool",
-      "entree_prevue" => "dateTime|notNull",
-      "sortie_prevue" => "dateTime|moreEquals|entree_prevue|notNull",
-      "entree_reelle" => "dateTime",
-      "sortie_reelle" => "dateTime",
-      "venue_SHS"     => "numchar|length|8|confidential",
-      "saisi_SHS"     => "bool",
-      "modif_SHS"     => "bool",
-      "DP"            => "code|cim10",
-      "pathologie"    => "str|length|3",
-      "septique"      => "bool",
-      "convalescence" => "text|confidential",
-      "rques"         => "text"
+      "patient_id"         => "ref|notNull",
+      "praticien_id"       => "ref|notNull",
+      "group_id"           => "ref|notNull",
+      "type"               => "enum|comp|ambu|exte|notNull",
+      "modalite"           => "enum|office|libre|tiers|notNull",
+      "annule"             => "bool",
+      "chambre_seule"      => "bool",
+      "entree_prevue"      => "dateTime|notNull",
+      "sortie_prevue"      => "dateTime|moreEquals|entree_prevue|notNull",
+      "entree_reelle"      => "dateTime",
+      "sortie_reelle"      => "dateTime",
+      "venue_SHS"          => "numchar|length|8|confidential",
+      "saisi_SHS"          => "bool",
+      "modif_SHS"          => "bool",
+      "DP"                 => "code|cim10",
+      "pathologie"         => "str|length|3",
+      "septique"           => "bool",
+      "convalescence"      => "text|confidential",
+      "rques"              => "text",
+      "ATNC"               => "bool",
+      "hormone_croissance" => "bool"
     );
   }
   
