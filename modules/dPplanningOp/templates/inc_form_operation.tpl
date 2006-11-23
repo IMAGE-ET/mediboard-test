@@ -165,6 +165,16 @@
   </tr>
   
   <tr>
+    <th><label for="ATNC_0">ATNC</label></th>
+    <td colspan="2">
+      <input name="ATNC" value="1" type="radio" {{if $op->ATNC == "1"}} checked="checked" {{/if}}/>
+      <label for="ATNC_1">Oui</label>
+      <input name="ATNC" value="0" type="radio" {{if !$op->ATNC || $op->ATNC == "0"}} checked="checked" {{/if}}/>
+      <label for="ATNC_0">Non</label>
+    </td>
+  </tr>
+  
+  <tr>
     <th><label for="info_0">Information du patient</label></th>
     <td colspan="2">
       <input name="info" value="1" type="radio" {{if $op->info == "1"}} checked="checked" {{/if}}/>
