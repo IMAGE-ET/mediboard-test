@@ -41,7 +41,7 @@ if (intval(mbGetValueFromPost("del"))) {
   } else {
     $_is_anesth=false;
   } 
-  if($_is_anesth){
+  if($_is_anesth && $do->_obj->patient_id){
     // Un Anesthesiste a été choisi
     $consultAnesth = new CConsultAnesth;
     $where = array();

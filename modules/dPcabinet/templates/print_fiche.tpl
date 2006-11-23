@@ -26,7 +26,7 @@
 </table>
 
 
-<table class="form" id="admission">
+<table class="form" id="admission" style="page-break-after: always;">
   <tr>
     <td colspan="2">
       <table width="100%" style="font-size: 100%;">
@@ -227,7 +227,7 @@
       </table>
     </td>
     <td class="halfPane">
-      <table width="100%" style="font-size: 100%; padding-bottom: 15px;">
+      <table width="100%" style="font-size: 100%;">
         <tr>
           <th class="category" colspan="6">Examens Clinique</th>
         </tr>
@@ -262,7 +262,6 @@
   </tr>
 </table>
 
-<br style="page-break-after: always;" />
 <table class="form" id="admission">
   <tr>
     <td>
