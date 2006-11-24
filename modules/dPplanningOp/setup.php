@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.60";
+$config["mod_version"]     = "0.59";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
