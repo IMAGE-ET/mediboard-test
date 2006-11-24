@@ -31,7 +31,7 @@
         </td>
         <td class="patient" onclick="flipSejour({{$curr_sejour->sejour_id}})">
           <strong><a name="sejour{{$curr_sejour->sejour_id}}">{{$curr_sejour->_ref_patient->_view}}</a></strong>
-          {{if $curr_sejour->type == "comp"}}
+          {{if $curr_sejour->type != "ambu" && $curr_sejour->type != "exte"}}
           ({{$curr_sejour->_duree_prevue}}j)
           {{else}}
           ({{$curr_sejour->type|truncate:1:""|capitalize}})

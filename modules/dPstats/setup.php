@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPstats";
-$config["mod_version"]     = "0.14";
+$config["mod_version"]     = "0.15";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -102,7 +102,12 @@ class CSetupdPstats {
                "\nCHANGE `nb_plages` `nb_plages` int(11) unsigned NOT NULL DEFAULT '0';";
         db_exec( $sql ); db_error();
       case "0.14":
-        return "0.14";
+        $sql = "ALTER TABLE `temps_hospi` " .
+               "\nCHANGE `type` `type` enum('comp','ambu','seances','ssr','psy') NOT NULL DEFAULT 'ambu';";
+        db_exec( $sql ); db_error();
+      
+      case "0.15":
+        return "0.15";
     }
     return false;
   }

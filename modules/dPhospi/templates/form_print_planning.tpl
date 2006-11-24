@@ -94,9 +94,9 @@ function pageMain() {
           <th><label for="type">Type d'admission</label></th>
           <td><select name="type">
             <option value="0">&mdash; Tous types d'admission &mdash;</option>
-            <option value="ambu">Ambulatoire</option>
-            <option value="exte">Externe</option>
-            <option value="comp">Complete</option>
+            {{foreach from=$sejour->_enumsTrans.type key=curr_key item=curr_type}}
+              <option value="{{$curr_key}}">{{$curr_type}}</option>
+            {{/foreach}}
           </select></td>
         </tr>
         <tr>

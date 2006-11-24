@@ -21,8 +21,6 @@ $listTemps = new CTempsHospi;
 $where = array();
 if($type) {
   $where["type"] = db_prepare("= %", $type);
-} else {
-  $where[] = "`type` = 'ambu' OR `type` = 'comp'";
 }
 $where["praticien_id"] = db_prepare_in(array_keys($listPrats), $prat_id);
 

@@ -60,9 +60,9 @@ function pageMain() {
             <select name="type_adm">
               <option value="0">&mdash; Tous les types d'hospi</option>
               <option value="1" {{if $type_adm == "1"}}selected="selected"{{/if}}>Hospi complètes + ambu</option>
-              {{foreach from=$listHospis item=curr_hospi}}
-              <option value="{{$curr_hospi.code}}" {{if $curr_hospi.code == $type_adm}}selected="selected"{{/if}}>
-                {{$curr_hospi.view}}
+              {{foreach from=$listHospis key=key_hospi item=curr_hospi}}
+              <option value="{{$key_hospi}}" {{if $key_hospi == $type_adm}}selected="selected"{{/if}}>
+                {{$curr_hospi}}
               </option>
               {{/foreach}}
             </select>

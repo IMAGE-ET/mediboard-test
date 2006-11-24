@@ -12,6 +12,7 @@ global $AppUI, $canRead, $canEdit, $m, $g;
 if(!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
+$sejour = new CSejour();
 
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
@@ -33,6 +34,7 @@ $smarty->assign("tomorrow", date("Y-m-d")." 21:00:00");
 $smarty->assign("listPrat", $listPrat);
 $smarty->assign("listSpec", $listSpec);
 $smarty->assign("listServ", $listServ);
+$smarty->assign("sejour"  , $sejour);
 
 $smarty->display("form_print_planning.tpl");
 

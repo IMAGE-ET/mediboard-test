@@ -67,12 +67,11 @@ function setCode(code, type) {
               <option value="">
                 &mdash; Tous les types
               </option>
-              <option value="ambu" {{if $type == "ambu"}}selected="selected"{{/if}}>
-                {{tr}}CSejour.type.ambu{{/tr}}
+              {{foreach from=$listHospis key=key_typeHospi item=curr_typeHospi}}
+              <option value="{{$key_typeHospi}}" {{if $key_typeHospi==$type}}selected="selected"{{/if}}>
+                {{tr}}CSejour.type.{{$key_typeHospi}}{{/tr}}
               </option>
-              <option value="comp" {{if $type == "comp"}}selected="selected"{{/if}}>
-                {{tr}}CSejour.type.comp{{/tr}}
-              </option>
+              {{/foreach}}
             </select>
           </td>
         </tr>

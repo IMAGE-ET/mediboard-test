@@ -44,7 +44,11 @@ if($typeVue == 0 || $typeVue == 2) {
 }
 
 if($typeVue == 2) {
-  $smarty->assign("type", $type);
+  $sejour = new CSejour;
+  $listHospis = $sejour->_enumsTrans["type"];
+  unset($listHospis["exte"]);
+  $smarty->assign("listHospis", $listHospis);
+  $smarty->assign("type"      , $type);
 }
 
 $smarty->assign("listTemps", $listTemps);

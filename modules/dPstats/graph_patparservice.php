@@ -19,11 +19,10 @@ $service_id    = mbGetValueFromGet("service_id"   , 0                );
 $type_adm      = mbGetValueFromGet("type_adm"     , 0                );
 $discipline_id = mbGetValueFromGet("discipline_id", 0                );
 
+$sejour = new CSejour;
 $listHospis = array();
 $listHospis[1] = "Hospi complètes + ambu";
-$listHospis["comp"] = "Hospi complètes";
-$listHospis["ambu"] = "Ambulatoires";
-$listHospis["exte"] = "Externes";
+$listHospis = $listHospis + $sejour->_enumsTrans["type"];
 
 $total = 0;
 

@@ -35,13 +35,9 @@ $listServices = $listServices->loadList();
 $listDisciplines = new CDiscipline();
 $listDisciplines = $listDisciplines->loadUsedDisciplines();
 
+$sejour = new CSejour;
 $listHospis = array();
-$listHospis[0]["code"] = "comp";
-$listHospis[0]["view"] = "Hospi complètes";
-$listHospis[1]["code"] = "ambu";
-$listHospis[1]["view"] = "Ambulatoires";
-$listHospis[2]["code"] = "exte";
-$listHospis[2]["view"] = "Externes";
+$listHospis = array_merge($listHospis,$sejour->_enumsTrans["type"]);
 
 // Création du template
 $smarty = new CSmartyDP(1);

@@ -2,6 +2,8 @@
 {{elseif $curr_adm->type == 'ambu'}} {{assign var=background value="#faa"}}
 {{elseif $curr_adm->type == 'comp'}} {{assign var=background value="#fff"}}
 {{elseif $curr_adm->type == 'exte'}} {{assign var=background value="#afa"}}
+{{else}}
+{{assign var=background value="#ccc"}}
 {{/if}}
 
 <td class="text" style="background: {{$background}}">

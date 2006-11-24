@@ -31,24 +31,21 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
   $datax[] = mbTranformTime("+0 DAY", $i, "%m/%Y");
 }
 
+$sejour = new CSejour;
 $listHospis = array();
-if($type_adm == "comp" || $type_adm == "0" || $type_adm == "1") {
-  $listHospis[0]["code"] = "comp";
-  $listHospis[0]["view"] = "Hospi complètes";
-}
-if($type_adm == "ambu" || $type_adm == "0" || $type_adm == "1") {
-  $listHospis[1]["code"] = "ambu";
-  $listHospis[1]["view"] = "Ambulatoires";
-}
-if($type_adm == "exte" || $type_adm == "0") {
-  $listHospis[2]["code"] = "exte";
-  $listHospis[2]["view"] = "Externes";
+
+
+foreach($sejour->_enumsTrans["type"] as $keyType=>$vType){
+  if($type_adm == "0" || $type_adm==$keyType || (($keyType=="comp" || $keyType=="ambu") && $type_adm == "1")){
+    $listHospis[$keyType] = str_replace(" ", "\n",$vType);
+  }
 }
 
+
+
 $patbyhospi = array();
-foreach($listHospis as $hospi) {
-  $type = $hospi["code"];
-  $patbyhospi[$type]["nom"] = $hospi["view"];
+foreach($listHospis as $type=>$vType) {
+  $patbyhospi[$type]["nom"] = $vType;
   $sql = "SELECT COUNT(sejour.sejour_id) AS total," .
     "\nsejour.type," .
     "\nDATE_FORMAT(sejour.entree_prevue, '%m/%Y') AS mois," .
@@ -82,8 +79,8 @@ foreach($listHospis as $hospi) {
 }
 
 // Setup the graph.
-$graph = new Graph(500,300,"auto");    
-$graph->img->SetMargin(50,40,50,70);
+$graph = new Graph(530,300,"auto");    
+$graph->img->SetMargin(50,100,50,70);
 $graph->SetScale("textlin");
 $graph->SetMarginColor("lightblue");
 
@@ -121,12 +118,15 @@ $graph->xaxis->SetLabelAngle(50);
 // Legend
 $graph->legend->SetMarkAbsSize(5);
 $graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$graph->legend->Pos(0.02,0.02, "right", "top");
+$graph->legend->Pos(0.012,0.2, "right", "top");
 
 // Create the bar pot
-$colors = array("comp" => "#aa5500",
-                "ambu" => "#55aa00",
-                "exte" => "#0055aa");
+$colors = array("comp"   => "#aa5500",
+                "ambu"    => "#55aa00",
+                "exte"    => "#0055aa",
+                "seances" => "#aa0055",
+                "ssr"     => "#5500aa",
+                "psy"     => "#00aa55");
 $listPlots = array();
 foreach($patbyhospi as $key => $value) {
   $bplot = new BarPlot($value["sejour"]);
