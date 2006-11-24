@@ -30,6 +30,10 @@ $functions = $functions->loadList(null, $order);
 $disciplines = new CDiscipline;
 $disciplines = $disciplines->loadList();
 
+// Récupération des spécialités CPAM
+$spec_cpam = new CSpecCPAM();
+$spec_cpam = $spec_cpam->loadList();
+
 // Récuperation des utilisateurs
 foreach ($functions as $key => $function) {
   $functions[$key]->loadRefs();
@@ -46,10 +50,11 @@ $profiles = $profiles->loadList($where);
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("canReadSante400", $canReadSante400);
-$smarty->assign("mediuserSel"   , $mediuserSel   );
-$smarty->assign("profiles"      , $profiles      );
-$smarty->assign("functions"     , $functions     );
-$smarty->assign("disciplines"   , $disciplines   );
+$smarty->assign("mediuserSel"    , $mediuserSel    );
+$smarty->assign("profiles"       , $profiles       );
+$smarty->assign("functions"      , $functions      );
+$smarty->assign("disciplines"    , $disciplines    );
+$smarty->assign("spec_cpam"      , $spec_cpam      );
 
 $smarty->display("vw_idx_mediusers.tpl");
 

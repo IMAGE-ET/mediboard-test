@@ -174,6 +174,19 @@ function deldate(sField){
           </td>
         </tr>
         <tr>
+          <th><label for="spec_cpam_id" title="Spécialité CPAM de l'utilisateur. Optionnel">Spéc CPAM</label></th>
+          <td>
+            <select name="spec_cpam_id" title="{{$mediuserSel->_props.spec_cpam_id}}">
+              <option value="">&mdash; Choisir une spécialité &mdash;</option>
+              {{foreach from=$spec_cpam item=curr_spec}}
+              <option value="{{$curr_spec->spec_cpam_id}}" {{if $curr_spec->spec_cpam_id == $mediuserSel->spec_cpam_id}} selected="selected" {{/if}}>
+                {{$curr_spec->_view}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
+        <tr>
           <th><label for="_profile_id" title="Profil de droits utilisateur. Obligatoire">Profil</label></th>
           <td>
             <select name="_profile_id">

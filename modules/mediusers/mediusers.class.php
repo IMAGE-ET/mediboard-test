@@ -25,6 +25,7 @@ class CMediusers extends CMbObject {
   // DB References
   var $function_id   = null;
   var $discipline_id = null;
+  var $spec_cpam_id  = null;
   var $commentaires  = null;
   var $actif         = null;
   var $deb_activite  = null;
@@ -77,6 +78,7 @@ class CMediusers extends CMbObject {
       "adeli"         => "numchar|length|9|confidential",
       "function_id"   => "ref|notNull",
       "discipline_id" => "ref",
+      "spec_cpam_id"  => "ref",
       "commentaires"  => "text",
       "actif"         => "bool",
       "deb_activite"  => "date",
