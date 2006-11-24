@@ -66,6 +66,15 @@ class CUserLog extends CMbObject {
     }
   }
   
+  /**
+   * Initializes id and class for given CMbObject
+   */
+  function setObject($mbObject) {
+    assert(is_a($mbObject, "CMbObject"));
+    $this->object_id = $mbObject->_id;
+    $this->object_class = get_class($mbObject);
+  }
+  
   function loadRefsFwd() {
     $this->_ref_user = new CUser;
     $this->_ref_user->load($this->user_id);

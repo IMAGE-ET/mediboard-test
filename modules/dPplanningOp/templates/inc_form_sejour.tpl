@@ -209,7 +209,7 @@
     {{else}}
     {{assign var="checked" value="libre"}}
     {{/if}}
-    {{html_radios name="modalite" options=$sejour->_enumsTrans.modalite separator="<br />" title=$sejour->_props.modalite checked=$checked}}
+    {{html_radios name="modalite" options=$sejour->_enumsTrans.modalite separator="" title=$sejour->_props.modalite checked=$checked}}
   </td>
 </tr>
 

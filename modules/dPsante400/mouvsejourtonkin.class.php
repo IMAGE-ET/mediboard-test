@@ -166,8 +166,8 @@ class CMouvSejourTonkin extends CMouvement400 {
       "HO" => "comp",
       "AM" => "ambu",
       "EX" => "exte",
-      "CH" => "ambu",
-      "DI" => "ambu",
+      "CH" => "seances",
+      "DI" => "seances",
     );
 
     static $transformHospiDP = array (
@@ -186,16 +186,22 @@ class CMouvSejourTonkin extends CMouvement400 {
     $this->sejour->type = @$transformHospi[$hospi];
     $this->sejour->DP   = @$transformHospiDP[$hospi];
 
+    $entree = $this->consumeDateTime("DATENT", "HREENT");
+    $sortie = $this->consumeDateTime("DATSOR", "HRESOR");
+
     switch ($this->consume("ETASEJ")) {
     	case "F": // Prévu
-      $this->sejour->entree_prevue = $this->consumeDateTime("DATENT", "HREENT");
-      $this->sejour->sortie_prevue = $this->consumeDateTime("DATSOR", "HRESOR");
+      $this->sejour->entree_prevue = $entree;
+      $this->sejour->sortie_prevue = $sortie;
   		break;
     
       case "P": // Présent
+      $this->sejour->entree_reelle = $entree;
+      $this->sejour->sortie_prevue = $sortie;
+
       case "S": // Sorti
-      $this->sejour->entree_reelle = $this->consumeDateTime("DATENT", "HREENT");
-      $this->sejour->sortie_reelle = $this->consumeDateTime("DATSOR", "HRESOR");
+      $this->sejour->entree_reelle = $entree;
+      $this->sejour->sortie_sortie = $sortie;
       break;
     }
 
@@ -219,19 +225,26 @@ class CMouvSejourTonkin extends CMouvement400 {
       "comp" => 5,
       "ambu" => 1,
       "exte" => 0,
+      "seances" => 0,
+      "ssr" => 7,
+      "psy" => 30,
     );
 
-    if (mbDateTime(null, $this->sejour->sortie_prevue) == mbDateTime(null, "0000-00-00 00:00:00")) {
-      // Date de sortie fournié, on l'utilise
-      if ($this->sejour->sortie_reelle > $this->sejour->entree_reelle) {
-        
-        $this->sejour->sortie_prevue = $this->sejour->sortie_reelle; 
-      } else { // On simule la date de sortie
-        $nbDays = $prevDays[$this->sejour->type];
-        $this->sejour->sortie_prevue = mbDateTime("+ $nbDays DAYS", $this->sejour->entree_prevue);
-      }
-
-      $this->sejour->_hour_sortie_prevue = null; // pour ne pas faire un updateFormField();
+    // Rectifications sur les dates prévues
+    // Pervents updateFormFields()
+    $this->sejour->_hour_entree_prevue = null;
+    $this->sejour->_hour_sortie_prevue = null;
+    
+    $nullDate = "0000-00-00 00:00:00";
+    if ($this->sejour->entree_prevue == $nullDate) {
+      $this->sejour->entree_prevue = $this->sejour->entree_reelle;
+    }
+    
+    if ($this->sejour->sortie_prevue == $nullDate) {
+      $this->sejour->sortie_prevue = 
+        $this->sejour->sortie_reelle > $this->sejour->entree_reelle ? 
+        $this->sejour->sortie_reelle : // Date de sortie fournie, on l'utilise 
+        mbDateTime("+ {$prevDays[$this->sejour->type]} days", $this->sejour->entree_prevue); // On simule la date de sortie
     }
     
     if ($msg = $this->sejour->store()) {

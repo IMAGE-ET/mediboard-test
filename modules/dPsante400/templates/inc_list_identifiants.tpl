@@ -41,7 +41,7 @@
       </a>
     </td>
     <td>{{$curr_idSante400->id400}}</td>
-    <td>{{$curr_idSante400->tag}}</td>
+    <td>{{$curr_idSante400->tag|replace:' ':'<br/>'}}</td>
   </tr>
   {{/foreach}}
 </table>

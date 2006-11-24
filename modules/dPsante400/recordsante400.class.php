@@ -28,7 +28,9 @@ class CRecordSante400 {
     global $dbChronos;
     $dbChronos[$dsn] = new Chronometer;
     self::$chrono =& $dbChronos[$dsn];
+    self::$chrono->start();
     self::$dbh = new PDO("odbc:$dsn", $dsnConfig["user"], $dsnConfig["pass"]);
+    self::$chrono->stop();
   }
 
   function multipleLoad($sql, $max = 100, $class = "CRecordSante400") {
@@ -46,11 +48,17 @@ class CRecordSante400 {
       self::$chrono->start();
       $sth->execute();
       self::$chrono->stop();
+
+      self::$chrono->start();
       while ($data = $sth->fetch(PDO::FETCH_ASSOC) and $max--) {
+        self::$chrono->stop();
         $record = new $class;
         $record->data = $data;
         $records[] = $record;
+        self::$chrono->start();
       }
+      self::$chrono->stop();
+
     } catch (PDOException $e) {
       trigger_error("Error querying '$sql' : " . $e->getMessage(), E_USER_ERROR);
     }
@@ -58,7 +66,7 @@ class CRecordSante400 {
     return $records;
   }
   
-  function query($sql) {
+  function query($sql, $values = array()) {
     try {
       self::connect();
       if (null == $sth = self::$dbh->prepare($sql)) {
@@ -66,9 +74,9 @@ class CRecordSante400 {
       }
       
       self::$chrono->start();
-      $sth->execute();
-      self::$chrono->stop();
+      $sth->execute($values);
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);
+      self::$chrono->stop();
     } catch (PDOException $e) {
       trigger_error("Error querying '$sql' : " . $e->getMessage(), E_USER_ERROR);
     }
@@ -111,9 +119,12 @@ class CRecordSante400 {
     return $value2 ? "$value1\n$value2" : "$value1";    
   }
 
+  /**
+   * Transforms a YYYYMMDD AS400 date into a YYYY-MM-DD SQL date 
+   */
   function consumeDate($valueName) {
     $date = $this->consume($valueName);
-    if ($date == "0" or $date = "99999999") {
+    if ($date == "0" or $date == "99999999") {
       return null;
     }
     
@@ -128,7 +139,7 @@ class CRecordSante400 {
     }
     
     if (strlen($time) == 2) {
-      $time = "00" . $time;
+      $time = "00" . $time ;
     }
     
     $reg = "/(\d{0,2})(\d{2})/i";

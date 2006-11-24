@@ -277,8 +277,10 @@ class CMbObject {
     $request->addLJoin($leftjoin);
     $request->addGroup($group);
     $request->addOrder($order);
+
+    $this->updateDBFields();
     foreach($this->getProps() as $key => $value) {
-      if($value !== null) {
+      if ($value !== null) {
         $request->addWhereClause($key, "= '$value'");
       }
     }
@@ -295,8 +297,10 @@ class CMbObject {
     $request->addGroup($group);
     $request->addOrder($order);
     $request->setLimit($limit);
+
+    $this->updateDBFields();
     foreach($this->getProps() as $key => $value) {
-      if($value !== null) {
+      if ($value !== null) {
         $request->addWhereClause($key, "= '$value'");
       }
     }
@@ -480,7 +484,6 @@ class CMbObject {
    *  Inserts a new row if id is zero or updates an existing row in the database table
    *  @return null|string null if successful otherwise returns and error message
    */
-
   function store($checkobject = true) {
     global $AppUI;
     
