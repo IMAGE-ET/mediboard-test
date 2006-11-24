@@ -43,6 +43,7 @@ $plages = $plages->loadList($where);
 $listOps = new COperation;
 $where = array();
 $where[] = "`plageop_id` ".db_prepare_in(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date_suivi')";
+$where["annulee"] = "= '0'";
 $order = "time_operation";
 $listOps = $listOps->loadList($where,$order);
 foreach($listOps as $key => $value) {

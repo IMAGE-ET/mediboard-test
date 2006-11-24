@@ -47,6 +47,10 @@ $order = "entree_reveil";
 $listReveil = $listReveil->loadList($where, $order);
 foreach($listReveil as $key => $value) {
   $listReveil[$key]->loadRefsFwd();
+  if($listReveil[$key]->_ref_sejour->type == "exte"){
+    unset($listReveil[$key]);
+    continue;
+  }
   $listReveil[$key]->_ref_sejour->loadRefsFwd();
   $listReveil[$key]->_ref_sejour->loadRefsAffectations();
   if($listReveil[$key]->_ref_sejour->_ref_first_affectation->affectation_id) {
@@ -73,6 +77,10 @@ $order = "sortie_reveil DESC";
 $listOut = $listOut->loadList($where, $order);
 foreach($listOut as $key => $value) {
   $listOut[$key]->loadRefsFwd();
+  if($listOut[$key]->_ref_sejour->type == "exte"){
+    unset($listOut[$key]);
+    continue;
+  }
   $listOut[$key]->_ref_sejour->loadRefsFwd();
   $listOut[$key]->_ref_sejour->loadRefsAffectations();
   if($listOut[$key]->_ref_sejour->_ref_first_affectation->affectation_id) {

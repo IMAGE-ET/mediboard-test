@@ -29,10 +29,12 @@ $timing = array();
 $listReveil = new COperation;
 $where = array();
 $where[] = "`plageop_id` ".db_prepare_in(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
-$where["entree_reveil"] = "IS NOT NULL";
-$where["sortie_reveil"] = "IS NULL";
+$where[] = "((`sejour`.type = 'exte' AND `sortie_salle` IS NOT NULL) OR (`sejour`.type != 'exte' AND `entree_reveil` IS NOT NULL)) AND `sortie_reveil` IS NULL";
+
+$ljoin = array();
+$ljoin["sejour"] = "`sejour`.`sejour_id` = `operations`.`sejour_id`";
 $order = "entree_reveil";
-$listReveil = $listReveil->loadList($where, $order);
+$listReveil = $listReveil->loadList($where, $order, null, null, $ljoin);
 foreach($listReveil as $key => $value) {
   $listReveil[$key]->loadRefsFwd();
   $listReveil[$key]->_ref_sejour->loadRefsFwd();

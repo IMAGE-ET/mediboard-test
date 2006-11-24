@@ -47,6 +47,10 @@ $order = "sortie_salle";
 $listOps = $listOps->loadList($where, $order);
 foreach($listOps as $key => $value) {
   $listOps[$key]->loadRefsFwd();
+  if($listOps[$key]->_ref_sejour->type == "exte"){
+    unset($listOps[$key]);
+    continue;
+  }
   $listOps[$key]->_ref_plageop->loadRefsFwd();
   $listOps[$key]->_ref_sejour->loadRefsFwd();
   //Tableau des timmings

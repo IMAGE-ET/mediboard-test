@@ -50,7 +50,9 @@
               <input type="hidden" name="dosql" value="do_planning_aed" />
               <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
               <input type="hidden" name="del" value="0" />
-              {{if $canEdit}}
+              {{if $curr_op->_ref_sejour->type=="exte"}}
+              -
+              {{elseif $canEdit}}
 	          <input name="entree_reveil" size="5" type="text" value="{{$curr_op->entree_reveil|date_format:"%H:%M"}}">
 	          <button class="tick notext" type="submit"></button>
 	          <button class="cancel notext" type="submit" onclick="this.form.entree_reveil.value = ''"></button>

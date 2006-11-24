@@ -126,15 +126,15 @@
     <table class="form">
       {{if $pack->_modeles|@count}}
       <tr><th class="category" colspan="2">Modèles du pack</th></tr>
-      {{foreach from=$pack->_modeles item=curr_modele}}
+      {{foreach from=$pack->_modeles key=key_modele item=curr_modele}}
       <tr><td>{{$curr_modele->nom}}</td>
         <td>
-          <form name="delFrm{{$pack->pack_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
+          <form name="delFrm{{$pack->pack_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
           <input type="hidden" name="dosql" value="do_pack_aed" />
           <input type="hidden" name="pack_id" value="{{$pack->pack_id}}" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
-          <input type="hidden" name="_del" value="{{$curr_modele->compte_rendu_id}}" />
+          <input type="hidden" name="_del" value="{{$key_modele}}" />
           <button class="trash notext" type="submit"></button>
           </form>
         </td>
@@ -143,12 +143,13 @@
       {{/if}}
       <tr><th class="category" colspan="2">Ajouter un modèle</th></tr>
       <tr><td colspan="2">
-        <form name="addFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
+        <form name="addFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_pack_aed" />
         <input type="hidden" name="pack_id" value="{{$pack->pack_id}}" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
-        <select name="_new">
+        <label for="_new" title="Veuillez choisir un modèle" />
+        <select name="_new" title="ref|notNull">
           <option value="">&mdash; Choisir un modèle</option>
           <optgroup label="Modèles du praticien">
             {{foreach from=$listModelePrat item=curr_modele}}
