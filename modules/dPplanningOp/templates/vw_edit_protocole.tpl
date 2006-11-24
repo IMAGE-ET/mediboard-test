@@ -96,20 +96,13 @@ function checkDureeHospi() {
   field1 = form.type;
   field2 = form.duree_hospi;
   if (field1 && field2) {
-    var sTypeAdmission = "";
-    for(i=0; i<field1.length; i++){
-      if(field1[i].checked){
-        sTypeAdmission = field1[i].value;
-      }
-    }
-    
-    if (sTypeAdmission=="comp" && (field2.value == 0 || field2.value == '')) {
+    if (field1.value=="comp" && (field2.value == 0 || field2.value == '')) {
       field2.value = prompt("Veuillez saisir une durée prévue d'hospitalisation d'au moins 1 jour", "1");
       field2.onchange();
       field2.focus();
       return false;
     }
-    if (sTypeAdmission=="ambu" && field2.value != 0 && field2.value != '') {
+    if (field1.value=="ambu" && field2.value != 0 && field2.value != '') {
       alert('Pour une admission de type Ambulatoire, la durée du séjour doit être de 0 jour.');
       field2.focus();
       return false;
@@ -296,14 +289,14 @@ function pageMain() {
           <td colspan="2"><input type="text" name="duree_hospi" title="{{$protocole->_props.duree_hospi}}" size="2" value="{{$protocole->duree_hospi}}" /> jours</td>
         </tr>
         <tr>
-          <th><label for="type_comp" title="Type d'admission">{{tr}}type_adm{{/tr}}</label></th>
+          <th><label for="type" title="Type d'admission">{{tr}}type_adm{{/tr}}</label></th>
           <td colspan="2">
-            <input name="type" value="comp" type="radio" {{if !$protocole->protocole_id || $protocole->type == "comp"}}checked="checked"{{/if}} />
-            <label for="type_comp">{{tr}}CProtocole.type.comp{{/tr}}</label><br />
-            <input name="type" value="ambu" type="radio" {{if $protocole->type == "ambu"}}checked="checked"{{/if}} />
-            <label for="type_ambu">{{tr}}CProtocole.type.ambu{{/tr}}</label><br />
-            <input name="type" value="exte" type="radio" {{if $protocole->type == "exte"}}checked="checked"{{/if}} />
-            <label for="type_exte">{{tr}}CProtocole.type.exte{{/tr}}</label><br />
+            {{if $protocole->type}}
+            {{assign var="checked" value=$protocole->type}}
+            {{else}}
+            {{assign var="checked" value="comp"}}
+            {{/if}}
+            {{html_options name="type" options=$protocole->_enumsTrans.type title=$protocole->_props.type selected=$checked}}
           </td>
         </tr>
         <tr>

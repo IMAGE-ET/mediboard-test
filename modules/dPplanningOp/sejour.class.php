@@ -46,6 +46,12 @@ class CSejour extends CMbObject {
   var $rques              = null;
   var $ATNC               = null;
   var $hormone_croissance = null;
+  var $lit_accompagnant   = null;
+  var $isolement          = null;
+  var $television         = null;
+  var $repas_diabete      = null;
+  var $repas_sans_sel     = null;
+  var $repas_sans_residu  = null;
   
   // Form Fields
   var $_duree_prevue       = null;
@@ -80,7 +86,7 @@ class CSejour extends CMbObject {
       "patient_id"         => "ref|notNull",
       "praticien_id"       => "ref|notNull",
       "group_id"           => "ref|notNull",
-      "type"               => "enum|comp|ambu|exte|notNull",
+      "type"               => "enum|comp|ambu|exte|seances|ssr|psy|notNull",
       "modalite"           => "enum|office|libre|tiers|notNull",
       "annule"             => "bool",
       "chambre_seule"      => "bool",
@@ -97,7 +103,13 @@ class CSejour extends CMbObject {
       "convalescence"      => "text|confidential",
       "rques"              => "text",
       "ATNC"               => "bool",
-      "hormone_croissance" => "bool"
+      "hormone_croissance" => "bool",
+      "lit_accompagnant"   => "bool",
+      "isolement"          => "bool",
+      "television"         => "bool",
+      "repas_diabete"      => "bool",
+      "repas_sans_sel"     => "bool",
+      "repas_sans_residu"  => "bool"
     );
   }
   

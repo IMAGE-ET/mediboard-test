@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.59";
+$config["mod_version"]     = "0.60";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -665,7 +665,16 @@ class CSetupdPplanningOp {
         db_exec( $sql ); db_error();
       
       case "0.58":
-        $sql = "ALTER TABLE `sejour` ADD `ATNC` enum('0','1') NOT NULL DEFAULT '0';";
+        $sql = "ALTER TABLE `sejour`" .
+               "\nADD `ATNC` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nADD `hormone_croissance` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nADD `lit_accompagnant` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nADD `isolement` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nADD `television` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nADD `repas_diabete` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nADD `repas_sans_sel` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nADD `repas_sans_residu` enum('0','1') NOT NULL DEFAULT '0'," .
+               "\nCHANGE `type` `type` enum('comp','ambu','exte','seances','ssr','psy') NOT NULL DEFAULT 'comp';";
         db_exec( $sql ); db_error();
         
         $sql = "UPDATE sejour SET ATNC = '1' WHERE sejour_id IN (SELECT sejour_id FROM `operations` WHERE ATNC = '1');";
@@ -674,7 +683,7 @@ class CSetupdPplanningOp {
         $sql = "ALTER TABLE `operations` DROP `ATNC`;";
         db_exec( $sql ); db_error();
         
-        $sql = "ALTER TABLE `sejour` ADD `hormone_croissance` enum('0','1') NOT NULL DEFAULT '0';";
+        $sql = "ALTER TABLE `protocole` CHANGE `type` `type` enum('comp','ambu','exte','seances','ssr','psy') NOT NULL DEFAULT 'comp';";
         db_exec( $sql ); db_error();
         
       case "0.59":

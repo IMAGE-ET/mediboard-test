@@ -19,7 +19,7 @@
 <table class="form" onmousemove="checkSejoursToReload()">
 
 <tr>
-  <th class="category" colspan="3">
+  <th class="category" colspan="4">
     {{if $mode_operation && $sejour->sejour_id}}
       {{if $canReadSante400}}
       <a style="float:right;" href="#" onclick="view_idsante400('CSejour',{{$sejour->sejour_id}})">
@@ -36,7 +36,7 @@
 
 {{if $sejour->annule == 1}}
 <tr>
-  <th class="category" colspan="3" style="background: #f00;">
+  <th class="category" colspan="4" style="background: #f00;">
   SEJOUR ANNULE
   </th>
 </tr>
@@ -47,7 +47,7 @@
   <th>
     Sejours existants
   </th>
-  <td colspan="2" id="selectSejours">
+  <td colspan="3" id="selectSejours">
     <select name="sejour_id" onchange="reloadSejour(this.value)">
       <option value="" {{if !$sejour->sejour_id}} selected="selected" {{/if}}>
         &mdash; Créer un nouveau séjour
@@ -66,7 +66,7 @@
   <th>
     <label for="group_id" title="Etablissement ou se déroule le séjour. Obligatoire">Etablissement</label>
   </th>
-  <td colspan="2">
+  <td colspan="3">
     <select title="{{$sejour->_props.group_id}}" name="group_id" onchange="removePlageOp(true);">
     {{foreach from=$etablissements item=curr_etab}}
       <option value="{{$curr_etab->group_id}}" {{if ($sejour->sejour_id && $sejour->group_id==$curr_etab->group_id) || (!$sejour->sejour_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
@@ -79,7 +79,7 @@
   <th>
     <label for="praticien_id" title="Praticien responsable. Obligatoire">Praticien</label>
   </th>
-  <td colspan="2">
+  <td colspan="3">
     <select name="praticien_id" title="{{$sejour->_props.praticien_id}}">
       <option value="">&mdash; Choisir un praticien</option>
       {{foreach from=$listPraticiens item=curr_praticien}}
@@ -99,7 +99,7 @@
   <td class="readonly">
   	<input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" ondblclick="popPat()" readonly="readonly" />
   </td>
-  <td class="button">
+  <td colspan="2" class="button">
   	<button type="button" class="search" onclick="popPat()">Choisir un patient</button>
   </td>
 </tr>
@@ -107,11 +107,11 @@
 <tr>
   <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM)</label></th>
   <td><input type="text" name="DP" title="{{$sejour->_props.DP}}" size="10" value="{{$sejour->DP}}" /></td>
-  <td class="button"><button type="button" class="search" onclick="popCode('cim10')">Choisir un code</button></td>
+  <td colspan="2" class="button"><button type="button" class="search" onclick="popCode('cim10')">Choisir un code</button></td>
 </tr>
 
 <tr>
-  <th class="category" colspan="3">Admission</th>
+  <th class="category" colspan="4">Admission</th>
 </tr>
 
 <tr>
@@ -123,7 +123,7 @@
     <input type="hidden" name="_date_entree_prevue" title="date|notNull" value="{{$sejour->_date_entree_prevue}}" onchange="modifSejour(); updateSortiePrevue();"/>
     <img id="editSejour__date_entree_prevue_trigger" src="./images/calendar.gif" alt="calendar"/>
   </td>
-  <td>
+  <td colspan="2">
     à
     <select name="_hour_entree_prevue" onchange="updateHeureSortie()">
     {{foreach from=$hours|smarty:nodefaults item=hour}}
@@ -146,7 +146,7 @@
     <input type="text" name="_duree_prevue" title="num|min|0" value="{{if $sejour->sejour_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" size="4" onchange="updateSortiePrevue()" />
     jours
   </td>
-  <td id="dureeEst">
+  <td id="dureeEst" colspan="2">
   </td>
 </tr>
 
@@ -159,7 +159,7 @@
     <input type="hidden" name="_date_sortie_prevue" title="date|moreEquals|_date_entree_prevue|notNull" value="{{$sejour->_date_sortie_prevue}}" onchange="updateDureePrevue(); modifSejour()" />
     <img id="editSejour__date_sortie_prevue_trigger" src="./images/calendar.gif" alt="calendar"/>
   </td>
-  <td>
+  <td colspan="2">
     à 
     <select name="_hour_sortie_prevue">
     {{foreach from=$hours|smarty:nodefaults item=hour}}
@@ -177,24 +177,24 @@
 {{if !$mode_operation}}
 <tr>
   <th>Entrée réelle :</th>
-  <td colspan="2">{{$sejour->entree_reelle|date_format:"%d/%m/%Y à %Hh%M"}}</td>
+  <td colspan="3">{{$sejour->entree_reelle|date_format:"%d/%m/%Y à %Hh%M"}}</td>
 </tr>
 
 <tr>
   <th>Sortie réelle :</th>
-  <td colspan="2">{{$sejour->sortie_reelle|date_format:"%d/%m/%Y à %Hh%M"}}</td>
+  <td colspan="3">{{$sejour->sortie_reelle|date_format:"%d/%m/%Y à %Hh%M"}}</td>
 </tr>
 {{/if}}
 
 <tr>
-  <th><label for="type_ambu" title="Type d'admission">{{tr}}Type d'admission{{/tr}}</label></th>
-  <td colspan="2">
+  <th><label for="type" title="Type d'admission">{{tr}}Type d'admission{{/tr}}</label></th>
+  <td colspan="3">
     {{if $sejour->sejour_id}}
     {{assign var="checked" value=$sejour->type}}
     {{else}}
     {{assign var="checked" value="ambu"}}
     {{/if}}
-    {{html_radios name="type" options=$sejour->_enumsTrans.type separator="<br />" title=$sejour->_props.type checked=$checked}}
+    {{html_options name="type" options=$sejour->_enumsTrans.type title=$sejour->_props.type selected=$checked}}
   </td>
 </tr>
 
@@ -203,7 +203,7 @@
   <th>
     <label for="modalite_libre" title="modalite d'admission">{{tr}}Modalité d'admission{{/tr}}</label>
   </th>
-  <td colspan="2">
+  <td colspan="3">
     {{if $sejour->sejour_id}}
     {{assign var="checked" value=$sejour->modalite}}
     {{else}}
@@ -215,41 +215,106 @@
 
 <tr>
   <th><label for="ATNC_1">ATNC</label></th>
-  <td colspan="2">
+  <td>
     <input name="ATNC" value="1" type="radio" {{if $sejour->ATNC == "1"}} checked="checked" {{/if}}/>
     <label for="ATNC_1">Oui</label>
     <input name="ATNC" value="0" type="radio" {{if !$sejour->ATNC || $sejour->ATNC == "0"}} checked="checked" {{/if}}/>
     <label for="ATNC_0">Non</label>
   </td>
-</tr>
-
-<tr>
   <th><label for="hormone_croissance_1">Traitement hormonal</label></th>
   <td colspan="2">
     <input name="hormone_croissance" value="1" type="radio" {{if $sejour->hormone_croissance == "1"}} checked="checked" {{/if}}/>
     <label for="hormone_croissance_1">Oui</label>
     <input name="hormone_croissance" value="0" type="radio" {{if !$sejour->hormone_croissance || $sejour->hormone_croissance == "0"}} checked="checked" {{/if}}/>
     <label for="hormone_croissance_0">Non</label>
-  </td>
+  </td>  
 </tr>
 {{/if}}
+
 <tr>
   <th>
     <label for="chambre_seule_1" title="Patient à placer dans une chambre particulière">Chambre particulière</label>
   </th>
-  <td colspan="2">
+  <td {{if $mode_operation}}colspan="3"{{/if}}>
     <input name="chambre_seule" value="1" type="radio" {{if $sejour->chambre_seule}} checked="checked" {{/if}} onchange="modifSejour()" />
     <label for="chambre_seule_1">Oui</label>
     <input name="chambre_seule" value="0" type="radio" {{if !$sejour->chambre_seule || !$sejour->sejour_id}} checked="checked" {{/if}} onchange="modifSejour()" />
     <label for="chambre_seule_0">Non</label>
+  </td>
+  {{if !$mode_operation}}
+  <th>
+    <label for="lit_accompagnant_1" title="Un lit pour un accompagnant est-il à prévoir">Lit accompagnant</label>
+  </th>
+  <td>
+    <input name="lit_accompagnant" value="1" type="radio" {{if $sejour->lit_accompagnant}} checked="checked" {{/if}} />
+    <label for="lit_accompagnant_1">Oui</label>
+    <input name="lit_accompagnant" value="0" type="radio" {{if !$sejour->lit_accompagnant || !$sejour->sejour_id}} checked="checked" {{/if}} />
+    <label for="lit_accompagnant_0">Non</label>
+  </td>
+  {{/if}}
 </tr>
 
 {{if !$mode_operation}}
 <tr>
   <th>
+    <label for="repas_sans_sel_1" title="Repas sans sel">Repas sans sel</label>
+  </th>
+  <td>
+    <input name="repas_sans_sel" value="1" type="radio" {{if $sejour->repas_sans_sel}} checked="checked" {{/if}} />
+    <label for="repas_sans_sel_1">Oui</label>
+    <input name="repas_sans_sel" value="0" type="radio" {{if !$sejour->repas_sans_sel || !$sejour->sejour_id}} checked="checked" {{/if}} />
+    <label for="repas_sans_sel_0">Non</label>
+  </td>
+  <th>
+    <label for="isolement_1" title="Le patient doit-il être isolé">Isolement</label>
+  </th>
+  <td>
+    <input name="isolement" value="1" type="radio" {{if $sejour->isolement}} checked="checked" {{/if}} />
+    <label for="isolement_1">Oui</label>
+    <input name="isolement" value="0" type="radio" {{if !$sejour->isolement || !$sejour->sejour_id}} checked="checked" {{/if}} />
+    <label for="isolement_0">Non</label>
+  </td>
+</tr>
+
+<tr>
+  <th>
+    <label for="repas_diabete_1" title="Repas diabétique">Repas diabétique</label>
+  </th>
+  <td>
+    <input name="repas_diabete" value="1" type="radio" {{if $sejour->repas_diabete}} checked="checked" {{/if}} />
+    <label for="repas_diabete_1">Oui</label>
+    <input name="repas_diabete" value="0" type="radio" {{if !$sejour->repas_diabete || !$sejour->sejour_id}} checked="checked" {{/if}} />
+    <label for="repas_diabete_0">Non</label>
+  </td>
+  <th>
+    <label for="television_1" title="La chambre doit-elle avoir la télévision">Télévision</label>
+  </th>
+  <td>
+    <input name="television" value="1" type="radio" {{if $sejour->television}} checked="checked" {{/if}} />
+    <label for="television_1">Oui</label>
+    <input name="television" value="0" type="radio" {{if !$sejour->television || !$sejour->sejour_id}} checked="checked" {{/if}} />
+    <label for="television_0">Non</label>
+  </td>
+</tr>
+
+<tr>
+  <th>
+    <label for="repas_sans_residu_1" title="Repas sans résidu">Repas sans résidu</label>
+  </th>
+  <td>
+    <input name="repas_sans_residu" value="1" type="radio" {{if $sejour->repas_sans_residu}} checked="checked" {{/if}} />
+    <label for="repas_sans_residu_1">Oui</label>
+    <input name="repas_sans_residu" value="0" type="radio" {{if !$sejour->repas_sans_residu || !$sejour->sejour_id}} checked="checked" {{/if}} />
+    <label for="repas_sans_residu_0">Non</label>
+  </td>
+  <td colspan="2"></td>
+</tr>
+
+<tr>
+  <th>
     <label for="venue_SHS" title="Code Administratif SHS">Code de venue SHS</label>
   </th>
-  <td colspan="2">
+  <td colspan="3">
     <input type="text" size="8" maxlength="8" name="venue_SHS" title="{{$sejour->_props.venue_SHS}}" value="{{$sejour->venue_SHS}}" />
   </td>
 </tr>
@@ -259,7 +324,7 @@
   <td class="text">
     <label for="convalescence" title="Convalescence">Convalescence</label>
   </td>
-  <td class="text" colspan="2">
+  <td class="text" colspan="3">
     <label for="rques" title="Remarques">Remarques sur le séjour</label>
   </td>
 </tr>
@@ -268,7 +333,7 @@
   <td>
     <textarea name="convalescence" title="{{$sejour->_props.convalescence}}" rows="3">{{$sejour->convalescence}}</textarea>
   </td>
-  <td colspan="2">
+  <td colspan="3">
     <textarea name="rques" title="{{$sejour->_props.rques}}" rows="3">{{$sejour->rques}}</textarea>
   </td>
 </tr>
@@ -276,7 +341,7 @@
 
 {{if !$mode_operation}}
 <tr>
-  <td class="button" colspan="3">
+  <td class="button" colspan="4">
   {{if $sejour->sejour_id}}
     <button class="modify" type="submit">Modifier</button>
     <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|smarty:nodefaults|JSAttribute}}'});">
