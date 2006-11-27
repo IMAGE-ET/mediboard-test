@@ -23,12 +23,13 @@
   {{else}}
     <td class="text">
   {{/if}}
+  {{if $curr_affectation->sejour_id}}
     <a style="float: right;" href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->patient_id}}">
       <img src="modules/{{$m}}/images/edit.png" alt="edit" title="Editer le patient" />
     </a>
-  {{if $patient->_fin_cmu}}
+    {{if $patient->_fin_cmu}}
     <div style="float: right;"><strong>CMU</strong></div>
-  {{/if}}
+    {{/if}}
     {{if !$sejour->entree_reelle || ($aff_prev->affectation_id && $aff_prev->effectue == 0)}}
       <font style="color:#a33">
     {{else}}
@@ -62,11 +63,73 @@
       {{$curr_affectation->entree|date_format:"%d/%m %Hh%M"}}
     {{/if}}
     </font>
+  {{else}}
+  <em>[LIT BLOQUE]</em>
+  {{/if}}
   </td>
   <td class="action" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}">
     {{$sejour->_ref_praticien->_shortview}}
   </td>
 </tr>
+
+{{if !$curr_affectation->sejour_id}}
+  <tr class="dates">
+    <td class="text">
+    {{if $canEdit}}
+    <form name="rmvAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
+    <input type="hidden" name="dosql" value="do_affectation_aed" />
+    <input type="hidden" name="del" value="1" />
+    <input type="hidden" name="affectation_id" value="{{$curr_affectation->affectation_id}}" />
+    </form>
+    <a style="float: right;" href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->affectation_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|addslashes}}'})">
+      <img src="modules/{{$m}}/images/trash.png" alt="trash" title="Supprimer l'affectation" />
+    </a>
+    {{/if}}
+    <em>Du</em>:
+    {{$curr_affectation->entree|date_format:"%A %d %B %H:%M"}}
+    ({{$curr_affectation->_entree_relative}} jours)
+  </td>
+  <td class="action">
+    {{if $canEdit}}
+    <form name="entreeAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
+    <input type="hidden" name="dosql" value="do_affectation_aed" />
+    <input type="hidden" name="affectation_id" value="{{$curr_affectation->affectation_id}}" />
+    <input type="hidden" name="entree" value="{{$curr_affectation->entree}}" />
+    </form>
+    <a>
+      <img id="entreeAffectation{{$curr_affectation->affectation_id}}__trigger_entree" src="modules/{{$m}}/images/planning.png" alt="Planning" title="Modifier la date de début" />
+    </a>
+    {{/if}}
+  </td>
+  </tr>
+  <tr class="dates">
+  <td class="text">
+    <em>Au</em>:
+    {{$curr_affectation->sortie|date_format:"%A %d %B %H:%M"}}
+    ({{$curr_affectation->_sortie_relative}} jours)
+  </td>
+  <td class="action">
+    {{if $canEdit}}
+    <form name="sortieAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
+    <input type="hidden" name="dosql" value="do_affectation_aed" />
+    <input type="hidden" name="affectation_id" value="{{$curr_affectation->affectation_id}}" />
+    <input type="hidden" name="sortie" value="{{$curr_affectation->sortie}}" />
+    </form>
+    <a>
+      <img id="sortieAffectation{{$curr_affectation->affectation_id}}__trigger_sortie" src="modules/{{$m}}/images/planning.png" alt="Planning" title="Modifier la date de fin" />
+    </a>
+    {{/if}}
+  </td>
+  </tr>
+  {{if $curr_affectation->rques}}
+    <tr class="dates">
+      <td class="text" colspan="2" style="background-color: #ff5">
+        <em>Remarques:</em> {{$curr_affectation->rques|nl2br}}
+      </td>
+    </tr>
+  {{/if}}
+{{else}}
+
 <tr class="dates">
   {{if $aff_prev->affectation_id}}
   <td class="text">
@@ -265,6 +328,9 @@ chambre double
     {{/if}}
   </td>
 </tr>
+
+{{/if}}
+
 {{foreachelse}}
 <tr class="litdispo"><td colspan="2">Lit disponible</td></tr>
 <tr class="litdispo">

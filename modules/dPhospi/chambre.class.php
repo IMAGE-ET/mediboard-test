@@ -130,6 +130,9 @@ class CChambre extends CMbObject {
     }
 
     foreach ($listAff as $affectation1) {
+      if(!$affectation1->sejour_id){
+        continue;
+      }
       $sejour1 =& $affectation1->_ref_sejour;
       $patient1 =& $sejour1->_ref_patient;
       $chirurgien1 =& $sejour1->_ref_praticien;
@@ -139,6 +142,9 @@ class CChambre extends CMbObject {
         $this->_chambre_seule++;
       
       foreach ($listAff as $affectation2) {
+        if(!$affectation2->sejour_id){
+          continue;
+        }
         if ($affectation1->affectation_id == $affectation2->affectation_id) {
           continue;
         }

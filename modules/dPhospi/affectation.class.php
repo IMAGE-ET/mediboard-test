@@ -24,6 +24,7 @@ class CAffectation extends CMbObject {
   var $sortie   = null;
   var $confirme = null;
   var $effectue = null;
+  var $rques    = null;
   
   // Form Fields
   var $_entree_relative;
@@ -45,11 +46,12 @@ class CAffectation extends CMbObject {
   function getSpecs() {
     return array (
       "lit_id"    => "ref|notNull",
-      "sejour_id" => "ref|notNull",
+      "sejour_id" => "ref",
       "entree"    => "dateTime|notNull",
       "sortie"    => "dateTime|notNull",
       "confirme"  => "bool",
-      "effectue"  => "bool"
+      "effectue"  => "bool",
+      "rques"     => "text"
     );
   }
 
@@ -83,12 +85,16 @@ class CAffectation extends CMbObject {
 	  if (!$this->canDelete( $msg )) {
 		  return $msg;
 	  }
-	  $sql = "DELETE FROM `affectation` WHERE `sejour_id` = '".$this->sejour_id."'";
+    if($this->sejour_id){
+	    $sql = "DELETE FROM `affectation` WHERE `sejour_id` = '".$this->sejour_id."'";
+    }else{
+      $sql = "DELETE FROM `affectation` WHERE `affectation_id` = '".$this->affectation_id."'";
+    }
 	  if (!db_exec( $sql )) {
       return db_error();
 	  } else {
 		  return null;
-	  }
+    }
   }
   
   function store() {
@@ -103,13 +109,13 @@ class CAffectation extends CMbObject {
     if($this->_no_synchro) {
       return $msg;
     }
-    if(!$this->_ref_prev->affectation_id) {
+    if(!$this->_ref_prev->affectation_id && $this->sejour_id) {
       if($this->entree != $this->_ref_sejour->entree_prevue) {
         $this->_ref_sejour->entree_prevue = $this->entree;
         $changeSejour = 1;
       }
     }
-    if(!$this->_ref_next->affectation_id) {
+    if(!$this->_ref_next->affectation_id  && $this->sejour_id) {
       if($this->sortie != $this->_ref_sejour->sortie_prevue) {
         $this->_ref_sejour->sortie_prevue = $this->sortie;
       }

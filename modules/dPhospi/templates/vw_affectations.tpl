@@ -4,19 +4,22 @@ function flipChambre(chambre_id) {
 }
 
 function flipSejour(sejour_id) {
-  Element.classNames("sejour" + sejour_id).flip("sejourcollapse", "sejourexpand");
+  if(sejour_id){
+    Element.classNames("sejour" + sejour_id).flip("sejourcollapse", "sejourexpand");
+  }else{
+    Element.classNames("sejour").flip("sejourcollapse", "sejourexpand");
+  }
 }
 
 var selected_hospitalisation = null;
-
+var selected_hospi = false;
 function selectHospitalisation(sejour_id) {
   var element = document.getElementById("hospitalisation" + selected_hospitalisation);
   if (element) {
     element.checked = false;
   }
-
   selected_hospitalisation = sejour_id;
- 
+  selected_hospi = true;
   submitAffectation();
 }
 
@@ -27,15 +30,17 @@ function selectLit(lit_id) {
   if (element) {
     element.checked = false;
   }
-
   selected_lit = lit_id;
-  
   submitAffectation();
 }
 
 function submitAffectation() {
-  if (selected_lit && selected_hospitalisation) {
-    var form = eval("document.addAffectationsejour" + selected_hospitalisation);
+  if (selected_lit && selected_hospi) {
+    if(selected_hospitalisation){
+      var form = eval("document.addAffectationsejour" + selected_hospitalisation);
+    }else{
+      var form = eval("document.addAffectationsejour");    
+    }
     form.lit_id.value = selected_lit;
     form.submit();
   }
@@ -228,6 +233,33 @@ function pageMain() {
     <td class="pane">
       <div id="calendar-container"></div>
       {{if $canEdit}}
+      
+      <form name="addAffectationsejour" action="?m={{$m}}" method="post">
+      <input type="hidden" name="dosql" value="do_affectation_aed" />
+      <input type="hidden" name="lit_id" value="" />
+      <input type="hidden" name="sejour_id" value="" />
+      <input type="hidden" name="entree" value="{{$date|date_format:"%Y-%m-%d"}} 08:00:00" />
+      <input type="hidden" name="sortie" value="{{$date|date_format:"%Y-%m-%d"}} 23:00:00" />
+
+      <table class="sejourcollapse" id="sejour">
+        <tr>
+        <td class="selectsejour">
+          <input type="radio" id="hospitalisation" onclick="selectHospitalisation()" />
+          <script type="text/javascript">new Draggable('sejour', {revert:true})</script>
+        </td>
+        <td class="patient" onclick="flipSejour()">
+          <strong><a name="sejour">[BLOQUER UN LIT]</a></strong>
+        </td>
+      </tr> 
+      <tr>
+        <td class="date" colspan="2" style="background-color: #ff5">
+          <label for="rques">Remarques</label> : 
+          <textarea name="rques"></textarea>
+        </td>
+      </tr>
+      </table>
+      </form>
+      
       {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
         {{include file="inc_affectations_liste.tpl"}}
       {{/foreach}}

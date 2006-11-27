@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPhospi";
-$config["mod_version"]     = "0.18";
+$config["mod_version"]     = "0.19";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -148,9 +148,13 @@ class CSetupdPhospi {
                "\nCHANGE `group_id` `group_id` int(11) unsigned NOT NULL DEFAULT '1'," .
                "\nCHANGE `nom` `nom` varchar(255) NOT NULL;";
         db_exec( $sql ); db_error();
-        
+      
       case "0.18":
-        return "0.18";
+        $sql = "ALTER TABLE `affectation` ADD `rques` text NULL;";
+        db_exec( $sql ); db_error();
+        
+      case "0.19":
+        return "0.19";
     }
     return false;
   }
