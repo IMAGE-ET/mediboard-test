@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "mediusers";
-$config["mod_version"]     = "0.21";
+$config["mod_version"]     = "0.22";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -385,7 +385,15 @@ class CSetupmediusers {
         $sql = "INSERT INTO `spec_cpam` (`spec_cpam_id`, `text`, `actes`) VALUES(78,'GENETIQUE MEDICALE','CS|K|ADE|ADI|ADC|ACO|ADA|ATM');";
       
       case "0.21":
-        return "0.21";
+        $sql = "ALTER TABLE `users_mediboard` " .
+               "\nCHANGE `spec_cpam_id` `spec_cpam_id` int(11) unsigned NULL;";
+        db_exec( $sql ); db_error();
+        $sql = "ALTER TABLE `spec_cpam` " .
+               "\nCHANGE `spec_cpam_id` `spec_cpam_id` int(11) unsigned NULL;";
+        db_exec( $sql ); db_error();
+        
+      case "0.22":
+        return "0.22";
     }
 
     return false;
