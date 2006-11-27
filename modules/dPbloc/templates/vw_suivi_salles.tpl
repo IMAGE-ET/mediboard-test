@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 function pageMain() {
-  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+  regRedirectPopupCal("{{$date_suivi}}", "index.php?m={{$m}}&tab={{$tab}}&date_suivi=");
   PairEffect.initGroup("acteEffect");
 }
 
@@ -16,7 +16,7 @@ function printFeuilleBloc(oper_id) {
 <table class="main">
   <tr>
     <th colspan="{{$listSalles|@count}}">
-      {{$date|date_format:"%A %d %B %Y"}}
+      {{$date_suivi|date_format:"%A %d %B %Y"}}
       <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
   </tr>

@@ -13,7 +13,7 @@ if (!$canEdit) {
     $AppUI->redirect("m=system&a=access_denied");
 }
 
-$date  = mbGetValueFromGetOrSession("date", mbDate());
+$date_suivi  = mbGetValueFromGetOrSession("date_suivi", mbDate());
 
 
 // Chargement des salles
@@ -36,7 +36,7 @@ foreach($listSalles as $keySalle=>$currSalle){
   
   $plages = new CplageOp;
   $where = array();
-  $where["date"] = "= '$date'";
+  $where["date"] = "= '$date_suivi'";
   $where["salle_id"] = "= '$keySalle'";
   $order = "debut";
   $plages = $plages->loadList($where, $order);
@@ -56,7 +56,7 @@ foreach($listSalles as $keySalle=>$currSalle){
   
   $urgences = new COperation;
   $where = array();
-  $where["date"]     = "= '$date'";
+  $where["date"]     = "= '$date_suivi'";
   $where["salle_id"] = "= '$keySalle'";
   $order = "chir_id";
   $urgences = $urgences->loadList($where);
@@ -80,7 +80,7 @@ $smarty->assign("vueReduite"     , true);
 $smarty->assign("listAnesths"    , $listAnesths);
 $smarty->assign("listInfosSalles", $listInfosSalles);
 $smarty->assign("listSalles"     , $listSalles);
-$smarty->assign("date"           , $date);
+$smarty->assign("date_suivi"     , $date_suivi);
 
 $smarty->display("vw_suivi_salles.tpl");
 ?>
