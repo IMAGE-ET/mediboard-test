@@ -1,4 +1,4 @@
-<h2>Assistant d'ainstallation</h2>
+<h2>Assistant d'installation</h2>
 
 <ol>
   <li>
