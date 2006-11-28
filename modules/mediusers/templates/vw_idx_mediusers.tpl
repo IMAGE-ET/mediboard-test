@@ -15,7 +15,8 @@ function collapseFunctions() {
 function pageMain() {
   PairEffect.initGroup("functionEffect", { 
     bStoreInCookie: false,
-    idStartVisible: "function{{$mediuserSel->function_id}}"
+    idStartVisible: "function{{$mediuserSel->function_id}}",
+    sEffect: "appear"
   });
   regFieldCalendar("mediuser", "deb_activite");
   regFieldCalendar("mediuser", "fin_activite");
@@ -47,17 +48,24 @@ function deldate(sField){
           <th>Prénom</th>
           <th>Type</th>
         </tr>
-        {{foreach from=$functions item=curr_function}}
+        {{foreach from=$groups item=curr_group}}
+        <tr>
+          <th class="title" colspan="5">
+            {{$curr_group->text}}
+          </th>
+        </tr>
+        {{foreach from=$curr_group->_ref_functions item=curr_function}}
         <tr id="function{{$curr_function->function_id}}-trigger">
           <td style="background-color: #{{$curr_function->color}}">
           </td>
-          <td colspan="4" style="background: #{{$curr_function->color}}" >
-            <strong>{{$curr_function->text}}</strong> -
-            {{$curr_function->_ref_users|@count}} utilisateur(s) -
-            Etablissement {{$curr_function->_ref_group->text}}
+          <td colspan="3">
+            <strong>{{$curr_function->text}}</strong>
+          </td>
+          <td>
+            {{$curr_function->_ref_users|@count}} utilisateur(s)
           </td>
         </tr>
-        <tbody class="functionEffect" id="function{{$curr_function->function_id}}">
+        <tbody class="functionEffect" id="function{{$curr_function->function_id}}" style="display:none;">
         {{foreach from=$curr_function->_ref_users item=curr_user}}
         <tr>
           <td style="background-color: #{{$curr_function->color}}"></td>
@@ -70,6 +78,7 @@ function deldate(sField){
         </tr>
         {{/foreach}}
         </tbody>
+        {{/foreach}}
         {{/foreach}}
       </table>
     </td>
@@ -152,10 +161,14 @@ function deldate(sField){
           <td>
             <select name="function_id" title="{{$mediuserSel->_props.function_id}}">
               <option value="">&mdash; Choisir une fonction &mdash;</option>
-              {{foreach from=$functions item=curr_function}}
+              {{foreach from=$groups item=curr_group}}
+              <optgroup label="{{$curr_group->text}}">
+              {{foreach from=$curr_group->_ref_functions item=curr_function}}
               <option class="mediuser" style="border-color: #{{$curr_function->color}};" value="{{$curr_function->function_id}}" {{if $curr_function->function_id == $mediuserSel->function_id}} selected="selected" {{/if}}>
                 {{$curr_function->text}}
               </option>
+              {{/foreach}}
+              </optgroup>
               {{/foreach}}
             </select>
           </td>

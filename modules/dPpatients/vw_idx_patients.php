@@ -45,6 +45,8 @@ $patient = new CPatient;
 if($new) {
   $patient->load(null);
   mbSetValueToSession("patient_id", null);
+  mbSetValueToSession("selClass", null);
+  mbSetValueToSession("selKey", null);
 } else {
   $patient->load($patient_id);
 }

@@ -22,9 +22,16 @@ $mediuserSel = new CMediusers;
 $mediuserSel->load(mbGetValueFromGetOrSession("user_id"));
 
 // Récupération des fonctions
-$order = array("group_id", "text");
-$functions = new CFunctions;
-$functions = $functions->loadList(null, $order);
+$groups = new CGroups;
+$order = "text";
+$groups = $groups->loadList(null, $order);
+foreach ($groups as $key => $group) {
+  $groups[$key]->loadRefsBack();
+  foreach($groups[$key]->_ref_functions as $keyFct => $function){
+    // Récuperation des utilisateurs
+    $groups[$key]->_ref_functions[$keyFct]->loadRefs();
+  }
+}
 
 // Récupération des disciplines
 $disciplines = new CDiscipline;
@@ -33,11 +40,6 @@ $disciplines = $disciplines->loadList();
 // Récupération des spécialités CPAM
 $spec_cpam = new CSpecCPAM();
 $spec_cpam = $spec_cpam->loadList();
-
-// Récuperation des utilisateurs
-foreach ($functions as $key => $function) {
-  $functions[$key]->loadRefs();
-}
   
 // Récupération des profils
 $where = array (
@@ -52,7 +54,7 @@ $smarty = new CSmartyDP(1);
 $smarty->assign("canReadSante400", $canReadSante400);
 $smarty->assign("mediuserSel"    , $mediuserSel    );
 $smarty->assign("profiles"       , $profiles       );
-$smarty->assign("functions"      , $functions      );
+$smarty->assign("groups"         , $groups         );
 $smarty->assign("disciplines"    , $disciplines    );
 $smarty->assign("spec_cpam"      , $spec_cpam      );
 

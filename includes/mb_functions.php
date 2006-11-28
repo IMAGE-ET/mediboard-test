@@ -573,6 +573,22 @@ function mbArrayFromString($str) {
   return $array;
 }
 
+function mbArrayCreateRange($min, $max, $cleasvalue = false, $step = 1){
+  if($min>=$max){
+    return false;
+  }
+  $aTemp = array();
+  while($min<=$max){
+    if($cleasvalue){
+      $aTemp[$min] = $min;
+    }else{
+      $aTemp[] = $min;
+    }
+    $min += $step;
+  }
+  return $aTemp;
+}
+
 /**
  * Ensures a directory path exists. Creates it if needed.
  * @return boolean jobdone-value */
