@@ -78,10 +78,12 @@ for($i = 0; $i < 7; $i++) {
   $date = mbDate("+$i day", $debut);
   $where["date"] = "= '$date'";
   $plagesPerDay = $plage->loadList($where);
-  foreach($plagesPerDay as $key => $value) {
-    $plagesPerDay[$key]->loadFillRate();
+  if(!(($i == 5 || $i == 6) && !count($plagesPerDay))) {
+    foreach($plagesPerDay as $key => $value) {
+      $plagesPerDay[$key]->loadFillRate();
+    }
+    $plages[$date] = $plagesPerDay;
   }
-  $plages[$date] = $plagesPerDay;
 }
 
 // Liste des heures
