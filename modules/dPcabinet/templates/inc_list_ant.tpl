@@ -1,25 +1,29 @@
       <strong>Antécédents du patient</strong>
       <ul>
       {{if $patient->_ref_antecedents}}
-        {{foreach from=$listAnt key=keyAnt item=currTypeAnt}}
-        {{if $currTypeAnt}}
+        {{foreach from=$patient->_ref_types_antecedent key=curr_type item=list_antecedent}}
+        {{if $list_antecedent|@count}}
         <li>
-          {{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}
-          {{foreach from=$currTypeAnt item=currAnt}}
-          <ul><li>
-            <form name="delAntFrm" action="?m=dPcabinet" method="post">
-            <input type="hidden" name="m" value="dPpatients" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="dosql" value="do_antecedent_aed" />
-            <input type="hidden" name="antecedent_id" value="{{$currAnt->antecedent_id}}" />
-            <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'cet antécédent',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedents})">
-            </button>          
-            {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-              {{$currAnt->date|date_format:"%d/%m/%Y"}} :
-            {{/if}}
-            <i>{{$currAnt->rques}}</i>
+          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
+          {{foreach from=$list_antecedent item=curr_antecedent}}
+          <ul>
+            <li>
+              <form name="delAntFrm" action="?m=dPcabinet" method="post">
+
+              <input type="hidden" name="m" value="dPpatients" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="dosql" value="do_antecedent_aed" />
+              <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->antecedent_id}}" />
+              
+              <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cet antécédent',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedents})">
+              </button>          
+              {{if $curr_antecedent->date}}
+                {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
+              {{/if}}
+              <em>{{$curr_antecedent->rques}}</em>
             </form>
-          </li></ul>
+            </li>
+          </ul>
           {{/foreach}}
         </li>
         {{/if}}
@@ -44,7 +48,7 @@
           {{elseif $curr_trmt->debut}}
             Depuis le {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} :
           {{/if}}
-          <i>{{$curr_trmt->traitement}}</i>
+          <em>{{$curr_trmt->traitement}}</em>
           </form>
         </li>
         {{foreachelse}}

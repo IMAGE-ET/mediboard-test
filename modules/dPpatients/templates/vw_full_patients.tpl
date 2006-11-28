@@ -70,7 +70,7 @@ function pageMain() {
           </th>
         </tr>
 
-        <tbody class="patientEffect" id="mainInfo">
+        <tbody class="patientEffect" style="display: none" id="mainInfo">
         <tr>
           <th class="category" colspan="2">
             <a style="float:right;" href="#" onclick="view_history_patient({{$patient->patient_id}})">
@@ -208,12 +208,81 @@ function pageMain() {
         </tr>
         </tbody>
       </table>
+      
+
       <table class="form">
+
+		<!-- Antécédants -->
+        <tr id="antecedents-trigger">
+          <th colspan="2" class="title">{{$patient->_ref_antecedents|@count}} antécédent(s)</th>
+        </tr>
+        
+        <tbody class="patientEffect" style="display: none" id="antecedents">
+          {{foreach from=$patient->_ref_types_antecedent key=curr_type item=list_antecedent}}
+          <tr>
+            <th class="category" colspan="2">{{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}</th>
+          </tr>
+          {{foreach from=$list_antecedent item=curr_antecedent}}
+          <tr>
+            <td class="text" colspan="2">
+              {{if $curr_antecedent->date}}
+                {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
+              {{/if}}
+              {{$curr_antecedent->rques|nl2br}}
+            </td>
+          </tr>
+          {{/foreach}}
+          {{foreachelse}}
+          <tr><td><em>Pas d'antécédents</em></td></tr>
+          {{/foreach}}
+        </tbody>
+        
+		<!-- Traitements -->
+        <tr id="traitements-trigger">
+          <th colspan="2" class="title">{{$patient->_ref_traitements|@count}} traitement(s)</th>
+        </tr>
+        
+        <tbody class="patientEffect" style="display: none" id="traitements">
+          {{foreach from=$patient->_ref_traitements item=curr_traitement}}
+          <tr>
+            <td class="text" colspan="2">
+              {{if $curr_traitement->fin}}
+              Du {{$curr_traitement->debut|date_format:"%d/%m/%Y"}}
+              au {{$curr_traitement->fin|date_format:"%d/%m/%Y"}} :
+              {{elseif $curr_traitement->debut}}
+              Depuis le {{$curr_traitement->debut|date_format:"%d/%m/%Y"}} :
+              {{/if}}
+              {{$curr_traitement->traitement}}
+            </td>
+          </tr>
+          {{foreachelse}}
+          <tr><td><em>Pas de traitements</em></td></tr>
+          {{/foreach}}
+        </tbody>
+        
+		<!-- Diagnostics -->
+        <tr id="diagnostics-trigger">
+          <th colspan="2" class="title">{{$patient->_codes_cim10|@count}} diagnostic(s)</th>
+        </tr>
+        
+        <tbody class="patientEffect" style="display: none" id="diagnostics">
+          {{foreach from=$patient->_codes_cim10 item=curr_code}}
+          <tr>
+            <td class="text" colspan="2">
+              {{$curr_code->code}}: {{$curr_code->libelle}}
+             </td>
+          </tr>
+          {{foreachelse}}
+          <tr><td><em>Pas de diagnostics</em></td></tr>
+          {{/foreach}}
+        </tbody>
+        
+		<!-- Séjours -->
         <tr id="sejours-trigger">
           <th colspan="2" class="title">{{$patient->_ref_sejours|@count}} séjour(s)</th>
         </tr>
         
-        <tbody class="patientEffect" id="sejours">
+        <tbody class="patientEffect" style="display: none" id="sejours">
         {{foreach from=$patient->_ref_sejours item=curr_sejour}}
         <tr>
           <td>
@@ -263,13 +332,17 @@ function pageMain() {
           </td>
         </tr>
         {{/foreach}}
+        {{foreachelse}}
+        <tr><td><em>Pas de séjours</em></td></tr>
         {{/foreach}}
         </tbody>
+  
+        <!-- Consultations -->
         <tr id="consultations-trigger">
           <th colspan="2" class="title">{{$patient->_ref_consultations|@count}} consultation(s)</th>
         </tr>
 
-        <tbody class="patientEffect" id="consultations">
+        <tbody class="patientEffect" style="display: none" id="consultations">
         {{foreach from=$patient->_ref_consultations item=curr_consult}}
         <tr>
           <td>

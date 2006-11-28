@@ -454,6 +454,11 @@ table.tbl th {
   white-space: nowrap;
 }
 
+table.tbl tr.triggerShow td,
+table.tbl tr.triggerHide td{
+  padding-left: 25px;
+}
+
 table.tbl th.title {
   font-size: 14px;
   font-weight: bold;  

@@ -20,16 +20,16 @@ if(!$patient_id) {
   $AppUI->redirect("m=dPpatients&tab=0");
 }
 
-$fileModule    = CModule::getInstalled("dPfiles");
-$fileCptRendus = CModule::getInstalled("dPcompteRendu");
+$modFile    = CModule::getInstalled("dPfiles");
+$modCR      = CModule::getInstalled("dPcompteRendu");
+$modConsult = CModule::getInstalled("dPcabinet");
 
-$canReadFiles     = $fileModule->canRead();
-$canEditFiles     = $fileModule->canEdit();
-$canReadCptRendus = $fileCptRendus->canRead();
-$canEditCptRendus = $fileCptRendus->canEdit();
-$canEditDoc       = $fileCptRendus->canEdit();
-
-
+$canReadFiles     = $modFile->canRead();
+$canEditFiles     = $modFile->canEdit();
+$canReadCptRendus = $modCR->canRead();
+$canEditCptRendus = $modCR->canEdit();
+$canEditDoc       = $modCR->canEdit();
+$canEditConsult   = $modConsult->canEdit();
 
 $diagnosticsInstall = CModule::getActive("dPImeds") && CModule::getActive("dPsante400");
 
@@ -77,8 +77,9 @@ if ($mediuser->isFromType(array("Anesthésiste"))) {
 // Récuperation du patient sélectionné
 $patient = new CPatient;
 $patient->load($patient_id);
-
 $patient->loadDossierComplet();
+$patient->loadRefsAntecedents();
+$patient->loadRefsTraitements();
 
 $moduleCabinet = CModule::getInstalled("dPcabinet");
 $canEditCabinet = $moduleCabinet->canEdit();
@@ -107,10 +108,13 @@ $smarty->assign("anesth"          , $anesth          );
 $smarty->assign("listPrat"        , $listPrat        );
 $smarty->assign("canEditCabinet"  , $canEditCabinet  );
 $smarty->assign("listCategory"    , $listCategory    );
+
 $smarty->assign("canReadFiles"    , $canReadFiles    );
 $smarty->assign("canEditFiles"    , $canEditFiles    );
 $smarty->assign("canReadCptRendus", $canReadCptRendus);
 $smarty->assign("canEditCptRendus", $canEditCptRendus);
+$smarty->assign("canEditConsult"  , $canEditConsult  );
+
 $smarty->assign("listModelePrat"  , $listModelePrat  );
 $smarty->assign("listModeleFct"   , $listModeleFct   );
 $smarty->assign("affichageFile"   , $affichageFile   );

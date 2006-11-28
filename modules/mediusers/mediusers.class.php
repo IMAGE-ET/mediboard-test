@@ -411,15 +411,15 @@ class CMediusers extends CMbObject {
     // Liste de Tous les établissements
     $group = new CGroups;
     $order = "text";
-    $basegroups = $group->loadList(null, $order);
+    $groups = $group->loadList(null, $order);
 
-    $groups = array();
     // Filtre
-    foreach($basegroups as $keyGroupe=>$groupe){
-      if($groupe->getPerm($permType)) {
-        $groups[$keyGroupe] = $basegroups[$keyGroupe];
+    foreach($groups as $keyGroupe => $groupe){
+      if (!$groupe->getPerm($permType)) {
+        unset($groups[$keyGroupe]);
       }
     }
+
     return $groups;
   }
 

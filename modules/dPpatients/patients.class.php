@@ -107,6 +107,7 @@ class CPatient extends CMbObject {
   var $_ref_sejours          = null;
   var $_ref_consultations    = null;
   var $_ref_antecedents      = null;
+  var $_ref_types_antecedent = null;
   var $_ref_traitements      = null;
   var $_ref_curr_affectation = null;
   var $_ref_next_affectation = null;
@@ -401,12 +402,21 @@ class CPatient extends CMbObject {
   }
   
   function loadRefsAntecedents() {
-    $this->_ref_antecedents = new CAntecedent;
-    if($this->patient_id){
+    if ($this->patient_id) {
+      $antecedent = new CAntecedent();
+      
+      // Chargement des antécédents
       $where = array();
       $where["patient_id"] = "= '$this->patient_id'";
       $order = "type ASC";
-      $this->_ref_antecedents = $this->_ref_antecedents->loadList($where, $order);
+      $this->_ref_antecedents = $antecedent->loadList($where, $order);
+
+      // Classement des antécédents
+      $this->_ref_types_antecedent = array();
+      
+      foreach($this->_ref_antecedents as $keyAnt => &$currAnt){
+        $this->_ref_types_antecedent[$currAnt->type][$keyAnt] = $currAnt;
+      }
     }
   }
 

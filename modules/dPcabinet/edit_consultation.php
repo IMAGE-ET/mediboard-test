@@ -206,18 +206,6 @@ $techniquesComp->loadAides($userSel->user_id);
 $examComp = new CExamComp();
 $examComp->loadAides($userSel->user_id);
 
-
-// Classement des antecedents
-$listAnt = array();
-foreach($antecedent->_enumsTrans["type"] as $keyAnt => $currAnt){
-  $listAnt[$keyAnt] = array();
-}
-if($consult->consultation_id) {
-  foreach($patient->_ref_antecedents as $keyAnt => $currAnt){
-    $listAnt[$currAnt->type][$keyAnt] = $currAnt;
-  }
-}
-
 // Vérification du cas anesthésie
 if($consult->_ref_chir->isFromType(array("Anesthésiste"))) {
   $_is_anesth=true; 
@@ -230,7 +218,6 @@ $smarty->assign("codePraticienEc", $codePraticienEc);
 $smarty->assign("urlDHE"         , $urlDHE);
 $smarty->assign("urlDHEParams"   , $urlDHEParams);
 $smarty->assign("etablissements" , $etablissements);
-$smarty->assign("listAnt"        , $listAnt);
 $smarty->assign("date"           , $date);
 $smarty->assign("hour"           , $hour);
 $smarty->assign("vue"            , $vue);
