@@ -186,11 +186,9 @@ function pageMain() {
     
     </form>
 
-  </td>
   
   {{if $liste->liste_choix_id}}
-  <td class="pane">
-  
+ 
     <table class="form">
       {{if $liste->_valeurs|@count}}
       <tr><th class="category" colspan="2">Choix diponibles</th></tr>
@@ -226,9 +224,9 @@ function pageMain() {
       </td></tr>
     </table>
   
-  </td>
+
   {{/if}}
-  
+  </td>  
 </tr>
 
 </table>
