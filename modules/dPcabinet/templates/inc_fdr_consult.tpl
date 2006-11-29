@@ -302,7 +302,7 @@ function submitFdr(oForm) {
         </tr>
         <tr>
           <td colspan="2" class="button">
-            <button type="button" onclick="effectuerReglement()">Règlement effectué</button>
+            <button class="submit" type="button" onclick="effectuerReglement()">Règlement effectué</button>
             <button class="cancel" type="button" onclick="cancelTarif()">Annuler</button>
           </td>
         </tr>
