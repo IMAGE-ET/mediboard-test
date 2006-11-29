@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcompteRendu";
-$config["mod_version"]     = "0.27";
+$config["mod_version"]     = "0.28";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -208,7 +208,14 @@ class CSetupdPcompteRendu {
         $sql = "ALTER TABLE `compte_rendu` ADD INDEX ( `file_category_id` );";
         db_exec( $sql ); db_error();
       case "0.27":
-        return "0.27";
+        set_time_limit(1800);
+        $sql = "UPDATE `liste_choix` SET function_id = NULL WHERE function_id='0';";
+        db_exec( $sql ); db_error();
+        $sql = "UPDATE `liste_choix` SET chir_id = NULL WHERE chir_id='0';";
+        db_exec( $sql ); db_error();
+        
+      case "0.28":
+        return "0.28";
     }
     return false;
   }

@@ -101,11 +101,17 @@ class CTemplateManager {
   }
   
   function loadLists($user_id, $compte_rendu_id = 0) {
+    global $AppUI;
     // Liste de choix
     $chir = new CMediusers;
-    $chir->load($user_id);
     $where = array();
-    $where[] = "(chir_id = '$chir->user_id' OR function_id = '$chir->function_id')";
+    if($user_id){
+      $chir->load($user_id);
+      $where[] = "(chir_id = '$chir->user_id' OR function_id = '$chir->function_id')";
+    }else{
+      $chir->load($AppUI->user_id); 
+      $where["function_id"] = "= '$chir->function_id'";
+    }
     $where["compte_rendu_id"] = "IN ('0', '$compte_rendu_id')";
     $order = "nom ASC";
     $lists = new CListeChoix();
