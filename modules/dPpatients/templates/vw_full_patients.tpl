@@ -233,7 +233,7 @@ function pageMain() {
           </tr>
           {{/foreach}}
           {{foreachelse}}
-          <tr><td><em>Pas d'antécédents</em></td></tr>
+          <tr><td colspan="2"><em>Pas d'antécédents</em></td></tr>
           {{/foreach}}
         </tbody>
         
@@ -256,7 +256,7 @@ function pageMain() {
             </td>
           </tr>
           {{foreachelse}}
-          <tr><td><em>Pas de traitements</em></td></tr>
+          <tr><td colspan="2"><em>Pas de traitements</em></td></tr>
           {{/foreach}}
         </tbody>
         
@@ -273,7 +273,7 @@ function pageMain() {
              </td>
           </tr>
           {{foreachelse}}
-          <tr><td><em>Pas de diagnostics</em></td></tr>
+          <tr><td colspan="2"><em>Pas de diagnostics</em></td></tr>
           {{/foreach}}
         </tbody>
         
@@ -289,9 +289,11 @@ function pageMain() {
             <a title="Modifier le séjour" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
               <img src="modules/dPpatients/images/planning.png" alt="Planifier"/>
             </a>
-            Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
-            au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
-            - Dr. {{$curr_sejour->_ref_praticien->_view}}
+            <a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}#{{$curr_sejour->sejour_id}}">
+              Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
+              au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
+              - Dr. {{$curr_sejour->_ref_praticien->_view}}
+            </a>
           </td>
           <td style="text-align:right;">
           {{if $curr_sejour->_canRead}}
@@ -313,8 +315,8 @@ function pageMain() {
             <ul><li>
             <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
               <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
+              {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} - Intervention du Dr. {{$curr_op->_ref_chir->_view}}
             </a>
-            {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} - Intervention du Dr. {{$curr_op->_ref_chir->_view}}
             </li></ul>
           </td>
           <td style="text-align:right;">
@@ -353,7 +355,9 @@ function pageMain() {
               <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
             </a>
             {{/if}}
-            {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_consult->_ref_chir->_view}}
+            <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+              {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_consult->_ref_chir->_view}}
+            </a>
           </td>
           <td style="text-align:right;">
           {{if $curr_consult->_canRead}}
@@ -372,9 +376,8 @@ function pageMain() {
         {{/foreach}}
         </tbody>
 
-        <tr>
-        
         {{if $diagnosticsInstall}}
+        <tr>
           <th colspan="4" class="title" onclick="view_labo()">
             Laboratoires
           </th>
