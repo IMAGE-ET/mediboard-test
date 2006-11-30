@@ -79,6 +79,10 @@ body {
   margin: 0px;
 }
 
+#main table.titleblock td.titlecell span {
+  border-bottom: 4px solid #aaf;
+}
+
 /* Onglets de module */
 
 td.tabview {
@@ -107,7 +111,7 @@ table.tabmenu td.normal {
 
 table.tabmenu td.normal:hover {
   background: #fff;
-  border-bottom: 4px solid #0f0;
+  border-bottom: 4px solid #afa;
 }
 
 table.tabmenu td.normalLeft {
@@ -120,7 +124,7 @@ table.tabmenu td.normalRight {
 
 table.tabmenu td.selected {
   background: #fff;
-  border-bottom: 4px solid #f00;
+  border-bottom: 4px solid #faa;
 }
 
 table.tabmenu td.selectedLeft {

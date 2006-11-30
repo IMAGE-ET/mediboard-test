@@ -123,6 +123,6 @@ function chgMenu(id, type) {
           </td>
           {{/if}}
           <td class="titlecell">
-            {{tr}}{{$titleBlockData.name}}{{/tr}}
+            <span>{{tr}}{{$titleBlockData.name}}{{/tr}}</span>
           </td>
       {{/if}}
