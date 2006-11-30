@@ -1,0 +1,152 @@
+@CHARSET "ISO-8859-1";
+
+body {
+  font-family: arial, sans-serif;
+  font-size: 11px;  
+  background: #fff;
+  margin: 0px;
+}
+
+#headerMenu {
+  width: 100%;
+  background: #aaa url(./images/headerBar.png) repeat-x top;
+  cursor: default;
+}
+
+#headerMenu td.end {
+  width: 100%;
+  text-align: right;
+  vertical-align: top;
+}
+
+#headerMenu td.end select {
+  height: 11px;
+  font-size: 8px;
+}
+
+#headerMenu td.menuTitle {
+  background: url(./images/menu.png) no-repeat bottom right;
+  font-size: 12px;
+  padding: 1px 20px 1px 2px;
+  border-right: 1px inset #999;
+}
+
+#headerMenu td.menuTitle:hover {
+  background: url(./images/menuHover.png) no-repeat bottom right;
+}
+
+#headerMenu #toolMenuList,
+#headerMenu #modMenuList {
+  border: 1px solid #000;
+}
+
+#headerMenu #toolMenuList img,
+#headerMenu #modMenuList img {
+  padding-right: 4px;
+}
+
+#headerMenu div.menuItem {
+  background: #eee url(./images/menuItem.png) repeat-y left;
+  display: block;
+  font-size: 12px;
+  padding: 1px 4px;
+}
+
+#headerMenu div.menuItem:hover {
+  background-color: #aaf;
+}
+
+#headerMenu div.menuItem a,
+#headerMenu div.menuItem a:hover,
+#headerMenu div.menuItem a:visited {
+  text-decoration: none;
+}
+
+#headerMenu div.selected {
+  background-color: #faa;
+}
+
+#main table.titleblock td.titlecell {
+  height: 0%;
+  vertical-align: middle;
+  font-family: arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+  background: #fff;
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
+}
+
+/* Onglets de module */
+
+td.tabview {
+  vertical-align: bottom;
+}
+
+table.tabmenu {
+  border: 1px dotted #bbb;
+}
+
+table.tabmenu td {
+  height: 0%;
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
+  border-bottom: 4px solid #fff;
+}
+
+table.tabmenu td a {
+  text-decoration: none;
+}
+
+table.tabmenu td.normal {
+  background: #fff;
+}
+
+table.tabmenu td.normal:hover {
+  background: #fff;
+  border-bottom: 4px solid #0f0;
+}
+
+table.tabmenu td.normalLeft {
+  background: #fff;
+}
+
+table.tabmenu td.normalRight {
+  background: #fff;
+}
+
+table.tabmenu td.selected {
+  background: #fff;
+  border-bottom: 4px solid #f00;
+}
+
+table.tabmenu td.selectedLeft {
+  background: #fff;
+}
+
+table.tabmenu td.selectedRight {
+  background: #fff;
+}
+
+/* panneau d'affichage */
+
+td.tabox {
+  background-color: #fff;
+  border: 1px dotted #bbb;
+  padding: 0px;
+  margin: 0px;
+}
+
+table.main {
+  border: 0px;
+}
+
+/* System message */
+#systemMsg {
+  float: left;
+  height: 12px;
+  white-space: nowrap;
+}
