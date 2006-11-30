@@ -72,7 +72,8 @@ $prec = mbDate("-1 week", $debut);
 $suiv = mbDate("+1 week", $debut);
 
 // Sélection des plages
-$plage = new CPlageconsult();
+$plage    = new CPlageconsult();
+$listDays = array();
 $where["chir_id"] = "= '$chirSel'";
 for($i = 0; $i < 7; $i++) {
   $date = mbDate("+$i day", $debut);
@@ -84,6 +85,7 @@ for($i = 0; $i < 7; $i++) {
     }
     $plages[$date] = $plagesPerDay;
   }
+  $listDays[] = $date;
 }
 
 // Liste des heures
@@ -208,21 +210,22 @@ foreach($plages as $keyDate=>$valDate){
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("_firstconsult_time", $_firstconsult_time);
-$smarty->assign("_lastconsult_time", $_lastconsult_time);
-$smarty->assign("arrayAffichage", $arrayAffichage);
-$smarty->assign("plageconsult_id", $plageconsult_id);
-$smarty->assign("vue", $vue);
-$smarty->assign("chirSel", $chirSel);
-$smarty->assign("plageSel", $plageSel);
-$smarty->assign("listChirs", $listChirs);
-$smarty->assign("plages", $plages);
-$smarty->assign("today", $today);
-$smarty->assign("debut", $debut);
-$smarty->assign("fin", $fin);
-$smarty->assign("prec", $prec);
-$smarty->assign("suiv", $suiv);
-$smarty->assign("listHours", $listHours);
-$smarty->assign("listMins", $listMins);
+$smarty->assign("_lastconsult_time" , $_lastconsult_time);
+$smarty->assign("arrayAffichage"    , $arrayAffichage);
+$smarty->assign("plageconsult_id"   , $plageconsult_id);
+$smarty->assign("vue"               , $vue);
+$smarty->assign("chirSel"           , $chirSel);
+$smarty->assign("plageSel"          , $plageSel);
+$smarty->assign("listChirs"         , $listChirs);
+$smarty->assign("listDays"          , $listDays);
+$smarty->assign("plages"            , $plages);
+$smarty->assign("today"             , $today);
+$smarty->assign("debut"             , $debut);
+$smarty->assign("fin"               , $fin);
+$smarty->assign("prec"              , $prec);
+$smarty->assign("suiv"              , $suiv);
+$smarty->assign("listHours"         , $listHours);
+$smarty->assign("listMins"          , $listMins);
 
 $smarty->display("vw_planning.tpl");
 ?>

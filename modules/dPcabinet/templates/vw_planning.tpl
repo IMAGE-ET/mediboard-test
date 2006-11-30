@@ -137,7 +137,7 @@ function pageMain() {
         {{if !$plageSel->plageconsult_id}}
         <th class="category" colspan="4">Créer une plage</th>
         {{else}}
-        <th class="category" colspan="4">
+        <th class="category" colspan="4" style="color: #f00">
           <a style="float:right;" href="#" onclick="view_log('CPlageconsult',{{$plageSel->plageconsult_id}})">
             <img src="images/history.gif" alt="historique" />
           </a>
@@ -182,7 +182,7 @@ function pageMain() {
         <td>
           <select name="date" title="{{$plageSel->_props.date}}">
             <option value="">&mdash; Choisir le jour de la semaine</option>
-            {{foreach from=$plages|smarty:nodefaults key=curr_day item=plagesPerDay}}
+            {{foreach from=$listDays|smarty:nodefaults item=curr_day}}
             <option value="{{$curr_day}}" {{if $curr_day == $plageSel->date}} selected="selected" {{/if}}>
               {{$curr_day|date_format:"%A"}}
             </option>
@@ -254,7 +254,7 @@ function pageMain() {
 
 	    <table class="form">
 	      <tr>
-	        <th class="category" colspan="2">Supprimer cette plage</th>
+	        <th class="category" colspan="2"  style="color: #f00">Supprimer cette plage</th>
 	      </tr>
 	      <tr>
 	        <th>Supprimer cette plage pendant</th>
