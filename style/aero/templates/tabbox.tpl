@@ -9,7 +9,7 @@
             {{assign var="sel" value="normal"}}
           {{/if}}
           <td class="{{$sel}}Left">
-            :
+            [
           </td>
           <td class="{{$sel}}"><a href="?m={{$m}}&amp;tab={{$currTabBox[0]}}">
             {{if $currTabBox[1]===null}}
@@ -19,7 +19,7 @@
             {{/if}}
           </a></td>
           <td class="{{$sel}}Right">
-            :
+            ]
           </td>
           {{/foreach}}
         </tr>
@@ -27,7 +27,7 @@
     </td>
   </tr>
   <tr>
-    <td class="tabox" colspan="3">
+    <td class="tabox">
 {{else}}
     </td>
   </tr>

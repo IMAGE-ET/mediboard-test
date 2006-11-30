@@ -13,26 +13,43 @@ body {
   cursor: default;
 }
 
-#headerMenu td.end {
+#headerMenu td.message {
   width: 100%;
+}
+
+#headerMenu td.end {
   text-align: right;
   vertical-align: top;
 }
 
-#headerMenu td.end select {
-  height: 11px;
-  font-size: 8px;
+#headerMenu td.titlecell img {
+  margin: 0px;
+  border: 0px;
+  padding-left: 20px;
+}
+
+#headerMenu td.titlecell {
+  height: 0%;
+  vertical-align: middle;
+  font-family: arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+  white-space: nowrap;
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
 }
 
 #headerMenu td.menuTitle {
-  background: url(./images/menu.png) no-repeat bottom right;
+  background: url(./images/menu.png) no-repeat top right;
   font-size: 12px;
-  padding: 1px 20px 1px 2px;
-  border-right: 1px inset #999;
+  padding: 1px 15px 1px 2px;
+  border-right: 1px inset #000;
 }
 
 #headerMenu td.menuTitle:hover {
-  background: url(./images/menuHover.png) no-repeat bottom right;
+  background: url(./images/menuHover.png) no-repeat top right;
 }
 
 #headerMenu #toolMenuList,
@@ -66,23 +83,6 @@ body {
   background-color: #faa;
 }
 
-#main table.titleblock td.titlecell {
-  height: 0%;
-  vertical-align: middle;
-  font-family: arial, sans-serif;
-  font-size: 14px;
-  font-weight: bold;
-  color: #000;
-  background: #fff;
-  border: 0px;
-  padding: 0px;
-  margin: 0px;
-}
-
-#main table.titleblock td.titlecell span {
-  border-bottom: 4px solid #aaf;
-}
-
 /* Onglets de module */
 
 td.tabview {
@@ -90,11 +90,12 @@ td.tabview {
 }
 
 table.tabmenu {
-  border: 1px dotted #bbb;
+  border: 10px 0px;
 }
 
 table.tabmenu td {
   height: 0%;
+  width: 0%;
   border: 0px;
   padding: 0px;
   margin: 0px;
@@ -106,32 +107,41 @@ table.tabmenu td a {
 }
 
 table.tabmenu td.normal {
+  padding: 0px 5px;
   background: #fff;
 }
 
 table.tabmenu td.normal:hover {
-  background: #fff;
   border-bottom: 4px solid #afa;
 }
 
 table.tabmenu td.normalLeft {
+  height: 0%;
+  width: 0%;
   background: #fff;
 }
 
 table.tabmenu td.normalRight {
+  height: 0%;
+  width: 0%;
   background: #fff;
 }
 
 table.tabmenu td.selected {
+  padding: 0px 5px;
   background: #fff;
   border-bottom: 4px solid #faa;
 }
 
 table.tabmenu td.selectedLeft {
+  height: 0%;
+  width: 0%;
   background: #fff;
 }
 
 table.tabmenu td.selectedRight {
+  height: 0%;
+  width: 0%;
   background: #fff;
 }
 

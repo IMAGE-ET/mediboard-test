@@ -89,7 +89,15 @@ function chgMenu(id, type) {
         </a>
       </div>
     </td>
-    <td>
+    {{if $titleBlockData.icon}}
+    <td class="titlecell">
+      {{$titleBlockData.icon|smarty:nodefaults}}
+    </td>
+    {{/if}}
+    <td class="titlecell">
+      {{tr}}{{$titleBlockData.name}}{{/tr}}
+    </td>
+    <td class="message">
       <div {{if $dialog}}class="dialog" {{if !$errorMessage}} style="display: none"{{/if}}{{/if}} id="systemMsg">
         {{$errorMessage|smarty:nodefaults}}
       </div>
@@ -113,16 +121,3 @@ function chgMenu(id, type) {
 
 <table id="main" class="{{$m}}">
   <tr>
-    <td>
-      {{if !$dialog}}
-      <table class="titleblock">
-        <tr>
-          {{if $titleBlockData.icon}}
-          <td>
-            {{$titleBlockData.icon|smarty:nodefaults}}
-          </td>
-          {{/if}}
-          <td class="titlecell">
-            <span>{{tr}}{{$titleBlockData.name}}{{/tr}}</span>
-          </td>
-      {{/if}}
