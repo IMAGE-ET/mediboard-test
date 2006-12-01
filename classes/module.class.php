@@ -170,6 +170,12 @@ class CModule extends CMbObject {
     
     $AppUI->savePlace();
     
+    $moduleAdmin = CModule::getInstalled("system");
+    
+    if($moduleAdmin->canAdmin() && is_file("./modules/".$this->mod_name."/configure.php")){
+      $this->registerTab("configure", "Configurer", TAB_READ);
+    }
+    
     if(count($this->_tabs) == 1) {
       $a = $tab;
       $this->showAction();
