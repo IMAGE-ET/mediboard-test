@@ -31,68 +31,65 @@
 {{if $listPlage}}
 {{foreach from=$listPlage item=curr_plage}}
   <tr>
-    <th colspan="5" style="font-weight: bold;">Consultations de {{$curr_plage->_hour_deb}}h à {{$curr_plage->_hour_fin}}h</th>
-  </tr>
-  <tr>
-    <th>Heure</th>
-    <th>Patient</th>
-    <th>Motif</th>
-    <th>RDV</th>
-    <th>Etat</th>
+    <th colspan="2" style="font-weight: bold;">Consultations de {{$curr_plage->_hour_deb}}h à {{$curr_plage->_hour_fin}}h</th>
   </tr>
   {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
   {{if !$curr_consult->patient_id}}
-    {{assign var="style" value="style='background: #ffa;'"}}          
+    {{assign var="style" value="background: #ffa; font-size: 9px;"}}          
   {{elseif $curr_consult->premiere}} 
-    {{assign var="style" value="style='background: #faa;font-size: 9px;'"}}
+    {{assign var="style" value="background: #faa; font-size: 9px;"}}
   {{else}} 
-    {{assign var="style" value="style='font-size: 9px;'"}}
+    {{assign var="style" value="font-size: 9px;"}}
   {{/if}}
   <tr>
     {{if $curr_consult->consultation_id == $consult->consultation_id}}
-    <td style='font-size: 9px;background: #aaf;'>
+    <td style="background: #aaf; font-size: 9px;" rowspan="2">
     {{else}}
-    <td {{$style|smarty:nodefaults}}>
+    <td style="{{$style|smarty:nodefaults}}" rowspan="2">
     {{/if}}
+      <a href="index.php?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}" title="Modifier le RDV" style="float: right;">
+        <img src="modules/dPcabinet/images/planning.png" alt="modifier" />
+      </a>
       {{if $curr_consult->patient_id}}
-        <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">{{$curr_consult->heure|truncate:5:"":true}}</a>
+        <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}" style="margin-bottom: 4px;">
+          {{$curr_consult->heure|truncate:5:"":true}}
+        </a>
       {{else}}
         {{$curr_consult->heure|truncate:5:"":true}}
       {{/if}}
+      {{if $curr_consult->patient_id}}
+        {{$curr_consult->_etat}}
+      {{/if}}
     </td>
-    <td class="text" {{$style|smarty:nodefaults}}>
-      {{if !$curr_consult->patient_id}}
-        [PAUSE]
-      {{else}}
-        <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
-        {{$curr_consult->_ref_patient->_view}}
+    <td style="{{$style|smarty:nodefaults}}">
+      {{if $curr_consult->patient_id}}
+      <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+        {{$curr_consult->_ref_patient->_view|truncate:30:"...":true}}
         {{if $curr_consult->_ref_patient->_age != "??"}}
           ({{$curr_consult->_ref_patient->_age}}&nbsp;ans)
         {{/if}}
-      {{/if}}
       </a>
+      {{else}}
+        [PAUSE]
+      {{/if}}
     </td>
-    <td class="text" {{$style|smarty:nodefaults}}>
+  </tr>
+  <tr>
+    <td style="{{$style|smarty:nodefaults}}">
       {{if $curr_consult->patient_id}}
         <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
-          {{$curr_consult->motif|nl2br|truncate:10:"...":true}}
+          {{$curr_consult->motif|nl2br|truncate:30:"...":true}}
         </a>
       {{else}}
-        {{$curr_consult->motif|nl2br|truncate:10:"...":true}}
+        {{$curr_consult->motif|nl2br|truncate:30:"...":true}}
       {{/if}}
     </td>
-    <td {{$style|smarty:nodefaults}}>
-      <a href="index.php?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}" title="Modifier le RDV">
-        <img src="modules/dPcabinet/images/planning.png" alt="modifier" />
-      </a>
-    </td>
-    <td {{$style|smarty:nodefaults}}>{{if $curr_consult->patient_id}}{{$curr_consult->_etat}}{{/if}}</td>
   </tr>
   {{/foreach}}
 {{/foreach}}
 {{else}}
   <tr>
-    <th colspan="2" style="font-weight: bold;">Pas de consultations</th>
+    <th colspan="3" style="font-weight: bold;">Pas de consultations</th>
   </tr>
 {{/if}}
 </table>

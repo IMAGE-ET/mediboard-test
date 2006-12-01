@@ -101,8 +101,8 @@ class CConsultation extends CMbObject {
   
   function getEtat() {
     $etat = array();
-    $etat[CC_PLANIFIE]       = "Planif.";
-    $etat[CC_PATIENT_ARRIVE] = "Arrivé ".mbTranformTime(null, $this->arrivee, "%Hh%M");
+    $etat[CC_PLANIFIE]       = "Plan.";
+    $etat[CC_PATIENT_ARRIVE] = mbTranformTime(null, $this->arrivee, "%Hh%M");
     $etat[CC_EN_COURS]       = "En cours";
     $etat[CC_TERMINE]        = "Term.";
     if($this->chrono)
@@ -196,7 +196,7 @@ class CConsultation extends CMbObject {
     }
     if($this->_nb_files_docs) {
       $this->getEtat();
-      $this->_etat .= " ($this->_nb_files_docs Doc.)";
+      $this->_etat .= " ($this->_nb_files_docs Doc)";
     }
   }
   
