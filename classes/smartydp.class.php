@@ -38,6 +38,22 @@ function do_translation($params, $content, &$smarty, &$repeat) {
   }
 }
 
+/**
+ * Render an image using phpThumb
+ */
+function thumb($params, &$smarty) {
+  global $AppUI;
+  $finUrl = "";
+  foreach ($params as $_key => $_val) {
+    if($_key == "src") {
+      $src = $AppUI->getConfig("root_dir")."/".$_val;
+    } else {
+      $finUrl .= "&$_key=$_val";
+    }
+  }
+  return "<img src=\"lib/phpThumb/phpThumb.php?src=$src$finUrl\" />";
+}
+
 function smarty_modifier_json($object) {
   // create a new instance of Services_JSON
   $json = new Services_JSON();
@@ -129,7 +145,8 @@ class CSmartyDP extends Smarty {
     $this->default_modifiers = array("@cleanField");
     
     // Register mediboard functions
-    $this->register_block("tr"              , "do_translation"); 
+    $this->register_block   ("tr"              , "do_translation"); 
+    $this->register_function("thumb"        , "thumb");
     $this->register_modifier("json"         , "smarty_modifier_json");
     $this->register_modifier("cleanField"   , "smarty_modifier_cleanField");
     $this->register_modifier("stripslashes" , "smarty_modifier_stripslashes");

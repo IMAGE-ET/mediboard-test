@@ -51,7 +51,8 @@ function chgMenu(id, type) {
         {{foreach from=$affModule item=currModule}}
         <a href="?m={{$currModule.modName}}" title="{{$currModule.modNameLong}}">
         <div class="menuItem {{if $currModule.modName==$m}}selected{{/if}}">
-          <img src="modules/{{$currModule.modName}}/images/{{$currModule.modName}}.png" alt="{{$currModule.modNameCourt}}" border="0" height="16" width="16" />
+          {{assign var="modname" value=$currModule.modName}}
+          {{thumb src="modules/$modname/images/$modname.png" h="16" w="16" f="png"}}
           {{$currModule.modNameLong}}
         </div>
         </a>
