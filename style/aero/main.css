@@ -104,6 +104,7 @@ table.tabmenu td {
 
 table.tabmenu td a {
   text-decoration: none;
+  white-space: nowrap;
 }
 
 table.tabmenu td.normal {
