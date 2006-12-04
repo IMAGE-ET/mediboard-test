@@ -27,23 +27,23 @@
 </form>
 {{/if}}
 
-<table class="tbl">
+<table class="tbl" style="width: 250px">
 {{if $listPlage}}
 {{foreach from=$listPlage item=curr_plage}}
   <tr>
-    <th colspan="2" style="font-weight: bold;">Consultations de {{$curr_plage->_hour_deb}}h à {{$curr_plage->_hour_fin}}h</th>
+    <th class="title" colspan="2">Consultations de {{$curr_plage->_hour_deb}}h à {{$curr_plage->_hour_fin}}h</th>
   </tr>
   {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
   {{if !$curr_consult->patient_id}}
-    {{assign var="style" value="background: #ffa; font-size: 9px;"}}          
+    {{assign var="style" value="width: 35px; background: #ffa; font-size: 9px;"}}          
   {{elseif $curr_consult->premiere}} 
-    {{assign var="style" value="background: #faa; font-size: 9px;"}}
+    {{assign var="style" value="width: 35px; background: #faa; font-size: 9px;"}}
   {{else}} 
-    {{assign var="style" value="font-size: 9px;"}}
+    {{assign var="style" value="width: 35px; font-size: 9px;"}}
   {{/if}}
   <tr>
     {{if $curr_consult->consultation_id == $consult->consultation_id}}
-    <td style="background: #aaf; font-size: 9px;" rowspan="2">
+    <td style="width: 35px; background: #aaf; font-size: 9px;" rowspan="2">
     {{else}}
     <td style="{{$style|smarty:nodefaults}}" rowspan="2">
     {{/if}}
@@ -78,10 +78,10 @@
     <td style="{{$style|smarty:nodefaults}}">
       {{if $curr_consult->patient_id}}
         <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
-          {{$curr_consult->motif|nl2br|truncate:30:"...":true}}
+          {{$curr_consult->motif|truncate:30:"...":true}}
         </a>
       {{else}}
-        {{$curr_consult->motif|nl2br|truncate:30:"...":true}}
+        {{$curr_consult->motif|truncate:30:"...":true}}
       {{/if}}
     </td>
   </tr>
