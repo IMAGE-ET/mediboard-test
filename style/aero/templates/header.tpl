@@ -76,6 +76,12 @@ function chgMenu(id, type) {
             Changez votre mot de passe
         </div>
         </a>
+        <a href="?m=mediusers&amp;a=edit_infos">
+        <div class="menuItem">
+          <img src="style/aero/images/myinfos.png" alt="{{tr}}My Info{{/tr}}" border="0" height="16" width="16" />
+          {{tr}}My Info{{/tr}}
+        </div>
+        </a>
         <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">
         <div class="menuItem">
           <img src="style/aero/images/prefs.png" alt="Preferences" border="0" height="16" width="16" />

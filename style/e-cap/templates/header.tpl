@@ -95,6 +95,7 @@ function popChgPwd() {
       </a> |
       {{/foreach}}
       <a href="#" onclick="popChgPwd()">Changez votre mot de passe</a> | 
+      <a href="?m=mediusers&amp;a=edit_infos">{{tr}}My Info{{/tr}}</a> |
       <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a> |
       <a href="?logout=-1">{{tr}}Logout{{/tr}}</a>
     </td>
