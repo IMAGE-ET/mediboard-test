@@ -89,6 +89,10 @@ function reloadAfterSaveDoc(){
   reloadFdr();
 }
 
+function reloadAfterUploadFile(){
+  reloadFdr();
+}
+
 function confirmFileDeletion(oButton) {
   oOptions = {
     typeName: 'le fichier',
@@ -147,16 +151,10 @@ function submitFdr(oForm) {
         {{foreachelse}}
           <li>Aucun fichier disponible</li>
         {{/foreach}}
-      </ul>
-      <form name="uploadFrm" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
-        <input type="hidden" name="m" value="dPfiles" />
-        <input type="hidden" name="dosql" value="do_file_aed" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="file_class" value="CConsultation" />
-        <input type="hidden" name="file_object_id" value="{{$consult->consultation_id}}" />
-        <input type="file" name="formfile" size="0" /><br />
-        <button class="submit" type="submit">Ajouter</button>
-      </form>
+      </ul>     
+      <button class="new" onclick="uploadFile('CConsultation', {{$consult->consultation_id}}, '')">
+        Ajouter un fichier
+      </button>
     </td>
 
 	<!-- Documents -->

@@ -95,7 +95,9 @@ function reloadListFileDossier(){
   url.requestUpdate('File'+sSelClass+sSelKey);
 }
 
-
+function reloadAfterUploadFile(){
+  reloadListFile()
+}
 
 function reloadListFile(){
   if(file_deleted && file_preview == file_deleted){

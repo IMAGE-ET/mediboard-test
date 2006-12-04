@@ -189,4 +189,6 @@ $dPconfig["dPplanningOp"]["sejour"] = array (
   "min_intervalle" => "15"
 );
 $dPconfig["dPImeds"]["url"] = "http://10.100.0.67/listedossiers.aspx";
+
+$dPconfig["dPfiles"]["nb_upload_files"] = "1";
 ?>

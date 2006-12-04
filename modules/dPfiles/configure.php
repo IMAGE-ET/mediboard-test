@@ -7,32 +7,23 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canAdmin, $canEdit, $m;
+global $AppUI, $dPconfig, $canAdmin, $canRead, $canEdit, $m, $tab;
 
 if(!$canAdmin) {
-	$AppUI->redirect("m=system&a=access_denied");
+    $AppUI->redirect("m=system&a=access_denied");
 }
 
-$file_category_id = mbGetValueFromGetOrSession("file_category_id");
 
-// Chargement de la catégorie demandé
-$category=new CFilesCategory;
-$category->load($file_category_id);
 
-// Liste des Catégories
-$listCategory = new CFilesCategory;
-$listCategory = $listCategory->loadList();
 
-// LIste des Class
-$listClass = getChildClasses();
+$listNbFiles = mbArrayCreateRange(1,4,true);
 
 
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("listCategory", $listCategory);
-$smarty->assign("category"    , $category    );
-$smarty->assign("listClass"   , $listClass   );
+$smarty->assign("listNbFiles"  , $listNbFiles);
+$smarty->assign("configFiles" , $dPconfig["dPfiles"]);
 
 $smarty->display("configure.tpl");
 

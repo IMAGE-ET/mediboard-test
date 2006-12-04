@@ -22,57 +22,16 @@ if(!$patient_id) {
 
 $modFile    = CModule::getInstalled("dPfiles");
 $modCR      = CModule::getInstalled("dPcompteRendu");
-$modConsult = CModule::getInstalled("dPcabinet");
 
 $canReadFiles     = $modFile->canRead();
 $canEditFiles     = $modFile->canEdit();
-$canReadCptRendus = $modCR->canRead();
-$canEditCptRendus = $modCR->canEdit();
 $canEditDoc       = $modCR->canEdit();
-$canEditConsult   = $modConsult->canEdit();
 
 $diagnosticsInstall = CModule::getActive("dPImeds") && CModule::getActive("dPsante400");
-
-$where = array();
-$where["object_id"] = "IS NULL";
-$where["object_class"] = "= 'CPatient'";
-$order = "nom"; 
-
-$listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
-$where["chir_id"] = db_prepare_in(array_keys($listPrat));
-$modele = new CCompteRendu();
-$listModelePrat = $modele->loadlist($where, $order);
-unset($where["chir_id"]);
-
-$listFct = new CMediusers();
-$listFct = $listFct->loadFonctions(PERM_EDIT);
-$where["function_id"] = db_prepare_in(array_keys($listFct));
-$modele = new CCompteRendu();
-$listModeleFct = $modele->loadlist($where, $order);
-unset($where["function_id"]);
 
 // Liste des Category pour les fichiers
 $listCategory = new CFilesCategory;
 $listCategory = $listCategory->listCatClass("CPatient");
-
-// L'utilisateur est-il un chirurgien
-$mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
-if ($mediuser->isFromType(array("Chirurgien"))) {
-  $chir = $mediuser;
-} else {
-  $chir = null;
-}
-
-// L'utilisateur est-il un anesthésiste
-$mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
-if ($mediuser->isFromType(array("Anesthésiste"))) {
-  $anesth = $mediuser;
-} else {
-  $anesth = null;
-}
 
 // Récuperation du patient sélectionné
 $patient = new CPatient;
@@ -103,20 +62,12 @@ $canEditFileDoc = $canEditFiles || $canEditDoc;
 $smarty->assign("canEditFileDoc" , $canEditFileDoc);
 $smarty->assign("canEditDoc"     , $canEditDoc);
 $smarty->assign("patient"         , $patient         );
-$smarty->assign("chir"            , $chir            );
-$smarty->assign("anesth"          , $anesth          );
-$smarty->assign("listPrat"        , $listPrat        );
 $smarty->assign("canEditCabinet"  , $canEditCabinet  );
 $smarty->assign("listCategory"    , $listCategory    );
 
 $smarty->assign("canReadFiles"    , $canReadFiles    );
 $smarty->assign("canEditFiles"    , $canEditFiles    );
-$smarty->assign("canReadCptRendus", $canReadCptRendus);
-$smarty->assign("canEditCptRendus", $canEditCptRendus);
-$smarty->assign("canEditConsult"  , $canEditConsult  );
 
-$smarty->assign("listModelePrat"  , $listModelePrat  );
-$smarty->assign("listModeleFct"   , $listModeleFct   );
 $smarty->assign("affichageFile"   , $affichageFile   );
 $smarty->assign("selClass"        , $selClass        );
 $smarty->assign("selKey"          , $selKey          );

@@ -13,17 +13,9 @@
         {{if $canEditFiles && !$accordDossier}}
         <tr>
           <td colspan="2" class="text">
-            <form name="uploadFrm{{$keyCat}}" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
-            <input type="hidden" name="m" value="dPfiles" />
-            <input type="hidden" name="dosql" value="do_file_aed" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="file_class" value="{{$selClass}}" />
-            <input type="hidden" name="file_object_id" value="{{$selKey}}" />
-            <input type="hidden" name="file_category_id" value="{{$keyCat}}" />
-            <label for="formfile">Ajouter un document</label>
-            <input type="file" name="formfile" size="0" />
-            <button class="submit" type="submit">Ajouter</button>
-            </form>
+            <button class="new" onclick="uploadFile('{{$selClass}}', '{{$selKey}}', '{{$keyCat}}')">
+              Ajouter un fichier
+            </button>
           </td>
         </tr>
         {{/if}}
