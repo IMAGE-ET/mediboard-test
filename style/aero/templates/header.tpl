@@ -53,7 +53,7 @@ function chgMenu(id, type) {
         <div class="menuItem {{if $currModule.modName==$m}}selected{{/if}}">
           {{assign var="modname" value=$currModule.modName}}
           {{thumb src="modules/$modname/images/$modname.png" h="16" w="16" f="png"}}
-          {{$currModule.modNameLong}}
+          {{$currModule.modNameCourt}}
         </div>
         </a>
         {{/foreach}}
