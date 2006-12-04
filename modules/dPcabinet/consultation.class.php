@@ -270,10 +270,10 @@ class CConsultation extends CMbObject {
     $this->loadRefsFwd();
     $template->addProperty("Consultation - date"      , mbTranformTime("+0 DAY", $this->_ref_plageconsult->date, "%d / %m / %Y") );
     $template->addProperty("Consultation - heure"     , $this->heure);
-    $template->addProperty("Consultation - motif"     , nl2br($this->motif));
-    $template->addProperty("Consultation - remarques" , nl2br($this->rques));
-    $template->addProperty("Consultation - examen"    , nl2br($this->examen));
-    $template->addProperty("Consultation - traitement", nl2br($this->traitement));
+    $template->addProperty("Consultation - motif"     , $this->motif);
+    $template->addProperty("Consultation - remarques" , $this->rques);
+    $template->addProperty("Consultation - examen"    , $this->examen);
+    $template->addProperty("Consultation - traitement", $this->traitement);
   }
 
   function canDelete(&$msg, $oid = null) {

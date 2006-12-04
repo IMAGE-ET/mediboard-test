@@ -19,17 +19,18 @@ class CMediusers extends CMbObject {
   var $user_id = null;
 
   // DB Fields
-  var $remote = null;
-  var $adeli  = null;
+  var $remote        = null;
+  var $adeli         = null;
+  var $titres        = null;
+  var $commentaires  = null;
+  var $actif         = null;
+  var $deb_activite  = null;
+  var $fin_activite  = null;
 
   // DB References
   var $function_id   = null;
   var $discipline_id = null;
   var $spec_cpam_id  = null;
-  var $commentaires  = null;
-  var $actif         = null;
-  var $deb_activite  = null;
-  var $fin_activite  = null;
 
   // dotProject user fields
   var $_user_type       = null;
@@ -78,11 +79,12 @@ class CMediusers extends CMbObject {
       "adeli"         => "numchar|length|9|confidential",
       "function_id"   => "ref|notNull",
       "discipline_id" => "ref",
-      "spec_cpam_id"  => "ref",
+      "titres"        => "text",
       "commentaires"  => "text",
       "actif"         => "bool",
       "deb_activite"  => "date",
-      "fin_activite"  => "date"  
+      "fin_activite"  => "date",
+      "spec_cpam_id"  => "ref"
       );
   }
 
@@ -235,14 +237,6 @@ class CMediusers extends CMbObject {
     $order = "codes_ccam";
     $protocoles = new CProtocole;
     $this->_ref_protocoles = $protocoles->loadList($where, $order);
-  }
-
-
-  function fillTemplate(&$template) {
-    $this->loadRefsFwd();
-    $template->addProperty("Praticien - nom"       , $this->_user_last_name );
-    $template->addProperty("Praticien - prénom"    , $this->_user_first_name);
-    $template->addProperty("Praticien - spécialité", $this->_ref_function->text);
   }
 
   function store() {
@@ -464,6 +458,15 @@ class CMediusers extends CMbObject {
 
   function isPraticien () {
     return $this->isFromType(array("Chirurgien", "Anesthésiste"));
+  }
+
+  function fillTemplate(&$template) {
+    $this->loadRefsFwd();
+    $template->addProperty("Praticien - nom"       , $this->_user_last_name );
+    $template->addProperty("Praticien - prénom"    , $this->_user_first_name);
+    $template->addProperty("Praticien - spécialité", $this->_ref_function->text);
+    $template->addProperty("Praticien - titres"    , $this->titres);
+    $template->addProperty("Praticien - ADELI"     , $this->adeli);
   }
 }
 

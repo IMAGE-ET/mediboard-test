@@ -223,6 +223,10 @@ function deldate(sField){
           <td><input type="text" name="adeli" size="9" maxlength="9" title="{{$mediuserSel->_props.adeli}}" value="{{$mediuserSel->adeli}}" /></td>
         </tr>
         <tr>
+          <th><label for="titres" title="Titres du médecin">Titres</label></th>
+          <td><textarea name="titres" title="{{$mediuserSel->_props.titres}}">{{$mediuserSel->titres}}</textarea>
+        </tr>
+        <tr>
           <th><label for="_user_email" title="Email de l'utilisateur">Email</label></th>
           <td><input type="text" name="_user_email" title="{{$mediuserSel->_user_props._user_email}}" value="{{$mediuserSel->_user_email}}" /></td>
         </tr>

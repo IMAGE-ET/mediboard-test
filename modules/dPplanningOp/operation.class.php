@@ -461,9 +461,9 @@ class COperation extends CMbObject {
     $template->addProperty("Opération - retrait garrot"       , mbTranformTime(null, $this->retrait_garrot, $timeFormat));
     $template->addProperty("Opération - sortie bloc"          , mbTranformTime(null, $this->sortie_salle, $timeFormat));
     $template->addProperty("Opération - depassement"          , $this->depassement);
-    $template->addProperty("Opération - exams pre-op"         , nl2br($this->examen));
-    $template->addProperty("Opération - matériel"             , nl2br($this->materiel));
-    $template->addProperty("Opération - convalescence"        , nl2br($this->_ref_sejour->convalescence));
+    $template->addProperty("Opération - exams pre-op"         , $this->examen);
+    $template->addProperty("Opération - matériel"             , $this->materiel);
+    $template->addProperty("Opération - convalescence"        , $this->_ref_sejour->convalescence);
   }
 }
 

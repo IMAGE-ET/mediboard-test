@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "mediusers";
-$config["mod_version"]     = "0.22";
+$config["mod_version"]     = "0.23";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -393,7 +393,12 @@ class CSetupmediusers {
         db_exec( $sql ); db_error();
         
       case "0.22":
-        return "0.22";
+        $sql = "ALTER TABLE `users_mediboard` " .
+               "\nADD `titres`  text NULL AFTER adeli;";
+        db_exec( $sql ); db_error();
+
+      case "0.23":
+        return "0.23";
     }
 
     return false;

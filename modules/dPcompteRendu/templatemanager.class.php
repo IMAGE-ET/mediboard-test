@@ -140,7 +140,7 @@ class CTemplateManager {
     
     foreach($this->properties as $property) {
       $fields[] = $property["fieldHTML"];
-      $values[] = $property["valueHTML"];
+      $values[] = nl2br($property["valueHTML"]);
     }
 
     $this->document = str_replace($fields, $values, $source);

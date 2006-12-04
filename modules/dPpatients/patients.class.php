@@ -644,28 +644,28 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - mobile"            , $this->tel2       );
     if($this->medecin_traitant) {
       $template->addProperty("Patient - médecin traitant"          , "{$this->_ref_medecin_traitant->nom} {$this->_ref_medecin_traitant->prenom}");
-      $template->addProperty("Patient - médecin traitant - adresse", "".nl2br($this->_ref_medecin_traitant->adresse)."<br />{$this->_ref_medecin_traitant->cp} {$this->_ref_medecin_traitant->ville}");
+      $template->addProperty("Patient - médecin traitant - adresse", "{$this->_ref_medecin_traitant->adresse}\n{$this->_ref_medecin_traitant->cp} {$this->_ref_medecin_traitant->ville}");
     } else {
       $template->addProperty("Patient - médecin traitant");
       $template->addProperty("Patient - médecin traitant - adresse");
     }
     if($this->medecin1) {
       $template->addProperty("Patient - médecin correspondant 1"          , "{$this->_ref_medecin1->nom} {$this->_ref_medecin1->prenom}");
-      $template->addProperty("Patient - médecin correspondant 1 - adresse", "".nl2br($this->_ref_medecin1->adresse)."<br />{$this->_ref_medecin1->cp} {$this->_ref_medecin1->ville}");
+      $template->addProperty("Patient - médecin correspondant 1 - adresse", "{$this->_ref_medecin1->adresse}\n{$this->_ref_medecin1->cp} {$this->_ref_medecin1->ville}");
     } else {
       $template->addProperty("Patient - médecin correspondant 1");
       $template->addProperty("Patient - médecin correspondant 1 - adresse");
     }
     if($this->medecin2) {
       $template->addProperty("Patient - médecin correspondant 2"          , "{$this->_ref_medecin2->nom} {$this->_ref_medecin2->prenom}");
-      $template->addProperty("Patient - médecin correspondant 2 - adresse", "".nl2br($this->_ref_medecin2->adresse)."<br />{$this->_ref_medecin2->cp} {$this->_ref_medecin2->ville}");
+      $template->addProperty("Patient - médecin correspondant 2 - adresse", "{$this->_ref_medecin2->adresse}\n{$this->_ref_medecin2->cp} {$this->_ref_medecin2->ville}");
     } else {
       $template->addProperty("Patient - médecin correspondant 2");
       $template->addProperty("Patient - médecin correspondant 2 - adresse");
     }
     if($this->medecin3) {
       $template->addProperty("Patient - médecin correspondant 3"          , "{$this->_ref_medecin3->nom} {$this->_ref_medecin3->prenom}");
-      $template->addProperty("Patient - médecin correspondant 3 - adresse", "".nl2br($this->_ref_medecin3->adresse)."<br />{$this->_ref_medecin3->cp} {$this->_ref_medecin3->ville}");
+      $template->addProperty("Patient - médecin correspondant 3 - adresse", "{$this->_ref_medecin3->adresse}\n{$this->_ref_medecin3->cp} {$this->_ref_medecin3->ville}");
     } else {
       $template->addProperty("Patient - médecin correspondant 3");
       $template->addProperty("Patient - médecin correspondant 3 - adresse");
@@ -685,7 +685,7 @@ class CPatient extends CMbObject {
       foreach($listAnt as $keyAnt=>$currTypeAnt){
         if($currTypeAnt){
           if($sAntecedents){$sAntecedents.="<br />";}
-          $sAntecedents .= $AppUI->_("CAntecedent.type.".$keyAnt)."<br />";
+          $sAntecedents .= $AppUI->_("CAntecedent.type.".$keyAnt)."\n";
           foreach($currTypeAnt as $currAnt){
             $sAntecedents .= " &bull; ";
             if($currAnt->date){
