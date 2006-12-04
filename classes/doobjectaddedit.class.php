@@ -137,13 +137,17 @@ class CDoObjectAddEdit {
     global $AppUI;
 
     $fields = array();
-    foreach (get_object_vars($this->_obj) as $propName => $propValue) {
-      if ($propName[0] != "_" && $propValue !== null) {
+    foreach ($this->_obj->getProps() as $propName => $propValue) {
+      if ($propValue !== null) {
         $propValueBefore = $this->_objBefore->$propName;
         if ($propValueBefore != $propValue) {
           $fields[] = $propName;
         }
       }
+    }
+    
+    if (!count($fields)) {
+      return;
     }
 
     $object_id = $this->_obj->_id;
@@ -159,7 +163,7 @@ class CDoObjectAddEdit {
       $fields = array();
     }
 
-    if ($this->_logIt && count($fields)) {
+    if ($this->_logIt) {
       $log = new CuserLog;
       $log->user_id = $AppUI->user_id;
       $log->object_id = $object_id;
