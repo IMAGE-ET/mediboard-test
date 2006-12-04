@@ -166,29 +166,29 @@ function pageMain() {
       {{/if}}
       </th>
     </tr>
-
+  
     <tr>
-      <th><label for="user_id" title="Utilisateur concerné">Utilisateur</label></th>
+      <th><label for="function_id" title="Fonction concerné">Fonction</label></th>
       <td>
-        <select name="user_id" title="{{$aide->_props.user_id}}">
-          <option value="">&mdash; Associer à un praticien &mdash;</option>
-          {{foreach from=$listPrat item=curr_prat}}
-            <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $aide->user_id}} selected="selected" {{/if}}>
-              {{$curr_prat->_view}}
+        <select name="function_id" title="{{$aide->_props.function_id}}" onchange="this.form.user_id.value = ''">
+          <option value="">&mdash; Associer à une fonction &mdash;</option>
+          {{foreach from=$listFunc item=curr_func}}
+            <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $aide->function_id}} selected="selected" {{/if}}>
+              {{$curr_func->_view}}
             </option>
           {{/foreach}}
         </select>
       </td>
     </tr>
-  
+
     <tr>
-      <th><label for="function_id" title="Fonction concerné">Fonction</label></th>
+      <th><label for="user_id" title="Utilisateur concerné">Praticien</label></th>
       <td>
-        <select name="function_id" title="{{$aide->_props.function_id}}">
-          <option value="">&mdash; Associer à une fonction &mdash;</option>
-          {{foreach from=$listFunc item=curr_func}}
-            <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $aide->function_id}} selected="selected" {{/if}}>
-              {{$curr_func->_view}}
+        <select name="user_id" title="{{$aide->_props.user_id}}" onchange="this.form.function_id.value = ''">
+          <option value="">&mdash; Associer à un praticien &mdash;</option>
+          {{foreach from=$listPrat item=curr_prat}}
+            <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $aide->user_id}} selected="selected" {{/if}}>
+              {{$curr_prat->_view}}
             </option>
           {{/foreach}}
         </select>
