@@ -1,5 +1,6 @@
-<script type="text/javascript">
+<script type="text/javascript" src="modules/dPpatients/javascript/autocomplete.js?build={{$mb_version_build}}"></script>
 
+<script type="text/javascript">
 function popColor() {
   var url = new Url;
   url.setModuleAction("mediusers", "color_selector");
@@ -14,6 +15,10 @@ function setColor(color) {
   }
   document.getElementById('test').style.background = '#' + f.color.value;
   f.color.onchange();
+}
+
+function pageMain() {
+  initInseeFields("editFrm", "cp", "ville");
 }
 </script>
 
@@ -80,6 +85,15 @@ function setColor(color) {
         
         <tr>
           <th>
+            <label for="soustitre" title="Sous-titre de la fonction">Sous-titre</label>
+          </th>
+          <td>
+            <textarea title="{{$userfunction->_props.soustitre}}" name="soustitre">{{$userfunction->soustitre}}</textarea>
+          </td>
+        </tr>
+        
+        <tr>
+          <th>
             <label for="group_id" title="Etablissement auquel se rattache la fonction">Etablissement</label>
           </th>
           <td>
@@ -111,6 +125,50 @@ function setColor(color) {
             <input type="hidden" name="color" title="{{$userfunction->_props.color}}" value="{{$userfunction->color}}" />
           </td>
         </tr>
+        
+        <tr>
+          <th>
+            <label for="adresse" title="Veuillez saisir l'adresse du cabinet">Adresse</label>
+          </th>
+          <td>
+            <textarea title="{{$userfunction->_props.adresse}}" name="adresse">{{$userfunction->adresse}}</textarea>
+          </td>
+        </tr>
+        <tr>
+          <th><label for="cp" title="Code postal">Code Postal</label></th>
+          <td>
+            <input size="31" maxlength="5" type="text" name="cp" value="{{$userfunction->cp}}" title="{{$userfunction->_props.cp}}" />
+            <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
+          </td>
+        </tr>
+        <tr>
+          <th><label for="ville" title="Ville du cabinet">Ville</label></th>
+          <td>
+            <input size="31" type="text" name="ville" value="{{$userfunction->ville}}" title="{{$userfunction->_props.ville}}" />
+            <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
+          </td>
+        </tr>
+        <tr>
+          <th><label for="_tel1" title="Numéro de téléphone filaire">Téléphone</label></th>
+          <td>
+            <input type="text" name="_tel1" size="2" maxlength="2" value="{{$userfunction->_tel1}}" title="num|length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
+            <input type="text" name="_tel2" size="2" maxlength="2" value="{{$userfunction->_tel2}}" title="num|length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
+            <input type="text" name="_tel3" size="2" maxlength="2" value="{{$userfunction->_tel3}}" title="num|length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
+            <input type="text" name="_tel4" size="2" maxlength="2" value="{{$userfunction->_tel4}}" title="num|length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
+            <input type="text" name="_tel5" size="2" maxlength="2" value="{{$userfunction->_tel5}}" title="num|length|2" onkeyup="followUp(this, '_fax1', 2)" />
+          </td>
+        </tr>
+        <tr>
+          <th><label for="_fax1" title="Numéro de fax">Télécopie</label></th>
+          <td>
+            <input type="text" name="_fax1" size="2" maxlength="2" value="{{$userfunction->_fax1}}" title="num|length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
+            <input type="text" name="_fax2" size="2" maxlength="2" value="{{$userfunction->_fax2}}" title="num|length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
+            <input type="text" name="_fax3" size="2" maxlength="2" value="{{$userfunction->_fax3}}" title="num|length|2" onkeyup="followUp(this, '_fax4', 2)" /> -
+            <input type="text" name="_fax4" size="2" maxlength="2" value="{{$userfunction->_fax4}}" title="num|length|2" onkeyup="followUp(this, '_fax5', 2)" /> -
+            <input type="text" name="_fax5" size="2" maxlength="2" value="{{$userfunction->_fax5}}" title="num|length|2" />
+          </td>
+        </tr>
+        
         <tr>
           <td class="button" colspan="2">
           {{if $userfunction->function_id}}

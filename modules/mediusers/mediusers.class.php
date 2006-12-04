@@ -462,6 +462,7 @@ class CMediusers extends CMbObject {
 
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
+    $this->_ref_function->fillTemplate($template);
     $template->addProperty("Praticien - nom"       , $this->_user_last_name );
     $template->addProperty("Praticien - prénom"    , $this->_user_first_name);
     $template->addProperty("Praticien - spécialité", $this->_ref_function->text);

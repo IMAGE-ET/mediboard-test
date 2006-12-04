@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "mediusers";
-$config["mod_version"]     = "0.23";
+$config["mod_version"]     = "0.24";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
@@ -398,7 +398,17 @@ class CSetupmediusers {
         db_exec( $sql ); db_error();
 
       case "0.23":
-        return "0.23";
+        $sql = "ALTER TABLE `functions_mediboard` " .
+               "\nADD `adresse` TEXT NULL," .
+               "\nADD `cp` int(5) unsigned zerofill NULL," .
+               "\nADD `ville` VARCHAR( 50 ) NULL," .
+               "\nADD `tel` bigint(10) unsigned zerofill NULL," .
+               "\nADD `fax` bigint(10) unsigned zerofill NULL," .
+               "\nADD `soustitre` TEXT NULL;";
+        db_exec( $sql ); db_error();
+      
+      case "0.24":
+        return "0.24";
     }
 
     return false;
