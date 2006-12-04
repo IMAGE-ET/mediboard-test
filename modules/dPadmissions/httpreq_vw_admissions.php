@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $g;
 
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
@@ -26,6 +26,7 @@ $today = new CSejour;
 
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 
+$where["group_id"] = "= '$g'";
 $where["entree_prevue"] = "BETWEEN '$date' AND '$next'";
 if($selAdmis != "0") {
   $where[] = "(entree_reelle IS NULL OR entree_reelle = '0000-00-00 00:00:00')";

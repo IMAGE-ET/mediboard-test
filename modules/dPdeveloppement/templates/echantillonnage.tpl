@@ -5,16 +5,16 @@
 
 <table class="form">
   <tr>
-    <th class="title" colspan="6">
+    <th class="title" colspan="8">
       Echantillonnage
     </th>
   </tr>
   
   <tr>
-    <th colspan="3">
+    <th colspan="4">
       <label for="etablissement" title="Veuillez saisir un titre pour l'etablissement">Titre de l'etablissement</label>
     </th>
-    <td colspan="3">
+    <td colspan="4">
       <input type="text" name="etablissement" value="" title="str|notNull" />
     </td>
   </tr>
@@ -38,6 +38,12 @@
     <td>
       {{html_options name="_nb_salles" options=$list_5}}
     </td>
+    <th>
+      <label for="_nb_services" title="Nombre de services à créer">Nombre de services</label>
+    </th>
+    <td>
+      {{html_options name="_nb_services" options=$list_5}}
+    </td>
   </tr> 
   
   <tr>
@@ -59,6 +65,12 @@
     <td>
       {{html_options name="_nb_plagesop" options=$list_14}}
     </td>
+    <th>
+      <label for="_nb_chambre" title="Nombre de chambre à créer par service">Nombre de chambre</label>
+    </th>
+    <td>
+      {{html_options name="_nb_chambre" options=$list_20}}
+    </td>
   </tr>
   
   <tr>
@@ -75,10 +87,16 @@
     <td>
       {{html_options name="_nb_interv" options=$list_5}}
     </td>
+    <th>
+      <label for="_nb_lit" title="Nombre maximal de lit à créer par chambre">Nombre de lit</label>
+    </th>
+    <td>
+      {{html_options name="_nb_lit" options=$list_5}}
+    </td>
   </tr>
 
   <tr>
-    <td colspan="6" class="button">
+    <td colspan="8" class="button">
       <button type="submit" class="submit">Créer</button>
     </td>
   </tr>

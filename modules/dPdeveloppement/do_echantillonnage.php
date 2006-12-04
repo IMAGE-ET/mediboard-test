@@ -79,6 +79,9 @@ $_nb_consult   = mbGetValueFromPost("_nb_consult"  ,1);
 $_nb_plagesop  = mbGetValueFromPost("_nb_plagesop" ,1);
 $_nb_salles    = mbGetValueFromPost("_nb_salles"   ,1);
 $_nb_interv    = mbGetValueFromPost("_nb_interv"   ,1);
+$_nb_services  = mbGetValueFromPost("_nb_services" ,1);
+$_nb_chambre   = mbGetValueFromPost("_nb_chambre"  ,1);
+$_nb_lit       = mbGetValueFromPost("_nb_lit"      ,1);
 
 $log_file = "tmp/echantillonnage.log";
 $log_text = "##\r\n## Echantillonnage du ".date("d/m/Y à H:i:s")."\r\n##\r\n";
@@ -347,9 +350,40 @@ foreach($salles->listObjects as $salle){
   }
 }
 
+// Creation des Services / Chambres / Lits
+$services = new CEchantillonnage("CService");
+$chambres = new CEchantillonnage("CChambre");
+$lits     = new CEchantillonnage("CLit");
+for($i=1; $i<=$_nb_services; $i++){
+  $services->renew();
+  $tabFields = array("group_id"    => $group->object->_id,
+                      "nom"         => "Service $i",
+                      "description" => "[DEMO]");
+  $services->setManyFields($tabFields);
+  
+  if(!$services->store($log_text)){
+    for($iChambre=1; $iChambre<=$_nb_chambre; $iChambre++){
+      $chambres->renew();
+      $tabFields = array("service_id"       => $services->object->_id,
+                          "nom"              => "Chambre $i".str_pad($iChambre, 2, "0", STR_PAD_LEFT),
+                          "caracteristiques" => "[DEMO]");
+      $chambres->setManyFields($tabFields);
+      if(!$chambres->store($log_text)){
+        $nb_lit_max = rand(1,$_nb_lit);
+        for($iLit=1; $iLit<=$nb_lit_max; $iLit++){
+          $lits->renew();
+          $tabFields = array("chambre_id"       => $chambres->object->_id,
+                              "nom"              => "Lit $iLit");
+          $lits->setManyFields($tabFields);
+          $lits->store($log_text);
+        }
+      }
+    }  
+  }
+}
+
 
 // A Faire : Creation de modeles
-
 
 $logFile = fopen($log_file, "a+");
 fwrite($logFile, $log_text."\r\n");

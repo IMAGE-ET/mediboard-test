@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $g;
 
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
@@ -22,7 +22,7 @@ $nextmonth = mbDate("+1 month", $date);
 // Liste des admissions par jour
 $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
     "\nFROM `sejour`" .
-    "\nWHERE `sejour`.`entree_prevue` LIKE '$month'" .
+    "\nWHERE `sejour`.`entree_prevue` LIKE '$month' AND `sejour`.`group_id` = '$g'" .
     "\nGROUP BY `date`" .
     "\nORDER BY `date`";
 $list1 = db_loadlist($sql);
@@ -30,7 +30,7 @@ $list1 = db_loadlist($sql);
 // Liste des admissions non effectuées par jour
 $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
     "\nFROM `sejour`" .
-    "\nWHERE `sejour`.`entree_prevue` LIKE '$month'" .
+    "\nWHERE `sejour`.`entree_prevue` LIKE '$month' AND `sejour`.`group_id` = '$g'" .
     "\nAND `sejour`.`entree_reelle` IS NULL" .
     "\nAND `sejour`.`annule` = '0'" .
     "\nGROUP BY `date`" .
@@ -40,7 +40,7 @@ $list2 = db_loadlist($sql);
 // Liste des admissions non préparées
 $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
     "\nFROM `sejour`" .
-    "\nWHERE `sejour`.`entree_prevue` LIKE '$month'" .
+    "\nWHERE `sejour`.`entree_prevue` LIKE '$month' AND `sejour`.`group_id` = '$g'" .
     "\nAND `sejour`.`saisi_SHS` = '0'" .
     "\nAND `sejour`.`annule` = '0'" .
     "\nGROUP BY `date`" .

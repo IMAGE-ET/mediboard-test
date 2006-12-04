@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $g;
 
 if (!$canRead) {
   $AppUI->redirect( "m=system&a=access_denied" );
@@ -36,6 +36,7 @@ if($vue) {
 }
 $order = "patients.nom, patients.prenom";
 $where["type"] = "= 'comp'";
+$where["sejour.group_id"] = "= '$g'";
 $listComp = $list->loadList($where, $order, null, null, $ljoin);
 foreach($listComp as $key => $value) {
   $listComp[$key]->loadRefsFwd();
