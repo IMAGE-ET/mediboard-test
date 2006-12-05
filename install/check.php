@@ -153,18 +153,23 @@ $extension->reasons[] = "Module de statistiques graphiques";
 $extension->reasons[] = "Fonction d'audiogrammes";
 $extensions[] = $extension;
 
+$extension = new CPHPExtension;
+$extension->name = "PDO";
+$extension->description = "Extension de connectivité aux bases de données";
+$extension->reasons[] = "Interopérabilité avec des systèmes tiers";
+$extensions[] = $extension;
+
+$extension = new CPHPExtension;
+$extension->name = "PDO_ODBC";
+$extension->description = "Pilote ODBC pour PDO";
+$extension->reasons[] = "Interopérabilité avec des systèmes tiers";
+$extensions[] = $extension;
+
 $versions = array();
 
 $version = new CPHPVersion;
-$version->name = "4.3";
-$version->description = "Version de PHP4 récente";
-$version->mandatory = true;
-$version->reasons[] = "Construction orientée objet";
-$version->reasons[] = "Correction de nombreux bugs, stabilité";
-$versions[] = $version;
-
-$version = new CPHPVersion;
 $version->name = "5.1";
+$version->mandatory = true;
 $version->description = "Version de PHP5 récente";
 $version->reasons[] = "Intégration du support XML natif : utilisation pour l'intéropérabilité HPRIM XML'";
 $version->reasons[] = "Intégration de PDO : accès universel et sécurisé aux base de données";
