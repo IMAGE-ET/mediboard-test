@@ -105,9 +105,11 @@ function chgMenu(id, type) {
       {{tr}}{{$titleBlockData.name}}{{/tr}}
     </td>
     <td class="message">
+      {{if !$dialog}}
       <div {{if $dialog}}class="dialog" {{if !$errorMessage}} style="display: none"{{/if}}{{/if}} id="systemMsg">
         {{$errorMessage|smarty:nodefaults}}
       </div>
+      {{/if}}
     </td>
     <td class="end">
       <form name="ChangeGroup" action="" method="get">
@@ -123,8 +125,14 @@ function chgMenu(id, type) {
     </td>
   </tr>
 </table>
-
 {{/if}}
 
 <table id="main" class="{{$m}}">
   <tr>
+  
+{{if $dialog}}
+    <td class="tabox">
+      <div class="dialog" {{if !$errorMessage}}style="display: none"{{/if}} id="systemMsg">
+        {{$errorMessage|smarty:nodefaults}}
+      </div>
+{{/if}}

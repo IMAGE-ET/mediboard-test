@@ -48,7 +48,7 @@ function thumb($params, &$smarty) {
     if($_key == "src") {
       $src = $AppUI->getConfig("root_dir")."/".$_val;
     } else {
-      $finUrl .= "&$_key=$_val";
+      $finUrl .= "&amp;$_key=$_val";
     }
   }
   return "<img src=\"lib/phpThumb/phpThumb.php?src=$src$finUrl\" />";

@@ -35,17 +35,17 @@
   </tr>
   {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
   {{if !$curr_consult->patient_id}}
-    {{assign var="style" value="width: 35px; background: #ffa; font-size: 9px;"}}          
+    {{assign var="style" value="background: #ffa; font-size: 9px;"}}          
   {{elseif $curr_consult->premiere}} 
-    {{assign var="style" value="width: 35px; background: #faa; font-size: 9px;"}}
+    {{assign var="style" value="background: #faa; font-size: 9px;"}}
   {{else}} 
-    {{assign var="style" value="width: 35px; font-size: 9px;"}}
+    {{assign var="style" value="font-size: 9px;"}}
   {{/if}}
   <tr>
     {{if $curr_consult->consultation_id == $consult->consultation_id}}
     <td style="width: 35px; background: #aaf; font-size: 9px;" rowspan="2">
     {{else}}
-    <td style="{{$style|smarty:nodefaults}}" rowspan="2">
+    <td style="width: 35px; {{$style|smarty:nodefaults}}" rowspan="2">
     {{/if}}
       <a href="index.php?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}" title="Modifier le RDV" style="float: right;">
         <img src="modules/dPcabinet/images/planning.png" alt="modifier" />
