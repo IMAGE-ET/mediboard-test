@@ -101,6 +101,33 @@
           </td>
         </tr>
         {{/foreach}}
+        {{if $patientsSoundex|@count}}
+        <tr>
+          <th colspan="4">
+            <em>Résultats proches</em>
+          </th>
+        </tr>
+        {{/if}}
+        {{foreach from=$patientsSoundex item=curr_patient}}
+        <tr>
+          <td><input type="checkbox" name="fusion_{{$curr_patient->patient_id}}" /></td>
+          <td class="text">
+            <a href="{{$href}}{{$curr_patient->patient_id}}">
+              {{$curr_patient->_view}}
+            </a>
+          </td>
+          <td class="text">
+            <a href="{{$href}}{{$curr_patient->patient_id}}">
+              {{$curr_patient->_naissance}}
+            </a>
+          </td>
+          <td class="text">
+            <a href="{{$href}}{{$curr_patient->patient_id}}">
+              {{$curr_patient->adresse}}, {{$curr_patient->cp}} {{$curr_patient->ville}}
+            </a>
+          </td>
+        </tr>
+        {{/foreach}}
         
       </table>
       </form>
