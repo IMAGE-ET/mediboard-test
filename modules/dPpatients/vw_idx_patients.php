@@ -72,7 +72,7 @@ $patient_year      = mbGetValueFromGetOrSession("Date_Year" , date("Y"));
 
 $where        = array();
 $whereSoundex = array();
-$soundexObj = new soundex2();
+$soundexObj   = new soundex2();
 
 if ($patient_nom) {
   $where["nom"]                 = "LIKE '$patient_nom%'";

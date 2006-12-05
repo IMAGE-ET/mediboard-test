@@ -47,35 +47,56 @@ function setClose(key, val){
 </table>
 
 <table class="tbl">
-<tr>
-  <th align="center">Patient</th>
-  <th align="center">Date de naissance</th>
-  <th align="center">Téléphone</th>
-  <th align="center">Mobile</th>
-  <th align="center">Sélectionner</th>
-</tr>
-{{foreach from=$list item=curr_patient}}
-<tr>
-  <td><a href="#" onclick="createEditPat({{$curr_patient->patient_id}})" class="buttonedit notext" style="float:left;"></a>{{$curr_patient->_view}}</td>
-  <td>{{$curr_patient->_naissance}}</td>
-  <td>{{$curr_patient->tel}}</td>
-  <td>{{$curr_patient->tel2}}</td>
-  <td class="button">
-    <button class="tick" type="button" onclick="setClose({{$curr_patient->patient_id}}, '{{$curr_patient->_view|smarty:nodefaults|JSAttribute}}')">Sélectionner</button>
-  </td>
-</tr>
-{{/foreach}}
-</table>
-
-<table class="form">
-
-<tr>
-  <td class="button" colspan="2">
-    <button class="submit" type="button" onclick="createEditPat(0)">Créer un patient</button>
-    <button class="cancel" type="button" onclick="window.close()">Annuler</button>
-  </td>
-</tr>
-
+  <tr>
+    <th align="center">Patient</th>
+    <th align="center">Date de naissance</th>
+    <th align="center">Téléphone</th>
+    <th align="center">Mobile</th>
+    <th align="center">Sélectionner</th>
+  </tr>
+  {{foreach from=$patients item=curr_patient}}
+  <tr>
+    <td><a href="#" onclick="createEditPat({{$curr_patient->patient_id}})" class="buttonedit notext" style="float:left;"></a>{{$curr_patient->_view}}</td>
+    <td>{{$curr_patient->_naissance}}</td>
+    <td>{{$curr_patient->tel}}</td>
+    <td>{{$curr_patient->tel2}}</td>
+    <td class="button">
+      <button class="tick" type="button" onclick="setClose({{$curr_patient->patient_id}}, '{{$curr_patient->_view|smarty:nodefaults|JSAttribute}}')">Sélectionner</button>
+    </td>
+  </tr>
+  {{foreachelse}}
+  {{if $name || $firstName}}
+  <tr>
+    <td class="button" colspan="5">
+      Aucun résultat exact
+    </td>
+  </tr>
+  {{/if}}
+  {{/foreach}}
+  <tr>
+    <td class="button" colspan="5">
+      <button class="submit" type="button" onclick="createEditPat(0)">Créer un patient</button>
+      <button class="cancel" type="button" onclick="window.close()">Annuler</button>
+    </td>
+  </tr>
+  {{if $patientsSoundex|@count}}
+  <tr>
+    <th colspan="5">
+      <em>Résultats proches</em>
+    </th>
+  </tr>
+  {{/if}}
+  {{foreach from=$patientsSoundex item=curr_patient}}
+  <tr>
+    <td><a href="#" onclick="createEditPat({{$curr_patient->patient_id}})" class="buttonedit notext" style="float:left;"></a>{{$curr_patient->_view}}</td>
+    <td>{{$curr_patient->_naissance}}</td>
+    <td>{{$curr_patient->tel}}</td>
+    <td>{{$curr_patient->tel2}}</td>
+    <td class="button">
+      <button class="tick" type="button" onclick="setClose({{$curr_patient->patient_id}}, '{{$curr_patient->_view|smarty:nodefaults|JSAttribute}}')">Sélectionner</button>
+    </td>
+  </tr>
+  {{/foreach}}
 </table>
 
 </form>
