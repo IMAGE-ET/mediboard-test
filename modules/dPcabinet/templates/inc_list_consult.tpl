@@ -43,9 +43,9 @@
   {{/if}}
   <tr>
     {{if $curr_consult->consultation_id == $consult->consultation_id}}
-    <td style="width: 35px; background: #aaf; font-size: 9px;" rowspan="2">
+    <td style="width: 40px; background: #aaf; font-size: 9px;" rowspan="2">
     {{else}}
-    <td style="width: 35px; {{$style|smarty:nodefaults}}" rowspan="2">
+    <td style="width: 40px; {{$style|smarty:nodefaults}}" rowspan="2">
     {{/if}}
       <a href="index.php?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}" title="Modifier le RDV" style="float: right;">
         <img src="modules/dPcabinet/images/planning.png" alt="modifier" />
