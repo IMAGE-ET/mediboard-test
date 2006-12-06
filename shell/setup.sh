@@ -18,6 +18,13 @@ fi
    
 APACHE_GROUP=$1
 
+grep $APACHE_GROUP: /etc/group >/dev/null
+if [ $? -ne "0" ]
+then
+  echo "Error: group '$APACHE_GROUP' does not exist"
+  exit 1
+fi
+
 # Check optionnal sub-directory
 SUB_DIR=$2
   if [ "$SUB_DIR" = "modules" ]
