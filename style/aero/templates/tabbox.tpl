@@ -28,8 +28,4 @@
   </tr>
   <tr>
     <td class="tabox">
-{{else}}
-    </td>
-  </tr>
-</table>
 {{/if}}

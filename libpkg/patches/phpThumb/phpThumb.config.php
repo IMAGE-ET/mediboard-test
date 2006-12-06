@@ -132,18 +132,18 @@ $PHPTHUMB_CONFIG['output_maxheight'] = 0;      // default maximum thumbnail heig
 $PHPTHUMB_CONFIG['output_interlace'] = true;   // if true: interlaced output for GIF/PNG, progressive output for JPEG; if false: non-interlaced for GIF/PNG, baseline for JPEG.
 
 // * Error message configuration
-$PHPTHUMB_CONFIG['error_image_width']           = 400;      // default width for error images
-$PHPTHUMB_CONFIG['error_image_height']          = 100;      // default height for error images
+$PHPTHUMB_CONFIG['error_image_width']           = 64;      // default width for error images
+$PHPTHUMB_CONFIG['error_image_height']          = 64;      // default height for error images
 $PHPTHUMB_CONFIG['error_message_image_default'] = '';       // Set this to the name of a generic error image (e.g. '/images/error.png') that you want displayed in place of any error message that may occur. This setting is overridden by the 'err' parameter, which does the same thing.
-$PHPTHUMB_CONFIG['error_bgcolor']               = 'CCCCFF'; // background color of error message images
-$PHPTHUMB_CONFIG['error_textcolor']             = 'FF0000'; // color of text in error messages
+$PHPTHUMB_CONFIG['error_bgcolor']               = 'DDDDDD'; // background color of error message images
+$PHPTHUMB_CONFIG['error_textcolor']             = '000000'; // color of text in error messages
 $PHPTHUMB_CONFIG['error_fontsize']              = 1;        // size of text in error messages, from 1 (smallest) to 5 (largest)
 $PHPTHUMB_CONFIG['error_die_on_error']          = true;     // die with error message on any fatal error (recommended with standalone phpThumb.php)
 $PHPTHUMB_CONFIG['error_silent_die_on_error']   = false;    // simply die with no output of any kind on fatal errors (not recommended)
 $PHPTHUMB_CONFIG['error_die_on_source_failure'] = true;     // die with error message if source image cannot be processed by phpThumb() (usually because source image is corrupt in some way). If false the source image will be passed through unprocessed, if true (default) an error message will be displayed.
 
 // * Off-server Thumbnailing Configuration:
-$PHPTHUMB_CONFIG['nohotlink_enabled']           = false;                                    // If false will allow thumbnailing from any source domain
+$PHPTHUMB_CONFIG['nohotlink_enabled']           = true;                                     // If false will allow thumbnailing from any source domain
 $PHPTHUMB_CONFIG['nohotlink_valid_domains']     = array(@$_SERVER['HTTP_HOST']);            // This is the list of domains for which thumbnails are allowed to be created. The default value of the current domain should be fine in most cases, but if neccesary you can add more domains in here, in the format 'www.example.com'
 $PHPTHUMB_CONFIG['nohotlink_erase_image']       = true;                                     // if true thumbnail is covered up with $PHPTHUMB_CONFIG['nohotlink_fill_color'] before text is applied, if false text is written over top of thumbnail
 $PHPTHUMB_CONFIG['nohotlink_text_message']      = 'Off-server thumbnailing is not allowed'; // text of error message

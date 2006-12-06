@@ -49,13 +49,13 @@ function chgMenu(id, type) {
       Modules
       <div id="modMenuList" style="visibility: hidden; position: absolute">
         {{foreach from=$affModule item=currModule}}
-        <a href="?m={{$currModule.modName}}" title="{{$currModule.modNameLong}}">
         <div class="menuItem {{if $currModule.modName==$m}}selected{{/if}}">
-          {{assign var="modname" value=$currModule.modName}}
-          {{thumb src="modules/$modname/images/$modname.png" h="16" w="16" f="png"}}
-          {{$currModule.modNameCourt}}
+          <a href="?m={{$currModule.modName}}" title="{{$currModule.modNameLong}}">
+            {{assign var="modname" value=$currModule.modName}}
+            {{thumb src="modules/$modname/images/$modname.png" h="16" w="16" f="png"}}
+            {{$currModule.modNameCourt}}
+          </a>
         </div>
-        </a>
         {{/foreach}}
       </div>
     </td>
@@ -70,30 +70,30 @@ function chgMenu(id, type) {
           <img src="style/aero/images/modif.png" alt="Suggestions" border="0" height="16" width="16" />
           {{$suggestion|smarty:nodefaults}}
         </div>
-        <a href="#" onclick="popChgPwd();">
         <div class="menuItem">
+          <a href="#" onclick="popChgPwd();">
             <img src="style/aero/images/passwd.png" alt="Mot de passe" border="0" height="16" width="16" />
             Changez votre mot de passe
+          </a>
         </div>
-        </a>
-        <a href="?m=mediusers&amp;a=edit_infos">
         <div class="menuItem">
-          <img src="style/aero/images/myinfos.png" alt="{{tr}}My Info{{/tr}}" border="0" height="16" width="16" />
-          {{tr}}My Info{{/tr}}
+          <a href="?m=mediusers&amp;a=edit_infos">
+            <img src="style/aero/images/myinfos.png" alt="{{tr}}My Info{{/tr}}" border="0" height="16" width="16" />
+            {{tr}}My Info{{/tr}}
+          </a>
         </div>
-        </a>
-        <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">
         <div class="menuItem">
-          <img src="style/aero/images/prefs.png" alt="Preferences" border="0" height="16" width="16" />
-          {{tr}}Préférences{{/tr}}
+          <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">
+            <img src="style/aero/images/prefs.png" alt="Preferences" border="0" height="16" width="16" />
+            {{tr}}Préférences{{/tr}}
+          </a>
         </div>
-        </a>
-        <a href="?logout=-1">
         <div class="menuItem">
-          <img src="style/aero/images/logout.png" alt="{{tr}}Logout{{/tr}}" border="0" height="16" width="16" />
-          {{tr}}Logout{{/tr}}
+          <a href="?logout=-1">
+            <img src="style/aero/images/logout.png" alt="{{tr}}Logout{{/tr}}" border="0" height="16" width="16" />
+            {{tr}}Logout{{/tr}}
+          </a>
         </div>
-        </a>
       </div>
     </td>
     {{if $titleBlockData.icon}}

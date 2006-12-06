@@ -51,7 +51,7 @@ function thumb($params, &$smarty) {
       $finUrl .= "&amp;$_key=$_val";
     }
   }
-  return "<img src=\"lib/phpThumb/phpThumb.php?src=$src$finUrl\" />";
+  return "<img src=\"lib/phpThumb/phpThumb.php?src=$src$finUrl\" alt=\"thumb\" />";
 }
 
 function smarty_modifier_json($object) {
