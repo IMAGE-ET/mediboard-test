@@ -9,7 +9,7 @@
     </td>
     {{if $creation_prat}}
     <th>
-      <label for="_nb_prat" title="Nombre de praticiens à créer">Nombre de praticiens</label>
+      <label for="_nb_prat" title="Nombre de praticiens à créer par cabinet">Nombre de praticiens</label>
     </th>
     <td class="halfPane">
       {{html_options name="_nb_prat" options=$list_10}}

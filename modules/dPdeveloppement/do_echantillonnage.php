@@ -6,12 +6,15 @@
 * @version $Revision: $
 * @author Sébastien Fillonneau
 */
-
+set_time_limit(1800);
 global $AppUI, $canRead, $canEdit, $m;
 
 if(!$canRead) {
     $AppUI->redirect("m=system&a=access_denied");
 }
+
+$log_file = "tmp/echantillonnage.log";
+file_put_contents($log_file, "##\r\n## Echantillonnage du ".date("d/m/Y à H:i:s")."\r\n##\r\n", FILE_APPEND);
 
 class CEchantillonnage {
   var $class  = null;
@@ -41,11 +44,12 @@ class CEchantillonnage {
     $this->listObjects[$this->object->_id] = $this->object;
   }
   
-  function store(&$log, $logfile = true) {
+  function store($logfile = true) {
+    global $log_file;
     if(!$msg = $this->object->store()) {
       $this->listObjects[$this->object->_id] = $this->object;
       if($logfile){
-        $log .= $this->object->_class_name.": ".$this->object->_id."\r\n";
+        file_put_contents($log_file, $this->object->_class_name.": ".$this->object->_id."\r\n", FILE_APPEND);
       }
     }else{
       return $msg; 
@@ -111,9 +115,6 @@ $_nb_interv        = mbGetValueFromPost("_nb_interv"        , 1);
 $_nb_chambre       = mbGetValueFromPost("_nb_chambre"       , 1);
 $_nb_lit           = mbGetValueFromPost("_nb_lit"           , 1);
 
-$log_file = "tmp/echantillonnage.log";
-$log_text = "##\r\n## Echantillonnage du ".date("d/m/Y à H:i:s")."\r\n##\r\n";
-
 $aNomFamille = array("ADAM" ,"ALBERT" ,"ALEXANDRE" ,"ANDRE" ,"ANTOINE" ,"ARNAUD" ,"AUBERT" ,"AUBRY" ,"BAILLY" ,"BARBE" ,"BARBIER" ,"BARON" ,"BARRE" ,"BARTHELEMY" ,"BENARD" ,"BENOIT" ,"BERGER" ,"BERNARD" ,"BERTIN" ,"BERTRAND" ,"BESNARD" ,"BESSON" ,"BIGOT" ,"BLANC" ,"BLANCHARD" ,"BLANCHET" ,"BONNET" ,"BOUCHER" ,"BOUCHET" ,"BOULANGER" ,"BOURGEOIS" ,"BOUSQUET" ,"BOUVIER" ,"BOYER" ,"BRETON" ,"BRIAND" ,"BRUN" ,"BRUNEL" ,"BRUNET" ,"BUISSON" ,"CAMUS" ,"CARLIER" ,"CARON" ,"CARPENTIER" ,"CARRE" ,"CHARLES" ,"CHARPENTIER" ,"CHARRIER" ,"CHAUVIN" ,"CHEVALIER" ,"CHEVALLIER" ,"CLEMENT" ,"COLAS" ,"COLIN" ,"COLLET" ,"COLLIN" ,"CORDIER" ,"COSTE" ,"COULON" ,"COURTOIS" ,"COUSIN" ,"DA SILVA" ,"DANIEL" ,"DAVID" ,"DELATTRE" ,"DELAUNAY" ,"DELMAS" ,"DENIS" ,"DESCHAMPS" ,"DEVAUX" ,"DIDIER" ,"DUBOIS" ,"DUFOUR" ,"DUMAS" ,"DUMONT" ,"DUPONT" ,"DUPUIS" ,"DUPUY" ,"DURAND" ,"DUVAL" ,"ETIENNE" ,"FABRE" ,"FAURE" ,"FERNANDEZ" ,"FERRAND" ,"FLEURY" ,"FONTAINE" ,"FOURNIER" ,"FRANCOIS" ,"GAILLARD" ,"GARCIA" ,"GARNIER" ,"GAUDIN" ,"GAUTHIER" ,"GAUTIER" ,"GAY" ,"GEORGES" ,"GERARD" ,"GERMAIN" ,"GILBERT" ,"GILLET" ,"GIRARD" ,"GIRAUD" ,"GONZALEZ" ,"GREGOIRE" ,"GRONDIN" ,"GROS" ,"GUERIN" ,"GUICHARD" ,"GUILLAUME" ,"GUILLET" ,"GUILLON" ,"GUILLOT" ,"GUILLOU" ,"GUYOT" ,"HAMON" ,"HARDY" ,"HEBERT" ,"HENRY" ,"HERVE" ,"HOARAU" ,"HUBERT" ,"HUET" ,"HUMBERT" ,"IMBERT" ,"JACOB" ,"JACQUES" ,"JACQUET" ,"JEAN" ,"JOLY" ,"JOUBERT" ,"JULIEN" ,"KLEIN" ,"LACROIX" ,"LAMBERT" ,"LAMY" ,"LANGLOIS" ,"LAPORTE" ,"LAUNAY" ,"LAURENT" ,"LE GALL" ,"LE GOFF" ,"LE ROUX" ,"LEBLANC" ,"LEBON" ,"LEBRETON" ,"LEBRUN" ,"LECLERC" ,"LECLERCQ" ,"LECOMTE" ,"LEDUC" ,"LEFEBVRE" ,"LEFEVRE" ,"LEGER" ,"LEGRAND" ,"LEGROS" ,"LEJEUNE" ,"LELIEVRE" ,"LEMAIRE" ,"LEMAITRE" ,"LEMOINE" ,"LEROUX" ,"LEROY" ,"LESAGE" ,"LEVEQUE" ,"LOPEZ" ,"LOUIS" ,"LUCAS" ,"MAHE" ,"MAILLARD" ,"MAILLOT" ,"MALLET" ,"MARCHAL" ,"MARCHAND" ,"MARECHAL" ,"MARIE" ,"MARTEL" ,"MARTIN" ,"MARTINEZ" ,"MARTY" ,"MASSE" ,"MASSON" ,"MATHIEU" ,"MAURY" ,"MENARD" ,"MERCIER" ,"MEUNIER" ,"MEYER" ,"MICHAUD" ,"MICHEL" ,"MILLET" ,"MONNIER" ,"MOREAU" ,"MOREL" ,"MORIN" ,"MORVAN" ,"MOULIN" ,"MULLER" ,"NICOLAS" ,"NOEL" ,"OLIVIER" ,"OLLIVIER" ,"PARIS" ,"PASCAL" ,"PASQUIER" ,"PAUL" ,"PAYET" ,"PELLETIER" ,"PEREZ" ,"PERRET" ,"PERRIER" ,"PERRIN" ,"PERROT" ,"PETIT" ,"PHILIPPE" ,"PICARD" ,"PICHON" ,"PIERRE" ,"PINEAU" ,"POIRIER" ,"PONS" ,"POULAIN" ,"PREVOST" ,"RAYMOND" ,"RAYNAUD" ,"REGNIER" ,"REMY" ,"RENARD" ,"RENAUD" ,"RENAULT" ,"REY" ,"REYNAUD" ,"RICHARD" ,"RIVIERE" ,"ROBERT" ,"ROBIN" ,"ROCHE" ,"RODRIGUEZ" ,"ROGER" ,"ROLLAND" ,"ROUSSEAU" ,"ROUSSEL" ,"ROUX" ,"ROY" ,"ROYER" ,"SANCHEZ" ,"SAUVAGE" ,"SCHMITT" ,"SCHNEIDER" ,"SIMON" ,"TANGUY" ,"TESSIER" ,"THOMAS" ,"VALLEE" ,"VASSEUR" ,"VERDIER" ,"VIDAL" ,"VINCENT" ,"VOISIN" ,"WEBER" );
 $aPrenom_h   = array("Enzo" ,"Hugo" ,"Lucas" ,"Théo" ,"Mathéo" ,"Thomas" ,"Baptiste" ,"Léo" ,"Clément" ,"Louis" ,"Nathan" ,"Alexandre" ,"Quentin" ,"Romain" ,"Tom" ,"Mattéo" ,"Maxime" ,"Antoine" ,"Benjamin" ,"Mathis" ,"Valentin" ,"Robin" ,"Nicolas" ,"Paul" ,"Arthur" ,"Martin" ,"Éthan" ,"Julien" ,"Noah" ,"Victor" ,"Gabriel" );
 $aPrenom_f   = array("Emma" ,"Clara" ,"Manon" ,"Anais" ,"Léa" ,"Chloé" ,"Lucie" ,"Camille" ,"Marie" ,"Jade" ,"Eva" ,"Louise" ,"Mathilde" ,"Julie" ,"Océane" ,"Laura" ,"Ilona" ,"Charlotte" ,"Emilie" ,"Sarah" ,"Clémence" ,"Lilou" ,"Justine" ,"Elisa" ,"Pauline" ,"Lisa" ,"Lena" ,"Lou" ,"Louane" ,"Maélis" ,"Perrine" );
@@ -127,7 +128,7 @@ if(!$_create_group && $groups_selected){
   $tabFields = array("text"           => $etablissement,
                       "raison_sociale" => "[DEMO]");
   $group->setManyFields($tabFields);
-  $group->store($log_text);
+  $group->store();
 }
 
 // Cabinets (fonctions) et Praticiens
@@ -155,9 +156,9 @@ foreach($aCabinet as $title => $value){
                           "group_id" => $group->object->_id,
                           "type"     => "cabinet");
       $fonctions->setManyFields($tabFields);
-      $fonctions->store($log_text);
+      $fonctions->store();
       $fonctions->setField("text", $title." ".$fonctions->object->_id);
-      $fonctions->store($log_text, false);
+      $fonctions->store(false);
       if($_nb_prat){
         for($iPrat=1; $iPrat<=$_nb_prat; $iPrat++){
           $praticiens->renew();
@@ -171,7 +172,7 @@ foreach($aCabinet as $title => $value){
           $nom         = $praticiens->object->_user_last_name;
           $praticiens->setField("_user_username", str_replace(" ","",strtolower(substr($prenom,0,1).$nom)));
           $praticiens->setField("_user_password", strtolower($prenom));
-          $praticiens->store($log_text);
+          $praticiens->store();
           
           $user = new CUser;
           $user->load($praticiens->object->_id);
@@ -201,9 +202,9 @@ if($_nb_salles){
                         "nom"      => "Salle",
                         "stats"    => 0);
     $salles->setManyFields($tabFields);
-    $salles->store($log_text);
+    $salles->store();
     $salles->setField("nom", "Salle ".$salles->object->_id);
-    $salles->store($log_text, false);
+    $salles->store(false);
   }
 }
 
@@ -222,23 +223,23 @@ if($_nb_services){
                         "nom"         => "Service",
                         "description" => "[DEMO]");
     $services->setManyFields($tabFields);
-    if(!$services->store($log_text)){
+    if(!$services->store()){
       $services->setField("nom", "Service ".$services->object->_id);
-      $services->store($log_text, false);
+      $services->store(false);
       for($iChambre=1; $iChambre<=$_nb_chambre; $iChambre++){
         $chambres->renew();
         $tabFields = array("service_id"       => $services->object->_id,
                             "nom"              => "Chambre ".$services->object->_id.str_pad($iChambre, 1, "0", STR_PAD_LEFT),
                             "caracteristiques" => "[DEMO]");
         $chambres->setManyFields($tabFields);
-        if(!$chambres->store($log_text)){
+        if(!$chambres->store()){
           $nb_lit_max = rand(1,$_nb_lit);
           for($iLit=1; $iLit<=$nb_lit_max; $iLit++){
             $lits->renew();
             $tabFields = array("chambre_id"       => $chambres->object->_id,
                                 "nom"              => "Lit $iLit");
             $lits->setManyFields($tabFields);
-            $lits->store($log_text);
+            $lits->store();
           }
         }
       }
@@ -268,7 +269,7 @@ for($i=1; $i<=$_nb_pat; $i++){
                       "_annee" => rand(1900,$annee_max),
                       "rques"  => "[DEMO]");
   $patients->setManyFields($tabFields);
-  $patients->store($log_text);
+  $patients->store();
 }
 
 
@@ -327,7 +328,7 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
                           "chir_id"   => $prat->_id);
       $plages->setManyFields($tabFields);
       
-      if(!$plages->store($log_text)){
+      if(!$plages->store()){
         $plageConsult[$prat->_id][] = $plages->object;
       } 
     }
@@ -359,14 +360,14 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
                           "plageconsult_id" => $plage["plage_id"],
                           "motif"           => $alistMotif);
       $consults->setManyFields($tabFields);
-      if(!$consults->store($log_text)){
+      if(!$consults->store()){
         $chir_id = $plage["chir_id"];
         $praticiens->listObjects[$chir_id]->updateFormFields();
         if($praticiens->listObjects[$chir_id]->isFromType(array("Anesthésiste"))) {
           // Test Anesthésiste
           $consultsAnesth = new CEchantillonnage("CConsultAnesth");
           $consultsAnesth->setField("consultation_id", $consults->object->_id);
-          $consultsAnesth->store($log_text);
+          $consultsAnesth->store();
         }
       }
     }
@@ -396,7 +397,7 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
                           "_min_inter_op" => 15,
                           "_year"         => date("Y"));
       $plagesOp->setManyFields($tabFields);
-      if(!$plagesOp->store($log_text)){
+      if(!$plagesOp->store()){
         
         for($i=1; $i<=$_nb_interv; $i++){
           // Création d'un Séjour
@@ -420,7 +421,7 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
             $sejours->setField("_date_sortie_prevue", mbDate("+".$nbjour." day", $date));
           }
           
-          if(!$sejours->store($log_text)){
+          if(!$sejours->store()){
             // Création d'une invervention
             $operations->renew();
             $tabFields = array("sejour_id"      => $sejours->object->_id,
@@ -436,7 +437,7 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
                                 "_min_op"        => 0,
                                 "_hour_op"       => 1);
             $operations->setManyFields($tabFields);
-            $operations->store($log_text);
+            $operations->store();
           }  
         }
       } 
@@ -446,10 +447,7 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
 
 
 // A Faire : Creation de modeles
-
-$logFile = fopen($log_file, "a+");
-fwrite($logFile, $log_text."\r\n");
-fclose($logFile);
+file_put_contents($log_file, "\r\n", FILE_APPEND);
 
 $AppUI->setMsg("Echantillonnage effectué",UI_MSG_OK);
 ?>
