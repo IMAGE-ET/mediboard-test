@@ -296,6 +296,7 @@ if(!$suppressHeaders) {
   $performance["memoire"] = mbConvertDecaBinary(memory_get_usage());
   $performance["objets"]  = $mbObjectCount;
   $performance["cache"]   = $mbCacheObjectCount;
+  $performance["size"]    = mbConvertDecaBinary(ob_get_length());
   
   //Creation du Template
   $smartyFooter = new CSmartyDP(1);

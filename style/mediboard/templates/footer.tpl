@@ -15,6 +15,8 @@
   {{$currdbChrono->nbSteps}} requêtes SQL.
   {{/foreach}}
   <br />
+  Poids de la page : {{$performance.size}}
+  <br />
 </div>
 {{/if}}
 
