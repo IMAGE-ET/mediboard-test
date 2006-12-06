@@ -9,6 +9,15 @@ BASH_PATH=$(dirname $BASH_SOURCE)
 
 announce_script "Mediboard directories groups and mods"
 
+if [ "$#" -lt 1 ]
+then 
+  echo "Usage: $0 <apache_group>
+  echo "  <apache_group> is the name of the primary group for Apache user
+  exit 1
+fi
+   
+APACHE_GROUP=$1
+
 # Check Apache group paramater
 APACHE_GROUP=$1
   if [ -z "$APACHE_GROUP" ]
