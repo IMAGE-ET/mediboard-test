@@ -11,7 +11,7 @@ announce_script "Mediboard directories groups and mods"
 
 if [ "$#" -lt 1 ]
 then 
-  echo "Usage: $0 <apache_group>
+  echo "Usage: $0 <apache_group>"
   echo "  <apache_group> is the name of the primary group for Apache user"
   exit 1
 fi
