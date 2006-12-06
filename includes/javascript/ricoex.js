@@ -59,6 +59,6 @@ Class.extend(Rico.Accordion, {
    
    changeTabAndFocus: function(iIntexTab,oField ){
      this.showTabByIndex(iIntexTab);
-     oField.focus();
+     if(oField){oField.focus();}
    }
 });
