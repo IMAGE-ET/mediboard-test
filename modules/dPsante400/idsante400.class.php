@@ -78,7 +78,7 @@
     $this->loadRefs();
     
     // Object has not been found : never created or deleted since last binding
-    if (!$this->_ref_object->_id && $mbObjectDefault) {
+    if (!@$this->_ref_object->_id && $mbObjectDefault) {
       $mbObject->extendsWith($mbObjectDefault);
     }
     
