@@ -14,7 +14,7 @@ if [ "$#" -lt 1 ]
 then 
   echo "Usage: $0 <apache_group> <sub_dir>"
   echo "  <apache_group> is the name of the primary group for Apache user"
-  echo "  <apache_group> [modules|style] (optional) is the sub-directory you want to apply changes on"
+  echo "  <sub_dir> [modules|style] (optional) is the sub-directory you want to apply changes on"
   exit 1
 fi
    
