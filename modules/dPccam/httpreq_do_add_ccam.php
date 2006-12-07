@@ -10,6 +10,7 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 set_time_limit(360);
+ini_set("memory_limit", "128M");
 
 $filepath = "modules/dPccam/base/ccamV2.tar.gz";
 $filedir = "tmp/ccam";
