@@ -16,7 +16,7 @@ if (!$canRead) {
 $_firstconsult_time  = null;
 $_lastconsult_time   = null;
 
-// L'utilisateur est-il praticien?
+// L'utilisateur est-il praticien ?
 $chir = null;
 $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);
@@ -35,28 +35,33 @@ $plageconsult_id = mbGetValueFromGetOrSession("plageconsult_id");
 $plageSel = new CPlageconsult();
 $plageSel->load($plageconsult_id);
 $plageSel->loadRefs();
-foreach($plageSel->_ref_consultations as $key => $value) {
-  if ($vue && $plageSel->_ref_consultations[$key]->paye)
-    unset($plageSel->_ref_consultations[$key]);
-  else {
-    $plageSel->_ref_consultations[$key]->loadRefPatient();
-    $plageSel->_ref_consultations[$key]->getNumDocsAndFiles();    
-  }
+
+if ($plageSel->_affected) {
+  $firstconsult = reset($plageSel->_ref_consultations);
+  $_firstconsult_time = substr($firstconsult->heure, 0, 5);
+
+  
+  $lastconsult = end($plageSel->_ref_consultations);
+  $_lastconsult_time  = substr($lastconsult->heure, 0, 5);
 }
+
+// Détails sur les consultation affichées
+foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
+  if ($vue && $consultation->paye) {
+    unset($plageSel->_ref_consultations[$keyConsult]);
+    continue;
+  }
+
+  $consultation->loadRefPatient();
+  $consultation->getNumDocsAndFiles();    
+}
+
 if ($plageSel->chir_id != $chirSel) {
   $plageconsult_id = null;
   mbSetValueToSession("plageconsult_id", $plageconsult_id);
   $plageSel = new CPlageconsult();
 }
-if($plageSel->_affected){
-  reset($plageSel->_ref_consultations);
-  $firstconsult = current($plageSel->_ref_consultations)->heure;
-  $_firstconsult_time = substr($firstconsult, 0, 5);
 
-  end($plageSel->_ref_consultations);
-  $lastconsult = current($plageSel->_ref_consultations)->heure;
-  $_lastconsult_time  = substr($lastconsult, 0, 5);
-}
 // Liste des chirurgiens
 $mediusers = new CMediusers();
 $listChirs = $mediusers->loadPraticiens(PERM_EDIT);
