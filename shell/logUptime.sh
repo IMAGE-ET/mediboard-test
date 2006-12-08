@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $BASH_SOURCE)
+BASH_PATH=$(dirname $0)
 . $BASH_PATH/utils.sh
 
 ########

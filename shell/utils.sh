@@ -35,5 +35,4 @@ announce_script()
 
   echo 
   echo "--- $SCRIPTNAME ($(date)) ---"
-  echo
 }
