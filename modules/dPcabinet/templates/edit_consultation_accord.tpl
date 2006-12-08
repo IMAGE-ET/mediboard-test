@@ -32,7 +32,7 @@ function updateList() {
 
   url.periodicalUpdate('listConsult', { frequency: 90 });
 }
-
+var oCimField = null;
 function pageMain() {
   updateList();
   
@@ -44,6 +44,11 @@ function pageMain() {
   regFieldCalendar("editTrmtFrm", "debut");
   regFieldCalendar("editTrmtFrm", "fin");
   {{/if}}
+
+  oCimField = new TokenField(document.editDiagFrm.listCim10, { 
+    confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
+    onChange : updateTokenCim10
+    } );  
 }
 </script>
 

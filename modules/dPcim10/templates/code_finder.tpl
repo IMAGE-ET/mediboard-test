@@ -1,6 +1,6 @@
 <script type="text/javascript">
 function setClose(code) {
-  window.opener.putCim10(code);
+  window.opener.oCimField.add(code);
   //window.close();
 }
 

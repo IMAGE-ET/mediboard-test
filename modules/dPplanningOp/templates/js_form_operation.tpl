@@ -1,44 +1,9 @@
 <!-- $Id: $ -->
 
 <script type="text/javascript">
-  
-function putCCAM(code) {
-  if(!code) {
-    refreshListCCAM();
-    return false;
-  }
-  aSpec = new Array();
-  aSpec[0] = "code";
-  aSpec[1] = "ccam";
-  aSpec[2] = "notNull";
-  oCode = new Object();
-  oCode.value = code
-  if(sAlert = checkElement(oCode, aSpec)) {
-    refreshListCCAM();
-    alert(sAlert);
-    return false;
-  }
-  else {
-    var oForm = document.editOp;
-    aCcam = oForm.codes_ccam.value.split("|");
-    // Si la chaine est vide, il crée un tableau à un élément vide donc :
-    aCcam.removeByValue("");
-    aCcam.push(code);
-    oForm.codes_ccam.value = aCcam.join("|");
-    oForm._codeCCAM.value = "";
-    refreshListCCAM();
-    modifOp();
-    return true;
-  }
-}
 
-function delCCAM(code) {
-  var oForm = document.editOp;
-  var aCcam = oForm.codes_ccam.value.split("|");
-  // Si la chaine est vide, il crée un tableau à un élément vide donc :
-  aCcam.removeByValue("");
-  aCcam.removeByValue(code, true);
-  oForm.codes_ccam.value = aCcam.join("|");
+var oCcamField = null;
+function updateTokenCcam(){
   refreshListCCAM();
   modifOp();
 }
@@ -56,7 +21,7 @@ function refreshListCCAM() {
   var iCode = 0;
   while (sCode = aCcam[iCode++]) {
     var sCodeNode = sCode;
-    sCodeNode += "<button class='cancel notext' type='button' onclick='delCCAM(\"" + sCode + "\")'>";
+    sCodeNode += "<button class='cancel notext' type='button' onclick='oCcamField.remove(\"" + sCode + "\")'>";
     sCodeNode += "<\/button>";
     aCodeNodes.push(sCodeNode);
   }
@@ -107,11 +72,11 @@ function checkCCAM() {
   var oForm = document.editOp;
   var sCcam = oForm._codeCCAM.value;
   if(sCcam != "") {
-    if(!putCCAM(sCcam)) {
+    if(!oCcamField.add(sCcam,true)) {
       return false;
     }
   }
-  delCCAM("XXXXXX");
+  oCcamField.remove("XXXXXX");
   var sCodesCcam = oForm.codes_ccam.value;
   var sLibelle = oForm.libelle.value;
   if(sCodesCcam == "" && sLibelle == "") {
@@ -292,6 +257,16 @@ function incFormOperationMain() {
   if({{$modurgence && !$op->operation_id}}) {
     updateEntreePrevue();
   }
+  
+  aSpecCcam = new Array();
+  aSpecCcam[0] = "code";
+  aSpecCcam[1] = "ccam";
+  aSpecCcam[2] = "notNull";
+  
+  oCcamField = new TokenField(document.editOp.codes_ccam, { 
+    onChange : updateTokenCcam,
+    aSpec : aSpecCcam
+    } );
 }
 
 </script>

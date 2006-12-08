@@ -2,39 +2,7 @@
 
 <script type="text/javascript">
 
-function putCCAM(code) {
-  aSpec = new Array();
-  aSpec[0] = "code";
-  aSpec[1] = "ccam";
-  aSpec[2] = "notNull";
-  oCode = new Object();
-  oCode.value = code
-  if(sAlert = checkElement(oCode, aSpec)) {
-    alert(sAlert);
-    return false;
-  }
-  else {
-    var oForm = document.editFrm;
-    aCcam = oForm.codes_ccam.value.split("|");
-    // Si la chaine est vide, il crée un tableau à un élément vide donc :
-    aCcam.removeByValue("");
-    aCcam.push(code);
-    oForm.codes_ccam.value = aCcam.join("|");
-    oForm._codeCCAM.value = "";
-    refreshListCCAM();
-    return true;
-  }
-}
-
-function delCCAM(code) {
-  var oForm = document.editFrm;
-  var aCcam = oForm.codes_ccam.value.split("|");
-  // Si la chaine est vide, il crée un tableau à un élément vide donc :
-  aCcam.removeByValue("");
-  aCcam.removeByValue(code, true);
-  oForm.codes_ccam.value = aCcam.join("|");
-  refreshListCCAM();
-}
+var oCcamField = null;
 
 function refreshListCCAM() {
   oCcamNode = document.getElementById("listCodesCcam");
@@ -47,7 +15,7 @@ function refreshListCCAM() {
   var iCode = 0;
   while (sCode = aCcam[iCode++]) {
     var sCodeNode = sCode;
-    sCodeNode += "<button class='cancel notext' type='button' onclick='delCCAM(\"" + sCode + "\")'>";
+    sCodeNode += "<button class='cancel notext' type='button' onclick='oCcamField.remove(\"" + sCode + "\")'>";
     sCodeNode += "<\/button>";
     aCodeNodes.push(sCodeNode);
   }
@@ -76,11 +44,11 @@ function checkCCAM() {
   var oForm = document.editFrm;
   var sCcam = oForm._codeCCAM.value;
   if(sCcam != "") {
-    if(!putCCAM(sCcam)) {
+    if(!oCcamField.add(sCcam,true)) {
       return false;
     }
   }
-  delCCAM("XXXXXX");
+  oCcamField.remove("XXXXXX");
   var sCodesCcam = oForm.codes_ccam.value;
   var sLibelle = oForm.libelle.value;
   if(sCodesCcam == "" && sLibelle == "") {
@@ -158,6 +126,16 @@ function setCode( key, type ) {
 
 function pageMain() {
   refreshListCCAM();
+
+  aSpecCcam = new Array();
+  aSpecCcam[0] = "code";
+  aSpecCcam[1] = "ccam";
+  aSpecCcam[2] = "notNull";
+  
+  oCcamField = new TokenField(document.editFrm.codes_ccam, { 
+    onChange : refreshListCCAM,
+    aSpec : aSpecCcam
+    } );
 }
 
 </script>
@@ -240,7 +218,7 @@ function pageMain() {
           </th>
           <td>
             <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" />
-            <button class="tick notext" type="button" onclick="putCCAM(this.form._codeCCAM.value)"></button>
+            <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)"></button>
             
           </td>
           <td class="button"><button class="search" type="button" onclick="popCode('ccam')">Choisir un code</button></td>

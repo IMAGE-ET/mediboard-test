@@ -125,7 +125,7 @@ function reloadConsultAnesth() {
 
 
 
-
+var oCimField = null;
 
 function pageMain() {
   updateList();  
@@ -140,6 +140,11 @@ function pageMain() {
   {{/if}}
   
   initAccord(true);
+  
+  oCimField = new TokenField(document.editDiagFrm.listCim10, { 
+    confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
+    onChange : updateTokenCim10
+    } );
 }
 
 </script>

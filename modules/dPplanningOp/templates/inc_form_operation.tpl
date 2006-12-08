@@ -58,8 +58,8 @@
       <label for="_codeCCAM" title="Codes CCAM d'intervention">Ajout de codes CCAM</label>
     </th>
     <td>
-      <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" onblur="putCCAM(this.form._codeCCAM.value)" />
-      <button class="tick notext" type="button" onclick="putCCAM(this.form._codeCCAM.value)"></button>
+      <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" onblur="oCcamField.add(this.form._codeCCAM.value,true)" />
+      <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)"></button>
     </td>
     <td class="button">
       <button type="button" class="search" onclick="popCode('ccam')">Choisir un code</button>

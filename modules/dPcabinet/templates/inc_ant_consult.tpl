@@ -8,25 +8,8 @@ function selectCim10(code) {
   cim10url.popup(800, 500, "CIM10");
 }
 
-function putCim10(code) {
+function updateTokenCim10(){
   var oForm = document.editDiagFrm;
-  aCim10 = oForm.listCim10.value.split("|");
-  // Si la chaine est vide, il crée un tableau à un élément vide donc :
-  aCim10.removeByValue("");
-  aCim10.push(code);
-  aCim10.removeDuplicates();
-  oForm.listCim10.value = aCim10.join("|");
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
-}
-
-function delCim10(code) {
-  if(!(confirm("Voulez-vous réellement supprimer ce diagnostic ?"))){
-    return false;
-  }
-  var oForm = document.editDiagFrm;
-  var aCim10 = oForm.listCim10.value.split("|");
-  aCim10.removeByValue(code);
-  oForm.listCim10.value = aCim10.join("|");
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
 }
 
@@ -278,7 +261,7 @@ function incAntecedantsMain() {
           {{foreach from=$curr_cat item=curr_code}}
           <tr>
             <td class="text">
-              <button class="tick notext" type="button" onclick="putCim10('{{$curr_code->code}}')"></button>
+              <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}')"></button>
               <button class="down notext" type="button" onclick="selectCim10('{{$curr_code->code}}')"></button>
               {{$curr_code->code}}: {{$curr_code->libelle}}
             </td>

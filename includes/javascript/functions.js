@@ -305,6 +305,68 @@ function regRedirectFlatCal(sInitDate, sRedirectBase, sContainerId, bTime) {
   );
 }
 
+
+function TokenField(oElement, oOptions){
+  this.oElement = oElement;
+  
+  var oDefaultOptions = {
+    onChange: function(){},
+    confirm : null,
+    aSpec   : null
+  };
+  Object.extend(oDefaultOptions, oOptions);
+  this.oOptions = oDefaultOptions;
+}
+
+TokenField.prototype.onComplete = function(){
+  if (this.oOptions.onChange != null)
+    this.oOptions.onChange();
+  return true;
+}
+
+TokenField.prototype.add = function(sValue,multiple) {
+  if(!sValue){
+    return false;
+  }
+  if(this.oOptions.aSpec){
+    oCode = new Object();
+    oCode.value = sValue;
+    if(sAlert = checkElement(oCode, this.oOptions.aSpec)) {
+      alert(sAlert);
+      return false;
+    }
+  }
+  var aToken = this.oElement.value.split("|");
+  aToken.removeByValue("");
+  aToken.push(sValue);
+  if(!multiple){
+    aToken.removeDuplicates();
+  }
+  this.oElement.value = aToken.join("|");
+  this.onComplete();
+}
+
+TokenField.prototype.remove = function(sValue) {
+  if(this.oOptions.confirm && !confirm(this.oOptions.confirm)){
+    return false;
+  }
+  var aToken = this.oElement.value.split("|");
+  aToken.removeByValue("");
+  aToken.removeByValue(sValue, true);
+  this.oElement.value = aToken.join("|");
+  this.onComplete();
+}
+
+
+
+
+
+
+
+
+
+
+
 function view_log(classe, id) {
   url = new Url();
   url.setModuleAction("system", "view_history");

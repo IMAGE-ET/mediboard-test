@@ -59,7 +59,7 @@
       <ul>
         {{foreach from=$patient->_codes_cim10 item=curr_code}}
         <li>
-          <button class="trash notext" type="button" onclick="delCim10('{{$curr_code->code}}')">
+          <button class="trash notext" type="button" onclick="oCimField.remove('{{$curr_code->code}}')">
           </button>
           {{$curr_code->code}}: {{$curr_code->libelle}}
         </li>

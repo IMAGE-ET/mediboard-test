@@ -1,5 +1,7 @@
 <script type="text/javascript">
 
+var oEvenementField = null;
+
 function choixSuiteEven(){
   var oForm = document.FrmEI;
   if(oForm.suite_even.value=="autre"){
@@ -27,34 +29,22 @@ function checkCode(oElement){
 }
 function delCode(iCode){
   var oForm = document.FrmEI;
-  var aEvenements = oForm.evenements.value.split("|");
-  // Si la chaine est vide, il crée un tableau à un élément vide donc :
-  aEvenements.removeByValue("");
-  aEvenements.removeByValue(iCode, true);
-  oForm.evenements.value = aEvenements.join("|");
+  oEvenementField.remove(iCode);
   
   var oElement = eval("oForm._ItemsSel_cat_" + oForm._elemOpen.value);
-  var aEvenements = oElement.value.split("|");
-  aEvenements.removeByValue("");
-  aEvenements.removeByValue(iCode, true);
-  oElement.value = aEvenements.join("|");
+  oItemSelField = new TokenField(oElement);
+  oItemSelField.remove(iCode);
   
   refreshListChoix();
 }
 
 function putCode(iCode){
   var oForm = document.FrmEI;
-  var aEvenements = oForm.evenements.value.split("|");
-  // Si la chaine est vide, il crée un tableau à un élément vide donc :
-  aEvenements.removeByValue("");
-  aEvenements.push(iCode);
-  oForm.evenements.value = aEvenements.join("|");
+  oEvenementField.add(iCode);
   
   var oElement = eval("oForm._ItemsSel_cat_" + oForm._elemOpen.value);
-  var aEvenements = oElement.value.split("|");
-  aEvenements.removeByValue("");
-  aEvenements.push(iCode);
-  oElement.value = aEvenements.join("|");
+  oItemSelField = new TokenField(oElement);
+  oItemSelField.add(iCode);
   
   refreshListChoix();
 }
@@ -82,6 +72,8 @@ function refreshListChoix(){
 function pageMain() {
   regFieldCalendar("FrmEI", "_incident_date");
   refreshListChoix();
+  
+  oEvenementField = new TokenField(document.FrmEI.evenements);
 }
 </script>
 <table class="main">
