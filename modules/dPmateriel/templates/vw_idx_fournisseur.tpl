@@ -53,7 +53,7 @@ function pageMain() {
       <table class="form">
         <tr>
           {{if $fournisseur->fournisseur_id}}
-          <th class="title" colspan="2" style="color:#f00;">Modification du fournisseur {{$fournisseur->_view}}</th>
+          <th class="title modify" colspan="2">Modification du fournisseur {{$fournisseur->_view}}</th>
           {{else}}
           <th class="title" colspan="2">Création d'un fournisseur</th>
           {{/if}}

@@ -108,7 +108,7 @@ function popPlanning(debut) {
       <table class="form">
         <tr>
           {{if $plagesel->plageop_id}}
-          <th class="category" colspan="6" style="color: #f00;">
+          <th class="category modify" colspan="6">
             <a style="float:right;" href="#" onclick="view_log('CPlageOp',{{$plagesel->plageop_id}})">
               <img src="images/history.gif" alt="historique" />
             </a>

@@ -137,7 +137,7 @@ function pageMain() {
         {{if !$plageSel->plageconsult_id}}
         <th class="category" colspan="4">Créer une plage</th>
         {{else}}
-        <th class="category" colspan="4" style="color: #f00">
+        <th class="category modify" colspan="4">
           <a style="float:right;" href="#" onclick="view_log('CPlageconsult',{{$plageSel->plageconsult_id}})">
             <img src="images/history.gif" alt="historique" />
           </a>
@@ -254,7 +254,7 @@ function pageMain() {
 
 	    <table class="form">
 	      <tr>
-	        <th class="category" colspan="2"  style="color: #f00">Supprimer cette plage</th>
+	        <th class="category modify" colspan="2">Supprimer cette plage</th>
 	      </tr>
 	      <tr>
 	        <th>Supprimer cette plage pendant</th>

@@ -50,7 +50,7 @@ function pageMain() {
 
   <tr>
     {{if $sejour->sejour_id}}
-    <th colspan="2" class="title" style="color: #f00;">
+    <th colspan="2" class="title modify">
       {{if $canReadSante400}}
       <a style="float:right;" href="#" onclick="view_idsante400('CSejour',{{$sejour->sejour_id}})">
         <img src="images/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>

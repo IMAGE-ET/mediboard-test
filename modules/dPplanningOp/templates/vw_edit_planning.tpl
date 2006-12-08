@@ -188,19 +188,19 @@ function pageMain() {
   <tr>
     {{if $op->operation_id}}
     {{if $modurgence}}
-    <th colspan="2" class="title" style="color: #f00; background-color: #00a">
+    <th colspan="2" class="title urgence modify">
       <button style="float:left;" class="search" type="button" onclick="popProtocole()">Choisir un protocole</button>
       Modification de l'urgence de {{$patient->_view}} par le Dr. {{$chir->_view}}
     </th>
     {{else}}
-    <th colspan="2" class="title" style="color: #f00;">
+    <th colspan="2" class="title modify">
       <button class="search" style="float:left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
       Modification de l'intervention de {{$patient->_view}} par le Dr. {{$chir->_view}}
     </th>
     {{/if}}
     {{else}}
     {{if $modurgence}}
-    <th colspan="2" class="title" style="color: #fff; background-color: #00a"> 
+    <th colspan="2" class="title urgence"> 
       <button class="search" style="float: left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
       Création d'une urgence
     </th>

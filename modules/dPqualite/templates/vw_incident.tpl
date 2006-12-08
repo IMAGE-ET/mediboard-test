@@ -116,7 +116,7 @@ function pageMain() {
         
         <tr>
           {{if $fiche->fiche_ei_id}}
-          <th colspan="4" class="title" style="color:#f00;">
+          <th colspan="4" class="title modify">
           <input type="hidden" name="_validation" value="1" />
           {{else}}
           <th colspan="4" class="title">

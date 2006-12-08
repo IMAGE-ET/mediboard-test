@@ -34,7 +34,7 @@
       <table class="form">
         <tr>
           {{if $type_anesth->type_anesth_id}}
-          <th class="title" colspan="2" style="color:#f00;">Modification du type d'anesthésie {{$type_anesth->name}}</th>
+          <th class="title modify" colspan="2">Modification du type d'anesthésie {{$type_anesth->name}}</th>
           {{else}}
           <th class="title" colspan="2">Création d'un type d'anesthésie</th>
           {{/if}}

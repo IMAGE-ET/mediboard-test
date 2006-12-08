@@ -44,6 +44,21 @@ th {
 td {
 }
 
+th.title.modify {
+  color: #f00;
+}
+th.title.urgence {
+  background-color: #00a;
+  color: #fff;
+}
+th.title.urgence.modify {
+  background-color: #00a;
+  color: #f00;
+}
+th.category.modify {
+  color: #f00;
+}
+
 img {
   border: none;
 }

@@ -10,7 +10,7 @@
 <table class="form">
   <tr>
     {{if $item->ei_item_id}}
-    <th colspan="2" class="category" style="color:#f00;">
+    <th colspan="2" class="category modify">
       {{tr}}msg-CEiItem-title-modify{{/tr}} : {{$item->_view}}
     {{else}}
     <th colspan="2" class="category">

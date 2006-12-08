@@ -8,7 +8,20 @@ body {
   background: #fff;
   margin: 0px;
 }
-
+th.title.modify {
+  color: #fc0;
+}
+th.title.urgence {
+  background-color: #08F;
+  color: #fff;
+}
+th.title.urgence.modify {
+  background-color: #08F;
+  color: #fc0;
+}
+th.category.modify {
+  color: #fc0;
+}
 /* Login */
 
 #login {

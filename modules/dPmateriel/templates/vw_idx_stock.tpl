@@ -42,7 +42,7 @@
       <table class="form">
         <tr>
           {{if $stock->stock_id}}
-          <th class="title" colspan="2" style="color:#f00;">Modification du stock {{$stock->_view}}</th>
+          <th class="title modify" colspan="2">Modification du stock {{$stock->_view}}</th>
           {{else}}
           <th class="title" colspan="2">Création d'un stock</th>
           {{/if}}

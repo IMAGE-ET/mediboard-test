@@ -38,7 +38,7 @@
       <table class="form">
         <tr>
           {{if $reference->reference_id}}
-          <th class="title" colspan="2" style="color:#f00;">Modification de la référence {{$reference->_view}}</th>
+          <th class="title modify" colspan="2">Modification de la référence {{$reference->_view}}</th>
           {{else}}
           <th class="title" colspan="2">Création d'une référence</th>
           {{/if}}

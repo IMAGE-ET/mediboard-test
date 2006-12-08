@@ -28,7 +28,7 @@
       <table class="form">
         <tr>
           {{if $specialite->discipline_id}}
-          <th class="title" colspan="2" style="color:#f00;">{{$specialite->_view}}</th>
+          <th class="title modify" colspan="2">{{$specialite->_view}}</th>
           {{else}}
           <th class="title" colspan="2">Création d'une spécialité Médicale</th>
           {{/if}}

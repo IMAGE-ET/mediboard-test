@@ -33,7 +33,7 @@
       <table class="form">
         <tr>
           {{if $category->category_id}}
-          <th class="title" colspan="2" style="color:#f00;">Modification de la catégorie {{$category->_view}}</th>
+          <th class="title modify" colspan="2">Modification de la catégorie {{$category->_view}}</th>
           {{else}}
           <th class="title" colspan="2">Création d'une fiche</th>
           {{/if}}

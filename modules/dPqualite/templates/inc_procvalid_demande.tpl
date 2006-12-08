@@ -1,7 +1,7 @@
 {{assign var="info_proc" value=$docGed->_lastentry->date|date_format:"%d %b %Y à %Hh%M"}}
 <table class="form">
   <tr>          
-    <th class="title" colspan="2" style="color: #f00;">              
+    <th class="title modify" colspan="2">              
       <input type="hidden" name="suivi[etat]" value="{{$smarty.const.CDOC_VALID}}" />
       {{tr}}_CDocGed_CDOC_DEMANDE{{/tr}}
     </th>

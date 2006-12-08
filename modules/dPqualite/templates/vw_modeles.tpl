@@ -83,7 +83,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
       <table class="form">
         <tr>
           {{if $docGed->doc_ged_id}}
-          <th class="title" style="color:#f00;" colspan="2">
+          <th class="title modify" colspan="2">
             {{tr}}msg-CDocGed-title-modify-modele{{/tr}}
             <input type="hidden" name="ged[user_id]" value="{{$docGed->user_id}}" />
           {{else}}

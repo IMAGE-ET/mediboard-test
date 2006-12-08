@@ -50,7 +50,7 @@ function pageMain() {
       <table class="form">
         {{if $fichePaie->fiche_paie_id}}
         <tr>
-          <th class="title" colspan="4" style="color: #f00;" colspan="2">Modifier la {{$fichePaie->_view}}</th>
+          <th class="title modify" colspan="4" colspan="2">Modifier la {{$fichePaie->_view}}</th>
         </tr>
         {{else}}
         <tr>

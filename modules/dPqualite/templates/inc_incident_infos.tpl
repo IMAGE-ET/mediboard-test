@@ -1,6 +1,6 @@
         <tr>
           {{if !$fiche->valid_user_id}}
-          <th colspan="2" class="title" style="color:#f00;">
+          <th colspan="2" class="title modify">
             {{tr}}_CFicheEi_valid{{/tr}} {{$fiche->_view}}
           {{else}}
           <th colspan="2" class="title">

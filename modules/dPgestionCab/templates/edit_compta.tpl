@@ -34,7 +34,7 @@ function pageMain() {
       <table class="form">
         <tr>
           {{if $gestioncab->gestioncab_id}}
-          <th class="title" colspan="4" style="color: #f00;">
+          <th class="title modify" colspan="4">
             <a style="float:right;" href="#" onclick="view_log('CGestionCab',{{$gestioncab->gestioncab_id}})">
               <img src="images/history.gif" alt="historique" />
             </a>

@@ -181,7 +181,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
       <table class="form">
         <tr>          
           {{if $docGed->doc_ged_id && ($docGed->etat==CDOC_DEMANDE || $docGed->etat==CDOC_TERMINE)}}
-            <th class="title" colspan="2" style="color: #f00;">
+            <th class="title modify" colspan="2">
               <input type="hidden" name="ged[etat]" value="{{$smarty.const.CDOC_DEMANDE}}" />
               <input type="hidden" name="suivi[etat]" value="{{$smarty.const.CDOC_DEMANDE}}" />
               {{if $docGed->etat==CDOC_TERMINE}}
@@ -200,7 +200,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
               {{tr}}msg-CDocGed-etatredac_CDOC_REDAC{{/tr}}
             </th>
           {{elseif $docGed->doc_ged_id}}
-            <th class="title" colspan="2" style="color: #f00;">
+            <th class="title modify" colspan="2">
               {{tr}}msg-CDocGed-title-valid{{/tr}}
             </th>
           {{else}}

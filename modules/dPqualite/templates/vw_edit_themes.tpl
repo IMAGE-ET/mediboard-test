@@ -37,7 +37,7 @@
       <table class="form">
         <tr>
           {{if $theme->doc_theme_id}}
-          <th class="title" colspan="2" style="color:#f00;">{{tr}}msg-CThemeDoc-title-modify{{/tr}}: {{$theme->_view}}</th>
+          <th class="title modify" colspan="2">{{tr}}msg-CThemeDoc-title-modify{{/tr}}: {{$theme->_view}}</th>
           {{else}}
           <th class="title" colspan="2">{{tr}}msg-CThemeDoc-title-create{{/tr}}</th>
           {{/if}}

@@ -157,7 +157,7 @@ function pageMain() {
 
   <tr>
     {{if $protocole->protocole_id}}
-    <th colspan="2" class="title" style="color: #f00;">
+    <th colspan="2" class="title modify">
       <a style="float:right;" href="#" onclick="view_log('CProtocole',{{$protocole->protocole_id}})">
         <img src="images/history.gif" alt="historique" />
       </a>
