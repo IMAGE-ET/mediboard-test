@@ -98,16 +98,16 @@ class CMediusers extends CMbObject {
     $user = new CUser();
     $user->user_id = $this->user_id;
 
-    $user->user_type       = $this->_user_type      ;
-    $user->user_username   = $this->_user_username  ;
-    $user->user_password   = $this->_user_password  ;
-    $user->user_first_name = $this->_user_first_name;
-    $user->user_last_name  = $this->_user_last_name ;
-    $user->user_email      = $this->_user_email     ;
-    $user->user_phone      = $this->_user_phone     ;
-    $user->user_address1   = $this->_user_adresse   ;
-    $user->user_zip        = $this->_user_cp        ;
-    $user->user_city       = $this->_user_ville     ;
+    $user->user_type        = $this->_user_type      ;
+    $user->user_username    = $this->_user_username  ;
+    $user->_user_password   = $this->_user_password  ;
+    $user->user_first_name  = $this->_user_first_name;
+    $user->user_last_name   = $this->_user_last_name ;
+    $user->user_email       = $this->_user_email     ;
+    $user->user_phone       = $this->_user_phone     ;
+    $user->user_address1    = $this->_user_adresse   ;
+    $user->user_zip         = $this->_user_cp        ;
+    $user->user_city        = $this->_user_ville     ;
 
     return $user;
   }

@@ -30,30 +30,32 @@ $utypes = array(
 */
 
 class CUser extends CMbObject {
-	var $user_id         = null;
-	var $user_username   = null;
-	var $user_password   = null;
-	var $user_type       = null;
-	var $user_first_name = null;
-	var $user_last_name  = null;
-	var $user_email      = null;
-	var $user_phone      = null;
-	var $user_mobile     = null;
-	var $user_address1   = null;
-	var $user_city       = null;
-	var $user_zip        = null;
-	var $user_country    = null;
-	var $user_birthday   = null;
-	var $user_pic        = null;
-	var $user_signature  = null;
+  var $user_id          = null;
+  var $user_username    = null;
+  var $user_password    = null;
+  var $user_type        = null;
+  var $user_first_name  = null;
+  var $user_last_name   = null;
+  var $user_email       = null;
+  var $user_phone       = null;
+  var $user_mobile      = null;
+  var $user_address1    = null;
+  var $user_city        = null;
+  var $user_zip         = null;
+  var $user_country     = null;
+  var $user_birthday    = null;
+  var $user_pic         = null;
+  var $user_signature   = null;
 
-  var $_ref_preferences= null;
+  var $_user_password    = null;
+
+  var $_ref_preferences = null;
   
-	function CUser() {
-		$this->CMbObject("users", "user_id");
+  function CUser() {
+    $this->CMbObject("users", "user_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-	}
+  }
   
   function getSpecs() {
     return array (
@@ -82,12 +84,12 @@ class CUser extends CMbObject {
     );
   }
 
-	function updateDBFields() {
+  function updateDBFields() {
     parent::updateDBFields();
     
     // Nullify no to empty in database
-		$this->user_password = $this->user_password ? md5($this->user_password) : null;
-	}
+    $this->user_password = $this->_user_password ? md5($this->_user_password) : null;
+  }
   
   function updateFormFields () {
     parent::updateFormFields();
@@ -97,12 +99,12 @@ class CUser extends CMbObject {
   }
   
   /**
-	 * @return string error message when necessary, null otherwise
-	 */
+   * @return string error message when necessary, null otherwise
+   */
   function copyPermissionsFrom($user_id, $delExistingPerms = false) {
     if (!$user_id) {
-			return null;
-		}    
+      return null;
+    }    
  
     // Copy user type
     $profile = new CUser();
@@ -120,7 +122,7 @@ class CUser extends CMbObject {
       if (!db_delete("perm_object", "user_id", $this->user_id)) {
         return "Can't delete objects permissions";
       }
-		}    
+    }    
 
     // Get other user's permissions
 

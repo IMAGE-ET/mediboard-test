@@ -17,7 +17,7 @@ $do->deleteMsg = "Utilisateur supprimé";
 
 $do->doBind();
     
-if (intval(dPgetParam($_POST, 'del'))) {
+if (intval(dPgetParam($_POST, "del"))) {
   $do->doDelete();
 } else {
   // Verification de la non existence d'un utilisateur avec le même login

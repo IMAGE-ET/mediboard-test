@@ -25,12 +25,12 @@
   <tr>
     <th rowspan="2"><label for="user_username" title="Veuillez choisir un nom d'utilisateur">Nom d'utilisateur</label></th>
     <td rowspan="2"><input tabindex="101" type="text" name="user_username" value="{{$user->user_username}}" title="{{$user->_props.user_username}}" /></td>
-    <th><label for="user_password" title="Mot de passe pour se connecter à Mediboard. Obligatoire">Mot de passe</label></th>
-    <td><input type="password" name="user_password" title="{{$user->_props.user_password}}{{if !$user->user_id}}|notNull{{/if}}" value="" /></td>
+    <th><label for="_user_password" title="Mot de passe pour se connecter à Mediboard. Obligatoire">Mot de passe</label></th>
+    <td><input type="password" name="_user_password" title="{{$user->_props.user_password}}{{if !$user->user_id}}|notNull{{/if}}" value="" /></td>
   </tr>
   <tr>
     <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (vérif.)</label></th>
-    <td><input type="password" name="_user_password2" title="str|sameAs|user_password" value="" /></td>
+    <td><input type="password" name="_user_password2" title="str|sameAs|_user_password" value="" /></td>
   </tr>
 
   <tr>
