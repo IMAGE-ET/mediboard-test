@@ -28,6 +28,11 @@ function putArrivee(oForm) {
 
 function pageMain() {
   regRedirectPopupCal("{{$debut}}", "index.php?m={{$m}}&tab={{$tab}}&plageconsult_id=0&debut="); 
+  
+  PairEffect.initGroup("functionEffect", { 
+    bStoreInCookie: true,
+    sEffect: "appear"
+  });
 }
 
 </script>
@@ -123,17 +128,10 @@ function pageMain() {
     {{if $plageSel->plageconsult_id}}
     <a class="buttonnew" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id=0">Créer une nouvelle plage</a>
     {{/if}}
-    <form name='editFrm' action='?m=dPcabinet' method='post' onsubmit='return checkPlage()'>
-
-    <input type='hidden' name='dosql' value='do_plageconsult_aed' />
-    <input type='hidden' name='del' value='0' />
-    <input type='hidden' name='plageconsult_id' value='{{$plageSel->plageconsult_id}}' />
-    <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
-    <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
-    <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
     
+
     <table class="form">
-      <tr>
+      <tr id="editplage-trigger">
         {{if !$plageSel->plageconsult_id}}
         <th class="category" colspan="4">Créer une plage</th>
         {{else}}
@@ -145,132 +143,143 @@ function pageMain() {
         </th>
         {{/if}}
       </tr>
-
+      <tbody class="functionEffect" id="editplage" style="display:none;">
       <tr>
-        <th><label for="chir_id" title="Praticien concerné par la plage de consultation">Praticien</label></th>
-        <td><select name="chir_id" title="{{$plageSel->_props.chir_id}}">
-            <option value="">&mdash; Choisir un praticien</option>
-            {{foreach from=$listChirs item=curr_chir}}
-              <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
-              {{$curr_chir->_view}}
-              </option>
-            {{/foreach}}
-            </select>
-        </td>
-        <th><label for="libelle" title="Libellé de la plage de consultation">Libellé</label></th>
-        <td><input type="text" title="{{$plageSel->_props.libelle}}" name="libelle" value="{{$plageSel->libelle}}" />
-      </tr>
-
-      <tr>
-        <th><label for="_hour_deb" title="Début de la plage de consultation">Début</label></th>
-        <td><select name="_hour_deb" title="num|notNull">
-            {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
-              <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_deb}} selected="selected" {{/if}}>
-                {{$curr_hour|string_format:"%02d"}}
-              </option>
-            {{/foreach}}
-            </select> h
-          <select name="_min_deb">
-            {{foreach from=$listMins|smarty:nodefaults item=curr_min}}
-              <option value="{{$curr_min|string_format:"%02d"}}" {{if $curr_min == $plageSel->_min_deb}} selected="selected" {{/if}}>
-                {{$curr_min|string_format:"%02d"}}
-              </option>
-            {{/foreach}}
-          </select> min
-        </td>
-        <th><label for="date" title="Jour de la semaine pour la plage de consultation">Jour de la semaine</label></th>
         <td>
-          <select name="date" title="{{$plageSel->_props.date}}">
-            <option value="">&mdash; Choisir le jour de la semaine</option>
-            {{foreach from=$listDays|smarty:nodefaults item=curr_day}}
-            <option value="{{$curr_day}}" {{if $curr_day == $plageSel->date}} selected="selected" {{/if}}>
-              {{$curr_day|date_format:"%A"}}
-            </option>
-            {{/foreach}}
-          </select>
-        </td>
-      </tr>
-
-      <tr>
-        <th><label for="_hour_fin" title="Fin de la plage de consultation">Fin</label></th>
-        <td>
-          <select name="_hour_fin" title="num|moreThan|_hour_deb|notNull">
-            {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
-              <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_fin}} selected="selected" {{/if}}>
-                {{$curr_hour|string_format:"%02d"}}
-              </option>
-            {{/foreach}}
-          </select> h
-          <select name="_min_fin">
-            {{foreach from=$listMins|smarty:nodefaults item=curr_min}}
-              <option value="{{$curr_min|string_format:"%02d"}}" {{if $curr_min == $plageSel->_min_fin}} selected="selected" {{/if}}>
-                {{$curr_min|string_format:"%02d"}}
-              </option>
-            {{/foreach}}
-          </select> min
-          
-        </td>
-        <th><label for="_repeat" title="Nombre de plages à créer">Nombre de plages</label></th>
-        <td><input type="text" size="2" name="_repeat" value="1" /></td>
-      </tr>
+          <form name='editFrm' action='?m=dPcabinet' method='post' onsubmit='return checkPlage()'>
+          <input type='hidden' name='dosql' value='do_plageconsult_aed' />
+          <input type='hidden' name='del' value='0' />
+          <input type='hidden' name='plageconsult_id' value='{{$plageSel->plageconsult_id}}' />
+          <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
+          <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
+          <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
+          <table class="form">
+            <tr>
+              <th><label for="chir_id" title="Praticien concerné par la plage de consultation">Praticien</label></th>
+              <td><select name="chir_id" title="{{$plageSel->_props.chir_id}}">
+                <option value="">&mdash; Choisir un praticien</option>
+                {{foreach from=$listChirs item=curr_chir}}
+                  <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
+                  {{$curr_chir->_view}}
+                  </option>
+                {{/foreach}}
+                </select>
+              </td>
+              <th><label for="libelle" title="Libellé de la plage de consultation">Libellé</label></th>
+              <td><input type="text" title="{{$plageSel->_props.libelle}}" name="libelle" value="{{$plageSel->libelle}}" />
+            </tr>
+            <tr>
+              <th><label for="_hour_deb" title="Début de la plage de consultation">Début</label></th>
+              <td><select name="_hour_deb" title="num|notNull">
+                {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
+                  <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_deb}} selected="selected" {{/if}}>
+                    {{$curr_hour|string_format:"%02d"}}
+                  </option>
+                {{/foreach}}
+                </select> h
+                <select name="_min_deb">
+                  {{foreach from=$listMins|smarty:nodefaults item=curr_min}}
+                    <option value="{{$curr_min|string_format:"%02d"}}" {{if $curr_min == $plageSel->_min_deb}} selected="selected" {{/if}}>
+                      {{$curr_min|string_format:"%02d"}}
+                    </option>
+                  {{/foreach}}
+                </select> min
+              </td>
+              <th><label for="date" title="Jour de la semaine pour la plage de consultation">Jour de la semaine</label></th>
+              <td>
+                <select name="date" title="{{$plageSel->_props.date}}">
+                  <option value="">&mdash; Choisir le jour de la semaine</option>
+                  {{foreach from=$listDays|smarty:nodefaults item=curr_day}}
+                  <option value="{{$curr_day}}" {{if $curr_day == $plageSel->date}} selected="selected" {{/if}}>
+                    {{$curr_day|date_format:"%A"}}
+                  </option>
+                  {{/foreach}}
+                </select>
+              </td>
+            </tr>     
+            <tr>
+              <th><label for="_hour_fin" title="Fin de la plage de consultation">Fin</label></th>
+              <td>
+                <select name="_hour_fin" title="num|moreThan|_hour_deb|notNull">
+                  {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
+                    <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_fin}} selected="selected" {{/if}}>
+                      {{$curr_hour|string_format:"%02d"}}
+                    </option>
+                  {{/foreach}}
+                </select> h
+                <select name="_min_fin">
+                  {{foreach from=$listMins|smarty:nodefaults item=curr_min}}
+                    <option value="{{$curr_min|string_format:"%02d"}}" {{if $curr_min == $plageSel->_min_fin}} selected="selected" {{/if}}>
+                      {{$curr_min|string_format:"%02d"}}
+                    </option>
+                  {{/foreach}}
+                </select> min
+              </td>
+              <th><label for="_repeat" title="Nombre de plages à créer">Nombre de plages</label></th>
+              <td><input type="text" size="2" name="_repeat" value="1" /></td>
+            </tr>      
+            <tr>
+              <th><label for="_freq" title="Fréquence de la plage de consultation, en minutes">Fréquence</label></th>
+              <td>
+                <select name="_freq">
+                  <option value="05" {{if ($plageSel->_freq == "05")}} selected="selected" {{/if}}>05</option>
+                  <option value="10" {{if ($plageSel->_freq == "10")}} selected="selected" {{/if}}>10</option>
+                  <option value="15" {{if ($plageSel->_freq == "15") || (!$plageSel->plageconsult_id)}} selected="selected" {{/if}}>15</option>
+                  <option value="20" {{if ($plageSel->_freq == "20")}} selected="selected" {{/if}}>20</option>
+                  <option value="30" {{if ($plageSel->_freq == "30")}} selected="selected" {{/if}}>30</option>
+               </select> minutes</td>
+              <th>
+                <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>
+              </th>
+              <td>
+                <select name="_type_repeat">
+                  <option value="1">Normale</option>
+                  <option value="2">Une semaine sur deux</option>
+                  <option value="3">Une semaine sur trois</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              {{if !$plageSel->plageconsult_id}}
+              <td class="button" colspan="4"><button type="submit" class="submit">Créer</button></td>
+              {{else}}
+              <td class="button" colspan="4"><button type="submit" class="modify">Modifier</button></td>
+              {{/if}}
+            </tr>
+          </table>
+          </form>
       
-      <tr>
-        <th><label for="_freq" title="Fréquence de la plage de consultation, en minutes">Fréquence</label></th>
-        <td>
-          <select name="_freq">
-            <option value="05" {{if ($plageSel->_freq == "05")}} selected="selected" {{/if}}>05</option>
-            <option value="10" {{if ($plageSel->_freq == "10")}} selected="selected" {{/if}}>10</option>
-            <option value="15" {{if ($plageSel->_freq == "15") || (!$plageSel->plageconsult_id)}} selected="selected" {{/if}}>15</option>
-            <option value="20" {{if ($plageSel->_freq == "20")}} selected="selected" {{/if}}>20</option>
-            <option value="30" {{if ($plageSel->_freq == "30")}} selected="selected" {{/if}}>30</option>
-         </select> minutes</td>
-        <th>
-          <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>
-        </th>
-        <td>
-          <select name="_type_repeat">
-            <option value="1">Normale</option>
-            <option value="2">Une semaine sur deux</option>
-            <option value="3">Une semaine sur trois</option>
-          </select>
+          {{if $plageSel->plageconsult_id}}
+	      <form name='removeFrm' action='./index.php?m=dPcabinet' method='post'>
+      	  <input type='hidden' name='dosql' value='do_plageconsult_aed' />
+	      <input type='hidden' name='del' value='1' />
+      	  <input type='hidden' name='plageconsult_id' value='{{$plageSel->plageconsult_id}}' />
+          <table class="form">
+	        <tr>
+	          <th class="category modify" colspan="2">Supprimer cette plage</th>
+            </tr>
+	        <tr>
+	          <th>Supprimer cette plage pendant</th>
+	          <td><input type='text' name='_repeat' size="1" value='1' /> semaine(s)</td>
+	        </tr>
+	        <tr>
+	          <td class="button" colspan="2">
+	            <button class="trash" type='button' onclick="confirmDeletion(this.form,{typeName:'la plage de consultations du',objName:'{{$plageSel->date|date_format:"%A %d %B %Y"}}'})">
+	              Supprimer
+	            </button>
+	          </td>
+	        </tr>
+	      </table>
+	    </form>
+        {{/if}}        
         </td>
       </tr>
-      <tr>
-        {{if !$plageSel->plageconsult_id}}
-        <td class="button" colspan="4"><button type="submit" class="submit">Créer</button></td>
-        {{else}}
-        <td class="button" colspan="4"><button type="submit" class="modify">Modifier</button></td>
-        {{/if}}
-      </tr>
+      </tbody>
     </table>
-    </form>
 
-      {{if $plageSel->plageconsult_id}}
-	  <form name='removeFrm' action='./index.php?m=dPcabinet' method='post'>
 
-	  <input type='hidden' name='dosql' value='do_plageconsult_aed' />
-	  <input type='hidden' name='del' value='1' />
-	  <input type='hidden' name='plageconsult_id' value='{{$plageSel->plageconsult_id}}' />
 
-	    <table class="form">
-	      <tr>
-	        <th class="category modify" colspan="2">Supprimer cette plage</th>
-	      </tr>
-	      <tr>
-	        <th>Supprimer cette plage pendant</th>
-	        <td><input type='text' name='_repeat' size="1" value='1' /> semaine(s)</td>
-	      </tr>
-	      <tr>
-	        <td class="button" colspan="2">
-	          <button class="trash" type='button' onclick="confirmDeletion(this.form,{typeName:'la plage de consultations du',objName:'{{$plageSel->date|date_format:"%A %d %B %Y"}}'})">
-	            Supprimer
-	          </button>
-	        </td>
-	      </tr>
-	    </table>
 
-	  </form>
-      {{/if}}
     </td>
     <td>
       {{if $plageSel->plageconsult_id}}
