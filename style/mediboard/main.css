@@ -1596,11 +1596,11 @@ table#weeklyPlanning td.nonEmpty {
 }
 table#weeklyPlanning td.nonEmptyConsult {
   background: #ccc;
-  border: #9f9 1px dotted;
+  border: #9f9 2px solid;
 }
 table#weeklyPlanning td.nonEmptyOp {
   background: #ccc;
-  border: #99f 1px dotted;
+  border: #99f 2px solid;
 }
 
 table#weeklyPlanning td.empty {
