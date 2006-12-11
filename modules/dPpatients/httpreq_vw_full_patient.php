@@ -20,6 +20,10 @@ if(!$patient_id) {
   $AppUI->redirect("m=dPpatients&tab=0");
 }
 
+// Liste des Praticiens
+$listPrat = new CMediusers();
+$listPrat = $listPrat->loadPraticiens(PERM_READ);
+
 // Récuperation du patient sélectionné
 $patient = new CPatient;
 $patient->load($patient_id);
@@ -27,12 +31,17 @@ $patient->loadDossierComplet();
 $patient->loadRefsAntecedents();
 $patient->loadRefsTraitements();
 
+$moduleCabinet = CModule::getInstalled("dPcabinet");
+$canEditCabinet = $moduleCabinet->canEdit();
+
 $diagnosticsInstall = CModule::getActive("dPImeds") && CModule::getActive("dPsante400");
 
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("patient"            , $patient);
+$smarty->assign("listPrat"           , $listPrat          );
+$smarty->assign("patient"            , $patient           );
+$smarty->assign("canEditCabinet"     , $canEditCabinet    );
 $smarty->assign("diagnosticsInstall" , $diagnosticsInstall);
 
 $smarty->display("inc_vw_full_patients.tpl");

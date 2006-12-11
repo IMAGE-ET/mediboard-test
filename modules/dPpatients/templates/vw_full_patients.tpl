@@ -3,6 +3,11 @@
 {{include file="../../dPfiles/templates/inc_files_functions.tpl"}}
 
 <script type="text/javascript">
+
+function viewItem(oOptions) {
+  setObject(oOptions);
+}
+
 function reloadListFile(){
   if(file_deleted && file_preview == file_deleted){
     ZoomAjax("","","","", 0);
@@ -65,7 +70,7 @@ function pageMain() {
 
 <table class="main">
   <tr>
-    <td id="listInfosPat" style="width:200px;">
+    <td id="listInfosPat" style="width:200px;" rowspan="2">
 
       <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFile(); return false;">
       <input type="hidden" name="selKey"   value="{{$selKey}}" />
@@ -80,6 +85,10 @@ function pageMain() {
       
       {{include file="inc_vw_full_patients.tpl"}}
     </td>
+    <td class="greedyPane" id="item">
+    </td>
+  </tr>
+  <tr>
     <td class="greedyPane" id="listView">
       {{include file="../../dPfiles/templates/inc_list_view_colonne.tpl"}}
     </td>

@@ -1595,12 +1595,12 @@ table#weeklyPlanning td.nonEmpty {
   background: #ccc; 
 }
 table#weeklyPlanning td.nonEmptyConsult {
-  background: #ccc;
-  border: #9f9 2px solid;
+  background: #ccc url(images/plageConsult.png) repeat-y left;
+  border: #9f9 1px solid;
 }
 table#weeklyPlanning td.nonEmptyOp {
-  background: #ccc;
-  border: #99f 2px solid;
+  background: #ccc url(images/plageOp.png) repeat-y left;
+  border: #99f 1px solid;
 }
 
 table#weeklyPlanning td.empty {

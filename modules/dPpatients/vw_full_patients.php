@@ -29,6 +29,10 @@ $canEditDoc       = $modCR->canEdit();
 
 $diagnosticsInstall = CModule::getActive("dPImeds") && CModule::getActive("dPsante400");
 
+// Liste des Praticiens
+$listPrat = new CMediusers();
+$listPrat = $listPrat->loadPraticiens(PERM_READ);
+
 // Liste des Category pour les fichiers
 $listCategory = new CFilesCategory;
 $listCategory = $listCategory->listCatClass("CPatient");
@@ -59,23 +63,24 @@ $smarty = new CSmartyDP(1);
 
 $canEditFileDoc = $canEditFiles || $canEditDoc;
 
-$smarty->assign("canEditFileDoc" , $canEditFileDoc);
-$smarty->assign("canEditDoc"     , $canEditDoc);
-$smarty->assign("patient"         , $patient         );
-$smarty->assign("canEditCabinet"  , $canEditCabinet  );
-$smarty->assign("listCategory"    , $listCategory    );
+$smarty->assign("canEditFileDoc"    , $canEditFileDoc);
+$smarty->assign("canEditDoc"        , $canEditDoc);
+$smarty->assign("patient"           , $patient         );
+$smarty->assign("canEditCabinet"    , $canEditCabinet  );
+$smarty->assign("listPrat"          , $listPrat        );
+$smarty->assign("listCategory"      , $listCategory    );
 
-$smarty->assign("canReadFiles"    , $canReadFiles    );
-$smarty->assign("canEditFiles"    , $canEditFiles    );
+$smarty->assign("canReadFiles"      , $canReadFiles    );
+$smarty->assign("canEditFiles"      , $canEditFiles    );
 
-$smarty->assign("affichageFile"   , $affichageFile   );
-$smarty->assign("selClass"        , $selClass        );
-$smarty->assign("selKey"          , $selKey          );
-$smarty->assign("selView"         , $object->_view   );
-$smarty->assign("typeVue"         , $typeVue         );
-$smarty->assign("accordDossier"   , 0                );
+$smarty->assign("affichageFile"     , $affichageFile   );
+$smarty->assign("selClass"          , $selClass        );
+$smarty->assign("selKey"            , $selKey          );
+$smarty->assign("selView"           , $object->_view   );
+$smarty->assign("typeVue"           , $typeVue         );
+$smarty->assign("accordDossier"     , 0                );
 
-$smarty->assign("diagnosticsInstall" , $diagnosticsInstall);
+$smarty->assign("diagnosticsInstall", $diagnosticsInstall);
 
 $smarty->display("vw_full_patients.tpl");
 

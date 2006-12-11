@@ -16,7 +16,7 @@
           <th class="category" colspan="2">
             {{if $patient->_canRead}}
             <div style="float:right;">
-              <a href="#" onclick="setObject( {
+              <a href="#" onclick="viewItem( {
                 objClass: 'CPatient', 
                 keywords: '', 
                 id: {{$patient->patient_id|smarty:nodefaults|JSAttribute}}, 
@@ -141,6 +141,48 @@
             </form>
           </td>
         </tr>
+        <tr>
+          <th class="category" colspan="4">Planifier</th>
+        </tr>
+        <tr>
+          <td colspan="4" class="button">
+            <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
+              Intervention
+            </a>
+            <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
+              Urgence
+            </a>
+            <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
+              Séjour
+            </a>
+            <a class="buttonnew" href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
+              Consultation
+            </a>
+          </td>
+        </tr>
+        {{if $listPrat|@count && $canEditCabinet}}
+        <tr><th class="category" colspan="4">Consultation immédiate</th></tr>
+        <tr>
+          <td class="button" colspan="4">
+            <form name="addConsFrm" action="index.php?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
+            <input type="hidden" name="m" value="dPcabinet" />
+            <input type="hidden" name="dosql" value="do_consult_now" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="patient_id" title="notNull|ref" value="{{$patient->patient_id}}" />
+            <label for="prat_id" title="Praticien pour la consultation immédiate. Obligatoire">Praticien</label>
+            <select name="prat_id" title="notNull|ref">
+              <option value="">&mdash; Choisir un praticien</option>
+              {{foreach from=$listPrat item=curr_prat}}
+                <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $app->user_id}} selected="selected" {{/if}}>
+                  {{$curr_prat->_view}}
+                </option>
+              {{/foreach}}
+            </select>
+            <button class="new" type="submit">Consulter</button>
+            </form>
+          </td>
+        </tr>
+  {{/if}}
         </tbody>
       </table>
       
@@ -232,7 +274,7 @@
           </td>
           <td style="text-align:right;">
           {{if $curr_sejour->_canRead}}
-            <a href="#" onclick="setObject( {
+            <a href="#" onclick="viewItem( {
               objClass: 'CSejour', 
               keywords: '', 
               id: {{$curr_sejour->sejour_id|smarty:nodefaults|JSAttribute}}, 
@@ -247,16 +289,16 @@
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
         <tr>
           <td>
-            <ul><li>
+            <ul>
             <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
               <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
               {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} - Intervention du Dr. {{$curr_op->_ref_chir->_view}}
             </a>
-            </li></ul>
+            </ul>
           </td>
           <td style="text-align:right;">
           {{if $curr_op->_canRead}}
-            <a href="#" onclick="setObject( {
+            <a href="#" onclick="viewItem( {
               objClass: 'COperation', 
               keywords: '', 
               id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
@@ -296,7 +338,7 @@
           </td>
           <td style="text-align:right;">
           {{if $curr_consult->_canRead}}
-            <a href="#" onclick="setObject( {
+            <a href="#" onclick="viewItem( {
               objClass: 'CConsultation', 
               keywords: '', 
               id: {{$curr_consult->consultation_id|smarty:nodefaults|JSAttribute}}, 
