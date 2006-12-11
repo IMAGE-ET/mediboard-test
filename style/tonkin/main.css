@@ -597,5 +597,5 @@ table#header table.titleblock td.titlecell {
 
 /* System message */
 #systemMsg {
-  text-align: center;
+  text-align: left;
 }

@@ -63,7 +63,7 @@ function popChgPwd() {
           </th>
           <td width="100%">
             <div id="systemMsg">
-              {{$errorMessage|smarty:nodefaults}}
+              {{$errorMessage|nl2br|smarty:nodefaults}}
             </div>
           </td>
         </tr>
@@ -104,7 +104,7 @@ function popChgPwd() {
 </table>
 {{else}}
 <div id="systemMsg" style="display: block;">
-  {{$errorMessage|smarty:nodefaults}}
+  {{$errorMessage|nl2br|smarty:nodefaults}}
 </div>
 {{/if}}
 <table id="main" class="{{$m}}">

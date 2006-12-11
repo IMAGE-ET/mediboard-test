@@ -94,7 +94,7 @@ function popChgPwd() {
   <tr>
     <td>
       <div id="systemMsg">
-        {{$errorMessage|smarty:nodefaults}}
+        {{$errorMessage|nl2br|smarty:nodefaults}}
       </div>
       {{if !$dialog}}
       <table class='titleblock'>

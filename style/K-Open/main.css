@@ -535,7 +535,7 @@ th.title {
 #systemMsg {
   font-size: 80%;
   float : none;
-  text-align: center;
+  text-align: left;
 }
 
 div.dialog#systemMsg {

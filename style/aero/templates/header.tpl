@@ -107,7 +107,7 @@ function chgMenu(id, type) {
     <td class="message">
       {{if !$dialog}}
       <div {{if $dialog}}class="dialog" {{if !$errorMessage}} style="display: none"{{/if}}{{/if}} id="systemMsg">
-        {{$errorMessage|smarty:nodefaults}}
+        {{$errorMessage|nl2br|smarty:nodefaults}}
       </div>
       {{/if}}
     </td>
@@ -133,6 +133,6 @@ function chgMenu(id, type) {
 {{if $dialog}}
     <td class="tabox">
       <div class="dialog" {{if !$errorMessage}}style="display: none"{{/if}} id="systemMsg">
-        {{$errorMessage|smarty:nodefaults}}
+        {{$errorMessage|nl2br|smarty:nodefaults}}
       </div>
 {{/if}}

@@ -89,8 +89,8 @@ function popChgPwd() {
             {{$suggestion|smarty:nodefaults}} |
             <a href="#" onclick="popChgPwd();">Changez votre mot de passe</a> |
             <a href="?m=mediusers&amp;a=edit_infos">{{tr}}My Info{{/tr}}</a> |
-            <a href="./index.php?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a> |
-            <a href="./index.php?logout=-1">{{tr}}Logout{{/tr}}</a>
+            <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a> |
+            <a href="?logout=-1">{{tr}}Logout{{/tr}}</a>
           </td>
         </tr>
       </table>
@@ -102,7 +102,7 @@ function popChgPwd() {
   <tr>
     <td>
       <div id="systemMsg">
-        {{$errorMessage|smarty:nodefaults}}
+        {{$errorMessage|nl2br|smarty:nodefaults|nl2br}}
       </div>
       {{if !$dialog}}
       <table class='titleblock'>

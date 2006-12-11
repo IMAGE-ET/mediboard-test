@@ -107,7 +107,7 @@
 </div>
 
 {{if $errorMessage}}
-  {{$errorMessage|smarty:nodefaults}}
+  {{$errorMessage|nl2br|smarty:nodefaults}}
 {{/if}}
 </body>
 </html>

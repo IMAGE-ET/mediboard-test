@@ -523,7 +523,7 @@ th.title {
 /* System message */
 #systemMsg {
   float : none;
-  text-align: center;
+  text-align: left;
   width: 100%;
 }
 div.message, div.loading, div.error, div.warning {
