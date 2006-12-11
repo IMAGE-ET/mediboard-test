@@ -5,7 +5,11 @@
         <tr>
           <th></th>
           {{foreach from=$plagesConsult|smarty:nodefaults key=curr_day item=plagesPerDay}}
-          <th colspan="{{if !$listEntry.$curr_day.nbcol}}1{{else}}{{$listEntry.$curr_day.nbcol}}{{/if}}">{{$curr_day|date_format:"%A %d"}}</th>
+          <th colspan="{{if !$listEntry.$curr_day.nbcol}}1{{else}}{{$listEntry.$curr_day.nbcol}}{{/if}}">
+            <a href="?m=dPboard&amp;tab=vw_mainboard&amp;view=day&amp;date={{$curr_day}}">
+              {{$curr_day|date_format:"%A %d"}}
+            </a>
+          </th>
           {{/foreach}}
         </tr>  
         {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
@@ -36,6 +40,19 @@
           {{/foreach}}
         {{/foreach}}
       </table>
+      <div style="width:100px;">
+        Légende
+        <table id="weeklyPlanning" class="tbl">
+          <tr>
+            <td class="nonEmptyConsult">&nbsp;</td>
+            <td>Plages de consultations</td>
+          </tr>
+          <tr>
+            <td class="nonEmptyOp">&nbsp;</td>
+            <td>Plages opératoire</td>
+          </tr>
+        </table>
+      </div>
     </td>
   </tr>
 </table>

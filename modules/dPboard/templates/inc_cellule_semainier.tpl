@@ -19,23 +19,23 @@
   {{/if}}
   
   {{if $colonne=="plagesConsult"}}
-    <a href="?m=dPcabinet&amp;tab=vw_planning&amp;plageconsult_id={{$plageInfos->plageconsult_id}}" title="Voir le contenu de la plage">
+    <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$plageInfos->date}}" title="Voir le contenu de la plage">
       {{if $plageInfos->libelle}}{{$plageInfos->libelle}}<br />{{/if}}
       {{$plageInfos->debut|date_format:"%Hh%M"}} - {{$plageInfos->fin|date_format:"%Hh%M"}}
     </a>
-    <a href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageInfos->plageconsult_id}}" title="Planifier une consultation dans cette plage"> 
-      <div class="progressBar">
-        <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-        <div class="text">{{$plageInfos->_affected}} / {{$plageInfos->_total}}</div>
-      </div>
-    </a>
+    <div class="progressBar">
+      <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
+      <div class="text">{{$plageInfos->_affected}} / {{$plageInfos->_total}}</div>
+    </div>
   {{else}}
-    {{$plageInfos->_ref_salle->nom}}<br />
-    {{$plageInfos->debut|date_format:"%Hh%M"}} - {{$plageInfos->fin|date_format:"%Hh%M"}}
-      <div class="progressBar">
-        <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-        <div class="text">{{$plageInfos->_nb_operations}} Intervention(s)</div>
-      </div>    
+    <a href="?m=dPplanningOp&amp;tab=vw_idx_planning&amp;date={{$plageInfos->date}}">
+      {{$plageInfos->_ref_salle->nom}}<br />
+      {{$plageInfos->debut|date_format:"%Hh%M"}} - {{$plageInfos->fin|date_format:"%Hh%M"}}
+    </a>
+    <div class="progressBar">
+      <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
+      <div class="text">{{$plageInfos->_nb_operations}} Intervention(s)</div>
+    </div>    
   {{/if}}
   </td>            
 {{/if}}
