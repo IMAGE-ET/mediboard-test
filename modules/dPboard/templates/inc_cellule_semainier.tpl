@@ -6,7 +6,7 @@
   <td class="empty" rowspan="4"></td>
 {{elseif is_string($plageJour.$colonne) && $plageJour.$colonne == "full"}}
 {{else}}
-  <td class="nonEmpty" rowspan="{{$plageInfos->_nbQuartHeure}}">
+  <td class="nonEmpty{{$style}}" rowspan="{{$plageInfos->_nbQuartHeure}}">
   
   {{assign var="pct" value=$plageInfos->_fill_rate}}
   {{if $pct gt 100}}

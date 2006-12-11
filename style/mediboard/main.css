@@ -1594,6 +1594,14 @@ table#weeklyPlanning td.selectedPlage {
 table#weeklyPlanning td.nonEmpty {
   background: #ccc; 
 }
+table#weeklyPlanning td.nonEmptyConsult {
+  background: #ccc;
+  border: #9f9 1px dotted;
+}
+table#weeklyPlanning td.nonEmptyOp {
+  background: #ccc;
+  border: #99f 1px dotted;
+}
 
 table#weeklyPlanning td.empty {
   background: #eee;

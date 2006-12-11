@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td>
-      <table id="weeklyPlanning">
+      <table id="weeklyPlanning" class="tbl">
         <tr>
           <th></th>
           {{foreach from=$plagesConsult|smarty:nodefaults key=curr_day item=plagesPerDay}}
@@ -22,11 +22,13 @@
             
             {{if $listEntry.$curr_day.consult || !$listEntry.$curr_day.nbcol}}
               {{assign var="colonne" value="plagesConsult"}}
+              {{assign var="style" value="Consult"}}
               {{include file="inc_cellule_semainier.tpl"}}
             {{/if}}
             
             {{foreach from=$listEntry.$curr_day.salle item=curr_salle}}
               {{assign var="colonne" value="Salle$curr_salle"}}
+              {{assign var="style" value="Op"}}
               {{include file="inc_cellule_semainier.tpl"}}
             {{/foreach}}
 
