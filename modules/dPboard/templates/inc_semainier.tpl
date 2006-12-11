@@ -45,11 +45,11 @@
         <table id="weeklyPlanning" class="tbl">
           <tr>
             <td class="nonEmptyConsult">&nbsp;</td>
-            <td>Plages de consultations</td>
+            <td>Plage de consultation</td>
           </tr>
           <tr>
             <td class="nonEmptyOp">&nbsp;</td>
-            <td>Plages opératoire</td>
+            <td>Plage opératoire</td>
           </tr>
         </table>
       </div>
