@@ -27,7 +27,13 @@
 </form>
 {{/if}}
 
+{{if $board}}
+{{assign var="font" value="font-size: 100%;"}} 
+<table class="tbl">
+{{else}}
+{{assign var="font" value="font-size: 9px;"}} 
 <table class="tbl" style="width: 250px">
+{{/if}}
 {{if $listPlage}}
 {{foreach from=$listPlage item=curr_plage}}
   <tr>
@@ -35,11 +41,11 @@
   </tr>
   {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
   {{if !$curr_consult->patient_id}}
-    {{assign var="style" value="background: #ffa; font-size: 9px;"}}          
+    {{assign var="style" value="background: #ffa; $font"}}          
   {{elseif $curr_consult->premiere}} 
-    {{assign var="style" value="background: #faa; font-size: 9px;"}}
+    {{assign var="style" value="background: #faa; $font"}}
   {{else}} 
-    {{assign var="style" value="font-size: 9px;"}}
+    {{assign var="style" value="$font"}}
   {{/if}}
   <tr>
     {{if $curr_consult->consultation_id == $consult->consultation_id}}

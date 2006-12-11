@@ -6,22 +6,39 @@ PairEffect.initGroup("functionEffect", {
 
 </script>
 
-
-{{if $typeHospi == "entree"}}
+{{if $board}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="4">Entrées</th>
+    <th class="title" colspan="4">Hospitalisations</th>
   </tr>
   <tr>
-    <th>Heure</th>
+    <th>Entree</th>
+    <th>Sortie</th>
     <th>Patient</th>
     <th>Chambre</th>
   </tr>
-  {{foreach from=$listAff item=curr_aff}}
+  {{foreach from=$listSejours item=curr_sejour}}
   <tr>
-    <td>{{$curr_aff->entree|date_format:"%H h %M"}}</td>
-    <td>{{$curr_aff->_ref_sejour->_ref_patient->_view}}</td>
-    <td>{{$curr_aff->_ref_lit->_view}}</td>
+    {{if $date == $curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}
+    <td style="background-color: #afa">
+    {{else}}
+    <td>
+    {{/if}}
+      {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y %Hh%M"}}
+    </td>
+    {{if $date == $curr_sejour->sortie_prevue|date_format:"%Y-%m-%d"}}
+    <td style="background-color: #afa">
+    {{else}}
+    <td>
+    {{/if}}
+      {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y %Hh%M"}}
+    </td>
+    <td>{{$curr_sejour->_ref_patient->_view}}</td>
+    <td>
+      {{foreach from=$curr_sejour->_curr_affectations item=curr_aff}}
+        {{$curr_aff->_ref_lit->_view}}<br />
+      {{/foreach}}
+    </td>
   </tr>
   {{/foreach}}        
 </table>

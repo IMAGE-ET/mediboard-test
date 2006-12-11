@@ -14,6 +14,7 @@ if(!$canRead) {
 }
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
+$view = mbGetValueFromGetOrSession("view", "day");
 $userSel = new CMediusers;
 $userSel->load($AppUI->user_id);
 
@@ -28,8 +29,9 @@ $vue          = mbGetValueFromGetOrSession("vue2", $vue2_default);
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("date", $date);
-$smarty->assign("vue" , $vue);
+$smarty->assign("date" , $date);
+$smarty->assign("view" , $view);
+$smarty->assign("vue"  , $vue);
 
 $smarty->display("vw_mainboard.tpl");
 

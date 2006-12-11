@@ -16,51 +16,32 @@ if(!$canRead) {
 // Récupération des paramètres
 $chirSel   = mbGetValueFromGetOrSession("chirSel");
 $date      = mbGetValueFromGetOrSession("date", mbDate());
-$typeHospi = mbGetValueFromGet("typeHospi", "entree");
 $board     = mbGetValueFromGet("board", 0);
 
-$sql = "SELECT `affectation`.*" .
-   "\nFROM `affectation`" .
-   "\nLEFT JOIN `lit`" .
-   "\nON `affectation`.`lit_id` = `lit`.`lit_id`" .
-   "\nLEFT JOIN `chambre`" .
-   "\nON `chambre`.`chambre_id` = `lit`.`chambre_id`" .
-   "\nLEFT JOIN `service`" .
-   "\nON `service`.`service_id` = `chambre`.`service_id`" .
-   "\nLEFT JOIN `sejour`" .
-   "\nON `sejour`.`sejour_id` = `affectation`.`sejour_id`" .
-   "\nWHERE `affectation`.`$typeHospi` < '$date 23:59:59'" .
-   "\nAND `affectation`.`$typeHospi` > '$date 00:00:00'" .
-   "\nAND `sejour`.`praticien_id` = '$chirSel'" .
-   "\nORDER BY `affectation`.`$typeHospi`, `service`.`nom`, `chambre`.`nom`, `lit`.`nom`";
+$where = array();
+$were["praticien_id"] = "= '$chirSel'";
+$where["entree_prevue"] = "<= '$date 23:59:59'";
+$where["sortie_prevue"] = ">= '$date 00:00:00'";
 
-$listAff = new CAffectation;
-$listAff = db_loadObjectList($sql, $listAff);
+$order = "`sortie_prevue` ASC, `entree_prevue` DESC";
+
+$sejour = new CSejour();
+$listSejours = $sejour->loadList($where, $order);
+
+$affectation = new CAffectation();
+foreach($listSejours as $key => $curr_sejour) {
+  $listSejours[$key]->loadRefsFwd();
+  $where = array();
+  $where["sejour_id"] = "= '$curr_sejour->_id'";
+  $where["entree"] = "<= '$date 00:00:00'";
+  $where["sortie"] = ">= '$date 23:59:59'";
   
-foreach($listAff as $key => &$affectation) {
-  $loadData = false;
-  $affectation->loadRefs();
+  $order = "`entree` DESC";
   
-  if ($typeHospi == "entree") $affectation_connexe =& $affectation->_ref_prev;
-  if ($typeHospi == "sortie") $affectation_connexe =& $affectation->_ref_next;
-
-  if (!$affectation_connexe->_id) {
-    $sejour =& $affectation->_ref_sejour;
-    $sejour->loadRefsFwd();
-    $sejour->loadRefsOperations();
-      
-    if ($typeHospi=="sortie"){
-      // Rowspan pour la cellule de l'heure
-      $affectation->_nb_rows = count($sejour->_ref_operations) + 1;
-      // Récupération des Références pour les opérations
-      foreach($sejour->_ref_operations as &$operation) {
-        $operation->loadRefs();
-      }
-    }
-
-    $affectation->_ref_lit->loadCompleteView();
-  } else {
-    unset($listAff[$key]);
+  $listSejours[$key]->_curr_affectations = $affectation->loadList($where, $order);
+  foreach($listSejours[$key]->_curr_affectations as $keyAff => $curr_aff) {
+    $listSejours[$key]->_curr_affectations[$keyAff]->loadRefLit();
+    $listSejours[$key]->_curr_affectations[$keyAff]->_ref_lit->loadCompleteView();
   }
 }
 
@@ -75,11 +56,11 @@ $hospiList = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, tr
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("board"    , $board);
-$smarty->assign("typeHospi", $typeHospi);
-$smarty->assign("listAff"  , $listAff);
-$smarty->assign("crList"   , $crList);
-$smarty->assign("hospiList", $hospiList);
+$smarty->assign("board"      , $board);
+$smarty->assign("date"       , $date);
+$smarty->assign("listSejours", $listSejours);
+$smarty->assign("crList"     , $crList);
+$smarty->assign("hospiList"  , $hospiList);
 
 $smarty->display("inc_vw_hospi.tpl");
 

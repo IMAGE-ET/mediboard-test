@@ -102,28 +102,42 @@ function updateListPatients() {
   url.requestUpdate("patients");
 }
 
-function updateListHospi(typeHospi) {
+function updateListHospi() {
   var url = new Url;
   url.setModuleAction("dPboard", "httpreq_vw_hospi");
 
   url.addParam("chirSel" , "{{$app->user_id}}");
   url.addParam("date"    , "{{$date}}");
-  url.addParam("typeHospi", typeHospi);
   url.addParam("board"   , "1");
 
-  url.requestUpdate(typeHospi);
+  url.requestUpdate("hospi");
+}
+
+function updateSemainier() {
+  var url = new Url;
+  url.setModuleAction("dPboard", "httpreq_semainier");
+
+  url.addParam("chirSel" , "{{$app->user_id}}");
+  url.addParam("date"    , "{{$date}}");
+  url.addParam("board"   , "1");
+
+  url.requestUpdate("semainier");
 }
 
 function pageMain() {
-  hideIcon("consultations");
-  hideIcon("operations");
-  hideIcon("hospi");
-  hideIcon("patients");
-  updateListConsults();
-  updateListOperations();
-  updateListPatients();
-  updateListHospi("entree");
-  updateListHospi("sortie");
+  {{if $view == "day"}}
+    hideIcon("consultations");
+    hideIcon("operations");
+    hideIcon("hospi");
+    hideIcon("patients");
+    updateListConsults();
+    updateListOperations();
+    updateListPatients();
+    updateListHospi();
+  {{/if}}
+  {{if $view == "week"}}
+    updateSemainier();
+  {{/if}}
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
 }
 
@@ -131,16 +145,30 @@ function pageMain() {
 
 <table class="main">
   <tr>
-    <th colspan="2">
+    <th>
       <form name="editFrmPratDate" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       {{$date|date_format:"%A %d %B %Y"}}
       <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
       </form>
     </th>
+    <th>
+      <form name="editFrmView" action="?m={{$m}}" method="get">
+      <input type="hidden" name="m" value="{{$m}}" />
+      <select name="view" onchange="this.form.submit()">
+        <option value="day" {{if $view == "day"}}selected="selected"{{/if}}>
+          Journée
+        </option>
+        <option value="week" {{if $view == "week"}}selected="selected"{{/if}}>
+          Semainier
+        </option>
+      </select>
+      </form>
+    </th>
   </tr>
+  {{if $view == "day"}}
   <tr>
-    <td class="halfPane" onmouseover="showIcon('consultations')" onmouseout="hideIcon('consultations')">
+    <td style="border: 1px dotted #000;" class="halfPane" onmouseover="showIcon('consultations')" onmouseout="hideIcon('consultations')">
       <div style="position:absolute" id="icon-consultations">
         <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$date}}">
           <img src="modules/dPcabinet/images/dPcabinet.png" height="24px" width="24px" />
@@ -149,7 +177,7 @@ function pageMain() {
       <div style="overflow: auto; height: 250px;" id="consultations">
       </div>
     </td>
-    <td class="halfPane" onmouseover="showIcon('operations')" onmouseout="hideIcon('operations')">
+    <td style="border: 1px dotted #000;" class="halfPane" onmouseover="showIcon('operations')" onmouseout="hideIcon('operations')">
       <div style="position:absolute" id="icon-operations">
         <a href="index.php?m=dPplanningOp&amp;tab=vw_idx_patients">
           <img src="modules/dPplanningOp/images/dPplanningOp.png" height="24px" width="24px" />
@@ -160,7 +188,7 @@ function pageMain() {
     </td>
   </tr>
   <tr>
-    <td onmouseover="showIcon('patients')" onmouseout="hideIcon('patients')">
+    <td style="border: 1px dotted #000;" onmouseover="showIcon('patients')" onmouseout="hideIcon('patients')">
       <div style="position:absolute" id="icon-patients">
         <a href="index.php?m=dPpatients&amp;tab=vw_idx_planning&amp;date={{$date}}">
           <img src="modules/dPpatients/images/dPpatients.png" height="24px" width="24px" />
@@ -169,16 +197,23 @@ function pageMain() {
       <div style="overflow: auto; height: 250px;" id="patients">
       </div>
     </td>
-    <td onmouseover="showIcon('hospi')" onmouseout="hideIcon('hospi')">
+    <td style="border: 1px dotted #000;" onmouseover="showIcon('hospi')" onmouseout="hideIcon('hospi')">
       <div style="position:absolute" id="icon-hospi">
         <img src="modules/dPhospi/images/dPhospi.png" height="24px" width="24px" />
       </div>
       <div style="overflow: auto; height: 250px;">
-        <div id="sortie">
-        </div>
-        <div id="entree">
+        <div id="hospi">
         </div>
       </div>
     </td>
   </tr>
+  {{/if}}
+  {{if $view == "week"}}
+  <tr>
+    <td style="border: 1px dotted #000;" colspan="2">
+      <div id="semainier">
+      </div>
+    </td>
+  </tr>
+  {{/if}}
 </table>
