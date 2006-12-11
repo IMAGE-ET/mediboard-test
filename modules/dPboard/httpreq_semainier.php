@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m, $listMins,$listHours,$HeureMax,$MinMax,$HeureMin,$MinMin,$aAffichage;
+global $AppUI, $canRead, $canEdit, $g, $m, $listMins,$listHours,$HeureMax,$MinMax,$HeureMin,$MinMin,$aAffichage;
 
 if (!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
@@ -139,34 +139,72 @@ function writePlage($aAffichage,$listPlages,$type,$sHeureDeb,$sHeureFin,$sMinDeb
   }
 }
 
+// Liste des Salles
+$listSalles = new CSalle();
+$where = array();
+$where["group_id"] = "= '$g'";
+$order = "'nom'";
+$listSalles = $listSalles->loadList($where, $order);
+
 // Plages de Consultations
 $plageConsult     = new CPlageconsult();
 $plageOp          = new CPlageOp();
 $listDays         = array();
 $plagesConsult    = array();
 $plagesOp         = array();
-$where["chir_id"] = "= '$chirSel'";
 
 for($i = 0; $i < 7; $i++) {
-  $date          = mbDate("+$i day", $debut);
-  $where["date"] = "= '$date'";
+  $where = array();
+  $where["chir_id"] = "= '$chirSel'";
+  $date             = mbDate("+$i day", $debut);
+  $where["date"]    = "= '$date'";
   
   $plagesPerDayConsult = $plageConsult->loadList($where);
-  $plagesPerDayOp      = $plageOp->loadList($where);
+  $nb_oper = 0;
+  foreach($listSalles as $keySalle=>$salle){
+    $where["salle_id"] = "= '$keySalle'";
+    $plagesPerDayOp[$keySalle] = $plageOp->loadList($where);
+    $nb_oper = $nb_oper + count($plagesPerDayOp[$keySalle]);
+  }
   
-  if(!( ($i == 5 || $i == 6) && !count($plagesPerDayConsult) && !count($plagesPerDayOp) )){
+  
+  if(!( ($i == 5 || $i == 6) && !count($plagesPerDayConsult) && !$nb_oper )){
     foreach($plagesPerDayConsult as $key => $value) {
       $plagesPerDayConsult[$key]->loadFillRate();
     }
-    foreach($plagesPerDayOp as $key => $value) {
-      $plagesPerDayOp[$key]->loadRefSalle();
-    }
     
+    foreach($plagesPerDayOp as $key => $valuePlages) {
+      
+      if(!count($plagesPerDayOp[$key])){
+        unset($plagesPerDayOp[$key]);
+      }else{
+        foreach($valuePlages as $keyPlage=>$value){
+          $plagesPerDayOp[$key][$keyPlage]->loadRefSalle();
+          $plagesPerDayOp[$key][$keyPlage]->GetNbOperations();
+        }
+        $plagesOp[$key][$date] = $plagesPerDayOp[$key];
+      }
+    }
     $plagesConsult[$date] = $plagesPerDayConsult;
-    $plagesOp[$date]      = $plagesPerDayOp;
+    if(count($plagesPerDayConsult)){
+      $consult = 1;
+    }else{
+      $consult = 0;
+    }
+    if(count($plagesPerDayOp)){
+      $entry_salle = array_keys($plagesPerDayOp);
+    }else{
+      $entry_salle = null;
+    }
+    $listEntry[$date]     = array("nbcol" => (count($entry_salle)+$consult),
+                                   "consult"=>count($plagesPerDayConsult),
+                                   "salle"=>$entry_salle);
   }
   $listDays[] = $date;
 }
+
+$listEntrees = array();
+
 
 // Création du tableau de visualisation
 $aAffichage      = array();
@@ -174,18 +212,24 @@ foreach($plagesConsult as $keyDate=>$valDate){
   foreach($listHours as $keyHours=>$valHours){
     foreach($listMins as $kayMins=>$valMins){
       // Initialisation du tableau
-      $aAffichage["$keyDate $valHours:$valMins"] = array("plagesConsult"=>"empty", "plagesOp"=>"empty");
+      $aAffichage["$keyDate $valHours:$valMins"] = array("plagesConsult"=>"empty");
+      foreach($plagesOp as $keySalle=>$salle){
+        $aAffichage["$keyDate $valHours:$valMins"]["Salle$keySalle"]  ="empty";
+      }
     }
   }
 }
 
 writePlage(&$aAffichage, $plagesConsult,"plagesConsult","_hour_deb","_hour_fin","_min_deb","_min_fin");
-writePlage(&$aAffichage, $plagesOp,"plagesOp","_heuredeb","_heurefin","_minutedeb","_minutefin");
+
+foreach($plagesOp as $keySalle=>$salle){
+  writePlage(&$aAffichage, $plagesOp[$keySalle],"Salle$keySalle","_heuredeb","_heurefin","_minutedeb","_minutefin");
+}
 
 // Création du template
 $smarty = new CSmartyDP(1);
 
-
+$smarty->assign("listEntry"         , $listEntry);
 $smarty->assign("aAffichage"        , $aAffichage);
 $smarty->assign("chirSel"           , $chirSel);
 $smarty->assign("debut"             , $debut);

@@ -5,7 +5,7 @@
         <tr>
           <th></th>
           {{foreach from=$plagesConsult|smarty:nodefaults key=curr_day item=plagesPerDay}}
-          <th colspan="2">{{$curr_day|date_format:"%A %d"}}</th>
+          <th colspan="{{if !$listEntry.$curr_day.nbcol}}1{{else}}{{$listEntry.$curr_day.nbcol}}{{/if}}">{{$curr_day|date_format:"%A %d"}}</th>
           {{/foreach}}
         </tr>  
         {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
@@ -19,22 +19,17 @@
           
           {{assign var="keyAff" value="$curr_day $curr_hour:$curr_mins"}}
           {{assign var="plageJour" value=$aAffichage.$keyAff}}
-          
-          {{if is_string($plageJour.plagesOp) && $plageJour.plagesOp == "empty" &&
-               is_string($plageJour.plagesConsult) && $plageJour.plagesConsult == "empty"}}
-               <td class="empty" colspan="2"></td>
-          {{elseif is_string($plageJour.plagesOp) && $plageJour.plagesOp == "hours" &&
-                   is_string($plageJour.plagesConsult) && $plageJour.plagesConsult == "hours"}}
-                <td class="empty" rowspan="4" colspan="2"></td>
-          {{elseif is_string($plageJour.plagesOp) && $plageJour.plagesOp == "full" &&
-                   is_string($plageJour.plagesConsult) && $plageJour.plagesConsult == "full"}}
-          {{else}}
-            {{assign var="colonne" value="plagesConsult"}}
-            {{include file="inc_cellule_semainier.tpl"}}
             
-            {{assign var="colonne" value="plagesOp"}}
-            {{include file="inc_cellule_semainier.tpl"}}
-          {{/if}}
+            {{if $listEntry.$curr_day.consult || !$listEntry.$curr_day.nbcol}}
+              {{assign var="colonne" value="plagesConsult"}}
+              {{include file="inc_cellule_semainier.tpl"}}
+            {{/if}}
+            
+            {{foreach from=$listEntry.$curr_day.salle item=curr_salle}}
+              {{assign var="colonne" value="Salle$curr_salle"}}
+              {{include file="inc_cellule_semainier.tpl"}}
+            {{/foreach}}
+
           {{/foreach}}
           {{/foreach}}
         {{/foreach}}
