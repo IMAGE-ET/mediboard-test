@@ -1,0 +1,547 @@
+/* Global CSS for Mediboard_lite (include of Mediboard before)*/
+
+/* Body */
+
+body {
+  font-family: arial, sans-serif;
+  font-size: 11px;  
+  background: #fff;
+  margin: 0px;
+}
+
+/* Login */
+
+#login {
+  margin: 40px 0px 0px; 
+}
+
+#login table {
+  border: solid #000 3px;
+  width: 600px;
+  background: #fff;
+  margin: auto;
+  padding: 5px;
+}
+
+#login table td.logo {
+  width: 33%;
+  text-align: center;
+  font-size: 9px;
+  white-space: normal;
+}
+
+/* Form tables */
+
+table.form {
+  width: 100%;
+  border-spacing: 1px;
+}
+
+table.form th {
+  color: #000;
+  white-space: nowrap;
+  background-color: #ffd;
+  vertical-align: top;
+  text-align: right;
+  font-weight: normal;
+  padding: 2px 4px;
+  border: none;
+}
+
+table.form th.title {
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold; 
+  text-align: center;
+  background-color: #638cc9;
+  border: #aaa 1px outset;
+}
+
+table.form tr.groupexpand td,
+table.form tr.groupcollapse td,
+table.form tr.groupexpand th,
+table.form tr.groupcollapse th {
+  padding-left: 25px;
+}
+
+table.form tr.triggerShow td,
+table.form tr.triggerHide td,
+table.form tr.triggerShow th,
+table.form tr.triggerHide th {
+  padding-left:25px;
+}
+
+table.form th.category {
+  color: #fff;
+  font-weight: bold;  
+  font-style: italic;  
+  text-align: center;
+  background-color: #638cc9;
+  border: #638cc9 1px outset;
+}
+
+table.form th.mandatory {
+  color: #f00;
+  font-weight: bold;
+}
+
+label.notNull {
+  padding-right: 13px;
+  background: url(./images/redbox.jpg) no-repeat center right;
+  font-weight: bold;
+}
+
+label.notNullOK {
+  padding-right: 13px;
+  background: url(./images/greenbox.jpg) no-repeat center right;
+  font-weight: bold;
+}
+
+label:hover {
+  border-bottom: 1px dotted #888;
+  cursor: help;
+}
+
+table.form th.text {
+  white-space: normal;
+  text-align: center;
+}
+
+table.form td {
+  white-space: nowrap;
+  vertical-align: top;
+  background-color: #ffd;
+  text-align: left;
+  padding: 1px 4px;
+}
+
+table.form td.dark {
+  background-color: #ffc;
+}
+
+table.form td.light {
+  background-color: #fff;
+}
+
+table.form td.compte_rendu {
+  background: #ffd;
+}
+
+table.form td.text {
+  white-space: normal;
+}
+
+table.form td.info {
+  white-space: normal;
+}
+
+table.form td.readonly input {
+  background-color: #ffd;
+  border: 1px dotted;
+}
+
+table.form td.button {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table.form td.date div {
+  font-size: 11px;
+  border: 1px dotted;
+  padding: 0px 1px;
+  margin: 1px;
+  width: 100px;
+  min-height: 15px;
+  float: left;
+}
+
+table.form td.date img {
+  margin-top: 3px;
+}
+
+div.autocomplete {
+  position:absolute;
+  width:250px;
+  max-height:200px;
+  overflow: auto;
+  background-color:white;
+  border:1px solid #888;
+  margin:0px;
+  padding:0px;
+}
+div.autocomplete ul {
+  list-style-type:none;
+  margin:0px;
+  padding:0px;
+}
+div.autocomplete ul li.selected { background-color: #ffd;}
+div.autocomplete ul li {
+  list-style-type:none;
+  display:block;
+  margin:0;
+  padding:2px;
+  cursor:pointer;
+}
+
+/* Navigation */
+
+td#mainHeader table {
+  width: 100%;
+}
+
+td#mainHeader td.logo {
+  text-align: left;
+}
+
+td#mainHeader td.welcome {
+  text-align: right;
+  font-size: 14px;
+  font-style: italic;
+}
+
+td#menubar {
+  text-align: right;
+  border: 2px solid #000;
+  padding: 2px;
+  background-color: #638cc9;
+  color: #fff;
+  width: 100%;
+}
+
+td#menubar a.textSelected {
+  color: #fdd;
+  font-weight: bold;
+}
+
+td#menubar a.textNonSelected {
+  color: #fff;
+}
+
+td#menubar a {
+  color: #000;
+}
+
+td#menubar a:hover {
+  color: #fcc;
+}
+
+/* Tabbed items */
+
+td.tabox {
+  background-color: #fff;
+  border: solid #fff 0px;
+}
+
+table.tabmenu {
+  margin: 5px 10px;
+  border-spacing: 0px;
+}
+
+table.tabmenu td {
+  height: 25px;
+  padding-top: 2px;
+}
+
+table.tabmenu td.normal {
+  background: url(./images/tabBg.png) repeat-x bottom;
+}
+
+table.tabmenu td.normal a {
+  color: #fff;
+}
+
+table.tabmenu td.normalLeft {
+  width: 15px;
+  background: url(./images/tabLeft.gif) no-repeat bottom right;
+}
+
+table.tabmenu td.normalRight {
+  width: 15px;
+  background: url(./images/tabRight.gif) no-repeat bottom left;
+}
+
+table.tabmenu td.selected {
+  background: url(./images/tabSelectedBg.png) repeat-x bottom;
+}
+
+table.tabmenu td.selectedLeft {
+  width: 15px;
+  background: url(./images/tabSelectedLeft.gif) no-repeat bottom right;
+}
+
+table.tabmenu td.selectedRight {
+  width: 15px;
+  background: url(./images/tabSelectedRight.gif) no-repeat bottom left;
+}
+
+/* Inputs */
+
+a.button, button, a.buttonedit, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
+a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange, a.buttondown {
+  color: #fff;
+  height: 18px;
+  background-color: #638cc9;
+}
+
+a.button:hover, button:hover, a.buttonedit:hover, a.buttontrash:hover, a.buttonsubmit:hover, 
+a.buttonnew:hover, a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, 
+a.buttonsearch:hover, a.buttontick:hover, a.buttonchange:hover, a.buttondown:hover {
+  background-color: #8ae;
+}
+
+button.edit, a.buttonedit {
+  background-image: url(images/buttons/edit.gif);
+  padding-left: 16px;
+}
+
+button.trash, a.buttontrash {
+  background-image: url(images/buttons/trash.gif);
+  padding-left: 18px; 
+}
+
+button.submit, a.buttonsubmit {
+  background-image: url(images/buttons/save.gif);
+  padding-left: 18px;
+}
+button.new, a.buttonnew {
+  background-image: url(images/buttons/new.gif);
+  padding-left: 18px;
+}
+button.print, a.buttonprint {
+  background-image: url(images/buttons/print.gif);
+  padding-left: 18px;
+}
+button.cancel, a.buttoncancel {
+  background-image: url(images/buttons/cancel.gif);
+  padding-left: 18px;
+}
+
+button.modify, a.buttonmodify {
+  background-image: url(images/buttons/save.gif);
+  padding-left: 18px;
+}
+button.search, a.buttonsearch {
+  background-image: url(images/buttons/search.gif);
+  padding-left: 18px;
+}
+button.tick, a.buttontick {
+  background-image: url(images/buttons/tick.gif);
+  padding-left: 18px;
+}
+
+button.down, a.buttondown {
+  background-image: url(images/buttons/down.gif);
+  padding-left: 18px;
+}
+
+button.change, a.buttonchange {
+  background-image: url(images/buttons/change.gif);
+  padding-left: 18px;
+}
+button.notext{
+  padding : 0px 0px 0px 0px;
+  margin  : 1px 1px;
+  width: 19px;
+}
+a.notext{
+  padding : 0px 0px 0px 16px;
+  margin  : 1px 1px;
+  height: 16px;
+}
+
+input {
+  border: 1px #a5acb2 solid;
+  font-size: 12px;
+  margin: 1px;
+  padding: 0px 2px;
+}
+
+input[type=submit],
+input[type=reset],
+input[type=button] {
+  border-color: black;
+  background: #638cc9;
+  margin: 0 10px;
+  color: #fff;
+}
+
+input[type=submit]:hover,
+input[type=reset]:hover,
+input[type=button]:hover {
+  background: #8ae;
+  color: #fff;
+}
+
+select {
+  border: 1px #a5acb2 solid;
+  font-size: 10px;
+  padding: 0;
+}
+
+optgroup {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 0px;
+  padding-left: 5px;
+  background: #fff;
+}
+
+option {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: normal;
+  padding: 0px;
+  padding-right: 4px;
+  background: #fff;
+}
+
+input,
+select,
+textarea {
+  padding: 1px;
+  border: 1px #a5acb2 solid;
+  background: #fff;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  padding: 0px;
+  border: 2px #a5acb2 inset;
+  background: #ddf;
+}
+
+/* Standard table */
+
+table.tbl {
+  width: 100%;
+  border: 0px;
+  border-spacing: 1px;
+  background-color: #fff;
+}
+
+table.tbl a {
+  display: block;
+}
+
+table.tbl tr:hover td {
+  background-color: #fdd;
+}
+
+a.actionPat {
+  display: inline;
+  float: right;
+  margin: 0 1px;
+}
+
+table.tbl a.action {
+  display: inline;
+}
+
+table.tbl th a {
+  color: #fff;
+}
+
+table.tbl th {
+  background-color: #638cc9;
+  padding: 2px;
+  color: #fff;
+  border: outset #ccc 1px;
+  font-weight: normal;
+  text-align: center;
+  font-style: italic;
+  white-space: nowrap;
+}
+
+table.tbl tr.triggerShow td,
+table.tbl tr.triggerHide td{
+  padding-left: 25px;
+}
+
+table.tbl th.title {
+  font-size: 14px;
+  font-weight: bold;  
+  text-align: center;
+  background: #638cc9;
+  border: #aaa 1px outset;
+}
+
+table.tbl td {
+  background-color: #ffd;
+  padding: 2px;
+  white-space: nowrap;
+}
+
+table.tbl th.text {
+  white-space: normal;
+}
+
+table.tbl td.text {
+  white-space: normal;
+}
+
+table.tbl td.button {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table.tbl tr.clear,
+table.tbl tr.clear a {
+  background-color: #fff;
+  color: #000;
+}
+
+table.tbl tr.clear td,
+table.tbl tr.clear th {
+  background-color: transparent;
+  border: none;
+}
+
+table.tbl td.date div {
+  font-size: 11px;
+  border: 1px dotted;
+  padding: 0px 1px;
+  margin: 1px;
+  width: 100px;
+  min-height: 15px;
+  float: left;
+}
+
+table.tbl td.date img {
+  margin-top: 3px;
+}
+
+table.titleblock td.titlecell {
+  font-family: Arial;
+  font-size: 20px; 
+  color: #638cc9;
+  width: 100%;
+  padding-bottom: 5px;
+}
+
+/* Main table */
+
+th.title {
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;  
+  text-align: center;
+  background: #638cc9;
+  border: #638cc9 1px outset;
+}
+
+/* System message */
+#systemMsg {
+  font-size: 80%;
+  float : none;
+  text-align: center;
+}
+
+div.dialog#systemMsg {
+  float: right;
+}
+
+div.message, div.loading, div.error, div.warning {
+   white-space: nowrap;
+}
