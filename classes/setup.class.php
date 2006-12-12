@@ -52,6 +52,12 @@ class CSetup {
    * Associates an SQL query to a module revision
    */
   function addQuery($query) {
+    // Table creation ?
+    if (preg_match("/CREATE\s+TABLE\s+(\S+)/i", $query, $matches)) {
+      $table = trim($matches[1], "`");
+      $this->addTable($table);
+    }
+    
     $this->queries[current($this->revisions)][] = $query;
   }
 
@@ -59,7 +65,11 @@ class CSetup {
    * Registers a table in the module
    */
   function addTable($table) {
-  $this->tables[] = $table;
+    if (in_array($table, $this->tables)) {
+      trigger_error("Table '$table' already exists", E_USER_ERROR);
+    }
+
+    $this->tables[] = $table;
   }
     
   /**
