@@ -15,10 +15,6 @@ $config["mod_version"]     = "0.1";
 $config["mod_type"]        = "user";
 $config["mod_config"]      = true;
 
-if (@$a == "setup") {
-  echo dPshowModuleConfig($config);
-}
-
 class CSetupdPImeds {
 
   function configure() {

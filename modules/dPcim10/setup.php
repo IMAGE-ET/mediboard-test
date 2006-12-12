@@ -18,7 +18,12 @@ if (@$a == "setup") {
   echo dPshowModuleConfig( $config );
 }
 
-class CSetupdPcim10 {
+class CSetupdPcim10 extends CSetup {
+  
+  function __construct() {
+    $this->mod_name = "dPcim10";
+    $this->mod_version = "0.11";
+  }
 
   function configure() {
     global $AppUI;

@@ -443,15 +443,19 @@ class CAppUI {
 * @param boolean If true, $msg is appended to the current string otherwise
 * the existing message is overwritten with $msg.
 */
-  function setMsg($msg, $msgNo=0, $append=false) {
+  function setMsg($msg, $msgNo = null, $append = false) {
     $msg = $this->_($msg);
-    $this->msg = $append ? $this->msg." ".$msg : $msg;
-    $this->msgNo = $msgNo;
+    $this->msg = ($append and $this->msg) ? join(array($this->msg, $msg), "\n") : $msg;
+
+    if ($msgNo) {
+      $this->msgNo = $msgNo;
+    }
   }
-/**
-* Display the formatted message and icon
-* @param boolean If true the current message state is cleared.
-*/
+  
+ /**
+  * Display the formatted message and icon
+  * @param boolean If true the current message state is cleared.
+  */
   function getMsg($reset=true) {
     $msg = $this->msg;
 
