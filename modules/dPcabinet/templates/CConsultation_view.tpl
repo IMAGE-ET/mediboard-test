@@ -19,8 +19,11 @@ function newExam(sAction, consultation_id) {
   </tr>
   <tr>
     <td>
-      <strong>Dr. {{$object->_ref_plageconsult->_ref_chir->_view}}</strong>
-      &mdash; {{$object->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
+      <strong>Date:</strong>
+      <i>le {{$object->_ref_plageconsult->date|date_format:"%d %B %Y"}}</i>
+      <br />
+      <strong>Praticien:</strong>
+      <i>Dr. {{$object->_ref_plageconsult->_ref_chir->_view}}</i>
       {{if $object->motif}}
         <br />
         <strong>Motif:</strong>
