@@ -60,9 +60,7 @@ function mbRelativePath($absPath) {
 }
 
 function errorHandler($errno, $errstr, $errfile, $errline) {
-  global $divClasses;
-  global $errorTypes;
-  global $logPath;
+  global $divClasses, $errorTypes, $logPath, $AppUI;
   
   // Handles the @ case
   if (!error_reporting()) {
@@ -79,6 +77,11 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   $errorType = @$errorTypes[$errno];
   
   $log = "\n\n<div class='$divClass'>";
+  
+  if($AppUI->user_id){
+    $log .= "\n<strong>User: </strong>$AppUI->user_first_name $AppUI->user_last_name ($AppUI->user_id)<br />";
+  }
+  
   $log .= "\n<strong>Time: </strong>$errorTime";
   $log .= "\n<strong>Type: </strong>$errorType";
   $log .= "\n<strong>Text: </strong>$errstr";
