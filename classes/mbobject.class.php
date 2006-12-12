@@ -28,15 +28,16 @@ class CMbObject {
   
   var $_objectsTable = null; // list of loaded objects
   
-  var $_class_name = null; // class name of the object
-  var $_tbl        = null; // table name
-  var $_tbl_key    = null; // primary key name
-  var $_error      = null; // error message
-  var $_id         = null; // universal shortcut for the object id
-  var $_view       = null; // universal view of the object
-  var $_shortview  = null; // universal shortview for the object
-  var $_canRead    = null; // read permission for the object
-  var $_canEdit    = null; // write permission for the object
+  var $_class_name    = null; // class name of the object
+  var $_tbl           = null; // table name
+  var $_tbl_key       = null; // primary key name
+  var $_error         = null; // error message
+  var $_id            = null; // universal shortcut for the object id
+  var $_view          = null; // universal view of the object
+  var $_shortview     = null; // universal shortview for the object
+  var $_view_template = null; // default template file
+  var $_canRead       = null; // read permission for the object
+  var $_canEdit       = null; // write permission for the object
 
   /**
    * Properties  specification
@@ -68,9 +69,9 @@ class CMbObject {
     global $mbObjectCount;
     $mbObjectCount++;
     
-    $this->_tbl = $table;
+    $this->_tbl     = $table;
     $this->_tbl_key = $key;
-    $this->_id =& $this->$key;
+    $this->_id      =& $this->$key;
     
     static $class = null;
     if(!$class) {
@@ -366,9 +367,18 @@ class CMbObject {
    */
 
   function updateFormFields() {
-    $k = $this->_tbl_key;
-    $this->_view = $this->_tbl . " #" . $this->$k;
-    $this->_shortview = "#" . $this->$k;
+    $k                    = $this->_tbl_key;
+    $this->_view          = $this->_tbl . " #" . $this->$k;
+    $this->_shortview     = "#" . $this->$k;
+    $this->_view_template = "../../{$this->_ref_module->mod_name}/templates/{$this->_class_name}_view.tpl";
+  }
+  
+  /**
+   * Complete view for the object
+   */
+  
+  function loadCompleteView() {
+    $this->loadRefsFwd();
   }
   
   /**

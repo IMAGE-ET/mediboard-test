@@ -790,6 +790,18 @@ div.big-error {
   }
 }
 
+  /* @import "./tooltip.css   */
+
+div.tooltip {
+  border: 1px dotted #000;
+  background-color:#aaa;
+  position: absolute;
+}
+
+div.tooltip table.tbl {
+  width: 200px;
+}
+
   /* @import "./login.css";   */
 
 #login {

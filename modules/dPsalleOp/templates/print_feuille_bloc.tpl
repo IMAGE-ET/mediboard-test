@@ -79,7 +79,7 @@
         </tr>
         
         <tr>
-          <th>Type d'anesthésiste</th>
+          <th>Type d'anesthésie</th>
           <td class="text">
             {{if $operation->type_anesth}}
             {{$operation->_lu_type_anesth}}
@@ -255,7 +255,7 @@
           <th style="{{$styleBorder}}text-align:left;">Code</th>
           <th style="{{$styleBorder}}text-align:left;">Exécutant</th>
           <th style="{{$styleBorder}}text-align:left;">Activité</th>
-          <th style="{{$styleBorder}}text-align:left;">Phase — Modificateurs</th>
+          <th style="{{$styleBorder}}text-align:left;">Phase &mdash; Modificateurs</th>
         </tr>
         {{foreach from=$operation->_ref_actes_ccam item=currActe}}
         <tr>

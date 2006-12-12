@@ -16,7 +16,7 @@
           <th class="category" colspan="2">
             {{if $patient->_canRead}}
             <div style="float:right;">
-              <a href="#" onclick="viewItem( {
+              <a href="#" onclick="setObject( {
                 objClass: 'CPatient', 
                 keywords: '', 
                 id: {{$patient->patient_id|smarty:nodefaults|JSAttribute}}, 
@@ -274,7 +274,7 @@
           </td>
           <td style="text-align:right;">
           {{if $curr_sejour->_canRead}}
-            <a href="#" onclick="viewItem( {
+            <a href="#" onclick="setObject( {
               objClass: 'CSejour', 
               keywords: '', 
               id: {{$curr_sejour->sejour_id|smarty:nodefaults|JSAttribute}}, 
@@ -290,15 +290,23 @@
         <tr>
           <td>
             <ul>
-            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}"
+              onmouseover="viewItem(
+                'COperation',
+                {{$curr_op->operation_id}})"
+              onmouseout="hideItem(
+                'COperation',
+                {{$curr_op->operation_id}})">
               <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
               {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} - Intervention du Dr. {{$curr_op->_ref_chir->_view}}
             </a>
+            <div id="COperation{{$curr_op->operation_id}}" class="tooltip" style="display: none;">
+            </div>
             </ul>
           </td>
           <td style="text-align:right;">
           {{if $curr_op->_canRead}}
-            <a href="#" onclick="viewItem( {
+            <a href="#" onclick="setObject( {
               objClass: 'COperation', 
               keywords: '', 
               id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
@@ -332,18 +340,26 @@
               <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
             </a>
             {{/if}}
-            <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+            <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}"
+              onmouseover="viewItem(
+                'CConsultation',
+                {{$curr_consult->consultation_id}})"
+              onmouseout="hideItem(
+                'CConsultation',
+                {{$curr_consult->consultation_id}})">
               {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_consult->_ref_chir->_view}}
             </a>
+            <div id="CConsultation{{$curr_consult->consultation_id}}" class="tooltip" style="display: none;">
+            </div>
           </td>
           <td style="text-align:right;">
           {{if $curr_consult->_canRead}}
-            <a href="#" onclick="viewItem( {
-              objClass: 'CConsultation', 
-              keywords: '', 
-              id: {{$curr_consult->consultation_id|smarty:nodefaults|JSAttribute}}, 
-              view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )"
-              title="{{$curr_consult->_nb_files_docs}} doc(s)">
+            <a href="#" title="{{$curr_consult->_nb_files_docs}} doc(s)"
+              onclick="setObject( {
+                objClass: 'CConsultation', 
+                keywords: '', 
+                id: {{$curr_consult->consultation_id}}, 
+                view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
               {{$curr_consult->_nb_files_docs}}
               <img align="top" src="modules/{{$m}}/images/next{{if !$curr_consult->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
             </a>

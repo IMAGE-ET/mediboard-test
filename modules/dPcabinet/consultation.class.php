@@ -153,6 +153,10 @@ class CConsultation extends CMbObject {
     return $msg . parent::check();
   }
   
+  function loadCompleteView() {
+    $this->loadRefPlageConsult();
+    $this->loadRefsExamAudio();
+  }
 
   function loadRefPatient() {
     $this->_ref_patient = new CPatient;

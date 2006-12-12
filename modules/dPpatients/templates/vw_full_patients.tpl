@@ -4,8 +4,22 @@
 
 <script type="text/javascript">
 
-function viewItem(oOptions) {
-  setObject(oOptions);
+function viewItem(class, id) {
+  oElement = $(class+id);
+  oElement.show();
+  if(oElement.alt != "infos - cliquez pour fermer") {
+    url = new Url;
+    url.setModuleAction("system", "httpreq_vw_object");
+    url.addParam("object_class", class);
+    url.addParam("object_id", id);
+    url.requestUpdate(oElement);
+    oElement.alt = "infos - cliquez pour fermer";
+  }
+}
+
+function hideItem(class, id) {
+  oElement = $(class+id);
+  oElement.hide();
 }
 
 function reloadListFile(){
@@ -19,7 +33,7 @@ function reloadListFile(){
   url.addParam("selClass", document.FrmClass.selClass.value);  
   url.addParam("typeVue", document.FrmClass.typeVue.value);
   url.requestUpdate('listView', { waitingText : null });
-  
+
   var url = new Url;
   url.setModuleAction("dPpatients", "httpreq_vw_full_patient");
   url.addParam("patient_id", "{{$patient->_id}}");

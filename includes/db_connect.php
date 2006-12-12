@@ -338,12 +338,13 @@ function db_delete($table, $keyName, $keyValue) {
 function db_insertObject($table, &$object, $keyName = null, $verbose = false) {
   $fmtsql = "INSERT INTO $table (%s) VALUES (%s) ";
   foreach (get_object_vars($object) as $k => $v) {
-    if (is_array($v) or is_object($v) or $v == null) {
+    if (is_array($v) or is_object($v) or $v === null) {
       continue;
     }
     if ($k[0] == "_") { // internal field
       continue;
     }
+    $v = trim($v);
     $fields[] = "`$k`";
     $values[] = "'" . db_escape($v) . "'";
   }
@@ -381,6 +382,7 @@ function db_updateObject($table, &$object, $keyName) {
     if ($v === null) {
       continue;
     }
+    $v = trim($v);
     if($v === "") {
       // Tries to nullify empty values but won't fail if not possible
       $val = "NULL";

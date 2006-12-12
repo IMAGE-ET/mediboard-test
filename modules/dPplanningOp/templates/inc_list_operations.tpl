@@ -1,5 +1,10 @@
       <table class="tbl">
         <tr>
+          <th class="title" colspan="5">
+            Opérations
+          </th>
+        </tr>
+        <tr>
           <th>Patient</th>
           <th>Actes médicaux</th>
           <th>Heure prévue</th>
