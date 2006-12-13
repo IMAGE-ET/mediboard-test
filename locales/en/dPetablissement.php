@@ -1,0 +1,3 @@
+<?php
+$locales["CGroups"] = "Etablissements";
+?>

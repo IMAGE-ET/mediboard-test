@@ -8,6 +8,47 @@
   {{assign var="modFiles" value=null}}
 {{/if}}
 
+<script type="text/javascript">
+
+function doEmptyTemplates() {
+  var url = new Url;
+  url.setModuleAction("system", "httpreq_do_empty_templates");
+  url.requestUpdate("emptyTemplates");
+}
+
+function doEmptySharedMemory() {
+  var url = new Url;
+  url.setModuleAction("system", "httpreq_do_empty_shared_memory");
+  url.requestUpdate("emptySharedMemory");
+}
+
+</script>
+
+<h2>Nettoyage du cache</h2>
+
+<table class="tbl">
+  <tr>
+    <th>Action</th>
+    <th>Status</th>
+  </tr>
+  <tr>
+    <td>
+      <button class="cancel" onclick="doEmptyTemplates()">
+        Vider les caches template Smarty
+      </button>
+    </td>
+    <td id="emptyTemplates" />
+  </tr>
+  <tr>
+    <td>
+      <button class="cancel" onclick="doEmptySharedMemory()">
+        Vider les variables de la mémoire partagée
+      </button>
+    </td>
+    <td id="emptySharedMemory" />
+  </tr>
+</table>
+
 <h2>Administration des modules</h2>
 
 <table border="0" cellpadding="2" cellspacing="1" width="98%" class="tbl">
@@ -110,31 +151,4 @@
     </td>
   </tr>
   {{/foreach}}
-</table>
-
-<script type="text/javascript">
-
-function doEmptyTemplates() {
-  var emptyTemplatesUrl = new Url;
-  emptyTemplatesUrl.setModuleAction("system", "httpreq_do_empty_templates");
-  emptyTemplatesUrl.requestUpdate("emptyPath");
-}
-
-</script>
-
-<h2>Suppression du cache des templates</h2>
-
-<table class="tbl">
-  <tr>
-    <th>Action</th>
-    <th>Status</th>
-  </tr>
-  <tr>
-    <td>
-      <button class="cancel" onclick="doEmptyTemplates()">
-        Supprimer les templates
-      </button>
-    </td>
-    <td id="emptyPath" />
-  </tr>
 </table>

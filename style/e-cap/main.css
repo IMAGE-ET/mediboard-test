@@ -555,6 +555,10 @@ div.dialog#systemMsg {
   float: right;
 }
 
+div.loading {
+  background-image: url(images/loading.gif);
+}
+
 div.message, div.loading, div.error, div.warning {
    white-space: nowrap;
 }

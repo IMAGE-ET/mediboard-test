@@ -16,6 +16,8 @@ if(!is_file("./includes/config.php")) {
 }
 
 require_once("./classes/ui.class.php");
+
+require_once("./includes/cache.php");
 require_once("./includes/config_dist.php");
 require_once("./includes/config.php");
 
@@ -26,6 +28,12 @@ is_file($dPconfig["root_dir"]."/includes/config.php")
 require_once("./includes/mb_functions.php");
 require_once("./includes/main_functions.php");
 require_once("./includes/errors.php");
+
+require_once("./classes/chrono.class.php");
+
+// Start chrono
+$phpChrono = new Chronometer;
+$phpChrono->start();
 
 // PHP Configuration
 ini_set("memory_limit", "64M");
@@ -52,10 +60,11 @@ if(!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
 $AppUI =& $_SESSION["AppUI"];
 $AppUI->setConfig($dPconfig);
 $AppUI->checkStyle();
-$AppUI->getAllClasses();
 
-$phpChrono = new Chronometer;
-$phpChrono->start();
+$allChrono = new Chronometer;
+$allChrono->start();
+$AppUI->getAllClasses();
+$allChrono->stop();
 
 // load default preferences if not logged in
 if($AppUI->doLogin()) {
@@ -89,11 +98,10 @@ $g = "";
 
 
 // check if we are logged in
-if($AppUI->doLogin()) {
-  $AppUI->setUserLocale();
+if ($AppUI->doLogin()) {
   // load basic locale settings
-  @include_once("./locales/$AppUI->user_locale/locales.php");
-  @include_once("./locales/core.php");
+  $AppUI->setUserLocale();
+  include_once("./locales/core.php");
   setlocale(LC_TIME, $AppUI->user_locale);
 
   $redirect = @$_SERVER["QUERY_STRING"];
@@ -101,7 +109,7 @@ if($AppUI->doLogin()) {
     $redirect = "";
   }
 
-  if(isset($locale_char_set)) {
+  if (isset($locale_char_set)) {
     header("Content-type: text/html;charset=$locale_char_set");
   }
 
@@ -165,8 +173,7 @@ if(!$indexGroup->canRead()) {
 }
 
 // load locale settings
-@include_once("./locales/$AppUI->user_locale/locales.php");
-@include_once("./locales/core.php");
+require_once("./locales/core.php");
 
 $user_locale = $AppUI->user_locale;
 
@@ -192,9 +199,9 @@ $suppressHeaders = dPgetParam($_GET, "suppressHeaders");
 // Output the charset header in cas of an ajax request
 $ajax = dPgetParam($_GET, "ajax", false);
 
-if(!$suppressHeaders || $ajax) {
+if (!$suppressHeaders || $ajax) {
   // output the character set header
-  if(isset($locale_char_set)) {
+  if (isset($locale_char_set)) {
     header("Content-type: text/html;charset=$locale_char_set");
   }
 }
@@ -213,12 +220,12 @@ foreach($listActiveModules as $module) {
   require_once "./modules/".$module->mod_name."/index.php";
 }
   
-if(!$suppressHeaders) {
+if (!$suppressHeaders) {
   
   // -- Code pour le HEADER --
   
   // Définition du CharSet
-  if(!isset( $locale_char_set )){
+  if (!isset($locale_char_set)){
     $locale_char_set = "UTF-8";
   }
   //Liste des Etablissements
@@ -313,7 +320,6 @@ if(!$suppressHeaders) {
 }
 
 ob_end_flush();
-
 require "./includes/access_log.php";
 
 ?>

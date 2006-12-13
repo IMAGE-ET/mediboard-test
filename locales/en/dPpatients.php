@@ -1,0 +1,32 @@
+<?php
+$locales["CAntecedent.type.alle"] = "Allergie";
+$locales["CAntecedent.type.trans"] = "Transfusion";
+$locales["CAntecedent.type.obst"] = "Obstétrique";
+$locales["CAntecedent.type.chir"] = "Chirurgical";
+$locales["CAntecedent.type.med"] = "Médical";
+$locales["CAntecedent.type.fam"] = "Familial";
+$locales["CAntecedent.type.anesth"] = "Anesthésique";
+$locales["CPatient.sexe."] = " ";
+$locales["CPatient.sexe.m"] = "f";
+$locales["CPatient.sexe.f"] = "m";
+$locales["CPatient.sexe.j"] = "j";
+$locales["CPatient.incapable_majeur."] = " ";
+$locales["CPatient.incapable_majeur.1"] = "Oui";
+$locales["CPatient.incapable_majeur.0"] = "Non";
+$locales["CPatient.ATNC."] = " ";
+$locales["CPatient.ATNC.1"] = "Oui";
+$locales["CPatient.ATNC.0"] = "Non";
+$locales["CPatient.nationalite."] = " ";
+$locales["CPatient.nationalite.local"] = "Local";
+$locales["CPatient.nationalite.etranger"] = "Etranger";
+$locales["CPatient.prevenir_parente."] = " ";
+$locales["CPatient.prevenir_parente.ascendant"] = "Ascendant";
+$locales["CPatient.prevenir_parente.colateral"] = "Colatéral";
+$locales["CPatient.prevenir_parente.conjoint"] = "Conjoint";
+$locales["CPatient.prevenir_parente.divers"] = "Divers";
+$locales["CPatient.prevenir_parente.enfant"] = "Enfant";
+$locales["CAntecedent"] = "Antécédents";
+$locales["CMedecin"] = "Médecins";
+$locales["CPatient"] = "Patients";
+$locales["CTraitement"] = "Traitements";
+?>
