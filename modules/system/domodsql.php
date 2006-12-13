@@ -56,8 +56,10 @@ switch ($cmd) {
 		break;
 	case "remove":
     $success = $setup->remove();
-    $module->remove();
-    $AppUI->setMsg("Module removed", $success ? UI_MSG_OK : UI_MSG_ERROR, true);
+    if($success !== null){
+      $module->remove();
+      $AppUI->setMsg("Module removed", $success ? UI_MSG_OK : UI_MSG_ERROR, true);
+    }
 		break;
   case "install":
     $newVersion = $setup->upgrade($module->mod_version);

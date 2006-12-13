@@ -12,32 +12,15 @@ $config = array();
 $config["mod_name"]        = "dPpatients";
 $config["mod_version"]     = "0.40";
 $config["mod_type"]        = "user";
-$config["mod_config"]      = true;
 
-if (@$a == "setup") {
-  echo dPshowModuleConfig($config);
-}
-
-class CSetupdPpatients {
-
-  function configure() {
-    global $AppUI;
-    $AppUI->redirect("m=dPpatients&a=configure");
-    return true;
-  }
-
-  function remove() {
-    db_exec("DROP TABLE patients;");   db_error();
-    db_exec("DROP TABLE medecin;");    db_error();
-    db_exec("DROP TABLE antecedent;"); db_error();
-    db_exec("DROP TABLE traitement;"); db_error();
-    return null;
-  }
-
-  function upgrade($old_version) {
-    switch ($old_version) {
-      case "all":
-        $sql = "CREATE TABLE `patients` (
+class CSetupdPpatients extends CSetup {
+  
+  function __construct() {
+    parent::__construct();
+    
+    $this->mod_name = "dPpatients";
+    $this->makeRevision("all");
+    $sql = "CREATE TABLE `patients` (
               `patient_id` INT(11) NOT NULL AUTO_INCREMENT,
               `nom` VARCHAR(50) NOT NULL DEFAULT '',
               `prenom` VARCHAR(50) NOT NULL DEFAULT '',
@@ -57,17 +40,17 @@ class CSetupdPpatients {
               KEY `matricule` (`matricule`,`SHS`),
               KEY `nom` (`nom`,`prenom`)
             ) TYPE=MyISAM;";
-        db_exec( $sql ); db_error();
-      case "0.1":
-        $sql = "ALTER TABLE patients" .
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.1");
+    $sql = "ALTER TABLE patients" .
             "\nADD tel2 VARCHAR( 10 ) AFTER tel ," .
             "\nADD medecin1 INT( 11 ) AFTER medecin_traitant ," .
             "\nADD medecin2 INT( 11 ) AFTER medecin1 ," .
             "\nADD medecin3 INT( 11 ) AFTER medecin2 ," .
             "\nADD rques TEXT;";
-        db_exec( $sql ); db_error();
-        
-        $sql = "CREATE TABLE medecin (" .
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE medecin (" .
             "\nmedecin_id INT(11) NOT NULL AUTO_INCREMENT," .
             "\nnom VARCHAR(50) NOT NULL DEFAULT ''," .
             "\nprenom VARCHAR(50) NOT NULL DEFAULT ''," .
@@ -79,47 +62,42 @@ class CSetupdPpatients {
             "\ncp VARCHAR(5) DEFAULT NULL," .
             "\nPRIMARY KEY  (`medecin_id`))" .
             "\nTYPE=MyISAM COMMENT='Table des medecins correspondants';";
-        db_exec( $sql ); db_error();
-      case "0.2":
-        $sql = "ALTER TABLE medecin " .
-            "\nADD specialite TEXT AFTER prenom ;";
-        db_exec( $sql ); db_error();
-  
-      case "0.21":
-        $sql = "ALTER TABLE medecin " .
-            "\nADD disciplines TEXT AFTER prenom ;";
-        db_exec( $sql ); db_error();
-  
-      case "0.22":
-          $sql = "ALTER TABLE `medecin`" .
-        "\nCHANGE `adresse` `adresse` TEXT DEFAULT NULL ;";
-          db_exec( $sql ); db_error();
-          
-      case "0.23":
-        $sql = "ALTER TABLE `medecin` ADD INDEX ( `nom` ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `medecin` ADD INDEX ( `prenom` ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `medecin` ADD INDEX ( `cp` ) ;";
-        db_exec( $sql ); db_error();
-      
-      case "0.24":
-        $sql = "ALTER TABLE `patients`" .
-            "\nADD `nom_jeune_fille` VARCHAR( 50 ) NOT NULL AFTER `nom` ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients`" .
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.2");
+    $sql = "ALTER TABLE medecin ADD specialite TEXT AFTER prenom ;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.21");
+    $sql = "ALTER TABLE medecin ADD disciplines TEXT AFTER prenom ;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.22");
+    $sql = "ALTER TABLE `medecin` CHANGE `adresse` `adresse` TEXT DEFAULT NULL ;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.23");
+    $sql = "ALTER TABLE `medecin` ADD INDEX ( `nom` ) ;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `medecin` ADD INDEX ( `prenom` ) ;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `medecin` ADD INDEX ( `cp` ) ;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.24");
+    $sql = "ALTER TABLE `patients` ADD `nom_jeune_fille` VARCHAR( 50 ) NOT NULL AFTER `nom` ;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients`" .
             "\nCHANGE `sexe` `sexe` ENUM( 'm', 'f', 'j' )" .
             "\nDEFAULT 'm' NOT NULL ";
-        db_exec( $sql ); db_error();
-      
-      case "0.25":
-        $sql = "ALTER TABLE `patients`" .
-            "\nCHANGE `adresse` `adresse` TEXT" .
-            "\nNOT NULL ";
-        db_exec( $sql ); db_error();
-      
-      case "0.26":
-        $sql = "CREATE TABLE `antecedent` (
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.25");
+    $sql = "ALTER TABLE `patients` CHANGE `adresse` `adresse` TEXT NOT NULL ";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.26");
+    $sql = "CREATE TABLE `antecedent` (
                 `antecedent_id` BIGINT NOT NULL AUTO_INCREMENT ,
                 `patient_id` BIGINT NOT NULL ,
                 `type` ENUM( 'trans', 'obst', 'chir', 'med' ) DEFAULT 'med' NOT NULL ,
@@ -128,18 +106,17 @@ class CSetupdPpatients {
                 PRIMARY KEY ( `antecedent_id` ) ,
                 INDEX ( `patient_id` )
                 ) TYPE=MyISAM COMMENT = 'antecedents des patients';";
-        db_exec( $sql ); db_error();
-      
-      case "0.27":
-        $sql = "ALTER TABLE `antecedent`" .
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.27");
+    $sql = "ALTER TABLE `antecedent`" .
             "CHANGE `type` `type`" .
             "ENUM( 'trans', 'obst', 'chir', 'med', 'fam' )" .
             "DEFAULT 'med' NOT NULL;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients`" .
-            "ADD `listCim10` TEXT DEFAULT NULL ;";
-        db_exec( $sql ); db_error();
-        $sql = "CREATE TABLE `traitement` (
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` ADD `listCim10` TEXT DEFAULT NULL ;";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `traitement` (
                 `traitement_id` BIGINT NOT NULL AUTO_INCREMENT ,
                 `patient_id` BIGINT NOT NULL ,
                 `debut` DATE DEFAULT '0000-00-00' NOT NULL ,
@@ -148,107 +125,96 @@ class CSetupdPpatients {
                 PRIMARY KEY ( `traitement_id` ) ,
                 INDEX ( `patient_id` )
                 ) TYPE=MyISAM COMMENT = 'traitements des patients';";
-        db_exec( $sql ); db_error();
-      
-      case "0.28":
-        $sql = "ALTER TABLE `patients`" .
-            "CHANGE `SHS` `regime_sante` VARCHAR( 40 );";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients`" .
-            "ADD `SHS` VARCHAR( 8 ) AFTER `matricule`;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD INDEX ( `SHS` );";
-        db_exec( $sql ); db_error();
-        
-      case "0.29":
-        $sql = "ALTER TABLE `patients` DROP INDEX `patient_id` ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` DROP INDEX `nom` ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD INDEX ( `nom` ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD INDEX ( `prenom` ) ;";
-        db_exec( $sql ); db_error();
-      case "0.30":
-        $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'trans', 'obst', 'chir', 'med', 'fam', 'alle' ) NOT NULL DEFAULT 'med';";
-        db_exec( $sql ); db_error();
-      case "0.31":
-        $sql = "ALTER TABLE `patients` ADD `cmu` date NULL AFTER `matricule` ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `ald` text AFTER `rques` ;";
-        db_exec( $sql ); db_error();
-      case "0.32":
-        $sql = "UPDATE `medecin` SET `tel` = NULL WHERE `tel`='NULL' ;";
-        db_exec( $sql ); db_error();
-        $sql = "UPDATE `medecin` SET `fax` = NULL WHERE `fax`='NULL' ;";
-        db_exec( $sql ); db_error();
-        $sql = "UPDATE `medecin` SET `email` = NULL WHERE `email`='NULL' ;";
-        db_exec( $sql ); db_error();
-        $sql = "UPDATE `medecin` SET `specialite` = NULL WHERE `specialite`='NULL' ;";
-        db_exec( $sql ); db_error();
-        $sql = "UPDATE `medecin` SET `disciplines` = NULL WHERE `disciplines`='NULL' ;";
-        db_exec( $sql ); db_error();
-        $sql = "UPDATE `medecin` SET `adresse` = NULL WHERE `adresse`='NULL' ;";
-        db_exec( $sql ); db_error();
-        $sql = "UPDATE `medecin` SET `ville` = NULL WHERE `ville`='NULL' ;";
-        db_exec( $sql ); db_error();
-        $sql = "UPDATE `medecin` SET `cp` = NULL WHERE `cp` LIKE 'NULL%' ;";
-        db_exec( $sql ); db_error();
-      case "0.33":
-        $sql = "ALTER TABLE `medecin` ADD `jeunefille` VARCHAR( 50 ) AFTER `prenom` ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `medecin` ADD `complementaires` TEXT AFTER `disciplines` ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `medecin` ADD `orientations` TEXT AFTER `disciplines` ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `medecin` DROP `specialite` ;";
-        db_exec( $sql ); db_error();
-      case "0.34":
-        $sql = "ALTER TABLE `patients` ADD `pays` VARCHAR( 50 ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `nationalite` ENUM( 'local', 'etranger' ) NOT NULL DEFAULT 'local';";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `lieu_naissance` VARCHAR( 50 ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `profession` VARCHAR( 50 ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `employeur_nom` VARCHAR( 50 ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `employeur_adresse` TEXT ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `employeur_cp` VARCHAR( 5 ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `employeur_ville` VARCHAR( 50 ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `employeur_tel` VARCHAR( 10 ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `employeur_urssaf` VARCHAR( 11 ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `prevenir_nom` VARCHAR( 50 ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `prevenir_prenom` VARCHAR( 50 ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `prevenir_adresse` TEXT ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `prevenir_cp` VARCHAR( 5 ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `prevenir_ville` VARCHAR( 50 ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `prevenir_tel` VARCHAR( 10 ) ;";
-        db_exec( $sql ); db_error();
-        $sql = "ALTER TABLE `patients` ADD `prevenir_parente` ENUM( 'conjoint', 'enfant', 'ascendant', 'colateral', 'divers' ) ;";
-        db_exec( $sql ); db_error();
-      case "0.35":
-        $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'med', 'alle', 'trans', 'obst', 'chir', 'fam', 'anesth' ) NOT NULL DEFAULT 'med';";
-        db_exec( $sql ); db_error();
-      case "0.36":
-        set_time_limit(1800);
-        $sql = "ALTER TABLE `antecedent` " .
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.28");
+    $sql = "ALTER TABLE `patients` CHANGE `SHS` `regime_sante` VARCHAR( 40 );";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` ADD `SHS` VARCHAR( 8 ) AFTER `matricule`;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` ADD INDEX ( `SHS` );";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.29");
+    $sql = "ALTER TABLE `patients` DROP INDEX `patient_id` ;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` DROP INDEX `nom` ;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` ADD INDEX ( `nom` ) ;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` ADD INDEX ( `prenom` ) ;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.30");
+    $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'trans', 'obst', 'chir', 'med', 'fam', 'alle' ) NOT NULL DEFAULT 'med';";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.31");
+    $sql = "ALTER TABLE `patients` ADD `cmu` date NULL AFTER `matricule` ;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` ADD `ald` text AFTER `rques` ;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.32");
+    $sql = "UPDATE `medecin` SET `tel` = NULL WHERE `tel`='NULL' ;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `medecin` SET `fax` = NULL WHERE `fax`='NULL' ;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `medecin` SET `email` = NULL WHERE `email`='NULL' ;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `medecin` SET `specialite` = NULL WHERE `specialite`='NULL' ;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `medecin` SET `disciplines` = NULL WHERE `disciplines`='NULL' ;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `medecin` SET `adresse` = NULL WHERE `adresse`='NULL' ;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `medecin` SET `ville` = NULL WHERE `ville`='NULL' ;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `medecin` SET `cp` = NULL WHERE `cp` LIKE 'NULL%' ;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.33");
+    $sql = "ALTER TABLE `medecin` ADD `jeunefille` VARCHAR( 50 ) AFTER `prenom` ;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `medecin` ADD `complementaires` TEXT AFTER `disciplines` ;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `medecin` ADD `orientations` TEXT AFTER `disciplines` ;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `medecin` DROP `specialite` ;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.34");
+    $sql = "ALTER TABLE `patients` " .
+           "\nADD `pays` VARCHAR( 50 )," .
+           "\nADD `nationalite` ENUM( 'local', 'etranger' ) NOT NULL DEFAULT 'local'," .
+           "\nADD `lieu_naissance` VARCHAR( 50 )," .
+           "\nADD `profession` VARCHAR( 50 )," .
+           "\nADD `employeur_nom` VARCHAR( 50 )," .
+           "\nADD `employeur_adresse` TEXT," .
+           "\nADD `employeur_cp` VARCHAR( 5 )," .
+           "\nADD `employeur_ville` VARCHAR( 50 )," .
+           "\nADD `employeur_tel` VARCHAR( 10 )," .
+           "\nADD `employeur_urssaf` VARCHAR( 11 )," .
+           "\nADD `prevenir_nom` VARCHAR( 50 )," .
+           "\nADD `prevenir_prenom` VARCHAR( 50 )," .
+           "\nADD `prevenir_adresse` TEXT," .
+           "\nADD `prevenir_cp` VARCHAR( 5 )," .
+           "\nADD `prevenir_ville` VARCHAR( 50 )," .
+           "\nADD `prevenir_tel` VARCHAR( 10 )," .
+           "\nADD `prevenir_parente` ENUM( 'conjoint', 'enfant', 'ascendant', 'colateral', 'divers' ) ;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.35");
+    $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'med', 'alle', 'trans', 'obst', 'chir', 'fam', 'anesth' ) NOT NULL DEFAULT 'med';";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.36");
+    $this->setTimeLimit(1800);
+    $sql = "ALTER TABLE `antecedent` " .
                "\nCHANGE `antecedent_id` `antecedent_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0';";
-        db_exec( $sql ); db_error();
-        
-        $sql = "ALTER TABLE `medecin` " .
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `medecin` " .
                "\nCHANGE `medecin_id` `medecin_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
                "\nCHANGE `prenom` `prenom` varchar(255) NOT NULL," .
@@ -258,9 +224,8 @@ class CSetupdPpatients {
                "\nCHANGE `tel` `tel` bigint(10) unsigned zerofill NULL," .
                "\nCHANGE `fax` `fax` bigint(10) unsigned zerofill NULL," .
                "\nCHANGE `email` `email` varchar(255) NULL;";
-        db_exec( $sql ); db_error();
-        
-        $sql = "ALTER TABLE `patients` " .
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` " .
                "\nCHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
                "\nCHANGE `nom_jeune_fille` `nom_jeune_fille` varchar(255) NULL," .
@@ -288,63 +253,59 @@ class CSetupdPpatients {
                "\nCHANGE `prevenir_nom` `prevenir_nom` varchar(255) NULL," .
                "\nCHANGE `prevenir_prenom` `prevenir_prenom` varchar(255) NULL," .
                "\nCHANGE `prevenir_ville` `prevenir_ville` varchar(255) NULL;";
-        db_exec( $sql ); db_error();
-        
-        $sql = "ALTER TABLE `traitement` " .
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `traitement` " .
                "\nCHANGE `traitement_id` `traitement_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0';";
-        db_exec( $sql ); db_error();
-              
-        $sql = "ALTER TABLE `patients` " .
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` " .
                "\nCHANGE `ATNC` `ATNC` enum('o','n','0','1') NOT NULL DEFAULT 'n'," .
                "\nCHANGE `incapable_majeur` `incapable_majeur` enum('o','n','0','1') NOT NULL DEFAULT 'n';";
-        db_exec( $sql ); db_error();
-      
-        $sql = "UPDATE `patients` SET `ATNC`='0' WHERE `ATNC`='n';"; db_exec( $sql ); db_error();
-        $sql = "UPDATE `patients` SET `ATNC`='1' WHERE `ATNC`='o';"; db_exec( $sql ); db_error();
-        $sql = "UPDATE `patients` SET `incapable_majeur`='0' WHERE `incapable_majeur`='n';"; db_exec( $sql ); db_error();
-        $sql = "UPDATE `patients` SET `incapable_majeur`='1' WHERE `incapable_majeur`='o';"; db_exec( $sql ); db_error();
-      
-        $sql = "ALTER TABLE `patients` " .
+    $this->addQuery($sql);
+    $sql = "UPDATE `patients` SET `ATNC`='0' WHERE `ATNC`='n';";                             $this->addQuery($sql);
+    $sql = "UPDATE `patients` SET `ATNC`='1' WHERE `ATNC`='o';";                         $this->addQuery($sql);
+    $sql = "UPDATE `patients` SET `incapable_majeur`='0' WHERE `incapable_majeur`='n';"; $this->addQuery($sql);
+    $sql = "UPDATE `patients` SET `incapable_majeur`='1' WHERE `incapable_majeur`='o';"; $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` " .
                "\nCHANGE `ATNC` `ATNC` enum('0','1') NOT NULL DEFAULT '0'," .
                "\nCHANGE `incapable_majeur` `incapable_majeur` enum('0','1') NOT NULL DEFAULT '0';";
-        db_exec( $sql ); db_error();
-        
-      case "0.37":
-        set_time_limit(1800);
-        $sql = "ALTER TABLE `patients` " .
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.37");
+    $this->setTimeLimit(1800);
+    $sql = "ALTER TABLE `patients` " .
                "\nADD `nom_soundex2`    VARCHAR(255) DEFAULT NULL AFTER `nom_jeune_fille`," .
                "\nADD `prenom_soundex2` VARCHAR(255) DEFAULT NULL AFTER `nom_soundex2`," .
                "\nADD `nomjf_soundex2`  VARCHAR(255) DEFAULT NULL AFTER `prenom_soundex2`;";
-        db_exec( $sql ); db_error();
-        $where = array("nom_soundex2" => "IS NULL", "nom" => "!= ''");
-        $limit = "0,1000";
-        $pat = new CPatient;
-        $listPat = $pat->loadList($where, null, $limit);
-        while(count($listPat)) {
-          foreach($listPat as $key => $pat) {
-            if($msg = $listPat[$key]->store(false)) {
-              mbTrace($msg, "Erreur store [".$listPat[$key]->_id."]", true);
-            }
+    $this->addQuery($sql);
+    function setup_soundex(){
+      $where = array("nom_soundex2" => "IS NULL", "nom" => "!= ''");
+      $limit = "0,1000";
+      $pat = new CPatient;
+      $listPat = $pat->loadList($where, null, $limit);
+      while(count($listPat)) {
+        foreach($listPat as $key => $pat) {
+          if($msg = $listPat[$key]->store(false)) {
+            trigger_error("Erreur store [".$listPat[$key]->_id."] : ".$msg);
+            return false;
           }
-          $listPat = $pat->loadList($where, null, $limit);
         }
-      case "0.38":
-        $sql = "ALTER TABLE `patients` " .
-               "\nADD `rang_beneficiaire` enum('1','2','11','12','13') NULL AFTER `ald`;";
-        db_exec( $sql ); db_error();
-        
-      case "0.39":
-        $sql = "ALTER TABLE `traitement` " .
-               "\nCHANGE `debut` `debut` date NULL;";
-        db_exec( $sql ); db_error();
-      
-      case "0.40":
-        return "0.40";
+        $listPat = $pat->loadList($where, null, $limit);
+      }
+      return true;
     }
-    return false;
+    $this->addFunctions("setup_soundex");
+    
+    $this->makeRevision("0.38");
+    $sql = "ALTER TABLE `patients` ADD `rang_beneficiaire` enum('1','2','11','12','13') NULL AFTER `ald`;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.39");
+    $sql = "ALTER TABLE `traitement` CHANGE `debut` `debut` date NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.40";
   }
-
 }
 
 ?>

@@ -20,6 +20,7 @@ class CSetup {
   protected $queries = array();
   protected $functions = array();
   protected $dependencies = array();
+  protected $timeLimit = array();
   protected $tables = array();
   
   function __construct() {
@@ -37,6 +38,7 @@ class CSetup {
     $this->queries[$revision] = array();
     $this->functions[$revision] = array();
     $this->dependencies[$revision] = array();
+    $this->timeLimit[$revision] = null;
     end($this->revisions);
   }
   
@@ -47,7 +49,12 @@ class CSetup {
   function addFunctions($function) {
     $this->functions[current($this->revisions)][] = $function;
   }
-
+  
+  
+  function setTimeLimit($limit){
+    $this->timeLimit[current($this->revisions)] = $limit;
+  }
+  
   /**
    * Associates an SQL query to a module revision
    */
@@ -116,6 +123,11 @@ class CSetup {
         
       if (@$depFailed) {
         return $currRevision;
+      }
+      
+      // Set Time Limit
+      if($this->timeLimit[$currRevision]){
+        set_time_limit($this->timeLimit[$currRevision]);
       }
 
       // Query upgrading

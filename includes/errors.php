@@ -96,8 +96,12 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
     if (isset($context["class"])) {
       $log .= "\n<strong>Class: </strong>" . $context["class"];
     }
-    $log .= "\n<strong>File: </strong>" . mbRelativePath($context["file"]);
-    $log .= "\n<strong>Line: </strong>" . $context["line"];
+    if (isset($context["file"])) {
+      $log .= "\n<strong>File: </strong>" . mbRelativePath($context["file"]);
+    }
+    if (isset($context["line"])) {
+      $log .= "\n<strong>Line: </strong>" . $context["line"];
+    }
     $log .= "<br />";
   }
   

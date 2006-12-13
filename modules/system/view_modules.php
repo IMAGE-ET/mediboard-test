@@ -29,7 +29,7 @@ foreach ($modules as $keyRow => $row) {
   $modules[$keyRow]["is_config"]    = is_file("modules/".$row["mod_name"]."/configure.php");
   $modules[$keyRow]["href"]         = "?m=$m&a=domodsql&mod_id=".$row["mod_id"];
   
-  if($row["mod_name"] == "system" || $row["mod_name"] == "admin") {
+  if($config["mod_type"] == "core") {
     if(!$modules[$keyRow]["is_upToDate"]) {
       $coreModules[] = $modules[$keyRow];
     }
