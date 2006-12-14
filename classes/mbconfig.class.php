@@ -50,13 +50,17 @@ class CMbConfig {
     }
   }
   
-  function update($newValues = array()) {
+  function update($newValues = array(), $keepOld = true) {
     if (!count($newValues)) {
       return;
     }
     
-    $this->load();
-    $this->values = mbArrayMergeRecursive($this->values, $newValues);
+    if($keepOld) {
+      $this->load();
+      $newValues = mbArrayMergeRecursive($this->values, $newValues);
+    }
+    
+    $this->values = $newValues;
     
     $config = new Config;
     $config->parseConfig($this->values, $this->configType, $this->options);
