@@ -165,6 +165,12 @@ $extension->description = "Pilote ODBC pour PDO";
 $extension->reasons[] = "Interopérabilité avec des systèmes tiers";
 $extensions[] = $extension;
 
+$extension = new CPHPExtension;
+$extension->name = "eAccelerator";
+$extension->description = "Extension d'optimsation d'OPCODE et de mémoire partagée";
+$extension->reasons[] = "Accélération globale du système";
+$extensions[] = $extension;
+
 $versions = array();
 
 $version = new CPHPVersion;
