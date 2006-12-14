@@ -34,14 +34,19 @@ class CMbConfig {
     
     $loadPath = is_file($this->targetPath) ? $this->targetPath : $this->sourcePath;
     
-    $config = new Config;
-    $configContainer = $config->parseConfig($loadPath, $this->configType, $this->options);
-
-    $rootConfig = $configContainer->toArray();
-    $this->values = $rootConfig["root"];
+    if(is_file($loadPath)) {
     
-    if (!is_file($this->targetPath)) {
-      $this->guessValues();
+      $config = new Config;
+      $configContainer = $config->parseConfig($loadPath, $this->configType, $this->options);
+
+      $rootConfig = $configContainer->toArray();
+      $this->values = $rootConfig["root"];
+    
+      if (!is_file($this->targetPath)) {
+        $this->guessValues();
+      }
+    } else {
+      $this->values = array();
     }
   }
   
