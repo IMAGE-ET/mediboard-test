@@ -51,13 +51,16 @@ class CMbConfig {
   }
   
   function update($newValues = array(), $keepOld = true) {
-    if (!count($newValues)) {
-      return;
-    }
-    
     if($keepOld) {
       $this->load();
       $newValues = mbArrayMergeRecursive($this->values, $newValues);
+    }
+    
+    if (!count($newValues)) {
+      if(is_file($this->targetPath)){
+        unlink($this->targetPath);
+      }
+      return;
     }
     
     $this->values = $newValues;

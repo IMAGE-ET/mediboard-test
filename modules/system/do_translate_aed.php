@@ -24,24 +24,23 @@ if(!$module || !$trans || !$chaine || !is_array($trans) || !is_array($chaine)){
 }
 
 // Dossier des traductions
-$locales = $AppUI->readDirs("locales");
-mbRemoveValuesInArray(".svn",$locales);
+$localesDirs = $AppUI->readDirs("locales");
+mbRemoveValuesInArray(".svn",$localesDirs);
 
-foreach($locales as $locale){
-  // Données du fichier de langue
-  $txt = "##\n## DO NOT MODIFY THIS FILE BY HAND!\n##\n";
+$translateModule = new CMbConfig;
+$translateModule->sourcePath = null;
+foreach($localesDirs as $locale){
+  // Données du fichier de langue  
+  $translation = array();
   foreach($chaine as $key => $valChaine){
-  	if($valChaine!=""){
-  	  $txt .= "\"".stripslashes($valChaine)."\"=>\"".stripslashes($trans[$key][$locale])."\",\n";
-  	}
+    if($valChaine!=""){
+      $translation[$valChaine] = $trans[$key][$locale];
+    }
   }
   //Ecriture du fichier
-  if (!($fp = fopen ("{$AppUI->cfg['root_dir']}/locales/$locale/$module.inc", "wt"))) {
-    $AppUI->setMsg( "Could not open locales file to save.", UI_MSG_ERROR );
-    $AppUI->redirect( "m=system" );
-  }
-  fwrite( $fp, $txt );
-  fclose( $fp );
+  $translateModule->options = array("name" => "locales");
+  $translateModule->targetPath = "locales/$locale/$module.php";
+  $translateModule->update($translation, false);  
 }
 
 $AppUI->setMsg( "Locales file saved", UI_MSG_OK );

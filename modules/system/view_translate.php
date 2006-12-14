@@ -21,21 +21,23 @@ mbRemoveValuesInArray(".svn", $modules);
 ksort($modules);
 
 // Dossier des traductions
-$locales = $AppUI->readDirs("locales");
-mbRemoveValuesInArray(".svn",$locales);
+$localesDirs = $AppUI->readDirs("locales");
+mbRemoveValuesInArray(".svn",$localesDirs);
 
 // Récupération du fichier demandé pour toutes les langues
+$translateModule = new CMbConfig;
+$translateModule->sourcePath = null;
 $contenu_file = array();
-foreach($locales as $locale){
-  ob_start();
-  @readfile( "{$AppUI->cfg['root_dir']}/locales/$locale/$modules[$module].inc" );
-  eval( "\$contenu_file['$locale']=array(".ob_get_contents().");" );
-  ob_end_clean();
+foreach($localesDirs as $locale){
+  $translateModule->options = array("name" => "locales");
+  $translateModule->targetPath = "locales/$locale/$modules[$module].php";
+  $translateModule->load();
+  $contenu_file[$locale] = $translateModule->values;
 }
 
 // Réattribution des clés et organisation
 $trans = array();
-foreach($locales as $locale){
+foreach($localesDirs as $locale){
 	foreach($contenu_file[$locale] as $k=>$v){
 		$trans[ (is_int($k) ? $v : $k) ][$locale] = $v;
 	}
@@ -43,7 +45,7 @@ foreach($locales as $locale){
 
 // Remplissage par null si la valeur n'existe pas
 foreach($trans as $k=>$v){
-  foreach($locales as $keyLocale=>$valueLocale){
+  foreach($localesDirs as $keyLocale=>$valueLocale){
   	if(!isset($trans[$k][$keyLocale])){
   		$trans[$k][$keyLocale] = null;
   	}
@@ -51,11 +53,10 @@ foreach($trans as $k=>$v){
 }
 uksort($trans,"strnatcasecmp");
 
-
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("locales"  , $locales);
+$smarty->assign("locales"  , $localesDirs);
 $smarty->assign("modules"  , $modules);
 $smarty->assign("module"   , $module);
 $smarty->assign("trans"    , $trans);
