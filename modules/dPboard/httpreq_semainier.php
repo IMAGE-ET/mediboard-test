@@ -41,7 +41,7 @@ reset($listMins);
 $HeureMin = intval(current($listHours));
 $MinMin   = intval(current($listMins));
 
-function writePlage($aAffichage,$listPlages,$type,$sHeureDeb,$sHeureFin,$sMinDeb,$sMinFin){
+function writePlage(&$aAffichage,$listPlages,$type,$sHeureDeb,$sHeureFin,$sMinDeb,$sMinFin){
   global $listMins,$listHours,$HeureMax,$MinMax,$HeureMin,$MinMin;
   
   foreach($listPlages as $keyPlages=>$valPlages){
@@ -220,10 +220,10 @@ foreach($plagesConsult as $keyDate=>$valDate){
   }
 }
 
-writePlage(&$aAffichage, $plagesConsult,"plagesConsult","_hour_deb","_hour_fin","_min_deb","_min_fin");
+writePlage($aAffichage, $plagesConsult,"plagesConsult","_hour_deb","_hour_fin","_min_deb","_min_fin");
 
 foreach($plagesOp as $keySalle=>$salle){
-  writePlage(&$aAffichage, $plagesOp[$keySalle],"Salle$keySalle","_heuredeb","_heurefin","_minutedeb","_minutefin");
+  writePlage($aAffichage, $plagesOp[$keySalle],"Salle$keySalle","_heuredeb","_heurefin","_minutedeb","_minutefin");
 }
 
 // Création du template
