@@ -49,8 +49,10 @@ function mbRelativePath($absPath) {
   global $dPconfig;
   $mbPath = $dPconfig["root_dir"];
   
+  $absPath = strtolower(strtr($absPath, "\\", "/"));
+  $mbPath = strtolower(strtr($mbPath, "\\", "/"));
+  
   // Hack for MS Windows server
-  $absPath = strtr($absPath, "\\", "/");
   
   $relPath = strpos($absPath, $mbPath) === 0 ? 
     substr($absPath, strlen($mbPath) + 1) :
