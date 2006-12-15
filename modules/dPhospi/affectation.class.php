@@ -36,6 +36,7 @@ class CAffectation extends CMbObject {
   var $_ref_prev   = null;
   var $_ref_next   = null;
   var $_no_synchro = null;
+  var $_list_repas = null;
 
 	function CAffectation() {
 		$this->CMbObject("affectation", "affectation_id");
@@ -206,6 +207,27 @@ class CAffectation extends CMbObject {
      or ($aff->entree >= $this->entree and $aff->sortie <= $this->sortie))
       return true;
     return false;
+  }
+  
+  function loadMenu($date, $listTypeRepas = null){
+    $this->_list_repas[$date] = array();
+    $repas =& $this->_list_repas[$date];
+    if(!$listTypeRepas){
+      $listTypeRepas = new CTypeRepas;
+      $order = "debut, fin, nom";
+      $listTypeRepas = $listTypeRepas->loadList(null,$order);
+    }
+    
+    $repasDuJour = new CRepas;
+    $where = array();
+    $where["date"] = db_prepare(" = %", $date);
+    $ljoin = array("menu" => "repas.menu_id = menu.menu_id");
+    foreach($listTypeRepas as $keyType=>$typeRepas){
+      $where["menu.typerepas"] = db_prepare("= %",$keyType);
+      $repas[$keyType] = $repasDuJour->loadList($where, null, null, null, $ljoin);
+    }
+    
+    
   }
 }
 ?>

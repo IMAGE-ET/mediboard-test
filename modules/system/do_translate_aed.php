@@ -34,7 +34,7 @@ foreach($localesDirs as $locale){
   $translation = array();
   foreach($chaine as $key => $valChaine){
     if($valChaine!=""){
-      $translation[$valChaine] = $trans[$key][$locale];
+      $translation[$valChaine] = stripslashes($trans[$key][$locale]);
     }
   }
   //Ecriture du fichier
