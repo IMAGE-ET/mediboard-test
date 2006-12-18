@@ -108,7 +108,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
             </form>
           </td>
           <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+            <a href="index.php?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}">
               {{$currProc->_ref_group->text}}
             </a>
           </td>
@@ -169,7 +169,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
       <input type="hidden" name="dosql" value="do_docged_aed" />
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />      
-      
+
       <input type="hidden" name="ged[doc_ged_id]" value="{{$docGed->doc_ged_id}}" />  
       <input type="hidden" name="ged[user_id]" value="{{$user_id}}" />
       <input type="hidden" name="ged[annule]" value="{{$docGed->annule}}" />
@@ -205,6 +205,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
             </th>
           {{else}}
             <th class="title" colspan="2">
+              <input type="hidden" name="ged[annule]" value="0" />
               <input type="hidden" name="ged[etat]" value="{{$docGed|const:'DEMANDE'}}" />
               <input type="hidden" name="suivi[etat]" value="{{$docGed|const:'DEMANDE'}}" />
               <input type="hidden" name="suivi[doc_ged_suivi_id]" value="" />

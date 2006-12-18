@@ -755,7 +755,7 @@ class CMbObject {
         $targetPropValue = $this->$targetPropName;
     
         if (!isset($targetPropValue)) {
-          return printf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
+          return sprintf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
         }
 
         if ($propValue <= $targetPropValue) {
@@ -769,7 +769,7 @@ class CMbObject {
         $targetPropValue = $this->$targetPropName;
     
         if (!isset($targetPropValue)) {
-          return printf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
+          return sprintf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
         }
 
         if ($propValue < $targetPropValue) {
