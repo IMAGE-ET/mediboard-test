@@ -77,13 +77,13 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
 function annuleConsult(oForm, etat) {
   if(etat) {
     if(confirm("Voulez-vous vraiment annuler cette consultation ?")) {
-      oForm.chrono.value = {{$smarty.const.CC_TERMINE}};
+      oForm.chrono.value = {{$consult|const:'TERMINE'}};
     } else {
       return;
     }
   } else {
     if(confirm("Voulez-vous vraiment rétablir cette consultation ?")) {
-      oForm.chrono.value = {{$smarty.const.CC_PLANIFIE}};
+      oForm.chrono.value = {{$consult|const:'PLANIFIE'}};
     } else {
       return;
     }
@@ -97,7 +97,7 @@ function annuleConsult(oForm, etat) {
 {{if $plageConsult->plageconsult_id && !$consult->consultation_id}}
 function pageMain() {
   var oForm = document.editFrm;
-  oForm.plageconsult_id.value = {{$plageConsult->plageconsult_id}};
+  oForm.plageconsult_id.value = {{$consult->plageconsult_id}};
   oForm.chir_id.value = {{$plageConsult->chir_id}};
   popRDV();
 }
@@ -121,7 +121,7 @@ function checkFormRDV(oForm){
 <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
 <input type="hidden" name="annule" value="{{$consult->annule}}" />
 <input type="hidden" name="arrivee" value="" />
-<input type="hidden" name="chrono" value="{{$smarty.const.CC_PLANIFIE}}" />
+<input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
 
 <table class="form">
   {{if $consult->consultation_id}}

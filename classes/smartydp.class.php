@@ -62,6 +62,15 @@ function smarty_modifier_json($object) {
   return strtr($sJson, array("&quot;"=>"\\\""));
 }
 
+function smarty_modifier_const($object, $constName) {
+  $class = new ReflectionClass($object);
+  if (null == $const = $class->getConstant($constName)) {
+    trigger_error("Constant '$constName' for class '$class->name' does not exist", E_USER_WARNING);
+  }
+  
+  return $const;
+}
+
 function JSAttribute($string){
   return strtr($string, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'&quot;',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
 }
@@ -148,6 +157,7 @@ class CSmartyDP extends Smarty {
     $this->register_block   ("tr"              , "do_translation"); 
     $this->register_function("thumb"        , "thumb");
     $this->register_modifier("json"         , "smarty_modifier_json");
+    $this->register_modifier("const"        , "smarty_modifier_const");
     $this->register_modifier("cleanField"   , "smarty_modifier_cleanField");
     $this->register_modifier("stripslashes" , "smarty_modifier_stripslashes");
     $this->register_modifier("JSAttribute"  , "JSAttribute");

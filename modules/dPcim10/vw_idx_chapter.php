@@ -13,7 +13,7 @@ if(!$canRead) {
 	$AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$lang = mbGetValueFromGetOrSession("lang", LANG_FR);
+$lang = mbGetValueFromGetOrSession("lang", CCodeCIM10::LANG_FR);
 
 $cim10 = new CCodeCIM10();
 $chapter = $cim10->getSommaire($lang);

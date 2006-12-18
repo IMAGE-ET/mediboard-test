@@ -54,7 +54,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
     if($this->_obj->doc_ged_id){
       // Procédure Existante --> Verification
 
-      if($this->_objBefore->etat == CDOC_REDAC && $_validation===null){
+      if($this->_objBefore->etat == CDocGed::REDAC && $_validation===null){
         // Test d'upload du fichier
         $objFile = new CFileAddEdit;
         $objFile->redirect = null;
@@ -71,7 +71,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
       }      
     }
 
-    if($this->_objBefore->etat == CDOC_DEMANDE && $this->_obj->etat == CDOC_REDAC && !$this->_objBefore->num_ref){
+    if($this->_objBefore->etat == CDocGed::DEMANDE && $this->_obj->etat == CDocGed::REDAC && !$this->_objBefore->num_ref){
       // Pas de numéro : Nouvelle Procédure --> Récup n° dernier doc dans meme chapitre et catégorie
       $this->_obj->version = 1;
         
@@ -90,7 +90,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
       }
     }
     
-    if(!($this->_objBefore->etat == CDOC_VALID && $this->_obj->etat == CDOC_TERMINE)){
+    if(!($this->_objBefore->etat == CDocGed::VALID && $this->_obj->etat == CDocGed::TERMINE)){
       // Annulation changement de version
       $this->_obj->version = $this->_objBefore->version;
     }

@@ -56,7 +56,7 @@ foreach($listPlage as $key => $value) {
   //unset($listPlage[$key]->_ref_consultations);
   $where = array();
   $where["plageconsult_id"] = "= '".$value->plageconsult_id."'";
-  $where["chrono"] = ">= '".CC_TERMINE."'";
+  $where["chrono"] = ">= '".CConsultation::TERMINE."'";
   $where["annule"] = "= '0'";
   $where[] = "tarif IS NOT NULL AND tarif <> ''";
   if($etat != -1)

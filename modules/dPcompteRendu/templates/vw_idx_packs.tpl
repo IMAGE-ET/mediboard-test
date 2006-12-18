@@ -118,11 +118,7 @@
     
     </form>
 
-  </td>
-  
-  {{if $pack->pack_id}}
-  <td class="pane">
-  
+    {{if $pack->pack_id}}
     <table class="form">
       {{if $pack->_modeles|@count}}
       <tr><th class="category" colspan="2">Modèles du pack</th></tr>
@@ -166,9 +162,9 @@
         </form>
       </td></tr>
     </table>
-  
+    {{/if}}
+
   </td>
-  {{/if}}
   
 </tr>
 

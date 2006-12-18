@@ -100,6 +100,4 @@ class CPathologies {
   }    
 }
 
-global $pathos;
-$pathos = new CPathologies();
 ?>

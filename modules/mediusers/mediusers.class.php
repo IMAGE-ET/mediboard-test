@@ -8,6 +8,8 @@
  */
 
 global $utypes, $utypes_flip;
+global $AppUI;
+require_once($AppUI->getModuleClass("admin"));
 
 $utypes_flip = array_flip($utypes);
 

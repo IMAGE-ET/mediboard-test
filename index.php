@@ -9,13 +9,15 @@
 include_once("./includes/magic_quotes_gpc.php");
 
 $dPconfig = array();
+global $performance;
+$performance = array();
 
-if(!is_file("./includes/config.php")) {
+
+if (!is_file("./includes/config.php")) {
   header("location: install/");
   die("Redirection vers l'assistant d'installation");
 }
 
-require_once("./classes/ui.class.php");
 
 require_once("./includes/config_dist.php");
 require_once("./includes/config.php");
@@ -29,46 +31,30 @@ require_once("./includes/mb_functions.php");
 require_once("./includes/main_functions.php");
 require_once("./includes/errors.php");
 
-require_once("./classes/chrono.class.php");
-
 // Start chrono
+require_once("./classes/chrono.class.php");
 $phpChrono = new Chronometer;
 $phpChrono->start();
 
 // PHP Configuration
 ini_set("memory_limit", "64M");
 
-// manage the session variable(s)
-session_name("dotproject");
-if(get_cfg_var("session.auto_start") > 0) {
-  session_write_close();
-}
-session_start();
-session_register("AppUI");
-  
-// write the HTML headers
+// Load AppUI from session
+require_once("./classes/ui.class.php");
+require_once("./includes/session.php");
+
+// Write the HTML headers
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");  // Date in the past
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modified
 header("Cache-Control: no-cache, must-revalidate");  // HTTP/1.1
 header("Pragma: no-cache");  // HTTP/1.0
 
-// check if session has previously been initialised
-if(!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
-  $_SESSION["AppUI"] = new CAppUI();
-}
+require_once("./includes/db_connect.php");
+require_once("./includes/autoload.php");
 
-$AppUI =& $_SESSION["AppUI"];
-$AppUI->setConfig($dPconfig);
-$AppUI->checkStyle();
-
-$allChrono = new Chronometer;
-$allChrono->start();
-$AppUI->getAllClasses();
-$allChrono->stop();
-
-// load default preferences if not logged in
-if($AppUI->doLogin()) {
-    $AppUI->loadPrefs(0);
+// Load default preferences if not logged in
+if ($AppUI->doLogin()) {
+  $AppUI->loadPrefs(0);
 }
 
 // check if the user is trying to log in
@@ -105,7 +91,7 @@ if ($AppUI->doLogin()) {
   setlocale(LC_TIME, $AppUI->user_locale);
 
   $redirect = @$_SERVER["QUERY_STRING"];
-  if(strpos($redirect, "logout") !== false) {
+  if (strpos($redirect, "logout") !== false) {
     $redirect = "";
   }
 
@@ -298,14 +284,13 @@ if(!$suppressHeaders) {
     }
   }
   
-  $performance = array();
   $performance["genere"]  = number_format($phpChrono->total, 3);
   $performance["memoire"] = mbConvertDecaBinary(memory_get_usage());
   $performance["objets"]  = $mbObjectCount;
   $performance["cache"]   = $mbCacheObjectCount;
   $performance["size"]    = mbConvertDecaBinary(ob_get_length());
   
-  //Creation du Template
+  // Creation du Template
   $smartyFooter = new CSmartyDP(1);
   $smartyFooter->template_dir = "style/$uistyle/templates/";
   $smartyFooter->compile_dir  = "style/$uistyle/templates_c/";

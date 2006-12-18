@@ -15,7 +15,7 @@ if (!$canRead) {
 
 $user = $AppUI->user_id;
 
-$lang = mbGetValueFromGetOrSession("lang", LANG_FR);
+$lang = mbGetValueFromGetOrSession("lang", CCodeCIM10::LANG_FR);
 
 // Recherche des codes favoris
 
@@ -38,6 +38,7 @@ foreach($favoris as $key => $value) {
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("lang" , $lang);
+$smarty->assign("code", new CCodeCIM10);
 $smarty->assign("codes", $codes);
 
 $smarty->display("vw_idx_favoris.tpl");

@@ -180,11 +180,11 @@ function popFile(objectClass, objectId, elementClass, elementId){
       
       <table class="form">
         <tr>          
-          {{if $docGed->doc_ged_id && ($docGed->etat==CDOC_DEMANDE || $docGed->etat==CDOC_TERMINE)}}
+          {{if $docGed->doc_ged_id && ($docGed->etat == $docGed|const:'DEMANDE' || $docGed->etat==$docGed|const:'TERMINE')}}
             <th class="title modify" colspan="2">
-              <input type="hidden" name="ged[etat]" value="{{$smarty.const.CDOC_DEMANDE}}" />
-              <input type="hidden" name="suivi[etat]" value="{{$smarty.const.CDOC_DEMANDE}}" />
-              {{if $docGed->etat==CDOC_TERMINE}}
+              <input type="hidden" name="ged[etat]" value="{{$docGed|const:'DEMANDE'}}" />
+              <input type="hidden" name="suivi[etat]" value="{{$docGed|const:'DEMANDE'}}" />
+              {{if $docGed->etat==$docGed|const:'TERMINE'}}
               <input type="hidden" name="suivi[doc_ged_suivi_id]" value="" />
               {{tr}}msg-CDocGed-title-modify-demande{{/tr}}
               {{else}}
@@ -192,12 +192,12 @@ function popFile(objectClass, objectId, elementClass, elementId){
               {{tr}}msg-CDocGed-title-modify{{/tr}}
               {{/if}}
             </th>
-          {{elseif $docGed->doc_ged_id && $docGed->etat==CDOC_REDAC}}
+          {{elseif $docGed->doc_ged_id && $docGed->etat==$docGed|const:'REDAC'}}
             <th class="title" colspan="2">
-              <input type="hidden" name="ged[etat]" value="{{$smarty.const.CDOC_VALID}}" />
-              <input type="hidden" name="suivi[etat]" value="{{$smarty.const.CDOC_REDAC}}" />
+              <input type="hidden" name="ged[etat]" value="{{$docGed|const:'VALID'}}" />
+              <input type="hidden" name="suivi[etat]" value="{{$docGed|const:'REDAC'}}" />
               <input type="hidden" name="suivi[doc_ged_suivi_id]" value="" />
-              {{tr}}msg-CDocGed-etatredac_CDOC_REDAC{{/tr}}
+              {{tr}}msg-CDocGed-etatredac_REDAC{{/tr}}
             </th>
           {{elseif $docGed->doc_ged_id}}
             <th class="title modify" colspan="2">
@@ -205,15 +205,15 @@ function popFile(objectClass, objectId, elementClass, elementId){
             </th>
           {{else}}
             <th class="title" colspan="2">
-              <input type="hidden" name="ged[etat]" value="{{$smarty.const.CDOC_DEMANDE}}" />
-              <input type="hidden" name="suivi[etat]" value="{{$smarty.const.CDOC_DEMANDE}}" />
+              <input type="hidden" name="ged[etat]" value="{{$docGed|const:'DEMANDE'}}" />
+              <input type="hidden" name="suivi[etat]" value="{{$docGed|const:'DEMANDE'}}" />
               <input type="hidden" name="suivi[doc_ged_suivi_id]" value="" />
               {{tr}}msg-CDocGed-title-create{{/tr}}
             </th>
           {{/if}}                    
         </tr>       
-        {{if $docGed->etat==CDOC_TERMINE || $docGed->etat==CDOC_DEMANDE || !$docGed->doc_ged_id}}
-          {{if $docGed->doc_ged_id && $docGed->etat!=CDOC_TERMINE}}
+        {{if $docGed->etat==$docGed|const:'TERMINE' || $docGed->etat==$docGed|const:'DEMANDE' || !$docGed->doc_ged_id}}
+          {{if $docGed->doc_ged_id && $docGed->etat!=$docGed|const:'TERMINE'}}
           <tr>
             <th>{{tr}}Date{{/tr}}</th>
             <td>{{$docGed->_lastentry->date|date_format:"%A %d %B %Y à %Hh%M"}}</td>
@@ -250,7 +250,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
           </tr>
           <tr>
             <td colspan="2" class="button">
-              {{if $docGed->doc_ged_id && $docGed->etat!=CDOC_TERMINE}}
+              {{if $docGed->doc_ged_id && $docGed->etat!=$docGed|const:'TERMINE'}}
               <button class="modify" type="submit">
                 {{tr}}Modify{{/tr}}
               </button>
@@ -265,7 +265,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
               {{/if}}
             </td>
           </tr>
-        {{elseif $docGed->etat==CDOC_REDAC}}
+        {{elseif $docGed->etat==$docGed|const:'REDAC'}}
           <tr>
             <th>{{tr}}CDocGed.one{{/tr}}</th>
             <td>

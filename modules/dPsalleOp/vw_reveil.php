@@ -31,7 +31,7 @@ $listSalles = new CSalle;
 $listSalles = $listSalles->loadList();
 
 // Selection des plages opératoires de la journée
-$plages = new CplageOp;
+$plages = new CPlageOp;
 $where = array();
 $where["date"] = "= '$date'";
 $plages = $plages->loadList($where);

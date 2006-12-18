@@ -29,7 +29,7 @@ if(!$docGed->load($doc_ged_id) || $docGed->etat==0){
 $docGed->loadLastEntry();
 $docGed->_lastentry->loadFile();
 
-if($docGed->etat==CDOC_TERMINE){
+if($docGed->etat==CDocGed::TERMINE){
   $docGed->_lastentry = new CDocGedSuivi;
 }
 

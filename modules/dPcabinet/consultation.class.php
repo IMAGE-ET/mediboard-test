@@ -7,15 +7,12 @@
 * @author Romain Ollivier
 */
 
-// Enum for Consultation.chrono
-if(!defined("CC_PLANIFIE")) {
-  define("CC_PLANIFIE"      , 16);
-  define("CC_PATIENT_ARRIVE", 32);
-  define("CC_EN_COURS"      , 48);
-  define("CC_TERMINE"       , 64);
-}
-
 class CConsultation extends CMbObject {
+  const PLANIFIE = 16;
+  const PATIENT_ARRIVE = 32;
+  const EN_COURS = 48;
+  const TERMINE = 64;
+  
   // DB Table key
   var $consultation_id = null;
 
@@ -101,10 +98,10 @@ class CConsultation extends CMbObject {
   
   function getEtat() {
     $etat = array();
-    $etat[CC_PLANIFIE]       = "Plan.";
-    $etat[CC_PATIENT_ARRIVE] = mbTranformTime(null, $this->arrivee, "%Hh%M");
-    $etat[CC_EN_COURS]       = "En cours";
-    $etat[CC_TERMINE]        = "Term.";
+    $etat[self::PLANIFIE]       = "Plan.";
+    $etat[self::PATIENT_ARRIVE] = mbTranformTime(null, $this->arrivee, "%Hh%M");
+    $etat[self::EN_COURS]       = "En cours";
+    $etat[self::TERMINE]        = "Term.";
     if($this->chrono)
       $this->_etat = $etat[$this->chrono];
     if ($this->annule) {

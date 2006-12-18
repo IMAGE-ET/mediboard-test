@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-$mbPath = "../../";
+$mbPath = "../..";
 $m = "dPcompteRendu";
 
 class CTemplateManager {
@@ -25,21 +25,14 @@ class CTemplateManager {
   var $valueMode = true;
 };
 // required includes for start-up
-require_once( $mbPath . "includes/config.php" );
-require_once( $mbPath . "includes/main_functions.php" );
-require_once( $mbPath . "classes/ui.class.php" );
+require_once("$mbPath/includes/config.php");
+require_once("$mbPath/classes/ui.class.php");
+require_once("$mbPath/includes/session.php");
+require_once("$mbPath/includes/cache.php" );
+require_once("$mbPath/includes/autoload.php" );
+require_once("$mbPath/includes/main_functions.php" );
 
-
-// manage the session variable(s)
-session_name("dotproject");
-if (get_cfg_var("session.auto_start") > 0) {
-  session_write_close();
-}
-session_start();
-
-$AppUI =& $_SESSION["AppUI"];
-
-$templateManager =& $_SESSION["dPcompteRendu"]["templateManager"];
+$templateManager =& $_SESSION[$m]["templateManager"];
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));

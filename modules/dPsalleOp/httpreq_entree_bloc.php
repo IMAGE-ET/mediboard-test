@@ -19,7 +19,7 @@ $date_now = mbDate();
 $modif_operation = $date>=$date_now;
 
 // Selection des plages opératoires de la journée
-$plages = new CplageOp;
+$plages = new CPlageOp;
 $where = array();
 $where["date"] = "= '$date'";
 $plages = $plages->loadList($where);

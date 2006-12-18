@@ -2,8 +2,8 @@
 <table class="form">
   <tr>          
     <th class="title modify" colspan="2">              
-      <input type="hidden" name="suivi[etat]" value="{{$smarty.const.CDOC_VALID}}" />
-      {{tr}}_CDocGed_CDOC_DEMANDE{{/tr}}
+      <input type="hidden" name="suivi[etat]" value="{{$docGed|const:'VALID'}}" />
+      {{tr}}_CDocGed_DEMANDE{{/tr}}
     </th>
   </tr>
   <tr>

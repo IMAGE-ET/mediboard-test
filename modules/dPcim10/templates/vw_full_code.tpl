@@ -18,16 +18,17 @@ function selectCode(code) {
       <input type="hidden" name="code" value="{{$cim10->code}}" />
 
       <select name="lang" style="float:right;" onchange="this.form.submit()">
-        <option value="{{$smarty.const.LANG_FR}}" {{if $lang == $smarty.const.LANG_FR}}selected="selected"{{/if}}>
+        <option value="{{$code|const:'LANG_FR'}}" {{if $lang == $code|const:'LANG_FR'}}selected="selected"{{/if}}>
           Français
         </option>
-        <option value="{{$smarty.const.LANG_EN}}" {{if $lang == $smarty.const.LANG_EN}}selected="selected"{{/if}}>
+        <option value="{{$code|const:'LANG_EN'}}" {{if $lang == $code|const:'LANG_EN'}}selected="selected"{{/if}}>
           English
         </option>
-        <option value="{{$smarty.const.LANG_DE}}" {{if $lang == $smarty.const.LANG_DE}}selected="selected"{{/if}}>
+        <option value="{{$code|const:'LANG_DE'}}" {{if $lang == $code|const:'LANG_DE'}}selected="selected"{{/if}}>
           Deutsch
         </option>
       </select>
+
 
       <h1>&ldquo;{{$cim10->libelle}}&rdquo;</h1>
 

@@ -34,7 +34,7 @@ foreach($listSalles as $keySalle=>$currSalle){
   $listInfosSalles[$keySalle] = array();
   $salle =& $listInfosSalles[$keySalle];
   
-  $plages = new CplageOp;
+  $plages = new CPlageOp;
   $where = array();
   $where["date"] = "= '$date_suivi'";
   $where["salle_id"] = "= '$keySalle'";

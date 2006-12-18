@@ -356,7 +356,7 @@ function pageMain() {
             <input type="hidden" name="dosql" value="do_consultation_aed" />
             <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
             <input type="hidden" name="_check_premiere" value="{{$curr_consult->_check_premiere}}" />
-            <input type="hidden" name="chrono" value="{{$smarty.const.CC_PATIENT_ARRIVE}}" />
+            <input type="hidden" name="chrono" value="{{$curr_consult|const:'PATIENT_ARRIVE'}}" />
             <input type="hidden" name="arrivee" value="" />
             </form>
             
@@ -365,15 +365,14 @@ function pageMain() {
             <input type="hidden" name="dosql" value="do_consultation_aed" />
             <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
             <input type="hidden" name="_check_premiere" value="{{$curr_consult->_check_premiere}}" />
-            <input type="hidden" name="chrono" value="{{$smarty.const.CC_TERMINE}}" />
+            <input type="hidden" name="chrono" value="{{$curr_consult|const:'TERMINE'}}" />
             <input type="hidden" name="annule" value="1" />
             </form>
             
             <a class="action" href="{{$href_planning}}">
               <img src="modules/{{$m}}/images/planning.png" title="Modifier le rendez-vous" alt="modifier" />
             </a>
-
-			{{if $curr_consult->chrono == $smarty.const.CC_PLANIFIE && $curr_consult->patient_id}}
+			{{if $curr_consult->chrono == $curr_consult|const:'PLANIFIE' && $curr_consult->patient_id}}
             <a class="action" href="#" onclick="putArrivee(document.etatFrm{{$curr_consult->consultation_id}})">
               <img src="modules/{{$m}}/images/check.png" title="Notifier l'arrivée du patient" alt="arrivee" />
             </a>

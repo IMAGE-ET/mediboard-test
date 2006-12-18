@@ -6,7 +6,7 @@
 * @version $Revision$
 * @author Romain Ollivier
 */
-global $filesDir;
+global $filesDir, $AppUI;
 $filesDir = $AppUI->cfg["root_dir"]."/files";
 
 class CFile extends CMbObject {

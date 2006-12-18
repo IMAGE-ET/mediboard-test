@@ -26,7 +26,7 @@ $where = array("group_id"=>"= '$g'");
 $listSalles = $listSalles->loadList($where);
 
 // Selection des plages opératoires de la journée
-$plages = new CplageOp;
+$plages = new CPlageOp;
 $where = array();
 $where["date"] = "= '$date'";
 $where["salle_id"] = "= '$salle'";

@@ -98,7 +98,10 @@ class CChambre extends CMbObject {
   }
   
   function checkChambre() {
-    global $pathos;
+    static $pathos = null;
+    if (!$pathos) {
+      $pathos = new CPathologies();
+    }
     
     assert($this->_ref_lits !== null);
     $this->_nb_lits_dispo = count($this->_ref_lits);

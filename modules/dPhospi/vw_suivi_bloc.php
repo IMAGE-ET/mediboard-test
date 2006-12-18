@@ -34,7 +34,7 @@ if($service_id!=0 && array_key_exists($service_id,$services)){
 
 
 // Selection des plages opératoires de la journée
-$plages = new CplageOp;
+$plages = new CPlageOp;
 $where = array();
 $where["date"] = "= '$date_suivi'";
 $plages = $plages->loadList($where);

@@ -48,7 +48,7 @@ $consult->patient_id = $_POST["patient_id"];
 $consult->heure = $hour_now;
 $consult->arrivee = $day_now." ".$hour_now;
 $consult->duree = 1;
-$consult->chrono = CC_PATIENT_ARRIVE;
+$consult->chrono = CConsultation::PATIENT_ARRIVE;
 $consult->motif = "Consultation immédiate";
 $consult->store();
 

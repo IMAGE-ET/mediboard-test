@@ -7,17 +7,14 @@
 * @author Romain Ollivier
 */
 
-// Enum for Plageressource.state
-if(!defined("PR_FREE")) {
-  define("PR_OUT"    , "#aaa");  // plage échue
-  define("PR_FREE"   , "#aae");  // plage libre
-  define("PR_FREEB"  , "#88c");  // plage libre à plus d'1 mois
-  define("PR_BUSY"   , "#ecc");  // plage occupée
-  define("PR_BLOCKED", "#eaa");  // plage occupée à moins de 15 jours
-  define("PR_PAYED"  , "#aea");  // plage réglée
-}
-
 class CPlageressource extends CMbObject {
+  const OUT     = "#aaa";  // plage échue
+  const FREE    = "#aae";  // plage libre
+  const FREEB   = "#88c";  // plage libre à plus d'1 mois
+  const BUSY    = "#ecc";  // plage occupée
+  const BLOCKED = "#eaa";  // plage occupée à moins de 15 jours
+  const PAYED   = "#aea";  // plage réglée
+  
   // DB Table key
   var $plageressource_id = null;
 
@@ -131,18 +128,18 @@ class CPlageressource extends CMbObject {
     $this->_hour_fin = intval(substr($this->fin, 0, 2));
     $this->_min_fin  = intval(substr($this->fin, 3, 2));
     if($this->paye == 1) {
-      $this->_state = PR_PAYED;
+      $this->_state = self::PAYED;
     } elseif($this->date < mbDate()) {
-      $this->_state = PR_OUT;
+      $this->_state = self::OUT;
     } elseif($this->prat_id) {
       if (mbDate("+ 15 DAYS") > $this->date) {
-        $this->_state = PR_BLOCKED;
+        $this->_state = self::BLOCKED;
       } else
-        $this->_state = PR_BUSY;
+        $this->_state = self::BUSY;
     } elseif (mbDate("+ 1 MONTH") < $this->date) {
-      $this->_state = PR_FREEB;
+      $this->_state = self::FREEB;
     } else {
-      $this->_state = PR_FREE;
+      $this->_state = self::FREE;
     }
   }
   

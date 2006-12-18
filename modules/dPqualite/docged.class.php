@@ -10,16 +10,14 @@
 /**
  * The CDocGed class
  */
-
-if(!defined("CDOC_DEMANDE")) {
-  define("CDOC_MODELE"     , 0);
-  define("CDOC_DEMANDE"    , 16);
-  define("CDOC_REDAC"      , 32);
-  define("CDOC_VALID"      , 48);
-  define("CDOC_TERMINE"    , 64);
-}
  
 class CDocGed extends CMbObject {
+  const MODELE   = 0;
+  const DEMANDE  = 16;
+  const REDAC    = 32;
+  const VALID    = 48;
+  const TERMINE  = 64;
+
   // DB Table key
   var $doc_ged_id = null;
     
@@ -73,13 +71,13 @@ class CDocGed extends CMbObject {
   function getEtatRedac() {
     global $AppUI;
     $etat = array();
-    $etat[CDOC_DEMANDE]   = $AppUI->_("msg-CDocGed-etatredac_CDOC_DEMANDE");
-    $etat[CDOC_REDAC]     = $AppUI->_("msg-CDocGed-etatredac_CDOC_REDAC");
-    $etat[CDOC_VALID]     = $AppUI->_("msg-CDocGed-etatredac_CDOC_VALID");
+    $etat[self::DEMANDE]   = $AppUI->_("msg-CDocGed-etatredac_DEMANDE");
+    $etat[self::REDAC]     = $AppUI->_("msg-CDocGed-etatredac_REDAC");
+    $etat[self::VALID]     = $AppUI->_("msg-CDocGed-etatredac_VALID");
     if($this->annule){
-      $etat[CDOC_TERMINE]   = $AppUI->_("msg-CDocGed-etat_INDISPO");
+      $etat[self::TERMINE]   = $AppUI->_("msg-CDocGed-etat_INDISPO");
     }else{
-      $etat[CDOC_TERMINE]   = $AppUI->_("msg-CDocGed-etat_DISPO");  
+      $etat[self::TERMINE]   = $AppUI->_("msg-CDocGed-etat_DISPO");  
     }
     if($this->etat)
       $this->_etat_actuel = $etat[$this->etat];
@@ -88,13 +86,13 @@ class CDocGed extends CMbObject {
   function getEtatValid() {
     global $AppUI;
     $etat = array();
-    $etat[CDOC_DEMANDE]   = $AppUI->_("msg-CDocGed-etatvalid_CDOC_DEMANDE");
-    $etat[CDOC_REDAC]     = $AppUI->_("msg-CDocGed-etatvalid_CDOC_REDAC");
-    $etat[CDOC_VALID]     = $AppUI->_("msg-CDocGed-etatvalid_CDOC_VALID");
+    $etat[self::DEMANDE]   = $AppUI->_("msg-CDocGed-etatvalid_DEMANDE");
+    $etat[self::REDAC]     = $AppUI->_("msg-CDocGed-etatvalid_REDAC");
+    $etat[self::VALID]     = $AppUI->_("msg-CDocGed-etatvalid_VALID");
     if($this->annule){
-      $etat[CDOC_TERMINE]   = $AppUI->_("msg-CDocGed-etat_INDISPO");
+      $etat[self::TERMINE]   = $AppUI->_("msg-CDocGed-etat_INDISPO");
     }else{
-      $etat[CDOC_TERMINE]   = $AppUI->_("msg-CDocGed-etat_DISPO");  
+      $etat[self::TERMINE]   = $AppUI->_("msg-CDocGed-etat_DISPO");  
     }
     if($this->etat)
       $this->_etat_actuel = $etat[$this->etat];
@@ -138,27 +136,27 @@ class CDocGed extends CMbObject {
   function loadProcDemande($user_id = null,$annule = null){
     // Chargement des Procédures en cours de demande    
     $where = array();
-    $where["etat"] = "= '".CDOC_DEMANDE."'";
+    $where["etat"] = "= '".self::DEMANDE."'";
     return $this->loadProc($user_id,$where,$annule);
   }
   
   function loadProcTermineOuRefuse($user_id = null,$annule = null){
     $where = array();           
-    $where["etat"] = "= '".CDOC_TERMINE."'";
+    $where["etat"] = "= '".self::TERMINE."'";
     return $this->loadProc($user_id,$where,$annule);
   }
 
   function loadProcRedac($user_id = null,$annule = null){
     // Chargement des Procédures en Attente d'upload d'un fichier (Redaction)
     $where = array();           
-    $where["etat"] = "= '".CDOC_REDAC."'";
+    $where["etat"] = "= '".self::REDAC."'";
     return $this->loadProc($user_id,$where,$annule);
   }
   
   function loadProcRedacAndValid($user_id = null,$annule = null){
     // Chargement des Procédures en Attente d'upload d'un fichier (Redaction)
     $where = array();
-    $where[] = "(`doc_ged`.etat = '".CDOC_VALID."' || `doc_ged`.etat = '".CDOC_REDAC."')";
+    $where[] = "(`doc_ged`.etat = '".self::VALID."' || `doc_ged`.etat = '".self::REDAC."')";
     return $this->loadProc($user_id,$where,$annule);
   }
   
@@ -189,7 +187,7 @@ class CDocGed extends CMbObject {
     $where = array();
     $where["doc_ged_id"] = "= '$this->doc_ged_id'";
     $where["user_id"] = "= '$this->user_id'";
-    $where["etat"] = "= '".CDOC_DEMANDE."'";
+    $where["etat"] = "= '".self::DEMANDE."'";
     $order = "date DESC";
     $this->_firstentry->loadObject($where, $order);
     $this->_firstentry->loadRefsFwd();
@@ -197,12 +195,12 @@ class CDocGed extends CMbObject {
   
   function canDelete(&$msg, $oid = null) {
     // Suppr si Demande, redac, valid ou refus de demande (Terminé sans doc actif)
-    if($this->etat==CDOC_DEMANDE 
-       || $this->etat==CDOC_REDAC 
-       || $this->etat==CDOC_VALID
-       || $this->etat==CDOC_MODELE
-       || ($this->etat==CDOC_TERMINE && !$this->_lastactif->doc_ged_suivi_id)
-       || ($this->etat==CDOC_TERMINE && $this->_lastactif->doc_ged_suivi_id!=$this->_lastentry->doc_ged_suivi_id)
+    if($this->etat==self::DEMANDE 
+       || $this->etat==self::REDAC 
+       || $this->etat==self::VALID
+       || $this->etat==self::MODELE
+       || ($this->etat==self::TERMINE && !$this->_lastactif->doc_ged_suivi_id)
+       || ($this->etat==self::TERMINE && $this->_lastactif->doc_ged_suivi_id!=$this->_lastentry->doc_ged_suivi_id)
        ){
       return true;
     }else{
@@ -226,7 +224,7 @@ class CDocGed extends CMbObject {
     }    
     $this->_lastactif->delete_suivi($this->doc_ged_id, $this->_lastactif->doc_ged_suivi_id);
     if($this->_lastactif->doc_ged_suivi_id){
-      $this->etat = CDOC_TERMINE;
+      $this->etat = self::TERMINE;
       $this->user_id = 0;
       $this->store(); 
     }else{

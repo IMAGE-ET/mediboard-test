@@ -7,14 +7,10 @@
  * @author Romain Ollivier
  */
 
-// Enum for langages
-if(!defined("LANG_FR")) {
-  define("LANG_FR", "FR_OMS");
-  define("LANG_EN", "EN_OMS");
-  define("LANG_DE", "GE_DIMDI");
-}
-
 class CCodeCIM10 {
+  const LANG_FR = "FR_OMS";
+  const LANG_EN = "EN_OMS";
+  const LANG_DE = "GE_DIMDI";
 
   // Lite props
   var $code = null;
@@ -54,7 +50,7 @@ class CCodeCIM10 {
   }
   
   // Chargement des données Lite
-  function loadLite($lang = LANG_FR, $connection = 1) {
+  function loadLite($lang = self::LANG_FR, $connection = 1) {
     
     $this->_lang = $lang;
 
@@ -93,7 +89,7 @@ class CCodeCIM10 {
   }
   
   // Chargement des données
-  function load($lang = LANG_FR, $connection = 1) {
+  function load($lang = self::LANG_FR, $connection = 1) {
 
     $this->loadLite($lang, 0);
 
@@ -273,7 +269,7 @@ class CCodeCIM10 {
 }
   
   // Sommaire
-  function getSommaire($lang = LANG_FR, $connection = 1) {
+  function getSommaire($lang = self::LANG_FR, $connection = 1) {
     $this->_lang = $lang;
 
     $query = "SELECT * FROM chapter ORDER BY chap";
@@ -296,7 +292,7 @@ class CCodeCIM10 {
   }
   
   // Recherche de codes
-  function findCodes($keys, $lang = LANG_FR, $connection = 1) {
+  function findCodes($keys, $lang = self::LANG_FR, $connection = 1) {
     $this->_lang = $lang;
   
     $query = "SELECT * FROM libelle WHERE 0";

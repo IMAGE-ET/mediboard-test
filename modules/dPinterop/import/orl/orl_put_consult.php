@@ -93,7 +93,7 @@ foreach ($consults as $consult) {
     $consultation->duree = @$freqs[$consult->freq] or 1;
     $consultation->secteur1 = $consult->secteur1;
     $consultation->secteur2 = $consult->secteur2;
-    $consultation->chrono = strftime("%Y-%m-%d") > $consult->date ? CC_TERMINE : CC_PLANIFIE;
+    $consultation->chrono = strftime("%Y-%m-%d") > $consult->date ? CConsultation::TERMINE : CConsultation::PLANIFIE;
     $consultation->annule = 0;
     $consultation->paye = strftime("%Y-%m-%d") > $consult->date ? 1 : 0;
     $consultation->cr_valide = 0;

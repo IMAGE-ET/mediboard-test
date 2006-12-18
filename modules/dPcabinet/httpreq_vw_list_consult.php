@@ -77,7 +77,7 @@ foreach ($listPlage as &$plage) {
   $plage->_ref_chir =& $userSel;
   $plage->loadRefsBack();
   foreach ($plage->_ref_consultations as $keyConsult => &$consultation) {
-    if ($vue && ($consultation->chrono == CC_TERMINE)) {
+    if ($vue && ($consultation->chrono == CConsultation::TERMINE)) {
       unset($plage->_ref_consultations[$keyConsult]);
       continue;
     }

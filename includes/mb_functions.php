@@ -133,24 +133,6 @@ function mbSetAbsValueToSession($valName, $value = null) {
 }
 
 /**
- * Traces variable using preformated text et varibale export
- * @return void 
- **/
-function mbTrace($var, $label = null, $die = false, $error = false) {
-  $export = print_r($var, true);
-  //$export = var_export($var, true); 
-  $export = htmlspecialchars($export);
-  if($error)
-    trigger_error (html_entity_decode("\n$label: $export\n"));
-  else
-  echo "<pre>$label: $export</pre>";
-
-  if ($die) {
-    die();
-  }
-}
-
-/**
  * Calculate the bank holidays in France
  * @return array: List of bank holidays
  **/
@@ -160,7 +142,7 @@ function mbBankHolidays($date = null) {
     $date = mbDate();
   $year = mbTranformTime("+0 DAY", $date, "%Y");
 
-  // Calculdu dimanche de paques : http://fr.wikipedia.org/wiki/Computus
+  // Calcul du Dimanche de Pâques : http://fr.wikipedia.org/wiki/Computus
   $n = $year - 1900;
   $a = $n % 19;
   $b = intval((7 * $a + 1) / 19);
@@ -698,15 +680,14 @@ function mbConvertDecaBinary($number) {
 function getChildClasses($parent = "CMbObject", $properties = array()) {
   $listClasses = get_declared_classes();
   foreach ($listClasses as $key => $class) {
-    if (!is_subclass_of($class, $parent)) {
+    if ($parent and !is_subclass_of($class, $parent)) {
       unset($listClasses[$key]);
-    } else {
-      if(is_array($properties)) {
-        foreach($properties as $prop) {
-          if(!array_key_exists($prop, get_class_vars($class))) {
-            unset($listClasses[$key]);
-          }
-        }
+      continue;
+    }
+
+    foreach($properties as $prop) {
+      if(!array_key_exists($prop, get_class_vars($class))) {
+        unset($listClasses[$key]);
       }
     }
   }
@@ -715,6 +696,8 @@ function getChildClasses($parent = "CMbObject", $properties = array()) {
 }
 
 function getInstalledClasses($properties = array()) {
+  global $AppUI;
+  $AppUI->getAllClasses();
   $listClasses = getChildClasses("CMbObject", $properties);
   foreach ($listClasses as $key => $class) {
     $object = new $class;

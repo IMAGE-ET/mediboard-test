@@ -4,19 +4,21 @@
 </table>
 
 {{if $debugMode}}
-<div style="margin: 10px; text-align: center;">
-  Page générée en {{$performance.genere}} secondes
-  par PHP, utilisant {{$performance.memoire}} de mémoire 
-  sur  {{$performance.objets}} objets métier + {{$performance.cache}} en cache
+<div id="performance">
+  PHP : {{$performance.genere}} secondes &ndash;
+  Poids de la page : {{$performance.size}} &ndash;
+  Mémoire {{$performance.memoire}}
+  <br />
+  Objets métier : {{$performance.objets}} &ndash;
+  Objets en cache : {{$performance.cache}} &ndash;
+  Classes auto-chargées : {{$performance.autoload}}
+  <br />
+  Requêtes SQL : 
   {{foreach from=$dbChronos item=currdbChrono key=keydbConfigName}}
-  <br />
-  {{$currdbChrono->total|string_format:"%.3f"}} secondes prises
-  par la base de données <strong>{{$keydbConfigName}}</strong> en 
-  {{$currdbChrono->nbSteps}} requêtes SQL.
+  &ndash; {{$currdbChrono->nbSteps}} 
+  sur '{{$keydbConfigName}}'
+  en {{$currdbChrono->total|string_format:"%.3f"}} secondes
   {{/foreach}}
-  <br />
-  Poids de la page : {{$performance.size}}
-  <br />
 </div>
 {{/if}}
 

@@ -164,7 +164,7 @@ class CDoObjectAddEdit {
     }
 
     if ($this->_logIt) {
-      $log = new CuserLog;
+      $log = new CUserLog;
       $log->user_id = $AppUI->user_id;
       $log->object_id = $object_id;
       $log->object_class = $this->className;

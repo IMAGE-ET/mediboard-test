@@ -20,7 +20,7 @@ function validDoc(oForm){
     oForm.elements["suivi[remarques]"].focus();
   }else{
     oForm.elements["suivi[doc_ged_suivi_id]"].value = "";
-    oForm.elements["ged[etat]"].value = {{$smarty.const.CDOC_TERMINE}};
+    oForm.elements["ged[etat]"].value = {{$docGed|const:'TERMINE'}};
     oForm.elements["suivi[actif]"].value = 1;
     oForm.submit();
   }
@@ -41,14 +41,14 @@ function refuseDoc(oForm){
     oForm.elements["ged[doc_chapitre_id]"].value="";
     oForm.elements["ged[titre]"].value="";
     {{/if}}
-    oForm.elements["ged[etat]"].value = {{$smarty.const.CDOC_TERMINE}};      
+    oForm.elements["ged[etat]"].value = {{$docGed|const:'TERMINE'}};      
     oForm.submit();
   }
 }
 
 function redactionDoc(oForm){
   oForm.elements["suivi[doc_ged_suivi_id]"].value = "";
-  oForm.elements["ged[etat]"].value = {{$smarty.const.CDOC_REDAC}};
+  oForm.elements["ged[etat]"].value = {{$docGed|const:'REDAC'}};
   if(oForm.onsubmit()){
     oForm.submit();
   }
@@ -203,7 +203,7 @@ function redactionDoc(oForm){
               <button class="change" type="submit">
                 {{tr}}button-CDocGed-retablir{{/tr}}
               </button>
-              {{if $currProc->etat==CDOC_TERMINE}}
+              {{if $currProc->etat==$currProc|const:'TERMINE'}}
               {{tr}}msg-CDocGed-etat_INDISPO{{/tr}}
               {{else}}
               <strong>{{tr}}_CDocGed_attente{{/tr}}</strong>
@@ -237,11 +237,11 @@ function redactionDoc(oForm){
       <input type="hidden" name="suivi[actif]" value="{{$docGed->_lastentry->actif}}" /> 
       <input type="hidden" name="suivi[file_id]" value="{{$docGed->_lastentry->file_id}}" />    
 
-      {{if $docGed->etat==CDOC_DEMANDE && !$lastactif}}
+      {{if $docGed->etat==$docGed|const:'DEMANDE' && !$lastactif}}
         {{include file="inc_procvalid_demande.tpl"}}
-      {{elseif $docGed->etat==CDOC_REDAC && !$lastactif}}
+      {{elseif $docGed->etat==$docGed|const:'REDAC' && !$lastactif}}
         {{include file="inc_procvalid_redaction.tpl"}}
-      {{elseif $docGed->etat==CDOC_VALID && !$lastactif}}
+      {{elseif $docGed->etat==$docGed|const:'VALID' && !$lastactif}}
         {{include file="inc_procvalid_validation.tpl"}}
       {{else}}
         {{include file="inc_procvalid_termine.tpl"}}

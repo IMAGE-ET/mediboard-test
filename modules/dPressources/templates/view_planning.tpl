@@ -43,8 +43,8 @@ function pageMain() {
             {{assign var="isNotIn" value=1}}
             {{foreach from=$plagesPerDay item=curr_plage}}
               {{if $curr_plage->_hour_deb == $curr_hour}}
-                {{if ($curr_plage->_state == $smarty.const.PR_PAYED) && ($curr_plage->prat_id != $app->user_id)}}
-                <td align="center" bgcolor="{{$smarty.const.PR_OUT}}" rowspan="{{$curr_plage->_hour_fin-$curr_plage->_hour_deb}}">
+                {{if ($curr_plage->_state == $curr_plage|const:'PAYED') && ($curr_plage->prat_id != $app->user_id)}}
+                <td align="center" bgcolor="{{$curr_plage|const:'OUT'}}" rowspan="{{$curr_plage->_hour_fin-$curr_plage->_hour_deb}}">
                 {{else}}
                 <td style="vertical-align:middle; text-align:center; background-color:{{$curr_plage->_state}}" rowspan="{{$curr_plage->_hour_fin-$curr_plage->_hour_deb}}">
                 {{/if}}
@@ -66,12 +66,12 @@ function pageMain() {
                   </font>
                   {{/if}}
                   <br />
-                  {{if $isprat && (($curr_plage->_state == $smarty.const.PR_FREE) || (($curr_plage->_state == $smarty.const.PR_BUSY) && ($curr_plage->prat_id == $app->user_id)))}}
+                  {{if $isprat && (($curr_plage->_state == $curr_plage|const:'FREE') || (($curr_plage->_state == $curr_plage|const:'BUSY') && ($curr_plage->prat_id == $app->user_id)))}}
                   <form name="editPlage{{$curr_plage->plageressource_id}}" action="?m={{$m}}" method="post" onSubmit=" return alertAction()">
                   <input type='hidden' name='dosql' value='do_plageressource_aed' />
                   <input type='hidden' name='del' value='0' />
                   <input type='hidden' name='plageressource_id' value='{{$curr_plage->plageressource_id}}' />
-                    {{if $curr_plage->_state == $smarty.const.PR_FREE}}
+                    {{if $curr_plage->_state == $curr_plage|const:'FREE'}}
                     <input type='hidden' name='prat_id' value='{{$app->user_id}}' />
                     <button class="tick" type="submit">Réserver</button>
                     {{else}}
@@ -180,27 +180,27 @@ function pageMain() {
           <th colspan="2" class="category">Légende</th>
         </tr>
         <tr>
-          <th style="background:{{$smarty.const.PR_OUT}}" />
+          <th style="background:{{$curr_plage|const:'OUT'}}" />
           <td class="text">Plage terminée</td>
         </tr>
         <tr>
-          <th style="background:{{$smarty.const.PR_FREE}}" />
+          <th style="background:{{$curr_plage|const:'FREE'}}" />
           <td class="text">Plage libre</td>
         </tr>
         <tr>
-          <th style="background:{{$smarty.const.PR_FREEB}}" />
+          <th style="background:{{$curr_plage|const:'FREEB'}}" />
           <td class="text">Plage libre non réservable (dans plus d'1 mois)</td>
         </tr>
         <tr>
-          <th style="background:{{$smarty.const.PR_BUSY}}" />
+          <th style="background:{{$curr_plage|const:'BUSY'}}" />
           <td class="text">Plage réservée (echéance dans plus de 15 jours)</td>
         </tr>
         <tr>
-          <th style="background:{{$smarty.const.PR_BLOCKED}}" />
+          <th style="background:{{$curr_plage|const:'BLOCKED'}}" />
           <td class="text">Plage bloquée (échéance dans moins de 15 jours)</td>
         </tr>
         <tr>
-          <th style="background:{{$smarty.const.PR_PAYED}}" />
+          <th style="background:{{$curr_plage|const:'PAYED'}}" />
           <td class="text">Plage réglée</td>
         </tr>
         <tr>

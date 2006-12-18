@@ -17,8 +17,6 @@ $mbObjectCount = 0;
 $mbCacheObjectCount = 0;
 
 require_once("./classes/request.class.php");
-
-require_once("./includes/db_connect.php");
  
 class CMbObject {
   

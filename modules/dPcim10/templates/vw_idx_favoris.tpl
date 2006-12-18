@@ -2,17 +2,19 @@
   <tr>
     <th colspan="4">
       <form action="index.php" name="selection" method="get">
+
       <select name="lang" style="float:right;" onchange="this.form.submit()">
-        <option value="{{$smarty.const.LANG_FR}}" {{if $lang == $smarty.const.LANG_FR}}selected="selected"{{/if}}>
+        <option value="{{$code|const:'LANG_FR'}}" {{if $lang == $code|const:'LANG_FR'}}selected="selected"{{/if}}>
           Français
         </option>
-        <option value="{{$smarty.const.LANG_EN}}" {{if $lang == $smarty.const.LANG_EN}}selected="selected"{{/if}}>
+        <option value="{{$code|const:'LANG_EN'}}" {{if $lang == $code|const:'LANG_EN'}}selected="selected"{{/if}}>
           English
         </option>
-        <option value="{{$smarty.const.LANG_DE}}" {{if $lang == $smarty.const.LANG_DE}}selected="selected"{{/if}}>
+        <option value="{{$code|const:'LANG_DE'}}" {{if $lang == $code|const:'LANG_DE'}}selected="selected"{{/if}}>
           Deutsch
         </option>
       </select>
+
       <input type="hidden" name="m" value="dPcim10" />
       <input type="hidden" name="tab" value="vw_idx_favoris" />
       Codes favoris
@@ -26,7 +28,7 @@
   {{/if}}
     <td>
       <strong>
-        <a href="index.php?m={{$m}}&amp;tab=vw_full_code&amp;code={{$curr_code->code}}">{{$curr_code->code}}</a>
+        <a href="?m={{$m}}&amp;tab=vw_full_code&amp;code={{$curr_code->code}}">{{$curr_code->code}}</a>
       </strong>
       <br />
 

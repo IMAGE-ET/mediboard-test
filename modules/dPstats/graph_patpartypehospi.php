@@ -79,7 +79,7 @@ foreach($listHospis as $type=>$vType) {
 }
 
 // Setup the graph.
-$graph = new Graph(530,300,"auto");    
+$graph = new Graph(530,300,"auto");   
 $graph->img->SetMargin(50,100,50,70);
 $graph->SetScale("textlin");
 $graph->SetMarginColor("lightblue");

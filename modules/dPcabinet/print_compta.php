@@ -11,6 +11,8 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
+mbTrace(CConsultation::TERMINE);
+
 // Récupération des paramètres
 $deb  = mbGetValueFromGetOrSession("deb", mbDate());
 $fin  = mbGetValueFromGetOrSession("fin", mbDate());
@@ -64,7 +66,7 @@ foreach($listPlage as $key => $value) {
   $where = array();
   $where["chir_id"] = "= '$curr_chir->user_id'";
   $where["date_paiement"] = "= '".$value["date"]."'";
-  $where["chrono"] = ">= '".CC_TERMINE."'";
+  $where["chrono"] = ">= '".CConsultation::TERMINE."'";
   $where["annule"] = "= '0'";
   if($etat != -1)
     $where["paye"] = "= '$etat'";

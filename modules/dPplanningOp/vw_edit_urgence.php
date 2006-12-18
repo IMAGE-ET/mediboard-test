@@ -142,7 +142,7 @@ $smarty = new CSmartyDP(1);
 $smarty->assign("canReadSante400", $canReadSante400);
 
 $smarty->assign("op"        , $op);
-$smarty->assign("plage"     , $op->plageop_id ? $op->_ref_plageop : new CPlageop );
+$smarty->assign("plage"     , $op->plageop_id ? $op->_ref_plageop : new CPlageOp );
 $smarty->assign("sejour"    , $sejour);
 $smarty->assign("chir"      , $chir);
 $smarty->assign("praticien" , $chir);
