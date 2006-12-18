@@ -39,7 +39,7 @@ $ljoin["service"]  = "service.service_id = chambre.service_id";
 $where["sortie"]   = "BETWEEN '$limit1' AND '$limit2'";
 $where["type"]     = "!= 'exte'";
 $where["service.group_id"] = "= '$g'";
-$where["service.service_id"] = db_prepare_in(array_keys($services));
+//$where["service.service_id"] = db_prepare_in(array_keys($services));
 if ($vue) {
   $where["confirme"] = "= '0'";
 }
@@ -90,6 +90,10 @@ foreach($sortiesAmbu as $key => $value) {
     $sortiesAmbu[$key]->_ref_next->loadRefsFwd();
     $sortiesAmbu[$key]->_ref_next->_ref_lit->loadCompleteView();
   }
+  $service_actuel    = $sortiesAmbu[$key]->_ref_lit->_ref_chambre->service_id;
+  if(!in_array($service_actuel,array_keys($services))){
+      unset($sortiesAmbu[$key]);
+  }
 }
 
 // Récupération des sorties hospi complete du jour
@@ -106,6 +110,10 @@ foreach($sortiesComp as $key => $value) {
     $sortiesComp[$key]->_ref_lit->loadCompleteView();
     $sortiesComp[$key]->_ref_next->loadRefsFwd();
     $sortiesComp[$key]->_ref_next->_ref_lit->loadCompleteView();
+  }
+  $service_actuel    = $sortiesComp[$key]->_ref_lit->_ref_chambre->service_id;
+  if(!in_array($service_actuel,array_keys($services))){
+      unset($sortiesComp[$key]);
   }
 }
 
