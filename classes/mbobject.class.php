@@ -1378,14 +1378,24 @@ class CMbObject {
     $currUser->load($user_id);
     
     $where = array();
-    $where[] = "(user_id = '$user_id' OR function_id = '$currUser->function_id')";
-    $where["class"] = " = '$this->_class_name'";
+    $where["user_id"] = db_prepare("= %", $user_id);
+    $where["class"]   = db_prepare("= %", $this->_class_name);
     $order = "name";
+    
     $aides = new CAideSaisie();
     $aides = $aides->loadList($where,$order);  
     // Aides mapping suitable for select options
     foreach ($aides as $aide) {
-      $this->_aides[$aide->field][$aide->text] = $aide->name;  
+      $this->_aides[$aide->field]["Aides du praticien"][$aide->text] = $aide->name;  
+    }
+    
+    unset($where["user_id"]);
+    $where["function_id"] = db_prepare("= %", $currUser->function_id);
+    $aides = new CAideSaisie();
+    $aides = $aides->loadList($where,$order);  
+    // Aides mapping suitable for select options
+    foreach ($aides as $aide) {
+      $this->_aides[$aide->field]["Aides du cabinet"][$aide->text] = $aide->name;  
     }
   }
 
