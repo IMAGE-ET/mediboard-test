@@ -22,32 +22,14 @@ function doEmptySharedMemory() {
   url.requestUpdate("emptySharedMemory");
 }
 
+
+function pageMain() {
+  var url = new Url;
+  url.setModuleAction("system", "httpreq_check_shared_memory");
+  url.requestUpdate("emptySharedMemory");
+}
+
 </script>
-
-<h2>Nettoyage du cache</h2>
-
-<table class="tbl">
-  <tr>
-    <th>Action</th>
-    <th>Status</th>
-  </tr>
-  <tr>
-    <td>
-      <button class="cancel" onclick="doEmptyTemplates()">
-        Vider les caches template Smarty
-      </button>
-    </td>
-    <td id="emptyTemplates" />
-  </tr>
-  <tr>
-    <td>
-      <button class="cancel" onclick="doEmptySharedMemory()">
-        Vider les variables de la mémoire partagée
-      </button>
-    </td>
-    <td id="emptySharedMemory" />
-  </tr>
-</table>
 
 <h2>Administration des modules</h2>
 
@@ -151,4 +133,29 @@ function doEmptySharedMemory() {
     </td>
   </tr>
   {{/foreach}}
+</table>
+
+<h2>Nettoyage du cache</h2>
+
+<table class="tbl">
+  <tr>
+    <th>Action</th>
+    <th>Status</th>
+  </tr>
+  <tr>
+    <td>
+      <button class="cancel" onclick="doEmptyTemplates()">
+        Vider les caches template Smarty
+      </button>
+    </td>
+    <td id="emptyTemplates" />
+  </tr>
+  <tr>
+    <td>
+      <button class="cancel" onclick="doEmptySharedMemory()">
+        Vider les variables de la mémoire partagée
+      </button>
+    </td>
+    <td id="emptySharedMemory" />
+  </tr>
 </table>

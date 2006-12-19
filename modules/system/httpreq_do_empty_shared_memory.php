@@ -13,10 +13,34 @@ if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
 }
 
-$i = 0;
-foreach (shm_list() as $key) {
-  $i++;
-  shm_rem($key);
+
+// Remove locales
+foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
+  $localeName = basename($localeDir);
+  $sharedName = "locales-$localeName";
+  
+  if (!shm_get($sharedName)) {
+    echo "<div class='message'>Table absente en mémoire pour langage '$localeName'</div>";
+    continue;
+  } 
+  
+  if (!shm_rem($sharedName)) {
+    echo "<div class='error'>Impossible de supprimer la table pour langage '$localeName'</div>";
+    continue;
+  }
+  
+  echo "<div class='message'>Table supprimée pour langage '$localeName'</div>";
 }
 
-echo "<div class='message'>$i variables supprimées</div>";
+// Remove class paths
+if (!shm_get("class-paths")) {
+  echo "<div class='message'>Table des classes absente en mémoire</div>";
+  return;
+}      
+  
+if (!shm_rem("class-paths")) {
+  echo "<div class='error'>Impossible de supprimer la table des classes</div>";
+  return;
+}
+
+echo "<div class='message'>Table des classes suppprimée</div>";
