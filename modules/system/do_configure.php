@@ -16,7 +16,6 @@ $mbpath = "";
 
 unset($_POST["m"]);
 unset($_POST["dosql"]);
-
 $mbConfig = new CMbConfig;
 $mbConfig->update($_POST);
 $mbConfig->load();

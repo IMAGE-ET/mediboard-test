@@ -8,80 +8,87 @@
  * latest version: $HeadURL: https://svn.sourceforge.net/svnroot/mediboard/trunk/includes/errors.php $ 
  */
 
-/**
- * Returns true if shared memory is available
- */
-function shm_ready() {
-  if (function_exists("eaccelerator_get") and function_exists("eaccelerator_info")) {
-    $info = eaccelerator_info();
-    return $info["cache"];
+switch ($dPconfig["shared_memory"]) {
+  case "none" :
+
+  /**
+   * Returns true if shared memory is available
+   */
+  function shm_ready() {
+    return false;
   }
   
-  return false;
-}
+  /**
+   * Get a variable from shared memory if cache engine exists
+   */
+  function shm_get($key) {
+    return null;
+  }
+  
+  /**
+   * Put a variable into shared memory if cache engine exists
+   */
+  function shm_put($key, $value) {
+    return false;
+  }
+  
+  /**
+   * Remove a variable from shared memory if cache engine exists
+   */
+  function shm_rem($key) {
+    return false;
+  }
 
-/**
- * Get a variable from shared memory if cache engine exists
- */
-function shm_get($key) {
-  global $rootName;
-  $key = "$rootName-$key";
+  
+  break;
+  
+  case "eaccelerator" :
 
-  if (function_exists("eaccelerator_get")) {
-    if ($get = eaccelerator_get($key)) {
-      return unserialize($get);
+  function shm_ready() {
+    if (function_exists("eaccelerator_get") and function_exists("eaccelerator_put") and function_exists("eaccelerator_rm")) {
+      return true;
     }
-  }
-
-  return null;
-}
-
-/**
- * Put a variable into shared memory if cache engine exists
- */
-function shm_put($key, $value) {
-  global $rootName;
-  $key = "$rootName-$key";
-
-  if (function_exists("eaccelerator_put")) {
-    return eaccelerator_put($key, serialize($value));
+    
+    return false;
   }
   
-  return false;
-}
-
-/**
- * Remove a variable from shared memory if cache engine exists
- */
-function shm_rem($key) {
-  global $rootName;
-  $key = "$rootName-$key";
-
-  if (function_exists("eaccelerator_rm")) {
-    return eaccelerator_rm($key);
-  }
+  function shm_get($key) {
+    global $rootName;
+    $key = "$rootName-$key";
   
-  return false;
-}
-
-/**
- * Retrive list of variable keys in shared memory
- */
-function shm_list() {
-  global $rootName;
-  $keys = array();
-  
-  if (function_exists("eaccelerator_list_keys")) {
-    foreach (eaccelerator_list_keys() as $variable) {
-      $key = trim($variable["name"], ":");
-      if (preg_match("/^$rootName-(.*)$/", $key, $match)) {
-        $keys[] = $match[1];
-        
-      } 
+    if (function_exists("eaccelerator_get")) {
+      if ($get = eaccelerator_get($key)) {
+        return unserialize($get);
+      }
     }
+  
+    return null;
   }
   
-  return $keys;
+  function shm_put($key, $value) {
+    global $rootName;
+    $key = "$rootName-$key";
+  
+    if (function_exists("eaccelerator_put")) {
+      return eaccelerator_put($key, serialize($value));
+    }
+    
+    return false;
+  }
+  
+  function shm_rem($key) {
+    global $rootName;
+    $key = "$rootName-$key";
+  
+    if (function_exists("eaccelerator_rm")) {
+      return eaccelerator_rm($key);
+    }
+    
+    return false;
+  }
+  break;
+  
+  default:
+    trigger_error("Mode de mémoire partagée non reconnu");
 }
-
 ?>

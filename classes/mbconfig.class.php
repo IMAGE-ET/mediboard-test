@@ -30,28 +30,30 @@ class CMbConfig {
     $this->values["site_domain"] = $_SERVER["HTTP_HOST"];     
   }
   
-  function load() {
+  function loadValuesFromPath($path) {
+    if (!is_file($path)) {
+      return array();
+    }
     
-    $loadPath = is_file($this->targetPath) ? $this->targetPath : $this->sourcePath;
-    
-    if(is_file($loadPath)) {
-    
-      $config = new Config;
-      $configContainer = $config->parseConfig($loadPath, $this->configType, $this->options);
+    $config = new Config;
+    $configContainer = $config->parseConfig($path, $this->configType, $this->options);
+    $rootConfig = $configContainer->toArray();
+    return $rootConfig["root"];
+  }
 
-      $rootConfig = $configContainer->toArray();
-      $this->values = $rootConfig["root"];
+  function load() {
+    $this->values = mbArrayMergeRecursive(
+      $this->loadValuesFromPath($this->sourcePath),
+      $this->loadValuesFromPath($this->targetPath));
     
-      if (!is_file($this->targetPath)) {
-        $this->guessValues();
-      }
-    } else {
-      $this->values = array();
+    
+    if (!is_file($this->targetPath)) {
+      $this->guessValues();
     }
   }
   
   function update($newValues = array(), $keepOld = true) {
-    if($keepOld) {
+    if ($keepOld) {
       $this->load();
       $newValues = mbArrayMergeRecursive($this->values, $newValues);
     }

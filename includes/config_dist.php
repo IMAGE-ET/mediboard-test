@@ -109,6 +109,9 @@ $dPconfig["locale_alert"] = "^";
 // Set to true to help analyse errors
 $dPconfig["debug"] = true;
 
+// Choose shared memory handler [none|eaccelerator] up to now
+$dPconfig["shared_memory"] = "none";
+
 /********* 
  * Mediboard module-specific active configuration settings
  */

@@ -10,7 +10,7 @@ $mod_id   = intval(mbGetValueFromGet("mod_id", "0"));
 $mod_name = mbGetValueFromGet("mod_name", "0");
 
 $module = new CModule();
-if($mod_id) {
+if ($mod_id) {
 	$module->load($mod_id);
 } else {
   $module->mod_version = "all";
@@ -25,16 +25,15 @@ if (!$ok) {
 		$AppUI->redirect();
 	}
 }
-$setupclass = "CSetup".$config["mod_name"];
-if (! $setupclass) {
+
+if (!class_exists($setupclass = "CSetup".$config["mod_name"])) {
   if ($module->mod_type != "core") {
     $AppUI->setMsg("Module does not have a valid setup class defined", UI_MSG_ERROR);
     $AppUI->redirect();
   }
 }
-else {
-  $setup = new $setupclass();
-}
+
+$setup = new $setupclass;
 
 switch ($cmd) {
 	case "moveup":
