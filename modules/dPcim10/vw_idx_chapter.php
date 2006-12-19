@@ -22,6 +22,7 @@ $chapter = $cim10->getSommaire($lang);
 $smarty = new CSmartyDP(1);
 
 $smarty->assign("lang"   , $lang);
+$smarty->assign("cim10"  , $cim10);
 $smarty->assign("chapter", $chapter);
 
 $smarty->display("vw_idx_chapter.tpl");
