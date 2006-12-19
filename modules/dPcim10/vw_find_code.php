@@ -24,6 +24,7 @@ $numresults = count($master);
 // Création du template
 $smarty = new CSmartyDP(1);
 
+$smarty->assign("cim10"      , $cim10);
 $smarty->assign("lang"      , $lang);
 $smarty->assign("keys"      , $keys);
 $smarty->assign("master"    , $master);
