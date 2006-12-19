@@ -53,7 +53,7 @@ class CAideSaisie extends CMbObject {
     $nb_result = db_loadResult($sql->getRequest());
     
     if($nb_result){
-      $msg.= "Pathologie non disponible<br />";
+      $msg.= "Cette aide existe déjà<br />";
     }
     
     return $msg . parent::check();

@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $logPath;
 
 if(!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");

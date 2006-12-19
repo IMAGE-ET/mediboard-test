@@ -5,6 +5,7 @@ function closeWindow(){
 function submitFormAides(oForm){
   if(checkForm(oForm)){
     submitFormAjax(oForm, 'systemMsg', { onComplete : closeWindow });
+    window.close();
   }
   return false;
 }
@@ -63,7 +64,7 @@ function submitFormAides(oForm){
   <tr>
     <td class="button" colspan="2">
       <button class="submit" type="button" onclick="submitFormAides(this.form)">
-        Créer
+        Créer et Fermer
       </button>
     </td>
   </tr>

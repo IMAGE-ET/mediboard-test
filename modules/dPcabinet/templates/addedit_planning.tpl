@@ -188,7 +188,8 @@ function checkFormRDV(oForm){
             <select name="_helpers_motif" size="1" onchange="pasteHelperContent(this)">
               <option value="">&mdash; Choisir une aide</option>
               {{html_options options=$consult->_aides.motif}}
-            </select>
+            </select><br />
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.motif)" />            
           </th>
           <td colspan="2"><textarea name="motif" title="{{$consult->_props.motif}}" rows="3">{{$consult->motif}}</textarea></td>
         </tr>
@@ -199,7 +200,8 @@ function checkFormRDV(oForm){
             <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
               <option value="">&mdash; Choisir une aide</option>
               {{html_options options=$consult->_aides.rques}}
-            </select>
+            </select><br />
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques)"/>
           </th>
           <td colspan="2"><textarea name="rques" title="{{$consult->_props.rques}}" rows="3">{{$consult->rques}}</textarea></td>
         </tr>

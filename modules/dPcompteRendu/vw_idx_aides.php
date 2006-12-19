@@ -31,9 +31,18 @@ foreach($classes as $sClass=>$aChamps){
 	$listObjectAffichage[$sClass] = $AppUI->_($sClass);
 }
 
-// Liste des praticiens accessibles
+// Liste des users accessibles
 $listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
+$listFct = $listPrat->loadFonctions(PERM_EDIT);
+$where = array();
+$where["users_mediboard.function_id"] = db_prepare_in(array_keys($listFct));
+$ljoin = array();
+$ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
+$order = "`users`.`user_last_name`, `users`.`user_first_name`";
+$listPrat = $listPrat->loadList($where, $order, null, null, $ljoin);
+foreach ($listPrat as $keyUser => $mediuser) {
+  $mediuser->_ref_function =& $listFct[$mediuser->function_id];
+}
 
 $listFunc = new CFunctions();
 $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
