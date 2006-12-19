@@ -1,0 +1,79 @@
+<?php /* $Id: $ */
+
+/**
+* @package Mediboard
+* @subpackage dPrepas
+* @version $Revision: $
+* @author Sébastien Fillonneau
+*/
+
+// MODULE CONFIGURATION DEFINITION
+$config = array();
+$config["mod_name"]        = "dPrepas";
+$config["mod_version"]     = "0.1";
+$config["mod_type"]        = "user";
+
+class CSetupdPrepas extends CSetup {
+  
+  function __construct() {
+    parent::__construct();
+    
+    $this->mod_name = "dPrepas";
+    
+    $this->makeRevision("all");
+    $sql = "CREATE TABLE `menu` (" .
+          "\n`menu_id` int(11) unsigned NOT NULL AUTO_INCREMENT ," .
+          "\n`group_id` int(11) UNSIGNED NOT NULL," .
+          "\n`nom` VARCHAR( 255 ) NOT NULL ," .
+          "\n`typerepas` int(11) UNSIGNED NOT NULL," .
+          "\n`plat1` VARCHAR( 255 )," .
+          "\n`plat2` VARCHAR( 255 )," .
+          "\n`plat3` VARCHAR( 255 )," .
+          "\n`plat4` VARCHAR( 255 )," .
+          "\n`plat5` VARCHAR( 255 )," .
+          "\n`boisson` VARCHAR( 255 )," .
+          "\n`pain` VARCHAR( 255 )," .
+          "\n`diabete` enum('0','1') NOT NULL DEFAULT '0'," .
+          "\n`sans_sel` enum('0','1') NOT NULL DEFAULT '0'," .
+          "\n`sans_residu` enum('0','1') NOT NULL DEFAULT '0'," .
+          "\n`modif` enum('0','1') NOT NULL DEFAULT '1'," .
+          "\n`debut` date NOT NULL," .
+          "\n`fin` date NOT NULL," .
+          "\n`repetition` int(11) unsigned NOT NULL," .
+          "\nPRIMARY KEY ( `menu_id` )) TYPE=MyISAM;";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `plats` (" .
+          "\n`plat_id` int(11) unsigned NOT NULL AUTO_INCREMENT ," .
+          "\n`group_id` int(11) UNSIGNED NOT NULL," .
+          "\n`nom` VARCHAR( 255 ) NOT NULL ," .
+          "\n`type` enum('plat1','plat2','plat3','plat4','plat5','boisson','pain') NOT NULL DEFAULT 'plat1'," .
+          "\n`typerepas` int(11) UNSIGNED NOT NULL," .
+          "\nPRIMARY KEY ( `plat_id` )) TYPE=MyISAM;";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `repas_type` (" .
+          "\n`typerepas_id` int(11) unsigned NOT NULL AUTO_INCREMENT ," .
+          "\n`group_id` int(11) UNSIGNED NOT NULL," .
+          "\n`nom` VARCHAR( 255 ) NOT NULL ," .
+          "\n`debut` time NOT NULL," .
+          "\n`fin` time NOT NULL," .
+          "\nPRIMARY KEY ( `typerepas_id` )) TYPE=MyISAM;";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `repas` (" .
+          "\n`repas_id` int(11) unsigned NOT NULL AUTO_INCREMENT ," .
+          "\n`affectation_id` int(11) UNSIGNED NOT NULL," .
+          "\n`menu_id` int(11) UNSIGNED NOT NULL," .
+          "\n`plat1` int(11) UNSIGNED NULL," .
+          "\n`plat2` int(11) UNSIGNED NULL," .
+          "\n`plat3` int(11) UNSIGNED NULL," .
+          "\n`plat4` int(11) UNSIGNED NULL," .
+          "\n`plat5` int(11) UNSIGNED NULL," .
+          "\n`boisson` int(11) UNSIGNED NULL," .
+          "\n`pain` int(11) UNSIGNED NULL," .
+          "\n`date` date NOT NULL," .
+          "\nPRIMARY KEY ( `repas_id` )) TYPE=MyISAM;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.1";
+  }
+}
+?>
