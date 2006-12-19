@@ -14,6 +14,7 @@
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.motif}}
       </select>
+      <button class="new notext" type="button" onclick="addHelp('CConsultation', this.form.motif)"/>
     </th>
     <th class="category">
       <label for="rques" title="Remarques concernant la consultation">Remarques</label>
@@ -23,6 +24,7 @@
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.rques}}
       </select>
+      <button class="new notext" type="button" onclick="addHelp('CConsultation', this.form.rques)"/>
     </th>
   </tr>
   <tr>
@@ -38,6 +40,7 @@
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.examen}}
       </select>
+      <button class="new notext" type="button" onclick="addHelp('CConsultation', this.form.examen)"/>
     </th>
     <th class="category">
       <label for="traitement" title="title">Traitements</label>
@@ -47,6 +50,7 @@
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.traitement}}
       </select>
+      <button class="new notext" type="button" onclick="addHelp('CConsultation', this.form.traitement)"/>
     </th>
   </tr>
   <tr>

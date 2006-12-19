@@ -1385,7 +1385,9 @@ class CMbObject {
     $aides = new CAideSaisie();
     $aides = $aides->loadList($where,$order);  
     // Aides mapping suitable for select options
+    
     foreach ($aides as $aide) {
+      
       $this->_aides[$aide->field]["Aides du praticien"][$aide->text] = $aide->name;  
     }
     

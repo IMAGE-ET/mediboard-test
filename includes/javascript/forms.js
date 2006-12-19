@@ -6,6 +6,7 @@ function addHelp(sClass, oField) {
   url.addParam("class", sClass);
   url.addParam("field", oField.name);
   url.addParam("text", oField.value);
+  url.popup(600, 200, "AidesSaisie");
 }
 
 function confirmExit() {
