@@ -1,5 +1,13 @@
 // $Id$
 
+function addHelp(sClass, oField) {
+  url = new Url;
+  url.setModuleAction("dPcompteRendu", "edit_aide");
+  url.addParam("class", sClass);
+  url.addParam("field", oField.name);
+  url.addParam("text", oField.value);
+}
+
 function confirmExit() {
   if(bFormsToSave)
     alert("element non sauvegardé");
