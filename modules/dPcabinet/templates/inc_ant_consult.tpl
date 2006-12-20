@@ -8,7 +8,18 @@ function selectCim10(code) {
   cim10url.popup(800, 500, "CIM10");
 }
 
-function updateTokenCim10(){
+function popCode() {
+  var url = new Url();
+  url.setModuleAction("dPcim10", "vw_find_code");
+  url.popup(700, 500, "Find CIM10");
+}
+
+function setCode(sCode, type, sFullCode) {
+  oCimField.add(sCode);
+  updateTokenCim10();
+}
+
+function updateTokenCim10() {
   var oForm = document.editDiagFrm;
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
 }
@@ -243,6 +254,7 @@ function incAntecedantsMain() {
       
       <hr />
       <strong>Ajouter un diagnostic</strong>
+      <button class="search" onclick="popCode()">Chercher un diagnostic</button>
       <form name="editDiagFrm" action="?m={{$m}}" method="post">
 
       <input type="hidden" name="m" value="dPpatients" />

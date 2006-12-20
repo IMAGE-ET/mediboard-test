@@ -1,7 +1,10 @@
 <script type="text/javascript">
+
+function selectCode() {
+  var sCode = '{{$cim10->code}}';
+  var sFullCode = '{{$cim10->libelle}}';
   
-function selectCode(code) {
-  window.opener.setCode(code, "cim10");
+  window.opener.setCode(sCode, "cim10", sFullCode);
   window.close();
 }
 
@@ -73,7 +76,7 @@ function selectCode(code) {
     {{/if}}
  
     {{if $dialog}}
-    <button class="tick" type="button" onclick="selectCode('{{$cim10->code}}')">
+    <button class="tick" type="button" onclick="selectCode()">
       Sélectionner ce code
     </button>
     {{/if}}
