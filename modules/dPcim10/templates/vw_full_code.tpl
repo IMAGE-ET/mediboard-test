@@ -19,19 +19,7 @@ function selectCode() {
       <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
       <input type="hidden" name="dialog" value="{{$dialog}}" />
       <input type="hidden" name="code" value="{{$cim10->code}}" />
-
-      <select name="lang" style="float:right;" onchange="this.form.submit()">
-        <option value="{{$cim10|const:'LANG_FR'}}" {{if $lang == $cim10|const:'LANG_FR'}}selected="selected"{{/if}}>
-          Français
-        </option>
-        <option value="{{$cim10|const:'LANG_EN'}}" {{if $lang == $cim10|const:'LANG_EN'}}selected="selected"{{/if}}>
-          English
-        </option>
-        <option value="{{$cim10|const:'LANG_DE'}}" {{if $lang == $cim10|const:'LANG_DE'}}selected="selected"{{/if}}>
-          Deutsch
-        </option>
-      </select>
-
+      {{include file="inc_select_lang.tpl"}}
 
       <h1>&ldquo;{{$cim10->libelle}}&rdquo;</h1>
 

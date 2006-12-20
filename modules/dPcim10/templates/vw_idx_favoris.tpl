@@ -2,18 +2,7 @@
   <tr>
     <th colspan="4">
       <form action="index.php" name="selection" method="get">
-
-      <select name="lang" style="float:right;" onchange="this.form.submit()">
-        <option value="{{$cim10|const:'LANG_FR'}}" {{if $lang == $cim10|const:'LANG_FR'}}selected="selected"{{/if}}>
-          Français
-        </option>
-        <option value="{{$cim10|const:'LANG_EN'}}" {{if $lang == $cim10|const:'LANG_EN'}}selected="selected"{{/if}}>
-          English
-        </option>
-        <option value="{{$cim10|const:'LANG_DE'}}" {{if $lang == $cim10|const:'LANG_DE'}}selected="selected"{{/if}}>
-          Deutsch
-        </option>
-      </select>
+      {{include file="inc_select_lang.tpl"}}
 
       <input type="hidden" name="m" value="dPcim10" />
       <input type="hidden" name="tab" value="vw_idx_favoris" />
