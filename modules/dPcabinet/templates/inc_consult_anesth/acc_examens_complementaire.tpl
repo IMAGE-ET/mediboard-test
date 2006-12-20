@@ -42,8 +42,14 @@ function modifEtatExamComp(oForm){
 }
 
 function submitExamComp(oForm) {
+  if(oForm.examen){
+    var examen = oForm.examen.value;
+  }
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadListExamComp});
   oForm.reset();
+  if(oForm.examen){
+    oForm._hidden_examen.value = examen;
+  }
 }
 
 function reloadListExamComp() {
@@ -66,7 +72,9 @@ function reloadListExamComp() {
       <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this)">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$examComp->_aides.examen}}
-      </select><br />
+      </select>
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamComp', this.form._hidden_examen, 'examen')"></button><br />
+      <input type="hidden" name="_hidden_examen" value="" />
       <textarea name="examen" onblur="if(this.value!=''){submitExamComp(this.form);}"></textarea>
       <button class="submit" type="button" onclick="if(this.form.examen.value!=''){submitExamComp(this.form);}">Ajouter</button>
       </form>

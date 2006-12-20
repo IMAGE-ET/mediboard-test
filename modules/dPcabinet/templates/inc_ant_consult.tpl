@@ -29,6 +29,7 @@ function dateAntecedent(){
   var oEnCours = oForm._date_ant;
   var oHiddenField = oForm.date;
   oForm._helpers_rques.value = "";
+  oForm._hidden_rques.value = oForm.rques.value;
   oForm.rques.value = "";
   var oViewField = document.getElementById('editAntFrm_date_da');
   var oTriggerField = document.getElementById('editAntFrm_date_trigger');
@@ -89,6 +90,7 @@ function dateFinTrmt(){
 
 function finTrmt() {
   var oForm = document.editTrmtFrm;
+  oForm._hidden_traitement.value = oForm.traitement.value;
   oForm.traitement.value = "";
   oForm._helpers_traitement.value = "";
 }
@@ -132,6 +134,7 @@ function incAntecedantsMain() {
             <option value="">&mdash; Choisir une aide</option>
             {{html_options options=$consult_anesth->_aides.tabac}}
           </select>
+          <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.tabac)"/>
         </td>
         <td>
           <label for="oenolisme" title="Comportement alcoolique">Oenolisme</label>
@@ -139,6 +142,7 @@ function incAntecedantsMain() {
             <option value="">&mdash; Choisir une aide</option>
             {{html_options options=$consult_anesth->_aides.oenolisme}}
           </select>
+          <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.oenolisme)"/>
         </td>
       </tr>
       <tr>  
@@ -168,6 +172,8 @@ function incAntecedantsMain() {
               <option value="">&mdash; Choisir une aide</option>
               {{html_options options=$antecedent->_aides.rques}}
             </select>
+            <input type="hidden" name="_hidden_rques" value="" />
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques')"/>
           </td>
 
         </tr>
@@ -217,6 +223,8 @@ function incAntecedantsMain() {
               <option value="">&mdash; Choisir une aide</option>
               {{html_options options=$traitement->_aides.traitement}}
             </select>
+            <input type="hidden" name="_hidden_traitement" value="" />
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTraitement', this.form._hidden_traitement, 'traitement')"/>
           </td>
         </tr>
         <tr>

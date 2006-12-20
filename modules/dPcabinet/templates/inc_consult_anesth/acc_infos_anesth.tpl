@@ -1,7 +1,13 @@
 <script type="text/javascript">
 function submitTech(oForm) {
+  if(oForm.technique){
+    var technique = oForm.technique.value;
+  }
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadListTech});
   oForm.reset();
+  if(oForm.technique){
+    oForm._hidden_technique.value = technique;
+  }
 }
 
 function reloadListTech() {
@@ -50,7 +56,8 @@ function reloadListTech() {
       <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult_anesth->_aides.premedication}}
-      </select><br />
+      </select>
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.premedication)"></button><br />
       <textarea name="premedication" onchange="submitFormAjax(this.form, 'systemMsg')">{{$consult_anesth->premedication}}</textarea>
       
       <br /><br />
@@ -58,11 +65,10 @@ function reloadListTech() {
       <select name="_helpers_prepa_preop" size="1" onchange="pasteHelperContent(this);this.form.prepa_preop.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult_anesth->_aides.prepa_preop}}
-      </select><br />
+      </select>
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.prepa_preop)"></button><br />
       <textarea name="prepa_preop" onchange="submitFormAjax(this.form, 'systemMsg')">{{$consult_anesth->prepa_preop}}</textarea>
-      
-      
-      
+
       </form>
       <br />
       
@@ -75,7 +81,9 @@ function reloadListTech() {
       <select name="_helpers_technique" size="1" onchange="pasteHelperContent(this)">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$techniquesComp->_aides.technique}}
-      </select><br />
+      </select>
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTechniqueComp', this.form._hidden_technique, 'technique')"></button><br />
+      <input type="hidden" name="_hidden_technique" value="" />
       <textarea name="technique" onblur="if(this.value!=''){submitTech(this.form);}"></textarea>
       <button class="submit" type="button" onclick="if(this.form.technique.value!=''){submitTech(this.form);}">Ajouter</button>
       </form>
@@ -96,7 +104,8 @@ function reloadListTech() {
       <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.rques}}
-      </select><br />
+      </select>
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques)"></button><br />
       <textarea name="rques" onchange="submitFormAjax(this.form, 'systemMsg')">{{$consult->rques}}</textarea><br />
       </form>
     </td>

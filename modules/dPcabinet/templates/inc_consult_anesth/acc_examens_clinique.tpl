@@ -85,7 +85,8 @@ function calculImcVst(){
       <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this);this.form.examen.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.examen}}
-      </select><br />
+      </select>
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen)"></button><br />
       <textarea name="examen" onchange="submitFormAjax(this.form, 'systemMsg')">{{$consult->examen}}</textarea><br />
       </form>
     </td>
