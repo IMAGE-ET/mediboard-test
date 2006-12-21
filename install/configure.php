@@ -10,6 +10,13 @@
 require_once("checkauth.php");
 require_once($mbpath."classes/mbconfig.class.php");
 
+if(isset($_POST["username"])){
+ unset($_POST["username"]); 
+}
+if(isset($_POST["password"])){
+ unset($_POST["password"]); 
+}
+
 $mbConfig = new CMbConfig;
 $mbConfig->update($_POST);
 $mbConfig->load();
