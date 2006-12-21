@@ -8,6 +8,8 @@
  * latest version: $HeadURL: https://svn.sourceforge.net/svnroot/mediboard/trunk/includes/errors.php $ 
  */
 
+global $dPconfig;
+
 switch ($dPconfig["shared_memory"]) {
   case "none" :
 

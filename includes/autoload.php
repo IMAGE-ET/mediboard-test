@@ -7,6 +7,8 @@
  * @author Thomas Despoix
  */
 
+global $AppUI, $performance;
+
 $performance["autoload"] = 0;
 
 // Load class paths in shared memory
