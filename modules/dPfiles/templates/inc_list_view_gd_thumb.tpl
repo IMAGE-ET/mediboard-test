@@ -35,7 +35,7 @@
             {{assign var="confirmDeleteType" value="le document"}}
             {{assign var="confirmDeleteName" value=$curr_file->nom}}
             {{assign var="elementId" value=$curr_file->compte_rendu_id}}
-            {{assign var="srcImg" value="modules/dPfiles/images/medifile.png"}}
+            {{assign var="srcImg" value="images/pictures/medifile.png"}}
           
           {{elseif $curr_file->_class_name=="CFile"}}
             <form name="editFile{{$curr_file->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">

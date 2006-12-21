@@ -1,7 +1,7 @@
 <tr class="lit" id="lit{{$curr_lit->lit_id}}">
   <td>
     {{if $curr_lit->_overbooking}}
-      <img src="modules/{{$m}}/images/warning.png" alt="warning" title="Over-booking: {{$curr_lit->_overbooking}} collisions" />
+      <img src="images/icons/warning.png" alt="warning" title="Over-booking: {{$curr_lit->_overbooking}} collisions" />
     {{/if}}
     {{$curr_lit->nom}}
   </td>
@@ -19,13 +19,13 @@
 
 <tr class="patient">
   {{if $curr_affectation->confirme}}
-    <td class="text" style="background-image:url(modules/{{$m}}/images/ray.gif); background-repeat:repeat;">
+    <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
   {{else}}
     <td class="text">
   {{/if}}
   {{if $curr_affectation->sejour_id}}
     <a style="float: right;" href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->patient_id}}">
-      <img src="modules/{{$m}}/images/edit.png" alt="edit" title="Editer le patient" />
+      <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
     </a>
     {{if $patient->_fin_cmu}}
     <div style="float: right;"><strong>CMU</strong></div>
@@ -40,18 +40,18 @@
      {{/if}}
     {{/if}}
     {{if $sejour->type == "ambu"}}
-      <img src="modules/{{$m}}/images/X.png" alt="X" title="Sortant ce soir" />
+      <img src="images/icons/X.png" alt="X" title="Sortant ce soir" />
     {{elseif $curr_affectation->sortie|date_format:"%Y-%m-%d" == $demain}}
       {{if $aff_next->affectation_id}}
-        <img src="modules/{{$m}}/images/OC.png" alt="OC" title="Sortant demain" />
+        <img src="images/icons/OC.png" alt="OC" title="Sortant demain" />
       {{else}}
-        <img src="modules/{{$m}}/images/O.png" alt="O" title="Sortant demain" />
+        <img src="images/icons/O.png" alt="O" title="Sortant demain" />
       {{/if}}
     {{elseif $curr_affectation->sortie|date_format:"%Y-%m-%d" == $date}}
       {{if $aff_next->affectation_id}}
-        <img src="modules/{{$m}}/images/OoC.png" alt="OoC" title="Sortant aujourd'hui" />
+        <img src="images/icons/OoC.png" alt="OoC" title="Sortant aujourd'hui" />
       {{else}}
-        <img src="modules/{{$m}}/images/Oo.png" alt="Oo" title="Sortant aujourd'hui" />
+        <img src="images/icons/Oo.png" alt="Oo" title="Sortant aujourd'hui" />
       {{/if}}
     {{/if}}
     {{if $sejour->type == "ambu"}}
@@ -82,7 +82,7 @@
     <input type="hidden" name="affectation_id" value="{{$curr_affectation->affectation_id}}" />
     </form>
     <a style="float: right;" href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->affectation_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|addslashes}}'})">
-      <img src="modules/{{$m}}/images/trash.png" alt="trash" title="Supprimer l'affectation" />
+      <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
     </a>
     {{/if}}
     <em>Du</em>:
@@ -97,7 +97,7 @@
     <input type="hidden" name="entree" value="{{$curr_affectation->entree}}" />
     </form>
     <a>
-      <img id="entreeAffectation{{$curr_affectation->affectation_id}}__trigger_entree" src="modules/{{$m}}/images/planning.png" alt="Planning" title="Modifier la date de début" />
+      <img id="entreeAffectation{{$curr_affectation->affectation_id}}__trigger_entree" src="images/icons/planning.png" alt="Planning" title="Modifier la date de début" />
     </a>
     {{/if}}
   </td>
@@ -116,7 +116,7 @@
     <input type="hidden" name="sortie" value="{{$curr_affectation->sortie}}" />
     </form>
     <a>
-      <img id="sortieAffectation{{$curr_affectation->affectation_id}}__trigger_sortie" src="modules/{{$m}}/images/planning.png" alt="Planning" title="Modifier la date de fin" />
+      <img id="sortieAffectation{{$curr_affectation->affectation_id}}__trigger_sortie" src="images/icons/planning.png" alt="Planning" title="Modifier la date de fin" />
     </a>
     {{/if}}
   </td>
@@ -181,7 +181,7 @@
     </form>
     
     <a>
-      <img id="entreeAffectation{{$curr_affectation->affectation_id}}__trigger_entree" src="modules/{{$m}}/images/planning.png" alt="Planning" title="Modifier la date d'entrée" />
+      <img id="entreeAffectation{{$curr_affectation->affectation_id}}__trigger_entree" src="images/icons/planning.png" alt="Planning" title="Modifier la date d'entrée" />
     </a>
     {{/if}}
   </td>
@@ -211,7 +211,7 @@
     </form>
     
     <a style="float: right;">
-<img id="splitAffectation{{$curr_affectation->affectation_id}}__trigger_split" src="modules/{{$m}}/images/move.gif" alt="Move" title="Déplacer un patient" />
+<img id="splitAffectation{{$curr_affectation->affectation_id}}__trigger_split" src="images/icons/move.gif" alt="Move" title="Déplacer un patient" />
     </a>
     {{/if}}
 
@@ -230,7 +230,7 @@
     </form>
     
     <a>
-<img id="sortieAffectation{{$curr_affectation->affectation_id}}__trigger_sortie" src="modules/{{$m}}/images/planning.png" alt="Planning" title="Modifier la date de sortie" />
+<img id="sortieAffectation{{$curr_affectation->affectation_id}}__trigger_sortie" src="images/icons/planning.png" alt="Planning" title="Modifier la date de sortie" />
     </a>
     {{/if}}
   </td>

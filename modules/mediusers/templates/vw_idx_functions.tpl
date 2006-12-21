@@ -65,7 +65,7 @@ function pageMain() {
           <th class="category" colspan="2">
           {{if $userfunction->function_id}}
             <a style="float:right;" href="#" onclick="view_log('CFunctions',{{$userfunction->function_id}})">
-              <img src="images/history.gif" alt="historique" />
+              <img src="images/icons/history.gif" alt="historique" />
             </a>
             Modification de la fonction &lsquo;{{$userfunction->text}}&rsquo;
           {{else}}

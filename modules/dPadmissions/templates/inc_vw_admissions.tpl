@@ -8,7 +8,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_idx_admission&date="
   <tr>
     <th colspan="7">
       {{$date|date_format:"%A %d %B %Y"}}
-      <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
       <br /> 
       <em>
       {{if $selAdmis == "n"}}Admissions non effectuées

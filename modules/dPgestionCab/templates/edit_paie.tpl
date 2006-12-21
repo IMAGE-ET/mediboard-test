@@ -64,7 +64,7 @@ function pageMain() {
           <td class="date">
             <div id="editFrm_debut_da">{{$fichePaie->debut|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="debut" title="{{$fichePaie->_props.debut}}" value="{{$fichePaie->debut}}" />
-            <img id="editFrm_debut_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            <img id="editFrm_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
         <tr>
@@ -74,7 +74,7 @@ function pageMain() {
           <td class="date">
             <div id="editFrm_fin_da">{{$fichePaie->fin|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="fin" title="{{$fichePaie->_props.fin}}" value="{{$fichePaie->fin}}" />
-            <img id="editFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            <img id="editFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
         <tr>

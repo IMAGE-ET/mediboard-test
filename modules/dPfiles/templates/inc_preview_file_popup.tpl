@@ -20,7 +20,7 @@ window.onbeforeunload= function () {
     <td style="width: 20%">
     {{if $filePrev && !$nonavig}}
     <a class="button" href="{{$href}}&amp;elementClass={{$filePrev.elementClass}}&amp;elementId={{$filePrev.elementId}}">
-      <img align="top" src="modules/{{$m}}/images/prev.png" alt="Fichier précédent" />
+      <img align="top" src="images/icons/prev.png" alt="Fichier précédent" />
       Document précédent
     </a>
     {{/if}}
@@ -42,7 +42,7 @@ window.onbeforeunload= function () {
     <th style="width:20%">
     {{if $fileNext && !$nonavig}}
     <a class="button" href="{{$href}}&amp;elementClass={{$fileNext.elementClass}}&amp;elementId={{$fileNext.elementId}}">
-      Document suivant <img align="top" src="modules/{{$m}}/images/next.png" alt="Fichier suivant" />
+      Document suivant <img align="top" src="images/icons/next.png" alt="Fichier suivant" />
     </a>
     {{/if}}
     </th>
@@ -53,7 +53,7 @@ window.onbeforeunload= function () {
         {{if $fileSel->_class_name=="CFile" && $fileSel->_nb_pages && !$acces_denied}}
             {{if $page_prev !== null}}
             <a class="button" href="{{$href}}&amp;objectClass={{$objectClass}}&amp;objectId={{$objectId}}&amp;elementClass={{$elementClass}}&amp;elementId={{$elementId}}&amp;nonavig={{$nonavig}}&amp;sfn={{$page_prev}}">
-              <img align="top" src="modules/{{$m}}/images/prev.png" alt="Page précédente" />
+              <img align="top" src="images/icons/prev.png" alt="Page précédente" />
               Page précédente
             </a>
             {{/if}}
@@ -72,7 +72,7 @@ window.onbeforeunload= function () {
             {{if $page_next}}
             <a class="button" href="{{$href}}&amp;objectClass={{$objectClass}}&amp;objectId={{$objectId}}&amp;elementClass={{$elementClass}}&amp;elementId={{$elementId}}&amp;nonavig={{$nonavig}}&amp;sfn={{$page_next}}">
               Page suivante 
-              <img align="top" src="modules/{{$m}}/images/next.png" alt="Page suivante" />
+              <img align="top" src="images/icons/next.png" alt="Page suivante" />
             </a>
             {{/if}}
         {{/if}}<br />

@@ -99,11 +99,11 @@ function pageMain() {
         <th class="title modify" colspan="5">
           {{if $canReadSante400}}
           <a style="float:right;" href="#" onclick="view_idsante400('CPatient',{{$patient->patient_id}})">
-            <img src="images/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
+            <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
           </a>
           {{/if}}
           <a style="float:right;" href="#" onclick="view_log('CPatient',{{$patient->patient_id}})">
-            <img src="images/history.gif" alt="historique" />
+            <img src="images/icons/history.gif" alt="historique" />
           </a>
           Modification du dossier de {{$patient->_view}}
         </th>

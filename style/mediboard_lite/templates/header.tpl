@@ -47,7 +47,7 @@ function popChgPwd() {
           {{foreach from=$affModule item=currModule}}
           <td align="center">
             <a href="?m={{$currModule.modName}}">
-              <img src="modules/{{$currModule.modName}}/images/{{$currModule.modName}}.png" alt="{{$currModule.modNameCourt}}" height="48" width="48" />
+              <img src="images/modules/{{$currModule.modName}}.png" alt="{{$currModule.modNameCourt}}" height="48" width="48" />
               <br />{{$currModule.modNameCourt}}
             </a>
           </td>

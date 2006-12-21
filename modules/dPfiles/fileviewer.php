@@ -53,10 +53,10 @@ if($file_id = mbGetValueFromGet("file_id")) {
   $file->load($file_id);
   $file->loadRefsFwd();
   if(!is_file($file->_file_path)) {
-    header("Location: modules/dPfiles/images/notfound.png");
+    header("Location: images/pictures/notfound.png");
     return;
   } elseif(!$file->canRead()) {
-    header("Location: modules/dPfiles/images/accessdenied.png");
+    header("Location: images/pictures/accessdenied.png");
     return;
   }
   
@@ -92,15 +92,15 @@ if($file_id = mbGetValueFromGet("file_id")) {
 //      $finUrl .= "&fltr[]=usm|80|5|1";
 //      $finUrl .= "&fltr[]=usm";
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
-      //header("Location: modules/dPfiles/images/acroread.png");
+      //header("Location: images/pictures/acroread.png");
     } elseif(strpos($file->file_type, "text") !== false) {
-      header("Location: modules/dPfiles/images/text.png");
+      header("Location: images/pictures/text.png");
     } elseif(strpos($file->file_type, "msword") !== false) {
-      header("Location: modules/dPfiles/images/text.png");
+      header("Location: images/pictures/text.png");
     } elseif(strpos($file->file_type, "video") !== false) {
-      header("Location: modules/dPfiles/images/video.png");
+      header("Location: images/pictures/video.png");
     } else {
-      header("Location: modules/dPfiles/images/unknown.png");
+      header("Location: images/pictures/unknown.png");
     }
     /*
     $thumb = new phpthumb;

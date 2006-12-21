@@ -58,9 +58,9 @@ function pageMain() {
     <td width="1%" nowrap="nowrap">{{$module.mod_name}}</td>
     <td>
       {{if $module.mod_active}}
-        {{assign var="src" value="./images/obj/dotgreen.gif"}}
+        {{assign var="src" value="./images/icons/dotgreen.gif"}}
       {{else}}
-        {{assign var="src" value="./images/obj/dotyellowanim.gif"}}
+        {{assign var="src" value="./images/icons/dotyellowanim.gif"}}
       {{/if}}
       <img alt="dot" src="{{$src}}" width="12" height="12" />
       {{if $canEdit}}
@@ -99,9 +99,9 @@ function pageMain() {
     <td>{{$module.mod_name}}.png</td>
     <td>
       {{if $module.mod_ui_active}}
-        {{assign var="src" value="./images/obj/dotgreen.gif"}}
+        {{assign var="src" value="./images/icons/dotgreen.gif"}}
       {{else}}
-        {{assign var="src" value="./images/obj/dotredanim.gif"}}
+        {{assign var="src" value="./images/icons/dotredanim.gif"}}
       {{/if}}
       <img alt="dot" src="{{$src}}" width="12" height="12" />
       {{if $canEdit}}

@@ -6,7 +6,7 @@
   
   {{if $fileSel->_class_name=="CFile" && $fileSel->_nb_pages && !$acces_denied}}
     {{if $page_prev !== null}}
-    <a class="button" href="#" onclick="ZoomAjax('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}', '{{$page_prev}}');"><img align="top" src="modules/{{$m}}/images/prev.png" alt="Page précédente" /> Page précédente</a>
+    <a class="button" href="#" onclick="ZoomAjax('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}', '{{$page_prev}}');"><img align="top" src="images/icons/prev.png" alt="Page précédente" /> Page précédente</a>
     {{/if}}
     
     {{if $fileSel->_nb_pages && $fileSel->_nb_pages>=2}}
@@ -22,7 +22,7 @@
     {{/if}}
             
     {{if $page_next}}
-    <a class="button" href="#" onclick="ZoomAjax('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}', '{{$page_next}}');">Page suivante <img align="top" src="modules/{{$m}}/images/next.png" alt="Page suivante" /></a>
+    <a class="button" href="#" onclick="ZoomAjax('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}', '{{$page_next}}');">Page suivante <img align="top" src="images/icons/next.png" alt="Page suivante" /></a>
     {{/if}}
   {{/if}}<br />
     {{if $includeInfosFile}}

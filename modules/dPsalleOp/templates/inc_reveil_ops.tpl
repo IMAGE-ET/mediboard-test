@@ -10,7 +10,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
           <th class="category" colspan="2">
             <div style="float: right;">{{$hour|date_format:"%Hh%M"}}</div>
             {{$date|date_format:"%A %d %B %Y"}}
-            <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+            <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
           </th>
         </tr>
       </table>

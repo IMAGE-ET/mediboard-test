@@ -10,7 +10,7 @@ function pageMain() {
   <tr>
     <th class="title" colspan="8">
       Liste {{$listSejours|@count}} personnes hospitalisée(s) au {{$date|date_format:"%A %d %B %Y"}}
-      <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
   </tr>
   <tr>
@@ -62,13 +62,13 @@ function pageMain() {
     <td class="text">
       {{if $GHM->_DP}}
         {{if $GHM->_borne_basse > $GHM->_duree}}
-        <img src="modules/dPpmsi/images/cross.png" alt="alerte" />
+        <img src="images/icons/cross.png" alt="alerte" />
         Séjour trop court
         {{elseif $GHM->_borne_haute < $GHM->_duree}}
-        <img src="modules/dPpmsi/images/cross.png" alt="alerte" />
+        <img src="images/icons/cross.png" alt="alerte" />
         Séjour trop long
         {{else}}
-        <img src="modules/dPpmsi/images/tick.png" alt="ok" />
+        <img src="images/icons/tick.png" alt="ok" />
         {{/if}}
       {{else}}
       -

@@ -19,7 +19,7 @@ function pageMain() {
         {{/foreach}}
       </select>
       pour le {{$date|date_format:"%A %d %b %Y"}}
-      <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
       </form><br />
     </td>
   </tr>
@@ -51,11 +51,11 @@ function pageMain() {
                   -
                   {{elseif $curr_affect->_list_repas.$date.$keyType->repas_id}}
                   <a href="?m={{$m}}&amp;tab=vw_edit_repas&amp;affectation_id={{$curr_affect->affectation_id}}&amp;typerepas_id={{$keyType}}">
-                    <img src="modules/{{$m}}/images/tick.png" width="20" height="20" alt="Repas commandé" />
+                    <img src="images/icons/tick-dPrepas.png" width="20" height="20" alt="Repas commandé" />
                   </a>
                   {{else}}
                   <a href="?m={{$m}}&amp;tab=vw_edit_repas&amp;affectation_id={{$curr_affect->affectation_id}}&amp;typerepas_id={{$keyType}}">
-                    <img src="modules/{{$m}}/images/flag.png" width="20" height="20" alt="Repas à commander" />
+                    <img src="images/icons/flag.png" width="20" height="20" alt="Repas à commander" />
                   </a>
                   {{/if}}
                 </td>

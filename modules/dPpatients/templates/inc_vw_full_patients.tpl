@@ -9,7 +9,7 @@
         <tr>
           <th class="category" colspan="2">
             <a style="float:right;" href="#" onclick="view_history_patient({{$patient->patient_id}})">
-              <img src="images/history.gif" alt="historique" />
+              <img src="images/icons/history.gif" alt="historique" />
             </a>
             Identité
           </th>
@@ -23,7 +23,7 @@
                 view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' })"
                 title="{{$patient->_nb_files_docs}} doc(s)">
                 {{$patient->_nb_files_docs}}
-                <img align="top" src="modules/{{$m}}/images/next{{if !$patient->_nb_files_docs}}_red{{/if}}.png" title="{{$patient->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />                
+                <img align="top" src="images/icons/{{if !$patient->_nb_files_docs}}next_red.png{{else}}next.png{{/if}}" title="{{$patient->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />                
               </a>
             </div>
             {{/if}} 
@@ -264,7 +264,7 @@
         <tr>
           <td>
             <a title="Modifier le séjour" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
-              <img src="modules/dPpatients/images/planning.png" alt="Planifier"/>
+              <img src="images/icons/planning.png" alt="Planifier"/>
             </a>
             <a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}#{{$curr_sejour->sejour_id}}"
               onmouseover="viewItem(
@@ -289,7 +289,7 @@
               view:'{{$curr_sejour->_view|smarty:nodefaults|JSAttribute}}'} )"
               title="{{$curr_sejour->_nb_files_docs}} doc(s)">
               {{$curr_sejour->_nb_files_docs}}
-              <img align="top" src="modules/{{$m}}/images/next{{if !$curr_sejour->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_sejour->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+              <img align="top" src="images/icons/{{if !$curr_sejour->_nb_files_docs}}next_red.png{{else}}next.png{{/if}}" title="{{$curr_sejour->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
             </a>
             {{/if}}         
           </td>
@@ -305,7 +305,7 @@
               onmouseout="hideItem(
                 'COperation',
                 {{$curr_op->operation_id}})">
-              <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
+              <img src="images/icons/planning.png" alt="modifier" title="modifier" />
               {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} - Intervention du Dr. {{$curr_op->_ref_chir->_view}}
             </a>
             <div id="COperation{{$curr_op->operation_id}}" class="tooltip" style="display: none;">
@@ -345,7 +345,7 @@
             [ANNULE]<br />
             {{else}}
             <a href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}">
-              <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
+              <img src="images/icons/planning.png" alt="modifier" title="modifier" />
             </a>
             {{/if}}
             <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}"
@@ -369,7 +369,7 @@
                 id: {{$curr_consult->consultation_id}}, 
                 view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
               {{$curr_consult->_nb_files_docs}}
-              <img align="top" src="modules/{{$m}}/images/next{{if !$curr_consult->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+              <img align="top" src="images/icons/{{if !$curr_consult->_nb_files_docs}}next_red.png{{else}}next.png{{/if}}" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
             </a>
             {{/if}}
           </td>

@@ -323,7 +323,7 @@ function pageMain() {
           <td class="date">
             <div id="ProcEditFrm_qualite_date_verification_da">{{$today|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="qualite_date_verification" value="{{$today|date_format:"%Y-%m-%d"}}" />
-            <img id="ProcEditFrm_qualite_date_verification_trigger" src="./images/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-qualite_date_verification-desc{{/tr}}" />
+            <img id="ProcEditFrm_qualite_date_verification_trigger" src="./images/icons/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-qualite_date_verification-desc{{/tr}}" />
           </td>
         </tr>
         {{elseif !$fiche->qualite_date_controle}}
@@ -332,7 +332,7 @@ function pageMain() {
           <td class="date">
             <div id="ProcEditFrm_qualite_date_controle_da">{{$today|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="qualite_date_controle" value="{{$today|date_format:"%Y-%m-%d"}}" />
-            <img id="ProcEditFrm_qualite_date_controle_trigger" src="./images/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-qualite_date_controle-desc{{/tr}}" />
+            <img id="ProcEditFrm_qualite_date_controle_trigger" src="./images/icons/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-qualite_date_controle-desc{{/tr}}" />
           </td>
         </tr>
         {{/if}}

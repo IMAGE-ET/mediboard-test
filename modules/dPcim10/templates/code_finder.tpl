@@ -15,9 +15,9 @@ function goToCode(code){
   <tr>
     <th class="category" colspan="2">
       <a href="index.php?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={{$up->code}}">
-        <img src="modules/dPcim10/images/uparrow.png" alt="" />
+        <img src="images/icons/uparrow.png" alt="" />
         {{$up->code}}: {{$up->libelle}}
-        <img src="modules/dPcim10/images/uparrow.png" alt="" />
+        <img src="images/icons/uparrow.png" alt="" />
       </a>
     </th>
   </tr>

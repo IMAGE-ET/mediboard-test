@@ -25,7 +25,7 @@ function verifIntubDifficileAndSave(oForm){
     {{foreach from=$consult_anesth->_enumsTrans.mallampati|smarty:nodefaults key=curr_mallampati item=trans_mallampati}}
     <td rowspan="4" class="button">
       <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{$trans_mallampati}}">
-        <img src="modules/{{$m}}/images/mallampati/{{$curr_mallampati}}.gif" alt="{{$trans_mallampati}}" />
+        <img src="images/pictures/{{$curr_mallampati}}.gif" alt="{{$trans_mallampati}}" />
         <br />
         <input type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked"{{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
         {{$trans_mallampati}}

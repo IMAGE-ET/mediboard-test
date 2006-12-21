@@ -20,7 +20,7 @@
     <td class="date">
       <div id="editFrm_cmu_da">{{$patient->cmu|date_format:"%d/%m/%Y"}}</div>
       <input type="hidden" name="cmu" title="date" value="{{$patient->cmu}}" />
-      <img tabindex="202" id="editFrm_cmu_trigger" src="./images/calendar.gif" alt="calendar"/>
+      <img tabindex="202" id="editFrm_cmu_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
       <button class="cancel notext" type="button" onclick="delCmu()"></button>
     </td>
     <th>

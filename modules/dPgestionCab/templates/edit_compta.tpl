@@ -36,7 +36,7 @@ function pageMain() {
           {{if $gestioncab->gestioncab_id}}
           <th class="title modify" colspan="4">
             <a style="float:right;" href="#" onclick="view_log('CGestionCab',{{$gestioncab->gestioncab_id}})">
-              <img src="images/history.gif" alt="historique" />
+              <img src="images/icons/history.gif" alt="historique" />
             </a>
             Modification de la fiche {{$gestioncab->_view}}
           </th>
@@ -53,7 +53,7 @@ function pageMain() {
               {{$gestioncab->date|date_format:"%d/%m/%Y"}}
             </div>
             <input type="hidden" name="date" title="{{$gestioncab->_props.date}}|notNull" value="{{$gestioncab->date}}" />
-            <img id="editFrm_date_trigger" src="./images/calendar.gif" alt="calendar"/>
+            <img id="editFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
           </td>
         </tr>
         <tr>
@@ -121,7 +121,7 @@ function pageMain() {
               {{$date|date_format:"%d/%m/%Y"}}
             </div>
             <input type="hidden" title="date|notNull" name="date" value="{{$date}}" />
-            <img id="selectFrm_date_trigger" src="./images/calendar.gif" alt="calendar" />
+            <img id="selectFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar" />
           </td>
           <td class="button">
             <button class="print" type="button" onclick="printRapport()">Imprimer</button>
@@ -134,7 +134,7 @@ function pageMain() {
               {{$datefin|date_format:"%d/%m/%Y"}}
             </div>
             <input type="hidden" name="datefin" title="date|moreEquals|date|notNull" value="{{$datefin}}" />
-            <img id="selectFrm_datefin_trigger" src="./images/calendar.gif" alt="calendar" />
+            <img id="selectFrm_datefin_trigger" src="./images/icons/calendar.gif" alt="calendar" />
           </td>
           <td class="button">
             <button type="submit" class="search">Afficher</button>

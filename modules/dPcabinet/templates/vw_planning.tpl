@@ -42,7 +42,7 @@ function pageMain() {
     <th>
       <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$prec}}&amp;plageconsult_id=0">&lt;&lt;&lt;</a>
       Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
-      <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
       <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$suiv}}&amp;plageconsult_id=0">&gt;&gt;&gt;</a>
       <br />
       <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$today}}&amp;plageconsult_id=0">Aujourd'hui</a>
@@ -137,7 +137,7 @@ function pageMain() {
         {{else}}
         <th class="category modify" colspan="4">
           <a style="float:right;" href="#" onclick="view_log('CPlageconsult',{{$plageSel->plageconsult_id}})">
-            <img src="images/history.gif" alt="historique" />
+            <img src="images/icons/history.gif" alt="historique" />
           </a>
           Modifier cette plage
         </th>
@@ -331,7 +331,7 @@ function pageMain() {
             [PAUSE]
             {{else}}
             <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_consult->_ref_patient->patient_id}}">
-              <img src="modules/{{$m}}/images/edit.png" alt="modifier" />
+              <img src="images/icons/edit.png" alt="modifier" />
             </a>
             <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->_ref_patient->_view}}</a>
             {{/if}}
@@ -370,14 +370,14 @@ function pageMain() {
             </form>
             
             <a class="action" href="{{$href_planning}}">
-              <img src="modules/{{$m}}/images/planning.png" title="Modifier le rendez-vous" alt="modifier" />
+              <img src="images/icons/planning.png" title="Modifier le rendez-vous" alt="modifier" />
             </a>
 			{{if $curr_consult->chrono == $curr_consult|const:'PLANIFIE' && $curr_consult->patient_id}}
             <a class="action" href="#" onclick="putArrivee(document.etatFrm{{$curr_consult->consultation_id}})">
-              <img src="modules/{{$m}}/images/check.png" title="Notifier l'arrivée du patient" alt="arrivee" />
+              <img src="images/icons/check.png" title="Notifier l'arrivée du patient" alt="arrivee" />
             </a>
             <a class="action" href="#" onclick="if(confirm('Voulez-vous vraiment annuler cette consultation ?')) {document.cancelFrm{{$curr_consult->consultation_id}}.submit()}">
-              <img src="modules/{{$m}}/images/cancel.png" title="Annuler ce rendez-vous" alt="annuler" />
+              <img src="images/icons/cancel.png" title="Annuler ce rendez-vous" alt="annuler" />
             </a>
             {{/if}}
           </td>

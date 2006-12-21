@@ -50,7 +50,7 @@
                   {{$arrayAffichage.$keyAff->_view}}
                 </a> ({{$arrayAffichage.$keyAff->_nb_operations}})
                 <a href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id={{$arrayAffichage.$keyAff->plageop_id}}&amp;date={{$curr_day}}">
-                  <img src="./modules/dPbloc/images/edit.png" alt="Editer la plage" title="Editer la plage" border="0" height="16" width="16" />
+                  <img src="images/icons/edit.png" alt="Editer la plage" title="Editer la plage" border="0" height="16" width="16" />
                 </a>
                 </strong>
               </td>

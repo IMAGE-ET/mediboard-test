@@ -53,11 +53,11 @@ function pageMain() {
     <th colspan="2" class="title modify">
       {{if $canReadSante400}}
       <a style="float:right;" href="#" onclick="view_idsante400('CSejour',{{$sejour->sejour_id}})">
-        <img src="images/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
+        <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
       </a>
       {{/if}}
       <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->sejour_id}})">
-        <img src="images/history.gif" alt="historique" />
+        <img src="images/icons/history.gif" alt="historique" />
       </a>
       Modification du séjour {{$sejour->_view}}
     </th>

@@ -44,7 +44,7 @@
     <td class="date">
       <div id="echantillonage_debut_da">{{$today|date_format:"%d/%m/%Y"}}</div>
       <input type="hidden" name="debut" value="{{$today}}" />
-      <img id="echantillonage_debut_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début" />
+      <img id="echantillonage_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" />
     </td>
   </tr>
   
@@ -63,7 +63,7 @@
   <tr>
     <th colspan="2" id="vwButtonEtap2">
       <a class="button" href="#" onclick="goto_etape2()">
-        Etape Suivante <img align="top" src="modules/{{$m}}/images/next.png" alt="Etape Suivante" />
+        Etape Suivante <img align="top" src="images/icons/next.png" alt="Etape Suivante" />
       </a>
     </th>
   </tr>

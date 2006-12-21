@@ -26,7 +26,7 @@ function pageMain() {
 <tr>
   <th>
   	Logs d'accès du  {{$date|date_format:"%A %d %b %Y"}}
-    <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+    <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     <form action="index.php" name="typevue" method="get">
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="tab" value="{{$tab}}" />

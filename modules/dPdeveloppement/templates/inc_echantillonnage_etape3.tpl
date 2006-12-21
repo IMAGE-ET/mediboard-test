@@ -42,7 +42,7 @@
   <tr>
     <th colspan="4" id="vwButtonEtap4">
       <a class="button" href="#" onclick="goto_etape4()">
-        Etape Suivante <img align="top" src="modules/{{$m}}/images/next.png" alt="Etape Suivante" />
+        Etape Suivante <img align="top" src="images/icons/next.png" alt="Etape Suivante" />
       </a>
     </th>
   </tr>

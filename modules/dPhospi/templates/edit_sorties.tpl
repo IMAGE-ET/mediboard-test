@@ -18,7 +18,7 @@ function pageMain() {
     </td>
     <th>
     {{$date|date_format:"%A %d %B %Y"}}
-    <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+    <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     
     </th>
   <tr>
@@ -64,7 +64,7 @@ function pageMain() {
                 </form>
                 </td>
                 {{if $curr_sortie->confirme}}
-                <td class="text" style="background-image:url(modules/{{$m}}/images/ray.gif); background-repeat:repeat;">
+                <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
                 {{else}}
                 <td class="text">
                 {{/if}}
@@ -121,7 +121,7 @@ function pageMain() {
                 </form>
                 </td>
                 {{if $curr_sortie->confirme}}
-                <td class="text" style="background-image:url(modules/{{$m}}/images/ray.gif); background-repeat:repeat;">
+                <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
                 {{else}}
                 <td class="text">
                 {{/if}}
@@ -159,7 +159,7 @@ function pageMain() {
                 </form>
                 </td>
                 {{if $curr_sortie->confirme}}
-                <td class="text" style="background-image:url(modules/{{$m}}/images/ray.gif); background-repeat:repeat;">
+                <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
                 {{else}}
                 <td class="text">
                 {{/if}}

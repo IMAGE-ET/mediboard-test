@@ -18,11 +18,11 @@
       {{if $op->operation_id}}
         {{if $canReadSante400}}
         <a style="float:right;" href="#" onclick="view_idsante400('COperation',{{$op->operation_id}})">
-          <img src="images/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
+          <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
         </a>
         {{/if}}
         <a style="float:right;" href="#" onclick="view_log('COperation',{{$op->operation_id}})">
-          <img src="images/history.gif" alt="historique" />
+          <img src="images/icons/history.gif" alt="historique" />
         </a>
       {{/if}}
       Informations concernant l'opération

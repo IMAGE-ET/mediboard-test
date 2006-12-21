@@ -41,7 +41,7 @@ function pageMain() {
         {{/foreach}}
       </select>
       pour le {{$date|date_format:"%A %d %b %Y"}}
-      <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
       </form><br />
     </th>
   </tr>

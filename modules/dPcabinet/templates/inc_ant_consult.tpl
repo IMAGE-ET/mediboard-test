@@ -185,7 +185,7 @@ function incAntecedantsMain() {
           <td class="date">
             <div id="editAntFrm_date_da"></div>
             <input type="hidden" name="date" value="" />
-            <img id="editAntFrm_date_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
+            <img id="editAntFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
           </td>
           <td rowspan="2">
             <textarea name="rques" onblur="if(this.value!=''){submitAnt(this.form);dateAntecedent();}"></textarea>
@@ -235,7 +235,7 @@ function incAntecedantsMain() {
           <td class="date">
             <div id="editTrmtFrm_debut_da"></div>
             <input type="hidden" name="debut" title="{{$traitement->_props.debut}}" value="" />
-            <img id="editTrmtFrm_debut_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
+            <img id="editTrmtFrm_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
           </td>
           <td rowspan="2">
             <textarea name="traitement" onblur="if(this.value!=''){submitAnt(this.form);finTrmt();}"></textarea>
@@ -249,7 +249,7 @@ function incAntecedantsMain() {
           <td class="date">
             <div id="editTrmtFrm_fin_da"></div>
             <input type="hidden" name="fin" title="{{$traitement->_props.fin}}" value="" />
-            <img id="editTrmtFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin" style="display:none;" />
+            <img id="editTrmtFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin" style="display:none;" />
           </td>
         </tr>
         <tr>

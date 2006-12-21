@@ -12,7 +12,7 @@ function pageMain() {
     <th class="title" colspan="2">
       <a href="index.php?m={{$m}}&amp;debut={{$prec}}">&lt;&lt;&lt;</a>
       semaine du {{$debut|date_format:"%A %d %B %Y"}}
-      <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
       <a href="index.php?m={{$m}}&amp;debut={{$suiv}}">&gt;&gt;&gt;</a>
     </th>
   </tr>
@@ -72,7 +72,7 @@ function pageMain() {
         <tr>
           <th colspan="4" class="category">
 	        <a style="float:right;" href="#" onclick="view_log('CPlageressource',{{$plage->plageressource_id}})">
-              <img src="images/history.gif" alt="historique" />
+              <img src="images/icons/history.gif" alt="historique" />
             </a>
             Modifier la plage du {{$plage->date|date_format:"%d/%m/%Y"}}
             ({{$plage->debut|date_format:"%H"}}h-{{$plage->fin|date_format:"%H"}}h)
@@ -91,7 +91,7 @@ function pageMain() {
             <div id="addPlage_date_da">{{$debut|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="date" value="{{$debut}}" title="{{$plage->_props.date}}" />
             {{/if}}
-            <img id="addPlage_date_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date"/>
+            <img id="addPlage_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date"/>
           </td>
           <th><label for="_hour_deb" title="Heure de début">Début</label></th>
           <td>

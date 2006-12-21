@@ -23,11 +23,11 @@
     {{if $mode_operation && $sejour->sejour_id}}
       {{if $canReadSante400}}
       <a style="float:right;" href="#" onclick="view_idsante400('CSejour',{{$sejour->sejour_id}})">
-        <img src="images/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
+        <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
       </a>
       {{/if}}
       <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->sejour_id}})">
-        <img src="images/history.gif" alt="historique" />
+        <img src="images/icons/history.gif" alt="historique" />
       </a>
     {{/if}}
     Informations concernant le séjour
@@ -121,7 +121,7 @@
   <td class="date">
     <div id="editSejour__date_entree_prevue_da">{{$sejour->_date_entree_prevue|date_format:"%d/%m/%Y"}}</div>
     <input type="hidden" name="_date_entree_prevue" title="date|notNull" value="{{$sejour->_date_entree_prevue}}" onchange="modifSejour(); updateSortiePrevue();"/>
-    <img id="editSejour__date_entree_prevue_trigger" src="./images/calendar.gif" alt="calendar"/>
+    <img id="editSejour__date_entree_prevue_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
   </td>
   <td colspan="2">
     à
@@ -157,7 +157,7 @@
   <td class="date">
     <div id="editSejour__date_sortie_prevue_da">{{$sejour->_date_sortie_prevue|date_format:"%d/%m/%Y"}}</div>
     <input type="hidden" name="_date_sortie_prevue" title="date|moreEquals|_date_entree_prevue|notNull" value="{{$sejour->_date_sortie_prevue}}" onchange="updateDureePrevue(); modifSejour()" />
-    <img id="editSejour__date_sortie_prevue_trigger" src="./images/calendar.gif" alt="calendar"/>
+    <img id="editSejour__date_sortie_prevue_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
   </td>
   <td colspan="2">
     à 

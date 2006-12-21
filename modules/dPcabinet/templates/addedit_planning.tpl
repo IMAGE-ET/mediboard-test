@@ -133,7 +133,7 @@ function checkFormRDV(oForm){
     {{if $consult->consultation_id}}
       <th class="title modify" colspan="5">
         <a style="float:right;" href="#" onclick="view_log('CConsultation',{{$consult->consultation_id}})">
-          <img src="images/history.gif" alt="historique" />
+          <img src="images/icons/history.gif" alt="historique" />
         </a>
         Modification de la consultation de {{$pat->_view}} pour le Dr. {{$chir->_view}}
       </th>

@@ -25,7 +25,7 @@ function pageMain() {
   <th class="category" colspan="2">
     <a href="index.php?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;chir_id={{$chir_id}}&amp;date={{$pdate}}">&lt;&lt;&lt;</a>
     {{$date|date_format:"%B %Y"}}
-    <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+    <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     <a href="index.php?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;chir_id={{$chir_id}}&amp;date={{$ndate}}">&gt;&gt;&gt;</a>
   </th>
 </tr>

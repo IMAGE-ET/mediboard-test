@@ -23,7 +23,7 @@ function pageMain() {
           <td class="date">
             <div id="users_debutlog_da">{{$debutlog|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="debutlog" title="date|notNull" value="{{$debutlog}}" />
-            <img id="users_debutlog_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            <img id="users_debutlog_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
          </td>
           <th><label for="user_id" title="Utilisateur">Utilisateur</label></th>
           <td>
@@ -41,7 +41,7 @@ function pageMain() {
           <td class="date">
             <div id="users_finlog_da">{{$finlog|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="finlog" title="date|moreEquals|debutlog|notNull" value="{{$finlog}}" />
-            <img id="users_finlog_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            <img id="users_finlog_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
          </td>
           <td colspan="2" />
         </tr>
@@ -68,7 +68,7 @@ function pageMain() {
           <td class="date">
             <div id="Form1_debutact_da">{{$debutact|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="debutact" title="date|notNull" value="{{$debutact}}" />
-            <img id="Form1_debutact_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            <img id="Form1_debutact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
          </td>
         </tr>
         <tr>
@@ -76,7 +76,7 @@ function pageMain() {
           <td class="date">
             <div id="Form1_finact_da">{{$finact|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="finact" title="date|moreEquals|debutact|notNull" value="{{$finact}}" />
-            <img id="Form1_finact_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            <img id="Form1_finact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
         <tr>

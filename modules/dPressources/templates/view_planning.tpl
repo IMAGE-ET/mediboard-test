@@ -22,7 +22,7 @@ function pageMain() {
     <th class="title">
       <a href="index.php?m={{$m}}&amp;debut={{$prec}}">&lt;&lt;&lt;</a>
       semaine du {{$debut|date_format:"%A %d %B %Y"}}
-      <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
       <a href="index.php?m={{$m}}&amp;debut={{$suiv}}">&gt;&gt;&gt;</a>
     </th>
     <th class="title">Votre compte</th>

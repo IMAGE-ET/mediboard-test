@@ -11,7 +11,7 @@
       <td colspan="6" style="text-align: center; width: 100%; font-weight: bold;">
         <div style="float: right;">{{$hour|date_format:"%Hh%M"}}</div>
         {{$date|date_format:"%A %d %B %Y"}}
-        <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+        <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
       </td>
     </tr>
     <tr>
@@ -54,7 +54,7 @@
     <td style="width: 40px; {{$style|smarty:nodefaults}}" rowspan="2">
     {{/if}}
       <a href="index.php?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}" title="Modifier le RDV" style="float: right;">
-        <img src="modules/dPcabinet/images/planning.png" alt="modifier" />
+        <img src="images/icons/planning.png" alt="modifier" />
       </a>
       {{if $curr_consult->patient_id}}
         <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}" style="margin-bottom: 4px;">

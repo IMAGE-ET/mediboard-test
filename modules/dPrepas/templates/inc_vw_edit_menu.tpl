@@ -87,7 +87,7 @@ function pageMain() {
           <td class="date">
             <div id="editMenu_debut_da">{{if $menu->menu_id}}{{$menu->debut|date_format:"%d/%m/%Y"}}{{else}}{{$date_debut|date_format:"%d/%m/%Y"}}{{/if}}</div>
             <input type="hidden" name="debut" title="{{$menu->_props.debut}}" value="{{if $menu->menu_id}}{{$menu->debut}}{{else}}{{$date_debut}}{{/if}}" />
-            <img id="editMenu_debut_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début" />
+            <img id="editMenu_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" />
           </td>
         </tr>
         <tr>
@@ -95,7 +95,7 @@ function pageMain() {
           <td class="date">
             <div id="editMenu_fin_da">{{if $menu->menu_id}}{{$menu->fin|date_format:"%d/%m/%Y"}}{{else}}{{$date_debut|date_format:"%d/%m/%Y"}}{{/if}}</div>
             <input type="hidden" name="fin" title="{{$menu->_props.fin}}" value="{{if $menu->menu_id}}{{$menu->fin}}{{else}}{{$date_debut}}{{/if}}" />
-            <img id="editMenu_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début" />
+            <img id="editMenu_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" />
           </td>
         </tr>
         <tr>

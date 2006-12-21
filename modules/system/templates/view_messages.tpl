@@ -90,7 +90,7 @@ function pageMain() {
       <td class="date">
         <div id="editFrm_deb_da">{{$message->deb|date_format:"%d/%m/%Y %H:%M"}}</div>
         <input type="hidden" name="deb" title="{{$message->_props.deb}}" value="{{$message->deb}}" />
-        <img id="editFrm_deb_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+        <img id="editFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
       </td>
     </tr>
 
@@ -99,7 +99,7 @@ function pageMain() {
       <td class="date">
         <div id="editFrm_fin_da">{{$message->fin|date_format:"%d/%m/%Y %H:%M"}}</div>
         <input type="hidden" name="fin" title="{{$message->_props.fin}}" value="{{$message->fin}}" />
-        <img id="editFrm_fin_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
+        <img id="editFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
       </td>
     </tr>
 

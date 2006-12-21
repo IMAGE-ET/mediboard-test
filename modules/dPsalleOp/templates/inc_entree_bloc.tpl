@@ -6,7 +6,7 @@
     <th class="category">{{$listEntree|@count}} patients en attente</th>
     <th class="category" colspan="2">
       {{$date|date_format:"%A %d %B %Y"}}
-      <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
   </tr>
 </table>

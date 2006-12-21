@@ -83,7 +83,7 @@ function pageMain() {
     <th class="category" colspan="2">
       {{if $compte_rendu->compte_rendu_id}}
       <a style="float:right;" href="#" onclick="view_log('CCompteRendu',{{$compte_rendu->compte_rendu_id}})">
-        <img src="images/history.gif" alt="historique" />
+        <img src="images/icons/history.gif" alt="historique" />
       </a>
       {{/if}}
       Informations sur le modèle

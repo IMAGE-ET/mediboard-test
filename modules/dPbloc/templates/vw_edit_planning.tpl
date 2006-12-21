@@ -38,7 +38,7 @@ function popPlanning(debut) {
     <td class="greedyPane" style="text-align:center;">
       <a href="#" onclick="popPlanning('{{$date}}');">
         <strong>{{$date|date_format:"%A %d %B"}}</strong><br />
-        <img src="modules/dPbloc/images/print.png" height="15" width="15" alt="imprimer" border="0" />
+        <img src="images/icons/print.png" height="15" width="15" alt="imprimer" border="0" />
       </a>
       <table id="planningBloc">
         <tr>
@@ -84,7 +84,7 @@ function popPlanning(debut) {
                   {{$arrayAffichage.$keyAff->_view}}
                 </a> ({{$arrayAffichage.$keyAff->_nb_operations}})
                 <a href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id={{$arrayAffichage.$keyAff->plageop_id}}&amp;date={{$date}}">
-                  <img src="./modules/dPbloc/images/edit.png" alt="editer la plage" title="Editer la plage" border="0" height="16" width="16" />
+                  <img src="images/icons/edit.png" alt="editer la plage" title="Editer la plage" border="0" height="16" width="16" />
                 </a>
                 </strong>
               </td>
@@ -110,7 +110,7 @@ function popPlanning(debut) {
           {{if $plagesel->plageop_id}}
           <th class="category modify" colspan="6">
             <a style="float:right;" href="#" onclick="view_log('CPlageOp',{{$plagesel->plageop_id}})">
-              <img src="images/history.gif" alt="historique" />
+              <img src="images/icons/history.gif" alt="historique" />
             </a>
             Modifier la plage opératoire
           {{else}}
@@ -191,7 +191,7 @@ function popPlanning(debut) {
           <input type="hidden" name="date" value="{{$date}}" />
           {{/if}}
           <!-- Possibilité de changer la date ? -->
-          <!--img id="editFrm_date_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date"/-->
+          <!--img id="editFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date"/-->
         </td>
     
         <th><label for="_heurefin" title="Heure de fin de la plage. Obligatoire">Fin</label></th>

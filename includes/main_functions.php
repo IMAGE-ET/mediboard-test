@@ -53,8 +53,8 @@ function dPfindImage( $name, $module=null ) {
 
 	if (file_exists( "{$AppUI->cfg['root_dir']}/style/$uistyle/images/$name" )) {
 		return "./style/$uistyle/images/$name";
-	} else if ($module && file_exists( "{$AppUI->cfg['root_dir']}/modules/$module/images/$name" )) {
-		return "./modules/$module/images/$name";
+	} else if ($module && file_exists( "{$AppUI->cfg['root_dir']}/images/modules/$name" )) {
+		return "./images/modules/$name";
 	} else if (file_exists( "{$AppUI->cfg['root_dir']}/images/icons/$name" )) {
 		return "./images/icons/$name";
 	} else if (file_exists( "{$AppUI->cfg['root_dir']}/images/obj/$name" )) {

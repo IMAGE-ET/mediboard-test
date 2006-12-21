@@ -40,8 +40,8 @@ function deldate(sField){
       <table class="tbl">
         <tr>
           <th style="width: 32px;">
-            <img src="modules/{{$m}}/images/collapse.gif" onclick="collapseFunctions()" alt="réduire" />
-            <img src="modules/{{$m}}/images/expand.gif"  onclick="expandFunctions()" alt="agrandir" />
+            <img src="images/icons/collapse.gif" onclick="collapseFunctions()" alt="réduire" />
+            <img src="images/icons/expand.gif"  onclick="expandFunctions()" alt="agrandir" />
           </th>
           <th>Utilisateur</th>
           <th>Nom</th>
@@ -93,11 +93,11 @@ function deldate(sField){
             {{if $mediuserSel->user_id}}
             {{if $canReadSante400}}
             <a style="float:right;" href="#" onclick="view_idsante400('CMediusers',{{$mediuserSel->user_id}})">
-              <img src="images/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
+              <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
             </a>
             {{/if}}
             <a style="float:right;" href="#" onclick="view_log('CMediusers',{{$mediuserSel->user_id}})">
-              <img src="images/history.gif" alt="historique" title="historique"/>
+              <img src="images/icons/history.gif" alt="historique" title="historique"/>
             </a>
             Modification de l'utilisateur &lsquo;{{$mediuserSel->_user_username}}&rsquo;
             {{else}}
@@ -132,7 +132,7 @@ function deldate(sField){
 		  <td class="date">
 		    <div id="mediuser_deb_activite_da">{{$mediuserSel->deb_activite|date_format:"%d/%m/%Y"}}</div>
 		    <input type="hidden" name="deb_activite" title="date" value="{{$mediuserSel->deb_activite}}" />
-		    <img id="mediuser_deb_activite_trigger" src="./images/calendar.gif" alt="Date de début d'activité"/>
+		    <img id="mediuser_deb_activite_trigger" src="./images/icons/calendar.gif" alt="Date de début d'activité"/>
 		    <button class="cancel notext" type="button" onclick="deldate('deb_activite')"></button>
 		  </td>
 		</tr>
@@ -142,7 +142,7 @@ function deldate(sField){
 		  <td class="date">
 		    <div id="mediuser_fin_activite_da">{{$mediuserSel->fin_activite|date_format:"%d/%m/%Y"}}</div>
 		    <input type="hidden" name="fin_activite" title="date" value="{{$mediuserSel->fin_activite}}" />
-		    <img id="mediuser_fin_activite_trigger" src="./images/calendar.gif" alt="Date de fin d'activité"/>
+		    <img id="mediuser_fin_activite_trigger" src="./images/icons/calendar.gif" alt="Date de fin d'activité"/>
 		    <button class="cancel notext" type="button" onclick="deldate('fin_activite')"></button>
 		  </td>
 		</tr>

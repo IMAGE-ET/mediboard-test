@@ -139,7 +139,7 @@ function pageMain() {
           <td class="date">
             <div id="FrmEI__incident_date_da">{{if $fiche->fiche_ei_id}}{{$fiche->_incident_date|date_format:"%d/%m/%Y"}}{{else}}{{$datenow|date_format:"%d/%m/%Y"}}{{/if}}</div>
             <input type="hidden" name="_incident_date" title="date|notNull" value="{{if $fiche->fiche_ei_id}}{{$fiche->_incident_date}}{{else}}{{$datenow}}{{/if}}" />
-            <img id="FrmEI__incident_date_trigger" src="./images/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-date_incident-desc{{/tr}}"/>
+            <img id="FrmEI__incident_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-date_incident-desc{{/tr}}"/>
          </td>
         </tr>
         <tr>

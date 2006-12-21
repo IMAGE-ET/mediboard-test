@@ -95,7 +95,7 @@
   </button>
   {{/if}}
   {{if $curr_adm->modif_SHS == 1}}
-  <img src="images/icons/rc-gui-status-downgr.png" alt="modifié" />
+  <img src="images/icons/warning.png" alt="modifié" />
   {{/if}}
   </form>
 </td>

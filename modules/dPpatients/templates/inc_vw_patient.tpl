@@ -75,7 +75,7 @@ function reloadAfterSaveDoc(){
   <tr>
     <th class="category" colspan="2">
       <a style="float:right;" href="#" onclick="view_history_patient({{$patient->patient_id}})">
-        <img src="images/history.gif" alt="historique" />
+        <img src="images/icons/history.gif" alt="historique" />
       </a>
       Identité
     </th>
@@ -235,7 +235,7 @@ function reloadAfterSaveDoc(){
   <tr>
     <td>
       <a class="actionPat" title="Modifier le séjour" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
-        <img src="modules/dPpatients/images/planning.png" alt="Planifier"/>
+        <img src="images/icons/planning.png" alt="Planifier"/>
       </a>
       <a class="actionPat" href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}#adm{{$curr_sejour->sejour_id}}">
         Séjour du {{$curr_sejour->entree_prevue|date_format:"%d %b %Y"}} 
@@ -261,10 +261,10 @@ function reloadAfterSaveDoc(){
   <tr>
     <td>
       <a class="actionPat" href="#" onclick="printIntervention({{$curr_op->operation_id}})">
-        <img src="modules/dPpatients/images/print.png" alt="Imprimer" title="Imprimer l'opération"/>
+        <img src="images/icons/print.png" alt="Imprimer" title="Imprimer l'opération"/>
       </a>
       <a class="actionPat" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
-        <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
+        <img src="images/icons/planning.png" alt="modifier" title="modifier" />
       </a>
       <a class="actionPat" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
         Intervention le {{$curr_op->_datetime|date_format:"%d %b %Y"}}
@@ -298,7 +298,7 @@ function reloadAfterSaveDoc(){
       [ANNULE]
       {{else}}
       <a class="actionPat" href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}">
-        <img src="modules/dPpatients/images/planning.png" alt="modifier" title="modifier" />
+        <img src="images/icons/planning.png" alt="modifier" title="modifier" />
       </a>
       {{/if}}
       <a class="actionPat" href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">

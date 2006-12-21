@@ -31,7 +31,7 @@ $callback = isset( $_GET['callback'] ) ? $_GET['callback'] : 0;
 	<tr>
 		<td colspan="2">
 			<a href="webpal.map">
-				<img src="./images/colorchart.gif" width="292" height="196" border="0" alt="color chart" usemap="#map_webpal" ismap />
+				<img src="./images/pictures/colorchart.gif" width="292" height="196" border="0" alt="color chart" usemap="#map_webpal" ismap />
 			</a>
 		</td>
 	</tr>

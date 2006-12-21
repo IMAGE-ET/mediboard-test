@@ -43,7 +43,7 @@ function pageMain() {
           <th class="category" colspan="2">
           {{if $usergroup->group_id}}
             <a style="float:right;" href="#" onclick="view_log('CGroups',{{$usergroup->group_id}})">
-              <img src="images/history.gif" alt="historique" />
+              <img src="images/icons/history.gif" alt="historique" />
             </a>
             Modification de l'établissement &lsquo;{{$usergroup->text}}&rsquo;
           {{else}}

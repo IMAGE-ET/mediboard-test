@@ -13,31 +13,31 @@
                 {{/foreach}}
                 {{/foreach}}">
               {{if $curr_chambre->_overbooking}}
-              <img src="modules/{{$m}}/images/surb.png" alt="warning" title="Over-booking: {{$curr_chambre->_overbooking}} collisions" />
+              <img src="images/icons/surb.png" alt="warning" title="Over-booking: {{$curr_chambre->_overbooking}} collisions" />
               {{/if}}
 
               {{if $curr_chambre->_ecart_age > 15}}
-              <img src="modules/{{$m}}/images/age.png" alt="warning" title="Ecart d'âge important: {{$curr_chambre->_ecart_age}} ans" />
+              <img src="images/icons/age.png" alt="warning" title="Ecart d'âge important: {{$curr_chambre->_ecart_age}} ans" />
               {{/if}}
 
               {{if $curr_chambre->_genres_melanges}}
-              <img src="modules/{{$m}}/images/sexe.png" alt="warning" title="Sexes opposés" />
+              <img src="images/icons/sexe.png" alt="warning" title="Sexes opposés" />
               {{/if}}
 
               {{if $curr_chambre->_chambre_seule}}
-              <img src="modules/{{$m}}/images/seul.png" alt="warning" title="Chambre seule obligatoire" />
+              <img src="images/icons/seul.png" alt="warning" title="Chambre seule obligatoire" />
               {{/if}}
               
               {{if $curr_chambre->_chambre_double}}
-              <img src="modules/{{$m}}/images/double.png" alt="warning" title="Chambre double possible" />
+              <img src="images/icons/double.png" alt="warning" title="Chambre double possible" />
               {{/if}}
 
               {{if $curr_chambre->_conflits_chirurgiens}}
-              <img src="modules/{{$m}}/images/prat.png" alt="warning" title="{{$curr_chambre->_conflits_chirurgiens}} Conflit(s) de praticiens" />
+              <img src="images/icons/prat.png" alt="warning" title="{{$curr_chambre->_conflits_chirurgiens}} Conflit(s) de praticiens" />
               {{/if}}
 
               {{if $curr_chambre->_conflits_pathologies}}
-              <img src="modules/{{$m}}/images/path.png" alt="warning" title="{{$curr_chambre->_conflits_pathologies}} Conflit(s) de pathologies" />
+              <img src="images/icons/path.png" alt="warning" title="{{$curr_chambre->_conflits_pathologies}} Conflit(s) de pathologies" />
               {{/if}}
 
               <strong><a name="chambre{{$curr_chambre->chambre_id}}">{{$curr_chambre->nom}}</a></strong>

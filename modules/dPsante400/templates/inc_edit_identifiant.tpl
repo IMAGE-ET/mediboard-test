@@ -11,7 +11,7 @@
   <th class="category" colspan="2">
   {{if $idSante400->_id}}
     <a style="float:right;" href="#" onclick="view_log('CIDSante400',{{$idSante400->_id}})">
-      <img src="images/history.gif" alt="historique" />
+      <img src="images/icons/history.gif" alt="historique" />
     </a>
     Modification de l'ID400 &lsquo;{{$idSante400->_view}}&rsquo;
   {{else}}
@@ -84,7 +84,7 @@
     <td class="date">
       <div id="editFrm_last_update_da">{{$last_update|date_format:"%d/%m/%Y %H:%M:%S"}}</div>
       <input type="hidden" name="last_update" title="{{$idSante400->_props.last_update}}" value="{{$last_update}}" />
-      <img id="editFrm_last_update_trigger" src="./images/calendar.gif" alt="calendar" title="Choisir une date"/>
+      <img id="editFrm_last_update_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date"/>
     </td>
   </tr>
 

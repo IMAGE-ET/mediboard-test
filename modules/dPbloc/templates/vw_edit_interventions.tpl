@@ -20,7 +20,7 @@
 		<tr>
 		  <td width="50%">
 		    <a style="float:right;" href="#" onclick="view_log('COperation',{{$curr_op->operation_id}})">
-              <img src="images/history.gif" alt="historique" />
+              <img src="images/icons/history.gif" alt="historique" />
             </a>
 		    <strong>
 		    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
@@ -61,10 +61,10 @@
 		  </td>
 		  <td>
 		    {{if $curr_op->annulee}}
-		    <img src="./modules/{{$m}}/images/cross.png" width="12" height="12" alt="annulée" border="0" />
+		    <img src="images/icons/cross.png" width="12" height="12" alt="annulée" border="0" />
 		    {{else}}
 		    <a href="index.php?m={{$m}}&amp;a=do_order_op&amp;cmd=insert&amp;id={{$curr_op->operation_id}}">
-		    <img src="./modules/{{$m}}/images/tick.png" width="12" height="12" alt="ajouter" border="0" />
+		    <img src="images/icons/tick.png" width="12" height="12" alt="ajouter" border="0" />
 			</a>
 			{{/if}}
 		  </td>
@@ -83,7 +83,7 @@
 		<tr>
 		  <td width="50%">
 		    <a name="{{$curr_op->operation_id}}" style="float:right;" href="#" onclick="view_log('COperation',{{$curr_op->operation_id}})">
-              <img src="images/history.gif" alt="historique" />
+              <img src="images/icons/history.gif" alt="historique" />
             </a>
 			<form name="editFrm{{$curr_op->operation_id}}" action="index.php" method="get">
             <input type="hidden" name="m" value="{{$m}}" />
@@ -150,17 +150,17 @@
 		  <td>
 		    {{if $curr_op->rank != 1}}
 		    <a href="index.php?m={{$m}}&amp;a=do_order_op&amp;cmd=up&amp;id={{$curr_op->operation_id}}">
-		    <img src="./modules/{{$m}}/images/uparrow.png" width="12" height="12" alt="monter" border="0" />
+		    <img src="images/icons/uparrow.png" width="12" height="12" alt="monter" border="0" />
 			</a>
 			<br />
 			{{/if}}
 			<a href="index.php?m={{$m}}&amp;a=do_order_op&amp;cmd=rm&amp;id={{$curr_op->operation_id}}">
-		    <img src="./modules/{{$m}}/images/cross.png" width="12" height="12" alt="supprimer" border="0" />
+		    <img src="images/icons/cross.png" width="12" height="12" alt="supprimer" border="0" />
 			</a>
 			{{if $curr_op->rank != $max}}
 			<br />
 		    <a href="index.php?m={{$m}}&amp;a=do_order_op&amp;cmd=down&amp;id={{$curr_op->operation_id}}">
-		    <img src="./modules/{{$m}}/images/downarrow.png" width="12" height="12" alt="descendre" border="0" />
+		    <img src="images/icons/downarrow.png" width="12" height="12" alt="descendre" border="0" />
 			</a>
 			{{/if}}
 		  </td>

@@ -149,7 +149,7 @@ function pageMain() {
       <form name="editFrmPratDate" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       {{$date|date_format:"%A %d %B %Y"}}
-      <img id="changeDate" src="./images/calendar.gif" title="Choisir la date" alt="calendar" />
+      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
       </form>
     </th>
     <th>
