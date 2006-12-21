@@ -66,7 +66,7 @@ table.form th.title {
   font-size: 14px;
   font-weight: bold; 
   text-align: center;
-  background-color: #638cc9;
+  background-color: #68c;
   border: #aaa 1px outset;
 }
 
@@ -89,8 +89,8 @@ table.form th.category {
   font-weight: bold;  
   font-style: italic;  
   text-align: center;
-  background-color: #638cc9;
-  border: #638cc9 1px outset;
+  background-color: #68c;
+  border: #68c 1px outset;
 }
 
 table.form th.mandatory {
@@ -216,7 +216,7 @@ td#menubar {
   text-align: right;
   border: 2px solid #000;
   padding: 2px;
-  background-color: #638cc9;
+  background-color: #68c;
   color: #fff;
   width: 100%;
 }
@@ -293,13 +293,13 @@ a.button, button, a.buttonedit, a.buttontrash, a.buttonsubmit, a.buttonnew, a.bu
 a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange, a.buttondown {
   color: #fff;
   height: 18px;
-  background-color: #638cc9;
+  background-color: #8ae;
 }
 
 a.button:hover, button:hover, a.buttonedit:hover, a.buttontrash:hover, a.buttonsubmit:hover, 
 a.buttonnew:hover, a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, 
 a.buttonsearch:hover, a.buttontick:hover, a.buttonchange:hover, a.buttondown:hover {
-  background-color: #8ae;
+  background-color: #bbb;
 }
 
 button.edit, a.buttonedit {
@@ -373,7 +373,7 @@ input[type=submit],
 input[type=reset],
 input[type=button] {
   border-color: black;
-  background: #638cc9;
+  background: #8ae;
   margin: 0 10px;
   color: #fff;
 }
@@ -381,7 +381,7 @@ input[type=button] {
 input[type=submit]:hover,
 input[type=reset]:hover,
 input[type=button]:hover {
-  background: #8ae;
+  background: #bbb;
   color: #fff;
 }
 
@@ -457,7 +457,7 @@ table.tbl th a {
 }
 
 table.tbl th {
-  background-color: #638cc9;
+  background-color: #68c;
   padding: 2px;
   color: #fff;
   border: outset #ccc 1px;
@@ -476,7 +476,7 @@ table.tbl th.title {
   font-size: 14px;
   font-weight: bold;  
   text-align: center;
-  background: #638cc9;
+  background: #68c;
   border: #aaa 1px outset;
 }
 
@@ -528,7 +528,7 @@ table.tbl td.date img {
 table.titleblock td.titlecell {
   font-family: Arial;
   font-size: 20px; 
-  color: #638cc9;
+  color: #68c;
   width: 100%;
   padding-bottom: 5px;
 }
@@ -540,8 +540,8 @@ th.title {
   color: #fff;
   font-weight: bold;  
   text-align: center;
-  background: #638cc9;
-  border: #638cc9 1px outset;
+  background: #68c;
+  border: #68c 1px outset;
 }
 
 /* System message */
