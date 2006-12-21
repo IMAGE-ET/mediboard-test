@@ -213,6 +213,11 @@ $dPconfig = $mbConfig->values;
   </tr>
 
   <tr>
+    <th><label for="readonly" title="Version en lecture seule. Empeche toute modification des données de Mediboard">Version readonly ?</label></th>
+    <td><input type="text" size="40" name="readonly" value="<?php echo $dPconfig['readonly'] ?>" /></td>
+  </tr>
+
+  <tr>
     <th><label for="shared_memory" title="Choisir quelle extension doit tenter de gérer la mémoire partagée (celle-ci doit être installée)">Mémoire partagée ?</label></th>
     <td>
       <select name="shared_memory" size="1">

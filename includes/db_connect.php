@@ -263,9 +263,13 @@ function db_loadObjectListWithOpt($sql, $object, $maxrows = null) {
 * @param [type] $verbose
 */
 function db_insertArray($table, &$hash, $verbose = false) {
+  global $dPconfig;
+  if($dPconfig["readonly"]) {
+    return false;
+  }
   $fmtsql = "insert into $table (%s) values(%s) ";
   foreach ($hash as $k => $v) {
-    if (is_array($v) or is_object($v) or $v == null) {
+    if (is_array($v) or is_object($v) or $v === null) {
       continue;
     }
     $fields[] = $k;
@@ -290,6 +294,10 @@ function db_insertArray($table, &$hash, $verbose = false) {
 * @param [type] $verbose
 */
 function db_updateArray($table, &$hash, $keyName, $verbose = false) {
+  global $dPconfig;
+  if($dPconfig["readonly"]) {
+    return false;
+  }
   $fmtsql = "UPDATE $table SET %s WHERE %s";
   foreach ($hash as $k => $v) {
     if(is_array($v) or is_object($v) or $k[0] == "_") // internal or NA field
@@ -319,6 +327,10 @@ function db_updateArray($table, &$hash, $keyName, $verbose = false) {
 *
 */
 function db_delete($table, $keyName, $keyValue) {
+  global $dPconfig;
+  if($dPconfig["readonly"]) {
+    return false;
+  }
   $keyName = db_escape($keyName);
   $keyValue = db_escape($keyValue);
   $sql = "DELETE FROM $table WHERE $keyName='$keyValue'";
@@ -336,6 +348,10 @@ function db_delete($table, $keyName, $keyValue) {
 * @param [type] $verbose
 */
 function db_insertObject($table, &$object, $keyName = null, $verbose = false) {
+  global $dPconfig;
+  if($dPconfig["readonly"]) {
+    return false;
+  }
   $fmtsql = "INSERT INTO $table (%s) VALUES (%s) ";
   foreach (get_object_vars($object) as $k => $v) {
     if (is_array($v) or is_object($v) or $v === null) {
@@ -369,6 +385,10 @@ function db_insertObject($table, &$object, $keyName = null, $verbose = false) {
 * @param [type] $updateNulls
 */
 function db_updateObject($table, &$object, $keyName) {
+  global $dPconfig;
+  if($dPconfig["readonly"]) {
+    return false;
+  }
   $fmtsql = "UPDATE $table SET %s WHERE %s";
   $tmp = array();
   foreach (get_object_vars($object) as $k => $v) {

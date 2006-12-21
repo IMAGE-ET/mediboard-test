@@ -109,6 +109,9 @@ $dPconfig["locale_alert"] = "^";
 // Set to true to help analyse errors
 $dPconfig["debug"] = true;
 
+// Use mediboard in a read-only mode
+$dPconfig["readonly"] = false;
+
 // Choose shared memory handler [none|eaccelerator] up to now
 $dPconfig["shared_memory"] = "none";
 
