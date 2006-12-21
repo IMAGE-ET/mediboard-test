@@ -21,7 +21,7 @@ if (!is_file("./includes/config.php")) {
 
 require_once("./includes/config_dist.php");
 require_once("./includes/config.php");
-require_once("./includes/cache.php");
+require_once("./classes/sharedmemory.class.php");
 
 // Check that the user has correctly set the root directory
 is_file($dPconfig["root_dir"]."/includes/config.php") 

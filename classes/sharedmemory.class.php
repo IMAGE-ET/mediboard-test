@@ -1,52 +1,49 @@
-<?php /* $Id: errors.php 26 2006-05-04 16:12:16Z Rhum1 $ */
+<?php /* CLASSES $Id: chrono.class.php 16 2006-05-04 14:54:07Z MyttO $ */
 
 /**
- * @package Mediboard
- * @subpackage Style
- * @version $Revision: 26 $
- * @author Thomas Despoix
- * latest version: $HeadURL: https://svn.sourceforge.net/svnroot/mediboard/trunk/includes/errors.php $ 
+ *  @package Mediboard
+ *  @subpackage classes
+ *  @author  Thomas Despoix
+ *  @version $Revision: 16 $
  */
 
-global $dPconfig;
-
-switch ($dPconfig["shared_memory"]) {
-  case "none" :
-
+/**
+ * Default Shared Memory class with no shared memory behaviour
+ */
+class SharedMemory {
+    
   /**
    * Returns true if shared memory is available
    */
-  function shm_ready() {
+  function isReady() {
     return false;
   }
   
   /**
-   * Get a variable from shared memory if cache engine exists
+   * Get a variable from shared memory
    */
-  function shm_get($key) {
+  function get($key) {
     return null;
   }
   
   /**
-   * Put a variable into shared memory if cache engine exists
+   * Put a variable into shared memory
    */
-  function shm_put($key, $value) {
+  function put($key, $value) {
     return false;
   }
   
   /**
-   * Remove a variable from shared memory if cache engine exists
+   * Remove a variable from shared memory
    */
-  function shm_rem($key) {
+  function rem($key) {
     return false;
   }
+}
 
+class EAcceleratorSharedMemory extends SharedMemory {
   
-  break;
-  
-  case "eaccelerator" :
-
-  function shm_ready() {
+  function isReady() {
     if (function_exists("eaccelerator_get") and function_exists("eaccelerator_put") and function_exists("eaccelerator_rm")) {
       return true;
     }
@@ -54,7 +51,7 @@ switch ($dPconfig["shared_memory"]) {
     return false;
   }
   
-  function shm_get($key) {
+  function get($key) {
     global $rootName;
     $key = "$rootName-$key";
   
@@ -67,7 +64,7 @@ switch ($dPconfig["shared_memory"]) {
     return null;
   }
   
-  function shm_put($key, $value) {
+  function put($key, $value) {
     global $rootName;
     $key = "$rootName-$key";
   
@@ -78,7 +75,7 @@ switch ($dPconfig["shared_memory"]) {
     return false;
   }
   
-  function shm_rem($key) {
+  function rem($key) {
     global $rootName;
     $key = "$rootName-$key";
   
@@ -88,9 +85,22 @@ switch ($dPconfig["shared_memory"]) {
     
     return false;
   }
+}
+
+// Shared Memory instance factory
+global $dPconfig;
+switch ($dPconfig["shared_memory"]) {
+  case "none" : 
+  $shm = new SharedMemory;
+  break;
+    
+  case "eaccelerator" :
+  $shm = new EAcceleratorSharedMemory;
   break;
   
   default:
-    trigger_error("Mode de mémoire partagée non reconnu");
+  trigger_error("Mode de mémoire partagée non reconnu", E_USER_ERROR);
+  $shm = new SharedMemory;
 }
+
 ?>

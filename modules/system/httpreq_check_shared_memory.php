@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $shm;
 
 if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
@@ -23,7 +23,7 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
     }
   }
 
-  if (null == $sharedLocale = shm_get("locales-$localeName")) {
+  if (null == $sharedLocale = $shm->get("locales-$localeName")) {
     echo "<div class='message'>Table absente en mémoire pour langage '$localeName'</div>";
     continue;
   }      
@@ -44,7 +44,7 @@ foreach($classNames as $className) {
   $classPaths[$className] = $class->getFileName();
 }
 
-if (null == $sharedClassPaths = shm_get("class-paths")) {
+if (null == $sharedClassPaths = $shm->get("class-paths")) {
   echo "<div class='message'>Table des classes absente en mémoire</div>";
   return;
 }      

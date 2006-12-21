@@ -7,14 +7,14 @@
  * @author Thomas Despoix
  */
 
-global $AppUI, $performance;
+global $AppUI, $performance, $shm;
 
 $performance["autoload"] = 0;
 
 // Load class paths in shared memory
-if (shm_ready()) {
+if ($shm->isReady()) {
 
-  if (null == $classPaths = shm_get("class-paths")) {
+  if (null == $classPaths = $shm->get("class-paths")) {
     $AppUI->getAllClasses();
     $classNames = getChildClasses(null);
     foreach($classNames as $className) {
@@ -22,7 +22,7 @@ if (shm_ready()) {
       $classPaths[$className] = $class->getFileName();
     }
     
-    shm_put("class-paths", $classPaths);
+    $shm->put("class-paths", $classPaths);
   } 
   
   function __autoload($className) {

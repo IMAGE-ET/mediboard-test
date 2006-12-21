@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $shm;
 
 if (!$canEdit) {
   $AppUI->redirect( "m=system&a=access_denied" );
@@ -19,12 +19,12 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   $localeName = basename($localeDir);
   $sharedName = "locales-$localeName";
   
-  if (!shm_get($sharedName)) {
+  if (!$shm->get($sharedName)) {
     echo "<div class='message'>Table absente en mémoire pour langage '$localeName'</div>";
     continue;
   } 
   
-  if (!shm_rem($sharedName)) {
+  if (!$shm->rem($sharedName)) {
     echo "<div class='error'>Impossible de supprimer la table pour langage '$localeName'</div>";
     continue;
   }
@@ -33,12 +33,12 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
 }
 
 // Remove class paths
-if (!shm_get("class-paths")) {
+if (!$shm->get("class-paths")) {
   echo "<div class='message'>Table des classes absente en mémoire</div>";
   return;
 }      
   
-if (!shm_rem("class-paths")) {
+if (!$shm->rem("class-paths")) {
   echo "<div class='error'>Impossible de supprimer la table des classes</div>";
   return;
 }
