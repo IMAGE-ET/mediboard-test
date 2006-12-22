@@ -11,8 +11,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-mbTrace(CConsultation::TERMINE);
-
 // Récupération des paramètres
 $deb  = mbGetValueFromGetOrSession("deb", mbDate());
 $fin  = mbGetValueFromGetOrSession("fin", mbDate());
