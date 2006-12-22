@@ -129,7 +129,13 @@ class CTemplateManager {
       $object->loadAides($user_id);
       if(is_array($helpers = @$object->_aides["compte_rendu"])) {
         // Caution, keys and values have to been flipped out
-        $this->helpers = array_flip($helpers);
+        $valuesHelpers = array();
+        foreach($helpers as $listHelpers){
+          if(is_array($listHelpers)){
+            $valuesHelpers = array_merge($valuesHelpers,$listHelpers);
+          }
+        }
+        $this->helpers = array_flip($valuesHelpers);
       }
     } else {
       $this->helpers = array();
