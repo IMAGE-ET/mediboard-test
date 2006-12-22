@@ -98,7 +98,7 @@ function pageMain() {
   <tr>
     <th><label for="function_id" title="Fonction à laquelle le modèle est associé">Fonction</label></th>
     <td>
-      <select name="function_id" title="{{$compte_rendu->_props.function_id}}">
+      <select name="function_id" title="{{$compte_rendu->_props.function_id}}" onchange="this.form.chir_id.value = ''">
         <option value="">&mdash; Associer à une fonction &mdash;</option>
         {{foreach from=$listFunc item=curr_func}}
           <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $compte_rendu->function_id}} selected="selected" {{/if}}>
@@ -112,7 +112,7 @@ function pageMain() {
   <tr>
     <th><label for="chir_id" title="Praticien auquel le modèle est associé">Praticien</label></th>
     <td>
-      <select name="chir_id" title="{{$compte_rendu->_props.chir_id}}">
+      <select name="chir_id" title="{{$compte_rendu->_props.chir_id}}" onchange="this.form.function_id.value = ''">
         <option value="">&mdash; Associer à un praticien &mdash;</option>
         {{foreach from=$listPrat item=curr_prat}}
           <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $prat_id}} selected="selected" {{/if}}>
