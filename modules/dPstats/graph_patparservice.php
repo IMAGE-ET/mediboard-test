@@ -9,8 +9,6 @@
 
 global $AppUI, $canRead, $canEdit, $m;
 
-die();
-
 require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"  ));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_bar"));
 
@@ -100,8 +98,6 @@ foreach($services as $service) {
 }
 
 // Setup the graph.
-JpGraphError::Raise("Screwed up");
-
 $graph = new Graph(500,300,"auto");    
 $graph->img->SetMargin(50,40,50,70);
 $graph->SetScale("textlin");
