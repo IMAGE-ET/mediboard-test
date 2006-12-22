@@ -470,7 +470,7 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.51");
-    $sql = "UPDATE `consultation` SET `annule` = 0 WHERE (`annule` = '' OR `annule` IS NULL );";
+    $sql = "UPDATE `consultation` SET `annule` = '0' WHERE (`annule` = '' OR `annule` IS NULL );";
     $this->addQuery($sql);
     
     $this->mod_version = "0.52";
