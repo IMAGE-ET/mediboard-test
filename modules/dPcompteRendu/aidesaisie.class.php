@@ -33,7 +33,10 @@ class CAideSaisie extends CMbObject {
   
   function check() {
     $msg = null;
-    global $pathos;
+    static $pathos = null;
+    if (!$pathos) {
+      $pathos = new CPathologies();
+    }
     
     $where = array();
     if($this->user_id){

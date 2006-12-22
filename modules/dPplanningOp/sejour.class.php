@@ -123,9 +123,12 @@ class CSejour extends CMbObject {
 
   function check() {
     $msg = null;
-    global $pathos;
+    static $pathos = null;
+    if (!$pathos) {
+      $pathos = new CPathologies();
+    }
 
-    if($this->pathologie != null && (!in_array($this->pathologie, $pathos->dispo))) {
+    if ($this->pathologie != null && (!in_array($this->pathologie, $pathos->dispo))) {
       $msg.= "Pathologie non disponible<br />";
     }
 
