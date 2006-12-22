@@ -21,6 +21,7 @@ $object_class = mbGetValueFromGetOrSession("object_class", null);
 $type         = mbGetValueFromGetOrSession("type"        , null);
 
 // Récupération de la liste des classes disponibles
+$AppUI->getAllClasses();
 $listClasses = getChildClasses();
 
 // Récupération de la liste des utilisateurs disponibles
