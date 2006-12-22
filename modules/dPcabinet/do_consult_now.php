@@ -23,7 +23,7 @@ $day_now = strftime("%Y-%m-%d");
 $hour_now = strftime("%H:%M:00");
 $debut = strftime("%H:00:00");
 
-$plage = new CPlageConsult();
+$plage = new CPlageconsult();
 $where = array();
 $where["chir_id"] = "= '$chir->user_id'";
 $where["date"] = "= '$day_now'";
