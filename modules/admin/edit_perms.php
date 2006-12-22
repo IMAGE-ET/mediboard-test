@@ -23,6 +23,7 @@ if(!$user_id) {
 $modulesInstalled = CModule::getInstalled();
 $isAdminPermSet   = false;
 
+$AppUI->getAllClasses();
 $listClasses = getChildClasses("CMbObject");
 
 // Récuperation de l'utilisateur sélectionné
