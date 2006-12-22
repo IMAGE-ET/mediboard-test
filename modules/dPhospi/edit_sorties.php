@@ -89,10 +89,11 @@ foreach($sortiesAmbu as $key => $value) {
     $sortiesAmbu[$key]->_ref_lit->loadCompleteView();
     $sortiesAmbu[$key]->_ref_next->loadRefsFwd();
     $sortiesAmbu[$key]->_ref_next->_ref_lit->loadCompleteView();
-  }
-  $service_actuel    = $sortiesAmbu[$key]->_ref_lit->_ref_chambre->service_id;
-  if(!in_array($service_actuel,array_keys($services))){
-      unset($sortiesAmbu[$key]);
+    
+    $service_actuel    = $sortiesAmbu[$key]->_ref_lit->_ref_chambre->service_id;
+    if(!in_array($service_actuel,array_keys($services))){
+        unset($sortiesAmbu[$key]);
+    }
   }
 }
 
@@ -110,10 +111,11 @@ foreach($sortiesComp as $key => $value) {
     $sortiesComp[$key]->_ref_lit->loadCompleteView();
     $sortiesComp[$key]->_ref_next->loadRefsFwd();
     $sortiesComp[$key]->_ref_next->_ref_lit->loadCompleteView();
-  }
-  $service_actuel    = $sortiesComp[$key]->_ref_lit->_ref_chambre->service_id;
-  if(!in_array($service_actuel,array_keys($services))){
-      unset($sortiesComp[$key]);
+    
+    $service_actuel    = $sortiesComp[$key]->_ref_lit->_ref_chambre->service_id;
+    if(!in_array($service_actuel,array_keys($services))){
+        unset($sortiesComp[$key]);
+    }
   }
 }
 
