@@ -361,8 +361,14 @@ function db_insertObject($table, &$object, $keyName = null, $verbose = false) {
       continue;
     }
     $v = trim($v);
+    if($v === "") {
+      // Tries to nullify empty values but won't fail if not possible
+      $val = "NULL";
+    } else {
+      $val = "'" . db_escape($v) . "'";
+    }
     $fields[] = "`$k`";
-    $values[] = "'" . db_escape($v) . "'";
+    $values[] = $val;
   }
   $sql = sprintf($fmtsql, implode(",", $fields) ,  implode(",", $values));
   ($verbose) && print "$sql<br />\n";
