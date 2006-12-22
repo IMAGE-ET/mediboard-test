@@ -119,7 +119,7 @@ function checkFormRDV(oForm){
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
-<input type="hidden" name="annule" value="{{if $consult->annule}}{{$consult->annule}}{{else}}0{{/if}}" />
+<input type="hidden" name="annule" value="{{$consult->annule|default:"0"}}" />
 <input type="hidden" name="arrivee" value="" />
 <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
 
