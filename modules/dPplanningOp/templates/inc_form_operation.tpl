@@ -9,7 +9,7 @@
 <input type="hidden" name="sejour_id" value="{{$op->sejour_id}}" />
 <input type="hidden" name="commande_mat" value="{{$op->commande_mat}}" />
 <input type="hidden" name="rank" value="{{$op->rank}}" />
-<input type="hidden" name="annulee" value="{{$op->annulee}}" />
+<input type="hidden" name="annulee" value="{{$op->annulee|default:"0"}}" />
 <input type="hidden" name="_group_id" value="{{$sejour->group_id}}" />
      
 <table class="form">

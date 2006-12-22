@@ -229,7 +229,7 @@ function redactionDoc(oForm){
       <input type="hidden" name="ged[doc_ged_id]" value="{{$docGed->doc_ged_id}}" />  
       <input type="hidden" name="ged[user_id]" value="{{$docGed->user_id}}" />
       <input type="hidden" name="ged[group_id]" value="{{$docGed->group_id}}" />
-      <input type="hidden" name="ged[annule]" value="{{$docGed->annule}}" />
+      <input type="hidden" name="ged[annule]" value="{{$docGed->annule|default:"0"}}" />
       <input type="hidden" name="ged[etat]" value="" />
       
       <input type="hidden" name="suivi[doc_ged_suivi_id]" value="{{$docGed->_lastentry->doc_ged_suivi_id}}" />

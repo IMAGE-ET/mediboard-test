@@ -124,7 +124,7 @@ function pageMain() {
     <td></td>
     <td>{{$module}}</td>
     <td>
-      <img alt="not installed" src="./images/obj/dotgrey.gif" width="12" height="12" />
+      <img alt="not installed" src="./images/icons/dotgrey.gif" width="12" height="12" />
       {{if $canEdit}}
         <a class="action" href="?m={{$m}}&amp;a=domodsql&amp;cmd=install&amp;mod_name={{$module}}">
           {{tr}}install{{/tr}}

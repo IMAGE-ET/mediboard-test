@@ -203,7 +203,7 @@ function pageMain() {
       <input type="hidden" name="dosql" value="do_ficheEi_aed" />
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="annulee" value="{{$fiche->annulee}}" />
+      <input type="hidden" name="annulee" value="{{$fiche->annulee|default:"0"}}" />
       <input type="hidden" name="fiche_ei_id" value="{{$fiche->fiche_ei_id}}" />
       <input type="hidden" name="_validation" value="0" />
       <input type="hidden" name="service_date_validation" value="{{$fiche->service_date_validation}}" />

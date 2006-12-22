@@ -172,7 +172,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
 
       <input type="hidden" name="ged[doc_ged_id]" value="{{$docGed->doc_ged_id}}" />  
       <input type="hidden" name="ged[user_id]" value="{{$user_id}}" />
-      <input type="hidden" name="ged[annule]" value="{{$docGed->annule}}" />
+      <input type="hidden" name="ged[annule]" value="{{$docGed->annule|default:"0"}}" />
             
       <input type="hidden" name="suivi[user_id]" value="{{$user_id}}" />  
       <input type="hidden" name="suivi[actif]" value="0" /> 
