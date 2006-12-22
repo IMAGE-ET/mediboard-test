@@ -5,6 +5,7 @@
 var oCcamField = null;
 function updateTokenCcam(){
   refreshListCCAM();
+  document.editOp._codeCCAM.value="";
   modifOp();
 }
 
