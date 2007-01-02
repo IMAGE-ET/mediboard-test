@@ -2,7 +2,7 @@
 
 /**
  *  @package Mediboard
- *  @subpackage dPqualite
+ *  @subpackage dPrepas
  *  @version $Revision: $
  *  @author Sébastien Fillonneau
  */

@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPrepas";
-$config["mod_version"]     = "0.1";
+$config["mod_version"]     = "0.12";
 $config["mod_type"]        = "user";
 
 class CSetupdPrepas extends CSetup {
@@ -73,7 +73,45 @@ class CSetupdPrepas extends CSetup {
           "\nPRIMARY KEY ( `repas_id` )) TYPE=MyISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.1";
+    $this->makeRevision("0.1");
+    $sql = "ALTER TABLE `repas` CHANGE `menu_id` `menu_id` int(11) UNSIGNED NULL;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `repas` ADD `typerepas_id` int(11) UNSIGNED NOT NULL;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `menu` ADD `nb_repet` int(11) unsigned NOT NULL;";
+    $this->addQuery($sql);
+    function setup_menu(){
+      $sql = "SELECT * FROM menu";
+      $menus = db_loadList($sql);
+      foreach($menus as $menu){
+        $nbDays  = mbDaysRelative($menu["debut"], $menu["fin"]);
+        $nbWeeks = floor($nbDays / 7);
+        if(!$nbWeeks){
+          $menu["nb_repet"] = 1;
+        }else{
+          $menu["nb_repet"] = ceil($nbWeeks/$menu["repetition"]);
+        }
+        $sql = "UPDATE `menu` SET `nb_repet` = '".$menu["nb_repet"]."' WHERE(`menu_id`='".$menu["menu_id"]."');";
+        db_exec($sql); db_error();
+        $sql = "UPDATE `repas` SET `typerepas_id`='".$menu["typerepas"]."' WHERE(`menu_id`='".$menu["menu_id"]."');";
+        db_exec($sql); db_error();
+      }
+      $sql = "ALTER TABLE `menu` DROP `fin` ";
+      db_exec($sql); db_error(); 
+      return true;
+    }
+    $this->addFunctions("setup_menu");
+    
+    $this->makeRevision("0.11");
+    $sql = "CREATE TABLE `validationrepas` (" .
+          "\n`validationrepas_id` int(11) unsigned NOT NULL AUTO_INCREMENT ," .
+          "\n`service_id` int(11) UNSIGNED NOT NULL," .
+          "\n`date` date NOT NULL," .
+          "\n`typerepas_id` int(11) UNSIGNED NOT NULL," .
+          "\nPRIMARY KEY ( `validationrepas_id` )) TYPE=MyISAM;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.12";
   }
 }
 ?>

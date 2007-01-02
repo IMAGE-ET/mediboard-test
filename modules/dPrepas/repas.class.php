@@ -2,7 +2,7 @@
 
 /**
  *  @package Mediboard
- *  @subpackage dPqualite
+ *  @subpackage dPrepas
  *  @version $Revision: $
  *  @author Sébastien Fillonneau
  */
@@ -25,6 +25,7 @@ class CRepas extends CMbObject {
   var $boisson        = null;
   var $pain           = null;
   var $date           = null;
+  var $typerepas_id   = null;
   
   // Object References
   var $_ref_affectation = null;
@@ -49,7 +50,7 @@ class CRepas extends CMbObject {
   function getSpecs() {
     return array (
       "affectation_id" => "ref|notNull",
-      "menu_id"        => "ref|notNull",
+      "menu_id"        => "ref",
       "plat1"          => "ref",
       "plat2"          => "ref",
       "plat3"          => "ref",
@@ -57,7 +58,8 @@ class CRepas extends CMbObject {
       "plat5"          => "ref",
       "boisson"        => "ref",
       "pain"           => "ref",
-      "date"           => "date"
+      "date"           => "date",
+      "typerepas_id"   => "ref|notNull"
     );
   }
   

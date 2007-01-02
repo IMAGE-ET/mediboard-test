@@ -2134,3 +2134,9 @@ div#performance {
   margin: 10px; 
   text-align: center;
 }
+
+option.validation {
+  background-image: url(images/buttons/tick.png);
+  background-repeat: no-repeat;
+  background-position: center right;
+}

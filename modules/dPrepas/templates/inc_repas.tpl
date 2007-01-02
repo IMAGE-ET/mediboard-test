@@ -1,6 +1,12 @@
-<input type="hidden" name="menu_id" value="{{$menu->menu_id}}" />
-
 <table class="form">
+
+{{if !$menu_id}}
+  <input type="hidden" name="menu_id" value="" />
+  <tr>
+    <th class="category" colspan="2">Pas de repas à prévoir</th>
+  </tr>
+{{else}}
+  <input type="hidden" name="menu_id" value="{{$menu->menu_id}}" />
   <tr>
     <th class="category" colspan="2">{{$menu->nom}}</th>
   </tr>
@@ -31,6 +37,7 @@
     </td>
   </tr>
   {{/foreach}}
+{{/if}}
 
   <tr>
     <td colspan="2" class="button">

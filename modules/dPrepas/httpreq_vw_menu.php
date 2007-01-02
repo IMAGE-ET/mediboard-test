@@ -15,6 +15,9 @@ if(!$canRead) {
 
 $menu_id  = mbGetValueFromGetOrSession("menu_id" , null);
 $repas_id = mbGetValueFromGet("repas_id" , null);
+if($menu_id == ""){
+  $menu_id = null;
+}
 
 $menu = new CMenu;
 $menu->load($menu_id);
@@ -41,6 +44,7 @@ foreach($plats->_enums["type"] as $key=>$value){
 // Création du template
 $smarty = new CSmartyDP(1);
 
+$smarty->assign("menu_id"   , $menu_id);
 $smarty->assign("menu"      , $menu);
 $smarty->assign("listPlats" , $listPlats);
 $smarty->assign("plats"     , $plats);

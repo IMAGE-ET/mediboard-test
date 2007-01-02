@@ -9,9 +9,27 @@ function viewplat(menu_id){
   url.requestUpdate('listPlat');
 }
 
+function norepas(){
+  var url = new Url;
+  url.setModuleAction("dPrepas", "httpreq_vw_menu");
+  {{if $repas->repas_id}}
+  url.addParam("repas_id", {{$repas->repas_id}});  
+  {{/if}}
+  url.addParam("menu_id", "");
+  url.requestUpdate('listPlat', { onComplete : submitFormRepas });
+}
+function submitFormRepas(){
+  oForm = document.editMenu;
+  //oForm.submit();
+}
+
 {{if $repas->repas_id}}
 function pageMain() {
+  {{if $repas->menu_id}}
   viewplat({{$repas->menu_id}});
+  {{else}}
+  norepas();
+  {{/if}}
 }
 {{/if}}
 </script>
@@ -20,6 +38,7 @@ function pageMain() {
 <input type="hidden" name="dosql" value="do_repas_aed" />
 <input type="hidden" name="repas_id" value="{{if $repas}}{{$repas->repas_id}}{{/if}}" />
 <input type="hidden" name="affectation_id" value="{{$affectation->affectation_id}}" />
+<input type="hidden" name="typerepas_id" value="{{$typeRepas->typerepas_id}}" />
 <input type="hidden" name="date" value="{{$date}}" />
 <input type="hidden" name="del" value="0" />
 
@@ -42,7 +61,7 @@ function pageMain() {
     <td>
       {{$affectation->_ref_lit->_view}}
     </td>
-    <td rowspan="4" class="halfPane" id="listPlat"></td>
+    <td rowspan="5" class="halfPane" id="listPlat"></td>
   </tr>
 
   <tr>
@@ -60,6 +79,12 @@ function pageMain() {
     </th>
     <td>
       {{$typeRepas->nom}}
+    </td>
+  </tr> 
+  
+  <tr>
+    <td colspan="2" class="button">
+      <button type="button" class="submit" onclick="norepas();">Ne pas prévoir de repas</button>
     </td>
   </tr>  
   

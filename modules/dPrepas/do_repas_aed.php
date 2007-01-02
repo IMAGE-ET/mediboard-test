@@ -13,6 +13,7 @@ $do = new CDoObjectAddEdit("CRepas", "repas_id");
 $do->createMsg = "Repas créé";
 $do->modifyMsg = "Repas modifié";
 $do->deleteMsg = "Repas supprimé";
+$do->redirect  = "m=$m&tab=vw_planning_repas";
 $do->doIt();
 
 ?>

@@ -78,11 +78,6 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <td colspan="2" class="button">
-           Les menus sont disponibles du lundi au dimanche des semaines sélectionnées
-          </td>
-        </tr>
-        <tr>
           <th><label for="debut" title="Date de début">Début</label></th>
           <td class="date">
             <div id="editMenu_debut_da">{{if $menu->menu_id}}{{$menu->debut|date_format:"%d/%m/%Y"}}{{else}}{{$date_debut|date_format:"%d/%m/%Y"}}{{/if}}</div>
@@ -91,18 +86,16 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="fin" title="Date de fin">Fin</label></th>
-          <td class="date">
-            <div id="editMenu_fin_da">{{if $menu->menu_id}}{{$menu->fin|date_format:"%d/%m/%Y"}}{{else}}{{$date_debut|date_format:"%d/%m/%Y"}}{{/if}}</div>
-            <input type="hidden" name="fin" title="{{$menu->_props.fin}}" value="{{if $menu->menu_id}}{{$menu->fin}}{{else}}{{$date_debut}}{{/if}}" />
-            <img id="editMenu_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" />
-          </td>
-        </tr>
-        <tr>
           <th><label for="repetition" title="Répétition">Répétition</label></th>
           <td>
             1 sem. / 
             {{html_options name="repetition" options=$listRepeat title=$menu->_props.repetition selected=$menu->repetition}}
+          </td>
+        </tr>
+        <tr>
+          <th><label for="nb_repet" title="Nombre de répétition">Nombre de répétition</label></th>
+          <td>
+            <input size="3" name="nb_repet" title="{{$menu->_props.nb_repet}}" type="text" value="{{$menu->nb_repet}}" />
           </td>
         </tr>
         <tr>

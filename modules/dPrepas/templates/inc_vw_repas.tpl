@@ -7,7 +7,9 @@
       <tr id="affect{{$curr_affect->_id}}-trigger">
         <th class="category">
         <div style="float:right">
-          {{if $repas->_is_modif}}
+          {{if $repas->repas_id && !$repas->menu_id}}
+            [PAS DE REPAS]
+          {{elseif $repas->_is_modif}}
             <em>{{$repas->_ref_menu->nom}}</em>
           {{else}}
             {{$repas->_ref_menu->nom}}

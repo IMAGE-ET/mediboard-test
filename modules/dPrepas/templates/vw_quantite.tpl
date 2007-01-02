@@ -26,7 +26,8 @@ function pageMain() {
       <select name="service_id" onchange="reloadChambres();">
         <option value="">&mdash; Veuillez sélectionner un service</option>
         {{foreach from=$services item=curr_service}}
-        <option value="{{$curr_service->service_id}}" {{if $curr_service->service_id == $service_id}}selected="selected"{{/if}}>
+        {{assign var="validation" value=$curr_service->_ref_validrepas.$date.$type}}
+        <option {{if $type && $validation->validationrepas_id}}class="validation"{{/if}} value="{{$curr_service->service_id}}" {{if $curr_service->service_id == $service_id}}selected="selected"{{/if}}>
           {{$curr_service->nom}}
         </option>
         {{/foreach}}

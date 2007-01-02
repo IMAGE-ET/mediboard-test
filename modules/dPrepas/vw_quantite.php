@@ -77,6 +77,9 @@ $where = array();
 $where["group_id"] = "= '$g'";
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
+foreach($services as &$service){
+  $service->validationRepas($date);
+}
 
 // Création du template
 $smarty = new CSmartyDP(1);

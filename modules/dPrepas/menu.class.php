@@ -2,7 +2,7 @@
 
 /**
  *  @package Mediboard
- *  @subpackage dPqualite
+ *  @subpackage dPrepas
  *  @version $Revision: $
  *  @author Sébastien Fillonneau
  */
@@ -30,8 +30,8 @@ class CMenu extends CMbObject {
   var $sans_residu = null;
   var $modif       = null;
   var $debut       = null;
-  var $fin         = null;
   var $repetition  = null;
+  var $nb_repet    = null;
   
   // Object References
   var $_ref_typerepas = null;
@@ -59,8 +59,8 @@ class CMenu extends CMbObject {
       "sans_residu" => "bool",
       "modif"       => "bool",
       "debut"       => "date|notNull",
-      "fin"         => "date|moreThan|debut|notNull",
-      "repetition"  => "num|pos|notNull"
+      "repetition"  => "num|pos|notNull",
+      "nb_repet"    => "num|pos|notNull"
     );
   }
   
@@ -72,7 +72,7 @@ class CMenu extends CMbObject {
     }
     $where["group_id"] = db_prepare("= %",$g);
     $where["debut"]    = db_prepare("<= %",$date);
-    $where["fin"]      = db_prepare(">= %",$date);
+    //$where["fin"]      = db_prepare(">= %",$date);
     $order = "nom";
     
     $listRepas = new CMenu;
@@ -86,14 +86,26 @@ class CMenu extends CMbObject {
   }
   
   function is_actif($date){
-    if($date < $this->debut || $date > $this->fin){
+    $date_debut = mbDate("last sunday", $this->debut);
+    $date_debut = mbDate("+1 day"     , $date_debut);
+    $numDayMenu  = mbDaysRelative($date_debut, $this->debut);
+    
+    $nb_weeks = (($this->nb_repet * $this->repetition) - 1);
+    $date_fin = mbDate("+$nb_weeks week" , $date_debut);
+    $date_fin = mbDate("next monday"     , $date_fin);
+    $date_fin = mbDate("-1 day"          , $date_fin);
+    
+    if($date < $this->debut || $date > $date_fin){  
       return false;
     }
     
-    $nbDays  = mbDaysRelative($this->debut, $date);
+    $nbDays  = mbDaysRelative($date_debut, $date);
     $nbWeeks = floor($nbDays / 7);
+    $numDay = $nbDays - ($nbWeeks * 7);
     if (!$nbWeeks || !fmod($nbWeeks, $this->repetition)) {
-      return true;
+      if($numDay == $numDayMenu){
+        return true;
+      }
     }
     return false;
   }
@@ -109,14 +121,6 @@ class CMenu extends CMbObject {
   }
   
   function updateDBFields() {
-    if($this->debut){
-      $this->debut = mbDate("last sunday", $this->debut);
-      $this->debut = mbDate("+1 day", $this->debut);
-    }
-    if($this->fin){
-      $this->fin = mbDate("next monday", $this->fin);
-      $this->fin = mbDate("-1 day", $this->fin);
-    }
   }
 }
 ?>

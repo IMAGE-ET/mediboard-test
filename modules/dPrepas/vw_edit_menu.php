@@ -12,7 +12,6 @@ global $AppUI, $canRead, $canAdmin, $canEdit, $m, $g;
 if(!$canEdit) {
   $AppUI->redirect("m=system&a=access_denied");
 }
-
 $menu_id      = mbGetValueFromGetOrSession("menu_id", null);
 $plat_id      = mbGetValueFromGetOrSession("plat_id", null);
 $typerepas_id = mbGetValueFromGetOrSession("typerepas_id", null);

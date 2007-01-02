@@ -26,6 +26,7 @@ class CService extends CMbObject {
   // Object references
   var $_ref_chambres = null;
   var $_ref_group    = null;
+  var $_ref_validrepas = null;
 
 	function CService() {
 		$this->CMbObject("service", "service_id");
@@ -81,6 +82,26 @@ class CService extends CMbObject {
     );
         
     return CMbObject::canDelete( $msg, $oid, $tables );
+  }
+  
+  function validationRepas($date, $listTypeRepas = null){
+    $this->_ref_validrepas[$date] = array();
+    $validation =& $this->_ref_validrepas[$date];
+    if(!$listTypeRepas){
+      $listTypeRepas = new CTypeRepas;
+      $order = "debut, fin, nom";
+      $listTypeRepas = $listTypeRepas->loadList(null,$order);
+    }
+    
+    $where               = array();
+    $where["date"]       = db_prepare(" = %", $date);
+    $where["service_id"] = db_prepare(" = %", $this->service_id);
+    foreach($listTypeRepas as $keyType=>$typeRepas){
+      $where["typerepas_id"] = db_prepare("= %",$keyType);
+      $validrepas = new CValidationRepas;
+      $validrepas->loadObject($where);
+      $validation[$keyType] = $validrepas;
+    }
   }
 }
 ?>

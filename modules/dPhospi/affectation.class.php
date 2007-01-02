@@ -221,11 +221,10 @@ class CAffectation extends CMbObject {
     $where                   = array();
     $where["date"]           = db_prepare(" = %", $date);
     $where["affectation_id"] = db_prepare(" = %", $this->affectation_id);
-    $ljoin = array("menu" => "repas.menu_id = menu.menu_id");
     foreach($listTypeRepas as $keyType=>$typeRepas){
-      $where["menu.typerepas"] = db_prepare("= %",$keyType);
+      $where["typerepas_id"] = db_prepare("= %",$keyType);
       $repasDuJour = new CRepas;
-      $repasDuJour->loadObject($where, null, null, $ljoin);
+      $repasDuJour->loadObject($where);
       $repas[$keyType] = $repasDuJour;
     }
     

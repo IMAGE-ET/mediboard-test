@@ -27,6 +27,9 @@ $where = array();
 $where["group_id"] = "= '$g'";
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
+foreach($services as &$service){
+  $service->validationRepas($date);
+}
 
 $listTypeRepas = new CTypeRepas;
 $order = "debut, fin, nom";

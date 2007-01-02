@@ -3,7 +3,29 @@ function pageMain() {
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date="); 
 }
 
+function devalidationRepas(validation_id){
+  oForm = document.validRepas;
+  oForm.del.value = 1;
+  oForm.validationrepas_id.value = validation_id;
+  oForm.submit();
+}
+function validationRepas(typerepas_id){
+  oForm = document.validRepas;
+  oForm.typerepas_id.value = typerepas_id;
+  oForm.submit();
+}
 </script>
+
+<form name="validRepas" action="?m={{$m}}" method="post">
+<input type="hidden" name="m" value="{{$m}}" />
+<input type="hidden" name="del" value="0" />
+<input type="hidden" name="dosql" value="do_validationrepas_aed" />
+<input type="hidden" name="date" value="{{$date}}" />
+<input type="hidden" name="service_id" value="{{$service_id}}" />
+<input type="hidden" name="typerepas_id" value="" />
+<input type="hidden" name="validationrepas_id" value="" />
+</form>
+
 <table class="main">
   <tr>
     <td>
@@ -30,7 +52,16 @@ function pageMain() {
         <tr>
           <td colspan="2"></td>
           {{foreach from=$listTypeRepas item=curr_type}}
-          <th class="category">{{$curr_type->nom}}</th>
+          <th class="category">
+            {{assign var="type_id" value=$curr_type->_id}}
+            {{assign var="validation" value=$service->_ref_validrepas.$date.$type_id}}
+            {{if $validation->validationrepas_id}}
+            <button type="button" class="cancel notext" onclick="devalidationRepas({{$validation->validationrepas_id}})" style="float:right;"></button>            
+            {{else}}
+            <button type="button" class="tick notext" onclick="validationRepas({{$curr_type->_id}})" style="float:right;"></button>
+            {{/if}}
+            {{$curr_type->nom}}
+          </th>
           {{/foreach}}
         </tr>
         
@@ -49,10 +80,14 @@ function pageMain() {
                        && $curr_type->debut > $curr_affect->sortie|date_format:"%H:%M")
                   }}
                   -
-                  {{elseif $curr_affect->_list_repas.$date.$keyType->repas_id}}
+                  {{elseif $curr_affect->_list_repas.$date.$keyType->repas_id && $curr_affect->_list_repas.$date.$keyType->menu_id}}
                   <a href="?m={{$m}}&amp;tab=vw_edit_repas&amp;affectation_id={{$curr_affect->affectation_id}}&amp;typerepas_id={{$keyType}}">
                     <img src="images/icons/tick-dPrepas.png" width="20" height="20" alt="Repas commandé" />
                   </a>
+                  {{elseif $curr_affect->_list_repas.$date.$keyType->repas_id}}
+                  <a href="?m={{$m}}&amp;tab=vw_edit_repas&amp;affectation_id={{$curr_affect->affectation_id}}&amp;typerepas_id={{$keyType}}">
+                    <img src="images/icons/no.png" width="20" height="20" alt="" />
+                  </a>                  
                   {{else}}
                   <a href="?m={{$m}}&amp;tab=vw_edit_repas&amp;affectation_id={{$curr_affect->affectation_id}}&amp;typerepas_id={{$keyType}}">
                     <img src="images/icons/flag.png" width="20" height="20" alt="Repas à commander" />
