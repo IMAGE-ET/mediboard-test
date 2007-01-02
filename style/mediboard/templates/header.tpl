@@ -43,7 +43,7 @@ function popChgPwd() {
   <tr>
     <td id="banner">
       <p>Mediboard :: Système de gestion des structures de santé</p>
-      <a href='http://www.mediboard.org'><img src="./style/{{$uistyle}}/images/mbSmall.gif" alt="Logo Mediboard"  /></a>
+      <a href='http://www.mediboard.org'><img src="./style/{{$uistyle}}/images/pictures/mbSmall.gif" alt="Logo Mediboard"  /></a>
     </td>
   </tr>
   <tr>

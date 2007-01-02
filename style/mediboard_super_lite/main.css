@@ -23,7 +23,7 @@ table.tabmenu td {
 }
 
 table.tabmenu td.normal {
-  background: #bbb; /*url(./images/tabBg.png) repeat-x bottom;*/
+  background: #bbb; /*url(./images/icons/tabBg.png) repeat-x bottom;*/
   padding: 3px;
 }
 

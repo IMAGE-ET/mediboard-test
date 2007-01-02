@@ -108,7 +108,7 @@ if ($AppUI->doLogin()) {
   
   $smartyLogin->assign("localeCharSet"        , $locale_char_set);
   $smartyLogin->assign("mediboardVersion"     , @$AppUI->getVersion());
-  $smartyLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/favicon.ico",1));
+  $smartyLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
   $smartyLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
   $smartyLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
   $smartyLogin->assign("mediboardScript"      , mbLoadScripts(1));
@@ -249,7 +249,7 @@ if (!$suppressHeaders) {
   $smartyHeader->assign("titleBlockData"       , $titleBlockData);
   $smartyHeader->assign("localeCharSet"        , $locale_char_set);
   $smartyHeader->assign("mediboardVersion"     , @$AppUI->getVersion());
-  $smartyHeader->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/favicon.ico",1));
+  $smartyHeader->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
   $smartyHeader->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
   $smartyHeader->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
   $smartyHeader->assign("mediboardScript"      , mbLoadScripts(1));

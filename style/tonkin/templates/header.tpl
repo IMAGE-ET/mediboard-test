@@ -45,7 +45,7 @@ function popChgPwd() {
       <table>
         <tr>
           <td rowspan="3" class="logo">
-            <img src="./style/{{$uistyle}}/images/tonkin.gif" alt="Groupe Tonkin" />
+            <img src="./style/{{$uistyle}}/images/pictures/tonkin.gif" alt="Groupe Tonkin" />
           </td>
           <th width="1%">
             <table class='titleblock'>

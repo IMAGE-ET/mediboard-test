@@ -9,7 +9,7 @@ body {
 
 #headerMenu {
   width: 100%;
-  background: #aaa url(./images/headerBar.png) repeat-x top;
+  background: #aaa url(./images/icons/headerBar.png) repeat-x top;
   cursor: default;
 }
 
@@ -42,14 +42,14 @@ body {
 }
 
 #headerMenu td.menuTitle {
-  background: url(./images/menu.png) no-repeat top right;
+  background: url(./images/icons/menu.png) no-repeat top right;
   font-size: 12px;
   padding: 1px 15px 1px 2px;
   border-right: 1px inset #000;
 }
 
 #headerMenu td.menuTitle:hover {
-  background: url(./images/menuHover.png) no-repeat top right;
+  background: url(./images/icons/menuHover.png) no-repeat top right;
 }
 
 #headerMenu #toolMenuList,
@@ -63,7 +63,7 @@ body {
 }
 
 #headerMenu div.menuItem {
-  background: #eee url(./images/menuItem.png) repeat-y left;
+  background: #eee url(./images/icons/menuItem.png) repeat-y left;
   display: block;
   font-size: 12px;
   padding: 1px 4px;

@@ -46,7 +46,7 @@ function popChgPwd() {
       <table>
         <tr>
           <td class="logo">
-            <img src="./style/{{$uistyle}}/images/mbLogo.png" alt="Mediboard logo" />
+            <img src="./style/{{$uistyle}}/images/pictures/mbLogo.png" alt="Mediboard logo" />
           </td>
           <td width="1%">
             <table class="titleblock">

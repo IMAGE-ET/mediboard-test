@@ -37,7 +37,7 @@
     <tr>
       <td class="logo" colspan="3 ">
         <a href="http://www.mediboard.org/">
-          <img src="./style/mediboard/images/mbNormal.gif" alt="MediBoard logo" />
+          <img src="images/pictures/mbNormal.gif" alt="MediBoard logo" />
         </a>
         <p>
           Plateforme Open Source pour les Etablissements de Santé<br/>
@@ -87,7 +87,7 @@
     <tr>
       <td class="logo">
         <a href="http://www.dotproject.net/">
-          <img src="./style/mediboard/images/dp_icon.gif" alt="dotProject logo" />
+          <img src="images/pictures/dp_icon.gif" alt="dotProject logo" />
         </a>
         <p>Version {{$mediboardVersion}}</p>
       </td>

@@ -5,7 +5,7 @@
 #menubar table {
   border: 0px;
   border-spacing: 0px;
-  background: url(./images/acier.png) repeat-x scroll bottom left;
+  background: url(./images/pictures/acier.png) repeat-x scroll bottom left;
   color: #fff;
   text-align: left;
   width: 100%;
@@ -22,11 +22,11 @@
 
 #menubar table td.iconSelected,
 #menubar table td.textSelected {
-  background: url(./images/blue.png) repeat;
+  background: url(./images/icons/blue.png) repeat;
 }
 
 #menubar table td:hover {
-  background: url(./images/vert.png) repeat;
+  background: url(./images/icons/vert.png) repeat;
 }
 
 #menubar table td.noHover:hover {
@@ -38,7 +38,7 @@
   border: 0;
   width: 10px;
   height: 10px;
-  background: url(./images/up.png) no-repeat scroll bottom center;
+  background: url(./images/icons/up.png) no-repeat scroll bottom center;
   cursor: pointer;
 }
 
@@ -47,42 +47,42 @@
   border: 0;
   width: 10px;
   height: 10px;
-  background: url(./images/down.png) no-repeat scroll bottom center;
+  background: url(./images/icons/down.png) no-repeat scroll bottom center;
   cursor: pointer;
 }
 
 /* Onglets de module */
 
 table.tabmenu td.normal {
-  background: url(./images/tabBg.png) repeat-x bottom;
+  background: url(./images/icons/tabBg.png) repeat-x bottom;
 }
 
 table.tabmenu td.normalLeft {
   width: 10px;
-  background: url(./images/tabLeft.png) no-repeat bottom right;
+  background: url(./images/icons/tabLeft.png) no-repeat bottom right;
 }
 
 table.tabmenu td.normalRight {
   width: 10px;
-  background: url(./images/tabRight.png) no-repeat bottom left;
+  background: url(./images/icons/tabRight.png) no-repeat bottom left;
 }
 
 table.tabmenu td.selected {
-  background: url(./images/tabSelectedBg.png) repeat-x;
+  background: url(./images/icons/tabSelectedBg.png) repeat-x;
 }
 
 table.tabmenu td.selectedLeft {
   width: 10px;
-  background: url(./images/tabSelectedLeft2.png) no-repeat bottom right;
+  background: url(./images/icons/tabSelectedLeft2.png) no-repeat bottom right;
 }
 
 table.tabmenu td.selectedRight {
   width: 10px;
-  background: url(./images/tabSelectedRight2.png) no-repeat bottom left;
+  background: url(./images/icons/tabSelectedRight2.png) no-repeat bottom left;
 }
 
 /* panneau d'affichage */
 
 table.tabview td.tabox {
-  background: url(./images/acierOnglet.png) repeat;
+  background: url(./images/pictures/acierOnglet.png) repeat;
 }

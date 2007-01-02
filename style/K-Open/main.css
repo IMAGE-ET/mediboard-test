@@ -87,13 +87,13 @@ table.form th.mandatory {
 
 label.notNull {
   padding-right: 13px;
-  background: url(./images/redbox.jpg) no-repeat center right;
+  background: url(./images/icons/redbox.jpg) no-repeat center right;
   font-weight: bold;
 }
 
 label.notNullOK {
   padding-right: 13px;
-  background: url(./images/greenbox.jpg) no-repeat center right;
+  background: url(./images/icons/greenbox.jpg) no-repeat center right;
   font-weight: bold;
 }
 
@@ -243,7 +243,7 @@ table.tabmenu td {
 }
 
 table.tabmenu td.normal {
-  background: url(./images/tabBg.png) repeat-x bottom;
+  background: url(./images/icons/tabBg.png) repeat-x bottom;
 }
 
 table.tabmenu td.normal a {
@@ -252,26 +252,26 @@ table.tabmenu td.normal a {
 
 table.tabmenu td.normalLeft {
   width: 15px;
-  background: url(./images/tabLeft.gif) no-repeat bottom right;
+  background: url(./images/icons/tabLeft.gif) no-repeat bottom right;
 }
 
 table.tabmenu td.normalRight {
   width: 15px;
-  background: url(./images/tabRight.gif) no-repeat bottom left;
+  background: url(./images/icons/tabRight.gif) no-repeat bottom left;
 }
 
 table.tabmenu td.selected {
-  background: url(./images/tabSelectedBg.png) repeat-x bottom;
+  background: url(./images/icons/tabSelectedBg.png) repeat-x bottom;
 }
 
 table.tabmenu td.selectedLeft {
   width: 15px;
-  background: url(./images/tabSelectedLeft.gif) no-repeat bottom right;
+  background: url(./images/icons/tabSelectedLeft.gif) no-repeat bottom right;
 }
 
 table.tabmenu td.selectedRight {
   width: 15px;
-  background: url(./images/tabSelectedRight.gif) no-repeat bottom left;
+  background: url(./images/icons/tabSelectedRight.gif) no-repeat bottom left;
 }
 
 /* Inputs */

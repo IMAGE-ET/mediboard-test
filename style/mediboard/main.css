@@ -8,7 +8,7 @@
 body {
   font-family: arial, sans-serif;
   font-size: 11px;  
-  background: #ddf; /* url(./images/bodyGradient.jpg) no-repeat fixed top center; */
+  background: #ddf; /* url(./images/pictures/bodyGradient.jpg) no-repeat fixed top center; */
   margin: 0px;
 }
 
@@ -126,7 +126,7 @@ h2.module {
 }
 
 h2.dPpatients{
-  background-image: url(../../modules/dPpatients/images/dPpatients.png);
+  background-image: url(../../images/modules/dPpatients.png);
 }
 
 h3 {
@@ -378,31 +378,31 @@ table.tabmenu td {
 }
 
 table.tabmenu td.normal {
-  background: url(./images/tabBg.png) repeat-x bottom;
+  background: url(./images/icons/tabBg.png) repeat-x bottom;
 }
 
 table.tabmenu td.normalLeft {
   width: 17px;
-  background: url(./images/tabLeft.png) no-repeat bottom right;
+  background: url(./images/icons/tabLeft.png) no-repeat bottom right;
 }
 
 table.tabmenu td.normalRight {
   width: 17px;
-  background: url(./images/tabRight.png) no-repeat bottom left;
+  background: url(./images/icons/tabRight.png) no-repeat bottom left;
 }
 
 table.tabmenu td.selected {
-  background: url(./images/tabSelectedBg.png) repeat-x;
+  background: url(./images/icons/tabSelectedBg.png) repeat-x;
 }
 
 table.tabmenu td.selectedLeft {
   width: 17px;
-  background: url(./images/tabSelectedLeft.png) no-repeat bottom right;
+  background: url(./images/icons/tabSelectedLeft.png) no-repeat bottom right;
 }
 
 table.tabmenu td.selectedRight {
   width: 17px;
-  background: url(./images/tabSelectedRight.png) no-repeat bottom left;
+  background: url(./images/icons/tabSelectedRight.png) no-repeat bottom left;
 }
 
 /* Standard table */
@@ -721,27 +721,27 @@ div#systemMsg {
 
 div.warning {
   color: #666;
-  background: url(images/warning.png) no-repeat center left;
+  background: url(../../images/icons/warning.png) no-repeat center left;
   padding: 2px;
   padding-left: 20px;
 }
 
 div.error {
   color: #f00;
-  background: url(images/cross.png) no-repeat center left;
+  background: url(../../images/icons/cancel.png) no-repeat center left;
   padding: 2px;
   padding-left: 20px;
 }
 
 div.message {
   color: #008;
-  background: url(images/check.png) no-repeat center left;
+  background: url(../../images/icons/check.png) no-repeat center left;
   padding: 2px;
   padding-left: 20px;
 }
 
 div.loading {
-  background: url(images/loading.gif) no-repeat center left;
+  background: url(images/icons/loading.gif) no-repeat center left;
   padding: 2px;
   padding-left: 20px;
 }
@@ -749,7 +749,7 @@ div.loading {
 div.big-warning {
   margin: 10px 50px;
   min-height: 50px;
-  background: #ffd url(icons/48/warning.png) no-repeat 5px center ;
+  background: #ffd url(images/icons/warning.png) no-repeat 5px center ;
   border: 1px solid #da0;
   padding: 5px;
   padding-left: 60px;
@@ -758,7 +758,7 @@ div.big-warning {
 div.big-success {
   margin: 10px 50px;
   min-height: 50px;
-  background: #efe url(icons/48/success.png) no-repeat 5px center ;
+  background: #efe url(images/icons/success.png) no-repeat 5px center ;
   border: 1px solid #5a5;
   padding: 5px;
   padding-left: 60px;
@@ -767,7 +767,7 @@ div.big-success {
 div.big-info {
   margin: 10px 50px;
   min-height: 50px;
-  background: #eef url(icons/48/info.png) no-repeat 5px center ;
+  background: #eef url(images/icons/info.png) no-repeat 5px center ;
   border: 1px solid #55a;
   padding: 5px;
   padding-left: 60px;
@@ -776,7 +776,7 @@ div.big-info {
 div.big-error {
   margin: 10px 50px;
   min-height: 50px;
-  background: #fee url(icons/48/error.png) no-repeat 5px center ;
+  background: #fee url(images/icons/error.png) no-repeat 5px center ;
   border: 1px solid #a55;
   padding: 5px;
   padding-left: 60px;
@@ -841,7 +841,7 @@ div.tooltip table.tbl {
 
 #banner {
   display: none;
-  background: url(./images/titleGradient.jpg) no-repeat center;
+  background: url(./images/pictures/titleGradient.jpg) no-repeat center;
   vertical-align: middle;
 }
 
@@ -1429,13 +1429,13 @@ table.chambreexpand td.action {
 table.chambrecollapse th.chambre {
   padding: 2px;
   padding-left: 10px;
-  background: #aaa url(./images/collapse.gif) no-repeat center left;
+  background: #aaa url(../../images/icons/collapse.gif) no-repeat center left;
 }
 
 table.chambreexpand th.chambre {
   padding: 2px;
   padding-left: 10px;
-  background: #aaa url(./images/expand.gif) no-repeat center left;
+  background: #aaa url(../../images/icons/expand.gif) no-repeat center left;
 }
 
 th.chambre img {
@@ -1528,13 +1528,13 @@ table.operationcollapse td.patient,
 table.sejourcollapse td.patient {
   white-space: normal;
   padding-left: 17px;
-  background: #ddf url(./images/collapse.gif) no-repeat center left;
+  background: #ddf url(../../images/icons/collapse.gif) no-repeat center left;
 }
 
 table.operationexpand td.patient,
 table.sejournexpand td.patient {
   padding-left: 17px;
-  background: #ddf url(./images/expand.gif) no-repeat center left;
+  background: #ddf url(../../images/icons/expand.gif) no-repeat center left;
 }
 
 table.operationexpand td.date,
@@ -1607,11 +1607,11 @@ table#weeklyPlanning td.nonEmpty {
   background: #ccc; 
 }
 table#weeklyPlanning td.nonEmptyConsult {
-  background: #ccc url(images/plageConsult.png) repeat-y left;
+  background: #ccc url(images/pictures/plageConsult.png) repeat-y left;
   border: #9f9 1px solid;
 }
 table#weeklyPlanning td.nonEmptyOp {
-  background: #ccc url(images/plageOp.png) repeat-y left;
+  background: #ccc url(images/pictures/plageOp.png) repeat-y left;
   border: #99f 1px solid;
 }
 
@@ -1646,16 +1646,16 @@ div.progressBar div.bar {
   background-repeat: repeat;
 }
 div.progressBar div.empty {
-  background-image: url(./images/pempty.png);
+  background-image: url(./images/icons/pempty.png);
 }
 div.progressBar div.normal {
-  background-image: url(./images/pnormal.png);
+  background-image: url(./images/icons/pnormal.png);
 }
 div.progressBar div.booked {
-  background-image: url(./images/pbooked.png);
+  background-image: url(./images/icons/pbooked.png);
 }
 div.progressBar div.full {
-  background-image: url(./images/pfull.png);
+  background-image: url(./images/icons/pfull.png);
 }
 
 div.progressBar div.text {
@@ -1682,12 +1682,12 @@ tr.groupcollapse th {
 
 tr.groupcollapse td,
 tr.groupcollapse th {
-  background-image: url(./images/collapse.gif);
+  background-image: url(../../images/icons/collapse.gif);
 }
 
 tr.groupexpand td,
 tr.groupexpand th {
-  background-image: url(./images/expand.gif);
+  background-image: url(../../images/icons/expand.gif);
 }
 
 tr.triggerShow td,
@@ -1707,12 +1707,12 @@ tr.triggerHide th {
 
 tr.triggerHide td,
 tr.triggerHide th {
-  background-image: url(./images/expand.gif);
+  background-image: url(../../images/icons/expand.gif);
 }
 
 tr.triggerShow td,
 tr.triggerShow th {
-  background-image: url(./images/collapse.gif);
+  background-image: url(../../images/icons/collapse.gif);
 }
 
 tr.show {

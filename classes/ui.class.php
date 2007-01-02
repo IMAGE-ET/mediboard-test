@@ -174,20 +174,6 @@ class CAppUI {
   }
   
 /**
-* Used to load a image file from the module directory
-* @param string $name The class root file name (excluding .class.php)
-* @return string The path to the include file
- */
-  function getModuleImage($name = null, $file = null) {
-    if ($name) {
-      if ($root = $this->getConfig("root_dir")) {
-        $filename = $file ? $file : $name;
-        return "$root/modules/$name/images/$filename";
-      }
-    }
-  }
-  
-/**
 * Used to store information in tmp directory
 * @param string $subpath in tmp directory
 * @return string The path to the include file

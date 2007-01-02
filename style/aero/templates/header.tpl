@@ -63,34 +63,34 @@ function chgMenu(id, type) {
       Outils
       <div id="toolMenuList" style="visibility: hidden; position: absolute">
         <div class="menuItem">
-          <img src="style/aero/images/help.png" alt="Aide" border="0" height="16" width="16" />
+          <img src="style/aero/images/icons/help.png" alt="Aide" border="0" height="16" width="16" />
           {{$helpOnline|smarty:nodefaults}}
         </div>
         <div class="menuItem">
-          <img src="style/aero/images/modif.png" alt="Suggestions" border="0" height="16" width="16" />
+          <img src="style/aero/images/icons/modif.png" alt="Suggestions" border="0" height="16" width="16" />
           {{$suggestion|smarty:nodefaults}}
         </div>
         <div class="menuItem">
           <a href="#" onclick="popChgPwd();">
-            <img src="style/aero/images/passwd.png" alt="Mot de passe" border="0" height="16" width="16" />
+            <img src="style/aero/images/icons/passwd.png" alt="Mot de passe" border="0" height="16" width="16" />
             Changez votre mot de passe
           </a>
         </div>
         <div class="menuItem">
           <a href="?m=mediusers&amp;a=edit_infos">
-            <img src="style/aero/images/myinfos.png" alt="{{tr}}My Info{{/tr}}" border="0" height="16" width="16" />
+            <img src="style/aero/images/icons/myinfos.png" alt="{{tr}}My Info{{/tr}}" border="0" height="16" width="16" />
             {{tr}}My Info{{/tr}}
           </a>
         </div>
         <div class="menuItem">
           <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">
-            <img src="style/aero/images/prefs.png" alt="Preferences" border="0" height="16" width="16" />
+            <img src="style/aero/images/icons/prefs.png" alt="Preferences" border="0" height="16" width="16" />
             {{tr}}Préférences{{/tr}}
           </a>
         </div>
         <div class="menuItem">
           <a href="?logout=-1">
-            <img src="style/aero/images/logout.png" alt="{{tr}}Logout{{/tr}}" border="0" height="16" width="16" />
+            <img src="style/aero/images/icons/logout.png" alt="{{tr}}Logout{{/tr}}" border="0" height="16" width="16" />
             {{tr}}Logout{{/tr}}
           </a>
         </div>

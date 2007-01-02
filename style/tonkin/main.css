@@ -73,13 +73,13 @@ table.form th.mandatory {
 
 label.notNull {
   padding-right: 13px;
-  background: url(./images/redbox.jpg) no-repeat center right;
+  background: url(./images/icons/redbox.jpg) no-repeat center right;
   font-weight: bold;
 }
 
 label.notNullOK {
   padding-right: 13px;
-  background: url(./images/greenbox.jpg) no-repeat center right;
+  background: url(./images/icons/greenbox.jpg) no-repeat center right;
   font-weight: bold;
 }
 
@@ -171,7 +171,7 @@ div.autocomplete ul li {
 /* Navigation */
 
 table#header {
-  background: url(./images/bandeau.png) repeat-x top;
+  background: url(./images/icons/bandeau.png) repeat-x top;
   height: 84px;
 }
 
@@ -245,7 +245,7 @@ table.tabmenu td {
 }
 
 table.tabmenu td.normal {
-  background: url(./images/tabBg.png) repeat-x bottom;
+  background: url(./images/icons/tabBg.png) repeat-x bottom;
 }
 
 table.tabmenu td.normal a {
@@ -254,26 +254,26 @@ table.tabmenu td.normal a {
 
 table.tabmenu td.normalLeft {
   width: 15px;
-  background: url(./images/tabLeft.gif) no-repeat bottom right;
+  background: url(./images/icons/tabLeft.gif) no-repeat bottom right;
 }
 
 table.tabmenu td.normalRight {
   width: 15px;
-  background: url(./images/tabRight.gif) no-repeat bottom left;
+  background: url(./images/icons/tabRight.gif) no-repeat bottom left;
 }
 
 table.tabmenu td.selected {
-  background: url(./images/tabSelectedBg.png) repeat-x bottom;
+  background: url(./images/icons/tabSelectedBg.png) repeat-x bottom;
 }
 
 table.tabmenu td.selectedLeft {
   width: 15px;
-  background: url(./images/tabSelectedLeft.gif) no-repeat bottom right;
+  background: url(./images/icons/tabSelectedLeft.gif) no-repeat bottom right;
 }
 
 table.tabmenu td.selectedRight {
   width: 15px;
-  background: url(./images/tabSelectedRight.gif) no-repeat bottom left;
+  background: url(./images/icons/tabSelectedRight.gif) no-repeat bottom left;
 }
 
 /* Inputs */
@@ -282,7 +282,7 @@ input,
 select,
 textarea {
   color: #082F54;
-  background-image:url(./images/input.png);
+  background-image:url(./images/pictures/input.png);
   border:1px solid black;
   font-size: 12px;
   margin: 1px;
@@ -302,7 +302,7 @@ input[type=button] {
   background-color: #ddd;
   margin: 0 2px;
   padding: 0px 2px;
-  background-image: url(./images/button.png);
+  background-image: url(./images/buttons/button.png);
   background-repeat: repeat-x;
   background-position: bottom;
   height: 18px
@@ -313,7 +313,7 @@ button:hover,
 input[type=submit]:hover,
 input[type=reset]:hover,
 input[type=button]:hover {
-  background-image: url(./images/buttonover.png);
+  background-image: url(./images/buttons/buttonover.png);
   background-position: left bottom;
 }
 
