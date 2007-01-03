@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPrepas";
-$config["mod_version"]     = "0.12";
+$config["mod_version"]     = "0.13";
 $config["mod_type"]        = "user";
 
 class CSetupdPrepas extends CSetup {
@@ -111,7 +111,13 @@ class CSetupdPrepas extends CSetup {
           "\nPRIMARY KEY ( `validationrepas_id` )) TYPE=MyISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.12";
+    $this->makeRevision("0.12");
+    $sql = "ALTER TABLE `repas` ADD `modif` enum('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `validationrepas` ADD `modif` enum('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.13";
   }
 }
 ?>

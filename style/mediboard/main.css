@@ -2136,7 +2136,14 @@ div#performance {
 }
 
 option.validation {
+  height: 16px;
   background-image: url(images/buttons/tick.png);
+  background-repeat: no-repeat;
+  background-position: center right;
+}
+option.modification {
+  height: 16px;
+  background-image: url(../../images/icons/warning.png);
   background-repeat: no-repeat;
   background-position: center right;
 }

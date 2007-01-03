@@ -27,7 +27,15 @@ function pageMain() {
         <option value="">&mdash; Veuillez sélectionner un service</option>
         {{foreach from=$services item=curr_service}}
         {{assign var="validation" value=$curr_service->_ref_validrepas.$date.$type}}
-        <option {{if $type && $validation->validationrepas_id}}class="validation"{{/if}} value="{{$curr_service->service_id}}" {{if $curr_service->service_id == $service_id}}selected="selected"{{/if}}>
+        {{if $type && $validation->validationrepas_id && !$validation->modif}}
+          {{assign var="classStyle" value="validation"}}
+        {{elseif $type && $validation->validationrepas_id}}
+          {{assign var="classStyle" value="modification"}}
+        {{else}}
+          {{assign var="classStyle" value=""}}
+        {{/if}}
+        
+        <option class="{{$classStyle}}" value="{{$curr_service->service_id}}" {{if $curr_service->service_id == $service_id}}selected="selected"{{/if}}>
           {{$curr_service->nom}}
         </option>
         {{/foreach}}

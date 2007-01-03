@@ -36,6 +36,7 @@ if(!$service_id || !array_key_exists($service_id,$services)){
   $service_id = null ;
 }else{
   $service =& $services[$service_id].
+  $service->validationRepas($date);
   $service->loadRefsBack();
   foreach ($service->_ref_chambres as $chambre_id => &$chambre) {
     $chambre->loadRefsBack();
@@ -81,6 +82,7 @@ $smarty->assign("date"          , $date);
 $smarty->assign("service"       , $service);
 $smarty->assign("service_id"    , $service_id);
 $smarty->assign("plat"          , $plat);
+$smarty->assign("validation"    , $service->_ref_validrepas[$date][$type]);
 
 $smarty->display("inc_vw_repas.tpl");
 ?>

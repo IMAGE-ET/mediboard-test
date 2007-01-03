@@ -26,6 +26,7 @@ class CRepas extends CMbObject {
   var $pain           = null;
   var $date           = null;
   var $typerepas_id   = null;
+  var $modif          = null;
   
   // Object References
   var $_ref_affectation = null;
@@ -40,6 +41,7 @@ class CRepas extends CMbObject {
   
   // Form fields
   var $_is_modif        = null;
+  var $_no_synchro      = null;
   
   function CRepas() {
     $this->CMbObject("repas", "repas_id");
@@ -59,8 +61,28 @@ class CRepas extends CMbObject {
       "boisson"        => "ref",
       "pain"           => "ref",
       "date"           => "date",
-      "typerepas_id"   => "ref|notNull"
+      "typerepas_id"   => "ref|notNull",
+      "modif"          => "bool"
     );
+  }
+  
+  function store() {
+    $this->updateDBFields();
+    if(!$this->_no_synchro){
+      $service = $this->getService();
+      $where = array();
+      $where["date"]         = db_prepare("= %", $this->date);
+      $where["service_id"]   = db_prepare("= %", $service->_id);
+      $where["typerepas_id"] = db_prepare("= %", $this->typerepas_id);
+      $validationrepas = new CValidationRepas;
+      $validationrepas->loadObject($where);
+      if($validationrepas->validationrepas_id){
+        $validationrepas->modif = 1;
+        $validationrepas->store();
+        $this->modif = 1;
+      }
+    }
+    return parent::store();
   }
   
   function loadRemplacements(){
@@ -90,10 +112,20 @@ class CRepas extends CMbObject {
     $this->_ref_menu->load($this->menu_id);
   }
   
-  function loadRefsFwd() {
+  function getService(){
+    $this->loadRefAffectation();
+    $this->_ref_affectation->loadRefLit();
+    $this->_ref_affectation->_ref_lit->loadCompleteView();
+    return $this->_ref_affectation->_ref_lit->_ref_chambre->_ref_service;
+  }
+  
+  function loadRefAffectation(){
     $this->_ref_affectation = new CAffectation;
     $this->_ref_affectation->load($this->affectation_id);
-    
+  }
+  
+  function loadRefsFwd() {
+    $this->loadRefAffectation();
     $this->loadRefMenu();
   }
 }

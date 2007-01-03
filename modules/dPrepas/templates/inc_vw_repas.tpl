@@ -1,3 +1,16 @@
+{{if $type && $validation->validationrepas_id && $validation->modif}}
+<form action="?m={{$m}}" method="post">
+<input type="hidden" name="m" value="{{$m}}" />
+<input type="hidden" name="del" value="0" />
+<input type="hidden" name="dosql" value="do_validationrepas_aed" />
+<input type="hidden" name="date" value="{{$date}}" />
+<input type="hidden" name="service_id" value="{{$service_id}}" />
+<input type="hidden" name="typerepas_id" value="{{$type}}" />
+<input type="hidden" name="validationrepas_id" value="{{$validation->validationrepas_id}}" />
+<input type="hidden" name="modif" value="0" />
+<button type="submit" class="tick">Valider les modifications</button>
+</form>
+{{/if}}
 <table class="tbl">
 {{if $service_id}}
 {{foreach from=$service->_ref_chambres item=curr_chambre}}
@@ -13,6 +26,9 @@
             <em>{{$repas->_ref_menu->nom}}</em>
           {{else}}
             {{$repas->_ref_menu->nom}}
+          {{/if}}
+          {{if $repas->modif}}
+          <img src="images/icons/warning.png" alt="modifié" />
           {{/if}}
         </div>
         Chambre {{$curr_chambre->_view}} - {{$curr_lit->_view}}
