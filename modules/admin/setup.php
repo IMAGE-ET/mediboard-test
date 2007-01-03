@@ -111,6 +111,12 @@ class CSetupadmin extends CSetup {
         }
         }
       }
+      // Ajout des droits d'administration généraux
+      $editPerm = new CPermModule;
+      $where = array("user_id" =>"= '1'", "mod_id" =>"= '0'");
+      $editPerm->loadObject($where);
+      $editPerm->view = 2;
+      $editPerm->store();
       if($error !== "") {
         trigger_error($error);
         return false;
