@@ -322,6 +322,7 @@ class CMbObject {
       foreach($object->getProps() as $key => $value) {
         $this->$key = $value;
       }
+      $this->checkConfidential();
       $this->updateFormFields();
       return true;
     }
