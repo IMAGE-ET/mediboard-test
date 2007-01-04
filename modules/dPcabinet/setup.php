@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.53";
+$config["mod_version"]     = "0.54";
 $config["mod_type"]        = "user";
 
 
@@ -477,7 +477,36 @@ class CSetupdPcabinet extends CSetup {
     $sql = "UPDATE `consultation` SET `patient_id` = NULL WHERE (`patient_id` = 0 );";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.53";
+    $this->makeRevision("0.53");
+    $sql = "CREATE TABLE `exampossum` (
+                    `exampossum_id` int(11) unsigned NOT NULL auto_increment,
+                    `consultation_id` int(11) unsigned NOT NULL DEFAULT '0',
+                    `age` enum('inf60','61','sup71') NULL,
+                    `ouverture_yeux` enum('spontane','bruit','douleur','jamais') NULL,
+                    `rep_verbale` enum('oriente','confuse','inapproprie','incomprehensible','aucune') NULL,
+                    `rep_motrice` enum('obeit','oriente','evitement','decortication','decerebration','rien') NULL,
+                    `signes_respiratoires` enum('aucun','dyspnee_effort','bpco_leger','dyspnee_inval','bpco_modere','dyspnee_repos','fibrose') NULL,
+                    `uree` enum('inf7.5','7.6','10.1','sup15.1') NULL,
+                    `freq_cardiaque` enum('inf39','40','50','81','101','sup121') NULL,
+                    `signes_cardiaques` enum('aucun','diuretique','antiangineux','oedemes','cardio_modere','turgescence','cardio') NULL,
+                    `hb` enum('inf9.9','10','11.5','13','16.1','17.1','sup18.1') NULL,
+                    `leucocytes` enum('inf3000','3100','4000','10100','sup20100') NULL,
+                    `ecg` enum('normal','fa','autre','sup5','anomalie') NULL,
+                    `kaliemie` enum('inf2.8','2.9','3.2','3.5','5.1','5.4','sup6.0') NULL,
+                    `natremie` enum('inf125','126','131','sup136') NULL,
+                    `pression_arterielle` enum('inf89','90','100','110','131','sup171') NULL,
+                    `gravite` enum('min','moy','maj','maj+') NULL,
+                    `nb_interv` enum('1','2','sup2') NULL,
+                    `pertes_sanguines` enum('inf100','101','501','sup1000') NULL,
+                    `contam_peritoneale` enum('aucune','mineure','purulente','diffusion') NULL,
+                    `cancer` enum('absense','tumeur','ganglion','metastases') NULL,
+                    `circonstances_interv` enum('reglee','urg','prgm','sansdelai') NULL,
+                    PRIMARY KEY  (`exampossum_id`),
+                    KEY `consultation_id` (`consultation_id`)
+                    ) TYPE=MyISAM COMMENT='Table pour le calcul possum';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.54";
   }
 }
 ?>

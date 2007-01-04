@@ -130,6 +130,7 @@ function submitFdr(oForm) {
         <select name="type_examen" onchange="newExam(this, {{$consult->consultation_id}})">
           <option value="">&mdash; Choisir un type d'examen</option>
           <option value="exam_audio">Audiogramme</option>
+          <option value="exam_possum">Score Possum</option>
         </select>
       </form>
       <strong>Fichiers</strong>

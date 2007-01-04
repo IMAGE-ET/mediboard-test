@@ -219,19 +219,7 @@ class CPatient extends CMbObject {
     $this->_tel44 = substr($this->employeur_tel, 6, 2);
     $this->_tel45 = substr($this->employeur_tel, 8, 2);
 
-
-    if($this->naissance != "0000-00-00") {
-      $annais = substr($this->naissance, 0, 4);
-      $anjour = date("Y");
-      $moisnais = substr($this->naissance, 5, 2);
-      $moisjour = date("m");
-      $journais = substr($this->naissance, 8, 2);
-      $jourjour = date("d");
-      $this->_age = $anjour-$annais;
-      if($moisjour<$moisnais){$this->_age=$this->_age-1;}
-      if($jourjour<$journais && $moisjour==$moisnais){$this->_age=$this->_age-1;}
-    } else
-      $this->_age = "??";
+    $this->evalAge();
     
     if($this->_age != "??" && $this->_age <= 15)
       $this->_shortview = "Enf.";
@@ -252,6 +240,31 @@ class CPatient extends CMbObject {
       $this->_codes_cim10[] = new CCodeCIM10($value, 1);
     }
   }
+  
+  
+  function evalAge($date = null){
+    if(!$date){
+      $anjour   = date("Y");
+      $moisjour = date("m");
+      $jourjour = date("d");
+    }else{
+      $anjour   = substr($date, 0, 4);
+      $moisjour = substr($date, 5, 2);
+      $jourjour = substr($date, 8, 2);      
+    }
+    
+    if($this->naissance != "0000-00-00") {
+      $annais   = substr($this->naissance, 0, 4);
+      $moisnais = substr($this->naissance, 5, 2);
+      $journais = substr($this->naissance, 8, 2);
+      $this->_age = $anjour-$annais;
+      if($moisjour<$moisnais){$this->_age=$this->_age-1;}
+      if($jourjour<$journais && $moisjour==$moisnais){$this->_age=$this->_age-1;}
+    } else {
+      $this->_age = "??";
+    }
+  }
+  
   
   function updateDBFields() {
     $soundex2 = new soundex2;
