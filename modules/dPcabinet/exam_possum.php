@@ -21,6 +21,7 @@ $exam_possum->loadObject($where);
 
 if (!$exam_possum->_id) {
   $exam_possum->consultation_id = $consultation_id;
+  $exam_possum->updateFormFields();
 }
 $exam_possum->loadRefsFwd();
 
@@ -79,7 +80,6 @@ if(!$exam_possum->natremie && $consultAnesth->na){
 }
 
 $exam_possum->updateFormFields();
-
 
 // Création du template
 $smarty = new CSmartyDP(1);

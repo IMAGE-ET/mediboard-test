@@ -223,7 +223,7 @@ class CExamPossum extends CMbObject {
           $this->_score_physio += 4;
         }elseif($this->_glasgow >= 12 && $this->_glasgow <= 14){
           $this->_score_physio += 2;
-        }else{
+        }elseif($this->_glasgow == 15){
           $this->_score_physio += 1;
         }
         continue;
