@@ -171,7 +171,12 @@
   </tr>
   <tr>
     <td class="button" colspan="3">
-      <button class="submit" type="submit">Valider</button>
+      {{if $exam_nyha->examnyha_id}}
+        <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'cet examen complementaire',target:'systemMsg'})">{{tr}}Delete{{/tr}}</button>
+      {{else}}
+        <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+      {{/if}}
     </td>
   </tr>
 </table>

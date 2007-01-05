@@ -213,7 +213,12 @@ var scoreOper   = {{$exam_possum->_score_oper}};
   </tr>
   <tr>
     <td class="button" colspan="6">
-      <button class="submit" type="submit">Valider</button>
+      {{if $exam_possum->exampossum_id}}
+        <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'cet examen complementaire',target:'systemMsg'})">{{tr}}Delete{{/tr}}</button>
+      {{else}}
+        <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+      {{/if}}
     </td>
   </tr>
 </table>
