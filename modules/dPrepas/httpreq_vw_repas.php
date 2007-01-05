@@ -82,7 +82,11 @@ $smarty->assign("date"          , $date);
 $smarty->assign("service"       , $service);
 $smarty->assign("service_id"    , $service_id);
 $smarty->assign("plat"          , $plat);
-$smarty->assign("validation"    , $service->_ref_validrepas[$date][$type]);
+if($type){
+  $smarty->assign("validation"    , $service->_ref_validrepas[$date][$type]);
+}else{
+  $smarty->assign("validation"    , null);
+}
 
 $smarty->display("inc_vw_repas.tpl");
 ?>
