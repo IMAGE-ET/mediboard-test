@@ -45,6 +45,9 @@ class CExamPossum extends CMbObject {
   var $_score_possum_oper   = null;
   var $_score_possum_physio = null;
   
+  // Fwd References
+  var $_ref_consult = null;
+  
   function CExamPossum() {
     $this->CMbObject("exampossum", "exampossum_id");
     

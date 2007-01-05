@@ -131,6 +131,7 @@ function submitFdr(oForm) {
           <option value="">&mdash; Choisir un type d'examen</option>
           <option value="exam_audio">Audiogramme</option>
           <option value="exam_possum">Score Possum</option>
+          <option value="exam_nyha">Classification NYHA</option>
         </select>
       </form>
       <strong>Fichiers</strong>

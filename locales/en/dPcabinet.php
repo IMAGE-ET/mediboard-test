@@ -1,4 +1,5 @@
 <?php
+$locales['CExamNyha.hesitation.1'] = 'Oui';
 $locales['CConsultAnesth'] = 'Consultation Anesthésique';
 $locales['CConsultAnesth.ASA.'] = ' ';
 $locales['CConsultAnesth.ASA.1'] = '1';
@@ -61,6 +62,17 @@ $locales['CConsultation.premiere.0'] = '0';
 $locales['CConsultation.premiere.1'] = '1';
 $locales['CExamAudio'] = 'Examen Audio';
 $locales['CExamComp'] = 'Examen Complémentaire';
+$locales['CExamNyha.hesitation.0'] = 'Non';
+$locales['CExamNyha.q1.0'] = 'Non';
+$locales['CExamNyha.q1.1'] = 'Oui';
+$locales['CExamNyha.q2a.0'] = 'Non';
+$locales['CExamNyha.q2a.1'] = 'Oui';
+$locales['CExamNyha.q2b.0'] = 'Non';
+$locales['CExamNyha.q2b.1'] = 'Oui';
+$locales['CExamNyha.q3a.0'] = 'Non';
+$locales['CExamNyha.q3a.1'] = 'Oui';
+$locales['CExamNyha.q3b.0'] = 'Non';
+$locales['CExamNyha.q3b.1'] = 'Oui';
 $locales['CExamPossum.age.61'] = '2 &mdash; 61 - 70 ans';
 $locales['CExamPossum.age.inf60'] = '1 &mdash; <= 60 ans';
 $locales['CExamPossum.age.sup71'] = '3 &mdash; >= 71 ans';

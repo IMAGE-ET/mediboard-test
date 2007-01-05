@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.54";
+$config["mod_version"]     = "0.55";
 $config["mod_type"]        = "user";
 
 
@@ -506,7 +506,22 @@ class CSetupdPcabinet extends CSetup {
                     ) TYPE=MyISAM COMMENT='Table pour le calcul possum';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.54";
+    $this->makeRevision("0.54");
+    $sql = "CREATE TABLE `examnyha` (
+                    `examnyha_id` int(11) unsigned NOT NULL auto_increment,
+                    `consultation_id` int(11) unsigned NOT NULL DEFAULT '0',
+                    `q1` enum('0','1') NULL,
+                    `q2a` enum('0','1') NULL,
+                    `q2b` enum('0','1') NULL,
+                    `q3a` enum('0','1') NULL,
+                    `q3b` enum('0','1') NULL,
+                    `hesitation` enum('0','1') NOT NULL DEFAULT '0',
+                    PRIMARY KEY  (`examnyha_id`),
+                    KEY `consultation_id` (`consultation_id`)
+                    ) TYPE=MyISAM COMMENT='Table pour la classe NYHA';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.55";
   }
 }
 ?>
