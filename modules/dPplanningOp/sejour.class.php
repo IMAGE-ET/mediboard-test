@@ -69,6 +69,7 @@ class CSejour extends CMbObject {
   var $_ref_praticien         = null;
   var $_ref_operations        = null;
   var $_ref_last_operation    = null;
+  var $_codes_ccam            = null;
   var $_ref_affectations      = null;
   var $_ref_first_affectation = null;
   var $_ref_last_affectation  = null;
@@ -298,6 +299,7 @@ class CSejour extends CMbObject {
     
     if(count($this->_ref_operations) > 0) {
       $this->_ref_last_operation =& reset($this->_ref_operations);
+      $this->_codes_ccam = $this->_ref_last_operation->codes_ccam;
     } else {
       $this->_ref_last_operation =& new COperation;
     }

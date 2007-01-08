@@ -24,9 +24,17 @@
     <td class="text">
   {{/if}}
   {{if $curr_affectation->sejour_id}}
-    <a style="float: right;" href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->patient_id}}">
+    <a style="float: right;" href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->patient_id}}"
+              onmouseover="viewPrevTimeHospi(
+                {{$curr_affectation->affectation_id}},
+                {{$curr_affectation->_ref_sejour->praticien_id}},
+                '{{$curr_affectation->_ref_sejour->_codes_ccam}}')"
+              onmouseout="hidePrevTimeHospi(
+                {{$curr_affectation->affectation_id}})">
       <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
     </a>
+    <div id="tpsPrev{{$curr_affectation->affectation_id}}" class="tooltip" style="display: none; padding: 5px;">
+    </div>
     {{if $patient->_fin_cmu}}
     <div style="float: right;"><strong>CMU</strong></div>
     {{/if}}

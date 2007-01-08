@@ -155,6 +155,24 @@ function reloadService(oElement) {
   }
 }
 
+function viewPrevTimeHospi(affectation_id, chir_id, codes) {
+  oElement = $("tpsPrev"+affectation_id);
+  oElement.show();
+  if(oElement.alt != "infos - cliquez pour fermer") {
+    url = new Url;
+    url.setModuleAction("dPplanningOp", "httpreq_get_hospi_time");
+    url.addParam("chir_id", chir_id);
+    url.addParam("codes", codes);
+    url.requestUpdate(oElement);
+    oElement.alt = "infos - cliquez pour fermer";
+  }
+}
+
+function hidePrevTimeHospi(affectation_id) {
+  oElement = $("tpsPrev"+affectation_id);
+  oElement.hide();
+}
+
 function pageMain() {
   // PairEffect.InitGroup can't be used because it scans all DOM nodes
   {{foreach from=$services item=curr_service}}
