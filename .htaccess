@@ -1,2 +1,2 @@
 php_flag magic_quotes_gpc off
-eaccelerator.name_space = "mediboard"
+php_value eaccelerator.name_space mediboard
