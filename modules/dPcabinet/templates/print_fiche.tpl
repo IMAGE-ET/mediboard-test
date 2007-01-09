@@ -299,7 +299,7 @@
         <tr>
           {{if $consult->_ref_consult_anesth->mallampati}}
           <td rowspan="4" class="button" style="white-space: nowrap;">
-            <img src="modules/{{$m}}/images/mallampati/{{$consult->_ref_consult_anesth->mallampati}}.gif" alt="{{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}" />
+            <img src="images/pictures/{{$consult->_ref_consult_anesth->mallampati}}.gif" alt="{{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}" />
             <br />Mallampati<br />de {{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}
           </td>
           {{/if}}
