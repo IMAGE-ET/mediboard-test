@@ -42,20 +42,21 @@ function pageMain() {
     </tr>
     
     <tr>
+      <th>Titre</th>
       <th>Début de publication</th>
       <th>Fin de publication</th>
-      <th>Titre</th>
-      <th>Contenu</th>
     </tr>
 
     {{foreach from=$messages item=curr_message}}
     <tr>
       {{assign var="message_id" value=$curr_message->message_id}}
       {{assign var="href" value="?m=$m&tab=$tab&message_id=$message_id"}}
+      <td><strong><a href="{{$href}}">{{$curr_message->titre}}</a></strong></td>
       <td><a href="{{$href}}">{{$curr_message->deb|date_format:"%d/%m/%Y %H:%M"}}</a></td>
       <td><a href="{{$href}}">{{$curr_message->fin|date_format:"%d/%m/%Y %H:%M"}}</a></td>
-      <td class="text"><a href="{{$href}}">{{$curr_message->titre}}</a></td>
-      <td class="text">{{$curr_message->corps|nl2br}}</td>
+    </tr>
+    <tr>
+      <td class="text" colspan="10">{{$curr_message->corps|nl2br}}</td>
     </tr>
     {{/foreach}}
       
