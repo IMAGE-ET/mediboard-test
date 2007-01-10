@@ -71,13 +71,23 @@ $dPconfig["db"]["GHS1010"] = array(
   "dbport" => ""
 );
 
-// Codes postaux
+// Codes INSEE
 $dPconfig["baseINSEE"] = "INSEE";
 $dPconfig["db"]["INSEE"] = array(
   "dbhost" => "localhost",
   "dbname" => "INSEE",
   "dbuser" => "INSEEAdmin",
   "dbpass" => "AdminINSEE",
+  "dbport" => ""
+);
+
+// Transit
+$dPconfig["baseTransit"] = "Transit";
+$dPconfig["db"]["Transit"] = array(
+  "dbhost" => "localhost",
+  "dbname" => "Transit",
+  "dbuser" => "TransitAdmin",
+  "dbpass" => "AdminTransit",
   "dbport" => ""
 );
 

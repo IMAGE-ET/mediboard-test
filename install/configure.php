@@ -157,31 +157,42 @@ $dPconfig = $mbConfig->values;
 
   <tr>
     <th class="category" colspan="2">Base de donées INSEE</th>
+    <th class="category" colspan="2">Base de donées Transit</th>
   </tr>
 
   <tr>
     <th><label for="baseINSEE" title="Merci de choisir une configuration de base de données">Nom de la configuration :</label></th>
     <td class="readonly"><input type="text" readonly="readonly" size="20" name="baseINSEE" value="<?php echo @$dPconfig["baseINSEE"]; ?>" /></td>
+    <th><label for="baseTransit" title="Merci de choisir une configuration de base de données">Nom de la configuration :</label></th>
+    <td class="readonly"><input type="text" readonly="readonly" size="20" name="baseTransit" value="<?php echo @$dPconfig["baseTransit"]; ?>" /></td>
   </tr>
 
   <tr>
     <th><label for="db[INSEE][dbhost]" title="Nom de l'hôte">Nom de l'hôte :</label></th>
     <td><input type="text" size="40" name="db[INSEE][dbhost]" value="<?php echo @$dPconfig["db"]["INSEE"]["dbhost"]; ?>" /></td>
+    <th><label for="db[Transit][dbhost]" title="Nom de l'hôte">Nom de l'hôte :</label></th>
+    <td><input type="text" size="40" name="db[Transit][dbhost]" value="<?php echo @$dPconfig["db"]["Transit"]["dbhost"]; ?>" /></td>
   </tr>
 
   <tr>
     <th><label for="db[INSEE][dbname]" title="Nom de la base">Nom de la base :</label></th>
     <td><input type="text" size="40" name="db[INSEE][dbname]" value="<?php echo @$dPconfig["db"]["INSEE"]["dbname"]; ?>" /></td>
+    <th><label for="db[Transit][dbname]" title="Nom de la base">Nom de la base :</label></th>
+    <td><input type="text" size="40" name="db[Transit][dbname]" value="<?php echo @$dPconfig["db"]["Transit"]["dbname"]; ?>" /></td>
   </tr>
 
   <tr>
     <th><label for="db[INSEE][dbuser]" title="Nom de l'utilisateur">Nom de l'utilisateur :</label></th>
     <td><input type="text" size="40" name="db[INSEE][dbuser]" value="<?php echo @$dPconfig["db"]["INSEE"]["dbuser"]; ?>" /></td>
+    <th><label for="db[Transit][dbuser]" title="Nom de l'utilisateur">Nom de l'utilisateur :</label></th>
+    <td><input type="text" size="40" name="db[Transit][dbuser]" value="<?php echo @$dPconfig["db"]["Transit"]["dbuser"]; ?>" /></td>
   </tr>
 
   <tr>
     <th><label for="db[INSEE][dbpass]" title="Mot de passe de l'utililisateur'">Mot de passe :</label></th>
     <td><input type="text" size="40" name="db[INSEE][dbpass]" value="<?php echo @$dPconfig["db"]["INSEE"]["dbpass"]; ?>" /></td>
+    <th><label for="db[Transit][dbpass]" title="Mot de passe de l'utililisateur'">Mot de passe :</label></th>
+    <td><input type="text" size="40" name="db[Transit][dbpass]" value="<?php echo @$dPconfig["db"]["Transit"]["dbpass"]; ?>" /></td>
   </tr>
 
 </table>
