@@ -560,5 +560,5 @@ div.loading {
 }
 
 div.message, div.loading, div.error, div.warning {
-   white-space: nowrap;
+   white-space: normal;
 }

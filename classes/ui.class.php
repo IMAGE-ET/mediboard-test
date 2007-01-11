@@ -462,6 +462,29 @@ class CAppUI {
 
     return $msg ? "<div class='$class'>$msg</div>" : "";
   }
+
+ /**
+  * Display an ajax step, and exit on error messages
+  * @param string $msg : the message
+  * @param enum $msgType : type of message [UI_MSG_OK|UI_MSG_WARNING|UI_MSG_ERROR]
+  */
+  function stepAjax($msg, $msgType = UI_MSG_OK) {
+    switch($msgType) {
+      case UI_MSG_OK      : $class = "message"; break;
+      case UI_MSG_WARNING : $class = "warning"; break;
+      case UI_MSG_ERROR   : $class = "error" ; break;
+      default: $class = "message"; break;
+    }
+    
+    $msg = nl2br($msg);
+
+    echo "<div class='$class'>$msg</div>";
+    
+    if ($msgType == UI_MSG_ERROR) {
+      die;
+    }
+  }
+
 /**
 * Set the value of a temporary state variable.
 *

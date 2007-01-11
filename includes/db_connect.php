@@ -182,10 +182,10 @@ function db_loadList($sql, $maxrows = null, $dbid = "std") {
 *
 * @param [type] $maxrows
 */
-function db_loadColumn($sql, $maxrows = null) {
+function db_loadColumn($sql, $maxrows = null, $dbid = "std") {
   GLOBAL $AppUI;
-  if (!($cur = db_exec($sql))) {;
-    $AppUI->setMsg(db_error(), UI_MSG_ERROR);
+  if (!($cur = db_exec($sql, $dbid))) {
+    $AppUI->setMsg(db_error($dbid), UI_MSG_ERROR);
     return false;
   }
   $list = array();
@@ -499,8 +499,8 @@ function bindObjectToObject($obj1, &$obj) {
   }
 }
 
-function db_loadTable($table) {
+function db_loadTable($table, $dbid = "std") {
   $query = db_prepare("SHOW TABLES LIKE %", $table);
-  return db_loadResult($query);
+  return db_loadResult($query, $dbid);
 } 
 ?>
