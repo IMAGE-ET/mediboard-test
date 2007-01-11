@@ -87,8 +87,4 @@ if ($columnsError) {
   $AppUI->stepAjax("Column names checked with no errors");
 }
 
-global $phpChrono;
-$phpChrono->stop();
-mbTrace($phpChrono);
-
 ?>

@@ -46,7 +46,7 @@ function doAction(sType, bFollowed) {
           <td onclick="doAction('checkTables');">
             <button class="tick">Go</button>
           </td>
-          <td>Création des tables</td>
+          <td>Intégrité du transfert de base</td>
           <td class="text" id="checkTables"></td>
         </tr>
 
