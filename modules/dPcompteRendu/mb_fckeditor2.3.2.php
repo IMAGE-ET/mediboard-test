@@ -25,6 +25,7 @@ class CTemplateManager {
   var $valueMode = true;
 };
 // required includes for start-up
+require_once("$mbPath/includes/config_dist.php");
 require_once("$mbPath/includes/config.php");
 require_once("$mbPath/classes/ui.class.php");
 require_once("$mbPath/includes/session.php");
