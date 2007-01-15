@@ -39,12 +39,7 @@ $rowCountError = 0;
 $columnsError = 0;
 $tableMissing = 0;
 
-$i = 0;
 foreach ($tables as $table => $columns) {
-  if (++$i > 1000) {
-    break;
-  }
-
   if (db_loadTable($table, $base)) {
     // Rows count
     $query = "SELECT COUNT(*) AS  total FROM `$table`";

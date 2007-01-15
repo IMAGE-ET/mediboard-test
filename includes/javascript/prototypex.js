@@ -34,6 +34,11 @@ Class.extend(Function, {
   getName: function() {
     var re = /function ([^\(]*)/;
     return this.toString().match(re)[1] || "anonymous";
+  },
+  
+  getSignature: function() {
+    var re = /function ([^\{]*)/;
+    return this.toString().match(re)[1];
   }
 });
 

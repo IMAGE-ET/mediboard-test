@@ -3,6 +3,10 @@
   </tr>
 </table>
 
+<div id="console" style="display:none">
+  <div id="console-title">Javascript console</div>
+</div>
+
 {{if $debugMode}}
 <div id="performance">
   PHP : {{$performance.genere}} secondes &ndash;

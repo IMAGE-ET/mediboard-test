@@ -47,27 +47,95 @@ function initFCKEditor() {}
 function pageMain() {}
 
 /**
+ * Javascript console
+ */
+var Console = {
+	id : "console",
+ 
+	trace: function(sContent, sClass) {
+    Element.show(this.id);
+    new Insertion.Bottom(this.id, "<div class='" + (sClass || "label") + "'>" + sContent + "</div>");
+	},
+	
+	traceValue: function(oValue) {
+		if (!oValue) {
+    	this.trace("null", "value");
+    	return;
+		}
+		
+		switch (typeof oValue) {
+			case "object":
+			  if (oValue instanceof Array) {
+					this.trace(">> array", "value");
+			  } else {		  	
+					this.trace(">> object", "value");
+			  }
+				break;
+
+			case "function":
+				this.trace(">> function " + oValue.getSignature(), "value");
+				break;
+
+			case "string":
+	    	this.trace("'" + oValue + "'", "value");
+	    	break;
+
+			default:
+	    	this.trace(oValue, "value");
+		}
+	},
+
+  debug: function(oValue, sLabel) {
+  	sLabel = sLabel || "Trace";
+    
+    if (oValue instanceof Array) {
+	    this.trace(sLabel + ": array");
+      oValue.each(this.traceValue.bind(this))
+    } else if (oValue instanceof Object) {
+	    this.trace(sLabel + ": object");
+      for (oKey in oValue) {
+      	this.trace(oKey + ": ", "key");
+      	this.traceValue(oValue[oKey]);
+      }
+    } else {
+	    this.trace(sLabel + ": " + typeof oValue);
+     	this.traceValue(oValue);
+    }
+  },
+  
+  debugElement: function(oElement, sLabel) {
+  	oElement = $(oElement);
+    this.trace((sLabel || "Trace") + ": " + typeof oElement);
+
+    for (kAttribute in oElement.attributes) {
+      oAttribute = oElement.attributes[kAttribute];
+      if (oAttribute) {
+        if (oAttribute.nodeName) {
+          this.trace("Attributes." + oAttribute.nodeName + ": ", "key");
+          this.traceValue(oAttribute.nodeValue);
+        }
+      }
+    }
+  },
+  
+  error: function (sMsg) {
+  	this.trace("Error: " + sMsg, "error");
+  }
+	
+}
+
+/**
  * Assert utility object
  */ 
  
 var Assert = {
-  trace: function (sMsg) {
-    var oCaller = this.trace.caller.caller;
-    debug(printf.apply(null, arguments), printf("Error in function '%s'", oCaller.getName()));
-
-    var aTraces = new Array;
-    while (oCaller = oCaller.caller) {
-      aTraces.push(oCaller.getName());
-    }
-    
-    debug(aTraces.join("\n"), "Backtraces");
-  },
 
   that: function (bPredicate, sMsg) {
     if (!bPredicate) {
       var aArgs = $A(arguments);
       aArgs.shift();
-      this.trace.apply(this, aArgs);
+      sMsg = printf.apply(null, aArgs);
+      Console.error(sMsg);
     }
   }
 };
@@ -77,6 +145,7 @@ var Assert = {
  */
 
 Class.extend(Element.ClassNames, {
+	
   load: function (sCookieName) {
     var oCookie = new CJL_CookieUtil(sCookieName);
     if (sValue = oCookie.getSubValue(this.element.id)) {
@@ -356,16 +425,6 @@ TokenField.prototype.remove = function(sValue) {
   this.oElement.value = aToken.join("|");
   this.onComplete();
 }
-
-
-
-
-
-
-
-
-
-
 
 function view_log(classe, id) {
   url = new Url();
