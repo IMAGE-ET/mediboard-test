@@ -164,11 +164,12 @@ $library = new CLibrary;
 
 $library->name = "Scriptaculous";
 $library->url = "http://script.aculo.us/";
-$library->fileName = "scriptaculous-js-1.6.0.tar.gz";
+$library->fileName = "scriptaculous-js-1.6.5.tar.gz";
+
 $library->description = "Composant Javascript d'effets spéciaux, accompagné du framework prototype.js";
 
 $renamer = new CLibraryRenamer;
-$renamer->sourceDir = "scriptaculous-js-1.6.0";
+$renamer->sourceDir = "scriptaculous-js-1.6.5";
 $renamer->targetDir = "scriptaculous";
 
 $library->renamer = $renamer;

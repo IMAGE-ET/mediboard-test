@@ -50,61 +50,65 @@ function pageMain() {}
  * Javascript console
  */
 var Console = {
-	id : "console",
+  id : "console",
  
-	trace: function(sContent, sClass) {
-    Element.show(this.id);
+  trace: function(sContent, sClass) {
+    Element.show(this.id);    
     new Insertion.Bottom(this.id, "<div class='" + (sClass || "label") + "'>" + sContent + "</div>");
-	},
-	
-	traceValue: function(oValue) {
-		if (!oValue) {
-    	this.trace("null", "value");
-    	return;
-		}
-		
-		switch (typeof oValue) {
-			case "object":
-			  if (oValue instanceof Array) {
-					this.trace(">> array", "value");
-			  } else {		  	
-					this.trace(">> object", "value");
-			  }
-				break;
+  },
+  
+  traceValue: function(oValue) {
+    if (oValue === null) {
+      this.trace("null", "value");
+      return;
+    }
+    
+    switch (typeof oValue) {
+      case "undefined": 
+        this.trace("undefined", "value");
+        break;
+      
+      case "object":
+        if (oValue instanceof Array) {
+          this.trace(">> array", "value");
+        } else {        
+          this.trace(">> object", "value");
+        }
+        break;
 
-			case "function":
-				this.trace(">> function " + oValue.getSignature(), "value");
-				break;
+      case "function":
+        this.trace(">> function " + oValue.getSignature(), "value");
+        break;
 
-			case "string":
-	    	this.trace("'" + oValue + "'", "value");
-	    	break;
+      case "string":
+        this.trace("'" + oValue + "'", "value");
+        break;
 
-			default:
-	    	this.trace(oValue, "value");
-		}
-	},
+      default:
+        this.trace(oValue, "value");
+    }
+  },
 
   debug: function(oValue, sLabel) {
-  	sLabel = sLabel || "Trace";
+    sLabel = sLabel || "Trace";
     
     if (oValue instanceof Array) {
-	    this.trace(sLabel + ": array");
+      this.trace(sLabel + ": array");
       oValue.each(this.traceValue.bind(this))
     } else if (oValue instanceof Object) {
-	    this.trace(sLabel + ": object");
+      this.trace(sLabel + ": object");
       for (oKey in oValue) {
-      	this.trace(oKey + ": ", "key");
-      	this.traceValue(oValue[oKey]);
+        this.trace(oKey + ": ", "key");
+        this.traceValue(oValue[oKey]);
       }
     } else {
-	    this.trace(sLabel + ": " + typeof oValue);
-     	this.traceValue(oValue);
+      this.trace(sLabel + ": " + typeof oValue);
+       this.traceValue(oValue);
     }
   },
   
   debugElement: function(oElement, sLabel) {
-  	oElement = $(oElement);
+    oElement = $(oElement);
     this.trace((sLabel || "Trace") + ": " + typeof oElement);
 
     for (kAttribute in oElement.attributes) {
@@ -119,9 +123,9 @@ var Console = {
   },
   
   error: function (sMsg) {
-  	this.trace("Error: " + sMsg, "error");
+    this.trace("Error: " + sMsg, "error");
   }
-	
+  
 }
 
 /**
@@ -145,7 +149,7 @@ var Assert = {
  */
 
 Class.extend(Element.ClassNames, {
-	
+  
   load: function (sCookieName) {
     var oCookie = new CJL_CookieUtil(sCookieName);
     if (sValue = oCookie.getSubValue(this.element.id)) {
@@ -176,7 +180,7 @@ Class.extend(PairEffect, {
       bStartVisible: false, // Make it visible at start
       bStoreInCookie: true,
       sCookieName: "effect"
-	};
+  };
 
     Object.extend(oDefaultOptions, oOptions);
     
@@ -186,7 +190,7 @@ Class.extend(PairEffect, {
 
     Assert.that(this.oTarget, "Target element '%s' is undefined", idTarget);
     Assert.that(this.oTrigger, "Trigger element '%s' is undefined ", this.oOptions.idTrigger);
-	
+  
     // Initialize the effect
     Event.observe(this.oTrigger, "click", this.flip.bind(this));
   
@@ -339,7 +343,7 @@ function regFieldCalendar(sFormName, sFieldName, bTime) {
 function regRedirectPopupCal(sInitDate, sRedirectBase, sContainerId, bTime) {
   if (sContainerId == null) sContainerId = "changeDate";
   if (bTime == null) bTime = false;
-	
+  
   Calendar.setup( {
       button      : sContainerId,
       date        : makeDateFromDATE(sInitDate),

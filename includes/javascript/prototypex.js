@@ -10,7 +10,7 @@ Class.extend = function (oClass, oExtension) {
  * Try utility object
  */
 
-Try.extend( { 
+Object.extend(Try, { 
   // Try as many functions as possible and returns array of return values
   allThese : function() {
     var aReturnValues = [];
@@ -101,5 +101,52 @@ Class.extend(Element.ClassNames, {
     }
   }
 });
+
+/**
+ * Hack to make Ajax from prototype.js work with Rico
+ * 
+ */
+Ajax.Updater.prototype.setRequestHeaders = 
+Ajax.Request.prototype.setRequestHeaders = function() {
+  var headers = {
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-Prototype-Version': Prototype.Version,
+    'Accept': 'text/javascript, text/html, application/xml, text/xml, */*'
+  };
+
+  if (this.options.method == 'post') {
+    headers['Content-type'] = this.options.contentType +
+      (this.options.encoding ? '; charset=' + this.options.encoding : '');
+
+    /* Force "Connection: close" for older Mozilla browsers to work
+     * around a bug where XMLHttpRequest sends an incorrect
+     * Content-length header. See Mozilla Bugzilla #246651.
+     */
+    if (this.transport.overrideMimeType &&
+        (navigator.userAgent.match(/Gecko\/(\d{4})/) || [0,2005])[1] < 2005)
+          headers['Connection'] = 'close';
+  }
+
+  // user-defined headers
+  if (typeof this.options.requestHeaders == 'object') {
+    var extras = this.options.requestHeaders;
+
+    if (typeof extras.push == 'function')
+      for (var i = 0; i < extras.length; i += 2)
+        headers[extras[i]] = extras[i+1];
+    else
+      $H(extras).each(function(pair) { headers[pair.key] = pair.value });
+  }
+
+// BEFORE HACK
+//    for (var name in headers)
+//      this.transport.setRequestHeader(name, headers[name]);
+
+// AFTER HACK    
+	$H(headers).each(function(pair) { 
+    this.transport.setRequestHeader(pair.key, pair.value); 
+  }.bind(this));
+	
+}
 
 

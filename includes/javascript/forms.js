@@ -110,6 +110,7 @@ function pasteHelperContent(oHelpElement) {
   var sValue = oHelpElement.value;
   oHelpElement.value = "";
   insertAt(oAreaField, sValue + '\n')
+  oAreaField.scrollTop = oAreaField.scrollHeight;
 }
 
 function notNullOK(oElement) {

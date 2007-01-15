@@ -1,5 +1,5 @@
 {{assign var="module" value="mediusers"}}
-{{assign var="script" value="vw_idx_mediusers"}}
+{{assign var="action" value="vw_idx_mediusers"}}
 
 <script type="text/javascript">
 
@@ -29,6 +29,9 @@ Chronometer.prototype = {
 }
 
 var Benchmark = {
+  module : "{{$module}}", 
+  action: "{{$action}}",
+  
   totalDuration : 0,
   requestCount : 0,
   responseCount : 0,
@@ -63,7 +66,7 @@ var Benchmark = {
     }
   
     var url = new Url;
-    url.setModuleAction("{{$module}}", "{{$script}}");
+    url.setModuleAction(this.module, this.action);
     url.requestUpdate("response", oOptions);
   },
   
@@ -72,19 +75,16 @@ var Benchmark = {
   	
     
     if (this.executer) {
-      Console.trace("Shutting down executer");
       this.executer.stop();
     }
     
     if (fMilliseconds != 0.0) {
-      Console.debug(fMilliseconds, "Create executer with frequency");
-      this.executer = new PeriodicalExecuter(this.fake, fMilliseconds);
+      this.executer = new PeriodicalExecuter(this.send.bind(this), fMilliseconds);
     }
   },
-  
-  fake: function() {
-    Console.debug((new Date).getTime(), "Fake Sand");
-  }
+}
+
+function pageMain() {
 }
 
 </script>
@@ -94,7 +94,7 @@ var Benchmark = {
 <table class="tbl">
   <tr>
 	<th>Module</th>
-	<th>Script</th>
+	<th>Action</th>
 	<th>Fréquences</th>
 	<th>Action</th>
 	<th>Requêtes</th>
@@ -104,10 +104,10 @@ var Benchmark = {
   </tr>
   <tr>
     <td>{{tr}}module-{{$module}}-court{{/tr}}</td>
-    <td>{{tr}}script-{{$script}}{{/tr}}</td>
+    <td>{{tr}}action-{{$action}}{{/tr}}</td>
     <td>
       <select name="frequency" onchange="Benchmark.sendEvery(this.value)">
-        <option value="0">&mdash Arret</option>
+        <option value="0">&mdash; Arrêt</option>
         <option value="3600">1 heure</option>
         <option value="900">15 minutes</option>
         <option value="240">4 minutes</option>
@@ -129,4 +129,4 @@ var Benchmark = {
   </tr>
 </table>
 
-<div id="response" style="Display:none"></div>
+<div id="response" style="display:none"></div>
