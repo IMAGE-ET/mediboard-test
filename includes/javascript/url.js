@@ -109,6 +109,31 @@ Url.prototype.requestUpdate = function(ioTarget, oOptions) {
   new Ajax.Updater(ioTarget, "index.php", oDefaultOptions);  
 }
 
+Url.prototype.requestUpdateOffline = function(ioTarget, oOptions) {
+  if (typeof netscape != 'undefined' && typeof netscape.security != 'undefined') {
+    netscape.security.PrivilegeManager.enablePrivilege('UniversalBrowserRead');
+  }
+  this.addParam("suppressHeaders"  , "1");
+  this.addParam("ajax"             , "1");
+  this.addParam("_syncroOffline"   , "1");
+  this.addParam("_synchroDatetime" , config["date_synchro"]);
+  
+  var oDefaultOptions = {
+    waitingText: "Chargement",
+    method: "get",
+    parameters:  this.aParams.join("&"), 
+    asynchronous: true,
+    evalScripts: true
+  };
+
+  Object.extend(oDefaultOptions, oOptions);
+  
+  if(oDefaultOptions.waitingText)
+    $(ioTarget).innerHTML = "<div class='loading'>" + oDefaultOptions.waitingText + "...<br>Merci de patienter.</div>";
+
+  new Ajax.Updater(ioTarget, config["urlMediboard"], oDefaultOptions);
+}
+
 Url.prototype.periodicalUpdate = function(ioTarget, oOptions) {
   this.addParam("suppressHeaders", "1");
   this.addParam("ajax", "1");

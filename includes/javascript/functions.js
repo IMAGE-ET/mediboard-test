@@ -15,6 +15,18 @@ window.onbeforeunload= function () {
   //}
 }
 
+var djConfig = { isDebug: false };
+
+var AjaxResponse = {
+  handleConnexion : function(){
+    //
+  },
+  
+  storeData: function(sNameKey, oDataSave) {
+    MbStorage.save(sNameKey,oDataSave);
+  }
+}
+
 /**
  * System message effects
  */
@@ -455,4 +467,82 @@ function uploadFile(classe, id, categorie_id){
   url.addParam("file_object_id", id);
   url.addParam("file_category_id", categorie_id);
   url.popup(600, 200, "uploadfile");
+}
+
+// *******
+
+Dom = {
+  writeElem : function(elem_replace_id,elemReplace){
+    elem = $(elem_replace_id);
+    while (elem.firstChild) {
+      elem.removeChild(elem.firstChild);
+    }
+    if(elemReplace){
+      elem.appendChild(elemReplace);
+    }
+  },
+  
+  cloneElemById : function(id,withChildNodes){
+    var elem = $(id).cloneNode(withChildNodes);
+    elem.removeAttribute("id");
+    return elem;
+  },
+  
+  createTd : function(sClassname, sColspan){
+    var oTd = document.createElement("td");
+    if(sClassname){
+      oTd.className = sClassname;
+    }
+    if(sColspan){
+      oTd.setAttribute("colspan" , sColspan); 
+    }
+    return oTd;
+  },
+  
+  createImg : function(sSrc){
+    var oImg = document.createElement("img");
+    oImg.setAttribute("src", sSrc);
+    return oImg;
+  },
+  
+  createInput : function(sType, sName, sValue){
+    var oInput = document.createElement("input");
+    oInput.setAttribute("type"  , sType);
+    oInput.setAttribute("name"  , sName);
+    oInput.setAttribute("value" , sValue);
+    return oInput;
+  },
+  
+  createSelect : function(sName){
+    var oSelect = document.createElement("select");
+    oSelect.setAttribute("name"  , sName);
+    return oSelect;
+  },
+  
+  createOptSelect : function(sValue, sName, selected, oInsertInto){
+    var oOpt = document.createElement("option");
+    oOpt.setAttribute("value" , sValue);
+    if(selected && selected == true){
+      oOpt.setAttribute("selected" , "selected");
+    }
+    oOpt.innerHTML = sName;
+    if(!oInsertInto){
+      return oOpt;
+    }
+    oInsertInto.appendChild(oOpt);
+  },
+  
+  cleanWhitespace : function(node){
+    if(node.hasChildNodes()){
+      for(var i=0; i< node.childNodes.length; i++){
+        var childNode = node.childNodes[i];
+        if((childNode.nodeType == Node.TEXT_NODE) && (!notWhitespace.test(childNode.nodeValue))){
+          node.removeChild(node.childNodes[i]);
+          i--;
+        }else if (childNode.nodeType == Node.ELEMENT_NODE) {
+          Dom.cleanWhitespace(childNode);
+        } 
+      }
+    }
+  }
 }

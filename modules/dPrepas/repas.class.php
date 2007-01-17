@@ -66,6 +66,32 @@ class CRepas extends CMbObject {
     );
   }
   
+  function check(){
+    $msg = parent::check();
+    if(!$msg){
+      $where = array();
+      $where["date"]           = db_prepare("= %", $this->date);
+      $where["affectation_id"] = db_prepare("= %", $this->affectation_id);
+      $where["typerepas_id"]   = db_prepare("= %", $this->typerepas_id);
+      if($this->repas_id){
+        $where["repas_id"]   = db_prepare("!= %", $this->repas_id);
+      }
+      $select = "count(`".$this->_tbl_key."`) AS `total`";
+      
+      $sql = new CRequest();
+      $sql->addTable($this->_tbl);
+      $sql->addSelect($select);
+      $sql->addWhere($where);
+      
+      $nbRepas = db_loadResult($sql->getRequest());
+      
+      if($nbRepas){
+        $msg .= "Un repas a déjà été créé, vous ne pouvez pas en créer un nouveau.";
+      }
+    }
+    return $msg;
+  }
+  
   function store() {
     $this->updateDBFields();
     if(!$this->_no_synchro){

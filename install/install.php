@@ -254,6 +254,20 @@ $library->patches[] = $patch;
 
 $libraries[] = $library;
 
+$library = new CLibrary;
+$library->name = "Dojo";
+$library->url = "http://www.dojotoolkit.org/";
+$library->fileName = "dojo-0.4.1-storage.tar.gz";
+$library->description = "Composant Javascript de sauvegarde de données";
+
+$renamer = new CLibraryRenamer;
+$renamer->sourceDir = "dojo-0.4.1-storage";
+$renamer->targetDir = "dojo";
+
+$library->renamer = $renamer;
+
+$libraries[] = $library;
+
 ?>
 
 <?php showHeader(); ?>

@@ -7,7 +7,7 @@
   <div id="console-title">Javascript console</div>
 </div>
 
-{{if $debugMode}}
+{{if $debugMode && !$offline}}
 <div id="performance">
   PHP : {{$performance.genere}} secondes &ndash;
   Poids de la page : {{$performance.size}} &ndash;
@@ -30,7 +30,7 @@
 </div>
 {{/if}}
 
-{{if $demoVersion}}
+{{if $demoVersion && !$offline}}
 <div style="margin: 10px; float:right">
   <a href="http://www.sourceforge.net/projects/mediboard/" title="Projet Mediboard sur Sourceforge">
     <img src="http://www.sourceforge.net/sflogo.php?group_id=112072&amp;type=2" alt="Sourceforge Project Logo" />

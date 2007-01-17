@@ -120,6 +120,7 @@ if ($AppUI->doLogin()) {
   $smartyLogin->assign("time"                 , time());
   $smartyLogin->assign("redirect"             , $redirect);
   $smartyLogin->assign("uistyle"              , $uistyle);
+  $smartyLogin->assign("offline"              , false);
 
   $smartyLogin->display("login.tpl");
   
@@ -245,7 +246,8 @@ if (!$suppressHeaders) {
   if (!$dialog) {
     $smartyHeader->assign("affModule" , $affModule);
   }
-  $smartyHeader->assign("includeFooter"        , false);
+  $smartyHeader->assign("offline"              , false);
+  $smartyHeader->assign("baseUrl"              , null);
   $smartyHeader->assign("titleBlockData"       , $titleBlockData);
   $smartyHeader->assign("localeCharSet"        , $locale_char_set);
   $smartyHeader->assign("mediboardVersion"     , @$AppUI->getVersion());
@@ -296,7 +298,7 @@ if(!$suppressHeaders) {
   $smartyFooter->compile_dir  = "style/$uistyle/templates_c/";
   $smartyFooter->config_dir   = "style/$uistyle/configs/";
   $smartyFooter->cache_dir    = "style/$uistyle/cache/";
-  $smartyFooter->assign("includeFooter" , true);
+  $smartyFooter->assign("offline"       , false);
   $smartyFooter->assign("debugMode"     , @$AppUI->user_prefs["INFOSYSTEM"]);
   $smartyFooter->assign("performance"   , $performance);
   $smartyFooter->assign("errorMessage"  , $AppUI->getMsg());

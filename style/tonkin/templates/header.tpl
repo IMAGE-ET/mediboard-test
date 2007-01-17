@@ -10,6 +10,11 @@
   {{$mediboardCommonStyle|smarty:nodefaults}}
   {{$mediboardStyle|smarty:nodefaults}}
   {{$mediboardScript|smarty:nodefaults}}
+  {{if $offline}}
+  <script type="text/javascript">
+    var config = {"urlMediboard":"{{$baseUrl}}/index.php"};
+  </script>
+  {{/if}}
 </head>
 
 <body onload="main()">
@@ -24,7 +29,7 @@
     </tr>
   </table>
 </div>
-
+{{if !$offline}}
 <script type="text/javascript">
 function popChgPwd() {
   var url = new Url;
@@ -32,12 +37,14 @@ function popChgPwd() {
   url.popup(400, 300, "ChangePassword");
 }
 </script>
-
+{{/if}}
 {{if !$dialog}}
 
+{{if !$offline}}
 {{foreach from=$messages item=currMsg}}
   <div style='background: #aaa; color: #fff;'><strong>{{$currMsg->titre}}</strong> : {{$currMsg->corps}}</div>
 {{/foreach}}
+{{/if}}
 
 <table id="header" cellspacing="0">
   <tr>
@@ -48,6 +55,7 @@ function popChgPwd() {
             <img src="./style/{{$uistyle}}/images/pictures/tonkin.gif" alt="Groupe Tonkin" />
           </td>
           <th width="1%">
+            {{if !$offline}}
             <table class='titleblock'>
               <tr>
                 {{if $titleBlockData.icon}}
@@ -60,6 +68,7 @@ function popChgPwd() {
                 </td>
               </tr>
             </table>
+            {{/if}}
           </th>
           <td width="100%">
             <div id="systemMsg">
@@ -69,6 +78,7 @@ function popChgPwd() {
         </tr>
         <tr>
           <td colspan="2" id="menubar1">
+            {{if !$offline}}
             <form name="ChangeGroup" action="" method="get">
             <input type="hidden" name="m" value="{{$m}}" />
             <select name="g" onchange="ChangeGroup.submit();">
@@ -84,15 +94,18 @@ function popChgPwd() {
             <a href="./index.php?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a> |
             <a href="?logout=-1">{{tr}}Logout{{/tr}}</a> |
             </form>
+            {{/if}}
           </td>
         </tr>
         <tr>
           <td colspan="2" id="menubar2">
+            {{if !$offline}}
             {{foreach from=$affModule item=currModule}}    
             <a href="?m={{$currModule.modName}}" class="{{if $currModule.modName==$m}}textSelected{{else}}textNonSelected{{/if}}">
               {{$currModule.modNameCourt}}
             </a> |
             {{/foreach}}
+            {{/if}}
           </td>
         </tr>
       </table>

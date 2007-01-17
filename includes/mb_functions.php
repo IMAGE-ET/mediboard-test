@@ -515,7 +515,17 @@ function mbLoadScripts($modeReturn = 0) {
     return $affichageScript;
 }
 
-
+function mbLoadScriptsStorage($modeReturn){
+  $affichageScript = null;
+  
+  $affichageScript .= mbLoadScript("lib/dojo/dojo.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/dojo/src/io/__package__.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/dojo/src/html/__package__.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/dojo/src/lfx/__package__.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/storage.js",$modeReturn);
+  if($modeReturn)
+    return $affichageScript;
+}
 
 /**
  * Reomve accents and some strange characters

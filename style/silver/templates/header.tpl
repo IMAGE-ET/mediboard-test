@@ -10,6 +10,11 @@
   {{$mediboardCommonStyle|smarty:nodefaults}}
   {{$mediboardStyle|smarty:nodefaults}}
   {{$mediboardScript|smarty:nodefaults}}
+  {{if $offline}}
+  <script type="text/javascript">
+    var config = {"urlMediboard":"{{$baseUrl}}/index.php"};
+  </script>
+  {{/if}}
 </head>
 
 <body onload="main()">
@@ -24,7 +29,7 @@
     </tr>
   </table>
 </div>
-
+{{if !$offline}}
 <script type="text/javascript">
 function popChgPwd() {
   var url = new Url;
@@ -104,14 +109,14 @@ function popChgPwd() {
   new PairEffect("menuIcons", { bStartVisible: true });
 </script>
 {{/if}}
-
+{{/if}}
 <table id="main" class="{{$m}}">
   <tr>
     <td>
       <div {{if $dialog}}class="dialog" {{if !$errorMessage}} style="display: none"{{/if}}{{/if}} id="systemMsg">
         {{$errorMessage|nl2br|smarty:nodefaults}}
       </div>
-      {{if !$dialog}}
+      {{if !$dialog && !$offline}}
       <table class='titleblock'>
         <tr>
           {{if $titleBlockData.icon}}

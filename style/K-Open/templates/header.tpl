@@ -10,6 +10,11 @@
   {{$mediboardCommonStyle|smarty:nodefaults}}
   {{$mediboardStyle|smarty:nodefaults}}
   {{$mediboardScript|smarty:nodefaults}}
+  {{if $offline}}
+  <script type="text/javascript">
+    var config = {"urlMediboard":"{{$baseUrl}}/index.php"};
+  </script>
+  {{/if}}
 </head>
 
 <body onload="main()">
@@ -24,7 +29,7 @@
     </tr>
   </table>
 </div>
-
+{{if !$offline}}
 <script type="text/javascript">
 function popChgPwd() {
   var url = new Url();
@@ -32,7 +37,7 @@ function popChgPwd() {
   url.popup(350, 220, "password");
 }
 </script>
-
+{{/if}}
 {{if !$dialog}}
 
 
@@ -49,6 +54,7 @@ function popChgPwd() {
             <img src="./style/{{$uistyle}}/images/pictures/mbLogo.png" alt="Mediboard logo" />
           </td>
           <td width="1%">
+            {{if !$offline}}
             <table class="titleblock">
               <tr>
                 {{if $titleBlockData.icon}}
@@ -61,6 +67,7 @@ function popChgPwd() {
                 </td>
               </tr>
             </table>
+            {{/if}}
           </td>
           <td>
             <div id="systemMsg">
@@ -68,6 +75,7 @@ function popChgPwd() {
             </div>
           </td>
           <td class="welcome">
+            {{if !$offline}}
             <form name="ChangeGroup" action="" method="get">
             <input type="hidden" name="m" value="{{$m}}" />
             <select name="g" onchange="ChangeGroup.submit();">
@@ -80,11 +88,13 @@ function popChgPwd() {
             <br />
             {{tr}}Welcome{{/tr}} {{$AppUI->user_first_name}} {{$AppUI->user_last_name}}
             </form>
+            {{/if}}
           </td>
         </tr>
       </table>
     </td>
   </tr>
+  {{if !$offline}}
   <tr>
     <td id="menubar">
       | {{$helpOnline|smarty:nodefaults}} | 
@@ -99,6 +109,7 @@ function popChgPwd() {
       <a href="?logout=-1">{{tr}}Logout{{/tr}}</a>
     </td>
   </tr>
+  {{/if}}
 </table>
 {{else}}
 <div class="dialog" {{if !$errorMessage}} style="display: none"{{/if}} id="systemMsg">

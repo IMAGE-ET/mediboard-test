@@ -10,6 +10,11 @@
   {{$mediboardCommonStyle|smarty:nodefaults}}
   {{$mediboardStyle|smarty:nodefaults}}
   {{$mediboardScript|smarty:nodefaults}}
+  {{if $offline}}
+  <script type="text/javascript">
+    var config = {"urlMediboard":"{{$baseUrl}}/index.php"};
+  </script>
+  {{/if}}
 </head>
 
 <body onload="main()">
@@ -24,7 +29,7 @@
     </tr>
   </table>
 </div>
-
+{{if !$offline}}
 <script type="text/javascript">
 function popChgPwd() {
   var url = new Url;
@@ -32,6 +37,7 @@ function popChgPwd() {
   url.popup(400, 300, "ChangePassword");
 }
 </script>
+
 
 {{if !$dialog}}
 
@@ -98,13 +104,14 @@ function popChgPwd() {
   </tr>
 </table>
 {{/if}}
+{{/if}}
 <table id="main" class="{{$m}}">
   <tr>
     <td>
       <div id="systemMsg">
         {{$errorMessage|nl2br|smarty:nodefaults|nl2br}}
       </div>
-      {{if !$dialog}}
+      {{if !$dialog && !$offline}}
       <table class='titleblock'>
         <tr>
           {{if $titleBlockData.icon}}

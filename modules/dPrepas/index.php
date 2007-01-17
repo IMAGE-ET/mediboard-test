@@ -13,4 +13,5 @@ $module->registerTab("vw_edit_menu"      , null , TAB_EDIT);
 $module->registerTab("vw_planning_repas" , null , TAB_READ);
 $module->registerTab("vw_edit_repas"     , null , TAB_EDIT);
 $module->registerTab("vw_quantite"       , null , TAB_EDIT);
+$module->registerTab("repas_offline"     , "Archive Zip" , TAB_ADMIN);
 ?>

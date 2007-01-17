@@ -39,6 +39,24 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
   }
 }
 
+function confirmDeletionOffline(oForm, oFct, oOptions, oOptionsAjax) {
+  oDefaultOptions = {
+    typeName: "",
+    objName : "",
+    msg     : "Voulez-vous réellement supprimer ",
+    ajax    : 0,
+    target  : "systemMsg"
+  }
+  
+  Object.extend(oDefaultOptions, oOptions);
+  
+  if (oDefaultOptions.objName.length) oDefaultOptions.objName = " '" + oDefaultOptions.objName + "'";
+  if (confirm(oDefaultOptions.msg + oDefaultOptions.typeName + " " + oDefaultOptions.objName + " ?" )) {
+    oForm.del.value = 1;
+    oFct();
+  }
+}
+
 //window.onUnload = confirmExit();
 
 var bFormsToSave = false;
@@ -680,6 +698,31 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
   url.requestUpdate(ioTarget, oDefaultOptions);
 }
 
+function submitFormAjaxOffline(oForm, ioTarget, oOptions) {
+  if (oForm.attributes.onsubmit) {
+    if (oForm.attributes.onsubmit.nodeValue) {        // this second test is only for IE
+      if (!oForm.onsubmit()) {
+        return;
+      }
+    }  
+  }
+  
+  url = new Url;
+  var iElement = 0;
+  while (oElement = oForm.elements[iElement++]) {
+    if (oElement.type != "radio" || oElement.checked) {
+      url.addParam(oElement.name, oElement.value);
+    }
+  }
+
+  var oDefaultOptions = {
+    method : "post"
+  };
+  Object.extend(oDefaultOptions, oOptions);
+
+  url.requestUpdateOffline(ioTarget, oDefaultOptions);
+}
+
 function setSelectionRange(textarea, selectionStart, selectionEnd) {
   if (textarea.setSelectionRange) {
     textarea.focus();
@@ -747,3 +790,27 @@ function followUp(field, sFollowFieldName, iLength) {
     fieldFollow.focus();
   }  
 }
+
+
+Object.extend(Form, {
+  toObject: function (oForm) {
+    var aFieldsForm  = Form.getElements(oForm);
+    var oDataForm = {};
+    //  Récupération des données du formualaire
+    aFieldsForm.each(function (value) {
+      var sNameElement  = value["name"];
+      var sValueElement = Form.Element.getValue(value);
+      oDataForm[sNameElement] = sValueElement;
+      }
+    );
+    return oDataForm;
+  },
+  fromObject: function(oForm, oObject){
+    $H(oObject).each(function (pair) {
+      var oField = oForm[pair.key];
+      if(oField){
+        oField.value = pair.value;
+      }
+    });
+  }
+} );
