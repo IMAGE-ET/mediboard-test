@@ -88,11 +88,15 @@ class CCompteRendu extends CMbObject {
   function loadRefsFwd() {
 
     // Objet
-    $this->_ref_object = new $this->object_class;
-    if($this->object_id)
-      $this->_ref_object->load($this->object_id);
-      $this->_ref_object->loadRefsFwd();
-
+    if (class_exists($this->object_class)) {
+      $this->_ref_object = new $this->object_class;
+      if ($this->object_id)
+        $this->_ref_object->load($this->object_id);
+        $this->_ref_object->loadRefsFwd();
+    } else {
+      trigger_error("Enable to create instance of '$this->object_class' class", E_USER_ERROR);
+    }
+    
     $this->loadCategory();
     
     // Chirurgien

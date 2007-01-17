@@ -8,6 +8,10 @@
  * latest version: $HeadURL$ 
  */
 
+global $performance;
+$performance["error"] = 0;
+$performance["warning"] = 0;
+$performance["notice"] = 0;
 $logPath = "tmp/mb-log.html";
 
 error_reporting( E_ALL );
@@ -42,6 +46,20 @@ $errorTypes = array (
   E_USER_ERROR => "User error",
   E_USER_WARNING => "User warning",
   E_USER_NOTICE => "User notice",
+);
+
+$errorCategories = array (
+  E_ERROR => "error",
+  E_WARNING => "warning",
+  E_NOTICE => "notice",
+  E_PARSE => "error",
+  E_CORE_ERROR => "error",
+  E_CORE_WARNING => "warning",
+  E_COMPILE_ERROR => "error",
+  E_COMPILE_WARNING => "warning",
+  E_USER_ERROR => "error",
+  E_USER_WARNING => "warning",
+  E_USER_NOTICE => "notice",
 );
 
 // To be put in mbFonctions
@@ -82,8 +100,13 @@ function mbTrace($var, $label = null, $log = false) {
   
 }
 
+
+/**
+ * Custom herror handler with backtrace
+ * @return null
+ */
 function errorHandler($errno, $errstr, $errfile, $errline) {
-  global $divClasses, $errorTypes, $logPath, $AppUI;
+  global $divClasses, $errorTypes, $errorCategories, $logPath, $AppUI, $performance;
   
   // Handles the @ case
   if (!error_reporting()) {
@@ -101,9 +124,13 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   
   $log = "\n\n<div class='$divClass'>";
   
-  if($AppUI->user_id){
-    $log .= "\n<strong>User: </strong>$AppUI->user_first_name $AppUI->user_last_name ($AppUI->user_id)<br />";
+  if ($AppUI->user_id){
+    $log .= "\n<strong>User: </strong>$AppUI->user_first_name $AppUI->user_last_name ($AppUI->user_id)";
   }
+  
+  $log .= "\n<strong>Query: </strong>" . $_SERVER["argv"][0];
+  
+  $log .= "<br />";
   
   $log .= "\n<strong>Time: </strong>$errorTime";
   $log .= "\n<strong>Type: </strong>$errorType";
@@ -129,6 +156,8 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   }
   
   $log .= "</div>";
+  
+  $performance[$errorCategories[$errno]]++;
   
   if (ini_get("log_errors")) {
     file_put_contents($logPath, $log, FILE_APPEND);

@@ -13,6 +13,10 @@
   Poids de la page : {{$performance.size}} &ndash;
   Mémoire {{$performance.memoire}}
   <br />
+  Erreurs : {{$performance.error}} &ndash;
+  Alertes : {{$performance.warning}} &ndash;
+  Notices : {{$performance.notice}}
+  <br />
   Objets métier : {{$performance.objets}} &ndash;
   Objets en cache : {{$performance.cache}} &ndash;
   Classes auto-chargées : {{$performance.autoload}}
