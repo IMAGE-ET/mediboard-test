@@ -129,27 +129,27 @@ class CSmartyDP extends Smarty {
    * Directories initialisation
    * Standard data assignment
    */
-  function CSmartyDP($doubleTagMod = 0) {
+  function CSmartyDP($rootDir = null) {
     global $AppUI, $dbChronos, $dPconfig, $canRead, $canEdit, $canAdmin, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax, $mb_version_build;
 
 
-    $root = $AppUI->getConfig( 'root_dir' );
+    if (!$rootDir) {
+      $rootDir = "modules/$m"; 
+    }
     
     // Directories initialisation
-    $this->template_dir = "$root/modules/$m/templates/";
-    $this->compile_dir  = "$root/modules/$m/templates_c/";
-    $this->config_dir   = "$root/modules/$m/configs/";
-    $this->cache_dir    = "$root/modules/$m/cache/";
+    $this->template_dir = "$rootDir/templates/";
+    $this->compile_dir  = "$rootDir/templates_c/";
+    $this->config_dir   = "$rootDir/configs/";
+    $this->cache_dir    = "$rootDir/cache/";
     
     // Debugginf directives
-    $this->debug_tpl = "$root/classes/smarty_debug.tpl";
+    $this->debug_tpl = "classes/smarty_debug.tpl";
     $this->debugging = false;
     
     // Delimiter definition
-    if($doubleTagMod) {
-      $this->left_delimiter = "{{";
-      $this->right_delimiter = "}}";
-    }
+    $this->left_delimiter = "{{";
+    $this->right_delimiter = "}}";
     
     // Default modifier for security reason
     $this->default_modifiers = array("@cleanField");

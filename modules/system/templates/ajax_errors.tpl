@@ -11,5 +11,5 @@ AjaxResponse.onDisconnected();
 AjaxResponse.onPerformances({{$performance|@json}});
 </script>
 
-{{/if}}}
+{{/if}}
   

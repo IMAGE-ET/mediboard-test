@@ -186,11 +186,7 @@ class CModule extends CMbObject {
     $actionType = "tab";
 
     require_once($AppUI->getSystemClass("smartydp"));
-    $smartyStyle = new CSmartyDP();
-    $smartyStyle->template_dir = "style/$uistyle/templates/";
-    $smartyStyle->compile_dir  = "style/$uistyle/templates_c/";
-    $smartyStyle->config_dir   = "style/$uistyle/configs/";
-    $smartyStyle->cache_dir    = "style/$uistyle/cache/";
+    $smartyStyle = new CSmartyDP("style/$uistyle");
     
     $smartyStyle->assign("tabs"   , $this->_tabs);
     $smartyStyle->assign("tab"    , $tab);

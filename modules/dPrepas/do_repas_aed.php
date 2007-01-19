@@ -44,17 +44,16 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
         $del          = mbGetValueFromPost("del", 0);
         $tmp_repas_id = mbGetValueFromPost("_tmp_repas_id", 0);
         $msgSystem    = $AppUI->getMsg();
-        $smarty       = new CSmartyDP();
-        $smarty->template_dir = "modules/dPrepas/templates/";
-        $smarty->compile_dir  = "modules/dPrepas/templates_c/";
-        $smarty->config_dir   = "modules/dPrepas/configs/";
-        $smarty->cache_dir    = "modules/dPrepas/cache/";
+
+        $smarty       = new CSmartyDP("modules/dPrepas");
+
         $smarty->assign("del"            , $del);
         $smarty->assign("tmp_repas_id"   , $tmp_repas_id);
         $smarty->assign("demandeSynchro" , $demandeSynchro);
         $smarty->assign("msgSystem"      , $msgSystem);
         $smarty->assign("callBack"       , $callBack);
         $smarty->assign("idValue"        , $idValue);
+
         if($del){
           $smarty->assign("object"     , $this->_objBefore);
         }elseif($tmp_repas_id && !$msgSystem){

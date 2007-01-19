@@ -100,31 +100,18 @@ if (!$suppressHeaders || $ajax) {
 
 // check if we are logged in
 if (!$AppUI->user_id) {
-  $redirect = @$_SERVER["QUERY_STRING"];
-  if (strpos($redirect, "logout") !== false) {
-    $redirect = "";
-  }
+  
+  $redirect = mbGetValueFromGet("logout") ?  "" : @$_SERVER["QUERY_STRING"]; 
   
   // Ajax login alert
   if ($ajax) {
     // Creation du Template
-    $tplAjax = new CSmartyDP();
-    $tplAjax->template_dir = "modules/system/templates/";
-    $tplAjax->compile_dir  = "modules/system/templates_c/";
-    $tplAjax->config_dir   = "modules/system/configs/";
-    $tplAjax->cache_dir    = "modules/system/cache/";
-
+    $tplAjax = new CSmartyDP("modules/system");
     $tplAjax->assign("performance", $performance);
-
     $tplAjax->display("ajax_errors.tpl");
 
   } else {
-    $smartyLogin = new CSmartyDP();
-    $smartyLogin->template_dir = "style/$uistyle/templates/";
-    $smartyLogin->compile_dir  = "style/$uistyle/templates_c/";
-    $smartyLogin->config_dir   = "style/$uistyle/configs/";
-    $smartyLogin->cache_dir    = "style/$uistyle/cache/";
-    
+    $smartyLogin = new CSmartyDP("style/$uistyle");
     $smartyLogin->assign("localeCharSet"        , $locale_char_set);
     $smartyLogin->assign("mediboardVersion"     , @$AppUI->getVersion());
     $smartyLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
@@ -140,7 +127,6 @@ if (!$AppUI->user_id) {
     $smartyLogin->assign("redirect"             , $redirect);
     $smartyLogin->assign("uistyle"              , $uistyle);
     $smartyLogin->assign("offline"              , false);
-  
     $smartyLogin->display("login.tpl");
   }
   
@@ -296,11 +282,7 @@ $performance["size"]    = mbConvertDecaBinary(ob_get_length());
 if (!$suppressHeaders) {
   
   // Creation du Template
-  $smartyFooter = new CSmartyDP();
-  $smartyFooter->template_dir = "style/$uistyle/templates/";
-  $smartyFooter->compile_dir  = "style/$uistyle/templates_c/";
-  $smartyFooter->config_dir   = "style/$uistyle/configs/";
-  $smartyFooter->cache_dir    = "style/$uistyle/cache/";
+  $smartyFooter = new CSmartyDP("style/$uistyle");
   $smartyFooter->assign("offline"       , false);
   $smartyFooter->assign("debugMode"     , @$AppUI->user_prefs["INFOSYSTEM"]);
   $smartyFooter->assign("performance"   , $performance);
@@ -312,11 +294,7 @@ if (!$suppressHeaders) {
 // Ajax performance
 if ($ajax) {
   // Creation du Template
-  $tplAjax = new CSmartyDP();
-  $tplAjax->template_dir = "modules/system/templates/";
-  $tplAjax->compile_dir  = "modules/system/templates_c/";
-  $tplAjax->config_dir   = "modules/system/configs/";
-  $tplAjax->cache_dir    = "modules/system/cache/";
+  $tplAjax = new CSmartyDP("modules/system");
   $tplAjax->assign("performance", $performance);
   $tplAjax->display("ajax_errors.tpl");
 }
