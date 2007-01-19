@@ -82,7 +82,7 @@ class CTemplateManager {
     // Don't use mbSetValue which uses $m
     $_SESSION["dPcompteRendu"]["templateManager"] = $this;
    
-    $smartyStyle = new CSmartyDP("style/dPcompteRendu");
+    $smarty = new CSmartyDP("style/dPcompteRendu");
     $smarty->assign("templateManager", $this);
     $smarty->display("init_htmlarea.tpl");
 	}
