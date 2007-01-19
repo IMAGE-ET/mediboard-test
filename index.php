@@ -12,12 +12,10 @@ $dPconfig = array();
 global $performance;
 $performance = array();
 
-
 if (!is_file("./includes/config.php")) {
   header("location: install/");
   die("Redirection vers l'assistant d'installation");
 }
-
 
 require_once("./includes/config_dist.php");
 require_once("./includes/config.php");
@@ -53,7 +51,7 @@ require_once("./includes/db_connect.php");
 require_once("./includes/autoload.php");
 
 // Load default preferences if not logged in
-if ($AppUI->doLogin()) {
+if (!$AppUI->user_id) {
   $AppUI->loadPrefs(0);
 }
 
@@ -71,6 +69,12 @@ if(isset($_POST["login"])) {
   $AppUI->redirect($redirect);
 }
 
+// Don't output anything. Usefull for fileviewers, popup dialogs, ajax requests, etc.
+$suppressHeaders = dPgetParam($_GET, "suppressHeaders");
+
+// Output the charset header in case of an ajax request
+$ajax = dPgetParam($_GET, "ajax", false);
+
 // Get the user preference
 $uistyle = $AppUI->getPref("UISTYLE");
 
@@ -82,47 +86,63 @@ $a = "";
 $u = "";
 $g = "";
 
+// load locale settings
+$AppUI->setUserLocale();
+require_once("./locales/core.php");
+setlocale(LC_TIME, $AppUI->user_locale);
+
+if (!$suppressHeaders || $ajax) {
+  // output the character set header
+  if (isset($locale_char_set)) {
+    header("Content-type: text/html;charset=$locale_char_set");
+  }
+}
 
 // check if we are logged in
-if ($AppUI->doLogin()) {
-  // load basic locale settings
-  $AppUI->setUserLocale();
-  include_once("./locales/core.php");
-  setlocale(LC_TIME, $AppUI->user_locale);
-
+if (!$AppUI->user_id) {
   $redirect = @$_SERVER["QUERY_STRING"];
   if (strpos($redirect, "logout") !== false) {
     $redirect = "";
   }
-
-  if (isset($locale_char_set)) {
-    header("Content-type: text/html;charset=$locale_char_set");
-  }
-
-  //require "./style/$uistyle/login.php";
-  $smartyLogin = new CSmartyDP(1);
-  $smartyLogin->template_dir = "style/$uistyle/templates/";
-  $smartyLogin->compile_dir  = "style/$uistyle/templates_c/";
-  $smartyLogin->config_dir   = "style/$uistyle/configs/";
-  $smartyLogin->cache_dir    = "style/$uistyle/cache/";
   
-  $smartyLogin->assign("localeCharSet"        , $locale_char_set);
-  $smartyLogin->assign("mediboardVersion"     , @$AppUI->getVersion());
-  $smartyLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
-  $smartyLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
-  $smartyLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
-  $smartyLogin->assign("mediboardScript"      , mbLoadScripts(1));
-  $smartyLogin->assign("demoVersion"          , $dPconfig["demo_version"]);
-  $smartyLogin->assign("mb_version_major"     , $mb_version_major);
-  $smartyLogin->assign("mb_version_minor"     , $mb_version_minor);
-  $smartyLogin->assign("mb_version_patch"     , $mb_version_patch);
-  $smartyLogin->assign("errorMessage"         , $AppUI->getMsg());
-  $smartyLogin->assign("time"                 , time());
-  $smartyLogin->assign("redirect"             , $redirect);
-  $smartyLogin->assign("uistyle"              , $uistyle);
-  $smartyLogin->assign("offline"              , false);
+  // Ajax login alert
+  if ($ajax) {
+    // Creation du Template
+    $tplAjax = new CSmartyDP(1);
+    $tplAjax->template_dir = "modules/system/templates/";
+    $tplAjax->compile_dir  = "modules/system/templates_c/";
+    $tplAjax->config_dir   = "modules/system/configs/";
+    $tplAjax->cache_dir    = "modules/system/cache/";
 
-  $smartyLogin->display("login.tpl");
+    $tplAjax->assign("performance", $performance);
+
+    $tplAjax->display("ajax_errors.tpl");
+
+  } else {
+    $smartyLogin = new CSmartyDP(1);
+    $smartyLogin->template_dir = "style/$uistyle/templates/";
+    $smartyLogin->compile_dir  = "style/$uistyle/templates_c/";
+    $smartyLogin->config_dir   = "style/$uistyle/configs/";
+    $smartyLogin->cache_dir    = "style/$uistyle/cache/";
+    
+    $smartyLogin->assign("localeCharSet"        , $locale_char_set);
+    $smartyLogin->assign("mediboardVersion"     , @$AppUI->getVersion());
+    $smartyLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
+    $smartyLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
+    $smartyLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
+    $smartyLogin->assign("mediboardScript"      , mbLoadScripts(1));
+    $smartyLogin->assign("demoVersion"          , $dPconfig["demo_version"]);
+    $smartyLogin->assign("mb_version_major"     , $mb_version_major);
+    $smartyLogin->assign("mb_version_minor"     , $mb_version_minor);
+    $smartyLogin->assign("mb_version_patch"     , $mb_version_patch);
+    $smartyLogin->assign("errorMessage"         , $AppUI->getMsg());
+    $smartyLogin->assign("time"                 , time());
+    $smartyLogin->assign("redirect"             , $redirect);
+    $smartyLogin->assign("uistyle"              , $uistyle);
+    $smartyLogin->assign("offline"              , false);
+  
+    $smartyLogin->display("login.tpl");
+  }
   
   // destroy the current session and output login page
   session_unset();
@@ -142,6 +162,7 @@ if(!$m) {
     }
   }
 }
+
 $a     = $AppUI->checkFileName(mbGetValueFromGet("a"     , "index"));
 $u     = $AppUI->checkFileName(mbGetValueFromGet("u"     , ""));
 $dosql = $AppUI->checkFileName(mbGetValueFromPost("dosql", ""));
@@ -159,13 +180,6 @@ if(!$indexGroup->canRead()) {
   $g = $AppUI->user_group;
 }
 
-// load locale settings
-require_once("./locales/core.php");
-
-$user_locale = $AppUI->user_locale;
-
-setlocale(LC_TIME, $user_locale);
-
 // check overall module permissions
 // these can be further modified by the included action files
 
@@ -180,23 +194,10 @@ $canAdmin    = $indexModule->canAdmin();
 $canAuthor   = $canEdit;
 $canDelete   = $canEdit;
 
-// Don't output anything. Usefull for fileviewers, popup dialogs, ajax requests, etc.
-$suppressHeaders = dPgetParam($_GET, "suppressHeaders");
-
-// Output the charset header in cas of an ajax request
-$ajax = dPgetParam($_GET, "ajax", false);
-
-if (!$suppressHeaders || $ajax) {
-  // output the character set header
-  if (isset($locale_char_set)) {
-    header("Content-type: text/html;charset=$locale_char_set");
-  }
-}
-
 // do some db work if dosql is set
 if(isset($_REQUEST["dosql"])) {
-    $mDo = isset($_REQUEST["m"]) ? $_REQUEST["m"] : $m;
-    require("./modules/$mDo/$dosql.php");
+  $mDo = isset($_REQUEST["m"]) ? $_REQUEST["m"] : $m;
+  require("./modules/$mDo/$dosql.php");
 }
 
 ob_start();
@@ -278,19 +279,21 @@ if ($tab !== null) {
 
 $phpChrono->stop();
 
-if(!$suppressHeaders) {
-  // -- Inclusion du footer --
-  if( !function_exists("memory_get_usage") ) {
-    function memory_get_usage() {
-      return "-";
-    }
+// Calcul des performances
+if( !function_exists("memory_get_usage") ) {
+  function memory_get_usage() {
+    return "-";
   }
   
-  $performance["genere"]  = number_format($phpChrono->total, 3);
-  $performance["memoire"] = mbConvertDecaBinary(memory_get_usage());
-  $performance["objets"]  = $mbObjectCount;
-  $performance["cache"]   = $mbCacheObjectCount;
-  $performance["size"]    = mbConvertDecaBinary(ob_get_length());
+}
+$performance["genere"]  = number_format($phpChrono->total, 3);
+$performance["memoire"] = mbConvertDecaBinary(memory_get_usage());
+$performance["objets"]  = $mbObjectCount;
+$performance["cache"]   = $mbCacheObjectCount;
+$performance["size"]    = mbConvertDecaBinary(ob_get_length());
+  
+// Inclusion du footer
+if (!$suppressHeaders) {
   
   // Creation du Template
   $smartyFooter = new CSmartyDP(1);
@@ -304,6 +307,18 @@ if(!$suppressHeaders) {
   $smartyFooter->assign("errorMessage"  , $AppUI->getMsg());
   $smartyFooter->assign("demoVersion"   , $dPconfig["demo_version"]);
   $smartyFooter->display("footer.tpl");
+}
+
+// Ajax performance
+if ($ajax) {
+  // Creation du Template
+  $tplAjax = new CSmartyDP(1);
+  $tplAjax->template_dir = "modules/system/templates/";
+  $tplAjax->compile_dir  = "modules/system/templates_c/";
+  $tplAjax->config_dir   = "modules/system/configs/";
+  $tplAjax->cache_dir    = "modules/system/cache/";
+  $tplAjax->assign("performance", $performance);
+  $tplAjax->display("ajax_errors.tpl");
 }
 
 ob_end_flush();

@@ -18,13 +18,11 @@ window.onbeforeunload= function () {
 var djConfig = { isDebug: false };
 
 var AjaxResponse = {
-  handleConnexion : function(){
-    //
+  onDisconnected: function() {
+    Console.trace("onDisconnected");
   },
   
-  storeData: function(sNameKey, oDataSave) {
-    MbStorage.save(sNameKey,oDataSave);
-  }
+  onPerformances: Prototype.emptyFunction
 }
 
 /**

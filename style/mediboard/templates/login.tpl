@@ -33,7 +33,6 @@
     <tr>
       <th class="category" colspan="3">{{$app->cfg.company_name}}</th>
     </tr>
-    
     <tr>
       <td class="logo" colspan="3 ">
         <a href="http://www.mediboard.org/">
@@ -45,17 +44,17 @@
         </p>
       </td>
     </tr>
-    
     <tr>
       <th class="category" colspan="2">Connexion</th>
       {{if $demoVersion}}
       <th class="category">Comptes disponibles</th>
       {{/if}}
     </tr>
-    
     <tr>
-      <th><label for="username" title="Nom de compte utilisateur. Obligatoire">{{tr}}Username{{/tr}}:</label></th>
-      <td><input type="text" name="username" title="notNull|str" size="25" maxlength="20" /></td>
+      <th>
+        <label for="username" title="Nom de l'utilisateur pour s'authentifier">{{tr}}Username{{/tr}}</label>
+      </th>
+      <td><input type="text" title="str|notNull" size="25" maxlength="20" name="username" class="text" /></td>
       {{if $demoVersion}}
       <td rowspan="3" class="category">
         <strong>Administrateur</strong>: admin/admin<br />
@@ -66,16 +65,13 @@
       </td>
       {{/if}}
     </tr>
-    
     <tr>
-      <th><label for="password" title="Mot de passe utilisateur. Obligatoire">{{tr}}Password{{/tr}}:</label></th>
-      <td><input type="password" name="password" title="notNull|str" size="25" maxlength="32" /></td>
+      <th><label for="password" title="Mot de passe d'authentification">{{tr}}Password{{/tr}}</label></th>
+      <td><input type="password" title="str|notNull" size="25" maxlength="32" name="password" class="text" /></td>
     </tr>
-    
     <tr>
-      <td colspan="2" class="button"><input type="submit" value="{{tr}}login{{/tr}}" /></td>
+      <td colspan="2" class="button"><input type="submit" name="login" value="{{tr}}login{{/tr}}" /></td>
     </tr>
-    
     <tr>
       <th class="category">Basé sur</th>
       {{if $demoVersion}}
@@ -91,7 +87,6 @@
         </a>
         <p>Version {{$mediboardVersion}}</p>
       </td>
-
       {{if $demoVersion}}
       <td class="logo">
         <a href="http://www.sourceforge.net/projects/mediboard/" title="Projet Mediboard sur Sourceforge">
@@ -100,15 +95,14 @@
         <p>Hébergement du code source</p>
       </td>
       {{/if}}
-
       <td class="logo">
         <a href="http://www.mozilla-europe.org/fr/products/firefox/" title="Télécharger Firefox">
           <img src="http://www.spreadfirefox.com/community/images/affiliates/Buttons/80x15/firefox_80x15.png" alt="Firefox Logo" />
         </a>
         <p>Pour un meilleur confort et plus de sécurité, nous recommandons d'utiliser le navigateur Firefox</p>
       </td>
-    </tr>
-    </table>
+      </tr>
+	</table>
   </form>
 </div>
 

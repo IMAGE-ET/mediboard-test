@@ -29,7 +29,7 @@ class CAppUI {
 /** @var array generic array for holding the state of anything */
   var $state = null;
 /** @var int */
-  var $user_id = null;
+  var $user_id = 0;
 /** @var string */
   var $user_first_name = null;
 /** @var string */
@@ -79,7 +79,6 @@ class CAppUI {
   function CAppUI() {
     $this->state = array();
 
-    $this->user_id = -1;
     $this->user_first_name = "";
     $this->user_last_name = "";
     $this->user_type = 0;
@@ -310,13 +309,10 @@ class CAppUI {
 * Looks in the user preferences first.  If this value has not been set by the user it uses the system default set in config.php.
 * @param string Locale abbreviation corresponding to the sub-directory name in the locales directory (usually the abbreviated language code).
 */
-  function setUserLocale($loc="") {
-    if ($loc) {
-      $this->user_locale = $loc;
-    } else {
-      $this->user_locale = @$this->user_prefs["LOCALE"] ? $this->user_prefs["LOCALE"] : $this->cfg["host_locale"];
-    }
+  function setUserLocale() {
+    $this->user_locale = $this->user_prefs["LOCALE"];
   }
+
 /**
 * Translate string to the local language [same form as the gettext abbreviation]
 *
@@ -613,15 +609,9 @@ class CAppUI {
   }
 
 /**
-* Checks whether there is any user logged in.
-*/
-  function doLogin() {
-    return ($this->user_id < 0) ? true : false;
-  }
-/**
-* Gets the value of the specified user preference
-* @param string Name of the preference
-*/
+ * Gets the value of the specified user preference
+ * @param string Name of the preference
+ */
   function getPref($name) {
     return @$this->user_prefs[$name];
   }

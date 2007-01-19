@@ -128,7 +128,7 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
     $log .= "\n<strong>User: </strong>$AppUI->user_first_name $AppUI->user_last_name ($AppUI->user_id)";
   }
   
-  $log .= "\n<strong>Query: </strong>" . $_SERVER["argv"][0];
+  $log .= "\n<strong>Query: </strong>" . @$_SERVER["argv"][0];
   
   $log .= "<br />";
   

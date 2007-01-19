@@ -1,5 +1,4 @@
 <?php /* SYSTEM $Id$ */
-
 global $AppUI,$a,$tab;
 
 $a = mbGetValueFromGet("a",null);
@@ -26,9 +25,8 @@ foreach ($_POST["pref_name"] as $name => $value) {
 		} else {
 			$AppUI->setMsg("updated", UI_MSG_OK, true);
 			if ($obj->pref_user) {
-			// if user preferences, reload them now
-				$AppUI->loadPrefs($AppUI->user_id);
-				$AppUI->setUserLocale();
+  			// if user preferences, reload them now
+  			$AppUI->loadPrefs($AppUI->user_id);
 			}
 		}
 	}
