@@ -132,9 +132,10 @@ class CSmartyDP extends Smarty {
   function CSmartyDP($rootDir = null) {
     global $AppUI, $dbChronos, $dPconfig, $canRead, $canEdit, $canAdmin, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax, $mb_version_build;
 
+    $root = $dPconfig["root_dir"];
 
     if (!$rootDir) {
-      $rootDir = "modules/$m"; 
+      $rootDir = "$root/modules/$m"; 
     }
     
     // Directories initialisation
