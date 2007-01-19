@@ -54,7 +54,7 @@ $order = "debut DESC";
 $listeFiches = $listeFiches->loadList($where, $order);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("employe"      , $employe);
 $smarty->assign("fichePaie"    , $fichePaie);

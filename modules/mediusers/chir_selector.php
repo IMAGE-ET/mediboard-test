@@ -22,7 +22,7 @@ $specs = new CFunctions;
 $specs = $specs->loadSpecialites(PERM_EDIT);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("prats", $prats);
 $smarty->assign("specs", $specs);

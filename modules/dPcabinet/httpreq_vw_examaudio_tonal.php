@@ -23,7 +23,7 @@ ${"graph_tonal_".$side}->Stroke("tmp/graphtmp.png");
 $map_tonal = ${"graph_tonal_".$side}->GetHTMLImageMap("graph_tonal_".$side);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("map_tonal" , $map_tonal);
 $smarty->assign("side"      , $side);

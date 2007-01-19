@@ -101,7 +101,7 @@ foreach($listService as $currService){
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("date_suivi"  , $date_suivi);
 $smarty->assign("affOper"     , $affOper);

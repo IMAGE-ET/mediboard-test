@@ -21,7 +21,7 @@ $selTri = mbGetValueFromGetOrSession("selTri", "nom");
 $date = mbGetValueFromGetOrSession("date", mbDate());
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 
 $smarty->assign("date"     , $date);

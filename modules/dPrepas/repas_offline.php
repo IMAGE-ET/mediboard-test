@@ -24,11 +24,11 @@ $zipFile = new Archive_Zip("tmp/mediboard_repas.zip");
 // Création du fichier index.html
 $plats     = new CPlat;
 
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 $smarty->assign("plats" , $plats);
 $smarty->assign("mediboardScriptStorage", mbLoadScriptsStorage(1));
 
-$smartyStyle = new CSmartyDP(1);
+$smartyStyle = new CSmartyDP();
 
 $smartyStyle->template_dir = "style/$uistyle/templates/";
 $smartyStyle->compile_dir  = "style/$uistyle/templates_c/";

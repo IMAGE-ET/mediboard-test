@@ -44,7 +44,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
         $del          = mbGetValueFromPost("del", 0);
         $tmp_repas_id = mbGetValueFromPost("_tmp_repas_id", 0);
         $msgSystem    = $AppUI->getMsg();
-        $smarty       = new CSmartyDP(1);
+        $smarty       = new CSmartyDP();
         $smarty->template_dir = "modules/dPrepas/templates/";
         $smarty->compile_dir  = "modules/dPrepas/templates_c/";
         $smarty->config_dir   = "modules/dPrepas/configs/";

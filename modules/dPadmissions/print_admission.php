@@ -21,7 +21,7 @@ foreach($admission->_ref_operations as $keyOp => $op) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("admission", $admission);
 

@@ -38,7 +38,7 @@ if($fct_selected && is_array($fct_selected)){
 $list_50 = mbArrayCreateRange(1,50, true);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("list_10"       , $list_10);
 $smarty->assign("list_50"       , $list_50);

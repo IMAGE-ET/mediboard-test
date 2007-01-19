@@ -37,7 +37,7 @@ foreach ($bilan as $frequence => $value) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("exam_audio" , $exam_audio);
 $smarty->assign("bilan"      , $bilan);

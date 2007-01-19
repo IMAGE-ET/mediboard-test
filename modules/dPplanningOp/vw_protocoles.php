@@ -58,7 +58,7 @@ if ($protocole_id = mbGetValueFromGetOrSession("protocole_id")) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("protocoles", $protocoles);
 $smarty->assign("listPrat"  , $listPrat  );

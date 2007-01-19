@@ -48,7 +48,7 @@ $idSante400->loadRefs();
 
 $last_update = mbGetValue($idSante400->last_update, mbDateTime());
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("listClasses", $listClasses);
 $smarty->assign("last_update", $last_update);

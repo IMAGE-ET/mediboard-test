@@ -63,7 +63,7 @@ if($nbExact = (100 - count($patients))) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("name"            , $name            );
 $smarty->assign("firstName"       , $firstName       );

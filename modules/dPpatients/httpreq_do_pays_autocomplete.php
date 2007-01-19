@@ -22,7 +22,7 @@ if($pays = @$_GET[$_GET["fieldpays"]]) {
 if ($canRead && $sql) {
   $result = db_loadList($sql, 30, $AppUI->cfg["baseINSEE"]);
   // Création du template
-  $smarty = new CSmartyDP(1);
+  $smarty = new CSmartyDP();
 
   $smarty->assign("pays"  , $pays);
   $smarty->assign("result", $result);

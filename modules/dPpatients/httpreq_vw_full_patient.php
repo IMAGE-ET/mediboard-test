@@ -37,7 +37,7 @@ $canEditCabinet = $moduleCabinet->canEdit();
 $diagnosticsInstall = CModule::getActive("dPImeds") && CModule::getActive("dPsante400");
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("listPrat"           , $listPrat          );
 $smarty->assign("patient"            , $patient           );

@@ -49,7 +49,7 @@ $listPrat = in_array($mediuser->_user_type, array("Administrator", "Secrétaire")
   array($mediuser->_id => $mediuser);
   
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign('deb', $deb);
 $smarty->assign('fin', $fin);

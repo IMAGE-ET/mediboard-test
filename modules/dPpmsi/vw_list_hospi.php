@@ -38,7 +38,7 @@ foreach ($listSejours as $keySejour => $valueSejour) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("date"       , $date       );
 $smarty->assign("listSejours", $listSejours);

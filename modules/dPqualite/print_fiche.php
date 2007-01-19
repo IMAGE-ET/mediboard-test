@@ -42,7 +42,7 @@ if(!$fiche->load($fiche_ei_id)){
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("catFiche" , $catFiche);
 $smarty->assign("fiche"    , $fiche);

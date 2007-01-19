@@ -16,6 +16,6 @@ $templateManager->initHTMLArea();
 //$getMail = new Mail_IMAPv2();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->display("send_mail.tpl");

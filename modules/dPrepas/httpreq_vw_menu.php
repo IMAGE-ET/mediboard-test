@@ -42,7 +42,7 @@ foreach($plats->_enums["type"] as $key=>$value){
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("menu_id"   , $menu_id);
 $smarty->assign("menu"      , $menu);

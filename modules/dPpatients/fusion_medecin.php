@@ -35,7 +35,7 @@ $finalMedecin->loadRefsFwd();
 $finalMedecin->medecin_id = null;
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("medecin1"    , $medecin1    );
 $smarty->assign("medecin2"    , $medecin2    );

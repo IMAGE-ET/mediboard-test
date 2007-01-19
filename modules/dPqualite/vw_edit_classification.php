@@ -16,7 +16,7 @@ if (!$canAdmin) {
 $typeVue = mbGetValueFromGetOrSession("typeVue", 0);
 
 require_once( $AppUI->getSystemClass("smartydp"));
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("typeVue"  , $typeVue  );
 

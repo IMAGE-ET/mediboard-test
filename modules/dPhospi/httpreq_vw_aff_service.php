@@ -25,7 +25,7 @@ $service->_vwService = 1;
 loadServiceComplet($service, $date, $mode);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("date"        , $date );
 $smarty->assign("demain"      , mbDate("+ 1 day", $date));

@@ -23,7 +23,7 @@ ${"graph_tympan_".$side}->Stroke("tmp/graphtmp.png");
 $map_tympan = ${"graph_tympan_".$side}->GetHTMLImageMap("graph_tympan_".$side);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("map_tympan", $map_tympan);
 $smarty->assign("side"      , $side);

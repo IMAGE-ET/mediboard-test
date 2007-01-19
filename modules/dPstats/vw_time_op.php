@@ -35,7 +35,7 @@ if($typeVue == 0){
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 if($typeVue == 0 || $typeVue == 2) {
   $smarty->assign("prat_id"  , $prat_id  );

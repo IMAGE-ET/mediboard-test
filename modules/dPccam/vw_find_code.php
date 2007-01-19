@@ -99,7 +99,7 @@ while($row = db_fetch_array($result)) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("clefs"   , $clefs);
 $smarty->assign("selacces", $selacces);

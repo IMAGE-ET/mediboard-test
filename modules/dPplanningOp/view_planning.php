@@ -24,7 +24,7 @@ $patient->loadRefs();
 $today = mbDate();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("operation", $operation);
 $smarty->assign("today"    , $today    );

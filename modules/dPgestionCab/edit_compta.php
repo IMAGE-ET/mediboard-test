@@ -54,7 +54,7 @@ foreach($listGestionCab as $key => $fiche) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("gestioncab"       , $gestioncab);
 $smarty->assign("date"             , $date);

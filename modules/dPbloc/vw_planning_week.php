@@ -104,7 +104,7 @@ $listSpec = $listSpec->loadSpecialites();
 
 
 //Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("listDays"       , $listDays      );
 $smarty->assign("listSalles"     , $listSalles    );

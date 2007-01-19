@@ -104,7 +104,7 @@ foreach ($sejours as $key => &$sejour) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("deb"      , $deb           );
 $smarty->assign("fin"      , $fin           );

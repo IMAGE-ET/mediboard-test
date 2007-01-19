@@ -120,7 +120,7 @@ foreach($sortiesComp as $key => $value) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 $smarty->assign("date"         , $date        );
 $smarty->assign("deplacements" , $deplacements);
 $smarty->assign("sortiesAmbu"  , $sortiesAmbu );

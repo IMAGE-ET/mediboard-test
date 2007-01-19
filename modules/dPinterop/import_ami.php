@@ -14,7 +14,7 @@ if (!$canRead) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->display("import_ami.tpl");
 

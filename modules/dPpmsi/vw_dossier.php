@@ -85,7 +85,7 @@ $canEditCabinet = $moduleCabinet->canEdit();
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->debugging = false;
 

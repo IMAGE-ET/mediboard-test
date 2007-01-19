@@ -20,7 +20,7 @@ $listNbFiles = mbArrayCreateRange(1,4,true);
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("listNbFiles"  , $listNbFiles);
 $smarty->assign("configFiles" , $dPconfig["dPfiles"]);

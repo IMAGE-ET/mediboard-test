@@ -21,7 +21,7 @@ $consult->loadRefConsultAnesth();
 $consult->_ref_consult_anesth->loadRefsBack();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("consult_anesth", $consult->_ref_consult_anesth);
 

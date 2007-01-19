@@ -16,7 +16,7 @@ $list_14 = mbArrayCreateRange(1,14, true);
 $list_20 = mbArrayCreateRange(1,20, true);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("_nb_services" , $_nb_services);
 $smarty->assign("list_5"       , $list_5);

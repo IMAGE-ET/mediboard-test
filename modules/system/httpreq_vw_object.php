@@ -21,7 +21,7 @@ $object->load($object_id);
 $object->loadCompleteView();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("object", $object);
 

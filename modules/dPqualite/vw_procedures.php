@@ -61,7 +61,7 @@ foreach($procedures as $keyProc=>$currProc){
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("selTheme"       , $selTheme);
 $smarty->assign("listThemes"     , $listThemes);

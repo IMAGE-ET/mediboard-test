@@ -107,7 +107,7 @@ $orderanesth = "name";
 $listAnesthType = $listAnesthType->loadList(null,$orderanesth);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->debugging = false;
 

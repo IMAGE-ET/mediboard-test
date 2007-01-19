@@ -41,7 +41,7 @@ $finalPatient->loadRefsFwd();
 $finalPatient->patient_id = null;
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("patient1"    , $patient1    );
 $smarty->assign("patient2"    , $patient2    );

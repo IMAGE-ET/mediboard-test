@@ -82,7 +82,7 @@ foreach($services as &$service){
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("listMenu"         , $listMenu);
 $smarty->assign("listRemplacement" , $listRemplacement);

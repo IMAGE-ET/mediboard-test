@@ -150,7 +150,7 @@ foreach($listTypeRepas as $keyType => $valType){
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("dPrepas"       , $dPrepas);
 $smarty->assign("aPlats"        , $aPlats);

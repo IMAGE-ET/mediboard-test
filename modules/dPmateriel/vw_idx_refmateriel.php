@@ -42,7 +42,7 @@ $Fournisseur = new CFournisseur;
 $listFournisseur = $Fournisseur->loadList();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("listCategory"   ,$listCategory   );
 $smarty->assign("listFournisseur",$listFournisseur);

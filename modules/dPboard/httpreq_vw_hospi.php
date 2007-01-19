@@ -54,7 +54,7 @@ $crList    = CCompteRendu::loadModeleByCat("Opération", $where, $order, true);
 $hospiList = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("board"      , $board);
 $smarty->assign("date"       , $date);

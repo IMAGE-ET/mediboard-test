@@ -17,7 +17,7 @@ if(!isset($dPconfig["dPImeds"]["url"])){
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("configurl" , $dPconfig["dPImeds"]["url"]);
 

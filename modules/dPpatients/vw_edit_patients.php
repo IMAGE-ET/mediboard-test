@@ -32,7 +32,7 @@ if (!$patient_id) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("canReadSante400", $canReadSante400);
 $smarty->assign("patient"        , $patient     );

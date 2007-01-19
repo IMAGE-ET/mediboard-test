@@ -73,7 +73,7 @@ foreach($list as $key => $value) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("oper_id"     , $oper_id);
 $smarty->assign("month"       , $month);

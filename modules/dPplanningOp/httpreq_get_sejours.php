@@ -19,7 +19,7 @@ $etablissements = new CMediusers();
 $etablissements = $etablissements->loadEtablissements(PERM_READ);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("sejours", $patient->_ref_sejours);
 $smarty->assign("etablissements", $etablissements);

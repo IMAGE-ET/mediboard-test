@@ -106,7 +106,7 @@ if ($typeVue == 1) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("date_recherche", $date_recherche);
 $smarty->assign("libre"         , $libre         );

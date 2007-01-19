@@ -18,7 +18,7 @@ $compteRendu->load($compte_rendu_id);
 $cr = $compteRendu->source;
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("cr", $cr);
 

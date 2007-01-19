@@ -89,7 +89,7 @@ $canEditCabinet = $moduleCabinet->canEdit();
 $affichageNbFile = CFile::loadNbFilesByCategory($patient);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("affichageNbFile" ,$affichageNbFile                           );
 $smarty->assign("patient"         , $patient                                   );

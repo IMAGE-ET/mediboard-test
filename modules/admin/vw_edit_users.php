@@ -37,7 +37,7 @@ if ($where) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("user_last_name" , $user_last_name );
 $smarty->assign("user_first_name", $user_first_name);

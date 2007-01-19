@@ -22,7 +22,7 @@ $master = $cim10->findCodes($keys, $lang);
 $numresults = count($master);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("cim10"      , $cim10);
 $smarty->assign("lang"      , $lang);

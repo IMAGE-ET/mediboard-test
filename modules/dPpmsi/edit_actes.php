@@ -50,7 +50,7 @@ $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("selOp"      , $selOp      );
 $smarty->assign("timing"     , $timing     );

@@ -57,7 +57,7 @@ if ($selConsult) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("consult", $consult);
 

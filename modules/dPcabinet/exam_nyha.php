@@ -29,7 +29,7 @@ $consultation->loadRefsFwd();
 $consultation->loadRefConsultAnesth();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("exam_nyha" , $exam_nyha);
 

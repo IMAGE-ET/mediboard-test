@@ -73,7 +73,7 @@ foreach ($bilan as $frequence => $value) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("_conduction", $_conduction);
 $smarty->assign("_oreille", $_oreille);

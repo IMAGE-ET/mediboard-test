@@ -32,7 +32,7 @@ if($selClass){
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 if($selClass){
   $smarty->assign("key"        , $key);

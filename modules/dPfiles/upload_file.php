@@ -21,7 +21,7 @@ $object->load($file_object_id);
 $listCategory = CFilesCategory::listCatClass($file_class);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("file_class"      , $file_class);
 $smarty->assign("file_object_id"  , $file_object_id);

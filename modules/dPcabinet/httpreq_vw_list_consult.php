@@ -88,7 +88,7 @@ foreach ($listPlage as &$plage) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("tab"      , "edit_consultation");
 $smarty->assign("board"    , $board);

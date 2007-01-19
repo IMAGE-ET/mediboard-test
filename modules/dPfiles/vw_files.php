@@ -34,7 +34,7 @@ $file->load($file_id);
 $listCategory = CFilesCategory::listCatClass($selClass);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $object = null;
 

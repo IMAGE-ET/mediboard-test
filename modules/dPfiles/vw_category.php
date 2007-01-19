@@ -28,7 +28,7 @@ $listClass = getChildClasses();
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("listCategory", $listCategory);
 $smarty->assign("category"    , $category    );

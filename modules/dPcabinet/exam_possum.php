@@ -82,7 +82,7 @@ if(!$exam_possum->natremie && $consultAnesth->na){
 $exam_possum->updateFormFields();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("exam_possum" , $exam_possum);
 

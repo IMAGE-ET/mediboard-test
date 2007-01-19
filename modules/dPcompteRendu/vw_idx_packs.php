@@ -75,7 +75,7 @@ if($pack_id) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("users"         , $users);
 $smarty->assign("user_id"       , $user_id);

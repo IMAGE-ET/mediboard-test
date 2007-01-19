@@ -30,7 +30,7 @@ foreach($sejour->_ref_operations as $keyOp => $value) {
 $sejour->loadRefGHM();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("sejour" , $sejour              );
 $smarty->assign("patient", $sejour->_ref_patient);

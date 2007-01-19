@@ -93,7 +93,7 @@ foreach($files as $filePath) {
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("show", $show);
 $smarty->assign("docsWithoutFileTruncated", $docsWithoutFileTruncated);

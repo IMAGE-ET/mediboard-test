@@ -99,7 +99,7 @@ foreach($listOut as $key => $value) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("listSalles"    , $listSalles  );
 $smarty->assign("listAnesths"   , $listAnesths );

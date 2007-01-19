@@ -62,7 +62,7 @@ $visibility = array(PERM_DENY => "caché",
                     PERM_EDIT => "administration");
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("user"            , $user            );
 $smarty->assign("modulesInstalled", $modulesInstalled);

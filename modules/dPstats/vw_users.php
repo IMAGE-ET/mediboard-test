@@ -24,7 +24,7 @@ $debutact      = mbGetValueFromGetOrSession("debutact", mbDate());
 $finact        = mbGetValueFromGetOrSession("finact", mbDate());
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("user_id"  , $user_id  );
 $smarty->assign("listUsers", $listUsers);

@@ -19,7 +19,7 @@ $result = db_loadList($sql, null, $AppUI->cfg["baseCCAM"]);
 
 if ($canRead) {
   // Création du template
-  $smarty = new CSmartyDP(1);
+  $smarty = new CSmartyDP();
   $smarty->debugging = false;
 
   $smarty->assign("codeacte"  , $codeacte);

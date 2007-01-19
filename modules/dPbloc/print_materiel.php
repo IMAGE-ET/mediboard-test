@@ -46,7 +46,7 @@ foreach($op2 as $key => $value) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("op1", $op1);
 $smarty->assign("op2", $op2);

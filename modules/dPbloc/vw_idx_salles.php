@@ -33,7 +33,7 @@ $salleSel = new CSalle;
 $salleSel->load(mbGetValueFromGetOrSession("salle_id"));
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("salles"          , $salles        );
 $smarty->assign("salleSel"        , $salleSel      );

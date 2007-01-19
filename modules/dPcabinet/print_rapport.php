@@ -109,7 +109,7 @@ foreach($listPlage as $key => $value) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("today"    , $today);
 $smarty->assign("deb"      , $deb);

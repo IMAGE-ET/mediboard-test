@@ -19,7 +19,7 @@ $cim10 = new CCodeCIM10();
 $chapter = $cim10->getSommaire($lang);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("lang"   , $lang);
 $smarty->assign("cim10"  , $cim10);

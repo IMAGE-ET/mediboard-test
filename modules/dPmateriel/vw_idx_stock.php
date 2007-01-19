@@ -44,7 +44,7 @@ foreach($listCategory as $key => $value) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("stock"       , $stock       );
 $smarty->assign("listGroupes" , $listGroupes );

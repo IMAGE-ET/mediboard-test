@@ -35,7 +35,7 @@ $logs = $logs->loadAgregation($from, $next, ($groupres + 1), 0);
 $listModules = CModule::getInstalled();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("logs"       , $logs);
 $smarty->assign("date"       , $date);

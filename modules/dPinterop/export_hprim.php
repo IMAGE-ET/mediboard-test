@@ -92,7 +92,7 @@ if (isset($_POST["hostname"]) or ($ajax and $doc_valid and !$sent_files)) {
 $doc->getSentFiles();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("doc", $doc);
 $smarty->assign("fileprefix", $fileprefix);

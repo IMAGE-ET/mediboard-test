@@ -26,7 +26,7 @@ $messages = new CMessage;
 $messages = $messages->loadPublications($filter_status);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("message"      , $message      );
 $smarty->assign("messages"     , $messages     );

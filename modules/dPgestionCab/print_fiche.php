@@ -24,7 +24,7 @@ $fichePaie->loadRefsFwd();
 $fichePaie->_ref_params_paie->loadRefsFwd();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("fichePaie" , $fichePaie);
 

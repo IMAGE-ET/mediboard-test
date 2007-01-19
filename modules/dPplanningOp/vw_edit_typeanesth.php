@@ -25,7 +25,7 @@ $listTypeAnesth = $listTypeAnesth->loadList(null, "name");
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("listTypeAnesth", $listTypeAnesth);
 $smarty->assign("type_anesth"   , $type_anesth   );

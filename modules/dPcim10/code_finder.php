@@ -32,7 +32,7 @@ if($i >= 0)
   $up =& $cim10->_levelsSup[$i];
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign('up', $up);
 $smarty->assign('cim10', $cim10);

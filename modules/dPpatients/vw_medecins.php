@@ -49,7 +49,7 @@ $medecins = new CMedecin();
 $medecins = $medecins->loadList($where, "nom, prenom", "0, 100");
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("dialog"     , $dialog);
 $smarty->assign("type"       , $type);

@@ -41,7 +41,7 @@ $aide->text    = stripslashes($text);
 $aide->user_id = $AppUI->user_id;
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("aide"     , $aide);
 $smarty->assign("listFunc" , $listFunc);

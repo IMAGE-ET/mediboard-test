@@ -22,7 +22,7 @@ $spec_cpam = new CSpecCPAM();
 $spec_cpam = $spec_cpam->loadList();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("disciplines" , $disciplines            );
 $smarty->assign("spec_cpam"   , $spec_cpam              );

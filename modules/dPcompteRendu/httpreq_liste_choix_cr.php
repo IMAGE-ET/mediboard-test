@@ -42,7 +42,7 @@ $templateManager->initHTMLArea();
 
 // Création du template
 
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("templateManager", $templateManager);
 $smarty->assign("compte_rendu"   , $compte_rendu);

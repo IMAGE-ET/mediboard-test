@@ -78,7 +78,7 @@ $techniquesComp->loadAides($userSel->user_id);
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("consult"       , $consult       );
 $smarty->assign("consult_anesth", $consult_anesth);

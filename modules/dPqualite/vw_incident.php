@@ -73,7 +73,7 @@ for ($i = 0; $i <= 23; $i++) {
   
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("datenow"        , mbDate());
 $smarty->assign("heurenow"       , mbTranformTime(null,null,"%H"));

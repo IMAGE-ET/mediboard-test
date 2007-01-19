@@ -30,7 +30,7 @@ if($operation->load($operation_id)) {
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("patient"  , $operation->_ref_sejour->_ref_patient);
 $smarty->assign("operation", $operation);

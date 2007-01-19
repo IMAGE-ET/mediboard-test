@@ -22,7 +22,7 @@ $date = mbGetValueFromGetOrSession("date", mbDate());
 $now  = mbDate();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 $smarty->assign('date' , $date );
 $smarty->assign('now' , $now );
 $smarty->assign('vue' , $vue );

@@ -68,7 +68,7 @@ if(!$service_id || !array_key_exists($service_id,$services)){
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("date"          , $date);
 $smarty->assign("listTypeRepas" , $listTypeRepas);

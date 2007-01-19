@@ -216,7 +216,7 @@ if($consult->_ref_chir->isFromType(array("Anesthésiste"))) {
   $_is_anesth=false;
 }
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 $smarty->assign("codePraticienEc", $codePraticienEc);
 $smarty->assign("urlDHE"         , $urlDHE);
 $smarty->assign("urlDHEParams"   , $urlDHEParams);

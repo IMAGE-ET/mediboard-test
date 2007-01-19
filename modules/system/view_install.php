@@ -14,7 +14,7 @@ if (!$canRead && !$dialog) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->display("view_install.tpl");
 

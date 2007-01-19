@@ -58,7 +58,7 @@ if ($selConsult) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("_is_anesth", $_is_anesth);
 $smarty->assign("consult"   , $consult);

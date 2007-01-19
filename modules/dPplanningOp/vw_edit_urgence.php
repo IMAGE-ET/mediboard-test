@@ -137,7 +137,7 @@ for ($i = 0; $i < 60; $i += $operationConfig["min_intervalle"]) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("canReadSante400", $canReadSante400);
 

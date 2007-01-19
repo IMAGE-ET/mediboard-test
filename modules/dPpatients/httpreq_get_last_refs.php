@@ -26,7 +26,7 @@ foreach($patient->_ref_consultations as $key => $consult) {
 
 if ($canRead) {
   // Création du template
-  $smarty = new CSmartyDP(1);
+  $smarty = new CSmartyDP();
 
   $smarty->assign("patient", $patient);
 

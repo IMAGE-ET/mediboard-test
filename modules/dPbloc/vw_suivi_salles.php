@@ -74,7 +74,7 @@ foreach($listSalles as $keySalle=>$currSalle){
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("vueReduite"     , true);
 $smarty->assign("listAnesths"    , $listAnesths);

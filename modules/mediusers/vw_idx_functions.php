@@ -34,7 +34,7 @@ $userfunction->load(mbGetValueFromGetOrSession("function_id", 0));
 $userfunction->loadRefsFwd();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("canReadSante400", $canReadSante400);
 $smarty->assign("userfunction", $userfunction);

@@ -95,7 +95,7 @@ if($isprat) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("debut"    , $debut);
 $smarty->assign("prec"     , $prec);

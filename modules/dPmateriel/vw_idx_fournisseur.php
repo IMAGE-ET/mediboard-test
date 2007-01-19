@@ -29,7 +29,7 @@ $where = array();
 $listFournisseur = $lstfournisseur->loadList($where);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("listFournisseur", $listFournisseur);
 $smarty->assign("fournisseur"    , $fournisseur    );

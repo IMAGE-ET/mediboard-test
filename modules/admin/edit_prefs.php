@@ -81,7 +81,7 @@ mbRemoveValuesInArray(".svn", $styles);
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 $smarty->assign("user"     , $user);
 $smarty->assign("user_id"  , $user_id);
 $smarty->assign("locales"  , $locales);

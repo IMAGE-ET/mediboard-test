@@ -212,7 +212,7 @@ foreach($plages as $keyDate=>$valDate){
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("_firstconsult_time", $_firstconsult_time);
 $smarty->assign("_lastconsult_time" , $_lastconsult_time);

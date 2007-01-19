@@ -54,7 +54,7 @@ foreach($trans as $k=>$v){
 uksort($trans,"strnatcasecmp");
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("locales"  , $localesDirs);
 $smarty->assign("modules"  , $modules);

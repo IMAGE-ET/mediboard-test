@@ -37,7 +37,7 @@ $id400->loadLatestFor($sejour);
 $sejour400 = $id400->id400;
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("patient"   , $patient);
 $smarty->assign("patient400", $patient400);

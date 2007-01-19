@@ -22,7 +22,7 @@ $admission->_ref_sejour->loadRefsFwd();
 $admission->_ref_plageop->loadRefs();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign('admission', $admission);
 

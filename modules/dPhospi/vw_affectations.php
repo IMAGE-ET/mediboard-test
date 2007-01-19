@@ -109,7 +109,7 @@ if ($canEdit) {
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("pathos"                , $pathos);
 $smarty->assign("date"                  , $date );

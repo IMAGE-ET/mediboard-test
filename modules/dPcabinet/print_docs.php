@@ -23,7 +23,7 @@ if ($consultation_id) {
 }  
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("documents", $consult->_ref_documents);
 

@@ -86,7 +86,7 @@ $liste->loadRefsFwd();
 //}
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("users"     , $listPrat  );
 $smarty->assign("user_id"   , $user_id   );

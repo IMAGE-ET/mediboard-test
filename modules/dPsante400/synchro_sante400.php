@@ -41,7 +41,7 @@ foreach ($mouvs as $mouv) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 $smarty->assign("connection", CRecordSante400::$dbh);
 $smarty->assign("marked", $marked);
 $smarty->assign("count", $count);

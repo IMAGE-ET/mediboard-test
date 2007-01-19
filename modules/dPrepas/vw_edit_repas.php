@@ -56,7 +56,7 @@ if (!$affectation->load($affectation_id) || !$typeRepas->load($typerepas_id)){
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("affectation"   , $affectation);
 $smarty->assign("typerepas_id"  , $typerepas_id);

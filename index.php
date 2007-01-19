@@ -108,7 +108,7 @@ if (!$AppUI->user_id) {
   // Ajax login alert
   if ($ajax) {
     // Creation du Template
-    $tplAjax = new CSmartyDP(1);
+    $tplAjax = new CSmartyDP();
     $tplAjax->template_dir = "modules/system/templates/";
     $tplAjax->compile_dir  = "modules/system/templates_c/";
     $tplAjax->config_dir   = "modules/system/configs/";
@@ -119,7 +119,7 @@ if (!$AppUI->user_id) {
     $tplAjax->display("ajax_errors.tpl");
 
   } else {
-    $smartyLogin = new CSmartyDP(1);
+    $smartyLogin = new CSmartyDP();
     $smartyLogin->template_dir = "style/$uistyle/templates/";
     $smartyLogin->compile_dir  = "style/$uistyle/templates_c/";
     $smartyLogin->config_dir   = "style/$uistyle/configs/";
@@ -239,7 +239,7 @@ if (!$suppressHeaders) {
   $titleBlockData["icon"]=dPshowImage( dPFindImage( "$m.png", $m ), "24", "24" );
   
   //Creation du Template
-  $smartyHeader = new CSmartyDP(1);
+  $smartyHeader = new CSmartyDP();
   $smartyHeader->template_dir = "style/$uistyle/templates/";
   $smartyHeader->compile_dir  = "style/$uistyle/templates_c/";
   $smartyHeader->config_dir   = "style/$uistyle/configs/";
@@ -296,7 +296,7 @@ $performance["size"]    = mbConvertDecaBinary(ob_get_length());
 if (!$suppressHeaders) {
   
   // Creation du Template
-  $smartyFooter = new CSmartyDP(1);
+  $smartyFooter = new CSmartyDP();
   $smartyFooter->template_dir = "style/$uistyle/templates/";
   $smartyFooter->compile_dir  = "style/$uistyle/templates_c/";
   $smartyFooter->config_dir   = "style/$uistyle/configs/";
@@ -312,7 +312,7 @@ if (!$suppressHeaders) {
 // Ajax performance
 if ($ajax) {
   // Creation du Template
-  $tplAjax = new CSmartyDP(1);
+  $tplAjax = new CSmartyDP();
   $tplAjax->template_dir = "modules/system/templates/";
   $tplAjax->compile_dir  = "modules/system/templates_c/";
   $tplAjax->config_dir   = "modules/system/configs/";

@@ -21,7 +21,7 @@ $graph_vocal->Stroke("tmp/graphtmp.png");
 $map_vocal = $graph_vocal->GetHTMLImageMap("graph_vocal");
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("map_vocal" , $map_vocal);
 $smarty->assign("exam_audio", $exam_audio);

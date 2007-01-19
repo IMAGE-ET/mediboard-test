@@ -59,7 +59,7 @@ $object->load($selKey);
 $affichageFile = CFile::loadFilesAndDocsByObject($object);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $canEditFileDoc = $canEditFiles || $canEditDoc;
 

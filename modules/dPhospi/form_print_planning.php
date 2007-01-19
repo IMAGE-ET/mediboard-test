@@ -26,7 +26,7 @@ $where["group_id"] = "= '$g'";
 $listServ = $listServ->loadListWithPerms(PERM_READ,$where);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("today"   , date("Y-m-d")." 06:00:00");
 $smarty->assign("tomorrow", date("Y-m-d")." 21:00:00");

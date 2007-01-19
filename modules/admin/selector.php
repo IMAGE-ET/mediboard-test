@@ -75,7 +75,7 @@ if (!$ok) {
 }
 
 // Template creation
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign('callback', $callback);
 $smarty->assign('title', $title);

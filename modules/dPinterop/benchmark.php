@@ -10,7 +10,7 @@
 global $AppUI, $canRead, $canEdit, $m;
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $cr = new CCompteRendu;
 $smarty->display("benchmark.tpl");

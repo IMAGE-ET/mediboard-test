@@ -111,7 +111,7 @@ foreach($listFiches as $keyList=>$valueList){
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("user_id"          , $AppUI->user_id);
 $smarty->assign("catFiche"         , $catFiche);  

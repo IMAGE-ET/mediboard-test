@@ -58,7 +58,7 @@ $etablissements = $etablissements->loadEtablissements(PERM_READ);
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("etablissements" , $etablissements);
 $smarty->assign("modeles"        , $modeles);

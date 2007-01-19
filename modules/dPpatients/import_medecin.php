@@ -139,7 +139,7 @@ if (mbGetValueFromGet("curl", 1)) {
   $str = @file_get_contents($path);
   if (!$str) {
     // Création du template
-    $smarty = new CSmartyDP(1);
+    $smarty = new CSmartyDP();
     
     $smarty->assign("end_of_process", true);
     $smarty->display("import_medecin.tpl");
@@ -255,7 +255,7 @@ foreach ($medecins as &$medecin) {
 $chrono->stop();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->debugging = false;
 $smarty->assign("long_display", false);

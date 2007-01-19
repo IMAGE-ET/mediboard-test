@@ -15,7 +15,7 @@ if(!$canRead) {
 
 $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("etablissements", $etablissements);
 $smarty->assign("today"         , date("Y-m-d"));

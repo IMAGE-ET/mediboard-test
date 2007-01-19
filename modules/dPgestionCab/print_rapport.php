@@ -72,7 +72,7 @@ $sql .= "\nGROUP BY invar";
 $total = db_loadResult($sql);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("date"             , $date);
 $smarty->assign("datefin"          , $datefin);

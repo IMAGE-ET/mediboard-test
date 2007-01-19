@@ -38,7 +38,7 @@ foreach ($services as $service_id => $service) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("chambreSel", $chambreSel);
 $smarty->assign("litSel"    , $litSel);

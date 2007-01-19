@@ -45,7 +45,7 @@ $listDisciplines = new CDiscipline();
 $listDisciplines = $listDisciplines->loadUsedDisciplines();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("map_graph_interventions" , $map_graph_interventions);
 $smarty->assign("debutact"       , $debutact       );

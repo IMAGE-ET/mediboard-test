@@ -27,7 +27,7 @@ $vue2_default = isset($AppUI->user_prefs["AFFCONSULT"]) ? $AppUI->user_prefs["AF
 $vue          = mbGetValueFromGetOrSession("vue2", $vue2_default);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("date" , $date);
 $smarty->assign("view" , $view);

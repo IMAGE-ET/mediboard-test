@@ -35,7 +35,7 @@ foreach($favoris as $key => $value) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("lang" , $lang);
 $smarty->assign("cim10", new CCodeCIM10);

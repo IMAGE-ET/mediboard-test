@@ -50,7 +50,7 @@ if($group_id && $etablissement->load($group_id)){
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("salles"       , $salles);
 $smarty->assign("listCab"      , $listCab);

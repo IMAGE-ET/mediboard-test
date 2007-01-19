@@ -56,7 +56,7 @@ foreach($list as $key => $value) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("dialog"      , $dialog      );
 $smarty->assign("object_class", $object_class);

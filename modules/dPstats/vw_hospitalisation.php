@@ -40,7 +40,7 @@ $listHospis = array();
 $listHospis = array_merge($listHospis,$sejour->_enumsTrans["type"]);
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("debutact"       , $debutact);
 $smarty->assign("finact"         , $finact);

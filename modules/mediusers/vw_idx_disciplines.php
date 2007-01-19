@@ -26,7 +26,7 @@ $listDiscipline = $listDiscipline->loadList();
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("specialite"    , $specialite    );
 $smarty->assign("listDiscipline", $listDiscipline);

@@ -31,7 +31,7 @@ $acces_denied     = true;      // droit d'affichage du fichier demandé
 $arrNumPages      = array();   // navigation par pages (PDF)
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 if($objectClass && $objectId && $elementClass && $elementId){
   

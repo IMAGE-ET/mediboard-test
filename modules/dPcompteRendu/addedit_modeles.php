@@ -67,7 +67,7 @@ foreach($listObjectClass as $keyClass=>$value){
   }
 }
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 $smarty->assign("prat_id"             , $prat_id);
 $smarty->assign("compte_rendu_id"     , $compte_rendu_id);
 $smarty->assign("listPrat"            , $listPrat);

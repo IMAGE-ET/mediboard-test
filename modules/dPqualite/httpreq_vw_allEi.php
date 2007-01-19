@@ -28,7 +28,7 @@ $listeFiches = CFicheEi::loadFichesEtat("ALL_TERM",null,$where_allei);
 
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("listUsersTermine" , $listUsersTermine);
 $smarty->assign("listeFiches"      , $listeFiches);

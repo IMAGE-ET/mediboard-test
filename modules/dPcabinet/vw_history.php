@@ -29,7 +29,7 @@ if($consult->_ref_consult_anesth->consultation_anesth_id){
 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("consult" , $consult );
 

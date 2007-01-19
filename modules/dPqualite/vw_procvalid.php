@@ -85,7 +85,7 @@ if($docGed->version){
 }
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("lastactif"         , $lastactif);
 $smarty->assign("procAnnuleVisible" , $procAnnuleVisible);

@@ -49,7 +49,7 @@ foreach($patient->_ref_consultations as $consultation) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("patient" , $patient );
 

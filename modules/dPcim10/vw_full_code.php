@@ -21,7 +21,7 @@ $cim10->load($lang);
 $cim10->loadRefs();
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("lang" , $lang);
 $smarty->assign("cim10", $cim10);

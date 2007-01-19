@@ -32,7 +32,7 @@ foreach($services as $keyService=>$valService){
 } 
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("serviceSel"     , $serviceSel    );
 $smarty->assign("services"       , $services      );

@@ -59,7 +59,7 @@ for ($i = 0; $i < 60; $i += $step) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("protocole", $protocole);
 $smarty->assign("chir"     , $chir);

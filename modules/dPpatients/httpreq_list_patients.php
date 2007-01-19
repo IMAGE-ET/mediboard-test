@@ -74,7 +74,7 @@ if($whereSoundex && ($nbExact = (100 - count($patients)))) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("board"          , $board                                     );
 $smarty->assign("nom"            , $patient_nom                               );

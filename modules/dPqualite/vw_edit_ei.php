@@ -57,7 +57,7 @@ foreach($listItems as $key => $value) {
 }
 
 require_once( $AppUI->getSystemClass("smartydp"));
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("categorie"      , $categorie);
 $smarty->assign("item"           , $item);

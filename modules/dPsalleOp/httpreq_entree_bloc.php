@@ -54,7 +54,7 @@ foreach($listReveil as $key => $value) {
   }
 }
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("hour"           , $hour        );
 $smarty->assign("listReveil"     , $listReveil  );

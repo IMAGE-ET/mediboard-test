@@ -55,7 +55,7 @@ for ($i = 0; $i < 5; $i++) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 $smarty->assign("list1" , $list1 );
 $smarty->assign("list2" , $list2 );
 

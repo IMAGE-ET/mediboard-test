@@ -60,7 +60,7 @@ foreach($urgences as $keyOp => $curr_op) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("vueReduite"    , false                   );
 $smarty->assign("salle"         , $salle                   );

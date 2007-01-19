@@ -84,7 +84,7 @@ if($plageconsult_id) {
 }
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("date"           , $date);
 $smarty->assign("ndate"          , $ndate);

@@ -26,7 +26,7 @@ $usergroup = new CGroups;
 $usergroup->load(mbGetValueFromGetOrSession("group_id", 0));
 
 // Création du template
-$smarty = new CSmartyDP(1);
+$smarty = new CSmartyDP();
 
 $smarty->assign("usergroup", $usergroup);
 $smarty->assign("listGroups", $listGroups);
