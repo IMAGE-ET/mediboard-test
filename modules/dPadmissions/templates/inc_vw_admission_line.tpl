@@ -7,6 +7,9 @@
 {{/if}}
 
 <td class="text" style="background: {{$background}}">
+  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_adm->_ref_patient->patient_id}}">
+    <img src="images/icons/edit.png" alt="modifier" />
+  </a>
   <a name="adm{{$curr_adm->sejour_id}}" href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
   {{$curr_adm->_ref_patient->_view}}
   </a>
@@ -25,35 +28,35 @@
 </td>
 
 <td class="text" style="background: {{$background}}">
+  <form name="editChFrm{{$curr_adm->sejour_id}}" action="index.php" method="post">
+  
+  <input type="hidden" name="m" value="dPhospi" />
+  <input type="hidden" name="otherm" value="dPadmissions" />
+  <input type="hidden" name="dosql" value="do_edit_chambre" />
+  <input type="hidden" name="id" value="{{$curr_adm->sejour_id}}" />
+  {{if $curr_adm->chambre_seule}}
+  <input type="hidden" name="value" value="0" />
+  <button class="change" type="button" style="background-color: #f55;" onclick="submitAdmission(this.form);">
+    simple
+  </button>
+  {{else}}
+  <input type="hidden" name="value" value="1" />
+  <button class="change" type="button" onclick="submitAdmission(this.form);">
+    double
+  </button>
+  {{/if}}
+  
+  </form>
   {{assign var=affectation value=$curr_adm->_ref_first_affectation}}
   {{if $affectation->affectation_id}}
   {{$affectation->_ref_lit->_view}}
   {{else}}
   Pas de chambre
   {{/if}}
-    <form name="editChFrm{{$curr_adm->sejour_id}}" action="index.php" method="post">
-    
-    <input type="hidden" name="m" value="dPhospi" />
-    <input type="hidden" name="otherm" value="dPadmissions" />
-    <input type="hidden" name="dosql" value="do_edit_chambre" />
-    <input type="hidden" name="id" value="{{$curr_adm->sejour_id}}" />
-    {{if $curr_adm->chambre_seule}}
-    <input type="hidden" name="value" value="0" />
-    <button class="change" type="button" style="background-color: #f55;" onclick="submitAdmission(this.form);">
-      simple
-    </button>
-    {{else}}
-    <input type="hidden" name="value" value="1" />
-    <button class="change" type="button" onclick="submitAdmission(this.form);">
-      double
-    </button>
-    {{/if}}
-    
-    </form>
 </td>
 
 {{if $curr_adm->annule == 1}}
-<td style="background: {{$background}}" align="center" colspan=2>
+<td style="background: {{$background}}" align="center" colspan="5">
   <strong>ANNULE</strong></td>
 {{else}}
 <td style="background: {{$background}}">
@@ -68,11 +71,12 @@
     Admis
   </button>
   {{else}}
-  à {{$curr_adm->entree_reelle|date_format:"%Hh%M"}}<br />
   <input type="hidden" name="value" value="n" />
   <button class="cancel" type="button" onclick="submitAdmission(this.form);">
     Annuler
   </button>
+  <br />
+  {{$curr_adm->entree_reelle|date_format:"%Hh%M"}}
   {{/if}}
   </form>
 </td>
@@ -99,7 +103,23 @@
   {{/if}}
   </form>
 </td>
-{{/if}}
+
+<td style="background: {{$background}}">
+  {{foreach from=$curr_adm->_ref_operations item=curr_op}}
+  {{if $curr_op->_ref_consult_anesth->consultation_anesth_id}}
+  {{$curr_op->_ref_consult_anesth->_date_consult|date_format:"%d/%m/%Y"}}
+  <br />
+  {{/if}}
+  {{/foreach}}
+</td>
+
+<td style="background: {{$background}}" class="button">
+  {{if $curr_adm->_ref_patient->_fin_cmu}}
+    <img src="images/icons/tick.png" alt="Droits CMU en cours" />
+  {{else}}
+    -
+  {{/if}}
+</td>
 
 <td style="background: {{$background}}">
   {{foreach from=$curr_adm->_ref_operations item=curr_op}}
@@ -113,3 +133,4 @@
   -
   {{/foreach}}
 </td>
+{{/if}}

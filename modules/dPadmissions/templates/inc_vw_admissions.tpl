@@ -6,7 +6,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_idx_admission&date="
 
 <table class="tbl">
   <tr>
-    <th colspan="7">
+    <th colspan="9">
       {{$date|date_format:"%A %d %B %Y"}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
       <br /> 
@@ -34,10 +34,11 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_idx_admission&date="
       <input type="hidden" name="id" value="{{$date}}" />
       <input type="hidden" name="mode" value="allsaisie" />
       <input type="hidden" name="value" value="1" />
-      Saisis
-      <button class="tick notext" type="submit"></button>
+      <button class="tick" type="submit">Saisis</button>
       </form>
     </th>
+    <th>Anesth</th>
+    <th>CMU</th>
     <th>DH</th>
   </tr>
   {{foreach from=$today item=curr_adm}}

@@ -324,7 +324,8 @@ class COperation extends CMbObject {
     $this->_ref_consult_anesth = new CConsultAnesth();
     $where = array();
     $where["operation_id"] = "= '$this->operation_id'";
-    $this->_ref_consult_anesth->loadObject($where);
+    $order = "consultation_anesth_id ASC";
+    $this->_ref_consult_anesth->loadObject($where, $order);
   }
   
   function loadRefSejour() {

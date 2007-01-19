@@ -1,11 +1,29 @@
+<script type="text/javascript">
+
+function pageMain() {
+  PairEffect.initGroup("ChapEffect", { 
+    bStoreInCookie: false,
+    sEffect: "appear"
+  });
+}
+
+</script>
+
 <table class="bookCode">
   <tr>
-    <th colspan="4">
+    <th style="text-align: center;" colspan="4">
       Codes favoris
     </th>
   </tr>
-  {{foreach from=$codes item=curr_code key=curr_key}}
-  {{if $curr_key is div by 4}}
+  {{foreach from=$codesByChap item=curr_chap key=key_chap}}
+  <tr id="chap{{$key_chap}}-trigger">
+    <th colspan="4">
+      {{$curr_chap.nom}} ({{$curr_chap.codes|@count}})
+    </th>
+  </tr>
+  <tbody id="chap{{$key_chap}}" class="ChapEffect" style="display: none;">
+  {{foreach from=$curr_chap.codes item=curr_code key=key_code}}
+  {{if $key_code is div by 4}}
   <tr>
   {{/if}}
     <td>
@@ -17,7 +35,7 @@
       {{$curr_code->libelleLong}}
       {{if $canEdit}}
       <br />
-      <form name="delFavoris" action="./index.php?m={{$m}}" method="post">
+      <form name="delFavoris" action="index.php?m={{$m}}" method="post">
       <input type="hidden" name="dosql" value="do_favoris_aed" />
       <input type="hidden" name="del" value="1" />
       <input type="hidden" name="favoris_id" value="{{$curr_code->favoris_id}}" />
@@ -27,8 +45,10 @@
 	  </form>
 	  {{/if}}
     </td>
-  {{if ($curr_key+1) is div by 4 or ($curr_key+1) == $codes|@count}}
+  {{if ($key_code+1) is div by 4 or ($key_code+1) == $curr_chap.codes|@count}}
   </tr>
   {{/if}}
+  {{/foreach}}
+  </tbody>
   {{/foreach}}
 </table>

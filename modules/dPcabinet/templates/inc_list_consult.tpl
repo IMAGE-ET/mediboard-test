@@ -37,7 +37,7 @@
 {{if $listPlage}}
 {{foreach from=$listPlage item=curr_plage}}
   <tr>
-    <th class="title" colspan="2">Consultations de {{$curr_plage->_hour_deb}}h à {{$curr_plage->_hour_fin}}h</th>
+    <th class="title" colspan="2">Consultations de {{$curr_plage->debut|date_format:"%Hh%M"}} à {{$curr_plage->fin|date_format:"%Hh%M"}}</th>
   </tr>
   {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
   {{if !$curr_consult->patient_id}}

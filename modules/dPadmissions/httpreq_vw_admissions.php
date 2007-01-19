@@ -46,7 +46,11 @@ $today = $today->loadList($where, $order, null, null, $ljoin);
 foreach ($today as $keySejour => $valueSejour) {
   $sejour =& $today[$keySejour];
   $sejour->loadRefs();
-  $user = new CMediusers;
+  $sejour->_ref_patient->verifCmuEtat($date);
+  foreach($sejour->_ref_operations as $key_op => $curr_op) {
+    $sejour->_ref_operations[$key_op]->loadRefsConsultAnesth();
+    $sejour->_ref_operations[$key_op]->_ref_consult_anesth->loadRefsFwd();
+  }
   $affectation =& $sejour->_ref_first_affectation;
   if ($affectation->affectation_id) {
     $affectation->loadRefLit();

@@ -24,21 +24,43 @@ $hour_now = strftime("%H:%M:00");
 $debut = strftime("%H:00:00");
 
 $plage = new CPlageconsult();
+$plageBefore = new CPlageconsult();
+$plageAfter = new CPlageconsult();
+// Cas ou une plage correspond
 $where = array();
 $where["chir_id"] = "= '$chir->user_id'";
-$where["date"] = "= '$day_now'";
-$where["debut"] = "<= '$hour_now'";
-$where["fin"] = "> '$hour_now'";
+$where["date"]    = "= '$day_now'";
+$where["debut"]   = "<= '$hour_now'";
+$where["fin"]     = "> '$hour_now'";
 $plage->loadObject($where);
 if(!$plage->plageconsult_id) {
-  $plage->chir_id = $chir->user_id;
-  $plage->date = $day_now;
-  $plage->freq = "00:15:00";
-  $plage->debut = $debut;
-  $plage->fin = mbTime("+1 HOUR", $debut);
-  $plage->libelle = "automatique";
-  $plage->store();
+  // Cas ou on a des plage en collision
+	$where = array();
+	$where["chir_id"] = "= '$chir->user_id'";
+	$where["date"]    = "= '$day_now'";
+	$where["debut"]   = "<= '$debut'";
+	$where["fin"]     = ">= '$debut'";
+  $plageBefore->loadObject($where);
+	$where["debut"]   = "<= '".mbTime("+1 HOUR", $debut)."'";
+	$where["fin"]     = ">= '".mbTime("+1 HOUR", $debut)."'";
+  $plageAfter->loadObject($where);
+  if($plageBefore->plageconsult_id) {
+    if($plageAfter->plageconsult_id) {
+      $plageBefore->fin = $plageAfter->debut;
+    } else {
+      $plageBefore->fin = max($plageBefore->fin, mbTime("+1 HOUR", $debut));
+    }
+    $plageBefore->updateFormFields();
+    $plageBefore->store();
+    $plage =& $plageBefore;
+  } else {
+    $plageAfter->debut = min($plageAfter->debut, $debut);
+    $plageAfter->updateFormFields();
+    $plageAfter->store();
+    $plage =& $plageAfter;
+  }
 }
+
 $plage->loadRefsFwd();
 $ref_chir = $plage->_ref_chir;
 

@@ -15,26 +15,12 @@ if (!$canRead) {
 
 $user = $AppUI->user_id;
 
-//Recherche des codes favoris
-$query = "SELECT favoris_id, favoris_code
-		  FROM ccamfavoris
-		  WHERE favoris_user = '$AppUI->user_id'
-		  ORDER BY favoris_code";
-$favoris = db_loadList($query);
-
-$i = 0;
-$codes = array();
-foreach($favoris as $key => $value) {
-  $codes[$i] = new CCodeCCAM($value["favoris_code"]);
-  $codes[$i]->loadLite();
-  $codes[$i]->favoris_id = $value["favoris_id"];
-  $i++;
-}
+$codesByChap = CFavoriCCAM::getOrdered($user);
 
 // Création du template
 $smarty = new CSmartyDP(1);
 
-$smarty->assign("codes", $codes);
+$smarty->assign("codesByChap", $codesByChap);
 
 $smarty->display("vw_idx_favoris.tpl");
 

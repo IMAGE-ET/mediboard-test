@@ -30,7 +30,11 @@
       {{/if}}
       </form>
     </td>
-    <td><b>{{$curr_sortie->_ref_sejour->_ref_patient->_view}}</b></td>
+    <td class="text">
+		  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_sejour->_ref_patient->patient_id}}">
+		    <img src="images/icons/edit.png" alt="modifier" />
+		  </a>
+      <b>{{$curr_sortie->_ref_sejour->_ref_patient->_view}}</b></td>
     <td>{{$curr_sortie->sortie|date_format:"%H h %M"}}</td>
     <td class="text">Dr. {{$curr_sortie->_ref_sejour->_ref_praticien->_view}}</td>
     <td class="text">{{$curr_sortie->_ref_lit->_view}}</td>

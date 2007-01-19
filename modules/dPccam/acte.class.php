@@ -74,6 +74,42 @@ class CCodeCCAM {
         $this->_code7 = 1;
     }
   }
+  
+  function loadChaps() {
+    $query = "select * from actes where CODE = '$this->code'";
+    $result = db_exec($query, $this->dbccam);
+    $row = db_fetch_array($result);
+
+    // On rentre les champs de la table actes
+    $this->chapitres[0]["db"] = $row["ARBORESCENCE1"];
+    $this->chapitres[1]["db"] = $row["ARBORESCENCE2"];
+    $this->chapitres[2]["db"] = $row["ARBORESCENCE3"];
+    $this->chapitres[3]["db"] = $row["ARBORESCENCE4"];
+    $pere = "000001";
+    $track = "";
+    
+    // On rentre les infos sur les chapitres
+    foreach($this->chapitres as $key => $value) {
+      $rang = $this->chapitres[$key]["db"];
+      $query = "select * from arborescence where CODEPERE = '$pere' and rang = '$rang'";
+      $result = db_exec($query, $this->dbccam);
+      $row = db_fetch_array($result);
+      
+      $query = "select * from notesarborescence where CODEMENU = '" . $row["CODEMENU"] . "'";
+      $result2 = db_exec($query, $this->dbccam);
+      
+      $track .= substr($row["RANG"], -2) . ".";
+      $this->chapitres[$key]["rang"] = $track;
+      $this->chapitres[$key]["code"] = $row["CODEMENU"];
+      $this->chapitres[$key]["nom"] = $row["LIBELLE"];
+      $this->chapitres[$key]["rq"] = "";
+      while($row2 = db_fetch_array($result2)) {
+        $this->chapitres[$key]["rq"] .= "* " . str_replace("¶", "\n", $row2["TEXTE"]) . "\n";
+      }
+      $pere = $this->chapitres[$key]["code"];
+    }
+    $this->place = $this->chapitres[3]["rang"];
+  }
    
   // Chargement des variables
   function Load() {
@@ -88,36 +124,11 @@ class CCodeCCAM {
       $row = db_fetch_array($result);
     
       //On rentre les champs de la table actes
-      $this->chapitres[0]["db"] = $row["ARBORESCENCE1"];
-      $this->chapitres[1]["db"] = $row["ARBORESCENCE2"];
-      $this->chapitres[2]["db"] = $row["ARBORESCENCE3"];
-      $this->chapitres[3]["db"] = $row["ARBORESCENCE4"];
       $this->libelleCourt = $row["LIBELLECOURT"];
       $this->libelleLong = $row["LIBELLELONG"];
     
       //On rentre les caracteristiques des chapitres
-      $pere = "000001";
-      $track = "";
-      foreach($this->chapitres as $key => $value) {
-        $rang = $this->chapitres[$key]["db"];
-        $query = "select * from arborescence where CODEPERE = '$pere' and rang = '$rang'";
-        $result = db_exec($query, $this->dbccam);
-        $row = db_fetch_array($result);
-        
-        $query = "select * from notesarborescence where CODEMENU = '" . $row["CODEMENU"] . "'";
-        $result2 = db_exec($query, $this->dbccam);
-        
-        $track .= substr($row["RANG"], -2) . ".";
-        $this->chapitres[$key]["rang"] = $track;
-        $this->chapitres[$key]["code"] = $row["CODEMENU"];
-        $this->chapitres[$key]["nom"] = $row["LIBELLE"];
-        $this->chapitres[$key]["rq"] = "";
-        while($row2 = db_fetch_array($result2)) {
-          $this->chapitres[$key]["rq"] .= "* " . str_replace("¶", "\n", $row2["TEXTE"]) . "\n";
-        }
-        $pere = $this->chapitres[$key]["code"];
-      }
-      $this->place = $this->chapitres[3]["rang"];
+      $this->loadChaps();
       
       // Extraction des remarques
       $this->remarques = array();

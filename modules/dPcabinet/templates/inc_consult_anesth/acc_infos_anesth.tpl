@@ -35,7 +35,15 @@ function reloadListTech() {
             {{$curr_anesth->name}}
           </option>
         {{/foreach}}
-      </select>                        
+      </select>
+      <br />
+      <label for="rques" title="Remarques concernant l'opération">Remarques</label>
+      <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
+        <option value="">&mdash; Choisir une aide</option>
+        {{html_options options=$consult_anesth->_ref_operation->_aides.rques}}
+      </select>
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques)"></button><br />
+      <textarea name="rques" onblur="submitFormAjax(this.form, 'systemMsg')">{{$consult_anesth->_ref_operation->rques}}</textarea>
       </form>
       <br />
       {{/if}}

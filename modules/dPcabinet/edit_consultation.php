@@ -86,6 +86,9 @@ if($consult->consultation_id) {
   $consult->_ref_consult_anesth->loadAides($userSel->user_id);
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
     $consult->_ref_consult_anesth->loadRefs();
+    if($consult->_ref_consult_anesth->_ref_operation->operation_id) {
+      $consult->_ref_consult_anesth->_ref_operation->loadAides($userSel->user_id);
+    }
   }
   $patient =& $consult->_ref_patient;
   $patient->loadRefs();
