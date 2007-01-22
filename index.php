@@ -59,7 +59,7 @@ if (!$AppUI->user_id) {
 $suppressHeaders = dPgetParam($_GET, "suppressHeaders");
 
 // Output the charset header in case of an ajax request
-$ajax = dPgetParam($_GET, "ajax", false);
+$ajax = dPgetParam($_REQUEST, "ajax", false);
 
 // Check if we are in the dialog mode
 $dialog = dPgetParam( $_REQUEST, "dialog");
