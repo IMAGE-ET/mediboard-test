@@ -31,7 +31,8 @@ Url.prototype.addElement = function(oElement, sParamName) {
 }
 
 Url.prototype.make = function() {
-  return "?" + this.aParams.join("&");
+  var sUrl = "?" + this.aParams.join("&");
+  return sUrl;
 }
 
 Url.prototype.redirect = function() {
@@ -41,7 +42,7 @@ Url.prototype.redirect = function() {
     window.location.href = this.make();
 }
 
-Url.prototype.pop = function(iWidth, iHeight, sWindowName) {
+Url.prototype.pop = function(iWidth, iHeight, sWindowName, sBaseUrl) {
   this.addParam("dialog", "1");
   var aFeatures = new Array;
   aFeatures.push("left=50");
@@ -54,8 +55,8 @@ Url.prototype.pop = function(iWidth, iHeight, sWindowName) {
 
   // Forbidden characters for IE
   sWindowName = sWindowName.replace(/[ -]/gi, "_");
-  
-  this.oWindow = window.open(this.make(), sWindowName, aFeatures.join(", "));  
+  var sTargetUrl = sBaseUrl || "";
+  this.oWindow = window.open(sTargetUrl + this.make(), sWindowName, aFeatures.join(", "));  
 }
 
 Url.prototype.popDirect = function(iWidth, iHeight, sWindowName, sBaseUrl) {
