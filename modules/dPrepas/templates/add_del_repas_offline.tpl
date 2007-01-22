@@ -1,12 +1,9 @@
+<div class="text">
 {{$msgSystem|smarty:nodefaults}}
 
 {{if $demandeSynchro}}
-  <button class="tick" onclick="synchrovalid();">Remplacer</button>
-  <button class="cancel" onclick="recupvalue();">Récupérer</button>
-{{elseif $del || $tmp_repas_id}}
-  <script type='text/javascript'>
-    synchro_repas('{{$object->affectation_id}}','{{$object->typerepas_id}}','{{$del}}','{{$object->repas_id}}');
-  </script>
+  <button class="tick" onclick="synchrovalid('{{$object->repas_id}}');">Oui</button>
+  <button class="cancel" onclick="synchroRefused('{{$object->affectation_id}}','{{$object->typerepas_id}}');">Non</button>
 {{/if}}
 
 {{if $callBack}}
@@ -14,3 +11,4 @@
     {{$callBack}}({{$idValue}});
   </script>
 {{/if}}
+</div>

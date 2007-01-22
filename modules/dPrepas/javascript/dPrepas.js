@@ -1,60 +1,274 @@
 var odPrepas;
-var notWhitespace = /\S/;
-var saveInProgress = 0;
+var notWhitespace   = /\S/;
+var saveInProgress  = 0;
+var sMsgAlertReturn = "Vous avez modifié des repas et ceux-ci n'ont pas été synchronisé.\nSi vous continuer, vous perdrez vos modifications.";
+
+var ETAT_DEFAULT      = 0;
+var ETAT_SERV_RECUP   = 16;
+var ETAT_REPAS_RECUP  = 32;
+var ETAT_REPAS_MODIF  = 48;
+var ETAT_SYNCH        = 64;
+
+
+function pageMain() {
+  regFieldCalendar("FrmSelectService", "date");
+}
+
+function storageMain(){
+  loadDatadPrepas();
+  //Initialisation pour le chargement
+  if(config["etatOffline"] == ETAT_SYNCH){
+    setEtatOffline(0);
+  }else{
+    setEtatOffline(config["etatOffline"]);
+  }
+  if(odPrepas){
+    var iEtat = config["etatOffline"];
+    if(iEtat == ETAT_SERV_RECUP){
+      createFormSelect();
+    }else if(iEtat > ETAT_SERV_RECUP){
+      createPlanning();
+    }
+  }
+}
+
+function vwEtatButton(iEtat){
+  switch (iEtat) {
+    case ETAT_DEFAULT:
+      $('tdMenuRecupServ').className  = "button iconSelected";
+      $('tdMenuRecupRepas').className = "button";
+      $('tdMenuModifRepas').className = "button";
+      $('tdMenuSynchro').className    = "button";
+      break;
+    case ETAT_SERV_RECUP:
+      $('tdMenuRecupServ').className  = "button iconSelected";
+      $('tdMenuRecupRepas').className = "button";
+      $('tdMenuModifRepas').className = "button";
+      $('tdMenuSynchro').className    = "button";
+      break;
+    case ETAT_REPAS_RECUP:
+      $('tdMenuRecupServ').className  = "button";
+      $('tdMenuRecupRepas').className = "button iconSelected";
+      $('tdMenuModifRepas').className = "button";
+      $('tdMenuSynchro').className    = "button";
+      break;
+    case ETAT_REPAS_MODIF:
+      $('tdMenuRecupServ').className  = "button";
+      $('tdMenuRecupRepas').className = "button";
+      $('tdMenuModifRepas').className = "button iconSelected";
+      $('tdMenuSynchro').className    = "button";
+      break;
+    case ETAT_SYNCH:
+      $('tdMenuRecupServ').className  = "button";
+      $('tdMenuRecupRepas').className = "button";
+      $('tdMenuModifRepas').className = "button";
+      $('tdMenuSynchro').className    = "button iconSelected";
+      break;
+  }
+}
+
+function setEtatOffline(iEtat){
+  if(!odPrepas){
+    odPrepas = {}
+    odPrepas["config"] = {};
+  }
+  vwEtatButton(iEtat);
+  odPrepas["config"]["etatOffline"] = iEtat;
+  Object.extend(config, odPrepas["config"]);
+  MbStorage.save("dPrepas",odPrepas);
+}
+
+function verifEtatRequis(iEtatRequis){
+  var iEtatActuel = parseInt(odPrepas["config"]["etatOffline"]);
+  iEtatRequis = parseInt(iEtatRequis);
+  if(iEtatRequis > iEtatActuel){
+    return false;
+  }
+  return true;
+}
 
 function loadDatadPrepas(){
   odPrepas = MbStorage.load("dPrepas");
-  Object.extend(config, odPrepas["config"]);
+  if(odPrepas){
+    Object.extend(config, odPrepas["config"]);
+  }
 }
+
+function createFormSelect(oData){
+  if(!oData){
+    oData = MbStorage.load("services");
+  }
+  var oServices       = oData["oServices"];
+  var oEtablissements = oData["oEtablissements"];
+  var oSelectService  = Dom.cloneElemById('templatelistService',true); 
+  $H(oEtablissements).each(function (pair) {
+    var oGroup    = pair.value;
+    var iGroup_id = pair.key;
+    var oOptGroup = document.createElement("optgroup");
+    oOptGroup.setAttribute("label" , oEtablissements[iGroup_id]["text"]);
+    
+    $H(oServices).each(function (pair) {
+      var oService = pair.value;
+      if(oService["group_id"] == iGroup_id){
+        Dom.createOptSelect(oService["service_id"], oService["nom"], false, oOptGroup);
+      }
+    } );
+    if(oOptGroup.hasChildNodes()){
+      oSelectService.appendChild(oOptGroup);
+    }
+  } );
+
+  Dom.writeElem('listService',oSelectService);
+  $('divPlanningRepas').hide();
+  $('divRepas').hide();
+  $('vwServices').show();
+  setEtatOffline(ETAT_SERV_RECUP);
+}
+
+Object.extend(AjaxResponse, {
+  onDisconnected: function() {
+    loginUrl = new Url;
+    loginUrl.addParam("dialog", 1);
+    loginUrl.pop(500, 300, "login", config["urlMediboard"]+"index.php");
+  },
+  storeData: function(sNameKey, oDataSave) {
+    MbStorage.save(sNameKey,oDataSave);
+  },
+  putServices : function(sNameKey, oDataSave){
+    this.storeData(sNameKey, oDataSave);
+    createFormSelect(oDataSave);
+  },
+  putdPrepasData : function(sNameKey, oDataSave){
+    oDataSave["oRepas"][0] = {};
+    this.storeData(sNameKey, oDataSave);
+    loadDatadPrepas();
+    $('vwServices').hide();
+    setEtatOffline(ETAT_REPAS_RECUP);
+    createPlanning();
+  },
+  putRepas : function(oRepas){
+    var iRepasId       = oRepas["repas_id"];
+    var affectation_id = oRepas["affectation_id"];
+    var typerepas_id   = oRepas["typerepas_id"];
+    var iTmpRepasId    = 0;
+    
+    if(odPrepas["oPlanningRepas"][affectation_id][typerepas_id]){
+      iTmpRepasId = odPrepas["oPlanningRepas"][affectation_id][typerepas_id]["_tmp_repas_id"];
+      odPrepas["oRepas"][0][iTmpRepasId] = null;
+    }
+    odPrepas["oRepas"][iRepasId] = oRepas;
+    odPrepas["oPlanningRepas"][affectation_id][typerepas_id]["_tmp_repas_id"] = 0;
+    odPrepas["oPlanningRepas"][affectation_id][typerepas_id]["repas_id"]      = iRepasId;
+    this.storeData("dPrepas", odPrepas);
+  }
+} );
 
 //************************************
 
 function loadServices(){
+  var iEtatActuel = parseInt(odPrepas["config"]["etatOffline"]);
+  if(iEtatActuel < ETAT_SYNCH && verifEtatRequis(ETAT_REPAS_MODIF)){
+    if(!confirm(sMsgAlertReturn)){
+      return false;
+    }
+  }
+  //Retour autorisé apres alerte: Suppression des données pré-existante
+  odPrepas = {}
+  odPrepas["config"] = {};
+  odPrepas["config"]["etatOffline"]  = ETAT_DEFAULT;
+  odPrepas["config"]["CRepas_modif"] = 0;
+  Object.extend(config, odPrepas["config"]);
+  MbStorage.save("dPrepas",odPrepas);
+  //Non Affichage des DIV
+  $('divPlanningRepas').hide();
+  $('divRepas').hide();
+  $('vwServices').hide();
   var url = new Url;
   url.setModuleAction("dPhospi" , "httpreq_get_services_offline");
   url.addParam("dialog"         , "1");
   url.requestUpdateOffline("systemMsg");
 }
 
-function recupdata(){
-  var url = new Url;
+function getDatadPrepas(){
+  var iEtatActuel   = parseInt(odPrepas["config"]["etatOffline"]);
+  var bRepasModif   = verifEtatRequis(ETAT_REPAS_MODIF);
+  var bRepasSynchro = verifEtatRequis(ETAT_SYNCH);
+  
+  if(!verifEtatRequis(ETAT_SERV_RECUP)){
+    return false;
+  }
+  if(iEtatActuel != ETAT_SERV_RECUP){
+    if(bRepasModif && !bRepasSynchro){
+      if(!confirm(sMsgAlertReturn)){
+        return false;
+      }
+      // Retour autorisé apres alerte : Suppression des données pré-existante
+      odPrepas["config"]["CRepas_modif"] = 0;
+    }
+    createFormSelect();
+    return false;
+  }
+  var oForm = document.FrmSelectService;
+  if(!checkForm(oForm)){
+    return false;
+  }
+  var url   = new Url;
   url.setModuleAction("dPrepas" , "httpreq_get_infos_offline");
+  url.addParam("dialog"         , "1");
+  url.addParam("service_id"     , oForm.service_id.value)
+  url.addParam("date"           , oForm.date.value)
+  url.requestUpdateOffline("systemMsg");
+}
+
+function synchrovalid(iRepasId){
+  // Synchonisation acceptée
+  var oForm      = document.editRepas;
+  var oObjRepas  = odPrepas["oRepas"][iRepasId];
+  var sNameMsgId = oObjRepas["affectation_id"] + "_" + oObjRepas["typerepas_id"];
+  Form.fromObject(oForm, oObjRepas);
+  oForm._synchroConfirm.value = 1;
+  submitFormAjaxOffline(oForm, sNameMsgId);
+}
+
+function synchroRefused(affectation_id, typerepas_id){
+  // Synchronisation refusée
+  var oDivMsg    = document.createElement("div");
+  var oTextError = document.createTextNode("Le Repas n'a pas été envoyé.");
+  oDivMsg.className  = "error";
+  oDivMsg.appendChild(oTextError);
+  Dom.writeElem(affectation_id + "_" + typerepas_id,oDivMsg);
+}
+
+function checkInRepas(){
+  var iEtatActuel = parseInt(odPrepas["config"]["etatOffline"]);
+  if(iEtatActuel >= ETAT_SYNCH || !verifEtatRequis(ETAT_REPAS_MODIF)){
+    return false;
+  }
+  if($('divPlanningRepas').style.display == "none"){
+    alert("Veuillez terminer le repas en cours avant de synchroniser les données.");
+    return false;
+  }
+  AjaxResponse.onPerformances = _submitRepas;
+  var url   = new Url;
+  url.setModuleAction("system" , "empty");
   url.addParam("dialog"         , "1");
   url.requestUpdateOffline("systemMsg");
 }
 
-
-function synchro_repas(affectation_id, typerepas_id, del, iRepasId){
-  var iTmpRepasId = odPrepas["oPlanningRepas"][affectation_id][typerepas_id]["_tmp_repas_id"];
-  odPrepas["oPlanningRepas"][affectation_id][typerepas_id]["_tmp_repas_id"] = 0;
-  if(del == 1){
-    // Suppresion d'un repas
-    odPrepas["oPlanningRepas"][affectation_id][typerepas_id]["repas_id"] = 0;
-    odPrepas["oRepas"][iRepasId] = null;
-  }else{
-    // Ajout d'un repas    
-    alert("Creation d'un repas\n" + affectation_id + " - " + typerepas_id + " - " + del + " - " + iRepasId);
-    odPrepas["oPlanningRepas"][affectation_id][typerepas_id]["repas_id"] = iRepasId;
-    odPrepas["oRepas"][iRepasId]       = {};
-    odPrepas["oRepas"][iRepasId]       = odPrepas["oRepas"][0][iTmpRepasId];
-    odPrepas["oRepas"][iRepasId]["_tmp_repas_id"] = 0;
-    odPrepas["oRepas"][iRepasId]["repas_id"]      = iRepasId;
-    odPrepas["oRepas"][0][iTmpRepasId]            = null;
+function _submitRepas(){
+  AjaxResponse.onPerformances = Prototype.emptyFunction;
+  var iEtatActuel = parseInt(odPrepas["config"]["etatOffline"]);
+  if(iEtatActuel >= ETAT_SYNCH || !verifEtatRequis(ETAT_REPAS_MODIF)){
+    return false;
   }
-  //Mémorisation des données
-  MbStorage.save("dPrepas",odPrepas);
-}
-
-
-
-
-function submitRepas(){
+  setEtatOffline(ETAT_SYNCH);
   var oForm = document.editRepas;
   var templateID  = 'templateNoRepas';
   var vwListPlats = Dom.cloneElemById(templateID,true);
   var oAllRepas   = odPrepas["oRepas"];
   
   oForm.action = config["urlMediboard"];
+  oForm._synchroConfirm.value = 0;
   
   // Permet d'ajouter des champs dans le formulaire
   Dom.cleanWhitespace(vwListPlats);
@@ -120,7 +334,9 @@ function saveRepas(){
   }
   
   // Mémorisation des données
-  MbStorage.save("dPrepas",odPrepas);
+  
+  odPrepas["config"]["CRepas_modif"] = 1;
+  setEtatOffline(ETAT_REPAS_MODIF);
   
   // Etat dans le planning
   elem.innerHTML = "";
@@ -281,6 +497,9 @@ function vwPlats(menu_id){
 }
 
 function vwRepas(affectation_id, typerepas_id){
+  if(!verifEtatRequis(ETAT_REPAS_RECUP) || verifEtatRequis(ETAT_SYNCH)){
+    return false;
+  }
   var repas          = odPrepas["oPlanningRepas"][affectation_id][typerepas_id];
   var oAllRepas      = odPrepas["oRepas"];
   var oAffectation   = odPrepas["oAffectations"][affectation_id];
@@ -289,16 +508,17 @@ function vwRepas(affectation_id, typerepas_id){
   var oButtonBack    = Dom.cloneElemById('templateHrefBack', true);
   var oConfigdPrepas = odPrepas["config"];
 
-  oForm.repas_id.value       = repas["repas_id"];
-  oForm._tmp_repas_id.value  = repas["_tmp_repas_id"];
-  oForm.typerepas_id.value   = typerepas_id;
-  oForm.affectation_id.value = affectation_id;
-  oForm.del.value            = 0;
-  oForm._del.value           = 0;
-  oForm.date.value           = oConfigdPrepas["CRepas_date"];
-  var sDate                  = oConfigdPrepas["CRepas_date"].substr(8,2) 
-                               + " / " + oConfigdPrepas["CRepas_date"].substr(5,2) 
-                               + " / " + oConfigdPrepas["CRepas_date"].substr(0,4);
+  oForm.repas_id.value        = repas["repas_id"];
+  oForm._tmp_repas_id.value   = repas["_tmp_repas_id"];
+  oForm.typerepas_id.value    = typerepas_id;
+  oForm.affectation_id.value  = affectation_id;
+  oForm.del.value             = 0;
+  oForm._del.value            = 0;
+  oForm._synchroConfirm.value = 0;
+  oForm.date.value            = oConfigdPrepas["CRepas_date"];
+  var sDate                   = oConfigdPrepas["CRepas_date"].substr(8,2) 
+                                + " / " + oConfigdPrepas["CRepas_date"].substr(5,2) 
+                                + " / " + oConfigdPrepas["CRepas_date"].substr(0,4);
   if(typeof repas != "object"){
     return;
   }
@@ -376,12 +596,11 @@ function viewEtatRepas(elem, affectation_id, typerepas_id){
 
 //Fonction d'ecriture du planning pour 1 jour et 1 service donné
 function createPlanning(){
-  loadDatadPrepas();
-  
   var oTypeRepas    = odPrepas["oListTypeRepas"];
   var oAffectations = odPrepas["oAffectations"];
   var oSejours      = odPrepas["oSejours"];
   var oPatients     = odPrepas["oPatients"];
+  var oConfig       = odPrepas["config"];
   
   var oTblPlanning = document.createElement("table");
   oTblPlanning.className = "tbl";
@@ -412,17 +631,19 @@ function createPlanning(){
     oFirstLine.appendChild(oCelluleTH);
   } );
   
-  // Bouton pour envoyer les repas
-  oButtonSendRepas = document.createElement("button");
-  oButtonSendRepas.setAttribute("class", "tick");
-  oButtonSendRepas.setAttribute("type", "button");
-  oButtonSendRepas.setAttribute("onclick", "submitRepas()");
-  oButtonSendRepas.setAttribute("style", "float:right;");
-  oButtonSendRepas.innerHTML = "Envoyer"
-  var oTdButtonSend = Dom.createTd(null, oFirstLine.childNodes.length);
-  oTdButtonSend.appendChild(oButtonSendRepas);
+  // Information service et date
+  var oTrInformation = document.createElement("tr");
+  var oTdInformation = Dom.createTh("title", oFirstLine.childNodes.length);
+  var oServices      = MbStorage.load("services");
+  var oService       = oServices["oServices"][oConfig["CRepas_service_id"]];
+  var sDate          = oConfig["CRepas_date"].substr(8,2) 
+                       + " / " + oConfig["CRepas_date"].substr(5,2) 
+                       + " / " + oConfig["CRepas_date"].substr(0,4);
   
-  oTblPlanning.appendChild(oTdButtonSend);
+  oTdInformation.innerHTML = oService["nom"] + " le " + sDate;
+  oTrInformation.appendChild(oTdInformation);
+  
+  oTblPlanning.appendChild(oTrInformation);
   oTblPlanning.appendChild(oFirstLine);
   
   $H(oAffectations).each(function (pair) {

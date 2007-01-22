@@ -19,22 +19,18 @@ require_once($AppUI->getModuleFile("dPhospi", "inc_vw_affectations"));
 $service_id = mbGetValueFromGet("service_id" , null);
 $date       = mbGetValueFromGet("date"       , mbDate());
 
-// ATTENTION !!!!!! DONNEES TEMPORAIRES POUR LES TEST
-$service_id = 1;
-$date       = "2006-11-07";
-// FIN DONNEES TEMPORAIRES
-
 $service = null;
 
-// Liste des services
-$services = new CService;
+// Liste des Etablissements selon Permissions
+$etablissements = new CMediusers();
+$etablissements = $etablissements->loadEtablissements(PERM_READ);
+
+// Récupération des services
+$order = "group_id, nom";
 $where = array();
-$where["group_id"] = "= '$g'";
-$order = "nom";
-$services = $services->loadListWithPerms(PERM_READ,$where, $order);
-foreach($services as &$service){
-  $service->validationRepas($date);
-}
+$where["group_id"] = db_prepare_in(array_keys($etablissements));
+$services = new CService;
+$services = $services->loadList($where, $order);
 
 $listTypeRepas = new CTypeRepas;
 $order = "debut, fin, nom";
@@ -117,6 +113,8 @@ $dPrepas = array();
 $dPrepas["date_synchro"]      = time();
 $dPrepas["CRepas_date"]       = $date;
 $dPrepas["CRepas_service_id"] = $service_id;
+$dPrepas["CRepas_modif"]      = "0";
+$dPrepas["etatOffline"]       = "1";
 
 $listRepas   = new CMenu;
 foreach($listTypeRepas as $keyType => $valType){

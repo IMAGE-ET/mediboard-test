@@ -24,17 +24,12 @@ $where["group_id"] = db_prepare_in(array_keys($etablissements));
 $services = new CService;
 $services = $services->loadList($where, $order);
 
-$aListServices = array();
-foreach($services as $keyService=>$service){
-  $aListServices[$service->group_id][$service->_id] = $service;
-}
-
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("etablissements"  , $etablissements);
-$smarty->assign("aListServices"   , $aListServices);
+$smarty->assign("etablissements" , $etablissements);
+$smarty->assign("services"       , $services);
 
 $smarty->display("httpreq_get_services_offline.tpl");
 ?>

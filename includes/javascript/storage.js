@@ -5,17 +5,11 @@ dojo.require("dojo.html.*");
 dojo.require("dojo.lfx.*");
 dojo.require("dojo.storage.*");
 
+function storageMain(){}
 
 var MbStorage = {
   initialize: function(){
-    var directory = dojo.byId("directory");
-    dojo.event.connect(directory, "onchange", this, this.directoryChange);
-    this._printAvailableKeys();
-  },
-
-  directoryChange: function(evt){
-    var key = evt.target.value;
-    this._handleLoad(key);    
+    storageMain();
   },
   
   load: function(key){   
@@ -39,7 +33,6 @@ var MbStorage = {
     dojo.storage.clear();
     
     this._printStatus("Cleared", "message");
-    this._printAvailableKeys();
   },
 
   configure: function(evt){
@@ -50,7 +43,6 @@ var MbStorage = {
       // case they have all been erased
       var self = this;
       dojo.storage.onHideSettingsUI = function(){
-        self._printAvailableKeys();
       }
       
       // show the dialog
@@ -73,7 +65,6 @@ var MbStorage = {
               + "Press the Configure button to grant permission.");
       }else if(status == dojo.storage.SUCCESS){
         self._printStatus("Saved '" + key + "'", "message");
-        self._printAvailableKeys();
       }
     };
     try{
@@ -81,25 +72,6 @@ var MbStorage = {
     }catch(exp){
       alert(exp);
     }
-  },
-    
-  _printAvailableKeys: function(){
-    var availableKeys = dojo.storage.getKeys();
-    
-    var directory = dojo.byId("directory");
-    
-    // clear out any old keys
-    directory.innerHTML = "";
-    
-    // add new ones
-    for (var i = 0; i < availableKeys.length; i++){
-      var optionNode = document.createElement("option");
-      optionNode.appendChild(document.createTextNode(availableKeys[i]));
-      optionNode.value = availableKeys[i];
-      directory.appendChild(optionNode);
-    }
-    
-    return availableKeys;
   },
 
   _handleLoad: function(key){
@@ -113,7 +85,6 @@ var MbStorage = {
     $('systemMsg').innerHTML = "<div class='" + classname + "'>" + message + "</div>";
   }
 };
-
 
 //wait until the storage system is finished loading
 if(dojo.storage.manager.isInitialized() == false){ // storage might already be loaded when we get here

@@ -10,6 +10,5 @@ var oResponse = {
   "oPlanningRepas" : {{$planningRepas|@json}},
   "config"         : {{$dPrepas|@json}}
 };
-oResponse["oRepas"][0] = {};
-AjaxResponse.storeData("dPrepas",oResponse);
+AjaxResponse.putdPrepasData("dPrepas",oResponse);
 </script>

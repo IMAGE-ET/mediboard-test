@@ -14,54 +14,61 @@ if(!$canRead) {
 }
 set_time_limit(90);
 
-$mode = mbGetValueFromGet("mode" , null);
+$indexFile  = mbGetValueFromPost("indexFile"  , 0);
+$style      = mbGetValueFromPost("style"      , 0);
+$image      = mbGetValueFromPost("image"      , 0);
+$javascript = mbGetValueFromPost("javascript" , 0);
+$lib        = mbGetValueFromPost("lib"        , 0);
 
 // Création du fichier Zip
 if(file_exists("tmp/mediboard_repas.zip")){unlink("tmp/mediboard_repas.zip");}
 $zipFile = new Archive_Zip("tmp/mediboard_repas.zip");
 
 
-// Création du fichier index.html
-$plats     = new CPlat;
-
-$smarty = new CSmartyDP();
-$smarty->assign("plats" , $plats);
-$smarty->assign("mediboardScriptStorage", mbLoadScriptsStorage(1));
-
-$smartyStyle = new CSmartyDP();
-
-$smartyStyle->template_dir = "style/$uistyle/templates/";
-$smartyStyle->compile_dir  = "style/$uistyle/templates_c/";
-$smartyStyle->config_dir   = "style/$uistyle/configs/";
-$smartyStyle->cache_dir    = "style/$uistyle/cache/";
- 
-$smartyStyle->assign("offline"              , true);
-$smartyStyle->assign("localeCharSet"        , $locale_char_set);
-$smartyStyle->assign("mediboardVersion"     , @$AppUI->getVersion());
-$smartyStyle->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
-$smartyStyle->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
-$smartyStyle->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
-$smartyStyle->assign("mediboardScript"      , mbLoadScripts(1));
-$smartyStyle->assign("messages"             , $messages);
-$smartyStyle->assign("debugMode"            , @$AppUI->user_prefs["INFOSYSTEM"]);
-$smartyStyle->assign("demoVersion"          , $dPconfig["demo_version"]);
-$smartyStyle->assign("baseUrl"              , $dPconfig["base_url"]);
-$smartyStyle->assign("errorMessage"         , $AppUI->getMsg());
-$smartyStyle->assign("uistyle"              , $uistyle);
-
-ob_start();
-$smartyStyle->display("header.tpl");
-$smarty->display("repas_offline.tpl");
-$smartyStyle->display("footer.tpl");
-$indexFile = ob_get_contents();
-ob_end_clean();
-file_put_contents("tmp/index.html", $indexFile);
-
-$zipFile->add("tmp/index.html"       , array("remove_path"=>"tmp/"));
-if($mode == "index"){
-  return;  
+if($indexFile){
+  // Création du fichier index.html
+  $plats     = new CPlat;  
+  
+  $configOffline = array("urlMediboard" => $dPconfig["base_url"]."/",
+                         "etatOffline"  => 0);
+  
+  $smarty = new CSmartyDP();
+  $smarty->template_dir = "modules/dPrepas/templates/";
+  $smarty->compile_dir  = "modules/dPrepas/templates_c/";
+  $smarty->config_dir   = "modules/dPrepas/configs/";
+  $smarty->cache_dir    = "modules/dPrepas/cache/";
+  $smarty->assign("plats" , $plats);
+  $smarty->assign("mediboardScriptStorage", mbLoadScriptsStorage(1));
+  
+  $smartyStyle = new CSmartyDP();
+  $smartyStyle->template_dir = "style/$uistyle/templates/";
+  $smartyStyle->compile_dir  = "style/$uistyle/templates_c/";
+  $smartyStyle->config_dir   = "style/$uistyle/configs/";
+  $smartyStyle->cache_dir    = "style/$uistyle/cache/";
+  
+  $smartyStyle->assign("offline"              , true);
+  $smartyStyle->assign("localeCharSet"        , $locale_char_set);
+  $smartyStyle->assign("mediboardVersion"     , @$AppUI->getVersion());
+  $smartyStyle->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
+  $smartyStyle->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
+  $smartyStyle->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
+  $smartyStyle->assign("mediboardScript"      , mbLoadScripts(1));
+  $smartyStyle->assign("messages"             , $messages);
+  $smartyStyle->assign("debugMode"            , @$AppUI->user_prefs["INFOSYSTEM"]);
+  $smartyStyle->assign("demoVersion"          , $dPconfig["demo_version"]);
+  $smartyStyle->assign("configOffline"        , $configOffline);
+  $smartyStyle->assign("errorMessage"         , $AppUI->getMsg());
+  $smartyStyle->assign("uistyle"              , $uistyle);
+  
+  ob_start();
+  $smartyStyle->display("header.tpl");
+  $smarty->display("repas_offline.tpl");
+  $smartyStyle->display("footer.tpl");
+  $indexFile = ob_get_contents();
+  ob_end_clean();
+  file_put_contents("tmp/index.html", $indexFile);
+  $zipFile->add("tmp/index.html"       , array("remove_path"=>"tmp/"));
 }
-
 
 
 function delSvnAndSmartyDir($action,$fileProps){
@@ -74,16 +81,26 @@ function delSvnAndSmartyDir($action,$fileProps){
  }
 }
 
-$zipFile->add("images/"                     , array("callback_pre_add"=>"delSvnAndSmartyDir"));
-$zipFile->add("style/"                      , array("callback_pre_add"=>"delSvnAndSmartyDir"));
-$zipFile->add("includes/javascript/"        , array("callback_pre_add"=>"delSvnAndSmartyDir"));
-$zipFile->add("modules/dPrepas/javascript/" , array("callback_pre_add"=>"delSvnAndSmartyDir"));
+if($style){
+  $zipFile->add("style/" , array("callback_pre_add"=>"delSvnAndSmartyDir"));
+}
 
-$zipFile->add("lib/dojo");
-$zipFile->add("lib/jscalendar");
-$zipFile->add("lib/rico");
-$zipFile->add("lib/scriptaculous");
+if($image) {
+  $zipFile->add("images/" , array("callback_pre_add"=>"delSvnAndSmartyDir"));
+}
+
+if($lib){
+  $zipFile->add("lib/dojo");
+  $zipFile->add("lib/jscalendar");
+  $zipFile->add("lib/rico");
+  $zipFile->add("lib/scriptaculous");
+}
+
+if($javascript){
+  $zipFile->add("includes/javascript/"        , array("callback_pre_add"=>"delSvnAndSmartyDir"));
+  $zipFile->add("modules/dPrepas/javascript/" , array("callback_pre_add"=>"delSvnAndSmartyDir"));
+}
 
 mbtrace($zipFile->listContent(), "Contenu de l'archive");
-
+exit;
 ?>

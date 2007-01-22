@@ -12,7 +12,7 @@
   {{$mediboardScript|smarty:nodefaults}}
   {{if $offline}}
   <script type="text/javascript">
-    var config = {"urlMediboard":"{{$baseUrl}}/index.php"};
+    var config = {{$configOffline|@json}};
   </script>
   {{/if}}
 </head>

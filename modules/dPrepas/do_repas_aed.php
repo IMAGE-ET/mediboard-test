@@ -52,12 +52,8 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
         $smarty->assign("demandeSynchro" , $demandeSynchro);
         $smarty->assign("msgSystem"      , $msgSystem);
         $smarty->assign("callBack"       , $callBack);
-        $smarty->assign("idValue"        , $idValue);
-
-        if($del){
+        if($demandeSynchro){
           $smarty->assign("object"     , $this->_objBefore);
-        }elseif($tmp_repas_id && !$msgSystem){
-          $smarty->assign("object"     , $this->_obj);
         }
         $smarty->display("add_del_repas_offline.tpl");
       }
@@ -124,7 +120,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
          $nbLogs = db_loadResult($sql->getRequest());
          
          if($nbLogs){
-           $AppUI->setMsg("Le repas a été modifié depuis la dernière synchronisation", UI_MSG_WARNING);
+           $AppUI->setMsg("Le repas a été modifié depuis la dernière synchronisation. Voulez-vous tout de même l'enregistrer ?", UI_MSG_WARNING);
            $this->doRedirect(true);
          }
        }

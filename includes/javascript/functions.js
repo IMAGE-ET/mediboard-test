@@ -499,6 +499,17 @@ Dom = {
     return oTd;
   },
   
+  createTh : function(sClassname, sColspan){
+    var oTh = document.createElement("th");
+    if(sClassname){
+      oTh.className = sClassname;
+    }
+    if(sColspan){
+      oTh.setAttribute("colspan" , sColspan); 
+    }
+    return oTh;
+  },
+  
   createImg : function(sSrc){
     var oImg = document.createElement("img");
     oImg.setAttribute("src", sSrc);

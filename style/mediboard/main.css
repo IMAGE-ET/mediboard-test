@@ -149,6 +149,10 @@ textarea {
   width: 99%;
 }
 
+div div.text {
+  white-space: normal;
+}
+
 button,
 a.button,  
 a.buttonedit, 
@@ -888,6 +892,21 @@ div.tooltip table.tbl {
 
 #header td {
   padding: 0px;
+}
+
+table.Offline td.button {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table.Offline select,
+table.Offline option,
+table.Offline input,
+table.Offline button  {
+  height: 20px;
+  font-size: 15px;
+  font-weight: bold;
+  margin : 2px 2px;
 }
 
 /* Banner */

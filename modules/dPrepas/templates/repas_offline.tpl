@@ -1,12 +1,60 @@
 {{$mediboardScriptStorage|smarty:nodefaults}}
 <script type="text/javascript" src="modules/dPrepas/javascript/dPrepas.js"></script>
 
-<button type="button" onclick="loadServices();">Recup Services</button>
-<button type="button" onclick="recupdata();">Recup data dPrepas</button>
-<button class="trash" type="button" onclick="return MbStorage.clear()">Tout Supprimer</button>
-<br />
-<select id="directory" size="3"></select>
-<button class="tick" type="button" onclick="createPlanning()">Go</button>
+<table class='titleblock'>
+  <tr>
+    <td class='titlecell'>
+      Gestion des Repas Offline
+    </td>
+  </tr>
+</table>
+<table id="header" class="Offline" cellspacing="0">
+  <tr>
+    <td id="menubar">
+      <table>
+        <tr>
+          <td id="tdMenuRecupServ" class="button">
+            <a href="#" onclick="loadServices();">
+              <img src="images/pictures/download.png" title="Récupérer les services"/><br />Récupérer Les services
+            </a>
+          </td>
+          <td id="tdMenuRecupRepas" class="button">
+            <a href="#" onclick="getDatadPrepas();">
+              <img src="images/pictures/download.png" title="Récupérer les services"/><br />Récupérer les Repas
+            </a>
+          </td>
+          <td id="tdMenuModifRepas" class="button">
+            <a href="#">
+              <img src="images/pictures/dPrepas.png" title="Modification des Repas"/><br />Modification des Repas
+            </a>
+          </td>
+          <td id="tdMenuSynchro" class="button">
+            <a href="#" onclick="checkInRepas();">
+              <img src="images/pictures/upload.png" title="Envoi des Repas"/><br />Envoi des Repas
+            </a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<form name="FrmSelectService" action="#" method="post">
+<table class="form" id="vwServices" style="display:none;">
+  <tr>
+    <th><label for="service_id" title="Veuillez sélectionner un service">Service</label></th>
+    <td id="listService"><select title="ref|notNull" name="service_id"></select></td>
+  </tr>
+  <tr>
+    <th><label for="date" title="Veuillez sélectionner une date">Date</label></th>
+    <td class="date">
+      <div id="FrmSelectService_date_da"></div>
+      <input type="hidden" name="date" title="date|notNull" value="" />
+      <img id="FrmSelectService_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" />
+    </td>
+  </tr>
+</table>
+</form>
 
 <div id="divPlanningRepas"></div>
 <div id="divRepas" style="display:none">
@@ -20,6 +68,7 @@
   <input type="hidden" name="date" value="" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="_del" value="0" />
+  <input type="hidden" name="_synchroConfirm" value="0" />
   
   <table class="form">
     <tr>
@@ -90,6 +139,7 @@
     </tbody>
   </table>
   
+  <select id="templatelistService" title="ref|notNull" name="service_id"><option value="">&mdash; Veuillez sélectionner un service</option></select>
   <button id="templateButtonMod" onclick="saveRepas();" type="button" class="modify">{{tr}}Modify{{/tr}}</button>
   <button id="templateButtonDel" onclick="confirmDeletionOffline(this.form, saveRepas,{typeName:'{{tr escape="javascript"}}CRepas.one{{/tr}}'})" type="button" class="trash">{{tr}}Delete{{/tr}}</button>
   <button id="templateButtonAdd" onclick="saveRepas();" type="button" class="submit">{{tr}}Create{{/tr}}</button>
@@ -97,7 +147,3 @@
     <img align="top" src="images/icons/prev.png" alt="Fichier précédent" />Retour
   </a>
 </div>
-
-
-
-

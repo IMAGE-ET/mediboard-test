@@ -240,7 +240,7 @@ if (!$suppressHeaders) {
     $smartyHeader->assign("affModule" , $affModule);
   }
   $smartyHeader->assign("offline"              , false);
-  $smartyHeader->assign("baseUrl"              , null);
+  $smartyHeader->assign("configOffline"        , null);
   $smartyHeader->assign("titleBlockData"       , $titleBlockData);
   $smartyHeader->assign("localeCharSet"        , $locale_char_set);
   $smartyHeader->assign("mediboardVersion"     , @$AppUI->getVersion());

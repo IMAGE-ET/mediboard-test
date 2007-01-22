@@ -96,10 +96,13 @@ Url.prototype.requestUpdate = function(ioTarget, oOptions) {
 
   var oDefaultOptions = {
     waitingText: "Chargement",
+    urlBase: "",
     method: "get",
     parameters:  this.aParams.join("&"), 
     asynchronous: true,
-    evalScripts: true
+    evalScripts: true,
+    onFailure: function(){$(ioTarget).innerHTML = "<div class='error'>Le serveur rencontre quelques problemes.</div>";},
+    onException: function(){$(ioTarget).innerHTML = "<div class='error'>Le serveur est injoignable.</div>";;},
   };
 
   Object.extend(oDefaultOptions, oOptions);
@@ -109,32 +112,26 @@ Url.prototype.requestUpdate = function(ioTarget, oOptions) {
   if (oDefaultOptions.waitingText)
     $(ioTarget).innerHTML = "<div class='loading'>" + oDefaultOptions.waitingText + "...<br>Merci de patienter.</div>";
     
-  new Ajax.Updater(ioTarget, "index.php", oDefaultOptions);  
+  new Ajax.Updater(ioTarget, oDefaultOptions["urlBase"] + "index.php", oDefaultOptions);  
 }
 
 Url.prototype.requestUpdateOffline = function(ioTarget, oOptions) {
   if (typeof netscape != 'undefined' && typeof netscape.security != 'undefined') {
     netscape.security.PrivilegeManager.enablePrivilege('UniversalBrowserRead');
   }
-  this.addParam("suppressHeaders"  , "1");
-  this.addParam("ajax"             , "1");
+  
   this.addParam("_syncroOffline"   , "1");
-  this.addParam("_synchroDatetime" , config["date_synchro"]);
+  if(config["date_synchro"]){
+    this.addParam("_synchroDatetime" , config["date_synchro"]);
+  }
   
   var oDefaultOptions = {
-    waitingText: "Chargement",
-    method: "get",
-    parameters:  this.aParams.join("&"), 
-    asynchronous: true,
-    evalScripts: true
+      urlBase: config["urlMediboard"],
   };
 
   Object.extend(oDefaultOptions, oOptions);
   
-  if(oDefaultOptions.waitingText)
-    $(ioTarget).innerHTML = "<div class='loading'>" + oDefaultOptions.waitingText + "...<br>Merci de patienter.</div>";
-
-  new Ajax.Updater(ioTarget, config["urlMediboard"], oDefaultOptions);
+  this.requestUpdate(ioTarget, oDefaultOptions);
 }
 
 Url.prototype.periodicalUpdate = function(ioTarget, oOptions) {

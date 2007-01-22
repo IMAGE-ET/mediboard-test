@@ -1,7 +1,7 @@
 <script type="text/javascript">
 var oResponse = {
   "oEtablissements"  : {{$etablissements|@json}},
-  "oServices"        : {{$aListServices|@json}}
+  "oServices"        : {{$services|@json}}
 };
-AjaxResponse.storeData("services",oResponse);
+AjaxResponse.putServices("services",oResponse);
 </script>
