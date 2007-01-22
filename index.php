@@ -55,6 +55,15 @@ if (!$AppUI->user_id) {
   $AppUI->loadPrefs(0);
 }
 
+// Don't output anything. Usefull for fileviewers, popup dialogs, ajax requests, etc.
+$suppressHeaders = dPgetParam($_GET, "suppressHeaders");
+
+// Output the charset header in case of an ajax request
+$ajax = dPgetParam($_GET, "ajax", false);
+
+// Check if we are in the dialog mode
+$dialog = dPgetParam( $_REQUEST, "dialog");
+
 // check if the user is trying to log in
 if(isset($_POST["login"])) {
   $username = dPgetParam($_POST   , "username", "");
@@ -66,14 +75,11 @@ if(isset($_POST["login"])) {
     @include_once("./locales/core.php");
     $AppUI->setMsg("Login Failed", UI_MSG_ERROR);
   }
+  if($ok && $dialog) {
+    $redirect = "m=system&a=login_ok&dialog=1";
+  }
   $AppUI->redirect($redirect);
 }
-
-// Don't output anything. Usefull for fileviewers, popup dialogs, ajax requests, etc.
-$suppressHeaders = dPgetParam($_GET, "suppressHeaders");
-
-// Output the charset header in case of an ajax request
-$ajax = dPgetParam($_GET, "ajax", false);
 
 // Get the user preference
 $uistyle = $AppUI->getPref("UISTYLE");
@@ -119,6 +125,7 @@ if (!$AppUI->user_id) {
     $smartyLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
     $smartyLogin->assign("mediboardScript"      , mbLoadScripts(1));
     $smartyLogin->assign("demoVersion"          , $dPconfig["demo_version"]);
+    $smartyLogin->assign("dialog"               , $dialog);
     $smartyLogin->assign("mb_version_major"     , $mb_version_major);
     $smartyLogin->assign("mb_version_minor"     , $mb_version_minor);
     $smartyLogin->assign("mb_version_patch"     , $mb_version_patch);
@@ -205,7 +212,6 @@ if (!$suppressHeaders) {
   //Liste des Etablissements
   $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
   // Liste des Modules
-  $dialog = dPgetParam( $_GET, "dialog");
   if (!$dialog) {
     //top navigation menu
     $iKey = 0;

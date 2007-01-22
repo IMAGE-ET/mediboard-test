@@ -19,7 +19,9 @@ var djConfig = { isDebug: false };
 
 var AjaxResponse = {
   onDisconnected: function() {
-    Console.trace("onDisconnected");
+    loginUrl = new Url;
+    loginUrl.addParam("dialog", 1);
+    loginUrl.pop(500, 300, "login");
   },
   
   onPerformances: Prototype.emptyFunction

@@ -29,7 +29,9 @@
   <form name="loginFrm" action="./index.php" method="post">
   <input type="hidden" name="login" value="{{$time}}" />
   <input type="hidden" name="redirect" value="{{$redirect|smarty:nodefaults}}" />
+  <input type="hidden" name="dialog" value="{{$dialog}}" />
   <table class="form">
+    {{if !$dialog}}
     <tr>
       <th class="category" colspan="3">{{$app->cfg.company_name}}</th>
     </tr>
@@ -45,7 +47,7 @@
         </p>
       </td>
     </tr>
-
+    {{/if}}
     <tr>
       <th class="category" colspan="2">Connexion</th>
       {{if $demoVersion}}
@@ -75,7 +77,7 @@
     <tr>
       <td colspan="2" class="button"><input type="submit" name="login" value="{{tr}}login{{/tr}}" /></td>
     </tr>
-
+    {{if !$dialog}}
     <tr>
       {{if $demoVersion}}
       <th class="category">Hébergé chez</th>
@@ -100,6 +102,7 @@
         <p>Pour un meilleur confort et plus de sécurité, nous recommandons d'utiliser le navigateur Firefox</p>
       </td>
     </tr>
+    {{/if}}
     </table>
   </form>
 </div>

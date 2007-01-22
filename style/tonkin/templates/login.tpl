@@ -29,7 +29,9 @@
   <form name="loginFrm" action="./index.php" method="post">
   <input type="hidden" name="login" value="{{$time}}" />
   <input type="hidden" name="redirect" value="{{$redirect|smarty:nodefaults}}" />
+  <input type="hidden" name="dialog" value="{{$dialog}}" />
   <table class="form">
+    {{if !$dialog}}
     <tr>
       <th class="category" colspan="3">{{$app->cfg.company_name}}</th>
     </tr>
@@ -44,6 +46,7 @@
         </p>
       </td>
     </tr>
+    {{/if}}
     <tr>
       <th class="category" rowspan="6" style="vertical-align: middle;">
         <img src="./style/{{$uistyle}}/images/pictures/tonkin.gif" alt="Groupe Tonkin" />
