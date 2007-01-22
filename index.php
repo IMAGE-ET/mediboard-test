@@ -188,8 +188,8 @@ $canAuthor   = $canEdit;
 $canDelete   = $canEdit;
 
 // do some db work if dosql is set
-if(isset($_REQUEST["dosql"])) {
-  $mDo = isset($_REQUEST["m"]) ? $_REQUEST["m"] : $m;
+if($dosql) {
+  $mDo = isset($_POST["m"]) ? $_POST["m"] : $m;
   require("./modules/$mDo/$dosql.php");
 }
 
