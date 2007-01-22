@@ -189,7 +189,7 @@ $canDelete   = $canEdit;
 
 // do some db work if dosql is set
 if($dosql) {
-  $mDo = isset($_POST["m"]) ? $_POST["m"] : $m;
+  $mDo = mbGetValueFromPost("m", $m);
   require("./modules/$mDo/$dosql.php");
 }
 

@@ -90,7 +90,10 @@ td.tabview {
 }
 
 table.tabmenu {
-  border: 10px 0px;
+  border-top   : 10px;
+  border-bottom: 10px;
+  border-left  : 0px;
+  border-right : 0px;
 }
 
 table.tabmenu td {
