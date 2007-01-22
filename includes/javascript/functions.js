@@ -21,7 +21,7 @@ var AjaxResponse = {
   onDisconnected: function() {
     loginUrl = new Url;
     loginUrl.addParam("dialog", 1);
-    loginUrl.pop(500, 300, "login");
+    loginUrl.pop(610, 300, "login");
   },
   
   onPerformances: Prototype.emptyFunction
