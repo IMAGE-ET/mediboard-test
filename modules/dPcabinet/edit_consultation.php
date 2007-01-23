@@ -237,6 +237,7 @@ $smarty->assign("traitement"     , $traitement);
 $smarty->assign("techniquesComp" , $techniquesComp);
 $smarty->assign("examComp"       , $examComp);
 $smarty->assign("_is_anesth"     , $_is_anesth);  
+$smarty->assign("noReglement"    , 0);
 
 if($_is_anesth) {
   $secs = array();

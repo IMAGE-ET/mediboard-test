@@ -82,6 +82,9 @@
             </a>
           </td>
           <td {{if $vueReduite}}class="text"{{/if}}>
+            <a href="index.php?m=dPsalleOp&amp;tab=vw_anesthesie&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" style="float:right;">
+              <img src="images/icons/anesth.png" title="" />
+            </a>
             {{if $vueReduite}}
             <button class="print notext" onclick="printFeuilleBloc({{$curr_operation->operation_id}})" style="float:right;"></button>
             {{/if}}

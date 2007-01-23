@@ -14,7 +14,8 @@ if (!$canEdit) {
 }
 
 // Utilisateur sélectionné ou utilisateur courant
-$prat_id = mbGetValueFromGetOrSession("chirSel", 0);
+$prat_id      = mbGetValueFromGetOrSession("chirSel", 0);
+$noReglement  = mbGetValueFromGet("noReglement" , 0);
 
 $userSel = new CMediusers;
 $userSel->load($prat_id ? $prat_id : $AppUI->user_id);
@@ -111,6 +112,7 @@ $smarty->assign("listModeleFunc", $listModeleFunc);
 $smarty->assign("tarifsChir"    , $tarifsChir);
 $smarty->assign("tarifsCab"     , $tarifsCab);
 $smarty->assign("consult"       , $consult);
+$smarty->assign("noReglement"   , $noReglement);
 
 $smarty->display("inc_fdr_consult.tpl");
 

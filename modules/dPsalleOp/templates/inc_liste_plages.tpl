@@ -29,6 +29,6 @@
       
       </form>
       <script type="text/javascript">
-      regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&op=0&date=");
+      regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&op=0&date=");
 	  </script>      
       {{include file="inc_details_plages.tpl"}}

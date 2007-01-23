@@ -81,6 +81,9 @@ function newExam(oSelect, consultation_id) {
 function reloadFdr() {
   var url = new Url;
   url.setModuleAction("dPcabinet", "httpreq_vw_fdr_consult");
+  {{if $noReglement}}
+  url.addParam("noReglement", "1");  
+  {{/if}}
   url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   url.requestUpdate('fdrConsultContent', { waitingText : null });
 }
@@ -118,7 +121,9 @@ function submitFdr(oForm) {
   <tr>
     <th class="category">Fichiers liés</th>
     <th class="category">Documents</th>
+    {{if !$noReglement}}
     <th colspan="2" class="category">Règlement</th>
+    {{/if}}
   </tr>
   <tr>
 
@@ -146,15 +151,14 @@ function submitFdr(oForm) {
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
             <input type="hidden" name="_view" value="{{$curr_file->_view}}" />
-            <button class="trash notext" type="button" onclick="confirmFileDeletion(this)">
-            </button>
+            <button class="trash notext" type="button" onclick="confirmFileDeletion(this)"></button>
           </form>
         </li>
         {{foreachelse}}
           <li>Aucun fichier disponible</li>
         {{/foreach}}
       </ul>     
-      <button class="new" onclick="uploadFile('CConsultation', {{$consult->consultation_id}}, '')">
+      <button class="new" type="button" onclick="uploadFile('CConsultation', {{$consult->consultation_id}}, '')">
         Ajouter un fichier
       </button>
     </td>
@@ -217,7 +221,7 @@ function submitFdr(oForm) {
     </form>
     
     </td>
-
+    {{if !$noReglement}}
     <!-- Règlements -->	
     
     <td>
@@ -325,6 +329,7 @@ function submitFdr(oForm) {
       
       </form>
     </td>
+    {{/if}}
         
 
   </tr>

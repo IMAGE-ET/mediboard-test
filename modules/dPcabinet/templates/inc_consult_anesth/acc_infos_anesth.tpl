@@ -48,7 +48,7 @@ function reloadListTech() {
       <br />
       {{/if}}
       <form name="editAsaFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
       <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
@@ -97,13 +97,13 @@ function reloadListTech() {
       </form>
     </td>
     <td class="text" rowspan="2" id="listTech">
-      {{include file="inc_consult_anesth/techniques_comp.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_consult_anesth/techniques_comp.tpl"}}
     </td>
   </tr>
   <tr>
     <td>
       <form class="watch" name="editFrmRemarques" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
       <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
