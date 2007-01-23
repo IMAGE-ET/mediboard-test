@@ -40,7 +40,6 @@ function pageMain() {
     <th>{{tr}}Type{{/tr}}</th>
     <th>{{tr}}Version{{/tr}}</th>
     <th>{{tr}}Menu Text{{/tr}}</th>
-    <th>{{tr}}Menu Icon{{/tr}}</th>
     <th>{{tr}}Menu Status{{/tr}}</th>
     <th>#</th>
   </tr>
@@ -96,7 +95,6 @@ function pageMain() {
     <td>{{$module.mod_type}}</td>
     <td>{{$module.mod_version}}</td>
     <td>{{tr}}module-{{$module.mod_name}}-long{{/tr}}</td>
-    <td>{{$module.mod_name}}.png</td>
     <td>
       {{if $module.mod_ui_active}}
         {{assign var="src" value="./images/icons/dotgreen.gif"}}
