@@ -9,7 +9,6 @@ var ETAT_REPAS_RECUP  = 32;
 var ETAT_REPAS_MODIF  = 48;
 var ETAT_SYNCH        = 64;
 
-
 function pageMain() {
   regFieldCalendar("FrmSelectService", "date");
 }
@@ -139,7 +138,7 @@ Object.extend(AjaxResponse, {
     createFormSelect(oDataSave);
   },
   putdPrepasData : function(sNameKey, oDataSave){
-    oDataSave["oRepas"][0] = {};
+    oDataSave["oRepasNew"] = {};
     this.storeData(sNameKey, oDataSave);
     loadDatadPrepas();
     $('vwServices').hide();
@@ -265,7 +264,8 @@ function _submitRepas(){
   var oForm = document.editRepas;
   var templateID  = 'templateNoRepas';
   var vwListPlats = Dom.cloneElemById(templateID,true);
-  var oAllRepas   = odPrepas["oRepas"];
+  var oRepasBdd   = odPrepas["oRepas"];
+  var oRepasNew   = odPrepas["oRepasNew"];
   
   oForm.action = config["urlMediboard"];
   oForm._synchroConfirm.value = 0;
@@ -278,26 +278,24 @@ function _submitRepas(){
   var thTitle      = linesPlats[0].childNodes[0];
   thTitle.appendChild(inputMenuId);
   Dom.writeElem('listPlat',vwListPlats);
-  
-  $H(oAllRepas).each(function (pair) { 
+
+  $H(oRepasNew).each(function (pair) {
     var oObj = pair.value;
-    var iKey = pair.key;
-    if(iKey == 0){
-      $H(oObj).each(function (pair) {
-        if(pair.value != null){
-          Form.fromObject(oForm, pair.value);
-          var sNameMsgId = oObj[pair.key]["affectation_id"] + "_" + oObj[pair.key]["typerepas_id"];
-          submitFormAjaxOffline(oForm, sNameMsgId);
-        }
-      });
-    }else{
-      if(pair.value != null){
-        Form.fromObject(oForm, oObj);
-        var sNameMsgId = oObj["affectation_id"] + "_" + oObj["typerepas_id"];
-        submitFormAjaxOffline(oForm, sNameMsgId);
-      }
+    if(pair.value != null){
+      Form.fromObject(oForm, oObj);
+      var sNameMsgId = oObj["affectation_id"] + "_" + oObj["typerepas_id"];
+      submitFormAjaxOffline(oForm, sNameMsgId);
     }
-  });
+  } );
+  
+  $H(oRepasBdd).each(function (pair) {
+    var oObj = pair.value;
+    if(pair.value != null){
+      Form.fromObject(oForm, oObj);
+      var sNameMsgId = oObj["affectation_id"] + "_" + oObj["typerepas_id"];
+      submitFormAjaxOffline(oForm, sNameMsgId);
+    }
+  } );
 }
 
 function view_planning(){
@@ -330,7 +328,7 @@ function saveRepas(){
       odPrepas["oPlanningRepas"][affectation_id][typerepas_id]["_tmp_repas_id"] = 0;
       odPrepas["oPlanningRepas"][affectation_id][typerepas_id]["repas_id"] = 0;
     }
-    odPrepas["oRepas"][0][iTmpRepasId] = oDataForm;
+    odPrepas["oRepasNew"][iTmpRepasId] = oDataForm;
   }
   
   // Mémorisation des données
@@ -433,14 +431,15 @@ function vwPlats(menu_id){
   var tmp_repas_id = oForm._tmp_repas_id.value;
   var typerepas_id = oForm.typerepas_id.value;
   var del          = oForm._del.value;
-  var oAllRepas    = odPrepas["oRepas"];
+  var oRepasBdd    = odPrepas["oRepas"];
+  var oRepasNew    = odPrepas["oRepasNew"];
   var oMenus       = odPrepas["oMenus"];
   
   if(repas_id != 0){
-    var oRepas = oAllRepas[repas_id];
+    var oRepas = oRepasBdd[repas_id];
   }
   if(tmp_repas_id != 0){
-    var oRepas = oAllRepas[0][tmp_repas_id];
+    var oRepas = oRepasNew[tmp_repas_id];
   }
   if(menu_id == "" || menu_id == null){
     var templateID = 'templateNoRepas';
@@ -501,7 +500,8 @@ function vwRepas(affectation_id, typerepas_id){
     return false;
   }
   var repas          = odPrepas["oPlanningRepas"][affectation_id][typerepas_id];
-  var oAllRepas      = odPrepas["oRepas"];
+  var oRepasBdd      = odPrepas["oRepas"];
+  var oRepasNew      = odPrepas["oRepasNew"];
   var oAffectation   = odPrepas["oAffectations"][affectation_id];
   var oType          = odPrepas["oListTypeRepas"][typerepas_id];
   var oForm          = document.editRepas;
@@ -524,10 +524,10 @@ function vwRepas(affectation_id, typerepas_id){
   }
   $('divPlanningRepas').hide();
   if(repas["repas_id"] != 0){
-    var oRepas = oAllRepas[repas["repas_id"]];
+    var oRepas = oRepasBdd[repas["repas_id"]];
   }
   if(repas["_tmp_repas_id"] != 0){
-    var oRepas = oAllRepas[0][repas["_tmp_repas_id"]];
+    var oRepas = oRepasNew[repas["_tmp_repas_id"]];
   }
   if(oRepas){
     oForm._del.value = oRepas["del"];
@@ -556,7 +556,8 @@ function vwRepas(affectation_id, typerepas_id){
 function viewEtatRepas(elem, affectation_id, typerepas_id){
   // Récupération des repas
   var repas     = odPrepas["oPlanningRepas"][affectation_id][typerepas_id];
-  var oAllRepas = odPrepas["oRepas"];
+  var oRepasBdd = odPrepas["oRepas"];
+  var oRepasNew = odPrepas["oRepasNew"];
   
   // Création des différents état de Repas
   var imgRepasPlanifie = Dom.createImg("images/icons/tick-dPrepas.png");
@@ -573,10 +574,10 @@ function viewEtatRepas(elem, affectation_id, typerepas_id){
       urlimg.appendChild(imgRepasFlag);
     }else{
       if(repas["repas_id"] != 0){
-        var oRepas = oAllRepas[repas["repas_id"]];
+        var oRepas = oRepasBdd[repas["repas_id"]];
       }
       if(repas["_tmp_repas_id"] != 0){
-        var oRepas = oAllRepas[0][repas["_tmp_repas_id"]];
+        var oRepas = oRepasNew[repas["_tmp_repas_id"]];
       }
       
       if(oRepas && oRepas["del"] == 1){
