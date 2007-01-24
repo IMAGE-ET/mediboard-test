@@ -12,16 +12,21 @@ require_once("checkauth.php");
 require_once ("../classes/mbpath.class.php");
 
 class CLibraryPatch {
-  var $dirName = "";
+  var $dirName    = "";
+  var $subDirName = "";
   var $sourceName = "";
-  var $targetDir = "";
+  var $targetDir  = "";
   
   function apply() {
     global $mbpath;
     $pkgsDir = $mbpath."libpkg";
     $libsDir = $mbpath."lib";
     $patchDir = "$pkgsDir/patches";
-    $sourcePath = "$patchDir/$this->dirName/$this->sourceName";
+    $sourcePath = "$patchDir/$this->dirName/";
+    if($this->subDirName) {
+      $sourcePath .= "$this->subDirName/";
+    }
+    $sourcePath .= "$this->sourceName";
     $targetPath = "$libsDir/$this->dirName/$this->targetDir/$this->sourceName";
     $oldPath = $targetPath . ".old";
     
@@ -242,8 +247,19 @@ $library->renamer = $renamer;
 
 $patch = new CLibraryPatch;
 $patch->dirName = "fckeditor";
+$patch->subDirName = "browser";
 $patch->sourceName = "config.php";
 $patch->targetDir = "editor/filemanager/browser/default/connectors/php";
+
+$library->patches[] = $patch;
+
+$patch = new CLibraryPatch;
+$patch->dirName = "fckeditor";
+$patch->subDirName = "uploader";
+$patch->sourceName = "config.php";
+$patch->targetDir = "editor/filemanager/upload/php";
+
+$library->patches[] = $patch;
 
 $patch = new CLibraryPatch;
 $patch->dirName = "fckeditor";

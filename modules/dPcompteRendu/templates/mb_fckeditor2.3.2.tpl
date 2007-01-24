@@ -14,7 +14,7 @@ FCKConfig.ToolbarSets["Default"] = [
 	['Save','Preview'],
 	['Cut','Copy','Paste','PasteText','PasteWord','-','Print'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-	['Table','Rule','Smiley','SpecialChar','mbPageBreak'],
+	['Table','Rule','Image', 'Smiley','SpecialChar','mbPageBreak'],
 	['FitWindow','Source','About'],
 	'/',
 	['FontFormat','FontName','FontSize'],
