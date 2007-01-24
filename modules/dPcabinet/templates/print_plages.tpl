@@ -30,6 +30,7 @@
     <th>Durée</th>
   </tr>
   {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
+  {{if $curr_consult->patient_id}}
   <tr>
     {{if $curr_consult->premiere}}
     <td style="background-color:#eaa">
@@ -49,6 +50,7 @@
     <td class="text">{{$curr_consult->rques|nl2br}}</td>
     <td class="text">{{$curr_consult->duree}} x {{$curr_plage->freq|date_format:"%M"}} min</td>
   </tr>
+  {{/if}}
   {{/foreach}}
   {{/foreach}}
 </table>

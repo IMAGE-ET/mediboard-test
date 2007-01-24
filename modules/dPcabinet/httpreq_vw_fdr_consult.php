@@ -15,7 +15,32 @@ if (!$canEdit) {
 
 // Utilisateur sélectionné ou utilisateur courant
 $prat_id      = mbGetValueFromGetOrSession("chirSel", 0);
+$selConsult   = mbGetValueFromGetOrSession("selConsult", null);
 $noReglement  = mbGetValueFromGet("noReglement" , 0);
+
+$consult = new CConsultation();
+
+// Test compliqué afin de savoir quelle consultation charger
+if(isset($_GET["selConsult"])) {
+  if($consult->load($selConsult) && $consult->patient_id) {
+    $consult->loadRefsFwd();
+    $prat_id = $consult->_ref_plageconsult->chir_id;
+    mbSetValueToSession("chirSel", $prat_id);
+  } else {
+    $consult = new CConsultation();
+    $selConsult = null;
+    mbSetValueToSession("selConsult");
+  }
+} else {
+  if($consult->load($selConsult) && $consult->patient_id) {
+    $consult->loadRefsFwd();
+    if($prat_id !== $consult->_ref_plageconsult->chir_id) {
+      $consult = new CConsultation();
+      $selConsult = null;
+      mbSetValueToSession("selConsult");
+    }
+  }
+}
 
 $userSel = new CMediusers;
 $userSel->load($prat_id ? $prat_id : $AppUI->user_id);
@@ -34,10 +59,7 @@ if (!$userSel->canEdit()) {
   $AppUI->redirect("m=dPcabinet&tab=0");
 }
 
-$selConsult = mbGetValueFromGetOrSession("selConsult");
-
 // Consultation courante
-$consult = new CConsultation();
 $consult->_ref_chir = $userSel;
 if ($selConsult) {
   $consult->load($selConsult);

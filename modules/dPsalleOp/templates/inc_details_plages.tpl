@@ -57,7 +57,7 @@
        <table class="tbl">
         <tr>
           <th>Heure</th>
-          <th>Patient</th>
+          <th colspan="2">Patient</th>
           {{if !$vueReduite}}
           <th>Intervention</th>
           <th>Coté</th>
@@ -82,16 +82,22 @@
             </a>
           </td>
           <td {{if $vueReduite}}class="text"{{/if}}>
-            <a href="index.php?m=dPsalleOp&amp;tab=vw_anesthesie&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" style="float:right;">
-              <img src="images/icons/anesth.png" title="" />
-            </a>
-            {{if $vueReduite}}
-            <button class="print notext" onclick="printFeuilleBloc({{$curr_operation->operation_id}})" style="float:right;"></button>
-            {{/if}}
             <a href="index.php?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
               {{$curr_operation->_ref_sejour->_ref_patient->_view}}
             </a>
           </td>
+          
+          
+          <td>
+            {{if $vueReduite}}
+            <button class="print notext" onclick="printFeuilleBloc({{$curr_operation->operation_id}})"></button>
+            {{else}}
+            <a href="index.php?m=dPsalleOp&amp;tab=vw_anesthesie&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}">
+              <img src="images/icons/anesth.png" title="" />
+            </a>
+            {{/if}}
+          </td>
+          
           {{if !$vueReduite}}
           <td>
             <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_operation->operation_id}}" title="Modifier l'intervention">

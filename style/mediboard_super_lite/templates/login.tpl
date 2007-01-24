@@ -75,7 +75,7 @@
     </tr>
     
     <tr>
-      <td colspan="2" class="button"><input type="submit" name="login" value="{{tr}}login{{/tr}}" /></td>
+      <td colspan="2" class="button"><button class="tick" type="submit" name="login">{{tr}}login{{/tr}}</button></td>
     </tr>
     
     {{if !$dialog}}

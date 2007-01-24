@@ -6,6 +6,22 @@ function pageMain() {
   opsUpdater.addParam("date", "{{$date}}");
   opsUpdater.periodicalUpdate('listplages', { frequency: 90 });
 }
+
+function printFiche() {
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "print_fiche"); 
+  url.addElement(document.editFrmFinish.consultation_id);
+  url.popup(700, 500, "printFiche");
+  return;
+}
+
+function printAllDocs() {
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "print_docs"); 
+  url.addElement(document.editFrmFinish.consultation_id);
+  url.popup(700, 500, "printDocuments");
+  return;
+}
 </script>
 
 <table class="main">
@@ -13,7 +29,14 @@ function pageMain() {
     <td style="width: 200px;" id="listplages"></td>
     <td class="greedyPane">
       {{if $op && !$consult->consultation_id}}
-        Il n'y a aucune consultation d'anesthésie pour cette opération
+        <table class="form">
+          <tr>
+            <th class="category">Consultation</th>
+          </tr>
+          <tr>
+            <td>Il n'y a aucune consultation d'anesthésie pour cette opération</td>
+          </tr>
+        </table>
       {{elseif $op}}
         <form class="watch" name="editFrmFinish" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
         <input type="hidden" name="m" value="{{$m}}" />
@@ -25,7 +48,7 @@ function pageMain() {
         
         <table class="form">
           <tr>
-            <th class="category">
+            <th class="category" colspan="2">
               Consultation
             </th>
           </tr>
@@ -39,13 +62,21 @@ function pageMain() {
               <strong>Intervention :</strong>
               le <strong>{{$consult_anesth->_ref_operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
               par le <strong>Dr. {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong> (coté {{tr}}COperation.cote.{{$consult_anesth->_ref_operation->cote}}{{/tr}})<br />
+            </td>
+            <td class="button">
               <a class="buttonsearch" href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$consult->consultation_id}}">
                 Voir la consultation
-              </a>
+              </a><br />
+              <button class="print" type="button" onclick="printFiche()">
+                Imprimer la fiche
+              </button><br />
+              <button class="print" type="button" onclick="printAllDocs()">
+                Imprimer les documents
+              </button> 
             </td>
           </tr>
           <tr>
-            <th class="category">
+            <th class="category" colspan="2">
               Informations Anesthésie
             </th>
           </tr>

@@ -82,7 +82,7 @@ function reloadFdr() {
   var url = new Url;
   url.setModuleAction("dPcabinet", "httpreq_vw_fdr_consult");
   {{if $noReglement}}
-  url.addParam("noReglement", "1");  
+  url.addParam("noReglement", "1"); 
   {{/if}}
   url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   url.requestUpdate('fdrConsultContent', { waitingText : null });
