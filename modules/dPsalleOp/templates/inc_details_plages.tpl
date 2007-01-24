@@ -81,7 +81,7 @@
               {{$curr_operation->time_operation|date_format:"%Hh%M"}}
             </a>
           </td>
-          <td {{if $vueReduite}}class="text"{{/if}}>
+          <td class="text">
             <a href="index.php?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
               {{$curr_operation->_ref_sejour->_ref_patient->_view}}
             </a>
@@ -92,8 +92,8 @@
             {{if $vueReduite}}
             <button class="print notext" onclick="printFeuilleBloc({{$curr_operation->operation_id}})"></button>
             {{else}}
-            <a href="index.php?m=dPsalleOp&amp;tab=vw_anesthesie&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}">
-              <img src="images/icons/anesth.png" title="" />
+            <a href="index.php?m=dPsalleOp&amp;tab=vw_anesthesie&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="dossier d'anesthésie">
+              <img src="images/icons/anesth.png" alt="Anesth" />
             </a>
             {{/if}}
           </td>
