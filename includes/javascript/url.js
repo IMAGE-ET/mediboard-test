@@ -87,7 +87,9 @@ Url.prototype.popup = function(iWidth, iHeight, sWindowName) {
 }
 
 Url.prototype.close = function() {
-  this.oWindow.close();
+  if(this.oWindow) {
+    this.oWindow.close();
+  } 
 }
 
 Url.prototype.requestUpdate = function(ioTarget, oOptions) {
