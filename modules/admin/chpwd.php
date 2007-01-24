@@ -14,7 +14,7 @@ if ($user_id) {
 		if (db_loadResult( $sql ) == $user_id) {
 			$user = new CUser();
 			$user->user_id = $user_id;
-			$user->user_password = $new_pwd1;
+			$user->_user_password = $new_pwd1;
 
 			if (($msg = $user->store())) {
 				$AppUI->setMsg( $msg, UI_MSG_ERROR );
