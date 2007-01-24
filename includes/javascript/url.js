@@ -1,6 +1,6 @@
 // Class URL, for easy url parameters writing and poping
 function Url() {
-  this.aParams = new Array;
+  this.oParams = {};
   this.oWindow = null;
 }
 
@@ -15,7 +15,7 @@ Url.prototype.setModuleTab = function(sModule, sTab) {
 }
 
 Url.prototype.addParam = function(sName, sValue) {
-  this.aParams.push(sName + "=" + sValue);
+  this.oParams[sName] = sValue;
 }
 
 Url.prototype.addElement = function(oElement, sParamName) {
@@ -31,7 +31,7 @@ Url.prototype.addElement = function(oElement, sParamName) {
 }
 
 Url.prototype.make = function() {
-  var sUrl = "?" + this.aParams.join("&");
+  var sUrl = "?" + $H(this.oParams).toQueryString();
   return sUrl;
 }
 
@@ -100,7 +100,7 @@ Url.prototype.requestUpdate = function(ioTarget, oOptions) {
     waitingText: "Chargement",
     urlBase: "",
     method: "get",
-    parameters:  this.aParams.join("&"), 
+    parameters:  $H(this.oParams).toQueryString(), 
     asynchronous: true,
     evalScripts: true,
     onFailure: function(){$(ioTarget).innerHTML = "<div class='error'>Le serveur rencontre quelques problemes.</div>";},
@@ -143,7 +143,7 @@ Url.prototype.periodicalUpdate = function(ioTarget, oOptions) {
   var oDefaultOptions = {
     waitingText: "Chargement",
     method: "get",
-    parameters:  this.aParams.join("&"), 
+    parameters:  $H(this.oParams).toQueryString(), 
     asynchronous: true,
     evalScripts: true
   };

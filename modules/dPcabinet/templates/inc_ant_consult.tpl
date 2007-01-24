@@ -9,9 +9,8 @@ function selectCim10(code) {
 }
 
 function popCode() {
-  var url = new Url();
-  url.setModuleAction("dPcim10", "vw_find_code");
-  url.popup(700, 500, "Find CIM10");
+  cim10url.setModuleAction("dPcim10", "vw_find_code");
+  cim10url.popup(700, 500, "CIM10");
 }
 
 function setCode(sCode, type, sFullCode) {

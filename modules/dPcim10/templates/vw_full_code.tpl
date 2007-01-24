@@ -5,7 +5,6 @@ function selectCode() {
   var sFullCode = '{{$cim10->libelle}}';
   
   window.opener.setCode(sCode, "cim10", sFullCode);
-  window.close();
 }
 
 </script>
