@@ -88,7 +88,7 @@ class CUser extends CMbObject {
     parent::updateDBFields();
     
     // Nullify no to empty in database
-    $this->user_password = $this->_user_password ? md5($this->_user_password) : null;
+    $this->user_password = $this->_user_password ? md5($this->_user_password) : $this->user_password;
   }
   
   function updateFormFields () {
