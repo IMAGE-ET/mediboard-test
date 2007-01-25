@@ -76,7 +76,7 @@ switch($cmd)
   }
   case "rm" : {
   	$sql = "UPDATE operations
-			SET time_operation = null, rank = 0
+			SET time_operation = '00:00:00', rank = 0
 			WHERE operations.operation_id = '$id'";
     $result = db_exec($sql);
     cleanOrderOp($plageop, "time");
