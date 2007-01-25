@@ -73,7 +73,13 @@
    * Will only bind default object properties when it's created
    */
   function bindObject(&$mbObject, $mbObjectDefault = null) {
-    $this->object_class = get_class($mbObject);
+    $object_class = get_class($mbObject);
+    if (!is_a($mbObject, "CMbObject")) {
+      trigger_error("Impossible d'associer un identifiant Santé 400 à un objet de classe '$object_class'");
+    }
+
+    $this->object_class = $object_class;
+    $this->object_id = $mbObject->_id;
     $this->loadMatchingObject("`last_update` DESC");
     $this->loadRefs();
     

@@ -9,7 +9,7 @@
 
 global $AppUI;
 
-$do = new CDoObjectAddEdit("CIDSante400", "id_sante400_id");
+$do = new CDoObjectAddEdit("CIdSante400", "id_sante400_id");
 $do->createMsg = "ID Santé 400 créé";
 $do->modifyMsg = "ID Santé 400 modifié";
 $do->deleteMsg = "ID Santé 400 supprimé";

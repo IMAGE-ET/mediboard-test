@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $canRead, $canEdit, $m, $g;
 
 if (!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
@@ -15,19 +15,26 @@ if (!$canRead) {
 
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 
-$urgences      = new COperation;
-$where         = array();
-$where["date"] = "= '".$date."'";
-$order         = "salle_id, chir_id";
-$urgences      = $urgences->loadList($where, $order);
-foreach($urgences as $keyOp => $op) {
-  $urgences[$keyOp]->loadRefsFwd();
-  $urgences[$keyOp]->_ref_sejour->loadRefPatient();
+// Listes des urgences
+$operation = new COperation;
+$where = array (
+  "date" => "= '$date'",
+);
+$order = "salle_id, chir_id";
+$urgences = $operation->loadList($where, $order);
+foreach ($urgences as &$urgence) {
+  $urgence->loadRefsFwd();
+  $urgence->_ref_sejour->loadRefPatient();
 }
 
-$listSalles = new CSalle;
+// Listes des salles
+$salle = new CSalle;
+$where = array (
+  "group_id" => "= '$g'",
+);
 $order = "nom";
-$listSalles = $listSalles->loadList(null, $order);
+
+$listSalles = $salle->loadList($where, $order);
 
 // Création du template
 $smarty = new CSmartyDP();

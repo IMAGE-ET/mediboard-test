@@ -15,7 +15,6 @@ class CMouvSejourTonkin extends CMouvement400 {
   function __construct() {
     $this->base = "GT_EAI";
     $this->table = "SEJMDB";
-    $this->completeMark = ">EFCPSN";
     $this->prodField = "RETPRODST";
     $this->idField = "IDUENR";
     $this->typeField = "CODACT";

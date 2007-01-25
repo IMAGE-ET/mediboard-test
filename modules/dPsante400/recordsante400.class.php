@@ -11,6 +11,7 @@ class CRecordSante400 {
   static $chrono = null;
  
   public $data = array();
+  public $valuePrefix = "";
   
   function __construct() {
   }
@@ -33,7 +34,7 @@ class CRecordSante400 {
     self::$chrono->stop();
   }
 
-  function multipleLoad($sql, $max = 100, $class = "CRecordSante400") {
+  function multipleLoad($sql, $values = array(), $max = 100, $class = "CRecordSante400") {
     if (!is_a(new $class, "CRecordSante400")) {
       trigger_error("instances of '$class' are not instances of 'CRecordSante400'", E_USER_WARNING);
     }
@@ -46,7 +47,7 @@ class CRecordSante400 {
       }
       
       self::$chrono->start();
-      $sth->execute();
+      $sth->execute($values);
       self::$chrono->stop();
 
       self::$chrono->start();
@@ -91,6 +92,8 @@ class CRecordSante400 {
   }
   
   function consume($valueName) {
+    $valueName = "$this->valuePrefix$valueName";
+    
     if (!is_array($this->data)) {
       throw new Exception("The value '$valueName' doesn't exist in this record, which has NO value");
     }
@@ -142,7 +145,7 @@ class CRecordSante400 {
       $time = "00" . $time ;
     }
     
-    $reg = "/(\d{0,2})(\d{2})/i";
+    $reg = "/(\d{0,2})h?(\d{2})/i";
     return preg_replace($reg, "$1:$2:00", $time);
   }
 

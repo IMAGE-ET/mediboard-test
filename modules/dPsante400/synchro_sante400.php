@@ -4,6 +4,8 @@ global $AppUI, $m, $dbChronos, $dPconfig;
 
 require_once($AppUI->getModuleClass("dPsante400", "mouvsejourtonkin"));
 
+set_time_limit(90);
+
 switch ($mode_compat = @$dPconfig["interop"]["mode_compat"]) {
   case "medicap" : 
   $mouvFactory = new CMouvSejourEcap;

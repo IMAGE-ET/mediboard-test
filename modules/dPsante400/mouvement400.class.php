@@ -5,7 +5,6 @@ require_once $AppUI->getModuleClass("dPsante400", "recordsante400");
 class CMouvement400 extends CRecordSante400 {
   protected $base = null;
   protected $table = null;
-  protected $completeMark = null;
   
   protected $prodField = null;
   protected $idField = null;
@@ -13,7 +12,7 @@ class CMouvement400 extends CRecordSante400 {
 
   public $verbose = false;
   
-  public $status = null;
+  public $status = "--------";
   public $rec = null;
   public $type = null;
   public $prod = null;
@@ -22,7 +21,7 @@ class CMouvement400 extends CRecordSante400 {
     $query = "SELECT * FROM $this->base.$this->table";
     $query .= $this->getMarkedQuery($marked);
  
-    return CRecordSante400::multipleLoad($query, $max, get_class($this));
+    return CRecordSante400::multipleLoad($query, array(), $max, get_class($this));
   }
 
   function getMarkedQuery($marked) {
@@ -31,7 +30,7 @@ class CMouvement400 extends CRecordSante400 {
     }
     
     return $marked ? 
-      "\n WHERE $this->prodField != '$this->completeMark' AND $this->prodField != ''" : 
+      "\n WHERE $this->prodField != '' AND $this->prodField LIKE '%-%'" : 
       "\n WHERE $this->prodField = ''";
   }
 
@@ -60,7 +59,7 @@ class CMouvement400 extends CRecordSante400 {
       return null;
     }
 
-    if ($this->status == $this->completeMark) {
+    if (false !== strpos($this->status, "-")) {
 //      $query = "DELETE FROM $this->base.$this->table WHERE $this->idField = $this->rec";
       $query = "UPDATE $this->base.$this->table SET $this->prodField = '$this->status' WHERE $this->idField = $this->rec";
     } else {
@@ -71,8 +70,8 @@ class CMouvement400 extends CRecordSante400 {
     $rec->query($query);
   }
   
-  function markStatus($letter) {
-    $this->status .= $letter;
+  function markStatus($rank, $number) {
+    $this->status[$rank] = $number;
   }
 
   function trace($value, $title) {
@@ -82,7 +81,6 @@ class CMouvement400 extends CRecordSante400 {
   }
   
   function proceed() {
-    $this->status = ">";
     $this->rec = $this->consume($this->idField);
     $this->prod = $this->consume($this->prodField);
     $this->type = $this->consume($this->typeField);

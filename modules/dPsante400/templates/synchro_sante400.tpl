@@ -43,14 +43,14 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 <table class="tbl">
 
 <tr>
-  <th class="title" colspan="11">
+  <th class="title" colspan="20">
   	Imports de {{$mouvs|@count}} mouvements de séjours
   	sur {{$count}} disponibles</th>
 </tr>
 
 <tr>
   <th colspan="3">Santé 400</th>
-  <th colspan="8">Import Mediboard</th>
+  <th colspan="20">Import Mediboard</th>
 </tr>
 
 <tr>
@@ -63,6 +63,8 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
   <th>Patient</th>
   <th>Sejour</th>
   <th>Naissance</th>
+  <th>Intervention</th>
+  <th>Actes</th>
   <th>Marque</th>
 
   {{if !$dialog}}
@@ -76,12 +78,14 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
   <td>{{$curr_mouv->rec}}</td>
   <td>{{$curr_mouv->type}}</td>
   <td>{{$curr_mouv->prod}}</td>
-  <td>{{if @$curr_mouv->status.1 == "E"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.2 == "F"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.3 == "C"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.4 == "P"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.5 == "S"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.6 == "N"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.0 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.1 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.2 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.3 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.4 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.5 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.6 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.7 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
   <td>{{$curr_mouv->status}}</td>
 
   {{if !$dialog}}
