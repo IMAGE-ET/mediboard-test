@@ -118,7 +118,7 @@ if (phpthumb_functions::version_compare_replacement(phpversion(), '4.3.2', '>=')
 $PHPTHUMB_CONFIG['prefer_imagemagick'] = true;  // If true, use ImageMagick to resize thumbnails if possible, since it is usually faster than GD functions; if false only use ImageMagick if PHP memory limit is too low.
 if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
     // Windows: set absolute pathname
-  $PHPTHUMB_CONFIG['imagemagick_path'] = 'C:\Progiciels\ImageMagick-6.2.8-Q16\convert.exe';
+  $PHPTHUMB_CONFIG['imagemagick_path'] = 'C:\Progiciels\ImageMagick\convert.exe';
 } else {
     // *nix: set absolute pathname to "convert", or leave as null if "convert" is in the path (location detected with `which`)
     //$PHPTHUMB_CONFIG['imagemagick_path'] = '/usr/local/bin/convert';
@@ -238,3 +238,9 @@ function phpThumbURL($ParameterString) {
 ///////////////////////////////////////////////////////////////////////////////
 
 ?>
+
+<pre>
+<?php print_r($PHPTHUMB_CONFIG) ?>
+</pre>
+
+<?php die(); ?>
