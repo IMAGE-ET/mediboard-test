@@ -289,7 +289,7 @@
               view:'{{$curr_sejour->_view|smarty:nodefaults|JSAttribute}}'} )"
               title="{{$curr_sejour->_nb_files_docs}} doc(s)">
               {{$curr_sejour->_nb_files_docs}}
-              <img align="top" src="images/icons/{{if !$curr_sejour->_nb_files_docs}}next_red.png{{else}}next.png{{/if}}" title="{{$curr_sejour->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+              <img align="top" src="images/icons/next{{if !$curr_sejour->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_sejour->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
             </a>
             {{/if}}         
           </td>
@@ -321,7 +321,7 @@
               view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )"
               title="{{$curr_op->_nb_files_docs}} doc(s)">
               {{$curr_op->_nb_files_docs}}
-              <img align="top" src="modules/{{$m}}/images/next{{if !$curr_op->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_op->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+              <img align="top" src="images/icons/next{{if !$curr_sejour->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_op->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
             </a>
             {{/if}} 
           </td>
@@ -369,7 +369,7 @@
                 id: {{$curr_consult->consultation_id}}, 
                 view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
               {{$curr_consult->_nb_files_docs}}
-              <img align="top" src="images/icons/{{if !$curr_consult->_nb_files_docs}}next_red.png{{else}}next.png{{/if}}" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+              <img align="top" src="images/icons/next{{if !$curr_sejour->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
             </a>
             {{/if}}
           </td>
