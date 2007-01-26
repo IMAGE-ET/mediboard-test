@@ -35,29 +35,19 @@
       {{/if}}
       <table width="100%" style="border-spacing: 0px;font-size: 100%;">
         <tr>
-          <th class="category" colspan="4">Actes CCAM</th>
+          <th class="category" colspan="2">Actes CCAM</th>
         </tr>
         {{assign var="styleBorder" value="border: solid #aaa 1px;"}}
         <tr>
           <th style="{{$styleBorder}}text-align:left;">Code</th>
-          <th style="{{$styleBorder}}text-align:left;">Exécutant</th>
-          <th style="{{$styleBorder}}text-align:left;">Activité</th>
-          <th style="{{$styleBorder}}text-align:left;">Phase &mdash; Modificateurs</th>
+          <th style="{{$styleBorder}}text-align:left;">Libelle</th>
         </tr>
-        {{foreach from=$object->_ref_actes_ccam item=currActe}}
+        {{foreach from=$object->_ext_codes_ccam item=currCode}}
         <tr>
           <td class="text" style="{{$styleBorder}}">
-            <strong>{{$currActe->code_acte}}</strong><br />
-            {{$currActe->_ref_code_ccam->libelleLong}}
+            <strong>{{$currCode->code}}</strong><br />
           </td>
-          <td class="text" style="{{$styleBorder}}">{{$currActe->_ref_executant->_view}}</td>
-          <td style="{{$styleBorder}}">{{$currActe->code_activite}}</td>
-          <td style="{{$styleBorder}}">
-            {{$currActe->code_phase}}
-            {{if $currActe->modificateurs}}
-            &mdash; {{$currActe->modificateurs}}
-            {{/if}}
-          </td>
+          <td class="text" style="{{$styleBorder}}">{{$currCode->libelleLong}}</td>
         </tr>
         {{/foreach}}
       </table>
