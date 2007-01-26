@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.55";
+$config["mod_version"]     = "0.56";
 $config["mod_type"]        = "user";
 
 
@@ -521,7 +521,11 @@ class CSetupdPcabinet extends CSetup {
                     ) TYPE=MyISAM COMMENT='Table pour la classe NYHA';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.55";
+    $this->makeRevision("0.55");
+    $sql = "ALTER TABLE `consultation_anesth` ADD `listCim10` TEXT DEFAULT NULL ;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.56";
   }
 }
 ?>

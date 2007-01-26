@@ -104,7 +104,9 @@
             - sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}<br />
             {{if $consult->_ref_consult_anesth->poid}}<strong>{{$consult->_ref_consult_anesth->poid}} kg</strong> - {{/if}}
             {{if $consult->_ref_consult_anesth->taille}}<strong>{{$consult->_ref_consult_anesth->taille}} cm</strong> - {{/if}}
-            {{if $consult->_ref_consult_anesth->_imc}}IMC : <strong>{{$consult->_ref_consult_anesth->_imc}}</strong>{{/if}}
+            {{if $consult->_ref_consult_anesth->_imc}}IMC : <strong>{{$consult->_ref_consult_anesth->_imc}}</strong>
+              {{if $consult->_ref_consult_anesth->_imc_valeur}}({{$consult->_ref_consult_anesth->_imc_valeur}}){{/if}}
+            {{/if}}
           </td>
         </tr>
         <tr>

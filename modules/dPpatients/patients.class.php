@@ -364,13 +364,15 @@ class CPatient extends CMbObject {
       "label" => "antécédent(s)", 
       "name" => "antecedent", 
       "idfield" => "antecedent_id", 
-      "joinfield" => "patient_id"
+      "joinfield" => "object_id",
+      "joinon" => "`object_class` = 'CPatient'"
     );
     $tables[] = array (
       "label" => "traitement(s)", 
       "name" => "traitement", 
       "idfield" => "traitement_id", 
-      "joinfield" => "patient_id"
+      "joinfield" => "object_id",
+      "joinon" => "`object_class` = 'CPatient'"
     );
     $tables[] = array (
       "label" => "fichier(s)", 
@@ -420,7 +422,8 @@ class CPatient extends CMbObject {
       
       // Chargement des antécédents
       $where = array();
-      $where["patient_id"] = "= '$this->patient_id'";
+      $where["object_id"]    = "= '$this->patient_id'";
+      $where["object_class"] = "= 'CPatient'";
       $order = "type ASC";
       $this->_ref_antecedents = $antecedent->loadList($where, $order);
 
@@ -437,7 +440,8 @@ class CPatient extends CMbObject {
     if($this->patient_id){
       $this->_ref_traitements = new CTraitement;
       $where = array();
-      $where["patient_id"] = "= '$this->patient_id'";
+      $where["object_id"]    = "= '$this->patient_id'";
+      $where["object_class"] = "= 'CPatient'";
       $order = "fin DESC, debut DESC";
       $this->_ref_traitements = $this->_ref_traitements->loadList($where, $order);
     }

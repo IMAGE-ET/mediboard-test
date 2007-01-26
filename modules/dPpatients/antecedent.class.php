@@ -12,7 +12,8 @@ class CAntecedent extends CMbObject {
   var $antecedent_id = null;
 
   // DB References
-  var $patient_id = null;
+  var $object_id    = null;
+  var $object_class = null;
 
   // DB fields
   var $type  = null;
@@ -20,7 +21,7 @@ class CAntecedent extends CMbObject {
   var $rques = null;
   
   // Object References
-  var $_ref_patient = null;
+  var $_ref_object = null;
 
   function CAntecedent() {
     $this->CMbObject("antecedent", "antecedent_id");
@@ -30,16 +31,23 @@ class CAntecedent extends CMbObject {
 
   function getSpecs() {
     return array (
-      "patient_id" => "ref|notNull",
-      "type"       => "enum|med|alle|trans|obst|chir|fam|anesth|notNull",
-      "date"       => "date",
-      "rques"      => "text"
+      "object_id"    => "ref|notNull",
+      "object_class" => "enum|CPatient|CConsultAnesth|notNull",
+      "type"         => "enum|med|alle|trans|obst|chir|fam|anesth|notNull",
+      "date"         => "date",
+      "rques"        => "text"
     );
   }
   
   function loadRefsFwd() {
-    $this->_ref_patient = new CPatient;
-    $this->_ref_patient->load($this->patient_id);
+    // Objet
+    if (class_exists($this->object_class)) {
+      $this->_ref_object = new $this->object_class;
+      if ($this->object_id)
+        $this->_ref_object->load($this->object_id);
+    } else {
+      trigger_error("Enable to create instance of '$this->object_class' class", E_USER_ERROR);
+    }
   }
 }
 

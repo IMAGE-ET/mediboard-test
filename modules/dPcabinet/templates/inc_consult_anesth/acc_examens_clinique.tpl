@@ -1,17 +1,27 @@
 <script type="text/javascript">
 function calculImcVst(){
    var oForm = document.editAnesthPatFrm;
+   var sImcValeur = "";
+   var fImc       = "";
+   var fVst       = "";
    if(oForm.poid.value && !isNaN(parseFloat(oForm.poid.value)) && parseFloat(oForm.poid.value)>0){
-     oForm._vst.value = {{if $patient->sexe=="m"}}70{{else}}65{{/if}}*parseFloat(oForm.poid.value);
+     fVst = {{if $patient->sexe=="m"}}70{{else}}65{{/if}}*parseFloat(oForm.poid.value);
      if(oForm.taille.value && !isNaN(parseInt(oForm.taille.value)) && parseInt(oForm.taille.value)>0){
-       oForm._imc.value = round(parseFloat(oForm.poid.value) / (parseInt(oForm.taille.value) * parseInt(oForm.taille.value) * 0.0001),2);
-     }else{
-       oForm._imc.value = "";
+       fImc = round(parseFloat(oForm.poid.value) / (parseInt(oForm.taille.value) * parseInt(oForm.taille.value) * 0.0001),2);
+       if(fImc < {{if $patient->sexe=="m"}}20{{else}}19{{/if}}){
+         sImcValeur = "Maigreur";
+       }else if(fImc > {{if $patient->sexe=="m"}}25{{else}}24{{/if}} && fImc <=30){
+         sImcValeur = "Surpoids";
+       }else if(fImc > 30 && fImc <=40){
+         sImcValeur = "Obésité";
+       }else if(fImc > 40){
+         sImcValeur = "Obésité morbide";
+       }
      }
-   }else{
-     oForm._vst.value = "";
-     oForm._imc.value = "";
    }
+   oForm._vst.value = fVst;
+   oForm._imc.value = fImc;
+   $('imcValeur').innerHTML = sImcValeur;
    calculPSA(); 
    calculClairance();  
 }
@@ -53,9 +63,10 @@ function calculImcVst(){
           </td>
         </tr>
         <tr>
-          <th><label for="_imc" title="Indice de Masse Corporel du Patient">IMC</label></th>
+          <th><label for="_vst" title="Volume Sanguin Total du patient">VST</label></th>
           <td class="readonly">
-            <input type="text" size="4" name="_imc" value="{{$consult_anesth->_imc}}" readonly="readonly" />
+            <input type="text" size="4" name="_vst" value="{{$consult_anesth->_vst}}" readonly="readonly" />
+            ml
           </td>
           <th><label for="spo2" title="Spo2">Spo2</label></th>
           <td>
@@ -64,12 +75,11 @@ function calculImcVst(){
           </td>
         </tr>
         <tr>
-          <th><label for="_vst" title="Volume Sanguin Total du patient">VST</label></th>
+          <th><label for="_imc" title="Indice de Masse Corporel du Patient">IMC</label></th>
           <td class="readonly">
-            <input type="text" size="4" name="_vst" value="{{$consult_anesth->_vst}}" readonly="readonly" />
-            ml
+            <input type="text" size="4" name="_imc" value="{{$consult_anesth->_imc}}" readonly="readonly" />
           </td>
-          <td colspan="2"></td>
+          <td id="imcValeur" colspan="2" style="color:#F00;">{{$consult_anesth->_imc_valeur}}</td>
         </tr>
         </table>
       </form>

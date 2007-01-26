@@ -1,4 +1,11 @@
 <script type="text/javascript">
+function verifNonEmpty(oElement){
+  var notWhitespace = /\S/;
+  if(notWhitespace.test(oElement.value)){
+    return true;
+  }
+  return false;
+}
 
 function showAll(patient_id) {
   var url = new Url;

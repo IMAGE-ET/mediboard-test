@@ -37,7 +37,7 @@ function reloadListTech() {
         {{/foreach}}
       </select>
       <br />
-      <label for="rques" title="Remarques concernant l'opération">Remarques</label>
+      <label for="rques" title="Remarques concernant l'opération">Remarques pour le bloc</label>
       <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult_anesth->_ref_operation->_aides.rques}}
@@ -92,8 +92,8 @@ function reloadListTech() {
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTechniqueComp', this.form._hidden_technique, 'technique')"></button><br />
       <input type="hidden" name="_hidden_technique" value="" />
-      <textarea name="technique" onblur="if(this.value!=''){submitTech(this.form);}"></textarea>
-      <button class="submit" type="button" onclick="if(this.form.technique.value!=''){submitTech(this.form);}">Ajouter</button>
+      <textarea name="technique" onblur="if(verifNonEmpty(this)){submitTech(this.form);}"></textarea>
+      <button class="submit" type="button" onclick="if(verifNonEmpty(this.form.technique)){submitTech(this.form);}">Ajouter</button>
       </form>
     </td>
     <td class="text" rowspan="2" id="listTech">

@@ -23,6 +23,11 @@ function updateTokenCim10() {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
 }
 
+function updateTokenCim10Anesth(){
+  var oForm = document.editTabacFrm;
+  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedentsAnesth });
+}
+
 function dateAntecedent(){
   var oForm = document.editAntFrm;
   var oEnCours = oForm._date_ant;
@@ -102,6 +107,7 @@ function reloadAntecedents() {
   var antUrl = new Url;
   antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents");
   antUrl.addParam("patient_id", document.editDiagFrm.patient_id.value);
+  antUrl.addParam("_is_anesth", "{{$_is_anesth}}");
   antUrl.requestUpdate('listAnt', { waitingText : null, onComplete : closeCIM10 });
 }
 
@@ -112,12 +118,35 @@ function submitAnt(oForm) {
 function incAntecedantsMain() {
   PairEffect.initGroup("effectCategory");
 }
+{{if $_is_anesth}}
+function reloadAntecedentsAnesth() {
+  var antUrl = new Url;
+  antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents_anesth");
+  antUrl.addParam("consultation_anesth_id", "{{$consult_anesth->consultation_anesth_id}}");
+  antUrl.requestUpdate('listAntCAnesth', { waitingText : null });
+}
+
+function copyAntecedent(antecedent_id){
+ var oForm = document.frmCopyAntecedent;
+ oForm.antecedent_id.value = antecedent_id;
+ oForm.object_class.value  = "CConsultAnesth";
+ oForm.object_id.value     = "{{$consult_anesth->consultation_anesth_id}}";
+ submitFormAjax(oForm, 'systemMsg', { waitingText : null, onComplete : reloadAntecedentsAnesth });
+}
+function copyTraitement(traitement_id){
+ var oForm = document.frmCopyTraitement;
+ oForm.traitement_id.value = traitement_id;
+ oForm.object_class.value  = "CConsultAnesth";
+ oForm.object_id.value     = "{{$consult_anesth->consultation_anesth_id}}";
+ submitFormAjax(oForm, 'systemMsg', { waitingText : null, onComplete : reloadAntecedentsAnesth });
+}
+{{/if}}
 
 </script>
 
 <table class="form">
   <tr>
-    <td class="text">
+    <td class="text" {{if $_is_anesth}}rowspan="2"{{/if}}>
       {{if $_is_anesth}}
       <hr />
       <form name="editTabacFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
@@ -125,6 +154,7 @@ function incAntecedantsMain() {
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
       <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
+      <input type="hidden" name="listCim10" value="{{$consult_anesth->listCim10}}" />
       <table class="form">
       <tr>
         <td>
@@ -161,7 +191,8 @@ function incAntecedantsMain() {
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_antecedent_aed" />
-      <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
+      <input type="hidden" name="object_id" value="{{$patient->patient_id}}" />
+      <input type="hidden" name="object_class" value="CPatient" />
       <table class="form">
         <tr>
           <td colspan="2"><strong>Ajouter un antécédent</strong></td>
@@ -187,7 +218,7 @@ function incAntecedantsMain() {
             <img id="editAntFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
           </td>
           <td rowspan="2">
-            <textarea name="rques" onblur="if(this.value!=''){submitAnt(this.form);dateAntecedent();}"></textarea>
+            <textarea name="rques" onblur="if(verifNonEmpty(this)){submitAnt(this.form);dateAntecedent();}"></textarea>
           </td>
         </tr>
         <tr>
@@ -198,7 +229,7 @@ function incAntecedantsMain() {
         </tr>
         <tr>
           <td class="button" colspan="3">
-            <button class="submit" type="button" onclick="if(this.form.rques.value!=''){submitAnt(this.form);dateAntecedent();}">Ajouter</button>
+            <button class="submit" type="button" onclick="if(verifNonEmpty(this.form.rques.value)){submitAnt(this.form);dateAntecedent();}">Ajouter</button>
           </td>
         </tr>
       </table>
@@ -211,7 +242,8 @@ function incAntecedantsMain() {
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_traitement_aed" />
-      <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
+      <input type="hidden" name="object_id" value="{{$patient->patient_id}}" />
+      <input type="hidden" name="object_class" value="CPatient" />
       
       <table class="form">
         <tr>
@@ -237,7 +269,7 @@ function incAntecedantsMain() {
             <img id="editTrmtFrm_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
           </td>
           <td rowspan="2">
-            <textarea name="traitement" onblur="if(this.value!=''){submitAnt(this.form);finTrmt();}"></textarea>
+            <textarea name="traitement" onblur="if(verifNonEmpty(this)){submitAnt(this.form);finTrmt();}"></textarea>
           </td>
         </tr>
         <tr>
@@ -253,7 +285,7 @@ function incAntecedantsMain() {
         </tr>
         <tr>
           <td class="button" colspan="3">
-            <button class="submit" type="button" onclick="if(this.form.traitement.value!=''){submitAnt(this.form);finTrmt();}">Ajouter</button>
+            <button class="submit" type="button" onclick="if(verifNonEmpty(this.form.traitement)){submitAnt(this.form);finTrmt();}">Ajouter</button>
           </td>
         </tr>
       </table>
@@ -261,6 +293,7 @@ function incAntecedantsMain() {
       
       <hr />
       <strong>Ajouter un diagnostic</strong>
+      
       <button class="search" onclick="popCode()">Chercher un diagnostic</button>
       <form name="editDiagFrm" action="?m={{$m}}" method="post">
 
@@ -295,4 +328,11 @@ function incAntecedantsMain() {
       {{include file="inc_list_ant.tpl"}}
     </td>
   </tr>
+  {{if $_is_anesth}}
+  <tr>
+    <td class="text" id="listAntCAnesth">
+      {{include file="inc_list_ant_anesth.tpl"}}
+    </td>
+  </tr>
+  {{/if}}
 </table>

@@ -1,4 +1,11 @@
 <script type="text/javascript">
+function verifNonEmpty(oElement){
+  var notWhitespace = /\S/;
+  if(notWhitespace.test(oElement.value)){
+    return true;
+  }
+  return false;
+}
 function view_history_consult(id){
   url = new Url();
   url.setModuleAction("dPcabinet", "vw_history");
@@ -126,6 +133,7 @@ function reloadConsultAnesth() {
 
 
 var oCimField = null;
+var oCimAnesthField = null;
 
 function pageMain() {
   updateList();  
@@ -144,6 +152,11 @@ function pageMain() {
   oCimField = new TokenField(document.editDiagFrm.listCim10, { 
     confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
     onChange : updateTokenCim10
+    } );
+  
+  oCimAnesthField = new TokenField(document.editTabacFrm.listCim10, { 
+    confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
+    onChange : updateTokenCim10Anesth
     } );
 }
 

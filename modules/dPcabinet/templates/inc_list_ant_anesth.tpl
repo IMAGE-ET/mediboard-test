@@ -1,7 +1,24 @@
-      <strong>Antécédents du patient</strong>
+      <form name="frmCopyAntecedent" action="?m=dPcabinet" method="post">
+      <input type="hidden" name="m" value="dPpatients" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="dosql" value="do_copy_antecedent" />
+      <input type="hidden" name="antecedent_id" value="" />
+      <input type="hidden" name="object_id" value="" />
+      <input type="hidden" name="object_class" value="" />
+      </form>
+      <form name="frmCopyTraitement" action="?m=dPcabinet" method="post">
+      <input type="hidden" name="m" value="dPpatients" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="dosql" value="do_copy_traitement" />
+      <input type="hidden" name="traitement_id" value="" />
+      <input type="hidden" name="object_id" value="" />
+      <input type="hidden" name="object_class" value="" />
+      </form>
+      
+      <strong>Antécédents significatifs de l'opération</strong>
       <ul>
-      {{if $patient->_ref_antecedents}}
-        {{foreach from=$patient->_ref_types_antecedent key=curr_type item=list_antecedent}}
+      {{if $consult_anesth->_ref_antecedents}}
+        {{foreach from=$consult_anesth->_ref_types_antecedent key=curr_type item=list_antecedent}}
         {{if $list_antecedent|@count}}
         <li>
           {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
@@ -15,13 +32,8 @@
               <input type="hidden" name="dosql" value="do_antecedent_aed" />
               <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->antecedent_id}}" />
               
-              <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cet antécédent',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedents})">
-              </button> 
-              {{if $_is_anesth}}
-              <a href="#nothing" onclick="copyAntecedent({{$curr_antecedent->antecedent_id}})" title="Rendre significatif">
-                <img src="images/icons/plus.png" alt="Rendre significatif" />
-              </a>
-              {{/if}}         
+              <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cet antécédent',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedentsAnesth})">
+              </button>          
               {{if $curr_antecedent->date}}
                 {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
               {{/if}}
@@ -37,22 +49,18 @@
         <li>Pas d'antécédents</li>
       {{/if}}
       </ul>
-      <strong>Traitements du patient</strong>
+      
+      <strong>Traitements significatifs de l'opération</strong>
       <ul>
-        {{foreach from=$patient->_ref_traitements item=curr_trmt}}
+        {{foreach from=$consult_anesth->_ref_traitements item=curr_trmt}}
         <li>
           <form name="delTrmtFrm" action="?m=dPcabinet" method="post">
           <input type="hidden" name="m" value="dPpatients" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="do_traitement_aed" />
           <input type="hidden" name="traitement_id" value="{{$curr_trmt->traitement_id}}" />
-          <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'ce traitement',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedents})">
+          <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'ce traitement',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedentsAnesth})">
           </button>
-          {{if $_is_anesth}}
-          <a href="#nothing" onclick="copyTraitement({{$curr_trmt->traitement_id}})" title="Rendre significatif">
-            <img src="images/icons/plus.png" alt="Rendre significatif" />
-          </a>
-          {{/if}}
           {{if $curr_trmt->fin}}
             Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}} :
           {{elseif $curr_trmt->debut}}
@@ -65,17 +73,13 @@
         <li>Pas de traitements</li>
         {{/foreach}}
       </ul>
-      <strong>Diagnostics du patient</strong>
+      
+      <strong>Diagnostics significatifs de l'opération</strong>
       <ul>
-        {{foreach from=$patient->_codes_cim10 item=curr_code}}
+        {{foreach from=$consult_anesth->_codes_cim10 item=curr_code}}
         <li>
-          <button class="trash notext" type="button" onclick="oCimField.remove('{{$curr_code->code}}')">
+          <button class="trash notext" type="button" onclick="oCimAnesthField.remove('{{$curr_code->code}}')">
           </button>
-          {{if $_is_anesth}}
-          <a href="#nothing" onclick="oCimAnesthField.add('{{$curr_code->code}}')" title="Rendre significatif">
-            <img src="images/icons/plus.png" alt="Rendre significatif" />
-          </a>
-          {{/if}}
           {{$curr_code->code}}: {{$curr_code->libelle}}
         </li>
         {{foreachelse}}

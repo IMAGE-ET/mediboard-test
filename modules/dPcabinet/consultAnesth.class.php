@@ -53,6 +53,7 @@ class CConsultAnesth extends CMbObject {
   var $ht_final      = null;
   var $premedication = null;
   var $prepa_preop   = null;
+  var $listCim10     = null;
 
   // Form fields
   var $_date_consult = null;
@@ -61,6 +62,7 @@ class CConsultAnesth extends CMbObject {
   var $_min_tsivy    = null;
   var $_sec_tca      = null;
   var $_min_tca      = null;
+  var $_codes_cim10  = null;
 
   // Object References
   var $_ref_consultation       = null;
@@ -69,8 +71,12 @@ class CConsultAnesth extends CMbObject {
   var $_ref_operation          = null;
   var $_ref_plageconsult       = null;
   var $_intub_difficile        = null;
+  var $_ref_types_antecedent   = null;
+  var $_ref_antecedents        = null;
+  var $_ref_traitements        = null;
   var $_clairance              = null;
   var $_imc                    = null;
+  var $_imc_valeur             = null;
   var $_vst                    = null;
   var $_psa                    = null;
 
@@ -157,6 +163,15 @@ class CConsultAnesth extends CMbObject {
     // Hack for ZEROFILL issue
     $this->tasys  = intval($this->tasys);
     $this->tadias = intval($this->tadias);
+    
+    // Codes CIM10
+    $this->_codes_cim10 = array();
+    $arrayCodes = array();
+    if($this->listCim10)
+      $arrayCodes = explode("|", $this->listCim10);
+    foreach($arrayCodes as $value) {
+      $this->_codes_cim10[] = new CCodeCIM10($value, 1);
+    }
   }
    
   function updateDBFields() {
@@ -197,7 +212,40 @@ class CConsultAnesth extends CMbObject {
     $this->_ref_files =& $this->_ref_consultation->_ref_files;
   }
   
+  function loadRefsAntecedents() {
+    if ($this->consultation_anesth_id) {
+      $antecedent = new CAntecedent();
+      
+      // Chargement des antécédents
+      $where = array();
+      $where["object_id"]    = "= '$this->consultation_anesth_id'";
+      $where["object_class"] = "= 'CConsultAnesth'";
+      $order = "type ASC";
+      $this->_ref_antecedents = $antecedent->loadList($where, $order);
+
+      // Classement des antécédents
+      $this->_ref_types_antecedent = array();
+      
+      foreach($this->_ref_antecedents as $keyAnt => &$currAnt){
+        $this->_ref_types_antecedent[$currAnt->type][$keyAnt] = $currAnt;
+      }
+    }
+  }
+
+  function loadRefsTraitements() {
+    if($this->consultation_anesth_id){
+      $this->_ref_traitements = new CTraitement;
+      $where = array();
+      $where["object_id"]    = "= '$this->consultation_anesth_id'";
+      $where["object_class"] = "= 'CConsultAnesth'";
+      $order = "fin DESC, debut DESC";
+      $this->_ref_traitements = $this->_ref_traitements->loadList($where, $order);
+    }
+  }
+  
   function loadRefsFwd() {
+    $this->loadRefsAntecedents();
+    $this->loadRefsTraitements();
     $this->loadRefConsultation();
     $this->_ref_consultation->loadRefsFwd();
     $this->_ref_plageconsult =& $this->_ref_consultation->_ref_plageconsult;
@@ -230,6 +278,24 @@ class CConsultAnesth extends CMbObject {
   	if($this->ht && $this->_vst){
       $this->_psa = $this->_vst * ($this->ht - 30) / 100;
   	}
+   
+   // Détermination valeur IMC
+   if($this->poid && $this->taille){
+     if($this->_ref_consultation->_ref_patient->sexe!="m"){
+       $valeurImc = array("seuil_inf" => 19, "seuil_sup" => 24);
+     }else{
+       $valeurImc = array("seuil_inf" => 20, "seuil_sup" => 25);
+     }
+     if($this->_imc < $valeurImc["seuil_inf"]){
+       $this->_imc_valeur = "Maigreur";
+     }elseif($this->_imc > $valeurImc["seuil_sup"] && $this->_imc <=30){
+       $this->_imc_valeur = "Surpoids";
+     }elseif($this->_imc > 30 && $this->_imc <=40){
+       $this->_imc_valeur = "Obésité";
+     }elseif($this->_imc > 40){
+       $this->_imc_valeur = "Obésité morbide";
+     }
+   }
   }
   
   function loadRefsBack() {
@@ -280,6 +346,20 @@ class CConsultAnesth extends CMbObject {
       "name"      => "techniques_anesth", 
       "idfield"   => "technique_id", 
       "joinfield" => "consultation_anesth_id"
+    );
+    $tables[] = array (
+      "label" => "antécédent(s)", 
+      "name" => "antecedent", 
+      "idfield" => "antecedent_id", 
+      "joinfield" => "object_id",
+      "joinon" => "`object_class` = 'CConsultAnesth'"
+    );
+    $tables[] = array (
+      "label" => "traitement(s)", 
+      "name" => "traitement", 
+      "idfield" => "traitement_id", 
+      "joinfield" => "object_id",
+      "joinon" => "`object_class` = 'CConsultAnesth'"
     );
     return parent::canDelete( $msg, $oid, $tables );
   }
