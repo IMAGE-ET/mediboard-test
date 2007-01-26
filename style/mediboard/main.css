@@ -1908,6 +1908,25 @@ div.generated {
   font-size: 90%;
 }
 
+div.about {
+	margin-top: 100px;
+	height: 200px;
+	position: absolute;
+	text-align: center;
+	width: 100%;
+}
+
+div.about div.text {
+	height: 100%;
+	text-align: center;
+	width: 100%;
+}
+
+div.about div.nav {
+	text-align: center;
+	width: 100%;
+}
+
 /* The main calendar widget.  DIV containing a table. */
 
 .calendar {
