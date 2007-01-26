@@ -50,18 +50,24 @@ if(!$plage->plageconsult_id) {
     } else {
       $plageBefore->fin = max($plageBefore->fin, mbTime("+1 HOUR", $debut));
     }
-    $plageBefore->updateFormFields();
-    $plageBefore->store();
     $plage =& $plageBefore;
-  } else {
+  } elseif($plageAfter->plageconsult_id) {
     $plageAfter->debut = min($plageAfter->debut, $debut);
-    $plageAfter->updateFormFields();
-    $plageAfter->store();
     $plage =& $plageAfter;
+  } else {
+    $plage->chir_id = $chir->user_id;
+    $plage->date    = $day_now;
+    $plage->freq    = "00:15:00";
+    $plage->debut   = $debut;
+    $plage->fin     = mbTime("+1 HOUR", $debut);
+    $plage->libelle = "automatique";
   }
+  $plage->updateFormFields();
+  $plage->store();
 }
 
 $plage->loadRefsFwd();
+
 $ref_chir = $plage->_ref_chir;
 
 $consult = new CConsultation;
