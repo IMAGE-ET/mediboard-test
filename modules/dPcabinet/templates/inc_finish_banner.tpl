@@ -1,4 +1,8 @@
 <script type="text/javascript">
+{{if $ajax}}
+new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
+{{/if}}
+
 function submitConsultWithChrono(chrono) {
   var oForm = document.editFrmFinish;
   oForm.chrono.value = chrono;
