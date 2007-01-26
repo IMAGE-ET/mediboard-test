@@ -68,6 +68,10 @@ class COperation extends CMbObject {
 
   // Shortcut fields
   var $_datetime = null;
+  
+  // Links
+  var $_link_editor = null;
+  var $_link_viewer = null;
 
   // DB References
   var $_ref_chir           = null;
@@ -76,7 +80,7 @@ class COperation extends CMbObject {
   var $_ref_anesth         = null;
   var $_ref_sejour         = null;
   var $_ref_consult_anesth = null;
-  var $_ref_actes_ccam     = array(); 
+  var $_ref_actes_ccam     = array();
 
   // External references
   var $_ext_codes_ccam = null;
@@ -207,6 +211,11 @@ class COperation extends CMbObject {
     }
     if($this->entree_salle && $this->sortie_salle && $this->sortie_salle>$this->entree_salle){
       $this->_presence_salle = mbSubTime($this->entree_salle,$this->sortie_salle);
+    }
+    if($this->plageop_id) {
+      $this->_link_editor = "index.php?m=dPplanningOp&tab=vw_edit_planning&operation_id=".$this->_id;
+    } else {
+      $this->_link_editor = "index.php?m=dPplanningOp&tab=vw_edit_urgence&operation_id=".$this->_id;
     }
   }
   

@@ -298,7 +298,7 @@
         <tr>
           <td>
             <ul>
-            <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}"
+            <a href="{{$curr_op->_link_editor}}"
               onmouseover="viewItem(
                 'COperation',
                 {{$curr_op->operation_id}})"

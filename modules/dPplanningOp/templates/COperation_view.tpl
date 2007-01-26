@@ -7,7 +7,7 @@
   <tr>
     <td>
       <strong>Date:</strong>
-      <i>le {{$object->_ref_plageop->date|date_format:"%d %B %Y"}}</i>
+      <i>le {{$object->_datetime|date_format:"%d %B %Y"}}</i>
       <br />
       <strong>Praticien:</strong>
       <i>{{$object->_ref_chir->_view}}</i>
