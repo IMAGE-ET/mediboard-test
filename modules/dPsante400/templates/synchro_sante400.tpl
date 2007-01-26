@@ -62,9 +62,9 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
   <th>Chirurgien</th>
   <th>Patient</th>
   <th>Sejour</th>
-  <th>Naissance</th>
   <th>Intervention</th>
   <th>Actes</th>
+  <th>Naissance</th>
   <th>Marque</th>
 
   {{if !$dialog}}

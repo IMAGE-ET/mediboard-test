@@ -9,9 +9,9 @@ class CMouvSejourEcap extends CMouvement400 {
   const STATUS_PRATICIEN     = 2;
   const STATUS_PATIENT       = 3;
   const STATUS_SEJOUR        = 4;
-  const STATUS_NAISSANCE     = 5;
-  const STATUS_OPERATION     = 6;
-  const STATUS_ACTES         = 7;
+  const STATUS_OPERATION     = 5;
+  const STATUS_ACTES         = 6;
+  const STATUS_NAISSANCE     = 7;
   
   public $sejour = null;
   public $etablissement = null;
@@ -126,16 +126,21 @@ class CMouvSejourEcap extends CMouvement400 {
       return;
     }
     
-    $praticien = new CMediusers;
-
-    $prat400 = new CRecordSante400();
-    $prat400->query("SELECT * FROM $this->base.ECPRPF WHERE PRCIDC = ? AND PRCPRT = ?", array (
+    $query = "SELECT * FROM $this->base.ECPRPF " .
+        "\nWHERE PRCIDC = ? " .
+        "\nAND PRCPRT = ?";
+    $queryValues = array (
       $this->id400EtabECap->id400, 
-      $CPRT));
+      $CPRT,
+    );
+     
+    $prat400 = new CRecordSante400();
+    $prat400->loadOne($query, $queryValues);
 
     $nomsPraticien     = split(" ", $prat400->consume("PRZNOM"));
     $prenomsPraticiens = split(" ", $prat400->consume("PRZPRE"));
 
+    $praticien = new CMediusers;
     $praticien->_user_type = 3; // Chirurgien
     $praticien->_user_username = substr(strtolower($prenomsPraticiens[0] . $nomsPraticien[0]), 0, 20);
     $praticien->_user_last_name  = join(" ", $nomsPraticien);
@@ -291,6 +296,8 @@ class CMouvSejourEcap extends CMouvement400 {
       return;
     }
     
+    $this->trace($dheECap->data, "DHE Trouvée"); 
+
     $NSEJ = null;//$dheECap->consume("ATNSEJ");
     $IDAT = $dheECap->consume("ATIDAT");
     
@@ -366,7 +373,6 @@ class CMouvSejourEcap extends CMouvement400 {
 
     // $TRPE et $EXBI à gérer
     
-    $this->trace($dheECap->data, "Données DHE non traitées"); 
     $this->markStatus(self::STATUS_SEJOUR, 2);
   }
   
@@ -387,10 +393,13 @@ class CMouvSejourEcap extends CMouvement400 {
     // Recherche des opérations
     $opersECap = CRecordSante400::multipleLoad($query, $queryValues);
     foreach ($opersECap as $operECap) {
+      $this->trace($operECap->data, "Opération trouvée"); 
+
       $operECap->valuePrefix = "IN";
       
       $operation = new COperation;
       $operation->sejour_id = $this->sejour->_id;
+      $operation->chir_id = $this->sejour->praticien_id;
 
       // Entrée/sortie prévue/réelle
       $entree_prevue = $operECap->consumeDateTime("DTEP", "HREP");
@@ -408,13 +417,11 @@ class CMouvSejourEcap extends CMouvement400 {
       $operation->entree_salle = mbTime($entree_reelle);
       $operation->sortie_salle = mbTime($sortie_reelle);
       
-      $this->trace($operation->entree_salle, "Entree reelle");
-      $this->trace($operation->sortie_salle, "Sortie reelle");
-      
-      // Praticien
-      $CPRT = $operECap->consume("CPRT");
-      $this->syncPraticien($CPRT);
-      $operation->chir_id = $this->praticiens[$CPRT]->_id;
+      // Anesthésiste
+      if ($CPRT = $operECap->consume("CPRT")) {
+        $this->syncPraticien($CPRT);
+        $operation->anesth_id = $this->praticiens[$CPRT]->_id;
+      }
       
       // Textes
       $operation->libelle = $operECap->consume("CNAT");
@@ -441,23 +448,31 @@ class CMouvSejourEcap extends CMouvement400 {
 
       // Gestion des id400
       $CINT = $operECap->consume("CINT");
-      $tag = "CIDC:{$this->id400EtabECap->id400}";
+      $tags = array (
+        "CINT",
+        "CIDC:{$this->id400EtabECap->id400}"
+      );
       $id400Oper = new CIdSante400();
-      $id400Oper->id400 = $CPRT;
-      $id400Oper->tag = "CINT $tag";
+      $id400Oper->id400 = $CINT;
+      $id400Oper->tag = join($tags, " ");
       $id400Oper->bindObject($operation);
       $this->id400Opers[$CINT] = $id400Oper;      
       
-      $this->trace($operation->getProps(), "Opération sauvée"); 
-      $this->trace($operECap->data, "Données operation non traitées"); 
-
+      $this->operations[$CINT] = $operation;
       $this->syncActes($CINT);
     }
 
+    // Status
     $this->markStatus(self::STATUS_OPERATION, count($opersECap));
+    if (!count($opersECap)) {
+      $this->markStatus(self::STATUS_ACTES, 0);
+      
+    }
   }
 
   function syncActes($CINT) {
+    $operation = $this->operations[$CINT];
+    
     $query = "SELECT * " .
         "\nFROM $this->base.ECACPF " .
         "\nWHERE ACCIDC = ? " .
@@ -469,7 +484,52 @@ class CMouvSejourEcap extends CMouvement400 {
     );
 
     $actesECap = CRecordSante400::multipleLoad($query, $queryValues);
-    mbTrace($actesECap, "Actes trouvés");
+    
+    foreach ($actesECap as $acteECap) {
+      $acteECap->valuePrefix = "AC";
+      
+      $acte = new CActeCCAM;
+
+      // Champs issus de l'opération
+      $acte->operation_id = $operation->_id;
+      $acte->execution = mbDateTime($operation->sortie_salle, $operation->date);
+      
+      // Praticien exécutant
+      $CPRT = $acteECap->consume("CPRT");
+      $this->syncPraticien($CPRT);
+      $acte->executant_id = $this->praticiens[$CPRT]->_id;
+      
+      // Codage
+      $acte->code_acte     = $acteECap->consume("CDAC");
+      $acte->code_activite = $acteECap->consume("CACT");
+      $acte->code_phase    = $acteECap->consume("CPHA");
+      $acte->modificateurs = $acteECap->consume("CMOD");
+      $acte->montant_depassement = $acteECap->consume("MDEP");
+      
+      // Gestion des id400
+      $tags = array (
+        "CIDC:{$this->id400EtabECap->id400}",
+        "CINT:$CINT",
+        "CPRT:$CPRT",
+        "Acte:$acte->code_acte-$acte->code_activite-$acte->code_phase",
+      );
+
+      $id400acte = new CIdSante400();
+      $id400acte->id400 = $CINT;
+      $id400acte->tag = join($tags, " ");
+      $id400acte->bindObject($acte);
+
+      $this->trace($acteECap->data, "Acte trouvé");
+      $this->trace($acte, "Acte à sauver");
+            
+      // Ajout du code dans l'opération
+      if (!in_array($acte->code_acte, $operation->_codes_ccam)) {
+        $operation->_codes_ccam[] = $acte->code_acte;
+        $operation->store();
+      }
+    }
+
+    $this->markStatus(self::STATUS_ACTES, count($actesECap));
   }
 
   function syncSejour() {

@@ -220,7 +220,11 @@ class COperation extends CMbObject {
   }
   
   function updateDBFields() {
-    if($this->codes_ccam) {
+    if (count($this->_codes_ccam)) {
+      $this->codes_ccam = join($this->_codes_ccam, "|");
+    }
+    
+    if ($this->codes_ccam) {
       $this->codes_ccam = strtoupper($this->codes_ccam);
       $codes_ccam = explode("|", $this->codes_ccam);
       $XPosition = true;

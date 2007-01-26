@@ -83,6 +83,14 @@ class CRecordSante400 {
     }
   }
   
+  function loadOne($sql, $values = array()) {
+    $this->query($sql, $values);
+    if (!$this->data) {
+      $values = join($values, ",");
+      trigger_error("Couldn't find row for query '$sql' with values [$values] : ", E_USER_WARNING);
+    }
+  }
+  
   /**
    * Transforms a DDMMYYYY AS400 date into a YYYY-MM-DD SQL date 
    */
