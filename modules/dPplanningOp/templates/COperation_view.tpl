@@ -35,19 +35,15 @@
       {{/if}}
       <table width="100%" style="border-spacing: 0px;font-size: 100%;">
         <tr>
-          <th class="category" colspan="2">Actes CCAM</th>
+          <th class="category">Actes CCAM</th>
         </tr>
         {{assign var="styleBorder" value="border: solid #aaa 1px;"}}
-        <tr>
-          <th style="{{$styleBorder}}text-align:left;">Code</th>
-          <th style="{{$styleBorder}}text-align:left;">Libelle</th>
-        </tr>
         {{foreach from=$object->_ext_codes_ccam item=currCode}}
         <tr>
           <td class="text" style="{{$styleBorder}}">
-            <strong>{{$currCode->code}}</strong><br />
+            <strong>{{$currCode->code}}</strong> :
+            {{$currCode->libelleLong}}
           </td>
-          <td class="text" style="{{$styleBorder}}">{{$currCode->libelleLong}}</td>
         </tr>
         {{/foreach}}
       </table>
