@@ -30,7 +30,7 @@ class CMouvement400 extends CRecordSante400 {
     }
     
     return $marked ? 
-      "\n WHERE $this->prodField != '' AND $this->prodField LIKE '%-%'" : 
+      "\n WHERE $this->prodField != ''" : 
       "\n WHERE $this->prodField = ''";
   }
 
@@ -59,9 +59,8 @@ class CMouvement400 extends CRecordSante400 {
       return null;
     }
 
-    if (false !== strpos($this->status, "-")) {
-//      $query = "DELETE FROM $this->base.$this->table WHERE $this->idField = $this->rec";
-      $query = "UPDATE $this->base.$this->table SET $this->prodField = '$this->status' WHERE $this->idField = $this->rec";
+    if (false == strpos($this->status, "-")) {
+      $query = "DELETE FROM $this->base.$this->table WHERE $this->idField = $this->rec";
     } else {
       $query = "UPDATE $this->base.$this->table SET $this->prodField = '$this->status' WHERE $this->idField = $this->rec";
     }
