@@ -43,15 +43,15 @@ class CMouvement400 extends CRecordSante400 {
     return $req->consume("TOTAL");
   }
 
-  function load($rec = null) {
-    $query = "SELECT * FROM $this->base.$this->table";
-    
-    if ($rec !== null) {
-      $rec = intval($rec);
-      $query .= "\n WHERE $this->idField = $rec";
-    }
-     
-    $this->query($query);
+  function load($rec) {
+    $query = "SELECT * FROM $this->base.$this->table" .
+        "\n WHERE $this->idField = ?";
+
+    $values = array (
+      intval($rec),
+    );    
+
+    $this->loadOne($query, $values);
   }
     
   function markRow() {
@@ -59,14 +59,15 @@ class CMouvement400 extends CRecordSante400 {
       return null;
     }
 
-    if (false == strpos($this->status, "-")) {
-      $query = "DELETE FROM $this->base.$this->table WHERE $this->idField = $this->rec";
-    } else {
-      $query = "UPDATE $this->base.$this->table SET $this->prodField = '$this->status' WHERE $this->idField = $this->rec";
-    }
+    $query = false === strpos($this->status, "-") ?
+      "DELETE FROM $this->base.$this->table WHERE $this->idField = ?" :
+      "UPDATE $this->base.$this->table SET $this->prodField = '$this->status' WHERE $this->idField = ?";
+    $values = array (
+      $this->rec,
+    );
     
     $rec = new CRecordSante400;
-    $rec->query($query);
+    $rec->query($query, $values);
   }
   
   function markStatus($rank, $number) {

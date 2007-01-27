@@ -317,7 +317,7 @@ class CMouvSejourEcap extends CMouvement400 {
     // Motifs d'hospitalisations
     $CMOT = $dheECap->consume("ATCMOT");
     $motECap = new CRecordSante400();
-    $motECap->query("SELECT * FROM $this->base.ECMOPF WHERE MOCMOT = ?", array($CMOT));
+    $motECap->loadOne("SELECT * FROM $this->base.ECMOPF WHERE MOCMOT = ?", array($CMOT));
     $LIMO = $motECap->consume("MOLIMO");
     $this->sejour->rques = "Motif: $LIMO";
     

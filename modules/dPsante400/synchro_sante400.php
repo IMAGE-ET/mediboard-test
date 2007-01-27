@@ -28,9 +28,13 @@ $procs = 0;
 
 $mouvs = array();
 if ($rec = mbGetValueFromGet("rec")) {
-  $mouv = $mouvFactory;
-  $mouv->load($rec);
-  $mouvs = array($mouv);
+  try {
+    $mouv = $mouvFactory;
+    $mouv->load($rec);
+    $mouvs = array($mouv);
+  } catch (Exception $e) {
+    trigger_error("Mouvement with id '$rec'has been deleted : " . $e->getMessage(), E_USER_ERROR);
+  }
 } else {
   $mouvs = $mouvFactory->multipleLoad($marked, $max);
 }
