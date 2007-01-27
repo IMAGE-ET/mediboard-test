@@ -87,7 +87,7 @@ class CRecordSante400 {
     $this->query($sql, $values);
     if (!$this->data) {
       $values = join($values, ",");
-      trigger_error("Couldn't find row for query '$sql' with values [$values] : ", E_USER_WARNING);
+      throw new Exception("Couldn't find row for query '$sql' with values [$values]");
     }
   }
   
@@ -159,7 +159,10 @@ class CRecordSante400 {
 
   function consumeDateTime($dateName, $timeName) {
     $date = $this->consumeDate($dateName);
-    $time = $this->consumeTime($timeName);
+
+    if (null == $time = $this->consumeTime($timeName)) {
+      $time = "00:00:00";
+    }
     
     return $time ? "$date $time" : $date;
   }
