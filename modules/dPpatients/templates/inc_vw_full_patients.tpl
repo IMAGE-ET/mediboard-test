@@ -369,7 +369,7 @@
                 id: {{$curr_consult->consultation_id}}, 
                 view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
               {{$curr_consult->_nb_files_docs}}
-              <img align="top" src="images/icons/next{{if !$curr_sejour->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+              <img align="top" src="images/icons/next{{if !$curr_consult->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
             </a>
             {{/if}}
           </td>
