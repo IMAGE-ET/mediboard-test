@@ -172,9 +172,10 @@ class CRequest {
     }
     
     // Where clauses
+    
     if (is_array($this->where)) {
-      $where = array();
-      foreach ($this->where as $field => $eq) {
+      $where = $this->where;
+      foreach ($where as $field => $eq) {
         if (is_string($field)) {
           if($pos = strpos($field, ".")) {
             $point_table = substr($field, 0, $pos);
