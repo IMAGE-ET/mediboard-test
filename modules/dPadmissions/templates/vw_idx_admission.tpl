@@ -34,14 +34,14 @@ function pageMain() {
   var totalUpdater = new Url;
   totalUpdater.setModuleAction("dPadmissions", "httpreq_vw_all_admissions");
   totalUpdater.addParam("date", "{{$date}}");
-  totalUpdater.periodicalUpdate('allAdmissions', { frequency: 90 });
+  totalUpdater.periodicalUpdate('allAdmissions', { frequency: 120 });
   
   var listUpdater = new Url;
   listUpdater.setModuleAction("dPadmissions", "httpreq_vw_admissions");
   listUpdater.addParam("selAdmis", "{{$selAdmis}}");
   listUpdater.addParam("selSaisis", "{{$selSaisis}}");
   listUpdater.addParam("date", "{{$date}}");
-  listUpdater.periodicalUpdate('listAdmissions', { frequency: 90 });
+  listUpdater.periodicalUpdate('listAdmissions', { frequency: 120 });
 
 }
 
