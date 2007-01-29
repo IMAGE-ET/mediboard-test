@@ -33,6 +33,7 @@ class CRequest {
     $this->limit  = "";
   }
   
+  
   function addSelect($select) {
     if(is_array($select)) {
       $this->select = array_merge($this->select, $select);
@@ -41,6 +42,14 @@ class CRequest {
     }
   }
   
+  function addColumn($column, $as = null) {
+    if ($as) {
+      $this->select[$as] = $column; 
+    } else {
+      $this->select[] = $column; 
+    }
+  }
+
   function addTable($table) {
     if(is_array($table)) {
       $this->table = array_merge($this->table, $table);
@@ -77,6 +86,10 @@ class CRequest {
     }
   }
   
+/**
+ * @param string $key the field to perform the test on
+ * @param string $value the test to be performed
+ */
   function addWhereClause($key, $value) {
     if($key) {
       $this->where[$key] = $value;
@@ -105,25 +118,42 @@ class CRequest {
     $this->limit = $limit;
   }
 
+  /**
+   * returns the SQL string
+   * @param CMbObject $obj Object on which table we prefix selects, ne prefix if null
+   */
   function getRequest($obj = null) {
-    if(!count($this->select)) {
-      if($obj === null) {
-        trigger_error("You have to choose either an object or select(s)");
+    // MbObject binding
+    if ($obj) {
+      if (!is_a($obj, "CMbObject")) {
+        trigger_error("Object must be an instance of MbObject", E_USER_ERROR);
       }
-      $select = "`$obj->_tbl`.*";
-    } else {
-      $select = implode(", ", $this->select);
-    }
-    if(!count($this->table)) {
-      if($obj === null) {
+
+      if (count($this->select)) {
+        trigger_error("You have to choose either an object or select(s)", E_USER_ERROR);
+      }
+
+      $this->select[] = "`$obj->_tbl`.*";
+      
+      if (count($this->table)) {
         trigger_error("You have to choose either an object or table(s)");
       }
-      $table = "`$obj->_tbl`";
-    } else {
-      $table = implode(", ", $this->table);
+
+      $this->table[] = "$obj->_tbl";
     }
     
-    $sql = "SELECT $select FROM $table";
+    // Select clauses
+    foreach ($this->select as $as => $column) {
+      $select[$as] = is_string($as) ? "$column AS `$as`" : $column;
+    }
+    
+    $select = join($select, ", ");
+    $sql = "SELECT $select";
+    
+    // Table clauses
+    $table = implode(", ", $this->table);
+    $sql .= "\nFROM $table";
+        
 
     // Left join clauses
     if ($this->ljoin) {
@@ -143,36 +173,38 @@ class CRequest {
     
     // Where clauses
     if (is_array($this->where)) {
+      $where = array();
       foreach ($this->where as $field => $eq) {
         if (is_string($field)) {
           if($pos = strpos($field, ".")) {
             $point_table = substr($field, 0, $pos);
             $point_field = substr($field, $pos + 1);
-            $this->where[$field] = "`$point_table`.`$point_field` $eq";
+            $where[$field] = "`$point_table`.`$point_field` $eq";
           } else {
-            $this->where[$field] = "`$field` $eq";
+            $where[$field] = "`$field` $eq";
           }
         }
         
-        $this->where[$field] = "(" . $this->where[$field] . ")";
+        $where[$field] = "(" . $where[$field] . ")";
       }
     }
     
     if ($this->where) {
       $sql .= "\nWHERE ";
-      $sql .= is_array($this->where) ? implode("\nAND ", $this->where) : $this->where;
+      $sql .= is_array($this->where) ? implode("\nAND ", $where) : $this->where;
     }
       
     // Group by fields
     if (is_array($this->group)) {
+      $groups = array();
       foreach ($this->group as $key => $field) {
-        $this->group[$key] = "`$field`";
+        $groups[$key] = "`$field`";
       }
     }
     
     if ($this->group) {
       $sql .= "\nGROUP BY ";
-      $sql .= is_array($this->group) ? implode(", ", $this->group) : $this->group;
+      $sql .= is_array($this->group) ? implode(", ", $groups) : $this->group;
     }
       
     // Order by fields

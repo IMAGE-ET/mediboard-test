@@ -178,9 +178,9 @@ function db_loadList($sql, $maxrows = null, $dbid = "std") {
 /**
 * Document::db_loadColumn()
 *
-* { Description }
+* Loads the first column for a given query
 *
-* @param [type] $maxrows
+* @param int $maxrows limit to a maximum nember of rows
 */
 function db_loadColumn($sql, $maxrows = null, $dbid = "std") {
   GLOBAL $AppUI;
