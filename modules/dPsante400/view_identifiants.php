@@ -21,10 +21,10 @@ $listClasses = getInstalledClasses();
 
 // Chargement de la liste des id4Sante400 pour le filtre
 $filter = new CIdSante400;
-$filter->object_id    = mbGetValueFromGetOrSession("object_id"   );
-$filter->object_class = mbGetValueFromGetOrSession("object_class");
-$filter->tag          = mbGetValueFromGetOrSession("tag"         );
-$filter->id400        = mbGetValueFromGetOrSession("id400");
+$filter->object_id    = mbGetValueFromGet("object_id"   );
+$filter->object_class = mbGetValueFromGet("object_class");
+$filter->tag          = mbGetValueFromGet("tag"         );
+$filter->id400        = mbGetValueFromGet("id400");
 $filter->nullifyEmptyFields();
 
 // Chargment de la cible si ojet unique
@@ -42,7 +42,7 @@ foreach ($list_idSante400 as $curr_idSante400) {
   $curr_idSante400->loadRefs();
 }
 
-// Chargment de l'IdSante400 courant
+// Chargement de l'IdSante400 courant
 $idSante400 = new CIdSante400;
 $idSante400->load(mbGetValueFromGetOrSession("id_sante400_id"));
 $idSante400->loadRefs();
