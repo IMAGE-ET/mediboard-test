@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.56";
+$config["mod_version"]     = "0.57";
 $config["mod_type"]        = "user";
 
 
@@ -525,7 +525,29 @@ class CSetupdPcabinet extends CSetup {
     $sql = "ALTER TABLE `consultation_anesth` ADD `listCim10` TEXT DEFAULT NULL ;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.56";
+    $this->makeRevision("0.56");
+    function setup_cleanOperationIdError(){
+      $where = array();
+      $where["consultation_anesth.operation_id"] = "!= 0";
+      $where[] = "consultation_anesth.operation_id IS NOT NULL";
+      $where[] = "(SELECT COUNT(operations.operation_id) FROM operations WHERE operation_id=consultation_anesth.operation_id)=0";
+      
+      $sql = new CRequest();
+      $sql->addSelect("consultation_anesth_id");
+      $sql->addTable("consultation_anesth");
+      $sql->addWhere($where);
+      if(!$aKeyxAnesth = db_loadColumn($sql->getRequest())){
+        return false;
+      }
+      $sql = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".db_prepare_in($aKeyxAnesth).")";
+      if (!db_exec($sql)) {
+        return false;
+      }
+      return true;
+    }
+    $this->addFunctions("setup_cleanOperationIdError");
+
+    $this->mod_version = "0.57";
   }
 }
 ?>

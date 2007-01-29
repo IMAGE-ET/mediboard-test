@@ -46,7 +46,27 @@
         ({{$curr_consult->_ref_patient->_naissance}})
       {{/if}}
     </td>
-    <td class="text">{{$curr_consult->motif|nl2br}}</td>
+    <td class="text">
+      {{$curr_consult->motif|nl2br}}
+      {{if $curr_consult->_ref_consult_anesth->_id && $curr_consult->_ref_consult_anesth->operation_id}}
+        {{assign var=curr_op value=$curr_consult->_ref_consult_anesth->_ref_operation}}
+
+        {{if $curr_consult->motif}}<br />{{/if}}
+        Intervention le {{$curr_consult->_ref_consult_anesth->_date_op|date_format:"%d/%m/%Y"}}
+        - Dr. {{$curr_op->_ref_plageop->_ref_chir->_view}}<br />
+        {{if $curr_op->libelle}}
+          <em>[{{$curr_op->libelle}}]</em>
+          <br />
+        {{/if}}
+        {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
+          {{if !$curr_code->_code7}}<strong>{{/if}}
+          {{$curr_code->libelleLong|truncate:60:"...":false}}
+          <em>({{$curr_code->code}})</em>
+          {{if !$curr_code->_code7}}</strong>{{/if}}
+          <br/>
+        {{/foreach}}
+      {{/if}}
+    </td>
     <td class="text">{{$curr_consult->rques|nl2br}}</td>
     <td class="text">{{$curr_consult->duree}} x {{$curr_plage->freq|date_format:"%M"}} min</td>
   </tr>

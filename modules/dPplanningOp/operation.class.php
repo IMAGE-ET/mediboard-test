@@ -169,7 +169,13 @@ class COperation extends CMbObject {
       "idfield" => "file_id", 
       "joinfield" => "file_object_id",
       "joinon" => "`file_class`='COperation'"
-    );    
+    );
+    $tables[] = array (
+      "label"     => "consultation(s) d'anesthésie", 
+      "name"      => "consultation_anesth", 
+      "idfield"   => "consultation_anesth_id", 
+      "joinfield" => "operation_id"
+    );   
 
 //    $tables[] = array (
 //      "label" => "naissance(s)", 
