@@ -92,13 +92,13 @@ $sql = "UPDATE consultation" .
 db_exec( $sql ); $msg .= db_error();
 
 $sql = "UPDATE antecedent" .
-    "\nSET patient_id = '$patient_id'" .
-    "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
+    "\nSET object_id = '$patient_id'" .
+    "\nWHERE object_class = 'CPatient' AND object_id IN ('$patient1->patient_id','$patient2->patient_id')";
 db_exec( $sql ); $msg .= db_error();
 
 $sql = "UPDATE traitement" .
-    "\nSET patient_id = '$patient_id'" .
-    "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
+    "\nSET object_id = '$patient_id'" .
+    "\nWHERE object_class = 'CPatient' AND object_id IN ('$patient1->patient_id','$patient2->patient_id')";
 db_exec( $sql ); $msg .= db_error();
 
 if(CModule::getInstalled("dPfiles")) {
