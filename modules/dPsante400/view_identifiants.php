@@ -24,6 +24,7 @@ $filter = new CIdSante400;
 $filter->object_id    = mbGetValueFromGetOrSession("object_id"   );
 $filter->object_class = mbGetValueFromGetOrSession("object_class");
 $filter->tag          = mbGetValueFromGetOrSession("tag"         );
+$filter->id400        = mbGetValueFromGetOrSession("id400");
 $filter->nullifyEmptyFields();
 
 // Chargment de la cible si ojet unique
