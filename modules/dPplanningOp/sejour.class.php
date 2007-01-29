@@ -288,14 +288,12 @@ class CSejour extends CMbObject {
     }
   }
   
-  function loadRefsOperations($where = null) {
-    if($where === null) {
-      $where = array();
-    }
+  function loadRefsOperations($where = array()) {
     $where["sejour_id"] = "= '$this->sejour_id'";
+    $order = "date ASC";
 
     $operations = new COperation;
-    $this->_ref_operations = $operations->loadList($where);
+    $this->_ref_operations = $operations->loadList($where, $order);
     
     if(count($this->_ref_operations) > 0) {
       $this->_ref_last_operation =& reset($this->_ref_operations);
