@@ -25,7 +25,7 @@
     <td>
       <input type="radio" name="image" value="1" checked="checked" /> Oui
       <input type="radio" name="image" value="0" /> Non
-    </td>  
+    </td>
     <th>
       <label for="javascript_1">Fichiers Javascripts</label>
     </th>
@@ -41,8 +41,17 @@
     <td>
       <input type="radio" name="lib" value="1" checked="checked" /> Oui
       <input type="radio" name="lib" value="0" /> Non
-    </td> 
-    <td class="button" colspan="2">
+    </td>
+    <th>
+      <label for="typeArch_zip">Archive</label>
+    </th>
+    <td>
+      <input type="radio" name="typeArch" value="zip" checked="checked" /> Zip
+      <input type="radio" name="typeArch" value="tar" /> Tar
+    </td>
+  </tr>
+  <tr>
+    <td class="button" colspan="4">
       <button class="submit" type="button" onclick="submitFormAjax(this.form, 'createArchive');">Créer</button>
     </td>
   </tr>

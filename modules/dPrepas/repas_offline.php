@@ -19,10 +19,19 @@ $style      = mbGetValueFromPost("style"      , 0);
 $image      = mbGetValueFromPost("image"      , 0);
 $javascript = mbGetValueFromPost("javascript" , 0);
 $lib        = mbGetValueFromPost("lib"        , 0);
+$typeArch   = mbGetValueFromPost("typeArch"   , "zip");
 
 // Création du fichier Zip
 if(file_exists("tmp/mediboard_repas.zip")){unlink("tmp/mediboard_repas.zip");}
-$zipFile = new Archive_Zip("tmp/mediboard_repas.zip");
+if(file_exists("tmp/mediboard_repas.tar.gz")){unlink("tmp/mediboard_repas.tar.gz");}
+
+if($typeArch == "zip"){
+  $zipFile = new Archive_Zip("tmp/mediboard_repas.zip");
+}elseif($typeArch == "tar"){
+  $zipFile = new Archive_Tar("tmp/mediboard_repas.tar.gz", true);
+}else{
+ return; 
+}
 
 
 if($indexFile){
@@ -67,7 +76,12 @@ if($indexFile){
   $indexFile = ob_get_contents();
   ob_end_clean();
   file_put_contents("tmp/index.html", $indexFile);
-  $zipFile->add("tmp/index.html"       , array("remove_path"=>"tmp/"));
+  
+  if($typeArch == "zip"){
+    $zipFile->add("tmp/index.html", array("remove_path"=>"tmp/"));
+  }elseif($typeArch == "tar"){
+    $zipFile->addModify("tmp/index.html", null, "tmp/");
+  }
 }
 
 
@@ -80,6 +94,7 @@ function delSvnAndSmartyDir($action,$fileProps){
    return true;
  }
 }
+
 
 if($style){
   $zipFile->add("style/" , array("callback_pre_add"=>"delSvnAndSmartyDir"));
