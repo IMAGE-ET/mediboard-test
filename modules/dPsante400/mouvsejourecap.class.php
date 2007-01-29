@@ -376,7 +376,6 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->markStatus(self::STATUS_SEJOUR, 2);
   }
   
-  
   function syncOperations() {
     $query = "SELECT * " .
         "\nFROM $this->base.ECINPF " .
