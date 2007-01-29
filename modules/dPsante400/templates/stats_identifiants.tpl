@@ -21,6 +21,13 @@
   </tr>
   {{/foreach}}
 
+  <tr>
+    <th>Total sur toute la classe</th>
+    <td><strong>{{$statTotal.nbObjects}}</strong></td>
+    <td><strong>{{$statTotal.nbID400s}}</strong></td>
+    <td><strong>{{$statTotal.average|string_format:"%.2f"}}</strong></td>
+  </tr>
+
 </table>
 
     </td>

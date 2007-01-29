@@ -18,8 +18,8 @@ $req = new CRequest;
 $req->addTable("id_sante400");
 $req->addColumn("COUNT(DISTINCT object_id)", "nbObjects");
 $req->addColumn("COUNT(id_sante400_id)", "nbID400s");
-$statsTotal = db_loadList($req->getRequest());
-$statsTotal = $statsTotal[0];
+$statTotal = db_loadList($req->getRequest());
+$statTotal = $statTotal[0];
 
 $req->addSelect("object_class");
 $req->addGroup("object_class");
@@ -30,13 +30,13 @@ foreach ($stats as &$stat) {
   $stat["average"] = $stat["nbID400s"] / $stat["nbObjects"];
 }
 
-$statsTotal["average"] = $statsTotal["nbID400s"] / $statsTotal["nbObjects"];
+$statTotal["average"] = $statTotal["nbID400s"] / $statTotal["nbObjects"];
 
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("stats", $stats);
-$smarty->assign("statsTotal", $statsTotal);
+$smarty->assign("statTotal", $statTotal);
 $smarty->display("stats_identifiants.tpl");
 
 ?>
