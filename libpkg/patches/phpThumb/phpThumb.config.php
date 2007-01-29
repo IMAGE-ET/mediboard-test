@@ -238,9 +238,3 @@ function phpThumbURL($ParameterString) {
 ///////////////////////////////////////////////////////////////////////////////
 
 ?>
-
-<pre>
-<?php print_r($PHPTHUMB_CONFIG) ?>
-</pre>
-
-<?php die(); ?>
