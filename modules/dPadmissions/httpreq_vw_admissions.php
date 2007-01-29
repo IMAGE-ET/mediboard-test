@@ -56,7 +56,7 @@ foreach ($today as $keySejour => $valueSejour) {
     //$sejour->_ref_operations[$key_op]->_ref_consult_anesth->loadRefsFwd();
     $sejour->_ref_operations[$key_op]->_ref_consult_anesth->loadRefConsultation();
     $sejour->_ref_operations[$key_op]->_ref_consult_anesth->_ref_consultation->loadRefPlageConsult();
-    $sejour->_ref_operations[$key_op]->_ref_consult_anesth->_date_consult =& $sejour->_ref_operations[$key_op]->_ref_consult_anesth->_ref_consultation->_ref_plageconsult->date;
+    $sejour->_ref_operations[$key_op]->_ref_consult_anesth->_date_consult =& $sejour->_ref_operations[$key_op]->_ref_consult_anesth->_ref_consultation->_date;
   }
   $affectation =& $sejour->_ref_first_affectation;
   if ($affectation->affectation_id) {
