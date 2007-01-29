@@ -263,10 +263,10 @@ function reloadAfterSaveDoc(){
       <a class="actionPat" href="#" onclick="printIntervention({{$curr_op->operation_id}})">
         <img src="images/icons/print.png" alt="Imprimer" title="Imprimer l'opération"/>
       </a>
-      <a class="actionPat" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+      <a class="actionPat" href="{{$curr_op->_link_editor}}">
         <img src="images/icons/planning.png" alt="modifier" title="modifier" />
       </a>
-      <a class="actionPat" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+      <a class="actionPat" href="{{$curr_op->_link_editor}}">
         Intervention le {{$curr_op->_datetime|date_format:"%d %b %Y"}}
         {{if $curr_op->_nb_files_docs}}
           - ({{$curr_op->_nb_files_docs}} Doc.)
@@ -279,7 +279,7 @@ function reloadAfterSaveDoc(){
 	</td>
     {{else}}
     <td>
-      <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+      <a href="{{$curr_op->_link_editor}}">
         Dr. {{$curr_op->_ref_chir->_view}}
       </a>
     </td>
