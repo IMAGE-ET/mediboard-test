@@ -4,7 +4,7 @@
 
 <table class="tbl">
   <tr>
-     <th class="title" colspan=10>Statistiques de synchronisation par type d'objets</th>
+     <th class="title" colspan="10">Statistiques de synchronisation par type d'objets</th>
   </tr>
   <tr>
      <th>Type d'objet</th>
