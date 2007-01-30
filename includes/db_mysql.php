@@ -131,12 +131,16 @@ function db_num_rows( $qid ) {
 	return mysql_num_rows( $qid );
 }
 
+function db_affected_rows($dbid = "std" ) {
+  return mysql_affected_rows(db_link($dbid));
+}
+
 function db_fetch_row( $cur ) {
 	return mysql_fetch_row( $cur );
 }
 
 function db_fetch_assoc( $cur ) {
-	return mysql_fetch_assoc( $cur );
+  return mysql_fetch_assoc( $cur );
 }
 
 function db_fetch_array( $cur  ) {
@@ -163,6 +167,7 @@ function db_version($dbid = "std") {
 		return 0;
 	}
 }
+
 
 function db_unix2dateTime( $time ) {
 	// converts a unix time stamp to the default date format

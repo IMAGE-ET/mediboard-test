@@ -328,7 +328,9 @@ class CMbObject {
     return false;
   }
   
-  // Object list by a request constructor
+  /**
+   * Object list by a request constructor
+   */
   function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     $request = new CRequest();
     $request->addLJoin($leftjoin);

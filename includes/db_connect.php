@@ -31,6 +31,18 @@ function do_connect($dbid) {
 
 do_connect("std");
 
+/**
+ * Returns a link handler for given sourcename
+ * @param string $dbid The DB sourcename
+ */
+function db_link($dbid = "std") {
+  global $links_db;
+  if (!array_key_exists($dbid, $links_db)) {
+    trigger_error( "FATAL ERROR: link to $dbid not found.", E_USER_ERROR );
+  }
+
+  return $links_db[$dbid];  
+}
 
 /**
 * This global function loads the first field of the first row returned by the query.
