@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPsante400";
-$config["mod_version"]     = "0.13";
+$config["mod_version"]     = "0.14";
 $config["mod_type"]        = "user";
 
 class CSetupdPsante400 extends CSetup {
@@ -44,8 +44,22 @@ class CSetupdPsante400 extends CSetup {
                "\nCHANGE `id_sante400_id` `id_sante400_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `object_id` `object_id` int(11) unsigned NOT NULL;";
     $this->addQuery($sql);
+
+    $this->makeRevision("0.13");
+    $sql = "ALTER TABLE `id_sante400` DROP INDEX `object_class` ;";    
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `id_sante400` ADD INDEX ( `object_class` ) ;";    
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `id_sante400` ADD INDEX ( `object_id` ) ;";    
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `id_sante400` ADD INDEX ( `tag` ) ;";    
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `id_sante400` ADD INDEX ( `last_update` ) ;";    
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `id_sante400` ADD INDEX ( `id400` ) ;";    
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.13";
+    $this->mod_version = "0.14";
   } 
 }
 ?>
