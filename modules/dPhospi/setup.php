@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPhospi";
-$config["mod_version"]     = "0.19";
+$config["mod_version"]     = "0.20";
 $config["mod_type"]        = "user";
 
 
@@ -131,7 +131,13 @@ class CSetupdPhospi extends CSetup {
     $sql = "ALTER TABLE `affectation` ADD `rques` text NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.19";
+    $this->makeRevision("0.19");
+    $sql = "ALTER TABLE `affectation` ADD INDEX ( `confirme` )";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `affectation` ADD INDEX ( `effectue` )";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.20";
   }
 }
 ?>

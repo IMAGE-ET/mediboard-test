@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.57";
+$config["mod_version"]     = "0.58";
 $config["mod_type"]        = "user";
 
 
@@ -546,8 +546,24 @@ class CSetupdPcabinet extends CSetup {
       return true;
     }
     $this->addFunctions("setup_cleanOperationIdError");
+    
+    $this->makeRevision("0.57");
+    $sql = "ALTER TABLE `consultation` ADD INDEX ( `heure` )";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `consultation` ADD INDEX ( `annule` )";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `consultation` ADD INDEX ( `paye` )";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `consultation` ADD INDEX ( `date_paiement` )";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `plageconsult` ADD INDEX ( `date` )";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `plageconsult` ADD INDEX ( `debut` )";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `plageconsult` ADD INDEX ( `fin` )";
+    $this->addQuery($sql);
 
-    $this->mod_version = "0.57";
+    $this->mod_version = "0.58";
   }
 }
 ?>
