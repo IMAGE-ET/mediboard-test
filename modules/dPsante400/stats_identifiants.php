@@ -30,7 +30,7 @@ foreach ($stats as &$stat) {
   $stat["average"] = $stat["nbID400s"] / $stat["nbObjects"];
 }
 
-$statTotal["average"] = $statTotal["nbID400s"] / $statTotal["nbObjects"];
+$statTotal["average"] = @($statTotal["nbID400s"] / $statTotal["nbObjects"]);
 
 
 // Création du template
