@@ -548,6 +548,7 @@ class CSetupdPcabinet extends CSetup {
     $this->addFunctions("setup_cleanOperationIdError");
     
     $this->makeRevision("0.57");
+    $this->setTimeLimit(1800);
     $sql = "ALTER TABLE `consultation` ADD INDEX ( `heure` )";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `consultation` ADD INDEX ( `annule` )";
