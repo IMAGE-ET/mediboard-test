@@ -42,6 +42,11 @@ function pageMain() {
         <tr>
           <th class="category" colspan="2">
           {{if $usergroup->group_id}}
+            {{if $canReadSante400}}
+            <a style="float:right;" href="#" onclick="view_idsante400('CGroups',{{$usergroup->group_id}})">
+              <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
+            </a>
+            {{/if}}
             <a style="float:right;" href="#" onclick="view_log('CGroups',{{$usergroup->group_id}})">
               <img src="images/icons/history.gif" alt="historique" />
             </a>
