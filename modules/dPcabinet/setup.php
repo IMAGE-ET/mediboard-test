@@ -536,12 +536,16 @@ class CSetupdPcabinet extends CSetup {
       $sql->addSelect("consultation_anesth_id");
       $sql->addTable("consultation_anesth");
       $sql->addWhere($where);
-      if(!$aKeyxAnesth = db_loadColumn($sql->getRequest())){
+      $aKeyxAnesth = db_loadColumn($sql->getRequest());
+      if($aKeyxAnesth === false){
         return false;
       }
-      $sql = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".db_prepare_in($aKeyxAnesth).")";
-      if (!db_exec($sql)) {
-        return false;
+      if(count($aKeyxAnesth)) {
+        $sql = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".db_prepare_in($aKeyxAnesth).")";
+        if (!db_exec($sql)) {
+          return false;
+        }
+        return true;
       }
       return true;
     }
@@ -563,7 +567,7 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($sql);
     $sql = "ALTER TABLE `plageconsult` ADD INDEX ( `fin` )";
     $this->addQuery($sql);
-
+    
     $this->mod_version = "0.58";
   }
 }
