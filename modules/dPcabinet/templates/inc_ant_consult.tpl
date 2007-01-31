@@ -146,7 +146,7 @@ function copyTraitement(traitement_id){
 
 <table class="form">
   <tr>
-    <td class="text" {{if $_is_anesth}}rowspan="2"{{/if}}>
+    <td class="text">
       {{if $_is_anesth}}
       <hr />
       <form name="editTabacFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
@@ -324,15 +324,33 @@ function copyTraitement(traitement_id){
       </table>
       </form>      
     </td>
-    <td class="text" id="listAnt">
-      {{include file="inc_list_ant.tpl"}}
+
+    <td>
+      <table class="form">
+        <tr>
+          <th class="category">
+            Dossier patient
+          </th>
+        </tr>
+        <tr>
+          <td class="text" id="listAnt">
+            {{include file="inc_list_ant.tpl"}}
+          </td>
+        </tr>
+        {{if $_is_anesth}}
+        <tr>
+          <th class="category">
+            Dossier d'anesthésie
+          </th>
+        </tr>
+        <tr>
+          <td class="text" id="listAntCAnesth">
+            {{include file="inc_list_ant_anesth.tpl"}}
+          </td>
+        </tr>
+        {{/if}}
+      </table>
     </td>
   </tr>
-  {{if $_is_anesth}}
-  <tr>
-    <td class="text" id="listAntCAnesth">
-      {{include file="inc_list_ant_anesth.tpl"}}
-    </td>
-  </tr>
-  {{/if}}
+
 </table>
