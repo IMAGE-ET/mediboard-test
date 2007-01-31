@@ -37,6 +37,19 @@ if($urgences) {
   }
 } else {
   $listUrgences = array();
+  // Urgences du jour
+  $listUrgences = new COperation;
+  $where = array();
+  $where["date"] = "= '$date'";
+  $where["chir_id"] = "= '$userSel->user_id'";
+  $order = "date";
+  $listUrgences = $listUrgences->loadList($where, $order);
+  if($urgences) {
+    foreach($listUrgences as $keyUrg => $curr_urg) {
+      $listUrgences[$keyUrg]->loadRefs();
+      $listUrgences[$keyUrg]->_ref_sejour->loadRefsFwd();
+    }
+  }
   // Liste des opérations du jour sélectionné
   $listDay = new CPlageOp;
   $where = array();
