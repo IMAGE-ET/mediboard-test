@@ -78,7 +78,7 @@ function updateListOperations() {
 
   url.addParam("chirSel" , "{{$app->user_id}}");
   url.addParam("date"    , "{{$date}}");
-  url.addParam("urgences", "0");
+  url.addParam("urgences", "1");
   url.addParam("board"   , "1");
 
   url.requestUpdate("operations");
