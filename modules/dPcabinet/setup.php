@@ -570,13 +570,14 @@ class CSetupdPcabinet extends CSetup {
     
     $this->makeRevision("0.58");
     $this->setTimeLimit(1800);
+    $this->addDependency("dPpatients", "0.41");
     $sql = "INSERT INTO antecedent
             SELECT '', consultation_anesth.consultation_anesth_id, antecedent.type, antecedent.date, antecedent.rques, 'CConsultAnesth' 
             FROM antecedent, consultation_anesth, consultation
             WHERE antecedent.object_class = 'CPatient'
               AND antecedent.object_id = consultation.patient_id
               AND consultation.consultation_id = consultation_anesth.consultation_id";
-    //$this->addQuery($sql);
+    $this->addQuery($sql);
     $sql = "INSERT INTO traitement
             SELECT '', consultation_anesth.consultation_anesth_id, traitement.debut, traitement.fin, traitement.traitement, 'CConsultAnesth' 
             FROM traitement, consultation_anesth, consultation
