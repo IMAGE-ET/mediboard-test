@@ -38,6 +38,9 @@ function reloadFinishBanner() {
       </button>      
       {{else}}
       <button id="listConsult-trigger" type="button" style="float:left">+/-</button>
+      <button class="print" type="button" style="float: right;" onclick="printAllDocs()">
+        Imprimer les documents
+      </button> 
       {{/if}}
         Consultation
         (Etat : {{$consult->_etat}}

@@ -1,6 +1,11 @@
 {{if !$documents|@count}}
   <strong>Il n'y a pas de document pour cette consultation</strong>
 {{else}}
+<script type="text/javascript">
+function pageMain(){
+  window.print();
+}
+</script>
     </td>
   </tr>
 </table>

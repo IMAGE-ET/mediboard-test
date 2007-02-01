@@ -100,7 +100,7 @@ function printFiche() {
 
 function printAllDocs() {
   var url = new Url;
-  url.setModuleAction("dPcabinet", "print_docs"); 
+  url.setModuleAction("dPcabinet", "print_select_docs"); 
   url.addElement(document.editFrmFinish.consultation_id);
   url.popup(700, 500, "printDocuments");
   return;

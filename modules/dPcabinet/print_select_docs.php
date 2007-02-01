@@ -13,9 +13,7 @@ if (!$canEdit) {
   $AppUI->redirect("m=system&a=access_denied");
 }
 
-$consultation_id = mbGetValueFromPost("consultation_id");
-$nbDoc           = mbGetValueFromPost("nbDoc");
-$documents       = array();
+$consultation_id = mbGetValueFromGet("consultation_id");
 
 // Consultation courante
 $consult = new CConsultation();
@@ -24,20 +22,13 @@ if (!$consult->load($consultation_id) || !$consult->canEdit()) {
   $AppUI->redirect("m=dPcabinet&tab=0");
 }else{
   $consult->loadRefsDocs();
-  $aKeysDocs = array_keys($consult->_ref_documents);
-  foreach($nbDoc as $compte_rendu_id => $nb_print){
-    if($nb_print>0 && in_array($compte_rendu_id,$aKeysDocs)){
-      for($i=1; $i<=$nb_print; $i++){
-        $documents[] = $consult->_ref_documents[$compte_rendu_id];
-      }
-    }
-  }
-}
+}  
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("documents", $documents);
+$smarty->assign("consult"   , $consult);
+$smarty->assign("documents" , $consult->_ref_documents);
 
-$smarty->display("print_docs.tpl");
+$smarty->display("print_select_docs.tpl");
 ?>

@@ -7,6 +7,14 @@ function verifNonEmpty(oElement){
   return false;
 }
 
+function printAllDocs() {
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "print_select_docs"); 
+  url.addElement(document.editFrmFinish.consultation_id);
+  url.popup(700, 500, "printDocuments");
+  return;
+}
+
 function showAll(patient_id) {
   var url = new Url;
   url.setModuleAction("dPcabinet", "vw_resume");
