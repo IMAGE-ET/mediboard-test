@@ -15,6 +15,7 @@ function popCode() {
 
 function setCode(sCode, type, sFullCode) {
   oCimField.add(sCode);
+  oCimAnesthField.add(sCode);
   updateTokenCim10();
 }
 
@@ -192,7 +193,11 @@ function copyTraitement(traitement_id){
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_antecedent_aed" />
       <input type="hidden" name="object_id" value="{{$patient->patient_id}}" />
-      <input type="hidden" name="object_class" value="CPatient" />
+      <input type="hidden" name="object_class" value="CPatient" />      
+      {{if $_is_anesth}}
+      <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
+      {{/if}}
+
       <table class="form">
         <tr>
           <td colspan="2"><strong>Ajouter un antécédent</strong></td>
@@ -244,6 +249,9 @@ function copyTraitement(traitement_id){
       <input type="hidden" name="dosql" value="do_traitement_aed" />
       <input type="hidden" name="object_id" value="{{$patient->patient_id}}" />
       <input type="hidden" name="object_class" value="CPatient" />
+      {{if $_is_anesth}}
+      <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
+      {{/if}}
       
       <table class="form">
         <tr>
@@ -313,7 +321,7 @@ function copyTraitement(traitement_id){
           {{foreach from=$curr_cat item=curr_code}}
           <tr>
             <td class="text">
-              <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}')"></button>
+              <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}');oCimAnesthField.add('{{$curr_code->code}}');"></button>
               <button class="down notext" type="button" onclick="selectCim10('{{$curr_code->code}}')"></button>
               {{$curr_code->code}}: {{$curr_code->libelle}}
             </td>

@@ -18,9 +18,8 @@
               <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cet antécédent',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedents})">
               </button> 
               {{if $_is_anesth}}
-              <a href="#nothing" onclick="copyAntecedent({{$curr_antecedent->antecedent_id}})" title="Rendre significatif">
-                <img src="images/icons/plus.png" alt="Rendre significatif" />
-              </a>
+              <button class="add notext" type="button" onclick="copyAntecedent({{$curr_antecedent->antecedent_id}})">
+              </button>
               {{/if}}         
               {{if $curr_antecedent->date}}
                 {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
@@ -49,9 +48,8 @@
           <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'ce traitement',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedents})">
           </button>
           {{if $_is_anesth}}
-          <a href="#nothing" onclick="copyTraitement({{$curr_trmt->traitement_id}})" title="Rendre significatif">
-            <img src="images/icons/plus.png" alt="Rendre significatif" />
-          </a>
+          <button class="add notext" type="button" onclick="copyTraitement({{$curr_trmt->traitement_id}})">
+          </button>
           {{/if}}
           {{if $curr_trmt->fin}}
             Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}} :
@@ -72,9 +70,8 @@
           <button class="trash notext" type="button" onclick="oCimField.remove('{{$curr_code->code}}')">
           </button>
           {{if $_is_anesth}}
-          <a href="#nothing" onclick="oCimAnesthField.add('{{$curr_code->code}}')" title="Rendre significatif">
-            <img src="images/icons/plus.png" alt="Rendre significatif" />
-          </a>
+          <button class="add notext" type="button" onclick="oCimAnesthField.add('{{$curr_code->code}}')">
+          </button>
           {{/if}}
           {{$curr_code->code}}: {{$curr_code->libelle}}
         </li>

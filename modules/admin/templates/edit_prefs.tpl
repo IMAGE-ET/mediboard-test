@@ -23,6 +23,7 @@
       {{/if}}
     </th>
   </tr>
+
   <tr>
     <th>
       <label for="pref_name[LOCALE]" title="Veuillez choisir le langage que vous souhaiter utiliser">{{tr}}Locale{{/tr}}</label>
@@ -36,7 +37,7 @@
         {{/foreach}}
       </select>
     </td>
-  </tr>
+  </tr>  
   <tr>
     <th>
       <label for="pref_name[UISTYLE]" title="Veuillez choisir l'apparence que vous souhaiter utiliser">{{tr}}User Interface Style{{/tr}}</label>
@@ -50,7 +51,7 @@
         {{/foreach}}
       </select>
     </td>
-  </tr>
+  </tr>  
   <tr>
     <th>
       <label for="pref_name[DEFMODULE]" title="Veuillez choisir le module par défaut à afficher">{{tr}}Module par défaut{{/tr}}</label>
@@ -64,11 +65,15 @@
         {{/foreach}}
       </select>
     </td>
+  </tr>  
+  
+  {{if $prefsUser.dPpatients}}  
+  <tr>
+    <th class="category" colspan="2">{{tr}}module-dPpatients-long{{/tr}}</th>
   </tr>
-  {{if $prefsUser.dPpatients}}
   <tr>
     <th>
-      <label for="pref_name[DEPARTEMENT]" title="Veuillez choisir le numéro du département par défaut à utiliser">{{tr}}N° du département par Défaut{{/tr}}</label>
+      <label for="pref_name[DEPARTEMENT]" title="Veuillez choisir le numéro du département par défaut à utiliser">{{tr}}N° du département par défaut{{/tr}}</label>
     </th>
     <td>
       <input type="text" name="pref_name[DEPARTEMENT]" value="{{$prefsUser.dPpatients.DEPARTEMENT}}" maxlength="3" size="4" title="num|minMax|0|999"/>
@@ -77,6 +82,9 @@
   {{/if}}
   
   {{if $prefsUser.dPcabinet}}
+  <tr>
+    <th class="category" colspan="2">{{tr}}module-dPcabinet-long{{/tr}}</th>
+  </tr>
   <tr>
     <th>
       <label for="pref_name[AFFCONSULT]" title="Type de vue par défaut des consultations">{{tr}}Vue des Consultations par défaut{{/tr}}</label>
@@ -99,9 +107,26 @@
       </select>
     </td>
   </tr>
+  <tr>
+    <th class="category" colspan="2">{{tr}}module-dPcabinet-long{{/tr}} - Anesth</th>
+  </tr>
+  <tr>
+    <th>
+      <label for="pref_name[AUTOADDSIGN]" title="Ajout automatique des éléments significatifs">{{tr}}Ajout automatique des éléments significatifs{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[AUTOADDSIGN]">
+        <option value="0"{{if $prefsUser.dPcabinet.AUTOADDSIGN == "0"}}selected="selected"{{/if}}>Oui</option>
+        <option value="1"{{if $prefsUser.dPcabinet.AUTOADDSIGN == "1"}}selected="selected"{{/if}}>Non</option>
+      </select>
+    </td>
+  </tr>
   {{/if}}
 
   {{if $prefsUser.system}}
+  <tr>
+    <th class="category" colspan="2">{{tr}}module-system-long{{/tr}}</th>
+  </tr>
   <tr>
     <th>
       <label for="pref_name[INFOSYSTEM]" title="Afficher les informations système">{{tr}}Afficher les informations système{{/tr}}</label>

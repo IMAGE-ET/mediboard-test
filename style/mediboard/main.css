@@ -165,6 +165,8 @@ a.buttonmodify,
 a.buttonsearch, 
 a.buttontick, 
 a.buttonchange, 
+a.buttonremove, 
+a.buttonadd, 
 a.buttondown {
   color: #000;
   text-decoration: none;
@@ -183,7 +185,8 @@ a.buttondown {
 
 a.button:hover, button:hover, a.buttonedit:hover, a.buttontrash:hover, a.buttonsubmit:hover,
 a.buttonnew:hover, a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, 
-a.buttonsearch:hover, a.buttontick:hover, a.buttonchange:hover, a.buttondown:hover {
+a.buttonsearch:hover, a.buttontick:hover, a.buttonchange:hover, a.buttondown:hover,
+a.buttonadd:hover, a.buttonremove:hover {
   background-color: #bbb;
 }
 
@@ -235,6 +238,16 @@ button.down, a.buttondown {
 
 button.change, a.buttonchange {
   background-image: url(images/buttons/change.png);
+  padding-left: 18px;
+}
+
+button.add, a.buttonadd {
+  background-image: url(images/buttons/add.png);
+  padding-left: 18px;
+}
+
+button.remove, a.buttonremove {
+  background-image: url(images/buttons/remove.png);
   padding-left: 18px;
 }
 

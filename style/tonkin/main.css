@@ -291,6 +291,7 @@ textarea {
 
 a.button, button, a.buttonedit, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
 a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange, a.buttondown,
+a.buttonadd, a.buttonremove,
 input[type=submit],
 input[type=reset],
 input[type=button] {
@@ -443,6 +444,30 @@ button.edit, a.buttonedit {
 
 button.edit:hover, a.buttonedit:hover {
   background-image: url(./images/buttons/editover.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.add, a.buttonadd {
+  background-image: url(./images/buttons/add.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.add:hover, a.buttonadd:hover {
+  background-image: url(./images/buttons/addover.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.remove, a.buttonremove {
+  background-image: url(./images/buttons/remove.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.remove:hover, a.buttonremove:hover {
+  background-image: url(./images/buttons/removeover.png);
   background-position: left bottom;
   padding-left: 18px;
 }

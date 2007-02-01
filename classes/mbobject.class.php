@@ -1360,8 +1360,7 @@ class CMbObject {
   function loadAides($user_id) {
     // Initialisation to prevent understandable smarty notices
     foreach($this->_props as $propName => $propSpec) {
-      $specFragments = explode("|", $propSpec);
-      if (array_search("text", $specFragments) !== false) {
+      if ($this->lookupSpec("text",$propSpec) !== false) {
         $this->_aides[$propName] = null;
       }
     }
