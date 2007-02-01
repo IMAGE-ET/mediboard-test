@@ -13,11 +13,6 @@ function addHelp(sClass, oField, sName) {
   url.popup(600, 200, "AidesSaisie");
 }
 
-function confirmExit() {
-  if(bFormsToSave)
-    alert("element non sauvegardé");
-}
-
 function confirmDeletion(oForm, oOptions, oOptionsAjax) {
   oDefaultOptions = {
     typeName: "",
@@ -55,16 +50,6 @@ function confirmDeletionOffline(oForm, oFct, oOptions, oOptionsAjax) {
     oForm.del.value = 1;
     oFct();
   }
-}
-
-//window.onUnload = confirmExit();
-
-var bFormsToSave = false;
-
-function watchFormModified(id, oldval, newval) {
-  //alert("élément modifié ("+id+") de "+oldval+" à "+newval);
-  bFormsToSave = true;
-  return newval;
 }
 
 function getLabelFor(oElement) {
@@ -153,7 +138,6 @@ var bGiveFormFocus = true;
 
 function prepareForm(oForm) {
   var sFormName = oForm.getAttribute("name");
-  var sFormClass = oForm.getAttribute("class");
 
   // Build label targets
   aLabels = oForm.getElementsByTagName("label");
@@ -165,16 +149,11 @@ function prepareForm(oForm) {
         oLabel.htmlFor = sFormName + "_" + sFor;
       }
     } 
-  } 
+  }
 
   // For each element
   var iElement = 0;
   while (oElement = oForm.elements[iElement++]) {
-    // Watch elements for watch class forms
-    if (sFormClass == "watch") {
-      oElement.watch("value", watchFormModified);
-    }
-     
     // Create id for each element if id is null
     if (!oElement.id) {
       oElement.id = sFormName + "_" + oElement.name;
@@ -183,12 +162,18 @@ function prepareForm(oForm) {
       }
     }
   
-    // Label emphasized for notNull elements
+    //  Label emphasized for notNull elements
     if (sPropSpec = oElement.getAttribute("title")) {
-      aSpecFragments = sPropSpec.split("|");
+      aSpecFragments = sPropSpec.split(" ");
       if (aSpecFragments.contains("notNull")) {
         notNullOK(oElement);
-		Element.addEventHandler(oElement, "change", notNullOK);
+        Element.addEventHandler(oElement, "change", notNullOK);
+      }
+    }else if (sPropSpec = oElement.getAttribute("class")) {
+      aSpecFragments = sPropSpec.split(" ");
+      if (aSpecFragments.contains("notNull")) {
+        notNullOK(oElement);
+        Element.addEventHandler(oElement, "change", notNullOK);
       }
     }
    

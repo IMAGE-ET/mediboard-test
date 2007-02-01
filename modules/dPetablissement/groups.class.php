@@ -52,7 +52,7 @@ class CGroups extends CMbObject {
   
   function getSpecs() {
     return array (
-      "text"           => "str|notNull",
+      "text"           => "notNull str",
       "raison_sociale" => "str|maxLength|50",
       "adresse"        => "text",
       "cp"             => "numchar|length|5",

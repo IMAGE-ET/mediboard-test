@@ -31,9 +31,9 @@ class CSalle extends CMbObject {
 
   function getSpecs() {
     return array (
-      "group_id" => "ref|notNull",
-      "nom"      => "str|notNull",
-      "stats"    => "bool|notNull"
+      "group_id" => "notNull refMandatory",
+      "nom"      => "notNull str",
+      "stats"    => "notNull bool"
     );
   }
   

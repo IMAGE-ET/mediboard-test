@@ -55,13 +55,13 @@ class CDocGed extends CMbObject {
 
   function getSpecs() {
     return array (
-      "group_id"         => "ref|notNull",
+      "group_id"         => "notNull refMandatory",
       "user_id"          => "ref",
       "doc_chapitre_id"  => "ref",
       "doc_theme_id"     => "ref",
       "doc_categorie_id" => "ref",
       "titre"            => "str|maxLength|50",
-      "etat"             => "enum|0|16|32|48|64|notNull",
+      "etat"             => "notNull enum|0|16|32|48|64",
       "version"          => "currency|min|0",
       "annule"           => "bool",
       "num_ref"          => "num"

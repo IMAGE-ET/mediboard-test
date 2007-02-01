@@ -51,7 +51,7 @@ class CRepas extends CMbObject {
   
   function getSpecs() {
     return array (
-      "affectation_id" => "ref|notNull",
+      "affectation_id" => "notNull refMandatory",
       "menu_id"        => "ref",
       "plat1"          => "ref",
       "plat2"          => "ref",
@@ -61,7 +61,7 @@ class CRepas extends CMbObject {
       "boisson"        => "ref",
       "pain"           => "ref",
       "date"           => "date",
-      "typerepas_id"   => "ref|notNull",
+      "typerepas_id"   => "notNull refMandatory",
       "modif"          => "bool"
     );
   }

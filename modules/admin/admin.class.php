@@ -59,11 +59,11 @@ class CUser extends CMbObject {
   
   function getSpecs() {
     return array (
-      "user_username"   => "str|maxLength|20|notNull",
+      "user_username"   => "notNull str|maxLength|20",
       "user_password"   => "str|minLength|4",
-      "user_type"       => "num|max|20|notNull",
+      "user_type"       => "notNull num|max|20",
       "user_first_name" => "str|maxLength|50",
-      "user_last_name"  => "str|maxLength|50|notNull",
+      "user_last_name"  => "notNull str|maxLength|50",
       "user_email"      => "str|maxLength|255",
       "user_phone"      => "str|maxLength|30",
       "user_mobile"     => "str|maxLength|30",

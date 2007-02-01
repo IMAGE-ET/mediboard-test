@@ -60,7 +60,7 @@ function pageMain() {
           <th><label for="deb" title="Date de début de la recherche">Début</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_deb_da">{{$deb|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="deb" title="date|notNull" value="{{$deb}}" />
+            <input type="hidden" name="deb" title="notNull date" value="{{$deb}}" />
             <img id="paramFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
@@ -68,7 +68,7 @@ function pageMain() {
           <th><label for="fin" title="Date de fin de la recherche">Fin</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_fin_da">{{$fin|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" title="date|moreEquals|deb|notNull" value="{{$fin}}" />
+            <input type="hidden" name="fin" title="notNull date moreEquals|deb" value="{{$fin}}" />
             <img id="paramFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>

@@ -35,7 +35,7 @@
       </label>
     </th>
     <td>
-      <input type="text" name="ged[titre]" value="{{$docGed->titre}}" title="{{$docGed->_props.titre}}|notNull" />
+      <input type="text" name="ged[titre]" value="{{$docGed->titre}}" title="notNull {{$docGed->_props.titre}}" />
     </td>
   </tr>
   <tr>
@@ -45,7 +45,7 @@
       </label>
     </th>
     <td>
-      <select name="ged[doc_theme_id]" title="{{$docGed->_props.doc_theme_id}}|notNull">
+      <select name="ged[doc_theme_id]" title="notNull {{$docGed->_props.doc_theme_id}}">
         <option value="">&mdash; {{tr}}CDocGed-doc_theme_id-desc{{/tr}}</option>
         {{foreach from=$listThemes item=curr_theme}}
         <option value="{{$curr_theme->doc_theme_id}}" {{if $docGed->doc_theme_id == $curr_theme->doc_theme_id}} selected="selected" {{/if}} >
@@ -65,7 +65,7 @@
   <tr>
     <th><label for="ged[version]">{{tr}}CDocGed-version{{/tr}}</label></th>
     <td>
-      <select name="ged[version]" title="currency|notNull">
+      <select name="ged[version]" title="notNull currency">
         {{foreach from=$versionDoc|smarty:nodefaults item=currVersion}}
         <option value="{{$currVersion}}">{{$currVersion}}</option>
         {{/foreach}}

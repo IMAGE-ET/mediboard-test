@@ -42,15 +42,15 @@ class CFile extends CMbObject {
   
   function getSpecs() {
     return array (
-      "file_class"         => "str|notNull",
-      "file_object_id"     => "ref|notNull",
+      "file_class"         => "notNull str",
+      "file_object_id"     => "notNull refMandatory",
       "file_category_id"   => "ref",
-      "file_date"          => "dateTime|notNull",
+      "file_date"          => "notNull dateTime",
       "file_size"          => "num|pos",
-      "file_real_filename" => "str|notNull",
+      "file_real_filename" => "notNull str",
       "file_owner"         => "ref",
       "file_type"          => "str",
-      "file_name"          => "str|notNull"
+      "file_name"          => "notNull str"
     );
   }
 

@@ -64,13 +64,13 @@ class CConsultation extends CMbObject {
   
   function getSpecs() {
     return array (
-      "plageconsult_id" => "ref|notNull",
+      "plageconsult_id" => "notNull refMandatory",
       "patient_id"      => "ref",
-      "heure"           => "time|notNull",
+      "heure"           => "notNull time",
       "duree"           => "numchar|maxLength|1",
       "secteur1"        => "currency|min|0",
       "secteur2"        => "currency|min|0",
-      "chrono"          => "enum|16|32|48|64|notNull",
+      "chrono"          => "notNull enum|16|32|48|64",
       "annule"          => "bool",
       "paye"            => "bool",
       "date_paiement"   => "date",

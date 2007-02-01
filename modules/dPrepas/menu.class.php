@@ -44,9 +44,9 @@ class CMenu extends CMbObject {
   
   function getSpecs() {
     return array (
-      "nom"         => "str|notNull",
-      "group_id"    => "ref|notNull",
-      "typerepas"   => "ref|notNull",
+      "nom"         => "notNull str",
+      "group_id"    => "notNull refMandatory",
+      "typerepas"   => "notNull refMandatory",
       "plat1"       => "str",
       "plat2"       => "str",
       "plat3"       => "str",
@@ -58,9 +58,9 @@ class CMenu extends CMbObject {
       "sans_sel"    => "bool",
       "sans_residu" => "bool",
       "modif"       => "bool",
-      "debut"       => "date|notNull",
-      "repetition"  => "num|pos|notNull",
-      "nb_repet"    => "num|pos|notNull"
+      "debut"       => "notNull date",
+      "repetition"  => "notNull num|pos",
+      "nb_repet"    => "notNull num|pos"
     );
   }
   

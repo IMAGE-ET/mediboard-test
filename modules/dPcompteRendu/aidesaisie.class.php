@@ -66,10 +66,10 @@ class CAideSaisie extends CMbObject {
     return array (
       "user_id"     => "ref",
       "function_id" => "ref|xor|user_id",
-      "class"       => "str|notNull",
-      "field"       => "str|notNull",
-      "name"        => "str|notNull",
-      "text"        => "text|notNull"
+      "class"       => "notNull str",
+      "field"       => "notNull str",
+      "name"        => "notNull str",
+      "text"        => "notNull text"
     );
   }
   

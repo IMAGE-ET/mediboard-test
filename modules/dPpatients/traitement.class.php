@@ -31,10 +31,10 @@ class CTraitement extends CMbObject {
 
   function getSpecs() {
     return array (
-      "object_id"    => "ref|notNull",
-      "object_class" => "enum|CPatient|CConsultAnesth|notNull",
+      "object_id"    => "notNull refMandatory",
+      "object_class" => "notNull enum|CPatient|CConsultAnesth",
       "debut"        => "date",
-      "fin"          => "date|moreEquals|debut",
+      "fin"          => "date moreEquals|debut",
       "traitement"   => "text"
     );
   }

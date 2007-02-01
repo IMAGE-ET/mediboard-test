@@ -67,17 +67,17 @@ class CFichePaie extends CMbObject {
 
   function getSpecs() {
     return array (
-      "params_paie_id" => "ref|notNull",
-      "debut"          => "date|notNull",
-      "fin"            => "date|moreEquals|debut|notNull",
-      "salaire"        => "currency|min|0|notNull",
-      "heures"         => "num|max|255|notNull",
-      "heures_sup"     => "num|max|255|notNull",
-      "mutuelle"       => "currency|min|0|notNull",
-      "anciennete"     => "pct|notNull",
-      "precarite"      => "pct|notNull",
-      "conges_payes"   => "pct|notNull",
-      "prime_speciale" => "pct|notNull"
+      "params_paie_id" => "notNull refMandatory",
+      "debut"          => "notNull date",
+      "fin"            => "notNull date moreEquals|debut",
+      "salaire"        => "notNull currency|min|0",
+      "heures"         => "notNull num|max|255",
+      "heures_sup"     => "notNull num|max|255",
+      "mutuelle"       => "notNull currency|min|0",
+      "anciennete"     => "notNull pct",
+      "precarite"      => "notNull pct",
+      "conges_payes"   => "notNull pct",
+      "prime_speciale" => "notNull pct"
     );
   }
   

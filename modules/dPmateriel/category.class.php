@@ -26,7 +26,7 @@ class CCategory extends CMbObject {
 
   function getSpecs() {
     return array (
-      "category_name" => "str|maxLength|50|notNull"
+      "category_name" => "notNull str|maxLength|50"
     );
   }
   

@@ -40,8 +40,8 @@ class CListeChoix extends CMbObject {
     return array (
       "chir_id"         => "ref|xor|function_id",
       "function_id"     => "ref",
-      "nom"             => "str|notNull",
-      "valeurs"         => "text|confidential",
+      "nom"             => "notNull str",
+      "valeurs"         => "text confidential",
       "compte_rendu_id" => "ref"
     );
   }

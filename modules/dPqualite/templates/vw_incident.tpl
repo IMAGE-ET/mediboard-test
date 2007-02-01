@@ -6,7 +6,7 @@ function choixSuiteEven(){
   var oForm = document.FrmEI;
   if(oForm.suite_even.value=="autre"){
     $('suiteEvenAutre').show();
-    oForm.suite_even_descr.title="{{$fiche->_props.suite_even_descr}}|notNull";
+    oForm.suite_even_descr.title="notNull {{$fiche->_props.suite_even_descr}}";
   }else{
     $('suiteEvenAutre').hide();
     oForm.suite_even_descr.title="{{$fiche->_props.suite_even_descr}}";
@@ -138,7 +138,7 @@ function pageMain() {
           <th><label for="_incident_date" title="{{tr}}CFicheEi-date_incident-desc{{/tr}}">{{tr}}CFicheEi-date_incident{{/tr}}</label></th>
           <td class="date">
             <div id="FrmEI__incident_date_da">{{if $fiche->fiche_ei_id}}{{$fiche->_incident_date|date_format:"%d/%m/%Y"}}{{else}}{{$datenow|date_format:"%d/%m/%Y"}}{{/if}}</div>
-            <input type="hidden" name="_incident_date" title="date|notNull" value="{{if $fiche->fiche_ei_id}}{{$fiche->_incident_date}}{{else}}{{$datenow}}{{/if}}" />
+            <input type="hidden" name="_incident_date" title="notNull date" value="{{if $fiche->fiche_ei_id}}{{$fiche->_incident_date}}{{else}}{{$datenow}}{{/if}}" />
             <img id="FrmEI__incident_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-date_incident-desc{{/tr}}"/>
          </td>
         </tr>
@@ -299,7 +299,7 @@ function pageMain() {
             </tr>
             <tr>
               <td>
-                <textarea name="suite_even_descr" title="{{$fiche->_props.suite_even_descr}}{{if $fiche->suite_even=="autre"}}|notNull{{/if}}">{{$fiche->suite_even_descr}}</textarea>
+                <textarea name="suite_even_descr" title="{{$fiche->_props.suite_even_descr}}{{if $fiche->suite_even=="autre"}} notNull{{/if}}">{{$fiche->suite_even_descr}}</textarea>
               </td>
             </tr>
             </table>

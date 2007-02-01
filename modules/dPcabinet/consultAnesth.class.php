@@ -88,15 +88,15 @@ class CConsultAnesth extends CMbObject {
   
   function getSpecs() {
     return array (
-      "consultation_id" => "ref|notNull",
+      "consultation_id" => "notNull refMandatory",
       "operation_id"    => "ref",
       // @todo : un type particulier pour le poid et la taille
       "poid"            => "currency|pos",
       "taille"          => "currency|min|0",
       "groupe"          => "enum|?|O|A|B|AB",
       "rhesus"          => "enum|?|NEG|POS",
-      "antecedents"     => "text|confidential",
-      "traitements"     => "text|confidential",
+      "antecedents"     => "text confidential",
+      "traitements"     => "text confidential",
       "tabac"           => "text",
       "oenolisme"       => "text",
       "tasys"           => "num|max|64",

@@ -44,9 +44,9 @@ class CCompteRendu extends CMbObject {
       "chir_id"          => "ref|xor|function_id",
       "function_id"      => "ref",
       "object_id"        => "ref",
-      "nom"              => "str|notNull",
+      "nom"              => "notNull str",
       "source"           => "html",
-      "object_class"     => "enum|CPatient|CConsultAnesth|COperation|CConsultation|notNull",
+      "object_class"     => "notNull enum|CPatient|CConsultAnesth|COperation|CConsultation",
       "file_category_id" => "ref",
       "valide"           => "numchar|maxLength|1"
     );

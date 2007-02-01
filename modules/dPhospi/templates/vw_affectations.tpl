@@ -163,6 +163,7 @@ function viewPrevTimeHospi(affectation_id, chir_id, codes) {
     url.setModuleAction("dPplanningOp", "httpreq_get_hospi_time");
     url.addParam("chir_id", chir_id);
     url.addParam("codes", codes);
+    url.addParam("javascript", 0);
     url.requestUpdate(oElement);
     oElement.alt = "infos - cliquez pour fermer";
   }

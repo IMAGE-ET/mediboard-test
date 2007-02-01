@@ -95,7 +95,7 @@
       <label for="_hour_op" title="Durée de l'intervention. Obligatoire">Temps opératoire</label>
     </th>
     <td>
-      <select name="_hour_op" title="notNull|num">
+      <select name="_hour_op" title="notNull num">
       {{foreach from=$hours_duree|smarty:nodefaults item=hour}}
         <option value="{{$hour}}" {{if (!$op && $hour == 1) || $op->_hour_op == $hour}} selected="selected" {{/if}}>{{$hour}}</option>
       {{/foreach}}
@@ -151,7 +151,7 @@
       <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention</label>
       <input type="hidden" name="date" value="" />
       <input type="hidden" name="_date" value="{{$plage->date}}" />
-      <input type="hidden" name="plageop_id" title="{{$op->_props.plageop_id}}|notNull" ondblclick="popPlage()" value="{{$plage->plageop_id}}" />
+      <input type="hidden" name="plageop_id" title="notNull {{$op->_props.plageop_id}}" ondblclick="popPlage()" value="{{$plage->plageop_id}}" />
     </th>
     <td class="readonly">
       <input type="text" name="_datestr" readonly="readonly" size="10" ondblclick="popPlage()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />

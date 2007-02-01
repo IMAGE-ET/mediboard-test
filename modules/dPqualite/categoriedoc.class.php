@@ -27,8 +27,8 @@ class CCategorieDoc extends CMbObject {
 
   function getSpecs() {
     return array (
-      "nom"  => "str|maxLength|50|notNull",
-      "code" => "str|maxLength|1|notNull"
+      "nom"  => "notNull str|maxLength|50",
+      "code" => "notNull str|maxLength|1"
     );
   }
   

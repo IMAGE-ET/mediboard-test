@@ -26,7 +26,7 @@ function setClose(selClass,keywords,key,val){
   <tr>
     <th><label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label></th>
     <td>
-      <select title="str|notNull" name="selClass">
+      <select title="notNull str" name="selClass">
         <option value="">&mdash; Choisissez un type</option>
         {{foreach from=$listClass|smarty:nodefaults item=curr_listClass}}
         <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{tr}}{{$curr_listClass}}{{/tr}}</option>
@@ -37,7 +37,7 @@ function setClose(selClass,keywords,key,val){
   </tr>
   <tr>
     <th><label for="keywords" title="Veuillez saisir un ou plusieurs mot clé">Mots Clés</label></th>
-    <td><input title="str|notNull" type="text" name="keywords" value="{{$keywords|stripslashes}}" /></td>
+    <td><input title="notNull str" type="text" name="keywords" value="{{$keywords|stripslashes}}" /></td>
     <td><button class="search" type="submit">Rechercher</button></td>
   </tr>
 </table>

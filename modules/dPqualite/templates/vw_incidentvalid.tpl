@@ -215,7 +215,7 @@ function pageMain() {
         <tr>
           <th><label for="degre_urgence" title="{{tr}}CFicheEi-degre_urgence-desc{{/tr}}">{{tr}}CFicheEi-degre_urgence{{/tr}}</label></th>
           <td>
-            <select name="degre_urgence" title="{{$fiche->_props.degre_urgence}}|notNull">
+            <select name="degre_urgence" title="notNull {{$fiche->_props.degre_urgence}}">
             <option value="">&mdash; {{tr}}select-choice{{/tr}}</option>
             {{html_options options=$fiche->_enumsTrans.degre_urgence}}
             </select>
@@ -224,7 +224,7 @@ function pageMain() {
         <tr>
           <th><label for="service_valid_user_id" title="{{tr}}CFicheEi-service_valid_user_id-desc{{/tr}}">{{tr}}CFicheEi-service_valid_user_id{{/tr}}</label></th>
           <td>
-            <select name="service_valid_user_id" title="{{$fiche->_props.service_valid_user_id}}|notNull">
+            <select name="service_valid_user_id" title="notNull {{$fiche->_props.service_valid_user_id}}">
             <option value="">&mdash; {{tr}}select-choice{{/tr}} &mdash;</option>
             {{foreach from=$listUsersEdit item=currUser}}
             <option value="{{$currUser->user_id}}">{{$currUser->_view}}</option>
@@ -273,7 +273,7 @@ function pageMain() {
             <label for="service_actions" title="{{tr}}CFicheEi-service_actions-desc{{/tr}}">{{tr}}CFicheEi-service_actions{{/tr}}</label>
           </th>
           <td>
-            <textarea name="service_actions" title="{{$fiche->_props.service_actions}}|notNull">{{$fiche->service_actions}}</textarea>
+            <textarea name="service_actions" title="notNull {{$fiche->_props.service_actions}}">{{$fiche->service_actions}}</textarea>
           </td>
         </tr>
         <tr>
@@ -281,7 +281,7 @@ function pageMain() {
             <label for="service_descr_consequences" title="{{tr}}CFicheEi-service_descr_consequences-desc{{/tr}}">{{tr}}CFicheEi-service_descr_consequences{{/tr}}</label>
           </th>
           <td>
-            <textarea name="service_descr_consequences" title="{{$fiche->_props.service_descr_consequences}}|notNull">{{$fiche->service_descr_consequences}}</textarea>
+            <textarea name="service_descr_consequences" title="notNull {{$fiche->_props.service_descr_consequences}}">{{$fiche->service_descr_consequences}}</textarea>
           </td>
         </tr>
         <tr>

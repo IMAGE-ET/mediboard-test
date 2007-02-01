@@ -28,7 +28,7 @@ class CDiscipline extends CMbObject {
 
   function getSpecs() {
     return array (
-      "text" => "str|notNull"
+      "text" => "notNull str"
     );
   }
   

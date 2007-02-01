@@ -51,7 +51,7 @@
       </label>
     </th>
     <td>
-      <input type="text" name="ged[titre]" value="{{$docGed->titre}}" title="{{$docGed->_props.titre}}|notNull" />
+      <input type="text" name="ged[titre]" value="{{$docGed->titre}}" title="notNull {{$docGed->_props.titre}}" />
     </td>
   </tr>
   <tr>
@@ -61,7 +61,7 @@
       </label>
     </th>
     <td>
-      <select name="ged[doc_theme_id]" title="{{$docGed->_props.doc_theme_id}}|notNull">
+      <select name="ged[doc_theme_id]" title="notNull {{$docGed->_props.doc_theme_id}}">
         <option value="">&mdash; {{tr}}CDocGed-doc_theme_id-desc{{/tr}}</option>
         {{foreach from=$listThemes item=curr_theme}}
         <option value="{{$curr_theme->doc_theme_id}}" {{if $docGed->doc_theme_id == $curr_theme->doc_theme_id}} selected="selected" {{/if}} >
@@ -79,7 +79,7 @@
       </label>
     </th>
     <td>
-      <select name="ged[doc_chapitre_id]" title="{{$docGed->_props.doc_chapitre_id}}|notNull">
+      <select name="ged[doc_chapitre_id]" title="notNull {{$docGed->_props.doc_chapitre_id}}">
         <option value="">&mdash; {{tr}}CDocGed-doc_chapitre_id-desc{{/tr}}</option>
         {{foreach from=$listChapitres item=curr_chapitre}}
         <option value="{{$curr_chapitre->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre->doc_chapitre_id}} selected="selected" {{/if}} >
@@ -96,7 +96,7 @@
       </label>
     </th>
     <td>
-      <select name="ged[doc_categorie_id]" title="{{$docGed->_props.doc_categorie_id}}|notNull">
+      <select name="ged[doc_categorie_id]" title="notNull {{$docGed->_props.doc_categorie_id}}">
         <option value="">&mdash; {{tr}}CDocGed-doc_categorie_id-desc{{/tr}}</option>
         {{foreach from=$listCategories item=curr_category}}
         <option value="{{$curr_category->doc_categorie_id}}" {{if $docGed->doc_categorie_id == $curr_category->doc_categorie_id}} selected="selected" {{/if}} >

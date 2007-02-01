@@ -33,10 +33,10 @@ class CMateriel extends CMbObject {
 
   function getSpecs() {
     return array (
-      "nom"         => "str|maxLength|50|notNull",
+      "nom"         => "notNull str|maxLength|50",
       "code_barre"  => "num",
       "description" => "text",
-      "category_id" => "ref|notNull"
+      "category_id" => "notNull refMandatory"
     );
   }
   

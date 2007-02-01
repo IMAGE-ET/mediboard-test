@@ -30,7 +30,7 @@
   </tr>
   <tr>
     <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (vérif.)</label></th>
-    <td><input type="password" name="_user_password2" title="str|sameAs|_user_password" value="" /></td>
+    <td><input type="password" name="_user_password2" title="str sameAs|_user_password" value="" /></td>
   </tr>
 
   <tr>

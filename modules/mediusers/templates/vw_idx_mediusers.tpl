@@ -111,11 +111,11 @@ function deldate(sField){
         </tr>
         <tr>
           <th><label for="_user_password" title="Mot de passe pour se connecter à Mediboard. Obligatoire">Mot de passe</label></th>
-          <td><input type="password" name="_user_password" title="{{$mediuserSel->_user_props._user_password}}{{if !$mediuserSel->user_id}}|notNull{{/if}}" value="" /></td>
+          <td><input type="password" name="_user_password" title="{{$mediuserSel->_user_props._user_password}}{{if !$mediuserSel->user_id}} notNull{{/if}}" value="" /></td>
         </tr>
         <tr>
           <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (vérif.)</label></th>
-          <td><input type="password" name="_user_password2" title="str|sameAs|_user_password" value="" /></td>
+          <td><input type="password" name="_user_password2" title="str sameAs|_user_password" value="" /></td>
         </tr>
         <tr>
           <th><label for="actif_1" title="Permet ou non à d'activer le compte utilisateur">Compte actif</label></th>

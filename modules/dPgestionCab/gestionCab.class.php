@@ -37,13 +37,13 @@ class CGestionCab extends CMbObject {
 
   function getSpecs() {
     return array (
-      "function_id"      => "ref|notNull",
-      "libelle"          => "str|notNull",
-      "date"             => "date|notNull",
-      "rubrique_id"      => "ref|notNull",
-      "montant"          => "currency|min|0|notNull",
-      "mode_paiement_id" => "ref|notNull",
-      "num_facture"      => "num|notNull",
+      "function_id"      => "notNull refMandatory",
+      "libelle"          => "notNull str",
+      "date"             => "notNull date",
+      "rubrique_id"      => "notNull refMandatory",
+      "montant"          => "notNull currency|min|0",
+      "mode_paiement_id" => "notNull refMandatory",
+      "num_facture"      => "notNull num",
       "rques"            => "text"
     );
   }

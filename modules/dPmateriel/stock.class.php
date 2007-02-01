@@ -32,9 +32,9 @@ class CStock extends CMbObject {
 
   function getSpecs() {
     return array (
-      "materiel_id" => "ref|notNull",
-      "group_id"    => "ref|notNull",
-      "seuil_cmd"   => "num|pos|notNull",
+      "materiel_id" => "notNull refMandatory",
+      "group_id"    => "notNull refMandatory",
+      "seuil_cmd"   => "notNull num|pos",
       "quantite"    => "num|pos"
     );
   }

@@ -77,8 +77,8 @@
   <tr>
     <th><label for="ATNC" title="Patient présentant un risque ATNC">ATNC </label></th>
     <td>
-      <input tabindex="206" type="radio" name="ATNC" value="1" {{if $patient->ATNC == "1"}} checked="checked" {{/if}} />oui
-      <input tabindex="207" type="radio" name="ATNC" value="0" {{if $patient->ATNC == "0"}} checked="checked" {{/if}} />non
+      <input title="{{$patient->_props.ATNC}}" tabindex="206" type="radio" name="ATNC" value="1" {{if $patient->ATNC == "1"}} checked="checked" {{/if}} />oui
+      <input title="{{$patient->_props.ATNC}}" tabindex="207" type="radio" name="ATNC" value="0" {{if $patient->ATNC == "0"}} checked="checked" {{/if}} />non
     </td>
     <th><label for="SHS" title="Code Administratif SHS">Code administratif</label></th>
     <td colspan="2">

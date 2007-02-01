@@ -98,7 +98,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             <label for="ged[titre]" title="{{tr}}CDocGed-titre-modele-desc{{/tr}}">{{tr}}CDocGed-titre-modele{{/tr}}</label>
           </th>
           <td>
-            <input type="text" name="ged[titre]" value="{{$docGed->titre}}" title="{{$docGed->_props.titre}}|notNull" />
+            <input type="text" name="ged[titre]" value="{{$docGed->titre}}" title="notNull {{$docGed->_props.titre}}" />
           </td>
         </tr>
         <tr>

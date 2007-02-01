@@ -29,8 +29,8 @@ class CSpecCPAM extends CMbObject {
 
   function getSpecs() {
     return array (
-      "text"  => "str|notNull",
-      "actes" => "str|notNull"
+      "text"  => "notNull str",
+      "actes" => "notNull str"
     );
   }
   

@@ -25,7 +25,7 @@ class CFilesCategory extends CMbObject {
   
   function getSpecs() {
     return array (
-      "nom"               => "str|notNull",
+      "nom"               => "notNull str",
       "class"             => "str"
     );
   }

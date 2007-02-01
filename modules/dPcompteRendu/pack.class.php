@@ -36,8 +36,8 @@ class CPack extends CMbObject {
 
   function getSpecs() {
     return array (
-      "chir_id" => "ref|notNull",
-      "nom"     => "str|notNull|confidential",
+      "chir_id" => "notNull refMandatory",
+      "nom"     => "notNull str confidential",
       "modeles" => "text"
     );
   }

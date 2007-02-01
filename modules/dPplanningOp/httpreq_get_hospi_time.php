@@ -9,8 +9,9 @@
 
 global $AppUI, $canRead, $canEdit, $m, $tab;
 
-$chir_id = mbGetValueFromGet("chir_id" , 0 );
-$codes   = mbGetValueFromGet("codes"   , "");
+$chir_id    = mbGetValueFromGet("chir_id"    , 0 );
+$codes      = mbGetValueFromGet("codes"      , "");
+$javascript = mbGetValueFromGet("javascript" , true);
 
 $arrayCodes = explode("|", $codes);
 $result = CTempsHospi::getTime($chir_id, $arrayCodes);
@@ -24,6 +25,7 @@ if($result) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("temps", $temps);
+$smarty->assign("javascript", $javascript);
 
 $smarty->display("inc_get_time.tpl");
 

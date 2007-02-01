@@ -286,7 +286,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
                   <label for="SHS" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label>
                 </th>
                 <td>
-                  <input type="text" title="{{$patient->_props.SHS}}|notNull" name="SHS" value="{{$patient->SHS}}" size="8" maxlength="8" />
+                  <input type="text" title="notNull {{$patient->_props.SHS}}" name="SHS" value="{{$patient->SHS}}" size="8" maxlength="8" />
                 </td>
               </tr>
 
@@ -318,7 +318,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
                   <br />Suggestion :
                 </th>
                 <td>
-                  <input type="text" title="{{$curr_sejour->_props.venue_SHS}}|notNull" name="venue_SHS" value="{{$curr_sejour->venue_SHS}}" size="8" maxlength="8" />
+                  <input type="text" title="notNull {{$curr_sejour->_props.venue_SHS}}" name="venue_SHS" value="{{$curr_sejour->venue_SHS}}" size="8" maxlength="8" />
                   <br />{{$curr_sejour->_venue_SHS_guess}}
                 </td>
               </tr>
@@ -368,12 +368,12 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
 
               <tr>
                 <th><label for="code_uf" title="Choisir un code pour l'unité fonctionnelle">Code d'unité fonct.</label></th>
-                <td><input type="text" title="{{$curr_op->_props.code_uf}}|notNull" name="code_uf" value="{{$curr_op->code_uf}}" size="10" maxlength="10" /></td>
+                <td><input type="text" title="notNull {{$curr_op->_props.code_uf}}" name="code_uf" value="{{$curr_op->code_uf}}" size="10" maxlength="10" /></td>
               </tr>
 
               <tr>
                 <th><label for="libelle_uf" title="Choisir un libellé pour l'unité fonctionnelle">Libellé d'unité fonct.</label></th>
-                <td><input type="text" title="{{$curr_op->_props.libelle_uf}}|notNull" name="libelle_uf" value="{{$curr_op->libelle_uf}}" size="20" maxlength="35" /></td>
+                <td><input type="text" title="notNull {{$curr_op->_props.libelle_uf}}" name="libelle_uf" value="{{$curr_op->libelle_uf}}" size="20" maxlength="35" /></td>
               </tr>
 
               <tr>

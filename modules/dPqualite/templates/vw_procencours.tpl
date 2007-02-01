@@ -246,7 +246,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
           <tr>
             <th><label for="suivi[remarques]" title="{{tr}}CDocGedSuivi-remarques-desc{{/tr}}">{{tr}}CDocGedSuivi-remarques{{/tr}}</label></th>
             <td>
-              <textarea name="suivi[remarques]" title="{{$docGed->_lastentry->_props.remarques}}|notNull">{{$docGed->_lastentry->remarques}}</textarea>
+              <textarea name="suivi[remarques]" title="notNull {{$docGed->_lastentry->_props.remarques}}">{{$docGed->_lastentry->remarques}}</textarea>
             </td>
           </tr>
           <tr>
@@ -304,13 +304,13 @@ function popFile(objectClass, objectId, elementClass, elementId){
           <tr>
             <th><label for="formfile">{{tr}}File{{/tr}}</label></th>
             <td>
-              <input type="file" name="formfile" size="0" title="str|notNull" />
+              <input type="file" name="formfile" size="0" title="notNull str" />
             </td>
           </tr>
           <tr>
             <th><label for="suivi[remarques]" title="{{tr}}CDocGedSuivi-remarques-desc{{/tr}}">{{tr}}CDocGedSuivi-remarques{{/tr}}</label></th>
             <td>
-              <textarea name="suivi[remarques]" title="{{$docGed->_lastentry->_props.remarques}}|notNull"></textarea>
+              <textarea name="suivi[remarques]" title="notNull {{$docGed->_lastentry->_props.remarques}}"></textarea>
             </td>
           </tr>
           <tr>

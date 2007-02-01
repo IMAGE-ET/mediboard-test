@@ -60,7 +60,7 @@
         <tr>
           <th><label for="_fin" title="Heure de fin">Fin</label></th>
           <td>
-            {{html_options name="_fin" options=$listHours title="num|moreThan|_debut" selected=$typeRepas->_fin}}
+            {{html_options name="_fin" options=$listHours title="num moreThan|_debut" selected=$typeRepas->_fin}}
             h
           </td>
         </tr>

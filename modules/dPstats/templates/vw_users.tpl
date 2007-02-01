@@ -22,7 +22,7 @@ function pageMain() {
           <th><label for="debutlog" title="Date de début">Début:</label></th>
           <td class="date">
             <div id="users_debutlog_da">{{$debutlog|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debutlog" title="date|notNull" value="{{$debutlog}}" />
+            <input type="hidden" name="debutlog" title="notNull date" value="{{$debutlog}}" />
             <img id="users_debutlog_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
          </td>
           <th><label for="user_id" title="Utilisateur">Utilisateur</label></th>
@@ -40,7 +40,7 @@ function pageMain() {
           <th><label for="finlog" title="Date de fin">Fin:</label></th>
           <td class="date">
             <div id="users_finlog_da">{{$finlog|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="finlog" title="date|moreEquals|debutlog|notNull" value="{{$finlog}}" />
+            <input type="hidden" name="finlog" title="notNull date moreEquals|debutlog" value="{{$finlog}}" />
             <img id="users_finlog_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
          </td>
           <td colspan="2" />
@@ -67,7 +67,7 @@ function pageMain() {
           <th><label for="debutact" title="Date de début">Début:</label></th>
           <td class="date">
             <div id="Form1_debutact_da">{{$debutact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debutact" title="date|notNull" value="{{$debutact}}" />
+            <input type="hidden" name="debutact" title="notNull date" value="{{$debutact}}" />
             <img id="Form1_debutact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
          </td>
         </tr>
@@ -75,7 +75,7 @@ function pageMain() {
           <th><label for="finact" title="Date de fin">Fin:</label></th>
           <td class="date">
             <div id="Form1_finact_da">{{$finact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="finact" title="date|moreEquals|debutact|notNull" value="{{$finact}}" />
+            <input type="hidden" name="finact" title="notNull date moreEquals|debutact" value="{{$finact}}" />
             <img id="Form1_finact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>

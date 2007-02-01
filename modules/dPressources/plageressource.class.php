@@ -49,11 +49,11 @@ class CPlageressource extends CMbObject {
   function getSpecs() {
     return array (
       "prat_id" => "ref",
-      "date"    => "date|notNull",
-      "debut"   => "time|notNull",
-      "fin"     => "time|notNull",
-      "tarif"   => "currency|min|0|notNull|confidential",
-      "libelle" => "str|confidential",
+      "date"    => "notNull date",
+      "debut"   => "notNull time",
+      "fin"     => "notNull time",
+      "tarif"   => "notNull currency|min|0 confidential",
+      "libelle" => "str confidential",
       "paye"    => "bool"
     );
   }

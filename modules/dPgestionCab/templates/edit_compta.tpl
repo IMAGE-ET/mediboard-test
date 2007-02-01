@@ -52,7 +52,7 @@ function pageMain() {
             <div id="editFrm_date_da">
               {{$gestioncab->date|date_format:"%d/%m/%Y"}}
             </div>
-            <input type="hidden" name="date" title="{{$gestioncab->_props.date}}|notNull" value="{{$gestioncab->date}}" />
+            <input type="hidden" name="date" title="notNull {{$gestioncab->_props.date}}" value="{{$gestioncab->date}}" />
             <img id="editFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
           </td>
         </tr>
@@ -120,7 +120,7 @@ function pageMain() {
             <div id="selectFrm_date_da">
               {{$date|date_format:"%d/%m/%Y"}}
             </div>
-            <input type="hidden" title="date|notNull" name="date" value="{{$date}}" />
+            <input type="hidden" title="notNull date" name="date" value="{{$date}}" />
             <img id="selectFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar" />
           </td>
           <td class="button">
@@ -133,7 +133,7 @@ function pageMain() {
             <div id="selectFrm_datefin_da">
               {{$datefin|date_format:"%d/%m/%Y"}}
             </div>
-            <input type="hidden" name="datefin" title="date|moreEquals|date|notNull" value="{{$datefin}}" />
+            <input type="hidden" name="datefin" title="notNull date moreEquals|date" value="{{$datefin}}" />
             <img id="selectFrm_datefin_trigger" src="./images/icons/calendar.gif" alt="calendar" />
           </td>
           <td class="button">

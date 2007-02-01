@@ -44,7 +44,7 @@
       <label for="dPplanningOp[operation][duree_fin]" title="{{tr}}config-dPplanningOp-COperation-duree_fin{{/tr}}">{{tr}}config-dPplanningOp-COperation-duree_fin{{/tr}}</label>  
     </th>
     <td>
-      <select title="num|moreEquals|dPplanningOp[operation][duree_deb]" name="dPplanningOp[operation][duree_fin]">
+      <select title="num moreEquals|dPplanningOp[operation][duree_deb]" name="dPplanningOp[operation][duree_fin]">
       {{foreach from=$listHours item=currHours}}
         <option value="{{$currHours}}"{{if $currHours==$configOper.duree_fin}}selected="selected"{{/if}}>{{$currHours}}</option>
       {{/foreach}}
@@ -54,7 +54,7 @@
       <label for="dPplanningOp[operation][hour_urgence_fin]" title="{{tr}}config-dPplanningOp-COperation-hour_urgence_fin{{/tr}}">{{tr}}config-dPplanningOp-COperation-hour_urgence_fin{{/tr}}</label>  
     </th>
     <td>
-      <select title="num|moreEquals|dPplanningOp[operation][hour_urgence_deb]" name="dPplanningOp[operation][hour_urgence_fin]">
+      <select title="num moreEquals|dPplanningOp[operation][hour_urgence_deb]" name="dPplanningOp[operation][hour_urgence_fin]">
       {{foreach from=$listHours item=currHours}}
         <option value="{{$currHours}}"{{if $currHours==$configOper.hour_urgence_fin}}selected="selected"{{/if}}>{{$currHours}}</option>
       {{/foreach}}
@@ -82,7 +82,7 @@
       <label for="dPplanningOp[sejour][heure_fin]" title="{{tr}}config-dPplanningOp-CSejour-heure_fin{{/tr}}">{{tr}}config-dPplanningOp-CSejour-heure_fin{{/tr}}</label>  
     </th>
     <td>
-      <select title="num|moreEquals|dPplanningOp[sejour][heure_deb]" name="dPplanningOp[sejour][heure_fin]">
+      <select title="num moreEquals|dPplanningOp[sejour][heure_deb]" name="dPplanningOp[sejour][heure_fin]">
       {{foreach from=$listHours item=currHours}}
         <option value="{{$currHours}}"{{if $currHours==$configSejour.heure_fin}}selected="selected"{{/if}}>{{$currHours}}</option>
       {{/foreach}}

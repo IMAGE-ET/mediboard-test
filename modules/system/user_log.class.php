@@ -37,11 +37,11 @@ class CUserLog extends CMbObject {
 
   function getSpecs() {
     return array (
-      "user_id"      => "ref|notNull",
-      "date"         => "dateTime|notNull",
-      "object_id"    => "ref|notNull",
-      "object_class" => "str|maxLength|25|notNull",
-      "type"         => "enum|create|store|delete|notNull",
+      "user_id"      => "notNull refMandatory",
+      "date"         => "notNull dateTime",
+      "object_id"    => "notNull refMandatory",
+      "object_class" => "notNull str|maxLength|25",
+      "type"         => "notNull enum|create|store|delete",
       "fields"       => "text"
     );
   }

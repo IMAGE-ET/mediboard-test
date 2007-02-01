@@ -26,7 +26,7 @@ class CTypeAnesth extends CMbObject {
   
   function getSpecs() {
     return array (
-      "name" => "str|notNull"
+      "name" => "notNull str"
     );
   }
   

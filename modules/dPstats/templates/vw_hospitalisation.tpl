@@ -20,7 +20,7 @@ function pageMain() {
           <th><label for="debutact" title="Date de début">Début</label></th>
           <td class="date">
             <div id="hospitalisation_debutact_da">{{$debutact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debutact" title="date|notNull" value="{{$debutact}}" />
+            <input type="hidden" name="debutact" title="notNull date" value="{{$debutact}}" />
             <img id="hospitalisation_debutact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
          </td>
           <th><label for="service_id" title="Service">Service</label></th>
@@ -39,7 +39,7 @@ function pageMain() {
           <th><label for="finact" title="Date de fin">Fin</label></th>
           <td class="date">
             <div id="hospitalisation_finact_da">{{$finact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="finact" title="date|moreEquals|debutact|notNull" value="{{$finact}}" />
+            <input type="hidden" name="finact" title="notNull date moreEquals|debutact" value="{{$finact}}" />
             <img id="hospitalisation_finact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
           <th><label for="prat_id" title="Praticien">Praticien</label></th>

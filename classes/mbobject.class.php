@@ -448,7 +448,7 @@ class CMbObject {
       $propValue =& $this->$propName;
       if ($propValue !== null) {
         if ($msg = $this->checkProperty($propName)) {
-          if (!in_array("notNull", explode("|", $propSpec))) {
+          if (!$this->lookupSpec("notNull", $propSpec)) {
             $propValue = "";
           }
         }
@@ -686,17 +686,13 @@ class CMbObject {
     global $AppUI;
     $enums = array();
     foreach ($this->_props as $propName => $propSpec) {
-      $specFragments = explode("|", $propSpec);
-      if ($this->lookupSpec("enum", $specFragments)) {
-        $this->lookupSpec("confidential", $specFragments);
-        $this->lookupSpec("notNull", $specFragments);
+      if($specFragments = $this->lookupSpec("enum", $propSpec)){
         $enums[$propName] = $specFragments;
-      }elseif($this->lookupSpec("bool", $specFragments)){
+      }elseif($this->lookupSpec("bool", $propSpec)){
         $enums[$propName][] = 0;
         $enums[$propName][] = 1;
       }
     }
-    
     return $enums;
   }
   
@@ -720,10 +716,7 @@ class CMbObject {
   function buildEnums() {
     global $AppUI;
     foreach ($this->_props as $propName => $propSpec) {
-      $specFragments = explode("|", $propSpec);
-      if ($this->lookupSpec("enum", $specFragments)) {
-        $this->lookupSpec("confidential", $specFragments);
-        $this->lookupSpec("notNull", $specFragments);
+      if($specFragments = $this->lookupSpec("enum", $propSpec)){
         $this->_enums[$propName] = $specFragments;
         $this->_enumsTrans[$propName] = array_flip($specFragments);
         foreach($this->_enumsTrans[$propName] as $key => $item) {
@@ -737,88 +730,106 @@ class CMbObject {
   /**
    * Functions to check the object's properties
    */
-  
-  function lookupSpec($specFragment, &$specFragments) {
-    $fragmentPosition = array_search($specFragment, $specFragments);
-
-    if ($fragmentPosition !== false) {
-      array_splice($specFragments, $fragmentPosition, 1);
-    }
-    
-    return $fragmentPosition !== false;
-  }
-  
-  function checkMoreThan($propValue, $specFragments) {
-    if ($fragment = @$specFragments[1]) {
-  
-      switch ($fragment) {
-        case "moreThan":
-        $targetPropName = $specFragments[2];
-        $targetPropValue = $this->$targetPropName;
-    
-        if (!isset($targetPropValue)) {
-          return sprintf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
-        }
-
-        if ($propValue <= $targetPropValue) {
-          return "'$propValue' n'est pas strictement supérieur à '$targetPropValue'";
-        }
-  
-        break;
-             
-        case "moreEquals":
-        $targetPropName = $specFragments[2];
-        $targetPropValue = $this->$targetPropName;
-    
-        if (!isset($targetPropValue)) {
-          return sprintf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
-        }
-
-        if ($propValue < $targetPropValue) {
-          return "'$propValue' n'est pas supérieur ou égal à '$targetPropValue'";
-        }
-  
-        break;
+  function lookupSpec($specFragment, $propSpec){
+    $aSpecFragments = explode(" ", $propSpec);
+    foreach($aSpecFragments as $spec){
+      $aFrag = explode("|", $spec);
+      $fragmentPosition = array_search($specFragment,$aFrag);
+      if($fragmentPosition !== false){
+        array_splice($aFrag, $fragmentPosition, 1);
+        return $aFrag;
       }
-    };
-  
-    return null;
+    }
+    return false;
   }
   
   function checkProperty($propName) {
-    $propValue =& $this->$propName;
     $propSpec =& $this->_props[$propName];
-    $specFragments = explode("|", $propSpec);
-    
-    // remove confidential status
-    $confidential = array_search("confidential", $specFragments);
-    if ($confidential !== false) {
-      array_splice($specFragments, $confidential, 1);
-    }
-
-    // notNull
-    $notNull = array_search("notNull", $specFragments);
-    if ($notNull !== false) {
-      array_splice($specFragments, $notNull, 1);
-    }
-
-    if(!in_array("xor", $specFragments) and !in_array("nand", $specFragments)){
-      if ($propValue === null || $propValue === "") {
-        return $notNull ? "Ne pas peut pas avoir une valeur nulle" : null;
+    $specFragments = explode(" ", $propSpec);
+    $msg = null;
+    foreach($specFragments as $specValue){
+      if($msgError = $this->checkPropertyValue($propName, $specValue)){
+        $msg .= $msgError;
       }
     }
+    return $msg;
+  }
+  
+  function checkPropertyValue($propName, $value){
+    $propValue =& $this->$propName;
+    $specFragments = explode("|", $value);
+    
+    // Parametres du champs
+    switch ($specFragments[0]) {
+      case "notNull":
+        if ($propValue === null || $propValue === "") {
+          return "Ne pas peut pas avoir une valeur nulle";
+        }
+        return null;
+        break;
+        
+      case "moreThan":
+        $targetPropName = $specFragments[1];
+        $targetPropValue = $this->$targetPropName;
+        if (!isset($targetPropValue)) {
+          return sprintf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
+        }
+        if ($propValue <= $targetPropValue) {
+          return "'$propValue' n'est pas strictement supérieur à '$targetPropValue'";
+        }
+        return null;
+        break;
+        
+      case "moreEquals":
+        $targetPropName = $specFragments[1];
+        $targetPropValue = $this->$targetPropName;
+        if (!isset($targetPropValue)) {
+          return sprintf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
+        }
+        if ($propValue < $targetPropValue) {
+          return "'$propValue' n'est pas supérieur ou égal à '$targetPropValue'";
+        }
+        return null;
+        break;
+      
+      case "sameAs":
+        $targetPropName = $specFragments[1];
+        $targetPropValue = $this->$targetPropName;
+        if (!isset($targetPropValue)) {
+          return sprintf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
+        }
+        if ($propValue !== $targetPropValue) {
+          return "'Doit être identique à '$targetPropName'";
+        }
+        return null;
+        break;
+      
+      case "confidential":
+        return null;
+        break;
+    }
+    
+    if ($propValue === null || $propValue === "") {
+      return null;
+    }
+    
+    // Types du champs
     switch ($specFragments[0]) {
       // Reference to another object
+      case "refMandatory":
+        if (!is_numeric($propValue) && $propValue!="") {
+          return "N'est pas une référence (format non numérique)";
+        }
+        $propValue = intval($propValue);
+        if ($propValue === 0) {
+          return "ne peut pas être une référence nulle";
+        }
       case "ref":
         if (!is_numeric($propValue) && $propValue!="") {
           return "N'est pas une référence (format non numérique)";
         }
 
         $propValue = intval($propValue);
-        
-        if ($propValue === 0 and $notNull) {
-          return "ne peut pas être une référence nulle";
-        }
 
         if ($propValue < 0) {
           return "N'est pas une référence (entier négatif)";
@@ -1174,11 +1185,6 @@ class CMbObject {
       default:
         return "Spécification invalide";
     }
-
-    if ($checkMessage = $this->checkMoreThan($propValue, $specFragments)) {
-      return $checkMessage;
-    }
-    
     return null;
   }
   
@@ -1188,9 +1194,12 @@ class CMbObject {
       if($props == null)
         $props = $this->_props;
       foreach ($props as $propName => $propSpec) {
-        $propValue =& $this->$propName;
-        if ($propValue !== null) {
-          $this->codeProperty($propValue, $propSpec);
+        $propValue =& $this->$propName;        
+        if ($propValue !== null && $this->lookupSpec("confidential",$propSpec) !== false) {
+          $specFragments = explode(" ", $propSpec);
+          foreach($specFragments as $specValue){
+            $this->codeProperty($propValue, $specValue);
+          }
         }
       }
     }
@@ -1232,137 +1241,118 @@ class CMbObject {
       else
         $mins[] = $i;
     }
-    
     $defaultLength = 6;
-
     $specFragments = explode("|", $propSpec);
-    
-    // test if it is confidential
-    $confidential = array_search("confidential", $specFragments);
-    if ($confidential !== false) {
-      array_splice($specFragments, $confidential, 1);
-    }
-
-    if ($confidential) {
-      // test if notNull and remove this fragment
-      $notNull = array_search("notNull", $specFragments);
-      if ($notNull !== false) {
-        array_splice($specFragments, $notNull, 1);
-      }
-      
-      switch ($specFragments[0]) {
-        // Reference to another object : do nothing
-        case "ref":
-          break;
-          
-        // regular string
-        case "text": 
-          $propValue = $this->randomString($chars, 40);
-          break;
-          
-        // regular string
-        case "str":
-          switch (@$specFragments[1]) {
-            case null:
-              $propValue = $this->randomString($chars, $defaultLength);
-              break;
-              
-            case "length":
-              $length = intval(@$specFragments[2]);
-              $propValue = $this->randomString($chars, $length);
-              break;
-              
-            case "minLength":
-              $length = intval(@$specFragments[2]);
-              if($defaultLength < $length)
-                $propValue = $this->randomString($chars, $length);
-              else
-                $propValue = $this->randomString($chars, $defaultLength);
-              break;
-              
-            case "maxLength":
-              $length = intval(@$specFragments[2]);
-              if($defaultLength > $length)
-                $propValue = $this->randomString($chars, $length);
-              else
-                $propValue = $this->randomString($chars, $defaultLength);
-              break;
-          
-            default:
-              $propValue = null;
-          }
-          
-          break;
   
-        // numerical string
-        case "num":
-          switch (@$specFragments[1]) {
-            case null:
-              $propValue = $this->randomString($nums, $defaultLength);
-              break;
-              
-            case "length":
-              $length = intval(@$specFragments[2]);
-              $propValue = $this->randomString($nums, $length);
-              break;
-              
-            case "minLength":
-              $length = intval(@$specFragments[2]);
-              if($defaultLength < $length)
-                $propValue = $this->randomString($nums, $length);
-              else
-                $propValue = $this->randomString($nums, $defaultLength);
-              break;
-              
-            case "maxLength":
-              $length = intval(@$specFragments[2]);
-              if($defaultLength > $length)
-                $propValue = $this->randomString($nums, $length);
-              else
-                $propValue = $this->randomString($nums, $defaultLength);
-              break;
-          
-            default:
-              $propValue = null;
-          }
-          
-          break;
+    switch ($specFragments[0]) {
+      // Reference to another object : do nothing
+      case "ref":
+        break;
         
-        // Enumeration
-        case "enum":
-          array_shift($specFragments);
-          $propValue = $this->randomString($specFragments, 1);
-          break;
+      // regular string
+      case "text": 
+        $propValue = $this->randomString($chars, 40);
+        break;
+        
+      // regular string
+      case "str":
+        switch (@$specFragments[1]) {
+          case null:
+            $propValue = $this->randomString($chars, $defaultLength);
+            break;
+            
+          case "length":
+            $length = intval(@$specFragments[2]);
+            $propValue = $this->randomString($chars, $length);
+            break;
+            
+          case "minLength":
+            $length = intval(@$specFragments[2]);
+            if($defaultLength < $length)
+              $propValue = $this->randomString($chars, $length);
+            else
+              $propValue = $this->randomString($chars, $defaultLength);
+            break;
+            
+          case "maxLength":
+            $length = intval(@$specFragments[2]);
+            if($defaultLength > $length)
+              $propValue = $this->randomString($chars, $length);
+            else
+              $propValue = $this->randomString($chars, $defaultLength);
+            break;
+        
+          default:
+            $propValue = null;
+        }
+        
+        break;
+
+      // numerical string
+      case "num":
+        switch (@$specFragments[1]) {
+          case null:
+            $propValue = $this->randomString($nums, $defaultLength);
+            break;
+            
+          case "length":
+            $length = intval(@$specFragments[2]);
+            $propValue = $this->randomString($nums, $length);
+            break;
+            
+          case "minLength":
+            $length = intval(@$specFragments[2]);
+            if($defaultLength < $length)
+              $propValue = $this->randomString($nums, $length);
+            else
+              $propValue = $this->randomString($nums, $defaultLength);
+            break;
+            
+          case "maxLength":
+            $length = intval(@$specFragments[2]);
+            if($defaultLength > $length)
+              $propValue = $this->randomString($nums, $length);
+            else
+              $propValue = $this->randomString($nums, $defaultLength);
+            break;
+        
+          default:
+            $propValue = null;
+        }
+        
+        break;
       
-        // Date
-        case "date":
-          $propValue = "19".$this->randomString($nums, 2)."-".$this->randomString($monthes, 1)."-".$this->randomString($days, 1);
-          break;
-      
-        // Time
-        case "time":
-          $propValue = $this->randomString($hours, 1).":".$this->randomString($mins, 1).":".$this->randomString($mins, 1);
-          break;
-      
-        // DateTime
-        case "dateTime":
-          $propValue = "19".$this->randomString($nums, 2)."-".$this->randomString($monthes, 1)."-".$this->randomString($days, 1);
-          $propValue .= " ".$this->randomString($hours, 1).":".$this->randomString($mins, 1).":".$this->randomString($mins, 1);
-          break;
-      
-        // Format monétaire
-        case "currency":
-          $propValue = $this->randomString($nums, 2).".".$this->randomString($nums, 2);
-          break;
-          
-        // HTML Text
-        case "html":
-          $propValue = "Document confidentiel";
-          break;
-  
-        default:
-          return "Spécification invalide";
-      }
+      // Enumeration
+      case "enum":
+        array_shift($specFragments);
+        $propValue = $this->randomString($specFragments, 1);
+        break;
+    
+      // Date
+      case "date":
+        $propValue = "19".$this->randomString($nums, 2)."-".$this->randomString($monthes, 1)."-".$this->randomString($days, 1);
+        break;
+    
+      // Time
+      case "time":
+        $propValue = $this->randomString($hours, 1).":".$this->randomString($mins, 1).":".$this->randomString($mins, 1);
+        break;
+    
+      // DateTime
+      case "dateTime":
+        $propValue = "19".$this->randomString($nums, 2)."-".$this->randomString($monthes, 1)."-".$this->randomString($days, 1);
+        $propValue .= " ".$this->randomString($hours, 1).":".$this->randomString($mins, 1).":".$this->randomString($mins, 1);
+        break;
+    
+      // Format monétaire
+      case "currency":
+        $propValue = $this->randomString($nums, 2).".".$this->randomString($nums, 2);
+        break;
+        
+      // HTML Text
+      case "html":
+        $propValue = "Document confidentiel";
+        break;
     }
     return null;
   }

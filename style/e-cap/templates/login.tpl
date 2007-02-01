@@ -60,7 +60,7 @@
     
     <tr>
       <th><label for="username" title="Nom de l'utilisateur pour s'authentifier">{{tr}}Username{{/tr}}</label></th>
-      <td><input type="text" title="str|notNull" size="25" maxlength="20" name="username" class="text" /></td>
+      <td><input type="text" title="notNull str" size="25" maxlength="20" name="username" class="text" /></td>
       {{if $demoVersion}}
       <td rowspan="3" class="category">
         <strong>Administrateur</strong>: admin/admin<br />
@@ -74,7 +74,7 @@
     
     <tr>
       <th><label for="password" title="Mot de passe d'authentification">{{tr}}Password{{/tr}}</label></th>
-      <td><input type="password"  title="str|notNull" size="25" maxlength="32" name="password" class="text" /></td>
+      <td><input type="password"  title="notNull str" size="25" maxlength="32" name="password" class="text" /></td>
     </tr>
     
     <tr>

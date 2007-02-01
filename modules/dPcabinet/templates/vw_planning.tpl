@@ -170,7 +170,7 @@ function pageMain() {
             </tr>
             <tr>
               <th><label for="_hour_deb" title="Début de la plage de consultation">Début</label></th>
-              <td><select name="_hour_deb" title="num|notNull">
+              <td><select name="_hour_deb" title="notNull num">
                 {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
                   <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_deb}} selected="selected" {{/if}}>
                     {{$curr_hour|string_format:"%02d"}}
@@ -200,7 +200,7 @@ function pageMain() {
             <tr>
               <th><label for="_hour_fin" title="Fin de la plage de consultation">Fin</label></th>
               <td>
-                <select name="_hour_fin" title="num|moreThan|_hour_deb|notNull">
+                <select name="_hour_fin" title="notNull num moreThan|_hour_deb">
                   {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
                     <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_fin}} selected="selected" {{/if}}>
                       {{$curr_hour|string_format:"%02d"}}

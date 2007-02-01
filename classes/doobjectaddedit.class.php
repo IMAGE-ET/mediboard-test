@@ -96,7 +96,6 @@ class CDoObjectAddEdit {
 
   function doStore() {
     global $AppUI;
-
     if ($msg = $this->_obj->store()) {
       $AppUI->setMsg($msg, UI_MSG_ERROR );
       if ($this->redirectError) {

@@ -32,8 +32,8 @@ class CNaissance extends CMbObject {
   
   function getSpecs() {
     return array (
-      "operation_id"    => "ref|notNull",
-      "nom_enfant"      => "str|notNull|confidential",
+      "operation_id"    => "notNull refMandatory",
+      "nom_enfant"      => "notNull str confidential",
       "prenom_enfant"   => "str",
       "date_prevue"     => "date",
       "date_reelle"     => "dateTime",

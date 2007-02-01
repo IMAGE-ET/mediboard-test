@@ -38,9 +38,9 @@ class CMessage extends CMbObject {
 
   function getSpecs() {
     return array (
-      "deb"   => "dateTime|notNull",
-      "fin"   => "dateTime|notNull",
-      "titre" => "str|maxLength|40|notNull",
+      "deb"   => "notNull dateTime",
+      "fin"   => "notNull dateTime",
+      "titre" => "notNull str|maxLength|40",
       "corps" => "text"
     );
   }

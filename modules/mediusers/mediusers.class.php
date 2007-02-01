@@ -62,15 +62,15 @@ class CMediusers extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
 
     static $user_props = array (
-      "_user_username"   => "notNull|str|minLength|4",
+      "_user_username"   => "notNull str|minLength|4",
       "_user_password"   => "str|minLength|4",
       "_user_first_name" => "str",
-      "_user_last_name"  => "notNull|str|confidential",
-      "_user_email"      => "str|confidential",
-      "_user_phone"      => "num|length|10|confidential",
-      "_user_adresse"    => "str|confidential",
-      "_user_cp"         => "num|length|5|confidential",
-      "_user_ville"      => "str|confidential"
+      "_user_last_name"  => "notNull str confidential",
+      "_user_email"      => "str confidential",
+      "_user_phone"      => "num|length|10 confidential",
+      "_user_adresse"    => "str confidential",
+      "_user_cp"         => "num|length|5 confidential",
+      "_user_ville"      => "str confidential"
       );
       $this->_user_props =& $user_props;
   }
@@ -78,8 +78,8 @@ class CMediusers extends CMbObject {
   function getSpecs() {
     return array (
       "remote"        => "bool",
-      "adeli"         => "numchar|length|9|confidential",
-      "function_id"   => "ref|notNull",
+      "adeli"         => "numchar|length|9 confidential",
+      "function_id"   => "notNull refMandatory",
       "discipline_id" => "ref",
       "titres"        => "text",
       "commentaires"  => "text",

@@ -51,18 +51,18 @@ class CMedecin extends CMbObject {
 
   function getSpecs() {
     return array (
-      "nom"             => "str|notNull|confidential",
-      "prenom"          => "str|confidential",
-      "jeunefille"      => "str|confidential",
-      "adresse"         => "text|confidential",
-      "ville"           => "str|confidential",
-      "cp"              => "numchar|maxLength|5|confidential",
-      "tel"             => "numchar|length|10|confidential",
-      "fax"             => "numchar|length|10|confidential",
-      "email"           => "str|confidential",
-      "disciplines"     => "text|confidential",
-      "orientations"    => "text|confidential",
-      "complementaires" => "text|confidential"
+      "nom"             => "notNull str confidential",
+      "prenom"          => "str confidential",
+      "jeunefille"      => "str confidential",
+      "adresse"         => "text confidential",
+      "ville"           => "str confidential",
+      "cp"              => "numchar|maxLength|5 confidential",
+      "tel"             => "numchar|length|10 confidential",
+      "fax"             => "numchar|length|10 confidential",
+      "email"           => "str confidential",
+      "disciplines"     => "text confidential",
+      "orientations"    => "text confidential",
+      "complementaires" => "text confidential"
     );
   }
   
@@ -111,21 +111,6 @@ class CMedecin extends CMbObject {
         $this->_fax5;
     }
   }
-
-	function check() {
-    // Data checking
-    $msg = null;
-
-    if (!strlen($this->nom)) {
-      $msg .= "Nom invalide: '$this->nom'<br />";
-    }
-
-    if (!strlen($this->prenom)) {
-      $msg .= "Nom invalide: '$this->prenom'<br />";
-    }
-        
-    return $msg . parent::check();
-	}
 	
   function canDelete(&$msg, $oid = null) {
     $tables[] = array (

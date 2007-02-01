@@ -28,7 +28,7 @@ class CEiCategorie extends CMbObject {
 
   function getSpecs() {
     return array (
-      "nom" => "str|maxLength|50|notNull"
+      "nom" => "notNull str|maxLength|50"
     );
   }
   
