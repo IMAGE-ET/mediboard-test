@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.58";
+$config["mod_version"]     = "0.59";
 $config["mod_type"]        = "user";
 
 
@@ -568,7 +568,29 @@ class CSetupdPcabinet extends CSetup {
     $sql = "ALTER TABLE `plageconsult` ADD INDEX ( `fin` )";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.58";
+    $this->makeRevision("0.58");
+    $this->setTimeLimit(1800);
+    $sql = "INSERT INTO antecedent
+            SELECT '', consultation_anesth.consultation_anesth_id, antecedent.type, antecedent.date, antecedent.rques, 'CConsultAnesth' 
+            FROM antecedent, consultation_anesth, consultation
+            WHERE antecedent.object_class = 'CPatient'
+              AND antecedent.object_id = consultation.patient_id
+              AND consultation.consultation_id = consultation_anesth.consultation_id";
+    //$this->addQuery($sql);
+    $sql = "INSERT INTO traitement
+            SELECT '', consultation_anesth.consultation_anesth_id, traitement.debut, traitement.fin, traitement.traitement, 'CConsultAnesth' 
+            FROM traitement, consultation_anesth, consultation
+            WHERE traitement.object_class = 'CPatient'
+              AND traitement.object_id = consultation.patient_id
+              AND consultation.consultation_id = consultation_anesth.consultation_id";
+    $this->addQuery($sql);
+    $sql = "UPDATE consultation_anesth, consultation, patients
+            SET consultation_anesth.listCim10 = patients.listCim10
+            WHERE consultation_anesth.consultation_id = consultation.consultation_id
+              AND consultation.patient_id = patients.patient_id";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.59";
   }
 }
 ?>
