@@ -19,6 +19,7 @@ class CDoObjectAddEdit {
   var $redirectStore       = null;
   var $redirectError       = null;
   var $redirectDelete      = null;
+  var $isNotNew            = null;
   var $ajax                = null;
   var $callBack            = null;
   var $suppressHeaders     = null;
@@ -104,9 +105,9 @@ class CDoObjectAddEdit {
     } else {
       $id = $this->objectKeyGetVarName;
       mbSetValueToSession($id, $this->_obj->$id);
-      $isNotNew = @$_POST[$this->objectKeyGetVarName];
+      $this->isNotNew = @$_POST[$this->objectKeyGetVarName];
       $this->doLog("store");
-      $AppUI->setMsg( $isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
+      $AppUI->setMsg($this->isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
       if ($this->redirectStore) {
         $this->redirect =& $this->redirectStore;
       }
