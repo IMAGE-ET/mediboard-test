@@ -23,7 +23,8 @@ $classes = array (
   "CTraitement"    => array ("traitement"),
   "CTechniqueComp" => array ("technique"),
   "CExamComp"      => array ("examen"),
-  "CExamAudio"     => array ("remarques")
+  "CExamAudio"     => array ("remarques"),
+  "CAddiction"     => array ("addiction")
 );  
 
 $listObjectAffichage = array();

@@ -45,6 +45,7 @@ class CConsultation extends CMbObject {
   var $_check_premiere = null; // CheckBox: must be present in all forms!
   var $_somme          = null;
   var $_date           = null; // updated at loadRefs()
+  var $_types_examen   = null;
 
   // Fwd References
   var $_ref_patient      = null;
@@ -250,6 +251,11 @@ class CConsultation extends CMbObject {
     $where["consultation_id"] = "= '$this->consultation_id'";
     $order = "examen";
     $this->_ref_examcomp = $this->_ref_examcomp->loadList($where,$order);
+    
+    foreach($this->_ref_examcomp as $keyExam => &$currExam){
+      $this->_types_examen[$currExam->realisation][$keyExam] = $currExam;
+    }
+    
   }
   
   function getPerm($permType) {

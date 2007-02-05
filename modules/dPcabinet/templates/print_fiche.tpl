@@ -375,27 +375,35 @@
   <tr>
     <td>
       <table width="100%" style="font-size: 100%;">
+        {{foreach from=$consult->_types_examen key=curr_type item=list_exams}}
+        {{if $list_exams|@count}}
         <tr>
           <th>
-            Examens Complémentaires
+            Examens Complémentaires : {{tr}}CExamComp.realisation.{{$curr_type}}{{/tr}}
           </th>
           <td>
             <ul>
-              {{foreach from=$consult->_ref_examcomp item=curr_examcomp}}
+              {{foreach from=$list_exams item=curr_examcomp}}
               <li>
-                {{$curr_examcomp->examen}} 
+                {{$curr_examcomp->examen}}
                 {{if $curr_examcomp->fait}}
                   (Fait)
                 {{else}}
                   (A Faire)
                 {{/if}}
               </li>
-              {{foreachelse}}
-              <li>Pas d'examen complémentaire</li>
               {{/foreach}}
             </ul>
           </td>
         </tr>
+       {{/if}}
+       {{foreachelse}}
+       <tr>
+        <td>
+          Pas d'examen complémentaire
+        </td>
+      </tr>
+      {{/foreach}}
       </table>
       {{if $consult->rques}}
       <table width="100%" style="font-size: 100%;">

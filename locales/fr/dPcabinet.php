@@ -1,5 +1,7 @@
 <?php
-$locales['CExamNyha.hesitation.1'] = 'Oui';
+$locales['CAddiction.type.cannabis'] = 'Cannabis';
+$locales['CAddiction.type.oenolisme'] = 'Oenolisme';
+$locales['CAddiction.type.tabac'] = 'Tabac';
 $locales['CConsultAnesth'] = 'Consultation Anesthésique';
 $locales['CConsultAnesth.ASA.'] = ' ';
 $locales['CConsultAnesth.ASA.1'] = '1';
@@ -62,7 +64,10 @@ $locales['CConsultation.premiere.0'] = '0';
 $locales['CConsultation.premiere.1'] = '1';
 $locales['CExamAudio'] = 'Examen Audio';
 $locales['CExamComp'] = 'Examen Complémentaire';
+$locales['CExamComp.realisation.avant'] = 'Avant l\'admission';
+$locales['CExamComp.realisation.pendant'] = 'Pendant le séjour';
 $locales['CExamNyha.hesitation.0'] = 'Non';
+$locales['CExamNyha.hesitation.1'] = 'Oui';
 $locales['CExamNyha.q1.0'] = 'Non';
 $locales['CExamNyha.q1.1'] = 'Oui';
 $locales['CExamNyha.q2a.0'] = 'Non';

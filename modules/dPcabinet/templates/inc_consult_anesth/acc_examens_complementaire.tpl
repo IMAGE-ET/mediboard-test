@@ -44,11 +44,13 @@ function modifEtatExamComp(oForm){
 function submitExamComp(oForm) {
   if(oForm.examen){
     var examen = oForm.examen.value;
+    var realisation = oForm.realisation.value;
   }
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadListExamComp});
   oForm.reset();
   if(oForm.examen){
     oForm._hidden_examen.value = examen;
+    oForm.realisation.value = realisation;
   }
 }
 
@@ -68,15 +70,33 @@ function reloadListExamComp() {
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_examcomp_aed" />
       <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
-      <label for="examen" title="Ajouter un examen complementaire">Examen Complémentaire</label>
-      <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this)">
-        <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$examComp->_aides.examen}}
-      </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamComp', this.form._hidden_examen, 'examen')"></button><br />
-      <input type="hidden" name="_hidden_examen" value="" />
-      <textarea name="examen" onblur="if(verifNonEmpty(this)){submitExamComp(this.form);}"></textarea>
-      <button class="submit" type="button" onclick="if(verifNonEmpty(this.form.examen)){submitExamComp(this.form);}">Ajouter</button>
+      <table class="form">
+        <tr>
+          <td><strong>Ajouter un examen complémentaire</strong></td>
+          <td>
+            <label for="rques" title="Informations">Informations</label>
+            <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this)">
+              <option value="">&mdash; Choisir une aide</option>
+                {{html_options options=$examComp->_aides.examen}}
+              </select>
+              <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamComp', this.form._hidden_examen, 'examen')"></button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {{html_options name="realisation" options=$examComp->_enumsTrans.realisation}}
+          </td>
+          <td>
+            <input type="hidden" name="_hidden_examen" value="" />
+            <textarea name="examen" onblur="if(verifNonEmpty(this)){submitExamComp(this.form);}"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td class="button" colspan="3">
+            <button class="submit" type="button" onclick="if(verifNonEmpty(this.form.examen)){submitExamComp(this.form);}">Ajouter</button>
+          </td>
+        </tr>
+      </table>      
       </form>
     </td>
     <td class="text" id="listExamComp" rowspan="2">

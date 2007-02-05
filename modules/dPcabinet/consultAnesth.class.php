@@ -74,6 +74,8 @@ class CConsultAnesth extends CMbObject {
   var $_ref_types_antecedent   = null;
   var $_ref_antecedents        = null;
   var $_ref_traitements        = null;
+  var $_ref_addictions         = null;
+  var $_ref_types_addiction    = null;
   var $_clairance              = null;
   var $_imc                    = null;
   var $_imc_valeur             = null;
@@ -211,6 +213,27 @@ class CConsultAnesth extends CMbObject {
     $this->_ref_consultation->loadRefsFiles();
     $this->_ref_files =& $this->_ref_consultation->_ref_files;
   }
+    
+  function loadRefsAddictions() {
+    global $dPconfig;
+    if ($this->consultation_anesth_id && $dPconfig["dPcabinet"]["addictions"]) {
+      $addiction = new CAddiction();
+      
+      // Chargement des addictions
+      $where = array();
+      $where["object_id"]    = "= '$this->consultation_anesth_id'";
+      $where["object_class"] = "= 'CConsultAnesth'";
+      $order = "type ASC";
+      $this->_ref_addictions = $addiction->loadList($where, $order);
+
+      // Classement des addictions
+      $this->_ref_types_addiction = array();
+      
+      foreach($this->_ref_addictions as $keyAddict => &$currAddict){
+        $this->_ref_types_addiction[$currAddict->type][$keyAddict] = $currAddict;
+      }
+    }
+  }
   
   function loadRefsAntecedents() {
     if ($this->consultation_anesth_id) {
@@ -246,6 +269,7 @@ class CConsultAnesth extends CMbObject {
   function loadRefsFwd() {
     $this->loadRefsAntecedents();
     $this->loadRefsTraitements();
+    $this->loadRefsAddictions();
     $this->loadRefConsultation();
     $this->_ref_consultation->loadRefsFwd();
     $this->_ref_plageconsult =& $this->_ref_consultation->_ref_plageconsult;

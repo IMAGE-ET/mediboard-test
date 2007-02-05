@@ -15,12 +15,13 @@ class CExamComp extends CMbObject {
   var $consultation_id = null;
 
   // DB fields
-  var $examen  = null;
-  var $fait    = null;
+  var $examen      = null;
+  var $realisation = null;
+  var $fait        = null;
 
   // Fwd References
   var $_ref_consult = null;
-
+  
   function CExamComp() {
     $this->CMbObject("exams_comp", "exam_id");
     
@@ -31,6 +32,7 @@ class CExamComp extends CMbObject {
     return array (
       "consultation_id" => "notNull refMandatory",
       "examen"          => "text",
+      "realisation"     => "notNull enum|avant|pendant",
       "fait"            => "num|minMax|0|1"
     );
   }

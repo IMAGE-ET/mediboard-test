@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.59";
+$config["mod_version"]     = "0.61";
 $config["mod_type"]        = "user";
 
 
@@ -591,7 +591,22 @@ class CSetupdPcabinet extends CSetup {
               AND consultation.patient_id = patients.patient_id";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.59";
+    $this->makeRevision("0.59");
+    $sql = "ALTER TABLE `exams_comp` ADD `realisation` ENUM( 'avant', 'pendant' ) NOT NULL DEFAULT 'avant' AFTER `consultation_id`;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.60");
+    $sql = "CREATE TABLE `addiction` (
+            `addiction_id` int(11) unsigned NOT NULL auto_increment,
+            `object_id` int(11) unsigned NOT NULL default '0',
+            `object_class` enum('CConsultAnesth') NOT NULL default 'CConsultAnesth',
+            `type` enum('tabac', 'oenolisme', 'cannabis') NOT NULL default 'tabac',
+            `addiction` text,
+            PRIMARY KEY  (`addiction_id`)
+            ) TYPE=MyISAM COMMENT = 'Addictions pour le dossier anesthésie';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.61";
   }
 }
 ?>

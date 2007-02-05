@@ -204,6 +204,9 @@ $dPconfig["dPplanningOp"]["sejour"] = array (
   "heure_fin"      => "23",
   "min_intervalle" => "15"
 );
+
+$dPconfig["dPcabinet"]["addictions"] = 0;
+
 $dPconfig["dPImeds"]["url"] = "http://10.100.0.67/listedossiers.aspx";
 
 $dPconfig["dPfiles"]["nb_upload_files"] = "1";
