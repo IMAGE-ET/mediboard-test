@@ -30,58 +30,92 @@ function setClose(date) {
 <input type="hidden" name="dialog" value="1" />
 <input type="hidden" name="fmtdate" value="" />
 
-<table class="form">
-
+<table class="main">
   <tr>
     <th class="category" colspan="2">
-      <a style="float:left;" href="index.php?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;month={{$pmonth}}&amp;year={{$pyear}}&amp;group_id={{$group_id}}&amp;oper_id={{$oper_id}}">&lt; &lt;</a>
-      <a style="float:right;" href="index.php?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;month={{$nmonth}}&amp;year={{$nyear}}&amp;group_id={{$group_id}}&amp;oper_id={{$oper_id}}">&gt; &gt;</a>
+      <a style="float:left;" href="index.php?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;month={{$pmonth}}&amp;year={{$pyear}}&amp;group_id={{$group_id}}&amp;operation_id={{$operation_id}}">&lt; &lt;</a>
+      <a style="float:right;" href="index.php?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;month={{$nmonth}}&amp;year={{$nyear}}&amp;group_id={{$group_id}}&amp;operation_id={{$operation_id}}">&gt; &gt;</a>
       <div>{{$nameMonth}} {{$year}}</div>
     </th>
   </tr>
-
+  
   <tr>
-    <td rowspan="3">
-      <select name="list" size="14">
-        <option value="" selected="selected">&mdash; Choisir une date &mdash;</option>
-        {{foreach from=$list item=curr_plage}}
-        {{if $curr_plage.free_time < 0}}
-          <option value="" ondblclick="setClose('{{$curr_plage.date|date_format:"%d/%m/%Y"}}')"
-          onclick="document.frmSelector.fmtdate.value='{{$curr_plage.date|date_format:"%d/%m/%Y"}}'"
-        {{else}}
-          <option value="{{$curr_plage.plageop_id}}" ondblclick="setClose('{{$curr_plage.date|date_format:"%d/%m/%Y"}}')"
-          onclick="document.frmSelector.fmtdate.value='{{$curr_plage.date|date_format:"%d/%m/%Y"}}'"
-        {{/if}}
-        {{if $curr_plage.spec_id}}
-          style="background:#aae"
-        {{elseif $curr_plage.free_time < 0}}
-          style="background:#eaa"
-        {{else}}
-          style="background:transparent"
-        {{/if}}>
-        {{$curr_plage.date|date_format:"%a %d %b %Y"}} - {{$curr_plage.nom}}
-        </option>
+    <td class="halfPane">
+      <table class="tbl">
+        <tr>
+          <th class="category" colspan="2">
+            Choisir une date
+          </th>
+        </tr>
+        {{foreach from=$listPlages item=curr_plage}}
+        <tr>
+          <td>
+            {{assign var="pct" value=$curr_plage->_fill_rate}}
+            {{if $pct > 100}}
+              {{assign var="over" value=1}}
+              {{assign var="pct" value=100}}
+            {{else}}
+              {{assign var="over" value=0}}              
+            {{/if}}
+            
+            {{if $pct < 100}}{{assign var="backgroundClass" value="normal"}}
+            {{elseif !$over}}{{assign var="backgroundClass" value="booked"}}
+            {{else}}{{assign var="backgroundClass" value="full"}}
+            {{/if}} 
+            <div class="progressBar">
+              <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
+              <div class="text">
+                <label for="list_{{$curr_plage->plageop_id}}" {{if !$over}}ondblclick="setClose('{{$curr_plage->date|date_format:"%d/%m/%Y"}}')"{{/if}}>
+                  {{$curr_plage->date|date_format:"%a %d %b %Y"}} - {{$curr_plage->_ref_salle->nom}}
+                </label>
+              </div>
+            </div>
+          </td>
+          <td>
+            {{if !$over}}
+            <input type="radio" name="list" value="{{$curr_plage->plageop_id}}" ondblclick="setClose('{{$curr_plage->date|date_format:"%d/%m/%Y"}}')" onclick="document.frmSelector.fmtdate.value='{{$curr_plage->date|date_format:"%d/%m/%Y"}}'"/>
+            {{/if}}
+          </td>
+        </tr>
         {{/foreach}}
-      </select>
+      </table>
     </td>
-    <td>
-      <strong>Admission du patient</strong>
-      <br />
-      <input type="radio" name="admission" value="veille"{{if !$oper_id}} checked="checked"{{/if}} />
-      <label for="admission_veille">La veille</label>
-      <br />
-      <input type="radio" name="admission" value="jour" />
-      <label for="admission_jour">Le jour même</label>
-      <br />
-      <input type="radio" name="admission" value="aucune"{{if $oper_id}} checked="checked"{{/if}} />
-      <label for="admission_jour">Ne pas modifier</label>
-      <br />
-    </td>
-  </tr>
-
-  <tr>
-    <td class="text"><i>Légende :</i>
+    <td class="halfPane">
       <table class="form">
+        <tr>
+          <th colspan="2" class="category">
+            Admission du patient
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <input type="radio" name="admission" value="veille"{{if !$operation_id}} checked="checked"{{/if}} />
+          </td>
+          <td>
+            <label for="admission_veille">La veille</label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="radio" name="admission" value="jour" />
+          </td>
+          <td>
+            <label for="admission_jour">Le jour même</label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="radio" name="admission" value="aucune"{{if $operation_id}} checked="checked"{{/if}} />
+          </td>
+          <td>
+            <label for="admission_jour">Ne pas modifier</label>
+          </td>
+        </tr>
+        <tr>
+          <th class="category" colspan="2">
+            Légende
+          </th>
+        </tr>
         <tr>
           <td style="background-color:#eaa; width:10px;"></td>
           <td>plages pleines</td>
@@ -95,17 +129,14 @@ function setClose(date) {
             <i>Par défaut, une admission la veille se fait à 17h et à 8h pour le jour même</i>
           </td>
         </tr>
+        <tr>
+          <td colspan="2" class="button">
+            <button class="cancel" type="button" onclick="window.close()">annuler</button>
+            <button class="tick" type="button" onclick="setClose('')">Sélectionner</button>          
+          </td>
+        </tr>
       </table>
     </td>
   </tr>
-
-  <tr>
-    <td class="button" colspan="2">
-      <button class="cancel" type="button" onclick="window.close()">annuler</button>
-      <button class="tick" type="button" onclick="setClose('')">Sélectionner</button>
-    </td>
-  </tr>
-
 </table>
-
 </form>

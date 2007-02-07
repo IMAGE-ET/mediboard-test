@@ -66,7 +66,7 @@ foreach($listDays as $keyDate=>$valDate){
     $listPlages[$keyPlages]->loadRefsFwd();
     $listPlages[$keyPlages]->_ref_chir->loadRefsFwd();
     
-    $listPlages[$keyPlages]->GetNbOperations();
+    $listPlages[$keyPlages]->getNbOperations();
 
     // Mémorisation dans le tableau d'affichage
     $nbquartheure = ($valPlages->_heurefin-$valPlages->_heuredeb)*4;

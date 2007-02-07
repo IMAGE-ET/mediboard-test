@@ -77,7 +77,7 @@ $listPlages = $listPlages->loadList($where,$order);
 foreach($listPlages as $keyPlages=>$valPlages){
   $listPlages[$keyPlages]->loadRefsFwd();
   $listPlages[$keyPlages]->_ref_chir->loadRefsFwd();
-  $listPlages[$keyPlages]->GetNbOperations();
+  $listPlages[$keyPlages]->getNbOperations();
   
   // Mémorisation dans le tableau d'affichage
   $nbquartheure = ($valPlages->_heurefin-$valPlages->_heuredeb)*4;

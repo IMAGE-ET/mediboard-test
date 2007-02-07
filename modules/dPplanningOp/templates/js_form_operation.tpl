@@ -179,9 +179,9 @@ function popPlage() {
     url.addElement(oForm._min_op, "curr_op_min");
     url.addElement(oSejourForm.group_id, "group_id");
     {{if $op->operation_id}}
-    url.addElement("{{$op->operation_id}}", "oper_id");
+    url.addElement(oForm.operation_id);
     {{/if}}
-    url.popup(400, 250, 'Plage');
+    url.popup(450, 250, 'Plage');
   }
 }
 

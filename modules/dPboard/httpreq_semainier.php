@@ -180,7 +180,7 @@ for($i = 0; $i < 7; $i++) {
       }else{
         foreach($valuePlages as $keyPlage=>$value){
           $plagesPerDayOp[$key][$keyPlage]->loadRefSalle();
-          $plagesPerDayOp[$key][$keyPlage]->GetNbOperations();
+          $plagesPerDayOp[$key][$keyPlage]->getNbOperations();
         }
         $plagesOp[$key][$date] = $plagesPerDayOp[$key];
       }

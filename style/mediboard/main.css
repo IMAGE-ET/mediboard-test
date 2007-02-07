@@ -1747,6 +1747,8 @@ div.progressBar div.text {
   margin-top: -13px;
   text-align: center;
   font-size: 11px;
+  white-space: nowrap;
+  width: 90%;
 }
 
 

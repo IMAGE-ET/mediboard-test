@@ -243,9 +243,14 @@ class CPlageOp extends CMbObject {
     return $msg;
   }
   
-  function GetNbOperations() {
-    $sql = "SELECT COUNT(`operations`.`operation_id`) AS total," .
-        "\nSUM(TIME_TO_SEC(`operations`.`temp_operation`) + TIME_TO_SEC(`plagesop`.`temps_inter_op`)) AS time" .
+  function getNbOperations($addedTime = null, $useTimeInterOp = true) {
+    if($useTimeInterOp == true){
+      $select_time = "\nSUM(TIME_TO_SEC(`operations`.`temp_operation`) + TIME_TO_SEC(`plagesop`.`temps_inter_op`)) AS time";
+    }else{
+      $select_time = "\nSUM(TIME_TO_SEC(`operations`.`temp_operation`)) AS time";
+    }
+        
+    $sql = "SELECT COUNT(`operations`.`operation_id`) AS total," . $select_time .
         "\nFROM `operations`, `plagesop`" .
         "\nWHERE `operations`.`plageop_id` = '$this->plageop_id'" .
         "\nAND `operations`.`plageop_id` = `plagesop`.`plageop_id`" .
@@ -253,6 +258,9 @@ class CPlageOp extends CMbObject {
     $result = null;
     db_loadHash($sql, $result);
     $this->_nb_operations = $result["total"];
+    if($addedTime){
+      $result["time"] = $result["time"] + $addedTime;
+    }
     $this->_fill_rate = number_format($result["time"]*100/(strtotime($this->fin)-strtotime($this->debut)), 2);
   }
   
