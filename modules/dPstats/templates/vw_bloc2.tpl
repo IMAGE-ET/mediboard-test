@@ -41,7 +41,7 @@ function pageMain() {
           <th rowspan="2">Code<br />ASA</th>
           <th rowspan="2">Placement<br />programme</th>
           <th rowspan="2">Attribution<br />n° d'ordre</th>
-          <th colspan="8">Timings opération</th>
+          <th colspan="9">Timings opération</th>
           <th colspan="2">Timings reveil</th>
         </tr>
         <tr>
@@ -52,7 +52,8 @@ function pageMain() {
           <th>libelle</th>
           <th>CCAM</th>
           <th>entrée salle</th>
-          <th>induction</th>
+          <th>debut d'induction</th>
+          <th>fin d'induction</th>
           <th>pose garrot</th>
           <th>début intervention</th>
           <th>fin intervention</th>
@@ -79,10 +80,17 @@ function pageMain() {
           <td class="text">{{$curr_op->codes_ccam|replace:'|':' '}}</td>
           <td class="text">{{$curr_op->_lu_type_anesth}}</td>
           <td class="text">{{tr}}CConsultAnesth.ASA.{{$curr_op->_ref_consult_anesth->ASA}}{{/tr}}</td>
-          <td class="text">{{$curr_op->_ref_first_log->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
+          <td class="text">
+            {{if $curr_op->_ref_first_log}}
+              {{$curr_op->_ref_first_log->date|date_format:"%d/%m/%Y à %Hh%M"}}
+            {{else}}
+              &mdash;
+            {{/if}}
+          </td>
           <td class="text">?</td>
           <td class="text">{{$curr_op->entree_salle|date_format:"%Hh%M"}}</td>
-          <td class="text">{{$curr_op->induction|date_format:"%Hh%M"}}</td>
+          <td class="text">{{$curr_op->induction_debut|date_format:"%Hh%M"}}</td>
+          <td class="text">{{$curr_op->induction_fin|date_format:"%Hh%M"}}</td>
           <td class="text">{{$curr_op->pose_garrot|date_format:"%Hh%M"}}</td>
           <td class="text">{{$curr_op->debut_op|date_format:"%Hh%M"}}</td>
           <td class="text">{{$curr_op->fin_op|date_format:"%Hh%M"}}</td>

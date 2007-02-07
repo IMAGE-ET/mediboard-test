@@ -9,14 +9,15 @@
 
 global $AppUI;
 require_once($AppUI->getModuleClass("dPinterop", "mbxmldocument"));
+require_once($AppUI->getModuleClass("dPinterop", "mbxmlschema"));
 
-if (!class_exists("CMbXMLDocument")) {
+if (!class_exists("CMbXMLDocument") || !class_exists("CMbXMLSchema")) {
   return;
 }
 
 global $AppUI, $m;
 
-class CHPrimXMLSchema extends CMbXMLDocument {
+class CHPrimXMLSchema extends CMbXMLSchema {
   function __construct() {
     parent::__construct();
     
@@ -26,32 +27,6 @@ class CHPrimXMLSchema extends CMbXMLDocument {
     $this->addAttribute($root, "targetNamespace", "http://www.hprim.org/hprimXML");
     $this->addAttribute($root, "elementFormDefault", "qualified");
     $this->addAttribute($root, "attributeFormDefault", "unqualified");
-  }
-  
-  function addSchemaPart($filePath) {
-    $schemaPart = new DomDocument;
-    $schemaPart->load($filePath);
-    
-    // Select all child elements of schemaPart XML
-    // And pump them into main schema
-    $xpath = new domXPath($schemaPart);
-    foreach ($xpath->query('/*/*') as $node) {
-      $element = $this->importNode($node, true);
-      $this->documentElement->appendChild($element);
-    }
-  }
-
-  function importSchemaPackage($dirPath) {
-    foreach (glob("$dirPath/*.xsd") as $fileName) {
-      $this->addSchemaPart($fileName);
-    }
-  }
-  
-  function purgeIncludes() {
-    $xpath = new domXPath($this);
-    foreach ($xpath->query('/*/xsd:import | /*/xsd:include') as $node) {
-      $node->parentNode->removeChild($node);
-    }
   }
 
   function purgeImportedNamespaces() {

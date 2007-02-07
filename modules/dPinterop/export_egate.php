@@ -1,0 +1,53 @@
+<?php /* $Id: $ */
+
+/**
+* @package Mediboard
+* @subpackage dPinterop
+* @version $Revision: $
+* @author Sébastien Fillonneau
+*/
+
+global $AppUI, $canRead, $canEdit, $m, $dPconfig;
+
+if (!class_exists("DOMDocument")) {
+  trigger_error("sorry, DOMDocument is needed");
+  return;
+}
+
+if (!$canRead) {
+  $AppUI->redirect( "m=system&a=access_denied" );
+}
+
+$mb_sejour_id = dPgetParam($_POST, "mb_sejour_id", mbGetValueFromGetOrSession("sejour_id"));
+
+$mbSejour = new CSejour();
+$doc      = new CEGateXMLPatientStayInformation;
+
+if ($mbSejour->load($mb_sejour_id)) {
+  $mbSejour->loadRefs();
+  foreach($mbSejour->_ref_operations as $key => $value) {
+    $mbSejour->_ref_operations[$key]->loadRefPlageOp();
+    $mbSejour->_ref_operations[$key]->loadRefsConsultAnesth();
+    $mbSejour->_ref_operations[$key]->_ref_consult_anesth->loadRefConsultation();
+  }
+  
+  if (!$doc->checkSchema()) {
+    return;
+  }
+  
+  $doc->generateFromSejour($mbSejour);
+  $doc_valid = $doc->schemaValidate();
+}
+
+$doc->addNameSpaces();
+$doc->saveTempFile();
+
+// Création du template
+$smarty = new CSmartyDP();
+
+$smarty->assign("doc"       , $doc);
+$smarty->assign("doc_valid" , @$doc_valid);
+$smarty->assign("mbSejour"  , $mbSejour);
+
+$smarty->display("export_egate.tpl");
+?>

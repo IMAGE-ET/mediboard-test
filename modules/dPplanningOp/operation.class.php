@@ -54,7 +54,8 @@ class COperation extends CMbObject {
   var $sortie_salle   = null;
   var $entree_reveil  = null;
   var $sortie_reveil  = null;
-  var $induction      = null;
+  var $induction_debut= null;
+  var $induction_fin  = null;
 
   // Form fields
   var $_hour_op        = null;
@@ -124,7 +125,8 @@ class COperation extends CMbObject {
       "retrait_garrot" => "time",
       "entree_reveil"  => "time",
       "sortie_reveil"  => "time",
-      "induction"      => "time",
+      "induction_debut"=> "time",
+      "induction_fin"  => "time",
       "entree_bloc"    => "time"
     );
   }

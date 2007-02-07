@@ -135,10 +135,20 @@
           </td>
         </tr>
         <tr>
-          <th>Induction</th>
+          <th>Debut d'induction</th>
           <td class="halfPane">
-            {{if $operation->induction}}
-              {{$operation->induction|date_format:"%Hh%M"}}
+            {{if $operation->induction_debut}}
+              {{$operation->induction_debut|date_format:"%Hh%M"}}
+            {{else}}
+            &mdash;
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <th>Fin d'induction</th>
+          <td class="halfPane">
+            {{if $operation->induction_fin}}
+              {{$operation->induction_fin|date_format:"%Hh%M"}}
             {{else}}
             &mdash;
             {{/if}}

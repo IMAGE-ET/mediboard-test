@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- edited with XML Spy v4.2 U (http://www.xmlspy.com) by Frontec AB (Frontec AB) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="log">
+		<xs:annotation>
+			<xs:documentation>A sequence of patient stay quality</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="date" type="xs:string" />
+			<xs:attribute name="type" type="xs:string" />
+			<xs:attribute name="exception" type="xs:string" />
+			<xs:attribute name="message" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

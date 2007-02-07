@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.61";
+$config["mod_version"]     = "0.62";
 $config["mod_type"]        = "user";
 
 class CSetupdPplanningOp extends CSetup {
@@ -622,7 +622,15 @@ class CSetupdPplanningOp extends CSetup {
     $sql = "ALTER TABLE `operations` ADD INDEX ( `annulee` )";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.61";
+    $this->makeRevision("0.61");
+    $sql = "ALTER TABLE `operations`" .
+            "\nCHANGE `induction` `induction_debut` TIME";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `operations`" .
+            "\nADD `induction_fin` TIME AFTER `induction_debut`";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.62";
   }
 }
 ?>

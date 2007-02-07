@@ -89,12 +89,13 @@ if($op) {
   $selOp->_ref_plageop->loadRefsFwd();
   // Tableau des timings
   $timing["entree_salle"]    = array();
-  $timing["pose_garrot"]    = array();
-  $timing["debut_op"]       = array();
-  $timing["fin_op"]         = array();
-  $timing["retrait_garrot"] = array();
+  $timing["pose_garrot"]     = array();
+  $timing["debut_op"]        = array();
+  $timing["fin_op"]          = array();
+  $timing["retrait_garrot"]  = array();
   $timing["sortie_salle"]    = array();
-  $timing["induction"]      = array();
+  $timing["induction_debut"] = array();
+  $timing["induction_fin"]   = array();
   foreach($timing as $key => $value) {
     for($i = -10; $i < 10 && $selOp->$key !== null; $i++) {
       $timing[$key][] = mbTime("+ $i minutes", $selOp->$key);

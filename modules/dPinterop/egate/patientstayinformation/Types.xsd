@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XML Spy v4.2 U (http://www.xmlspy.com) by Frontec AB (Frontec AB) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:complexType name="HeaderType">
+		<xs:attribute name="Created" type="xs:dateTime" use="required"/>
+		<xs:attribute name="Originator" type="xs:string" use="required"/>
+		<xs:attribute name="CountryCode" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="AckType">
+		<xs:sequence>
+			<xs:element name="Header" type="HeaderType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NakType">
+		<xs:sequence>
+			<xs:element name="Header"/>
+			<xs:element name="Error" type="xs:string" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ChecksumType">
+		<xs:simpleContent>
+			<xs:extension base="xs:int"/>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XML Spy v4.2 U (http://www.xmlspy.com) by Frontec AB (Frontec AB) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="Types.xsd"/>
+	<xs:element name="PatientStayInformation">
+		<xs:annotation>
+			<xs:documentation>A sequence of patient stay information.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="HeaderType"/>
+				<xs:element name="PatientStay" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Information related to the patient at the clinique stay level</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Patient">
+								<xs:annotation>
+									<xs:documentation>Patient related information</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="PatientID" type="xs:string" use="required"/>
+									<xs:attribute name="DateOfBirth" type="xs:dateTime" use="required"/>
+									<xs:attribute name="Gender" type="xs:string" use="optional"/>
+									<xs:attribute name="Firstname" type="xs:string" use="optional"/>
+									<xs:attribute name="Lastname" type="xs:string" use="optional"/>
+									<xs:attribute name="Phone1" type="xs:string" use="optional"/>
+									<xs:attribute name="Phone2" type="xs:string" use="optional"/>
+									<xs:attribute name="AcceptCall" type="xs:boolean" use="optional"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="StayTime" type="DateTimeType" maxOccurs="unbounded"/>
+							<xs:element name="MainDiagnosis" type="DiagnosisType" minOccurs="0"/>
+							<xs:element name="SecondaryDiagnosis" type="DiagnosisType" minOccurs="0" maxOccurs="unbounded"/>
+							<xs:element name="WardStay" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="WardMainDiagnosis" type="DiagnosisType" minOccurs="0"/>
+										<xs:element name="WardSecondaryDiagnosis" type="DiagnosisType" minOccurs="0" maxOccurs="unbounded"/>
+										<xs:element name="WardTime" type="DateTimeType" maxOccurs="unbounded"/>
+										<xs:element name="WardAct" minOccurs="0" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="WardProcedureCode" type="ProcedureCodeType"/>
+												</xs:sequence>
+												<xs:attribute name="DoctorID" type="xs:string" use="optional"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="WardID" type="xs:string" use="required"/>
+									<xs:attribute name="SpecialityCode" type="xs:string" use="optional"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Surgery" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TheatreRoom" type="RoomType" minOccurs="0"/>
+										<xs:element name="SurgeryProcedure" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="SurgeryProcedureCode" type="ProcedureCodeType"/>
+												</xs:sequence>
+												<xs:attribute name="SurgeonID" type="xs:string" use="optional"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="SurgeryTime" type="DateTimeType" minOccurs="0" maxOccurs="unbounded"/>
+										<xs:element name="AnesthesiaRoom" type="RoomType" minOccurs="0"/>
+										<xs:element name="RecoveryRoom" type="RoomType" minOccurs="0"/>
+									</xs:sequence>
+									<xs:attribute name="ASA" type="xs:int" use="optional"/>
+									<xs:attribute name="AnesthetistID" type="xs:string" use="optional"/>
+									<xs:attribute name="TypeOfAnesthesiaID" type="xs:int" use="optional"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="PerceivedQuality" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence maxOccurs="unbounded">
+										<xs:element name="Quality">
+											<xs:annotation>
+												<xs:documentation>Quality information</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="QuestionID" type="xs:int" use="required"/>
+												<xs:attribute name="Answer" type="xs:int" use="required"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="PatientStayID" type="xs:string" use="required"/>
+						<xs:attribute name="MainUnitID" type="xs:string" use="required"/>
+						<xs:attribute name="AdmissionTypeID" type="xs:int" use="optional"/>
+						<xs:attribute name="DischargeStatusID" type="xs:int" use="optional"/>
+						<xs:attribute name="AdmissionProcedureID" type="xs:string" use="optional"/>
+						<xs:attribute name="BA_TypeOfStayID" type="xs:int" use="optional"/>
+						<xs:attribute name="ClientTypeID" type="xs:int" use="optional"/>
+						<xs:attribute name="AdmissionWeight" type="xs:double" use="optional"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Checksum" type="ChecksumType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="DiagnosisType">
+		<xs:annotation>
+			<xs:documentation>A type that represents the definition of the diagnosis as a concept</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="DiagnosisCode" type="xs:string" use="required"/>
+		<xs:attribute name="Version" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ProcedureCodeType">
+		<xs:annotation>
+			<xs:documentation>A type that represents the definition of the procedure code as a concept</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="ProcedureCodeID" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DateTimeType">
+		<xs:annotation>
+			<xs:documentation>A type that represents the definition of datatime as a concept</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Start">
+				<xs:simpleType>
+					<xs:restriction base="xs:dateTime"/>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="End" type="xs:dateTime"/>
+		</xs:sequence>
+		<xs:attribute name="TypeID" type="xs:int" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="RoomType">
+		<xs:annotation>
+			<xs:documentation>A type that represents the definitionof a room such as theathe room or recovery room</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="BU_ID" type="xs:string" use="required"/>
+		<xs:attribute name="RoomID" type="xs:string" use="required"/>
+	</xs:complexType>
+</xs:schema>
