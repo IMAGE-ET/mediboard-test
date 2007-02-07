@@ -184,8 +184,8 @@ function choosePreselection(oSelect) {
       Suggestion :
     </th>
     <td>
-      <input type="text" title="notNull num|length|8" name="sc_venue_id" value="{{$mbOp->venue_SHS}}" size="8" maxlength="8" />
-      <br />{{$mbOp->_venue_SHS_guess}}
+      <input type="text" title="notNull num|length|8" name="sc_venue_id" value="{{$mbSejour->venue_SHS}}" size="8" maxlength="8" />
+      <br />{{$mbSejour->_venue_SHS_guess}}
     </td>
   </tr>
 
