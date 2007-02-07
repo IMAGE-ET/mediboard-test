@@ -119,6 +119,29 @@ function reloadAfterSaveDoc(){
     <td>{{$patient->_tel21}} {{$patient->_tel22}} {{$patient->_tel23}} {{$patient->_tel24}} {{$patient->_tel25}}</td>
   </tr>
   
+  {{if $patient->medecin_traitant || $patient->medecin1 || $patient->medecin2 || $patient->medecin3}}
+  <tr>
+    <th class="category" colspan="4">Médecins correspondants</th>
+  </tr>
+  
+  <tr>
+    <td colspan="4" class="text">
+      {{if $patient->medecin_traitant}}
+        {{$patient->_ref_medecin_traitant->_view}} ;
+      {{/if}}
+      {{if $patient->medecin1}}
+        {{$patient->_ref_medecin1->_view}} ;
+      {{/if}}
+      {{if $patient->medecin2}}
+        {{$patient->_ref_medecin2->_view}} ;
+      {{/if}}
+      {{if $patient->medecin3}}
+        {{$patient->_ref_medecin3->_view}} ;
+      {{/if}}
+    </td>
+  </tr>
+  {{/if}}
+
   {{if $patient->rques}}
   <tr>
     <th class="category" colspan="4">Remarques</th>
