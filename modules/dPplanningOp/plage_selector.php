@@ -39,7 +39,7 @@ $listSalles = $listSalles->loadList($where);
 
 $listPlages = new CPlageOp;
 $where = array();
-$where[]           = db_prepare("plagesop.chir_id = % OR plagesop.spec_id = %",$mediChir->user_id,$mediChir->function_id);
+$where[]           = db_prepare("(plagesop.chir_id = %1 OR plagesop.spec_id = %2)",$mediChir->user_id,$mediChir->function_id);
 $where["date"]     = "LIKE '$year-$month-__'";
 $where["salle_id"] = db_prepare_in(array_keys($listSalles));
 $order = "date, debut";

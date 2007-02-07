@@ -5,7 +5,8 @@ function setClose(date) {
   if(date == '') {
     date = form.fmtdate.value;
   }
-  var key = list.options[list.selectedIndex].value;
+  var key = 0;
+  key = getCheckedValue(list);
   var val = date;
   
   if (key == 0) {
@@ -58,9 +59,15 @@ function setClose(date) {
               {{assign var="over" value=0}}              
             {{/if}}
             
-            {{if $pct < 100}}{{assign var="backgroundClass" value="normal"}}
-            {{elseif !$over}}{{assign var="backgroundClass" value="booked"}}
-            {{else}}{{assign var="backgroundClass" value="full"}}
+            {{if $curr_plage->spec_id}}
+              {{assign var="pct" value="100"}}
+              {{assign var="backgroundClass" value="empty"}}
+            {{elseif $pct < 100}}
+              {{assign var="backgroundClass" value="normal"}}
+            {{elseif !$over}}
+              {{assign var="backgroundClass" value="booked"}}
+            {{else}}
+              {{assign var="backgroundClass" value="full"}}
             {{/if}} 
             <div class="progressBar">
               <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
@@ -112,22 +119,46 @@ function setClose(date) {
           </td>
         </tr>
         <tr>
+          <td class="text" colspan="2">
+            <i>Par défaut, une admission la veille se fait à 17h et à 8h pour le jour même</i>
+          </td>
+        </tr>
+        <tr>
           <th class="category" colspan="2">
             Légende
           </th>
         </tr>
         <tr>
-          <td style="background-color:#eaa; width:10px;"></td>
-          <td>plages pleines</td>
-        </tr>
-        <tr>
-          <td style="background-color:#aae; width:10px;"></td>
-          <td>plages de spécialité</td>
-        </tr>
-        <tr>
-          <td class="text" colspan="2">
-            <i>Par défaut, une admission la veille se fait à 17h et à 8h pour le jour même</i>
+          <td>
+            <div class="progressBar">
+              <div class="bar empty"></div>
+            </div>
           </td>
+          <td>plage de spécialité</td>
+        </tr>
+        <tr>
+          <td style="width:10px;">
+            <div class="progressBar">
+              <div class="bar full"></div>
+            </div>
+          </td>
+          <td>plage pleine</td>
+        </tr>
+        <tr>
+          <td style="width:10px;">
+            <div class="progressBar">
+              <div class="bar booked"></div>
+            </div>
+          </td>
+          <td>plage presque pleine</td>
+        </tr>
+        <tr>
+          <td style="width:10px;">
+            <div class="progressBar">
+              <div class="bar normal" style="width: 60%;"></div>
+            </div>
+          </td>
+          <td>taux de remplissage</td>
         </tr>
         <tr>
           <td colspan="2" class="button">

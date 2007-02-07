@@ -177,11 +177,11 @@ function popPlage() {
     url.addElement(oForm.chir_id, "chir");
     url.addElement(oForm._hour_op, "curr_op_hour");
     url.addElement(oForm._min_op, "curr_op_min");
-    url.addElement(oSejourForm.group_id, "group_id");
+    url.addElement(oSejourForm.group_id);
     {{if $op->operation_id}}
     url.addElement(oForm.operation_id);
     {{/if}}
-    url.popup(450, 250, 'Plage');
+    url.popup(450, 450, 'Plage');
   }
 }
 
