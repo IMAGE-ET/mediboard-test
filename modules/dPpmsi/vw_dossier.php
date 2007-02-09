@@ -25,7 +25,7 @@ $patient = new CPatient;
 $patient->load($pat_id);
 
 if ($patient->patient_id) {
-	//$patient->loadDossierComplet();
+	$patient->loadRefsFwd();
   $patient->loadRefsConsultations();
   $patient->loadRefsSejours();
   $patient->loadRefsAntecedents();
