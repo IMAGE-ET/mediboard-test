@@ -46,7 +46,7 @@ class CCodeCCAM {
   
   // Chargement des variables importantes
   function LoadLite() {
-    $query = "select * from actes where CODE = '$this->code'";
+    $query = db_prepare("select * from actes where CODE = %", $this->code);
     $result = db_exec($query, $this->dbccam);
     if(mysql_num_rows($result) == 0) {
       $this->code = "-";
@@ -60,12 +60,12 @@ class CCodeCCAM {
       $this->libelleCourt = $row["LIBELLECOURT"];
       $this->libelleLong = $row["LIBELLELONG"];
       $query1 = "select * from activiteacte where ";
-      $query1 .= "CODEACTE = '" . $this->code . "' ";
+      $query1 .= db_prepare("CODEACTE = %", $this->code);
       $query1 .= "and ACTIVITE = '4'";
       $result1 = db_exec($query1, $this->dbccam);
       if(db_num_rows($result1)) {
         $query2 = "select * from modificateuracte where ";
-        $query2 .= "CODEACTE = '" . $this->code . "' ";
+        $query2 .= db_prepare("CODEACTE = %", $this->code);
         $query2 .= "and CODEACTIVITE = '4'";
         $query2 .= "and MODIFICATEUR = '7'";
         $result2 = db_exec($query2, $this->dbccam);
@@ -76,7 +76,7 @@ class CCodeCCAM {
   }
   
   function loadChaps() {
-    $query = "select * from actes where CODE = '$this->code'";
+    $query = db_prepare("select * from actes where CODE = %", $this->code);
     $result = db_exec($query, $this->dbccam);
     $row = db_fetch_array($result);
 
@@ -91,11 +91,11 @@ class CCodeCCAM {
     // On rentre les infos sur les chapitres
     foreach($this->chapitres as $key => $value) {
       $rang = $this->chapitres[$key]["db"];
-      $query = "select * from arborescence where CODEPERE = '$pere' and rang = '$rang'";
+      $query = db_prepare("select * from arborescence where CODEPERE = %1 and rang = %2", $pere, $rang);
       $result = db_exec($query, $this->dbccam);
       $row = db_fetch_array($result);
       
-      $query = "select * from notesarborescence where CODEMENU = '" . $row["CODEMENU"] . "'";
+      $query = db_prepare("select * from notesarborescence where CODEMENU = %", $row["CODEMENU"]);
       $result2 = db_exec($query, $this->dbccam);
       
       $track .= substr($row["RANG"], -2) . ".";
@@ -113,7 +113,7 @@ class CCodeCCAM {
    
   // Chargement des variables
   function Load() {
-    $query = "select * from actes where CODE = '$this->code'";
+    $query = db_prepare("select * from actes where CODE = %", $this->code);
     $result = db_exec($query, $this->dbccam);
     if(db_num_rows($result) == 0) {
       $this->code = "";
@@ -132,7 +132,7 @@ class CCodeCCAM {
       
       // Extraction des remarques
       $this->remarques = array();
-      $query = "select * from notes where CODEACTE = '$this->code'";
+      $query = db_prepare("select * from notes where CODEACTE = %", $this->code);
       $result = db_exec($query, $this->dbccam);
       while ($row = db_fetch_array($result)) {
         $this->remarques[] = str_replace("¶", "\n", $row["TEXTE"]);
@@ -141,7 +141,8 @@ class CCodeCCAM {
       // Extraction des activités
       $query = "select ACTIVITE as numero " .
           "\nfrom activiteacte " .
-          "\nwhere CODEACTE = '$this->code'";
+          "\nwhere CODEACTE = %";
+      $query = db_prepare($query, $this->code);
       $result = db_exec($query, $this->dbccam);
       while($obj = db_fetch_object($result)) {
         $obj->libelle = "";
@@ -163,7 +164,8 @@ class CCodeCCAM {
         // Type de l'activité
         $query = "select LIBELLE as `type`" .
             "\nfrom activite " .
-            "\nwhere CODE = '$activite->numero'";
+            "\nwhere CODE = %";
+        $query = db_prepare($query, $activite->numero);
         $result = db_exec($query, $this->dbccam);
         $obj = db_fetch_object($result);
         $activite->type = $obj->type;
@@ -172,15 +174,17 @@ class CCodeCCAM {
         $activite->modificateurs = array();
         $modificateurs =& $activite->modificateurs;
         $query = "select * from modificateuracte " .
-            "\nwhere CODEACTE = '$this->code'" .
-            "\nand CODEACTIVITE = '$activite->numero'";
+            "\nwhere CODEACTE = %1" .
+            "\nand CODEACTIVITE = %2";
+        $query = db_prepare($query, $this->code, $activite->numero);
         $result = db_exec($query, $this->dbccam);
         
         while($row = db_fetch_array($result)) {
           $query = "select CODE as code, LIBELLE as libelle" .
               "\nfrom modificateur " .
-              "\nwhere CODE = '" . $row["MODIFICATEUR"] . "'" .
+              "\nwhere CODE = %" .
               "\norder by CODE";
+          $query = db_prepare($query, $row["MODIFICATEUR"]);
           $modificateurs[] = db_fetch_object(db_exec($query, $this->dbccam));
         }
   
@@ -189,9 +193,10 @@ class CCodeCCAM {
         $phases =& $activite->phases;
         $query = "select PHASE as phase, PRIXUNITAIRE as tarif" .
             "\nfrom phaseacte " .
-            "\nwhere CODEACTE = '$this->code'" .
-            "\nand ACTIVITE = '$activite->numero'" .
+            "\nwhere CODEACTE = %1" .
+            "\nand ACTIVITE = %2" .
             "\norder by PHASE";
+        $query = db_prepare($query, $this->code, $activite->numero);
         $result = db_exec($query, $this->dbccam);
               
         while($obj = db_fetch_object($result)) {
@@ -215,12 +220,12 @@ class CCodeCCAM {
       }
       
       //On rentre les actes associés
-      $query = "select * from associabilite where CODEACTE = '" . $this->code . "' group by ACTEASSO";
+      $query = db_prepare("select * from associabilite where CODEACTE = % group by ACTEASSO", $this->code);
       $result = db_exec($query, $this->dbccam);
       $i = 0;
       while($row = db_fetch_array($result)) {
         $this->assos[$i]["code"] = $row["ACTEASSO"];
-        $query = "select * from actes where CODE = '" . $row["ACTEASSO"] . "'";
+        $query = db_prepare("select * from actes where CODE = %", $row["ACTEASSO"]);
         $result2 = db_exec($query, $this->dbccam);
         $row2 = db_fetch_array($result2);
         $this->assos[$i]["texte"] = $row2["LIBELLELONG"];
@@ -228,12 +233,12 @@ class CCodeCCAM {
       }
       
       //On rentre les actes incompatibles
-      $query = "select * from incompatibilite where CODEACTE = '" . $this->code . "' group by INCOMPATIBLE";
+      $query = db_prepare("select * from incompatibilite where CODEACTE = % group by INCOMPATIBLE", $this->code);
       $result = db_exec($query, $this->dbccam);
       $i = 0;
       while($row = db_fetch_array($result)) {
         $this->incomps[$i]["code"] = $row["INCOMPATIBLE"];
-        $query = "select * from actes where CODE = '" . $row["INCOMPATIBLE"] . "'";
+        $query = db_prepare("select * from actes where CODE = %", $row["INCOMPATIBLE"]);
         $result2 = db_exec($query, $this->dbccam);
         $row2 = db_fetch_array($result2);
         $this->incomps[$i]["texte"] = $row2["LIBELLELONG"];
@@ -241,12 +246,12 @@ class CCodeCCAM {
       }
       
       //On rentre la procédure associée
-      $query = "select * from procedures where CODEACTE = '" . $this->code . "'";
+      $query = db_prepare("select * from procedures where CODEACTE = %", $this->code);
       $result = db_exec($query, $this->dbccam);
       if(db_num_rows($result) > 0) {
         $row = db_fetch_array($result);
         $this->procedure["code"] = $row["CODEPROCEDURE"];
-        $query = "select LIBELLELONG from actes where CODE = '" . $this->procedure["code"] . "'";
+        $query = db_prepare("select LIBELLELONG from actes where CODE = %", $this->procedure["code"]);
         $result = db_exec($query, $this->dbccam);
         $row = db_fetch_array($result);
         $this->procedure["texte"] = $row["LIBELLELONG"];
