@@ -59,12 +59,13 @@ function delCode() {
 
 </script>
 
-<form name="manageCodes" action="?m={{$m}}" method="post" onsubmit="return false;">
+<form name="manageCodes" action="?m={{$m}}" method="post">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_planning_aed" />
   <input type="hidden" name="operation_id" value="{{$selOp->operation_id}}" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="codes_ccam" value="{{$selOp->codes_ccam}}" />
+  <input type="submit" disabled="disabled" style="display:none;"/>
   <table class="form">
     <tr>
       <td style="vertical-align:middle;">
@@ -81,11 +82,11 @@ function delCode() {
         <button class="tick" type="button" onclick="addCode()">Ajouter</button>
       </td>
       <th style="vertical-align:middle;">
-        <label for="anapath_1">Anapath</label>
+        <label for="anapath_1" title="Examen anatomie pathologique">Anapath :</label>
       </th>
       <td style="vertical-align:middle;">      
-        <input type="radio" name="anapath" value="1" {{if $selOp->anapath}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="anapath_1">Oui</label>
-        <input type="radio" name="anapath" value="0" {{if !$selOp->anapath}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="anapath_0">Non</label>
+        <input type="radio" onChange="submitFormAjax(this.form, 'systemMsg');" name="anapath" value="1" {{if $selOp->anapath}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="anapath_1">Oui</label>
+        <input type="radio" onChange="submitFormAjax(this.form, 'systemMsg');" name="anapath" value="0" {{if !$selOp->anapath}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="anapath_0">Non</label>
       </td>
     </tr>
     <tr>
@@ -97,11 +98,11 @@ function delCode() {
         <button class="search" type="button" onclick="popCode()">Rechercher</button>
       </td>
       <th style="vertical-align:middle;">
-        <label for="labo_1">Labo</label>
+        <label for="labo_1" title="Analyse biologique">Labo :</label>
       </th>
       <td style="vertical-align:middle;">      
-        <input type="radio" name="labo" value="1" {{if $selOp->labo}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="labo_1">Oui</label>
-        <input type="radio" name="labo" value="0" {{if !$selOp->labo}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="labo_0">Non</label>
+        <input type="radio" onChange="submitFormAjax(this.form, 'systemMsg');" name="labo" value="1" {{if $selOp->labo}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="labo_1">Oui</label>
+        <input type="radio" onChange="submitFormAjax(this.form, 'systemMsg');" name="labo" value="0" {{if !$selOp->labo}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="labo_0">Non</label>
       </td>
     </tr>
   </table>
