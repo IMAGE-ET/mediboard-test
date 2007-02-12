@@ -8,4 +8,4 @@
  * Mediboard additional custom combo plugin for FCKeditor
  */
 
-// FCKLang['Name']	= 'Value' ;
+FCKLang['mbPageBreak']  = 'Page break' ;

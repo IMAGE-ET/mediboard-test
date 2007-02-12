@@ -35,7 +35,7 @@ var FCKToolbarMbPageBreak = function() {
 }
 
 // Inherit from FCKToolbarButton.
-FCKToolbarMbPageBreak.prototype = new FCKToolbarButton("mbPageBreak", "mbPageBreak") ;
+FCKToolbarMbPageBreak.prototype = new FCKToolbarButton("mbPageBreak", FCKLang.mbPageBreak) ;
 
 FCKToolbarMbPageBreak.prototype.GetLabel = function() {
   return "mbPageBreak" ;

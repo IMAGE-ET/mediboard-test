@@ -12,7 +12,7 @@ FCKConfig.Debug = false;
 // Toolbar Configuration
 FCKConfig.ToolbarSets["Default"] = [
 	['Save','Preview'],
-	['Cut','Copy','Paste','PasteText','PasteWord','-','Print'],
+	['Cut','Copy','Paste','PasteText','PasteWord','-','mbPrint'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 	['Table','Rule','Image', 'Smiley','SpecialChar','mbPageBreak'],
 	['FitWindow','Source','About'],
@@ -92,5 +92,6 @@ for (var i = 0; i < aMbCombos.length; i++) {
 }
 aToolbarSet.push(aMbToolbar);
 
-FCKConfig.Plugins.Add( 'mbpagebreak', 'en,fr', sMbPluginsPath ) ;
-FCKConfig.Plugins.Add( 'mbcombo2.3.2', 'en,fr', sMbPluginsPath ) ;
+FCKConfig.Plugins.Add( 'mbpagebreak', 'en,fr', sMbPluginsPath );
+FCKConfig.Plugins.Add( 'mbcombo2.3.2', 'en,fr', sMbPluginsPath );
+FCKConfig.Plugins.Add( 'mbprint', 'en,fr', sMbPluginsPath );
