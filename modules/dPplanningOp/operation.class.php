@@ -40,6 +40,8 @@ class COperation extends CMbObject {
   var $type_anesth    = null;  
   var $rques          = null;
   var $rank           = null;
+  var $anapath        = null;
+  var $labo           = null;
 
   var $depassement    = null;
   var $annulee        = null;    // completé par $sejour->annule
@@ -127,7 +129,9 @@ class COperation extends CMbObject {
       "sortie_reveil"  => "time",
       "induction_debut"=> "time",
       "induction_fin"  => "time",
-      "entree_bloc"    => "time"
+      "entree_bloc"    => "time",
+      "anapath"        => "bool|notNull",
+      "labo"           => "bool|notNull"
     );
   }
   

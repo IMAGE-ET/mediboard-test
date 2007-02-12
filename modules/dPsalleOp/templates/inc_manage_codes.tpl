@@ -80,6 +80,13 @@ function delCode() {
         <input type="text" size="7" name="_newCode" />
         <button class="tick" type="button" onclick="addCode()">Ajouter</button>
       </td>
+      <th style="vertical-align:middle;">
+        <label for="anapath_1">Anapath</label>
+      </th>
+      <td style="vertical-align:middle;">      
+        <input type="radio" name="anapath" value="1" {{if $selOp->anapath}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="anapath_1">Oui</label>
+        <input type="radio" name="anapath" value="0" {{if !$selOp->anapath}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="anapath_0">Non</label>
+      </td>
     </tr>
     <tr>
       <td style="vertical-align: middle;">
@@ -88,6 +95,13 @@ function delCode() {
       </td>
       <td style="vertical-align:middle; text-align:right;">
         <button class="search" type="button" onclick="popCode()">Rechercher</button>
+      </td>
+      <th style="vertical-align:middle;">
+        <label for="labo_1">Labo</label>
+      </th>
+      <td style="vertical-align:middle;">      
+        <input type="radio" name="labo" value="1" {{if $selOp->labo}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="labo_1">Oui</label>
+        <input type="radio" name="labo" value="0" {{if !$selOp->labo}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="labo_0">Non</label>
       </td>
     </tr>
   </table>

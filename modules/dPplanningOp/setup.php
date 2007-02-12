@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.62";
+$config["mod_version"]     = "0.63";
 $config["mod_type"]        = "user";
 
 class CSetupdPplanningOp extends CSetup {
@@ -630,7 +630,13 @@ class CSetupdPplanningOp extends CSetup {
             "\nADD `induction_fin` TIME AFTER `induction_debut`";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.62";
+    $this->makeRevision("0.62");
+    $sql = "ALTER TABLE `operations`" .
+            "\nADD `anapath` enum('0','1') NOT NULL DEFAULT '0'," .
+            "\nADD `labo` enum('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.63";
   }
 }
 ?>

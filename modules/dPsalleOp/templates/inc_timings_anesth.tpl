@@ -172,7 +172,7 @@
             
             <table>
               <tr>
-                <td rowspan="2">
+                <td rowspan="2" style="vertical-align: middle;">
                   {{if $canEdit || $modif_operation}}
                   <select name="type_anesth" onchange="submitFormAjax(this.form, 'systemMsg');">
                     <option value="">&mdash; Type d'anesthésie</option>
