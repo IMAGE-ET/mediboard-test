@@ -119,6 +119,24 @@ class CMedecin extends CMbObject {
       "idfield"   => "patient_id", 
       "joinfield" => "medecin_traitant"
     );
+    $tables[] = array (
+      "label"     => "patient(s)", 
+      "name"      => "patients", 
+      "idfield"   => "patient_id", 
+      "joinfield" => "medecin1"
+    );
+    $tables[] = array (
+      "label"     => "patient(s)", 
+      "name"      => "patients", 
+      "idfield"   => "patient_id", 
+      "joinfield" => "medecin2"
+    );
+    $tables[] = array (
+      "label"     => "patient(s)", 
+      "name"      => "patients", 
+      "idfield"   => "patient_id", 
+      "joinfield" => "medecin3"
+    );
     
     return parent::canDelete( $msg, $oid, $tables );
   }
