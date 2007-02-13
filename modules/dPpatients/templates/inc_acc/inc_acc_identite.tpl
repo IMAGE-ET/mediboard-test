@@ -10,22 +10,22 @@
   
   <tr>
     <th><label for="nom" title="Nom du patient. Obligatoire">Nom </label></th>
-    <td><input tabindex="101" type="text" name="nom" value="{{$patient->nom}}" title="{{$patient->_props.nom}}" /></td>
+    <td>{{mb_field object=$patient field="nom" tabindex="101"}}</td>
     <th rowspan="2"><label for="adresse" title="Adresse du patient">Adresse</label></th>
-    <td rowspan="2"><textarea tabindex="151" name="adresse" title="{{$patient->_props.adresse}}">{{$patient->adresse}}</textarea></td>
+    <td rowspan="2">{{mb_field object=$patient field="adresse" tabindex="151"}}</td>
   </tr>
   
   <tr>
     <th><label for="prenom" title="Prénom du patient. Obligatoire">Prénom </label></th>
-    <td><input tabindex="102" type="text" name="prenom" value="{{$patient->prenom}}" title="{{$patient->_props.prenom}}" /></td>
+    <td>{{mb_field object=$patient field="prenom" tabindex="102"}}</td>
   </tr>
   
   <tr>
     <th><label for="nom_jeune_fille" title="Nom de jeune fille d'une femme mariée">Nom de jeune fille</label></th>
-    <td><input tabindex="103" type="text" name="nom_jeune_fille" title="{{$patient->_props.nom_jeune_fille}}" value="{{$patient->nom_jeune_fille}}" /></td>
+    <td>{{mb_field object=$patient field="nom_jeune_fille" tabindex="103"}}</td>
     <th><label for="cp" title="Code postal">Code Postal</label></th>
     <td>
-      <input tabindex="152" size="31" maxlength="5" type="text" name="cp" value="{{$patient->cp}}" title="{{$patient->_props.cp}}" />
+      {{mb_field object=$patient field="cp" tabindex="152" size="31" maxlength="5"}}
       <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
     </td>
   </tr>
@@ -33,18 +33,11 @@
   <tr>
     <th><label for="sexe" title="Sexe du patient">Sexe</label></th>
     <td>
-      <select tabindex="104" name="sexe" title="{{$patient->_props.sexe}}">
-        {{if $patient->patient_id}}
-        {{assign var="selected" value=$patient->sexe}}
-        {{else}}
-        {{assign var="selected" value=$patient->_enums.sexe.0}}
-        {{/if}}
-        {{html_options options=$patient->_enumsTrans.sexe selected=$selected}}
-      </select>
+      {{mb_field object=$patient field="sexe" defaultSelected="m" tabindex="104"}}
     </td>
     <th><label for="ville" title="Ville du patient">Ville</label></th>
     <td>
-      <input tabindex="153" size="31" type="text" name="ville" value="{{$patient->ville}}" title="{{$patient->_props.ville}}" />
+      {{mb_field object=$patient field="ville" tabindex="153" size="31"}}
       <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
     </td>
   </tr>
@@ -58,53 +51,46 @@
     </td>
     <th><label for="pays" title="Pays de domicile du patient">Pays</label></th>
     <td>
-      <input tabindex="154" size="31" type="text" name="pays" value="{{$patient->pays}}" title="{{$patient->_props.pays}}" />
+      {{mb_field object=$patient field="pays" tabindex="154" size="31"}}
       <div style="display:none;" class="autocomplete" id="pays_auto_complete"></div>
     </td>
   </tr>
 
   <tr>
     <th><label for="lieu_naissance" title="Lieu de naissance du patient">Lieu de naissance</label></th>
-    <td><input tabindex="108" type="text" name="lieu_naissance" title="{{$patient->_props.lieu_naissance}}" value="{{$patient->lieu_naissance}}" /></td>
+    <td>{{mb_field object=$patient field="lieu_naissance" tabindex="108"}}</td>
     <th><label for="_tel1" title="Numéro de téléphone filaire">Téléphone</label></th>
     <td>
-      <input tabindex="155" type="text" name="_tel1" size="2" maxlength="2" value="{{$patient->_tel1}}" title="num|length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
-      <input tabindex="156" type="text" name="_tel2" size="2" maxlength="2" value="{{$patient->_tel2}}" title="num|length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
-      <input tabindex="157" type="text" name="_tel3" size="2" maxlength="2" value="{{$patient->_tel3}}" title="num|length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
-      <input tabindex="158" type="text" name="_tel4" size="2" maxlength="2" value="{{$patient->_tel4}}" title="num|length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
-      <input tabindex="159" type="text" name="_tel5" size="2" maxlength="2" value="{{$patient->_tel5}}" title="num|length|2" />
+      {{mb_field object=$patient field="_tel1" tabindex="155" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel2', 2)"}} -
+      {{mb_field object=$patient field="_tel2" tabindex="156" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel3', 2)"}} -
+      {{mb_field object=$patient field="_tel3" tabindex="157" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel4', 2)"}} -
+      {{mb_field object=$patient field="_tel4" tabindex="158" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel5', 2)"}} -
+      {{mb_field object=$patient field="_tel5" tabindex="159" size="2" maxlength="2" spec="num|length|2"}}
     </td>
   </tr>
   
   <tr>
     <th><label for="nationalite" title="Nationnalité du patient">Nationnalité</label></th>
     <td>
-      <select tabindex="109" name="nationalite" title="{{$patient->_props.nationalite}}">
-        {{if $patient->patient_id}}
-        {{assign var="selected" value=$patient->nationalite}}
-        {{else}}
-        {{assign var="selected" value=$patient->_enums.nationalite.0}}
-        {{/if}}
-        {{html_options options=$patient->_enumsTrans.nationalite selected=$selected}}
-      </select>
+      {{mb_field object=$patient field="nationalite" defaultSelected="local" tabindex="109"}}
     </td>
     <th><label for="_tel21" title="Numéro de téléphone portable">Portable</label></th>
     <td>
-      <input tabindex="160" type="text" name="_tel21" size="2" maxlength="2" value="{{$patient->_tel21}}" title="num|length|2" onkeyup="followUp(this, '_tel22', 2)" /> - 
-      <input tabindex="161" type="text" name="_tel22" size="2" maxlength="2" value="{{$patient->_tel22}}" title="num|length|2" onkeyup="followUp(this, '_tel23', 2)" /> -
-      <input tabindex="162" type="text" name="_tel23" size="2" maxlength="2" value="{{$patient->_tel23}}" title="num|length|2" onkeyup="followUp(this, '_tel24', 2)" /> -
-      <input tabindex="163" type="text" name="_tel24" size="2" maxlength="2" value="{{$patient->_tel24}}" title="num|length|2" onkeyup="followUp(this, '_tel25', 2)" /> -
-      <input tabindex="164" type="text" name="_tel25" size="2" maxlength="2" value="{{$patient->_tel25}}" title="num|length|2" />
+      {{mb_field object=$patient field="_tel21" tabindex="160" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel22', 2)"}} -
+      {{mb_field object=$patient field="_tel22" tabindex="161" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel23', 2)"}} -
+      {{mb_field object=$patient field="_tel23" tabindex="162" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel24', 2)"}} -
+      {{mb_field object=$patient field="_tel24" tabindex="163" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel25', 2)"}} -
+      {{mb_field object=$patient field="_tel25" tabindex="164" size="2" maxlength="2" spec="num|length|2"}}
     </td>
   </tr>
   
   <tr>
     <th><label for="rques" title="Remarques générales concernant le patient">Remarques</label></th>
     <td>
-      <textarea tabindex="110" title="{{$patient->_props.rques}}" name="rques">{{$patient->rques}}</textarea>
+      {{mb_field object=$patient field="rques" tabindex="110"}}
     </td>
     <th><label for="profession" title="Profession du patient">Profession</label></th>
-    <td><input onblur="oAccord.changeTabAndFocus(1, this.form.regime_sante);" tabindex="165" type="text" name="profession" value="{{$patient->profession}}" title="{{$patient->_props.profession}}" /></td>
+    <td>{{mb_field object=$patient field="profession" tabindex="165" onblur="oAccord.changeTabAndFocus(1, this.form.regime_sante);"}}</td>
   </tr>
 
 </table>
