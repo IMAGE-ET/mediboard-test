@@ -52,7 +52,7 @@ foreach($array_list_pref_generale as $namePref){
 // Préférences par Module
 $array_list_module_pref = array();
 $array_list_module_pref["dPpatients"] = array("DEPARTEMENT");
-$array_list_module_pref["dPcabinet"]  = array("AFFCONSULT","MODCONSULT","AUTOADDSIGN");
+$array_list_module_pref["dPcabinet"]  = array("AFFCONSULT","MODCONSULT","AUTOADDSIGN", "InterMaxDir");
 $array_list_module_pref["system"]     = array("INFOSYSTEM");
 
 foreach($array_list_module_pref as $modulename => $listPrefs){

@@ -85,6 +85,7 @@
   <tr>
     <th class="category" colspan="2">{{tr}}module-dPcabinet-long{{/tr}}</th>
   </tr>
+
   <tr>
     <th>
       <label for="pref_name[AFFCONSULT]" title="Type de vue par défaut des consultations">{{tr}}Vue des Consultations par défaut{{/tr}}</label>
@@ -96,6 +97,7 @@
       </select>
     </td>
   </tr>
+
   <tr>
     <th>
       <label for="pref_name[MODCONSULT]" title="Mode d'affichage des consultations">{{tr}}Mode d'affichage des Consultations{{/tr}}</label>
@@ -107,9 +109,11 @@
       </select>
     </td>
   </tr>
+
   <tr>
     <th class="category" colspan="2">{{tr}}module-dPcabinet-long{{/tr}} - Anesth</th>
   </tr>
+
   <tr>
     <th>
       <label for="pref_name[AUTOADDSIGN]" title="Ajout automatique des éléments significatifs">{{tr}}Ajout automatique des éléments significatifs{{/tr}}</label>
@@ -121,12 +125,22 @@
       </select>
     </td>
   </tr>
+
+  <tr>
+    <th>
+      <label for="pref_name[InterMaxDir]" title="{{tr}}pref-InterMaxDir-desc{{/tr}}">{{tr}}pref-InterMaxDir{{/tr}}</label>
+    </th>
+    <td>
+      <input class="str" type="text" name="pref_name[InterMaxDir]" value="{{$prefsUser.dPcabinet.InterMaxDir}}" />
+    </td>
+  </tr>
   {{/if}}
 
   {{if $prefsUser.system}}
   <tr>
     <th class="category" colspan="2">{{tr}}module-system-long{{/tr}}</th>
   </tr>
+
   <tr>
     <th>
       <label for="pref_name[INFOSYSTEM]" title="Afficher les informations système">{{tr}}Afficher les informations système{{/tr}}</label>

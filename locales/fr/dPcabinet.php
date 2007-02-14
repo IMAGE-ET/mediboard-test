@@ -1,4 +1,5 @@
 <?php
+$locales['pref-InterMaxDir-desc'] = 'Répertoire d\'Interopérabilité de LogicMax sur le poste utilisateur';
 $locales['CAddiction.type.cannabis'] = 'Cannabis';
 $locales['CAddiction.type.oenolisme'] = 'Oenolisme';
 $locales['CAddiction.type.tabac'] = 'Tabac';
@@ -180,4 +181,5 @@ $locales['CExamPossum.uree.sup15.1'] = '4 &mdash; >= 15.1 mmol/L';
 $locales['CPlageconsult'] = 'Plage de Consultation';
 $locales['CTarif'] = 'Tarifs';
 $locales['CTechniqueComp'] = 'Techniques Complémentaires';
+$locales['pref-InterMaxDir'] = 'Répertoire d\'InterMax';
 ?>
