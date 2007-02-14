@@ -27,6 +27,8 @@ class CMouvSejourEcap extends CMouvement400 {
   protected $id400Prats = array();
   protected $id400Opers = array();
   
+  static $cache = array();
+  
   function __construct() {
     $this->base = "ECAPFILE";
     $this->table = "TRSJ0";
@@ -78,6 +80,12 @@ class CMouvSejourEcap extends CMouvement400 {
   
   function syncEtablissement() {
     $CIDC = $this->consume("A_CIDC");
+    
+    if ($this->etablissement = @self::$cache["CGroups"][$CIDC]) {
+      mbTrace($CIDC, "Used cache for 'CGroups'");
+      return;
+    }
+    
     $etab400 = new CRecordSante400();
     $etab400->query("SELECT * FROM $this->base.ECCIPF WHERE CICIDC = $CIDC");
     $this->etablissement = new CGroups;
@@ -103,6 +111,8 @@ class CMouvSejourEcap extends CMouvement400 {
     $id400EtabSHS->store();
     
     $this->trace($etab400->data, "Données établissement non importées");
+    
+    self::$cache["CGroups"][$CIDC] = $this->etablissement; 
 
     $this->markStatus(self::STATUS_ETABLISSEMENT, 1);
   }
@@ -136,6 +146,7 @@ class CMouvSejourEcap extends CMouvement400 {
      
     $prat400 = new CRecordSante400();
     $prat400->loadOne($query, $queryValues);
+    $this->trace($prat400->data, "Données praticien à importer");
 
     $nomsPraticien     = split(" ", $prat400->consume("PRZNOM"));
     $prenomsPraticiens = split(" ", $prat400->consume("PRZPRE"));
@@ -193,7 +204,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $id400PratSHS->store();
     
     $this->praticiens[$CPRT] = $praticien;
-    $this->trace($prat400->data, "Données praticien non importées");
+    $this->trace($praticien->getProps(), "Praticien importé");
     $this->markStatus(self::STATUS_PRATICIEN, count($this->praticiens));
   }
 
@@ -465,7 +476,6 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->markStatus(self::STATUS_OPERATION, count($opersECap));
     if (!count($opersECap)) {
       $this->markStatus(self::STATUS_ACTES, 0);
-      
     }
   }
 

@@ -78,14 +78,14 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
   <td>{{$curr_mouv->rec}}</td>
   <td>{{$curr_mouv->type}}</td>
   <td>{{$curr_mouv->prod}}</td>
-  <td>{{if @$curr_mouv->status.0 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.1 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.2 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.3 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.4 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.5 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.6 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.7 != "-"}}<div class="message">Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.0 != "-"}}<div class="message">{{$curr_mouv->status.0}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.1 != "-"}}<div class="message">{{$curr_mouv->status.1}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.2 != "-"}}<div class="message">{{$curr_mouv->status.2}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.3 != "-"}}<div class="message">{{$curr_mouv->status.3}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.4 != "-"}}<div class="message">{{$curr_mouv->status.4}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.5 != "-"}}<div class="message">{{$curr_mouv->status.5}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.6 != "-"}}<div class="message">{{$curr_mouv->status.6}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  <td>{{if @$curr_mouv->status.7 != "-"}}<div class="message">{{$curr_mouv->status.7}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
   <td>{{$curr_mouv->status}}</td>
 
   {{if !$dialog}}

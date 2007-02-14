@@ -46,6 +46,9 @@ foreach ($mouvs as $mouv) {
   }
 }
 
+//mbTrace(CRecordSante400::$chrono, "Chrono");
+
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("connection", CRecordSante400::$dbh);

@@ -31,7 +31,7 @@ class CRecordSante400 {
     self::$chrono =& $dbChronos[$dsn];
     self::$chrono->start();
     self::$dbh = new PDO("odbc:$dsn", $dsnConfig["user"], $dsnConfig["pass"]);
-    self::$chrono->stop();
+    self::$chrono->stop("connection");
   }
 
   function multipleLoad($sql, $values = array(), $max = 100, $class = "CRecordSante400") {
@@ -48,11 +48,11 @@ class CRecordSante400 {
       
       self::$chrono->start();
       $sth->execute($values);
-      self::$chrono->stop();
+      self::$chrono->stop("multiple load execute");
 
       self::$chrono->start();
       while ($data = $sth->fetch(PDO::FETCH_ASSOC) and $max--) {
-        self::$chrono->stop();
+        self::$chrono->stop("multiple load fetch");
         $record = new $class;
         $record->data = $data;
         $records[] = $record;
@@ -77,7 +77,7 @@ class CRecordSante400 {
       self::$chrono->start();
       $sth->execute($values);
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);
-      self::$chrono->stop();
+      self::$chrono->stop("query");
     } catch (PDOException $e) {
       trigger_error("Error querying '$sql' : " . $e->getMessage(), E_USER_ERROR);
     }
