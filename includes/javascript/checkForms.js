@@ -75,9 +75,6 @@ var ElementChecker = {
         sMsg = "Spécification Introuvable";
     }
     return sMsg;
-    
-    // lance la fonciton selon la spec principale
-    //return this.
   },
   checkParams : function(){
     // NotNull
