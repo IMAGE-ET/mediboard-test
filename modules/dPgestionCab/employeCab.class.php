@@ -42,7 +42,7 @@ class CEmployeCab extends CMbObject {
       "function"    => "notNull str",
       "adresse"     => "str",
       "ville"       => "str",
-      "cp"          => "numchar|length|5 confidential"
+      "cp"          => "numchar length|5 confidential"
     );
   }
   

@@ -40,8 +40,8 @@ class CUserLog extends CMbObject {
       "user_id"      => "notNull refMandatory",
       "date"         => "notNull dateTime",
       "object_id"    => "notNull refMandatory",
-      "object_class" => "notNull str|maxLength|25",
-      "type"         => "notNull enum|create|store|delete",
+      "object_class" => "notNull str maxLength|25",
+      "type"         => "notNull enum list|create|store|delete",
       "fields"       => "text"
     );
   }

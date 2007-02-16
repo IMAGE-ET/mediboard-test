@@ -29,7 +29,7 @@
     </td>
     <th><label for="object_class" title="Classe de l'object">Classe</label></th>
     <td>
-      <select name="object_class" title="str|maxLength|25">
+      <select name="object_class" title="str maxLength|25">
         <option value="0">&mdash; Toutes les classes</option>
         {{foreach from=$listClasses|smarty:nodefaults item=curr_class}}
         <option value="{{$curr_class}}" {{if $curr_class == $object_class}}selected="selected"{{/if}}>
@@ -42,7 +42,7 @@
   <tr>
     <th><label for="type" title="Action effectuée">Action</label></th>
     <td>
-      <select name="type" title="enum|0|create|store|delete">
+      <select name="type" title="enum list|0|create|store|delete">
         <option value="0">&mdash; Tous les types</option>
         {{html_options options=$userLog->_enumsTrans.type selected=$type}}
       </select>

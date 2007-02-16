@@ -26,8 +26,8 @@ class CChapitreDoc extends CMbObject {
 
   function getSpecs() {
     return array (
-      "nom"  => "notNull str|maxLength|50",
-      "code" => "notNull str|maxLength|10"
+      "nom"  => "notNull str maxLength|50",
+      "code" => "notNull str maxLength|10"
     );
   }
   

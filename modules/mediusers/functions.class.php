@@ -53,14 +53,14 @@ class CFunctions extends CMbObject {
   function getSpecs() {
     return array (
       "group_id" => "notNull refMandatory",
-      "type"     => "notNull enum|administratif|cabinet",
+      "type"     => "notNull enum list|administratif|cabinet",
       "text"     => "notNull str confidential",
-      "color"    => "notNull str|length|6",
+      "color"    => "notNull str length|6",
       "adresse"  => "text",
-      "cp"       => "numchar|length|5",
-      "ville"    => "str|maxLength|50",
-      "tel"      => "numchar|length|10",
-      "fax"      => "numchar|length|10",
+      "cp"       => "numchar length|5",
+      "ville"    => "str maxLength|50",
+      "tel"      => "numchar length|10",
+      "fax"      => "numchar length|10",
       "soustitre"=> "text"
     );
   }

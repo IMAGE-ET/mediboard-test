@@ -38,8 +38,8 @@ class CTarif extends CMbObject {
       "chir_id"     => "ref",
       "function_id" => "ref",
       "description" => "notNull str confidential",
-      "secteur1"    => "notNull currency|min|0",
-      "secteur2"    => "currency|min|0"
+      "secteur1"    => "notNull currency min|0",
+      "secteur2"    => "currency min|0"
     );
   }
   

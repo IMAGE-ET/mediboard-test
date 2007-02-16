@@ -104,13 +104,13 @@ class COperation extends CMbObject {
       "salle_id"       => "ref",
       "codes_ccam"     => "str",
       "date"           => "date",
-      "code_uf"        => "str|length|3",
-      "libelle_uf"     => "str|maxLength|35",
+      "code_uf"        => "str length|3",
+      "libelle_uf"     => "str maxLength|35",
       "libelle"        => "str confidential",
-      "cote"           => "notNull enum|droit|gauche|bilatéral|total",
+      "cote"           => "notNull enum list|droit|gauche|bilatéral|total",
       "temp_operation" => "time",
-      "entree_salle"    => "time",
-      "sortie_salle"    => "time",
+      "entree_salle"   => "time",
+      "sortie_salle"   => "time",
       "time_operation" => "time",
       "examen"         => "text confidential",
       "materiel"       => "text confidential",
@@ -118,8 +118,8 @@ class COperation extends CMbObject {
       "info"           => "bool",
       "type_anesth"    => "ref",
       "rques"          => "text confidential",
-      "rank"           => "num|max|255",
-      "depassement"    => "currency|min|0 confidential",
+      "rank"           => "num max|255",
+      "depassement"    => "currency min|0 confidential",
       "annulee"        => "bool",
       "pose_garrot"    => "time",
       "debut_op"       => "time",
@@ -130,8 +130,8 @@ class COperation extends CMbObject {
       "induction_debut"=> "time",
       "induction_fin"  => "time",
       "entree_bloc"    => "time",
-      "anapath"        => "bool|notNull",
-      "labo"           => "bool|notNull"
+      "anapath"        => "bool notNull",
+      "labo"           => "bool notNull"
     );
   }
   

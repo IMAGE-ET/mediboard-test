@@ -65,7 +65,7 @@ class CAideSaisie extends CMbObject {
   function getSpecs() {
     return array (
       "user_id"     => "ref",
-      "function_id" => "ref|xor|user_id",
+      "function_id" => "ref xor|user_id",
       "class"       => "notNull str",
       "field"       => "notNull str",
       "name"        => "notNull str",

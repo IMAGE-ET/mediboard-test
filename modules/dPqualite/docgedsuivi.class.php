@@ -40,7 +40,7 @@ class CDocGedSuivi extends CMbObject {
       "doc_ged_id"       => "notNull refMandatory",
       "file_id"          => "ref",
       "remarques"        => "notNull text",
-      "etat"             => "notNull enum|0|16|32|48|64",
+      "etat"             => "notNull enum list|0|16|32|48|64",
       "date"             => "dateTime",
       "actif"            => "bool"
     );

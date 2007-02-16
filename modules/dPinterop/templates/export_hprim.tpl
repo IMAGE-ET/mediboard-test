@@ -175,7 +175,7 @@ function choosePreselection(oSelect) {
   
   <tr>
    <th><label for="sc_patient_id" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label></th>
-    <td><input type="text" title="notNull num|length|8" name="sc_patient_id" value="{{$mbSejour->_ref_patient->SHS}}" size="8" maxlength="8" /></td>
+    <td><input type="text" title="notNull num length|8" name="sc_patient_id" value="{{$mbSejour->_ref_patient->SHS}}" size="8" maxlength="8" /></td>
   </tr>
   
   <tr>
@@ -184,7 +184,7 @@ function choosePreselection(oSelect) {
       Suggestion :
     </th>
     <td>
-      <input type="text" title="notNull num|length|8" name="sc_venue_id" value="{{$mbSejour->venue_SHS}}" size="8" maxlength="8" />
+      <input type="text" title="notNull num length|8" name="sc_venue_id" value="{{$mbSejour->venue_SHS}}" size="8" maxlength="8" />
       <br />{{$mbSejour->_venue_SHS_guess}}
     </td>
   </tr>
@@ -217,12 +217,12 @@ function choosePreselection(oSelect) {
   
   <tr>
     <th><label for="cmca_uf_code" title="Choisir un code pour l'unité fonctionnelle">Code de l'unité fonctionnelle</label></th>
-    <td><input type="text" title="notNull str|maxLength|10" name="cmca_uf_code" value="{{$mbOp->code_uf}}" size="10" maxlength="10" /></td>
+    <td><input type="text" title="notNull str maxLength|10" name="cmca_uf_code" value="{{$mbOp->code_uf}}" size="10" maxlength="10" /></td>
   </tr>
 
   <tr>
     <th><label for="cmca_uf_libelle" title="Choisir un libellé pour l'unité fonctionnelle">Libellé de l'unité fonctionnelle</label></th>
-    <td><input type="text" title="notNull str|maxLength|35" name="cmca_uf_libelle" value="{{$mbOp->libelle_uf}}" size="35" maxlength="35" /></td>
+    <td><input type="text" title="notNull str maxLength|35" name="cmca_uf_libelle" value="{{$mbOp->libelle_uf}}" size="35" maxlength="35" /></td>
   </tr>
   {{/if}}
 

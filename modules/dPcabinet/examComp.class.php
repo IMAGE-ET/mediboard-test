@@ -32,8 +32,8 @@ class CExamComp extends CMbObject {
     return array (
       "consultation_id" => "notNull refMandatory",
       "examen"          => "text",
-      "realisation"     => "notNull enum|avant|pendant",
-      "fait"            => "num|minMax|0|1"
+      "realisation"     => "notNull enum list|avant|pendant",
+      "fait"            => "num minMax|0|1"
     );
   }
   

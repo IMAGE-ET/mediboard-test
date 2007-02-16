@@ -37,7 +37,7 @@ class CTempsOp extends CMbObject {
   function getSpecs() {
     return array (
       "chir_id"         => "ref",
-      "nb_intervention" => "num|pos",
+      "nb_intervention" => "num pos",
       "estimation"      => "time",
       "occup_moy"       => "time",
       "occup_ecart"     => "time",

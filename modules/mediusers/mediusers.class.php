@@ -62,23 +62,29 @@ class CMediusers extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
 
     static $user_props = array (
-      "_user_username"   => "notNull str|minLength|4",
-      "_user_password"   => "str|minLength|4",
+      "_user_username"   => "notNull str minLength|4",
+      "_user_password"   => "str minLength|4",
       "_user_first_name" => "str",
       "_user_last_name"  => "notNull str confidential",
       "_user_email"      => "str confidential",
-      "_user_phone"      => "num|length|10 confidential",
+      "_user_phone"      => "num length|10 confidential",
       "_user_adresse"    => "str confidential",
-      "_user_cp"         => "num|length|5 confidential",
+      "_user_cp"         => "num length|5 confidential",
       "_user_ville"      => "str confidential"
       );
       $this->_user_props =& $user_props;
+      
+      static $user_specs = null;
+      if(!$user_specs){
+        $_user_specs = $this->getSpecsObj($this->_user_props);
+      }
+      $this->_user_specs =& $user_specs;
   }
 
   function getSpecs() {
     return array (
       "remote"        => "bool",
-      "adeli"         => "numchar|length|9 confidential",
+      "adeli"         => "numchar length|9 confidential",
       "function_id"   => "notNull refMandatory",
       "discipline_id" => "ref",
       "titres"        => "text",
@@ -191,7 +197,7 @@ class CMediusers extends CMbObject {
       $this->_user_cp         = $user->user_zip;
       $this->_user_ville      = $user->user_city;
       // Encrypt this datas
-      $this->checkConfidential($this->_user_props);
+      $this->checkConfidential($this->_user_specs);
       $this->_view            = $this->_user_last_name." ".$this->_user_first_name;
       $this->_shortview       = "";
       $arrayLastName = explode(" ", $this->_user_last_name);

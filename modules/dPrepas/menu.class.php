@@ -59,8 +59,8 @@ class CMenu extends CMbObject {
       "sans_residu" => "bool",
       "modif"       => "bool",
       "debut"       => "notNull date",
-      "repetition"  => "notNull num|pos",
-      "nb_repet"    => "notNull num|pos"
+      "repetition"  => "notNull num pos",
+      "nb_repet"    => "notNull num pos"
     );
   }
   

@@ -1,0 +1,93 @@
+<?php /* $Id: $ */
+
+/**
+ *  @package Mediboard
+ *  @subpackage classes
+ *  @version $Revision: $
+ *  @author Sébastien Fillonneau
+*/
+
+require_once("./classes/mbFieldSpec.class.php");
+
+class CFloatSpec extends CMbFieldSpec {
+  
+  var $min    = null;
+  var $max    = null;
+  var $pos    = null;
+  var $minMax = null;
+  
+  function checkProperty(&$object){
+    $fieldName = $this->fieldName;
+    $propValue = $object->$fieldName;
+    
+    $propValue = $this->checkNumeric($propValue, false);
+    if($propValue === null){
+      return "n'est pas une valeur décimale (utilisez le . pour la virgule)";
+    }
+    
+    // pos
+    if($this->pos){
+      if ($propValue <= 0) {
+        return "Doit avoir une valeur positive";
+      }
+    }
+    
+    // min
+    if($this->min){
+      if(!$min = $this->checkNumeric($this->min, false)){
+        trigger_error("Spécification de minimum numérique invalide (min = $this->min)", E_USER_WARNING);
+        return "Erreur système";
+      }
+      if ($propValue < $min) {
+        return "Doit avoir une valeur minimale de $min";
+      }
+    }
+      
+    // max
+    if($this->max){
+      if(!$max = $this->checkNumeric($this->max, false)){
+        trigger_error("Spécification de maximum numérique invalide (max = $this->max)", E_USER_WARNING);
+        return "Erreur système";
+      }      
+      if ($propValue > $max) {
+        return "Doit avoir une valeur maximale de $max";
+      }
+    }
+     
+    // minMax
+    if($this->minMax){
+      $specFragments = explode("|", $this->minMax);
+      if(count($specFragments) != 2
+         || !$min= $this->checkNumeric(@$specFragments[0], false)
+         || !$max= $this->checkNumeric(@$specFragments[1], false)){
+        trigger_error("Spécification de minimum maximum numérique invalide (minMax = $this->minMax)", E_USER_WARNING);
+        return "Erreur système";
+      }
+      if($propValue>$max || $propValue<$min){
+        return "N'est pas compris entre $min et $max";
+      }
+    }
+    return null;
+  }
+  
+  function getConfidential(&$object){
+    $fieldName = $this->fieldName;
+    $propValue =& $object->$fieldName;
+    
+    $propValue = $this->randomString($this->_nums, 2).".".$this->randomString($this->_nums, 2);
+  }
+  
+  function checkFieldType(){
+    return "text";
+  }
+  
+  function getDBSpec(){
+    $type_sql = "float";
+    if($this->pos){
+      $type_sql = "float unsigned";
+    }
+    return $type_sql;
+  }
+}
+
+?>

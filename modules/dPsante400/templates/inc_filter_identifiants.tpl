@@ -20,7 +20,7 @@
       <label for="object_class" title="Classe de l'object">Classe</label>
     </th>
     <td>
-      <select name="object_class" title="str|maxLength|25">
+      <select name="object_class" title="str maxLength|25">
         <option value="">&mdash; Toutes les classes</option>
         {{foreach from=$listClasses|smarty:nodefaults item=curr_class}}
         <option value="{{$curr_class}}" {{if $curr_class == $filter->object_class}}selected="selected"{{/if}}>

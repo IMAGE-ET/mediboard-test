@@ -43,6 +43,7 @@ class CMbObject {
 
   var $_aides      = array(); // aides à la saisie
   var $_props      = array(); // properties specifications
+  var $_specs      = array();
   var $_enums      = array(); // enums fields elements
   var $_enumsTrans = array(); // enums fields translated elements
   var $_seek       = array(); // seekable fields
@@ -87,6 +88,15 @@ class CMbObject {
     }
         
     $this->_props =& $props;
+    
+    
+    
+    static $specsObj = null;
+    
+    if (!$specsObj) {
+      $specsObj =& $this->getSpecsObj();
+    }
+    $this->_specs =& $specsObj;
     
     static $seeks = null;
     if (!$seeks) {
@@ -229,12 +239,12 @@ class CMbObject {
    * Bind an object with an array
    */
 
-  function bind($hash) {
+  function bind($hash, $doStripSlashes = true) {
     if (!is_array($hash)) {
       $this->_error = get_class($this)."::bind failed.";
       return false;
     } else {
-      bindHashToObject($hash, $this);
+      bindHashToObject($hash, $this, $doStripSlashes);
       return true;
     }
   }
@@ -678,6 +688,17 @@ class CMbObject {
   function getSpecs() {
     return array();
   }
+  
+  function getSpecsObj($specs = null){
+    if($specs === null){
+      $specs =& $this->_props;
+    }
+    $spec = array();
+    foreach($specs as $k => $v){
+      $spec[$k] = CMbFieldSpecFact::getSpec($this, $k, $v);
+    }
+    return $spec;
+  }
 
   /**
    * Build Enums variant returning values
@@ -686,7 +707,9 @@ class CMbObject {
     global $AppUI;
     $enums = array();
     foreach ($this->_props as $propName => $propSpec) {
-      if($specFragments = $this->lookupSpec("enum", $propSpec)){
+      $specEnum = $this->lookupSpec("enum", $propSpec);
+      $specFragments = $this->lookupSpec("list", $propSpec);
+      if($specEnum && $specFragments){
         $enums[$propName] = $specFragments;
       }elseif($this->lookupSpec("bool", $propSpec)){
         $enums[$propName][] = 0;
@@ -716,7 +739,9 @@ class CMbObject {
   function buildEnums() {
     global $AppUI;
     foreach ($this->_props as $propName => $propSpec) {
-      if($specFragments = $this->lookupSpec("enum", $propSpec)){
+      $specEnum = $this->lookupSpec("enum", $propSpec);
+      $specFragments = $this->lookupSpec("list", $propSpec);
+      if($specEnum && $specFragments){
         $this->_enums[$propName] = $specFragments;
         $this->_enumsTrans[$propName] = array_flip($specFragments);
         foreach($this->_enumsTrans[$propName] as $key => $item) {
@@ -737,624 +762,38 @@ class CMbObject {
       $fragmentPosition = array_search($specFragment,$aFrag);
       if($fragmentPosition !== false){
         array_splice($aFrag, $fragmentPosition, 1);
-        return $aFrag;
+        if(count($aFrag)){
+          return $aFrag;
+        }else{
+          return true;
+        }
       }
     }
     return false;
   }
   
   function checkProperty($propName) {
-    $propSpec =& $this->_props[$propName];
-    $specFragments = explode(" ", $propSpec);
+    $specObj = $this->_specs[$propName];
     $msg = null;
-    foreach($specFragments as $specValue){
-      if($msgError = $this->checkPropertyValue($propName, $specValue)){
-        $msg .= $msgError;
-      }
+    if($msgError = $specObj->checkPropertyValue($this)){
+      $msg .= $msgError;
     }
     return $msg;
   }
   
-  function checkPropertyValue($propName, $value){
-    $propValue =& $this->$propName;
-    $specFragments = explode("|", $value);
-    
-    // Parametres du champs
-    switch ($specFragments[0]) {
-      case "notNull":
-        if ($propValue === null || $propValue === "") {
-          return "Ne pas peut pas avoir une valeur nulle";
-        }
-        return null;
-        break;
-        
-      case "moreThan":
-        $targetPropName = $specFragments[1];
-        $targetPropValue = $this->$targetPropName;
-        if (!isset($targetPropValue)) {
-          return sprintf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
-        }
-        if ($propValue <= $targetPropValue) {
-          return "'$propValue' n'est pas strictement supérieur à '$targetPropValue'";
-        }
-        return null;
-        break;
-        
-      case "moreEquals":
-        $targetPropName = $specFragments[1];
-        $targetPropValue = $this->$targetPropName;
-        if (!isset($targetPropValue)) {
-          return sprintf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
-        }
-        if ($propValue < $targetPropValue) {
-          return "'$propValue' n'est pas supérieur ou égal à '$targetPropValue'";
-        }
-        return null;
-        break;
-      
-      case "sameAs":
-        $targetPropName = $specFragments[1];
-        $targetPropValue = $this->$targetPropName;
-        if (!isset($targetPropValue)) {
-          return sprintf("Elément cible invalide ou inexistant (nom = %s)", $targetPropName);
-        }
-        if ($propValue !== $targetPropValue) {
-          return "'Doit être identique à '$targetPropName'";
-        }
-        return null;
-        break;
-      
-      case "confidential":
-        return null;
-        break;
-    }
-    
-    if ($propValue === null || $propValue === "") {
-      return null;
-    }
-    
-    // Types du champs
-    switch ($specFragments[0]) {
-      // Reference to another object
-      case "refMandatory":
-        if (!is_numeric($propValue) && $propValue!="") {
-          return "N'est pas une référence (format non numérique)";
-        }
-        $propValue = intval($propValue);
-        if ($propValue === 0) {
-          return "ne peut pas être une référence nulle";
-        }
-      case "ref":
-        if (!is_numeric($propValue) && $propValue!="") {
-          return "N'est pas une référence (format non numérique)";
-        }
-
-        $propValue = intval($propValue);
-
-        if ($propValue < 0) {
-          return "N'est pas une référence (entier négatif)";
-        }
-        
-        if(isset($specFragments[1])){
-        
-          switch ($specFragments[1]) {
-            case "xor":
-              $targetPropName = @$specFragments[2];
-              
-              if(!$targetPropName){
-                return "Spécification de chaîne de caractères invalide";
-              }
-          
-              $targetPropValue = $this->$targetPropName;
-      
-              if (!isset($targetPropValue)) {
-                return "Elément cible invalide ou inexistant (nom = $targetPropName)";
-              }
-             
-              if ($propValue==0 and $targetPropValue==0) {
-                return "Merci de choisir soit '$propName', soit '$targetPropName'"; 
-              }
-              
-              if ($propValue!=0 and $targetPropValue!=0) {
-                return "Vous ne devez choisir qu'un seul de ces champs : '$propName', '$targetPropName'"; 
-              }
-            
-              break;
-            
-            case "nand":
-          	  break;
-          	
-            default:
-              return "Spécification de chaîne de caractères invalide";
-          }
-          break;
-        }
-      // regular string
-      case "str":
-        switch (@$specFragments[1]) {
-          case null:
-            break;
-            
-          case "length":
-            $length = intval(@$specFragments[2]);
-            
-            if ($length < 1 or $length > 255) {
-              return "Spécification de longueur invalide (longueur = $length)";
-            }
-            
-            if (strlen($propValue) != $length) {
-              return "N'a pas la bonne longueur (longueur souhaitée : $length)'";
-            }
-            
-            break;
-            
-          case "minLength":
-            $length = intval(@$specFragments[2]);
-            
-            if ($length < 1 or $length > 255) {
-              return "Spécification de longueur minimale invalide (longueur = $length)";
-            }
-            
-            if (strlen($propValue) < $length) {
-              return "N'a pas la bonne longueur (longueur minimale souhaitée : $length)'";
-            }
-            
-            break;
-            
-          case "maxLength":
-            $length = intval(@$specFragments[2]);
-            
-            if ($length < 1 or $length > 255) {
-              return "Spécification de longueur minimale invalide (longueur = $length)";
-            }
-            
-            if (strlen($propValue) > $length) {
-              return "N'a pas la bonne longueur (longueur maximale souhaitée : $length)'";
-            }
-            
-            break;
-        
-          default:
-            return "Spécification de chaîne de caractères invalide";
-        }
-        
-        break;
-
-      // numerical string
-      case "numchar":
-      case "num":
-        if (!is_numeric($propValue)) {
-          return "N'est pas une chaîne numérique";
-        }
-      
-        switch (@$specFragments[1]) {
-          case null:
-            break;
-            
-          case "min":
-            if (!is_numeric($min = @$specFragments[2])) {
-              return "Spécification de minimum numérique invalide";
-            }
-            
-            $min = intval($min);
-            if ($propValue < $min) {
-              return "Soit avoir une valeur minimale de $min";
-            }
-            
-            break;
-
-          case "max":
-            if (!is_numeric($max = @$specFragments[2])) {
-              return "Spécification de maximum numérique invalide";
-            }
-            
-            $max = intval($max);
-            if ($propValue > $max) {
-              return "Soit avoir une valeur maximale de $max";
-            }
-            
-            break;
-          
-          case "pos":            
-            if ($propValue <= 0) {
-              return "Doit avoir une valeur positive";
-            }
-            
-            break;
-  
-          case "length":
-            $length = intval(@$specFragments[2]);
-            
-            if ($length < 1 or $length > 255) {
-              return "Spécification de longueur invalide (longueur = $length)";
-            }
-            
-            if (strlen($propValue) != $length) {
-              return "N'a pas la bonne longueur (longueur souhaité : $length)'";
-            }
-            
-            break;
-            
-          case "minLength":
-            $length = intval(@$specFragments[2]);
-            
-            if ($length < 1 or $length > 255) {
-              return "Spécification de longueur minimale invalide (longueur = $length)";
-            }
-            
-            if (strlen($propValue) < $length) {
-              return "N'a pas la bonne longueur (longueur minimale souhaitée : $length)'";
-            }
-            
-            break;
-            
-          case "maxLength":
-            $length = intval(@$specFragments[2]);
-            
-            if ($length < 1 or $length > 255) {
-              return "Spécification de longueur minimale invalide (longueur = $length)";
-            }
-            
-            if (strlen($propValue) > $length) {
-              return "N'a pas la bonne longueur (longueur maximale souhaitée : $length)'";
-            }
-            
-            break;
-        }
-        
-        break;
-      
-      // Boolean
-      case "bool":
-        if (!is_numeric($propValue)) {
-          return "N'est pas une chaîne numérique";
-        }
-        if($propValue!=0 && $propValue!=1){
-          return "Ne peut être différent de 0 ou 1";
-        }
-        break;
-      
-      // Enumeration
-      case "enum":
-        array_shift($specFragments);
-        if (!in_array($propValue, $specFragments)) {
-          return "N'a pas une valeur possible";
-        }
-        break;
-    
-      // Date
-      case "date":
-        if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $propValue)) {
-          return "format de date invalide";
-        }
-        
-        break;
-    
-      // Time
-      case "time":
-        if (!preg_match ("/^([0-9]{1,2}):([0-9]{1,2})(:([0-9]{1,2}))?$/", $propValue)) {
-          return "format de time invalide";
-        }
-        
-        break;
-    
-      // DateTime
-      case "dateTime":
-        if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})[ \+]([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})$/", $propValue)) {
-          return "format de dateTime invalide";
-        }
-        
-        break;
-    
-      // Currrency format
-      case "float":
-      case "currency":
-        //if (!preg_match ("/^([0-9]+)(\.[0-9]{0,2}){0,1}$/", $propValue)) {
-        if(!is_numeric($propValue)){
-          return "n'est pas une valeur décimale (utilisez le . pour la virgule)";
-        }
-        
-        switch (@$specFragments[1]) {
-          case null:
-            break;
-            
-          case "min":
-            if (!is_numeric($min = @$specFragments[2])) {
-              return "Spécification de minimum numérique invalide";
-            }
-            
-            $min = intval($min);
-            if ($propValue < $min) {
-              return "Soit avoir une valeur minimale de $min";
-            }
-            
-            break;
-
-          case "max":
-            if (!is_numeric($max = @$specFragments[2])) {
-              return "Spécification de maximum numérique invalide";
-            }
-            
-            $max = intval($max);
-            if ($propValue > $max) {
-              return "Soit avoir une valeur maximale de $max";
-            }
-            
-            break;
-          
-          case "pos":            
-            if ($propValue <= 0) {
-              return "Doit avoir une valeur positive";
-            }
-            
-            break;
-          
-          case "minMax":
-            if (!is_numeric($min = @$specFragments[2]) || !is_numeric($max = @$specFragments[3])) {
-              return "Spécification de maximum numérique invalide";
-            } 
-            if($propValue>$max || $propValue<$min){
-              return "N'est pas compris entre $min et $max";
-            }
-            break;
-            
-        }     
-        
-        break;
-    
-      // Percentage with two digits after coma
-      case "pct":
-        if (!preg_match ("/^([0-9]+)(\.[0-9]{0,2}){0,1}$/", $propValue)) {
-          return "n'est pas un pourcentage (utilisez le . pour la virgule)";
-        }
-        
-        break;
-        
-      // Text free format
-      case "text":
-        break;
-        
-      // HTML Text
-      case "html":
-        // @todo Should validate against XHTML DTD
-        
-        // Purges empty spans
-        $regexps = array (
-          "<span[^>]*>[\s]*<\/span>" => " ",
-          "<font[^>]*>[\s]*<\/font>" => " ",
-          "<span class=\"field\">([^\[].*)<\/span>" => "$1"
-          );
-        
-//         while (purgeHtmlText($regexps, $propValue));
-
-        break;
-      
-      case "email":
-        if (!preg_match("/^[-a-z0-9\._]+@[-a-z0-9\.]+\.[a-z]{2,4}$/i", $propValue)) {
-          return "Le format de l'email n'est pas valide";
-        }
-        break;
-      // Special Codes
-      case "code":
-        switch (@$specFragments[1]) {
-          case "ccam":
-            if (!preg_match ("/^([a-z0-9]){0,7}$/i", $propValue)) {
-              return "Code CCAM incorrect, doit contenir 4 lettres et trois chiffres";
-            }
-            
-            break;
-
-          case "cim10":
-            if (!preg_match ("/^([a-z0-9]){0,5}$/i", $propValue)) {
-              return "Code CCAM incorrect, doit contenir 5 lettres maximum";
-            }
-            
-            break;
-
-          case "adeli":
-            if (!preg_match ("/^([0-9]){9}$/i", $propValue)) {
-              return "Code Adeli incorrect, doit contenir exactement 9 chiffres";
-            }
-            
-            break;
-
-          case "insee":
-            $matches = null;
-            if (!preg_match ("/^([1-2][0-9]{2}[0-9]{2}[0-9]{2}[0-9]{3}[0-9]{3})([0-9]{2})$/i", $propValue, $matches)) {
-              return "Matricule incorrect, doit contenir exactement 15 chiffres (commençant par 1 ou 2)";
-            }
-          
-            $code = $matches[1];
-            $cle = $matches[2];
-            
-            // Use bcmod since standard modulus can't work on numbers exceedind the 2^32 limit
-            if (function_exists("bcmod")) {
-              if (97 - bcmod($code, 97) != $cle) {
-                return "Matricule incorrect, la clé n'est pas valide";
-              }
-            }
-          
-            break;
-
-          default:
-            return "Spécification de code invalide";
-        }
-
-        break;
-
-      default:
-        return "Spécification invalide";
-    }
-    return null;
-  }
-  
-  function checkConfidential($props = null) {
+  function checkConfidential($specs = null) {
     global $dPconfig;
     if($dPconfig["hide_confidential"]) {
-      if($props == null)
-        $props = $this->_props;
-      foreach ($props as $propName => $propSpec) {
-        $propValue =& $this->$propName;        
-        if ($propValue !== null && $this->lookupSpec("confidential",$propSpec) !== false) {
-          $specFragments = explode(" ", $propSpec);
-          foreach($specFragments as $specValue){
-            $this->codeProperty($propValue, $specValue);
-          }
+      if($specs == null){
+        $specs = $this->_specs;
+      }
+      foreach ($specs as $propName => $propSpec) {
+        $propValue =& $this->$propName;
+        if ($propValue !== null && $this->_specs[$propName]){
+          $this->_specs[$propName]->checkConfidential($this);
         }
       }
     }
-  }
-  
-  function randomString($array, $length) {
-    $key = "";
-    $count = count($array) - 1;
-    srand((double)microtime()*1000000);
-    for($i = 0; $i < $length; $i++) $key .= $array[rand(0, $count)];
-    return($key);
-  }
-
-  function codeProperty(&$propValue, &$propSpec) {
-    $chars = array(
-      "a","b","c","d","e","f","g","h","i","j","k","l","m",
-      "n","o","p","q","r","s","t","u","v","w","x","y","z");
-    $nums = array("0","1","2","3","4","5","6","7","8","9");
-    $days = array();
-    for($i = 1; $i < 29; $i++) {
-      if($i < 10)
-        $days[] = "0".$i;
-      else
-        $days[] = $i;
-    }
-    $monthes = array(
-      "01","02","03","04","05","06","07","08","09", "10", "11", "12");
-    $hours = array();
-    for($i = 9; $i < 18; $i++) {
-      if($i < 10)
-        $hours[] = "0".$i;
-      else
-        $hours[] = $i;
-    }
-    $mins = array();
-    for($i = 0; $i < 60; $i++) {
-      if($i < 10)
-        $mins[] = "0".$i;
-      else
-        $mins[] = $i;
-    }
-    $defaultLength = 6;
-    $specFragments = explode("|", $propSpec);
-  
-    switch ($specFragments[0]) {
-      // Reference to another object : do nothing
-      case "ref":
-        break;
-        
-      // regular string
-      case "text": 
-        $propValue = $this->randomString($chars, 40);
-        break;
-        
-      // regular string
-      case "str":
-        switch (@$specFragments[1]) {
-          case null:
-            $propValue = $this->randomString($chars, $defaultLength);
-            break;
-            
-          case "length":
-            $length = intval(@$specFragments[2]);
-            $propValue = $this->randomString($chars, $length);
-            break;
-            
-          case "minLength":
-            $length = intval(@$specFragments[2]);
-            if($defaultLength < $length)
-              $propValue = $this->randomString($chars, $length);
-            else
-              $propValue = $this->randomString($chars, $defaultLength);
-            break;
-            
-          case "maxLength":
-            $length = intval(@$specFragments[2]);
-            if($defaultLength > $length)
-              $propValue = $this->randomString($chars, $length);
-            else
-              $propValue = $this->randomString($chars, $defaultLength);
-            break;
-        
-          default:
-            $propValue = null;
-        }
-        
-        break;
-
-      // numerical string
-      case "num":
-        switch (@$specFragments[1]) {
-          case null:
-            $propValue = $this->randomString($nums, $defaultLength);
-            break;
-            
-          case "length":
-            $length = intval(@$specFragments[2]);
-            $propValue = $this->randomString($nums, $length);
-            break;
-            
-          case "minLength":
-            $length = intval(@$specFragments[2]);
-            if($defaultLength < $length)
-              $propValue = $this->randomString($nums, $length);
-            else
-              $propValue = $this->randomString($nums, $defaultLength);
-            break;
-            
-          case "maxLength":
-            $length = intval(@$specFragments[2]);
-            if($defaultLength > $length)
-              $propValue = $this->randomString($nums, $length);
-            else
-              $propValue = $this->randomString($nums, $defaultLength);
-            break;
-        
-          default:
-            $propValue = null;
-        }
-        
-        break;
-      
-      // Enumeration
-      case "enum":
-        array_shift($specFragments);
-        $propValue = $this->randomString($specFragments, 1);
-        break;
-    
-      // Date
-      case "date":
-        $propValue = "19".$this->randomString($nums, 2)."-".$this->randomString($monthes, 1)."-".$this->randomString($days, 1);
-        break;
-    
-      // Time
-      case "time":
-        $propValue = $this->randomString($hours, 1).":".$this->randomString($mins, 1).":".$this->randomString($mins, 1);
-        break;
-    
-      // DateTime
-      case "dateTime":
-        $propValue = "19".$this->randomString($nums, 2)."-".$this->randomString($monthes, 1)."-".$this->randomString($days, 1);
-        $propValue .= " ".$this->randomString($hours, 1).":".$this->randomString($mins, 1).":".$this->randomString($mins, 1);
-        break;
-    
-      // Format monétaire
-      case "currency":
-        $propValue = $this->randomString($nums, 2).".".$this->randomString($nums, 2);
-        break;
-        
-      // HTML Text
-      case "html":
-        $propValue = "Document confidentiel";
-        break;
-    }
-    return null;
   }
 
   function loadAides($user_id) {

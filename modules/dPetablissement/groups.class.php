@@ -53,17 +53,17 @@ class CGroups extends CMbObject {
   function getSpecs() {
     return array (
       "text"           => "notNull str",
-      "raison_sociale" => "str|maxLength|50",
+      "raison_sociale" => "str maxLength|50",
       "adresse"        => "text",
-      "cp"             => "numchar|length|5",
-      "ville"          => "str|maxLength|50",
-      "tel"            => "numchar|length|10",
-      "directeur"      => "str|maxLength|50",
-      "domiciliation"  => "str|maxLength|9",
-      "siret"          => "str|length|14",
-      "ape"            => "str|length|4",
+      "cp"             => "numchar length|5",
+      "ville"          => "str maxLength|50",
+      "tel"            => "numchar length|10",
+      "directeur"      => "str maxLength|50",
+      "domiciliation"  => "str maxLength|9",
+      "siret"          => "str length|14",
+      "ape"            => "str length|4",
       "mail"           => "email",
-      "fax"            => "numchar|length|10",
+      "fax"            => "numchar length|10",
       "web"            => "str"
     );
   }

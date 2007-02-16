@@ -57,10 +57,10 @@ class CModule extends CMbObject {
 
   function getSpecs() {
     return array (
-      "mod_name"      => "notNull str|maxLength|20",
-      "mod_type"      => "notNull enum|core|user",
-      "mod_version"   => "notNull str|maxLength|6",
-      "mod_ui_active" => "notNull num|length|1", // should be "bool"
+      "mod_name"      => "notNull str maxLength|20",
+      "mod_type"      => "notNull enum list|core|user",
+      "mod_version"   => "notNull str maxLength|6",
+      "mod_ui_active" => "notNull num length|1", // should be "bool"
       "mod_ui_order"  => "notNull num"
     );
   }

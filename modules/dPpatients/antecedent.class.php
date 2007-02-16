@@ -32,8 +32,8 @@ class CAntecedent extends CMbObject {
   function getSpecs() {
     return array (
       "object_id"    => "notNull refMandatory",
-      "object_class" => "notNull enum|CPatient|CConsultAnesth",
-      "type"         => "notNull enum|med|alle|trans|obst|chir|fam|anesth",
+      "object_class" => "notNull enum list|CPatient|CConsultAnesth",
+      "type"         => "notNull enum list|med|alle|trans|obst|chir|fam|anesth",
       "date"         => "date",
       "rques"        => "text"
     );

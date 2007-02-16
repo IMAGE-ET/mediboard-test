@@ -44,8 +44,8 @@ class CPermModule extends CMbObject {
     return array (
       "user_id"     => "notNull refMandatory",
       "mod_id"      => "ref",
-      "permission"  => "notNull numchar|maxLength|1",
-      "view"        => "notNull numchar|maxLength|1",
+      "permission"  => "notNull numchar maxLength|1",
+      "view"        => "notNull numchar maxLength|1",
     );
   }
   

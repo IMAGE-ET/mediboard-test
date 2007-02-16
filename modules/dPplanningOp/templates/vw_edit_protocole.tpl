@@ -200,7 +200,7 @@ function pageMain() {
             <label for="_hour_op" title="Durée de l'intervention. Obligatoire">Temps opératoire</label>
           </th>
           <td colspan="2">
-            <select name="_hour_op" title="notNull num|min|0">
+            <select name="_hour_op" title="notNull num min|0">
             {{foreach from=$hours|smarty:nodefaults key=key item=hour}}
               <option value="{{$key}}" {{if (!$protocole && $key == 1) || $protocole->_hour_op == $key}} selected="selected" {{/if}}>{{$key}}</option>
             {{/foreach}}

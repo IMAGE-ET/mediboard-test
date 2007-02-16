@@ -112,11 +112,11 @@ function setChecked(oField, sValue) {
       {{$medecin2->tel}}
     </td>
     <td>
-      <input type="text" name="_tel1" size="2" maxlength="2" value="{{$finalMedecin->_tel1}}" title="num|length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
-      <input type="text" name="_tel2" size="2" maxlength="2" value="{{$finalMedecin->_tel2}}" title="num|length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
-      <input type="text" name="_tel3" size="2" maxlength="2" value="{{$finalMedecin->_tel3}}" title="num|length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
-      <input type="text" name="_tel4" size="2" maxlength="2" value="{{$finalMedecin->_tel4}}" title="num|length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
-      <input type="text" name="_tel5" size="2" maxlength="2" value="{{$finalMedecin->_tel5}}" title="num|length|2" onkeyup="followUp(this, '_tel21', 2)" />
+      <input type="text" name="_tel1" size="2" maxlength="2" value="{{$finalMedecin->_tel1}}" title="num length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
+      <input type="text" name="_tel2" size="2" maxlength="2" value="{{$finalMedecin->_tel2}}" title="num length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
+      <input type="text" name="_tel3" size="2" maxlength="2" value="{{$finalMedecin->_tel3}}" title="num length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
+      <input type="text" name="_tel4" size="2" maxlength="2" value="{{$finalMedecin->_tel4}}" title="num length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
+      <input type="text" name="_tel5" size="2" maxlength="2" value="{{$finalMedecin->_tel5}}" title="num length|2" onkeyup="followUp(this, '_tel21', 2)" />
     </td>
   </tr>
   <tr>
@@ -134,11 +134,11 @@ function setChecked(oField, sValue) {
       {{$medecin2->fax}}
     </td>
     <td>
-      <input type="text" name="_fax1" size="2" maxlength="2" value="{{$finalMedecin->_fax1}}" title="num|length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
-      <input type="text" name="_fax2" size="2" maxlength="2" value="{{$finalMedecin->_fax2}}" title="num|length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
-      <input type="text" name="_fax3" size="2" maxlength="2" value="{{$finalMedecin->_fax3}}" title="num|length|2" onkeyup="followUp(this, '_fax4', 2)" /> -
-      <input type="text" name="_fax4" size="2" maxlength="2" value="{{$finalMedecin->_fax4}}" title="num|length|2" onkeyup="followUp(this, '_fax5', 2)" /> -
-      <input type="text" name="_fax5" size="2" maxlength="2" value="{{$finalMedecin->_fax5}}" title="num|length|2" />
+      <input type="text" name="_fax1" size="2" maxlength="2" value="{{$finalMedecin->_fax1}}" title="num length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
+      <input type="text" name="_fax2" size="2" maxlength="2" value="{{$finalMedecin->_fax2}}" title="num length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
+      <input type="text" name="_fax3" size="2" maxlength="2" value="{{$finalMedecin->_fax3}}" title="num length|2" onkeyup="followUp(this, '_fax4', 2)" /> -
+      <input type="text" name="_fax4" size="2" maxlength="2" value="{{$finalMedecin->_fax4}}" title="num length|2" onkeyup="followUp(this, '_fax5', 2)" /> -
+      <input type="text" name="_fax5" size="2" maxlength="2" value="{{$finalMedecin->_fax5}}" title="num length|2" />
     </td>
   </tr>
   <tr>

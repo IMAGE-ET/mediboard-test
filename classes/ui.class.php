@@ -93,7 +93,9 @@ class CAppUI {
   
   function getAllClasses() {
     $rootDir = $this->getConfig("root_dir");
-
+    foreach(glob("classes/*/*.class.php") as $fileName) {
+      require_once("$rootDir/$fileName");
+    }
     // Require all global classes
     foreach(glob("classes/*.class.php") as $fileName) {
       require_once("$rootDir/$fileName");

@@ -108,20 +108,20 @@ class CExamAudio extends CMbObject {
     return array (
       "consultation_id" => "notNull refMandatory",
       "remarques"       => "text",
-      "gauche_aerien"   => "str|maxLength|64",
-      "gauche_osseux"   => "str|maxLength|64",
-      "gauche_conlat"   => "str|maxLength|64",
-      "gauche_ipslat"   => "str|maxLength|64",
-      "gauche_pasrep"   => "str|maxLength|64",
-      "gauche_tympan"   => "str|maxLength|64",
-      "gauche_vocale"   => "str|maxLength|64",
-      "droite_aerien"   => "str|maxLength|64",
-      "droite_osseux"   => "str|maxLength|64",
-      "droite_conlat"   => "str|maxLength|64",
-      "droite_ipslat"   => "str|maxLength|64",
-      "droite_pasrep"   => "str|maxLength|64",
-      "droite_tympan"   => "str|maxLength|64",
-      "droite_vocale"   => "str|maxLength|64"
+      "gauche_aerien"   => "str maxLength|64",
+      "gauche_osseux"   => "str maxLength|64",
+      "gauche_conlat"   => "str maxLength|64",
+      "gauche_ipslat"   => "str maxLength|64",
+      "gauche_pasrep"   => "str maxLength|64",
+      "gauche_tympan"   => "str maxLength|64",
+      "gauche_vocale"   => "str maxLength|64",
+      "droite_aerien"   => "str maxLength|64",
+      "droite_osseux"   => "str maxLength|64",
+      "droite_conlat"   => "str maxLength|64",
+      "droite_ipslat"   => "str maxLength|64",
+      "droite_pasrep"   => "str maxLength|64",
+      "droite_tympan"   => "str maxLength|64",
+      "droite_vocale"   => "str maxLength|64"
     );
   }
   

@@ -95,11 +95,11 @@
       {{$patient2->prevenir_tel}}
     </td>
     <td>
-      <input tabindex="305" type="text" name="_tel31" size="2" maxlength="2" value="{{$finalPatient->_tel31}}" title="num|length|2" onkeyup="followUp(this, '_tel32', 2)" /> - 
-      <input tabindex="306" type="text" name="_tel32" size="2" maxlength="2" value="{{$finalPatient->_tel32}}" title="num|length|2" onkeyup="followUp(this, '_tel33', 2)" /> -
-      <input tabindex="307" type="text" name="_tel33" size="2" maxlength="2" value="{{$finalPatient->_tel33}}" title="num|length|2" onkeyup="followUp(this, '_tel34', 2)" /> -
-      <input tabindex="308" type="text" name="_tel34" size="2" maxlength="2" value="{{$finalPatient->_tel34}}" title="num|length|2" onkeyup="followUp(this, '_tel35', 2)" /> -
-      <input tabindex="309" type="text" name="_tel35" size="2" maxlength="2" value="{{$finalPatient->_tel35}}" title="num|length|2" />
+      <input tabindex="305" type="text" name="_tel31" size="2" maxlength="2" value="{{$finalPatient->_tel31}}" title="num length|2" onkeyup="followUp(this, '_tel32', 2)" /> - 
+      <input tabindex="306" type="text" name="_tel32" size="2" maxlength="2" value="{{$finalPatient->_tel32}}" title="num length|2" onkeyup="followUp(this, '_tel33', 2)" /> -
+      <input tabindex="307" type="text" name="_tel33" size="2" maxlength="2" value="{{$finalPatient->_tel33}}" title="num length|2" onkeyup="followUp(this, '_tel34', 2)" /> -
+      <input tabindex="308" type="text" name="_tel34" size="2" maxlength="2" value="{{$finalPatient->_tel34}}" title="num length|2" onkeyup="followUp(this, '_tel35', 2)" /> -
+      <input tabindex="309" type="text" name="_tel35" size="2" maxlength="2" value="{{$finalPatient->_tel35}}" title="num length|2" />
     </td>
   </tr>
   <tr>
@@ -196,11 +196,11 @@
       {{$patient2->employeur_tel}}
     </td>
     <td>
-      <input tabindex="315" type="text" name="_tel41" size="2" maxlength="2" value="{{$finalPatient->_tel41}}" title="num|length|2" onkeyup="followUp(this, '_tel42', 2)" /> - 
-      <input tabindex="316" type="text" name="_tel42" size="2" maxlength="2" value="{{$finalPatient->_tel42}}" title="num|length|2" onkeyup="followUp(this, '_tel43', 2)" /> -
-      <input tabindex="317" type="text" name="_tel43" size="2" maxlength="2" value="{{$finalPatient->_tel43}}" title="num|length|2" onkeyup="followUp(this, '_tel44', 2)" /> -
-      <input tabindex="318" type="text" name="_tel44" size="2" maxlength="2" value="{{$finalPatient->_tel44}}" title="num|length|2" onkeyup="followUp(this, '_tel45', 2)" /> -
-      <input tabindex="319" type="text" name="_tel45" size="2" maxlength="2" value="{{$finalPatient->_tel45}}" title="num|length|2" />
+      <input tabindex="315" type="text" name="_tel41" size="2" maxlength="2" value="{{$finalPatient->_tel41}}" title="num length|2" onkeyup="followUp(this, '_tel42', 2)" /> - 
+      <input tabindex="316" type="text" name="_tel42" size="2" maxlength="2" value="{{$finalPatient->_tel42}}" title="num length|2" onkeyup="followUp(this, '_tel43', 2)" /> -
+      <input tabindex="317" type="text" name="_tel43" size="2" maxlength="2" value="{{$finalPatient->_tel43}}" title="num length|2" onkeyup="followUp(this, '_tel44', 2)" /> -
+      <input tabindex="318" type="text" name="_tel44" size="2" maxlength="2" value="{{$finalPatient->_tel44}}" title="num length|2" onkeyup="followUp(this, '_tel45', 2)" /> -
+      <input tabindex="319" type="text" name="_tel45" size="2" maxlength="2" value="{{$finalPatient->_tel45}}" title="num length|2" />
     </td>
   </tr>
   <tr>

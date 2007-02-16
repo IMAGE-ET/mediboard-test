@@ -68,10 +68,10 @@ class CConsultation extends CMbObject {
       "plageconsult_id" => "notNull refMandatory",
       "patient_id"      => "ref",
       "heure"           => "notNull time",
-      "duree"           => "numchar|maxLength|1",
-      "secteur1"        => "currency|min|0",
-      "secteur2"        => "currency|min|0",
-      "chrono"          => "notNull enum|16|32|48|64",
+      "duree"           => "numchar maxLength|1",
+      "secteur1"        => "currency min|0",
+      "secteur2"        => "currency min|0",
+      "chrono"          => "notNull enum list|16|32|48|64",
       "annule"          => "bool",
       "paye"            => "bool",
       "date_paiement"   => "date",
@@ -82,7 +82,7 @@ class CConsultation extends CMbObject {
       "premiere"        => "bool",
       "tarif"           => "str",
       "arrivee"         => "dateTime",
-      "type_tarif"      => "enum|cheque|CB|especes|tiers|autre"
+      "type_tarif"      => "enum list|cheque|CB|especes|tiers|autre"
     );
   }
   

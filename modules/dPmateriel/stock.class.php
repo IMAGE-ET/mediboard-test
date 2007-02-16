@@ -34,8 +34,8 @@ class CStock extends CMbObject {
     return array (
       "materiel_id" => "notNull refMandatory",
       "group_id"    => "notNull refMandatory",
-      "seuil_cmd"   => "notNull num|pos",
-      "quantite"    => "num|pos"
+      "seuil_cmd"   => "notNull num pos",
+      "quantite"    => "num pos"
     );
   }
   

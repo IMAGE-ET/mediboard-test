@@ -114,41 +114,15 @@ function include_script($params, &$smarty) {
     return $_html_result;
 }
 
-function smarty_function_mb_field_spec($propSpec){
-  $type = null;
-  $specFragments = explode(" ", $propSpec);
-  
-  foreach($specFragments as $specValue){
-    $fragments = explode("|", $specValue);
-    switch ($fragments[0]) {
-      case "text":
-      case "html":
-        $type = "textarea";
-        break;
-      case "str":
-      case "num":
-      case "numchar":
-      case "date":
-      case "time":
-      case "dateTime":
-      case "float":
-      case "currency":
-      case "pct":
-      case "email":
-      case "code":
-        $type = "text";
-        break;
-      case "bool":
-        $type = "radio";
-        break;
-      case "enum":
-        $type = "enum";
-        break;
-      default:
-        break;
-    }
+function smarty_function_mb_field_spec($obj, $field, $propSpec){
+  if(!isset($obj->_specs[$field])){
+    $obj->_specs = $obj->getSpecsObj(array($field => $propSpec));
   }
-  return $type;
+  if($obj->_specs[$field]){
+    return $obj->_specs[$field]->checkFieldType();
+  }else{
+    return null;
+  }
 }
 
 /**
@@ -176,7 +150,7 @@ function smarty_function_mb_field($params, &$smarty){
   if(isset($params["spec"])) {  $propSpec = $params["spec"];      }
   if(isset($params["class"])){ $className = $params["class"]." "; }
   
-  $attribute_oblig = array("type"            => smarty_function_mb_field_spec($propSpec),
+  $attribute_oblig = array("type"            => smarty_function_mb_field_spec($params["object"], $params["field"], $propSpec),
                             "element"         => "field",
                             "typeEnum"        => "select",
                             "separator"       => "",

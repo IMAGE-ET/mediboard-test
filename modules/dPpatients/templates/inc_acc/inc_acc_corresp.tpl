@@ -56,22 +56,22 @@
     </td>
     <th><label for="_tel41" title="Téléphone de l'employeur">Téléphone</label></th>
     <td>
-      {{mb_field object=$patient field="_tel41" tabindex="355" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel42', 2)"}} -
-      {{mb_field object=$patient field="_tel42" tabindex="356" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel43', 2)"}} -
-      {{mb_field object=$patient field="_tel43" tabindex="357" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel44', 2)"}} -
-      {{mb_field object=$patient field="_tel44" tabindex="358" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel45', 2)"}} -
-      {{mb_field object=$patient field="_tel45" tabindex="359" size="2" maxlength="2" spec="num|length|2"}}
+      {{mb_field object=$patient field="_tel41" tabindex="355" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel42', 2)"}} -
+      {{mb_field object=$patient field="_tel42" tabindex="356" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel43', 2)"}} -
+      {{mb_field object=$patient field="_tel43" tabindex="357" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel44', 2)"}} -
+      {{mb_field object=$patient field="_tel44" tabindex="358" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel45', 2)"}} -
+      {{mb_field object=$patient field="_tel45" tabindex="359" size="2" maxlength="2" spec="num length|2"}}
     </td>
   </tr>
   
   <tr>
     <th><label for="_tel31" title="Téléphone de la personne à prévenir">Téléphone</label></th>
     <td>
-      {{mb_field object=$patient field="_tel31" tabindex="306" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel32', 2)"}} -
-      {{mb_field object=$patient field="_tel32" tabindex="307" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel33', 2)"}} -
-      {{mb_field object=$patient field="_tel33" tabindex="308" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel34', 2)"}} -
-      {{mb_field object=$patient field="_tel34" tabindex="309" size="2" maxlength="2" spec="num|length|2" onkeyup="followUp(this, '_tel35', 2)"}} -
-      {{mb_field object=$patient field="_tel35" tabindex="310" size="2" maxlength="2" spec="num|length|2"}}
+      {{mb_field object=$patient field="_tel31" tabindex="306" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel32', 2)"}} -
+      {{mb_field object=$patient field="_tel32" tabindex="307" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel33', 2)"}} -
+      {{mb_field object=$patient field="_tel33" tabindex="308" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel34', 2)"}} -
+      {{mb_field object=$patient field="_tel34" tabindex="309" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel35', 2)"}} -
+      {{mb_field object=$patient field="_tel35" tabindex="310" size="2" maxlength="2" spec="num length|2"}}
     </td>
     <th><label for="employeur_urssaf" title="Veuillez saisir le numéro Urssaf">Numéro Urssaf</label></th>
     <td>{{mb_field object=$patient field="employeur_urssaf" tabindex="360"}}</td>

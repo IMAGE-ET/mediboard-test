@@ -78,7 +78,7 @@ function db_loadObject($sql, &$object) {
     if(!db_loadHash($sql, $hash)) {
       return false;
     }
-    bindHashToObject($hash, $object);
+    bindHashToObject($hash, $object, false);
     return true;
   } else {
     $cur = db_exec($sql);
@@ -106,7 +106,7 @@ function db_loadObjectWithOpt($sql, &$object) {
       if(!db_loadHash($sql, $hash)) {
         return false;
       }
-      bindHashToObject($hash, $object);
+      bindHashToObject($hash, $object, false);
       return true;
     }
   } else {
@@ -226,7 +226,7 @@ function db_loadObjectList($sql, $object, $maxrows = null) {
   while ($row = db_fetch_array($cur)) {
     $key = $row[$table_key];
     $newObject = new $class();
-    $newObject->bind($row);
+    $newObject->bind($row, false);
     $newObject->checkConfidential();
     $newObject->updateFormFields();
     $list[$newObject->_id] = $newObject;
@@ -252,7 +252,7 @@ function db_loadObjectListWithOpt($sql, $object, $maxrows = null) {
       $mbCacheObjectCount++;
     } else {
       $newObject = new $class();
-      $newObject->bind($row);
+      $newObject->bind($row, false);
       $newObject->checkConfidential();
       $newObject->updateFormFields();
       $object->_objectsTable[$newObject->_id] = $newObject;
@@ -491,13 +491,17 @@ function stripslashes_deep($value) {
 * @param boolean
 * @param boolean
 */
-function bindHashToObject($hash, &$obj) {
+function bindHashToObject($hash, &$obj, $doStripSlashes = true) {
   is_array($hash) or die("bindHashToObject : hash expected");
   is_object($obj) or die("bindHashToObject : object expected");
 
   foreach (get_object_vars($obj) as $k => $v) {
     if (isset($hash[$k])) {
-      $obj->$k = stripslashes_deep($hash[$k]);
+      if($doStripSlashes){
+        $obj->$k = stripslashes_deep($hash[$k]);
+      }else{
+        $obj->$k = $hash[$k];
+      }
     }
   }
 }

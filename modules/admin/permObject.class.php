@@ -41,7 +41,7 @@ class CPermObject extends CMbObject {
       "user_id"      => "notNull refMandatory",
       "object_id"    => "ref",
       "object_class" => "notNull str",
-      "permission"   => "notNull numchar|maxLength|1"
+      "permission"   => "notNull numchar maxLength|1"
     );
   }
   

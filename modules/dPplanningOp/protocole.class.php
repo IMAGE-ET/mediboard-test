@@ -52,17 +52,17 @@ class CProtocole extends CMbObject {
   function getSpecs() {
     return array (
       "chir_id"         => "notNull refMandatory",
-      "type"            => "enum|comp|ambu|exte|seances|ssr|psy",
-      "DP"              => "code|cim10",
+      "type"            => "enum list|comp|ambu|exte|seances|ssr|psy",
+      "DP"              => "code cim10",
       "convalescence"   => "text confidential",
       "rques_sejour"    => "text confidential",
       "libelle"         => "str confidential",
       "examen"          => "text confidential",
       "materiel"        => "text confidential",
-      "duree_hospi"     => "notNull num|minMax|0|36500",
+      "duree_hospi"     => "notNull num minMax|0|36500",
       "rques_operation" => "text confidential",
-      "depassement"     => "float|min|0 confidential",
-      "pathologie"      => "str|length|3",
+      "depassement"     => "float min|0 confidential",
+      "pathologie"      => "str length|3",
       "septique"        => "bool",
       "codes_ccam"      => "str",
       "temp_operation"  => "time"

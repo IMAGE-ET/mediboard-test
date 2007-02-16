@@ -228,7 +228,7 @@ function popPlanning(debut) {
         </td>
         <th colspan="3"><label for="_min_inter_op" title="Nombre de minutes entre chaque patient">Minutes entre les interventions</label></th>
         <td>
-          <input type="text" name="_min_inter_op" size="3" title="notNull num|pos"
+          <input type="text" name="_min_inter_op" size="3" title="notNull num pos"
                  value="{{if $plagesel->plageop_id}}{{$plagesel->_min_inter_op}}{{else}}{{15}}{{/if}}" />
           min
         </td>
@@ -239,7 +239,7 @@ function popPlanning(debut) {
           <label for="_repeat" title="Nombre de plages à créer">Nombre de plages</label>
         </th>
         <td>
-          <input type="text" title="notNull num|min|1" name="_repeat" size="1" value="1" />
+          <input type="text" title="notNull num min|1" name="_repeat" size="1" value="1" />
         </td>
         <th>
           <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>

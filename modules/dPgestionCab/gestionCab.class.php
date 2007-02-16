@@ -41,7 +41,7 @@ class CGestionCab extends CMbObject {
       "libelle"          => "notNull str",
       "date"             => "notNull date",
       "rubrique_id"      => "notNull refMandatory",
-      "montant"          => "notNull currency|min|0",
+      "montant"          => "notNull currency min|0",
       "mode_paiement_id" => "notNull refMandatory",
       "num_facture"      => "notNull num",
       "rques"            => "text"

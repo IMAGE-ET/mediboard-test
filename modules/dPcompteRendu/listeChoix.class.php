@@ -38,7 +38,7 @@ class CListeChoix extends CMbObject {
 
   function getSpecs() {
     return array (
-      "chir_id"         => "ref|xor|function_id",
+      "chir_id"         => "ref xor|function_id",
       "function_id"     => "ref",
       "nom"             => "notNull str",
       "valeurs"         => "text confidential",

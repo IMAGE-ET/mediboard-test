@@ -69,14 +69,14 @@ class CFournisseur extends CMbObject {
 
   function getSpecs() {
     return array (
-      "societe"    => "notNull str|maxLength|50",
+      "societe"    => "notNull str maxLength|50",
       "adresse"    => "str",
-      "codepostal" => "num|length|5",
+      "codepostal" => "num length|5",
       "ville"      => "str",
       "telephone"  => "num",
       "mail"       => "email",
-      "nom"        => "str|maxLength|50",
-      "prenom"     => "str|maxLength|50"
+      "nom"        => "str maxLength|50",
+      "prenom"     => "str maxLength|50"
     );
   }
   

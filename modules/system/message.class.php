@@ -40,7 +40,7 @@ class CMessage extends CMbObject {
     return array (
       "deb"   => "notNull dateTime",
       "fin"   => "notNull dateTime",
-      "titre" => "notNull str|maxLength|40",
+      "titre" => "notNull str maxLength|40",
       "corps" => "text"
     );
   }

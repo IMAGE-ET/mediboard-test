@@ -52,7 +52,7 @@ class CPlageressource extends CMbObject {
       "date"    => "notNull date",
       "debut"   => "notNull time",
       "fin"     => "notNull time",
-      "tarif"   => "notNull currency|min|0 confidential",
+      "tarif"   => "notNull currency min|0 confidential",
       "libelle" => "str confidential",
       "paye"    => "bool"
     );
