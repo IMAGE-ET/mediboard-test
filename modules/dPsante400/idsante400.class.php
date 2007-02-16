@@ -69,6 +69,21 @@
   }
   
   /**
+   * Tries to get an already bound object if id400 is not older than delay
+   */
+  function getCachedObject($delay) {
+    $this->_id = null;
+    $this->loadMatchingObject("`last_update` DESC");
+    $this->loadRefsFwd();
+
+    if (mbDateTime($delay, $this->last_update) < mbDateTime()) {
+      $this->_ref_object = new $this->object_class;
+    }
+
+    return $this->_ref_object;
+  }
+  
+  /**
    * Binds the id400 to an object, and updates the object
    * Will only bind default object properties when it's created
    */

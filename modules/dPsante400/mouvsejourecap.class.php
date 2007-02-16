@@ -81,14 +81,19 @@ class CMouvSejourEcap extends CMouvement400 {
   function syncEtablissement() {
     $CIDC = $this->consume("A_CIDC");
     
-    if ($this->etablissement = @self::$cache["CGroups"][$CIDC]) {
-      mbTrace($CIDC, "Used cache for 'CGroups'");
-      return;
-    }
-    
+    $this->id400EtabECap = new CIdSante400();
+    $this->id400EtabECap->id400 = $CIDC;
+    $this->id400EtabECap->object_class = "CGroups";
+
+    $this->etablissement = $this->id400EtabECap->getCachedObject("+1 HOUR");
+    if ($this->etablissement->_id) {
+      $this->trace($this->etablissement->getProps(), "Etablissement depuis le cache");
+      $this->markCache(self::STATUS_ETABLISSEMENT);
+      return;    
+    } 
+        
     $etab400 = new CRecordSante400();
     $etab400->query("SELECT * FROM $this->base.ECCIPF WHERE CICIDC = $CIDC");
-    $this->etablissement = new CGroups;
     $this->etablissement->text           = $etab400->consume("CIZIDC");
     $this->etablissement->raison_sociale = $this->etablissement->text;
     $this->etablissement->adresse        = $etab400->consumeMulti("CIZAD1", "CIZAD2");
@@ -100,35 +105,41 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->etablissement->mail           = $etab400->consume("CIMAIL");
     $this->etablissement->domiciliation  = $etab400->consume("CIFINS");
 
-    $this->id400EtabECap = new CIdSante400();
-    $this->id400EtabECap->id400 = $etab400->consume("CICIDC");
-    $this->id400EtabECap->bindObject($this->etablissement);
-
     $id400EtabSHS = new CIdSante400();
     $id400EtabSHS->loadLatestFor($this->etablissement, "SHS");
     $id400EtabSHS->last_update = mbDateTime();
     $id400EtabSHS->id400 =  $etab400->consume("CICSHS");
     $id400EtabSHS->store();
     
+    $this->id400EtabECap->bindObject($this->etablissement);
+
+    $this->trace($this->etablissement->getProps(), "Etablissement synchronisé");
     $this->trace($etab400->data, "Données établissement non importées");
     
-    self::$cache["CGroups"][$CIDC] = $this->etablissement; 
-
-    $this->markStatus(self::STATUS_ETABLISSEMENT, 1);
+    $this->markStatus(self::STATUS_ETABLISSEMENT);
   }
   
   function syncFonction() {
-    $this->fonction = new CFunctions();
+    $id400Func = new CIdSante400();
+    $id400Func->id400 = $this->id400EtabECap->id400;
+    $id400Func->object_class = "CFunctions";
+
+    $this->fonction = $id400Func->getCachedObject("+1 HOUR");
+    if ($this->fonction->_id) {
+      $this->trace($this->fonction->getProps(), "Cabinet depuis le cache");
+      $this->markCache(self::STATUS_FONCTION);
+      return;    
+    } 
+
     $this->fonction->group_id = $this->etablissement->group_id;
     $this->fonction->loadMatchingObject();
     $this->fonction->text = "Import eCap";
     $this->fonction->color = "00FF00";
 
-    $id400Func = new CIdSante400();
-    $id400Func->id400 = $this->id400EtabECap->id400;
     $id400Func->bindObject($this->fonction);
     
-    $this->markStatus(self::STATUS_FONCTION, 1);
+    $this->trace($this->fonction->getProps(), "Cabinet synchronisé");
+    $this->markStatus(self::STATUS_FONCTION);
   }
    
   function syncPraticien($CPRT) {
@@ -136,76 +147,100 @@ class CMouvSejourEcap extends CMouvement400 {
       return;
     }
     
-    $query = "SELECT * FROM $this->base.ECPRPF " .
-        "\nWHERE PRCIDC = ? " .
-        "\nAND PRCPRT = ?";
-    $queryValues = array (
-      $this->id400EtabECap->id400, 
-      $CPRT,
-    );
-     
-    $prat400 = new CRecordSante400();
-    $prat400->loadOne($query, $queryValues);
-    $this->trace($prat400->data, "Données praticien à importer");
+    // Id400 pricipal
+    $tag = "CIDC:{$this->id400EtabECap->id400}";
+    $id400Prat = new CIdSante400();
+    $id400Prat->object_class = "CMediusers";
+    $id400Prat->id400 = $CPRT;
+    $id400Prat->tag = $tag;
 
-    $nomsPraticien     = split(" ", $prat400->consume("PRZNOM"));
-    $prenomsPraticiens = split(" ", $prat400->consume("PRZPRE"));
-
-    $praticien = new CMediusers;
-    $praticien->_user_type = 3; // Chirurgien
-    $praticien->_user_username = substr(strtolower($prenomsPraticiens[0] . $nomsPraticien[0]), 0, 20);
-    $praticien->_user_last_name  = join(" ", $nomsPraticien);
-    $praticien->_user_first_name = join(" ", $prenomsPraticiens);
-    $praticien->_user_email      = $prat400->consume("PRMAIL");
-    $praticien->_user_phone      = mbGetValue(
-      $prat400->consume("PRZTL1"), 
-      $prat400->consume("PRZTL2"), 
-      $prat400->consume("PRZTL3"));
-    $praticien->_user_adresse    = $prat400->consumeMulti("PRZAD1", "PRZAD2");
-    $praticien->_user_cp         = $prat400->consume("PRCPO");
-    $praticien->_user_ville      = $prat400->consume("PRZVIL");
-    $praticien->adeli            = $prat400->consume("PRCINC");
-    $praticien->actif            = $prat400->consume("PRACTI");
-    $praticien->deb_activite     = $prat400->consumeDate("PRDTA1");
-    $praticien->fin_activite     = $prat400->consumeDate("PRDTA2");
+    $praticien = $id400Prat->getCachedObject("+1 HOUR");
+    if ($praticien->_id) {
+      $this->trace($praticien->getProps(), "Praticien depuis le cache");
+      $this->id400Prats[$CPRT] = $id400Prat;
+      $this->praticiens[$CPRT] = $praticien;
+      $this->markCache(self::STATUS_PRATICIEN);
+      return;
+    }
     
-    // Import de la spécialité eCap
-    $CSPE = $prat400->consume("PRCSPE");
-    $spec400 = new CRecordSante400;
-    $spec400->query("SELECT * FROM $this->base.ECSPPF WHERE SPCSPE= $CSPE");
-    $LISP = $spec400->consume("SPLISP");
-    $praticien->commentaires = "Spécialité eCap : $LISP";
-    
-    // Import des spécialités à nomenclature officielles
-    $CSP = array (
-      $CSP1 = $prat400->consume("PRCSP1"),
-      $CSP2 = $prat400->consume("PRCSP2"),
-      $CSP3 = $prat400->consume("PRCSP3")
-    );
-    
-    $CSP = join(" ", $CSP);
-    $praticien->commentaires .= "\nSpécialité (Nomenclature) : $CSP";
+    // Gestion du praticien non renseigné
+    if ($CPRT == "0") {
+      $praticien = new CMediusers;
+      $praticien->_user_type = 3; // Chirurgien
+      $praticien->_user_username = "pnr{$this->id400EtabECap->id400}";
+      $praticien->_user_last_name  = "Non renseigné";
+      $praticien->_user_first_name = "Praticien";
+    } else {
+      $query = "SELECT * FROM $this->base.ECPRPF " .
+          "\nWHERE PRCIDC = ? " .
+          "\nAND PRCPRT = ?";
+      $queryValues = array (
+        $this->id400EtabECap->id400, 
+        $CPRT,
+      );
+       
+      $prat400 = new CRecordSante400();
+      $prat400->loadOne($query, $queryValues);
+      $this->trace($prat400->data, "Données praticien à importer");
+  
+      $nomsPraticien     = split(" ", $prat400->consume("PRZNOM"));
+      $prenomsPraticiens = split(" ", $prat400->consume("PRZPRE"));
+  
+      $praticien = new CMediusers;
+      $praticien->_user_type = 3; // Chirurgien
+      $praticien->_user_username = substr(strtolower($prenomsPraticiens[0] . $nomsPraticien[0]), 0, 20);
+      $praticien->_user_last_name  = join(" ", $nomsPraticien);
+      $praticien->_user_first_name = join(" ", $prenomsPraticiens);
+      $praticien->_user_email      = $prat400->consume("PRMAIL");
+      $praticien->_user_phone      = mbGetValue(
+        $prat400->consume("PRZTL1"), 
+        $prat400->consume("PRZTL2"), 
+        $prat400->consume("PRZTL3"));
+      $praticien->_user_adresse    = $prat400->consumeMulti("PRZAD1", "PRZAD2");
+      $praticien->_user_cp         = $prat400->consume("PRCPO");
+      $praticien->_user_ville      = $prat400->consume("PRZVIL");
+      $praticien->adeli            = $prat400->consume("PRCINC");
+      $praticien->actif            = $prat400->consume("PRACTI");
+      $praticien->deb_activite     = $prat400->consumeDate("PRDTA1");
+      $praticien->fin_activite     = $prat400->consumeDate("PRDTA2");
+      
+      // Import de la spécialité eCap
+      $CSPE = $prat400->consume("PRCSPE");
+      $spec400 = new CRecordSante400;
+      $spec400->query("SELECT * FROM $this->base.ECSPPF WHERE SPCSPE = $CSPE");
+      $LISP = $spec400->consume("SPLISP");
+      $praticien->commentaires = "Spécialité eCap : $LISP";
+      
+      // Import des spécialités à nomenclature officielles
+      $CSP = array (
+        $CSP1 = $prat400->consume("PRCSP1"),
+        $CSP2 = $prat400->consume("PRCSP2"),
+        $CSP3 = $prat400->consume("PRCSP3")
+      );
+      
+      $CSP = join(" ", $CSP);
+      $praticien->commentaires .= "\nSpécialité (Nomenclature) : $CSP";
+    }    
     
     $pratDefault = new CMediusers;
     $pratDefault->function_id = $this->fonction->function_id;
 
-    // Gestion des id400
-    $tag = "CIDC:{$this->id400EtabECap->id400}";
-    $id400Prat = new CIdSante400();
-    $id400Prat->id400 = $CPRT;
-    $id400Prat->tag = $tag;
     $id400Prat->bindObject($praticien, $pratDefault);
+
     $this->id400Prats[$CPRT] = $id400Prat;
-    
-    $id400PratSHS = new CIdSante400();
-    $id400PratSHS->loadLatestFor($praticien, "SHS $tag");
-    $id400PratSHS->last_update = mbDateTime();
-    $id400PratSHS->id400 =  $prat400->consume("PRSIH");
-    $id400PratSHS->store();
-    
     $this->praticiens[$CPRT] = $praticien;
+
+    // Id400 secondaire    
+    if ($CPRT != "0") {
+      $id400PratSHS = new CIdSante400();
+      $id400PratSHS->loadLatestFor($praticien, "SHS $tag");
+      $id400PratSHS->last_update = mbDateTime();
+      $id400PratSHS->id400 =  $prat400->consume("PRSIH");
+      $id400PratSHS->store();
+    }
+    
     $this->trace($praticien->getProps(), "Praticien importé");
-    $this->markStatus(self::STATUS_PRATICIEN, count($this->praticiens));
+    $this->markStatus(self::STATUS_PRATICIEN);
   }
 
   function syncPatient() {
@@ -284,7 +319,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->id400Pat->bindObject($this->patient);
 
     $this->trace($pat400->data, "Données patients non importées");
-    $this->markStatus(self::STATUS_PATIENT, 1);
+    $this->markStatus(self::STATUS_PATIENT);
   }
 
   function syncDHE() {
@@ -326,11 +361,12 @@ class CMouvSejourEcap extends CMouvement400 {
     $log->loadMatchingObject();
 
     // Motifs d'hospitalisations
-    $CMOT = $dheECap->consume("ATCMOT");
-    $motECap = new CRecordSante400();
-    $motECap->loadOne("SELECT * FROM $this->base.ECMOPF WHERE MOCMOT = ?", array($CMOT));
-    $LIMO = $motECap->consume("MOLIMO");
-    $this->sejour->rques = "Motif: $LIMO";
+    if ("0" != $CMOT = $dheECap->consume("ATCMOT")) {
+      $motECap = new CRecordSante400();
+      $motECap->loadOne("SELECT * FROM $this->base.ECMOPF WHERE MOCMOT = ?", array($CMOT));
+      $LIMO = $motECap->consume("MOLIMO");
+      $this->sejour->rques = "Motif: $LIMO";
+    }
     
     // Horodatage
     $entree = $dheECap->consumeDateTime("ATDTEN", "ATHREN");
@@ -384,7 +420,7 @@ class CMouvSejourEcap extends CMouvement400 {
 
     // $TRPE et $EXBI à gérer
     
-    $this->markStatus(self::STATUS_SEJOUR, 2);
+    $this->markStatus(self::STATUS_SEJOUR);
   }
   
   function syncOperations() {
@@ -440,22 +476,6 @@ class CMouvSejourEcap extends CMouvement400 {
       // Dossier d'anesthésie
       $CASA = $operECap->consume("CASA"); // A mettre dans une CConsultAnesth
       
-//      // Motif d'hospit +/- équivalent à nos prototoles
-//      $CMOT = $operECap->consume("CMOT");
-//      $this->trace($CMOT, "Motif");
-//      
-//      $query = "SELECT *" .
-//          "\nFROM $this->base.ECMOPF" .
-//          "\nWHERE MOCMOT = ?";
-//                
-//      $queryValues = array (
-//        $CMOT,
-//      );
-//    
-//      $motifECap = new CRecordSante400;
-//      $motifECap->query($query, $queryValues);
-//      $motifECAP->valuePrefix = "MO";
-
       // Gestion des id400
       $CINT = $operECap->consume("CINT");
       $tags = array (
@@ -558,7 +578,7 @@ class CMouvSejourEcap extends CMouvement400 {
     switch ($this->consume("A_PRES")) {
       case "0": // Prévu
       $this->sejour->entree_prevue = $entree;
-      $this->sejour->sortie_prevue = $sortie;
+      $this->sejour->sortie_prevue = mbGetValue($sortie, mbDateTime("+ 1 days", $this->sejour->entree_prevue));
       break;
     
       case "1": // Présent
@@ -570,7 +590,7 @@ class CMouvSejourEcap extends CMouvement400 {
       $this->sejour->sortie_reelle = $sortie;
       break;
     }
-        
+    
     // Gestion des identifiants
     $tags[] = "CIDC:{$this->id400EtabECap->id400}";
     $tags[] = "DMED:{$this->id400Pat->id400}";
@@ -580,7 +600,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->id400Sej->bindObject($this->sejour);
     
     // Rectifications sur les dates prévues
-    // Pervents updateFormFields()
+    // Prevents updateFormFields()
     $this->sejour->_hour_entree_prevue = null;
     $this->sejour->_hour_sortie_prevue = null;
     
@@ -595,15 +615,14 @@ class CMouvSejourEcap extends CMouvement400 {
         $this->sejour->sortie_reelle : // Date de sortie fournie, on l'utilise 
         mbDateTime("+ 1 days", $this->sejour->entree_prevue); // On simule la date de sortie
     }
-
+    
     // Sauvegarde après rectifications
     if ($msg = $this->sejour->store()) {
       throw new Exception($msg);
     }
     
-    
     $this->trace($this->sejour->getProps(), "Séjour sauvegardé");
-    $this->markStatus(self::STATUS_SEJOUR, 1);
+    $this->markStatus(self::STATUS_SEJOUR);
   }
   
   function syncNaissance() {

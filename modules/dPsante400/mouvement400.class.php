@@ -12,7 +12,10 @@ class CMouvement400 extends CRecordSante400 {
 
   public $verbose = false;
   
-  public $status = "--------";
+  public $statuses = array(null, null, null, null, null, null, null, null);
+  public $cached   = array(null, null, null, null, null, null, null, null);
+  
+  public $status = null;
   public $rec = null;
   public $type = null;
   public $prod = null;
@@ -58,8 +61,13 @@ class CMouvement400 extends CRecordSante400 {
     if (!$this->prodField) {
       return null;
     }
+    
+    $this->status = "";
+    foreach ($this->statuses as $status) {
+      $this->status .= null !== $status ? chr($status + ord("0")) : "-";    
+    }
 
-    $query = /*false === strpos($this->status, "-") ?
+    $query = /* !in_array(null, $this->statuses) ?
       "DELETE FROM $this->base.$this->table WHERE $this->idField = ?" :*/
       "UPDATE $this->base.$this->table SET $this->prodField = '$this->status' WHERE $this->idField = ?";
     $values = array (
@@ -70,8 +78,13 @@ class CMouvement400 extends CRecordSante400 {
     $rec->query($query, $values);
   }
   
-  function markStatus($rank, $number) {
-    $this->status[$rank] = $number;
+  function markStatus($rank, $value = null) {
+    $this->statuses[$rank] = null === $value ? @$this->statuses[$rank] + 1 : $value;
+  }
+
+  function markCache($rank, $value = null) {
+    $this->markStatus($rank, $value);
+    $this->cached[$rank] = null === $value ? @$this->cached[$rank] + 1 : $value;
   }
 
   function trace($value, $title) {

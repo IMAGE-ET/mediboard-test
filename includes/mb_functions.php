@@ -219,6 +219,8 @@ function mbTranformTime($relative = null, $ref = null, $format) {
 
 /**
  * Transforms absolute or relative time into DB friendly DATETIME format
+ * @param string $relative Modifies the time (eg '+1 DAY')
+ * @param datetime The reference date time fo transforms
  * @return string: the transformed time 
  **/
 function mbDateTime($relative = null, $ref = null) {

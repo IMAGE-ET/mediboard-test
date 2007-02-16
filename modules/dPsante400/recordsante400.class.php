@@ -145,7 +145,7 @@ class CRecordSante400 {
 
   function consumeTime($valueName) {
     $time = $this->consume($valueName);
-    if (!$time === "0") {
+    if ($time === "0") {
       return null;
     }
     
@@ -158,13 +158,15 @@ class CRecordSante400 {
   }
 
   function consumeDateTime($dateName, $timeName) {
-    $date = $this->consumeDate($dateName);
+    if (null == $date = $this->consumeDate($dateName)) {
+      return null;
+    }
 
     if (null == $time = $this->consumeTime($timeName)) {
       $time = "00:00:00";
     }
     
-    return $time ? "$date $time" : $date;
+    return "$date $time";
   }
 }
 ?>

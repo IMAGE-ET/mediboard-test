@@ -4,7 +4,7 @@ function explain(iRec) {
   url.setModuleAction("{{$m}}", "{{$action}}");
   url.addParam("rec", iRec);
   url.addParam("verbose", 1);
-  url.popup(800, 500, "Explaination Import Sante400");
+  url.popup(900, 700, "Explaination Import Sante400");
 }
   
 </script>
@@ -18,6 +18,7 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 
 <table class="main">
 
+{{if !$dialog}}
 <tr>
   <td style="text-align: right">
 
@@ -36,6 +37,7 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
   
   </td>
 </tr>
+{{/if}}
 
 <tr>
   <td>
@@ -74,18 +76,25 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 </tr>
 
 {{foreach from=$mouvs item=curr_mouv}}
-<tr>	
+<tr>
   <td>{{$curr_mouv->rec}}</td>
   <td>{{$curr_mouv->type}}</td>
   <td>{{$curr_mouv->prod}}</td>
-  <td>{{if @$curr_mouv->status.0 != "-"}}<div class="message">{{$curr_mouv->status.0}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.1 != "-"}}<div class="message">{{$curr_mouv->status.1}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.2 != "-"}}<div class="message">{{$curr_mouv->status.2}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.3 != "-"}}<div class="message">{{$curr_mouv->status.3}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.4 != "-"}}<div class="message">{{$curr_mouv->status.4}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.5 != "-"}}<div class="message">{{$curr_mouv->status.5}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.6 != "-"}}<div class="message">{{$curr_mouv->status.6}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
-  <td>{{if @$curr_mouv->status.7 != "-"}}<div class="message">{{$curr_mouv->status.7}}&nbsp;Importé</div>{{else}}<div class="warning">Echec</div>{{/if}}</td>
+  {{foreach from=$curr_mouv->statuses key="index" item="status"}}
+  {{assign var="cache" value=$curr_mouv->cached[$index]}}
+  <td>
+    {{if $status !== null}}
+    <div class="message">
+      synchro:&nbsp;{{$status}}
+      {{if $cache}}
+      <br />cache:&nbsp;{{$cache}}
+      {{/if}}
+    </div>
+    {{else}}
+    <div class="warning">Echec</div>
+    {{/if}}
+  </td>
+  {{/foreach}}
   <td>{{$curr_mouv->status}}</td>
 
   {{if !$dialog}}
