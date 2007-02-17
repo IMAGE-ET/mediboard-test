@@ -19,6 +19,7 @@ class CMouvement400 extends CRecordSante400 {
   public $rec = null;
   public $type = null;
   public $prod = null;
+  public $when = null;
 
   function multipleLoad($marked = false, $max = 100) {
     $query = "SELECT * FROM $this->base.$this->table";
@@ -94,6 +95,7 @@ class CMouvement400 extends CRecordSante400 {
   }
   
   function proceed() {
+    $this->when = $this->consumeDateTime("TRDATE", "TRHEURE");
     $this->rec = $this->consume($this->idField);
     $this->prod = $this->consume($this->prodField);
     $this->type = $this->consume($this->typeField);

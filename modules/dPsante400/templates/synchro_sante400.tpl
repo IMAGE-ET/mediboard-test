@@ -57,6 +57,7 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 
 <tr>
   <th>Numéro</th>
+  <th>Quand</th>
   <th>Type</th>
   <th>Marque</th>
   <th>Etablissement</th>
@@ -78,6 +79,7 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 {{foreach from=$mouvs item=curr_mouv}}
 <tr>
   <td>{{$curr_mouv->rec}}</td>
+  <td>{{$curr_mouv->when}}</td>
   <td>{{$curr_mouv->type}}</td>
   <td>{{$curr_mouv->prod}}</td>
   {{foreach from=$curr_mouv->statuses key="index" item="status"}}
