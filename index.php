@@ -65,7 +65,7 @@ $ajax = dPgetParam($_REQUEST, "ajax", false);
 $dialog = dPgetParam( $_REQUEST, "dialog");
 
 // check if the user is trying to log in
-if(isset($_POST["login"])) {
+if (isset($_POST["login"])) {
   $username = dPgetParam($_POST   , "username", "");
   $password = dPgetParam($_POST   , "password", "");
   $md5      = dPgetParam($_POST   , "md5"     , 0);
@@ -75,7 +75,7 @@ if(isset($_POST["login"])) {
     @include_once("./locales/core.php");
     $AppUI->setMsg("Login Failed", UI_MSG_ERROR);
   }
-  if($ok && $dialog) {
+  if ($ok && $dialog) {
     $redirect = "m=system&a=login_ok&dialog=1";
   }
   $AppUI->redirect($redirect);
@@ -137,55 +137,52 @@ if (!$AppUI->user_id) {
     $smartyLogin->display("login.tpl");
   }
   
-  // destroy the current session and output login page
+  // Destroy the current session and output login page
   session_unset();
   session_destroy();
   exit;
 }
 
-// set the module and action from the url
-$m = $AppUI->checkFileName(mbGetValueFromGet("m", 0));
-if(!$m) {
-  // Select the default module
-  $m = CPermModule::getVisibleModule();
-  $pref_module = $AppUI->getPref("DEFMODULE");
-  if($pref_module) {
-    if(CPermModule::getViewModule(CModule::getInstalled($pref_module)->mod_id, PERM_READ)) {
+// Set the module and action from the url
+if (null == $m = $AppUI->checkFileName(mbGetValueFromGet("m", 0))) {
+  $m = CPermModule::getFirstVisibleModule();
+  if ($pref_module = $AppUI->getPref("DEFMODULE")) {
+    if (CPermModule::getViewModule(CModule::getInstalled($pref_module)->mod_id, PERM_READ)) {
       $m = $pref_module;
     }
   }
 }
 
+// Still no target module
+if (null == $m) {
+  $AppUI->redirect("m=system&a=access_denied");
+}
+
+if (null == $currentModule = CModule::getInstalled($m)) {
+  $AppUI->redirect("m=system&a=access_denied");
+}
+
+// Get current module permissions
+// these can be further modified by the included action files
+$can = new CCanDo;
+$can->read  = $canRead  = $currentModule->canRead();
+$can->edit  = $canEdit  = $currentModule->canEdit();
+$can->view  = $canView  = $currentModule->canView();
+$can->admin = $canAdmin = $currentModule->canAdmin();
+
 $a     = $AppUI->checkFileName(mbGetValueFromGet("a"     , "index"));
 $u     = $AppUI->checkFileName(mbGetValueFromGet("u"     , ""));
 $dosql = $AppUI->checkFileName(mbGetValueFromPost("dosql", ""));
-
-$currentModule = CModule::getInstalled($m);
-$listModules   = CPermModule::getVisibleModules();
 
 // set the group in use, put the user group if not allowed
 $g = mbGetAbsValueFromGetOrSession("g", $AppUI->user_group);
 $indexGroup = new CGroups;
 $indexGroup->load($g);
 
-if(!$indexGroup->canRead()) {
+if (!$indexGroup->canRead()) {
   mbSetAbsValueToSession("g", $AppUI->user_group);
   $g = $AppUI->user_group;
 }
-
-// check overall module permissions
-// these can be further modified by the included action files
-
-$indexModule = CModule::getInstalled($m);
-if(!$indexModule) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
-$canRead     = $indexModule->canRead();
-$canEdit     = $indexModule->canEdit();
-$canView     = $indexModule->canView();
-$canAdmin    = $indexModule->canAdmin();
-$canAuthor   = $canEdit;
-$canDelete   = $canEdit;
 
 // do some db work if dosql is set
 if($dosql) {
@@ -195,9 +192,8 @@ if($dosql) {
 
 ob_start();
 
-$listActiveModules = CModule::getActive();
-
-foreach($listActiveModules as $module) {
+// Feed modules with tabs
+foreach (CModule::getActive() as $module) {
   require_once "./modules/".$module->mod_name."/index.php";
 }
   
@@ -215,7 +211,8 @@ if (!$suppressHeaders) {
   if (!$dialog) {
     //top navigation menu
     $iKey = 0;
-    foreach ($listModules as $module) {
+    $affModule = array();
+    foreach (CPermModule::getVisibleModules() as $module) {
       $affModule[$iKey]["modName"]      = "$module->mod_name";
       $affModule[$iKey]["modNameCourt"] = $AppUI->_("module-$module->mod_name-court");
       $affModule[$iKey]["modNameLong"]  = $AppUI->_("module-$module->mod_name-long");
@@ -261,7 +258,9 @@ if (!$suppressHeaders) {
 
 // -- Code pour les tabBox et Inclusion du fichier demandé --
 
-$tab = $a == "index"  ? mbGetValueFromGetOrSession("tab", 1) : mbGetValueFromGet("tab");
+$tab = $a == "index"  ? 
+  mbGetValueFromGetOrSession("tab", 1) : 
+  mbGetValueFromGet("tab");
 
 if ($tab !== null) {
   $currentModule->showTabs();

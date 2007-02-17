@@ -44,13 +44,7 @@ class CModule extends CMbObject {
   
   // Static Collections
   var $_registered = array();
-/*
-  var $mod_directory   = null; : removed
-  var $mod_setup_class = null; : removed
-  var $mod_ui_name     = null; : removed
-  var $mod_ui_icon     = null; : removed
-  var $mod_description = null; : removed
-*/
+
   function CModule() {
     $this->CMbObject("modules", "mod_id");
   }

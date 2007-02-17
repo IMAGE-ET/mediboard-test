@@ -1,6 +1,8 @@
 <?php 
 
-global $AppUI, $m, $dbChronos, $dPconfig;
+global $AppUI, $m, $can, $dbChronos, $dPconfig;
+
+$can->needsEdit();
 
 require_once($AppUI->getModuleClass("dPsante400", "mouvsejourtonkin"));
 

@@ -123,18 +123,22 @@ class CPermModule extends CMbObject {
     return $result >= $permType;
   }
 
-  // Return the first visible module
-  function getVisibleModule() {
+  /**
+   *  Return the first visible module
+   */
+  function getFirstVisibleModule() {
     $listModules = CModule::getVisible();
-    foreach($listModules as $module) {
-      if(CPermModule::getViewModule($module->mod_id, PERM_READ)) {
+    foreach ($listModules as $module) {
+      if (CPermModule::getViewModule($module->mod_id, PERM_READ)) {
         return $module->mod_name;
       }
     }
     return false;
   }
   
-  // Return all the visible modules
+  /**
+   *  Return all the visible modules
+   */
   function getVisibleModules() {
     $listReadable = array();
     $listModules = CModule::getVisible();
