@@ -165,11 +165,13 @@ class CMouvSejourEcap extends CMouvement400 {
     
     // Gestion du praticien non renseigné
     if ($CPRT == "0") {
-      $praticien = new CMediusers;
       $praticien->_user_type = 3; // Chirurgien
       $praticien->_user_username = "pnr{$this->id400EtabECap->id400}";
       $praticien->_user_last_name  = "Non renseigné";
       $praticien->_user_first_name = "Praticien";
+
+      // At least one true mediuser property or update won't work
+      $praticien->actif = "0";
     } else {
       $query = "SELECT * FROM $this->base.ECPRPF " .
           "\nWHERE PRCIDC = ? " .
@@ -186,7 +188,6 @@ class CMouvSejourEcap extends CMouvement400 {
       $nomsPraticien     = split(" ", $prat400->consume("PRZNOM"));
       $prenomsPraticiens = split(" ", $prat400->consume("PRZPRE"));
   
-      $praticien = new CMediusers;
       $praticien->_user_type = 3; // Chirurgien
       $praticien->_user_username = substr(strtolower($prenomsPraticiens[0] . $nomsPraticien[0]), 0, 20);
       $praticien->_user_last_name  = join(" ", $nomsPraticien);
