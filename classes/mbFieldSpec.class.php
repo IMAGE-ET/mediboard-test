@@ -109,7 +109,7 @@ class CMbFieldSpec {
     
     // moreThan
     if($field = $this->moreThan){
-      if($msg = checkTargetPropValue($object, $field)){
+      if($msg = $this->checkTargetPropValue($object, $field)){
         return $msg;
       }
       $targetPropValue = $object->$field;
@@ -120,7 +120,7 @@ class CMbFieldSpec {
     
     // moreEquals
     if($field = $this->moreEquals){
-      if($msg = checkTargetPropValue($object, $field)){
+      if($msg = $this->checkTargetPropValue($object, $field)){
         return $msg;
       }
       $targetPropValue = $object->$field;      
@@ -131,7 +131,7 @@ class CMbFieldSpec {
     
     // sameAs
     if($field = $this->sameAs){
-      if($msg = checkTargetPropValue($object, $field)){
+      if($msg = $this->checkTargetPropValue($object, $field)){
         return $msg;
       }
       $targetPropValue = $object->$field;  
@@ -156,7 +156,7 @@ class CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue =& $object->$fieldName;
     
-    if($this->msgError = $this->checkParams(&$object)){
+    if($this->msgError = $this->checkParams($object)){
       return $this->msgError;
     }
     
@@ -164,7 +164,7 @@ class CMbFieldSpec {
       return null;
     }
     
-    if($this->msgError = $this->checkProperty(&$object)){
+    if($this->msgError = $this->checkProperty($object)){
       return $this->msgError;
     }
     
