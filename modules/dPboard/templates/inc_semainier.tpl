@@ -54,7 +54,7 @@
         </table>
       </div>
     </td>
-    <td style="width: 300px; font-size: 70%;">
+    <td id="viewTooltip" style="width: 300px; font-size: 70%;">
       {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
         {{foreach from=$listMins|smarty:nodefaults item=curr_mins key=keyMins}}
         {{foreach from=$plagesConsult key=curr_day item=plagesPerDay}}

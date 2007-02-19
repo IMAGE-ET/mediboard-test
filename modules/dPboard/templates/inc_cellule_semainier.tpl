@@ -20,8 +20,7 @@
 
   {{if $colonne=="plagesConsult"}}
     <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$plageInfos->date}}" 
-       onmouseover="viewItem('CPlageconsult',{{$plageInfos->_id}},'{{$curr_day}}')"
-       onmouseout="hideItem('CPlageconsult',{{$plageInfos->_id}},'{{$curr_day}}')">
+       onmouseover="viewItem('CPlageconsult',{{$plageInfos->_id}},'{{$curr_day}}')">
       {{if $plageInfos->libelle}}{{$plageInfos->libelle}}<br />{{/if}}
       {{$plageInfos->debut|date_format:"%Hh%M"}} - {{$plageInfos->fin|date_format:"%Hh%M"}}
     </a>
@@ -31,8 +30,7 @@
     </div>
   {{else}}
     <a href="?m=dPplanningOp&amp;tab=vw_idx_planning&amp;date={{$plageInfos->date}}"
-       onmouseover="viewItem('CPlageOp',{{$plageInfos->_id}},'{{$curr_day}}')"
-       onmouseout="hideItem('CPlageOp',{{$plageInfos->_id}}),'{{$curr_day}}'">
+       onmouseover="viewItem('CPlageOp',{{$plageInfos->_id}},'{{$curr_day}}')">
       {{$plageInfos->_ref_salle->nom}}<br />
       {{$plageInfos->debut|date_format:"%Hh%M"}} - {{$plageInfos->fin|date_format:"%Hh%M"}}
     </a>

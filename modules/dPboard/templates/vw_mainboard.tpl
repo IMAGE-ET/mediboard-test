@@ -1,5 +1,17 @@
 <script type="text/javascript">
+var notWhitespace   = /\S/;
+
 function viewItem(class, id, date) {
+  
+  Dom.cleanWhitespace($('viewTooltip'));
+  var oDiv = $('viewTooltip').childNodes;
+
+  $H(oDiv).each(function (pair) {
+    if(typeof pair.value == "object"){
+      $(pair.value["id"]).hide();
+    }
+  });
+
   oElement = $(class+id);
   oElement.show();
   
@@ -29,15 +41,6 @@ function viewItem(class, id, date) {
   url.requestUpdate(oElement);
   oElement.alt = "infos - cliquez pour fermer";
 }
-
-
-
-
-
-
-
-
-
 
 function hideItem(class, id) {
   oElement = $(class+id);
