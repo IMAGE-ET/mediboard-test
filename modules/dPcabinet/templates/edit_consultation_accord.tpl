@@ -70,11 +70,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td id="listConsult" style="width: 200px; vertical-align: top;" />
-    {{if $consult->consultation_id}}
     <td class="greedyPane">
-    {{else}}
-    <td class="halfPane">
-    {{/if}}
 
       {{if $consult->consultation_id}}
       {{assign var="patient" value=$consult->_ref_patient}}

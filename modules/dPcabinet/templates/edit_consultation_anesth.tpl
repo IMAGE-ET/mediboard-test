@@ -50,20 +50,6 @@ function initAccord(init_resize){
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function submitForm(oForm) {
   submitFormAjax(oForm, 'systemMsg');
 }
@@ -165,11 +151,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td id="listConsult" style="width: 200px; vertical-align: top;" />
-    {{if $consult->consultation_id}}
     <td class="greedyPane" id="tdConsultation">
-    {{else}}
-    <td class="halfPane">
-    {{/if}}
     
     {{if $consult->consultation_id}}
       {{assign var="patient" value=$consult->_ref_patient}}
