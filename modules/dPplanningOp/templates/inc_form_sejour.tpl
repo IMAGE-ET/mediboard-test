@@ -200,13 +200,6 @@
   </th>
   <td colspan="3">
     {{mb_field object=$sejour field="modalite" typeEnum="radio" defaultSelected="libre"}}
-    
-    {{if $sejour->sejour_id}}
-    {{assign var="checked" value=$sejour->modalite}}
-    {{else}}
-    {{assign var="checked" value="libre"}}
-    {{/if}}
-    {{html_radios name="modalite" options=$sejour->_enumsTrans.modalite separator="" title=$sejour->_props.modalite checked=$checked}}
   </td>
 </tr>
 
