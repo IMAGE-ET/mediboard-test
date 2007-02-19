@@ -93,7 +93,7 @@
 
 <tr>
   <th>
-    {{mb_field object=$sejour field="patient_id" type="hidden" spec="" ondblclick="popPat()"}}
+    {{mb_field object=$sejour field="patient_id" type="hidden" ondblclick="popPat()"}}
     <label for="patient_id" title="Patient concerné. Obligatoire">Patient</label>
   </th>
   <td class="readonly">

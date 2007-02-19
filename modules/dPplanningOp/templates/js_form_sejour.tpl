@@ -133,7 +133,7 @@ function setPat(patient_id, _patient_view) {
     bChangePat = 1;
   }
   
-  //oForm.patient_id.onchange();
+  oForm.patient_id.onchange();
 }
 
 function checkSejoursToReload() {
