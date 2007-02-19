@@ -24,7 +24,7 @@ class CRefMandatorySpec extends CRefSpec {
     if ($propValue === 0) {
       return "ne peut pas être une référence nulle";
     }
-    return parent::checkProperty(&$object);
+    return parent::checkProperty($object);
   }
 }
 
