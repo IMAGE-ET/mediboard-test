@@ -205,7 +205,7 @@ function smarty_function_mb_field($params, &$smarty){
           $iMax = 1;
           for($i=$iMax; $i>=0; $i--){
             $selected = "";
-            if(($value && $value == $i) || (!$value && $i == $params["defaultSelected"])){
+            if(($value && $value === $i) || (!$value && $i === $params["defaultSelected"])){
               $selected = "checked=\"checked\"";
             }
             $_html_result .= "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$i\" $selected $extra/>";
@@ -239,7 +239,7 @@ function smarty_function_mb_field($params, &$smarty){
             case "radio":
               $compteur = 0;
               foreach($enumsTrans as $key => $item){
-                if(($value && $value == $key) || (!$value && $key == $params["defaultSelected"])){
+                if(($value && $value === $key) || (!$value && $key === $params["defaultSelected"])){
                  $selected = " checked=\"checked\""; 
                 }else{
                   $selected = "";
