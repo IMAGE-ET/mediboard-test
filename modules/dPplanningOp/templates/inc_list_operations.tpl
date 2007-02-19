@@ -5,7 +5,11 @@
 {{/if}}
         <tr>
           <th class="title" colspan="5">
-            Opérations
+            {{if $boardItem}}
+              Interventions
+            {{else}}
+              Opérations
+            {{/if}}
           </th>
         </tr>
         <tr>
@@ -120,6 +124,9 @@
               <strong>{{$curr_code->code}}</strong>
               {{if !$board}}
               : {{$curr_code->libelleLong}}
+              {{/if}}
+              {{if $boardItem}}
+              : {{$curr_code->libelleLong|truncate:50:"...":false}}
               {{/if}}
               <br />
               {{/foreach}}
