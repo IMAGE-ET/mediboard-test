@@ -28,7 +28,7 @@
 {{/if}}
 
 {{if $boardItem}}
-  {{assign var="font" value="font-size: 70%;"}} 
+  {{assign var="font" value="font-size: 9px;"}} 
   <table class="tbl">
 {{elseif $board}}
   {{assign var="font" value="font-size: 100%;"}} 
@@ -41,7 +41,7 @@
 {{if $listPlage}}
 {{foreach from=$listPlage item=curr_plage}}
   <tr>
-    <th {{if !$boardItem}}class="title"{{/if}} colspan="2">Consultations de {{$curr_plage->debut|date_format:"%Hh%M"}} à {{$curr_plage->fin|date_format:"%Hh%M"}}</th>
+    <th class="title" colspan="2">Consultations de {{$curr_plage->debut|date_format:"%Hh%M"}} à {{$curr_plage->fin|date_format:"%Hh%M"}}</th>
   </tr>
   {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
   {{if !$curr_consult->patient_id}}

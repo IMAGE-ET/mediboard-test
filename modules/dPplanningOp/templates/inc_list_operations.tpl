@@ -1,5 +1,5 @@
 {{if $boardItem}}
-      <table class="tbl" style="font-size: 70%;">
+      <table class="tbl" style="font-size: 9px;">
 {{else}}
       <table class="tbl">
 {{/if}}
