@@ -321,7 +321,7 @@
               view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )"
               title="{{$curr_op->_nb_files_docs}} doc(s)">
               {{$curr_op->_nb_files_docs}}
-              <img align="top" src="images/icons/next{{if !$curr_sejour->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_op->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+              <img align="top" src="images/icons/next{{if !$curr_op->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_op->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
             </a>
             {{/if}} 
           </td>
