@@ -244,8 +244,11 @@ function smarty_function_mb_field($params, &$smarty){
                 }else{
                   $selected = "";
                 }
-                $_html_result .= "<input type=\"radio\" name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$key\" $selected $extra/>";
-                $_html_result .= "<label for=\"".$params["field"]."_$key\">$item</label> ";
+                $_html_result .= "<input type=\"radio\" name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$key\" $selected";
+                if($compteur == 0) {
+                  $_html_result .= $extra;
+                }
+                $_html_result .= " /><label for=\"".$params["field"]."_$key\">$item</label> ";
                 $compteur++;
                 if($compteur % $params["cycle"] == 0){
                   $_html_result .= $params["separator"];
