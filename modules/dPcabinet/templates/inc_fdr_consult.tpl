@@ -149,8 +149,8 @@ function submitFdr(oForm) {
             <input type="hidden" name="m" value="dPfiles" />
             <input type="hidden" name="dosql" value="do_file_aed" />
             <input type="hidden" name="del" value="1" />
-            <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
-            <input type="hidden" name="_view" value="{{$curr_file->_view}}" />
+            {{mb_field object=$curr_file field="file_id" type="hidden" spec=""}}
+            {{mb_field object=$curr_file field="_view" type="hidden" spec=""}}
             <button class="trash notext" type="button" onclick="confirmFileDeletion(this)"></button>
           </form>
         </li>
@@ -181,7 +181,7 @@ function submitFdr(oForm) {
           {{else}}
           <input type="hidden" name="object_id" value="{{$consult->consultation_id}}" />
           {{/if}}          
-          <input type="hidden" name="compte_rendu_id" value="{{$document->compte_rendu_id}}" />
+          {{mb_field object=$document field="compte_rendu_id" type="hidden" spec=""}}
           <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})"></button>
           <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadFdr})" />
           </form>
@@ -230,8 +230,8 @@ function submitFdr(oForm) {
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
-      <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
-      <input type="hidden" name="_check_premiere" value="{{$consult->_check_premiere}}" />
+      {{mb_field object=$consult field="consultation_id" type="hidden" spec=""}}
+      {{mb_field object=$consult field="_check_premiere" type="hidden" spec=""}}
  
       <table class="form">
         {{if !$consult->tarif}}
@@ -264,9 +264,9 @@ function submitFdr(oForm) {
           <th><label for="_somme" title="Somme à régler. Obligatoire.">Somme à régler</label></th>
           <td>
             <input type="text" size="4" name="_somme" title="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" /> €
-            <input type="hidden" name="secteur1" value="{{$consult->secteur1}}" />
-            <input type="hidden" name="secteur2" value="{{$consult->secteur2}}" />
-            <input type="hidden" name="tarif" value="{{if $consult->tarif != null}}{{$consult->tarif}}{{/if}}" />
+            {{mb_field object=$consult field="secteur1" type="hidden" spec=""}}
+            {{mb_field object=$consult field="secteur2" type="hidden" spec=""}}
+            {{mb_field object=$consult field="tarif" type="hidden" spec=""}}
             <input type="hidden" name="paye" value="0" />
             <input type="hidden" name="date_paiement" value="" />
           </td>
@@ -274,11 +274,11 @@ function submitFdr(oForm) {
         {{else}}
         <tr>
           <td colspan="2" class="button">
-            <input type="hidden" name="secteur1" value="{{$consult->secteur1}}" />
-            <input type="hidden" name="secteur2" value="{{$consult->secteur2}}" />
-            <input type="hidden" name="tarif" value="{{$consult->tarif}}" />
-            <input type="hidden" name="paye" value="{{$consult->paye}}" />
-            <input type="hidden" name="date_paiement" value="{{$consult->date_paiement}}" />
+            {{mb_field object=$consult field="secteur1" type="hidden" spec=""}}
+            {{mb_field object=$consult field="secteur2" type="hidden" spec=""}}
+            {{mb_field object=$consult field="tarif" type="hidden" spec=""}}
+            {{mb_field object=$consult field="paye" type="hidden" spec=""}}
+            {{mb_field object=$consult field="date_paiement" type="hidden" spec=""}}
             <strong>{{$consult->secteur1+$consult->secteur2}} € ont été réglés : {{$consult->type_tarif}}</strong>
           </td>
         </tr>

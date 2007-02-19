@@ -26,7 +26,7 @@ function reloadListTech() {
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_planning_aed" />
-      <input type="hidden" name="operation_id" value="{{$consult_anesth->_ref_operation->operation_id}}" />
+      {{mb_field object=$consult_anesth->_ref_operation field="operation_id" type="hidden" spec=""}}
       <label for="type_anesth" title="Type d'anesthésie pour l'intervention">Type d'anesthésie</label>
       <select name="type_anesth" onchange="submitFormAjax(this.form, 'systemMsg')">
         <option value="">&mdash; Choisir un type d'anesthésie</option>
@@ -43,7 +43,7 @@ function reloadListTech() {
         {{html_options options=$consult_anesth->_ref_operation->_aides.rques}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques)"></button><br />
-      <textarea name="rques" onblur="submitFormAjax(this.form, 'systemMsg')">{{$consult_anesth->_ref_operation->rques}}</textarea>
+      {{mb_field object=$consult_anesth->_ref_operation field="rques" onblur="submitFormAjax(this.form, 'systemMsg')"}}
       </form>
       <br />
       {{/if}}
@@ -51,14 +51,9 @@ function reloadListTech() {
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-      <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
+      {{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
       <label for="ASA" title="Score ASA">ASA</label>
-      {{if $consult_anesth->ASA}}
-      {{assign var="selected" value=$consult_anesth->ASA}}
-      {{else}}
-      {{assign var="selected" value=$consult_anesth->_enums.ASA.0}}
-      {{/if}}
-      {{html_options name="ASA" options=$consult_anesth->_enumsTrans.ASA selected=$selected onchange="submitFormAjax(this.form, 'systemMsg')"}}
+      {{mb_field object=$consult_anesth field="ASA" defaultSelected="1" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       <br /><br />
       <label for="premedication" title="Informations concernant la prémédication">Prémédication</label>
       <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();">
@@ -66,7 +61,7 @@ function reloadListTech() {
         {{html_options options=$consult_anesth->_aides.premedication}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.premedication)"></button><br />
-      <textarea name="premedication" onchange="submitFormAjax(this.form, 'systemMsg')">{{$consult_anesth->premedication}}</textarea>
+      {{mb_field object=$consult_anesth field="premedication" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       
       <br /><br />
       <label for="prepa_preop" title="Informations concernant la préparation pré-opératoire">Préparation Pré-opératoire</label>
@@ -75,7 +70,7 @@ function reloadListTech() {
         {{html_options options=$consult_anesth->_aides.prepa_preop}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.prepa_preop)"></button><br />
-      <textarea name="prepa_preop" onchange="submitFormAjax(this.form, 'systemMsg')">{{$consult_anesth->prepa_preop}}</textarea>
+      {{mb_field object=$consult_anesth field="prepa_preop" onchange="submitFormAjax(this.form, 'systemMsg')"}}
 
       </form>
       <br />
@@ -84,7 +79,7 @@ function reloadListTech() {
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_technique_aed" />
-      <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
+      {{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
       <label for="technique" title="Ajouter une technique complementaire">Technique Complémentaire</label>
       <select name="_helpers_technique" size="1" onchange="pasteHelperContent(this)">
         <option value="">&mdash; Choisir une aide</option>
@@ -106,15 +101,15 @@ function reloadListTech() {
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
-      <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
-      <input type="hidden" name="_check_premiere" value="{{$consult->_check_premiere}}" />
+      {{mb_field object=$consult field="consultation_id" type="hidden" spec=""}}
+      {{mb_field object=$consult field="_check_premiere" type="hidden" spec=""}}
       <label for="rques" title="Remarques concernant la consultation">Remarques</label>
       <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.rques}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques)"></button><br />
-      <textarea name="rques" onchange="submitFormAjax(this.form, 'systemMsg')">{{$consult->rques}}</textarea><br />
+      {{mb_field object=$consult field="rques" onchange="submitFormAjax(this.form, 'systemMsg')"}}<br />
       </form>
     </td>
   </tr>

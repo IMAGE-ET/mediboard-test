@@ -22,6 +22,14 @@ if(!$userSel->isPraticien()) {
   $AppUI->redirect("m=system&a=access_denied");
 }
 
+if($view == "day"){
+  $prec = mbDate("-1 day", $date);
+  $suiv = mbDate("+1 day", $date);
+}else{
+  $prec = mbDate("-1 week", $date);
+  $suiv = mbDate("+1 week", $date);
+}
+
 // Consultations
 $vue2_default = isset($AppUI->user_prefs["AFFCONSULT"]) ? $AppUI->user_prefs["AFFCONSULT"] : 0 ;
 $vue          = mbGetValueFromGetOrSession("vue2", $vue2_default);
@@ -29,6 +37,8 @@ $vue          = mbGetValueFromGetOrSession("vue2", $vue2_default);
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("prec" , $prec);
+$smarty->assign("suiv" , $suiv);
 $smarty->assign("date" , $date);
 $smarty->assign("view" , $view);
 $smarty->assign("vue"  , $vue);

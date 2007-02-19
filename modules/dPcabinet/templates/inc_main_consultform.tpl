@@ -2,8 +2,9 @@
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_consultation_aed" />
-<input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
-<input type="hidden" name="_check_premiere" value="{{$consult->_check_premiere}}" />
+{{mb_field object=$consult field="consultation_id" type="hidden" spec=""}}
+{{mb_field object=$consult field="_check_premiere" type="hidden" spec=""}}
+
 <table class="form">
   <tr>
     <th class="category">
@@ -28,8 +29,8 @@
     </th>
   </tr>
   <tr>
-    <td class="text" colspan="2"><textarea name="motif" rows="5" onchange="submitFormAjax(this.form, 'systemMsg');">{{$consult->motif}}</textarea></td>
-    <td class="text" colspan="2"><textarea name="rques" rows="5" onchange="submitFormAjax(this.form, 'systemMsg');">{{$consult->rques}}</textarea></td>
+    <td class="text" colspan="2">{{mb_field object=$consult field="motif" rows="5" onchange="submitFormAjax(this.form, 'systemMsg');"}}</td>
+    <td class="text" colspan="2">{{mb_field object=$consult field="rques" rows="5" onchange="submitFormAjax(this.form, 'systemMsg');"}}</td>
   </tr>
   <tr>
     <th class="category">
@@ -54,8 +55,8 @@
     </th>
   </tr>
   <tr>
-    <td class="text" colspan="2"><textarea name="examen" rows="5" onchange="submitFormAjax(this.form, 'systemMsg');">{{$consult->examen}}</textarea></td>
-    <td class="text" colspan="2"><textarea name="traitement" rows="5" onchange="submitFormAjax(this.form, 'systemMsg');">{{$consult->traitement}}</textarea></td>
+    <td class="text" colspan="2">{{mb_field object=$consult field="examen" rows="5" onchange="submitFormAjax(this.form, 'systemMsg');"}}</td>
+    <td class="text" colspan="2">{{mb_field object=$consult field="traitement" rows="5" onchange="submitFormAjax(this.form, 'systemMsg');"}}</td>
   </tr>
   <tr>
     <td class="button" colspan="4">

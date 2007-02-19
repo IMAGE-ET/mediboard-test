@@ -3,8 +3,8 @@
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-      <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
-      <input type="hidden" name="listCim10" value="{{$consult_anesth->listCim10}}" />
+      {{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
+      {{mb_field object=$consult_anesth field="listCim10" type="hidden" spec=""}}
       <table class="form">
       <tr>
         <td>
@@ -26,10 +26,10 @@
       </tr>
       <tr>  
         <td>
-          <textarea name="tabac" onchange="submitForm(this.form);">{{$consult_anesth->tabac}}</textarea>
+          {{mb_field object=$consult_anesth field="tabac" onchange="submitForm(this.form);"}}
         </td>
         <td>
-          <textarea name="oenolisme" onchange="submitForm(this.form);">{{$consult_anesth->oenolisme}}</textarea>
+          {{mb_field object=$consult_anesth field="oenolisme" onchange="submitForm(this.form);"}}
         </td>
       </tr>
       </table>

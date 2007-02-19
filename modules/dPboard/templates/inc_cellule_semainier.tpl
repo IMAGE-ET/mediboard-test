@@ -17,9 +17,11 @@
   {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
   {{else}}{{assign var="backgroundClass" value="full"}}
   {{/if}}
-  
+
   {{if $colonne=="plagesConsult"}}
-    <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$plageInfos->date}}" title="Voir le contenu de la plage">
+    <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$plageInfos->date}}" 
+       onmouseover="viewItem('CPlageconsult',{{$plageInfos->_id}},'{{$curr_day}}')"
+       onmouseout="hideItem('CPlageconsult',{{$plageInfos->_id}},'{{$curr_day}}')">
       {{if $plageInfos->libelle}}{{$plageInfos->libelle}}<br />{{/if}}
       {{$plageInfos->debut|date_format:"%Hh%M"}} - {{$plageInfos->fin|date_format:"%Hh%M"}}
     </a>
@@ -28,7 +30,9 @@
       <div class="text">{{$plageInfos->_affected}} / {{$plageInfos->_total}}</div>
     </div>
   {{else}}
-    <a href="?m=dPplanningOp&amp;tab=vw_idx_planning&amp;date={{$plageInfos->date}}">
+    <a href="?m=dPplanningOp&amp;tab=vw_idx_planning&amp;date={{$plageInfos->date}}"
+       onmouseover="viewItem('CPlageOp',{{$plageInfos->_id}},'{{$curr_day}}')"
+       onmouseout="hideItem('CPlageOp',{{$plageInfos->_id}}),'{{$curr_day}}'">
       {{$plageInfos->_ref_salle->nom}}<br />
       {{$plageInfos->debut|date_format:"%Hh%M"}} - {{$plageInfos->fin|date_format:"%Hh%M"}}
     </a>

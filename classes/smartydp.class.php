@@ -208,7 +208,7 @@ function smarty_function_mb_field($params, &$smarty){
             if(($value && $value == $i) || (!$value && $i == $params["defaultSelected"])){
               $selected = "checked=\"checked\"";
             }
-            $_html_result .= "<input type=\"radio\" name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$i\" $selected $extra/>";
+            $_html_result .= "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$i\" $selected $extra/>";
             $_html_result .= "<label for=\"".$params["field"]."_$i\">".$AppUI->_("$objClass.".$params["field"].".$i")."</label> ";
             if($i != 0){
               $_html_result .= $params["separator"];

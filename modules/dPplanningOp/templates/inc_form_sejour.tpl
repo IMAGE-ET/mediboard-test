@@ -8,11 +8,11 @@
 {{if $mode_operation}}
   <input type="hidden" name="callback" value="submitFormOperation" />
 {{/if}}
-<input type="hidden" name="saisi_SHS" value="{{$sejour->saisi_SHS}}" />
-<input type="hidden" name="modif_SHS" value="{{$sejour->modif_SHS}}" />
+{{mb_field object=$sejour field="saisi_SHS" type="hidden" spec=""}}
+{{mb_field object=$sejour field="modif_SHS" type="hidden" spec=""}}
 <input type="hidden" name="annule" value="{{$sejour->annule|default:"0"}}" />
 {{if !$mode_operation}}
-  <input type="hidden" name="sejour_id" value="{{$sejour->sejour_id}}" />
+  {{mb_field object=$sejour field="sejour_id" type="hidden" spec=""}}
 {{/if}}
 
 
@@ -93,7 +93,7 @@
 
 <tr>
   <th>
-    <input type="hidden" name="patient_id" title="{{$sejour->_props.patient_id}}" ondblclick="popPat()" value="{{$patient->patient_id}}" />
+    {{mb_field object=$sejour field="patient_id" type="hidden" spec="" ondblclick="popPat()"}}
     <label for="patient_id" title="Patient concerné. Obligatoire">Patient</label>
   </th>
   <td class="readonly">
@@ -106,7 +106,7 @@
 
 <tr>
   <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM)</label></th>
-  <td><input type="text" name="DP" title="{{$sejour->_props.DP}}" size="10" value="{{$sejour->DP}}" /></td>
+  <td>{{mb_field object=$sejour field="DP" size="10"}}</td>
   <td colspan="2" class="button"><button type="button" class="search" onclick="popCode('cim10')">Choisir un code</button></td>
 </tr>
 
@@ -120,7 +120,7 @@
   </th>
   <td class="date">
     <div id="editSejour__date_entree_prevue_da">{{$sejour->_date_entree_prevue|date_format:"%d/%m/%Y"}}</div>
-    <input type="hidden" name="_date_entree_prevue" title="notNull date" value="{{$sejour->_date_entree_prevue}}" onchange="modifSejour(); updateSortiePrevue();"/>
+    {{mb_field object=$sejour field="_date_entree_prevue" type="hidden" spec="notNull date" onchange="modifSejour(); updateSortiePrevue();"}}
     <img id="editSejour__date_entree_prevue_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
   </td>
   <td colspan="2">
@@ -156,7 +156,7 @@
   </th>
   <td class="date">
     <div id="editSejour__date_sortie_prevue_da">{{$sejour->_date_sortie_prevue|date_format:"%d/%m/%Y"}}</div>
-    <input type="hidden" name="_date_sortie_prevue" title="notNull date moreEquals|_date_entree_prevue" value="{{$sejour->_date_sortie_prevue}}" onchange="updateDureePrevue(); modifSejour()" />
+    {{mb_field object=$sejour field="_date_sortie_prevue" type="hidden" spec="notNull date moreEquals|_date_entree_prevue" onchange="updateDureePrevue(); modifSejour()"}}
     <img id="editSejour__date_sortie_prevue_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
   </td>
   <td colspan="2">
@@ -189,12 +189,7 @@
 <tr>
   <th><label for="type" title="Type d'admission">{{tr}}Type d'admission{{/tr}}</label></th>
   <td colspan="3">
-    {{if $sejour->sejour_id}}
-    {{assign var="checked" value=$sejour->type}}
-    {{else}}
-    {{assign var="checked" value="ambu"}}
-    {{/if}}
-    {{html_options name="type" options=$sejour->_enumsTrans.type title=$sejour->_props.type selected=$checked}}
+    {{mb_field object=$sejour field="type" defaultSelected="ambu"}}
   </td>
 </tr>
 
@@ -204,6 +199,8 @@
     <label for="modalite_libre" title="modalite d'admission">{{tr}}Modalité d'admission{{/tr}}</label>
   </th>
   <td colspan="3">
+    {{mb_field object=$sejour field="modalite" typeEnum="radio" defaultSelected="libre"}}
+    
     {{if $sejour->sejour_id}}
     {{assign var="checked" value=$sejour->modalite}}
     {{else}}

@@ -27,17 +27,21 @@
 </form>
 {{/if}}
 
-{{if $board}}
-{{assign var="font" value="font-size: 100%;"}} 
-<table class="tbl">
+{{if $boardItem}}
+  {{assign var="font" value="font-size: 70%;"}} 
+  <table class="tbl">
+{{elseif $board}}
+  {{assign var="font" value="font-size: 100%;"}} 
+  <table class="tbl">
 {{else}}
-{{assign var="font" value="font-size: 9px;"}} 
-<table class="tbl" style="width: 250px">
+  {{assign var="font" value="font-size: 9px;"}} 
+  <table class="tbl" style="width: 250px">
 {{/if}}
+
 {{if $listPlage}}
 {{foreach from=$listPlage item=curr_plage}}
   <tr>
-    <th class="title" colspan="2">Consultations de {{$curr_plage->debut|date_format:"%Hh%M"}} à {{$curr_plage->fin|date_format:"%Hh%M"}}</th>
+    <th {{if !$boardItem}}class="title"{{/if}} colspan="2">Consultations de {{$curr_plage->debut|date_format:"%Hh%M"}} à {{$curr_plage->fin|date_format:"%Hh%M"}}</th>
   </tr>
   {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
   {{if !$curr_consult->patient_id}}
@@ -53,9 +57,11 @@
     {{else}}
     <td style="width: 40px; {{$style|smarty:nodefaults}}" rowspan="2">
     {{/if}}
+      {{if !$boardItem}}
       <a href="index.php?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}" title="Modifier le RDV" style="float: right;">
         <img src="images/icons/planning.png" alt="modifier" />
       </a>
+      {{/if}}
       {{if $curr_consult->patient_id}}
         <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}" style="margin-bottom: 4px;">
           {{$curr_consult->heure|truncate:5:"":true}}

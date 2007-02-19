@@ -164,7 +164,7 @@ function copyTraitement(traitement_id){
       <input type="hidden" name="object_id" value="{{$patient->patient_id}}" />
       <input type="hidden" name="object_class" value="CPatient" />      
       {{if $_is_anesth}}
-      <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
+      {{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
       {{/if}}
 
       <table class="form">
@@ -198,7 +198,7 @@ function copyTraitement(traitement_id){
         <tr>
           <th><label for="type" title="Type d'antécédent">Type</label></th>
           <td>
-            {{html_options name="type" options=$antecedent->_enumsTrans.type}}
+            {{mb_field object=$antecedent field="type"}}
           </td>
         </tr>
         <tr>
@@ -219,7 +219,7 @@ function copyTraitement(traitement_id){
       <input type="hidden" name="object_id" value="{{$patient->patient_id}}" />
       <input type="hidden" name="object_class" value="CPatient" />
       {{if $_is_anesth}}
-      <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
+      {{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
       {{/if}}
       
       <table class="form">
@@ -278,8 +278,8 @@ function copyTraitement(traitement_id){
       <input type="hidden" name="tab" value="edit_consultation" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_patients_aed" />
-      <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
-      <input type="hidden" name="listCim10" value="{{$patient->listCim10}}" />
+      {{mb_field object=$patient field="patient_id" type="hidden" spec=""}}
+      {{mb_field object=$patient field="listCim10" type="hidden" spec=""}}
       
       <table style="width: 100%">
       {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}

@@ -5,8 +5,8 @@
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="dosql" value="do_exam_audio_aed" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="examaudio_id" value="{{$exam_audio->examaudio_id}}" />
-<input type="hidden" name="consultation_id" value="{{$exam_audio->consultation_id}}" />
+{{mb_field object=$exam_audio field="examaudio_id" type="hidden" spec=""}}
+{{mb_field object=$exam_audio field="consultation_id" type="hidden" spec=""}}
 
 <table class="main" id="weber">
 

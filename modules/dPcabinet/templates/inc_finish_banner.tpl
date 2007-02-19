@@ -23,8 +23,8 @@ function reloadFinishBanner() {
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_consultation_aed" />
-<input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
-<input type="hidden" name="chrono" value="{{$consult->chrono}}" />
+{{mb_field object=$consult field="consultation_id" type="hidden" spec=""}}
+{{mb_field object=$consult field="chrono" type="hidden" spec=""}}
 
 <table class="form">
   <tr>

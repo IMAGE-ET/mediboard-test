@@ -40,7 +40,6 @@ foreach($classSelected as $selected){
   
   // CLé dela table
   $aClass[$object->_tbl_key]["keytable"] = $object->_tbl_key;
-  //$aClass[$object->_tbl_key]["_object"]  = "object ICI";
   
   // Extraction des champs
   foreach ($object->getProps() as $k => $v) {

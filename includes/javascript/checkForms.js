@@ -60,7 +60,7 @@ var ElementChecker = {
         sMsg = this.pct();
         break;
       case "text":
-        sMsg = this.txt();
+        sMsg = this.text();
         break;
       case "html":
         sMsg = this.html();
@@ -396,7 +396,7 @@ Object.extend(ElementChecker, {
   
   // currency
   currency: function() {
-    return this.float;
+    return this.float();
   },
   
   // pct

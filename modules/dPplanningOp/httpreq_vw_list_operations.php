@@ -19,6 +19,7 @@ $userSel = new CMediusers;
 $userSel->load($chirSel);
 $urgences = mbGetValueFromGetOrSession("urgences", 0);
 $board = mbGetValueFromGet("board", 0);
+$boardItem = mbGetValueFromGet("boardItem", 0);
 
 if($urgences) {
   $listDay = array();
@@ -77,6 +78,7 @@ $hospiList = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, tr
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("boardItem"   , $boardItem);
 $smarty->assign("date"        , $date);
 $smarty->assign("crList"      , $crList);
 $smarty->assign("hospiList"   , $hospiList);

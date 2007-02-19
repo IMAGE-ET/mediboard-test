@@ -16,7 +16,7 @@ function verifIntubDifficileAndSave(oForm){
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-<input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
+{{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
 <table class="form">
   <tr>
     <th colspan="6" class="category">Condition d'intubation</th>
@@ -35,14 +35,14 @@ function verifIntubDifficileAndSave(oForm){
 
     <th><label for="bouche_m20" title="Ouverture de la bouche">Ouverture de la bouche</label></th>
     <td>
-      {{html_radios name="bouche" options=$consult_anesth->_enumsTrans.bouche selected=$consult_anesth->bouche separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
+      {{mb_field object=$consult_anesth field="bouche" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
     </td>
   </tr>
   
   <tr>
     <th><label for="distThyro_m65" title="Distance thyro-mentonnière">Distance thyro-mentonnière</label></th>
     <td>
-      {{html_radios name="distThyro" options=$consult_anesth->_enumsTrans.distThyro selected=$consult_anesth->distThyro separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
+      {{mb_field object=$consult_anesth field="distThyro" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
     </td>
   </tr>
 
@@ -54,7 +54,7 @@ function verifIntubDifficileAndSave(oForm){
         {{html_options options=$consult_anesth->_aides.etatBucco}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.etatBucco)"></button><br />
-      <textarea name="etatBucco" onchange="submitFormAjax(this.form, 'systemMsg')" title="{{$consult_anesth->_props.etatBucco}}">{{$consult_anesth->etatBucco}}</textarea>
+      {{mb_field object=$consult_anesth field="etatBucco" onchange="submitFormAjax(this.form, 'systemMsg')"}}
     </td>
   </tr>
   
@@ -66,7 +66,7 @@ function verifIntubDifficileAndSave(oForm){
         {{html_options options=$consult_anesth->_aides.conclusion}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.conclusion)"></button><br />
-      <textarea name="conclusion" onchange="submitFormAjax(this.form, 'systemMsg')" title="{{$consult_anesth->_props.conclusion}}">{{$consult_anesth->conclusion}}</textarea>
+      {{mb_field object=$consult_anesth field="conclusion" onchange="submitFormAjax(this.form, 'systemMsg')"}}
     </td>
   </tr>
   <tr>

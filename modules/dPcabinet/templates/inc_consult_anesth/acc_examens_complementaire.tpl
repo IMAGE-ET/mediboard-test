@@ -69,7 +69,7 @@ function reloadListExamComp() {
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_examcomp_aed" />
-      <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
+      {{mb_field object=$consult field="consultation_id" type="hidden" spec=""}}
       <table class="form">
         <tr>
           <td><strong>Ajouter un examen complémentaire</strong></td>
@@ -109,101 +109,86 @@ function reloadListExamComp() {
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-      <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->consultation_anesth_id}}" />
+      {{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
       <table class="form">
         <tr>
           <th><label for="groupe" title="Groupe sanguin">Groupe</label></th>
           <td>
-            {{if $consult_anesth->groupe}}
-            {{assign var="selected" value=$consult_anesth->groupe}}
-            {{else}}
-            {{assign var="selected" value=$consult_anesth->_enums.groupe.0}}
-            {{/if}}
-            {{html_options tabindex="101" name="groupe" title=$consult_anesth->_props.groupe options=$consult_anesth->_enumsTrans.groupe selected=$selected onchange="submitForm(this.form)"}}
+            {{mb_field object=$consult_anesth field="groupe" defaultSelected="?" tabindex="101" onchange="submitForm(this.form)"}}
             /
-            {{if $consult_anesth->rhesus}}
-            {{assign var="selected" value=$consult_anesth->rhesus}}
-            {{else}}
-            {{assign var="selected" value=$consult_anesth->_enums.rhesus.0}}
-            {{/if}}
-            {{html_options tabindex="102"  name="rhesus" title=$consult_anesth->_props.rhesus options=$consult_anesth->_enumsTrans.rhesus selected=$selected onchange="submitForm(this.form)"}}
+            {{mb_field object=$consult_anesth field="rhesus" defaultSelected="?" tabindex="102" onchange="submitForm(this.form)"}}
           </td>
           <th><label for="creatinine" title="Créatinine">Créatinine</label></th>
           <td>
-            <input tabindex="108" type="text" size="4" name="creatinine" title="{{$consult_anesth->_props.creatinine}}" value="{{$consult_anesth->creatinine}}" onchange="calculClairance();submitForm(this.form);" />
+            {{mb_field object=$consult_anesth field="creatinine" tabindex="108" size="4" onchange="calculClairance();submitForm(this.form);"}}
             mg/l
           </td>
         </tr>
         <tr>
           <th><label for="rai" title="Recherche d'agglutinines irrégulières">RAI</label></th>
           <td>
-            {{if $consult_anesth->rai}}
-            {{assign var="selected" value=$consult_anesth->rai}}
-            {{else}}
-            {{assign var="selected" value=$consult_anesth->_enums.rai.0}}
-            {{/if}}
-            {{html_options tabindex="103" name="rai" title=$consult_anesth->_props.rai options=$consult_anesth->_enumsTrans.rai selected=$selected onchange="submitForm(this.form)"}}
+            {{mb_field object=$consult_anesth field="rai" defaultSelected="?" tabindex="103" onchange="submitForm(this.form)"}}
           </td>
           <th><label for="_clairance" title="Clairance Créatinine">Clairance</label></th>
           <td class="readonly">
-            <input type="text" size="4" name="_clairance" value="{{$consult_anesth->_clairance}}" readonly="readonly" />
+            {{mb_field object=$consult_anesth field="_clairance" type="text" size="4" readonly="readonly"}}
             ml/min
           </td>
         </tr>
         <tr>
           <th><label for="hb" title="Hb">Hb</label></th>
           <td>
-            <input tabindex="104" type="text" size="4" name="hb" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.hb}}" value="{{$consult_anesth->hb}}" />
+            {{mb_field object=$consult_anesth field="hb" tabindex="104" size="4" onchange="submitForm(this.form)"}}
             g/dl
           </td>
           <th><label for="na" title="Na+">Na+</label></th>
           <td>
-            <input tabindex="109" type="text" size="4" name="na" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.na}}" value="{{$consult_anesth->na}}" />
+            {{mb_field object=$consult_anesth field="na" tabindex="109" size="4" onchange="submitForm(this.form)"}}
             mmol/l
           </td>
         </tr>
         <tr> 
           <th><label for="ht" title="Hématocrite">Ht</label></th>
           <td>
-            <input tabindex="105" type="text" size="4" name="ht" title="{{$consult_anesth->_props.ht}}" value="{{$consult_anesth->ht}}" onchange="calculPSA();submitForm(this.form);" />
+            {{mb_field object=$consult_anesth field="ht" tabindex="105" size="4" onchange="calculPSA();submitForm(this.form);"}}
             %
           </td>
           <th><label for="k" title="K+">K+</label></th>
           <td>
-            <input tabindex="110" type="text" size="4" name="k" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.k}}" value="{{$consult_anesth->k}}" />
+            {{mb_field object=$consult_anesth field="k" tabindex="110" size="4" onchange="submitForm(this.form)"}}
             mmol/l
           </td>
         </tr>
         <tr>
           <th><label for="ht_final" title="Hématocrite finale">Ht final</label></th>
           <td>
-            <input tabindex="106" type="text" size="4" name="ht_final" title="{{$consult_anesth->_props.ht_final}}" value="{{$consult_anesth->ht_final}}" onchange="calculPSA();submitForm(this.form);" />
+            {{mb_field object=$consult_anesth field="ht_final" tabindex="106" size="4" onchange="calculPSA();submitForm(this.form);"}}
             %
           </td>
           <th><label for="tp" title="Taux de prothrombine">TP</label></th>
           <td>
-            <input tabindex="111" type="text" size="4" name="tp" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.tp}}" value="{{$consult_anesth->tp}}" />
+            {{mb_field object=$consult_anesth field="tp" tabindex="111" size="4" onchange="submitForm(this.form)"}}
             %
           </td>
         </tr>
         <tr>
           <th><label for="_psa" title="Pertes Sanguines Acceptables">PSA</label></th>
           <td class="readonly">
-            <input type="text" size="4" name="_psa" value="{{$consult_anesth->_psa}}" readonly="readonly" />
+            {{mb_field object=$consult_anesth field="_psa" type="text" size="4" readonly="readonly"}}
             ml/GR
           </td>
           <th><label for="tca" title="Temps de Céphaline avec Activateur">TCA</label></th>
           <td>
-            <input tabindex="112" type="text" name="tca_temoin" maxlength="2" size="2" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.tca_temoin}}" value="{{$consult_anesth->tca_temoin}}" />
+            {{mb_field object=$consult_anesth field="tca_temoin" tabindex="112" maxlength="2" size="2" onchange="submitForm(this.form)"}}
             s /
-            <input tabindex="113" type="text" name="tca" maxlength="2" size="2" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.tca}}" value="{{$consult_anesth->tca}}" />
+            {{mb_field object=$consult_anesth field="tca" tabindex="113" maxlength="2" size="2" onchange="submitForm(this.form)"}}
              s
           </td>
         </tr>
         <tr>
           <th><label for="plaquettes" title="Plaquettes">Plaquettes</label></th>
           <td>
-            <input tabindex="107" type="text" size="6" name="plaquettes" onchange="submitForm(this.form)" title="{{$consult_anesth->_props.plaquettes}}" value="{{$consult_anesth->plaquettes}}" />
+            {{mb_field object=$consult_anesth field="plaquettes" tabindex="107" size="6" onchange="submitForm(this.form)"}}
           </td>
           <th><label for="tsivy" title="Temps de saignement par la méthode d'Ivy">TS Ivy</label></th>
           <td>
@@ -217,12 +202,7 @@ function reloadListExamComp() {
           <td colspan="2"></td>
           <th><label for="ecbu" title="Examen Cytobactériologique des Urines">ECBU</label></th>
           <td>
-            {{if $consult_anesth->ecbu}}
-            {{assign var="selected" value=$consult_anesth->ecbu}}
-            {{else}}
-            {{assign var="selected" value=$consult_anesth->_enums.ecbu.0}}
-            {{/if}}
-            {{html_options tabindex="116" name="ecbu" title=$consult_anesth->_props.ecbu options=$consult_anesth->_enumsTrans.ecbu selected=$selected onchange="submitForm(this.form)"}}
+            {{mb_field object=$consult_anesth field="ecbu" defaultSelected="?" tabindex="116" onchange="submitForm(this.form)"}}
           </td>
         </tr>
       </table>    

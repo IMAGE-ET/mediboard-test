@@ -54,5 +54,40 @@
         </table>
       </div>
     </td>
+    <td style="width: 300px; font-size: 70%;">
+      {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
+        {{foreach from=$listMins|smarty:nodefaults item=curr_mins key=keyMins}}
+        {{foreach from=$plagesConsult key=curr_day item=plagesPerDay}}
+          
+          {{assign var="keyAff" value="$curr_day $curr_hour:$curr_mins"}}
+          {{assign var="plageJour" value=$aAffichage.$keyAff}}
+            
+            {{if $listEntry.$curr_day.consult || !$listEntry.$curr_day.nbcol}}
+              {{assign var="colonne" value="plagesConsult"}}
+              {{assign var="style" value="Consult"}}
+              {{assign var="plageInfos" value=$plageJour.$colonne}}
+              {{if !is_string($plageJour.$colonne)}}
+                <div id="{{$plageInfos->_class_name}}{{$plageInfos->_id}}" class="" style="display: none;"></div>
+              {{/if}} 
+            {{/if}}
+            
+            {{foreach from=$listEntry.$curr_day.salle item=curr_salle}}
+              {{assign var="colonne" value="Salle$curr_salle"}}
+              {{assign var="style" value="Op"}}
+              {{assign var="plageInfos" value=$plageJour.$colonne}}
+              {{if !is_string($plageJour.$colonne)}}
+                <div id="{{$plageInfos->_class_name}}{{$plageInfos->_id}}" class="" style="display: none;"></div>
+              {{/if}} 
+            {{/foreach}}
+
+        {{/foreach}}
+        {{/foreach}}
+      {{/foreach}}
+
+     
+     
+      
+      
+    </td>
   </tr>
 </table>

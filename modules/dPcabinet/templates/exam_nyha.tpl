@@ -5,8 +5,8 @@
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="dosql" value="do_exam_nyha_aed" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="examnyha_id" value="{{$exam_nyha->examnyha_id}}" />
-<input type="hidden" name="consultation_id" value="{{$exam_nyha->consultation_id}}" />
+{{mb_field object=$exam_nyha field="examnyha_id" type="hidden" spec=""}}
+{{mb_field object=$exam_nyha field="consultation_id" type="hidden" spec=""}}
 
 <table class="form">
   <tr>

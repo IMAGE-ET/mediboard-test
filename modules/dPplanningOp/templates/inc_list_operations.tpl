@@ -1,4 +1,8 @@
+{{if $boardItem}}
+      <table class="tbl" style="font-size: 70%;">
+{{else}}
       <table class="tbl">
+{{/if}}
         <tr>
           <th class="title" colspan="5">
             Opérations
@@ -9,7 +13,9 @@
           <th>Actes médicaux</th>
           <th>Heure prévue</th>
           <th>Durée</th>
-          <th>Compte-rendu</th>
+          {{if !$boardItem}}
+            <th>Compte-rendu</th>
+          {{/if}}
         </tr>
         {{if $urgences}}
         {{foreach from=$listUrgences item=curr_op}}
@@ -133,6 +139,7 @@
               {{$curr_op->temp_operation|date_format:"%Hh%M"}}
             </a>
           </td>
+          {{if !$boardItem}}
           <td>
             <table>
             {{foreach from=$curr_op->_ref_documents item=document}}
@@ -175,6 +182,7 @@
             </table>
             </form>
           </td>
+          {{/if}}
         </tr>
         {{/foreach}}
         {{/foreach}}

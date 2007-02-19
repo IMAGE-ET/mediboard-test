@@ -5,10 +5,10 @@
 <input type="hidden" name="dosql" value="do_planning_aed" />
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="operation_id" value="{{$op->operation_id}}" />
-<input type="hidden" name="sejour_id" value="{{$op->sejour_id}}" />
-<input type="hidden" name="commande_mat" value="{{$op->commande_mat}}" />
-<input type="hidden" name="rank" value="{{$op->rank}}" />
+{{mb_field object=$op field="operation_id" type="hidden" spec=""}}
+{{mb_field object=$op field="sejour_id" type="hidden" spec=""}}
+{{mb_field object=$op field="commande_mat" type="hidden" spec=""}}
+{{mb_field object=$op field="rank" type="hidden" spec=""}}
 <input type="hidden" name="annulee" value="{{$op->annulee|default:"0"}}" />
 <input type="hidden" name="_group_id" value="{{$sejour->group_id}}" />
      
@@ -69,7 +69,7 @@
   <tr>
     <th>
       Liste des codes CCAM
-      <input name="codes_ccam" type="hidden" value="{{$op->codes_ccam}}" onchange="refreshListCCAM()" />
+      {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM()" type="hidden" spec=""}}
     </th>
     <td colspan="2" class="text" id="listCodesCcam">
     </td>
@@ -77,16 +77,13 @@
   
   <tr>
     <th><label for="libelle" title="Libellé facultatif d'intervention">Libellé</label></th>
-    <td colspan="2"><input type="text" name="libelle" title="{{$op->_props.libelle}}" size="50" value="{{$op->libelle}}"/></td>
+    <td colspan="2">{{mb_field object=$op field="libelle" size="50"}}</td>
   </tr>
   
   <tr>
     <th><label for="cote" title="Côté concerné par l'intervention">Côté</label></th>
     <td colspan="2">
-      <select name="cote" title="{{$op->_props.cote}}" onchange="modifOp()">
-        <option value="" {{if !$op->operation_id}} selected="selected" {{/if}}>&mdash; Choisir un côté</option>
-        {{html_options options=$op->_enumsTrans.cote selected=$op->cote}}
-      </select>
+      {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir un côté" onchange="modifOp()"}}
     </td>
   </tr> 
 
@@ -169,23 +166,20 @@
   </tr>
 
   <tr>
-    <td><textarea name="examen" title="{{$op->_props.examen}}" rows="3">{{$op->examen}}</textarea></td>
-    <td><textarea name="materiel" title="{{$op->_props.materiel}}" rows="3">{{$op->materiel}}</textarea></td>
-    <td><textarea name="rques" title="{{$op->_props.rques}}" rows="3">{{$op->rques}}</textarea></td>
+    <td>{{mb_field object=$op field="examen" rows="3"}}</td>
+    <td>{{mb_field object=$op field="materiel" rows="3"}}</td>
+    <td>{{mb_field object=$op field="rques" rows="3"}}</td>
   </tr>
   
   <tr>
     <th><label for="depassement"title="Valeur du dépassement d'honoraire éventuel">Dépassement d'honoraire</label></th>
-    <td colspan="2"><input name="depassement" title="{{$op->_props.depassement}}" type="text" size="4" value="{{$op->depassement}}" /> €</td>
+    <td colspan="2">{{mb_field object=$op field="depassement" size="4"}} €</td>
   </tr>
   
   <tr>
     <th><label for="info_0">Information du patient</label></th>
     <td colspan="2">
-      <input name="info" value="1" type="radio" {{if $op->info == "1"}} checked="checked" {{/if}}/>
-      <label for="info_1">Oui</label>
-      <input name="info" value="0" type="radio" {{if !$op->operation_id || $op->info == "0"}} checked="checked" {{/if}}/>
-      <label for="info_0">Non</label>
+      {{mb_field object=$op field="info"}}
     </td>
   </tr>
 

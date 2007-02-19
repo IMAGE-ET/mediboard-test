@@ -1,4 +1,48 @@
 <script type="text/javascript">
+function viewItem(class, id, date) {
+  oElement = $(class+id);
+  oElement.show();
+  
+  if(oElement.alt == "infos - cliquez pour fermer") {
+    return;
+  }
+  
+  url = new Url;
+  url.addParam("board"     , "1");
+  url.addParam("boardItem" , "1");
+  
+  if(class == "CPlageconsult"){
+    url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
+    url.addParam("plageconsult_id", id);
+    url.addParam("date"           , date);
+    url.addParam("chirSel"        , "{{$app->user_id}}");
+    url.addParam("vue2"           , "{{$vue}}");
+    url.addParam("selConsult"     , "");
+  }else if(class == "CPlageOp"){
+    url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
+    url.addParam("chirSel" , "{{$app->user_id}}");
+    url.addParam("date"    , date);
+    url.addParam("urgences", "0");
+  }else{
+    return;
+  }
+  url.requestUpdate(oElement);
+  oElement.alt = "infos - cliquez pour fermer";
+}
+
+
+
+
+
+
+
+
+
+
+function hideItem(class, id) {
+  oElement = $(class+id);
+  oElement.hide();
+}
 
 function editDocument(compte_rendu_id) {
   var url = new Url();
@@ -147,9 +191,11 @@ function pageMain() {
   <tr>
     <th>
       <form name="editFrmPratDate" action="?m={{$m}}" method="get">
+      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}">&lt;&lt;&lt;</a>
       <input type="hidden" name="m" value="{{$m}}" />
       {{$date|date_format:"%A %d %B %Y"}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;date={{$suiv}}">&gt;&gt;&gt;</a>
       </form>
     </th>
     <th>

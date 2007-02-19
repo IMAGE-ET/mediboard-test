@@ -15,8 +15,8 @@
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="dosql" value="do_examcomp_aed" />
-            <input type="hidden" name="exam_id" value="{{$curr_examcomp->exam_id}}" />
-            <input type="hidden" name="fait" value="{{$curr_examcomp->fait}}" />
+            {{mb_field object=$curr_examcomp field="exam_id" type="hidden" spec=""}}
+            {{mb_field object=$curr_examcomp field="fait" type="hidden" spec=""}}
             <button class="trash notext" type="button" onclick="delExamComp(this.form)">
             </button>
             {{$curr_examcomp->examen}}

@@ -12,8 +12,8 @@
               <input type="hidden" name="m" value="dPcabinet" />
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="dosql" value="do_addiction_aed" />
-              <input type="hidden" name="addiction_id" value="{{$curr_addiction->addiction_id}}" />
-              
+              {{mb_field object=$curr_addiction field="addiction_id" type="hidden" spec=""}}
+
               <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cette addiction',ajax:1,target:'systemMsg'},{onComplete:reloadAddictions})">
               </button>
               <em>{{$curr_addiction->addiction}}</em>

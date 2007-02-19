@@ -118,7 +118,7 @@ function checkFormRDV(oForm){
 
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
+{{mb_field object=$consult field="consultation_id" type="hidden" spec=""}}
 <input type="hidden" name="annule" value="{{$consult->annule|default:"0"}}" />
 <input type="hidden" name="arrivee" value="" />
 <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
@@ -175,7 +175,7 @@ function checkFormRDV(oForm){
 
         <tr id="viewPatient" {{if $consult->consultation_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
           <th>
-            <input type="hidden" title="{{$consult->_props.patient_id}}" name="patient_id" value="{{$pat->patient_id}}" ondblclick="popPat()" />
+            {{mb_field object=$consult field="patient_id" type="hidden" spec="" ondblclick="popPat()"}}
             <label for="patient_id" title="Patient pour la consultation">Patient</label>
           </th>
           <td class="readonly"><input type="text" name="_pat_name" size="30" value="{{$pat->_view}}" readonly="readonly"  ondblclick="popPat()" /></td>
@@ -191,7 +191,7 @@ function checkFormRDV(oForm){
             </select><br />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.motif)" />            
           </th>
-          <td colspan="2"><textarea name="motif" title="{{$consult->_props.motif}}" rows="3">{{$consult->motif}}</textarea></td>
+          <td colspan="2">{{mb_field object=$consult field="motif" rows="3"}}</td>
         </tr>
 
         <tr>
@@ -203,7 +203,7 @@ function checkFormRDV(oForm){
             </select><br />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques)"/>
           </th>
-          <td colspan="2"><textarea name="rques" title="{{$consult->_props.rques}}" rows="3">{{$consult->rques}}</textarea></td>
+          <td colspan="2">{{mb_field object=$consult field="rques" rows="3"}}</td>
         </tr>
 
       </table>
@@ -229,7 +229,7 @@ function checkFormRDV(oForm){
           <th><label for="plageconsult_id" title="Date du rendez-vous de consultation">Date</label></th>
           <td class="readonly">
             <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="popRDV()" readonly="readonly" />
-            <input type="hidden" name="plageconsult_id" title="{{$consult->_props.plageconsult_id}}" value="{{$consult->plageconsult_id}}" ondblclick="popRDV()" />
+            {{mb_field object=$consult field="plageconsult_id" type="hidden" ondblclick="popRDV()"}}
           </td>
         </tr>
 

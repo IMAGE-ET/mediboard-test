@@ -13,10 +13,12 @@ if (!$canEdit) {
   $AppUI->redirect("m=system&a=access_denied");
 }
 
-$date  = mbGetValueFromGetOrSession("date", mbDate());
-$today = mbDate();
-$hour  = mbTime(null);
-$board = mbGetValueFromGet("board", 0);
+$date      = mbGetValueFromGetOrSession("date", mbDate());
+$today     = mbDate();
+$hour      = mbTime(null);
+$board     = mbGetValueFromGet("board", 0);
+$boardItem = mbGetValueFromGet("boardItem", 0);
+$plageconsult_id = mbGetValueFromGet("plageconsult_id", null);
 
 $prat_id    = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
 $selConsult = mbGetValueFromGetOrSession("selConsult", null);
@@ -67,11 +69,13 @@ $listPlage = new CPlageconsult();
 $where = array();
 $where["chir_id"] = "= '$userSel->user_id'";
 $where["date"] = "= '$date'";
+if($plageconsult_id && $boardItem){
+  $where["plageconsult_id"] =  db_prepare("= %", $plageconsult_id);
+}
 $order = "debut";
 $listPlage = $listPlage->loadList($where, $order);
 
 $vue = mbGetValueFromGetOrSession("vue2", 0);
-
 
 foreach ($listPlage as &$plage) {
   $plage->_ref_chir =& $userSel;
@@ -90,6 +94,7 @@ foreach ($listPlage as &$plage) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("boardItem", $boardItem);
 $smarty->assign("tab"      , "edit_consultation");
 $smarty->assign("board"    , $board);
 $smarty->assign("date"     , $date);
