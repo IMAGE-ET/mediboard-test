@@ -128,9 +128,9 @@ function smarty_function_mb_field_spec($obj, $field, $propSpec){
 /**
  * @param array params tableau des parametres
  *        - object          : Objet
- *        - field           : Nom du champ a afficher
- *        - element         : {optionnel} Nature de l'element a afficher (values : "field", "label") [default: "field"]
+ *        - field           : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
  *        - spec            : {optionnel} Specification du champs, par defaut, celle de la classe
+ *        - element         : {optionnel} Nature de l'element a afficher (values : "field", "label") [default: "field"]
  *        - separator       : {optionnel} Séparation entre les champs de type "radio" [default: ""]
  *        - cycle           : {optionnel} Cycle de répétition du séparateur (pour les enums en type radio) [default: "1"]
  *        - typeEnum        : {optionnel} Type d'affichage des enums (values : "select", "radio") [default: "select"]
