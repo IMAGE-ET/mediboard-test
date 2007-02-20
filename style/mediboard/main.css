@@ -863,9 +863,11 @@ div.big-error {
   /* @import "./tooltip.css   */
 
 div.tooltip {
-  border: 1px dotted #000;
+  padding: 4px;
   background-color:#aaa;
   position: absolute;
+  margin-left: 50px;
+  margin-top: 5px;
 }
 
 div.tooltip table.tbl {

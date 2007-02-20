@@ -20,7 +20,7 @@
       {{if $object->rques}}
       <br />
       <strong>Remarques:</strong>
-      <i>{{$object->rques|nl2br|truncate:80}}</i>
+      <i>{{$object->rques|nl2br|truncate:50}}</i>
       {{/if}}
     </td>
   </tr>

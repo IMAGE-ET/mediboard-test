@@ -182,7 +182,7 @@
             </form>
           </td>
         </tr>
-  {{/if}}
+  		{{/if}}
         </tbody>
       </table>
       
@@ -264,15 +264,11 @@
         <tr>
           <td>
             <a title="Modifier le séjour" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
-              <img src="images/icons/planning.png" alt="Planifier"/>
+              <img src="images/icons/edit.png" alt="Planifier"/>
             </a>
             <a href="#"
-              onmouseover="viewItem(
-                'CSejour',
-                {{$curr_sejour->sejour_id}})"
-              onmouseout="hideItem(
-                'CSejour',
-                {{$curr_sejour->sejour_id}})"
+              onmouseover="viewItem('CSejour', {{$curr_sejour->sejour_id}})"
+              onmouseout="hideItem('CSejour', {{$curr_sejour->sejour_id}})"
               onclick="viewCompleteItem('CSejour', {{$curr_sejour->_id}})">
               Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
               au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
@@ -297,21 +293,19 @@
         </tr>
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
         <tr>
-          <td>
-            <ul>
-            <a href="{{$curr_op->_link_editor}}"
-              onmouseover="viewItem(
-                'COperation',
-                {{$curr_op->operation_id}})"
-              onmouseout="hideItem(
-                'COperation',
-                {{$curr_op->operation_id}})">
-              <img src="images/icons/planning.png" alt="modifier" title="modifier" />
+          <td style="padding-left: 10px;">
+            <a title="Modifier l'intervention" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
+              <img src="images/icons/edit.png" alt="Planifier"/>
+            </a>
+          
+            <a href="#"
+              onmouseover="viewItem('COperation', {{$curr_op->_id}})"
+              onmouseout="hideItem('COperation', {{$curr_op->_id}})"
+              onclick="viewCompleteItem('COperation', {{$curr_op->_id}})">
               {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} - Intervention du Dr. {{$curr_op->_ref_chir->_view}}
             </a>
             <div id="COperation{{$curr_op->operation_id}}" class="tooltip" style="display: none;">
             </div>
-            </ul>
           </td>
           <td style="text-align:right;">
           {{if $curr_op->_canRead}}

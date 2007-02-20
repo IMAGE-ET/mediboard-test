@@ -311,6 +311,13 @@ class COperation extends CMbObject {
     $this->loadRefsActesCCAM();
   }
   
+  function loadComplete() {
+    parent::loadComplete();
+    foreach ($this->_ref_actes_ccam as &$acte_ccam) {
+      $acte_ccam->loadRefsFwd();
+    }
+  }
+  
   function loadRefChir() {
     $this->_ref_chir = new CMediusers;
     $this->_ref_chir->load($this->chir_id);

@@ -14,9 +14,11 @@
       <br />
       <strong>Anesthésiste:</strong>
       <i>{{$object->_ref_anesth->_view}}</i>
+      {{if $object->libelle}}
       <br />
       <strong>Libellé:</strong>
       <i>{{$object->libelle}}</i>
+      {{/if}}
       <br />
       <strong>Coté:</strong>
       <i>{{tr}}{{$object->cote}}{{/tr}}</i>
@@ -26,12 +28,12 @@
       {{if $object->materiel}}
         <br />
         <strong>Materiel:</strong>
-        <i>{{$object->materiel|nl2br}}</i>
+        <i>{{$object->materiel|nl2br|truncate:50}}</i>
       {{/if}}
       {{if $object->rques}}
         <br />
         <strong>Remarques:</strong>
-        <i>{{$object->rques|nl2br}}</i>
+        <i>{{$object->rques|nl2br|truncate:50}}</i>
       {{/if}}
       <table width="100%" style="border-spacing: 0px;font-size: 100%;">
         <tr>

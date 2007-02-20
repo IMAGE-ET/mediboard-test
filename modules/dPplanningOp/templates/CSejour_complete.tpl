@@ -7,6 +7,14 @@
     </th>
   </tr>
 
+  {{if $sejour->annule == 1}}
+  <tr>
+    <th class="category" colspan="4" style="background: #f00;">
+    SEJOUR ANNULE
+    </th>
+  </tr>
+  {{/if}}
+  
   <tr>
     <td>
       <strong>Etablissement :</strong>

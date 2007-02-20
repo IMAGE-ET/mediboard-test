@@ -27,22 +27,22 @@ function newExam(sAction, consultation_id) {
       {{if $object->motif}}
         <br />
         <strong>Motif:</strong>
-        <i>{{$object->motif|nl2br}}</i>
+        <i>{{$object->motif|nl2br|truncate:50}}</i>
       {{/if}}
       {{if $object->rques}}
         <br />
         <strong>Remarques:</strong>
-        <i>{{$object->rques|nl2br}}</i>
+        <i>{{$object->rques|nl2br|truncate:50}}</i>
       {{/if}}
       {{if $object->examen}}
         <br />
         <strong>Examens:</strong>
-        <i>{{$object->examen|nl2br}}</i>
+        <i>{{$object->examen|nl2br|truncate:50}}</i>
       {{/if}}
       {{if $object->traitement}}
         <br />
         <strong>Traitement:</strong>
-        <i>{{$object->traitement|nl2br}}</i>
+        <i>{{$object->traitement|nl2br|truncate:50}}</i>
       {{/if}}
       {{if $object->_ref_examaudio->examaudio_id}}
         <br />
