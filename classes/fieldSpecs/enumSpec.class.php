@@ -13,6 +13,13 @@ class CEnumSpec extends CMbFieldSpec {
   
   var $list = null;
   
+  function getValue($object, $params = null) {
+    global $AppUI;
+    $fieldName = $this->fieldName;
+    $propValue = $object->$fieldName;
+    return $AppUI->_(get_class($object).".".$fieldName.".".$propValue);
+  }
+  
   function getSpecType() {
     return("enum");
   }

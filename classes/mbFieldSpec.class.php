@@ -99,6 +99,12 @@ class CMbFieldSpec {
     $this->checkValues();
   }
   
+  function getValue(&$object, $params = null) {
+    $fieldName = $this->fieldName;
+    $propValue = $object->$fieldName;
+    return $propValue;
+  }
+  
   function getSpecType() {
     return("mbField");
   }
