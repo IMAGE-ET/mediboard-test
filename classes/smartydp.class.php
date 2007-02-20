@@ -311,7 +311,7 @@ function smarty_function_mb_value($params, &$smarty) {
 
   global $AppUI;
   
-  $_html_result = $params["object"]->_specs[$params["field"]]->getValue($params["object"]);
+  $_html_result = $params["object"]->_specs[$params["field"]]->getValue($params["object"], $params);
   return $_html_result;
 }
 

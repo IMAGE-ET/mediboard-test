@@ -11,6 +11,13 @@ require_once("./classes/mbFieldSpec.class.php");
 
 class CTextSpec extends CMbFieldSpec {
   
+  function getValue($object, $params = null) {
+    global $AppUI;
+    $fieldName = $this->fieldName;
+    $propValue = $object->$fieldName;
+    return smarty_modifier_date_format(nl2br($propValue), $format);
+  }
+  
   function getSpecType() {
     return("text");
   }

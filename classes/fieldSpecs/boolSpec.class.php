@@ -15,7 +15,7 @@ class CBoolSpec extends CMbFieldSpec {
     global $AppUI;
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    return $AppUI->_(get_class($object).".".$fieldName.".".$propValue);
+    return $AppUI->_("bool.".$propValue);
   }
   
   function getSpecType() {

@@ -11,6 +11,14 @@ require_once("./classes/mbFieldSpec.class.php");
 
 class CTimeSpec extends CMbFieldSpec {
   
+  function getValue($object, $params = null) {
+    global $AppUI;
+    $fieldName = $this->fieldName;
+    $propValue = $object->$fieldName;
+    $format = mbGetValue(@$params["format"], "%H:%M");
+    return smarty_modifier_date_format($propValue, $format);
+  }
+  
   function getSpecType() {
     return("time");
   }
