@@ -17,11 +17,10 @@
       <br />
       <strong>Etablissement:</strong>
       <i>{{$object->_ref_group->_view}}</i>
-      <br />
       {{if $object->rques}}
       <br />
       <strong>Remarques:</strong>
-      <i>{{$object->rques|nl2br}}</i>
+      <i>{{$object->rques|nl2br|truncate:80}}</i>
       {{/if}}
     </td>
   </tr>
