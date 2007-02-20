@@ -136,6 +136,7 @@ function smarty_function_mb_field($params, &$smarty) {
   
   $className    = null;
   $extra        = "";
+  $extra_class  = "";
   $_html_result = "";
   $propSpec     = null;
   
@@ -148,7 +149,7 @@ function smarty_function_mb_field($params, &$smarty) {
   $objClass  = $params["object"]->_class_name;
   
   if(isset($params["spec"])) {  $propSpec = $params["spec"];      }
-  if(isset($params["class"])){ $className = $params["class"]." "; }
+  if(isset($params["class"])){ $className = $params["class"]; }
   
   $attribute_oblig = array("type"            => smarty_function_mb_field_spec($params["object"], $params["field"], $propSpec),
                             "element"         => "field",
@@ -177,10 +178,11 @@ function smarty_function_mb_field($params, &$smarty) {
       case "typeEnum":
       case "defaultOption":
       case "defaultSelected":
+      case "class":
         break;
       case "type":
         if(($className !== "" && $className !== null) || ($propSpec !== "" && $propSpec!== null)){
-          $extra .= 'class="'.smarty_function_escape_special_chars($className.$propSpec).'" ';
+          $extra_class .= 'class="'.smarty_function_escape_special_chars($className." ".$propSpec).'"';
         }
         if(is_scalar($_val) && ($_val == "textarea" || $_val == "enum")){
           break;
@@ -195,21 +197,28 @@ function smarty_function_mb_field($params, &$smarty) {
     case "field":
       switch($params["type"]){
         case "textarea":
-          $_html_result = "<textarea name=\"".smarty_function_escape_special_chars($params["field"])."\" $extra>".smarty_function_escape_special_chars($value)."</textarea>";
+          $_html_result = "<textarea name=\"".smarty_function_escape_special_chars($params["field"])."\"$extra_class $extra>".smarty_function_escape_special_chars($value)."</textarea>";
           break;
         case "hidden":
         case "text":
-          $_html_result = "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"".smarty_function_escape_special_chars($value)."\" $extra/>";
+          $_html_result = "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"".smarty_function_escape_special_chars($value)."\" $extra_class $extra/>";
           break;
         case "radio":
+          $compteur = 0;
           $iMax = 1;
           for($i=$iMax; $i>=0; $i--){
             $selected = "";
             if(($value && $value === $i) || (!$value && $i === $params["defaultSelected"])){
               $selected = "checked=\"checked\"";
             }
-            $_html_result .= "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$i\" $selected $extra/>";
-            $_html_result .= "<label for=\"".$params["field"]."_$i\">".$AppUI->_("$objClass.".$params["field"].".$i")."</label> ";
+            $_html_result .= "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$i\" $selected";
+            if($compteur == 0) {
+              $_html_result .= ' class="'.smarty_function_escape_special_chars($className." ".$propSpec).'"';
+            }elseif($className != ""){
+              $_html_result .= ' class="'.smarty_function_escape_special_chars($className).'"';
+            }
+            $_html_result .= " $extra /><label for=\"".$params["field"]."_$i\">".$AppUI->_("$objClass.".$params["field"].".$i")."</label> ";
+            $compteur++;
             if($i != 0){
               $_html_result .= $params["separator"];
             }
@@ -221,7 +230,7 @@ function smarty_function_mb_field($params, &$smarty) {
               
           switch($params["typeEnum"]){
             case "select":
-              $_html_result = "<select name=\"".smarty_function_escape_special_chars($params["field"])."\" $extra>";
+              $_html_result = "<select name=\"".smarty_function_escape_special_chars($params["field"])."\" $extra_class $extra>";
               if($params["defaultOption"] && $params["defaultOption"]!=""){
                 $_html_result .= "<option value=\"\">".smarty_function_escape_special_chars($params["defaultOption"])."</option>";
               }
@@ -246,9 +255,11 @@ function smarty_function_mb_field($params, &$smarty) {
                 }
                 $_html_result .= "<input type=\"radio\" name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$key\" $selected";
                 if($compteur == 0) {
-                  $_html_result .= $extra;
+                  $_html_result .= ' class="'.smarty_function_escape_special_chars($className." ".$propSpec).'"';
+                }elseif($className != ""){
+                  $_html_result .= ' class="'.smarty_function_escape_special_chars($className).'"';
                 }
-                $_html_result .= " /><label for=\"".$params["field"]."_$key\">$item</label> ";
+                $_html_result .= " $extra /><label for=\"".$params["field"]."_$key\">$item</label> ";
                 $compteur++;
                 if($compteur % $params["cycle"] == 0){
                   $_html_result .= $params["separator"];
