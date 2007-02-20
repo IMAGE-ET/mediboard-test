@@ -340,16 +340,16 @@
             [ANNULE]<br />
             {{else}}
             <a href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}">
-              <img src="images/icons/planning.png" alt="modifier" title="modifier" />
+              <img src="images/icons/planning.png" alt="modifier" title="rendez-vous" />
+            </a>
+            <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+              <img src="images/icons/edit.png" alt="modifier" title="modifier" />
             </a>
             {{/if}}
-            <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}"
-              onmouseover="viewItem(
-                'CConsultation',
-                {{$curr_consult->consultation_id}})"
-              onmouseout="hideItem(
-                'CConsultation',
-                {{$curr_consult->consultation_id}})">
+            <a href="#"
+              onmouseover="viewItem('CConsultation',{{$curr_consult->_id}})"
+              onmouseout="hideItem('CConsultation',{{$curr_consult->_id}})"
+              onclick="viewCompleteItem('CConsultation', {{$curr_consult->_id}})">
               {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_consult->_ref_chir->_view}}
             </a>
             <div id="CConsultation{{$curr_consult->consultation_id}}" class="tooltip" style="display: none;">
