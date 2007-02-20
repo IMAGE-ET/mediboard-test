@@ -232,7 +232,7 @@ function pageMain() {
     <td style="border: 1px dotted #000;" class="halfPane" onmouseover="showIcon('consultations')" onmouseout="hideIcon('consultations')">
       <div style="position:absolute" id="icon-consultations">
         <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$date}}">
-          <img src="modules/dPcabinet/images/dPcabinet.png" height="24px" width="24px" />
+          <img src="images/modules/dPcabinet.png" height="24px" width="24px" />
         </a>
       </div>
       <div style="overflow: auto; height: 250px;" id="consultations">
@@ -241,7 +241,7 @@ function pageMain() {
     <td style="border: 1px dotted #000;" class="halfPane" onmouseover="showIcon('operations')" onmouseout="hideIcon('operations')">
       <div style="position:absolute" id="icon-operations">
         <a href="index.php?m=dPplanningOp&amp;tab=vw_idx_patients">
-          <img src="modules/dPplanningOp/images/dPplanningOp.png" height="24px" width="24px" />
+          <img src="images/modules/dPplanningOp.png" height="24px" width="24px" />
         </a>
       </div>
       <div style="overflow: auto; height: 250px;" id="operations">
@@ -252,7 +252,7 @@ function pageMain() {
     <td style="border: 1px dotted #000;" onmouseover="showIcon('patients')" onmouseout="hideIcon('patients')">
       <div style="position:absolute" id="icon-patients">
         <a href="index.php?m=dPpatients&amp;tab=vw_idx_planning&amp;date={{$date}}">
-          <img src="modules/dPpatients/images/dPpatients.png" height="24px" width="24px" />
+          <img src="images/modules/dPpatients.png" height="24px" width="24px" />
         </a>
       </div>
       <div style="overflow: auto; height: 250px;" id="patients">
@@ -260,7 +260,7 @@ function pageMain() {
     </td>
     <td style="border: 1px dotted #000;" onmouseover="showIcon('hospi')" onmouseout="hideIcon('hospi')">
       <div style="position:absolute" id="icon-hospi">
-        <img src="modules/dPhospi/images/dPhospi.png" height="24px" width="24px" />
+        <img src="images/modules/dPhospi.png" height="24px" width="24px" />
       </div>
       <div style="overflow: auto; height: 250px;">
         <div id="hospi">
