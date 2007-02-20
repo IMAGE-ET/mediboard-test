@@ -47,6 +47,7 @@ class CAideSaisie extends CMbObject {
     $where["class"] = db_prepare("= %",$this->class);
     $where["field"] = db_prepare("= %",$this->field);
     $where["text"]  = db_prepare("= %",$this->text);
+    $where["aide_id"]= db_prepare("!= %",$this->aide_id);
     
     $sql = new CRequest();
     $sql->addSelect("count(aide_id)");
