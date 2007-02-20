@@ -25,6 +25,7 @@ function reloadFinishBanner() {
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 {{mb_field object=$consult field="consultation_id" type="hidden" spec=""}}
 {{mb_field object=$consult field="chrono" type="hidden" spec=""}}
+{{mb_field object=$consult field="_check_premiere" type="hidden" spec=""}}
 
 <table class="form">
   <tr>
