@@ -13,6 +13,10 @@ class CRefSpec extends CMbFieldSpec {
   
   var $xor  = null;
   //var $nand = null;
+  
+  function getSpecType() {
+    return("ref");
+  }
 
   function checkProperty(&$object){
     $fieldName = $this->fieldName;

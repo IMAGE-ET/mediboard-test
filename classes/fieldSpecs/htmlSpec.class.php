@@ -11,6 +11,10 @@ require_once("./classes/mbFieldSpec.class.php");
 
 class CHtmlSpec extends CMbFieldSpec {
   
+  function getSpecType() {
+    return("html");
+  }
+  
   function checkProperty(&$object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;

@@ -100,7 +100,7 @@ class CMbFieldSpec {
   }
   
   function getSpecType() {
-    return("text");
+    return("mbField");
   }
   
   function checkParams(&$object){

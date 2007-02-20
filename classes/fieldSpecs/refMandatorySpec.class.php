@@ -12,6 +12,10 @@ require_once("./classes/fieldSpecs/refSpec.class.php");
 
 class CRefMandatorySpec extends CRefSpec {
   
+  function getSpecType() {
+    return("refMandatory");
+  }
+  
   function checkProperty(&$object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;

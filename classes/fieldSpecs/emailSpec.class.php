@@ -11,6 +11,10 @@ require_once("./classes/mbFieldSpec.class.php");
 
 class CEmailSpec extends CMbFieldSpec {
   
+  function getSpecType() {
+    return("email");
+  }
+  
   function checkProperty(&$object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;

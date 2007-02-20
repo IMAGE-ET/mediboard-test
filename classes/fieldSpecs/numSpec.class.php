@@ -11,6 +11,10 @@ require_once("./classes/mbFieldSpec.class.php");
 
 class CNumSpec extends CMbFieldSpec {
   
+  function getSpecType() {
+    return("num");
+  }
+  
   var $min       = null;
   var $max       = null;
   var $pos       = null;

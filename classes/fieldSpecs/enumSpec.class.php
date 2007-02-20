@@ -13,6 +13,10 @@ class CEnumSpec extends CMbFieldSpec {
   
   var $list = null;
   
+  function getSpecType() {
+    return("enum");
+  }
+  
   function checkValues(){
     parent::checkValues();
     if(!$this->list){

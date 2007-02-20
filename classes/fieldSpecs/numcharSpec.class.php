@@ -11,6 +11,11 @@ require_once("./classes/mbFieldSpec.class.php");
 require_once("./classes/fieldSpecs/numSpec.class.php");
 
 class CNumcharSpec extends CNumSpec {
+  
+  function getSpecType() {
+    return("numchar");
+  }
+
   function getDBSpec(){
     $type_sql = "bigint zerofill";
     

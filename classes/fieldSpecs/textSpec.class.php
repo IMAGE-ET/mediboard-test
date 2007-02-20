@@ -11,6 +11,10 @@ require_once("./classes/mbFieldSpec.class.php");
 
 class CTextSpec extends CMbFieldSpec {
   
+  function getSpecType() {
+    return("text");
+  }
+  
   function checkProperty(&$object){
     return null;
   }

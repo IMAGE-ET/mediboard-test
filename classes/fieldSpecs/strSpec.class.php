@@ -15,6 +15,10 @@ class CStrSpec extends CMbFieldSpec {
   var $minLength = null;
   var $maxLength = null;
   
+  function getSpecType() {
+    return("str");
+  }
+  
   function checkProperty(&$object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;

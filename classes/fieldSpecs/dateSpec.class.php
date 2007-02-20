@@ -11,6 +11,10 @@ require_once("./classes/mbFieldSpec.class.php");
 
 class CDateSpec extends CMbFieldSpec {
   
+  function getSpecType() {
+    return("date");
+  }
+  
   function checkProperty(&$object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;

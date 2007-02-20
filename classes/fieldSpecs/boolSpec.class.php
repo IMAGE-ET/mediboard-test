@@ -11,6 +11,10 @@ require_once("./classes/mbFieldSpec.class.php");
 
 class CBoolSpec extends CMbFieldSpec {
   
+  function getSpecType() {
+    return("bool");
+  }
+  
   function checkProperty(&$object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;

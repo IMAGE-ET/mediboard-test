@@ -16,6 +16,10 @@ class CFloatSpec extends CMbFieldSpec {
   var $pos    = null;
   var $minMax = null;
   
+  function getSpecType() {
+    return("float");
+  }
+  
   function checkProperty(&$object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;

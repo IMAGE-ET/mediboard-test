@@ -16,6 +16,10 @@ class CCodeSpec extends CMbFieldSpec {
   var $adeli = null;
   var $insee = null;
   
+  function getSpecType() {
+    return("code");
+  }
+  
   function checkProperty(&$object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
