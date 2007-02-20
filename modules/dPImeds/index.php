@@ -9,7 +9,6 @@
 
 // @todo: Put the following in $config_dist;
 global $dPconfig;
-$dPconfig["dPImeds"]["url"] = "http://10.100.0.67/listedossiers.aspx";
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
