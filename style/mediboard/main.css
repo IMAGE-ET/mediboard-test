@@ -1699,6 +1699,14 @@ table#weeklyPlanning td.nonEmptyOp {
   background: #ccc url(images/pictures/plageOp.png) repeat-y left;
   border: #99f 1px solid;
 }
+table#weeklyPlanning td.selectedConsult {
+  background: #ddd;
+  border: #9f9 1px solid;
+}
+table#weeklyPlanning td.selectedOp {
+  background: #ddd;
+  border: #99f 1px solid;
+}
 
 table#weeklyPlanning td.empty {
   background: #eee;

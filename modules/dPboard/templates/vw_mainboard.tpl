@@ -1,7 +1,23 @@
 <script type="text/javascript">
 var notWhitespace   = /\S/;
 
-function viewItem(class, id, date) {
+function viewItem(oTd, class, id, date) {
+
+  aListConsult = $$('td.selectedConsult');
+  aListConsult.each(function(elem) { elem.className = "nonEmptyConsult";});
+  
+  aListConsult = $$('td.selectedOp');
+  aListConsult.each(function(elem) { elem.className = "nonEmptyOp";});
+  
+  //new Effect.Highlight(oTd.parentNode);
+  
+  //Console.debug(oTd.parentNode);
+  
+  if(class == "CPlageconsult"){
+    oTd.parentNode.className = "selectedConsult";
+  }else if(class == "CPlageOp"){
+    oTd.parentNode.className = "selectedOp";
+  }
   
   Dom.cleanWhitespace($('viewTooltip'));
   var oDiv = $('viewTooltip').childNodes;

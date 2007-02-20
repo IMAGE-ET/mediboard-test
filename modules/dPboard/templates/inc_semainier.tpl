@@ -83,11 +83,6 @@
         {{/foreach}}
         {{/foreach}}
       {{/foreach}}
-
-     
-     
-      
-      
     </td>
   </tr>
 </table>
