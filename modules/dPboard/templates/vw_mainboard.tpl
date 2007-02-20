@@ -204,14 +204,10 @@ function pageMain() {
     <th>
       <form name="editFrmView" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
-      <select name="view" onchange="this.form.submit()">
-        <option value="day" {{if $view == "day"}}selected="selected"{{/if}}>
-          Journée
-        </option>
-        <option value="week" {{if $view == "week"}}selected="selected"{{/if}}>
-          Semainier
-        </option>
-      </select>
+      <input type="radio" name="view" value="day" value="day" {{if $view == "day"}}checked="checked"{{/if}} onchange="this.form.submit()" />
+      <label for="view_day" title="Affichage du jour">Journée</label>
+      <input type="radio" name="view" value="week" value="day" {{if $view == "week"}}checked="checked"{{/if}} onchange="this.form.submit()" />
+      <label for="view_week" title="Affichage de la semaine">Semainier</label>
       </form>
     </th>
   </tr>
