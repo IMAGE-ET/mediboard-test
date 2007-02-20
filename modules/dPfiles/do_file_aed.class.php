@@ -107,6 +107,8 @@ class CFileAddEdit extends CDoObjectAddEdit {
       if (!$msgs["file_ok"] && ($msgs["file_upload_error"] || $msgs["file_size_error"]) && $this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
+    }else{
+      parent::doStore();
     }
   }  
   
