@@ -151,7 +151,7 @@ class CConsultation extends CMbObject {
     return $msg . parent::check();
   }
   
-  function loadCompleteView() {
+  function loadView() {
     $this->loadRefPlageConsult();
     $this->loadRefsExamAudio();
   }

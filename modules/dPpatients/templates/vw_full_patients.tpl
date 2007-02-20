@@ -7,14 +7,23 @@
 function viewItem(class, id) {
   oElement = $(class+id);
   oElement.show();
-  if(oElement.alt != "infos - cliquez pour fermer") {
+  var sAlt = "infos - cliquez pour fermer";
+  if (oElement.alt != sAlt) {
     url = new Url;
     url.setModuleAction("system", "httpreq_vw_object");
     url.addParam("object_class", class);
     url.addParam("object_id", id);
     url.requestUpdate(oElement);
-    oElement.alt = "infos - cliquez pour fermer";
+    oElement.alt = sAlt;
   }
+}
+
+function viewCompleteItem(class, id) {
+  url = new Url;
+  url.setModuleAction("system", "httpreq_vw_complete_object");
+  url.addParam("object_class", class);
+  url.addParam("object_id", id);
+  url.requestUpdate("listView");
 }
 
 function hideItem(class, id) {

@@ -263,6 +263,19 @@ class CSejour extends CMbObject {
     $this->loadRefEtablissement();
   }
   
+  function loadComplete() {
+    parent::loadComplete();
+
+    foreach ($this->_ref_operations as &$operation) {
+      $operation->loadRefsFwd();
+    }
+  
+    foreach ($this->_ref_affectations as &$affectation) {
+      $affectation->loadRefLit();
+      $affectation->_ref_lit->loadCompleteView();
+    }
+  }
+  
   function getPerm($permType) {
     if(!$this->_ref_praticien) {
       $this->loadRefPraticien();

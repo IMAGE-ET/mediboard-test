@@ -266,13 +266,14 @@
             <a title="Modifier le séjour" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
               <img src="images/icons/planning.png" alt="Planifier"/>
             </a>
-            <a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}#{{$curr_sejour->sejour_id}}"
+            <a href="#"
               onmouseover="viewItem(
                 'CSejour',
                 {{$curr_sejour->sejour_id}})"
               onmouseout="hideItem(
                 'CSejour',
-                {{$curr_sejour->sejour_id}})">
+                {{$curr_sejour->sejour_id}})"
+              onclick="viewCompleteItem('CSejour', {{$curr_sejour->_id}})">
               Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
               au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
               - Dr. {{$curr_sejour->_ref_praticien->_view}}

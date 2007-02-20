@@ -306,7 +306,7 @@ class COperation extends CMbObject {
     return $msg;
   }
   
-  function loadCompleteView() {
+  function loadView() {
     $this->loadRefsFwd();
     $this->loadRefsActesCCAM();
   }

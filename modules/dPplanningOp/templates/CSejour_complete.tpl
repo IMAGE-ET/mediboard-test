@@ -1,6 +1,8 @@
-<table class="tbl tooltip">
+{{assign var="sejour" value=$object}}
+
+<table class="form">
   <tr>
-    <th>
+    <th class="title">
       {{$object->_view}}
     </th>
   </tr>
@@ -26,3 +28,6 @@
     </td>
   </tr>
 </table>
+
+{{include file="../../dPplanningOp/templates/inc_infos_operation.tpl"}}
+{{include file="../../dPplanningOp/templates/inc_infos_hospitalisation.tpl"}}

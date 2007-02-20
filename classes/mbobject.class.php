@@ -33,9 +33,11 @@ class CMbObject {
   var $_id            = null; // universal shortcut for the object id
   var $_view          = null; // universal view of the object
   var $_shortview     = null; // universal shortview for the object
-  var $_view_template = null; // default template file
   var $_canRead       = null; // read permission for the object
   var $_canEdit       = null; // write permission for the object
+
+  var $_view_template          = null; // view template path
+  var $_complete_view_template = null; // complete view template path
 
   /**
    * Properties  specification
@@ -380,16 +382,24 @@ class CMbObject {
     $k                    = $this->_tbl_key;
     $this->_view          = $this->_tbl . " #" . $this->$k;
     $this->_shortview     = "#" . $this->$k;
-    $this->_view_template = "../../{$this->_ref_module->mod_name}/templates/{$this->_class_name}_view.tpl";
   }
   
   /**
-   * Complete view for the object
+   * Load object view information 
    */
   
-  function loadCompleteView() {
+  function loadView() {
     $this->loadRefsFwd();
   }
+  
+  /**
+   * Load complete object view information 
+   */
+  
+  function loadComplete() {
+    $this->loadRefs();
+  }
+  
   
   /**
    * References loaders
@@ -439,6 +449,8 @@ class CMbObject {
   
   function loadRefModule($name) {
     $this->_ref_module = CModule::getInstalled($name);
+    $this->_view_template          = "../../{$this->_ref_module->mod_name}/templates/{$this->_class_name}_view.tpl";
+    $this->_complete_template = "../../{$this->_ref_module->mod_name}/templates/{$this->_class_name}_complete.tpl";
   }
 
   /**
