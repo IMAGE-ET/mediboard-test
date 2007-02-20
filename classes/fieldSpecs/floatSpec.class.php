@@ -49,7 +49,8 @@ class CFloatSpec extends CMbFieldSpec {
       
     // max
     if($this->max){
-      if(!$max = $this->checkNumeric($this->max, false)){
+      $max = $this->checkNumeric($this->max, false);
+      if($max === null){
         trigger_error("Spécification de maximum numérique invalide (max = $this->max)", E_USER_WARNING);
         return "Erreur système";
       }      
@@ -61,9 +62,9 @@ class CFloatSpec extends CMbFieldSpec {
     // minMax
     if($this->minMax){
       $specFragments = explode("|", $this->minMax);
-      if(count($specFragments) != 2
-         || !$min= $this->checkNumeric(@$specFragments[0], false)
-         || !$max= $this->checkNumeric(@$specFragments[1], false)){
+      $min= $this->checkNumeric(@$specFragments[0], false);
+      $max= $this->checkNumeric(@$specFragments[1], false);
+      if(count($specFragments) != 2 || $min === null || $max === null){
         trigger_error("Spécification de minimum maximum numérique invalide (minMax = $this->minMax)", E_USER_WARNING);
         return "Erreur système";
       }
