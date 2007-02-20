@@ -227,7 +227,7 @@ function smarty_function_mb_field($params, &$smarty) {
             }elseif($className != ""){
               $_html_result .= ' class="'.smarty_function_escape_special_chars($className).'"';
             }
-            $_html_result .= " $extra /><label for=\"".$params["field"]."_$i\">".$AppUI->_("$objClass.".$params["field"].".$i")."</label> ";
+            $_html_result .= " $extra /><label for=\"".$params["field"]."_$i\">".$AppUI->_("bool.$i")."</label> ";
             $compteur++;
             if($i != 0){
               $_html_result .= $params["separator"];
