@@ -83,7 +83,9 @@ var ElementChecker = {
         return "Ne pas peut pas être vide";
       }
     }
-    
+    if(this.oElement.value == ""){
+      return null;
+    }
     // moreThan
     if(this.aProperties["moreThan"]){
       var sTargetElement = this.aProperties["moreThan"];

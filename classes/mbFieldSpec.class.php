@@ -116,7 +116,9 @@ class CMbFieldSpec {
     if($this->notNull && ($propValue === null || $propValue === "")){
       return "Ne pas peut pas avoir une valeur nulle";
     }
-    
+    if($propValue === null || $propValue === ""){
+      return null;
+    }
     // moreThan
     if($field = $this->moreThan){
       if($msg = $this->checkTargetPropValue($object, $field)){
