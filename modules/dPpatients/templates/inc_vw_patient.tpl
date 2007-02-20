@@ -84,39 +84,37 @@ function reloadAfterSaveDoc(){
 
   <tr>
     <th>Nom</th>
-    <td>{{$patient->nom}}</td>
+    <td>{{mb_value object=$patient field="nom"}}</td>
     <th>Adresse</th>
-    <td class="text">{{$patient->adresse|nl2br}}</td>
+    <td class="text">{{mb_value object=$patient field="adresse"}}</td>
   </tr>
   
   <tr>
     <th>Prénom</th>
-    <td>{{$patient->prenom}}</td>
+    <td>{{mb_value object=$patient field="prenom"}}</td>
     <th>Code Postal</th>
-    <td>{{$patient->cp}}</td>
+    <td>{{mb_value object=$patient field="cp"}}</td>
   </tr>
   
   <tr>
     <th>Nom de naissance</th>
-    <td>{{$patient->nom_jeune_fille}}</td>
+    <td>{{mb_value object=$patient field="nom_jeune_fille"}}</td>
     <th>Ville</th>
-    <td>{{$patient->ville}}</td>
+    <td>{{mb_value object=$patient field="ville"}}</td>
   </tr>
   
   <tr>
     <th>Date de naissance</th>
-    <td>{{$patient->_naissance}}</td>
+    <td>{{mb_value object=$patient field="naissance"}}</td>
     <th>Téléphone</th>
-    <td>{{$patient->_tel1}} {{$patient->_tel2}} {{$patient->_tel3}} {{$patient->_tel4}} {{$patient->_tel5}}</td>
+    <td>{{mb_value object=$patient field="tel"}}</td>
   </tr>
   
   <tr>
     <th>Sexe</th>
-    <td>
-      {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}}
-    </td>
+    <td>{{mb_value object=$patient field="sexe"}}</td>
     <th>Portable</th>
-    <td>{{$patient->_tel21}} {{$patient->_tel22}} {{$patient->_tel23}} {{$patient->_tel24}} {{$patient->_tel25}}</td>
+    <td>{{mb_value object=$patient field="tel2"}}</td>
   </tr>
   
   {{if $patient->medecin_traitant || $patient->medecin1 || $patient->medecin2 || $patient->medecin3}}
@@ -148,7 +146,7 @@ function reloadAfterSaveDoc(){
   </tr>
   
   <tr>
-    <td colspan="4" class="text">{{$patient->rques|nl2br}}</td>
+    <td colspan="4" class="text">{{mb_value object=$patient field="rques"}}</td>
   </tr>
   {{/if}}
   
