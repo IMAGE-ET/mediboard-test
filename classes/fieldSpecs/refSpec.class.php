@@ -33,7 +33,7 @@ class CRefSpec extends CMbFieldSpec {
     }
     
     if($field = $this->xor){
-      if($msg = checkTargetPropValue($field)){
+      if($msg = $this->checkTargetPropValue($object, $field)){
         return $msg;
       }
       $targetPropValue = $object->$field; 
