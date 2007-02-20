@@ -99,6 +99,10 @@ class CMbFieldSpec {
     $this->checkValues();
   }
   
+  function getSpecType() {
+    return("text");
+  }
+  
   function checkParams(&$object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;

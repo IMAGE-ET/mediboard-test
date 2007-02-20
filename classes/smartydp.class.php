@@ -119,6 +119,17 @@ function smarty_function_mb_field_spec($obj, $field, $propSpec){
     $obj->_specs = $obj->getSpecsObj(array($field => $propSpec));
   }
   if($obj->_specs[$field]){
+    return $obj->_specs[$field]->getSpecType();
+  }else{
+    return null;
+  }
+}
+
+function smarty_function_mb_value_spec($obj, $field, $propSpec){
+  if(!isset($obj->_specs[$field])){
+    $obj->_specs = $obj->getSpecsObj(array($field => $propSpec));
+  }
+  if($obj->_specs[$field]){
     return $obj->_specs[$field]->checkFieldType();
   }else{
     return null;
@@ -129,7 +140,7 @@ function smarty_function_mb_field_spec($obj, $field, $propSpec){
  * @param datatype paramname
  * 
  */
-function smarty_function_mb_field($params, &$smarty){
+function smarty_function_mb_field($params, &$smarty) {
   global $AppUI;
   
   require_once $smarty->_get_plugin_filepath('shared','escape_special_chars');
@@ -283,6 +294,62 @@ function smarty_function_mb_field($params, &$smarty){
 }
 
 /**
+ * Fonction that return the value of an object field
+ */
+
+function smarty_function_mb_value($params, &$smarty) {
+
+  global $AppUI;
+  
+  require_once $smarty->_get_plugin_filepath('shared','escape_special_chars');
+  $_html_result = "";
+  
+  if(!isset($params["object"]) || !isset($params["field"])){
+    $smarty->trigger_error("mb_select: attribut 'object' ou 'field' manquant", E_USER_NOTICE);
+  }
+  
+  $value     = $params["object"]->$params["field"];
+  $fieldType = smarty_function_mb_value_spec($params["object"], $params["field"], $propSpec);
+  
+  switch($fieldType) {
+    case "bool" :
+      break;
+    case "code" :
+      break;
+    case "date" :
+      break;
+    case "dateTime" :
+      break;
+    case "email" :
+      break;
+    case "enum" :
+      break;
+    case "float" :
+      break;
+    case "html" :
+      break;
+    case "numchar" :
+      break;
+    case "num" :
+      break;
+    case "pct" :
+      break;
+    case "refMandatory" :
+      break;
+    case "ref" :
+      break;
+    case "str" :
+      break;
+    case "text" :
+      break;
+    case "time" :
+      break;
+  }
+  $_html_result = $value;
+  return $_html_result;
+}
+
+/**
  * dotProject integration of Smarty engine main class
  *
  * Provides an extension of smarty class with directory initialization
@@ -326,6 +393,7 @@ class CSmartyDP extends Smarty {
     $this->register_block   ("tr"           , "do_translation"); 
     $this->register_function("thumb"        , "thumb");
     $this->register_function("mb_field"     , "smarty_function_mb_field");
+    $this->register_function("mb_value"     , "smarty_function_mb_value");
     $this->register_modifier("json"         , "smarty_modifier_json");
     $this->register_modifier("const"        , "smarty_modifier_const");
     $this->register_modifier("cleanField"   , "smarty_modifier_cleanField");
