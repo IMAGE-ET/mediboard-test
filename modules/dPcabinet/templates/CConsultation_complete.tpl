@@ -28,21 +28,21 @@ function newExam(sAction, consultation_id) {
     </td>
   </tr>
   <tr>
-    <td>
+    <td class="text">
       <strong>Motif :</strong>
       <i>{{$object->motif|nl2br}}</i>
     </td>
-    <td>
+    <td class="text">
       <strong>Remarques :</strong>
       <i>{{$object->rques|nl2br}}</i>
     </td>
   </tr>
   <tr>
-    <td>
+    <td class="text">
       <strong>Examens :</strong>
       <i>{{$object->examen|nl2br}}</i>
     </td>
-    <td>
+    <td class="text">
       <strong>Traitement :</strong>
       <i>{{$object->traitement|nl2br}}</i>
     </td>
