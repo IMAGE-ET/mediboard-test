@@ -126,8 +126,18 @@ function smarty_function_mb_field_spec($obj, $field, $propSpec){
 }
 
 /**
- * @param datatype paramname
- * 
+ * @param array params tableau des parametres
+ *        - object          : Objet
+ *        - field           : Nom du champ a afficher
+ *        - element         : {optionnel} Nature de l'element a afficher (values : "field", "label") [default: "field"]
+ *        - spec            : {optionnel} Specification du champs, par defaut, celle de la classe
+ *        - separator       : {optionnel} Séparation entre les champs de type "radio" [default: ""]
+ *        - cycle           : {optionnel} Cycle de répétition du séparateur (pour les enums en type radio) [default: "1"]
+ *        - typeEnum        : {optionnel} Type d'affichage des enums (values : "select", "radio") [default: "select"]
+ *        - defaultOption   : {optionnel} Ajout d'un "option" en amont des valeurs ayant pour value ""
+ *        - defaultSelected : {optionnel} Détermine la valur sélectionner par défaut ni valeur nulle pour les enums
+ *        - class           : {optionnel} Permet de donner une classe aux champs
+ *        - type            : {optionnel} Permet de forcer un type de champs (ex: hidden)
  */
 function smarty_function_mb_field($params, &$smarty) {
   global $AppUI;
