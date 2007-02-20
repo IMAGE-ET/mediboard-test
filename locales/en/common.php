@@ -1,4 +1,5 @@
 <?php
+$locales['bool.1'] = 'yes';
 $locales['- New Item -'] = '';
 $locales['::store-check failed:'] = '';
 $locales['About'] = 'About';
@@ -17,9 +18,10 @@ $locales['Archived Projects'] = 'Archived Projects';
 $locales['back'] = 'back';
 $locales['Backup'] = 'Backup';
 $locales['Birthday'] = 'Birthday';
+$locales['bool.0'] = 'no';
 $locales['Calendar'] = 'Calendar';
-$locales['CANCEL'] = 'CANCEL';
 $locales['Cancel'] = 'Annuler';
+$locales['CANCEL'] = 'CANCEL';
 $locales['cancel'] = 'cancel';
 $locales['Change User Password'] = 'Change User Password';
 $locales['chgpwNoMatch'] = 'The new password don\'t match';

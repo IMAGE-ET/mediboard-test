@@ -1,4 +1,5 @@
 <?php
+$locales['bool.1'] = 'oui';
 $locales['- New Item -'] = '-- Créer';
 $locales['::store-check failed:'] = ': impossible de sauvegarder l\'objet, ';
 $locales['About'] = 'A propos';
@@ -17,9 +18,10 @@ $locales['Archived Projects'] = 'Projets Archivés';
 $locales['back'] = 'retour';
 $locales['Backup'] = 'Sauvegarde';
 $locales['Birthday'] = 'Anniversaire';
+$locales['bool.0'] = 'non';
 $locales['Calendar'] = 'Calendrier';
-$locales['CANCEL'] = 'ANNULE';
 $locales['Cancel'] = 'Annuler';
+$locales['CANCEL'] = 'ANNULE';
 $locales['cancel'] = 'annuler';
 $locales['Change User Password'] = 'Change le mot de passe utilisateur';
 $locales['chgpwNoMatch'] = 'Le nouveau mot de passe ne correspond pas';
