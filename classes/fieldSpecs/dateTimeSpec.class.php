@@ -11,8 +11,8 @@ require_once("./classes/mbFieldSpec.class.php");
 
 class CDateTimeSpec extends CMbFieldSpec {
   
-  function getValue($object, $params = null) {
-    global $AppUI;
+  function getValue($object, $smarty, $params = null) {
+    require_once $smarty->_get_plugin_filepath('modifier','date_format');
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     $format = mbGetValue(@$params["format"], "%d/%m/%Y %H:%M");

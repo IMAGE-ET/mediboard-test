@@ -11,7 +11,7 @@ require_once("./classes/mbFieldSpec.class.php");
 
 class CBoolSpec extends CMbFieldSpec {
   
-  function getValue($object, $params = null) {
+  function getValue($object, $smarty, $params = null) {
     global $AppUI;
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;

@@ -13,7 +13,7 @@ class CEnumSpec extends CMbFieldSpec {
   
   var $list = null;
   
-  function getValue($object, $params = null) {
+  function getValue($object, $smarty, $params = null) {
     global $AppUI;
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;

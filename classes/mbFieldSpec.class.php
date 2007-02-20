@@ -99,7 +99,7 @@ class CMbFieldSpec {
     $this->checkValues();
   }
   
-  function getValue(&$object, $params = null) {
+  function getValue(&$object, $smarty, $params = null) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     return $propValue;
