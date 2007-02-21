@@ -29,15 +29,15 @@ function pageMain() {
           </th>
         </tr>
         <tr>
-          <th><label for="_user_last_name" title="Nom de famille de l'utilisateur. Obligatoire">Nom</label></th>
-          <td><input type="text" name="_user_last_name" title="{{$user->_user_props._user_last_name}}" value="{{$user->_user_last_name}}" /></td>
+          <th>{{mb_label object=$user field="_user_last_name"}}</th>
+          <td>{{mb_field object=$user field="_user_last_name"}}</td>
         </tr>
         <tr>
-          <th><label for="_user_first_name" title="Prénom de l'utilisateur">Prénom</label></th>
-          <td><input type="text" name="_user_first_name"  title="{{$user->_user_props._user_first_name}}" value="{{$user->_user_first_name}}" /></td>
+          <th>{{mb_label object=$user field="_user_first_name"}}</th>
+          <td>{{mb_field object=$user field="_user_first_name"}}</td>
         </tr>
         <tr>
-          <th><label for="discipline_id" title="Spécialité de l'utilisateur. Optionnel">Spécialité</label></th>
+          <th>{{mb_label object=$user field="discipline_id"}}</th>
           <td>
             <select name="discipline_id" title="{{$user->_props.discipline_id}}">
               <option value="">&mdash; Choisir une spécialité &mdash;</option>
@@ -50,7 +50,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="spec_cpam_id" title="Spécialité CPAM de l'utilisateur. Optionnel">Spéc CPAM</label></th>
+          <th>{{mb_label object=$user field="spec_cpam_id"}}</th>
           <td>
             <select name="spec_cpam_id" title="{{$user->_props.spec_cpam_id}}">
               <option value="">&mdash; Choisir une spécialité &mdash;</option>
@@ -63,20 +63,20 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="adeli" title="Numero Adeli de l'utilisateur">Code Adeli</label></th>
-          <td><input type="text" name="adeli" size="9" maxlength="9" title="{{$user->_props.adeli}}" value="{{$user->adeli}}" /></td>
+          <th>{{mb_label object=$user field="adeli"}}</th>
+          <td>{{mb_field object=$user field="adeli"}}</td>
         </tr>
         <tr>
-          <th><label for="titres" title="Titres du médecin">Titres</label></th>
-          <td><textarea name="titres" title="{{$user->_props.titres}}">{{$user->titres}}</textarea>
+          <th>{{mb_label object=$user field="titres"}}</th>
+          <td>{{mb_field object=$user field="titres"}}</td>
         </tr>
         <tr>
-          <th><label for="_user_email" title="Email de l'utilisateur">Email</label></th>
-          <td><input type="text" name="_user_email" title="{{$user->_user_props._user_email}}" value="{{$user->_user_email}}" /></td>
+          <th>{{mb_label object=$user field="_user_email"}}</th>
+          <td>{{mb_field object=$user field="_user_email"}}</td>
         </tr>
         <tr>
-          <th><label for="_user_phone" title="Numéro de téléphone de l'utilisateur">Tél</label></th>
-          <td><input type="text" name="_user_phone" title="{{$user->_user_props._user_phone}}" value="{{$user->_user_phone}}" /></td>
+          <th>{{mb_label object=$user field="_user_phone"}}</th>
+          <td>{{mb_field object=$user field="_user_phone"}}</td>
         </tr>
         <tr>
           <td colspan="2" class="button">
@@ -102,37 +102,29 @@ function pageMain() {
           </th>
         </tr>
         <tr>
-          <th>
-            <label for="soustitre" title="Sous-titre de la fonction">Sous-titre</label>
-          </th>
-          <td>
-            <textarea title="{{$fonction->_props.soustitre}}" name="soustitre">{{$fonction->soustitre}}</textarea>
-          </td>
+          <th>{{mb_label object=$fonction field="soustitre"}}</th>
+          <td>{{mb_field object=$fonction field="soustitre"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="adresse" title="Veuillez saisir l'adresse du cabinet">Adresse</label>
-          </th>
-          <td>
-            <textarea title="{{$fonction->_props.adresse}}" name="adresse">{{$fonction->adresse}}</textarea>
-          </td>
+          <th>{{mb_label object=$fonction field="adresse"}}</th>
+          <td>{{mb_field object=$fonction field="adresse"}}</td>
         </tr>
         <tr>
-          <th><label for="cp" title="Code postal">Code Postal</label></th>
+          <th>{{mb_label object=$fonction field="cp"}}</th>
           <td>
-            <input size="31" maxlength="5" type="text" name="cp" value="{{$fonction->cp}}" title="{{$fonction->_props.cp}}" />
+            {{mb_field object=$fonction field="cp"}}
             <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
           </td>
         </tr>
         <tr>
-          <th><label for="ville" title="Ville du cabinet">Ville</label></th>
+          <th>{{mb_label object=$fonction field="ville"}}</th>
           <td>
-            <input size="31" type="text" name="ville" value="{{$fonction->ville}}" title="{{$fonction->_props.ville}}" />
+            {{mb_field object=$fonction field="ville"}}
             <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
           </td>
         </tr>
         <tr>
-          <th><label for="_tel1" title="Numéro de téléphone filaire">Téléphone</label></th>
+          <th>{{mb_label object=$fonction field="tel" defaultFor="_tel1"}}</th>
           <td>
             <input type="text" name="_tel1" size="2" maxlength="2" value="{{$fonction->_tel1}}" title="num length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
             <input type="text" name="_tel2" size="2" maxlength="2" value="{{$fonction->_tel2}}" title="num length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
@@ -142,7 +134,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="_fax1" title="Numéro de fax">Télécopie</label></th>
+          <th>{{mb_label object=$fonction field="fax" defaultFor="_fax1"}}</th>
           <td>
             <input type="text" name="_fax1" size="2" maxlength="2" value="{{$fonction->_fax1}}" title="num length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
             <input type="text" name="_fax2" size="2" maxlength="2" value="{{$fonction->_fax2}}" title="num length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
