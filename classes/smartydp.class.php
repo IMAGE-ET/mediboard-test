@@ -213,7 +213,7 @@ function smarty_function_mb_field($params, &$smarty) {
       $iMax = 1;
       for($i=$iMax; $i>=0; $i--){
         $selected = "";
-        if(($value && $value === $i) || (!$value && $i === $params["defaultSelected"])){
+        if(($value !== null && $value === $i) || ($value === null && $i === $params["defaultSelected"])){
           $selected = "checked=\"checked\"";
         }
         $_html_result .= "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$i\" $selected";
@@ -240,7 +240,7 @@ function smarty_function_mb_field($params, &$smarty) {
             $_html_result .= "<option value=\"\">".smarty_function_escape_special_chars($params["defaultOption"])."</option>";
           }
           foreach($enumsTrans as $key => $item){
-            if(($value && $value == $key) || (!$value && $key == $params["defaultSelected"])){
+            if(($value !== null && $value == $key) || ($value === null && $key == $params["defaultSelected"])){
              $selected = " selected=\"selected\""; 
             }else{
               $selected = "";
