@@ -114,12 +114,14 @@ function include_script($params, &$smarty) {
     return $_html_result;
 }
 
-function smarty_function_mb_field_spec($obj, $field, $propSpec){
-  if(!isset($obj->_specs[$field])){
-    $obj->_specs = $obj->getSpecsObj(array($field => $propSpec));
+function smarty_function_mb_field_spec($obj, $field, $propSpec = null){
+  if($propSpec != null){
+    $specs = $obj->getSpecsObj(array($field => $propSpec));
+  }else{
+    $specs = $obj->_specs;
   }
-  if($obj->_specs[$field]){
-    return $obj->_specs[$field]->checkFieldType();
+  if($specs[$field]){
+    return $specs[$field]->checkFieldType();
   }else{
     return null;
   }
@@ -157,10 +159,14 @@ function smarty_function_mb_field($params, &$smarty) {
   $propSpec  = @$params["object"]->_props[$params["field"]];
   $objClass  = $params["object"]->_class_name;
   
-  if(isset($params["spec"])) {  $propSpec = $params["spec"];      }
+  if(isset($params["spec"])) {
+    $propSpec = $params["spec"];
+  }else{
+    $params["spec"] = null;
+  }
   if(isset($params["class"])){ $className = $params["class"]; }
   
-  $attribute_oblig = array("type"            => smarty_function_mb_field_spec($params["object"], $params["field"], $propSpec),
+  $attribute_oblig = array("type"            => smarty_function_mb_field_spec($params["object"], $params["field"], $params["spec"]),
                             "typeEnum"        => "select",
                             "separator"       => "",
                             "cycle"           => 1,

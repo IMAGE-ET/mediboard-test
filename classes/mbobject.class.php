@@ -701,9 +701,13 @@ class CMbObject {
     return array();
   }
   
-  function getSpecsObj(){
-    $specs =& $this->_props;
-    $props = get_object_vars($this);
+  function getSpecsObj($props = null){
+    if($props == null){
+      $specs =& $this->_props;
+      $props = get_object_vars($this);
+    }else{
+      $specs = $props;
+    }
     
     $spec = array();
     foreach($props as $k => $v){
