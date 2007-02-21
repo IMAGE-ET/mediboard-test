@@ -189,7 +189,7 @@ function smarty_function_mb_field($params, &$smarty) {
         break;
       case "type":
         if(($className !== "" && $className !== null) || ($propSpec !== "" && $propSpec!== null)){
-          $extra_class .= 'class="'.smarty_function_escape_special_chars($className." ".$propSpec).'"';
+          $extra_class .= 'class="'.smarty_function_escape_special_chars(trim($className." ".$propSpec)).'"';
         }
         if(is_scalar($_val) && ($_val == "textarea" || $_val == "enum")){
           break;
@@ -210,19 +210,19 @@ function smarty_function_mb_field($params, &$smarty) {
       break;
     case "radio":
       $compteur = 0;
-      $iMax = 1;
-      for($i=$iMax; $i>=0; $i--){
+      for($i=1; $i>=0; $i--){
         $selected = "";
-        if(($value !== null && $value === $i) || ($value === null && $i === $params["defaultSelected"])){
+        if(($value !== null && $value === "$i") || ($value === null && "$i" === $params["defaultSelected"])){
           $selected = "checked=\"checked\"";
         }
         $_html_result .= "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$i\" $selected";
+        
         if($compteur == 0) {
-          $_html_result .= ' class="'.smarty_function_escape_special_chars($className." ".$propSpec).'"';
+          $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className." ".$propSpec)).'"';
         }elseif($className != ""){
-          $_html_result .= ' class="'.smarty_function_escape_special_chars($className).'"';
+          $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className)).'"';
         }
-        $_html_result .= " $extra /><label for=\"".$params["field"]."_$i\">".$AppUI->_("bool.$i")."</label> ";
+        $_html_result .= " $extra/><label for=\"".$params["field"]."_$i\">".$AppUI->_("bool.$i")."</label> ";
         $compteur++;
         if($i != 0){
           $_html_result .= $params["separator"];
@@ -240,7 +240,7 @@ function smarty_function_mb_field($params, &$smarty) {
             $_html_result .= "<option value=\"\">".smarty_function_escape_special_chars($params["defaultOption"])."</option>";
           }
           foreach($enumsTrans as $key => $item){
-            if(($value !== null && $value == $key) || ($value === null && $key == $params["defaultSelected"])){
+            if(($value !== null && $value === "$key") || ($value === null && "$key" === $params["defaultSelected"])){
              $selected = " selected=\"selected\""; 
             }else{
               $selected = "";
@@ -253,18 +253,18 @@ function smarty_function_mb_field($params, &$smarty) {
         case "radio":
           $compteur = 0;
           foreach($enumsTrans as $key => $item){
-            if(($value && $value === $key) || (!$value && $key === $params["defaultSelected"])){
+            if(($value !== null && $value === "$key") || ($value === null && "$key" === $params["defaultSelected"])){
              $selected = " checked=\"checked\""; 
             }else{
               $selected = "";
             }
             $_html_result .= "<input type=\"radio\" name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$key\" $selected";
             if($compteur == 0) {
-              $_html_result .= ' class="'.smarty_function_escape_special_chars($className." ".$propSpec).'"';
+              $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className." ".$propSpec)).'"';
             }elseif($className != ""){
-              $_html_result .= ' class="'.smarty_function_escape_special_chars($className).'"';
+              $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className)).'"';
             }
-            $_html_result .= " $extra /><label for=\"".$params["field"]."_$key\">$item</label> ";
+            $_html_result .= " $extra/><label for=\"".$params["field"]."_$key\">$item</label> ";
             $compteur++;
             if($compteur % $params["cycle"] == 0){
               $_html_result .= $params["separator"];
