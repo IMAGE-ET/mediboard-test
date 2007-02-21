@@ -40,7 +40,7 @@
           {{/if}}
         </tr> 
         <tr>
-          <th><label for="name" title="Nom du type d'anesthésie, obligatoire">Nom du type d'anesthésie</label></th>
+          <th>{{mb_label object=$type_anesth field="name"}}</th>
           <td>{{mb_field object=$type_anesth field="name"}}</td>
         </tr>  
         <tr>

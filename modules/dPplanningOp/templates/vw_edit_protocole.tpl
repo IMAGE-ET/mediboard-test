@@ -182,7 +182,7 @@ function pageMain() {
         
         <tr>
           <th>
-            <label for="chir_id" title="Praticien responsable. Obligatoire">Praticien</label>
+            {{mb_label object=$protocole field="chir_id"}}
           </th>
           <td colspan="2">
             <select name="chir_id" title="{{$protocole->_props.chir_id}}">
@@ -197,7 +197,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="_hour_op" title="Durée de l'intervention. Obligatoire">Temps opératoire</label>
+            {{mb_label object=$protocole field="_hour_op"}}
           </th>
           <td colspan="2">
             <select name="_hour_op" title="notNull num min|0">
@@ -214,7 +214,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="_codeCCAM" title="Codes CCAM d'intervention">Ajout de codes CCAM</label>
+            {{mb_label object=$protocole field="codes_ccam"}}
           </th>
           <td>
             <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" />
@@ -232,13 +232,13 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="libelle" title="Libellé facultatif d'intervention">Libellé</label></th>
+          <th>{{mb_label object=$protocole field="libelle"}}</th>
           <td colspan="2">{{mb_field object=$protocole field="libelle" size="50"}}</td>
         </tr>
         <tr>
-          <td class="text"><label for="examen" title="Bilan pré-opératoire">Bilan pré-op</label></td>
-          <td class="text"><label for="materiel" title="Matériel à prévoir / examens per-opératoire">Matériel à prévoir / examens per-op</label></td>
-          <td class="text"><label for="rques_operation" title="Remarques sur l'intervention">Remarques</label></td>
+          <td class="text">{{mb_label object=$protocole field="examen"}}</td>
+          <td class="text">{{mb_label object=$protocole field="materiel"}}</td>
+          <td class="text">{{mb_label object=$protocole field="rques_operation"}}</td>
         </tr>
 
         <tr>
@@ -247,7 +247,7 @@ function pageMain() {
           <td>{{mb_field object=$protocole field="rques_operation" rows="3"}}</td>
         </tr>
         <tr>
-          <th><label for="depassement"title="Valeur du dépassement d'honoraire éventuel">Dépassement d'honoraire</label></th>
+          <th>{{mb_label object=$protocole field="depassement"}}</th>
           <td colspan="2">{{mb_field object=$protocole field="depassement" size="4"}} €</td>
         </tr>
       </table>
@@ -258,23 +258,23 @@ function pageMain() {
          <th class="category" colspan="3">Informations concernant le séjour</th>
        </tr>
         <tr>
-          <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM)</label></th>
+          <th>{{mb_label object=$protocole field="DP"}}</th>
           <td>{{mb_field object=$protocole field="DP" size="10"}}</td>
           <td class="button"><button type="button" class="search" onclick="popCode('cim10')">Choisir un code</button></td>
         </tr>
         <tr>
-          <th><label for="duree_hospi" title="Durée d'hospitalisation en jours">Durée d'hospitalisation</label></th>
+          <th>{{mb_label object=$protocole field="duree_hospi"}}</th>
           <td colspan="2">{{mb_field object=$protocole field="duree_hospi" size="2"}} jours</td>
         </tr>
         <tr>
-          <th><label for="type" title="Type d'admission">{{tr}}type_adm{{/tr}}</label></th>
+          <th>{{mb_label object=$protocole field="type"}}</th>
           <td colspan="2">
             {{mb_field object=$protocole field="type" defaultSelected="comp"}}
           </td>
         </tr>
         <tr>
-          <td><label for="convalescence" title="Convalescence post-opératoire">Convalescence</label></td>
-          <td colspan="2"><label for="rques_sejour" title="Remarques générales sur le séjour">Remarques</label></td>
+          <td>{{mb_label object=$protocole field="convalescence"}}</td>
+          <td colspan="2">{{mb_label object=$protocole field="rques_sejour"}}</td>
         </tr>
         <tr>
           <td>{{mb_field object=$protocole field="convalescence" rows="3"}}</td>
