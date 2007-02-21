@@ -1,11 +1,9 @@
 <table class="form">
   <tr>
-    <th><label for="regime_sante" title="Regime d'assurance santé">Régime d'assurance santé</label></th>
-    <td>
-      {{mb_field object=$patient field="regime_sante" tabindex="201" size="40" maxlength="40"}}
-    </td>
+    <th>{{mb_label object=$patient field="regime_sante"}}</th>
+    <td>{{mb_field object=$patient field="regime_sante" tabindex="201" size="40" maxlength="40"}}</td>
     <th>
-      <label for="medecin_traitant" title="Choisir un médecin traitant">Medecin traitant</label>
+      {{mb_label object=$patient field="medecin_traitant"}}
       {{mb_field object=$patient field="medecin_traitant" type="hidden"}}
     </th>
     <td class="readonly">
@@ -16,7 +14,7 @@
   </tr>
   
   <tr>
-    <th><label for="cmu" title="Couverture Mutuelle Universelle">CMU</label></th>
+    <th>{{mb_label object=$patient field="cmu"}}</th>
     <td class="date">
       <div id="editFrm_cmu_da">{{$patient->cmu|date_format:"%d/%m/%Y"}}</div>
       {{mb_field object=$patient field="cmu" type="hidden" spec="date"}}
@@ -24,7 +22,7 @@
       <button class="cancel notext" type="button" onclick="delCmu()"></button>
     </td>
     <th>
-      <label for="medecin1" title="Choisir un médecin correspondant">Médecin correspondant 1</label>
+      {{mb_label object=$patient field="medecin1"}}
       {{mb_field object=$patient field="medecin1" type="hidden"}}
     </th>
     <td class="readonly">
@@ -35,13 +33,13 @@
   </tr>
   
   <tr>
-    <th rowspan="2"><label for="ald" title="Affection longue Durée">ALD</label></th>
+    <th rowspan="2">{{mb_label object=$patient field="ald"}}</th>
     <td rowspan="2">
       {{mb_field object=$patient field="ald" tabindex="203"}}
     </td>
     <th>
+      {{mb_label object=$patient field="medecin2"}}
       {{mb_field object=$patient field="medecin2" type="hidden"}}
-      <label for="medecin2" title="Choisir un second médecin correspondant">Médecin correspondant 2</label>
     </th>
     <td class="readonly">
       <input type="text" name="_medecin2_name" size="30" value="{{if ($patient->_ref_medecin2)}}Dr. {{$patient->_ref_medecin2->_view}}{{/if}}" ondblclick="popMed('2')" readonly="readonly" />
@@ -52,8 +50,8 @@
   
   <tr>
     <th>
+      {{mb_label object=$patient field="medecin3"}}
       {{mb_field object=$patient field="medecin3" type="hidden"}}
-      <label for="medecin3" title="Choisir un troisième médecin correspondant">Médecin correspondant 3</label>
     </th>
     <td class="readonly">
       <input type="text" name="_medecin3_name" size="30" value="{{if ($patient->_ref_medecin3)}}Dr. {{$patient->_ref_medecin3->_view}}{{/if}}" ondblclick="popMed('3')" readonly="readonly" />
@@ -63,22 +61,16 @@
   </tr>
   
   <tr>
-    <th><label for="incapable_majeur" title="Patient reconnu incapable majeur">Incapable majeur</label></th>
-    <td>
-      {{mb_field object=$patient field="incapable_majeur" tabindex="204"}}
-    </td>
-    <th><label for="matricule" title="Matricule valide d'assuré social (13 chiffres + 2 pour la clé)">Numéro d'assuré social</label></th>
-    <td colspan="2">
-      {{mb_field object=$patient field="matricule" tabindex="255" size="17" maxlength="15"}}
-    </td>
+    <th>{{mb_label object=$patient field="incapable_majeur"}}</th>
+    <td>{{mb_field object=$patient field="incapable_majeur" tabindex="204"}}</td>
+    <th>{{mb_label object=$patient field="matricule"}}</th>
+    <td colspan="2">{{mb_field object=$patient field="matricule" tabindex="255" size="17" maxlength="15"}}</td>
   </tr>
   
   <tr>
-    <th><label for="ATNC" title="Patient présentant un risque ATNC">ATNC </label></th>
-    <td>
-      {{mb_field object=$patient field="ATNC" tabindex="206"}}
-    </td>
-    <th><label for="SHS" title="Code Administratif SHS">Code administratif</label></th>
+    <th>{{mb_label object=$patient field="ATNC"}}</th>
+    <td>{{mb_field object=$patient field="ATNC" tabindex="206"}}</td>
+    <th>{{mb_label object=$patient field="SHS"}}</th>
     <td colspan="2">
       {{mb_field object=$patient field="SHS" tabindex="256" size="8" maxlength="8" onblur="oAccord.changeTabAndFocus(2, this.form.prevenir_nom);"}}
     </td>
