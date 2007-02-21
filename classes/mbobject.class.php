@@ -701,13 +701,13 @@ class CMbObject {
     return array();
   }
   
-  function getSpecsObj($specs = null){
-    if($specs === null){
-      $specs =& $this->_props;
-    }
+  function getSpecsObj(){
+    $specs =& $this->_props;
+    $props = get_object_vars($this);
+    
     $spec = array();
-    foreach($specs as $k => $v){
-      $spec[$k] = CMbFieldSpecFact::getSpec($this, $k, $v);
+    foreach($props as $k => $v){
+      $spec[$k] = CMbFieldSpecFact::getSpec($this, $k, @$specs[$k]);
     }
     return $spec;
   }

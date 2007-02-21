@@ -24,19 +24,14 @@
         </tr>
         
         <tr>
-          <th><label for="soundex" title="Faire une recherche phonetique sur le patient">Utiliser la phonétique</label></th>
-          <td>
-            <input type="checkbox" name="check_soundex" onclick="chgSoundex()" {{if $soundex == "on"}}checked="checked"{{/if}}/>
-            <input type="hidden"   name="soundex" {{if $soundex == "on"}}value="on"{{else}}value="off"{{/if}} />
-          </td>
-          <th>
+          <th colspan="2">
             <label for="check_naissance" title="Date de naissance du patient à rechercher">
               <input type="checkbox" name="check_naissance" onclick="affNaissance()" {{if $naissance == "on"}}checked="checked"{{/if}}/>
               <input type="hidden" name="naissance" {{if $naissance == "on"}}value="on"{{else}}value="off"{{/if}} />
               Date de naissance
             </label>
           </th>
-          <td>
+          <td colspan="2">
             {{if $naissance == "on"}}
             {{html_select_date
                  time=$datePat

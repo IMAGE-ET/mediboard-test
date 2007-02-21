@@ -29,7 +29,7 @@ class CMbFieldSpec {
   var $_hours         = null;
   var $_mins          = null; 
   
-  function CMbFieldSpec(&$className, &$field, $propSpec, $aProperties) {
+  function CMbFieldSpec(&$className, &$field, $propSpec = null, $aProperties = array()) {
     $this->className =& $className;
     $this->fieldName =& $field;
     $this->spec      =& $propSpec;
@@ -148,7 +148,7 @@ class CMbFieldSpec {
       }
       $targetPropValue = $object->$field;  
       if ($propValue !== $targetPropValue) {
-        return "'Doit être identique à '$targetPropName'";
+        return "Doit être identique à '$targetPropName'";
       }
     }
     

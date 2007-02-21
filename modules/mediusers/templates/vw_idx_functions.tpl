@@ -73,29 +73,16 @@ function pageMain() {
           {{/if}}
           </th>
         </tr>
-        
         <tr>
-          <th>
-            <label for="text" title="Intitulé de la fonction. Obligatoire">Intitulé</label>
-          </th>
-          <td>
-            <input type="text" name="text" title="{{$userfunction->_props.text}}" size="30" value="{{$userfunction->text}}" />
-          </td>
+          <th>{{mb_label object=$userfunction field="text"}}</th>
+          <td>{{mb_field object=$userfunction field="text"}}</td>
         </tr>
-        
         <tr>
-          <th>
-            <label for="soustitre" title="Sous-titre de la fonction">Sous-titre</label>
-          </th>
-          <td>
-            <textarea title="{{$userfunction->_props.soustitre}}" name="soustitre">{{$userfunction->soustitre}}</textarea>
-          </td>
+          <th>{{mb_label object=$userfunction field="soustitre"}}</th>
+          <td>{{mb_field object=$userfunction field="soustitre"}}</td>
         </tr>
-        
         <tr>
-          <th>
-            <label for="group_id" title="Etablissement auquel se rattache la fonction">Etablissement</label>
-          </th>
+          <th>{{mb_label object=$userfunction field="group_id"}}</th>
           <td>
             <select name="group_id" title="{{$userfunction->_props.group_id}}">
               <option value="">&mdash; choisir un établissement</option>
@@ -108,48 +95,38 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="type" title="Type de fonction. Obligatoire">Type</label></th>
-          <td>
-            <select name="type" title="{{$userfunction->_props.type}}">
-              <option value="">&mdash; Choisir un type</option>
-              {{html_options options=$userfunction->_enumsTrans.type selected=$userfunction->type}}
-            </select>
-          </td>
+          <th>{{mb_label object=$userfunction field="type"}}</th>
+          <td>{{mb_field object=$userfunction field="type"}}</td>
         </tr>
         <tr>
-          <th><label for="color" title="Couleur de visualisation des fonctions dans les plannings">Couleur</label></th>
+          <th>{{mb_label object=$userfunction field="color"}}</th>
           <td>
             <span id="test" title="test" style="background: #{{$userfunction->color}};">
-            <a href="#" onclick="popColor()">cliquez ici</a>
+              <a href="#" onclick="popColor()">cliquez ici</a>
             </span>
-            <input type="hidden" name="color" title="{{$userfunction->_props.color}}" value="{{$userfunction->color}}" />
-          </td>
-        </tr>
-        
-        <tr>
-          <th>
-            <label for="adresse" title="Veuillez saisir l'adresse du cabinet">Adresse</label>
-          </th>
-          <td>
-            <textarea title="{{$userfunction->_props.adresse}}" name="adresse">{{$userfunction->adresse}}</textarea>
+            {{mb_field object=$userfunction field="color" type="hidden"}}
           </td>
         </tr>
         <tr>
-          <th><label for="cp" title="Code postal">Code Postal</label></th>
+          <th>{{mb_label object=$userfunction field="adresse"}}</th>
+          <td>{{mb_field object=$userfunction field="adresse"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$userfunction field="cp"}}</th>
           <td>
-            <input size="31" maxlength="5" type="text" name="cp" value="{{$userfunction->cp}}" title="{{$userfunction->_props.cp}}" />
+            {{mb_field object=$userfunction field="cp"}}
             <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
           </td>
         </tr>
         <tr>
-          <th><label for="ville" title="Ville du cabinet">Ville</label></th>
+          <th>{{mb_label object=$userfunction field="ville"}}</th>
           <td>
-            <input size="31" type="text" name="ville" value="{{$userfunction->ville}}" title="{{$userfunction->_props.ville}}" />
+            {{mb_field object=$userfunction field="ville"}}
             <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
           </td>
         </tr>
         <tr>
-          <th><label for="_tel1" title="Numéro de téléphone filaire">Téléphone</label></th>
+          <th>{{mb_label object=$userfunction field="tel" defaultFor="_tel1"}}</th>
           <td>
             <input type="text" name="_tel1" size="2" maxlength="2" value="{{$userfunction->_tel1}}" title="num length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
             <input type="text" name="_tel2" size="2" maxlength="2" value="{{$userfunction->_tel2}}" title="num length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
@@ -159,7 +136,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="_fax1" title="Numéro de fax">Télécopie</label></th>
+          <th>{{mb_label object=$userfunction field="fax" defaultFor="_fax1"}}</th>
           <td>
             <input type="text" name="_fax1" size="2" maxlength="2" value="{{$userfunction->_fax1}}" title="num length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
             <input type="text" name="_fax2" size="2" maxlength="2" value="{{$userfunction->_fax2}}" title="num length|2" onkeyup="followUp(this, '_fax3', 2)" /> -

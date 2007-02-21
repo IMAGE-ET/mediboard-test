@@ -31,43 +31,41 @@
           </th>
         </tr>
         <tr>
-          <th>Nom</th>
-          <td>{{$patient->nom}}</td>
-          <th>Adresse</th>
-          <td class="text">{{$patient->adresse|nl2br}}</td>
+          <th>{{mb_label object=$patient field="nom"}}</th>
+          <td>{{mb_value object=$patient field="nom"}}</td>
+          <th>{{mb_label object=$patient field="adresse"}}</th>
+          <td class="text">{{mb_value object=$patient field="adresse"}}</td>
         </tr>
         <tr>
-          <th>Prénom</th>
-          <td>{{$patient->prenom}}</td>
-          <th>Code Postal</th>
-          <td>{{$patient->cp}}</td>
+          <th>{{mb_label object=$patient field="prenom"}}</th>
+          <td>{{mb_value object=$patient field="prenom"}}</td>
+          <th>{{mb_label object=$patient field="cp"}}</th>
+          <td>{{mb_value object=$patient field="cp"}}</td>
         </tr>
         <tr>
-          <th>Nom de naissance</th>
-          <td>{{$patient->nom_jeune_fille}}</td>
-          <th>Ville</th>
-          <td>{{$patient->ville}}</td>
+          <th>{{mb_label object=$patient field="nom_jeune_fille"}}</th>
+          <td>{{mb_value object=$patient field="nom_jeune_fille"}}</td>
+          <th>{{mb_label object=$patient field="ville"}}</th>
+          <td>{{mb_value object=$patient field="ville"}}</td>
         </tr>
         <tr>
-          <th>Date de naissance</th>
-          <td>{{$patient->_naissance}}</td>
-          <th>Téléphone</th>
-          <td>{{$patient->_tel1}} {{$patient->_tel2}} {{$patient->_tel3}} {{$patient->_tel4}} {{$patient->_tel5}}</td>
+          <th>{{mb_label object=$patient field="naissance"}}</th>
+          <td>{{mb_value object=$patient field="naissance"}}</td>
+          <th>{{mb_label object=$patient field="tel"}}</th>
+          <td>{{mb_value object=$patient field="tel"}}</td>
         </tr>
         <tr>
-          <th>Sexe</th>
-          <td>
-            {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}}
-          </td>
-          <th>Portable</th>
-          <td>{{$patient->_tel21}} {{$patient->_tel22}} {{$patient->_tel23}} {{$patient->_tel24}} {{$patient->_tel25}}</td>
+          <th>{{mb_label object=$patient field="sexe"}}</th>
+          <td>{{mb_value object=$patient field="sexe"}}</td>
+          <th>{{mb_label object=$patient field="tel2"}}</th>
+          <td>{{mb_value object=$patient field="tel2"}}</td>
         </tr>
         {{if $patient->rques}}
         <tr>
-          <th class="category" colspan="4">Remarques</th>
+          <th class="category" colspan="4">{{mb_label object=$patient field="rques"}}</th>
         </tr>
         <tr>
-          <td colspan="4" class="text">{{$patient->rques|nl2br}}</td>
+          <td colspan="4" class="text">{{mb_value object=$patient field="rques"}}</td>
         </tr>
         {{/if}}
         <tr>
@@ -75,8 +73,8 @@
           <th colspan="2" class="category">Médecins</th>
         </tr>
         <tr>
-          <th>N° SS</th>
-          <td>{{$patient->matricule}}</td>
+          <th>{{mb_label object=$patient field="matricule"}}</th>
+          <td>{{mb_value object=$patient field="matricule"}}</td>
           <th>Traitant</th>
           <td>
             {{if $patient->medecin_traitant}}
@@ -85,8 +83,8 @@
           </td>
         </tr>
         <tr>
-          <th>Régime de santé</th>
-          <td>{{$patient->regime_sante}}</td>
+          <th>{{mb_label object=$patient field="regime_sante"}}</th>
+          <td>{{mb_value object=$patient field="regime_sante"}}</td>
           <th rowspan="3">Correspondants</th>
           <td>
             {{if $patient->medecin1}}
@@ -95,13 +93,12 @@
           </td>
         </tr>
         <tr>
-          <th>CMU</th>
+          <th>{{mb_label object=$patient field="cmu"}}</th>
           <td>
             {{if $patient->cmu}}
-            jusqu'au {{$patient->cmu|date_format:"%d/%m/%Y"}}
-            {{else}}
-            -
+            jusqu'au
             {{/if}}
+            {{mb_value object=$patient field="cmu"}}
           </td>
           <td>
             {{if $patient->medecin2}}
@@ -110,14 +107,8 @@
           </td>
         </tr>
         <tr>
-          <th>ALD</th>
-          <td>
-            {{if $patient->ald}}
-            {{$patient->ald|nl2br}}
-            {{else}}
-            -
-            {{/if}}
-          </td>
+          <th>{{mb_label object=$patient field="ald"}}</th>
+          <td>{{mb_value object=$patient field="ald"}}</td>
           <td>
             {{if $patient->medecin3}}
             Dr. {{$patient->_ref_medecin3->_view}}
@@ -202,10 +193,8 @@
           {{foreach from=$list_antecedent item=curr_antecedent}}
           <tr>
             <td class="text" colspan="2">
-              {{if $curr_antecedent->date}}
-                {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
-              {{/if}}
-              {{$curr_antecedent->rques|nl2br}}
+              {{mb_value object=$curr_antecedent field="date"}}
+              {{mb_value object=$curr_antecedent field="rques"}}
             </td>
           </tr>
           {{/foreach}}
@@ -224,12 +213,12 @@
           <tr>
             <td class="text" colspan="2">
               {{if $curr_traitement->fin}}
-              Du {{$curr_traitement->debut|date_format:"%d/%m/%Y"}}
-              au {{$curr_traitement->fin|date_format:"%d/%m/%Y"}} :
+                Du {{mb_value object=$curr_traitement field="debut"}}
+                au {{mb_value object=$curr_traitement field="fin"}} :
               {{elseif $curr_traitement->debut}}
-              Depuis le {{$curr_traitement->debut|date_format:"%d/%m/%Y"}} :
+                Depuis le {{mb_value object=$curr_traitement field="debut"}} :
               {{/if}}
-              {{$curr_traitement->traitement}}
+              {{mb_value object=$curr_traitement field="traitement"}}
             </td>
           </tr>
           {{foreachelse}}

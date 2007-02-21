@@ -34,8 +34,8 @@
           {{/if}}
         </tr>
         <tr>
-          <th><label for="text" title="Veuillez saisir le nom d'une spécialité médicale, obligatoire">Spécialité Médicale</label></th>
-          <td><input name="text" size="60" title="{{$specialite->_props.text}}" type="text" value="{{$specialite->text}}" /></td>
+          <th>{{mb_label object=$specialite field="text"}}</th>
+          <td>{{mb_field object=$specialite field="text"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">

@@ -43,10 +43,10 @@ function deldate(sField){
             <img src="images/icons/collapse.gif" onclick="collapseFunctions()" alt="réduire" />
             <img src="images/icons/expand.gif"  onclick="expandFunctions()" alt="agrandir" />
           </th>
-          <th>Utilisateur</th>
-          <th>Nom</th>
-          <th>Prénom</th>
-          <th>Type</th>
+          <th>{{tr}}CMediusers-_user_username{{/tr}}</th>
+          <th>{{tr}}CMediusers-_user_last_name{{/tr}}</th>
+          <th>{{tr}}CMediusers-_user_first_name{{/tr}}</th>
+          <th>{{tr}}CMediusers-_user_type{{/tr}}</th>
         </tr>
         {{foreach from=$groups item=curr_group}}
         <tr>
@@ -106,58 +106,48 @@ function deldate(sField){
           </th>
         </tr>
         <tr>
-          <th><label for="_user_username" title="Nom du compte pour se connecter à Mediboard. Obligatoire">Login</label></th>
-          <td><input type="text" name="_user_username" title="{{$mediuserSel->_user_props._user_username}}" value="{{$mediuserSel->_user_username}}" /></td>
+          <th>{{mb_label object=$mediuserSel field="_user_username"}}</th>
+          <td>{{mb_field object=$mediuserSel field="_user_username"}}</td>
         </tr>
         <tr>
-          <th><label for="_user_password" title="Mot de passe pour se connecter à Mediboard. Obligatoire">Mot de passe</label></th>
-          <td><input type="password" name="_user_password" title="{{$mediuserSel->_user_props._user_password}}{{if !$mediuserSel->user_id}} notNull{{/if}}" value="" /></td>
+          <th>{{mb_label object=$mediuserSel field="_user_password"}}</th>
+          <td><input type="password" name="_user_password" class="{{$mediuserSel->_user_props._user_password}}{{if !$mediuserSel->user_id}} notNull{{/if}}" value="" /></td>
         </tr>
         <tr>
-          <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (vérif.)</label></th>
-          <td><input type="password" name="_user_password2" title="str sameAs|_user_password" value="" /></td>
+          <th>{{mb_label object=$mediuserSel field="_user_password2"}}</th>
+          <td><input type="password" name="_user_password2" class="str sameAs|_user_password" value="" /></td>
         </tr>
         <tr>
-          <th><label for="actif_1" title="Permet ou non à d'activer le compte utilisateur">Compte actif</label></th>
-          <td>
-            <input type="radio" name="actif" value="1" {{if $mediuserSel->actif == "1" || !$mediuserSel->actif}} checked="checked" {{/if}} />
-            <label for="actif_1" title="Compte activé">oui</label>
-            <input type="radio" name="actif" value="0" {{if $mediuserSel->actif == "0"}} checked="checked" {{/if}} />
-            <label for="actif_0" title="Compte désactivé">non</label>
+          <th>{{mb_label object=$mediuserSel field="actif"}}</th>
+          <td>{{mb_field object=$mediuserSel field="actif" defaultSelected="1"}}</td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$mediuserSel field="deb_activite"}}</th>
+		      <td class="date">
+		        <div id="mediuser_deb_activite_da">{{mb_value object=$mediuserSel field="deb_activite"}}</div>
+		        <input type="hidden" name="deb_activite" title="date" value="{{$mediuserSel->deb_activite}}" />
+            <img id="mediuser_deb_activite_trigger" src="./images/icons/calendar.gif" alt="Date de début d'activité"/>
+            <button class="cancel notext" type="button" onclick="deldate('deb_activite')"></button>
+          </td>
+        </tr>
+    
+        <tr>
+          <th>{{mb_label object=$mediuserSel field="fin_activite"}}</th>
+          <td class="date">
+            <div id="mediuser_fin_activite_da">{{mb_value object=$mediuserSel field="fin_activite"}}</div>
+            <input type="hidden" name="fin_activite" title="date" value="{{$mediuserSel->fin_activite}}" />
+            <img id="mediuser_fin_activite_trigger" src="./images/icons/calendar.gif" alt="Date de fin d'activité"/>
+            <button class="cancel notext" type="button" onclick="deldate('fin_activite')"></button>
           </td>
         </tr>
         
         <tr>
-          <th><label for="deb_activite" title="Date de début d'activité">Début d'activité</label></th>
-		  <td class="date">
-		    <div id="mediuser_deb_activite_da">{{$mediuserSel->deb_activite|date_format:"%d/%m/%Y"}}</div>
-		    <input type="hidden" name="deb_activite" title="date" value="{{$mediuserSel->deb_activite}}" />
-		    <img id="mediuser_deb_activite_trigger" src="./images/icons/calendar.gif" alt="Date de début d'activité"/>
-		    <button class="cancel notext" type="button" onclick="deldate('deb_activite')"></button>
-		  </td>
-		</tr>
-		
-		<tr>
-          <th><label for="fin_activite" title="Date de fin d'activité">Fin d'activité</label></th>
-		  <td class="date">
-		    <div id="mediuser_fin_activite_da">{{$mediuserSel->fin_activite|date_format:"%d/%m/%Y"}}</div>
-		    <input type="hidden" name="fin_activite" title="date" value="{{$mediuserSel->fin_activite}}" />
-		    <img id="mediuser_fin_activite_trigger" src="./images/icons/calendar.gif" alt="Date de fin d'activité"/>
-		    <button class="cancel notext" type="button" onclick="deldate('fin_activite')"></button>
-		  </td>
-		</tr>
-        
-        <tr>
-          <th><label for="remote_0" title="Permet ou non à l'utilisateur de se connecter à distance">Accès distant</label></th>
-          <td>
-            <input type="radio" name="remote" value="0" {{if $mediuserSel->remote == "0"}} checked="checked" {{/if}} />
-            <label for="remote_0" title="Accès distant authorisé">oui</label>
-            <input type="radio" name="remote" value="1" {{if $mediuserSel->remote == "1"}} checked="checked" {{/if}} />
-            <label for="remote_1" title="Accès distant interdit">non</label>
-          </td>
+          <th>{{mb_label object=$mediuserSel field="remote"}}</th>
+          <td>{{mb_field object=$mediuserSel field="remote"}}</td>
         </tr>
         <tr>
-          <th><label for="function_id" title="Fonction de l'utilisateur au sein de l'établissement. Obligatoire">Fonction</label></th>
+          <th>{{mb_label object=$mediuserSel field="function_id"}}</th>
           <td>
             <select name="function_id" title="{{$mediuserSel->_props.function_id}}">
               <option value="">&mdash; Choisir une fonction &mdash;</option>
@@ -174,7 +164,7 @@ function deldate(sField){
           </td>
         </tr>
         <tr>
-          <th><label for="discipline_id" title="Spécialité de l'utilisateur. Optionnel">Spécialité</label></th>
+          <th>{{mb_label object=$mediuserSel field="discipline_id"}}</th>
           <td>
             <select name="discipline_id" title="{{$mediuserSel->_props.discipline_id}}">
               <option value="">&mdash; Choisir une spécialité &mdash;</option>
@@ -187,7 +177,7 @@ function deldate(sField){
           </td>
         </tr>
         <tr>
-          <th><label for="spec_cpam_id" title="Spécialité CPAM de l'utilisateur. Optionnel">Spéc CPAM</label></th>
+          <th>{{mb_label object=$mediuserSel field="spec_cpam_id"}}</th>
           <td>
             <select name="spec_cpam_id" title="{{$mediuserSel->_props.spec_cpam_id}}">
               <option value="">&mdash; Choisir une spécialité &mdash;</option>
@@ -200,10 +190,10 @@ function deldate(sField){
           </td>
         </tr>
         <tr>
-          <th><label for="_profile_id" title="Profil de droits utilisateur. Obligatoire">Profil</label></th>
+          <th>{{mb_label object=$mediuserSel field="_profile_id"}}</th>
           <td>
             <select name="_profile_id">
-              <option value="">&mdash; Choisir un profil</option>	
+              <option value="">&mdash; Choisir un profil</option>
               {{foreach from=$profiles item=curr_profile}}
               <option value="{{$curr_profile->user_id}}">{{$curr_profile->user_username}}</option>
               {{/foreach}}
@@ -211,32 +201,32 @@ function deldate(sField){
           </td>
         </tr>
         <tr>
-          <th><label for="_user_last_name" title="Nom de famille de l'utilisateur. Obligatoire">Nom</label></th>
-          <td><input type="text" name="_user_last_name" title="{{$mediuserSel->_user_props._user_last_name}}" value="{{$mediuserSel->_user_last_name}}" /></td>
+          <th>{{mb_label object=$mediuserSel field="_user_last_name"}}</th>
+          <td>{{mb_field object=$mediuserSel field="_user_last_name"}}</td>
         </tr>
         <tr>
-          <th><label for="_user_first_name" title="Prénom de l'utilisateur">Prénom</label></th>
-          <td><input type="text" name="_user_first_name"  title="{{$mediuserSel->_user_props._user_first_name}}" value="{{$mediuserSel->_user_first_name}}" /></td>
+          <th>{{mb_label object=$mediuserSel field="_user_first_name"}}</th>
+          <td>{{mb_field object=$mediuserSel field="_user_first_name"}}</td>
         </tr>
         <tr>
-          <th><label for="adeli" title="Numero Adeli de l'utilisateur">Code Adeli</label></th>
-          <td><input type="text" name="adeli" size="9" maxlength="9" title="{{$mediuserSel->_props.adeli}}" value="{{$mediuserSel->adeli}}" /></td>
+          <th>{{mb_label object=$mediuserSel field="adeli"}}</th>
+          <td>{{mb_field object=$mediuserSel field="adeli"}}</td>
         </tr>
         <tr>
-          <th><label for="titres" title="Titres du médecin">Titres</label></th>
-          <td><textarea name="titres" title="{{$mediuserSel->_props.titres}}">{{$mediuserSel->titres}}</textarea>
+          <th>{{mb_label object=$mediuserSel field="titres"}}</th>
+          <td>{{mb_field object=$mediuserSel field="titres"}}</td>
         </tr>
         <tr>
-          <th><label for="_user_email" title="Email de l'utilisateur">Email</label></th>
-          <td><input type="text" name="_user_email" title="{{$mediuserSel->_user_props._user_email}}" value="{{$mediuserSel->_user_email}}" /></td>
+          <th>{{mb_label object=$mediuserSel field="_user_email"}}</th>
+          <td>{{mb_field object=$mediuserSel field="_user_email"}}</td>
         </tr>
         <tr>
-          <th><label for="_user_phone" title="Numéro de téléphone de l'utilisateur">Tél</label></th>
-          <td><input type="text" name="_user_phone" title="{{$mediuserSel->_user_props._user_phone}}" value="{{$mediuserSel->_user_phone}}" /></td>
+          <th>{{mb_label object=$mediuserSel field="_user_phone"}}</th>
+          <td>{{mb_field object=$mediuserSel field="_user_phone"}}</td>
         </tr>
         <tr>
-          <th><label for="commentaires" title="Veuillez saisir un commentaire">Commentaires</label></th>
-          <td><textarea name="commentaires" title="{{$mediuserSel->_props.commentaires}}">{{$mediuserSel->commentaires}}</textarea>
+          <th>{{mb_label object=$mediuserSel field="commentaires"}}</th>
+          <td>{{mb_field object=$mediuserSel field="commentaires"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">

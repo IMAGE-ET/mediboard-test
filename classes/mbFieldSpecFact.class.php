@@ -12,7 +12,7 @@ class CMbFieldSpecFact {
   function CMbFieldSpecFact() {
   }
    
-  function getSpec($object, $field, $propSpec){
+  function getSpec($object, $field, $propSpec = null){
     
     static $aClass = array("refMandatory" => "CRefMandatorySpec",
                              "ref"          => "CRefSpec",
@@ -58,6 +58,8 @@ class CMbFieldSpecFact {
     }
     if($nameClass){
       $specObject = new $aClass[$nameClass]($object->_class_name, $field, $propSpec, $aProperties);
+    } else {
+      $specObject = new CMbFieldSpec($object->_class_name, $field);
     }
     return $specObject;
   }

@@ -18,7 +18,6 @@ $board = mbGetValueFromGet("board", 0);
 // Patients
 $patient_nom       = mbGetValueFromGetOrSession("nom"       , ""       );
 $patient_prenom    = mbGetValueFromGetOrSession("prenom"    , ""       );
-$soundex           = mbGetValueFromGetOrSession("soundex"   , "off"    );
 $patient_naissance = mbGetValueFromGetOrSession("naissance" , "off"    );
 $patient_ville     = mbGetValueFromGetOrSession("ville"     , ""       );
 $patient_cp        = mbGetValueFromGetOrSession("cp"        , ""       );
@@ -65,7 +64,7 @@ if (!function_exists('array_diff_key')) {
 }
 
 $pat = new CPatient();
-if ($where && ($soundex == "off")) {
+if ($where) {
   $patients = $pat->loadList($where, "nom, prenom, naissance", "0, 100");
 }
 if($whereSoundex && ($nbExact = (100 - count($patients)))) {
