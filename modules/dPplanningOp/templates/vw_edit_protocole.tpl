@@ -144,7 +144,7 @@ function pageMain() {
 
 <input type="hidden" name="dosql" value="do_protocole_aed" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="protocole_id" value="{{$protocole->protocole_id}}" />
+{{mb_field object=$protocole field="protocole_id" type="hidden" spec=""}}
 
 <table class="main" style="margin: 4px; border-spacing: 0px;">
   {{if $protocole->protocole_id}}
@@ -226,14 +226,14 @@ function pageMain() {
         <tr>
           <th>
             Liste des codes CCAM:
-            <input name="codes_ccam" type="hidden" value="{{$protocole->codes_ccam}}" />
+            {{mb_field object=$protocole field="codes_ccam" type="hidden" spec=""}}
           </th>
           <td colspan="2" class="text" id="listCodesCcam">
           </td>
         </tr>
         <tr>
           <th><label for="libelle" title="Libellé facultatif d'intervention">Libellé</label></th>
-          <td colspan="2"><input type="text" name="libelle" title="{{$protocole->_props.libelle}}" size="50" value="{{$protocole->libelle}}"/></td>
+          <td colspan="2">{{mb_field object=$protocole field="libelle" size="50"}}</td>
         </tr>
         <tr>
           <td class="text"><label for="examen" title="Bilan pré-opératoire">Bilan pré-op</label></td>
@@ -242,13 +242,13 @@ function pageMain() {
         </tr>
 
         <tr>
-          <td><textarea name="examen" title="{{$protocole->_props.examen}}" rows="3">{{$protocole->examen}}</textarea></td>
-          <td><textarea name="materiel" title="{{$protocole->_props.materiel}}" rows="3">{{$protocole->materiel}}</textarea></td>
-          <td><textarea name="rques_operation" title="{{$protocole->_props.rques_operation}}" rows="3">{{$protocole->rques_operation}}</textarea></td>
+          <td>{{mb_field object=$protocole field="examen" rows="3"}}</td>
+          <td>{{mb_field object=$protocole field="materiel" rows="3"}}</td>
+          <td>{{mb_field object=$protocole field="rques_operation" rows="3"}}</td>
         </tr>
         <tr>
           <th><label for="depassement"title="Valeur du dépassement d'honoraire éventuel">Dépassement d'honoraire</label></th>
-          <td colspan="2"><input name="depassement" title="{{$protocole->_props.depassement}}" type="text" size="4" value="{{$protocole->depassement}}" /> €</td>
+          <td colspan="2">{{mb_field object=$protocole field="depassement" size="4"}} €</td>
         </tr>
       </table>
     </td>
@@ -259,22 +259,17 @@ function pageMain() {
        </tr>
         <tr>
           <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM)</label></th>
-          <td><input type="text" name="DP" title="{{$protocole->_props.DP}}" size="10" value="{{$protocole->DP}}" /></td>
+          <td>{{mb_field object=$protocole field="DP" size="10"}}</td>
           <td class="button"><button type="button" class="search" onclick="popCode('cim10')">Choisir un code</button></td>
         </tr>
         <tr>
           <th><label for="duree_hospi" title="Durée d'hospitalisation en jours">Durée d'hospitalisation</label></th>
-          <td colspan="2"><input type="text" name="duree_hospi" title="{{$protocole->_props.duree_hospi}}" size="2" value="{{$protocole->duree_hospi}}" /> jours</td>
+          <td colspan="2">{{mb_field object=$protocole field="duree_hospi" size="2"}} jours</td>
         </tr>
         <tr>
           <th><label for="type" title="Type d'admission">{{tr}}type_adm{{/tr}}</label></th>
           <td colspan="2">
-            {{if $protocole->type}}
-            {{assign var="checked" value=$protocole->type}}
-            {{else}}
-            {{assign var="checked" value="comp"}}
-            {{/if}}
-            {{html_options name="type" options=$protocole->_enumsTrans.type title=$protocole->_props.type selected=$checked}}
+            {{mb_field object=$protocole field="type" defaultSelected="comp"}}
           </td>
         </tr>
         <tr>
@@ -282,8 +277,8 @@ function pageMain() {
           <td colspan="2"><label for="rques_sejour" title="Remarques générales sur le séjour">Remarques</label></td>
         </tr>
         <tr>
-          <td><textarea name="convalescence" title="{{$protocole->_props.convalescence}}" rows="3">{{$protocole->convalescence}}</textarea></td>
-          <td colspan="2"><textarea name="rques_sejour" title="{{$protocole->_props.rques_sejour}}" rows="3">{{$protocole->rques_sejour}}</textarea></td>
+          <td>{{mb_field object=$protocole field="convalescence" rows="3"}}</td>
+          <td colspan="2">{{mb_field object=$protocole field="rques_sejour" rows="3"}}</td>
         </tr>
       </table>
     </td>

@@ -29,7 +29,7 @@
       <form name="editType" action="./index.php?m={{$m}}&amp;tab=vw_edit_typeanesth" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="dosql" value="do_typeanesth_aed" />
-	  <input type="hidden" name="type_anesth_id" value="{{$type_anesth->type_anesth_id}}" />
+      {{mb_field object=$type_anesth field="type_anesth_id" type="hidden" spec=""}}
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
@@ -41,7 +41,7 @@
         </tr> 
         <tr>
           <th><label for="name" title="Nom du type d'anesthésie, obligatoire">Nom du type d'anesthésie</label></th>
-          <td><input name="name" title="{{$type_anesth->_props.name}}" type="text" value="{{$type_anesth->name}}" /></td>
+          <td>{{mb_field object=$type_anesth field="name"}}</td>
         </tr>  
         <tr>
           <td class="button" colspan="2">

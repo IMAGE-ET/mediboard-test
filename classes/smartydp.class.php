@@ -130,7 +130,6 @@ function smarty_function_mb_field_spec($obj, $field, $propSpec){
  *        - object          : Objet
  *        - field           : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
  *        - spec            : {optionnel} Specification du champs, par defaut, celle de la classe
- *        - element         : {optionnel} Nature de l'element a afficher (values : "field", "label") [default: "field"]
  *        - separator       : {optionnel} Séparation entre les champs de type "radio" [default: ""]
  *        - cycle           : {optionnel} Cycle de répétition du séparateur (pour les enums en type radio) [default: "1"]
  *        - typeEnum        : {optionnel} Type d'affichage des enums (values : "select", "radio") [default: "select"]
@@ -151,7 +150,7 @@ function smarty_function_mb_field($params, &$smarty) {
   $propSpec     = null;
   
   if(!isset($params["object"]) || !isset($params["field"])){
-    $smarty->trigger_error("mb_select: attribut 'object' ou 'field' manquant", E_USER_NOTICE);
+    $smarty->trigger_error("mb_field: attribut 'object' ou 'field' manquant", E_USER_NOTICE);
   }
   
   $value     = $params["object"]->$params["field"];
@@ -162,7 +161,6 @@ function smarty_function_mb_field($params, &$smarty) {
   if(isset($params["class"])){ $className = $params["class"]; }
   
   $attribute_oblig = array("type"            => smarty_function_mb_field_spec($params["object"], $params["field"], $propSpec),
-                            "element"         => "field",
                             "typeEnum"        => "select",
                             "separator"       => "",
                             "cycle"           => 1,
@@ -179,7 +177,6 @@ function smarty_function_mb_field($params, &$smarty) {
   // Creation des extra
   foreach($params as $_key =>$_val){
     switch($_key) {
-      case "element":
       case "object":
       case "field":
       case "spec":
@@ -202,103 +199,87 @@ function smarty_function_mb_field($params, &$smarty) {
     }
   }
 
-  switch($params["element"]) {
-    // Ecriture des champs
-    case "field":
-      switch($params["type"]){
-        case "textarea":
-          $_html_result = "<textarea name=\"".smarty_function_escape_special_chars($params["field"])."\"$extra_class $extra>".smarty_function_escape_special_chars($value)."</textarea>";
+  // Ecriture des champs
+  switch($params["type"]){
+    case "textarea":
+      $_html_result = "<textarea name=\"".smarty_function_escape_special_chars($params["field"])."\"$extra_class $extra>".smarty_function_escape_special_chars($value)."</textarea>";
+      break;
+    case "hidden":
+    case "text":
+      $_html_result = "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"".smarty_function_escape_special_chars($value)."\" $extra_class $extra/>";
+      break;
+    case "radio":
+      $compteur = 0;
+      $iMax = 1;
+      for($i=$iMax; $i>=0; $i--){
+        $selected = "";
+        if(($value && $value === $i) || (!$value && $i === $params["defaultSelected"])){
+          $selected = "checked=\"checked\"";
+        }
+        $_html_result .= "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$i\" $selected";
+        if($compteur == 0) {
+          $_html_result .= ' class="'.smarty_function_escape_special_chars($className." ".$propSpec).'"';
+        }elseif($className != ""){
+          $_html_result .= ' class="'.smarty_function_escape_special_chars($className).'"';
+        }
+        $_html_result .= " $extra /><label for=\"".$params["field"]."_$i\">".$AppUI->_("bool.$i")."</label> ";
+        $compteur++;
+        if($i != 0){
+          $_html_result .= $params["separator"];
+        }
+      }
+      break;
+          
+    case "enum":
+      $enumsTrans = $params["object"]->_enumsTrans[$params["field"]];
+          
+      switch($params["typeEnum"]){
+        case "select":
+          $_html_result = "<select name=\"".smarty_function_escape_special_chars($params["field"])."\" $extra_class $extra>";
+          if($params["defaultOption"] && $params["defaultOption"]!=""){
+            $_html_result .= "<option value=\"\">".smarty_function_escape_special_chars($params["defaultOption"])."</option>";
+          }
+          foreach($enumsTrans as $key => $item){
+            if(($value && $value == $key) || (!$value && $key == $params["defaultSelected"])){
+             $selected = " selected=\"selected\""; 
+            }else{
+              $selected = "";
+            }
+            $_html_result .= "<option value=\"$key\"$selected>$item</option>";
+          }
+          $_html_result .= "</select>";
           break;
-        case "hidden":
-        case "text":
-          $_html_result = "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"".smarty_function_escape_special_chars($value)."\" $extra_class $extra/>";
-          break;
+          
         case "radio":
           $compteur = 0;
-          $iMax = 1;
-          for($i=$iMax; $i>=0; $i--){
-            $selected = "";
-            if(($value && $value === $i) || (!$value && $i === $params["defaultSelected"])){
-              $selected = "checked=\"checked\"";
+          foreach($enumsTrans as $key => $item){
+            if(($value && $value === $key) || (!$value && $key === $params["defaultSelected"])){
+             $selected = " checked=\"checked\""; 
+            }else{
+              $selected = "";
             }
-            $_html_result .= "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$i\" $selected";
+            $_html_result .= "<input type=\"radio\" name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$key\" $selected";
             if($compteur == 0) {
               $_html_result .= ' class="'.smarty_function_escape_special_chars($className." ".$propSpec).'"';
             }elseif($className != ""){
               $_html_result .= ' class="'.smarty_function_escape_special_chars($className).'"';
             }
-            $_html_result .= " $extra /><label for=\"".$params["field"]."_$i\">".$AppUI->_("bool.$i")."</label> ";
+            $_html_result .= " $extra /><label for=\"".$params["field"]."_$key\">$item</label> ";
             $compteur++;
-            if($i != 0){
+            if($compteur % $params["cycle"] == 0){
               $_html_result .= $params["separator"];
             }
           }
           break;
-          
-        case "enum":
-          $enumsTrans = $params["object"]->_enumsTrans[$params["field"]];
               
-          switch($params["typeEnum"]){
-            case "select":
-              $_html_result = "<select name=\"".smarty_function_escape_special_chars($params["field"])."\" $extra_class $extra>";
-              if($params["defaultOption"] && $params["defaultOption"]!=""){
-                $_html_result .= "<option value=\"\">".smarty_function_escape_special_chars($params["defaultOption"])."</option>";
-              }
-              foreach($enumsTrans as $key => $item){
-                if(($value && $value == $key) || (!$value && $key == $params["defaultSelected"])){
-                 $selected = " selected=\"selected\""; 
-                }else{
-                  $selected = "";
-                }
-                $_html_result .= "<option value=\"$key\"$selected>$item</option>";
-              }
-              $_html_result .= "</select>";
-              break;
-              
-            case "radio":
-              $compteur = 0;
-              foreach($enumsTrans as $key => $item){
-                if(($value && $value === $key) || (!$value && $key === $params["defaultSelected"])){
-                 $selected = " checked=\"checked\""; 
-                }else{
-                  $selected = "";
-                }
-                $_html_result .= "<input type=\"radio\" name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$key\" $selected";
-                if($compteur == 0) {
-                  $_html_result .= ' class="'.smarty_function_escape_special_chars($className." ".$propSpec).'"';
-                }elseif($className != ""){
-                  $_html_result .= ' class="'.smarty_function_escape_special_chars($className).'"';
-                }
-                $_html_result .= " $extra /><label for=\"".$params["field"]."_$key\">$item</label> ";
-                $compteur++;
-                if($compteur % $params["cycle"] == 0){
-                  $_html_result .= $params["separator"];
-                }
-              }
-              break;
-              
-            default:
-              $smarty->trigger_error("mb_select: Type d'enumeration '".$params["typeEnum"]."' non pris en charge", E_USER_NOTICE);
-          }
-          break;
-          
         default:
-          $smarty->trigger_error("mb_select: Specification '$propSpec' non prise en charge", E_USER_NOTICE);
-          break;
+          $smarty->trigger_error("mb_field: Type d'enumeration '".$params["typeEnum"]."' non pris en charge", E_USER_NOTICE);
       }
-      break;
-
-    // Ecriture des labels
-    case "label":
-      $selected = ""; 
-      if($params["defaultSelected"] != ""){
-        $selected = "_".$params["defaultSelected"]; 
-      }
-      $_html_result = "<label for=\"".$params["field"].$selected."\" title=\"".$AppUI->_("$objClass-".$params["field"]."-desc")."\"$extra>$objClass-".$params["field"]."</label>";
       break;
       
-    default :
-      $smarty->trigger_error("mb_select: attribut 'type' incorrect", E_USER_NOTICE);
+    default:
+      $smarty->trigger_error("mb_field: Specification '$propSpec' non prise en charge", E_USER_NOTICE);
+      break;
   }
   return $_html_result;
 }
@@ -312,6 +293,61 @@ function smarty_function_mb_value($params, &$smarty) {
   global $AppUI;
   
   $_html_result = $params["object"]->_specs[$params["field"]]->getValue($params["object"], $smarty, $params);
+  return $_html_result;
+}
+
+/**
+ * Fonction d'écriture  des labels
+ * @param array params tableau des parametres
+ *        - object      : Objet
+ *        - field       : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
+ *        - defaultFor  : {optionnel} Ajout d'une valeur à cibler pour "select" ou "radio"
+ *        - typeEnum    : {optionnel} Type d'affichage des enums (values : "select", "radio") [default: "select"]
+ */
+function smarty_function_mb_label($params, &$smarty) {
+  global $AppUI;
+  
+  if(!isset($params["object"]) || !isset($params["field"])){
+    $smarty->trigger_error("mb_label: attribut 'object' ou 'field' manquant", E_USER_NOTICE);
+  }
+  
+  $extra    = null;
+  $objClass = $params["object"]->_class_name;
+  $field    = $params["field"];
+  $selected = $field;
+  $propSpec = @$params["object"]->_props[$params["field"]];
+  $type     = smarty_function_mb_field_spec($params["object"], $params["field"], $propSpec);
+  $aObjProp = get_object_vars($params["object"]);
+  
+  // Creation des extra
+  foreach($params as $_key =>$_val){
+    switch($_key) {
+      case "object":
+      case "field":
+      case "defaultFor":
+      case "typeEnum":
+        break;
+      default:
+        $extra .= $_key.'="'.smarty_function_escape_special_chars($_val).'" ';
+    }
+  }
+
+  if(isset($params["defaultFor"])){
+    $selected = $params["defaultFor"];
+  }elseif($type == "radio"){
+    $selected .= "_1";
+  }elseif($type == "enum" && isset($params["typeEnum"]) && $params["typeEnum"] == "radio"){
+    $enumsTrans = array_flip($params["object"]->_enumsTrans[$params["field"]]);
+    $selected .= "_".current($enumsTrans);
+  }elseif(array_key_exists($field ,$aObjProp) === false){    
+    $smarty->trigger_error("mb_label: '$field' introuvable dans la classe '$objClass'", E_USER_NOTICE);
+    return null;
+  }
+
+  $_html_result  = "<label for=\"".$selected."\" title=\"".$AppUI->_("$objClass-".$field."-desc")."\" $extra>";
+  $_html_result .= $AppUI->_("$objClass-".$field);
+  $_html_result .= "</label>";
+  
   return $_html_result;
 }
 
@@ -360,6 +396,7 @@ class CSmartyDP extends Smarty {
     $this->register_function("thumb"        , "thumb");
     $this->register_function("mb_field"     , "smarty_function_mb_field");
     $this->register_function("mb_value"     , "smarty_function_mb_value");
+    $this->register_function("mb_label"     , "smarty_function_mb_label");
     $this->register_modifier("json"         , "smarty_modifier_json");
     $this->register_modifier("const"        , "smarty_modifier_const");
     $this->register_modifier("cleanField"   , "smarty_modifier_cleanField");

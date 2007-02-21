@@ -64,7 +64,7 @@
 
 <tr>
   <th>
-    <label for="group_id" title="Etablissement ou se déroule le séjour. Obligatoire">Etablissement</label>
+    {{mb_label object=$sejour field="group_id"}}
   </th>
   <td colspan="3">
     <select title="{{$sejour->_props.group_id}}" name="group_id" onchange="removePlageOp(true);">
@@ -77,7 +77,7 @@
 
 <tr>
   <th>
-    <label for="praticien_id" title="Praticien responsable. Obligatoire">Praticien</label>
+    {{mb_label object=$sejour field="praticien_id"}}
   </th>
   <td colspan="3">
     <select name="praticien_id" title="{{$sejour->_props.praticien_id}}">
@@ -94,7 +94,7 @@
 <tr>
   <th>
     <input type="hidden" name="patient_id" title="{{$sejour->_props.patient_id}}" ondblclick="popPat()" value="{{$patient->patient_id}}" />
-    <label for="patient_id" title="Patient concerné. Obligatoire">Patient</label>
+    {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td class="readonly">
   	<input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" ondblclick="popPat()" readonly="readonly" />
@@ -105,7 +105,7 @@
 </tr>
 
 <tr>
-  <th><label for="DP" title="Code CIM du diagnostic principal">Diagnostic principal (CIM)</label></th>
+  <th>{{mb_label object=$sejour field="DP"}}</th>
   <td>{{mb_field object=$sejour field="DP" size="10"}}</td>
   <td colspan="2" class="button"><button type="button" class="search" onclick="popCode('cim10')">Choisir un code</button></td>
 </tr>
@@ -115,9 +115,7 @@
 </tr>
 
 <tr>
-  <th>
-  	<label for="_date_entree_prevue" title="Choisir une date d'entrée">Entrée prévue</label>
-  </th>
+  <th>{{mb_label object=$sejour field="_date_entree_prevue"}}</th>
   <td class="date">
     <div id="editSejour__date_entree_prevue_da">{{$sejour->_date_entree_prevue|date_format:"%d/%m/%Y"}}</div>
     {{mb_field object=$sejour field="_date_entree_prevue" type="hidden" spec="notNull date" onchange="modifSejour(); updateSortiePrevue();"}}
@@ -139,9 +137,7 @@
 </tr>
 
 <tr>
-  <th>
-    <label for="_duree_prevue" title="Choisir une durée prévue de séjour">Durée du séjour</label>
-  </th>
+  <th>{{mb_label object=$sejour field="_duree_prevue"}}</th>
   <td>
     <input type="text" name="_duree_prevue" title="num min|0" value="{{if $sejour->sejour_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" size="4" onchange="updateSortiePrevue()" />
     jours
@@ -151,9 +147,7 @@
 </tr>
 
 <tr {{if $mode_operation}} style="display: none" {{/if}}>
-  <th>
-  	<label for="_date_sortie_prevue" title="Choisir une date de sortie">Sortie prévue</label>
-  </th>
+  <th>{{mb_label object=$sejour field="_date_sortie_prevue"}}</th>
   <td class="date">
     <div id="editSejour__date_sortie_prevue_da">{{$sejour->_date_sortie_prevue|date_format:"%d/%m/%Y"}}</div>
     {{mb_field object=$sejour field="_date_sortie_prevue" type="hidden" spec="notNull date moreEquals|_date_entree_prevue" onchange="updateDureePrevue(); modifSejour()"}}
@@ -187,7 +181,7 @@
 {{/if}}
 
 <tr>
-  <th><label for="type" title="Type d'admission">{{tr}}Type d'admission{{/tr}}</label></th>
+  <th>{{mb_label object=$sejour field="type"}}</th>
   <td colspan="3">
     {{mb_field object=$sejour field="type" defaultSelected="ambu"}}
   </td>
@@ -195,136 +189,91 @@
 
 {{if !$mode_operation}}
 <tr>
-  <th>
-    <label for="modalite_libre" title="modalite d'admission">{{tr}}Modalité d'admission{{/tr}}</label>
-  </th>
+  <th>{{mb_label object=$sejour field="modalite" typeEnum="radio"}}</th>
   <td colspan="3">
     {{mb_field object=$sejour field="modalite" typeEnum="radio" defaultSelected="libre"}}
   </td>
 </tr>
 
 <tr>
-  <th><label for="ATNC_1">ATNC</label></th>
+  <th>{{mb_label object=$sejour field="ATNC"}}</th>
   <td>
-    <input name="ATNC" value="1" type="radio" {{if $sejour->ATNC == "1"}} checked="checked" {{/if}}/>
-    <label for="ATNC_1">Oui</label>
-    <input name="ATNC" value="0" type="radio" {{if !$sejour->ATNC || $sejour->ATNC == "0"}} checked="checked" {{/if}}/>
-    <label for="ATNC_0">Non</label>
+    {{mb_field object=$sejour field="ATNC" defaultSelected=0}}
   </td>
-  <th><label for="hormone_croissance_1">Traitement hormonal</label></th>
+  <th>{{mb_label object=$sejour field="hormone_croissance"}}</th>
   <td colspan="2">
-    <input name="hormone_croissance" value="1" type="radio" {{if $sejour->hormone_croissance == "1"}} checked="checked" {{/if}}/>
-    <label for="hormone_croissance_1">Oui</label>
-    <input name="hormone_croissance" value="0" type="radio" {{if !$sejour->hormone_croissance || $sejour->hormone_croissance == "0"}} checked="checked" {{/if}}/>
-    <label for="hormone_croissance_0">Non</label>
+    {{mb_field object=$sejour field="hormone_croissance" defaultSelected=0}}
   </td>  
 </tr>
 {{/if}}
 
 <tr>
-  <th>
-    <label for="chambre_seule_1" title="Patient à placer dans une chambre particulière">Chambre particulière</label>
-  </th>
+  <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
   <td {{if $mode_operation}}colspan="3"{{/if}}>
-    <input name="chambre_seule" value="1" type="radio" {{if $sejour->chambre_seule}} checked="checked" {{/if}} onchange="modifSejour()" />
-    <label for="chambre_seule_1">Oui</label>
-    <input name="chambre_seule" value="0" type="radio" {{if !$sejour->chambre_seule || !$sejour->sejour_id}} checked="checked" {{/if}} onchange="modifSejour()" />
-    <label for="chambre_seule_0">Non</label>
+    {{mb_field object=$sejour field="chambre_seule" defaultSelected=0}}
   </td>
   {{if !$mode_operation}}
-  <th>
-    <label for="lit_accompagnant_1" title="Un lit pour un accompagnant est-il à prévoir">Lit accompagnant</label>
-  </th>
+  <th>{{mb_label object=$sejour field="lit_accompagnant"}}</th>
   <td>
-    <input name="lit_accompagnant" value="1" type="radio" {{if $sejour->lit_accompagnant}} checked="checked" {{/if}} />
-    <label for="lit_accompagnant_1">Oui</label>
-    <input name="lit_accompagnant" value="0" type="radio" {{if !$sejour->lit_accompagnant || !$sejour->sejour_id}} checked="checked" {{/if}} />
-    <label for="lit_accompagnant_0">Non</label>
+    {{mb_field object=$sejour field="lit_accompagnant" defaultSelected=0}}
   </td>
   {{/if}}
 </tr>
 
 {{if !$mode_operation}}
 <tr>
-  <th>
-    <label for="repas_sans_sel_1" title="Repas sans sel">Repas sans sel</label>
-  </th>
+  <th>{{mb_label object=$sejour field="repas_sans_sel"}}</th>
   <td>
-    <input name="repas_sans_sel" value="1" type="radio" {{if $sejour->repas_sans_sel}} checked="checked" {{/if}} />
-    <label for="repas_sans_sel_1">Oui</label>
-    <input name="repas_sans_sel" value="0" type="radio" {{if !$sejour->repas_sans_sel || !$sejour->sejour_id}} checked="checked" {{/if}} />
-    <label for="repas_sans_sel_0">Non</label>
+    {{mb_field object=$sejour field="repas_sans_sel" defaultSelected=0}}
   </td>
-  <th>
-    <label for="isolement_1" title="Le patient doit-il être isolé">Isolement</label>
-  </th>
+  <th>{{mb_label object=$sejour field="isolement"}}</th>
   <td>
-    <input name="isolement" value="1" type="radio" {{if $sejour->isolement}} checked="checked" {{/if}} />
-    <label for="isolement_1">Oui</label>
-    <input name="isolement" value="0" type="radio" {{if !$sejour->isolement || !$sejour->sejour_id}} checked="checked" {{/if}} />
-    <label for="isolement_0">Non</label>
+    {{mb_field object=$sejour field="isolement" defaultSelected=0}}
   </td>
 </tr>
 
 <tr>
-  <th>
-    <label for="repas_diabete_1" title="Repas diabétique">Repas diabétique</label>
-  </th>
+  <th>{{mb_label object=$sejour field="repas_diabete"}}</th>
   <td>
-    <input name="repas_diabete" value="1" type="radio" {{if $sejour->repas_diabete}} checked="checked" {{/if}} />
-    <label for="repas_diabete_1">Oui</label>
-    <input name="repas_diabete" value="0" type="radio" {{if !$sejour->repas_diabete || !$sejour->sejour_id}} checked="checked" {{/if}} />
-    <label for="repas_diabete_0">Non</label>
+    {{mb_field object=$sejour field="repas_diabete" defaultSelected=0}}
   </td>
-  <th>
-    <label for="television_1" title="La chambre doit-elle avoir la télévision">Télévision</label>
-  </th>
+  <th>{{mb_label object=$sejour field="television"}}</th>
   <td>
-    <input name="television" value="1" type="radio" {{if $sejour->television}} checked="checked" {{/if}} />
-    <label for="television_1">Oui</label>
-    <input name="television" value="0" type="radio" {{if !$sejour->television || !$sejour->sejour_id}} checked="checked" {{/if}} />
-    <label for="television_0">Non</label>
+    {{mb_field object=$sejour field="television" defaultSelected=0}}
   </td>
 </tr>
 
 <tr>
-  <th>
-    <label for="repas_sans_residu_1" title="Repas sans résidu">Repas sans résidu</label>
-  </th>
+  <th>{{mb_label object=$sejour field="repas_sans_residu"}}</th>
   <td>
-    <input name="repas_sans_residu" value="1" type="radio" {{if $sejour->repas_sans_residu}} checked="checked" {{/if}} />
-    <label for="repas_sans_residu_1">Oui</label>
-    <input name="repas_sans_residu" value="0" type="radio" {{if !$sejour->repas_sans_residu || !$sejour->sejour_id}} checked="checked" {{/if}} />
-    <label for="repas_sans_residu_0">Non</label>
+    {{mb_field object=$sejour field="repas_sans_residu" defaultSelected=0}}
   </td>
   <td colspan="2"></td>
 </tr>
 
 <tr>
-  <th>
-    <label for="venue_SHS" title="Code Administratif SHS">Code de venue SHS</label>
-  </th>
+  <th>{{mb_label object=$sejour field="venue_SHS"}}</th>
   <td colspan="3">
-    <input type="text" size="8" maxlength="8" name="venue_SHS" title="{{$sejour->_props.venue_SHS}}" value="{{$sejour->venue_SHS}}" />
+    {{mb_field object=$sejour field="venue_SHS" size="8" maxlength="8"}}
   </td>
 </tr>
 {{/if}}
 
 <tr>
   <td class="text">
-    <label for="convalescence" title="Convalescence">Convalescence</label>
+    {{mb_label object=$sejour field="convalescence"}}
   </td>
   <td class="text" colspan="3">
-    <label for="rques" title="Remarques">Remarques sur le séjour</label>
+    {{mb_label object=$sejour field="rques"}}
   </td>
 </tr>
 
 <tr>
   <td>
-    <textarea name="convalescence" title="{{$sejour->_props.convalescence}}" rows="3">{{$sejour->convalescence}}</textarea>
+    {{mb_field object=$sejour field="convalescence" rows="3"}}
   </td>
   <td colspan="3">
-    <textarea name="rques" title="{{$sejour->_props.rques}}" rows="3">{{$sejour->rques}}</textarea>
+    {{mb_field object=$sejour field="rques" rows="3"}}
   </td>
 </tr>
 

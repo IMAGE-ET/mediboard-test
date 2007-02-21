@@ -39,7 +39,7 @@
 
   <tr>
     <th>
-      <label for="chir_id" title="Chirurgien Responsable. Obligatoire">Chirurgien</label>
+      {{mb_label object=$op field="chir_id"}}
     </th>
     <td colspan="2">
       <select name="chir_id" title="{{$op->_props.chir_id}}" onchange="synchroPrat();removePlageOp(true);">
@@ -55,7 +55,7 @@
   
   <tr>
     <th>
-      <label for="_codeCCAM" title="Codes CCAM d'intervention">Ajout de codes CCAM</label>
+      {{mb_label object=$op field="codes_ccam" defaultFor="_codeCCAM"}}
     </th>
     <td>
       <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" onblur="oCcamField.add(this.form._codeCCAM.value,true)" />
@@ -76,12 +76,12 @@
   </tr>
   
   <tr>
-    <th><label for="libelle" title="Libellé facultatif d'intervention">Libellé</label></th>
+    <th>{{mb_label object=$op field="libelle"}}</th>
     <td colspan="2">{{mb_field object=$op field="libelle" size="50"}}</td>
   </tr>
   
   <tr>
-    <th><label for="cote" title="Côté concerné par l'intervention">Côté</label></th>
+    <th>{{mb_label object=$op field="cote"}}</th>
     <td colspan="2">
       {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir un côté" onchange="modifOp()"}}
     </td>
@@ -89,7 +89,7 @@
 
   <tr>
     <th>
-      <label for="_hour_op" title="Durée de l'intervention. Obligatoire">Temps opératoire</label>
+      {{mb_label object=$op field="_hour_op"}}
     </th>
     <td>
       <select name="_hour_op" title="notNull num">
@@ -110,7 +110,7 @@
   <tr>
     {{if $modurgence}}
     <th>
-      <label for="date" title="Choisir une date d'intervention">Date de l'intervention</label>
+      {{mb_label object=$op field="date"}}
     </th>
     <td>
       <input type="hidden" name="plageop_id" value="" />
@@ -145,7 +145,7 @@
     </td>
     {{else}}
     <th>
-      <label for="plageop_id" title="Date de l'intervention. Obligatoire">Date de l'intervention</label>
+      {{mb_label object=$op field="plageop_id"}}
       <input type="hidden" name="date" value="" />
       <input type="hidden" name="_date" value="{{$plage->date}}" />
       <input type="hidden" name="plageop_id" title="notNull {{$op->_props.plageop_id}}" ondblclick="popPlage()" value="{{$plage->plageop_id}}" />
@@ -160,9 +160,9 @@
   </tr>
 
   <tr>
-    <td class="text"><label for="examen" title="Bilan pré-opératoire">Bilan pré-op</label></td>
-    <td class="text"><label for="materiel" title="Matériel à prévoir / examens per-opératoire">Matériel à prévoir / examens per-op</label></td>
-    <td class="text"><label for="rques" title="Remarques sur l'intervention">Remarques sur l'intervention</label></td>
+    <td class="text">{{mb_label object=$op field="examen"}}</td>
+    <td class="text">{{mb_label object=$op field="materiel"}}</td>
+    <td class="text">{{mb_label object=$op field="rques"}}</td>
   </tr>
 
   <tr>
@@ -172,12 +172,12 @@
   </tr>
   
   <tr>
-    <th><label for="depassement"title="Valeur du dépassement d'honoraire éventuel">Dépassement d'honoraire</label></th>
+    <th>{{mb_label object=$op field="depassement"}}</th>
     <td colspan="2">{{mb_field object=$op field="depassement" size="4"}} €</td>
   </tr>
   
   <tr>
-    <th><label for="info_0">Information du patient</label></th>
+    <th>{{mb_label object=$op field="info"}}</th>
     <td colspan="2">
       {{mb_field object=$op field="info"}}
     </td>

@@ -69,7 +69,7 @@
                   <input type="hidden" name="del" value="0" />
                   <input type="hidden" name="dosql" value="do_modele_aed" />
                   <input type="hidden" name="object_id" value="{{$curr_op->operation_id}}" />
-                  <input type="hidden" name="compte_rendu_id" value="{{$document->compte_rendu_id}}" />
+                  {{mb_field object=$document field="compte_rendu_id" type="hidden" spec=""}}
                   <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">
                   </button>
                   <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}'})" />
@@ -158,7 +158,7 @@
                   <input type="hidden" name="del" value="0" />
                   <input type="hidden" name="dosql" value="do_modele_aed" />
                   <input type="hidden" name="object_id" value="{{$curr_op->operation_id}}" />
-                  <input type="hidden" name="compte_rendu_id" value="{{$document->compte_rendu_id}}" />
+                  {{mb_field object=$document field="compte_rendu_id" type="hidden" spec=""}}
                   <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">
                   </button>
                   <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadAfterSaveDoc})" />
