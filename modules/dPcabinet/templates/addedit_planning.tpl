@@ -176,7 +176,7 @@ function checkFormRDV(oForm){
         <tr id="viewPatient" {{if $consult->consultation_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
           <th>
             {{mb_field object=$consult field="patient_id" type="hidden" spec="" ondblclick="popPat()"}}
-            <label for="patient_id" title="Patient pour la consultation">Patient</label>
+            {{mb_label object=$consult field="patient_id"}}
           </th>
           <td class="readonly"><input type="text" name="_pat_name" size="30" value="{{$pat->_view}}" readonly="readonly"  ondblclick="popPat()" /></td>
           <td class="button"><button class="search" type="button" onclick="popPat()">Rechercher un patient</button></td>
@@ -184,7 +184,7 @@ function checkFormRDV(oForm){
         
         <tr>
           <th>
-            <label for="motif" title="Motif de la consultation">Motif</label><br />
+            {{mb_label object=$consult field="motif"}}<br />
             <select name="_helpers_motif" size="1" onchange="pasteHelperContent(this)">
               <option value="">&mdash; Choisir une aide</option>
               {{html_options options=$consult->_aides.motif}}
@@ -196,7 +196,7 @@ function checkFormRDV(oForm){
 
         <tr>
           <th>
-            <label for="rques" title="Remarques de la consultation" >Remarques</label><br />
+            {{mb_label object=$consult field="rques"}}<br />
             <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
               <option value="">&mdash; Choisir une aide</option>
               {{html_options options=$consult->_aides.rques}}
@@ -215,10 +215,10 @@ function checkFormRDV(oForm){
         <tr><th class="category" colspan="3">Rendez-vous</th></tr>
 
         <tr>
-          <th><label for="premiere" title="Première consultation de ce patient avec le praticien?">Consultation</label></th>
+          <th>{{mb_label object=$consult field="premiere"}}</th>
           <td>
             <input type="checkbox" name="_check_premiere" value="1" {{if $consult->_check_premiere}} checked="checked" {{/if}} />
-            <label for="_check_premiere" title="Première consultation de ce patient avec le praticien">Première consultation</label>
+            {{mb_label object=$consult field="_check_premiere"}}
           </td>
           <td rowspan="4" class="button">
             <button class="search" type="button" onclick="popRDV()">Rechercher un horaire</button>
@@ -226,7 +226,7 @@ function checkFormRDV(oForm){
         </tr>
 
         <tr>
-          <th><label for="plageconsult_id" title="Date du rendez-vous de consultation">Date</label></th>
+          <th>{{mb_label object=$consult field="plageconsult_id"}}</th>
           <td class="readonly">
             <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="popRDV()" readonly="readonly" />
             {{mb_field object=$consult field="plageconsult_id" type="hidden" ondblclick="popRDV()"}}
@@ -234,13 +234,13 @@ function checkFormRDV(oForm){
         </tr>
 
         <tr>
-          <th><label for="heure" title="Heure du rendez-vous de consultation">Heure</label></th>
+          <th>{{mb_label object=$consult field="heure"}}</th>
           <td class="readonly">
             <input type="text" name="heure" value="{{$consult->heure|date_format:"%H:%M"}}" size="4" readonly="readonly" />
           </td>
         </tr>
         <tr>
-          <th><label for="_duree" title="Durée prévue de la consultation">Durée</label></th>
+          <th>{{mb_label object=$consult field="duree"}}</th>
           <td>
             <select name="duree">
               <option value="1" {{if $consult->duree == 1}} selected="selected" {{/if}}>simple</option>

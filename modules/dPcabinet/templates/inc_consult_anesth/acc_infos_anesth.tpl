@@ -27,7 +27,7 @@ function reloadListTech() {
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_planning_aed" />
       {{mb_field object=$consult_anesth->_ref_operation field="operation_id" type="hidden" spec=""}}
-      <label for="type_anesth" title="Type d'anesthésie pour l'intervention">Type d'anesthésie</label>
+      {{mb_label object=$consult_anesth->_ref_operation field="type_anesth"}}
       <select name="type_anesth" onchange="submitFormAjax(this.form, 'systemMsg')">
         <option value="">&mdash; Choisir un type d'anesthésie</option>
         {{foreach from=$anesth item=curr_anesth}}
@@ -37,7 +37,7 @@ function reloadListTech() {
         {{/foreach}}
       </select>
       <br />
-      <label for="rques" title="Remarques concernant l'opération">Remarques pour le bloc</label>
+      {{mb_label object=$consult_anesth->_ref_operation field="rques"}}
       <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult_anesth->_ref_operation->_aides.rques}}
@@ -52,10 +52,10 @@ function reloadListTech() {
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
       {{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
-      <label for="ASA" title="Score ASA">ASA</label>
+      {{mb_label object=$consult_anesth field="ASA"}}
       {{mb_field object=$consult_anesth field="ASA" defaultSelected="1" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       <br /><br />
-      <label for="premedication" title="Informations concernant la prémédication">Prémédication</label>
+      {{mb_label object=$consult_anesth field="premedication"}}
       <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult_anesth->_aides.premedication}}
@@ -64,7 +64,7 @@ function reloadListTech() {
       {{mb_field object=$consult_anesth field="premedication" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       
       <br /><br />
-      <label for="prepa_preop" title="Informations concernant la préparation pré-opératoire">Préparation Pré-opératoire</label>
+      {{mb_label object=$consult_anesth field="prepa_preop"}}
       <select name="_helpers_prepa_preop" size="1" onchange="pasteHelperContent(this);this.form.prepa_preop.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult_anesth->_aides.prepa_preop}}
@@ -80,7 +80,7 @@ function reloadListTech() {
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_technique_aed" />
       {{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
-      <label for="technique" title="Ajouter une technique complementaire">Technique Complémentaire</label>
+      {{mb_label object=$techniquesComp field="technique"}}
       <select name="_helpers_technique" size="1" onchange="pasteHelperContent(this)">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$techniquesComp->_aides.technique}}
@@ -103,7 +103,7 @@ function reloadListTech() {
       <input type="hidden" name="dosql" value="do_consultation_aed" />
       {{mb_field object=$consult field="consultation_id" type="hidden" spec=""}}
       {{mb_field object=$consult field="_check_premiere" type="hidden" spec=""}}
-      <label for="rques" title="Remarques concernant la consultation">Remarques</label>
+      {{mb_label object=$consult field="rques"}}
       <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.rques}}

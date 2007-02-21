@@ -261,7 +261,7 @@ function submitFdr(oForm) {
         
         {{if $consult->paye == "0"}}
         <tr>
-          <th><label for="_somme" title="Somme à régler. Obligatoire.">Somme à régler</label></th>
+          <th>{{mb_label object=$consult field="_somme"}}</th>
           <td>
             <input type="text" size="4" name="_somme" title="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" /> €
             {{mb_field object=$consult field="secteur1" type="hidden" spec=""}}
@@ -292,16 +292,10 @@ function submitFdr(oForm) {
         {{if $consult->tarif && $consult->paye == "0"}}
         <tr>
           <th>
-            <label for="type_tarif" title="Moyen de paiement">Moyen de paiement</label>
+            {{mb_label object=$consult field="type_tarif"}}
           </th>
           <td>
-            <select name="type_tarif">
-              <option value="cheque"  {{if $consult->type_tarif == "cheque" }}selected="selected"{{/if}}>Chèques     </option>
-              <option value="CB"      {{if $consult->type_tarif == "CB"     }}selected="selected"{{/if}}>CB          </option>
-              <option value="especes" {{if $consult->type_tarif == "especes"}}selected="selected"{{/if}}>Espèces     </option>
-              <option value="tiers"   {{if $consult->type_tarif == "tiers"  }}selected="selected"{{/if}}>Tiers-payant</option>
-              <option value="autre"   {{if $consult->type_tarif == "autre"  }}selected="selected"{{/if}}>Autre       </option>
-            </select>
+            {{mb_field object=$consult field="type_tarif" defaultSelected="cheque"}}
           </td>
         </tr>
         <tr>

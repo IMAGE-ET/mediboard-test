@@ -11,8 +11,8 @@ var scoreOper   = {{$exam_possum->_score_oper}};
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="dosql" value="do_exam_possum_aed" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="exampossum_id" value="{{$exam_possum->exampossum_id}}" />
-<input type="hidden" name="consultation_id" value="{{$exam_possum->consultation_id}}" />
+{{mb_field object=$exam_possum field="exampossum_id" type="hidden" spec=""}}
+{{mb_field object=$exam_possum field="consultation_id" type="hidden" spec=""}}
 
 <table class="form">
   <tr>
@@ -28,92 +28,59 @@ var scoreOper   = {{$exam_possum->_score_oper}};
   </tr>
   
   <tr>
-    <th><label for="age" title="Age du patient">Age</label></th>
+    <th>{{mb_label object=$exam_possum field="age"}}</th>
     <td>
-      <select name="age" title="{{$exam_possum->_props.age}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->age options=$exam_possum->_enumsTrans.age}}
-      </select>
+      {{mb_field object=$exam_possum field="age" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>
-    <th><label for="kaliemie" title="Kaliémie (mEql/L)">Kaliémie</label></th>
+    <th>{{mb_label object=$exam_possum field="kaliemie"}}</th>
     <td>
-      <select name="kaliemie" title="{{$exam_possum->_props.kaliemie}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->kaliemie options=$exam_possum->_enumsTrans.kaliemie}}
-      </select>
+      {{mb_field object=$exam_possum field="kaliemie" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>
-    <th><label for="signes_respiratoires" title="Signes respiratoires">Signes respiratoires</label></th>
+    <th>{{mb_label object=$exam_possum field="signes_respiratoires"}}</th>
     <td>
-      <select name="signes_respiratoires" title="{{$exam_possum->_props.signes_respiratoires}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->signes_respiratoires options=$exam_possum->_enumsTrans.signes_respiratoires}}
-      </select>
+      {{mb_field object=$exam_possum field="signes_respiratoires" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>
   </tr>
   
   <tr>
-    <th><label for="uree" title="Urée">Urée</label></th>
+    <th>{{mb_label object=$exam_possum field="uree"}}</th>
     <td>
-      <select name="uree" title="{{$exam_possum->_props.uree}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->uree options=$exam_possum->_enumsTrans.uree}}
-      </select>
+      {{mb_field object=$exam_possum field="uree" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>
-    <th><label for="natremie" title="Natrémie (mEql/L)">Natrémie</label></th>
+    <th>{{mb_label object=$exam_possum field="natremie"}}</th>
     <td>
-      <select name="natremie" title="{{$exam_possum->_props.natremie}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->natremie options=$exam_possum->_enumsTrans.natremie}}
-      </select>
+      {{mb_field object=$exam_possum field="natremie" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>
-    <th><label for="signes_cardiaques" title="Signes cardiaques">Signes cardiaques</label></th>
+    <th>{{mb_label object=$exam_possum field="signes_cardiaques"}}</th>
     <td>
-      <select name="signes_cardiaques" title="{{$exam_possum->_props.signes_cardiaques}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->signes_cardiaques options=$exam_possum->_enumsTrans.signes_cardiaques}}
-      </select>
+      {{mb_field object=$exam_possum field="signes_cardiaques" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>
   </tr>
   
   <tr>
-    <th><label for="hb" title="Hb (g/dL)">Hb</label></th>
+    <th>{{mb_label object=$exam_possum field="hb"}}</th>
     <td>
-      <select name="hb" title="{{$exam_possum->_props.hb}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->hb options=$exam_possum->_enumsTrans.hb}}
-      </select>
+      {{mb_field object=$exam_possum field="hb" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>
-    <th><label for="freq_cardiaque" title="Fréquence cardiaque">Fréquence cardiaque</label></th>
+    <th>{{mb_label object=$exam_possum field="freq_cardiaque"}}</th>
     <td>
-      <select name="freq_cardiaque" title="{{$exam_possum->_props.freq_cardiaque}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->freq_cardiaque options=$exam_possum->_enumsTrans.freq_cardiaque}}
-      </select>
+      {{mb_field object=$exam_possum field="freq_cardiaque" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>
-    <th><label for="ecg" title="ECG">ECG</label></th>
+    <th>{{mb_label object=$exam_possum field="ecg"}}</th>
     <td>
-      <select name="ecg" title="{{$exam_possum->_props.ecg}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->ecg options=$exam_possum->_enumsTrans.ecg}}
-      </select>
+      {{mb_field object=$exam_possum field="ecg" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>
   </tr>
   
   <tr>
-    <th><label for="leucocytes" title="Leucocytes">Leucocytes</label></th>
+    <th>{{mb_label object=$exam_possum field="leucocytes"}}</th>
     <td>
-      <select name="leucocytes" title="{{$exam_possum->_props.leucocytes}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->leucocytes options=$exam_possum->_enumsTrans.leucocytes}}
-      </select>
+      {{mb_field object=$exam_possum field="leucocytes" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>
     <td colspan="2"></td>
-    <th><label for="pression_arterielle" title="Pression Arterielle">Pression Arterielle</label></th>
+    <th>{{mb_label object=$exam_possum field="pression_arterielle"}}</th>
     <td>
-      <select name="pression_arterielle" title="{{$exam_possum->_props.pression_arterielle}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->pression_arterielle options=$exam_possum->_enumsTrans.pression_arterielle}}
-      </select>
+      {{mb_field object=$exam_possum field="pression_arterielle" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>
   </tr>
   
@@ -122,26 +89,17 @@ var scoreOper   = {{$exam_possum->_score_oper}};
   </tr>
   
   <tr>
-    <th><label for="ouverture_yeux" title="Ouverture des yeux">Ouverture des yeux</label></th>
+    <th>{{mb_label object=$exam_possum field="ouverture_yeux"}}</th>
     <td>
-      <select name="ouverture_yeux" title="{{$exam_possum->_props.ouverture_yeux}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->ouverture_yeux options=$exam_possum->_enumsTrans.ouverture_yeux}}
-      </select>
+      {{mb_field object=$exam_possum field="ouverture_yeux" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>
-    <th><label for="rep_verbale" title="Réponse verbale">Réponse verbale</label></th>
+    <th>{{mb_label object=$exam_possum field="rep_verbale"}}</th>
     <td>
-      <select name="rep_verbale" title="{{$exam_possum->_props.rep_verbale}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->rep_verbale options=$exam_possum->_enumsTrans.rep_verbale}}
-      </select>
+      {{mb_field object=$exam_possum field="rep_verbale" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>
-    <th><label for="rep_motrice" title="Meilleure réponse motrice">Réponse motrice</label></th>
+    <th>{{mb_label object=$exam_possum field="rep_motrice"}}</th>
     <td>
-      <select name="rep_motrice" title="{{$exam_possum->_props.rep_motrice}}" onchange="calculPhysio()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->rep_motrice options=$exam_possum->_enumsTrans.rep_motrice}}
-      </select>
+      {{mb_field object=$exam_possum field="rep_motrice" defaultOption="&mdash;" onchange="calculPhysio()"}}
     </td>  
   </tr>
 
@@ -152,50 +110,32 @@ var scoreOper   = {{$exam_possum->_score_oper}};
   </tr>
   
   <tr>
-    <th><label for="gravite" title="Gravité de l'intervention">Gravité</label></th>
+    <th>{{mb_label object=$exam_possum field="gravite"}}</th>
     <td>
-      <select name="gravite" title="{{$exam_possum->_props.gravite}}" onchange="calculOper()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->gravite options=$exam_possum->_enumsTrans.gravite}}
-      </select>
+      {{mb_field object=$exam_possum field="gravite" defaultOption="&mdash;" onchange="calculOper()"}}
     </td>  
-    <th><label for="nb_interv" title="Nombre d'interventions">Nombre d'interventions</label></th>
+    <th>{{mb_label object=$exam_possum field="nb_interv"}}</th>
     <td>
-      <select name="nb_interv" title="{{$exam_possum->_props.nb_interv}}" onchange="calculOper()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->nb_interv options=$exam_possum->_enumsTrans.nb_interv}}
-      </select>
+      {{mb_field object=$exam_possum field="nb_interv" defaultOption="&mdash;" onchange="calculOper()"}}
     </td>  
-    <th><label for="pertes_sanguines" title="Pertes sanguines">Pertes sanguines</label></th>
+    <th>{{mb_label object=$exam_possum field="pertes_sanguines"}}</th>
     <td>
-      <select name="pertes_sanguines" title="{{$exam_possum->_props.pertes_sanguines}}" onchange="calculOper()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->pertes_sanguines options=$exam_possum->_enumsTrans.pertes_sanguines}}
-      </select>
+      {{mb_field object=$exam_possum field="pertes_sanguines" defaultOption="&mdash;" onchange="calculOper()"}}
     </td>  
   </tr>
   
   <tr>
-    <th><label for="contam_peritoneale" title="Contamination péritonéale">Contamination</label></th>
+    <th>{{mb_label object=$exam_possum field="contam_peritoneale"}}</th>
     <td>
-      <select name="contam_peritoneale" title="{{$exam_possum->_props.contam_peritoneale}}" onchange="calculOper()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->contam_peritoneale options=$exam_possum->_enumsTrans.contam_peritoneale}}
-      </select>
+      {{mb_field object=$exam_possum field="contam_peritoneale" defaultOption="&mdash;" onchange="calculOper()"}}
     </td> 
-    <th><label for="cancer" title="Cancer">Cancer</label></th>
+    <th>{{mb_label object=$exam_possum field="cancer"}}</th>
     <td>
-      <select name="cancer" title="{{$exam_possum->_props.cancer}}" onchange="calculOper()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->cancer options=$exam_possum->_enumsTrans.cancer}}
-      </select>
+      {{mb_field object=$exam_possum field="cancer" defaultOption="&mdash;" onchange="calculOper()"}}
     </td>
-    <th><label for="circonstances_interv" title="Circonstances de l'intervention">Circonstances</label></th>
+    <th>{{mb_label object=$exam_possum field="circonstances_interv"}}</th>
     <td>
-      <select name="circonstances_interv" title="{{$exam_possum->_props.circonstances_interv}}" onchange="calculOper()">
-        <option value="">&mdash;</option>
-        {{html_options selected=$exam_possum->circonstances_interv options=$exam_possum->_enumsTrans.circonstances_interv}}
-      </select>
+      {{mb_field object=$exam_possum field="circonstances_interv" defaultOption="&mdash;" onchange="calculOper()"}}
     </td>
   </tr>
   

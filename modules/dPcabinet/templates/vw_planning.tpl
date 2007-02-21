@@ -149,13 +149,13 @@ function pageMain() {
           <form name='editFrm' action='?m=dPcabinet' method='post' onsubmit='return checkPlage()'>
           <input type='hidden' name='dosql' value='do_plageconsult_aed' />
           <input type='hidden' name='del' value='0' />
-          <input type='hidden' name='plageconsult_id' value='{{$plageSel->plageconsult_id}}' />
+          {{mb_field object=$plageSel field="plageconsult_id" type="hidden" spec=""}}
           <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
           <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
           <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
           <table class="form">
             <tr>
-              <th><label for="chir_id" title="Praticien concerné par la plage de consultation">Praticien</label></th>
+              <th>{{mb_label object=$plageSel field="chir_id"}}</th>
               <td><select name="chir_id" title="{{$plageSel->_props.chir_id}}">
                 <option value="">&mdash; Choisir un praticien</option>
                 {{foreach from=$listChirs item=curr_chir}}
@@ -165,11 +165,11 @@ function pageMain() {
                 {{/foreach}}
                 </select>
               </td>
-              <th><label for="libelle" title="Libellé de la plage de consultation">Libellé</label></th>
-              <td><input type="text" title="{{$plageSel->_props.libelle}}" name="libelle" value="{{$plageSel->libelle}}" />
+              <th>{{mb_label object=$plageSel field="libelle"}}</th>
+              <td>{{mb_field object=$plageSel field="libelle"}}</td>
             </tr>
             <tr>
-              <th><label for="_hour_deb" title="Début de la plage de consultation">Début</label></th>
+              <th>{{mb_label object=$plageSel field="_hour_deb"}}</th>
               <td><select name="_hour_deb" title="notNull num">
                 {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
                   <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_deb}} selected="selected" {{/if}}>
@@ -185,7 +185,7 @@ function pageMain() {
                   {{/foreach}}
                 </select> min
               </td>
-              <th><label for="date" title="Jour de la semaine pour la plage de consultation">Jour de la semaine</label></th>
+              <th>{{mb_label object=$plageSel field="date"}}</th>
               <td>
                 <select name="date" title="{{$plageSel->_props.date}}">
                   <option value="">&mdash; Choisir le jour de la semaine</option>
@@ -198,7 +198,7 @@ function pageMain() {
               </td>
             </tr>     
             <tr>
-              <th><label for="_hour_fin" title="Fin de la plage de consultation">Fin</label></th>
+              <th>{{mb_label object=$plageSel field="_hour_fin"}}</th>
               <td>
                 <select name="_hour_fin" title="notNull num moreThan|_hour_deb">
                   {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
@@ -219,7 +219,7 @@ function pageMain() {
               <td><input type="text" size="2" name="_repeat" value="1" /></td>
             </tr>      
             <tr>
-              <th><label for="_freq" title="Fréquence de la plage de consultation, en minutes">Fréquence</label></th>
+              <th>{{mb_label object=$plageSel field="_freq"}}</th>
               <td>
                 <select name="_freq">
                   <option value="05" {{if ($plageSel->_freq == "05")}} selected="selected" {{/if}}>05</option>
@@ -253,7 +253,7 @@ function pageMain() {
 	      <form name='removeFrm' action='./index.php?m=dPcabinet' method='post'>
       	  <input type='hidden' name='dosql' value='do_plageconsult_aed' />
 	      <input type='hidden' name='del' value='1' />
-      	  <input type='hidden' name='plageconsult_id' value='{{$plageSel->plageconsult_id}}' />
+	      {{mb_field object=$plageSel field="plageconsult_id" type="hidden" spec=""}}
           <table class="form">
 	        <tr>
 	          <th class="category modify" colspan="2">Supprimer cette plage</th>
@@ -354,8 +354,8 @@ function pageMain() {
             <form name="etatFrm{{$curr_consult->consultation_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
-            <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
-            <input type="hidden" name="_check_premiere" value="{{$curr_consult->_check_premiere}}" />
+            {{mb_field object=$curr_consult field="consultation_id" type="hidden" spec=""}}
+            {{mb_field object=$curr_consult field="_check_premiere" type="hidden" spec=""}}
             <input type="hidden" name="chrono" value="{{$curr_consult|const:'PATIENT_ARRIVE'}}" />
             <input type="hidden" name="arrivee" value="" />
             </form>
@@ -363,8 +363,8 @@ function pageMain() {
             <form name="cancelFrm{{$curr_consult->consultation_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
-            <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
-            <input type="hidden" name="_check_premiere" value="{{$curr_consult->_check_premiere}}" />
+            {{mb_field object=$curr_consult field="consultation_id" type="hidden" spec=""}}
+            {{mb_field object=$curr_consult field="_check_premiere" type="hidden" spec=""}}
             <input type="hidden" name="chrono" value="{{$curr_consult|const:'TERMINE'}}" />
             <input type="hidden" name="annule" value="1" />
             </form>

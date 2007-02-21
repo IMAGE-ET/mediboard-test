@@ -37,7 +37,7 @@
         <tr>
           <td colspan="2"><strong>Addiction</strong></td>
           <td>
-            <label for="addiction" title="Information sur l'addiction">Information</label>
+            {{mb_label object=$addiction field="addiction"}}
             <select name="_helpers_addiction" size="1" onchange="pasteHelperContent(this)">
               <option value="">&mdash; Choisir une aide</option>
               {{html_options options=$addiction->_aides.addiction}}
@@ -48,7 +48,7 @@
         </tr>
         
         <tr>
-          <th><label for="type" title="Type d'addiction">Type</label></th>
+          <th>{{mb_label object=$addiction field="type"}}</th>
           <td>
             {{html_options name="type" options=$addiction->_enumsTrans.type}}
           </td>

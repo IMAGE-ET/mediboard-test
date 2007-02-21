@@ -171,7 +171,7 @@ function copyTraitement(traitement_id){
         <tr>
           <td colspan="2"><strong>Ajouter un antécédent</strong></td>
           <td>
-            <label for="rques" title="Remarques sur l'antécédent">Remarques</label>
+            {{mb_label object=$antecedent field="rques"}}
             <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
               <option value="">&mdash; Choisir une aide</option>
               {{html_options options=$antecedent->_aides.rques}}
@@ -184,7 +184,7 @@ function copyTraitement(traitement_id){
         <tr>
           <th>
             <input type="checkbox" name="_date_ant" onclick="dateAntecedent()" />
-            <label for="date" title="Date de l'antécédent">Date</label>
+            {{mb_label object=$antecedent field="date"}}
           </th>
           <td class="date">
             <div id="editAntFrm_date_da"></div>
@@ -196,7 +196,7 @@ function copyTraitement(traitement_id){
           </td>
         </tr>
         <tr>
-          <th><label for="type" title="Type d'antécédent">Type</label></th>
+          <th>{{mb_label object=$antecedent field="type"}}</th>
           <td>
             {{mb_field object=$antecedent field="type"}}
           </td>
@@ -226,7 +226,7 @@ function copyTraitement(traitement_id){
         <tr>
           <td colspan="2"><strong>Ajouter un traitement</strong></td>
           <td>
-            <label for="traitement" title="Traitement">Traitement</label>
+            {{mb_label object=$traitement field="traitement"}}
             <select name="_helpers_traitement" size="1" onchange="pasteHelperContent(this)">
               <option value="">&mdash; Choisir une aide</option>
               {{html_options options=$traitement->_aides.traitement}}
@@ -238,7 +238,7 @@ function copyTraitement(traitement_id){
         <tr>
           <th>
             <input type="checkbox" name="_datetrmt" onclick="dateTrmt()" />
-            <label for="debut" title="Début du traitement">Début</label>
+            {{mb_label object=$traitement field="debut"}}
           </th>
           <td class="date">
             <div id="editTrmtFrm_debut_da"></div>
@@ -252,7 +252,7 @@ function copyTraitement(traitement_id){
         <tr>
           <th>
             <input type="checkbox" name="_en_cours" disabled="disabled" onclick="dateFinTrmt()" />
-            <label for="fin" title="Fin du traitement">Fin</label>
+            {{mb_label object=$traitement field="fin"}}
           </th>
           <td class="date">
             <div id="editTrmtFrm_fin_da"></div>

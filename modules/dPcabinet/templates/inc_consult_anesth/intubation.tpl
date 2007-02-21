@@ -33,21 +33,21 @@ function verifIntubDifficileAndSave(oForm){
     </td>
     {{/foreach}}
 
-    <th><label for="bouche_m20" title="Ouverture de la bouche">Ouverture de la bouche</label></th>
+    <th>{{mb_label object=$consult_anesth field="bouche" defaultFor="bouche_m20"}}</th>
     <td>
       {{mb_field object=$consult_anesth field="bouche" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
     </td>
   </tr>
   
   <tr>
-    <th><label for="distThyro_m65" title="Distance thyro-mentonnière">Distance thyro-mentonnière</label></th>
+    <th>{{mb_label object=$consult_anesth field="distThyro" defaultFor="distThyro_m65"}}</th>
     <td>
       {{mb_field object=$consult_anesth field="distThyro" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
     </td>
   </tr>
 
   <tr>
-    <th><label for="etatBucco" title="Etat bucco-dentaire">Etat bucco-dentaire</label></th>
+    <th>{{mb_label object=$consult_anesth field="etatBucco"}}</th>
     <td>
       <select name="_helpers_etatBucco" size="1" onchange="pasteHelperContent(this);this.form.etatBucco.onchange();">
         <option value="">&mdash; Choisir une aide</option>
@@ -59,7 +59,7 @@ function verifIntubDifficileAndSave(oForm){
   </tr>
   
   <tr>
-    <th><label for="conclusion" title="Remarques et Conclusion sur les conditions d'intubation">Remarques / Conclusion</label></th>
+    <th>{{mb_label object=$consult_anesth field="conclusion"}}</th>
     <td>
       <select name="_helpers_conclusion" size="1" onchange="pasteHelperContent(this);this.form.conclusion.onchange();">
         <option value="">&mdash; Choisir une aide</option>

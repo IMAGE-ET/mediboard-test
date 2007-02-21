@@ -8,7 +8,7 @@
 <table class="form">
   <tr>
     <th class="category">
-      <label for="motif" title="Motif de la consultation">Motif</label>
+      {{mb_label object=$consult field="motif"}}
     </th>
     <th>
       <select name="_helpers_motif" size="1" onchange="pasteHelperContent(this);this.form.motif.onchange();">
@@ -18,7 +18,7 @@
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.motif)"/>
     </th>
     <th class="category">
-      <label for="rques" title="Remarques concernant la consultation">Remarques</label>
+      {{mb_label object=$consult field="rques"}}
     </th>
     <th>
       <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
@@ -34,7 +34,7 @@
   </tr>
   <tr>
     <th class="category">
-      <label for="examen" title="Bilan de l'examen clinique">Examens</label>
+      {{mb_label object=$consult field="examen"}}
     </th>
     <th>
       <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this);this.form.examen.onchange();">
@@ -44,7 +44,7 @@
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen)"/>
     </th>
     <th class="category">
-      <label for="traitement" title="title">Traitements</label>
+      {{mb_label object=$consult field="traitement"}}
     </th>
     <th>
       <select name="_helpers_traitement" size="1" onchange="pasteHelperContent(this);this.form.traitement.onchange();">

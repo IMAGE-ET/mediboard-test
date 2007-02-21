@@ -172,10 +172,10 @@ function pageMain() {
           <td>
             <form name="editFrm" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="dosql" value="do_tarif_aed" />
-            <input type="hidden" name="tarif_id" value="{{$tarif->tarif_id}}" />
+            {{mb_field object=$tarif field="tarif_id" type="hidden" spec=""}}
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="chir_id" value="{{$mediuser->user_id}}" />
-            <input type="hidden" name="function_id" value="{{$mediuser->function_id}}" />
+            {{mb_field object=$mediuser field="function_id" type="hidden" spec=""}}
             <table class="form">
               {{if $tarif->tarif_id}}
               <tr><th class="category" colspan="2">Editer ce tarif</th></tr>
@@ -183,7 +183,7 @@ function pageMain() {
               <tr><th class="category" colspan="2">Créer un nouveau tarif</th></tr>
               {{/if}}
               <tr>
-                <th><label for="_type" title="Veuillez choisir le type du tarif">Type</label></th>
+                <th>{{mb_label object=$tarif field="_type"}}</th>
                 <td>
                   <select name="_type">
                     <option value="chir" {{if $tarif->chir_id}} selected="selected" {{/if}}>Tarif personnel</option>
@@ -192,21 +192,21 @@ function pageMain() {
                 </td>
               </tr>
               <tr>
-                <th><label for="description" title="Veuillez saisir un nom pour ce tarif">Nom</label></th>
+                <th>{{mb_label object=$tarif field="description"}}</th>
                 <td>
-                  <input type="text" title="{{$tarif->_props.description}}" name="description" value="{{$tarif->description}}" />
+                  {{mb_field object=$tarif field="description"}}
                 </td>
               </tr>
               <tr>
-                <th><label for="secteur1" title="Veuillez saisir un tarif pour le secteur 1">Secteur1</label></th>
+                <th>{{mb_label object=$tarif field="secteur1"}}</th>
                 <td>
-                  <input type="text" title="{{$tarif->_props.secteur1}}" name="secteur1" value="{{$tarif->secteur1}}" size="6" /> €
+                  {{mb_field object=$tarif field="secteur1" size="6"}} €
                 </td>
               </tr>
               <tr>
-                <th><label for="secteur2" title="Veuillez saisir un tarif pour le secteur 2">Secteur2</label></th>
+                <th>{{mb_label object=$tarif field="secteur2"}}</th>
                 <td>
-                  <input type="text" title="{{$tarif->_props.secteur2}}" name="secteur2" value="{{$tarif->secteur2}}" size="6" /> €
+                  {{mb_field object=$tarif field="secteur2" size="6"}} €
                 </td>
               </tr>
               <tr>

@@ -37,6 +37,6 @@
     </ul>
   {{/if}}
 
-  <label for="position" title="Veuillez choisir la position du patient">Position</label>
+  {{mb_label object=$consult_anesth field="position"}}
   {{mb_field object=$consult_anesth field="position" defaultOption="&mdash; Veuillez Choisir"}}
 </form>
