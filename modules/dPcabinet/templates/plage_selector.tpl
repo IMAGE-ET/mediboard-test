@@ -17,6 +17,7 @@ function changePeriod(sPeriod) {
   var url = new Url;
   url.setModuleAction("dPcabinet", "plage_selector");
   url.addParam("period", sPeriod);
+  url.addParam("chir_id", {{$chir_id}});
   url.addParam("dialog", 1);
   url.redirect();
 }
