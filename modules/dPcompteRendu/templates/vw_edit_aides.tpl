@@ -15,8 +15,8 @@ function submitFormAides(oForm){
 <input type="hidden" name="dosql" value="do_aide_aed" />
 <input type="hidden" name="m" value="dPcompteRendu" />
 <input type="hidden" name="aide_id" value="" />
-<input type="hidden" name="class" value="{{$aide->class}}" />
-<input type="hidden" name="field" value="{{$aide->field}}" />
+{{mb_field object=$aide field="class" type="hidden" spec=""}}
+{{mb_field object=$aide field="field" type="hidden" spec=""}}
 <input type="hidden" name="del" value="0" />
 
 <table class="form">
@@ -26,7 +26,7 @@ function submitFormAides(oForm){
     </th>
   </tr>
   <tr>
-    <th><label for="function_id" title="Fonction concerné">Fonction</label></th>
+    <th>{{mb_label object=$aide field="function_id"}}</th>
     <td>
       <select name="function_id" title="{{$aide->_props.function_id}}" onchange="this.form.user_id.value = ''">
         <option value="">&mdash; Associer à une fonction &mdash;</option>
@@ -39,7 +39,7 @@ function submitFormAides(oForm){
     </td>
   </tr>
   <tr>
-    <th><label for="user_id" title="Utilisateur concerné">Praticien</label></th>
+    <th>{{mb_label object=$aide field="user_id"}}</th>
     <td>
       <select name="user_id" title="{{$aide->_props.user_id}}" onchange="this.form.function_id.value = ''">
         <option value="">&mdash; Associer à un praticien &mdash;</option>
@@ -52,13 +52,13 @@ function submitFormAides(oForm){
     </td>
   </tr>
   <tr>
-    <th><label for="name" title="intitulé de l'aide, obligatoire.">Intitulé</label></th>
-    <td><input type="text" name="name" title="{{$aide->_props.name}}" value="{{$aide->name}}" /></td>
+    <th>{{mb_label object=$aide field="name"}}</th>
+    <td>{{mb_field object=$aide field="name"}}</td>
   </tr>
   <tr>
-    <th><label for="text" title="Texte de remplacement.">Texte</label></th>
+    <th>{{mb_label object=$aide field="text"}}</th>
     <td>
-      <textarea rows="4" name="text" title="{{$aide->_props.text}}">{{$aide->text}}</textarea>
+      {{mb_field object=$aide field="text" rows="4"}}
     </td>
   </tr>
   <tr>

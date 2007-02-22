@@ -58,7 +58,7 @@
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="dosql" value="do_modele_aed" />
-            <input type="hidden" name="compte_rendu_id" value="{{$curr_modele->compte_rendu_id}}" />
+            {{mb_field object=$curr_modele field="compte_rendu_id" type="hidden" spec=""}}
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$curr_modele->nom|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
@@ -93,7 +93,7 @@
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="dosql" value="do_modele_aed" />
-            <input type="hidden" name="compte_rendu_id" value="{{$curr_modele->compte_rendu_id}}" />
+            {{mb_field object=$curr_modele field="compte_rendu_id" type="hidden" spec=""}}
             <button  type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$curr_modele->nom|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>

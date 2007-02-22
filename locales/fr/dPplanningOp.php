@@ -1,5 +1,5 @@
 <?php
-$locales['mod-dPplanningOp-tab-vw_edit_typeanesth'] = 'Types d\'anesthesie';
+$locales['CSejour-septique-desc'] = 'Septique';
 $locales['chambre_seule.'] = ' ';
 $locales['chambre_seule.0'] = 'n';
 $locales['chambre_seule.1'] = 'o';
@@ -117,6 +117,7 @@ $locales['CSejour-repas_sans_sel'] = 'Repas sans sel';
 $locales['CSejour-repas_sans_sel-desc'] = 'Repas sans sel';
 $locales['CSejour-rques'] = 'Remarques sur le séjour';
 $locales['CSejour-rques-desc'] = 'Remarques';
+$locales['CSejour-septique'] = 'Septique';
 $locales['CSejour-television'] = 'Télévision';
 $locales['CSejour-television-desc'] = 'La chambre doit-elle avoir la télévision';
 $locales['CSejour-type'] = 'Type d\'admission';
@@ -164,6 +165,7 @@ $locales['CTypeAnesth-name-desc'] = 'Nom du type d\'anesthésie, obligatoire';
 $locales['mod-dPplanningOp-tab-vw_edit_planning'] = 'Edition d\'interventions';
 $locales['mod-dPplanningOp-tab-vw_edit_protocole'] = 'Edition de protocoles';
 $locales['mod-dPplanningOp-tab-vw_edit_sejour'] = 'Edition de séjours';
+$locales['mod-dPplanningOp-tab-vw_edit_typeanesth'] = 'Types d\'anesthesie';
 $locales['mod-dPplanningOp-tab-vw_edit_urgence'] = 'Edition d\'urgences';
 $locales['mod-dPplanningOp-tab-vw_idx_planning'] = 'Planning';
 $locales['mod-dPplanningOp-tab-vw_protocoles'] = 'Liste des protocoles';

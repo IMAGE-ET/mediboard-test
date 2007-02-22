@@ -152,7 +152,7 @@ function pageMain() {
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
     <input type="hidden" name="dosql" value="do_aide_aed" />
-    <input type="hidden" name="aide_id" value="{{$aide->aide_id}}" />
+    {{mb_field object=$aide field="aide_id" type="hidden" spec=""}}
     <input type="hidden" name="del" value="0" />
 
     <table class="form">
@@ -168,7 +168,7 @@ function pageMain() {
     </tr>
   
     <tr>
-      <th><label for="function_id" title="Fonction concerné">Fonction</label></th>
+      <th>{{mb_label object=$aide field="function_id"}}</th>
       <td>
         <select name="function_id" title="{{$aide->_props.function_id}}" onchange="this.form.user_id.value = ''">
           <option value="">&mdash; Associer à une fonction &mdash;</option>
@@ -182,7 +182,7 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="user_id" title="Utilisateur concerné">Praticien</label></th>
+      <th>{{mb_label object=$aide field="user_id"}}</th>
       <td>
         <select name="user_id" title="{{$aide->_props.user_id}}" onchange="this.form.function_id.value = ''">
           <option value="">&mdash; Associer à un praticien &mdash;</option>
@@ -196,7 +196,7 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="class" title="Type d'objet concerné, obligatoire.">Objet</label></th>
+      <th>{{mb_label object=$aide field="class"}}</th>
       <td>
         <select name="class" title="{{$aide->_props.class}}" onchange="loadFields()">
           <option value="">&mdash; Choisir un objet</option>
@@ -205,7 +205,7 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="field" title="Champ de l'objet concerné, obligatoire.">Champ</label></th>
+      <th>{{mb_label object=$aide field="field"}}</th>
       <td>
         <select name="field" title="{{$aide->_props.field}}">
           <option value="">&mdash; Choisir un champ</option>
@@ -214,38 +214,35 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="name" title="intitulé de l'aide, obligatoire.">Intitulé</label></th>
-      <td><input type="text" name="name" title="{{$aide->_props.name}}" value="{{$aide->name}}" /></td>
+      <th>{{mb_label object=$aide field="name"}}</th>
+      <td>{{mb_field object=$aide field="name"}}</td>
     </tr>
     
     <tr>
-      <th><label for="text" title="Texte de remplacement.">Texte</label></th>
+      <th>{{mb_label object=$aide field=text"}}</th>
       <td>
-        <textarea style="width: 200px" rows="4" name="text" title="{{$aide->_props.text}}">{{$aide->text}}</textarea>
+        {{mb_field object=$aide field="text" style="width: 200px" rows="4"}}
       </td>
     </tr>
 
     <tr>
       <td class="button" colspan="2">
         {{if $aide->aide_id}}
-        <button class="submit" type="submit">
-          Valider
+        <button class="modify" type="submit">
+          {{tr}}Modify{{/tr}}
         </button>
         <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'aide',objName:'{{$aide->name|smarty:nodefaults|JSAttribute}}'})">
-          Supprimer
+          {{tr}}Delete{{/tr}}
         </button>
         {{else}}
         <button class="submit" type="submit">
-          Créer
+          {{tr}}Create{{/tr}}
         </button>
         {{/if}}
       </td>
     </tr>
-
     </table>
-    
     </form>
-
   </td>
 </tr>
 

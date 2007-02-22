@@ -27,9 +27,9 @@ if (window.opener.reloadAfterSaveDoc) {
 <input type="hidden" name="m" value="dPcompteRendu" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_modele_aed" />
-<input type="hidden" name="compte_rendu_id" value="{{$compte_rendu->compte_rendu_id}}" />
-<input type="hidden" name="object_id" value="{{$compte_rendu->object_id}}" />
-<input type="hidden" name="object_class" value="{{$compte_rendu->object_class}}" />
+{{mb_field object=$compte_rendu field="compte_rendu_id" type="hidden" spec=""}}
+{{mb_field object=$compte_rendu field="object_id" type="hidden" spec=""}}
+{{mb_field object=$compte_rendu field="object_class" type="hidden" spec=""}}
 
 <table class="form">
   <tr>

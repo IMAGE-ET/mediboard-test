@@ -96,7 +96,7 @@ function pageMain() {
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
     <input type="hidden" name="dosql" value="do_liste_aed" />
-    <input type="hidden" name="liste_choix_id" value="{{$liste->liste_choix_id}}" />
+    {{mb_field object=$liste field="liste_choix_id" type="hidden" spec=""}}
     <input type="hidden" name="del" value="0" />
 
     <table class="form">
@@ -112,7 +112,7 @@ function pageMain() {
     </tr>
   
     <tr>
-      <th><label for="function_id" title="Fonction à laquelle le modèle est associé">Fonction</label></th>
+      <th>{{mb_label object=$liste field="function_id"}}</th>
       <td>
         <select name="function_id" title="{{$liste->_props.function_id}}" onchange="this.form.chir_id.value = ''">
           <option value="">&mdash; Associer à une fonction &mdash;</option>
@@ -126,7 +126,7 @@ function pageMain() {
     </tr>
   
     <tr>
-      <th><label for="chir_id" title="Praticien auquel le modèle est associé">Praticien</label></th>
+      <th>{{mb_label object=$liste field="chir_id"}}</th>
       <td>
         <select name="chir_id" title="{{$liste->_props.chir_id}}" onchange="this.form.function_id.value = ''">
           <option value="">&mdash; Associer à un praticien &mdash;</option>
@@ -140,12 +140,12 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="nom" title="intitulé de la liste, obligatoire.">Intitulé</label></th>
+      <th>{{mb_label object=$liste field="nom"}}</th>
       <td><input type="text" title="{{$liste->_props.nom}}" name="nom" value="{{$liste->nom}}" /></td>
     </tr>
     
     <tr>
-      <th><label for="compte_rendu_id" title="Compte-rendu associé.">Compte-rendu</label></th>
+      <th>{{mb_label object=$liste field="compte_rendu_id"}}</th>
       <td>
         <select name="compte_rendu_id">
           <option value="0">&mdash; Tous</option>
@@ -168,15 +168,15 @@ function pageMain() {
     <tr>
       <td class="button" colspan="2">
         {{if $liste->liste_choix_id}}
-        <button class="submit" type="submit">
-          Valider
+        <button class="modify" type="submit">
+          {{tr}}Modify{{/tr}}
         </button>
         <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la liste',objName:'{{$liste->nom|smarty:nodefaults|JSAttribute}}'})">
-          Supprimer
+          {{tr}}Delete{{/tr}}
         </button>
         {{else}}
         <button class="submit" type="submit">
-          Créer
+          {{tr}}Create{{/tr}}
         </button>
         {{/if}}
       </td>
@@ -197,11 +197,11 @@ function pageMain() {
         <td>
           <form name="delFrm{{$liste->liste_choix_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
           <input type="hidden" name="dosql" value="do_liste_aed" />
-          <input type="hidden" name="liste_choix_id" value="{{$liste->liste_choix_id}}" />
+          {{mb_field object=$liste field="liste_choix_id" type="hidden" spec=""}}
           <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="valeurs" value="{{$liste->valeurs}}" />
-          <input type="hidden" name="chir_id" value="{{$liste->chir_id}}" />
-          <input type="hidden" name="function_id" value="{{$liste->function_id}}" />
+          {{mb_field object=$liste field="valeurs" type="hidden" spec=""}}
+          {{mb_field object=$liste field="chir_id" type="hidden" spec=""}}
+          {{mb_field object=$liste field="function_id" type="hidden" spec=""}}
           <input type="hidden" name="_del" value="{{$curr_valeur}}" />
           <button class="trash notext" type="submit"></button>
           </form>
@@ -213,20 +213,18 @@ function pageMain() {
       <tr><td colspan="2">
         <form name="addFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
         <input type="hidden" name="dosql" value="do_liste_aed" />
-        <input type="hidden" name="liste_choix_id" value="{{$liste->liste_choix_id}}" />
+        {{mb_field object=$liste field="liste_choix_id" type="hidden" spec=""}}
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="valeurs" value="{{$liste->valeurs}}" />
-        <input type="hidden" name="chir_id" value="{{$liste->chir_id}}" />
-        <input type="hidden" name="function_id" value="{{$liste->function_id}}" />
+        {{mb_field object=$liste field="valeurs" type="hidden" spec=""}}
+        {{mb_field object=$liste field="chir_id" type="hidden" spec=""}}
+        {{mb_field object=$liste field="function_id" type="hidden" spec=""}}
         <input type="text" name="_new" value="" />
         <button type="submit" class="tick notext"></button>
         </form>
       </td></tr>
     </table>
-  
 
   {{/if}}
   </td>  
 </tr>
-
 </table>

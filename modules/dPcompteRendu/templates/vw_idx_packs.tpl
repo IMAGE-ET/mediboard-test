@@ -61,7 +61,7 @@
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
     <input type="hidden" name="dosql" value="do_pack_aed" />
-    <input type="hidden" name="pack_id" value="{{$pack->pack_id}}" />
+    {{mb_field object=$pack field="pack_id" type="hidden" spec=""}}
     <input type="hidden" name="del" value="0" />
 
     <table class="form">
@@ -78,7 +78,7 @@
 
     <tr>
       <th>
-        <label for="chir_id" title="Utilisateur concerné, obligatoire.">Utilisateur</label>
+        {{mb_label object=$pack field="chir_id"}}
       </th>
       <td>
         <select name="chir_id" title="{{$pack->_props.chir_id}}">
@@ -93,22 +93,22 @@
     </tr>
 
     <tr>
-      <th><label for="nom" title="intitulé du pack, obligatoire.">Intitulé</label></th>
-      <td><input type="text" title="{{$pack->_props.nom}}" name="nom" value="{{$pack->nom}}" /></td>
+      <th>{{mb_label object=$pack field="nom"}}</th>
+      <td>{{mb_field object=$pack field="nom"}}</td>
     </tr>
 
     <tr>
       <td class="button" colspan="2">
         {{if $pack->pack_id}}
-        <button class="submit" type="submit">
-          Valider
+        <button class="modify" type="submit">
+          {{tr}}Modify{{/tr}}
         </button>
         <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le pack',objName:'{{$pack->nom|smarty:nodefaults|JSAttribute}}'})">
-          Supprimer
+          {{tr}}Delete{{/tr}}
         </button>
         {{else}}
         <button class="submit" type="submit">
-          Créer
+          {{tr}}Create{{/tr}}
         </button>
         {{/if}}
       </td>
@@ -127,7 +127,7 @@
         <td>
           <form name="delFrm{{$pack->pack_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
           <input type="hidden" name="dosql" value="do_pack_aed" />
-          <input type="hidden" name="pack_id" value="{{$pack->pack_id}}" />
+          {{mb_field object=$pack field="pack_id" type="hidden" spec=""}}
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
           <input type="hidden" name="_del" value="{{$key_modele}}" />
@@ -141,7 +141,7 @@
       <tr><td colspan="2">
         <form name="addFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_pack_aed" />
-        <input type="hidden" name="pack_id" value="{{$pack->pack_id}}" />
+        {{mb_field object=$pack field="pack_id" type="hidden" spec=""}}
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
         <label for="_new" title="Veuillez choisir un modèle" />

@@ -67,7 +67,7 @@ function pageMain() {
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_modele_aed" />
-<input type="hidden" name="compte_rendu_id" value="{{$compte_rendu->compte_rendu_id}}" />
+{{mb_field object=$compte_rendu field="compte_rendu_id" type="hidden" spec=""}}
 
 <table class="main">
 
@@ -91,12 +91,12 @@ function pageMain() {
   </tr>
   
   <tr>
-    <th><label for="nom" title="Intitulé du modèle. Obligatoire">Nom</label></th>
-    <td><input type="text" name="nom" value="{{$compte_rendu->nom}}" title="{{$compte_rendu->_props.nom}}" /></td>
+    <th>{{mb_label object=$compte_rendu field="nom"}}</th>
+    <td>{{mb_field object=$compte_rendu field="nom"}}</td>
   </tr>
   
   <tr>
-    <th><label for="function_id" title="Fonction à laquelle le modèle est associé">Fonction</label></th>
+    <th>{{mb_label object=$compte_rendu field="function_id"}}</th>
     <td>
       <select name="function_id" title="{{$compte_rendu->_props.function_id}}" onchange="this.form.chir_id.value = ''">
         <option value="">&mdash; Associer à une fonction &mdash;</option>
@@ -110,7 +110,7 @@ function pageMain() {
   </tr>
   
   <tr>
-    <th><label for="chir_id" title="Praticien auquel le modèle est associé">Praticien</label></th>
+    <th>{{mb_label object=$compte_rendu field="chir_id"}}</th>
     <td>
       <select name="chir_id" title="{{$compte_rendu->_props.chir_id}}" onchange="this.form.function_id.value = ''">
         <option value="">&mdash; Associer à un praticien &mdash;</option>
@@ -124,7 +124,7 @@ function pageMain() {
   </tr>
   
   <tr>
-    <th><label for="object_class" title="Type d'objet concerné, obligatoire.">Objet</label></th>
+    <th>{{mb_label object=$compte_rendu field="object_class"}}</th>
     <td>
       {{if !$compte_rendu->compte_rendu_id}}
       <select name="object_class" title="{{$compte_rendu->_props.object_class}}" onchange="loadCategory()">
@@ -137,7 +137,7 @@ function pageMain() {
   </tr>
   
   <tr>
-    <th><label for="file_category_id" title="Catégorie du document">Catégorie</label></th>
+    <th>{{mb_label object=$compte_rendu field="file_category_id"}}</th>
     <td>
       {{if !$compte_rendu->compte_rendu_id}}
       <select name="file_category_id" title="{{$compte_rendu->_props.file_category_id}}">
@@ -170,9 +170,7 @@ function pageMain() {
   </td>
   <td class="greedyPane" style="height: 500px">
   {{if $compte_rendu->compte_rendu_id}}
-    <textarea id="htmlarea" name="source">
-    {{$compte_rendu->source}}
-    </textarea>
+    {{mb_field object=$compte_rendu field="source" id="htmlarea"}}
   {{/if}}
   </td>
 </tr>
