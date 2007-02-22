@@ -113,7 +113,7 @@ function pageMain() {
   </tr>
   <tr>
     <td class="greedyPane" id="listView">
-      {{include file="../../dPfiles/templates/inc_list_view_colonne.tpl"}}
+      {{include file="../../dPpatients/templates/CPatient_complete.tpl"}}
     </td>
   </tr>
 </table>

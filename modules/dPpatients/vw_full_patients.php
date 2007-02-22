@@ -41,8 +41,6 @@ $listCategory = $listCategory->listCatClass("CPatient");
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadDossierComplet();
-$patient->loadRefsAntecedents();
-$patient->loadRefsTraitements();
 
 $moduleCabinet = CModule::getInstalled("dPcabinet");
 $canEditCabinet = $moduleCabinet->canEdit();
@@ -50,8 +48,10 @@ $canEditCabinet = $moduleCabinet->canEdit();
 // Chargement des fichiers
 $typeVue        = 1;
 
-$selClass       = mbGetValueFromGetOrSession("selClass", "CPatient");
-$selKey         = mbGetValueFromGetOrSession("selKey"  , $patient_id);
+  $selClass = "CPatient";
+  $selKey   = $patient_id;
+  mbSetValueToSession("selClass", $selClass);
+  mbSetValueToSession("selKey"  , $selKey);
 
 $object = new $selClass;
 $object->load($selKey);
@@ -79,6 +79,7 @@ $smarty->assign("selKey"            , $selKey          );
 $smarty->assign("selView"           , $object->_view   );
 $smarty->assign("typeVue"           , $typeVue         );
 $smarty->assign("accordDossier"     , 0                );
+$smarty->assign("object"            , $patient         );
 
 $smarty->assign("diagnosticsInstall", $diagnosticsInstall);
 

@@ -1,19 +1,11 @@
       <table class="form">
-        <tr id="mainInfo-trigger">
-          <th class="title" colspan="4">
-            {{$patient->_view}} ({{$patient->_age}} ans)
-          </th>
-        </tr>
-
-        <tbody class="patientEffect" style="display: none" id="mainInfo">
         <tr>
-          <th class="category" colspan="2">
-            <a style="float:right;" href="#" onclick="view_history_patient({{$patient->patient_id}})">
-              <img src="images/icons/history.gif" alt="historique" />
+          <th class="title">
+            <a href="#" onclick="viewCompleteItem('CPatient', {{$patient->_id}})">
+              {{$patient->_view}} ({{$patient->_age}} ans)
             </a>
-            Identité
           </th>
-          <th class="category" colspan="2">
+          <th class="title">
             {{if $patient->_canRead}}
             <div style="float:right;">
               <a href="#" onclick="setObject( {
@@ -27,222 +19,8 @@
               </a>
             </div>
             {{/if}} 
-            Coordonnées
           </th>
         </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="nom"}}</th>
-          <td>{{mb_value object=$patient field="nom"}}</td>
-          <th>{{mb_label object=$patient field="adresse"}}</th>
-          <td class="text">{{mb_value object=$patient field="adresse"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="prenom"}}</th>
-          <td>{{mb_value object=$patient field="prenom"}}</td>
-          <th>{{mb_label object=$patient field="cp"}}</th>
-          <td>{{mb_value object=$patient field="cp"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="nom_jeune_fille"}}</th>
-          <td>{{mb_value object=$patient field="nom_jeune_fille"}}</td>
-          <th>{{mb_label object=$patient field="ville"}}</th>
-          <td>{{mb_value object=$patient field="ville"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="naissance"}}</th>
-          <td>{{mb_value object=$patient field="naissance"}}</td>
-          <th>{{mb_label object=$patient field="tel"}}</th>
-          <td>{{mb_value object=$patient field="tel"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="sexe"}}</th>
-          <td>{{mb_value object=$patient field="sexe"}}</td>
-          <th>{{mb_label object=$patient field="tel2"}}</th>
-          <td>{{mb_value object=$patient field="tel2"}}</td>
-        </tr>
-        {{if $patient->rques}}
-        <tr>
-          <th class="category" colspan="4">{{mb_label object=$patient field="rques"}}</th>
-        </tr>
-        <tr>
-          <td colspan="4" class="text">{{mb_value object=$patient field="rques"}}</td>
-        </tr>
-        {{/if}}
-        <tr>
-          <th colspan="2" class="category">Infos médicales</th>
-          <th colspan="2" class="category">Médecins</th>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="matricule"}}</th>
-          <td>{{mb_value object=$patient field="matricule"}}</td>
-          <th>Traitant</th>
-          <td>
-            {{if $patient->medecin_traitant}}
-            Dr. {{$patient->_ref_medecin_traitant->_view}}
-            {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="regime_sante"}}</th>
-          <td>{{mb_value object=$patient field="regime_sante"}}</td>
-          <th rowspan="3">Correspondants</th>
-          <td>
-            {{if $patient->medecin1}}
-            Dr. {{$patient->_ref_medecin1->_view}}
-            {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="cmu"}}</th>
-          <td>
-            {{if $patient->cmu}}
-            jusqu'au
-            {{/if}}
-            {{mb_value object=$patient field="cmu"}}
-          </td>
-          <td>
-            {{if $patient->medecin2}}
-            Dr. {{$patient->_ref_medecin2->_view}}
-            {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="ald"}}</th>
-          <td>{{mb_value object=$patient field="ald"}}</td>
-          <td>
-            {{if $patient->medecin3}}
-            Dr. {{$patient->_ref_medecin3->_view}}
-            {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <td class="button" colspan="4">
-            <form name="actionPat" action="./index.php" method="get">
-            <input type="hidden" name="m" value="dPpatients" />
-            <input type="hidden" name="tab" value="vw_idx_patients" />
-            <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
-            <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
-              Imprimer
-            </button>
-            {{if $canEdit}}
-            <button type="button" class="modify" onclick="editPatient()">
-              Modifier
-            </button>
-            {{/if}}
-            </form>
-          </td>
-        </tr>
-        <tr>
-          <th class="category" colspan="4">Planifier</th>
-        </tr>
-        <tr>
-          <td colspan="4" class="button">
-            <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
-              Intervention
-            </a>
-            <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
-              Urgence
-            </a>
-            <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
-              Séjour
-            </a>
-            <a class="buttonnew" href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
-              Consultation
-            </a>
-          </td>
-        </tr>
-        {{if $listPrat|@count && $canEditCabinet}}
-        <tr><th class="category" colspan="4">Consultation immédiate</th></tr>
-        <tr>
-          <td class="button" colspan="4">
-            <form name="addConsFrm" action="index.php?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
-            <input type="hidden" name="m" value="dPcabinet" />
-            <input type="hidden" name="dosql" value="do_consult_now" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="patient_id" title="notNull refMandatory" value="{{$patient->patient_id}}" />
-            <label for="prat_id" title="Praticien pour la consultation immédiate. Obligatoire">Praticien</label>
-            <select name="prat_id" title="notNull refMandatory">
-              <option value="">&mdash; Choisir un praticien</option>
-              {{foreach from=$listPrat item=curr_prat}}
-                <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $app->user_id}} selected="selected" {{/if}}>
-                  {{$curr_prat->_view}}
-                </option>
-              {{/foreach}}
-            </select>
-            <button class="new" type="submit">Consulter</button>
-            </form>
-          </td>
-        </tr>
-  		{{/if}}
-        </tbody>
-      </table>
-      
-
-      <table class="form">
-
-		<!-- Antécédants -->
-        <tr id="antecedents-trigger">
-          <th colspan="2" class="title">{{$patient->_ref_antecedents|@count}} antécédent(s)</th>
-        </tr>
-        
-        <tbody class="patientEffect" style="display: none" id="antecedents">
-          {{foreach from=$patient->_ref_types_antecedent key=curr_type item=list_antecedent}}
-          <tr>
-            <th class="category" colspan="2">{{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}</th>
-          </tr>
-          {{foreach from=$list_antecedent item=curr_antecedent}}
-          <tr>
-            <td class="text" colspan="2">
-              {{mb_value object=$curr_antecedent field="date"}}
-              {{mb_value object=$curr_antecedent field="rques"}}
-            </td>
-          </tr>
-          {{/foreach}}
-          {{foreachelse}}
-          <tr><td colspan="2"><em>Pas d'antécédents</em></td></tr>
-          {{/foreach}}
-        </tbody>
-        
-		<!-- Traitements -->
-        <tr id="traitements-trigger">
-          <th colspan="2" class="title">{{$patient->_ref_traitements|@count}} traitement(s)</th>
-        </tr>
-        
-        <tbody class="patientEffect" style="display: none" id="traitements">
-          {{foreach from=$patient->_ref_traitements item=curr_traitement}}
-          <tr>
-            <td class="text" colspan="2">
-              {{if $curr_traitement->fin}}
-                Du {{mb_value object=$curr_traitement field="debut"}}
-                au {{mb_value object=$curr_traitement field="fin"}} :
-              {{elseif $curr_traitement->debut}}
-                Depuis le {{mb_value object=$curr_traitement field="debut"}} :
-              {{/if}}
-              {{mb_value object=$curr_traitement field="traitement"}}
-            </td>
-          </tr>
-          {{foreachelse}}
-          <tr><td colspan="2"><em>Pas de traitements</em></td></tr>
-          {{/foreach}}
-        </tbody>
-        
-		<!-- Diagnostics -->
-        <tr id="diagnostics-trigger">
-          <th colspan="2" class="title">{{$patient->_codes_cim10|@count}} diagnostic(s)</th>
-        </tr>
-        
-        <tbody class="patientEffect" style="display: none" id="diagnostics">
-          {{foreach from=$patient->_codes_cim10 item=curr_code}}
-          <tr>
-            <td class="text" colspan="2">
-              {{$curr_code->code}}: {{$curr_code->libelle}}
-             </td>
-          </tr>
-          {{foreachelse}}
-          <tr><td colspan="2"><em>Pas de diagnostics</em></td></tr>
-          {{/foreach}}
-        </tbody>
-        
 		<!-- Séjours -->
         <tr id="sejours-trigger">
           <th colspan="2" class="title">{{$patient->_ref_sejours|@count}} séjour(s)</th>
@@ -312,7 +90,7 @@
         </tr>
         {{/foreach}}
         {{foreachelse}}
-        <tr><td><em>Pas de séjours</em></td></tr>
+        <tr><td colspan="2"><em>Pas de séjours</em></td></tr>
         {{/foreach}}
         </tbody>
   
@@ -363,12 +141,73 @@
 
         {{if $diagnosticsInstall}}
         <tr>
-          <th colspan="4" class="title" onclick="view_labo()">
-            Laboratoires
+          <th colspan="4" class="title">
+            <a href="#" onclick="view_labo()">
+              Laboratoires
+            </a>
           </th>
         </tr>
         {{/if}}
-
+      </table>
+      
+      <hr/>
+      
+      <table class="form">
+		<!-- Planifier -->
+        <tr id="planifier-trigger" colspan="2">
+          <th colspan="2" class="title">Planifier</th>
+        </tr>
+        
+        <tbody class="patientEffect" style="display: none" id="planifier">
+          <tr><th class="category" colspan="2">Evènements</th></tr>
+          <tr>
+            <td class="button">
+              <a class="buttonnew" href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
+                Consultation
+              </a>
+            </td>
+            <td class="button">
+              <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
+                Intervention
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td class="button">
+              <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
+                Séjour
+              </a>
+            </td>
+            <td class="button">
+              <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
+                Urgence
+              </a>
+            </td>
+          </tr>
+          {{if $listPrat|@count && $canEditCabinet}}
+          <tr><th class="category" colspan="2">Consultation immédiate</th></tr>
+          <tr>
+            <td class="button" colspan="2">
+              <form name="addConsFrm" action="index.php?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
+              <input type="hidden" name="m" value="dPcabinet" />
+              <input type="hidden" name="dosql" value="do_consult_now" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="patient_id" title="notNull refMandatory" value="{{$patient->patient_id}}" />
+              <label for="prat_id" title="Praticien pour la consultation immédiate. Obligatoire">Praticien</label>
+              <select name="prat_id" title="notNull refMandatory">
+                <option value="">&mdash; Choisir un praticien</option>
+                {{foreach from=$listPrat item=curr_prat}}
+                  <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $app->user_id}} selected="selected" {{/if}}>
+                    {{$curr_prat->_view}}
+                  </option>
+                {{/foreach}}
+              </select>
+              <button class="new" type="submit">Consulter</button>
+              </form>
+            </td>
+          </tr>
+          {{/if}}
+        </tbody>        
       </table>
       
 <script type="text/javascript">      

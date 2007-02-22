@@ -1,9 +1,8 @@
 <?php
-$locales['mod-dPrepas-tab-vw_planning_repas'] = 'Planning des Repas';
 $locales['Active Users'] = 'Utilisateurs Actifs';
 $locales['Add or Edit Permissions'] = 'Ajouter ou Editer les Permissions';
-$locales['Add User'] = 'Ajouter un Utilisateur';
 $locales['add user'] = 'ajouter utilisateur';
+$locales['Add User'] = 'Ajouter un Utilisateur';
 $locales['adminDeleteTemplate'] = 'supprimer toutes les permissions';
 $locales['adminInvalidBirthday'] = 'Entrez une date valide (aaaa-mm-jj) ou laissez le champ vide';
 $locales['adminInvalidDay'] = 'Le jour que vous avez fourni est invalide.';
@@ -54,6 +53,7 @@ $locales['Level'] = 'Niveau';
 $locales['Login Name'] = 'Login';
 $locales['Manager'] = 'Directeur';
 $locales['Mobile'] = 'Portable';
+$locales['mod-dPrepas-tab-vw_planning_repas'] = 'Planning des Repas';
 $locales['Module'] = 'Module';
 $locales['Not Defined'] = 'Non défini';
 $locales['On hold'] = 'En attente';
