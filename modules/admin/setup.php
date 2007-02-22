@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "admin";
-$config["mod_version"]     = "1.0.5";
+$config["mod_version"]     = "1.0.6";
 $config["mod_type"]        = "core";
 
 class CSetupadmin extends CSetup {
@@ -167,8 +167,13 @@ class CSetupadmin extends CSetup {
                "\nDROP `user_aol`," .
                "\nDROP `user_owner`;";
     $this->addQuery($sql);
-
-    $this->mod_version = "1.0.5";
+    
+    $this->makeRevision("1.0.5");
+    $sql = "ALTER TABLE `user_preferences` " .
+        "\nCHANGE `pref_name` `pref_name` VARCHAR( 40 ) NOT NULL";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.6";
   }
 }
 ?>

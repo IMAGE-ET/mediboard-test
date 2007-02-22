@@ -26,15 +26,6 @@
     </td>
   </tr>
 
-  {{if $object->rques}}
-  <tr>
-    <td class="text" colspan="2">
-      <strong>Remarques :</strong>
-      {{$object->rques|nl2br}}
-    </td>
-  </tr>
-  {{/if}}
-
   <tr>
     <td>
       <strong>Entrée prévue :</strong>
@@ -68,6 +59,24 @@
     </td>
   </tr>
   
+  {{if $object->rques}}
+  <tr>
+    <td class="text" colspan="2">
+      <strong>Remarques :</strong>
+      {{$object->rques|nl2br}}
+    </td>
+  </tr>
+  {{/if}}
+
+  {{if $object->convalescence}}
+  <tr>
+    <td class="text" colspan="2">
+      <strong>Convalescence :</strong>
+      {{$object->convalescence|nl2br}}
+    </td>
+  </tr>
+  {{/if}}
+
   <tr>
     <th class="category" colspan="2">Hospitalisation</th>
   </tr>

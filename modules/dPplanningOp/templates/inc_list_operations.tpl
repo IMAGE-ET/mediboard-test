@@ -25,7 +25,8 @@
         {{foreach from=$listUrgences item=curr_op}}
         <tr>
           <td class="text">
-            <a href="index.php?m=dPcabinet&amp;tab=vw_dossier&amp;patSel={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
+<!--            <a href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">-->
+            <a href="index.php?m=dPcabinet&amp;tab=vw_dossier&amp;patSel={{$curr_op->_ref_sejour->_ref_patient->patient_id}}"> 
               {{$curr_op->_ref_sejour->_ref_patient->_view}}
             </a>
           </td>
@@ -110,7 +111,8 @@
         {{foreach from=$curr_plage->_ref_operations item=curr_op}}
         <tr>
           <td class="text">
-            <a href="index.php?m=dPcabinet&amp;tab=vw_dossier&amp;patSel={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
+            <a href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
+<!--            <a href="index.php?m=dPcabinet&amp;tab=vw_dossier&amp;patSel={{$curr_op->_ref_sejour->_ref_patient->patient_id}}"> -->
               {{$curr_op->_ref_sejour->_ref_patient->_view}}
             </a>
           </td>

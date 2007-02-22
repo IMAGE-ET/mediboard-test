@@ -134,6 +134,19 @@
       <input class="str" type="text" name="pref_name[InterMaxDir]" value="{{$prefsUser.dPcabinet.InterMaxDir}}" />
     </td>
   </tr>
+
+  <tr>
+    <th>
+      <label for="pref_name[DefaultPeriod]" title="{{tr}}pref-DefaultPeriod-desc{{/tr}}">{{tr}}pref-DefaultPeriod{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[DefaultPeriod]">
+        <option value="day"   {{if $prefsUser.dPcabinet.DefaultPeriod == "day"  }}selected="selected"{{/if}}>{{tr}}ChangePeriod.day{{/tr}}</option>
+        <option value="week"  {{if $prefsUser.dPcabinet.DefaultPeriod == "week" }}selected="selected"{{/if}}>{{tr}}ChangePeriod.week{{/tr}}</option>
+        <option value="month" {{if $prefsUser.dPcabinet.DefaultPeriod == "month"}}selected="selected"{{/if}}>{{tr}}ChangePeriod.month{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
   {{/if}}
 
   {{if $prefsUser.system}}

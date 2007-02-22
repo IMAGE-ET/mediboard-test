@@ -78,7 +78,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("board"          , $board                                     );
 $smarty->assign("nom"            , $patient_nom                               );
 $smarty->assign("prenom"         , $patient_prenom                            );
-$smarty->assign("soundex"        , $soundex                                   );
 $smarty->assign("naissance"      , $patient_naissance                         );
 $smarty->assign("ville"          , $patient_ville                             );
 $smarty->assign("cp"             , $patient_cp                                );

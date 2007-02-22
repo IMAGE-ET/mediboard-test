@@ -16,19 +16,22 @@ if (!$canRead) {
 // Initialisation des variables
 $plageconsult_id = mbGetValueFromGet("plageconsult_id");
 
+$period = mbGetValueFromGetOrSession("period", $AppUI->user_prefs["DefaultPeriod"]);
+$periods = array("day", "week", "month");
+$nextPeriod = CMbArray::cycleValue($periods, $period);
+
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;
 $listPlace = array();
 if ($plageconsult_id) {
   $plage->load($plageconsult_id);
   $date  = $plage->date;
-  $ndate = mbDate("+1 MONTH", $date);
-  $pdate = mbDate("-1 MONTH", $date);
 } else {
   $date  = mbGetValueFromGet("date", mbDate());
-  $ndate = mbDate("+1 MONTH", $date);
-  $pdate = mbDate("-1 MONTH", $date);
 }
+
+$ndate = mbDate("+1 $period", $date);
+$pdate = mbDate("-1 $period", $date);
 
 // Récupération des plages de consultation disponibles
 $listPlage = new CPlageconsult;
@@ -43,7 +46,29 @@ $where["chir_id"] = db_prepare_in(array_keys($listPrat), $chir_id);
 
 // Choix du mois
 $month = mbTranformTime(null, $date, "%Y-%m-__");
-$where["date"] = "LIKE '$month'";
+
+switch ($period) {
+  case "day":
+    $minDate = mbDate(null, $date);
+    $maxDate = mbDate(null, $date);
+    break;
+
+  case "week":
+    $minDate = mbDate("last sunday", $date);
+    $maxDate = mbDate("next saturday", $date);
+    break;
+
+  case "month":
+    $minDate = mbTranformTime(null, $date, "%Y-%m-01");
+    $maxDate = mbTranformTime("+1 month", $date, "%Y-%m-00");
+    break;
+
+	default:
+    trigger_error("Période '$period' inconnue");
+		break;
+}
+
+$where["date"] = db_prepare("BETWEEN %1 AND %2", $minDate, $maxDate);
 $order = "date, debut";
 
 // Chargement des plages disponibles
@@ -86,6 +111,8 @@ if($plageconsult_id) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("period"         , $period);
+$smarty->assign("nextPeriod"     , $nextPeriod);
 $smarty->assign("date"           , $date);
 $smarty->assign("ndate"          , $ndate);
 $smarty->assign("pdate"          , $pdate);

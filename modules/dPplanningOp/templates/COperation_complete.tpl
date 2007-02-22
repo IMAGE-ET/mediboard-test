@@ -1,5 +1,3 @@
-
-
 <table class="form">
 
   <tr>
@@ -64,6 +62,15 @@
   </tr>
   {{/if}}
 
+  {{if $object->examen}}
+  <tr>
+    <td class="text" colspan="2">
+      <strong>Bilan pré-op :</strong>
+      {{$object->examen|nl2br}}
+    </td>
+  </tr>
+  {{/if}}
+
   <tr>
     <th class="category" colspan="2">Actes prévus</th>
   </tr>
@@ -92,4 +99,52 @@
   </tr>
   {{/foreach}}
   
+  <tr>
+    <th class="category" colspan="2">Horodatage</th>
+  </tr>
+  
+  <tr>
+    <td>
+      <strong>Entrée salle :</strong>
+      {{$object->entree_salle}} 
+    </td>
+    <td>
+      <strong>Sortie salle :</strong>
+      {{$object->sortie_salle}} 
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <strong>Début intervention :</strong>
+      {{$object->debut_op}} 
+    </td>
+    <td>
+      <strong>Fin intervention :</strong>
+      {{$object->fin_op}} 
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <strong>Pose garrot :</strong>
+      {{$object->pose_garrot}} 
+    </td>
+    <td>
+      <strong>Retrait garrot :</strong>
+      {{$object->retrait_garrot}} 
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <strong>Début induction :</strong>
+      {{$object->induction_debut}} 
+    </td>
+    <td>
+      <strong>Fin induction :</strong>
+      {{$object->induction_fin}} 
+    </td>
+  </tr>
+
 </table>

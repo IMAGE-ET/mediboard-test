@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.61";
+$config["mod_version"]     = "0.62";
 $config["mod_type"]        = "user";
 
 
@@ -606,7 +606,12 @@ class CSetupdPcabinet extends CSetup {
             ) TYPE=MyISAM COMMENT = 'Addictions pour le dossier anesthésie';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.61";
+    $this->makeRevision("0.61");
+    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
+        "\nVALUES ('0', 'DefaultPeriod', 'month');";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.62";
   }
 }
 ?>

@@ -13,8 +13,16 @@ function setClose(time) {
 }
 {{/if}}
 
+function changePeriod(sPeriod) {
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "plage_selector");
+  url.addParam("period", sPeriod);
+  url.addParam("dialog", 1);
+  url.redirect();
+}
+
 function pageMain() {
-  regRedirectPopupCal("{{$date}}", "index.php?m=dPcabinet&a=plage_selector&dialog=1&chir_id={{$chir_id}}&date=");  
+  regRedirectPopupCal("{{$date}}", "?m=dPcabinet&a=plage_selector&dialog=1&chir_id={{$chir_id}}&date=");  
 }
 
 </script>
@@ -22,11 +30,19 @@ function pageMain() {
 <table class="main">
 
 <tr>
-  <th class="category" colspan="2">
-    <a href="index.php?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;chir_id={{$chir_id}}&amp;date={{$pdate}}">&lt;&lt;&lt;</a>
-    {{$date|date_format:"%B %Y"}}
+  <th class="category">
+    
+    <button class="search" style="float:left" onclick="changePeriod('{{$nextPeriod}}');" >
+    {{tr}}ChangePeriod.{{$nextPeriod}}{{/tr}}
+    </button>
+  
+    <a href="?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;chir_id={{$chir_id}}&amp;date={{$pdate}}">&lt;&lt;&lt;</a>
+	{{if $period == "day"  }}{{$date|date_format:"%A %d %B %Y"}}{{/if}}
+	{{if $period == "week" }}{{$date|date_format:"semaine du %d %B %Y"}}{{/if}}
+	{{if $period == "month"}}{{$date|date_format:"%B %Y"}}{{/if}}
+
     <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-    <a href="index.php?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;chir_id={{$chir_id}}&amp;date={{$ndate}}">&gt;&gt;&gt;</a>
+    <a href="?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;chir_id={{$chir_id}}&amp;date={{$ndate}}">&gt;&gt;&gt;</a>
   </th>
 </tr>
 
