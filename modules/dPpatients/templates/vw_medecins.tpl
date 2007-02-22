@@ -2,30 +2,8 @@
 
 <script type="text/javascript">
 
-function checkMedecin() {
-  var form = document.editFrm;
-    
-  if (form.nom.value.length == 0) {
-    alert("Nom manquant");
-    form.nom.focus();
-    return false;
-  }
-    
-  if (form.prenom.value.length == 0) {
-    alert("Prénom manquant");
-    form.prenom.focus();
-    return false;
-  }
-   
-  return true;
-}
-
-function setClose() {
-  window.opener.setMed(
-    "{{$medecin->medecin_id}}",
-    "{{$medecin->nom|smarty:nodefaults|escape:"javascript"}}",
-    "{{$medecin->prenom|smarty:nodefaults|escape:"javascript"}}",
-    "{{$type|smarty:nodefaults|escape:"javascript"}}");
+function setClose(iId, sNom, sPrenom, sType) {
+  window.opener.setMed(iId, sNom, sPrenom, sType);
   window.close();
 }
 
@@ -84,36 +62,59 @@ function setClose() {
           <th><button type="submit" class="search">Fusion</button></th>
           {{/if}}
           <th>Nom - Prénom</th>
-          {{if !$dialog}}
           <th>Adresse</th>
-          {{/if}}
           <th>Ville</th>
           <th>CP</th>
-          {{if !$dialog}}
           <th>Telephone</th>
           <th>Fax</th>
+          {{if $dialog}}
+          <th>Sélectionner</th>
           {{/if}}
         </tr>
 
         {{foreach from=$medecins item=curr_medecin}}
-        {{assign var="medecin_id" value=$curr_medecin->medecin_id"}}
+        {{assign var="medecin_id" value=$curr_medecin->medecin_id}}
         <tr>
-          {{if !$dialog}}
-            <td><input type="checkbox" name="fusion_{{$medecin_id}}" /></td>
-          {{/if}}
           {{if $dialog}}
-            {{assign var="href" value="?m=$m&a=vw_medecins&dialog=1&medecin_id=$medecin_id"}}
-            <td><a href="{{$href}}">{{$curr_medecin->_view}}</a></td>
-            <td class="text"><a href="{{$href}}">{{$curr_medecin->ville}}</a></td>
-            <td><a href="{{$href}}">{{$curr_medecin->cp}}</a></td>
+            {{assign var="href" value="#"}}
           {{else}}
             {{assign var="href" value="?m=$m&tab=$tab&medecin_id=$medecin_id"}}
-            <td><a href="{{$href}}">{{$curr_medecin->_view}}</a></td>
-            <td class="text"><a href="{{$href}}">{{$curr_medecin->adresse}}</a></td>
-            <td class="text"><a href="{{$href}}">{{$curr_medecin->ville}}</a></td>
-            <td><a href="{{$href}}">{{$curr_medecin->cp}}</a></td>
-            <td><a href="{{$href}}">{{$curr_medecin->tel}}</a></td>
-            <td><a href="{{$href}}">{{$curr_medecin->fax}}</a></td>
+            <td><input type="checkbox" name="fusion_{{$medecin_id}}" /></td>
+          {{/if}}
+          <td class="text">
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')"{{/if}}>
+              {{$curr_medecin->_view}}
+            </a>
+          </td>
+          <td class="text">
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')"{{/if}}>
+              {{$curr_medecin->adresse}}
+            </a>
+          </td>
+          <td class="text">
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')"{{/if}}>
+              {{$curr_medecin->ville}}
+            </a>
+          </td>
+          <td>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')"{{/if}}>
+              {{$curr_medecin->cp}}
+            </a>
+          </td>
+          <td>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')"{{/if}}>
+              {{$curr_medecin->tel}}
+            </a>
+          </td>
+          <td>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')"{{/if}}>
+              {{$curr_medecin->fax}}
+            </a>
+          </td>
+          {{if $dialog}}
+            <td>
+              <button type="button" class="tick" onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')">Selectionner</button>
+            </td>
           {{/if}}
         </tr>
         {{/foreach}}
@@ -125,10 +126,12 @@ function setClose() {
       {{/if}}
 
     </td>
-
+    
+    {{if !$dialog}}
     <td class="pane">
-      <form name="editFrm" action="index.php?m={{$m}}" method="post" onsubmit="return checkMedecin()">
+      <form name="editFrm" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_medecins_aed" />
+      {{mb_field object=$medecin field="medecin_id" type="hidden" spec=""}}
       <input type="hidden" name="del" value="0" />
       <table class="form">
         {{if !$dialog && $medecin->medecin_id}}
@@ -150,100 +153,88 @@ function setClose() {
         </tr>
 
         <tr>
-          <th><label for="nom" title="Nom du médecin">Nom</label></th>
-          <td {{if $dialog}} class="readonly" {{/if}}><input type="text" {{if $dialog}} readonly {{/if}} name="nom" value="{{$medecin->nom}}" /></td>
+          <th>{{mb_label object=$medecin field="nom"}}</th>
+          <td>{{mb_field object=$medecin field="nom"}}</td>
         </tr>
         
         <tr>
-          <th><label for="prenom" title="Prénom du médecin">Prénom</label></th>
-          <td {{if $dialog}} class="readonly" {{/if}}><input type="text" {{if $dialog}} readonly {{/if}} name="prenom" value="{{$medecin->prenom}}" /></td>
+          <th>{{mb_label object=$medecin field="prenom"}}</th>
+          <td>{{mb_field object=$medecin field="prenom"}}</td>
         </tr>
         
         <tr>
-          <th><label for="adresse" title="Adresse du cabinet du médecin">Adresse</label></th>
-          <td {{if $dialog}} class="readonly" {{/if}}>
-            <textarea {{if $dialog}} readonly {{/if}} name="adresse">{{$medecin->adresse}}</textarea>
+          <th>{{mb_label object=$medecin field="adresse"}}</th>
+          <td>{{mb_field object=$medecin field="adresse"}}</td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$medecin field="cp"}}</th>
+          <td>{{mb_field object=$medecin field="cp"}}</td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$medecin field="ville"}}</th>
+          <td>{{mb_field object=$medecin field="ville"}}</td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$medecin field="tel" defaultFor="_tel1"}}</th>
+          <td>
+            {{mb_field object=$medecin field="_tel1" size="2" maxlength="2" spec="num length|2"}} -
+            {{mb_field object=$medecin field="_tel2" size="2" maxlength="2" spec="num length|2"}} -
+            {{mb_field object=$medecin field="_tel3" size="2" maxlength="2" spec="num length|2"}} -
+            {{mb_field object=$medecin field="_tel4" size="2" maxlength="2" spec="num length|2"}} -
+            {{mb_field object=$medecin field="_tel5" size="2" maxlength="2" spec="num length|2"}}
           </td>
         </tr>
         
         <tr>
-          <th><label for="cp" title="Code Postal du cabinet du médecin">Code Postal</label></th>
-          <td {{if $dialog}} class="readonly" {{/if}}><input type="text" {{if $dialog}} readonly {{/if}} name="cp" value="{{$medecin->cp}}" /></td>
-        </tr>
-        
-        <tr>
-          <th><label for="ville" title="Ville du cabinet du médecin">Ville</label></th>
-          <td {{if $dialog}} class="readonly" {{/if}}><input type="text" {{if $dialog}} readonly {{/if}} name="ville" value="{{$medecin->ville}}" /></td>
-        </tr>
-        
-        <tr>
-          <th><label for="_tel1" title="Téléphone du médecin">Tél</label></th>
-          <td {{if $dialog}} class="readonly" {{/if}}>
-            <input type="text" {{if $dialog}} readonly {{/if}} size="2" maxlength="2" name="_tel1" value="{{$medecin->_tel1}}" /> -
-            <input type="text" {{if $dialog}} readonly {{/if}} size="2" maxlength="2" name="_tel2" value="{{$medecin->_tel2}}" /> -
-            <input type="text" {{if $dialog}} readonly {{/if}} size="2" maxlength="2" name="_tel3" value="{{$medecin->_tel3}}" /> -
-            <input type="text" {{if $dialog}} readonly {{/if}} size="2" maxlength="2" name="_tel4" value="{{$medecin->_tel4}}" /> -
-            <input type="text" {{if $dialog}} readonly {{/if}} size="2" maxlength="2" name="_tel5" value="{{$medecin->_tel5}}" />
+          <th>{{mb_label object=$medecin field="fax" defaultFor="_fax1"}}</th>
+          <td>
+            {{mb_field object=$medecin field="_fax1" size="2" maxlength="2" spec="num length|2"}} -
+            {{mb_field object=$medecin field="_fax2" size="2" maxlength="2" spec="num length|2"}} -
+            {{mb_field object=$medecin field="_fax3" size="2" maxlength="2" spec="num length|2"}} -
+            {{mb_field object=$medecin field="_fax4" size="2" maxlength="2" spec="num length|2"}} -
+            {{mb_field object=$medecin field="_fax5" size="2" maxlength="2" spec="num length|2"}}
           </td>
         </tr>
         
         <tr>
-          <th><label for="_fax1" title="Fax du médecin">Fax</label></th>
-          <td {{if $dialog}} class="readonly" {{/if}}>
-            <input type="text" {{if $dialog}} readonly {{/if}} size="2" maxlength="2" name="_fax1" value="{{$medecin->_fax1}}" /> -
-            <input type="text" {{if $dialog}} readonly {{/if}} size="2" maxlength="2" name="_fax2" value="{{$medecin->_fax2}}" /> -
-            <input type="text" {{if $dialog}} readonly {{/if}} size="2" maxlength="2" name="_fax3" value="{{$medecin->_fax3}}" /> -
-            <input type="text" {{if $dialog}} readonly {{/if}} size="2" maxlength="2" name="_fax4" value="{{$medecin->_fax4}}" /> -
-            <input type="text" {{if $dialog}} readonly {{/if}} size="2" maxlength="2" name="_fax5" value="{{$medecin->_fax5}}" />
-          </td>
-        </tr>
-        
-        <tr>
-          <th><label for="email" title="Email du médecin">Email</label></th>
-          <td {{if $dialog}} class="readonly" {{/if}}><input type="text" {{if $dialog}} readonly {{/if}} name="email" value="{{$medecin->email}}" /></td>
+          <th>{{mb_label object=$medecin field="email"}}</th>
+          <td>{{mb_field object=$medecin field="email"}}</td>
         </tr>
 
         <tr>
-          <th><label for="disciplines" title="Disciplines qualifiantes du médecin">Disciplines</label></th>
-          <td {{if $dialog}} class="readonly" {{/if}}>
-            <textarea title="{{$medecin->_props.disciplines}}"{{if $dialog}} readonly {{/if}} name="disciplines">{{$medecin->disciplines}}</textarea>
-          </td>
+          <th>{{mb_label object=$medecin field="disciplines"}}</th>
+          <td>{{mb_field object=$medecin field="disciplines"}}</td>
         </tr>
         
         <tr>
-          <th><label for="orientations" title="Mentions et orientations reconnue par l'Ordre des médecins">Orientations</label></th>
-          <td {{if $dialog}} class="readonly" {{/if}}>
-            <textarea title="{{$medecin->_props.orientations}}"{{if $dialog}} readonly {{/if}} name="orientations">{{$medecin->orientations}}</textarea>
-          </td>
+          <th>{{mb_label object=$medecin field="orientations"}}</th>
+          <td>{{mb_field object=$medecin field="orientations"}}</td>
         </tr>
 
         <tr>
-          <th><label for="complementaires" title="Disciplines complémentaires d'exercice">Complémentaires</label></th>
-          <td {{if $dialog}} class="readonly" {{/if}}>
-            <textarea title="{{$medecin->_props.complementaires}}"{{if $dialog}} readonly {{/if}} name="complementaires">{{$medecin->complementaires}}</textarea>
-          </td>
+          <th>{{mb_label object=$medecin field="complementaires"}}</th>
+          <td>{{mb_field object=$medecin field="complementaires"}}</td>
         </tr>
 
         <tr>
           <td class="button" colspan="4">
-          {{if $dialog}}
-            <button type="button" class="tick" onclick="setClose()">Selectionner ce medecin</button>
-          {{else}}
             {{if $medecin->medecin_id}}
-            <input type="hidden" name="medecin_id" value="{{$medecin->medecin_id}}" />
-            <button class="modify" type="submit">Modifier</button>
+            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
             <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le médecin',objName:'{{$medecin->_view|smarty:nodefaults|JSAttribute}}'})">
-              Supprimer
+              {{tr}}Delete{{/tr}}
             </button>
             {{else}}
-            <button class="submit" type="submit">Créer</button>
+            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
-          {{/if}}
           </td>
         </tr>
       </table>
       </form>
     </td>
+    {{/if}}
   </tr>
 </table>
       

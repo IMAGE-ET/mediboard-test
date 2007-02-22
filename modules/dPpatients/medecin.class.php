@@ -52,7 +52,7 @@ class CMedecin extends CMbObject {
   function getSpecs() {
     return array (
       "nom"             => "notNull str confidential",
-      "prenom"          => "str confidential",
+      "prenom"          => "notNull str confidential",
       "jeunefille"      => "str confidential",
       "adresse"         => "text confidential",
       "ville"           => "str confidential",
