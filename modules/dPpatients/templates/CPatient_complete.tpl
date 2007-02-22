@@ -190,7 +190,7 @@
           {{mb_value object=$curr_traitement field="traitement"}}
         </li>
       {{foreachelse}}
-        Pas de traitements
+        <i>Pas de traitements</i>
       {{/foreach}}
       {{if $object->_ref_traitements|@count}}</ul>{{/if}}
     </td>
@@ -201,7 +201,7 @@
           <strong>{{$curr_code->code}}:</strong> {{$curr_code->libelle}}
         </li>
       {{foreachelse}}
-        Pas de diagnostics
+        <i>Pas de diagnostics</i>
       {{/foreach}}
     </td>
   </tr>
