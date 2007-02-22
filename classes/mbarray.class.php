@@ -42,5 +42,28 @@ class CMbArray {
     
     return $diff; 
   }
+  
+  /**
+   * Returns the value following the given one in cycle mode
+   * @param Array $array
+   * @param mixed $value
+   * @return mixed Next value, false if $value does not exist
+   */
+  function cycleValue($array, $value) {
+    $array = array_unique($array);
+    while ($value !== current($array)) {
+      next($array);
+      if (false === current($array)) {
+        trigger_error("value could not be found in array", E_USER_NOTICE);
+        return false;
+      }
+    } 
+    
+    if (false === $nextValue = next($array)) {
+      $nextValue = reset($array);
+    }
+    
+    return $nextValue;
+  }
 }
 ?>
