@@ -11,6 +11,8 @@
 {{mb_field object=$sejour field="saisi_SHS" type="hidden" spec=""}}
 {{mb_field object=$sejour field="modif_SHS" type="hidden" spec=""}}
 <input type="hidden" name="annule" value="{{$sejour->annule|default:"0"}}" />
+<input type="hidden" name="septique" value="{{$sejour->septique|default:"1"}}" />
+<input type="hidden" name="pathologie" value="{{$sejour->pathologie}}" />
 {{if !$mode_operation}}
   {{mb_field object=$sejour field="sejour_id" type="hidden" spec=""}}
 {{/if}}
@@ -80,7 +82,7 @@
     {{mb_label object=$sejour field="praticien_id"}}
   </th>
   <td colspan="3">
-    <select name="praticien_id" title="{{$sejour->_props.praticien_id}}">
+    <select name="praticien_id" onchange="modifPrat()" title="{{$sejour->_props.praticien_id}}">
       <option value="">&mdash; Choisir un praticien</option>
       {{foreach from=$listPraticiens item=curr_praticien}}
       <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $praticien->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>

@@ -46,6 +46,11 @@ if ($patient_id) {
 
 // Vérification des droits sur les praticiens
 $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
+$categorie_prat = array();
+foreach($listPraticiens as $keyPrat =>$prat){
+  $prat->loadRefsFwd();
+  $categorie_prat[$keyPrat] = $prat->_ref_discipline->categorie;
+}
 
 // On récupère le séjour
 $sejour = new CSejour;
@@ -111,11 +116,12 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("canReadSante400", $canReadSante400);
 
-$smarty->assign("sejour"    , $sejour);
-$smarty->assign("praticien" , $praticien);
-$smarty->assign("patient"   , $patient);
-$smarty->assign("sejours"   , $sejours);
-$smarty->assign("msg_alert" , $msg_alert);
+$smarty->assign("categorie_prat", $categorie_prat);
+$smarty->assign("sejour"        , $sejour);
+$smarty->assign("praticien"     , $praticien);
+$smarty->assign("patient"       , $patient);
+$smarty->assign("sejours"       , $sejours);
+$smarty->assign("msg_alert"     , $msg_alert);
 
 $smarty->assign("etablissements", $etablissements);
 $smarty->assign("listPraticiens", $listPraticiens);

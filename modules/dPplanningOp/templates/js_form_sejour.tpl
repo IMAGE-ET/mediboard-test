@@ -2,6 +2,18 @@
 
 <script type="text/javascript">
 
+var listCategoriePrat = {{$categorie_prat|@json}};
+
+function modifPrat(){
+  var oForm = document.editSejour;
+  var sValue = document.editSejour.praticien_id.value;
+  if(sValue != ""){
+    oForm.pathologie.value = listCategoriePrat[sValue];
+  }else{
+    oForm.pathologie.value = "";
+  }
+}
+
 function checkDureeHospi() {
   var form = document.editSejour;
   field1 = form.type;

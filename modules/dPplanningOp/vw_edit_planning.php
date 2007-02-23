@@ -49,6 +49,11 @@ if ($patient_id && !$operation_id && !$sejour_id) {
 
 // Vérification des droits sur les praticiens
 $listPraticiens = $chir->loadPraticiens(PERM_EDIT);
+$categorie_prat = array();
+foreach($listPraticiens as $keyPrat =>$prat){
+  $prat->loadRefsFwd();
+  $categorie_prat[$keyPrat] = $prat->_ref_discipline->categorie;
+}
 
 // On récupère le séjour
 $sejour = new CSejour;
@@ -155,6 +160,7 @@ $smarty->assign("today"     , $today);
 $smarty->assign("tomorow"   , $tomorow);
 $smarty->assign("msg_alert" , "");
 
+$smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listModelePrat", $listModelePrat);
 $smarty->assign("listModeleFunc", $listModeleFunc);
