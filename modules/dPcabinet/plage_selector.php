@@ -36,10 +36,14 @@ $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
 $where["chir_id"] = db_prepare_in(array_keys($listPrat), $chir_id);
 
-// Filtre par heure
+// Filtres
 if ($hour = mbGetValueFromGet("hour")) {
   $where["debut"] = "<= '$hour:00'";
   $where["fin"] = "> '$hour:00'";
+}
+
+if ($hide_finished = mbGetValueFromGet("hide_finished", 1)) {
+  $where[] = db_prepare("`date` >= %", mbDate());
 }
 
 // Filtre de la période
@@ -75,6 +79,11 @@ $order = "date, debut";
 
 // Chargement des plages disponibles
 $listPlage = $listPlage->loadList($where, $order);
+
+if (!array_key_exists($plageconsult_id, $listPlage)) {
+  $plage->_id = $plageconsult_id = null;
+}
+
 foreach ($listPlage as $keyPlage => &$currPlage) {
   if (!$plageconsult_id && $date == $currPlage->date) {
     $plageconsult_id = $currPlage->plageconsult_id;
@@ -119,6 +128,7 @@ $smarty->assign("period"         , $period);
 $smarty->assign("periods"        , $periods);
 $smarty->assign("hour"           , $hour);
 $smarty->assign("hours"          , CPlageconsult::$hours);
+$smarty->assign("hide_finished"  , $hide_finished);
 $smarty->assign("date"           , $date);
 $smarty->assign("ndate"          , $ndate);
 $smarty->assign("pdate"          , $pdate);

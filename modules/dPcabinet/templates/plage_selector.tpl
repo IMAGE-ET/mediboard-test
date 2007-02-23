@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-{{assign var="redirect" value="?m=dPcabinet&a=plage_selector&dialog=1&chir_id=$chir_id&period=$period&hour=$hour"}}
+{{assign var="redirect" value="?m=dPcabinet&a=plage_selector&dialog=1&chir_id=$chir_id&period=$period&hour=$hour&hide_finished=$hide_finished"}}
 
 <script type="text/javascript">
 {{if $plage->plageconsult_id}}
@@ -24,7 +24,7 @@ function pageMain() {
 <table class="main">
 
 <tr>
-  <th class="category" colspan="2">
+  <td class="category" colspan="2">
     
     <form name="Filter" action="?" method="get">
     
@@ -47,13 +47,15 @@ function pageMain() {
           </select>
         </td>
         
-        <td colspan="2">
-          <a href="{{$redirect}}&amp;date={{$pdate}}">&lt;&lt;&lt;</a>
-          {{if $period == "day"  }}{{$date|date_format:" %A %d %B %Y"}}{{/if}}
-          {{if $period == "week" }}{{$date|date_format:" semaine du %d %B %Y"}}{{/if}}
-          {{if $period == "month"}}{{$date|date_format:" %B %Y"}}{{/if}}
+        <td class="button" style="width: 250px;">
+          <a style="float:left" href="{{$redirect}}&amp;date={{$pdate}}">&lt;&lt;&lt;</a>
+          <a style="float:right" href="{{$redirect}}&amp;date={{$ndate}}">&gt;&gt;&gt;</a>
+          <strong>
+            {{if $period == "day"  }}{{$date|date_format:" %A %d %B %Y"}}{{/if}}
+            {{if $period == "week" }}{{$date|date_format:" semaine du %d %B %Y"}}{{/if}}
+            {{if $period == "month"}}{{$date|date_format:" %B %Y"}}{{/if}}
+          </strong>
           <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-          <a href="{{$redirect}}&amp;date={{$ndate}}">&gt;&gt;&gt;</a>
         </td>
         
         <th><label for="hour" title="Filtrer les plages englobalt l'heure choisie">Filtrer les heures</label></th>
@@ -67,12 +69,19 @@ function pageMain() {
             {{/foreach}}
           </select>
         </td>
+        
+        <td>
+		  <input type="checkbox" name="hide_finished" value="1" onchange="this.form.submit()" 
+		    {{if $hide_finished}}checked="checked" {{/if}} />
+		  <label for="hide_finished">Cacher les terminées</label>
+  
+        </td>
       </tr>
 
     </table>
 
     </form>
-  </th>
+  </td>
 </tr>
 
 <tr>
@@ -122,9 +131,13 @@ function pageMain() {
   </td>
   <td>
     <table class="tbl">
-      {{if $plage->plageconsult_id}}
+      {{if $plage->_id}}
       <tr>
-        <th colspan="3">Plage du {{$plage->date|date_format:"%A %d %B %Y"}}</th>
+        <th colspan="3">
+          Dr. {{$plage->_ref_chir->_view}}
+          <br />
+          Plage du {{$plage->date|date_format:"%A %d %B %Y"}}
+        </th>
       </tr>
       <tr>
         <th>Heure</th>
