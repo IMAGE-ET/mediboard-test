@@ -239,7 +239,7 @@ function mbDate($relative = null, $ref = null) {
  * Transforms absolute or relative time into DB friendly TIME format
  * @return string: the transformed time 
  **/
-function mbTime($relative, $ref = null) {
+function mbTime($relative = null, $ref = null) {
   return mbTranformTime($relative, $ref, "%H:%M:%S");
 }
 

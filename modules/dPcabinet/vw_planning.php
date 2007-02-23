@@ -30,17 +30,41 @@ $vue = mbGetValueFromGetOrSession("vue1");
 // Praticien selectionné
 $chirSel = mbGetValueFromGetOrSession("chirSel", $chir ? $chir->user_id : null);
 
+// Période
+$today = mbDate();
+$debut = mbGetValueFromGetOrSession("debut", $today);
+$debut = mbDate("last sunday", $debut);
+$fin   = mbDate("next sunday", $debut);
+$debut = mbDate("+1 day", $debut);
+
+$is_in_period = ($today >= $debut) && ($today <= $fin);
+
+$prec = mbDate("-1 week", $debut);
+$suiv = mbDate("+1 week", $debut);
+
 // Plage de consultation selectionnée
 $plageconsult_id = mbGetValueFromGetOrSession("plageconsult_id");
 $plageSel = new CPlageconsult();
-$plageSel->load($plageconsult_id);
+if(!$plageconsult_id && $chirSel && $is_in_period) {
+  $nowTime = mbTime();
+  $where = array(
+    "chir_id" => "= '$chirSel'",
+    "date"    => "= '$today'",
+    "debut"   => "<= '$nowTime'",
+    "fin"   => ">= '$nowTime'"
+  );
+  $plageSel->loadObject($where);
+}
+if(!$plageSel->plageconsult_id) {
+  $plageSel->load($plageconsult_id);
+} else {
+  $plageconsult_id = $plageSel->plageconsult_id;
+}
 $plageSel->loadRefs();
 
 if ($plageSel->_affected) {
   $firstconsult = reset($plageSel->_ref_consultations);
   $_firstconsult_time = substr($firstconsult->heure, 0, 5);
-
-  
   $lastconsult = end($plageSel->_ref_consultations);
   $_lastconsult_time  = substr($lastconsult->heure, 0, 5);
 }
@@ -51,34 +75,25 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
     unset($plageSel->_ref_consultations[$keyConsult]);
     continue;
   }
-
   $consultation->loadRefPatient();
   $consultation->getNumDocsAndFiles();    
 }
 
 if ($plageSel->chir_id != $chirSel) {
   $plageconsult_id = null;
-  mbSetValueToSession("plageconsult_id", $plageconsult_id);
   $plageSel = new CPlageconsult();
 }
+
+mbSetValueToSession("plageconsult_id", $plageconsult_id);
 
 // Liste des chirurgiens
 $mediusers = new CMediusers();
 $listChirs = $mediusers->loadPraticiens(PERM_EDIT);
 
-// Période
-$today = mbDate();
-$debut = mbGetValueFromGetOrSession("debut", $today);
-$debut = mbDate("last sunday", $debut);
-$fin   = mbDate("next sunday", $debut);
-$debut = mbDate("+1 day", $debut);
-
-$prec = mbDate("-1 week", $debut);
-$suiv = mbDate("+1 week", $debut);
-
 // Sélection des plages
 $plage    = new CPlageconsult();
 $listDays = array();
+$where = array();
 $where["chir_id"] = "= '$chirSel'";
 for($i = 0; $i < 7; $i++) {
   $date = mbDate("+$i day", $debut);
