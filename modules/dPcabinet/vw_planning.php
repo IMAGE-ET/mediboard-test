@@ -7,11 +7,11 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+set_time_limit(2);
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+global $AppUI, $can, $m;
+
+$can->needsRead();
 
 $_firstconsult_time  = null;
 $_lastconsult_time   = null;
@@ -93,46 +93,37 @@ for($i = 0; $i < 7; $i++) {
   $listDays[] = $date;
 }
 
-// Liste des heures
-$listHours = array();
-for($i = 8; $i <= 20; $i++) {
-  $listHours[$i] = $i;
-}
-
-// Liste des minutes
-$listMins = array();
-$listMins[] = 00;
-$listMins[] = 15;
-$listMins[] = 30;
-$listMins[] = 45;
-
+// Liste des heures et minutes
+$listHours = range(8, 20);
+$listMins = range(0, 59, 15);
 
 // Création du tableau de visualisation
 $arrayAffichage = array();
-foreach($plages as $keyDate=>$valDate){
-  foreach($listHours as $keyHours=>$valHours){
-    foreach($listMins as $kayMins=>$valMins){
+foreach ($plages as $keyDate=>$valDate){
+  foreach ($listHours as $keyHours=>$valHours){
+    foreach ($listMins as $kayMins=>$valMins){
       // Initialisation du tableau
       $arrayAffichage["$keyDate $valHours:$valMins"] = "empty";
     }
   }
 }
-foreach($plages as $keyPlages=>$valPlages){
-  foreach($valPlages as $keyvalPlages=>$valvalPlages){
+
+foreach ($plages as $keyPlages=>$valPlages){
+  foreach ($valPlages as $keyvalPlages=>$valvalPlages){
     // Test validité des plages dans le semainier    
     $heure_fin = $valvalPlages->_hour_fin;
     $heure_deb = $valvalPlages->_hour_deb;
     $min_deb   = $valvalPlages->_min_deb;
     $min_fin   = $valvalPlages->_min_fin;
     $outPlage = false;
-    foreach(array("min_deb","min_fin") as $minute){
+    foreach (array("min_deb","min_fin") as $minute){
       $minute_trouve = array_search(${$minute},$listMins);
-      if($minute_trouve===false){
+      if ($minute_trouve===false){
         $afterValue = 0;
-        foreach($listMins as $valueMin){
-          if(${$minute} > $valueMin && $afterValue!==null){
+        foreach ($listMins as $valueMin){
+          if (${$minute} > $valueMin && $afterValue!==null){
             $afterValue = $valueMin;
-          }elseif($afterValue!==null){
+          } elseif($afterValue!==null){
             // Entre l'ancienne valeur et celle ci
             $centerValue = $afterValue + ($valueMin-$afterValue)/2;
             $afterValue = null;
@@ -162,13 +153,14 @@ foreach($plages as $keyPlages=>$valPlages){
     
     if(!$outPlage){
       // Mémorisation des objets
-      $nbquartheure = ($heure_fin-$heure_deb)*4;
+      $nbquartheure = ($heure_fin-$heure_deb)*count($listMins);
       $nbquartheure = $nbquartheure - array_search($min_deb,$listMins) + array_search($min_fin,$listMins);
       
       $valvalPlages->_nbQuartHeure = $nbquartheure;
       $arrayAffichage[$valvalPlages->date." ".$heure_deb.":".$min_deb] = $valvalPlages;
+
       // Détermination des horaire non vides
-      $heure_encours = array_search($heure_deb,$listHours);
+      $heure_encours = array_search($heure_deb,$listHours) + 8;
       $min_encours   = array_search($min_deb,$listMins);    
       $dans_plage = true;
       while($dans_plage == true){      
@@ -176,7 +168,7 @@ foreach($plages as $keyPlages=>$valPlages){
         if(!array_key_exists($min_encours,$listMins)){
           $min_encours=0;
           $heure_encours ++;
-          if(!array_key_exists($heure_encours,$listHours)){
+          if(!in_array($heure_encours, $listHours)){
             $heure_encours=8;
           }
         }        
@@ -189,6 +181,7 @@ foreach($plages as $keyPlages=>$valPlages){
     }
   }
 }
+
 // Recherche d'heure completement vides
 foreach($plages as $keyDate=>$valDate){
   foreach($listHours as $keyHours=>$valHours){

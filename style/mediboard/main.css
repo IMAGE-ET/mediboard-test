@@ -387,7 +387,7 @@ div#console div.value {
 
 /* classes Mediboard */
 
-option.mediuser {
+.mediuser {
   border-left: 4px solid transparent; 
   padding-left: 4px; 
   margin-left: 0px;

@@ -16,22 +16,14 @@ if (!$canRead) {
 // Initialisation des variables
 $plageconsult_id = mbGetValueFromGet("plageconsult_id");
 
-$period = mbGetValueFromGetOrSession("period", $AppUI->user_prefs["DefaultPeriod"]);
-$periods = array("day", "week", "month");
-$nextPeriod = CMbArray::cycleValue($periods, $period);
-
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;
-$listPlace = array();
 if ($plageconsult_id) {
   $plage->load($plageconsult_id);
   $date  = $plage->date;
 } else {
   $date  = mbGetValueFromGet("date", mbDate());
 }
-
-$ndate = mbDate("+1 $period", $date);
-$pdate = mbDate("-1 $period", $date);
 
 // Récupération des plages de consultation disponibles
 $listPlage = new CPlageconsult;
@@ -44,9 +36,15 @@ $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
 $where["chir_id"] = db_prepare_in(array_keys($listPrat), $chir_id);
 
-// Choix du mois
-$month = mbTranformTime(null, $date, "%Y-%m-__");
+// Filtre par heure
+if ($hour = mbGetValueFromGet("hour")) {
+  $where["debut"] = "<= '$hour:00'";
+  $where["fin"] = "> '$hour:00'";
+}
 
+// Filtre de la période
+$periods = array("day", "week", "month");
+$period = mbGetValueFromGet("period", $AppUI->user_prefs["DefaultPeriod"]);
 switch ($period) {
   case "day":
     $minDate = mbDate(null, $date);
@@ -68,7 +66,11 @@ switch ($period) {
 		break;
 }
 
+$ndate = mbDate("+1 $period", $date);
+$pdate = mbDate("-1 $period", $date);
+
 $where["date"] = db_prepare("BETWEEN %1 AND %2", $minDate, $maxDate);
+
 $order = "date, debut";
 
 // Chargement des plages disponibles
@@ -82,8 +84,10 @@ foreach ($listPlage as $keyPlage => &$currPlage) {
   $currPlage->loadFillRate();
 }
 
-if($plageconsult_id) {
-  if(!$plage->plageconsult_id) {
+// Chargement des places disponibles
+$listPlace = array();
+if ($plageconsult_id) {
+  if (!$plage->plageconsult_id) {
     $plage->load($plageconsult_id);
   }
   $plage->loadRefs(false);
@@ -112,7 +116,9 @@ if($plageconsult_id) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("period"         , $period);
-$smarty->assign("nextPeriod"     , $nextPeriod);
+$smarty->assign("periods"        , $periods);
+$smarty->assign("hour"           , $hour);
+$smarty->assign("hours"          , CPlageconsult::$hours);
 $smarty->assign("date"           , $date);
 $smarty->assign("ndate"          , $ndate);
 $smarty->assign("pdate"          , $pdate);

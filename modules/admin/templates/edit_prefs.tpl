@@ -141,9 +141,9 @@
     </th>
     <td>
       <select name="pref_name[DefaultPeriod]">
-        <option value="day"   {{if $prefsUser.dPcabinet.DefaultPeriod == "day"  }}selected="selected"{{/if}}>{{tr}}ChangePeriod.day{{/tr}}</option>
-        <option value="week"  {{if $prefsUser.dPcabinet.DefaultPeriod == "week" }}selected="selected"{{/if}}>{{tr}}ChangePeriod.week{{/tr}}</option>
-        <option value="month" {{if $prefsUser.dPcabinet.DefaultPeriod == "month"}}selected="selected"{{/if}}>{{tr}}ChangePeriod.month{{/tr}}</option>
+        <option value="day"   {{if $prefsUser.dPcabinet.DefaultPeriod == "day"  }}selected="selected"{{/if}}>{{tr}}Period.day{{/tr}}</option>
+        <option value="week"  {{if $prefsUser.dPcabinet.DefaultPeriod == "week" }}selected="selected"{{/if}}>{{tr}}Period.week{{/tr}}</option>
+        <option value="month" {{if $prefsUser.dPcabinet.DefaultPeriod == "month"}}selected="selected"{{/if}}>{{tr}}Period.month{{/tr}}</option>
       </select>
     </td>
   </tr>

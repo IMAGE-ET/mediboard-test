@@ -1,5 +1,5 @@
 <?php
-$locales['CPlageconsult-_freq-desc'] = 'Fréquence de la plage de consultation, en minutes';
+$locales['config-dPcabinet-CPlageconsult-minutes_interval'] = 'Intervales en minutes';
 $locales['CAddiction-addiction'] = 'Information';
 $locales['CAddiction-addiction-desc'] = 'Information sur l\'addiction';
 $locales['CAddiction-type'] = 'Type';
@@ -317,6 +317,8 @@ $locales['CExamPossum.uree.7.6'] = '2 &mdash; 7.6-10 mmol/L';
 $locales['CExamPossum.uree.10.1'] = '3 &mdash; 10.1-15 mmol/L';
 $locales['CExamPossum.uree.inf7.5'] = '1 &mdash; <= 7.5 mmol/L';
 $locales['CExamPossum.uree.sup15.1'] = '4 &mdash; >= 15.1 mmol/L';
+$locales['config-dPcabinet-CPlageconsult-hours_start'] = 'Heure de début';
+$locales['config-dPcabinet-CPlageconsult-hours_stop'] = 'Heure de fin';
 $locales['COperation-type_anesth'] = 'Type d\'anesthésie';
 $locales['COperation-type_anesth-desc'] = 'Type d\'anesthésie pour l\'intervention';
 $locales['CPlageconsult'] = 'Plage de Consultation';
@@ -327,6 +329,7 @@ $locales['CPlageconsult-date-desc'] = 'Jour de la semaine pour la plage de consu
 $locales['CPlageconsult-libelle'] = 'Libellé';
 $locales['CPlageconsult-libelle-desc'] = 'Libellé de la plage de consultation';
 $locales['CPlageconsult-_freq'] = 'Fréquence';
+$locales['CPlageconsult-_freq-desc'] = 'Fréquence de la plage de consultation, en minutes';
 $locales['CPlageconsult-_hour_deb'] = 'Début';
 $locales['CPlageconsult-_hour_deb-desc'] = 'Début de la plage de consultation';
 $locales['CPlageconsult-_hour_fin'] = 'Fin';

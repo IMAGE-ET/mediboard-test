@@ -1,5 +1,7 @@
 <!-- $Id$ -->
 
+{{assign var="redirect" value="?m=dPcabinet&a=plage_selector&dialog=1&chir_id=$chir_id&period=$period&hour=$hour"}}
+
 <script type="text/javascript">
 {{if $plage->plageconsult_id}}
 function setClose(time) {
@@ -13,17 +15,8 @@ function setClose(time) {
 }
 {{/if}}
 
-function changePeriod(sPeriod) {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "plage_selector");
-  url.addParam("period", sPeriod);
-  url.addParam("chir_id", {{$chir_id}});
-  url.addParam("dialog", 1);
-  url.redirect();
-}
-
 function pageMain() {
-  regRedirectPopupCal("{{$date}}", "?m=dPcabinet&a=plage_selector&dialog=1&chir_id={{$chir_id}}&date=");  
+  regRedirectPopupCal("{{$date}}", "{{$redirect|smarty:nodefaults}}&date=");  
 }
 
 </script>
@@ -31,19 +24,54 @@ function pageMain() {
 <table class="main">
 
 <tr>
-  <th class="category">
+  <th class="category" colspan="2">
     
-    <button class="search" style="float:left" onclick="changePeriod('{{$nextPeriod}}');" >
-    {{tr}}ChangePeriod.{{$nextPeriod}}{{/tr}}
-    </button>
-  
-    <a href="?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;chir_id={{$chir_id}}&amp;date={{$pdate}}">&lt;&lt;&lt;</a>
-	{{if $period == "day"  }}{{$date|date_format:"%A %d %B %Y"}}{{/if}}
-	{{if $period == "week" }}{{$date|date_format:"semaine du %d %B %Y"}}{{/if}}
-	{{if $period == "month"}}{{$date|date_format:"%B %Y"}}{{/if}}
+    <form name="Filter" action="?" method="get">
+    
+    <input type="hidden" name="m" value="dPcabinet" />
+    <input type="hidden" name="a" value="plage_selector" />
+    <input type="hidden" name="dialog" value="1" />
+    <input type="hidden" name="chir_id" value="{{$chir_id}}" />
+    <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
 
-    <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-    <a href="?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;chir_id={{$chir_id}}&amp;date={{$ndate}}">&gt;&gt;&gt;</a>
+    <table class="form">
+      <tr>
+        <th><label for="period">Planning</label></th>
+        <td>
+          <select name="period" onchange="this.form.submit()">
+            {{foreach from=$periods item="_period"}}
+            <option value="{{$_period}}" {{if $_period == $period}}selected="selected"{{/if}}>
+              {{tr}}Period.{{$_period}}{{/tr}}
+            </option>
+            {{/foreach}}
+          </select>
+        </td>
+        
+        <td colspan="2">
+          <a href="{{$redirect}}&amp;date={{$pdate}}">&lt;&lt;&lt;</a>
+          {{if $period == "day"  }}{{$date|date_format:" %A %d %B %Y"}}{{/if}}
+          {{if $period == "week" }}{{$date|date_format:" semaine du %d %B %Y"}}{{/if}}
+          {{if $period == "month"}}{{$date|date_format:" %B %Y"}}{{/if}}
+          <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+          <a href="{{$redirect}}&amp;date={{$ndate}}">&gt;&gt;&gt;</a>
+        </td>
+        
+        <th><label for="hour" title="Filtrer les plages englobalt l'heure choisie">Filtrer les heures</label></th>
+        <td>
+          <select name="hour" onchange="this.form.submit()">
+    		<option value="">&mdash; Toutes</option>
+            {{foreach from=$hours item="_hour"}}
+            <option value="{{$_hour}}" {{if $_hour == $hour}} selected="selected" {{/if}}>
+              {{$_hour|string_format:"%02d h"}}
+            </option>
+            {{/foreach}}
+          </select>
+        </td>
+      </tr>
+
+    </table>
+
+    </form>
   </th>
 </tr>
 
@@ -56,8 +84,8 @@ function pageMain() {
         <th>Libelle</th>
         <th>Etat</th>
       </tr>
-      {{foreach from=$listPlage item=curr_plage}}
-      {{assign var="pct" value=$curr_plage->_fill_rate}}
+      {{foreach from=$listPlage item=_plage}}
+      {{assign var="pct" value=$_plage->_fill_rate}}
       {{if $pct gt 100}}
       {{assign var="pct" value=100}}
       {{/if}}
@@ -66,23 +94,27 @@ function pageMain() {
       {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
       {{else}}{{assign var="backgroundClass" value="full"}}
       {{/if}} 
-      <tr style="{{if $curr_plage->plageconsult_id == $plageconsult_id}}font-weight: bold;{{/if}}">
+      <tr style="{{if $_plage->plageconsult_id == $plageconsult_id}}font-weight: bold;{{/if}}">
         <td>
-          <a href="index.php?m=dPcabinet&amp;a=plage_selector&amp;dialog=1&amp;plageconsult_id={{$curr_plage->plageconsult_id}}&amp;chir_id={{$chir_id}}&amp;date={{$date}}">
-            <div class="progressBar">
-              <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-              <div class="text">{{$curr_plage->date|date_format:"%A %d"}}</div>
+          <div class="progressBar">
+            <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
+            <div class="text">
+              <a href="{{$redirect}}&amp;plageconsult_id={{$_plage->_id}}">
+                {{$_plage->date|date_format:"%A %d"}}
+              </a>
             </div>
-          </a>
+          </div>
         </td>
         <td class="text">
-          {{$curr_plage->_ref_chir->_view}}
+          <div class="mediuser" style="border-color: #{{$_plage->_ref_chir->_ref_function->color}};">
+            {{$_plage->_ref_chir->_view}}
+          </div>
         </td>
         <td class="text">
-          {{$curr_plage->libelle}}
+          {{$_plage->libelle}}
         </td>
         <td>
-          {{$curr_plage->_affected}} / {{$curr_plage->_total}}
+          {{$_plage->_affected}} / {{$_plage->_total}}
         </td>
       </tr>
       {{/foreach}}
@@ -104,42 +136,42 @@ function pageMain() {
         <th colspan="3">Pas de plage le {{$date|date_format:"%A %d %B %Y"}}</th>
       </tr>
       {{/if}}
-      {{foreach from=$listPlace item=curr_place}}
+      {{foreach from=$listPlace item=_place}}
       <tr>
-        <td><button type="button" class="tick" onclick="setClose('{{$curr_place.time|date_format:"%H:%M"}}')">{{$curr_place.time|date_format:"%Hh%M"}}</button></td>
+        <td><button type="button" class="tick" onclick="setClose('{{$_place.time|date_format:"%H:%M"}}')">{{$_place.time|date_format:"%Hh%M"}}</button></td>
         <td class="text">
-          {{foreach from=$curr_place.consultations item=curr_consultation}}
+          {{foreach from=$_place.consultations item=_consultation}}
           
-          {{if !$curr_consultation->patient_id}}
+          {{if !$_consultation->patient_id}}
             {{assign var="style" value="style='background: #ffa;'"}}
-          {{elseif $curr_consultation->premiere}}
+          {{elseif $_consultation->premiere}}
             {{assign var="style" value="style='background: #faa;'"}}
           {{else}} 
             {{assign var="style" value=""}}
           {{/if}}
           <div {{$style|smarty:nodefaults}}>
-            {{if !$curr_consultation->patient_id}}
+            {{if !$_consultation->patient_id}}
               [PAUSE]
             {{else}}
-              {{$curr_consultation->_ref_patient->_view}}
-              {{if $curr_consultation->motif}}
-              ({{$curr_consultation->motif|truncate:"20"}})
+              {{$_consultation->_ref_patient->_view}}
+              {{if $_consultation->motif}}
+              ({{$_consultation->motif|truncate:"20"}})
               {{/if}}
             {{/if}}
           </div>
           {{/foreach}}
         </td>
         <td>
-          {{foreach from=$curr_place.consultations item=curr_consultation}}
-            {{if !$curr_consultation->patient_id}}
+          {{foreach from=$_place.consultations item=_consultation}}
+            {{if !$_consultation->patient_id}}
               {{assign var="style" value="style='background: #ffa;'"}}
-            {{elseif $curr_consultation->premiere}}
+            {{elseif $_consultation->premiere}}
               {{assign var="style" value="style='background: #faa;'"}}
             {{else}} 
               {{assign var="style" value=""}}
             {{/if}}
             <div {{$style|smarty:nodefaults}}>
-              {{$curr_consultation->duree}}
+              {{$_consultation->duree}}
             </div>
           {{/foreach}}
         </td>

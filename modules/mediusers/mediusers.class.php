@@ -362,45 +362,6 @@ class CMediusers extends CMbObject {
     }
 
     return $mediusers;
-
-  }
-
-  function loadListFromTypeOld($user_types = null, $permType = PERM_READ, $function_id = null, $name = null) {
-    global $utypes_flip;
-    $ljoin = array();
-    $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
-    $where = array();
-    $where["users_mediboard.user_id"] = "= `users`.`user_id`";
-    if ($function_id) {
-      $where["users_mediboard.function_id"] = "= '$function_id'";
-    }
-    if ($name) {
-      $where["users.user_last_name"] = "LIKE '$name%'";
-    }
-
-    if (is_array($user_types)) {
-      foreach ($user_types as $key => $value) {
-        $user_types[$key] = $utypes_flip[$value];
-      }
-
-      $where["users.user_type"] = db_prepare_in($user_types);
-    }
-
-    $order = "users.user_last_name";
-
-    // Get all users
-    $mediuser = new CMediusers;
-    $baseUsers = $mediuser->loadList($where, $order, null, null, $ljoin);
-  
-    // Filter with permissions
-    foreach ($baseUsers as $key => $mediuser) {
-      if(!$mediuser->getPerm($permType)) {
-        unset($baseUsers[$key]);
-      }
-    }
-
-    return $baseUsers;
-
   }
 
   function loadEtablissements($permType = PERM_READ){

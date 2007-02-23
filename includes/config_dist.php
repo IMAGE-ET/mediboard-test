@@ -206,6 +206,11 @@ $dPconfig["dPplanningOp"]["sejour"] = array (
 );
 
 $dPconfig["dPcabinet"]["addictions"] = 0;
+$dPconfig["dPcabinet"]["CPlageConsult"] = array (
+  "hours_start"      => "8",
+  "hours_stop"       => "20",
+  "minutes_interval" => "15"
+);
 
 $dPconfig["dPImeds"]["url"] = "http://10.100.0.67/listedossiers.aspx";
 

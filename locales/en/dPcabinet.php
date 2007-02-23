@@ -1,5 +1,5 @@
 <?php
-$locales['CPlageconsult-_freq-desc'] = '';
+$locales['config-dPcabinet-CPlageconsult-minutes_interval'] = 'Intervals in minutes';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-desc'] = '';
 $locales['CAddiction-type'] = '';
@@ -317,6 +317,8 @@ $locales['CExamPossum.uree.7.6'] = '2 &mdash; 7.6-10 mmol/L';
 $locales['CExamPossum.uree.10.1'] = '3 &mdash; 10.1-15 mmol/L';
 $locales['CExamPossum.uree.inf7.5'] = '1 &mdash; <= 7.5 mmol/L';
 $locales['CExamPossum.uree.sup15.1'] = '4 &mdash; >= 15.1 mmol/L';
+$locales['config-dPcabinet-CPlageconsult-hours_start'] = 'Start hour';
+$locales['config-dPcabinet-CPlageconsult-hours_stop'] = 'Stop hour';
 $locales['COperation-type_anesth'] = '';
 $locales['COperation-type_anesth-desc'] = '';
 $locales['CPlageconsult'] = '';
@@ -327,6 +329,7 @@ $locales['CPlageconsult-date-desc'] = '';
 $locales['CPlageconsult-libelle'] = '';
 $locales['CPlageconsult-libelle-desc'] = '';
 $locales['CPlageconsult-_freq'] = '';
+$locales['CPlageconsult-_freq-desc'] = '';
 $locales['CPlageconsult-_hour_deb'] = '';
 $locales['CPlageconsult-_hour_deb-desc'] = '';
 $locales['CPlageconsult-_hour_fin'] = '';

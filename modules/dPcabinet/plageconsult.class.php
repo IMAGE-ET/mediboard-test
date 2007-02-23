@@ -8,6 +8,9 @@
 */
 
 class CPlageconsult extends CMbObject {
+  static $minutes = array();
+  static $hours = array();
+  
   // DB Table key
   var $plageconsult_id = null;
 
@@ -242,4 +245,8 @@ class CPlageconsult extends CMbObject {
   }    
 }
 
+global $dPconfig;
+$pcConfig =& $dPconfig["dPcabinet"]["CPlageConsult"];
+CPlageconsult::$hours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
+CPlageconsult::$minutes = range(0, 59, $pcConfig["minutes_interval"]);
 ?>
