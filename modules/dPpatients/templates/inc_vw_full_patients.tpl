@@ -113,13 +113,23 @@
               <img src="images/icons/edit.png" alt="modifier" title="modifier" />
             </a>
             {{/if}}
+            
+            {{if $curr_consult->_ref_consult_anesth->consultation_anesth_id}}
+              {{assign var="object_id" value=$curr_consult->_ref_consult_anesth->consultation_anesth_id}}
+              {{assign var="object_class" value="CConsultAnesth"}}
+              <img src="images/icons/anesth.png" alt="Consultation d'anesthésie" title="Consultation d'anesthésie" />
+            {{else}}
+              {{assign var="object_id" value=$curr_consult->_id}}
+              {{assign var="object_class" value="CConsultation"}}
+            {{/if}}
+            
             <a href="#"
-              onmouseover="viewItem('CConsultation',{{$curr_consult->_id}})"
-              onmouseout="hideItem('CConsultation',{{$curr_consult->_id}})"
-              onclick="viewCompleteItem('CConsultation', {{$curr_consult->_id}})">
+              onmouseover="viewItem('{{$object_class}}',{{$object_id}})"
+              onmouseout="hideItem('{{$object_class}}',{{$object_id}})"
+              onclick="viewCompleteItem('{{$object_class}}', {{$object_id}})">
               {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_consult->_ref_chir->_view}}
             </a>
-            <div id="CConsultation{{$curr_consult->consultation_id}}" class="tooltip" style="display: none;">
+            <div id="{{$object_class}}{{$object_id}}" class="tooltip" style="display: none;">
             </div>
           </td>
           <td style="text-align:right;">
@@ -154,7 +164,7 @@
       
       <table class="form">
 		<!-- Planifier -->
-        <tr id="planifier-trigger" colspan="2">
+        <tr id="planifier-trigger">
           <th colspan="2" class="title">Planifier</th>
         </tr>
         

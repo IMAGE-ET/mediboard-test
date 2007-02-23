@@ -267,6 +267,12 @@ class CConsultAnesth extends CMbObject {
     }
   }
   
+  function loadComplete(){
+   parent::loadComplete();
+   $this->_ref_consultation->loadExamsComp();
+   $this->_ref_consultation->loadRefsExamNyha();
+   $this->_ref_consultation->loadRefsExamPossum();
+  }
   function loadRefsFwd() {
     $this->loadRefsAntecedents();
     $this->loadRefsTraitements();

@@ -1,5 +1,9 @@
 <script type="text/javascript" src="modules/{{$m}}/javascript/exam_audio.js?build={{$mb_version_build}}"></script>
-
+<script type="text/javascript">
+if (window.opener.reloadFdr) {
+  window.opener.reloadFdr();
+}
+</script>
 <form name="editFrm" action="?m=dPcabinet&amp;a=exam_audio&amp;dialog=1" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="dPcabinet" />

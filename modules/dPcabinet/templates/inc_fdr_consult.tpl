@@ -67,6 +67,12 @@ function createDocument(oSelect, consultation_id) {
   oSelect.value = "";
 }
 
+function loadExam(sValue){
+  var oForm = document.newExamen;
+  oForm.type_examen.value = sValue;
+  oForm.type_examen.onchange();
+}
+
 function newExam(oSelect, consultation_id) {
   if (sAction = oSelect.value) {
     var url = new Url;
@@ -134,10 +140,41 @@ function submitFdr(oForm) {
         <label for="type_examen" title="Type d'examen complémentaire à effectuer"><strong>Examens complémentaires</strong></label>
         <select name="type_examen" onchange="newExam(this, {{$consult->consultation_id}})">
           <option value="">&mdash; Choisir un type d'examen</option>
-          <option value="exam_audio">Audiogramme</option>
-          <option value="exam_possum">Score Possum</option>
-          <option value="exam_nyha">Classification NYHA</option>
+          {{if _is_anesth}}
+            <option value="exam_possum">Score Possum</option>
+            <option value="exam_nyha">Classification NYHA</option>
+          {{else}}
+            <option value="exam_audio">Audiogramme</option>          
+          {{/if}}
         </select>
+        <ul>
+          {{if !$consult->_ref_examaudio->_id && !$consult->_ref_examnyha->_id && !$consult->_ref_exampossum->_id}}
+          <li>
+            Aucun examen
+          </li>
+          {{/if}}
+          {{if $consult->_ref_examaudio->_id}}
+          <li>
+            <a href="#nothing" onclick="loadExam('exam_audio');">
+              Audiogramme
+            </a>
+          </li>
+          {{/if}}
+          {{if $consult->_ref_exampossum->_id}}
+          <li>
+            <a href="#nothing" onclick="loadExam('exam_possum');">
+              Score Possum
+            </a>
+          </li>
+          {{/if}}
+          {{if $consult->_ref_examnyha->_id}}
+          <li>
+            <a href="#nothing" onclick="loadExam('exam_nyha');">
+              Classification NYHA
+            </a>
+          </li>
+          {{/if}}
+        </ul>
       </form>
       <strong>Fichiers</strong>
       <ul>

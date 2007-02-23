@@ -56,6 +56,8 @@ class CConsultation extends CMbObject {
   var $_ref_consult_anesth = null;
   var $_ref_examaudio      = null;
   var $_ref_examcomp       = null;
+  var $_ref_examnyha       = null;
+  var $_ref_exampossum     = null;
 
   function CConsultation() {
     $this->CMbObject("consultation", "consultation_id");
@@ -229,10 +231,23 @@ class CConsultation extends CMbObject {
   }
   
   function loadRefsExamAudio(){
-  	$this->_ref_examaudio = new CExamAudio;
+  	 $this->_ref_examaudio = new CExamAudio;
     $where = array();
     $where["consultation_id"] = "= '$this->consultation_id'";
     $this->_ref_examaudio->loadObject($where);
+  }
+  
+  function loadRefsExamNyha(){
+    $this->_ref_examnyha = new CExamNyha;
+    $where = array();
+    $where["consultation_id"] = "= '$this->consultation_id'";
+    $this->_ref_examnyha->loadObject($where);
+  }
+  function loadRefsExamPossum(){
+    $this->_ref_exampossum = new CExamPossum;
+    $where = array();
+    $where["consultation_id"] = "= '$this->consultation_id'";
+    $this->_ref_exampossum->loadObject($where);
   }
   
   function loadRefsBack() {
@@ -243,6 +258,8 @@ class CConsultation extends CMbObject {
     
     $this->loadRefsExamAudio();
     $this->loadExamsComp();
+    $this->loadRefsExamNyha();
+    $this->loadRefsExamPossum();
   }
   
   function loadExamsComp(){

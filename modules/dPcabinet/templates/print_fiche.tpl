@@ -405,8 +405,26 @@
       </tr>
       {{/foreach}}
       </table>
-      {{if $consult->rques}}
+      
       <table width="100%" style="font-size: 100%;">
+      {{if $consult->_ref_exampossum->_id}}
+        <tr>
+          <th>Score Possum</th>
+          <td>
+            Morbidité : {{mb_value object=$consult->_ref_exampossum field="_morbidite"}}%<br />
+            Mortalité : {{mb_value object=$consult->_ref_exampossum field="_mortalite"}}%
+          </td>
+        </tr>
+      {{/if}}
+      
+      {{if $consult->_ref_examnyha->_id}}
+        <tr>
+          <th>Clasification NYHA</th>
+          <td>{{mb_value object=$consult->_ref_examnyha field="_classeNyha"}}</td>
+        </tr>   
+      {{/if}}
+      
+      {{if $consult->rques}}
         <tr>
           <th>
             Remarques
@@ -415,8 +433,8 @@
             {{$consult->rques|nl2br}}
           </td>
         </tr>
-      </table>
       {{/if}}
+      </table>
 
       <table width="100%" style="font-size: 100%;padding-bottom: 10px;">
         <tr>

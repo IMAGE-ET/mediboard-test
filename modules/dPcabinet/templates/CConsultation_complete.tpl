@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-function newExam(sAction, consultation_id) {
+newExam = function(sAction, consultation_id) {
   if (sAction) {
     var url = new Url;
     url.setModuleAction("dPcabinet", sAction);

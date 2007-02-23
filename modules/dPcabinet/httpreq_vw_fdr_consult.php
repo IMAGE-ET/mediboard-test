@@ -66,6 +66,9 @@ if ($selConsult) {
   $consult->loadRefsFwd();
   $consult->loadRefsDocs();
   $consult->loadRefsFiles();
+  $consult->loadRefsExamAudio();
+  $consult->loadRefsExamNyha();
+  $consult->loadRefsExamPossum();
   
   // On vérifie que l'utilisateur a les droits sur la consultation
   $right = false;

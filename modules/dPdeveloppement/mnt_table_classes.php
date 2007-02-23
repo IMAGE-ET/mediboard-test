@@ -43,15 +43,19 @@ foreach($classSelected as $selected){
   
   // Extraction des champs
   foreach ($object->getProps() as $k => $v) {
-    $aClass[$k]["class_field"] = $k;
-    if(isset($object->_specs[$k])){
-      $aClass[$k]["object_spec"] = $object->_specs[$k]->getDBSpec();
+    if($k[0] != "_"){
+      $aClass[$k]["class_field"] = $k;
+      if(isset($object->_specs[$k])){
+        $aClass[$k]["object_spec"] = $object->_specs[$k]->getDBSpec();
+      }
     }
   } 
   
   // Extraction des propriétés
   foreach($object->_props as $k => $v) {
-    $aClass[$k]["class_props"] = $v;    
+    if($k[0] != "_"){
+      $aClass[$k]["class_props"] = $v;
+    }
   }
   
   //Extraction des champs de la BDD

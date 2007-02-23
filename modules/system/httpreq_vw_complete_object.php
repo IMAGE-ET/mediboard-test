@@ -20,11 +20,14 @@ $object = new $object_class;
 $object->load($object_id);
 $object->loadComplete();
 
-// Création du template
-$smarty = new CSmartyDP();
+if(!$object->canRead()){
+  include("access_denied.php");
+}else{
+  // Création du template
+  $smarty = new CSmartyDP();
 
-$smarty->assign("object", $object);
+  $smarty->assign("object", $object);
 
-$smarty->display($object->_complete_template);
-
+  $smarty->display($object->_complete_template);
+}
 ?>

@@ -203,6 +203,7 @@
       {{foreachelse}}
         <i>Pas de diagnostics</i>
       {{/foreach}}
+      {{if $object->_ref_traitements|@count}}</ul>{{/if}}
     </td>
   </tr>
 </table>
