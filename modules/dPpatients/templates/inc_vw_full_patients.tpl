@@ -88,6 +88,45 @@
             {{/if}} 
           </td>
         </tr>
+        {{if $curr_op->_ref_consult_anesth->_id}}
+        <tr>
+          <td style="padding-left: 10px;">
+            {{assign var="curr_consult" value=$curr_op->_ref_consult_anesth->_ref_consultation}}
+            {{if $curr_consult->annule}}
+            [ANNULE]<br />
+            {{else}}
+            <a href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}">
+              <img src="images/icons/planning.png" alt="modifier" title="rendez-vous" />
+            </a>
+            <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+              <img src="images/icons/edit.png" alt="modifier" title="modifier" />
+            </a>
+            {{/if}}
+            <img src="images/icons/anesth.png" alt="Consultation d'anesthésie" title="Consultation d'anesthésie" />
+            <a href="#"
+              onmouseover="viewItem('CConsultAnesth',{{$curr_op->_ref_consult_anesth->_id}},'op')"
+              onmouseout="hideItem('CConsultAnesth',{{$curr_op->_ref_consult_anesth->_id}},'op')"
+              onclick="viewCompleteItem('CConsultAnesth', {{$curr_op->_ref_consult_anesth->_id}},'op')">
+              {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_consult->_ref_chir->_view}}
+            </a>
+            <div id="opCConsultAnesth{{$curr_op->_ref_consult_anesth->_id}}" class="tooltip" style="display: none;">
+            </div>
+          </td>
+          <td style="text-align:right;">
+          {{if $curr_consult->_canRead}}
+            <a href="#" title="{{$curr_consult->_nb_files_docs}} doc(s)"
+              onclick="setObject( {
+                objClass: 'CConsultation', 
+                keywords: '', 
+                id: {{$curr_consult->consultation_id}}, 
+                view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
+              {{$curr_consult->_nb_files_docs}}
+              <img align="top" src="images/icons/next{{if !$curr_consult->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+            </a>
+            {{/if}}
+          </td>
+        </tr>
+        {{/if}}
         {{/foreach}}
         {{foreachelse}}
         <tr><td colspan="2"><em>Pas de séjours</em></td></tr>

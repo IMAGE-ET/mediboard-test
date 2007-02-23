@@ -367,6 +367,10 @@ class COperation extends CMbObject {
   
   function loadRefsFwd() {
     $this->loadRefsConsultAnesth();
+    $this->_ref_consult_anesth->loadRefConsultation();
+    $this->_ref_consult_anesth->_ref_consultation->getNumDocsAndFiles();
+    $this->_ref_consult_anesth->_ref_consultation->canRead();
+    $this->_ref_consult_anesth->_ref_consultation->canEdit();
     $this->loadRefChir();
     $this->loadRefPlageOp();
     $this->loadRefCCAM();

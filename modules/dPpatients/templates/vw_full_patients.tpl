@@ -4,8 +4,12 @@
 
 <script type="text/javascript">
 
-function viewItem(class, id) {
-  oElement = $(class+id);
+function viewItem(class, id, prefix) {
+  if(prefix){
+    oElement = $(prefix+class+id);
+  }else{
+    oElement = $(class+id);
+  }
   oElement.show();
   var sAlt = "infos - cliquez pour fermer";
   if (oElement.alt != sAlt) {
@@ -26,8 +30,12 @@ function viewCompleteItem(class, id) {
   url.requestUpdate("listView");
 }
 
-function hideItem(class, id) {
-  oElement = $(class+id);
+function hideItem(class, id, prefix) {
+  if(prefix){
+    oElement = $(prefix+class+id);
+  }else{
+    oElement = $(class+id);
+  }
   oElement.hide();
 }
 
