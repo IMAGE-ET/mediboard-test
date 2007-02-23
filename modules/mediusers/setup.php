@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "mediusers";
-$config["mod_version"]     = "0.24";
+$config["mod_version"]     = "0.25";
 $config["mod_type"]        = "user";
 
 class CSetupmediusers extends CSetup {
@@ -390,7 +390,11 @@ class CSetupmediusers extends CSetup {
                "\nADD `soustitre` TEXT NULL;";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.24";
+     $this->makeRevision("0.24");
+     $sql = "ALTER TABLE `discipline` ADD `categorie` enum('ORT','ORL','OPH','DER','STO','GAS','ARE','RAD','GYN','EST') NULL";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.25";
   }
 }
 ?>

@@ -1,7 +1,19 @@
 <?php
-$locales['CDiscipline-text-desc'] = '';
+$locales['CDiscipline.categorie.STO'] = '';
 $locales['CDiscipline'] = '';
+$locales['CDiscipline-categorie'] = '';
+$locales['CDiscipline-categorie-desc'] = '';
 $locales['CDiscipline-text'] = '';
+$locales['CDiscipline-text-desc'] = '';
+$locales['CDiscipline.categorie.ARE'] = '';
+$locales['CDiscipline.categorie.DER'] = '';
+$locales['CDiscipline.categorie.EST'] = '';
+$locales['CDiscipline.categorie.GAS'] = '';
+$locales['CDiscipline.categorie.GYN'] = '';
+$locales['CDiscipline.categorie.OPH'] = '';
+$locales['CDiscipline.categorie.ORL'] = '';
+$locales['CDiscipline.categorie.ORT'] = '';
+$locales['CDiscipline.categorie.RAD'] = '';
 $locales['CFunctions'] = '';
 $locales['CFunctions-adresse'] = '';
 $locales['CFunctions-adresse-desc'] = '';

@@ -7,6 +7,7 @@
       <table class="tbl">
         <tr>
           <th>Spécialité Médicale</th>
+          <th>Catégorie</th>
         </tr>
         {{foreach from=$listDiscipline item=curr_discipline}}
         <tr>
@@ -14,7 +15,12 @@
             <a href="index.php?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id={{$curr_discipline->discipline_id}}" title="Modifier la spécialité">
               {{$curr_discipline->_view}}
             </a>
-          </td>        
+          </td>
+          <td>
+            <a href="index.php?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id={{$curr_discipline->discipline_id}}" title="Modifier la spécialité">
+              {{$curr_discipline->categorie}}
+            </a>
+          </td>      
         </tr>
         {{/foreach}}
       </table>
@@ -23,7 +29,7 @@
       {{if $canEdit}}
       <form name="editSpeMed" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_discipline_aed" />
-	  <input type="hidden" name="discipline_id" value="{{$specialite->discipline_id}}" />
+      {{mb_field object=$specialite field="discipline_id" type="hidden" spec=""}}
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
@@ -36,6 +42,10 @@
         <tr>
           <th>{{mb_label object=$specialite field="text"}}</th>
           <td>{{mb_field object=$specialite field="text"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$specialite field="categorie"}}</th>
+          <td>{{mb_field object=$specialite field="categorie" defaultOption="&mdash;"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">

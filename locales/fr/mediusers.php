@@ -1,7 +1,19 @@
 <?php
-$locales['CDiscipline-text-desc'] = 'Nom de la spécialité médicale';
+$locales['CDiscipline.categorie.STO'] = 'STO';
 $locales['CDiscipline'] = 'Disciplines';
+$locales['CDiscipline-categorie'] = 'Catégorie';
+$locales['CDiscipline-categorie-desc'] = 'Catégorie de la spécialité';
 $locales['CDiscipline-text'] = 'Spécialité médicale';
+$locales['CDiscipline-text-desc'] = 'Nom de la spécialité médicale';
+$locales['CDiscipline.categorie.ARE'] = 'ARE';
+$locales['CDiscipline.categorie.DER'] = 'DER';
+$locales['CDiscipline.categorie.EST'] = 'EST';
+$locales['CDiscipline.categorie.GAS'] = 'GAS';
+$locales['CDiscipline.categorie.GYN'] = 'GYN';
+$locales['CDiscipline.categorie.OPH'] = 'OPH';
+$locales['CDiscipline.categorie.ORL'] = 'ORL';
+$locales['CDiscipline.categorie.ORT'] = 'ORT';
+$locales['CDiscipline.categorie.RAD'] = 'RAD';
 $locales['CFunctions'] = 'Cabinet / Fonction';
 $locales['CFunctions-adresse'] = 'Adresse';
 $locales['CFunctions-adresse-desc'] = 'Adresse du cabinet';
