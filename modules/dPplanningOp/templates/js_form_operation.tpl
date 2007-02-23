@@ -146,6 +146,7 @@ function synchroPrat() {
   var oSejourForm = document.editSejour;
   if(!oSejourForm.praticien_id.value) {
     oSejourForm.praticien_id.value = oOpForm.chir_id.value;
+    oSejourForm.praticien_id.onchange();
   }
   updateTime();
 }
