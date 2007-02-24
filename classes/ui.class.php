@@ -498,7 +498,7 @@ class CAppUI {
 * @return mixed
 */
   function getState($label) {
-    return array_key_exists($label, $this->state) ? $this->state[$label] : NULL;
+    return array_key_exists($label, $this->state) ? $this->state[$label] : null;
   }
 /**
 * Login function

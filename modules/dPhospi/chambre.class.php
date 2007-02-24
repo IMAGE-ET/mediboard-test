@@ -100,7 +100,7 @@ class CChambre extends CMbObject {
   function checkChambre() {
     static $pathos = null;
     if (!$pathos) {
-      $pathos = new CPathologies();
+      $pathos = new CDiscipline();
     }
     
     assert($this->_ref_lits !== null);

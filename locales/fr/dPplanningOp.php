@@ -51,7 +51,6 @@ $locales['COperation.cote.total'] = 'Total';
 $locales['COperation.info.'] = ' ';
 $locales['COperation.info.0'] = 'Non';
 $locales['COperation.info.1'] = 'Oui';
-$locales['CPathologies'] = 'Pathologie';
 $locales['CProtocole'] = 'Protocole';
 $locales['CProtocole-chir_id'] = 'Praticien';
 $locales['CProtocole-chir_id-desc'] = 'Praticien responsable. Obligatoire';

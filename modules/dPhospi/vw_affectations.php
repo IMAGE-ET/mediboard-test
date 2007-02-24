@@ -11,7 +11,7 @@ global $AppUI, $canRead, $canEdit, $m, $g;
 
 require_once($AppUI->getModuleFile($m, "inc_vw_affectations"));
 
-$pathos = new CPathologies();
+$pathos = new CDiscipline();
 
 if(!$canRead) {
   $AppUI->redirect("m=system&a=access_denied");
@@ -65,6 +65,8 @@ $sql->addWhere($where);
 $sql->addLJoin($leftjoin);
 
 $alerte = db_loadResult($sql->getRequest());
+
+// Liste des patients à placer
 
 $groupSejourNonAffectes = array();
 
