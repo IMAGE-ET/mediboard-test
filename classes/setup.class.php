@@ -12,16 +12,18 @@
  * Install, upgrade or remove modules
  */ 
 class CSetup {
-  public $mod_name = null;
-  public $mod_version = null;
-  public $mod_type = "user";
+  // Public vars
+  var $mod_name = null;
+  var $mod_version = null;
+  var $mod_type = "user";
 
-  protected $revisions = array();
-  protected $queries = array();
-  protected $functions = array();
-  protected $dependencies = array();
-  protected $timeLimit = array();
-  protected $tables = array();
+  // Protected vars
+  var $revisions = array();
+  var $queries = array();
+  var $functions = array();
+  var $dependencies = array();
+  var $timeLimit = array();
+  var $tables = array();
   
   function __construct() {
   }
