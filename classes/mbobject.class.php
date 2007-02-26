@@ -17,6 +17,7 @@ $mbObjectCount = 0;
 $mbCacheObjectCount = 0;
 
 require_once("./classes/request.class.php");
+require_once("./classes/mbFieldSpecFact.class.php");
  
 class CMbObject {
   

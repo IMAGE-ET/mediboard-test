@@ -303,16 +303,10 @@ function mbDaysRelative($from, $to) {
  * @return int: number of days
  **/
 function mbTimeRelative($from, $to) {
-  mbTrace($from, "From");
-  mbTrace($to, "To");
   $diff = strtotime($to) - strtotime($from); 
-  mbTrace($diff, "Diff ");
   $hours = intval($diff / 3600);
-  mbTrace($hours, "Hours");
   $mins = intval(($diff % 3600) / 60);
-  mbTrace($mins, "Mins");
   $secs = intval($diff % 60);
-  mbTrace($secs, "Secs");
   return "$hours:$mins:$secs";
 }
 

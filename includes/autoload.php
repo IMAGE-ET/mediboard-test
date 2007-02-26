@@ -13,7 +13,6 @@ $performance["autoload"] = 0;
 
 // Load class paths in shared memory
 if ($shm->isReady()) {
-
   if (null == $classPaths = $shm->get("class-paths")) {
     $AppUI->getAllClasses();
     $classNames = getChildClasses(null);

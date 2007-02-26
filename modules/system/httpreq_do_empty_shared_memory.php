@@ -7,12 +7,14 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m, $shm;
+// This script has to be lanuched via installer
+// DO NOT $AppUI facilities
+global $shm, $can;
 
-if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+// Only check permissions if connected to mediboard, and not to the installer
+if ($can) {
+  $can->needsAdmin();
 }
-
 
 // Remove locales
 foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {

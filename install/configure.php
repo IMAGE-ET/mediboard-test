@@ -235,6 +235,14 @@ $dPconfig = $mbConfig->values;
         <option value="none"         <?php if ($dPconfig['shared_memory'] == 'none'        ) { echo 'selected="selected"'; } ?> >Aucune</option>
         <option value="eaccelerator" <?php if ($dPconfig['shared_memory'] == 'eaccelerator') { echo 'selected="selected"'; } ?> >eAccelertaror</option>
       </select>
+      
+      <div>
+      <?php
+        $rootName = basename($dPconfig["root_dir"]);
+        require_once("../classes/sharedmemory.class.php");
+        require_once("../modules/system/httpreq_do_empty_shared_memory.php");
+      ?>
+      </div>
     </td>
   </tr>
 
