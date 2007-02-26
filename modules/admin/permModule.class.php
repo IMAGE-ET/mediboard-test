@@ -10,12 +10,6 @@
 global $permissionSystemeDown;
 $sql = "SHOW TABLE STATUS LIKE 'perm_module'";
 $permissionSystemeDown = !db_loadResult($sql);
- 
-if(!defined("PERM_DENY")) {
-  define("PERM_DENY" , "0");
-  define("PERM_READ" , "1");
-  define("PERM_EDIT" , "2");
-}
 
 /**
  * The CPermModule class
