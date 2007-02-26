@@ -46,7 +46,7 @@ db_exec($sql, $base);
 if(!($msg = db_error($base)))
   echo '<div class="message">import villes INSEE effectué avec succès</div>';
 else
-  echo '<div class="error"><strong>une erreur s\'est produite</strong> : $msg</div>';
+  echo '<div class="error"><strong>une erreur s\'est produite</strong> : '.$msg.'</div>';
 
 $sql = "DROP TABLE IF EXISTS `pays`";
 db_exec($sql, $base);
@@ -71,4 +71,4 @@ db_exec($sql, $base);
 if(!($msg = db_error($base)))
   echo '<div class="message">import pays ISO effectué avec succès</div>';
 else
-  echo '<div class="error"><strong>une erreur s\'est produite</strong> : $msg</div>';
+  echo '<div class="error"><strong>une erreur s\'est produite</strong> : '.$msg.'</div>';
