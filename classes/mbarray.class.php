@@ -65,5 +65,21 @@ class CMbArray {
     
     return $nextValue;
   }
+  
+  /**
+   * Extract a key from an array, returning the value if exists
+   * @param array $array The array to explore
+   * @param string $name Name of the key to extract
+   * @param mixed $default The default value is $key is not found
+   * @param bool $mandatory will trigger an warning if value is null 
+   */
+  function extract(&$array, $key, $default = null, $mandatory = false) {
+    $value = mbGetValue(@$array[$key], $default);
+    unset($array[$key]);
+    if (!$value and $mandatory) {
+      $this->trigger_error("mb_field: paramater 'object' missing", E_USER_WARNING);
+    }
+    return $value;
+  }
 }
 ?>

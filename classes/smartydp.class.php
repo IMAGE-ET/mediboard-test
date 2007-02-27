@@ -150,9 +150,9 @@ function smarty_function_mb_field($params, &$smarty) {
   $extra_class  = "";
   $_html_result = "";
   
-  $object = $smarty->extractParam($params, "object", null, true);
-  $field  = $smarty->extractParam($params, "field" , null, true);
-  $prop   = $smarty->extractParam($params, "spec");
+  $object = CMbArray::extract($params, "object", null, true);
+  $field  = CMbArray::extract($params, "field" , null, true);
+  $prop   = CMbArray::extract($params, "spec");
 
   $spec = $prop ? 
     CMbFieldSpecFact::getSpec($object, $field, $prop) : 
@@ -193,7 +193,7 @@ function smarty_function_mb_field($params, &$smarty) {
       case "class":
         break;
       case "type":
-        if(($className !== "" && $className !== null) || ($prop !== "" && $prop!== null)){
+        if (!$className || !$prop) {
           $extra_class .= 'class="'.smarty_function_escape_special_chars(trim($className." ".$prop)).'"';
         }
         if(is_scalar($_val) && ($_val == "textarea" || $_val == "enum")){
@@ -427,23 +427,5 @@ class CSmartyDP extends Smarty {
     $this->assign("mb_version_build", $mb_version_build);
 
   }
-  
-  /**
-   * Extract an param in array, removing it form the array
-   * Useful for coding smarty functions
-   * @param array params The params array to explore
-   * @param string name Name of the parameter to extract
-   * @param mixed default The default value is param name is not found
-   * @param bool mandatory will trigger an warning if value id null 
-   */
-  function extractParam(&$params, $name, $default = null, $mandatory = false) {
-    $value = mbGetValue(@$params[$name], $default);
-    unset($params[$name]);
-    if (!$value and $mandatory) {
-      $this->trigger_error("mb_field: paramater 'object' missing", E_USER_WARNING);
-    }
-    return $value;
-  }
-
 }
 ?>
