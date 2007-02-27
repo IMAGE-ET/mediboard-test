@@ -8,7 +8,7 @@
     </th>
     <td class="readonly">
       <input type="text" name="_medecin_traitant_name" size="30" value="Dr. {{$patient->_ref_medecin_traitant->_view}}" ondblclick="popMed('_traitant')" readonly="readonly" />
-      <button class="cancel notext" type="button" onclick="delMed('_traitant')"></button>
+      <button class="cancel notext" type="button" onclick="delMed('_traitant')">{{tr}}Delete{{/tr}}</button>
     </td>
     <td class="button"><button class="search" tabindex="251" type="button" onclick="popMed('_traitant')">Choisir un médecin</button></td>
   </tr>
@@ -19,7 +19,7 @@
       <div id="editFrm_cmu_da">{{$patient->cmu|date_format:"%d/%m/%Y"}}</div>
       {{mb_field object=$patient field="cmu" type="hidden" spec="date"}}
       <img tabindex="202" id="editFrm_cmu_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
-      <button class="cancel notext" type="button" onclick="delCmu()"></button>
+      <button class="cancel notext" type="button" onclick="delCmu()">{{tr}}Delete{{/tr}}</button>
     </td>
     <th>
       {{mb_label object=$patient field="medecin1"}}
@@ -27,7 +27,7 @@
     </th>
     <td class="readonly">
       <input type="text" name="_medecin1_name" size="30" value="Dr. {{$patient->_ref_medecin1->_view}}" ondblclick="popMed('1')" readonly="readonly" />
-      <button class="cancel notext" type="button" onclick="delMed('1')"></button>
+      <button class="cancel notext" type="button" onclick="delMed('1')">{{tr}}Delete{{/tr}}</button>
     </td>
     <td class="button"><button class="search" tabindex="252" type="button" onclick="popMed('1')">Choisir un médecin</button></td>
   </tr>
@@ -43,9 +43,10 @@
     </th>
     <td class="readonly">
       <input type="text" name="_medecin2_name" size="30" value="{{if ($patient->_ref_medecin2)}}Dr. {{$patient->_ref_medecin2->_view}}{{/if}}" ondblclick="popMed('2')" readonly="readonly" />
-      <button class="cancel notext" type="button" onclick="delMed('2')"></button>
+      <button class="cancel notext" type="button" onclick="delMed('2')">{{tr}}Delete{{/tr}}</button>
     </td>
-    <td class="button"><button class="search" tabindex="253" type="button" onclick="popMed('2')">Choisir un médecin</button></td>
+    <td class="button">
+      <button class="search" tabindex="253" type="button" onclick="popMed('2')">Choisir un médecin</button></td>
   </tr>
   
   <tr>
@@ -55,7 +56,7 @@
     </th>
     <td class="readonly">
       <input type="text" name="_medecin3_name" size="30" value="{{if ($patient->_ref_medecin3)}}Dr. {{$patient->_ref_medecin3->_view}}{{/if}}" ondblclick="popMed('3')" readonly="readonly" />
-      <button class="cancel notext" type="button" onclick="delMed('3')"></button>
+      <button class="cancel notext" type="button" onclick="delMed('3')">{{tr}}Delete{{/tr}}</button>
     </td>
     <td class="button"><button class="search" tabindex="254" type="button" onclick="popMed('3')">Choisir un médecin</button></td>
   </tr>

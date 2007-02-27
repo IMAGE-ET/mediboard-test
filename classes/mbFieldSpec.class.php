@@ -8,7 +8,6 @@
 */
 
 class CMbFieldSpec {
-  //
   var $object         = null;
   var $spec           = null;
   var $fieldName      = null;
@@ -21,6 +20,13 @@ class CMbFieldSpec {
   
   var $msgError       = null;
   
+  static $chars  = array();
+  static $nums   = array();
+  static $months = array();
+  static $days   = array();
+  static $hours  = array();
+  static $mins   = array();
+  
   var $_defaultLength = null;
   var $_chars         = null;
   var $_nums          = null;
@@ -29,10 +35,10 @@ class CMbFieldSpec {
   var $_hours         = null;
   var $_mins          = null; 
   
-  function CMbFieldSpec(&$className, &$field, $propSpec = null, $aProperties = array()) {
+  function CMbFieldSpec(&$className, &$field, $prop = null, $aProperties = array()) {
     $this->className =& $className;
     $this->fieldName =& $field;
-    $this->spec      =& $propSpec;
+    $this->prop      =& $prop;
     
     $aObjProperties = get_object_vars($this);
 
@@ -231,5 +237,12 @@ class CMbFieldSpec {
   function checkValues(){
   }
 }
+
+CMbFieldSpec::$chars  = range("a","z");
+CMbFieldSpec::$nums   = range(0, 9);
+CMbFieldSpec::$months = range(1, 12);
+CMbFieldSpec::$days   = range(1, 29);
+CMbFieldSpec::$hours  = range(9, 19);
+CMbFieldSpec::$mins   = range(0, 60, 10);
 
 ?>

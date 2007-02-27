@@ -149,24 +149,23 @@ function smarty_function_mb_field($params, &$smarty) {
   $extra        = "";
   $extra_class  = "";
   $_html_result = "";
-  $propSpec     = null;
   
-  if(!isset($params["object"]) || !isset($params["field"])){
-    $smarty->trigger_error("mb_field: attribut 'object' ou 'field' manquant", E_USER_NOTICE);
-  }
+  $object = $smarty->extractParam($params, "object", null, true);
+  $field  = $smarty->extractParam($params, "field" , null, true);
+  $prop   = $smarty->extractParam($params, "spec");
+
+  $spec = $prop ? 
+    CMbFieldSpecFact::getSpec($object, $field, $prop) : 
+    $object->_specs[$field];
+
+  $prop = $spec->prop;
+
+  $value     = $object->$field;
+  $objClass  = $object->_class_name;
   
-  $value     = $params["object"]->$params["field"];
-  $propSpec  = @$params["object"]->_props[$params["field"]];
-  $objClass  = $params["object"]->_class_name;
-  
-  if(isset($params["spec"])) {
-    $propSpec = $params["spec"];
-  }else{
-    $params["spec"] = null;
-  }
   if(isset($params["class"])){ $className = $params["class"]; }
   
-  $attribute_oblig = array("type"            => smarty_function_mb_field_spec($params["object"], $params["field"], $params["spec"]),
+  $attribute_oblig = array("type"            => $spec->checkFieldType(),
                             "typeEnum"        => "select",
                             "separator"       => "",
                             "cycle"           => 1,
@@ -194,8 +193,8 @@ function smarty_function_mb_field($params, &$smarty) {
       case "class":
         break;
       case "type":
-        if(($className !== "" && $className !== null) || ($propSpec !== "" && $propSpec!== null)){
-          $extra_class .= 'class="'.smarty_function_escape_special_chars(trim($className." ".$propSpec)).'"';
+        if(($className !== "" && $className !== null) || ($prop !== "" && $prop!== null)){
+          $extra_class .= 'class="'.smarty_function_escape_special_chars(trim($className." ".$prop)).'"';
         }
         if(is_scalar($_val) && ($_val == "textarea" || $_val == "enum")){
           break;
@@ -208,11 +207,11 @@ function smarty_function_mb_field($params, &$smarty) {
   // Ecriture des champs
   switch($params["type"]){
     case "textarea":
-      $_html_result = "<textarea name=\"".smarty_function_escape_special_chars($params["field"])."\"$extra_class $extra>".smarty_function_escape_special_chars($value)."</textarea>";
+      $_html_result = "<textarea name=\"".smarty_function_escape_special_chars($field)."\"$extra_class $extra>".smarty_function_escape_special_chars($value)."</textarea>";
       break;
     case "hidden":
     case "text":
-      $_html_result = "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"".smarty_function_escape_special_chars($value)."\" $extra_class $extra/>";
+      $_html_result = "<input name=\"".smarty_function_escape_special_chars($field)."\" value=\"".smarty_function_escape_special_chars($value)."\" $extra_class $extra/>";
       break;
     case "radio":
       $compteur = 0;
@@ -221,14 +220,14 @@ function smarty_function_mb_field($params, &$smarty) {
         if(($value !== null && $value === "$i") || ($value === null && "$i" === $params["defaultSelected"])){
           $selected = "checked=\"checked\"";
         }
-        $_html_result .= "<input name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$i\" $selected";
+        $_html_result .= "<input name=\"".smarty_function_escape_special_chars($field)."\" value=\"$i\" $selected";
         
         if($compteur == 0) {
-          $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className." ".$propSpec)).'"';
+          $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className." ".$prop)).'"';
         }elseif($className != ""){
           $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className)).'"';
         }
-        $_html_result .= " $extra/><label for=\"".$params["field"]."_$i\">".$AppUI->_("bool.$i")."</label> ";
+        $_html_result .= " $extra/><label for=\"".$field."_$i\">".$AppUI->_("bool.$i")."</label> ";
         $compteur++;
         if($i != 0){
           $_html_result .= $params["separator"];
@@ -237,11 +236,11 @@ function smarty_function_mb_field($params, &$smarty) {
       break;
           
     case "enum":
-      $enumsTrans = $params["object"]->_enumsTrans[$params["field"]];
+      $enumsTrans = $object->_enumsTrans[$field];
           
       switch($params["typeEnum"]){
         case "select":
-          $_html_result = "<select name=\"".smarty_function_escape_special_chars($params["field"])."\" $extra_class $extra>";
+          $_html_result = "<select name=\"".smarty_function_escape_special_chars($field)."\" $extra_class $extra>";
           if($params["defaultOption"] && $params["defaultOption"]!=""){
             $_html_result .= "<option value=\"\">".smarty_function_escape_special_chars($params["defaultOption"])."</option>";
           }
@@ -264,13 +263,13 @@ function smarty_function_mb_field($params, &$smarty) {
             }else{
               $selected = "";
             }
-            $_html_result .= "<input type=\"radio\" name=\"".smarty_function_escape_special_chars($params["field"])."\" value=\"$key\" $selected";
+            $_html_result .= "<input type=\"radio\" name=\"".smarty_function_escape_special_chars($field)."\" value=\"$key\" $selected";
             if($compteur == 0) {
-              $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className." ".$propSpec)).'"';
+              $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className." ".$prop)).'"';
             }elseif($className != ""){
               $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className)).'"';
             }
-            $_html_result .= " $extra/><label for=\"".$params["field"]."_$key\">$item</label> ";
+            $_html_result .= " $extra/><label for=\"".$field."_$key\">$item</label> ";
             $compteur++;
             if($compteur % $params["cycle"] == 0){
               $_html_result .= $params["separator"];
@@ -284,7 +283,7 @@ function smarty_function_mb_field($params, &$smarty) {
       break;
       
     default:
-      $smarty->trigger_error("mb_field: Specification '$propSpec' non prise en charge", E_USER_NOTICE);
+      $smarty->trigger_error("mb_field: Specification '$prop' non prise en charge", E_USER_NOTICE);
       break;
   }
   return $_html_result;
@@ -427,6 +426,23 @@ class CSmartyDP extends Smarty {
     $this->assign("ajax", $ajax);
     $this->assign("mb_version_build", $mb_version_build);
 
+  }
+  
+  /**
+   * Extract an param in array, removing it form the array
+   * Useful for coding smarty functions
+   * @param array params The params array to explore
+   * @param string name Name of the parameter to extract
+   * @param mixed default The default value is param name is not found
+   * @param bool mandatory will trigger an warning if value id null 
+   */
+  function extractParam(&$params, $name, $default = null, $mandatory = false) {
+    $value = mbGetValue(@$params[$name], $default);
+    unset($params[$name]);
+    if (!$value and $mandatory) {
+      $this->trigger_error("mb_field: paramater 'object' missing", E_USER_WARNING);
+    }
+    return $value;
   }
 
 }

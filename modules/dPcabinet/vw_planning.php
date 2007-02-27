@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-set_time_limit(2);
-
 global $AppUI, $can, $m;
 
 $can->needsRead();

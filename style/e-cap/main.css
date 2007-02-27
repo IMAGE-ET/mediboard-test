@@ -352,6 +352,7 @@ button.change, a.buttonchange {
   padding-left: 18px;
 }
 button.notext{
+  font-size: 0;
   padding : 0px 0px 0px 0px;
   margin  : 1px 1px;
   width: 19px;
