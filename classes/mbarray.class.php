@@ -81,5 +81,17 @@ class CMbArray {
     }
     return $value;
   }
+  
+  /**
+   * Return a string of XML attributes based on given array key-value pairs 
+   */
+  function makeXmlAttributes(&$array) {
+    $return = array();
+    foreach ($array as $key => $value) {
+      $value = htmlspecialchars($value);
+      $return[] = "$key=\"$value\"";
+    }
+    return join($return, " ");
+  }
 }
 ?>
