@@ -29,7 +29,7 @@
       {{if $canEdit}}
       <form name="editSpeMed" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_discipline_aed" />
-      {{mb_field object=$specialite field="discipline_id" type="hidden" spec=""}}
+      {{mb_field object=$specialite field="discipline_id" hidden=1 spec=""}}
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>

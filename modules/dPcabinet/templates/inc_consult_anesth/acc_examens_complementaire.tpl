@@ -69,7 +69,7 @@ function reloadListExamComp() {
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_examcomp_aed" />
-      {{mb_field object=$consult field="consultation_id" type="hidden" spec=""}}
+      {{mb_field object=$consult field="consultation_id" hidden=1 spec=""}}
       <table class="form">
         <tr>
           <td><strong>Ajouter un examen complémentaire</strong></td>
@@ -109,14 +109,14 @@ function reloadListExamComp() {
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-      {{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
+      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 spec=""}}
       <table class="form">
         <tr>
           <th>{{mb_label object=$consult_anesth field="groupe"}}</th>
           <td>
-            {{mb_field object=$consult_anesth field="groupe" defaultSelected="?" tabindex="101" onchange="submitForm(this.form)"}}
+            {{mb_field object=$consult_anesth field="groupe" tabindex="101" onchange="submitForm(this.form)"}}
             /
-            {{mb_field object=$consult_anesth field="rhesus" defaultSelected="?" tabindex="102" onchange="submitForm(this.form)"}}
+            {{mb_field object=$consult_anesth field="rhesus" tabindex="102" onchange="submitForm(this.form)"}}
           </td>
           <th>{{mb_label object=$consult_anesth field="creatinine"}}</th>
           <td>
@@ -127,11 +127,11 @@ function reloadListExamComp() {
         <tr>
           <th>{{mb_label object=$consult_anesth field="rai"}}</th>
           <td>
-            {{mb_field object=$consult_anesth field="rai" defaultSelected="?" tabindex="103" onchange="submitForm(this.form)"}}
+            {{mb_field object=$consult_anesth field="rai" tabindex="103" onchange="submitForm(this.form)"}}
           </td>
           <th>{{mb_label object=$consult_anesth field="_clairance"}}</th>
           <td class="readonly">
-            {{mb_field object=$consult_anesth field="_clairance" type="text" size="4" readonly="readonly"}}
+            {{mb_field object=$consult_anesth field="_clairance"  size="4" readonly="readonly"}}
             ml/min
           </td>
         </tr>
@@ -174,7 +174,7 @@ function reloadListExamComp() {
         <tr>
           <th>{{mb_label object=$consult_anesth field="_psa"}}</th>
           <td class="readonly">
-            {{mb_field object=$consult_anesth field="_psa" type="text" size="4" readonly="readonly"}}
+            {{mb_field object=$consult_anesth field="_psa"  size="4" readonly="readonly"}}
             ml/GR
           </td>
           <th>{{mb_label object=$consult_anesth field="tca" defaultFor="tca_temoin"}}</th>
@@ -202,7 +202,7 @@ function reloadListExamComp() {
           <td colspan="2"></td>
           <th>{{mb_label object=$consult_anesth field="ecbu"}}</th>
           <td>
-            {{mb_field object=$consult_anesth field="ecbu" defaultSelected="?" tabindex="116" onchange="submitForm(this.form)"}}
+            {{mb_field object=$consult_anesth field="ecbu" tabindex="116" onchange="submitForm(this.form)"}}
           </td>
         </tr>
       </table>    

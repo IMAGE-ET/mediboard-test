@@ -64,31 +64,27 @@ class CStrSpec extends CMbFieldSpec {
     $propValue =& $object->$fieldName;
     
     if($this->length){
-      $propValue = $this->randomString($this->_chars, $this->length);
+      $propValue = $this->randomString(CMbFieldSpec::$chars, $this->length);
     
     }elseif($this->minLength){
       if($this->_defaultLength < $this->minLength){
-        $propValue = $this->randomString($this->_chars, $this->minLength);
+        $propValue = $this->randomString(CMbFieldSpec::$chars, $this->minLength);
       }else{
-        $propValue = $this->randomString($this->_chars, $this->_defaultLength);
+        $propValue = $this->randomString(CMbFieldSpec::$chars, $this->_defaultLength);
       }
     
     }elseif($this->maxLength){
       if($this->_defaultLength > $this->maxLength){
-        $propValue = $this->randomString($this->_chars, $this->maxLength);
+        $propValue = $this->randomString(CMbFieldSpec::$chars, $this->maxLength);
       }else{
-        $propValue = $this->randomString($this->_chars, $this->_defaultLength);
+        $propValue = $this->randomString(CMbFieldSpec::$chars, $this->_defaultLength);
       }
 
     }else{
-      $propValue = $this->randomString($this->_chars, $this->_defaultLength);
+      $propValue = $this->randomString(CMbFieldSpec::$chars, $this->_defaultLength);
     }
   }
   
-  function checkFieldType(){
-    return "text";
-  }
-
   function getDBSpec(){
     $type_sql = "varchar(255)";
     
@@ -97,6 +93,10 @@ class CStrSpec extends CMbFieldSpec {
       $type_sql = "varchar($length)";
     }
     return $type_sql;
+  }
+  
+  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+    return $this->getFormElementText($object, $params, &$value, &$className);
   }
 }
 

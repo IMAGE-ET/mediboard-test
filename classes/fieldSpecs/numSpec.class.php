@@ -117,30 +117,26 @@ class CNumSpec extends CMbFieldSpec {
     $propValue =& $object->$fieldName;
     
     if($this->length){
-      $propValue = $this->randomString($this->_nums, $this->length);
+      $propValue = $this->randomString(CMbFieldSpec::$nums, $this->length);
       
     }elseif($this->minLength){
       if($this->_defaultLength < $this->minLength){
-        $propValue = $this->randomString($this->_nums, $this->minLength);
+        $propValue = $this->randomString(CMbFieldSpec::$nums, $this->minLength);
       }else{
-        $propValue = $this->randomString($this->_nums, $this->_defaultLength);
+        $propValue = $this->randomString(CMbFieldSpec::$nums, $this->_defaultLength);
       }
       
     }elseif($this->maxLength){
       if($this->_defaultLength > $this->maxLength){
-        $propValue = $this->randomString($this->_nums, $this->maxLength);
+        $propValue = $this->randomString(CMbFieldSpec::$nums, $this->maxLength);
       }else{
-        $propValue = $this->randomString($this->_nums, $this->_defaultLength);
+        $propValue = $this->randomString(CMbFieldSpec::$nums, $this->_defaultLength);
       }
       
     }else{
-      $propValue = $this->randomString($this->_nums, $this->_defaultLength);
+      $propValue = $this->randomString(CMbFieldSpec::$nums, $this->_defaultLength);
     }
 
-  }
-  
-  function checkFieldType(){
-    return "text";
   }
   
   function getDBSpec(){
@@ -169,6 +165,10 @@ class CNumSpec extends CMbFieldSpec {
     }
     
     return $type_sql;
+  }
+
+  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+    return $this->getFormElementText($object, $params, &$value, &$className);
   }
 }
 

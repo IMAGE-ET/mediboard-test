@@ -131,7 +131,7 @@ function setClose(iId, sNom, sPrenom, sType) {
     <td class="pane">
       <form name="editFrm" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_medecins_aed" />
-      {{mb_field object=$medecin field="medecin_id" type="hidden" spec=""}}
+      {{mb_field object=$medecin field="medecin_id" hidden=1 spec=""}}
       <input type="hidden" name="del" value="0" />
       <table class="form">
         {{if !$dialog && $medecin->medecin_id}}

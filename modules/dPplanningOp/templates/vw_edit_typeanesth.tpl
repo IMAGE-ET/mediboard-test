@@ -29,7 +29,7 @@
       <form name="editType" action="./index.php?m={{$m}}&amp;tab=vw_edit_typeanesth" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="dosql" value="do_typeanesth_aed" />
-      {{mb_field object=$type_anesth field="type_anesth_id" type="hidden" spec=""}}
+      {{mb_field object=$type_anesth field="type_anesth_id" hidden=1 spec=""}}
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>

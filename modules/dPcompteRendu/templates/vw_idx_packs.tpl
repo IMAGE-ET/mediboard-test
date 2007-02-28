@@ -61,7 +61,7 @@
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
     <input type="hidden" name="dosql" value="do_pack_aed" />
-    {{mb_field object=$pack field="pack_id" type="hidden" spec=""}}
+    {{mb_field object=$pack field="pack_id" hidden=1 spec=""}}
     <input type="hidden" name="del" value="0" />
 
     <table class="form">
@@ -127,7 +127,7 @@
         <td>
           <form name="delFrm{{$pack->pack_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
           <input type="hidden" name="dosql" value="do_pack_aed" />
-          {{mb_field object=$pack field="pack_id" type="hidden" spec=""}}
+          {{mb_field object=$pack field="pack_id" hidden=1 spec=""}}
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
           <input type="hidden" name="_del" value="{{$key_modele}}" />
@@ -141,7 +141,7 @@
       <tr><td colspan="2">
         <form name="addFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_pack_aed" />
-        {{mb_field object=$pack field="pack_id" type="hidden" spec=""}}
+        {{mb_field object=$pack field="pack_id" hidden=1 spec=""}}
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
         <label for="_new" title="Veuillez choisir un modèle" />

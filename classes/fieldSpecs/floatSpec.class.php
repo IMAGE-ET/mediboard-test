@@ -79,11 +79,7 @@ class CFloatSpec extends CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue =& $object->$fieldName;
     
-    $propValue = $this->randomString($this->_nums, 2).".".$this->randomString($this->_nums, 2);
-  }
-  
-  function checkFieldType(){
-    return "text";
+    $propValue = $this->randomString(CMbFieldSpec::$nums, 2).".".$this->randomString(CMbFieldSpec::$nums, 2);
   }
   
   function getDBSpec(){
@@ -92,6 +88,10 @@ class CFloatSpec extends CMbFieldSpec {
       $type_sql = "float unsigned";
     }
     return $type_sql;
+  }
+  
+  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+    return $this->getFormElementText($object, $params, &$value, &$className);
   }
 }
 

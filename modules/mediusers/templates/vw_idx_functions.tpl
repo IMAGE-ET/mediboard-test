@@ -104,7 +104,7 @@ function pageMain() {
             <span id="test" title="test" style="background: #{{$userfunction->color}};">
               <a href="#" onclick="popColor()">cliquez ici</a>
             </span>
-            {{mb_field object=$userfunction field="color" type="hidden"}}
+            {{mb_field object=$userfunction field="color" hidden=1}}
           </td>
         </tr>
         <tr>

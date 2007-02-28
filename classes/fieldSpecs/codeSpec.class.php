@@ -64,10 +64,6 @@ class CCodeSpec extends CMbFieldSpec {
     return null;
   }
   
-  function checkFieldType(){
-    return "text";
-  }
-  
   function getDBSpec(){
     $type_sql = null;
     
@@ -82,6 +78,10 @@ class CCodeSpec extends CMbFieldSpec {
     }
     
     return $type_sql;
+  }
+
+  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+    return $this->getFormElementText($object, $params, &$value, &$className);
   }
 }
 

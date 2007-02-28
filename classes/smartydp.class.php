@@ -136,157 +136,24 @@ function smarty_function_mb_field_spec($obj, $field, $propSpec = null){
  *        - cycle           : {optionnel} Cycle de répétition du séparateur (pour les enums en type radio) [default: "1"]
  *        - typeEnum        : {optionnel} Type d'affichage des enums (values : "select", "radio") [default: "select"]
  *        - defaultOption   : {optionnel} Ajout d'un "option" en amont des valeurs ayant pour value ""
- *        - defaultSelected : {optionnel} Détermine la valur sélectionner par défaut ni valeur nulle pour les enums
  *        - class           : {optionnel} Permet de donner une classe aux champs
- *        - type            : {optionnel} Permet de forcer un type de champs (ex: hidden)
+ *        - hidden          : {optionnel} Permet de forcer le type "hidden"
  */
 function smarty_function_mb_field($params, &$smarty) {
   global $AppUI;
   
   require_once $smarty->_get_plugin_filepath('shared','escape_special_chars');
   
-  $className    = null;
-  $extra        = "";
-  $extra_class  = "";
-  $_html_result = "";
-  
-  $object = CMbArray::extract($params, "object", null, true);
-  $field  = CMbArray::extract($params, "field" , null, true);
-  $prop   = CMbArray::extract($params, "spec");
+  $object  = CMbArray::extract($params, "object", null, true);
+  $field   = CMbArray::extract($params, "field" , null, true);
+  $propKey = array_key_exists("spec", $params);
+  $prop    = CMbArray::extract($params, "spec");
 
-  $spec = $prop ? 
+  $spec = $propKey ? 
     CMbFieldSpecFact::getSpec($object, $field, $prop) : 
     $object->_specs[$field];
 
-  $prop = $spec->prop;
-
-  $value     = $object->$field;
-  $objClass  = $object->_class_name;
-  
-  if(isset($params["class"])){ $className = $params["class"]; }
-  
-  $attribute_oblig = array("type"            => $spec->checkFieldType(),
-                            "typeEnum"        => "select",
-                            "separator"       => "",
-                            "cycle"           => 1,
-                            "defaultOption"   => null,
-                            "defaultSelected" => "");
-  foreach($attribute_oblig as $attrib =>$default){
-    if(!isset($params[$attrib])){
-      $params[$attrib] = $default;
-    }
-  }
-  if($params["cycle"]<=0){
-    $params["cycle"] = 1;
-  } 
-  // Creation des extra
-  foreach($params as $_key =>$_val){
-    switch($_key) {
-      case "object":
-      case "field":
-      case "spec":
-      case "separator":
-      case "cycle":
-      case "typeEnum":
-      case "defaultOption":
-      case "defaultSelected":
-      case "class":
-        break;
-      case "type":
-        if (!$className || !$prop) {
-          $extra_class .= 'class="'.smarty_function_escape_special_chars(trim($className." ".$prop)).'"';
-        }
-        if(is_scalar($_val) && ($_val == "textarea" || $_val == "enum")){
-          break;
-        }
-      default:
-        $extra .= $_key.'="'.smarty_function_escape_special_chars($_val).'" ';
-    }
-  }
-
-  // Ecriture des champs
-  switch($params["type"]){
-    case "textarea":
-      $_html_result = "<textarea name=\"".smarty_function_escape_special_chars($field)."\"$extra_class $extra>".smarty_function_escape_special_chars($value)."</textarea>";
-      break;
-    case "hidden":
-    case "text":
-      $_html_result = "<input name=\"".smarty_function_escape_special_chars($field)."\" value=\"".smarty_function_escape_special_chars($value)."\" $extra_class $extra/>";
-      break;
-    case "radio":
-      $compteur = 0;
-      for($i=1; $i>=0; $i--){
-        $selected = "";
-        if(($value !== null && $value === "$i") || ($value === null && "$i" === $params["defaultSelected"])){
-          $selected = "checked=\"checked\"";
-        }
-        $_html_result .= "<input name=\"".smarty_function_escape_special_chars($field)."\" value=\"$i\" $selected";
-        
-        if($compteur == 0) {
-          $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className." ".$prop)).'"';
-        }elseif($className != ""){
-          $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className)).'"';
-        }
-        $_html_result .= " $extra/><label for=\"".$field."_$i\">".$AppUI->_("bool.$i")."</label> ";
-        $compteur++;
-        if($i != 0){
-          $_html_result .= $params["separator"];
-        }
-      }
-      break;
-          
-    case "enum":
-      $enumsTrans = $object->_enumsTrans[$field];
-          
-      switch($params["typeEnum"]){
-        case "select":
-          $_html_result = "<select name=\"".smarty_function_escape_special_chars($field)."\" $extra_class $extra>";
-          if($params["defaultOption"] && $params["defaultOption"]!=""){
-            $_html_result .= "<option value=\"\">".smarty_function_escape_special_chars($params["defaultOption"])."</option>";
-          }
-          foreach($enumsTrans as $key => $item){
-            if(($value !== null && $value === "$key") || ($value === null && "$key" === $params["defaultSelected"])){
-             $selected = " selected=\"selected\""; 
-            }else{
-              $selected = "";
-            }
-            $_html_result .= "<option value=\"$key\"$selected>$item</option>";
-          }
-          $_html_result .= "</select>";
-          break;
-          
-        case "radio":
-          $compteur = 0;
-          foreach($enumsTrans as $key => $item){
-            if(($value !== null && $value === "$key") || ($value === null && "$key" === $params["defaultSelected"])){
-             $selected = " checked=\"checked\""; 
-            }else{
-              $selected = "";
-            }
-            $_html_result .= "<input type=\"radio\" name=\"".smarty_function_escape_special_chars($field)."\" value=\"$key\" $selected";
-            if($compteur == 0) {
-              $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className." ".$prop)).'"';
-            }elseif($className != ""){
-              $_html_result .= ' class="'.smarty_function_escape_special_chars(trim($className)).'"';
-            }
-            $_html_result .= " $extra/><label for=\"".$field."_$key\">$item</label> ";
-            $compteur++;
-            if($compteur % $params["cycle"] == 0){
-              $_html_result .= $params["separator"];
-            }
-          }
-          break;
-              
-        default:
-          $smarty->trigger_error("mb_field: Type d'enumeration '".$params["typeEnum"]."' non pris en charge", E_USER_NOTICE);
-      }
-      break;
-      
-    default:
-      $smarty->trigger_error("mb_field: Specification '$prop' non prise en charge", E_USER_NOTICE);
-      break;
-  }
-  return $_html_result;
+  return $spec->getFormElement($object, $params);
 }
 
 /**
@@ -307,53 +174,15 @@ function smarty_function_mb_value($params, &$smarty) {
  *        - object      : Objet
  *        - field       : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
  *        - defaultFor  : {optionnel} Ajout d'une valeur à cibler pour "select" ou "radio"
- *        - typeEnum    : {optionnel} Type d'affichage des enums (values : "select", "radio") [default: "select"]
+ *        - typeEnum    : {optionnel} Type d'affichage des enums à cibler (values : "select", "radio") [default: "select"]
  */
 function smarty_function_mb_label($params, &$smarty) {
   global $AppUI;
   
-  if(!isset($params["object"]) || !isset($params["field"])){
-    $smarty->trigger_error("mb_label: attribut 'object' ou 'field' manquant", E_USER_NOTICE);
-  }
+  $object     = CMbArray::extract($params, "object", null, true);
+  $field      = CMbArray::extract($params, "field" , null, true);
   
-  $extra    = null;
-  $objClass = $params["object"]->_class_name;
-  $field    = $params["field"];
-  $selected = $field;
-  $propSpec = @$params["object"]->_props[$params["field"]];
-  $type     = smarty_function_mb_field_spec($params["object"], $params["field"], $propSpec);
-  $aObjProp = get_object_vars($params["object"]);
-  
-  // Creation des extra
-  foreach($params as $_key =>$_val){
-    switch($_key) {
-      case "object":
-      case "field":
-      case "defaultFor":
-      case "typeEnum":
-        break;
-      default:
-        $extra .= $_key.'="'.smarty_function_escape_special_chars($_val).'" ';
-    }
-  }
-
-  if(isset($params["defaultFor"])){
-    $selected = $params["defaultFor"];
-  }elseif($type == "radio"){
-    $selected .= "_1";
-  }elseif($type == "enum" && isset($params["typeEnum"]) && $params["typeEnum"] == "radio"){
-    $enumsTrans = array_flip($params["object"]->_enumsTrans[$params["field"]]);
-    $selected .= "_".current($enumsTrans);
-  }elseif(array_key_exists($field ,$aObjProp) === false){    
-    $smarty->trigger_error("mb_label: '$field' introuvable dans la classe '$objClass'", E_USER_NOTICE);
-    return null;
-  }
-
-  $_html_result  = "<label for=\"".$selected."\" title=\"".$AppUI->_("$objClass-".$field."-desc")."\" $extra>";
-  $_html_result .= $AppUI->_("$objClass-".$field);
-  $_html_result .= "</label>";
-  
-  return $_html_result;
+  return $object->_specs[$field]->getLabelElement($object, $params);
 }
 
 /**

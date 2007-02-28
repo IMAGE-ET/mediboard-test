@@ -137,7 +137,7 @@ class CPatient extends CMbObject {
       "matricule"        => "code insee confidential",
       "regime_sante"     => "str",
       "SHS"              => "numchar length|8",
-      "sexe"             => "enum list|m|f|j",
+      "sexe"             => "enum list|m|f|j default|m",
       "adresse"          => "text confidential",
       "ville"            => "str confidential",
       "cp"               => "numchar length|5 confidential",
@@ -153,7 +153,7 @@ class CPatient extends CMbObject {
       "rang_beneficiaire"=> "enum list|1|2|11|12|13",
       
       "pays"             => "str",
-      "nationalite"      => "notNull enum list|local|etranger",
+      "nationalite"      => "notNull enum list|local|etranger default|local",
       "lieu_naissance"   => "str",
       "profession"       => "str",
       
@@ -191,12 +191,14 @@ class CPatient extends CMbObject {
     
     $this->_nom_naissance = $this->nom_jeune_fille ? $this->nom_jeune_fille : $this->nom; 
     $this->_prenoms = array($this->prenom);
-
-    $this->_jour  = substr($this->naissance, 8, 2);
-    $this->_mois  = substr($this->naissance, 5, 2);
-    $this->_annee = substr($this->naissance, 0, 4);
     
-    $this->_naissance = "$this->_jour/$this->_mois/$this->_annee";
+    $aNaissance = split("-", $this->naissance);
+    
+    $this->_jour  = $aNaissance[2];
+    $this->_mois  = $aNaissance[1];
+    $this->_annee = $aNaissance[0];
+    
+    $this->_naissance = sprintf("%02d/%02d/%04d", $this->_jour, $this->_mois, $this->_annee);
 
     $this->_tel1 = substr($this->tel, 0, 2);
     $this->_tel2 = substr($this->tel, 2, 2);

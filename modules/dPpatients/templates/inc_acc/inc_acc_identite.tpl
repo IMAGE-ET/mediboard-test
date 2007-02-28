@@ -32,7 +32,7 @@
 
   <tr>
     <th>{{mb_label object=$patient field="sexe"}}</th>
-    <td>{{mb_field object=$patient field="sexe" defaultSelected="m" tabindex="104"}}</td>
+    <td>{{mb_field object=$patient field="sexe" tabindex="104"}}</td>
     <th>{{mb_label object=$patient field="ville"}}</th>
     <td>
       {{mb_field object=$patient field="ville" tabindex="153" size="31"}}
@@ -70,7 +70,7 @@
   <tr>
     <th>{{mb_label object=$patient field="nationalite"}}</th>
     <td>
-      {{mb_field object=$patient field="nationalite" defaultSelected="local" tabindex="109"}}
+      {{mb_field object=$patient field="nationalite" tabindex="109"}}
     </td>
     <th>{{mb_label object=$patient field="tel2" defaultFor="_tel21"}}</th>
     <td>

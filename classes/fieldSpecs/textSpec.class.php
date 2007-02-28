@@ -29,11 +29,11 @@ class CTextSpec extends CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
-    $propValue = $this->randomString($this->_chars, 40);
+    $propValue = $this->randomString(CMbFieldSpec::$chars, 40);
   }
   
-  function checkFieldType(){
-    return "textarea";
+  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+    return $this->getFormElementTextarea($object, $params, &$value, &$className);
   }
   
   function getDBSpec(){

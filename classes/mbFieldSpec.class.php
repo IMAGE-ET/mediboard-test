@@ -11,6 +11,7 @@ class CMbFieldSpec {
   var $object         = null;
   var $spec           = null;
   var $fieldName      = null;
+  var $default        = null;
   
   var $notNull        = null;
   var $confidential   = null;
@@ -28,12 +29,6 @@ class CMbFieldSpec {
   static $mins   = array();
   
   var $_defaultLength = null;
-  var $_chars         = null;
-  var $_nums          = null;
-  var $_days          = null;
-  var $_monthes       = null;
-  var $_hours         = null;
-  var $_mins          = null; 
   
   function CMbFieldSpec(&$className, &$field, $prop = null, $aProperties = array()) {
     $this->className =& $className;
@@ -50,57 +45,7 @@ class CMbFieldSpec {
       }
     }
     
-    
-    static $_chars   = null;
-    static $_nums    = null;
-    static $_days    = null;
-    static $_monthes = null;
-    static $_hours   = null;
-    static $_mins    = null;
-    if(!$_chars){
-      $_chars = array("a","b","c","d","e","f","g","h","i","j","k","l","m",
-                     "n","o","p","q","r","s","t","u","v","w","x","y","z");
-    }
-    if(!$_nums){
-      $_nums = array("0","1","2","3","4","5","6","7","8","9");
-    }
-    if(!$_days){
-      $_days = array();
-      for($i = 1; $i < 29; $i++) {
-        if($i < 10)
-          $_days[] = "0".$i;
-        else
-          $_days[] = $i;
-      }
-    }
-    if(!$_monthes){
-      $_monthes = array("01","02","03","04","05","06","07","08","09", "10", "11", "12");
-    }
-    if(!$_hours){
-      $_hours = array();
-      for($i = 9; $i < 18; $i++) {
-        if($i < 10)
-          $_hours[] = "0".$i;
-        else
-          $_hours[] = $i;
-      }
-    }
-    if(!$_mins){
-      $_mins = array();
-      for($i = 0; $i < 60; $i++) {
-        if($i < 10)
-          $_mins[] = "0".$i;
-        else
-          $_mins[] = $i;
-      }
-    }
     $this->_defaultLength = 6;
-    $this->_chars   =& $_chars;
-    $this->_nums    =& $_nums;
-    $this->_days    =& $_days;
-    $this->_monthes =& $_monthes;
-    $this->_hours   =& $_hours;
-    $this->_mins    =& $_mins;
     
     $this->checkValues();
   }
@@ -109,10 +54,6 @@ class CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     return $propValue;
-  }
-  
-  function getSpecType() {
-    return("mbField");
   }
   
   function checkParams(&$object){
@@ -217,8 +158,6 @@ class CMbFieldSpec {
     return $length;
   }
   
-  function checkProperty(){
-  }
   function checkConfidential(&$object){
     if(!$this->confidential){
       return null;
@@ -226,12 +165,80 @@ class CMbFieldSpec {
 
     $this->getConfidential($object);
   }
+  
+  function getFormElement(&$object, &$params){
+    $hidden    = CMbArray::extract($params, "hidden");
+    $className = CMbArray::extract($params, "class");
+    $value     = $object->{$this->fieldName};
+    if($hidden){
+      return $this->getFormHiddenElement($object, $params, &$value, &$className);
+    }
+    return $this->getFormHtmlElement($object, $params, &$value, &$className);
+  }
+  
+  function getLabelElement(&$object, &$params){
+    global $AppUI;
+    
+    $defaultFor = CMbArray::extract($params, "defaultFor");
+    if($defaultFor){
+      $selected = $this;
+    }else{
+      $selected = $this->getLabelForElement($object, $params);
+    }
+    $extra  = CMbArray::makeXmlAttributes($params);
+    
+    $sHtml  = "<label for=\"$selected\" title=\"".$AppUI->_($object->_class_name."-".$this->fieldName."-desc")."\" $extra>";
+    $sHtml .= $AppUI->_($object->_class_name."-".$this->fieldName);
+    $sHtml .= "</label>";
+    
+    return $sHtml;
+  }
+  
+  function getLabelForElement(&$object, &$params){
+    return $this->fieldName;
+  }
+  
+  function getFormHiddenElement(&$object, &$params, &$value, &$className){
+    $field = $this->fieldName;
+    $extra = CMbArray::makeXmlAttributes($params);
+    $sHtml = "<input type=\"hidden\" name=\"".htmlspecialchars($field)."\" value=\"".htmlspecialchars($value)."\"";
+    if($this->prop){
+      $sHtml .= " class=\"".htmlspecialchars($this->prop)."\"";
+    }
+    $sHtml  .= " $extra/>";
+    
+    return $sHtml;
+  }
+  
+  function getFormElementText(&$object, &$params, &$value, &$className){
+    $field        = htmlspecialchars($this->fieldName);
+    $extra        = CMbArray::makeXmlAttributes($params);
+    $sHtml        = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"";    
+    $sHtml       .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra/>";
+    return $sHtml;
+  }
+  
+  function getFormElementTextarea(&$object, &$params, &$value, &$className){
+    $field        = htmlspecialchars($this->fieldName);
+    $extra        = CMbArray::makeXmlAttributes($params);
+    $sHtml        = "<textarea name=\"$field\" class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra>".htmlspecialchars($value)."</textarea>";
+    return $sHtml;
+  }
+  
+  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+    return $this->getFormElementText($object, $params, $value, $className);
+    //trigger_error("mb_field: Specification '".$this->prop."' non prise en charge", E_USER_NOTICE);
+  }
+  
+  function getSpecType() {
+    return("mbField");
+  }
+  
+  function checkProperty(){
+  }
   function getConfidential(&$object){
   }
   function getDBSpec(){
-    return null;
-  }
-  function checkFieldType(){
     return null;
   }
   function checkValues(){

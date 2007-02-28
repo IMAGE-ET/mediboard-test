@@ -11,6 +11,13 @@ require_once("./classes/mbFieldSpec.class.php");
 
 class CBoolSpec extends CMbFieldSpec {
   
+  function checkValues(){
+    parent::checkValues();
+    if($this->default === null){
+      $this->default = 0;
+    }
+  }
+  
   function getValue($object, $smarty, $params = null) {
     global $AppUI;
     $fieldName = $this->fieldName;
@@ -35,13 +42,35 @@ class CBoolSpec extends CMbFieldSpec {
     }
     return null;
   }
-  
-  function checkFieldType(){
-    return "radio";
-  }
-  
+
   function getDBSpec(){
     return "enum('0','1')";
+  }
+  
+  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+    global $AppUI;
+    $sHtml        = "";
+    $field        = htmlspecialchars($this->fieldName);
+    $separator    = CMbArray::extract($params, "separator");
+    $extra        = CMbArray::makeXmlAttributes($params);
+    
+    for($i=1; $i>=0; $i--){
+      $selected = ""; 
+      if(($value !== null && $value === "$i") || ($value === null && "$i" === "$this->default")){
+        $selected = "checked=\"checked\"";
+      }
+      $sHtml .= "<input type=\"radio\" name=\"$field\" value=\"$i\" $selected";
+      if($i == 1) {
+        $sHtml .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\"";
+      }elseif($className){
+        $sHtml .= " class=\"".htmlspecialchars(trim($className))."\"";
+      }
+      $sHtml .= " $extra/><label for=\"".$field."_$i\">".$AppUI->_("bool.$i")."</label> ";
+      if($i==1 && $separator){
+        $sHtml .= $separator;
+      }
+    }
+    return $sHtml;
   }
 }
 

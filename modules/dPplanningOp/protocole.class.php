@@ -52,7 +52,7 @@ class CProtocole extends CMbObject {
   function getSpecs() {
     return array (
       "chir_id"         => "notNull refMandatory",
-      "type"            => "enum list|comp|ambu|exte|seances|ssr|psy",
+      "type"            => "enum list|comp|ambu|exte|seances|ssr|psy default|comp",
       "DP"              => "code cim10",
       "convalescence"   => "text confidential",
       "rques_sejour"    => "text confidential",

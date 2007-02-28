@@ -149,7 +149,7 @@ function pageMain() {
           <form name='editFrm' action='?m=dPcabinet' method='post' onsubmit='return checkPlage()'>
           <input type='hidden' name='dosql' value='do_plageconsult_aed' />
           <input type='hidden' name='del' value='0' />
-          {{mb_field object=$plageSel field="plageconsult_id" type="hidden" spec=""}}
+          {{mb_field object=$plageSel field="plageconsult_id" hidden=1 spec=""}}
           <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
           <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
           <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
@@ -253,7 +253,7 @@ function pageMain() {
 	      <form name='removeFrm' action='./index.php?m=dPcabinet' method='post'>
       	  <input type='hidden' name='dosql' value='do_plageconsult_aed' />
 	      <input type='hidden' name='del' value='1' />
-	      {{mb_field object=$plageSel field="plageconsult_id" type="hidden" spec=""}}
+	      {{mb_field object=$plageSel field="plageconsult_id" hidden=1 spec=""}}
           <table class="form">
 	        <tr>
 	          <th class="category modify" colspan="2">Supprimer cette plage</th>
@@ -354,8 +354,8 @@ function pageMain() {
             <form name="etatFrm{{$curr_consult->consultation_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
-            {{mb_field object=$curr_consult field="consultation_id" type="hidden" spec=""}}
-            {{mb_field object=$curr_consult field="_check_premiere" type="hidden" spec=""}}
+            {{mb_field object=$curr_consult field="consultation_id" hidden=1 spec=""}}
+            {{mb_field object=$curr_consult field="_check_premiere" hidden=1 spec=""}}
             <input type="hidden" name="chrono" value="{{$curr_consult|const:'PATIENT_ARRIVE'}}" />
             <input type="hidden" name="arrivee" value="" />
             </form>
@@ -363,8 +363,8 @@ function pageMain() {
             <form name="cancelFrm{{$curr_consult->consultation_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
-            {{mb_field object=$curr_consult field="consultation_id" type="hidden" spec=""}}
-            {{mb_field object=$curr_consult field="_check_premiere" type="hidden" spec=""}}
+            {{mb_field object=$curr_consult field="consultation_id" hidden=1 spec=""}}
+            {{mb_field object=$curr_consult field="_check_premiere" hidden=1 spec=""}}
             <input type="hidden" name="chrono" value="{{$curr_consult|const:'TERMINE'}}" />
             <input type="hidden" name="annule" value="1" />
             </form>

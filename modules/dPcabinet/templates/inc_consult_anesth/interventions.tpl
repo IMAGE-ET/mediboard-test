@@ -3,7 +3,7 @@
   <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="m" value="dPcabinet" />
-  {{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
+  {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 spec=""}}
   <select name="operation_id" onchange="submitOpConsult()">
     <option value="">Pas d'Intervention</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}

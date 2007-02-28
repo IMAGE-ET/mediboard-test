@@ -84,7 +84,7 @@ class CConsultation extends CMbObject {
       "premiere"        => "bool",
       "tarif"           => "str",
       "arrivee"         => "dateTime",
-      "type_tarif"      => "enum list|cheque|CB|especes|tiers|autre"
+      "type_tarif"      => "enum list|cheque|CB|especes|tiers|autre default|cheque"
     );
   }
   

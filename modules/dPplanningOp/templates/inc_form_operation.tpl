@@ -5,10 +5,10 @@
 <input type="hidden" name="dosql" value="do_planning_aed" />
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="del" value="0" />
-{{mb_field object=$op field="operation_id" type="hidden" spec=""}}
-{{mb_field object=$op field="sejour_id" type="hidden" spec=""}}
-{{mb_field object=$op field="commande_mat" type="hidden" spec=""}}
-{{mb_field object=$op field="rank" type="hidden" spec=""}}
+{{mb_field object=$op field="operation_id" hidden=1 spec=""}}
+{{mb_field object=$op field="sejour_id" hidden=1 spec=""}}
+{{mb_field object=$op field="commande_mat" hidden=1 spec=""}}
+{{mb_field object=$op field="rank" hidden=1 spec=""}}
 <input type="hidden" name="annulee" value="{{$op->annulee|default:"0"}}" />
 <input type="hidden" name="_group_id" value="{{$sejour->group_id}}" />
      
@@ -69,7 +69,7 @@
   <tr>
     <th>
       Liste des codes CCAM
-      {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM()" type="hidden" spec=""}}
+      {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM()" hidden=1 spec=""}}
     </th>
     <td colspan="2" class="text" id="listCodesCcam">
     </td>

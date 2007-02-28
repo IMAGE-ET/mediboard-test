@@ -88,8 +88,8 @@ class CSejour extends CMbObject {
       "patient_id"         => "notNull refMandatory",
       "praticien_id"       => "notNull refMandatory",
       "group_id"           => "notNull refMandatory",
-      "type"               => "notNull enum list|comp|ambu|exte|seances|ssr|psy",
-      "modalite"           => "notNull enum list|office|libre|tiers",
+      "type"               => "notNull enum list|comp|ambu|exte|seances|ssr|psy default|ambu",
+      "modalite"           => "notNull enum list|office|libre|tiers default|libre",
       "annule"             => "bool",
       "chambre_seule"      => "bool",
       "entree_prevue"      => "notNull dateTime",
@@ -124,6 +124,7 @@ class CSejour extends CMbObject {
   }
 
   function check() {
+    $msg    = null;
     $pathos = new CDiscipline();
 
     if ($this->pathologie != null && (!in_array($this->pathologie, $pathos->_enums["categorie"]))) {

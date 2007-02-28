@@ -38,8 +38,8 @@ class CHtmlSpec extends CMbFieldSpec {
     $propValue = "Document confidentiel";
   }
   
-  function checkFieldType(){
-    return "textarea";
+  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+    return $this->getFormElementTextarea($object, $params, &$value, &$className);
   }
   
   function getDBSpec(){

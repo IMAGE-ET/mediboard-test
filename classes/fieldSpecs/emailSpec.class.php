@@ -25,12 +25,12 @@ class CEmailSpec extends CMbFieldSpec {
     return null;
   }
   
-  function checkFieldType(){
-    return "text";
-  }
-  
   function getDBSpec(){
     return "varchar(50)";
+  }
+  
+  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+    return $this->getFormElementText($object, $params, &$value, &$className);
   }
 }
 

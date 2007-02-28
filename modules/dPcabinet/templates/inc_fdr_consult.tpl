@@ -140,7 +140,7 @@ function submitFdr(oForm) {
         <label for="type_examen" title="Type d'examen complémentaire à effectuer"><strong>Examens complémentaires</strong></label>
         <select name="type_examen" onchange="newExam(this, {{$consult->consultation_id}})">
           <option value="">&mdash; Choisir un type d'examen</option>
-          {{if _is_anesth}}
+          {{if $_is_anesth}}
             <option value="exam_possum">Score Possum</option>
             <option value="exam_nyha">Classification NYHA</option>
           {{else}}
@@ -186,8 +186,8 @@ function submitFdr(oForm) {
             <input type="hidden" name="m" value="dPfiles" />
             <input type="hidden" name="dosql" value="do_file_aed" />
             <input type="hidden" name="del" value="1" />
-            {{mb_field object=$curr_file field="file_id" type="hidden" spec=""}}
-            {{mb_field object=$curr_file field="_view" type="hidden" spec=""}}
+            {{mb_field object=$curr_file field="file_id" hidden=1 spec=""}}
+            {{mb_field object=$curr_file field="_view" hidden=1 spec=""}}
             <button class="trash notext" type="button" onclick="confirmFileDeletion(this)"></button>
           </form>
         </li>
@@ -218,7 +218,7 @@ function submitFdr(oForm) {
           {{else}}
           <input type="hidden" name="object_id" value="{{$consult->consultation_id}}" />
           {{/if}}          
-          {{mb_field object=$document field="compte_rendu_id" type="hidden" spec=""}}
+          {{mb_field object=$document field="compte_rendu_id" hidden=1 spec=""}}
           <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})"></button>
           <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadFdr})" />
           </form>
@@ -267,8 +267,8 @@ function submitFdr(oForm) {
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
-      {{mb_field object=$consult field="consultation_id" type="hidden" spec=""}}
-      {{mb_field object=$consult field="_check_premiere" type="hidden" spec=""}}
+      {{mb_field object=$consult field="consultation_id" hidden=1 spec=""}}
+      {{mb_field object=$consult field="_check_premiere" hidden=1 spec=""}}
  
       <table class="form">
         {{if !$consult->tarif}}
@@ -301,9 +301,9 @@ function submitFdr(oForm) {
           <th>{{mb_label object=$consult field="_somme"}}</th>
           <td>
             <input type="text" size="4" name="_somme" title="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" /> €
-            {{mb_field object=$consult field="secteur1" type="hidden" spec=""}}
-            {{mb_field object=$consult field="secteur2" type="hidden" spec=""}}
-            {{mb_field object=$consult field="tarif" type="hidden" spec=""}}
+            {{mb_field object=$consult field="secteur1" hidden=1 spec=""}}
+            {{mb_field object=$consult field="secteur2" hidden=1 spec=""}}
+            {{mb_field object=$consult field="tarif" hidden=1 spec=""}}
             <input type="hidden" name="paye" value="0" />
             <input type="hidden" name="date_paiement" value="" />
           </td>
@@ -311,11 +311,11 @@ function submitFdr(oForm) {
         {{else}}
         <tr>
           <td colspan="2" class="button">
-            {{mb_field object=$consult field="secteur1" type="hidden" spec=""}}
-            {{mb_field object=$consult field="secteur2" type="hidden" spec=""}}
-            {{mb_field object=$consult field="tarif" type="hidden" spec=""}}
-            {{mb_field object=$consult field="paye" type="hidden" spec=""}}
-            {{mb_field object=$consult field="date_paiement" type="hidden" spec=""}}
+            {{mb_field object=$consult field="secteur1" hidden=1 spec=""}}
+            {{mb_field object=$consult field="secteur2" hidden=1 spec=""}}
+            {{mb_field object=$consult field="tarif" hidden=1 spec=""}}
+            {{mb_field object=$consult field="paye" hidden=1 spec=""}}
+            {{mb_field object=$consult field="date_paiement" hidden=1 spec=""}}
             <strong>{{$consult->secteur1+$consult->secteur2}} € ont été réglés : {{$consult->type_tarif}}</strong>
           </td>
         </tr>
@@ -332,7 +332,7 @@ function submitFdr(oForm) {
             {{mb_label object=$consult field="type_tarif"}}
           </th>
           <td>
-            {{mb_field object=$consult field="type_tarif" defaultSelected="cheque"}}
+            {{mb_field object=$consult field="type_tarif"}}
           </td>
         </tr>
         <tr>

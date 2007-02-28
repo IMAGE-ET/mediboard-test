@@ -41,15 +41,15 @@ class CTimeSpec extends CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue =& $object->$fieldName;
     
-    $propValue = $this->randomString($this->_hours, 1).":".$this->randomString($this->_mins, 1).":".$this->randomString($this->_mins, 1);
-  }
-  
-  function checkFieldType(){
-    return "text";
+    $propValue = $this->randomString(CMbFieldSpec::$hours, 1).":".$this->randomString(CMbFieldSpec::$mins, 1).":".$this->randomString(CMbFieldSpec::$mins, 1);
   }
   
   function getDBSpec(){
     return "time";
+  }
+  
+  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+    return $this->getFormElementText($object, $params, &$value, &$className);
   }
 }
 

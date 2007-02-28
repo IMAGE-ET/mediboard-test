@@ -118,7 +118,7 @@ function checkFormRDV(oForm){
 
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 <input type="hidden" name="del" value="0" />
-{{mb_field object=$consult field="consultation_id" type="hidden" spec=""}}
+{{mb_field object=$consult field="consultation_id" hidden=1 spec=""}}
 <input type="hidden" name="annule" value="{{$consult->annule|default:"0"}}" />
 <input type="hidden" name="arrivee" value="" />
 <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
@@ -175,7 +175,7 @@ function checkFormRDV(oForm){
 
         <tr id="viewPatient" {{if $consult->consultation_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
           <th>
-            {{mb_field object=$consult field="patient_id" type="hidden" spec="" ondblclick="popPat()"}}
+            {{mb_field object=$consult field="patient_id" hidden=1 spec="" ondblclick="popPat()"}}
             {{mb_label object=$consult field="patient_id"}}
           </th>
           <td class="readonly"><input type="text" name="_pat_name" size="30" value="{{$pat->_view}}" readonly="readonly"  ondblclick="popPat()" /></td>
@@ -229,7 +229,7 @@ function checkFormRDV(oForm){
           <th>{{mb_label object=$consult field="plageconsult_id"}}</th>
           <td class="readonly">
             <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="popRDV()" readonly="readonly" />
-            {{mb_field object=$consult field="plageconsult_id" type="hidden" ondblclick="popRDV()"}}
+            {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="popRDV()"}}
           </td>
         </tr>
 

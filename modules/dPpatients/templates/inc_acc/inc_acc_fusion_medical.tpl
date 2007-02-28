@@ -34,7 +34,7 @@
       {{$patient2->cmu|date_format:"%d/%m/%Y"}}
     </td>
     <td>
-      {{mb_field object=$finalPatient field="cmu" type="hidden"}}
+      {{mb_field object=$finalPatient field="cmu" hidden=1}}
       <input type="text" readonly="readonly" name="_cmu_view" value="{{$finalPatient->cmu|date_format:"%d/%m/%Y"}}" />
     </td>
   </tr>
@@ -95,7 +95,7 @@
       {{$patient2->_ref_medecin_traitant->_view}}
     </td>
     <td>
-      {{mb_field object=$finalPatient field="medecin_traitant" type="hidden" spec=""}}
+      {{mb_field object=$finalPatient field="medecin_traitant" hidden=1 spec=""}}
       <input type="text" readonly="readonly" name="_medecin_traitant_view" value="{{$finalPatient->_ref_medecin_traitant->_view}}" />
     </td>
   </tr>
@@ -114,7 +114,7 @@
       {{$patient2->_ref_medecin1->_view}}
     </td>
     <td>
-      {{mb_field object=$finalPatient field="medecin1" type="hidden" spec=""}}
+      {{mb_field object=$finalPatient field="medecin1" hidden=1 spec=""}}
       <input type="text" readonly="readonly" name="_medecin1_view" value="{{$finalPatient->_ref_medecin1->_view}}" />
     </td>
   </tr>
@@ -133,7 +133,7 @@
       {{$patient2->_ref_medecin2->_view}}
     </td>
     <td>
-      {{mb_field object=$finalPatient field="medecin2" type="hidden" spec=""}}
+      {{mb_field object=$finalPatient field="medecin2" hidden=1 spec=""}}
       <input type="text" readonly="readonly" name="_medecin2_view" value="{{$finalPatient->_ref_medecin2->_view}}" />
     </td>
   </tr>
@@ -152,7 +152,7 @@
       {{$patient2->_ref_medecin3->_view}}
     </td>
     <td>
-      {{mb_field object=$finalPatient field="medecin3" type="hidden" spec=""}}
+      {{mb_field object=$finalPatient field="medecin3" hidden=1 spec=""}}
       <input type="text" readonly="readonly" name="_medecin3_view" value="{{$finalPatient->_ref_medecin3->_view}}" />
     </td>
   </tr>

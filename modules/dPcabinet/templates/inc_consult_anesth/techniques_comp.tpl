@@ -6,7 +6,7 @@
     <input type="hidden" name="m" value="dPcabinet" />
     <input type="hidden" name="del" value="1" />
     <input type="hidden" name="dosql" value="do_technique_aed" />
-    {{mb_field object=$curr_tech field="technique_id" type="hidden" spec=""}}
+    {{mb_field object=$curr_tech field="technique_id" hidden=1 spec=""}}
     <button class="trash notext" type="button" onclick="submitTech(this.form)">
     </button>
     {{$curr_tech->technique}}

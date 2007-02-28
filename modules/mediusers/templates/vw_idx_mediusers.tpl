@@ -119,7 +119,7 @@ function deldate(sField){
         </tr>
         <tr>
           <th>{{mb_label object=$mediuserSel field="actif"}}</th>
-          <td>{{mb_field object=$mediuserSel field="actif" defaultSelected="1"}}</td>
+          <td>{{mb_field object=$mediuserSel field="actif"}}</td>
         </tr>
         
         <tr>

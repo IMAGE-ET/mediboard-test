@@ -25,12 +25,12 @@ class CPctSpec extends CMbFieldSpec {
     return null;
   }
   
-  function checkFieldType(){
-    return "text";
-  }
-  
   function getDBSpec(){
     return "float";
+  }
+  
+  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+    return $this->getFormElementText($object, $params, &$value, &$className);
   }
 }
 

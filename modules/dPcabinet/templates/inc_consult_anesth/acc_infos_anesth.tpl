@@ -26,7 +26,7 @@ function reloadListTech() {
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_planning_aed" />
-      {{mb_field object=$consult_anesth->_ref_operation field="operation_id" type="hidden" spec=""}}
+      {{mb_field object=$consult_anesth->_ref_operation field="operation_id" hidden=1 spec=""}}
       {{mb_label object=$consult_anesth->_ref_operation field="type_anesth"}}
       <select name="type_anesth" onchange="submitFormAjax(this.form, 'systemMsg')">
         <option value="">&mdash; Choisir un type d'anesthésie</option>
@@ -51,9 +51,9 @@ function reloadListTech() {
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-      {{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
+      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 spec=""}}
       {{mb_label object=$consult_anesth field="ASA"}}
-      {{mb_field object=$consult_anesth field="ASA" defaultSelected="1" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+      {{mb_field object=$consult_anesth field="ASA" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       <br /><br />
       {{mb_label object=$consult_anesth field="premedication"}}
       <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();">
@@ -79,7 +79,7 @@ function reloadListTech() {
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_technique_aed" />
-      {{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
+      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 spec=""}}
       {{mb_label object=$techniquesComp field="technique"}}
       <select name="_helpers_technique" size="1" onchange="pasteHelperContent(this)">
         <option value="">&mdash; Choisir une aide</option>
@@ -101,8 +101,8 @@ function reloadListTech() {
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
-      {{mb_field object=$consult field="consultation_id" type="hidden" spec=""}}
-      {{mb_field object=$consult field="_check_premiere" type="hidden" spec=""}}
+      {{mb_field object=$consult field="consultation_id" hidden=1 spec=""}}
+      {{mb_field object=$consult field="_check_premiere" hidden=1 spec=""}}
       {{mb_label object=$consult field="rques"}}
       <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
         <option value="">&mdash; Choisir une aide</option>

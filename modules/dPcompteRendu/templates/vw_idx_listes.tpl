@@ -96,7 +96,7 @@ function pageMain() {
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
     <input type="hidden" name="dosql" value="do_liste_aed" />
-    {{mb_field object=$liste field="liste_choix_id" type="hidden" spec=""}}
+    {{mb_field object=$liste field="liste_choix_id" hidden=1 spec=""}}
     <input type="hidden" name="del" value="0" />
 
     <table class="form">
@@ -197,11 +197,11 @@ function pageMain() {
         <td>
           <form name="delFrm{{$liste->liste_choix_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
           <input type="hidden" name="dosql" value="do_liste_aed" />
-          {{mb_field object=$liste field="liste_choix_id" type="hidden" spec=""}}
+          {{mb_field object=$liste field="liste_choix_id" hidden=1 spec=""}}
           <input type="hidden" name="del" value="0" />
-          {{mb_field object=$liste field="valeurs" type="hidden" spec=""}}
-          {{mb_field object=$liste field="chir_id" type="hidden" spec=""}}
-          {{mb_field object=$liste field="function_id" type="hidden" spec=""}}
+          {{mb_field object=$liste field="valeurs" hidden=1 spec=""}}
+          {{mb_field object=$liste field="chir_id" hidden=1 spec=""}}
+          {{mb_field object=$liste field="function_id" hidden=1 spec=""}}
           <input type="hidden" name="_del" value="{{$curr_valeur}}" />
           <button class="trash notext" type="submit"></button>
           </form>
@@ -213,11 +213,11 @@ function pageMain() {
       <tr><td colspan="2">
         <form name="addFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
         <input type="hidden" name="dosql" value="do_liste_aed" />
-        {{mb_field object=$liste field="liste_choix_id" type="hidden" spec=""}}
+        {{mb_field object=$liste field="liste_choix_id" hidden=1 spec=""}}
         <input type="hidden" name="del" value="0" />
-        {{mb_field object=$liste field="valeurs" type="hidden" spec=""}}
-        {{mb_field object=$liste field="chir_id" type="hidden" spec=""}}
-        {{mb_field object=$liste field="function_id" type="hidden" spec=""}}
+        {{mb_field object=$liste field="valeurs" hidden=1 spec=""}}
+        {{mb_field object=$liste field="chir_id" hidden=1 spec=""}}
+        {{mb_field object=$liste field="function_id" hidden=1 spec=""}}
         <input type="text" name="_new" value="" />
         <button type="submit" class="tick notext"></button>
         </form>

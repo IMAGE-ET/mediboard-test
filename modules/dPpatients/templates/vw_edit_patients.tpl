@@ -87,7 +87,7 @@ function pageMain() {
       <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return confirmCreation(this)">
       <input type="hidden" name="dosql" value="do_patients_aed" />
       <input type="hidden" name="del" value="0" />
-      {{mb_field object=$patient field="patient_id" type="hidden" spec=""}}
+      {{mb_field object=$patient field="patient_id" hidden=1 spec=""}}
       {{if $dialog}}
       <input type="hidden" name="dialog" value="{{$dialog}}" />
       {{/if}}

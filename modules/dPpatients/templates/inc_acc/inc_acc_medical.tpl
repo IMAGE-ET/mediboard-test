@@ -4,7 +4,7 @@
     <td>{{mb_field object=$patient field="regime_sante" tabindex="201" size="40" maxlength="40"}}</td>
     <th>
       {{mb_label object=$patient field="medecin_traitant"}}
-      {{mb_field object=$patient field="medecin_traitant" type="hidden"}}
+      {{mb_field object=$patient field="medecin_traitant" hidden=1}}
     </th>
     <td class="readonly">
       <input type="text" name="_medecin_traitant_name" size="30" value="Dr. {{$patient->_ref_medecin_traitant->_view}}" ondblclick="popMed('_traitant')" readonly="readonly" />
@@ -17,13 +17,13 @@
     <th>{{mb_label object=$patient field="cmu"}}</th>
     <td class="date">
       <div id="editFrm_cmu_da">{{$patient->cmu|date_format:"%d/%m/%Y"}}</div>
-      {{mb_field object=$patient field="cmu" type="hidden" spec="date"}}
+      {{mb_field object=$patient field="cmu" hidden=1 spec="date"}}
       <img tabindex="202" id="editFrm_cmu_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
       <button class="cancel notext" type="button" onclick="delCmu()">{{tr}}Delete{{/tr}}</button>
     </td>
     <th>
       {{mb_label object=$patient field="medecin1"}}
-      {{mb_field object=$patient field="medecin1" type="hidden"}}
+      {{mb_field object=$patient field="medecin1" hidden=1}}
     </th>
     <td class="readonly">
       <input type="text" name="_medecin1_name" size="30" value="Dr. {{$patient->_ref_medecin1->_view}}" ondblclick="popMed('1')" readonly="readonly" />
@@ -39,7 +39,7 @@
     </td>
     <th>
       {{mb_label object=$patient field="medecin2"}}
-      {{mb_field object=$patient field="medecin2" type="hidden"}}
+      {{mb_field object=$patient field="medecin2" hidden=1}}
     </th>
     <td class="readonly">
       <input type="text" name="_medecin2_name" size="30" value="{{if ($patient->_ref_medecin2)}}Dr. {{$patient->_ref_medecin2->_view}}{{/if}}" ondblclick="popMed('2')" readonly="readonly" />
@@ -52,7 +52,7 @@
   <tr>
     <th>
       {{mb_label object=$patient field="medecin3"}}
-      {{mb_field object=$patient field="medecin3" type="hidden"}}
+      {{mb_field object=$patient field="medecin3" hidden=1}}
     </th>
     <td class="readonly">
       <input type="text" name="_medecin3_name" size="30" value="{{if ($patient->_ref_medecin3)}}Dr. {{$patient->_ref_medecin3->_view}}{{/if}}" ondblclick="popMed('3')" readonly="readonly" />

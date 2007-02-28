@@ -15,8 +15,8 @@ function submitFormAides(oForm){
 <input type="hidden" name="dosql" value="do_aide_aed" />
 <input type="hidden" name="m" value="dPcompteRendu" />
 <input type="hidden" name="aide_id" value="" />
-{{mb_field object=$aide field="class" type="hidden" spec=""}}
-{{mb_field object=$aide field="field" type="hidden" spec=""}}
+{{mb_field object=$aide field="class" hidden=1 spec=""}}
+{{mb_field object=$aide field="field" hidden=1 spec=""}}
 <input type="hidden" name="del" value="0" />
 
 <table class="form">

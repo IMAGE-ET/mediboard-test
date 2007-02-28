@@ -50,8 +50,74 @@ class CEnumSpec extends CMbFieldSpec {
     $propValue = $this->randomString($specFragments, 1);
   }
   
-  function checkFieldType(){
-    return "enum";
+  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+    $sHtml         = null;
+    $field         = htmlspecialchars($this->fieldName);
+    $typeEnum      = CMbArray::extract($params, "typeEnum", "select");
+    $separator     = CMbArray::extract($params, "separator");
+    $cycle         = CMbArray::extract($params, "cycle", 1);
+    $defaultOption = CMbArray::extract($params, "defaultOption");
+    $extra         = CMbArray::makeXmlAttributes($params);
+    $enumsTrans    = $object->_enumsTrans[$field];
+    
+    if($typeEnum == "select"){
+      $sHtml       = "<select name=\"$field\"";
+      $sHtml      .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra>";
+      
+      if($defaultOption){
+        $sHtml    .= "<option value=\"\">$defaultOption</option>";
+      }
+      foreach($enumsTrans as $key => $item){
+        if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default")){
+          $selected = " selected=\"selected\""; 
+        }else{
+          $selected = "";
+        }
+        $sHtml    .= "<option value=\"$key\"$selected>$item</option>";
+      }
+      $sHtml      .= "</select>";
+
+    }elseif($typeEnum == "radio"){
+      $compteur    = 0;
+      $sHtml       = "";
+      
+      foreach($enumsTrans as $key => $item){
+        if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default")){
+          $selected = " checked=\"checked\""; 
+        }else{
+          $selected = "";
+        }
+        $sHtml    .= "<input type=\"radio\" name=\"$field\" value=\"$key\"$selected";
+        if($compteur == 0) {
+          $sHtml  .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\"";
+        }elseif($className != ""){
+          $sHtml  .= " class=\"".htmlspecialchars(trim($className))."\"";
+        }
+        $sHtml    .= " $extra/><label for=\"".$field."_$key\">$item</label> ";
+        $compteur++;
+        if($compteur % $cycle == 0){
+          $sHtml  .= $separator;
+        }
+      }
+      
+    }else{
+      trigger_error("mb_field: Type d'enumeration '$typeEnum' non pris en charge", E_USER_WARNING);
+    }
+    return $sHtml;
+  }
+  
+  function getLabelForElement(&$object, &$params){
+    $typeEnum  = CMbArray::extract($params, "typeEnum", "select");
+    
+    if($typeEnum == "select"){
+      return $this->fieldName;
+    }
+    if($typeEnum == "radio"){
+      $enumsTrans = array_flip($object->_enumsTrans[$this->fieldName]);
+      return $this->fieldName."_".current($enumsTrans);
+    }
+    trigger_error("mb_field: Type d'enumeration '$typeEnum' non pris en charge", E_USER_WARNING);
+    return null;
   }
   
   function getDBSpec(){

@@ -72,7 +72,7 @@ class CMediusers extends CMbObject {
       "discipline_id" => "ref",
       "titres"        => "text",
       "commentaires"  => "text",
-      "actif"         => "bool",
+      "actif"         => "bool default|1",
       "deb_activite"  => "date",
       "fin_activite"  => "date",
       "spec_cpam_id"  => "ref",

@@ -34,7 +34,7 @@ function calculImcVst(){
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-      {{mb_field object=$consult_anesth field="consultation_anesth_id" type="hidden" spec=""}}
+      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 spec=""}}
       <table class="form">
         <tr>
           <th>{{mb_label object=$consult_anesth field="poid"}}</th>
@@ -65,7 +65,7 @@ function calculImcVst(){
         <tr>
           <th>{{mb_label object=$consult_anesth field="_vst"}}</th>
           <td class="readonly">
-            {{mb_field object=$consult_anesth field="_vst" size="4" type="text" readonly="readonly"}}
+            {{mb_field object=$consult_anesth field="_vst" size="4"  readonly="readonly"}}
             ml
           </td>
           <th>{{mb_label object=$consult_anesth field="spo2"}}</th>
@@ -77,7 +77,7 @@ function calculImcVst(){
         <tr>
           <th>{{mb_label object=$consult_anesth field="_imc"}}</th>
           <td class="readonly">
-            {{mb_field object=$consult_anesth field="_imc" size="4" type="text" readonly="readonly"}}
+            {{mb_field object=$consult_anesth field="_imc" size="4" readonly="readonly"}}
           </td>
           <td id="imcValeur" colspan="2" style="color:#F00;">{{$consult_anesth->_imc_valeur}}</td>
         </tr>
@@ -89,8 +89,8 @@ function calculImcVst(){
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
-      {{mb_field object=$consult field="consultation_id" type="hidden" spec=""}}
-      {{mb_field object=$consult field="_check_premiere" type="hidden" spec=""}}
+      {{mb_field object=$consult field="consultation_id" hidden=1 spec=""}}
+      {{mb_field object=$consult field="_check_premiere" hidden=1 spec=""}}
       {{mb_label object=$consult field="examen"}}
       <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this);this.form.examen.onchange();">
         <option value="">&mdash; Choisir une aide</option>
