@@ -144,7 +144,7 @@ function pageMain() {
 
 <input type="hidden" name="dosql" value="do_protocole_aed" />
 <input type="hidden" name="del" value="0" />
-{{mb_field object=$protocole field="protocole_id" hidden=1 spec=""}}
+{{mb_field object=$protocole field="protocole_id" hidden=1 prop=""}}
 
 <table class="main" style="margin: 4px; border-spacing: 0px;">
   {{if $protocole->protocole_id}}
@@ -226,7 +226,7 @@ function pageMain() {
         <tr>
           <th>
             Liste des codes CCAM:
-            {{mb_field object=$protocole field="codes_ccam" hidden=1 spec=""}}
+            {{mb_field object=$protocole field="codes_ccam" hidden=1 prop=""}}
           </th>
           <td colspan="2" class="text" id="listCodesCcam">
           </td>

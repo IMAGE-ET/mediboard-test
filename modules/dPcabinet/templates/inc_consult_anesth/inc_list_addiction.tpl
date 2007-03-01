@@ -12,7 +12,7 @@
               <input type="hidden" name="m" value="dPcabinet" />
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="dosql" value="do_addiction_aed" />
-              {{mb_field object=$curr_addiction field="addiction_id" hidden=1 spec=""}}
+              {{mb_field object=$curr_addiction field="addiction_id" hidden=1 prop=""}}
 
               <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cette addiction',ajax:1,target:'systemMsg'},{onComplete:reloadAddictions})">
               </button>

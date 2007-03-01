@@ -17,7 +17,7 @@
     <th>{{mb_label object=$patient field="cmu"}}</th>
     <td class="date">
       <div id="editFrm_cmu_da">{{$patient->cmu|date_format:"%d/%m/%Y"}}</div>
-      {{mb_field object=$patient field="cmu" hidden=1 spec="date"}}
+      {{mb_field object=$patient field="cmu" hidden=1 prop="date"}}
       <img tabindex="202" id="editFrm_cmu_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
       <button class="cancel notext" type="button" onclick="delCmu()">{{tr}}Delete{{/tr}}</button>
     </td>

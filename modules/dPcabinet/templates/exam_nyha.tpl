@@ -9,8 +9,8 @@ if (window.opener.reloadFdr) {
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="dosql" value="do_exam_nyha_aed" />
 <input type="hidden" name="del" value="0" />
-{{mb_field object=$exam_nyha field="examnyha_id" hidden=1 spec=""}}
-{{mb_field object=$exam_nyha field="consultation_id" hidden=1 spec=""}}
+{{mb_field object=$exam_nyha field="examnyha_id" hidden=1 prop=""}}
+{{mb_field object=$exam_nyha field="consultation_id" hidden=1 prop=""}}
 
 <table class="form">
   <tr>

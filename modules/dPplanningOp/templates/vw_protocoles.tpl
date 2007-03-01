@@ -222,7 +222,7 @@ function setClose(protocole_id) {
             <form name="modif" action="./index.php" method="get">
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="tab" value="vw_edit_protocole" />
-            {{mb_field object=$protSel field="protocole_id" hidden=1 spec=""}}
+            {{mb_field object=$protSel field="protocole_id" hidden=1 prop=""}}
             <button class="modify" type="submit">Modifier</button>
             </form>
           </td>

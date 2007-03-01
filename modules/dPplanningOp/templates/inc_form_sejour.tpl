@@ -8,13 +8,13 @@
 {{if $mode_operation}}
   <input type="hidden" name="callback" value="submitFormOperation" />
 {{/if}}
-{{mb_field object=$sejour field="saisi_SHS" hidden=1 spec=""}}
-{{mb_field object=$sejour field="modif_SHS" hidden=1 spec=""}}
+{{mb_field object=$sejour field="saisi_SHS" hidden=1 prop=""}}
+{{mb_field object=$sejour field="modif_SHS" hidden=1 prop=""}}
 <input type="hidden" name="annule" value="{{$sejour->annule|default:"0"}}" />
 <input type="hidden" name="septique" value="{{$sejour->septique|default:"1"}}" />
 <input type="hidden" name="pathologie" value="{{$sejour->pathologie}}" />
 {{if !$mode_operation}}
-  {{mb_field object=$sejour field="sejour_id" hidden=1 spec=""}}
+  {{mb_field object=$sejour field="sejour_id" hidden=1 prop=""}}
 {{/if}}
 
 
@@ -120,7 +120,7 @@
   <th>{{mb_label object=$sejour field="_date_entree_prevue"}}</th>
   <td class="date">
     <div id="editSejour__date_entree_prevue_da">{{$sejour->_date_entree_prevue|date_format:"%d/%m/%Y"}}</div>
-    {{mb_field object=$sejour field="_date_entree_prevue" hidden=1 spec="notNull date" onchange="modifSejour(); updateSortiePrevue();"}}
+    {{mb_field object=$sejour field="_date_entree_prevue" hidden=1 prop="notNull date" onchange="modifSejour(); updateSortiePrevue();"}}
     <img id="editSejour__date_entree_prevue_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
   </td>
   <td colspan="2">
@@ -152,7 +152,7 @@
   <th>{{mb_label object=$sejour field="_date_sortie_prevue"}}</th>
   <td class="date">
     <div id="editSejour__date_sortie_prevue_da">{{$sejour->_date_sortie_prevue|date_format:"%d/%m/%Y"}}</div>
-    {{mb_field object=$sejour field="_date_sortie_prevue" hidden=1 spec="notNull date moreEquals|_date_entree_prevue" onchange="updateDureePrevue(); modifSejour()"}}
+    {{mb_field object=$sejour field="_date_sortie_prevue" hidden=1 prop="notNull date moreEquals|_date_entree_prevue" onchange="updateDureePrevue(); modifSejour()"}}
     <img id="editSejour__date_sortie_prevue_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
   </td>
   <td colspan="2">

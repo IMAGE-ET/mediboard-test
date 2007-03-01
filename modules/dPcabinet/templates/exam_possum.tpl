@@ -14,8 +14,8 @@ var scoreOper   = {{$exam_possum->_score_oper}};
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="dosql" value="do_exam_possum_aed" />
 <input type="hidden" name="del" value="0" />
-{{mb_field object=$exam_possum field="exampossum_id" hidden=1 spec=""}}
-{{mb_field object=$exam_possum field="consultation_id" hidden=1 spec=""}}
+{{mb_field object=$exam_possum field="exampossum_id" hidden=1 prop=""}}
+{{mb_field object=$exam_possum field="consultation_id" hidden=1 prop=""}}
 
 <table class="form">
   <tr>

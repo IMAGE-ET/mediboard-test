@@ -67,7 +67,7 @@ function pageMain() {
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_modele_aed" />
-{{mb_field object=$compte_rendu field="compte_rendu_id" hidden=1 spec=""}}
+{{mb_field object=$compte_rendu field="compte_rendu_id" hidden=1 prop=""}}
 
 <table class="main">
 

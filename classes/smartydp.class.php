@@ -131,7 +131,7 @@ function smarty_function_mb_field_spec($obj, $field, $propSpec = null){
  * @param array params tableau des parametres
  *        - object          : Objet
  *        - field           : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
- *        - spec            : {optionnel} Specification du champs, par defaut, celle de la classe
+ *        - prop            : {optionnel} Specification du champs, par defaut, celle de la classe
  *        - separator       : {optionnel} Séparation entre les champs de type "radio" [default: ""]
  *        - cycle           : {optionnel} Cycle de répétition du séparateur (pour les enums en type radio) [default: "1"]
  *        - typeEnum        : {optionnel} Type d'affichage des enums (values : "select", "radio") [default: "select"]
@@ -146,8 +146,8 @@ function smarty_function_mb_field($params, &$smarty) {
   
   $object  = CMbArray::extract($params, "object", null, true);
   $field   = CMbArray::extract($params, "field" , null, true);
-  $propKey = array_key_exists("spec", $params);
-  $prop    = CMbArray::extract($params, "spec");
+  $propKey = array_key_exists("prop", $params);
+  $prop    = CMbArray::extract($params, "prop");
 
   $spec = $propKey ? 
     CMbFieldSpecFact::getSpec($object, $field, $prop) : 

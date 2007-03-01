@@ -67,6 +67,11 @@
           </td>
           {{if !$currChamp.BDD_name}}
           <td colspan="5" {{$styleColorError|smarty:nodefaults}}>
+          {{if $currChamp.object_spec}}
+            <strong>
+              {{$currChamp.object_spec}}
+            </strong>
+          {{/if}}
           </td>
           {{else}}
           <td {{if $currChamp.keytable==$currChamp.BDD_name}}

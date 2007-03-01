@@ -131,7 +131,7 @@ function setClose(iId, sNom, sPrenom, sType) {
     <td class="pane">
       <form name="editFrm" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_medecins_aed" />
-      {{mb_field object=$medecin field="medecin_id" hidden=1 spec=""}}
+      {{mb_field object=$medecin field="medecin_id" hidden=1 prop=""}}
       <input type="hidden" name="del" value="0" />
       <table class="form">
         {{if !$dialog && $medecin->medecin_id}}
@@ -180,22 +180,22 @@ function setClose(iId, sNom, sPrenom, sType) {
         <tr>
           <th>{{mb_label object=$medecin field="tel" defaultFor="_tel1"}}</th>
           <td>
-            {{mb_field object=$medecin field="_tel1" size="2" maxlength="2" spec="num length|2"}} -
-            {{mb_field object=$medecin field="_tel2" size="2" maxlength="2" spec="num length|2"}} -
-            {{mb_field object=$medecin field="_tel3" size="2" maxlength="2" spec="num length|2"}} -
-            {{mb_field object=$medecin field="_tel4" size="2" maxlength="2" spec="num length|2"}} -
-            {{mb_field object=$medecin field="_tel5" size="2" maxlength="2" spec="num length|2"}}
+            {{mb_field object=$medecin field="_tel1" size="2" maxlength="2" prop="num length|2"}} -
+            {{mb_field object=$medecin field="_tel2" size="2" maxlength="2" prop="num length|2"}} -
+            {{mb_field object=$medecin field="_tel3" size="2" maxlength="2" prop="num length|2"}} -
+            {{mb_field object=$medecin field="_tel4" size="2" maxlength="2" prop="num length|2"}} -
+            {{mb_field object=$medecin field="_tel5" size="2" maxlength="2" prop="num length|2"}}
           </td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$medecin field="fax" defaultFor="_fax1"}}</th>
           <td>
-            {{mb_field object=$medecin field="_fax1" size="2" maxlength="2" spec="num length|2"}} -
-            {{mb_field object=$medecin field="_fax2" size="2" maxlength="2" spec="num length|2"}} -
-            {{mb_field object=$medecin field="_fax3" size="2" maxlength="2" spec="num length|2"}} -
-            {{mb_field object=$medecin field="_fax4" size="2" maxlength="2" spec="num length|2"}} -
-            {{mb_field object=$medecin field="_fax5" size="2" maxlength="2" spec="num length|2"}}
+            {{mb_field object=$medecin field="_fax1" size="2" maxlength="2" prop="num length|2"}} -
+            {{mb_field object=$medecin field="_fax2" size="2" maxlength="2" prop="num length|2"}} -
+            {{mb_field object=$medecin field="_fax3" size="2" maxlength="2" prop="num length|2"}} -
+            {{mb_field object=$medecin field="_fax4" size="2" maxlength="2" prop="num length|2"}} -
+            {{mb_field object=$medecin field="_fax5" size="2" maxlength="2" prop="num length|2"}}
           </td>
         </tr>
         

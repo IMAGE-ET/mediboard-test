@@ -202,11 +202,11 @@
       {{$patient2->tel}}
     </td>
     <td>
-      {{mb_field object=$finalPatient field="_tel1" tabindex="115" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel2', 2)"}} -
-      {{mb_field object=$finalPatient field="_tel2" tabindex="116" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel3', 2)"}} -
-      {{mb_field object=$finalPatient field="_tel3" tabindex="117" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel4', 2)"}} -
-      {{mb_field object=$finalPatient field="_tel4" tabindex="118" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel5', 2)"}} -
-      {{mb_field object=$finalPatient field="_tel5" tabindex="119" size="2" maxlength="2" spec="num length|2"}}
+      {{mb_field object=$finalPatient field="_tel1" tabindex="115" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel2', 2)"}} -
+      {{mb_field object=$finalPatient field="_tel2" tabindex="116" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel3', 2)"}} -
+      {{mb_field object=$finalPatient field="_tel3" tabindex="117" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel4', 2)"}} -
+      {{mb_field object=$finalPatient field="_tel4" tabindex="118" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel5', 2)"}} -
+      {{mb_field object=$finalPatient field="_tel5" tabindex="119" size="2" maxlength="2" prop="num length|2"}}
     </td>
   </tr>
   <tr>
@@ -224,11 +224,11 @@
       {{$patient2->tel2}}
     </td>
     <td>
-      {{mb_field object=$finalPatient field="_tel21" tabindex="120" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel22', 2)"}} -
-      {{mb_field object=$finalPatient field="_tel22" tabindex="121" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel23', 2)"}} -
-      {{mb_field object=$finalPatient field="_tel23" tabindex="122" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel24', 2)"}} -
-      {{mb_field object=$finalPatient field="_tel24" tabindex="123" size="2" maxlength="2" spec="num length|2" onkeyup="followUp(this, '_tel25', 2)"}} -
-      {{mb_field object=$finalPatient field="_tel25" tabindex="124" size="2" maxlength="2" spec="num length|2"}}
+      {{mb_field object=$finalPatient field="_tel21" tabindex="120" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel22', 2)"}} -
+      {{mb_field object=$finalPatient field="_tel22" tabindex="121" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel23', 2)"}} -
+      {{mb_field object=$finalPatient field="_tel23" tabindex="122" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel24', 2)"}} -
+      {{mb_field object=$finalPatient field="_tel24" tabindex="123" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel25', 2)"}} -
+      {{mb_field object=$finalPatient field="_tel25" tabindex="124" size="2" maxlength="2" prop="num length|2"}}
     </td>
   </tr>
   <tr>

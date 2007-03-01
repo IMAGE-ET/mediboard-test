@@ -152,7 +152,7 @@ function pageMain() {
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
     <input type="hidden" name="dosql" value="do_aide_aed" />
-    {{mb_field object=$aide field="aide_id" hidden=1 spec=""}}
+    {{mb_field object=$aide field="aide_id" hidden=1 prop=""}}
     <input type="hidden" name="del" value="0" />
 
     <table class="form">

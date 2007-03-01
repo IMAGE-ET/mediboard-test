@@ -34,7 +34,7 @@ function calculImcVst(){
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 spec=""}}
+      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
       <table class="form">
         <tr>
           <th>{{mb_label object=$consult_anesth field="poid"}}</th>
@@ -89,8 +89,8 @@ function calculImcVst(){
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
-      {{mb_field object=$consult field="consultation_id" hidden=1 spec=""}}
-      {{mb_field object=$consult field="_check_premiere" hidden=1 spec=""}}
+      {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
+      {{mb_field object=$consult field="_check_premiere" hidden=1 prop=""}}
       {{mb_label object=$consult field="examen"}}
       <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this);this.form.examen.onchange();">
         <option value="">&mdash; Choisir une aide</option>

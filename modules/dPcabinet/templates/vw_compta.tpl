@@ -172,10 +172,10 @@ function pageMain() {
           <td>
             <form name="editFrm" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="dosql" value="do_tarif_aed" />
-            {{mb_field object=$tarif field="tarif_id" hidden=1 spec=""}}
+            {{mb_field object=$tarif field="tarif_id" hidden=1 prop=""}}
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="chir_id" value="{{$mediuser->user_id}}" />
-            {{mb_field object=$mediuser field="function_id" hidden=1 spec=""}}
+            {{mb_field object=$mediuser field="function_id" hidden=1 prop=""}}
             <table class="form">
               {{if $tarif->tarif_id}}
               <tr><th class="category" colspan="2">Editer ce tarif</th></tr>
