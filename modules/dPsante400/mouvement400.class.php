@@ -107,8 +107,8 @@ class CMouvement400 extends CRecordSante400 {
     }
 
     $query = 
-//      !in_array(null, $this->statuses, true) ?
-//      "DELETE FROM $this->base.$this->table WHERE $this->idField = ?" :
+      !in_array(null, $this->statuses, true) ?
+      "DELETE FROM $this->base.$this->table WHERE $this->idField = ?" :
       "UPDATE $this->base.$this->table SET $this->prodField = '$this->status' WHERE $this->idField = ?";
     $values = array (
       $this->rec,

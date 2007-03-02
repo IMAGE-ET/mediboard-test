@@ -101,14 +101,14 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->etablissement->mail           = $etab400->consume("MAIL");
     $this->etablissement->domiciliation  = $etab400->consume("FINS");
 
+    $this->id400EtabECap->bindObject($this->etablissement);
+
     $id400EtabSHS = new CIdSante400();
     $id400EtabSHS->loadLatestFor($this->etablissement, "SHS");
     $id400EtabSHS->last_update = mbDateTime();
     $id400EtabSHS->id400 =  $etab400->consume("CSHS");
     $id400EtabSHS->store();
     
-    $this->id400EtabECap->bindObject($this->etablissement);
-
     $this->trace($this->etablissement->getProps(), "Etablissement synchronisé");
     $this->trace($etab400->data, "Données établissement non importées");
     
