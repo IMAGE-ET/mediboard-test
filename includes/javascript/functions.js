@@ -258,6 +258,80 @@ Object.extend(PairEffect, {
 });
 
 /**
+ * ObjectTooltip Class
+ *   Handle object tooltip creation, associated with a MbObject and a target HTML element
+ */
+
+var ObjectTooltip = Class.create();
+
+Class.extend(ObjectTooltip, {
+
+  // Constructor
+  initialize: function(eTrigger, sClass, iObject, oOptions) {
+  	this.eTrigger = $(eTrigger);
+  	this.sClass = sClass;
+  	this.iObject = iObject;
+  	this.eTarget = null;
+
+    var oDefaultOptions = {
+    	sTargetPrefix : null
+    };
+
+    Object.extend(oDefaultOptions, oOptions);
+
+		this.addHandlers();
+		this.createDiv();
+		this.load();
+  },
+  
+  show: function() {
+		this.eTarget.show();
+  },
+  
+  hide: function() {
+		this.eTarget.hide();
+  },
+  
+  load: function() {
+    url = new Url;
+    url.setModuleAction("system", "httpreq_vw_object");
+    url.addParam("object_class", this.sClass);
+    url.addParam("object_id", this.iObject);
+    url.requestUpdate(this.eTarget);
+  },
+  
+  addHandlers: function() {
+		Event.observe(this.eTrigger, "mouseout", this.hide.bind(this));
+  },
+  
+  createDiv: function() {
+	  eDiv = document.createElement("div");
+		Element.classNames(eDiv).add("tooltip");
+		Element.hide(eDiv);
+	  this.eTrigger.parentNode.insertBefore(eDiv, this.eTrigger.nextSibling);
+  	this.eTarget = eDiv;
+  }  
+  
+} );
+
+/**
+ * ObjectTooltip utility fonctions
+ *   Helpers for ObjectTooltip instanciations
+ */
+
+Object.extend(ObjectTooltip, {
+	create: function(eTrigger, sClass, iObject, oOptions) {
+		if (!eTrigger.oTooltip) {
+			eTrigger.oTooltip = new ObjectTooltip(eTrigger, sClass, iObject, oOptions);
+		}
+
+    eTrigger.oTooltip.show();		
+	}
+} );
+
+
+
+/**
  * Date utility functions
  * @todo: extend Date class
  */

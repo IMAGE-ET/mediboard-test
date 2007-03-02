@@ -1,9 +1,20 @@
+{{assign var="operation" value=$object}}
+
 <table class="tbl tooltip">
   <tr>
     <th>
       {{$object->_view}}
     </th>
   </tr>
+  
+  {{if $operation->annulee == 1}}
+  <tr>
+    <th class="category" style="background: #f00;">
+    OPERATION ANNULEE
+    </th>
+  </tr>
+  {{/if}}
+  
   <tr>
     <td>
       <strong>Date:</strong>

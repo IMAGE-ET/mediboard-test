@@ -1,26 +1,37 @@
+{{assign var="sejour" value=$object}}
+
 <table class="tbl tooltip">
   <tr>
     <th>
-      {{$object->_view}}
+      {{$sejour->_view}}
     </th>
   </tr>
+
+  {{if $sejour->annule == 1}}
+  <tr>
+    <th class="category" colspan="4" style="background: #f00;">
+    SEJOUR ANNULE
+    </th>
+  </tr>
+  {{/if}}
+
   <tr>
     <td>
       <strong>Admission:</strong>
-      <i>le {{$object->entree_prevue|date_format:"%d %B %Y à %Hh%M"}}</i>
+      <i>le {{$sejour->entree_prevue|date_format:"%d %B %Y à %Hh%M"}}</i>
       <br />
       <strong>Sortie:</strong>
-      <i>le {{$object->sortie_prevue|date_format:"%d %B %Y à %Hh%M"}}</i>
+      <i>le {{$sejour->sortie_prevue|date_format:"%d %B %Y à %Hh%M"}}</i>
       <br />
       <strong>Praticien:</strong>
-      <i>{{$object->_ref_praticien->_view}}</i>
+      <i>{{$sejour->_ref_praticien->_view}}</i>
       <br />
       <strong>Etablissement:</strong>
-      <i>{{$object->_ref_group->_view}}</i>
-      {{if $object->rques}}
+      <i>{{$sejour->_ref_group->_view}}</i>
+      {{if $sejour->rques}}
       <br />
       <strong>Remarques:</strong>
-      <i>{{$object->rques|nl2br|truncate:50}}</i>
+      <i>{{$sejour->rques|nl2br|truncate:50}}</i>
       {{/if}}
     </td>
   </tr>

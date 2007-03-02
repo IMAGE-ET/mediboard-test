@@ -1,26 +1,36 @@
+{{assign var="operation" value=$object}}
+
 <table class="form">
 
   <tr>
     <th class="title" colspan="2">
-      {{$object->_view}}
+      {{$operation->_view}}
     </th>
   </tr>
   
+  {{if $operation->annulee == 1}}
+  <tr>
+    <th class="category" colspan="4" style="background: #f00;">
+    OPERATION ANNULEE
+    </th>
+  </tr>
+  {{/if}}
+
   <tr>
     <td>
       <strong>Praticien :</strong>
-      {{$object->_ref_chir->_view}}
+      {{$operation->_ref_chir->_view}}
     </td>
     <td>
       <strong>Anesthésiste :</strong>
-      {{$object->_ref_anesth->_view}}
+      {{$operation->_ref_anesth->_view}}
     </td>
   </tr>
 
   <tr>
     <td>
       <strong>Date :</strong>
-      le {{$object->_datetime|date_format:"%d %B %Y"}}
+      le {{$operation->_datetime|date_format:"%d %B %Y"}}
     </td>
     <td>
     </td>
@@ -29,44 +39,44 @@
   <tr>
     <td>
       <strong>Libellé :</strong>
-      {{$object->libelle}}
+      {{$operation->libelle}}
     </td>
     <td>
-      <strong>Coté:</strong>
-      {{tr}}{{$object->cote}}{{/tr}}
+      <strong>Coté :</strong>
+      {{tr}}{{$operation->cote}}{{/tr}}
     </td>
   </tr>
 
   <tr>
     <td>
       <strong>Type d'anesthésie :</strong>
-      {{$object->_lu_type_anesth}}
+      {{$operation->_lu_type_anesth}}
     </td>
   </tr>
   
-  {{if $object->materiel}}
+  {{if $operation->materiel}}
   <tr>
     <td class="text" colspan="2">
       <strong>Matériel :</strong>
-      {{$object->materiel|nl2br}}
+      {{$operation->materiel|nl2br}}
     </td>
   </tr>
   {{/if}}
 
-  {{if $object->rques}}
+  {{if $operation->rques}}
   <tr>
     <td class="text" colspan="2">
       <strong>Remarques :</strong>
-      {{$object->rques|nl2br}}
+      {{$operation->rques|nl2br}}
     </td>
   </tr>
   {{/if}}
 
-  {{if $object->examen}}
+  {{if $operation->examen}}
   <tr>
     <td class="text" colspan="2">
       <strong>Bilan pré-op :</strong>
-      {{$object->examen|nl2br}}
+      {{$operation->examen|nl2br}}
     </td>
   </tr>
   {{/if}}
@@ -74,7 +84,7 @@
   <tr>
     <th class="category" colspan="2">Actes prévus</th>
   </tr>
-  {{foreach from=$object->_ext_codes_ccam item=currCode}}
+  {{foreach from=$operation->_ext_codes_ccam item=currCode}}
   <tr>
     <td class="text" colspan="2">
       <strong>{{$currCode->code}}</strong> :
@@ -87,7 +97,7 @@
     <th class="category" colspan="2">Actes codés</th>
   </tr>
   
-  {{foreach from=$object->_ref_actes_ccam item=curr_acte}}
+  {{foreach from=$operation->_ref_actes_ccam item=curr_acte}}
   <tr>
     <td>
       <strong>{{$curr_acte->_view}}</strong>
@@ -106,44 +116,44 @@
   <tr>
     <td>
       <strong>Entrée salle :</strong>
-      {{$object->entree_salle}} 
+      {{$operation->entree_salle}} 
     </td>
     <td>
       <strong>Sortie salle :</strong>
-      {{$object->sortie_salle}} 
+      {{$operation->sortie_salle}} 
     </td>
   </tr>
 
   <tr>
     <td>
       <strong>Début intervention :</strong>
-      {{$object->debut_op}} 
+      {{$operation->debut_op}} 
     </td>
     <td>
       <strong>Fin intervention :</strong>
-      {{$object->fin_op}} 
+      {{$operation->fin_op}} 
     </td>
   </tr>
 
   <tr>
     <td>
       <strong>Pose garrot :</strong>
-      {{$object->pose_garrot}} 
+      {{$operation->pose_garrot}} 
     </td>
     <td>
       <strong>Retrait garrot :</strong>
-      {{$object->retrait_garrot}} 
+      {{$operation->retrait_garrot}} 
     </td>
   </tr>
 
   <tr>
     <td>
       <strong>Début induction :</strong>
-      {{$object->induction_debut}} 
+      {{$operation->induction_debut}} 
     </td>
     <td>
       <strong>Fin induction :</strong>
-      {{$object->induction_fin}} 
+      {{$operation->induction_fin}} 
     </td>
   </tr>
 

@@ -4,24 +4,6 @@
 
 <script type="text/javascript">
 
-function viewItem(class, id, prefix) {
-  if(prefix){
-    oElement = $(prefix+class+id);
-  }else{
-    oElement = $(class+id);
-  }
-  oElement.show();
-  var sAlt = "infos - cliquez pour fermer";
-  if (oElement.alt != sAlt) {
-    url = new Url;
-    url.setModuleAction("system", "httpreq_vw_object");
-    url.addParam("object_class", class);
-    url.addParam("object_id", id);
-    url.requestUpdate(oElement);
-    oElement.alt = sAlt;
-  }
-}
-
 function viewCompleteItem(class, id) {
   url = new Url;
   url.setModuleAction("system", "httpreq_vw_complete_object");
@@ -30,31 +12,28 @@ function viewCompleteItem(class, id) {
   url.requestUpdate("listView");
 }
 
-function hideItem(class, id, prefix) {
-  if(prefix){
-    oElement = $(prefix+class+id);
-  }else{
-    oElement = $(class+id);
-  }
-  oElement.hide();
-}
-
 function reloadListFile(){
   if(file_deleted && file_preview == file_deleted){
     ZoomAjax("","","","", 0);
   }
   var url = new Url;
   initAccord(false);
+  
   url.setModuleAction("{{$m}}", "httpreq_vw_listfiles");
   url.addParam("selKey", document.FrmClass.selKey.value);
   url.addParam("selClass", document.FrmClass.selClass.value);  
   url.addParam("typeVue", document.FrmClass.typeVue.value);
-  url.requestUpdate('listView', { waitingText : null });
+  url.requestUpdate('listView', { 
+    waitingText : null 
+  } );
 
   var url = new Url;
   url.setModuleAction("dPpatients", "httpreq_vw_full_patient");
   url.addParam("patient_id", "{{$patient->_id}}");
-  url.requestUpdate('listInfosPat', { waitingText : null });
+  url.requestUpdate('listInfosPat', { 
+    waitingText: null, 
+    onComplete: viewFullPatientMain
+  } );
 }
 
 function saveObjectInfos(oObject){
@@ -95,6 +74,7 @@ function printPatient(id) {
 
 function pageMain() {
   initAccord(true);
+  viewFullPatientMain();
 }
 
 </script>
@@ -112,7 +92,7 @@ function pageMain() {
       <input type="hidden" name="typeVue"  value="1" />
       </form>
       
-      {{assign var="href" value="index.php?m=dPpatients&tab=vw_full_patients"}}
+      {{assign var="href" value="?m=dPpatients&tab=vw_full_patients"}}
       
       {{include file="inc_vw_full_patients.tpl"}}
     </td>

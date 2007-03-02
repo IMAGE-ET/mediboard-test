@@ -31,6 +31,8 @@ class CRecordSante400 {
     self::$chrono =& $dbChronos[$dsn];
     self::$chrono->start();
     self::$dbh = new PDO("odbc:$dsn", $dsnConfig["user"], $dsnConfig["pass"]);
+    self::$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
     self::$chrono->stop("connection");
   }
 
@@ -42,10 +44,7 @@ class CRecordSante400 {
     $records = array();
     try {
       self::connect();
-      if (null == $sth = self::$dbh->prepare($sql)) {
-        throw new PDOException("Couldn't prepare query");
-      }
-      
+      $sth = self::$dbh->prepare($sql);
       self::$chrono->start();
       $sth->execute($values);
       self::$chrono->stop("multiple load execute");
@@ -70,15 +69,18 @@ class CRecordSante400 {
   function query($sql, $values = array()) {
     try {
       self::connect();
-      if (null == $sth = self::$dbh->prepare($sql)) {
-        throw new PDOException("Couldn't prepare query");
-      }
-      
+      $sth = self::$dbh->prepare($sql);
       self::$chrono->start();
       $sth->execute($values);
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);
       self::$chrono->stop("query");
     } catch (PDOException $e) {
+      // Fetch throws this exception in case of UPDATE query
+      if ($e->getCode() == 24000) {
+        self::$chrono->stop("query");
+        return;
+      }
+  
       trigger_error("Error querying '$sql' : " . $e->getMessage(), E_USER_ERROR);
     }
   }

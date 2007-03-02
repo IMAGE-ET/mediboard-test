@@ -22,7 +22,7 @@ switch ($mode_compat = @$dPconfig["interop"]["mode_compat"]) {
   die();
 }
 
-$marked = mbGetValueFromGetOrSession("marked");
+$marked = mbGetValueFromGetOrSession("marked", "1");
 $max = mbGetValueFromGet("max", 5);
 
 $count = $mouvFactory->count($marked);

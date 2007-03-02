@@ -7,12 +7,12 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $object_class = mbGetValueFromGet("object_class");
 $object_id    = mbGetValueFromGet("object_id");
 
-if ($object_class === null || $object_id === null) {
+if (!$object_class || !$object_id) {
   return;
 }
 
@@ -20,14 +20,18 @@ $object = new $object_class;
 $object->load($object_id);
 $object->loadView();
 
-if(!$object->canRead()){
-  include("access_denied.php");
-}else{
-  // Création du template
-  $smarty = new CSmartyDP();
+$can->read = $object->canRead();
+$can->needsRead();
 
-  $smarty->assign("object", $object);
+// If no template is defined, use generic
+$template = is_file("modules/$object->_view_template") ?
+  $object->_view_template : 
+  "system/templates/CMbObject_view.tpl";
 
-  $smarty->display($object->_view_template);
-}
+// Création du template
+$smarty = new CSmartyDP();
+$smarty->assign("object", $object);
+$smarty->assign("props", $object->getProps());
+
+$smarty->display("../../$template");
 ?>

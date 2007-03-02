@@ -21,12 +21,40 @@ class CMouvement400 extends CRecordSante400 {
   public $prod = null;
   public $when = null;
 
+  function initialize() {
+    $this->when = $this->consumeDateTime("TRDATE", "TRHEURE");
+    $this->rec = $this->consume($this->idField);
+    $this->prod = $this->consume($this->prodField);
+    $this->type = $this->consume($this->typeField);
+
+    $this->valuePrefix = $this->type == "S" ? "B_": "A_";
+  }
+  
   function multipleLoad($marked = false, $max = 100) {
     $query = "SELECT * FROM $this->base.$this->table";
     $query .= $this->getMarkedQuery($marked);
  
-    return CRecordSante400::multipleLoad($query, array(), $max, get_class($this));
+    $mouvs = CRecordSante400::multipleLoad($query, array(), $max, get_class($this));
+
+    // Multiple checkout
+    $recs = array();
+    foreach ($mouvs as &$mouv) {
+      $mouv->initialize();
+      $recs[] = "'$mouv->rec'";
+    }
+
+    $recs = join($recs, ",");
+    
+    $query = "UPDATE $mouv->base.$mouv->table " .
+        "\n SET $mouv->prodField = '========' " .
+        "\n WHERE $mouv->idField IN ($recs)";
+    
+    $rec = new CRecordSante400;
+    $rec->query($query);
+    
+    return $mouvs;
   }
+  
 
   function getMarkedQuery($marked) {
     if (!$this->prodField) {
@@ -56,6 +84,16 @@ class CMouvement400 extends CRecordSante400 {
     );    
 
     $this->loadOne($query, $values);
+    $this->initialize();
+
+    // Checkout
+    $query = "UPDATE $this->base.$this->table " .
+        "\n SET $this->prodField = '========' " .
+        "\n WHERE $this->idField = ?";
+    $values = array($this->rec);
+    
+    $rec = new CRecordSante400;
+    $rec->query($query, $values);
   }
     
   function markRow() {
@@ -68,8 +106,9 @@ class CMouvement400 extends CRecordSante400 {
       $this->status .= null !== $status ? chr($status + ord("0")) : "-";    
     }
 
-    $query = !in_array(null, $this->statuses, true) ?
-      "DELETE FROM $this->base.$this->table WHERE $this->idField = ?" :
+    $query = 
+//      !in_array(null, $this->statuses, true) ?
+//      "DELETE FROM $this->base.$this->table WHERE $this->idField = ?" :
       "UPDATE $this->base.$this->table SET $this->prodField = '$this->status' WHERE $this->idField = ?";
     $values = array (
       $this->rec,
@@ -95,11 +134,6 @@ class CMouvement400 extends CRecordSante400 {
   }
   
   function proceed() {
-    $this->when = $this->consumeDateTime("TRDATE", "TRHEURE");
-    $this->rec = $this->consume($this->idField);
-    $this->prod = $this->consume($this->prodField);
-    $this->type = $this->consume($this->typeField);
-    
     $this->trace($this->data, "Données à traiter dans le mouvement");
     try {
       $this->synchronize();
