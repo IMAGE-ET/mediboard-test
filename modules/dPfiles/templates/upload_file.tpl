@@ -38,7 +38,7 @@ if (window.opener.reloadAfterUploadFile) {
     </th>
     <td>
       <select name="_file_category_id[{{$curr_nb_file}}]">
-        <option value="0" {{if $file_category_id == 0}}selected="selected"{{/if}}>&mdash; Aucune</option>
+        <option value="" {{if !$file_category_id}}selected="selected"{{/if}}>&mdash; Aucune</option>
         {{foreach from=$listCategory item=curr_cat}}
         <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $file_category_id}}selected="selected"{{/if}} >
           {{$curr_cat->nom}}

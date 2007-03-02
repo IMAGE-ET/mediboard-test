@@ -11,7 +11,7 @@ global $AppUI, $canRead, $canEdit, $m, $dPconfig;
 
 $file_class       = mbGetValueFromGetOrSession("file_class");
 $file_object_id   = mbGetValueFromGetOrSession("file_object_id");
-$file_category_id = mbGetValueFromGetOrSession("file_category_id", 0);
+$file_category_id = mbGetValueFromGetOrSession("file_category_id", null);
 $uploadok         = mbGetValueFromGet("uploadok", 0);
 
 $nb_files_upload = mbArrayCreateRange(1,$dPconfig["dPfiles"]["nb_upload_files"],true);

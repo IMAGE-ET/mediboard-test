@@ -66,7 +66,7 @@
             
             {{if $canEditFileDoc && !$accordDossier}}
               <select name="file_category_id" onchange="submitFileChangt(this.form)">
-                <option value="0" {{if $curr_file->file_category_id == 0}}selected="selected"{{/if}}>&mdash; Aucune</option>
+                <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune</option>
                 {{foreach from=$listCategory item=curr_cat}}
                 <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $curr_file->file_category_id}}selected="selected"{{/if}} >
                   {{$curr_cat->nom}}

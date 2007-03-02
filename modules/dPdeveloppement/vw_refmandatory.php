@@ -27,13 +27,15 @@ foreach($listClass as $selected){
   
   // Extraction des champs de prop "refMandatory"
   foreach ($object->_specs as $k => $v) {
-    if($v->getSpecType() == "refMandatory"){
+    $typeProp = $v->getSpecType();
+    if($typeProp == "refMandatory" || $typeProp == "ref"){
       //Comptage du nombre d'entrées à 0
       $sql = "SELECT count(`".$object->_tbl_key."`) FROM `".$object->_tbl."` WHERE `$k` = '0';";
       $nb_result = db_loadResult($sql);
       
       if($nb_result){
         $aClass[$k]["class_field"] = $k;
+        $aClass[$k]["typeProp"]    = $typeProp;
         $aClass[$k]["count_0_bdd"] = $nb_result;
       
         //Comptage du nombre d'entrées totale

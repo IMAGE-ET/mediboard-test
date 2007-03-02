@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcompteRendu";
-$config["mod_version"]     = "0.28";
+$config["mod_version"]     = "0.29";
 $config["mod_type"]        = "user";
 
 class CSetupdPcompteRendu extends CSetup {
@@ -207,7 +207,16 @@ class CSetupdPcompteRendu extends CSetup {
     $sql = "UPDATE `liste_choix` SET chir_id = NULL WHERE chir_id='0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.28";
+    $this->makeRevision("0.28");
+    $this->setTimeLimit(1800);
+    $sql = "DELETE FROM `pack` WHERE chir_id='0';";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `compte_rendu` CHANGE `file_category_id` `file_category_id` int(11) unsigned NULL DEFAULT NULL;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `compte_rendu` SET `file_category_id` = NULL WHERE `file_category_id` = '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.29";
   }
 }
 ?>

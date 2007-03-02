@@ -39,7 +39,7 @@ if (window.opener.reloadAfterSaveDoc) {
       &mdash;
       <strong>Catégorie :</strong>
       <select name="file_category_id">
-      <option value="0"{{if $compte_rendu->file_category_id==0}} selected="selected"{{/if}}>&mdash; Aucune Catégorie</option>
+      <option value=""{{if !$compte_rendu->file_category_id}} selected="selected"{{/if}}>&mdash; Aucune Catégorie</option>
       {{foreach from=$listCategory item=currCat}}
       <option value="{{$currCat->file_category_id}}"{{if $currCat->file_category_id==$compte_rendu->file_category_id}} selected="selected"{{/if}}>{{$currCat->nom}}</otpion>
       {{/foreach}}

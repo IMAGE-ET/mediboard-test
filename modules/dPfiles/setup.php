@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPfiles";
-$config["mod_version"]     = "0.16";
+$config["mod_version"]     = "0.17";
 $config["mod_type"]        = "user";
 
 class CSetupdPfiles extends CSetup {
@@ -183,7 +183,15 @@ class CSetupdPfiles extends CSetup {
     $sql = "ALTER TABLE `files_mediboard` ADD INDEX ( `file_object_id` );";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.16";
+    $this->makeRevision("0.16");
+    $sql = "ALTER TABLE `files_mediboard` CHANGE `file_category_id` `file_category_id` int(11) unsigned NULL DEFAULT NULL;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `files_mediboard` SET `file_category_id` = NULL WHERE `file_category_id` = '0';";
+    $this->addQuery($sql);
+    $sql = "UPDATE `files_mediboard` SET `file_owner` = 1 WHERE `file_owner` = '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.17";
   }
 }
 ?>

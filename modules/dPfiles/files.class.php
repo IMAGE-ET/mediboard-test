@@ -43,12 +43,12 @@ class CFile extends CMbObject {
   function getSpecs() {
     return array (
       "file_class"         => "notNull str",
-      "file_object_id"     => "notNull refMandatory",
+      "file_object_id"     => "notNull ref",
       "file_category_id"   => "ref",
       "file_date"          => "notNull dateTime",
       "file_size"          => "num pos",
       "file_real_filename" => "notNull str",
-      "file_owner"         => "ref",
+      "file_owner"         => "notNull ref",
       "file_type"          => "str",
       "file_name"          => "notNull str"
     );
@@ -241,7 +241,11 @@ class CFile extends CMbObject {
     // S'il objet valide
     if($object->$key){
       foreach($object->_ref_files as $keyFile => $curr_file){
-        $affichageNbFile[$curr_file->file_category_id]["nb"] ++;
+        if($curr_file->file_category_id){
+          $affichageNbFile[$curr_file->file_category_id]["nb"] ++;
+        }else{
+          $affichageNbFile[0]["nb"] ++;
+        }
       }
     }
     return $affichageNbFile;
@@ -309,7 +313,11 @@ class CFile extends CMbObject {
     foreach($object->_ref_files as $keyFile=>$FileData) {
       $object->_ref_files[$keyFile]->canRead();
       if($object->_ref_files[$keyFile]->_canRead) {
-        $affichageFile[$FileData->file_category_id]["DocsAndFiles"][$FileData->file_name."_CFile_".$FileData->file_id] =& $object->_ref_files[$keyFile];
+        if($FileData->file_category_id){
+          $affichageFile[$FileData->file_category_id]["DocsAndFiles"][$FileData->file_name."_CFile_".$FileData->file_id] =& $object->_ref_files[$keyFile];
+        }else{
+          $affichageFile[0]["DocsAndFiles"][$FileData->file_name."_CFile_".$FileData->file_id] =& $object->_ref_files[$keyFile];
+        }
       }
     }
     
@@ -317,7 +325,11 @@ class CFile extends CMbObject {
     foreach($object->_ref_documents as $keyDoc=>$DocData) {
       $object->_ref_documents[$keyDoc]->canRead();
       if($object->_ref_documents[$keyDoc]->_canRead) {
-        $affichageFile[$DocData->file_category_id]["DocsAndFiles"][$DocData->nom."_CCompteRendu_".$DocData->compte_rendu_id] =& $object->_ref_documents[$keyDoc];
+        if($DocData->file_category_id){
+          $affichageFile[$DocData->file_category_id]["DocsAndFiles"][$DocData->nom."_CCompteRendu_".$DocData->compte_rendu_id] =& $object->_ref_documents[$keyDoc];
+        }else{
+          $affichageFile[0]["DocsAndFiles"][$DocData->nom."_CCompteRendu_".$DocData->compte_rendu_id] =& $object->_ref_documents[$keyDoc];
+        }
       }
     }
     

@@ -141,7 +141,7 @@ function pageMain() {
     <td>
       {{if !$compte_rendu->compte_rendu_id}}
       <select name="file_category_id" title="{{$compte_rendu->_props.file_category_id}}">
-        <option value="0">&mdash; Aucune Catégorie</option>
+        <option value="">&mdash; Aucune Catégorie</option>
       </select>
       {{else}}
         {{if $compte_rendu->_ref_category->file_category_id}}

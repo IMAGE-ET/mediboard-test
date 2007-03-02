@@ -1,6 +1,7 @@
 <table class="tbl">
   <tr>
     <th>Objet</th>
+    <th>Propriété</th>
     <th>Nombre d'enregistrement à '0'</th>
     <th>Nombre total d'enregistrement</th>
   </tr>
@@ -10,7 +11,7 @@
   {{if $currClass|@count}}
   
   <tr>
-    <th colspan="3" class="title">
+    <th colspan="4" class="title">
       {{$keyClass}}
     </th>
   </tr>
@@ -19,6 +20,9 @@
     <tr>
       <td {{$styleColorConflit|smarty:nodefaults}}>
         {{$currChamp.class_field}}
+      </td>
+      <td {{$styleColorConflit|smarty:nodefaults}}>
+        {{$currChamp.typeProp}}
       </td>
       <td {{$styleColorConflit|smarty:nodefaults}}>
         {{$currChamp.count_0_bdd}}
