@@ -48,8 +48,8 @@ class CDateSpec extends CMbFieldSpec {
     return "date";
   }
   
-  function getFormHtmlElement(&$object, &$params, &$value, &$className){
-    return $this->getFormElementText($object, $params, &$value, &$className);
+  function getFormHtmlElement($object, $params, $value, $className){
+    return $this->getFormElementText($object, $params, $value, $className);
   }
 }
 

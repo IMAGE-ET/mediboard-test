@@ -21,7 +21,7 @@ class CTextSpec extends CMbFieldSpec {
     return("text");
   }
   
-  function checkProperty(&$object){
+  function checkProperty($object){
     return null;
   }
   
@@ -32,8 +32,8 @@ class CTextSpec extends CMbFieldSpec {
     $propValue = $this->randomString(CMbFieldSpec::$chars, 40);
   }
   
-  function getFormHtmlElement(&$object, &$params, &$value, &$className){
-    return $this->getFormElementTextarea($object, $params, &$value, &$className);
+  function getFormHtmlElement($object, $params, $value, $className){
+    return $this->getFormElementTextarea($object, $params, $value, $className);
   }
   
   function getDBSpec(){

@@ -135,7 +135,6 @@ class CDoObjectAddEdit {
 
   function doLog($type) {
     global $AppUI;
-
     $fields = array();
     foreach ($this->_obj->getProps() as $propName => $propValue) {
       if ($propValue !== null) {
@@ -144,10 +143,6 @@ class CDoObjectAddEdit {
           $fields[] = $propName;
         }
       }
-    }
-    
-    if (!count($fields)) {
-      return;
     }
 
     $object_id = $this->_obj->_id;
@@ -163,6 +158,10 @@ class CDoObjectAddEdit {
       $fields = array();
     }
 
+    if (!count($fields) && $type == "store") {
+      return;
+    }
+    
     if ($this->_logIt) {
       $log = new CUserLog;
       $log->user_id = $AppUI->user_id;

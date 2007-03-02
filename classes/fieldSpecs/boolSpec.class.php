@@ -29,7 +29,7 @@ class CBoolSpec extends CMbFieldSpec {
     return("bool");
   }
   
-  function checkProperty(&$object){
+  function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
@@ -47,7 +47,7 @@ class CBoolSpec extends CMbFieldSpec {
     return "enum('0','1')";
   }
   
-  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+  function getFormHtmlElement($object, $params, $value, $className){
     global $AppUI;
     $sHtml        = "";
     $field        = htmlspecialchars($this->fieldName);
@@ -71,6 +71,10 @@ class CBoolSpec extends CMbFieldSpec {
       }
     }
     return $sHtml;
+  }
+  
+  function getLabelForElement($object, $params){
+    return $this->fieldName."_1";
   }
 }
 

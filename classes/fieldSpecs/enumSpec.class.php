@@ -31,7 +31,7 @@ class CEnumSpec extends CMbFieldSpec {
     }
   }
   
-  function checkProperty(&$object){
+  function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
@@ -50,7 +50,7 @@ class CEnumSpec extends CMbFieldSpec {
     $propValue = $this->randomString($specFragments, 1);
   }
   
-  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+  function getFormHtmlElement($object, $params, $value, $className){
     $sHtml         = null;
     $field         = htmlspecialchars($this->fieldName);
     $typeEnum      = CMbArray::extract($params, "typeEnum", "select");
@@ -106,7 +106,7 @@ class CEnumSpec extends CMbFieldSpec {
     return $sHtml;
   }
   
-  function getLabelForElement(&$object, &$params){
+  function getLabelForElement($object, &$params){
     $typeEnum  = CMbArray::extract($params, "typeEnum", "select");
     
     if($typeEnum == "select"){

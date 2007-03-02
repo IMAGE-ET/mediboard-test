@@ -15,7 +15,7 @@ class CPctSpec extends CMbFieldSpec {
     return("pct");
   }
   
-  function checkProperty(&$object){
+  function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
@@ -29,8 +29,8 @@ class CPctSpec extends CMbFieldSpec {
     return "float";
   }
   
-  function getFormHtmlElement(&$object, &$params, &$value, &$className){
-    return $this->getFormElementText($object, $params, &$value, &$className);
+  function getFormHtmlElement($object, $params, $value, $className){
+    return $this->getFormElementText($object, $params, $value, $className);
   }
 }
 

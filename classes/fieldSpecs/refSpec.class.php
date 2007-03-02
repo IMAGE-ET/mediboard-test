@@ -18,7 +18,7 @@ class CRefSpec extends CMbFieldSpec {
     return("ref");
   }
 
-  function checkProperty(&$object){
+  function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     

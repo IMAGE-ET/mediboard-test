@@ -15,7 +15,7 @@ class CHtmlSpec extends CMbFieldSpec {
     return("html");
   }
   
-  function checkProperty(&$object){
+  function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     // @todo Should validate against XHTML DTD
@@ -38,8 +38,8 @@ class CHtmlSpec extends CMbFieldSpec {
     $propValue = "Document confidentiel";
   }
   
-  function getFormHtmlElement(&$object, &$params, &$value, &$className){
-    return $this->getFormElementTextarea($object, $params, &$value, &$className);
+  function getFormHtmlElement($object, $params, $value, $className){
+    return $this->getFormElementTextarea($object, $params, $value, $className);
   }
   
   function getDBSpec(){

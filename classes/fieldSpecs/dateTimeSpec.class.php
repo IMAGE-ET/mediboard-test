@@ -27,7 +27,7 @@ class CDateTimeSpec extends CMbFieldSpec {
     return("time");
   }
   
-  function checkProperty(&$object){
+  function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
@@ -49,8 +49,8 @@ class CDateTimeSpec extends CMbFieldSpec {
     return "datetime";
   }
   
-  function getFormHtmlElement(&$object, &$params, &$value, &$className){
-    return $this->getFormElementText($object, $params, &$value, &$className);
+  function getFormHtmlElement($object, $params, $value, $className){
+    return $this->getFormElementText($object, $params, $value, $className);
   }
 }
 

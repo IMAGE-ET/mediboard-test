@@ -23,7 +23,7 @@ class CNumSpec extends CMbFieldSpec {
   var $maxLength = null;
   var $minMax    = null;
   
-  function checkProperty(&$object){
+  function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
@@ -167,8 +167,8 @@ class CNumSpec extends CMbFieldSpec {
     return $type_sql;
   }
 
-  function getFormHtmlElement(&$object, &$params, &$value, &$className){
-    return $this->getFormElementText($object, $params, &$value, &$className);
+  function getFormHtmlElement($object, $params, $value, $className){
+    return $this->getFormElementText($object, $params, $value, $className);
   }
 }
 

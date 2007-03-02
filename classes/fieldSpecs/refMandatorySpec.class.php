@@ -16,7 +16,7 @@ class CRefMandatorySpec extends CRefSpec {
     return("refMandatory");
   }
   
-  function checkProperty(&$object){
+  function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     

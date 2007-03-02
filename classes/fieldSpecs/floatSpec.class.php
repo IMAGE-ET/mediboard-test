@@ -20,7 +20,7 @@ class CFloatSpec extends CMbFieldSpec {
     return("float");
   }
   
-  function checkProperty(&$object){
+  function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
@@ -90,8 +90,8 @@ class CFloatSpec extends CMbFieldSpec {
     return $type_sql;
   }
   
-  function getFormHtmlElement(&$object, &$params, &$value, &$className){
-    return $this->getFormElementText($object, $params, &$value, &$className);
+  function getFormHtmlElement($object, $params, $value, $className){
+    return $this->getFormElementText($object, $params, $value, $className);
   }
 }
 

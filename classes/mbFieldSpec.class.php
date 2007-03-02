@@ -50,13 +50,13 @@ class CMbFieldSpec {
     $this->checkValues();
   }
   
-  function getValue(&$object, $smarty, $params = null) {
+  function getValue($object, $smarty, $params = null) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     return $propValue;
   }
   
-  function checkParams(&$object){
+  function checkParams($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     // NotNull
@@ -111,7 +111,7 @@ class CMbFieldSpec {
     return null;
   }
   
-  function checkPropertyValue(&$object){
+  function checkPropertyValue($object){
     $fieldName = $this->fieldName;
     $propValue =& $object->$fieldName;
     
@@ -166,17 +166,17 @@ class CMbFieldSpec {
     $this->getConfidential($object);
   }
   
-  function getFormElement(&$object, &$params){
+  function getFormElement($object, $params){
     $hidden    = CMbArray::extract($params, "hidden");
     $className = CMbArray::extract($params, "class");
     $value     = $object->{$this->fieldName};
     if($hidden){
-      return $this->getFormHiddenElement($object, $params, &$value, &$className);
+      return $this->getFormHiddenElement($object, $params, $value, $className);
     }
-    return $this->getFormHtmlElement($object, $params, &$value, &$className);
+    return $this->getFormHtmlElement($object, $params, $value, $className);
   }
   
-  function getLabelElement(&$object, &$params){
+  function getLabelElement($object, $params){
     global $AppUI;
     
     $defaultFor = CMbArray::extract($params, "defaultFor");
@@ -194,11 +194,11 @@ class CMbFieldSpec {
     return $sHtml;
   }
   
-  function getLabelForElement(&$object, &$params){
+  function getLabelForElement($object, $params){
     return $this->fieldName;
   }
   
-  function getFormHiddenElement(&$object, &$params, &$value, &$className){
+  function getFormHiddenElement($object, $params, $value, $className){
     $field = $this->fieldName;
     $extra = CMbArray::makeXmlAttributes($params);
     $sHtml = "<input type=\"hidden\" name=\"".htmlspecialchars($field)."\" value=\"".htmlspecialchars($value)."\"";
@@ -210,7 +210,7 @@ class CMbFieldSpec {
     return $sHtml;
   }
   
-  function getFormElementText(&$object, &$params, &$value, &$className){
+  function getFormElementText($object, &$params, $value, $className){
     $field        = htmlspecialchars($this->fieldName);
     $extra        = CMbArray::makeXmlAttributes($params);
     $sHtml        = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"";    
@@ -218,14 +218,14 @@ class CMbFieldSpec {
     return $sHtml;
   }
   
-  function getFormElementTextarea(&$object, &$params, &$value, &$className){
+  function getFormElementTextarea($object, &$params, $value, $className){
     $field        = htmlspecialchars($this->fieldName);
     $extra        = CMbArray::makeXmlAttributes($params);
     $sHtml        = "<textarea name=\"$field\" class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra>".htmlspecialchars($value)."</textarea>";
     return $sHtml;
   }
   
-  function getFormHtmlElement(&$object, &$params, &$value, &$className){
+  function getFormHtmlElement($object, &$params, $value, $className){
     return $this->getFormElementText($object, $params, $value, $className);
     //trigger_error("mb_field: Specification '".$this->prop."' non prise en charge", E_USER_NOTICE);
   }
