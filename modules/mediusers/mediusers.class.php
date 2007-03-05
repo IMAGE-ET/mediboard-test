@@ -68,14 +68,14 @@ class CMediusers extends CMbObject {
     return array (
       "remote"        => "bool",
       "adeli"         => "numchar length|9 confidential",
-      "function_id"   => "notNull ref",
-      "discipline_id" => "ref",
+      "function_id"   => "notNull ref class|CFunctions",
+      "discipline_id" => "ref class|CDiscipline",
       "titres"        => "text",
       "commentaires"  => "text",
       "actif"         => "bool default|1",
       "deb_activite"  => "date",
       "fin_activite"  => "date",
-      "spec_cpam_id"  => "ref",
+      "spec_cpam_id"  => "ref class|CSpecCPAM",
       
       "_user_username"   => "notNull str minLength|4",
       "_user_password"   => "str minLength|4",

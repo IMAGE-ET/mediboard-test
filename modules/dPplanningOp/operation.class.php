@@ -96,12 +96,12 @@ class COperation extends CMbObject {
   
   function getSpecs() {
     return array (
-      "sejour_id"      => "notNull ref",
-      "chir_id"        => "notNull ref",
-      "anesth_id"      => "ref",
-      "plageop_id"     => "ref",
+      "sejour_id"      => "notNull ref class|",
+      "chir_id"        => "notNull ref class|CMediusers",
+      "anesth_id"      => "ref class|CMediusers",
+      "plageop_id"     => "ref class|CPlageOp",
       "pause"          => "time",
-      "salle_id"       => "ref",
+      "salle_id"       => "ref class|CSalle",
       "codes_ccam"     => "str",
       "date"           => "date",
       "code_uf"        => "str length|3",
@@ -116,7 +116,7 @@ class COperation extends CMbObject {
       "materiel"       => "text confidential",
       "commande_mat"   => "bool",
       "info"           => "bool",
-      "type_anesth"    => "ref",
+      "type_anesth"    => "ref class|CTypeAnesth",
       "rques"          => "text confidential",
       "rank"           => "num max|255",
       "depassement"    => "currency min|0 confidential",

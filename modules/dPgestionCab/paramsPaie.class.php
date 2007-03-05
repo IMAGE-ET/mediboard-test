@@ -57,7 +57,7 @@ class CParamsPaie extends CMbObject {
 
   function getSpecs() {
     return array (
-      "employecab_id" => "notNull ref",
+      "employecab_id" => "notNull ref class|CEmployeCab",
       "smic"          => "notNull currency|min|0",
       "csgds"         => "notNull pct",
       "csgnds"        => "notNull pct",

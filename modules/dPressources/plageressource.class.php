@@ -48,7 +48,7 @@ class CPlageressource extends CMbObject {
   
   function getSpecs() {
     return array (
-      "prat_id" => "ref",
+      "prat_id" => "ref class|CMediusers",
       "date"    => "notNull date",
       "debut"   => "notNull time",
       "fin"     => "notNull time",

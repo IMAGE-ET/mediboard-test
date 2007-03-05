@@ -41,13 +41,13 @@ class CCompteRendu extends CMbObject {
 
   function getSpecs() {
     return array (
-      "chir_id"          => "ref xor|function_id",
-      "function_id"      => "ref",
+      "chir_id"          => "ref xor|function_id class|CMediusers",
+      "function_id"      => "ref class|CFunctions",
       "object_id"        => "ref",
       "nom"              => "notNull str",
       "source"           => "html",
       "object_class"     => "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation",
-      "file_category_id" => "ref",
+      "file_category_id" => "ref class|CFilesCategory",
       "valide"           => "numchar maxLength|1"
     );
   }

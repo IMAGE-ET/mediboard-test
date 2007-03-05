@@ -36,7 +36,7 @@ class CService extends CMbObject {
 
   function getSpecs() {
     return array (
-      "group_id"    => "notNull ref",
+      "group_id"    => "notNull ref class|CGroups",
       "nom"         => "notNull str",
       "description" => "text confidential"
     );

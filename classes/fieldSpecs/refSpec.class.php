@@ -11,6 +11,8 @@ require_once("./classes/mbFieldSpec.class.php");
 
 class CRefSpec extends CMbFieldSpec {
   
+  var $class = null;
+  
   function getSpecType() {
     return("ref");
   }

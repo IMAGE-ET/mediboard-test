@@ -35,8 +35,8 @@ class CTarif extends CMbObject {
   
   function getSpecs() {
     return array (
-      "chir_id"     => "ref",
-      "function_id" => "ref",
+      "chir_id"     => "ref class|CMediusers",
+      "function_id" => "ref class|CFunctions",
       "description" => "notNull str confidential",
       "secteur1"    => "notNull currency min|0",
       "secteur2"    => "currency min|0"

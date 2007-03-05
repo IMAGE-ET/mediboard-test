@@ -70,7 +70,7 @@ class CFicheEi extends CMbObject {
 
   function getSpecs() {
     return array (
-      "user_id"                      => "notNull ref",    
+      "user_id"                      => "notNull ref class|CMediusers",    
       "date_fiche"                   => "notNull dateTime",
       "date_incident"                => "notNull dateTime",
       "evenements"                   => "notNull str maxLength|255",
@@ -92,15 +92,15 @@ class CFicheEi extends CMbObject {
       "annulee"                      => "bool",
       "remarques"                    => "text",
       //1ere Validation Qualité
-      "valid_user_id"                => "ref",
+      "valid_user_id"                => "ref class|CMediusers",
       "date_validation"              => "dateTime",
       //Validation Chef de Projet
-      "service_valid_user_id"        => "ref",
+      "service_valid_user_id"        => "ref class|CMediusers",
       "service_date_validation"      => "dateTime",
       "service_actions"              => "text",
       "service_descr_consequences"   => "text",
       //2nde Validation Qualité
-      "qualite_user_id"              => "ref",
+      "qualite_user_id"              => "ref class|CMediusers",
       "qualite_date_validation"      => "dateTime",
       "qualite_date_verification"    => "date",
       "qualite_date_controle"        => "date"

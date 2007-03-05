@@ -30,7 +30,7 @@ class CExamComp extends CMbObject {
   
   function getSpecs() {
     return array (
-      "consultation_id" => "notNull ref",
+      "consultation_id" => "notNull ref class|CConsultation",
       "examen"          => "text",
       "realisation"     => "notNull enum list|avant|pendant",
       "fait"            => "num minMax|0|1"

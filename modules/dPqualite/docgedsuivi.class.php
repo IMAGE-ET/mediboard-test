@@ -36,9 +36,9 @@ class CDocGedSuivi extends CMbObject {
 
   function getSpecs() {
     return array (
-      "user_id"          => "notNull ref",
-      "doc_ged_id"       => "notNull ref",
-      "file_id"          => "ref",
+      "user_id"          => "notNull ref class|CMediusers",
+      "doc_ged_id"       => "notNull ref class|CDocGed",
+      "file_id"          => "ref class|CFile",
       "remarques"        => "notNull text",
       "etat"             => "notNull enum list|0|16|32|48|64",
       "date"             => "dateTime",

@@ -67,8 +67,8 @@ class CConsultation extends CMbObject {
   
   function getSpecs() {
     return array (
-      "plageconsult_id" => "notNull ref",
-      "patient_id"      => "ref",
+      "plageconsult_id" => "notNull ref class|CPlageconsult",
+      "patient_id"      => "ref class|CPatient",
       "heure"           => "notNull time",
       "duree"           => "numchar maxLength|1",
       "secteur1"        => "currency min|0",

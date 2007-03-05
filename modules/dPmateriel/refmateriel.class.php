@@ -35,8 +35,8 @@ class CRefMateriel extends CMbObject {
 
   function getSpecs() {
     return array (
-      "fournisseur_id" => "notNull ref",
-      "materiel_id"    => "notNull ref",
+      "fournisseur_id" => "notNull ref class|CFournisseur",
+      "materiel_id"    => "notNull ref class|CMateriel",
       "quantite"       => "notNull num pos",
       "prix"           => "notNull float"
     );

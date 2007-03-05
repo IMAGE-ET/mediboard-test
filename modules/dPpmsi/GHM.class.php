@@ -78,7 +78,7 @@ class CGHM  extends CMbObject {
 
   function getSpecs() {
     return array (
-      "sejour_id" => "notNull ref",
+      "sejour_id" => "notNull ref class|CSejour",
       "DR"        => "str maxLength|10",
       "DASs"      => "text",
       "DADs"      => "text"

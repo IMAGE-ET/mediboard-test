@@ -52,7 +52,7 @@ class CFunctions extends CMbObject {
 
   function getSpecs() {
     return array (
-      "group_id" => "notNull ref",
+      "group_id" => "notNull ref class|CGroups",
       "type"     => "notNull enum list|administratif|cabinet",
       "text"     => "notNull str confidential",
       "color"    => "notNull str length|6",

@@ -51,17 +51,17 @@ class CRepas extends CMbObject {
   
   function getSpecs() {
     return array (
-      "affectation_id" => "notNull ref",
-      "menu_id"        => "ref",
-      "plat1"          => "ref",
-      "plat2"          => "ref",
-      "plat3"          => "ref",
-      "plat4"          => "ref",
-      "plat5"          => "ref",
-      "boisson"        => "ref",
-      "pain"           => "ref",
+      "affectation_id" => "notNull ref class|CAffectation",
+      "menu_id"        => "ref class|CMenu",
+      "plat1"          => "ref class|CPlat",
+      "plat2"          => "ref class|CPlat",
+      "plat3"          => "ref class|CPlat",
+      "plat4"          => "ref class|CPlat",
+      "plat5"          => "ref class|CPlat",
+      "boisson"        => "ref class|CPlat",
+      "pain"           => "ref class|CPlat",
       "date"           => "date",
-      "typerepas_id"   => "notNull ref",
+      "typerepas_id"   => "notNull ref class|CTypeRepas",
       "modif"          => "bool"
     );
   }

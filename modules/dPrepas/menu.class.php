@@ -45,8 +45,8 @@ class CMenu extends CMbObject {
   function getSpecs() {
     return array (
       "nom"         => "notNull str",
-      "group_id"    => "notNull ref",
-      "typerepas"   => "notNull ref",
+      "group_id"    => "notNull ref class|CGroups",
+      "typerepas"   => "notNull ref class|CTypeRepas",
       "plat1"       => "str",
       "plat2"       => "str",
       "plat3"       => "str",

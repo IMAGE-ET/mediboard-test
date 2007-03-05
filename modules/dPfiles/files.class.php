@@ -44,11 +44,11 @@ class CFile extends CMbObject {
     return array (
       "file_class"         => "notNull str",
       "file_object_id"     => "notNull ref",
-      "file_category_id"   => "ref",
+      "file_category_id"   => "ref class|CFilesCategory",
       "file_date"          => "notNull dateTime",
       "file_size"          => "num pos",
       "file_real_filename" => "notNull str",
-      "file_owner"         => "notNull ref",
+      "file_owner"         => "notNull ref class|CMediusers",
       "file_type"          => "str",
       "file_name"          => "notNull str"
     );

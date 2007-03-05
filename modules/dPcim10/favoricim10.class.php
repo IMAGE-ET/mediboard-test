@@ -23,7 +23,7 @@ class CFavoricim10 extends CMbObject {
   
   function getSpecs() {
     return array (
-      "favoris_user" => "notNull ref",
+      "favoris_user" => "notNull ref class|CUser",
       "favoris_code" => "notNull str maxLength|16"
     );
   }
