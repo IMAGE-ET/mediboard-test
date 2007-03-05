@@ -112,7 +112,7 @@ class CNumSpec extends CMbFieldSpec {
     return null;
   }
 
-  function getConfidential(&$object){
+  function sample(&$object){
     $fieldName = $this->fieldName;
     $propValue =& $object->$fieldName;
     

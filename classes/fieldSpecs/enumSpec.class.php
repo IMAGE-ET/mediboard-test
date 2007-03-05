@@ -42,7 +42,7 @@ class CEnumSpec extends CMbFieldSpec {
     return null;
   }
   
-  function getConfidential(&$object){
+  function sample(&$object){
     $fieldName = $this->fieldName;
     $propValue =& $object->$fieldName;
     $specFragments = explode("|", $this->list);

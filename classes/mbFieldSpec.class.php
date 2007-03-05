@@ -175,11 +175,12 @@ class CMbFieldSpec {
   }
   
   function checkConfidential(&$object){
-    if(!$this->confidential){
+    $field = $this->fieldName;
+    if(!$this->confidential || $object->$field === null){
       return null;
     }
 
-    $this->getConfidential($object);
+    $this->sample($object);
   }
   
   function getFormElement($object, $params){
@@ -252,11 +253,14 @@ class CMbFieldSpec {
   
   function checkProperty(){
   }
-  function getConfidential(&$object){
+  
+  function sample(&$object){
   }
+  
   function getDBSpec(){
     return null;
   }
+  
   function checkValues(){
   }
 }

@@ -83,6 +83,27 @@ class CCodeSpec extends CMbFieldSpec {
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementText($object, $params, $value, $className);
   }
+  
+  function sample(&$object) {
+    $fieldName = $this->fieldName;
+    
+    // ccam
+    if($this->ccam){
+      $object->$fieldName = "BFGA004";
+    
+    // cim10
+    }elseif($this->cim10){
+      $object->$fieldName = "H251";
+      
+    // adeli
+    }elseif($this->adeli){
+      $object->$fieldName = "123456789";
+      
+    // insee
+    }elseif($this->insee){
+      $object->$fieldName = "100000000000047";
+    }
+  }
 }
 
 ?>

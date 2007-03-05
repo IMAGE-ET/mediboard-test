@@ -32,6 +32,11 @@ class CEmailSpec extends CMbFieldSpec {
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementText($object, $params, $value, $className);
   }
+  
+  function sample(&$object) {
+    $fieldName = $this->fieldName;
+    $object->$fieldName = "noone@nowhere.com";
+  }
 }
 
 ?>
