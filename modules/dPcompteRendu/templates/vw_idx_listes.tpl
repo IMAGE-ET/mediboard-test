@@ -148,7 +148,7 @@ function pageMain() {
       <th>{{mb_label object=$liste field="compte_rendu_id"}}</th>
       <td>
         <select name="compte_rendu_id">
-          <option value="0">&mdash; Tous</option>
+          <option value="">&mdash; Tous</option>
           <optgroup label="CR du praticien">
           {{foreach from=$listCrPrat item=curr_cr}}
           <option value="{{$curr_cr->compte_rendu_id}}" {{if $liste->compte_rendu_id == $curr_cr->compte_rendu_id}}selected="selected"{{/if}}>

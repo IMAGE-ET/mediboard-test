@@ -68,7 +68,7 @@ class CExamPossum extends CMbObject {
   
   function getSpecs() {
     return array (
-      "consultation_id"      => "notNull refMandatory",
+      "consultation_id"      => "notNull ref",
       "age"                  => "enum list|inf60|61|sup71",
       "ouverture_yeux"       => "enum list|spontane|bruit|douleur|jamais",
       "rep_verbale"          => "enum list|oriente|confuse|inapproprie|incomprehensible|aucune",

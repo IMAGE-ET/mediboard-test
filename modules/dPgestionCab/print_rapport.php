@@ -23,7 +23,7 @@ $rubrique_id      = mbGetValueFromGetOrSession("rubrique_id"      , 0);
 $mode_paiement_id = mbGetValueFromGetOrSession("mode_paiement_id" , 0);
 
 $where             = array();
-$where[]           = "function_id = 0 OR function_id = '$user->function_id'";
+$where[]           = "function_id IS NULL OR function_id = '$user->function_id'";
 
 $listRubriques     = new CRubrique;
 $listRubriques     = $listRubriques->loadList($where);

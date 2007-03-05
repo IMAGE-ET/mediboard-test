@@ -2,8 +2,8 @@ var ElementChecker = {
   aProperties : {},
   oElement    : null,
   sTypeSpec   : null,
-  aSpecTypes  : Array("refMandatory", "ref", "str", "numchar",
-                      "num", "bool", "enum", "date", "time",
+  aSpecTypes  : Array("ref", "str", "numchar", "num", 
+                      "bool", "enum", "date", "time",
                       "dateTime", "float", "currency", "pct",
                       "text", "html", "email", "code"),
   setProperties : function(sTypeSpec, oElement, aProperties){
@@ -20,9 +20,6 @@ var ElementChecker = {
     }
     
     switch (this.sTypeSpec){
-      case "refMandatory":
-        sMsg = this.refMandatory();
-        break;
       case "ref":
         sMsg = this.ref();
         break;
@@ -83,6 +80,29 @@ var ElementChecker = {
         return "Ne pas peut pas être vide";
       }
     }
+    
+    // xor
+    if(this.aProperties["xor"]){
+      var sTargetElement = this.aProperties["xor"];
+      if (!sTargetElement) {
+        return "Spécification de chaîne de caractères invalide";
+      }
+      var oTargetElement = this.oElement.form.elements[sTargetElement];
+      if (!oTargetElement) {
+        return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
+      }
+      var oTargetLabel = getLabelFor(oTargetElement);
+      var oLabel = getLabelFor(this.oElement);
+      var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : sTargetElement;
+      var sLabel = oLabel ? oLabel.innerHTML : oElement.name;
+      if (this.oElement.value == "" && oTargetElement.value == ""){
+        return printf("Merci de choisir soit '%s', soit '%s'", sLabel, sTargetLabel);  
+      }
+      if (this.oElement.value != "" && oTargetElement.value != ""){
+        return printf("Vous ne devez choisir qu'un seul de ces champs : '%s', '%s'", sLabel, sTargetLabel);   
+      }
+    }
+    
     if(this.oElement.value == ""){
       return null;
     }
@@ -128,9 +148,9 @@ var ElementChecker = {
 }
 
 
-Object.extend(ElementChecker, {
-  // refMandatory
-  refMandatory: function() {
+Object.extend(ElementChecker, {  
+  // ref
+  ref: function() {
     if (isNaN(this.oElement.value)) {
       return "N'est pas une référence (format non numérique)";
     }
@@ -138,44 +158,8 @@ Object.extend(ElementChecker, {
     if (iElementValue == 0) {
       return "Ne peut pas être une référence nulle";
     }
-    return this.ref();
-  },
-  
-  // ref
-  ref: function() {
-    if (isNaN(this.oElement.value)) {
-      return "N'est pas une référence (format non numérique)";
-    }
-    iElementValue = parseInt(this.oElement.value, 10);
     if (iElementValue < 0) {
       return "N'est pas une référence (entier négatif)";
-    }
-
-    // xor
-    if(this.aProperties["xor"]){
-      var sTargetElement = this.aProperties["xor"];
-      if (!sTargetElement) {
-        return "Spécification de chaîne de caractères invalide";
-      }
-      var oTargetElement = this.oElement.form.elements[sTargetElement];
-      if (!oTargetElement) {
-        return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
-      }
-      var oTargetLabel = getLabelFor(oTargetElement);
-      var oLabel = getLabelFor(this.oElement);
-      var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : sTargetElement;
-      var sLabel = oLabel ? oLabel.innerHTML : oElement.name;
-      if (this.oElement.value == "" && oTargetElement.value == ""){
-        return printf("Merci de choisir soit '%s', soit '%s'", sLabel, sTargetLabel);  
-      }
-      if (this.oElement.value != "" && oTargetElement.value != ""){
-        return printf("Vous ne devez choisir qu'un seul de ces champs : '%s', '%s'", sLabel, sTargetLabel);   
-      }
-    }
-    
-    //  nand
-    if(this.aProperties["nand"]){
-      // Non implémenté
     }
     return null;
   },

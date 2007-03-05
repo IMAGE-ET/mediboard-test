@@ -46,7 +46,7 @@ class CPlageconsult extends CMbObject {
   
   function getSpecs() {
     return array (
-      "chir_id" => "notNull refMandatory",
+      "chir_id" => "notNull ref",
       "date"    => "notNull date",
       "freq"    => "notNull time",
       "debut"   => "notNull time",

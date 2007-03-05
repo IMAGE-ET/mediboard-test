@@ -17,7 +17,7 @@ function setObject(oObject) {
 
 function cancelObject(oObject) {
   var oForm = document.editPermObj;
-  oForm.object_id.value = 0;
+  oForm.object_id.value = "";
   oForm._object_view.value = "";
 }
 
@@ -49,7 +49,7 @@ function cancelObject(oObject) {
   <tr>
     <td class="button readonly">
       <input type="text" name="_object_view" value="" readonly="readonly" />
-      <input type="hidden" name="object_id" value="0" />
+      <input type="hidden" name="object_id" value="" />
       <br />
       <button type="button" class="cancel" onclick="cancelObject()">
         Pas d'objet

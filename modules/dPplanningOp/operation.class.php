@@ -96,8 +96,8 @@ class COperation extends CMbObject {
   
   function getSpecs() {
     return array (
-      "sejour_id"      => "notNull refMandatory",
-      "chir_id"        => "notNull refMandatory",
+      "sejour_id"      => "notNull ref",
+      "chir_id"        => "notNull ref",
       "anesth_id"      => "ref",
       "plageop_id"     => "ref",
       "pause"          => "time",
@@ -294,7 +294,7 @@ class COperation extends CMbObject {
     $plageTmp = new CPlageOp;
     $plageTmp->load($this->plageop_id);
     if ($plageTmp->spec_id) {
-      $plageTmp->spec_id = 0;
+      $plageTmp->spec_id = null;
       $chirTmp = new CMediusers;
       $chirTmp->load($this->chir_id);
       $plageTmp->chir_id = $chirTmp->user_id;

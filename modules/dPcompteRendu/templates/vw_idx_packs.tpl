@@ -145,7 +145,7 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
         <label for="_new" title="Veuillez choisir un modèle" />
-        <select name="_new" title="notNull refMandatory">
+        <select name="_new" title="notNull ref">
           <option value="">&mdash; Choisir un modèle</option>
           <optgroup label="Modèles du praticien">
             {{foreach from=$listModelePrat item=curr_modele}}

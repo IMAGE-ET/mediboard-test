@@ -70,7 +70,7 @@ class CFicheEi extends CMbObject {
 
   function getSpecs() {
     return array (
-      "user_id"                      => "notNull refMandatory",    
+      "user_id"                      => "notNull ref",    
       "date_fiche"                   => "notNull dateTime",
       "date_incident"                => "notNull dateTime",
       "evenements"                   => "notNull str maxLength|255",

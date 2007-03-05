@@ -33,7 +33,7 @@ class CEiItem extends CMbObject {
   
   function getSpecs() {
     return array (
-      "ei_categorie_id" => "notNull refMandatory",
+      "ei_categorie_id" => "notNull ref",
       "nom"             => "notNull str maxLength|50"
     );
   }

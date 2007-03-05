@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "system";
-$config["mod_version"]     = "1.0.5";
+$config["mod_version"]     = "1.0.6";
 $config["mod_type"]        = "core";
 
 class CSetupsystem extends CSetup {
@@ -82,7 +82,12 @@ class CSetupsystem extends CSetup {
                "\nCHANGE `object_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0'; ";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.5";
+    $this->makeRevision("1.0.5");
+    $this->setTimeLimit(300);
+    $sql = "DELETE FROM `user_log` WHERE `object_id` = '0'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.6";
   }
 }
 ?>

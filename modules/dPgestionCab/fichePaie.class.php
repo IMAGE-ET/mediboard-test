@@ -67,7 +67,7 @@ class CFichePaie extends CMbObject {
 
   function getSpecs() {
     return array (
-      "params_paie_id" => "notNull refMandatory",
+      "params_paie_id" => "notNull ref",
       "debut"          => "notNull date",
       "fin"            => "notNull date moreEquals|debut",
       "salaire"        => "notNull currency min|0",

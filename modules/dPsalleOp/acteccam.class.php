@@ -51,8 +51,8 @@ class CActeCCAM extends CMbObject {
       "modificateurs"       => "str maxLength|4",
       "montant_depassement" => "currency min|0",
       "commentaire"         => "text",
-      "operation_id"        => "notNull refMandatory",
-      "executant_id"        => "notNull refMandatory"
+      "operation_id"        => "notNull ref",
+      "executant_id"        => "notNull ref"
     );
   }
   

@@ -36,7 +36,7 @@ class CEmployeCab extends CMbObject {
 
   function getSpecs() {
     return array (
-      "function_id" => "notNull refMandatory",
+      "function_id" => "notNull ref",
       "nom"         => "notNull str",
       "prenom"      => "notNull str",
       "function"    => "notNull str",

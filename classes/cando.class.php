@@ -17,27 +17,29 @@ class CCanDo {
   var $view = null;
   var $admin = null;
   
+  function redirect(){
+    global $AppUI;
+    $dialog = mbGetValueFromGet("dialog");
+    $suppressHeaders = mbGetValueFromGet("suppressHeaders");
+    $ajax   = mbGetValueFromGet("ajax");
+    $AppUI->redirect("m=system&a=access_denied&dialog=$dialog&ajax=$ajax&suppressHeaders=$suppressHeaders");
+  }
+  
   function needsRead() {
     if (!$this->read) {
-      global $AppUI;
-      $dialog = mbGetValueFromGet("dialog");
-      $AppUI->redirect("m=system&a=access_denied&dialog=$dialog");
+      $this->redirect();
     }
   }
 
   function needsEdit() {
     if (!$this->edit) {
-      global $AppUI;
-      $dialog = mbGetValueFromGet("dialog");
-      $AppUI->redirect("m=system&a=access_denied&dialog=$dialog");
+      $this->redirect();
     }
   }
 
   function needsAdmin() {
     if (!$this->admin) {
-      global $AppUI;
-      $dialog = mbGetValueFromGet("dialog");
-      $AppUI->redirect("m=system&a=access_denied&dialog=$dialog");
+      $this->redirect();
     }
   }
 }

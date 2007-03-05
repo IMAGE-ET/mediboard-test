@@ -38,7 +38,7 @@ class CLit extends CMbObject {
 
   function getSpecs() {
     return array (
-      "chambre_id" => "notNull refMandatory",
+      "chambre_id" => "notNull ref",
       "nom"        => "notNull str"
     );
   }

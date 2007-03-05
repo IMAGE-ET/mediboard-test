@@ -37,7 +37,7 @@ $order = "mod_id";
 $permModule = new CPermModule;
 $listPermsModules = $permModule->loadList($where, $order);
 foreach($listPermsModules as $keyMod => $mod) {
-  if($listPermsModules[$keyMod]->mod_id == 0) {
+  if(!$listPermsModules[$keyMod]->mod_id) {
     $isAdminPermSet = true;
   }
   $listPermsModules[$keyMod]->loadRefDBModule();

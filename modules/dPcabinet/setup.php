@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.62";
+$config["mod_version"]     = "0.63";
 $config["mod_type"]        = "user";
 
 
@@ -610,8 +610,24 @@ class CSetupdPcabinet extends CSetup {
     $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
         "\nVALUES ('0', 'DefaultPeriod', 'month');";
     $this->addQuery($sql);
-
-    $this->mod_version = "0.62";
+    
+    $this->makeRevision("0.62");
+    $sql = "ALTER TABLE `tarifs` " .
+           "\nCHANGE `chir_id` `chir_id` int(11) unsigned NULL DEFAULT NULL," .
+           "\nCHANGE `function_id` `function_id` int(11) unsigned NULL DEFAULT NULL;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `tarifs` SET function_id = NULL WHERE function_id='0';";
+    $this->addQuery($sql);
+    $sql = "UPDATE `tarifs` SET chir_id = NULL WHERE chir_id='0';";
+    $this->addQuery($sql);
+    $sql = "DELETE FROM `consultation_anesth` WHERE `consultation_id`= '0'";
+    $this->addQuery($sql);
+    $sql = "UPDATE `consultation_anesth` SET operation_id = NULL WHERE operation_id='0';";
+    $this->addQuery($sql);
+    $sql = "DELETE FROM `exams_comp` WHERE `consultation_id`= '0'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.63";
   }
 }
 ?>

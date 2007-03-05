@@ -37,9 +37,9 @@ class CUserLog extends CMbObject {
 
   function getSpecs() {
     return array (
-      "user_id"      => "notNull refMandatory",
+      "user_id"      => "notNull ref",
       "date"         => "notNull dateTime",
-      "object_id"    => "notNull refMandatory",
+      "object_id"    => "notNull ref",
       "object_class" => "notNull str maxLength|25",
       "type"         => "notNull enum list|create|store|delete",
       "fields"       => "text"

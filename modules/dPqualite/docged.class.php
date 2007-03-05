@@ -55,7 +55,7 @@ class CDocGed extends CMbObject {
 
   function getSpecs() {
     return array (
-      "group_id"         => "notNull refMandatory",
+      "group_id"         => "notNull ref",
       "user_id"          => "ref",
       "doc_chapitre_id"  => "ref",
       "doc_theme_id"     => "ref",

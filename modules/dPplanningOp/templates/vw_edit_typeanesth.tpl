@@ -2,7 +2,7 @@
   <tr>
     <td class="halfPane">
       <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_typeanesth&amp;type_anesth_id=0">
-        Créer unnouveau type d'anesthésie
+        Créer un nouveau type d'anesthésie
       </a>
       <table class="tbl">
         <tr>

@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "admin";
-$config["mod_version"]     = "1.0.6";
+$config["mod_version"]     = "1.0.7";
 $config["mod_type"]        = "core";
 
 class CSetupadmin extends CSetup {
@@ -173,7 +173,20 @@ class CSetupadmin extends CSetup {
         "\nCHANGE `pref_name` `pref_name` VARCHAR( 40 ) NOT NULL";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.6";
+    $this->makeRevision("1.0.6");
+    $sql = "ALTER TABLE `perm_object` CHANGE `object_id` `object_id` int(11) unsigned NULL DEFAULT NULL;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `perm_object` SET object_id = NULL WHERE object_id='0';";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `perm_module` CHANGE `mod_id` `mod_id` int(11) unsigned NULL DEFAULT NULL;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `perm_module` SET mod_id = NULL WHERE mod_id='0';";
+    $this->addQuery($sql);
+    $sql = "DELETE FROM `perm_module` WHERE user_id='0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.7";
   }
 }
 ?>

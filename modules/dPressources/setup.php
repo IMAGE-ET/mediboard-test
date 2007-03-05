@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPressources";
-$config["mod_version"]     = "0.12";
+$config["mod_version"]     = "0.13";
 $config["mod_type"]        = "user";
 
 class CSetupdPressources extends CSetup {
@@ -45,7 +45,11 @@ class CSetupdPressources extends CSetup {
                "\nCHANGE `libelle` `libelle` varchar(255) NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.12";
+    $this->makeRevision("0.12");
+    $sql = "UPDATE `plageressource` SET prat_id = NULL WHERE prat_id='0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.13";
     
   }
 }

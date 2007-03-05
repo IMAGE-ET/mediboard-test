@@ -165,7 +165,7 @@ function choosePreselection(oSelect) {
   
   <tr>
     <th><label for="mb_operation_id" title="Choisir un identifiant d'opération">Identifiant d'opération</label></th>
-    <td><input type="text" title="notNull refMandatory" name="mb_operation_id" value="{{$mbOp->operation_id}}" size="5"/></td>
+    <td><input type="text" title="notNull ref" name="mb_operation_id" value="{{$mbOp->operation_id}}" size="5"/></td>
   </tr>
   
   {{if $mbOp->operation_id}}

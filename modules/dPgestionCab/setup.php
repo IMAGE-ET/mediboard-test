@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPgestionCab";
-$config["mod_version"]     = "0.14";
+$config["mod_version"]     = "0.15";
 $config["mod_type"]        = "user";
 
 class CSetupdPgestionCab extends CSetup {
@@ -202,7 +202,17 @@ class CSetupdPgestionCab extends CSetup {
                "\nCHANGE `nom` `nom` varchar(255) NOT NULL DEFAULT 'divers';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.14";
+    $this->makeRevision("0.14");
+    $sql = "ALTER TABLE `mode_paiement` CHANGE `function_id` `function_id` int(11) unsigned NULL DEFAULT NULL;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `mode_paiement` SET `function_id` = NULL WHERE `function_id` = '0';";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `rubrique_gestioncab` CHANGE `function_id` `function_id` int(11) unsigned NULL DEFAULT NULL;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `rubrique_gestioncab` SET `function_id` = NULL WHERE `function_id` = '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.15";
   }
 }
 ?>

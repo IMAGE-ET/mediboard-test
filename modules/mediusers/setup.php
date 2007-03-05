@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "mediusers";
-$config["mod_version"]     = "0.25";
+$config["mod_version"]     = "0.26";
 $config["mod_type"]        = "user";
 
 class CSetupmediusers extends CSetup {
@@ -394,7 +394,11 @@ class CSetupmediusers extends CSetup {
      $sql = "ALTER TABLE `discipline` ADD `categorie` enum('ORT','ORL','OPH','DER','STO','GAS','ARE','RAD','GYN','EST') NULL";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.25";
+     $this->makeRevision("0.25");
+     $sql = "UPDATE `users_mediboard` SET `discipline_id` = NULL WHERE `discipline_id` = '0';";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.26";
   }
 }
 ?>

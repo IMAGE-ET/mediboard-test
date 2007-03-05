@@ -30,7 +30,7 @@ $mediuser->loadRefFunction();
 $listeTarifsChir = null;
 if ($mediuser->isPraticien()) {
   $where = array();
-  $where["function_id"] = "= 0";
+  $where["function_id"] = "IS NULL";
   $where["chir_id"] = "= '$mediuser->user_id'";
   $listeTarifsChir = new CTarif();
   $listeTarifsChir = $listeTarifsChir->loadList($where);
@@ -38,7 +38,7 @@ if ($mediuser->isPraticien()) {
 
 // Liste des tarifs de la spécialité
 $where = array();
-$where["chir_id"] = "= 0";
+$where["chir_id"] = "IS NULL";
 $where["function_id"] = "= '$mediuser->function_id'";
 $listeTarifsSpe = new CTarif();
 $listeTarifsSpe = $listeTarifsSpe->loadList($where);

@@ -31,7 +31,7 @@ if(!$gestioncab->gestioncab_id) {
 }
 
 $where             = array();
-$where[]           = "function_id = 0 OR function_id = '$user->function_id'";
+$where[]           = "function_id IS NULL OR function_id = '$user->function_id'";
 
 $listRubriques     = new CRubrique;
 $listRubriques     = $listRubriques->loadList($where);

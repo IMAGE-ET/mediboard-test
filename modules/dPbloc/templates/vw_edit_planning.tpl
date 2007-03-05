@@ -6,7 +6,7 @@ function checkPlage() {
     return false;
    }
     
-  if (form.chir_id.value == 0 && form.spec_id.value == 0) {
+  if (form.chir_id.value == "" && form.spec_id.value == "") {
     alert("Merci de choisir un chirurgien ou une spécialité");
     form.chir_id.focus();
     return false;

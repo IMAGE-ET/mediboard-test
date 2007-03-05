@@ -85,9 +85,9 @@ class CSejour extends CMbObject {
   
   function getSpecs() {
     return array (
-      "patient_id"         => "notNull refMandatory",
-      "praticien_id"       => "notNull refMandatory",
-      "group_id"           => "notNull refMandatory",
+      "patient_id"         => "notNull ref",
+      "praticien_id"       => "notNull ref",
+      "group_id"           => "notNull ref",
       "type"               => "notNull enum list|comp|ambu|exte|seances|ssr|psy default|ambu",
       "modalite"           => "notNull enum list|office|libre|tiers default|libre",
       "annule"             => "bool",

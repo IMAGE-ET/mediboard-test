@@ -36,7 +36,7 @@ class CExamNyha extends CMbObject {
   
   function getSpecs() {
     return array (
-      "consultation_id" => "notNull refMandatory",
+      "consultation_id" => "notNull ref",
       "q1"              => "bool",
       "q2a"             => "bool",
       "q2b"             => "bool",

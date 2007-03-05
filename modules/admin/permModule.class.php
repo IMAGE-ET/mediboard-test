@@ -36,7 +36,7 @@ class CPermModule extends CMbObject {
   
   function getSpecs() {
     return array (
-      "user_id"     => "notNull refMandatory",
+      "user_id"     => "notNull ref",
       "mod_id"      => "ref",
       "permission"  => "notNull numchar maxLength|1",
       "view"        => "notNull numchar maxLength|1",
@@ -77,13 +77,21 @@ class CPermModule extends CMbObject {
     if($user_id !== null) {
       $currPermsModules = array();
       foreach($listPermsModules as $perm_mod) {
-        $currPermsModules[$perm_mod->mod_id] = $perm_mod;
+        if(!$perm_mod->mod_id){
+          $currPermsModules[0] = $perm_mod;
+        }else{
+          $currPermsModules[$perm_mod->mod_id] = $perm_mod;
+        }
       }
       return $currPermsModules;
     } else {
       $userPermsModules = array();
       foreach($listPermsModules as $perm_mod) {
-        $userPermsModules[$perm_mod->mod_id] = $perm_mod;
+        if(!$perm_mod->mod_id){
+          $userPermsModules[0] = $perm_mod;
+        }else{
+          $userPermsModules[$perm_mod->mod_id] = $perm_mod;
+        }
       }
       return $userPermsModules;
     }
@@ -112,7 +120,11 @@ class CPermModule extends CMbObject {
       $result = $perms[0]->$field;
     }
     if(isset($perms[$mod_id])) {
-      $result = $perms[$mod_id]->$field;
+      if(!$mod_id){
+        $result = $perms[0]->$field;
+      }else{
+        $result = $perms[$mod_id]->$field;
+      }
     }
     return $result >= $permType;
   }

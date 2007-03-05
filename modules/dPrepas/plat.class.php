@@ -32,9 +32,9 @@ class CPlat extends CMbObject {
   function getSpecs() {
     return array (
       "nom"       => "notNull str",
-      "group_id"  => "notNull refMandatory",
+      "group_id"  => "notNull ref",
       "type"      => "notNull enum list|plat1|plat2|plat3|plat4|plat5|boisson|pain",
-      "typerepas" => "notNull refMandatory"
+      "typerepas" => "notNull ref"
     );
   }
   

@@ -14,8 +14,7 @@ class CMbFieldSpecFact {
    
   function getSpec($object, $field, $propSpec = null){
     
-    static $aClass = array("refMandatory" => "CRefMandatorySpec",
-                             "ref"          => "CRefSpec",
+    static $aClass = array("ref"          => "CRefSpec",
                              "str"          => "CStrSpec",
                              "numchar"      => "CNumcharSpec",
                              "num"          => "CNumSpec",

@@ -18,6 +18,7 @@ class CMbFieldSpec {
   var $moreThan       = null;
   var $moreEquals     = null;
   var $sameAs         = null;
+  var $xor            = null;
   
   var $msgError       = null;
   
@@ -63,6 +64,21 @@ class CMbFieldSpec {
     if($this->notNull && ($propValue === null || $propValue === "")){
       return "Ne pas peut pas avoir une valeur nulle";
     }
+    
+    // xor
+    if($field = $this->xor){
+      if($msg = $this->checkTargetPropValue($object, $field)){
+        return $msg;
+      }
+      $targetPropValue = $object->$field; 
+      if (!$propValue and !$targetPropValue) {
+        return "Merci de choisir soit '$fieldName', soit '$field'"; 
+      }
+      if ($propValue and $targetPropValue) {
+        return "Vous ne devez choisir qu'un seul de ces champs : '$fieldName', '$field'"; 
+      }
+    }
+    
     if($propValue === null || $propValue === ""){
       return null;
     }
@@ -114,7 +130,7 @@ class CMbFieldSpec {
   function checkPropertyValue($object){
     $fieldName = $this->fieldName;
     $propValue =& $object->$fieldName;
-    
+
     if($this->msgError = $this->checkParams($object)){
       return $this->msgError;
     }

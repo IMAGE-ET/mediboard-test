@@ -120,8 +120,8 @@
     </th>
     <td>
       <select name="pref_name[AUTOADDSIGN]">
-        <option value="0"{{if $prefsUser.dPcabinet.AUTOADDSIGN == "0"}}selected="selected"{{/if}}>Oui</option>
-        <option value="1"{{if $prefsUser.dPcabinet.AUTOADDSIGN == "1"}}selected="selected"{{/if}}>Non</option>
+        <option value="0"{{if $prefsUser.dPcabinet.AUTOADDSIGN == "0"}}selected="selected"{{/if}}>Non</option>
+        <option value="1"{{if $prefsUser.dPcabinet.AUTOADDSIGN == "1"}}selected="selected"{{/if}}>Oui</option>
       </select>
     </td>
   </tr>

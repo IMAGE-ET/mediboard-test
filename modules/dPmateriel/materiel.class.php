@@ -36,7 +36,7 @@ class CMateriel extends CMbObject {
       "nom"         => "notNull str maxLength|50",
       "code_barre"  => "num",
       "description" => "text",
-      "category_id" => "notNull refMandatory"
+      "category_id" => "notNull ref"
     );
   }
   

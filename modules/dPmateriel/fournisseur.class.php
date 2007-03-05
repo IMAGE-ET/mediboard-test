@@ -33,11 +33,11 @@ class CFournisseur extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
 
     static $props = array (
-      "societe"    => "str|notNull",
+      "societe"    => "str notNull",
       "adresse"    => "text",
-      "codepostal" => "numchar|length|5",
+      "codepostal" => "numchar length|5",
       "ville"      => "str",
-      "telephone"  => "numchar|maxLength|10",
+      "telephone"  => "numchar maxLength|10",
       "mail"       => "email",
       "nom"        => "str",
       "prenom"     => "str"

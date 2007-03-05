@@ -29,7 +29,7 @@ class CDoAntecedentAddEdit extends CDoObjectAddEdit {
     } else {
       $this->doStore();
     }
-    if(! (!$this->isNotNew && isset($_POST["consultation_anesth_id"]) && $this->_obj->object_class == "CPatient" && $autoadd_default == 0)){
+    if(! (!$this->isNotNew && isset($_POST["consultation_anesth_id"]) && $this->_obj->object_class == "CPatient" && $autoadd_default == 1)){
       $this->doRedirect();
     }
   }

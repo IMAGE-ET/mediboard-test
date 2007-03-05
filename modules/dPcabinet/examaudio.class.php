@@ -106,7 +106,7 @@ class CExamAudio extends CMbObject {
   
   function getSpecs() {
     return array (
-      "consultation_id" => "notNull refMandatory",
+      "consultation_id" => "notNull ref",
       "remarques"       => "text",
       "gauche_aerien"   => "str maxLength|64",
       "gauche_osseux"   => "str maxLength|64",

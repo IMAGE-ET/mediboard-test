@@ -56,7 +56,7 @@ class CPlageOp extends CMbObject {
       "chir_id"        => "ref",
       "anesth_id"      => "ref",
       "spec_id"        => "ref xor|chir_id",
-      "salle_id"       => "notNull refMandatory",
+      "salle_id"       => "notNull ref",
       "date"           => "notNull date",
       "debut"          => "notNull time",
       "fin"            => "notNull time",

@@ -34,7 +34,7 @@ class CTempsHospi extends CMbObject {
 
   function getSpecs() {
     return array (
-      "praticien_id" => "notNull refMandatory",
+      "praticien_id" => "notNull ref",
       "type"         => "notNull enum list|comp|ambu|seances|ssr|psy",
       "nb_sejour"    => "num pos",
       "duree_moy"    => "currency pos",

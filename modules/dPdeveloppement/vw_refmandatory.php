@@ -25,7 +25,7 @@ foreach($listClass as $selected){
   $aChamps[$nameKeyTable] = array();
   $aClass =& $aChamps[$nameKeyTable];
   
-  // Extraction des champs de prop "refMandatory"
+  // Extraction des champs de prop "refMnadatory" ou "ref"
   foreach ($object->_specs as $k => $v) {
     $typeProp = $v->getSpecType();
     if($typeProp == "refMandatory" || $typeProp == "ref"){

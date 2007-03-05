@@ -33,7 +33,7 @@ class CTypeRepas extends CMbObject {
   function getSpecs() {
     return array (
       "nom"      => "notNull str",
-      "group_id" => "notNull refMandatory",
+      "group_id" => "notNull ref",
       "debut"    => "notNull time",
       "fin"      => "notNull time moreThan|debut"
     );

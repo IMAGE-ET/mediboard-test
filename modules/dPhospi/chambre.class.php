@@ -45,7 +45,7 @@ class CChambre extends CMbObject {
   
   function getSpecs() {
     return array (
-      "service_id"       => "notNull refMandatory",
+      "service_id"       => "notNull ref",
       "nom"              => "notNull str",
       "caracteristiques" => "text confidential"
     );

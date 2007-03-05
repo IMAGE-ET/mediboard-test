@@ -51,7 +51,7 @@ class CTarif extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    if($this->chir_id == 0)
+    if($this->chir_id == null)
       $_type = "chir";
     else
       $_type = "function";
@@ -60,9 +60,9 @@ class CTarif extends CMbObject {
   function updateDBFields() {
   	if($this->_type !== null) {
       if($this->_type == "chir")
-        $this->function_id = 0;
+        $this->function_id = "";
       else
-        $this->chir_id = 0;
+        $this->chir_id = "";
   	}
   }
   

@@ -28,9 +28,9 @@ class CValidationRepas extends CMbObject {
   
   function getSpecs() {
     return array (
-      "service_id"   => "notNull refMandatory",
+      "service_id"   => "notNull ref",
       "date"         => "date",
-      "typerepas_id" => "notNull refMandatory",
+      "typerepas_id" => "notNull ref",
       "modif"        => "bool"
     );
   }

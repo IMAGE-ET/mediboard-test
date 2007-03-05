@@ -68,7 +68,7 @@ class CMediusers extends CMbObject {
     return array (
       "remote"        => "bool",
       "adeli"         => "numchar length|9 confidential",
-      "function_id"   => "notNull refMandatory",
+      "function_id"   => "notNull ref",
       "discipline_id" => "ref",
       "titres"        => "text",
       "commentaires"  => "text",

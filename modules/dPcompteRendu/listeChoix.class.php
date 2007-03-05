@@ -51,7 +51,7 @@ class CListeChoix extends CMbObject {
       return "Une liste ne peut pas appartenir à la fois à une fonction et un utilisateur";
     }
     if (!($this->chir_id or $this->function_id)) {
-      return "Une liste doit appertenir à un utilisateur ou à une fonction";
+      return "Une liste doit appartenir à un utilisateur ou à une fonction";
     }
   }
   

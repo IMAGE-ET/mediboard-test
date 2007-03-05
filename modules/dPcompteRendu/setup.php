@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcompteRendu";
-$config["mod_version"]     = "0.29";
+$config["mod_version"]     = "0.30";
 $config["mod_type"]        = "user";
 
 class CSetupdPcompteRendu extends CSetup {
@@ -216,7 +216,24 @@ class CSetupdPcompteRendu extends CSetup {
     $sql = "UPDATE `compte_rendu` SET `file_category_id` = NULL WHERE `file_category_id` = '0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.29";
+    $this->makeRevision("0.29");
+    $this->setTimeLimit(1800);
+    $sql = "UPDATE `compte_rendu` SET `function_id` = NULL WHERE `function_id` = '0';";
+    $this->addQuery($sql);
+    $sql = "UPDATE `compte_rendu` SET `chir_id` = NULL WHERE `chir_id` = '0';";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `liste_choix` CHANGE `compte_rendu_id` `compte_rendu_id` int(11) unsigned NULL DEFAULT NULL;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `liste_choix` SET compte_rendu_id = NULL WHERE compte_rendu_id='0';";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `aide_saisie` CHANGE `user_id` `user_id` int(11) unsigned NULL DEFAULT NULL;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `aide_saisie` SET function_id = NULL WHERE function_id='0';";
+    $this->addQuery($sql);
+    $sql = "UPDATE `aide_saisie` SET user_id = NULL WHERE user_id='0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.30";
   }
 }
 ?>

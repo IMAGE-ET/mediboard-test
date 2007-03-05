@@ -43,7 +43,7 @@
 <table class="form" id="vwServices" style="display:none;">
   <tr>
     <th><label for="service_id" title="Veuillez sélectionner un service">Service</label></th>
-    <td id="listService"><select title="notNull refMandatory" name="service_id"></select></td>
+    <td id="listService"><select title="notNull ref" name="service_id"></select></td>
   </tr>
   <tr>
     <th><label for="date" title="Veuillez sélectionner une date">Date</label></th>
@@ -139,7 +139,7 @@
     </tbody>
   </table>
   
-  <select id="templatelistService" title="notNull refMandatory" name="service_id"><option value="">&mdash; Veuillez sélectionner un service</option></select>
+  <select id="templatelistService" title="notNull ref" name="service_id"><option value="">&mdash; Veuillez sélectionner un service</option></select>
   <button id="templateButtonMod" onclick="saveRepas();" type="button" class="modify">{{tr}}Modify{{/tr}}</button>
   <button id="templateButtonDel" onclick="confirmDeletionOffline(this.form, saveRepas,{typeName:'{{tr escape="javascript"}}CRepas.one{{/tr}}'})" type="button" class="trash">{{tr}}Delete{{/tr}}</button>
   <button id="templateButtonAdd" onclick="saveRepas();" type="button" class="submit">{{tr}}Create{{/tr}}</button>
