@@ -72,7 +72,7 @@ foreach($listDays as $keyDate=>$valDate){
     $nbquartheure = ($valPlages->_heurefin-$valPlages->_heuredeb)*4;
     $nbquartheure = $nbquartheure - array_search($valPlages->_minutedeb,$listMins) + array_search($valPlages->_minutefin,$listMins);
     $valPlages->_nbQuartHeure = $nbquartheure;
-
+//mbTRace($valPlages);die();
 
     $arrayAffichage["$keyDate-s".$valPlages->salle_id."-".intval($valPlages->_heuredeb).":".$valPlages->_minutedeb] = $valPlages;
     // Détermination des horaire non vides
@@ -84,6 +84,7 @@ foreach($listDays as $keyDate=>$valDate){
       if(!array_key_exists($min_encours,$listMins)){
         $min_encours=0;
         $heure_encours ++;
+        //mbTrace($heure_encours);die();
         if(!array_key_exists($heure_encours,$listHours)){
           $heure_encours=8;
         }

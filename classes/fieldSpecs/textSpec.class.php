@@ -27,9 +27,7 @@ class CTextSpec extends CMbFieldSpec {
   
   function sample(&$object){
     $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
-    
-    $propValue = $this->randomString(CMbFieldSpec::$chars, 40);
+    $object->$fieldName = $this->randomString(CMbFieldSpec::$chars, 40);
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

@@ -16,11 +16,13 @@ if(!$canRead) {
 $log_file = "tmp/echantillonnage.log";
 file_put_contents($log_file, "##\r\n## Echantillonnage du ".date("d/m/Y à H:i:s")."\r\n##\r\n", FILE_APPEND);
 
+
 class CEchantillonnage {
-  var $class  = null;
-  var $object = null;
-  var $listObjects = array();
-  
+  var $class           = null;
+  var $object          = null;
+  var $listObjects     = array();
+  var $listStaticProps = array();
+
   function CEchantillonnage ($class) {
     $this->class = $class;
     $this->object = new $class;
@@ -30,6 +32,11 @@ class CEchantillonnage {
     $this->object = new $this->class;
   }
   
+  function load($object_id){
+    $this->object->load($object_id);
+    $this->listObjects[$this->object->_id] = $this->object;
+  }
+
   function loadListArray($tab){
     foreach($tab as $value){
       $this->renew();
@@ -39,33 +46,16 @@ class CEchantillonnage {
     }
   }
   
-  function load($object_id){
-    $this->object->load($object_id);
-    $this->listObjects[$this->object->_id] = $this->object;
-  }
-  
-  function store($logfile = true) {
-    global $log_file;
-    if(!$msg = $this->object->store()) {
-      $this->listObjects[$this->object->_id] = $this->object;
-      if($logfile){
-        file_put_contents($log_file, $this->object->_class_name.": ".$this->object->_id."\r\n", FILE_APPEND);
-      }
-    }else{
-      return $msg; 
-    }
-  }
-  
   function setField($field, $value) {
-    $this->object->$field = $value;
+    $this->listStaticProps[$field] = $value;
   }
   
   function setManyFields($tabFields) {
     foreach($tabFields as $field => $value) {
       if(is_array($value)) {
-        $this->object->$field = $this->getRandValue($value);
+        $this->listStaticProps[$field] = $this->getRandValue($value);
       } else {
-        $this->object->$field = $value;
+        $this->listStaticProps[$field] = $value;
       }
     }
   }
@@ -87,6 +77,22 @@ class CEchantillonnage {
     }
   }
   
+  function store($logfile = true) {
+    global $log_file, $aMsgError;
+    
+    CMbObjectTest::sample($this->object, $this->listStaticProps);
+    if(!$msg = $this->object->store()) {
+      $this->listObjects[$this->object->_id] = $this->object;
+      if($logfile){
+        file_put_contents($log_file, $this->object->_class_name.": ".$this->object->_id."\r\n", FILE_APPEND);
+      }
+    }else{
+      if(!in_array($msg, $aMsgError)){
+        $aMsgError[] = $msg;
+      }
+      return $msg; 
+    }
+  }
 }
 
 // Récupération des données
@@ -116,9 +122,11 @@ $_nb_chambre       = mbGetValueFromPost("_nb_chambre"       , 1);
 $_nb_lit           = mbGetValueFromPost("_nb_lit"           , 1);
 
 $aNomFamille = array("ADAM" ,"ALBERT" ,"ALEXANDRE" ,"ANDRE" ,"ANTOINE" ,"ARNAUD" ,"AUBERT" ,"AUBRY" ,"BAILLY" ,"BARBE" ,"BARBIER" ,"BARON" ,"BARRE" ,"BARTHELEMY" ,"BENARD" ,"BENOIT" ,"BERGER" ,"BERNARD" ,"BERTIN" ,"BERTRAND" ,"BESNARD" ,"BESSON" ,"BIGOT" ,"BLANC" ,"BLANCHARD" ,"BLANCHET" ,"BONNET" ,"BOUCHER" ,"BOUCHET" ,"BOULANGER" ,"BOURGEOIS" ,"BOUSQUET" ,"BOUVIER" ,"BOYER" ,"BRETON" ,"BRIAND" ,"BRUN" ,"BRUNEL" ,"BRUNET" ,"BUISSON" ,"CAMUS" ,"CARLIER" ,"CARON" ,"CARPENTIER" ,"CARRE" ,"CHARLES" ,"CHARPENTIER" ,"CHARRIER" ,"CHAUVIN" ,"CHEVALIER" ,"CHEVALLIER" ,"CLEMENT" ,"COLAS" ,"COLIN" ,"COLLET" ,"COLLIN" ,"CORDIER" ,"COSTE" ,"COULON" ,"COURTOIS" ,"COUSIN" ,"DA SILVA" ,"DANIEL" ,"DAVID" ,"DELATTRE" ,"DELAUNAY" ,"DELMAS" ,"DENIS" ,"DESCHAMPS" ,"DEVAUX" ,"DIDIER" ,"DUBOIS" ,"DUFOUR" ,"DUMAS" ,"DUMONT" ,"DUPONT" ,"DUPUIS" ,"DUPUY" ,"DURAND" ,"DUVAL" ,"ETIENNE" ,"FABRE" ,"FAURE" ,"FERNANDEZ" ,"FERRAND" ,"FLEURY" ,"FONTAINE" ,"FOURNIER" ,"FRANCOIS" ,"GAILLARD" ,"GARCIA" ,"GARNIER" ,"GAUDIN" ,"GAUTHIER" ,"GAUTIER" ,"GAY" ,"GEORGES" ,"GERARD" ,"GERMAIN" ,"GILBERT" ,"GILLET" ,"GIRARD" ,"GIRAUD" ,"GONZALEZ" ,"GREGOIRE" ,"GRONDIN" ,"GROS" ,"GUERIN" ,"GUICHARD" ,"GUILLAUME" ,"GUILLET" ,"GUILLON" ,"GUILLOT" ,"GUILLOU" ,"GUYOT" ,"HAMON" ,"HARDY" ,"HEBERT" ,"HENRY" ,"HERVE" ,"HOARAU" ,"HUBERT" ,"HUET" ,"HUMBERT" ,"IMBERT" ,"JACOB" ,"JACQUES" ,"JACQUET" ,"JEAN" ,"JOLY" ,"JOUBERT" ,"JULIEN" ,"KLEIN" ,"LACROIX" ,"LAMBERT" ,"LAMY" ,"LANGLOIS" ,"LAPORTE" ,"LAUNAY" ,"LAURENT" ,"LE GALL" ,"LE GOFF" ,"LE ROUX" ,"LEBLANC" ,"LEBON" ,"LEBRETON" ,"LEBRUN" ,"LECLERC" ,"LECLERCQ" ,"LECOMTE" ,"LEDUC" ,"LEFEBVRE" ,"LEFEVRE" ,"LEGER" ,"LEGRAND" ,"LEGROS" ,"LEJEUNE" ,"LELIEVRE" ,"LEMAIRE" ,"LEMAITRE" ,"LEMOINE" ,"LEROUX" ,"LEROY" ,"LESAGE" ,"LEVEQUE" ,"LOPEZ" ,"LOUIS" ,"LUCAS" ,"MAHE" ,"MAILLARD" ,"MAILLOT" ,"MALLET" ,"MARCHAL" ,"MARCHAND" ,"MARECHAL" ,"MARIE" ,"MARTEL" ,"MARTIN" ,"MARTINEZ" ,"MARTY" ,"MASSE" ,"MASSON" ,"MATHIEU" ,"MAURY" ,"MENARD" ,"MERCIER" ,"MEUNIER" ,"MEYER" ,"MICHAUD" ,"MICHEL" ,"MILLET" ,"MONNIER" ,"MOREAU" ,"MOREL" ,"MORIN" ,"MORVAN" ,"MOULIN" ,"MULLER" ,"NICOLAS" ,"NOEL" ,"OLIVIER" ,"OLLIVIER" ,"PARIS" ,"PASCAL" ,"PASQUIER" ,"PAUL" ,"PAYET" ,"PELLETIER" ,"PEREZ" ,"PERRET" ,"PERRIER" ,"PERRIN" ,"PERROT" ,"PETIT" ,"PHILIPPE" ,"PICARD" ,"PICHON" ,"PIERRE" ,"PINEAU" ,"POIRIER" ,"PONS" ,"POULAIN" ,"PREVOST" ,"RAYMOND" ,"RAYNAUD" ,"REGNIER" ,"REMY" ,"RENARD" ,"RENAUD" ,"RENAULT" ,"REY" ,"REYNAUD" ,"RICHARD" ,"RIVIERE" ,"ROBERT" ,"ROBIN" ,"ROCHE" ,"RODRIGUEZ" ,"ROGER" ,"ROLLAND" ,"ROUSSEAU" ,"ROUSSEL" ,"ROUX" ,"ROY" ,"ROYER" ,"SANCHEZ" ,"SAUVAGE" ,"SCHMITT" ,"SCHNEIDER" ,"SIMON" ,"TANGUY" ,"TESSIER" ,"THOMAS" ,"VALLEE" ,"VASSEUR" ,"VERDIER" ,"VIDAL" ,"VINCENT" ,"VOISIN" ,"WEBER" );
-$aPrenom_h   = array("Enzo" ,"Hugo" ,"Lucas" ,"Théo" ,"Mathéo" ,"Thomas" ,"Baptiste" ,"Léo" ,"Clément" ,"Louis" ,"Nathan" ,"Alexandre" ,"Quentin" ,"Romain" ,"Tom" ,"Mattéo" ,"Maxime" ,"Antoine" ,"Benjamin" ,"Mathis" ,"Valentin" ,"Robin" ,"Nicolas" ,"Paul" ,"Arthur" ,"Martin" ,"Éthan" ,"Julien" ,"Noah" ,"Victor" ,"Gabriel" );
-$aPrenom_f   = array("Emma" ,"Clara" ,"Manon" ,"Anais" ,"Léa" ,"Chloé" ,"Lucie" ,"Camille" ,"Marie" ,"Jade" ,"Eva" ,"Louise" ,"Mathilde" ,"Julie" ,"Océane" ,"Laura" ,"Ilona" ,"Charlotte" ,"Emilie" ,"Sarah" ,"Clémence" ,"Lilou" ,"Justine" ,"Elisa" ,"Pauline" ,"Lisa" ,"Lena" ,"Lou" ,"Louane" ,"Maélis" ,"Perrine" );
+$aPrenom_h   = array("Enzo" ,"Hugo" ,"Lucas" ,"Théo" ,"Mathéo" ,"Thomas" ,"Baptiste" ,"Clément" ,"Louis" ,"Nathan" ,"Alexandre" ,"Quentin" ,"Romain" ,"Tomas" ,"Mattéo" ,"Maxime" ,"Antoine" ,"Benjamin" ,"Mathis" ,"Valentin" ,"Robin" ,"Nicolas" ,"Paul" ,"Arthur" ,"Martin" ,"Éthan" ,"Julien" ,"Noah" ,"Victor" ,"Gabriel" );
+$aPrenom_f   = array("Emma" ,"Clara" ,"Manon" ,"Anais" ,"Léane" ,"Chloé" ,"Lucie" ,"Camille" ,"Marie" ,"Jade" ,"Louise" ,"Mathilde" ,"Julie" ,"Océane" ,"Laura" ,"Ilona" ,"Charlotte" ,"Emilie" ,"Sarah" ,"Clémence" ,"Lilou" ,"Justine" ,"Elisa" ,"Pauline" ,"Lisa" ,"Lena" ,"Louane" ,"Maélis" ,"Perrine" );
 $aPrenoms    = array("m"=>$aPrenom_h, "f"=>$aPrenom_f, "j"=>$aPrenom_f);
+
+$aMsgError   = array();
 
 // Etablissement
 $group = new CEchantillonnage("CGroups");
@@ -143,6 +151,7 @@ $praticiens = new CEchantillonnage("CMediusers");
 if(count($fct_selected)){
  $fonctions->loadListArray($fct_selected); 
 }
+
 foreach($aCabinet as $title => $value){
   if($value["nb"]){
     $_profile_id = $value["profil"];
@@ -167,9 +176,10 @@ foreach($aCabinet as $title => $value){
                               "_user_first_name" => array_merge($aPrenom_h,$aPrenom_f),
                               "_user_last_name"  => $aNomFamille,
                               "_user_type"       => $value["curr_type"]);
+          
           $praticiens->setManyFields($tabFields);
-          $prenom      = $praticiens->object->_user_first_name;
-          $nom         = $praticiens->object->_user_last_name;
+          $prenom = $praticiens->listStaticProps["_user_first_name"];
+          $nom    = $praticiens->listStaticProps["_user_last_name"];
           $praticiens->setField("_user_username", str_replace(" ","",strtolower(substr($prenom,0,1).$nom)));
           $praticiens->setField("_user_password", strtolower($prenom));
           $praticiens->store();
@@ -378,6 +388,7 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
   $plagesOp   = new CEchantillonnage("CPlageOp");
   $sejours    = new CEchantillonnage("CSejour");
   $operations = new CEchantillonnage("COperation");
+  $pathos     = new CDiscipline();
   
   foreach($salles->listObjects as $salle){
     $lstplages = $plages->getRandValue($aPlages,$_nb_plagesop); 
@@ -396,9 +407,9 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
                           "_minutefin"    => $listMins,
                           "_min_inter_op" => 15,
                           "_year"         => date("Y"));
+                          // A FIRE !! temps_inter_op
       $plagesOp->setManyFields($tabFields);
       if(!$plagesOp->store()){
-        
         for($i=1; $i<=$_nb_interv; $i++){
           // Création d'un Séjour
           $aType = $sejours->getRandValue($aTypeSejour);
@@ -412,7 +423,8 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
                              "_hour_sortie_prevue" => 18,
                              "_min_sortie_prevue"  => $listMins,
                              "_date_entree_prevue" => mbDate($aType["entree_d"]." day", $date),
-                             "rques"               => "[DEMO]");
+                             "rques"               => "[DEMO]",
+                             "pathologie"          => $pathos->_enums["categorie"]);
           $sejours->setManyFields($tabFields);
           if($aType["sortie_d"]){
             $sejours->setField("_date_sortie_prevue", mbDate($aType["sortie_d"]." day", $date));
@@ -420,7 +432,6 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
             $nbjour = rand(1,5);
             $sejours->setField("_date_sortie_prevue", mbDate("+".$nbjour." day", $date));
           }
-          
           if(!$sejours->store()){
             // Création d'une invervention
             $operations->renew();
@@ -435,7 +446,8 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
                                 "codes_ccam"     => array("HBGD038", "GAMA007", "BFGA004", "HHFE002", "MEMC003",
                                                            "NFFC004", "PAGA011", "BGLB001", "QZFA036", "AHPC001"),
                                 "_min_op"        => 0,
-                                "_hour_op"       => 1);
+                                "_hour_op"       => 1,
+                                "pause"          => "00:10:00");
             $operations->setManyFields($tabFields);
             $operations->store();
           }  
@@ -448,6 +460,9 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
 
 // A Faire : Creation de modeles
 file_put_contents($log_file, "\r\n", FILE_APPEND);
-
-$AppUI->setMsg("Echantillonnage effectué",UI_MSG_OK);
+if(count($aMsgError)){
+  $AppUI->setMsg("Echantillonnage effectué partiellement :" .implode(", ", $aMsgError) ,E_USER_WARNING);
+}else{
+  $AppUI->setMsg("Echantillonnage effectué",UI_MSG_OK);
+}
 ?>

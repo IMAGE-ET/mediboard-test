@@ -132,7 +132,16 @@ class CNumSpec extends CMbFieldSpec {
       }else{
         $propValue = $this->randomString(CMbFieldSpec::$nums, $this->_defaultLength);
       }
-      
+    }elseif($this->minMax || $this->max || $this->min){
+      if($this->minMax){
+        $specFragments = explode("|", $this->minMax);
+        $min= $this->checkNumeric($specFragments[0]);
+        $max= $this->checkNumeric($specFragments[1]);
+      }else{
+        $min = $this->min ? $this->min : 0;
+        $max = $this->max ? $this->max : 999999;
+      }
+      $propValue = rand($min, $max);
     }else{
       $propValue = $this->randomString(CMbFieldSpec::$nums, $this->_defaultLength);
     }
