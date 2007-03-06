@@ -177,6 +177,7 @@ function reloadAfterSaveDoc(){
     <th class="category" colspan="4">Planifier</th>
   </tr>
   <tr>
+    {{if !$app->user_prefs.simpleCabinet}}
     <td class="button">
       <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
         Intervention
@@ -193,6 +194,9 @@ function reloadAfterSaveDoc(){
       </a>
     </td>
     <td class="button">
+    {{else}}
+    <td colspan="4" class="button">
+    {{/if}}
       <a class="buttonnew" href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
         Consultation
       </a>

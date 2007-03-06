@@ -84,7 +84,7 @@ function newDHE(oForm) {
               </option>
               {{/foreach}}
             </select>
-            {{else}}
+            {{elseif !$app->user_prefs.simpleCabinet}}
             <button style="margin: 1px;" class="new" type="button" onclick="newOperation      ({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}})">Nouvelle intervention</button>
             <br/>
             <button style="margin: 1px;" class="new" type="button" onclick="newHospitalisation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}})">Nouveau séjour</button>

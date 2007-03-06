@@ -11,6 +11,8 @@
 
 class CMbObjectTest {
   
+  var $log = "";
+  
   function sample(&$object, $staticsProps = array()){
     foreach($object->_specs as $key => $spec){
       if(isset($staticsProps[$key])){
@@ -26,13 +28,20 @@ class CMbObjectTest {
     global $AppUI;
     $str_params = implode(",", $params);
     $result = $object->$function_name($str_params);
-    $log = get_class($object)."::$function_name($str_params) -> $result ()";
+    $log = "<div class=\"message\">".get_class($object)."::$function_name($str_params) -> $result</div>".$AppUI->getMsg();
     $this->addLog($log);
-    
+  }
+  
+  function resetLog() {
+    $this->log = "";
   }
   
   function addLog($log) {
-    return true;
+    $this->log .= "$log<br />";
+  }
+  
+  function getLog() {
+    return $this->log;
   }
   
 }

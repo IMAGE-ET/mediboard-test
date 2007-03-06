@@ -36,6 +36,7 @@ viewFullPatientMain = function() {
   </th>
 </tr>
 
+{{if !$app->user_prefs.simpleCabinet}}
 <!-- Séjours -->
 
 <tr id="sejours-trigger">
@@ -147,7 +148,9 @@ viewFullPatientMain = function() {
 
 {{/foreach}}
 </tbody>
-  
+
+{{/if}}  
+
 <!-- Consultations -->
 
 <tr id="consultations-trigger">
@@ -227,6 +230,15 @@ viewFullPatientMain = function() {
 
 <tbody class="patientEffect" style="display: none" id="planifier">
   <tr><th class="category" colspan="2">Evènements</th></tr>
+  {{if $app->user_prefs.simpleCabinet}}
+  <tr>
+    <td class="button" colspan="2">
+      <a class="buttonnew" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
+        Consultation
+      </a>
+    </td>
+  </tr>
+  {{else}}
   <tr>
     <td class="button">
       <a class="buttonnew" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
@@ -251,6 +263,7 @@ viewFullPatientMain = function() {
       </a>
     </td>
   </tr>
+  {{/if}}
   {{if $listPrat|@count && $canEditCabinet}}
   <tr><th class="category" colspan="2">Consultation immédiate</th></tr>
   <tr>

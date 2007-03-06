@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPcabinet-CPlageconsult-minutes_interval'] = 'Intervals in minutes';
+$locales['pref-simpleCabinet-desc'] = '';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-desc'] = '';
 $locales['CAddiction-type'] = '';
@@ -319,6 +319,7 @@ $locales['CExamPossum.uree.inf7.5'] = '1 &mdash; <= 7.5 mmol/L';
 $locales['CExamPossum.uree.sup15.1'] = '4 &mdash; >= 15.1 mmol/L';
 $locales['config-dPcabinet-CPlageconsult-hours_start'] = 'Start hour';
 $locales['config-dPcabinet-CPlageconsult-hours_stop'] = 'Stop hour';
+$locales['config-dPcabinet-CPlageconsult-minutes_interval'] = 'Intervals in minutes';
 $locales['COperation-type_anesth'] = '';
 $locales['COperation-type_anesth-desc'] = '';
 $locales['CPlageconsult'] = '';
@@ -354,4 +355,5 @@ $locales['mod-dPcabinet-tab-vw_dossier'] = '';
 $locales['mod-dPcabinet-tab-vw_planning'] = '';
 $locales['pref-InterMaxDir'] = 'InterMax folder';
 $locales['pref-InterMaxDir-desc'] = 'LogicMax interoperability folder on user hard-drive';
+$locales['pref-simpleCabinet'] = '';
 ?>

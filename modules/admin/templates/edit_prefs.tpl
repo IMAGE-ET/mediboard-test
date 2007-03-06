@@ -147,6 +147,18 @@
       </select>
     </td>
   </tr>
+
+  <tr>
+    <th>
+      <label for="pref_name[simpleCabinet]" title="{{tr}}pref-simpleCabinet-desc{{/tr}}">{{tr}}pref-simpleCabinet{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[simpleCabinet]">
+        <option value="day"   {{if $prefsUser.dPcabinet.simpleCabinet == 0 }}selected="selected"{{/if}}>avec hospitalisation</option>
+        <option value="week"  {{if $prefsUser.dPcabinet.simpleCabinet == 1 }}selected="selected"{{/if}}>sans hospitalisation</option>
+      </select>
+    </td>
+  </tr>
   {{/if}}
 
   {{if $prefsUser.system}}

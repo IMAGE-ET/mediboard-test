@@ -1,7 +1,9 @@
 <script language="JavaScript" type="text/javascript">
 
 function incPatientHistoryMain() {
+  {{if !$app->user_prefs.simpleCabinet}}
   new PairEffect("sejours");
+  {{/if}}
   new PairEffect("consultations");
 }
 
@@ -9,6 +11,7 @@ function incPatientHistoryMain() {
   
 
 <table class="form">
+  {{if !$app->user_prefs.simpleCabinet}}
   <tr id="sejours-trigger">
     <td>Séjours ({{$patient->_ref_sejours|@count}})</td>
   </tr>
@@ -39,6 +42,7 @@ function incPatientHistoryMain() {
     </tr>
     {{/foreach}}
   </tbody>
+  {{/if}}
   <tr id="consultations-trigger">
     <td>Consultations ({{$patient->_ref_consultations|@count}})</td>
   </tr>

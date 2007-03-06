@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPcabinet-CPlageconsult-minutes_interval'] = 'Intervales en minutes';
+$locales['pref-simpleCabinet-desc'] = 'Affichage des informations concernant les hospitalisations';
 $locales['CAddiction-addiction'] = 'Information';
 $locales['CAddiction-addiction-desc'] = 'Information sur l\'addiction';
 $locales['CAddiction-type'] = 'Type';
@@ -319,6 +319,7 @@ $locales['CExamPossum.uree.inf7.5'] = '1 &mdash; <= 7.5 mmol/L';
 $locales['CExamPossum.uree.sup15.1'] = '4 &mdash; >= 15.1 mmol/L';
 $locales['config-dPcabinet-CPlageconsult-hours_start'] = 'Heure de début';
 $locales['config-dPcabinet-CPlageconsult-hours_stop'] = 'Heure de fin';
+$locales['config-dPcabinet-CPlageconsult-minutes_interval'] = 'Intervales en minutes';
 $locales['COperation-type_anesth'] = 'Type d\'anesthésie';
 $locales['COperation-type_anesth-desc'] = 'Type d\'anesthésie pour l\'intervention';
 $locales['CPlageconsult'] = 'Plage de Consultation';
@@ -354,4 +355,5 @@ $locales['mod-dPcabinet-tab-vw_dossier'] = 'Dossiers';
 $locales['mod-dPcabinet-tab-vw_planning'] = 'Programme de consultation';
 $locales['pref-InterMaxDir'] = 'Répertoire d\'InterMax';
 $locales['pref-InterMaxDir-desc'] = 'Répertoire d\'Interopérabilité de LogicMax sur le poste utilisateur';
+$locales['pref-simpleCabinet'] = 'Liaison hospitalisation';
 ?>
