@@ -51,6 +51,10 @@ class CEGateXMLPatientStayInformation extends CEGateXMLDocument {
     $this->addAttribute($patient, "Firstname"   , $mbPatient->nom);
     $this->addAttribute($patient, "Lastname"    , $mbPatient->prenom);
     
+    if($mbPatient->naissance == "0000-00-00"){
+      $this->msgError[] = "La date de naissance du patient n'est pas renseigné.";
+    }
+    
     if($mbPatient->sexe && $mbPatient->sexe == "m"){
       $this->addAttribute($patient, "Gender"    , "M");
     }elseif($mbPatient->sexe){

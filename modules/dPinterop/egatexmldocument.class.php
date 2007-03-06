@@ -25,15 +25,16 @@ $aTypesAnesth = array("7" => "4",
                        "1" => "0");
 
 class CEGateXMLDocument extends CMbXMLDocument {
-  var $pmsipath = "modules/dPinterop/egate";
-  var $finalpath = "files/egate";
-  var $schemapath = null;
-  var $schemafilename = null;
-  var $documentfilename = null;
-  var $documentfinalprefix = null;
-  var $documentfinalfilename = null;
-  var $sentFiles = array();
-  var $now = null;
+  var $pmsipath               = "modules/dPinterop/egate";
+  var $finalpath              = "files/egate";
+  var $schemapath             = null;
+  var $schemafilename         = null;
+  var $documentfilename       = null;
+  var $documentfinalprefix    = null;
+  var $documentfinalfilename  = null;
+  var $sentFiles              = array();
+  var $now                    = null;
+  var $msgError               = null;
 
   function __construct($schemaname) {
     parent::__construct();
@@ -108,11 +109,17 @@ class CEGateXMLDocument extends CMbXMLDocument {
       $TheatreRoom = $this->addElement($surgery, "TheatreRoom");
       $this->addAttribute($TheatreRoom, "BU_ID"  , $mbSejour->group_id);
       $this->addAttribute($TheatreRoom, "RoomID" , $mbSalle_id);
-
-      $surgeryProdecure = $this->addElement($surgery, "SurgeryProcedure");
-      $this->addAttribute($surgeryProdecure, "SurgeonID"            , $operation->chir_id);
-      $SurgeryProcedureCode = $this->addElement($surgeryProdecure   , "SurgeryProcedureCode");
-      $this->addAttribute($SurgeryProcedureCode, "ProcedureCodeID"  , "CCAM");
+      
+      // Ajout des actes codés
+      if(!count($operation->_ref_actes_ccam)){
+        $this->msgError[] = "Il n'y a aucun acte de codé.";
+      }
+      foreach ($operation->_ref_actes_ccam as $keyActe => $acte) {
+        $surgeryProdecure = $this->addElement($surgery, "SurgeryProcedure");
+        $this->addAttribute($surgeryProdecure, "SurgeonID"            , $acte->executant_id);
+        $SurgeryProcedureCode = $this->addElement($surgeryProdecure   , "SurgeryProcedureCode");
+        $this->addAttribute($SurgeryProcedureCode, "ProcedureCodeID"  , $acte->code_acte." - ".$acte->code_activite);
+      }
       
       $this->addSurgeryTime($surgery, "3", $operation->entree_bloc     , $operation->sortie_reveil , $operation->date);
       $this->addSurgeryTime($surgery, "5", $operation->entree_salle    , $operation->sortie_salle  , $operation->date);

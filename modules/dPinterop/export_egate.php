@@ -20,12 +20,15 @@ if (!$canRead) {
 
 $mb_sejour_id = dPgetParam($_POST, "mb_sejour_id", mbGetValueFromGetOrSession("sejour_id"));
 
+$msgError = null;
 $mbSejour = new CSejour();
-$doc      = new CEGateXMLPatientStayInformation;
+$doc      = new CEGateXMLPatientStayInformation();
+
 
 if ($mbSejour->load($mb_sejour_id)) {
   $mbSejour->loadRefs();
   foreach($mbSejour->_ref_operations as $key => $value) {
+    $mbSejour->_ref_operations[$key]->loadRefsActesCCAM();
     $mbSejour->_ref_operations[$key]->loadRefPlageOp();
     $mbSejour->_ref_operations[$key]->loadRefsConsultAnesth();
     $mbSejour->_ref_operations[$key]->_ref_consult_anesth->loadRefConsultation();

@@ -8,7 +8,17 @@
       {{if !$doc_valid}}
         <h3>Document non valide!</h3>
       {{/if}}
-
+      
+      {{if $doc->msgError|@count}}
+      <ul>
+        {{foreach from=$doc->msgError item=curr_error}}
+        <li>
+          {{$curr_error}}
+        </li>
+        {{/foreach}}
+      </ul>
+      {{/if}}
+      
       {{if !$ajax}}
         <h3>XML: Schema de validation</h3>
         <ul>
