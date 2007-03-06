@@ -63,39 +63,77 @@ foreach($listDays as $keyDate=>$valDate){
   $order = "debut";
   $listPlages = $listPlages->loadList($where,$order);
   foreach($listPlages as $keyPlages=>$valPlages){
-    $listPlages[$keyPlages]->loadRefsFwd();
-    $listPlages[$keyPlages]->_ref_chir->loadRefsFwd();
-    
-    $listPlages[$keyPlages]->getNbOperations();
-
-    // Mémorisation dans le tableau d'affichage
-    $nbquartheure = ($valPlages->_heurefin-$valPlages->_heuredeb)*4;
-    $nbquartheure = $nbquartheure - array_search($valPlages->_minutedeb,$listMins) + array_search($valPlages->_minutefin,$listMins);
-    $valPlages->_nbQuartHeure = $nbquartheure;
-//mbTRace($valPlages);die();
-
-    $arrayAffichage["$keyDate-s".$valPlages->salle_id."-".intval($valPlages->_heuredeb).":".$valPlages->_minutedeb] = $valPlages;
-    // Détermination des horaire non vides
-    $heure_encours = array_search(intval($valPlages->_heuredeb),$listHours);
-    $min_encours   = array_search($valPlages->_minutedeb,$listMins);    
-    $dans_plage = true;
-    while($dans_plage == true){      
-      $min_encours ++;
-      if(!array_key_exists($min_encours,$listMins)){
-        $min_encours=0;
-        $heure_encours ++;
-        //mbTrace($heure_encours);die();
-        if(!array_key_exists($heure_encours,$listHours)){
-          $heure_encours=8;
+    // Test validité des plages dans le semainier    
+    $heure_fin = $valPlages->_heurefin;
+    $heure_deb = $valPlages->_heuredeb;
+    $min_deb   = $valPlages->_minutedeb;
+    $min_fin   = $valPlages->_minutefin;
+    $outPlage = false;
+    foreach (array("min_deb","min_fin") as $minute){
+      $minute_trouve = array_search(${$minute},$listMins);
+      if ($minute_trouve===false){
+        $afterValue = 0;
+        foreach ($listMins as $valueMin){
+          if (${$minute} > $valueMin && $afterValue!==null){
+            $afterValue = $valueMin;
+          } elseif($afterValue!==null){
+            // Entre l'ancienne valeur et celle ci
+            $centerValue = $afterValue + ($valueMin-$afterValue)/2;
+            $afterValue = null;
+            if(${$minute}>$centerValue){
+              ${$minute} = $valueMin;
+            }else{
+              ${$minute} = $afterValue;
+            }
+          }
         }
-      }      
-      if($heure_encours==$valPlages->_heurefin && $listMins[$min_encours]==$valPlages->_minutefin){
-        $dans_plage = false;
-      }else{
-        $arrayAffichage["$keyDate-s".$valPlages->salle_id."-".$heure_encours.":".$listMins[$min_encours]] = "full";	
-      }         
+        if($afterValue!==null){
+          ${$minute} = $afterValue;
+        }
+      } 
+    }
+    if($heure_fin>20 && $heure_deb<=20 && $min_deb<45){
+      $heure_fin = "20";
+      $min_fin   = "45";
+    }elseif($heure_deb<8 && (($heure_fin==8 && $min_fin>0) || $heure_fin>8)){
+      $heure_deb = "08";
+      $min_deb   = "00";
+    }elseif($heure_fin>20 || $heure_deb<8){
+      // Plages Hors semainier
+      $outPlage = true;
     }
     
+    if(!$outPlage){
+      $listPlages[$keyPlages]->loadRefsFwd();
+      $listPlages[$keyPlages]->_ref_chir->loadRefsFwd();
+      $listPlages[$keyPlages]->getNbOperations();
+      
+      // Mémorisation dans le tableau d'affichage
+      $nbquartheure = ($heure_fin-$heure_deb)*4;
+      $nbquartheure = $nbquartheure - array_search($min_deb,$listMins) + array_search($min_fin,$listMins);
+      $valPlages->_nbQuartHeure = $nbquartheure;
+      
+      $arrayAffichage["$keyDate-s".$valPlages->salle_id."-".intval($heure_deb).":".$min_deb] = $valPlages;
+      // Détermination des horaire non vides
+      $heure_encours = array_search(intval($heure_deb),$listHours);
+      $min_encours   = array_search($min_deb,$listMins);
+      $dans_plage = true;
+      while($dans_plage == true){      
+        $min_encours ++;
+        if(!array_key_exists($min_encours,$listMins)){
+          $min_encours=0;
+          $heure_encours ++;
+          if(!array_key_exists($heure_encours,$listHours)){
+            $heure_encours=8;
+          }
+        }      
+        if($heure_encours==$heure_fin && $listMins[$min_encours]==$min_fin){
+          $dans_plage = false;
+        }else{
+          $arrayAffichage["$keyDate-s".$valPlages->salle_id."-".$heure_encours.":".$listMins[$min_encours]] = "full"; 
+        }         
+      }  
+    }
   }  
 }
 
