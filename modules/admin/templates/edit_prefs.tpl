@@ -154,8 +154,8 @@
     </th>
     <td>
       <select name="pref_name[simpleCabinet]">
-        <option value="day"   {{if $prefsUser.dPcabinet.simpleCabinet == 0 }}selected="selected"{{/if}}>avec hospitalisation</option>
-        <option value="week"  {{if $prefsUser.dPcabinet.simpleCabinet == 1 }}selected="selected"{{/if}}>sans hospitalisation</option>
+        <option value="0"   {{if $prefsUser.dPcabinet.simpleCabinet == 0 }}selected="selected"{{/if}}>avec hospitalisation</option>
+        <option value="1"  {{if $prefsUser.dPcabinet.simpleCabinet == 1 }}selected="selected"{{/if}}>sans hospitalisation</option>
       </select>
     </td>
   </tr>
