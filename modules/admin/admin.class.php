@@ -46,6 +46,7 @@ class CUser extends CMbObject {
   var $user_birthday    = null;
   var $user_pic         = null;
   var $user_signature   = null;
+  var $user_last_login  = null;
 
   var $_user_password    = null;
 
@@ -73,7 +74,8 @@ class CUser extends CMbObject {
       "user_country"    => "str maxLength|30",
       "user_birthday"   => "dateTime",
       "user_pic"        => "text",
-      "user_signature"  => "text"
+      "user_signature"  => "text",
+      "user_last_login" => "dateTime"
     );
   }
   

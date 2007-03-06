@@ -86,7 +86,9 @@ function popChgPwd() {
               {{/foreach}}
             </select>
             <br />
+            <span title="{{tr}}last connection{{/tr}} : {{$AppUI->user_last_login|date_format:"%A %d %B %Y %H:%M"}}">
             {{tr}}Welcome{{/tr}} {{$AppUI->user_first_name}} {{$AppUI->user_last_name}}
+            </span>
             </form>
             {{/if}}
           </td>

@@ -40,6 +40,8 @@ class CAppUI {
   var $user_type = null;
 /** @var int */
   var $user_group = null;
+/** @var dateTime */
+  var $user_last_login = null;
 /** @var array */
   var $user_prefs=null;
 /** @var int Unix time stamp */
@@ -531,24 +533,16 @@ class CAppUI {
     // Test login and password validity
     $username = trim(db_escape($username));
     $password = trim(db_escape($password));
+    $user = new CUser;
+    $where = array();
+    $where["user_username"] = db_prepare("= %", $username);
     if($md5) {
-      $sql = "SELECT `user_id`," .
-          "\n`user_type`," .
-          "\n`user_password`" .
-          "\nFROM `users`" .
-          "\nWHERE `user_username` = '$username' " .
-          "\nAND `user_password` = '$password'";
+      $where["user_password"] = db_prepare("= %", $password);
     } else {
-      $sql = "SELECT `user_id`," .
-          "\n`user_type`," .
-          "\n`user_password`" .
-          "\nFROM `users`" .
-          "\nWHERE `user_username` = '$username' " .
-          "\nAND `user_password` = MD5('$password')";
+      $where["user_password"] = db_prepare("= MD5(%)", $password);
     }
-
-    $obj = null;
-    if (!db_loadObject($sql, $obj)) {
+    $user->loadObject($where);
+    if (!$user->_id) {
       return false;
     }
     
@@ -559,7 +553,7 @@ class CAppUI {
     $result2 = db_loadList($sql);
     $remote = 1;
     if(count($result1) && count($result2)) {
-      $sql = "SELECT `remote` FROM `users_mediboard` WHERE `user_id` = '$obj->user_id'";
+      $sql = "SELECT `remote` FROM `users_mediboard` WHERE `user_id` = '$user->user_id'";
       if($cur = db_exec($sql)) {
         if($row = db_fetch_row($cur)) {
           $remote = intval($row[0]);
@@ -569,7 +563,7 @@ class CAppUI {
           "\nFROM `groups_mediboard`, `functions_mediboard`, `users_mediboard`" .
           "\nWHERE `groups_mediboard`.`group_id` = `functions_mediboard`.`group_id`" .
           "\nAND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`" .
-          "\nAND `users_mediboard`.`user_id` = '$obj->user_id'";
+          "\nAND `users_mediboard`.`user_id` = '$user->user_id'";
       $this->user_group = db_loadResult($sql);
     }
     
@@ -584,24 +578,21 @@ class CAppUI {
     $is_local[3] = ($ip0 == 172 && $ip1 >= 16 && $ip1 < 32);
     $is_local[4] = ($ip0 == 192 && $ip1 == 168);
     $is_local[0] = $is_local[1] || $is_local[2] || $is_local[3] || $is_local[4];
-    if (!$is_local[0] && $remote == 1 && $obj->user_type != 1) {
+    if (!$is_local[0] && $remote == 1 && $user->user_type != 1) {
       return false;
     }
 
     // Load the user in AppUI
-    $sql = "SELECT " .
-        "\n`user_id`, " .
-        "\n`user_first_name`, " .
-        "\n`user_last_name`, " .
-        "\n`user_email`, " .
-        "\n`user_type`" .
-        "\nFROM `users`" .
-        "\nWHERE `user_id` = '$obj->user_id' " .
-        "\nAND `user_username` = '$username'";
-
-    if(!db_loadObject($sql, $this)) {
-      return false;
-    }
+    $this->user_id         = $user->user_id;
+    $this->user_first_name = $user->user_first_name;
+    $this->user_last_name  = $user->user_last_name;
+    $this->user_email      = $user->user_email;
+    $this->user_type       = $user->user_type;
+    $this->user_last_login = $user->user_last_login;
+    
+    // save the last_login dateTime
+    $user->user_last_login = mbDateTime();
+    $user->store();
 
     // load the user preferences
     $this->loadPrefs($this->user_id);

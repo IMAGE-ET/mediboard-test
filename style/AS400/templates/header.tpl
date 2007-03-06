@@ -72,7 +72,10 @@ function popChgPwd() {
           <td class="welcome">
             <form name="ChangeGroup" action="" method="get">
             <input type="hidden" name="m" value="{{$m}}" />
-            {{tr}}Welcome{{/tr}} {{$AppUI->user_first_name}} {{$AppUI->user_last_name}} -
+            <span title="{{tr}}last connection{{/tr}} : {{$AppUI->user_last_login|date_format:"%A %d %B %Y %H:%M"}}">
+            {{tr}}Welcome{{/tr}} {{$AppUI->user_first_name}} {{$AppUI->user_last_name}}
+            <span title="{{tr}}last connection{{/tr}} : {{$AppUI->user_last_login|date_format:"%A %d %B %Y %H:%M"}}">
+            -
             <select name="g" onchange="ChangeGroup.submit();">
               {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}
               <option value="{{$keyEtablissement}}" {{if $keyEtablissement==$g}}selected="selected"{{/if}}>

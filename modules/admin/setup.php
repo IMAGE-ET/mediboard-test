@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "admin";
-$config["mod_version"]     = "1.0.7";
+$config["mod_version"]     = "1.0.8";
 $config["mod_type"]        = "core";
 
 class CSetupadmin extends CSetup {
@@ -186,7 +186,11 @@ class CSetupadmin extends CSetup {
     $sql = "DELETE FROM `perm_module` WHERE user_id='0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.7";
+    $this->makeRevision("1.0.7");
+    $sql = "ALTER TABLE `users` ADD `user_last_login` DATETIME NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.8";
   }
 }
 ?>
