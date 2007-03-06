@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.63";
+$config["mod_version"]     = "0.64";
 $config["mod_type"]        = "user";
 
 
@@ -627,7 +627,12 @@ class CSetupdPcabinet extends CSetup {
     $sql = "DELETE FROM `exams_comp` WHERE `consultation_id`= '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.63";
+    $this->makeRevision("0.63");
+    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
+        "\nVALUES ('0', 'simpleCabinet', '0');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.64";
   }
 }
 ?>
