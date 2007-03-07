@@ -175,7 +175,7 @@ function checkFormRDV(oForm){
 
         <tr id="viewPatient" {{if $consult->consultation_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
           <th>
-            {{mb_field object=$consult field="patient_id" hidden=1 prop="" ondblclick="popPat()"}}
+            {{mb_field object=$pat field="patient_id" hidden=1 prop="" ondblclick="popPat()"}}
             {{mb_label object=$consult field="patient_id"}}
           </th>
           <td class="readonly"><input type="text" name="_pat_name" size="30" value="{{$pat->_view}}" readonly="readonly"  ondblclick="popPat()" /></td>

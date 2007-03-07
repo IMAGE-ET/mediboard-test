@@ -149,7 +149,6 @@ class CMbFieldSpec {
   function randomString($array, $length) {
     $key = "";
     $count = count($array) - 1;
-    srand((double)microtime()*1000000);
     for($i = 0; $i < $length; $i++) $key .= $array[rand(0, $count)];
     return($key);
   }
@@ -255,6 +254,9 @@ class CMbFieldSpec {
   }
   
   function sample(&$object){
+    $fieldName = $this->fieldName;
+    $propValue =& $object->$fieldName;
+    srand(crc32($propValue));
   }
   
   function getDBSpec(){

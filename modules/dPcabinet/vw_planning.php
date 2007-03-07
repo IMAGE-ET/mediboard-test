@@ -41,15 +41,15 @@ $prec = mbDate("-1 week", $debut);
 $suiv = mbDate("+1 week", $debut);
 
 // Plage de consultation selectionnée
-$plageconsult_id = mbGetValueFromGetOrSession("plageconsult_id");
+$plageconsult_id = mbGetValueFromGetOrSession("plageconsult_id", null);
 $plageSel = new CPlageconsult();
-if(!$plageconsult_id && $chirSel && $is_in_period) {
+if(($plageconsult_id === null) && $chirSel && $is_in_period) {
   $nowTime = mbTime();
   $where = array(
     "chir_id" => "= '$chirSel'",
     "date"    => "= '$today'",
     "debut"   => "<= '$nowTime'",
-    "fin"   => ">= '$nowTime'"
+    "fin"     => ">= '$nowTime'"
   );
   $plageSel->loadObject($where);
 }

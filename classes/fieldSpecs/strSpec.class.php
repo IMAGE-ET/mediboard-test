@@ -60,6 +60,7 @@ class CStrSpec extends CMbFieldSpec {
   }
   
   function sample(&$object){
+    parent::sample($object);
     $fieldName = $this->fieldName;
     $propValue =& $object->$fieldName;
     

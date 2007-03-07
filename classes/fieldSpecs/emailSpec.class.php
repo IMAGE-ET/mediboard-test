@@ -34,6 +34,7 @@ class CEmailSpec extends CMbFieldSpec {
   }
   
   function sample(&$object) {
+    parent::sample($object);
     $fieldName = $this->fieldName;
     $object->$fieldName = "noone@nowhere.com";
   }

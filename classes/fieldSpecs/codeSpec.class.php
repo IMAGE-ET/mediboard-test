@@ -85,6 +85,7 @@ class CCodeSpec extends CMbFieldSpec {
   }
   
   function sample(&$object) {
+    parent::sample($object);
     $fieldName = $this->fieldName;
     
     // ccam

@@ -26,6 +26,7 @@ class CTextSpec extends CMbFieldSpec {
   }
   
   function sample(&$object){
+    parent::sample($object);
     $fieldName = $this->fieldName;
     $object->$fieldName = $this->randomString(CMbFieldSpec::$chars, 40);
   }
