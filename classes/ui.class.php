@@ -547,12 +547,8 @@ class CAppUI {
     }
     
     // Put user_group in AppUI
-    $sql = "SHOW TABLES LIKE 'users_mediboard'";
-    $result1 = db_loadList($sql);
-    $sql = "SHOW TABLES LIKE 'groups_mediboard'";
-    $result2 = db_loadList($sql);
     $remote = 1;
-    if(count($result1) && count($result2)) {
+    if(db_loadTable("users_mediboard") && db_loadTable("groups_mediboard")) {
       $sql = "SELECT `remote` FROM `users_mediboard` WHERE `user_id` = '$user->user_id'";
       if($cur = db_exec($sql)) {
         if($row = db_fetch_row($cur)) {
@@ -591,8 +587,10 @@ class CAppUI {
     $this->user_last_login = $user->user_last_login;
     
     // save the last_login dateTime
-    $user->user_last_login = mbDateTime();
-    $user->store();
+    if(db_loadField("users", "user_last_login")) {
+      $user->user_last_login = mbDateTime();
+      $user->store();
+    }
 
     // load the user preferences
     $this->loadPrefs($this->user_id);

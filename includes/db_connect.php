@@ -195,7 +195,7 @@ function db_loadList($sql, $maxrows = null, $dbid = "std") {
 * @param int $maxrows limit to a maximum nember of rows
 */
 function db_loadColumn($sql, $maxrows = null, $dbid = "std") {
-  GLOBAL $AppUI;
+  global $AppUI;
   if (!($cur = db_exec($sql, $dbid))) {
     $AppUI->setMsg(db_error($dbid), UI_MSG_ERROR);
     return false;
@@ -510,7 +510,6 @@ function bindObjectToObject($obj1, &$obj) {
   is_object($obj1) or die("bindObjectToObject : object expected");
   is_object($obj) or die("bindObjectToObject : object expected");
   foreach ($obj1->getProps() as $k => $v) {
-  //foreach (get_object_vars($obj1) as $k => &$v) {
     $obj->$k = $v;
   }
 }
@@ -518,5 +517,10 @@ function bindObjectToObject($obj1, &$obj) {
 function db_loadTable($table, $dbid = "std") {
   $query = db_prepare("SHOW TABLES LIKE %", $table);
   return db_loadResult($query, $dbid);
-} 
+}
+
+function db_loadField($table, $field, $dbid = "std") {
+  $query = db_prepare("SHOW FIELDS FROM `$table` WHERE Field = %", $field);
+  return db_loadResult($query, $dbid);
+}
 ?>
