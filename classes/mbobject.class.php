@@ -76,50 +76,38 @@ class CMbObject {
     $this->_id      =& $this->$key;
     
     static $class = null;
-    if(!$class) {
+    static $objectsTable = array();
+    static $props = null;
+    static $specsObj = null;
+    static $seeks = null;
+    static $enums = null;
+    static $enumsTrans = null;
+
+    static $static = false;
+    if (!$static) {
       $class = get_class($this);
+      $this->_class_name =& $class;
+      $this->_objectsTable =& $objectsTable;
+      $props =& $this->getSpecs();
+      $this->_props =& $props;
+      $specsObj =& $this->getSpecsObj();
+      $this->_specs =& $specsObj;
+      $seeks =& $this->getSeeks();
+      $this->_seek =& $seeks;
+      $enums =& $this->getEnums();
+      $this->_enums =& $enums;
+      $enumsTrans =& $this->getEnumsTrans();
+      $this->_enumsTrans =& $enumsTrans;
+      
+      $static = true;
     }
     
     $this->_class_name =& $class;
-    
-    static $objectsTable = array();
     $this->_objectsTable =& $objectsTable;
-    
-    static $props = null;
-    if (!$props) {
-      $props =& $this->getSpecs();
-    }
-        
     $this->_props =& $props;
-    
-    
-    
-    static $specsObj = null;
-    
-    if (!$specsObj) {
-      $specsObj =& $this->getSpecsObj();
-    }
     $this->_specs =& $specsObj;
-    
-    static $seeks = null;
-    if (!$seeks) {
-      $seeks =& $this->getSeeks();
-    }
-        
     $this->_seek =& $seeks;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums =& $this->getEnums();
-    }
-        
     $this->_enums =& $enums;
-
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans =& $this->getEnumsTrans();
-    }
-    
     $this->_enumsTrans =& $enumsTrans;
   }
   
