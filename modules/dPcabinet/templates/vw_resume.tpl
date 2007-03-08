@@ -175,8 +175,8 @@ function newExam(sAction, consultation_id) {
     <th>Documents</th>
     <th>Fichiers</th>
   </tr>
+  {{foreach from=$sejours item=curr_sejour}}
   <tr>
-    {{foreach from=$sejours item=curr_sejour}}
     <td class="text" valign="top">
       <ul>
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
@@ -221,6 +221,6 @@ function newExam(sAction, consultation_id) {
       {{/foreach}}
       </ul>
     </td>
-    {{/foreach}}
   </tr>
+  {{/foreach}}
 </table>
