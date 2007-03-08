@@ -16,8 +16,7 @@ global $AppUI, $canRead, $canEdit, $m;
 $fileModule     = CModule::getInstalled("dPfiles");
 $cptRenduModule = CModule::getInstalled("dPcompteRendu");
 
-$canEditFiles = $fileModule->canEdit();
-$canEditDoc   = $cptRenduModule->canEdit();
+$canEditFile  = false;
 
 $selClass      = mbGetValueFromGetOrSession("selClass", null);
 $selKey        = mbGetValueFromGetOrSession("selKey"  , null);
@@ -39,17 +38,13 @@ if($selClass && $selKey){
   // Chargement de l'objet
   $object = new $selClass;
   $object->load($selKey);
+  $canEditFile = $object->canEdit();
   
   $affichageFile = CFile::loadFilesAndDocsByObject($object);
   
   $smarty->assign("affichageFile",$affichageFile);
 }
 
-$canEditFileDoc = $canEditFiles || $canEditDoc;
-
-$smarty->assign("canEditFileDoc" , $canEditFileDoc);
-$smarty->assign("canEditFiles"   , $canEditFiles);
-$smarty->assign("canEditDoc"     , $canEditDoc);
 $smarty->assign("reloadlist"     , $reloadlist  ); 
 $smarty->assign("listCategory"   , $listCategory);
 $smarty->assign("selClass"       , $selClass    );
@@ -57,6 +52,7 @@ $smarty->assign("selKey"         , $selKey      );
 $smarty->assign("object"         , $object      );
 $smarty->assign("typeVue"        , $typeVue     );
 $smarty->assign("accordDossier"  , $accordDossier);
+$smarty->assign("canEditFile"    , $canEditFile);
 if($typeVue==1){
   $smarty->display("inc_list_view_colonne.tpl");
 }elseif($typeVue==2){

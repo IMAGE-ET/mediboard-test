@@ -27,7 +27,7 @@ $listPrat = $listPrat->loadPraticiens(PERM_READ);
 // Récuperation du patient sélectionné
 $patient = new CPatient;
 $patient->load($patient_id);
-$patient->loadDossierComplet();
+$patient->loadDossierComplet(PERM_READ);
 $patient->loadRefsAntecedents();
 $patient->loadRefsTraitements();
 

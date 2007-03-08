@@ -192,9 +192,31 @@ class CMbObject {
     }
   }
   
-  function getNumDocsAndFiles(){
-  	$this->_nb_files_docs = $this->getNumFiles() + $this->getNumDocs();
+  function getNumDocsAndFiles($permType = null){
+    if(!$permType){
+      $this->_nb_files_docs = $this->getNumFiles() + $this->getNumDocs();
+    }else{
+      $this->_nb_files_docs = $this->getNumDocsAndFilesWithPerm($permType);
+    }
     return $this->_nb_files_docs;
+  }
+  
+  function getNumDocsAndFilesWithPerm($permType = PERM_READ){
+    $this->loadRefsFiles();
+    foreach($this->_ref_files as $file_id=>&$file){
+      if(!$file->getPerm($permType)){
+        unset($this->_ref_files[$file_id]);
+      }
+    }
+    
+    $this->loadRefsDocs();
+    foreach($this->_ref_documents as $doc_id=>&$doc){
+      if(!$doc->getPerm($permType)){
+        unset($this->_ref_documents[$doc_id]);
+      }
+    }
+    
+    return count($this->_ref_files) + count($this->_ref_documents);
   }
   
   /**

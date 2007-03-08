@@ -10,7 +10,7 @@
     </div>
     <div id="Acc{{$keyCat}}Content" class="accordionTabContentBox">
       <table class="tbl">
-        {{if $canEditFiles && !$accordDossier}}
+        {{if $canEditFile && !$accordDossier}}
         <tr>
           <td colspan="2" class="text">
             <button class="new" onclick="uploadFile('{{$selClass}}', '{{$selKey}}', '{{$keyCat}}')">
@@ -42,7 +42,7 @@
             {{/if}}
             <hr />
 
-            {{if $curr_file->_class_name=="CCompteRendu" && $canEditDoc && !$accordDossier}}
+            {{if $curr_file->_class_name=="CCompteRendu" && $canEditFile && !$accordDossier}}
               <form name="editDoc{{$curr_file->compte_rendu_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPcompteRendu" />
               <input type="hidden" name="dosql" value="do_modele_aed" />
@@ -51,7 +51,7 @@
               {{assign var="confirmDeleteType" value="le document"}}
               {{assign var="confirmDeleteName" value=$curr_file->nom}}
               
-            {{elseif $curr_file->_class_name=="CFile" && $canEditFiles && !$accordDossier}}
+            {{elseif $curr_file->_class_name=="CFile" && $canEditFile && !$accordDossier}}
               <form name="editFile{{$curr_file->file_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPfiles" />
               <input type="hidden" name="dosql" value="do_file_aed" />
@@ -62,7 +62,7 @@
               
             {{/if}}
             
-            {{if $canEditFileDoc && !$accordDossier}}
+            {{if $canEditFile && !$accordDossier}}
               <select name="file_category_id" onchange="submitFileChangt(this.form)">
                 <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune</option>
                 {{foreach from=$listCategory item=curr_cat}}

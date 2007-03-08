@@ -159,13 +159,12 @@ class CCompteRendu extends CMbObject {
     if(!($this->_ref_chir || $this->_ref_function) || !$this->_ref_object) {
       $this->loadRefsFwd();
     }
-    if($this->_ref_chir->_id) {
+    if($this->_ref_object->_id){
+      $can = $this->_ref_object->getPerm($permType);
+    }elseif($this->_ref_chir->_id) {
       $can = $this->_ref_chir->getPerm($permType);
     } else {
       $can = $this->_ref_function->getPerm($permType);
-    }
-    if($this->_ref_object->_id) {
-      $can = $can && $this->_ref_object->getPerm($permType);
     }
     return $can;
   }

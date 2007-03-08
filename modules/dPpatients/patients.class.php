@@ -571,11 +571,11 @@ class CPatient extends CMbObject {
     }
   }
 
-  function loadDossierComplet() {
+  function loadDossierComplet($permType = null) {
     $this->loadRefs();
     $this->canRead();
     $this->canEdit();
-    $this->getNumDocsAndFiles();
+    $this->getNumDocsAndFiles($permType);
     
     // Affectations courantes
     $affectation =& $this->_ref_curr_affectation;
@@ -597,7 +597,7 @@ class CPatient extends CMbObject {
       $consult->loadRefConsultAnesth();
       $consult->loadRefsExamAudio();
       $consult->loadExamsComp();
-      $consult->getNumDocsAndFiles();
+      $consult->getNumDocsAndFiles($permType);
       
       $consult->loadRefsFwd();
       $consult->canRead();
@@ -610,16 +610,16 @@ class CPatient extends CMbObject {
       
       $sejour->loadRefsAffectations();
       $sejour->loadRefsOperations();
-      $sejour->getNumDocsAndFiles();
+      $sejour->getNumDocsAndFiles($permType);
       
       $sejour->loadRefsFwd();
       $sejour->canRead();
       $sejour->canEdit();
-      $sejour->getNumDocsAndFiles();
+      $sejour->getNumDocsAndFiles($permType);
       foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
         $operation =& $sejour->_ref_operations[$keyOp];
         $operation->loadRefsFwd();
-        $operation->getNumDocsAndFiles();
+        $operation->getNumDocsAndFiles($permType);
         $operation->canRead();
         $operation->canEdit();
       }

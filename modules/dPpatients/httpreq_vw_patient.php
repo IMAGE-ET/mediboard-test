@@ -15,14 +15,6 @@ if (!$canRead) {
 
 $patient_id = mbGetValueFromGetOrSession("patient_id", 0);
 
-$fileModule    = CModule::getInstalled("dPfiles");
-$fileCptRendus = CModule::getInstalled("dPcompteRendu");
-
-$canReadFiles     = $fileModule->canRead();
-$canEditFiles     = $fileModule->canEdit();
-$canReadCptRendus = $fileCptRendus->canRead();
-$canEditCptRendus = $fileCptRendus->canEdit();
-
 // Liste des modèles
 $where = array();
 $where["object_id"] = "IS NULL";
@@ -98,10 +90,7 @@ $smarty->assign("anesth"          , $anesth                                    )
 $smarty->assign("listPrat"        , $listPrat                                  );
 $smarty->assign("canEditCabinet"  , $canEditCabinet                            );
 $smarty->assign("listCategory"    , $listCategory                              );
-$smarty->assign("canReadFiles"    , $canReadFiles                              );
-$smarty->assign("canEditFiles"    , $canEditFiles                              );
-$smarty->assign("canReadCptRendus", $canReadCptRendus                        );
-$smarty->assign("canEditCptRendus", $canEditCptRendus                        );
+
 $smarty->assign("listModelePrat"  , $listModelePrat                            );
 $smarty->assign("listModeleFct"   , $listModeleFct                             );
 

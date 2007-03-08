@@ -86,9 +86,9 @@ function pageMain() {
     <td id="listInfosPat" style="width:200px;" rowspan="2">
 
       <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFile('load'); return false;">
-      <input type="hidden" name="selKey"   value="{{$selKey}}" />
-      <input type="hidden" name="selClass" value="{{$selClass}}" />
-      <input type="hidden" name="selView"  value="{{$selView}}" />
+      <input type="hidden" name="selKey"   value="" />
+      <input type="hidden" name="selClass" value="" />
+      <input type="hidden" name="selView"  value="" />
       <input type="hidden" name="keywords" value="" />
       <input type="hidden" name="file_id"  value="" />
       <input type="hidden" name="typeVue"  value="1" />
