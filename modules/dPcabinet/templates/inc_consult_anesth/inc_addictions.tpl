@@ -1,20 +1,21 @@
       <script>
-      function reloadAddictions() {
-        var antUrl = new Url;
-        antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_addictions");
-        antUrl.addParam("consultation_anesth_id", "{{$consult_anesth->consultation_anesth_id}}");
-        antUrl.requestUpdate('listAddict', { waitingText : null});
-      }
-      
       function submitAddiction(oForm){
-        submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAddictions });
+        submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
       }
-      
       function finAddiction(oForm){
         oForm._hidden_addiction.value = oForm.addiction.value;
         oForm.addiction.value = "";
         oForm._helpers_addiction.value = "";
       }
+      {{if $_is_anesth}}
+        function copyAddiction(addiction_id){
+         var oForm = document.frmCopyAddiction;
+         oForm.addiction_id.value = addiction_id;
+         oForm.object_class.value  = "CConsultAnesth";
+         oForm.object_id.value     = "{{$consult_anesth->consultation_anesth_id}}";
+         submitFormAjax(oForm, 'systemMsg', { waitingText : null, onComplete : reloadAntecedentsAnesth });
+        }
+      {{/if}}
       </script>
       
       <hr />
@@ -22,16 +23,21 @@
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
-      {{mb_field object=$consult_anesth field="listCim10" hidden=1 prop=""}}
+      {{if $_is_anesth}}
+        {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
+        {{mb_field object=$consult_anesth field="listCim10" hidden=1 prop=""}}
+      {{/if}}
       </form>
 
       <form name="editAddictFrm" action="?m=dPcabinet" method="post">
-      <input type="hidden" name="m" value="dPcabinet" />
+      <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_addiction_aed" />
-      <input type="hidden" name="object_id" value="{{$consult_anesth->consultation_anesth_id}}" />
-      <input type="hidden" name="object_class" value="CConsultAnesth" />      
+      <input type="hidden" name="object_id" value="{{$patient->_id}}" />
+      <input type="hidden" name="object_class" value="CPatient" />
+      {{if $_is_anesth}}
+      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
+      {{/if}}      
       <table class="form">
 
         <tr>

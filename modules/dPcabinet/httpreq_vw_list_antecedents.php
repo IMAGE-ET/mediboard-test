@@ -20,6 +20,7 @@ $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefsAntecedents();
 $patient->loadRefsTraitements();
+$patient->loadRefsAddictions();
 
 // Création du template
 $smarty = new CSmartyDP();

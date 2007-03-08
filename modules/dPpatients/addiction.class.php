@@ -31,7 +31,7 @@ class CAddiction extends CMbObject {
   function getSpecs() {
     return array (
       "object_id"    => "notNull ref",
-      "object_class" => "notNull enum list|CConsultAnesth",
+      "object_class" => "notNull enum list|CPatient|CConsultAnesth",
       "type"         => "notNull enum list|tabac|oenolisme|cannabis",
       "addiction"    => "text"
     );

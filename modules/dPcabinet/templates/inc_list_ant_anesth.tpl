@@ -6,6 +6,14 @@
       <input type="hidden" name="object_id" value="" />
       <input type="hidden" name="object_class" value="" />
       </form>
+      <form name="frmCopyAddiction" action="?m=dPcabinet" method="post">
+      <input type="hidden" name="m" value="dPpatients" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="dosql" value="do_copy_addiction" />
+      <input type="hidden" name="addiction_id" value="" />
+      <input type="hidden" name="object_id" value="" />
+      <input type="hidden" name="object_class" value="" />
+      </form>
       <form name="frmCopyTraitement" action="?m=dPcabinet" method="post">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
@@ -14,6 +22,10 @@
       <input type="hidden" name="object_id" value="" />
       <input type="hidden" name="object_class" value="" />
       </form>
+      
+      {{if $dPconfig.dPcabinet.addictions}}
+        {{include file="inc_consult_anesth/inc_list_addiction_anesth.tpl}}    
+      {{/if}}
       
       <strong>Antécédents significatifs de l'opération</strong>
       <ul>

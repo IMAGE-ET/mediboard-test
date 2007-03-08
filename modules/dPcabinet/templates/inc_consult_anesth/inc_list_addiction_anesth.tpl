@@ -1,7 +1,7 @@
-      <strong>Addictions du patient</strong>
+      <strong>Addictions significatifs de l'opération</strong>
       <ul>
-      {{if $patient->_ref_addictions}}
-        {{foreach from=$patient->_ref_types_addiction key=curr_type item=list_addiction}}
+      {{if $consult_anesth->_ref_addictions}}
+        {{foreach from=$consult_anesth->_ref_types_addiction key=curr_type item=list_addiction}}
         {{if $list_addiction|@count}}
         <li>
           {{tr}}CAddiction.type.{{$curr_type}}{{/tr}}
@@ -15,12 +15,8 @@
               <input type="hidden" name="dosql" value="do_addiction_aed" />
               {{mb_field object=$curr_addiction field="addiction_id" hidden=1 prop=""}}
 
-              <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cette addiction',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedents})">
-              </button> 
-              {{if $_is_anesth}}
-              <button class="add notext" type="button" onclick="copyAddiction({{$curr_addiction->_id}})">
+              <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cette addiction',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedentsAnesth})">
               </button>
-              {{/if}}
               <em>{{$curr_addiction->addiction}}</em>
             </form>
             </li>

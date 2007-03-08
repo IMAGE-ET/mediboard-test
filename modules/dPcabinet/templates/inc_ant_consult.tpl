@@ -148,13 +148,13 @@ function copyTraitement(traitement_id){
 <table class="form">
   <tr>
     <td class="text">
-      {{if $_is_anesth}}
+
         {{if $dPconfig.dPcabinet.addictions}}
           {{include file="inc_consult_anesth/inc_addictions.tpl}}
-        {{else}}
+        {{elseif $_is_anesth}}
           {{include file="inc_consult_anesth/inc_tabac_oenolisme.tpl}}      
         {{/if}}
-      {{/if}}
+
       <hr />
       
       <form name="editAntFrm" action="?m=dPcabinet" method="post">
@@ -304,18 +304,6 @@ function copyTraitement(traitement_id){
 
     <td>
       <table class="form">
-        {{if $dPconfig.dPcabinet.addictions}}
-        <tr>
-          <th class="category">
-            Addictions
-          </th>
-        </tr>
-        <tr>
-          <td class="text" id="listAddict">
-            {{include file="inc_consult_anesth/inc_list_addiction.tpl"}}
-          </td>
-        </tr>
-        {{/if}}
         <tr>
           <th class="category">
             Dossier patient

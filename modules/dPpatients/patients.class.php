@@ -109,6 +109,8 @@ class CPatient extends CMbObject {
   var $_ref_antecedents      = null;
   var $_ref_types_antecedent = null;
   var $_ref_traitements      = null;
+  var $_ref_addictions       = null;
+  var $_ref_types_addiction  = null;
   var $_ref_curr_affectation = null;
   var $_ref_next_affectation = null;
   var $_ref_medecin_traitant = null;
@@ -417,6 +419,27 @@ class CPatient extends CMbObject {
       $this->_ref_consultations = $this->_ref_consultations->loadList($where, $order, null, null, $leftjoin);
     }
   }
+
+  function loadRefsAddictions() {
+    global $dPconfig;
+    if ($this->patient_id && $dPconfig["dPcabinet"]["addictions"]) {
+      $addiction = new CAddiction();
+      
+      // Chargement des addictions
+      $where = array();
+      $where["object_id"]    = "= '$this->patient_id'";
+      $where["object_class"] = "= 'CPatient'";
+      $order = "type ASC";
+      $this->_ref_addictions = $addiction->loadList($where, $order);
+
+      // Classement des addictions
+      $this->_ref_types_addiction = array();
+      
+      foreach($this->_ref_addictions as $keyAddict => &$currAddict){
+        $this->_ref_types_addiction[$currAddict->type][$keyAddict] = $currAddict;
+      }
+    }
+  }
   
   function loadRefsAntecedents() {
     if ($this->patient_id) {
@@ -483,6 +506,7 @@ class CPatient extends CMbObject {
     $this->loadRefsAntecedents();
     $this->loadRefsTraitements();
     $this->loadRefsAffectations();
+    $this->loadRefsAddictions();
   }
 
   // Forward references

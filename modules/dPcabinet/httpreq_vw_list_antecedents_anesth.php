@@ -19,6 +19,7 @@ $consult_anesth = new CConsultAnesth;
 $consult_anesth->load($consultation_anesth_id);
 $consult_anesth->loadRefsAntecedents();
 $consult_anesth->loadRefsTraitements();
+$consult_anesth->loadRefsAddictions();
 
 // Création du template
 $smarty = new CSmartyDP();
