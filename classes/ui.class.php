@@ -588,6 +588,7 @@ class CAppUI {
     
     // save the last_login dateTime
     if(db_loadField("users", "user_last_login")) {
+      $user->user_last_name = null;
       $user->user_last_login = mbDateTime();
       $user->store();
     }
