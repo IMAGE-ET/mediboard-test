@@ -112,6 +112,9 @@ function reloadListExamComp() {
       {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
       <table class="form">
         <tr>
+          <th colspan="4" class="category">Résultats d'analyse</th>
+        </tr>
+        <tr>
           <th>{{mb_label object=$consult_anesth field="groupe"}}</th>
           <td>
             {{mb_field object=$consult_anesth field="groupe" tabindex="101" onchange="submitForm(this.form)"}}
