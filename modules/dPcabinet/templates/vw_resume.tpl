@@ -112,45 +112,41 @@ function newExam(sAction, consultation_id) {
     <th>Documents</th>
     <th>Fichiers</th>
   </tr>
+  {{foreach from=$consultations item=curr_consult}}
   <tr>
     <td class="text" valign="top">
-      <ul>
-        {{foreach from=$consultations item=curr_consult}}
-        <li>
-          Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
-          &mdash; {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
-          {{if $curr_consult->motif}}
-            <br />
-            <strong>Motif:</strong>
-            <i>{{$curr_consult->motif}}</i>
-          {{/if}}
-          {{if $curr_consult->rques}}
-            <br />
-            <strong>Remarques:</strong>
-            <i>{{$curr_consult->rques}}</i>
-          {{/if}}
-          {{if $curr_consult->examen}}
-            <br />
-            <strong>Examens:</strong>
-            <i>{{$curr_consult->examen}}</i>
-          {{/if}}
-          {{if $curr_consult->traitement}}
-            <br />
-            <strong>Traitement:</strong>
-            <i>{{$curr_consult->traitement}}</i>
-          {{/if}}
-          {{if $curr_consult->_ref_examaudio->examaudio_id}}
-            <br />
-            <a href="#" onclick="newExam('exam_audio', {{$curr_consult->consultation_id}})">
-              <strong>Audiogramme</strong>
-            </a>
-          {{/if}}
-        </li>
-    {{/foreach}}
+      Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
+      &mdash; {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
+      {{if $curr_consult->motif}}
+	      <br />
+	      <strong>Motif:</strong>
+	      <i>{{$curr_consult->motif}}</i>
+	    {{/if}}
+	    {{if $curr_consult->rques}}
+	      <br />
+	      <strong>Remarques:</strong>
+	      <i>{{$curr_consult->rques}}</i>
+	    {{/if}}
+	    {{if $curr_consult->examen}}
+	      <br />
+	      <strong>Examens:</strong>
+	      <i>{{$curr_consult->examen}}</i>
+	    {{/if}}
+	    {{if $curr_consult->traitement}}
+	      <br />
+	      <strong>Traitement:</strong>
+	      <i>{{$curr_consult->traitement}}</i>
+	    {{/if}}
+	    {{if $curr_consult->_ref_examaudio->examaudio_id}}
+	      <br />
+	      <a href="#" onclick="newExam('exam_audio', {{$curr_consult->consultation_id}})">
+	        <strong>Audiogramme</strong>
+	      </a>
+	    {{/if}}
     </td>
     <td class="text" valign="top">
       <ul>
-      {{foreach from=$docsCons item=curr_doc}}
+      {{foreach from=$curr_consult->_ref_documents item=curr_doc}}
         <li>
           {{$curr_doc->nom}}
           <button class="print notext" onclick="printDocument({{$curr_doc->compte_rendu_id}})">
@@ -161,7 +157,7 @@ function newExam(sAction, consultation_id) {
     </td>
     <td class="text" valign="top">
       <ul>
-      {{foreach from=$filesCons item=curr_file}}
+      {{foreach from=$curr_consult->_ref_files item=curr_file}}
         <li>
           <a href="#" onclick="popFile('{{$curr_file->file_class}}','{{$curr_file->file_object_id}}','{{$curr_file->_class_name}}','{{$curr_file->file_id}}')">{{$curr_file->file_name}}</a>
           ({{$curr_file->_file_size}})
@@ -170,6 +166,7 @@ function newExam(sAction, consultation_id) {
       </ul>
     </td>
   </tr>
+  {{/foreach}}
   <tr>
     <th colspan="3" class="title">Interventions</th>
   </tr>
@@ -179,9 +176,9 @@ function newExam(sAction, consultation_id) {
     <th>Fichiers</th>
   </tr>
   <tr>
+    {{foreach from=$sejours item=curr_sejour}}
     <td class="text" valign="top">
       <ul>
-        {{foreach from=$sejours item=curr_sejour}}
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
         <li>
           Dr. {{$curr_op->_ref_chir->_view}}
@@ -197,29 +194,33 @@ function newExam(sAction, consultation_id) {
           au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
         </li>
         {{/foreach}}
-        {{/foreach}}
       </ul>
     </td>
     <td class="text" valign="top">
       <ul>
-      {{foreach from=$docsOp item=curr_doc}}
+      {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
+      {{foreach from=$curr_op->_ref_documents item=curr_doc}}
         <li>
           {{$curr_doc->nom}}
           <button class="print notext" onclick="printDocument({{$curr_doc->compte_rendu_id}})">
           </button>
         </li>
       {{/foreach}}
+      {{/foreach}}
       </ul>
     </td>
     <td class="text" valign="top">
       <ul>
-      {{foreach from=$filesOp item=curr_file}}
+      {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
+      {{foreach from=$curr_op->_ref_files item=curr_file}}
         <li>
           <a href="#" onclick="popFile('{{$curr_file->file_class}}','{{$curr_file->file_object_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">{{$curr_file->file_name}}</a>
           ({{$curr_file->_file_size}})
         </li>
       {{/foreach}}
+      {{/foreach}}
       </ul>
     </td>
+    {{/foreach}}
   </tr>
 </table>

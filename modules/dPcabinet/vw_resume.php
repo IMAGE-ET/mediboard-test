@@ -52,12 +52,6 @@ $filesOp = array();
 foreach($consultations as $key => $value) {
   $patient->_ref_consultations[$key]->loadRefsBack();
   $patient->_ref_consultations[$key]->loadRefPlageConsult();
-  if($consultations[$key]->_ref_documents) {
-    $docsCons = array_merge($docsCons, $consultations[$key]->_ref_documents);
-  }
-  if($consultations[$key]->_ref_files) {
-    $filesCons = array_merge($filesCons, $consultations[$key]->_ref_files);
-  }
 }
 
 // Sejours
@@ -70,12 +64,6 @@ foreach($sejours as $key => $sejour) {
     $sejours[$key]->_ref_operations[$keyOp]->loadRefChir();
     $sejours[$key]->_ref_operations[$keyOp]->loadRefsFiles();
     $sejours[$key]->_ref_operations[$keyOp]->loadRefsDocs();
-    if($sejours[$key]->_ref_operations[$keyOp]->_ref_documents) {
-      $docsOp = array_merge($docsOp, $sejours[$key]->_ref_operations[$keyOp]->_ref_documents);
-    }
-    if($sejours[$key]->_ref_operations[$keyOp]->_ref_files) {
-      $filesOp = array_merge($filesOp, $sejours[$key]->_ref_operations[$keyOp]->_ref_files);
-    }
   }
 }
 
@@ -86,10 +74,6 @@ $smarty->assign("listAnt"       , $listAnt);
 $smarty->assign("patient"       , $patient);
 $smarty->assign("consultations" , $consultations );
 $smarty->assign("sejours"       , $sejours);
-$smarty->assign("docsCons"      , $docsCons);
-$smarty->assign("docsOp"        , $docsOp);
-$smarty->assign("filesCons"     , $filesCons);
-$smarty->assign("filesOp"       , $filesOp);
 
 $smarty->display("vw_resume.tpl");
 
