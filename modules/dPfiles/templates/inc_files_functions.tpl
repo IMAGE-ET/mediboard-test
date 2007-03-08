@@ -79,7 +79,7 @@ function setObject(oObject){
   }
 }
 
-function reloadListFileDossier(){
+function reloadListFileDossier(sAction){
   var sSelClass = document.FrmClass.selClass.value;
   var sSelKey   = document.FrmClass.selKey.value;
   if(eval($('accordion'+sSelClass+sSelKey))){
@@ -96,11 +96,19 @@ function reloadListFileDossier(){
 }
 
 function reloadAfterUploadFile(){
-  reloadListFile()
+  reloadListFile('add')
 }
 
-function reloadListFile(){
-  if(file_deleted && file_preview == file_deleted){
+function reloadAfterMoveFile(){
+  reloadListFile('move')
+}
+
+function reloadAfterDeleteFile(){
+  reloadListFile('delete')
+}
+
+function reloadListFile(sAction){
+  if(sAction == "delete" && file_preview == file_deleted){
     ZoomAjax("","","","", 0);
   }
   var url = new Url;
@@ -114,7 +122,7 @@ function reloadListFile(){
 
 function submitFileChangt(oForm){
   file_deleted = null;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadListFile });
+  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAfterMoveFile });
 }
 
 </script>

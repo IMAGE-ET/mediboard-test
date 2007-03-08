@@ -12,8 +12,8 @@ function viewCompleteItem(class, id) {
   url.requestUpdate("listView");
 }
 
-function reloadListFile(){
-  if(file_deleted && file_preview == file_deleted){
+function reloadListFile(sAction){
+  if(sAction == "delete" && file_preview == file_deleted){
     ZoomAjax("","","","", 0);
   }
   var url = new Url;
@@ -26,14 +26,16 @@ function reloadListFile(){
   url.requestUpdate('listView', { 
     waitingText : null 
   } );
-
-  var url = new Url;
-  url.setModuleAction("dPpatients", "httpreq_vw_full_patient");
-  url.addParam("patient_id", "{{$patient->_id}}");
-  url.requestUpdate('listInfosPat', { 
-    waitingText: null, 
-    onComplete: viewFullPatientMain
-  } );
+  
+  if(sAction == "add" || sAction == "delete"){
+    var url = new Url;
+    url.setModuleAction("dPpatients", "httpreq_vw_full_patient");
+    url.addParam("patient_id", "{{$patient->_id}}");
+    url.requestUpdate('listInfosPat', { 
+      waitingText: null, 
+      onComplete: viewFullPatientMain
+    } );
+  }
 }
 
 function saveObjectInfos(oObject){
@@ -83,7 +85,7 @@ function pageMain() {
   <tr>
     <td id="listInfosPat" style="width:200px;" rowspan="2">
 
-      <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFile(); return false;">
+      <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFile('load'); return false;">
       <input type="hidden" name="selKey"   value="{{$selKey}}" />
       <input type="hidden" name="selClass" value="{{$selClass}}" />
       <input type="hidden" name="selView"  value="{{$selView}}" />

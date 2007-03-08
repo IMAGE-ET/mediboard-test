@@ -111,15 +111,20 @@ class CEGateXMLDocument extends CMbXMLDocument {
       $this->addAttribute($TheatreRoom, "RoomID" , $mbSalle_id);
       
       // Ajout des actes codés
-      if(!count($operation->_ref_actes_ccam)){
+      $code_trouve = 0;
+      foreach ($operation->_ref_actes_ccam as $keyActe => $acte) {
+        if($acte->code_activite == 1){
+          $surgeryProdecure = $this->addElement($surgery, "SurgeryProcedure");
+          $this->addAttribute($surgeryProdecure, "SurgeonID"            , $acte->executant_id);
+          $SurgeryProcedureCode = $this->addElement($surgeryProdecure   , "SurgeryProcedureCode");
+          $this->addAttribute($SurgeryProcedureCode, "ProcedureCodeID"  , $acte->code_acte);
+          $code_trouve++;
+        }
+      }
+      if($code_trouve == 0){
         $this->msgError[] = "Il n'y a aucun acte de codé.";
       }
-      foreach ($operation->_ref_actes_ccam as $keyActe => $acte) {
-        $surgeryProdecure = $this->addElement($surgery, "SurgeryProcedure");
-        $this->addAttribute($surgeryProdecure, "SurgeonID"            , $acte->executant_id);
-        $SurgeryProcedureCode = $this->addElement($surgeryProdecure   , "SurgeryProcedureCode");
-        $this->addAttribute($SurgeryProcedureCode, "ProcedureCodeID"  , $acte->code_acte." - ".$acte->code_activite);
-      }
+      
       
       $this->addSurgeryTime($surgery, "3", $operation->entree_bloc     , $operation->sortie_reveil , $operation->date);
       $this->addSurgeryTime($surgery, "5", $operation->entree_salle    , $operation->sortie_salle  , $operation->date);

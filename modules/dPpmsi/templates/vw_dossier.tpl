@@ -104,7 +104,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
 }
 </script>
 
-<form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFileDossier(); return false;">
+<form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFileDossier('load'); return false;">
 <input type="hidden" name="selKey"   value="" />
 <input type="hidden" name="selClass" value="" />
 <input type="hidden" name="selView"  value="" />
