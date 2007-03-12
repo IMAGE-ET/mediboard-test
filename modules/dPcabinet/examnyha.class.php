@@ -48,6 +48,8 @@ class CExamNyha extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
+    
+    $this->_classNyha = "";
     if($this->q1 == 1){
       if($this->q2a !== null && $this->q2a == 0){
         $this->_classeNyha = "Classe III";
@@ -70,6 +72,8 @@ class CExamNyha extends CMbObject {
         $this->_classeNyha = "Classe IV";
       }
     }
+    
+    $this->_view = "Classification NYHA : $this->_classeNyha"; 
   }
   
   function loadRefsFwd() {

@@ -251,6 +251,9 @@ class CExamPossum extends CMbObject {
     //Calcul de la Mortalité
     $temp = (0.13 * $this->_score_physio) + (0.16 * $this->_score_oper) - 7.04;
     $this->_mortalite = round(100 / (1 + exp(-$temp)),1);
+    
+    $this->_view = "Scores POSSUM (morb./mort.) : $this->_morbidite / $this->_mortalite"; 
+    
 
   }
   
