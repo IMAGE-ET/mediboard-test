@@ -392,6 +392,13 @@ class CConsultAnesth extends CMbObject {
       "joinfield" => "object_id",
       "joinon" => "`object_class` = 'CConsultAnesth'"
     );
+    $tables[] = array (
+      "label" => "addiction(s)", 
+      "name" => "addiction", 
+      "idfield" => "addiction_id", 
+      "joinfield" => "object_id",
+      "joinon" => "`object_class` = 'CConsultAnesth'"
+    );
     return parent::canDelete( $msg, $oid, $tables );
   }
 }

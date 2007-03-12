@@ -4,10 +4,10 @@
 
 <script type="text/javascript">
 
-function viewCompleteItem(class, id) {
+function viewCompleteItem(sClassName, id) {
   url = new Url;
   url.setModuleAction("system", "httpreq_vw_complete_object");
-  url.addParam("object_class", class);
+  url.addParam("object_class", sClassName);
   url.addParam("object_id", id);
   url.requestUpdate("listView");
 }

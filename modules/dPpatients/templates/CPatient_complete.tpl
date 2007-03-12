@@ -157,6 +157,9 @@
     <th class="title">Antécédent(s)</th>
     <th class="title">Traitement(s)</th>
     <th class="title">Diagnostic(s)</th>
+    {{if $dPconfig.dPcabinet.addictions}}
+    <th class="title">Addiction(s)</th>
+    {{/if}}
   </tr>
   
   <tr>
@@ -205,5 +208,24 @@
       {{/foreach}}
       {{if $object->_ref_traitements|@count}}</ul>{{/if}}
     </td>
+
+    {{if $dPconfig.dPcabinet.addictions}}
+    <td>
+      {{foreach from=$object->_ref_types_addiction key=curr_type item=list_addiction}}
+      <strong>
+        {{tr}}CAddiction.type.{{$curr_type}}{{/tr}}
+      </strong>
+      <ul>
+        {{foreach from=$list_addiction item=curr_addiction}}
+        <li>
+          {{mb_value object=$curr_addiction field="addiction"}}
+        </li>
+        {{/foreach}}
+      </ul>
+      {{foreachelse}}
+        <i>Pas d'addictions</i>
+      {{/foreach}}
+    </td>
+    {{/if}}
   </tr>
 </table>

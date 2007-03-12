@@ -3,7 +3,7 @@ var ElementChecker = {
   oElement    : null,
   sTypeSpec   : null,
   aSpecTypes  : Array("ref", "str", "numchar", "num", 
-                      "bool", "enum", "date", "time",
+                      "bool", "ienum", "date", "time",
                       "dateTime", "float", "currency", "pct",
                       "text", "html", "email", "code"),
   setProperties : function(sTypeSpec, oElement, aProperties){
@@ -19,58 +19,8 @@ var ElementChecker = {
       return null;
     }
     
-    switch (this.sTypeSpec){
-      case "ref":
-        sMsg = this.ref();
-        break;
-      case "str":
-        sMsg = this.str();
-        break;
-      case "numchar":
-        sMsg = this.numchar();
-        break;
-      case "num":
-        sMsg = this.num();
-        break;
-      case "bool":
-        sMsg = this.bool();
-        break;
-      case "enum":
-        sMsg = this.enum();
-        break;
-      case "date":
-        sMsg = this.date();
-        break;
-      case "time":
-        sMsg = this.time();
-        break;
-      case "dateTime":
-        sMsg = this.dateTime();
-        break;
-      case "float":
-        sMsg = this.float();
-        break;
-      case "currency":
-        sMsg = this.currency();
-        break;
-      case "pct":
-        sMsg = this.pct();
-        break;
-      case "text":
-        sMsg = this.text();
-        break;
-      case "html":
-        sMsg = this.html();
-        break;
-      case "email":
-        sMsg = this.email();
-        break;
-      case "code":
-        sMsg = this.code();
-        break;
-      default:
-        sMsg = "Spécification Introuvable";
-    }
+    sMsg = this["check_" + this.sTypeSpec]();
+    
     return sMsg;
   },
   checkParams : function(){
@@ -150,7 +100,7 @@ var ElementChecker = {
 
 Object.extend(ElementChecker, {  
   // ref
-  ref: function() {
+  check_ref: function() {
     if (isNaN(this.oElement.value)) {
       return "N'est pas une référence (format non numérique)";
     }
@@ -165,7 +115,7 @@ Object.extend(ElementChecker, {
   },
   
   // str
-  str: function() {
+  check_str: function() {
     // length
     if(this.aProperties["length"]){
       iLength = parseInt(this.aProperties["length"], 10);
@@ -202,12 +152,12 @@ Object.extend(ElementChecker, {
   },
   
   // numchar
-  numchar: function() {
-    return this.num();
+  check_numchar: function() {
+    return this.check_num();
   },
   
   // num
-  num: function() {
+  check_num: function() {
     if (isNaN(this.oElement.value)) {
       return "N'est pas une chaîne numérique";
     }
@@ -287,7 +237,7 @@ Object.extend(ElementChecker, {
   },
   
   // bool
-  bool: function() {
+  check_bool: function() {
     if (isNaN(this.oElement.value)) {
       return "N'est pas une chaîne numérique";
     }
@@ -298,7 +248,7 @@ Object.extend(ElementChecker, {
   },
   
   // enum
-  enum: function() {
+  check_enum: function() {
     if(!this.aProperties["list"]){
       return "Spécification 'list' manquante pour le champ " + this.oElement.name;
     }
@@ -310,7 +260,7 @@ Object.extend(ElementChecker, {
   },
   
   // date
-  date: function() {
+  check_date: function() {
     if(!this.oElement.value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)) {
       return "N'as pas un format correct";
     }
@@ -318,7 +268,7 @@ Object.extend(ElementChecker, {
   },
   
   // time
-  time: function() {
+  check_time: function() {
     if(!this.oElement.value.match(/^(\d{1,2}):(\d{1,2}):(\d{1,2})$/)) {
       return "N'as pas un format correct";
     }
@@ -326,7 +276,7 @@ Object.extend(ElementChecker, {
   },
   
   // dateTime
-  dateTime: function() {
+  check_dateTime: function() {
     if(!this.oElement.value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})[ \+](\d{1,2}):(\d{1,2}):(\d{1,2})$/)) {
       return "N'as pas un format correct";
     }
@@ -334,7 +284,7 @@ Object.extend(ElementChecker, {
   },
   
   // float
-  float: function() {
+  check_float: function() {
     if(isNaN(parseFloat(this.oElement.value)) || parseFloat(this.oElement.value)!=this.oElement.value){
       return "N'est pas une valeur décimale (utilisez le . pour la virgule)";
     }
@@ -381,12 +331,12 @@ Object.extend(ElementChecker, {
   },
   
   // currency
-  currency: function() {
-    return this.float();
+  check_currency: function() {
+    return this.check_float();
   },
   
   // pct
-  pct: function() {
+  check_pct: function() {
     if (!this.oElement.value.match(/^(\d+)(\.\d{1,2})?$/)) {
       return "N'est pas une valeur décimale (utilisez le . pour la virgule)";
     }
@@ -394,17 +344,17 @@ Object.extend(ElementChecker, {
   },
   
   // text
-  text: function() {
+  check_text: function() {
     return null;
   },
   
   // html
-  html: function() {
+  check_html: function() {
     return null;
   },
   
   // email
-  email: function() {
+  check_email: function() {
     if (!this.oElement.value.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)) {
       return "Le format de l'email n'est pas valide";
     }
@@ -412,7 +362,7 @@ Object.extend(ElementChecker, {
   },
   
   // code
-  code: function() {
+  check_code: function() {
     // ccam
     if(this.aProperties["ccam"]){
       if (!this.oElement.value.match(/^([a-z]){4}([0-9]){3}$/i)) {
@@ -459,11 +409,13 @@ function checkForm(oForm){
   var oElementFirstFailed = null;
   var aMsgFailed = new Array;
   var iElement = 0;
+  
   while (oElement = oForm.elements[iElement++]) {
     var aSpecFragments = null;
+    
     if(sPropSpec = oElement.getAttribute("title")){
       aSpecFragments = sPropSpec.split(" ");
-    }else if(sPropSpec = oElement.getAttribute("class")){
+    }else if(sPropSpec = oElement.className){
       aSpecFragments = sPropSpec.split(" ");
     }  
     

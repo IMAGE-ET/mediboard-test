@@ -96,15 +96,15 @@ function reloadListFileDossier(sAction){
 }
 
 function reloadAfterUploadFile(){
-  reloadListFile('add')
+  reloadListFile('add');
 }
 
 function reloadAfterMoveFile(){
-  reloadListFile('move')
+  reloadListFile('move');
 }
 
 function reloadAfterDeleteFile(){
-  reloadListFile('delete')
+  reloadListFile('delete');
 }
 
 function reloadListFile(sAction){
