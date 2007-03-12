@@ -75,7 +75,7 @@ class CSetupadmin extends CSetup {
         }
         if($module->mod_id !== null) {
         if($value->permission_item == -1) {
-          $newPerm = new CPermModule;
+          $newPerm = new CPermModuleLegacy;
           $newPerm->user_id = $value->permission_user;
           $newPerm->mod_id  = $module->mod_id;
           if($value->_module_editall) {
@@ -91,7 +91,7 @@ class CSetupadmin extends CSetup {
             $newPerm->view = 0;
           }
         } else {
-          $newPerm = new CPermObject;
+          $newPerm = new CPermObjectLegacy;
           $newPerm->user_id      = $value->permission_user;
           $newPerm->object_id    = $value->permission_item;
           $newPerm->object_class = $moduleClasses[$value->permission_grant_on];

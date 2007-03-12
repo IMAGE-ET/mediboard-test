@@ -526,6 +526,7 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.56");
+    $this->addDependency("dPplanningOp", "0.63");
     function setup_cleanOperationIdError(){
       $where = array();
       $where["consultation_anesth.operation_id"] = "!= 0";
