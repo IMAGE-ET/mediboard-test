@@ -260,7 +260,7 @@ button.remove, a.buttonremove {
 
 button.notext{
   font-size: 0;
-  padding : 1px 0px 0px 0px;
+  padding : 15px 0px 0px 0px;
   margin  : 1px 1px;
   width: 19px;
 }

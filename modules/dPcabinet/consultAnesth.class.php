@@ -342,7 +342,15 @@ class CConsultAnesth extends CMbObject {
     if(!$this->_ref_consultation){
       $this->loadRefConsultation();
     }
-    return $this->_ref_consultation->getPerm($permType);
+    if($this->operation_id){
+      if(!$this->_ref_operation){
+        $this->loadRefOperation();
+      }
+      $canOper = $this->_ref_operation->getPerm($permType);
+    }else{
+      $canOper = false;
+    }
+    return $this->_ref_consultation->getPerm($permType) || $canOper;
   }
   
   function fillTemplate(&$template) {
