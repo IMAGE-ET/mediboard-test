@@ -21,4 +21,10 @@ if (!get_magic_quotes_gpc()) {
   $_REQUEST = array_map_recursive("addslashes", $_REQUEST);
 }
 
+if(isset($_REQUEST["ajax"])){
+  $_GET     = array_map_recursive("utf8_decode", $_GET    );
+  $_POST    = array_map_recursive("utf8_decode", $_POST   );
+  $_COOKIE  = array_map_recursive("utf8_decode", $_COOKIE );
+  $_REQUEST = array_map_recursive("utf8_decode", $_REQUEST);
+}
 ?>

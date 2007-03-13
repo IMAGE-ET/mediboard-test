@@ -32,6 +32,7 @@ require_once($AppUI->getModuleFile($m, "inc_graph_activite"));
 $graph->Stroke("tmp/graphtmp.png");
 $map_graph_interventions = $graph->GetHTMLImageMap("graph_interventions");
 
+$map_graph_interventions = preg_replace("/javascript:/", "#nothing\" onclick=\"", $map_graph_interventions);
 
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);

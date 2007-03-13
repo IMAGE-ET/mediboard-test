@@ -1,5 +1,5 @@
 <!-- $Id$ -->
-
+<script type="text/javascript" src="modules/dPpatients/javascript/autocomplete.js?build={{$mb_version_build}}"></script>
 <script type="text/javascript">
 
 function setClose(iId, sNom, sPrenom, sType) {
@@ -7,6 +7,9 @@ function setClose(iId, sNom, sPrenom, sType) {
   window.close();
 }
 
+function pageMain() {
+  initInseeFields("editFrm", "cp", "ville","_tel1");
+}
 </script>
 
 <table class="main">
@@ -169,12 +172,18 @@ function setClose(iId, sNom, sPrenom, sType) {
         
         <tr>
           <th>{{mb_label object=$medecin field="cp"}}</th>
-          <td>{{mb_field object=$medecin field="cp"}}</td>
+          <td>
+            {{mb_field object=$medecin field="cp" size="31" maxlength="5"}}
+            <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
+          </td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$medecin field="ville"}}</th>
-          <td>{{mb_field object=$medecin field="ville"}}</td>
+          <td>
+            {{mb_field object=$medecin field="ville" size="31"}}
+            <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
+          </td>
         </tr>
         
         <tr>

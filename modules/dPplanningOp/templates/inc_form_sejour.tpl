@@ -38,7 +38,7 @@
 
 {{if $sejour->annule == 1}}
 <tr>
-  <th class="category" colspan="4" style="background: #f00;">
+  <th class="category cancelled" colspan="4">
   SEJOUR ANNULE
   </th>
 </tr>

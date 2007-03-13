@@ -10,7 +10,7 @@
   
   {{if $operation->annulee == 1}}
   <tr>
-    <th class="category" colspan="4" style="background: #f00;">
+    <th class="category cancelled" colspan="4">
     OPERATION ANNULEE
     </th>
   </tr>

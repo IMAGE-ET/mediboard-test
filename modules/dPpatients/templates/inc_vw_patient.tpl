@@ -271,7 +271,7 @@ function reloadAfterSaveDoc(){
       </a>
 	</td>
     {{if $curr_sejour->annule}}
- 	<td style="background: #f00">
+ 	<td class="cancelled">
       <strong>[SEJOUR ANNULE]</strong>
 	</td>
     {{else}}
@@ -299,7 +299,7 @@ function reloadAfterSaveDoc(){
       </a>
     </td>
     {{if $curr_op->annulee}}
- 	<td style="background: #f00">
+ 	<td class="cancelled">
       <strong>[OPERATION ANNULEE]</strong>
 	</td>
     {{else}}

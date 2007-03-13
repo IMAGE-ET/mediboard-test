@@ -341,7 +341,7 @@ newExam = function(sAction, consultation_id) {
   </tr>
   
   <tr>
-    <td>
+    <td class="text">
       {{foreach from=$object->_ref_types_antecedent key=curr_type item=list_antecedent}}
       <strong>
         {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
@@ -358,7 +358,7 @@ newExam = function(sAction, consultation_id) {
         <i>Pas d'antécédents</i>
       {{/foreach}}
     </td>
-    <td>
+    <td class="text">
       {{if $object->_ref_traitements|@count}}<ul>{{/if}}
       {{foreach from=$object->_ref_traitements item=curr_traitement}}
         <li>
@@ -375,7 +375,7 @@ newExam = function(sAction, consultation_id) {
       {{/foreach}}
       {{if $object->_ref_traitements|@count}}</ul>{{/if}}
     </td>
-    <td>
+    <td class="text">
       {{if $object->_ref_traitements|@count}}<ul>{{/if}}
       {{foreach from=$object->_codes_cim10 item=curr_code}}
         <li>
@@ -388,7 +388,7 @@ newExam = function(sAction, consultation_id) {
     </td>
     
     {{if $dPconfig.dPcabinet.addictions}}
-    <td>
+    <td class="text">
       {{foreach from=$object->_ref_types_addiction key=curr_type item=list_addiction}}
       <strong>
         {{tr}}CAddiction.type.{{$curr_type}}{{/tr}}

@@ -300,7 +300,7 @@ function submitFdr(oForm) {
         <tr>
           <th>{{mb_label object=$consult field="_somme"}}</th>
           <td>
-            <input type="text" size="4" name="_somme" title="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" /> €
+            <input type="text" size="4" name="_somme" title="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" /> &euro;
             {{mb_field object=$consult field="secteur1" hidden=1 prop=""}}
             {{mb_field object=$consult field="secteur2" hidden=1 prop=""}}
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
@@ -316,7 +316,7 @@ function submitFdr(oForm) {
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
             {{mb_field object=$consult field="paye" hidden=1 prop=""}}
             {{mb_field object=$consult field="date_paiement" hidden=1 prop=""}}
-            <strong>{{$consult->secteur1+$consult->secteur2}} € ont été réglés : {{$consult->type_tarif}}</strong>
+            <strong>{{$consult->secteur1+$consult->secteur2}} &euro; ont été réglés : {{$consult->type_tarif}}</strong>
           </td>
         </tr>
         <tr>

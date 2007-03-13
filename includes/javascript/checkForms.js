@@ -468,7 +468,10 @@ function checkForm(oForm){
     
     if (oElementFirstFailed) {
       if (oElementFirstFailed.type != "hidden") {
-        oElementFirstFailed.focus();
+        try {
+          oElementFirstFailed.focus();
+        }
+        catch(e){}
       }
       var oDoubleClick = oElementFirstFailed["ondblclick"] || Prototype.emptyFunction;
       oDoubleClick();

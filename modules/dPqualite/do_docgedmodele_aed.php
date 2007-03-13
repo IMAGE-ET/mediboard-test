@@ -34,13 +34,6 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
     unset($_POST["suppressHeaders"]);
     unset($_POST["callback"]);
     
-    // UTF8 issue for Ajax
-    if ($this->ajax) {
-      foreach($_POST as $key => $value) {
-        $_POST[$key] = utf8_decode($value);
-      }
-    }
-    
     // Object binding
     if (!$this->_obj->bind( $_POST["ged"] )) {
       $AppUI->setMsg( $this->_obj->getError(), UI_MSG_ERROR );
@@ -108,13 +101,6 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
     unset($_POST["ajax"]);
     unset($_POST["suppressHeaders"]);
     unset($_POST["callback"]);
-    
-    // UTF8 issue for Ajax
-    if ($this->ajax) {
-      foreach($_POST as $key => $value) {
-        $_POST[$key] = utf8_decode($value);
-      }
-    }
     
     // Object binding
     if (!$this->_obj->bind( $_POST["suivi"] )) {

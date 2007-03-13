@@ -12,7 +12,6 @@ function changePause(){
     myNode.innerHTML = "";
     myNode = document.getElementById("clickPat");
     myNode.innerHTML = "Infos patient (indisponibles)";
-    myNode.setAttribute("onclick", "");
   }else{
     $('viewPatient').show();
   }
@@ -20,9 +19,13 @@ function changePause(){
 
 
 function requestInfoPat() {
+  var oForm = document.editFrm;
+  if(!oForm.patient_id.value){
+    return false;
+  }
   var url = new Url;
   url.setModuleAction("dPpatients", "httpreq_get_last_refs");
-  url.addElement(document.editFrm.patient_id);
+  url.addElement(oForm.patient_id);
   url.requestUpdate("infoPat", {
     waitingText: "Chargement des antécédants du patient"
   });
@@ -38,13 +41,12 @@ function popPat() {
 
 function setPat( key, val ) {
   var f = document.editFrm;
-
+  
   if (val != '') {
     f.patient_id.value = key;
     f._pat_name.value = val;
-    myNode = document.getElementById("clickPat");
+    myNode = $("clickPat");
     myNode.innerHTML = "++ Infos patient (cliquez pour afficher) ++";
-    myNode.setAttribute("onclick", "requestInfoPat()");
   }
 }
 
@@ -143,7 +145,7 @@ function checkFormRDV(oForm){
   </tr>
   {{if $consult->annule == 1}}
   <tr>
-    <th class="category" colspan="3" style="background: #f00;">
+    <th class="category cancelled" colspan="3">
     CONSULTATION ANNULEE
     </th>
   </tr>
@@ -254,11 +256,10 @@ function checkFormRDV(oForm){
       
       <table class="form">
         <tr>
-          {{if $pat->patient_id}}
           <th id="clickPat" class="category" onclick="requestInfoPat()">
+          {{if $pat->patient_id}}
             ++ Infos patient (cliquez pour afficher) ++
           {{else}}
-          <th id="clickPat" class="category">
             Infos patient (indisponibles)
           {{/if}}
           </th>

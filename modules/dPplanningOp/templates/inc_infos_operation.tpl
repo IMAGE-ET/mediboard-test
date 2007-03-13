@@ -20,7 +20,7 @@
     </td>
     <td>{{$curr_operation->_datetime|date_format:"%a %d %b %Y"}}</td>
     {{if $curr_operation->annulee}}
-    <th style="background: #f00">
+    <th class="category cancelled">
       <strong>OPERATION ANNULEE</strong>
 	</th>
     {{else}}

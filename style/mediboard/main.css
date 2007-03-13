@@ -59,6 +59,13 @@ th.title.urgence.modify {
 th.category.modify {
   color: #f00;
 }
+table.form td.cancelled,
+th.cancelled,
+th.category.cancelled,
+table.form th.category.cancelled {
+  color: #fff;
+  background-color: #f00;
+}
 
 img {
   border: none;
