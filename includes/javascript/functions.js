@@ -554,7 +554,7 @@ Class.extend(Applet, {
 
   options : {
     parentElement: "applet-container",
-    archiveDir : "../includes/applets",
+    archiveDir : "../includes/applets"
   },
   
   attributes: {
@@ -601,7 +601,7 @@ Class.extend(Applet, {
     
     // Final append to parent element when applet element is complete
     parentElement.appendChild(this.appletElement);
-  },
+  }
 } );
 
 /*
