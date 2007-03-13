@@ -26,7 +26,7 @@
 </div>
 
 <div id="login">
-  <form name="loginFrm" action="./index.php" method="post">
+  <form name="loginFrm" action="./index.php" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="login" value="{{$time}}" />
   <input type="hidden" name="redirect" value="{{$redirect|smarty:nodefaults}}" />
   <input type="hidden" name="dialog" value="{{$dialog}}" />
@@ -35,6 +35,7 @@
     <tr>
       <th class="category" colspan="3">
         {{$app->cfg.company_name}}
+        <br />
         <img src="./style/{{$uistyle}}/images/pictures/e-cap.jpg" alt="eCap logo" />
       </th>
     </tr>
