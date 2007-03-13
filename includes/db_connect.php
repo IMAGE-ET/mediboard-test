@@ -520,7 +520,7 @@ function db_loadTable($table, $dbid = "std") {
 }
 
 function db_loadField($table, $field, $dbid = "std") {
-  $query = db_prepare("SHOW FIELDS FROM `$table` WHERE Field = %", $field);
+  $query = db_prepare("SHOW COLUMNS FROM `$table` LIKE %", $field);
   return db_loadResult($query, $dbid);
 }
 ?>
