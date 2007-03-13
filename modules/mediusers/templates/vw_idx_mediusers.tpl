@@ -111,7 +111,7 @@ function deldate(sField){
         </tr>
         <tr>
           <th>{{mb_label object=$mediuserSel field="_user_password"}}</th>
-          <td><input type="password" name="_user_password" class="{{$mediuserSel->_user_props._user_password}}{{if !$mediuserSel->user_id}} notNull{{/if}}" value="" /></td>
+          <td><input type="password" name="_user_password" class="{{$mediuserSel->_props._user_password}}{{if !$mediuserSel->user_id}} notNull{{/if}}" value="" /></td>
         </tr>
         <tr>
           <th>{{mb_label object=$mediuserSel field="_user_password2"}}</th>
