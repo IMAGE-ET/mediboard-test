@@ -2,8 +2,7 @@
 
 viewFullPatientMain = function() {
   PairEffect.initGroup("patientEffect", { 
-    bStoreInCookie: true,
-    sEffect: "Appear"
+    bStoreInCookie: true
   } );
 }
   

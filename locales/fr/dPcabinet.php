@@ -1,5 +1,4 @@
 <?php
-$locales['pref-simpleCabinet-desc'] = 'Affichage des informations concernant les hospitalisations';
 $locales['CAddiction-addiction'] = 'Information';
 $locales['CAddiction-addiction-desc'] = 'Information sur l\'addiction';
 $locales['CAddiction-type'] = 'Type';
@@ -353,7 +352,15 @@ $locales['mod-dPcabinet-tab-form_print_plages'] = 'Impression plannings';
 $locales['mod-dPcabinet-tab-vw_compta'] = 'Comptabilité';
 $locales['mod-dPcabinet-tab-vw_dossier'] = 'Dossiers';
 $locales['mod-dPcabinet-tab-vw_planning'] = 'Programme de consultation';
+$locales['pref-DefaultPeriod'] = 'Période par défault';
+$locales['pref-DefaultPeriod-desc'] = 'Période par défault pour les périodes de consultation';
+$locales['pref-DossierCabinet-desc'] = 'Module utilisé pour le dossier patient cabinet';
+$locales['pref-DossierCabinet'] = 'Dossier patient cabinet';
+$locales['pref-GestionFSE-desc'] = 'Permet de déclencher l\'envoi de FSE';
+$locales['pref-GestionFSE'] = 'Gérer la FSE';
 $locales['pref-InterMaxDir'] = 'Répertoire d\'InterMax';
 $locales['pref-InterMaxDir-desc'] = 'Répertoire d\'Interopérabilité de LogicMax sur le poste utilisateur';
+$locales['pref-InterMaxDir-undef'] = 'Impossible d\'utiliser le composant Logicmax si le répertoire d\'interopérabilité n\'est pas configuré';
 $locales['pref-simpleCabinet'] = 'Liaison hospitalisation';
+$locales['pref-simpleCabinet-desc'] = 'Affichage des informations concernant les hospitalisations';
 ?>

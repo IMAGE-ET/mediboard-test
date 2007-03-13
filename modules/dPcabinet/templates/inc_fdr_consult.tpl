@@ -163,14 +163,14 @@ function submitFdr(oForm) {
           {{if $consult->_ref_exampossum->_id}}
           <li>
             <a href="#nothing" onclick="loadExam('exam_possum');">
-              Score Possum
+              {{$consult->_ref_exampossum->_view}}
             </a>
           </li>
           {{/if}}
           {{if $consult->_ref_examnyha->_id}}
           <li>
             <a href="#nothing" onclick="loadExam('exam_nyha');">
-              Classification NYHA
+              {{$consult->_ref_examnyha->_view}}
             </a>
           </li>
           {{/if}}
@@ -258,9 +258,11 @@ function submitFdr(oForm) {
     </form>
     
     </td>
-    {{if !$noReglement}}
+
+
     <!-- Règlements -->	
-    
+
+    {{if !$noReglement}}
     <td>
       <form name="tarifFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
@@ -361,8 +363,48 @@ function submitFdr(oForm) {
       </form>
     </td>
     {{/if}}
-        
-
   </tr>
+  
+  
+  <!-- Module FSE -->
+  
+  {{if $app->user_prefs.GestionFSE && $consult->tarif}}
+  <tr>
+    <th class="category" colspan="3">Feuille de Soins Electronique</th>
+  </tr>
+  <tr>
+    <td id="yoplet-container" colspan="3">
+    
+    
+    {{if $app->user_prefs.InterMaxDir}}
+    
+<!--
+    <applet 
+      name="intermax-yoplet"
+      code="org.lostinthegarden.applet.impl.DefaultFileOperatorImpl.class" 
+      archive="includes/applets/yoplet.jar" 
+      width="400" 
+      height="100"
+    >
+      <param name="action" value="sleep"/>
+      <param name="debug" value="true" />
+      <param name="readPath"  value="{{$app->user_prefs.InterMaxDir}}\INTERMAX.txt " />
+      <param name="writePath" value="{{$app->user_prefs.InterMaxDir}}\INTERMAX.txt" />
+      <param name="watchPath" value="{{$app->user_prefs.InterMaxDir}}\INTERMAX.txt" />
+      <param name="content" value="Another content" />
+    </applet>
+
+-->
+    {{else}}
+    <div class="big-warning">
+      {{tr}}pref-InterMaxDir{{/tr}} inconnu.
+      <br />
+      {{tr}}pref-InterMaxDir-undef{{/tr}} (cf. préférences)
+    </div>
+    {{/if}}
+    </td>
+  </tr>
+  {{/if}}
+  
 </table>
           

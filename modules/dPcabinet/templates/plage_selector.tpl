@@ -31,12 +31,13 @@ function pageMain() {
     <input type="hidden" name="m" value="dPcabinet" />
     <input type="hidden" name="a" value="plage_selector" />
     <input type="hidden" name="dialog" value="1" />
+    <input type="hidden" name="date" value="{{$date}}" />
     <input type="hidden" name="chir_id" value="{{$chir_id}}" />
     <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
 
     <table class="form">
       <tr>
-        <th><label for="period">Planning</label></th>
+        <th><label for="period" title="Changer la période de recherche">Planning</label></th>
         <td>
           <select name="period" onchange="this.form.submit()">
             {{foreach from=$periods item="_period"}}
@@ -71,9 +72,12 @@ function pageMain() {
         </td>
         
         <td>
-		  <input type="checkbox" name="hide_finished" value="1" onchange="this.form.submit()" 
-		    {{if $hide_finished}}checked="checked" {{/if}} />
-		  <label for="hide_finished">Cacher les terminées</label>
+          
+		  <label for="hide_finished">Masquer terminées :</label>
+		  <input type="radio" name="hide_finished" value="0" onchange="this.form.submit()" {{if $hide_finished == "0"}}checked="checked" {{/if}} />
+		  <label for="hide_finished_0">Non</label>
+		  <input type="radio" name="hide_finished" value="1" onchange="this.form.submit()" {{if $hide_finished == "1"}}checked="checked" {{/if}} />
+		  <label for="hide_finished_1">Oui</label>
   
         </td>
       </tr>

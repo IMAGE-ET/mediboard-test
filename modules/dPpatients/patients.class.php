@@ -11,6 +11,11 @@
  * The CPatient Class
  */
 class CPatient extends CMbObject {
+  static $dossier_cabinet_prefix = array (
+    "dPcabinet" => "?m=dPcabinet&tab=vw_dossier&patSel=",
+    "dPpatients" => "?m=dPpatients&tab=vw_full_patients&patient_id="
+  );
+  
   // DB Table key
   var $patient_id = null;
 
@@ -94,12 +99,18 @@ class CPatient extends CMbObject {
   var $_age         = null;
   var $_codes_cim10 = null;
   
+  // Navigation Fields
+  var $_dossier_cabinet_url = null;
+  
   // HPRIM Fields
   var $_prenoms        = null; // multiple
   var $_nom_naissance  = null; // +/- = nom_jeune_fille
   var $_adresse_ligne2 = null;
   var $_adresse_ligne3 = null;
   var $_pays           = null;
+  
+  // Path
+  
 
   // Object References
   var $_nb_docs              = null;
@@ -119,8 +130,7 @@ class CPatient extends CMbObject {
   var $_ref_medecin3         = null;
 
 	function CPatient() {
-		$this->CMbObject("patients", "patient_id");
-    
+		$this->CMbObject("patients", "patient_id");    
     $this->loadRefModule(basename(dirname(__FILE__)));
 	}
 
@@ -243,6 +253,10 @@ class CPatient extends CMbObject {
     foreach($arrayCodes as $value) {
       $this->_codes_cim10[] = new CCodeCIM10($value, 1);
     }
+    
+    // Navigation fields
+    global $AppUI;
+    $this->_dossier_cabinet_url = self::$dossier_cabinet_prefix[$AppUI->user_prefs["DossierCabinet"]] . $this->_id;
   }
   
   

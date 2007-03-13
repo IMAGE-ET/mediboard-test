@@ -15,7 +15,9 @@
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.motif}}
       </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.motif)"/>
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.motif)">
+        Nouveau
+      </button>
     </th>
     <th class="category">
       {{mb_label object=$consult field="rques"}}
@@ -25,7 +27,9 @@
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.rques}}
       </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques)"/>
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques)">
+        Nouveau
+      </button>
     </th>
   </tr>
   <tr>
@@ -41,7 +45,10 @@
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.examen}}
       </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen)"/>
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen)">
+        Nouveau
+      </button>
+      
     </th>
     <th class="category">
       {{mb_label object=$consult field="traitement"}}
@@ -51,7 +58,9 @@
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.traitement}}
       </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.traitement)"/>
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.traitement)">
+        Nouveau
+      </button>
     </th>
   </tr>
   <tr>

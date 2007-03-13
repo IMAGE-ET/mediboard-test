@@ -111,17 +111,25 @@
   </tr>
 
   <tr>
-    <th class="category" colspan="2">{{tr}}module-dPcabinet-long{{/tr}} - Anesth</th>
+    <th>
+      <label for="pref_name[GestionFSE]" title="{{tr}}pref-GestionFSE-desc{{/tr}}">{{tr}}pref-GestionFSE{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[GestionFSE]">
+        <option value="0"{{if $prefsUser.dPcabinet.GestionFSE == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
+        <option value="1"{{if $prefsUser.dPcabinet.GestionFSE == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
+      </select>
+    </td>
   </tr>
 
   <tr>
     <th>
-      <label for="pref_name[AUTOADDSIGN]" title="Ajout automatique des éléments significatifs">{{tr}}Ajout automatique des éléments significatifs{{/tr}}</label>
+      <label for="pref_name[DossierCabinet]" title="{{tr}}pref-DossierCabinet-desc{{/tr}}">{{tr}}pref-DossierCabinet{{/tr}}</label>
     </th>
     <td>
-      <select name="pref_name[AUTOADDSIGN]">
-        <option value="0"{{if $prefsUser.dPcabinet.AUTOADDSIGN == "0"}}selected="selected"{{/if}}>Non</option>
-        <option value="1"{{if $prefsUser.dPcabinet.AUTOADDSIGN == "1"}}selected="selected"{{/if}}>Oui</option>
+      <select name="pref_name[DossierCabinet]">
+        <option value="dPcabinet" {{if $prefsUser.dPcabinet.DossierCabinet == "dPcabinet" }}selected="selected"{{/if}}>{{tr}}module-dPcabinet-court {{/tr}}</option>
+        <option value="dPpatients"{{if $prefsUser.dPcabinet.DossierCabinet == "dPpatients"}}selected="selected"{{/if}}>{{tr}}module-dPpatients-court{{/tr}}</option>
       </select>
     </td>
   </tr>
@@ -131,7 +139,7 @@
       <label for="pref_name[InterMaxDir]" title="{{tr}}pref-InterMaxDir-desc{{/tr}}">{{tr}}pref-InterMaxDir{{/tr}}</label>
     </th>
     <td>
-      <input class="str" type="text" name="pref_name[InterMaxDir]" value="{{$prefsUser.dPcabinet.InterMaxDir}}" />
+      <input class="str" type="text" size="40" name="pref_name[InterMaxDir]" value="{{$prefsUser.dPcabinet.InterMaxDir}}" />
     </td>
   </tr>
 
@@ -156,6 +164,22 @@
       <select name="pref_name[simpleCabinet]">
         <option value="0"   {{if $prefsUser.dPcabinet.simpleCabinet == 0 }}selected="selected"{{/if}}>avec hospitalisation</option>
         <option value="1"  {{if $prefsUser.dPcabinet.simpleCabinet == 1 }}selected="selected"{{/if}}>sans hospitalisation</option>
+      </select>
+    </td>
+  </tr>
+
+  <tr>
+    <th class="category" colspan="2">{{tr}}module-dPcabinet-long{{/tr}} - Anesth</th>
+  </tr>
+
+  <tr>
+    <th>
+      <label for="pref_name[AUTOADDSIGN]" title="Ajout automatique des éléments significatifs">{{tr}}Ajout automatique des éléments significatifs{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[AUTOADDSIGN]">
+        <option value="0"{{if $prefsUser.dPcabinet.AUTOADDSIGN == "0"}}selected="selected"{{/if}}>Non</option>
+        <option value="1"{{if $prefsUser.dPcabinet.AUTOADDSIGN == "1"}}selected="selected"{{/if}}>Oui</option>
       </select>
     </td>
   </tr>

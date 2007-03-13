@@ -25,13 +25,12 @@
         {{foreach from=$listUrgences item=curr_op}}
         <tr>
           <td class="text">
-<!--            <a href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">-->
-            <a href="index.php?m=dPcabinet&amp;tab=vw_dossier&amp;patSel={{$curr_op->_ref_sejour->_ref_patient->patient_id}}"> 
+            <a href="{{$curr_op->_ref_sejour->_ref_patient->_dossier_cabinet_url}}">
               {{$curr_op->_ref_sejour->_ref_patient->_view}}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->operation_id}}">
+            <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
               {{if $curr_op->libelle}}
                 <em>[{{$curr_op->libelle}}]</em>
                 <br />
@@ -49,13 +48,13 @@
             {{if $curr_op->annulee}}
             [ANNULEE]
             {{else}}
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->operation_id}}">
+            <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
               {{$curr_op->_datetime|date_format:"le %d/%m/%Y à %Hh%M"}}
             </a>
             {{/if}}
           </td>
           <td style="text-align: center;">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->operation_id}}">
+            <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
               {{$curr_op->temp_operation|date_format:"%Hh%M"}}
             </a>
           </td>
@@ -69,7 +68,7 @@
                   <input type="hidden" name="m" value="dPcompteRendu" />
                   <input type="hidden" name="del" value="0" />
                   <input type="hidden" name="dosql" value="do_modele_aed" />
-                  <input type="hidden" name="object_id" value="{{$curr_op->operation_id}}" />
+                  <input type="hidden" name="object_id" value="{{$curr_op->_id}}" />
                   {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
                   <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">
                   </button>
@@ -83,7 +82,7 @@
             <table>
               <tr>
                 <td>
-                  <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$curr_op->operation_id}})">
+                  <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$curr_op->_id}})">
                     <option value="">&mdash; Choisir un modèle</option>
                     <optgroup label="Opération">
                     {{foreach from=$crList item=curr_cr}}
@@ -111,13 +110,12 @@
         {{foreach from=$curr_plage->_ref_operations item=curr_op}}
         <tr>
           <td class="text">
-<!--            <a href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}"> -->
-            <a href="index.php?m=dPcabinet&amp;tab=vw_dossier&amp;patSel={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
+            <a href="{{$curr_op->_ref_sejour->_ref_patient->_dossier_cabinet_url}}">
               {{$curr_op->_ref_sejour->_ref_patient->_view}}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
               {{if $curr_op->libelle}}
                 <em>[{{$curr_op->libelle}}]</em>
                 <br />
@@ -138,13 +136,13 @@
             {{if $curr_op->annulee}}
             [ANNULEE]
             {{else}}
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
               {{$curr_op->time_operation|date_format:"%Hh%M"}}
             </a>
             {{/if}}
           </td>
           <td style="text-align: center;">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
               {{$curr_op->temp_operation|date_format:"%Hh%M"}}
             </a>
           </td>
@@ -159,7 +157,7 @@
                   <input type="hidden" name="m" value="dPcompteRendu" />
                   <input type="hidden" name="del" value="0" />
                   <input type="hidden" name="dosql" value="do_modele_aed" />
-                  <input type="hidden" name="object_id" value="{{$curr_op->operation_id}}" />
+                  <input type="hidden" name="object_id" value="{{$curr_op->_id}}" />
                   {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
                   <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">
                   </button>
@@ -173,7 +171,7 @@
             <table>
               <tr>
                 <td>
-                  <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$curr_op->operation_id}})">
+                  <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$curr_op->_id}})">
                     <option value="">&mdash; Choisir un modèle</option>
                     <optgroup label="Opération">
                     {{foreach from=$crList item=curr_cr}}

@@ -20,8 +20,8 @@ $object = new $object_class;
 $object->load($object_id);
 $object->loadView();
 
-$can->read = $object->canRead();
-$can->needsRead();
+//$can->read = $object->canRead();
+//$can->needsRead();
 
 // If no template is defined, use generic
 $template = is_file("modules/$object->_view_template") ?

@@ -117,7 +117,7 @@ function submitAnt(oForm) {
 }
 
 function incAntecedantsMain() {
-  PairEffect.initGroup("effectCategory");
+  PairEffect.initGroup("effectCategory", { sEffect: "appear" });
 }
 {{if $_is_anesth}}
 function reloadAntecedentsAnesth() {
@@ -158,6 +158,7 @@ function copyTraitement(traitement_id){
       <hr />
       
       <form name="editAntFrm" action="?m=dPcabinet" method="post">
+      
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_antecedent_aed" />
@@ -177,7 +178,9 @@ function copyTraitement(traitement_id){
               {{html_options options=$antecedent->_aides.rques}}
             </select>
             <input type="hidden" name="_hidden_rques" value="" />
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques')"/>
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques')">
+              Nouveau
+            </button>
           </td>
 
         </tr>
@@ -232,7 +235,9 @@ function copyTraitement(traitement_id){
               {{html_options options=$traitement->_aides.traitement}}
             </select>
             <input type="hidden" name="_hidden_traitement" value="" />
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTraitement', this.form._hidden_traitement, 'traitement')"/>
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTraitement', this.form._hidden_traitement, 'traitement')">
+              Nouveau
+            </button>
           </td>
         </tr>
         <tr>
@@ -269,6 +274,7 @@ function copyTraitement(traitement_id){
       </form>
       
       <hr />
+      
       <strong>Ajouter un diagnostic</strong>
       
       <button class="search" onclick="popCode()">Chercher un diagnostic</button>
@@ -290,8 +296,12 @@ function copyTraitement(traitement_id){
           {{foreach from=$curr_cat item=curr_code}}
           <tr>
             <td class="text">
-              <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}');oCimAnesthField.add('{{$curr_code->code}}');"></button>
-              <button class="down notext" type="button" onclick="selectCim10('{{$curr_code->code}}')"></button>
+              <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}');oCimAnesthField.add('{{$curr_code->code}}');">
+                Ajouter
+              </button>
+              <button class="down notext" type="button" onclick="selectCim10('{{$curr_code->code}}')">
+                Parcourir
+              </button>
               {{$curr_code->code}}: {{$curr_code->libelle}}
             </td>
           </tr>
