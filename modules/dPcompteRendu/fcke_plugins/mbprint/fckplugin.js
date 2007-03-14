@@ -50,7 +50,7 @@ FCKToolbarMbPrint.prototype.GetLabel = function() {
 
 var oMbPrintItem = new FCKToolbarMbPrint ;
 
-oMbPrintItem.IconPath = sMbPluginsPath + 'mbPrint/images/mbprint.gif';
+oMbPrintItem.IconPath = sMbPluginsPath + 'mbprint/images/mbprint.gif';
 
 // Registers toolbar item object
 FCKToolbarItems.RegisterItem("mbPrint", oMbPrintItem) ;
