@@ -543,6 +543,7 @@ class CAppUI {
     }
     $user->loadObject($where);
     if (!$user->_id) {
+      $this->setMsg("Wrong login/password combination", UI_MSG_ERROR);
       return false;
     }
     
@@ -575,6 +576,7 @@ class CAppUI {
     $is_local[4] = ($ip0 == 192 && $ip1 == 168);
     $is_local[0] = $is_local[1] || $is_local[2] || $is_local[3] || $is_local[4];
     if (!$is_local[0] && $remote == 1 && $user->user_type != 1) {
+      $this->setMsg("User has no remote access", UI_MSG_ERROR);
       return false;
     }
 

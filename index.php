@@ -73,7 +73,7 @@ if (isset($_POST["login"])) {
   $ok = $AppUI->login($username, $password, $md5);
   if(!$ok) {
     @include_once("./locales/core.php");
-    $AppUI->setMsg("Login Failed", UI_MSG_ERROR);
+    $AppUI->setMsg("Login Failed", UI_MSG_ERROR, true);
   }
   if ($ok && $dialog) {
     $redirect = "m=system&a=login_ok&dialog=1";
