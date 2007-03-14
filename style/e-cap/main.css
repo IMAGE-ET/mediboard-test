@@ -22,6 +22,11 @@ th.title.urgence.modify {
 th.category.modify {
   color: #fc0;
 }
+
+div.tooltip {
+  background-color:#aaa;
+}
+
 /* Login */
 
 #login {

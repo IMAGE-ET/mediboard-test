@@ -40,6 +40,23 @@ function popPlanning() {
   url.popup(700, 550, 'Planning');
 }
 
+function changeDate(sDebut, sFin){
+  var oForm = document.paramFrm;
+  var date_debut  = makeDateFromDATE(sDebut);
+  var date_fin    = makeDateFromDATE(sFin);
+  
+  oForm.deb.value = sDebut;
+  oForm.fin.value = sFin;
+  $('paramFrm_deb_da').innerHTML = makeLocaleDateFromDate(date_debut);
+  $('paramFrm_fin_da').innerHTML = makeLocaleDateFromDate(date_fin);
+}
+
+function changeDateCal(){
+  var oForm = document.paramFrm;
+  oForm.select_days[0].checked = false;
+  oForm.select_days[1].checked = false;
+  oForm.select_days[2].checked = false;
+}
 function pageMain() {
   regFieldCalendar("paramFrm", "deb");
   regFieldCalendar("paramFrm", "fin");
@@ -58,17 +75,25 @@ function pageMain() {
         <tr><th class="category" colspan="3">Choix de la période</th></tr>
         <tr>
           <th><label for="deb" title="Date de début de la recherche">Début</label></th>
-          <td class="date" colspan="2">
-            <div id="paramFrm_deb_da">{{$deb|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="deb" title="notNull date" value="{{$deb}}" />
+          <td class="date">
+            <div id="paramFrm_deb_da">{{$now|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" onchange="changeDateCal()" name="deb" title="notNull date" value="{{$now}}" />
             <img id="paramFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+          </td>
+          <td rowspan="2">
+            <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
+              <label for="select_days_day">Jour courant</label>
+            <br /><input type="radio" name="select_days" onclick="changeDate('{{$week_deb}}','{{$week_fin}}');" value="week" /> 
+              <label for="select_days_week">Semaine courante</label>
+            <br /><input type="radio" name="select_days" onclick="changeDate('{{$month_deb}}','{{$month_fin}}');" value="month" /> 
+              <label for="select_days_month">Mois courant</label>
           </td>
         </tr>
         <tr>
           <th><label for="fin" title="Date de fin de la recherche">Fin</label></th>
-          <td class="date" colspan="2">
-            <div id="paramFrm_fin_da">{{$fin|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" title="notNull date moreEquals|deb" value="{{$fin}}" />
+          <td class="date">
+            <div id="paramFrm_fin_da">{{$now|date_format:"%d/%m/%Y"}}</div>
+            <input type="hidden" onchange="changeDateCal()" name="fin" title="notNull date moreEquals|deb" value="{{$now}}" />
             <img id="paramFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>
@@ -101,7 +126,9 @@ function pageMain() {
           <td><select name="chir">
             <option value="0">&mdash; Tous les praticiens &mdash;</option>
             {{foreach from=$listPrat item=curr_prat}}
-              <option value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
+              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" >
+                {{$curr_prat->_view}}
+              </option>
             {{/foreach}}
           </select></td>
         </tr>
@@ -110,7 +137,9 @@ function pageMain() {
           <td><select name="spe">
             <option value="0">&mdash; Toutes les spécialités &mdash;</option>
             {{foreach from=$listSpec item=curr_spec}}
-              <option value="{{$curr_spec->function_id}}">{{$curr_spec->text}}</option>
+              <option value="{{$curr_spec->function_id}}" class="mediuser" style="border-color: #{{$curr_spec->color}};">
+                {{$curr_spec->text}}
+              </option>
             {{/foreach}}
           </select></td>
         </tr>
