@@ -471,8 +471,7 @@ function TokenField(oElement, oOptions){
   var oDefaultOptions = {
     onChange: function(){},
     confirm : null,
-    sSpecType : "",
-    aSpecParams : {}
+    sProps  : null
   };
   Object.extend(oDefaultOptions, oOptions);
   this.oOptions = oDefaultOptions;
@@ -488,10 +487,11 @@ TokenField.prototype.add = function(sValue,multiple) {
   if(!sValue){
     return false;
   }
-  if(this.oOptions.sSpecType){
+  if(this.oOptions.sProps){
     oCode = new Object();
     oCode.value = sValue;
-    ElementChecker.setProperties(this.oOptions.sSpecType, oCode, this.oOptions.aSpecParams);
+    oCode.className = this.oOptions.sProps;
+    ElementChecker.prepare(oCode);
     if(sAlert = ElementChecker.checkElement()) {
       alert(sAlert);
       return false;

@@ -6,11 +6,38 @@ var ElementChecker = {
                       "bool", "enum", "date", "time",
                       "dateTime", "float", "currency", "pct",
                       "text", "html", "email", "code"),
-  setProperties : function(sTypeSpec, oElement, aProperties){
-    this.aProperties = aProperties;
-    this.oElement    = oElement;
-    this.sTypeSpec   = sTypeSpec;
+  
+  prepare : function(oElement){
+    //Initialisation
+    var aSpecFragments = null;
+    this.aProperties  = {};
+    this.oElement     = oElement;
+    this.sTypeSpec    = null;
+    // Extraction des props
+    if(sPropSpec = oElement.title){
+      aSpecFragments = sPropSpec.split(" ");
+    }else if(sPropSpec = oElement.className){
+      aSpecFragments = sPropSpec.split(" ");
+    }
+    
+    // Props trouvées : Recherche de la prop principale et creation propriétés
+    if(aSpecFragments){
+      aSpecFragments.each(function (value) {
+        if(ElementChecker.aSpecTypes.indexOf(value) != -1){
+          ElementChecker.sTypeSpec = value;
+        }else{
+          aParams = value.split("|");
+          if(aParams.length == 1){
+            ElementChecker.aProperties[value] = true;
+          }else{
+            key = aParams.shift();
+            ElementChecker.aProperties[key] = aParams.join("|");
+          }
+        }
+      });
+    }
   },
+  
   checkElement : function(){
     if(sMsg = this.checkParams()){
       return sMsg;
@@ -411,53 +438,28 @@ function checkForm(oForm){
   var iElement = 0;
   
   while (oElement = oForm.elements[iElement++]) {
-    var aSpecFragments = null;
+    var aMsg   = new Array;
+    ElementChecker.prepare(oElement);
     
-    if(sPropSpec = oElement.getAttribute("title")){
-      aSpecFragments = sPropSpec.split(" ");
-    }else if(sPropSpec = oElement.className){
-      aSpecFragments = sPropSpec.split(" ");
-    }  
-    
-    if (aSpecFragments) {
-      var oLabel      = getLabelFor(oElement);
-      var aMsg        = new Array;
-      var aProperties = {};
-      var sTypeName   = null;
+    if(ElementChecker.sTypeSpec){
+      // Type de spec trouvé
+      var oLabel = getLabelFor(oElement);
       
-      aSpecFragments.each(function (value) {
-        if(ElementChecker.aSpecTypes.indexOf(value) != -1){
-          sTypeName = value;
-        }else{
-          aParams = value.split("|");
-          if(aParams.length == 1){
-            aProperties[value] = true;
-          }else{
-            key = aParams.shift();
-            aProperties[key] = aParams.join("|");
-          }
-        }
-      });
-      if(sTypeName){
-        // Type de spec trouvé
-        ElementChecker.setProperties(sTypeName, oElement, aProperties);
-        if(sMsg = ElementChecker.checkElement()){
-          aMsg.push("\n => " + sMsg);
-        }
+      if(sMsg = ElementChecker.checkElement()){
+        aMsg.push("\n => " + sMsg);
+      }
+      if(aMsg.length != 0){
+        var sLabelTitle = oLabel ? oLabel.getAttribute("title") : null;
+        var sMsgFailed = sLabelTitle ? sLabelTitle : printf("%s (val:'%s', spec:'%s')", oElement.name, oElement.value, sPropSpec);
+        sMsgFailed += aMsg.join("");
+        aMsgFailed.push("- " + sMsgFailed);
         
-        if(aMsg.length != 0){
-          var sLabelTitle = oLabel ? oLabel.getAttribute("title") : null;
-          var sMsgFailed = sLabelTitle ? sLabelTitle : printf("%s (val:'%s', spec:'%s')", oElement.name, oElement.value, sPropSpec);
-          sMsgFailed += aMsg.join("");
-          aMsgFailed.push("- " + sMsgFailed);
-          
-          if (!oElementFirstFailed) {
-            oElementFirstFailed = oElement;
-          }
+        if (!oElementFirstFailed) {
+          oElementFirstFailed = oElement;
         }
-        if (oLabel) {
-          oLabel.style.color = aMsg.length ? "#f00" : "#000";
-        }
+      }
+      if (oLabel) {
+        oLabel.style.color = aMsg.length ? "#f00" : "#000";
       }
     }
   }

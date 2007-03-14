@@ -262,11 +262,7 @@ function incFormOperationMain() {
   
   oCcamField = new TokenField(document.editOp.codes_ccam, { 
     onChange : updateTokenCcam,
-    sSpecType : "code",
-    aSpecParams : {
-      "ccam" : true, 
-      "notNull" : true
-    }
+    sProps : "notNull code ccam"
   } );
 }
 
