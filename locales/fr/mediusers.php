@@ -1,5 +1,4 @@
 <?php
-$locales['CDiscipline.categorie.STO'] = 'STO';
 $locales['CDiscipline'] = 'Disciplines';
 $locales['CDiscipline-categorie'] = 'Catégorie';
 $locales['CDiscipline-categorie-desc'] = 'Catégorie de la spécialité';
@@ -14,6 +13,7 @@ $locales['CDiscipline.categorie.OPH'] = 'OPH';
 $locales['CDiscipline.categorie.ORL'] = 'ORL';
 $locales['CDiscipline.categorie.ORT'] = 'ORT';
 $locales['CDiscipline.categorie.RAD'] = 'RAD';
+$locales['CDiscipline.categorie.STO'] = 'STO';
 $locales['CFunctions'] = 'Cabinet / Fonction';
 $locales['CFunctions-adresse'] = 'Adresse';
 $locales['CFunctions-adresse-desc'] = 'Adresse du cabinet';
@@ -53,7 +53,7 @@ $locales['CMediusers-fin_activite'] = 'Fin d\'activité';
 $locales['CMediusers-fin_activite-desc'] = 'Date de fin d\'activité de l\'utilisateur';
 $locales['CMediusers-function_id'] = 'Fonction';
 $locales['CMediusers-function_id-desc'] = 'Fonction de l\'utilisateur au sein de l\'établissement';
-$locales['CMediusers-remote'] = 'Accès distant';
+$locales['CMediusers-remote'] = 'Accès distant interdit';
 $locales['CMediusers-remote-desc'] = 'Permet ou non à l\'utilisateur de se connecter à distance';
 $locales['CMediusers-spec_cpam_id'] = 'Spéc. CPAM';
 $locales['CMediusers-spec_cpam_id-desc'] = 'Spécialité CPAM de l\'utilisateur';

@@ -1,5 +1,4 @@
 <?php
-$locales['CDiscipline.categorie.STO'] = '';
 $locales['CDiscipline'] = '';
 $locales['CDiscipline-categorie'] = '';
 $locales['CDiscipline-categorie-desc'] = '';
@@ -14,6 +13,7 @@ $locales['CDiscipline.categorie.OPH'] = '';
 $locales['CDiscipline.categorie.ORL'] = '';
 $locales['CDiscipline.categorie.ORT'] = '';
 $locales['CDiscipline.categorie.RAD'] = '';
+$locales['CDiscipline.categorie.STO'] = '';
 $locales['CFunctions'] = '';
 $locales['CFunctions-adresse'] = '';
 $locales['CFunctions-adresse-desc'] = '';
