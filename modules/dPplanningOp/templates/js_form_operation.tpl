@@ -260,15 +260,14 @@ function incFormOperationMain() {
     updateEntreePrevue();
   }
   
-  aSpecCcam = new Array();
-  aSpecCcam[0] = "code";
-  aSpecCcam[1] = "ccam";
-  aSpecCcam[2] = "notNull";
-  
   oCcamField = new TokenField(document.editOp.codes_ccam, { 
     onChange : updateTokenCcam,
-    aSpec : aSpecCcam
-    } );
+    sSpecType : "code",
+    aSpecParams : {
+      "ccam" : true, 
+      "notNull" : true
+    }
+  } );
 }
 
 </script>

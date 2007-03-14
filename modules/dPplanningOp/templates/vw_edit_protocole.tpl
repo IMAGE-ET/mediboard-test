@@ -127,15 +127,14 @@ function setCode( key, type ) {
 function pageMain() {
   refreshListCCAM();
 
-  aSpecCcam = new Array();
-  aSpecCcam[0] = "code";
-  aSpecCcam[1] = "ccam";
-  aSpecCcam[2] = "notNull";
-  
   oCcamField = new TokenField(document.editFrm.codes_ccam, { 
     onChange : refreshListCCAM,
-    aSpec : aSpecCcam
-    } );
+    sSpecType : "code",
+    aSpecParams : {
+      "ccam" : true, 
+      "notNull" : true
+    }
+  } );
 }
 
 </script>
