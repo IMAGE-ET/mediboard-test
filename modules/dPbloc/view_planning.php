@@ -18,8 +18,8 @@ $fin = mbGetValueFromGetOrSession("fin", mbDate());
 
 $vide  = mbGetValueFromGet("vide" , false);
 $type  = mbGetValueFromGet("type" , 0);
-$chir  = mbGetValueFromGet("chir" , 0);
-$spe   = mbGetValueFromGet("spe"  , 0);
+$chir  = mbGetValueFromGet("chir" , null);
+$spe   = mbGetValueFromGet("spe"  , null);
 $salle = mbGetValueFromGet("salle", 0);
 $CCAM  = mbGetValueFromGet("CCAM" , "");
 
@@ -36,19 +36,11 @@ $order[] = "date";
 $order[] = "salle_id";
 $order[] = "debut";
 
-// En fonction du chirurgien
-if ($chir) {
-  $where["chir_id"] = "= '$chir'";
-}
+$chir_id = mbGetValueFromGet("chir_id");
+$listPrat = new CMediusers;
+$listPrat = $listPrat->loadPraticiens(PERM_EDIT, $spe);
 
-// @todo : rajouter en fonction de l'anesthésiste
-
-// En fonction du cabinet
-if ($spe) {
-  $mediusers = new CMediusers;
-  $listChirs = $mediusers->loadPraticiens(PERM_READ, $spe);
-  $where["chir_id"] = db_prepare_in(array_keys($listChirs));
-}
+$where["chir_id"] = db_prepare_in(array_keys($listPrat), $chir_id);
 
 // En fonction de la salle
 if ($salle) {
