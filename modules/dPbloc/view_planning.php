@@ -36,7 +36,7 @@ $order[] = "date";
 $order[] = "salle_id";
 $order[] = "debut";
 
-$chir_id = mbGetValueFromGet("chir_id");
+$chir_id = mbGetValueFromGet("chir");
 $listPrat = new CMediusers;
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT, $spe);
 
