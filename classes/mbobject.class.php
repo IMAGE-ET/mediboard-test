@@ -88,15 +88,15 @@ class CMbObject {
       $class = get_class($this);
       $this->_class_name =& $class;
       $this->_objectsTable =& $objectsTable;
-      $props =& $this->getSpecs();
+      $props = $this->getSpecs();
       $this->_props =& $props;
-      $specsObj =& $this->getSpecsObj();
+      $specsObj = $this->getSpecsObj();
       $this->_specs =& $specsObj;
-      $seeks =& $this->getSeeks();
+      $seeks = $this->getSeeks();
       $this->_seek =& $seeks;
-      $enums =& $this->getEnums();
+      $enums = $this->getEnums();
       $this->_enums =& $enums;
-      $enumsTrans =& $this->getEnumsTrans();
+      $enumsTrans = $this->getEnumsTrans();
       $this->_enumsTrans =& $enumsTrans;
       
       $static = true;
@@ -825,7 +825,7 @@ class CMbObject {
 
   function loadAides($user_id) {
     // Initialisation to prevent understandable smarty notices
-    foreach($this->_props as $propName => $propSpec) {
+    foreach ($this->_props as $propName => $propSpec) {
       if ($this->lookupSpec("text",$propSpec) !== false) {
         $this->_aides[$propName] = null;
       }
