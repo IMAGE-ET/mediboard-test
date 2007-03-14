@@ -3,7 +3,7 @@ var ElementChecker = {
   oElement    : null,
   sTypeSpec   : null,
   aSpecTypes  : Array("ref", "str", "numchar", "num", 
-                      "bool", "ienum", "date", "time",
+                      "bool", "enum", "date", "time",
                       "dateTime", "float", "currency", "pct",
                       "text", "html", "email", "code"),
   setProperties : function(sTypeSpec, oElement, aProperties){

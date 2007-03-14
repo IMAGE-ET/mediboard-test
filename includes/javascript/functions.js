@@ -471,7 +471,8 @@ function TokenField(oElement, oOptions){
   var oDefaultOptions = {
     onChange: function(){},
     confirm : null,
-    aSpec   : null
+    sSpecType : "",
+    aSpecParams : {}
   };
   Object.extend(oDefaultOptions, oOptions);
   this.oOptions = oDefaultOptions;
@@ -487,13 +488,14 @@ TokenField.prototype.add = function(sValue,multiple) {
   if(!sValue){
     return false;
   }
-  if(this.oOptions.aSpec){
+  if(this.oOptions.sSpecType){
     oCode = new Object();
     oCode.value = sValue;
-    //if(sAlert = checkElement(oCode, this.oOptions.aSpec)) {
-    //  alert(sAlert);
-    //  return false;
-    //}
+    ElementChecker.setProperties(this.oOptions.sSpecType, oCode, this.oOptions.aSpecParams);
+    if(sAlert = ElementChecker.checkElement()) {
+      alert(sAlert);
+      return false;
+    }
   }
   var aToken = this.oElement.value.split("|");
   aToken.removeByValue("");
