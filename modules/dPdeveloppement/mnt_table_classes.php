@@ -59,30 +59,31 @@ foreach($classSelected as $selected){
   }
   
   //Extraction des champs de la BDD
-  $sql = "SHOW FULL FIELDS FROM `".$object->_tbl."`";
-  $listFields = db_loadList($sql);
-  foreach($listFields as $currField){
-  	$aBdd_field =& $aClass[$currField["Field"]];
-    $aBdd_field["BDD_name"]    = $currField["Field"];
-    $aBdd_field["BDD_type"]    = $currField["Type"];
-    $aBdd_field["BDD_null"]    = $currField["Null"];
-    $aBdd_field["BDD_default"] = $currField["Default"];
-    $aBdd_field["BDD_index"]   = null;
-  }
-  
-  // Extraction des Index
-  $sql = "SHOW INDEX FROM `".$object->_tbl."`";
-  $listIndex = db_loadList($sql);
-  foreach($listIndex as $currIndex){
-    if($aClass[$currIndex["Column_name"]]["BDD_index"]){
-      $aClass[$currIndex["Column_name"]]["BDD_index"] .= ", ";
-    }
-    if($currIndex["Key_name"]=="PRIMARY"){
-      $aClass[$currIndex["Column_name"]]["BDD_primary"] = true;
-    }
-    $aClass[$currIndex["Column_name"]]["BDD_index"] .= $currIndex["Key_name"];
-  }
-  
+  if(db_loadTable($object->_tbl)) {
+	  $sql = "SHOW FULL FIELDS FROM `".$object->_tbl."`";
+	  $listFields = db_loadList($sql);
+	  foreach($listFields as $currField){
+	  	$aBdd_field =& $aClass[$currField["Field"]];
+	    $aBdd_field["BDD_name"]    = $currField["Field"];
+	    $aBdd_field["BDD_type"]    = $currField["Type"];
+	    $aBdd_field["BDD_null"]    = $currField["Null"];
+	    $aBdd_field["BDD_default"] = $currField["Default"];
+	    $aBdd_field["BDD_index"]   = null;
+	  }
+	  
+	  // Extraction des Index
+	  $sql = "SHOW INDEX FROM `".$object->_tbl."`";
+	  $listIndex = db_loadList($sql);
+	  foreach($listIndex as $currIndex){
+	    if($aClass[$currIndex["Column_name"]]["BDD_index"]){
+	      $aClass[$currIndex["Column_name"]]["BDD_index"] .= ", ";
+	    }
+	    if($currIndex["Key_name"]=="PRIMARY"){
+	      $aClass[$currIndex["Column_name"]]["BDD_primary"] = true;
+	    }
+	    $aClass[$currIndex["Column_name"]]["BDD_index"] .= $currIndex["Key_name"];
+	  }
+  } 
 }
 
 $aChampsObligatoire = array("keytable", "class_field","class_props","BDD_name","BDD_type",
@@ -130,7 +131,7 @@ foreach($aChamps as $nameClass=>$currClass){
 
     }
     
-    // Si tout a afficher : on supprime les lignes valides
+    // Supressions des lignes correctes dans le mode d'affichage "liste des erreurs"
     if($selClass===null){ 
     	// Aucun champs d'erreur
       $test_champs_valide = !$curr_champ["error_BDD_null"] && !$curr_champ["error_BDD_type"] && !$curr_champ["error_class_props"];

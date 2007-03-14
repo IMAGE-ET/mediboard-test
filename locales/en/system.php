@@ -1,5 +1,5 @@
 <?php
-$locales['CNote-text-desc'] = '';
+$locales['CNote-public-desc'] = '';
 $locales['Abbreviation'] = '';
 $locales['active'] = '';
 $locales['added'] = '';
@@ -15,7 +15,9 @@ $locales['CNote-degre'] = '';
 $locales['CNote-degre-desc'] = '';
 $locales['CNote-libelle'] = '';
 $locales['CNote-libelle-desc'] = '';
+$locales['CNote-public'] = '';
 $locales['CNote-text'] = '';
+$locales['CNote-text-desc'] = '';
 $locales['CNote-user_id'] = '';
 $locales['CNote-user_id-desc'] = '';
 $locales['CNote.degre.high'] = '';

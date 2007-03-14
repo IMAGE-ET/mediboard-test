@@ -5,7 +5,7 @@
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
 
-      <label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label>
+      <label for="selClass" title="Veuillez Sélectionner une classe">Choix de la classe</label>
       <select title="notNull str" name="selClass" onchange="submit();">
         <option value=""{{if !$selClass}} selected="selected"{{/if}}>&mdash; Liste des erreurs</option>
         {{foreach from=$listClass item=curr_listClass}}
@@ -19,8 +19,8 @@
     <td>
       <table class="tbl">
         <tr>
-          <th rowspan="2">Objet</th>
-          <th rowspan="2">Propriété de l'objet</th>
+          <th rowspan="2">Champ</th>
+          <th rowspan="2">Propriété du champ</th>
           <th colspan="5">Base de Données</th>
         </tr>
         <tr>

@@ -60,6 +60,7 @@ class CMbObject {
   var $_ref_logs      = null; // history of the object
   var $_ref_first_log = null;
   var $_ref_last_log  = null;
+  var $_ref_notes     = array(); // Notes
   var $_ref_documents = array(); // Documents
   var $_ref_files     = array(); // Fichiers
 
@@ -117,6 +118,19 @@ class CMbObject {
   function getError() {
     return $this->_error;
   }
+  
+  /**
+   * Chargement des notes sur l'objet
+   */
+  function loadRefsNotes($perm = PERM_READ) {
+    $this->_ref_notes = new CNote();
+    if($this->_id){
+      $this->_ref_notes = $this->_ref_notes->loadNotesForObject($this, $perm);
+      return count($this->_ref_notes);
+    }else {
+      return 0;
+    }
+  }
 
   /**
    * Chargement des Fichiers et Documents
@@ -125,8 +139,7 @@ class CMbObject {
     $this->_ref_files = new CFile();
     if($this->_id){
       $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
-      $docs_valid = count($this->_ref_files);
-      return $docs_valid;
+      return count($this->_ref_files);
     }else{
       return 0;
     }

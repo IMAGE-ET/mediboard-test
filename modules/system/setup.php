@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "system";
-$config["mod_version"]     = "1.0.6";
+$config["mod_version"]     = "1.0.7";
 $config["mod_type"]        = "core";
 
 class CSetupsystem extends CSetup {
@@ -87,7 +87,22 @@ class CSetupsystem extends CSetup {
     $sql = "DELETE FROM `user_log` WHERE `object_id` = '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.6";
+    $this->makeRevision("1.0.6");
+    $sql = "CREATE TABLE `note` (
+              `note_id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+              `user_id` INT( 11 ) UNSIGNED NOT NULL ,
+              `object_id` INT( 11 ) UNSIGNED NOT NULL ,
+              `object_class` VARCHAR( 25 ) NOT NULL ,
+              `public` ENUM('0','1') NOT NULL DEFAULT '0',
+              `degre` ENUM('low','high') NOT NULL DEFAULT 'low',
+              `date` DATETIME NOT NULL ,
+              `libelle` VARCHAR( 255 ) NOT NULL ,
+              `text` TEXT NULL ,
+              INDEX ( `user_id` , `object_id` , `object_class` , `public` , `degre` , `date` )
+            ) ENGINE = MYISAM COMMENT = 'Table des notes sur les objets';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.7";
   }
 }
 ?>

@@ -283,11 +283,11 @@ Class.extend(ObjectTooltip, {
   	this.iObject = iObject;
   	this.eTarget = null;
 
-    var oDefaultOptions = {
-    	sTargetPrefix : null
+    this.oOptions = {
+      mode : "view"
     };
 
-    Object.extend(oDefaultOptions, oOptions);
+    Object.extend(this.oOptions, oOptions);
 
 		this.addHandlers();
 		this.createDiv();
@@ -304,7 +304,8 @@ Class.extend(ObjectTooltip, {
   
   load: function() {
     url = new Url;
-    url.setModuleAction("system", "httpreq_vw_object");
+    var mode = ObjectTooltip.modes[this.oOptions.mode];
+    url.setModuleAction(mode.module, mode.action);
     url.addParam("object_class", this.sClass);
     url.addParam("object_id", this.iObject);
     url.requestUpdate(this.eTarget);
@@ -330,6 +331,16 @@ Class.extend(ObjectTooltip, {
  */
 
 Object.extend(ObjectTooltip, {
+  modes: {
+    view: {
+      module: "system",
+      action: "httpreq_vw_object"
+    },
+    notes: {
+      module: "system",
+      action: "httpreq_vw_object_notes"
+    }
+  },
 	create: function(eTrigger, sClass, iObject, oOptions) {
 		if (!eTrigger.oTooltip) {
 			eTrigger.oTooltip = new ObjectTooltip(eTrigger, sClass, iObject, oOptions);

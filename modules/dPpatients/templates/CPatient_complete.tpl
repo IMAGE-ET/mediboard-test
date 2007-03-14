@@ -1,12 +1,20 @@
 <table class="form">
   <tr>
     <th class="title" colspan="2">
+      <a style="float:right;" href="#nothing" onclick="view_history_patient({{$object->_id}})">
+        <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
+      </a>
+      <a style="float:left;" href="#nothing"
+        onmouseover="ObjectTooltip.create(this, '{{$object->_class_name}}', {{$object->_id}}, { mode: 'notes' })"
+        onclick="new Note().create('{{$object->_class_name}}', {{$object->_id}})">
+        <img src="images/icons/note_blue.png" alt="Ecrire une note" />
+      </a>
       <form name="actionPat" action="./index.php" method="get">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="tab" value="vw_idx_patients" />
-      <input type="hidden" name="patient_id" value="{{$object->patient_id}}" />
+      <input type="hidden" name="patient_id" value="{{$object->_id}}" />
       {{$object->_view}}
-      <button type="button" class="print" onclick="printPatient({{$object->patient_id}})">
+      <button type="button" class="print" onclick="printPatient({{$object->_id}})">
         Imprimer
       </button>
       {{if $canEdit}}
@@ -78,9 +86,6 @@
   
   <tr>
     <th class="title" colspan="2">
-      <a style="float:right;" href="#nothing" onclick="view_history_patient({{$object->patient_id}})">
-        <img src="images/icons/history.gif" alt="historique" />
-      </a>
       Informations médicales
     </th>
   </tr>
