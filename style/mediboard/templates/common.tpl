@@ -15,5 +15,9 @@
     var config = {{$configOffline|@json}};
     {{/if}}
     var Preferences = {{$app->user_prefs|@json}};
+    
+    {{if $dialog}}
+    Event.observe(document, 'keydown', closeWindowByEscape);
+    {{/if}}
   </script>
 </head>

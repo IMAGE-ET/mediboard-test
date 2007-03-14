@@ -1,3 +1,13 @@
+{{if !$board}}
+<div style="font-weight:bold; height:20px; text-align:center;">
+  {{$date|date_format:"%A %d %B %Y"}}
+  <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+  <script type="text/javascript">
+    regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_idx_planning&date=");
+  </script>
+</div>
+{{/if}}
+
 {{if $boardItem}}
       <table class="tbl" style="font-size: 9px;">
 {{else}}

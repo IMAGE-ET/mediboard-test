@@ -15,6 +15,16 @@ window.onbeforeunload= function () {
   //}
 }
 
+function closeWindowByEscape(e) {
+  var keycode;
+  if (window.event) keycode = window.event.keyCode;
+  else if (e) keycode = e.which;
+
+  if(keycode == 27){
+    window.close();
+  }
+}
+
 var djConfig = { isDebug: false };
 
 var AjaxResponse = {

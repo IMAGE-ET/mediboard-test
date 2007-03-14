@@ -1,7 +1,7 @@
 <script type="text/javascript">
 var notWhitespace   = /\S/;
 
-function viewItem(oTd, class, id, date) {
+function viewItem(oTd, sClassName, id, date) {
 
   // Mise en surbrillance de la plage survolée
   
@@ -11,9 +11,9 @@ function viewItem(oTd, class, id, date) {
   aListConsult = $$('td.selectedOp');
   aListConsult.each(function(elem) { elem.className = "nonEmptyOp";});
   
-  if(class == "CPlageconsult"){
+  if(sClassName == "CPlageconsult"){
     oTd.parentNode.className = "selectedConsult";
-  }else if(class == "CPlageOp"){
+  }else if(sClassName == "CPlageOp"){
     oTd.parentNode.className = "selectedOp";
   }
   
@@ -28,7 +28,7 @@ function viewItem(oTd, class, id, date) {
     }
   });
 
-  oElement = $(class+id);
+  oElement = $(sClassName+id);
   oElement.show();
   
   if(oElement.alt == "infos - cliquez pour fermer") {
@@ -39,14 +39,14 @@ function viewItem(oTd, class, id, date) {
   url.addParam("board"     , "1");
   url.addParam("boardItem" , "1");
   
-  if(class == "CPlageconsult"){
+  if(sClassName == "CPlageconsult"){
     url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
     url.addParam("plageconsult_id", id);
     url.addParam("date"           , date);
     url.addParam("chirSel"        , "{{$app->user_id}}");
     url.addParam("vue2"           , "{{$vue}}");
     url.addParam("selConsult"     , "");
-  }else if(class == "CPlageOp"){
+  }else if(sClassName == "CPlageOp"){
     url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
     url.addParam("chirSel" , "{{$app->user_id}}");
     url.addParam("date"    , date);
@@ -58,8 +58,8 @@ function viewItem(oTd, class, id, date) {
   oElement.alt = "infos - cliquez pour fermer";
 }
 
-function hideItem(class, id) {
-  oElement = $(class+id);
+function hideItem(sClassName, id) {
+  oElement = $(sClassName+id);
   oElement.hide();
 }
 
@@ -220,9 +220,9 @@ function pageMain() {
     <th>
       <form name="editFrmView" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
-      <input type="radio" name="view" value="day" value="day" {{if $view == "day"}}checked="checked"{{/if}} onchange="this.form.submit()" />
+      <input type="radio" name="view" value="day" value="day" {{if $view == "day"}}checked="checked"{{/if}} onclick="this.form.submit()" />
       <label for="view_day" title="Affichage du jour">Journée</label>
-      <input type="radio" name="view" value="week" value="day" {{if $view == "week"}}checked="checked"{{/if}} onchange="this.form.submit()" />
+      <input type="radio" name="view" value="week" value="day" {{if $view == "week"}}checked="checked"{{/if}} onclick="this.form.submit()" />
       <label for="view_week" title="Affichage de la semaine">Semainier</label>
       </form>
     </th>

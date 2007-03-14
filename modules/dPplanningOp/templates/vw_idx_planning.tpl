@@ -21,20 +21,23 @@ function reloadAfterSaveDoc(){
   updateListOperations("{{$date}}");
 }
 
-function updateListOperations(date) {
+function updateListOperations(date, urgence) {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
 
   url.addParam("chirSel" , "{{$selChir}}");
   url.addParam("date"    , date);
-  url.addParam("urgences", "{{$urgences}}");
+  if(!urgence){
+    url.addParam("urgences", "{{$urgences}}");
+  }else{
+    url.addParam("urgences", urgence);
+  }
 
   url.requestUpdate('operations');
 }
 
 function pageMain() {
   updateListOperations("{{$date}}");
-  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
 }
 
 </script>
@@ -63,10 +66,8 @@ function pageMain() {
       {{$date|date_format:"%B %Y"}}
       <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
     </th>
-    <th class="greedyPane">
-      {{$date|date_format:"%A %d %B %Y"}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-    </th>
+    <td rowspan="2" id="operations" class="greedyPane" style="vertical-align:top;">
+    </td>
   </tr>
   <tr>
     <td>
@@ -87,7 +88,7 @@ function pageMain() {
         </tr>
         {{else}}
         <tr>
-          <td align="right"><a href="index.php?m={{$m}}&amp;tab=vw_idx_planning&amp;date={{$curr_plage.date|date_format:"%Y-%m-%d"}}&amp;urgences=0">{{$curr_plage.date|date_format:"%a %d %b %Y"}}</a></td>
+          <td align="right"><a href="#nothing" onclick="updateListOperations('{{$curr_plage.date|date_format:"%Y-%m-%d"}}', '0')">{{$curr_plage.date|date_format:"%a %d %b %Y"}}</a></td>
           <td align="center">{{$curr_plage.debut|date_format:"%Hh%M"}} à {{$curr_plage.fin|date_format:"%Hh%M"}}</td>
           <td align="center">{{$curr_plage.total}}</td>
           <td align="center">{{$curr_plage.duree|date_format:"%Hh%M"}}</td>
@@ -103,8 +104,6 @@ function pageMain() {
         </tr>
         {{/if}}
       </table>
-    </td>
-    <td id="operations">
     </td>
   </tr>
 </table>
