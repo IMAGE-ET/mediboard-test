@@ -192,7 +192,7 @@ Class.extend(PairEffect, {
       bStartVisible: false, // Make it visible at start
       bStoreInCookie: true,
       sCookieName: "effect"
-    };
+  };
 
     Object.extend(oDefaultOptions, oOptions);
     
@@ -490,10 +490,10 @@ TokenField.prototype.add = function(sValue,multiple) {
   if(this.oOptions.aSpec){
     oCode = new Object();
     oCode.value = sValue;
-    if(sAlert = checkElement(oCode, this.oOptions.aSpec)) {
-      alert(sAlert);
-      return false;
-    }
+    //if(sAlert = checkElement(oCode, this.oOptions.aSpec)) {
+    //  alert(sAlert);
+    //  return false;
+    //}
   }
   var aToken = this.oElement.value.split("|");
   aToken.removeByValue("");
@@ -543,100 +543,25 @@ function uploadFile(classe, id, categorie_id){
   url.popup(600, 200, "uploadfile");
 }
 
-/**
- * Applet element creator
- */
-var Applet = Class.create();
-
-Class.extend(Applet, {
-  parameters: {
+var Note = Class.create();
+Class.extend(Note,  {
+  initialize: function() {
+    this.url = new Url();
+    this.url.setModuleAction("system", "edit_note");
   },
-
-  options : {
-    parentElement: "applet-container",
-    archiveDir : "../includes/applets"
+  create: function (classe, object_id) {
+    this.url.addParam("object_class", classe);
+    this.url.addParam("object_id", object_id);
+    this.popup();
   },
-  
-  attributes: {
-    code: null,
-    archive: null,
-    width: "600",
-    height: "200"    
+  edit: function(note_id) {
+    this.url.addParam("note_id", note_id);
+    this.popup();
   },
-    
-  appletElement: null, 
-  
-  // Constructor for derived class
-  initializeConcrete : Prototype.emptyFunction,
-  
-  // Constructor
-  initialize: function(sArchive, sClass) {
-  	this.attributes.code = sClass + ".class";
-  	this.attributes.archive = this.options.archiveDir + "/" + sArchive;
-  },
-
-  createAppletElement: function() {
-    var parentElement = document.getElementById(this.options.parentElement);
-     
-    // Remove element if exist
-    if (this.appletElement) {
-      this.appletElement.parentNode.removeChild(this.appletElement);
-    }
-    
-    // Create an applet element
-    this.appletElement = document.createElement("applet");
-
-    // Add attributes
-    for (attribute in this.attributes) {
-      this.appletElement.setAttribute(attribute, this.attributes[attribute]);
-    }
-    
-    // Add parameters
-    for (parameter in this.parameters) {
-      var paramElement = document.createElement("param");
-      paramElement.setAttribute("name", parameter);
-      paramElement.setAttribute("value", this.parameters[parameter]);
-      this.appletElement.appendChild(paramElement);
-    }
-    
-    // Final append to parent element when applet element is complete
-    parentElement.appendChild(this.appletElement);
+  popup: function () {
+    this.url.popup(600, 500, "note");
   }
-} );
-
-/*
- * Yoplet applet element
- */
-var Yoplet = Class.create();
-
-Class.extend(Yoplet, Applet.prototype);
-
-Class.extend(Yoplet, {
-	
-	initialize : function(parameters, attributes, options) {
-		Object.extend(this.parameters, parameters || {} );
-		Object.extend(this.attributes, attributes || {} );
-		Object.extend(this.options   , options    || {} );
-		
-		// Parent call
-		Applet.prototype.initialize("Yoplet", "org.lostinthegarden.applet.impl.DefaultFileOperatorImpl");
-	},
-	  
-  read: function() {
-    this.parameters.action = "read";
-    this.createAppletElement(document.body);
-  },
-  
-  write: function() {
-    this.parameters.action = "write";
-    this.createAppletElement(document.body);
-  },
-  
-  watch: function() {
-    this.parameters.action = "watch";
-    this.createAppletElement(document.body);
-  }
-} );
+} )
 
 // *******
 
