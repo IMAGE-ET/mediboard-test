@@ -1,6 +1,7 @@
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="dosql" value="do_note_aed" />
 <input type="hidden" name="del" value="0" />
+<input type="hidden" name="m" value="system" />
 {{mb_field object=$note field="note_id" hidden=1 prop=""}}
 {{mb_field object=$note field="object_id" hidden=1}}
 {{mb_field object=$note field="object_class" hidden=1}}
@@ -50,12 +51,12 @@
   <tr>
     <td class="button" colspan="2">
       {{if $note->_id}}
-      <button type="submit" class="submit">Modifier</button>
+      <button type="button" class="submit">Modifier</button>
       <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'la ',objName:'{{$note->_view|smarty:nodefaults|JSAttribute}}'})">
         Supprimer
       </button>
       {{else}}
-      <button type="submit" class="submit">Créer</button>
+      <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg'); window.close();">Créer</button>
       {{/if}}
     </td>
   </tr>

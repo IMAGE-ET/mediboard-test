@@ -6,7 +6,7 @@
       </a>
       <a style="float:left;" href="#nothing"
         onmouseover="ObjectTooltip.create(this, '{{$object->_class_name}}', {{$object->_id}}, { mode: 'notes' })"
-        onclick="new Note().create('{{$object->_class_name}}', {{$object->_id}})">
+        onclick="new Note().create('{{$object->_class_name}}', {{$object->_id}});">
         <img src="images/icons/note_blue.png" alt="Ecrire une note" />
       </a>
       <form name="actionPat" action="./index.php" method="get">

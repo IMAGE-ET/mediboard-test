@@ -278,50 +278,56 @@ Class.extend(ObjectTooltip, {
 
   // Constructor
   initialize: function(eTrigger, sClass, iObject, oOptions) {
-  	this.eTrigger = $(eTrigger);
-  	this.sClass = sClass;
-  	this.iObject = iObject;
-  	this.eTarget = null;
+    this.eTrigger = $(eTrigger);
+    this.sClass = sClass;
+    this.iObject = iObject;
+    this.eDiv = null;
+    this.eTarget = null;
 
     this.oOptions = {
       mode : "view"
     };
-
     Object.extend(this.oOptions, oOptions);
+    this.mode = ObjectTooltip.modes[this.oOptions.mode];
 
-		this.addHandlers();
-		this.createDiv();
-		this.load();
+    this.createDiv();
+    this.addHandlers();
+    this.load();
   },
   
   show: function() {
-		this.eTarget.show();
+    this.eDiv.show();
   },
   
   hide: function() {
-		this.eTarget.hide();
+    this.eDiv.hide();
   },
   
   load: function() {
     url = new Url;
-    var mode = ObjectTooltip.modes[this.oOptions.mode];
-    url.setModuleAction(mode.module, mode.action);
+    url.setModuleAction(this.mode.module, this.mode.action);
     url.addParam("object_class", this.sClass);
     url.addParam("object_id", this.iObject);
     url.requestUpdate(this.eTarget);
   },
   
   addHandlers: function() {
-		Event.observe(this.eTrigger, "mouseout", this.hide.bind(this));
+    if(this.oOptions.mode == "view") {
+      Event.observe(this.eTrigger, "mouseout", this.hide.bind(this));
+    }
+    if(this.oOptions.mode == "notes") {
+      Event.observe(this.eDiv, "click", this.hide.bind(this));
+    }
   },
   
   createDiv: function() {
-	  eDiv = document.createElement("div");
-		Element.classNames(eDiv).add("tooltip");
-		Element.hide(eDiv);
-	  this.eTrigger.parentNode.insertBefore(eDiv, this.eTrigger.nextSibling);
-  	this.eTarget = eDiv;
+    this.eDiv  = Dom.cloneElemById("tooltipTpl",true);
+    Element.classNames(this.eDiv).add(this.mode.class);
+    Element.hide(this.eDiv);
+    this.eTrigger.parentNode.insertBefore(this.eDiv, this.eTrigger.nextSibling);
+    this.eTarget = document.getElementsByClassName("content", this.eDiv)[0];
   }  
+   
   
 } );
 
@@ -334,20 +340,22 @@ Object.extend(ObjectTooltip, {
   modes: {
     view: {
       module: "system",
-      action: "httpreq_vw_object"
+      action: "httpreq_vw_object",
+      class: "tooltip"
     },
     notes: {
       module: "system",
-      action: "httpreq_vw_object_notes"
+      action: "httpreq_vw_object_notes",
+      class: "postit"
     }
   },
-	create: function(eTrigger, sClass, iObject, oOptions) {
-		if (!eTrigger.oTooltip) {
-			eTrigger.oTooltip = new ObjectTooltip(eTrigger, sClass, iObject, oOptions);
-		}
+  create: function(eTrigger, sClass, iObject, oOptions) {
+    if (!eTrigger.oTooltip) {
+      eTrigger.oTooltip = new ObjectTooltip(eTrigger, sClass, iObject, oOptions);
+    }
 
-    eTrigger.oTooltip.show();		
-	}
+    eTrigger.oTooltip.show();    
+  }
 } );
 
 

@@ -38,22 +38,22 @@
 
 <!-- Tooltip div used for dom clonage -->
 
-<div id="tooltipTpl" class="tooltip" style="display: none;">
+<div id="tooltipTpl" style="display: none;">
   <table class="decoration">
     <tr>
-      <td class="top-left" />
-      <td class="top" />
-	    <td class="top-right" />
+      <td class="deco top-left" />
+      <td class="deco top" />
+	    <td class="deco top-right" />
 	  </tr>
 	  <tr>
-	    <td class="left" />
+	    <td class="deco left" />
 	    <td class="content"></td>
-	    <td class="right" />
+	    <td class="deco right" />
 	  </tr>
 	  <tr>
-	    <td class="bottom-left" />
-	    <td class="bottom" />
-	    <td class="bottom-right" />
+	    <td class="deco bottom-left" />
+	    <td class="deco bottom" />
+	    <td class="deco bottom-right" />
 	  </tr>
 	</table>
 </div>

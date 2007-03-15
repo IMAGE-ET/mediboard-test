@@ -871,51 +871,145 @@ div.big-error {
   /* @import "./tooltip.css   */
 
 div.tooltip {
-	width: 200px;
-	min-height: 150px;
   padding: 0px;
-  margin: 0px;
+  margin-left: 20px;
   position: absolute;
 }
 
 div.tooltip table.decoration {
-	width: 100%;
-	height: 100%;
   border-spacing: 0px;
   border: none;
 }
 
-table.decoration td.top-right,
-table.decoration td.top,
-table.decoration td.top-left,
-table.decoration td.left,
-table.decoration td.bottom-left {
-  border: 0px;
-  padding: 0px;
+div.tooltip table.decoration td.deco {
+	border: 0px;
+	opacity: .7;
 }
 
-table.decoration td.bottom {
-  border: 0px;
+div.tooltip table.decoration td.top-right,
+div.tooltip table.decoration td.top,
+div.tooltip table.decoration td.top-left,
+div.tooltip table.decoration td.left,
+div.tooltip table.decoration td.bottom-left {
+  background-color: transparent;
+	opacity: 1;
+}
+
+div.tooltip table.decoration td.bottom {
+  width: 16px;
   height: 16px;
   background: url(images/pictures/bottom.png) top left no-repeat;
 }
 
-table.decoration td.bottom-right {
-  border: 0px;
+div.tooltip table.decoration td.bottom-right {
   width: 16px;
   height: 16px;
   background: url(images/pictures/bottom-right.png) top left no-repeat;
 }
 
-table.decoration td.right {
-  border: 0px;
+div.tooltip table.decoration td.right {
   width: 16px;
+  height: 16px;
   background: url(images/pictures/right.png) top left no-repeat;
 }
 
-table.decoration td.content {
-  border: 1px solid #000;
-	height: 100%;
+div.tooltip table.decoration td.content {
+  border: 5px solid #fff;
+}
+
+div.postit {
+  padding: 0px;
+  margin-left: 20px;
+  position: absolute;
+}
+
+div.postit table.decoration {
+  border-spacing: 0px;
+  border: none;
+}
+
+div.postit table.decoration td.deco {
+	border: 0px;
+	opacity: .7;
+}
+
+div.postit table.decoration td.top-right,
+div.postit table.decoration td.top-left,
+div.postit table.decoration td.bottom-left {
+  background-color: transparent;
+	opacity: 1;
+}
+
+div.postit table.decoration td.left,
+div.postit table.decoration td.top {
+  background-color: #ff6;
+	opacity: 1;
+}
+
+div.postit table.decoration td.top {
+  background: #ff6 url(../../images/icons/cancel.png) top right no-repeat;
+}
+
+
+div.postit table.decoration td.top-left {
+	width: 10px;
+	height: 15px;
+	background: url(images/pictures/note-top-left.png) bottom right no-repeat;
+	opacity: 1;
+}
+
+div.postit table.decoration td.bottom {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/bottom.png) top left no-repeat;
+}
+
+div.postit table.decoration td.bottom-right {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/bottom-right.png) top left no-repeat;
+}
+
+div.postit table.decoration td.right {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/right.png) top left no-repeat;
+}
+
+div.postit table.decoration td.content {
+  border: none;
+  background-color: #ff6;
+  max-height: 40px;
+  overflow: scroll;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+table.note {
+  background: transparent;
+  border-spacing: 0px;
+  padding: 0px;
+  font-size: 10px;
+  font-color: #000;
+  font-weight: normal;
+}
+
+table.note th,
+table.note td {
+  background: transparent;
+  text-align: left;
+}
+
+table.note th {
+  font-weight: bold;
+}
+
+table.note th.high {
+  background-color: #faa;
+}
+
+table.note th.low {
+  background-color: #afa;
 }
 
   /* @import "./login.css";   */

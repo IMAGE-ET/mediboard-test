@@ -70,7 +70,7 @@ class CNote extends CMbObject {
     $key = $object->_tbl_key;
     $where["object_class"]     = "= '".get_class($object)."'";
     $where["object_id"] = "= '".$object->$key."'";
-    $order = "date DESC";
+    $order = "degre DESC, date DESC";
     $listNote = new CNote();
     $listNote = $listNote->loadListWithPerms($perm, $where, $order);
     return $listNote;
