@@ -21,3 +21,49 @@
     {{/if}}
   </script>
 </head>
+
+<body onload="main()">
+
+<!-- Loading divs -->
+<div id="waitingMsgMask" class="chargementMask" style="display: none;"></div>
+<div id="waitingMsgText" class="chargementText" style="display: none;">
+  <table class="tbl">
+    <tr>
+      <th class="title">
+        <div class="loading"><span id="waitingInnerMsgText">Chargement en cours</span></div>
+      </th>
+    </tr>
+  </table>
+</div>
+
+<!-- Tooltip div used for dom clonage -->
+
+<div id="tooltipTpl" class="tooltip" style="display: none;">
+  <table class="decoration">
+    <tr>
+      <td class="top-left" />
+      <td class="top" />
+	    <td class="top-right" />
+	  </tr>
+	  <tr>
+	    <td class="left" />
+	    <td class="content"></td>
+	    <td class="right" />
+	  </tr>
+	  <tr>
+	    <td class="bottom-left" />
+	    <td class="bottom" />
+	    <td class="bottom-right" />
+	  </tr>
+	</table>
+</div>
+
+{{if !$offline}}
+<script type="text/javascript">
+function popChgPwd() {
+  var url = new Url;
+  url.setModuleAction("admin", "chpwd");
+  url.popup(400, 300, "ChangePassword");
+}
+</script>
+{{/if}}

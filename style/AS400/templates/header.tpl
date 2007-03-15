@@ -1,28 +1,7 @@
 {{include file="../../mediboard/templates/common.tpl"}}
 
-<body onload="main()">
-
-<div id="waitingMsgMask" class="chargementMask" style="display: none;"></div>
-<div id="waitingMsgText" class="chargementText" style="display: none;">
-  <table class="tbl">
-    <tr>
-      <th class="title">
-        <div class="loading"><span id="waitingInnerMsgText">Chargement en cours</span></div>
-      </th>
-    </tr>
-  </table>
-</div>
 {{if !$offline}}
-<script type="text/javascript">
-function popChgPwd() {
-  var url = new Url();
-  url.setModuleAction("admin", "chpwd");
-  url.popup(350, 220, "password");
-}
-</script>
-
 {{if !$dialog}}
-
 
 {{foreach from=$messages item=currMsg}}
   <div style='background: #aaa; color: #fff;'><strong>{{$currMsg->titre}}</strong> : {{$currMsg->corps}}</div>
