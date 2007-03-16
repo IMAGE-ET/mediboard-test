@@ -160,7 +160,7 @@ function checkFormRDV(oForm){
             <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
           </th>
           <td>
-            <select name="chir_id" title="{{$consult->_props.patient_id}}" onChange="ClearRDV()">
+            <select name="chir_id" class="{{$consult->_props.patient_id}}" onChange="ClearRDV()">
               <option value="">&mdash; Choisir un praticien</option>
               {{foreach from=$listPraticiens item=curr_praticien}}
               <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>

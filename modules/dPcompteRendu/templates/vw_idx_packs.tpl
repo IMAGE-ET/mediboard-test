@@ -81,7 +81,7 @@
         {{mb_label object=$pack field="chir_id"}}
       </th>
       <td>
-        <select name="chir_id" title="{{$pack->_props.chir_id}}">
+        <select name="chir_id" class="{{$pack->_props.chir_id}}">
           <option value="">&mdash; Choisir un utilisateur</option>
           {{foreach from=$users item=curr_user}}
           <option class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}};" value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $pack->chir_id}} selected="selected" {{/if}}>
@@ -145,7 +145,7 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
         <label for="_new" title="Veuillez choisir un modèle" />
-        <select name="_new" title="notNull ref">
+        <select name="_new" class="notNull ref">
           <option value="">&mdash; Choisir un modèle</option>
           <optgroup label="Modèles du praticien">
             {{foreach from=$listModelePrat item=curr_modele}}

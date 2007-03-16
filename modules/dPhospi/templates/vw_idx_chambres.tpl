@@ -72,13 +72,13 @@ function pageMain() {
 
     <tr>
       <th><label for="nom" title="intitulé du chambre, obligatoire.">Intitulé</label></th>
-      <td><input type="text" name="nom" title="{{$chambreSel->_props.nom}}" value="{{$chambreSel->nom}}" /></td>
+      <td><input type="text" name="nom" class="{{$chambreSel->_props.nom}}" value="{{$chambreSel->nom}}" /></td>
     </tr>
 
 	<tr>
      <th><label for="service_id" title="Service auquel la chambre est rattaché, obligatoire.">Service</label></th>
 	  <td>
-        <select name="service_id" title="{{$chambreSel->_props.service_id}}">
+        <select name="service_id" class="{{$chambreSel->_props.service_id}}">
           <option value="">&mdash; Choisir un service &mdash;</option>
         {{foreach from=$services item=curr_service}}
           <option value="{{$curr_service->service_id}}" {{if $curr_service->service_id == $chambreSel->service_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
@@ -134,7 +134,7 @@ function pageMain() {
     <tr>
       <th><label for="nom" title="Nom du lit">Nom</label></th>
       <td>
-        <input type="text" name="nom" title="{{$litSel->_props.nom}}" value="{{$litSel->nom}}" />
+        <input type="text" name="nom" class="{{$litSel->_props.nom}}" value="{{$litSel->nom}}" />
         {{if $litSel->lit_id}}
         <button class="modify" type="submit">Modifier</button>
         <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le lit',objName:'{{$litSel->nom|smarty:nodefaults|JSAttribute}}'})">

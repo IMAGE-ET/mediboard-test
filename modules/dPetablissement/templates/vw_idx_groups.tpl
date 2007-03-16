@@ -61,7 +61,7 @@ function pageMain() {
             <label for="text" title="intitulé de l'établissement, obligatoire.">Intitulé</label>
           </th>
           <td>
-            <input type="text" title="{{$usergroup->_props.text}}" name="text" size="30" id="group_text" value="{{$usergroup->text}}" />
+            <input type="text" class="{{$usergroup->_props.text}}" name="text" size="30" id="group_text" value="{{$usergroup->text}}" />
           </td>
         </tr>
         <tr>
@@ -69,7 +69,7 @@ function pageMain() {
             <label for="raison_sociale" title="Veuillez saisir la raison sociale de l'établissement">Raison Sociale</label>
           </th>
           <td>
-            <input type="text" title="{{$usergroup->_props.raison_sociale}}" name="raison_sociale" size="30" value="{{$usergroup->raison_sociale}}" />
+            <input type="text" class="{{$usergroup->_props.raison_sociale}}" name="raison_sociale" size="30" value="{{$usergroup->raison_sociale}}" />
           </td>
         </tr>
         <tr>
@@ -83,7 +83,7 @@ function pageMain() {
         <tr>
           <th><label for="cp" title="Code postal">Code Postal</label></th>
           <td>
-            <input size="31" maxlength="5" type="text" name="cp" value="{{$usergroup->cp}}" title="{{$usergroup->_props.cp}}" />
+            <input size="31" maxlength="5" type="text" name="cp" value="{{$usergroup->cp}}" class="{{$usergroup->_props.cp}}" />
             <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
           </td>
         </tr>
@@ -91,28 +91,28 @@ function pageMain() {
         <tr>
           <th><label for="ville" title="Ville de l'établissement">Ville</label></th>
           <td>
-            <input size="31" type="text" name="ville" value="{{$usergroup->ville}}" title="{{$usergroup->_props.ville}}" />
+            <input size="31" type="text" name="ville" value="{{$usergroup->ville}}" class="{{$usergroup->_props.ville}}" />
             <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
           </td>
         </tr>
         <tr>
           <th><label for="_tel1" title="Numéro de téléphone filaire">Téléphone</label></th>
           <td>
-            <input type="text" name="_tel1" size="2" maxlength="2" value="{{$usergroup->_tel1}}" title="num length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
-            <input type="text" name="_tel2" size="2" maxlength="2" value="{{$usergroup->_tel2}}" title="num length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
-            <input type="text" name="_tel3" size="2" maxlength="2" value="{{$usergroup->_tel3}}" title="num length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
-            <input type="text" name="_tel4" size="2" maxlength="2" value="{{$usergroup->_tel4}}" title="num length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
-            <input type="text" name="_tel5" size="2" maxlength="2" value="{{$usergroup->_tel5}}" title="num length|2" onkeyup="followUp(this, '_fax1', 2)" />
+            <input type="text" name="_tel1" size="2" maxlength="2" value="{{$usergroup->_tel1}}" class="num length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
+            <input type="text" name="_tel2" size="2" maxlength="2" value="{{$usergroup->_tel2}}" class="num length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
+            <input type="text" name="_tel3" size="2" maxlength="2" value="{{$usergroup->_tel3}}" class="num length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
+            <input type="text" name="_tel4" size="2" maxlength="2" value="{{$usergroup->_tel4}}" class="num length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
+            <input type="text" name="_tel5" size="2" maxlength="2" value="{{$usergroup->_tel5}}" class="num length|2" onkeyup="followUp(this, '_fax1', 2)" />
           </td>
         </tr>
         <tr>
           <th><label for="_fax1" title="Numéro de fax">Télécopie</label></th>
           <td>
-            <input type="text" name="_fax1" size="2" maxlength="2" value="{{$usergroup->_fax1}}" title="num length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
-            <input type="text" name="_fax2" size="2" maxlength="2" value="{{$usergroup->_fax2}}" title="num length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
-            <input type="text" name="_fax3" size="2" maxlength="2" value="{{$usergroup->_fax3}}" title="num length|2" onkeyup="followUp(this, '_fax4', 2)" /> -
-            <input type="text" name="_fax4" size="2" maxlength="2" value="{{$usergroup->_fax4}}" title="num length|2" onkeyup="followUp(this, '_fax5', 2)" /> -
-            <input type="text" name="_fax5" size="2" maxlength="2" value="{{$usergroup->_fax5}}" title="num length|2" onkeyup="followUp(this, 'mail', 2)" />
+            <input type="text" name="_fax1" size="2" maxlength="2" value="{{$usergroup->_fax1}}" class="num length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
+            <input type="text" name="_fax2" size="2" maxlength="2" value="{{$usergroup->_fax2}}" class="num length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
+            <input type="text" name="_fax3" size="2" maxlength="2" value="{{$usergroup->_fax3}}" class="num length|2" onkeyup="followUp(this, '_fax4', 2)" /> -
+            <input type="text" name="_fax4" size="2" maxlength="2" value="{{$usergroup->_fax4}}" class="num length|2" onkeyup="followUp(this, '_fax5', 2)" /> -
+            <input type="text" name="_fax5" size="2" maxlength="2" value="{{$usergroup->_fax5}}" class="num length|2" onkeyup="followUp(this, 'mail', 2)" />
           </td>
         </tr>
         <tr>
@@ -120,7 +120,7 @@ function pageMain() {
             <label for="mail" title="Veuillez saisir une adresse e-mail">E-mail</label>
           </th>
           <td>
-            <input type="text" title="{{$usergroup->_props.mail}}" name="mail" value="{{$usergroup->mail}}" />
+            <input type="text" class="{{$usergroup->_props.mail}}" name="mail" value="{{$usergroup->mail}}" />
           </td>
         </tr>
         <tr>
@@ -128,7 +128,7 @@ function pageMain() {
             <label for="web" title="Veuillez saisir l'adresse d'un site internet">Site internet</label>
           </th>
           <td>
-            <input type="text" title="{{$usergroup->_props.web}}" name="web" value="{{$usergroup->web}}" />
+            <input type="text" class="{{$usergroup->_props.web}}" name="web" value="{{$usergroup->web}}" />
           </td>
         </tr>
         
@@ -137,7 +137,7 @@ function pageMain() {
             <label for="directeur" title="Veuillez saisir le nom du directeur de l'établissement">Nom du Directeur</label>
           </th>
           <td>
-            <input type="text" title="{{$usergroup->_props.directeur}}" name="directeur" size="30" value="{{$usergroup->directeur}}" />
+            <input type="text" class="{{$usergroup->_props.directeur}}" name="directeur" size="30" value="{{$usergroup->directeur}}" />
           </td>
         </tr>
         <tr>
@@ -145,7 +145,7 @@ function pageMain() {
             <label for="domiciliation">Domiciliation</label>
           </th>
           <td>
-            <input type="text" title="{{$usergroup->_props.domiciliation}}" name="domiciliation" size="10" value="{{$usergroup->domiciliation}}" />
+            <input type="text" class="{{$usergroup->_props.domiciliation}}" name="domiciliation" size="10" value="{{$usergroup->domiciliation}}" />
           </td>
         </tr>
         <tr>
@@ -153,7 +153,7 @@ function pageMain() {
             <label for="siret" title="Veuillez saisir le n° siret de l'établissement">N° SIRET</label>
           </th>
           <td>
-            <input type="text" title="{{$usergroup->_props.siret}}" maxlength="14" name="siret" size="15" value="{{$usergroup->siret}}" />
+            <input type="text" class="{{$usergroup->_props.siret}}" maxlength="14" name="siret" size="15" value="{{$usergroup->siret}}" />
           </td>
         </tr>
         <tr>
@@ -161,7 +161,7 @@ function pageMain() {
             <label for="ape" title="Veuillez saisir le code APE de l'établissement">Code APE</label>
           </th>
           <td>
-            <input type="text" title="{{$usergroup->_props.ape}}" maxlength="4" name="ape" size="5" value="{{$usergroup->ape}}" />
+            <input type="text" class="{{$usergroup->_props.ape}}" maxlength="4" name="ape" size="5" value="{{$usergroup->ape}}" />
           </td>
         </tr>
         <tr>

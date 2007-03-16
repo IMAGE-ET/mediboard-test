@@ -43,9 +43,9 @@
   <tr>
     <th>{{mb_label object=$patient field="naissance" defaultFor="_jour"}}</th>
     <td>
-      <input tabindex="105" type="text" title="num length|2" name="_jour"  size="2" maxlength="2" value="{{if $patient->_jour != "00"}}{{$patient->_jour}}{{/if}}" onkeyup="followUp(this, '_mois', 2)" /> -
-      <input tabindex="106" type="text" title="num length|2" name="_mois"  size="2" maxlength="2" value="{{if $patient->_mois != "00"}}{{$patient->_mois}}{{/if}}" onkeyup="followUp(this, '_annee', 2)" /> -
-      <input tabindex="107" type="text" title="num length|4" name="_annee" size="4" maxlength="4" value="{{if $patient->_annee != "0000"}}{{$patient->_annee}}{{/if}}" />
+      <input tabindex="105" type="text" class="num length|2" name="_jour"  size="2" maxlength="2" value="{{if $patient->_jour != "00"}}{{$patient->_jour}}{{/if}}" onkeyup="followUp(this, '_mois', 2)" /> -
+      <input tabindex="106" type="text" class="num length|2" name="_mois"  size="2" maxlength="2" value="{{if $patient->_mois != "00"}}{{$patient->_mois}}{{/if}}" onkeyup="followUp(this, '_annee', 2)" /> -
+      <input tabindex="107" type="text" class="num length|4" name="_annee" size="4" maxlength="4" value="{{if $patient->_annee != "0000"}}{{$patient->_annee}}{{/if}}" />
     </td>
     <th>{{mb_label object=$patient field="pays"}}</th>
     <td>

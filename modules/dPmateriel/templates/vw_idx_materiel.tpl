@@ -46,11 +46,11 @@
         </tr>   
         <tr>
           <th><label for="nom" title="Nom du matériel, obligatoire">Nom</label></th>
-          <td><input name="nom" title="{{$materiel->_props.nom}}" type="text" value="{{$materiel->nom}}" /></td>
+          <td><input name="nom" class="{{$materiel->_props.nom}}" type="text" value="{{$materiel->nom}}" /></td>
         </tr>
         <tr>
           <th><label for="category_id" title="Catégorie du matériel, obligatoire">Catégorie</label></th>
-          <td><select name="category_id" title="{{$materiel->_props.category_id}}">
+          <td><select name="category_id" class="{{$materiel->_props.category_id}}">
             <option value="">&mdash; Choisir une catégorie</option>
             {{foreach from=$listCategories item=curr_category}}
               <option value="{{$curr_category->category_id}}" {{if $materiel->category_id == $curr_category->category_id}} selected="selected" {{/if}} >
@@ -62,11 +62,11 @@
         </tr>
         <tr>
           <th><label for="code_barre" title="Code Barre du matériel, numérique">Code Barre</label></th>
-          <td><input name="code_barre" title="{{$materiel->_props.code_barre}}" type="text" value="{{$materiel->code_barre}}" /></td>
+          <td><input name="code_barre" class="{{$materiel->_props.code_barre}}" type="text" value="{{$materiel->code_barre}}" /></td>
         </tr>
         <tr>
           <th><label for="description" title="Description du matériel">Description</label></th>
-          <td><textarea title="{{$materiel->_props.description}}" name="description">{{$materiel->description}}</textarea></td>
+          <td><textarea class="{{$materiel->_props.description}}" name="description">{{$materiel->description}}</textarea></td>
         </tr>
         <tr>
           <td class="button" colspan="2">

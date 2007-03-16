@@ -122,7 +122,7 @@ function popPlanning(debut) {
         <tr>
          <th><label for="chir_id" title="Nom du chirurgien">Chirurgien</label></th>
          <td>
-          <select name="chir_id" title="{{$plagesel->_props.chir_id}}">
+          <select name="chir_id" class="{{$plagesel->_props.chir_id}}">
             <option value="">&mdash; Choisir un chirurgien</option>
             {{foreach from=$specs item=currFct key=keyFct}}
             <optgroup label="{{$currFct->_view}}">
@@ -140,7 +140,7 @@ function popPlanning(debut) {
           <label for="salle_id" title="Nom de la salle. Obligatoire.">Salle</label>
         </th>
         <td>
-          <select name="salle_id" title="{{$plagesel->_props.salle_id}}">
+          <select name="salle_id" class="{{$plagesel->_props.salle_id}}">
             <option value="">&mdash; Choisir une salle</option>
             {{foreach from=$listSalles item=salle}}
             <option value="{{$salle->salle_id}}" {{if $plagesel->salle_id == $salle->salle_id}} selected="selected"{{/if}} >
@@ -151,7 +151,7 @@ function popPlanning(debut) {
         </td>
         <th><label for="_heuredeb" title="Heure de début de la plage. Obligatoire">Début</label></th>
         <td>
-          <select name="_heuredeb" title="notNull num">
+          <select name="_heuredeb" class="notNull num">
           {{foreach from=$listHours|smarty:nodefaults item=heure}}
             <option value="{{$heure|string_format:"%02d"}}" {{if $plagesel->_heuredeb == $heure}} selected="selected" {{/if}} >
               {{$heure|string_format:"%02d"}}
@@ -171,7 +171,7 @@ function popPlanning(debut) {
       <tr>
         <th><label for="spec_id" title="Spécialité associée à la plage opératoire">Spécialité</label></th>
         <td>
-          <select name="spec_id" title="{{$plagesel->_props.spec_id}}">
+          <select name="spec_id" class="{{$plagesel->_props.spec_id}}">
             <option value="">&mdash; Choisir une spécialité</option>
             {{foreach from=$specs item=spec}}
               <option value="{{$spec->function_id}}" class="mediuser" style="border-color: #{{$spec->color}};"
@@ -181,7 +181,7 @@ function popPlanning(debut) {
             {{/foreach}}
           </select>
         </td>
-        <th><label for="date" title="Date de la plage opératoire.">Date</label></th>
+        <th><label for="date" class="Date de la plage opératoire.">Date</label></th>
         <td class="date">
           {{if $plagesel->plageop_id}}
           <div id="editFrm_date_da">{{$plagesel->date|date_format:"%d/%m/%Y"}}</div>
@@ -196,7 +196,7 @@ function popPlanning(debut) {
     
         <th><label for="_heurefin" title="Heure de fin de la plage. Obligatoire">Fin</label></th>
         <td>
-          <select name="_heurefin" title="notNull num">
+          <select name="_heurefin" class="notNull num">
             {{foreach from=$listHours|smarty:nodefaults item=heure}}
             <option value="{{$heure|string_format:"%02d"}}" {{if $plagesel->_heurefin == $heure}} selected="selected" {{/if}} >
               {{$heure|string_format:"%02d"}}
@@ -228,7 +228,7 @@ function popPlanning(debut) {
         </td>
         <th colspan="3"><label for="_min_inter_op" title="Nombre de minutes entre chaque patient">Minutes entre les interventions</label></th>
         <td>
-          <input type="text" name="_min_inter_op" size="3" title="notNull num pos"
+          <input type="text" name="_min_inter_op" size="3" class="notNull num pos"
                  value="{{if $plagesel->plageop_id}}{{$plagesel->_min_inter_op}}{{else}}{{15}}{{/if}}" />
           min
         </td>
@@ -239,7 +239,7 @@ function popPlanning(debut) {
           <label for="_repeat" title="Nombre de plages à créer">Nombre de plages</label>
         </th>
         <td>
-          <input type="text" title="notNull num min|1" name="_repeat" size="1" value="1" />
+          <input type="text" class="notNull num min|1" name="_repeat" size="1" value="1" />
         </td>
         <th>
           <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>

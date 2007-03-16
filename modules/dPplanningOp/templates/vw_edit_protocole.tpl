@@ -184,7 +184,7 @@ function pageMain() {
             {{mb_label object=$protocole field="chir_id"}}
           </th>
           <td colspan="2">
-            <select name="chir_id" title="{{$protocole->_props.chir_id}}">
+            <select name="chir_id" class="{{$protocole->_props.chir_id}}">
               <option value="">&mdash; Choisir un praticien</option>
               {{foreach from=$listPraticiens item=curr_praticien}}
               <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -199,7 +199,7 @@ function pageMain() {
             {{mb_label object=$protocole field="_hour_op"}}
           </th>
           <td colspan="2">
-            <select name="_hour_op" title="notNull num min|0">
+            <select name="_hour_op" class="notNull num min|0">
             {{foreach from=$hours|smarty:nodefaults key=key item=hour}}
               <option value="{{$key}}" {{if (!$protocole && $key == 1) || $protocole->_hour_op == $key}} selected="selected" {{/if}}>{{$key}}</option>
             {{/foreach}}

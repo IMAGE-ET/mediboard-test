@@ -60,42 +60,41 @@ function pageMain() {
         </tr>
         <tr>
           <th><label for="societe" title="Société, obligatoire">Société</label></th>
-          <td><input name="societe" title="{{$fournisseur->_props.societe}}" type="text" value="{{$fournisseur->societe}}" /></td>
+          <td><input name="societe" class="{{$fournisseur->_props.societe}}" type="text" value="{{$fournisseur->societe}}" /></td>
         </tr>
         <tr>
           <th><label for="adresse" title="Adresse de la société">Adresse</label></th>
-          <td><textarea title="{{$fournisseur->_props.adresse}}" name="adresse">{{$fournisseur->adresse}}</textarea></td>
+          <td><textarea class="{{$fournisseur->_props.adresse}}" name="adresse">{{$fournisseur->adresse}}</textarea></td>
         </tr>
         <tr>
           <th><label for="codepostal" title="Code Postal">Code Postal</label></th>
           <td>
-            <input size="31" maxlength="5" type="text" name="codepostal" title="{{$fournisseur->_props.codepostal}}" value="{{$fournisseur->codepostal}}" />
+            <input size="31" maxlength="5" type="text" name="codepostal" class="{{$fournisseur->_props.codepostal}}" value="{{$fournisseur->codepostal}}" />
             <div style="display:none;" class="autocomplete" id="codepostal_auto_complete"></div>
           </td>
         </tr>
         <tr>
           <th><label for="ville" title="Ville">Ville</label></th>
           <td>
-           
-            <input size="31" type="text" name="ville" value="{{$fournisseur->ville}}" title="{{$fournisseur->_props.ville}}" />
-          <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
+            <input size="31" type="text" name="ville" value="{{$fournisseur->ville}}" class="{{$fournisseur->_props.ville}}" />
+            <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
           </td>
         </tr>
         <tr>
           <th><label for="telephone" title="Téléphone">Téléphone</label></th>
-          <td><input name="telephone" title="{{$fournisseur->_props.telephone}}" type="text" value="{{$fournisseur->telephone}}" /></td>
+          <td><input name="telephone" class="{{$fournisseur->_props.telephone}}" type="text" value="{{$fournisseur->telephone}}" /></td>
         </tr>
         <tr>
           <th><label for="mail" title="E-Mail valide">E-Mail</label></th>
-          <td><input name="mail" title="{{$fournisseur->_props.mail}}" type="text" value="{{$fournisseur->mail}}" /></td>
+          <td><input name="mail" class="{{$fournisseur->_props.mail}}" type="text" value="{{$fournisseur->mail}}" /></td>
         </tr>
         <tr>
           <th><label for="nom" title="Nom du contact">Nom du contact</label></th>
-          <td><input name="nom" title="{{$fournisseur->_props.nom}}" type="text" value="{{$fournisseur->nom}}" /></td>
+          <td><input name="nom" class="{{$fournisseur->_props.nom}}" type="text" value="{{$fournisseur->nom}}" /></td>
         </tr>
         <tr>
           <th><label for="prenom" title="Prénom du contact">Prénom du Contact</label></th>
-          <td><input name="prenom" title="{{$fournisseur->_props.prenom}}" type="text" value="{{$fournisseur->prenom}}" /></td>
+          <td><input name="prenom" class="{{$fournisseur->_props.prenom}}" type="text" value="{{$fournisseur->prenom}}" /></td>
         </tr>
         <tr>
           <td class="button" colspan="2">

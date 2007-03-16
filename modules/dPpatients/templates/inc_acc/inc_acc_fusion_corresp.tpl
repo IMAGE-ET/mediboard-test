@@ -21,7 +21,7 @@
       {{$patient2->prevenir_nom}}
     </td>
     <td>
-      <input tabindex="300" type="text" name="prevenir_nom" value="{{$finalPatient->prevenir_nom}}" title="{{$finalPatient->_props.prevenir_nom}}" />
+      <input tabindex="300" type="text" name="prevenir_nom" value="{{$finalPatient->prevenir_nom}}" class="{{$finalPatient->_props.prevenir_nom}}" />
      </td>
   </tr>
   <tr>
@@ -35,7 +35,7 @@
       {{$patient2->prevenir_prenom}}
     </td>
     <td>
-      <input tabindex="301" type="text" name="prevenir_prenom" value="{{$finalPatient->prevenir_prenom}}" title="{{$finalPatient->_props.prevenir_prenom}}" />
+      <input tabindex="301" type="text" name="prevenir_prenom" value="{{$finalPatient->prevenir_prenom}}" class="{{$finalPatient->_props.prevenir_prenom}}" />
      </td>
   </tr>
   <tr>
@@ -49,7 +49,7 @@
       {{$patient2->prevenir_adresse}}
     </td>
     <td>
-      <textarea tabindex="302" name="prevenir_adresse" title="{{$finalPatient->_props.prevenir_adresse}}">{{$finalPatient->prevenir_adresse}}</textarea>
+      <textarea tabindex="302" name="prevenir_adresse" class="{{$finalPatient->_props.prevenir_adresse}}">{{$finalPatient->prevenir_adresse}}</textarea>
     </td>
   </tr>
   <tr>
@@ -63,7 +63,7 @@
       {{$patient2->prevenir_cp}}
     </td>
     <td>
-      <input tabindex="303" type="text" name="prevenir_cp" value="{{$finalPatient->prevenir_cp}}" title="{{$finalPatient->_props.prevenir_cp}}" onclick="setField(this.form.prevenir_cp, '{{$patient2->prevenir_cp|smarty:nodefaults|JSAttribute}}')" />
+      <input tabindex="303" type="text" name="prevenir_cp" value="{{$finalPatient->prevenir_cp}}" class="{{$finalPatient->_props.prevenir_cp}}" onclick="setField(this.form.prevenir_cp, '{{$patient2->prevenir_cp|smarty:nodefaults|JSAttribute}}')" />
     </td>
   </tr>
   <tr>
@@ -77,7 +77,7 @@
       {{$patient2->prevenir_ville}}
     </td>
     <td>
-      <input tabindex="304" type="text" name="prevenir_ville" value="{{$finalPatient->prevenir_ville}}" title="{{$finalPatient->_props.prevenir_ville}}" />
+      <input tabindex="304" type="text" name="prevenir_ville" value="{{$finalPatient->prevenir_ville}}" class="{{$finalPatient->_props.prevenir_ville}}" />
     </td>
   </tr>
   <tr>
@@ -113,7 +113,7 @@
       {{tr}}CPatient.prevenir_parente.{{$patient2->prevenir_parente}}{{/tr}}
     </td>
     <td>
-      <select tabindex="310" name="prevenir_parente" title="{{$finalPatient->_props.prevenir_parente}}">
+      <select tabindex="310" name="prevenir_parente" class="{{$finalPatient->_props.prevenir_parente}}">
         <option value="" {{if $finalPatient->prevenir_parente===null}}selected="selected"{{/if}}>&mdash;Veuillez Choisir &mdash;</option>
         {{html_options options=$finalPatient->_enumsTrans.prevenir_parente selected=$finalPatient->prevenir_parente}}
       </select>

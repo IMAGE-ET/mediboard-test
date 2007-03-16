@@ -45,7 +45,7 @@
         </tr> 
         <tr>
           <th><label for="nom" title="Nom de la catégorie, obligatoire">Catégorie</label></th>
-          <td><input name="nom" title="{{$category->_props.nom}}" type="text" value="{{$category->nom}}" /></td>
+          <td><input name="nom" class="{{$category->_props.nom}}" type="text" value="{{$category->nom}}" /></td>
         </tr>
         <tr>
           <th><label for="class" title="Class de la catégorie">Class</label></th>

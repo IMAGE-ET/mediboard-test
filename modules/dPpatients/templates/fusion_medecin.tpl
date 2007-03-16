@@ -39,7 +39,7 @@ function setChecked(oField, sValue) {
       {{$medecin2->nom}}
     </td>
     <td>
-      <input tabindex="1" type="text" name="nom" value="{{$finalMedecin->nom}}" title="{{$finalMedecin->_props.nom}}" />
+      <input tabindex="1" type="text" name="nom" value="{{$finalMedecin->nom}}" class="{{$finalMedecin->_props.nom}}" />
      </td>
   </tr>
   <tr>
@@ -53,7 +53,7 @@ function setChecked(oField, sValue) {
       {{$medecin2->prenom}}
     </td>
     <td>
-      <input tabindex="2" type="text" name="prenom" value="{{$finalMedecin->prenom}}" title="{{$finalMedecin->_props.prenom}}" /></td>
+      <input tabindex="2" type="text" name="prenom" value="{{$finalMedecin->prenom}}" class="{{$finalMedecin->_props.prenom}}" /></td>
   </tr>
   <tr>
     <th><label for="adresse" title="Adresse du medecin">Adresse</label></th>
@@ -66,7 +66,7 @@ function setChecked(oField, sValue) {
       {{$medecin2->adresse}}
     </td>
     <td>
-      <textarea tabindex="8" name="adresse" title="{{$finalMedecin->_props.adresse}}" rows="1">{{$finalMedecin->adresse}}</textarea>
+      <textarea tabindex="8" name="adresse" class="{{$finalMedecin->_props.adresse}}" rows="1">{{$finalMedecin->adresse}}</textarea>
     </td>
   </tr>
   <tr>
@@ -80,7 +80,7 @@ function setChecked(oField, sValue) {
       {{$medecin2->cp}}
     </td>
     <td>
-      <input tabindex="9" type="text" name="cp" value="{{$finalMedecin->cp}}" title="{{$finalMedecin->_props.cp}}" onclick="setField(this.form.cp, '{{$medecin2->cp|smarty:nodefaults|JSAttribute}}')" />
+      <input tabindex="9" type="text" name="cp" value="{{$finalMedecin->cp}}" class="{{$finalMedecin->_props.cp}}" onclick="setField(this.form.cp, '{{$medecin2->cp|smarty:nodefaults|JSAttribute}}')" />
     </td>
   </tr>
   <tr>
@@ -94,7 +94,7 @@ function setChecked(oField, sValue) {
       {{$medecin2->ville}}
     </td>
     <td>
-      <input tabindex="10" type="text" name="ville" value="{{$finalMedecin->ville}}" title="{{$finalMedecin->_props.ville}}" />
+      <input tabindex="10" type="text" name="ville" value="{{$finalMedecin->ville}}" class="{{$finalMedecin->_props.ville}}" />
     </td>
   </tr>
   <tr>
@@ -112,11 +112,11 @@ function setChecked(oField, sValue) {
       {{$medecin2->tel}}
     </td>
     <td>
-      <input type="text" name="_tel1" size="2" maxlength="2" value="{{$finalMedecin->_tel1}}" title="num length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
-      <input type="text" name="_tel2" size="2" maxlength="2" value="{{$finalMedecin->_tel2}}" title="num length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
-      <input type="text" name="_tel3" size="2" maxlength="2" value="{{$finalMedecin->_tel3}}" title="num length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
-      <input type="text" name="_tel4" size="2" maxlength="2" value="{{$finalMedecin->_tel4}}" title="num length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
-      <input type="text" name="_tel5" size="2" maxlength="2" value="{{$finalMedecin->_tel5}}" title="num length|2" onkeyup="followUp(this, '_tel21', 2)" />
+      <input type="text" name="_tel1" size="2" maxlength="2" value="{{$finalMedecin->_tel1}}" class="num length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
+      <input type="text" name="_tel2" size="2" maxlength="2" value="{{$finalMedecin->_tel2}}" class="num length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
+      <input type="text" name="_tel3" size="2" maxlength="2" value="{{$finalMedecin->_tel3}}" class="num length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
+      <input type="text" name="_tel4" size="2" maxlength="2" value="{{$finalMedecin->_tel4}}" class="num length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
+      <input type="text" name="_tel5" size="2" maxlength="2" value="{{$finalMedecin->_tel5}}" class="num length|2" onkeyup="followUp(this, '_tel21', 2)" />
     </td>
   </tr>
   <tr>
@@ -134,11 +134,11 @@ function setChecked(oField, sValue) {
       {{$medecin2->fax}}
     </td>
     <td>
-      <input type="text" name="_fax1" size="2" maxlength="2" value="{{$finalMedecin->_fax1}}" title="num length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
-      <input type="text" name="_fax2" size="2" maxlength="2" value="{{$finalMedecin->_fax2}}" title="num length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
-      <input type="text" name="_fax3" size="2" maxlength="2" value="{{$finalMedecin->_fax3}}" title="num length|2" onkeyup="followUp(this, '_fax4', 2)" /> -
-      <input type="text" name="_fax4" size="2" maxlength="2" value="{{$finalMedecin->_fax4}}" title="num length|2" onkeyup="followUp(this, '_fax5', 2)" /> -
-      <input type="text" name="_fax5" size="2" maxlength="2" value="{{$finalMedecin->_fax5}}" title="num length|2" />
+      <input type="text" name="_fax1" size="2" maxlength="2" value="{{$finalMedecin->_fax1}}" class="num length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
+      <input type="text" name="_fax2" size="2" maxlength="2" value="{{$finalMedecin->_fax2}}" class="num length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
+      <input type="text" name="_fax3" size="2" maxlength="2" value="{{$finalMedecin->_fax3}}" class="num length|2" onkeyup="followUp(this, '_fax4', 2)" /> -
+      <input type="text" name="_fax4" size="2" maxlength="2" value="{{$finalMedecin->_fax4}}" class="num length|2" onkeyup="followUp(this, '_fax5', 2)" /> -
+      <input type="text" name="_fax5" size="2" maxlength="2" value="{{$finalMedecin->_fax5}}" class="num length|2" />
     </td>
   </tr>
   <tr>
@@ -152,7 +152,7 @@ function setChecked(oField, sValue) {
       {{$medecin2->disciplines|nl2br}}
     </td>
     <td class="text">
-      <textarea rows="3" title="{{$finalMedecin->_props.disciplines}}" name="disciplines">{{$finalMedecin->disciplines|nl2br}}</textarea>
+      <textarea rows="3" class="{{$finalMedecin->_props.disciplines}}" name="disciplines">{{$finalMedecin->disciplines|nl2br}}</textarea>
     </td>
   </tr>
   <tr>
@@ -166,7 +166,7 @@ function setChecked(oField, sValue) {
       {{$medecin2->orientations|nl2br}}
     </td>
     <td class="text">
-      <textarea rows="3" title="{{$finalMedecin->_props.orientations}}" name="orientations">{{$finalMedecin->orientations|nl2br}}</textarea>
+      <textarea rows="3" class="{{$finalMedecin->_props.orientations}}" name="orientations">{{$finalMedecin->orientations|nl2br}}</textarea>
     </td>
   </tr>
   <tr>
@@ -180,7 +180,7 @@ function setChecked(oField, sValue) {
       {{$medecin2->complementaires|nl2br}}
     </td>
     <td class="text">
-      <textarea rows="3" title="{{$finalMedecin->_props.complementaires}}" name="complementaires">{{$finalMedecin->complementaires|nl2br}}</textarea>
+      <textarea rows="3" class="{{$finalMedecin->_props.complementaires}}" name="complementaires">{{$finalMedecin->complementaires|nl2br}}</textarea>
     </td>
   </tr>
   <tr>

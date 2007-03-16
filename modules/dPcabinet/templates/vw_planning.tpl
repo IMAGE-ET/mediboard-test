@@ -156,7 +156,7 @@ function pageMain() {
           <table class="form">
             <tr>
               <th>{{mb_label object=$plageSel field="chir_id"}}</th>
-              <td><select name="chir_id" title="{{$plageSel->_props.chir_id}}">
+              <td><select name="chir_id" class="{{$plageSel->_props.chir_id}}">
                 <option value="">&mdash; Choisir un praticien</option>
                 {{foreach from=$listChirs item=curr_chir}}
                   <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
@@ -170,7 +170,7 @@ function pageMain() {
             </tr>
             <tr>
               <th>{{mb_label object=$plageSel field="_hour_deb"}}</th>
-              <td><select name="_hour_deb" title="notNull num">
+              <td><select name="_hour_deb" class="notNull num">
                 {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
                   <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_deb}} selected="selected" {{/if}}>
                     {{$curr_hour|string_format:"%02d"}}
@@ -187,7 +187,7 @@ function pageMain() {
               </td>
               <th>{{mb_label object=$plageSel field="date"}}</th>
               <td>
-                <select name="date" title="{{$plageSel->_props.date}}">
+                <select name="date" class="{{$plageSel->_props.date}}">
                   <option value="">&mdash; Choisir le jour de la semaine</option>
                   {{foreach from=$listDays|smarty:nodefaults item=curr_day}}
                   <option value="{{$curr_day}}" {{if $curr_day == $plageSel->date}} selected="selected" {{/if}}>
@@ -200,7 +200,7 @@ function pageMain() {
             <tr>
               <th>{{mb_label object=$plageSel field="_hour_fin"}}</th>
               <td>
-                <select name="_hour_fin" title="notNull num moreThan|_hour_deb">
+                <select name="_hour_fin" class="notNull num moreThan|_hour_deb">
                   {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
                     <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_fin}} selected="selected" {{/if}}>
                       {{$curr_hour|string_format:"%02d"}}

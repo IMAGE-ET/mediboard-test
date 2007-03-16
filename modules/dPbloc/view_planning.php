@@ -29,7 +29,7 @@ $CCAM  = mbGetValueFromGet("CCAM" , "");
 $plagesop = new CPlageOp;
 
 $where = array();
-$where["date"] =  "BETWEEN '$deb' AND '$fin'";
+$where["date"] =  db_prepare("BETWEEN %1 AND %2", $deb, $fin);
 
 $order = array();
 $order[] = "date";
@@ -38,7 +38,7 @@ $order[] = "debut";
 
 $chir_id = mbGetValueFromGet("chir");
 $listPrat = new CMediusers;
-$listPrat = $listPrat->loadPraticiens(PERM_EDIT, $spe);
+$listPrat = $listPrat->loadPraticiens(PERM_READ, $spe);
 
 $where["chir_id"] = db_prepare_in(array_keys($listPrat), $chir_id);
 

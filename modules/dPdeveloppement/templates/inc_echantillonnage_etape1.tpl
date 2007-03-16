@@ -24,7 +24,7 @@
   <tr>
     <td class="button">
       <label for="etablissement" title="Veuillez saisir un titre pour l'etablissement">Titre de l'etablissement</label>
-      <input type="text" name="etablissement" value="" title="str" />
+      <input type="text" name="etablissement" value="" class="str" />
     </td>
     <td class="button">
       {{if $etablissements|@count}}

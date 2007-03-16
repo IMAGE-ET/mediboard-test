@@ -76,7 +76,7 @@
       <label for="pref_name[DEPARTEMENT]" title="Veuillez choisir le numéro du département par défaut à utiliser">{{tr}}N° du département par défaut{{/tr}}</label>
     </th>
     <td>
-      <input type="text" name="pref_name[DEPARTEMENT]" value="{{$prefsUser.dPpatients.DEPARTEMENT}}" maxlength="3" size="4" title="num minMax|0|999"/>
+      <input type="text" name="pref_name[DEPARTEMENT]" value="{{$prefsUser.dPpatients.DEPARTEMENT}}" maxlength="3" size="4" class="num minMax|0|999"/>
     </td>
   </tr>
   {{/if}}

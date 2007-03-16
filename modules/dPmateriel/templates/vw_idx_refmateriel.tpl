@@ -45,7 +45,7 @@
         </tr>
         <tr>
           <th><label for="fournisseur_id" title="Fournisseur, obligatoire">Fournisseur</label></th>
-          <td><select name="fournisseur_id" title="{{$reference->_props.fournisseur_id}}">
+          <td><select name="fournisseur_id" class="{{$reference->_props.fournisseur_id}}">
             <option value="">&mdash; Choisir un Fournisseur</option>
             {{foreach from=$listFournisseur item=curr_fournisseur}}
               <option value="{{$curr_fournisseur->fournisseur_id}}" {{if $reference->fournisseur_id == $curr_fournisseur->fournisseur_id}} selected="selected" {{/if}} >
@@ -57,7 +57,7 @@
         </tr>
         <tr>
           <th><label for="materiel_id" title="Matériel, obligatoire">Matériel</label></th>
-          <td><select name="materiel_id" title="{{$reference->_props.materiel_id}}">
+          <td><select name="materiel_id" class="{{$reference->_props.materiel_id}}">
             <option value="">&mdash; Choisir un Matériel</option>
             {{foreach from=$listCategory item=curr_cat}}
                <optgroup label="{{$curr_cat->category_name}}">
@@ -73,11 +73,11 @@
         </tr>
         <tr>
           <th><label for="quantite" title="Quantité, obligatoire">Quantité</label></th>
-          <td><input name="quantite" title="{{$reference->_props.quantite}}" type="text" value="{{$reference->quantite}}" /></td>
+          <td><input name="quantite" class="{{$reference->_props.quantite}}" type="text" value="{{$reference->quantite}}" /></td>
         </tr>
         <tr>
           <th><label for="prix" title="Prix, obligatoire">Prix</label></th>
-          <td><input name="prix" title="{{$reference->_props.prix}}" type="text" value="{{$reference->prix}}" /></td>
+          <td><input name="prix" class="{{$reference->_props.prix}}" type="text" value="{{$reference->prix}}" /></td>
         </tr>
         <tr>
           <td class="button" colspan="2">

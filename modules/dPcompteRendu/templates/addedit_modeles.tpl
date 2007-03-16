@@ -98,7 +98,7 @@ function pageMain() {
   <tr>
     <th>{{mb_label object=$compte_rendu field="function_id"}}</th>
     <td>
-      <select name="function_id" title="{{$compte_rendu->_props.function_id}}" onchange="this.form.chir_id.value = ''">
+      <select name="function_id" class="{{$compte_rendu->_props.function_id}}" onchange="this.form.chir_id.value = ''">
         <option value="">&mdash; Associer à une fonction &mdash;</option>
         {{foreach from=$listFunc item=curr_func}}
           <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $compte_rendu->function_id}} selected="selected" {{/if}}>
@@ -112,7 +112,7 @@ function pageMain() {
   <tr>
     <th>{{mb_label object=$compte_rendu field="chir_id"}}</th>
     <td>
-      <select name="chir_id" title="{{$compte_rendu->_props.chir_id}}" onchange="this.form.function_id.value = ''">
+      <select name="chir_id" class="{{$compte_rendu->_props.chir_id}}" onchange="this.form.function_id.value = ''">
         <option value="">&mdash; Associer à un praticien &mdash;</option>
         {{foreach from=$listPrat item=curr_prat}}
           <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $prat_id}} selected="selected" {{/if}}>
@@ -127,7 +127,7 @@ function pageMain() {
     <th>{{mb_label object=$compte_rendu field="object_class"}}</th>
     <td>
       {{if !$compte_rendu->compte_rendu_id}}
-      <select name="object_class" title="{{$compte_rendu->_props.object_class}}" onchange="loadCategory()">
+      <select name="object_class" class="{{$compte_rendu->_props.object_class}}" onchange="loadCategory()">
         <option value="">&mdash; Choisir un objet</option>
       </select>
       {{else}}
@@ -140,7 +140,7 @@ function pageMain() {
     <th>{{mb_label object=$compte_rendu field="file_category_id"}}</th>
     <td>
       {{if !$compte_rendu->compte_rendu_id}}
-      <select name="file_category_id" title="{{$compte_rendu->_props.file_category_id}}">
+      <select name="file_category_id" class="{{$compte_rendu->_props.file_category_id}}">
         <option value="">&mdash; Aucune Catégorie</option>
       </select>
       {{else}}

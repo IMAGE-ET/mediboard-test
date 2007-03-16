@@ -169,8 +169,8 @@ if (window.opener.reloadFdr) {
   <tr>
     <th><label for="hesitation_0">Réponses du patient sans hésitation</label></th>
     <td>
-      <input name="hesitation" title="{{$exam_nyha->_props.hesitation}}" type="radio" value="0" {{if $exam_nyha->_id && $exam_nyha->hesitation==0}}checked="checked"{{/if}}>{{tr}}CExamNyha.hesitation.0{{/tr}}
-      <input name="hesitation" title="{{$exam_nyha->_props.hesitation}}" type="radio" value="1" {{if !$exam_nyha->_id || $exam_nyha->hesitation==1}}checked="checked"{{/if}}>{{tr}}CExamNyha.hesitation.1{{/tr}}
+      <input name="hesitation" class="{{$exam_nyha->_props.hesitation}}" type="radio" value="0" {{if $exam_nyha->_id && $exam_nyha->hesitation==0}}checked="checked"{{/if}}>{{tr}}CExamNyha.hesitation.0{{/tr}}
+      <input name="hesitation" class="{{$exam_nyha->_props.hesitation}}" type="radio" value="1" {{if !$exam_nyha->_id || $exam_nyha->hesitation==1}}checked="checked"{{/if}}>{{tr}}CExamNyha.hesitation.1{{/tr}}
     </td>
   </tr>
   <tr>

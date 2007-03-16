@@ -46,7 +46,7 @@ function pageMain() {
               <tr>
                 <th><label for="codeacte" title="Code CCAM de l'acte">Code de l'acte</label></th>
                 <td>
-                  <input tabindex="1" type="text" size="30" name="codeacte" title="code ccam" value="{{if $codeacte!="-"}}{{$codeacte|stripslashes}}{{/if}}" />
+                  <input tabindex="1" type="text" size="30" name="codeacte" class="code ccam" value="{{if $codeacte!="-"}}{{$codeacte|stripslashes}}{{/if}}" />
                   <div style="display: none;" class="autocomplete" id="codeacte_auto_complete"></div>                 
                   <button tabindex="2" class="search" type="submit">Afficher</button>
                 </td>

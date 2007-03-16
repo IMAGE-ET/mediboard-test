@@ -25,7 +25,7 @@
 <table class="form">
   <tr>
     <th><label for="keys" title="Un ou plusieurs mots clés, séparés par des espaces. Obligatoire">Mots clefs</label></th>
-    <td><input type="text" title="str" name="keys" value="{{$keys|stripslashes}}" /></td>
+    <td><input type="text" class="str" name="keys" value="{{$keys|stripslashes}}" /></td>
   </tr>
   <tr>
     <td class="button" colspan="2">

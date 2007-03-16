@@ -277,7 +277,7 @@ function submitFdr(oForm) {
         <tr>
           <th><label for="choix" title="Type de tarif pour la consultation. Obligatoire.">Choix du tarif</label></th>
           <td>
-            <select name="choix"  title="notNull str" onchange="modifTarif()">
+            <select name="choix"  class="notNull str" onchange="modifTarif()">
               <option value="" selected="selected">&mdash; Choix du tarif</option>
               {{if $tarifsChir|@count}}
               <optgroup label="Tarifs praticien">
@@ -302,7 +302,7 @@ function submitFdr(oForm) {
         <tr>
           <th>{{mb_label object=$consult field="_somme"}}</th>
           <td>
-            <input type="text" size="4" name="_somme" title="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" /> &euro;
+            <input type="text" size="4" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" /> &euro;
             {{mb_field object=$consult field="secteur1" hidden=1 prop=""}}
             {{mb_field object=$consult field="secteur2" hidden=1 prop=""}}
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}

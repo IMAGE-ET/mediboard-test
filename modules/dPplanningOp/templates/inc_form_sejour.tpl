@@ -69,7 +69,7 @@
     {{mb_label object=$sejour field="group_id"}}
   </th>
   <td colspan="3">
-    <select title="{{$sejour->_props.group_id}}" name="group_id" onchange="removePlageOp(true);">
+    <select class="{{$sejour->_props.group_id}}" name="group_id" onchange="removePlageOp(true);">
     {{foreach from=$etablissements item=curr_etab}}
       <option value="{{$curr_etab->group_id}}" {{if ($sejour->sejour_id && $sejour->group_id==$curr_etab->group_id) || (!$sejour->sejour_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
     {{/foreach}}
@@ -82,7 +82,7 @@
     {{mb_label object=$sejour field="praticien_id"}}
   </th>
   <td colspan="3">
-    <select name="praticien_id" onchange="modifPrat()" title="{{$sejour->_props.praticien_id}}">
+    <select name="praticien_id" onchange="modifPrat()" class="{{$sejour->_props.praticien_id}}">
       <option value="">&mdash; Choisir un praticien</option>
       {{foreach from=$listPraticiens item=curr_praticien}}
       <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $praticien->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -95,7 +95,7 @@
 
 <tr>
   <th>
-    <input type="hidden" name="patient_id" title="{{$sejour->_props.patient_id}}" ondblclick="popPat()" value="{{$patient->patient_id}}" />
+    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="popPat()" value="{{$patient->patient_id}}" />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td class="readonly">
@@ -141,7 +141,7 @@
 <tr>
   <th>{{mb_label object=$sejour field="_duree_prevue"}}</th>
   <td>
-    <input type="text" name="_duree_prevue" title="num min|0" value="{{if $sejour->sejour_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" size="4" onchange="updateSortiePrevue()" />
+    <input type="text" name="_duree_prevue" class="num min|0" value="{{if $sejour->sejour_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" size="4" onchange="updateSortiePrevue()" />
     jours
   </td>
   <td id="dureeEst" colspan="2">

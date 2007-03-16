@@ -77,7 +77,7 @@ function pageMain() {
           <th><label for="deb" title="Date de début de la recherche">Début</label></th>
           <td class="date">
             <div id="paramFrm_deb_da">{{$now|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" onchange="changeDateCal()" name="deb" title="notNull date" value="{{$now}}" />
+            <input type="hidden" onchange="changeDateCal()" name="deb" class="notNull date" value="{{$now}}" />
             <img id="paramFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
           <td rowspan="2">
@@ -93,7 +93,7 @@ function pageMain() {
           <th><label for="fin" title="Date de fin de la recherche">Fin</label></th>
           <td class="date">
             <div id="paramFrm_fin_da">{{$now|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" onchange="changeDateCal()" name="fin" title="notNull date moreEquals|deb" value="{{$now}}" />
+            <input type="hidden" onchange="changeDateCal()" name="fin" class="notNull date moreEquals|deb" value="{{$now}}" />
             <img id="paramFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>

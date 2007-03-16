@@ -50,7 +50,7 @@ function pageMain() {
           <th><label for="deb">Début</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_deb_da">{{$today|date_format:"%d/%m/%Y %H:%M"}}</div>
-            <input type="hidden" name="deb" title="notNull dateTime" value="{{$today}}" />
+            <input type="hidden" name="deb" class="notNull dateTime" value="{{$today}}" />
             <img id="paramFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
@@ -59,7 +59,7 @@ function pageMain() {
           <th><label for="fin">Fin</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_fin_da">{{$tomorrow|date_format:"%d/%m/%Y %H:%M"}}</div>
-            <input type="hidden" name="fin" title="notNull dateTime moreEquals|deb" value="{{$tomorrow}}" />
+            <input type="hidden" name="fin" class="notNull dateTime moreEquals|deb" value="{{$tomorrow}}" />
             <img id="paramFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>

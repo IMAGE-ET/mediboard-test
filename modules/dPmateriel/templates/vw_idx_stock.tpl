@@ -49,7 +49,7 @@
         </tr>  
         <tr>
           <th><label for="materiel_id" title="Matériel, obligatoire">Matériel</label></th>
-          <td><select name="materiel_id" title="{{$stock->_props.materiel_id}}">
+          <td><select name="materiel_id" class="{{$stock->_props.materiel_id}}">
             <option value="">&mdash; Choisir un Matériel</option>
             {{foreach from=$listCategory item=curr_cat}}
                <optgroup label="{{$curr_cat->category_name}}">
@@ -65,7 +65,7 @@
         </tr>
         <tr>
           <th><label for="group_id" title="Groupe, obligatoire">Groupe</label></th>
-          <td><select name="group_id" title="{{$stock->_props.group_id}}">
+          <td><select name="group_id" class="{{$stock->_props.group_id}}">
             <option value="">&mdash; Choisir un Groupe</option>
             {{foreach from=$listGroupes item=curr_groupes}}
               <option value="{{$curr_groupes->group_id}}" {{if $stock->group_id == $curr_groupes->group_id}} selected="selected" {{/if}} >
@@ -77,11 +77,11 @@
         </tr>        
         <tr>
           <th><label for="seuil_cmd" title="Seuil de Commande, obligatoire">Seuil de Commande</label></th>
-          <td><input name="seuil_cmd" title="{{$stock->_props.seuil_cmd}}" type="text" value="{{$stock->seuil_cmd}}" /></td>
+          <td><input name="seuil_cmd" class="{{$stock->_props.seuil_cmd}}" type="text" value="{{$stock->seuil_cmd}}" /></td>
         </tr>
         <tr>
           <th><label for="quantite" title="Quantité, obligatoire">Quantité</label></th>
-          <td><input name="quantite" title="{{$stock->_props.quantite}}" type="text" value="{{$stock->quantite}}" /></td>
+          <td><input name="quantite" class="{{$stock->_props.quantite}}" type="text" value="{{$stock->quantite}}" /></td>
         </tr>
         <tr>
           <td class="button" colspan="2">

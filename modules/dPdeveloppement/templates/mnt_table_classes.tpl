@@ -6,7 +6,7 @@
       <input type="hidden" name="tab" value="{{$tab}}" />
 
       <label for="selClass" title="Veuillez Sélectionner une classe">Choix de la classe</label>
-      <select title="notNull str" name="selClass" onchange="submit();">
+      <select class="notNull str" name="selClass" onchange="submit();">
         <option value=""{{if !$selClass}} selected="selected"{{/if}}>&mdash; Liste des erreurs</option>
         {{foreach from=$listClass item=curr_listClass}}
         <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{tr}}{{$curr_listClass}}{{/tr}}</option>

@@ -165,7 +165,7 @@ function choosePreselection(oSelect) {
   
   <tr>
     <th><label for="mb_operation_id" title="Choisir un identifiant d'opération">Identifiant d'opération</label></th>
-    <td><input type="text" title="notNull ref" name="mb_operation_id" value="{{$mbOp->operation_id}}" size="5"/></td>
+    <td><input type="text" class="notNull ref" name="mb_operation_id" value="{{$mbOp->operation_id}}" size="5"/></td>
   </tr>
   
   {{if $mbOp->operation_id}}
@@ -175,7 +175,7 @@ function choosePreselection(oSelect) {
   
   <tr>
    <th><label for="sc_patient_id" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label></th>
-    <td><input type="text" title="notNull num length|8" name="sc_patient_id" value="{{$mbSejour->_ref_patient->SHS}}" size="8" maxlength="8" /></td>
+    <td><input type="text" class="notNull num length|8" name="sc_patient_id" value="{{$mbSejour->_ref_patient->SHS}}" size="8" maxlength="8" /></td>
   </tr>
   
   <tr>
@@ -184,7 +184,7 @@ function choosePreselection(oSelect) {
       Suggestion :
     </th>
     <td>
-      <input type="text" title="notNull num length|8" name="sc_venue_id" value="{{$mbSejour->venue_SHS}}" size="8" maxlength="8" />
+      <input type="text" class="notNull num length|8" name="sc_venue_id" value="{{$mbSejour->venue_SHS}}" size="8" maxlength="8" />
       <br />{{$mbSejour->_venue_SHS_guess}}
     </td>
   </tr>
@@ -217,12 +217,12 @@ function choosePreselection(oSelect) {
   
   <tr>
     <th><label for="cmca_uf_code" title="Choisir un code pour l'unité fonctionnelle">Code de l'unité fonctionnelle</label></th>
-    <td><input type="text" title="notNull str maxLength|10" name="cmca_uf_code" value="{{$mbOp->code_uf}}" size="10" maxlength="10" /></td>
+    <td><input type="text" class="notNull str maxLength|10" name="cmca_uf_code" value="{{$mbOp->code_uf}}" size="10" maxlength="10" /></td>
   </tr>
 
   <tr>
     <th><label for="cmca_uf_libelle" title="Choisir un libellé pour l'unité fonctionnelle">Libellé de l'unité fonctionnelle</label></th>
-    <td><input type="text" title="notNull str maxLength|35" name="cmca_uf_libelle" value="{{$mbOp->libelle_uf}}" size="35" maxlength="35" /></td>
+    <td><input type="text" class="notNull str maxLength|35" name="cmca_uf_libelle" value="{{$mbOp->libelle_uf}}" size="35" maxlength="35" /></td>
   </tr>
   {{/if}}
 
@@ -253,22 +253,22 @@ function choosePreselection(oSelect) {
   
   <tr>
     <th><label for="hostname" title="Nom pleinement qualifié de l'hôte FTP">Nom du server</label></th>
-    <td><input type="text" title="notNull str" name="hostname" value="{{$ftp->hostname}}"/></td>
+    <td><input type="text" class="notNull str" name="hostname" value="{{$ftp->hostname}}"/></td>
   </tr>
   
   <tr>
     <th><label for="username" title="Nom de l'utilisateur FTP">Utilisateur</label></th>
-    <td><input type="text" title="notNull str" name="username" value="{{$ftp->username}}"/></td>
+    <td><input type="text" class="notNull str" name="username" value="{{$ftp->username}}"/></td>
   </tr>
   
   <tr>
     <th><label for="userpass" title="Nom de l'utilisateur FTP">Mot de passe</label></th>
-    <td><input type="password" title="notNull str" name="userpass" value="{{$ftp->userpass}}"/></td>
+    <td><input type="password" class="notNull str" name="userpass" value="{{$ftp->userpass}}"/></td>
   </tr>
 
   <tr>
     <th><label for="fileprefix" title="Préfixe pour le nom de fichier à télécharger">Préfix de nom de fichier</label></th>
-    <td><input type="text" title="notNull str" name="fileprefix" value="{{$fileprefix}}"/></td>
+    <td><input type="text" class="notNull str" name="fileprefix" value="{{$fileprefix}}"/></td>
   </tr>
   
   <tr>

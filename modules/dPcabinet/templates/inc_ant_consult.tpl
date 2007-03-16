@@ -247,7 +247,7 @@ function copyTraitement(traitement_id){
           </th>
           <td class="date">
             <div id="editTrmtFrm_debut_da"></div>
-            <input type="hidden" name="debut" title="{{$traitement->_props.debut}}" value="" />
+            <input type="hidden" name="debut" class="{{$traitement->_props.debut}}" value="" />
             <img id="editTrmtFrm_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
           </td>
           <td rowspan="2">
@@ -261,7 +261,7 @@ function copyTraitement(traitement_id){
           </th>
           <td class="date">
             <div id="editTrmtFrm_fin_da"></div>
-            <input type="hidden" name="fin" title="{{$traitement->_props.fin}}" value="" />
+            <input type="hidden" name="fin" class="{{$traitement->_props.fin}}" value="" />
             <img id="editTrmtFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin" style="display:none;" />
           </td>
         </tr>

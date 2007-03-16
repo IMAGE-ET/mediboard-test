@@ -170,7 +170,7 @@ function pageMain() {
     <tr>
       <th>{{mb_label object=$aide field="function_id"}}</th>
       <td>
-        <select name="function_id" title="{{$aide->_props.function_id}}" onchange="this.form.user_id.value = ''">
+        <select name="function_id" class="{{$aide->_props.function_id}}" onchange="this.form.user_id.value = ''">
           <option value="">&mdash; Associer à une fonction &mdash;</option>
           {{foreach from=$listFunc item=curr_func}}
             <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $aide->function_id}} selected="selected" {{/if}}>
@@ -184,7 +184,7 @@ function pageMain() {
     <tr>
       <th>{{mb_label object=$aide field="user_id"}}</th>
       <td>
-        <select name="user_id" title="{{$aide->_props.user_id}}" onchange="this.form.function_id.value = ''">
+        <select name="user_id" class="{{$aide->_props.user_id}}" onchange="this.form.function_id.value = ''">
           <option value="">&mdash; Associer à un praticien &mdash;</option>
           {{foreach from=$listPrat item=curr_prat}}
             <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $aide->user_id}} selected="selected" {{/if}}>
@@ -198,7 +198,7 @@ function pageMain() {
     <tr>
       <th>{{mb_label object=$aide field="class"}}</th>
       <td>
-        <select name="class" title="{{$aide->_props.class}}" onchange="loadFields()">
+        <select name="class" class="{{$aide->_props.class}}" onchange="loadFields()">
           <option value="">&mdash; Choisir un objet</option>
         </select>
       </td>
@@ -207,7 +207,7 @@ function pageMain() {
     <tr>
       <th>{{mb_label object=$aide field="field"}}</th>
       <td>
-        <select name="field" title="{{$aide->_props.field}}">
+        <select name="field" class="{{$aide->_props.field}}">
           <option value="">&mdash; Choisir un champ</option>
         </select>
       </td>

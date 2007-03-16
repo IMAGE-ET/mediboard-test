@@ -40,7 +40,7 @@
         </tr> 
         <tr>
           <th><label for="category_name" title="Nom de la catégorie, obligatoire">Catégorie</label></th>
-          <td><input name="category_name" title="{{$category->_props.category_name}}" type="text" value="{{$category->category_name}}" /></td>
+          <td><input name="category_name" class="{{$category->_props.category_name}}" type="text" value="{{$category->category_name}}" /></td>
         </tr>
         <tr>
           <td class="button" colspan="2">

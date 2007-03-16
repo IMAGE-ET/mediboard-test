@@ -11,7 +11,7 @@
       <label for="dPfiles[nb_upload_files]" title="{{tr}}config-dPfiles-nb_upload_files{{/tr}}">{{tr}}config-dPfiles-nb_upload_files{{/tr}}</label>  
     </th>
     <td>
-      <select title="num" name="dPfiles[nb_upload_files]">
+      <select class="num" name="dPfiles[nb_upload_files]">
       {{html_options options=$listNbFiles selected=$configFiles.nb_upload_files}}
       </select>
     </td>

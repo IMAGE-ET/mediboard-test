@@ -63,7 +63,7 @@ function pageMain() {
           </th>
           <td class="date">
             <div id="editFrm_debut_da">{{$fichePaie->debut|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debut" title="{{$fichePaie->_props.debut}}" value="{{$fichePaie->debut}}" />
+            <input type="hidden" name="debut" class="{{$fichePaie->_props.debut}}" value="{{$fichePaie->debut}}" />
             <img id="editFrm_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
@@ -73,7 +73,7 @@ function pageMain() {
           </th>
           <td class="date">
             <div id="editFrm_fin_da">{{$fichePaie->fin|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" title="{{$fichePaie->_props.fin}}" value="{{$fichePaie->fin}}" />
+            <input type="hidden" name="fin" class="{{$fichePaie->_props.fin}}" value="{{$fichePaie->fin}}" />
             <img id="editFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
@@ -82,7 +82,7 @@ function pageMain() {
             <label for="salaire" title="Salaire horaireen euros">Salaire horaire</label>
           </th>
           <td>
-            <input type="text" name="salaire" size="5" title="{{$fichePaie->_props.salaire}}" value="{{$fichePaie->salaire}}" />
+            <input type="text" name="salaire" size="5" class="{{$fichePaie->_props.salaire}}" value="{{$fichePaie->salaire}}" />
             €
           </td>
         </tr>
@@ -91,7 +91,7 @@ function pageMain() {
             <label for="heures" title="Nombre d'heures travaillées dans la période">Nombre d'heures travaillées</label>
           </th>
           <td>
-            <input type="text" size="4" name="heures" title="{{$fichePaie->_props.heures}}" value="{{$fichePaie->heures}}" />
+            <input type="text" size="4" name="heures" class="{{$fichePaie->_props.heures}}" value="{{$fichePaie->heures}}" />
             h
           </td>
         </tr>
@@ -100,7 +100,7 @@ function pageMain() {
             <label for="heures_sup" title="Nombre d'heures suplémentaires travaillées dans la période">Nombre d'heures suplémentaires</label>
           </th>
           <td>
-            <input type="text" size="4" name="heures_sup" title="{{$fichePaie->_props.heures_sup}}" value="{{$fichePaie->heures_sup}}" />
+            <input type="text" size="4" name="heures_sup" class="{{$fichePaie->_props.heures_sup}}" value="{{$fichePaie->heures_sup}}" />
             h
           </td>
         </tr>
@@ -109,7 +109,7 @@ function pageMain() {
             <label for="mutuelle" title="Valeur de la cotisation pour la mutuelle">Mutuelle</label>
           </th>
           <td>
-            <input type="text" name="mutuelle" size="4" title="{{$fichePaie->_props.mutuelle}}" value="{{$fichePaie->mutuelle}}" />
+            <input type="text" name="mutuelle" size="4" class="{{$fichePaie->_props.mutuelle}}" value="{{$fichePaie->mutuelle}}" />
             €
           </td>
         </tr>
@@ -118,7 +118,7 @@ function pageMain() {
             <label for="precarite" title="Prime de précarité exprimée en pourcentage">Prime de précarité</label>
           </th>
           <td>
-            <input type="text" size="4" name="precarite" title="{{$fichePaie->_props.precarite}}" value="{{$fichePaie->precarite}}" />
+            <input type="text" size="4" name="precarite" class="{{$fichePaie->_props.precarite}}" value="{{$fichePaie->precarite}}" />
             %
           </td>
         </tr>
@@ -127,7 +127,7 @@ function pageMain() {
             <label for="anciennete" title="Prime d'ancienneté exprimée en pourcentage">Prime d'ancienneté</label>
           </th>
           <td>
-            <input type="text" size="4" name="anciennete" title="{{$fichePaie->_props.anciennete}}" value="{{$fichePaie->anciennete}}" />
+            <input type="text" size="4" name="anciennete" class="{{$fichePaie->_props.anciennete}}" value="{{$fichePaie->anciennete}}" />
             %
           </td>
         </tr>
@@ -136,7 +136,7 @@ function pageMain() {
             <label for="conges_payes" title="Congés payés exprimés en pourcentage">Congés payés</label>
           </th>
           <td>
-            <input type="text" size="4" name="conges_payes" title="{{$fichePaie->_props.conges_payes}}" value="{{$fichePaie->conges_payes}}" />
+            <input type="text" size="4" name="conges_payes" class="{{$fichePaie->_props.conges_payes}}" value="{{$fichePaie->conges_payes}}" />
             %
           </td>
         </tr>
@@ -145,7 +145,7 @@ function pageMain() {
             <label for="prime_speciale" title="Prime spéciale en euros">Prime spéciale</label>
           </th>
           <td>
-            <input type="text" size="4" name="prime_speciale" title="{{$fichePaie->_props.prime_speciale}}" value="{{$fichePaie->prime_speciale}}" />
+            <input type="text" size="4" name="prime_speciale" class="{{$fichePaie->_props.prime_speciale}}" value="{{$fichePaie->prime_speciale}}" />
             €
           </td>
         </tr>
