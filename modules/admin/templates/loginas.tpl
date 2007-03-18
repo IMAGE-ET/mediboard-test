@@ -1,0 +1,14 @@
+<!-- $Id: -->
+
+{{if $app->user_type == 1 && $app->user_id != $loginas_user->_id}}
+<form name="loginas-{{$loginas_user->_id}}" action="?" method="post">
+    
+<input type="hidden" name="redirect" value="? "/>
+<input type="hidden" name="login" value="ok" />
+<input type="hidden" name="loginas" value="{{$loginas_user->user_username}}" />
+<button type="submit" class="tick">
+  {{tr}}Substituer{{/tr}}
+</button>
+  
+</form>
+{{/if}}

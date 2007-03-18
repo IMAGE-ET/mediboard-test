@@ -60,7 +60,7 @@ class CFile extends CMbObject {
     //$this->file_object_id = intval($this->file_object_id);
   }
   
-  function loadRefsFwd(){
+  function loadRefsFwd() {
     $this->_ref_file_owner = new CMediusers;
     $this->_ref_file_owner->load($this->file_owner);
     if(class_exists($this->file_class)) {
@@ -69,6 +69,10 @@ class CFile extends CMbObject {
     }
   }
   
+  function loadView() {
+    $this->loadRefsFwd();
+  }
+
   function updateFormFields() {
     parent::updateFormFields();
     global $filesDir;
@@ -84,7 +88,7 @@ class CFile extends CMbObject {
     }
     
     $this->_shortview = $this->file_name;
-    $this->_view = $this->file_name." (".$this->_file_size.")";  
+    $this->_view = $this->file_name;  
   }
   
   function getPerm($permType) {
@@ -96,7 +100,10 @@ class CFile extends CMbObject {
     }else{
       $objectPerm = false;
     }
-    return ($this->_ref_file_owner->getPerm($permType) && $objectPerm);
+
+// Following implementation would be for private file
+//    return ($this->_ref_file_owner->getPerm($permType) && $objectPerm);
+    return $objectPerm;
   }
   
   function delete() {

@@ -38,6 +38,7 @@
           <td class="welcome">
             {{if !$offline}}
             <form name="ChangeGroup" action="" method="get">
+
             <input type="hidden" name="m" value="{{$m}}" />
             CAPIO Santé -
             <select name="g" onchange="ChangeGroup.submit();">
@@ -47,12 +48,13 @@
               </option>
               {{/foreach}}
             </select>
+            </form>
+            {{/if}}
             <br />
             <span title="{{tr}}last connection{{/tr}} : {{$AppUI->user_last_login|date_format:"%A %d %B %Y %H:%M"}}">
             {{tr}}Welcome{{/tr}} {{$AppUI->user_first_name}} {{$AppUI->user_last_name}}
             </span>
-            </form>
-            {{/if}}
+
           </td>
         </tr>
       </table>

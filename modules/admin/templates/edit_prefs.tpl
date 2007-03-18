@@ -1,7 +1,7 @@
 {{if !$tab}}
-<form name="changeuser" action="./index.php?m=admin&amp;a={{$a}}" method="post" onsubmit="return checkForm(this)">
+<form name="changeuser" action="?m=admin&amp;a={{$a}}" method="post" onsubmit="return checkForm(this)">
 {{else}}
-<form name="changeuser" action="./index.php?m=admin&amp;tab={{$tab}}" method="post" onsubmit="return checkForm(this)">
+<form name="changeuser" action="?m=admin&amp;tab={{$tab}}" method="post" onsubmit="return checkForm(this)">
 {{/if}}
 <input type="hidden" name="dosql" value="do_preference_aed" />
 <input type="hidden" name="pref_user" value="{{$user_id}}" />
@@ -15,11 +15,10 @@
 <table class="form">
   <tr>
     <th colspan="2" class="title">
-      {{tr}}User Preferences{{/tr}}: 
       {{if $user_id}}
-        {{$user->_view}}
+      {{tr}}User Preferences{{/tr}} : {{$user->_view}}
       {{else}}
-        {{tr}}Default{{/tr}}
+      {{tr}}User Preferences{{/tr}} : {{tr}}Default{{/tr}}
       {{/if}}
     </th>
   </tr>

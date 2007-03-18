@@ -8,12 +8,13 @@
 
 <table class="form">
   <tr>
-    <th class="title" colspan="4">
-      {{if $user->user_id}}
+    {{if $user->_id}}
+    <th class="title modify" colspan="4">
       Utilisateur : {{$user->_view}}
-      {{else}}
+    {{else}}
+    <th class="title" colspan="4">
       Création d'utilisateur
-      {{/if}}
+    {{/if}}
     </th>
   </tr>
 
@@ -23,13 +24,13 @@
   </tr>
   
   <tr>
-    <th rowspan="2"><label for="user_username" title="Veuillez choisir un nom d'utilisateur">Nom d'utilisateur</label></th>
+    <th rowspan="2"><label for="user_username" title="Veuillez choisir un nom d'utilisateur">Utilisateur</label></th>
     <td rowspan="2"><input tabindex="101" type="text" name="user_username" value="{{$user->user_username}}" class="{{$user->_props.user_username}}" /></td>
     <th><label for="_user_password" title="Mot de passe pour se connecter à Mediboard. Obligatoire">Mot de passe</label></th>
     <td><input type="password" name="_user_password" class="{{$user->_props.user_password}}{{if !$user->user_id}}|notNull{{/if}}" value="" /></td>
   </tr>
   <tr>
-    <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (vérif.)</label></th>
+    <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (bis)</label></th>
     <td><input type="password" name="_user_password2" class="str sameAs|_user_password" value="" /></td>
   </tr>
 

@@ -146,6 +146,16 @@ var Console = {
   
   error: function (sMsg) {
     this.trace("Error: " + sMsg, "error");
+  },
+  
+  start: function() {
+  	this.dStart = new Date;
+  },
+  
+  stop: function() {
+  	var dStop = new Date;
+  	this.debug(dStop - this.dStart, "Duration in milliseconds");
+  	this.dStart = null;
   }
   
 }
@@ -283,23 +293,36 @@ Class.extend(ObjectTooltip, {
     this.iObject = iObject;
     this.eDiv = null;
     this.eTarget = null;
+    this.idTimeOut = null;
 
     this.oOptions = {
-      mode : "view"
+      mode: "view",
+      duration: 300,
     };
+    
     Object.extend(this.oOptions, oOptions);
     this.mode = ObjectTooltip.modes[this.oOptions.mode];
 
     this.createDiv();
     this.addHandlers();
-    this.load();
   },
   
+	launchShow: function() {
+  	if (!this.idTimeOut) {
+      this.idTimeout = setTimeout(this.show.bind(this), this.oOptions.duration);
+  	}
+	},
+	
   show: function() {
+    if (!this.eTarget.innerHTML) {
+      this.load();
+  	}
+
     this.eDiv.show();
   },
   
   hide: function() {
+  	clearTimeout(this.idTimeout);
     this.eDiv.hide();
   },
   
@@ -322,7 +345,7 @@ Class.extend(ObjectTooltip, {
   
   createDiv: function() {
     this.eDiv  = Dom.cloneElemById("tooltipTpl",true);
-    Element.classNames(this.eDiv).add(this.mode.class);
+    Element.classNames(this.eDiv).add(this.mode.sClass);
     Element.hide(this.eDiv);
     this.eTrigger.parentNode.insertBefore(this.eDiv, this.eTrigger.nextSibling);
     this.eTarget = document.getElementsByClassName("content", this.eDiv)[0];
@@ -341,12 +364,12 @@ Object.extend(ObjectTooltip, {
     view: {
       module: "system",
       action: "httpreq_vw_object",
-      class: "tooltip"
+      sClass: "tooltip"
     },
     notes: {
       module: "system",
       action: "httpreq_vw_object_notes",
-      class: "postit"
+      sClass: "postit"
     }
   },
   create: function(eTrigger, sClass, iObject, oOptions) {
@@ -354,7 +377,7 @@ Object.extend(ObjectTooltip, {
       eTrigger.oTooltip = new ObjectTooltip(eTrigger, sClass, iObject, oOptions);
     }
 
-    eTrigger.oTooltip.show();    
+    eTrigger.oTooltip.launchShow();    
   }
 } );
 

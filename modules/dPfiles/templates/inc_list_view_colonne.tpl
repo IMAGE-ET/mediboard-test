@@ -26,11 +26,11 @@
         {{/if}}
           <td class="{{cycle name=cellicon values="dark, light"}}">
             {{if $curr_file->_class_name=="CCompteRendu"}}
-              {{assign var="elementId" value=$curr_file->compte_rendu_id}}
+              {{assign var="elementId" value=$curr_file->_id}}
               {{assign var="srcImg" value="images/pictures/medifile.png"}}
             {{else}}
-              {{assign var="elementId" value=$curr_file->file_id}}
-              {{assign var="srcImg" value="index.php?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&wl=64&hp=64"}}
+              {{assign var="elementId" value=$curr_file->_id}}
+              {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&wl=64&hp=64"}}
             {{/if}}
 
             <a href="#" onclick="popFile('{{$selClass}}', '{{$selKey}}', '{{$curr_file->_class_name}}', '{{$elementId}}', '0');">
@@ -38,26 +38,23 @@
             </a>
           </td>
           <td class="{{cycle name=celltxt values="dark, light"}} text" style="vertical-align: middle;">
-            <strong>{{$curr_file->_view}}</strong>
-            {{if $curr_file->_class_name=="CFile"}}
-              <br />Date : {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
-            {{/if}}
+            <span onmouseover="ObjectTooltip.create(this, '{{$curr_file->_class_name}}', {{$curr_file->_id}});">{{$curr_file->_view}}</span>
             <hr />
 
             {{if $curr_file->_class_name=="CCompteRendu" && $canEditFile && !$accordDossier}}
-              <form name="editDoc{{$curr_file->compte_rendu_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+              <form name="editDoc{{$curr_file->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPcompteRendu" />
               <input type="hidden" name="dosql" value="do_modele_aed" />
-              <input type="hidden" name="compte_rendu_id" value="{{$curr_file->compte_rendu_id}}" />
+              <input type="hidden" name="_id" value="{{$curr_file->_id}}" />
               <input type="hidden" name="del" value="0" />
               {{assign var="confirmDeleteType" value="le document"}}
               {{assign var="confirmDeleteName" value=$curr_file->nom}}
               
             {{elseif $curr_file->_class_name=="CFile" && $canEditFile && !$accordDossier}}
-              <form name="editFile{{$curr_file->file_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+              <form name="editFile{{$curr_file->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPfiles" />
               <input type="hidden" name="dosql" value="do_file_aed" />
-              <input type="hidden" name="file_id" value="{{$curr_file->file_id}}" />
+              <input type="hidden" name="_id" value="{{$curr_file->_id}}" />
               <input type="hidden" name="del" value="0" />
               {{assign var="confirmDeleteType" value="le fichier"}}
               {{assign var="confirmDeleteName" value=$curr_file->file_name}}
@@ -71,7 +68,7 @@
                   {{$curr_cat->nom}}
                 </option>
                 {{/foreach}}
-              </select><br />
+              </select>
               <button type="button" class="trash" onclick="file_deleted={{$elementId}};confirmDeletion(this.form, {typeName:'{{$confirmDeleteType}}',objName:'{{$confirmDeleteName|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadAfterDeleteFile})">
                 Supprimer
               </button>

@@ -14,7 +14,7 @@ if(!$canRead) {
 }
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
-$view = mbGetValueFromGetOrSession("view", "day");
+$view = mbGetValueFromGetOrSession("view", "week");
 $userSel = new CMediusers;
 $userSel->load($AppUI->user_id);
 

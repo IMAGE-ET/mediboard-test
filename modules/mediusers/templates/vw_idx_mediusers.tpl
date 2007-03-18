@@ -1,15 +1,21 @@
 <script type="text/javascript">
 
-function expandFunctions() {
-  document.getElementsByClassName("functionEffect").each( function(oElement) {
-    Element.show(oElement);
-  });
+var Functions = {
+  collapse: function() {
+    Element.hide.apply(null, $$("tbody.functionEffect"));
+  },
+  
+  expand: function() {
+    Element.show.apply(null, $$("tbody.functionEffect"));
+  }
 }
 
-function collapseFunctions() {
-  document.getElementsByClassName("functionEffect").each( function(oElement) {
-    Element.hide(oElement);
-  });
+function deldate(sField){
+  oForm = document.mediuser;
+  ElemField = eval("oForm."+sField);
+  ElemField.value = "";
+  oDateDiv = $("mediuser_"+sField+"_da");
+  oDateDiv.innerHTML = "";
 }
 
 function pageMain() {
@@ -22,13 +28,6 @@ function pageMain() {
   regFieldCalendar("mediuser", "fin_activite");
 }
 
-function deldate(sField){
-  oForm = document.mediuser;
-  ElemField = eval("oForm."+sField);
-  ElemField.value = "";
-  oDateDiv = $("mediuser_"+sField+"_da");
-  oDateDiv.innerHTML = "";
-}
 </script>
 
 <table class="main">
@@ -40,8 +39,8 @@ function deldate(sField){
       <table class="tbl">
         <tr>
           <th style="width: 32px;">
-            <img src="images/icons/collapse.gif" onclick="collapseFunctions()" alt="réduire" />
-            <img src="images/icons/expand.gif"  onclick="expandFunctions()" alt="agrandir" />
+            <img src="images/icons/collapse.gif" onclick="Functions.collapse()" alt="réduire" />
+            <img src="images/icons/expand.gif"  onclick="Functions.expand()" alt="agrandir" />
           </th>
           <th>{{tr}}CMediusers-_user_username{{/tr}}</th>
           <th>{{tr}}CMediusers-_user_last_name{{/tr}}</th>
@@ -55,7 +54,7 @@ function deldate(sField){
           </th>
         </tr>
         {{foreach from=$curr_group->_ref_functions item=curr_function}}
-        <tr id="function{{$curr_function->function_id}}-trigger">
+        <tr id="function{{$curr_function->_id}}-trigger">
           <td style="background-color: #{{$curr_function->color}}">
           </td>
           <td colspan="3">
@@ -65,12 +64,12 @@ function deldate(sField){
             {{$curr_function->_ref_users|@count}} utilisateur(s)
           </td>
         </tr>
-        <tbody class="functionEffect" id="function{{$curr_function->function_id}}" style="display:none;">
+        <tbody class="functionEffect" id="function{{$curr_function->_id}}" style="display:none;">
         {{foreach from=$curr_function->_ref_users item=curr_user}}
         <tr>
           <td style="background-color: #{{$curr_function->color}}"></td>
-          {{assign var=user_id value=$curr_user->user_id}}
-          {{assign var="href" value="index.php?m=$m&tab=$tab&user_id=$user_id"}}
+          {{assign var=user_id value=$curr_user->_id}}
+          {{assign var="href" value="?m=$m&tab=$tab&user_id=$user_id"}}
           <td><a href="{{$href}}">{{$curr_user->_user_username}}</a></td>
           <td><a href="{{$href}}">{{$curr_user->_user_last_name}}</a></td>
           <td><a href="{{$href}}">{{$curr_user->_user_first_name}}</a></td>
@@ -83,16 +82,24 @@ function deldate(sField){
       </table>
     </td>
     <td class="pane">
+    
+      {{if $mediuserSel->_id}}
+        <a class="buttonsearch" style="" href="?m=admin&amp;tab=view_edit_users&amp;user_username={{$mediuserSel->_user_username}}&amp;user_id={{$mediuserSel->_id}}">
+          Administrer cet utilisateur
+        </a>
+      {{/if}}
       <form name="mediuser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+
       <input type="hidden" name="dosql" value="do_mediusers_aed" />
-      <input type="hidden" name="user_id" value="{{$mediuserSel->user_id}}" />
+      <input type="hidden" name="user_id" value="{{$mediuserSel->_id}}" />
       <input type="hidden" name="del" value="0" />
+
       <table class="form">
         <tr>
-          <th class="category" colspan="2">
-            {{if $mediuserSel->user_id}}
+          {{if $mediuserSel->_id}}
+          <th class="title modify" colspan="2">
             {{if $canReadSante400}}
-            <a style="float:right;" href="#" onclick="view_idsante400('CMediusers',{{$mediuserSel->user_id}})">
+            <a style="float:right;" href="#" onclick="view_idsante400('CMediusers',{{$mediuserSel->_id}})">
               <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
             </a>
             {{/if}}
@@ -100,9 +107,10 @@ function deldate(sField){
               <img src="images/icons/history.gif" alt="historique" title="historique"/>
             </a>
             Modification de l'utilisateur &lsquo;{{$mediuserSel->_user_username}}&rsquo;
-            {{else}}
+          {{else}}
+          <th class="title" colspan="2">
             Création d'un nouvel utilisateur
-            {{/if}}
+          {{/if}}
           </th>
         </tr>
         <tr>
@@ -128,7 +136,9 @@ function deldate(sField){
 		        <div id="mediuser_deb_activite_da">{{mb_value object=$mediuserSel field="deb_activite"}}</div>
 		        <input type="hidden" name="deb_activite" title="date" value="{{$mediuserSel->deb_activite}}" />
             <img id="mediuser_deb_activite_trigger" src="./images/icons/calendar.gif" alt="Date de début d'activité"/>
-            <button class="cancel notext" type="button" onclick="deldate('deb_activite')"></button>
+            <button class="cancel notext" type="button" onclick="deldate('deb_activite')">
+              {{tr}}remove{{/tr}}
+            </button>
           </td>
         </tr>
     
@@ -138,7 +148,9 @@ function deldate(sField){
             <div id="mediuser_fin_activite_da">{{mb_value object=$mediuserSel field="fin_activite"}}</div>
             <input type="hidden" name="fin_activite" title="date" value="{{$mediuserSel->fin_activite}}" />
             <img id="mediuser_fin_activite_trigger" src="./images/icons/calendar.gif" alt="Date de fin d'activité"/>
-            <button class="cancel notext" type="button" onclick="deldate('fin_activite')"></button>
+            <button class="cancel notext" type="button" onclick="deldate('fin_activite')">
+              {{tr}}remove{{/tr}}
+            </button>
           </td>
         </tr>
         
@@ -154,7 +166,7 @@ function deldate(sField){
               {{foreach from=$groups item=curr_group}}
               <optgroup label="{{$curr_group->text}}">
               {{foreach from=$curr_group->_ref_functions item=curr_function}}
-              <option class="mediuser" style="border-color: #{{$curr_function->color}};" value="{{$curr_function->function_id}}" {{if $curr_function->function_id == $mediuserSel->function_id}} selected="selected" {{/if}}>
+              <option class="mediuser" style="border-color: #{{$curr_function->color}};" value="{{$curr_function->_id}}" {{if $curr_function->_id == $mediuserSel->function_id}} selected="selected" {{/if}}>
                 {{$curr_function->text}}
               </option>
               {{/foreach}}

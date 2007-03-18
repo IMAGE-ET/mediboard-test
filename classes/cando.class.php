@@ -21,7 +21,7 @@ class CCanDo {
     global $AppUI;
     $dialog = mbGetValueFromGet("dialog");
     $suppressHeaders = mbGetValueFromGet("suppressHeaders");
-    $ajax   = mbGetValueFromGet("ajax");
+    $ajax = mbGetValueFromGet("ajax");
     $AppUI->redirect("m=system&a=access_denied&dialog=$dialog&ajax=$ajax&suppressHeaders=$suppressHeaders");
   }
   

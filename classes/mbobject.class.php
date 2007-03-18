@@ -281,16 +281,15 @@ class CMbObject {
 
   // One object by ID
   function load($oid = null, $strip = true) {
-    $k = $this->_tbl_key;
     if ($oid) {
-      $this->$k = intval($oid);
+      $this->_id = intval($oid);
     }
-    $oid = $this->$k;
-    if ($oid === null) {
+
+    if (!$this->_id) {
       return false;
     }
     
-    $sql = "SELECT * FROM `$this->_tbl` WHERE `$this->_tbl_key` = '$oid'";
+    $sql = "SELECT * FROM `$this->_tbl` WHERE `$this->_tbl_key` = '$this->_id'";
     $object = db_loadObject($sql, $this);
 
     if (!$object) {

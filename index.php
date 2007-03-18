@@ -66,11 +66,8 @@ $dialog = dPgetParam( $_REQUEST, "dialog");
 
 // check if the user is trying to log in
 if (isset($_POST["login"])) {
-  $username = dPgetParam($_POST   , "username", "");
-  $password = dPgetParam($_POST   , "password", "");
-  $md5      = dPgetParam($_POST   , "md5"     , 0);
   $redirect = dPgetParam($_REQUEST, "redirect", "");
-  $ok = $AppUI->login($username, $password, $md5);
+  $ok = $AppUI->login();
   if(!$ok) {
     @include_once("./locales/core.php");
     $AppUI->setMsg("Login Failed", UI_MSG_ERROR, true);

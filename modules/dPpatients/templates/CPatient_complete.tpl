@@ -28,58 +28,58 @@
   <tr>
     <td class="text">
       <strong>{{mb_label object=$object field="nom"}}</strong>
-      <i>{{mb_value object=$object field="nom"}}</i>
+      {{mb_value object=$object field="nom"}}
     </td>
     <td class="text">
       <strong>{{mb_label object=$object field="adresse"}}</strong>
-      <i>{{mb_value object=$object field="adresse"}}</i>
+      {{mb_value object=$object field="adresse"}}
     </td>
   </tr>
   <tr>
     <td class="text">
       <strong>{{mb_label object=$object field="prenom"}}</strong>
-      <i>{{mb_value object=$object field="prenom"}}</i>
+      {{mb_value object=$object field="prenom"}}
     </td>
     <td class="text">
       <strong>{{mb_label object=$object field="cp"}}</strong>
-      <i>{{mb_value object=$object field="cp"}}</i>
+      {{mb_value object=$object field="cp"}}
     </td>
   </tr>
   <tr>
     <td class="text">
       <strong>{{mb_label object=$object field="nom_jeune_fille"}}</strong>
-      <i>{{mb_value object=$object field="nom_jeune_fille"}}</i>
+      {{mb_value object=$object field="nom_jeune_fille"}}
     </td>
     <td class="text">
       <strong>{{mb_label object=$object field="ville"}}</strong>
-      <i>{{mb_value object=$object field="ville"}}</i>
+      {{mb_value object=$object field="ville"}}
     </td>
   </tr>
   <tr>
     <td class="text">
       <strong>{{mb_label object=$object field="naissance"}}</strong>
-      <i>{{mb_value object=$object field="naissance"}}</i>
+      {{mb_value object=$object field="naissance"}}
     </td>
     <td class="text">
       <strong>{{mb_label object=$object field="tel"}}</strong>
-      <i>{{mb_value object=$object field="tel"}}</i>
+      {{mb_value object=$object field="tel"}}
     </td>
   </tr>
   <tr>
     <td class="text">
       <strong>{{mb_label object=$object field="sexe"}}</strong>
-      <i>{{mb_value object=$object field="sexe"}}</i>
+      {{mb_value object=$object field="sexe"}}
     </td>
     <td class="text">
       <strong>{{mb_label object=$object field="tel2"}}</strong>
-      <i>{{mb_value object=$object field="tel2"}}</i>
+      {{mb_value object=$object field="tel2"}}
     </td>
   </tr>
   {{if $object->rques}}
   <tr>
     <td class="text" colspan="2">
       <strong>{{mb_label object=$object field="rques"}}</strong>
-      <i>{{mb_value object=$object field="rques"}}</i>
+      {{mb_value object=$object field="rques"}}
     </td>
   </tr>
   {{/if}}
@@ -92,66 +92,66 @@
   <tr>
     <td class="text">
       <strong>{{mb_label object=$object field="matricule"}}</strong>
-      <i>{{mb_value object=$object field="matricule"}}</i>
+      {{mb_value object=$object field="matricule"}}
     </td>
     <td class="text">
       <strong>{{mb_label object=$object field="cmu"}}</strong>
-      <i>
+      
         {{if $object->cmu}}
           jusqu'au
         {{/if}}
         {{mb_value object=$object field="cmu"}}
-      </i>
+      
     </td>
   </tr>
   <tr>
     <td class="text">
       <strong>{{mb_label object=$object field="regime_sante"}}</strong>
-      <i>{{mb_value object=$object field="regime_sante"}}</i>
+      {{mb_value object=$object field="regime_sante"}}
     </td>
     <td class="text">
       <strong>{{mb_label object=$object field="ald"}}</strong>
-      <i>{{mb_value object=$object field="ald"}}</i>
+      {{mb_value object=$object field="ald"}}
     </td>
   </tr>
   <tr>
     <td class="text">
       <strong>{{mb_label object=$object field="medecin_traitant"}}</strong>
       {{if $object->medecin_traitant}}
-        <br /><i>Dr. {{mb_value object=$object->_ref_medecin_traitant field="_view"}}<br/>
+        <br />Dr. {{mb_value object=$object->_ref_medecin_traitant field="_view"}}<br/>
         {{mb_value object=$object->_ref_medecin_traitant field="adresse"}}
         - {{mb_value object=$object->_ref_medecin_traitant field="cp"}} {{mb_value object=$object->_ref_medecin_traitant field="ville"}}
         {{if $object->_ref_medecin_traitant->tel}}<br />{{mb_value object=$object->_ref_medecin_traitant field="tel"}}{{/if}}
-        </i>
+        
       {{/if}}
     </td>
     <td class="text">
       <strong>Médecins correspondants</strong>
       {{if $object->medecin1}}
-      <i>
+      
         <br />Dr. {{mb_value object=$object->_ref_medecin1 field="_view"}}
         {{if $object->_ref_medecin1->tel}}
           ({{mb_value object=$object->_ref_medecin1 field="tel"}})
         {{/if}}
-      </i>
+      
       {{/if}}
       
       {{if $object->medecin2}}
-      <i>
+      
         <br />Dr. {{mb_value object=$object->_ref_medecin2 field="_view"}}
         {{if $object->_ref_medecin2->tel}}
           ({{mb_value object=$object->_ref_medecin2 field="tel"}})
         {{/if}}
-      </i>
+      
       {{/if}}
       
       {{if $object->medecin3}}
-      <i>
+      
         <br />Dr. {{mb_value object=$object->_ref_medecin3 field="_view"}}
         {{if $object->_ref_medecin3->tel}}
           ({{mb_value object=$object->_ref_medecin3 field="tel"}})
         {{/if}}
-      </i>
+      
       {{/if}}
     </td>
   </tr>
@@ -182,7 +182,7 @@
         {{/foreach}}
       </ul>
       {{foreachelse}}
-        <i>Pas d'antécédents</i>
+        <em>Pas d'antécédents</em>
       {{/foreach}}
     </td>
     <td class="text">
@@ -198,7 +198,7 @@
           {{mb_value object=$curr_traitement field="traitement"}}
         </li>
       {{foreachelse}}
-        <i>Pas de traitements</i>
+        <em>Pas de traitements</em>
       {{/foreach}}
       {{if $object->_ref_traitements|@count}}</ul>{{/if}}
     </td>
@@ -209,7 +209,7 @@
           <strong>{{$curr_code->code}}:</strong> {{$curr_code->libelle}}
         </li>
       {{foreachelse}}
-        <i>Pas de diagnostics</i>
+        <em>Pas de diagnostics</em>
       {{/foreach}}
       {{if $object->_ref_traitements|@count}}</ul>{{/if}}
     </td>
@@ -228,7 +228,7 @@
         {{/foreach}}
       </ul>
       {{foreachelse}}
-        <i>Pas d'addictions</i>
+        <em>Pas d'addictions</em>
       {{/foreach}}
     </td>
     {{/if}}

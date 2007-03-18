@@ -26,11 +26,12 @@ function pageMain() {
       <table class="form">
         <tr>
           <td  class="readonly">
-            <label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label>
+            <label for="selClass" title="Type de l'objet courant">Type</label>
             <input type="text" readonly="readonly" ondblclick="popObject()" name="selClass" value="{{$selClass|stripslashes}}" />
           </td>
           <td class="readonly">
-            <input type="text" size="80" readonly="readonly" ondblclick="popObject()" name="selView" value="{{$selView|stripslashes}}" />
+            <label title="Nom de l'objet sélectionné">Nom</label>
+            <input type="text" size="50" readonly="readonly" ondblclick="popObject()" name="selView" value="{{$selView|stripslashes}}" />
             <button type="button" onclick="popObject()" class="search">Rechercher</button>
             <input type="hidden" name="selKey" value="{{$selKey|stripslashes}}" />
             <input type="hidden" name="keywords" value="{{$keywords|stripslashes}}" />

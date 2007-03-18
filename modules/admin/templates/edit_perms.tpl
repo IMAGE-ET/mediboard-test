@@ -3,7 +3,9 @@
     <td colspan="2">
       <table class="tbl">
         <tr>
-          <th class="title">Utilisateur : {{$user->_view}}</th>
+          <th class="title">
+            Utilisateur : {{$user->_view}}
+          </th>
         </tr>
       </table>
     </td>
