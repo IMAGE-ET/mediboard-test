@@ -37,10 +37,17 @@ $order[] = "salle_id";
 $order[] = "debut";
 
 $chir_id = mbGetValueFromGet("chir");
-$listPrat = new CMediusers;
-$listPrat = $listPrat->loadPraticiens(PERM_READ, $spe);
-
-$where["chir_id"] = db_prepare_in(array_keys($listPrat), $chir_id);
+$user = new CMediusers();
+$user->load($AppUI->user_id);
+if($user->isFromType(array("Anesthésiste"))) {
+  if($chir_id) {
+    $where["chir_id"] = db_prepare("chir_id = %", $chir_id);
+  }
+} else {
+  $listPrat = new CMediusers;
+  $listPrat = $listPrat->loadPraticiens(PERM_READ, $spe);
+  $where["chir_id"] = db_prepare_in(array_keys($listPrat), $chir_id);
+}
 
 // En fonction de la salle
 if ($salle) {
