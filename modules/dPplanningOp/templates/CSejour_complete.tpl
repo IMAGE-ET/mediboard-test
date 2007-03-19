@@ -3,6 +3,14 @@
 <table class="form">
   <tr>
     <th class="title" colspan="2">
+      <a style="float:right;" href="#nothing" onclick="view_log('{{$object->_class_name}}', {{$object->_id}})">
+        <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
+      </a>
+      <a style="float:left;" href="#nothing"
+        onmouseover="ObjectTooltip.create(this, '{{$object->_class_name}}', {{$object->_id}}, { mode: 'notes' })"
+        onclick="new Note().create('{{$object->_class_name}}', {{$object->_id}});">
+        <img src="images/icons/note_blue.png" alt="Ecrire une note" />
+      </a>
       {{$object->_view}}
     </th>
   </tr>
