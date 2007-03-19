@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $canAdmin, $m, $g;
+global $AppUI, $can, $m, $g;
 
-if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsEdit();
 
 $doc_ged_id = mbGetValueFromGetOrSession("doc_ged_id",0);
 $fileSel = new CFile;

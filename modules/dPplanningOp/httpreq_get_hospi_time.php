@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m, $tab;
+global $AppUI, $can, $m, $tab;
 
 $chir_id    = mbGetValueFromGet("chir_id"    , 0 );
 $codes      = mbGetValueFromGet("codes"      , "");

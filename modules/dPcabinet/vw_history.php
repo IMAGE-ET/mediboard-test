@@ -7,12 +7,10 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 // Définition des variables
 $consultation_id = mbGetValueFromGet("consultation_id", 0);

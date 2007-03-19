@@ -7,15 +7,13 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m, $tab, $dPconfig;
+global $AppUI, $can, $m, $tab, $dPconfig;
 
-if(!$canRead) {
-	$AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsRead();
 
 // Droit de lecture dPsante400
 $moduleSante400 = CModule::getInstalled("dPsante400");
-$canReadSante400 = $moduleSante400 ? $moduleSante400->canRead() : false;
+$canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
 
 $sejour_id    = mbGetValueFromGetOrSession("sejour_id");
 $patient_id   = mbGetValueFromGet("patient_id");
@@ -114,7 +112,7 @@ if($sejour->_ref_operations){
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canReadSante400", $canReadSante400);
+$smarty->assign("canSante400", $canSante400);
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("sejour"        , $sejour);

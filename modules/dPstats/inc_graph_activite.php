@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"    ));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_bar"));

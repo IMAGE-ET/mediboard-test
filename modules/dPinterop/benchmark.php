@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 // Création du template
 $smarty = new CSmartyDP();

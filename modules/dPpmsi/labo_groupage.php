@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canEdit) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsEdit();
 
 $sejour_id  = mbGetValueFromGetOrSession("sejour_id", null);
 

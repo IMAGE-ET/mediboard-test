@@ -7,7 +7,7 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $limit = mbGetValueFromGetOrSession("limit", 0);
 
@@ -15,9 +15,7 @@ if ($limit == -1) {
   return;	
 }
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 set_time_limit( 1800 );
 

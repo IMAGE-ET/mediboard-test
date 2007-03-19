@@ -7,7 +7,7 @@
 <input type="hidden" name="pref_user" value="{{$user_id}}" />
 <input type="hidden" name="del" value="0" />
 
-{{if $tab && $canEdit && $user_id}}
+{{if $tab && $can->edit && $user_id}}
 <a href="index.php?m={{$m}}&amp;tab=edit_prefs&amp;user_id=0" class="buttonedit">
   Editer les Préférences par Défaut
 </a>

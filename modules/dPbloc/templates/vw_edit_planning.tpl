@@ -99,7 +99,7 @@ function popPlanning(debut) {
         Créer une nouvelle plage opératoire
       </a>
       {{/if}}
-      {{if $canEdit}}
+      {{if $can->edit}}
       <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkPlage()">
       <input type="hidden" name="dosql" value="do_plagesop_aed" />
       <input type="hidden" name="del" value="0" />

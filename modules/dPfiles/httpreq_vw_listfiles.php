@@ -7,16 +7,14 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-//if (!$canRead) {
-//  $AppUI->redirect("m=system&a=access_denied");
-//}
+//$can->needsRead();
 
 $fileModule     = CModule::getInstalled("dPfiles");
 $cptRenduModule = CModule::getInstalled("dPcompteRendu");
 
-$canEditFile  = false;
+$canFile  = new CCanDo;
 
 $selClass      = mbGetValueFromGetOrSession("selClass", null);
 $selKey        = mbGetValueFromGetOrSession("selKey"  , null);
@@ -38,7 +36,7 @@ if($selClass && $selKey){
   // Chargement de l'objet
   $object = new $selClass;
   $object->load($selKey);
-  $canEditFile = $object->canEdit();
+  $canFile = $object->canDo();
   
   $affichageFile = CFile::loadFilesAndDocsByObject($object);
   
@@ -52,7 +50,7 @@ $smarty->assign("selKey"         , $selKey      );
 $smarty->assign("object"         , $object      );
 $smarty->assign("typeVue"        , $typeVue     );
 $smarty->assign("accordDossier"  , $accordDossier);
-$smarty->assign("canEditFile"    , $canEditFile);
+$smarty->assign("canFile"        , $canFile);
 if($typeVue==1){
   $smarty->display("inc_list_view_colonne.tpl");
 }elseif($typeVue==2){

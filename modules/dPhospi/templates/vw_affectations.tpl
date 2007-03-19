@@ -251,7 +251,7 @@ function pageMain() {
     </td>
     <td class="pane">
       <div id="calendar-container"></div>
-      {{if $canEdit}}
+      {{if $can->edit}}
       
       <form name="addAffectationsejour" action="?m={{$m}}" method="post">
       <input type="hidden" name="dosql" value="do_affectation_aed" />

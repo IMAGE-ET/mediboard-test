@@ -11,7 +11,7 @@
                 <td class="button">
                   {{if $selOp->entree_salle}}
                   Entrée patient:
-                  {{if $canEdit}}
+                  {{if $can->edit}}
                   <input name="entree_salle" size="5" type="text" value="{{$selOp->entree_salle|date_format:"%H:%M"}}">
                   <button class="tick notext" type="submit"></button>
                   <button class="cancel notext" type="submit" onclick="this.form.entree_salle.value = ''"></button>
@@ -29,7 +29,7 @@
                     {{$selOp->entree_salle|date_format:"%Hh%M"}}
                   {{/if}}
                   
-                  {{elseif $canEdit || $modif_operation}}
+                  {{elseif $can->edit || $modif_operation}}
                   <input type="hidden" name="entree_salle" value="" />
                   <button class="submit" type="submit" onclick="this.form.entree_salle.value = 'current'">entrée patient</button>
                   {{else}}-{{/if}}
@@ -37,7 +37,7 @@
                 <td class="button">
                   {{if $selOp->pose_garrot}}
                   Pose garrot:
-                  {{if $canEdit}}
+                  {{if $can->edit}}
                   <input name="pose_garrot" size="5" type="text" value="{{$selOp->pose_garrot|date_format:"%H:%M"}}">
                   <button class="tick notext" type="submit"></button>
                   <button class="cancel notext" type="submit" onclick="this.form.pose_garrot.value = ''"></button>
@@ -55,7 +55,7 @@
                     {{$selOp->pose_garrot|date_format:"%Hh%M"}}
                   {{/if}}
                   
-                  {{elseif $canEdit || $modif_operation}}
+                  {{elseif $can->edit || $modif_operation}}
                   <input type="hidden" name="pose_garrot" value="" />
                   <button class="submit" type="submit" onclick="this.form.pose_garrot.value = 'current'">pose garrot</button>
                   {{else}}-{{/if}}
@@ -63,7 +63,7 @@
                 <td class="button">
                   {{if $selOp->debut_op}}
                   Début opération:
-                  {{if $canEdit}}
+                  {{if $can->edit}}
                   <input name="debut_op" size="5" type="text" value="{{$selOp->debut_op|date_format:"%H:%M"}}">
                   <button class="tick notext" type="submit"></button>
                   <button class="cancel notext" type="submit" onclick="this.form.debut_op.value = ''"></button>
@@ -81,7 +81,7 @@
                     {{$selOp->debut_op|date_format:"%Hh%M"}}
                   {{/if}}
                   
-                  {{elseif $canEdit || $modif_operation}}
+                  {{elseif $can->edit || $modif_operation}}
                   <input type="hidden" name="debut_op" value="" />
                   <button class="submit" type="submit" onclick="this.form.debut_op.value = 'current'">début intervention</button>
                   {{else}}-{{/if}}
@@ -91,7 +91,7 @@
                 <td class="button">
                   {{if $selOp->sortie_salle}}
                   Sortie patient:
-                  {{if $canEdit}}
+                  {{if $can->edit}}
                   <input name="sortie_salle" size="5" type="text" value="{{$selOp->sortie_salle|date_format:"%H:%M"}}">
                   <button class="tick notext" type="submit"></button>
                   <button class="cancel notext" type="submit" onclick="this.form.sortie_salle.value = ''"></button>
@@ -109,7 +109,7 @@
                     {{$selOp->sortie_salle|date_format:"%Hh%M"}}
                   {{/if}}
                   
-                  {{elseif $canEdit || $modif_operation}}
+                  {{elseif $can->edit || $modif_operation}}
                   <input type="hidden" name="sortie_salle" value="" />
                   <button class="submit" type="submit" onclick="this.form.sortie_salle.value = 'current'">sortie patient</button>
                   {{else}}-{{/if}}
@@ -117,7 +117,7 @@
                 <td class="button">
                   {{if $selOp->retrait_garrot}}
                   Retrait garrot:
-                  {{if $canEdit}}
+                  {{if $can->edit}}
                   <input name="retrait_garrot" size="5" type="text" value="{{$selOp->retrait_garrot|date_format:"%H:%M"}}">
                   <button class="tick notext" type="submit"></button>
                   <button class="cancel notext" type="submit" onclick="this.form.retrait_garrot.value = ''"></button>
@@ -135,7 +135,7 @@
                     {{$selOp->retrait_garrot|date_format:"%Hh%M"}}
                   {{/if}}
                   
-                  {{elseif $canEdit || $modif_operation}}
+                  {{elseif $can->edit || $modif_operation}}
                   <input type="hidden" name="retrait_garrot" value="" />
                   <button class="submit" type="submit" onclick="this.form.retrait_garrot.value = 'current'">retrait garrot</button>
                   {{else}}-{{/if}}
@@ -143,7 +143,7 @@
                 <td class="button">
                   {{if $selOp->fin_op}}
                   Fin opération:
-                  {{if $canEdit}}
+                  {{if $can->edit}}
                   <input name="fin_op" size="5" type="text" value="{{$selOp->fin_op|date_format:"%H:%M"}}">
                   <button class="tick notext" type="submit"></button>
                   <button class="cancel notext" type="submit" onclick="this.form.fin_op.value = ''"></button>
@@ -161,7 +161,7 @@
                     {{$selOp->fin_op|date_format:"%Hh%M"}}
                   {{/if}}
                   
-                  {{elseif $canEdit || $modif_operation}}
+                  {{elseif $can->edit || $modif_operation}}
                   <input type="hidden" name="fin_op" value="" />
                   <button class="submit" type="submit" onclick="this.form.fin_op.value = 'current'">fin intervention</button>
                   {{else}}-{{/if}}
@@ -173,7 +173,7 @@
             <table>
               <tr>
                 <td rowspan="2" style="vertical-align: middle;">
-                  {{if $canEdit || $modif_operation}}
+                  {{if $can->edit || $modif_operation}}
                   <select name="type_anesth" onchange="submitFormAjax(this.form, 'systemMsg');">
                     <option value="">&mdash; Type d'anesthésie</option>
                     {{foreach from=$listAnesthType item=curr_anesth}}
@@ -188,7 +188,7 @@
                     {{$typeAnesth->name}}
                   {{else}}-{{/if}}
                   par le Dr.
-                  {{if $canEdit || $modif_operation}}
+                  {{if $can->edit || $modif_operation}}
                   <select name="anesth_id" onchange="submit()">
                     <option value="">&mdash; Anesthésiste</option>
                     {{foreach from=$listAnesths item=curr_anesth}}
@@ -206,7 +206,7 @@
                 <td>
                   {{if $selOp->induction_debut}}
                   Début d'induction:
-                  {{if $canEdit}}
+                  {{if $can->edit}}
                   <input name="induction_debut" size="5" type="text" value="{{$selOp->induction_debut|date_format:"%H:%M"}}">
                   <button class="tick notext" type="submit"></button>
                   <button class="cancel notext" type="submit" onclick="this.form.induction_debut.value = ''"></button>
@@ -224,7 +224,7 @@
                     {{$selOp->induction_debut|date_format:"%Hh%M"}}
                   {{/if}}
             
-                  {{elseif $canEdit || $modif_operation}}
+                  {{elseif $can->edit || $modif_operation}}
                   <input type="hidden" name="induction_debut" value="" />
                   <button class="submit" type="submit" onclick="this.form.induction_debut.value = 'current'">Début d'induction</button>
                   {{else}}-{{/if}}
@@ -234,7 +234,7 @@
                 <td>
                   {{if $selOp->induction_fin}}
                   Fin d'induction:
-                  {{if $canEdit}}
+                  {{if $can->edit}}
                   <input name="induction_fin" size="5" type="text" value="{{$selOp->induction_fin|date_format:"%H:%M"}}">
                   <button class="tick notext" type="submit"></button>
                   <button class="cancel notext" type="submit" onclick="this.form.induction_fin.value = ''"></button>
@@ -252,7 +252,7 @@
                     {{$selOp->induction_fin|date_format:"%Hh%M"}}
                   {{/if}}
             
-                  {{elseif $canEdit || $modif_operation}}
+                  {{elseif $can->edit || $modif_operation}}
                   <input type="hidden" name="induction_fin" value="" />
                   <button class="submit" type="submit" onclick="this.form.induction_fin.value = 'current'">Fin d'induction</button>
                   {{else}}-{{/if}}

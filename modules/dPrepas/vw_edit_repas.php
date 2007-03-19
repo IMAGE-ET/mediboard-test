@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m, $g;
+global $AppUI, $can, $m, $g;
 
-if(!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsEdit();
 
 $date           = mbGetValueFromGetOrSession("date"           , mbDate());
 $typerepas_id   = mbGetValueFromGetOrSession("typerepas_id"   , null);
@@ -31,8 +29,9 @@ if (!$affectation->load($affectation_id) || !$typeRepas->load($typerepas_id)){
   $affectation->loadRefSejour();
   $affectation->loadRefLit();
   $affectation->_ref_lit->loadCompleteView();
+  $canAffectation = $affectation->canDo();
   
-  if(!$affectation->canRead() || !$affectation->_ref_sejour->sejour_id || $affectation->_ref_sejour->type == "ambu"){
+  if(!$canAffectation->read || !$affectation->_ref_sejour->sejour_id || $affectation->_ref_sejour->type == "ambu"){
     // Droit Interdit ou Ambulatoire
     mbSetValueToSession("affectation_id", null);
     $affectation_id = null ;

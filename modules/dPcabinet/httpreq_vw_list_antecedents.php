@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
   
-if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsEdit();
 
 $patient_id  = mbGetValueFromGetOrSession("patient_id", 0);
 $_is_anesth  = mbGetValueFromGetOrSession("_is_anesth", null);

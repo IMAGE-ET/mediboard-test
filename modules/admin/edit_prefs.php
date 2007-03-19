@@ -7,12 +7,12 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m, $utypes;
+global $AppUI, $can, $m, $utypes;
 // Utilisateur demandé
 $user_id = mbGetValueFromGet("user_id" , 0);
 
 // Vérification des droit
-if ($canEdit){
+if ($can->edit){
   $user_id = mbGetValueFromGetOrSession("user_id", $AppUI->user_id);
   $user_id = intval($user_id);
 }else{

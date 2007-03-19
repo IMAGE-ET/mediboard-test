@@ -7,13 +7,9 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m, $mp_status;
 
-global $mp_status;
-
-if (!$canRead) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsRead();
 
 // Récupération du message à ajouter/éditer
 $message = new CMessage;

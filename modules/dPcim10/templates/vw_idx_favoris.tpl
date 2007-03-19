@@ -22,7 +22,7 @@
       <br />
 
       {{$curr_code->libelle}}
-      {{if $canEdit}}
+      {{if $can->edit}}
       <br />
 
       <form name="delFavoris" action="?m={{$m}}" method="post">

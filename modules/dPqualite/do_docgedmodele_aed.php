@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $canAdmin, $m, $g;
+global $AppUI, $can, $m, $g;
 
 $doc_ged_id = 0;
 $file_id = null;
@@ -133,8 +133,8 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
 
 
 $do1 = new CDoDocGedAddEdit;
-if(!$canAdmin){
-  $this->doRedirect();
+if(!$can->admin){
+  $do1->doRedirect();
 }
 $do1->doIt();
 

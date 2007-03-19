@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-GLOBAL $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $id = mbGetValueFromGetOrSession("id");
 

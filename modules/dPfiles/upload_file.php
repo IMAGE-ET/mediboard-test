@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m, $dPconfig;
+global $AppUI, $can, $m, $dPconfig;
 
 $file_class       = mbGetValueFromGetOrSession("file_class");
 $file_object_id   = mbGetValueFromGetOrSession("file_object_id");

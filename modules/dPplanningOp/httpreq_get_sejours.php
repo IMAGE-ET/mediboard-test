@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m, $tab;
+global $AppUI, $can, $m, $tab;
 
 $patient_id = mbGetValueFromGet("patient_id", 0);
 $patient = new CPatient;

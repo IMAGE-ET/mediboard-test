@@ -10,11 +10,9 @@
 global $AppUI, $m;
 
 $module = CModule::getInstalled($m);
-$canEdit = $module->canEdit();
+$canModule = $module->canDo();
 
-if (!$canEdit) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$canModule->needsEdit();
 
 $chir = new CMediusers;
 $chir->load($_POST["prat_id"]);

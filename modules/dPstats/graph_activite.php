@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $debutact      = mbGetValueFromGetOrSession("debut", mbDate("-1 YEAR"));
 $rectif        = mbTranformTime("+0 DAY", $debutact, "%d")-1;

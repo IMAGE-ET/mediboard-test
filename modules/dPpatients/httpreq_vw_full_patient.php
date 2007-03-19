@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 $patient_id = mbGetValueFromGetOrSession("patient_id", 0);
 
@@ -31,8 +29,11 @@ $patient->loadDossierComplet(PERM_READ);
 $patient->loadRefsAntecedents();
 $patient->loadRefsTraitements();
 
+
 $moduleCabinet = CModule::getInstalled("dPcabinet");
-$canEditCabinet = $moduleCabinet->canEdit();
+$canCabinet    = $moduleCabinet->canDo();
+
+
 
 $diagnosticsInstall = CModule::getActive("dPImeds") && CModule::getActive("dPsante400");
 
@@ -41,7 +42,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("listPrat"           , $listPrat          );
 $smarty->assign("patient"            , $patient           );
-$smarty->assign("canEditCabinet"     , $canEditCabinet    );
+$smarty->assign("canCabinet"         , $$canCabinet       );
 $smarty->assign("diagnosticsInstall" , $diagnosticsInstall);
 
 $smarty->display("inc_vw_full_patients.tpl");

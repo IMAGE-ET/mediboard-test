@@ -7,11 +7,10 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $dPconfig, $canAdmin, $canRead, $canEdit, $m, $tab;
+global $AppUI, $dPconfig, $can, $m, $tab;
 
-if(!$canAdmin) {
-    $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsAdmin();
+
 if(!isset($dPconfig["dPImeds"]["url"])){
   $dPconfig["dPImeds"]["url"] = "http://10.100.0.67/listedossiers.aspx";
 }

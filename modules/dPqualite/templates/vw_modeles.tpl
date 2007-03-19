@@ -24,7 +24,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
 <table class="main">
   <tr>
     <td class="halfPane">
-      {{if $canAdmin && $docGed->doc_ged_id}}
+      {{if $can->admin && $docGed->doc_ged_id}}
         <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_modeles&amp;doc_ged_id=0">
         {{tr}}CDocGed.create_modele{{/tr}}
         </a>
@@ -36,7 +36,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         {{foreach from=$modeles item=currModele}}
         <tr>
           <td>
-            {{if $canAdmin}}
+            {{if $can->admin}}
             <a href="index.php?m={{$m}}&amp;tab=vw_modeles&amp;doc_ged_id={{$currModele->doc_ged_id}}">
             {{else}}
             <a href="#" onclick="ZoomAjax('{{$currModele->_class_name}}','{{$currModele->_id}}','CFile','{{$currModele->_lastentry->_id}}', 0);">
@@ -55,7 +55,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
       </table>
     </td>
     <td class="halfPane" id="bigView" style="text-align: center;">
-      {{if $canAdmin}}
+      {{if $can->admin}}
       <form name="ProcModeleFrm" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_docgedmodele_aed" />
       <input type="hidden" name="m" value="{{$m}}" />

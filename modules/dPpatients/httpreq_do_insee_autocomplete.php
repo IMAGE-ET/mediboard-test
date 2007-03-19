@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 do_connect($AppUI->cfg["baseINSEE"]);
 $sql = null;
@@ -23,7 +23,7 @@ if($ville = @$_GET[$_GET["fieldcity"]]) {
       "\nORDER BY code_postal, commune";
 }
 
-if ($canRead && $sql) {
+if ($can->read && $sql) {
 	 $result = db_loadList($sql, 30, $AppUI->cfg["baseINSEE"]);
   // Création du template
   $smarty = new CSmartyDP();

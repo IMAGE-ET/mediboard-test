@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $canAdmin, $m, $g;
+global $AppUI, $can, $m, $g;
 
-if (!$canAdmin) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsAdmin();
 
 $allEi_user_id   = mbGetValueFromGetOrSession("allEi_user_id",null);
 

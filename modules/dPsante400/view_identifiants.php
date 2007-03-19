@@ -7,14 +7,11 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $canRead, $canEdit, $m;
-
+global $AppUI, $can, $m;
 
 $dialog = mbGetValueFromGet("dialog");
 
-if (!$canRead) {
-  $AppUI->redirect("m=system&a=access_denied&dialog=$dialog");
-}
+$can->needsRead();
 
 // Récupération de la liste des classes disponibles
 $listClasses = getInstalledClasses();

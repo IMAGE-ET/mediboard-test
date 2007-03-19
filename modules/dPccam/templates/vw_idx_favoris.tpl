@@ -33,7 +33,7 @@ function pageMain() {
       <br />
 
       {{$curr_code->libelleLong}}
-      {{if $canEdit}}
+      {{if $can->edit}}
       <br />
       <form name="delFavoris" action="index.php?m={{$m}}" method="post">
       <input type="hidden" name="dosql" value="do_favoris_aed" />

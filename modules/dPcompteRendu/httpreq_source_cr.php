@@ -7,11 +7,9 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsEdit();
 
 $compte_rendu_id = dPgetParam($_GET, "compte_rendu_id", 0);
 

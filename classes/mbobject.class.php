@@ -250,6 +250,14 @@ class CMbObject {
     $this->_canEdit = $this->getPerm(PERM_EDIT);
     return $this->_canEdit;
   }
+
+  function canDo(){
+    $canDo = new CCanDo;
+    $canDo->read  = $this->canRead();
+    $canDo->edit  = $this->canEdit();
+    
+    return $canDo;
+  }
   
   function loadListWithPerms($permType = PERM_READ, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     $list = $this->loadList($where, $order, $limit, $group, $leftjoin);	

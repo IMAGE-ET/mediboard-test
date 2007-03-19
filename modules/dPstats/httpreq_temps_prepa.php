@@ -11,13 +11,11 @@ if(function_exists("date_default_timezone_set")) {
   date_default_timezone_set("UTC");
 }
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
+
+$can->needsEdit();
 
 $intervalle = mbGetValueFromGet("intervalle", "none");
-
-if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
 
 // Liste des Praticiens
 $user = new CMediusers;

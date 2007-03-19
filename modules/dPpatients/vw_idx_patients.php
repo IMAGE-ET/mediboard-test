@@ -7,18 +7,15 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 $patient_id = mbGetValueFromGetOrSession("patient_id", 0);
 $new        = mbGetValueFromGet("new", 0);
 
 $moduleCabinet = CModule::getInstalled("dPcabinet");
-
-$canEditCabinet   = $moduleCabinet->canEdit();
+$canCabinet    = $moduleCabinet->canDo();
 
 $listPrat = array();
 
@@ -133,7 +130,7 @@ $smarty->assign("patient"        , $patient                                   );
 $smarty->assign("chir"           , $chir                                      );
 $smarty->assign("anesth"         , $anesth                                    );
 $smarty->assign("listPrat"       , $listPrat                                  );
-$smarty->assign("canEditCabinet" , $canEditCabinet                            );
+$smarty->assign("canCabinet"     , $canCabinet                                );
 $smarty->assign("board"          , 0                                          );
 
 $smarty->display("vw_idx_patients.tpl");

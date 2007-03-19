@@ -102,7 +102,17 @@ class CModule extends CMbObject {
     $this->_canEdit = $this->getPerm(PERM_EDIT);
     return $this->_canEdit;
   }
+  
+  function canDo(){
+    $canDo = new CCanDo;
+    $canDo->read  = $this->canRead();
+    $canDo->edit  = $this->canEdit();
+    $canDo->view  = $this->canView();
+    $canDo->admin = $this->canAdmin();
     
+    return $canDo;
+  }
+  
   function registerSetup() {
     global $registeredModules;
 

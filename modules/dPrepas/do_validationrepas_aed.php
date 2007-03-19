@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m, $g;
+global $AppUI, $can, $m, $g;
 
 class CDoValidationRepasAddEdit extends CDoObjectAddEdit {
   function CDoValidationRepasAddEdit() {

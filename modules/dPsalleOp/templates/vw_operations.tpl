@@ -27,7 +27,7 @@ function pageMain() {
         <tr>
           <th>Actes</th>
           <td class="text">
-          {{if $canEdit || $modif_operation}}
+          {{if $can->edit || $modif_operation}}
           {{include file="inc_manage_codes.tpl"}}
           {{else}}
           Il n'est pas possible de modifier les actes d'une intervention antérieure.

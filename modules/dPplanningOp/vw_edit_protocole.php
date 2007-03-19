@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m, $tab;
+global $AppUI, $can, $m, $tab;
 
-if(!$canEdit) {
-	$AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsEdit();
 
 $protocole_id = mbGetValueFromGetOrSession("protocole_id", 0);
 $chir_id      = mbGetValueFromGetOrSession("chir_id"     , 0);

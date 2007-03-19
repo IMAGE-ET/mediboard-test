@@ -6,7 +6,7 @@
     {{$curr_lit->nom}}
   </td>
   <td class="action">
-    {{if $canEdit}}
+    {{if $can->edit}}
       <input name="choixLit" type="radio" id="lit{{$curr_lit->lit_id}}" onclick="selectLit({{$curr_lit->lit_id}})" />
     {{/if}}
   </td>
@@ -83,7 +83,7 @@
 {{if !$curr_affectation->sejour_id}}
   <tr class="dates">
     <td class="text">
-    {{if $canEdit}}
+    {{if $can->edit}}
     <form name="rmvAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
     <input type="hidden" name="dosql" value="do_affectation_aed" />
     <input type="hidden" name="del" value="1" />
@@ -98,7 +98,7 @@
     ({{$curr_affectation->_entree_relative}} jours)
   </td>
   <td class="action">
-    {{if $canEdit}}
+    {{if $can->edit}}
     <form name="entreeAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
     <input type="hidden" name="dosql" value="do_affectation_aed" />
     <input type="hidden" name="affectation_id" value="{{$curr_affectation->affectation_id}}" />
@@ -117,7 +117,7 @@
     ({{$curr_affectation->_sortie_relative}} jours)
   </td>
   <td class="action">
-    {{if $canEdit}}
+    {{if $can->edit}}
     <form name="sortieAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
     <input type="hidden" name="dosql" value="do_affectation_aed" />
     <input type="hidden" name="affectation_id" value="{{$curr_affectation->affectation_id}}" />
@@ -146,7 +146,7 @@
     ({{$curr_affectation->_entree_relative}} jours)
   </td>
   <td class="action">
-    {{if $canEdit}}
+    {{if $can->edit}}
     <form name="rmvAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
 
     <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -162,7 +162,7 @@
   </td>
   {{else}}
   <td class="text">
-    {{if $canEdit}}
+    {{if $can->edit}}
     <form name="rmvAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
 
     <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -179,7 +179,7 @@
     ({{$curr_affectation->_entree_relative}} jours)
   </td>
   <td class="action">
-    {{if $canEdit}}
+    {{if $can->edit}}
     <form name="entreeAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
 
     <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -204,7 +204,7 @@
   </td>
   {{else}}
   <td class="text">
-    {{if $canEdit}}
+    {{if $can->edit}}
     <form name="splitAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
 
     <input type="hidden" name="dosql" value="do_affectation_split" />
@@ -228,7 +228,7 @@
     ({{$curr_affectation->_sortie_relative}} jours)
   </td>
   <td class="action">
-    {{if $canEdit}}
+    {{if $can->edit}}
     <form name="sortieAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
 
     <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -275,7 +275,7 @@
     <em>Pathologie</em>:
     {{$sejour->pathologie}}
     -
-    {{if $canEdit}}
+    {{if $can->edit}}
     <input type="radio" name="septique" value="0" {{if $sejour->septique == 0}} checked="checked" {{/if}} onclick="this.form.submit()" />
     <label for="septique_0" title="Séjour propre">Propre</label>
     <input type="radio" name="septique" value="1" {{if $sejour->septique == 1}} checked="checked" {{/if}} onclick="this.form.submit()" />
@@ -316,7 +316,7 @@ Septique
 {{/if}}
 <tr class="dates">
   <td class="text" colspan="2">
-    {{if $canEdit}}
+    {{if $can->edit}}
     <form name="editChFrm{{$sejour->sejour_id}}" action="index.php" method="post">
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="dosql" value="do_edit_chambre" />

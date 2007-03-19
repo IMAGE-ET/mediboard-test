@@ -7,12 +7,10 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 // @ todo : pourquoi on arrive pas à y accéder dès que le module n'est pas visible ???
-//if (!$canRead) {
-//  $AppUI->redirect( "m=system&a=access_denied" );
-//}
+//$can->needsRead();
 
 $list = array();
 $type = mbGetValueFromGet("type", 0 );

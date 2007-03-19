@@ -7,11 +7,9 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if(!$canEdit) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsEdit();
 
 // Liste des prats
 $listPrat = new CMediusers;

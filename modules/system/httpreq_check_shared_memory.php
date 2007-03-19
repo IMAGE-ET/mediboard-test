@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m, $shm;
+global $AppUI, $can, $m, $shm;
 
-if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsEdit();
 
 // Check locales
 foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {

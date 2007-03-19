@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 set_time_limit(1800);
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if(!$canRead) {
-    $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsEdit();
 
 $log_file = "tmp/echantillonnage.log";
 file_put_contents($log_file, "##\r\n## Echantillonnage du ".date("d/m/Y à H:i:s")."\r\n##\r\n", FILE_APPEND);

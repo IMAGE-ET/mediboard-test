@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if(!$canEdit) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsEdit();
 
 $deblist = mbGetValueFromGetOrSession("deblist", mbDate("-1 WEEK"));
 $finlist = mbDate("+1 DAY", $deblist);

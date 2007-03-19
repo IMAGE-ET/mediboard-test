@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $do = new CDoObjectAddEdit("CExamNyha", "examnyha_id");
 $do->createMsg = "Classification NYHA créé";

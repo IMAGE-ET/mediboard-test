@@ -28,7 +28,7 @@
             {{/if}}
           </td>
           <td class="button">
-            {{if $canEdit}}
+            {{if $can->edit}}
             <form name="editSortieBlocFrm{{$curr_op->operation_id}}" action="index.php?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="dosql" value="do_planning_aed" />
@@ -42,7 +42,7 @@
             {{/if}}
           </td>
           <td class="button">
-            {{if $canEdit}}
+            {{if $can->edit}}
             <form name="editEntreeReveilFrm{{$curr_op->operation_id}}" action="index.php?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="dosql" value="do_planning_aed" />
@@ -61,7 +61,7 @@
               <input type="hidden" name="dosql" value="do_planning_aed" />
               <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
               <input type="hidden" name="del" value="0" />
-              {{if $canEdit}}
+              {{if $can->edit}}
 	          <input name="sortie_reveil" size="5" type="text" value="{{$curr_op->sortie_reveil|date_format:"%H:%M"}}">
 	          <button class="tick notext" type="submit"></button>
 	          <button class="cancel notext" type="submit" onclick="this.form.sortie_reveil.value = ''"></button>

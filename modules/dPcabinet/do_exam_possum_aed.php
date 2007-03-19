@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $do = new CDoObjectAddEdit("CExamPossum", "exampossum_id");
 $do->createMsg = "Examen score possum créé";

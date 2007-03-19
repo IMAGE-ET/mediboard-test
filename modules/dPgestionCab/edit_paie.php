@@ -7,11 +7,9 @@
  * @author Romain Ollivier
  */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 $user = new CMediusers();
 $user->load($AppUI->user_id);

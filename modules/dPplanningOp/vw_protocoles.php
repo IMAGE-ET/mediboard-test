@@ -7,11 +7,9 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if(!$canEdit) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsEdit();
 
 // L'utilisateur est-il chirurgien?
 $mediuser = new CMediusers;

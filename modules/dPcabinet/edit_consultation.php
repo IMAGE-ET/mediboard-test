@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m, $dPconfig;
+global $AppUI, $can, $m, $dPconfig;
 
-if (!$canEdit) {
-	$AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsEdit();
 
 $vue2_default = isset($AppUI->user_prefs["AFFCONSULT"]) ? $AppUI->user_prefs["AFFCONSULT"] : 0 ;
 
@@ -59,6 +57,7 @@ if(isset($_GET["selConsult"])) {
 $userSel = new CMediusers;
 $userSel->load($prat_id);
 $userSel->loadRefs();
+$canUserSel = $userSel->canDo();
 
 // Vérification des droits sur les praticiens
 $listChir = $userSel->loadPraticiens(PERM_EDIT);
@@ -68,11 +67,7 @@ if (!$userSel->isPraticien()) {
   $AppUI->redirect("m=dPcabinet&tab=0");
 }
 
-if (!$userSel->canEdit()) {
-  mbSetValueToSession("chirSel", 0);
-  $AppUI->setMsg("Vous n'avez pas les droits suffisants", UI_MSG_ALERT);
-  $AppUI->redirect("m=dPcabinet&tab=0");
-}
+$canUserSel->needsEdit(array("chirSel"=>0));
 
 $anesth = new CTypeAnesth;
 $orderanesth = "name";

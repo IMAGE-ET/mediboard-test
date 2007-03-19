@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canAdmin, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if(!$canAdmin) {
-	$AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsAdmin();
 
 $file_category_id = mbGetValueFromGetOrSession("file_category_id");
 

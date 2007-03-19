@@ -162,7 +162,7 @@ function reloadAfterSaveDoc(){
       <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
         Imprimer
       </button>
-      {{if $canEdit}}
+      {{if $can->edit}}
       <button type="button" class="modify" onclick="editPatient()">
         Modifier
       </button>
@@ -202,7 +202,7 @@ function reloadAfterSaveDoc(){
       </a>
     </td>
   </tr>
-  {{if $listPrat|@count && $canEditCabinet}}
+  {{if $listPrat|@count && $canCabinet->edit}}
   <tr><th class="category" colspan="4">Consultation immédiate</th></tr>
   <tr>
     <td class="button" colspan="4">

@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $selClass = mbGetValueFromGetOrSession("selClass", null);
 $keywords = mbGetValueFromGetOrSession("keywords", null);

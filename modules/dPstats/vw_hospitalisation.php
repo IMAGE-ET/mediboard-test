@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if(!$canRead) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsRead();
 
 $debutact      = mbGetValueFromGetOrSession("debutact", mbDate("-1 YEAR"));
 $rectif        = mbTranformTime("+0 DAY", $debutact, "%d")-1;

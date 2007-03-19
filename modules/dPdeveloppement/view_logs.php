@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m, $logPath;
+global $AppUI, $can, $m, $logPath;
 
-if(!$canRead) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsRead();
 
 // Création du template
 $smarty = new CSmartyDP();

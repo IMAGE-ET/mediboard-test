@@ -86,7 +86,7 @@ function pageMain() {
       <input type="hidden" name="fiche_ei_id" value="{{$fiche->fiche_ei_id}}" />
     
       <table class="form">
-        {{if $canAdmin}}
+        {{if $can->admin}}
         <tr>
           <th colspan="2">
             <label for="user_id" title="{{tr}}CFicheEi-user_id{{/tr}}">{{tr}}CFicheEi-user_id{{/tr}}</label>

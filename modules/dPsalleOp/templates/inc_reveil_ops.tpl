@@ -30,7 +30,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
           <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
           <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
           <td class="button">
-            {{if $canEdit}}
+            {{if $can->edit}}
               <form name="editSortieBlocFrm{{$curr_op->operation_id}}" action="index.php?m={{$m}}" method="post">
                 <input type="hidden" name="m" value="dPplanningOp" />
                 <input type="hidden" name="dosql" value="do_planning_aed" />
@@ -44,7 +44,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
             {{/if}}
           </td>
           <td class="button">
-            {{if $canEdit || $modif_operation}}
+            {{if $can->edit || $modif_operation}}
             <form name="editEntreeReveilFrm{{$curr_op->operation_id}}" action="index.php?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="dosql" value="do_planning_aed" />

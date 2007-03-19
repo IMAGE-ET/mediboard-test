@@ -7,11 +7,9 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 $sql = "SELECT * FROM import_praticiens";
 $listImport = db_loadlist($sql);

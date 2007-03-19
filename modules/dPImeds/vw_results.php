@@ -7,11 +7,9 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $canRead, $canEdit, $m, $g, $dPconfig;
+global $AppUI, $can, $m, $g, $dPconfig;
 
-if(!$canRead) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsRead();
 
 $patient_id = mbGetValueFromGetOrSession("patient_id");
 $patient = new CPatient;

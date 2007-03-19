@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canRead) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsRead();
 
 $discipline_id = mbGetValueFromGetOrSession("discipline_id");
 

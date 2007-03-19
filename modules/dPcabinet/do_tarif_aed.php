@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $do = new CDoObjectAddEdit("CTarif", "tarif_id");
 $do->createMsg = "Tarif créé";

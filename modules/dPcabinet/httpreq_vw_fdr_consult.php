@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
   
-if (!$canEdit) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsEdit();
 
 // Utilisateur sélectionné ou utilisateur courant
 $prat_id      = mbGetValueFromGetOrSession("chirSel", 0);
@@ -45,6 +43,7 @@ if(isset($_GET["selConsult"])) {
 $userSel = new CMediusers;
 $userSel->load($prat_id ? $prat_id : $AppUI->user_id);
 $userSel->loadRefs();
+$canUserSel = $userSel->canDo();
 
 // Vérification des droits sur les praticiens
 $listChir = $userSel->loadPraticiens(PERM_EDIT);
@@ -54,32 +53,23 @@ if (!$userSel->isPraticien()) {
   $AppUI->redirect("m=dPcabinet&tab=0");
 }
 
-if (!$userSel->canEdit()) {
-  $AppUI->setMsg("Vous n'avez pas les droits suffisants", UI_MSG_ALERT);
-  $AppUI->redirect("m=dPcabinet&tab=0");
-}
+$canUserSel->needsEdit();
 
 // Consultation courante
 $consult->_ref_chir = $userSel;
 if ($selConsult) {
   $consult->load($selConsult);
+  
+  $can->needsObject($consult);
+  $canConsult = $consult->canDo();
+  $canConsult->needsEdit();
+  
   $consult->loadRefsFwd();
   $consult->loadRefsDocs();
   $consult->loadRefsFiles();
   $consult->loadRefsExamAudio();
   $consult->loadRefsExamNyha();
   $consult->loadRefsExamPossum();
-  
-  // On vérifie que l'utilisateur a les droits sur la consultation
-  $right = false;
-  foreach($listChir as $key => $value) {
-    if($value->user_id == $consult->_ref_plageconsult->chir_id)
-      $right = true;
-  }
-  if(!$right) {
-    $AppUI->setMsg("Vous n'avez pas accès à cette consultation", UI_MSG_ALERT);
-    $AppUI->redirect("m=dPpatients&tab=0&id=$consult->patient_id");
-  }
 }
 
 // Récupération des modèles

@@ -7,12 +7,11 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 // only user_type of Administrator (1) can access this page
-if (!$canEdit || $AppUI->user_type != 1) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->edit |= ($AppUI->user_type != 1);
+$can->needsEdit();
 
 $module = mbGetValueFromPost("module", null);
 $trans  = mbGetValueFromPost("trans" , null);

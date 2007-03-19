@@ -7,11 +7,10 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m, $locale_char_set, $uistyle, $messages, $dPconfig;
+global $AppUI, $can, $m, $locale_char_set, $uistyle, $messages, $dPconfig;
 
-if(!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
+
 set_time_limit(90);
 
 $indexFile  = mbGetValueFromPost("indexFile"  , 0);

@@ -175,7 +175,7 @@
         {{/if}}
         {{/if}}
         
-        {{if !$canAdmin}}
+        {{if !$can->admin}}
         <tr>
           <td colspan="2" class="button">
             {{$fiche->_etat_actuel}}

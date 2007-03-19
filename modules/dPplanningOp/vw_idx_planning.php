@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if(!$canEdit) {
-	$AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsEdit();
 
 $date      = mbGetValueFromGetOrSession("date", mbDate());
 $lastmonth = mbDate("-1 month", $date);

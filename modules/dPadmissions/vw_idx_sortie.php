@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 // Type d'affichage
 $vue = mbGetValueFromGetOrSession("vue", 0);
@@ -23,10 +21,10 @@ $now  = mbDate();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign('date' , $date );
-$smarty->assign('now' , $now );
-$smarty->assign('vue' , $vue );
+$smarty->assign("date" , $date );
+$smarty->assign("now" , $now );
+$smarty->assign("vue" , $vue );
 
-$smarty->display('vw_idx_sortie.tpl');
+$smarty->display("vw_idx_sortie.tpl");
 
 ?>

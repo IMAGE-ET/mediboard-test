@@ -10,7 +10,7 @@
     </div>
     <div id="Acc{{$keyCat}}Content" class="accordionTabContentBox">
       <table class="tbl">
-        {{if $canEditFile && !$accordDossier}}
+        {{if $canFile->edit && !$accordDossier}}
         <tr>
           <td colspan="6" class="text">
             <button class="new" onclick="uploadFile('{{$selClass}}', '{{$selKey}}', '{{$keyCat}}')">
@@ -41,7 +41,7 @@
             <span onmouseover="ObjectTooltip.create(this, '{{$curr_file->_class_name}}', {{$curr_file->_id}});">{{$curr_file->_view}}</span>
             <hr />
 
-            {{if $curr_file->_class_name=="CCompteRendu" && $canEditFile && !$accordDossier}}
+            {{if $curr_file->_class_name=="CCompteRendu" && $canFile->edit && !$accordDossier}}
               <form name="editDoc{{$curr_file->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPcompteRendu" />
               <input type="hidden" name="dosql" value="do_modele_aed" />
@@ -50,7 +50,7 @@
               {{assign var="confirmDeleteType" value="le document"}}
               {{assign var="confirmDeleteName" value=$curr_file->nom}}
               
-            {{elseif $curr_file->_class_name=="CFile" && $canEditFile && !$accordDossier}}
+            {{elseif $curr_file->_class_name=="CFile" && $canFile->edit && !$accordDossier}}
               <form name="editFile{{$curr_file->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPfiles" />
               <input type="hidden" name="dosql" value="do_file_aed" />
@@ -60,7 +60,7 @@
               {{assign var="confirmDeleteName" value=$curr_file->file_name}}
             {{/if}}
 
-            {{if $canEditFile && !$accordDossier}}
+            {{if $canFile->edit && !$accordDossier}}
               <select name="file_category_id" onchange="submitFileChangt(this.form)">
                 <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune</option>
                 {{foreach from=$listCategory item=curr_cat}}

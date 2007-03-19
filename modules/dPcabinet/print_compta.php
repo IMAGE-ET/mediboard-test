@@ -9,7 +9,7 @@
 
 // !! Attention, régression importante si ajout de type de paiement
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 // Récupération des paramètres
 $deb  = mbGetValueFromGetOrSession("deb", mbDate());

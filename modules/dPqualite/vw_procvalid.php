@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $canAdmin, $m, $g;
+global $AppUI, $can, $m, $g;
 
-if (!$canAdmin) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsAdmin();
 
 
 $doc_ged_id        = mbGetValueFromGetOrSession("doc_ged_id",0);

@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m, $g;
+global $AppUI, $can, $m, $g;
 
-if(!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 $type       = mbGetValueFromGetOrSession("type"       , null);
 $service_id = mbGetValueFromGetOrSession("service_id" , null);

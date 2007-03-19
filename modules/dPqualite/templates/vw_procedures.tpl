@@ -38,7 +38,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
       
       <table class="tbl">
         <tr>
-          {{if $canEdit}}
+          {{if $can->edit}}
           <th>-</th>
           {{/if}}
           <th>{{tr}}CDocGed-_reference_doc{{/tr}}</th>
@@ -47,9 +47,9 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         </tr>
         {{foreach from=$procedures item=currProc}}
         <tr>
-          {{if $canEdit}}
+          {{if $can->edit}}
           <td>
-            {{if $canAdmin}}
+            {{if $can->admin}}
             <form name="ProcEditFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="dosql" value="do_docged_aed" />
             <input type="hidden" name="m" value="{{$m}}" />
@@ -85,7 +85,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         </tr>
         {{foreachelse}}
         <tr>
-          {{if $canEdit}}
+          {{if $can->edit}}
           <td colspan="4">
           {{else}}
           <td colspan="3">

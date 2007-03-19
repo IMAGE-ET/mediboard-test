@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 // Récupération du compte-rendu
 $compte_rendu_id = dPgetParam($_GET, "compte_rendu_id", 0);

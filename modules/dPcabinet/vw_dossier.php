@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canEdit) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsEdit();
 
 $pat_id = mbGetValueFromGetOrSession("patSel");
 
@@ -56,14 +54,14 @@ if ($pat_id) {
 }
 
 $moduleCabinet = CModule::getInstalled("dPcabinet");
-$canEditCabinet = $moduleCabinet->canEdit();
+$canCabinet    = $moduleCabinet->canDo();
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("patient", $patient                    );
-$smarty->assign("listPrat", $listPrat                  );
-$smarty->assign("canEditCabinet", $canEditCabinet      );
+$smarty->assign("patient"    , $patient    );
+$smarty->assign("listPrat"   , $listPrat   );
+$smarty->assign("canCabinet" , $canCabinet );
 
 $smarty->display("vw_dossier.tpl");
 

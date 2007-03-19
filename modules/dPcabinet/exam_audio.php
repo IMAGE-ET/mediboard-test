@@ -7,12 +7,10 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 global $frequences, $pressions, $exam_audio, $graph_tympan_gauche, $graph_tympan_droite;
 
-if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsEdit();
 
 $_conduction = mbGetValueFromGetOrSession("_conduction", "aerien");
 $_oreille = mbGetValueFromGetOrSession("_oreille", "gauche");

@@ -7,7 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $canRead, $canEdit, $m, $exam_audio;
+global $AppUI, $can, $m, $exam_audio;
 
 $exam_audio = new CExamAudio;
 $exam_audio->load(mbGetValueFromGetOrSession("examaudio_id"));

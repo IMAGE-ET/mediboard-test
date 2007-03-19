@@ -7,15 +7,13 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $canRead, $canEdit, $m, $g;
+global $AppUI, $can, $m, $g;
 
 require_once($AppUI->getModuleFile($m, "inc_vw_affectations"));
 
 $pathos = new CDiscipline();
 
-if(!$canRead) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsRead();
 
 // A passer en variable de configuration
 $heureLimit = "16:00:00";
@@ -70,7 +68,7 @@ $alerte = db_loadResult($sql->getRequest());
 
 $groupSejourNonAffectes = array();
 
-if ($canEdit) {
+if ($can->edit) {
   // Admissions de la veille
   $dayBefore = mbDate("-1 days", $date);
   $where = array(

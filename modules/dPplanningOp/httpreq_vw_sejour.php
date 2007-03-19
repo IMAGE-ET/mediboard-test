@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m, $tab, $dPconfig;
+global $AppUI, $can, $m, $tab, $dPconfig;
 
 $mode_operation = mbGetValueFromGet("mode_operation", 0);
 $sejour_id      = mbGetValueFromGet("sejour_id"     , 0);
@@ -15,7 +15,7 @@ $patient_id     = mbGetValueFromGet("patient_id"    , 0);
 
 // Droit de lecture dPsante400
 $moduleSante400 = CModule::getInstalled("dPsante400");
-$canReadSante400 = $moduleSante400 ? $moduleSante400->canRead() : false;
+$canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
 
 // Liste des Etablissements selon Permissions
 $etablissements = new CMediusers();
@@ -56,7 +56,7 @@ for ($i = 0; $i < 60; $i += $sejourConfig["min_intervalle"]) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canReadSante400", $canReadSante400);
+$smarty->assign("canSante400", $canSante400);
 
 $smarty->assign("sejour"   , $sejour);
 $smarty->assign("praticien", $praticien);

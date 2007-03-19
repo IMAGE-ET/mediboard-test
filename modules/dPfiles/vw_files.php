@@ -7,13 +7,10 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canRead) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsRead();
 
-$canEditFile   = false;
 $selClass      = mbGetValueFromGetOrSession("selClass", null);
 $keywords      = mbGetValueFromGetOrSession("keywords", null);
 $selKey        = mbGetValueFromGetOrSession("selKey"  , null);
@@ -21,7 +18,8 @@ $selView       = mbGetValueFromGetOrSession("selView" , null);
 $typeVue       = mbGetValueFromGetOrSession("typeVue" , 0);
 $file_id       = mbGetValueFromGet("file_id"          , null);
 $accordDossier = mbGetValueFromGet("accordDossier"    , 0);
-$reloadlist = 0;
+$reloadlist    = 0;
+$canFile       = new CCanDo;
 
 $file = new CFile;
 $file->load($file_id);
@@ -37,13 +35,13 @@ if($selClass && $selKey){
   // Chargement de l'objet
   $object = new $selClass;
   $object->load($selKey);
-  $canEditFile = $object->canEdit();
+  $canFile = $object->canDo();
   $affichageFile = CFile::loadFilesAndDocsByObject($object);
 
   $smarty->assign("affichageFile",$affichageFile);
 }
 
-$smarty->assign("canEditFile"    , $canEditFile);
+$smarty->assign("canFile"        , $canFile     );
 $smarty->assign("listCategory"   , $listCategory);
 $smarty->assign("selClass"       , $selClass    );
 $smarty->assign("selKey"         , $selKey      );

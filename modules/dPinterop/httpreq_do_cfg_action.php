@@ -7,7 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $action = mbGetValueFromGet("action");
 

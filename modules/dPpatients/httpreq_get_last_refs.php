@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $patient_id = mbGetValueFromGet("patient_id", 0);
 $patient = new CPatient;
@@ -24,7 +24,7 @@ foreach($patient->_ref_consultations as $key => $consult) {
   $patient->_ref_consultations[$key]->_ref_plageconsult->loadRefsFwd();
 }
 
-if ($canRead) {
+if ($can->read) {
   // Création du template
   $smarty = new CSmartyDP();
 

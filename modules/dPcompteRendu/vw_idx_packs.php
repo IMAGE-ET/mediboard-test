@@ -7,11 +7,9 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 // Utilisateur sélectionné ou utilisateur courant
 $user_id = mbGetValueFromGetOrSession("filter_user_id", $AppUI->user_id);

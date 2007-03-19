@@ -7,15 +7,13 @@
  * @author Romain Ollivier
  */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canRead) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 // Droit de lecture dPsante400
 $moduleSante400 = CModule::getInstalled("dPsante400");
-$canReadSante400 = $moduleSante400 ? $moduleSante400->canRead() : false;
+$canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
 
 $patient_id = mbGetValueFromGetOrSession("patient_id");
 $dialog     = mbGetValueFromGet("dialog",0);
@@ -34,8 +32,8 @@ if (!$patient_id) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canReadSante400", $canReadSante400);
-$smarty->assign("patient"        , $patient     );
+$smarty->assign("canSante400" , $canSante400);
+$smarty->assign("patient"     , $patient     );
 
 $smarty->display("vw_edit_patients.tpl");
 ?>

@@ -7,13 +7,11 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m, $g;
+global $AppUI, $can, $m, $g;
 
 require_once($AppUI->getModuleFile($m, "inc_vw_affectations"));
 
-if(!$canRead) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsRead();
 
 $deb     = mbGetValueFromGet("deb"    , date("Y-m-d")." 06:00:00");
 $fin     = mbGetValueFromGet("fin"    , date("Y-m-d")." 21:00:00");

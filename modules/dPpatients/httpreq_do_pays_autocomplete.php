@@ -8,7 +8,7 @@
 */
 
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 do_connect($AppUI->cfg["baseINSEE"]);
 $sql = null;
@@ -19,7 +19,7 @@ if($pays = @$_GET[$_GET["fieldpays"]]) {
       "\nORDER BY nom_fr";
 } 
 
-if ($canRead && $sql) {
+if ($can->read && $sql) {
   $result = db_loadList($sql, 30, $AppUI->cfg["baseINSEE"]);
   // Création du template
   $smarty = new CSmartyDP();

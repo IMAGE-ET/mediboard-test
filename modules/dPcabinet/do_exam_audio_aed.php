@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 mbSetValueToSession("_conduction", $_POST["_conduction"]);
 mbSetValueToSession("_oreille", $_POST["_oreille"]);

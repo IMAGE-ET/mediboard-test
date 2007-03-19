@@ -7,16 +7,14 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m, $dPconfig;
+global $AppUI, $can, $m, $dPconfig;
 
 if (!class_exists("DOMDocument")) {
   trigger_error("sorry, DOMDocument is needed");
   return;
 }
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 $mb_sejour_id = dPgetParam($_POST, "mb_sejour_id", mbGetValueFromGetOrSession("sejour_id"));
 

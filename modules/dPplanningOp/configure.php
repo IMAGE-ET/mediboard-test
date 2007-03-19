@@ -7,7 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $dPconfig, $canAdmin, $canRead, $canEdit, $m, $tab;
+global $AppUI, $dPconfig, $can, $m, $tab;
+
+$can->needsAdmin();
 
 $listHours = range(0, 23);
 $listInterval = array("5","10","15","20","30");

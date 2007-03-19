@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $canAdmin, $m, $g;
+global $AppUI, $can, $m, $g;
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 $fiche_ei_id = mbGetValueFromGet("fiche_ei_id",0);
 
@@ -19,13 +17,13 @@ $fiche  = new CFicheEi;
 $aUsers = array();
 $listFct = new CFunctions();
 
-if($canAdmin && $fiche_ei_id){
+if($can->admin && $fiche_ei_id){
   // Droit admin et edition de fiche
   $fiche->load($fiche_ei_id);
 }
 
 // Chargement des Utilisateurs
-if($canAdmin) {
+if($can->admin) {
   $listFct = CMediusers::loadFonctions(PERM_READ);
   foreach($listFct as $key => $fct) {
     $listFct[$key]->loadRefsBack();

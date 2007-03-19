@@ -47,7 +47,7 @@ function pageMain() {
   <tr>
     <td>
       <img alt="updown" src="./images/icons/updown.gif" width="10" height="15" border=0 usemap="#arrow{{$module.mod_id}}" />
-      {{if $canEdit}}
+      {{if $can->edit}}
       <map name="arrow{{$module.mod_id}}">
         <area coords="0,0,10,7"  href="{{$module.href}}&amp;cmd=moveup" />
         <area coords="0,8,10,14" href="{{$module.href}}&amp;cmd=movedn" />
@@ -62,7 +62,7 @@ function pageMain() {
         {{assign var="src" value="./images/icons/dotyellowanim.gif"}}
       {{/if}}
       <img alt="dot" src="{{$src}}" width="12" height="12" />
-      {{if $canEdit}}
+      {{if $can->edit}}
         <a class="action" href="{{$module.href}}&amp;cmd=toggle">
       {{/if}}
       {{if $module.mod_active}}
@@ -70,7 +70,7 @@ function pageMain() {
       {{else}}
         {{tr}}disabled{{/tr}}
       {{/if}}
-      {{if $canEdit}}
+      {{if $can->edit}}
         </a>
         |
         <a class="action" href="{{$module.href}}&amp;cmd=remove"
@@ -102,7 +102,7 @@ function pageMain() {
         {{assign var="src" value="./images/icons/dotredanim.gif"}}
       {{/if}}
       <img alt="dot" src="{{$src}}" width="12" height="12" />
-      {{if $canEdit}}
+      {{if $can->edit}}
       <a class="action" href="{{$module.href}}&amp;cmd=toggleMenu">
       {{/if}}
       {{if $module.mod_ui_active}}
@@ -110,7 +110,7 @@ function pageMain() {
       {{else}}
         {{tr}}hidden{{/tr}}
       {{/if}}
-      {{if $canEdit}}
+      {{if $can->edit}}
       </a>
       {{/if}}
     </td>
@@ -123,7 +123,7 @@ function pageMain() {
     <td>{{$module}}</td>
     <td>
       <img alt="not installed" src="./images/icons/dotgrey.gif" width="12" height="12" />
-      {{if $canEdit}}
+      {{if $can->edit}}
         <a class="action" href="?m={{$m}}&amp;a=domodsql&amp;cmd=install&amp;mod_name={{$module}}">
           {{tr}}install{{/tr}}
         </a>

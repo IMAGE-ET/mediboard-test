@@ -17,7 +17,7 @@
       <button type="button" class="print" onclick="printPatient({{$object->_id}})">
         Imprimer
       </button>
-      {{if $canEdit}}
+      {{if $can->edit}}
         <button type="button" class="modify" onclick="editPatient()">
           Modifier
         </button>

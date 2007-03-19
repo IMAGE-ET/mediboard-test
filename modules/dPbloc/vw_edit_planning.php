@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m, $g;
+global $AppUI, $can, $m, $g;
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $plageop_id = mbGetValueFromGetOrSession("plageop_id");

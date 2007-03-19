@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 global $filepath, $filedir, $regCim10, $regCCAM, $alnum, $alpha;
 
 $type = mbGetValueFromGet("type");

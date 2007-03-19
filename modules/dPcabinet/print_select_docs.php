@@ -7,22 +7,19 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
-
-if (!$canEdit) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+global $AppUI, $can, $m;
 
 $consultation_id = mbGetValueFromGet("consultation_id");
 
 // Consultation courante
 $consult = new CConsultation();
-if (!$consult->load($consultation_id) || !$consult->canEdit()) {
-  $AppUI->setMsg("Vous n'avez pas les droits suffisants", UI_MSG_ALERT);
-  $AppUI->redirect("m=dPcabinet&tab=0");
-}else{
-  $consult->loadRefsDocs();
-}  
+$consult->load($consultation_id);
+$can->edit &= $consult->canEdit();
+
+$can->needsEdit();
+$can->needsObject($consult);
+
+$consult->loadRefsDocs();  
 
 // Création du template
 $smarty = new CSmartyDP();

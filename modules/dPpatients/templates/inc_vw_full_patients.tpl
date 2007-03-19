@@ -263,7 +263,7 @@ viewFullPatientMain = function() {
     </td>
   </tr>
   {{/if}}
-  {{if $listPrat|@count && $canEditCabinet}}
+  {{if $listPrat|@count && $canCabinet->edit}}
   <tr><th class="category" colspan="2">Consultation immédiate</th></tr>
   <tr>
     <td class="button" colspan="2">

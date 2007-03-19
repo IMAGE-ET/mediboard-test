@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 $patient_id = mbGetValueFromGetOrSession("patient_id", 0);
 
@@ -76,23 +74,23 @@ $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
 $moduleCabinet = CModule::getInstalled("dPcabinet");
-$canEditCabinet = $moduleCabinet->canEdit();
+$canCabinet    = $moduleCabinet->canDo();
 
 $affichageNbFile = CFile::loadNbFilesByCategory($patient);
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("affichageNbFile" ,$affichageNbFile                           );
-$smarty->assign("patient"         , $patient                                   );
-$smarty->assign("chir"            , $chir                                      );
-$smarty->assign("anesth"          , $anesth                                    );
-$smarty->assign("listPrat"        , $listPrat                                  );
-$smarty->assign("canEditCabinet"  , $canEditCabinet                            );
-$smarty->assign("listCategory"    , $listCategory                              );
+$smarty->assign("affichageNbFile" ,$affichageNbFile  );
+$smarty->assign("patient"         , $patient         );
+$smarty->assign("chir"            , $chir            );
+$smarty->assign("anesth"          , $anesth          );
+$smarty->assign("listPrat"        , $listPrat        );
+$smarty->assign("canCabinet"      , $canCabinet      );
+$smarty->assign("listCategory"    , $listCategory    );
 
-$smarty->assign("listModelePrat"  , $listModelePrat                            );
-$smarty->assign("listModeleFct"   , $listModeleFct                             );
+$smarty->assign("listModelePrat"  , $listModelePrat  );
+$smarty->assign("listModeleFct"   , $listModeleFct   );
 
 $smarty->display("inc_vw_patient.tpl");
 ?>

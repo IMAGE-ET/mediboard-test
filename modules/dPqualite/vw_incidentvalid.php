@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $canAdmin, $m, $g;
+global $AppUI, $can, $m, $g;
 
-if (!$canRead) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 $fiche_ei_id         = mbGetValueFromGetOrSession("fiche_ei_id",null);
 $ficheAnnuleVisible  = mbGetValueFromGetOrSession("ficheAnnuleVisible" , 0);
@@ -22,8 +20,8 @@ $catFiche = array();
 $fiche = new CFicheEi;
 
 $droitFiche = !$fiche->load($fiche_ei_id);
-$droitFiche = $droitFiche || (!$canEdit && $fiche->user_id!=$AppUI->user_id);
-$droitFiche = $droitFiche || ($canEdit && !$canAdmin && $fiche->user_id!=$AppUI->user_id && $fiche->service_valid_user_id!=$AppUI->user_id);
+$droitFiche = $droitFiche || (!$can->edit && $fiche->user_id!=$AppUI->user_id);
+$droitFiche = $droitFiche || ($can->edit && !$can->admin && $fiche->user_id!=$AppUI->user_id && $fiche->service_valid_user_id!=$AppUI->user_id);
 
 
 if($droitFiche){
@@ -62,7 +60,7 @@ $listFiches["AUTHOR"] = array();
 
 // **************************************************************
 // Chargement pour Chef de Service
-if($canEdit){
+if($can->edit){
 	$listFiches["ATT_CS"]      = array();
   $listFiches["ATT_QUALITE"] = array();
   $listFiches["ALL_TERM"]    = array();
@@ -70,7 +68,7 @@ if($canEdit){
 
 // **************************************************************
 // Chargement pour Administration
-if($canAdmin){
+if($can->admin){
 	$listFiches["VALID_FICHE"] = array();
   $listFiches["ATT_CS"]      = array();
   $listFiches["ATT_QUALITE"] = array();
@@ -94,11 +92,11 @@ if($canAdmin){
 foreach($listFiches as $keyList=>$valueList){
   $userSel = null;
   $where = null;
-  if($keyList=="AUTHOR" || ($canEdit && !$canAdmin)){
+  if($keyList=="AUTHOR" || ($can->edit && !$can->admin)){
     $userSel=$AppUI->user_id;
   }
   
-  if($keyList=="ALL_TERM" && $canAdmin){
+  if($keyList=="ALL_TERM" && $can->admin){
     $where = array();
     if($allEi_user_id){
       $where["user_id"] = db_prepare("= %",$allEi_user_id);

@@ -7,15 +7,13 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m, $tab, $dPconfig;
+global $AppUI, $can, $m, $tab, $dPconfig;
 
-if (!$canEdit) {
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsEdit();
 
 // Droit de lecture dPsante400
 $moduleSante400 = CModule::getInstalled("dPsante400");
-$canReadSante400 = $moduleSante400 ? $moduleSante400->canRead() : false;
+$canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
 
 // Liste des Etablissements selon Permissions
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
@@ -145,7 +143,7 @@ for ($i = 0; $i < 60; $i += $operationConfig["min_intervalle"]) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canReadSante400", $canReadSante400);
+$smarty->assign("canSante400", $canSante400);
 
 $smarty->assign("op"        , $op);
 $smarty->assign("plage"     , $op->plageop_id ? $op->_ref_plageop : new CPlageOp );

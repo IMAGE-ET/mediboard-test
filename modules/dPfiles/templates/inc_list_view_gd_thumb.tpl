@@ -10,7 +10,7 @@
     </div>
     <div id="Acc{{$keyCat}}Content" class="accordionTabContentBox">
       <table class="tbl">
-        {{if $canEditFile && !$accordDossier}}
+        {{if $canFile->edit && !$accordDossier}}
         <tr>
           <td colspan="9">
             <button class="new" onclick="uploadFile('{{$selClass}}', '{{$selKey}}', '{{$keyCat}}')">
@@ -59,7 +59,7 @@
           </a>
           <br />  
             
-          {{if $canEditFile && !$accordDossier}}  
+          {{if $canFile->edit && !$accordDossier}}  
             Déplacer vers 
             <select name="file_category_id" onchange="submitFileChangt(this.form)">
               <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune</option>

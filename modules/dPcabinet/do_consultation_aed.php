@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 if ($chir_id = mbGetValueFromPost("chir_id")) {
   mbSetValueToSession("chir_id", $chir_id);

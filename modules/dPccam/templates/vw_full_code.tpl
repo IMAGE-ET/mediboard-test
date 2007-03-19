@@ -62,7 +62,7 @@ function pageMain() {
             <table class="form">
               <tr>
                 <td class="button">
-                  {{if $canEdit}}
+                  {{if $can->edit}}
                   <form name="addFavoris" action="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}" method="post">
             
                   <input type="hidden" name="dosql" value="do_favoris_aed" />

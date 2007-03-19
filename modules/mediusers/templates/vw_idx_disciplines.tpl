@@ -26,7 +26,7 @@
       </table>
     </td>
     <td class="halfPane">
-      {{if $canEdit}}
+      {{if $can->edit}}
       <form name="editSpeMed" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_discipline_aed" />
       {{mb_field object=$specialite field="discipline_id" hidden=1 prop=""}}

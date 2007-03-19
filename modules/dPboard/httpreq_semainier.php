@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $g, $m, $listMins,$listHours,$HeureMax,$MinMax,$HeureMin,$MinMin,$aAffichage;
+global $AppUI, $can, $g, $m, $listMins,$listHours,$HeureMax,$MinMax,$HeureMin,$MinMin,$aAffichage;
 
-if (!$canRead) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsRead();
 
 // Récupération des paramètres
 $chirSel   = mbGetValueFromGetOrSession("chirSel", 25);

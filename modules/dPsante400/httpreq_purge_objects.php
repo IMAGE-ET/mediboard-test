@@ -7,11 +7,9 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $canRead, $canEdit, $canAdmin, $m, $g;
+global $AppUI, $can, $m, $g;
 
-if (!$canAdmin) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsAdmin();
 
 /**
  * Purge objects of a given class linked to an idSante400 from database

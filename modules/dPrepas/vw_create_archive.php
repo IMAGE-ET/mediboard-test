@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $canAdmin, $m;
+global $AppUI, $can, $m;
 
-if(!$canAdmin) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsAdmin();
 
 $smarty = new CSmartyDP();
 $smarty->display("vw_create_archive.tpl");

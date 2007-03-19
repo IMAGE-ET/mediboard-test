@@ -7,11 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $m;
+global $AppUI, $can, $m;
 
-if (!$canRead) {
-    $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 $selClass = mbGetValueFromGetOrSession("selClass", null);
 

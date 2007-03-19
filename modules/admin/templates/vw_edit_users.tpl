@@ -9,7 +9,7 @@
       {{include file="inc_list_users.tpl"}}
     </td>
     <td class="halfPane">
-      {{if $canEdit}}
+      {{if $can->edit}}
       {{include file="inc_edit_user.tpl"}}
       {{else}}
       {{include file="inc_vw_user.tpl"}}

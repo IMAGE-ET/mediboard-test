@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-GLOBAL $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canRead) {			// lock out users that do not have at least readPermission on this module
-	$AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsRead();
 
 $id = mbGetValueFromGetOrSession("id");
 
@@ -24,8 +22,8 @@ $admission->_ref_plageop->loadRefs();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('admission', $admission);
+$smarty->assign("admission", $admission);
 
-$smarty->display('print_depassement.tpl');
+$smarty->display("print_depassement.tpl");
 
 ?>

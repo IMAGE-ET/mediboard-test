@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 // Récupération des variables
 $objectClass  = mbGetValueFromGet("objectClass"  , null);

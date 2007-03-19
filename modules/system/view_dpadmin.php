@@ -9,7 +9,7 @@
 
 // Old dP administration put in a tab
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 ?>
 <table>

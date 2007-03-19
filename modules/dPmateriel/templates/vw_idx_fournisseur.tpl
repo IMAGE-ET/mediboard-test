@@ -45,7 +45,7 @@ function pageMain() {
       </table>
     </td>
     <td class="halfPane">
-      {{if $canEdit}}
+      {{if $can->edit}}
       <form name="editFournisseur" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_fournisseur_aed" />
 	  <input type="hidden" name="fournisseur_id" value="{{$fournisseur->fournisseur_id}}" />

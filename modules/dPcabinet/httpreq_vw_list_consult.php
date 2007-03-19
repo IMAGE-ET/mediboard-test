@@ -7,11 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
   
-if (!$canEdit) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsEdit();
 
 $date      = mbGetValueFromGetOrSession("date", mbDate());
 $today     = mbDate();
@@ -47,17 +45,14 @@ if (isset($_GET["selConsult"])) {
 // On charge le praticien
 $userSel = new CMediusers;
 $userSel->load($prat_id);
+$canUserSel = $userSel->canDo();
 
 if (!$userSel->isPraticien()) {
   $AppUI->setMsg("Vous devez selectionner un praticien", UI_MSG_ALERT);
   $AppUI->redirect("m=dPcabinet&tab=0");
 }
 
-if (!$userSel->canEdit()) {
-  mbSetValueToSession("chirSel", 0);
-  $AppUI->setMsg("Vous n'avez pas les droits suffisants", UI_MSG_ALERT);
-  $AppUI->redirect("m=dPcabinet&tab=0");
-}
+$canUserSel->needsEdit(array("chirSel"=>0));
 
 if($consult->consultation_id) {
   $date = $consult->_ref_plageconsult->date;

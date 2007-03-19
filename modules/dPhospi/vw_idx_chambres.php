@@ -7,11 +7,9 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $canRead, $canEdit, $m, $g;
+global $AppUI, $can, $m, $g;
 
-if(!$canRead) {
-  $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsRead();
 
 // Récupération de la chambre à ajouter/editer
 $chambreSel = new CChambre;

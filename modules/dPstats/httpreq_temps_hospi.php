@@ -11,7 +11,7 @@ if(function_exists("date_default_timezone_set")) {
   date_default_timezone_set("UTC");
 }
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $intervalle = mbGetValueFromGet("intervalle", "none");
 

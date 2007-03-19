@@ -7,11 +7,9 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
-if (!$canEdit) {
-  $AppUI->redirect( "m=system&a=access_denied" );
-}
+$can->needsEdit();
 
 $deb = mbDate();
 $fin = mbDate("+ 0 day");
@@ -51,13 +49,13 @@ $listPrat = in_array($mediuser->_user_type, array("Administrator", "Secrétaire")
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('deb', $deb);
-$smarty->assign('fin', $fin);
-$smarty->assign('mediuser', $mediuser);
-$smarty->assign('listeTarifsChir', $listeTarifsChir);
-$smarty->assign('listeTarifsSpe', $listeTarifsSpe);
-$smarty->assign('tarif', $tarif);
-$smarty->assign('listPrat', $listPrat);
+$smarty->assign("deb", $deb);
+$smarty->assign("fin", $fin);
+$smarty->assign("mediuser", $mediuser);
+$smarty->assign("listeTarifsChir", $listeTarifsChir);
+$smarty->assign("listeTarifsSpe", $listeTarifsSpe);
+$smarty->assign("tarif", $tarif);
+$smarty->assign("listPrat", $listPrat);
 
-$smarty->display('vw_compta.tpl');
+$smarty->display("vw_compta.tpl");
 

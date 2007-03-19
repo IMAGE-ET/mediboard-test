@@ -7,7 +7,7 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $templateManager = new CTemplateManager;
 $templateManager->valueMode = false;

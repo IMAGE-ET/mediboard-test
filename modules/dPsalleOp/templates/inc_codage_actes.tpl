@@ -6,7 +6,7 @@
   <li>
     <strong>{{$curr_code->libelleLong}}</strong> 
     <em>(<a class="action" href="?m=dPccam&amp;tab=vw_full_code&amp;codeacte={{$curr_code->code}}">{{$curr_code->code}}</a>)</em>
-    {{if $canEdit || $modif_operation}}
+    {{if $can->edit || $modif_operation}}
     <br />Codes associés :
     <select name="asso" onchange="setCode(this.value, 'ccam')">
       <option value="">&mdash; choix</option>
@@ -59,7 +59,7 @@
           {{else}}
             {{assign var="listExecutants" value=$listChirs}}
           {{/if}}
-          {{if $canEdit || $modif_operation}}
+          {{if $can->edit || $modif_operation}}
           <select name="executant_id" title="{{$acte->_props.executant_id}}">
             <option value="">&mdash; Choisir un professionnel de santé</option>
             {{foreach from=$listExecutants item=curr_executant}}
@@ -80,7 +80,7 @@
         <th><label for="modificateurs" title="Modificateurs associés à l'acte">Modificateur(s)</label></th>
         <td class="text">
           {{foreach from=$curr_phase->_modificateurs item=curr_mod}}
-            {{if $canEdit || $modif_operation}}
+            {{if $can->edit || $modif_operation}}
             <input type="checkbox" name="modificateur_{{$curr_mod->code}}" {{if $curr_mod->_value}}checked="checked"{{/if}} />
             <label for="modificateur_{{$curr_mod->code}}" title="{{$curr_mod->libelle}}">
               {{$curr_mod->code}} : {{$curr_mod->libelle}}
@@ -96,7 +96,7 @@
       <tr class="{{$acte->_view}}">
         <th><label for="commentaire" title="Commentaires sur l'acte">Commentaire</label></th>
         <td class="text">
-          {{if $canEdit || $modif_operation}}
+          {{if $can->edit || $modif_operation}}
           <textarea name="commentaire" title="{{$acte->_props.commentaire}}">{{$acte->commentaire}}</textarea>
           {{elseif $acte->commentaire}}
             {{$acte->commentaire|nl2br}}
@@ -106,7 +106,7 @@
       
       </tbody>
       
-      {{if $canEdit || $modif_operation}}
+      {{if $can->edit || $modif_operation}}
       <tr>
         <td class="button" colspan="2">
           {{if $acte->acte_id}}

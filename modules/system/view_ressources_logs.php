@@ -7,7 +7,7 @@
  * @author Romain Ollivier
  */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $date     = mbGetValueFromGetOrSession("date"    , mbDate());
 $groupres = mbGetValueFromGetOrSession("groupres", 1);

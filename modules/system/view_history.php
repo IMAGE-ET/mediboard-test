@@ -7,12 +7,12 @@
  * @author Romain Ollivier
  */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 $dialog = mbGetValueFromGet("dialog");
 
-if (!$canRead && !$dialog) {
-  $AppUI->redirect( "m=system&a=access_denied" );
+if (!$can->read && !$dialog) {
+  $can->redirect();
 }
 
 $user_id      = mbGetValueFromGetOrSession("user_id"     , null);

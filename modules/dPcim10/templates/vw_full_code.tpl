@@ -48,7 +48,7 @@ function selectCode() {
     </td>
      
     <td class="rightPane">
-    {{if $canEdit}}
+    {{if $can->edit}}
       <form name="addFavoris" action="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}" method="post">
       
       <input type="hidden" name="dosql" value="do_favoris_aed" />

@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 require_once($AppUI->getModuleFile("dPcabinet", "jpgraph_bezier"));
 require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));

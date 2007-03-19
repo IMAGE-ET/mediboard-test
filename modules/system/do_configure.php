@@ -7,11 +7,10 @@
 * @author Sébastien Fillonneau
 */
 
-global $mbpath, $AppUI, $dPconfig, $canAdmin, $canRead, $canEdit, $m, $tab;
+global $mbpath, $AppUI, $dPconfig, $can, $m, $tab;
 
-if(!$canAdmin) {
-    $AppUI->redirect("m=system&a=access_denied");
-}
+$can->needsAdmin();
+
 $mbpath = "";
 
 unset($_POST["m"]);

@@ -216,7 +216,7 @@ function setClose(protocole_id) {
         </tr>
         {{/if}}
 
-        {{if $canEdit}}
+        {{if $can->edit}}
         <tr>
           <td class="button" colspan="2">
             <form name="modif" action="./index.php" method="get">

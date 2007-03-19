@@ -1,5 +1,5 @@
 <script language="Javascript" type="text/javascript">
-{{if $canEdit}}
+{{if $can->edit}}
 var oCookie = new CJL_CookieUtil("EIAccordion");
 var showTabAcc = 0;
 
@@ -21,7 +21,7 @@ function writeHeader(iId, sValue){
 }
 {{/if}}
 
-{{if $canAdmin}}
+{{if $can->admin}}
 function search_AllEI(){
   var oForm = document.EiALL_TERM;
   var url = new Url;
@@ -61,7 +61,7 @@ function printIncident(ficheId){
   return;
 }
 
-{{if  $canAdmin && $fiche->qualite_date_validation && (!$fiche->qualite_date_verification || !$fiche->qualite_date_controle)}}
+{{if  $can->admin && $fiche->qualite_date_validation && (!$fiche->qualite_date_verification || !$fiche->qualite_date_controle)}}
 function pageMain() {
   {{if !$fiche->qualite_date_verification}}
   regFieldCalendar("ProcEditFrm", "qualite_date_verification");
@@ -76,9 +76,9 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="halfPane">
-      {{if $canAdmin || $canEdit}}
+      {{if $can->admin || $can->edit}}
       <div class="accordionMain" id="accordionConsult">
-        {{if !$canAdmin}}
+        {{if !$can->admin}}
         
         <div id="CSATraiter">
           <div id="CSATraiterHeader" class="accordionTabTitleBar">
@@ -211,7 +211,7 @@ function pageMain() {
       <table class="form">
         {{include file="inc_incident_infos.tpl"}}
         
-      {{if $canAdmin && !$fiche->date_validation &&!$fiche->annulee}}
+      {{if $can->admin && !$fiche->date_validation &&!$fiche->annulee}}
         <tr>
           <th><label for="degre_urgence" title="{{tr}}CFicheEi-degre_urgence-desc{{/tr}}">{{tr}}CFicheEi-degre_urgence{{/tr}}</label></th>
           <td>
@@ -293,7 +293,7 @@ function pageMain() {
           </td>
         </tr>
       {{/if}}
-      {{if $canAdmin && $fiche->service_date_validation}}
+      {{if $can->admin && $fiche->service_date_validation}}
         {{if !$fiche->qualite_date_validation}}
         <tr>
           <td colspan="2" class="button">
@@ -348,7 +348,7 @@ function pageMain() {
         {{/if}}
       {{/if}}
       
-      {{if $canAdmin && ($fiche->annulee || $fiche->date_validation)}}
+      {{if $can->admin && ($fiche->annulee || $fiche->date_validation)}}
         <tr>
           <td colspan="2" class="button">
             {{if $fiche->annulee}}

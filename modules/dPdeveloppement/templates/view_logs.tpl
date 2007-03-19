@@ -1,4 +1,4 @@
-{{if $canEdit}}
+{{if $can->edit}}
 <div>
   <form name="editFrm" action="?m=system" method="post">
     <input type="hidden" name="m" value="system" />

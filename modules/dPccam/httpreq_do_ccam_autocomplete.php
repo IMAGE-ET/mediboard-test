@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $can, $m;
 
 do_connect($AppUI->cfg["baseCCAM"]);
 
@@ -17,7 +17,7 @@ if($codeacte = @$_POST["codeacte"]){
 
 $result = db_loadList($sql, null, $AppUI->cfg["baseCCAM"]);
 
-if ($canRead) {
+if ($can->read) {
   // Création du template
   $smarty = new CSmartyDP();
   $smarty->debugging = false;
