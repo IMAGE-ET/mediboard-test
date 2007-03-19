@@ -56,6 +56,7 @@ function changeDateCal(){
   oForm.select_days[0].checked = false;
   oForm.select_days[1].checked = false;
   oForm.select_days[2].checked = false;
+  oForm.select_days[3].checked = false;
 }
 function pageMain() {
   regFieldCalendar("paramFrm", "deb");
@@ -83,6 +84,8 @@ function pageMain() {
           <td rowspan="2">
             <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
               <label for="select_days_day">Jour courant</label>
+            <br /><input type="radio" name="select_days" onclick="changeDate('{{$tomorrow}}','{{$tomorrow}}');" value="tomorrow" /> 
+              <label for="select_days_tomorrow">Lendemain</label>
             <br /><input type="radio" name="select_days" onclick="changeDate('{{$week_deb}}','{{$week_fin}}');" value="week" /> 
               <label for="select_days_week">Semaine courante</label>
             <br /><input type="radio" name="select_days" onclick="changeDate('{{$month_deb}}','{{$month_fin}}');" value="month" /> 

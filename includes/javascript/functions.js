@@ -447,6 +447,15 @@ function makeLocaleDateFromDate(date) {
   return printf("%02d/%02d/%04d", d, m, y);
 }
 
+
+function makeLocaleDateTimeFromDate(date) {
+  var h = date.getHours();
+  var m = date.getMinutes();
+  
+  return makeLocaleDateFromDate(date) + printf(" %02d:%02d", h, m);
+}
+
+
 function makeDATETIMEFromDate(date, useSpace) {
   var h = date.getHours();
   var m = date.getMinutes();

@@ -12,8 +12,6 @@ function checkFormPrint() {
 }
 
 function popPlanning() {
-  
-  
   var form = document.paramFrm;
 
   var url = new Url;
@@ -28,6 +26,23 @@ function popPlanning() {
   url.addElement(form.conv);
   url.popup(700, 500, "Planning");
   return;
+}
+
+function changeDate(sDebut, sFin){
+  var oForm = document.paramFrm;
+  var date_debut  = makeDateFromDATETIME(sDebut);
+  var date_fin    = makeDateFromDATETIME(sFin);
+  
+  oForm.deb.value = sDebut;
+  oForm.fin.value = sFin;
+  $('paramFrm_deb_da').innerHTML = makeLocaleDateTimeFromDate(date_debut);
+  $('paramFrm_fin_da').innerHTML = makeLocaleDateTimeFromDate(date_fin);
+}
+
+function changeDateCal(){
+  var oForm = document.paramFrm;
+  oForm.select_days[0].checked = false;
+  oForm.select_days[1].checked = false;
 }
 
 function pageMain() {
@@ -48,25 +63,31 @@ function pageMain() {
         
         <tr>
           <th><label for="deb">Début</label></th>
-          <td class="date" colspan="2">
-            <div id="paramFrm_deb_da">{{$today|date_format:"%d/%m/%Y %H:%M"}}</div>
-            <input type="hidden" name="deb" class="notNull dateTime" value="{{$today}}" />
+          <td class="date">
+            <div id="paramFrm_deb_da">{{$today_deb|date_format:"%d/%m/%Y %H:%M"}}</div>
+            <input type="hidden" onchange="changeDateCal()" name="deb" class="notNull dateTime" value="{{$today_deb}}" />
             <img id="paramFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+          </td>
+          <td rowspan="2">
+            <input type="radio" name="select_days" onclick="changeDate('{{$today_deb}}','{{$today_fin}}');" value="today" checked="checked" /> 
+              <label for="select_days_today">Aujourd'hui</label>
+            <br /><input type="radio" name="select_days" onclick="changeDate('{{$tomorrow_deb}}','{{$tomorrow_fin}}');" value="tomorrow" /> 
+              <label for="select_days_tomorrow">Lendemain</label>
           </td>
         </tr>
 
         <tr>
           <th><label for="fin">Fin</label></th>
-          <td class="date" colspan="2">
-            <div id="paramFrm_fin_da">{{$tomorrow|date_format:"%d/%m/%Y %H:%M"}}</div>
-            <input type="hidden" name="fin" class="notNull dateTime moreEquals|deb" value="{{$tomorrow}}" />
+          <td class="date">
+            <div id="paramFrm_fin_da">{{$today_fin|date_format:"%d/%m/%Y %H:%M"}}</div>
+            <input type="hidden" onchange="changeDateCal()" name="fin" class="notNull dateTime moreEquals|deb" value="{{$today_fin}}" />
             <img id="paramFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>
 
         <tr>
           <th><label for="ordre">Classement des admissions</label></th>
-          <td>
+          <td colspan="2">
             <select name="ordre">
               <option value="heure">Par heure d'admission</option>
               <option value="nom">Par nom du patient</option>
@@ -76,7 +97,7 @@ function pageMain() {
 
         <tr>
           <th><label for="service">Service</label></th>
-          <td><select name="service">
+          <td colspan="2"><select name="service">
             <option value="0">&mdash; Tous les services &mdash;</option>
             {{foreach from=$listServ item=curr_serv}}
             <option value="{{$curr_serv->service_id}}">{{$curr_serv->nom}}</option>
