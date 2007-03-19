@@ -9,6 +9,17 @@
   </tr>
   <tr>
     <th class="libelle">
+      {{if $user == $curr_note->user_id}}
+        <form name="delNoteFrm{{$curr_note}}" action="" method="post">
+        <input type="hidden" name="m" value="system" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="do_note_aed" />
+        {{mb_field object=$curr_note field="note_id" hidden=1 prop=""}}
+        
+        <button class="cancel notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cette note',ajax:1,target:'systemMsg'})">
+        </button>
+        </form>
+      {{/if}}
       {{$curr_note->libelle}}
     </th>
   </tr>

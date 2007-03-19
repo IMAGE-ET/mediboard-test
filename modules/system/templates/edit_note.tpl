@@ -1,3 +1,8 @@
+<script type="text/javascript">
+function closewindow(){
+  window.close();
+}
+</script>
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="dosql" value="do_note_aed" />
 <input type="hidden" name="del" value="0" />
@@ -56,7 +61,7 @@
         Supprimer
       </button>
       {{else}}
-      <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg'); window.close();">Créer</button>
+      <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg',{onComplete:closewindow});">Créer</button>
       {{/if}}
     </td>
   </tr>
