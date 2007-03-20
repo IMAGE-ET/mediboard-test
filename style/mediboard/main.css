@@ -1879,17 +1879,23 @@ div.progressBar div {
 
 div.progressBar div.bar {
   height: 12px;
+/*  opacity: 0.2; */
+  display: block;
   background-repeat: repeat;
 }
+
 div.progressBar div.empty {
   background-image: url(./images/icons/pempty.png);
 }
+
 div.progressBar div.normal {
   background-image: url(./images/icons/pnormal.png);
 }
+
 div.progressBar div.booked {
   background-image: url(./images/icons/pbooked.png);
 }
+
 div.progressBar div.full {
   background-image: url(./images/icons/pfull.png);
 }

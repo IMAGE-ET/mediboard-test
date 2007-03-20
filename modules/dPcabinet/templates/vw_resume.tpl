@@ -2,13 +2,6 @@
 
 <script type="text/javascript">
 
-function printDocument(doc_id) {
-  var url = new Url;
-  url.setModuleAction("dPcompteRendu", "print_cr");
-  url.addParam("compte_rendu_id", doc_id);
-  url.popup(700, 600, 'Compte-rendu');
-}
-
 function popFile(objectClass, objectId, elementClass, elementId){
   var url = new Url;
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
@@ -32,8 +25,7 @@ function newExam(sAction, consultation_id) {
   </tr>
   <tr>
     <th>Antécédents</th>
-    <th>Documents</th>
-    <th>Fichiers</th>
+    <th colspan="2">Documents</th>
   </tr>
   
   <tr>
@@ -45,41 +37,34 @@ function newExam(sAction, consultation_id) {
         <li>
           <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong>
           {{foreach from=$currTypeAnt item=currAnt}}
-          <ul><li>         
+          <ul>
+            <li>         
             {{if $currAnt->date|date_format:"%d/%m/%Y"}}
               {{$currAnt->date|date_format:"%d/%m/%Y"}} :
             {{/if}}
             {{$currAnt->rques}}
-          </li></ul>
+            </li>
+          </ul>
           {{/foreach}}
         </li>
         {{/if}}
         {{/foreach}}
       {{else}}
-        <li>Pas d'antécédents</li>
+        <li><em>Pas d'antécédents</em></li>
       {{/if}}
       </ul>
     </td>
-    <td rowspan="3" class="text" valign="top">
-      <ul>
+    <td rowspan="3" colspan="2"valign="top">
       {{foreach from=$patient->_ref_documents item=curr_doc}}
-        <li>
-          {{$curr_doc->nom}}
-          <button class="print notext" onclick="printDocument({{$curr_doc->compte_rendu_id}})">
-          </button>
-        </li>
+      <a href="#" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class_name}}','{{$curr_doc->_id}}')">
+        {{$curr_doc->nom}}
+      </a>
       {{/foreach}}
-      </ul>
-    </td>
-    <td rowspan="3" class="text" valign="top">
-      <ul>
       {{foreach from=$patient->_ref_files item=curr_file}}
-        <li>
-          <a href="#" onclick="popFile('{{$patient->_class_name}}','{{$patient->_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">{{$curr_file->file_name}}</a>
-          ({{$curr_file->_file_size}})
-        </li>
+      <a href="#" onclick="popFile('{{$patient->_class_name}}','{{$patient->_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">
+        {{$curr_file->file_name}}
+      </a>
       {{/foreach}}
-      </ul>
     </td>
   </tr>
   <tr>
@@ -98,7 +83,7 @@ function newExam(sAction, consultation_id) {
           : <i>{{$curr_trmt->traitement}}</i>
         </li>
         {{foreachelse}}
-        <li>Pas de traitements</li>
+        <li><em>Pas de traitements</em></li>
         {{/foreach}}
       </ul>
     </td>
@@ -110,14 +95,16 @@ function newExam(sAction, consultation_id) {
   <tr>
     <th>Résumé</th>
     <th>Documents</th>
-    <th>Fichiers</th>
+    <th>Regl.</th>
   </tr>
-  {{foreach from=$consultations item=curr_consult}}
+  
+  <!-- Consultations -->
+  {{foreach from=$patient->_ref_consultations item=curr_consult}}
   <tr>
     <td class="text" valign="top">
       Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
       &mdash; {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
-      {{if $curr_consult->motif}}
+        {{if $curr_consult->motif}}
 	      <br />
 	      <strong>Motif:</strong>
 	      <i>{{$curr_consult->motif}}</i>
@@ -144,38 +131,35 @@ function newExam(sAction, consultation_id) {
 	      </a>
 	    {{/if}}
     </td>
-    <td class="text" valign="top">
-      <ul>
+    <td valign="top">
       {{foreach from=$curr_consult->_ref_documents item=curr_doc}}
-        <li>
-          {{$curr_doc->nom}}
-          <button class="print notext" onclick="printDocument({{$curr_doc->compte_rendu_id}})">
-          </button>
-        </li>
+      <a href="#" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class_name}}','{{$curr_doc->_id}}')">
+        {{$curr_doc->nom}}
+      </a>
       {{/foreach}}
-      </ul>
-    </td>
-    <td class="text" valign="top">
-      <ul>
       {{foreach from=$curr_consult->_ref_files item=curr_file}}
-        <li>
-          <a href="#" onclick="popFile('{{$curr_file->file_class}}','{{$curr_file->file_object_id}}','{{$curr_file->_class_name}}','{{$curr_file->file_id}}')">{{$curr_file->file_name}}</a>
-          ({{$curr_file->_file_size}})
-        </li>
+      <a href="#" onclick="popFile('{{$curr_file->file_class}}','{{$curr_file->file_object_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">
+        {{$curr_file->file_name}}
+      </a>
       {{/foreach}}
-      </ul>
     </td>
+    {{if $curr_consult->tarif}}
+    <td {{if !$curr_consult->date_paiement}} style="color: #f00;"{{/if}}>
+      {{$curr_consult->_somme}}&euro;
+    </td>
+    {{/if}}
   </tr>
   {{/foreach}}
+  
+  <!-- Interventions -->
   <tr>
     <th colspan="3" class="title">Interventions</th>
   </tr>
   <tr>
     <th>Résumé</th>
-    <th>Documents</th>
-    <th>Fichiers</th>
+    <th colspan="2">Documents</th>
   </tr>
-  {{foreach from=$sejours item=curr_sejour}}
+  {{foreach from=$patient->_ref_sejours item=curr_sejour}}
   <tr>
     <td class="text" valign="top">
       <ul>
@@ -183,9 +167,15 @@ function newExam(sAction, consultation_id) {
         <li>
           Dr. {{$curr_op->_ref_chir->_view}}
           &mdash; {{$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}}
-          {{foreach from=$curr_op->_codes_ccam|smarty:nodefaults item=curr_code}}
-            <br />
-            {{$curr_code}}
+          {{if $curr_op->libelle}}
+          <br/>
+          <strong>{{mb_label object=$curr_op field="libelle"}}</strong> :
+          {{mb_value object=$curr_op field="libelle"}}
+          {{/if}}
+          {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
+          <br />
+          <strong>{{$curr_code->code}}</strong>
+          : {{$curr_code->libelleLong}}
           {{/foreach}}
         </li>
         {{foreachelse}}
@@ -196,30 +186,21 @@ function newExam(sAction, consultation_id) {
         {{/foreach}}
       </ul>
     </td>
-    <td class="text" valign="top">
-      <ul>
+    <td colspan="2" valign="top">
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
       {{foreach from=$curr_op->_ref_documents item=curr_doc}}
-        <li>
-          {{$curr_doc->nom}}
-          <button class="print notext" onclick="printDocument({{$curr_doc->compte_rendu_id}})">
-          </button>
-        </li>
+      <a href="#" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class_name}}','{{$curr_doc->_id}}')">
+        {{$curr_doc->nom}}
+      </a>
       {{/foreach}}
       {{/foreach}}
-      </ul>
-    </td>
-    <td class="text" valign="top">
-      <ul>
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
       {{foreach from=$curr_op->_ref_files item=curr_file}}
-        <li>
-          <a href="#" onclick="popFile('{{$curr_file->file_class}}','{{$curr_file->file_object_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">{{$curr_file->file_name}}</a>
-          ({{$curr_file->_file_size}})
-        </li>
+      <a href="#" onclick="popFile('{{$curr_file->file_class}}','{{$curr_file->file_object_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">
+        {{$curr_file->file_name}}
+      </a>
       {{/foreach}}
       {{/foreach}}
-      </ul>
     </td>
   </tr>
   {{/foreach}}

@@ -297,7 +297,7 @@ Class.extend(ObjectTooltip, {
 
     this.oOptions = {
       mode: "view",
-      duration: 300,
+      duration: 200,
     };
     
     Object.extend(this.oOptions, oOptions);

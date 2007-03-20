@@ -672,3 +672,7 @@ table.note td {
 table.note th {
   font-weight: bold;
 }
+
+div.progressBar div.bar {
+/*  opacity: 0.5; */
+}

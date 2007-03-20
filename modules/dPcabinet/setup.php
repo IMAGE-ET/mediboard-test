@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.66";
+$config["mod_version"]     = "0.67";
 $config["mod_type"]        = "user";
 
 
@@ -643,7 +643,17 @@ class CSetupdPcabinet extends CSetup {
         "\nVALUES ('0', 'DossierCabinet', 'dPcabinet');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.66";
+    $this->makeRevision("0.66");
+    $sql = "UPDATE `consultation` SET  `rques` = NULL  WHERE `rques` = 'NULL'";
+    $this->addQuery($sql);
+    $sql = "UPDATE `consultation` SET  `motif` = NULL  WHERE `motif` = 'NULL'";
+    $this->addQuery($sql);
+    $sql = "UPDATE `consultation` SET  `traitement` = NULL  WHERE `traitement` = 'NULL'";
+    $this->addQuery($sql);
+    $sql = "UPDATE `consultation` SET  `examen` = NULL  WHERE `examen` = 'NULL'";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.67";
   }
 }
 ?>

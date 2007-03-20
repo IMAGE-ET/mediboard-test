@@ -117,7 +117,7 @@
 			  <option>30</option>
 			  <option>45</option>
 			</select>
-			<input type="submit" value="changer" />
+			<button class="tick" type="submit">Changer</button>
 			</form>
 		  </td>
 		  <td class="text">
