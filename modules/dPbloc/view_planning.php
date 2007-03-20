@@ -42,7 +42,7 @@ $user->load($AppUI->user_id);
 
 //if($user->isFromType(array("Anesthésiste"))) {
   if($chir_id) {
-    $where["chir_id"] = db_prepare("chir_id = %", $chir_id);
+    $where["chir_id"] = db_prepare("= %", $chir_id);
   }
 //} else {
 //  $listPrat = new CMediusers;
