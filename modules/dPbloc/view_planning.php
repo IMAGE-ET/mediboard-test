@@ -83,7 +83,8 @@ foreach($plagesop as $keyPlage => $valuePlage) {
       $operation =& $listOp[$keyOp];
       $operation->loadRefsFwd();
       $operation->_ref_sejour->loadRefsFwd();
-      $operation->_ref_sejour->loadRefsAffectations();
+      // On utilise la first_affectation pour contenir l'affectation courante du patient
+      $operation->_ref_sejour->_ref_first_affectation = $operation->_ref_sejour->getCurrAffectation($operation->_datetime);
       $affectation =& $operation->_ref_sejour->_ref_first_affectation;
       if ($affectation->affectation_id) {
         $affectation->loadRefsFwd();
