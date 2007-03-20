@@ -22,7 +22,7 @@ class CCanDo {
     global $AppUI, $actionType;
     
     // on passa a null soit "tab" soit "a" selon ou l'on se trouve
-    mbSetValueToSession($this->setValues);
+    mbSetValueToSession($actionType);
     
     if($this->setValues){
       if(is_scalar($this->setValues)){
