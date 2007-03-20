@@ -285,6 +285,20 @@ class CSejour extends CMbObject {
     return ($this->_ref_group->getPerm($permType) && $this->_ref_praticien->getPerm($permType));
   }
   
+  function getCurrAffectation($date = null) {
+    if(!$date) {
+      $date = mbDateTime();
+    }
+    $curr_affectation = new CAffectation();
+    $order = "entree";
+    $where = array();
+    $where["sejour_id"] = db_prepare("= %", $this->sejour_id);
+    $where["entree"] = db_prepare("< %", $date);
+    $where["sortie"] = db_prepare(">= %", $date);
+    $curr_affectation->loadObject($where, $order);
+    return $curr_affectation;
+  }
+  
   function loadRefsAffectations() {
     $where = array("sejour_id" => "= '$this->sejour_id'");
     $order = "sortie DESC";
