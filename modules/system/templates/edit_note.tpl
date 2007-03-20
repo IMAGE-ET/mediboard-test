@@ -1,6 +1,11 @@
 <script type="text/javascript">
-function closewindow(){
-  window.close();
+function submitNote(){
+  var oForm = document.editFrm;
+  
+  if(checkForm(oForm)){
+    submitFormAjax(oForm, 'systemMsg');
+    window.close();
+  }
 }
 </script>
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -61,7 +66,7 @@ function closewindow(){
         Supprimer
       </button>
       {{else}}
-      <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg',{onComplete:closewindow});">Créer</button>
+      <button type="button" class="submit" onclick="submitNote()">Créer</button>
       {{/if}}
     </td>
   </tr>
