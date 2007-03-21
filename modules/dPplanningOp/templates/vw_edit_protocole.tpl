@@ -7,6 +7,7 @@ var oCcamField = null;
 function refreshListCCAM() {
   oCcamNode = document.getElementById("listCodesCcam");
   var oForm = document.editFrm;
+  oForm._codeCCAM.value="";
   var aCcam = oForm.codes_ccam.value.split("|");
   // Si la chaine est vide, il crée un tableau à un élément vide donc :
   aCcam.removeByValue("");
@@ -129,11 +130,7 @@ function pageMain() {
 
   oCcamField = new TokenField(document.editFrm.codes_ccam, { 
     onChange : refreshListCCAM,
-    sSpecType : "code",
-    aSpecParams : {
-      "ccam" : true, 
-      "notNull" : true
-    }
+    sProps : "notNull code ccam"
   } );
 }
 
