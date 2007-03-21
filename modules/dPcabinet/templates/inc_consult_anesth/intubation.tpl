@@ -51,7 +51,7 @@ function verifIntubDifficileAndSave(oForm){
     <td>
       <select name="_helpers_etatBucco" size="1" onchange="pasteHelperContent(this);this.form.etatBucco.onchange();">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult_anesth->_aides.etatBucco}}
+        {{html_options options=$consult_anesth->_aides.etatBucco.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.etatBucco)"></button><br />
       {{mb_field object=$consult_anesth field="etatBucco" onchange="submitFormAjax(this.form, 'systemMsg')"}}
@@ -63,7 +63,7 @@ function verifIntubDifficileAndSave(oForm){
     <td>
       <select name="_helpers_conclusion" size="1" onchange="pasteHelperContent(this);this.form.conclusion.onchange();">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult_anesth->_aides.conclusion}}
+        {{html_options options=$consult_anesth->_aides.conclusion.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.conclusion)"></button><br />
       {{mb_field object=$consult_anesth field="conclusion" onchange="submitFormAjax(this.form, 'systemMsg')"}}

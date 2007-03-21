@@ -135,6 +135,8 @@ function pageMain() {
   
   initAccord(true);
   
+  document.editAntFrm.type.onchange();
+  
   oCimField = new TokenField(document.editDiagFrm.listCim10, { 
     confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
     onChange : updateTokenCim10

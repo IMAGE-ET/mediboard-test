@@ -124,6 +124,12 @@ class CExamAudio extends CMbObject {
       "droite_vocale"   => "str maxLength|64"
     );
   }
+
+  function getHelpedFields(){
+    return array(
+      "remarques" => null
+    );
+  }
   
   function checkAbscisse($vocal_points) {
     $dBs = array();

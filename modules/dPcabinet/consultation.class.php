@@ -99,6 +99,16 @@ class CConsultation extends CMbObject {
     ); 
   }
   
+  function getHelpedFields(){
+    return array(
+      "motif"         => null,
+      "rques"         => null,
+      "examen"        => null,
+      "traitement"    => null,
+      "compte_rendu"  => null
+    );
+  }
+  
   function getEtat() {
     $etat = array();
     $etat[self::PLANIFIE]       = "Plan.";

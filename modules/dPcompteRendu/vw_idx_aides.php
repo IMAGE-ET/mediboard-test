@@ -11,23 +11,35 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-// Class and fields
-$classes = array (
-  "CConsultation"  => array ("motif", "rques", "examen", "traitement", "compte_rendu"),
-  "CConsultAnesth" => array ("tabac", "oenolisme", "etatBucco" , "conclusion", "premedication", "prepa_preop"),
-  "COperation"     => array ("examen", "materiel", "convalescence", "compte_rendu"),
-  "CPatient"       => array ("remarques"),
-  "CAntecedent"    => array ("rques"),
-  "CTraitement"    => array ("traitement"),
-  "CTechniqueComp" => array ("technique"),
-  "CExamComp"      => array ("examen"),
-  "CExamAudio"     => array ("remarques"),
-  "CAddiction"     => array ("addiction")
-);  
+// Liste des Class
+$listClass       = getInstalledClasses();
+$listTraductions = array();
+$classes         = array();
 
-$listObjectAffichage = array();
-foreach($classes as $sClass=>$aChamps){
-	$listObjectAffichage[$sClass] = $AppUI->_($sClass);
+// Chargement des champs d'aides a la saisie
+foreach($listClass as $sClassName){  
+  $object = new $sClassName;
+  if(count($object->_helped_fields)){
+    $listTraductions[$sClassName] = $AppUI->_($sClassName);
+    
+    foreach($object->_helped_fields as $field =>$help_field){
+      $classes[$sClassName][$field] = null;
+      
+      if($help_field){
+        $specType = $object->_specs[$help_field]->getSpecType();
+        if($specType == "enum"){
+          $entryEnums = array();
+          // Ecriture du tableau de traduction
+          foreach($object->_enumsTrans[$help_field] as $key => $sTraduction){
+            $listTraductions["$sClassName.$help_field.$key"] = $sTraduction;
+            $entryEnums[$key] = "$sClassName.$help_field.$key";
+          }
+          $classes[$sClassName][$field] = $entryEnums;
+        }
+      }
+
+    }
+  }
 }
 
 // Liste des users accessibles
@@ -105,15 +117,15 @@ if (!$aide_id) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listPrat"      , $listPrat);
-$smarty->assign("listFunc"      , $listFunc);
-$smarty->assign("classes"       , $classes);
-$smarty->assign("aide"          , $aide);
-$smarty->assign("aidesFunc"     , $aidesFunc);
-$smarty->assign("aidesPrat"     , $aidesPrat);
-$smarty->assign("filter_class"  , $filter_class);
-$smarty->assign("filter_user_id", $filter_user_id);
-$smarty->assign("listObjectAffichage" , $listObjectAffichage);
+$smarty->assign("listPrat"        , $listPrat);
+$smarty->assign("listFunc"        , $listFunc);
+$smarty->assign("classes"         , $classes);
+$smarty->assign("aide"            , $aide);
+$smarty->assign("aidesFunc"       , $aidesFunc);
+$smarty->assign("aidesPrat"       , $aidesPrat);
+$smarty->assign("filter_class"    , $filter_class);
+$smarty->assign("filter_user_id"  , $filter_user_id);
+$smarty->assign("listTraductions" , $listTraductions);
 
 $smarty->display("vw_idx_aides.tpl");
 ?>

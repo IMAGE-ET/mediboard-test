@@ -193,7 +193,13 @@ class CPatient extends CMbObject {
       "ville"  => "like"
     );
   }
-  
+
+  function getHelpedFields(){
+    return array(
+      "remarques" => null
+    );
+  }
+    
   function updateFormFields() {
     parent::updateFormFields();
 

@@ -144,6 +144,16 @@ class COperation extends CMbObject {
     );
   }
 
+  function getHelpedFields(){
+    return array(
+      "examen"        => null,
+      "materiel"      => null,
+      "convalescence" => null,
+      "compte_rendu"  => null,
+      "rques"         => null
+    );
+  }
+  
   function check() {
     // Data checking
     $msg = null;

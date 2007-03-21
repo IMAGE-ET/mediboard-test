@@ -44,13 +44,15 @@ class CMbObject {
    * Properties  specification
    */
 
-  var $_aides      = array(); // aides à la saisie
-  var $_props      = array(); // properties specifications
-  var $_specs      = array();
-  var $_enums      = array(); // enums fields elements
-  var $_enumsTrans = array(); // enums fields translated elements
-  var $_seek       = array(); // seekable fields
+  var $_helped_fields = array(); // Champs concerné par les aides a la saisie
+  var $_aides         = array(); // aides à la saisie
+  var $_props         = array(); // properties specifications
+  var $_specs         = array();
+  var $_enums         = array(); // enums fields elements
+  var $_enumsTrans    = array(); // enums fields translated elements
+  var $_seek          = array(); // seekable fields
   var $_nb_files_docs = null;
+  
   
   /**
    * References
@@ -76,13 +78,14 @@ class CMbObject {
     $this->_tbl_key = $key;
     $this->_id      =& $this->$key;
     
-    static $class = null;
-    static $objectsTable = array();
-    static $props = null;
-    static $specsObj = null;
-    static $seeks = null;
-    static $enums = null;
-    static $enumsTrans = null;
+    static $class         = null;
+    static $objectsTable  = array();
+    static $props         = null;
+    static $specsObj      = null;
+    static $seeks         = null;
+    static $enums         = null;
+    static $enumsTrans    = null;
+    static $helped_fields = null;
 
     static $static = false;
     if (!$static) {
@@ -99,17 +102,20 @@ class CMbObject {
       $this->_enums =& $enums;
       $enumsTrans = $this->getEnumsTrans();
       $this->_enumsTrans =& $enumsTrans;
+      $helped_fields = $this->getHelpedFields();
+      $this->_helped_fields =& $helped_fields;
       
       $static = true;
     }
     
-    $this->_class_name =& $class;
-    $this->_objectsTable =& $objectsTable;
-    $this->_props =& $props;
-    $this->_specs =& $specsObj;
-    $this->_seek =& $seeks;
-    $this->_enums =& $enums;
-    $this->_enumsTrans =& $enumsTrans;
+    $this->_class_name    =& $class;
+    $this->_objectsTable  =& $objectsTable;
+    $this->_props         =& $props;
+    $this->_specs         =& $specsObj;
+    $this->_seek          =& $seeks;
+    $this->_enums         =& $enums;
+    $this->_enumsTrans    =& $enumsTrans;
+    $this->_helped_fields =& $helped_fields;
   }
   
   /**
@@ -732,6 +738,13 @@ class CMbObject {
     return array();
   }
   
+  /**
+   * Liste des champs d'aides à la saisie
+   */
+  function getHelpedFields(){
+    return array();
+  }
+  
   function getSpecsObj($props = null){
     if($props == null){
       $specs =& $this->_props;
@@ -844,37 +857,63 @@ class CMbObject {
   }
 
   function loadAides($user_id) {
-    // Initialisation to prevent understandable smarty notices
-    foreach ($this->_props as $propName => $propSpec) {
-      if ($this->lookupSpec("text",$propSpec) !== false) {
-        $this->_aides[$propName] = null;
-      }
+    foreach ($this->_helped_fields as $field => $prop) {
+      $this->_aides[$field] = null;
     }
-    // Load appropriate Aides
+    
+    // Chargement de l'utilisateur courant
     $currUser = new CMediusers();
     $currUser->load($user_id);
     
+    // Préparation du chargement des aides
     $where = array();
     $where["user_id"] = db_prepare("= %", $user_id);
     $where["class"]   = db_prepare("= %", $this->_class_name);
     $order = "name";
     
+    // Chargement des Aides de l'utilisateur
     $aides = new CAideSaisie();
-    $aides = $aides->loadList($where,$order);  
-    // Aides mapping suitable for select options
-    
-    foreach ($aides as $aide) {
-      
-      $this->_aides[$aide->field]["Aides du praticien"][$aide->text] = $aide->name;  
-    }
-    
+    $aides = $aides->loadList($where,$order); 
+    $this->orderAides($aides, "Aides du praticien");
     unset($where["user_id"]);
+    
+    // Chargement des Aides de la fonction de l'utilisateur
     $where["function_id"] = db_prepare("= %", $currUser->function_id);
     $aides = new CAideSaisie();
     $aides = $aides->loadList($where,$order);  
-    // Aides mapping suitable for select options
+    $this->orderAides($aides, "Aides du cabinet");
+  }
+  
+  function orderAides($aides, $title){
+    global $AppUI;
     foreach ($aides as $aide) {
-      $this->_aides[$aide->field]["Aides du cabinet"][$aide->text] = $aide->name;  
+      $curr_aide =& $this->_aides[$aide->field];
+      
+      // Verification de l'existance des clé dans le tableaux
+      $linkField = @$this->_helped_fields[$aide->field];
+      if($linkField){
+        $entryEnums = $this->_enumsTrans[$linkField];
+        // Création des entrées pour les enums
+        if(!isset($curr_aide[current($entryEnums)])){
+          foreach($entryEnums as $valueEnum){
+            $curr_aide[$valueEnum][$title] = array();
+          }
+        }
+      }
+    
+      // Ajout de l'aide à la liste générale
+      $curr_aide["no_enum"][$title][$aide->text] = $aide->name; 
+      
+      if(!$aide->depend_value && $linkField){
+        // depend de toute les entrées
+        foreach($entryEnums as $valueEnum){
+          $curr_aide[$valueEnum][$title][$aide->text] = $aide->name;
+        }
+      }
+      
+      if($aide->depend_value){
+        $curr_aide[$AppUI->_($aide->class.".".$linkField.".".$aide->depend_value)][$title][$aide->text] = $aide->name;
+      }
     }
   }
 

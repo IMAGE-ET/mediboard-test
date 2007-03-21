@@ -1,5 +1,5 @@
 <?php
-$locales['CMedecin-complementaires-desc'] = 'Disciplines complémentaires d\'exercice';
+$locales['CAntecedent.type.gyn'] = 'Gynécologique';
 $locales['CAntecedent'] = 'Antécédents';
 $locales['CAntecedent-date'] = 'Date';
 $locales['CAntecedent-date-desc'] = 'Date de l\'antécédent';
@@ -18,6 +18,7 @@ $locales['CMedecin'] = 'Médecins';
 $locales['CMedecin-adresse'] = 'Adresse';
 $locales['CMedecin-adresse-desc'] = 'Adresse du cabinet du médecin';
 $locales['CMedecin-complementaires'] = 'Complémentaires';
+$locales['CMedecin-complementaires-desc'] = 'Disciplines complémentaires d\'exercice';
 $locales['CMedecin-cp'] = 'Code Postal';
 $locales['CMedecin-cp-desc'] = 'Code Postal du cabinet du médecin';
 $locales['CMedecin-disciplines'] = 'Disciplines';

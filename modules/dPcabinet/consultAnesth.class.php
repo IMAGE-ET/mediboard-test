@@ -145,6 +145,17 @@ class CConsultAnesth extends CMbObject {
     );
   }
   
+  function getHelpedFields(){
+    return array(
+      "tabac"         => null,
+      "oenolisme"     => null,
+      "etatBucco"     => null,
+      "conclusion"    => null,
+      "premedication" => null,
+      "prepa_preop"   => null
+    );
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
   	// Vérification si intubation difficile

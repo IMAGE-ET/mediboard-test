@@ -33,6 +33,12 @@ class CTechniqueComp extends CMbObject {
       "technique"              => "text"
     );
   }
+
+  function getHelpedFields(){
+    return array(
+      "technique" => null
+    );
+  }
   
   function loadRefsFwd() {
     $this->_ref_consult_anesth = new CConsultAnesth;

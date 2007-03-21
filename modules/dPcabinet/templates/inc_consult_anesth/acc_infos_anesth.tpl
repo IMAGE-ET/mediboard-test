@@ -40,7 +40,7 @@ function reloadListTech() {
       {{mb_label object=$consult_anesth->_ref_operation field="rques"}}
       <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult_anesth->_ref_operation->_aides.rques}}
+        {{html_options options=$consult_anesth->_ref_operation->_aides.rques.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques)"></button><br />
       {{mb_field object=$consult_anesth->_ref_operation field="rques" onblur="submitFormAjax(this.form, 'systemMsg')"}}
@@ -58,7 +58,7 @@ function reloadListTech() {
       {{mb_label object=$consult_anesth field="premedication"}}
       <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult_anesth->_aides.premedication}}
+        {{html_options options=$consult_anesth->_aides.premedication.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.premedication)"></button><br />
       {{mb_field object=$consult_anesth field="premedication" onchange="submitFormAjax(this.form, 'systemMsg')"}}
@@ -67,7 +67,7 @@ function reloadListTech() {
       {{mb_label object=$consult_anesth field="prepa_preop"}}
       <select name="_helpers_prepa_preop" size="1" onchange="pasteHelperContent(this);this.form.prepa_preop.onchange();">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult_anesth->_aides.prepa_preop}}
+        {{html_options options=$consult_anesth->_aides.prepa_preop.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.prepa_preop)"></button><br />
       {{mb_field object=$consult_anesth field="prepa_preop" onchange="submitFormAjax(this.form, 'systemMsg')"}}
@@ -83,7 +83,7 @@ function reloadListTech() {
       {{mb_label object=$techniquesComp field="technique"}}
       <select name="_helpers_technique" size="1" onchange="pasteHelperContent(this)">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$techniquesComp->_aides.technique}}
+        {{html_options options=$techniquesComp->_aides.technique.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTechniqueComp', this.form._hidden_technique, 'technique')"></button><br />
       <input type="hidden" name="_hidden_technique" value="" />
@@ -106,7 +106,7 @@ function reloadListTech() {
       {{mb_label object=$consult field="rques"}}
       <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult->_aides.rques}}
+        {{html_options options=$consult->_aides.rques.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques)"></button><br />
       {{mb_field object=$consult field="rques" onchange="submitFormAjax(this.form, 'systemMsg')"}}<br />

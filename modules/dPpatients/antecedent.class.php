@@ -33,9 +33,15 @@ class CAntecedent extends CMbObject {
     return array (
       "object_id"    => "notNull ref",
       "object_class" => "notNull enum list|CPatient|CConsultAnesth",
-      "type"         => "notNull enum list|med|alle|trans|obst|chir|fam|anesth",
+      "type"         => "notNull enum list|med|alle|trans|obst|chir|fam|anesth|gyn",
       "date"         => "date",
       "rques"        => "text"
+    );
+  }
+
+  function getHelpedFields(){
+    return array(
+      "rques" => "type"
     );
   }
   

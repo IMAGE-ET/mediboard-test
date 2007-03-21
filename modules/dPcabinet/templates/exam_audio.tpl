@@ -287,7 +287,7 @@ if (window.opener.reloadFdr) {
         <td style="text-align:left;">
           <select name="_helpers_remarques" size="1" onchange="pasteHelperContent(this);">
             <option value="">&mdash; Choisir une aide</option>
-            {{html_options options=$exam_audio->_aides.remarques}}
+            {{html_options options=$exam_audio->_aides.remarques.no_enum}}
           </select>
           <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamAudio', this.form.remarques)"></button><br />
           <textarea name="remarques" rows="4">{{$exam_audio->remarques}}</textarea>

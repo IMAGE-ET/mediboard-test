@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.43";
+$config["mod_version"]     = "0.44";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -331,7 +331,11 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `addiction` CHANGE `object_class` `object_class` enum('CPatient','CConsultAnesth') NOT NULL DEFAULT 'CPatient';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.43";
+    $this->makeRevision("0.43");
+    $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` enum('med','alle','trans','obst','chir','fam','anesth','gyn') NOT NULL DEFAULT 'med';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.44";
   }
 }
 

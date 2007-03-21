@@ -116,6 +116,30 @@ function pasteHelperContent(oHelpElement) {
   oAreaField.scrollTop = oAreaField.scrollHeight;
 }
 
+function putHelperContent(oForm, sFieldChoix, sFieldSelect){
+  var oSelectAides  = $(oForm[sFieldSelect]);  
+  var sValue        = oForm[sFieldChoix].options[oForm[sFieldChoix].selectedIndex].textContent
+  
+  //Suppression des espaces
+  Dom.cleanWhitespace(oSelectAides);
+  
+  if(!sValue || sValue == ""){
+    sValue = "no_enum";
+  }
+  
+  // Etude des classes
+  for(var i=0; i< oSelectAides.childNodes.length; i++){
+    var childNode = oSelectAides.childNodes[i];
+    if(childNode.className == sValue){
+      $(childNode).show();
+    }else{
+      $(childNode).hide();
+    }
+  }
+}
+
+
+
 function notNullOK(oElement) {
   if (oLabel = getLabelFor(oElement)) {
     oLabel.className = oElement.value ? "notNullOK" : "notNull";

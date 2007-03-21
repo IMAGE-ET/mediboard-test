@@ -36,6 +36,12 @@ class CAddiction extends CMbObject {
       "addiction"    => "text"
     );
   }
+
+  function getHelpedFields(){
+    return array(
+      "addiction" => null
+    );
+  }
   
   function loadRefsFwd() {
     // Objet

@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcompteRendu";
-$config["mod_version"]     = "0.30";
+$config["mod_version"]     = "0.31";
 $config["mod_type"]        = "user";
 
 class CSetupdPcompteRendu extends CSetup {
@@ -233,7 +233,11 @@ class CSetupdPcompteRendu extends CSetup {
     $sql = "UPDATE `aide_saisie` SET user_id = NULL WHERE user_id='0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.30";
+    $this->makeRevision("0.30");
+    $sql = "ALTER TABLE `aide_saisie` ADD `depend_value` varchar(255) DEFAULT NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.31";
   }
 }
 ?>

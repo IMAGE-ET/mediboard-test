@@ -2,31 +2,30 @@
 
 <script type="text/javascript">
 
-var classes = {{$classes|@json}};
-
-var aTraducClass = new Array();
-{{foreach from=$listObjectAffichage key=key item=currClass}}
-aTraducClass["{{$key}}"] = "{{$currClass}}";
+var aTraduction = new Array();
+{{foreach from=$listTraductions key=key item=currClass}}
+aTraduction["{{$key}}"] = "{{$currClass}}";
 {{/foreach}}
+
+var classes = {{$classes|@json}};
 
 function loadClasses(value) {
   var form = document.editFrm;
   var select = form.elements['class'];
   var options = classes;
-  
+
   // delete all former options except first
   while (select.length > 1) {
     select.options[1] = null;
   }
-
+  
   // insert new ones
   for (var elm in options) {
     var option = elm;
     if (typeof(options[option]) != "function") { // to filter prototype functions
-      select.options[select.length] = new Option(aTraducClass[option], option, option == value);
+      select.options[select.length] = new Option(aTraduction[option], option, option == value);
     }
   }
-
   loadFields();
 }
 
@@ -43,9 +42,36 @@ function loadFields(value) {
 
   // insert new ones
   for (var elm in options) {
+    var option = elm;
+    if (typeof(options[option]) != "function") { // to filter prototype functions
+      select.options[select.length] = new Option(option, option, option == value);
+    }
+  }
+  loadDependances();
+}
+
+function loadDependances(value){
+  var form = document.editFrm;
+  var select = form.elements['depend_value'];
+  var className  = form.elements['class'].value;
+  var fieldName  = form.elements['field'].value;
+  var options = classes[className];
+
+  // delete all former options except first
+  while (select.length > 1) {
+    select.options[1] = null;
+  }
+  
+  if(!options){
+   return;
+  }
+  options = classes[className][fieldName];
+  
+  // insert new ones
+  for (var elm in options) {
     var option = options[elm];
     if (typeof(option) != "function") { // to filter prototype functions
-      select.options[select.length] = new Option(option, option, option == value);
+      select.options[select.length] = new Option(aTraduction[option], elm, elm == value);
     }
   }
 }
@@ -53,6 +79,7 @@ function loadFields(value) {
 function pageMain() {
   loadClasses('{{$aide->class}}');
   loadFields('{{$aide->field}}');
+  loadDependances('{{$aide->depend_value}}');
 }
 
 </script>
@@ -109,6 +136,7 @@ function pageMain() {
       <th>Utilisateur</th>
       <th>Type d'objet</th>
       <th>Champ de l'objet</th>
+      <th>Dépendance</th>
       <th>Nom de l'aide</th>
       <th>Texte de remplacement</th>
     </tr>
@@ -120,9 +148,21 @@ function pageMain() {
     <tr>
       {{assign var="aide_id" value=$curr_aide->aide_id}}
       {{assign var="href" value="?m=$m&tab=$tab&aide_id=$aide_id"}}
+      {{assign var="className" value=$curr_aide->class}}
+      {{assign var="field" value=$curr_aide->field}}
       <td><a href="{{$href}}">{{$curr_aide->_ref_user->_view}}</a></td>
-      <td><a href="{{$href}}">{{tr}}{{$curr_aide->class}}{{/tr}}</a></td>
-      <td><a href="{{$href}}">{{$curr_aide->field}}</a></td>
+      <td><a href="{{$href}}">{{tr}}{{$className}}{{/tr}}</a></td>
+      <td><a href="{{$href}}">{{$field}}</a></td>
+      <td>
+        <a href="{{$href}}">
+        {{if $curr_aide->_ref_abstat_object->_helped_fields.$field}}
+          {{$curr_aide->_ref_abstat_object->_helped_fields.$field}}
+          {{if $curr_aide->depend_value}}
+          : {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field}}.{{$curr_aide->depend_value}}{{/tr}}
+          {{/if}}
+        {{else}}&mdash;{{/if}}
+        </a>
+      </td>
       <td><a href="{{$href}}">{{$curr_aide->name}}</a></td>
       <td class="text">{{$curr_aide->text|nl2br}}</td>
     </tr>
@@ -135,9 +175,21 @@ function pageMain() {
     <tr>
       {{assign var="aide_id" value=$curr_aide->aide_id}}
       {{assign var="href" value="?m=$m&tab=$tab&aide_id=$aide_id"}}
+      {{assign var="className" value=$curr_aide->class}}
+      {{assign var="field" value=$curr_aide->field}}
       <td><a href="{{$href}}">{{$curr_aide->_ref_function->text}}</a></td>
-      <td><a href="{{$href}}">{{tr}}{{$curr_aide->class}}{{/tr}}</a></td>
-      <td><a href="{{$href}}">{{$curr_aide->field}}</a></td>
+      <td><a href="{{$href}}">{{tr}}{{$className}}{{/tr}}</a></td>
+      <td><a href="{{$href}}">{{$field}}</a></td>
+      <td>
+        <a href="{{$href}}">
+        {{if $curr_aide->_ref_abstat_object->_helped_fields.$field}}
+          {{$curr_aide->_ref_abstat_object->_helped_fields.$field}}
+          {{if $curr_aide->depend_value}}
+          : {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field}}.{{$curr_aide->depend_value}}{{/tr}}
+          {{/if}}
+        {{else}}&mdash;{{/if}}
+        </a>
+      </td>
       <td><a href="{{$href}}">{{$curr_aide->name}}</a></td>
       <td class="text">{{$curr_aide->text|nl2br}}</td>
     </tr>
@@ -207,8 +259,17 @@ function pageMain() {
     <tr>
       <th>{{mb_label object=$aide field="field"}}</th>
       <td>
-        <select name="field" class="{{$aide->_props.field}}">
+        <select name="field" class="{{$aide->_props.field}}" onchange="loadDependances()">
           <option value="">&mdash; Choisir un champ</option>
+        </select>
+      </td>
+    </tr>
+    
+    <tr>
+      <th>{{mb_label object=$aide field="depend_value"}}</th>
+      <td>
+        <select name="depend_value" class="{{$aide->_props.depend_value}}">
+          <option value="">&mdash; Tous</option>
         </select>
       </td>
     </tr>

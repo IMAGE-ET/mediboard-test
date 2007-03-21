@@ -123,7 +123,7 @@ class CTemplateManager {
     }
     if(isset($object)) {
       $object->loadAides($user_id);
-      if(is_array($helpers = @$object->_aides["compte_rendu"])) {
+      if(is_array($helpers = @$object->_aides["compte_rendu"]["no_enum"])) {
         // Caution, keys and values have to been flipped out
         $valuesHelpers = array();
         foreach($helpers as $listHelpers){

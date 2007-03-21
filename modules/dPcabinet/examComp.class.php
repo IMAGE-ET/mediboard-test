@@ -36,6 +36,12 @@ class CExamComp extends CMbObject {
       "fait"            => "num minMax|0|1"
     );
   }
+
+  function getHelpedFields(){
+    return array(
+      "examen" => null
+    );
+  }
   
   function loadRefsFwd() {
     $this->_ref_consult = new CConsultation;

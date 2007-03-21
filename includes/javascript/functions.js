@@ -627,7 +627,7 @@ Class.extend(Note,  {
 } )
 
 // *******
-
+var notWhitespace   = /\S/;
 Dom = {
   writeElem : function(elem_replace_id,elemReplace){
     elem = $(elem_replace_id);

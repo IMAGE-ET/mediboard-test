@@ -13,7 +13,7 @@
     <th>
       <select name="_helpers_motif" size="1" onchange="pasteHelperContent(this);this.form.motif.onchange();">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult->_aides.motif}}
+        {{html_options options=$consult->_aides.motif.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.motif)">
         Nouveau
@@ -25,7 +25,7 @@
     <th>
       <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult->_aides.rques}}
+        {{html_options options=$consult->_aides.rques.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques)">
         Nouveau
@@ -43,7 +43,7 @@
     <th>
       <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this);this.form.examen.onchange();">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult->_aides.examen}}
+        {{html_options options=$consult->_aides.examen.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen)">
         Nouveau
@@ -56,7 +56,7 @@
     <th>
       <select name="_helpers_traitement" size="1" onchange="pasteHelperContent(this);this.form.traitement.onchange();">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult->_aides.traitement}}
+        {{html_options options=$consult->_aides.traitement.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.traitement)">
         Nouveau

@@ -77,7 +77,7 @@ function reloadListExamComp() {
             {{mb_label object=$examComp field="examen"}}
             <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this)">
               <option value="">&mdash; Choisir une aide</option>
-                {{html_options options=$examComp->_aides.examen}}
+                {{html_options options=$examComp->_aides.examen.no_enum}}
               </select>
               <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamComp', this.form._hidden_examen, 'examen')"></button>
           </td>

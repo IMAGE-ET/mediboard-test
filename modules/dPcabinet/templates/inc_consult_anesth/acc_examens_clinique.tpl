@@ -94,7 +94,7 @@ function calculImcVst(){
       {{mb_label object=$consult field="examen"}}
       <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this);this.form.examen.onchange();">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult->_aides.examen}}
+        {{html_options options=$consult->_aides.examen.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen)"></button><br />
       {{mb_field object=$consult field="examen" onchange="submitFormAjax(this.form, 'systemMsg')"}}<br />

@@ -189,7 +189,7 @@ function checkFormRDV(oForm){
             {{mb_label object=$consult field="motif"}}<br />
             <select name="_helpers_motif" size="1" onchange="pasteHelperContent(this)">
               <option value="">&mdash; Choisir une aide</option>
-              {{html_options options=$consult->_aides.motif}}
+              {{html_options options=$consult->_aides.motif.no_enum}}
             </select><br />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.motif)" />            
           </th>
@@ -201,7 +201,7 @@ function checkFormRDV(oForm){
             {{mb_label object=$consult field="rques"}}<br />
             <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
               <option value="">&mdash; Choisir une aide</option>
-              {{html_options options=$consult->_aides.rques}}
+              {{html_options options=$consult->_aides.rques.no_enum}}
             </select><br />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques)"/>
           </th>

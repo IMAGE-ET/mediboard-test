@@ -174,8 +174,14 @@ function copyTraitement(traitement_id){
           <td>
             {{mb_label object=$antecedent field="rques"}}
             <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
-              <option value="">&mdash; Choisir une aide</option>
-              {{html_options options=$antecedent->_aides.rques}}
+              <option value="" style="display:none;">&mdash; Choisir une aide</option>
+              {{foreach from=$antecedent->_aides.rques item=curr_list key=keyList}}
+              {{foreach from=$curr_list item=list_aides key=sTitleOpt}}
+              <optgroup class="{{$keyList}}" label="{{$sTitleOpt}}" {{if $keyList!="no_enum"}}style="display:none;"{{/if}}>
+                {{html_options options=$list_aides}}
+              </optgroup>
+              {{/foreach}}
+              {{/foreach}}
             </select>
             <input type="hidden" name="_hidden_rques" value="" />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques')">
@@ -201,7 +207,7 @@ function copyTraitement(traitement_id){
         <tr>
           <th>{{mb_label object=$antecedent field="type"}}</th>
           <td>
-            {{mb_field object=$antecedent field="type"}}
+            {{mb_field object=$antecedent field="type" onchange="putHelperContent(document.editAntFrm,'type','_helpers_rques')"}}
           </td>
         </tr>
         <tr>
@@ -232,7 +238,7 @@ function copyTraitement(traitement_id){
             {{mb_label object=$traitement field="traitement"}}
             <select name="_helpers_traitement" size="1" onchange="pasteHelperContent(this)">
               <option value="">&mdash; Choisir une aide</option>
-              {{html_options options=$traitement->_aides.traitement}}
+              {{html_options options=$traitement->_aides.traitement.no_enum}}
             </select>
             <input type="hidden" name="_hidden_traitement" value="" />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTraitement', this.form._hidden_traitement, 'traitement')">

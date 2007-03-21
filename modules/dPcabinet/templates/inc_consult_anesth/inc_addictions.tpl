@@ -46,7 +46,7 @@ function finAddiction(oForm){
       {{mb_label object=$addiction field="addiction"}}
       <select name="_helpers_addiction" size="1" onchange="pasteHelperContent(this)">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$addiction->_aides.addiction}}
+        {{html_options options=$addiction->_aides.addiction.no_enum}}
       </select>
       <input type="hidden" name="_hidden_addiction" value="" />
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAddiction', this.form._hidden_addiction, 'addiction')">
