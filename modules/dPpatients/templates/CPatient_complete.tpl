@@ -169,7 +169,7 @@
   
   <tr>
     <td class="text">
-      {{foreach from=$object->_ref_types_antecedent key=curr_type item=list_antecedent}}
+      {{foreach from=$object->_ref_antecedents key=curr_type item=list_antecedent}}
       <strong>
         {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
       </strong>

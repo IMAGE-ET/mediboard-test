@@ -38,7 +38,17 @@ class CAntecedent extends CMbObject {
       "rques"        => "text"
     );
   }
-
+  
+  function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
+    $results = parent::loadList($where, $order, $limit, $group, $leftjoin);
+    
+    $listAnt = array();
+    foreach($results as $keyAnt => &$currAnt){
+      $listAnt[$currAnt->type][$keyAnt] = $currAnt;
+    }
+    return $listAnt;
+  }
+  
   function getHelpedFields(){
     return array(
       "rques" => "type"

@@ -118,7 +118,6 @@ class CPatient extends CMbObject {
   var $_ref_sejours          = null;
   var $_ref_consultations    = null;
   var $_ref_antecedents      = null;
-  var $_ref_types_antecedent = null;
   var $_ref_traitements      = null;
   var $_ref_addictions       = null;
   var $_ref_types_addiction  = null;
@@ -478,13 +477,6 @@ class CPatient extends CMbObject {
       $where["object_class"] = "= 'CPatient'";
       $order = "type ASC";
       $this->_ref_antecedents = $antecedent->loadList($where, $order);
-
-      // Classement des antécédents
-      $this->_ref_types_antecedent = array();
-      
-      foreach($this->_ref_antecedents as $keyAnt => &$currAnt){
-        $this->_ref_types_antecedent[$currAnt->type][$keyAnt] = $currAnt;
-      }
     }
   }
 
@@ -742,17 +734,9 @@ class CPatient extends CMbObject {
     }
     
     if(is_array($this->_ref_antecedents)){
-      // Classement des antécédents
-      $antecedent = new CAntecedent();
-      $listAnt = array();
+      // Réécritude des antécédents
       $sAntecedents = null;
-      foreach($antecedent->_enumsTrans["type"] as $keyAnt => $currAnt){
-        $listAnt[$keyAnt] = array();
-      }
-      foreach($this->_ref_antecedents as $keyAnt=>$currAnt){
-        $listAnt[$currAnt->type][$keyAnt] = $currAnt;
-      }
-      foreach($listAnt as $keyAnt=>$currTypeAnt){
+      foreach($this->_ref_antecedents as $keyAnt=>$currTypeAnt){
         if($currTypeAnt){
           if($sAntecedents){$sAntecedents.="<br />";}
           $sAntecedents .= $AppUI->_("CAntecedent.type.".$keyAnt)."\n";

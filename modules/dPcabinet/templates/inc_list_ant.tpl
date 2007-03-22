@@ -5,7 +5,7 @@
       <strong>Antécédents du patient</strong>
       <ul>
       {{if $patient->_ref_antecedents}}
-        {{foreach from=$patient->_ref_types_antecedent key=curr_type item=list_antecedent}}
+        {{foreach from=$patient->_ref_antecedents key=curr_type item=list_antecedent}}
         {{if $list_antecedent|@count}}
         <li>
           {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}

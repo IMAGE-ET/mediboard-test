@@ -71,7 +71,6 @@ class CConsultAnesth extends CMbObject {
   var $_ref_operation          = null;
   var $_ref_plageconsult       = null;
   var $_intub_difficile        = null;
-  var $_ref_types_antecedent   = null;
   var $_ref_antecedents        = null;
   var $_ref_traitements        = null;
   var $_ref_addictions         = null;
@@ -257,13 +256,6 @@ class CConsultAnesth extends CMbObject {
       $where["object_class"] = "= 'CConsultAnesth'";
       $order = "type ASC";
       $this->_ref_antecedents = $antecedent->loadList($where, $order);
-
-      // Classement des antécédents
-      $this->_ref_types_antecedent = array();
-      
-      foreach($this->_ref_antecedents as $keyAnt => &$currAnt){
-        $this->_ref_types_antecedent[$currAnt->type][$keyAnt] = $currAnt;
-      }
     }
   }
 

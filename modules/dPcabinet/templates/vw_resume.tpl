@@ -32,7 +32,7 @@ function newExam(sAction, consultation_id) {
     <td class="text" valign="top">
       <ul>
       {{if $patient->_ref_antecedents}}
-        {{foreach from=$listAnt key=keyAnt item=currTypeAnt}}
+        {{foreach from=$patient->_ref_antecedents key=keyAnt item=currTypeAnt}}
         {{if $currTypeAnt}}
         <li>
           <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong>

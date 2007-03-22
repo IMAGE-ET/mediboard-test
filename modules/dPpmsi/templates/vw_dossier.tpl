@@ -171,11 +171,20 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           <th>Antécedents du patient</th>
           <td class="text" colspan="3">
             <ul>
-              {{foreach from=$patient->_ref_antecedents item=curr_ant}}
-              <li>
-                {{tr}}CAntecedent.type.{{$curr_ant->type}}{{/tr}} le {{$curr_ant->date|date_format:"%d %b %Y"}} :
-                <em>{{$curr_ant->rques}}</em>
-              </li>
+              {{foreach from=$patient->_ref_antecedents key=curr_type item=list_antecedent}}
+              {{if $list_antecedent|@count}}
+		        <li>
+		          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
+		          {{foreach from=$list_antecedent item=curr_antecedent}}
+		          <ul>
+		            <li>
+                      {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
+                        <em>{{$curr_antecedent->rques}}</em>
+                    </li>
+		          </ul>
+		          {{/foreach}}
+		        </li>
+		        {{/if}}
               {{foreachelse}}
               <li>Pas d'antécédents</li>
               {{/foreach}}

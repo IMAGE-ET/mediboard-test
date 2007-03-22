@@ -164,7 +164,7 @@
         <tr>
           <td>
             {{if $patient->_ref_antecedents}}
-              {{foreach name=nameForeach from=$listAnt key=keyAnt item=currTypeAnt}}
+              {{foreach name=nameForeach from=$patient->_ref_antecedents key=keyAnt item=currTypeAnt}}
               {{if $currTypeAnt}}
               {{if !$smarty.foreach.nameForeach.first}}
               <br />

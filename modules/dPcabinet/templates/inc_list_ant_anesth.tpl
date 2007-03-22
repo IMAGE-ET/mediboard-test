@@ -30,7 +30,7 @@
       <strong>Antécédents significatifs de l'opération</strong>
       <ul>
       {{if $consult_anesth->_ref_antecedents}}
-        {{foreach from=$consult_anesth->_ref_types_antecedent key=curr_type item=list_antecedent}}
+        {{foreach from=$consult_anesth->_ref_antecedents key=curr_type item=list_antecedent}}
         {{if $list_antecedent|@count}}
         <li>
           {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}

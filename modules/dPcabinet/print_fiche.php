@@ -37,16 +37,6 @@ if ($consultation_id) {
   $patient->loadRefsTraitements();
 }
 
-// Classement des antécédents
-$antecedent = new CAntecedent();
-$listAnt = array();
-foreach($antecedent->_enumsTrans["type"] as $keyAnt => $currAnt){
-  $listAnt[$keyAnt] = array();
-}
-foreach($patient->_ref_antecedents as $keyAnt => $currAnt){
-  $listAnt[$currAnt->type][$keyAnt] = $currAnt;
-}
-
 // Affichage des données
 $listChamps = array(
                 1=>array("hb","ht","ht_final","plaquettes"),
@@ -92,7 +82,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("unites"    , $unites);
 $smarty->assign("listChamps", $listChamps);
 $smarty->assign("consult"   , $consult);
-$smarty->assign("listAnt"   , $listAnt);
 
 $smarty->display("print_fiche.tpl");
 ?>

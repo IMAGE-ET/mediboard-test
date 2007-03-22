@@ -32,16 +32,6 @@ $patient->loadRefsTraitements();
 $consultations =& $patient->_ref_consultations;
 $sejours =& $patient->_ref_sejours;
 
-$antecedent = new CAntecedent();
-$listAnt = array();
-foreach ($antecedent->_enumsTrans["type"] as $keyAnt => $currAnt){
-  $listAnt[$keyAnt] = array();
-}
-
-foreach($patient->_ref_antecedents as $keyAnt => $currAnt){
-  $listAnt[$currAnt->type][$keyAnt] = $currAnt;
-}
-
 // Consultations
 foreach ($patient->_ref_consultations as &$consultation) {
   $consultation->loadRefsBack();
@@ -65,7 +55,6 @@ foreach ($patient->_ref_sejours as &$sejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listAnt"       , $listAnt);
 $smarty->assign("patient"       , $patient);
 
 $smarty->display("vw_resume.tpl");
