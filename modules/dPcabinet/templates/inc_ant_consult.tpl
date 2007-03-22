@@ -171,18 +171,26 @@ function copyTraitement(traitement_id){
       <table class="form">
         <tr>
           <td colspan="2"><strong>Ajouter un antécédent</strong></td>
-          <td>
+          <td id="listAides_Antecedent_rques">
             {{mb_label object=$antecedent field="rques"}}
-            <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
-              <option value="" style="display:none;">&mdash; Choisir une aide</option>
-              {{foreach from=$antecedent->_aides.rques item=curr_list key=keyList}}
-              {{foreach from=$curr_list item=list_aides key=sTitleOpt}}
-              <optgroup class="{{$keyList}}" label="{{$sTitleOpt}}" {{if $keyList!="no_enum"}}style="display:none;"{{/if}}>
-                {{html_options options=$list_aides}}
-              </optgroup>
-              {{/foreach}}
-              {{/foreach}}
-            </select>
+            
+            {{foreach from=$antecedent->_aides.rques item=curr_list key=keyEnum}}
+              {{if $keyEnum == "no_enum"}}
+                {{assign var=dependOn value=""}}
+                {{assign var=styleSelect value=""}}
+              {{else}}
+                {{assign var=dependOn value=$keyEnum}}
+                {{assign var=styleSelect value="style='display:none;'"}}
+              {{/if}}
+              <select name="_helpers_rques{{if $dependOn}}-{{$dependOn}}{{/if}}" size="1" onchange="pasteHelperContent(this)" {{$styleSelect|smarty:nodefaults}}>
+                <option value="">&mdash; Choisir une aide</option>
+                {{foreach from=$curr_list item=list_aides key=sTitleOpt}}
+                  <optgroup label="{{$sTitleOpt}}">
+                    {{html_options options=$list_aides}}
+                  </optgroup>
+                {{/foreach}}
+              </select>
+            {{/foreach}}
             <input type="hidden" name="_hidden_rques" value="" />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques')">
               Nouveau
@@ -207,7 +215,7 @@ function copyTraitement(traitement_id){
         <tr>
           <th>{{mb_label object=$antecedent field="type"}}</th>
           <td>
-            {{mb_field object=$antecedent field="type" onchange="putHelperContent(document.editAntFrm,'type','_helpers_rques')"}}
+            {{mb_field object=$antecedent field="type" onchange="putHelperContent(this,'rques')"}}
           </td>
         </tr>
         <tr>

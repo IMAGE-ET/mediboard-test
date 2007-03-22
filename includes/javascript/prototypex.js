@@ -69,11 +69,13 @@ Element.extend = function(element) {
 
 // Caution: Object.extend syntax causes weird exceptions to be thrown further on execution
 
+Event.Observe
+
 Element.addEventHandler = function(oElement, sEvent, oHandler) {
   var sEventMethod = "on" + sEvent;
   var oPreviousHandler = oElement[sEventMethod] || function() {};
   oElement[sEventMethod] = function () {
-    oPreviousHandler();
+    oPreviousHandler.bind(oElement)();
     oHandler(oElement);
   }
 }

@@ -297,7 +297,7 @@ Class.extend(ObjectTooltip, {
 
     this.oOptions = {
       mode: "view",
-      duration: 200,
+      duration: 200
     };
     
     Object.extend(this.oOptions, oOptions);
@@ -707,7 +707,7 @@ Dom = {
         if((childNode.nodeType == Node.TEXT_NODE) && (!notWhitespace.test(childNode.nodeValue))){
           node.removeChild(node.childNodes[i]);
           i--;
-        }else if (childNode.nodeType == Node.ELEMENT_NODE) {
+        }else if (childNode.nodeType == 1) {
           Dom.cleanWhitespace(childNode);
         } 
       }

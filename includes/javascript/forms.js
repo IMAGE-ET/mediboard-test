@@ -105,8 +105,10 @@ function pasteHelperContent(oHelpElement) {
   var aFound = oHelpElement.name.match(/_helpers_(.*)/);
   Assert.that(aFound.length == 2, "Helper element '%s' is not of the form '_helpers_propname'", oHelpElement.name);
   
-  var oForm = oHelpElement.form;    
-  var sPropName = aFound[1];
+  var oForm       = oHelpElement.form; 
+  var aFieldFound = aFound[1].split("-");
+  
+  var sPropName = aFieldFound[0];
   var oAreaField = oForm.elements[sPropName];
   //Assert.that(oAreaField == "toto", "Helper element '%s' has no corresponding text area '%s' in the same form", oHelpElement.name, sPropName);
 
@@ -116,29 +118,31 @@ function pasteHelperContent(oHelpElement) {
   oAreaField.scrollTop = oAreaField.scrollHeight;
 }
 
-function putHelperContent(oForm, sFieldChoix, sFieldSelect){
-  var oSelectAides  = $(oForm[sFieldSelect]);  
-  var sValue        = oForm[sFieldChoix].options[oForm[sFieldChoix].selectedIndex].textContent
+function putHelperContent(oElem, sFieldSelect){
+  var oForm       = oElem.form;
+  var sValue      = oElem.options[oElem.selectedIndex].innerHTML;
   
-  //Suppression des espaces
-  Dom.cleanWhitespace(oSelectAides);
-  
-  if(!sValue || sValue == ""){
-    sValue = "no_enum";
-  }
-  
-  // Etude des classes
-  for(var i=0; i< oSelectAides.childNodes.length; i++){
-    var childNode = oSelectAides.childNodes[i];
-    if(childNode.className == sValue){
-      $(childNode).show();
-    }else{
-      $(childNode).hide();
+  for(var i=0; i< oForm.elements.length; i++){
+    var element = oForm.elements[i];
+    
+    var aFound  = element.name.match(/_helpers_(.*)/);
+    var aFoundOk = aFound != null && aFound.length == 2;
+    
+    if (element.nodeType == 1 && element.nodeName == "SELECT" && aFoundOk) {
+      var aFieldsDepend = aFound[1].split("-");
+      if(aFieldsDepend[0] == sFieldSelect){
+        if(!aFieldsDepend[1]){
+          aFieldsDepend[1] = "";
+        }
+        if(aFieldsDepend[1] == sValue){
+          $(element).show();
+        }else{
+          $(element).hide();
+        }
+      }
     }
   }
 }
-
-
 
 function notNullOK(oElement) {
   if (oLabel = getLabelFor(oElement)) {
