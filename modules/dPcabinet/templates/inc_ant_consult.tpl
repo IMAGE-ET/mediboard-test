@@ -173,24 +173,15 @@ function copyTraitement(traitement_id){
           <td colspan="2"><strong>Ajouter un antécédent</strong></td>
           <td id="listAides_Antecedent_rques">
             {{mb_label object=$antecedent field="rques"}}
-            
-            {{foreach from=$antecedent->_aides.rques item=curr_list key=keyEnum}}
-              {{if $keyEnum == "no_enum"}}
-                {{assign var=dependOn value=""}}
-                {{assign var=styleSelect value=""}}
-              {{else}}
-                {{assign var=dependOn value=$keyEnum}}
-                {{assign var=styleSelect value="style='display:none;'"}}
-              {{/if}}
-              <select name="_helpers_rques{{if $dependOn}}-{{$dependOn}}{{/if}}" size="1" onchange="pasteHelperContent(this)" {{$styleSelect|smarty:nodefaults}}>
+            {{* Tout sur une ligne pour éviter les espaces qui s'affichent sous IE *}}
+            {{foreach from=$antecedent->_aides.rques item=curr_list key=keyEnum}}{{if $keyEnum == "no_enum"}}{{assign var=dependOn value=""}}{{assign var=styleSelect value=""}}{{else}}{{assign var=dependOn value=$keyEnum}}{{assign var=styleSelect value="style='display:none;'"}}{{/if}}<select name="_helpers_rques{{if $dependOn}}-{{$dependOn}}{{/if}}" size="1" onchange="pasteHelperContent(this)" {{$styleSelect|smarty:nodefaults}}>
                 <option value="">&mdash; Choisir une aide</option>
                 {{foreach from=$curr_list item=list_aides key=sTitleOpt}}
                   <optgroup label="{{$sTitleOpt}}">
                     {{html_options options=$list_aides}}
                   </optgroup>
                 {{/foreach}}
-              </select>
-            {{/foreach}}
+              </select>{{/foreach}}
             <input type="hidden" name="_hidden_rques" value="" />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques')">
               Nouveau
