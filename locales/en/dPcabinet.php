@@ -1,4 +1,5 @@
 <?php
+$locales['mod-dPcabinet-tab-vw_intermax'] = 'LogicMax FSE';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-desc'] = '';
 $locales['CAddiction-type'] = '';
@@ -354,12 +355,13 @@ $locales['mod-dPcabinet-tab-vw_dossier'] = '';
 $locales['mod-dPcabinet-tab-vw_planning'] = '';
 $locales['pref-DefaultPeriod'] = 'Default period';
 $locales['pref-DefaultPeriod-desc'] = 'Default period for practice planning';
-$locales['pref-DossierCabinet-desc'] = 'Used module for patient file';
 $locales['pref-DossierCabinet'] = 'Patient file module';
-$locales['pref-GestionFSE-desc'] = 'Allow to interface with FSE sender';
+$locales['pref-DossierCabinet-desc'] = 'Used module for patient file';
 $locales['pref-GestionFSE'] = 'Manage FSE';
+$locales['pref-GestionFSE-desc'] = 'Allow to interface with FSE sender';
 $locales['pref-InterMaxDir'] = 'InterMax folder';
 $locales['pref-InterMaxDir-desc'] = 'LogicMax interoperability folder on user hard-drive';
+$locales['pref-InterMaxDir-undef'] = '';
 $locales['pref-simpleCabinet'] = '';
 $locales['pref-simpleCabinet-desc'] = '';
 ?>

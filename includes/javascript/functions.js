@@ -92,14 +92,14 @@ var Console = {
       
       case "object":
         if (oValue instanceof Array) {
-          this.trace(">> array", "value");
+          this.trace(">> [Array]", "value");
         } else {        
-          this.trace(">> object", "value");
+          this.trace(">> " + oValue, "value");
         }
         break;
 
       case "function":
-        this.trace(">> function " + oValue.getSignature(), "value");
+        this.trace(">> Function" + oValue.getSignature(), "value");
         break;
 
       case "string":
@@ -111,14 +111,14 @@ var Console = {
     }
   },
 
-  debug: function(oValue, sLabel) {
+  debugOld: function(oValue, sLabel) {  	
     sLabel = sLabel || "Trace";
     
     if (oValue instanceof Array) {
-      this.trace(sLabel + ": array");
+      this.trace(sLabel + ": [Array]");
       oValue.each(this.traceValue.bind(this))
     } else if (oValue instanceof Object) {
-      this.trace(sLabel + ": object");
+      this.trace(sLabel + ": " + oValue);
       for (oKey in oValue) {
         this.trace(oKey + ": ", "key");
         this.traceValue(oValue[oKey]);
@@ -126,6 +126,68 @@ var Console = {
     } else {
       this.trace(sLabel + ": " + typeof oValue);
        this.traceValue(oValue);
+    }
+  },
+  
+  debug: function(oValue, sLabel, oOptions) {
+    sLabel = sLabel || "value";
+
+    var oDefault = {
+      level: 1,
+      current: 0
+    }
+
+  	
+  	Object.extend(oDefault, oOptions);
+
+  	if (oDefault.current > oDefault.level) {
+  		return;
+  	}
+		
+    if (oDefault.current) {
+    	oDefault.current.times( function() {
+        sLabel = "&nbsp;" + sLabel;
+      } );
+    }
+  	
+    this.trace(sLabel + ": ", "key");
+  	
+    if (oValue === null) {
+      this.trace("null", "value");
+      return;
+    }
+    
+    switch (typeof oValue) {
+      case "undefined": 
+        this.trace("undefined", "value");
+        break;
+      
+      case "object":
+        oDefault.current++;
+        if (oValue instanceof Array) {
+          this.trace("[Array]", "value");
+          oValue.each(function(value) { 
+          	Console.debug(value, "", oDefault);
+          } );
+        } else {
+          this.trace(oValue, "value");
+          $H(oValue).each(function(pair) {
+          	Console.debug(pair.value, pair.key, oDefault);
+          	
+          } );
+        }
+        break;
+
+      case "function":
+        this.trace("[Function] : " + oValue.getSignature(), "value");
+        break;
+
+      case "string":
+        this.trace("'" + oValue + "'", "value");
+        break;
+
+      default:
+        this.trace(oValue, "value");
     }
   },
   
