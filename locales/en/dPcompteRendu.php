@@ -1,8 +1,9 @@
 <?php
-$locales['CPack-nom-desc'] = '';
+$locales['CAideSaisie-depend_value-desc'] = '';
 $locales['CAideSaisie'] = '';
 $locales['CAideSaisie-class'] = '';
 $locales['CAideSaisie-class-desc'] = '';
+$locales['CAideSaisie-depend_value'] = '';
 $locales['CAideSaisie-field'] = '';
 $locales['CAideSaisie-field-desc'] = '';
 $locales['CAideSaisie-function_id'] = '';
@@ -37,4 +38,5 @@ $locales['CPack'] = '';
 $locales['CPack-chir_id'] = '';
 $locales['CPack-chir_id-desc'] = '';
 $locales['CPack-nom'] = '';
+$locales['CPack-nom-desc'] = '';
 ?>
