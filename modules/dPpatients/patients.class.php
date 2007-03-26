@@ -493,21 +493,19 @@ class CPatient extends CMbObject {
   
   function loadRefsAffectations() {
     $this->loadRefsSejours();
-    if($this->patient_id){
-      // Affectation actuelle et prochaine affectation
-      $where["sejour_id"] = db_prepare_in(array_keys($this->_ref_sejours));
-      $order = "entree";
-      $now = mbDateTime();
-      
-      $this->_ref_curr_affectation = new CAffectation();
-      $where["entree"] = "< '$now'";
-      $where["sortie"] = ">= '$now'";
-      $this->_ref_curr_affectation->loadObject($where, $order);
-      
-      $this->_ref_next_affectation = new CAffectation();
-      $where["entree"] = "> '$now'";
-      $this->_ref_next_affectation->loadObject($where, $order);
-    }
+    // Affectation actuelle et prochaine affectation
+    $where["sejour_id"] = db_prepare_in(array_keys($this->_ref_sejours));
+    $order = "entree";
+    $now = mbDateTime();
+    
+    $this->_ref_curr_affectation = new CAffectation();
+    $where["entree"] = "< '$now'";
+    $where["sortie"] = ">= '$now'";
+    $this->_ref_curr_affectation->loadObject($where, $order);
+    
+    $this->_ref_next_affectation = new CAffectation();
+    $where["entree"] = "> '$now'";
+    $this->_ref_next_affectation->loadObject($where, $order);
   }
   
   
@@ -591,7 +589,10 @@ class CPatient extends CMbObject {
   }
 
   function loadDossierComplet($permType = null) {
-    $this->loadRefs();
+    if (!$this->loadRefs()) {
+      return;
+    }
+    
     $this->canRead();
     $this->canEdit();
     $this->getNumDocsAndFiles($permType);
