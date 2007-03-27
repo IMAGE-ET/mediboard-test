@@ -860,7 +860,17 @@ class CMbObject {
 
   function loadAides($user_id) {
     foreach ($this->_helped_fields as $field => $prop) {
-      $this->_aides[$field] = null;
+      $this->_aides[$field] = array();
+      $this->_aides[$field]["no_enum"] = null;
+      
+      if($prop){
+        $entryEnums = $this->_enumsTrans[$prop];
+        // Création des entrées pour les enums
+        $this->_aides[$field]["no_enum"] = null;
+        foreach($entryEnums as $valueEnum){
+          $this->_aides[$field][$valueEnum] = null;
+         }
+      }
     }
     
     // Chargement de l'utilisateur courant
@@ -888,6 +898,7 @@ class CMbObject {
   
   function orderAides($aides, $title){
     global $AppUI;
+    
     foreach ($aides as $aide) {
       $curr_aide =& $this->_aides[$aide->field];
       
@@ -895,12 +906,6 @@ class CMbObject {
       $linkField = @$this->_helped_fields[$aide->field];
       if($linkField){
         $entryEnums = $this->_enumsTrans[$linkField];
-        // Création des entrées pour les enums
-        if(!isset($curr_aide[current($entryEnums)])){
-          foreach($entryEnums as $valueEnum){
-            $curr_aide[$valueEnum][$title] = array();
-          }
-        }
       }
     
       // Ajout de l'aide à la liste générale
