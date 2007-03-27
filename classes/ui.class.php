@@ -529,28 +529,14 @@ class CAppUI {
 * @return boolean True if successful, false if not
 */
   function login() {
-
     // Test login and password validity
-//    $username = trim(db_escape($username));
-//    $password = trim(db_escape($password));
-//    $user = new CUser;
-//    $where = array();
-//    $where["user_username"] = db_prepare("= %", $username);
-//    if($md5) {
-//      $where["user_password"] = db_prepare("= %", $password);
-//    } else {
-//      $where["user_password"] = db_prepare("= MD5(%)", $password);
-//    }
-//    $user->loadObject($where);
-
     $user = new CUser;
     $user->user_username = trim(mbGetValueFromPost("username"));
     $user->user_password = trim(mbGetValueFromPost("password"));
     
+    
     // Login as, for administators
     if ($loginas = mbGetValueFromPost("loginas")) {
-//      mbTrace($this, "AppUI");
-//      die();
       if ($this->user_type != 1) {
         $this->setMsg("Only administrator can login as another user", UI_MSG_ERROR);
         return false;
@@ -560,12 +546,9 @@ class CAppUI {
       $user->user_password = null;
     }
     
-    $user->_user_password = $user->user_password;
-//    global $db_trace; 
-//    $db_trace = true;
+    // See CUser::updateDBFields
+    $user->_user_password = mbGetValue($user->user_password, "dummy");
     $user->loadMatchingObject();
-//    $db_trace = false;
-//    mbTrace($user);
     if (!$user->_id) {
       $this->setMsg("Wrong login/password combination", UI_MSG_ERROR);
       return false;
