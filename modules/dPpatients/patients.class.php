@@ -592,6 +592,7 @@ class CPatient extends CMbObject {
     //if (!$this->loadRefs()) {
     //  return;
     //}
+    $this->loadRefs();
     
     $this->canRead();
     $this->canEdit();
