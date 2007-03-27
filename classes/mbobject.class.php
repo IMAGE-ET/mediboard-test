@@ -445,10 +445,12 @@ class CMbObject {
    */
 
   function loadRefs() {
-    if($this->_id){  
+    if ($this->_id){  
       $this->loadRefsBack();
       $this->loadRefsFwd();
     }
+    
+    return $this->_id;
   }
 
   function loadRefsBack() {
