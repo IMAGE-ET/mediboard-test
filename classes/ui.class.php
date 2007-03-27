@@ -599,6 +599,8 @@ class CAppUI {
     
     // save the last_login dateTime
     if(db_loadField("users", "user_last_login")) {
+      // Nullify password or you md5 it once more
+      $user->_user_password = null;
       $user->user_last_name = null;
       $user->user_last_login = mbDateTime();
       $user->store();
