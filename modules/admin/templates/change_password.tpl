@@ -39,7 +39,7 @@
   </tr>
   <tr>
     <td colspan="2" class="button">
-      <button type="submit" class="submit">{{tr}}Submit{{/tr}}</button>
+      <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
     </td>
   </tr>
 </table>
