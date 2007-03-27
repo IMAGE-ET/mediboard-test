@@ -59,6 +59,7 @@ class CEchantillonnage {
   }
   
   function getRandValue($tab, $nb = null) {
+    srand();
     if($nb){
       $listKey = array_rand($tab,$nb);
       if(!is_array($listKey)){$listKey = array($listKey);}
@@ -192,17 +193,14 @@ foreach($aCabinet as $title => $value){
     }
   }
 }
+
 // Chargement des praticiens selectionnés
 if(count($prat_selected)){
  $praticiens->loadListArray($prat_selected); 
 }
 
-
 // Salles
 $salles = new CEchantillonnage("CSalle");
-if(count($salles_selected)){
- $salles->loadListArray($salles_selected); 
-}
 if($_nb_salles){
   for($i=1; $i<=$_nb_salles; $i++){
     $salles->renew();
@@ -215,12 +213,15 @@ if($_nb_salles){
     $salles->store(false);
   }
 }
-
+if(count($salles_selected)){
+ $salles->loadListArray($salles_selected); 
+}
 
 // Services - Chambres - Lits
 $services = new CEchantillonnage("CService");
 $chambres = new CEchantillonnage("CChambre");
 $lits     = new CEchantillonnage("CLit");
+
 if(count($services_selected)){
  $services->loadListArray($services_selected); 
 }
@@ -279,7 +280,6 @@ for($i=1; $i<=$_nb_pat; $i++){
   $patients->setManyFields($tabFields);
   $patients->store();
 }
-
 
 /**********************************************************************************/
 /**********************************************************************************/
