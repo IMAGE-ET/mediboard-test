@@ -1,4 +1,4 @@
-<script type="text/javacript">
+<script type="text/javascript">
 function submitAddiction(oForm){
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
 }
