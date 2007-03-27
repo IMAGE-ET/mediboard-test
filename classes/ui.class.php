@@ -532,9 +532,7 @@ class CAppUI {
     // Test login and password validity
     $user = new CUser;
     $user->user_username = trim(mbGetValueFromPost("username"));
-    $user->user_password = trim(mbGetValueFromPost("password"));
-    
-    $user->_user_password = "dummy";
+    $user->_user_password = trim(mbGetValueFromPost("password"));
     
     // Login as, for administators
     if ($loginas = mbGetValueFromPost("loginas")) {
@@ -544,9 +542,15 @@ class CAppUI {
       }
       
       $user->user_username = trim($loginas);
-      $user->user_password = null;
       $user->_user_password = null;
+    } 
+    // No password given
+    elseif (!$user->_user_password) {
+      $this->setMsg("You should enter your password", UI_MSG_ERROR);
+      return false;
     }
+        
+    
     
     // See CUser::updateDBFields
     $user->loadMatchingObject();
@@ -600,7 +604,6 @@ class CAppUI {
     // save the last_login dateTime
     if(db_loadField("users", "user_last_login")) {
       // Nullify password or you md5 it once more
-      $user->_user_password = null;
       $user->user_last_name = null;
       $user->user_last_login = mbDateTime();
       $user->store();
