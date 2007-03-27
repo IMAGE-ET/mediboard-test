@@ -534,6 +534,7 @@ class CAppUI {
     $user->user_username = trim(mbGetValueFromPost("username"));
     $user->user_password = trim(mbGetValueFromPost("password"));
     
+    $user->_user_password = "dummy";
     
     // Login as, for administators
     if ($loginas = mbGetValueFromPost("loginas")) {
@@ -544,11 +545,12 @@ class CAppUI {
       
       $user->user_username = trim($loginas);
       $user->user_password = null;
+      $user->_user_password = null;
     }
     
     // See CUser::updateDBFields
-    $user->_user_password = mbGetValue($user->user_password, "dummy");
     $user->loadMatchingObject();
+    
     if (!$user->_id) {
       $this->setMsg("Wrong login/password combination", UI_MSG_ERROR);
       return false;
@@ -556,10 +558,10 @@ class CAppUI {
     
     // Put user_group in AppUI
     $remote = 1;
-    if(db_loadTable("users_mediboard") && db_loadTable("groups_mediboard")) {
+    if (db_loadTable("users_mediboard") && db_loadTable("groups_mediboard")) {
       $sql = "SELECT `remote` FROM `users_mediboard` WHERE `user_id` = '$user->user_id'";
-      if($cur = db_exec($sql)) {
-        if($row = db_fetch_row($cur)) {
+      if ($cur = db_exec($sql)) {
+        if ($row = db_fetch_row($cur)) {
           $remote = intval($row[0]);
         }
       }
