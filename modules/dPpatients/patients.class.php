@@ -589,9 +589,9 @@ class CPatient extends CMbObject {
   }
 
   function loadDossierComplet($permType = null) {
-    if (!$this->loadRefs()) {
-      return;
-    }
+    //if (!$this->loadRefs()) {
+    //  return;
+    //}
     
     $this->canRead();
     $this->canEdit();
@@ -599,13 +599,13 @@ class CPatient extends CMbObject {
     
     // Affectations courantes
     $affectation =& $this->_ref_curr_affectation;
-    if ($affectation->affectation_id) {
+    if ($affectation && $affectation->affectation_id) {
       $affectation->loadRefsFwd();
       $affectation->_ref_lit->loadCompleteView();
     }
     
     $affectation =& $this->_ref_next_affectation;
-    if ($affectation->affectation_id) {
+    if ($affectation && $affectation->affectation_id) {
       $affectation->loadRefsFwd();
       $affectation->_ref_lit->loadCompleteView();
     }
