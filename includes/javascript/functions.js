@@ -444,7 +444,24 @@ Object.extend(ObjectTooltip, {
 } );
 
 
+function initNotes(){
+  $$("div.noteDiv").each(function(pair) {
+    var sClassDiv = pair.className;
+    var aClass    = sClassDiv.split(" ");
+    var aInfos    = aClass[1].split("-");
+     
+    url = new Url;
+    url.setModuleAction("system", "httpreq_get_notes_image");
+    url.addParam("object_class" , aInfos[0]);
+    url.addParam("object_id"    , aInfos[1]);
+    url.requestUpdate(pair, { waitingText : null });
+      
+  });
+}
 
+function reloadNotes(){
+  initNotes();
+}
 /**
  * Date utility functions
  * @todo: extend Date class

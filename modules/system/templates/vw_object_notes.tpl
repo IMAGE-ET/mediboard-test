@@ -16,7 +16,7 @@
         <input type="hidden" name="dosql" value="do_note_aed" />
         {{mb_field object=$curr_note field="note_id" hidden=1 prop=""}}
         
-        <button class="cancel notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cette note',ajax:1,target:'systemMsg'})">
+        <button class="cancel notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cette note',ajax:1,target:'systemMsg'},{onComplete:initNotes})">
         </button>
         </form>
       {{/if}}

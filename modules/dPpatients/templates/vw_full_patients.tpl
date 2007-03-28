@@ -77,6 +77,7 @@ function printPatient(id) {
 function pageMain() {
   initAccord(true);
   viewFullPatientMain();
+  initNotes();
 }
 
 </script>

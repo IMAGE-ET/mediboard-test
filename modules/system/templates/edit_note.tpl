@@ -1,10 +1,13 @@
 <script type="text/javascript">
+function reloadNotes(){
+  window.opener.reloadNotes();
+  window.close();
+}
 function submitNote(){
   var oForm = document.editFrm;
   
   if(checkForm(oForm)){
-    submitFormAjax(oForm, 'systemMsg');
-    window.close();
+    submitFormAjax(oForm, 'systemMsg', {onComplete: reloadNotes});
   }
 }
 </script>
