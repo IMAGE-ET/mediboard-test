@@ -31,7 +31,7 @@ function initAccord(init_resize){
   var fHeightDivTitle = 0;
   var fhauteur_div = 0;
   fHeightDivTitle = Element.getOffsetHeightByClassName("accordionTabTitleBar");
-  fhauteur_div = window.getInnerDimensions().x - Position.cumulativeOffset($('accordionConsult'))[1] - fHeightDivTitle;
+  fhauteur_div = window.getInnerDimensions().y - Position.cumulativeOffset($('accordionConsult'))[1] - fHeightDivTitle;
   aAccordBorderTop = Element.getStyle("accordionConsult","border-top-width").split("px");
   fHeight = fhauteur_div - parseFloat(aAccordBorderTop[0]) - 14; //-14 pour les marges et bordures en bas des tableaux  
   if(fHeight<=120){

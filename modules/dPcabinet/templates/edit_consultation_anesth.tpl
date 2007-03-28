@@ -36,7 +36,7 @@ function initAccord(init_resize){
   // Position Top de l'accord
   fposTop_div = Position.cumulativeOffset(oAccordionDiv)[1]; 
   
-  fhauteur_div = window.getInnerDimensions().x - (fposTop_div - fposTop_tdConsultAnesth) - fHeightDivTitle;
+  fhauteur_div = window.getInnerDimensions().y - (fposTop_div - fposTop_tdConsultAnesth) - fHeightDivTitle;
   aAccordBorderTop = Element.getStyle("accordionConsult","border-top-width").split("px");
   fHeight = fhauteur_div - parseFloat(aAccordBorderTop[0]) - 14;
   //-14 pour les marges et bordures en bas des tableaux
