@@ -25,21 +25,21 @@
     {{if $mode_operation && $sejour->sejour_id}}
       {{if $canSante400->read}}
       <a style="float:right;" href="#" onclick="view_idsante400('CSejour',{{$sejour->sejour_id}})">
-        <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
+        <img src="images/icons/sante400.gif" alt="Sante400" title="{{tr}}Id400.desc{{/tr}}"/>
       </a>
       {{/if}}
       <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->sejour_id}})">
-        <img src="images/icons/history.gif" alt="historique" />
+        <img src="images/icons/history.gif" alt="{{tr}}History.desc{{/tr}}" />
       </a>
     {{/if}}
-    Informations concernant le séjour
+    {{tr}}msg-CSejour-informations{{/tr}}
   </th>
 </tr>
 
 {{if $sejour->annule == 1}}
 <tr>
   <th class="category cancelled" colspan="4">
-  SEJOUR ANNULE
+  {{tr}}CSejour-annule{{/tr}}
   </th>
 </tr>
 {{/if}}
@@ -109,7 +109,7 @@
 <tr>
   <th>{{mb_label object=$sejour field="DP"}}</th>
   <td>{{mb_field object=$sejour field="DP" size="10"}}</td>
-  <td colspan="2" class="button"><button type="button" class="search" onclick="popCode('cim10')">Choisir un code</button></td>
+  <td colspan="2" class="button"><button type="button" class="search" onclick="popCode('cim10')">{{tr}}button-CCodeCIM10-choix{{/tr}}</button></td>
 </tr>
 
 <tr>

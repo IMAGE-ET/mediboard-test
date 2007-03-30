@@ -37,7 +37,7 @@ function pageMain() {
   <tr>
     <td>
       <a class="buttonnew" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;sejour_id=0">
-        Programmer un nouveau séjour
+        {{tr}}CSejour.create{{/tr}}
       </a>
     </td>
     <td>

@@ -162,8 +162,8 @@ function setClose(date) {
         </tr>
         <tr>
           <td colspan="2" class="button">
-            <button class="cancel" type="button" onclick="window.close()">annuler</button>
-            <button class="tick" type="button" onclick="setClose('')">Sélectionner</button>          
+            <button class="cancel" type="button" onclick="window.close()">{{tr}}cancel{{/tr}}</button>
+            <button class="tick" type="button" onclick="setClose('')">{{tr}}Select{{/tr}}</button>          
           </td>
         </tr>
       </table>

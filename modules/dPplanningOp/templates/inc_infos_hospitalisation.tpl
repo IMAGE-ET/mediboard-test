@@ -3,7 +3,7 @@
 <table class="tbl">
   <tr>
     <th class="title" colspan="3">
-      Informations sur les affectations d'hospitalisation
+      {{tr}}msg-CSejour-infoHospi{{/tr}}
     </th>
   </tr>
   
