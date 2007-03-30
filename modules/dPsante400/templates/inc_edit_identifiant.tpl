@@ -25,10 +25,10 @@
     </th>
     <td>
       {{if $dialog && $target}}
-      <input type="hidden" name="object_class" title="{{$filter->_props.object_class}}" value="{{$filter->object_class}}" />
+      <input type="hidden" name="object_class" class="{{$filter->_props.object_class}}" value="{{$filter->object_class}}" />
       {{tr}}{{$filter->object_class}}{{/tr}}
       {{else}}
-      <select name="object_class" title="{{$idSante400->_props.object_class}}">
+      <select name="object_class" class="{{$idSante400->_props.object_class}}">
         <option value="">&mdash; Choisir une classe</option>
         {{foreach from=$listClasses|smarty:nodefaults item=curr_class}}
         <option value="{{$curr_class}}" {{if $curr_class == $idSante400->object_class}}selected="selected"{{/if}}>
@@ -46,10 +46,10 @@
     </th>
     <td>
 	  {{if $dialog && $target}}
-	  <input type="hidden" name="object_id" title="{{$filter->_props.object_id}}" value="{{$filter->object_id}}" />
+	  <input type="hidden" name="object_id" class="{{$filter->_props.object_id}}" value="{{$filter->object_id}}" />
       {{$target->_view}}
 	  {{else}}
-      <input name="object_id" title="{{$filter->_props.object_id}}" value="{{$idSante400->object_id}}" />
+      <input name="object_id" class="{{$filter->_props.object_id}}" value="{{$idSante400->object_id}}" />
       <button class="search" type="button" onclick="popObject(this)">Chercher</button>
       {{if $idSante400->_id}}
       <br />
@@ -64,7 +64,7 @@
       <label for="id400" title="Identifiant Santé 400 de l'objet">ID400</label>
     </th>
     <td>
-      <input name="id400" title="{{$idSante400->_props.id400}}" value="{{$idSante400->id400}}" />
+      <input name="id400" class="{{$idSante400->_props.id400}}" value="{{$idSante400->id400}}" />
     </td>
   </tr>
 
@@ -73,7 +73,7 @@
       <label for="tag" title="Etiquette (sémantique) de l'identifiant">Etiquette</label>
     </th>
     <td>
-      <input name="tag" title="{{$idSante400->_props.tag}}" value="{{$idSante400->tag}}" />
+      <input name="tag" class="{{$idSante400->_props.tag}}" value="{{$idSante400->tag}}" />
     </td>
   </tr>
 
@@ -83,7 +83,7 @@
     </th>
     <td class="date">
       <div id="editFrm_last_update_da">{{$last_update|date_format:"%d/%m/%Y %H:%M:%S"}}</div>
-      <input type="hidden" name="last_update" title="{{$idSante400->_props.last_update}}" value="{{$last_update}}" />
+      <input type="hidden" name="last_update" class="{{$idSante400->_props.last_update}}" value="{{$last_update}}" />
       <img id="editFrm_last_update_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date"/>
     </td>
   </tr>

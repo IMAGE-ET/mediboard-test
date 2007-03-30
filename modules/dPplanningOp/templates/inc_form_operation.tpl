@@ -18,21 +18,21 @@
       {{if $op->operation_id}}
         {{if $canSante400->read}}
         <a style="float:right;" href="#" onclick="view_idsante400('COperation',{{$op->operation_id}})">
-          <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
+          <img src="images/icons/sante400.gif" alt="Sante400" title="{{tr}}Id400.desc{{/tr}}"/>
         </a>
         {{/if}}
         <a style="float:right;" href="#" onclick="view_log('COperation',{{$op->operation_id}})">
-          <img src="images/icons/history.gif" alt="historique" />
+          <img src="images/icons/history.gif" alt="{{tr}}History.desc{{/tr}}" />
         </a>
       {{/if}}
-      Informations concernant l'opération
+      {{tr}}msg-COperation-informations{{/tr}}
     </th>
   </tr>
   
   {{if $op->annulee == 1}}
   <tr>
     <th class="category cancelled" colspan="3">
-    OPERATION ANNULEE
+    {{tr}}COperation-annulee{{/tr}}
     </th>
   </tr>
   {{/if}}
@@ -62,7 +62,7 @@
       <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)"></button>
     </td>
     <td class="button">
-      <button type="button" class="search" onclick="popCode('ccam')">Choisir un code</button>
+      <button type="button" class="search" onclick="popCode('ccam')">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
     </td>
   </tr>
 

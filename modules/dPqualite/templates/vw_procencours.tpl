@@ -236,7 +236,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
               <label for="ged[group_id]" title="{{tr}}CDocGed-group_id-desc{{/tr}}">{{tr}}CDocGed-group_id{{/tr}}</label>
             </th>
             <td colspan="2">
-              <select title="{{$docGed->_props.group_id}}" name="ged[group_id]">
+              <select class="{{$docGed->_props.group_id}}" name="ged[group_id]">
               {{foreach from=$etablissements item=curr_etab}}
                 <option value="{{$curr_etab->group_id}}" {{if ($docGed->doc_ged_id && $docGed->group_id==$curr_etab->group_id) || (!$docGed->doc_ged_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
               {{/foreach}}
@@ -246,7 +246,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
           <tr>
             <th><label for="suivi[remarques]" title="{{tr}}CDocGedSuivi-remarques-desc{{/tr}}">{{tr}}CDocGedSuivi-remarques{{/tr}}</label></th>
             <td>
-              <textarea name="suivi[remarques]" title="notNull {{$docGed->_lastentry->_props.remarques}}">{{$docGed->_lastentry->remarques}}</textarea>
+              <textarea name="suivi[remarques]" class="notNull {{$docGed->_lastentry->_props.remarques}}">{{$docGed->_lastentry->remarques}}</textarea>
             </td>
           </tr>
           <tr>
@@ -304,13 +304,13 @@ function popFile(objectClass, objectId, elementClass, elementId){
           <tr>
             <th><label for="formfile">{{tr}}File{{/tr}}</label></th>
             <td>
-              <input type="file" name="formfile" size="0" title="notNull str" />
+              <input type="file" name="formfile" size="0" class="notNull str" />
             </td>
           </tr>
           <tr>
             <th><label for="suivi[remarques]" title="{{tr}}CDocGedSuivi-remarques-desc{{/tr}}">{{tr}}CDocGedSuivi-remarques{{/tr}}</label></th>
             <td>
-              <textarea name="suivi[remarques]" title="notNull {{$docGed->_lastentry->_props.remarques}}"></textarea>
+              <textarea name="suivi[remarques]" class="notNull {{$docGed->_lastentry->_props.remarques}}"></textarea>
             </td>
           </tr>
           <tr>

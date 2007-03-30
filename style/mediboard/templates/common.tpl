@@ -39,7 +39,7 @@
 <!-- Tooltip div used for dom clonage -->
 
 <div id="tooltipTpl" style="display: none;">
-  <table class="decoration">
+  <table class="decoration" cellspacing="0">
     <tr>
       <td class="deco top-left" />
       <td class="deco top" />

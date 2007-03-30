@@ -3,14 +3,14 @@
 <table class="tbl">
   <tr>
     <th class="title" colspan="3">
-      Informations sur les opérations pendant le séjour
+      {{tr}}msg-CSejour-infoOper{{/tr}}
     </th>
   </tr>
   
   <tr>
-    <th>Chirurgien</th>
-    <th>Date</th>
-    <th>Actes</th>
+    <th>{{tr}}COperation-chir_id{{/tr}}</th>
+    <th>{{tr}}Date{{/tr}}</th>
+    <th>{{tr}}COperation-_ext_codes_ccam{{/tr}}</th>
   </tr>
 
   {{foreach from=$sejour->_ref_operations item=curr_operation}}
@@ -21,7 +21,7 @@
     <td>{{$curr_operation->_datetime|date_format:"%a %d %b %Y"}}</td>
     {{if $curr_operation->annulee}}
     <th class="category cancelled">
-      <strong>OPERATION ANNULEE</strong>
+      <strong>{{tr}}COperation-annulee{{/tr}}</strong>
 	</th>
     {{else}}
     <td class="text">

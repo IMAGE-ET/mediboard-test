@@ -26,11 +26,11 @@
     <input type="hidden" name="dosql" value="do_acteccam_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="acte_id" value="{{$acte->acte_id}}" />
-    <input type="hidden" name="operation_id" title="{{$acte->_props.operation_id}}" value="{{$selOp->operation_id}}" />
-    <input type="hidden" name="code_acte" title="{{$acte->_props.code_acte}}" value="{{$acte->code_acte}}" />
-    <input type="hidden" name="code_activite" title="{{$acte->_props.code_activite}}" value="{{$acte->code_activite}}" />
-    <input type="hidden" name="code_phase" title="{{$acte->_props.code_phase}}" value="{{$acte->code_phase}}" />
-    <input type="hidden" name="montant_depassement" title="{{$acte->_props.montant_depassement}}" value="{{$acte->montant_depassement}}" />
+    <input type="hidden" name="operation_id" class="{{$acte->_props.operation_id}}" value="{{$selOp->operation_id}}" />
+    <input type="hidden" name="code_acte" class="{{$acte->_props.code_acte}}" value="{{$acte->code_acte}}" />
+    <input type="hidden" name="code_activite" class="{{$acte->_props.code_activite}}" value="{{$acte->code_activite}}" />
+    <input type="hidden" name="code_phase" class="{{$acte->_props.code_phase}}" value="{{$acte->code_phase}}" />
+    <input type="hidden" name="montant_depassement" class="{{$acte->_props.montant_depassement}}" value="{{$acte->montant_depassement}}" />
 
     <table class="form">
       
@@ -44,7 +44,7 @@
       <tr style="display: none;">
         <th><label for="execution" title="Date et heure d'exécution de l'acte">Exécution</label></th>
         <td>
-          <input type="text" name="execution" title="{{$acte->_props.execution}}" readonly="readonly" value="{{$acte->execution}}" />
+          <input type="text" name="execution" class="{{$acte->_props.execution}}" readonly="readonly" value="{{$acte->execution}}" />
           <button type="button" onclick="this.form.execution.value = makeDATETIMEFromDate(new Date());">Maintenant</button><br />
         </td>
       </tr>
@@ -60,7 +60,7 @@
             {{assign var="listExecutants" value=$listChirs}}
           {{/if}}
           {{if $can->edit || $modif_operation}}
-          <select name="executant_id" title="{{$acte->_props.executant_id}}">
+          <select name="executant_id" class="{{$acte->_props.executant_id}}">
             <option value="">&mdash; Choisir un professionnel de santé</option>
             {{foreach from=$listExecutants item=curr_executant}}
             <option value="{{$curr_executant->user_id}}" {{if $acte->executant_id == $curr_executant->user_id}} selected="selected" {{/if}}>
@@ -97,7 +97,7 @@
         <th><label for="commentaire" title="Commentaires sur l'acte">Commentaire</label></th>
         <td class="text">
           {{if $can->edit || $modif_operation}}
-          <textarea name="commentaire" title="{{$acte->_props.commentaire}}">{{$acte->commentaire}}</textarea>
+          <textarea name="commentaire" class="{{$acte->_props.commentaire}}">{{$acte->commentaire}}</textarea>
           {{elseif $acte->commentaire}}
             {{$acte->commentaire|nl2br}}
           {{else}}-{{/if}}

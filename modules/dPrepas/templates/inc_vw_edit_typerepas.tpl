@@ -48,19 +48,19 @@
         </tr>
         <tr>
           <th><label for="nom" title="Nom du type de plat, obligatoire">Nom</label></th>
-          <td><input name="nom" title="{{$typeRepas->_props.nom}}" type="text" value="{{$typeRepas->nom}}" /></td>
+          <td><input name="nom" class="{{$typeRepas->_props.nom}}" type="text" value="{{$typeRepas->nom}}" /></td>
         </tr>
         <tr>
           <th><label for="_debut" title="Heure de début">Début</label></th>
           <td>
-            {{html_options name="_debut" options=$listHours title="num" selected=$typeRepas->_debut}}
+            {{html_options name="_debut" options=$listHours class="num" selected=$typeRepas->_debut}}
             h
           </td>
         </tr>
         <tr>
           <th><label for="_fin" title="Heure de fin">Fin</label></th>
           <td>
-            {{html_options name="_fin" options=$listHours title="num moreThan|_debut" selected=$typeRepas->_fin}}
+            {{html_options name="_fin" options=$listHours class="num moreThan|_debut" selected=$typeRepas->_fin}}
             h
           </td>
         </tr>

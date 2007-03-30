@@ -86,10 +86,10 @@ function pageMain() {
           <td class="date">
             {{if $plage->plageressource_id}}
             <div id="addPlage_date_da">{{$plage->date|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="date" value="{{$plage->date}}" title="{{$plage->_props.date}}" />
+            <input type="hidden" name="date" value="{{$plage->date}}" class="{{$plage->_props.date}}" />
             {{else}}
             <div id="addPlage_date_da">{{$debut|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="date" value="{{$debut}}" title="{{$plage->_props.date}}" />
+            <input type="hidden" name="date" value="{{$debut}}" class="{{$plage->_props.date}}" />
             {{/if}}
             <img id="addPlage_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date"/>
           </td>
@@ -106,10 +106,10 @@ function pageMain() {
         </tr>
         <tr>
           <th><label for="libelle" title="Libellé de la plage">Libellé</label></th>
-          <td><input type="text" name="libelle" value="{{$plage->libelle}}" title="{{$plage->_props.libelle}}" /></td>
+          <td><input type="text" name="libelle" value="{{$plage->libelle}}" class="{{$plage->_props.libelle}}" /></td>
           <th><label for="_hour_fin" title="Heure de fin">Fin:</label</th>
           <td>
-            <select name="_hour_fin" title="num moreThan|_hour_deb">
+            <select name="_hour_fin" class="num moreThan|_hour_deb">
               {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
               <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plage->_hour_fin}} selected="selected" {{/if}}>
               {{$curr_hour|string_format:"%02d"}}
@@ -120,7 +120,7 @@ function pageMain() {
         </tr>
         <tr>
           <th><label for="tarif" title="Tarif de la plage. Obligatoire">Tarif</label></th>
-          <td><input type="text" name="tarif" size="3" value="{{$plage->tarif}}" title="{{$plage->_props.tarif}}" />€</td>
+          <td><input type="text" name="tarif" size="3" value="{{$plage->tarif}}" class="{{$plage->_props.tarif}}" />€</td>
           <th><label for="_repeat" title="Nombre de semaine concernées">Répétition:</label></th>
           <td><input type="text" name="_repeat" size="3" value="1" /></td>
         </tr>

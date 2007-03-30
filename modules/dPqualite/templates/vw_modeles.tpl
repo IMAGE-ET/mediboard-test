@@ -98,7 +98,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             <label for="ged[titre]" title="{{tr}}CDocGed-titre-modele-desc{{/tr}}">{{tr}}CDocGed-titre-modele{{/tr}}</label>
           </th>
           <td>
-            <input type="text" name="ged[titre]" value="{{$docGed->titre}}" title="notNull {{$docGed->_props.titre}}" />
+            <input type="text" name="ged[titre]" value="{{$docGed->titre}}" class="notNull {{$docGed->_props.titre}}" />
           </td>
         </tr>
         <tr>
@@ -106,7 +106,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             <label for="ged[group_id]" title="{{tr}}CDocGed-group_id-desc-modele{{/tr}}">{{tr}}CDocGed-group_id{{/tr}}</label>
           </th>
           <td colspan="2">
-            <select title="{{$docGed->_props.group_id}}" name="ged[group_id]">
+            <select class="{{$docGed->_props.group_id}}" name="ged[group_id]">
             {{foreach from=$etablissements item=curr_etab}}
               <option value="{{$curr_etab->group_id}}" {{if ($docGed->doc_ged_id && $docGed->group_id==$curr_etab->group_id) || (!$docGed->doc_ged_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
             {{/foreach}}

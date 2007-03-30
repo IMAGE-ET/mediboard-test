@@ -35,7 +35,7 @@
       </label>
     </th>
     <td>
-      <input type="text" name="ged[titre]" value="{{$docGed->titre}}" title="notNull {{$docGed->_props.titre}}" />
+      <input type="text" name="ged[titre]" value="{{$docGed->titre}}" class="notNull {{$docGed->_props.titre}}" />
     </td>
   </tr>
   <tr>
@@ -45,7 +45,7 @@
       </label>
     </th>
     <td>
-      <select name="ged[doc_theme_id]" title="notNull {{$docGed->_props.doc_theme_id}}">
+      <select name="ged[doc_theme_id]" class="notNull {{$docGed->_props.doc_theme_id}}">
         <option value="">&mdash; {{tr}}CDocGed-doc_theme_id-desc{{/tr}}</option>
         {{foreach from=$listThemes item=curr_theme}}
         <option value="{{$curr_theme->doc_theme_id}}" {{if $docGed->doc_theme_id == $curr_theme->doc_theme_id}} selected="selected" {{/if}} >
@@ -58,14 +58,14 @@
   <tr>
     <th><label for="suivi[remarques]" title="{{tr}}CDocGedSuivi-remarques-desc{{/tr}}">{{tr}}CDocGedSuivi-remarques{{/tr}}</label></th>
     <td>
-      <textarea name="suivi[remarques]" title="{{$docGed->_lastentry->_props.remarques}}"></textarea>
+      <textarea name="suivi[remarques]" class="{{$docGed->_lastentry->_props.remarques}}"></textarea>
     </td>
   </tr>
   {{if $docGed->version}}
   <tr>
     <th><label for="ged[version]">{{tr}}CDocGed-version{{/tr}}</label></th>
     <td>
-      <select name="ged[version]" title="notNull currency">
+      <select name="ged[version]" class="notNull currency">
         {{foreach from=$versionDoc|smarty:nodefaults item=currVersion}}
         <option value="{{$currVersion}}">{{$currVersion}}</option>
         {{/foreach}}

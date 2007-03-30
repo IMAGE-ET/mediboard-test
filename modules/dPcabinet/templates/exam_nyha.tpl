@@ -64,7 +64,7 @@ if (window.opener.reloadFdr) {
       </label>
     </td>
     <td>
-      {{html_radios onchange="changeValue(this.name,'q2a','q3a')" name="q1" options=$exam_nyha->_enumsTrans.q1 separator="<br />" title=$exam_nyha->_props.q1 checked=$exam_nyha->q1}}
+      {{html_radios onchange="changeValue(this.name,'q2a','q3a')" name="q1" options=$exam_nyha->_enumsTrans.q1 separator="<br />" class=$exam_nyha->_props.q1 checked=$exam_nyha->q1}}
     </td>
   </tr>
   
@@ -84,7 +84,7 @@ if (window.opener.reloadFdr) {
       </label>
     </td>
     <td>
-      {{html_radios onchange="changeValue(this.name,'q2b','')" name="q2a" options=$exam_nyha->_enumsTrans.q2a separator="<br />" title=$exam_nyha->_props.q2a checked=$exam_nyha->q2a}}
+      {{html_radios onchange="changeValue(this.name,'q2b','')" name="q2a" options=$exam_nyha->_enumsTrans.q2a separator="<br />" class=$exam_nyha->_props.q2a checked=$exam_nyha->q2a}}
     </td>
   </tr>
   </tbody>
@@ -107,7 +107,7 @@ if (window.opener.reloadFdr) {
       </label>
     </td>
     <td>
-      {{html_radios onchange="changeValue(this.name,'','')" name="q2b" options=$exam_nyha->_enumsTrans.q2b separator="<br />" title=$exam_nyha->_props.q2b checked=$exam_nyha->q2b}}
+      {{html_radios onchange="changeValue(this.name,'','')" name="q2b" options=$exam_nyha->_enumsTrans.q2b separator="<br />" class=$exam_nyha->_props.q2b checked=$exam_nyha->q2b}}
     </td>
   </tr>
   </tbody>
@@ -129,7 +129,7 @@ if (window.opener.reloadFdr) {
       </label>
     </td>
     <td>
-      {{html_radios onchange="changeValue(this.name,'q3b','')" name="q3a" options=$exam_nyha->_enumsTrans.q3a separator="<br />" title=$exam_nyha->_props.q3a checked=$exam_nyha->q3a}}
+      {{html_radios onchange="changeValue(this.name,'q3b','')" name="q3a" options=$exam_nyha->_enumsTrans.q3a separator="<br />" class=$exam_nyha->_props.q3a checked=$exam_nyha->q3a}}
     </td>
   </tr>
   </tbody>
@@ -150,7 +150,7 @@ if (window.opener.reloadFdr) {
       </label>
     </td>
     <td>
-      {{html_radios onchange="changeValue(this.name,'','')" name="q3b" options=$exam_nyha->_enumsTrans.q3b separator="<br />" title=$exam_nyha->_props.q3b checked=$exam_nyha->q3b}}
+      {{html_radios onchange="changeValue(this.name,'','')" name="q3b" options=$exam_nyha->_enumsTrans.q3b separator="<br />" class=$exam_nyha->_props.q3b checked=$exam_nyha->q3b}}
     </td>
   </tr>
   </tbody>

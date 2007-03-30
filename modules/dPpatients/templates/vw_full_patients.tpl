@@ -9,7 +9,9 @@ function viewCompleteItem(sClassName, id) {
   url.setModuleAction("system", "httpreq_vw_complete_object");
   url.addParam("object_class", sClassName);
   url.addParam("object_id", id);
-  url.requestUpdate("listView");
+  url.requestUpdate("listView", { 
+    onComplete: initNotes 
+  } );
 }
 
 function reloadListFile(sAction){

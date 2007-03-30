@@ -22,7 +22,7 @@ function pageMain() {
           <th><label for="debutact" title="Date de début">Début:</label></th>
           <td class="date">
             <div id="Form1_debutact_da">{{$debutact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debutact" title="notNull date" value="{{$debutact}}" />
+            <input type="hidden" name="debutact" class="notNull date" value="{{$debutact}}" />
             <img id="Form1_debutact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
          </td>
         </tr>
@@ -30,7 +30,7 @@ function pageMain() {
           <th><label for="finact" title="Date de fin">Fin:</label></th>
           <td class="date">
             <div id="Form1_finact_da">{{$finact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="finact" title="notNull date moreEquals|debutact" value="{{$finact}}" />
+            <input type="hidden" name="finact" class="notNull date moreEquals|debutact" value="{{$finact}}" />
             <img id="Form1_finact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
@@ -55,7 +55,7 @@ function pageMain() {
           <th><label for="debutact" title="Date de début">Début:</label></th>
           <td class="date">
             <div id="Form2_debutact_da">{{$debutact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debutact" title="notNull date" value="{{$debutact}}" />
+            <input type="hidden" name="debutact" class="notNull date" value="{{$debutact}}" />
             <img id="Form2_debutact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
          </td>
         </tr>
@@ -63,7 +63,7 @@ function pageMain() {
           <th><label for="finact" title="Date de fin">Fin:</label></th>
           <td class="date">
             <div id="Form2_finact_da">{{$finact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="finact" title="notNull date moreEquals|debutact" value="{{$finact}}" />
+            <input type="hidden" name="finact" class="notNull date moreEquals|debutact" value="{{$finact}}" />
             <img id="Form2_finact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>

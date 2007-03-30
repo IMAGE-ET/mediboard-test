@@ -33,7 +33,7 @@ function pageMain() {
           <th><label for="debutact" title="Date de début">Début</label></th>
           <td class="date">
             <div id="bloc_debutact_da">{{$debutact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debutact" title="notNull date" value="{{$debutact}}" />
+            <input type="hidden" name="debutact" class="notNull date" value="{{$debutact}}" />
             <img id="bloc_debutact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
          </td>
           <th><label for="salle_id" title="Salle">Salle</label></th>
@@ -52,7 +52,7 @@ function pageMain() {
           <th><label for="finact" title="Date de fin">Fin</label></th>
           <td class="date">
             <div id="bloc_finact_da">{{$finact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="finact" title="notNull date moreEquals|debutact" value="{{$finact}}" />
+            <input type="hidden" name="finact" class="notNull date moreEquals|debutact" value="{{$finact}}" />
             <img id="bloc_finact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
           <th><label for="prat_id" title="Praticien">Praticien</label></th>

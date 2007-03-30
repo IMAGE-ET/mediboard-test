@@ -39,7 +39,7 @@ class CAddiction extends CMbObject {
 
   function getHelpedFields(){
     return array(
-      "addiction" => null
+      "addiction" => "type"
     );
   }
   

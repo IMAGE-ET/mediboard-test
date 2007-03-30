@@ -23,7 +23,7 @@
       <label for="nom" title="{{tr}}CEiItem-nom-desc{{/tr}}">{{tr}}CEiItem-nom{{/tr}}</label>
     </th>
     <td>
-      <input type="text" name="nom" value="{{$item->nom}}" title="{{$item->_props.nom}}" />
+      <input type="text" name="nom" value="{{$item->nom}}" class="{{$item->_props.nom}}" />
     </td>
   </tr>
   <tr>
@@ -31,7 +31,7 @@
       <label for="ei_categorie_id" title="{{tr}}CEiItem-ei_categorie_id-desc{{/tr}}">{{tr}}CEiItem-ei_categorie_id{{/tr}}</label>
     </th>
     <td>
-      <select name="ei_categorie_id" title="{{$item->_props.ei_categorie_id}}">
+      <select name="ei_categorie_id" class="{{$item->_props.ei_categorie_id}}">
         <option value="">&mdash; {{tr}}CEiItem-ei_categorie_id-desc{{/tr}}</option>
         {{foreach from=$listCategories item=curr_cat}}        
         <option value="{{$curr_cat->ei_categorie_id}}"{{if $curr_cat->ei_categorie_id==$item->ei_categorie_id}} selected="selected"{{/if}}>

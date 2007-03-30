@@ -15,7 +15,9 @@ function popCode() {
 
 function setCode(sCode, type, sFullCode) {
   oCimField.add(sCode);
+  {{if $_is_anesth}}
   oCimAnesthField.add(sCode);
+  {{/if}}
   updateTokenCim10();
 }
 
@@ -301,7 +303,7 @@ function copyTraitement(traitement_id){
           {{foreach from=$curr_cat item=curr_code}}
           <tr>
             <td class="text">
-              <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}');oCimAnesthField.add('{{$curr_code->code}}');">
+              <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}');{{if $_is_anesth}}oCimAnesthField.add('{{$curr_code->code}}');{{/if}}">
                 Ajouter
               </button>
               <button class="down notext" type="button" onclick="selectCim10('{{$curr_code->code}}')">

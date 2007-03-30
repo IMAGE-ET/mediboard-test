@@ -44,10 +44,15 @@ function finAddiction(oForm){
     <td colspan="2"><strong>Addiction</strong></td>
     <td>
       {{mb_label object=$addiction field="addiction"}}
-      <select name="_helpers_addiction" size="1" onchange="pasteHelperContent(this)">
+      {{* Tout sur une ligne pour éviter les espaces qui s'affichent sous IE *}}
+      {{foreach from=$addiction->_aides.addiction item=curr_list key=keyEnum}}{{if $keyEnum == "no_enum"}}{{assign var=dependOn value=""}}{{assign var=styleSelect value=""}}{{else}}{{assign var=dependOn value=$keyEnum}}{{assign var=styleSelect value="style='display:none;'"}}{{/if}}<select name="_helpers_addiction{{if $dependOn}}-{{$dependOn}}{{/if}}" size="1" onchange="pasteHelperContent(this)" {{$styleSelect|smarty:nodefaults}}>
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$addiction->_aides.addiction.no_enum}}
-      </select>
+        {{foreach from=$curr_list item=list_aides key=sTitleOpt}}
+          <optgroup label="{{$sTitleOpt}}">
+            {{html_options options=$list_aides}}
+          </optgroup>
+        {{/foreach}}
+      </select>{{/foreach}}
       <input type="hidden" name="_hidden_addiction" value="" />
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAddiction', this.form._hidden_addiction, 'addiction')">
         Nouveau
@@ -58,7 +63,7 @@ function finAddiction(oForm){
   <tr>
     <th>{{mb_label object=$addiction field="type"}}</th>
     <td>
-      {{html_options name="type" options=$addiction->_enumsTrans.type}}
+      {{html_options name="type" options=$addiction->_enumsTrans.type onchange="putHelperContent(this,'addiction')"}}
     </td>
     <td>
       <textarea name="addiction" onblur="if(verifNonEmpty(this)){submitAddiction(this.form);finAddiction(this.form);}"></textarea>

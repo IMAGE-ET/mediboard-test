@@ -43,13 +43,13 @@
 <table class="form" id="vwServices" style="display:none;">
   <tr>
     <th><label for="service_id" title="Veuillez sélectionner un service">Service</label></th>
-    <td id="listService"><select title="notNull ref" name="service_id"></select></td>
+    <td id="listService"><select class="notNull ref" name="service_id"></select></td>
   </tr>
   <tr>
     <th><label for="date" title="Veuillez sélectionner une date">Date</label></th>
     <td class="date">
       <div id="FrmSelectService_date_da"></div>
-      <input type="hidden" name="date" title="notNull date" value="" />
+      <input type="hidden" name="date" class="notNull date" value="" />
       <img id="FrmSelectService_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" />
     </td>
   </tr>
@@ -139,7 +139,7 @@
     </tbody>
   </table>
   
-  <select id="templatelistService" title="notNull ref" name="service_id"><option value="">&mdash; Veuillez sélectionner un service</option></select>
+  <select id="templatelistService" class="notNull ref" name="service_id"><option value="">&mdash; Veuillez sélectionner un service</option></select>
   <button id="templateButtonMod" onclick="saveRepas();" type="button" class="modify">{{tr}}Modify{{/tr}}</button>
   <button id="templateButtonDel" onclick="confirmDeletionOffline(this.form, saveRepas,{typeName:'{{tr escape="javascript"}}CRepas.one{{/tr}}'})" type="button" class="trash">{{tr}}Delete{{/tr}}</button>
   <button id="templateButtonAdd" onclick="saveRepas();" type="button" class="submit">{{tr}}Create{{/tr}}</button>

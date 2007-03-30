@@ -50,11 +50,11 @@
         </tr>   
         <tr>
           <th><label for="nom" title="{{tr}}CChapitreDoc-nom-desc{{/tr}}">{{tr}}CChapitreDoc-nom{{/tr}}</label></th>
-          <td><input name="nom" title="{{$chapitre->_props.nom}}" type="text" value="{{$chapitre->nom}}" /></td>
+          <td><input name="nom" class="{{$chapitre->_props.nom}}" type="text" value="{{$chapitre->nom}}" /></td>
         </tr>
         <tr>
           <th><label for="code" title="{{tr}}CChapitreDoc-code-desc{{/tr}}">{{tr}}CChapitreDoc-code{{/tr}}</label></th>
-          <td><input name="code" title="{{$chapitre->_props.code}}" type="text" value="{{$chapitre->code}}" /></td>
+          <td><input name="code" class="{{$chapitre->_props.code}}" type="text" value="{{$chapitre->code}}" /></td>
         </tr>
         <tr>
           <td class="button" colspan="2">            

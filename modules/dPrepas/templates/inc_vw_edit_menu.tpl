@@ -63,12 +63,12 @@ function pageMain() {
         </tr>     
         <tr>
           <th><label for="nom" title="Nom du menu, obligatoire">Nom</label></th>
-          <td><input name="nom" title="{{$menu->_props.nom}}" type="text" value="{{$menu->nom}}" /></td>
+          <td><input name="nom" class="{{$menu->_props.nom}}" type="text" value="{{$menu->nom}}" /></td>
         </tr>
         <tr>
           <th><label for="typerepas" title="Type de repas">Type de repas</label></th>
           <td colspan="3">
-            <select name="typerepas" title="{{$menu->_props.typerepas}}">
+            <select name="typerepas" class="{{$menu->_props.typerepas}}">
               {{foreach from=$listTypeRepas item=curr_typerepas}}
                 <option value="{{$curr_typerepas->typerepas_id}}" {{if $menu->typerepas==$curr_typerepas->typerepas_id}}selected="selected"{{/if}}>
                   {{$curr_typerepas->nom}}
@@ -81,7 +81,7 @@ function pageMain() {
           <th><label for="debut" title="Date de début">Début</label></th>
           <td class="date">
             <div id="editMenu_debut_da">{{if $menu->menu_id}}{{$menu->debut|date_format:"%d/%m/%Y"}}{{else}}{{$date_debut|date_format:"%d/%m/%Y"}}{{/if}}</div>
-            <input type="hidden" name="debut" title="{{$menu->_props.debut}}" value="{{if $menu->menu_id}}{{$menu->debut}}{{else}}{{$date_debut}}{{/if}}" />
+            <input type="hidden" name="debut" class="{{$menu->_props.debut}}" value="{{if $menu->menu_id}}{{$menu->debut}}{{else}}{{$date_debut}}{{/if}}" />
             <img id="editMenu_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" />
           </td>
         </tr>
@@ -89,42 +89,42 @@ function pageMain() {
           <th><label for="repetition" title="Répétition">Répétition</label></th>
           <td>
             1 sem. / 
-            {{html_options name="repetition" options=$listRepeat title=$menu->_props.repetition selected=$menu->repetition}}
+            {{html_options name="repetition" options=$listRepeat class=$menu->_props.repetition selected=$menu->repetition}}
           </td>
         </tr>
         <tr>
           <th><label for="nb_repet" title="Nombre de répétition">Nombre de répétition</label></th>
           <td>
-            <input size="3" name="nb_repet" title="{{$menu->_props.nb_repet}}" type="text" value="{{$menu->nb_repet}}" />
+            <input size="3" name="nb_repet" class="{{$menu->_props.nb_repet}}" type="text" value="{{$menu->nb_repet}}" />
           </td>
         </tr>
         <tr>
           <th><label for="plat1" title="Plat n°1">1er Plat</label></th>
-          <td><input name="plat1" title="{{$menu->_props.plat1}}" type="text" value="{{$menu->plat1}}" /></td>
+          <td><input name="plat1" class="{{$menu->_props.plat1}}" type="text" value="{{$menu->plat1}}" /></td>
         </tr>
         <tr>
           <th><label for="plat2" title="Plat n°2">2nd Plat</label></th>
-          <td><input name="plat2" title="{{$menu->_props.plat2}}" type="text" value="{{$menu->plat2}}" /></td>
+          <td><input name="plat2" class="{{$menu->_props.plat2}}" type="text" value="{{$menu->plat2}}" /></td>
         </tr>
         <tr>
           <th><label for="plat3" title="Plat n°3">3ème Plat</label></th>
-          <td><input name="plat3" title="{{$menu->_props.plat3}}" type="text" value="{{$menu->plat3}}" /></td>
+          <td><input name="plat3" class="{{$menu->_props.plat3}}" type="text" value="{{$menu->plat3}}" /></td>
         </tr>
         <tr>
           <th><label for="plat4" title="Plat n°4">4ème Plat</label></th>
-          <td><input name="plat4" title="{{$menu->_props.plat4}}" type="text" value="{{$menu->plat4}}" /></td>
+          <td><input name="plat4" class="{{$menu->_props.plat4}}" type="text" value="{{$menu->plat4}}" /></td>
         </tr>
         <tr>
           <th><label for="plat5" title="Plat n°5">5ème Plat</label></th>
-          <td><input name="plat5" title="{{$menu->_props.plat5}}" type="text" value="{{$menu->plat5}}" /></td>
+          <td><input name="plat5" class="{{$menu->_props.plat5}}" type="text" value="{{$menu->plat5}}" /></td>
         </tr>
         <tr>
           <th><label for="boisson" title="Boisson pour ce repas">Boisson</label></th>
-          <td><input name="boisson" title="{{$menu->_props.boisson}}" type="text" value="{{$menu->boisson}}" /></td>
+          <td><input name="boisson" class="{{$menu->_props.boisson}}" type="text" value="{{$menu->boisson}}" /></td>
         </tr>
         <tr>
           <th><label for="pain" title="Pain pour ce repas">Pain</label></th>
-          <td><input name="pain" title="{{$menu->_props.pain}}" type="text" value="{{$menu->pain}}" /></td>
+          <td><input name="pain" class="{{$menu->_props.pain}}" type="text" value="{{$menu->pain}}" /></td>
         </tr>
         <tr>
           <th><label for="diabete_1" title="Repas adapté pour les diabétique">Diabétique</label></th>

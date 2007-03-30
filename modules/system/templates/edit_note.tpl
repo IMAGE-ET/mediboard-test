@@ -1,13 +1,13 @@
 <script type="text/javascript">
 function reloadNotes(){
   window.opener.reloadNotes();
-  window.close();
 }
 function submitNote(){
   var oForm = document.editFrm;
   
   if(checkForm(oForm)){
     submitFormAjax(oForm, 'systemMsg', {onComplete: reloadNotes});
+    oForm.reset();
   }
 }
 </script>
@@ -70,6 +70,7 @@ function submitNote(){
       </button>
       {{else}}
       <button type="button" class="submit" onclick="submitNote()">Créer</button>
+      <button type="button" class="cancel" onclick="window.close();">Fermer</button>
       {{/if}}
     </td>
   </tr>

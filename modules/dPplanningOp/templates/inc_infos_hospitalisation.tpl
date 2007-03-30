@@ -8,9 +8,9 @@
   </tr>
   
   <tr>
-    <th>Lit</th>
-    <th>Entrée</th>
-    <th>Sortie</th>
+    <th>{{tr}}CLit-nom{{/tr}}</th>
+    <th>{{tr}}CAffectation-entree-court{{/tr}}</th>
+    <th>{{tr}}CAffectation-sortie-court{{/tr}}</th>
   </tr>
 
   {{foreach from=$sejour->_ref_affectations item=curr_affectation}}

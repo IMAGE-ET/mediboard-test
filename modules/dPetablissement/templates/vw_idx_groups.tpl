@@ -77,7 +77,7 @@ function pageMain() {
             <label for="adresse" title="Veuillez saisir l'adresse l'établissement">Adresse</label>
           </th>
           <td>
-            <textarea title="{{$usergroup->_props.adresse}}" name="adresse">{{$usergroup->adresse}}</textarea>
+            <textarea class="{{$usergroup->_props.adresse}}" name="adresse">{{$usergroup->adresse}}</textarea>
           </td>
         </tr>
         <tr>

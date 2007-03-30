@@ -23,7 +23,7 @@
       <label for="nom" title="{{tr}}CEiCategorie-nom-desc{{/tr}}">{{tr}}CEiCategorie-nom{{/tr}}</label>
     </th>
     <td>
-      <input type="text" name="nom" value="{{$categorie->nom}}" title="{{$categorie->_props.nom}}" />
+      <input type="text" name="nom" value="{{$categorie->nom}}" class="{{$categorie->_props.nom}}" />
     </td>
   </tr>
   <tr>

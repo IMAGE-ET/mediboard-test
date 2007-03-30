@@ -405,12 +405,14 @@ Class.extend(ObjectTooltip, {
     }
   },
   
-  createDiv: function() {
+  createDiv: function() {    
     this.eDiv  = Dom.cloneElemById("tooltipTpl",true);
     Element.classNames(this.eDiv).add(this.mode.sClass);
     Element.hide(this.eDiv);
+    this.eDiv.removeAttribute("_extended");
     this.eTrigger.parentNode.insertBefore(this.eDiv, this.eTrigger.nextSibling);
     this.eTarget = document.getElementsByClassName("content", this.eDiv)[0];
+    this.eTarget.removeAttribute("_extended");
   }  
    
   
@@ -701,7 +703,7 @@ Class.extend(Note,  {
     this.popup();
   },
   popup: function () {
-    this.url.popup(600, 500, "note");
+    this.url.popup(600, 300, "note");
   }
 } )
 

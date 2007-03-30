@@ -174,13 +174,13 @@ function pageMain() {
   {{if $modurgence}}
   <tr>
     <td colspan="2">
-       <a class="buttonnew" href="index.php?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">Programmer une nouvelle urgence</a>
+       <a class="buttonnew" href="index.php?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">{{tr}}COperation.create_urgence{{/tr}}</a>
     </td>
   </tr>
   {{else}}
   <tr>
     <td colspan="2">
-       <a class="buttonnew" href="index.php?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">Programmer une nouvelle intervention</a>
+       <a class="buttonnew" href="index.php?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">{{tr}}COperation.create{{/tr}}</a>
     </td>
   </tr>
   {{/if}}
@@ -190,24 +190,24 @@ function pageMain() {
     {{if $modurgence}}
     <th colspan="2" class="title urgence modify">
       <button style="float:left;" class="search" type="button" onclick="popProtocole()">Choisir un protocole</button>
-      Modification de l'urgence de {{$patient->_view}} par le Dr. {{$chir->_view}}
+      {{tr}}msg-COperation-title-modify-urgence{{/tr}} {{$patient->_view}} par le Dr. {{$chir->_view}}
     </th>
     {{else}}
     <th colspan="2" class="title modify">
       <button class="search" style="float:left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
-      Modification de l'intervention de {{$patient->_view}} par le Dr. {{$chir->_view}}
+      {{tr}}msg-COperation-title-modify{{/tr}} {{$patient->_view}} par le Dr. {{$chir->_view}}
     </th>
     {{/if}}
     {{else}}
     {{if $modurgence}}
     <th colspan="2" class="title urgence"> 
-      <button class="search" style="float: left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
-      Création d'une urgence
+      <button class="search" style="float: left;" type="button" onclick="popProtocole()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
+      {{tr}}msg-COperation-title-create-urgence{{/tr}}
     </th>
     {{else}}
     <th colspan="2" class="title"> 
-      <button class="search" style="float: left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
-      Création d'une intervention
+      <button class="search" style="float: left;" type="button" onclick="popProtocole()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
+      {{tr}}msg-COperation-title-create{{/tr}}
     </th>
     {{/if}}
     {{/if}}
@@ -227,41 +227,41 @@ function pageMain() {
         <tr>
           <td class="button">
           {{if $op->operation_id}}
-            <button class="modify" type="button" onclick="submitForms();">Modifier</button>
-            <button class="trash" type="button" onclick="deleteObjects();">Supprimer</button>
+            <button class="modify" type="button" onclick="submitForms();">{{tr}}Modify{{/tr}}</button>
+            <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>
             {{if $op->annulee}}
-            <button class="change" type="button" onclick="cancelObjects();">Rétablir</button>
+            <button class="change" type="button" onclick="cancelObjects();">{{tr}}Restore{{/tr}}</button>
             {{else}}
-            <button class="cancel" type="button" onclick="cancelObjects();">Annuler</button>
+            <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
             {{/if}}
           {{else}}
-            <button class="submit" type="button" onclick="submitForms();">Créer</button>
+            <button class="submit" type="button" onclick="submitForms();">{{tr}}Create{{/tr}}</button>
           {{/if}}
           {{if $op->operation_id}}
-            <button class="print" type="button" onclick="printForm();">Imprimer</button>
+            <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
             <select name="_choix_modele" onchange="printDocument(this)">
-              <option value="">&mdash; Choisir un modèle</option>
+              <option value="">&mdash; {{tr}}modele-choice{{/tr}}</option>
               <optgroup label="Modèles du praticien">
               {{foreach from=$listModelePrat item=curr_modele}}
                 <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
               {{foreachelse}}
-                <option value="">Aucun modèle disponible</option>
+                <option value="">{{tr}}modele-none{{/tr}}</option>
               {{/foreach}}
               </optgroup>
               <optgroup label="Modèles du cabinet">
               {{foreach from=$listModeleFunc item=curr_modele}}
                 <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
               {{foreachelse}}
-                <option value="">Aucun modèle disponible</option>
+                <option value="">{{tr}}modele-none{{/tr}}</option>
               {{/foreach}}
               </optgroup>
             </select>
             <select name="_choix_pack" onchange="printPack(this)">
-              <option value="">&mdash; Choisir un pack</option>
+              <option value="">&mdash; {{tr}}pack-choice{{/tr}}</option>
               {{foreach from=$listPack item=curr_pack}}
                 <option value="{{$curr_pack->pack_id}}">{{$curr_pack->nom}}</option>
               {{foreachelse}}
-                <option value="">Aucun pack disponible</option>
+                <option value="">{{tr}}pack-none{{/tr}}</option>
               {{/foreach}}
             </select>
           {{/if}}

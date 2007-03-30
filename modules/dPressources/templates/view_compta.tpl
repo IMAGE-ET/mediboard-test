@@ -85,7 +85,7 @@ function pageMain() {
           <th><label for="deb" title="Date de début pour les rapports">Début</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_deb_da">{{$today|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="deb" title="notNull date" value="{{$today}}" />
+            <input type="hidden" name="deb" class="notNull date" value="{{$today}}" />
             <img id="paramFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
           </td>
         </tr>
@@ -93,7 +93,7 @@ function pageMain() {
           <th><label for="fin" title="Date de fin pour les rapports">Fin</label></th>
           <td class="date" colspan="2">
             <div id="paramFrm_fin_da">{{$today|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" title="notNull date moreEquals|deb" value="{{$today}}" />
+            <input type="hidden" name="fin" class="notNull date moreEquals|deb" value="{{$today}}" />
             <img id="paramFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
           </td>
         </tr>

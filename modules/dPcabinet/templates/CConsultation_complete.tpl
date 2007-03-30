@@ -17,11 +17,9 @@ newExam = function(sAction, consultation_id) {
       <a style="float:right;" href="#nothing" onclick="view_log('{{$object->_class_name}}', {{$object->_id}})">
         <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
       </a>
-      <a style="float:left;" href="#nothing"
-        onmouseover="ObjectTooltip.create(this, '{{$object->_class_name}}', {{$object->_id}}, { mode: 'notes' })"
-        onclick="new Note().create('{{$object->_class_name}}', {{$object->_id}});">
-        <img src="images/icons/note_blue.png" alt="Ecrire une note" />
-      </a>
+      <div style="float:left;" class="noteDiv {{$object->_class_name}}-{{$object->_id}}">
+        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+      </div>
       {{$object->_view}}
     </th>
   </tr>

@@ -1,4 +1,5 @@
 <?php
-$locales["CCodeCCAM"] = "Code CCAM";
-$locales["CFavoriCCAM"] = "Favoris CCAM";
+$locales['CCodeCCAM'] = '';
+$locales['CFavoriCCAM'] = '';
+$locales['CFavoriCCAM.none'] = '';
 ?>

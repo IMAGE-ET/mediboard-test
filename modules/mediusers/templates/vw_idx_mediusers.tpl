@@ -134,7 +134,7 @@ function pageMain() {
           <th>{{mb_label object=$mediuserSel field="deb_activite"}}</th>
 		      <td class="date">
 		        <div id="mediuser_deb_activite_da">{{mb_value object=$mediuserSel field="deb_activite"}}</div>
-		        <input type="hidden" name="deb_activite" title="date" value="{{$mediuserSel->deb_activite}}" />
+		        <input type="hidden" name="deb_activite" class="date" value="{{$mediuserSel->deb_activite}}" />
             <img id="mediuser_deb_activite_trigger" src="./images/icons/calendar.gif" alt="Date de début d'activité"/>
             <button class="cancel notext" type="button" onclick="deldate('deb_activite')">
               {{tr}}remove{{/tr}}
@@ -146,7 +146,7 @@ function pageMain() {
           <th>{{mb_label object=$mediuserSel field="fin_activite"}}</th>
           <td class="date">
             <div id="mediuser_fin_activite_da">{{mb_value object=$mediuserSel field="fin_activite"}}</div>
-            <input type="hidden" name="fin_activite" title="date" value="{{$mediuserSel->fin_activite}}" />
+            <input type="hidden" name="fin_activite" class="date" value="{{$mediuserSel->fin_activite}}" />
             <img id="mediuser_fin_activite_trigger" src="./images/icons/calendar.gif" alt="Date de fin d'activité"/>
             <button class="cancel notext" type="button" onclick="deldate('fin_activite')">
               {{tr}}remove{{/tr}}
@@ -161,7 +161,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$mediuserSel field="function_id"}}</th>
           <td>
-            <select name="function_id" title="{{$mediuserSel->_props.function_id}}">
+            <select name="function_id" class="{{$mediuserSel->_props.function_id}}">
               <option value="">&mdash; Choisir une fonction &mdash;</option>
               {{foreach from=$groups item=curr_group}}
               <optgroup label="{{$curr_group->text}}">
@@ -178,7 +178,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$mediuserSel field="discipline_id"}}</th>
           <td>
-            <select name="discipline_id" title="{{$mediuserSel->_props.discipline_id}}">
+            <select name="discipline_id" class="{{$mediuserSel->_props.discipline_id}}">
               <option value="">&mdash; Choisir une spécialité &mdash;</option>
               {{foreach from=$disciplines item=curr_discipline}}
               <option value="{{$curr_discipline->discipline_id}}" {{if $curr_discipline->discipline_id == $mediuserSel->discipline_id}} selected="selected" {{/if}}>
@@ -191,7 +191,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$mediuserSel field="spec_cpam_id"}}</th>
           <td>
-            <select name="spec_cpam_id" title="{{$mediuserSel->_props.spec_cpam_id}}">
+            <select name="spec_cpam_id" class="{{$mediuserSel->_props.spec_cpam_id}}">
               <option value="">&mdash; Choisir une spécialité &mdash;</option>
               {{foreach from=$spec_cpam item=curr_spec}}
               <option value="{{$curr_spec->spec_cpam_id}}" {{if $curr_spec->spec_cpam_id == $mediuserSel->spec_cpam_id}} selected="selected" {{/if}}>

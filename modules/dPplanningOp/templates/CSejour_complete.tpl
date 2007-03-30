@@ -4,13 +4,11 @@
   <tr>
     <th class="title" colspan="2">
       <a style="float:right;" href="#nothing" onclick="view_log('{{$object->_class_name}}', {{$object->_id}})">
-        <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
+        <img src="images/icons/history.gif" alt="historique" title="{{tr}}History.desc{{/tr}}" />
       </a>
-      <a style="float:left;" href="#nothing"
-        onmouseover="ObjectTooltip.create(this, '{{$object->_class_name}}', {{$object->_id}}, { mode: 'notes' })"
-        onclick="new Note().create('{{$object->_class_name}}', {{$object->_id}});">
-        <img src="images/icons/note_blue.png" alt="Ecrire une note" />
-      </a>
+      <div style="float:left;" class="noteDiv {{$object->_class_name}}-{{$object->_id}}">
+        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+      </div>
       {{$object->_view}}
     </th>
   </tr>
@@ -18,51 +16,51 @@
   {{if $sejour->annule == 1}}
   <tr>
     <th class="category cancelled" colspan="4">
-    SEJOUR ANNULE
+    {{tr}}CSejour-annule{{/tr}}
     </th>
   </tr>
   {{/if}}
   
   <tr>
     <td>
-      <strong>Etablissement :</strong>
+      <strong>{{tr}}CSejour-group_id{{/tr}} :</strong>
       {{$object->_ref_group->_view}}
     </td>
     <td>
-      <strong>Praticien :</strong>
+      <strong>{{tr}}CSejour-praticien_id{{/tr}} :</strong>
       <i>{{$object->_ref_praticien->_view}}</i>
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>Entrée prévue :</strong>
+      <strong>{{tr}}CSejour-_date_entree_prevue{{/tr}} :</strong>
       {{mb_value object=$sejour field="entree_prevue"}}
     </td>
     <td>
-      <strong>Entrée reelle :</strong>
+      <strong>{{tr}}CSejour-entree_reelle{{/tr}} :</strong>
       {{mb_value object=$sejour field="entree_reelle"}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>Sortie prévue :</strong>
+      <strong>{{tr}}CSejour-_date_sortie_prevue{{/tr}} :</strong>
       {{mb_value object=$sejour field="sortie_prevue"}}
     </td>
     <td>
-      <strong>Sortie reelle :</strong>
+      <strong>{{tr}}CSejour-sortie_reelle{{/tr}} :</strong>
       {{mb_value object=$sejour field="sortie_reelle"}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>Durée prévue :</strong>
+      <strong>{{tr}}CSejour-_duree_prevue{{/tr}} :</strong>
       {{$sejour->_duree_prevue}} jour(s)
     </td>
     <td>
-      <strong>Sortie reelle :</strong>
+      <strong>{{tr}}CSejour-_duree_reelle{{/tr}} :</strong>
       {{$sejour->_duree_reelle}} jour(s)
     </td>
   </tr>
@@ -70,7 +68,7 @@
   {{if $object->rques}}
   <tr>
     <td class="text" colspan="2">
-      <strong>Remarques :</strong>
+      <strong>{{tr}}CSejour-rques-court{{/tr}} :</strong>
       {{$object->rques|nl2br}}
     </td>
   </tr>
@@ -79,74 +77,74 @@
   {{if $object->convalescence}}
   <tr>
     <td class="text" colspan="2">
-      <strong>Convalescence :</strong>
+      <strong>{{tr}}CSejour-convalescence{{/tr}} :</strong>
       {{$object->convalescence|nl2br}}
     </td>
   </tr>
   {{/if}}
 
   <tr>
-    <th class="category" colspan="2">Hospitalisation</th>
+    <th class="category" colspan="2">{{tr}}msg-CSejour-hospi{{/tr}}</th>
   </tr>
   
   <tr>
     <td>
-      <strong>Type d'admission</strong>
+      <strong>{{tr}}CSejour-type{{/tr}}</strong>
       {{mb_value object=$sejour field="type"}}
     </td>
     <td>
-      <strong>Modalité</strong>:
+      <strong>{{tr}}CSejour-modalite-court{{/tr}}</strong>:
       {{mb_value object=$sejour field="modalite"}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>ATNC :</strong>
+      <strong>{{tr}}CSejour-{{/tr}} :</strong>
       {{mb_value object=$sejour field="ATNC"}}
     </td>
     <td>
-      <strong>Traitement hormonal :</strong>
+      <strong>{{tr}}CSejour-hormone_croissance{{/tr}} :</strong>
       {{mb_value object=$sejour field="hormone_croissance"}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>Chambre particulière :</strong>
+      <strong>{{tr}}CSejour-chambre_seule{{/tr}} :</strong>
       {{mb_value object=$sejour field="chambre_seule"}}
     </td>
     <td>
-      <strong>Lit accompagnant :</strong>
+      <strong>{{tr}}CSejour-lit_accompagnant{{/tr}} :</strong>
       {{mb_value object=$sejour field="lit_accompagnant"}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>Repas sans sel :</strong>
+      <strong>{{tr}}CSejour-repas_sans_sel{{/tr}} :</strong>
       {{mb_value object=$sejour field="repas_sans_sel"}}
     </td>
     <td>
-      <strong>Isolement :</strong>
+      <strong>{{tr}}CSejour-isolement{{/tr}} :</strong>
       {{mb_value object=$sejour field="isolement"}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>Repas diabétique :</strong>
+      <strong>{{tr}}CSejour-repas_diabete{{/tr}} :</strong>
       {{mb_value object=$sejour field="repas_diabete"}}
     </td>
     <td>
-      <strong>Télévision :</strong>
+      <strong>{{tr}}CSejour-television{{/tr}} :</strong>
       {{mb_value object=$sejour field="television"}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>Repas sans résidu :</strong>
+      <strong>{{tr}}CSejour-repas_sans_residu{{/tr}} :</strong>
       {{mb_value object=$sejour field="repas_sans_residu"}}
     </td>
   </tr>

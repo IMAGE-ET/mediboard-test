@@ -2,22 +2,16 @@
   <tr>
     <td class="halfPane">
       <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_typeanesth&amp;type_anesth_id=0">
-        Créer un nouveau type d'anesthésie
+        {{tr}}CTypeAnesth.create{{/tr}}
       </a>
       <table class="tbl">
         <tr>
-          <th>id</th>
-          <th>Type d'anesthésie</th>
+          <th>{{tr}}CTypeAnesth-name-court{{/tr}}</th>
         </tr>
         {{foreach from=$listTypeAnesth item=curr_TypeAnesth}}
         <tr>
-          <td>
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_typeanesth&amp;type_anesth_id={{$curr_TypeAnesth->type_anesth_id}}" title="Modifier le type d'anesthésie">
-              {{$curr_TypeAnesth->type_anesth_id}}
-            </a>
-          </td>
           <td class="text">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_typeanesth&amp;type_anesth_id={{$curr_TypeAnesth->type_anesth_id}}" title="Modifier le type d'anesthésie">
+            <a href="index.php?m={{$m}}&amp;tab=vw_edit_typeanesth&amp;type_anesth_id={{$curr_TypeAnesth->type_anesth_id}}" title="{{tr}}CTypeAnesth-modify{{/tr}}">
               {{$curr_TypeAnesth->name}}
             </a>
           </td>
@@ -34,9 +28,9 @@
       <table class="form">
         <tr>
           {{if $type_anesth->type_anesth_id}}
-          <th class="title modify" colspan="2">Modification du type d'anesthésie {{$type_anesth->name}}</th>
+          <th class="title modify" colspan="2">{{tr}}msg-CTypeAnesth-title-modify{{/tr}} {{$type_anesth->name}}</th>
           {{else}}
-          <th class="title" colspan="2">Création d'un type d'anesthésie</th>
+          <th class="title" colspan="2">{{tr}}msg-CTypeAnesth-title-create{{/tr}}</th>
           {{/if}}
         </tr> 
         <tr>
@@ -46,10 +40,10 @@
         <tr>
           <td class="button" colspan="2">
             {{if $type_anesth->type_anesth_id}}
-              <button class="submit" type="modify">Modifier</button>
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le type d\'anesthésie',objName:'{{$type_anesth->name|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+              <button class="submit" type="modify">{{tr}}Modify{{/tr}}</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'{{tr}}CTypeAnesth.one{{/tr}}',objName:'{{$type_anesth->name|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
             {{else}}
-              <button class="submit" type="submit">Créer</button>
+              <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
         </tr>  

@@ -48,18 +48,18 @@
         </tr>
         <tr>
           <th><label for="nom" title="Nom du plat, obligatoire">Nom</label></th>
-          <td><input name="nom" title="{{$plat->_props.nom}}" type="text" value="{{$plat->nom}}" /></td>
+          <td><input name="nom" class="{{$plat->_props.nom}}" type="text" value="{{$plat->nom}}" /></td>
         </tr>
         <tr>
           <th><label for="type" title="Type de plat">Type de plat</label></th>
           <td colspan="3">
-            {{html_options name="type" options=$plat->_enumsTrans.type title=$plat->_props.type selected=$plat->type}}
+            {{html_options name="type" options=$plat->_enumsTrans.type class=$plat->_props.type selected=$plat->type}}
           </td>
         </tr>
         <tr>
           <th><label for="typerepas" title="Type de repas">Type de repas</label></th>
           <td colspan="3">
-            <select name="typerepas" title="{{$plat->_props.typerepas}}">
+            <select name="typerepas" class="{{$plat->_props.typerepas}}">
               {{foreach from=$listTypeRepas item=curr_typerepas}}
                 <option value="{{$curr_typerepas->typerepas_id}}" {{if $plat->typerepas==$curr_typerepas->typerepas_id}}selected="selected"{{/if}}>
                   {{$curr_typerepas->nom}}

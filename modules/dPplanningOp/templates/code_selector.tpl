@@ -23,7 +23,7 @@ function createFavori() {
   
   {{if !$list}}
   <tr>
-  	<td>Aucun favori disponible</td>
+  	<td>{{tr}}CFavoriCCAM.none{{/tr}}</td>
   </tr>
   {{/if}}
 
@@ -35,7 +35,7 @@ function createFavori() {
       {{$curr_code->libelleLong}}
       <br />
       <button class="tick" type="button" onclick="setClose('{{$curr_code->code}}', '{{$type}}')">
-        Sélectionner
+        {{tr}}Select{{/tr}}
       </button>
     </td>
   {{if ($curr_key+1) is div by 3}}
@@ -48,8 +48,8 @@ function createFavori() {
 <table class="form">
   <tr>
     <td class="button" colspan="3">
-      <button class="cancel" type="button" onclick="window.close();">Annuler</button>
-      <button class="search" type="button" onclick="createFavori();">Rechercher un autre code</button>
+      <button class="cancel" type="button" onclick="window.close();">{{tr}}Cancel{{/tr}}</button>
+      <button class="search" type="button" onclick="createFavori();">{{tr}}button-CCodeCCAM-searchAnother{{/tr}}</button>
     </td>
   </tr>
 </table>

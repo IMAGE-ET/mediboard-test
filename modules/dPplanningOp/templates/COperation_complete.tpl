@@ -5,13 +5,11 @@
   <tr>
     <th class="title" colspan="2">
       <a style="float:right;" href="#nothing" onclick="view_log('{{$object->_class_name}}', {{$object->_id}})">
-        <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
+        <img src="images/icons/history.gif" alt="historique" title="{{tr}}History.desc{{/tr}}" />
       </a>
-      <a style="float:left;" href="#nothing"
-        onmouseover="ObjectTooltip.create(this, '{{$object->_class_name}}', {{$object->_id}}, { mode: 'notes' })"
-        onclick="new Note().create('{{$object->_class_name}}', {{$object->_id}});">
-        <img src="images/icons/note_blue.png" alt="Ecrire une note" />
-      </a>
+      <div style="float:left;" class="noteDiv {{$object->_class_name}}-{{$object->_id}}">
+        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+      </div>
       {{$operation->_view}}
     </th>
   </tr>
@@ -19,26 +17,26 @@
   {{if $operation->annulee == 1}}
   <tr>
     <th class="category cancelled" colspan="4">
-    OPERATION ANNULEE
+    {{tr}}COperation-annulee{{/tr}}
     </th>
   </tr>
   {{/if}}
 
   <tr>
     <td>
-      <strong>Praticien :</strong>
+      <strong>{{tr}}COperation-chir_id-court{{/tr}} :</strong>
       {{$operation->_ref_chir->_view}}
     </td>
     <td>
-      <strong>Anesthésiste :</strong>
+      <strong>{{tr}}COperation-anesth_id-court{{/tr}} :</strong>
       {{$operation->_ref_anesth->_view}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>Date :</strong>
-      le {{$operation->_datetime|date_format:"%d %B %Y"}}
+      <strong>{{tr}}COperation-date-court{{/tr}} :</strong>
+      {{$operation->_datetime|date_format:"%d %B %Y"}}
     </td>
     <td>
     </td>
@@ -46,18 +44,18 @@
 
   <tr>
     <td>
-      <strong>Libellé :</strong>
+      <strong>{{tr}}COperation-libelle{{/tr}} :</strong>
       {{$operation->libelle}}
     </td>
     <td>
-      <strong>Coté :</strong>
+      <strong>{{tr}}COperation-cote{{/tr}} :</strong>
       {{tr}}{{$operation->cote}}{{/tr}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>Type d'anesthésie :</strong>
+      <strong>{{tr}}COperation-_lu_type_anesth{{/tr}} :</strong>
       {{$operation->_lu_type_anesth}}
     </td>
   </tr>
@@ -65,7 +63,7 @@
   {{if $operation->materiel}}
   <tr>
     <td class="text" colspan="2">
-      <strong>Matériel :</strong>
+      <strong>{{tr}}COperation-materiel-court{{/tr}} :</strong>
       {{$operation->materiel|nl2br}}
     </td>
   </tr>
@@ -74,7 +72,7 @@
   {{if $operation->rques}}
   <tr>
     <td class="text" colspan="2">
-      <strong>Remarques :</strong>
+      <strong>{{tr}}COperation-rques-court{{/tr}} :</strong>
       {{$operation->rques|nl2br}}
     </td>
   </tr>
@@ -83,14 +81,14 @@
   {{if $operation->examen}}
   <tr>
     <td class="text" colspan="2">
-      <strong>Bilan pré-op :</strong>
+      <strong>{{tr}}COperation-examen{{/tr}} :</strong>
       {{$operation->examen|nl2br}}
     </td>
   </tr>
   {{/if}}
 
   <tr>
-    <th class="category" colspan="2">Actes prévus</th>
+    <th class="category" colspan="2">{{tr}}COperation-_ext_codes_ccam{{/tr}}</th>
   </tr>
   {{foreach from=$operation->_ext_codes_ccam item=currCode}}
   <tr>
@@ -102,7 +100,7 @@
   {{/foreach}}
   
   <tr>
-    <th class="category" colspan="2">Actes codés</th>
+    <th class="category" colspan="2">{{tr}}COperation-_ref_actes_ccam{{/tr}}</th>
   </tr>
   
   {{foreach from=$operation->_ref_actes_ccam item=curr_acte}}
@@ -118,49 +116,49 @@
   {{/foreach}}
   
   <tr>
-    <th class="category" colspan="2">Horodatage</th>
+    <th class="category" colspan="2">{{tr}}msg-COperation-horodatage{{/tr}}</th>
   </tr>
   
   <tr>
     <td>
-      <strong>Entrée salle :</strong>
+      <strong>{{tr}}COperation-entree_salle{{/tr}} :</strong>
       {{$operation->entree_salle}} 
     </td>
     <td>
-      <strong>Sortie salle :</strong>
+      <strong>{{tr}}COperation-sortie_salle{{/tr}} :</strong>
       {{$operation->sortie_salle}} 
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>Début intervention :</strong>
+      <strong>{{tr}}COperation-debut_op{{/tr}} :</strong>
       {{$operation->debut_op}} 
     </td>
     <td>
-      <strong>Fin intervention :</strong>
+      <strong>{{tr}}COperation-fin_op{{/tr}} :</strong>
       {{$operation->fin_op}} 
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>Pose garrot :</strong>
+      <strong>{{tr}}COperation-pose_garrot{{/tr}} :</strong>
       {{$operation->pose_garrot}} 
     </td>
     <td>
-      <strong>Retrait garrot :</strong>
+      <strong>{{tr}}COperation-retrait_garrot{{/tr}} :</strong>
       {{$operation->retrait_garrot}} 
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>Début induction :</strong>
+      <strong>{{tr}}COperation-induction_debut{{/tr}} :</strong>
       {{$operation->induction_debut}} 
     </td>
     <td>
-      <strong>Fin induction :</strong>
+      <strong>{{tr}}COperation-induction_fin{{/tr}} :</strong>
       {{$operation->induction_fin}} 
     </td>
   </tr>

@@ -84,7 +84,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$userfunction field="group_id"}}</th>
           <td>
-            <select name="group_id" title="{{$userfunction->_props.group_id}}">
+            <select name="group_id" class="{{$userfunction->_props.group_id}}">
               <option value="">&mdash; choisir un établissement</option>
               {{foreach from=$listGroups item=curr_group}}
               <option value="{{$curr_group->group_id}}" {{if $curr_group->group_id == $userfunction->group_id}} selected="selected" {{/if}}>
@@ -128,21 +128,21 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$userfunction field="tel" defaultFor="_tel1"}}</th>
           <td>
-            <input type="text" name="_tel1" size="2" maxlength="2" value="{{$userfunction->_tel1}}" title="num length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
-            <input type="text" name="_tel2" size="2" maxlength="2" value="{{$userfunction->_tel2}}" title="num length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
-            <input type="text" name="_tel3" size="2" maxlength="2" value="{{$userfunction->_tel3}}" title="num length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
-            <input type="text" name="_tel4" size="2" maxlength="2" value="{{$userfunction->_tel4}}" title="num length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
-            <input type="text" name="_tel5" size="2" maxlength="2" value="{{$userfunction->_tel5}}" title="num length|2" onkeyup="followUp(this, '_fax1', 2)" />
+            <input type="text" name="_tel1" size="2" maxlength="2" value="{{$userfunction->_tel1}}" class="num length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
+            <input type="text" name="_tel2" size="2" maxlength="2" value="{{$userfunction->_tel2}}" class="num length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
+            <input type="text" name="_tel3" size="2" maxlength="2" value="{{$userfunction->_tel3}}" class="num length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
+            <input type="text" name="_tel4" size="2" maxlength="2" value="{{$userfunction->_tel4}}" class="num length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
+            <input type="text" name="_tel5" size="2" maxlength="2" value="{{$userfunction->_tel5}}" class="num length|2" onkeyup="followUp(this, '_fax1', 2)" />
           </td>
         </tr>
         <tr>
           <th>{{mb_label object=$userfunction field="fax" defaultFor="_fax1"}}</th>
           <td>
-            <input type="text" name="_fax1" size="2" maxlength="2" value="{{$userfunction->_fax1}}" title="num length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
-            <input type="text" name="_fax2" size="2" maxlength="2" value="{{$userfunction->_fax2}}" title="num length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
-            <input type="text" name="_fax3" size="2" maxlength="2" value="{{$userfunction->_fax3}}" title="num length|2" onkeyup="followUp(this, '_fax4', 2)" /> -
-            <input type="text" name="_fax4" size="2" maxlength="2" value="{{$userfunction->_fax4}}" title="num length|2" onkeyup="followUp(this, '_fax5', 2)" /> -
-            <input type="text" name="_fax5" size="2" maxlength="2" value="{{$userfunction->_fax5}}" title="num length|2" />
+            <input type="text" name="_fax1" size="2" maxlength="2" value="{{$userfunction->_fax1}}" class="num length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
+            <input type="text" name="_fax2" size="2" maxlength="2" value="{{$userfunction->_fax2}}" class="num length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
+            <input type="text" name="_fax3" size="2" maxlength="2" value="{{$userfunction->_fax3}}" class="num length|2" onkeyup="followUp(this, '_fax4', 2)" /> -
+            <input type="text" name="_fax4" size="2" maxlength="2" value="{{$userfunction->_fax4}}" class="num length|2" onkeyup="followUp(this, '_fax5', 2)" /> -
+            <input type="text" name="_fax5" size="2" maxlength="2" value="{{$userfunction->_fax5}}" class="num length|2" />
           </td>
         </tr>
         

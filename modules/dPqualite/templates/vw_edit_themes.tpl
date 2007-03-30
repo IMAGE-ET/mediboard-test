@@ -44,7 +44,7 @@
         </tr>   
         <tr>
           <th><label for="nom" title="{{tr}}CThemeDoc-nom-desc{{/tr}}">{{tr}}CThemeDoc-nom{{/tr}}</label></th>
-          <td><input name="nom" title="{{$theme->_props.nom}}" type="text" value="{{$theme->nom}}" /></td>
+          <td><input name="nom" class="{{$theme->_props.nom}}" type="text" value="{{$theme->nom}}" /></td>
         </tr>
         <tr>
           <td class="button" colspan="2">            

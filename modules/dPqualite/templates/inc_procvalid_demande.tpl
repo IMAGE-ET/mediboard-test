@@ -51,7 +51,7 @@
       </label>
     </th>
     <td>
-      <input type="text" name="ged[titre]" value="{{$docGed->titre}}" title="notNull {{$docGed->_props.titre}}" />
+      <input type="text" name="ged[titre]" value="{{$docGed->titre}}" class="notNull {{$docGed->_props.titre}}" />
     </td>
   </tr>
   <tr>
@@ -61,7 +61,7 @@
       </label>
     </th>
     <td>
-      <select name="ged[doc_theme_id]" title="notNull {{$docGed->_props.doc_theme_id}}">
+      <select name="ged[doc_theme_id]" class="notNull {{$docGed->_props.doc_theme_id}}">
         <option value="">&mdash; {{tr}}CDocGed-doc_theme_id-desc{{/tr}}</option>
         {{foreach from=$listThemes item=curr_theme}}
         <option value="{{$curr_theme->doc_theme_id}}" {{if $docGed->doc_theme_id == $curr_theme->doc_theme_id}} selected="selected" {{/if}} >
@@ -79,7 +79,7 @@
       </label>
     </th>
     <td>
-      <select name="ged[doc_chapitre_id]" title="notNull {{$docGed->_props.doc_chapitre_id}}">
+      <select name="ged[doc_chapitre_id]" class="notNull {{$docGed->_props.doc_chapitre_id}}">
         <option value="">&mdash; {{tr}}CDocGed-doc_chapitre_id-desc{{/tr}}</option>
         {{foreach from=$listChapitres item=curr_chapitre}}
         <option value="{{$curr_chapitre->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre->doc_chapitre_id}} selected="selected" {{/if}} >
@@ -96,7 +96,7 @@
       </label>
     </th>
     <td>
-      <select name="ged[doc_categorie_id]" title="notNull {{$docGed->_props.doc_categorie_id}}">
+      <select name="ged[doc_categorie_id]" class="notNull {{$docGed->_props.doc_categorie_id}}">
         <option value="">&mdash; {{tr}}CDocGed-doc_categorie_id-desc{{/tr}}</option>
         {{foreach from=$listCategories item=curr_category}}
         <option value="{{$curr_category->doc_categorie_id}}" {{if $docGed->doc_categorie_id == $curr_category->doc_categorie_id}} selected="selected" {{/if}} >
@@ -110,7 +110,7 @@
   <tr>
     <th><label for="suivi[remarques]" title="{{tr}}CDocGed-remarques-desc{{/tr}}">{{tr}}CDocGed-remarques{{/tr}}</label></th>
     <td>
-      <textarea name="suivi[remarques]" title="{{$docGed->_lastentry->_props.remarques}}"></textarea>
+      <textarea name="suivi[remarques]" class="{{$docGed->_lastentry->_props.remarques}}"></textarea>
     </td>
   </tr>
   <tr>

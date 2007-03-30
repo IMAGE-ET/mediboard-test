@@ -90,7 +90,7 @@ function pageMain() {
       <th><label for="deb" title="Date de début de la publication, obligatoire">Début de publication</label></th>
       <td class="date">
         <div id="editFrm_deb_da">{{$message->deb|date_format:"%d/%m/%Y %H:%M"}}</div>
-        <input type="hidden" name="deb" title="{{$message->_props.deb}}" value="{{$message->deb}}" />
+        <input type="hidden" name="deb" class="{{$message->_props.deb}}" value="{{$message->deb}}" />
         <img id="editFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
       </td>
     </tr>
@@ -99,20 +99,20 @@ function pageMain() {
       <th><label for="fin" title="Date de fin de la publication, obligatoire">Début de fin</label></th>
       <td class="date">
         <div id="editFrm_fin_da">{{$message->fin|date_format:"%d/%m/%Y %H:%M"}}</div>
-        <input type="hidden" name="fin" title="{{$message->_props.fin}}" value="{{$message->fin}}" />
+        <input type="hidden" name="fin" class="{{$message->_props.fin}}" value="{{$message->fin}}" />
         <img id="editFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
       </td>
     </tr>
 
     <tr>
       <th><label for="titre" title="Titre du message, obligatoire.">Titre</label></th>
-      <td><input type="text" name="titre" title="{{$message->_props.titre}}" value="{{$message->titre}}" /></td>
+      <td><input type="text" name="titre" class="{{$message->_props.titre}}" value="{{$message->titre}}" /></td>
     </tr>
 
     <tr>
       <th><label for="corps" title="Corps du message, obligatoire.">Corps</label></th>
       <td>
-        <textarea style="width: 200px" rows="4" name="corps" title="{{$message->_props.corps}}">{{$message->corps}}</textarea>
+        <textarea style="width: 200px" rows="4" name="corps" class="{{$message->_props.corps}}">{{$message->corps}}</textarea>
       </td>
     </tr>
 
