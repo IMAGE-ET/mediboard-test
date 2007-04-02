@@ -138,8 +138,8 @@ class CCompteRendu extends CMbObject {
     if(count($resultCategory) || $horsCat){
       $where = array();
     	if($horsCat){
-    	  $where[] = "file_category_id IS NULL OR file_category_id ".db_prepare_in(array_keys($resultCategory));
         $resultCategory[0] = "";
+    	  $where[] = "file_category_id IS NULL OR file_category_id ".db_prepare_in(array_keys($resultCategory));
       } else {
         $where["file_category_id"] = db_prepare_in(array_keys($resultCategory));
       }
