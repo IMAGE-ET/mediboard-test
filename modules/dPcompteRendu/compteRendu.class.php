@@ -136,12 +136,14 @@ class CCompteRendu extends CMbObject {
     $documents = array();
     
     if(count($resultCategory) || $horsCat){
-    	if($horsCat){
-        $resultCategory[0] = "";
-      }
       $where = array();
+    	if($horsCat){
+    	  $where[] = "file_category_id IS NULL OR file_category_id ".db_prepare_in(array_keys($resultCategory));
+        $resultCategory[0] = "";
+      } else {
+        $where["file_category_id"] = db_prepare_in(array_keys($resultCategory));
+      }
       $where["object_id"] = " IS NULL";
-      $where["file_category_id"] = db_prepare_in(array_keys($resultCategory));
       if($where1){
         if(is_array($where1)) {
           $where = array_merge($where, $where1);
@@ -149,7 +151,7 @@ class CCompteRendu extends CMbObject {
           $where[] = $where1;
         }
       }
-      $resultDoc = new CCompteRendu;$okiii = 1;
+      $resultDoc = new CCompteRendu;
       $documents = $resultDoc->loadList($where,$order);
     }
     return $documents;
