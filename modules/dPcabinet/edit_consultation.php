@@ -17,7 +17,6 @@ $date         = mbGetValueFromGetOrSession("date", mbDate());
 $vue          = mbGetValueFromGetOrSession("vue2", $vue2_default);
 $today        = mbDate();
 $hour         = mbTime(null);
-$_is_anesth   = false;
 
 $prat_id      = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
 $selConsult   = mbGetValueFromGetOrSession("selConsult", null);
@@ -207,12 +206,6 @@ $techniquesComp->loadAides($userSel->user_id);
 $examComp = new CExamComp();
 $examComp->loadAides($userSel->user_id);
 
-// Vérification du cas anesthésie
-if($consult->_ref_chir->isFromType(array("Anesthésiste"))) {
-  $_is_anesth=true; 
-} else {
-  $_is_anesth=false;
-}
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("codePraticienEc", $codePraticienEc);
@@ -235,10 +228,10 @@ $smarty->assign("traitement"     , $traitement);
 $smarty->assign("addiction"      , $addiction);
 $smarty->assign("techniquesComp" , $techniquesComp);
 $smarty->assign("examComp"       , $examComp);
-$smarty->assign("_is_anesth"     , $_is_anesth);  
+$smarty->assign("_is_anesth"     , $consult->_is_anesth);  
 $smarty->assign("noReglement"    , 0);
 
-if($_is_anesth) {
+if($consult->_is_anesth) {
   $secs = array();
   for ($i = 0; $i < 60; $i++) {
     $secs[] = $i;

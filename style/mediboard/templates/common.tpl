@@ -25,6 +25,7 @@
 <body onload="main()">
 
 <!-- Loading divs -->
+
 <div id="waitingMsgMask" class="chargementMask" style="display: none;"></div>
 <div id="waitingMsgText" class="chargementText" style="display: none;">
   <table class="tbl">
@@ -56,6 +57,12 @@
 	    <td class="deco bottom-right" />
 	  </tr>
 	</table>
+</div>
+
+<!-- Javascript Console -->
+
+<div id="console" style="display:none">
+  <div id="console-title">Javascript console</div>
 </div>
 
 {{if !$offline}}

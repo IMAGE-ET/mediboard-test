@@ -44,13 +44,11 @@ class CConsultation extends CMbObject {
   var $_min            = null;
   var $_check_premiere = null; // CheckBox: must be present in all forms!
   var $_somme          = null;
-  var $_date           = null; // updated at loadRefs()
   var $_types_examen   = null;
 
   // Fwd References
   var $_ref_patient      = null;
   var $_ref_plageconsult = null;
-  var $_ref_chir         = null; //pseudo RefFwd, get that in plageConsult
 
   // Back References
   var $_ref_consult_anesth = null;
@@ -58,6 +56,12 @@ class CConsultation extends CMbObject {
   var $_ref_examcomp       = null;
   var $_ref_examnyha       = null;
   var $_ref_exampossum     = null;
+
+  // Foreign form fields : updated at loadRefs()
+  var $_ref_chir  = null; //pseudo RefFwd, get that in plageConsult
+  var $_date      = null;
+  var $_is_anesth = null; 
+
 
   function CConsultation() {
     $this->CMbObject("consultation", "consultation_id");
@@ -177,8 +181,11 @@ class CConsultation extends CMbObject {
     $this->_ref_plageconsult = new CPlageconsult;
     $this->_ref_plageconsult->load($this->plageconsult_id);
     $this->_ref_plageconsult->loadRefsFwd();
+    
+    // Foreign fields
     $this->_ref_chir =& $this->_ref_plageconsult->_ref_chir;
     $this->_date = $this->_ref_plageconsult->date;
+    $this->_is_anesth = $this->_ref_chir->isFromType(array("Anesthésiste"));
   }
   
   function loadRefsFwd() {
@@ -286,7 +293,7 @@ class CConsultation extends CMbObject {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_plageconsult) {
+    if (!$this->_ref_plageconsult) {
       $this->loadRefPlageConsult();
     }
     return $this->_ref_plageconsult->getPerm($permType);

@@ -42,6 +42,7 @@ function newDHE(oForm) {
         url.addParam(param, urlDHEParams[param]);
       }
     }
+    Console.debug("{{$urlDHE|smarty:nodefaults}}", "Url DHE");
     url.popDirect("900", "600", "eCap", "{{$urlDHE|smarty:nodefaults}}")
   {{/if}}
 }

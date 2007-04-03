@@ -121,11 +121,12 @@ function submitAnt(oForm) {
 function incAntecedantsMain() {
   PairEffect.initGroup("effectCategory", { sEffect: "appear" });
 }
+
 {{if $_is_anesth}}
 function reloadAntecedentsAnesth() {
   var antUrl = new Url;
   antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents_anesth");
-  antUrl.addParam("consultation_anesth_id", "{{$consult_anesth->consultation_anesth_id}}");
+  antUrl.addParam("consultation_anesth_id", "{{$consult_anesth->_id}}");
   antUrl.requestUpdate('listAntCAnesth', { waitingText : null });
 }
 
@@ -133,14 +134,14 @@ function copyAntecedent(antecedent_id){
  var oForm = document.frmCopyAntecedent;
  oForm.antecedent_id.value = antecedent_id;
  oForm.object_class.value  = "CConsultAnesth";
- oForm.object_id.value     = "{{$consult_anesth->consultation_anesth_id}}";
+ oForm.object_id.value     = "{{$consult_anesth->_id}}";
  submitFormAjax(oForm, 'systemMsg', { waitingText : null, onComplete : reloadAntecedentsAnesth });
 }
 function copyTraitement(traitement_id){
  var oForm = document.frmCopyTraitement;
  oForm.traitement_id.value = traitement_id;
  oForm.object_class.value  = "CConsultAnesth";
- oForm.object_id.value     = "{{$consult_anesth->consultation_anesth_id}}";
+ oForm.object_id.value     = "{{$consult_anesth->_id}}";
  submitFormAjax(oForm, 'systemMsg', { waitingText : null, onComplete : reloadAntecedentsAnesth });
 }
 {{/if}}
@@ -151,11 +152,11 @@ function copyTraitement(traitement_id){
   <tr>
     <td class="text">
 
-        {{if $dPconfig.dPcabinet.addictions}}
-          {{include file="inc_consult_anesth/inc_addictions.tpl}}
-        {{elseif $_is_anesth}}
-          {{include file="inc_consult_anesth/inc_tabac_oenolisme.tpl}}      
-        {{/if}}
+      {{if $dPconfig.dPcabinet.addictions}}
+        {{include file="inc_consult_anesth/inc_addictions.tpl}}
+      {{elseif $_is_anesth}}
+        {{include file="inc_consult_anesth/inc_tabac_oenolisme.tpl}}      
+      {{/if}}
 
       <hr />
       
