@@ -11,7 +11,7 @@
 {{mb_field object=$sejour field="saisi_SHS" hidden=1 prop=""}}
 {{mb_field object=$sejour field="modif_SHS" hidden=1 prop=""}}
 <input type="hidden" name="annule" value="{{$sejour->annule|default:"0"}}" />
-<input type="hidden" name="septique" value="{{$sejour->septique|default:"1"}}" />
+<input type="hidden" name="septique" value="{{$sejour->septique|default:"0"}}" />
 <input type="hidden" name="pathologie" value="{{$sejour->pathologie}}" />
 {{if !$mode_operation}}
   {{mb_field object=$sejour field="sejour_id" hidden=1 prop=""}}
