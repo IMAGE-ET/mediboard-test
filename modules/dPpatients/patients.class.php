@@ -589,10 +589,7 @@ class CPatient extends CMbObject {
   }
 
   function loadDossierComplet($permType = null) {
-    //if (!$this->loadRefs()) {
-    //  return;
-    //}
-    $this->loadRefs();
+    $pat_id = $this->loadRefs();
     
     $this->canRead();
     $this->canEdit();
@@ -609,6 +606,11 @@ class CPatient extends CMbObject {
     if ($affectation && $affectation->affectation_id) {
       $affectation->loadRefsFwd();
       $affectation->_ref_lit->loadCompleteView();
+    }
+    
+    // Si le loadRef n'a pas fonctionné, on arrete la
+    if(!$pat_id) {
+      return;
     }
   
     // Consultations
