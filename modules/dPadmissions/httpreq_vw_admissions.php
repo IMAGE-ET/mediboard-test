@@ -31,7 +31,7 @@ if($selAdmis != "0") {
   $where["annule"] = "= '0'";
 }
 if($selSaisis != "0") {
-  $where["saisi_SHS"] = "= '$selSaisis'";
+  $where["saisi_SHS"] = "= '0'";
   $where["annule"] = "= '0'";
 }
 if($selTri == "nom")
