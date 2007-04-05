@@ -1,0 +1,29 @@
+<?php
+$locales['CCatalogueLabo'] = '';
+$locales['CCatalogueLabo-identifiant'] = '';
+$locales['CCatalogueLabo-identifiant-desc'] = '';
+$locales['CCatalogueLabo-libelle'] = '';
+$locales['CCatalogueLabo-libelle-desc'] = '';
+$locales['CCatalogueLabo-pere_id'] = '';
+$locales['CCatalogueLabo-pere_id-desc'] = '';
+$locales['CExamenLablo'] = '';
+$locales['CExamenLabo-catalogue_labo_id'] = '';
+$locales['CExamenLabo-catalogue_labo_id-desc'] = '';
+$locales['CExamenLabo-identifiant'] = '';
+$locales['CExamenLabo-identifiant-desc'] = '';
+$locales['CExamenLabo-libelle'] = '';
+$locales['CExamenLabo-libelle-desc'] = '';
+$locales['CExamenLabo-max'] = '';
+$locales['CExamenLabo-max-desc'] = '';
+$locales['CExamenLabo-min'] = '';
+$locales['CExamenLabo-min-desc'] = '';
+$locales['CExamenLabo-type'] = '';
+$locales['CExamenLabo-type-desc'] = '';
+$locales['CExamenLabo-unite'] = '';
+$locales['CExamenLabo-unite-desc'] = '';
+$locales['CExamenLabo.type.bool'] = '';
+$locales['CExamenLabo.type.num'] = '';
+$locales['CExamenLabo.type.str'] = '';
+$locales['mod-dPlabo-tab-vw_edit_catalogues'] = '';
+$locales['mod-dPlabo-tab-vw_edit_examens'] = '';
+?>

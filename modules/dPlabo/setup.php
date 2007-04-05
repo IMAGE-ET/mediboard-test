@@ -1,0 +1,50 @@
+<?php /* $Id: $ */
+
+/**
+* @package Mediboard
+* @subpackage dPlabo
+* @version $Revision: $
+* @author Romain Ollivier
+*/
+
+global $AppUI;
+
+$config = array();
+$config["mod_name"]        = "dPlabo";
+$config["mod_version"]     = "0.1";
+$config["mod_type"]        = "user";
+
+class CSetupdPlabo extends CSetup {
+  
+  function __construct() {
+    parent::__construct();
+    
+    $this->mod_name = "dPlabo";
+    
+    $this->makeRevision("all");
+
+    $sql = "CREATE TABLE `catalogue_labo` (" .
+          "\n`catalogue_labo_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT ," .
+          "\n`pere_id` INT(11) UNSIGNED DEFAULT NULL ," .
+          "\n`identifiant` VARCHAR(255) NOT NULL ," .
+          "\n`libelle` VARCHAR(255) NOT NULL," .
+          "\nPRIMARY KEY (`catalogue_labo_id`) ," .
+          "\nINDEX ( `pere_id` )) TYPE=MyISAM;";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `examen_labo` (" .
+          "\n`examen_labo_id` INT NOT NULL AUTO_INCREMENT ," .
+          "\n`catalogue_labo_id` INT(11) UNSIGNED NOT NULL DEFAULT 0 ," .
+          "\n`identifiant` VARCHAR(255) NOT NULL ," .
+          "\n`libelle` VARCHAR(255) NOT NULL," .
+          "\n`type` ENUM('bool','num','str') NOT NULL DEFAULT 'num' ," .
+          "\n`unite` VARCHAR(255) DEFAULT NULL," .
+          "\n`min` FLOAT DEFAULT NULL," .
+          "\n`max` FLOAT DEFAULT NULL," .
+          "\nPRIMARY KEY ( `examen_labo_id` ) ," .
+          "\nINDEX ( `catalogue_labo_id` )) TYPE=MyISAM;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.1";
+  }
+}
+?>

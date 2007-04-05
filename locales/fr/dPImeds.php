@@ -1,3 +1,3 @@
 <?php
-$locales["config-dPImeds-url"] = "Adresse du serveur Imeds";
+$locales['config-dPImeds-url'] = 'Adresse du serveur Imeds';
 ?>

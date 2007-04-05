@@ -1,0 +1,29 @@
+<?php
+$locales['CCatalogueLabo'] = 'Catalogue d\'examens';
+$locales['CCatalogueLabo-identifiant'] = 'Identifiant';
+$locales['CCatalogueLabo-identifiant-desc'] = 'Identifiant visible du catalogue';
+$locales['CCatalogueLabo-libelle'] = 'Libellé';
+$locales['CCatalogueLabo-libelle-desc'] = 'Libellé du catalogue';
+$locales['CCatalogueLabo-pere_id'] = 'Catalogue parent';
+$locales['CCatalogueLabo-pere_id-desc'] = 'Choix du catalogue parent';
+$locales['CExamenLablo'] = 'Examen de laboratoire';
+$locales['CExamenLabo-catalogue_labo_id'] = 'Catalogue';
+$locales['CExamenLabo-catalogue_labo_id-desc'] = 'Catalogue de l\'examen';
+$locales['CExamenLabo-identifiant'] = 'Identifiant';
+$locales['CExamenLabo-identifiant-desc'] = 'Identifiant visible de l\'examen';
+$locales['CExamenLabo-libelle'] = 'Libellé';
+$locales['CExamenLabo-libelle-desc'] = 'Libellé de l\'examen';
+$locales['CExamenLabo-max'] = 'Maximum';
+$locales['CExamenLabo-max-desc'] = 'Valeur maximale des résultats';
+$locales['CExamenLabo-min'] = 'Mininum';
+$locales['CExamenLabo-min-desc'] = 'Valeur minimale des résultats';
+$locales['CExamenLabo-type'] = 'Type';
+$locales['CExamenLabo-type-desc'] = 'Type des résultats';
+$locales['CExamenLabo-unite'] = 'Unité';
+$locales['CExamenLabo-unite-desc'] = 'Unité de l\'examen';
+$locales['CExamenLabo.type.bool'] = 'Oui / Non';
+$locales['CExamenLabo.type.num'] = 'Numérique';
+$locales['CExamenLabo.type.str'] = 'Alphanumérique';
+$locales['mod-dPlabo-tab-vw_edit_catalogues'] = 'Edition des catalogues';
+$locales['mod-dPlabo-tab-vw_edit_examens'] = 'Edition des examens';
+?>

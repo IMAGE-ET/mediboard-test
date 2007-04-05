@@ -1,8 +1,8 @@
 <?php
 $locales['Active Users'] = 'Utilisateurs Actifs';
 $locales['Add or Edit Permissions'] = 'Ajouter ou Editer les Permissions';
-$locales['add user'] = 'ajouter utilisateur';
 $locales['Add User'] = 'Ajouter un Utilisateur';
+$locales['add user'] = 'ajouter utilisateur';
 $locales['adminDeleteTemplate'] = 'supprimer toutes les permissions';
 $locales['adminInvalidBirthday'] = 'Entrez une date valide (aaaa-mm-jj) ou laissez le champ vide';
 $locales['adminInvalidDay'] = 'Le jour que vous avez fourni est invalide.';
