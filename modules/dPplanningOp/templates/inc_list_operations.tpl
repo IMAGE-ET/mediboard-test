@@ -1,3 +1,5 @@
+<input id="currDateJSAccess" name="currDateJSAccess" type="hidden" value="{{$date}}" />
+
 {{if !$board}}
 <div style="font-weight:bold; height:20px; text-align:center;">
   {{$date|date_format:"%A %d %B %Y"}}

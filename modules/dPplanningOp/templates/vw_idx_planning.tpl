@@ -18,7 +18,8 @@ function createDocument(modele_id, operation_id) {
 }
 
 function reloadAfterSaveDoc(){
-  updateListOperations("{{$date}}");
+  oInput = $('currDateJSAccess');
+  updateListOperations(oInput.value);
 }
 
 function updateListOperations(date, urgence) {
