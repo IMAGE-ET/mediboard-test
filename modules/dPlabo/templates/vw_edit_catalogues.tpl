@@ -20,7 +20,12 @@
               {{$curr_catalogue->libelle}}
             </a>
           </td>
-          <td>{{$curr_catalogue->_ref_examens_labo|@count}}</td>
+          <td>
+            {{$curr_catalogue->_ref_examens_labo|@count}}
+            <a class="buttonedit action" href="index.php?m={{$m}}&amp;tab=vw_edit_examens&amp;catalogue_labo_id={{$curr_catalogue->_id}}">
+              Editer
+            </a>
+          </td>
         </tr>
         {{foreach from=$curr_catalogue->_ref_catalogues_labo item="curr_sub_catalogue"}}
         <tr>
@@ -35,7 +40,12 @@
               {{$curr_sub_catalogue->libelle}}
             </a>
           </td>
-          <td>{{$curr_catalogue->_ref_examens_labo|@count}}</td>
+          <td>
+            {{$curr_sub_catalogue->_ref_examens_labo|@count}}
+            <a class="buttonedit action" href="index.php?m={{$m}}&amp;tab=vw_edit_examens&amp;catalogue_labo_id={{$curr_sub_catalogue->_id}}">
+              Editer
+            </a>
+          </td>
         </tr>
         {{/foreach}}
         {{/foreach}}
