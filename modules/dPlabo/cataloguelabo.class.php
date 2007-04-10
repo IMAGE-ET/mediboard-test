@@ -42,6 +42,7 @@ class CCatalogueLabo extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     $this->_shortview = $this->identifiant;
     $this->_view = $this->identifiant." : ".$this->libelle;
   }

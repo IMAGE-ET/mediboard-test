@@ -31,5 +31,5 @@ $template = is_file($object->_view_template) ?
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("object", $object);
-$smarty->display("../../$object->_complete_template");
+$smarty->display("../../$object->_complete_view_template");
 ?>

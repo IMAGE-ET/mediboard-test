@@ -420,7 +420,7 @@ class CMbObject {
     $this->_view          = $this->_tbl . " #" . $this->$k;
     $this->_shortview     = "#" . $this->$k;
     $this->_view_template     = "{$this->_ref_module->mod_name}/templates/{$this->_class_name}_view.tpl";
-    $this->_complete_template = "{$this->_ref_module->mod_name}/templates/{$this->_class_name}_complete.tpl";
+    $this->_complete_view_template = "{$this->_ref_module->mod_name}/templates/{$this->_class_name}_complete.tpl";
   }
   
   /**

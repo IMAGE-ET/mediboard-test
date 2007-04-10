@@ -10,11 +10,19 @@ var Catalogue = {
   }
 }
 
+function pageMain() {
+  PairEffect.initGroup('tree-content', { 
+    bStoreInCookie: false,
+    bStartVisible: true
+  } );
+}
+
 </script>
 
 <table class="main">
   <tr>
     <td class="halfPane">
+      {{assign var="catalogue_id" value=0}}
       {{foreach from=$listCatalogues item="_catalogue"}}
       {{include file="tree_catalogues.tpl"}}
       {{/foreach}}
