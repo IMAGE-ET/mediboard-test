@@ -5,7 +5,7 @@
 -->
 
 {{assign var="children" value=$_catalogue->_ref_catalogues_labo|@count}}
-<div class="tree-header {{if $_catalogue->_id == $catalogue->_id }}selected{{/if}}" >
+<div class="tree-header {{if $_catalogue->_id == $catalogue_id }}selected{{/if}}" >
   <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;catalogue_labo_id={{$_catalogue->_id}}" style="float:right;">
     {{$_catalogue->_ref_examens_labo|@count}} Examens
   </a>
