@@ -518,10 +518,6 @@ table.tbl a {
   display: block;
 }
 
-table.tbl tr:hover td {
-  background-color: #fdd;
-}
-
 a.actionPat {
   display: inline;
   float: right;
@@ -558,6 +554,14 @@ table.tbl th.title {
   text-align: center;
   background: #68c;
   border: #aaa 1px outset;
+}
+
+table.tbl tr.selected td {
+  background-color: #edb;
+}
+
+table.tbl tr:hover td {
+  background-color: #fdd;
 }
 
 table.tbl td {

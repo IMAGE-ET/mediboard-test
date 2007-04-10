@@ -1,3 +1,11 @@
+<script type="text/javascript">
+
+function pageMain() {
+  PairEffect.initGroup('content');
+}
+</script>
+  
+
 <table class="main">
   <tr>
     <td class="halfPane">
@@ -8,7 +16,7 @@
           <th>Examens</th>
         </tr>
         {{foreach from=$listCatalogues item="curr_catalogue"}}
-        <tr>
+        <tr {{if $curr_catalogue->_id == $catalogue->_id }} class="selected" {{/if}}>
           <td>+</td>
           <td>
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;catalogue_labo_id={{$curr_catalogue->_id}}">
@@ -42,7 +50,7 @@
           </td>
           <td>
             {{$curr_sub_catalogue->_ref_examens_labo|@count}}
-            <a class="buttonedit action" href="index.php?m={{$m}}&amp;tab=vw_edit_examens&amp;catalogue_labo_id={{$curr_sub_catalogue->_id}}">
+            <a class="buttonedit action" href="?m={{$m}}&amp;tab=vw_edit_examens&amp;catalogue_labo_id={{$curr_sub_catalogue->_id}}">
               Editer
             </a>
           </td>

@@ -19,7 +19,7 @@ var Intermax = {
       }
       
       // Fill a key-value pair in current category
-      if (aMatches = line.match(/(\w*)=(\w*)/)) {
+      if (aMatches = line.match(/(\w*)=(.*)/)) {
         sKey = aMatches[1];
         sValue = aMatches[2];
         oContent[sCurrentCategory][sKey] = sValue;
@@ -60,16 +60,68 @@ var Intermax = {
   },
   
   result: function() {
-    Console.debug(this.currentFunction, "Waiting for result of InterMax function");
+    Console.trace("Waiting for result of InterMax");
     document.intermaxResult.performRead();
     if (oAppletContent = document.intermaxResult.getContent()) {
       // Append with empty Js String will cast a Java string to a Js string
       var sContent = oAppletContent + ""; 
-      var oContent = this.bindContent(sContent);
-      Console.debug(oContent, "Result is", { level: 2} );
+      oContent = this.bindContent(sContent);
+      Console.debug(oContent, "Result is", { level: 1 } );
+      this.createResultMessages(oContent);
+      this.ResultHandler[oContent.FONCTION.NOM](oContent);
+    }    
+  },
+  
+  createResultMessages: function(oContent) {
+    var idFonction = oContent.FONCTION.NOM.replace(" ", "-");
+
+    // Select div result handler      
+    var sSelector = "tr#" + idFonction + " td.result div.handler";
+    var eResultHandler = $$(sSelector)[0];
+    eResultHandler.innerHTML = "";
+
+    // Create handler messages
+    oParam = oContent.PARAM;
+    eResultHandler.appendChild(Dom.createMessage("Appel : " + oParam.APPEL, oParam.APPEL == "OK" ? "message" : "error"))
+    eResultHandler.appendChild(Dom.createMessage("Exécution: " + oParam.EXECUTION, oParam.EXECUTION == "OK" ? "message" : "error"))
+    eResultHandler.appendChild(Dom.createMessage("Erreur : " + oParam.ERREUR, oParam.ERREUR == "0" ? "message" : "error"))
+    eResultHandler.appendChild(Dom.createMessage("Erreur API : " + oParam.ERREUR_API, oParam.ERREUR_API == "0" ? "message" : "error"))
+  },
+  
+  ResultHandler : {
+    "Lire Vitale" : function (oContent) {
+      oVitale = oContent.VITALE;
+      Console.debug(oVitale, "Trying to find patient");
+      
+      url = new Url;
+      url.setModuleAction("dPpatients", "pat_selector");
+
+      url.addParam("useVitale", "1");
+      url.addParam("vitale[nom]", oVitale.VIT_NOM);
+      url.addParam("vitale[prenom]", oVitale.VIT_PRENOM);
+
+      var sAdresse = [
+        oVitale.VIT_ADRESSE_1, 
+        oVitale.VIT_ADRESSE_2,
+        oVitale.VIT_ADRESSE_1, 
+        oVitale.VIT_ADRESSE_2,
+        oVitale.VIT_ADRESSE_1].without("").join("\n");
+      url.addParam("vitale[adresse]", sAdresse);
+      
+      var sNaissance = Date.fromLocaleDate(oVitale.VIT_DATE_NAISSANCE).toDATE();
+      url.addParam("vitale[naissance]", sNaissance);
+      
+      var sMatricule = oVitale.VIT_NUMERO_SS_INDIV ?
+        oVitale.VIT_NUMERO_SS_INDIV + oVitale.VIT_CLE_SS_INDIV :
+        oVitale.VIT_NUMERO_SS + oVitale.VIT_CLE_SS
+      url.addParam("vitale[matricule]", sMatricule);
+      url.popup(800, 500, "Patient");
+      
+      window.setPat = function(patient_id, patient_view) {
+        Console.debug(patient_id, "Patient ID");
+        Console.debug(patient_view, "Patient view");
+      }
     }
-    
-    
   }
 }
 </script>
@@ -82,7 +134,7 @@ var Intermax = {
   </tr>
   
   <tr>
-    <td>
+    <td style="text-align: center">
     <!-- Yoplet to trigger functions -->
 
     <applet 
@@ -98,9 +150,10 @@ var Intermax = {
       <param name="filePath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/INTERMAX.INI" />
       <param name="flagPath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/CALL.FLG" />
     </applet>
-    
 
-    <td>
+    </td>
+
+    <td style="text-align: center">
 
     <!-- Yoplet to read results -->
     <applet 
@@ -122,7 +175,12 @@ var Intermax = {
   
   <tr>
     <th>Fonctions disponibles</th>
-    <th>Résultats</th>
+    <th>
+      <button class="tick result" onclick="Intermax.result();" style="float:right">
+        {{tr}}InterMax.Result{{/tr}}
+      </button>
+      Résultats
+    </th>
   </tr>
   <tr id="Lire-Vitale">
     <td>
@@ -130,10 +188,8 @@ var Intermax = {
         {{tr}}InterMax.Lire Vitale{{/tr}}
       </button>
     </td>
-    <td>
-      <button class="tick result" onclick="Intermax.result();">
-        {{tr}}InterMax.Result{{/tr}}
-      </button>
+    <td class="result">
+      <div class="handler">My Result</div>
     </td>
   </tr>
 </table>

@@ -7,7 +7,7 @@
  * @author Romain Ollivier
  */
 
-global $AppUI, $can, $m;
+global $can;
 
 $can->needsRead();
 
@@ -16,7 +16,6 @@ $moduleSante400 = CModule::getInstalled("dPsante400");
 $canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
 
 $patient_id = mbGetValueFromGetOrSession("patient_id");
-$dialog     = mbGetValueFromGet("dialog",0);
 $name       = mbGetValueFromGet("name");
 $firstName  = mbGetValueFromGet("firstName");
 
@@ -29,11 +28,16 @@ if (!$patient_id) {
   $patient->prenom = $firstName;
 }
 
+  // Remplissage des valeurs un patient vitale
+if (mbGetValueFromGet("useVitale")) {
+  $patient->getValuesFromVitale();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("canSante400" , $canSante400);
-$smarty->assign("patient"     , $patient     );
+$smarty->assign("patient"     , $patient    );
 
 $smarty->display("vw_edit_patients.tpl");
 ?>

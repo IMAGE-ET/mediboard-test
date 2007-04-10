@@ -349,7 +349,7 @@ label.notNullOK {
 div#console {
   font-family: "Lucida Console";
   margin: 5px;
-  max-height: 400px;
+  max-height: 300px;
   overflow: auto;
   background: #444;
   color: #aaf;
@@ -533,6 +533,14 @@ table.tbl td {
   background-color: #fff;
   padding: 2px;
   white-space: nowrap;
+}
+
+table.tbl tr.selected td {
+  background-color: #ffc;
+}
+
+table.tbl tr:hover td {
+  background-color: #f8f8f8;
 }
 
 table.tbl th.text {

@@ -199,6 +199,18 @@ class CPatient extends CMbObject {
     );
   }
     
+  function getValuesFromVitale() {
+    if (null == $propsVitale = mbGetValueFromGetOrSession("vitale")) {
+      return;
+    }
+
+    foreach ($propsVitale as $propVitale => $valVitale) {
+      $this->$propVitale = $valVitale;
+    }
+    
+    $this->updateFormFields();
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -434,8 +446,8 @@ class CPatient extends CMbObject {
   
   function loadRefsConsultations($where = null) {
     $this->_ref_consultations = new CConsultation();
-    if($this->patient_id){
-      if($where === null) {
+    if ($this->patient_id){
+      if ($where === null) {
         $where = array();
       }
       $where["patient_id"] = "= '$this->patient_id'";

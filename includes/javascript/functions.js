@@ -72,11 +72,23 @@ function pageMain() {}
  * Javascript console
  */
 var Console = {
-  id : "console",
+  id: "console",
  
-  trace: function(sContent, sClass) {
-    Element.show(this.id);    
-    new Insertion.Bottom(this.id, "<div class='" + (sClass || "label") + "'>" + sContent + "</div>");
+  trace: function(sContent, sClass, nIndent) {
+  	sClass = sClass || "label";
+  	
+    Element.show(this.id);
+    var eDiv = document.createElement("div");
+    eDiv.className = sClass;
+    eDiv.innerHTML = sContent.toString().escapeHTML();
+
+    if (nIndent) {
+	    Element.setStyle(eDiv, { marginLeft: nIndent + "em" } );
+    }
+
+		eParent = $(this.id);
+    eParent.appendChild(eDiv);
+    eParent.scrollTop = eParent.scrollHeight;
   },
   
   traceValue: function(oValue) {
@@ -110,100 +122,114 @@ var Console = {
         this.trace(oValue, "value");
     }
   },
-
-  debugOld: function(oValue, sLabel) {  	
-    sLabel = sLabel || "Trace";
-    
-    if (oValue instanceof Array) {
-      this.trace(sLabel + ": [Array]");
-      oValue.each(this.traceValue.bind(this))
-    } else if (oValue instanceof Object) {
-      this.trace(sLabel + ": " + oValue);
-      for (oKey in oValue) {
-        this.trace(oKey + ": ", "key");
-        this.traceValue(oValue[oKey]);
-      }
-    } else {
-      this.trace(sLabel + ": " + typeof oValue);
-       this.traceValue(oValue);
-    }
-  },
   
   debug: function(oValue, sLabel, oOptions) {
-    sLabel = sLabel || "value";
+    sLabel = sLabel || "Value";
 
     var oDefault = {
       level: 1,
       current: 0
     }
-
-  	
-  	Object.extend(oDefault, oOptions);
-
-  	if (oDefault.current > oDefault.level) {
-  		return;
-  	}
-		
-    if (oDefault.current) {
-    	oDefault.current.times( function() {
-        sLabel = "&nbsp;" + sLabel;
-      } );
-    }
-  	
-    this.trace(sLabel + ": ", "key");
-  	
-    if (oValue === null) {
-      this.trace("null", "value");
+      
+    Object.extend(oDefault, oOptions);
+  
+    if (oDefault.current > oDefault.level) {
       return;
     }
-    
-    switch (typeof oValue) {
-      case "undefined": 
-        this.trace("undefined", "value");
-        break;
+            
+  	try {
+      this.trace(sLabel + ": ", "key", oDefault.current);
       
-      case "object":
-        oDefault.current++;
-        if (oValue instanceof Array) {
-          this.trace("[Array]", "value");
-          oValue.each(function(value) { 
-          	Console.debug(value, "", oDefault);
-          } );
-        } else {
+      if (oValue === null) {
+        this.trace("null", "value");
+        return;
+      }
+      
+      switch (typeof oValue) {
+        case "undefined": 
+          this.trace("undefined", "value");
+          break;
+        
+        case "object":
+          oDefault.current++;
+          if (oValue instanceof Array) {
+            this.trace("[Array]", "value");
+            oValue.each(function(value) { 
+              Console.debug(value, "", oDefault);
+            } );
+          } else {
+            this.trace(oValue, "value");
+            $H(oValue).each(function(pair) {
+              Console.debug(pair.value, pair.key, oDefault);
+              
+            } );
+          }
+          break;
+  
+        case "function":
+          this.trace("[Function] : " + oValue.getSignature(), "value");
+          break;
+  
+        case "string":
+          this.trace("'" + oValue + "'", "value");
+          break;
+  
+        default:
           this.trace(oValue, "value");
-          $H(oValue).each(function(pair) {
-          	Console.debug(pair.value, pair.key, oDefault);
-          	
-          } );
-        }
-        break;
+      }
 
-      case "function":
-        this.trace("[Function] : " + oValue.getSignature(), "value");
-        break;
-
-      case "string":
-        this.trace("'" + oValue + "'", "value");
-        break;
-
-      default:
-        this.trace(oValue, "value");
+    }
+    catch(e) {
+      this.trace("[couldn't get value]", "error");
     }
   },
   
-  debugElement: function(oElement, sLabel) {
-    oElement = $(oElement);
-    this.trace((sLabel || "Trace") + ": " + typeof oElement);
-
-    for (kAttribute in oElement.attributes) {
-      oAttribute = oElement.attributes[kAttribute];
-      if (oAttribute) {
-        if (oAttribute.nodeName) {
-          this.trace("Attributes." + oAttribute.nodeName + ": ", "key");
-          this.traceValue(oAttribute.nodeValue);
-        }
-      }
+  debugElement: function(oElement, sLabel, oOptions) {
+    sLabel = sLabel || "Element";
+    
+    var oDefault = {
+      level: 1,
+      current: 0
     }
+      
+    Object.extend(oDefault, oOptions);
+    alert($H(oDefault).inspect());
+    
+    if (oDefault.current > oDefault.level) {
+      return;
+    }
+            
+    oElement = $(oElement);
+    
+    var oNoRecursion = { 
+	    level: oDefault.current, 
+	    current: oDefault.current
+    };
+    
+    this.debug(oElement, sLabel, oNoRecursion);
+
+    oDefault.current++;
+    oNoRecursion = { 
+	    level: oDefault.current, 
+	    current: oDefault.current
+    };
+
+    // Text nodes don't have tagName
+		if (oElement.tagName) {
+	    this.debug(oElement.tagName.toLowerCase(), "tagName",  oNoRecursion);
+		}
+		
+		if (oElement instanceof Text) {
+	    this.debug(oElement.textContent, "textContent", oNoRecursion);
+		}
+		
+    $A(oElement.attributes).each( function(oAttribute) {
+      Console.debug(oAttribute.nodeValue, "Attributes." + oAttribute.nodeName, oDefault);
+    } );
+
+    $A(oElement.childNodes).each( function(oElement) {
+      Console.debugElement(oElement, "Element", oDefault)
+    } );
   },
   
   error: function (sMsg) {
@@ -211,13 +237,13 @@ var Console = {
   },
   
   start: function() {
-  	this.dStart = new Date;
+    this.dStart = new Date;
   },
   
   stop: function() {
-  	var dStop = new Date;
-  	this.debug(dStop - this.dStart, "Duration in milliseconds");
-  	this.dStart = null;
+    var dStop = new Date;
+    this.debug(dStop - this.dStart, "Duration in milliseconds");
+    this.dStart = null;
   }
   
 }
@@ -369,22 +395,22 @@ Class.extend(ObjectTooltip, {
     this.addHandlers();
   },
   
-	launchShow: function() {
-  	if (!this.idTimeOut) {
+  launchShow: function() {
+    if (!this.idTimeOut) {
       this.idTimeout = setTimeout(this.show.bind(this), this.oOptions.duration);
-  	}
-	},
-	
+    }
+  },
+  
   show: function() {
     if (!this.eTarget.innerHTML) {
       this.load();
-  	}
+    }
 
     this.eDiv.show();
   },
   
   hide: function() {
-  	clearTimeout(this.idTimeout);
+    clearTimeout(this.idTimeout);
     this.eDiv.hide();
   },
   
@@ -464,6 +490,7 @@ function initNotes(){
 function reloadNotes(){
   initNotes();
 }
+
 /**
  * Date utility functions
  * @todo: extend Date class
@@ -606,6 +633,30 @@ function regRedirectFlatCal(sInitDate, sRedirectBase, sContainerId, bTime) {
   );
 }
 
+Object.extend(Date, { 
+  fromDATE: makeDateFromDATE,
+  fromDATETIME : makeDateFromDATETIME,
+  fromLocaleDate : makeDateFromLocaleDate,
+  fromLocaleDateTime : null
+} );
+
+Class.extend(Date, {
+  toDATE: function() {
+    return makeDATEFromDate(this);
+  },
+  
+  toDATETIME: function() {
+    return makeDATETIMEFromDate(this);
+  },
+  
+  toLocaleDate: function() {
+    return makeLocaleDateFromDate(this);
+  },
+  
+  toLocaleDateTime: function() {
+    return makeLocaleDateTimeFromDate(this);
+  }
+} );
 
 function TokenField(oElement, oOptions){
   this.oElement = oElement;
@@ -710,6 +761,13 @@ Class.extend(Note,  {
 // *******
 var notWhitespace   = /\S/;
 Dom = {
+  createMessage : function (sMsg, sClassName) {
+    var eDiv = document.createElement("div");
+    eDiv.className = sClassName;
+    eDiv.innerHTML = sMsg;
+    return eDiv;
+  },
+  
   writeElem : function(elem_replace_id,elemReplace){
     elem = $(elem_replace_id);
     while (elem.firstChild) {

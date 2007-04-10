@@ -30,7 +30,7 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
   function doStore() {
     parent::doStore();
     
-    $dialog = dPgetParam($_POST, "dialog");  
+    $dialog = dPgetParam($_POST, "dialog");
     
     if($dialog){
       $this->redirectStore .= "&a=pat_selector&dialog=1&name=".$this->_obj->nom."&firstName=".$this->_obj->prenom;

@@ -10,7 +10,7 @@
       <input type="text" name="_medecin_traitant_name" size="30" value="Dr. {{$patient->_ref_medecin_traitant->_view}}" ondblclick="popMed('_traitant')" readonly="readonly" />
       <button class="cancel notext" type="button" onclick="delMed('_traitant')">{{tr}}Delete{{/tr}}</button>
     </td>
-    <td class="button"><button class="search" tabindex="251" type="button" onclick="popMed('_traitant')">Choisir un médecin</button></td>
+    <td class="button"><button class="search" tabindex="251" type="button" onclick="popMed('_traitant')">Choisir</button></td>
   </tr>
   
   <tr>
@@ -29,7 +29,7 @@
       <input type="text" name="_medecin1_name" size="30" value="Dr. {{$patient->_ref_medecin1->_view}}" ondblclick="popMed('1')" readonly="readonly" />
       <button class="cancel notext" type="button" onclick="delMed('1')">{{tr}}Delete{{/tr}}</button>
     </td>
-    <td class="button"><button class="search" tabindex="252" type="button" onclick="popMed('1')">Choisir un médecin</button></td>
+    <td class="button"><button class="search" tabindex="252" type="button" onclick="popMed('1')">Choisir</button></td>
   </tr>
   
   <tr>
@@ -46,7 +46,7 @@
       <button class="cancel notext" type="button" onclick="delMed('2')">{{tr}}Delete{{/tr}}</button>
     </td>
     <td class="button">
-      <button class="search" tabindex="253" type="button" onclick="popMed('2')">Choisir un médecin</button></td>
+      <button class="search" tabindex="253" type="button" onclick="popMed('2')">Choisir</button></td>
   </tr>
   
   <tr>
@@ -58,7 +58,7 @@
       <input type="text" name="_medecin3_name" size="30" value="{{if ($patient->_ref_medecin3)}}Dr. {{$patient->_ref_medecin3->_view}}{{/if}}" ondblclick="popMed('3')" readonly="readonly" />
       <button class="cancel notext" type="button" onclick="delMed('3')">{{tr}}Delete{{/tr}}</button>
     </td>
-    <td class="button"><button class="search" tabindex="254" type="button" onclick="popMed('3')">Choisir un médecin</button></td>
+    <td class="button"><button class="search" tabindex="254" type="button" onclick="popMed('3')">Choisir</button></td>
   </tr>
   
   <tr>
