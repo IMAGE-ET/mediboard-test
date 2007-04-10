@@ -1,4 +1,4 @@
-<?php /* $Id: mbobject.class.php 31 2006-05-05 09:55:35Z MyttO $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard

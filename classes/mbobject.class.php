@@ -3,7 +3,7 @@
 /**
  *  @package Mediboard
  *  @subpackage classes
- *  @version $Revision$
+ *  @version $Revision: 1793 $
  *  @author Thomas Despoix
 */
 

@@ -23,7 +23,7 @@ define("UI_CASE_UPPERFIRST", 3);
 * The Application User Interface Class.
 *
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
-* @version $Revision$
+* @version $Revision: 1765 $
 */
 class CAppUI {
 /** @var array generic array for holding the state of anything */

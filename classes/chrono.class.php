@@ -4,7 +4,7 @@
  *  @package Mediboard
  *  @subpackage classes
  *  @author  Thomas Despoix
- *  @version $Revision$
+ *  @version $Revision: 1575 $
  */
  
 // Chronometer

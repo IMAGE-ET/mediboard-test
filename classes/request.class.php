@@ -1,4 +1,4 @@
-<?php /* CLASSES $Id: $ */
+<?php /* CLASSES $Id$ */
 
 /**
  *  @package Mediboard

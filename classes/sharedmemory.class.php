@@ -1,4 +1,4 @@
-<?php /* CLASSES $Id: chrono.class.php 16 2006-05-04 14:54:07Z MyttO $ */
+<?php /* CLASSES $Id$ */
 
 /**
  *  @package Mediboard
