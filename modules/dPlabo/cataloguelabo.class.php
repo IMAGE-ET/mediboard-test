@@ -24,6 +24,9 @@ class CCatalogueLabo extends CMbObject {
   // Back references
   var $_ref_examens_labo = null;
   
+  // Form fields
+  var $_level = null;
+  
   function CCatalogueLabo() {
     $this->CMbObject("catalogue_labo", "catalogue_labo_id");
     
@@ -59,10 +62,11 @@ class CCatalogueLabo extends CMbObject {
     $this->_ref_catalogues_labo = $catalogue->loadList($where, $order);
   }
   
-  function loadRefsDeep() {
+  function loadRefsDeep($n = 0) {
+    $this->_level = $n;
     $this->loadRefs();
     foreach($this->_ref_catalogues_labo as $key => $curr_catalogue) {
-      $this->_ref_catalogues_labo[$key]->loadRefsDeep();
+      $this->_ref_catalogues_labo[$key]->loadRefsDeep($this->_level + 1);
     }
   }
 }

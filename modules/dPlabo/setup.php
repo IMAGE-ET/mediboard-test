@@ -11,7 +11,7 @@ global $AppUI;
 
 $config = array();
 $config["mod_name"]        = "dPlabo";
-$config["mod_version"]     = "0.1";
+$config["mod_version"]     = "0.11";
 $config["mod_type"]        = "user";
 
 class CSetupdPlabo extends CSetup {
@@ -44,7 +44,26 @@ class CSetupdPlabo extends CSetup {
           "\nINDEX ( `catalogue_labo_id` )) TYPE=MyISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.1";
+    $this->makeRevision("0.1");
+    $sql = "CREATE TABLE `pack_examens_labo` (" .
+          "\n`pack_examens_labo_id` INT NOT NULL AUTO_INCREMENT ," .
+          "\n`function_id` INT(11) UNSIGNED DEFAULT NULL ," .
+          "\n`libelle` VARCHAR(255) NOT NULL," .
+          "\nPRIMARY KEY ( `pack_examens_labo_id` ) ," .
+          "\nINDEX ( `function_id` )) TYPE=MyISAM;";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `pack_item_examen_labo` (" .
+          "\n`pack_item_examen_labo_id` INT NOT NULL AUTO_INCREMENT ," .
+          "\n`catalogue_labo_id` INT(11) UNSIGNED NOT NULL DEFAULT 0 ," .
+          "\n`pack_examens_labo_id` INT(11) UNSIGNED NOT NULL DEFAULT 0 ," .
+          "\n`examen_labo_id` INT(11) UNSIGNED NOT NULL DEFAULT 0 ," .
+          "\nPRIMARY KEY ( `pack_item_examen_labo_id` ) ," .
+          "\nINDEX ( `pack_examens_labo_id` ) ," .
+          "\nINDEX ( `examen_labo_id` )" .
+          ") TYPE=MyISAM;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.11";
   }
 }
 ?>
