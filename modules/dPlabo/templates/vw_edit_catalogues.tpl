@@ -11,59 +11,7 @@ function pageMain() {
 
 <table class="main">
   <tr>
-    <td class="halfPane">
-      <table class="tbl">
-        <tr>
-          <th colspan="2">Identifiant</th>
-          <th>Libellé</th>
-          <th>Examens</th>
-        </tr>
-        {{foreach from=$listCatalogues item="curr_catalogue"}}
-        <tr {{if $curr_catalogue->_id == $catalogue->_id }} class="selected" {{/if}}>
-          <td>+</td>
-          <td>
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;catalogue_labo_id={{$curr_catalogue->_id}}">
-              {{$curr_catalogue->identifiant}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;catalogue_labo_id={{$curr_catalogue->_id}}">
-              {{$curr_catalogue->libelle}}
-            </a>
-          </td>
-          <td>
-            {{$curr_catalogue->_ref_examens_labo|@count}}
-            <a class="buttonedit action" href="index.php?m={{$m}}&amp;tab=vw_edit_examens&amp;catalogue_labo_id={{$curr_catalogue->_id}}">
-              Editer
-            </a>
-          </td>
-        </tr>
-        {{foreach from=$curr_catalogue->_ref_catalogues_labo item="curr_sub_catalogue"}}
-        <tr {{if $curr_sub_catalogue->_id == $catalogue->_id }} class="selected" {{/if}}>
-          <td></td>
-          <td>
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;catalogue_labo_id={{$curr_sub_catalogue->_id}}">
-              {{$curr_sub_catalogue->identifiant}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;catalogue_labo_id={{$curr_sub_catalogue->_id}}">
-              {{$curr_sub_catalogue->libelle}}
-            </a>
-          </td>
-          <td>
-            {{$curr_sub_catalogue->_ref_examens_labo|@count}}
-            <a class="buttonedit action" href="?m={{$m}}&amp;tab=vw_edit_examens&amp;catalogue_labo_id={{$curr_sub_catalogue->_id}}">
-              Editer
-            </a>
-          </td>
-        </tr>
-        {{/foreach}}
-        {{/foreach}}
-      </table>
-      
-      <hr />
-      
+    <td class="halfPane">      
       {{foreach from=$listCatalogues item="_catalogue"}}
       {{include file="tree_catalogues.tpl"}}
       {{/foreach}}
