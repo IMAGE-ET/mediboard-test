@@ -1,7 +1,10 @@
 <script type="text/javascript">
 
 function pageMain() {
-  PairEffect.initGroup('content');
+  PairEffect.initGroup('tree-content', { 
+    bStoreInCookie: false,
+    bStartVisible: true
+  } );
 }
 </script>
   
@@ -36,7 +39,7 @@ function pageMain() {
           </td>
         </tr>
         {{foreach from=$curr_catalogue->_ref_catalogues_labo item="curr_sub_catalogue"}}
-        <tr>
+        <tr {{if $curr_sub_catalogue->_id == $catalogue->_id }} class="selected" {{/if}}>
           <td></td>
           <td>
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;catalogue_labo_id={{$curr_sub_catalogue->_id}}">
@@ -57,7 +60,9 @@ function pageMain() {
         </tr>
         {{/foreach}}
         {{/foreach}}
-      </table>*
+      </table>
+      
+      <hr />
       
       {{foreach from=$listCatalogues item="_catalogue"}}
       {{include file="tree_catalogues.tpl"}}
@@ -65,10 +70,10 @@ function pageMain() {
     </td>
     <td class="halfPane">
       {{if $can->edit}}
-      <a class="buttonnew" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;catalogue_labo_id=0">
+      <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;catalogue_labo_id=0">
         Ajouter un nouveau catalogue
       </a>
-      <form name="editCatalogue" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editCatalogue" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_catalogue_aed" />
       <input type="hidden" name="catalogue_labo_id" value="{{$catalogue->_id}}" />
       <input type="hidden" name="del" value="0" />

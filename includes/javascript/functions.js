@@ -193,12 +193,7 @@ var Console = {
     }
       
     Object.extend(oDefault, oOptions);
-    alert($H(oDefault).inspect());
     
-    if (oDefault.current > oDefault.level) {
-      return;
-    }
-            
     oElement = $(oElement);
     
     var oNoRecursion = { 
@@ -209,6 +204,11 @@ var Console = {
     this.debug(oElement, sLabel, oNoRecursion);
 
     oDefault.current++;
+
+    if (oDefault.current > oDefault.level) {
+      return;
+    }
+            
     oNoRecursion = { 
 	    level: oDefault.current, 
 	    current: oDefault.current
@@ -294,13 +294,14 @@ Class.extend(PairEffect, {
 
   // Constructor
   initialize: function(idTarget, oOptions) {
+
     var oDefaultOptions = {
       idTrigger: idTarget + "-trigger",
       sEffect: null, // could be null, "appear", "slide", "blind"
       bStartVisible: false, // Make it visible at start
       bStoreInCookie: true,
       sCookieName: "effect"
-  };
+    };
 
     Object.extend(oDefaultOptions, oOptions);
     

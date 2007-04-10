@@ -529,17 +529,20 @@ table.tbl th.title {
   border: #aaa 1px outset;
 }
 
-table.tbl td {
+table.tbl td,
+div.tree-header {
   background-color: #fff;
   padding: 2px;
   white-space: nowrap;
 }
 
-table.tbl tr.selected td {
+table.tbl tr.selected td,
+div.tree-header.selected {
   background-color: #ffc;
 }
 
-table.tbl tr:hover td {
+table.tbl tr:hover td,
+div.tree-header:hover {
   background-color: #f8f8f8;
 }
 
@@ -1948,7 +1951,9 @@ tr.triggerHide td {
 tr.triggerShow td,
 tr.triggerHide td,
 tr.triggerShow th,
-tr.triggerHide th {
+tr.triggerHide th,
+div.triggerShow,
+div.triggerHide {
   padding-left: 25px;
   font-weight: bold;
   background-repeat: no-repeat;
@@ -1956,12 +1961,14 @@ tr.triggerHide th {
 }
 
 tr.triggerHide td,
-tr.triggerHide th {
+tr.triggerHide th,
+div.triggerHide {
   background-image: url(../../images/icons/expand.gif);
 }
 
 tr.triggerShow td,
-tr.triggerShow th {
+tr.triggerShow th,
+div.triggerShow {
   background-image: url(../../images/icons/collapse.gif);
 }
 
@@ -1975,6 +1982,24 @@ td.show {
 
 .hidden {
   display: none;
+}
+
+div.tree-content {
+  margin: 0; 
+  padding-left: 25px;
+}
+
+div.tree-trigger {
+  overflow: hidden;
+  width: 0px;
+  float: left;
+}
+
+div.tree-header {
+  border: 1px solid #777;
+  margin-top: -1px;
+  padding-top: 4px;
+  font-weight: normal;
 }
 
   /* @import "./consultation.css"; */
