@@ -1,4 +1,4 @@
-<!-- $Id: $ -->
+<!-- $Id$ -->
 <!--
   $_catalogue : catalog to display hierarchically
   $catalogue_id : selected catalog 
