@@ -49,7 +49,11 @@
         </tr>
         {{/foreach}}
         {{/foreach}}
-      </table>
+      </table>*
+      
+      {{foreach from=$listCatalogues item="_catalogue"}}
+      {{include file="tree_catalogues.tpl"}}
+      {{/foreach}}
     </td>
     <td class="halfPane">
       {{if $can->edit}}
