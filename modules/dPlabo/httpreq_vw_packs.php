@@ -14,9 +14,13 @@ $can->needsRead();
 $user = new CMediusers;
 $user->load($AppUI->user_id);
 
+// Chargement des fontions
+$function = new CFunctions;
+$listFunctions = $function->loadListWithPerms(PERM_EDIT);
+
 //Chargement de tous les packs
 $pack = new CPackExamensLabo;
-$where = array("function_id = '$user->function_id' OR function_id IS NULL");
+$where = array("function_id IS NULL OR function_id ".db_prepare_in(array_keys($listFunctions)));
 $order = "libelle";
 $listPacks = $pack->loadList($where, $order);
 foreach($listPacks as $key => $curr_pack) {
