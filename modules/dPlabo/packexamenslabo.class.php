@@ -55,7 +55,7 @@ class CPackExamensLabo extends CMbObject {
     foreach($this->_ref_items_examen_labo as $key => $curr_item) {
       $this->_ref_items_examen_labo[$key]->loadRefsFwd();
       $examen_id = $this->_ref_items_examen_labo[$key]->_ref_examen_labo->_id;
-      $this->_ref_examens_labo[$examen_id] =& $this->_ref_items_examen_labo[$key]->_ref_examen_labo;
+      $this->_ref_examens_labo[$key] =& $this->_ref_items_examen_labo[$key]->_ref_examen_labo;
     }
   }
 }

@@ -1,4 +1,4 @@
-<table class="form">
+<table class="tbl">
   <tr>
     <th class="title" colspan="6">
       <a style="float:right;" href="#nothing" onclick="view_log('{{$object->_class_name}}', {{$object->_id}})">
@@ -8,8 +8,7 @@
     </th>
   </tr>
   <tr>
-    <th class="category">Identifiant</th>
-    <th class="category">Libelle</th>
+    <th class="category">Examen</th>
     <th class="category">Type</th>
     <th class="category">Unité</th>
     <th class="category">Min</th>
@@ -18,12 +17,10 @@
   {{foreach from=$object->_ref_examens_labo item="curr_examen"}}
   <tr>
     <td>
-      {{$curr_examen->identifiant}}
-    </td>
-    <td>
-      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-        {{tr}}{{$curr_examen->libelle}}{{/tr}}
-      </a>
+      <div id="examen-{{$curr_examen->_id}}">
+        <script type="text/javascript">new Draggable('examen-{{$curr_examen->_id}}', {revert:true})</script>
+        {{$curr_examen->_view}}
+      </div>
     </td>
     <td>
       <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">

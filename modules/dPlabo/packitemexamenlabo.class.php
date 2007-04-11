@@ -28,14 +28,14 @@ class CPackItemExamenLabo extends CMbObject {
   function getSpecs() {
     return array (
       "pack_examens_labo_id" => "ref class|CPackExamensLabo notNull",
-      "examen_labo_id"       => "ref class|CExamenLabo notNull",
-      "libelle"              => "str notNull"
+      "examen_labo_id"       => "ref class|CExamenLabo notNull"
     );
   }
   
   function updateFormFields() {
-    $this->_shortview = $this->libelle;
-    $this->_view      = $this->libelle;
+    $this->loadRefsFwd();
+    $this->_shortview = $this->_ref_examen_labo->_shortview;
+    $this->_view      = $this->_ref_examen_labo->_view;
   }
   
   function loadRefsFwd() {
@@ -43,19 +43,6 @@ class CPackItemExamenLabo extends CMbObject {
     $this->_ref_pack_examens_labo->load($this->pack_examens_labo_id);
     $this->_ref_examen_labo = new CExamenLabo;
     $this->_ref_examen_labo->load($this->examen_labo_id);
-  }
-  
-  function loadRefsBack() {
-    $item = new CPackItemExamenLabo;
-    $where = array("pack_catalogue_labo_id" => "= $this->pack_catalogue_labo_id");
-    $order = "identifiant";
-    $this->_ref_items_examen_labo = $item->loadList($where, $order);
-    $this->_ref_examens_labo = array();
-    foreach($this->_ref_items_examen_labo as $key => $curr_item) {
-      $this->_ref_items_examen_labo[$key]->loadRefsFwd();
-      $examen_id = $this->_ref_items_examen_labo[$key]->_ref_examen_labo->_id;
-      $this->_ref_examens_labo[$examen_id] =& $this->_ref_items_examen_labo[$key]->_ref_examen_labo;
-    }
   }
 }
 

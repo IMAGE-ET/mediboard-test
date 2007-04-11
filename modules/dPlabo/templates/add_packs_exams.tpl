@@ -10,28 +10,53 @@ var Catalogue = {
   }
 }
 
+function reloadPacks() {
+    var url = new Url;
+    url.setModuleAction("dPlabo", "httpreq_vw_packs");
+    url.requestUpdate('PacksView');
+}
+
+function dragDropExamen(examen_id, pack_id) {
+  oForm = $('newPackItem');
+  oForm.examen_labo_id.value       = examen_id.substring(7);
+  oForm.pack_examens_labo_id.value = pack_id;
+  //Console.debug(oForm.examen_labo_id.value);
+  //Console.debug(oForm.pack_examens_labo_id.value);
+  submitFormAjax(oForm, 'systemMsg', { onComplete: reloadPacks });
+  return true;
+}
+
 function pageMain() {
-  PairEffect.initGroup('tree-content', { 
+  PairEffect.initGroup('tree-content', {
     bStoreInCookie: false,
     bStartVisible: true
   } );
+  reloadPacks();
 }
 
 </script>
 
 <table class="main">
   <tr>
-    <td class="halfPane" rowspan="2">
+    <th class="halfPane">
+      Catalogues
+    </td>
+    <th class="halfPane">
+      Packs
+    </td>
+  </tr>
+  <tr>
+    <td>
       {{assign var="catalogue_id" value=0}}
       {{foreach from=$listCatalogues item="_catalogue"}}
       {{include file="tree_catalogues.tpl"}}
       {{/foreach}}
     </td>
-    <td class="halfPane" id="CatalogueView">
+    <td id="PacksView" rowspan="2">
     </td>
   </tr>
   <tr>
-    <td id="PacksView">
+    <td id="CatalogueView">
     </td>
   </tr>
 </table>
