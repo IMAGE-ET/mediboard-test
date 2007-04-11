@@ -1,4 +1,5 @@
 <?php
+$locales['CPackExamensLabo-libelle-desc'] = 'Libellé du pack';
 $locales['CCatalogueLabo'] = 'Catalogue d\'examens';
 $locales['CCatalogueLabo-identifiant'] = 'Identifiant';
 $locales['CCatalogueLabo-identifiant-desc'] = 'Identifiant visible du catalogue';
@@ -24,6 +25,13 @@ $locales['CExamenLabo-unite-desc'] = 'Unité de l\'examen';
 $locales['CExamenLabo.type.bool'] = 'Oui / Non';
 $locales['CExamenLabo.type.num'] = 'Numérique';
 $locales['CExamenLabo.type.str'] = 'Alphanumérique';
+$locales['CPackExamensLabo'] = 'Pack d\'examens';
+$locales['CPackExamensLabo-function_id'] = 'Fonction';
+$locales['CPackExamensLabo-function_id-desc'] = 'Fonction associée au pack';
+$locales['CPackExamensLabo-libelle'] = 'Libellé';
+$locales['CPackItemExamenLabo'] = 'Examen de pack';
+$locales['mod-dPlabo-tab-add_pack_exams'] = 'Contenu des packs';
 $locales['mod-dPlabo-tab-vw_edit_catalogues'] = 'Edition des catalogues';
 $locales['mod-dPlabo-tab-vw_edit_examens'] = 'Edition des examens';
+$locales['mod-dPlabo-tab-vw_edit_packs'] = 'Edition des packs';
 ?>

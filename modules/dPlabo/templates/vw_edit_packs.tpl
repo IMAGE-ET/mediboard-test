@@ -36,6 +36,19 @@
           {{/if}}
         </tr>
         <tr>
+          <th>{{mb_label object=$pack field="function_id"}}</th>
+          <td>
+            <select name="function_id">
+              <option value="">&mdash; Aucune</option>
+              {{foreach from=$listFunctions item="curr_function"}}
+              <option value="{{$curr_function->_id}}" {{if $pack->function_id == $curr_function->_id}}selected="selected"{{/if}}>
+                {{$curr_function->_view}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$pack field="libelle"}}</th>
           <td>{{mb_field object=$pack field="libelle"}}</td>
         </tr>

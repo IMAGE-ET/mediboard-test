@@ -1,4 +1,5 @@
 <?php
+$locales['CPackExamensLabo-libelle-desc'] = '';
 $locales['CCatalogueLabo'] = '';
 $locales['CCatalogueLabo-identifiant'] = '';
 $locales['CCatalogueLabo-identifiant-desc'] = '';
@@ -24,6 +25,13 @@ $locales['CExamenLabo-unite-desc'] = '';
 $locales['CExamenLabo.type.bool'] = '';
 $locales['CExamenLabo.type.num'] = '';
 $locales['CExamenLabo.type.str'] = '';
+$locales['CPackExamensLabo'] = '';
+$locales['CPackExamensLabo-function_id'] = '';
+$locales['CPackExamensLabo-function_id-desc'] = '';
+$locales['CPackExamensLabo-libelle'] = '';
+$locales['CPackItemExamenLabo'] = '';
+$locales['mod-dPlabo-tab-add_pack_exams'] = '';
 $locales['mod-dPlabo-tab-vw_edit_catalogues'] = '';
 $locales['mod-dPlabo-tab-vw_edit_examens'] = '';
+$locales['mod-dPlabo-tab-vw_edit_packs'] = '';
 ?>
