@@ -4,7 +4,7 @@
 * @package Mediboard
 * @subpackage mediusers
 * @version $Revision: $
-* @author Sébastien Fillonneau
+* @author Romain Ollivier
 */
 
 global $AppUI;
