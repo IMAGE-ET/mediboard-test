@@ -44,7 +44,7 @@ var oDragOptions = {
   {{foreach from=$object->_ref_examens_labo item="curr_examen"}}
   <tr>
     <td>
-      <div id="examen-{{$curr_examen->_id}}">
+      <div class="draggable" id="examen-{{$curr_examen->_id}}">
         <script type="text/javascript">
         new Draggable('examen-{{$curr_examen->_id}}', oDragOptions);
         </script>
