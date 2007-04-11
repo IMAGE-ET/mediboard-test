@@ -19,7 +19,7 @@ var Catalogue = {
     url.setModuleAction("system", "httpreq_vw_complete_object");
     url.addParam("object_class" , "CCatalogueLabo");
     url.addParam("object_id"    , iCatalogue);
-    url.requestUpdate('CatalogueView');
+    url.requestUpdate('CatalogueView', { waitingText : null });
   }
 }
 
@@ -33,7 +33,7 @@ function reloadPacks(pack_id) {
     var url = new Url;
     url.setModuleAction("dPlabo", "httpreq_vw_packs");
     url.addParam("pack_examens_labo_id", pack_id);
-    url.requestUpdate('PacksView');
+    url.requestUpdate('PacksView', { waitingText : null });
 }
 
 function pageMain() {
@@ -58,12 +58,10 @@ function pageMain() {
       {{foreach from=$listCatalogues item="_catalogue"}}
       {{include file="tree_catalogues.tpl"}}
       {{/foreach}}
+      <div id="CatalogueView">
+      </div>
     </td>
-    <td id="PacksView" rowspan="2">
-    </td>
-  </tr>
-  <tr>
-    <td id="CatalogueView">
+    <td id="PacksView">
     </td>
   </tr>
 </table>
