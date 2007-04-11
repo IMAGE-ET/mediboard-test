@@ -5,7 +5,21 @@ var oDragOptions = {
   starteffect : function(element) { 
     Element.classNames(element).add("dragged");
     new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 }); 
-  }
+  },
+  reverteffect: function(element, top_offset, left_offset) {
+    var dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
+    element._revert = new Effect.Move(element, { 
+      x: -left_offset, 
+      y: -top_offset, 
+      duration: dur,
+      afterFinish : function (effect) { 
+        Element.classNames(effect.element.id).remove("dragged");
+      }
+    } );
+  },
+  endeffect: function(element) { 
+    new Effect.Opacity(element, { duration:0.2, from:0.7, to:1.0} ); 
+  }       
 }
 
 </script>
@@ -30,7 +44,7 @@ var oDragOptions = {
   {{foreach from=$object->_ref_examens_labo item="curr_examen"}}
   <tr>
     <td>
-      <div id="examen-{{$curr_examen->_id}}" class="roro">
+      <div id="examen-{{$curr_examen->_id}}">
         <script type="text/javascript">
         new Draggable('examen-{{$curr_examen->_id}}', oDragOptions);
         </script>
