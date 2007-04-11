@@ -22,7 +22,6 @@ class CPackExamensLabo extends CMbObject {
   
   // Back references
   var $_ref_items_examen_labo = null;
-  var $_ref_examens_labo      = null;
   
   function CPackExamensLabo() {
     $this->CMbObject("pack_examens_labo", "pack_examens_labo_id");
@@ -51,11 +50,8 @@ class CPackExamensLabo extends CMbObject {
     $item = new CPackItemExamenLabo;
     $where = array("pack_examens_labo_id" => "= $this->pack_examens_labo_id");
     $this->_ref_items_examen_labo = $item->loadList($where);
-    $this->_ref_examens_labo = array();
     foreach($this->_ref_items_examen_labo as $key => $curr_item) {
       $this->_ref_items_examen_labo[$key]->loadRefsFwd();
-      $examen_id = $this->_ref_items_examen_labo[$key]->_ref_examen_labo->_id;
-      $this->_ref_examens_labo[$key] =& $this->_ref_items_examen_labo[$key]->_ref_examen_labo;
     }
   }
 }

@@ -13,7 +13,7 @@
               {{$curr_pack->libelle}}
             </a>
           </td>
-          <td>{{$curr_pack->_ref_examens_labo|@count}}</td>
+          <td>{{$curr_pack->_ref_items_examen_labo|@count}}</td>
         </tr>
         {{/foreach}}
       </table>
@@ -75,7 +75,8 @@
           <th>Min</th>
           <th>Max</th>
         </tr>
-        {{foreach from=$pack->_ref_examens_labo item="curr_examen"}}
+        {{foreach from=$pack->_ref_items_examen_labo item="curr_item"}}
+        {{assign var="curr_examen" value=$curr_item->_ref_examen_labo}}
         <tr>
           <td>
             <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">

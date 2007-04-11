@@ -7,6 +7,12 @@ var Pack = {
     oForm.pack_examens_labo_id.value = pack_id;
     submitFormAjax(oForm, 'systemMsg', { onComplete: reloadPacks });
     return true;
+  },
+  delExamen: function(oForm) {
+    oFormBase = $('newPackItem');
+    oFormBase.pack_examens_labo_id.value = {{$pack->_id}};
+    submitFormAjax(oForm, 'systemMsg', { onComplete: reloadPacks });
+    return true;
   }
 }
   
@@ -32,7 +38,7 @@ var Pack = {
   } );
   </script>
   <div style="float:right;">
-    {{$curr_pack->_ref_examens_labo|@count}} Examens
+    {{$curr_pack->_ref_items_examen_labo|@count}} Examens
   </div>
   <a href="#nothing" onclick="reloadPacks({{$curr_pack->_id}})">
     {{$curr_pack->_view}}
@@ -56,9 +62,17 @@ var Pack = {
     <th class="category">Min</th>
     <th class="category">Max</th>
   </tr>
-  {{foreach from=$pack->_ref_examens_labo item="curr_examen"}}
+  {{foreach from=$pack->_ref_items_examen_labo item="curr_item"}}
+  {{assign var="curr_examen" value=$curr_item->_ref_examen_labo}}
   <tr>
     <td>
+      <form name="delPackItem-{{$curr_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+        <input type="hidden" name="m" value="dPlabo" />
+        <input type="hidden" name="dosql" value="do_pack_item_aed" />
+        <input type="hidden" name="pack_item_examen_labo_id" value="{{$curr_item->_id}}" />
+        <input type="hidden" name="del" value="1" />
+        <button type="button" class="trash notext" style="float: right;" onclick="Pack.delExamen(this.form)"/>
+      </form>
       {{$curr_examen->_view}}
     </td>
     <td>
