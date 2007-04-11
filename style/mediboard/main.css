@@ -537,8 +537,14 @@ div.tree-header {
 }
 
 table.tbl tr.selected td,
-div.tree-header.selected {
+div.selected {
   background-color: #ffc;
+}
+
+div.dragged {
+  background-color: #ffc;
+  border: 1px solid black;
+  padding: 2px 10px;
 }
 
 table.tbl tr:hover td,

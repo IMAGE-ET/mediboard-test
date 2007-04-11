@@ -1,21 +1,31 @@
 <script type="text/javascript">
 
+var Catalogue = {
+  select: function(id) {
+    var url = new Url;
+    url.setModuleTab("{{$m}}", "{{$tab}}");
+    url.addParam("catalogue_labo_id", id);
+    url.redirect();
+  }
+};
+
 function pageMain() {
-  PairEffect.initGroup('tree-content', { 
-    bStoreInCookie: false,
-    bStartVisible: true
-  } );
+  PairEffect.initGroup('tree-content');
 }
 </script>
   
 
 <table class="main">
   <tr>
+    <!-- Affichage des catalogues -->
     <td class="halfPane">      
+      {{assign var="catalogue_id" value=$catalogue->_id}}
       {{foreach from=$listCatalogues item="_catalogue"}}
       {{include file="tree_catalogues.tpl"}}
       {{/foreach}}
     </td>
+    
+    <!-- Edition des catalogues --> 
     <td class="halfPane">
       {{if $can->edit}}
       <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;catalogue_labo_id=0">
@@ -37,13 +47,10 @@ function pageMain() {
           <th>{{mb_label object=$catalogue field="pere_id"}}</th>
           <td>
             <select name="pere_id">
-              <option value="">&mdash; Aucun</option>
-              {{foreach from=$listCatalogues item="curr_catalogue"}}
-              {{if $catalogue->_id != $curr_catalogue->_id}}
-              <option value="{{$curr_catalogue->_id}}" {{if $catalogue->pere_id == $curr_catalogue->_id}}selected="selected"{{/if}}>
-                {{$curr_catalogue->_view}}
-              </option>
-              {{/if}}
+              <option value="">&mdash; Catalogue racine</option>
+              {{assign var="pere_id" value=$catalogue->pere_id}}
+              {{foreach from=$listCatalogues item="_catalogue"}}
+              {{include file="options_catalogues.tpl"}}
               {{/foreach}}
             </select>
           </td>
@@ -60,12 +67,19 @@ function pageMain() {
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
             {{if $catalogue->_id}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le catalogue',objName:'{{$catalogue->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form, {
+                typeName:'le catalogue',
+                objName:'{{$catalogue->_view|smarty:nodefaults|JSAttribute}}'
+              } )">
+                Supprimer
+              </button>
             {{/if}}
           </td>
         </tr>
       </table>
       </form>
+      
+      <!-- Liste des exmanens du catalogue sélectionné -->
       {{if $catalogue->_id}}
       <table class="tbl">
         <tr>

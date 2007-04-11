@@ -33,6 +33,30 @@ class CCatalogueLabo extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  function check() {
+    if ($msg = parent::check()) {
+      return $msg;
+    }
+    
+    if ($this->hasAncestor($this)) {
+      return "Cyclic catalog creation";
+    }
+    
+  }
+  
+  function hasAncestor($catalogue) {
+    if (!$this->_id) {
+      return false;
+    }
+
+    if ($catalogue->_id == $this->pere_id) {
+      return true;
+    }
+    
+    $this->loadRefsFwd();
+    return $this->_ref_pere->hasAncestor($catalogue);
+  }
+  
   function getSpecs() {
     return array (
       "pere_id"     => "ref class|CCatalogueLabo",
@@ -48,8 +72,10 @@ class CCatalogueLabo extends CMbObject {
   }
   
   function loadRefsFwd() {
-    $this->_ref_pere = new CCatalogueLabo;
-    $this->_ref_pere->load($this->pere_id);
+    if (!$this->_ref_pere) {
+      $this->_ref_pere = new CCatalogueLabo;
+      $this->_ref_pere->load($this->pere_id);
+    }
   }
   
   function loadRefsBack() {

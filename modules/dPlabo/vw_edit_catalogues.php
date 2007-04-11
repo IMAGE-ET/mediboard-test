@@ -18,12 +18,12 @@ $catalogue = new CCatalogueLabo;
 $catalogue->load($catalogue_labo_id);
 $catalogue->loadRefs();
 
-//Chargement de tous les catalogues
+// Chargement de tous les catalogues
 $where = array("pere_id" => "IS NULL");
 $order = "identifiant";
 $listCatalogues = $catalogue->loadList($where, $order);
-foreach($listCatalogues as $key => $curr_catalogue) {
-  $listCatalogues[$key]->loadRefsDeep();
+foreach($listCatalogues as &$_catalogue) {
+  $_catalogue->loadRefsDeep();
 }
 
 // Création du template

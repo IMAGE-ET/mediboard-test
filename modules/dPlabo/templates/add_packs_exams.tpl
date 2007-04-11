@@ -27,10 +27,7 @@ function dragDropExamen(examen_id, pack_id) {
 }
 
 function pageMain() {
-  PairEffect.initGroup('tree-content', {
-    bStoreInCookie: false,
-    bStartVisible: true
-  } );
+  PairEffect.initGroup('tree-content');
   reloadPacks();
 }
 

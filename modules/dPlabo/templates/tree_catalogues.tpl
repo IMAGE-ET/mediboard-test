@@ -1,8 +1,7 @@
-<!-- $Id$ -->
-<!--
+{{* $Id$
   $_catalogue : catalog to display hierarchically
   $catalogue_id : selected catalog 
--->
+*}}
 
 {{assign var="children" value=$_catalogue->_ref_catalogues_labo|@count}}
 <div class="tree-header {{if $_catalogue->_id == $catalogue_id }}selected{{/if}}" >
@@ -11,8 +10,7 @@
   </a>
   <div class="tree-trigger" id="catalogue-{{$_catalogue->_id}}-trigger">showHide</div>  
   <a href="#" onclick="Catalogue.select({{$_catalogue->_id}})">
-  {{$_catalogue->identifiant}} &mdash;
-  {{$_catalogue->libelle}}
+  {{$_catalogue->_view}}
   </a>
 </div>
 {{if $children}}
