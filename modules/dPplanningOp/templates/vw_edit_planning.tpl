@@ -65,12 +65,12 @@ function setProtocole(protocole) {
   formOp.examen.value            = protocole.examen;
   formOp.depassement.value       = protocole.depassement;
   formOp.rques.value             = protocole.rques_operation;
+  formSejour.type.value          = protocole.type;
   formSejour._duree_prevue.value = protocole.duree_hospi;
   formSejour._duree_prevue.onchange();
   formSejour.convalescence.value = protocole.convalescence;
   formSejour.DP.value            = protocole.DP;
   formSejour.rques.value         = protocole.rques_sejour;
-  setRadioValue(formSejour.type, protocole.type);
 }
 
 function printDocument(iDocument_id) {
