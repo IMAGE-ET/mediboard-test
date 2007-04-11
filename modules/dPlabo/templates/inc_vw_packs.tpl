@@ -1,3 +1,17 @@
+<script type="text/javascript">
+
+var Pack = {
+  dropExamen: function(examen_id, pack_id) {
+    oForm = $('newPackItem');
+    oForm.examen_labo_id.value       = examen_id.substring(7);
+    oForm.pack_examens_labo_id.value = pack_id;
+    submitFormAjax(oForm, 'systemMsg', { onComplete: reloadPacks });
+    return true;
+  }
+}
+  
+</script>
+
 <form name="editPackItem" id="newPackItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dPlabo" />
   <input type="hidden" name="dosql" value="do_pack_item_aed" />
@@ -11,12 +25,12 @@
 {{assign var="examens" value=$curr_pack->_ref_examens_labo|@count}}
 <div class="tree-header" id="drop-pack-{{$curr_pack->_id}}">
   <script>
-  Droppables.add('drop-pack-{{$curr_pack->_id}}', { 
-                  onDrop:function(element){
-                    dragDropExamen(element.id,{{$curr_pack->_id}})
-                  }, 
-                  hoverclass:'selected'
-                });
+  Droppables.add('drop-pack-{{$curr_pack->_id}}', {
+    onDrop: function(element) {
+      Pack.dropExamen(element.id, {{$curr_pack->_id}})
+    }, 
+    hoverclass:'selected'
+  } );
   </script>
   <div style="float:right;">
     {{$curr_pack->_ref_examens_labo|@count}} Examens

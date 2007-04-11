@@ -1,11 +1,24 @@
 <script type="text/javascript">
 
 var Catalogue = {
-  select : function(iCatalogue_id) {
+  iCurrent: 0,
+  eHeader: null,
+  findCurrent: function(iCatalogue) {
+    this.iCurrent = iCatalogue;
+    this.eHeader = $("catalogue-" + iCatalogue + "-header");
+  },
+  
+  select : function(iCatalogue) {
+    if (this.eHeader) {
+      Element.classNames(this.eHeader).remove("selected");
+    } 
+    this.findCurrent(iCatalogue);
+    Element.classNames(this.eHeader).add("selected");
+
     var url = new Url;
     url.setModuleAction("system", "httpreq_vw_complete_object");
     url.addParam("object_class" , "CCatalogueLabo");
-    url.addParam("object_id"    , iCatalogue_id);
+    url.addParam("object_id"    , iCatalogue);
     url.requestUpdate('CatalogueView');
   }
 }
@@ -14,16 +27,6 @@ function reloadPacks() {
     var url = new Url;
     url.setModuleAction("dPlabo", "httpreq_vw_packs");
     url.requestUpdate('PacksView');
-}
-
-function dragDropExamen(examen_id, pack_id) {
-  oForm = $('newPackItem');
-  oForm.examen_labo_id.value       = examen_id.substring(7);
-  oForm.pack_examens_labo_id.value = pack_id;
-  //Console.debug(oForm.examen_labo_id.value);
-  //Console.debug(oForm.pack_examens_labo_id.value);
-  submitFormAjax(oForm, 'systemMsg', { onComplete: reloadPacks });
-  return true;
 }
 
 function pageMain() {

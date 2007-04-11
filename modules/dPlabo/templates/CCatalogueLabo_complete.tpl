@@ -18,7 +18,7 @@ var oDragOptions = {
     } );
   },
   endeffect: function(element) { 
-    new Effect.Opacity(element, { duration:0.2, from:0.7, to:1.0} ); 
+    new Effect.Opacity(element, { duration:0.2, from:0.7, to:1.0 } ); 
   }       
 }
 
