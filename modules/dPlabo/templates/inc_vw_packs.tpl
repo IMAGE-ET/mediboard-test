@@ -22,8 +22,7 @@ var Pack = {
 </form>
 
 {{foreach from=$listPacks item="curr_pack"}}
-{{assign var="examens" value=$curr_pack->_ref_examens_labo|@count}}
-<div class="tree-header" id="drop-pack-{{$curr_pack->_id}}">
+<div class="tree-header {{if $curr_pack->_id == $pack->_id}}selected{{/if}}" id="drop-pack-{{$curr_pack->_id}}">
   <script>
   Droppables.add('drop-pack-{{$curr_pack->_id}}', {
     onDrop: function(element) {
@@ -35,25 +34,53 @@ var Pack = {
   <div style="float:right;">
     {{$curr_pack->_ref_examens_labo|@count}} Examens
   </div>
-  <div class="tree-trigger" id="pack-{{$curr_pack->_id}}-trigger">showHide</div>  
-  {{$curr_pack->_view}}
+  <a href="#nothing" onclick="reloadPacks({{$curr_pack->_id}})">
+    {{$curr_pack->_view}}
+  </a>
 </div>
-{{if $examens}}
-<div class="tree-content pack-tree" id="pack-{{$curr_pack->_id}}" style="display: block;">
-  {{foreach from=$curr_pack->_ref_examens_labo item="curr_examen"}}
-  <div class="tree-header">
-    {{$curr_examen->_view}}
-  </div
-  {{/foreach}}
-</div>
-{{/if}}
 {{/foreach}}
 
-<script type="text/javascript">
-
-PairEffect.initGroup('pack-tree', {
-  bStoreInCookie: false,
-  bStartVisible: true
-} );
-
-</script>
+<table class="tbl">
+  <tr>
+    <th class="title" colspan="6">
+      <a style="float:right;" href="#nothing" onclick="view_log('{{$object->_class_name}}', {{$object->_id}})">
+        <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
+      </a>
+      {{$pack->_view}}
+    </th>
+  </tr>
+  <tr>
+    <th class="category">Examen</th>
+    <th class="category">Type</th>
+    <th class="category">Unité</th>
+    <th class="category">Min</th>
+    <th class="category">Max</th>
+  </tr>
+  {{foreach from=$pack->_ref_examens_labo item="curr_examen"}}
+  <tr>
+    <td>
+      {{$curr_examen->_view}}
+    </td>
+    <td>
+      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
+        {{$curr_examen->type}}
+      </a>
+    </td>
+    <td>
+      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
+        {{$curr_examen->unite}}
+      </a>
+    </td>
+    <td>
+      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
+        {{$curr_examen->min}} {{$curr_examen->unite}}
+      </a>
+    </td>
+    <td>
+      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
+        {{$curr_examen->max}} {{$curr_examen->unite}}
+      </a>
+    </td>
+  </tr>
+  {{/foreach}}
+</table>
