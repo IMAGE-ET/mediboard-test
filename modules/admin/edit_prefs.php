@@ -40,9 +40,15 @@ if($user_id!==null){
 $prefsUser = array();
 
 // Préférences Globales
-$array_list_pref_generale = array("LOCALE","UISTYLE","DEFMODULE");
-foreach($array_list_pref_generale as $namePref){
-  if(!array_key_exists($namePref,$prefs)){
+$array_list_pref_generale = array (
+  "LOCALE",
+  "UISTYLE",
+  "MenuPosition",
+  "DEFMODULE",
+);
+
+foreach ($array_list_pref_generale as $namePref){
+  if (!array_key_exists($namePref,$prefs)) {
     $prefs[$namePref] = null;
   }
   $prefsUser["GENERALE"][$namePref] = $prefs[$namePref];
@@ -50,19 +56,24 @@ foreach($array_list_pref_generale as $namePref){
 
 
 // Préférences par Module
-$array_list_module_pref = array();
-$array_list_module_pref["dPpatients"] = array("DEPARTEMENT");
-$array_list_module_pref["dPcabinet"]  = array (
-  "AFFCONSULT",
-  "MODCONSULT",
-  "AUTOADDSIGN",
-  "GestionFSE", 
-  "InterMaxDir", 
-  "DefaultPeriod",
-  "DossierCabinet",
-  "simpleCabinet"
+$array_list_module_pref = array (
+  "dPpatients" => array (
+    "DEPARTEMENT",
+  ),
+  "dPcabinet" => array (
+    "AFFCONSULT",
+    "MODCONSULT",
+    "AUTOADDSIGN",
+    "GestionFSE", 
+    "InterMaxDir", 
+    "DefaultPeriod",
+    "DossierCabinet",
+    "simpleCabinet",
+  ),
+  "system" => array (
+    "INFOSYSTEM",
+  ),
 );
-$array_list_module_pref["system"]     = array("INFOSYSTEM");
 
 foreach($array_list_module_pref as $modulename => $listPrefs){
   $prefsUser[$modulename] = array();	

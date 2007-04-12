@@ -3,9 +3,17 @@
 {{if !$dialog}}
 
 {{foreach from=$messages item=currMsg}}
-  <div style='background: #aaa; color: #fff;'><strong>{{$currMsg->titre}}</strong> : {{$currMsg->corps}}</div>
+  <div style='background: #aaa; color: #fff;'>
+    <strong>{{$currMsg->titre}}</strong> 
+    : {{$currMsg->corps}}
+  </div>
 {{/foreach}}
 
+{{if @$app->user_prefs.MenuPosition == "left"}}
+  Position left
+{{else}}
+  Position top
+{{/if}}
 <table id="header" cellspacing="0">
   <tr>
     <td id="mainHeader">

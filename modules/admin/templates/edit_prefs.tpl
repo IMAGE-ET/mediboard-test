@@ -36,7 +36,8 @@
         {{/foreach}}
       </select>
     </td>
-  </tr>  
+  </tr>
+  
   <tr>
     <th>
       <label for="pref_name[UISTYLE]" title="Veuillez choisir l'apparence que vous souhaiter utiliser">{{tr}}User Interface Style{{/tr}}</label>
@@ -50,7 +51,20 @@
         {{/foreach}}
       </select>
     </td>
-  </tr>  
+  </tr>
+  
+  <tr>
+    <th>
+      <label for="pref_name[MenuPosition]" title="{{tr}}pref-MenuPosition-desc{{/tr}}">{{tr}}pref-MenuPosition{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[MenuPosition]">
+        <option value="top"  {{if $prefsUser.GENERALE.MenuPosition == "top"  }}selected="selected"{{/if}}>{{tr}}pref-MenuPosition-top{{/tr}}</option>
+        <option value="left" {{if $prefsUser.GENERALE.MenuPosition == "left" }}selected="selected"{{/if}}>{{tr}}pref-MenuPosition-left{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+    
   <tr>
     <th>
       <label for="pref_name[DEFMODULE]" title="Veuillez choisir le module par défaut à afficher">{{tr}}Module par défaut{{/tr}}</label>

@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "system";
-$config["mod_version"]     = "1.0.7";
+$config["mod_version"]     = "1.0.8";
 $config["mod_type"]        = "core";
 
 class CSetupsystem extends CSetup {
@@ -102,7 +102,12 @@ class CSetupsystem extends CSetup {
             ) ENGINE = MYISAM COMMENT = 'Table des notes sur les objets';";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.7";
+    $this->makeRevision("1.0.7");
+    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
+        "\nVALUES ('0', 'MenuPosition', 'top');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.8";
   }
 }
 ?>
