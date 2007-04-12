@@ -10,7 +10,7 @@
   {{if $_catalogue->_id == $pere_id}}selected="selected"{{/if}}
   style="padding-left: {{$_catalogue->_level}}em"
 >
-  {{$_catalogue->_view}} (pere: {{$pere_id}} - self: {{$_catalogue->_id}}
+  {{$_catalogue->_view}}
 </option>
 
 {{foreach from=$_catalogue->_ref_catalogues_labo item="_catalogue"}}

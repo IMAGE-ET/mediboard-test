@@ -146,6 +146,7 @@
       {{/if}}
       
       <!-- Liste des packs associés -->
+      {{if $examen->_id}}
       <table class="tbl">
         <tr>
           <th class="title">Packs d'examens associés</th>
@@ -163,6 +164,8 @@
         </tr>
         {{/foreach}}
       </table>
+      {{/if}}
+
     </td>
   </tr>
 </table>
