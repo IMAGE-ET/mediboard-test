@@ -1,5 +1,8 @@
 {{include file="../../mediboard/templates/common.tpl"}}
 
+<table id="main" class="{{$m}}">
+  <tr>
+  
 {{if !$dialog}}
 
 {{foreach from=$messages item=currMsg}}
@@ -10,10 +13,57 @@
 {{/foreach}}
 
 {{if @$app->user_prefs.MenuPosition == "left"}}
-  Position left
+<td id="leftMenu">
+  {{thumb src="./style/$uistyle/images/pictures/e-cap.jpg" w="140" f="png"}}
+  
+  {{if !$offline}}
+  <!-- Changement d'établissement courant -->
+  <form name="ChangeGroup" action="?" method="get">
+
+  <input type="hidden" name="m" value="{{$m}}" />
+  <select name="g" onchange="this.form.submit();">
+    {{foreach from=$Etablissements item=currEtablissement}}
+    <option value="{{$currEtablissement->_id}}" {{if $currEtablissement->_id == $g}}selected="selected"{{/if}}>
+      {{$currEtablissement->_view}}
+    </option>
+    {{/foreach}}
+  </select>
+
+  </form>
+  
+  <!-- Welcome -->
+  <label title="{{tr}}last connection{{/tr}} : {{$AppUI->user_last_login|date_format:"%A %d %B %Y %H:%M"}}">
+  {{tr}}Welcome{{/tr}} {{$AppUI->user_first_name}} {{$AppUI->user_last_name}}
+  </label>
+  {{/if}}
+
+  <div id="menubar">
+    {{$helpOnline|smarty:nodefaults}}
+    {{foreach from=$affModule item=currModule}}
+    {{if $currModule.modName==$m}}
+    <a href="?m={{$currModule.modName}}" title="{{tr}}module-{{$currModule.modName}}-long{{/tr}}" class="textSelected">
+      <img src="images/modules/{{$m}}.png" alt="Icone {{$currModule.modName}}" />
+    {{else}}
+    <a href="?m={{$currModule.modName}}" title="{{tr}}module-{{$currModule.modName}}-long{{/tr}}"class="textNonSelected">
+    {{/if}}
+      {{$currModule.modNameCourt}}
+    </a>
+    {{/foreach}}
+    <a href="#" onclick="popChgPwd()">Changez votre mot de passe</a>
+    <a href="?m=mediusers&amp;a=edit_infos">{{tr}}My Info{{/tr}}</a>
+    <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a>
+    <a href="?logout=-1">{{tr}}Logout{{/tr}}</a>
+  </div>
+  
+  <!-- System messages -->
+  <div id="systemMsg">
+    {{$errorMessage|nl2br|smarty:nodefaults}}
+  </div>
+  
+</td>
+  
 {{else}}
-  Position top
-{{/if}}
+<td id="topMenu">
 <table id="header" cellspacing="0">
   <tr>
     <td id="mainHeader">
@@ -26,13 +76,11 @@
             {{if !$offline}}
             <table class="titleblock">
               <tr>
-                {{if $titleBlockData.icon}}
                 <td>
-                  {{$titleBlockData.icon|smarty:nodefaults}}
+                  <img src="images/modules/{{$m}}.png" alt="Icone {{$m}}" width="24" height="24" />
                 </td>
-                {{/if}}
                 <td class="titlecell">
-                  {{tr}}{{$titleBlockData.name}}{{/tr}}
+                  {{tr}}module-{{$m}}-long{{/tr}}
                 </td>
               </tr>
             </table>
@@ -49,7 +97,7 @@
 
             <input type="hidden" name="m" value="{{$m}}" />
             CAPIO Santé -
-            <select name="g" onchange="ChangeGroup.submit();">
+            <select name="g" onchange="this.form.submit();">
               {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}
               <option value="{{$keyEtablissement}}" {{if $keyEtablissement==$g}}selected="selected"{{/if}}>
                 {{$currEtablissement->_view}}
@@ -85,12 +133,18 @@
   </tr>
   {{/if}}
 </table>
-{{else}}
+
+</td>
+</tr>
+<tr>
+{{/if}}
+{{/if}}
+
+<td id="mainPane">
+
+{{if $dialog}}
 <div class="dialog" {{if !$errorMessage}} style="display: none"{{/if}} id="systemMsg">
   {{$errorMessage|nl2br|smarty:nodefaults}}
 </div>
 {{/if}}
 
-<table id="main" class="{{$m}}">
-<tr>
-  <td>

@@ -46,11 +46,13 @@ function thumb($params, &$smarty) {
   $finUrl = "";
   foreach ($params as $_key => $_val) {
     if($_key == "src") {
-      $src = $AppUI->getConfig("root_dir")."/".$_val;
+      $src = urlencode($AppUI->getConfig("root_dir")."/".$_val);
     } else {
-      $finUrl .= "&amp;$_key=$_val";
+      $finUrl .= ("&amp;$_key=$_val");
     }
   }
+  
+  
   return "<img src=\"lib/phpThumb/phpThumb.php?src=$src$finUrl\" alt=\"thumb\" />";
 }
 

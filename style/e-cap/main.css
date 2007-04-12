@@ -185,6 +185,34 @@ div.autocomplete ul li {
 
 /* Navigation */
 
+#leftMenu {
+  vertical-align: top;
+  width: 140px;
+  overflow: hidden;
+}
+
+#leftMenu div#menubar {
+  border: 2px solid #000;
+  padding: 2px;
+  background-color: #68c;
+  color: #fff;
+  width: 130px;
+}
+
+#leftMenu div#menubar a {
+  text-align: center;
+  display: block;
+}
+
+#leftMenu div#menubar a img {
+  margin: 0 auto;
+  display: block;
+}
+
+#leftMenu div#systemMsg {
+  text-align: left;
+}
+
 td#mainHeader table {
   width: 100%;
 }
@@ -199,7 +227,7 @@ td#mainHeader td.welcome {
   font-style: italic;
 }
 
-td#menubar {
+#menubar {
   text-align: right;
   border: 2px solid #000;
   padding: 2px;
@@ -208,20 +236,20 @@ td#menubar {
   width: 100%;
 }
 
-td#menubar a.textSelected {
+#menubar a.textSelected {
   color: #fdd;
   font-weight: bold;
 }
 
-td#menubar a.textNonSelected {
+#menubar a.textNonSelected {
   color: #fff;
 }
 
-td#menubar a {
+#menubar a {
   color: #000;
 }
 
-td#menubar a:hover {
+#menubar a:hover {
   color: #fcc;
 }
 
@@ -642,9 +670,9 @@ table.main th.urgence.modify {
 }
 
 /* System message */
+
 #systemMsg {
   font-size: 80%;
-  float : none;
   text-align: left;
 }
 
