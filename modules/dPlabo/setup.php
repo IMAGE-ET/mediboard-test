@@ -11,7 +11,7 @@ global $AppUI;
 
 $config = array();
 $config["mod_name"]        = "dPlabo";
-$config["mod_version"]     = "0.11";
+$config["mod_version"]     = "0.12";
 $config["mod_type"]        = "user";
 
 class CSetupdPlabo extends CSetup {
@@ -43,7 +43,7 @@ class CSetupdPlabo extends CSetup {
           "\nPRIMARY KEY ( `examen_labo_id` ) ," .
           "\nINDEX ( `catalogue_labo_id` )) TYPE=MyISAM;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.1");
     $sql = "CREATE TABLE `pack_examens_labo` (" .
           "\n`pack_examens_labo_id` INT NOT NULL AUTO_INCREMENT ," .
@@ -63,7 +63,26 @@ class CSetupdPlabo extends CSetup {
           ") TYPE=MyISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.11";
+    $this->makeRevision("0.11");
+    $sql = "ALTER TABLE `pack_item_examen_labo` DROP `catalogue_labo_id`";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `prescription_labo` (" .
+          "\n`prescription_labo_id` INT NOT NULL AUTO_INCREMENT ," .
+          "\n`consultation_id` INT(11) UNSIGNED DEFAULT NULL ," .
+          "\nPRIMARY KEY ( `prescription_labo_id` ) ," .
+          "\nINDEX ( `consultation_id` )) TYPE=MyISAM;";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `prescription_labo_examen` (" .
+          "\n`prescription_labo_examen_id` INT NOT NULL AUTO_INCREMENT ," .
+          "\n`prescription_labo_id` INT(11) UNSIGNED NOT NULL DEFAULT 0 ," .
+          "\n`examen_labo_id` INT(11) UNSIGNED NOT NULL DEFAULT 0 ," .
+          "\nPRIMARY KEY ( `prescription_labo_examen_id` ) ," .
+          "\nINDEX ( `prescription_labo_id` ) ," .
+          "\nINDEX ( `examen_labo_id` )" .
+          ") TYPE=MyISAM;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.12";
   }
 }
 ?>
