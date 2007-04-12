@@ -155,7 +155,11 @@
         </tr>
         {{foreach from=$examen->_ref_packs_labo item=_pack}}
         <tr>
-          <td>{{$_pack->_view}}</td>
+          <td>
+            <a href="?m={{$m}}&amp;tab=vw_edit_packs&amp;pack_exmaen_labo_id={{$_pack->_id}}">
+              {{$_pack->_view}}
+            <a>
+          </td>
         </tr>
         {{/foreach}}
       </table>

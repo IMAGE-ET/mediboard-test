@@ -47,10 +47,10 @@ function pageMain() {
   <tr>
     <th class="halfPane">
       Catalogues
-    </td>
+    </th>
     <th class="halfPane">
       Packs
-    </td>
+    </th>
   </tr>
   <tr>
     <td>
