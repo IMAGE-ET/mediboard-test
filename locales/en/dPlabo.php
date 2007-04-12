@@ -1,6 +1,8 @@
 <?php
-$locales['CPackExamensLabo-libelle-desc'] = '';
+$locales['CPackExamensLabo-back-items_examen_labo'] = 'Test';
 $locales['CCatalogueLabo'] = '';
+$locales['CCatalogueLabo-back-catalogues_labo'] = 'Sub-catalog';
+$locales['CCatalogueLabo-back-examens_labo'] = 'Medical test';
 $locales['CCatalogueLabo-identifiant'] = '';
 $locales['CCatalogueLabo-identifiant-desc'] = '';
 $locales['CCatalogueLabo-libelle'] = '';
@@ -8,6 +10,7 @@ $locales['CCatalogueLabo-libelle-desc'] = '';
 $locales['CCatalogueLabo-pere_id'] = '';
 $locales['CCatalogueLabo-pere_id-desc'] = '';
 $locales['CExamenLablo'] = '';
+$locales['CExamenLabo-back-items_pack_labo'] = 'Pack d\'examen';
 $locales['CExamenLabo-catalogue_labo_id'] = '';
 $locales['CExamenLabo-catalogue_labo_id-desc'] = '';
 $locales['CExamenLabo-identifiant'] = '';
@@ -29,6 +32,7 @@ $locales['CPackExamensLabo'] = '';
 $locales['CPackExamensLabo-function_id'] = '';
 $locales['CPackExamensLabo-function_id-desc'] = '';
 $locales['CPackExamensLabo-libelle'] = '';
+$locales['CPackExamensLabo-libelle-desc'] = '';
 $locales['CPackItemExamenLabo'] = '';
 $locales['mod-dPlabo-tab-add_pack_exams'] = '';
 $locales['mod-dPlabo-tab-vw_edit_catalogues'] = '';

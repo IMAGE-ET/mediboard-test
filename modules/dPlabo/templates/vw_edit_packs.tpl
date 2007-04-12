@@ -1,13 +1,17 @@
+{{* $Id: $*}}
+
 <table class="main">
   <tr>
     <td class="halfPane">
+
+      <!-- Liste des packs disponibles -->
       <table class="tbl">
         <tr>
           <th>Libelle</th>
           <th>Examens</th>
         </tr>
         {{foreach from=$listPacks item="curr_pack"}}
-        <tr>
+        <tr {{if $curr_pack->_id == $pack->_id}}class="selected"{{/if}}>
           <td>
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;pack_examens_labo_id={{$curr_pack->_id}}">
               {{$curr_pack->libelle}}
@@ -18,7 +22,10 @@
         {{/foreach}}
       </table>
     </td>
+
     <td class="halfPane">
+
+      <!-- Edition du pack sélectionné -->
       {{if $can->edit}}
       <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;pack_examens_labo_id=0">
         Ajouter un nouveau pack

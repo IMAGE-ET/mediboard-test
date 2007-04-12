@@ -38,11 +38,19 @@ class CPackItemExamenLabo extends CMbObject {
     $this->_view      = $this->_ref_examen_labo->_view;
   }
   
-  function loadRefsFwd() {
+  function loadRefPack() {
     $this->_ref_pack_examens_labo = new CPackExamensLabo;
     $this->_ref_pack_examens_labo->load($this->pack_examens_labo_id);
+  }
+
+  function loadRefExamen() {
     $this->_ref_examen_labo = new CExamenLabo;
     $this->_ref_examen_labo->load($this->examen_labo_id);
+  }
+  
+  function loadRefsFwd() {
+    $this->loadRefPack();
+    $this->loadRefExamen();
   }
 }
 

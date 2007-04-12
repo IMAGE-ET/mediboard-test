@@ -23,6 +23,7 @@ class CCatalogueLabo extends CMbObject {
   
   // Back references
   var $_ref_examens_labo = null;
+  var $_ref_catalogues_labo = null;
   
   // Form fields
   var $_level = null;
@@ -63,6 +64,13 @@ class CCatalogueLabo extends CMbObject {
       "identifiant" => "str notNull",
       "libelle"     => "str notNull"
     );
+  }
+  
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs["catalogues_labo"] = "CCatalogueLabo pere_id";
+    $backRefs["examens_labo"   ] = "CExamenLabo catalogue_labo_id";
+    return $backRefs;
   }
   
   function updateFormFields() {

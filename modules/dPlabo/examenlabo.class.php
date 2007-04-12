@@ -25,6 +25,12 @@ class CExamenLabo extends CMbObject {
   // Fwd References
   var $_ref_catalogue_labo = null;
   
+  // Back References
+  var $_ref_items_pack_labo = null;
+
+  // Distant References
+  var $_ref_packs_labo = null;
+  
   function CExamenLabo() {
     $this->CMbObject("examen_labo", "examen_labo_id");
     
@@ -43,14 +49,32 @@ class CExamenLabo extends CMbObject {
     );
   }
   
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs["items_pack_labo"] = "CPackItemExamenLabo examen_labo_id";
+    return $backRefs;
+  }
+
   function updateFormFields() {
     $this->_shortview = $this->identifiant;
-    $this->_view = $this->identifiant." : ".$this->libelle;
+    $this->_view = "$this->identifiant : $this->libelle";
   }
   
   function loadRefsFwd() {
     $this->_ref_catalogue_labo = new CCatalogueLabo;
     $this->_ref_catalogue_labo->load($this->catalogue_labo_id);
+  }
+  
+  function loadRefsBack() {
+    $this->_ref_packs_labo = array();
+    $item = new CPackItemExamenLabo;
+    $item->examen_labo_id = $this->_id;
+    $this->_ref_items_pack_labo = $item->loadMatchingList();
+    foreach ($this->_ref_items_pack_labo as &$item) {
+      $item->loadRefPack();
+      $pack =& $item->_ref_pack_examens_labo;
+      $this->_ref_packs_labo[$pack->_id] = $pack;
+    }
   }
 }
 

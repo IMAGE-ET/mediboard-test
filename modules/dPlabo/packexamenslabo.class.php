@@ -36,6 +36,12 @@ class CPackExamensLabo extends CMbObject {
     );
   }
   
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs["items_examen_labo"] = "CPackItemExamenLabo pack_examens_labo_id";
+    return $backRefs;
+  }
+
   function updateFormFields() {
     $this->_shortview = $this->libelle;
     $this->_view      = $this->libelle;
@@ -48,6 +54,7 @@ class CPackExamensLabo extends CMbObject {
   
   function loadRefsBack() {
     $item = new CPackItemExamenLabo;
+    
     $where = array("pack_examens_labo_id" => "= $this->pack_examens_labo_id");
     $this->_ref_items_examen_labo = $item->loadList($where);
     foreach($this->_ref_items_examen_labo as $key => $curr_item) {

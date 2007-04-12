@@ -1,6 +1,8 @@
 <?php
-$locales['CPackExamensLabo-libelle-desc'] = 'Libellé du pack';
+$locales['CPackExamensLabo-back-items_examen_labo'] = 'Examen';
 $locales['CCatalogueLabo'] = 'Catalogue d\'examens';
+$locales['CCatalogueLabo-back-catalogues_labo'] = 'Sous-catalogue';
+$locales['CCatalogueLabo-back-examens_labo'] = 'Examen';
 $locales['CCatalogueLabo-identifiant'] = 'Identifiant';
 $locales['CCatalogueLabo-identifiant-desc'] = 'Identifiant visible du catalogue';
 $locales['CCatalogueLabo-libelle'] = 'Libellé';
@@ -8,6 +10,7 @@ $locales['CCatalogueLabo-libelle-desc'] = 'Libellé du catalogue';
 $locales['CCatalogueLabo-pere_id'] = 'Catalogue parent';
 $locales['CCatalogueLabo-pere_id-desc'] = 'Choix du catalogue parent';
 $locales['CExamenLablo'] = 'Examen de laboratoire';
+$locales['CExamenLabo-back-items_pack_labo'] = 'Pack d\'examen';
 $locales['CExamenLabo-catalogue_labo_id'] = 'Catalogue';
 $locales['CExamenLabo-catalogue_labo_id-desc'] = 'Catalogue de l\'examen';
 $locales['CExamenLabo-identifiant'] = 'Identifiant';
@@ -29,6 +32,7 @@ $locales['CPackExamensLabo'] = 'Pack d\'examens';
 $locales['CPackExamensLabo-function_id'] = 'Fonction';
 $locales['CPackExamensLabo-function_id-desc'] = 'Fonction associée au pack';
 $locales['CPackExamensLabo-libelle'] = 'Libellé';
+$locales['CPackExamensLabo-libelle-desc'] = 'Libellé du pack';
 $locales['CPackItemExamenLabo'] = 'Examen de pack';
 $locales['mod-dPlabo-tab-add_pack_exams'] = 'Contenu des packs';
 $locales['mod-dPlabo-tab-vw_edit_catalogues'] = 'Edition des catalogues';

@@ -81,6 +81,7 @@ class CMbObject {
     static $class         = null;
     static $objectsTable  = array();
     static $props         = null;
+    static $backRefs      = null;
     static $specsObj      = null;
     static $seeks         = null;
     static $enums         = null;
@@ -94,6 +95,8 @@ class CMbObject {
       $this->_objectsTable =& $objectsTable;
       $props = $this->getSpecs();
       $this->_props =& $props;
+      $backRefs = $this->getBackRefs();
+      $this->_backRefs =& $backRefs;
       $specsObj = $this->getSpecsObj();
       $this->_specs =& $specsObj;
       $seeks = $this->getSeeks();
@@ -111,6 +114,7 @@ class CMbObject {
     $this->_class_name    =& $class;
     $this->_objectsTable  =& $objectsTable;
     $this->_props         =& $props;
+    $this->_backRefs      =& $backRefs;
     $this->_specs         =& $specsObj;
     $this->_seek          =& $seeks;
     $this->_enums         =& $enums;
@@ -641,6 +645,32 @@ class CMbObject {
     return true;
   }
 
+  function canDeleteEx() {
+    global $AppUI;
+
+    $issues = array();
+    foreach ($this->_backRefs as $backName => $backRef) {
+      $backSpec = split(" ", $backRef);
+      $backClass = $backSpec[0];
+      $backField = $backSpec[1];
+      $backObject = new $backClass;
+      
+      $query = "SELECT COUNT($backObject->_tbl_key) " .
+        "\nFROM `$backObject->_tbl` " .
+        "\nWHERE `$backField` = $this->_id";
+      if ($backCount = db_loadResult($query)) {
+        $issues[] = $backCount . " " . $AppUI->_("$this->_class_name-back-$backName") . "(s)";
+      }
+      
+    };
+    
+    $msg = count($issues) ? 
+      $AppUI->_("noDeleteRecord") . ": " . implode(", ", $issues) :
+      null;
+    
+    return $msg;
+  }
+
   /**
    * Default delete method
    * @return null|string null if successful otherwise returns and error message
@@ -650,7 +680,9 @@ class CMbObject {
     if ($oid) {
       $this->$k = intval($oid);
     }
-    $msg = null;
+    if ($msg = $this->canDeleteEx()) {
+      return $msg;
+    }
     if (!$this->canDelete($msg)) {
       return $msg;
     }
@@ -737,6 +769,14 @@ class CMbObject {
    * Get seek specifications
    */
   function getSpecs() {
+    return array();
+  }
+  
+  /**
+   * Get backward reference specifications
+   * "class" => "field"
+   */
+  function getBackRefs() {
     return array();
   }
   
@@ -1036,8 +1076,6 @@ function purgeHtmlText($regexps, &$source) {
     $total += htmlReplace($find, $replace, $source); 
   }
 
-//  echo "<h1>Total found: $total<h1><hr />";
-  
   return $total;
 }
 ?>
