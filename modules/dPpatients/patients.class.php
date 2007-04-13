@@ -108,9 +108,6 @@ class CPatient extends CMbObject {
   var $_adresse_ligne2 = null;
   var $_adresse_ligne3 = null;
   var $_pays           = null;
-  
-  // Path
-  
 
   // Object References
   var $_nb_docs              = null;
@@ -120,6 +117,7 @@ class CPatient extends CMbObject {
   var $_ref_antecedents      = null;
   var $_ref_traitements      = null;
   var $_ref_addictions       = null;
+  var $_ref_prescriptions    = null;
   var $_ref_types_addiction  = null;
   var $_ref_curr_affectation = null;
   var $_ref_next_affectation = null;
@@ -526,7 +524,15 @@ class CPatient extends CMbObject {
     if($docs_valid)
       $this->_nb_docs .= "$docs_valid";
   }
-
+  
+  function loadRefsPrescriptions() {
+    if(CModule::getInstalled("dPlabo")) {
+      $prescription = new CPrescriptionLabo();
+      $where = array("patient_id" => "= $this->_id");
+      $order = "date";
+      $this->_ref_prescriptions = $prescription->loadList($where, $order);
+    }
+  }
 
   function loadRefsBack() {
     $this->loadRefsFiles();
@@ -536,6 +542,7 @@ class CPatient extends CMbObject {
     $this->loadRefsTraitements();
     $this->loadRefsAffectations();
     $this->loadRefsAddictions();
+    $this->loadRefsPrescriptions();
   }
 
   // Forward references

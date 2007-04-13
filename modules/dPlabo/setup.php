@@ -11,7 +11,7 @@ global $AppUI;
 
 $config = array();
 $config["mod_name"]        = "dPlabo";
-$config["mod_version"]     = "0.12";
+$config["mod_version"]     = "0.13";
 $config["mod_type"]        = "user";
 
 class CSetupdPlabo extends CSetup {
@@ -82,7 +82,18 @@ class CSetupdPlabo extends CSetup {
           ") TYPE=MyISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.12";
+    $this->makeRevision("0.12");
+    $sql = "ALTER TABLE `prescription_labo`" .
+            "\nCHANGE `consultation_id` `patient_id` INT( 11 ) UNSIGNED NOT NULL DEFAULT 0;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription_labo`" .
+            "\nADD `praticien_id` INT( 11 ) UNSIGNED NOT NULL DEFAULT 0 AFTER `patient_id`;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription_labo`" .
+            "\nADD `date` DATETIME DEFAULT NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.13";
   }
 }
 ?>

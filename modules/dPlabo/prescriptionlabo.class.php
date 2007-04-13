@@ -11,8 +11,16 @@ class CPrescriptionLabo extends CMbObject {
   // DB Table key
   var $prescription_labo_id = null;
   
+  // DB Fields
+  var $date = null;
+  
   // DB references
-  var $consultation_id = null;
+  var $patient_id   = null;
+  var $praticien_id = null;
+  
+  // Forward references
+  var $_ref_patient   = null;
+  var $_ref_praticien = null;
   
   // Back references
   var $_ref_prescription_labo_examens = null;
@@ -25,7 +33,9 @@ class CPrescriptionLabo extends CMbObject {
   
   function getSpecs() {
     return array (
-      "consultation_id" => "ref class|CConsultation notNull"
+      "patient_id"   => "ref class|CPatient notNull",
+      "praticien_id" => "ref class|CMediusers notNull",
+      "date"         => "dateTime"
     );
   }
   
@@ -41,18 +51,25 @@ class CPrescriptionLabo extends CMbObject {
   }
   
   function loadRefsFwd() {
-    $this->_ref_consultation = new CConsultation;
-    $this->_ref_consultation->load($this->consultation_id);
+    $this->_ref_patient = new CPatient();
+    $this->_ref_patient->load($this->patient_id);
+    $this->_ref_praticien = new CMediusers();
+    $this->_ref_praticien->load($this->praticien_id);
   }
   
   function loadRefsBack() {
-    $item = new CPrescriptionLaboExamen;
+    $examen = new CPrescriptionLaboExamen;
     
     $where = array("prescription_labo_id" => "= $this->prescription_labo_id");
     $this->_ref_prescription_labo_examen = $item->loadList($where);
-    foreach($this->_ref_prescription_labo_examen as $key => $curr_item) {
-      $this->_ref_prescription_labo_examen[$key]->loadRefsFwd();
+    foreach($this->_ref_prescription_labo_examen as &$curr_examen) {
+      $curr_examen->loadRefsFwd();
     }
+  }
+  
+  function getPerm($permType) {
+    $this->loadRefsFwd();
+    return $this->_ref_praticien->getPerm($permType);
   }
 }
 

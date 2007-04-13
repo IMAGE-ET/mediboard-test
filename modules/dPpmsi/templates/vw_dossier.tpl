@@ -27,12 +27,12 @@ function popPat() {
 }
 
 function setPat( key, val ) {
-  var f = document.patFrm;
+  var oForm = document.patFrm;
   if (val != '') {
-    f.pat_id.value = key;
-    f.patNom.value = val;
+    oForm.pat_id.value = key;
+    oForm.patNom.value = val;
   }
-  f.submit();
+  oForm.submit();
 }
 
 function imprimerDocument(doc_id) {

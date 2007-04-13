@@ -57,8 +57,8 @@ class CPackExamensLabo extends CMbObject {
     
     $where = array("pack_examens_labo_id" => "= $this->pack_examens_labo_id");
     $this->_ref_items_examen_labo = $item->loadList($where);
-    foreach($this->_ref_items_examen_labo as $key => $curr_item) {
-      $this->_ref_items_examen_labo[$key]->loadRefsFwd();
+    foreach($this->_ref_items_examen_labo as &$curr_item) {
+      $curr_item->loadRefsFwd();
     }
   }
 }
