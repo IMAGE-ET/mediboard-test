@@ -59,7 +59,7 @@
         {{$currModule.modNameCourt}}
       </a> |
       {{/foreach}}
-      <a href='#' onclick='popChgPwd();return false'>Changez votre mot de passe</a> | <a href="?m=mediusers&amp;a=edit_infos">{{tr}}My Info{{/tr}}</a> | <a href="./index.php?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">Préférences</a> |
+      <a href='#' onclick='popChgPwd();return false'>{{tr}}Change password{{/tr}}</a> | <a href="?m=mediusers&amp;a=edit_infos">{{tr}}My Info{{/tr}}</a> | <a href="./index.php?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">Préférences</a> |
       <a href="./index.php?logout=-1">{{tr}}Logout{{/tr}}</a> |
     </td>
   </tr>

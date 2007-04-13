@@ -185,34 +185,6 @@ div.autocomplete ul li {
 
 /* Navigation */
 
-#leftMenu {
-  vertical-align: top;
-  width: 140px;
-  overflow: hidden;
-}
-
-#leftMenu div#menubar {
-  border: 2px solid #000;
-  padding: 2px;
-  background-color: #68c;
-  color: #fff;
-  width: 130px;
-}
-
-#leftMenu div#menubar a {
-  text-align: center;
-  display: block;
-}
-
-#leftMenu div#menubar a img {
-  margin: 0 auto;
-  display: block;
-}
-
-#leftMenu div#systemMsg {
-  text-align: left;
-}
-
 td#mainHeader table {
   width: 100%;
 }
@@ -230,14 +202,14 @@ td#mainHeader td.welcome {
 #menubar {
   text-align: right;
   border: 2px solid #000;
-  padding: 2px;
   background-color: #68c;
   color: #fff;
   width: 100%;
+  line-height: 150%;
 }
 
 #menubar a.textSelected {
-  color: #fdd;
+  color: #a00;
   font-weight: bold;
 }
 
@@ -245,12 +217,75 @@ td#mainHeader td.welcome {
   color: #fff;
 }
 
+#menubar a.textNonSelected img {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+#menubar a.textNonSelected:hover img {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
 #menubar a {
   color: #000;
 }
 
 #menubar a:hover {
-  color: #fcc;
+  color: #a00;
+}
+
+#topMenu #menubar a {
+  margin: 1px 0;
+  padding-left: 3px;
+  border-left: 1px solid #fff;
+}
+
+#leftMenu {
+  vertical-align: top;
+  width: 140px;
+  overflow: hidden;
+}
+
+#leftMenu #menubar {
+  border: 2px solid #000;
+  padding: 2px;
+  background-color: #68c;
+  color: #fff;
+  width: 130px;
+}
+
+#leftMenu #menubar a {
+  border: 1px solid transparent;
+  margin-top: -1px;
+  text-align: center;
+  display: block;
+}
+
+
+#leftMenu #menubar a.textSelected {
+  border-color: #fff;
+  background-color: #abe;
+}
+#leftMenu #menubar a:hover {
+  border-color: #ddd;
+}
+
+#leftMenu #menubar a img {
+  margin: 0 auto;
+  display: block;
+}
+
+#leftMenu #menubar.iconed a.textNonSelected img {
+  display: block;
+}
+
+#leftMenu #menubar.uniconed a.textNonSelected img {
+  display: none;
+}
+
+#leftMenu #systemMsg {
+  text-align: left;
 }
 
 /* Tabbed items */

@@ -44,7 +44,7 @@ function chgMenu(id, type) {
         <div class="menuItem">
           <a href="#" onclick="popChgPwd();">
             <img src="style/aero/images/icons/passwd.png" alt="Mot de passe" border="0" height="16" width="16" />
-            Changez votre mot de passe
+            {{tr}}Change password{{/tr}}
           </a>
         </div>
         <div class="menuItem">

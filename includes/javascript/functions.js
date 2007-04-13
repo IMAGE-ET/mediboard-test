@@ -280,6 +280,10 @@ Class.extend(Element.ClassNames, {
   save: function (sCookieName) {
     var oCookie = new CJL_CookieUtil(sCookieName);
     oCookie.setSubValue(this.element.id, this.toString());
+  },
+  
+  toggle: function (sClassName) {
+  	this[this.include(sClassName) ? "remove" : "add"](sClassName)
   }
 });
 

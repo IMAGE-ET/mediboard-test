@@ -1,5 +1,20 @@
 {{include file="../../mediboard/templates/common.tpl"}}
 
+<script type="text/javascript">
+var Menu = {
+  toggle: function () {
+    var oCNs = Element.classNames("menubar");
+    oCNs.flip("iconed", "uniconed");
+    oCNs.save("menubar");
+  },
+  
+  init: function() {
+    var oCNs = Element.classNames("menubar");
+    oCNs.load("menubar");
+  }
+}
+</script>
+
 <table id="main" class="{{$m}}">
   <tr>
   
@@ -14,7 +29,7 @@
 
 {{if @$app->user_prefs.MenuPosition == "left"}}
 <td id="leftMenu">
-  {{thumb src="./style/$uistyle/images/pictures/e-cap.jpg" w="140" f="png"}}
+  {{thumb src="style/$uistyle/images/pictures/e-cap.jpg" w="140" f="png"}}
   
   {{if !$offline}}
   <!-- Changement d'établissement courant -->
@@ -37,23 +52,26 @@
   </label>
   {{/if}}
 
-  <div id="menubar">
+  <div id="menubar" class="iconed">
+    <a href="#" onclick="Menu.toggle()">{{tr}}Menu icons{{/tr}}</a>
     {{$helpOnline|smarty:nodefaults}}
     {{foreach from=$affModule item=currModule}}
-    {{if $currModule.modName==$m}}
+    {{if $currModule.modName == $m}}
     <a href="?m={{$currModule.modName}}" title="{{tr}}module-{{$currModule.modName}}-long{{/tr}}" class="textSelected">
-      <img src="images/modules/{{$m}}.png" alt="Icone {{$currModule.modName}}" />
     {{else}}
     <a href="?m={{$currModule.modName}}" title="{{tr}}module-{{$currModule.modName}}-long{{/tr}}"class="textNonSelected">
     {{/if}}
+      <img src="images/modules/{{$currModule.modName}}.png" alt="Icone {{$currModule.modName}}" />
       {{$currModule.modNameCourt}}
     </a>
     {{/foreach}}
-    <a href="#" onclick="popChgPwd()">Changez votre mot de passe</a>
+    <a href="#" onclick="popChgPwd()">{{tr}}Change password{{/tr}}</a>
     <a href="?m=mediusers&amp;a=edit_infos">{{tr}}My Info{{/tr}}</a>
     <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a>
     <a href="?logout=-1">{{tr}}Logout{{/tr}}</a>
   </div>
+  
+  <script type="text/javascript">Menu.init();</script>
   
   <!-- System messages -->
   <div id="systemMsg">
@@ -119,15 +137,14 @@
   {{if !$offline}}
   <tr>
     <td id="menubar">
-      | {{$helpOnline|smarty:nodefaults}} | 
+      {{$helpOnline|smarty:nodefaults}}
       {{foreach from=$affModule item=currModule}}
       <a href="?m={{$currModule.modName}}" class="{{if $currModule.modName==$m}}textSelected{{else}}textNonSelected{{/if}}">
-        {{$currModule.modNameCourt}}
-      </a> |
+        {{$currModule.modNameCourt}}</a>
       {{/foreach}}
-      <a href="#" onclick="popChgPwd()">Changez votre mot de passe</a> | 
-      <a href="?m=mediusers&amp;a=edit_infos">{{tr}}My Info{{/tr}}</a> |
-      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a> |
+      <a href="#" onclick="popChgPwd()">{{tr}}Change password{{/tr}}</a>
+      <a href="?m=mediusers&amp;a=edit_infos">{{tr}}My Info{{/tr}}</a>
+      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a>
       <a href="?logout=-1">{{tr}}Logout{{/tr}}</a>
     </td>
   </tr>
