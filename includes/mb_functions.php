@@ -499,15 +499,16 @@ function mbLinkShortcutIcon($filepath,$modeReturn = 0) {
 }
 
 /**
- * Link to the mediboard.org documentation page 
+ * URL to the mediboard.org documentation page 
  * @return string: the link to mediboard.org  */
-function mbPortalLink( $page="Accueil", $title="Portail Mediboard" ) {
-  global $AppUI;
-  if($page == "bugTracker")
-    $url = "\"http://www.mediboard.org/public/tiki-view_tracker.php?trackerId=4\"";
-  else
-    $url = "\"http://www.mediboard.org/public/tiki-index.php?page=$page\"";
-  return "\n<a href=$url target=\"_blank\">$title</a>";
+function mbPortalURL( $page="Accueil") {
+  $url = "http://www.mediboard.org/public/";
+  
+  $url .= $page == "BugTracker" ?
+    "/tiki-view_tracker.php?trackerId=4" :
+    "tiki-index.php?page=$page";
+    
+  return $url;
 }
 /**
  * Loads all scripts

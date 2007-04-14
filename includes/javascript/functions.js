@@ -270,15 +270,15 @@ var Assert = {
 
 Class.extend(Element.ClassNames, {
   
-  load: function (sCookieName) {
-    var oCookie = new CJL_CookieUtil(sCookieName);
+  load: function (sCookieName, nDuration) {
+    var oCookie = new CJL_CookieUtil(sCookieName, nDuration);
     if (sValue = oCookie.getSubValue(this.element.id)) {
       this.set(sValue);
     }
   },
   
-  save: function (sCookieName) {
-    var oCookie = new CJL_CookieUtil(sCookieName);
+  save: function (sCookieName, nDuration) {
+    var oCookie = new CJL_CookieUtil(sCookieName, nDuration);
     oCookie.setSubValue(this.element.id, this.toString());
   },
   
@@ -636,6 +636,22 @@ function regRedirectFlatCal(sInitDate, sRedirectBase, sContainerId, bTime) {
       }
     } 
   );
+}
+
+/**
+ * Durations expressed in milliseconds
+ */
+var Duration = {
+	// Exact durations
+	second: 1000,
+	minute: 60 * 1000,
+	hour: 60 * 60 * 1000,
+	day: 24 * 60 * 60 * 1000,
+	week: 7 * 24 * 60 * 60 * 1000,
+	
+	// Approximative durations
+	month: 30 * 24 * 60 * 60 * 1000,
+	year: 365 * 24 * 60 * 60 * 1000
 }
 
 Object.extend(Date, { 

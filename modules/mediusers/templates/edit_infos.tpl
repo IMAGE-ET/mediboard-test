@@ -11,7 +11,7 @@ function pageMain() {
 <table class="main">
   <tr>
    <th class="title" colspan="2">
-     {{tr}}My Info{{/tr}}
+     {{tr}}menu-myInfo{{/tr}}
    </th>
   </tr>
   

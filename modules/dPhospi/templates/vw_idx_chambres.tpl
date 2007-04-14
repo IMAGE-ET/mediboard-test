@@ -33,7 +33,7 @@ function pageMain() {
 	</tr>
     <tbody class="serviceEffect" id="service{{$curr_service->service_id}}">
      {{foreach from=$curr_service->_ref_chambres item=curr_chambre}}
-      <tr>
+      <tr {{if $curr_chambre->_id == $chambreSel->_id}}class="selected"{{/if}}>
         <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_chambre->chambre_id}}&amp;lit_id=0">{{$curr_chambre->nom}}</a></td>
         <td class="text">{{$curr_chambre->caracteristiques|nl2br}}</td>
         <td>

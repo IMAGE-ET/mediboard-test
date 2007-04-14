@@ -58,12 +58,8 @@
   {{else}} 
     {{assign var="style" value="$font"}}
   {{/if}}
-  <tr>
-    {{if $curr_consult->consultation_id == $consult->consultation_id}}
-    <td style="width: 40px; background: #aaf; font-size: 9px;" rowspan="2">
-    {{else}}
+  <tr {{if $curr_consult->_id == $consult->_id}}class="selected"{{/if}}>
     <td style="width: 40px; {{$style|smarty:nodefaults}}" rowspan="2">
-    {{/if}}
       {{if !$boardItem}}
       <a href="index.php?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}" title="Modifier le RDV" style="float: right;">
         <img src="images/icons/planning.png" alt="modifier" />
@@ -93,7 +89,7 @@
       {{/if}}
     </td>
   </tr>
-  <tr>
+  <tr {{if $curr_consult->_id == $consult->_id}}class="selected"{{/if}}>
     <td style="{{$style|smarty:nodefaults}}">
       {{if $curr_consult->patient_id}}
         <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">

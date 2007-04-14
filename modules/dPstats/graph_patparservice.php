@@ -98,7 +98,7 @@ foreach($services as $service) {
 }
 
 // Setup the graph.
-$graph = new Graph(500,300,"auto");    
+$graph = new Graph(480,300,"auto");
 $graph->img->SetMargin(50,40,50,70);
 $graph->SetScale("textlin");
 $graph->SetMarginColor("lightblue");
@@ -140,7 +140,7 @@ $graph->xaxis->SetLabelAngle(50);
 // Legend
 $graph->legend->SetMarkAbsSize(5);
 $graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$graph->legend->Pos(0.02,0.02, "right", "top");
+$graph->legend->Pos(0.02,0.06, "right", "top");
 
 // Create the bar pot
 $colors = array("#aa5500",

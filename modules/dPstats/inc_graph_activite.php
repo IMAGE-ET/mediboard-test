@@ -82,7 +82,7 @@ foreach($salles as $salle) {
 }
 
 // Setup the graph.
-$graph = new Graph(500,300,"auto");    
+$graph = new Graph(480,300,"auto");    
 $graph->img->SetMargin(50,40,50,70);
 $graph->SetScale("textlin");
 $graph->SetMarginColor("lightblue");

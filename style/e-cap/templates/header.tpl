@@ -5,7 +5,7 @@ var Menu = {
   toggle: function () {
     var oCNs = Element.classNames("menubar");
     oCNs.flip("iconed", "uniconed");
-    oCNs.save("menubar");
+    oCNs.save("menubar", Duration.year);
   },
   
   init: function() {
@@ -53,8 +53,30 @@ var Menu = {
   {{/if}}
 
   <div id="menubar" class="iconed">
-    <a href="#" onclick="Menu.toggle()">{{tr}}Menu icons{{/tr}}</a>
-    {{$helpOnline|smarty:nodefaults}}
+    <div id="menuTools">
+      <a href="#" title="{{tr}}Menu icons{{/tr}}" onclick="Menu.toggle()">
+        <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}Menu icons{{/tr}}" />
+      </a>
+      <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">
+        <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
+      </a>
+      <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">
+        <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-tracker{{/tr}}" />
+      </a>
+      <a href="#" onclick="popChgPwd()" title="{{tr}}menu-changePassword{{/tr}}">
+        <img src="style/{{$uistyle}}/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" />
+      </a>
+      <a href="?m=mediusers&amp;a=edit_infos" title="{{tr}}menu-myInfo{{/tr}}">
+        <img src="style/{{$uistyle}}/images/icons/myinfos.png" alt="{{tr}}menu-myInfo{{/tr}}" />
+      </a>
+      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}" title="{{tr}}mod-admin-tab-edit_prefs{{/tr}}">
+        <img src="style/{{$uistyle}}/images/icons/prefs.png" alt="{{tr}}mod-admin-tab-edit_prefs{{/tr}}" />
+      </a>
+      <a href="?logout=-1" title="{{tr}}menu-logout{{/tr}}">
+        <img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" />
+      </a>
+    </div>
+    <hr />
     {{foreach from=$affModule item=currModule}}
     {{if $currModule.modName == $m}}
     <a href="?m={{$currModule.modName}}" title="{{tr}}module-{{$currModule.modName}}-long{{/tr}}" class="textSelected">
@@ -65,10 +87,6 @@ var Menu = {
       {{$currModule.modNameCourt}}
     </a>
     {{/foreach}}
-    <a href="#" onclick="popChgPwd()">{{tr}}Change password{{/tr}}</a>
-    <a href="?m=mediusers&amp;a=edit_infos">{{tr}}My Info{{/tr}}</a>
-    <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a>
-    <a href="?logout=-1">{{tr}}Logout{{/tr}}</a>
   </div>
   
   <script type="text/javascript">Menu.init();</script>
@@ -137,15 +155,15 @@ var Menu = {
   {{if !$offline}}
   <tr>
     <td id="menubar">
-      {{$helpOnline|smarty:nodefaults}}
+      <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a>
       {{foreach from=$affModule item=currModule}}
       <a href="?m={{$currModule.modName}}" class="{{if $currModule.modName==$m}}textSelected{{else}}textNonSelected{{/if}}">
         {{$currModule.modNameCourt}}</a>
       {{/foreach}}
-      <a href="#" onclick="popChgPwd()">{{tr}}Change password{{/tr}}</a>
-      <a href="?m=mediusers&amp;a=edit_infos">{{tr}}My Info{{/tr}}</a>
-      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a>
-      <a href="?logout=-1">{{tr}}Logout{{/tr}}</a>
+      <a href="#" onclick="popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a>
+      <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a>
+      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}mod-admin-tab-edit_prefs{{/tr}}</a>
+      <a href="?logout=-1">{{tr}}menu-logout{{/tr}}</a>
     </td>
   </tr>
   {{/if}}

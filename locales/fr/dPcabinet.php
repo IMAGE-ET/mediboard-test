@@ -1,5 +1,4 @@
 <?php
-$locales['mod-dPcabinet-tab-vw_intermax'] = 'LogicMax FSE';
 $locales['CAddiction-addiction'] = 'Information';
 $locales['CAddiction-addiction-desc'] = 'Information sur l\'addiction';
 $locales['CAddiction-type'] = 'Type';
@@ -352,7 +351,8 @@ $locales['mod-dPcabinet-tab-edit_planning'] = 'Prise de rendez-vous';
 $locales['mod-dPcabinet-tab-form_print_plages'] = 'Impression plannings';
 $locales['mod-dPcabinet-tab-vw_compta'] = 'Comptabilité';
 $locales['mod-dPcabinet-tab-vw_dossier'] = 'Dossiers';
-$locales['mod-dPcabinet-tab-vw_planning'] = 'Programme de consultation';
+$locales['mod-dPcabinet-tab-vw_intermax'] = 'LogicMax FSE';
+$locales['mod-dPcabinet-tab-vw_planning'] = 'Planning sémainier';
 $locales['pref-DefaultPeriod'] = 'Période par défault';
 $locales['pref-DefaultPeriod-desc'] = 'Période par défault pour les périodes de consultation';
 $locales['pref-DossierCabinet'] = 'Dossier patient cabinet';

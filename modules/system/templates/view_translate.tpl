@@ -37,7 +37,9 @@
       {{$curr_lang}}
     </th>
     {{/foreach}}
-    <th class="category"><button type="submit" class="modify notext"/></th>
+    <th class="category">
+      <button type="submit" class="modify notext">{{tr}}Save{{/tr}}</button>
+    </th>
   </tr>
   {{/if}}
   
@@ -47,7 +49,9 @@
     {{foreach from=$locales item=curr_lang}}
     <td><input size="40" type="text" name="trans[0][{{$curr_lang}}]" value="" /></td>
     {{/foreach}}
-    <td class="button"><button type="submit" class="submit notext"/></td>
+    <td class="button">
+      <button type="submit" class="submit notext">{{tr}}Save{{/tr}}</button>
+    </td>
   </tr>
   {{/if}}
   {{counter}}

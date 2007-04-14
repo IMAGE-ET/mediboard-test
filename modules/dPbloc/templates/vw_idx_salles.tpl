@@ -15,7 +15,7 @@
     </tr>
     
     {{foreach from=$salles item=curr_salle}}
-    <tr>
+    <tr {{if $curr_salle->_id == $salleSel->_id}}class="selected"{{/if}}>
       <td><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;salle_id={{$curr_salle->salle_id}}">{{$curr_salle->nom}}</a></td>
       <td>{{$curr_salle->_ref_group->text}}</td>
     </tr>

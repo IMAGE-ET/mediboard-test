@@ -42,7 +42,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("listPrat"           , $listPrat          );
 $smarty->assign("patient"            , $patient           );
-$smarty->assign("canCabinet"         , $$canCabinet       );
+$smarty->assign("canCabinet"         , $canCabinet        );
 $smarty->assign("diagnosticsInstall" , $diagnosticsInstall);
 
 $smarty->display("inc_vw_full_patients.tpl");

@@ -1,9 +1,20 @@
 <script type="text/javascript">
 
-viewFullPatientMain = function() {
-  PairEffect.initGroup("patientEffect", { 
-    bStoreInCookie: true
-  } );
+var ViewFullPatient = {
+  select: function(eLink) {
+    // Select current row
+    if (this.eCurrent) {
+      Element.classNames(this.eCurrent).remove("selected");
+    }
+    this.eCurrent = eLink.parentNode.parentNode;
+    Element.classNames(this.eCurrent).add("selected");
+  },
+  
+  main: function() {
+    PairEffect.initGroup("patientEffect", { 
+      bStoreInCookie: true
+    } );
+  }
 }
   
 </script>
@@ -13,7 +24,7 @@ viewFullPatientMain = function() {
 
 <tr>
   <th class="title">
-    <a href="#" onclick="viewCompleteItem('CPatient', {{$patient->_id}})">
+    <a href="#" onclick="viewCompleteItem('CPatient', {{$patient->_id}}); ViewFullPatient.select(this)">
       {{$patient->_view}} ({{$patient->_age}} ans)
     </a>
   </th>
@@ -45,7 +56,7 @@ viewFullPatientMain = function() {
 <tbody class="patientEffect" style="display: none" id="sejours">
 
 {{foreach from=$patient->_ref_sejours item=curr_sejour}}
-<tr>
+<tr id="CSejour-{{$curr_sejour->_id}}">
   <td>
     <a title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
       <img src="images/icons/edit.png" alt="Planifier"/>
@@ -53,7 +64,7 @@ viewFullPatientMain = function() {
 
     <a href="#"
       onmouseover="ObjectTooltip.create(this, 'CSejour', {{$curr_sejour->_id}})"
-      onclick="viewCompleteItem('CSejour', {{$curr_sejour->_id}})">
+      onclick="viewCompleteItem('CSejour', {{$curr_sejour->_id}}); ViewFullPatient.select(this)">
       Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
       au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
       - Dr. {{$curr_sejour->_ref_praticien->_view}}
@@ -84,7 +95,7 @@ viewFullPatientMain = function() {
   
     <a href="#"
       onmouseover="ObjectTooltip.create(this, 'COperation', {{$curr_op->_id}})"
-      onclick="viewCompleteItem('COperation', {{$curr_op->_id}})">
+      onclick="viewCompleteItem('COperation', {{$curr_op->_id}}); ViewFullPatient.select(this)">
       {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} - Intervention du Dr. {{$curr_op->_ref_chir->_view}}
     </a>
   </td>
@@ -121,7 +132,7 @@ viewFullPatientMain = function() {
     <img src="images/icons/anesth.png" alt="Consultation d'anesthésie" title="Consultation d'anesthésie" />
     <a href="#"
       onmouseover="ObjectTooltip.create(this, 'CConsultAnesth', {{$consult_anesth->_id}})"
-      onclick="viewCompleteItem('CConsultAnesth', {{$consult_anesth->_id}},'op')">
+      onclick="viewCompleteItem('CConsultAnesth', {{$consult_anesth->_id}}); ViewFullPatient.select(this)">
       {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_consult->_ref_chir->_view}}
     </a>
   </td>
@@ -183,7 +194,7 @@ viewFullPatientMain = function() {
     
     <a href="#"
       onmouseover="ObjectTooltip.create(this, '{{$object_class}}', {{$object_id}})"
-      onclick="viewCompleteItem('{{$object_class}}', {{$object_id}})">
+      onclick="viewCompleteItem('{{$object_class}}', {{$object_id}}); ViewFullPatient.select(this)">
       {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_consult->_ref_chir->_view}}
     </a>
   </td>

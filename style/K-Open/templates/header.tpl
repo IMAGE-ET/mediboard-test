@@ -60,16 +60,16 @@
   {{if !$offline}}
   <tr>
     <td id="menubar">
-      | {{$helpOnline|smarty:nodefaults}} | 
+      | <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a> | 
       {{foreach from=$affModule item=currModule}}
       <a href="?m={{$currModule.modName}}" class="{{if $currModule.modName==$m}}textSelected{{else}}textNonSelected{{/if}}">
         {{$currModule.modNameCourt}}
       </a> |
       {{/foreach}}
-      <a href="#" onclick="popChgPwd()">{{tr}}Change password{{/tr}}</a> | 
-      <a href="?m=mediusers&amp;a=edit_infos">{{tr}}My Info{{/tr}}</a> |
-      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}Préférences{{/tr}}</a> |
-      <a href="?logout=-1">{{tr}}Logout{{/tr}}</a>
+      <a href="#" onclick="popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a> | 
+      <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a> |
+      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}mod-admin-tab-edit_prefs{{/tr}}</a> |
+      <a href="?logout=-1">{{tr}}menu-logout{{/tr}}</a>
     </td>
   </tr>
   {{/if}}

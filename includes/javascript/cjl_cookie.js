@@ -21,7 +21,7 @@ function CJL_CookieUtil(name, duration, path, domain, secure)
       var date = new Date();
 	  var curTime = new Date().getTime();
 
-	  date.setTime(curTime + (1000 * 60 * duration));
+	  date.setTime(curTime + duration);
 	  this.affix = "; expires=" + date.toGMTString();
    }
    

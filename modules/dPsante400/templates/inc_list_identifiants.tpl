@@ -17,12 +17,12 @@
     <th>ID Mediboard</th>
     <th>Objet</th>
     {{/if}}
-    <th>Dernière mise à jour</th>
+    <th>Mise à jour</th>
     <th>ID Santé400</th>
     <th>Etiquette</th>
   </tr>
   {{foreach from=$list_idSante400 item=_idSante400}}
-  <tr>
+  <tr {{if $_idSante400->_id == $idSante400->_id}}class="selected"{{/if}}>
     {{if !$dialog}}
     <td>{{$_idSante400->object_class}}</td>
     <td>{{$_idSante400->object_id}}</td>

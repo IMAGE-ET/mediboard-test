@@ -1,8 +1,3 @@
-      {{$errorMessage|nl2br|smarty:nodefaults}}
-    </td>
-  </tr>
-</table>
-
 {{if $debugMode && !$offline}}
 <div id="performance">
   PHP : {{$performance.genere}} secondes &ndash;
@@ -25,6 +20,11 @@
   {{/foreach}}
 </div>
 {{/if}}
+
+    </td>
+  </tr>
+</table>
+
 
 {{if $demoVersion && !$offline}}
 <div style="margin: 10px; float:right">

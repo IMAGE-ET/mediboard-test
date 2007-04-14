@@ -76,7 +76,7 @@ foreach($services as $service) {
 }
 
 // Setup the graph.
-$graph = new Graph(500,300,"auto");    
+$graph = new Graph(480,300,"auto");    
 $graph->img->SetMargin(50,40,50,70);
 $graph->SetScale("textlin", 0, $maxDuree);
 $graph->SetMarginColor("lightblue");

@@ -35,34 +35,34 @@ function chgMenu(id, type) {
       <div id="toolMenuList" style="visibility: hidden; position: absolute">
         <div class="menuItem">
           <img src="style/aero/images/icons/help.png" alt="Aide" border="0" height="16" width="16" />
-          {{$helpOnline|smarty:nodefaults}}
+          <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a>
         </div>
         <div class="menuItem">
           <img src="style/aero/images/icons/modif.png" alt="Suggestions" border="0" height="16" width="16" />
-          {{$suggestion|smarty:nodefaults}}
+          <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">{{tr}}portal-tracker{{/tr}}</a>
         </div>
         <div class="menuItem">
           <a href="#" onclick="popChgPwd();">
             <img src="style/aero/images/icons/passwd.png" alt="Mot de passe" border="0" height="16" width="16" />
-            {{tr}}Change password{{/tr}}
+            {{tr}}menu-changePassword{{/tr}}
           </a>
         </div>
         <div class="menuItem">
           <a href="?m=mediusers&amp;a=edit_infos">
-            <img src="style/aero/images/icons/myinfos.png" alt="{{tr}}My Info{{/tr}}" border="0" height="16" width="16" />
-            {{tr}}My Info{{/tr}}
+            <img src="style/aero/images/icons/myinfos.png" alt="{{tr}}menu-myInfo{{/tr}}" border="0" height="16" width="16" />
+            {{tr}}menu-myInfo{{/tr}}
           </a>
         </div>
         <div class="menuItem">
           <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">
             <img src="style/aero/images/icons/prefs.png" alt="Preferences" border="0" height="16" width="16" />
-            {{tr}}Préférences{{/tr}}
+            {{tr}}mod-admin-tab-edit_prefs{{/tr}}
           </a>
         </div>
         <div class="menuItem">
           <a href="?logout=-1">
-            <img src="style/aero/images/icons/logout.png" alt="{{tr}}Logout{{/tr}}" border="0" height="16" width="16" />
-            {{tr}}Logout{{/tr}}
+            <img src="style/aero/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" border="0" height="16" width="16" />
+            {{tr}}menu-logout{{/tr}}
           </a>
         </div>
       </div>

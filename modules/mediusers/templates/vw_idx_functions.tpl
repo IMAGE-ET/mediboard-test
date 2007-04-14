@@ -25,7 +25,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;function_id=0" class="buttonnew">
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;function_id=0" class="buttonnew">
         Créer une fonction
       </a>
       <table class="tbl">
@@ -38,7 +38,7 @@ function pageMain() {
         {{foreach from=$curr_group->_ref_functions item=curr_function}}
         <tr>
           <td>
-            <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;function_id={{$curr_function->function_id}}">
+            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;function_id={{$curr_function->_id}}">
               {{$curr_function->text}}
             </a>
           </td>
@@ -46,7 +46,7 @@ function pageMain() {
             {{tr}}CFunctions.type.{{$curr_function->type}}{{/tr}}
           </td>
           <td style="background: #{{$curr_function->color}}">
-            <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;function_id={{$curr_function->function_id}}">
+            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;function_id={{$curr_function->_id}}">
               {{$curr_function->_ref_users|@count}}
             </a>
           </td>
@@ -56,7 +56,7 @@ function pageMain() {
       </table>
     </td>
     <td class="halfPane">
-    <form name="editFrm" action="./index.php?m={{$m}}" method="post" onSubmit="return checkForm(this)">
+    <form name="editFrm" action="?m={{$m}}" method="post" onSubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_functions_aed" />
       <input type="hidden" name="function_id" value="{{$userfunction->function_id}}" />
       <input type="hidden" name="del" value="0" />

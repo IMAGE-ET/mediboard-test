@@ -1,20 +1,20 @@
       <table class="tbl">
         <tr>
           <th colspan="4">
-            <a style="display: inline;" href="index.php?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
+            <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
             {{$date|date_format:"%B %Y"}}
-            <a style="display: inline;" href="index.php?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
+            <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
           </th>
         <tr>
           <th class="text">Date</th>
-          <th class="text"><a href="index.php?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=0">Toutes les admissions</a></th>
-          <th class="text"><a href="index.php?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=n">Dossiers non préparés</a></th>
-          <th class="text"><a href="index.php?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=n&amp;selSaisis=0">Admissions non effectuées</a></th>
+          <th class="text"><a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=0">Toutes les admissions</a></th>
+          <th class="text"><a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=n">Dossiers non préparés</a></th>
+          <th class="text"><a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=n&amp;selSaisis=0">Admissions non effectuées</a></th>
         </tr>
         {{foreach from=$list1 item=curr_list}}
-        <tr>
+        <tr {{if $curr_list.date == $date}}class="selected"{{/if}}>
           <td align="right">
-            <a href="index.php?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$curr_list.date|date_format:"%Y-%m-%d"}}">
+            <a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$curr_list.date|date_format:"%Y-%m-%d"}}">
             {{$curr_list.date|date_format:"%A %d"}}
             </a>
           </td>

@@ -188,7 +188,7 @@ function pageMain() {
               <th>{{mb_label object=$plageSel field="date"}}</th>
               <td>
                 <select name="date" class="{{$plageSel->_props.date}}">
-                  <option value="">&mdash; Choisir le jour de la semaine</option>
+                  <option value="">&mdash; Choisir le jour</option>
                   {{foreach from=$listDays|smarty:nodefaults item=curr_day}}
                   <option value="{{$curr_day}}" {{if $curr_day == $plageSel->date}} selected="selected" {{/if}}>
                     {{$curr_day|date_format:"%A"}}

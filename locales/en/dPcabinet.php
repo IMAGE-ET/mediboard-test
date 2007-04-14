@@ -1,5 +1,4 @@
 <?php
-$locales['mod-dPcabinet-tab-vw_intermax'] = 'LogicMax FSE';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-desc'] = '';
 $locales['CAddiction-type'] = '';
@@ -352,7 +351,8 @@ $locales['mod-dPcabinet-tab-edit_planning'] = '';
 $locales['mod-dPcabinet-tab-form_print_plages'] = '';
 $locales['mod-dPcabinet-tab-vw_compta'] = '';
 $locales['mod-dPcabinet-tab-vw_dossier'] = '';
-$locales['mod-dPcabinet-tab-vw_planning'] = '';
+$locales['mod-dPcabinet-tab-vw_intermax'] = 'LogicMax FSE';
+$locales['mod-dPcabinet-tab-vw_planning'] = 'Weekly planning';
 $locales['pref-DefaultPeriod'] = 'Default period';
 $locales['pref-DefaultPeriod-desc'] = 'Default period for practice planning';
 $locales['pref-DossierCabinet'] = 'Patient file module';

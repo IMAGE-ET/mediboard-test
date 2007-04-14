@@ -246,10 +246,13 @@ if (!$suppressHeaders) {
   $smartyHeader->assign("messages"             , $messages);
   $smartyHeader->assign("uistyle"              , $uistyle);
   $smartyHeader->assign("AppUI"                , $AppUI);
-  $smartyHeader->assign("Etablissements"       , $etablissements);
-  $smartyHeader->assign("helpOnline"           , mbPortalLink($m, "Aide"));
-  $smartyHeader->assign("suggestion"           , mbPortalLink("bugTracker", "Suggérer une amélioration"));
   $smartyHeader->assign("errorMessage"         , $AppUI->getMsg());
+  $smartyHeader->assign("Etablissements"       , $etablissements);
+  $smartyHeader->assign("portal"               , array (
+    "help" => mbPortalURL($m),
+    "tracker" => mbPortalURL("tracker"),
+  ));
+
   $smartyHeader->display("header.tpl");
 }
 

@@ -1,8 +1,9 @@
 <?php
+$locales['mod-admin-tab-edit_prefs'] = 'User preferences';
 $locales['Active Users'] = '';
 $locales['Add or Edit Permissions'] = '';
-$locales['Add User'] = '';
 $locales['add user'] = '';
+$locales['Add User'] = '';
 $locales['adminDeleteTemplate'] = 'delete all existing permissions (otherwise only add new permissions)';
 $locales['adminInvalidBirthday'] = 'Please enter a valid Birthday dateformat: (YYYY-MM-DD)or leave the field blank.';
 $locales['adminInvalidDay'] = 'The day you have provided is invalid.';

@@ -79,7 +79,7 @@
 
   <tr>
     <th>
-      <label for="last_update" title="Date et heure de la dernière mise à jour par synchronisation">Dernière mise à jour</label>
+      <label for="last_update" title="Date et heure de la dernière mise à jour par synchronisation">Mise à jour</label>
     </th>
     <td class="date">
       <div id="editFrm_last_update_da">{{$last_update|date_format:"%d/%m/%Y %H:%M:%S"}}</div>

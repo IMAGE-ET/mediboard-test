@@ -57,11 +57,9 @@ function pageMain() {
         <tr id="function{{$curr_function->_id}}-trigger">
           <td style="background-color: #{{$curr_function->color}}">
           </td>
-          <td colspan="3">
+          <td colspan="4">
             <strong>{{$curr_function->text}}</strong>
-          </td>
-          <td>
-            {{$curr_function->_ref_users|@count}} utilisateur(s)
+            ({{$curr_function->_ref_users|@count}})
           </td>
         </tr>
         <tbody class="functionEffect" id="function{{$curr_function->_id}}" style="display:none;">

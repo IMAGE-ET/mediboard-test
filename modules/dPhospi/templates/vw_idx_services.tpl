@@ -18,8 +18,8 @@
     </tr>
     
 	{{foreach from=$services item=curr_service}}
-    <tr>
-      <td><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;service_id={{$curr_service->service_id}}">{{$curr_service->nom}}</a></td>
+    <tr {{if $curr_service->_id == $serviceSel->_id}}class="selected"{{/if}}>
+      <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;service_id={{$curr_service->_id}}">{{$curr_service->nom}}</a></td>
       <td class="text">{{$curr_service->description|nl2br}}</td>
       <td>{{$curr_service->_ref_group->text}}</td>
     </tr>
@@ -55,7 +55,7 @@
         <select class="{{$serviceSel->_props.group_id}}" name="group_id">
           <option>&mdash; Choisir un établissement</option>
           {{foreach from=$etablissements item=curr_etab}}
-          <option value="{{$curr_etab->group_id}}" {{if ($serviceSel->service_id && $serviceSel->group_id==$curr_etab->group_id) || (!$serviceSel->service_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
+          <option value="{{$curr_etab->group_id}}" {{if ($serviceSel->_id && $serviceSel->group_id==$curr_etab->_id) || (!$serviceSel->_id && $g==$curr_etab->_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
           {{/foreach}}
         </select>
       </td>

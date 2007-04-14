@@ -453,6 +453,7 @@ table.tabmenu {
 
 table.tabmenu td {
   height: 28px;	
+  line-height: 90%;
 }
 
 table.tabmenu td.normal {
@@ -494,6 +495,7 @@ table.tbl {
 
 table.tbl a {
   display: block;
+  margin: 0 1px;
 }
 
 a.actionPat {

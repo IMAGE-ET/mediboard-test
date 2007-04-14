@@ -35,7 +35,7 @@ function reloadListFile(sAction){
     url.addParam("patient_id", "{{$patient->_id}}");
     url.requestUpdate('listInfosPat', { 
       waitingText: null, 
-      onComplete: viewFullPatientMain
+      onComplete: ViewFullPatient.main
     } );
   }
 }
@@ -78,7 +78,7 @@ function printPatient(id) {
 
 function pageMain() {
   initAccord(true);
-  viewFullPatientMain();
+  ViewFullPatient.main();
   initNotes();
 }
 

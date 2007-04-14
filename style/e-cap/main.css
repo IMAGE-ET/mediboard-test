@@ -262,6 +262,14 @@ td#mainHeader td.welcome {
   display: block;
 }
 
+#leftMenu #menubar #menuTools {
+  height: 14px;
+}
+
+#leftMenu #menubar #menuTools a {
+  width: 16px; /* For IE */
+  float: left;
+}
 
 #leftMenu #menubar a.textSelected {
   border-color: #fff;
@@ -302,11 +310,10 @@ table.tabmenu {
 
 table.tabmenu td {
   height: 25px;
-  padding-top: 2px;
 }
 
 table.tabmenu td.normal {
-  background: url(./images/icons/tabBg.png) repeat-x bottom;
+  background: url(./images/icons/tabBg.png) repeat-x center;
 }
 
 table.tabmenu td.normal a {
@@ -315,26 +322,26 @@ table.tabmenu td.normal a {
 
 table.tabmenu td.normalLeft {
   width: 15px;
-  background: url(./images/icons/tabLeft.gif) no-repeat bottom right;
+  background: url(./images/icons/tabLeft.gif) no-repeat center right;
 }
 
 table.tabmenu td.normalRight {
   width: 15px;
-  background: url(./images/icons/tabRight.gif) no-repeat bottom left;
+  background: url(./images/icons/tabRight.gif) no-repeat center left;
 }
 
 table.tabmenu td.selected {
-  background: url(./images/icons/tabSelectedBg.png) repeat-x bottom;
+  background: url(./images/icons/tabSelectedBg.png) repeat-x center;
 }
 
 table.tabmenu td.selectedLeft {
   width: 15px;
-  background: url(./images/icons/tabSelectedLeft.gif) no-repeat bottom right;
+  background: url(./images/icons/tabSelectedLeft.gif) no-repeat center right;
 }
 
 table.tabmenu td.selectedRight {
   width: 15px;
-  background: url(./images/icons/tabSelectedRight.gif) no-repeat bottom left;
+  background: url(./images/icons/tabSelectedRight.gif) no-repeat center left;
 }
 
 /* Inputs */
@@ -619,7 +626,8 @@ table.tbl th.title {
   border: #aaa 1px outset;
 }
 
-table.tbl tr.selected td {
+table.tbl tr.selected td,
+table.form tr.selected td {
   background-color: #edb;
 }
 
