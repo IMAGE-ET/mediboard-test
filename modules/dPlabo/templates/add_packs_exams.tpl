@@ -3,6 +3,7 @@
 var Catalogue = {
   select : function(iCatalogue) {
     if(isNaN(iCatalogue)) {
+      iCatalogue = 0;
       oForm = $('currCatalogue');
       if(oForm) {
         iCatalogue = oForm.catalogue_labo_id.value;
@@ -10,7 +11,9 @@ var Catalogue = {
     }
     var url = new Url;
     url.setModuleAction("dPlabo", "httpreq_vw_catalogues");
-    url.addParam("catalogue_labo_id", iCatalogue);
+    if(iCatalogue) {
+      url.addParam("catalogue_labo_id", iCatalogue);
+    }
     url.requestUpdate('CataloguesView', { waitingText : null });
   }
 }
@@ -18,6 +21,7 @@ var Catalogue = {
 var Pack = {
   select : function reloadPacks(pack_id) {
     if(isNaN(pack_id)) {
+      pack_id = 0;
       oForm = $('newPackItem');
       if(oForm) {
         pack_id = oForm.pack_examens_labo_id.value;
@@ -25,7 +29,9 @@ var Pack = {
     }
     var url = new Url;
     url.setModuleAction("dPlabo", "httpreq_vw_packs");
-    url.addParam("pack_examens_labo_id", pack_id);
+    if(pack_id) {
+      url.addParam("pack_examens_labo_id", pack_id);
+    }
     url.requestUpdate('PacksView', { waitingText : null });
   },
   dropExamen: function(sExamen_id, pack_id) {
