@@ -1,5 +1,5 @@
 <?php
-$locales['CPackExamensLabo-back-items_examen_labo'] = 'Examen';
+$locales['mod-dPlabo-tab-vw_edit_prescriptions'] = 'Prescriptions';
 $locales['CCatalogueLabo'] = 'Catalogue d\'examens';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sous-catalogue';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Examen';
@@ -29,6 +29,7 @@ $locales['CExamenLabo.type.bool'] = 'Oui / Non';
 $locales['CExamenLabo.type.num'] = 'Numérique';
 $locales['CExamenLabo.type.str'] = 'Alphanumérique';
 $locales['CPackExamensLabo'] = 'Pack d\'examens';
+$locales['CPackExamensLabo-back-items_examen_labo'] = 'Examen';
 $locales['CPackExamensLabo-function_id'] = 'Fonction';
 $locales['CPackExamensLabo-function_id-desc'] = 'Fonction associée au pack';
 $locales['CPackExamensLabo-libelle'] = 'Libellé';
