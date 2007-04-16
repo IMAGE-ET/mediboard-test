@@ -1,4 +1,4 @@
-<form name="editPrescriptionItem" id="newPrescriptionItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editPrescriptionItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dPlabo" />
   <input type="hidden" name="dosql" value="do_prescription_examen_aed" />
   <input type="hidden" name="prescription_labo_examen_id" value="" />
@@ -20,7 +20,7 @@
   <div style="float:right;">
     {{$curr_prescription->_ref_prescription_labo_examens|@count}} Examens
   </div>
-  <a href="#nothing" onclick="Prescription.reload({{$curr_prescription->_id}})">
+  <a href="#nothing" onclick="Prescription.select({{$curr_prescription->_id}})">
     {{$curr_prescription->_view}}
   </a>
 </div>

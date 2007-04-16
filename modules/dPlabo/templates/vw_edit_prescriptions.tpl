@@ -60,9 +60,9 @@ var Pack = {
 }
 
 var Prescription = {
-  reload : function(prescription_id) {
+  select : function(prescription_id) {
     if(isNaN(prescription_id)) {
-      oForm = $('newPrescriptionItem');
+      oForm = document.editPrescriptionItem;
       if(oForm) {
         prescription_id = oForm.prescription_labo_id.value;
       }
@@ -74,32 +74,39 @@ var Prescription = {
     url.addParam("patient_id"          , iPatient_id    );
     url.requestUpdate('listPrescriptions', { waitingText: null });
   },
+  
   create : function() {
     var oPatientForm = document.patFrm;
     if(!oPatientForm.patient_id.value) {
       return false;
     }
-    var oForm = $('newPrescription');
+    var oForm = document.editPrescription
     oForm.praticien_id.value = {{$app->user_id}};
     oForm.patient_id.value = oPatientForm.patient_id.value
     oForm.date.value = new Date().toDATETIME();
-    submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.reload });
+    submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select });
     return true;
   },
+  
   delExamen: function(oForm) {
-    oFormBase = $('newPrescriptionItem');
+    oFormBase = document.editPrescriptionItem;
     oFormBase.prescription_labo_id.value = oForm.prescription_labo_id.value;
-    submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.reload });
+    submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select });
     return true;
   },
+  
+  editExamen: function() {
+    oFormBase = document.editPrescriptionItem;
+  },
+  
   dropExamen: function(sExamen_id, prescription_id) {
-    oFormBase = $('newPrescriptionItem');
+    oFormBase = document.editPrescriptionItem;
     aExamen_id = sExamen_id.split("-");
     oFormBase.examen_labo_id.value       = aExamen_id[1];
     oFormBase.prescription_labo_id.value = prescription_id;
-    submitFormAjax(oFormBase, 'systemMsg', { onComplete: Prescription.reload });
+    submitFormAjax(oFormBase, 'systemMsg', { onComplete: Prescription.select });
     return true;
-  },
+  }
 }
 
 var oDragOptions = { 
@@ -126,7 +133,7 @@ var oDragOptions = {
 }
 
 function main() {
-  Prescription.reload();
+  Prescription.select();
   (document.typeListeFrm.typeListe.value == 'pack' ? Pack : Catalogue).select();
 }
 
@@ -155,7 +162,7 @@ function main() {
       </table>
       </form>
 
-      <form name="editPrescription" id="newPrescription" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editPrescription" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="m" value="dPlabo" />
         <input type="hidden" name="dosql" value="do_prescription_aed" />
         <input type="hidden" name="prescription_labo_id" value="" />
