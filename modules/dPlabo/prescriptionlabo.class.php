@@ -46,8 +46,9 @@ class CPrescriptionLabo extends CMbObject {
   }
 
   function updateFormFields() {
-    $this->_shortview = $this->libelle;
-    $this->_view      = $this->libelle;
+    parent::updateFormFields();
+    $this->_shortview = $this->date;
+    $this->_view      = $this->date;
   }
   
   function loadRefsFwd() {
@@ -61,8 +62,8 @@ class CPrescriptionLabo extends CMbObject {
     $examen = new CPrescriptionLaboExamen;
     
     $where = array("prescription_labo_id" => "= $this->prescription_labo_id");
-    $this->_ref_prescription_labo_examen = $item->loadList($where);
-    foreach($this->_ref_prescription_labo_examen as &$curr_examen) {
+    $this->_ref_prescription_labo_examens = $examen->loadList($where);
+    foreach($this->_ref_prescription_labo_examens as &$curr_examen) {
       $curr_examen->loadRefsFwd();
     }
   }

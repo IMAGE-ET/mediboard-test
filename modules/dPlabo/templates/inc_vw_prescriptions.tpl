@@ -1,17 +1,3 @@
-<script type="text/javascript">
-
-var Prescription = {
-  dropElement: function(element_id, prescription_id) {
-    oForm = $('newPrescriptionItem');
-    oForm.examen_labo_id.value       = examen_id.substring(7);
-    oForm.prescription_labo_id.value = prescription_id;
-    submitFormAjax(oForm, 'systemMsg', { onComplete: reloadPrescriptions });
-    return true;
-  }
-}
-  
-</script>
-
 <form name="editPrescriptionItem" id="newPrescriptionItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dPlabo" />
   <input type="hidden" name="dosql" value="do_prescription_examen_aed" />

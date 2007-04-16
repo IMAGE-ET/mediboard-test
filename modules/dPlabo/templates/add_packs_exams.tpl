@@ -1,44 +1,75 @@
 <script type="text/javascript">
 
 var Catalogue = {
-  iCurrent: 0,
-  eHeader: null,
-  findCurrent: function(iCatalogue) {
-    this.iCurrent = iCatalogue;
-    this.eHeader = $("catalogue-" + iCatalogue + "-header");
-  },
-  
   select : function(iCatalogue) {
-    if (this.eHeader) {
-      Element.classNames(this.eHeader).remove("selected");
-    } 
-    this.findCurrent(iCatalogue);
-    Element.classNames(this.eHeader).add("selected");
-
+    if(isNaN(iCatalogue)) {
+      oForm = $('currCatalogue');
+      if(oForm) {
+        iCatalogue = oForm.catalogue_labo_id.value;
+      }
+    }
     var url = new Url;
-    url.setModuleAction("system", "httpreq_vw_complete_object");
-    url.addParam("object_class" , "CCatalogueLabo");
-    url.addParam("object_id"    , iCatalogue);
-    url.requestUpdate('CatalogueView', { waitingText : null });
+    url.setModuleAction("dPlabo", "httpreq_vw_catalogues");
+    url.addParam("catalogue_labo_id", iCatalogue);
+    url.requestUpdate('CataloguesView', { waitingText : null });
   }
 }
 
-function reloadPacks(pack_id) {
-  if(isNaN(pack_id)) {
-    oForm = $('newPackItem');
-    if(oForm) {
-      pack_id = oForm.pack_examens_labo_id.value;
+var Pack = {
+  select : function reloadPacks(pack_id) {
+    if(isNaN(pack_id)) {
+      oForm = $('newPackItem');
+      if(oForm) {
+        pack_id = oForm.pack_examens_labo_id.value;
+      }
     }
+    var url = new Url;
+    url.setModuleAction("dPlabo", "httpreq_vw_packs");
+    url.addParam("pack_examens_labo_id", pack_id);
+    url.requestUpdate('PacksView', { waitingText : null });
+  },
+  dropExamen: function(sExamen_id, pack_id) {
+    oFormBase = $('newPackItem');
+    aExamen_id = sExamen_id.split("-");
+    oFormBase.examen_labo_id.value       = aExamen_id[1];
+    oFormBase.pack_examens_labo_id.value = pack_id;
+    submitFormAjax(oFormBase, 'systemMsg', { onComplete: Pack.select });
+    return true;
+  },
+  delExamen: function(oForm) {
+    oFormBase = $('newPackItem');
+    oFormBase.pack_examens_labo_id.value = oForm.pack_examens_labo_id.value;
+    submitFormAjax(oForm, 'systemMsg', { onComplete: Pack.select });
+    return true;
   }
-  var url = new Url;
-  url.setModuleAction("dPlabo", "httpreq_vw_packs");
-  url.addParam("pack_examens_labo_id", pack_id);
-  url.requestUpdate('PacksView', { waitingText : null });
+}
+
+var oDragOptions = {
+  revert: true,
+  ghosting: true,
+  starteffect : function(element) { 
+    Element.classNames(element).add("dragged");
+    new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 }); 
+  },
+  reverteffect: function(element, top_offset, left_offset) {
+    var dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
+    element._revert = new Effect.Move(element, { 
+      x: -left_offset, 
+      y: -top_offset, 
+      duration: dur,
+      afterFinish : function (effect) { 
+        Element.classNames(effect.element.id).remove("dragged");
+      }
+    } );
+  },
+  endeffect: function(element) { 
+    new Effect.Opacity(element, { duration:0.2, from:0.7, to:1.0 } ); 
+  }       
 }
 
 function pageMain() {
-  PairEffect.initGroup('tree-content');
-  reloadPacks();
+  Catalogue.select();
+  Pack.select();
 }
 
 </script>
@@ -53,13 +84,7 @@ function pageMain() {
     </th>
   </tr>
   <tr>
-    <td>
-      {{assign var="catalogue_id" value=0}}
-      {{foreach from=$listCatalogues item="_catalogue"}}
-      {{include file="tree_catalogues.tpl"}}
-      {{/foreach}}
-      <div id="CatalogueView">
-      </div>
+    <td id="CataloguesView">
     </td>
     <td id="PacksView">
     </td>
