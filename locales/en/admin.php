@@ -1,9 +1,9 @@
 <?php
-$locales['mod-admin-tab-edit_prefs'] = 'User preferences';
+$locales['menu-toggleIcons'] = 'Toggle icons in menu';
 $locales['Active Users'] = '';
 $locales['Add or Edit Permissions'] = '';
-$locales['add user'] = '';
 $locales['Add User'] = '';
+$locales['add user'] = '';
 $locales['adminDeleteTemplate'] = 'delete all existing permissions (otherwise only add new permissions)';
 $locales['adminInvalidBirthday'] = 'Please enter a valid Birthday dateformat: (YYYY-MM-DD)or leave the field blank.';
 $locales['adminInvalidDay'] = 'The day you have provided is invalid.';
@@ -54,6 +54,7 @@ $locales['Level'] = '';
 $locales['Login Name'] = '';
 $locales['Manager'] = '';
 $locales['Mobile'] = '';
+$locales['mod-admin-tab-edit_prefs'] = 'User preferences';
 $locales['mod-dPrepas-tab-vw_planning_repas'] = '';
 $locales['Module'] = '';
 $locales['Not Defined'] = '';

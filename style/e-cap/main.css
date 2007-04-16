@@ -218,8 +218,8 @@ td#mainHeader td.welcome {
 }
 
 #menubar a.textNonSelected img {
-  opacity: 0.5;
-  filter: alpha(opacity=50);
+  opacity: 0.6;
+  filter: alpha(opacity=60);
 }
 
 #menubar a.textNonSelected:hover img {
@@ -267,7 +267,9 @@ td#mainHeader td.welcome {
 }
 
 #leftMenu #menubar #menuTools a {
-  width: 16px; /* For IE */
+  text-decoration: none;
+  height: 16px;
+  width: 16px;
   float: left;
 }
 
@@ -286,6 +288,13 @@ td#mainHeader td.welcome {
 
 #leftMenu #menubar.iconed a.textNonSelected img {
   display: block;
+}
+#leftMenu #menubar.iconed #menuTools a#toggleIcons {
+  background: url(./images/icons/action_up.png);
+}
+
+#leftMenu #menubar.uniconed #menuTools a#toggleIcons {
+  background: url(./images/icons/action_down.png);
 }
 
 #leftMenu #menubar.uniconed a.textNonSelected img {

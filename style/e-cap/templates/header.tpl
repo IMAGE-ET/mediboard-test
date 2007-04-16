@@ -54,14 +54,12 @@ var Menu = {
 
   <div id="menubar" class="iconed">
     <div id="menuTools">
-      <a href="#" title="{{tr}}Menu icons{{/tr}}" onclick="Menu.toggle()">
-        <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}Menu icons{{/tr}}" />
-      </a>
+      <a id="toggleIcons" href="#" title="{{tr}}menu-toggleIcons{{/tr}}" onclick="Menu.toggle()" />
       <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">
         <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
       </a>
       <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">
-        <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-tracker{{/tr}}" />
+        <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
       </a>
       <a href="#" onclick="popChgPwd()" title="{{tr}}menu-changePassword{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" />
