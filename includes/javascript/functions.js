@@ -666,8 +666,8 @@ Class.extend(Date, {
     return makeDATEFromDate(this);
   },
   
-  toDATETIME: function() {
-    return makeDATETIMEFromDate(this);
+  toDATETIME: function(useSpace) {
+    return makeDATETIMEFromDate(this, useSpace);
   },
   
   toLocaleDate: function() {
