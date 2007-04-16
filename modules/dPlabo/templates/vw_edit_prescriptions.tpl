@@ -60,6 +60,20 @@ var Pack = {
 }
 
 var Prescription = {
+  reload : function(prescription_id) {
+    if(isNaN(prescription_id)) {
+      oForm = $('newPrescriptionItem');
+      if(oForm) {
+        prescription_id = oForm.prescription_labo_id.value;
+      }
+    }
+    var iPatient_id = document.patFrm.patient_id.value;
+    var url = new Url;
+    url.setModuleAction("dPlabo", "httpreq_vw_prescriptions");
+    url.addParam("prescription_labo_id", prescription_id);
+    url.addParam("patient_id"          , iPatient_id    );
+    url.requestUpdate('listPrescriptions', { waitingText: null });
+  },
   create : function() {
     var oPatientForm = document.patFrm;
     if(!oPatientForm.patient_id.value) {
@@ -69,17 +83,21 @@ var Prescription = {
     oForm.praticien_id.value = {{$app->user_id}};
     oForm.patient_id.value = oPatientForm.patient_id.value
     oForm.date.value = new Date().toDATETIME();
-    submitFormAjax(oForm, 'systemMsg', { onComplete: reloadPrescriptions });
+    submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.reload });
     return true;
   },
-  delete : function(prescription_id) {
+  delExamen: function(oForm) {
+    oFormBase = $('newPrescriptionItem');
+    oFormBase.prescription_labo_id.value = oForm.prescription_labo_id.value;
+    submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.reload });
+    return true;
   },
   dropExamen: function(sExamen_id, prescription_id) {
     oFormBase = $('newPrescriptionItem');
     aExamen_id = sExamen_id.split("-");
     oFormBase.examen_labo_id.value       = aExamen_id[1];
     oFormBase.prescription_labo_id.value = prescription_id;
-    submitFormAjax(oFormBase, 'systemMsg', { onComplete: reloadPrescriptions });
+    submitFormAjax(oFormBase, 'systemMsg', { onComplete: Prescription.reload });
     return true;
   },
 }
@@ -107,34 +125,9 @@ var oDragOptions = {
   }       
 }
 
-function reloadPrescriptions(prescription_id) {
-  if(isNaN(prescription_id)) {
-    oForm = $('newPrescriptionItem');
-    if(oForm) {
-      prescription_id = oForm.prescription_labo_id.value;
-    }
-  }
-  var iPatient_id = document.patFrm.patient_id.value;
-  var url = new Url;
-  url.setModuleAction("dPlabo", "httpreq_vw_prescriptions");
-  url.addParam("prescription_labo_id", prescription_id);
-  url.addParam("patient_id"          , iPatient_id    );
-  url.requestUpdate('listPrescriptions', { waitingText: null });
-}
-
-function reloadExamens() {
-  var sTypeListe = document.typeListeFrm.typeListe.value;
-  var url = new Url;
-  if(sTypeListe == "pack") {
-    Pack.select()
-  } else {
-    Catalogue.select();
-  }
-}
-
 function main() {
-  reloadPrescriptions();
-  reloadExamens();
+  Prescription.reload();
+  (document.typeListeFrm.typeListe.value == 'pack' ? Pack : Catalogue).select();
 }
 
 </script>
@@ -180,7 +173,7 @@ function main() {
           <th><label for="typeListe" title="Choissisez le mode d'affichage des examens">Examens à afficher</label></th>
           <td class="readonly">
             <input type="hidden" name="m" value="dPlabo" />
-            <select name="typeListe" onchange="this.form.submit()">
+            <select name="typeListe" onchange="(this.value == 'pack' ? Pack : Catalogue).select();">
               <option value="pack">par packs</option>
               <option value="cat" {{if $typeListe == "cat"}}selected="selected"{{/if}}>par catalogues</option>
             </select>

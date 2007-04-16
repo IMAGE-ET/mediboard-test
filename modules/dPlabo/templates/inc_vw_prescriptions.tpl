@@ -20,7 +20,7 @@
   <div style="float:right;">
     {{$curr_prescription->_ref_prescription_labo_examens|@count}} Examens
   </div>
-  <a href="#nothing" onclick="reloadPrescriptions({{$curr_prescription->_id}})">
+  <a href="#nothing" onclick="Prescription.reload({{$curr_prescription->_id}})">
     {{$curr_prescription->_view}}
   </a>
 </div>
@@ -47,6 +47,14 @@
   {{assign var="curr_examen" value=$curr_item->_ref_examen_labo}}
   <tr>
     <td>
+      <form name="delPrescriptionExamen-{{$curr_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+        <input type="hidden" name="m" value="dPlabo" />
+        <input type="hidden" name="dosql" value="do_prescription_examen_aed" />
+        <input type="hidden" name="prescription_labo_id" value="{{$prescription->_id}}" />
+        <input type="hidden" name="prescription_labo_examen_id" value="{{$curr_item->_id}}" />
+        <input type="hidden" name="del" value="1" />
+        <button type="button" class="trash notext" style="float: right;" onclick="Prescription.delExamen(this.form)"/>
+      </form>
       {{$curr_examen->_view}}
     </td>
     <td>
