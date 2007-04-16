@@ -118,6 +118,12 @@ var Prescription = {
   }
 }
 
+var Resultat = {
+  select: function() {
+    Console.trace("Mode Résultats");
+  }
+}
+
 var oDragOptions = { 
   revert: true,
   ghosting: true,
@@ -138,12 +144,12 @@ var oDragOptions = {
   },
   endeffect: function(element) { 
     new Effect.Opacity(element, { duration:0.2, from:0.7, to:1.0 } ); 
-  }       
+  }
 }
 
 function main() {
   Prescription.select();
-  (document.typeListeFrm.typeListe.value == 'pack' ? Pack : Catalogue).select();
+  window[document.typeListeFrm.typeListe.value].select();
 }
 
 </script>
@@ -183,15 +189,16 @@ function main() {
 
     </th>
     <th>
-      <form name="typeListeFrm" action="index.php" method="get">
+      <form name="typeListeFrm" action="?" method="get">
       <table class="form">
         <tr>
           <th><label for="typeListe" title="Choissisez le mode d'affichage des examens">Examens à afficher</label></th>
           <td class="readonly">
             <input type="hidden" name="m" value="dPlabo" />
-            <select name="typeListe" onchange="(this.value == 'pack' ? Pack : Catalogue).select();">
-              <option value="pack">par packs</option>
-              <option value="cat" {{if $typeListe == "cat"}}selected="selected"{{/if}}>par catalogues</option>
+            <select name="typeListe" onchange="window[this.value].select();">
+              <option value="Resultat">Résultats</option>
+              <option value="Pack">par packs</option>
+              <option value="Catalogue">par catalogues</option>
             </select>
           </td>
         </tr>
