@@ -15,21 +15,47 @@ function setPat( key, val ) {
   oForm.submit();
 }
 
-function updatePrescriptions() {
+function reloadPrescriptions(prescription_id) {
+  if(isNaN(prescription_id)) {
+    oForm = $('newPrescriptionItem');
+    if(oForm) {
+      prescription_id = oForm.prescription_labo_id.value;
+    }
+  }
   var iPatient_id = document.patFrm.patient_id.value;
   var url = new Url;
   url.setModuleAction("dPlabo", "httpreq_vw_prescriptions");
-  url.addParam("patient_id", iPatient_id);
+  url.addParam("prescription_labo_id", prescription_id);
+  url.addParam("patient_id"          , iPatient_id    );
   url.requestUpdate('listPrescriptions', { waitingText: null });
 }
 
-function updateExamens() {
-  
+function reloadExamens(item_id) {
+  var sTypeListe = document.typeListeFrm.typeListe.value;
+  var url = new Url;
+  if(sTypeListe == "pack") {
+    url.setModuleAction("dPlabo", "httpreq_vw_packs");
+    url.addParam("pack_examens_labo_id", item_id);
+  } else {
+    url.setModuleAction("dPlabo", "httpreq_vw_packs");
+    url.addParam("pack_examens_labo_id", item_id);
+  }
+  url.requestUpdate("listExamens", { waitingText: null });
+}
+
+function reloadPacks(pack_id) {
+  if(isNaN(pack_id)) {
+    oForm = $('newPackItem');
+    if(oForm) {
+      pack_id = oForm.pack_examens_labo_id.value;
+    }
+  }
+  reloadExamens(pack_id);
 }
 
 function main() {
-  updatePrescriptions();
-  updateExamens();
+  reloadPrescriptions();
+  reloadExamens();
 }
 
 </script>

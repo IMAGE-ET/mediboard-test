@@ -24,16 +24,16 @@ var Catalogue = {
 }
 
 function reloadPacks(pack_id) {
-    if(isNaN(pack_id)) {
-      oForm = $('newPackItem');
-      if(oForm) {
-        pack_id = oForm.pack_examens_labo_id.value;
-      }
+  if(isNaN(pack_id)) {
+    oForm = $('newPackItem');
+    if(oForm) {
+      pack_id = oForm.pack_examens_labo_id.value;
     }
-    var url = new Url;
-    url.setModuleAction("dPlabo", "httpreq_vw_packs");
-    url.addParam("pack_examens_labo_id", pack_id);
-    url.requestUpdate('PacksView', { waitingText : null });
+  }
+  var url = new Url;
+  url.setModuleAction("dPlabo", "httpreq_vw_packs");
+  url.addParam("pack_examens_labo_id", pack_id);
+  url.requestUpdate('PacksView', { waitingText : null });
 }
 
 function pageMain() {

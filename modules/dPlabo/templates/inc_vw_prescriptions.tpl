@@ -51,11 +51,11 @@ var Prescription = {
     </th>
   </tr>
   <tr>
-    <th class="category">Examen</th>
-    <th class="category">Type</th>
-    <th class="category">Unité</th>
-    <th class="category">Min</th>
-    <th class="category">Max</th>
+    <th>Examen</th>
+    <th>Type</th>
+    <th>Unité</th>
+    <th>Min</th>
+    <th>Max</th>
   </tr>
   {{foreach from=$prescription->_ref_prescription_labo_examens item="curr_item"}}
   {{assign var="curr_examen" value=$curr_item->_ref_examen_labo}}

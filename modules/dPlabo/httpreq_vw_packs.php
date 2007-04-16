@@ -37,7 +37,7 @@ foreach($listPacks as $key => $curr_pack) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("listPacks", $listPacks);
-$smarty->assign("pack"     , $pack      );
+$smarty->assign("pack"     , $pack     );
 
 $smarty->display("inc_vw_packs.tpl");
 
