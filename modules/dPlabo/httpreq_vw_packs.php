@@ -15,6 +15,7 @@ $user = new CMediusers;
 $user->load($AppUI->user_id);
 
 $pack_examens_labo_id = mbGetValueFromGetOrSession("pack_examens_labo_id");
+$typeListe  = mbGetValueFromGetOrSession("typeListe");
 
 // Chargement des fontions
 $function = new CFunctions;

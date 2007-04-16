@@ -19,7 +19,7 @@ var Catalogue = {
 }
 
 var Pack = {
-  select : function reloadPacks(pack_id) {
+  select : function(pack_id) {
     if(isNaN(pack_id)) {
       pack_id = 0;
       oForm = $('newPackItem');

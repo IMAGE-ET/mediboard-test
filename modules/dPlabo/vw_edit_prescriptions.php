@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $patient_id = mbGetValueFromGetOrSession("patient_id");
-$typeListe  = mbGetValueFromGetOrSession("typeListe", "pack");
+$typeListe  = mbGetValueFromGetOrSession("typeListe");
 
 // Chargement du patient
 

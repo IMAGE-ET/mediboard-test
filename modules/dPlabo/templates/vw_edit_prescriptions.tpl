@@ -29,12 +29,13 @@ var Catalogue = {
     if(iCatalogue) {
       url.addParam("catalogue_labo_id", iCatalogue);
     }
+    url.addParam("typeListe", document.typeListeFrm.typeListe.value);
     url.requestUpdate('listExamens', { waitingText : null });
   }
 }
 
 var Pack = {
-  select : function reloadPacks(pack_id) {
+  select : function(pack_id) {
     if(isNaN(pack_id)) {
       pack_id = 0;
       oForm = $('newPackItem');
@@ -47,6 +48,7 @@ var Pack = {
     if(pack_id) {
       url.addParam("pack_examens_labo_id", pack_id);
     }
+    url.addParam("typeListe", document.typeListeFrm.typeListe.value);
     url.requestUpdate("listExamens", { waitingText: null });
   },
   dropExamen: function(sExamen_id, pack_id) {
@@ -147,7 +149,7 @@ var oDragOptions = {
   }
 }
 
-function main() {
+function pageMain() {
   Prescription.select();
   window[document.typeListeFrm.typeListe.value].select();
 }
@@ -196,9 +198,15 @@ function main() {
           <td class="readonly">
             <input type="hidden" name="m" value="dPlabo" />
             <select name="typeListe" onchange="window[this.value].select();">
-              <option value="Resultat">Résultats</option>
-              <option value="Pack">par packs</option>
-              <option value="Catalogue">par catalogues</option>
+              <option value="Resultat" {{if $typeListe == "Resultat"}}selected="selected"{{/if}}>
+                Résultats
+              </option>
+              <option value="Pack" {{if $typeListe == "Pack"}}selected="selected"{{/if}}>
+                par packs
+              </option>
+              <option value="Catalogue" {{if $typeListe == "Catalogue"}}selected="selected"{{/if}}>
+                par catalogues
+              </option>
             </select>
           </td>
         </tr>
