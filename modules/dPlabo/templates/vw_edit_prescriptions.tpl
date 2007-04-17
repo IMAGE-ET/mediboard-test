@@ -48,16 +48,9 @@ var Pack = {
     if(pack_id) {
       url.addParam("pack_examens_labo_id", pack_id);
     }
+    url.addParam("dragPacks", 1);
     url.addParam("typeListe", document.typeListeFrm.typeListe.value);
     url.requestUpdate("listExamens", { waitingText: null });
-  },
-  dropExamen: function(sExamen_id, pack_id) {
-    oFormBase = $('newPackItem');
-    aExamen_id = sExamen_id.split("-");
-    oFormBase.examen_labo_id.value       = aExamen_id[1];
-    oFormBase.pack_examens_labo_id.value = pack_id;
-    submitFormAjax(oFormBase, 'systemMsg', { onComplete: Pack.select });
-    return true;
   },
   delExamen: function(oForm) {
     oFormBase = $('newPackItem');
@@ -113,7 +106,13 @@ var Prescription = {
   dropExamen: function(sExamen_id, prescription_id) {
     oFormBase = document.editPrescriptionItem;
     aExamen_id = sExamen_id.split("-");
-    oFormBase.examen_labo_id.value       = aExamen_id[1];
+    if(aExamen_id[0] == "examen") {
+      oFormBase.dosql.value = "do_prescription_examen_aed";
+      oFormBase.examen_labo_id.value = aExamen_id[1];
+    } else if(aExamen_id[0] == "pack") {
+      oFormBase.dosql.value = "do_prescription_pack_add";
+      oFormBase._pack_examens_labo_id.value = aExamen_id[1];
+    }
     oFormBase.prescription_labo_id.value = prescription_id;
     submitFormAjax(oFormBase, 'systemMsg', { onComplete: Prescription.select });
     return true;

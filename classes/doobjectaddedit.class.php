@@ -15,6 +15,7 @@ class CDoObjectAddEdit {
   var $createMsg           = null;
   var $modifyMsg           = null;
   var $deleteMsg           = null;
+  var $refTab              = null;
   var $redirect            = null;
   var $redirectStore       = null;
   var $redirectError       = null;
@@ -40,6 +41,8 @@ class CDoObjectAddEdit {
     $this->createMsg           = $AppUI->_("msg-".$className."-create");
     $this->modifyMsg           = $AppUI->_("msg-".$className."-modify");
     $this->deleteMsg           = $AppUI->_("msg-".$className."-delete");
+    
+    $this->refTab              =& $_POST;
 
     $this->_logIt              = true;
     $this->_obj                = new $this->className();
@@ -52,12 +55,12 @@ class CDoObjectAddEdit {
     $this->ajax = mbGetValueFromPost("ajax");
     $this->suppressHeaders = mbGetValueFromPost("suppressHeaders");
     $this->callBack = mbGetValueFromPost("callback");
-    unset($_POST["ajax"]);
-    unset($_POST["suppressHeaders"]);
-    unset($_POST["callback"]);
+    unset($this->refTab["ajax"]);
+    unset($this->refTab["suppressHeaders"]);
+    unset($this->refTab["callback"]);
 
     // Object binding
-    if (!$this->_obj->bind( $_POST )) {
+    if (!$this->_obj->bind( $this->refTab )) {
       $AppUI->setMsg( $this->_obj->getError(), UI_MSG_ERROR );
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
@@ -96,7 +99,7 @@ class CDoObjectAddEdit {
     } else {
       $id = $this->objectKeyGetVarName;
       mbSetValueToSession($id, $this->_obj->$id);
-      $this->isNotNew = @$_POST[$this->objectKeyGetVarName];
+      $this->isNotNew = @$this->refTab[$this->objectKeyGetVarName];
       $this->doLog("store");
       $AppUI->setMsg($this->isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
       if ($this->redirectStore) {
@@ -168,7 +171,7 @@ class CDoObjectAddEdit {
   function doIt() {
     $this->doBind();
 
-    if (intval(dPgetParam($_POST, 'del'))) {
+    if (intval(dPgetParam($this->refTab, 'del'))) {
       $this->doDelete();
     } else {
       $this->doStore();

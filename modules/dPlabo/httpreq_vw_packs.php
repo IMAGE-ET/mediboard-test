@@ -15,7 +15,8 @@ $user = new CMediusers;
 $user->load($AppUI->user_id);
 
 $pack_examens_labo_id = mbGetValueFromGetOrSession("pack_examens_labo_id");
-$typeListe  = mbGetValueFromGetOrSession("typeListe");
+$typeListe            = mbGetValueFromGetOrSession("typeListe");
+$dragPacks            = mbGetValueFromGet("dragPacks", 0);
 
 // Chargement des fontions
 $function = new CFunctions;
@@ -39,6 +40,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("listPacks", $listPacks);
 $smarty->assign("pack"     , $pack     );
+$smarty->assign("dragPacks", $dragPacks);
 
 $smarty->display("inc_vw_packs.tpl");
 

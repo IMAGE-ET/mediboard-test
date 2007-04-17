@@ -1,6 +1,7 @@
 <form name="editPrescriptionItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dPlabo" />
   <input type="hidden" name="dosql" value="do_prescription_examen_aed" />
+  <input type="hidden" name="_pack_examens_labo_id" value="" />
   <input type="hidden" name="prescription_labo_examen_id" value="" />
   <input type="hidden" name="examen_labo_id" value="" />
   <input type="hidden" name="prescription_labo_id" value="" />

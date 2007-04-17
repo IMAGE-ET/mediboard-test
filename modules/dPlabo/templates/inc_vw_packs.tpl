@@ -9,6 +9,11 @@
 
 {{foreach from=$listPacks item="curr_pack"}}
 <div class="tree-header {{if $curr_pack->_id == $pack->_id}}selected{{/if}}" id="drop-pack-{{$curr_pack->_id}}">
+  {{if $dragPacks}}
+  <script type="text/javascript">
+    new Draggable('pack-{{$curr_pack->_id}}', oDragOptions);
+  </script>
+  {{else}}
   <script>
   Droppables.add('drop-pack-{{$curr_pack->_id}}', {
     onDrop: function(element) {
@@ -17,12 +22,15 @@
     hoverclass:'selected'
   } );
   </script>
+  {{/if}}
   <div style="float:right;">
     {{$curr_pack->_ref_items_examen_labo|@count}} Examens
   </div>
-  <a href="#nothing" onclick="Pack.select({{$curr_pack->_id}})">
-    {{$curr_pack->_view}}
-  </a>
+  <div {{if $dragPacks}}class="draggable"{{/if}} id="pack-{{$curr_pack->_id}}"
+    <a href="#nothing" onclick="Pack.select({{$curr_pack->_id}})">
+      {{$curr_pack->_view}}
+    </a>
+  </div>
 </div>
 {{/foreach}}
 
