@@ -62,14 +62,20 @@ var Intermax = {
   result: function() {
     Console.trace("Waiting for result of InterMax");
     document.intermaxResult.performRead();
+    setTimeout(Intermax.handleContent.bind(Intermax), 100);
+    
+  },
+  
+  handleContent: function() {
     if (oAppletContent = document.intermaxResult.getContent()) {
       // Append with empty Js String will cast a Java string to a Js string
       var sContent = oAppletContent + ""; 
       oContent = this.bindContent(sContent);
       Console.debug(oContent, "Result is", { level: 1 } );
       this.createResultMessages(oContent);
-      this.ResultHandler[oContent.FONCTION.NOM](oContent);
-    }    
+      var fResultHandler = this.ResultHandler[oContent.FONCTION.NOM] || Prototype.emptyFunction;
+      fResultHandler(oContent);
+    }
   },
   
   createResultMessages: function(oContent) {
@@ -182,14 +188,18 @@ var Intermax = {
       Résultats
     </th>
   </tr>
-  <tr id="Lire-Vitale">
+
+  {{foreach from=$intermaxFunctions item="_function"}}
+  <tr id="{{$_function|replace:" ":"-"}}">
     <td>
-      <button class="tick" onclick="Intermax.trigger('Lire Vitale');">
-        {{tr}}InterMax.Lire Vitale{{/tr}}
+      <button class="tick" onclick="Intermax.trigger('{{$_function}}');">
+        {{tr}}InterMax.{{$_function}}{{/tr}}
       </button>
     </td>
     <td class="result">
       <div class="handler">My Result</div>
     </td>
   </tr>
+  {{/foreach}}
+  
 </table>

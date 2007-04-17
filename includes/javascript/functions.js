@@ -73,7 +73,11 @@ function pageMain() {}
  */
 var Console = {
   id: "console",
- 
+
+  hide: function() {
+  	Element.hide($(this.id));
+  },
+  
   trace: function(sContent, sClass, nIndent) {
   	sClass = sClass || "label";
   	

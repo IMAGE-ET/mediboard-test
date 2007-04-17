@@ -357,7 +357,7 @@ div#console {
   position: absolute;
   bottom: 0px;
   border: 1px dotted #aaf;
-  padding: 3px	;
+  padding: 3px 20px;
 }
 
 div#console div {
@@ -369,6 +369,14 @@ div#console div#console-title {
   font-family: "Arial";
   font-weight: bold;
   text-align: center;
+}
+
+div#console div#console-hide {
+  background: url(../../images/icons/cancel.png) no-repeat;
+  width: 20px;
+  height: 20px;
+  margin-left: -20px;
+  position: fixed;
 }
 
 div#console div.label {

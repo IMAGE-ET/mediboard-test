@@ -62,7 +62,10 @@
 <!-- Javascript Console -->
 
 <div id="console" style="display:none">
-  <div id="console-title">Javascript console</div>
+  <div id="console-title">
+    <div id="console-hide" onclick="Console.hide()"></div>
+    Javascript console
+  </div>
 </div>
 
 {{if !$offline}}
