@@ -2028,6 +2028,19 @@ div.tree-header {
   font-weight: normal;
 }
 
+table.affectations {
+
+}
+
+table.affectations {
+	width: 100%;
+}
+
+table.affectations td.fullService {
+	border: 1px solid #aaa;
+  background-color: #fff;
+}
+
   /* @import "./consultation.css"; */
 
 

@@ -1,4 +1,4 @@
-        <table class="chambrecollapse" id="chambre{{$curr_chambre->chambre_id}}">
+        <table class="tbl chambrecollapse" id="chambre{{$curr_chambre->chambre_id}}">
           <tr>
             <th class="chambre" colspan="2" onclick="javascript:flipChambre({{$curr_chambre->chambre_id}});
                 {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}

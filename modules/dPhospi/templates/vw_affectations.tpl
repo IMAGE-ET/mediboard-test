@@ -239,7 +239,7 @@ function pageMain() {
 
   <tr>
     <td class="greedyPane" colspan="3">
-      <table class="tbl">
+      <table class="affectations">
         <tr>
         {{foreach from=$services item=curr_service}}
           <td class="fullService" id="service{{$curr_service->service_id}}">
