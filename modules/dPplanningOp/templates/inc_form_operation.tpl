@@ -172,8 +172,15 @@
   </tr>
   
   <tr>
-    <th>{{mb_label object=$op field="depassement"}}</th>
-    <td colspan="2">{{mb_field object=$op field="depassement" size="4"}} €</td>
+    <td class="text">{{mb_label object=$op field="depassement"}}</td>
+    <td class="text">{{mb_label object=$op field="forfait"}}</td>
+    <td class="text">{{mb_label object=$op field="fournitures"}}</td>
+  </tr>
+
+  <tr>
+    <td>{{mb_field object=$op field="depassement" size="4"}} €</td>
+    <td>{{mb_field object=$op field="forfait" size="4"}} €</td>
+    <td>{{mb_field object=$op field="fournitures" size="4"}} €</td>
   </tr>
   
   <tr>

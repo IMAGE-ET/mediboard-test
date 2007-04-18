@@ -17,6 +17,8 @@ aProtocoles[{{$curr_protocole->protocole_id}}] = {
   materiel         : "{{$curr_protocole->materiel|smarty:nodefaults|escape:"javascript"}}",
   convalescence    : "{{$curr_protocole->convalescence|smarty:nodefaults|escape:"javascript"}}",
   depassement      : "{{$curr_protocole->depassement}}",
+  forfait          : "{{$curr_protocole->forfait}}",
+  fournitures      : "{{$curr_protocole->fournitures}}",
   type             : "{{$curr_protocole->type}}",
   duree_hospi      : {{$curr_protocole->duree_hospi}},
   rques_sejour     : "{{$curr_protocole->rques_sejour|smarty:nodefaults|escape:"javascript"}}",

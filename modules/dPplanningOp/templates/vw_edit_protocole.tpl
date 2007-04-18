@@ -242,9 +242,17 @@ function pageMain() {
           <td>{{mb_field object=$protocole field="materiel" rows="3"}}</td>
           <td>{{mb_field object=$protocole field="rques_operation" rows="3"}}</td>
         </tr>
+  
         <tr>
-          <th>{{mb_label object=$protocole field="depassement"}}</th>
-          <td colspan="2">{{mb_field object=$protocole field="depassement" size="4"}} €</td>
+          <td class="text">{{mb_label object=$protocole field="depassement"}}</td>
+          <td class="text">{{mb_label object=$protocole field="forfait"}}</td>
+          <td class="text">{{mb_label object=$protocole field="fournitures"}}</td>
+        </tr>
+
+        <tr>
+          <td>{{mb_field object=$protocole field="depassement" size="4"}} €</td>
+          <td>{{mb_field object=$protocole field="forfait" size="4"}} €</td>
+          <td>{{mb_field object=$protocole field="fournitures" size="4"}} €</td>
         </tr>
       </table>
     </td>

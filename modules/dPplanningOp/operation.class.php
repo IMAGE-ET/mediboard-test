@@ -44,7 +44,9 @@ class COperation extends CMbObject {
   var $labo           = null;
 
   var $depassement    = null;
-  var $annulee        = null;    // completé par $sejour->annule
+  var $forfait        = null;
+  var $fournitures    = null;
+  var $annulee        = null;
   
   //timings enregistrés
   var $entree_bloc    = null;
@@ -120,6 +122,8 @@ class COperation extends CMbObject {
       "rques"          => "text confidential",
       "rank"           => "num max|255",
       "depassement"    => "currency min|0 confidential",
+      "forfait"        => "currency min|0 confidential",
+      "founitures"     => "currency min|0 confidential",
       "annulee"        => "bool",
       "pose_garrot"    => "time",
       "debut_op"       => "time",

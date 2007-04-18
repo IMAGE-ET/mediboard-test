@@ -64,6 +64,8 @@ function setProtocole(protocole) {
   formOp.materiel.value          = protocole.materiel;
   formOp.examen.value            = protocole.examen;
   formOp.depassement.value       = protocole.depassement;
+  formOp.forfait.value           = protocole.forfait;
+  formOp.fournitures.value       = protocole.fournitures;
   formOp.rques.value             = protocole.rques_operation;
   formSejour.type.value          = protocole.type;
   formSejour._duree_prevue.value = protocole.duree_hospi;

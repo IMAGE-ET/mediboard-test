@@ -31,6 +31,8 @@ class CProtocole extends CMbObject {
   var $duree_hospi     = null;
   var $rques_operation = null; // Operation->rques
   var $depassement     = null;
+  var $forfait         = null;
+  var $fournitures     = null;
     
   // Form fields
   var $_hour_op    = null;
@@ -62,6 +64,8 @@ class CProtocole extends CMbObject {
       "duree_hospi"     => "notNull num minMax|0|36500",
       "rques_operation" => "text confidential",
       "depassement"     => "float min|0 confidential",
+      "forfait"         => "float min|0 confidential",
+      "fournitures"     => "float min|0 confidential",
       "pathologie"      => "str length|3",
       "septique"        => "bool",
       "codes_ccam"      => "str",

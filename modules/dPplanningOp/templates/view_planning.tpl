@@ -132,6 +132,20 @@
     <td>{{$operation->_ref_sejour->_duree_prevue}} jours</td>
   </tr>
   
+  {{if $operation->forfait}}
+  <tr>
+    <th>Forfait clinique</th>
+    <td>{{$operation->forfait}} euros</td>
+  </tr>
+  {{/if}}
+  
+  {{if $operation->fournitures}}
+  <tr>
+    <th>Fournitures</th>
+    <td>{{$operation->fournitures}} euros</td>
+  </tr>
+  {{/if}}
+  
   <tr><th class="category" colspan="2">Rendez vous d'anesthésie</th></tr>
   
   <tr>
