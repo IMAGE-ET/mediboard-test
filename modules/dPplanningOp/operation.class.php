@@ -123,7 +123,7 @@ class COperation extends CMbObject {
       "rank"           => "num max|255",
       "depassement"    => "currency min|0 confidential",
       "forfait"        => "currency min|0 confidential",
-      "founitures"     => "currency min|0 confidential",
+      "fournitures"    => "currency min|0 confidential",
       "annulee"        => "bool",
       "pose_garrot"    => "time",
       "debut_op"       => "time",

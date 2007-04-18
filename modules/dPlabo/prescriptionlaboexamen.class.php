@@ -14,6 +14,9 @@ class CPrescriptionLaboExamen extends CMbObject {
   // DB references
   var $prescription_labo_id = null;
   var $examen_labo_id       = null;
+  var $resultat             = null;
+  var $date                 = null;
+  var $commentaire          = null;
   
   // Forward references
   var $_ref_prescription_labo = null;
@@ -28,8 +31,21 @@ class CPrescriptionLaboExamen extends CMbObject {
   function getSpecs() {
     return array (
       "prescription_labo_id" => "ref class|CPrescriptionLabo notNull",
-      "examen_labo_id"       => "ref class|CExamenLabo notNull"
+      "examen_labo_id"       => "ref class|CExamenLabo notNull",
+      "resultat"             => "str",
+      "date"                 => "date",
+      "commentaire"          => "text"
     );
+  }
+  
+  function check() {
+    if($msg = parent::check()) {
+      return $msg;
+    }
+    $this->loadRefExamen();
+    $resultTest = CMbFieldSpecFact::getSpec($this, $resultat, $this->_ref_examen_labo->type);
+    $msg =  $resultTest->checkPropertyValue($this);
+    return $msg;
   }
   
   function updateFormFields() {
