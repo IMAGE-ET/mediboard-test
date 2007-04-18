@@ -157,7 +157,7 @@ function pageMain() {
 
 <table class="main">
   <tr>
-    <th>
+    <td>
 
       <form name="patFrm" action="index.php" method="get">
       <table class="form">
@@ -166,13 +166,13 @@ function pageMain() {
             <label for="patNom" title="Merci de choisir un patient pour voir son dossier">Choix du patient</label>
           </th>
           <td class="readonly">
-            <button class="new" type="button" style="float: right;"onclick="Prescription.create();">
-              Nouvelle prescription
-            </button>
             <input type="hidden" name="m" value="dPlabo" />
             <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
             <button class="search" type="button" onclick="popPat()">Chercher</button>
+            <button class="new" type="button" onclick="Prescription.create();">
+              Nouvelle prescription
+            </button>
           </td>
         </tr>
       </table>
@@ -188,12 +188,12 @@ function pageMain() {
         <input type="hidden" name="del" value="0" />
       </form>
 
-    </th>
-    <th>
+    </td>
+    <td>
       <form name="typeListeFrm" action="?" method="get">
       <table class="form">
         <tr>
-          <td>
+          <td class="button">
             <input type="hidden" name="m" value="dPlabo" />
             <input type="radio" name="typeListe" value="Pack" {{if $typeListe == "Pack" || $typeListe == ""}}checked="checked"{{/if}} onchange="window[this.value].select();" />
             <label for="typeListe_Pack">affichage des packs</label>
@@ -205,7 +205,7 @@ function pageMain() {
         </tr>
       </table>
       </form>
-    </th>
+    </td>
   </tr>
   <tr>
     <td class="halfPane" id="listPrescriptions">
