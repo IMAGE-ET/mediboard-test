@@ -59,14 +59,14 @@
     {{assign var="style" value="$font"}}
   {{/if}}
   <tr {{if $curr_consult->_id == $consult->_id}}class="selected"{{/if}}>
-    <td style="width: 40px; {{$style|smarty:nodefaults}}" rowspan="2">
+    <td style="width: 42px; {{if $curr_consult->_id != $consult->_id}}{{$style|smarty:nodefaults}}{{/if}}" rowspan="2">
       {{if !$boardItem}}
-      <a href="index.php?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}" title="Modifier le RDV" style="float: right;">
+      <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}" title="Modifier le RDV" style="float: right;">
         <img src="images/icons/planning.png" alt="modifier" />
       </a>
       {{/if}}
       {{if $curr_consult->patient_id}}
-        <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}" style="margin-bottom: 4px;">
+        <a href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}" style="margin-bottom: 4px;">
           {{$curr_consult->heure|truncate:5:"":true}}
         </a>
       {{else}}
@@ -78,7 +78,7 @@
     </td>
     <td style="{{$style|smarty:nodefaults}}">
       {{if $curr_consult->patient_id}}
-      <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+      <a href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}">
         {{$curr_consult->_ref_patient->_view|truncate:30:"...":true}}
         {{if $curr_consult->_ref_patient->_age != "??"}}
           ({{$curr_consult->_ref_patient->_age}}&nbsp;ans)
@@ -92,7 +92,7 @@
   <tr {{if $curr_consult->_id == $consult->_id}}class="selected"{{/if}}>
     <td style="{{$style|smarty:nodefaults}}">
       {{if $curr_consult->patient_id}}
-        <a href="index.php?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+        <a href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}">
           {{$curr_consult->motif|truncate:30:"...":true}}
         </a>
       {{else}}

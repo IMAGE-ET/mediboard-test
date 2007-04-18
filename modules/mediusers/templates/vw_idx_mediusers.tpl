@@ -64,7 +64,7 @@ function pageMain() {
         </tr>
         <tbody class="functionEffect" id="function{{$curr_function->_id}}" style="display:none;">
         {{foreach from=$curr_function->_ref_users item=curr_user}}
-        <tr>
+        <tr {{if $curr_user->_id == $mediuserSel->_id}}class="selected"{{/if}}>
           <td style="background-color: #{{$curr_function->color}}"></td>
           {{assign var=user_id value=$curr_user->_id}}
           {{assign var="href" value="?m=$m&tab=$tab&user_id=$user_id"}}
