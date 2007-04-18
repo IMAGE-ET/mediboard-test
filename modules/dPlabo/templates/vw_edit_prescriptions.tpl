@@ -29,7 +29,7 @@ var Catalogue = {
     if(iCatalogue) {
       url.addParam("catalogue_labo_id", iCatalogue);
     }
-    url.addParam("typeListe", document.typeListeFrm.typeListe.value);
+    url.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
     url.requestUpdate('listExamens', { waitingText : null });
   }
 }
@@ -49,7 +49,7 @@ var Pack = {
       url.addParam("pack_examens_labo_id", pack_id);
     }
     url.addParam("dragPacks", 1);
-    url.addParam("typeListe", document.typeListeFrm.typeListe.value);
+    url.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
     url.requestUpdate("listExamens", { waitingText: null });
   },
   delExamen: function(oForm) {
@@ -150,7 +150,7 @@ var oDragOptions = {
 
 function pageMain() {
   Prescription.select();
-  window[document.typeListeFrm.typeListe.value].select();
+  window[getCheckedValue(document.typeListeFrm.typeListe)].select();
 }
 
 </script>
@@ -193,20 +193,14 @@ function pageMain() {
       <form name="typeListeFrm" action="?" method="get">
       <table class="form">
         <tr>
-          <th><label for="typeListe" title="Choissisez le mode d'affichage des examens">Examens à afficher</label></th>
-          <td class="readonly">
+          <td>
             <input type="hidden" name="m" value="dPlabo" />
-            <select name="typeListe" onchange="window[this.value].select();">
-              <option value="Resultat" {{if $typeListe == "Resultat"}}selected="selected"{{/if}}>
-                Résultats
-              </option>
-              <option value="Pack" {{if $typeListe == "Pack"}}selected="selected"{{/if}}>
-                par packs
-              </option>
-              <option value="Catalogue" {{if $typeListe == "Catalogue"}}selected="selected"{{/if}}>
-                par catalogues
-              </option>
-            </select>
+            <input type="radio" name="typeListe" value="Pack" {{if $typeListe == "Pack" || $typeListe == ""}}checked="checked"{{/if}} onchange="window[this.value].select();" />
+            <label for="typeListe_Pack">affichage des packs</label>
+            <input type="radio" name="typeListe" value="Catalogue" {{if $typeListe == "Catalogue"}}checked="checked"{{/if}} onchange="window[this.value].select();" />
+            <label for="typeListe_Catalogue">affichage des catalogues</label>
+            <input type="radio" name="typeListe" value="Resultat" {{if $typeListe == "Resultat"}}checked="checked"{{/if}} onchange="window[this.value].select();" />
+            <label for="typeListe_Resultat">remplissage des résultats</label>
           </td>
         </tr>
       </table>
