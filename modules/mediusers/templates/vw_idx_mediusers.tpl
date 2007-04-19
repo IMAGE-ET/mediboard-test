@@ -131,9 +131,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$mediuserSel field="deb_activite"}}</th>
 		      <td class="date">
-		        <div id="mediuser_deb_activite_da">{{mb_value object=$mediuserSel field="deb_activite"}}</div>
-		        <input type="hidden" name="deb_activite" class="date" value="{{$mediuserSel->deb_activite}}" />
-            <img id="mediuser_deb_activite_trigger" src="./images/icons/calendar.gif" alt="Date de début d'activité"/>
+		        {{mb_field object=$mediuserSel field="deb_activite" form="mediuser"}}
             <button class="cancel notext" type="button" onclick="deldate('deb_activite')">
               {{tr}}remove{{/tr}}
             </button>

@@ -1,5 +1,10 @@
 {{* $Id: $ *}}
 
+<script type="text/javascript">
+  // Explicit form preparation for Ajax loading
+  prepareForm(document.editPrescriptionItem);
+</script>
+
 <form name="editPrescriptionItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="dPlabo" />
 <input type="hidden" name="dosql" value="do_prescription_examen_aed" />
@@ -20,7 +25,7 @@
   </tr>
   <tr>
     <th>{{mb_label object=$prescriptionItem field="date"}}</th>
-    <td>{{mb_field object=$prescriptionItem field="date"}}</td>
+    <td class="date">{{mb_field object=$prescriptionItem field="date" form="editPrescriptionItem"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$prescriptionItem field="resultat"}}</th>

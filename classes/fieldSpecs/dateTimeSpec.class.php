@@ -24,7 +24,7 @@ class CDateTimeSpec extends CMbFieldSpec {
   }
   
   function getSpecType() {
-    return("time");
+    return("dateTime");
   }
   
   function checkProperty($object){

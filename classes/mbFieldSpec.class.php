@@ -241,6 +241,18 @@ class CMbFieldSpec {
     return $sHtml;
   }
   
+  function getFormElementDate($object, &$params, $value, $className){
+    $field        = htmlspecialchars($this->fieldName);
+    $extra        = CMbArray::makeXmlAttributes($params);
+    $sHtml        = '<div id="'.$params["form"].'_'.$field.'_da">'.mbTranformTime(null, $value, "%d/%m/%Y").'</div>';
+    $sHtml       .= '<input type="hidden" name="'.$field.'" class="date" value="'.$value.'" '.$extra.' />';
+    $sHtml       .= '<img id="'.$params["form"].'_'.$field.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"/>';
+    $sHtml       .= '<script type="text/javascript">';
+    $sHtml       .= 'regFieldCalendar("'.$params["form"].'", "'.$field.'");';
+    $sHtml       .= '</script>';
+    return $sHtml;
+  }
+  
   function getFormHtmlElement($object, &$params, $value, $className){
     return $this->getFormElementText($object, $params, $value, $className);
     //trigger_error("mb_field: Specification '".$this->prop."' non prise en charge", E_USER_NOTICE);
