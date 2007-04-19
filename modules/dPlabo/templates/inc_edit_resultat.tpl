@@ -1,4 +1,5 @@
 {{* $Id: $ *}}
+
 <form name="editPrescriptionItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="dPlabo" />
 <input type="hidden" name="dosql" value="do_prescription_examen_aed" />
@@ -8,11 +9,11 @@
 <table class="form">
   <tr>
     {{if $prescriptionItem->_id}}
-    <th class="title modifiy" colspan="2">
+    <th class="title modify" colspan="2">
       Saisie du résultat
     </th>
     {{else}}
-    <th class="title modifiy" colspan="2">
+    <th colspan="2">
       Veuillez sélectioner un examen
     </th>
     {{/if}}

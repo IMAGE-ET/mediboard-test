@@ -64,7 +64,7 @@ var Prescription = {
   select : function(prescription_id) {
     if(isNaN(prescription_id)) {
       prescription_id = 0;
-      oForm = document.editPrescriptionItem;
+      oForm = document.dropPrescriptionItem;
       if(oForm) {
         prescription_id = oForm.prescription_labo_id.value;
       }
@@ -109,32 +109,35 @@ var Prescription = {
       }
       
       this.eSelected = $(["PrescriptionItem", iPrescriptionItem].join("-"));
-      Element.classNames(this.eSelected).add("selected");
+      
+      if (this.eSelected) {
+        Element.classNames(this.eSelected).add("selected");
+      }
     },
 
     edit: function(iPrescriptionItem) {
       setCheckedValue(document.typeListeFrm.typeListe, "Resultat");
-      if(iPrescriptionItem) {
-        Prescription.Examen.select(iPrescriptionItem);
-      }
+
       var url = new Url;
       url.setModuleAction("dPlabo", "httpreq_edit_resultat");
-    url.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
-      if(iPrescriptionItem) {
+      url.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
+
+      if (iPrescriptionItem) {
+        Prescription.Examen.select(iPrescriptionItem);
         url.addParam("prescription_labo_examen_id", iPrescriptionItem);
       }
       url.requestUpdate("rightPane", { waitingText: null });
     },
 
     del: function(oForm) {
-      oFormBase = document.editPrescriptionItem;
+      oFormBase = document.dropPrescriptionItem;
       oFormBase.prescription_labo_id.value = oForm.prescription_labo_id.value;
       submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select });
       return true;
     },
   
     drop: function(sExamen_id, prescription_id) {
-      oFormBase = document.editPrescriptionItem;
+      oFormBase = document.dropPrescriptionItem;
       aExamen_id = sExamen_id.split("-");
       if(aExamen_id[0] == "examen") {
         oFormBase.dosql.value = "do_prescription_examen_aed";
@@ -201,6 +204,7 @@ function pageMain() {
           <td class="readonly">
             <input type="hidden" name="m" value="dPlabo" />
             <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
+            <input type="hidden" name="prescription_labo_id" value="" />
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
             <button class="search" type="button" onclick="popPat()">Chercher</button>
             <button class="new" type="button" onclick="Prescription.create();">

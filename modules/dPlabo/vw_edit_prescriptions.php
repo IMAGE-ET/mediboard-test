@@ -14,6 +14,9 @@ $can->needsRead();
 $patient_id = mbGetValueFromGetOrSession("patient_id");
 $typeListe  = mbGetValueFromGetOrSession("typeListe");
 
+// Permettre de le remettre à null lors d'un changement de patient
+mbGetValueFromGetOrSession("prescription_labo_id");
+
 // Chargement du patient
 
 $patient = new CPatient;

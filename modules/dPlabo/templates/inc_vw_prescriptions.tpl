@@ -3,7 +3,7 @@
 </script>
   
 
-<form name="editPrescriptionItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="dropPrescriptionItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dPlabo" />
   <input type="hidden" name="dosql" value="do_prescription_examen_aed" />
   <input type="hidden" name="_pack_examens_labo_id" value="" />
