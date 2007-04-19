@@ -30,7 +30,7 @@
   </tr>
   <tr>
     <th>{{mb_label object=$prescriptionItem field="resultat"}}</th>
-    <td>{{mb_field object=$prescriptionItem field="resultat"}}</td>
+    <td>{{mb_field object=$prescriptionItem field="resultat" prop=$prescriptionItem->_ref_examen_labo->type}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$prescriptionItem field="commentaire"}}</th>

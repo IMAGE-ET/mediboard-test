@@ -536,7 +536,7 @@ class CMbObject {
         trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$this->_class_name'", E_USER_WARNING);
       } else {
         $propValue =& $this->$propName;
-        if($propValue !== null) {
+        if(($propValue !== null) || (!$this->_id)) {
           $msgProp = $this->checkProperty($propName);
           
           $debugInfo = $dPconfig["debug"] ? "(val:'$propValue', spec:'$propSpec')" : "";

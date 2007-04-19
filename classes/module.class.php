@@ -176,6 +176,9 @@ class CModule extends CMbObject {
 
     if(!is_file("./modules/".$this->mod_name."/".$tab.".php")) {
       $tab = $this->_tabs[0][0];
+      if(!is_file("./modules/".$this->mod_name."/".$tab.".php")) {
+        $AppUI->redirect("m=system&a=access_denied");
+      }
     }
     
     $AppUI->savePlace();

@@ -55,6 +55,7 @@ class CMbFieldSpecFact {
        $nameClass = $aFrag[0];
       }
     }
+
     if($nameClass){
       $specObject = new $aClass[$nameClass]($object->_class_name, $field, $propSpec, $aProperties);
     } else {

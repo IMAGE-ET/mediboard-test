@@ -42,8 +42,13 @@ class CPrescriptionLaboExamen extends CMbObject {
     if($msg = parent::check()) {
       return $msg;
     }
+    if(!$this->examen_labo_id) {
+      $old_object = new CPrescriptionLaboExamen();
+      $old_object->load($this->_id);
+      $this->examen_labo_id = $old_object->examen_labo_id;
+    }
     $this->loadRefExamen();
-    $resultTest = CMbFieldSpecFact::getSpec($this, 'resultat', $this->_ref_examen_labo->type);
+    $resultTest = CMbFieldSpecFact::getSpec($this, 'resultat', $this->_ref_examen_labo->type, true);
     $msg =  $resultTest->checkPropertyValue($this);
     return $msg;
   }
