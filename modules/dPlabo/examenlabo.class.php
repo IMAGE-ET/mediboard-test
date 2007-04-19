@@ -22,6 +22,9 @@ class CExamenLabo extends CMbObject {
   var $min         = null;
   var $max         = null;
   
+  // Form fields
+  var $_reference_values = null;
+  
   // Fwd References
   var $_ref_catalogue_labo = null;
   
@@ -58,6 +61,10 @@ class CExamenLabo extends CMbObject {
   function updateFormFields() {
     $this->_shortview = $this->identifiant;
     $this->_view = "$this->identifiant : $this->libelle";
+    
+    if ($this->type == "num") {
+      $this->_reference_values = "$this->min $this->unite - $this->max $this->unite";
+    }
   }
   
   function loadRefsFwd() {

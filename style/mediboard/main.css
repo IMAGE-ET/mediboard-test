@@ -492,6 +492,42 @@ table.tabmenu td.selectedRight {
   background: url(./images/icons/tabSelectedRight.png) no-repeat bottom left;
 }
 
+/* Pane table */
+
+table.main {
+  width: 100%;
+  margin: 2px;
+  border-spacing: 4px;
+}
+
+table.main td {
+  vertical-align: top;
+}
+
+table.main td.halfPane {
+  width: 50%;
+}
+
+table.main th.halfPane {
+  width: 50%;
+}
+
+td.greedyPane {
+  width: 100%;
+}
+
+th.greedyPane {
+  width: 100%;
+}
+
+th.title {
+  font-size: 14px;
+  font-weight: bold;  
+  text-align: center;
+  background: #bbb;
+  border: #aaa 1px outset;
+}
+
 /* Standard table */
 
 table.tbl {
@@ -544,6 +580,7 @@ div.tree-header {
   background-color: #fff;
   padding: 2px;
   white-space: nowrap;
+  vertical-align: middle;
 }
 
 table.tbl tr.selected td,
@@ -561,6 +598,7 @@ div.draggable {
   cursor: move;
 }
 
+tbody.hoverable:hover tr td,
 table.tbl tr:hover td,
 div.tree-header:hover {
   background-color: #f8f8f8;
@@ -750,42 +788,6 @@ div.autocomplete ul li {
   margin:0;
   padding:2px;
   cursor:pointer;
-}
-
-/* Pane table */
-
-table.main {
-  width: 100%;
-  margin: 2px;
-  border-spacing: 4px;
-}
-
-table.main td {
-  vertical-align: top;
-}
-
-table.main td.halfPane {
-  width: 50%;
-}
-
-table.main th.halfPane {
-  width: 50%;
-}
-
-td.greedyPane {
-  width: 100%;
-}
-
-th.greedyPane {
-  width: 100%;
-}
-
-th.title {
-  font-size: 14px;
-  font-weight: bold;  
-  text-align: center;
-  background: #bbb;
-  border: #aaa 1px outset;
 }
 
 /* links in header blocks */

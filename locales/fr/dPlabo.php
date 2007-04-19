@@ -1,5 +1,5 @@
 <?php
-$locales['mod-dPlabo-tab-vw_edit_prescriptions'] = 'Prescriptions';
+$locales['CPrescriptionLaboExamen-commentaire-desc'] = 'Commentaires du praticien sur la valeur de l\'examen';
 $locales['CCatalogueLabo'] = 'Catalogue d\'examens';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sous-catalogue';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Examen';
@@ -35,8 +35,14 @@ $locales['CPackExamensLabo-function_id-desc'] = 'Fonction associée au pack';
 $locales['CPackExamensLabo-libelle'] = 'Libellé';
 $locales['CPackExamensLabo-libelle-desc'] = 'Libellé du pack';
 $locales['CPackItemExamenLabo'] = 'Examen de pack';
+$locales['CPrescriptionLaboExamen-commentaire'] = 'Commentaires';
+$locales['CPrescriptionLaboExamen-date'] = 'Date';
+$locales['CPrescriptionLaboExamen-date-desc'] = 'Date du résultat de l\'examen';
+$locales['CPrescriptionLaboExamen-resultat'] = 'Valeur';
+$locales['CPrescriptionLaboExamen-resultat-desc'] = 'Valeur du résultat (le type dépend de l\'exemen)';
 $locales['mod-dPlabo-tab-add_pack_exams'] = 'Contenu des packs';
 $locales['mod-dPlabo-tab-vw_edit_catalogues'] = 'Edition des catalogues';
 $locales['mod-dPlabo-tab-vw_edit_examens'] = 'Edition des examens';
 $locales['mod-dPlabo-tab-vw_edit_packs'] = 'Edition des packs';
+$locales['mod-dPlabo-tab-vw_edit_prescriptions'] = 'Prescriptions';
 ?>

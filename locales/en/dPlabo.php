@@ -1,5 +1,5 @@
 <?php
-$locales['CPackExamensLabo-back-items_examen_labo'] = 'Test';
+$locales['CPrescriptionLaboExamen-commentaire-desc'] = 'Pratician comment on exam value';
 $locales['CCatalogueLabo'] = '';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sub-catalog';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Medical test';
@@ -29,13 +29,20 @@ $locales['CExamenLabo.type.bool'] = '';
 $locales['CExamenLabo.type.num'] = '';
 $locales['CExamenLabo.type.str'] = '';
 $locales['CPackExamensLabo'] = '';
+$locales['CPackExamensLabo-back-items_examen_labo'] = 'Test';
 $locales['CPackExamensLabo-function_id'] = '';
 $locales['CPackExamensLabo-function_id-desc'] = '';
 $locales['CPackExamensLabo-libelle'] = '';
 $locales['CPackExamensLabo-libelle-desc'] = '';
 $locales['CPackItemExamenLabo'] = '';
+$locales['CPrescriptionLaboExamen-commentaire'] = 'comment';
+$locales['CPrescriptionLaboExamen-date'] = 'Date';
+$locales['CPrescriptionLaboExamen-date-desc'] = 'Result date for exam';
+$locales['CPrescriptionLaboExamen-resultat'] = 'Result value';
+$locales['CPrescriptionLaboExamen-resultat-desc'] = 'Result value (type depends on examen)';
 $locales['mod-dPlabo-tab-add_pack_exams'] = '';
 $locales['mod-dPlabo-tab-vw_edit_catalogues'] = '';
 $locales['mod-dPlabo-tab-vw_edit_examens'] = '';
 $locales['mod-dPlabo-tab-vw_edit_packs'] = '';
+$locales['mod-dPlabo-tab-vw_edit_prescriptions'] = '';
 ?>

@@ -635,12 +635,15 @@ table.tbl th.title {
   border: #aaa 1px outset;
 }
 
+div.selected,
 table.tbl tr.selected td,
 table.form tr.selected td {
   background-color: #edb;
 }
 
-table.tbl tr:hover td {
+tbody.hoverable:hover tr td,
+table.tbl tr:hover td,
+div.tree-header:hover {
   background-color: #fdd;
 }
 

@@ -21,7 +21,10 @@ class CPrescriptionLaboExamen extends CMbObject {
   // Forward references
   var $_ref_prescription_labo = null;
   var $_ref_examen_labo       = null;
-  
+
+  // Distant fields
+  var $_hors_limite = null;
+    
   function CPrescriptionLaboExamen() {
     $this->CMbObject("prescription_labo_examen", "prescription_labo_examen_id");
     
@@ -39,24 +42,29 @@ class CPrescriptionLaboExamen extends CMbObject {
   }
   
   function check() {
-    if($msg = parent::check()) {
+    if ($msg = parent::check()) {
       return $msg;
     }
+    
     if(!$this->examen_labo_id) {
       $old_object = new CPrescriptionLaboExamen();
       $old_object->load($this->_id);
       $this->examen_labo_id = $old_object->examen_labo_id;
     }
     $this->loadRefExamen();
+    $resultTest = CMbFieldSpecFact::getSpec($this, "resultat", $this->_ref_examen_labo->type);
+    return $resultTest->checkPropertyValue($this);
     $resultTest = CMbFieldSpecFact::getSpec($this, 'resultat', $this->_ref_examen_labo->type, true);
     $msg =  $resultTest->checkPropertyValue($this);
     return $msg;
   }
   
   function updateFormFields() {
-    $this->loadRefsFwd();
-    $this->_shortview = $this->_ref_examen_labo->_shortview;
-    $this->_view      = $this->_ref_examen_labo->_view;
+    $this->loadRefExamen();
+    $examen =& $this->_ref_examen_labo;
+    $this->_hors_limite = $examen->type == "num" && ($examen->min > $this->resultat || $examen->max < $this->resultat);
+    $this->_shortview = $examen->_shortview;
+    $this->_view      = $examen->_view;
   }
   
   function loadRefPrescription() {
@@ -72,6 +80,35 @@ class CPrescriptionLaboExamen extends CMbObject {
   function loadRefsFwd() {
     $this->loadRefPrescription();
     $this->loadRefExamen();
+  }
+  
+  function loadSiblings() {
+    return $this->loadResults($this->_ref_prescription_labo->patient_id, $this->examen_labo_id);
+  }
+  
+  /**
+   * load results items with given patient and exam
+   */
+  function loadResults($patient_id, $examen_labo_id) {
+    $examen = new CExamenLabo;
+    $examen->load($examen_labo_id);
+    
+    $prescription = new CPrescriptionLabo;
+    $prescription->patient_id = $patient_id;
+    $prescriptions = $prescription->loadMatchingList();
+    
+    $where = array ();
+    $where["examen_labo_id"] = "= '$examen_labo_id'";
+    $where["prescription_labo_id"] = db_prepare_in(array_keys($prescriptions));
+    $order = "date";
+    
+    $items = $this->loadList($where, $order);
+    foreach ($items as &$item) {
+      $item->_ref_prescription_labo =& $prescriptions[$item->prescription_labo_id];
+      $item->_ref_examen_labo =& $examen;
+    }
+    
+    return $items;
   }
 }
 
