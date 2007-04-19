@@ -51,7 +51,7 @@ class CDateTimeSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    return $this->getFormElementText($object, $params, $value, $className);
+    return $this->getFormElementDateTime($object, $params, $value, $className);
   }
 }
 
