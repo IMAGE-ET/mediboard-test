@@ -18,8 +18,6 @@ $prescriptionItem = new CPrescriptionLaboExamen;
 $prescriptionItem->load(mbGetValueFromGetOrSession("prescription_labo_examen_id"));
 $prescriptionItem->loadRefs();
 
-mbTrace($prescriptionItem->getProps(), "Prescription Item");
-
 $siblingItems = new CPrescriptionLaboExamen;
 
 
