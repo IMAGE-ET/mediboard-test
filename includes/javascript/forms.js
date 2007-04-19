@@ -87,7 +87,7 @@ function setCheckedValue(oRadio, sValue) {
   }
   
   for (var i = 0; i < oRadio.length; i++) {
-    if (oRadio[i].value = sValue) {
+    if (oRadio[i].value == sValue) {
       oRadio[i].checked = true;
     }
   }

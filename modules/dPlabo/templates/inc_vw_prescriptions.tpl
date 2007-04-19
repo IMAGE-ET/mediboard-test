@@ -1,3 +1,8 @@
+<script type="text/javascript">
+  Prescription.Examen.init({{$prescription_labo_examen_id}})
+</script>
+  
+
 <form name="editPrescriptionItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dPlabo" />
   <input type="hidden" name="dosql" value="do_prescription_examen_aed" />
@@ -13,7 +18,7 @@
   <script>
   Droppables.add('drop-prescription-{{$curr_prescription->_id}}', {
     onDrop: function(element) {
-      Prescription.dropExamen(element.id, {{$curr_prescription->_id}})
+      Prescription.Examen.drop(element.id, {{$curr_prescription->_id}})
     }, 
     hoverclass:'selected'
   } );
@@ -46,7 +51,7 @@
   </tr>
   {{foreach from=$prescription->_ref_prescription_labo_examens item="curr_item"}}
   {{assign var="curr_examen" value=$curr_item->_ref_examen_labo}}
-  <tr>
+  <tr id="PrescriptionItem-{{$curr_item->_id}}">
     <td>
       <form name="delPrescriptionExamen-{{$curr_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="m" value="dPlabo" />
@@ -54,29 +59,26 @@
         <input type="hidden" name="prescription_labo_id" value="{{$prescription->_id}}" />
         <input type="hidden" name="prescription_labo_examen_id" value="{{$curr_item->_id}}" />
         <input type="hidden" name="del" value="1" />
-        <button type="button" class="trash notext" style="float: right;" onclick="Prescription.delExamen(this.form)"/>
+        <button type="button" class="trash notext" style="float: right;" onclick="Prescription.Examen.del(this.form)" >{{tr}}Delete{{/tr}}</button>
       </form>
-      {{$curr_examen->_view}}
-    </td>
-    <td>
+       
+      <button type="button" class="edit notext" style="float: left;" onclick="Prescription.Examen.edit({{$curr_item->_id}})">button</button>
+
       <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-        {{$curr_examen->type}}
+        {{$curr_examen->_view}}
       </a>
     </td>
     <td>
-      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-        {{$curr_examen->unite}}
-      </a>
+      {{$curr_examen->type}}
     </td>
     <td>
-      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-        {{$curr_examen->min}} {{$curr_examen->unite}}
-      </a>
+      {{$curr_examen->unite}}
     </td>
     <td>
-      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-        {{$curr_examen->max}} {{$curr_examen->unite}}
-      </a>
+      {{$curr_examen->min}} {{$curr_examen->unite}}
+    </td>
+    <td>
+      {{$curr_examen->max}} {{$curr_examen->unite}}
     </td>
   </tr>
   {{/foreach}}

@@ -3,7 +3,7 @@
 function popPat() {
   var url = new Url();
   url.setModuleAction("dPpatients", "pat_selector");
-  url.popup(500, 500, "Patient");
+  url.popup(600, 500, "Patient");
 }
 
 function setPat( key, val ) {
@@ -30,7 +30,7 @@ var Catalogue = {
       url.addParam("catalogue_labo_id", iCatalogue);
     }
     url.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
-    url.requestUpdate('listExamens', { waitingText : null });
+    url.requestUpdate('rightPane', { waitingText : null });
   }
 }
 
@@ -50,7 +50,7 @@ var Pack = {
     }
     url.addParam("dragPacks", 1);
     url.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
-    url.requestUpdate("listExamens", { waitingText: null });
+    url.requestUpdate("rightPane", { waitingText: null });
   },
   delExamen: function(oForm) {
     oFormBase = $('newPackItem');
@@ -75,7 +75,7 @@ var Prescription = {
     if(prescription_id) {
       url.addParam("prescription_labo_id", prescription_id);
     }
-    url.addParam("patient_id"          , iPatient_id    );
+    url.addParam("patient_id", iPatient_id    );
     url.requestUpdate('listPrescriptions', { waitingText: null });
   },
   
@@ -92,36 +92,69 @@ var Prescription = {
     return true;
   },
   
-  delExamen: function(oForm) {
-    oFormBase = document.editPrescriptionItem;
-    oFormBase.prescription_labo_id.value = oForm.prescription_labo_id.value;
-    submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select });
-    return true;
-  },
+  Examen : {
+    eSelected : null,
+    
+    init: function(iPrescriptionItem) {
+      if(getCheckedValue(document.typeListeFrm.typeListe) == "Resultat") {
+        Prescription.Examen.edit(iPrescriptionItem);
+      } else {
+        Prescription.Examen.select(iPrescriptionItem);
+      }
+    },
+    
+    select: function(iPrescriptionItem) {
+      if (this.eSelected) {
+        Element.classNames(this.eSelected).remove("selected");
+      }
+      
+      this.eSelected = $(["PrescriptionItem", iPrescriptionItem].join("-"));
+      Element.classNames(this.eSelected).add("selected");
+    },
+
+    edit: function(iPrescriptionItem) {
+      setCheckedValue(document.typeListeFrm.typeListe, "Resultat");
+      if(iPrescriptionItem) {
+        Prescription.Examen.select(iPrescriptionItem);
+      }
+      var url = new Url;
+      url.setModuleAction("dPlabo", "httpreq_edit_resultat");
+    url.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
+      if(iPrescriptionItem) {
+        url.addParam("prescription_labo_examen_id", iPrescriptionItem);
+      }
+      url.requestUpdate("rightPane", { waitingText: null });
+    },
+
+    del: function(oForm) {
+      oFormBase = document.editPrescriptionItem;
+      oFormBase.prescription_labo_id.value = oForm.prescription_labo_id.value;
+      submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select });
+      return true;
+    },
   
-  editExamen: function() {
-    oFormBase = document.editPrescriptionItem;
-  },
-  
-  dropExamen: function(sExamen_id, prescription_id) {
-    oFormBase = document.editPrescriptionItem;
-    aExamen_id = sExamen_id.split("-");
-    if(aExamen_id[0] == "examen") {
-      oFormBase.dosql.value = "do_prescription_examen_aed";
-      oFormBase.examen_labo_id.value = aExamen_id[1];
-    } else if(aExamen_id[0] == "pack") {
-      oFormBase.dosql.value = "do_prescription_pack_add";
-      oFormBase._pack_examens_labo_id.value = aExamen_id[1];
-    }
-    oFormBase.prescription_labo_id.value = prescription_id;
-    submitFormAjax(oFormBase, 'systemMsg', { onComplete: Prescription.select });
-    return true;
+    drop: function(sExamen_id, prescription_id) {
+      oFormBase = document.editPrescriptionItem;
+      aExamen_id = sExamen_id.split("-");
+      if(aExamen_id[0] == "examen") {
+        oFormBase.dosql.value = "do_prescription_examen_aed";
+        oFormBase.examen_labo_id.value = aExamen_id[1];
+      } else if(aExamen_id[0] == "pack") {
+        oFormBase.dosql.value = "do_prescription_pack_add";
+        oFormBase._pack_examens_labo_id.value = aExamen_id[1];
+      }
+      oFormBase.prescription_labo_id.value = prescription_id;
+      submitFormAjax(oFormBase, 'systemMsg', { onComplete: Prescription.select });
+      return true;
+    }    
+    
   }
+  
 }
 
 var Resultat = {
   select: function() {
-    Console.trace("Mode Résultats");
+    Prescription.Examen.edit();
   }
 }
 
@@ -196,11 +229,11 @@ function pageMain() {
           <td class="button">
             <input type="hidden" name="m" value="dPlabo" />
             <input type="radio" name="typeListe" value="Pack" {{if $typeListe == "Pack" || $typeListe == ""}}checked="checked"{{/if}} onchange="window[this.value].select();" />
-            <label for="typeListe_Pack">affichage des packs</label>
+            <label for="typeListe_Pack">Packs</label>
             <input type="radio" name="typeListe" value="Catalogue" {{if $typeListe == "Catalogue"}}checked="checked"{{/if}} onchange="window[this.value].select();" />
-            <label for="typeListe_Catalogue">affichage des catalogues</label>
+            <label for="typeListe_Catalogue">Catalogues</label>
             <input type="radio" name="typeListe" value="Resultat" {{if $typeListe == "Resultat"}}checked="checked"{{/if}} onchange="window[this.value].select();" />
-            <label for="typeListe_Resultat">remplissage des résultats</label>
+            <label for="typeListe_Resultat">Résultats</label>
           </td>
         </tr>
       </table>
@@ -210,7 +243,7 @@ function pageMain() {
   <tr>
     <td class="halfPane" id="listPrescriptions">
     </td>
-    <td class="halfPane" id="listExamens">
+    <td class="halfPane" id="rightPane">
     </td>
   </tr>
 </table>
