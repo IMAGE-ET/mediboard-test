@@ -247,9 +247,10 @@ class CMbFieldSpec {
     $sHtml        = '<div id="'.$params["form"].'_'.$field.'_da">'.mbTranformTime(null, $value, "%d/%m/%Y").'</div>';
     $sHtml       .= '<input type="hidden" name="'.$field.'" class="date" value="'.$value.'" '.$extra.' />';
     $sHtml       .= '<img id="'.$params["form"].'_'.$field.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"/>';
-    $sHtml       .= '<script type="text/javascript">';
-    $sHtml       .= 'regFieldCalendar("'.$params["form"].'", "'.$field.'");';
-    $sHtml       .= '</script>';
+    // Can't be handeld here cauz preporeForms has to be done
+    //$sHtml       .= '<script type="text/javascript">';
+    //$sHtml       .= 'regFieldCalendar("'.$params["form"].'", "'.$field.'");';
+    //$sHtml       .= '</script>';
     return $sHtml;
   }
   

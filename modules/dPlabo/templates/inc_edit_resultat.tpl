@@ -3,6 +3,7 @@
 <script type="text/javascript">
   // Explicit form preparation for Ajax loading
   prepareForm(document.editPrescriptionItem);
+  regFieldCalendar('editPrescriptionItem', 'date');
 </script>
 
 <form name="editPrescriptionItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
