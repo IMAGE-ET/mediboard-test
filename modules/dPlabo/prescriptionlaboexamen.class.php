@@ -43,7 +43,7 @@ class CPrescriptionLaboExamen extends CMbObject {
       return $msg;
     }
     $this->loadRefExamen();
-    $resultTest = CMbFieldSpecFact::getSpec($this, $resultat, $this->_ref_examen_labo->type);
+    $resultTest = CMbFieldSpecFact::getSpec($this, 'resultat', $this->_ref_examen_labo->type);
     $msg =  $resultTest->checkPropertyValue($this);
     return $msg;
   }

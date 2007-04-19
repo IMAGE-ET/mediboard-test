@@ -11,7 +11,7 @@ global $AppUI;
 
 $config = array();
 $config["mod_name"]        = "dPlabo";
-$config["mod_version"]     = "0.14";
+$config["mod_version"]     = "0.15";
 $config["mod_type"]        = "user";
 
 class CSetupdPlabo extends CSetup {
@@ -100,7 +100,12 @@ class CSetupdPlabo extends CSetup {
             "\nADD `commentaire` TEXT DEFAULT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.14";
+    $this->makeRevision("0.14");
+    $sql = "ALTER TABLE `prescription_labo_examen`" .
+            "\nCHANGE `date` `date` DATE DEFAULT NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.15";
   }
 }
 ?>
