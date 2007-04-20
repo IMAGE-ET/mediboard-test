@@ -245,7 +245,7 @@ class CMbFieldSpec {
     $field        = htmlspecialchars($this->fieldName);
     $extra        = CMbArray::makeXmlAttributes($params);
     $sHtml        = '<div id="'.$params["form"].'_'.$field.'_da">'.mbTranformTime(null, $value, "%d/%m/%Y").'</div>';
-    $sHtml       .= '<input type="hidden" name="'.$field.'" class="date" value="'.$value.'" '.$extra.' />';
+    $sHtml       .= '<input type="hidden" name="'.$field.'" class="date" value="'.mbTranformTime(null, $value, "%Y-%m-%d").'" '.$extra.' />';
     $sHtml       .= '<img id="'.$params["form"].'_'.$field.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"/>';
     // Can't be handeld here cauz preporeForms has to be done
     //$sHtml       .= '<script type="text/javascript">';
@@ -258,7 +258,7 @@ class CMbFieldSpec {
     $field        = htmlspecialchars($this->fieldName);
     $extra        = CMbArray::makeXmlAttributes($params);
     $sHtml        = '<div id="'.$params["form"].'_'.$field.'_da">'.mbTranformTime(null, $value, "%d/%m/%Y %H:%M").'</div>';
-    $sHtml       .= '<input type="hidden" name="'.$field.'" class="date" value="'.$value.'" '.$extra.' />';
+    $sHtml       .= '<input type="hidden" name="'.$field.'" class="date" value="'.mbTranformTime(null, $value, "%Y-%m-%d %H:%M:%S").'" '.$extra.' />';
     $sHtml       .= '<img id="'.$params["form"].'_'.$field.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"/>';
     // Can't be handeld here cauz preporeForms has to be done
     //$sHtml       .= '<script type="text/javascript">';
