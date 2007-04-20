@@ -6,21 +6,15 @@
       </a>
       <table class="tbl">
         <tr>
-          <th>id</th>
           <th>Matériel</th>
           <th>Groupe</th>
           <th>Seuil de Commande</th>
           <th>Quantité</th>
         </tr>
         {{foreach from=$listStock item=curr_stock}}
-        <tr>
+        <tr {{if $curr_stock->_id == $stock->_id}}class="selected"{{/if}}>
           <td class="text">
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id={{$curr_stock->stock_id}}" title="Modifier le stock">
-              {{$curr_stock->stock_id}}
-            </a>
-          </td>
-          <td class="text">
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id={{$curr_stock->_ref_materiel->materiel_id}}" title="Modifier le matériel">
+            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id={{$curr_stock->_id}}" title="Modifier le stock">
               {{$curr_stock->_ref_materiel->nom}} ({{$curr_stock->_ref_materiel->_ref_category->category_name}})
               {{if $curr_stock->_ref_materiel->code_barre}}<br />{{$curr_stock->_ref_materiel->code_barre}}{{/if}}
               {{if $curr_stock->_ref_materiel->description}}<br />{{$curr_stock->_ref_materiel->description|nl2br}}{{/if}}
@@ -37,11 +31,11 @@
     <td class="HalfPane">
       <form name="editStock" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_stock_aed" />  
-	  <input type="hidden" name="stock_id" value="{{$stock->stock_id}}" />
+	  <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
       <input type="hidden" name="del" value="0" />  
       <table class="form">
         <tr>
-          {{if $stock->stock_id}}
+          {{if $stock->_id}}
           <th class="title modify" colspan="2">Modification du stock {{$stock->_view}}</th>
           {{else}}
           <th class="title" colspan="2">Création d'un stock</th>
@@ -86,7 +80,7 @@
         <tr>
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
-            {{if $stock->stock_id}}
+            {{if $stock->_id}}
               <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le stock',objName:'{{$stock->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
             {{/if}}
           </td>

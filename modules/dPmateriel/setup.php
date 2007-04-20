@@ -6,12 +6,14 @@
  *	@version $Revision: $
  *  @author Sébastien Fillonneau
  */
+
+global $AppUI;
  
 // MODULE CONFIGURATION 
 // redundant now but mandatory until end of refactoring
 $config = array();
 $config["mod_name"]        = "dPmateriel";
-$config["mod_version"]     = "0.13";
+$config["mod_version"]     = "0.14";
 $config["mod_type"]        = "user";
 
 class CSetupdPmateriel extends CSetup {
@@ -23,7 +25,7 @@ class CSetupdPmateriel extends CSetup {
     
     $this->makeRevision("all");
     
-    $sql = "CREATE TABLE materiel (
+    $sql = "CREATE TABLE `materiel` (
           `materiel_id` int(11) NOT NULL auto_increment,
           `nom` VARCHAR(50) NOT NULL,
           `code_barre` int(11) default NULL,
@@ -32,7 +34,7 @@ class CSetupdPmateriel extends CSetup {
           ) TYPE=MyISAM COMMENT='Table du materiel';";
     $this->addQuery($sql);
     
-    $sql = "CREATE TABLE stock (
+    $sql = "CREATE TABLE `stock` (
             `stock_id` int(11) NOT NULL auto_increment,
             `materiel_id` int(11) NOT NULL,
             `group_id` int(11) NOT NULL,
@@ -119,7 +121,20 @@ class CSetupdPmateriel extends CSetup {
        "\nCHANGE `quantite` `quantite` int(11) unsigned NOT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.13";
+    $this->makeRevision("0.13");
+
+    $sql = "CREATE TABLE `commande_materiel` (
+        \n`commande_materiel_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+        \n`reference_id` int(11) UNSIGNED NOT NULL,
+        \n`quantite` int(11) UNSIGNED NOT NULL,
+        \n`prix` FLOAT NOT NULL,
+        \n`date` DATE NOT NULL,
+        \n`recu` ENUM('0','1') NOT NULL DEFAULT '0',
+        \nPRIMARY KEY (`commande_materiel_id`)
+        \n) TYPE=MyISAM;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.14";
   }  
 }
 

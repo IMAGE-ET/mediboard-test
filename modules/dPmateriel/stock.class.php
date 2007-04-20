@@ -35,8 +35,14 @@ class CStock extends CMbObject {
       "materiel_id" => "notNull ref class|CMateriel",
       "group_id"    => "notNull ref class|CGroups",
       "seuil_cmd"   => "notNull num pos",
-      "quantite"    => "num pos"
+      "quantite"    => "num min|0"
     );
+  }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->loadRefsFwd();
+    $this->_view = $this->_ref_materiel->_view;
   }
   
   function loadRefsFwd(){  

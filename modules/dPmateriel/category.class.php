@@ -35,6 +35,11 @@ class CCategory extends CMbObject {
       "category_name" => "like"
     );
   }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->category_name;
+  }
 	
   function loadRefsBack(){
     $this->_ref_materiel = new CMateriel;

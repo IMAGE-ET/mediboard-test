@@ -16,8 +16,8 @@ $reference_id = mbGetValueFromGetOrSession("reference_id");
 // Chargement de la reference demandé
 $reference=new CRefMateriel;
 $reference->load($reference_id);
-if($reference_id = mbGetValueFromGet("fournisseur_id")){
-  $reference->fournisseur_id = $reference_id;
+if($fournisseur_id = mbGetValueFromGet("fournisseur_id")){
+  $reference->fournisseur_id = $fournisseur_id;
 }
 
 //Chargement de toutes les réferences

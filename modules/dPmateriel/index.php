@@ -9,10 +9,11 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_idx_stock"      , "Edition des stocks"              , TAB_READ);
-$module->registerTab("vw_idx_materiel"   , "Edition des Fiches matériel"     , TAB_READ);
-$module->registerTab("vw_idx_category"   , "Gérer les catégories de matériel", TAB_READ);
-$module->registerTab("vw_idx_fournisseur", "Fournisseurs"                    , TAB_READ);
-$module->registerTab("vw_idx_refmateriel", "Références fournisseurs"         , TAB_READ);
+$module->registerTab("vw_idx_stock"      , null, TAB_READ);
+$module->registerTab("vw_idx_commandes"  , null, TAB_READ);
+$module->registerTab("vw_idx_materiel"   , null, TAB_READ);
+$module->registerTab("vw_idx_category"   , null, TAB_READ);
+$module->registerTab("vw_idx_fournisseur", null, TAB_READ);
+$module->registerTab("vw_idx_refmateriel", null, TAB_READ);
 
 ?>

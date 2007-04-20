@@ -89,6 +89,11 @@ class CFournisseur extends CMbObject {
     );
   }
   
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->societe;
+  }
+  
   function loadRefsBack(){
     $this->_ref_references = new CRefMateriel;
     $where = array();

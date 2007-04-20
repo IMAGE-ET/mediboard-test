@@ -6,21 +6,15 @@
       </a>
       <table class="tbl">
         <tr>
-          <th>id</th>
           <th>Nom</th>
           <th>Catégorie</th>
           <th>Description</th>
           <th>Code Barre</th>
         </tr>
         {{foreach from=$listMateriel item=curr_materiel}}
-        <tr>
-          <td>
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id={{$curr_materiel->materiel_id}}" title="Modifier le matériel">
-              {{$curr_materiel->materiel_id}}
-            </a>
-          </td>
+        <tr {{if $curr_materiel->_id == $materiel->_id}}class="selected"{{/if}}>
           <td class="text">
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id={{$curr_materiel->materiel_id}}" title="Modifier le matériel">
+            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id={{$curr_materiel->_id}}" title="Modifier le matériel">
               {{$curr_materiel->nom}}
             </a>
           </td>
@@ -34,11 +28,11 @@
     <td class="halfPane">
       <form name="editMat" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_materiel_aed" />
-	  <input type="hidden" name="materiel_id" value="{{$materiel->materiel_id}}" />
+	  <input type="hidden" name="materiel_id" value="{{$materiel->_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          {{if $materiel->materiel_id}}
+          {{if $materiel->_id}}
           <th class="title modify" colspan="2">Modification de la fiche {{$materiel->_view}}</th>
           {{else}}
           <th class="title" colspan="2">Création d'une fiche</th>
@@ -71,7 +65,7 @@
         <tr>
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
-            {{if $materiel->materiel_id}}
+            {{if $materiel->_id}}
               <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le matériel',objName:'{{$materiel->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
             {{/if}}
           </td>
@@ -82,8 +76,8 @@
   </tr>
   <tr>
     <td class="halfPane">
-         {{if $materiel->materiel_id}}
-         <button class="new" type="button" onclick="window.location='index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id=0&amp;materiel_id={{$materiel->materiel_id}}'">
+         {{if $materiel->_id}}
+         <button class="new" type="button" onclick="window.location='index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id=0&amp;materiel_id={{$materiel->_id}}'">
            Créer un nouveau stock pour ce matériel
          </button>
          {{/if}}

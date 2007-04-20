@@ -44,6 +44,8 @@ class CRefMateriel extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
+    $this->loadRefsFwd();
+    $this->_view = $this->_ref_materiel->_view;
     if($this->quantite!=0){
       $this->_prix_unitaire = $this->prix / $this->quantite;
     }

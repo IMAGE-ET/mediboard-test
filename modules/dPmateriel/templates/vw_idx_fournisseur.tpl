@@ -14,7 +14,6 @@ function pageMain() {
       </a>
       <table class="tbl">
         <tr>
-          <th>id</th>
           <th>Société</th>
           <th>Correspondant</th>
           <th>Adresse</th>
@@ -22,14 +21,9 @@ function pageMain() {
           <th>E-Mail</th>
         </tr>
         {{foreach from=$listFournisseur item=curr_fournisseur}}
-        <tr>
-          <td>
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_fournisseur&amp;fournisseur_id={{$curr_fournisseur->fournisseur_id}}" title="Modifier le fournisseur">
-              {{$curr_fournisseur->fournisseur_id}}
-            </a>
-          </td>
+        <tr {{if $curr_fournisseur->_id == $fournisseur->_id}}class="selected"{{/if}}>
           <td class="text">
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_fournisseur&amp;fournisseur_id={{$curr_fournisseur->fournisseur_id}}" title="Modifier le fournisseur">
+            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_fournisseur&amp;fournisseur_id={{$curr_fournisseur->_id}}" title="Modifier le fournisseur">
               {{$curr_fournisseur->societe}}
             </a>
           </td>
@@ -48,11 +42,11 @@ function pageMain() {
       {{if $can->edit}}
       <form name="editFournisseur" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_fournisseur_aed" />
-	  <input type="hidden" name="fournisseur_id" value="{{$fournisseur->fournisseur_id}}" />
+	  <input type="hidden" name="fournisseur_id" value="{{$fournisseur->_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          {{if $fournisseur->fournisseur_id}}
+          {{if $fournisseur->_id}}
           <th class="title modify" colspan="2">Modification du fournisseur {{$fournisseur->_view}}</th>
           {{else}}
           <th class="title" colspan="2">Création d'un fournisseur</th>
@@ -99,7 +93,7 @@ function pageMain() {
         <tr>
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
-            {{if $fournisseur->fournisseur_id}}
+            {{if $fournisseur->_id}}
               <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le fournisseur',objName:'{{$fournisseur->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
             {{/if}}
           </td>
@@ -111,8 +105,8 @@ function pageMain() {
   </tr>
   <tr>
     <td class="halfPane">
-      {{if $fournisseur->fournisseur_id}}
-      <button class="new" type="button" onclick="window.location='index.php?m=dPmateriel&amp;tab=vw_idx_refmateriel&amp;reference_id=0&amp;fournisseur_id={{$fournisseur->fournisseur_id}}'">
+      {{if $fournisseur->_id}}
+      <button class="new" type="button" onclick="window.location='index.php?m=dPmateriel&amp;tab=vw_idx_refmateriel&amp;reference_id=0&amp;fournisseur_id={{$fournisseur->_id}}'">
         Créer une nouvelle référence pour ce fournisseur
       </button>
       {{/if}}

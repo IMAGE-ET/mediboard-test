@@ -6,7 +6,6 @@
       </a>
       <table class="tbl">
         <tr>
-          <th>id</th>
           <th>Fournisseur</th>
           <th>Matériel</th>
           <th>Quantité</th>
@@ -14,16 +13,15 @@
           <th>Prix Unitaire</th>
         </tr>
         {{foreach from=$listReference item=curr_reference}}
-        <tr>
-          <td>
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_refmateriel&amp;reference_id={{$curr_reference->reference_id}}" title="Modifier la référence">
-              {{$curr_reference->reference_id}}
+        <tr {{if $curr_reference->_id == $reference->_id}}class="selected"{{/if}}>
+          <td class="text">
+            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_refmateriel&amp;reference_id={{$curr_reference->_id}}" title="Modifier la référence">
+              {{$curr_reference->_ref_fournisseur->societe}}
             </a>
           </td>
-          <td class="text">{{$curr_reference->_ref_fournisseur->societe}}</td>
           <td class="text">{{$curr_reference->_ref_materiel->nom|nl2br}}</td>
           <td>{{$curr_reference->quantite}}</td>
-          <td>{{$curr_reference->prix}}</td>
+          <td>{{$curr_reference->prix|string_format:"%.2f"}}</td>
           <td>{{$curr_reference->_prix_unitaire|string_format:"%.2f"}}</td>
         </tr>
         {{/foreach}}
@@ -33,11 +31,11 @@
       {{if $can->edit}}
       <form name="editreference" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_refmateriel_aed" />
-	  <input type="hidden" name="reference_id" value="{{$reference->reference_id}}" />
+	  <input type="hidden" name="reference_id" value="{{$reference->_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          {{if $reference->reference_id}}
+          {{if $reference->_id}}
           <th class="title modify" colspan="2">Modification de la référence {{$reference->_view}}</th>
           {{else}}
           <th class="title" colspan="2">Création d'une référence</th>
@@ -82,7 +80,7 @@
         <tr>
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
-            {{if $reference->reference_id}}
+            {{if $reference->_id}}
               <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la référence',objName:'{{$reference->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
             {{/if}}
           </td>

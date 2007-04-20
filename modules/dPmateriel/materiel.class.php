@@ -47,6 +47,11 @@ class CMateriel extends CMbObject {
     );
   }
   
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->nom;
+  }
+  
   function loadRefsBack(){
     $this->_ref_stock = new CStock;
     $where = array();
