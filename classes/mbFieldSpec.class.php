@@ -149,7 +149,12 @@ class CMbFieldSpec {
   function randomString($array, $length) {
     $key = "";
     $count = count($array) - 1;
-    for($i = 0; $i < $length; $i++) $key .= $array[rand(0, $count)];
+    for($i = 0; $i < $length; $i++)  {
+      $key .= $array[rand(0, $count)];
+      if ($i % 20 == 19) {
+        $key .= " ";
+      }  
+    }
     return($key);
   }
 
