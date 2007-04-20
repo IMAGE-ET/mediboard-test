@@ -13,6 +13,7 @@ $can->needsRead();
 
 $salle = mbGetValueFromGetOrSession("salle");
 $date  = mbGetValueFromGetOrSession("date", mbDate());
+$operation_id = mbGetValueFromGetOrSession("operation_id");
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;
@@ -60,13 +61,14 @@ foreach($urgences as $keyOp => $curr_op) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("vueReduite"    , false                   );
-$smarty->assign("salle"         , $salle                   );
-$smarty->assign("listSalles"    , $listSalles              );
-$smarty->assign("listAnesths"   , $listAnesths             );
-$smarty->assign("plages"        , $plages                  );
-$smarty->assign("urgences"      , $urgences                );
-$smarty->assign("date"          , $date                    );
+$smarty->assign("vueReduite"    , false       );
+$smarty->assign("salle"         , $salle       );
+$smarty->assign("listSalles"    , $listSalles  );
+$smarty->assign("listAnesths"   , $listAnesths );
+$smarty->assign("plages"        , $plages      );
+$smarty->assign("urgences"      , $urgences    );
+$smarty->assign("date"          , $date        );
+$smarty->assign("operation_id"  , $operation_id);
 
 $smarty->display("inc_liste_plages.tpl");
 ?>

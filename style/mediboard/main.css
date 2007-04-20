@@ -965,8 +965,11 @@ div.postit table.decoration {
   border: none;
 }
 
+div.postit table.decoration td {
+  border: 0px solid #883;
+}
+
 div.postit table.decoration td.deco {
-	border: 0px;
 	opacity: .7;
 }
 
@@ -977,21 +980,24 @@ div.postit table.decoration td.bottom-left {
 	opacity: 1;
 }
 
-div.postit table.decoration td.left,
-div.postit table.decoration td.top {
+div.postit table.decoration td.left {
   background-color: #ff6;
+  border-left-width: 1px;
+  border-bottom-width: 1px;
 	opacity: 1;
 }
 
 div.postit table.decoration td.top {
   background: #ff6 url(../../images/icons/cancel.png) top right no-repeat;
+	opacity: 1;
+  border-top-width: 1px;
+  border-right-width: 1px;
 }
 
-
 div.postit table.decoration td.top-left {
-	width: 10px;
+	width: 12px;
 	height: 15px;
-	background: url(images/pictures/note-top-left.png) bottom right no-repeat;
+	background: url(images/pictures/note-top-left.png) top left no-repeat;
 	opacity: 1;
 }
 
@@ -1014,7 +1020,8 @@ div.postit table.decoration td.right {
 }
 
 div.postit table.decoration td.content {
-  border: none;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
   background-color: #ff6;
   max-height: 40px;
   overflow: scroll;
@@ -1278,6 +1285,10 @@ table.dPsalleOp button  {
   height: 20px;
   font-size: 15px;
   font-weight: bold;
+}
+
+table.dPsalleOp .notext  {
+  font-size: 0px;
 }
 
   /* @import "./contacts.css";  */

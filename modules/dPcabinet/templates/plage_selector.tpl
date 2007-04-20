@@ -107,7 +107,7 @@ function pageMain() {
       {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
       {{else}}{{assign var="backgroundClass" value="full"}}
       {{/if}} 
-      <tr style="{{if $_plage->plageconsult_id == $plageconsult_id}}font-weight: bold;{{/if}}">
+      <tr {{if $_plage->plageconsult_id == $plageconsult_id}}class="selected"{{/if}}>
         <td>
           <div class="progressBar">
             <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>

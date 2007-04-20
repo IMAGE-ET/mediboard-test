@@ -29,7 +29,8 @@ var Menu = {
 
 {{if @$app->user_prefs.MenuPosition == "left"}}
 <td id="leftMenu">
-  {{thumb src="style/$uistyle/images/pictures/e-cap.jpg" w="140" f="png"}}
+  {{thumb src="images/pictures/mbNormal.gif" w="140" f="png"}}
+<!--  {{thumb src="style/$uistyle/images/pictures/e-cap.jpg" w="140" f="png"}} -->
   
   {{if !$offline}}
   <!-- Changement d'établissement courant -->

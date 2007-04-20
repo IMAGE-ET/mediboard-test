@@ -65,7 +65,7 @@
           {{/if}}
         </tr>
         {{foreach from=$curr_plage->_ref_operations item=curr_operation}}
-        <tr>
+        <tr {{if $curr_operation->_id == $operation_id}}class="selected"{{/if}}>
           {{if $curr_operation->entree_salle && $curr_operation->sortie_salle}}
           <td style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
           {{elseif $curr_operation->entree_salle}}
@@ -77,12 +77,12 @@
           {{else}}
           <td>
           {{/if}}
-            <a href="index.php?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
+            <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
               {{$curr_operation->time_operation|date_format:"%Hh%M"}}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
+            <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
               {{$curr_operation->_ref_sejour->_ref_patient->_view}}
             </a>
           </td>
@@ -135,7 +135,7 @@
           {{/if}}
         </tr>
         {{foreach from=$urgences item=curr_operation}}
-        <tr>
+        <tr {{if $curr_operation->_id == $operation_id}}class="selected"{{/if}}>
           {{if $curr_operation->entree_salle && $curr_operation->sortie_salle}}
           <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
           {{elseif $curr_operation->entree_salle}}

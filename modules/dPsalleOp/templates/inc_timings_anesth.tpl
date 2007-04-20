@@ -12,9 +12,9 @@
                   {{if $selOp->entree_salle}}
                   Entrée patient:
                   {{if $can->edit}}
-                  <input name="entree_salle" size="5" type="text" value="{{$selOp->entree_salle|date_format:"%H:%M"}}">
-                  <button class="tick notext" type="submit"></button>
-                  <button class="cancel notext" type="submit" onclick="this.form.entree_salle.value = ''"></button>
+                  <input name="entree_salle" size="5" type="text" value="{{$selOp->entree_salle|date_format:"%H:%M"}}" />
+                  <button class="tick notext" type="submit">{{tr}}Save{{/tr}}</button>
+                  <button class="cancel notext" type="submit" onclick="this.form.entree_salle.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{elseif $modif_operation}}
                   <select name="entree_salle" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -24,7 +24,7 @@
                     </option>
                     {{/foreach}}
                   </select>
-                  <button class="cancel notext" type="submit" onclick="this.form.entree_salle.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.entree_salle.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{else}}
                     {{$selOp->entree_salle|date_format:"%Hh%M"}}
                   {{/if}}
@@ -38,9 +38,9 @@
                   {{if $selOp->pose_garrot}}
                   Pose garrot:
                   {{if $can->edit}}
-                  <input name="pose_garrot" size="5" type="text" value="{{$selOp->pose_garrot|date_format:"%H:%M"}}">
-                  <button class="tick notext" type="submit"></button>
-                  <button class="cancel notext" type="submit" onclick="this.form.pose_garrot.value = ''"></button>
+                  <input name="pose_garrot" size="5" type="text" value="{{$selOp->pose_garrot|date_format:"%H:%M"}}" />
+                  <button class="tick notext" type="submit">{{tr}}Save{{/tr}}</button>
+                  <button class="cancel notext" style="padding-left: 20px;" type="submit" onclick="this.form.pose_garrot.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{elseif $modif_operation}}
                   <select name="pose_garrot" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -50,7 +50,7 @@
                     </option>
                     {{/foreach}}
                   </select>
-                  <button class="cancel notext" type="submit" onclick="this.form.pose_garrot.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.pose_garrot.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{else}}
                     {{$selOp->pose_garrot|date_format:"%Hh%M"}}
                   {{/if}}
@@ -64,9 +64,9 @@
                   {{if $selOp->debut_op}}
                   Début opération:
                   {{if $can->edit}}
-                  <input name="debut_op" size="5" type="text" value="{{$selOp->debut_op|date_format:"%H:%M"}}">
-                  <button class="tick notext" type="submit"></button>
-                  <button class="cancel notext" type="submit" onclick="this.form.debut_op.value = ''"></button>
+                  <input name="debut_op" size="5" type="text" value="{{$selOp->debut_op|date_format:"%H:%M"}}" />
+                  <button class="tick notext" type="submit">{{tr}}Save{{/tr}}</button>
+                  <button class="cancel notext" type="submit" onclick="this.form.debut_op.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{elseif $modif_operation}}
                   <select name="debut_op" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -76,7 +76,7 @@
                     </option>
                     {{/foreach}}
                   </select>
-                  <button class="cancel notext" type="submit" onclick="this.form.debut_op.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.debut_op.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{else}}
                     {{$selOp->debut_op|date_format:"%Hh%M"}}
                   {{/if}}
@@ -92,9 +92,9 @@
                   {{if $selOp->sortie_salle}}
                   Sortie patient:
                   {{if $can->edit}}
-                  <input name="sortie_salle" size="5" type="text" value="{{$selOp->sortie_salle|date_format:"%H:%M"}}">
-                  <button class="tick notext" type="submit"></button>
-                  <button class="cancel notext" type="submit" onclick="this.form.sortie_salle.value = ''"></button>
+                  <input name="sortie_salle" size="5" type="text" value="{{$selOp->sortie_salle|date_format:"%H:%M"}}" />
+                  <button class="tick notext" type="submit">{{tr}}Save{{/tr}}</button>
+                  <button class="cancel notext" type="submit" onclick="this.form.sortie_salle.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{elseif $modif_operation}}
                   <select name="sortie_salle" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -104,7 +104,7 @@
                     </option>
                     {{/foreach}}
                   </select>
-                  <button class="cancel notext" type="submit" onclick="this.form.sortie_salle.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.sortie_salle.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{else}}
                     {{$selOp->sortie_salle|date_format:"%Hh%M"}}
                   {{/if}}
@@ -118,9 +118,9 @@
                   {{if $selOp->retrait_garrot}}
                   Retrait garrot:
                   {{if $can->edit}}
-                  <input name="retrait_garrot" size="5" type="text" value="{{$selOp->retrait_garrot|date_format:"%H:%M"}}">
-                  <button class="tick notext" type="submit"></button>
-                  <button class="cancel notext" type="submit" onclick="this.form.retrait_garrot.value = ''"></button>
+                  <input name="retrait_garrot" size="5" type="text" value="{{$selOp->retrait_garrot|date_format:"%H:%M"}}" />
+                  <button class="tick notext" type="submit">{{tr}}Save{{/tr}}</button>
+                  <button class="cancel notext" type="submit" onclick="this.form.retrait_garrot.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{elseif $modif_operation}}
                   <select name="retrait_garrot" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -130,7 +130,7 @@
                     </option>
                     {{/foreach}}
                   </select>
-                  <button class="cancel notext" type="submit" onclick="this.form.retrait_garrot.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.retrait_garrot.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{else}}
                     {{$selOp->retrait_garrot|date_format:"%Hh%M"}}
                   {{/if}}
@@ -144,9 +144,9 @@
                   {{if $selOp->fin_op}}
                   Fin opération:
                   {{if $can->edit}}
-                  <input name="fin_op" size="5" type="text" value="{{$selOp->fin_op|date_format:"%H:%M"}}">
-                  <button class="tick notext" type="submit"></button>
-                  <button class="cancel notext" type="submit" onclick="this.form.fin_op.value = ''"></button>
+                  <input name="fin_op" size="5" type="text" value="{{$selOp->fin_op|date_format:"%H:%M"}}" />
+                  <button class="tick notext" type="submit">{{tr}}Save{{/tr}}</button>
+                  <button class="cancel notext" type="submit" onclick="this.form.fin_op.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{elseif $modif_operation}}
                   <select name="fin_op" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -156,7 +156,7 @@
                     </option>
                     {{/foreach}}
                   </select>
-                  <button class="cancel notext" type="submit" onclick="this.form.fin_op.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.fin_op.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{else}}
                     {{$selOp->fin_op|date_format:"%Hh%M"}}
                   {{/if}}
@@ -207,9 +207,9 @@
                   {{if $selOp->induction_debut}}
                   Début d'induction:
                   {{if $can->edit}}
-                  <input name="induction_debut" size="5" type="text" value="{{$selOp->induction_debut|date_format:"%H:%M"}}">
-                  <button class="tick notext" type="submit"></button>
-                  <button class="cancel notext" type="submit" onclick="this.form.induction_debut.value = ''"></button>
+                  <input name="induction_debut" size="5" type="text" value="{{$selOp->induction_debut|date_format:"%H:%M"}}" />
+                  <button class="tick notext" type="submit">{{tr}}Save{{/tr}}</button>
+                  <button class="cancel notext" type="submit" onclick="this.form.induction_debut.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{elseif $modif_operation}}
                   <select name="induction_debut" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -219,7 +219,7 @@
                     </option>
                     {{/foreach}}
                   </select>
-                  <button class="cancel notext" type="submit" onclick="this.form.induction_debut.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.induction_debut.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{else}}
                     {{$selOp->induction_debut|date_format:"%Hh%M"}}
                   {{/if}}
@@ -235,9 +235,9 @@
                   {{if $selOp->induction_fin}}
                   Fin d'induction:
                   {{if $can->edit}}
-                  <input name="induction_fin" size="5" type="text" value="{{$selOp->induction_fin|date_format:"%H:%M"}}">
-                  <button class="tick notext" type="submit"></button>
-                  <button class="cancel notext" type="submit" onclick="this.form.induction_fin.value = ''"></button>
+                  <input name="induction_fin" size="5" type="text" value="{{$selOp->induction_fin|date_format:"%H:%M"}}" />
+                  <button class="tick notext" type="submit">{{tr}}Save{{/tr}}</button>
+                  <button class="cancel notext" type="submit" onclick="this.form.induction_fin.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{elseif $modif_operation}}
                   <select name="induction_fin" onchange="this.form.submit()">
                     <option value="">-</option>
@@ -247,7 +247,7 @@
                     </option>
                     {{/foreach}}
                   </select>
-                  <button class="cancel notext" type="submit" onclick="this.form.induction_fin.value = ''"></button>
+                  <button class="cancel notext" type="submit" onclick="this.form.induction_fin.value = ''">{{tr}}Cancel{{/tr}}</button>
                   {{else}}
                     {{$selOp->induction_fin|date_format:"%Hh%M"}}
                   {{/if}}

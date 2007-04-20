@@ -22,7 +22,7 @@
       <th class="category" colspan="3">
         {{$app->cfg.company_name}}
         <br />
-        <img src="./style/{{$uistyle}}/images/pictures/e-cap.jpg" alt="eCap logo" />
+<!--        <img src="./style/{{$uistyle}}/images/pictures/e-cap.jpg" alt="eCap logo" /> -->
       </th>
     </tr>
     

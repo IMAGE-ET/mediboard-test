@@ -3,10 +3,11 @@
 function pageMain() {
   PairEffect.initGroup("acteEffect");
   
-  var opsUpdater = new Url;
-  opsUpdater.setModuleAction("dPsalleOp", "httpreq_liste_plages");
-  opsUpdater.addParam("date", "{{$date}}");
-  opsUpdater.periodicalUpdate('listplages', { frequency: 90 });
+  var url = new Url;
+  url.setModuleAction("dPsalleOp", "httpreq_liste_plages");
+  url.addParam("date", "{{$date}}");
+  url.addParam("operation_id", "{{$selOp->_id}}");
+  url.periodicalUpdate('listplages', { frequency: 90 });
 }
 </script>
 
@@ -61,7 +62,7 @@ function pageMain() {
         {{else}}
         <tr>
           <th class="title">
-            Selectionnez une opération
+            Sélectionnez une opération
           </th>
         </tr>
         {{/if}}
