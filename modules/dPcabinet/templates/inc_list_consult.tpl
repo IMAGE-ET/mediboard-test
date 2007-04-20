@@ -58,6 +58,7 @@
   {{else}} 
     {{assign var="style" value="$font"}}
   {{/if}}
+  <tbody class="hoverable">
   <tr {{if $curr_consult->_id == $consult->_id}}class="selected"{{/if}}>
     <td style="width: 42px; {{if $curr_consult->_id != $consult->_id}}{{$style|smarty:nodefaults}}{{/if}}" rowspan="2">
       {{if !$boardItem}}
@@ -100,6 +101,7 @@
       {{/if}}
     </td>
   </tr>
+  </tbody>
   {{/foreach}}
 {{/foreach}}
 {{else}}

@@ -48,6 +48,7 @@ function pageMain() {
     </tr>
 
     {{foreach from=$messages item=curr_message}}
+    <tbody class="hoverable">
     <tr>
       {{assign var="message_id" value=$curr_message->message_id}}
       {{assign var="href" value="?m=$m&tab=$tab&message_id=$message_id"}}
@@ -58,6 +59,7 @@ function pageMain() {
     <tr>
       <td class="text" colspan="10">{{$curr_message->corps|nl2br}}</td>
     </tr>
+    </tbody>
     {{/foreach}}
       
     </table>
