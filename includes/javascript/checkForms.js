@@ -60,23 +60,30 @@ var ElementChecker = {
     
     // xor
     if(this.aProperties["xor"]){
-      var sTargetElement = this.aProperties["xor"];
-      if (!sTargetElement) {
-        return "Spécification de chaîne de caractères invalide";
-      }
-      var oTargetElement = this.oElement.form.elements[sTargetElement];
-      if (!oTargetElement) {
-        return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
-      }
-      var oTargetLabel = getLabelFor(oTargetElement);
       var oLabel = getLabelFor(this.oElement);
-      var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : sTargetElement;
       var sLabel = oLabel ? oLabel.innerHTML : oElement.name;
-      if (this.oElement.value == "" && oTargetElement.value == ""){
-        return printf("Merci de choisir soit '%s', soit '%s'", sLabel, sTargetLabel);  
+      var iNbElements = this.oElement.value != "";
+      var sListElements = sLabel;
+      var message = "";
+      this.aProperties["xor"].split("|").each(function(sTargetElement) {
+        if (!sTargetElement) {
+          message += "Spécification de chaîne de caractères invalide";
+        }
+        var oTargetElement = this.oElement.form.elements[sTargetElement];
+        if (!oTargetElement) {
+          message += printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
+        } else {
+          var oTargetLabel = getLabelFor(oTargetElement);
+          var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : sTargetElement;
+          iNbElements += (oTargetElement.value != "");
+          sListElements += ", " + sTargetLabel;
+        }
+      });
+      if(message != "") {
+        return message;
       }
-      if (this.oElement.value != "" && oTargetElement.value != ""){
-        return printf("Vous ne devez choisir qu'un seul de ces champs : '%s', '%s'", sLabel, sTargetLabel);   
+      if (iNbElements != 1){
+        return printf("Vous devez choisir une et une seule de valeur entre '%s'", sListElements);  
       }
     }
     

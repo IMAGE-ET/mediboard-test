@@ -66,16 +66,31 @@ class CMbFieldSpec {
     }
     
     // xor
-    if($field = $this->xor){
-      if($msg = $this->checkTargetPropValue($object, $field)){
-        return $msg;
+    if($this->xor){
+      $fields = explode("|", $this->xor);
+      $otherfields = "";
+      foreach($fields as $field) {
+        if($msg = $this->checkTargetPropValue($object, $field)){
+          return $msg;
+        }
+        $targetPropValue[$field] = $object->$field;
+        $otherfields .= ", '$field'";
       }
-      $targetPropValue = $object->$field; 
-      if (!$propValue and !$targetPropValue) {
-        return "Merci de choisir soit '$fieldName', soit '$field'"; 
+      $noValue  = !$propValue;
+      $nbValues = ($propValue !== "");
+      foreach($targetPropValue as $key => $value) {
+        if($value === null) {
+          trigger_error("La valeur du champ '$key' impliqué dans un xor dans la classe '".$this->className."' n'est pas présente dans le formulaire", E_USER_ERROR);
+          die();
+        }
+        $noValue  &= !$value;
+        $nbValues += ($value !== "");
       }
-      if ($propValue and $targetPropValue) {
-        return "Vous ne devez choisir qu'un seul de ces champs : '$fieldName', '$field'"; 
+      if ($noValue) {
+        return "Merci de choisir un de ces champs : '$fieldName', '$otherfields'";
+      }
+      if ($nbValues > 1) {
+        return "Vous ne devez choisir qu'un seul de ces champs : '$fieldName''$otherfields'"; 
       }
     }
     

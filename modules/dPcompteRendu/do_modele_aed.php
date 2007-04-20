@@ -39,7 +39,7 @@ $do->doBind();
 if (intval(dPgetParam($_POST, "del"))) {
   $do->doDelete();
 } else {
- $do->doStore();
+  $do->doStore();
 }
 
 

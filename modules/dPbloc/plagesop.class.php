@@ -53,7 +53,7 @@ class CPlageOp extends CMbObject {
 
   function getSpecs() {
     return array (
-      "chir_id"        => "ref class|CMediusers",
+      "chir_id"        => "ref xor|spec_id class|CMediusers",
       "anesth_id"      => "ref class|CMediusers",
       "spec_id"        => "ref xor|chir_id class|CFunctions",
       "salle_id"       => "notNull ref class|CSalle",

@@ -27,6 +27,8 @@ if (window.opener.reloadAfterSaveDoc) {
 <input type="hidden" name="m" value="dPcompteRendu" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_modele_aed" />
+<input type="hidden" name="function_id" value="" />
+<input type="hidden" name="chir_id" value="" />
 {{mb_field object=$compte_rendu field="compte_rendu_id" hidden=1 prop=""}}
 {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
 {{mb_field object=$compte_rendu field="object_class" hidden=1 prop=""}}

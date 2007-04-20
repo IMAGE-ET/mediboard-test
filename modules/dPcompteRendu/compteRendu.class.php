@@ -41,9 +41,9 @@ class CCompteRendu extends CMbObject {
 
   function getSpecs() {
     return array (
-      "chir_id"          => "ref xor|function_id class|CMediusers",
-      "function_id"      => "ref class|CFunctions",
-      "object_id"        => "ref",
+      "chir_id"          => "ref xor|function_id|object_id class|CMediusers",
+      "function_id"      => "ref xor|chir_id|object_id class|CFunctions",
+      "object_id"        => "ref xor|function_id|chir_id",
       "nom"              => "notNull str",
       "source"           => "html",
       "object_class"     => "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation",
@@ -94,7 +94,7 @@ class CCompteRendu extends CMbObject {
         $this->_ref_object->load($this->object_id);
         $this->_ref_object->loadRefsFwd();
     } else {
-      trigger_error("Enable to create instance of '$this->object_class' class", E_USER_ERROR);
+      trigger_error("Unable to create instance of '$this->object_class' class", E_USER_ERROR);
     }
     
     $this->loadCategory();
