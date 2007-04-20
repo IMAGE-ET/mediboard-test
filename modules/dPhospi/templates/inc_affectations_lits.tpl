@@ -17,6 +17,7 @@
 {{assign var="aff_prev" value=$curr_affectation->_ref_prev}}
 {{assign var="aff_next" value=$curr_affectation->_ref_next}}
 
+<tbody class="hoverable">
 <tr class="patient">
   {{if $curr_affectation->confirme}}
     <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
@@ -363,4 +364,5 @@ chambre double
   {{/if}}
   </td>
 </tr>
+</tbody>
 {{/foreach}}
