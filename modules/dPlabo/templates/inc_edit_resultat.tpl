@@ -14,19 +14,20 @@
 <input type="hidden" name="prescription_labo_examen_id" value="{{$prescriptionItem->_id}}" />
 <input type="hidden" name="del" value="0" />
 
+{{if !$prescriptionItem->_id}}
+<table class="form">
+    <th class="title" colspan="2">
+      Veuillez sélectioner un examen
+    </th>
+  </tr>
+</table>
+{{else}}
 <table class="form">
   <tr>
-    {{if $prescriptionItem->_id}}
     <th class="title modify" colspan="2">
       Saisie du résultat
     </th>
-    {{else}}
-    <th colspan="2">
-      Veuillez sélectioner un examen
-    </th>
-    {{/if}}
   </tr>
-  
   <tr>
     <th>{{mb_label object=$examen field="_view"}}</th>
     <td>{{mb_value object=$examen field="_view"}}</td>
@@ -57,7 +58,6 @@
     <td colspan="2" class="button">
       <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.Examen.edit() } });">Valider</button></td>
   </tr>
-  
 </table>
 
 <table class="tbl">
@@ -105,5 +105,5 @@
   </tbody>
   {{/foreach}}
 </table>
-
+{{/if}}
 </form>

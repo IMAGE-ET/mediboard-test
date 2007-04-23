@@ -16,9 +16,10 @@ $typeListe = mbGetValueFromGetOrSession("typeListe");
 // Chargement de l'item choisi
 $prescriptionItem = new CPrescriptionLaboExamen;
 $prescriptionItem->load(mbGetValueFromGetOrSession("prescription_labo_examen_id"));
-$prescriptionItem->loadRefs();
-
-$siblingItems = $prescriptionItem->loadSiblings();
+$siblingItems = array();
+if($prescriptionItem->loadRefs()) {
+  $siblingItems = $prescriptionItem->loadSiblings();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
