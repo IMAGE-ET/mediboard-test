@@ -120,7 +120,7 @@
          <tr>
            <td class="text">{{$curr_refMateriel->_ref_fournisseur->societe}}</td>
            <td>{{$curr_refMateriel->quantite}}</td>
-           <td>{{$curr_refMateriel->prix}}</td>
+           <td>{{$curr_refMateriel->prix|string_format:"%.2f"}}</td>
            <td>{{$curr_refMateriel->_prix_unitaire|string_format:"%.2f"}}</td>
          </tr>
          {{foreachelse}}

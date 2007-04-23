@@ -1,5 +1,5 @@
 <?php
-$locales['CCommandeMateriel-recu-desc'] = 'Commande reçue';
+$locales['mod-dPmateriel-tab-vw_idx_commandes'] = 'Commandes';
 $locales['CCategory'] = 'Catégorie des Materiels';
 $locales['CCommandeMateriel-date'] = 'Date';
 $locales['CCommandeMateriel-date-desc'] = 'Date de la commande';
@@ -8,6 +8,7 @@ $locales['CCommandeMateriel-prix-desc'] = 'Prix d\'achat';
 $locales['CCommandeMateriel-quantite'] = 'Quantité';
 $locales['CCommandeMateriel-quantite-desc'] = 'Quantité commandée';
 $locales['CCommandeMateriel-recu'] = 'Commande reçue';
+$locales['CCommandeMateriel-recu-desc'] = 'Commande reçue';
 $locales['CCommandeMateriel-reference_id'] = 'Référence';
 $locales['CCommandeMateriel-reference_id-desc'] = 'Référence concernée';
 $locales['CFournisseur'] = 'Fournisseurs';

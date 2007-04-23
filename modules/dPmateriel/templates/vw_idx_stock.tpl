@@ -22,7 +22,16 @@
           </td>
           <td class="text">{{$curr_stock->_ref_group->text}}</td>
           <td>{{$curr_stock->seuil_cmd}}</td>
-          <td>{{$curr_stock->quantite}}</td>
+          <td>
+            {{if $curr_stock->_rupture}}
+              {{assign var=msgClass value="warning"}}
+            {{else}}
+              {{assign var=msgClass value="message"}}
+            {{/if}}
+            <div class="{{$msgClass}}">
+              {{$curr_stock->quantite}}
+            </div>
+          </td>
         </tr>
         {{/foreach}}
       </table>

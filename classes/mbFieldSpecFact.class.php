@@ -24,7 +24,7 @@ class CMbFieldSpecFact {
                              "time"         => "CTimeSpec",
                              "dateTime"     => "CDateTimeSpec",
                              "float"        => "CFloatSpec",
-                             "currency"     => "CFloatSpec",
+                             "currency"     => "CCurrencySpec",
                              "pct"          => "CPctSpec",
                              "text"         => "CTextSpec",
                              "html"         => "CHtmlSpec",

@@ -16,9 +16,12 @@ class CStock extends CMbObject {
 	
   // DB Fields
   var $materiel_id = null;
-  var $group_id = null;
-  var $seuil_cmd = null;
-  var $quantite = null;
+  var $group_id    = null;
+  var $seuil_cmd   = null;
+  var $quantite    = null;
+  
+  // Form fields
+  var $_rupture = null;
 
   // Object References
   var $_ref_group = null;
@@ -43,6 +46,7 @@ class CStock extends CMbObject {
     parent::updateFormFields();
     $this->loadRefsFwd();
     $this->_view = $this->_ref_materiel->_view;
+    $this->_rupture = $this->quantite <= $this->seuil_cmd;
   }
   
   function loadRefsFwd(){  
