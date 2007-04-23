@@ -9,12 +9,16 @@ var Catalogue = {
         iCatalogue = oForm.catalogue_labo_id.value;
       }
     }
-    var url = new Url;
-    url.setModuleAction("dPlabo", "httpreq_vw_catalogues");
+    var urlCat  = new Url;
+    var urlExam = new Url;
+    urlCat.setModuleAction("dPlabo", "httpreq_vw_catalogues");
+    urlExam.setModuleAction("dPlabo", "httpreq_vw_examens_catalogues");
     if(iCatalogue) {
-      url.addParam("catalogue_labo_id", iCatalogue);
+      urlCat.addParam("catalogue_labo_id", iCatalogue);
+      urlExam.addParam("catalogue_labo_id", iCatalogue);
     }
-    url.requestUpdate('CataloguesView', { waitingText : null });
+    urlCat.requestUpdate('CataloguesView', { waitingText : null });
+    urlExam.requestUpdate('CataloguesExamensView', { waitingText : null });
   }
 }
 
@@ -27,12 +31,16 @@ var Pack = {
         pack_id = oForm.pack_examens_labo_id.value;
       }
     }
-    var url = new Url;
-    url.setModuleAction("dPlabo", "httpreq_vw_packs");
+    var urlPack = new Url;
+    var urlExam = new Url;
+    urlPack.setModuleAction("dPlabo", "httpreq_vw_packs");
+    urlExam.setModuleAction("dPlabo", "httpreq_vw_examens_packs");
     if(pack_id) {
-      url.addParam("pack_examens_labo_id", pack_id);
+      urlPack.addParam("pack_examens_labo_id", pack_id);
+      urlExam.addParam("pack_examens_labo_id", pack_id);
     }
-    url.requestUpdate('PacksView', { waitingText : null });
+    urlPack.requestUpdate('PacksView', { waitingText : null });
+    urlExam.requestUpdate('PacksExamensView', { waitingText : null });
   },
   dropExamen: function(sExamen_id, pack_id) {
     oFormBase = document.editPackItem;
@@ -73,7 +81,7 @@ var oDragOptions = {
   }       
 }
 
-var DivManipulator = {
+var ElementManipulator = {
   SetViewportAvlHeight: function (sDivId, iPct) {
     var oDiv = $(sDivId);
     if (!oDiv) {
@@ -96,6 +104,10 @@ var DivManipulator = {
 function pageMain() {
   Pack.select();
   Catalogue.select();
+  ElementManipulator.SetViewportAvlHeight('PacksView', 0.49);
+  ElementManipulator.SetViewportAvlHeight('PacksExamensView', 0.96);
+  ElementManipulator.SetViewportAvlHeight('CataloguesView', 0.49);
+  ElementManipulator.SetViewportAvlHeight('CataloguesExamensView', 0.96);
 }
 
 </script>
@@ -110,9 +122,19 @@ function pageMain() {
     </th>
   </tr>
   <tr>
-    <td id="PacksView">
+    <td>
+      <div id="PacksView"></div>
     </td>
-    <td id="CataloguesView">
+    <td>
+      <div id="CataloguesView"></div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div id="PacksExamensView"></div>
+    </td>
+    <td>
+      <div id="CataloguesExamensView"></div>
     </td>
   </tr>
 </table>

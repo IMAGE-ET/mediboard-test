@@ -24,13 +24,18 @@ var Catalogue = {
         iCatalogue = oForm.catalogue_labo_id.value;
       }
     }
-    var url = new Url;
-    url.setModuleAction("dPlabo", "httpreq_vw_catalogues");
+    var urlCat = new Url;
+    var urlExam = new Url;
+    urlCat.setModuleAction("dPlabo", "httpreq_vw_catalogues");
+    urlExam.setModuleAction("dPlabo", "httpreq_vw_examens_catalogues");
     if(iCatalogue) {
-      url.addParam("catalogue_labo_id", iCatalogue);
+      urlCat.addParam("catalogue_labo_id", iCatalogue);
+      urlExam.addParam("catalogue_labo_id", iCatalogue);
     }
-    url.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
-    url.requestUpdate('rightPane', { waitingText : null });
+    urlCat.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
+    urlExam.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
+    urlCat.requestUpdate('topRightDiv', { waitingText : null });
+    urlExam.requestUpdate('bottomRightDiv', { waitingText : null });
   }
 }
 
@@ -43,14 +48,20 @@ var Pack = {
         pack_id = oForm.pack_examens_labo_id.value;
       }
     }
-    var url = new Url;
-    url.setModuleAction("dPlabo", "httpreq_vw_packs");
+    var urlPack = new Url;
+    var urlExam = new Url;
+    urlPack.setModuleAction("dPlabo", "httpreq_vw_packs");
+    urlExam.setModuleAction("dPlabo", "httpreq_vw_examens_packs");
     if(pack_id) {
-      url.addParam("pack_examens_labo_id", pack_id);
+      urlPack.addParam("pack_examens_labo_id", pack_id);
+      urlExam.addParam("pack_examens_labo_id", pack_id);
     }
-    url.addParam("dragPacks", 1);
-    url.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
-    url.requestUpdate("rightPane", { waitingText: null });
+    urlPack.addParam("dragPacks", 1);
+    urlExam.addParam("dragPacks", 1);
+    urlPack.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
+    urlExam.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
+    urlPack.requestUpdate("topRightDiv", { waitingText: null });
+    urlExam.requestUpdate("bottomRightDiv", { waitingText: null });
   },
   delExamen: function(oForm) {
     oFormBase = document.editPackItem;
@@ -126,7 +137,7 @@ var Prescription = {
         Prescription.Examen.select(iPrescriptionItem);
         url.addParam("prescription_labo_examen_id", iPrescriptionItem);
       }
-      url.requestUpdate("rightPane", { waitingText: null });
+      url.requestUpdate("topRightDiv", { waitingText: null });
     },
 
     del: function(oForm) {
@@ -184,7 +195,7 @@ var oDragOptions = {
   }
 }
 
-var DivManipulator = {
+var ElementManipulator = {
   SetViewportAvlHeight: function (sDivId, iPct) {
     var oDiv = $(sDivId);
     if (!oDiv) {
@@ -205,6 +216,8 @@ var DivManipulator = {
 }
 
 function pageMain() {
+  ElementManipulator.SetViewportAvlHeight('topRightDiv', 0.49);
+  ElementManipulator.SetViewportAvlHeight('bottomRightDiv', 0.96);
   Prescription.select();
   window[getCheckedValue(document.typeListeFrm.typeListe)].select();
 }
@@ -267,7 +280,9 @@ function pageMain() {
   <tr>
     <td class="halfPane" id="listPrescriptions">
     </td>
-    <td class="halfPane" id="rightPane">
+    <td class="halfPane">
+      <div id="topRightDiv"></div>
+      <div id="bottomRightDiv"></div>
     </td>
   </tr>
 </table>
