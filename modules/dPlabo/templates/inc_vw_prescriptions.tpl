@@ -15,7 +15,7 @@
 
 {{foreach from=$patient->_ref_prescriptions item="curr_prescription"}}
 <div class="tree-header {{if $curr_prescription->_id == $prescription->_id}}selected{{/if}}" id="drop-prescription-{{$curr_prescription->_id}}">
-  <script>
+  <script type="text/javascript">
   Droppables.add('drop-prescription-{{$curr_prescription->_id}}', {
     onDrop: function(element) {
       Prescription.Examen.drop(element.id, {{$curr_prescription->_id}})

@@ -4,7 +4,7 @@ var Catalogue = {
   select : function(iCatalogue) {
     if(isNaN(iCatalogue)) {
       iCatalogue = 0;
-      oForm = $('currCatalogue');
+      oForm = document.editCatalogue;
       if(oForm) {
         iCatalogue = oForm.catalogue_labo_id.value;
       }
@@ -22,7 +22,7 @@ var Pack = {
   select : function(pack_id) {
     if(isNaN(pack_id)) {
       pack_id = 0;
-      oForm = $('newPackItem');
+      oForm = document.editPackItem;
       if(oForm) {
         pack_id = oForm.pack_examens_labo_id.value;
       }
@@ -35,7 +35,7 @@ var Pack = {
     url.requestUpdate('PacksView', { waitingText : null });
   },
   dropExamen: function(sExamen_id, pack_id) {
-    oFormBase = $('newPackItem');
+    oFormBase = document.editPackItem;
     aExamen_id = sExamen_id.split("-");
     oFormBase.examen_labo_id.value       = aExamen_id[1];
     oFormBase.pack_examens_labo_id.value = pack_id;
@@ -43,7 +43,7 @@ var Pack = {
     return true;
   },
   delExamen: function(oForm) {
-    oFormBase = $('newPackItem');
+    oFormBase = document.editPackItem;
     oFormBase.pack_examens_labo_id.value = oForm.pack_examens_labo_id.value;
     submitFormAjax(oForm, 'systemMsg', { onComplete: Pack.select });
     return true;
@@ -73,9 +73,29 @@ var oDragOptions = {
   }       
 }
 
+var DivManipulator = {
+  SetViewportAvlHeight: function (sDivId, iPct) {
+    var oDiv = $(sDivId);
+    if (!oDiv) {
+      return;
+    }
+    var fYDivPos   = 0;
+    var fNavHeight = 0;
+    var fDivHeight = 0;
+  
+    // Position Top de la div, hauteur de la fenetre,
+    // puis calcul de la taille de la div
+    fYDivPos   = Position.cumulativeOffset(oDiv)[1];
+    fNavHeight = window.getInnerDimensions().y;
+    fDivHeight = fNavHeight - fYDivPos;
+    oDiv.style.overflow = "auto";
+    oDiv.style.height = (fDivHeight * iPct) +"px";
+  }
+}
+
 function pageMain() {
-  Catalogue.select();
   Pack.select();
+  Catalogue.select();
 }
 
 </script>
@@ -83,16 +103,16 @@ function pageMain() {
 <table class="main">
   <tr>
     <th class="halfPane">
-      Catalogues
+      Packs
     </th>
     <th class="halfPane">
-      Packs
+      Catalogues
     </th>
   </tr>
   <tr>
-    <td id="CataloguesView">
-    </td>
     <td id="PacksView">
+    </td>
+    <td id="CataloguesView">
     </td>
   </tr>
 </table>

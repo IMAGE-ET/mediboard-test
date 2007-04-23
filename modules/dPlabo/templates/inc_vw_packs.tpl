@@ -1,4 +1,11 @@
-<form name="editPackItem" id="newPackItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<script type="text/javascript">
+
+DivManipulator.SetViewportAvlHeight('divListPacks', 0.49);
+DivManipulator.SetViewportAvlHeight('divListExamensPack', 0.96);
+  
+</script>
+
+<form name="editPackItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dPlabo" />
   <input type="hidden" name="dosql" value="do_pack_item_aed" />
   <input type="hidden" name="pack_item_examen_labo_id" value="" />
@@ -7,6 +14,7 @@
   <input type="hidden" name="del" value="0" />
 </form>
 
+<div id="divListPacks">
 {{foreach from=$listPacks item="curr_pack"}}
 <div class="tree-header {{if $curr_pack->_id == $pack->_id}}selected{{/if}}" id="drop-pack-{{$curr_pack->_id}}">
   {{if $dragPacks}}
@@ -14,7 +22,7 @@
     new Draggable('pack-{{$curr_pack->_id}}', oDragOptions);
   </script>
   {{else}}
-  <script>
+  <script type="text/javascript">
   Droppables.add('drop-pack-{{$curr_pack->_id}}', {
     onDrop: function(element) {
       Pack.dropExamen(element.id, {{$curr_pack->_id}})
@@ -26,14 +34,16 @@
   <div style="float:right;">
     {{$curr_pack->_ref_items_examen_labo|@count}} Examens
   </div>
-  <div {{if $dragPacks}}class="draggable"{{/if}} id="pack-{{$curr_pack->_id}}"
+  <div {{if $dragPacks}}class="draggable"{{/if}} id="pack-{{$curr_pack->_id}}">
     <a href="#nothing" onclick="Pack.select({{$curr_pack->_id}})">
       {{$curr_pack->_view}}
     </a>
   </div>
 </div>
 {{/foreach}}
+</div>
 
+<div id="divListExamensPack">
 {{if $pack->_id}}
 <table class="tbl">
   <tr>
@@ -61,7 +71,7 @@
         <input type="hidden" name="pack_examens_labo_id" value="{{$pack->_id}}" />
         <input type="hidden" name="pack_item_examen_labo_id" value="{{$curr_item->_id}}" />
         <input type="hidden" name="del" value="1" />
-        <button type="button" class="trash notext" style="float: right;" onclick="Pack.delExamen(this.form)"/>
+        <button type="button" class="trash notext" style="float: right;" onclick="Pack.delExamen(this.form)">{{tr}}Delete{{/tr}}</button>
       </form>
       <div class="draggable" id="examen-{{$curr_examen->_id}}-{{$curr_item->_id}}">
       <script type="text/javascript">
@@ -94,3 +104,4 @@
   {{/foreach}}
 </table>
 {{/if}}
+</div>
