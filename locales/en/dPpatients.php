@@ -1,5 +1,4 @@
 <?php
-$locales['CAntecedent.type.gyn'] = '';
 $locales['CAntecedent'] = '';
 $locales['CAntecedent-date'] = 'Date';
 $locales['CAntecedent-date-desc'] = '';
@@ -11,6 +10,7 @@ $locales['CAntecedent.type.alle'] = '';
 $locales['CAntecedent.type.anesth'] = '';
 $locales['CAntecedent.type.chir'] = '';
 $locales['CAntecedent.type.fam'] = '';
+$locales['CAntecedent.type.gyn'] = '';
 $locales['CAntecedent.type.med'] = '';
 $locales['CAntecedent.type.obst'] = '';
 $locales['CAntecedent.type.trans'] = '';

@@ -29,12 +29,12 @@
     </th>
   </tr>
   <tr>
-    <th>{{mb_label object=$patient field="_view"}}</th>
+    <th>{{tr}}CPatient{{/tr}}</th>
     <td>{{mb_value object=$patient field="_view"}}</td>
   </tr>
 
   <tr>
-    <th>{{mb_label object=$examen field="_view"}}</th>
+    <th>{{tr}}CExamenLabo{{/tr}}</th>
     <td>{{mb_value object=$examen field="_view"}}</td>
   </tr>
 

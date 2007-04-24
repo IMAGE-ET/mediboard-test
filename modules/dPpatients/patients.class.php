@@ -529,7 +529,7 @@ class CPatient extends CMbObject {
     if(CModule::getInstalled("dPlabo")) {
       $prescription = new CPrescriptionLabo();
       $where = array("patient_id" => "= $this->_id");
-      $order = "date";
+      $order = "date DESC";
       $this->_ref_prescriptions = $prescription->loadList($where, $order);
     }
   }

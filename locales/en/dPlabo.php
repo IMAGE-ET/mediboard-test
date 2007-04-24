@@ -1,5 +1,4 @@
 <?php
-$locales['CPrescriptionLaboExamen-commentaire-desc'] = 'Pratician comment on exam value';
 $locales['CCatalogueLabo'] = '';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sub-catalog';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Medical test';
@@ -9,7 +8,7 @@ $locales['CCatalogueLabo-libelle'] = '';
 $locales['CCatalogueLabo-libelle-desc'] = '';
 $locales['CCatalogueLabo-pere_id'] = '';
 $locales['CCatalogueLabo-pere_id-desc'] = '';
-$locales['CExamenLablo'] = '';
+$locales['CExamenLabo'] = '';
 $locales['CExamenLabo-back-items_pack_labo'] = 'Pack d\'examen';
 $locales['CExamenLabo-catalogue_labo_id'] = '';
 $locales['CExamenLabo-catalogue_labo_id-desc'] = '';
@@ -36,6 +35,7 @@ $locales['CPackExamensLabo-libelle'] = '';
 $locales['CPackExamensLabo-libelle-desc'] = '';
 $locales['CPackItemExamenLabo'] = '';
 $locales['CPrescriptionLaboExamen-commentaire'] = 'comment';
+$locales['CPrescriptionLaboExamen-commentaire-desc'] = 'Pratician comment on exam value';
 $locales['CPrescriptionLaboExamen-date'] = 'Date';
 $locales['CPrescriptionLaboExamen-date-desc'] = 'Result date for exam';
 $locales['CPrescriptionLaboExamen-resultat'] = 'Result value';

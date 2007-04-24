@@ -48,7 +48,7 @@ class CPrescriptionLabo extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_shortview = $this->date;
-    $this->_view      = $this->date;
+    $this->_view      = "Prescription du ".mbTranformTime(null, $this->date, "%d/%m/%Y %Hh%M");
   }
   
   function loadRefsFwd() {
