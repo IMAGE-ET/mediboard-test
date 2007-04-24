@@ -46,7 +46,7 @@ class CTimeSpec extends CMbFieldSpec {
   }
   
   function getDBSpec(){
-    return "time";
+    return "TIME";
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

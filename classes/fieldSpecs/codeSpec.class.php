@@ -68,13 +68,13 @@ class CCodeSpec extends CMbFieldSpec {
     $type_sql = null;
     
     if($this->ccam){
-      $type_sql = "varchar(7)";
+      $type_sql = "VARCHAR(7)";
     }elseif($this->cim10){
-      $type_sql = "varchar(5)";
+      $type_sql = "VARCHAR(5)";
     }elseif($this->adeli){
-      $type_sql = "varchar(9)";
+      $type_sql = "VARCHAR(9)";
     }elseif($this->insee){
-      $type_sql = "varchar(15)";
+      $type_sql = "VARCHAR(15)";
     }
     
     return $type_sql;

@@ -36,7 +36,7 @@ class CTextSpec extends CMbFieldSpec {
   }
   
   function getDBSpec(){
-    return "text";
+    return "TEXT";
   }
 }
 

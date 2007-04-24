@@ -44,7 +44,7 @@ class CHtmlSpec extends CMbFieldSpec {
   }
   
   function getDBSpec(){
-    return "mediumtext";
+    return "MEDIUMTEXT";
   }
 }
 

@@ -31,40 +31,6 @@ class CFournisseur extends CMbObject {
     $this->CMbObject("fournisseur", "fournisseur_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-
-    static $props = array (
-      "societe"    => "str notNull",
-      "adresse"    => "text",
-      "codepostal" => "numchar length|5",
-      "ville"      => "str",
-      "telephone"  => "numchar maxLength|10",
-      "mail"       => "email",
-      "nom"        => "str",
-      "prenom"     => "str"
-    );
-    $this->_props =& $props;
-
-    static $seek = array (
-      "societe" => "like",
-      "ville"   => "like",
-      "nom"     => "like",
-      "prenom"  => "like"
-    );
-    $this->_seek =& $seek;
-
-    static $enums = null;
-    if (!$enums) {
-      $enums = $this->getEnums();
-    }
-    
-    $this->_enums =& $enums;
-    
-    static $enumsTrans = null;
-    if (!$enumsTrans) {
-      $enumsTrans = $this->getEnumsTrans();
-    }
-    
-    $this->_enumsTrans =& $enumsTrans;
   }
 
   function getSpecs() {

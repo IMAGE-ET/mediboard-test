@@ -123,7 +123,7 @@ class CEnumSpec extends CMbFieldSpec {
   
   function getDBSpec(){
     $aSpecFragments = explode("|", $this->list);
-    $type_sql = "enum('".implode("','", $aSpecFragments)."')";
+    $type_sql = "ENUM('".implode("','", $aSpecFragments)."')";
     return $type_sql;
   }
 }

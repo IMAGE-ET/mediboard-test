@@ -26,7 +26,7 @@ class CPctSpec extends CMbFieldSpec {
   }
   
   function getDBSpec(){
-    return "float";
+    return "FLOAT";
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

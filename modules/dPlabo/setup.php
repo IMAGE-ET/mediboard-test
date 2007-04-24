@@ -11,7 +11,7 @@ global $AppUI;
 
 $config = array();
 $config["mod_name"]        = "dPlabo";
-$config["mod_version"]     = "0.15";
+$config["mod_version"]     = "0.16";
 $config["mod_type"]        = "user";
 
 class CSetupdPlabo extends CSetup {
@@ -105,7 +105,27 @@ class CSetupdPlabo extends CSetup {
             "\nCHANGE `date` `date` DATE DEFAULT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.15";
+    $this->makeRevision("0.15");
+    $sql = "ALTER TABLE `examen_labo`" .
+        "\nADD `deb_application` DATE," .
+        "\nADD `fin_application` DATE," .
+        "\nADD `realisateur` INT(11) UNSIGNED," .
+        "\nADD `applicabilite` ENUM('homme','femme','unisexe')," .
+        "\nADD `age_min` INT(11) UNSIGNED," .
+        "\nADD `age_max` INT(11) UNSIGNED," .
+        "\nADD `technique` TEXT," .
+        "\nADD `materiel` TEXT," .
+        "\nADD `type_prelevement` VARCHAR(255)," .
+        "\nADD `methode_prelevement` TEXT," .
+        "\nADD `conservation` TEXT," .
+        "\nADD `temps_conservation` INT(11) UNSIGNED," .
+        "\nADD `quantité` INT(11) UNSIGNED," .
+        "\nADD `jour_execution` VARCHAR(255)," .
+        "\nADD `duree_execution` INT(11) UNSIGNED," .
+        "\nADD `remarques` TEXT;";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.16";
   }
 }
 ?>

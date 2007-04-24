@@ -26,7 +26,7 @@ class CEmailSpec extends CMbFieldSpec {
   }
   
   function getDBSpec(){
-    return "varchar(50)";
+    return "VARCHAR(50)";
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

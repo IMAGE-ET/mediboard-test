@@ -39,8 +39,18 @@
         {{if $currClass|@count}}
         <tr>
           <th colspan="7" class="title">
-            {{$keyClass}}
+            <button id="Suggestion-{{$keyClass}}-trigger" class="edit" style="float: right">
+              {{tr}}Suggest{{/tr}}
+            </button>
+            {{$keyClass}} ({{tr}}{{$keyClass}}{{/tr}})
           </th>
+        </tr>
+        <tr id="Suggestion-{{$keyClass}}">
+          <td colspan="0">
+            <script type="text/javascript">new PairEffect('Suggestion-{{$keyClass}}');</script>
+  
+            <pre>{{tr}}{{$aSuggestions.$keyClass|default:"no suggestion"}}{{/tr}}</pre>
+          </td>
         </tr>
         {{foreach from=$currClass key=keyChamp item=currChamp}}
         <tr>

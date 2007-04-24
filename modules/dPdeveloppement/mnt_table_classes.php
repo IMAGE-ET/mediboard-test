@@ -27,25 +27,21 @@ if($class_exist=== false){
   $classSelected[] = $selClass;
 }
 
-
-
-foreach($classSelected as $selected){  
-  $object = new $selected;  
-  $nameKeyTable = $AppUI->_($selected)." - ".$selected." (".$object->_ref_module->mod_name.")";
+foreach ($classSelected as $selected){  
+  $object = new $selected;
   
-  $aChamps[$nameKeyTable] = array();
-  $aClass =& $aChamps[$nameKeyTable];
+  $aChamps[$selected] = array();
+  $aClass =& $aChamps[$selected];
   
   // CLé dela table
   $aClass[$object->_tbl_key]["keytable"] = $object->_tbl_key;
   
   // Extraction des champs
   foreach ($object->getProps() as $k => $v) {
-    if($k[0] != "_"){
-      $aClass[$k]["class_field"] = $k;
-      if(isset($object->_specs[$k])){
-        $aClass[$k]["object_spec"] = $object->_specs[$k]->getDBSpec();
-      }
+    $aClass[$k]["class_field"] = $k;
+    
+    if ($spec = @$object->_specs[$k]) {
+      $aClass[$k]["object_spec"] = $spec->getDBSpec();
     }
   } 
   
@@ -73,7 +69,7 @@ foreach($classSelected as $selected){
 	  $sql = "SHOW INDEX FROM `$object->_tbl`";
     
 	  $listIndex = db_loadList($sql);
-	  foreach($listIndex as $currIndex){
+	  foreach($listIndex as $currIndex) {
 	    if($aClass[$currIndex["Column_name"]]["BDD_index"]){
 	      $aClass[$currIndex["Column_name"]]["BDD_index"] .= ", ";
 	    }
@@ -116,29 +112,35 @@ foreach($aChamps as $nameClass=>$currClass){
     $curr_champ["error_class_props"] = null;
     
     // Test clé de table
-    if($curr_champ["BDD_type"] && $curr_champ["class_field"]){
-      if($curr_champ["class_field"] == $curr_champ["keytable"] && $curr_champ["BDD_type"] !== "int(11) unsigned"){
-        $curr_champ["error_BDD_type"] = "int(11) unsigned";
+    if ($curr_champ["keytable"]) {
+      if ($curr_champ["BDD_type"]) {
+        if ($curr_champ["class_field"] == $curr_champ["keytable"] && $curr_champ["BDD_type"] !== "int(11) unsigned"){
+          $curr_champ["error_BDD_type"] = "INT(11) UNSIGNED";
+        }
+      }
+      else {
+        $curr_champ["object_spec"] = "INT(11) UNSIGNED";
       }
     }
     
     // Test sur les propriétés
     if($curr_champ["BDD_name"] && $curr_champ["class_props"]){
-      $specFragments = explode("|", $curr_champ["class_props"]);
       $type_sql = $curr_champ["object_spec"];
       
-      if($curr_champ["BDD_type"] != $type_sql){
+      if (strtoupper($curr_champ["BDD_type"]) != strtoupper($type_sql)) {
         $curr_champ["error_class_props"] = true;
         $curr_champ["error_BDD_type"]    = $type_sql;
       }
+      
       //Test notNull et YES dans BDD
+      $specFragments = explode(" ", $curr_champ["class_props"]);
       $notNull = array_search("notNull", $specFragments);
       if($notNull && $curr_champ["BDD_null"]=="YES"){
         $curr_champ["error_BDD_null"] = true;
         $curr_champ["error_class_props"] = true;
       }
-
     }
+    
     
     // Supressions des lignes correctes dans le mode d'affichage "liste des erreurs"
     if($selClass===null){ 
@@ -157,10 +159,74 @@ foreach($aChamps as $nameClass=>$currClass){
   }
 }
 
+// Construction des suggestions
+$aSuggestions = array();
+foreach ($aChamps as $class => $aFields) {
+  $object = new $class;
+  $newTable = !db_loadTable($object->_tbl);
+
+  // Production de chaque item de suggestion
+  foreach ($aFields as $fieldName => $fieldInfo) {
+    $BDD_name = $fieldInfo["BDD_name"];
+    $error_BDD_type = $fieldInfo["error_BDD_type"];
+    $error_BDD_null = $fieldInfo["error_BDD_null"];
+    $class_props = $fieldInfo["class_props"];
+    $class_field = $fieldInfo["class_field"];
+    $BDD_sugg = $fieldInfo["object_spec"];
+    
+    $suggestion = null;
+    
+    if ($error_BDD_type || $error_BDD_null || !$BDD_name) {
+      $fieldCreateKeyword = $newTable ? "" : "ADD";
+      
+      $suggestion  = $BDD_name ?
+        "CHANGE `$fieldName` `$fieldName` $error_BDD_type" : 
+        "$fieldCreateKeyword `$fieldName` $BDD_sugg";
+      
+      if ($fieldInfo["keytable"]) {
+        $suggestion .= " NOT NULL AUTO_INCREMENT"; 
+      } 
+
+      if (false !== array_search("notNull", explode(" ", $class_props))) {
+        $suggestion .= " NOT NULL";
+      }
+    }
+    
+    if ($BDD_name && !$class_field) {
+      $suggestion = "DROP `$BDD_name`";
+    }
+    
+    if ($suggestion) {
+      $aSuggestions[$class][] = "\n$suggestion";
+    }
+  
+  }
+  
+  // Production de la suggestion pour la table complete
+  if (array_key_exists($class, $aSuggestions)) {
+    if ($newTable) {
+      $aSuggestions[$class] = "CREATE TABLE `$object->_tbl` (" . 
+        join($aSuggestions[$class], ", ") . 
+        ", \nPRIMARY KEY (`$object->_tbl_key`)) TYPE=MYISAM;";
+    }
+    else {
+      $aSuggestions[$class] = "ALTER TABLE `$object->_tbl`" . 
+        join($aSuggestions[$class], ", ") . 
+        ";";
+    }
+  }
+  else {
+    $aSuggestions[$class] = null;
+  }
+
+}
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("aChamps"   , $aChamps);
+$smarty->assign("aSuggestions"   , $aSuggestions);
 $smarty->assign("selClass"  , $selClass);
 $smarty->assign("listClass" , $listClass);
 $smarty->display("mnt_table_classes.tpl");

@@ -44,7 +44,7 @@ class CBoolSpec extends CMbFieldSpec {
   }
 
   function getDBSpec(){
-    return "enum('0','1')";
+    return "ENUM('0','1')";
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

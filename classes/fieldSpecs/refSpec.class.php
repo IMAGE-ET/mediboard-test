@@ -39,7 +39,7 @@ class CRefSpec extends CMbFieldSpec {
   }
   
   function getDBSpec(){
-    return "int(11) unsigned";
+    return "INT(11) UNSIGNED";
   }
 }
 

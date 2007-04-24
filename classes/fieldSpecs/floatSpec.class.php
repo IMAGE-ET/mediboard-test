@@ -84,9 +84,9 @@ class CFloatSpec extends CMbFieldSpec {
   }
   
   function getDBSpec(){
-    $type_sql = "float";
+    $type_sql = "FLOAT";
     if($this->pos){
-      $type_sql = "float unsigned";
+      $type_sql = "FLOAT UNSIGNED";
     }
     return $type_sql;
   }

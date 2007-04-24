@@ -150,7 +150,7 @@ class CNumSpec extends CMbFieldSpec {
   }
   
   function getDBSpec(){
-    $type_sql   = "int(11)";
+    $type_sql   = "INT(11)";
     $valeur_max = null;
     
     if($this->minMax || $this->max){
@@ -160,18 +160,18 @@ class CNumSpec extends CMbFieldSpec {
       }else{
         $valeur_max = $this->max;
       }
-      $type_sql = "tinyint(4)";
+      $type_sql = "TINYINT(4)";
       if ($valeur_max > pow(2,8)) {
-        $type_sql = "mediumint(9)";
+        $type_sql = "MEDIUMINT(9)";
       }
       if ($valeur_max > pow(2,16)) {
-        $type_sql = "int";
+        $type_sql = "INT";
       }
       if ($valeur_max > pow(2,32)) {
-        $type_sql = "bigint";
+        $type_sql = "BIGINT";
       }
     }elseif($this->pos){
-      $type_sql = "int(11) unsigned";
+      $type_sql = "INT(11) UNSIGNED";
     }
     
     return $type_sql;

@@ -87,12 +87,16 @@ class CStrSpec extends CMbFieldSpec {
   }
   
   function getDBSpec(){
-    $type_sql = "varchar(255)";
+    $type_sql = "VARCHAR(255)";
     
-    if($this->maxLength || $this->length){
-      $length = $this->maxLength ? $this->maxLength : $this->length;
-      $type_sql = "varchar($length)";
+    if ($this->maxLength) {
+      $type_sql = "VARCHAR($this->maxLength)";
+    } 
+    
+    if ($this->length) {
+      $type_sql = "CHAR($this->length)";
     }
+    
     return $type_sql;
   }
   
