@@ -504,6 +504,10 @@ table.main td {
   vertical-align: top;
 }
 
+table.main tbody.viewported td.viewport {
+  border: 1px solid #000;
+}
+
 table.main td.halfPane {
   width: 50%;
 }

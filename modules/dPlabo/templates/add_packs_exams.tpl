@@ -81,33 +81,13 @@ var oDragOptions = {
   }       
 }
 
-var ElementManipulator = {
-  SetViewportAvlHeight: function (sDivId, iPct) {
-    var oDiv = $(sDivId);
-    if (!oDiv) {
-      return;
-    }
-    var fYDivPos   = 0;
-    var fNavHeight = 0;
-    var fDivHeight = 0;
-  
-    // Position Top de la div, hauteur de la fenetre,
-    // puis calcul de la taille de la div
-    fYDivPos   = Position.cumulativeOffset(oDiv)[1];
-    fNavHeight = window.getInnerDimensions().y;
-    fDivHeight = fNavHeight - fYDivPos;
-    oDiv.style.overflow = "auto";
-    oDiv.style.height = (fDivHeight * iPct) +"px";
-  }
-}
-
 function pageMain() {
   Pack.select();
   Catalogue.select();
-  ElementManipulator.SetViewportAvlHeight('PacksView', 0.5);
-  ElementManipulator.SetViewportAvlHeight('PacksExamensView', 1);
-  ElementManipulator.SetViewportAvlHeight('CataloguesView', 0.5);
-  ElementManipulator.SetViewportAvlHeight('CataloguesExamensView', 1);
+  ViewPort.SetAvlHeight('PacksView'            , 0.4);
+  ViewPort.SetAvlHeight('PacksExamensView'     , 1);
+  ViewPort.SetAvlHeight('CataloguesView'       , 0.4);
+  ViewPort.SetAvlHeight('CataloguesExamensView', 1);
 }
 
 </script>
@@ -121,20 +101,22 @@ function pageMain() {
       Catalogues
     </th>
   </tr>
+  <tbody class="viewported">
   <tr>
-    <td>
+    <td class="viewport">
       <div id="PacksView"></div>
     </td>
-    <td>
+    <td class="viewport">
       <div id="CataloguesView"></div>
     </td>
   </tr>
   <tr>
-    <td>
+    <td class="viewport">
       <div id="PacksExamensView"></div>
     </td>
-    <td>
+    <td class="viewport">
       <div id="CataloguesExamensView"></div>
     </td>
   </tr>
+  </tbody>
 </table>

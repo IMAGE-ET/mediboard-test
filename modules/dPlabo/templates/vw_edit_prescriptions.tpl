@@ -78,13 +78,17 @@ var Prescription = {
       }
     }
     var iPatient_id = document.patFrm.patient_id.value;
-    var url = new Url;
-    url.setModuleAction("dPlabo", "httpreq_vw_prescriptions");
+    var urlPresc = new Url;
+    var urlExam  = new Url;
+    urlPresc.setModuleAction("dPlabo", "httpreq_vw_prescriptions");
+    urlExam.setModuleAction("dPlabo", "httpreq_vw_examens_prescriptions");
     if(prescription_id) {
-      url.addParam("prescription_labo_id", prescription_id);
+      urlPresc.addParam("prescription_labo_id", prescription_id);
+      urlExam.addParam("prescription_labo_id", prescription_id);
     }
-    url.addParam("patient_id", iPatient_id    );
-    url.requestUpdate('listPrescriptions', { waitingText: null });
+    urlPresc.addParam("patient_id", iPatient_id    );
+    urlPresc.requestUpdate('listPrescriptions', { waitingText: null });
+    urlExam.requestUpdate('listExamens', { waitingText: null });
   },
   
   create : function() {
@@ -195,29 +199,11 @@ var oDragOptions = {
   }
 }
 
-var ElementManipulator = {
-  SetViewportAvlHeight: function (sDivId, iPct) {
-    var oDiv = $(sDivId);
-    if (!oDiv) {
-      return;
-    }
-    var fYDivPos   = 0;
-    var fNavHeight = 0;
-    var fDivHeight = 0;
-  
-    // Position Top de la div, hauteur de la fenetre,
-    // puis calcul de la taille de la div
-    fYDivPos   = Position.cumulativeOffset(oDiv)[1];
-    fNavHeight = window.getInnerDimensions().y;
-    fDivHeight = fNavHeight - fYDivPos;
-    oDiv.style.overflow = "auto";
-    oDiv.style.height = (fDivHeight * iPct) +"px";
-  }
-}
-
 function pageMain() {
-  ElementManipulator.SetViewportAvlHeight('topRightDiv', 0.5);
-  ElementManipulator.SetViewportAvlHeight('bottomRightDiv', 1);
+  ViewPort.SetAvlHeight('topRightDiv'      , 0.4);
+  ViewPort.SetAvlHeight('bottomRightDiv'   , 1);
+  ViewPort.SetAvlHeight('listPrescriptions', 0.4);
+  ViewPort.SetAvlHeight('listExamens'      , 1);
   Prescription.select();
   window[getCheckedValue(document.typeListeFrm.typeListe)].select();
 }
@@ -226,8 +212,7 @@ function pageMain() {
 
 <table class="main">
   <tr>
-    <td>
-
+    <td class="halfPane">
       <form name="patFrm" action="index.php" method="get">
       <table class="form">
         <tr>
@@ -247,7 +232,6 @@ function pageMain() {
         </tr>
       </table>
       </form>
-
       <form name="editPrescription" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="m" value="dPlabo" />
         <input type="hidden" name="dosql" value="do_prescription_aed" />
@@ -257,9 +241,8 @@ function pageMain() {
         <input type="hidden" name="date" value="" />
         <input type="hidden" name="del" value="0" />
       </form>
-
     </td>
-    <td>
+    <td class="halfPane">
       <form name="typeListeFrm" action="?" method="get">
       <table class="form">
         <tr>
@@ -277,12 +260,22 @@ function pageMain() {
       </form>
     </td>
   </tr>
+  <tbody class="viewported">
   <tr>
-    <td class="halfPane" id="listPrescriptions">
+    <td class="viewport">
+      <div id="listPrescriptions"></div>
     </td>
-    <td class="halfPane">
+    <td class="viewport">
       <div id="topRightDiv"></div>
+    </td>
+  </tr>
+  <tr>
+    <td class="viewport">
+      <div id="listExamens"></div>
+    </td>
+    <td class="viewport">
       <div id="bottomRightDiv"></div>
     </td>
   </tr>
+  <tbody>
 </table>

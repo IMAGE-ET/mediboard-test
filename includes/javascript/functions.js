@@ -375,6 +375,31 @@ Object.extend(PairEffect, {
 });
 
 /**
+ * View port manipulation object
+ *   Handle view ported objects
+ */
+
+var ViewPort = {
+  SetAvlHeight: function (sDivId, iPct) {
+    var oDiv = $(sDivId);
+    if (!oDiv) {
+      return;
+    }
+    var fYDivPos   = 0;
+    var fNavHeight = 0;
+    var fDivHeight = 0;
+  
+    // Position Top de la div, hauteur de la fenetre,
+    // puis calcul de la taille de la div
+    fYDivPos   = Position.cumulativeOffset(oDiv)[1];
+    fNavHeight = window.getInnerDimensions().y;
+    fDivHeight = fNavHeight - fYDivPos;
+    oDiv.style.overflow = "auto";
+    oDiv.style.height = (fDivHeight * iPct - 10) +"px";
+  }
+}
+
+/**
  * ObjectTooltip Class
  *   Handle object tooltip creation, associated with a MbObject and a target HTML element
  */
