@@ -60,12 +60,16 @@
           </td>
           <td>
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->min}} {{$curr_examen->unite}}
+              {{if $curr_examen->min}}
+                {{$curr_examen->min}} {{$curr_examen->unite}}
+              {{/if}}
             </a>
           </td>
           <td>
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->max}} {{$curr_examen->unite}}
+              {{if $curr_examen->max}}
+                {{$curr_examen->max}} {{$curr_examen->unite}}
+              {{/if}}
             </a>
           </td>
         </tr>
