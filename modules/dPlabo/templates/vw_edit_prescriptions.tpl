@@ -216,8 +216,8 @@ var ElementManipulator = {
 }
 
 function pageMain() {
-  ElementManipulator.SetViewportAvlHeight('topRightDiv', 0.49);
-  ElementManipulator.SetViewportAvlHeight('bottomRightDiv', 0.96);
+  ElementManipulator.SetViewportAvlHeight('topRightDiv', 0.5);
+  ElementManipulator.SetViewportAvlHeight('bottomRightDiv', 1);
   Prescription.select();
   window[getCheckedValue(document.typeListeFrm.typeListe)].select();
 }

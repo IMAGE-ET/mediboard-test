@@ -104,10 +104,10 @@ var ElementManipulator = {
 function pageMain() {
   Pack.select();
   Catalogue.select();
-  ElementManipulator.SetViewportAvlHeight('PacksView', 0.49);
-  ElementManipulator.SetViewportAvlHeight('PacksExamensView', 0.96);
-  ElementManipulator.SetViewportAvlHeight('CataloguesView', 0.49);
-  ElementManipulator.SetViewportAvlHeight('CataloguesExamensView', 0.96);
+  ElementManipulator.SetViewportAvlHeight('PacksView', 0.5);
+  ElementManipulator.SetViewportAvlHeight('PacksExamensView', 1);
+  ElementManipulator.SetViewportAvlHeight('CataloguesView', 0.5);
+  ElementManipulator.SetViewportAvlHeight('CataloguesExamensView', 1);
 }
 
 </script>
