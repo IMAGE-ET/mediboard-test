@@ -28,7 +28,8 @@
        
       <button type="button" class="edit notext" style="float: left;" onclick="Prescription.Examen.edit({{$curr_item->_id}})">button</button>
 
-      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
+      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}"
+         onmouseover="ObjectTooltip.create(this, 'CExamenLabo', {{$curr_examen->_id}})">
         {{$curr_examen->_view}}
       </a>
     </td>
