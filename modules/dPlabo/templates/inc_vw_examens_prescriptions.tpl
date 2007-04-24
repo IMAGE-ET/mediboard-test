@@ -49,8 +49,10 @@
         {{/if}}
         
         <div class="{{$msgClass}}">
-        {{mb_value object=$curr_item field=resultat}} 
-        {{mb_value object=$curr_examen field=unite}}
+          <a href="#nothing" onmouseover="ObjectTooltip.create(this, 'CPrescriptionLaboExamen', {{$curr_item->_id}})">
+            {{mb_value object=$curr_item field=resultat}} 
+            {{mb_value object=$curr_examen field=unite}}
+          </a>
         </div>
       {{else}}
         <em>Aucun résultat</em>
