@@ -93,5 +93,17 @@ class CMbArray {
     }
     return join($return, " ");
   }
+  
+  /**
+   * Create an array of given size filled with given values
+   */
+  function fillValues($value, $size) {
+    $array = array();
+    for ($i = 0; $i < $size; ++$i) {
+      $array[] = $value;
+    }
+    
+    return $array;
+  }
 }
 ?>

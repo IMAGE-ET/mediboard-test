@@ -20,6 +20,7 @@ $siblingItems = array();
 if($prescriptionItem->loadRefs()) {
   $siblingItems = $prescriptionItem->loadSiblings();
 }
+$prescriptionItem->_ref_prescription_labo->loadRefsFwd();
 
 // Création du template
 $smarty = new CSmartyDP();

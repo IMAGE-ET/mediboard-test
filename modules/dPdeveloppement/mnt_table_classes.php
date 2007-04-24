@@ -70,7 +70,8 @@ foreach($classSelected as $selected){
 	  }
 	  
 	  // Extraction des Index
-	  $sql = "SHOW INDEX FROM `".$object->_tbl."`";
+	  $sql = "SHOW INDEX FROM `$object->_tbl`";
+    
 	  $listIndex = db_loadList($sql);
 	  foreach($listIndex as $currIndex){
 	    if($aClass[$currIndex["Column_name"]]["BDD_index"]){
@@ -84,8 +85,18 @@ foreach($classSelected as $selected){
   } 
 }
 
-$aChampsObligatoire = array("keytable", "class_field","class_props","BDD_name","BDD_type",
-                             "BDD_null","BDD_default","BDD_index","BDD_primary", "object_spec");
+$aChampsObligatoire = array(
+  "keytable", 
+  "class_field", 
+  "class_props",
+  "BDD_name",
+  "BDD_type",
+  "BDD_null",
+  "BDD_default",
+  "BDD_index",
+  "BDD_primary", 
+  "object_spec"
+);
 
 // Test de concordance
 foreach($aChamps as $nameClass=>$currClass){
@@ -107,7 +118,7 @@ foreach($aChamps as $nameClass=>$currClass){
     // Test clé de table
     if($curr_champ["BDD_type"] && $curr_champ["class_field"]){
       if($curr_champ["class_field"] == $curr_champ["keytable"] && $curr_champ["BDD_type"] !== "int(11) unsigned"){
-        $curr_champ["error_BDD_type"] = $type_sql;
+        $curr_champ["error_BDD_type"] = "int(11) unsigned";
       }
     }
     

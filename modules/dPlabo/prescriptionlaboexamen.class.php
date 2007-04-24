@@ -82,14 +82,14 @@ class CPrescriptionLaboExamen extends CMbObject {
     $this->loadRefExamen();
   }
   
-  function loadSiblings() {
+  function loadSiblings($limit = 10) {
     return $this->loadResults($this->_ref_prescription_labo->patient_id, $this->examen_labo_id);
   }
   
   /**
    * load results items with given patient and exam
    */
-  function loadResults($patient_id, $examen_labo_id) {
+  function loadResults($patient_id, $examen_labo_id, $limit = 10) {
     $examen = new CExamenLabo;
     $examen->load($examen_labo_id);
     
@@ -100,7 +100,7 @@ class CPrescriptionLaboExamen extends CMbObject {
     $where = array ();
     $where["examen_labo_id"] = "= '$examen_labo_id'";
     $where["prescription_labo_id"] = db_prepare_in(array_keys($prescriptions));
-    $order = "date";
+    $order = "date DESC";
     
     $items = $this->loadList($where, $order);
     foreach ($items as &$item) {

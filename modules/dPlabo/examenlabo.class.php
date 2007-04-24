@@ -18,9 +18,28 @@ class CExamenLabo extends CMbObject {
   var $identifiant = null;
   var $libelle     = null;
   var $type        = null;
-  var $unite       = null;
+
+  var $deb_application = null;
+  var $fin_application = null;
+  var $realisateur = null;
+  var $applicabilite = null;
+  var $age_min         = null;
+  var $age_max         = null;
+  var $technique       = null;
+  var $materiel        = null;
+  var $type_prelevement = null;
+  var $methode_prelevement = null;
+  var $conservation = null;
+  var $temps_conservation = null;
+  var $quantité = null;
+  var $jour_execution = null;
+  var $duree_execution = null;
+  var $remarques = null;
+  
   var $min         = null;
   var $max         = null;
+  
+  var $unite       = null;
   
   // Form fields
   var $_reference_values = null;
@@ -42,13 +61,29 @@ class CExamenLabo extends CMbObject {
   
   function getSpecs() {
     return array (
-      "catalogue_labo_id" => "ref class|CCatalogueLabo notNull",
-      "identifiant"       => "str notNull",
-      "libelle"           => "str notNull",
-      "type"              => "enum list|bool|num|str notNull",
-      "unite"             => "str",
-      "min"               => "float",
-      "max"               => "float moreThan|min"
+      "catalogue_labo_id"   => "ref class|CCatalogueLabo notNull",
+      "identifiant"         => "str notNull",
+      "libelle"             => "str notNull",
+      "type"                => "enum list|bool|num|str notNull",
+      "unite"               => "str",
+      "min"                 => "float",
+      "max"                 => "float moreThan|min",
+      "deb_application"     => "date",
+      "fin_application"     => "date",
+      "realisateur"         => "ref class|CFunction",
+      "applicabilite"       => "enum list|homme|femme|unisexe",
+      "age_min"             => "num pos",
+      "age_max"             => "num pos moreThan|age_min",
+      "technique"           => "text",
+      "materiel"            => "text",
+      "type_prelevement"    => "str",
+      "methode_prelevement" => "text",
+      "conservation"        => "text",
+      "temps_conservation"  => "num pos",
+      "quantité"            => "num pos",
+      "jour_execution"      => "str",
+      "duree_execution"     => "num pos",
+      "remarques"           => "text",
     );
   }
   

@@ -1,6 +1,7 @@
-{{* $Id: $ *}}
+{{* $Id$ *}}
 
 {{assign var="examen" value=$prescriptionItem->_ref_examen_labo}}
+{{assign var="patient" value=$prescriptionItem->_ref_prescription_labo->_ref_patient}}
 
 <script type="text/javascript">
   // Explicit form preparation for Ajax loading
@@ -28,6 +29,11 @@
       Saisie du résultat
     </th>
   </tr>
+  <tr>
+    <th>{{mb_label object=$patient field="_view"}}</th>
+    <td>{{mb_value object=$patient field="_view"}}</td>
+  </tr>
+
   <tr>
     <th>{{mb_label object=$examen field="_view"}}</th>
     <td>{{mb_value object=$examen field="_view"}}</td>
@@ -59,6 +65,9 @@
       <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.Examen.edit() } });">Valider</button></td>
   </tr>
 </table>
+
+<img alt="Graph des résultats" src='?m=dPlabo&amp;a=graph_resultats&amp;suppressHeaders=1&amp;patient_id={{$patient->_id}}&amp;examen_id={{$examen->_id}}' />
+
 
 <table class="tbl">
   <tr>
