@@ -40,7 +40,7 @@
         <tr>
           <th colspan="7" class="title">
             <button id="Suggestion-{{$keyClass}}-trigger" class="edit" style="float: right">
-              {{tr}}Suggest{{/tr}}
+              {{tr}}Suggestion{{/tr}}
             </button>
             {{$keyClass}} ({{tr}}{{$keyClass}}{{/tr}})
           </th>
