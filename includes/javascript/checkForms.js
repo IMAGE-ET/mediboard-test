@@ -1,8 +1,10 @@
 var ElementChecker = {
-  aProperties : {},
-  oElement    : null,
-  sTypeSpec   : null,
-  aSpecTypes  : Array("ref", "str", "numchar", "num", 
+  aProperties    : {},
+  oElement       : null,
+  sTypeSpec      : null,
+  oTargetElement : null,
+  oCompare       : null,
+  aSpecTypes     : Array("ref", "str", "numchar", "num", 
                       "bool", "enum", "date", "time",
                       "dateTime", "float", "currency", "pct",
                       "text", "html", "email", "code"),
@@ -50,6 +52,31 @@ var ElementChecker = {
     
     return sMsg;
   },
+  
+  getCastFunction: function() {
+    switch (this.sTypeSpec) {
+    	case "num": return function(value) { return parseInt(value, 10); }
+			case "float": return function(value) { return parseFloat(value, 10); }
+    	default : return Prototype.K;
+    }
+  },
+  
+  castCompareValues: function(sTargetElement) {
+    this.oTargetElement = this.oElement.form.elements[sTargetElement];
+    if (!this.oTargetElement) {
+      return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
+    }
+    
+    var fCaster = this.getCastFunction();
+  	
+  	this.oCompare = {
+      source : fCaster(this.oElement.value),
+      target : fCaster(this.oTarget.value)
+  	}
+
+  	return null;
+  },
+  
   checkParams : function(){
     // NotNull
     if(this.aProperties["notNull"]){
@@ -90,43 +117,47 @@ var ElementChecker = {
     if(this.oElement.value == ""){
       return null;
     }
+    
+    var sTargetElement = null;
+    var sParamMsg = null;
+    
     // moreThan
-    if(this.aProperties["moreThan"]){
-      var sTargetElement = this.aProperties["moreThan"];
-      var oTargetElement = this.oElement.form.elements[sTargetElement];
-      if (!oTargetElement) {
-        return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
-      }
-      if (this.oElement.value <= oTargetElement.value) {
-        return printf("'%s' n'est pas strictement supérieur à '%s'", this.oElement.value, oTargetElement.value);
+    if (sTargetElement = this.aProperties["moreThan"]) {
+    	if (sParamMsg = this.castCompareValues(sTargetElement)) {
+    		return sParamMsg;
+    	}
+    	
+    	return "plouf";
+    	
+      if (this.oCompare.source <= this.oCompare.target) {
+        return printf("'%s' n'est pas strictement supérieur à '%s'", oCompare.source,  this.oCompare.target);
       }
     }
     
     // moreEquals
-    if(this.aProperties["moreEquals"]){
-      var sTargetElement = this.aProperties["moreEquals"];
-      var oTargetElement = this.oElement.form.elements[sTargetElement];
-      if (!oTargetElement) {
-        return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
-      }
-      if (this.oElement.value < oTargetElement.value) {
-        return printf("'%s' n'est pas supérieur ou égal à '%s'", this.oElement.value, oTargetElement.value);
+    if (sTargetElement = this.aProperties["moreEquals"]) {
+    	if (sParamMsg = this.castCompareValues(sTargetElement)) {
+    		return sParamMsg;
+    	}
+    	
+      if (this.oCompare.source < this.oCompare.target) {
+        return printf("'%s' n'est pas supérieur ou égal à '%s'", this.oCompare.source, this.oCompare.target);
       }
     }
-    
+
     // sameAs
-    if(this.aProperties["sameAs"]){
-      var sTargetElement = this.aProperties["sameAs"];
-      var oTargetElement = this.oElement.form.elements[sTargetElement];
-      if (!oTargetElement) {
-        return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
-      }
-      if (this.oElement.value != oTargetElement.value) {
-        var oTargetLabel = getLabelFor(oTargetElement);
+    if (sTargetElement = this.aProperties["moreEquals"]) {
+    	if (sParamMsg = this.castCompareValues(sTargetElement)) {
+    		return sParamMsg;
+    	}
+    	
+      if (this.oCompare.source != this.oCompare.target) {
+        var oTargetLabel = getLabelFor(this.oTargetElement);
         var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : this.oElement.name;
         return printf("Doit être identique à %s", sTargetLabel);
       }
     }
+    
     return null;
   }
 }
