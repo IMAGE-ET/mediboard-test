@@ -1,8 +1,5 @@
 {{* $Id$ *}}
 
-{{assign var="examen" value=$prescriptionItem->_ref_examen_labo}}
-{{assign var="patient" value=$prescriptionItem->_ref_prescription_labo->_ref_patient}}
-
 <script type="text/javascript">
   // Explicit form preparation for Ajax loading
   prepareForm(document.editPrescriptionItem);
@@ -23,6 +20,8 @@
   </tr>
 </table>
 {{else}}
+{{assign var="examen" value=$prescriptionItem->_ref_examen_labo}}
+{{assign var="patient" value=$prescriptionItem->_ref_prescription_labo->_ref_patient}}
 <table class="form">
   <tr>
     <th class="title modify" colspan="2">
@@ -62,12 +61,14 @@
   </tr>
   <tr>
     <td colspan="2" class="button">
-      <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.Examen.edit() } });">Valider</button></td>
+      <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.Examen.edit() } });">
+        Valider
+      </button>
+    </td>
   </tr>
 </table>
 
-<img alt="Graph des résultats" src='?m=dPlabo&amp;a=graph_resultats&amp;suppressHeaders=1&amp;patient_id={{$patient->_id}}&amp;examen_id={{$examen->_id}}' />
-
+</form>
 
 <table class="tbl">
   <tr>
@@ -115,4 +116,3 @@
   {{/foreach}}
 </table>
 {{/if}}
-</form>

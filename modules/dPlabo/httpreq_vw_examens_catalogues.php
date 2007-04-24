@@ -12,25 +12,15 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $catalogue_labo_id = mbGetValueFromGetOrSession("catalogue_labo_id");
-$typeListe  = mbGetValueFromGetOrSession("typeListe");
 
 // Chargement du catalogue demandé
 $catalogue = new CCatalogueLabo;
 $catalogue->load($catalogue_labo_id);
 $catalogue->loadRefs();
 
-// Chargement de tous les catalogues
-$where = array("pere_id" => "IS NULL");
-$order = "identifiant";
-$listCatalogues = $catalogue->loadList($where, $order);
-foreach($listCatalogues as &$_catalogue) {
-  $_catalogue->loadRefsDeep();
-}
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listCatalogues", $listCatalogues);
 $smarty->assign("catalogue"     , $catalogue    );
 
 $smarty->display("inc_vw_examens_catalogues.tpl");

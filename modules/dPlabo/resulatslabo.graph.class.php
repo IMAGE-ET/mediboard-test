@@ -10,6 +10,7 @@
 global $AppUI, $can, $m;
 
 require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_plotband"));
 
 class CResultatsLaboGraph extends Graph {

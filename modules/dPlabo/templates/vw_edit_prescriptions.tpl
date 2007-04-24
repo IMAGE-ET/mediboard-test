@@ -33,7 +33,6 @@ var Catalogue = {
       urlExam.addParam("catalogue_labo_id", iCatalogue);
     }
     urlCat.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
-    urlExam.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
     urlCat.requestUpdate('topRightDiv', { waitingText : null });
     urlExam.requestUpdate('bottomRightDiv', { waitingText : null });
   }
@@ -57,9 +56,7 @@ var Pack = {
       urlExam.addParam("pack_examens_labo_id", pack_id);
     }
     urlPack.addParam("dragPacks", 1);
-    urlExam.addParam("dragPacks", 1);
     urlPack.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
-    urlExam.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
     urlPack.requestUpdate("topRightDiv", { waitingText: null });
     urlExam.requestUpdate("bottomRightDiv", { waitingText: null });
   },
@@ -129,15 +126,18 @@ var Prescription = {
     edit: function(iPrescriptionItem) {
       setCheckedValue(document.typeListeFrm.typeListe, "Resultat");
 
-      var url = new Url;
-      url.setModuleAction("dPlabo", "httpreq_edit_resultat");
-      url.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
-
+      var urlResult = new Url;
+      var urlGraph  = new Url;
+      urlResult.setModuleAction("dPlabo", "httpreq_edit_resultat");
+      urlGraph.setModuleAction("dPlabo", "httpreq_graph_resultats");
+      urlResult.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
       if (iPrescriptionItem) {
         Prescription.Examen.select(iPrescriptionItem);
-        url.addParam("prescription_labo_examen_id", iPrescriptionItem);
+        urlResult.addParam("prescription_labo_examen_id", iPrescriptionItem);
+        urlGraph.addParam("prescription_labo_examen_id", iPrescriptionItem);
       }
-      url.requestUpdate("topRightDiv", { waitingText: null });
+      urlResult.requestUpdate("topRightDiv", { waitingText: null });
+      urlGraph.requestUpdate("bottomRightDiv", { waitingText: null });
     },
 
     del: function(oForm) {
