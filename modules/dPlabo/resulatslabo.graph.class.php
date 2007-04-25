@@ -19,6 +19,10 @@ class CResultatsLaboGraph extends Graph {
   var $resultats = null;
   
   function CResultatsLaboGraph($patient, $examen, $resultats) {
+    if ($examen->type != "num") {
+      JpGraphError::raise("Le type d'examen doit être numérique pour être affiché");
+    }
+    
     // Prepare values
     // Value plot
     $ydata = array();
@@ -29,9 +33,10 @@ class CResultatsLaboGraph extends Graph {
       $min = min($min, $resultat->resultat);
       $max = max($max, $resultat->resultat);
       $ydata[] = $resultat->resultat;
-      $xlabels[] = $resultat->date;
+      $xlabels[] = $resultat->date ? mbTranformTime(null, $resultat->date, "%d/%m/%y") : "attendu";
     }
     
+//    mbTrace($xlabels);
 //    mbTrace($examen->getProps(), "exmamen");
 //    mbTrace($ydata, "Ydata");
 //    mbTrace($min, "Min");
@@ -39,29 +44,31 @@ class CResultatsLaboGraph extends Graph {
 //    die();
 
     // Setup the graph.
-    $this->Graph(400, 250, "auto");
-    $delta = ($max-$min)/10;
+    $this->Graph(350, 250, "auto");
+    $delta = 2;
     
-    $this->SetScale("textlin", $min-$delta, $max+$delta);
+    $this->SetScale("textlin", max(0, $min-$delta), $max+$delta);
 
     $this->SetMarginColor("lightblue");
     
     // Image setup
     $this->img->SetAntiAliasing(true);
-    $this->img->SetMargin(45, 40, 30, 40);
+    $this->img->SetMargin(35, 20, 30, 40);
     
-    $uband=new PlotBand(HORIZONTAL,BAND_RDIAG,$examen->max,"max","#ffbbbb");
-    $uband->ShowFrame(true);
-    $uband->SetDensity(92); // 50% line density
-    
-    $lband=new PlotBand(HORIZONTAL,BAND_RDIAG,"min",$examen->min,"#ffbbbb");
-    $lband->ShowFrame(true);
-    $lband->SetDensity(92); // 50% line density
-    
-    $this->AddBand($uband);
-    $this->AddBand($lband); 
-    
-    
+    if ($examen->max) {
+      $uband = new PlotBand(HORIZONTAL,BAND_RDIAG,$examen->max,"max","#ffbbbb");
+      $uband->ShowFrame(true);
+      $uband->SetDensity(92); // 50% line density
+      $this->AddBand($uband);
+    }
+
+    if ($examen->min) {
+      $lband = new PlotBand(HORIZONTAL,BAND_RDIAG,"min",$examen->min,"#ffbbbb");
+      $lband->ShowFrame(true);
+      $lband->SetDensity(92); // 50% line density
+      $this->AddBand($lband); 
+    }    
+        
     // Legend setup
     $this->legend->Pos(0.02, 0.5, "right", "center");
     $this->legend->SetShadow("darkgray@0.5", 3);
@@ -72,12 +79,16 @@ class CResultatsLaboGraph extends Graph {
     $this->title->SetFont(FF_ARIAL,FS_NORMAL,10);
     $this->title->SetColor("darkred");
     $this->title->Set("Résultats pour " . $examen->_view);
+    $this->subtitle->SetFont(FF_ARIAL,FS_NORMAL,8);
+    $this->subtitle->SetColor("darkgray");
+    $this->subtitle->Set($patient->_view);
     
     // Setup X-axis labels
     $this->xgrid->Show(true);
     $this->xgrid->SetColor("lightgray", "lightgray:1.7");
-    $this->xaxis->SetFont(FF_ARIAL, FS_NORMAL, 8);
-    //$this->xaxis->SetLabelMargin(22);
+    $this->xaxis->SetFont(FF_ARIAL, FS_NORMAL, 7);
+    $this->xaxis->SetLabelAlign("right","top","right");
+    $this->xaxis->SetLabelMargin(2);
     $this->xaxis->SetLabelAngle(45);    
     
     // Setup Y-axis labels 

@@ -18,7 +18,7 @@ $patient = new CPatient;
 $patient->load(mbGetValueFromGet("patient_id"));
 
 $item = new CPrescriptionLaboExamen;
-$resultats = $item->loadResults($patient->_id, $examen->_id);
+$resultats = $item->loadResults($patient->_id, $examen->_id, 20);
 
 // Création du graph
 $graph = new CResultatsLaboGraph($patient, $examen, $resultats);

@@ -18,11 +18,15 @@ if($prescriptionItem->loadRefs()) {
   $prescriptionItem->_ref_prescription_labo->loadRefsFwd();
 }
 
+$siblingItems = $prescriptionItem->loadSiblings();
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("prescriptionItem", $prescriptionItem);
+$smarty->assign("siblingItems", $siblingItems);
 $smarty->assign("time", time());
+
 
 
 $smarty->display("inc_graph_resultats.tpl");

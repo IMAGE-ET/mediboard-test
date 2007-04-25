@@ -54,9 +54,6 @@ class CPrescriptionLaboExamen extends CMbObject {
     $this->loadRefExamen();
     $resultTest = CMbFieldSpecFact::getSpec($this, "resultat", $this->_ref_examen_labo->type);
     return $resultTest->checkPropertyValue($this);
-    $resultTest = CMbFieldSpecFact::getSpec($this, 'resultat', $this->_ref_examen_labo->type, true);
-    $msg =  $resultTest->checkPropertyValue($this);
-    return $msg;
   }
   
   function updateFormFields() {
@@ -84,7 +81,7 @@ class CPrescriptionLaboExamen extends CMbObject {
   }
   
   function loadSiblings($limit = 10) {
-    return $this->loadResults($this->_ref_prescription_labo->patient_id, $this->examen_labo_id);
+    return $this->loadResults($this->_ref_prescription_labo->patient_id, $this->examen_labo_id, $limit);
   }
   
   /**
@@ -103,7 +100,7 @@ class CPrescriptionLaboExamen extends CMbObject {
     $where["prescription_labo_id"] = db_prepare_in(array_keys($prescriptions));
     $order = "date DESC";
     
-    $items = $this->loadList($where, $order);
+    $items = $this->loadList($where, $order, $limit);
     foreach ($items as &$item) {
       $item->_ref_prescription_labo =& $prescriptions[$item->prescription_labo_id];
       $item->_ref_examen_labo =& $examen;

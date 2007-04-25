@@ -96,7 +96,7 @@ class CExamenLabo extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_shortview = $this->identifiant;
-    $this->_view = "$this->identifiant : $this->libelle";
+    $this->_view = "$this->identifiant : $this->libelle ($this->type_prelevement)";
     
     if ($this->type == "num") {
       $this->_reference_values = "$this->min $this->unite - $this->max $this->unite";
