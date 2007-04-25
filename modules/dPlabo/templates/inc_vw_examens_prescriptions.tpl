@@ -26,10 +26,11 @@
         <button type="button" class="trash notext" style="float: right;" onclick="Prescription.Examen.del(this.form)" >{{tr}}Delete{{/tr}}</button>
       </form>
        
-      <button type="button" class="edit notext" style="float: left;" onclick="Prescription.Examen.edit({{$curr_item->_id}})">button</button>
+      <button class="search notext" style="float: right;" onclick="ObjectTooltip.create(this, 'CExamenLabo', {{$curr_examen->_id}}, { popup: true })">
+        button
+      </button>
 
-      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}"
-         onmouseover="ObjectTooltip.create(this, 'CExamenLabo', {{$curr_examen->_id}})">
+      <a href="#nothing" onclick="Prescription.Examen.edit({{$curr_item->_id}})">
         {{$curr_examen->_view}}
       </a>
     </td>
@@ -49,10 +50,11 @@
         {{/if}}
         
         <div class="{{$msgClass}}">
-          <a href="#nothing" onclick="ObjectTooltip.create(this, 'CPrescriptionLaboExamen', {{$curr_item->_id}}, { popup: true })">
-            {{mb_value object=$curr_item field=resultat}} 
-            {{mb_value object=$curr_examen field=unite}}
-          </a>
+          <button class="search notext" style="float: right;" onclick="ObjectTooltip.create(this, 'CPrescriptionLaboExamen', {{$curr_item->_id}}, { popup: true })">
+            button
+          </button>
+          {{mb_value object=$curr_item field=resultat}} 
+          {{mb_value object=$curr_examen field=unite}}
         </div>
       {{else}}
         <em>Aucun résultat</em>
