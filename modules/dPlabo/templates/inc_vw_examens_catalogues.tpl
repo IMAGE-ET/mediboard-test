@@ -27,7 +27,7 @@
     </td>
     <td>
       <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-        {{$curr_examen->type}}
+        {{mb_value object=$curr_examen field="type"}}
       </a>
     </td>
     <td>
