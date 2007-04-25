@@ -87,8 +87,16 @@ var Prescription = {
       urlExam.addParam("prescription_labo_id", prescription_id);
     }
     urlPresc.addParam("patient_id", iPatient_id    );
-    urlPresc.requestUpdate('listPrescriptions', { waitingText: null });
-    urlExam.requestUpdate('listExamens', { waitingText: null });
+    urlPresc.requestUpdate("listPrescriptions", { waitingText: null });
+    urlExam.requestUpdate("listExamens", { waitingText: null });
+  },
+  
+  edit : function(prescription_id) {
+    var url = new Url;
+    url.setModuleAction("dPlabo", "httpreq_edit_prescription");
+    url.addParam("prescription_labo_id", prescription_id);
+    url.addParam("patient_id", document.patFrm.patient_id.value);
+    url.requestUpdate("listExamens", { waitingText: null });
   },
   
   create : function() {
@@ -98,7 +106,7 @@ var Prescription = {
     }
     var oForm = document.editPrescription
     oForm.praticien_id.value = {{$app->user_id}};
-    oForm.patient_id.value = oPatientForm.patient_id.value
+    oForm.patient_id.value = oPatientForm.patient_id.value;
     oForm.date.value = new Date().toDATETIME();
     submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select });
     return true;
@@ -225,7 +233,7 @@ function pageMain() {
             <input type="hidden" name="prescription_labo_id" value="" />
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
             <button class="search" type="button" onclick="popPat()">Chercher</button>
-            <button class="new" type="button" onclick="Prescription.create();">
+            <button class="new" type="button" onclick="Prescription.edit();">
               Prescrire
             </button>
           </td>

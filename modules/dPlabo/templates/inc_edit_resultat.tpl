@@ -76,5 +76,5 @@
   </tr>
 </table>
 
-</form>
 {{/if}}
+</form>

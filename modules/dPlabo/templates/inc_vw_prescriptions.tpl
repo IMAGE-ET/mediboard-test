@@ -29,5 +29,7 @@
   <a href="#nothing" onclick="Prescription.select({{$curr_prescription->_id}})">
     {{$curr_prescription->_view}}
   </a>
+  <br />
+  <button type="button" class="edit notext" onclick="Prescription.edit({{$curr_prescription->_id}});">edit</button>
 </div>
 {{/foreach}}
