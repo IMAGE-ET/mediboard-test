@@ -1,11 +1,19 @@
 {{if $prescription->_id}}
-<table class="tbl">
+<table class="tbl" id="drop-listprescriptions-{{$prescription->_id}}">
   <tr>
     <th class="title" colspan="3">
       <a style="float:right;" href="#nothing" onclick="view_log('{{$prescription->_class_name}}', {{$prescription->_id}})">
         <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
       </a>
       {{$prescription->_view}}
+      <script type="text/javascript">
+        Droppables.add('drop-listprescriptions-{{$prescription->_id}}', {
+          onDrop: function(element) {
+            Prescription.Examen.drop(element.id, {{$prescription->_id}})
+          }, 
+          hoverclass:'selected'
+        } );
+      </script>
     </th>
   </tr>
   <tr>
@@ -17,22 +25,20 @@
   {{assign var="curr_examen" value=$curr_item->_ref_examen_labo}}
   <tr id="PrescriptionItem-{{$curr_item->_id}}">
     <td>
+      <a href="#nothing" onclick="Prescription.Examen.edit({{$curr_item->_id}})">
+        {{$curr_examen->_view}}
+      </a>
       <form name="delPrescriptionExamen-{{$curr_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="m" value="dPlabo" />
         <input type="hidden" name="dosql" value="do_prescription_examen_aed" />
         <input type="hidden" name="prescription_labo_id" value="{{$prescription->_id}}" />
         <input type="hidden" name="prescription_labo_examen_id" value="{{$curr_item->_id}}" />
         <input type="hidden" name="del" value="1" />
-        <button type="button" class="trash notext" style="float: right;" onclick="Prescription.Examen.del(this.form)" >{{tr}}Delete{{/tr}}</button>
+        <button type="button" class="trash notext" onclick="Prescription.Examen.del(this.form)" >{{tr}}Delete{{/tr}}</button>
+        <button type="button" class="search notext" onclick="ObjectTooltip.create(this, 'CExamenLabo', {{$curr_examen->_id}}, { popup: true })">
+          view
+        </button>
       </form>
-       
-      <button class="search notext" style="float: right;" onclick="ObjectTooltip.create(this, 'CExamenLabo', {{$curr_examen->_id}}, { popup: true })">
-        button
-      </button>
-
-      <a href="#nothing" onclick="Prescription.Examen.edit({{$curr_item->_id}})">
-        {{$curr_examen->_view}}
-      </a>
     </td>
     <td>
       {{mb_value object=$curr_examen field="type"}}
@@ -50,12 +56,12 @@
         {{/if}}
         
         <div class="{{$msgClass}}">
-          <button class="search notext" style="float: right;" onclick="ObjectTooltip.create(this, 'CPrescriptionLaboExamen', {{$curr_item->_id}}, { popup: true })">
-            button
-          </button>
           {{mb_value object=$curr_item field=resultat}} 
           {{mb_value object=$curr_examen field=unite}}
         </div>
+        <!-- button class="search notext" onclick="ObjectTooltip.create(this, 'CPrescriptionLaboExamen', {{$curr_item->_id}}, { popup: true })">
+          view
+        </button -->
       {{else}}
         <em>Aucun résultat</em>
       {{/if}}

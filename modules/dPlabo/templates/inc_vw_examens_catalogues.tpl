@@ -24,6 +24,9 @@
       </script>
       {{$curr_examen->_view}}
       </div>
+      <button type="button" class="search notext" onclick="ObjectTooltip.create(this, 'CExamenLabo', {{$curr_examen->_id}}, { popup: true })">
+        view
+      </button>
     </td>
     <td>
       <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">

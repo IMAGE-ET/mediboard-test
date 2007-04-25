@@ -226,7 +226,7 @@ function pageMain() {
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
             <button class="search" type="button" onclick="popPat()">Chercher</button>
             <button class="new" type="button" onclick="Prescription.create();">
-              Nouvelle prescription
+              Prescrire
             </button>
           </td>
         </tr>

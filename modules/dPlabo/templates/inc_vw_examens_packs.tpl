@@ -19,20 +19,23 @@
   {{assign var="curr_examen" value=$curr_item->_ref_examen_labo}}
   <tr>
     <td>
-      <form name="delPackItem-{{$curr_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-        <input type="hidden" name="m" value="dPlabo" />
-        <input type="hidden" name="dosql" value="do_pack_item_aed" />
-        <input type="hidden" name="pack_examens_labo_id" value="{{$pack->_id}}" />
-        <input type="hidden" name="pack_item_examen_labo_id" value="{{$curr_item->_id}}" />
-        <input type="hidden" name="del" value="1" />
-        <button type="button" class="trash notext" style="float: right;" onclick="Pack.delExamen(this.form)">{{tr}}Delete{{/tr}}</button>
-      </form>
       <div class="draggable" id="examen-{{$curr_examen->_id}}-{{$curr_item->_id}}">
       <script type="text/javascript">
         new Draggable('examen-{{$curr_examen->_id}}-{{$curr_item->_id}}', oDragOptions);
       </script>
       {{$curr_examen->_view}}
       </div>
+      <form name="delPackItem-{{$curr_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+        <input type="hidden" name="m" value="dPlabo" />
+        <input type="hidden" name="dosql" value="do_pack_item_aed" />
+        <input type="hidden" name="pack_examens_labo_id" value="{{$pack->_id}}" />
+        <input type="hidden" name="pack_item_examen_labo_id" value="{{$curr_item->_id}}" />
+        <input type="hidden" name="del" value="1" />
+        <button type="button" class="trash notext" onclick="Pack.delExamen(this.form)">{{tr}}Delete{{/tr}}</button>
+        <button type="button" class="search notext" onclick="ObjectTooltip.create(this, 'CExamenLabo', {{$curr_examen->_id}}, { popup: true })">
+          view
+        </button>
+      </form>
     </td>
     <td>
       <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
