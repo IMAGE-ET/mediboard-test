@@ -129,7 +129,7 @@ var ElementChecker = {
     	}
     	
       if (this.oCompare.source <= this.oCompare.target) {
-        return printf("'%s' n'est pas strictement supérieur à '%s'", oCompare.source,  this.oCompare.target);
+        return printf("'%s' n'est pas strictement supérieur à '%s'", this.oElement.value,  this.oTargetElement.value);
       }
     }
     
@@ -140,7 +140,7 @@ var ElementChecker = {
     	}
     	
       if (this.oCompare.source < this.oCompare.target) {
-        return printf("'%s' n'est pas supérieur ou égal à '%s'", this.oCompare.source, this.oCompare.target);
+        return printf("'%s' n'est pas supérieur ou égal à '%s'", this.oElement.value,  this.oTargetElement.value);
       }
     }
 

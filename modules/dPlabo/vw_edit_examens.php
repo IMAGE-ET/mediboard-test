@@ -30,6 +30,12 @@ if($examen_labo_id && !mbGetValueFromGet("catalogue_labo_id")) {
 
 $catalogue->loadRefs();
 
+$groups = new CGroups;
+$groups = $groups->loadList();
+foreach ($groups as &$group) {
+  $group->loadRefs();
+}
+
 //Chargement de tous les catalogues
 $where = array("pere_id" => "IS NULL");
 $order = "identifiant";
