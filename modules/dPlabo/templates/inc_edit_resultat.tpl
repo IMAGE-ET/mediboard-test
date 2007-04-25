@@ -56,7 +56,15 @@
     <td>{{mb_field object=$prescriptionItem field="resultat" prop=$prescriptionItem->_ref_examen_labo->type}}</td>
   </tr>
   <tr>
-    <th>{{mb_label object=$prescriptionItem field="commentaire"}}</th>
+    <th>
+      {{mb_label object=$prescriptionItem field="commentaire"}}
+      <br />
+      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this)">
+        <option value="">&mdash; Choisir une aide</option>
+        {{html_options options=$prescriptionItem->_aides.commentaire.no_enum}}
+      </select>
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLaboExamen', this.form.commentaire)" />            
+    </th>
     <td>{{mb_field object=$prescriptionItem field="commentaire"}}</td>
   </tr>
   <tr>

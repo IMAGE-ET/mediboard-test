@@ -41,6 +41,12 @@ class CPrescriptionLaboExamen extends CMbObject {
     );
   }
   
+  function getHelpedFields() {
+    return array ( 
+      "commentaire"   => null,
+    );
+  }  
+  
   function check() {
     if ($msg = parent::check()) {
       return $msg;

@@ -117,6 +117,7 @@ if (!$aide_id) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("userSel"         , $userSel);
 $smarty->assign("listPrat"        , $listPrat);
 $smarty->assign("listFunc"        , $listFunc);
 $smarty->assign("classes"         , $classes);

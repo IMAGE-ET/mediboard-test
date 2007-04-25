@@ -133,7 +133,6 @@ function pageMain() {
     </tr>
     
     <tr>
-      <th>Utilisateur</th>
       <th>Type d'objet</th>
       <th>Champ de l'objet</th>
       <th>Dépendance</th>
@@ -142,7 +141,7 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th colspan="6"><strong>Aides du praticien</strong></th>
+      <th colspan="6">Aides du praticien '{{$userSel->_view}}'</th>
     </tr>
     {{foreach from=$aidesPrat item=curr_aide}}
     <tr>
@@ -150,7 +149,6 @@ function pageMain() {
       {{assign var="href" value="?m=$m&tab=$tab&aide_id=$aide_id"}}
       {{assign var="className" value=$curr_aide->class}}
       {{assign var="field" value=$curr_aide->field}}
-      <td><a href="{{$href}}">{{$curr_aide->_ref_user->_view}}</a></td>
       <td><a href="{{$href}}">{{tr}}{{$className}}{{/tr}}</a></td>
       <td><a href="{{$href}}">{{$field}}</a></td>
       <td>
@@ -169,7 +167,7 @@ function pageMain() {
     {{/foreach}}
     
     <tr>
-      <th colspan="6"><strong>Aides du cabinet</strong></th>
+      <th colspan="6">Aides du cabinet '{{$userSel->_ref_function->_view}}'</th>
     </tr>
     {{foreach from=$aidesFunc item=curr_aide}}
     <tr>
@@ -177,7 +175,6 @@ function pageMain() {
       {{assign var="href" value="?m=$m&tab=$tab&aide_id=$aide_id"}}
       {{assign var="className" value=$curr_aide->class}}
       {{assign var="field" value=$curr_aide->field}}
-      <td><a href="{{$href}}">{{$curr_aide->_ref_function->text}}</a></td>
       <td><a href="{{$href}}">{{tr}}{{$className}}{{/tr}}</a></td>
       <td><a href="{{$href}}">{{$field}}</a></td>
       <td>
