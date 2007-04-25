@@ -10,6 +10,7 @@
 <input type="hidden" name="m" value="dPlabo" />
 <input type="hidden" name="dosql" value="do_prescription_aed" />
 <input type="hidden" name="prescription_labo_id" value="{{$prescription->_id}}" />
+<input type="hidden" name="callback" value="Prescription.select" />
 <input type="hidden" name="del" value="0" />
 
 <table class="form">
@@ -45,7 +46,7 @@
   </tr>
   <tr>
     <td colspan="2" class="button">
-      <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.select({{$prescription->_id}}) } });">
+      <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg');">
         Valider
       </button>
     </td>
