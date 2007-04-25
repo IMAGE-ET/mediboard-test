@@ -419,14 +419,17 @@ Class.extend(ObjectTooltip, {
 
     this.oOptions = {
       mode: "view",
+      popup: false,
       duration: 200
     };
     
     Object.extend(this.oOptions, oOptions);
     this.mode = ObjectTooltip.modes[this.oOptions.mode];
 
-    this.createDiv();
-    this.addHandlers();
+    if (!this.oOptions.popup) {
+      this.createDiv();
+      this.addHandlers();
+    }
   },
   
   launchShow: function() {
@@ -436,11 +439,12 @@ Class.extend(ObjectTooltip, {
   },
   
   show: function() {
-    if (!this.eTarget.innerHTML) {
+    if (this.oOptions.popup || !this.eTarget.innerHTML) {
       this.load();
     }
-
-    this.eDiv.show();
+    if (!this.oOptions.popup) {
+      this.eDiv.show();
+    }
   },
   
   hide: function() {
@@ -453,7 +457,14 @@ Class.extend(ObjectTooltip, {
     url.setModuleAction(this.mode.module, this.mode.action);
     url.addParam("object_class", this.sClass);
     url.addParam("object_id", this.iObject);
-    url.requestUpdate(this.eTarget);
+    if(!this.oOptions.popup) {
+      url.requestUpdate(this.eTarget);
+      return;
+    }
+    if(this.oOptions.popup) {
+      url.popup(300, 300, this.sClass);
+      return;
+    }
   },
   
   addHandlers: function() {
