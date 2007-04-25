@@ -43,6 +43,7 @@ class CPackExamensLabo extends CMbObject {
   }
 
   function updateFormFields() {
+    parent::updateFormFields();
     $this->_shortview = $this->libelle;
     $this->_view      = $this->libelle;
   }

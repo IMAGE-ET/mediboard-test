@@ -60,6 +60,7 @@ class CPrescriptionLaboExamen extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     $this->loadRefExamen();
     $examen =& $this->_ref_examen_labo;
     $this->_hors_limite = $examen->type == "num" && ($examen->min > $this->resultat || $examen->max < $this->resultat);

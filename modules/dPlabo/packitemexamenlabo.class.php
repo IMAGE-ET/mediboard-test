@@ -33,6 +33,7 @@ class CPackItemExamenLabo extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     $this->loadRefsFwd();
     $this->_shortview = $this->_ref_examen_labo->_shortview;
     $this->_view      = $this->_ref_examen_labo->_view;
