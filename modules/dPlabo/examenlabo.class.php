@@ -69,7 +69,7 @@ class CExamenLabo extends CMbObject {
       "min"                 => "float",
       "max"                 => "float moreThan|min",
       "deb_application"     => "date",
-      "fin_application"     => "date",
+      "fin_application"     => "date moreThan|deb_application",
       "realisateur"         => "ref class|CFunction",
       "applicabilite"       => "enum list|homme|femme|unisexe",
       "age_min"             => "num pos",

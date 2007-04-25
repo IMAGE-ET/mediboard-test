@@ -1,4 +1,11 @@
-{{* $Id: $ *}}
+{{* $Id$ *}}
+
+<script type="text/javascript">
+function pageMain() {
+  regFieldCalendar('editExamen', 'deb_application');
+  regFieldCalendar('editExamen', 'fin_application');
+}
+</script>
 
 <table class="main">
   <tr>
@@ -81,7 +88,7 @@
       
       <!-- Edition de l'examen sélectionné -->
       {{if $can->edit}}
-      <a class="buttonnew" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id=0">
+      <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id=0">
         Ajouter un nouvel examen
       </a>
       <form name="editExamen" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -138,6 +145,14 @@
           <td>{{mb_field object=$examen field="max"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$examen field="deb_application"}}</th>
+          <td class="date">{{mb_field object=$examen field="deb_application" form="editExamen"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$examen field="fin_application"}}</th>
+          <td class="date">{{mb_field object=$examen field="fin_application" form="editExamen"}}</td>
+        </tr>
+        <tr>
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
             {{if $examen->_id}}
@@ -154,7 +169,7 @@
       <table class="tbl">
         <tr>
           <th class="title">Packs d'examens associés</th>
-        <tr>
+        </tr>
         <tr>
           <th>Nom du pack</th>
         </tr>
@@ -163,7 +178,7 @@
           <td>
             <a href="?m={{$m}}&amp;tab=vw_edit_packs&amp;pack_exmaen_labo_id={{$_pack->_id}}">
               {{$_pack->_view}}
-            <a>
+            </a>
           </td>
         </tr>
         {{/foreach}}

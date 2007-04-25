@@ -42,7 +42,9 @@ class CDateSpec extends CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue =& $object->$fieldName;
     
-    $propValue = "19".$this->randomString(CMbFieldSpec::$nums, 2)."-".$this->randomString(CMbFieldSpec::$months, 1)."-".$this->randomString(CMbFieldSpec::$days, 1);
+    $propValue = "19".$this->randomString(CMbFieldSpec::$nums, 2).
+      "-".$this->randomString(CMbFieldSpec::$months, 1).
+      "-".$this->randomString(CMbFieldSpec::$days, 1);
   }
   
   function getDBSpec(){
@@ -50,7 +52,7 @@ class CDateSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    return $this->getFormElementDate($object, $params, $value, $className);
+    return $this->getFormElementDateTime($object, $params, $value, $className, "%d/%m/%Y");
   }
 }
 

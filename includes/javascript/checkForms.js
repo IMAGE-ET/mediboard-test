@@ -57,6 +57,7 @@ var ElementChecker = {
     switch (this.sTypeSpec) {
     	case "num": return function(value) { return parseInt(value, 10); }
 			case "float": return function(value) { return parseFloat(value, 10); }
+			case "date": return function(value) { return Date.fromDATE(value); }
     	default : return Prototype.K;
     }
   },
@@ -70,8 +71,8 @@ var ElementChecker = {
     var fCaster = this.getCastFunction();
   	
   	this.oCompare = {
-      source : fCaster(this.oElement.value),
-      target : fCaster(this.oTarget.value)
+      source : this.oElement.value ? fCaster(this.oElement.value) : null,
+      target : this.oTargetElement.value ? fCaster(this.oTargetElement.value) : null
   	}
 
   	return null;
@@ -126,8 +127,6 @@ var ElementChecker = {
     	if (sParamMsg = this.castCompareValues(sTargetElement)) {
     		return sParamMsg;
     	}
-    	
-    	return "plouf";
     	
       if (this.oCompare.source <= this.oCompare.target) {
         return printf("'%s' n'est pas strictement supérieur à '%s'", oCompare.source,  this.oCompare.target);

@@ -42,8 +42,12 @@ class CDateTimeSpec extends CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue =& $object->$fieldName;
     
-    $propValue = "19".$this->randomString(CMbFieldSpec::$nums, 2)."-".$this->randomString(CMbFieldSpec::$months, 1)."-".$this->randomString(CMbFieldSpec::$days, 1);
-    $propValue .= " ".$this->randomString(CMbFieldSpec::$hours, 1).":".$this->randomString(CMbFieldSpec::$mins, 1).":".$this->randomString(CMbFieldSpec::$mins, 1);
+    $propValue = "19".$this->randomString(CMbFieldSpec::$nums, 2).
+      "-".$this->randomString(CMbFieldSpec::$months, 1).
+      "-".$this->randomString(CMbFieldSpec::$days, 1);
+    $propValue .= " ".$this->randomString(CMbFieldSpec::$hours, 1).
+      ":".$this->randomString(CMbFieldSpec::$mins, 1).
+      ":".$this->randomString(CMbFieldSpec::$mins, 1);
   }
   
   function getDBSpec(){
