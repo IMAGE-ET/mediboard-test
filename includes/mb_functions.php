@@ -504,7 +504,7 @@ function mbLinkShortcutIcon($filepath,$modeReturn = 0) {
 function mbPortalURL( $page="Accueil") {
   $url = "http://www.mediboard.org/public/";
   
-  $url .= $page == "BugTracker" ?
+  $url .= $page == "tracker" ?
     "/tiki-view_tracker.php?trackerId=4" :
     "tiki-index.php?page=$page";
     
