@@ -95,6 +95,7 @@ function pageMain() {
       <input type="hidden" name="dosql" value="do_examen_aed" />
       <input type="hidden" name="examen_labo_id" value="{{$examen->_id}}" />
       <input type="hidden" name="del" value="0" />
+      
       <table class="form">
         <tr>
           {{if $examen->_id}}
@@ -103,144 +104,48 @@ function pageMain() {
           <th class="title" colspan="2">Création d'un examen</th>
           {{/if}}
         </tr>
+      </table>
 
-        <tr>
-          <th>{{mb_label object=$examen field="catalogue_labo_id"}}</th>
-          <td>
-            <select name="catalogue_labo_id">
-              {{foreach from=$listCatalogues item="curr_catalogue"}}
-              <option value="{{$curr_catalogue->_id}}" {{if $curr_catalogue->_id == $examen->catalogue_labo_id}}selected="selected"{{/if}}>
-                {{$curr_catalogue->_view}}
-              </option>
-              {{foreach from=$curr_catalogue->_ref_catalogues_labo item="curr_sub_catalogue"}}
-              <option value="{{$curr_sub_catalogue->_id}}" {{if $curr_sub_catalogue->_id == $examen->catalogue_labo_id}}selected="selected"{{/if}}>
-                &mdash; {{$curr_sub_catalogue->_view}}
-              </option>
-              {{/foreach}}
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
+      <div class="accordionMain" id="accordionExamen">
+      
+        <div id="acc_infos">
+          <div  class="accordionTabTitleBar" id="IdentiteHeader">
+            {{tr}}mod-dPlabo-inc-acc_infos{{/tr}}
+          </div>
+          <div class="accordionTabContentBox" id="IdentiteContent"  >
+          {{include file="inc_examen/acc_infos.tpl"}}
+          </div>
+        </div>
+        
+        <div id="acc_realisation">
+          <div  class="accordionTabTitleBar" id="IdentiteHeader">
+            {{tr}}mod-dPlabo-inc-acc_realisation{{/tr}}
+          </div>
+          <div class="accordionTabContentBox" id="IdentiteContent"  >
+          {{include file="inc_examen/acc_realisation.tpl"}}
+          </div>
+        </div>
+        
+        <div id="acc_conservation">
+          <div  class="accordionTabTitleBar" id="IdentiteHeader">
+            {{tr}}mod-dPlabo-inc-acc_conservation{{/tr}}
+          </div>
+          <div class="accordionTabContentBox" id="IdentiteContent"  >
+          {{include file="inc_examen/acc_conservation.tpl"}}
+          </div>
+        </div>
+        
+      </div>
 
-        <tr>
-          <th>{{mb_label object=$examen field="identifiant"}}</th>
-          <td>{{mb_field object=$examen field="identifiant"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="libelle"}}</th>
-          <td>{{mb_field object=$examen field="libelle"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="type"}}</th>
-          <td>{{mb_field object=$examen field="type"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="unite"}}</th>
-          <td>{{mb_field object=$examen field="unite"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="min"}}</th>
-          <td>{{mb_field object=$examen field="min"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="max"}}</th>
-          <td>{{mb_field object=$examen field="max"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="deb_application"}}</th>
-          <td class="date">{{mb_field object=$examen field="deb_application" form="editExamen"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="fin_application"}}</th>
-          <td class="date">{{mb_field object=$examen field="fin_application" form="editExamen"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="realisateur"}}</th>
-          <td>
-            <select name="realisateur">
-              <option value="">&mdash; Choisir une réalisateur</option>
-              {{foreach from=$groups item="_group"}}
-              <optgroup label="{{$_group->_view}}">
-              </optgroup>
-              {{/foreach}}
-            </select>
-
-          </td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="applicabilite"}}</th>
-          <td>{{mb_field object=$examen field="applicabilite"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="age_min"}}</th>
-          <td>{{mb_field object=$examen field="age_min"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="age_max"}}</th>
-          <td>{{mb_field object=$examen field="age_max"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="technique"}}</th>
-          <td>{{mb_field object=$examen field="technique"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="materiel"}}</th>
-          <td>{{mb_field object=$examen field="materiel"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="type_prelevement"}}</th>
-          <td>{{mb_field object=$examen field="type_prelevement"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="methode_prelevement"}}</th>
-          <td>{{mb_field object=$examen field="methode_prelevement"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="conservation"}}</th>
-          <td>{{mb_field object=$examen field="conservation"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="temps_conservation"}}</th>
-          <td>{{mb_field object=$examen field="temps_conservation"}} unités ?</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="quantite"}}</th>
-          <td>{{mb_field object=$examen field="quantite"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="jour_execution"}}</th>
-          <td>{{mb_field object=$examen field="jour_execution"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="duree_execution"}}</th>
-          <td>{{mb_field object=$examen field="duree_execution"}} unités ?</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$examen field="remarques"}}</th>
-          <td>{{mb_field object=$examen field="remarques"}}</td>
-        </tr>
-
+      <script language="Javascript" type="text/javascript">
+      var oAccord = new Rico.Accordion($('accordionExamen'), { 
+        panelHeight: 300, 
+        showDelay: 50, 
+        showSteps: 3 
+      } );
+      </script>
+            
+      <table class="form">
         <tr>
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
@@ -250,7 +155,7 @@ function pageMain() {
           </td>
         </tr>
       </table>
-      </form>
+
       {{/if}}
       
       <!-- Liste des packs associés -->

@@ -32,7 +32,10 @@ $catalogue->loadRefs();
 
 $groups = CGroups::loadGroups();
 foreach ($groups as &$group) {
-  $group->loadFunctions();
+  $group->loadFunctions(null);
+  foreach ($group->_ref_functions as $function) {
+    $function->loadRefsUsers();
+  }
 }
 
 // Chargement de tous les catalogues

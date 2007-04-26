@@ -32,9 +32,16 @@ class CExamenLabo extends CMbObject {
   var $conservation = null;
   var $temps_conservation = null;
   var $quantite = null;
-  var $jour_execution = null;
   var $duree_execution = null;
   var $remarques = null;
+  var $execution_lun = null;
+  
+  var $execution_mar = null;
+  var $execution_mer = null;
+  var $execution_jeu = null;
+  var $execution_ven = null;
+  var $execution_sam = null;
+  var $execution_dim = null;
   
   var $min         = null;
   var $max         = null;
@@ -82,7 +89,13 @@ class CExamenLabo extends CMbObject {
       "conservation"        => "text",
       "temps_conservation"  => "num pos",
       "quantite"            => "num pos",
-      "jour_execution"      => "str",
+      "execution_lun"       => "bool",
+      "execution_mar"       => "bool",
+      "execution_mer"       => "bool",
+      "execution_jeu"       => "bool",
+      "execution_ven"       => "bool",
+      "execution_sam"       => "bool",
+      "execution_dim"       => "bool",
       "duree_execution"     => "num pos",
       "remarques"           => "text",
     );

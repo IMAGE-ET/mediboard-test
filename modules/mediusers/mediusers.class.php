@@ -390,9 +390,11 @@ class CMediusers extends CMbObject {
     $order = "text";
     $functions = $functions->loadMatchingList($order);
 
-    foreach ($functions as $_id => $function) {
-      if (!$function->getPerm($permType)) {
-        unset($functions[$_id]);
+    if ($permType) {
+      foreach ($functions as $_id => $function) {
+        if (!$function->getPerm($permType)) {
+          unset($functions[$_id]);
+        }
       }
     }
     return $functions;

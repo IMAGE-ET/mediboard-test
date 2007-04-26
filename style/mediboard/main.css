@@ -409,6 +409,11 @@ div#console div.value {
   margin-left: 0px;
 }
 
+optgroup.group {
+  text-align: center;
+  font-variant: small-caps;
+}
+
 /* Title block */
 
 table.titleblock td {
