@@ -71,7 +71,7 @@ class CExamenLabo extends CMbObject {
       "deb_application"     => "date",
       "fin_application"     => "date moreThan|deb_application",
       "applicabilite"       => "enum list|homme|femme|unisexe",
-      "realisateur"         => "ref class|CFunction",
+      "realisateur"         => "ref class|CMediusers",
       "age_min"             => "num pos",
       "age_max"             => "num pos moreThan|age_min",
       "technique"           => "text",

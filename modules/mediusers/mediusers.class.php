@@ -380,19 +380,19 @@ class CMediusers extends CMbObject {
     return $groups;
   }
 
-  function loadFonctions($permType = PERM_READ){
+  /**
+   * Load functions with permissions for given group, current group by default
+   */
+  function loadFonctions($permType = PERM_READ, $group_id = null) {
     global $g;
-    $where = array();
-    $where["group_id"] = "= '$g'";
-    $function = new CFunctions;
+    $functions = new CFunctions;
+    $functions->group_id = mbGetValue($group_id, $g);
     $order = "text";
-    $baseFunctions = $function->loadList($where, $order);
+    $functions = $functions->loadMatchingList($order);
 
-    $functions = array();
-    // Filtre
-    foreach($baseFunctions as $keyFct => $fct){
-      if($fct->getPerm($permType)){
-        $functions[$keyFct] = $baseFunctions[$keyFct];
+    foreach ($functions as $_id => $function) {
+      if (!$function->getPerm($permType)) {
+        unset($functions[$_id]);
       }
     }
     return $functions;

@@ -132,13 +132,33 @@ class CGroups extends CMbObject {
     return CMbObject::canDelete( $msg, $oid, $tables );
   }
 
-  // Backward References
+  /**
+   * Load functions with given permission
+   */
+  function loadFunctions($permType = PERM_READ) {
+    $this->_ref_functions = CMediusers::loadFonctions($permType, $this->_id);
+  }
+  
   function loadRefsBack() {
-  	$where = array(
-      "group_id" => "= '$this->group_id'");
-    $order = "type, text";
-    $this->_ref_functions = new CFunctions;
-    $this->_ref_functions = $this->_ref_functions->loadList($where, $order);
+    $this->loadFunctions();
+  }
+
+  
+  /**
+   * Load groups with given permission
+   */
+  static function loadGroups($permType = PERM_READ) {
+    $order = "text";
+    $group = new CGroups;
+    $groups = $group->loadList(null, $order);
+
+    foreach ($groups as $_id => $group) {
+      if (!$group->getPerm($permType)) {
+        unset($groups[$_id]);
+      }
+    }
+    
+    return $groups;    
   }
 }
 ?>

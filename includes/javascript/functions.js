@@ -37,6 +37,7 @@ var AjaxResponse = {
   onPerformances: Prototype.emptyFunction
 }
 
+
 /**
  * System message effects
  */

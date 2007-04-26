@@ -40,7 +40,7 @@ function waitingMessage(visibility){
       $('waitingMsgText').style.top  = posTop + "px";
       $('waitingMsgText').style.left = posLeft + "px";
       
-      Element.setOpacity($('waitingMsgMask'), 0.1);
+      Element.setOpacity($('waitingMsgMask'), 0.2);
       $('waitingMsgMask').show();
       $('waitingMsgMask').style.top  = "0px";
       $('waitingMsgMask').style.left = "0px";

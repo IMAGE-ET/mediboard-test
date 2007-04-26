@@ -164,7 +164,15 @@ function pageMain() {
 
         <tr>
           <th>{{mb_label object=$examen field="realisateur"}}</th>
-          <td> Sélecteur de fonction
+          <td>
+            <select name="realisateur">
+              <option value="">&mdash; Choisir une réalisateur</option>
+              {{foreach from=$groups item="_group"}}
+              <optgroup label="{{$_group->_view}}">
+              </optgroup>
+              {{/foreach}}
+            </select>
+
           </td>
         </tr>
 

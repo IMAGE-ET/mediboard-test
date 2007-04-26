@@ -9,6 +9,7 @@
 
 global $AppUI, $m;
 
+
 class CDoMediuserAddEdit extends CDoObjectAddEdit {
   function CDoMediuserAddEdit() {
     $this->CDoObjectAddEdit("CMediusers", "user_id");
@@ -23,14 +24,13 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
     // Get older function permission
     $old = new CMediusers();
     $old->load($this->_obj->user_id);
-    
+
     if ($msg = $this->_obj->store()) {
       if ($this->redirectError) {
         $AppUI->setMsg($msg, UI_MSG_ERROR);
         $AppUI->redirect($this->redirectError);
       }
     } else {
-
       // Copy permissions
       if ($profile_id = dPgetParam($_POST, "_profile_id")) {
         $user = new CUser;

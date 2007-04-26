@@ -63,6 +63,7 @@ class CPrescriptionLabo extends CMbObject {
     
     $where = array("prescription_labo_id" => "= $this->prescription_labo_id");
     $this->_ref_prescription_labo_examens = $examen->loadList($where);
+    mbTrace(array_keys($this->_ref_prescription_labo_examens), "examens items");
     foreach($this->_ref_prescription_labo_examens as &$curr_examen) {
       $curr_examen->loadRefsFwd();
     }

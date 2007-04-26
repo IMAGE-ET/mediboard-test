@@ -82,15 +82,17 @@ function pageMain() {
     <td class="pane">
     
       {{if $mediuserSel->_id}}
-        <a class="buttonsearch" style="" href="?m=admin&amp;tab=view_edit_users&amp;user_username={{$mediuserSel->_user_username}}&amp;user_id={{$mediuserSel->_id}}">
-          Administrer cet utilisateur
-        </a>
+      <a class="buttonsearch" style="" href="?m=admin&amp;tab=view_edit_users&amp;user_username={{$mediuserSel->_user_username}}&amp;user_id={{$mediuserSel->_id}}">
+        Administrer cet utilisateur
+      </a>
       {{/if}}
+
       <form name="mediuser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
       <input type="hidden" name="dosql" value="do_mediusers_aed" />
       <input type="hidden" name="user_id" value="{{$mediuserSel->_id}}" />
       <input type="hidden" name="del" value="0" />
+      
 
       <table class="form">
         <tr>
@@ -107,6 +109,8 @@ function pageMain() {
             Modification de l'utilisateur &lsquo;{{$mediuserSel->_user_username}}&rsquo;
           {{else}}
           <th class="title" colspan="2">
+            <input type="hidden" name="_user_type" value="0" />
+          
             Création d'un nouvel utilisateur
           {{/if}}
           </th>
@@ -130,23 +134,15 @@ function pageMain() {
         
         <tr>
           <th>{{mb_label object=$mediuserSel field="deb_activite"}}</th>
-		      <td class="date">
-		        {{mb_field object=$mediuserSel field="deb_activite" form="mediuser"}}
-            <button class="cancel notext" type="button" onclick="deldate('deb_activite')">
-              {{tr}}remove{{/tr}}
-            </button>
+          <td class="date">
+            {{mb_field object=$mediuserSel field="deb_activite" form="mediuser"}}
           </td>
         </tr>
     
         <tr>
           <th>{{mb_label object=$mediuserSel field="fin_activite"}}</th>
           <td class="date">
-            <div id="mediuser_fin_activite_da">{{mb_value object=$mediuserSel field="fin_activite"}}</div>
-            <input type="hidden" name="fin_activite" class="date" value="{{$mediuserSel->fin_activite}}" />
-            <img id="mediuser_fin_activite_trigger" src="./images/icons/calendar.gif" alt="Date de fin d'activité"/>
-            <button class="cancel notext" type="button" onclick="deldate('fin_activite')">
-              {{tr}}remove{{/tr}}
-            </button>
+            {{mb_field object=$mediuserSel field="fin_activite" form="mediuser"}}
           </td>
         </tr>
         

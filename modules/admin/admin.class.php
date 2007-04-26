@@ -62,7 +62,7 @@ class CUser extends CMbObject {
     return array (
       "user_username"   => "notNull str maxLength|20",
       "user_password"   => "str minLength|4",
-      "user_type"       => "notNull num max|20",
+      "user_type"       => "notNull num minMax|0|20",
       "user_first_name" => "str maxLength|50",
       "user_last_name"  => "notNull str maxLength|50 confidential",
       "user_email"      => "str maxLength|255",

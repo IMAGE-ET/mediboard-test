@@ -30,13 +30,12 @@ if($examen_labo_id && !mbGetValueFromGet("catalogue_labo_id")) {
 
 $catalogue->loadRefs();
 
-$groups = new CGroups;
-$groups = $groups->loadList();
+$groups = CGroups::loadGroups();
 foreach ($groups as &$group) {
-  $group->loadRefs();
+  $group->loadFunctions();
 }
 
-//Chargement de tous les catalogues
+// Chargement de tous les catalogues
 $where = array("pere_id" => "IS NULL");
 $order = "identifiant";
 $listCatalogues = $catalogue->loadList($where, $order);
@@ -47,7 +46,8 @@ foreach($listCatalogues as $key => $curr_catalogue) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("examen"        , $examen   );
+$smarty->assign("groups"        , $groups);
+$smarty->assign("examen"        , $examen);
 $smarty->assign("catalogue"     , $catalogue);
 $smarty->assign("listCatalogues", $listCatalogues);
 
