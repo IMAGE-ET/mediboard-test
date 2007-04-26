@@ -111,6 +111,11 @@ var Prescription = {
     submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select });
     return true;
   },
+
+  del: function(oForm) {
+    submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select } );
+    return true;
+  },
   
   Examen : {
     eSelected : null,
@@ -153,14 +158,14 @@ var Prescription = {
     },
 
     del: function(oForm) {
-      oFormBase = document.dropPrescriptionItem;
+      var oFormBase = document.dropPrescriptionItem;
       oFormBase.prescription_labo_id.value = oForm.prescription_labo_id.value;
       submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select });
       return true;
     },
   
     drop: function(sExamen_id, prescription_id) {
-      oFormBase = document.dropPrescriptionItem;
+      var oFormBase = document.dropPrescriptionItem;
       aExamen_id = sExamen_id.split("-");
       if(aExamen_id[0] == "examen") {
         oFormBase.dosql.value = "do_prescription_examen_aed";

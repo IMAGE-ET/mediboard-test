@@ -54,7 +54,7 @@
 <tr>
   <td colspan="3" class="text">
     Admission aujourd'hui à {{mb_value object=$_sejour field=entree_prevue format="%H:%M"}}
-    avec le Dr. {{$_sejour->_ref_praticien->_view}}
+    pour le Dr. {{$_sejour->_ref_praticien->_view}}
   </td>
 </tr>
 {{/foreach}}

@@ -30,6 +30,13 @@
     {{$curr_prescription->_view}}
   </a>
   <br />
-  <button type="button" class="edit notext" onclick="Prescription.edit({{$curr_prescription->_id}});">edit</button>
+  <form name="delPrescription-{{$curr_prescription->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+    <input type="hidden" name="m" value="dPlabo" />
+    <input type="hidden" name="dosql" value="do_prescription_aed" />
+    <input type="hidden" name="prescription_labo_id" value="{{$curr_prescription->_id}}" />
+    <input type="hidden" name="del" value="1" />
+    <button type="button" class="trash notext" onclick="Prescription.del(this.form)" >{{tr}}Delete{{/tr}}</button>
+    <button type="button" class="edit notext" onclick="Prescription.edit({{$curr_prescription->_id}});">edit</button>
+  </form>
 </div>
 {{/foreach}}
