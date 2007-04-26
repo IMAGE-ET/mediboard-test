@@ -36,6 +36,7 @@
     <input type="hidden" name="prescription_labo_id" value="{{$curr_prescription->_id}}" />
     <input type="hidden" name="del" value="1" />
     <button type="button" class="trash notext" onclick="Prescription.del(this.form)" >{{tr}}Delete{{/tr}}</button>
+    <button type="button" class="print notext" onclick="Prescription.print({{$curr_prescription->_id}});">print</button>
     <button type="button" class="edit notext" onclick="Prescription.edit({{$curr_prescription->_id}});">edit</button>
   </form>
 </div>

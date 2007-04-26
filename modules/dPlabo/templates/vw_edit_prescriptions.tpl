@@ -117,6 +117,14 @@ var Prescription = {
     return true;
   },
   
+  print: function(prescription_id) {
+    var url = new Url;
+    url.setModuleAction("system", "httpreq_vw_complete_object");
+    url.addParam("object_id", prescription_id);
+    url.addParam("object_class", "CPrescriptionLabo");
+    url.popup(500, 500, "CPrescriptionLabo");
+  },
+  
   Examen : {
     eSelected : null,
     
