@@ -66,8 +66,23 @@ function loadConsultationsDuJour(&$patients) {
   
 }
 
+// Chargement des admissions du jour
+function loadAdmissionsDuJour(&$patients) {
+  $today = mbDate();
+  $where = array();
+  $where["entree_prevue"] = "LIKE '$today __:__:__'";
+  foreach ($patients as &$patient) {
+    $patient->loadRefsSejours($where);
+    foreach ($patient->_ref_sejours as &$sejour) {
+      $sejour->loadRefPraticien();
+    }
+  }
+}
+
 loadConsultationsDuJour($patients);
 loadConsultationsDuJour($patientsSoundex);
+loadAdmissionsDuJour($patients);
+loadAdmissionsDuJour($patientsSoundex);
 
 
 // Création du template
