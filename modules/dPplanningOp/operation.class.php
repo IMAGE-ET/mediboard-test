@@ -134,8 +134,8 @@ class COperation extends CMbObject {
       "induction_debut"=> "time",
       "induction_fin"  => "time",
       "entree_bloc"    => "time",
-      "anapath"        => "bool notNull",
-      "labo"           => "bool notNull"
+      "anapath"        => "bool",
+      "labo"           => "bool"
     );
   }
   
@@ -312,8 +312,10 @@ class COperation extends CMbObject {
       $chirTmp = new CMediusers;
       $chirTmp->load($this->chir_id);
       $plageTmp->chir_id = $chirTmp->user_id;
+      $plageTmp->spec_id = "";
       $plageTmp->store();
     } elseif($reorder) {
+      $plageTmp->spec_id = "";
       $plageTmp->store();
     }
     
