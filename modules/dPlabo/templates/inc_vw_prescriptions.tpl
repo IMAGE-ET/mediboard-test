@@ -19,8 +19,8 @@
     <th>Etat</th>
   </tr>
   {{foreach from=$patient->_ref_prescriptions item="curr_prescription"}}
-  <tr>
-    <td class="{{if $curr_prescription->_id == $prescription->_id}}selected{{/if}}" id="drop-prescription-{{$curr_prescription->_id}}">
+  <tr class="{{if $curr_prescription->_id == $prescription->_id}}selected{{/if}}">
+    <td id="drop-prescription-{{$curr_prescription->_id}}">
       <script type="text/javascript">
         Droppables.add('drop-prescription-{{$curr_prescription->_id}}', {
           onDrop: function(element) {
