@@ -10,6 +10,7 @@
       <input type="hidden" name="_repeat" value="1" />
       <input type="hidden" name="plageop_id" value="{{$curr_plage->plageop_id}}" />
       <input type="hidden" name="chir_id" value="{{$curr_plage->chir_id}}" />
+      <input type="hidden" name="spec_id" value="{{$curr_plage->spec_id}}" />
 
       <table class="form">
         <tr>
