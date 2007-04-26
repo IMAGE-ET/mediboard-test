@@ -33,13 +33,15 @@ $patient->load($patient_id);
 
 $patient->loadRefsPrescriptions();
 
-foreach($patient->_ref_prescriptions as &$curr_prescription) {
+foreach($patient->_ref_prescriptions as $_id => $curr_prescription) {
+
   if(!$curr_prescription->canEdit()) {
-    unset($curr_prescription);
+    unset($patient->_ref_prescriptions[$_id]);
   } else {
     $curr_prescription->loadRefs();
   }
 }
+
 
 // Création du template
 $smarty = new CSmartyDP();
