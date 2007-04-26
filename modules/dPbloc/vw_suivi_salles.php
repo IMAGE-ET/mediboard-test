@@ -79,6 +79,7 @@ $smarty->assign("listAnesths"    , $listAnesths);
 $smarty->assign("listInfosSalles", $listInfosSalles);
 $smarty->assign("listSalles"     , $listSalles);
 $smarty->assign("date_suivi"     , $date_suivi);
+$smarty->assign("operation_id"   , 0);
 
 $smarty->display("vw_suivi_salles.tpl");
 ?>
