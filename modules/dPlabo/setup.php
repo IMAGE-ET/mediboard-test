@@ -11,7 +11,7 @@ global $AppUI;
 
 $config = array();
 $config["mod_name"]        = "dPlabo";
-$config["mod_version"]     = "0.16";
+$config["mod_version"]     = "0.17";
 $config["mod_type"]        = "user";
 
 class CSetupdPlabo extends CSetup {
@@ -124,8 +124,13 @@ class CSetupdPlabo extends CSetup {
         "\nADD `duree_execution` INT(11) UNSIGNED," .
         "\nADD `remarques` TEXT;";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.16");
+    $sql = "ALTER TABLE `examen_labo`" .
+        "\nCHANGE `quantité` `quantite` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
 
-    $this->mod_version = "0.16";
+    $this->mod_version = "0.17";
   }
 }
 ?>
