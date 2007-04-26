@@ -1,8 +1,16 @@
 {{* $Id$ *}}
 
+{{if !$prescriptionItem->_id}}
+<table class="form">
+    <th class="title">
+      Veuillez sélectioner un examen
+    </th>
+  </tr>
+</table>
+{{else}}
 {{assign var="examen" value=$prescriptionItem->_ref_examen_labo}}
 {{assign var="patient" value=$prescriptionItem->_ref_prescription_labo->_ref_patient}}
-{{if $prescriptionItem->_id && $examen->type == "num"}}
+{{if $examen->type == "num"}}
 <div id="resultGraph" style="text-align: center;">
   <img alt="Graph des résultats" 
     src='?m=dPlabo&amp;a=graph_resultats&amp;suppressHeaders=1&amp;patient_id={{$patient->_id}}&amp;examen_id={{$examen->_id}}&amp;time={{$time}}' 
@@ -61,3 +69,4 @@
   </tbody>
   {{/foreach}}
 </table>
+{{/if}}

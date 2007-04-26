@@ -12,13 +12,13 @@ global $can;
 $can->needsRead();
 
 // Chargement de l'item choisi
+$siblingItems = array();
 $prescriptionItem = new CPrescriptionLaboExamen;
 $prescriptionItem->load(mbGetValueFromGetOrSession("prescription_labo_examen_id"));
 if($prescriptionItem->loadRefs()) {
   $prescriptionItem->_ref_prescription_labo->loadRefsFwd();
+  $siblingItems = $prescriptionItem->loadSiblings();
 }
-
-$siblingItems = $prescriptionItem->loadSiblings();
 
 // Création du template
 $smarty = new CSmartyDP();

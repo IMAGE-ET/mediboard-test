@@ -43,6 +43,7 @@ class CExamenLabo extends CMbObject {
   
   // Form fields
   var $_reference_values = null;
+  var $_interne          = null;
   
   // Fwd References
   var $_ref_catalogue_labo = null;
@@ -101,6 +102,8 @@ class CExamenLabo extends CMbObject {
     if ($this->type == "num") {
       $this->_reference_values = "$this->min $this->unite - $this->max $this->unite";
     }
+    
+    $this->_interne = 1;
   }
   
   function loadRefsFwd() {

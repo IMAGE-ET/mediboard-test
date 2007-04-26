@@ -14,7 +14,7 @@
 
 {{if !$prescriptionItem->_id}}
 <table class="form">
-    <th class="title" colspan="2">
+    <th class="title">
       Veuillez sélectioner un examen
     </th>
   </tr>

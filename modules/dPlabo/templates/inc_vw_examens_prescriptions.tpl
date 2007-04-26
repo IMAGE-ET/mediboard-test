@@ -18,7 +18,7 @@
   </tr>
   <tr>
     <th>Examen</th>
-    <th>Type</th>
+    <th>Références</th>
     <th>Resultat</th>
   </tr>
   {{foreach from=$prescription->_ref_prescription_labo_examens item="curr_item"}}
@@ -41,10 +41,10 @@
       </form>
     </td>
     <td>
-      {{mb_value object=$curr_examen field="type"}}
-      {{if $curr_examen->_reference_values}} ({{$curr_examen->_reference_values}}) {{/if}}
+      {{if $curr_examen->_reference_values}}({{$curr_examen->_reference_values}}){{/if}}
     </td>
     <td>
+      {{if $curr_examen->_interne}}
       {{if $curr_item->date}}
         {{assign var=msgClass value=""}}
         {{if $curr_examen->type == "num"}}
@@ -63,7 +63,10 @@
           view
         </button -->
       {{else}}
-        <em>Aucun résultat</em>
+        <em>En attente</em>
+      {{/if}}
+      {{else}}
+        <em>Examen externe</em>
       {{/if}}
     </td>
   </tr>

@@ -17,7 +17,6 @@ $user->load($AppUI->user_id);
 $patient_id = mbGetValueFromGetOrSession("patient_id");
 
 $prescription_labo_id = mbGetValueFromGetOrSession("prescription_labo_id");
-$prescription_labo_examen_id = mbGetValueFromGetOrSession("prescription_labo_examen_id");
 
 if (!$patient_id) {
   return;
@@ -47,7 +46,6 @@ foreach($patient->_ref_prescriptions as $_id => $curr_prescription) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("patient"     , $patient     );
-$smarty->assign("prescription_labo_examen_id", $prescription_labo_examen_id);
 $smarty->assign("prescription", $prescription);
 
 $smarty->display("inc_vw_prescriptions.tpl");

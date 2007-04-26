@@ -89,6 +89,7 @@ var Prescription = {
     urlPresc.addParam("patient_id", iPatient_id    );
     urlPresc.requestUpdate("listPrescriptions", { waitingText: null });
     urlExam.requestUpdate("listExamens", { waitingText: null });
+    this.Examen.init(0);
   },
   
   edit : function(prescription_id) {
@@ -156,7 +157,7 @@ var Prescription = {
       urlResult.setModuleAction("dPlabo", "httpreq_edit_resultat");
       urlGraph.setModuleAction("dPlabo", "httpreq_graph_resultats");
       urlResult.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
-      if (iPrescriptionItem) {
+      if (!isNaN(iPrescriptionItem)) {
         Prescription.Examen.select(iPrescriptionItem);
         urlResult.addParam("prescription_labo_examen_id", iPrescriptionItem);
         urlGraph.addParam("prescription_labo_examen_id", iPrescriptionItem);
@@ -274,7 +275,7 @@ function pageMain() {
             <input type="radio" name="typeListe" value="Catalogue" {{if $typeListe == "Catalogue"}}checked="checked"{{/if}} onchange="window[this.value].select();" />
             <label for="typeListe_Catalogue">Catalogues</label>
             <input type="radio" name="typeListe" value="Resultat" {{if $typeListe == "Resultat"}}checked="checked"{{/if}} onchange="window[this.value].select();" />
-            <label for="typeListe_Resultat">Résultats</label>
+            <label for="typeListe_Resultat">Saisie résultats</label>
           </td>
         </tr>
       </table>
