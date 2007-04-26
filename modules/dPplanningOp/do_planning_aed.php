@@ -41,6 +41,7 @@ if(intval(mbGetValueFromPost("del", null))) {
   if($do->_obj->plageop_id && $do->_objBefore->plageop_id && ($do->_objBefore->plageop_id != $do->_obj->plageop_id)) {
     $plageop = new CPlageOp;
     $plageop->load($do->_objBefore->plageop_id);
+    $plageop->spec_id = "";
     $plageop->store();
   }
   $m = mbGetValueFromPost("otherm", $m);
