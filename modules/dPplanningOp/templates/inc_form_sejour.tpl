@@ -152,7 +152,7 @@
   <th>{{mb_label object=$sejour field="_date_sortie_prevue"}}</th>
   <td class="date">
     <div id="editSejour__date_sortie_prevue_da">{{$sejour->_date_sortie_prevue|date_format:"%d/%m/%Y"}}</div>
-    {{mb_field object=$sejour field="_date_sortie_prevue" hidden=1 prop="notNull date" onchange="updateDureePrevue(); modifSejour()"}}
+    {{mb_field object=$sejour field="_date_sortie_prevue" hidden=1 prop="notNull date moreEquals|_date_entree_prevue" onchange="updateDureePrevue(); modifSejour()"}}
     <img id="editSejour__date_sortie_prevue_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
   </td>
   <td colspan="2">

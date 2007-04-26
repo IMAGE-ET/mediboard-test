@@ -145,7 +145,7 @@ var ElementChecker = {
     }
 
     // sameAs
-    if (sTargetElement = this.aProperties["moreEquals"]) {
+    if (sTargetElement = this.aProperties["sameAs"]) {
     	if (sParamMsg = this.castCompareValues(sTargetElement)) {
     		return sParamMsg;
     	}
