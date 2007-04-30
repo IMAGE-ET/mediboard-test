@@ -42,7 +42,10 @@
     <th>{{mb_label object=$examen field="type"}}</th>
     <td>
       {{mb_value object=$examen field="type"}}
-      {{if $examen->_reference_values}} ({{$examen->_reference_values}}) {{/if}}
+      {{if $examen->type == "num"}}
+      : {{$examen->unite}}
+      ({{$examen->min}} &ndash {{$examen->max}})
+      {{/if}}
     </td>
   </tr>
 

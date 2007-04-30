@@ -77,7 +77,7 @@ class CMbArray {
     $value = mbGetValue(@$array[$key], $default);
     unset($array[$key]);
     if (!$value and $mandatory) {
-      $this->trigger_error("mb_field: paramater 'object' missing", E_USER_WARNING);
+      trigger_error("mb_field: paramater 'object' missing", E_USER_WARNING);
     }
     return $value;
   }

@@ -18,7 +18,7 @@ $trans  = mbGetValueFromPost("trans" , null);
 $chaine = mbGetValueFromPost("chaine", null);
 
 if(!$module || !$trans || !$chaine || !is_array($trans) || !is_array($chaine)){
-  $AppUI->setMsg( "Certaines informations sont manquantes au taitement de la traduction.", UI_MSG_ERROR );
+  $AppUI->setMsg( "Certaines informations sont manquantes au traitement de la traduction.", UI_MSG_ERROR );
   $AppUI->redirect();
 }
 

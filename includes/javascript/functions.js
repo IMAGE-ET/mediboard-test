@@ -458,12 +458,14 @@ Class.extend(ObjectTooltip, {
     url.setModuleAction(this.mode.module, this.mode.action);
     url.addParam("object_class", this.sClass);
     url.addParam("object_id", this.iObject);
+    
     if(!this.oOptions.popup) {
       url.requestUpdate(this.eTarget);
       return;
     }
+    
     if(this.oOptions.popup) {
-      url.popup(300, 300, this.sClass);
+      url.popup(this.mode.width, this.mode.height, this.sClass);
       return;
     }
   },
@@ -497,10 +499,19 @@ Class.extend(ObjectTooltip, {
 
 Object.extend(ObjectTooltip, {
   modes: {
+    complete: {
+      module: "system",
+      action: "httpreq_vw_complete_object",
+      sClass: "tooltip",
+      width: 600,
+      height: 500
+    },
     view: {
       module: "system",
       action: "httpreq_vw_object",
-      sClass: "tooltip"
+      sClass: "tooltip",
+      width: 300,
+      height: 250
     },
     notes: {
       module: "system",

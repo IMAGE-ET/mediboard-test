@@ -7,11 +7,11 @@
 * @author Romain Ollivier
 */
 
-// This script has to be lanuched via installer
-// DO NOT $AppUI facilities
+// This script has to be launched via installer
+// DO NOT USE $AppUI facilities
 global $shm, $can;
 
-// Only check permissions if connected to mediboard, and not to the installer
+// Only check permissions when connected to mediboard, not to the installer
 if ($can) {
   $can->needsAdmin();
 }

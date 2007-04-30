@@ -30,10 +30,13 @@
       <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;pack_examens_labo_id=0">
         Ajouter un nouveau pack
       </a>
+      
       <form name="editPack" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+
       <input type="hidden" name="dosql" value="do_pack_aed" />
       <input type="hidden" name="pack_examens_labo_id" value="{{$pack->_id}}" />
       <input type="hidden" name="del" value="0" />
+
       <table class="form">
         <tr>
           {{if $pack->_id}}
@@ -42,6 +45,7 @@
           <th class="title" colspan="2">Création d'un pack</th>
           {{/if}}
         </tr>
+
         <tr>
           <th>{{mb_label object=$pack field="function_id"}}</th>
           <td>
@@ -55,10 +59,12 @@
             </select>
           </td>
         </tr>
+
         <tr>
           <th>{{mb_label object=$pack field="libelle"}}</th>
           <td>{{mb_field object=$pack field="libelle"}}</td>
         </tr>
+
         <tr>
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
@@ -68,57 +74,15 @@
           </td>
         </tr>
       </table>
+      
       </form>
-      {{if $pack->_id}}
-      <table class="tbl">
-        <tr>
-          <th colspan="6" class="title">Liste des examens</th>
-        </tr>
-        <tr>
-          <th>Identifiant</th>
-          <th>Libelle</th>
-          <th>Type</th>
-          <th>Unité</th>
-          <th>Min</th>
-          <th>Max</th>
-        </tr>
-        {{foreach from=$pack->_ref_items_examen_labo item="curr_item"}}
-        {{assign var="curr_examen" value=$curr_item->_ref_examen_labo}}
-        <tr>
-          <td>
-            <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->identifiant}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{tr}}{{$curr_examen->libelle}}{{/tr}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->type}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->unite}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->min}} {{$curr_examen->unite}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->max}} {{$curr_examen->unite}}
-            </a>
-          </td>
-        </tr>
-        {{/foreach}}
-      </table>
       {{/if}}
+
+      {{if $pack->_id}}
+      <!-- Liste des exmanens du packsélectionné -->
+      {{assign var="examens" value=$pack->_ref_examens_labo}}
+      {{assign var="examen_id" value=""}}
+      {{include file="list_examens.tpl"}}
       {{/if}}
     </td>
   </tr>

@@ -44,7 +44,7 @@ class CResultatsLaboGraph extends Graph {
 //    die();
 
     // Setup the graph.
-    $this->Graph(350, 250, "auto");
+    $this->Graph(360, 250, "auto");
     $delta = 2;
     
     $this->SetScale("textlin", max(0, $min-$delta), $max+$delta);
@@ -53,19 +53,19 @@ class CResultatsLaboGraph extends Graph {
     
     // Image setup
     $this->img->SetAntiAliasing(true);
-    $this->img->SetMargin(35, 20, 30, 40);
+    $this->img->SetMargin(40, 10, 30, 40);
     
     if ($examen->max) {
       $uband = new PlotBand(HORIZONTAL,BAND_RDIAG,$examen->max,"max","#ffbbbb");
       $uband->ShowFrame(true);
-      $uband->SetDensity(92); // 50% line density
+      $uband->SetDensity(92);
       $this->AddBand($uband);
     }
 
     if ($examen->min) {
       $lband = new PlotBand(HORIZONTAL,BAND_RDIAG,"min",$examen->min,"#ffbbbb");
       $lband->ShowFrame(true);
-      $lband->SetDensity(92); // 50% line density
+      $lband->SetDensity(92);
       $this->AddBand($lband); 
     }    
         
@@ -90,6 +90,7 @@ class CResultatsLaboGraph extends Graph {
     $this->xaxis->SetLabelAlign("right","top","right");
     $this->xaxis->SetLabelMargin(2);
     $this->xaxis->SetLabelAngle(45);    
+    $this->xaxis->SetTickLabels($xlabels);
     
     // Setup Y-axis labels 
     $this->ygrid->Show(true, true);
@@ -101,9 +102,9 @@ class CResultatsLaboGraph extends Graph {
     $this->yaxis->title->SetFont(FF_ARIAL,FS_NORMAL, 7);
     $this->yaxis->title->SetColor("darkred");
     $this->yaxis->title->Set("valeurs en $examen->unite");
-    
+    $this->yaxis->SetLabelMargin(4);     
+    $this->yaxis->SetTitleMargin(28);     
 
-    $this->xaxis->SetTickLabels($xlabels);
     
     
     $plot = new LinePlot($ydata);

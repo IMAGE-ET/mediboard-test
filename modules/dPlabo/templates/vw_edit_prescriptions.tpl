@@ -299,5 +299,5 @@ function pageMain() {
       <div id="bottomRightDiv"></div>
     </td>
   </tr>
-  <tbody>
+  </tbody>
 </table>

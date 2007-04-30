@@ -48,7 +48,8 @@ function pageMain() {
           <td>
             <select name="pere_id">
               <option value="">&mdash; Catalogue racine</option>
-              {{assign var="pere_id" value=$catalogue->pere_id}}
+              {{assign var="selected_id" value=$catalogue->pere_id}}
+              {{assign var="exclude_id" value=$catalogue->_id}}
               {{foreach from=$listCatalogues item="_catalogue"}}
               {{include file="options_catalogues.tpl"}}
               {{/foreach}}
@@ -79,56 +80,13 @@ function pageMain() {
       </table>
       </form>
       
-      <!-- Liste des exmanens du catalogue sélectionné -->
       {{if $catalogue->_id}}
-      <table class="tbl">
-        <tr>
-          <th colspan="6" class="title">Liste des examens</th>
-        </tr>
-        <tr>
-          <th>Identifiant</th>
-          <th>Libelle</th>
-          <th>Type</th>
-          <th>Unité</th>
-          <th>Min</th>
-          <th>Max</th>
-        </tr>
-        {{foreach from=$catalogue->_ref_examens_labo item="curr_examen"}}
-        <tr>
-          <td>
-            <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->identifiant}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{tr}}{{$curr_examen->libelle}}{{/tr}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->type}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->unite}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->min}} {{$curr_examen->unite}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->max}} {{$curr_examen->unite}}
-            </a>
-          </td>
-        </tr>
-        {{/foreach}}
-      </table>
+      <!-- Liste des exmanens du catalogue sélectionné -->
+      {{assign var="examens" value=$catalogue->_ref_examens_labo}}
+      {{assign var="examen_id" value=""}}
+      {{include file="list_examens.tpl"}}
       {{/if}}
+      
       {{/if}}
     </td>
   </tr>

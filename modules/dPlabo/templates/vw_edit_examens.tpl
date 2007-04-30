@@ -9,89 +9,43 @@ function pageMain() {
 
 <table class="main">
   <tr>
-    <td class="halfPane">
+    <td style="width: 320px;">
     
       <!-- Sélection du catalogue -->
       <form name="selectCatalogue" action="index.php" method="get">
+
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
       <label for="catalogue_labo_id" title="Selectionner le catalogue que vous désirez afficher">
-        Choisissez un catalogue
+        Catalogue courant
       </label>
       <select name="catalogue_labo_id" onchange="this.form.submit()">
-        <option value="0">&mdash; aucun</option>
-        {{foreach from=$listCatalogues item="curr_catalogue"}}
-        <option value="{{$curr_catalogue->_id}}" {{if $curr_catalogue->_id == $catalogue->_id}}selected="selected"{{/if}}>
-          {{$curr_catalogue->_view}}
-        </option>
-        {{foreach from=$curr_catalogue->_ref_catalogues_labo item="curr_sub_catalogue"}}
-        <option value="{{$curr_sub_catalogue->_id}}" {{if $curr_sub_catalogue->_id == $catalogue->_id}}selected="selected"{{/if}}>
-          &mdash; {{$curr_sub_catalogue->_view}}
-        </option>
-        {{/foreach}}
+        <option value="0">&mdash; Choisir un catalogue</option>
+        {{assign var="selected_id" value=$catalogue->_id}}
+        {{assign var="exclude_id" value=""}}
+        {{foreach from=$listCatalogues item="_catalogue"}}
+        {{include file="options_catalogues.tpl"}}
         {{/foreach}}
       </select>
+
       </form>
       
       <!-- Liste des examens pour le catalogue courant -->
-      <table class="tbl">
-        <tr>
-          <th>Identifiant</th>
-          <th>Libellé</th>
-          <th>Type</th>
-          <th>Unité</th>
-          <th>Min</th>
-          <th>Max</th>
-        </tr>
-        {{foreach from=$catalogue->_ref_examens_labo item="curr_examen"}}
-        <tr {{if $curr_examen->_id == $examen->_id}} class="selected" {{/if}}>
-          <td>
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->identifiant}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->libelle}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->type}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{$curr_examen->unite}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{if $curr_examen->min}}
-                {{$curr_examen->min}} {{$curr_examen->unite}}
-              {{/if}}
-            </a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id={{$curr_examen->_id}}">
-              {{if $curr_examen->max}}
-                {{$curr_examen->max}} {{$curr_examen->unite}}
-              {{/if}}
-            </a>
-          </td>
-        </tr>
-        {{/foreach}}
-      </table>
+      {{assign var="examens" value=$catalogue->_ref_examens_labo}}
+      {{assign var="examen_id" value=$examen->_id}}
+      {{include file="list_examens.tpl"}}
     </td>
     
-    <td class="halfPane">
+    <td>
       
       <!-- Edition de l'examen sélectionné -->
       {{if $can->edit}}
       <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id=0">
         Ajouter un nouvel examen
       </a>
-      <form name="editExamen" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      
+      <form name="editExamen" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      
       <input type="hidden" name="dosql" value="do_examen_aed" />
       <input type="hidden" name="examen_labo_id" value="{{$examen->_id}}" />
       <input type="hidden" name="del" value="0" />
@@ -139,7 +93,7 @@ function pageMain() {
 
       <script language="Javascript" type="text/javascript">
       var oAccord = new Rico.Accordion($('accordionExamen'), { 
-        panelHeight: 300, 
+        panelHeight: 280, 
         showDelay: 50, 
         showSteps: 3 
       } );
@@ -155,7 +109,8 @@ function pageMain() {
           </td>
         </tr>
       </table>
-
+      
+      </form>
       {{/if}}
       
       <!-- Liste des packs associés -->
@@ -170,7 +125,7 @@ function pageMain() {
         {{foreach from=$examen->_ref_packs_labo item=_pack}}
         <tr>
           <td>
-            <a href="?m={{$m}}&amp;tab=vw_edit_packs&amp;pack_exmaen_labo_id={{$_pack->_id}}">
+            <a href="?m={{$m}}&amp;tab=vw_edit_packs&amp;pack_examens_labo_id={{$_pack->_id}}">
               {{$_pack->_view}}
             </a>
           </td>

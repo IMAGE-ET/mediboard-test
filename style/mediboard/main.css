@@ -317,6 +317,14 @@ option {
   background: #fff;
 }
 
+option.novalue {
+  display:none;
+}
+
+option[value=""] {
+  font-style: italic;
+}
+
 input,
 select,
 textarea {

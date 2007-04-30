@@ -45,7 +45,7 @@ table.form th {
   text-align: right;
   font-weight: normal;
   padding: 2px 4px;
-  border: none;
+  border-right: 1px solid #ddd;
 }
 
 table.form th.title {
@@ -117,6 +117,7 @@ table.form td {
   background-color: #ffd;
   text-align: left;
   padding: 1px 4px;
+  border: none;
 }
 
 table.form td.dark {
@@ -656,6 +657,7 @@ div.tree-header {
   background-color: #ffd;
   padding: 2px;
   white-space: nowrap;
+  border-bottom: 1px solid #ddd;
 }
 
 div.selected,

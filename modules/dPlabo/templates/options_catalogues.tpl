@@ -1,13 +1,13 @@
 {{* $Id: tree_catalogues.tpl 1792 2007-04-10 16:16:47Z MyttO $
-  Parameters
+  -- Parameters
   $_catalogue : catalog to display hierarchically
-  $pere_id : selected catalog 
-  $catalogue_id to exclude : selected catalog 
+  $selected_id : selected catalog 
+  $exclude_id to exclude : selected catalog 
 *}}
 
-{{if $catalogue_id != $_catalogue->_id}}
+{{if $exclude_id != $_catalogue->_id}}
 <option value="{{$_catalogue->_id}}" 
-  {{if $_catalogue->_id == $pere_id}}selected="selected"{{/if}}
+  {{if $_catalogue->_id == $selected_id}}selected="selected"{{/if}}
   style="padding-left: {{$_catalogue->_level}}em"
 >
   {{$_catalogue->_view}}

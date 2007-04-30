@@ -10,23 +10,35 @@
 
 <script type="text/javascript">
 
-function doEmptyTemplates() {
-  var url = new Url;
-  url.setModuleAction("system", "httpreq_do_empty_templates");
-  url.requestUpdate("emptyTemplates");
+var Templates = {
+  id: "Templates",
+  
+  empty: function() {
+    var url = new Url;
+    url.setModuleAction("system", "httpreq_do_empty_templates");
+    url.requestUpdate(this.id);
+  }
 }
 
-function doEmptySharedMemory() {
-  var url = new Url;
-  url.setModuleAction("system", "httpreq_do_empty_shared_memory");
-  url.requestUpdate("emptySharedMemory");
+var SharedMemory = {
+  id : "SharedMemory", 
+  
+  empty: function(ie) {
+    var url = new Url;
+    url.setModuleAction("system", "httpreq_do_empty_shared_memory");
+    url.requestUpdate(this.id);
+  },
+  
+  check: function(ie) {
+    var url = new Url;
+    url.setModuleAction("system", "httpreq_check_shared_memory");
+    url.requestUpdate(this.id);
+  }
 }
 
 
 function pageMain() {
-  var url = new Url;
-  url.setModuleAction("system", "httpreq_check_shared_memory");
-  url.requestUpdate("emptySharedMemory");
+  SharedMemory.check("SharedMemory");
 }
 
 </script>
@@ -142,18 +154,18 @@ function pageMain() {
   </tr>
   <tr>
     <td>
-      <button class="cancel" onclick="doEmptyTemplates()">
+      <button class="cancel" onclick="Templates.empty()">
         Vider les caches template Smarty
       </button>
     </td>
-    <td id="emptyTemplates" />
+    <td id="Templates" />
   </tr>
   <tr>
     <td>
-      <button class="cancel" onclick="doEmptySharedMemory()">
+      <button class="cancel" onclick="SharedMemory.empty(); ">
         Vider les variables de la mémoire partagée
       </button>
     </td>
-    <td id="emptySharedMemory" />
+    <td id="SharedMemory" />
   </tr>
 </table>

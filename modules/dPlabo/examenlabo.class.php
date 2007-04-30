@@ -1,4 +1,4 @@
-<?php
+<?php /* $Id: $ */
 
 /**
 * @package Mediboard
@@ -34,8 +34,8 @@ class CExamenLabo extends CMbObject {
   var $quantite = null;
   var $duree_execution = null;
   var $remarques = null;
+
   var $execution_lun = null;
-  
   var $execution_mar = null;
   var $execution_mer = null;
   var $execution_jeu = null;
@@ -49,17 +49,18 @@ class CExamenLabo extends CMbObject {
   var $unite       = null;
   
   // Form fields
-  var $_reference_values = null;
   var $_interne          = null;
   
   // Fwd References
   var $_ref_catalogue_labo = null;
+  var $_ref_realisateur = null;
   
   // Back References
   var $_ref_items_pack_labo = null;
 
   // Distant References
   var $_ref_packs_labo = null;
+  var $_ref_catalogues = null;
   
   function CExamenLabo() {
     $this->CMbObject("examen_labo", "examen_labo_id");
@@ -111,17 +112,59 @@ class CExamenLabo extends CMbObject {
     parent::updateFormFields();
     $this->_shortview = $this->identifiant;
     $this->_view = "$this->identifiant : $this->libelle ($this->type_prelevement)";
-    
-    if ($this->type == "num") {
-      $this->_reference_values = "$this->min $this->unite - $this->max $this->unite";
-    }
-    
+        
     $this->_interne = 1;
   }
   
   function loadRefsFwd() {
     $this->_ref_catalogue_labo = new CCatalogueLabo;
     $this->_ref_catalogue_labo->load($this->catalogue_labo_id);
+    
+    $this->_ref_realisateur = new CMediusers;
+    $this->_ref_realisateur->load($this->realisateur);
+  }
+
+  function loadView() {
+    parent::loadView();
+    $this->loadClassification();
+  }
+
+  function loadComplete() {
+    parent::loadComplete();
+    $this->loadClassification();
+    $this->loadRealisateurDeep();
+  }
+  
+  /**
+   * Load realisateur and associated function and group
+   */
+  function loadRealisateurDeep() {
+    $realisateur =& $this->_ref_realisateur; 
+    if ($realisateur->_id) {
+      $realisateur->loadRefFunction();
+      $function =& $realisateur->_ref_function;
+      $function->loadRefsFwd();
+    }
+  }
+  /**
+   * Load complete catalogue classification
+   */
+  function loadClassification() {
+    $catalogue = $this->_ref_catalogue_labo;
+    $catalogues = array();
+    $catalogues[$catalogue->_id] = $catalogue;
+    while ($parent_id = $catalogue->pere_id) {
+      $catalogue = new CCatalogueLabo;
+      $catalogue->load($parent_id);
+      $catalogues[$catalogue->_id] = $catalogue;
+    }
+    
+    $level = count($catalogues);
+    foreach ($catalogues as &$catalogue) {
+      $catalogue->_level = --$level;
+    }
+
+    $this->_ref_catalogues = array_reverse($catalogues, true);
   }
   
   function loadRefsBack() {
@@ -129,6 +172,7 @@ class CExamenLabo extends CMbObject {
     $item = new CPackItemExamenLabo;
     $item->examen_labo_id = $this->_id;
     $this->_ref_items_pack_labo = $item->loadMatchingList();
+    
     foreach ($this->_ref_items_pack_labo as &$item) {
       $item->loadRefPack();
       $pack =& $item->_ref_pack_examens_labo;

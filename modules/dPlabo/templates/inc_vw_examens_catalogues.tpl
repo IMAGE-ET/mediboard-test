@@ -8,13 +8,13 @@
       {{$catalogue->_view}}
     </th>
   </tr>
+
   <tr>
-    <th class="category">Examen</th>
-    <th class="category">Type</th>
-    <th class="category">Unité</th>
-    <th class="category">Min</th>
-    <th class="category">Max</th>
+    <th>Examen</th>
+    <th>Unité</th>
+    <th>Références</th>
   </tr>
+
   {{foreach from=$catalogue->_ref_examens_labo item="curr_examen"}}
   <tr>
     <td>
@@ -28,30 +28,12 @@
         view
       </button>
     </td>
-    <td>
-      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-        {{mb_value object=$curr_examen field="type"}}
-      </a>
-    </td>
-    <td>
-      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-        {{$curr_examen->unite}}
-      </a>
-    </td>
-    <td>
-      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-        {{if $curr_examen->min}}
-          {{$curr_examen->min}} {{$curr_examen->unite}}
-        {{/if}}
-      </a>
-    </td>
-    <td>
-      <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;examen_labo_id={{$curr_examen->_id}}">
-        {{if $curr_examen->min}}
-          {{$curr_examen->max}} {{$curr_examen->unite}}
-        {{/if}}
-      </a>
-    </td>
+    {{if $curr_examen->type == "num"}}
+    <td>{{$curr_examen->unite}}</td>
+    <td>{{$curr_examen->min}} &ndash; {{$curr_examen->max}}</td>
+    {{else}}
+    <td colspan="2">{{mb_value object=$curr_examen field="type"}}</td>
+    {{/if}}
   </tr>
   {{/foreach}}
 </table>
