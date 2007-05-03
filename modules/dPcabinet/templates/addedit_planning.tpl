@@ -223,7 +223,7 @@ function checkFormRDV(oForm){
             {{mb_label object=$consult field="_check_premiere"}}
           </td>
           <td rowspan="4" class="button">
-            <button class="search" type="button" onclick="popRDV()">Rechercher un horaire</button>
+            <button class="search" type="button" onclick="popRDV()">choix de l'horaire</button>
           </td>
         </tr>
 

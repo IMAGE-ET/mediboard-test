@@ -9,6 +9,8 @@
 
 global $AppUI, $can, $m, $g, $dPconfig;
 
+// Il faut faire un test sur l'installation de sante400
+$can->read &= (CModule::getInstalled("dPsante400") != null);
 $can->needsRead();
 
 $patient_id = mbGetValueFromGetOrSession("patient_id");
