@@ -63,7 +63,7 @@ function pageMain() {
   if (document.editAntFrm){
     document.editAntFrm.type.onchange();
     {{if $dPconfig.dPcabinet.addictions}}
-    document.editAddictFrm.type.onchange();
+    Try.these(document.editAddictFrm.type.onchange);
     {{/if}}
     oCimField = new TokenField(document.editDiagFrm.listCim10, { 
       confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',

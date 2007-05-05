@@ -29,16 +29,9 @@ $prescription->loadRefs();
 
 $patient = new CPatient();
 $patient->load($patient_id);
-
-$patient->loadRefsPrescriptions();
-
-foreach($patient->_ref_prescriptions as $_id => $curr_prescription) {
-
-  if(!$curr_prescription->canEdit()) {
-    unset($patient->_ref_prescriptions[$_id]);
-  } else {
-    $curr_prescription->loadRefs();
-  }
+$patient->loadRefsPrescriptions(PERM_EDIT);
+foreach ($patient->_ref_prescriptions as $_prescription) {
+  $_prescription->loadRefs();
 }
 
 

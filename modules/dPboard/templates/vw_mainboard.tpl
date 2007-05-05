@@ -210,19 +210,19 @@ function pageMain() {
   <tr>
     <th>
       <form name="editFrmPratDate" action="?m={{$m}}" method="get">
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}">&lt;&lt;&lt;</a>
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}">&lt;&lt;&lt;</a>
       <input type="hidden" name="m" value="{{$m}}" />
       {{$date|date_format:"%A %d %B %Y"}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;date={{$suiv}}">&gt;&gt;&gt;</a>
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$suiv}}">&gt;&gt;&gt;</a>
       </form>
     </th>
     <th>
       <form name="editFrmView" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
-      <input type="radio" name="view" value="day" value="day" {{if $view == "day"}}checked="checked"{{/if}} onclick="this.form.submit()" />
+      <input type="radio" name="view" value="day" {{if $view == "day"}}checked="checked"{{/if}} onclick="this.form.submit()" />
       <label for="view_day" title="Affichage du jour">Journée</label>
-      <input type="radio" name="view" value="week" value="day" {{if $view == "week"}}checked="checked"{{/if}} onclick="this.form.submit()" />
+      <input type="radio" name="view" value="week" {{if $view == "week"}}checked="checked"{{/if}} onclick="this.form.submit()" />
       <label for="view_week" title="Affichage de la semaine">Semainier</label>
       </form>
     </th>

@@ -34,7 +34,7 @@ Object.extend(Droppables, {
     <th>Références</th>
     <th>Resultat</th>
   </tr>
-  {{foreach from=$prescription->_ref_prescription_labo_examens item="curr_item"}}
+  {{foreach from=$prescription->_ref_prescription_items item="curr_item"}}
   {{assign var="curr_examen" value=$curr_item->_ref_examen_labo}}
   <tr id="PrescriptionItem-{{$curr_item->_id}}">
     <td>

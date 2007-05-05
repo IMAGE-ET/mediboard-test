@@ -25,6 +25,7 @@ function submitFormAides(oForm){
       Création d'une aide
     </th>
   </tr>
+  
   <tr>
     <th>{{mb_label object=$aide field="function_id"}}</th>
     <td>
@@ -38,6 +39,7 @@ function submitFormAides(oForm){
       </select>
     </td>
   </tr>
+
   <tr>
     <th>{{mb_label object=$aide field="user_id"}}</th>
     <td>
@@ -51,16 +53,43 @@ function submitFormAides(oForm){
       </select>
     </td>
   </tr>
+
+  <tr>
+    <th>{{mb_label object=$aide field="class"}}</th>
+    <td>{{tr}}{{$aide->class}}{{/tr}}</td>
+  </tr>
+
+  <tr>
+    <th>{{mb_label object=$aide field="field"}}</th>
+    <td>{{tr}}{{$aide->class}}-{{$aide->field}}{{/tr}}</td>
+  </tr>
+
+  {{if $dependValues}}
+  <tr>
+    <th>{{mb_label object=$aide field="depend_value"}}</th>
+    <td>
+      <select name="depend_value" class="{{$aide->_props.depend_value}}">
+        <option value="">&mdash; Tous</option>
+        {{foreach from=$dependValues key=_value item=_translation}}
+        <option value="{{$_value}}">{{$_translation}}</option>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
+  {{/if}}
+
   <tr>
     <th>{{mb_label object=$aide field="name"}}</th>
     <td>{{mb_field object=$aide field="name"}}</td>
   </tr>
+
   <tr>
     <th>{{mb_label object=$aide field="text"}}</th>
     <td>
       {{mb_field object=$aide field="text" rows="4"}}
     </td>
   </tr>
+
   <tr>
     <td class="button" colspan="2">
       <button class="submit" type="button" onclick="submitFormAides(this.form)">

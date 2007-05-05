@@ -43,7 +43,7 @@
       </form>
     </td>
     <td>
-      {{$curr_prescription->_ref_prescription_labo_examens|@count}} Examens
+      {{$curr_prescription->_ref_prescription_items|@count}} Examens
     </td>
     <td class="text">
       Validée, en attente

@@ -270,12 +270,17 @@ class CMbObject {
   }
   
   function loadListWithPerms($permType = PERM_READ, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
-    $list = $this->loadList($where, $order, $limit, $group, $leftjoin);	
-    foreach($list as $key=>$element){
-      if(!$element->getPerm($permType)){
-        unset($list[$key]);
+    $list = $this->loadList($where, $order, $limit, $group, $leftjoin);
+    
+    // Filter with permission
+    if ($permType) {
+      foreach ($list as $key=>$element){
+        if(!$element->getPerm($permType)){
+          unset($list[$key]);
+        }
       }
     }
+
     return $list;
   }
   

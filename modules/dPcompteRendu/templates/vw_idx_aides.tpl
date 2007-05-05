@@ -144,7 +144,7 @@ function pageMain() {
       <th colspan="6">Aides du praticien '{{$userSel->_view}}'</th>
     </tr>
     {{foreach from=$aidesPrat item=curr_aide}}
-    <tr>
+    <tr {{if $curr_aide->_id == $aide->_id}}class="selected"{{/if}}>
       {{assign var="aide_id" value=$curr_aide->aide_id}}
       {{assign var="href" value="?m=$m&tab=$tab&aide_id=$aide_id"}}
       {{assign var="className" value=$curr_aide->class}}
@@ -170,7 +170,7 @@ function pageMain() {
       <th colspan="6">Aides du cabinet '{{$userSel->_ref_function->_view}}'</th>
     </tr>
     {{foreach from=$aidesFunc item=curr_aide}}
-    <tr>
+    <tr {{if $curr_aide->_id == $aide->_id}}class="selected"{{/if}}>
       {{assign var="aide_id" value=$curr_aide->aide_id}}
       {{assign var="href" value="?m=$m&tab=$tab&aide_id=$aide_id"}}
       {{assign var="className" value=$curr_aide->class}}

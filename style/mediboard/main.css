@@ -538,6 +538,7 @@ th.greedyPane {
 }
 
 th.title {
+  font-family: "arial narrow", sans-serif;
   font-size: 14px;
   font-weight: bold;  
   text-align: center;
@@ -632,6 +633,8 @@ table.tbl td.text {
 table.tbl td.button {
   text-align: center;
   vertical-align: middle;
+  white-space: normal;
+  line-height: 140%;
 }
 
 div.previewfile{
@@ -1890,6 +1893,7 @@ table#weeklyPlanning {
 table#weeklyPlanning td {
   text-align: center; 
   vertical-align: middle;
+  white-space: normal;
 }
 
 table#weeklyPlanning td.selectedPlage {

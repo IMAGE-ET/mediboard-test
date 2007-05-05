@@ -23,7 +23,11 @@ class CPrescriptionLabo extends CMbObject {
   var $_ref_praticien = null;
   
   // Back references
-  var $_ref_prescription_labo_examens = null;
+  var $_ref_prescription_items = null;
+  
+  // Distant references
+  var $_ref_examens = null;
+  var $_ref_classification_roots = null;
   
   function CPrescriptionLabo() {
     $this->CMbObject("prescription_labo", "prescription_labo_id");
@@ -52,23 +56,104 @@ class CPrescriptionLabo extends CMbObject {
   }
   
   function loadRefsFwd() {
-    $this->_ref_patient = new CPatient();
-    $this->_ref_patient->load($this->patient_id);
-    $this->_ref_praticien = new CMediusers();
-    $this->_ref_praticien->load($this->praticien_id);
-  }
-  
-  function loadRefsBack() {
-    $examen = new CPrescriptionLaboExamen;
+    if (!$this->_ref_patient) {
+      $this->_ref_patient = new CPatient();
+      $this->_ref_patient->load($this->patient_id);
+    }
     
-    $where = array("prescription_labo_id" => "= $this->prescription_labo_id");
-    $this->_ref_prescription_labo_examens = $examen->loadList($where);
-
-    foreach($this->_ref_prescription_labo_examens as &$curr_examen) {
-      $curr_examen->loadRefsFwd();
+    if (!$this->_ref_praticien) {
+      $this->_ref_praticien = new CMediusers();
+      $this->_ref_praticien->load($this->praticien_id);
     }
   }
   
+  function loadRefsBack() {
+    if (!$this->_ref_prescription_items) {
+      $item = new CPrescriptionLaboExamen;
+      $item->prescription_labo_id = $this->_id;
+      $this->_ref_prescription_items = $item->loadMatchingList();
+      $this->_ref_examens = array();
+      foreach ($this->_ref_prescription_items as &$_item) {
+        $_item->_ref_prescription_labo =& $this;
+        $_item->loadRefsFwd();
+        $examen =& $_item->_ref_examen_labo;
+        $this->_ref_examens[$examen->_id] =& $examen; 
+      }
+    }
+  }
+
+  /**
+   * Load minimal catalogue classification to cover the prescription analyses
+   */
+  function loadClassification() {
+    $catalogues = array();
+    
+    // Load needed catalogues
+    foreach ($this->_ref_examens as $examen) {
+      $catalogue_id = $examen->catalogue_labo_id;
+      if (!array_key_exists($catalogue_id, $catalogues)) {
+        $catalogue = new CCatalogueLabo;
+        $catalogue->load($catalogue_id);
+        $catalogue->_ref_catalogues_labo = array();
+        $catalogues[$catalogue->_id] = $catalogue;
+      }
+    }
+
+    echo "<h2>Needed catalogues</h2>";
+    foreach ($catalogues as $trace_id => $trace_catalogue) {
+      mbTrace($trace_catalogue->_id, "ID for key '$trace_id'");
+      mbTrace($trace_catalogue->pere_id, "Parent ID for key '$trace_id'");
+    }
+
+    // Complete catalogue hierarchy
+    foreach ($catalogues as &$_catalogue) {
+      $child_catalogue =& $_catalogue;
+      while ($child_catalogue->pere_id && !array_key_exists($child_catalogue->pere_id, $catalogues)) {
+        $catalogue = new CCatalogueLabo;
+        $catalogue->load($child_catalogue->pere_id);
+        $catalogues[$catalogue->_id] = $catalogue;
+        $child_catalogue = $catalogue;
+      }
+    }
+    
+    // Prepare catalogues collections
+    foreach ($catalogues as &$ref_catalogue) {
+      $ref_catalogue->_ref_catalogues_labo = array();
+      $ref_catalogue->_ref_prescription_items = array();
+    }
+
+    // Feed prescription items
+    foreach ($this->_ref_prescription_items as &$_item) {
+      $catalogue_id = $_item->_ref_examen_labo->catalogue_labo_id;
+      $catalogues[$catalogue_id]->_ref_prescription_items[$_item->_id] =& $_item;
+    }
+    
+    // Link catalogue hierarchy
+    foreach ($catalogues as &$link_catalogue) {
+      if ($parent_id = $link_catalogue->pere_id) {
+        $parent_catalogue =& $catalogues[$parent_id];
+        $parent_catalogue->_ref_catalogues_labo[$link_catalogue->_id] =& $link_catalogue;
+        $link_catalogue->_ref_pere =& $parent_catalogue;
+      } 
+    }
+    
+    echo "<h2>Linked catalogues</h2>";
+    foreach ($catalogues as $trace_id => $trace_catalogue) {
+      mbTrace($trace_catalogue->_id, "ID for key '$trace_id'");
+      mbTrace($trace_catalogue->pere_id, "Parent ID for key '$trace_id'");
+    }
+
+    
+    // Find classifications roots
+    foreach ($catalogues as &$root_catalogue) {
+      if ($root_catalogue->computeLevel() == 0) {
+        $this->_ref_classification_roots[$root_catalogue->_id] =& $root_catalogue;
+      }
+      
+      mbTrace($root_catalogue->_level, "Level for '$root_catalogue->_id'");
+    }
+  } 
+   
   function getPerm($permType) {
     $this->loadRefsFwd();
     return $this->_ref_praticien->getPerm($permType);

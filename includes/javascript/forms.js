@@ -4,11 +4,7 @@ function addHelp(sClass, oField, sName) {
   url = new Url;
   url.setModuleAction("dPcompteRendu", "edit_aide");
   url.addParam("class", sClass);
-  if(sName){
-    url.addParam("field", sName);
-  }else{
-    url.addParam("field", oField.name);
-  }
+  url.addParam("field", sName || oField.name);
   url.addParam("text", oField.value);
   url.popup(600, 200, "AidesSaisie");
 }

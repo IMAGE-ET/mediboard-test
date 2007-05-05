@@ -72,13 +72,17 @@ class CPrescriptionLaboExamen extends CMbObject {
   }
   
   function loadRefPrescription() {
-    $this->_ref_prescription_labo = new CPrescriptionLabo;
-    $this->_ref_prescription_labo->load($this->prescription_labo_id);
+    if (!$this->_ref_prescription_labo) {
+      $this->_ref_prescription_labo = new CPrescriptionLabo;
+      $this->_ref_prescription_labo->load($this->prescription_labo_id);
+    }
   }
 
   function loadRefExamen() {
-    $this->_ref_examen_labo = new CExamenLabo;
-    $this->_ref_examen_labo->load($this->examen_labo_id);
+    if (!$this->_ref_examen_labo) {
+      $this->_ref_examen_labo = new CExamenLabo;
+      $this->_ref_examen_labo->load($this->examen_labo_id);
+    }
   }
   
   function loadRefsFwd() {

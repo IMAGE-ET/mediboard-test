@@ -1,4 +1,5 @@
 <?php
+$locales['CPrescriptionLaboExamen-commentaire'] = 'Commentaires';
 $locales['CCatalogueLabo'] = 'Catalogue d\'examens';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sous-catalogue';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Examen';
@@ -87,7 +88,7 @@ $locales['CPrescriptionLabo-patient_id'] = 'Patient';
 $locales['CPrescriptionLabo-patient_id-desc'] = 'Patient concerné par la prescription';
 $locales['CPrescriptionLabo-praticien_id'] = 'Praticien';
 $locales['CPrescriptionLabo-praticien_id-desc'] = 'Praticien prescripteur';
-$locales['CPrescriptionLaboExamen-commentaire'] = 'Commentaires';
+$locales['CPrescriptionLaboExamen'] = 'Item de prescription';
 $locales['CPrescriptionLaboExamen-commentaire-desc'] = 'Commentaires du praticien sur la valeur de l\'examen';
 $locales['CPrescriptionLaboExamen-date'] = 'Date';
 $locales['CPrescriptionLaboExamen-date-desc'] = 'Date du résultat de l\'examen';
@@ -101,4 +102,5 @@ $locales['mod-dPlabo-tab-vw_edit_catalogues'] = 'Edition des catalogues';
 $locales['mod-dPlabo-tab-vw_edit_examens'] = 'Edition des examens';
 $locales['mod-dPlabo-tab-vw_edit_packs'] = 'Edition des packs';
 $locales['mod-dPlabo-tab-vw_edit_prescriptions'] = 'Prescriptions';
+$locales['mod-dPlabo-tab-vw_resultats'] = 'Résultats';
 ?>

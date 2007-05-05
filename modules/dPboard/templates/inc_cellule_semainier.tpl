@@ -36,7 +36,7 @@
     </a>
     <div class="progressBar">
       <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-      <div class="text">{{$plageInfos->_nb_operations}} Intervention(s)</div>
+      <div class="text">{{$plageInfos->_nb_operations}} Op.</div>
     </div>    
   {{/if}}
   </td>            

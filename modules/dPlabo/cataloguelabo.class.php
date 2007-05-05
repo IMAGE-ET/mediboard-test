@@ -25,6 +25,9 @@ class CCatalogueLabo extends CMbObject {
   var $_ref_examens_labo = null;
   var $_ref_catalogues_labo = null;
   
+  // Distant references
+  var $_ref_prescription_items = null;
+  
   // Form fields
   var $_level = null;
   
@@ -79,11 +82,24 @@ class CCatalogueLabo extends CMbObject {
     $this->_view = $this->identifiant." : ".$this->libelle;
   }
   
-  function loadRefsFwd() {
+  function computeLevel() {
+    if (!$this->pere_id) {
+      return $this->_level = 0;
+    }
+    
+    $this->loadParent();
+    return $this->_level = $this->_ref_pere->computeLevel() + 1;
+  }
+  
+  function loadParent() {
     if (!$this->_ref_pere) {
       $this->_ref_pere = new CCatalogueLabo;
       $this->_ref_pere->load($this->pere_id);
     }
+  }
+
+  function loadRefsFwd() {
+    $this->loadParent();
   }
   
   function loadRefsBack() {

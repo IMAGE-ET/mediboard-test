@@ -1,4 +1,5 @@
 <?php
+$locales['CPrescriptionLaboExamen-commentaire'] = 'comment';
 $locales['CCatalogueLabo'] = '';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sub-catalog';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Medical test';
@@ -87,7 +88,7 @@ $locales['CPrescriptionLabo-patient_id'] = '';
 $locales['CPrescriptionLabo-patient_id-desc'] = '';
 $locales['CPrescriptionLabo-praticien_id'] = '';
 $locales['CPrescriptionLabo-praticien_id-desc'] = '';
-$locales['CPrescriptionLaboExamen-commentaire'] = 'comment';
+$locales['CPrescriptionLaboExamen'] = 'Prescription item';
 $locales['CPrescriptionLaboExamen-commentaire-desc'] = 'Pratician comment on exam value';
 $locales['CPrescriptionLaboExamen-date'] = 'Date';
 $locales['CPrescriptionLaboExamen-date-desc'] = 'Result date for exam';
@@ -101,4 +102,5 @@ $locales['mod-dPlabo-tab-vw_edit_catalogues'] = '';
 $locales['mod-dPlabo-tab-vw_edit_examens'] = '';
 $locales['mod-dPlabo-tab-vw_edit_packs'] = '';
 $locales['mod-dPlabo-tab-vw_edit_prescriptions'] = '';
+$locales['mod-dPlabo-tab-vw_resultats'] = 'Results';
 ?>

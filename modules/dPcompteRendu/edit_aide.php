@@ -11,9 +11,9 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$field = mbGetValueFromGet("field", null);
-$text  = mbGetValueFromGet("text" , null);
-$class = mbGetValueFromGet("class", null);
+$field = mbGetValueFromGet("field");
+$text  = utf8_decode(mbGetValueFromGet("text" ));
+$class = mbGetValueFromGet("class");
 
 // Liste des users accessibles
 $listPrat = new CMediusers();
@@ -31,6 +31,13 @@ foreach ($listPrat as $keyUser => $mediuser) {
 $listFunc = new CFunctions();
 $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 
+// Objet ciblé
+$object = new $class;
+$dependValues = null;
+if ($depend_field = $object->_helped_fields[$field]) {
+  $dependValues = @$object->_enumsTrans[$depend_field];
+}
+
 // Nouvelle Aide à la saisie
 $aide = new CAideSaisie();
 $aide->class   = $class;
@@ -42,6 +49,7 @@ $aide->user_id = $AppUI->user_id;
 $smarty = new CSmartyDP();
 
 $smarty->assign("aide"     , $aide);
+$smarty->assign("dependValues", $dependValues);
 $smarty->assign("listFunc" , $listFunc);
 $smarty->assign("listPrat" , $listPrat);
 

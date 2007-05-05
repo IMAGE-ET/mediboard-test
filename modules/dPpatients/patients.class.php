@@ -527,12 +527,12 @@ class CPatient extends CMbObject {
       $this->_nb_docs .= "$docs_valid";
   }
   
-  function loadRefsPrescriptions() {
-    if(CModule::getInstalled("dPlabo")) {
+  function loadRefsPrescriptions($perm = null) {
+    if (CModule::getInstalled("dPlabo")) {
       $prescription = new CPrescriptionLabo();
-      $where = array("patient_id" => "= $this->_id");
+      $where = array("patient_id" => "= '$this->_id'");
       $order = "date DESC";
-      $this->_ref_prescriptions = $prescription->loadList($where, $order);
+      $this->_ref_prescriptions = $prescription->loadListWithPerms($perm, $where, $order);
     }
   }
 
