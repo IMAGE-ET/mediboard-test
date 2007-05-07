@@ -144,12 +144,18 @@ class CRecordSante400 {
   }
 
   /**
-   * Transforms a HHhMM AS400 time into a HH:MM:00 SQL time 
+   * Transforms a HHhMM or HHMM AS400 time into a HH:MM:00 SQL time 
    */
   function consumeTime($valueName) {
     $time = $this->consume($valueName);
     if ($time === "0") {
       return null;
+    }
+    
+    // Cas
+    if (false !== strpos($time, "h")) {
+      $frags = split("h", $time);
+      return join(":", $frags) . ":00";
     }
     
     if (strlen($time) <= 2) {
@@ -158,7 +164,7 @@ class CRecordSante400 {
     
     $time = str_pad($time, 4, "0", STR_PAD_LEFT);
 
-    $reg = "/(\d{0,2})h?(\d{2})/i";
+    $reg = "/(\d{1,2})h?(\d{2})/i";
     return preg_replace($reg, "$1:$2:00", $time);
   }
 

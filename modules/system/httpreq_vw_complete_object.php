@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $can;
 
 $object_class = mbGetValueFromGet("object_class");
 $object_id    = mbGetValueFromGet("object_id");
@@ -23,6 +23,11 @@ $object->loadComplete();
 $can->read = $object->canRead();
 $can->needsRead();
 
+// Droit de lecture dPsante400
+$moduleSante400 = CModule::getInstalled("dPsante400");
+$canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
+
+
 // If no template is defined, use generic
 $template = is_file($object->_view_template) ?
   $object->_view_template : 
@@ -31,5 +36,6 @@ $template = is_file($object->_view_template) ?
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("object", $object);
+$smarty->assign("canSante400", $canSante400);
 $smarty->display("../../$object->_complete_view_template");
 ?>

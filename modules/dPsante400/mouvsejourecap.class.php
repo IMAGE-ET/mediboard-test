@@ -318,7 +318,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->id400Pat->tag = $tag;
     $this->id400Pat->bindObject($this->patient);
 
-    $this->trace($pat400->data, "Données patients non importées");
+    $this->trace($this->patient->getProps(), "Patient sauvegardé");
     $this->markStatus(self::STATUS_PATIENT);
   }
 
@@ -459,7 +459,7 @@ class CMouvSejourEcap extends CMouvement400 {
       $duree_prevue = $sortie_prevue > $entree_prevue ? 
         mbTimeRelative($entree_prevue, $sortie_prevue) : 
         "01:00:00"; 
-      
+        
       $operation->date = mbDate($entree_prevue);
       $operation->time_operation = mbTime($entree_prevue);
       $operation->temp_operation = $duree_prevue;
@@ -489,6 +489,9 @@ class CMouvSejourEcap extends CMouvement400 {
       $id400Oper->id400 = $CINT;
       $id400Oper->tag = join($tags, " ");
       $id400Oper->bindObject($operation);
+      
+      $this->trace($operation->getProps(), "Opération sauvegardée");
+      
       $this->id400Opers[$CINT] = $id400Oper;      
       
       $this->operations[$CINT] = $operation;

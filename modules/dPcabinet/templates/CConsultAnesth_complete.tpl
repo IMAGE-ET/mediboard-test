@@ -16,6 +16,13 @@ newExam = function(sAction, consultation_id) {
       <a style="float:right;" href="#nothing" onclick="view_log('{{$consult->_class_name}}', {{$consult->_id}})">
         <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
       </a>
+
+      {{if $canSante400->read}}
+      <a style="float:right;" href="#" onclick="view_idsante400('{{$object->_class_name}}',{{$object->_id}})">
+        <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
+      </a>
+      {{/if}}
+
       <div style="float:left;" class="noteDiv {{$consult->_class_name}}-{{$consult->_id}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
