@@ -47,16 +47,18 @@ class CMouvement400 extends CRecordSante400 {
       $mouv->initialize();
       $recs[] = "'$mouv->rec'";
     }
-
-    if ($idConfig["mark_row"]) {
-      $recs = join($recs, ",");
-      
-      $query = "UPDATE $mouv->base.$mouv->table " .
-          "\n SET $mouv->prodField = '========' " .
-          "\n WHERE $mouv->idField IN ($recs)";
-      
-      $rec = new CRecordSante400;
-      $rec->query($query);
+    
+    if (count($mouvs)) {
+      if ($idConfig["mark_row"]) {
+        $recs = join($recs, ",");
+        
+        $query = "UPDATE $mouv->base.$mouv->table " .
+            "\n SET $mouv->prodField = '========' " .
+            "\n WHERE $mouv->idField IN ($recs)";
+        
+        $rec = new CRecordSante400;
+        $rec->query($query);
+      }
     }
     
     return $mouvs;
