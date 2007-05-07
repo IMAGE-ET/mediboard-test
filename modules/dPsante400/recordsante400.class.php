@@ -143,6 +143,9 @@ class CRecordSante400 {
     return preg_replace($reg, "$1-$2-$3", $date);
   }
 
+  /**
+   * Transforms a HHhMM AS400 time into a HH:MM:00 SQL time 
+   */
   function consumeTime($valueName) {
     $time = $this->consume($valueName);
     if ($time === "0") {
@@ -153,8 +156,23 @@ class CRecordSante400 {
       $time .= "00" ;
     }
     
-    $reg = "/(\d{0,2})h?(\d{2})/i";
+    $reg = "/(\d{2})h?(\d{2})/i";
     return preg_replace($reg, "$1:$2:00", $time);
+  }
+
+  /**
+   * Transforms a HHhMM AS400 time into a HH:MM:00 SQL time 
+   */
+  function consumeTimeFlat($valueName) {
+    $time = $this->consume($valueName);
+    if ($time === "0") {
+      return null;
+    }
+
+    $time = str_pad($time, 6, "0", STR_PAD_LEFT);
+    
+    $reg = "/(\d{2})(\d{2})(\d{2})/i";
+    return preg_replace($reg, "$1:$2:$3", $time);
   }
 
   function consumeDateTime($dateName, $timeName) {
@@ -163,6 +181,18 @@ class CRecordSante400 {
     }
 
     if (null == $time = $this->consumeTime($timeName)) {
+      $time = "00:00:00";
+    }
+    
+    return "$date $time";
+  }
+
+  function consumeDateTimeFlat($dateName, $timeName) {
+    if (null == $date = $this->consumeDate($dateName)) {
+      return null;
+    }
+
+    if (null == $time = $this->consumeTimeFlat($timeName)) {
       $time = "00:00:00";
     }
     

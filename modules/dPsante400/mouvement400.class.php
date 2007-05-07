@@ -23,7 +23,7 @@ class CMouvement400 extends CRecordSante400 {
   public $when = null;
 
   function initialize() {
-    $this->when = $this->consumeDateTime("TRDATE", "TRHEURE");
+    $this->when = $this->consumeDateTimeFlat("TRDATE", "TRHEURE");
     $this->rec = $this->consume($this->idField);
     $this->prod = $this->consume($this->prodField);
     $this->type = $this->consume($this->typeField);
