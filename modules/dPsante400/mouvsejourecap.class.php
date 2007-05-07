@@ -35,6 +35,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->prodField = "ETAT";
     $this->idField = "INDEX";
     $this->typeField = "TRACTION";
+    $this->groupField = "CIDC";
   }
 
   function synchronize() {
@@ -129,6 +130,7 @@ class CMouvSejourEcap extends CMouvement400 {
 
     $this->fonction->group_id = $this->etablissement->group_id;
     $this->fonction->loadMatchingObject();
+    $this->fonction->type = "cabinet";
     $this->fonction->text = "Import eCap";
     $this->fonction->color = "00FF00";
 
@@ -444,6 +446,9 @@ class CMouvSejourEcap extends CMouvement400 {
       $operation = new COperation;
       $operation->sejour_id = $this->sejour->_id;
       $operation->chir_id = $this->sejour->praticien_id;
+      
+      // Côté indeterminé pour le moment
+      $operation->cote = "total";
 
       // Entrée/sortie prévue/réelle
       $entree_prevue = $operECap->consumeDateTime("DTEP", "HREP");
@@ -547,7 +552,7 @@ class CMouvSejourEcap extends CMouvement400 {
       $id400acte->bindObject($acte);
 
       $this->trace($acteECap->data, "Acte trouvé");
-      $this->trace($acte, "Acte à sauver");
+      $this->trace($acte->getProps(), "Acte à sauver");
             
       // Ajout du code dans l'opération
       if (!in_array($acte->code_acte, $operation->_codes_ccam)) {
@@ -556,7 +561,7 @@ class CMouvSejourEcap extends CMouvement400 {
       }
     }
 
-    $this->markStatus(self::STATUS_ACTES, count($actesECap));
+    $this->markStatus(self::STATUS_ACTES);
   }
 
   function syncSejour() {
@@ -565,16 +570,25 @@ class CMouvSejourEcap extends CMouvement400 {
     
     $NDOS = $this->consume("NDOS");
 
-    $this->sejour = new CSejour;  
+    // Gestion des identifiants
+    $tags[] = "CIDC:{$this->id400EtabECap->id400}";
+    $tags[] = "DMED:{$this->id400Pat->id400}";
+    $this->id400Sej = new CIdSante400();
+    $this->id400Sej->id400 = $NDOS;
+    $this->id400Sej->object_class = "CSejour";
+    $this->id400Sej->tag = join(" ", $tags);
+    $this->sejour = $this->id400Sej->getCachedObject();
+
+    // Références principales
     $this->sejour->group_id     = $this->etablissement->_id;
     $this->sejour->patient_id   = $this->patient->_id;
     $this->sejour->praticien_id = $this->praticiens[$CPRT]->_id;
-    
+
     $this->sejour->annule = $this->type == "S" ? 1 : 0;
     
     $entree = $this->consumeDateTime("DTEN", "HREN");
     $sortie = $this->consumeDateTime("DTSO", "HRSO");
-    
+        
     switch ($this->consume("PRES")) {
       case "0": // Prévu
       $this->sejour->entree_prevue = $entree;
@@ -591,35 +605,19 @@ class CMouvSejourEcap extends CMouvement400 {
       break;
     }
     
-    // Gestion des identifiants
-    $tags[] = "CIDC:{$this->id400EtabECap->id400}";
-    $tags[] = "DMED:{$this->id400Pat->id400}";
-    $this->id400Sej = new CIdSante400();
-    $this->id400Sej->id400 = $NDOS;
-    $this->id400Sej->tag = join(" ", $tags);
-    $this->id400Sej->bindObject($this->sejour);
-    
-    // Rectifications sur les dates prévues
-    // Prevents updateFormFields()
-    $this->sejour->_hour_entree_prevue = null;
-    $this->sejour->_hour_sortie_prevue = null;
-    
-    $nullDate = "0000-00-00 00:00:00";
-    if ($this->sejour->entree_prevue == $nullDate) {
+    // Absence de dates prévues
+    if (!$this->sejour->entree_prevue) {
       $this->sejour->entree_prevue = $this->sejour->entree_reelle;
     }
-    
-    if ($this->sejour->sortie_prevue == $nullDate) {
+
+    if (!$this->sejour->sortie_prevue) {
       $this->sejour->sortie_prevue = 
         $this->sejour->sortie_reelle > $this->sejour->entree_reelle ? 
         $this->sejour->sortie_reelle : // Date de sortie fournie, on l'utilise 
         mbDateTime("+ 1 days", $this->sejour->entree_prevue); // On simule la date de sortie
     }
     
-    // Sauvegarde après rectifications
-    if ($msg = $this->sejour->store()) {
-      throw new Exception($msg);
-    }
+    $this->id400Sej->bindObject($this->sejour);
     
     $this->trace($this->sejour->getProps(), "Séjour sauvegardé");
     $this->markStatus(self::STATUS_SEJOUR);

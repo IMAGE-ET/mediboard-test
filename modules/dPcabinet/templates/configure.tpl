@@ -9,7 +9,7 @@
   </tr>
   
   {{assign var="pcTr" value="config-dPcabinet-CPlageconsult"}}
-  {{assign var="pcName" value="config-dPcabinet-CPlageconsult"}}
+  {{assign var="pcName" value="dPcabinet[CPlageConsult]"}}
   <tr>
     <th>
       <label for="{{$pcName}}[hours_start]" title="{{tr}}{{$pcTr}}-hours_start{{/tr}}">{{tr}}{{$pcTr}}-hours_start{{/tr}}</label>  

@@ -60,8 +60,9 @@ class CMbFieldSpec {
   function checkParams($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
+    
     // NotNull
-    if($this->notNull && ($propValue === null || $propValue === "")){
+    if($this->notNull && !$this->default && ($propValue === null || $propValue === "")){
       return "Ne pas peut pas avoir une valeur nulle";
     }
     

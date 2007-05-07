@@ -305,18 +305,20 @@ class COperation extends CMbObject {
     }
     
     // Cas de la création dans une plage de spécialité
-    $plageTmp = new CPlageOp;
-    $plageTmp->load($this->plageop_id);
-    if ($plageTmp->spec_id) {
-      $plageTmp->spec_id = null;
-      $chirTmp = new CMediusers;
-      $chirTmp->load($this->chir_id);
-      $plageTmp->chir_id = $chirTmp->user_id;
-      $plageTmp->spec_id = "";
-      $plageTmp->store();
-    } elseif($reorder) {
-      $plageTmp->spec_id = "";
-      $plageTmp->store();
+    if ($this->plageop_id) {
+      $plageTmp = new CPlageOp;
+      $plageTmp->load($this->plageop_id);
+      if ($plageTmp->spec_id) {
+        $plageTmp->spec_id = null;
+        $chirTmp = new CMediusers;
+        $chirTmp->load($this->chir_id);
+        $plageTmp->chir_id = $chirTmp->user_id;
+        $plageTmp->spec_id = "";
+        $plageTmp->store();
+      } elseif($reorder) {
+        $plageTmp->spec_id = "";
+        $plageTmp->store();
+      }
     }
     
     return $msg;

@@ -45,9 +45,13 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 <table class="tbl">
 
 <tr>
-  <th class="title" colspan="20">
+  <th class="title" colspan="0">
   	Imports de {{$mouvs|@count}} mouvements de séjours
-  	sur {{$count}} disponibles</th>
+  	sur {{$count}} disponibles
+  	{{if $dPconfig.dPsante400.group_id}}
+  	<br />Filtré sur l'établissement '{{$dPconfig.dPsante400.group_id}}'
+  	{{/if}}
+  </th>
 </tr>
 
 <tr>

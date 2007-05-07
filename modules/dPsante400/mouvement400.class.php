@@ -9,6 +9,7 @@ class CMouvement400 extends CRecordSante400 {
   protected $prodField = null;
   protected $idField = null;
   protected $typeField = null;
+  protected $groupField = null;
 
   public $verbose = false;
   
@@ -31,8 +32,12 @@ class CMouvement400 extends CRecordSante400 {
   }
   
   function multipleLoad($marked = false, $max = 100) {
+    global $dPconfig;
+    $idConfig = $dPconfig["dPsante400"];
+
     $query = "SELECT * FROM $this->base.$this->table";
-    $query .= $this->getMarkedQuery($marked);
+    $query.= $this->getMarkedClause($marked);
+    $query.= $this->getFilterClause();
  
     $mouvs = CRecordSante400::multipleLoad($query, array(), $max, get_class($this));
 
@@ -43,20 +48,38 @@ class CMouvement400 extends CRecordSante400 {
       $recs[] = "'$mouv->rec'";
     }
 
-    $recs = join($recs, ",");
-    
-    $query = "UPDATE $mouv->base.$mouv->table " .
-        "\n SET $mouv->prodField = '========' " .
-        "\n WHERE $mouv->idField IN ($recs)";
-    
-    $rec = new CRecordSante400;
-    $rec->query($query);
+    if ($idConfig["mark_row"]) {
+      $recs = join($recs, ",");
+      
+      $query = "UPDATE $mouv->base.$mouv->table " .
+          "\n SET $mouv->prodField = '========' " .
+          "\n WHERE $mouv->idField IN ($recs)";
+      
+      $rec = new CRecordSante400;
+      $rec->query($query);
+    }
     
     return $mouvs;
   }
   
+  function getFilterClause() {
+    if (!$this->groupField) {
+      return;
+    }
 
-  function getMarkedQuery($marked) {
+    global $dPconfig;
+    $idConfig = $dPconfig["dPsante400"];
+    
+    $group_id = $idConfig["group_id"];
+    $beforeField = "B_$this->groupField";
+    $afterField  = "A_$this->groupField";
+
+    return  $group_id ? 
+      "\n AND ($beforeField = '$group_id' OR $afterField = '$group_id')" : 
+      "";
+  }
+
+  function getMarkedClause($marked) {
     if (!$this->prodField) {
       return;
     }
@@ -69,13 +92,17 @@ class CMouvement400 extends CRecordSante400 {
   function count($marked = false) {
     $req = new CRecordSante400();
     $query = "SELECT COUNT(*) AS TOTAL FROM $this->base.$this->table";
-    $query .= $this->getMarkedQuery($marked);
+    $query.= $this->getMarkedClause($marked);
+    $query.= $this->getFilterClause();
     $req->query($query);
 
     return $req->consume("TOTAL");
   }
 
   function load($rec) {
+    global $dPconfig;
+    $idConfig = $dPconfig["dPsante400"];
+
     $query = "SELECT * FROM $this->base.$this->table" .
         "\n WHERE $this->idField = ?";
 
@@ -87,16 +114,23 @@ class CMouvement400 extends CRecordSante400 {
     $this->initialize();
 
     // Checkout
-    $query = "UPDATE $this->base.$this->table " .
-        "\n SET $this->prodField = '========' " .
-        "\n WHERE $this->idField = ?";
-    $values = array($this->rec);
-    
-    $rec = new CRecordSante400;
-    $rec->query($query, $values);
+    if ($idConfig["mark_row"]) {
+      $query = "UPDATE $this->base.$this->table " .
+          "\n SET $this->prodField = '========' " .
+          "\n WHERE $this->idField = ?";
+      $values = array($this->rec);
+      
+      $rec = new CRecordSante400;
+      $rec->query($query, $values);
+    }
   }
     
   function markRow() {
+    global $dPconfig;
+    if (!$dPconfig["dPsante400"]["mark_row"]) {
+      return;
+    }
+    
     if (!$this->prodField) {
       return null;
     }
@@ -107,8 +141,8 @@ class CMouvement400 extends CRecordSante400 {
     }
 
     $query = 
-//      !in_array(null, $this->statuses, true) ?
-//      "DELETE FROM $this->base.$this->table WHERE $this->idField = ?" :
+      !in_array(null, $this->statuses, true) ?
+      "DELETE FROM $this->base.$this->table WHERE $this->idField = ?" :
       "UPDATE $this->base.$this->table SET $this->prodField = '$this->status' WHERE $this->idField = ?";
     $values = array (
       $this->rec,
@@ -152,6 +186,5 @@ class CMouvement400 extends CRecordSante400 {
   
   function synchronize() {
   }
-  
 }
 ?>

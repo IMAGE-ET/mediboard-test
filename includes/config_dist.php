@@ -215,4 +215,14 @@ $dPconfig["dPcabinet"]["CPlageConsult"] = array (
 $dPconfig["dPImeds"]["url"] = "http://10.100.0.67/listedossiers.aspx";
 
 $dPconfig["dPfiles"]["nb_upload_files"] = "1";
+
+$dPconfig["dPsante400"] = array (
+  "nb_rows" => "5",
+  "mark_row" => "0",
+  "dsn" => "",
+  "user" => "",
+  "pass" => "",
+  "group_id" => "",
+);
+
 ?>

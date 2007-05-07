@@ -1,11 +1,5 @@
 <?php
 
-$dPconfig["dPsante400"] = array (
-  "dsn" => "ecap",
-  "user" => "MEDIBOARD",
-  "pass" => "MEDIBOARD",
-);
-
 class CRecordSante400 {
   static $dbh = null;
   static $chrono = null;
@@ -24,7 +18,11 @@ class CRecordSante400 {
 
     global $dPconfig;
     $dsnConfig = $dPconfig["dPsante400"];
-    $dsn = $dsnConfig["dsn"];
+    
+    if (!$dsn = $dsnConfig["dsn"]) {
+      trigger_error("Data Source Name not defined, please configure module", E_USER_ERROR);
+      die;
+    }
     
     global $dbChronos;
     $dbChronos[$dsn] = new Chronometer;
@@ -151,8 +149,8 @@ class CRecordSante400 {
       return null;
     }
     
-    if (strlen($time) == 2) {
-      $time = "00" . $time ;
+    if (strlen($time) <= 2) {
+      $time .= "00" ;
     }
     
     $reg = "/(\d{0,2})h?(\d{2})/i";

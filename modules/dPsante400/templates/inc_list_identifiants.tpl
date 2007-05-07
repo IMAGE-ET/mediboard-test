@@ -39,7 +39,7 @@
     {{/if}}
     <td>
       <a href="?m=dPsante400&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;id_sante400_id={{$_idSante400->_id}}" >
-        {{$_idSante400->last_update|date_format:"%d/%m/%Y à %Hh%M (%A)"}}
+        {{$_idSante400->last_update|date_format:"%d/%m/%Y à %Hh%M"}}
       </a>
     </td>
     <td>{{$_idSante400->id400}}</td>

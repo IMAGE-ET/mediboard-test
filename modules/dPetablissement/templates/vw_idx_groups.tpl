@@ -18,7 +18,7 @@ function pageMain() {
           <th>Fonctions associées</th>
         </tr>
         {{foreach from=$listGroups item=curr_group}}
-        <tr>
+        <tr {{if $curr_group->_id == $usergroup->_id}}class="selected"{{/if}}>
           <td>
             <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$curr_group->group_id}}">
               {{$curr_group->text}}

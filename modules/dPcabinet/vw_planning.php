@@ -107,8 +107,8 @@ for($i = 0; $i < 7; $i++) {
 }
 
 // Liste des heures et minutes
-$listHours = range(8, 20);
-$listMins = range(0, 59, 15);
+$listHours = CPlageconsult::$hours;
+$listMins = CPlageconsult::$minutes;
 
 // Création du tableau de visualisation
 $arrayAffichage = array();
@@ -153,13 +153,13 @@ foreach ($plages as $keyPlages=>$valPlages){
       } 
     }
     
-    if($heure_fin>20 && $heure_deb<=20 && $min_deb<45){
-      $heure_fin = 20;
-      $min_fin   = 45;
-    }elseif($heure_deb<8 && $heure_fin>=8 && $min_fin>0){
-      $heure_deb = 8;
-      $min_deb   = 0;
-    }elseif($heure_fin>20 || $heure_deb<8){
+    if($heure_fin>CPlageConsult::$hours_stop && $heure_deb<=CPlageConsult::$hours_stop && $min_deb<end(CPlageconsult::$minutes)){
+      $heure_fin = CPlageConsult::$hours_stop;
+      $min_fin   = end(CPlageconsult::$minutes);
+    }elseif($heure_deb<CPlageconsult::$hours_start && $heure_fin>=CPlageconsult::$hours_start && $min_fin>0){
+      $heure_deb = CPlageconsult::$hours_start;
+      $min_deb   = reset(CPlageconsult::$minutes);;
+    }elseif($heure_fin>CPlageConsult::$hours_stop || $heure_deb<CPlageconsult::$hours_start){
       // Plages Hors semainier
       $outPlage = true;
     }
@@ -173,7 +173,7 @@ foreach ($plages as $keyPlages=>$valPlages){
       $arrayAffichage[$valvalPlages->date." ".$heure_deb.":".$min_deb] = $valvalPlages;
 
       // Détermination des horaire non vides
-      $heure_encours = array_search($heure_deb,$listHours) + 8;
+      $heure_encours = array_search($heure_deb,$listHours) + CPlageconsult::$hours_start;
       $min_encours   = array_search($min_deb,$listMins);    
       $dans_plage = true;
       while($dans_plage == true){      
@@ -182,7 +182,7 @@ foreach ($plages as $keyPlages=>$valPlages){
           $min_encours=0;
           $heure_encours ++;
           if(!in_array($heure_encours, $listHours)){
-            $heure_encours=8;
+            $heure_encours=CPlageconsult::$hours_start;
           }
         }        
         if($heure_encours==$heure_fin && $listMins[$min_encours]==$min_fin){

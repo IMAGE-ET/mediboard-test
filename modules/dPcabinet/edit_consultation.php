@@ -150,6 +150,10 @@ if($consult->consultation_id) {
   $urlDHEParams = array();
 }
 
+//mbTrace($urlDHE, "URL DHE");
+//mbTrace($urlDHEParams, "URL DHE Params");
+
+
 // Récupération des modèles
 $whereCommon = array();
 $whereCommon["object_id"] = "IS NULL";

@@ -23,7 +23,7 @@ switch ($mode_compat = @$dPconfig["interop"]["mode_compat"]) {
 }
 
 $marked = mbGetValueFromGetOrSession("marked", "1");
-$max = mbGetValueFromGet("max", 5);
+$max = mbGetValueFromGet("max", $dPconfig["dPsante400"]["nb_rows"]);
 
 $count = $mouvFactory->count($marked);
 $procs = 0;
