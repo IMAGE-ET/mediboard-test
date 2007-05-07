@@ -153,10 +153,12 @@ class CRecordSante400 {
     }
     
     if (strlen($time) <= 2) {
-      $time .= "00" ;
+      $time = "00" . $time;
     }
     
-    $reg = "/(\d{2})h?(\d{2})/i";
+    $time = str_pad($time, 4, "0", STR_PAD_LEFT);
+
+    $reg = "/(\d{0,2})h?(\d{2})/i";
     return preg_replace($reg, "$1:$2:00", $time);
   }
 
