@@ -104,7 +104,7 @@
         </tr>
         {{/if}}
         {{foreach from=$patientsSoundex item=curr_patient}}
-        <tr>
+        <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
           <td><input type="checkbox" name="fusion_{{$curr_patient->patient_id}}" /></td>
           <td class="text">
             <a href="{{$href}}{{$curr_patient->patient_id}}">
