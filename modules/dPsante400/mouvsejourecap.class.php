@@ -521,6 +521,8 @@ class CMouvSejourEcap extends CMouvement400 {
     $actesECap = CRecordSante400::multipleLoad($query, $queryValues);
     
     foreach ($actesECap as $acteECap) {
+      $this->trace($acteECap->data, "Acte trouvé");
+      
       $acteECap->valuePrefix = "AC";
       
       $acte = new CActeCCAM;
@@ -536,7 +538,7 @@ class CMouvSejourEcap extends CMouvement400 {
       
       // Codage
       $acte->code_acte     = $acteECap->consume("CDAC");
-      $acte->code_activite = $acteECap->consume("CACT");
+      $acte->code_activite = mbGetValue($acteECap->consume("CACT"), 1);
       $acte->code_phase    = $acteECap->consume("CPHA");
       $acte->modificateurs = $acteECap->consume("CMOD");
       $acte->montant_depassement = $acteECap->consume("MDEP");
@@ -552,10 +554,9 @@ class CMouvSejourEcap extends CMouvement400 {
       $id400acte = new CIdSante400();
       $id400acte->id400 = $CINT;
       $id400acte->tag = join($tags, " ");
-      $id400acte->bindObject($acte);
 
-      $this->trace($acteECap->data, "Acte trouvé");
       $this->trace($acte->getProps(), "Acte à sauver");
+      $id400acte->bindObject($acte);
             
       // Ajout du code dans l'opération
       if (!in_array($acte->code_acte, $operation->_codes_ccam)) {
