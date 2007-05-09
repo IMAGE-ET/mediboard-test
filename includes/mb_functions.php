@@ -292,6 +292,9 @@ function mbSubTime($relative, $ref = null) {
  * @return int: number of days
  **/
 function mbDaysRelative($from, $to) {
+  if (!$from || !$to) {
+    return null;
+  }
   $from = intval(strtotime($from) / 86400);
   $to   = intval(strtotime($to  ) / 86400);
   $days = intval($to - $from);

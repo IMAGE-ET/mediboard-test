@@ -102,6 +102,8 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->etablissement->mail           = $etab400->consume("MAIL");
     $this->etablissement->domiciliation  = $etab400->consume("FINS");
 
+    $this->trace($this->etablissement->getProps(), "Etablissement à enregistrer");
+
     $this->id400EtabECap->bindObject($this->etablissement);
 
     $id400EtabSHS = new CIdSante400();
@@ -110,7 +112,6 @@ class CMouvSejourEcap extends CMouvement400 {
     $id400EtabSHS->id400 =  $etab400->consume("CSHS");
     $id400EtabSHS->store();
     
-    $this->trace($this->etablissement->getProps(), "Etablissement synchronisé");
     $this->trace($etab400->data, "Données établissement non importées");
     
     $this->markStatus(self::STATUS_ETABLISSEMENT);
@@ -134,9 +135,10 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->fonction->text = "Import eCap";
     $this->fonction->color = "00FF00";
 
+    $this->trace($this->fonction->getProps(), "Cabinet à enregistrer");
+
     $id400Func->bindObject($this->fonction);
     
-    $this->trace($this->fonction->getProps(), "Cabinet synchronisé");
     $this->markStatus(self::STATUS_FONCTION);
   }
    
@@ -225,6 +227,8 @@ class CMouvSejourEcap extends CMouvement400 {
     $pratDefault = new CMediusers;
     $pratDefault->function_id = $this->fonction->function_id;
 
+    $this->trace($praticien->getProps(), "Praticien à enregistrer");
+    
     $id400Prat->bindObject($praticien, $pratDefault);
 
     $this->id400Prats[$CPRT] = $id400Prat;
@@ -239,7 +243,6 @@ class CMouvSejourEcap extends CMouvement400 {
       $id400PratSHS->store();
     }
     
-    $this->trace($praticien->getProps(), "Praticien importé");
     $this->markStatus(self::STATUS_PRATICIEN);
   }
 
@@ -316,9 +319,11 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->id400Pat = new CIdSante400();
     $this->id400Pat->id400 = $DMED;
     $this->id400Pat->tag = $tag;
+
+    $this->trace($this->patient->getProps(), "Patient à enregistrer");
+
     $this->id400Pat->bindObject($this->patient);
 
-    $this->trace($this->patient->getProps(), "Patient sauvegardé");
     $this->markStatus(self::STATUS_PATIENT);
   }
 
@@ -371,7 +376,13 @@ class CMouvSejourEcap extends CMouvement400 {
     // Horodatage
     $entree = $dheECap->consumeDateTime("ATDTEN", "ATHREN");
     $duree = $dheECap->consume("ATDMSJ");
-    $sortie = mbDate("+$duree days", $entree);
+    $sortie = mbDateTime("+$duree days", $entree);
+    $this->sejour->entree_prevue = $entree;
+    $this->sejour->sortie_prevue = $sortie;
+    
+    // Evite le updateFormField()
+    $this->sejour->_hour_entree_prevue = null;
+    $this->sejour->_hour_sortie_prevue = null;
     
     // Type d'hospitalisation
     $typeHospi = array (
@@ -416,6 +427,9 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->idDHECap = new CIdSante400();
     $this->idDHECap->id400 = $IDAT;
     $this->idDHECap->tag = join(" ", $tags);
+    
+    $this->trace($this->sejour->getProps(), "Séjour (via DHE) à enregistrer");
+
     $this->idDHECap->bindObject($this->sejour);
 
     // $TRPE et $EXBI à gérer
@@ -488,9 +502,10 @@ class CMouvSejourEcap extends CMouvement400 {
       $id400Oper = new CIdSante400();
       $id400Oper->id400 = $CINT;
       $id400Oper->tag = join($tags, " ");
+
+      $this->trace($operation->getProps(), "Opération à enregistrer");
+
       $id400Oper->bindObject($operation);
-      
-      $this->trace($operation->getProps(), "Opération sauvegardée");
       
       $this->id400Opers[$CINT] = $id400Oper;      
       
@@ -555,7 +570,7 @@ class CMouvSejourEcap extends CMouvement400 {
       $id400acte->id400 = $CINT;
       $id400acte->tag = join($tags, " ");
 
-      $this->trace($acte->getProps(), "Acte à sauver");
+      $this->trace($acte->getProps(), "Acte à enregistrer");
       $id400acte->bindObject($acte);
             
       // Ajout du code dans l'opération
@@ -621,9 +636,10 @@ class CMouvSejourEcap extends CMouvement400 {
         mbDateTime("+ 1 days", $this->sejour->entree_prevue); // On simule la date de sortie
     }
     
+    $this->trace($this->sejour->getProps(), "Séjour à enregistrer");
+
     $this->id400Sej->bindObject($this->sejour);
     
-    $this->trace($this->sejour->getProps(), "Séjour sauvegardé");
     $this->markStatus(self::STATUS_SEJOUR);
   }
   

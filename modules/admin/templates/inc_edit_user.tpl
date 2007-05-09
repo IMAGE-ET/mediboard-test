@@ -1,4 +1,4 @@
-<!-- $Id: inc_vw_patient.tpl 701 2006-09-01 11:23:17Z maskas $ -->
+<!-- $Id: $ -->
 
 <form name="editFrm" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 

@@ -89,13 +89,13 @@ class CModule extends CMbObject {
   }
   
   function canAdmin() {
-    $this->_canView = $this->getView(PERM_EDIT);
-    return $this->_canView;
+    $this->_canEdit = $this->getView(PERM_EDIT);
+    return $this->_canEdit;
   }
   
   function canRead() {
-    $this->_canEdit = $this->getPerm(PERM_READ);
-    return $this->_canEdit;
+    $this->_canRead = $this->getPerm(PERM_READ);
+    return $this->_canRead;
   }
   
   function canEdit() {
@@ -256,6 +256,15 @@ class CModule extends CMbObject {
     }
 
     return $module_visible;
+  }
+  
+  /**
+   * get CanDo object for given installed module, 
+   * @return CanDo with no permission if module not installed 
+   */
+  function getCanDo($moduleName) {
+    $module = CModule::getInstalled($moduleName);
+    return $module ? $module->canDo() : new CCanDo;
   }
   
   function reorder() {

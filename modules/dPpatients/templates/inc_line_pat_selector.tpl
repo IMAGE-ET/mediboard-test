@@ -1,4 +1,4 @@
-<!-- $Id: inc_vw_patient.tpl 1738 2007-03-19 16:33:47Z maskas $ -->
+<!-- $Id: $ -->
 
 <tbody class="hoverable">
 {{assign var="trClass" value=""}}

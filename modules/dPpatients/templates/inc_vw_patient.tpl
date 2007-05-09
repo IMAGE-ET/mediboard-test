@@ -259,10 +259,14 @@ function reloadAfterSaveDoc(){
   {{foreach from=$patient->_ref_sejours item=curr_sejour}}
   <tr>
     <td>
-      <a class="actionPat" title="Modifier le séjour" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
+      <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
         <img src="images/icons/planning.png" alt="Planifier"/>
       </a>
-      <a class="actionPat" href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}#adm{{$curr_sejour->sejour_id}}">
+      {{if $canAdmissions->view}}
+      <a class="actionPat" title="Accès à l'admission" href="?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}#adm{{$curr_sejour->sejour_id}}">
+      {{else}}
+      <a class="actionPat" title="Pas d'accès aux admissions">
+      {{/if}}
         Séjour du {{$curr_sejour->entree_prevue|date_format:"%d %b %Y"}} 
         au {{$curr_sejour->sortie_prevue|date_format:"%d %b %Y"}}
         {{if $curr_sejour->_nb_files_docs}}
@@ -276,9 +280,7 @@ function reloadAfterSaveDoc(){
 	</td>
     {{else}}
  	<td>
-      <a href="index.php?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}#adm{{$curr_sejour->sejour_id}}">
-        Dr. {{$curr_sejour->_ref_praticien->_view}}
-      </a>
+      Dr. {{$curr_sejour->_ref_praticien->_view}}
 	</td>
     {{/if}}
   </tr>
@@ -288,10 +290,18 @@ function reloadAfterSaveDoc(){
       <a class="actionPat" href="#" onclick="printIntervention({{$curr_op->operation_id}})">
         <img src="images/icons/print.png" alt="Imprimer" title="Imprimer l'opération"/>
       </a>
-      <a class="actionPat" href="{{$curr_op->_link_editor}}">
-        <img src="images/icons/planning.png" alt="modifier" title="modifier" />
+      {{if $canPlanningOp->view}}
+      <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">
+      {{else}}
+      <a class="actionPat" title="Modification d'intervention non autorisée">
+      {{/if}}
+        <img src="images/icons/planning.png" alt="modifier"/>
       </a>
-      <a class="actionPat" href="{{$curr_op->_link_editor}}">
+      {{if $canPlanningOp->view}}
+      <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">
+      {{else}}
+      <a class="actionPat" title="Modification d'intervention non autorisée">
+      {{/if}}
         Intervention le {{$curr_op->_datetime|date_format:"%d %b %Y"}}
         {{if $curr_op->_nb_files_docs}}
           - ({{$curr_op->_nb_files_docs}} Doc.)
@@ -304,9 +314,7 @@ function reloadAfterSaveDoc(){
 	</td>
     {{else}}
     <td>
-      <a href="{{$curr_op->_link_editor}}">
-        Dr. {{$curr_op->_ref_chir->_view}}
-      </a>
+      Dr. {{$curr_op->_ref_chir->_view}}
     </td>
     {{/if}}
   </tr>
@@ -322,18 +330,24 @@ function reloadAfterSaveDoc(){
       {{if $curr_consult->annule}}
       [ANNULE]
       {{else}}
-      <a class="actionPat" href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}">
-        <img src="images/icons/planning.png" alt="modifier" title="modifier" />
+      {{if $canCabinet->view}}
+      <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}">
+      {{else}}
+      <a class="actionPat" title="Accès la consultation non autorisé">
+      {{/if}}
+        <img src="images/icons/planning.png" alt="modifier" />
       </a>
       {{/if}}
-      <a class="actionPat" href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+      {{if $canCabinet->view}}
+      <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}">
+      {{else}}
+      <a class="actionPat" title="Accès la consultation non autorisé">
+      {{/if}}
         Le {{$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}} - {{$curr_consult->_etat}}
       </a>
     </td>
     <td>
-      <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
-        Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
-      </a>
+      Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
     </td>
   </tr>
   {{/foreach}}

@@ -78,18 +78,15 @@ if ($patient->patient_id) {
   }
 }
 
-$moduleCabinet = CModule::getInstalled("dPcabinet");
-$canCabinet    = $moduleCabinet->canDo();
-
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->debugging = false;
+$smarty->assign("canAdmissions"  , CModule::getCanDo("dPadmissions"));
+$smarty->assign("canPlanningOp"  , CModule::getCanDo("dPplanningOp"));
+$smarty->assign("canCabinet"     , CModule::getCanDo("dPcabinet"   ));
 
 $smarty->assign("patient"    , $patient   );
 $smarty->assign("listPrat"   , $listPrat  );
-$smarty->assign("canCabinet" , $canCabinet);
 
 
 $smarty->display("vw_dossier.tpl");

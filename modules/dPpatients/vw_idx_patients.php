@@ -14,9 +14,6 @@ $can->needsRead();
 $patient_id = mbGetValueFromGetOrSession("patient_id", 0);
 $new        = mbGetValueFromGet("new", 0);
 
-$moduleCabinet = CModule::getInstalled("dPcabinet");
-$canCabinet    = $moduleCabinet->canDo();
-
 $listPrat = array();
 
 // L'utilisateur est-il un chirurgien
@@ -117,6 +114,10 @@ if($whereSoundex && ($nbExact = (100 - count($patients)))) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("canAdmissions"  , CModule::getCanDo("dPadmissions"));
+$smarty->assign("canPlanningOp"  , CModule::getCanDo("dPplanningOp"));
+$smarty->assign("canCabinet"     , CModule::getCanDo("dPcabinet"   ));
+
 $smarty->assign("nom"            , $patient_nom                               );
 $smarty->assign("prenom"         , $patient_prenom                            );
 $smarty->assign("soundex"        , $soundex                                   );
@@ -130,7 +131,6 @@ $smarty->assign("patient"        , $patient                                   );
 $smarty->assign("chir"           , $chir                                      );
 $smarty->assign("anesth"         , $anesth                                    );
 $smarty->assign("listPrat"       , $listPrat                                  );
-$smarty->assign("canCabinet"     , $canCabinet                                );
 $smarty->assign("board"          , 0                                          );
 
 $smarty->display("vw_idx_patients.tpl");
