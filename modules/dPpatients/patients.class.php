@@ -108,6 +108,10 @@ class CPatient extends CMbObject {
   var $_adresse_ligne2 = null;
   var $_adresse_ligne3 = null;
   var $_pays           = null;
+  
+  // DHE Fields
+  var $_urlDHE       = null;
+  var $_urlDHEParams = null;
 
   // Object References
   var $_nb_docs              = null;
@@ -606,6 +610,33 @@ class CPatient extends CMbObject {
     $sommaire = $sommaire->getSommaire();
     foreach($sommaire as $key => $value) {
       $this->_static_cim10["sommaire"][] = new CCodeCIM10($value["code"], 1);
+    }
+  }
+  
+  function makeDHEUrl() {
+    global $dPconfig;
+    $this->_urlDHE       = "#";
+    $this->_urlDHEParams = array();
+    // Construction de l'URL
+    if(CModule::getInstalled("dPsante400") && ($dPconfig["interop"]["mode_compat"] == "medicap")) {
+	    $this->_urlDHE = $dPconfig["interop"]["base_url"];
+	    $this->_urlDHEParams["logineCap"]       = "";
+	    $this->_urlDHEParams["codeAppliExt"]    = "mediboard";
+	    $this->_urlDHEParams["patIdentLogExt"]  = $this->patient_id;
+	    $this->_urlDHEParams["patNom"]          = $this->nom;
+	    $this->_urlDHEParams["patPrenom"]       = $this->prenom;
+	    $this->_urlDHEParams["patNomJF"]        = $this->nom_jeune_fille;
+	    $this->_urlDHEParams["patSexe"]         = $this->sexe == "m" ? "1" : "2";
+	    $this->_urlDHEParams["patDateNaiss"]    = $this->_naissance;
+	    $this->_urlDHEParams["patAd1"]          = $this->adresse;
+	    $this->_urlDHEParams["patCP"]           = $this->cp;
+	    $this->_urlDHEParams["patVille"]        = $this->ville;
+	    $this->_urlDHEParams["patTel1"]         = $this->tel;
+	    $this->_urlDHEParams["patTel2"]         = $this->tel2;
+	    $this->_urlDHEParams["patTel3"]         = "";
+	    $this->_urlDHEParams["patNumSecu"]      = substr($this->matricule, 0, 13);
+	    $this->_urlDHEParams["patCleNumSecu"]   = substr($this->matricule, 13, 2);
+	    $this->_urlDHEParams["interDatePrevue"] = "";
     }
   }
 

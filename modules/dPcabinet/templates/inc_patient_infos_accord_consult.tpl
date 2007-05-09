@@ -27,7 +27,7 @@ function newConsultation(chir_id, pat_id) {
   url.redirect();
 }
 
-var urlDHEParams = {{$urlDHEParams|@json}};
+var urlDHEParams = {{$patient->_urlDHEParams|@json}};
 
 function newDHE(oForm) {
   {{if !$codePraticienEc || !$etablissements|@count}}
@@ -42,8 +42,8 @@ function newDHE(oForm) {
         url.addParam(param, urlDHEParams[param]);
       }
     }
-    Console.debug("{{$urlDHE|smarty:nodefaults}}", "Url DHE");
-    url.popDirect("900", "600", "eCap", "{{$urlDHE|smarty:nodefaults}}")
+    Console.debug("{{$patient->_urlDHE|smarty:nodefaults}}", "Url DHE");
+    url.popDirect("900", "600", "eCap", "{{$patient->_urlDHE|smarty:nodefaults}}")
   {{/if}}
 }
 

@@ -99,9 +99,7 @@ if($consult->consultation_id) {
   }
   // Affecter la date de la consultation
   $date = $consult->_ref_plageconsult->date;
-  $codePraticienEc = null;
-  $urlDHE = "#";
-  $urlDHEParams = array();
+  $patient->makeDHEUrl();
   if(CModule::getInstalled("dPsante400") && ($dPconfig["interop"]["mode_compat"] == "medicap")) {
     $tmpEtab = array();
     foreach($etablissements as $etab) {
@@ -112,46 +110,21 @@ if($consult->consultation_id) {
       }
     }
     $etablissements = $tmpEtab;
-    
-    // Construction de l'URL
-    $urlDHE = $dPconfig["interop"]["base_url"];
-    $urlDHEParams["logineCap"]       = "";
-    $urlDHEParams["codeAppliExt"]    = "mediboard";
-    $urlDHEParams["patIdentLogExt"]  = $patient->patient_id;
-    $urlDHEParams["patNom"]          = $patient->nom;
-    $urlDHEParams["patPrenom"]       = $patient->prenom;
-    $urlDHEParams["patNomJF"]        = $patient->nom_jeune_fille;
-    $urlDHEParams["patSexe"]         = $patient->sexe == "m" ? "1" : "2";
-    $urlDHEParams["patDateNaiss"]    = $patient->_naissance;
-    $urlDHEParams["patAd1"]          = $patient->adresse;
-    $urlDHEParams["patCP"]           = $patient->cp;
-    $urlDHEParams["patVille"]        = $patient->ville;
-    $urlDHEParams["patTel1"]         = $patient->tel;
-    $urlDHEParams["patTel2"]         = $patient->tel2;
-    $urlDHEParams["patTel3"]         = "";
-    $urlDHEParams["patNumSecu"]      = substr($patient->matricule, 0, 13);
-    $urlDHEParams["patCleNumSecu"]   = substr($patient->matricule, 13, 2);
-    $urlDHEParams["interDatePrevue"] = "";
 
     $idExt = new CIdSante400;
     $idExt->loadLatestFor($patient);
     $patIdentEc = $idExt->id400;
-    $urlDHEParams["patIdentEc"]      = $patIdentEc;
+    $patient->_urlDHEParams["patIdentEc"]      = $patIdentEc;
 
     $idExt = new CIdSante400;
     $idExt->loadLatestFor($userSel);
     $codePraticienEc = $idExt->id400;
-    $urlDHEParams["codePraticienEc"] = $codePraticienEc;
+    $patient->_urlDHEParams["codePraticienEc"] = $codePraticienEc;
   }
 } else {
   $consult->_ref_consult_anesth->consultation_anesth_id = 0;
   $codePraticienEc = null;
-  $urlDHE = "#";
-  $urlDHEParams = array();
 }
-
-//mbTrace($urlDHE, "URL DHE");
-//mbTrace($urlDHEParams, "URL DHE Params");
 
 
 // Récupération des modèles
@@ -213,8 +186,6 @@ $examComp->loadAides($userSel->user_id);
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("codePraticienEc", $codePraticienEc);
-$smarty->assign("urlDHE"         , $urlDHE);
-$smarty->assign("urlDHEParams"   , $urlDHEParams);
 $smarty->assign("etablissements" , $etablissements);
 $smarty->assign("date"           , $date);
 $smarty->assign("hour"           , $hour);
