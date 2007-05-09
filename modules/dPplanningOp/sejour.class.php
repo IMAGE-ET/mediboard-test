@@ -219,7 +219,6 @@ class CSejour extends CMbObject {
   }
   
   function updateDBFields() {
-    mbTrace($this->getProps(), "Sejour to store");
     if ($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
       $time_entree_prevue = mbTime(null, "$this->_hour_entree_prevue:$this->_min_entree_prevue");
       $this->entree_prevue = mbAddDateTime($time_entree_prevue, $this->_date_entree_prevue);
@@ -237,7 +236,6 @@ class CSejour extends CMbObject {
     } elseif(!$this->_at_midnight && $this->type == "comp") {
       $this->type = "ambu";
     }
-    mbTrace($this->getProps(), "Sejour stored");
   }
   
   function loadRefPatient() {
