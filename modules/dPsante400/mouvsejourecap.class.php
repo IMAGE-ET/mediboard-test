@@ -27,6 +27,9 @@ class CMouvSejourEcap extends CMouvement400 {
   protected $id400Prats = array();
   protected $id400Opers = array();
   
+  // Identifiant unique d'intervention stocké en dur dand la DHE
+  protected $dheCIDC = null;
+  
   static $cache = array();
   
   function __construct() {
@@ -347,7 +350,8 @@ class CMouvSejourEcap extends CMouvement400 {
       return;
     }
     
-    $this->trace($dheECap->data, "DHE Trouvée"); 
+    $this->trace($dheECap->data, "DHE Trouvée");
+    $this->dheCIDC = $dheECap->consume("ATCINT");
 
     $NSEJ = null;//$dheECap->consume("ATNSEJ");
     $IDAT = $dheECap->consume("ATIDAT");
@@ -441,14 +445,17 @@ class CMouvSejourEcap extends CMouvement400 {
     $query = "SELECT * " .
         "\nFROM $this->base.ECINPF " .
         "\nWHERE INCIDC = ? " .
-        "\nAND INNDOS = ? " .
-        "\nAND INDMED = ?";
+        "\nAND ((INNDOS = ? AND INDMED = ?) OR INCINT = ?)";
 
     $queryValues = array (
       $this->id400EtabECap->id400,
       $this->id400Sej->id400,
       $this->id400Pat->id400,
+      $this->dheCIDC,
     );
+    
+    mbTrace($query, "query"); 
+    mbTrace($queryValues, "values"); 
     
     // Recherche des opérations
     $opersECap = CRecordSante400::multipleLoad($query, $queryValues);
