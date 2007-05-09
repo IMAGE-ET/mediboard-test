@@ -399,7 +399,7 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
       $tabFields = array("chir_id"       => array("values"=>$praticiens->listObjects,"field"=>"_id"),
                           "salle_id"      => $salle->_id,
                           "date"          => $date,
-                          "spec_id"       => null,
+                          "spec_id"       => "",
                           "_heuredeb"     => $plage_heure["debut"],
                           "_minutedeb"    => $listMins,
                           "_heurefin"     => $plage_heure["fin"],
