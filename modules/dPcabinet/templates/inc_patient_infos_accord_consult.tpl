@@ -43,7 +43,7 @@ function newDHE(oForm) {
       }
     }
     Console.debug("{{$patient->_urlDHE|smarty:nodefaults}}", "Url DHE");
-    url.popDirect("900", "600", "eCap", "{{$patient->_urlDHE|smarty:nodefaults}}")
+    url.popDirect("900", "600", "eCap", "{{$patient->_urlDHE|smarty:nodefaults}}");
   {{/if}}
 }
 

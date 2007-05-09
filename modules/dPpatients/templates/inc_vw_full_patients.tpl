@@ -16,6 +16,26 @@ var ViewFullPatient = {
     } );
   }
 }
+
+var urlDHEParams = {{$patient->_urlDHEParams|@json}};
+
+function newDHE(oForm) {
+  {{if !$codePraticienEc || !$etablissements|@count}}
+    alert("Vous n'êtes pas autorisé à créer une DHE");
+  {{elseif !$patient->naissance || $patient->naissance == "0000-00-00"}}
+    alert("Le patient n'a pas une date de naissance valide");
+  {{else}}
+    var url = new Url;
+    url.addParam("codeClinique", oForm.etablissement.value);
+    for(param in urlDHEParams) {
+      if(param != "extends") {
+        url.addParam(param, urlDHEParams[param]);
+      }
+    }
+    Console.debug("{{$patient->_urlDHE|smarty:nodefaults}}", "Url DHE");
+    url.popDirect("900", "600", "eCap", "{{$patient->_urlDHE|smarty:nodefaults}}");
+  {{/if}}
+}
   
 </script>
   
@@ -256,11 +276,26 @@ var ViewFullPatient = {
       </a>
     </td>
     <td class="button">
+	    {{if $dPconfig.interop.mode_compat == "medicap"}}
+	    <form name="newActionDHE" action="" method="get">
+	    <button style="margin: 1px;" class="new" type="button" onclick="newDHE(this.form)">Nouvelle DHE</button>
+	    <br />
+	    <select name="etablissement">
+	      {{foreach from=$etablissements item=currEtablissement key=keyEtablissement}}
+	      <option value="{{$keyEtablissement}}" {{if $currEtablissement->group_id==$g}}selected="selected"{{/if}}>
+	        {{$currEtablissement->_view}}
+	      </option>
+	      {{/foreach}}
+	    </select>
+	    </form>
+	    {{else}}
       <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
         Intervention
       </a>
+      {{/if}}
     </td>
   </tr>
+  {{if $dPconfig.interop.mode_compat != "medicap"}}
   <tr>
     <td class="button">
       <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
@@ -273,6 +308,7 @@ var ViewFullPatient = {
       </a>
     </td>
   </tr>
+  {{/if}}
   {{/if}}
   {{if $listPrat|@count && $canCabinet->edit}}
   <tr><th class="category" colspan="2">Consultation immédiate</th></tr>
