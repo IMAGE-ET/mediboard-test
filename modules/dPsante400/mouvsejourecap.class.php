@@ -454,9 +454,6 @@ class CMouvSejourEcap extends CMouvement400 {
       $this->dheCIDC,
     );
     
-    mbTrace($query, "query"); 
-    mbTrace($queryValues, "values"); 
-    
     // Recherche des opérations
     $opersECap = CRecordSante400::multipleLoad($query, $queryValues);
     foreach ($opersECap as $operECap) {
