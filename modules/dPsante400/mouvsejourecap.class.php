@@ -272,6 +272,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->patient->prenom           = $pat400->consume("PAZPRE");
     $this->patient->nom_jeune_fille  = $pat400->consume("PAZNJF");
     $this->patient->naissance        = $pat400->consumeDate("PADNAI");
+    $this->patient->loadMatchingObject();
     
     $this->patient->sexe             = @$transformSexe[$pat400->consume("PAZSEX")];
     $this->patient->adresse          = $pat400->consumeMulti("PAZAD1", "PAZAD2");
