@@ -6,7 +6,7 @@ function addHelp(sClass, oField, sName) {
   url.addParam("class", sClass);
   url.addParam("field", sName || oField.name);
   url.addParam("text", oField.value);
-  url.popup(600, 200, "AidesSaisie");
+  url.popup(600, 300, "AidesSaisie");
 }
 
 function confirmDeletion(oForm, oOptions, oOptionsAjax) {
