@@ -190,7 +190,7 @@ class CMouvSejourEcap extends CMouvement400 {
       $prenomsPraticiens = split(" ", $prat400->consume("ZPRE"));
   
       $praticien->_user_type = 3; // Chirurgien
-      $praticien->_user_username = substr(strtolower($prenomsPraticiens[0] . $nomsPraticien[0]), 0, 20);
+      $praticien->_user_username = substr(strtolower($prenomsPraticiens[0][0] . $nomsPraticien[0]), 0, 20);
       $praticien->_user_last_name  = join(" ", $nomsPraticien);
       $praticien->_user_first_name = join(" ", $prenomsPraticiens);
       $praticien->_user_email      = $prat400->consume("MAIL");
