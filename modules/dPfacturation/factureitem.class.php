@@ -44,7 +44,6 @@ class CFactureItem extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->libelle;
-    
     $this->_ttc += $this->prix_ht * $this->taxe;
   }
 

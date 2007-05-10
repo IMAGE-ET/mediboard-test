@@ -1,5 +1,4 @@
 <?php
-$locales['menu-toggleIcons'] = 'Afficher/masquer les icônes dans le menu';
 $locales['Active Users'] = 'Utilisateurs Actifs';
 $locales['Add or Edit Permissions'] = 'Ajouter ou Editer les Permissions';
 $locales['Add User'] = 'Ajouter un Utilisateur';
@@ -53,6 +52,7 @@ $locales['Key'] = 'Clé';
 $locales['Level'] = 'Niveau';
 $locales['Login Name'] = 'Login';
 $locales['Manager'] = 'Directeur';
+$locales['menu-toggleIcons'] = 'Afficher/masquer les icônes dans le menu';
 $locales['Mobile'] = 'Portable';
 $locales['mod-admin-tab-edit_prefs'] = 'Préférences utilisateur';
 $locales['mod-dPrepas-tab-vw_planning_repas'] = 'Planning des Repas';

@@ -1,5 +1,4 @@
 <?php
-$locales['menu-toggleIcons'] = 'Toggle icons in menu';
 $locales['Active Users'] = '';
 $locales['Add or Edit Permissions'] = '';
 $locales['Add User'] = '';
@@ -53,6 +52,7 @@ $locales['Key'] = '';
 $locales['Level'] = '';
 $locales['Login Name'] = '';
 $locales['Manager'] = '';
+$locales['menu-toggleIcons'] = 'Toggle icons in menu';
 $locales['Mobile'] = '';
 $locales['mod-admin-tab-edit_prefs'] = 'User preferences';
 $locales['mod-dPrepas-tab-vw_planning_repas'] = '';

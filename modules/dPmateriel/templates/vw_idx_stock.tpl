@@ -1,6 +1,6 @@
 <table class="main">
   <tr>
-    <td class="HalfPane">
+    <td class="halfPane">
       <a class="buttonnew" href="index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id=0">
         Créer un nouveau stock
       </a>
@@ -20,7 +20,7 @@
               {{if $curr_stock->_ref_materiel->description}}<br />{{$curr_stock->_ref_materiel->description|nl2br}}{{/if}}
             </a>
           </td>
-          <td class="text">{{$curr_stock->_ref_group->text}}</td>
+          <td class="text">{{$curr_stock->_ref_group->_view}}</td>
           <td>{{$curr_stock->seuil_cmd}}</td>
           <td>
             {{if $curr_stock->_rupture}}
@@ -37,7 +37,7 @@
       </table>
         
     </td>
-    <td class="HalfPane">
+    <td class="halfPane">
       <form name="editStock" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_stock_aed" />  
 	  <input type="hidden" name="stock_id" value="{{$stock->_id}}" />

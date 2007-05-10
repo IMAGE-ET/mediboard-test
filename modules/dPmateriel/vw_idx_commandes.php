@@ -17,10 +17,20 @@ $commande_id = mbGetValueFromGetOrSession("commande_materiel_id");
 $commande = new CCommandeMateriel();
 $commande->load($commande_id);
 
-//Chargement de toutes les commandes
-$where = array();
-$listCommandes = $commande->loadList($where);
-foreach($listCommandes as &$curr_comm) {
+$order = "date DESC";
+
+//Chargement des commandes recevoir
+$where = array("recu" => "= 1");
+$listCommandesARecevoir = $commande->loadList($where,$order);
+foreach($listCommandesARecevoir as &$curr_comm) {
+  $curr_comm->loadRefsFwd();
+}
+
+//Chargement des commandes recu
+$where = array("recu" => "<> 1");
+$listCommandesRecu = $commande->loadList($where,$order);
+
+foreach($listCommandesRecu as &$curr_comm) {
   $curr_comm->loadRefsFwd();
 }
 
@@ -32,7 +42,8 @@ $listReferences = $reference->loadList();
 $smarty = new CSmartyDP();
 
 $smarty->assign("commande"      , $commande     );
-$smarty->assign("listCommandes" , $listCommandes);
+$smarty->assign("listCommandesARecevoir" , $listCommandesARecevoir);
+$smarty->assign("listCommandesRecu" , $listCommandesRecu);
 $smarty->assign("listReferences", $listReferences);
 
 $smarty->display("vw_idx_commandes.tpl");

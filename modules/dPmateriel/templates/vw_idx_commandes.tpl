@@ -22,7 +22,30 @@ function pageMain() {
           <th>Quantité</th>
           <th>Prix</th>
         </tr>
-        {{foreach from=$listCommandes item=curr_commande}}
+        {{foreach from=$listCommandesARecevoir item=curr_commande}}
+        <tr {{if $curr_commande->_id == $commande->_id}}class="selected"{{/if}}>
+          <td>
+            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_commandes&amp;commande_materiel_id={{$curr_commande->_id}}" title="Modifier la commande">
+              {{mb_value object=$curr_commande field="date"}}
+            </a>
+          </td>
+          <td>{{$curr_commande->_ref_reference->_view}}</td>
+          <td>{{mb_value object=$curr_commande field="quantite"}}</td>
+          <td>{{mb_value object=$curr_commande field="prix"}}</td>
+        </tr>
+        {{/foreach}}
+      </table>
+      <table class="tbl">
+        <tr>
+          <th class="title" colspan="5">Commandes reçu</th>
+        </tr>
+        <tr>
+          <th>Date</th>
+          <th>Reference</th>
+          <th>Quantité</th>
+          <th>Prix</th>
+        </tr>
+        {{foreach from=$listCommandesRecu item=curr_commande}}
         <tr {{if $curr_commande->_id == $commande->_id}}class="selected"{{/if}}>
           <td>
             <a href="index.php?m=dPmateriel&amp;tab=vw_idx_commandes&amp;commande_materiel_id={{$curr_commande->_id}}" title="Modifier la commande">

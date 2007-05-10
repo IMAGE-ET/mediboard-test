@@ -749,9 +749,9 @@ function getInstalledClasses($properties = array()) {
   $listClasses = getChildClasses("CMbObject", $properties);
   foreach ($listClasses as $key => $class) {
     $object = new $class;
-    if ($object->_ref_module === null) {
-      unset($listClasses[$key]);
-    }
+    //if ($object->_ref_module === null) {
+    //  unset($listClasses[$key]);
+    //}
   }
   
   return $listClasses;

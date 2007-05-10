@@ -18,27 +18,27 @@ $stock_id = mbGetValueFromGetOrSession("stock_id");
 // Récupération des données pour le stock choisi 
 $stock = new CStock;
 $stock->load($stock_id);
-if($stock_id = mbGetValueFromGet("materiel_id")){
-  $stock->materiel_id = $stock_id;
+if($materiel_id = mbGetValueFromGet("materiel_id")){
+  $stock->materiel_id = $materiel_id;
 }
 
 // Récupération de la liste des Stock
-$liststock = new CStock;
-$listStock = $liststock->loadList();
-foreach($listStock as $key => $value) {
-  $listStock[$key]->loadRefsFwd();
-  $listStock[$key]->_ref_materiel->loadRefsFwd();
+$itemStock = new CStock;
+$listStock = $itemStock->loadList();
+foreach($listStock as &$curr_stock) {
+  $curr_stock->loadRefsFwd();
+  $curr_stock->_ref_materiel->loadRefsFwd();
 }
 
 // Liste des Groupes
-$Groupes = new CGroups;
-$listGroupes = $Groupes->loadList();
+$groupe = new CGroups;
+$listGroupes = $groupe->loadList();
 
 //Liste des categories
-$Cat = new CCategory;
-$listCategory = $Cat->loadList();
-foreach($listCategory as $key => $value) {
-  $listCategory[$key]->loadRefsBack();
+$cat = new CCategory;
+$listCategory = $cat->loadList();
+foreach($listCategory as &$curr_cat) {
+  $curr_cat->loadRefsBack();
 }
 
 // Création du template
