@@ -11,32 +11,19 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$patient_id = mbGetValueFromGetOrSession("patient_id", 0);
-$new        = mbGetValueFromGet("new", 0);
-
-$listPrat = array();
+$mediuser = new CMediusers;
+$mediuser->load($AppUI->user_id);
 
 // L'utilisateur est-il un chirurgien
-$mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
-if ($mediuser->isFromType(array("Chirurgien"))) {
-  $chir = $mediuser;
-} else {
-  $chir = null;
-}
+$chir = $mediuser->isFromType(array("Chirurgien")) ? $mediuser : null;
 
 // L'utilisateur est-il un anesthésiste
-$mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
-if ($mediuser->isFromType(array("Anesthésiste"))) {
-  $anesth = $mediuser;
-} else {
-  $anesth = null;
-}
+$anesth = $mediuser->isFromType(array("Anesthésiste")) ? $mediuser : null;
 
-// Récuperation du patient sélectionné
+// Chargement du patient sélectionné
+$patient_id = mbGetValueFromGetOrSession("patient_id");
 $patient = new CPatient;
-if($new) {
+if ($new = mbGetValueFromGet("new")) {
   $patient->load(null);
   mbSetValueToSession("patient_id", null);
   mbSetValueToSession("selClass", null);
@@ -44,14 +31,6 @@ if($new) {
 } else {
   $patient->load($patient_id);
 }
-
-
-if ($patient_id && !$new) {
-  $listPrat = new CMediusers();
-  $listPrat = $listPrat->loadPraticiens(PERM_READ);
-  $patient->loadDossierComplet();
-}
-
 
 // Récuperation des patients recherchés
 $patient_nom       = mbGetValueFromGetOrSession("nom"       , ""       );
@@ -83,32 +62,27 @@ if ($patient_cp)                $where["cp"]        = $whereSoundex["cp"]       
 $patients        = array();
 $patientsSoundex = array();
 
-if (!function_exists('array_diff_key')) {
-  function array_diff_key() {
-    $argCount  = func_num_args();
-    $argValues  = func_get_args();
-    $valuesDiff = array();
-    if ($argCount < 2) return false;
-    foreach ($argValues as $argParam) {
-      if (!is_array($argParam)) return false;
-    }
-    foreach ($argValues[0] as $valueKey => $valueData) {
-      for ($i = 1; $i < $argCount; $i++) {
-        if (isset($argValues[$i][$valueKey])) continue 2;
-      }
-      $valuesDiff[$valueKey] = $valueData;
-    }
-    return $valuesDiff;
-  }
-}
-
+$order = "nom, prenom, naissance";
 $pat = new CPatient();
 if ($where && ($soundex == "off")) {
-  $patients = $pat->loadList($where, "nom, prenom, naissance", "0, 100");
+  $patients = $pat->loadList($where, $order, "0, 100");
 }
 if($whereSoundex && ($nbExact = (100 - count($patients)))) {
-  $patientsSoundex = $pat->loadList($whereSoundex, "nom, prenom, naissance", "0, $nbExact");
+  $patientsSoundex = $pat->loadList($whereSoundex, $order, "0, $nbExact");
   $patientsSoundex = array_diff_key($patientsSoundex, $patients);
+}
+
+// Sélection du premier de la liste si aucun n'est déjà sélectionné
+if (!$patient->_id and count($patients)) {
+  $patient = reset($patients);
+} 
+
+// Liste des praticiens disponibles
+$listPrat = array();
+if ($patient->_id) {
+  $listPrat = new CMediusers();
+  $listPrat = $listPrat->loadPraticiens(PERM_READ);
+  $patient->loadDossierComplet();
 }
 
 // Création du template
