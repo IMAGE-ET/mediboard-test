@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Sample catalogue file -->
+<catalogue id="ctl-1" xsi:noNamespaceSchemaLocation="catalogue.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<identitiant>Name</identitiant>
+	<libelle>String</libelle>
+	<sections>
+	  <catalogue id="ctl-11">
+				<identitiant>NAME</identitiant>
+				<libelle>String</libelle>
+				<sections />
+				<analyses />
+			</catalogue>
+	</sections>
+	<analyses>
+		<analyse id="anl-1">
+			<identifiant>Name</identifiant>
+			<libelle>String</libelle>
+			<type>
+				<numerique>
+					<unite>String</unite>
+					<min>0.0</min>
+					<max>0.0</max>
+				</numerique>
+			</type>
+			<application>
+				<debut>1967-08-13</debut>
+				<fin>1967-08-13</fin>
+			</application>
+			<applicabilite>
+				<sexe>Name</sexe>
+				<ageMinimum>2</ageMinimum>
+				<ageMaximum>2</ageMaximum>
+			</applicabilite>
+			<prelevement>
+				<type>homme</type>
+				<methode>String</methode>
+				<quantite>0.0</quantite>
+				<unite>String</unite>
+			</prelevement>
+			<conservation>
+				<duree>P1Y2M3DT10H30M0S</duree>
+				<methode>String</methode>
+			</conservation>
+			<execution>
+				<duree>P1Y2M3DT10H30M0S</duree>
+				<joursSemaine>
+					<lundi>true</lundi>
+					<mardi>true</mardi>
+					<mercredi>true</mercredi>
+					<jeudi>true</jeudi>
+					<vendredi>true</vendredi>
+					<samedi>true</samedi>
+					<dimanche>true</dimanche>
+				</joursSemaine>
+			</execution>
+			<technique>String</technique>
+			<materiel>String</materiel>
+			<remarques>String</remarques>
+		</analyse>
+	</analyses>
+</catalogue>

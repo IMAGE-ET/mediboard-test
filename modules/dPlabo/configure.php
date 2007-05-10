@@ -7,7 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $can, $m;
+global $can;
 
 $can->needsAdmin();
 

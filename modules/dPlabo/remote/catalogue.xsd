@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 sp2 (http://www.altova.com) by Tom Desp (openXtrem) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="catalogue" type="typeCatalogue">
+		<xs:annotation>
+			<xs:documentation>Catalogue racine</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="typeCatalogue">
+		<xs:annotation>
+			<xs:documentation>Structure récursive de catalogues et analyses</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="identitiant" type="xs:Name"/>
+			<xs:element name="libelle" type="xs:string"/>
+			<xs:element name="sections">
+				<xs:complexType>
+					<xs:sequence minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="catalogue" type="typeCatalogue"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="analyses">
+				<xs:complexType>
+					<xs:sequence minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="analyse" type="typeAnalyse"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="typeAnalyse">
+		<xs:annotation>
+			<xs:documentation>Contenu d'une analyse</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="identifiant" type="xs:Name"/>
+			<xs:element name="libelle" type="xs:string"/>
+			<xs:element name="type">
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="numerique">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="unite" type="xs:string"/>
+									<xs:element name="min" type="xs:decimal"/>
+									<xs:element name="max" type="xs:decimal"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="ouiNon"/>
+						<xs:element name="texteLibre"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="application">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="debut" type="xs:date" minOccurs="0"/>
+						<xs:element name="fin" type="xs:date" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="applicabilite">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="sexe" type="xs:Name"/>
+						<xs:element name="ageMinimum" type="xs:positiveInteger" minOccurs="0"/>
+						<xs:element name="ageMaximum" type="xs:positiveInteger" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="prelevement">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="type" type="typePrelevement"/>
+						<xs:element name="methode" type="xs:string"/>
+						<xs:element name="quantite" type="xs:decimal"/>
+						<xs:element name="unite" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="conservation">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="duree" type="xs:duration"/>
+						<xs:element name="methode" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="execution">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="duree" type="xs:duration"/>
+						<xs:element name="joursSemaine">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="lundi" type="xs:boolean"/>
+									<xs:element name="mardi" type="xs:boolean"/>
+									<xs:element name="mercredi" type="xs:boolean"/>
+									<xs:element name="jeudi" type="xs:boolean"/>
+									<xs:element name="vendredi" type="xs:boolean"/>
+									<xs:element name="samedi" type="xs:boolean"/>
+									<xs:element name="dimanche" type="xs:boolean"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="technique" type="xs:string"/>
+			<xs:element name="materiel" type="xs:string"/>
+			<xs:element name="remarques" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:ID"/>
+	</xs:complexType>
+	<xs:simpleType name="typeSexe">
+		<xs:annotation>
+			<xs:documentation>Homme, Femme ou Unisexe</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="homme"/>
+			<xs:enumeration value="femme"/>
+			<xs:enumeration value="unisexe"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="typePrelevement">
+		<xs:annotation>
+			<xs:documentation>Biopsie, Sang ou Urine</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="homme"/>
+			<xs:enumeration value="femme"/>
+			<xs:enumeration value="unisexe"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

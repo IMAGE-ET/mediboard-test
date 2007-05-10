@@ -505,21 +505,6 @@ class CAppUI {
 /**
 * Login function
 *
-* A number of things are done in this method to prevent illegal entry:
-* <ul>
-* <li>The username and password are trimmed and escaped to prevent malicious
-*     SQL being executed
-* <li>The username and encrypted password are selected from the database but
-*     the comparision is not made by the database, for example
-*     <code>...WHERE user_username = '$username' AND password=MD5('$password')...</code>
-*     to further prevent the injection of malicious SQL
-* </ul>
-* The schema previously used the MySQL PASSWORD function for encryption.  This
-* is not the recommended technique so a procedure was introduced to first check
-* for a match using the PASSWORD function.  If this is successful, then the
-* is upgraded to the MD5 encyption format.  This check can be controlled by the
-* <code>check_legacy_password</code> configuration variable in </code>config.php</code>
-*
 * Upon a successful username and password match, several fields from the user
 * table are loaded in this object for convenient reference.  The style, localces
 * and preferences are also loaded at this time.

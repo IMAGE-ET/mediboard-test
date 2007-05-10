@@ -141,44 +141,8 @@ $dPconfig["dPinterop"]["hprim_export"] = array (
  * Configuration settings to be removed with dotProject legacy purge
  */
 
-// Check for legacy password (prior to dP 1.0 alpha)
-$dPconfig["check_legacy_password"] = false;
-
 // Set this value to true to use persistent database connections
 $dPconfig["dbpersist"] = false;
-
-/********* 
- * Legacy dotProject inactive configuration settings
- */
-
-// Enable if you want to be able to see other users"s tasks
-$dPconfig["show_all_tasks"] = false;
-
-// Enable if you want to support gantt charts
-$dPconfig["enable_gantt_charts"] = true;
-
-// Sets the locale for the jpGraph library.  Leave blank if you experience problems
-$dPconfig["jpLocale"] = "";
-
-// Enable if you want to log changes using the history module
-$dPconfig["log_changes"] = false;
-
-// Enable if you want to check task"s start and end dates are non empty
-$dPconfig["check_tasks_dates"] = true;
-
-// The number of "working" hours in a day
-$dPconfig["daily_working_hours"] = 8.0;
-
-// Set to true if you need to be able to relink tickets to
-// an arbitrary parent.  Useful for email-generated tickets,
-// but the interface is a bit clunky.
-$dPconfig["link_tickets_kludge"] = false;
-
-// Calendar settings.
-$dPconfig["cal_day_start"]     = 8;           // Start hour, in 24 hour format
-$dPconfig["cal_day_end"]       = 17;          // End hour in 24 hour format
-$dPconfig["cal_day_increment"] = 15;          // Increment, in minutes
-$dPconfig["cal_working_days"]  = "1,2,3,4,5"; // days of week that the company works 0=Sunday
 
 // Compatibility mode
 $dPconfig["interop"]["mode_compat"] = "default";
@@ -225,4 +189,10 @@ $dPconfig["dPsante400"] = array (
   "group_id" => "",
 );
 
+$dPconfig["dPlabo"] = array (
+  "CCatalogueLabo" => array (
+    "remote_name" => "",
+    "remote_url" => "",
+  ),
+);
 ?>

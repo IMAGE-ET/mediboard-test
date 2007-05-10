@@ -121,14 +121,7 @@ class CDate extends Date {
 	}
 	
 	function isWorkingDay(){
-		global $AppUI;
-		
-		$working_days = $AppUI->getConfig("cal_working_days");
-		if(is_null($working_days)){
-			$working_days = array("1","2","3","4","5");
-		} else {
-			$working_days = explode(",", $working_days);
-		}
+		$working_days = array("1","2","3","4","5");
 		
 		return in_array($this->getDayOfWeek(), $working_days);
 	}
