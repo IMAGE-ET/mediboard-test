@@ -43,11 +43,13 @@ class CFacture extends CMbObject {
   }
   
   function loadRefsBack(){
-    $this->_ref_items = new CFactureItem;
-    $where = array();
-    $where["facture_id"] = "= '$this->facture_id'";
-    $this->_ref_items = $this->_ref_items->loadList($where);
-  
+	$item =  new CFactureItem;
+	$item->facture_id = $this->_id;
+	$this->_ref_items = $item->loadMatchingList();
+	$this->_total = 0;
+	foreach($this->_ref_items as $_item) {
+		$this->_total += $_item->_ttc; 
+	}
   } 
   
   function loadRefsFwd(){ 

@@ -21,7 +21,7 @@
             </a>
           </td>
           <td>{{$curr_facture->_ref_items|@count}}</td>
-          <td>{{$curr_facture->_total}}</td>
+           <td>{{mb_value object=$curr_facture field="_total"}}</td>
         </tr>
         {{/foreach}}
       </table>
