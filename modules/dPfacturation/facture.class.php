@@ -47,8 +47,7 @@ class CFacture extends CMbObject {
     $where = array();
     $where["facture_id"] = "= '$this->facture_id'";
     $this->_ref_items = $this->_ref_items->loadList($where);
-    
-    foreach
+  
   } 
   
   function loadRefsFwd(){ 
