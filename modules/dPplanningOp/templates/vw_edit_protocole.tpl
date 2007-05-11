@@ -214,7 +214,7 @@ function pageMain() {
           </th>
           <td>
             <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" />
-            <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)"></button>
+            <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
             
           </td>
           <td class="button"><button class="search" type="button" onclick="popCode('ccam')">Choisir un code</button></td>

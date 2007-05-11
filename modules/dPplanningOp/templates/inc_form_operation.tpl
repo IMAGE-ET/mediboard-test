@@ -59,7 +59,7 @@
     </th>
     <td>
       <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" onblur="oCcamField.add(this.form._codeCCAM.value,true)" />
-      <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)"></button>
+      <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
     </td>
     <td class="button">
       <button type="button" class="search" onclick="popCode('ccam')">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>

@@ -19,8 +19,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("listHours"    , $listHours);
 $smarty->assign("listInterval" , $listInterval);
-$smarty->assign("configOper"   , $dPconfig["dPcabinets"]["plages"]);
-$smarty->assign("configSejour" , $dPconfig["dPplanningOp"]["sejour"]);
 
 $smarty->display("configure.tpl");
 ?>

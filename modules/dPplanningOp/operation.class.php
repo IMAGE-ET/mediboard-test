@@ -7,9 +7,6 @@
 * @author Romain Ollivier
 */
 
-// @todo: Put the following in $config_dist;
-global $dPconfig;
-
 class COperation extends CMbObject {
   // DB Table key
   var $operation_id = null;

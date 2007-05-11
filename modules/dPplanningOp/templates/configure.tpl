@@ -1,107 +1,177 @@
-<form name="editConfigdPplanningOp" action="./index.php?m={{$m}}&amp;a=configure" method="post" onSubmit="return checkForm(this)">
+<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+
 <input type="hidden" name="dosql" value="do_configure" />
 <input type="hidden" name="m" value="system" />
+
 <table class="form">
+
+  {{assign var="class" value="COperation"}}
   <tr>
-    <th class="category" colspan="6">{{tr}}COperation{{/tr}}</th>
+    <th class="category" colspan="6">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
   <tr>
+
+    {{assign var="var" value="duree_deb"}}
     <th>
-      <label for="dPplanningOp[operation][duree_deb]" title="{{tr}}config-dPplanningOp-COperation-duree_deb{{/tr}}">{{tr}}config-dPplanningOp-COperation-duree_deb{{/tr}}</label>  
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <select class="num" name="dPplanningOp[operation][duree_deb]">
-      {{foreach from=$listHours item=currHours}}
-        <option value="{{$currHours}}"{{if $currHours==$configOper.duree_deb}}selected="selected"{{/if}}>{{$currHours}}</option>
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listHours item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_hour}}
+        </option>
       {{/foreach}}
       </select>
     </td>
+
+    {{assign var="var" value="hour_urgence_deb"}}
     <th>
-      <label for="dPplanningOp[operation][hour_urgence_deb]" title="{{tr}}config-dPplanningOp-COperation-hour_urgence_deb{{/tr}}">{{tr}}config-dPplanningOp-COperation-hour_urgence_deb{{/tr}}</label>  
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <select class="num" name="dPplanningOp[operation][hour_urgence_deb]">
-      {{foreach from=$listHours item=currHours}}
-        <option value="{{$currHours}}"{{if $currHours==$configOper.hour_urgence_deb}}selected="selected"{{/if}}>{{$currHours}}</option>
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listHours item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_hour}}
+        </option>
       {{/foreach}}
       </select>
     </td>
+
+    {{assign var="var" value="min_intervalle"}}
     <th>
-      <label for="dPplanningOp[operation][min_intervalle]" title="{{tr}}config-dPplanningOp-COperation-min_intervalle{{/tr}}">{{tr}}config-dPplanningOp-COperation-min_intervalle{{/tr}}</label>  
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <select class="num" name="dPplanningOp[operation][min_intervalle]">
-      {{foreach from=$listInterval item=currInterval}}
-        <option value="{{$currInterval}}"{{if $currInterval==$configOper.min_intervalle}}selected="selected"{{/if}}>{{$currInterval}}</option>
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listInterval item=_interval}}
+        <option value="{{$_interval}}"{{if $_interval == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_interval}}
+        </option>
       {{/foreach}}
       </select>
     </td>
+
   </tr>
-  
   <tr>
+
+    {{assign var="var" value="duree_fin"}}
     <th>
-      <label for="dPplanningOp[operation][duree_fin]" title="{{tr}}config-dPplanningOp-COperation-duree_fin{{/tr}}">{{tr}}config-dPplanningOp-COperation-duree_fin{{/tr}}</label>  
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <select class="num moreEquals|dPplanningOp[operation][duree_deb]" name="dPplanningOp[operation][duree_fin]">
-      {{foreach from=$listHours item=currHours}}
-        <option value="{{$currHours}}"{{if $currHours==$configOper.duree_fin}}selected="selected"{{/if}}>{{$currHours}}</option>
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listHours item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_hour}}
+        </option>
       {{/foreach}}
       </select>
     </td>
+
+    {{assign var="var" value="hour_urgence_fin"}}
     <th>
-      <label for="dPplanningOp[operation][hour_urgence_fin]" title="{{tr}}config-dPplanningOp-COperation-hour_urgence_fin{{/tr}}">{{tr}}config-dPplanningOp-COperation-hour_urgence_fin{{/tr}}</label>  
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <select class="num moreEquals|dPplanningOp[operation][hour_urgence_deb]" name="dPplanningOp[operation][hour_urgence_fin]">
-      {{foreach from=$listHours item=currHours}}
-        <option value="{{$currHours}}"{{if $currHours==$configOper.hour_urgence_fin}}selected="selected"{{/if}}>{{$currHours}}</option>
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listHours item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_hour}}
+        </option>
       {{/foreach}}
       </select>
     </td>
-    <td colspan="2"></td>
+    
+    <td colspan="2" />
+  </tr>
+
+  {{assign var="class" value="CSejour"}}
+  <tr>
+    <th class="category" colspan="6">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
 
   <tr>
-    <th class="category" colspan="6">{{tr}}CSejour{{/tr}}</th>
-  </tr>
-  
-  <tr>
+    {{assign var="var" value="heure_deb"}}
     <th>
-      <label for="dPplanningOp[sejour][heure_deb]" title="{{tr}}config-dPplanningOp-CSejour-heure_deb{{/tr}}">{{tr}}config-dPplanningOp-CSejour-heure_deb{{/tr}}</label>  
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <select class="num" name="dPplanningOp[sejour][heure_deb]">
-      {{foreach from=$listHours item=currHours}}
-        <option value="{{$currHours}}"{{if $currHours==$configSejour.heure_deb}}selected="selected"{{/if}}>{{$currHours}}</option>
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listHours item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_hour}}
+        </option>
       {{/foreach}}
       </select>
     </td>
+
+    {{assign var="var" value="heure_fin"}}
     <th>
-      <label for="dPplanningOp[sejour][heure_fin]" title="{{tr}}config-dPplanningOp-CSejour-heure_fin{{/tr}}">{{tr}}config-dPplanningOp-CSejour-heure_fin{{/tr}}</label>  
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <select class="num moreEquals|dPplanningOp[sejour][heure_deb]" name="dPplanningOp[sejour][heure_fin]">
-      {{foreach from=$listHours item=currHours}}
-        <option value="{{$currHours}}"{{if $currHours==$configSejour.heure_fin}}selected="selected"{{/if}}>{{$currHours}}</option>
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listHours item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_hour}}
+        </option>
       {{/foreach}}
       </select>
     </td>
+
+    {{assign var="var" value="min_intervalle"}}
     <th>
-      <label for="dPplanningOp[sejour][min_intervalle]" title="{{tr}}config-dPplanningOp-CSejour-min_intervalle{{/tr}}">{{tr}}config-dPplanningOp-CSejour-min_intervalle{{/tr}}</label>  
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <select class="num" name="dPplanningOp[sejour][min_intervalle]">
-      {{foreach from=$listInterval item=currInterval}}
-        <option value="{{$currInterval}}"{{if $currInterval==$configSejour.min_intervalle}}selected="selected"{{/if}}>{{$currInterval}}</option>
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listInterval item=_interval}}
+        <option value="{{$_interval}}"{{if $_interval == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_interval}}
+        </option>
       {{/foreach}}
       </select>
     </td>
   </tr>  
     
   <tr>
-    <td class="button" colspan="6">
+    <th class="category" colspan="6">DHE e-Cap</th>
+  </tr>
+
+  {{assign var="mod" value="interop"}}
+  {{assign var="var" value="base_url"}}
+  <tr>
+    <th colspan="3">
+      <label for="{{$mod}}[{{$var}}]" title="{{tr}}config-{{$mod}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$mod}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td colspan="3">
+      <input class="str" size="60" name="{{$mod}}[{{$var}}]" value="{{$dPconfig.$mod.$var}}" />
+    </td>
+  </tr>  
+    
+  <tr>
+    <td class="button" colspan="0">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
     </td>
   </tr>

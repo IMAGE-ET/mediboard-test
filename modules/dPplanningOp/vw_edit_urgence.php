@@ -117,27 +117,14 @@ if($chir->user_id) {
   $listPack = $listPack->loadlist($where, $order);
 }
 
-$sejourConfig =& $dPconfig["dPplanningOp"]["sejour"];
-for ($i = $sejourConfig["heure_deb"]; $i <= $sejourConfig["heure_fin"]; $i++) {
-    $hours[] = $i;
-}
+$config =& $dPconfig["dPplanningOp"]["CSejour"];
+$hours = range($config["heure_deb"], $config["heure_fin"]);
+$mins = range(0, 59, $config["min_intervalle"]);
 
-for ($i = 0; $i < 60; $i += $sejourConfig["min_intervalle"]) {
-    $mins[] = $i;
-}
-
-$operationConfig =& $dPconfig["dPplanningOp"]["operation"];
-for ($i = $operationConfig["duree_deb"]; $i <= $operationConfig["duree_fin"]; $i++) {
-    $hours_duree[] = $i;
-}
-
-for ($i = $operationConfig["hour_urgence_deb"]; $i <= $operationConfig["hour_urgence_fin"]; $i++) {
-    $hours_urgence[] = $i;
-}
-
-for ($i = 0; $i < 60; $i += $operationConfig["min_intervalle"]) {
-    $mins_duree[] = $i;
-}
+$config =& $dPconfig["dPplanningOp"]["COperation"];
+$hours_duree = range($config["duree_deb"], $config["duree_fin"]);
+$hours_urgence = range($config["hour_urgence_deb"], $config["hour_urgence_fin"]);
+$mins_duree = range(0, 59, $config["min_intervalle"]);
 
 // Création du template
 $smarty = new CSmartyDP();

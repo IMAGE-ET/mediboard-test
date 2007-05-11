@@ -24,8 +24,6 @@ var Action = {
 <input type="hidden" name="m" value="system" />
 <input type="hidden" name="dosql" value="do_configure" />
 
-{{assign var="module" value="dPlabo"}}
-
 <table class="form">  
   {{assign var="class" value="CCatalogueLabo"}}
     
@@ -36,24 +34,24 @@ var Action = {
   {{assign var="var" value="remote_name"}}
   <tr>
     <th>
-      <label for="{{$module}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$module}}-{{$class}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$module}}-{{$class}}-{{$var}}{{/tr}}
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
       </label>  
     </th>
     <td>
-      <input class="str maxLength|8" name="{{$module}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$module.$class.$var}}" />
+      <input class="str maxLength|8" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>
   </tr>  
     
   {{assign var="var" value="remote_url"}}
   <tr>
     <th>
-      <label for="{{$module}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$module}}-{{$class}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$module}}-{{$class}}-{{$var}}{{/tr}}
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
       </label>  
     </th>
     <td>
-      <input class="str" name="{{$module}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$module.$class.$var}}" />
+      <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>
   </tr>  
     
