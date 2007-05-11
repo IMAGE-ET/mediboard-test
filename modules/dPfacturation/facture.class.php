@@ -17,8 +17,9 @@ class CFacture extends CMbObject {
   // DB Fields
   var $date        = null;
   var $sejour_id = null;
+  var $prix = null;
   
-   // Form fields
+   // Distan fields
    var $_total = null;
    
   // Object References
@@ -33,6 +34,7 @@ class CFacture extends CMbObject {
   function getSpecs() {
     return array (
       "date"         => "notNull date",
+      "prix"		 => "notNull float",
       "sejour_id"    => "notNull ref class|CSejour"
     );
   }
@@ -48,7 +50,8 @@ class CFacture extends CMbObject {
 	$this->_ref_items = $item->loadMatchingList();
 	$this->_total = 0;
 	foreach($this->_ref_items as $_item) {
-		$this->_total += $_item->_ttc; 
+		$this->_total += $_item->_ttc;
+		$this->prix =  $this->_total;
 	}
   } 
   

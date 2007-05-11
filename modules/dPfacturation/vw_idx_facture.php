@@ -25,6 +25,8 @@ foreach($listFacture as &$curr_facture) {
   $curr_facture->loadRefs();
 }
 
+mbTrace($facture->_ref_items,"Mes items");
+
 // Création du template
 $smarty = new CSmartyDP();
 

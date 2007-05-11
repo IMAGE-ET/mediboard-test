@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPfacturation";
-$config["mod_version"]     = "0.10";
+$config["mod_version"]     = "0.11";
 $config["mod_type"]        = "user";
 
 class CSetupdPfacturation extends CSetup {
@@ -38,7 +38,13 @@ class CSetupdPfacturation extends CSetup {
  				`taxe` FLOAT NOT NULL, 
 			PRIMARY KEY (`facture_item_id`)) TYPE=MYISAM;";
      $this->addQuery($sql);   
-    $this->mod_version = "0.10";
+     
+     $this->makeRevision("0.10");
+    
+     $sql = "ALTER TABLE `facture` ADD `prix` FLOAT NOT NULL";
+     $this->addQuery($sql);
+  
+     $this->mod_version = "0.11";
   }
 }
 ?>
