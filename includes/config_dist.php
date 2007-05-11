@@ -170,13 +170,13 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
 );
 
 $dPconfig["dPcabinet"]["addictions"] = 0;
-$dPconfig["dPcabinet"]["CPlageConsult"] = array (
+$dPconfig["dPcabinet"]["CPlageconsult"] = array (
   "hours_start"      => "8",
   "hours_stop"       => "20",
   "minutes_interval" => "15"
 );
 
-$dPconfig["dPImeds"]["url"] = "http://10.100.0.67/listedossiers.aspx";
+$dPconfig["dPImeds"]["url"] = "http://localhost/listedossiers.aspx";
 
 $dPconfig["dPfiles"]["nb_upload_files"] = "1";
 

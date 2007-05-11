@@ -121,11 +121,11 @@ function pageMain() {
 </script>
 
 <h2>Import de la base données de l'ordre des médecin</h2>
-<button id="start_process" onclick="startProcess()">
+<button class="tick" id="start_process" onclick="startProcess()">
   Commencer le processus
 </button>
 
-<button id="stop_process" onclick="stopProcess()">
+<button class="tick" id="stop_process" onclick="stopProcess()">
   Arrêter le processus après l'étape courante
 </button>
 
@@ -160,7 +160,7 @@ function pageMain() {
   
 <tr>
   <td>
-    <button onclick="startINSEE()">
+    <button class="tick" onclick="startINSEE()">
       Importer les codes INSEE / ISO
     </button>
   </td>

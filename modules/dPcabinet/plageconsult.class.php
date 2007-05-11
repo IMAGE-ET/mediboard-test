@@ -247,10 +247,10 @@ class CPlageconsult extends CMbObject {
 }
 
 global $dPconfig;
-$pcConfig =& $dPconfig["dPcabinet"]["CPlageConsult"];
+$pcConfig =& $dPconfig["dPcabinet"]["CPlageconsult"];
 
-CPlageConsult::$hours_start = $pcConfig["hours_start"];
-CPlageConsult::$hours_stop  = $pcConfig["hours_stop"];
-CPlageConsult::$hours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
+CPlageconsult::$hours_start = $pcConfig["hours_start"];
+CPlageconsult::$hours_stop  = $pcConfig["hours_stop"];
+CPlageconsult::$hours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
 CPlageconsult::$minutes = range(0, 59, $pcConfig["minutes_interval"]);
 ?>

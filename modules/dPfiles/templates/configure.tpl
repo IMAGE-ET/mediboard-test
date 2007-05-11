@@ -1,18 +1,27 @@
-<form name="editConfigdPplanningOp" action="./index.php?m={{$m}}&amp;a=configure" method="post" onSubmit="return checkForm(this)">
+<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+
 <input type="hidden" name="dosql" value="do_configure" />
 <input type="hidden" name="m" value="system" />
+
 <table class="form">
+
+  <!-- CCatalogueLabo -->  
+  {{assign var="class" value="CCatalogueLabo"}}
   <tr>
-    <th class="category" colspan="6">{{tr}}CFile{{/tr}}</th>
+    <th class="category" colspan="6">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
   <tr>
+  
+    {{assign var="var" value="nb_upload_files"}}
     <th>
-      <label for="dPfiles[nb_upload_files]" title="{{tr}}config-dPfiles-nb_upload_files{{/tr}}">{{tr}}config-dPfiles-nb_upload_files{{/tr}}</label>  
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <select class="num" name="dPfiles[nb_upload_files]">
-      {{html_options options=$listNbFiles selected=$configFiles.nb_upload_files}}
+      <select class="num" name="{{$m}}[{{$var}}]">
+      {{html_options values=$listNbFiles output=$listNbFiles selected=$dPconfig.$m.$var}}
       </select>
     </td>
   </tr>  

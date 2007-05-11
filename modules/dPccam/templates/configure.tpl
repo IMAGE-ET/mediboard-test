@@ -16,7 +16,7 @@ function startCCAM() {
 </tr>
   
 <tr>
-  <td><button onclick="startCCAM()" >Importer la base de données CCAM</button></td>
+  <td><button class="tick" onclick="startCCAM()" >Importer la base de données CCAM</button></td>
   <td id="ccam"></td>
 </tr>
 

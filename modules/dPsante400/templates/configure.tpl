@@ -17,37 +17,45 @@ function purgeObjects() {
 <input type="hidden" name="m" value="system" />
 <input type="hidden" name="dosql" value="do_configure" />
 
-<table class="form">  
-  {{assign var="idTr" value="config-dPsante400"}}
-  {{assign var="idName" value="dPsante400"}}
+<table class="form">
+
   <tr>
     <th class="category" colspan="0">Connexion à la source de données</th>
   </tr>
   
+  {{assign var="var" value="dsn"}}
   <tr>
     <th>
-      <label for="{{$idName}}[dsn]" title="{{tr}}{{$idTr}}-dsn-desc{{/tr}}">{{tr}}{{$idTr}}-dsn{{/tr}}</label>  
+      <label for="{{$m}}[dsn]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <input class="str" name="{{$idName}}[dsn]" value="{{$dPconfig.dPsante400.dsn}}" />
+      <input class="str" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
     </td>
   </tr>  
     
+  {{assign var="var" value="user"}}
   <tr>
     <th>
-      <label for="{{$idName}}[user]" title="{{tr}}{{$idTr}}-user-desc{{/tr}}">{{tr}}{{$idTr}}-user{{/tr}}</label>  
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <input class="str" name="{{$idName}}[user]" value="{{$dPconfig.dPsante400.user}}" />
+      <input class="str" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
     </td>
   </tr>  
     
+  {{assign var="var" value="pass"}}
   <tr>
     <th>
-      <label for="{{$idName}}[pass]" title="{{tr}}{{$idTr}}-pass-desc{{/tr}}">{{tr}}{{$idTr}}-pass{{/tr}}</label>  
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <input class="str" name="{{$idName}}[pass]" value="{{$dPconfig.dPsante400.pass}}" />
+      <input class="str" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
     </td>
   </tr>  
     
@@ -55,33 +63,41 @@ function purgeObjects() {
     <th class="category" colspan="0">Traitement des mouvements</th>
   </tr>
 
+  {{assign var="var" value="group_id"}}
   <tr>
     <th>
-      <label for="{{$idName}}[group_id]" title="{{tr}}{{$idTr}}-group_id-desc{{/tr}}">{{tr}}{{$idTr}}-group_id{{/tr}}</label>  
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <input class="num" name="{{$idName}}[group_id]" value="{{$dPconfig.dPsante400.group_id}}" />
+      <input class="num" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
     </td>
   </tr>  
     
+  {{assign var="var" value="nb_rows"}}
   <tr>
     <th>
-      <label for="{{$idName}}[nb_rows]" title="{{tr}}{{$idTr}}-nb_rows-desc{{/tr}}">{{tr}}{{$idTr}}-nb_rows{{/tr}}</label>  
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <input class="num pos" name="{{$idName}}[nb_rows]" value="{{$dPconfig.dPsante400.nb_rows}}" />
+      <input class="num pos" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
     </td>
   </tr>  
     
+  {{assign var="var" value="mark_row"}}
   <tr>
     <th>
-      <label for="{{$idName}}[mark_row]" title="{{tr}}{{$idTr}}-mark_row-desc{{/tr}}">{{tr}}{{$idTr}}-mark_row{{/tr}}</label>  
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <select class="bool" name="{{$idName}}[mark_row]">
-        <option value="">&mdash; Choisir</option>
-        <option value="0" {{if $dPconfig.dPsante400.mark_row == 0}} selected="selected" {{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1" {{if $dPconfig.dPsante400.mark_row == 1}} selected="selected" {{/if}}>{{tr}}bool.1{{/tr}}</option>
+      <select class="bool" name="{{$m}}[{{$var}}]">
+        <option value="0" {{if $dPconfig.$m.$var == 0}} selected="selected" {{/if}}>{{tr}}bool.0{{/tr}}</option>
+        <option value="1" {{if $dPconfig.$m.$var == 1}} selected="selected" {{/if}}>{{tr}}bool.1{{/tr}}</option>
       </select>
     </td>
   </tr>  

@@ -24,7 +24,9 @@ var Action = {
 <input type="hidden" name="m" value="system" />
 <input type="hidden" name="dosql" value="do_configure" />
 
-<table class="form">  
+<table class="form">
+
+  <!-- CCatalogueLabo -->  
   {{assign var="class" value="CCatalogueLabo"}}
     
   <tr>
@@ -60,6 +62,7 @@ var Action = {
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
     </td>
   </tr>
+  
 </table>
 
 </form>

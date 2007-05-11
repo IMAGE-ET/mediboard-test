@@ -1,13 +1,23 @@
-<form name="editConfigdPplanningOp" action="./index.php?m={{$m}}&amp;a=configure" method="post" onSubmit="return checkForm(this)">
+<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+
 <input type="hidden" name="dosql" value="do_configure" />
 <input type="hidden" name="m" value="system" />
+
 <table class="form">
+
+  <tr>
+    <th class="category" colspan="0">{{tr}}{{$m}}{{/tr}}</th>
+  </tr>
+
+  {{assign var="var" value="url"}}
   <tr>
     <th>
-      <label for="dPImeds[url]" title="{{tr}}config-dPImeds-url{{/tr}}">{{tr}}config-dPImeds-url{{/tr}}</label>  
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <input type="text" name="dPImeds[url]" value="{{$configurl}}"/>
+      <input type="text" size="50" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/>
     </td>
   </tr>  
     
@@ -16,5 +26,7 @@
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
     </td>
   </tr>
+
 </table>
+
 </form>

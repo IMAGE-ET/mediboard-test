@@ -3,43 +3,60 @@
 <input type="hidden" name="m" value="system" />
 <input type="hidden" name="dosql" value="do_configure" />
 
-<table class="form">  
+<table class="form">
+
+  <!-- CPlageconsult -->  
+  {{assign var="class" value="CPlageconsult"}}
+    
   <tr>
-    <th class="category" colspan="6">{{tr}}CPlageconsult{{/tr}}</th>
+    <th class="category" colspan="0">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
-  {{assign var="pcTr" value="config-dPcabinet-CPlageconsult"}}
-  {{assign var="pcName" value="dPcabinet[CPlageConsult]"}}
   <tr>
+    {{assign var="var" value="hours_start"}}
     <th>
-      <label for="{{$pcName}}[hours_start]" title="{{tr}}{{$pcTr}}-hours_start{{/tr}}">{{tr}}{{$pcTr}}-hours_start{{/tr}}</label>  
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <select class="num" name="{{$pcName}}[hours_start]">
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
       {{foreach from=$hours item=_hour}}
-        <option value="{{$_hour}}" {{if $_hour == $pcConfig.hours_start}} selected="selected" {{/if}}>{{$_hour|string_format:"%02d"}}</option>
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>
+          {{$_hour|string_format:"%02d"}}
+        </option>
       {{/foreach}}
       </select>
     </td>
 
+    {{assign var="var" value="hours_stop"}}
     <th>
-      <label for="{{$pcName}}[hours_stop]" title="{{tr}}{{$pcTr}}-hours_stop{{/tr}}">{{tr}}{{$pcTr}}-hours_stop{{/tr}}</label>  
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <select class="num" name="{{$pcName}}[hours_stop]">
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
       {{foreach from=$hours item=_hour}}
-        <option value="{{$_hour}}" {{if $_hour == $pcConfig.hours_stop}} selected="selected" {{/if}}>{{$_hour|string_format:"%02d"}}</option>
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>
+          {{$_hour|string_format:"%02d"}}
+        </option>
       {{/foreach}}
       </select>
     </td>
 
+    {{assign var="var" value="minutes_interval"}}
     <th>
-      <label for="{{$pcName}}[minutes_interval]" title="{{tr}}{{$pcTr}}-minutes_interval{{/tr}}">{{tr}}{{$pcTr}}-minutes_interval{{/tr}}</label>  
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
     </th>
     <td>
-      <select class="num" name="{{$pcName}}[minutes_interval]">
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
       {{foreach from=$intervals item=_interval}}
-        <option value="{{$_interval}}" {{if $_interval == $pcConfig.minutes_interval}} selected="selected" {{/if}}>{{$_interval|string_format:"%02d"}}</option>
+        <option value="{{$_interval}}" {{if $_interval == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>
+          {{$_interval|string_format:"%02d"}}
+        </option>
       {{/foreach}}
       </select>
     </td>

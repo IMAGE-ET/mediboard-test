@@ -18,7 +18,7 @@ function startCIM10() {
 </tr>
   
 <tr>
-  <td><button onclick="startCIM10()">Importer la base de données CIM10</button></td>
+  <td><button class="tick" onclick="startCIM10()">Importer la base de données CIM10</button></td>
   <td id="cim10" />
 </tr>
 
