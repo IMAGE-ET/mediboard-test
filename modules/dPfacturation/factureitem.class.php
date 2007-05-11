@@ -20,12 +20,10 @@ class CFactureItem extends CMbObject {
   var $prix_ht = null;
   var $taxe = null;
   
-  
   // References
   var $_ref_facture = null;
    
   var $_ttc = null;
-  
   
   function CFactureItem() {
     $this->CMbObject("factureitem", "facture_item_id"); 

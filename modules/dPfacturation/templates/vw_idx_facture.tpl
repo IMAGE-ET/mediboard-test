@@ -1,10 +1,21 @@
 <script type="text/javascript">
 
+function popObject() {
+  var url = new Url;
+  url.setModuleAction("system", "object_selector");
+  url.addParam("selClass","CSejour");
+  url.popup(600, 300, "Object Selector");
+}
+
 function pageMain() {
   regFieldCalendar("editfacture", "date");
 }
 
-</script
+function setObject(oObject){
+	Console.debug(oObject);
+}
+
+</script>
 
 <table class="main">
   <tr>
@@ -54,11 +65,8 @@ function pageMain() {
         </tr>
         <tr>
           <th>{{mb_label object=$facture field="sejour_id"}}</th>
-          <td>{{mb_field object=$facture field="sejour_id"}}</td>
+          <td><button type="button" onclick="popObject()" class="search">Rechercher</button></td>
         </tr>
-        <tr>
-          <th>{{mb_label object=$facture field="prix"}}</th>
-          <td>{{mb_field object=$facture field="prix"}}</td>
         <tr>
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
@@ -94,13 +102,17 @@ function pageMain() {
            <td class="text">{{$curr_refFactureItem->libelle}}</td>
            <td>{{$curr_refFactureItem->prix_ht|string_format:"%.2f"}}</td>
            <td>{{$curr_refFactureItem->taxe}}</td>
-           <td></td>
+           <td>{{$curr_refFactureItem->_ttc}}</td>
          </tr>
          {{foreachelse}}
          <tr>
            <td class="button" colspan="4">Aucun élément trouvé</td>
          </tr>
          {{/foreach}}
+         <tr>
+         	<th colspan="3">TOTAL</th>
+         	<td></td>
+         </tr>       
        </table>
     </td>
   </tr>

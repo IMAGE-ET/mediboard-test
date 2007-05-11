@@ -19,9 +19,9 @@ class CFacture extends CMbObject {
   var $sejour_id = null;
   var $prix = null;
   
-   // Distan fields
-   var $_total = null;
-   
+  // Distan fields
+  var $_total = null;
+  
   // Object References
   var $_ref_sejour = null;
   var $_ref_items  = null;
@@ -51,7 +51,6 @@ class CFacture extends CMbObject {
 	$this->_total = 0;
 	foreach($this->_ref_items as $_item) {
 		$this->_total += $_item->_ttc;
-		$this->prix =  $this->_total;
 	}
   } 
   
