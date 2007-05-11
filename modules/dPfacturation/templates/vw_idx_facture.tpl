@@ -64,8 +64,11 @@ function setObject(oObject){
           <td class="date">{{mb_field object=$facture field="date" form="editfacture"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$facture field="sejour_id"}}</th>
-          <td><button type="button" onclick="popObject()" class="search">Rechercher</button></td>
+        	<td>
+          		<label title="Sejour de l'objet sélectionné">Séjour</label>
+           	 	<input type="text" size="20" readonly="readonly" ondblclick="popObject()" name="_view" value="{{$facture->_view|stripslashes}}" />
+          		<button type="button" onclick="popObject()" class="search">Rechercher</button>
+          	</td>
         </tr>
         <tr>
           <td class="button" colspan="2">
