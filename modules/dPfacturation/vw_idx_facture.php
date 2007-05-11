@@ -16,6 +16,7 @@ $facture_id = mbGetValueFromGetOrSession("facture_id");
 // Chargement de la facture demandé
 $facture = new CFacture();
 $facture->load($facture_id);
+$facture->loadRefs();
 
 
 // Récupération de la liste des factures
@@ -24,8 +25,6 @@ $listFacture = $itemFacture->loadList();
 foreach($listFacture as &$curr_facture) {
   $curr_facture->loadRefs();
 }
-
-mbTrace($facture->_ref_items,"Mes items");
 
 // Création du template
 $smarty = new CSmartyDP();
