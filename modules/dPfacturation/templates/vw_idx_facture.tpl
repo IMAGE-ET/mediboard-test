@@ -12,7 +12,9 @@ function pageMain() {
 }
 
 function setObject(oObject){
-	Console.debug(oObject);
+	var oForm = document.editfacture;
+	oForm._view.value = oObject.id;
+	oForm.sejour_id.onchange();
 }
 
 </script>
@@ -63,12 +65,11 @@ function setObject(oObject){
           <th>{{mb_label object=$facture field="date"}}</th>
           <td class="date">{{mb_field object=$facture field="date" form="editfacture"}}</td>
         </tr>
-        <tr>
-        	<td>
-          		<label title="Sejour de l'objet sélectionné">Séjour</label>
-           	 	<input type="text" size="20" readonly="readonly" ondblclick="popObject()" name="_view" value="{{$facture->_view|stripslashes}}" />
-          		<button type="button" onclick="popObject()" class="search">Rechercher</button>
-          	</td>
+        <tr>	
+          	<th>{{mb_label object=$facture field="sejour_id"}}</th>
+            <td>{{mb_field object=$facture field="sejour_id" hidden=true}}
+            <input type="text" size="30" readonly="readonly" ondblclick="popObject()" name="_view" value="{{$facture->_view|stripslashes}}" />
+          	<button type="button" onclick="popObject()" class="search">Rechercher</button></td>
         </tr>
         <tr>
           <td class="button" colspan="2">
@@ -92,7 +93,7 @@ function setObject(oObject){
          {{/if}}
          <table class="tbl">
          <tr>
-           <th class="title" colspan="4">Elements(s) correspondant(s)</th>
+           <th class="title" colspan="0">Elements(s) correspondant(s)</th>
          </tr>
          <tr>
            <th>Element</th>
