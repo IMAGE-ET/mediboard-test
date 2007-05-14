@@ -34,7 +34,7 @@ class CFacture extends CMbObject {
   function getSpecs() {
     return array (
       "date"         => "notNull date",
-      "prix"		 => "notNull float",
+      "prix"		 => "float",
       "sejour_id"    => "notNull ref class|CSejour"
     );
   }

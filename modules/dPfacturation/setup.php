@@ -35,7 +35,7 @@ class CSetupdPfacturation extends CSetup {
  				`facture_id` INT(11) UNSIGNED NOT NULL, 
  				`libelle` TEXT NOT NULL, 
  				`prix_ht` FLOAT NOT NULL, 
- 				`taxe` FLOAT NOT NULL, 
+ 				`taxe` FLOAT, 
 			PRIMARY KEY (`factureitem_id`)) TYPE=MYISAM;";
      $this->addQuery($sql);   
      

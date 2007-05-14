@@ -17,7 +17,7 @@ $facture_id = mbGetValueFromGetOrSession("facture_id");
 $facture = new CFacture();
 $facture->load($facture_id);
 $facture->loadRefs();
-
+//$facture->_ref_sejour->loadRefs();
 
 // Récupération de la liste des factures
 $itemFacture = new CFacture;

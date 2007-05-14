@@ -7,16 +7,16 @@ function popObject() {
   url.popup(600, 300, "Object Selector");
 }
 
-function pageMain() {
-  regFieldCalendar("editfacture", "date");
-}
-
 function setObject(oObject){
 	var oForm = document.editfacture;
-	oForm._view.value = oObject.id;
+	oForm.sejour_id.value = oObject.id;
+	oForm._sejour_view.value = oObject.view;	
 	oForm.sejour_id.onchange();
 }
 
+function pageMain() {
+  regFieldCalendar("editfacture", "date");
+}
 </script>
 
 <table class="main">
@@ -37,7 +37,7 @@ function setObject(oObject){
         {{foreach from=$listFacture item=curr_facture}}
         <tr {{if $curr_facture->_id == $facture->_id}}class="selected"{{/if}}>
           <td>
-           <a href="index.php?m=dPfacturation&amp;tab=vw_idx_facture&amp;facture_id={{$curr_facture->_id}}" title="Modifier la facture">
+           <a href="?m=dPfacturation&amp;tab=vw_idx_facture&amp;facture_id={{$curr_facture->_id}}" title="Modifier la facture">
               {{mb_value object=$curr_facture field="date"}}
             </a>
           </td>
@@ -68,7 +68,7 @@ function setObject(oObject){
         <tr>	
           	<th>{{mb_label object=$facture field="sejour_id"}}</th>
             <td>{{mb_field object=$facture field="sejour_id" hidden=true}}
-            <input type="text" size="30" readonly="readonly" ondblclick="popObject()" name="_view" value="{{$facture->_view|stripslashes}}" />
+            <input type="text" size="30" readonly="readonly" ondblclick="popObject()" name="_sejour_view" value="{{$facture->_ref_sejour->_view|stripslashes}}" />
           	<button type="button" onclick="popObject()" class="search">Rechercher</button></td>
         </tr>
         <tr>
@@ -101,12 +101,12 @@ function setObject(oObject){
            <th>Taxe</th>
            <th>Prix T.T.C</th>
          </tr>
-          {{foreach from=$facture->_ref_items item=curr_refFactureItem}}
+          {{foreach from=$facture->_ref_items item=_item}}
          <tr>
-           <td class="text">{{$curr_refFactureItem->libelle}}</td>
-           <td>{{$curr_refFactureItem->prix_ht|string_format:"%.2f"}}</td>
-           <td>{{$curr_refFactureItem->taxe}}</td>
-           <td>{{$curr_refFactureItem->_ttc}}</td>
+           <td class="text">{{$_item->libelle}}</td>
+           <td>{{$_item->prix_ht|string_format:"%.2f"}}</td>
+           <td>{{$_item->taxe}}</td>
+           <td>{{$_item->_ttc}}</td>
          </tr>
          {{foreachelse}}
          <tr>
@@ -115,7 +115,7 @@ function setObject(oObject){
          {{/foreach}}
          <tr>
          	<th colspan="3">TOTAL</th>
-         	<td></td>
+	        <td>{{mb_value object=$facture field="_total"}}</td>
          </tr>       
        </table>
     </td>
