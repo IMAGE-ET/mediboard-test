@@ -31,12 +31,12 @@ class CSetupdPfacturation extends CSetup {
      $this->addQuery($sql);
       
      $sql = "CREATE TABLE `factureitem` (
- 				`facture_item_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+ 				`factureitem_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
  				`facture_id` INT(11) UNSIGNED NOT NULL, 
  				`libelle` TEXT NOT NULL, 
  				`prix_ht` FLOAT NOT NULL, 
  				`taxe` FLOAT NOT NULL, 
-			PRIMARY KEY (`facture_item_id`)) TYPE=MYISAM;";
+			PRIMARY KEY (`factureitem_id`)) TYPE=MYISAM;";
      $this->addQuery($sql);   
      
      $this->makeRevision("0.10");
