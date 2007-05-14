@@ -1,6 +1,11 @@
 <table class="tbl">
 	<tr>
-	  <th class="title" colspan="0">Elements(s) correspondant(s)</th>
+	  <th class="title" colspan="0">
+      	<div style="float:left;" class="noteDiv CFacture-{{$facture->_id}}">
+    		<img alt="Ecrire une note" src="images/icons/note_grey.png" />
+ 	 	</div>
+	    Elements(s) correspondant(s)
+	  </th>
 	</tr>
 	<tr>
 	   <th>Element</th>

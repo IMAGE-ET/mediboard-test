@@ -56,9 +56,13 @@ function pageMain() {
       <table class="form">
         <tr>
           {{if $facture->_id}}
-          <th class="title modify" colspan="2">Modification de la facture {{$facture->_view}}</th>
+          <th class="title modify" colspan="2">
+     	 	Modification de la facture {{$facture->_view}}
+          </th>
           {{else}}
-          <th class="title" colspan="2">Création d'une facture</th>
+          <th class="title" colspan="2">
+      		Création d'une facture
+          </th>
           {{/if}}
         </tr>
         <tr>

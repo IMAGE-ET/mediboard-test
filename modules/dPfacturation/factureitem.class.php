@@ -39,11 +39,17 @@ class CFactureItem extends CMbObject {
       "_ttc"		=> "currency",
     );
   }
-  
+
+  function getHelpedFields() {
+    return array ( 
+      "libelle"   => null,
+    );
+  } 
+    
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->libelle;
-    $this->_ttc += $this->prix_ht * $this->taxe + $this->prix_ht;
+    $this->_ttc += $this->prix_ht * ($this->taxe/100) + $this->prix_ht;
   }
 
   function loadRefsBack(){

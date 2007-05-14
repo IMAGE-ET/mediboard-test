@@ -6,6 +6,7 @@ function main() {
   BrowserDetect.init();
   ObjectInitialisation.hackIt();
   SystemMessage.init();
+  initNotes();
   pageMain();
 }
 

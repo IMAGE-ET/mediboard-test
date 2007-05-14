@@ -762,9 +762,10 @@ div.tooltip table.decoration td.content {
   border-color: #ccc;
 }
 
-
 table.note th,
 table.note td {
+  font-style: normal;
+  color: #000000;
   background: transparent;
   text-align: left;
 }

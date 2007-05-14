@@ -4,12 +4,16 @@
 * @package Mediboard
 * @subpackage dPfacturation
 * @version $Revision: $
-* @author Alexis
+* @author Alexis / Yohann
 */
  
 global $AppUI, $can, $m;
 
 $can->needsRead();
+
+// Chargement de l'item choisi
+$libelleItem = new CFactureitem;
+$libelleItem->loadAides($AppUI->user_id);
 
 // Reception de l'id de la facture a partir de l'url
 $facture_id = mbGetValueFromGetOrSession("facture_id");
@@ -38,9 +42,9 @@ foreach($listFacture as $curr_facture) {
 // Création du template
 $smarty = new CSmartyDP();
 
-//$smarty->assign("facture_id", $facture_id);
-$smarty->assign("factureitem", $factureitem);
 $smarty->assign("facture", $facture);
+$smarty->assign("factureitem", $factureitem);
 $smarty->assign("listFacture", $listFacture);
+$smarty->assign("libelleItem", $libelleItem);
 $smarty->display("vw_idx_factureitem.tpl");
 ?>
