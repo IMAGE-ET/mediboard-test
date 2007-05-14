@@ -12,7 +12,7 @@
  */
 class CFactureItem extends CMbObject {
   // DB Table key
-  var $facture_item_id = null;
+  var $factureitem_id = null;
   
   // DB Fields
   var $facture_id = null;
@@ -26,7 +26,7 @@ class CFactureItem extends CMbObject {
   var $_ttc = null;
   
   function CFactureItem() {
-    $this->CMbObject("factureitem", "facture_item_id"); 
+    $this->CMbObject("factureitem", "factureitem_id"); 
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
 
