@@ -35,14 +35,15 @@ class CFactureItem extends CMbObject {
       "facture_id"  => "notNull ref class|CFacture",
       "libelle"     => "notNull text",
       "prix_ht"     => "notNull currency",
-      "taxe"        => "notNull pct"
+      "taxe"        => "notNull pct",
+      "_ttc"		=> "currency",
     );
   }
   
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->libelle;
-    $this->_ttc += $this->prix_ht * $this->taxe;
+    $this->_ttc += $this->prix_ht * $this->taxe + $this->prix_ht;
   }
 
   function loadRefsBack(){

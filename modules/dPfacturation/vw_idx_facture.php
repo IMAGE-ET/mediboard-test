@@ -4,24 +4,28 @@
 * @package Mediboard
 * @subpackage dPfacturation
 * @version $Revision: $
-* @author Alexis / Yohann
+* @author Yohann
 */
  
 global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$facture_id = mbGetValueFromGetOrSession("facture_id");
+$facture_id = mbGetValueFromGet("facture_id");
 
 // Chargement de la facture demandé
 $facture = new CFacture();
 $facture->load($facture_id);
-$facture->loadRefs();
-//$facture->_ref_sejour->loadRefs();
+if($facture->load($facture_id)) {
+	$facture->loadRefs();
+	$facture->_ref_sejour->loadRefPatient();
+}
+
+$order = "date DESC";
 
 // Récupération de la liste des factures
 $itemFacture = new CFacture;
-$listFacture = $itemFacture->loadList();
+$listFacture = $itemFacture->loadList(null,$order);
 foreach($listFacture as &$curr_facture) {
   $curr_facture->loadRefs();
 }

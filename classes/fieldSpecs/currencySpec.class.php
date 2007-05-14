@@ -8,19 +8,28 @@
 */
 
 require_once("./classes/fieldSpecs/floatSpec.class.php");
+require_once("./includes/config_dist.php");
 
 class CCurrencySpec extends CFloatSpec {
-  
+  //global $dPconfig;
+    
   function getSpecType() {
     return("currency");
   }
   
   function getValue($object, $smarty, $params = null) {
+  	global $dPconfig;
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    return sprintf("%.2f", $propValue);
+    return sprintf("%.2f", $propValue).$dPconfig["currency_symbol"];
   }
-
+  
+  function getFormHtmlElement($object, $params, $value, $className){
+  global $dPconfig;
+  	//parent::getFormHtmlElement($object, $params, $value, $className);
+    return parent::getFormHtmlElement($object, $params, $value, $className).$dPconfig["currency_symbol"];
+  }
+	
 }
 
 ?>

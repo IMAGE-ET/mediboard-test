@@ -3,12 +3,17 @@
     <td class="halfPane" rowspan="3">
       <form name="selFacture" action="index.php" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
-        
       <table class="form">
+      	<tr>
+      		<td>
+ 				<a class="buttonnew" href="index.php?m=dPfacturation&amp;tab=vw_idx_factureitem&amp;facture_id={{$facture->facture_id}}&amp;factureitem_id=0">
+        	Créer un nouvel élément
+      			</a>     		
+      		</td>
+      	</tr>
         <tr>
-          <th class="category" colspan="10">Sélection d'une facture</th>
+          <th class="title" colspan="0">Sélection d'une facture</th>
         </tr>
-       
         <tr>
           <th>
             <label for="facture_id" title="Sélectionner la facture pour afficher ces éléments">Facture: </label>
@@ -24,49 +29,10 @@
             </select>
           </td>
         </tr>
-        <a class="buttonnew" href="index.php?m=dPfacturation&amp;tab=vw_idx_factureitem&amp;facture_id={{$facture->facture_id}}&amp;factureitem_id=0">
-        Créer un nouvel élément
-      </a>
-         </form>
-        </table>
-      
-      
-      <table class="tbl">
-      
-     
-      <tr>
-           <th class="title" colspan="4">Eléments(s) correspondant(s)</th>
-         </tr>
-         <tr>
-           <th>Element</th>
-           <th>Prix H.T</th>
-           <th>Taxe</th>
-           <th>Prix T.T.C</th>
-         </tr>
-          {{foreach from=$facture->_ref_items item=curr_refFactureItem}}
-         <tr {{if $curr_refFactureItem->_id == $factureitem->_id}}class="selected"{{/if}}>
-           <td class="text">
-           <a href="index.php?m=dPfacturation&amp;tab=vw_idx_factureitem&amp;facture_id={{$curr_refFactureItem->facture_id}}&amp;factureitem_id={{$curr_refFactureItem->factureitem_id}}" title="Modifier l'element">
-              {{$curr_refFactureItem->libelle}}
-            </a>
-            
-            </td>
-           <td>{{$curr_refFactureItem->prix_ht|string_format:"%.2f"}}</td>
-           <td>{{$curr_refFactureItem->taxe}}</td>
-           <td></td>
-         </tr>
-         {{foreachelse}}
-         <tr>
-           <td class="button" colspan="4">Aucun élément trouvé</td>
-         </tr>
-         {{/foreach}}
-       </table>
-
+       </table> 
+      </form>
+      {{include file="list_element.tpl"}}  
     </td>
- 
- 
-    
-    
     <td class="halfPane">
       {{if $can->edit}}
       <form name="editfactureitem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">

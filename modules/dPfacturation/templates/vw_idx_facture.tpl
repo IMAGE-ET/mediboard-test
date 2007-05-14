@@ -31,7 +31,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>Date</th>
-          <th>Nombre de lignes</th>
+          <th>Nombre d'élément(s)</th>
  		  <th>Montant</th>
         </tr>
         {{foreach from=$listFacture item=curr_facture}}
@@ -67,9 +67,15 @@ function pageMain() {
         </tr>
         <tr>	
           	<th>{{mb_label object=$facture field="sejour_id"}}</th>
-            <td>{{mb_field object=$facture field="sejour_id" hidden=true}}
-            <input type="text" size="30" readonly="readonly" ondblclick="popObject()" name="_sejour_view" value="{{$facture->_ref_sejour->_view|stripslashes}}" />
-          	<button type="button" onclick="popObject()" class="search">Rechercher</button></td>
+            <td>
+            	{{mb_field object=$facture field="sejour_id" hidden=true}}
+	            {{if $facture->sejour_id}}
+    	        <input type="text" size="30" readonly="readonly" ondblclick="popObject()" name="_sejour_view" value="{{$facture->_ref_sejour->_view|stripslashes}}" />
+    	        {{else}}
+    	        <input type="text" size="30" readonly="readonly" ondblclick="popObject()" name="_sejour_view" value="" />
+    	        {{/if}}
+        	  	<button type="button" onclick="popObject()" class="search">Rechercher</button>
+        	</td>
         </tr>
         <tr>
           <td class="button" colspan="2">
@@ -89,35 +95,9 @@ function pageMain() {
          {{if $facture->_id}}
          <button class="new" type="button" onclick="window.location='index.php?m=dPfacturation&amp;tab=vw_idx_factureitem&amp;facture_item_id=0&amp;facture_id={{$facture->_id}}'">
            Créer un nouveau élément de la facture
-         </button>
+         </button>        
+         {{include file="list_element.tpl"}}
          {{/if}}
-         <table class="tbl">
-         <tr>
-           <th class="title" colspan="0">Elements(s) correspondant(s)</th>
-         </tr>
-         <tr>
-           <th>Element</th>
-           <th>Prix H.T</th>
-           <th>Taxe</th>
-           <th>Prix T.T.C</th>
-         </tr>
-          {{foreach from=$facture->_ref_items item=_item}}
-         <tr>
-           <td class="text">{{$_item->libelle}}</td>
-           <td>{{$_item->prix_ht|string_format:"%.2f"}}</td>
-           <td>{{$_item->taxe}}</td>
-           <td>{{$_item->_ttc}}</td>
-         </tr>
-         {{foreachelse}}
-         <tr>
-           <td class="button" colspan="4">Aucun élément trouvé</td>
-         </tr>
-         {{/foreach}}
-         <tr>
-         	<th colspan="3">TOTAL</th>
-	        <td>{{mb_value object=$facture field="_total"}}</td>
-         </tr>       
-       </table>
     </td>
   </tr>
  </table>

@@ -13,7 +13,7 @@ $can->needsRead();
 
 // Reception de l'id de la facture a partir de l'url
 $facture_id = mbGetValueFromGetOrSession("facture_id");
-$factureitem_id = mbGetValueFromGetOrSession("factureitem_id");
+$factureitem_id = mbGetValueFromGet("factureitem_id");
 
 
 // Chargement de la facture demandé

@@ -401,7 +401,7 @@ Object.extend(ElementChecker, {
   
   // pct
   check_pct: function() {
-    if (!this.oElement.value.match(/^(\d+)(\.\d{1,2})?$/)) {
+    if (!this.oElement.value.match(/^(\d+)(\.\d{1,4})?$/)) {
       return "N'est pas une valeur décimale (utilisez le . pour la virgule)";
     }
     return null;
