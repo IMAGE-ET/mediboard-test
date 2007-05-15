@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 // Chargement de l'item choisi
-$libelleItem = new CFactureitem;
+$libelleItem = new CFactureItem;
 $libelleItem->loadAides($AppUI->user_id);
 
 // Reception de l'id de la facture a partir de l'url
