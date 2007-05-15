@@ -417,9 +417,9 @@ Object.extend(ElementChecker, {
     return null;
   },
   
-
+//(http|https|ftp)?(www\.)?([\w*])\.[a-zA-Z]{2,3}[/]?$
   check_url: function() {
-   if (!this.oElement.value.match(/(http|https|ftp)(www\.)?([\w*])\.[a-zA-Z]{2,3}[/]?$/)) {
+   if (!this.oElement.value.match(/^(http:\/\/|https:\/\/|ftp:\/\/)?(www\.)(\w*)\.[a-zA-Z]{2,3}[/]?$/)) {
       return "Le format de l'url n'est pas valide";
     }
     return null;
