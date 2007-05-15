@@ -17,7 +17,7 @@
       </label>  
     </th>
     <td>
-      <input type="text" size="50" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/>
+      <input class="url" type="text" size="50" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/>
     </td>
   </tr>  
     
