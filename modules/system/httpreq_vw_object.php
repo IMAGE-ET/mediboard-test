@@ -20,7 +20,8 @@ $object = new $object_class;
 $object->load($object_id);
 $object->loadView();
 
-$can->read = $object->canRead();
+$canModule = CModule::getCanDo($object->_ref_module->mod_name);
+$can->read = $canModule->read && $object->canRead();
 $can->needsRead();
 
 // If no template is defined, use generic

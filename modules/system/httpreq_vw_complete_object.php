@@ -20,13 +20,9 @@ $object = new $object_class;
 $object->load($object_id);
 $object->loadComplete();
 
-$can->read = $object->canRead();
+$canModule = CModule::getCanDo($object->_ref_module->mod_name);
+$can->read = $canModule->read && $object->canRead();
 $can->needsRead();
-
-// Droit de lecture dPsante400
-$moduleSante400 = CModule::getInstalled("dPsante400");
-$canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
-
 
 // If no template is defined, use generic
 $template = is_file($object->_view_template) ?
@@ -35,7 +31,10 @@ $template = is_file($object->_view_template) ?
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
+
 $smarty->assign("object", $object);
-$smarty->assign("canSante400", $canSante400);
+
 $smarty->display("../../$object->_complete_view_template");
 ?>
