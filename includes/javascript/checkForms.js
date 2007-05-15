@@ -7,7 +7,7 @@ var ElementChecker = {
   aSpecTypes     : Array("ref", "str", "numchar", "num", 
                       "bool", "enum", "date", "time",
                       "dateTime", "float", "currency", "pct",
-                      "text", "html", "email", "code"),
+                      "text", "html", "email", "url", "code"),
   
   prepare : function(oElement){
     //Initialisation
@@ -416,6 +416,16 @@ Object.extend(ElementChecker, {
   check_html: function() {
     return null;
   },
+  
+
+  check_url: function() {
+   if (!this.oElement.value.match(/(http|https|ftp)(www\.)?([\w*])\.[a-zA-Z]{2,3}[/]?$/)) {
+      return "Le format de l'url n'est pas valide";
+    }
+    return null;
+  },
+  
+  
   
   // email
   check_email: function() {
