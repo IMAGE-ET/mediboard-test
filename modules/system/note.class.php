@@ -39,7 +39,7 @@ class CNote extends CMbObject {
   function getSpecs() {
     return array (
       "user_id"      => "notNull ref class|CMediusers",
-      "object_id"    => "notNull ref",
+      "object_id"    => "notNull ref class|CMbObject meta|object_class",
       "object_class" => "notNull str maxLength|25",
       "public"       => "notNull bool",
       "degre"        => "notNull enum list|low|high default|low",

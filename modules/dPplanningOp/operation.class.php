@@ -95,7 +95,7 @@ class COperation extends CMbObject {
   
   function getSpecs() {
     return array (
-      "sejour_id"      => "notNull ref class|",
+      "sejour_id"      => "notNull ref class|CSejour",
       "chir_id"        => "notNull ref class|CMediusers",
       "anesth_id"      => "ref class|CMediusers",
       "plageop_id"     => "ref class|CPlageOp",
