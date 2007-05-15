@@ -88,14 +88,10 @@ $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;
 
 // Heures & minutes
-$sejourConfig =& $dPconfig["dPplanningOp"]["sejour"];
-for ($i = $sejourConfig["heure_deb"]; $i <= $sejourConfig["heure_fin"]; $i++) {
-    $hours[] = $i;
-}
+$config =& $dPconfig["dPplanningOp"]["CSejour"];
+$hours = range($config["heure_deb"], $config["heure_fin"]);
+$mins = range(0, 59, $config["min_intervalle"]);
 
-for ($i = 0; $i < 60; $i += $sejourConfig["min_intervalle"]) {
-    $mins[] = $i;
-}
 // Préparation de l'alerte dans le cas d'annulation d'un sejour avec opération
 $msg_alert = "";
 if($sejour->_ref_operations){
