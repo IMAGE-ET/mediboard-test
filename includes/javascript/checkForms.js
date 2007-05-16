@@ -419,8 +419,9 @@ Object.extend(ElementChecker, {
   
 //(http|https|ftp)?(www\.)?([\w*])\.[a-zA-Z]{2,3}[/]?$
   check_url: function() {
-   if (!this.oElement.value.match(/^(http:\/\/|https:\/\/|ftp:\/\/)?(www\.)(\w*)\.[a-zA-Z]{2,3}[/]?$/)) {
-      return "Le format de l'url n'est pas valide";
+	  var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+	  if (!this.oElement.value.match(regexp)) {
+       return "Le format de l'url n'est pas valide";
     }
     return null;
   },
