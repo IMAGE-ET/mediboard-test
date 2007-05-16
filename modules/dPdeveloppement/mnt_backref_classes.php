@@ -46,16 +46,56 @@ foreach($classSelected as $selected) {
    		}
 	}
 }
-mbTrace($backRefs);
-mbTrace($backSpecs);
+
+$tab = array();
+
+foreach($backRefs as $keyBackRef => $valueBackRef) {
+	foreach ($valueBackRef as $key => $value) {
+		$tab[$keyBackRef][$value] = in_array($value,$backSpecs[$keyBackRef]) ? "ok" : "r";
+	}
+}
+
+foreach($backSpecs as $keyBackSpec => $valueBackSpec) {
+	foreach ($valueBackSpec as $key => $value) {
+		$tab[$keyBackSpec][$value] = array_key_exists($keyBackSpec,$backRefs) && in_array($value,$backRefs[$keyBackSpec]) ?"ok" : "t";
+	}
+}
+
+$aSuggestions = array();
+
+// Construction des suggestions
+foreach($tab as $keyTab => $valueTab) {
+	$suggestion = null;
+	$reference = array();
+	foreach($valueTab as $key => $value) {
+		if($value == "ok") {
+			$suggestion = "Pas de suggestion.";
+		} elseif($value == "t") {
+			$reference[] = 	$key;		
+			$suggestion = "function getBackRefs() {\n      \$backRefs = parent::getBackRefs();\n";
+			foreach($reference as $keyRef => $valueRef) {
+				$suggestion .="      \$backRefs[\"$keyRef\"] = \"$valueRef\";\n";
+			}
+			$suggestion .="     return \$backRefs;\n}";
+		} else {
+			$reference[] = 	$key;
+			$suggestion =  "La ou les référence(s) ";
+			foreach($reference as $keyRef => $valueRef) {
+				$suggestion .= "'$valueRef' ";
+			}
+			$suggestion .= " sont à enlever.";
+		}
+		$tabSuggestions[$keyTab] = "\n$suggestion";
+	}
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("selClass"  , $selClass);
 $smarty->assign("listClass" , $listClass);
-$smarty->assign("backSpecs" , $backSpecs);
-$smarty->assign("backRefs" , $backRefs);
+$smarty->assign("tabSuggestions"   , $tabSuggestions);
+$smarty->assign("tab"       , $tab);
 $smarty->display("mnt_backref_classes.tpl");
 
 ?>
