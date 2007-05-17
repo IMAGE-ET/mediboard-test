@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $ajax;
 
 $object_class = mbGetValueFromGet("object_class");
 $object_id    = mbGetValueFromGet("object_id");
@@ -18,6 +18,10 @@ if (!$object_class || !$object_id) {
 
 $object = new $object_class;
 $object->load($object_id);
+if (!$object->_id) {
+  $AppUI->redirect("?ajax=$ajax&suppressHeaders=1&m=$m&a=object_not_found&object_classname=$object_class");
+}
+
 $object->loadView();
 
 $canModule = CModule::getCanDo($object->_ref_module->mod_name);

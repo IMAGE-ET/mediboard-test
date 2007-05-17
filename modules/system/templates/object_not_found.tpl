@@ -1,7 +1,9 @@
-<div class="big-info">
+{{* $Id: $ *}}
+
+<div class="big-warning">
 L'objet
 {{if $object_classname}}
-  '{{tr}}{{$object_classname}}{{/tr}}'
+  de type '{{tr}}{{$object_classname}}{{/tr}}'
 {{/if}}
- n'a pas été trouvé.
+ n'a pas été trouvé ou a été supprimé.
 </div>

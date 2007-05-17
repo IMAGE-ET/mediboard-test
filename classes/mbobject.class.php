@@ -569,8 +569,8 @@ class CMbObject {
     
     // Properties checking
     $this->updateDBFields();
-    if($checkobject) {
-      if($msg = $this->check()) {
+    if ($checkobject) {
+      if ($msg = $this->check()) {
         return $AppUI->_(get_class($this)) . 
           $AppUI->_("::store-check failed:") .
           $AppUI->_($msg);
@@ -583,7 +583,12 @@ class CMbObject {
     if ($this->_id) {
         if (!db_loadResult($query)) {
         $this->_id = null;
-        trigger_error("Store query check failed: $query", E_USER_NOTICE);
+        
+        // Recheck for missing values when object was deleted
+        if ($msg = $this->check()) {
+          return $AppUI->_(get_class($this)) . " " .
+            $AppUI->_("::deleted not recreated");
+        }
       }
     }
     
