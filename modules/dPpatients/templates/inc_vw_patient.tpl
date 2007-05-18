@@ -345,7 +345,7 @@ function reloadAfterSaveDoc(){
       </a>
       {{/if}}
       {{if $canCabinet->view}}
-      <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}">
+      <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}&amp;chirSel={{$curr_consult->_ref_plageconsult->chir_id}}">
       {{else}}
       <a class="actionPat" title="Accès la consultation non autorisé">
       {{/if}}
