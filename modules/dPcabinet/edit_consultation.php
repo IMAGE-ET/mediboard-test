@@ -73,6 +73,7 @@ $orderanesth = "name";
 $anesth = $anesth->loadList(null,$orderanesth);
 
 // Consultation courante
+$codePraticienEc = null;
 $consult->_ref_chir =& $userSel;
 if($consult->consultation_id) {
   $consult->loadRefs();
