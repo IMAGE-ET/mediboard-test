@@ -75,6 +75,7 @@ $anesth = $anesth->loadList(null,$orderanesth);
 // Consultation courante
 $codePraticienEc = null;
 $consult->_ref_chir =& $userSel;
+$codePraticienEc = null;
 if($consult->consultation_id) {
   $consult->loadRefs();
   $consult->loadAides($userSel->user_id);
@@ -124,7 +125,6 @@ if($consult->consultation_id) {
   }
 } else {
   $consult->_ref_consult_anesth->consultation_anesth_id = 0;
-  $codePraticienEc = null;
 }
 
 

@@ -99,6 +99,8 @@ $smarty->assign("today"    , $today);
 $smarty->assign("userSel"  , $userSel);
 $smarty->assign("listPlage", $listPlage);
 $smarty->assign("consult"  , $consult);
+$smarty->assign("canCabinet"  , CModule::getCanDo("dPcabinet"));
+
 
 $smarty->display("inc_list_consult.tpl");
 

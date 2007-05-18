@@ -1,8 +1,9 @@
 {{if !$board}}
+{{if $canCabinet->view}}
 <script type="text/javascript">
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
 </script>
-
+{{/if}}
 <form name="changeView" action="index.php" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
@@ -11,17 +12,23 @@
       <td colspan="6" style="text-align: center; width: 100%; font-weight: bold;">
         <div style="float: right;">{{$hour|date_format:"%Hh%M"}}</div>
         {{$date|date_format:"%A %d %B %Y"}}
+        {{if $canCabinet->view}}
         <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+        {{/if}}
       </td>
     </tr>
     <tr>
-      <th><label for="vue2" title="Type de vue du planning">Type de vue</label></th>
+      <th>
+      {{if $canCabinet->view}}
+      <label for="vue2" title="Type de vue du planning">Type de vue</label></th>
       <td colspan="5">
         <select name="vue2" onchange="this.form.submit()">
           <option value="0"{{if $vue == "0"}}selected="selected"{{/if}}>Tout afficher</option>
           <option value="1"{{if $vue == "1"}}selected="selected"{{/if}}>Cacher les Terminées</option>
         </select>
       </td>
+      {{/if}}
+      
     </tr>
   </table>
 </form>
@@ -45,7 +52,7 @@
     <th>Heure</th>
     <th>Patient / Motif</th>
   </tr>
-{{if $listPlage}}
+{{if $listPlage|@count}}
 {{foreach from=$listPlage item=curr_plage}}
   <tr>
     <th colspan="2">{{$curr_plage->debut|date_format:"%Hh%M"}} - {{$curr_plage->fin|date_format:"%Hh%M"}}</th>
@@ -62,13 +69,21 @@
   <tr {{if $curr_consult->_id == $consult->_id}}class="selected"{{/if}}>
     <td style="width: 42px; {{if $curr_consult->_id != $consult->_id}}{{$style|smarty:nodefaults}}{{/if}}{{$font|smarty:nodefaults}}" rowspan="2">
       {{if !$boardItem}}
+      {{if $canCabinet->view}}
       <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}" title="Modifier le RDV" style="float: right;">
         <img src="images/icons/planning.png" alt="modifier" />
+      {{else}}
+      <a href="#nowhere" title="Impossible de modifier le RDV">
+      {{/if}}
       </a>
       {{/if}}
       {{if $curr_consult->patient_id}}
+      {{if $canCabinet->view}}
         <a href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}" style="margin-bottom: 4px;">
-          {{$curr_consult->heure|truncate:5:"":true}}
+      {{else}}
+       <a href="#nowhere" title="Impossible de modifier le RDV">
+      {{/if}}
+           {{$curr_consult->heure|truncate:5:"":true}}
         </a>
       {{else}}
         {{$curr_consult->heure|truncate:5:"":true}}
@@ -79,12 +94,16 @@
     </td>
     <td style="{{$style|smarty:nodefaults}}{{$font|smarty:nodefaults}}">
       {{if $curr_consult->patient_id}}
+      {{if $canCabinet->view}}
       <a href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}">
+      {{else}}
+      <a href=#nowhere title="Impossible de modifier le RDV">
+      {{/if}}
         {{$curr_consult->_ref_patient->_view|truncate:30:"...":true}}
         {{if $curr_consult->_ref_patient->_age != "??"}}
           ({{$curr_consult->_ref_patient->_age}}&nbsp;ans)
-        {{/if}}
       </a>
+      {{/if}}
       {{else}}
         [PAUSE]
       {{/if}}
@@ -93,7 +112,11 @@
   <tr {{if $curr_consult->_id == $consult->_id}}class="selected"{{/if}}>
     <td style="{{$style|smarty:nodefaults}}{{$font|smarty:nodefaults}}">
       {{if $curr_consult->patient_id}}
+      {{if $canCabinet->view}}
         <a href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}">
+      {{else}}
+      <a href="#nowhere" title="Impossible de modifier le RDV">
+      {{/if}}
           {{$curr_consult->motif|truncate:30:"...":true}}
         </a>
       {{else}}
