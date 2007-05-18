@@ -68,7 +68,12 @@ function pageMain() {
           <td style="background-color: #{{$curr_function->color}}"></td>
           {{assign var=user_id value=$curr_user->_id}}
           {{assign var="href" value="?m=$m&tab=$tab&user_id=$user_id"}}
-          <td><a href="{{$href}}">{{$curr_user->_user_username}}</a></td>
+          <td>
+            <a href="{{$href}}">
+              {{$curr_user->_user_username}}
+              {{if $curr_user->_user_last_login}}({{$curr_user->_user_last_login|date_format:"%d/%m/%Y %Hh%M"}}){{/if}}
+            </a>
+          </td>
           <td><a href="{{$href}}">{{$curr_user->_user_last_name}}</a></td>
           <td><a href="{{$href}}">{{$curr_user->_user_first_name}}</a></td>
           <td><a href="{{$href}}">{{$curr_user->_user_type}}</a></td>
