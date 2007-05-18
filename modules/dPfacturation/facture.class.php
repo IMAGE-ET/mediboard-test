@@ -30,7 +30,13 @@ class CFacture extends CMbObject {
     $this->CMbObject("facture", "facture_id"); 
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
-
+  
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CFactureItem facture_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "date"         => "notNull date",

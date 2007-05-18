@@ -83,6 +83,15 @@ class CSejour extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
 	}
   
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CAffectation sejour_id";
+      $backRefs["1"] = "CFacture sejour_id";
+      $backRefs["2"] = "CGHM sejour_id";
+      $backRefs["3"] = "COperation sejour_id";
+     return $backRefs;
+  }
+
   function getSpecs() {
     return array (
       "patient_id"         => "notNull ref class|CPatient",

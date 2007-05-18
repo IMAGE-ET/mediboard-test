@@ -97,6 +97,38 @@ class CMediusers extends CMbObject {
       );
   }
 
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CActeCCAM executant_id";
+      $backRefs["1"] = "CAideSaisie user_id";
+      $backRefs["2"] = "CCompteRendu chir_id";
+      $backRefs["3"] = "CDocGed user_id";
+      $backRefs["4"] = "CDocGedSuivi user_id";
+      $backRefs["5"] = "CExamenLabo realisateur";
+      $backRefs["6"] = "CFicheEi user_id";
+      $backRefs["7"] = "CFicheEi valid_user_id";
+      $backRefs["8"] = "CFicheEi service_valid_user_id";
+      $backRefs["9"] = "CFicheEi qualite_user_id";
+      $backRefs["10"] = "CFile file_owner";
+      $backRefs["11"] = "CListeChoix chir_id";
+      $backRefs["12"] = "CNote user_id";
+      $backRefs["13"] = "COperation chir_id";
+      $backRefs["14"] = "COperation anesth_id";
+      $backRefs["15"] = "CPack chir_id";
+      $backRefs["16"] = "CPlageOp chir_id";
+      $backRefs["17"] = "CPlageOp anesth_id";
+      $backRefs["18"] = "CPlageconsult chir_id";
+      $backRefs["19"] = "CPlageressource prat_id";
+      $backRefs["20"] = "CPrescriptionLabo praticien_id";
+      $backRefs["21"] = "CProtocole chir_id";
+      $backRefs["22"] = "CSejour praticien_id";
+      $backRefs["23"] = "CTarif chir_id";
+      $backRefs["24"] = "CTempsHospi praticien_id";
+      $backRefs["25"] = "CTempsOp chir_id";
+      $backRefs["26"] = "CTempsPrepa chir_id";
+     return $backRefs;
+  }
+   
   function createUser() {
     $user = new CUser();
     $user->user_id = $this->user_id;

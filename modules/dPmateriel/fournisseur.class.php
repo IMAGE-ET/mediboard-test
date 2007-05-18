@@ -32,7 +32,13 @@ class CFournisseur extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
-
+  
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CRefMateriel fournisseur_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "societe"    => "notNull str maxLength|50",

@@ -34,6 +34,13 @@ class CService extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
 	}
 
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CChambre service_id";
+      $backRefs["1"] = "CValidationRepas service_id";
+     return $backRefs;
+  }
+
   function getSpecs() {
     return array (
       "group_id"    => "notNull ref class|CGroups",

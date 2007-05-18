@@ -40,6 +40,12 @@ class CFile extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CDocGedSuivi file_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "file_class"         => "notNull str",

@@ -30,6 +30,15 @@ class CTypeRepas extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CMenu typerepas";
+      $backRefs["1"] = "CPlat typerepas";
+      $backRefs["2"] = "CRepas typerepas_id";
+      $backRefs["3"] = "CValidationRepas typerepas_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "nom"      => "notNull str",

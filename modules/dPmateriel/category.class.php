@@ -23,7 +23,13 @@ class CCategory extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
-
+  
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CMateriel category_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "category_name" => "notNull str maxLength|50"

@@ -29,6 +29,18 @@ class CPlat extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CRepas plat1";
+      $backRefs["1"] = "CRepas plat2";
+      $backRefs["2"] = "CRepas plat3";
+      $backRefs["3"] = "CRepas plat4";
+      $backRefs["4"] = "CRepas plat5";
+      $backRefs["5"] = "CRepas boisson";
+      $backRefs["6"] = "CRepas pain";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "nom"       => "notNull str",

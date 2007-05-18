@@ -26,7 +26,13 @@ class CRubrique extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
-
+  
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CGestionCab rubrique_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "function_id" => "notNull ref class|CFunctions",

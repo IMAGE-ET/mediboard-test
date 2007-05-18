@@ -42,8 +42,14 @@ class CAffectation extends CMbObject {
 		$this->CMbObject("affectation", "affectation_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-	}
+  }
   
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CRepas affectation_id";
+     return $backRefs;
+  } 
+ 
   function getSpecs() {
     return array (
       "lit_id"    => "notNull ref class|CLit",

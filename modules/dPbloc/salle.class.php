@@ -27,8 +27,15 @@ class CSalle extends CMbObject {
 		$this->CMbObject("sallesbloc", "salle_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-	}
-
+  }
+	
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "COperation salle_id";
+      $backRefs["1"] = "CPlageOp salle_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "group_id" => "notNull ref class|CGroups",

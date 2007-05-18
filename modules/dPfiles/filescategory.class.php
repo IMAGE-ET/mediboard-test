@@ -23,6 +23,14 @@ class CFilesCategory extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CCompteRendu file_category_id";
+      $backRefs["1"] = "CEmployeCab function_id";
+      $backRefs["2"] = "CFile file_category_id";
+     return $backRefs;
+  }
+
   function getSpecs() {
     return array (
       "nom"               => "notNull str",

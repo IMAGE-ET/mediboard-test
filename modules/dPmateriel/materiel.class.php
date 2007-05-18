@@ -27,10 +27,16 @@ class CMateriel extends CMbObject {
   
   function CMateriel() {
     $this->CMbObject("materiel", "materiel_id");
-    
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
 
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CRefMateriel materiel_id";
+      $backRefs["1"] = "CStock materiel_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "nom"         => "notNull str maxLength|50",

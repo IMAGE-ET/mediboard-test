@@ -80,7 +80,12 @@ class CDiscipline extends CMbObject {
     }
     $this->_compat =& $compat;
   }
-
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CMediusers discipline_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "text"      => "notNull str",

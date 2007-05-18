@@ -45,6 +45,12 @@ class CPlageconsult extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CConsultation plageconsult_id";
+     return $backRefs;
+  }
+
   function getSpecs() {
     return array (
       "chir_id" => "notNull ref class|CMediusers",

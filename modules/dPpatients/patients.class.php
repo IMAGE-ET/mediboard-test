@@ -133,8 +133,16 @@ class CPatient extends CMbObject {
 	function CPatient() {
 		$this->CMbObject("patients", "patient_id");    
     $this->loadRefModule(basename(dirname(__FILE__)));
-	}
-
+ 	}
+  
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CConsultation patient_id";
+      $backRefs["1"] = "CPrescriptionLabo patient_id";
+      $backRefs["2"] = "CSejour patient_id";
+     return $backRefs;
+  }
+ 
   function getSpecs() {
     return array (
       "nom"              => "notNull str confidential",

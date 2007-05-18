@@ -52,7 +52,13 @@ class CDocGed extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
-
+  
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CDocGedSuivi doc_ged_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "group_id"         => "notNull ref class|CGroups",

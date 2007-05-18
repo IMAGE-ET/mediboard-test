@@ -42,6 +42,11 @@ class CChambre extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CLit chambre_id";
+     return $backRefs;
+  }
   
   function getSpecs() {
     return array (

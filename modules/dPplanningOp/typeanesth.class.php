@@ -24,6 +24,12 @@ class CTypeAnesth extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "COperation type_anesth";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "name" => "notNull str"

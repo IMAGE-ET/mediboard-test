@@ -42,6 +42,12 @@ class CMenu extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CRepas menu_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "nom"         => "notNull str",

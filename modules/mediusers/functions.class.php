@@ -49,6 +49,21 @@ class CFunctions extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 	}
+  
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CAideSaisie function_id";
+      $backRefs["1"] = "CCompteRendu function_id";
+      $backRefs["2"] = "CGestionCab function_id";
+      $backRefs["3"] = "CListeChoix function_id";
+      $backRefs["4"] = "CMediusers function_id";
+      $backRefs["5"] = "CModePaiement function_id";
+      $backRefs["6"] = "CPackExamensLabo function_id";
+      $backRefs["7"] = "CPlageOp spec_id";
+      $backRefs["8"] = "CRubrique function_id";
+      $backRefs["9"] = "CTarif function_id";
+     return $backRefs;
+  }
 
   function getSpecs() {
     return array (

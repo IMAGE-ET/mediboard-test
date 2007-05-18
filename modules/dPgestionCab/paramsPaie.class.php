@@ -54,7 +54,13 @@ class CParamsPaie extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
-
+  
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CFichePaie params_paie_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "employecab_id" => "notNull ref class|CEmployeCab",

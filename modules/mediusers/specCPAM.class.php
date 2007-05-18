@@ -26,7 +26,13 @@ class CSpecCPAM extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
-
+  
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CMediusers spec_cpam_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "text"  => "notNull str",

@@ -47,8 +47,17 @@ class CMedecin extends CMbObject {
 		$this->CMbObject("medecin", "medecin_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-	}
-
+  }
+	
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CPatient medecin_traitant";
+      $backRefs["1"] = "CPatient medecin1";
+      $backRefs["2"] = "CPatient medecin2";
+      $backRefs["3"] = "CPatient medecin3";
+     return $backRefs;
+  }
+    
   function getSpecs() {
     return array (
       "nom"             => "notNull str confidential",

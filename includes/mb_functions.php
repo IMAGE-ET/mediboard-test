@@ -756,4 +756,19 @@ function getInstalledClasses($properties = array()) {
   
   return $listClasses;
 }
+
+function class_inherits_from($class, $ancestor) {
+	if ($class == $ancestor) {
+		return true;
+	}
+	
+	$parent = get_parent_class($class);
+	return $parent ? class_inherits_from($parent, $ancestor) : false;
+}
+
+function has_default_constructor($classname) {
+	$class = new ReflectionClass($classname);
+	$constructor = $class->getConstructor();
+	return ($constructor->getNumberOfParameters() == 0);
+}
 ?>

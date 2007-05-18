@@ -69,6 +69,16 @@ class CConsultation extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CConsultAnesth consultation_id";
+      $backRefs["1"] = "CExamAudio consultation_id";
+      $backRefs["2"] = "CExamComp consultation_id";
+      $backRefs["3"] = "CExamNyha consultation_id";
+      $backRefs["4"] = "CExamPossum consultation_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "plageconsult_id" => "notNull ref class|CPlageconsult",

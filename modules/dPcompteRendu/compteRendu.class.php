@@ -38,7 +38,13 @@ class CCompteRendu extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
-
+  
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CListeChoix compte_rendu_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "chir_id"          => "ref xor|function_id|object_id class|CMediusers",

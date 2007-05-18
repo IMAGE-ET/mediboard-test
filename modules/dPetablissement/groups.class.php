@@ -50,6 +50,20 @@ class CGroups extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CDocGed group_id";
+      $backRefs["1"] = "CFunctions group_id";
+      $backRefs["2"] = "CMenu group_id";
+      $backRefs["3"] = "CPlat group_id";
+      $backRefs["4"] = "CSalle group_id";
+      $backRefs["5"] = "CSejour group_id";
+      $backRefs["6"] = "CService group_id";
+      $backRefs["7"] = "CStock group_id";
+      $backRefs["8"] = "CTypeRepas group_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "text"           => "notNull str confidential",

@@ -22,7 +22,13 @@ class CThemeDoc extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
-
+  
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CDocGed doc_theme_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "nom" => "notNull str maxLength|50"

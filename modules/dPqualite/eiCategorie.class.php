@@ -26,6 +26,12 @@ class CEiCategorie extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
 
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CEiItem ei_categorie_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "nom" => "notNull str maxLength|50"

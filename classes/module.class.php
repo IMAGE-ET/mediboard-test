@@ -54,7 +54,13 @@ class CModule extends CMbObject {
   function CModule() {
     $this->CMbObject("modules", "mod_id");
   }
-
+  
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CPermModule mod_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "mod_name"      => "notNull str maxLength|20",

@@ -58,6 +58,16 @@ class CUser extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CFavoriCCAM favoris_user";
+      $backRefs["1"] = "CFavoricim10 favoris_user";
+      $backRefs["2"] = "CPermModule user_id";
+      $backRefs["3"] = "CPermObject user_id";
+      $backRefs["4"] = "CUserLog user_id";
+     return $backRefs;
+  }
+  
   function getSpecs() {
     return array (
       "user_username"   => "notNull str maxLength|20",

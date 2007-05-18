@@ -105,6 +105,7 @@ class CExamenLabo extends CMbObject {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["items_pack_labo"] = "CPackItemExamenLabo examen_labo_id";
+    $backRefs["prescriptions"] = "CPrescriptionLaboExamen examen_labo_id";
     return $backRefs;
   }
 

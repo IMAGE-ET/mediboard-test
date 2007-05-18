@@ -221,7 +221,7 @@ foreach ($aChamps as $class => $aFields) {
 
 }
 
-
+mbTrace($aChamps);
 // Création du template
 $smarty = new CSmartyDP();
 

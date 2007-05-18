@@ -35,6 +35,12 @@ class CLit extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 	}
+ 
+  function getBackRefs() {
+      $backRefs = parent::getBackRefs();
+      $backRefs["0"] = "CAffectation lit_id";
+     return $backRefs;
+  }
 
   function getSpecs() {
     return array (
