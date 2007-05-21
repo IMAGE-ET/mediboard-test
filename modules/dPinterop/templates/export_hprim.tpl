@@ -29,6 +29,7 @@ function choosePreselection(oSelect) {
 <tr>
 
 <td>
+  {{if $mbOp->_id}}
   {{assign var="mbSejour" value=$mbOp->_ref_sejour}}
   {{if !$doc_valid}}
   <h3>Document non valide : pensez à valider les valeurs suivantes !</h3>
@@ -144,6 +145,7 @@ function choosePreselection(oSelect) {
     Aucun fichier envoyé
     {{/foreach}}
   </ul>
+  {{/if}}
 </td>
 
 </tr>
@@ -228,7 +230,7 @@ function choosePreselection(oSelect) {
 
   <tr>
     <td class="button" colspan="2">
-  	  <button type="submit">Générer le document</button>
+  	  <button class="tick" type="submit">Générer le document</button>
     </td>
   </tr>
 
