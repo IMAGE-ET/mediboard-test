@@ -44,8 +44,8 @@
           {{/if}}
         </tr> 
         <tr>
-          <th><label for="nom" title="Nom de la catégorie, obligatoire">Catégorie</label></th>
-          <td><input name="nom" class="{{$category->_props.nom}}" type="text" value="{{$category->nom}}" /></td>
+          <th>{{mb_label object=$category field="nom"}}</th>
+          <td>{{mb_field object=$category field="nom"}}</td>
         </tr>
         <tr>
           <th><label for="class" title="Class de la catégorie">Class</label></th>

@@ -44,7 +44,7 @@ class CChambre extends CMbObject {
   }
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CLit chambre_id";
+      $backRefs["lits"] = "CLit chambre_id";
      return $backRefs;
   }
   

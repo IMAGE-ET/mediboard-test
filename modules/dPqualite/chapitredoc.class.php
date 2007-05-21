@@ -26,7 +26,7 @@ class CChapitreDoc extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CDocGed doc_chapitre_id";
+      $backRefs["chapitres_ged"] = "CDocGed doc_chapitre_id";
      return $backRefs;
   }
   

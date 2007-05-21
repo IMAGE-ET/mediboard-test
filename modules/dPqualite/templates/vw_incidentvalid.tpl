@@ -319,7 +319,7 @@ function pageMain() {
         {{else}}
         {{if !$fiche->qualite_date_verification}}
         <tr>
-          <th><label for="qualite_date_verification" title="{{tr}}CFicheEi-qualite_date_verification-desc{{/tr}}">{{tr}}CFicheEi-qualite_date_verification{{/tr}}</label></th>
+          <th>{{mb_label object=$fiche field="qualite_date_verification"}}</th>
           <td class="date">
             <div id="ProcEditFrm_qualite_date_verification_da">{{$today|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="qualite_date_verification" value="{{$today|date_format:"%Y-%m-%d"}}" />
@@ -328,7 +328,7 @@ function pageMain() {
         </tr>
         {{elseif !$fiche->qualite_date_controle}}
         <tr>
-          <th><label for="qualite_date_controle" title="{{tr}}CFicheEi-qualite_date_controle-desc{{/tr}}">{{tr}}CFicheEi-qualite_date_controle{{/tr}}</label></th>
+          <th>{{mb_label object=$fiche field="qualite_date_controle"}}</th>
           <td class="date">
             <div id="ProcEditFrm_qualite_date_controle_da">{{$today|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="qualite_date_controle" value="{{$today|date_format:"%Y-%m-%d"}}" />

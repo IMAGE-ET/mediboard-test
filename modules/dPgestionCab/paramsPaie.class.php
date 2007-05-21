@@ -57,7 +57,7 @@ class CParamsPaie extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CFichePaie params_paie_id";
+      $backRefs["fiches"] = "CFichePaie params_paie_id";
      return $backRefs;
   }
   

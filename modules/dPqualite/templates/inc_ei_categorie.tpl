@@ -19,12 +19,8 @@
     </th>
   </tr>
   <tr>
-    <th>
-      <label for="nom" title="{{tr}}CEiCategorie-nom-desc{{/tr}}">{{tr}}CEiCategorie-nom{{/tr}}</label>
-    </th>
-    <td>
-      <input type="text" name="nom" value="{{$categorie->nom}}" class="{{$categorie->_props.nom}}" />
-    </td>
+    <th>{{mb_label object=$categorie field="nom"}}</th>
+    <td>{{mb_field object=$categorie field="nom"}}</td>
   </tr>
   <tr>
     <td class="button" colspan="2">            

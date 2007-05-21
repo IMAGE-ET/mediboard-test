@@ -57,7 +57,7 @@ class CModule extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CPermModule mod_id";
+      $backRefs["permissions"] = "CPermModule mod_id";
      return $backRefs;
   }
   

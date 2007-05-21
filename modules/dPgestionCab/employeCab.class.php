@@ -36,7 +36,7 @@ class CEmployeCab extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CParamsPaie employecab_id";
+      $backRefs["params_paie"] = "CParamsPaie employecab_id";
      return $backRefs;
   }
   

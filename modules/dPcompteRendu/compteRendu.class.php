@@ -41,7 +41,7 @@ class CCompteRendu extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CListeChoix compte_rendu_id";
+      $backRefs["listes_choix"] = "CListeChoix compte_rendu_id";
      return $backRefs;
   }
   

@@ -39,9 +39,7 @@ foreach($classSelected as $selected) {
 	      $spec = array();
 	      $spec[] = $objetRefSpec->className;
 	      $spec[] = $objetRefSpec->fieldName;
-	      if ($objetRefSpec->meta) {
-	      	$spec[] = $objetRefSpec->meta;
-	      }
+	      
 		  $backSpecs[$objetRefSpec->class][] = join($spec, " ");
    		}
 	}
@@ -70,11 +68,6 @@ foreach($backSpecs as $keyBackSpec => $valueBackSpec) {
 			continue;
 		}
 		
-		if (!has_default_constructor($keyBackSpec) && count(split(" ",$value)) != 3) {
-			$alert = "noMeta";
-			continue;
-		}
-
 		$alert = array_key_exists($keyBackSpec,$backRefs) && in_array($value,$backRefs[$keyBackSpec]) ? "ok" : $alert;
 	}
 }

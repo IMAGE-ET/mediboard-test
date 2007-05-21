@@ -29,7 +29,7 @@ class CModePaiement extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CGestionCab mode_paiement_id";
+      $backRefs["fiches_compta"] = "CGestionCab mode_paiement_id";
      return $backRefs;
   }
  

@@ -89,7 +89,7 @@ class CConsultAnesth extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CTechniqueComp consultation_anesth_id";
+      $backRefs["techniques"] = "CTechniqueComp consultation_anesth_id";
      return $backRefs;
   }
   

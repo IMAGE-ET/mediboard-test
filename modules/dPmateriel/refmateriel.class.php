@@ -35,7 +35,7 @@ class CRefMateriel extends CMbObject {
  
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CCommandeMateriel reference_id";
+      $backRefs["commandes_materiel"] = "CCommandeMateriel reference_id";
      return $backRefs;
  }
  

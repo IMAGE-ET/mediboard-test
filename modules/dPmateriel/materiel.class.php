@@ -32,8 +32,8 @@ class CMateriel extends CMbObject {
 
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CRefMateriel materiel_id";
-      $backRefs["1"] = "CStock materiel_id";
+      $backRefs["refMateriel"] = "CRefMateriel materiel_id";
+      $backRefs["stock"] = "CStock materiel_id";
      return $backRefs;
   }
   

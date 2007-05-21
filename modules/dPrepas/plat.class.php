@@ -31,13 +31,13 @@ class CPlat extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CRepas plat1";
-      $backRefs["1"] = "CRepas plat2";
-      $backRefs["2"] = "CRepas plat3";
-      $backRefs["3"] = "CRepas plat4";
-      $backRefs["4"] = "CRepas plat5";
-      $backRefs["5"] = "CRepas boisson";
-      $backRefs["6"] = "CRepas pain";
+      $backRefs["repas1"] = "CRepas plat1";
+      $backRefs["repas2"] = "CRepas plat2";
+      $backRefs["repas3"] = "CRepas plat3";
+      $backRefs["repas4"] = "CRepas plat4";
+      $backRefs["repas5"] = "CRepas plat5";
+      $backRefs["repas_boisson"] = "CRepas boisson";
+      $backRefs["repas_pain"] = "CRepas pain";
      return $backRefs;
   }
   

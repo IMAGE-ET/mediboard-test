@@ -42,7 +42,7 @@ class CFile extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CDocGedSuivi file_id";
+      $backRefs["documents_ged_suivi"] = "CDocGedSuivi file_id";
      return $backRefs;
   }
   

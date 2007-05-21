@@ -29,7 +29,7 @@ class CRubrique extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CGestionCab rubrique_id";
+      $backRefs["fiches_compta"] = "CGestionCab rubrique_id";
      return $backRefs;
   }
   

@@ -71,11 +71,11 @@ class CConsultation extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CConsultAnesth consultation_id";
-      $backRefs["1"] = "CExamAudio consultation_id";
-      $backRefs["2"] = "CExamComp consultation_id";
-      $backRefs["3"] = "CExamNyha consultation_id";
-      $backRefs["4"] = "CExamPossum consultation_id";
+      $backRefs["consult_anesth"] = "CConsultAnesth consultation_id";
+      $backRefs["examaudio"] = "CExamAudio consultation_id";
+      $backRefs["examcomp"] = "CExamComp consultation_id";
+      $backRefs["examnyha"] = "CExamNyha consultation_id";
+      $backRefs["exampossum"] = "CExamPossum consultation_id";
      return $backRefs;
   }
   

@@ -36,8 +36,8 @@ class CService extends CMbObject {
 
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CChambre service_id";
-      $backRefs["1"] = "CValidationRepas service_id";
+      $backRefs["chambres"] = "CChambre service_id";
+      $backRefs["valid_repas"] = "CValidationRepas service_id";
      return $backRefs;
   }
 

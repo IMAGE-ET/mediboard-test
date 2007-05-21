@@ -1,7 +1,6 @@
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-    
       <form name="FrmTypeVue" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <label for="typeVue">{{tr}}_classification{{/tr}}</label>
@@ -49,12 +48,12 @@
           {{/if}}
         </tr>   
         <tr>
-          <th><label for="nom" title="{{tr}}CChapitreDoc-nom-desc{{/tr}}">{{tr}}CChapitreDoc-nom{{/tr}}</label></th>
-          <td><input name="nom" class="{{$chapitre->_props.nom}}" type="text" value="{{$chapitre->nom}}" /></td>
+          <th>{{mb_label object=$chapitre field="nom"}}</th>
+          <td>{{mb_field object=$chapitre field="nom"}}</td>
         </tr>
         <tr>
-          <th><label for="code" title="{{tr}}CChapitreDoc-code-desc{{/tr}}">{{tr}}CChapitreDoc-code{{/tr}}</label></th>
-          <td><input name="code" class="{{$chapitre->_props.code}}" type="text" value="{{$chapitre->code}}" /></td>
+          <th>{{mb_label object=$chapitre field="code"}}</th>
+          <td>{{mb_field object=$chapitre field="code"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">            

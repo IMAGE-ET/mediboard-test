@@ -126,9 +126,7 @@ function pageMain() {
         </tr>
         
         <tr>
-          <th>
-            <label for="type_incident" title="{{tr}}CFicheEi-type_incident-desc{{/tr}}">{{tr}}CFicheEi-type_incident{{/tr}}</label>
-          </th>
+          <th>{{mb_label object=$fiche field="type_incident"}}</th>
           <td>
             <select name="type_incident" class="{{$fiche->_props.type_incident}}">
             <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
@@ -143,16 +141,14 @@ function pageMain() {
          </td>
         </tr>
         <tr>
-          <th>
-            <label for="elem_concerne" title="{{tr}}CFicheEi-elem_concerne-desc{{/tr}}">{{tr}}CFicheEi-elem_concerne{{/tr}}</label>
-          </th>
+          <th>{{mb_label object=$fiche field="elem_concerne"}}</th>
           <td>
             <select name="elem_concerne" class="{{$fiche->_props.elem_concerne}}">
             <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
             {{html_options options=$fiche->_enumsTrans.elem_concerne selected=$fiche->elem_concerne}}
             </select>            
           </td>
-          <th><label for="_incident_heure" title="{{tr}}CFicheEi-_incident_heure{{/tr}}">{{tr}}CFicheEi-_incident_heure{{/tr}}</label></th>
+          <th>{{mb_label object=$fiche field="_incident_heure"}}</th>
           <td>
             <select name="_incident_heure">
             {{foreach from=$heures|smarty:nodefaults item=curr_heure}}
@@ -167,27 +163,17 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th>
-            <label for="elem_concerne_detail" title="{{tr}}CFicheEi-elem_concerne_detail-desc{{/tr}}">
-              {{tr}}CFicheEi-elem_concerne_detail{{/tr}}
-            </label>
-          </th>
-          <td>
-            <textarea name="elem_concerne_detail" class="{{$fiche->_props.elem_concerne_detail}}">{{$fiche->elem_concerne_detail}}</textarea>
-          </td>
-          <th><label for="lieu" title="{{tr}}CFicheEi-lieu-desc{{/tr}}">{{tr}}CFicheEi-lieu{{/tr}}</label></th>
-          <td>
-            <input type="text" name="lieu" class="{{$fiche->_props.lieu}}" value="{{$fiche->lieu}}" />
-          </td>
+          <th>{{mb_label object=$fiche field="elem_concerne_detail"}}</th>
+          <td>{{mb_field object=$fiche field="elem_concerne_detail"}}</td>
+          <th>{{mb_label object=$fiche field="lieu"}}</th>
+          <td>{{mb_field object=$fiche field="lieu"}}</td>
         </tr>
         <tr>
-          <th colspan="4" class="category"><label for="evenements" title="{{tr}}CFicheEi-evenements-desc{{/tr}}">{{tr}}CFicheEi-evenements{{/tr}}</label></th>
-        </tr>
-
+          <th colspan="4" class="category">{{mb_label object=$fiche field="evenements"}}</th>
+       </tr>
         <tr>
           <td colspan="2"rowspan="2" class="halfPane" id="listChoix"></td>
-          <th>
-            <label for="_cat_evenement" title="{{tr}}CFicheEi-_cat_evenement-desc{{/tr}}">{{tr}}CFicheEi-_cat_evenement{{/tr}}</label>
+          <th> <label for="_cat_evenement" title="{{tr}}CFicheEi-_cat_evenement-desc{{/tr}}">{{tr}}CFicheEi-_cat_evenement{{/tr}}</label>
           </th>
           <td style="height:1%;">
             <input type="hidden" name="evenements" class="{{$fiche->_props.evenements}}" value="{{$fiche->evenements}}"/>
@@ -231,18 +217,13 @@ function pageMain() {
            {{/foreach}}
          </td>
        </tr>
-
         <tr>
           <th colspan="4" class="category">{{tr}}_CFicheEi-infoscompl{{/tr}}</th>
         </tr>
         <tr>
-          <th>
-            <label for="autre" title="{{tr}}CFicheEi-autre-desc{{/tr}}">{{tr}}CFicheEi-autre{{/tr}}</label>
-          </th>
-          <td>
-            <textarea name="autre" class="{{$fiche->_props.autre}}">{{$fiche->autre}}</textarea>
-          </td>
-          <th><label for="gravite" title="{{tr}}CFicheEi-gravite-desc{{/tr}}">{{tr}}CFicheEi-gravite{{/tr}}</label></th>
+          <th>{{mb_label object=$fiche field="autre"}}</th>
+          <td>{{mb_field object=$fiche field="autre"}}</td>        
+          <th>{{mb_label object=$fiche field="gravite"}}</th>
           <td>
             <select name="gravite" class="{{$fiche->_props.gravite}}">
               <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
@@ -251,13 +232,9 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th>
-            <label for="descr_faits" title="{{tr}}CFicheEi-descr_faits-desc{{/tr}}">{{tr}}CFicheEi-descr_faits{{/tr}}</label>
-          </th>
-          <td>
-            <textarea name="descr_faits" class="{{$fiche->_props.descr_faits}}">{{$fiche->descr_faits}}</textarea>
-          </td>
-          <th><label for="plainte" title="{{tr}}CFicheEi-plainte-desc{{/tr}}">{{tr}}CFicheEi-plainte{{/tr}}</label></th>
+          <th>{{mb_label object=$fiche field="descr_faits"}}</th>
+          <td>{{mb_field object=$fiche field="descr_faits"}}</td> 
+          <th>{{mb_label object=$fiche field="plainte"}}</th>
           <td>
             <select name="plainte" class="{{$fiche->_props.plainte}}">
               <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
@@ -266,13 +243,9 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th>
-            <label for="mesures" title="{{tr}}CFicheEi-mesures-desc{{/tr}}">{{tr}}CFicheEi-mesures{{/tr}}</label>
-          </th>
-          <td>
-            <textarea name="mesures" class="{{$fiche->_props.mesures}}">{{$fiche->mesures}}</textarea>
-          </td>
-          <th><label for="commission" title="{{tr}}CFicheEi-commission-desc{{/tr}}">{{tr}}CFicheEi-commission{{/tr}}</label></th>
+          <th>{{mb_label object=$fiche field="mesures"}}</th>
+          <td>{{mb_field object=$fiche field="mesures"}}</td> 
+          <th>{{mb_label object=$fiche field="commission"}}</th>
           <td>
             <select name="commission" class="{{$fiche->_props.commission}}">
               <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
@@ -281,13 +254,9 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th>
-            <label for="descr_consequences" title="{{tr}}CFicheEi-descr_consequences-desc{{/tr}}">{{tr}}CFicheEi-descr_consequences{{/tr}}</label>
-          </th>
-          <td>
-            <textarea name="descr_consequences" class="{{$fiche->_props.descr_consequences}}">{{$fiche->descr_consequences}}</textarea>
-          </td>
-          <th><label for="suite_even" title="{{tr}}CFicheEi-suite_even-desc{{/tr}}">{{tr}}CFicheEi-suite_even{{/tr}}</label></th>
+          <th>{{mb_label object=$fiche field="descr_consequences"}}</th>
+          <td>{{mb_field object=$fiche field="descr_consequences"}}</td>
+          <th>{{mb_label object=$fiche field="suite_even"}}</th> 
           <td>
             <select name="suite_even" class="{{$fiche->_props.suite_even}}" onchange="javascript:choixSuiteEven();">
               <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
@@ -295,20 +264,16 @@ function pageMain() {
             </select>
             <table id="suiteEvenAutre" style="width:100%;{{if $fiche->suite_even!="autre"}}display:none;{{/if}}">
             <tr>
-              <td><label for="suite_even_descr" title="{{tr}}CFicheEi-suite_even_descr-desc{{/tr}}">{{tr}}CFicheEi-suite_even_descr{{/tr}}</label></td>
+              <td>{{mb_label object=$fiche field="suite_even_descr"}}</td>
             </tr>
             <tr>
-              <td>
-                <textarea name="suite_even_descr" class="{{$fiche->_props.suite_even_descr}}{{if $fiche->suite_even=="autre"}} notNull{{/if}}">{{$fiche->suite_even_descr}}</textarea>
-              </td>
+              <td>{{mb_field object=$fiche field="suite_even_descr"}}</td>
             </tr>
             </table>
           </td>
         </tr>
         <tr>
-          <th colspan="2">
-            <label for="deja_survenu" title="{{tr}}CFicheEi-deja_survenu-desc{{/tr}}">{{tr}}CFicheEi-deja_survenu{{/tr}}</label>
-          </th>
+          <th colspan="2">{{mb_label object=$fiche field="deja_survenu"}}</th>
           <td colspan="2">
             <select name="deja_survenu" class="{{$fiche->_props.deja_survenu}}">
               <option value="">{{tr}}CFicheEi.deja_survenu.{{/tr}}</option>

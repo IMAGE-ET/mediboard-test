@@ -29,21 +29,11 @@
     </td>
   </tr>
   <tr>
-    <th>
-      <label for="ged[titre]" title="{{tr}}CDocGed-titre-desc{{/tr}}">
-        {{tr}}CDocGed-titre{{/tr}}
-      </label>
-    </th>
-    <td>
-      <input type="text" name="ged[titre]" value="{{$docGed->titre}}" class="notNull {{$docGed->_props.titre}}" />
-    </td>
+    <th>{{mb_label object=$docGed field="titre"}}</th>
+    <td>{{mb_field object=$docGed field="titre"}}</td>
   </tr>
   <tr>
-    <th>
-      <label for="ged[doc_theme_id]" title="{{tr}}CDocGed-doc_theme_id-desc{{/tr}}">
-        {{tr}}CDocGed-doc_theme_id{{/tr}}
-      </label>
-    </th>
+    <th>{{mb_label object=$docGed field="doc_theme_id"}}</th>
     <td>
       <select name="ged[doc_theme_id]" class="notNull {{$docGed->_props.doc_theme_id}}">
         <option value="">&mdash; {{tr}}CDocGed-doc_theme_id-desc{{/tr}}</option>

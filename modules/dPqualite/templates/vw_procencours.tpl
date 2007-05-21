@@ -300,7 +300,6 @@ function popFile(objectClass, objectId, elementClass, elementId){
               {{$docGed->_lastentry->remarques|nl2br}}
             </td>
           </tr>          
-          
           <tr>
             <th><label for="formfile">{{tr}}File{{/tr}}</label></th>
             <td>

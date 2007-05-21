@@ -26,7 +26,7 @@ class CCategory extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CMateriel category_id";
+      $backRefs["materiel"] = "CMateriel category_id";
      return $backRefs;
   }
   

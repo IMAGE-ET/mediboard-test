@@ -28,7 +28,7 @@ class CEiCategorie extends CMbObject {
 
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CEiItem ei_categorie_id";
+      $backRefs["items"] = "CEiItem ei_categorie_id";
      return $backRefs;
   }
   

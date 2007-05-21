@@ -51,10 +51,10 @@ class CMedecin extends CMbObject {
 	
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CPatient medecin_traitant";
-      $backRefs["1"] = "CPatient medecin1";
-      $backRefs["2"] = "CPatient medecin2";
-      $backRefs["3"] = "CPatient medecin3";
+      $backRefs["patients_traites"] = "CPatient medecin_traitant";
+      $backRefs["patients1"] = "CPatient medecin1";
+      $backRefs["patients2"] = "CPatient medecin2";
+      $backRefs["patients3"] = "CPatient medecin3";
      return $backRefs;
   }
     

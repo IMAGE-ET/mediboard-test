@@ -32,10 +32,10 @@ class CTypeRepas extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CMenu typerepas";
-      $backRefs["1"] = "CPlat typerepas";
-      $backRefs["2"] = "CRepas typerepas_id";
-      $backRefs["3"] = "CValidationRepas typerepas_id";
+      $backRefs["menus"] = "CMenu typerepas";
+      $backRefs["plats"] = "CPlat typerepas";
+      $backRefs["repas"] = "CRepas typerepas_id";
+      $backRefs["valid_repas"] = "CValidationRepas typerepas_id";
      return $backRefs;
   }
   

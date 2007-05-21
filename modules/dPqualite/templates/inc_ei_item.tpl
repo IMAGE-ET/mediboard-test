@@ -19,17 +19,11 @@
     </th>
   </tr>
   <tr>
-    <th>
-      <label for="nom" title="{{tr}}CEiItem-nom-desc{{/tr}}">{{tr}}CEiItem-nom{{/tr}}</label>
-    </th>
-    <td>
-      <input type="text" name="nom" value="{{$item->nom}}" class="{{$item->_props.nom}}" />
-    </td>
+    <th>{{mb_label object=$item field="nom"}}</th>
+    <td>{{mb_field object=$item field="nom"}}</td>
   </tr>
   <tr>
-    <th>
-      <label for="ei_categorie_id" title="{{tr}}CEiItem-ei_categorie_id-desc{{/tr}}">{{tr}}CEiItem-ei_categorie_id{{/tr}}</label>
-    </th>
+  	<th>{{mb_label object=$item field="ei_categorie_id"}}</th>
     <td>
       <select name="ei_categorie_id" class="{{$item->_props.ei_categorie_id}}">
         <option value="">&mdash; {{tr}}CEiItem-ei_categorie_id-desc{{/tr}}</option>

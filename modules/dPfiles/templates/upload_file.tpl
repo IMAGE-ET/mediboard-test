@@ -22,7 +22,6 @@ if (window.opener.reloadAfterUploadFile) {
       Ajouter un fichier pour {{$object->_view}}
     </th>
   </tr>
-
   <tr>
     <td class="button" colspan="4">
       {{tr}}msg-CFile-maxsize{{/tr}} : {{$upload_max_size}}<br />

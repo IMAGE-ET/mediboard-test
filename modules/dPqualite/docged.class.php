@@ -55,7 +55,7 @@ class CDocGed extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CDocGedSuivi doc_ged_id";
+      $backRefs["documents_ged_suivi"] = "CDocGedSuivi doc_ged_id";
      return $backRefs;
   }
   

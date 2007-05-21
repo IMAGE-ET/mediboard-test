@@ -1,7 +1,6 @@
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-    
       <form name="FrmTypeVue" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <label for="typeVue">{{tr}}_classification{{/tr}}</label>
@@ -41,11 +40,11 @@
           {{else}}
           <th class="title" colspan="2">{{tr}}msg-CThemeDoc-title-create{{/tr}}</th>
           {{/if}}
-        </tr>   
-        <tr>
-          <th><label for="nom" title="{{tr}}CThemeDoc-nom-desc{{/tr}}">{{tr}}CThemeDoc-nom{{/tr}}</label></th>
-          <td><input name="nom" class="{{$theme->_props.nom}}" type="text" value="{{$theme->nom}}" /></td>
         </tr>
+        <tr>
+          <th>{{mb_label object=$theme field="nom"}}</th>
+          <td>{{mb_field object=$theme field="nom"}}</td>
+        </tr>   
         <tr>
           <td class="button" colspan="2">            
             {{if $theme->doc_theme_id}}

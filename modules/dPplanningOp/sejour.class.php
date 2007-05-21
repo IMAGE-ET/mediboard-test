@@ -85,10 +85,10 @@ class CSejour extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CAffectation sejour_id";
-      $backRefs["1"] = "CFacture sejour_id";
-      $backRefs["2"] = "CGHM sejour_id";
-      $backRefs["3"] = "COperation sejour_id";
+      $backRefs["affectations"] = "CAffectation sejour_id";
+      $backRefs["factures"] = "CFacture sejour_id";
+      $backRefs["GHM"] = "CGHM sejour_id";
+      $backRefs["operations"] = "COperation sejour_id";
      return $backRefs;
   }
 

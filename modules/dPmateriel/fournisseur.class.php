@@ -35,7 +35,7 @@ class CFournisseur extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CRefMateriel fournisseur_id";
+      $backRefs["materiels"] = "CRefMateriel fournisseur_id";
      return $backRefs;
   }
   

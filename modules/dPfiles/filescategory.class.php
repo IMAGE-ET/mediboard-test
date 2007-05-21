@@ -25,9 +25,9 @@ class CFilesCategory extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CCompteRendu file_category_id";
-      $backRefs["1"] = "CEmployeCab function_id";
-      $backRefs["2"] = "CFile file_category_id";
+      $backRefs["compte_rendu"] = "CCompteRendu file_category_id";
+      $backRefs["employes"] = "CEmployeCab function_id";
+      $backRefs["files"] = "CFile file_category_id";
      return $backRefs;
   }
 

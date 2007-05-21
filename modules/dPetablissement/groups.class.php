@@ -52,15 +52,15 @@ class CGroups extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CDocGed group_id";
-      $backRefs["1"] = "CFunctions group_id";
-      $backRefs["2"] = "CMenu group_id";
-      $backRefs["3"] = "CPlat group_id";
-      $backRefs["4"] = "CSalle group_id";
-      $backRefs["5"] = "CSejour group_id";
-      $backRefs["6"] = "CService group_id";
-      $backRefs["7"] = "CStock group_id";
-      $backRefs["8"] = "CTypeRepas group_id";
+      $backRefs["documents_ged"] = "CDocGed group_id";
+      $backRefs["functions"] = "CFunctions group_id";
+      $backRefs["menus"] = "CMenu group_id";
+      $backRefs["plats"] = "CPlat group_id";
+      $backRefs["salles"] = "CSalle group_id";
+      $backRefs["sejours"] = "CSejour group_id";
+      $backRefs["services"] = "CService group_id";
+      $backRefs["stocks"] = "CStock group_id";
+      $backRefs["type_repas"] = "CTypeRepas group_id";
      return $backRefs;
   }
   

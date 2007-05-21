@@ -47,7 +47,7 @@ class CPlageconsult extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CConsultation plageconsult_id";
+      $backRefs["consulations"] = "CConsultation plageconsult_id";
      return $backRefs;
   }
 

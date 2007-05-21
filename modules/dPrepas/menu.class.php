@@ -44,7 +44,7 @@ class CMenu extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CRepas menu_id";
+      $backRefs["repas"] = "CRepas menu_id";
      return $backRefs;
   }
   

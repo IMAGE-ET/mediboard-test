@@ -72,7 +72,6 @@ class CCatalogueLabo extends CMbObject {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["catalogues_labo"] = "CCatalogueLabo pere_id";
-    $backRefs["essai"] = "CEssai essai_id";
     $backRefs["examens_labo"   ] = "CExamenLabo catalogue_labo_id";
     return $backRefs;
   }

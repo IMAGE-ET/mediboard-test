@@ -31,8 +31,8 @@ class CSalle extends CMbObject {
 	
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "COperation salle_id";
-      $backRefs["1"] = "CPlageOp salle_id";
+      $backRefs["operations"] = "COperation salle_id";
+      $backRefs["plages_op"] = "CPlageOp salle_id";
      return $backRefs;
   }
   

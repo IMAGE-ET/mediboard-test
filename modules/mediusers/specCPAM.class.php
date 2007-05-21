@@ -29,7 +29,7 @@ class CSpecCPAM extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CMediusers spec_cpam_id";
+      $backRefs["users"] = "CMediusers spec_cpam_id";
      return $backRefs;
   }
   

@@ -137,9 +137,9 @@ class CPatient extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CConsultation patient_id";
-      $backRefs["1"] = "CPrescriptionLabo patient_id";
-      $backRefs["2"] = "CSejour patient_id";
+      $backRefs["consultations"] = "CConsultation patient_id";
+      $backRefs["prescriptions_labo"] = "CPrescriptionLabo patient_id";
+      $backRefs["sejours"] = "CSejour patient_id";
      return $backRefs;
   }
  

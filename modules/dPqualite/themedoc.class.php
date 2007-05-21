@@ -25,7 +25,7 @@ class CThemeDoc extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CDocGed doc_theme_id";
+      $backRefs["documents_ged"] = "CDocGed doc_theme_id";
      return $backRefs;
   }
   

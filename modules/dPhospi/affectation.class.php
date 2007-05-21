@@ -46,7 +46,7 @@ class CAffectation extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CRepas affectation_id";
+      $backRefs["repas"] = "CRepas affectation_id";
      return $backRefs;
   } 
  

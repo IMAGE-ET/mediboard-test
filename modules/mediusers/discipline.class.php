@@ -82,7 +82,7 @@ class CDiscipline extends CMbObject {
   }
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CMediusers discipline_id";
+      $backRefs["users"] = "CMediusers discipline_id";
      return $backRefs;
   }
   

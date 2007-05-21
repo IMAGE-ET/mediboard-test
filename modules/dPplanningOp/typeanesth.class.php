@@ -26,7 +26,7 @@ class CTypeAnesth extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "COperation type_anesth";
+      $backRefs["operations_anesth"] = "COperation type_anesth";
      return $backRefs;
   }
   

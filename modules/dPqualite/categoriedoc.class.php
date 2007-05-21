@@ -27,7 +27,7 @@ class CCategorieDoc extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CDocGed doc_categorie_id";
+      $backRefs["documents_ged"] = "CDocGed doc_categorie_id";
      return $backRefs;
   }
   

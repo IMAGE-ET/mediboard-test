@@ -147,9 +147,9 @@ class COperation extends CMbObject {
 
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CActeCCAM operation_id";
-      $backRefs["1"] = "CConsultAnesth operation_id";
-      $backRefs["2"] = "CNaissance operation_id";
+      $backRefs["actes_CCAM"] = "CActeCCAM operation_id";
+      $backRefs["dossiers_anesthesie"] = "CConsultAnesth operation_id";
+      $backRefs["naissances"] = "CNaissance operation_id";
      return $backRefs;
   }
   

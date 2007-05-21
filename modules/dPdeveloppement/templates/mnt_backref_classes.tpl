@@ -20,13 +20,12 @@
       <table class="tbl">
         <tr>
           <th colspan="2">Fonction getBackRefs()</th>
-          <th colspan="2">Classes de références</th>
+          <th colspan="0">Classes de références</th>
         </tr>
         <tr>
           <th>Alerte</th>
           <th>Nom</th>
           <th>Nom</th>
-          <th>Alerte</th>
         </tr>
         {{assign var="styleColorKey"     value="style=\"background-color:#afa;\""}}
         {{assign var="styleColorError"   value="style=\"background-color:#f00;\""}}
@@ -38,7 +37,7 @@
            	<button id="Suggestion-{{$keyTab}}-trigger" class="edit" style="float: right">
               {{tr}}Suggestion{{/tr}}
             </button>
-            {{$keyTab}} ({{tr}}{{$keyTab}}{{/tr}})
+            {{$keyTab}} ({{tr}}{{$keyTab}}{{/tr}}) 
           </th>
         </tr>
         <tr id="Suggestion-{{$keyTab}}">
@@ -101,13 +100,6 @@
                  {{$styleColorError|smarty:nodefaults}}
               {{/if}} >
             	{{$keyItemTab}}
-          </td>
-          <td {{if $_item.theo == ""}}
-                {{$styleColorKey|smarty:nodefaults}}
-              {{else}}
-                {{$styleColorError|smarty:nodefaults}}  
-              {{/if}} >
-          		{{$_item.theo}}
           </td>
           {{/if}}
         </tr>

@@ -33,7 +33,7 @@ class CFacture extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "CFactureItem facture_id";
+      $backRefs["items"] = "CFactureItem facture_id";
      return $backRefs;
   }
   

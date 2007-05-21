@@ -18,6 +18,20 @@ function choosePreselection(oSelect) {
   oSelect.value = "";
 }
 
+function popObject() {
+  var url = new Url;
+  url.setModuleAction("system", "object_selector");
+  url.addParam("selClass","COperation");
+  url.popup(600, 300, "Object Selector");
+}
+
+function setObject(oObject){
+	var oForm = document.formEdit;
+	oForm.mb_operation_id.value = oObject.id;
+	oForm._operation_view.value = oObject.view;	
+	oForm.mb_operation_id.onchange();
+}
+
 </script>
 
 {{if !$ajax}}
@@ -153,8 +167,9 @@ function choosePreselection(oSelect) {
 
 {{if !$ajax}}
 <td>
-  <form name="formEdit" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">  
-  
+  <form name="formEdit" action="?" method="get" onsubmit="return checkForm(this)">  
+  <input type="hidden" name="m" value="{{$m}}"/>
+  <input type="hidden" name="tab" value="{{$tab}}"/>
   <table class="form">
 
   <tr>
@@ -164,12 +179,18 @@ function choosePreselection(oSelect) {
   <tr>
     <th class="category" colspan="2">Identifiants Mediboard</th>
   </tr>
-  
-  <tr>
-    <th><label for="mb_operation_id" title="Choisir un identifiant d'opération">Identifiant d'opération</label></th>
-    <td><input type="text" class="notNull ref" name="mb_operation_id" value="{{$mbOp->operation_id}}" size="5"/></td>
+  <tr>	
+    <th>Opération</th>
+       <td>
+           <input type="hidden" class="notNull ref class|COperation" name="mb_operation_id" value="{{$mbOp->_id}}"/>
+	       {{if $mbOp->_id}}
+    	   <input type="text" size="30" readonly="readonly" ondblclick="popObject()" name="_operation_view" value="{{$mbOp->_view|stripslashes}}" />
+    	   {{else}}
+    	   <input type="text" size="30" readonly="readonly" ondblclick="popObject()" name="_operation_view" value="" />
+    	   {{/if}}
+           <button type="button" onclick="popObject()" class="search">Rechercher</button>
+       </td>
   </tr>
-  
   {{if $mbOp->operation_id}}
   <tr>
     <th class="category" colspan="2">Identifiants S@nté.com</th>

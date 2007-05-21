@@ -53,7 +53,7 @@ class CPlageOp extends CMbObject {
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["0"] = "COperation plageop_id";
+      $backRefs["operations"] = "COperation plageop_id";
      return $backRefs;
   }
   
