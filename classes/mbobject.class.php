@@ -658,16 +658,23 @@ class CMbObject {
   function canDeleteEx() {
     global $AppUI;
 
+    // Empty object
+    if (!$this->_id) {
+      return $AppUI->_("noObjectToDelete") . " " . $AppUI->_($this->_class_name);
+    }
+    
+    // Counting backrefs
     $issues = array();
     foreach ($this->_backRefs as $backName => $backRef) {
       $backSpec = split(" ", $backRef);
       $backClass = $backSpec[0];
       $backField = $backSpec[1];
       $backObject = new $backClass;
+      mbTrace($backObject->_ref_module, "Back Object '$backObject->_class_name'");
       
       $query = "SELECT COUNT($backObject->_tbl_key) " .
         "\nFROM `$backObject->_tbl` " .
-        "\nWHERE `$backField` = $this->_id";
+        "\nWHERE `$backField` = '$this->_id'";
       if ($backCount = db_loadResult($query)) {
         $issues[] = $backCount . " " . $AppUI->_("$this->_class_name-back-$backName") . "(s)";
       }
@@ -690,12 +697,12 @@ class CMbObject {
     if ($oid) {
       $this->$k = intval($oid);
     }
-//    if ($msg = $this->canDeleteEx()) {
-//      return $msg;
-//    }
-    if (!$this->canDelete($msg)) {
+    if ($msg = $this->canDeleteEx()) {
       return $msg;
     }
+//    if (!$this->canDelete($msg)) {
+//      return $msg;
+//    }
     $sql = "DELETE FROM $this->_tbl WHERE $this->_tbl_key = '".$this->$k."'";
     if (!db_exec($sql)) {
       return db_error();

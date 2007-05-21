@@ -418,6 +418,19 @@ class CConsultAnesth extends CMbObject {
     );
     return parent::canDelete( $msg, $oid, $tables );
   }
+
+  function canDeleteEx() {
+    // Date dépassée
+    $this->loadRefConsultation();
+    $consult =& $this->_ref_consultation;
+    $consult->loadRefPlageConsult();
+    if ($consult->_ref_plageconsult->date < mbDate()){
+      return "Imposible de supprimer une consultation passée";
+    }
+    
+    return parent::canDeleteEx();
+  }
 }
+
 
 ?>

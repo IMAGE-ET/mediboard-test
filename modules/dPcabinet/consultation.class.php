@@ -333,13 +333,6 @@ class CConsultation extends CMbObject {
       $msg = "Imposible de supprimer une consultation passée";
       return false;
     }
-    /*
-    $tables[] = array (
-      "label"     => "consultation(s) d'anesthésie", 
-      "name"      => "consultation_anesth", 
-      "idfield"   => "consultation_anesth_id", 
-      "joinfield" => "consultation_id"
-    );*/
     $tables[] = array (
       "label"     => "fichier(s)", 
       "name"      => "files_mediboard", 
@@ -356,27 +349,28 @@ class CConsultation extends CMbObject {
     );
     return parent::canDelete($msg, $oid, $tables);
   }
-  
-  function delete() {
-    $msg1 = null;
-    $msg2 = null;
-    $this->loadRefConsultAnesth();
-    $test1 = $this->canDelete($msg1);
-    if($this->_ref_consult_anesth->consultation_anesth_id) {
-      $test2 = $this->_ref_consult_anesth->canDelete($msg2);
-    } else {
-      $test2 = true;
+    
+  function canDeleteEx() {
+    // Date dépassée
+    $this->loadRefPlageConsult();
+    if ($this->_ref_plageconsult->date < mbDate()) {
+      return "Imposible de supprimer une consultation passée";
     }
-    if($test1 && $test2) {
-      $this->_ref_consult_anesth->delete();
-      return parent::delete();
-    } else {
-      if($msg1) {
-        return $msg1;
-      } else {
-        return $msg2;
+    
+    return parent::canDeleteEx();
+  }
+
+  function delete() {
+    // Appel en cascade sur la consultation d'anesthésie potentielle
+    $this->loadRefConsultAnesth();
+    $consult_anesth =& $this->_ref_consult_anesth;
+    if ($consult_anesth->_id) {
+      if ($msg = $consult_anesth->delete()) {
+        return $msg;
       }
     }
+    
+    return parent::delete();
   }
 }
 
