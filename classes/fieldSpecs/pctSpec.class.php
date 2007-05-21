@@ -34,7 +34,8 @@ class CPctSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    return $this->getFormElementText($object, $params, $value, $className);
+  	$params["size"]=6;
+    return $this->getFormElementText($object, $params, $value, $className)."%";
   }
   
   function sample(&$object) {

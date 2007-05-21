@@ -25,7 +25,8 @@ class CCurrencySpec extends CFloatSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-  global $dPconfig;
+    global $dPconfig;
+    $params["size"]=6;
   	//parent::getFormHtmlElement($object, $params, $value, $className);
     return parent::getFormHtmlElement($object, $params, $value, $className).$dPconfig["currency_symbol"];
   }

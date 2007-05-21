@@ -23,7 +23,10 @@ class CGestionCab extends CMbObject {
   var $mode_paiement_id = null;
   var $num_facture      = null;
   var $rques            = null;
-
+  
+  //Filter Fields
+  
+  
   // Object References
   var $_ref_function      = null;
   var $_ref_rubrique      = null;

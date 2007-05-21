@@ -45,19 +45,13 @@ function pageMain() {
           {{/if}}
         </tr>
         <tr>
-          <th><label for="libelle" title="Libellé de la fiche">Libellé</label></th>
-          <td><input name="libelle" value="{{$gestioncab->libelle}}" class="{{$gestioncab->_props.libelle}}" /></td>
-          <th><label for="date" title="Date de paiement de la fiche">Date</label></th>
-          <td class="date">
-            <div id="editFrm_date_da">
-              {{$gestioncab->date|date_format:"%d/%m/%Y"}}
-            </div>
-            <input type="hidden" name="date" class="notNull {{$gestioncab->_props.date}}" value="{{$gestioncab->date}}" />
-            <img id="editFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
-          </td>
+          <th>{{mb_label object=$gestioncab field="libelle"}}</th>
+          <td>{{mb_field object=$gestioncab field="libelle"}}</td>
+          <th>{{mb_label object=$gestioncab field="date"}}</th>
+          <td class="date">{{mb_field object=$gestioncab field="date" form="editFrm"}}</td>
         </tr>
         <tr>
-          <th><label for="rubrique_id" title="Rubrique concernée">Rubrique</label></th>
+          <th>{{mb_label object=$gestioncab field="rubrique_id"}}</th>
           <td>
             <select name="rubrique_id">
             {{foreach from=$listRubriques item=rubrique}}
@@ -67,11 +61,11 @@ function pageMain() {
             {{/foreach}}
             </select>
           </td>
-          <th><label for="montant" title="Montant de la fiche, utilisez un point (.) pour les centimes">Montant</label></th>
-          <td><input name="montant" value="{{$gestioncab->montant}}" class="{{$gestioncab->_props.montant}}" /> €</td>
+          <th>{{mb_label object=$gestioncab field="montant"}}</th>
+          <td>{{mb_field object=$gestioncab field="montant"}}</td>
         </tr>
         <tr>
-          <th><label for="mode_paiement_id" title="Mode de paiement de la fiche">Mode de paiement</label></th>
+          <th>{{mb_label object=$gestioncab field="mode_paiement_id"}}</th>
           <td>
             <select name="mode_paiement_id">
             {{foreach from=$listModesPaiement item=mode}}
@@ -81,18 +75,12 @@ function pageMain() {
             {{/foreach}}
             </select>
           </td>
-          <th rowspan="2">
-            <label for="rques" title="Remarques concernant la fiche">Remarques</label>
-          </th>
-          <td rowspan="2">
-            <textarea name="rques" class="{{$gestioncab->_props.rques}}">{{$gestioncab->rques}}</textarea>
-          </td>
+          <th rowspan="2">{{mb_label object=$gestioncab field="rques"}}</th>
+          <td rowspan="2">{{mb_field object=$gestioncab field="rques"}}</td>
         </tr>
         <tr>
-          <th><label for="num_facture" title="Numero de la facture">Numero de facture</label></th>
-          <td>
-            <input name="num_facture" size="5" value="{{$gestioncab->num_facture}}" class="{{$gestioncab->_props.num_facture}}" />
-          </td>
+          <th>{{mb_label object=$gestioncab field="num_facture"}}</th>
+          <td>{{mb_field object=$gestioncab field="num_facture"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="5">

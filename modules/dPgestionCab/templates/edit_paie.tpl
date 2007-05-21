@@ -22,7 +22,7 @@ function pageMain() {
     <td colspan="2">
       <form name="userSelector" action="index.php" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
-      <label for="employecab_id" title="Veuillez sélectionner l'employé concerné">Eployé Concerné</label>
+      <label for="employecab_id" title="Veuillez sélectionner l'employé concerné">Employé Concerné</label>
       <select name="employecab_id" onchange="this.form.submit()">
       {{foreach from=$listEmployes item=curr_emp}}
         <option value="{{$curr_emp->employecab_id}}" {{if $curr_emp->employecab_id == $employe->employecab_id}}selected="selected"{{/if}}>
@@ -58,96 +58,44 @@ function pageMain() {
         </tr>
         {{/if}}
         <tr>
-          <th>
-            <label for="debut" title="Debut de la période de la fiche de paie">Début de la période</label>
-          </th>
-          <td class="date">
-            <div id="editFrm_debut_da">{{$fichePaie->debut|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debut" class="{{$fichePaie->_props.debut}}" value="{{$fichePaie->debut}}" />
-            <img id="editFrm_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-          </td>
+          <th>{{mb_label object=$fichePaie field="debut"}}</th>
+          <td class="date">{{mb_field object=$fichePaie field="debut" form="editFrm"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="fin" title="Fin de la période de la fiche de paie">Fin de la période</label>
-          </th>
-          <td class="date">
-            <div id="editFrm_fin_da">{{$fichePaie->fin|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" class="{{$fichePaie->_props.fin}}" value="{{$fichePaie->fin}}" />
-            <img id="editFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-          </td>
+          <th>{{mb_label object=$fichePaie field="fin"}} </th>
+          <td class="date">{{mb_field object=$fichePaie field="fin" form="editFrm"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="salaire" title="Salaire horaireen euros">Salaire horaire</label>
-          </th>
-          <td>
-            <input type="text" name="salaire" size="5" class="{{$fichePaie->_props.salaire}}" value="{{$fichePaie->salaire}}" />
-            €
-          </td>
+          <th>{{mb_label object=$fichePaie field="salaire"}}</th>
+          <td>{{mb_field object=$fichePaie field="salaire"}}</td> 
         </tr>
         <tr>
-          <th>
-            <label for="heures" title="Nombre d'heures travaillées dans la période">Nombre d'heures travaillées</label>
-          </th>
-          <td>
-            <input type="text" size="4" name="heures" class="{{$fichePaie->_props.heures}}" value="{{$fichePaie->heures}}" />
-            h
-          </td>
+          <th>{{mb_label object=$fichePaie field="heures"}}</th>
+          <td>{{mb_field object=$fichePaie field="heures"}}h</td> 
         </tr>
         <tr>
-          <th>
-            <label for="heures_sup" title="Nombre d'heures suplémentaires travaillées dans la période">Nombre d'heures suplémentaires</label>
-          </th>
-          <td>
-            <input type="text" size="4" name="heures_sup" class="{{$fichePaie->_props.heures_sup}}" value="{{$fichePaie->heures_sup}}" />
-            h
-          </td>
+          <th>{{mb_label object=$fichePaie field="heures_sup"}}</th>
+          <td>{{mb_field object=$fichePaie field="heures_sup"}}h</td> 
         </tr>
         <tr>
-          <th>
-            <label for="mutuelle" title="Valeur de la cotisation pour la mutuelle">Mutuelle</label>
-          </th>
-          <td>
-            <input type="text" name="mutuelle" size="4" class="{{$fichePaie->_props.mutuelle}}" value="{{$fichePaie->mutuelle}}" />
-            €
-          </td>
+          <th>{{mb_label object=$fichePaie field="mutuelle"}}</th>
+          <td>{{mb_field object=$fichePaie field="mutuelle"}}</td> 
         </tr>
         <tr>
-          <th>
-            <label for="precarite" title="Prime de précarité exprimée en pourcentage">Prime de précarité</label>
-          </th>
-          <td>
-            <input type="text" size="4" name="precarite" class="{{$fichePaie->_props.precarite}}" value="{{$fichePaie->precarite}}" />
-            %
-          </td>
+          <th>{{mb_label object=$fichePaie field="precarite"}}</th>
+          <td>{{mb_field object=$fichePaie field="precarite"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="anciennete" title="Prime d'ancienneté exprimée en pourcentage">Prime d'ancienneté</label>
-          </th>
-          <td>
-            <input type="text" size="4" name="anciennete" class="{{$fichePaie->_props.anciennete}}" value="{{$fichePaie->anciennete}}" />
-            %
-          </td>
+          <th>{{mb_label object=$fichePaie field="anciennete"}}</th>
+          <td>{{mb_field object=$fichePaie field="anciennete"}}</td> 
         </tr>
         <tr>
-          <th>
-            <label for="conges_payes" title="Congés payés exprimés en pourcentage">Congés payés</label>
-          </th>
-          <td>
-            <input type="text" size="4" name="conges_payes" class="{{$fichePaie->_props.conges_payes}}" value="{{$fichePaie->conges_payes}}" />
-            %
-          </td>
+          <th>{{mb_label object=$fichePaie field="conges_payes"}}</th>
+          <td>{{mb_field object=$fichePaie field="conges_payes"}}</td> 
         </tr>
         <tr>
-          <th>
-            <label for="prime_speciale" title="Prime spéciale en euros">Prime spéciale</label>
-          </th>
-          <td>
-            <input type="text" size="4" name="prime_speciale" class="{{$fichePaie->_props.prime_speciale}}" value="{{$fichePaie->prime_speciale}}" />
-            €
-          </td>
+          <th>{{mb_label object=$fichePaie field="prime_speciale"}}</th>
+          <td>{{mb_field object=$fichePaie field="prime_speciale"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">

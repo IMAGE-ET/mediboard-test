@@ -32,46 +32,28 @@
           {{/if}}
         </tr>
         <tr>
-          <th><label for="nom" title="Nom de l'employé">Nom</label></th>
-          <td>
-            <input type="text" name="nom" class="{{$employe->_props.nom}}" value="{{$employe->nom}}" />
-          </td>
+          <th>{{mb_label object=$employe field="nom"}}</th>
+          <td>{{mb_field object=$employe field="nom"}}</td>
         </tr>
         <tr>
-          <th><label for="prenom" title="Prénom de l'employé">Prénom</label></th>
-          <td>
-            <input type="text" name="prenom" class="{{$employe->_props.prenom}}" value="{{$employe->prenom}}" />
-          </td>
+          <th>{{mb_label object=$employe field="prenom"}}</th>
+          <td>{{mb_field object=$employe field="prenom"}}</td>
         </tr>
         <tr>
-          <th><label for="function" title="Fonction de l'employé">Fonction</label></th>
-          <td>
-            <input type="text" name="function" class="{{$employe->_props.function}}" value="{{$employe->function}}" />
-          </td>
+          <th>{{mb_label object=$employe field="function"}}</th>
+          <td>{{mb_field object=$employe field="function"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="adresse" title="Adresse de l'employé">Adresse</label>
-          </th>
-          <td>
-            <input type="text" size="30" name="adresse" class="{{$employe->_props.adresse}}" value="{{$employe->adresse}}" />
-          </td>
+          <th>{{mb_label object=$employe field="adresse"}}</th>
+          <td>{{mb_field object=$employe field="adresse"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="cp" title="Code postal de l'employé">Code Postal</label>
-          </th>
-          <td>
-            <input type="text" size="6" name="cp" class="{{$employe->_props.cp}}" value="{{$employe->cp}}" />
-          </td>
+          <th>{{mb_label object=$employe field="cp"}}</th>
+          <td>{{mb_field object=$employe field="cp"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="ville" title="Ville de l'employé">Ville</label>
-          </th>
-          <td>
-            <input type="text" name="ville" class="{{$employe->_props.ville}}" value="{{$employe->ville}}" />
-          </td>
+          <th>{{mb_label object=$employe field="ville"}}</th>
+          <td>{{mb_field object=$employe field="ville"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">
@@ -94,75 +76,42 @@
           <th class="title" colspan="3">Employé</th>
         </tr>
         <tr>
-          <th>
-            <label for="matricule" title="Code de sécurité sociale">Sécurité sociale</label>
-          </th>
-          <td colspan="2">
-            <input type="text" name="matricule" class="{{$paramsPaie->_props.matricule}}" value="{{$paramsPaie->matricule}}" />
-          </td>
+          <th>{{mb_label object=$paramsPaie field="matricule"}}</th>
+          <td>{{mb_field object=$paramsPaie field="matricule"}}</td>
         </tr>
         <tr>
           <th class="title" colspan="3">Employeur</th>
         </tr>
         <tr>
-          <th>
-            <label for="nom" title="Raison sociale de l'employeur">Nom</label>
-          </th>
-          <td colspan="2">
-            <input type="text" name="nom" class="{{$paramsPaie->_props.nom}}" value="{{$paramsPaie->nom}}" />
-          </td>
+          <th>{{mb_label object=$paramsPaie field="nom"}}</th>
+          <td>{{mb_field object=$paramsPaie field="nom"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="adresse" title="Adresse de l'employeur">Adresse</label>
-          </th>
-          <td colspan="2">
-            <input type="text" size="30" name="adresse" class="{{$paramsPaie->_props.adresse}}" value="{{$paramsPaie->adresse}}" />
-          </td>
+          <th>{{mb_label object=$paramsPaie field="adresse"}}</th>
+          <td>{{mb_field object=$paramsPaie field="adresse"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="cp" title="Code postal de l'employeur">Code Postal</label>
-          </th>
-          <td colspan="2">
-            <input type="text" size="6" name="cp" class="{{$paramsPaie->_props.cp}}" value="{{$paramsPaie->cp}}" />
-          </td>
+          <th>{{mb_label object=$paramsPaie field="cp"}}</th>
+          <td>{{mb_field object=$paramsPaie field="cp"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="ville" title="Ville de l'employeur">Ville</label>
-          </th>
-          <td colspan="2">
-            <input type="text" name="ville" class="{{$paramsPaie->_props.ville}}" value="{{$paramsPaie->ville}}" />
-          </td>
+          <th>{{mb_label object=$paramsPaie field="ville"}}</th>
+          <td>{{mb_field object=$paramsPaie field="ville"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="siret" title="Numero de SIRET de l'employeur">Siret</label>
-          </th>
-          <td colspan="2">
-            <input type="text" size="15" name="siret" class="{{$paramsPaie->_props.siret}}" value="{{$paramsPaie->siret}}" />
-          </td>
+          <th>{{mb_label object=$paramsPaie field="siret"}}</th>
+          <td>{{mb_field object=$paramsPaie field="siret"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="ape" title="Code APE de l'employeur">Code APE</label>
-          </th>
-          <td colspan="2">
-            <input type="text" size="5" name="ape" class="{{$paramsPaie->_props.ape}}" value="{{$paramsPaie->ape}}" />
-          </td>
+          <th>{{mb_label object=$paramsPaie field="ape"}}</th>
+          <td>{{mb_field object=$paramsPaie field="ape"}}</td>
         </tr>
         <tr>
           <th class="title" colspan="3">Paramètres fiscaux</th>
         </tr>
         <tr>
-          <th>
-            <label for="smic" title="Valeur du smic horaire">Smic horaire</label>
-          </th>
-          <td colspan="2">
-            <input type="text" size="5" name="smic" class="{{$paramsPaie->_props.smic}}" value="{{$paramsPaie->smic}}" />
-            €
-          </td>
+          <th>{{mb_label object=$paramsPaie field="smic"}}</th>
+          <td>{{mb_field object=$paramsPaie field="smic"}}</td>
         </tr>
         <tr>
           <th class="category">Cotisations</th>
@@ -170,110 +119,49 @@
           <th class="category">patronnales</th>
         </tr>
         <tr>
-          <th><label for="csgds" title="CSG déductible">CSG déductible :</label></th>
-          <td>
-            <input type="text" size="5" name="csgds" class="{{$paramsPaie->_props.csgds}}" value="{{$paramsPaie->csgds}}" />
-            %
-          </td>
+          <th>{{mb_label object=$paramsPaie field="csgds"}}</th>
+          <td>{{mb_field object=$paramsPaie field="csgds"}}</td>
           <td>-</td>
         </tr>
         <tr>
-          <th>
-            <label for="csgnds" title="CSG non déductible">CSG non déductible :</label>
-          </th>
-          <td>
-            <input type="text" size="5" name="csgnds" class="{{$paramsPaie->_props.csgnds}}" value="{{$paramsPaie->csgnds}}" />
-            %
-          </td>
+          <th>{{mb_label object=$paramsPaie field="csgnds"}}</th>
+          <td>{{mb_field object=$paramsPaie field="csgnds"}}</td>
           <td>-</td>
         </tr>
         <tr>
-          <th>
-            <label for="ssms" title="S.S. maladie">S.S. maladie :</label>`
-          </th>
-          <td>
-            <input type="text" size="5" name="ssms" class="{{$paramsPaie->_props.ssms}}" value="{{$paramsPaie->ssms}}" />
-            %
-          </td>
-          <td>
-            <input type="text" size="5" name="ssmp" class="{{$paramsPaie->_props.ssmp}}" value="{{$paramsPaie->ssmp}}" />
-            %
-          </td>
+          <th>{{mb_label object=$paramsPaie field="ssms"}}</th>
+          <td>{{mb_field object=$paramsPaie field="ssms"}}</td>
+          <td>{{mb_field object=$paramsPaie field="ssmp"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="ssvs" title="S.S. vieillesse">S.S. vieillesse :</label>
-          </th>
-          <td>
-           <input type="text" size="5" name="ssvs" class="{{$paramsPaie->_props.ssvs}}" value="{{$paramsPaie->ssvs}}" />
-            %
-          </td>
-          <td>
-            <input type="text" size="5" name="ssvp" class="{{$paramsPaie->_props.ssvp}}" value="{{$paramsPaie->ssvp}}" />
-            %
-          </td>
+          <th>{{mb_label object=$paramsPaie field="ssvs"}}</th>
+          <td>{{mb_field object=$paramsPaie field="ssvs"}}</td>
+          <td>{{mb_field object=$paramsPaie field="ssvp"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="rcs" title="Retraite complémentaire">Retraite complémentaire :</label>
-          </th>
-          <td>
-            <input type="text" size="5" name="rcs" class="{{$paramsPaie->_props.rcs}}" value="{{$paramsPaie->rcs}}" />
-            %
-          </td>
-          <td>
-            <input type="text" size="5" name="rcp" class="{{$paramsPaie->_props.rcp}}" value="{{$paramsPaie->rcp}}" />
-            %
-          </td>
+          <th>{{mb_label object=$paramsPaie field="rcs"}}</th>
+          <td>{{mb_field object=$paramsPaie field="rcs"}}</td>
+          <td>{{mb_field object=$paramsPaie field="rcp"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="agffs" title="AGFF">AGFF :</label>
-          </th>
-          <td>
-            <input type="text" size="5" name="agffs" class="{{$paramsPaie->_props.agffs}}" value="{{$paramsPaie->agffs}}" />
-            %
-          </td>
-          <td>
-            <input type="text" size="5" name="agffp" class="{{$paramsPaie->_props.agffp}}" value="{{$paramsPaie->agffp}}" />
-            %
-          </td>
+          <th>{{mb_label object=$paramsPaie field="agffs"}}</th>
+          <td>{{mb_field object=$paramsPaie field="agffs"}}</td>
+          <td>{{mb_field object=$paramsPaie field="agffp"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="aps" title="Assurance prévoyance">Assurance prévoyance :</label>
-          </th>
-          <td>
-            <input type="text" size="5" name="aps" class="{{$paramsPaie->_props.aps}}" value="{{$paramsPaie->aps}}" />
-            %
-          </td>
-          <td>
-            <input type="text" size="5" name="app" class="{{$paramsPaie->_props.app}}" value="{{$paramsPaie->app}}" />
-            %
-          </td>
+          <th>{{mb_label object=$paramsPaie field="aps"}}</th>
+          <td>{{mb_field object=$paramsPaie field="aps"}}</td>
+          <td>{{mb_field object=$paramsPaie field="app"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="acs" title="AGFF">Assurance chômage :</label>
-          </th>
-          <td>
-            <input type="text" size="5" name="acs" class="{{$paramsPaie->_props.acs}}" value="{{$paramsPaie->acs}}" />
-            %
-          </td>
-          <td>
-            <input type="text" size="5" name="acp" class="{{$paramsPaie->_props.acp}}" value="{{$paramsPaie->acp}}" />
-            %
-          </td>
+          <th>{{mb_label object=$paramsPaie field="acs"}}</th>
+          <td>{{mb_field object=$paramsPaie field="acs"}}</td>
+          <td>{{mb_field object=$paramsPaie field="acp"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="aatp" title="Accident du travail">Accident du travail :</label>
-          </th>
+          <th>{{mb_label object=$paramsPaie field="aatp"}}</th>
+          <td>{{mb_field object=$paramsPaie field="aatp"}}</td>
           <td>-</td>
-          <td>
-            <input type="text" size="5" name="aatp" class="{{$paramsPaie->_props.aatp}}" value="{{$paramsPaie->aatp}}" />
-            %
-          </td>
         </tr>
         <tr>
           <td class="button" colspan="3">

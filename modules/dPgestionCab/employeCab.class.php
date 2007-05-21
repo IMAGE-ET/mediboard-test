@@ -46,7 +46,7 @@ class CEmployeCab extends CMbObject {
       "nom"         => "notNull str",
       "prenom"      => "notNull str",
       "function"    => "notNull str",
-      "adresse"     => "str",
+      "adresse"     => "text confidential",
       "ville"       => "str",
       "cp"          => "numchar length|5 confidential"
     );

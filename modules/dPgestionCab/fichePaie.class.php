@@ -56,6 +56,7 @@ class CFichePaie extends CMbObject {
   var $_salaire_a_payer = null;
   var $_salaire_net = null;
 
+
   // Object References
   var $_ref_params_paie = null;
 
@@ -77,7 +78,7 @@ class CFichePaie extends CMbObject {
       "anciennete"     => "notNull pct",
       "precarite"      => "notNull pct",
       "conges_payes"   => "notNull pct",
-      "prime_speciale" => "notNull pct"
+      "prime_speciale" => "notNull currency min|0"
     );
   }
   

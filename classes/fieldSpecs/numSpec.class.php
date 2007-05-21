@@ -178,6 +178,7 @@ class CNumSpec extends CMbFieldSpec {
   }
 
   function getFormHtmlElement($object, $params, $value, $className){
+  	$params["size"]=8;
     return $this->getFormElementText($object, $params, $value, $className);
   }
 }
