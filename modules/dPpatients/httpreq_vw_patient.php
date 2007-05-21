@@ -73,21 +73,22 @@ if ($patient->patient_id) {
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
-$moduleCabinet = CModule::getInstalled("dPcabinet");
-$canCabinet    = $moduleCabinet->canDo();
-
 $affichageNbFile = CFile::loadNbFilesByCategory($patient);
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("affichageNbFile" ,$affichageNbFile  );
+$smarty->assign("affichageNbFile" , $affichageNbFile );
 $smarty->assign("patient"         , $patient         );
 $smarty->assign("chir"            , $chir            );
 $smarty->assign("anesth"          , $anesth          );
 $smarty->assign("listPrat"        , $listPrat        );
-$smarty->assign("canCabinet"      , $canCabinet      );
 $smarty->assign("listCategory"    , $listCategory    );
+
+$smarty->assign("canPatients"  , CModule::getCanDo("dPpatients"));
+$smarty->assign("canAdmissions", CModule::getCanDo("dPadmissions"));
+$smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
+$smarty->assign("canCabinet"   , CModule::getCanDo("dPcabinet"));
 
 $smarty->assign("listModelePrat"  , $listModelePrat  );
 $smarty->assign("listModeleFct"   , $listModeleFct   );

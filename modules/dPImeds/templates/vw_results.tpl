@@ -1,5 +1,3 @@
-<!-- $Id: vw_dossier.tpl 717 2006-09-05 08:42:19Z maskas $ -->
-
 <script type="text/javascript">
 
 function popPat() {

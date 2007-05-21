@@ -162,7 +162,7 @@ function reloadAfterSaveDoc(){
       <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
         Imprimer
       </button>
-      {{if $can->edit}}
+      {{if $canPatients->edit}}
       <button type="button" class="modify" onclick="editPatient()">
         Modifier
       </button>

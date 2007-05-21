@@ -88,9 +88,10 @@ if ($patient->_id) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canAdmissions"  , CModule::getCanDo("dPadmissions"));
-$smarty->assign("canPlanningOp"  , CModule::getCanDo("dPplanningOp"));
-$smarty->assign("canCabinet"     , CModule::getCanDo("dPcabinet"   ));
+$smarty->assign("canPatients"  , CModule::getCanDo("dPpatients"));
+$smarty->assign("canAdmissions", CModule::getCanDo("dPadmissions"));
+$smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
+$smarty->assign("canCabinet"   , CModule::getCanDo("dPcabinet"));
 
 $smarty->assign("nom"            , $patient_nom                               );
 $smarty->assign("prenom"         , $patient_prenom                            );
