@@ -85,46 +85,33 @@ $aSuggestions = array();
 foreach($tab as $keyTab => $valueTab) {
 	$suggestion = null;
 	$reference = array();
+	$compteurReal = $compteurTheo = $compteurOkn = 0;
 	foreach($valueTab as $key => $value) {
-		foreach($value as $keyType => $valueType) {
-			if($keyType == "real") {
-				$compteurReal = count($keyType);
-				/*$suggestion = $valueType == "ok" ? "Pas de suggestion." : "Penser a changer le nom des références.";
-				if($valueType == "r") {
-					$suggestion =  "La ou les référence(s) ";
-					foreach($reference as $keyRef => $valueRef) {
-						$suggestion .= $valueRef;
-					}
-					$suggestion .= " sont à enlever.";
-				}*/
-			} else { $compteurTheo = count($keyType); }
-			if($compteurTheo != 0) { 
-				if($compteurReal == $compteurTheo) {
-					
-				}
+		if(@$tab[$keyTab][$key]["real"]) {
+			if($tab[$keyTab][$key]["real"] == "okn") {
+				$compteurOkn++;
 			}
-			/*if($value == "ok" || $value == "okn") {
-				$suggestion = "Pas de suggestion.";
-			} elseif($value == "t") {
-				$reference[] = 	$key;		
-				$suggestion = "function getBackRefs() {\n      \$backRefs = parent::getBackRefs();\n";
-				foreach($reference as $keyRef => $valueRef) {
-					$suggestion .="      \$backRefs[\"$keyRef\"] = \"$valueRef\";\n";
-				}
-				$suggestion .="     return \$backRefs;\n}";
-			} else {
-				$reference[] = 	$key;
-				$suggestion =  "La ou les référence(s) ";
-				foreach($reference as $keyRef => $valueRef) {
-					$suggestion .= $valueRef;
-				}
-				$suggestion .= " sont à enlever.";
-			}*/
-			$tabSuggestions[$keyTab] = "\n$suggestion";
+		    $compteurReal++;
 		}
+		if(@$tab[$keyTab][$key]["theo"]) {
+  			$compteurTheo++;
+		}
+		$reference[] =  $key;  
 	}
+	if($compteurReal == $compteurTheo) {
+		$suggestion = $compteurOkn > 0 ? "Penser a changer le nom des références." : "Pas de suggestion.";
+	} elseif($compteurReal > $compteurTheo) {
+		$suggestion = "Attention. Une ou des référence(s) sont à enlever.";
+	} elseif($compteurReal < $compteurTheo) {
+	    $suggestion = "function getBackRefs() {\n      \$backRefs = parent::getBackRefs();\n";
+	    foreach($reference as $keyRef => $valueRef) {
+	     	$suggestion .="      \$backRefs[\"$keyRef\"] = \"$valueRef\";\n";
+	    }
+	    $suggestion .="     return \$backRefs;\n}";
+	}
+    $tabSuggestions[$keyTab] = "\n$suggestion";
 }
-mbTrace($tab);
+
 // Création du template
 $smarty = new CSmartyDP();
 
