@@ -670,8 +670,11 @@ class CMbObject {
       $backClass = $backSpec[0];
       $backField = $backSpec[1];
       $backObject = new $backClass;
-      mbTrace($backObject->_ref_module, "Back Object '$backObject->_class_name'");
-      
+      // Cas du module non installé
+      if(!$backObject->_ref_module) continue;
+      // Cas de la supression en cascade
+      if($backObject->_specs[$backField]->cascade) continue;
+      // Vérification du nombre de backRefs
       $query = "SELECT COUNT($backObject->_tbl_key) " .
         "\nFROM `$backObject->_tbl` " .
         "\nWHERE `$backField` = '$this->_id'";

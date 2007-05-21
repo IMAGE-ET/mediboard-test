@@ -53,7 +53,7 @@ class CAffectation extends CMbObject {
   function getSpecs() {
     return array (
       "lit_id"    => "notNull ref class|CLit",
-      "sejour_id" => "ref class|CSejour",
+      "sejour_id" => "ref class|CSejour cascade",
       "entree"    => "notNull dateTime",
       "sortie"    => "notNull dateTime",
       "confirme"  => "bool",
