@@ -161,7 +161,7 @@ class CSejour extends CMbObject {
 
     if ($this->annule) {
       $this->delAffectations();
-      $this->delOperations();
+      $this->cancelOperations();
     }
 
     // Cas où on a une premiere affectation différente de l'heure d'admission
@@ -178,17 +178,6 @@ class CSejour extends CMbObject {
         $lastAff->store();
       }
     }
-
-
-  }
-  
-  function delete() {
-    $msg = parent::delete();
-    if($msg == null) {
-      // Suppression des affectations
-      $this->delAffectations();
-    }
-    return $msg;
   }
   
   function delAffectations() {
@@ -197,7 +186,7 @@ class CSejour extends CMbObject {
       $this->_ref_affectations[$key]->delete();
     }
   }
-  function delOperations(){
+  function cancelOperations(){
     $this->loadRefsOperations();
     foreach($this->_ref_operations as $key => $value) {
       $value->annulee = 1;

@@ -673,15 +673,24 @@ class CMbObject {
       // Cas du module non installé
       if(!$backObject->_ref_module) continue;
       // Cas de la supression en cascade
-      if($backObject->_specs[$backField]->cascade) continue;
-      // Vérification du nombre de backRefs
-      $query = "SELECT COUNT($backObject->_tbl_key) " .
-        "\nFROM `$backObject->_tbl` " .
-        "\nWHERE `$backField` = '$this->_id'";
-      if ($backCount = db_loadResult($query)) {
-        $issues[] = $backCount . " " . $AppUI->_("$this->_class_name-back-$backName") . "(s)";
+      if($backObject->_specs[$backField]->cascade) {
+        // Vérification de la possibilité de supprimer chaque backref
+        $backObject->$backField = $this->_id;
+        foreach($backObject->loadMatchingList() as $object) {
+          $msg = $object->canDeleteEx();
+          if($msg !== null) {
+            return $msg;
+          }
+        }
+      } else {
+        // Vérification du nombre de backRefs
+        $query = "SELECT COUNT($backObject->_tbl_key) " .
+          "\nFROM `$backObject->_tbl` " .
+          "\nWHERE `$backField` = '$this->_id'";
+        if ($backCount = db_loadResult($query)) {
+          $issues[] = $backCount . " " . $AppUI->_("$this->_class_name-back-$backName") . "(s)";
+        }
       }
-      
     };
     
     $msg = count($issues) ? 
@@ -706,12 +715,27 @@ class CMbObject {
 //    if (!$this->canDelete($msg)) {
 //      return $msg;
 //    }
+    // Deleting backRefs
+    foreach ($this->_backRefs as $backName => $backRef) {
+      $backSpec = split(" ", $backRef);
+      $backClass = $backSpec[0];
+      $backField = $backSpec[1];
+      $backObject = new $backClass;
+      // Cas du module non installé
+      if(!$backObject->_ref_module) continue;
+      // Cas de l'interdiction de suppression
+      if(!$backObject->_specs[$backField]->cascade) continue;
+      $backObject->$backField = $this->_id;
+      foreach($backObject->loadMatchingList() as $object) {
+        $object->delete();
+      }
+    }
     $sql = "DELETE FROM $this->_tbl WHERE $this->_tbl_key = '".$this->$k."'";
     if (!db_exec($sql)) {
       return db_error();
     } else {
-      $this->$k = null;
-      return null;
+    $this->$k = null;
+    return null;
     }
   }
   
