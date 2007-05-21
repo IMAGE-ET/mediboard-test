@@ -26,7 +26,7 @@ function purgeObjects() {
   {{assign var="var" value="dsn"}}
   <tr>
     <th>
-      <label for="{{$m}}[dsn]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
         {{tr}}config-{{$m}}-{{$var}}{{/tr}}
       </label>  
     </th>

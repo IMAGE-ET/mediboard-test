@@ -45,8 +45,8 @@ class CActeCCAM extends CMbObject {
   function getSpecs() {
     return array (
       "code_acte"           => "notNull code ccam",
-      "code_activite"       => "notNull numchar maxLength|2",
-      "code_phase"          => "notNull numchar maxLength|1",
+      "code_activite"       => "notNull num pos max|99",
+      "code_phase"          => "notNull num pos max|99",
       "execution"           => "notNull dateTime",
       "modificateurs"       => "str maxLength|4",
       "montant_depassement" => "currency min|0",

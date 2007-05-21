@@ -126,18 +126,6 @@ $dPconfig["readonly"] = false;
 $dPconfig["shared_memory"] = "none";
 
 /********* 
- * Mediboard module-specific active configuration settings
- */
-
-// HPRIM export FTP settings
-$dPconfig["dPinterop"]["hprim_export"] = array (
-  "hostname" => "",
-  "username" => "",
-  "userpass" => "",
-  "fileprefix" => "",
-);
-
-/********* 
  * Configuration settings to be removed with dotProject legacy purge
  */
 
@@ -154,6 +142,18 @@ $dPconfig["ft"] = array(
   "application/msword" => "/usr/bin/strings",
   "text/html" => "/usr/bin/strings",
   "application/pdf" => "/usr/bin/pdftotext",
+);
+
+/********* 
+ * Mediboard module-specific active configuration settings
+ */
+
+// HPRIM export FTP settings
+$dPconfig["dPinterop"]["hprim_export"] = array (
+  "hostname" => "",
+  "username" => "",
+  "userpass" => "",
+  "fileprefix" => "",
 );
 
 $dPconfig["dPplanningOp"]["COperation"] = array (

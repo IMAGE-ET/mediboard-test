@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPsalleOp";
-$config["mod_version"]     = "0.16";
+$config["mod_version"]     = "0.17";
 $config["mod_type"]        = "user";
 
 class CSetupdPsalleOp extends CSetup {
@@ -66,7 +66,13 @@ class CSetupdPsalleOp extends CSetup {
     $sql = "ALTER TABLE `acte_ccam` CHANGE `code_acte` `code_acte` varchar(7) NOT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.16";
+    $this->makeRevision("0.16");
+    $sql = "ALTER TABLE `acte_ccam`" .
+        "\nCHANGE `code_activite` `code_activite` TINYINT(4) NOT NULL," .
+        "\nCHANGE `code_phase` `code_phase` TINYINT(4) NOT NULL;";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.17";
     
   }
 }
