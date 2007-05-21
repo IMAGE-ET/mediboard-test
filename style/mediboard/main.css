@@ -2514,3 +2514,12 @@ option.modification {
   background-repeat: no-repeat;
   background-position: center right;
 }
+
+a.idsante400 {
+  height: 16px;
+  width: 16px;
+  background-image: url(../../images/icons/sante400.gif);
+  background-repeat: no-repeat;
+  background-position: center right;
+  padding-right:20px;
+}

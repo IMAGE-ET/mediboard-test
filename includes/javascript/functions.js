@@ -7,6 +7,7 @@ function main() {
   ObjectInitialisation.hackIt();
   SystemMessage.init();
   initNotes();
+  initSante400();
   pageMain();
 }
 
@@ -535,7 +536,7 @@ function initNotes(){
     var sClassDiv = pair.className;
     var aClass    = sClassDiv.split(" ");
     var aInfos    = aClass[1].split("-");
-     
+
     url = new Url;
     url.setModuleAction("system", "httpreq_get_notes_image");
     url.addParam("object_class" , aInfos[0]);
@@ -544,6 +545,23 @@ function initNotes(){
       
   });
 }
+
+
+
+function initSante400(){
+    $$("div.idsante400").each(function(element) {
+    var sIdDiv = element.id;
+    var aInfos = sIdDiv.split("-");
+
+
+    url = new Url;
+    url.setModuleAction("system", "httpreq_vw_object_idsante400");
+    url.addParam("object_class" , aInfos[0]);
+    url.addParam("object_id"    , aInfos[1]);
+    url.requestUpdate(element, { waitingText : null });
+  });
+}
+
 
 function reloadNotes(){
   initNotes();

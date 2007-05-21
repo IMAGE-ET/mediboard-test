@@ -34,12 +34,12 @@ function pageMain() {
   <tr>
     <td class="greedyPane">
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id=0" class="buttonnew">
-        Créer un utilisateur
+        Crï¿½er un utilisateur
       </a>
       <table class="tbl">
         <tr>
           <th style="width: 32px;">
-            <img src="images/icons/collapse.gif" onclick="Functions.collapse()" alt="réduire" />
+            <img src="images/icons/collapse.gif" onclick="Functions.collapse()" alt="rï¿½duire" />
             <img src="images/icons/expand.gif"  onclick="Functions.expand()" alt="agrandir" />
           </th>
           <th>{{tr}}CMediusers-_user_username{{/tr}}</th>
@@ -103,20 +103,20 @@ function pageMain() {
         <tr>
           {{if $mediuserSel->_id}}
           <th class="title modify" colspan="2">
-            {{if $canSante400->read}}
-            <a style="float:right;" href="#" onclick="view_idsante400('CMediusers',{{$mediuserSel->_id}})">
-              <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
-            </a>
-            {{/if}}
+            
+                      
+            <div style="float:right;" class="idsante400" id="CMediusers-{{$mediuserSel->_id}}"></div>
+            
             <a style="float:right;" href="#" onclick="view_log('CMediusers',{{$mediuserSel->user_id}})">
               <img src="images/icons/history.gif" alt="historique" title="historique"/>
             </a>
+            
             Modification de l'utilisateur &lsquo;{{$mediuserSel->_user_username}}&rsquo;
           {{else}}
           <th class="title" colspan="2">
             <input type="hidden" name="_user_type" value="0" />
           
-            Création d'un nouvel utilisateur
+            Crï¿½ation d'un nouvel utilisateur
           {{/if}}
           </th>
         </tr>
@@ -176,7 +176,7 @@ function pageMain() {
           <th>{{mb_label object=$mediuserSel field="discipline_id"}}</th>
           <td>
             <select name="discipline_id" class="{{$mediuserSel->_props.discipline_id}}">
-              <option value="">&mdash; Choisir une spécialité &mdash;</option>
+              <option value="">&mdash; Choisir une spï¿½cialitï¿½ &mdash;</option>
               {{foreach from=$disciplines item=curr_discipline}}
               <option value="{{$curr_discipline->discipline_id}}" {{if $curr_discipline->discipline_id == $mediuserSel->discipline_id}} selected="selected" {{/if}}>
                 {{$curr_discipline->_view}}
@@ -189,7 +189,7 @@ function pageMain() {
           <th>{{mb_label object=$mediuserSel field="spec_cpam_id"}}</th>
           <td>
             <select name="spec_cpam_id" class="{{$mediuserSel->_props.spec_cpam_id}}">
-              <option value="">&mdash; Choisir une spécialité &mdash;</option>
+              <option value="">&mdash; Choisir une spï¿½cialitï¿½ &mdash;</option>
               {{foreach from=$spec_cpam item=curr_spec}}
               <option value="{{$curr_spec->spec_cpam_id}}" {{if $curr_spec->spec_cpam_id == $mediuserSel->spec_cpam_id}} selected="selected" {{/if}}>
                 {{$curr_spec->_view}}
@@ -245,7 +245,7 @@ function pageMain() {
               Supprimer
             </button>
             {{else}}
-            <button class="submit" type="submit">Créer</button>
+            <button class="submit" type="submit">Crï¿½er</button>
             {{/if}}
           </td>
         </tr>
