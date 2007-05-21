@@ -690,9 +690,9 @@ class CMbObject {
     if ($oid) {
       $this->$k = intval($oid);
     }
-    if ($msg = $this->canDeleteEx()) {
-      return $msg;
-    }
+//    if ($msg = $this->canDeleteEx()) {
+//      return $msg;
+//    }
     if (!$this->canDelete($msg)) {
       return $msg;
     }
