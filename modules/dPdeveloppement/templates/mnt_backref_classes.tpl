@@ -50,9 +50,9 @@
         {{foreach from=$_itemTab key=keyItemTab item=_item}}
        	<tr>
        	  {{if @$_item.real}}
-          	  {{if $_item.real.condition == "okn"}}
+          	  {{if $_item.real.condition == "warningNum"}}
                 <td {{$styleColorConflit|smarty:nodefaults}}>
-                	Aucun nom n'a été défini.
+                	Aucun nom n'a été défini
                 </td>
               {{else}}
               	 <td {{if $_item.real.condition == "ok"}}
@@ -62,21 +62,21 @@
               		{{/if}} >
               	 </td>
               {{/if}}
-          <td {{if $_item.real.condition == "r"}}
+          <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
               	 {{$styleColorError|smarty:nodefaults}}
               {{else}}
                  {{$styleColorKey|smarty:nodefaults}}
               {{/if}} >
             	{{$_item.real.attribut}}
 		  </td>
-          <td {{if $_item.real.condition == "r"}}
+           <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
               	 {{$styleColorError|smarty:nodefaults}}
               {{else}}
                  {{$styleColorKey|smarty:nodefaults}}
               {{/if}} >
             	{{$keyItemTab}}
           </td>
-          <td {{if $_item.real.condition == "r"}}
+           <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
               	 {{$styleColorError|smarty:nodefaults}}
               {{else}}
                  {{$styleColorKey|smarty:nodefaults}}
@@ -84,15 +84,20 @@
               	{{$keyItemTab}}
           </td>
           {{else}}
-          <td {{if $_item.theo == "ok"}}
-              	 {{$styleColorKey|smarty:nodefaults}}
+          	  {{if $_item.theo == "okn"}}
+                <td {{$styleColorKey|smarty:nodefaults}} </td>
               {{elseif $_item.theo == ""}}
-                 {{$styleColorConflit|smarty:nodefaults}}
+              	 <td {{$styleColorConflit|smarty:nodefaults}}> 
+              	 	Invérifiable
+              	 </td>
+              {{elseif $_item.theo == "noClass"}}
+              	 <td {{$styleColorError|smarty:nodefaults}}> 
+              	 	{{$_item.theo}}
+              	 </td>
               {{else}}
-                 {{$styleColorError|smarty:nodefaults}}
-              {{/if}} >
-          </td>
-          <td {{if $_item.theo == "ok"}}
+                 <td  {{$styleColorError|smarty:nodefaults}} </td>
+              {{/if}}
+         <td {{if $_item.theo == "ok"}}
               	 {{$styleColorKey|smarty:nodefaults}}
               {{elseif $_item.theo == ""}}
                  {{$styleColorConflit|smarty:nodefaults}}
