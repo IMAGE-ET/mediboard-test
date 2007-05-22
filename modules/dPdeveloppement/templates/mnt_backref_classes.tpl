@@ -55,7 +55,7 @@
                 	Aucun nom n'a été défini.
                 </td>
               {{else}}
-              	 <td if {{if $_item.real.condition == "ok"}}
+              	 <td {{if $_item.real.condition == "ok"}}
               	 		{{$styleColorKey|smarty:nodefaults}}
               	 	 {{else}}
                 		{{$styleColorError|smarty:nodefaults}}

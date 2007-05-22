@@ -51,8 +51,10 @@ $tabKey = array();
 foreach($backRefs as $keyBackRef => $valueBackRef) {
 	foreach ($valueBackRef as $key => $value) {
 		$ok = is_numeric($key) ? "okn" : "ok";
-		$tab[$keyBackRef][$value]["real"]["condition"] = in_array($value,$backSpecs[$keyBackRef]) ? $ok : "r";
-		$tab[$keyBackRef][$value]["real"]["attribut"] = $key;
+		if(@$backSpecs[$keyBackRef]) {
+			$tab[$keyBackRef][$value]["real"]["condition"] = in_array($value,$backSpecs[$keyBackRef]) ? $ok : "r";
+			$tab[$keyBackRef][$value]["real"]["attribut"] = $key;
+		} 
 	}
 }
 
