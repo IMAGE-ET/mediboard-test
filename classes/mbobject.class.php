@@ -688,10 +688,10 @@ class CMbObject {
             return $msg;
           }
         }
-      } 
+      }
       
       // Vérification du nombre de backRefs
-      else {
+      elseif(!$backSpec->unlink) {
         $query = "SELECT COUNT($backObject->_tbl_key) " .
           "\nFROM `$backObject->_tbl` " .
           "\nWHERE `$backField` = '$this->_id'";
@@ -740,6 +740,8 @@ class CMbObject {
       if(!$backObject->_ref_module) continue;
       // Cas de l'interdiction de suppression
       if(!$backObject->_specs[$backField]->cascade) continue;
+      // Cas de l'interdiction de la non liaison des backRefs
+      if(!$backObject->_specs[$backField]->unlink) continue;
       $backObject->$backField = $this->_id;
       foreach($backObject->loadMatchingList() as $object) {
         $object->delete();
