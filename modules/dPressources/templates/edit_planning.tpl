@@ -82,7 +82,7 @@ function pageMain() {
         <tr><th colspan="4" class="category">Ajouter des plages</th></tr>
         {{/if}}
         <tr>
-          <th><label for="date" title="Date de la plage. Obligatoire">Date</label></th>
+          <th>{{mb_label object=$plage field="date"}}</th>
           <td class="date">
             {{if $plage->plageressource_id}}
             <div id="addPlage_date_da">{{$plage->date|date_format:"%d/%m/%Y"}}</div>
@@ -93,7 +93,7 @@ function pageMain() {
             {{/if}}
             <img id="addPlage_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date"/>
           </td>
-          <th><label for="_hour_deb" title="Heure de début">Début</label></th>
+          <th>{{mb_label object=$plage field="_hour_deb"}}</th>
           <td>
             <select name="_hour_deb">
               {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
@@ -105,9 +105,9 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="libelle" title="Libellé de la plage">Libellé</label></th>
-          <td><input type="text" name="libelle" value="{{$plage->libelle}}" class="{{$plage->_props.libelle}}" /></td>
-          <th><label for="_hour_fin" title="Heure de fin">Fin:</label</th>
+          <th>{{mb_label object=$plage field="libelle"}}</th>
+          <td>{{mb_field object=$plage field="libelle"}}</td>
+          <th>{{mb_label object=$plage field="_hour_fin"}}</th>
           <td>
             <select name="_hour_fin" class="num moreThan|_hour_deb">
               {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
@@ -119,13 +119,13 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="tarif" title="Tarif de la plage. Obligatoire">Tarif</label></th>
-          <td><input type="text" name="tarif" size="3" value="{{$plage->tarif}}" class="{{$plage->_props.tarif}}" />€</td>
+          <th>{{mb_label object=$plage field="tarif"}}</th>
+          <td>{{mb_field object=$plage field="tarif"}}</td>
           <th><label for="_repeat" title="Nombre de semaine concernées">Répétition:</label></th>
           <td><input type="text" name="_repeat" size="3" value="1" /></td>
         </tr>
         <tr>
-          <th><label for="prat_id" title="Praticien. Optionnel">Praticien</label></th>
+          <th>{{mb_label object=$plage field="prat_id"}}</th>
           <td>
             <select name="prat_id">
               <option value="">&mdash; Choix du praticien</option>

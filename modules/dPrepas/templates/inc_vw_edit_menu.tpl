@@ -62,11 +62,11 @@ function pageMain() {
           {{/if}}
         </tr>     
         <tr>
-          <th><label for="nom" title="Nom du menu, obligatoire">Nom</label></th>
-          <td><input name="nom" class="{{$menu->_props.nom}}" type="text" value="{{$menu->nom}}" /></td>
+          <th>{{mb_label object=$menu field="nom"}}</th>
+          <td>{{mb_field object=$menu field="nom"}}</td>
         </tr>
         <tr>
-          <th><label for="typerepas" title="Type de repas">Type de repas</label></th>
+          <th>{{mb_label object=$menu field="typerepas"}}</th>
           <td colspan="3">
             <select name="typerepas" class="{{$menu->_props.typerepas}}">
               {{foreach from=$listTypeRepas item=curr_typerepas}}
@@ -78,56 +78,50 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="debut" title="Date de début">Début</label></th>
-          <td class="date">
-            <div id="editMenu_debut_da">{{if $menu->menu_id}}{{$menu->debut|date_format:"%d/%m/%Y"}}{{else}}{{$date_debut|date_format:"%d/%m/%Y"}}{{/if}}</div>
-            <input type="hidden" name="debut" class="{{$menu->_props.debut}}" value="{{if $menu->menu_id}}{{$menu->debut}}{{else}}{{$date_debut}}{{/if}}" />
-            <img id="editMenu_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" />
-          </td>
+          <th>{{mb_label object=$menu field="debut"}}</th>
+          <td class="date">{{mb_field object=$menu field="debut" form="editMenu"}}</td>
         </tr>
         <tr>
-          <th><label for="repetition" title="Répétition">Répétition</label></th>
+          <th>{{mb_label object=$menu field="repetition"}}</th>
           <td>
             1 sem. / 
             {{html_options name="repetition" options=$listRepeat class=$menu->_props.repetition selected=$menu->repetition}}
           </td>
         </tr>
         <tr>
-          <th><label for="nb_repet" title="Nombre de répétition">Nombre de répétition</label></th>
-          <td>
-            <input size="3" name="nb_repet" class="{{$menu->_props.nb_repet}}" type="text" value="{{$menu->nb_repet}}" />
-          </td>
+          <th>{{mb_label object=$menu field="nb_repet"}}</th>
+          <td>{{mb_field object=$menu field="nb_repet"}}</td>
         </tr>
         <tr>
-          <th><label for="plat1" title="Plat n°1">1er Plat</label></th>
-          <td><input name="plat1" class="{{$menu->_props.plat1}}" type="text" value="{{$menu->plat1}}" /></td>
+          <th>{{mb_label object=$menu field="plat1"}}</th>
+          <td>{{mb_field object=$menu field="plat1"}}</td>
         </tr>
         <tr>
-          <th><label for="plat2" title="Plat n°2">2nd Plat</label></th>
-          <td><input name="plat2" class="{{$menu->_props.plat2}}" type="text" value="{{$menu->plat2}}" /></td>
+          <th>{{mb_label object=$menu field="plat2"}}</th>
+          <td>{{mb_field object=$menu field="plat2"}}</td>
         </tr>
         <tr>
-          <th><label for="plat3" title="Plat n°3">3ème Plat</label></th>
-          <td><input name="plat3" class="{{$menu->_props.plat3}}" type="text" value="{{$menu->plat3}}" /></td>
+          <th>{{mb_label object=$menu field="plat3"}}</th>
+          <td>{{mb_field object=$menu field="plat3"}}</td>
         </tr>
         <tr>
-          <th><label for="plat4" title="Plat n°4">4ème Plat</label></th>
-          <td><input name="plat4" class="{{$menu->_props.plat4}}" type="text" value="{{$menu->plat4}}" /></td>
+          <th>{{mb_label object=$menu field="plat4"}}</th>
+          <td>{{mb_field object=$menu field="plat4"}}</td>
         </tr>
         <tr>
-          <th><label for="plat5" title="Plat n°5">5ème Plat</label></th>
-          <td><input name="plat5" class="{{$menu->_props.plat5}}" type="text" value="{{$menu->plat5}}" /></td>
+          <th>{{mb_label object=$menu field="plat5"}}</th>
+          <td>{{mb_field object=$menu field="plat5"}}</td>
         </tr>
         <tr>
-          <th><label for="boisson" title="Boisson pour ce repas">Boisson</label></th>
-          <td><input name="boisson" class="{{$menu->_props.boisson}}" type="text" value="{{$menu->boisson}}" /></td>
+          <th>{{mb_label object=$menu field="boisson"}}</th>
+          <td>{{mb_field object=$menu field="boisson"}}</td>
         </tr>
         <tr>
-          <th><label for="pain" title="Pain pour ce repas">Pain</label></th>
-          <td><input name="pain" class="{{$menu->_props.pain}}" type="text" value="{{$menu->pain}}" /></td>
-        </tr>
+          <th>{{mb_label object=$menu field="pain"}}</th>
+          <td>{{mb_field object=$menu field="pain"}}</td>
+         </tr>
         <tr>
-          <th><label for="diabete_1" title="Repas adapté pour les diabétique">Diabétique</label></th>
+          <th>{{mb_label object=$menu field="diabete"}}</th>
           <td>
             <input name="diabete" value="1" type="radio" {{if $menu->diabete}} checked="checked" {{/if}} />
             <label for="diabete_1">Oui</label>
@@ -136,7 +130,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="sans_sel_1" title="Repas sans sel">Sans sel</label></th>
+          <th>{{mb_label object=$menu field="sans_sel"}}</th>
           <td>
             <input name="sans_sel" value="1" type="radio" {{if $menu->sans_sel}} checked="checked" {{/if}} />
             <label for="sans_sel_1">Oui</label>
@@ -145,7 +139,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="sans_residu_1" title="Repas sans résidu">Sans résidu</label></th>
+          <th>{{mb_label object=$menu field="sans_residu"}}</th>
           <td>
             <input name="sans_residu" value="1" type="radio" {{if $menu->sans_residu}} checked="checked" {{/if}} />
             <label for="sans_residu_1">Oui</label>
@@ -154,7 +148,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="modif_1" title="Repas modifiable">Modifiable</label></th>
+          <th>{{mb_label object=$menu field="modif"}}</th>
           <td>
             <input name="modif" value="1" type="radio" {{if $menu->modif || !$menu->menu_id}} checked="checked" {{/if}} />
             <label for="modif_1">Oui</label>
