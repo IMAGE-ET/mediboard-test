@@ -1,9 +1,10 @@
 <?php
-$locales['CAideSaisie-depend_value-desc'] = '';
+$locales['CMbObject-back-documents'] = 'Documents';
 $locales['CAideSaisie'] = '';
 $locales['CAideSaisie-class'] = '';
 $locales['CAideSaisie-class-desc'] = '';
 $locales['CAideSaisie-depend_value'] = '';
+$locales['CAideSaisie-depend_value-desc'] = '';
 $locales['CAideSaisie-field'] = '';
 $locales['CAideSaisie-field-desc'] = '';
 $locales['CAideSaisie-function_id'] = '';

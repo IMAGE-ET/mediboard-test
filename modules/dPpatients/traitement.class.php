@@ -31,7 +31,7 @@ class CTraitement extends CMbObject {
 
   function getSpecs() {
     return array (
-      "object_id"    => "notNull ref",
+      "object_id"    => "notNull ref class|CMbObject meta|object_class",
       "object_class" => "notNull enum list|CPatient|CConsultAnesth",
       "debut"        => "date",
       "fin"          => "date moreEquals|debut",

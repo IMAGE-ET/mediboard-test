@@ -49,10 +49,10 @@ class CCompteRendu extends CMbObject {
     return array (
       "chir_id"          => "ref xor|function_id|object_id class|CMediusers",
       "function_id"      => "ref xor|chir_id|object_id class|CFunctions",
-      "object_id"        => "ref xor|function_id|chir_id",
+      "object_id"        => "ref xor|function_id|chir_id class|CMbObject meta|object_class",
+      "object_class"     => "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation",
       "nom"              => "notNull str",
       "source"           => "html",
-      "object_class"     => "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation",
       "file_category_id" => "ref class|CFilesCategory",
       "valide"           => "numchar maxLength|1"
     );

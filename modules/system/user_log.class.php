@@ -39,7 +39,7 @@ class CUserLog extends CMbObject {
     return array (
       "user_id"      => "notNull ref class|CUser",
       "date"         => "notNull dateTime",
-      "object_id"    => "notNull ref",
+      "object_id"    => "notNull ref class|CMbObject meta|object_class unlink",
       "object_class" => "notNull str maxLength|25",
       "type"         => "notNull enum list|create|store|delete",
       "fields"       => "text"

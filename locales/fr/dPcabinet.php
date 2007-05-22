@@ -1,4 +1,5 @@
 <?php
+$locales['CConsultation-back-consult_anesth'] = 'Dossier d\'anesthésie';
 $locales['CAddiction-addiction'] = 'Information';
 $locales['CAddiction-addiction-desc'] = 'Information sur l\'addiction';
 $locales['CAddiction-type'] = 'Type';
@@ -316,11 +317,15 @@ $locales['CExamPossum.uree.7.6'] = '2 &mdash; 7.6-10 mmol/L';
 $locales['CExamPossum.uree.10.1'] = '3 &mdash; 10.1-15 mmol/L';
 $locales['CExamPossum.uree.inf7.5'] = '1 &mdash; <= 7.5 mmol/L';
 $locales['CExamPossum.uree.sup15.1'] = '4 &mdash; >= 15.1 mmol/L';
+$locales['config-dPcabinet-addictions'] = 'Mode d\'addictions';
+$locales['config-dPcabinet-addictions-0'] = 'Champs textes';
+$locales['config-dPcabinet-addictions-1'] = 'Liste d\'items';
 $locales['config-dPcabinet-CPlageconsult-hours_start'] = 'Heure de début';
 $locales['config-dPcabinet-CPlageconsult-hours_stop'] = 'Heure de fin';
 $locales['config-dPcabinet-CPlageconsult-minutes_interval'] = 'Intervales en minutes';
 $locales['COperation-type_anesth'] = 'Type d\'anesthésie';
 $locales['COperation-type_anesth-desc'] = 'Type d\'anesthésie pour l\'intervention';
+$locales['CPatient-back-consultations'] = 'Consultations';
 $locales['CPlageconsult'] = 'Plage de Consultation';
 $locales['CPlageconsult-chir_id'] = 'Praticien';
 $locales['CPlageconsult-chir_id-desc'] = 'Praticien concerné par la plage de consultation';

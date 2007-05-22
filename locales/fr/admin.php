@@ -1,4 +1,5 @@
 <?php
+$locales['CMbObject-back-permissions'] = 'Permissions';
 $locales['Active Users'] = 'Utilisateurs Actifs';
 $locales['Add or Edit Permissions'] = 'Ajouter ou Editer les Permissions';
 $locales['Add User'] = 'Ajouter un Utilisateur';
@@ -21,6 +22,7 @@ $locales['Branch Manager'] = 'Directeur de Filiale';
 $locales['CEO'] = 'PDG';
 $locales['change password'] = 'changer le mot de passe';
 $locales['Child Tasks'] = 'Sous-tâches';
+$locales['CMbObject-back-logs'] = 'Logs utilisateurs';
 $locales['companies list'] = 'liste des entreprises';
 $locales['Complete'] = 'Complet';
 $locales['copied from template'] = 'copiés depuis un modèle';

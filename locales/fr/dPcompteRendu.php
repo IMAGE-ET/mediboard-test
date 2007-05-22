@@ -1,9 +1,10 @@
 <?php
-$locales['CAideSaisie-depend_value-desc'] = 'Valeur liée a l\'aide';
+$locales['CMbObject-back-documents'] = 'Documents';
 $locales['CAideSaisie'] = 'Aide à la Saisie';
 $locales['CAideSaisie-class'] = 'Objet';
 $locales['CAideSaisie-class-desc'] = 'Type d\'objet concerné, obligatoire.';
 $locales['CAideSaisie-depend_value'] = 'Dépendance';
+$locales['CAideSaisie-depend_value-desc'] = 'Valeur liée a l\'aide';
 $locales['CAideSaisie-field'] = 'Champ';
 $locales['CAideSaisie-field-desc'] = 'Champ de l\'objet concerné, obligatoire.';
 $locales['CAideSaisie-function_id'] = 'Fonction';

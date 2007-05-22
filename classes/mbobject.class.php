@@ -682,11 +682,19 @@ class CMbObject {
         
         // Vérification de la possibilité de supprimer chaque backref
         $backObject->$backField = $this->_id;
-        foreach ($backObject->loadMatchingList() as $object) {
-          $msg = $object->canDeleteEx();
-          if ($msg !== null) {
-            return $msg;
+        $cascadeIssuesCount = 0;
+        $cascadeObjects = $backObject->loadMatchingList();
+        foreach ($cascadeObjects as $object) {
+          if ($msg = $object->canDeleteEx()) {
+            $cascadeIssuesCount++;
           }
+        }
+        
+        if ($cascadeIssuesCount) {
+          $issues[] = $AppUI->_("cascadeIssues")
+            . " " . $cascadeIssuesCount 
+            . "/" . count($cascadeObjects) 
+            . " " . $AppUI->_("$backSpec->class-back-$backName");
         }
       }
       
@@ -703,7 +711,8 @@ class CMbObject {
         
         // Comptage des backrefs
         if ($backCount = db_loadResult($query)) {
-          $issues[] = $backCount . " " . $AppUI->_("$backSpec->class-back-$backName");
+          $issues[] = $backCount 
+            . " " . $AppUI->_("$backSpec->class-back-$backName");
         }
       }
     };
@@ -835,19 +844,26 @@ class CMbObject {
   
   /**
    * Get backward reference specifications
-   * "class" => "field"
+   * "collection-name" => "class join-field"
    */
   function getBackRefs() {
     return array (
-      "notes" => "CNote object_id",
-      "files" => "CFile file_object_id",
+      "identifiants" => "CIdSante400 object_id",
+      "notes"        => "CNote object_id",
+      "files"        => "CFile file_object_id",
+      "documents"    => "CCompteRendu object_id",
+      "permissions"  => "CPermObject object_id",
+      "logs"         => "CUserLog object_id",
+      "antecedants"  => "CAntecedent object_id",
+      "addictions"   => "CAddiction object_id",
+      "traitements"  => "CTraitement object_id",
     );
   }
   
   /**
    * Liste des champs d'aides à la saisie
    */
-  function getHelpedFields(){
+  function getHelpedFields() {
     return array();
   }
   

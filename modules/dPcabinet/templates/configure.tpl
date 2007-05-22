@@ -5,6 +5,26 @@
 
 <table class="form">
 
+  <!-- Mode d'addictions -->  
+  <tr>
+    <th class="category" colspan="0">Mode d'addictions</th>
+  </tr>
+  
+  <tr>
+    {{assign var="var" value="addictions"}}
+    <th colspan="3">
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td colspan="3">
+      <select class="bool" name="{{$m}}[{{$var}}]">
+        <option value="0" {{if 0 == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-0{{/tr}}</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-1{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+
   <!-- CPlageconsult -->  
   {{assign var="class" value="CPlageconsult"}}
     

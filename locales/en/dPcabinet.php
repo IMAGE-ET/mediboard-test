@@ -1,4 +1,5 @@
 <?php
+$locales['CConsultation-back-consult_anesth'] = 'Anesthesiology file';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-desc'] = '';
 $locales['CAddiction-type'] = '';
@@ -316,11 +317,15 @@ $locales['CExamPossum.uree.7.6'] = '2 &mdash; 7.6-10 mmol/L';
 $locales['CExamPossum.uree.10.1'] = '3 &mdash; 10.1-15 mmol/L';
 $locales['CExamPossum.uree.inf7.5'] = '1 &mdash; <= 7.5 mmol/L';
 $locales['CExamPossum.uree.sup15.1'] = '4 &mdash; >= 15.1 mmol/L';
+$locales['config-dPcabinet-addictions'] = 'Addiction mode';
+$locales['config-dPcabinet-addictions-0'] = 'Text fields';
+$locales['config-dPcabinet-addictions-1'] = 'Item list';
 $locales['config-dPcabinet-CPlageconsult-hours_start'] = 'Start hour';
 $locales['config-dPcabinet-CPlageconsult-hours_stop'] = 'Stop hour';
 $locales['config-dPcabinet-CPlageconsult-minutes_interval'] = 'Intervals in minutes';
 $locales['COperation-type_anesth'] = '';
 $locales['COperation-type_anesth-desc'] = '';
+$locales['CPatient-back-consultations'] = '';
 $locales['CPlageconsult'] = '';
 $locales['CPlageconsult-chir_id'] = '';
 $locales['CPlageconsult-chir_id-desc'] = '';

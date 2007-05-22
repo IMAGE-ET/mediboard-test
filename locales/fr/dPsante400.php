@@ -1,9 +1,10 @@
 <?php
-$locales['config-dPsante400-group_id-desc'] = 'Identifiant de l\'établissement à filtrer, vide pour aucun filtre';
+$locales['CMbObject-back-identifiants'] = 'Identifiants externes';
 $locales['CIdSante400'] = 'Identifiant Sante 400';
 $locales['config-dPsante400-dsn'] = 'DSN';
 $locales['config-dPsante400-dsn-desc'] = 'Nom de la Source de Données à traiter';
 $locales['config-dPsante400-group_id'] = 'Filtrer sur un établissement';
+$locales['config-dPsante400-group_id-desc'] = 'Identifiant de l\'établissement à filtrer, vide pour aucun filtre';
 $locales['config-dPsante400-mark_row'] = 'Marquer les mouvements';
 $locales['config-dPsante400-mark_row-desc'] = 'Marquer les mouvements traités';
 $locales['config-dPsante400-nb_rows'] = 'Nombre de mouvements';
