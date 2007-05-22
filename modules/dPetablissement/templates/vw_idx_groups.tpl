@@ -10,12 +10,12 @@ function pageMain() {
   <tr>
     <td class="halfPane">
       <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;group_id=0" class="buttonnew">
-        Crï¿½er un ï¿½tablissement
+        Créer un établissement
       </a>
       <table class="tbl">
         <tr>
-          <th>liste des ï¿½tablissements</th>
-          <th>Fonctions associï¿½es</th>
+          <th>liste des établissements</th>
+          <th>Fonctions associées</th>
         </tr>
         {{foreach from=$listGroups item=curr_group}}
         <tr {{if $curr_group->_id == $usergroup->_id}}class="selected"{{/if}}>
@@ -48,15 +48,15 @@ function pageMain() {
             <a style="float:right;" href="#" onclick="view_log('CGroups',{{$usergroup->group_id}})">
               <img src="images/icons/history.gif" alt="historique" />
             </a>
-            Modification de l'ï¿½tablissement &lsquo;{{$usergroup->text}}&rsquo;
+            Modification de l'établissement &lsquo;{{$usergroup->text}}&rsquo;
           {{else}}
-            Crï¿½ation d'un ï¿½tablissement
+            Création d'un établissement
           {{/if}}
           </th>
         </tr>
         <tr>
           <th>
-            <label for="text" title="intitulï¿½ de l'ï¿½tablissement, obligatoire.">Intitulï¿½</label>
+            <label for="text" title="intitulé de l'établissement, obligatoire.">Intitulé</label>
           </th>
           <td>
             <input type="text" class="{{$usergroup->_props.text}}" name="text" size="30" id="group_text" value="{{$usergroup->text}}" />
@@ -64,7 +64,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="raison_sociale" title="Veuillez saisir la raison sociale de l'ï¿½tablissement">Raison Sociale</label>
+            <label for="raison_sociale" title="Veuillez saisir la raison sociale de l'établissement">Raison Sociale</label>
           </th>
           <td>
             <input type="text" class="{{$usergroup->_props.raison_sociale}}" name="raison_sociale" size="30" value="{{$usergroup->raison_sociale}}" />
@@ -72,7 +72,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="adresse" title="Veuillez saisir l'adresse l'ï¿½tablissement">Adresse</label>
+            <label for="adresse" title="Veuillez saisir l'adresse l'établissement">Adresse</label>
           </th>
           <td>
             <textarea class="{{$usergroup->_props.adresse}}" name="adresse">{{$usergroup->adresse}}</textarea>
@@ -87,14 +87,14 @@ function pageMain() {
         </tr>
         
         <tr>
-          <th><label for="ville" title="Ville de l'ï¿½tablissement">Ville</label></th>
+          <th><label for="ville" title="Ville de l'établissement">Ville</label></th>
           <td>
             <input size="31" type="text" name="ville" value="{{$usergroup->ville}}" class="{{$usergroup->_props.ville}}" />
             <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
           </td>
         </tr>
         <tr>
-          <th><label for="_tel1" title="Numï¿½ro de tï¿½lï¿½phone filaire">Tï¿½lï¿½phone</label></th>
+          <th><label for="_tel1" title="Numéro de téléphone filaire">Téléphone</label></th>
           <td>
             <input type="text" name="_tel1" size="2" maxlength="2" value="{{$usergroup->_tel1}}" class="num length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
             <input type="text" name="_tel2" size="2" maxlength="2" value="{{$usergroup->_tel2}}" class="num length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
@@ -104,7 +104,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="_fax1" title="Numï¿½ro de fax">Tï¿½lï¿½copie</label></th>
+          <th><label for="_fax1" title="Numéro de fax">Télécopie</label></th>
           <td>
             <input type="text" name="_fax1" size="2" maxlength="2" value="{{$usergroup->_fax1}}" class="num length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
             <input type="text" name="_fax2" size="2" maxlength="2" value="{{$usergroup->_fax2}}" class="num length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
@@ -132,7 +132,7 @@ function pageMain() {
         
         <tr>
           <th>
-            <label for="directeur" title="Veuillez saisir le nom du directeur de l'ï¿½tablissement">Nom du Directeur</label>
+            <label for="directeur" title="Veuillez saisir le nom du directeur de l'établissement">Nom du Directeur</label>
           </th>
           <td>
             <input type="text" class="{{$usergroup->_props.directeur}}" name="directeur" size="30" value="{{$usergroup->directeur}}" />
@@ -148,7 +148,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="siret" title="Veuillez saisir le nï¿½ siret de l'ï¿½tablissement">Nï¿½ SIRET</label>
+            <label for="siret" title="Veuillez saisir le n° siret de l'établissement">N° SIRET</label>
           </th>
           <td>
             <input type="text" class="{{$usergroup->_props.siret}}" maxlength="14" name="siret" size="15" value="{{$usergroup->siret}}" />
@@ -156,7 +156,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>
-            <label for="ape" title="Veuillez saisir le code APE de l'ï¿½tablissement">Code APE</label>
+            <label for="ape" title="Veuillez saisir le code APE de l'établissement">Code APE</label>
           </th>
           <td>
             <input type="text" class="{{$usergroup->_props.ape}}" maxlength="4" name="ape" size="5" value="{{$usergroup->ape}}" />
@@ -166,11 +166,11 @@ function pageMain() {
           <td class="button" colspan="2">
           {{if $usergroup->group_id}}
             <button class="modify" type="submit">Valider</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'ï¿½tablissement',objName:'{{$usergroup->text|smarty:nodefaults|JSAttribute}}'})">
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'établissement',objName:'{{$usergroup->text|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
           {{else}}
-            <button class="submit" type="submit" name="btnFuseAction">Crï¿½er</button>
+            <button class="submit" type="submit" name="btnFuseAction">Créer</button>
           {{/if}}
           </td>
         </tr>

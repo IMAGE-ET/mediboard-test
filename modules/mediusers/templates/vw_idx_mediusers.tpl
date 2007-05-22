@@ -39,7 +39,7 @@ function pageMain() {
       <table class="tbl">
         <tr>
           <th style="width: 32px;">
-            <img src="images/icons/collapse.gif" onclick="Functions.collapse()" alt="rï¿½duire" />
+            <img src="images/icons/collapse.gif" onclick="Functions.collapse()" alt="réduire" />
             <img src="images/icons/expand.gif"  onclick="Functions.expand()" alt="agrandir" />
           </th>
           <th>{{tr}}CMediusers-_user_username{{/tr}}</th>
@@ -245,7 +245,7 @@ function pageMain() {
               Supprimer
             </button>
             {{else}}
-            <button class="submit" type="submit">Crï¿½er</button>
+            <button class="submit" type="submit">Créer</button>
             {{/if}}
           </td>
         </tr>

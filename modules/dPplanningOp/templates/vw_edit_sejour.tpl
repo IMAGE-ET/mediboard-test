@@ -42,7 +42,7 @@ function pageMain() {
     </td>
     <td>
       <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->sejour_id}}">
-        Programmer une nouvelle intervention dans ce sï¿½jour
+        Programmer une nouvelle intervention dans ce séjour
       </a>
     </td>
   </tr>
@@ -57,11 +57,11 @@ function pageMain() {
     <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->sejour_id}})">
       <img src="images/icons/history.gif" alt="historique" />
     </a>
-      Modification du sï¿½jour {{$sejour->_view}}
+      Modification du séjour {{$sejour->_view}}
     </th>
     {{else}}
     <th colspan="2" class="title">      
-      Crï¿½ation d'un nouveau sï¿½jour
+      Création d'un nouveau séjour
     </th>
     {{/if}}
   </tr>

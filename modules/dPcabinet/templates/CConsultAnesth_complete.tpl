@@ -95,7 +95,7 @@ newExam = function(sAction, consultation_id) {
       <i>{{tr}}CConsultAnesth.position.{{$object->position}}{{/tr}}</i>
     </td>
     <td class="text" colspan="2">
-      <strong>Techniques Complï¿½mentaires :</strong>
+      <strong>Techniques Complémentaires :</strong>
       <ul>
         {{foreach from=$object->_ref_techniques item=curr_tech}}
         <li>

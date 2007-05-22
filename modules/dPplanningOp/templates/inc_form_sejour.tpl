@@ -50,7 +50,7 @@
   <td colspan="3" id="selectSejours">
     <select name="sejour_id" onchange="reloadSejour(this.value)">
       <option value="" {{if !$sejour->sejour_id}} selected="selected" {{/if}}>
-        &mdash; Crï¿½er un nouveau sï¿½jour
+        &mdash; Créer un nouveau séjour
       </option>
       {{foreach from=$sejours item=curr_sejour}}
       <option value="{{$curr_sejour->sejour_id}}" {{if $sejour->sejour_id == $curr_sejour->sejour_id}} selected="selected" {{/if}}>
@@ -122,7 +122,7 @@
     <img id="editSejour__date_entree_prevue_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
   </td>
   <td colspan="2">
-    ï¿½
+    à
     <select name="_hour_entree_prevue" onchange="updateHeureSortie()">
     {{foreach from=$hours|smarty:nodefaults item=hour}}
       <option value="{{$hour}}" {{if $sejour->_hour_entree_prevue == $hour || (!$sejour->sejour_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
@@ -154,7 +154,7 @@
     <img id="editSejour__date_sortie_prevue_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
   </td>
   <td colspan="2">
-    ï¿½ 
+    à 
     <select name="_hour_sortie_prevue">
     {{foreach from=$hours|smarty:nodefaults item=hour}}
       <option value="{{$hour}}" {{if $sejour->_hour_sortie_prevue == $hour  || (!$sejour->sejour_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
@@ -170,13 +170,13 @@
 
 {{if !$mode_operation}}
 <tr>
-  <th>Entrï¿½e rï¿½elle :</th>
-  <td colspan="3">{{$sejour->entree_reelle|date_format:"%d/%m/%Y ï¿½ %Hh%M"}}</td>
+  <th>Entrée réelle :</th>
+  <td colspan="3">{{$sejour->entree_reelle|date_format:"%d/%m/%Y à %Hh%M"}}</td>
 </tr>
 
 <tr>
-  <th>Sortie rï¿½elle :</th>
-  <td colspan="3">{{$sejour->sortie_reelle|date_format:"%d/%m/%Y ï¿½ %Hh%M"}}</td>
+  <th>Sortie réelle :</th>
+  <td colspan="3">{{$sejour->sortie_reelle|date_format:"%d/%m/%Y à %Hh%M"}}</td>
 </tr>
 {{/if}}
 
@@ -289,14 +289,14 @@
       {{assign var="annule_class" value="cancel"}}
     {{/if}}
     {{if $sejour->annule == "1"}}
-      {{assign var="annule_text" value="Rï¿½tablir"}}
+      {{assign var="annule_text" value="Rétablir"}}
       {{assign var="annule_class" value="change"}}
     {{/if}}
     <button class="{{$annule_class}}" type="button" onclick="cancelSejour();">
       {{$annule_text}}
     </button>
   {{else}}
-    <button class="submit" type="submit">Crï¿½er</button>
+    <button class="submit" type="submit">Créer</button>
   {{/if}}
   </td>
 </tr>

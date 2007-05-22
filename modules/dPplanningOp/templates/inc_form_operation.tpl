@@ -81,7 +81,7 @@
   <tr>
     <th>{{mb_label object=$op field="cote"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir un cï¿½tï¿½" onchange="modifOp()"}}
+      {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir un côté" onchange="modifOp()"}}
     </td>
   </tr> 
 
@@ -117,7 +117,7 @@
       <select name="date" onchange="{{if !$op->operation_id}}updateEntreePrevue();{{/if}} modifSejour()">
         {{if $op->operation_id}}
         <option value="{{$op->date}}" selected="selected">
-          Inchangï¿½e ({{$op->date|date_format:"%d/%m/%Y"}} )
+          Inchangée ({{$op->date|date_format:"%d/%m/%Y"}} )
         </option>
         {{/if}}
         <option value="{{$today}}">
@@ -129,7 +129,7 @@
       </select>
     </td>
     <td>
-      ï¿½
+      à
       <select name="_hour_urgence">
       {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
         <option value="{{$hour}}" {{if $op->_hour_urgence == $hour || (!$op->operation_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
@@ -176,9 +176,9 @@
   </tr>
 
   <tr>
-    <td>{{mb_field object=$op field="depassement" size="4"}} ï¿½</td>
-    <td>{{mb_field object=$op field="forfait" size="4"}} ï¿½</td>
-    <td>{{mb_field object=$op field="fournitures" size="4"}} ï¿½</td>
+    <td>{{mb_field object=$op field="depassement" size="4"}}</td>
+    <td>{{mb_field object=$op field="forfait" size="4"}}</td>
+    <td>{{mb_field object=$op field="fournitures" size="4"}}</td>
   </tr>
   
   <tr>
