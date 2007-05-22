@@ -34,7 +34,7 @@ function pageMain() {
   <tr>
     <td class="greedyPane">
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id=0" class="buttonnew">
-        CrÃ©er un utilisateur
+        Créer un utilisateur
       </a>
       <table class="tbl">
         <tr>
@@ -116,7 +116,7 @@ function pageMain() {
           <th class="title" colspan="2">
             <input type="hidden" name="_user_type" value="0" />
           
-            CrÃ©ation d'un nouvel utilisateur
+            Création d'un nouvel utilisateur
           {{/if}}
           </th>
         </tr>
@@ -176,7 +176,7 @@ function pageMain() {
           <th>{{mb_label object=$mediuserSel field="discipline_id"}}</th>
           <td>
             <select name="discipline_id" class="{{$mediuserSel->_props.discipline_id}}">
-              <option value="">&mdash; Choisir une spÃ©cialitÃ© &mdash;</option>
+              <option value="">&mdash; Choisir une spécialité &mdash;</option>
               {{foreach from=$disciplines item=curr_discipline}}
               <option value="{{$curr_discipline->discipline_id}}" {{if $curr_discipline->discipline_id == $mediuserSel->discipline_id}} selected="selected" {{/if}}>
                 {{$curr_discipline->_view}}
@@ -189,7 +189,7 @@ function pageMain() {
           <th>{{mb_label object=$mediuserSel field="spec_cpam_id"}}</th>
           <td>
             <select name="spec_cpam_id" class="{{$mediuserSel->_props.spec_cpam_id}}">
-              <option value="">&mdash; Choisir une spÃ©cialitÃ© &mdash;</option>
+              <option value="">&mdash; Choisir une spécialité &mdash;</option>
               {{foreach from=$spec_cpam item=curr_spec}}
               <option value="{{$curr_spec->spec_cpam_id}}" {{if $curr_spec->spec_cpam_id == $mediuserSel->spec_cpam_id}} selected="selected" {{/if}}>
                 {{$curr_spec->_view}}
