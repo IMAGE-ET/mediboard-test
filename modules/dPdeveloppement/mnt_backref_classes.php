@@ -51,7 +51,8 @@ $tabKey = array();
 foreach($backRefs as $keyBackRef => $valueBackRef) {
 	foreach ($valueBackRef as $key => $value) {
 		$ok = is_numeric($key) ? "okn" : "ok";
-		$tab[$keyBackRef][$value]["real"] = in_array($value,$backSpecs[$keyBackRef]) ? $ok : "r";
+		$tab[$keyBackRef][$value]["real"]["condition"] = in_array($value,$backSpecs[$keyBackRef]) ? $ok : "r";
+		$tab[$keyBackRef][$value]["real"]["attribut"] = $key;
 	}
 }
 
@@ -71,7 +72,6 @@ foreach($backSpecs as $keyBackSpec => $valueBackSpec) {
 		$alert = array_key_exists($keyBackSpec,$backRefs) && in_array($value,$backRefs[$keyBackSpec]) ? "ok" : $alert;
 	}
 }
-
 $aSuggestions = array();
 
 // Construction des suggestions
