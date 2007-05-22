@@ -85,6 +85,7 @@ class CDocGedSuivi extends CMbObject {
   }
   
   function delete() {
+    // Suppression du fichier correspondant
     $msg = null;
     if ($this->file_id){
       $this->loadFile();
@@ -92,6 +93,8 @@ class CDocGedSuivi extends CMbObject {
         $this->_ref_file->delete();
       }
     }
+
+    //suppression de la doc
     return parent::delete();
   }
 }

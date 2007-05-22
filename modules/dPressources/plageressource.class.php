@@ -77,12 +77,6 @@ class CPlageressource extends CMbObject {
     return $this->_ref_prat->getPerm($permType);
   }
 
-/*  
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array ();
-    return parent::canDelete( $msg, $oid, $tables );
-  }
-*/
 /*
  * returns collision message, null for no collision
  */

@@ -42,7 +42,7 @@ class CPreferences {
 	}
 
 	function delete() {
-		$sql = "DELETE FROM user_preferences WHERE pref_user = $this->pref_user AND pref_name = '$this->pref_name'";
+		$sql = "DELETE FROM user_preferences WHERE pref_user = '$this->pref_user' AND pref_name = '$this->pref_name'";
 		if (!db_exec( $sql )) {
 			return db_error();
 		} else {

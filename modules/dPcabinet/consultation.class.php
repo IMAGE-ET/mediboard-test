@@ -356,21 +356,7 @@ class CConsultation extends CMbObject {
     if ($this->_ref_plageconsult->date < mbDate()) {
       return "Imposible de supprimer une consultation passée";
     }
-    
     return parent::canDeleteEx();
-  }
-
-  function delete() {
-    // Appel en cascade sur la consultation d'anesthésie potentielle
-    $this->loadRefConsultAnesth();
-    $consult_anesth =& $this->_ref_consult_anesth;
-    if ($consult_anesth->_id) {
-      if ($msg = $consult_anesth->delete()) {
-        return $msg;
-      }
-    }
-    
-    return parent::delete();
   }
 }
 

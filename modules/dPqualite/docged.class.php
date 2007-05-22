@@ -214,6 +214,21 @@ class CDocGed extends CMbObject {
       return false;
     }
   }
+
+  function canDeleteEx() {
+    // Suppr si Demande, redac, valid ou refus de demande (Terminé sans doc actif)
+    if($this->etat==self::DEMANDE 
+       || $this->etat==self::REDAC 
+       || $this->etat==self::VALID
+       || $this->etat==self::MODELE
+       || ($this->etat==self::TERMINE && !$this->_lastactif->doc_ged_suivi_id)
+       || ($this->etat==self::TERMINE && $this->_lastactif->doc_ged_suivi_id!=$this->_lastentry->doc_ged_suivi_id)
+       ){
+      return parent::canDeleteEx();
+    }else{
+      return $AppUI->_("msg-CDocGed-error_delete");
+    }
+  }
   
   function delete() {
     // Suppression ou non de document en cours de modification
@@ -225,7 +240,7 @@ class CDocGed extends CMbObject {
       $this->loadLastEntry();
     }
     $msg = null;
-    if (!$this->canDelete( $msg )) {
+    if ($msg = $this->canDeleteEx()) {
       return $msg;
     }    
     $this->_lastactif->delete_suivi($this->doc_ged_id, $this->_lastactif->doc_ged_suivi_id);

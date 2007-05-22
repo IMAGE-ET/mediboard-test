@@ -183,8 +183,9 @@ class CSejour extends CMbObject {
   function delAffectations() {
     $this->loadRefsAffectations();
     foreach($this->_ref_affectations as $key => $value) {
-      $this->_ref_affectations[$key]->delete();
+      $this->_ref_affectations[$key]->deleteOne();
     }
+    return null;
   }
   function cancelOperations(){
     $this->loadRefsOperations();

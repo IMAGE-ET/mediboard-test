@@ -95,7 +95,7 @@ class CConsultAnesth extends CMbObject {
   
   function getSpecs() {
     return array (
-      "consultation_id" => "notNull ref class|CConsultation",
+      "consultation_id" => "notNull ref class|CConsultation cascade",
       "operation_id"    => "ref class|COperation",
       // @todo : un type particulier pour le poid et la taille
       "poid"            => "currency pos",

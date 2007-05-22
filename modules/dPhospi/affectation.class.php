@@ -86,22 +86,17 @@ class CAffectation extends CMbObject {
     return null;
   }
   
+  function deleteOne() {
+    return parent::delete();
+  }
+  
   function delete() {
   	$this->load();
-    $msg = null;
-	  if (!$this->canDelete( $msg )) {
-		  return $msg;
-	  }
     if($this->sejour_id){
-	    $sql = "DELETE FROM `affectation` WHERE `sejour_id` = '".$this->sejour_id."'";
-    }else{
-      $sql = "DELETE FROM `affectation` WHERE `affectation_id` = '".$this->affectation_id."'";
+      $this->loadRefSejour();
+      return $this->_ref_sejour->delAffectations();
     }
-	  if (!db_exec( $sql )) {
-      return db_error();
-	  } else {
-		  return null;
-    }
+    return $this->deleteOne();
   }
   
   function store() {

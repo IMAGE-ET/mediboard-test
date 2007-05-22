@@ -198,7 +198,7 @@ class CMediusers extends CMbObject {
 
     $msg = null;
     // Delete corresponding dP user first
-    if ($this->canDelete($msg)) {
+    if (!$msg = $this->canDeleteEx()) {
       $dPuser = $this->createUser();
       if ($msg = $dPuser->delete()) {
         return $msg;
