@@ -29,6 +29,8 @@ foreach($listCatalogues as &$_catalogue) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
+
 $smarty->assign("listCatalogues", $listCatalogues);
 $smarty->assign("catalogue"     , $catalogue    );
 

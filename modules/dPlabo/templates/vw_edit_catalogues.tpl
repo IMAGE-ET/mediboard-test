@@ -32,17 +32,27 @@ function pageMain() {
         Ajouter un nouveau catalogue
       </a>
       <form name="editCatalogue" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+
       <input type="hidden" name="dosql" value="do_catalogue_aed" />
       <input type="hidden" name="catalogue_labo_id" value="{{$catalogue->_id}}" />
       <input type="hidden" name="del" value="0" />
+
       <table class="form">
         <tr>
           {{if $catalogue->_id}}
-          <th class="title modify" colspan="2">Modification du catalogue {{$catalogue->_view}}</th>
+          <th class="title modify" colspan="0">
+            {{if $canSante400->read}}
+            <a style="float:right;" href="#" onclick="view_idsante400('{{$catalogue->_class_name}}',{{$catalogue->_id}})">
+              <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400" />
+	        </a>
+  	        {{/if}}
+            Modification du catalogue {{$catalogue->_view}}
+          </th>
           {{else}}
           <th class="title" colspan="2">Création d'un catalogue</th>
           {{/if}}
         </tr>
+
         <tr>
           <th>{{mb_label object=$catalogue field="pere_id"}}</th>
           <td>
@@ -56,14 +66,17 @@ function pageMain() {
             </select>
           </td>
         </tr>
+
         <tr>
           <th>{{mb_label object=$catalogue field="identifiant"}}</th>
           <td>{{mb_field object=$catalogue field="identifiant"}}</td>
         </tr>
+
         <tr>
           <th>{{mb_label object=$catalogue field="libelle"}}</th>
           <td>{{mb_field object=$catalogue field="libelle"}}</td>
         </tr>
+
         <tr>
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
@@ -78,6 +91,7 @@ function pageMain() {
           </td>
         </tr>
       </table>
+
       </form>
       
       {{if $catalogue->_id}}

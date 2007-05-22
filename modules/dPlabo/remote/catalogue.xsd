@@ -11,7 +11,7 @@
 			<xs:documentation>Structure récursive de catalogues et analyses</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="identitiant" type="xs:Name"/>
+			<xs:element name="identifiant" type="xs:Name"/>
 			<xs:element name="libelle" type="xs:string"/>
 			<xs:element name="sections">
 				<xs:complexType>

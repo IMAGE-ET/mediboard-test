@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Sample catalogue file -->
 <catalogue id="ctl-1" xsi:noNamespaceSchemaLocation="catalogue.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<identitiant>Name</identitiant>
-	<libelle>String</libelle>
+	<identifiant>Name 1</identifiant>
+	<libelle>String 1</libelle>
 	<sections>
 	  <catalogue id="ctl-11">
-				<identitiant>NAME</identitiant>
-				<libelle>String</libelle>
+				<identifiant>NAME 11</identifiant>
+				<libelle>String 11</libelle>
 				<sections />
 				<analyses />
-			</catalogue>
+		</catalogue>
+	  <catalogue id="ctl-12">
+				<identifiant>NAME 12</identifiant>
+				<libelle>String 12</libelle>
+				<sections />
+				<analyses />
+		</catalogue>
 	</sections>
 	<analyses>
 		<analyse id="anl-1">
