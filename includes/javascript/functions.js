@@ -6,8 +6,7 @@ function main() {
   BrowserDetect.init();
   ObjectInitialisation.hackIt();
   SystemMessage.init();
-  initNotes();
-  initSante400();
+  initPuces();
   pageMain();
 }
 
@@ -547,7 +546,6 @@ function initNotes(){
 }
 
 
-
 function initSante400(){
     $$("div.idsante400").each(function(element) {
     var sIdDiv = element.id;
@@ -562,9 +560,13 @@ function initSante400(){
   });
 }
 
+function initPuces() {
+  initNotes();
+  initSante400();
+}
 
 function reloadNotes(){
-  initNotes();
+  initNotes(); 
 }
 
 /**

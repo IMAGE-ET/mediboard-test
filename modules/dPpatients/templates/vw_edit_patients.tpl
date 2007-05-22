@@ -97,11 +97,9 @@ function pageMain() {
       <tr>
       {{if $patient->patient_id}}
         <th class="title modify" colspan="5">
-          {{if $canSante400->read}}
-          <a style="float:right;" href="#" onclick="view_idsante400('CPatient',{{$patient->patient_id}})">
-            <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
-          </a>
-          {{/if}}
+        
+          <div class="idsante400" id="CPatient-{{$patient->patient_id}}"></div>
+              
           <a style="float:right;" href="#" onclick="view_log('CPatient',{{$patient->patient_id}})">
             <img src="images/icons/history.gif" alt="historique" />
           </a>

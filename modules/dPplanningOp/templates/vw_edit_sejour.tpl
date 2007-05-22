@@ -42,7 +42,7 @@ function pageMain() {
     </td>
     <td>
       <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->sejour_id}}">
-        Programmer une nouvelle intervention dans ce séjour
+        Programmer une nouvelle intervention dans ce sï¿½jour
       </a>
     </td>
   </tr>
@@ -51,19 +51,17 @@ function pageMain() {
   <tr>
     {{if $sejour->sejour_id}}
     <th colspan="2" class="title modify">
-      {{if $canSante400->read}}
-      <a style="float:right;" href="#" onclick="view_idsante400('CSejour',{{$sejour->sejour_id}})">
-        <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
-      </a>
-      {{/if}}
-      <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->sejour_id}})">
-        <img src="images/icons/history.gif" alt="historique" />
-      </a>
-      Modification du séjour {{$sejour->_view}}
+    
+    <div class="idsante400" id="CSejour-{{$sejour->sejour_id}}"></div>
+    
+    <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->sejour_id}})">
+      <img src="images/icons/history.gif" alt="historique" />
+    </a>
+      Modification du sï¿½jour {{$sejour->_view}}
     </th>
     {{else}}
     <th colspan="2" class="title">      
-      Création d'un nouveau séjour
+      Crï¿½ation d'un nouveau sï¿½jour
     </th>
     {{/if}}
   </tr>

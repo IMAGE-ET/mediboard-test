@@ -1,6 +1,9 @@
 <table class="form">
   <tr>
     <th class="title" colspan="2">
+    
+      <div class="idsante400" id="CPatient-{{$object->_id}}"></div>
+     
       <a style="float:right;" href="#nothing" onclick="view_history_patient({{$object->_id}})">
         <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
       </a>

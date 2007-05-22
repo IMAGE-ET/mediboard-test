@@ -13,16 +13,16 @@ newExam = function(sAction, consultation_id) {
 <table class="form">
   <tr>
     <th class="title" colspan="4">
+      
+      <div class="idsante400" id="{{$consult->_class_name}}-{{$consult->_id}}"></div>
+      
       <a style="float:right;" href="#nothing" onclick="view_log('{{$consult->_class_name}}', {{$consult->_id}})">
         <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
       </a>
-
-      {{if $canSante400->read}}
-      <a style="float:right;" href="#" onclick="view_idsante400('{{$object->_class_name}}',{{$object->_id}})">
-        <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
-      </a>
-      {{/if}}
-
+      
+	    
+	  
+	
       <div style="float:left;" class="noteDiv {{$consult->_class_name}}-{{$consult->_id}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
@@ -95,7 +95,7 @@ newExam = function(sAction, consultation_id) {
       <i>{{tr}}CConsultAnesth.position.{{$object->position}}{{/tr}}</i>
     </td>
     <td class="text" colspan="2">
-      <strong>Techniques Complémentaires :</strong>
+      <strong>Techniques Complï¿½mentaires :</strong>
       <ul>
         {{foreach from=$object->_ref_techniques item=curr_tech}}
         <li>
@@ -211,7 +211,7 @@ newExam = function(sAction, consultation_id) {
   </tr>
   <tr>
     <td class="text" colspan="2">
-      <strong>Distance thyro-mentonnière :</strong>
+      <strong>Distance thyro-mentonniére :</strong>
       {{if $object->distThyro}}<i>{{tr}}CConsultAnesth.distThyro.{{$object->distThyro}}{{/tr}}</i>{{/if}}
     </td>
     <td class="text" colspan="2">

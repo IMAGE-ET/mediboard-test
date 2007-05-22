@@ -50,19 +50,19 @@ foreach($listPraticiens as $keyPrat =>$prat){
   $categorie_prat[$keyPrat] = $prat->_ref_discipline->categorie;
 }
 
-// On récupère le séjour
+// On récupére le séjour
 $sejour = new CSejour;
 if ($sejour_id) {
   $sejour->load($sejour_id);
 
   // On vérifie que l'utilisateur a les droits sur le sejour
   /*if (!$sejour->canEdit()) {
-    $AppUI->setMsg("Vous n'avez pas accès à ce séjour", UI_MSG_WARNING);
+    $AppUI->setMsg("Vous n'avez pas accés à ce séjour", UI_MSG_WARNING);
     $AppUI->redirect("m=$m&tab=$tab&sejour_id=0");
   }*/
   // Ancienne methode
   if (!array_key_exists($sejour->praticien_id, $listPraticiens)) {
-    $AppUI->setMsg("Vous n'avez pas accès à ce séjour", UI_MSG_WARNING);
+    $AppUI->setMsg("Vous n'avez pas accés à ce séjour", UI_MSG_WARNING);
     $AppUI->redirect("m=$m&tab=$tab&sejour_id=0");
   }
 
@@ -108,7 +108,6 @@ if($sejour->_ref_operations){
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canSante400", $canSante400);
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("sejour"        , $sejour);

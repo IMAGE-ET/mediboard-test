@@ -49,7 +49,6 @@ $profiles = $profiles->loadList($where);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canSante400"  , $canSante400  );
 $smarty->assign("mediuserSel"  , $mediuserSel  );
 $smarty->assign("profiles"     , $profiles     );
 $smarty->assign("groups"       , $groups       );

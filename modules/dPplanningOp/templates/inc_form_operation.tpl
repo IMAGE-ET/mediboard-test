@@ -16,14 +16,12 @@
   <tr>
     <th class="category" colspan="3">
       {{if $op->operation_id}}
-        {{if $canSante400->read}}
-        <a style="float:right;" href="#" onclick="view_idsante400('COperation',{{$op->operation_id}})">
-          <img src="images/icons/sante400.gif" alt="Sante400" title="{{tr}}Id400.desc{{/tr}}"/>
-        </a>
-        {{/if}}
-        <a style="float:right;" href="#" onclick="view_log('COperation',{{$op->operation_id}})">
-          <img src="images/icons/history.gif" alt="{{tr}}History.desc{{/tr}}" />
-        </a>
+      
+      <div class="idsante400" id="COperation-{{$op->operation_id}}"></div>
+      
+      <a style="float:right;" href="#" onclick="view_log('COperation',{{$op->operation_id}})">
+        <img src="images/icons/history.gif" alt="{{tr}}History.desc{{/tr}}" />
+      </a>
       {{/if}}
       {{tr}}msg-COperation-informations{{/tr}}
     </th>
@@ -83,7 +81,7 @@
   <tr>
     <th>{{mb_label object=$op field="cote"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir un côté" onchange="modifOp()"}}
+      {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir un cï¿½tï¿½" onchange="modifOp()"}}
     </td>
   </tr> 
 
@@ -119,7 +117,7 @@
       <select name="date" onchange="{{if !$op->operation_id}}updateEntreePrevue();{{/if}} modifSejour()">
         {{if $op->operation_id}}
         <option value="{{$op->date}}" selected="selected">
-          Inchangée ({{$op->date|date_format:"%d/%m/%Y"}} )
+          Inchangï¿½e ({{$op->date|date_format:"%d/%m/%Y"}} )
         </option>
         {{/if}}
         <option value="{{$today}}">
@@ -131,7 +129,7 @@
       </select>
     </td>
     <td>
-      à
+      ï¿½
       <select name="_hour_urgence">
       {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
         <option value="{{$hour}}" {{if $op->_hour_urgence == $hour || (!$op->operation_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
@@ -178,9 +176,9 @@
   </tr>
 
   <tr>
-    <td>{{mb_field object=$op field="depassement" size="4"}} €</td>
-    <td>{{mb_field object=$op field="forfait" size="4"}} €</td>
-    <td>{{mb_field object=$op field="fournitures" size="4"}} €</td>
+    <td>{{mb_field object=$op field="depassement" size="4"}} ï¿½</td>
+    <td>{{mb_field object=$op field="forfait" size="4"}} ï¿½</td>
+    <td>{{mb_field object=$op field="fournitures" size="4"}} ï¿½</td>
   </tr>
   
   <tr>

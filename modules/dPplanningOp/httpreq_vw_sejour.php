@@ -56,8 +56,6 @@ for ($i = 0; $i < 60; $i += $sejourConfig["min_intervalle"]) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canSante400", $canSante400);
-
 $smarty->assign("sejour"   , $sejour);
 $smarty->assign("praticien", $praticien);
 $smarty->assign("patient"  , $patient);

@@ -15,7 +15,7 @@ $can->needsRead();
 $moduleSante400 = CModule::getInstalled("dPsante400");
 $canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
 
-// Récupération des fonctions
+// Rï¿½cupï¿½ration des fonctions
 $listGroups = new CGroups;
 $listGroups = $listGroups->loadList();
 
@@ -23,14 +23,13 @@ foreach($listGroups as $key => $value) {
   $listGroups[$key]->loadRefs();
 }
 
-// Récupération du groupe selectionné
+// Rï¿½cupï¿½ration du groupe selectionnï¿½
 $usergroup = new CGroups;
 $usergroup->load(mbGetValueFromGetOrSession("group_id", 0));
 
-// Création du template
+// Crï¿½ation du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canSante400" , $canSante400);
 $smarty->assign("usergroup"   , $usergroup);
 $smarty->assign("listGroups"  , $listGroups);
 

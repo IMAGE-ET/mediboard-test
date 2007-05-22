@@ -14,16 +14,15 @@ newExam = function(sAction, consultation_id) {
 <table class="form">
   <tr>
     <th class="title" colspan="2">
+     
+      <div class="idsante400" id="{{$object->_class_name}}-{{$object->_id}}"></div>
+      
       <a style="float:right;" href="#nothing" onclick="view_log('{{$object->_class_name}}', {{$object->_id}})">
         <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
       </a>
 
-      {{if $canSante400->read}}
-      <a style="float:right;" href="#" onclick="view_idsante400('{{$object->_class_name}}',{{$object->_id}})">
-        <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400"/>
-      </a>
-      {{/if}}
-      
+	 
+	  
       <div style="float:left;" class="noteDiv {{$object->_class_name}}-{{$object->_id}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>

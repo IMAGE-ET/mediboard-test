@@ -36,8 +36,6 @@ if (mbGetValueFromGet("useVitale")) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canSante400" , $canSante400);
-$smarty->assign("patient"     , $patient    );
-
+$smarty->assign("patient", $patient);
 $smarty->display("vw_edit_patients.tpl");
 ?>

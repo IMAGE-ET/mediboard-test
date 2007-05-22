@@ -10,7 +10,7 @@ function viewCompleteItem(sClassName, id) {
   url.addParam("object_class", sClassName);
   url.addParam("object_id", id);
   url.requestUpdate("listView", { 
-    onComplete: initNotes 
+    onComplete: initPuces
   } );
 }
 
