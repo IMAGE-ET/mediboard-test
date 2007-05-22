@@ -1,4 +1,4 @@
-<table class="main">
+<table class="main"> 
   <tr>
     <td class="halfPane">
       <a class="buttonnew" href="index.php?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id=0">
