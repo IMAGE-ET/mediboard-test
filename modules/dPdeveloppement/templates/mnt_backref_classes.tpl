@@ -19,19 +19,17 @@
     <td>
       <table class="tbl">
         <tr>
-          <th colspan="3">Fonction getBackRefs()</th>
+          <th colspan="4">Fonction getBackRefs()</th>
           <th colspan="0">Classes de références</th>
         </tr>
         <tr>
           <th>Alerte</th>
           <th>Attribut</th>
+          <th>Traduction</th>
           <th>Nom</th>
           <th>Nom</th>
         </tr>
-        {{assign var="styleColorKey"     value="style=\"background-color:#afa;\""}}
-        {{assign var="styleColorError"   value="style=\"background-color:#f00;\""}}
-        {{assign var="styleColorConflit" value="style=\"background-color:#fc0;\""}}
-        
+      
         {{foreach from=$tab key=keyTab item=_itemTab}}
        	<tr>
           <th colspan="0" class="title">
@@ -51,74 +49,89 @@
        	<tr>
        	  {{if @$_item.real}}
           	  {{if $_item.real.condition == "warningNum"}}
-                <td {{$styleColorConflit|smarty:nodefaults}}>
+                <td class="warning">
                 	Aucun nom n'a été défini
                 </td>
               {{else}}
               	 <td {{if $_item.real.condition == "ok"}}
-              	 		{{$styleColorKey|smarty:nodefaults}}
+              	 		class="ok"
               	 	 {{else}}
-                		{{$styleColorError|smarty:nodefaults}}
+                		class="error"
               		{{/if}} >
               	 </td>
               {{/if}}
           <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
-              	 {{$styleColorError|smarty:nodefaults}}
+              	 class="error"
               {{else}}
-                 {{$styleColorKey|smarty:nodefaults}}
+                 class="ok"
               {{/if}} >
-            	{{$_item.real.attribut}}
+            	{{$_item.real.attribut}} 
 		  </td>
-           <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
-              	 {{$styleColorError|smarty:nodefaults}}
+		  <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
+              	 class="error"
               {{else}}
-                 {{$styleColorKey|smarty:nodefaults}}
+                 class="ok"
+              {{/if}} >
+            	{{tr}}{{$keyTab}}-back-{{$_item.real.attribut}}{{/tr}}
+		  </td> 
+          <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
+              	 class="error"
+              {{else}}
+                 class="ok"
               {{/if}} >
             	{{$keyItemTab}}
           </td>
            <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
-              	 {{$styleColorError|smarty:nodefaults}}
+              	 class="error"
               {{else}}
-                 {{$styleColorKey|smarty:nodefaults}}
+                 class="ok"
               {{/if}} >
               	{{$keyItemTab}}
           </td>
           {{else}}
           	  {{if $_item.theo == "okn"}}
-                <td {{$styleColorKey|smarty:nodefaults}} </td>
+                <td class="ok"> </td>
               {{elseif $_item.theo == ""}}
-              	 <td {{$styleColorConflit|smarty:nodefaults}}> 
+              	 <td class="warning"> 
               	 	Invérifiable
               	 </td>
               {{elseif $_item.theo == "noClass"}}
-              	 <td {{$styleColorError|smarty:nodefaults}}> 
+              	 <td class="error"> 
               	 	{{$_item.theo}}
               	 </td>
               {{else}}
-                 <td  {{$styleColorError|smarty:nodefaults}} </td>
+                 <td class="error"> </td>
               {{/if}}
          <td {{if $_item.theo == "ok"}}
-              	 {{$styleColorKey|smarty:nodefaults}}
+              	 class="ok"
               {{elseif $_item.theo == ""}}
-                 {{$styleColorConflit|smarty:nodefaults}}
+                  class="warning"
               {{else}}
-                 {{$styleColorError|smarty:nodefaults}}
+                 class="error"
               {{/if}} >
           </td>
           <td {{if $_item.theo == "ok"}}
-              	 {{$styleColorKey|smarty:nodefaults}}
+              	 class="ok"
               {{elseif $_item.theo == ""}}
-                 {{$styleColorConflit|smarty:nodefaults}}
+                  class="warning"
               {{else}}
-                 {{$styleColorError|smarty:nodefaults}}
+                 class="error"
               {{/if}} >
           </td>
           <td {{if $_item.theo == "ok"}}
-              	 {{$styleColorKey|smarty:nodefaults}}
+              	 class="ok"
               {{elseif $_item.theo == ""}}
-                 {{$styleColorConflit|smarty:nodefaults}}
+                  class="warning"
               {{else}}
-                 {{$styleColorError|smarty:nodefaults}}
+                 class="error"
+              {{/if}} >
+          </td>
+          <td {{if $_item.theo == "ok"}}
+              	 class="ok"
+              {{elseif $_item.theo == ""}}
+                  class="warning"
+              {{else}}
+                  class="error"
               {{/if}} >
             	{{$keyItemTab}}
           </td>

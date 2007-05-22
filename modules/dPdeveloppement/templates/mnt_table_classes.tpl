@@ -30,9 +30,6 @@
           <th>Default</th>
           <th>Index</th>
         </tr>
-        {{assign var="styleColorKey"     value="style=\"background-color:#afa;\""}}
-        {{assign var="styleColorError"   value="style=\"background-color:#f00;\""}}
-        {{assign var="styleColorConflit" value="style=\"background-color:#fc0;\""}}
         
         {{foreach from=$aChamps key=keyClass item=currClass}}
         
@@ -55,20 +52,20 @@
         {{foreach from=$currClass key=keyChamp item=currChamp}}
         <tr>
           <td {{if !$currChamp.class_field}}
-                {{$styleColorError|smarty:nodefaults}}
+                class="error"
               {{elseif $currChamp.keytable && $currChamp.keytable==$currChamp.class_field}}
-                {{$styleColorKey|smarty:nodefaults}}
+                class="ok"
               {{/if}}>
             {{$currChamp.class_field}}
           </td>
           <td {{if $currChamp.keytable && $currChamp.keytable==$currChamp.class_field && $currChamp.class_props}}
-                {{$styleColorError|smarty:nodefaults}}
+                class="error"
               {{elseif $currChamp.keytable && $currChamp.keytable==$currChamp.class_field}}
-                {{$styleColorKey|smarty:nodefaults}}
+                class="ok"
               {{elseif $currChamp.error_class_props}}
-                {{$styleColorConflit|smarty:nodefaults}}
+                class="warning"
               {{elseif !$currChamp.class_props}}
-                {{$styleColorError|smarty:nodefaults}}
+                class="error"
               {{/if}}>
             {{$currChamp.class_props}}
             {{if !$currChamp.class_field && $currChamp.class_props}}
@@ -76,7 +73,7 @@
             {{/if}}
           </td>
           {{if !$currChamp.BDD_name}}
-          <td colspan="5" {{$styleColorError|smarty:nodefaults}}>
+          <td colspan="5" class="error">
           {{if $currChamp.object_spec}}
             <strong>
               {{$currChamp.object_spec}}
@@ -85,14 +82,14 @@
           </td>
           {{else}}
           <td {{if $currChamp.keytable==$currChamp.BDD_name}}
-                {{$styleColorKey|smarty:nodefaults}}
+                class="ok"
               {{/if}}>
             {{$currChamp.BDD_name}}
           </td>
           <td {{if $currChamp.error_BDD_type}}
-                {{$styleColorConflit|smarty:nodefaults}}
+                class="warning"
               {{elseif $currChamp.keytable==$currChamp.BDD_name}}
-                {{$styleColorKey|smarty:nodefaults}}
+                class="ok"
               {{/if}}>
             {{$currChamp.BDD_type}}
             {{if $currChamp.error_BDD_type}}
@@ -100,21 +97,21 @@
             {{/if}}
           </td>
           <td {{if $currChamp.error_BDD_null}}
-                {{$styleColorConflit|smarty:nodefaults}}
+                class="warning"
               {{elseif $currChamp.keytable==$currChamp.BDD_name}}
-                {{$styleColorKey|smarty:nodefaults}}
+                class="ok"
               {{/if}}>
             {{if $currChamp.BDD_null!="NO"}}
             {{$currChamp.BDD_null}}
             {{/if}}
           </td>
           <td {{if $currChamp.keytable==$currChamp.BDD_name}}
-                {{$styleColorKey|smarty:nodefaults}}
+                class="ok"
               {{/if}}>
             {{$currChamp.BDD_default}}
           </td>
           <td {{if $currChamp.keytable==$currChamp.BDD_name}}
-                {{$styleColorKey|smarty:nodefaults}}
+                class="ok"
               {{/if}}>
             {{$currChamp.BDD_index}}
           </td>
