@@ -16,7 +16,7 @@ class CDateTimeSpec extends CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     $format = mbGetValue(@$params["format"], "%d/%m/%Y %H:%M");
-    if($propValue) {
+    if($propValue && $propValue != "0000-00-00 00:00:00") {
       return smarty_modifier_date_format($propValue, $format);
     } else {
       return "-";

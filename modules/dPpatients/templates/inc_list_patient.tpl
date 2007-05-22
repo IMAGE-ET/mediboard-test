@@ -81,17 +81,19 @@
           <td><input type="checkbox" name="fusion_{{$curr_patient->patient_id}}" /></td>
           <td class="text">
             <a href="{{$href}}{{$curr_patient->patient_id}}">
-              {{$curr_patient->_view}}
+              {{mb_value object=$curr_patient field="_view"}}
             </a>
           </td>
           <td class="text">
             <a href="{{$href}}{{$curr_patient->patient_id}}">
-              {{$curr_patient->_naissance}}
+              {{mb_value object=$curr_patient field="naissance"}}
             </a>
           </td>
           <td class="text">
             <a href="{{$href}}{{$curr_patient->patient_id}}">
-              {{$curr_patient->adresse}}, {{$curr_patient->cp}} {{$curr_patient->ville}}
+              {{mb_value object=$curr_patient field="adresse"}}
+              {{mb_value object=$curr_patient field="cp"}}
+              {{mb_value object=$curr_patient field="ville"}}
             </a>
           </td>
         </tr>
@@ -108,17 +110,19 @@
           <td><input type="checkbox" name="fusion_{{$curr_patient->patient_id}}" /></td>
           <td class="text">
             <a href="{{$href}}{{$curr_patient->patient_id}}">
-              {{$curr_patient->_view}}
+              {{mb_value object=$curr_patient field="_view"}}
             </a>
           </td>
           <td class="text">
             <a href="{{$href}}{{$curr_patient->patient_id}}">
-              {{$curr_patient->_naissance}}
+              {{mb_value object=$curr_patient field="naissance"}}
             </a>
           </td>
           <td class="text">
             <a href="{{$href}}{{$curr_patient->patient_id}}">
-              {{$curr_patient->adresse}}, {{$curr_patient->cp}} {{$curr_patient->ville}}
+              {{mb_value object=$curr_patient field="adresse"}}
+              {{mb_value object=$curr_patient field="cp"}}
+              {{mb_value object=$curr_patient field="ville"}}
             </a>
           </td>
         </tr>
