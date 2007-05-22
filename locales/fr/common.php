@@ -1,6 +1,7 @@
 <?php
-$locales['::deleted not recreated'] = 'L\'objet a été supprimé par un tiers et n\'a pas pu être recréé';
+$locales['CMbObject-back-files'] = 'Fichiers';
 $locales['- New Item -'] = '-- Créer';
+$locales['::deleted not recreated'] = 'L\'objet a été supprimé par un tiers et n\'a pas pu être recréé';
 $locales['::store-check failed:'] = ': impossible de sauvegarder l\'objet, ';
 $locales['About'] = 'A propos';
 $locales['add'] = 'ajoutez';
@@ -13,15 +14,16 @@ $locales['back'] = 'retour';
 $locales['bool.'] = ' ';
 $locales['bool.0'] = 'Non';
 $locales['bool.1'] = 'Oui';
-$locales['CANCEL'] = 'ANNULE';
 $locales['cancel'] = 'annuler';
 $locales['Cancel'] = 'Annuler';
+$locales['CANCEL'] = 'ANNULE';
 $locales['Change User Password'] = 'Change le mot de passe utilisateur';
 $locales['chgpwNoMatch'] = 'Le nouveau mot de passe ne correspond pas';
 $locales['chgpwUpdated'] = 'Votre mot de passe a été mis à jour';
 $locales['chgpwValidNew'] = 'Entrez un nouveau mot de passe';
 $locales['chgpwValidOld'] = 'Entrez votre ancien mot de passe';
 $locales['chgpwWrongPW'] = 'Vous avez entrer un mauvais mot de passe';
+$locales['CMbObject-back-notes'] = 'Notes utilisateurs';
 $locales['CModule'] = 'Module';
 $locales['Complete'] = 'Terminé';
 $locales['config-interop-base_url'] = 'URL de la DHE distante';

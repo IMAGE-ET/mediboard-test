@@ -666,29 +666,44 @@ class CMbObject {
     // Counting backrefs
     $issues = array();
     foreach ($this->_backRefs as $backName => $backRef) {
-      $backSpec = split(" ", $backRef);
-      $backClass = $backSpec[0];
-      $backField = $backSpec[1];
+      $backRefParts = split(" ", $backRef);
+      $backClass = $backRefParts[0];
+      $backField = $backRefParts[1];
       $backObject = new $backClass;
+      $backSpec =& $backObject->_specs[$backField];
+      
       // Cas du module non installé
-      if(!$backObject->_ref_module) continue;
+      if (!$backObject->_ref_module) {
+        continue;
+      }
+      
       // Cas de la supression en cascade
-      if($backObject->_specs[$backField]->cascade) {
+      if ($backSpec->cascade) {
+        
         // Vérification de la possibilité de supprimer chaque backref
         $backObject->$backField = $this->_id;
-        foreach($backObject->loadMatchingList() as $object) {
+        foreach ($backObject->loadMatchingList() as $object) {
           $msg = $object->canDeleteEx();
-          if($msg !== null) {
+          if ($msg !== null) {
             return $msg;
           }
         }
-      } else {
-        // Vérification du nombre de backRefs
+      } 
+      
+      // Vérification du nombre de backRefs
+      else {
         $query = "SELECT COUNT($backObject->_tbl_key) " .
           "\nFROM `$backObject->_tbl` " .
           "\nWHERE `$backField` = '$this->_id'";
+
+        // Cas des meta objects
+        if ($backMeta = $backSpec->meta) {
+          $query .= "\nAND `$backMeta` = '$this->_class_name'";
+        }
+        
+        // Comptage des backrefs
         if ($backCount = db_loadResult($query)) {
-          $issues[] = $backCount . " " . $AppUI->_("$this->_class_name-back-$backName") . "(s)";
+          $issues[] = $backCount . " " . $AppUI->_("$backSpec->class-back-$backName");
         }
       }
     };
@@ -705,10 +720,10 @@ class CMbObject {
    * @return null|string null if successful otherwise returns and error message
    */
   function delete($oid = null) {
-    $k = $this->_tbl_key;
     if ($oid) {
-      $this->$k = intval($oid);
+      $this->_id = intval($oid);
     }
+    
     if ($msg = $this->canDeleteEx()) {
       return $msg;
     }
@@ -730,11 +745,11 @@ class CMbObject {
         $object->delete();
       }
     }
-    $sql = "DELETE FROM $this->_tbl WHERE $this->_tbl_key = '".$this->$k."'";
+    $sql = "DELETE FROM $this->_tbl WHERE $this->_tbl_key = '$this->_id'";
     if (!db_exec($sql)) {
       return db_error();
     } else {
-    $this->$k = null;
+    $this->_id = null;
     return null;
     }
   }
@@ -821,7 +836,10 @@ class CMbObject {
    * "class" => "field"
    */
   function getBackRefs() {
-    return array();
+    return array (
+      "notes" => "CNote object_id",
+      "files" => "CFile file_object_id",
+    );
   }
   
   /**
@@ -935,7 +953,7 @@ class CMbObject {
       }
       foreach ($specs as $propName => $propSpec) {
         $propValue =& $this->$propName;
-        if ($propValue !== null && $this->_specs[$propName]){
+        if ($propValue !== null && $this->_specs[$propName]) {
           $this->_specs[$propName]->checkConfidential($this);
         }
       }

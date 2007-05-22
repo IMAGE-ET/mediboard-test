@@ -49,7 +49,7 @@ class CFile extends CMbObject {
   function getSpecs() {
     return array (
       "file_class"         => "notNull str",
-      "file_object_id"     => "notNull ref",
+      "file_object_id"     => "notNull ref class|CMbObject meta|file_class",
       "file_category_id"   => "ref class|CFilesCategory",
       "file_date"          => "notNull dateTime",
       "file_size"          => "num pos",

@@ -1,6 +1,7 @@
 <?php
-$locales['::deleted not recreated'] = 'Object was deleted and couldn\'t be recreated';
+$locales['CMbObject-back-files'] = 'Files';
 $locales['- New Item -'] = '';
+$locales['::deleted not recreated'] = 'Object was deleted and couldn\'t be recreated';
 $locales['::store-check failed:'] = '';
 $locales['About'] = 'About';
 $locales['add'] = 'add';
@@ -13,15 +14,16 @@ $locales['back'] = 'back';
 $locales['bool.'] = ' ';
 $locales['bool.0'] = 'no';
 $locales['bool.1'] = 'yes';
-$locales['CANCEL'] = 'CANCEL';
 $locales['cancel'] = 'cancel';
 $locales['Cancel'] = 'Annuler';
+$locales['CANCEL'] = 'CANCEL';
 $locales['Change User Password'] = 'Change User Password';
 $locales['chgpwNoMatch'] = 'The new password don\'t match';
 $locales['chgpwUpdated'] = 'Your password has been updated';
 $locales['chgpwValidNew'] = 'Please enter a valid new password';
 $locales['chgpwValidOld'] = 'Please enter a valid old password';
 $locales['chgpwWrongPW'] = 'You have entered the wrong old password';
+$locales['CMbObject-back-notes'] = 'User notes';
 $locales['CModule'] = 'Module';
 $locales['Complete'] = 'Complete';
 $locales['config-interop-base_url'] = 'Remote DHE URL';
