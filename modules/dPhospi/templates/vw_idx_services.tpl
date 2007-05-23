@@ -1,22 +1,16 @@
 <table class="main">
-
 <tr>
   <td class="halfPane">
-
     <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;service_id=0" class="buttonnew"><strong>Créer un service</strong></a>
-
     <table class="tbl">
-      
     <tr>
       <th colspan="3">Liste des services</th>
     </tr>
-    
     <tr>
       <th>Intitulé</th>
       <th>Description</th>
       <th>Etablissement</th>
     </tr>
-    
 	{{foreach from=$services item=curr_service}}
     <tr {{if $curr_service->_id == $serviceSel->_id}}class="selected"{{/if}}>
       <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;service_id={{$curr_service->_id}}">{{$curr_service->nom}}</a></td>
@@ -24,21 +18,14 @@
       <td>{{$curr_service->_ref_group->text}}</td>
     </tr>
     {{/foreach}}
-      
     </table>
-
-  </td>
-  
+  </td> 
   <td class="halfPane">
-
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-
     <input type="hidden" name="dosql" value="do_service_aed" />
     <input type="hidden" name="service_id" value="{{$serviceSel->service_id}}" />
     <input type="hidden" name="del" value="0" />
-
     <table class="form">
-
     <tr>
       <th class="category" colspan="2">
       {{if $serviceSel->service_id}}
@@ -48,9 +35,8 @@
       {{/if}}
       </th>
     </tr>
-
     <tr>
-      <th><label for="group_id" title="Etablissement du service. Obligatoire">Etablissement</label></th>
+      <th>{{mb_label object=$serviceSel field="group_id"}}</th>
       <td>
         <select class="{{$serviceSel->_props.group_id}}" name="group_id">
           <option>&mdash; Choisir un établissement</option>
@@ -60,17 +46,14 @@
         </select>
       </td>
     </tr>
-
     <tr>
-      <th><label for="nom" title="intitulé du service, obligatoire.">Intitulé</label></th>
-      <td><input type="text" class="{{$serviceSel->_props.nom}}" name="nom" value="{{$serviceSel->nom}}" /></td>
-    </tr>
-        
+      <th>{{mb_label object=$serviceSel field="nom"}}</th>
+      <td>{{mb_field object=$serviceSel field="nom"}}</td>
+    </tr>       
     <tr>
-      <th><label for="description" title="Description du service, responsabilités, lignes de conduite.">Description</label></th>
-      <td><textarea name="description" rows="4">{{$serviceSel->description}}</textarea></td>
-    </tr>
-    
+      <th>{{mb_label object=$serviceSel field="description"}}</th>
+      <td>{{mb_field object=$serviceSel field="description"}}</td>
+    </tr>    
     <tr>
       <td class="button" colspan="2">
         {{if $serviceSel->service_id}}
@@ -83,12 +66,8 @@
         {{/if}}
       </td>
     </tr>
-
-    </table>
-    
+    </table>   
     </form>
-
   </td>
 </tr>
-
 </table>

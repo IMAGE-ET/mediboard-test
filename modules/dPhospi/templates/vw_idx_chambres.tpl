@@ -5,28 +5,21 @@ function pageMain() {
 }
 
 </script>
-
 <table class="main">
-
 <tr>
   <td class="halfPane">
-
     <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id=0">
       Créer un chambre
     </a>
-
-    <table class="tbl">
-      
+    <table class="tbl">   
     <tr>
       <th colspan="4">Liste des chambres</th>
-    </tr>
-    
+    </tr>  
     <tr>
       <th>Intitulé</th>
       <th>Caracteristiques</th>
       <th>Lits disponibles</th>
-    </tr>
-    
+    </tr> 
 	{{foreach from=$services item=curr_service}}
 	<tr id="service{{$curr_service->service_id}}-trigger">
 	  <td colspan="4">{{$curr_service->nom}}</td>
@@ -44,22 +37,15 @@ function pageMain() {
       </tr>
       {{/foreach}}
     </tbody>
-    {{/foreach}}
-      
+    {{/foreach}}   
     </table>
-
   </td>
-  
   <td class="halfPane">
-
     <form name="editChambre" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-
     <input type="hidden" name="dosql" value="do_chambre_aed" />
     <input type="hidden" name="chambre_id" value="{{$chambreSel->chambre_id}}" />
     <input type="hidden" name="del" value="0" />
-
     <table class="form">
-
     <tr>
       <th class="category" colspan="2">
       {{if $chambreSel->chambre_id}}
@@ -69,14 +55,12 @@ function pageMain() {
       {{/if}}
       </th>
     </tr>
-
     <tr>
-      <th><label for="nom" title="intitulé du chambre, obligatoire.">Intitulé</label></th>
-      <td><input type="text" name="nom" class="{{$chambreSel->_props.nom}}" value="{{$chambreSel->nom}}" /></td>
+      <th>{{mb_label object=$chambreSel field="nom"}}</th>
+      <td>{{mb_field object=$chambreSel field="nom"}}</td>
     </tr>
-
 	<tr>
-     <th><label for="service_id" title="Service auquel la chambre est rattaché, obligatoire.">Service</label></th>
+	 <th>{{mb_label object=$chambreSel field="service_id"}}</th>
 	  <td>
         <select name="service_id" class="{{$chambreSel->_props.service_id}}">
           <option value="">&mdash; Choisir un service &mdash;</option>
@@ -85,14 +69,11 @@ function pageMain() {
         {{/foreach}}
         </select>
 	  </td>
-	</tr>
-	    
+	</tr>    
     <tr>
-      <th><label for="caracteristiques" title="Caracteristiques du chambre.">Caractéristiques</label></th>
-      <td>
-        <textarea name="caracteristiques" rows="4">{{$chambreSel->caracteristiques}}</textarea></td>
+      <th>{{mb_label object=$chambreSel field="caracteristiques"}}</th>
+      <td>{{mb_field object=$chambreSel field="caracteristiques"}}</td>
     </tr>
-
     <tr>
       <td class="button" colspan="2">
         {{if $chambreSel->chambre_id}}
@@ -105,24 +86,18 @@ function pageMain() {
         {{/if}}
       </td>
     </tr>
-
     </table>
-
 	</form>
-
   {{if $chambreSel->chambre_id}}
   <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_lit->chambre_id}}&amp;lit_id=0">
     Ajouter un lit
   </a>
-
   <form name="editLit" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-
   <input type="hidden" name="dosql" value="do_lit_aed" />
   <input type="hidden" name="lit_id" value="{{$litSel->lit_id}}" />
   <input type="hidden" name="chambre_id" value="{{$chambreSel->chambre_id}}" />
   <input type="hidden" name="del" value="0" />
     <table class="form">
-
     <tr>
       <th class="category" colspan="2">Lits</th>
     {{foreach from=$chambreSel->_ref_lits item=curr_lit}}
@@ -132,9 +107,9 @@ function pageMain() {
     </tr>
 	  {{/foreach}}
     <tr>
-      <th><label for="nom" title="Nom du lit">Nom</label></th>
+      <th>{{mb_label object=$litSel field="nom"}}</th>
       <td>
-        <input type="text" name="nom" class="{{$litSel->_props.nom}}" value="{{$litSel->nom}}" />
+        {{mb_field object=$litSel field="nom"}}
         {{if $litSel->lit_id}}
         <button class="modify" type="submit">Modifier</button>
         <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le lit',objName:'{{$litSel->nom|smarty:nodefaults|JSAttribute}}'})">
@@ -145,13 +120,9 @@ function pageMain() {
         {{/if}}
       </td>
     </tr>
-
     </table>
-
   </form>
   {{/if}}    
-
   </td>
 </tr>
-
 </table>
