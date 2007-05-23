@@ -1,3 +1,29 @@
 <?php
-$locales["CGroups"] = "Etablissements";
+$locales['CGroups-ape'] = '';
+$locales['CGroups'] = 'Etablissements';
+$locales['CGroups-adresse'] = '';
+$locales['CGroups-adresse-desc'] = '';
+$locales['CGroups-ape-desc'] = '';
+$locales['CGroups-cp'] = '';
+$locales['CGroups-cp-desc'] = '';
+$locales['CGroups-directeur'] = '';
+$locales['CGroups-directeur-desc'] = '';
+$locales['CGroups-domiciliation'] = '';
+$locales['CGroups-domiciliation-desc'] = '';
+$locales['CGroups-mail'] = '';
+$locales['CGroups-mail-desc'] = '';
+$locales['CGroups-raison_sociale'] = '';
+$locales['CGroups-raison_sociale-desc'] = '';
+$locales['CGroups-siret'] = '';
+$locales['CGroups-siret-desc'] = '';
+$locales['CGroups-text'] = '';
+$locales['CGroups-text-desc'] = '';
+$locales['CGroups-ville'] = '';
+$locales['CGroups-ville-desc'] = '';
+$locales['CGroups-web'] = '';
+$locales['CGroups-web-desc'] = '';
+$locales['CGroups-_fax1'] = '';
+$locales['CGroups-_fax1-desc'] = '';
+$locales['CGroups-_tel1'] = '';
+$locales['CGroups-_tel1-desc'] = '';
 ?>

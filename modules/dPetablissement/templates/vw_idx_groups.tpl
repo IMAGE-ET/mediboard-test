@@ -55,113 +55,74 @@ function pageMain() {
           </th>
         </tr>
         <tr>
-          <th>
-            <label for="text" title="intitulé de l'établissement, obligatoire.">Intitulé</label>
-          </th>
-          <td>
-            <input type="text" class="{{$usergroup->_props.text}}" name="text" size="30" id="group_text" value="{{$usergroup->text}}" />
-          </td>
+          <th>{{mb_label object=$usergroup field="text"}}</th>
+          <td>{{mb_field object=$usergroup field="text"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="raison_sociale" title="Veuillez saisir la raison sociale de l'établissement">Raison Sociale</label>
-          </th>
-          <td>
-            <input type="text" class="{{$usergroup->_props.raison_sociale}}" name="raison_sociale" size="30" value="{{$usergroup->raison_sociale}}" />
-          </td>
+          <th>{{mb_label object=$usergroup field="raison_sociale"}}</th>
+          <td>{{mb_field object=$usergroup field="raison_sociale"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="adresse" title="Veuillez saisir l'adresse l'établissement">Adresse</label>
-          </th>
-          <td>
-            <textarea class="{{$usergroup->_props.adresse}}" name="adresse">{{$usergroup->adresse}}</textarea>
-          </td>
+          <th>{{mb_label object=$usergroup field="adresse"}}</th>
+          <td>{{mb_field object=$usergroup field="adresse"}}</td>
         </tr>
         <tr>
-          <th><label for="cp" title="Code postal">Code Postal</label></th>
-          <td>
-            <input size="31" maxlength="5" type="text" name="cp" value="{{$usergroup->cp}}" class="{{$usergroup->_props.cp}}" />
+          <th>{{mb_label object=$usergroup field="cp"}}</th>
+          <td>{{mb_field object=$usergroup field="cp"}}
             <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
           </td>
         </tr>
         
         <tr>
-          <th><label for="ville" title="Ville de l'établissement">Ville</label></th>
-          <td>
-            <input size="31" type="text" name="ville" value="{{$usergroup->ville}}" class="{{$usergroup->_props.ville}}" />
-            <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
+          <th>{{mb_label object=$usergroup field="ville"}}</th>
+          <td>{{mb_field object=$usergroup field="ville"}}
+        	 <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
           </td>
         </tr>
         <tr>
-          <th><label for="_tel1" title="Numéro de téléphone filaire">Téléphone</label></th>
-          <td>
-            <input type="text" name="_tel1" size="2" maxlength="2" value="{{$usergroup->_tel1}}" class="num length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
-            <input type="text" name="_tel2" size="2" maxlength="2" value="{{$usergroup->_tel2}}" class="num length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
-            <input type="text" name="_tel3" size="2" maxlength="2" value="{{$usergroup->_tel3}}" class="num length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
-            <input type="text" name="_tel4" size="2" maxlength="2" value="{{$usergroup->_tel4}}" class="num length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
-            <input type="text" name="_tel5" size="2" maxlength="2" value="{{$usergroup->_tel5}}" class="num length|2" onkeyup="followUp(this, '_fax1', 2)" />
-          </td>
+          <th>{{mb_label object=$usergroup field="_tel1" defaultFor="_tel1"}}</th>
+		    <td>
+		      {{mb_field object=$usergroup field="_tel1" tabindex="155" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel2', 2)"}} -
+		      {{mb_field object=$usergroup field="_tel2" tabindex="156" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel3', 2)"}} -
+		      {{mb_field object=$usergroup field="_tel3" tabindex="157" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel4', 2)"}} -
+		      {{mb_field object=$usergroup field="_tel4" tabindex="158" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel5', 2)"}} -
+		      {{mb_field object=$usergroup field="_tel5" tabindex="159" size="2" maxlength="2" prop="num length|2"}}
+		    </td>
         </tr>
         <tr>
-          <th><label for="_fax1" title="Numéro de fax">Télécopie</label></th>
-          <td>
-            <input type="text" name="_fax1" size="2" maxlength="2" value="{{$usergroup->_fax1}}" class="num length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
-            <input type="text" name="_fax2" size="2" maxlength="2" value="{{$usergroup->_fax2}}" class="num length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
-            <input type="text" name="_fax3" size="2" maxlength="2" value="{{$usergroup->_fax3}}" class="num length|2" onkeyup="followUp(this, '_fax4', 2)" /> -
-            <input type="text" name="_fax4" size="2" maxlength="2" value="{{$usergroup->_fax4}}" class="num length|2" onkeyup="followUp(this, '_fax5', 2)" /> -
-            <input type="text" name="_fax5" size="2" maxlength="2" value="{{$usergroup->_fax5}}" class="num length|2" onkeyup="followUp(this, 'mail', 2)" />
-          </td>
+           <th>{{mb_label object=$usergroup field="_fax1" defaultFor="_fax1"}}</th>
+		   <td>
+		      {{mb_field object=$usergroup field="_fax1" tabindex="155" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_fax2', 2)"}} -
+		      {{mb_field object=$usergroup field="_fax2" tabindex="156" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_fax3', 2)"}} -
+		      {{mb_field object=$usergroup field="_fax3" tabindex="157" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_fax4', 2)"}} -
+		      {{mb_field object=$usergroup field="_fax4" tabindex="158" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_fax5', 2)"}} -
+		      {{mb_field object=$usergroup field="_fax5" tabindex="159" size="2" maxlength="2" prop="num length|2"}}
+		  </td>
         </tr>
         <tr>
-          <th>
-            <label for="mail" title="Veuillez saisir une adresse e-mail">E-mail</label>
-          </th>
-          <td>
-            <input type="text" class="{{$usergroup->_props.mail}}" name="mail" value="{{$usergroup->mail}}" />
-          </td>
+          <th>{{mb_label object=$usergroup field="mail"}}</th>
+          <td>{{mb_field object=$usergroup field="mail"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="web" title="Veuillez saisir l'adresse d'un site internet">Site internet</label>
-          </th>
-          <td>
-            <input type="text" class="{{$usergroup->_props.web}}" name="web" value="{{$usergroup->web}}" />
-          </td>
-        </tr>
-        
-        <tr>
-          <th>
-            <label for="directeur" title="Veuillez saisir le nom du directeur de l'établissement">Nom du Directeur</label>
-          </th>
-          <td>
-            <input type="text" class="{{$usergroup->_props.directeur}}" name="directeur" size="30" value="{{$usergroup->directeur}}" />
-          </td>
+          <th>{{mb_label object=$usergroup field="web"}}</th>
+          <td>{{mb_field object=$usergroup field="web"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="domiciliation">Domiciliation</label>
-          </th>
-          <td>
-            <input type="text" class="{{$usergroup->_props.domiciliation}}" name="domiciliation" size="10" value="{{$usergroup->domiciliation}}" />
-          </td>
+          <th>{{mb_label object=$usergroup field="directeur"}}</th>
+          <td>{{mb_field object=$usergroup field="directeur"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="siret" title="Veuillez saisir le n° siret de l'établissement">N° SIRET</label>
-          </th>
-          <td>
-            <input type="text" class="{{$usergroup->_props.siret}}" maxlength="14" name="siret" size="15" value="{{$usergroup->siret}}" />
-          </td>
+          <th>{{mb_label object=$usergroup field="domiciliation"}}</th>
+          <td>{{mb_field object=$usergroup field="domiciliation"}}</td>
         </tr>
         <tr>
-          <th>
-            <label for="ape" title="Veuillez saisir le code APE de l'établissement">Code APE</label>
-          </th>
-          <td>
-            <input type="text" class="{{$usergroup->_props.ape}}" maxlength="4" name="ape" size="5" value="{{$usergroup->ape}}" />
-          </td>
+          <th>{{mb_label object=$usergroup field="siret"}}</th>
+          <td>{{mb_field object=$usergroup field="siret"}}</td>
         </tr>
+        <tr>
+          <th>{{mb_label object=$usergroup field="ape"}}</th>
+          <td>{{mb_field object=$usergroup field="ape"}}</td>
+ 		</tr>
         <tr>
           <td class="button" colspan="2">
           {{if $usergroup->group_id}}

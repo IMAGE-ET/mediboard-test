@@ -1,3 +1,29 @@
 <?php
-$locales["CGroups"] = "Etablissements";
+$locales['CGroups-ape'] = 'Code APE';
+$locales['CGroups'] = 'Etablissements';
+$locales['CGroups-adresse'] = 'Adresse';
+$locales['CGroups-adresse-desc'] = 'Veuillez saisir l\'adresse l\'établissement';
+$locales['CGroups-ape-desc'] = 'Veuillez saisir le code APE de l\'établissement';
+$locales['CGroups-cp'] = 'Code Postal';
+$locales['CGroups-cp-desc'] = 'Code Postal';
+$locales['CGroups-directeur'] = 'Nom du Directeur';
+$locales['CGroups-directeur-desc'] = 'Veuillez saisir le nom du directeur de l\'établissement';
+$locales['CGroups-domiciliation'] = 'Domiciliation';
+$locales['CGroups-domiciliation-desc'] = 'Domicile';
+$locales['CGroups-mail'] = 'E-mail';
+$locales['CGroups-mail-desc'] = 'Veuillez saisir une adresse e-mail';
+$locales['CGroups-raison_sociale'] = 'Raison Sociale';
+$locales['CGroups-raison_sociale-desc'] = 'Veuillez saisir la raison sociale de l\'établissement';
+$locales['CGroups-siret'] = 'N° SIRET';
+$locales['CGroups-siret-desc'] = 'Veuillez saisir le n° siret de l\'établissement';
+$locales['CGroups-text'] = 'Intitulé';
+$locales['CGroups-text-desc'] = 'Intitulé de l\'établissement, obligatoire.';
+$locales['CGroups-ville'] = 'Ville';
+$locales['CGroups-ville-desc'] = 'Ville de l\'établissement';
+$locales['CGroups-web'] = 'Site internet';
+$locales['CGroups-web-desc'] = 'Veuillez saisir l\'adresse d\'un site internet';
+$locales['CGroups-_fax1'] = 'Télécopie';
+$locales['CGroups-_fax1-desc'] = 'Numéro de fax';
+$locales['CGroups-_tel1'] = 'Téléphone';
+$locales['CGroups-_tel1-desc'] = 'Numéro de téléphone filaire';
 ?>
