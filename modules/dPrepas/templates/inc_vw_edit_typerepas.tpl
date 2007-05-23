@@ -47,18 +47,18 @@
           {{/if}}
         </tr>
         <tr>
-          <th><label for="nom" title="Nom du type de plat, obligatoire">Nom</label></th>
-          <td><input name="nom" class="{{$typeRepas->_props.nom}}" type="text" value="{{$typeRepas->nom}}" /></td>
+	      <th>{{mb_label object=$typeRepas field="nom"}}</th>
+          <td>{{mb_field object=$typeRepas field="nom"}}</td>
         </tr>
         <tr>
-          <th><label for="_debut" title="Heure de début">Début</label></th>
+          <th>{{mb_label object=$typeRepas field="_debut"}}</th>
           <td>
             {{html_options name="_debut" options=$listHours class="num" selected=$typeRepas->_debut}}
             h
           </td>
         </tr>
         <tr>
-          <th><label for="_fin" title="Heure de fin">Fin</label></th>
+          <th>{{mb_label object=$typeRepas field="_fin"}}</th>
           <td>
             {{html_options name="_fin" options=$listHours class="num moreThan|_debut" selected=$typeRepas->_fin}}
             h

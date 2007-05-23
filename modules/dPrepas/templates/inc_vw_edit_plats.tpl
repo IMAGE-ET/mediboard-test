@@ -47,17 +47,17 @@
           {{/if}}
         </tr>
         <tr>
-          <th><label for="nom" title="Nom du plat, obligatoire">Nom</label></th>
-          <td><input name="nom" class="{{$plat->_props.nom}}" type="text" value="{{$plat->nom}}" /></td>
+          <th>{{mb_label object=$plat field="nom"}}</th>
+          <td>{{mb_field object=$plat field="nom"}}</td>
         </tr>
         <tr>
-          <th><label for="type" title="Type de plat">Type de plat</label></th>
+          <th>{{mb_label object=$plat field="type"}}</th>
           <td colspan="3">
             {{html_options name="type" options=$plat->_enumsTrans.type class=$plat->_props.type selected=$plat->type}}
           </td>
         </tr>
         <tr>
-          <th><label for="typerepas" title="Type de repas">Type de repas</label></th>
+          <th>{{mb_label object=$plat field="typerepas"}}</th>
           <td colspan="3">
             <select name="typerepas" class="{{$plat->_props.typerepas}}">
               {{foreach from=$listTypeRepas item=curr_typerepas}}
