@@ -24,8 +24,48 @@ $reloadlist = 1;
 
 // Liste des Class
 $listClass = getChildClasses("CMbObject", array("_ref_files"));
-
 $listCategory = CFilesCategory::listCatClass($selClass);
+
+mbTrace($selKey);
+// Id de l'utilisateur courant
+$user_id = $AppUI->user_id;
+
+// Chargement de l'utilisateur courant
+$userSel = new CMediusers;
+$userSel->load($user_id);
+$userSel->loadRefs();
+$canUserSel = $userSel->canDo();
+
+$etablissements = CMediusers::loadEtablissements(PERM_EDIT);
+
+// Récupération des modèles
+$whereCommon = array();
+$whereCommon["object_id"] = "IS NULL";
+$whereCommon[] = "`object_class` = '$selClass'";
+
+$order = "nom";
+
+// Modèles de l'utilisateur
+$listModelePrat = array();
+if ($userSel->user_id) {
+  $where = $whereCommon;
+  $where["chir_id"] = db_prepare("= %", $userSel->user_id);
+  $listModelePrat = new CCompteRendu;
+  $listModelePrat = $listModelePrat->loadlist($where, $order);
+}
+
+
+// Modèles de la fonction
+$listModeleFunc = array();
+if ($userSel->user_id) {
+  $where = $whereCommon;
+  $where["function_id"] = db_prepare("= %", $userSel->function_id);
+  $listModeleFunc = new CCompteRendu;
+  $listModeleFunc = $listModeleFunc->loadlist($where, $order);
+}
+
+
+
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -43,6 +83,9 @@ if($selClass && $selKey){
   $smarty->assign("affichageFile",$affichageFile);
 }
 
+$smarty->assign("selKey", $selKey);
+$smarty->assign("listModeleFunc" , $listModeleFunc);
+$smarty->assign("listModelePrat" , $listModelePrat);
 $smarty->assign("reloadlist"     , $reloadlist  ); 
 $smarty->assign("listCategory"   , $listCategory);
 $smarty->assign("selClass"       , $selClass    );

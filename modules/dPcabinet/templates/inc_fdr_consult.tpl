@@ -55,18 +55,6 @@ function editDocument(compte_rendu_id) {
   url.popup(700, 700, "Document");
 }
 
-function createDocument(oSelect, consultation_id) {
-  if (modele_id = oSelect.value) {
-    var url = new Url;
-    url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-    url.addParam("modele_id", modele_id);
-    url.addParam("object_id", consultation_id);
-    url.popup(700, 700, "Document");
-  }
-  
-  oSelect.value = "";
-}
-
 function loadExam(sValue){
   var oForm = document.newExamen;
   oForm.type_examen.value = sValue;
@@ -203,7 +191,6 @@ function submitFdr(oForm) {
 	<!-- Documents -->
 
     <td>
-    
     <table class="form">
       {{foreach from=$consult->_ref_documents item=document}}
       <tr>

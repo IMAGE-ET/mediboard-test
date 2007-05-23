@@ -17,7 +17,37 @@
               Ajouter un fichier
             </button>
           </td>
-        </tr>
+          
+          <td>
+           <form name="newDocumentFrm" action="?m={{$m}}" method="post">
+           <table class="form">
+             <tr>
+               <td>
+                 <select name="_choix_modele" onchange="createDocument(this, {{$selKey}})">           
+                   <option value="">&mdash; Choisir un modèle</option>
+                   {{if $listModelePrat|@count}}
+                   <optgroup label="Modèles du praticien">
+                   {{foreach from=$listModelePrat item=curr_modele}}
+                   <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
+                   {{/foreach}}
+                   </optgroup>
+                   {{/if}}
+                   {{if $listModeleFunc|@count}}
+                   <optgroup label="Modèles du cabinet">
+                   {{foreach from=$listModeleFunc item=curr_modele}}
+                   <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
+                   {{/foreach}}
+                   </optgroup>
+                   {{/if}}
+                 </select>
+               </td>
+             </tr>
+           </table>
+           </form>
+         </td>
+
+
+		</tr>
         {{/if}}
         {{counter start=0 skip=1 assign=curr_data}}
         {{foreach from=$curr_listCat.DocsAndFiles item=curr_file}}

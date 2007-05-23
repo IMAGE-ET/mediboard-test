@@ -16,6 +16,22 @@ window.onbeforeunload= function () {
   //}
 }
 
+
+
+function createDocument(oSelect, consultation_id) {
+  if (modele_id = oSelect.value) {
+    var url = new Url;
+    url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+    url.addParam("modele_id", modele_id);
+    url.addParam("object_id", consultation_id);
+    url.popup(700, 700, "Document");
+  }
+  
+  oSelect.value = "";
+}
+
+
+
 function closeWindowByEscape(e) {
   var keycode;
   if (window.event) keycode = window.event.keyCode;
