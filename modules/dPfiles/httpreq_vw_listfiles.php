@@ -26,7 +26,7 @@ $reloadlist = 1;
 $listClass = getChildClasses("CMbObject", array("_ref_files"));
 $listCategory = CFilesCategory::listCatClass($selClass);
 
-mbTrace($selKey);
+
 // Id de l'utilisateur courant
 $user_id = $AppUI->user_id;
 
