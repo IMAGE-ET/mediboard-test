@@ -13,16 +13,13 @@
         {{if $canFile->edit && !$accordDossier}}
         <tr>
           <td colspan="6" class="text">
-            <button class="new" onclick="uploadFile('{{$selClass}}', '{{$selKey}}', '{{$keyCat}}')">
-              Ajouter un fichier
-            </button>
-          </td>
-          
-          <td>
+           
+       
            <form name="newDocumentFrm" action="?m={{$m}}" method="post">
            <table class="form">
              <tr>
                <td>
+                 <div style="float: right">
                  <select name="_choix_modele" onchange="createDocument(this, {{$selKey}})">           
                    <option value="">&mdash; Choisir un modèle</option>
                    {{if $listModelePrat|@count}}
@@ -40,6 +37,10 @@
                    </optgroup>
                    {{/if}}
                  </select>
+                 </div>
+                 <button class="new" onclick="uploadFile('{{$selClass}}', '{{$selKey}}', '{{$keyCat}}')">
+                   Ajouter un fichier
+                 </button>
                </td>
              </tr>
            </table>
