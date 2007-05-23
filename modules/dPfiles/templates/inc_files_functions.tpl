@@ -125,4 +125,8 @@ function submitFileChangt(oForm){
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAfterMoveFile });
 }
 
+function reloadAfterSaveDoc() { 
+  reloadAfterUploadFile(); 
+}
+
 </script>
