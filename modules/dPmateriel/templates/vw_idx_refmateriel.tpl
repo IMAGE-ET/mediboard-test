@@ -42,7 +42,7 @@
           {{/if}}
         </tr>
         <tr>
-          <th><label for="fournisseur_id" title="Fournisseur, obligatoire">Fournisseur</label></th>
+          <th>{{mb_label object=$reference field="fournisseur_id"}}</th>
           <td><select name="fournisseur_id" class="{{$reference->_props.fournisseur_id}}">
             <option value="">&mdash; Choisir un Fournisseur</option>
             {{foreach from=$listFournisseur item=curr_fournisseur}}
@@ -54,7 +54,7 @@
           </td>
         </tr>
         <tr>
-          <th><label for="materiel_id" title="Matériel, obligatoire">Matériel</label></th>
+          <th>{{mb_label object=$reference field="materiel_id"}}</th>
           <td><select name="materiel_id" class="{{$reference->_props.materiel_id}}">
             <option value="">&mdash; Choisir un Matériel</option>
             {{foreach from=$listCategory item=curr_cat}}
@@ -70,12 +70,12 @@
           </td>
         </tr>
         <tr>
-          <th><label for="quantite" title="Quantité, obligatoire">Quantité</label></th>
-          <td><input name="quantite" class="{{$reference->_props.quantite}}" type="text" value="{{$reference->quantite}}" /></td>
+          <th>{{mb_label object=$reference field="quantite"}}</th>
+          <td>{{mb_field object=$reference field="quantite"}}</td>
         </tr>
         <tr>
-          <th><label for="prix" title="Prix, obligatoire">Prix</label></th>
-          <td><input name="prix" class="{{$reference->_props.prix}}" type="text" value="{{$reference->prix}}" /></td>
+          <th>{{mb_label object=$reference field="prix"}}</th>
+          <td>{{mb_field object=$reference field="prix"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">

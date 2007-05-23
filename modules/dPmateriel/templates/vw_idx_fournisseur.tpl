@@ -53,42 +53,42 @@ function pageMain() {
           {{/if}}
         </tr>
         <tr>
-          <th><label for="societe" title="Société, obligatoire">Société</label></th>
-          <td><input name="societe" class="{{$fournisseur->_props.societe}}" type="text" value="{{$fournisseur->societe}}" /></td>
+          <th>{{mb_label object=$fournisseur field="societe"}}</th>
+          <td>{{mb_field object=$fournisseur field="societe"}}</td>
         </tr>
         <tr>
-          <th><label for="adresse" title="Adresse de la société">Adresse</label></th>
-          <td><textarea class="{{$fournisseur->_props.adresse}}" name="adresse">{{$fournisseur->adresse}}</textarea></td>
+          <th>{{mb_label object=$fournisseur field="adresse"}}</th>
+          <td>{{mb_field object=$fournisseur field="adresse"}}</td>
         </tr>
         <tr>
-          <th><label for="codepostal" title="Code Postal">Code Postal</label></th>
+          <th>{{mb_label object=$fournisseur field="codepostal"}}</th>
           <td>
-            <input size="31" maxlength="5" type="text" name="codepostal" class="{{$fournisseur->_props.codepostal}}" value="{{$fournisseur->codepostal}}" />
-            <div style="display:none;" class="autocomplete" id="codepostal_auto_complete"></div>
-          </td>
+      		{{mb_field object=$fournisseur field="codepostal" tabindex="152" size="31" maxlength="5"}}
+      		<div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
+    	  </td>
         </tr>
-        <tr>
-          <th><label for="ville" title="Ville">Ville</label></th>
+        <tr> 
+          <th>{{mb_label object=$fournisseur field="ville"}}</th>
           <td>
-            <input size="31" type="text" name="ville" value="{{$fournisseur->ville}}" class="{{$fournisseur->_props.ville}}" />
-            <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
-          </td>
+      		{{mb_field object=$fournisseur field="ville" tabindex="153" size="31"}}
+      		<div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
+    	  </td>
         </tr>
         <tr>
-          <th><label for="telephone" title="Téléphone">Téléphone</label></th>
-          <td><input name="telephone" class="{{$fournisseur->_props.telephone}}" type="text" value="{{$fournisseur->telephone}}" /></td>
+          <th>{{mb_label object=$fournisseur field="telephone"}}</th>
+          <td>{{mb_field object=$fournisseur field="telephone"}}</td>
         </tr>
         <tr>
-          <th><label for="mail" title="E-Mail valide">E-Mail</label></th>
-          <td><input name="mail" class="{{$fournisseur->_props.mail}}" type="text" value="{{$fournisseur->mail}}" /></td>
+          <th>{{mb_label object=$fournisseur field="mail"}}</th>
+          <td>{{mb_field object=$fournisseur field="mail"}}</td>
         </tr>
         <tr>
-          <th><label for="nom" title="Nom du contact">Nom du contact</label></th>
-          <td><input name="nom" class="{{$fournisseur->_props.nom}}" type="text" value="{{$fournisseur->nom}}" /></td>
+          <th>{{mb_label object=$fournisseur field="nom"}}</th>
+          <td>{{mb_field object=$fournisseur field="nom"}}</td>
         </tr>
         <tr>
-          <th><label for="prenom" title="Prénom du contact">Prénom du Contact</label></th>
-          <td><input name="prenom" class="{{$fournisseur->_props.prenom}}" type="text" value="{{$fournisseur->prenom}}" /></td>
+          <th>{{mb_label object=$fournisseur field="prenom"}}</th>
+          <td>{{mb_field object=$fournisseur field="prenom"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">

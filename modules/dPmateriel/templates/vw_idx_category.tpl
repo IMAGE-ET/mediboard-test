@@ -33,8 +33,8 @@
           {{/if}}
         </tr> 
         <tr>
-          <th><label for="category_name" title="Nom de la catégorie, obligatoire">Catégorie</label></th>
-          <td><input name="category_name" class="{{$category->_props.category_name}}" type="text" value="{{$category->category_name}}" /></td>
+          <th>{{mb_label object=$category field="category_name"}}</th>
+          <td>{{mb_field object=$category field="category_name"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">

@@ -39,11 +39,11 @@
           {{/if}}
         </tr>   
         <tr>
-          <th><label for="nom" title="Nom du matériel, obligatoire">Nom</label></th>
-          <td><input name="nom" class="{{$materiel->_props.nom}}" type="text" value="{{$materiel->nom}}" /></td>
+          <th>{{mb_label object=$materiel field="nom"}}</th>
+          <td>{{mb_field object=$materiel field="nom"}}</td>
         </tr>
         <tr>
-          <th><label for="category_id" title="Catégorie du matériel, obligatoire">Catégorie</label></th>
+          <th>{{mb_label object=$materiel field="category_id"}}</th>
           <td><select name="category_id" class="{{$materiel->_props.category_id}}">
             <option value="">&mdash; Choisir une catégorie</option>
             {{foreach from=$listCategories item=curr_category}}
@@ -55,12 +55,12 @@
           </td>
         </tr>
         <tr>
-          <th><label for="code_barre" title="Code Barre du matériel, numérique">Code Barre</label></th>
-          <td><input name="code_barre" class="{{$materiel->_props.code_barre}}" type="text" value="{{$materiel->code_barre}}" /></td>
+          <th>{{mb_label object=$materiel field="code_barre"}}</th>
+          <td>{{mb_field object=$materiel field="code_barre"}}</td>
         </tr>
         <tr>
-          <th><label for="description" title="Description du matériel">Description</label></th>
-          <td><textarea class="{{$materiel->_props.description}}" name="description">{{$materiel->description}}</textarea></td>
+          <th>{{mb_label object=$materiel field="description"}}</th>
+          <td>{{mb_field object=$materiel field="description"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">
