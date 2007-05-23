@@ -120,7 +120,7 @@ function popPlanning(debut) {
           </th>
         </tr>
         <tr>
-         <th><label for="chir_id" title="Nom du chirurgien">Chirurgien</label></th>
+         <th>{{mb_label object=$plagesel field="chir_id"}}</th>
          <td>
           <select name="chir_id" class="{{$plagesel->_props.chir_id}}">
             <option value="">&mdash; Choisir un chirurgien</option>
@@ -136,9 +136,7 @@ function popPlanning(debut) {
             {{/foreach}}
           </select>
         </td>
-        <th>
-          <label for="salle_id" title="Nom de la salle. Obligatoire.">Salle</label>
-        </th>
+        <th>{{mb_label object=$plagesel field="salle_id"}}</th>
         <td>
           <select name="salle_id" class="{{$plagesel->_props.salle_id}}">
             <option value="">&mdash; Choisir une salle</option>
@@ -149,7 +147,7 @@ function popPlanning(debut) {
             {{/foreach}}
           </select>
         </td>
-        <th><label for="_heuredeb" title="Heure de début de la plage. Obligatoire">Début</label></th>
+        <th>{{mb_label object=$plagesel field="_heuredeb"}}</th>
         <td>
           <select name="_heuredeb" class="notNull num">
           {{foreach from=$listHours|smarty:nodefaults item=heure}}
@@ -169,7 +167,7 @@ function popPlanning(debut) {
         </td>
       </tr>
       <tr>
-        <th><label for="spec_id" title="Spécialité associée à la plage opératoire">Spécialité</label></th>
+        <th>{{mb_label object=$plagesel field="spec_id"}}</th>
         <td>
           <select name="spec_id" class="{{$plagesel->_props.spec_id}}">
             <option value="">&mdash; Choisir une spécialité</option>
@@ -181,7 +179,7 @@ function popPlanning(debut) {
             {{/foreach}}
           </select>
         </td>
-        <th><label for="date" class="Date de la plage opératoire.">Date</label></th>
+        <th>{{mb_label object=$plagesel field="date"}}</th>
         <td class="date">
           {{if $plagesel->plageop_id}}
           <div id="editFrm_date_da">{{$plagesel->date|date_format:"%d/%m/%Y"}}</div>
@@ -193,8 +191,7 @@ function popPlanning(debut) {
           <!-- Possibilité de changer la date ? -->
           <!--img id="editFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date"/-->
         </td>
-    
-        <th><label for="_heurefin" title="Heure de fin de la plage. Obligatoire">Fin</label></th>
+    	<th>{{mb_label object=$plagesel field="_heurefin"}}</th>
         <td>
           <select name="_heurefin" class="notNull num">
             {{foreach from=$listHours|smarty:nodefaults item=heure}}
@@ -215,7 +212,7 @@ function popPlanning(debut) {
       </tr>
       
       <tr>
-        <th><label for="anest_id" title="Anesthésiste associé à la plage opératoire">Anesthésiste</label></th>
+        <th>{{mb_label object=$plagesel field="anesth_id"}}</th>
         <td>
           <select name="anesth_id">
             <option value="">&mdash; Choisir un anesthésiste</option>
@@ -226,7 +223,7 @@ function popPlanning(debut) {
             {{/foreach}}
     	  </select>
         </td>
-        <th colspan="3"><label for="_min_inter_op" title="Nombre de minutes entre chaque patient">Minutes entre les interventions</label></th>
+        <th>{{mb_label object=$plagesel field="_min_inter_op"}}</th>
         <td>
           <input type="text" name="_min_inter_op" size="3" class="notNull num pos"
                  value="{{if $plagesel->plageop_id}}{{$plagesel->_min_inter_op}}{{else}}{{15}}{{/if}}" />

@@ -46,7 +46,7 @@
     </tr>
 
     <tr>
-      <th><label for="group_id" title="Etablissement de la salle. Obligatoire">Etablissement</label></th>
+      <th>{{mb_label object=$salleSel field="group_id"}}</th>
       <td>
         <select class="{{$salleSel->_props.group_id}}" name="group_id">
           <option value="">&mdash; Choisir un établissement</option>
@@ -58,12 +58,12 @@
     </tr>
     
     <tr>
-      <th><label for="nom" title="Intitulé de la salle. Obligatoire">Intitulé</label></th>
-      <td><input type="text" class="{{$salleSel->_props.nom}}" name="nom" value="{{$salleSel->nom}}" /></td>
+      <th>{{mb_label object=$salleSel field="nom"}}</th>
+      <td>{{mb_field object=$salleSel field="nom"}}</td>
     </tr>
     
     <tr>
-      <th><label for="stats_0" title="Prendre ou non en compte la salle dans les statistiques">Stats</label></th>
+      <th>{{mb_label object=$salleSel field="stats"}}</th>
       <td>
         <input type="radio" name="stats" value="1" {{if $salleSel->stats}}checked="checked"{{/if}} />
         <label for="stats_1" title="La prendre en compte dans les statistiques">Oui</label>
