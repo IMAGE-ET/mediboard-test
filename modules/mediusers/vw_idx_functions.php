@@ -11,10 +11,6 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-// Droit de lecture dPsante400
-$moduleSante400 = CModule::getInstalled("dPsante400");
-$canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
-
 // Récupération des fonctions
 $listGroups = new CGroups;
 $listGroups = $listGroups->loadList();
@@ -34,7 +30,8 @@ $userfunction->loadRefsFwd();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canSante400" , $canSante400);
+$smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
+
 $smarty->assign("userfunction", $userfunction);
 $smarty->assign("listGroups"  , $listGroups  );
 

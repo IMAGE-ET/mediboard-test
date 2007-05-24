@@ -11,10 +11,6 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-// Droit de lecture dPsante400
-$moduleSante400 = CModule::getInstalled("dPsante400");
-$canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
-
 // Récupération des fonctions
 $listGroups = new CGroups;
 $listGroups = $listGroups->loadList();
@@ -29,7 +25,6 @@ $usergroup->load(mbGetValueFromGetOrSession("group_id", 0));
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("usergroup"   , $usergroup);
 $smarty->assign("listGroups"  , $listGroups);
 

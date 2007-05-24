@@ -11,10 +11,6 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-// Droit de lecture dPsante400
-$moduleSante400 = CModule::getInstalled("dPsante400");
-$canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
-
 // Récupération du user à ajouter/editer
 $mediuserSel = new CMediusers;
 $mediuserSel->load(mbGetValueFromGetOrSession("user_id"));

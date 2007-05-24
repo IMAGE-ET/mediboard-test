@@ -13,10 +13,6 @@ $mode_operation = mbGetValueFromGet("mode_operation", 0);
 $sejour_id      = mbGetValueFromGet("sejour_id"     , 0);
 $patient_id     = mbGetValueFromGet("patient_id"    , 0);
 
-// Droit de lecture dPsante400
-$moduleSante400 = CModule::getInstalled("dPsante400");
-$canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
-
 // Liste des Etablissements selon Permissions
 $etablissements = new CMediusers();
 $etablissements = $etablissements->loadEtablissements(PERM_READ);

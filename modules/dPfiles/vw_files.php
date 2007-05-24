@@ -42,6 +42,7 @@ if($selClass && $selKey){
 }
 
 $smarty->assign("canFile"        , $canFile     );
+
 $smarty->assign("listCategory"   , $listCategory);
 $smarty->assign("selClass"       , $selClass    );
 $smarty->assign("selKey"         , $selKey      );

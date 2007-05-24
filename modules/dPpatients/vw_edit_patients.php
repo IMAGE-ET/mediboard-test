@@ -11,10 +11,6 @@ global $can;
 
 $can->needsRead();
 
-// Droit de lecture dPsante400
-$moduleSante400 = CModule::getInstalled("dPsante400");
-$canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
-
 $patient_id = mbGetValueFromGetOrSession("patient_id");
 $name       = mbGetValueFromGet("name");
 $firstName  = mbGetValueFromGet("firstName");

@@ -11,11 +11,6 @@ global $AppUI, $can, $m;
 
 //$can->needsRead();
 
-$fileModule     = CModule::getInstalled("dPfiles");
-$cptRenduModule = CModule::getInstalled("dPcompteRendu");
-
-$canFile  = new CCanDo;
-
 $selClass      = mbGetValueFromGetOrSession("selClass", null);
 $selKey        = mbGetValueFromGetOrSession("selKey"  , null);
 $typeVue       = mbGetValueFromGetOrSession("typeVue" , 0);
@@ -54,7 +49,6 @@ if ($userSel->user_id) {
   $listModelePrat = $listModelePrat->loadlist($where, $order);
 }
 
-
 // Modèles de la fonction
 $listModeleFunc = array();
 if ($userSel->user_id) {
@@ -64,13 +58,12 @@ if ($userSel->user_id) {
   $listModeleFunc = $listModeleFunc->loadlist($where, $order);
 }
 
-
-
-
 // Création du template
 $smarty = new CSmartyDP();
 
 $object = null;
+
+$canFile  = new CCanDo;
 
 if($selClass && $selKey){
   // Chargement de l'objet
@@ -83,6 +76,8 @@ if($selClass && $selKey){
   $smarty->assign("affichageFile",$affichageFile);
 }
 
+$smarty->assign("canFile"        , $canFile);
+
 $smarty->assign("selKey", $selKey);
 $smarty->assign("listModeleFunc" , $listModeleFunc);
 $smarty->assign("listModelePrat" , $listModelePrat);
@@ -93,12 +88,11 @@ $smarty->assign("selKey"         , $selKey      );
 $smarty->assign("object"         , $object      );
 $smarty->assign("typeVue"        , $typeVue     );
 $smarty->assign("accordDossier"  , $accordDossier);
-$smarty->assign("canFile"        , $canFile);
-if($typeVue==1){
-  $smarty->display("inc_list_view_colonne.tpl");
-}elseif($typeVue==2){
-  $smarty->display("inc_list_view_gd_thumb.tpl");
-}else{
-  $smarty->display("inc_list_view.tpl");
-}
+
+$smarty->display(
+ 	$typeVue == 1 ? "inc_list_view_colonne.tpl":
+ 	$typeVue == 2 ? "inc_list_view_gd_thumb.tpl":
+	"inc_list_view.tpl"
+);
+
 ?>

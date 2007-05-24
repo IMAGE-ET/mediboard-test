@@ -57,20 +57,16 @@ if(CModule::getInstalled("dPsante400") && ($dPconfig["interop"]["mode_compat"] =
   $patient->_urlDHEParams["codePraticienEc"] = $codePraticienEc;
 }
 
-$moduleCabinet = CModule::getInstalled("dPcabinet");
-$canCabinet    = $moduleCabinet->canDo();
-
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("canCabinet", CModule::getCanDo("dPcabinet"));
 
 $smarty->assign("codePraticienEc"   , $codePraticienEc);
 $smarty->assign("etablissements"    , $etablissements);
 $smarty->assign("patient"           , $patient         );
-$smarty->assign("canCabinet"        , $canCabinet      );
 $smarty->assign("listPrat"          , $listPrat        );
-
 $smarty->assign("object"            , $patient         );
-
 $smarty->assign("diagnosticsInstall", $diagnosticsInstall);
 
 $smarty->display("vw_full_patients.tpl");

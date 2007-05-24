@@ -11,10 +11,6 @@ global $AppUI, $can, $m, $tab, $dPconfig;
 
 $can->needsRead();
 
-// Droit de lecture dPsante400
-$moduleSante400 = CModule::getInstalled("dPsante400");
-$canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
-
 $sejour_id    = mbGetValueFromGetOrSession("sejour_id");
 $patient_id   = mbGetValueFromGet("patient_id");
 $praticien_id = mbGetValueFromGetOrSession("praticien_id");
@@ -107,7 +103,6 @@ if($sejour->_ref_operations){
 
 // Création du template
 $smarty = new CSmartyDP();
-
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("sejour"        , $sejour);

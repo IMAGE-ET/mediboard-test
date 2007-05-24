@@ -11,10 +11,6 @@ global $AppUI, $can, $m, $tab, $dPconfig;
 
 $can->needsRead();
 
-// Droit de lecture dPsante400
-$moduleSante400 = CModule::getInstalled("dPsante400");
-$canSante400    = $moduleSante400 ? $moduleSante400->canDo() : new CCanDo;
-
 // Liste des Etablissements selon Permissions
 $etablissements = new CMediusers();
 $etablissements = $etablissements->loadEtablissements(PERM_READ);
@@ -129,7 +125,7 @@ $mins_duree = range(0, 59, $config["min_intervalle"]);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canSante400", $canSante400);
+$smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
 
 $smarty->assign("op"        , $op);
 $smarty->assign("plage"     , $op->plageop_id ? $op->_ref_plageop : new CPlageOp );
