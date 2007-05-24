@@ -22,6 +22,8 @@ function pageMain() {
 
 <table class="main">
   <tr>
+  
+    <!-- Modification d'une fiche -->
     <td class="halfpane">
       <form name="editFrm" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_gestioncab_aed" />
@@ -97,6 +99,9 @@ function pageMain() {
       </table>
       </form>
     </td>
+    
+    <!-- Recherche de fiches -->
+    
     <td class="halfpane">
       <form name="selectFrm" action="index.php" method="get" onSubmit="return checkForm(this)">
       <input type="hidden" name="m" value="{{$m}}" />
