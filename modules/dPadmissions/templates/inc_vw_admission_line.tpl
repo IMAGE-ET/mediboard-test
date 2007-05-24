@@ -114,7 +114,7 @@
 </td>
 
 <td style="background: {{$background}}" class="button">
-  {{if $curr_adm->_ref_patient->_fin_cmu}}
+  {{if $curr_adm->_couvert_cmu}}
     <img src="images/icons/tick.png" alt="Droits CMU en cours" />
   {{else}}
     -

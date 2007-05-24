@@ -64,7 +64,8 @@ class CSejour extends CMbObject {
   var $_min_sortie_prevue  = null;
   var $_venue_SHS_guess    = null;
   var $_at_midnight        = null;
-
+  var $_couvert_cmu        = null;
+  
   // Object References
   var $_ref_patient           = null;
   var $_ref_praticien         = null;
@@ -237,14 +238,21 @@ class CSejour extends CMbObject {
     }
   }
   
+  // Calcul des droits CMU pour la duree totale du sejour
+  function getDroitsCMU(){
+  	if($this->_date_sortie_prevue<=$this->_ref_patient->cmu){
+  		$this->_couvert_cmu = true;
+  	}
+  }
+  
   function loadRefPatient() {
     $where = array (
       "patient_id" => "= '$this->patient_id'"
     );
-
+    
     $this->_ref_patient = new CPatient;
     $this->_ref_patient->loadObject($where);
-
+    $this->getDroitsCMU();
     $this->_view = "Séjour de ";
     $this->_view .= $this->_ref_patient->_view;
     $this->_view .= " du ";

@@ -36,6 +36,9 @@
           {{else}}
           ({{$curr_sejour->type|truncate:1:""|capitalize}})
           {{/if}}
+          {{if $curr_sejour->_couvert_cmu}}
+          <div style="float: right;"><strong>CMU</strong></div>
+          {{/if}}
         </td>
       </tr>      
       <tr>
@@ -110,7 +113,7 @@
       </tr>
       {{/if}}
       {{/foreach}}
-      {{if $curr_sejour->_ref_patient->rques != ""}}
+      {{if $curr_sejour->_ref_patient->rques}}
       <tr>
         <td class="date" colspan="2" style="background-color: #ff5">
           <em>Patient</em>: {{$curr_sejour->_ref_patient->rques|nl2br}}

@@ -101,7 +101,7 @@ class CPatient extends CMbObject {
   
   // Navigation Fields
   var $_dossier_cabinet_url = null;
-  
+
   // HPRIM Fields
   var $_prenoms        = null; // multiple
   var $_nom_naissance  = null; // +/- = nom_jeune_fille
@@ -115,7 +115,6 @@ class CPatient extends CMbObject {
 
   // Object References
   var $_nb_docs              = null;
-  var $_fin_cmu              = null;
   var $_ref_sejours          = null;
   var $_ref_consultations    = null;
   var $_ref_antecedents      = null;
@@ -706,15 +705,6 @@ class CPatient extends CMbObject {
         $operation->canRead();
         $operation->canEdit();
       }
-    }
-  }
-  
-  function verifCmuEtat($dateref = null){
-    if(!$dateref){
-      $dateref = mbDate();
-    }
-    if($dateref <= $this->cmu){
-      $this->_fin_cmu = true; 
     }
   }
   

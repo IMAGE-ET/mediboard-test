@@ -107,11 +107,13 @@ function loadServiceComplet(&$service, $date, $mode) {
           $sejour->loadRefsOperations();
           $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
           $sejour->_ref_patient =& getCachedPatient($sejour->patient_id);
+		  // Chargement des droits CMU
+          $sejour->getDroitsCMU();
 
           foreach($sejour->_ref_operations as $operation_id => $curr_operation) {
             $sejour->_ref_operations[$operation_id]->loadRefCCAM();
           }
-          $sejour->_ref_patient->verifCmuEtat($sejour->_date_entree_prevue);
+                    
         } else {
           unset($lit->_ref_affectations[$affectation_id]);
         }
@@ -143,7 +145,10 @@ function loadSejourNonAffectes($where) {
   foreach ($sejourNonAffectes as &$sejour) {
     $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
     $sejour->_ref_patient   =& getCachedPatient($sejour->patient_id);
-     
+    
+    // Chargement des droits CMU
+    $sejour->getDroitsCMU();
+    
     // Chargement des opérations
     $sejour->loadRefsOperations();
     foreach($sejour->_ref_operations as &$operation) {

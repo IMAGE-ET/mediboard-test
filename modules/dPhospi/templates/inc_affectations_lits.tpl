@@ -36,9 +36,11 @@
     </a>
     <div id="tpsPrev{{$curr_affectation->affectation_id}}" class="tooltip" style="display: none; padding: 5px;">
     </div>
-    {{if $patient->_fin_cmu}}
+    
+    {{if $sejour->_couvert_cmu}}
     <div style="float: right;"><strong>CMU</strong></div>
     {{/if}}
+          
     {{if !$sejour->entree_reelle || ($aff_prev->affectation_id && $aff_prev->effectue == 0)}}
       <font style="color:#a33">
     {{else}}
