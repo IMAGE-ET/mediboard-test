@@ -671,7 +671,8 @@ class CMbObject {
       $backField = $backRefParts[1];
       $backObject = new $backClass;
       $backSpec =& $backObject->_specs[$backField];
-      
+      $backMeta = $backSpec->meta;      
+
       // Cas du module non installé
       if (!$backObject->_ref_module) {
         continue;
@@ -682,10 +683,16 @@ class CMbObject {
         
         // Vérification de la possibilité de supprimer chaque backref
         $backObject->$backField = $this->_id;
+
+        // Cas des meta objects
+        if ($backMeta) {
+          $backObject->$backMeta = $this->_class_name;
+        }
+        
         $cascadeIssuesCount = 0;
         $cascadeObjects = $backObject->loadMatchingList();
-        foreach ($cascadeObjects as $object) {
-          if ($msg = $object->canDeleteEx()) {
+        foreach ($cascadeObjects as $cascadeObject) {
+          if ($msg = $cascadeObject->canDeleteEx()) {
             $cascadeIssuesCount++;
           }
         }
@@ -705,7 +712,7 @@ class CMbObject {
           "\nWHERE `$backField` = '$this->_id'";
 
         // Cas des meta objects
-        if ($backMeta = $backSpec->meta) {
+        if ($backMeta) {
           $query .= "\nAND `$backMeta` = '$this->_class_name'";
         }
         
@@ -729,6 +736,7 @@ class CMbObject {
    * @return null|string null if successful otherwise returns and error message
    */
   function delete($oid = null) {
+
     if ($oid) {
       $this->_id = intval($oid);
     }
@@ -736,33 +744,58 @@ class CMbObject {
     if ($msg = $this->canDeleteEx()) {
       return $msg;
     }
+
 //    if (!$this->canDelete($msg)) {
 //      return $msg;
 //    }
+
     // Deleting backRefs
     foreach ($this->_backRefs as $backName => $backRef) {
-      $backSpec = split(" ", $backRef);
-      $backClass = $backSpec[0];
-      $backField = $backSpec[1];
+      $backRefParts = split(" ", $backRef);
+      $backClass = $backRefParts[0];
+      $backField = $backRefParts[1];
       $backObject = new $backClass;
+      $backSpec =& $backObject->_specs[$backField];
+      $backMeta = $backSpec->meta;      
+      
+//        mbTrace($backSpec, "Back spec to delete");
+//        die;
       // Cas du module non installé
-      if(!$backObject->_ref_module) continue;
+      if (!$backObject->_ref_module) {
+        continue; 
+      }
+      
       // Cas de l'interdiction de suppression
-      if(!$backObject->_specs[$backField]->cascade) continue;
+      if (!$backSpec->cascade) {
+        continue;
+      }
+      
       // Cas de l'interdiction de la non liaison des backRefs
-      if(!$backObject->_specs[$backField]->unlink) continue;
+      if ($backSpec->unlink) {
+        continue; 
+      }
+      
       $backObject->$backField = $this->_id;
-      foreach($backObject->loadMatchingList() as $object) {
+      
+      // Cas des meta objects
+      if ($backMeta) {
+        $backObject->$backMeta = $this->_class_name;
+      }
+
+      foreach ($backObject->loadMatchingList() as $object) {
         $object->delete();
       }
     }
+    
+    // Actually delete record
     $sql = "DELETE FROM $this->_tbl WHERE $this->_tbl_key = '$this->_id'";
     if (!db_exec($sql)) {
       return db_error();
-    } else {
+    }
+    
+    // Deletion successful
     $this->_id = null;
     return null;
-    }
   }
   
 

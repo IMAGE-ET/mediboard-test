@@ -1,4 +1,4 @@
-<form name="editFrm" action="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}" method="post" onsubmit="return checkForm(this)">
+<form name="editFrm" action="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;object_class={{$filter->object_class}}&amp;object_id={{$filter->object_id}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="dosql" value="do_idsante400_aed" />

@@ -67,13 +67,11 @@ function chgMenu(id, type) {
         </div>
       </div>
     </td>
-    {{if $titleBlockData.icon}}
     <td class="titlecell">
-      {{$titleBlockData.icon|smarty:nodefaults}}
+      <img src="./images/modules/{{$m}}.png" height="24" width="24" />
     </td>
-    {{/if}}
     <td class="titlecell">
-      {{tr}}{{$titleBlockData.name}}{{/tr}}
+      {{tr}}module-{{$m}}-long{{/tr}}
     </td>
     <td class="message">
       {{if !$dialog}}

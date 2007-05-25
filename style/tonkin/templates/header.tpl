@@ -20,13 +20,11 @@
             {{if !$offline}}
             <table class='titleblock'>
               <tr>
-                {{if $titleBlockData.icon}}
                 <td>
-                  {{$titleBlockData.icon|smarty:nodefaults}}
+                  <img src="./images/modules/{{$m}}.png" height="24" width="24" />
                 </td>
-                {{/if}}
                 <td class='titlecell'>
-                  {{tr}}{{$titleBlockData.name}}{{/tr}}
+                  {{tr}}module-{{$m}}-long{{/tr}}
                 </td>
               </tr>
             </table>

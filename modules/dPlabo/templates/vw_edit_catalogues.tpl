@@ -41,11 +41,7 @@ function pageMain() {
         <tr>
           {{if $catalogue->_id}}
           <th class="title modify" colspan="0">
-            {{if $canSante400->read}}
-            <a style="float:right;" href="#" onclick="view_idsante400('{{$catalogue->_class_name}}',{{$catalogue->_id}})">
-              <img src="images/icons/sante400.gif" alt="Sante400" title="Identifiant sante 400" />
-	        </a>
-  	        {{/if}}
+            <div class="idsante400" id="{{$catalogue->_class_name}}-{{$catalogue->_id}}" ></div>
             Modification du catalogue {{$catalogue->_view}}
           </th>
           {{else}}

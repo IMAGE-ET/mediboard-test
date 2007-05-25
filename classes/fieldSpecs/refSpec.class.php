@@ -26,7 +26,7 @@ class CRefSpec extends CMbFieldSpec {
     
     $propValue = $this->checkNumeric($propValue, false);
       
-    if($propValue === null || $object->$fieldName === ""){
+    if ($propValue === null || $object->$fieldName === ""){
       return "N'est pas une référence (format non numérique)";
     }
     
@@ -36,6 +36,24 @@ class CRefSpec extends CMbFieldSpec {
     
     if ($propValue < 0) {
       return "N'est pas une référence (entier négatif)";
+    }
+    
+    if (!$this->class and !$this->meta) {
+      return "Type d'objet cible on défini";
+    }
+    
+    $class = $this->class;
+    if ($meta = $this->meta) {
+      $class = $object->$meta;
+    }
+    
+    if (!class_inherits_from($class, "CMbObject")) {
+      return "La type '$class' n'est pas un type d'objet métier";
+    }
+    
+    $ref = new $class;
+    if (!$ref->load($propValue)) {
+      return "Objet référencé de type '$class' introuvable";      
     }
 
     return null;

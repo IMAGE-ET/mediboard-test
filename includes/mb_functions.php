@@ -10,6 +10,14 @@
 require_once("mb_version.php");
 
 /**
+ * Utility function to return a value from a named array or a specified default
+ */
+function dPgetParam( &$arr, $name, $def=null ) {
+  return isset( $arr[$name] ) ? $arr[$name] : $def;
+}
+
+
+/**
  * Returns the first arguments that do not evaluate to false (0, null, "")
  */
 function mbGetValue() {
@@ -757,6 +765,10 @@ function getInstalledClasses($properties = array()) {
   return $listClasses;
 }
 
+/**
+ * Check if a class inherits froma an ancestor
+ * @return bool
+ */
 function class_inherits_from($class, $ancestor) {
 	if ($class == $ancestor) {
 		return true;
@@ -766,9 +778,14 @@ function class_inherits_from($class, $ancestor) {
 	return $parent ? class_inherits_from($parent, $ancestor) : false;
 }
 
+/**
+ * Check if a class has a default constructor (ie with 0 paramater)
+ * @return bool
+ */
 function has_default_constructor($classname) {
 	$class = new ReflectionClass($classname);
 	$constructor = $class->getConstructor();
 	return ($constructor->getNumberOfParameters() == 0);
 }
+
 ?>

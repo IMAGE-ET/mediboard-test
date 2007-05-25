@@ -563,11 +563,10 @@ function initNotes(){
 
 
 function initSante400(){
-    $$("div.idsante400").each(function(element) {
+  $$("div.idsante400").each(function(element) {
     var sIdDiv = element.id;
     var aInfos = sIdDiv.split("-");
-
-
+	
     url = new Url;
     url.setModuleAction("system", "httpreq_vw_object_idsante400");
     url.addParam("object_class" , aInfos[0]);

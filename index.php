@@ -221,11 +221,7 @@ if (!$suppressHeaders) {
   $messages = new CMessage();
   $messages = $messages->loadPublications("present");
   
-  // Titre et Image Module en cours
-  $titleBlockData["name"]="module-$m-long";
-  $titleBlockData["icon"]=dPshowImage( dPFindImage( "$m.png", $m ), "24", "24" );
-  
-  //Creation du Template
+  // Creation du Template
   $smartyHeader = new CSmartyDP();
   $smartyHeader->template_dir = "style/$uistyle/templates/";
   $smartyHeader->compile_dir  = "style/$uistyle/templates_c/";
@@ -236,7 +232,6 @@ if (!$suppressHeaders) {
   }
   $smartyHeader->assign("offline"              , false);
   $smartyHeader->assign("configOffline"        , null);
-  $smartyHeader->assign("titleBlockData"       , $titleBlockData);
   $smartyHeader->assign("localeCharSet"        , $locale_char_set);
   $smartyHeader->assign("mediboardVersion"     , @$AppUI->getVersion());
   $smartyHeader->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
