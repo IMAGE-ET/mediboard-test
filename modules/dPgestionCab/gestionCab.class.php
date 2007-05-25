@@ -25,7 +25,8 @@ class CGestionCab extends CMbObject {
   var $rques            = null;
   
   //Filter Fields
-  
+  var $_date_min = null;
+  var $_date_max = null;
   
   // Object References
   var $_ref_function      = null;
@@ -47,7 +48,9 @@ class CGestionCab extends CMbObject {
       "montant"          => "notNull currency min|0",
       "mode_paiement_id" => "notNull ref class|CModePaiement",
       "num_facture"      => "notNull num",
-      "rques"            => "text"
+      "rques"            => "text",
+      "_date_min" 		 => "notNull date",
+      "_date_max" 		 => "notNull date moreThan|_date_min"
     );
   }
   

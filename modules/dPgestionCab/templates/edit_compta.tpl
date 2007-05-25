@@ -4,8 +4,8 @@ function printRapport() {
 
   var url = new Url;
   url.setModuleAction("dPgestionCab", "print_rapport");
-  url.addElement(form.date);
-  url.addElement(form.datefin);
+  url.addElement(form._date_min);
+  url.addElement(form._date_max);
   url.addElement(form.libelle);
   url.addElement(form.rubrique_id);
   url.addElement(form.mode_paiement_id);
@@ -14,8 +14,8 @@ function printRapport() {
 
 function pageMain() {
   regFieldCalendar("editFrm", "date");
-  regFieldCalendar("selectFrm", "date");
-  regFieldCalendar("selectFrm", "datefin");
+  regFieldCalendar("selectFrm", "_date_min");
+  regFieldCalendar("selectFrm", "_date_max");
 }
 
 </script>
@@ -56,11 +56,20 @@ function pageMain() {
           <th>{{mb_label object=$gestioncab field="rubrique_id"}}</th>
           <td>
             <select name="rubrique_id">
+             <optgroup label="{{$etablissement}}">
             {{foreach from=$listRubriques item=rubrique}}
               <option value="{{$rubrique->rubrique_id}}" {{if $rubrique->rubrique_id == $gestioncab->rubrique_id}}selected="selected"{{/if}}>
                 {{$rubrique->nom}}
               </option>
             {{/foreach}}
+            </optgroup>
+            <optgroup label="{{$fonction}}">
+            {{foreach from=$listRubriqueFonction item=rubrique}}
+              <option value="{{$rubrique->rubrique_id}}" {{if $rubrique->rubrique_id == $gestioncab->rubrique_id}}selected="selected"{{/if}}>
+                {{$rubrique->nom}}
+              </option>
+            {{/foreach}}
+            </optgroup>
             </select>
           </td>
           <th>{{mb_label object=$gestioncab field="montant"}}</th>
@@ -70,11 +79,20 @@ function pageMain() {
           <th>{{mb_label object=$gestioncab field="mode_paiement_id"}}</th>
           <td>
             <select name="mode_paiement_id">
+            <optgroup label="{{$etablissement}}">
             {{foreach from=$listModesPaiement item=mode}}
               <option value="{{$mode->mode_paiement_id}}" {{if $mode->mode_paiement_id == $gestioncab->mode_paiement_id}}selected="selected"{{/if}}>
                 {{$mode->nom}}
               </option>
             {{/foreach}}
+            </optgroup>
+            <optgroup label="{{$fonction}}">
+            {{foreach from=$listModePaiementFonction item=mode}}
+              <option value="{{$mode->mode_paiement_id}}" {{if $mode->mode_paiement_id == $gestioncab->mode_paiement_id}}selected="selected"{{/if}}>
+                {{$mode->nom}}
+              </option>
+            {{/foreach}}
+            </optgroup>
             </select>
           </td>
           <th rowspan="2">{{mb_label object=$gestioncab field="rques"}}</th>
@@ -101,7 +119,6 @@ function pageMain() {
     </td>
     
     <!-- Recherche de fiches -->
-    
     <td class="halfpane">
       <form name="selectFrm" action="index.php" method="get" onSubmit="return checkForm(this)">
       <input type="hidden" name="m" value="{{$m}}" />
@@ -110,61 +127,61 @@ function pageMain() {
           <th class="title" colspan="5">Recherche de fiches</th>
         </tr>
         <tr>
-          <td style="text-align: right; vertical-align: middle;">
-            <label for="date" title="Date de début de la recherche">Depuis le</label>
-          </td>
-          <td class="date" colspan="3">
-            <div id="selectFrm_date_da">
-              {{$date|date_format:"%d/%m/%Y"}}
-            </div>
-            <input type="hidden" class="notNull date" name="date" value="{{$date}}" />
-            <img id="selectFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar" />
-          </td>
+          <td>{{mb_label object=$filter field="_date_min"}}</td>
+          <td class="date">{{mb_field object=$filter field="_date_min" form="selectFrm"}}</td>
           <td class="button">
             <button class="print" type="button" onclick="printRapport()">Imprimer</button>
           </td>
         </tr>
         <tr>
-          <td style="text-align: right; vertical-align: middle;">
-            <label for="datefin" title="Date de fin de la recherche">Jusqu'au</label>
-          </td>
-          <td class="date" colspan="3">
-            <div id="selectFrm_datefin_da">
-              {{$datefin|date_format:"%d/%m/%Y"}}
-            </div>
-            <input type="hidden" name="datefin" class="notNull date moreEquals|date" value="{{$datefin}}" />
-            <img id="selectFrm_datefin_trigger" src="./images/icons/calendar.gif" alt="calendar" />
-          </td>
+          <td>{{mb_label object=$filter field="_date_max"}}</td>
+          <td class="date">{{mb_field object=$filter field="_date_max" form="selectFrm"}}</td>
           <td class="button">
             <button type="submit" class="search">Afficher</button>
           </td>
         </tr>
         <tr>
           <th class="category">Date</th>
-          <th class="category">
-            Libellé<br />
-            <input type="text" name="libelle" value="{{$libelle}}" size="8" />
+          <th>{{mb_label object=$filter field="libelle"}}
+		  <br />
+            {{mb_field object=$filter field="libelle" canNull=true}}
           </th>
-          <th class="category">
-            Rubrique<br />
+          <th class="category"> {{mb_label object=$filter field="rubrique_id"}}
+            <br />
             <select name="rubrique_id">
-              <option value="0">&mdash; Toutes</option>
-              {{foreach from=$listRubriques item=rubrique}}
-              <option value="{{$rubrique->rubrique_id}}" {{if $rubrique->rubrique_id == $rubrique_id}}selected="selected"{{/if}}>
+             <optgroup label="{{$etablissement}}">
+            {{foreach from=$listRubriques item=rubrique}}
+              <option value="{{$rubrique->rubrique_id}}" {{if $rubrique->rubrique_id == $gestioncab->rubrique_id}}selected="selected"{{/if}}>
                 {{$rubrique->nom}}
               </option>
-              {{/foreach}}
+            {{/foreach}}
+            </optgroup>
+            <optgroup label="{{$fonction}}">
+            {{foreach from=$listRubriqueFonction item=rubrique}}
+              <option value="{{$rubrique->rubrique_id}}" {{if $rubrique->rubrique_id == $gestioncab->rubrique_id}}selected="selected"{{/if}}>
+                {{$rubrique->nom}}
+              </option>
+            {{/foreach}}
+            </optgroup>
             </select>
           </th>
-          <th class="category">
-            Mode de paiement<br />
+          <th class="category">{{mb_label object=$filter field="rubrique_id"}}
+            <br />
             <select name="mode_paiement_id">
-              <option value="0">&mdash; Tous</option>
-              {{foreach from=$listModesPaiement item=mode}}
-              <option value="{{$mode->mode_paiement_id}}" {{if $mode->mode_paiement_id == $mode_paiement_id}}selected="selected"{{/if}}>
+            <optgroup label="{{$etablissement}}">
+            {{foreach from=$listModesPaiement item=mode}}
+              <option value="{{$mode->mode_paiement_id}}" {{if $mode->mode_paiement_id == $gestioncab->mode_paiement_id}}selected="selected"{{/if}}>
                 {{$mode->nom}}
               </option>
-              {{/foreach}}
+            {{/foreach}}
+            </optgroup>
+            <optgroup label="{{$fonction}}">
+            {{foreach from=$listModePaiementFonction item=mode}}
+              <option value="{{$mode->mode_paiement_id}}" {{if $mode->mode_paiement_id == $gestioncab->mode_paiement_id}}selected="selected"{{/if}}>
+                {{$mode->nom}}
+              </option>
+            {{/foreach}}
+            </optgroup>
             </select>
           </th>
           <th class="category">Montant</th>

@@ -35,7 +35,7 @@ class CRubrique extends CMbObject {
   
   function getSpecs() {
     return array (
-      "function_id" => "notNull ref class|CFunctions",
+      "function_id" => "ref class|CFunctions",
       "nom"         => "notNull str"
     );
   }

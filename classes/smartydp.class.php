@@ -140,21 +140,28 @@ function smarty_function_mb_field_spec($obj, $field, $propSpec = null){
  *        - defaultOption   : {optionnel} Ajout d'un "option" en amont des valeurs ayant pour value ""
  *        - class           : {optionnel} Permet de donner une classe aux champs
  *        - hidden          : {optionnel} Permet de forcer le type "hidden"
+ * 		  - canNull			: {optionnel} Permet de passer outre le notNull de la spécification
  */
 function smarty_function_mb_field($params, &$smarty) {
   global $AppUI;
   
   require_once $smarty->_get_plugin_filepath('shared','escape_special_chars');
-  
+
   $object  = CMbArray::extract($params, "object", null, true);
   $field   = CMbArray::extract($params, "field" , null, true);
   $propKey = array_key_exists("prop", $params);
   $prop    = CMbArray::extract($params, "prop");
-
-  $spec = $propKey ? 
-    CMbFieldSpecFact::getSpec($object, $field, $prop) : 
-    $object->_specs[$field];
-
+  $canNull = CMbArray::extract($params, "canNull");
+ 
+  $spec = $propKey ?  CMbFieldSpecFact::getSpec($object, $field, $prop) : $object->_specs[$field];
+ 
+  if($canNull) {
+  		$spec->notNull = 0;
+  		$tabSpec = split(" ",$spec->prop);
+  		CMbArray::extract($tabSpec, "0");
+  		$spec->prop = join($tabSpec, " ");
+  }
+  
   return $spec->getFormElement($object, $params);
 }
 

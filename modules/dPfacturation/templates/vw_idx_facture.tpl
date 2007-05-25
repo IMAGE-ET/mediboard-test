@@ -94,14 +94,4 @@ function pageMain() {
       {{/if}}
     </td>
   </tr>
-  <tr>
-    <td class="halfPane">
-         {{if $facture->_id}}
-         <button class="new" type="button" onclick="window.location='index.php?m=dPfacturation&amp;tab=vw_idx_factureitem&amp;facture_item_id=0&amp;facture_id={{$facture->_id}}'">
-           Créer un nouveau élément de la facture
-         </button>        
-         {{include file="list_element.tpl"}}
-         {{/if}}
-    </td>
-  </tr>
  </table>

@@ -14,11 +14,16 @@ $can->needsRead();
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 
-$date             = mbGetValueFromGetOrSession("date"             , mbDate());
-$datefin          = mbGetValueFromGetOrSession("datefin"          , mbDate());
 $libelle          = mbGetValueFromGetOrSession("libelle"          , "");
 $rubrique_id      = mbGetValueFromGetOrSession("rubrique_id"      , 0);
 $mode_paiement_id = mbGetValueFromGetOrSession("mode_paiement_id" , 0);
+
+$filter = new CGestionCab;
+$filter->_date_min = mbGetValueFromGetOrSession("_date_min");
+$filter->_date_max = mbGetValueFromGetOrSession("_date_max");
+$filter->libelle = mbGetValueFromGetOrSession("libelle");
+$filter->rubrique_id = mbGetValueFromGetOrSession("rubrique_id");
+$filter->mode_paiement_id = mbGetValueFromGetOrSession("mode_paiement_id");
 
 $where             = array();
 $where[]           = "function_id IS NULL OR function_id = '$user->function_id'";
@@ -30,7 +35,7 @@ $listModesPaiement = new CModePaiement;
 $listModesPaiement = $listModesPaiement->loadList($where);
 
 $listGestionCab    = new CGestionCab();
-$where["date"]     = "BETWEEN '$date' AND '$datefin'";
+$where["date"]     = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
 if($libelle)
   $where["libelle"] = "LIKE '%$libelle%'";
 if($rubrique_id)
@@ -45,7 +50,7 @@ foreach($listGestionCab as $key => $fiche) {
 
 $sql = "SELECT rubrique_id, SUM(montant) AS value" .
     "\nFROM `gestioncab`" .
-    "\nWHERE date BETWEEN '$date' AND '$datefin'" .
+    "\nWHERE date BETWEEN '$filter->_date_min' AND '$filter->_date_max'" .
     "\nAND function_id = '$user->function_id'";
 if($libelle)
   $sql .= "\nAND libelle LIKE '%$libelle%'";
@@ -58,7 +63,7 @@ $totaux = db_loadList($sql);
 
 $sql = "SELECT SUM(montant) AS value, 0 as invar" .
     "\nFROM `gestioncab`" .
-    "\nWHERE date BETWEEN '$date' AND '$datefin'" .
+    "\nWHERE date BETWEEN '$filter->_date_min' AND '$filter->_date_max'" .
     "\nAND function_id = '$user->function_id'";
 if($libelle)
   $sql .= "\nAND libelle LIKE '%$libelle%'";
@@ -72,8 +77,7 @@ $total = db_loadResult($sql);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("date"             , $date);
-$smarty->assign("datefin"          , $datefin);
+$smarty->assign("filter"           , $filter);
 $smarty->assign("libelle"          , $libelle);
 $smarty->assign("rubrique_id"      , $rubrique_id);
 $smarty->assign("mode_paiement_id" , $mode_paiement_id);
