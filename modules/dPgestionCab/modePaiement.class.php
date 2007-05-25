@@ -45,6 +45,11 @@ class CModePaiement extends CMbObject {
       "nom" => "like"
     );
   }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = "Mode de paiement '".$this->nom."'";
+  }
 
   // Forward references
   function loadRefsFwd() {

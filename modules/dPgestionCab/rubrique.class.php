@@ -46,6 +46,11 @@ class CRubrique extends CMbObject {
     );
   }
 
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = "Rubrique '".$this->nom."'";
+  }
+
   // Forward references
   function loadRefsFwd() {
     // fonction (cabinet)

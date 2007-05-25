@@ -9,29 +9,28 @@
         <tr>
           <th class="title" colspan="2">Mode de paiement</th>
         </tr>
+         <tr>
+          <th class="title">{{$etablissement}}</th>
+        </tr>
         <tr>
           <th>Libellé</th>
-          <th>Fonctions</th>
         </tr>
-        {{foreach from=$listModePaiementGroup item=_item}}
+        {{foreach from=$listModePaiementGroup item=_item}}     
         <tr {{if $_item->_id == $modePaiement->_id}}class="selected"{{/if}}>
           <td>
            <a href="?m=dPgestionCab&amp;tab=edit_mode_paiement&amp;mode_paiement_id={{$_item->_id}}" title="Modifier le mode de paiement">
               {{mb_value object=$_item field="nom"}}
             </a>
            </td>
-           {{if !$_item->function_id}}
-           <td > Toutes </td>
-           {{else}}
-           <td >{{mb_value object=$_item field="function_id"}}</td>
-           {{/if}}
         </tr>
         {{/foreach}}
         {{foreach from=$listModePaiementFonction key=keyModePaiement item=_itemModePaiement}}
         {{if $_itemModePaiement|@count}}
+        <tr>
+          <th class="title">{{$keyModePaiement}}</th>
+        </tr>
          <tr>
           <th>Libellé</th>
-          <th>Fonctions</th>
         </tr>
         	{{foreach from=$_itemModePaiement item=_item}}
 	        <tr {{if $_item->_id == $modePaiement->_id}}class="selected"{{/if}}>
@@ -40,11 +39,6 @@
 	              {{mb_value object=$_item field="nom"}}
 	            </a>
 	           </td>
-	           {{if !$_item->function_id}}
-	           <td > Toutes </td>
-	           {{else}}
-	           <td >{{$keyModePaiement}}</td>
-	           {{/if}}
 	        </tr>
         	{{/foreach}}
         {{/if}}
@@ -62,7 +56,7 @@
         <tr>
           {{if $modePaiement->_id}}
           <th class="title modify" colspan="2">
-     	 	Modification d'un mode de paiement
+     	 	Modification du {{$modePaiement->_view}}
           </th>
           {{else}}
           <th class="title" colspan="2">

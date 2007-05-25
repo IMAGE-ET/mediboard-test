@@ -11,14 +11,21 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
+$user = new CMediusers();
+$user->load($AppUI->user_id);
+$user->loadRefsFwd();
+$user->_ref_function->loadRefsFwd();
+
+$etablissement = $user->_ref_function->_ref_group->text;
+
 $mode_paiement_id = mbGetValueFromGet("mode_paiement_id");
 
 $modePaiement = new CModePaiement();
 $modePaiement->load($mode_paiement_id);
 
 // Récupération de la liste des functions
-$listFunc = new CFunctions();
-$listFunc = $listFunc->loadSpecialites(PERM_EDIT);
+$function = new CFunctions();
+$listFunc = $function->loadListWithPerms(PERM_EDIT);
 
 $where = array();
 $itemModePaiement = new CModePaiement;
@@ -39,6 +46,7 @@ foreach($listFunc as $function) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("etablissement"       		, $etablissement);
 $smarty->assign("listFunc" 		   			, $listFunc);
 $smarty->assign("modePaiement" 	   			, $modePaiement);
 $smarty->assign("listModePaiementGroup" 	, $listModePaiementGroup);

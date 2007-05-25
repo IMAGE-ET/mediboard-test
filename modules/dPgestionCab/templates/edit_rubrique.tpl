@@ -9,9 +9,11 @@
         <tr>
           <th class="title" colspan="2">Rubrique</th>
         </tr>
+         <tr>
+          <th class="title">{{$etablissement}}</th>
+        </tr>
         <tr>
           <th>Libellé</th>
-          <th>Fonctions</th>
         </tr>
         {{foreach from=$listRubriqueGroup item=_item}}
         <tr {{if $_item->_id == $rubrique->_id}}class="selected"{{/if}}>
@@ -19,19 +21,16 @@
            <a href="?m=dPgestionCab&amp;tab=edit_rubrique&amp;rubrique_id={{$_item->_id}}" title="Modifier la rubrique">
               {{mb_value object=$_item field="nom"}}
             </a>
-           </td>
-           {{if !$_item->function_id}}
-           <td > Toutes </td>
-           {{else}}
-           <td >{{mb_value object=$_item field="function_id"}}</td>
-           {{/if}}
+          </td>
         </tr>
         {{/foreach}}
         {{foreach from=$listRubriqueFonction key=keyRubrique item=_itemRubrique}}
         {{if $_itemRubrique|@count}}
+        <tr>
+          <th class="title">{{$keyRubrique}}</th>
+        </tr>
          <tr>
           <th>Libellé</th>
-          <th>Fonctions</th>
         </tr>
         	{{foreach from=$_itemRubrique item=_item}}
 	        <tr {{if $_item->_id == $rubrique->_id}}class="selected"{{/if}}>
@@ -40,11 +39,6 @@
 	              {{mb_value object=$_item field="nom"}}
 	            </a>
 	           </td>
-	           {{if !$_item->function_id}}
-	           <td > Toutes </td>
-	           {{else}}
-	           <td >{{$keyRubrique}}</td>
-	           {{/if}}
 	        </tr>
         	{{/foreach}}
         {{/if}}
@@ -63,7 +57,7 @@
         <tr>
           {{if $rubrique->_id}}
           <th class="title modify" colspan="2">
-     	 	Modification d'une rubrique
+     	 	Modification de la {{$rubrique->_view}}
           </th>
           {{else}}
           <th class="title" colspan="2">

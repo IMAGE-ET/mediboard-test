@@ -43,12 +43,14 @@ function pageMain() {
             Modification de la fiche {{$gestioncab->_view}}
           </th>
           {{else}}
-          <th class="title" colspan="4">Création d'une nouvelle fiche</th>
+          <th class="title" colspan="2">Création d'une nouvelle fiche</th>
           {{/if}}
         </tr>
         <tr>
           <th>{{mb_label object=$gestioncab field="libelle"}}</th>
           <td>{{mb_field object=$gestioncab field="libelle"}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$gestioncab field="date"}}</th>
           <td class="date">{{mb_field object=$gestioncab field="date" form="editFrm"}}</td>
         </tr>
@@ -72,6 +74,8 @@ function pageMain() {
             </optgroup>
             </select>
           </td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$gestioncab field="montant"}}</th>
           <td>{{mb_field object=$gestioncab field="montant"}}</td>
         </tr>
@@ -95,8 +99,10 @@ function pageMain() {
             </optgroup>
             </select>
           </td>
-          <th rowspan="2">{{mb_label object=$gestioncab field="rques"}}</th>
-          <td rowspan="2">{{mb_field object=$gestioncab field="rques"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$gestioncab field="rques"}}</th>
+          <td>{{mb_field object=$gestioncab field="rques"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$gestioncab field="num_facture"}}</th>
@@ -129,14 +135,14 @@ function pageMain() {
         <tr>
           <td>{{mb_label object=$filter field="_date_min"}}</td>
           <td class="date">{{mb_field object=$filter field="_date_min" form="selectFrm"}}</td>
-          <td class="button">
+          <td class="button" colspan="3">
             <button class="print" type="button" onclick="printRapport()">Imprimer</button>
           </td>
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_max"}}</td>
-          <td class="date">{{mb_field object=$filter field="_date_max" form="selectFrm"}}</td>
-          <td class="button">
+          <td class="date" >{{mb_field object=$filter field="_date_max" form="selectFrm"}}</td>
+          <td class="button" colspan="3">
             <button type="submit" class="search">Afficher</button>
           </td>
         </tr>
