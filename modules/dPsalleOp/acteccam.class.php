@@ -16,8 +16,10 @@ class CActeCCAM extends CMbObject {
 	var $acte_id = null;
 
   // DB References
-  var $operation_id = null;
-  var $executant_id = null;
+  var $subject_id          = null;
+  var $subject_class       = null;
+    
+  var $executant_id        = null;
 
   // DB Fields
   var $code_acte           = null;
@@ -32,7 +34,9 @@ class CActeCCAM extends CMbObject {
   var $_modificateurs = array();
   
   // Object references
-  var $_ref_operation = null;
+  //var $_ref_operation = null;
+  var $_ref_subject   = null;
+  
   var $_ref_executant = null;
   var $_ref_code_ccam = null;
 
@@ -51,7 +55,8 @@ class CActeCCAM extends CMbObject {
       "modificateurs"       => "str maxLength|4",
       "montant_depassement" => "currency min|0",
       "commentaire"         => "text",
-      "operation_id"        => "notNull ref class|COperation",
+      "subject_id"          => "notNull ref class|CMbObject meta|subject_class",
+      "subject_class"       => "notNull enum list|COperation|CSejour|CConsultation",
       "executant_id"        => "notNull ref class|CMediusers"
     );
   }
@@ -76,9 +81,9 @@ class CActeCCAM extends CMbObject {
     $this->_view = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs"; 
   }
   
-  function loadRefOperation() {
-    $this->_ref_operation = new COperation;
-    $this->_ref_operation->load($this->operation_id);
+  function loadRefSubject(){
+    $this->_ref_subject = new $this->subject_class;
+    $this->_ref_subject->load($this->subject_id); 
   }
   
   function loadRefExecutant() {
@@ -92,16 +97,18 @@ class CActeCCAM extends CMbObject {
   }
    
   function loadRefsFwd() {
-    $this->loadRefOperation();
+    //$this->loadRefOperation();
+    $this->loadRefSubject();
     $this->loadRefExecutant();
     $this->loadRefCodeCCAM();
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_operation) {
-      $this->loadRefOperation();
+    if(!$this->_ref_subject) {
+    	$this->loadRefSubject();
+      //$this->loadRefOperation();
     }
-    return $this->_ref_operation->getPerm($permType);
+    return $this->_ref_subject->getPerm($permType);
   }
 }
 

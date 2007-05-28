@@ -69,7 +69,9 @@ $selOp = new COperation;
 $timing = array();
 if($op) {
   $selOp->load($op);
+  
   $selOp->loadRefs();
+
   foreach($selOp->_ext_codes_ccam as $keyCode => $code) {
     $selOp->_ext_codes_ccam[$keyCode]->Load();
   }

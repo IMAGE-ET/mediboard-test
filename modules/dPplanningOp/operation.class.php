@@ -9,7 +9,9 @@
 
 class COperation extends CMbObject {
   // DB Table key
-  var $operation_id = null;
+  var $operation_id  = null;
+  var $subject_id    = null;
+  var $subject_class = null;
 
   // DB References
   var $sejour_id  = null;
@@ -147,7 +149,7 @@ class COperation extends CMbObject {
 
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["actes_CCAM"] = "CActeCCAM operation_id";
+      $backRefs["actes_CCAM"] = "CActeCCAM subject_id";
       $backRefs["dossiers_anesthesie"] = "CConsultAnesth operation_id";
       $backRefs["naissances"] = "CNaissance operation_id";
      return $backRefs;
@@ -403,7 +405,8 @@ class COperation extends CMbObject {
   }
   
   function loadRefsActesCCAM() {
-    $where = array("operation_id" => "= '$this->operation_id'");
+    $where = array("subject_id" => "= '$this->operation_id'",
+				   "subject_class" => "= 'COperation'");
     $this->_ref_actes_ccam = new CActeCCAM;
     $this->_ref_actes_ccam = $this->_ref_actes_ccam->loadList($where);
   }

@@ -7,6 +7,7 @@
 * @author Thomas Despoix
 */
 
+
 class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
   function CDoActeCCAMAddEdit() {
     $this->CDoObjectAddEdit("CActeCCAM", "acte_id");
