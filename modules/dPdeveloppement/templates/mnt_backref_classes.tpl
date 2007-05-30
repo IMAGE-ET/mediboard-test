@@ -30,7 +30,7 @@
           <th>Nom</th>
         </tr>
       
-        {{foreach from=$tab key=keyTab item=_itemTab}}
+        {{foreach from=$tabInfo key=keyTab item=_itemTab}}
        	<tr>
           <th colspan="0" class="title">
            	<button id="Suggestion-{{$keyTab}}-trigger" class="edit" style="float: right">

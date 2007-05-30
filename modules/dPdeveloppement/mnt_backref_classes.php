@@ -46,7 +46,7 @@ foreach($classSelected as $selected) {
   }
 }
 
-$tab = array();
+$tabInfo = array();
 $tabKey = array();
 
 // Analyse des réels
@@ -54,7 +54,7 @@ foreach ($backRefs as $keyBackRef => $valueBackRefs) {
   foreach ($valueBackRefs as $key => $backRef) {
     $ok = is_numeric($key) ? "warningNum" : "ok";
     if (@$backSpecs[$keyBackRef]) {
-      $realRef =& $tab[$keyBackRef][$backRef]["real"];
+      $realRef =& $tabInfo[$keyBackRef][$backRef]["real"];
       $realRef["condition"] = $ok; 
       $realRef["attribut"] = $key;
       // Vérification que la fwd ref cible bien la class et non un ancêtre
@@ -72,7 +72,7 @@ foreach ($backRefs as $keyBackRef => $valueBackRefs) {
           continue; 
         } 
         if ($fwdSpec->class != $keyBackRef) {
-          unset($tab[$keyBackRef][$backRef]);
+          unset($tabInfo[$keyBackRef][$backRef]);
           continue;
         }  
         $realRef["condition"] = "default";
@@ -83,7 +83,7 @@ foreach ($backRefs as $keyBackRef => $valueBackRefs) {
 
 foreach($backSpecs as $keyBackSpec => $valueBackSpec) {
   foreach ($valueBackSpec as $key => $value) {
-    $alert =& $tab[$keyBackSpec][$value]["theo"];
+    $alert =& $tabInfo[$keyBackSpec][$value]["theo"];
     if (!class_exists($keyBackSpec)) {
       $alert = "noClass";
       continue;
@@ -95,16 +95,16 @@ foreach($backSpecs as $keyBackSpec => $valueBackSpec) {
     $alert = array_key_exists($keyBackSpec,$backRefs) && in_array($value,$backRefs[$keyBackSpec]) ? "ok" : $alert;
   }
 }
-$aSuggestions = array();
+$tabSuggestions = array();
 
 // Construction des suggestions
-foreach($tab as $keyTab => $valueTab) {
+foreach($tabInfo as $keyTab => $valueTab) {
   $suggestion = null;
   $reference = array();
   $compteurReal = $compteurTheo = $compteurOkn = 0;
   foreach($valueTab as $key => $value) {
-    if(@$tab[$keyTab][$key]["real"]["condition"]) {
-      if($tab[$keyTab][$key]["real"]["condition"] == "warningNum") {
+    if(@$tabInfo[$keyTab][$key]["real"]["condition"]) {
+      if($tabInfo[$keyTab][$key]["real"]["condition"] == "warningNum") {
         $compteurOkn++;
       }
         $compteurReal++;
@@ -130,11 +130,12 @@ foreach($tab as $keyTab => $valueTab) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("selClass"  , $selClass);
-$smarty->assign("listClass" , $listClass);
-$smarty->assign("tabSuggestions"   , $tabSuggestions);
-$smarty->assign("tabKey" , $tabKey);
-$smarty->assign("tab"       , $tab);
+$smarty->assign("selClass"  		, $selClass);
+$smarty->assign("listClass" 		, $listClass);
+$smarty->assign("tabSuggestions"   	, $tabSuggestions);
+$smarty->assign("tabKey" 			, $tabKey);
+$smarty->assign("tabInfo"       	, $tabInfo);
+
 $smarty->display("mnt_backref_classes.tpl");
 
 ?>
