@@ -60,7 +60,8 @@ $backSpecs = array();
 
 foreach($tabClass as $selected) {
   $object = new $selected;
-  mbTrace($object);
+  mbTrace($object->getProps(), "Properties for '$object->_class_name'");
+  mbTrace($object->_enums, "Enums for '$object->_class_name'");
   $ref_modules = $object->_specs;
   foreach ($object->_props as $keyObjetRefSpec => $valueObjetRefSpec) { 
   	$classname = $object->_class_name;
