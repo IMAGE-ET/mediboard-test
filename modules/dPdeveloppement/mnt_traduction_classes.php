@@ -46,34 +46,27 @@ foreach($localesDirs as $locale){
 	}
 }
 
-// Remplissage par null si la valeur n'existe pas
-foreach($trans as $k=>$v){
-  foreach($localesDirs as $keyLocale=>$valueLocale){
-  	if(!isset($trans[$k][$keyLocale])){
-  		$trans[$k][$keyLocale] = null;
-  	}
-  }
-}
-uksort($trans,"strnatcasecmp");
-
 $backSpecs = array();
 
 foreach($tabClass as $selected) {
   $object = new $selected;
-  mbTrace($object->getProps(), "Properties for '$object->_class_name'");
-  mbTrace($object->_enums, "Enums for '$object->_class_name'");
   $ref_modules = $object->_specs;
   foreach ($object->_props as $keyObjetRefSpec => $valueObjetRefSpec) { 
   	$classname = $object->_class_name;
-  	$backSpecs[$object->_class_name][$classname][$classname] = !array_key_exists($classname,$trans) ? " " : $trans[$classname]["fr"];
-  	$backSpecs[$object->_class_name][$classname][$classname.".one"] = !array_key_exists($classname.".one",$trans) ? " " : $trans[$classname.".one"]["fr"];
-  	$backSpecs[$object->_class_name][$classname][$classname.".more"] = !array_key_exists($classname.".more",$trans) ? " " : $trans[$classname.".more"]["fr"];
-  	$backSpecs[$object->_class_name][$classname][$classname.".none"] = !array_key_exists($classname.".none",$trans) ? " " : $trans[$classname.".none"]["fr"];
-  	$backSpecs[$object->_class_name][$classname][$classname.".create"] = !array_key_exists($classname.".create",$trans) ? " " : $trans[$classname.".create"]["fr"];
-  	$backSpecs[$object->_class_name][$classname][$classname.".modify"] = !array_key_exists($classname.".modify",$trans) ? " " : $trans[$classname.".modify"]["fr"];
-  	$backSpecs[$object->_class_name][$keyObjetRefSpec][$classname."-".$keyObjetRefSpec] = !array_key_exists($classname."-".$keyObjetRefSpec,$trans) ? " " : $trans[$classname."-".$keyObjetRefSpec]["fr"];  	
-  	$backSpecs[$object->_class_name][$keyObjetRefSpec][$classname."-".$keyObjetRefSpec."-desc"] = !array_key_exists($classname."-".$keyObjetRefSpec."-desc",$trans) ? " " : $trans[$classname."-".$keyObjetRefSpec."-desc"]["fr"];
-  	$backSpecs[$object->_class_name][$keyObjetRefSpec][$classname."-".$keyObjetRefSpec."-court"] = !array_key_exists($classname."-".$keyObjetRefSpec."-court",$trans) ? " " : $trans[$classname."-".$keyObjetRefSpec."-court"]["fr"];
+  	$backSpecs[$object->_class_name][$classname][$classname] = !array_key_exists($classname,$trans) ? '' : $trans[$classname]["fr"];
+  	$backSpecs[$object->_class_name][$classname][$classname.".one"] = !array_key_exists($classname.".one",$trans) ? '' : $trans[$classname.".one"]["fr"];
+  	$backSpecs[$object->_class_name][$classname][$classname.".more"] = !array_key_exists($classname.".more",$trans) ? '' : $trans[$classname.".more"]["fr"];
+  	$backSpecs[$object->_class_name][$classname][$classname.".none"] = !array_key_exists($classname.".none",$trans) ? '' : $trans[$classname.".none"]["fr"];
+  	$backSpecs[$object->_class_name][$classname][$classname.".create"] = !array_key_exists($classname.".create",$trans) ? '' : $trans[$classname.".create"]["fr"];
+  	$backSpecs[$object->_class_name][$classname][$classname.".modify"] = !array_key_exists($classname.".modify",$trans) ? '' : $trans[$classname.".modify"]["fr"];
+  	$backSpecs[$object->_class_name][$keyObjetRefSpec][$classname."-".$keyObjetRefSpec] = !array_key_exists($classname."-".$keyObjetRefSpec,$trans) ? '' : $trans[$classname."-".$keyObjetRefSpec]["fr"];  	
+  	$backSpecs[$object->_class_name][$keyObjetRefSpec][$classname."-".$keyObjetRefSpec."-desc"] = !array_key_exists($classname."-".$keyObjetRefSpec."-desc",$trans) ? '' : $trans[$classname."-".$keyObjetRefSpec."-desc"]["fr"];
+  	$backSpecs[$object->_class_name][$keyObjetRefSpec][$classname."-".$keyObjetRefSpec."-court"] = !array_key_exists($classname."-".$keyObjetRefSpec."-court",$trans) ? '' : $trans[$classname."-".$keyObjetRefSpec."-court"]["fr"];
+  }
+  foreach ($object->_enums as $keyObjetEnum => $valueObjetEnum) { 
+  	foreach ($valueObjetEnum as $key => $_item) { 
+  		$backSpecs[$object->_class_name][$keyObjetEnum][$classname.".".$keyObjetEnum.".".$_item] = !array_key_exists($classname.".".$keyObjetEnum.".".$_item,$trans) ? '' : $trans[$classname.".".$keyObjetEnum.".".$_item]["fr"];
+  	}
   }
 }
 

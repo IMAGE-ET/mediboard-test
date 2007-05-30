@@ -21,6 +21,7 @@
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
 <input type="hidden" name="module" value="{{$module}}" />
+<input type="hidden" name="trans[]" value="{{$trans}}" />
 <input type="hidden" name="dosql" value="do_translate_aed" />
 <table class="form">
 <tr>
@@ -36,12 +37,11 @@
         </tr>
         {{foreach from=$backSpecs key=key item=_item}}
         {{foreach from=$_item key=nom item=tabTrad}}
+        {{foreach from=$tabTrad key=chaine item=trad name=trad}}
         <tr>
-        	<td rowspan="{{$tabTrad|@count}}"> {{$nom}} </td>
-        	{{foreach from=$tabTrad key=chaine item=trad}}
+        	{{if $smarty.foreach.trad.first }} <td rowspan="{{$tabTrad|@count}}"> {{$nom}} </td> {{/if}}
         	<td> {{$chaine}} </td>
-        	<td><input size="40" type="text" name="tableau[{{$chaine}}]" value="{{$trad}}" /></td>
-        	
+        	<td><input size="70" type="text" name="tableau[{{$chaine}}]" value="{{$trad}}" /></td>
         </tr>
         {{/foreach}}
         {{/foreach}}	
