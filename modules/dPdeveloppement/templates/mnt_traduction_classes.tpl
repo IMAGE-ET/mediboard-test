@@ -36,15 +36,24 @@
     	  </th>
         </tr>
         {{foreach from=$backSpecs key=key item=_item}}
+        <tr>
+	        <th colspan="4" class="category">
+	     		 {{$key}}
+	    	</th>
+    	</tr>
+    	
         {{foreach from=$_item key=nom item=tabTrad}}
+        <tbody class="hoverable">
         {{foreach from=$tabTrad key=chaine item=trad name=trad}}
         <tr>
         	{{if $smarty.foreach.trad.first }} <td rowspan="{{$tabTrad|@count}}"> {{$nom}} </td> {{/if}}
         	<td> {{$chaine}} </td>
         	<td><input size="70" type="text" name="tableau[{{$chaine}}]" value="{{$trad}}" /></td>
+        	<td />
         </tr>
         {{/foreach}}
-        {{/foreach}}	
+        </tbody>	
+        {{/foreach}}
         {{/foreach}}
        </table>
     </td>

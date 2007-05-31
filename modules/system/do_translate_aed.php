@@ -25,6 +25,7 @@ if(!$module || !$trans || !$chaine || !is_array($trans) || !is_array($chaine)){
 // Dossier des traductions
 $localesDirs = $AppUI->readDirs("locales");
 mbRemoveValuesInArray(".svn",$localesDirs);
+mbRemoveValuesInArray("en",$localesDirs);
 
 $translateModule = new CMbConfig;
 $translateModule->sourcePath = null;
@@ -36,6 +37,7 @@ foreach($localesDirs as $locale){
       $translation[$valChaine] = stripslashes($trans[$key][$locale]);
     }
   }
+  
   //Ecriture du fichier
   $translateModule->options = array("name" => "locales");
   $translateModule->targetPath = "locales/$locale/$module.php";
