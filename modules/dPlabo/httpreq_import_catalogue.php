@@ -11,27 +11,79 @@ global $can, $m, $AppUI, $dPconfig, $remote_name;
 
 $can->needsAdmin();
 
-function importCatalogue($cat, $parent_id = null) {
-  global $remote_name;
+/**
+ * Recursive catalogue import
+ */
+function importCatalogue($cat, $parent_id = null) {  
+  global $AppUI, $remote_name;
   
+  // Bind a catalogue
   $catalogue = new CCatalogueLabo;
   $catalogue->identifiant = (string) $cat->identifiant;
   $catalogue->libelle = (string) $cat->libelle;
+  $catalogue->pere_id = $parent_id;
 
-  mbTrace($catalogue->getProps(), "Synchronisation du catalogue");
-  
+  // Bind the id400
   $catAtt = $cat->attributes();
-  
   $idCat = new CIdSante400;
   $idCat->tag = $remote_name;
   $idCat->id400 = (string) $catAtt["id"];
   
   $idCat->bindObject($catalogue);
-    
-  mbTrace($idCat->getProps(), "Identifiant Cat");
 
-  foreach ($cat->sections->catalogue as $_cat) {
-    importCatalogue($_cat ,$catalogue->_id);
+  $AppUI->stepAjax("Catalogue '$catalogue->libelle' importé", UI_MSG_OK);
+
+  // Import child catalogues
+  foreach ($cat->sections->catalogue as $_catalogue) {
+    importCatalogue($_catalogue ,$catalogue->_id);
+  }
+  
+  // Import analyses
+  foreach ($cat->analyses->analyse as $_analyse) {
+    mbTrace($_analyse, "analyse à trouvée");
+    $analyse = new CExamenLabo;
+    $analyse->identifiant = (string) $_analyse->identifiant;
+    $analyse->libelle     = (string) $_analyse->libelle;
+    $analyse->catalogue_labo_id = $catalogue->_id;
+    
+    // Type d'analyse
+    $type = $_analyse->type;
+    if ($numerique = $type->numerique) {
+      $analyse->type  = "num";
+      $analyse->unite = (string) $numerique->unite;
+      $analyse->min   = (string) $numerique->min;
+      $analyse->max   = (string) $numerique->min;
+    }
+    
+    if ($texteLibre = $type->texteLibre) {
+      $analyse->type = "str";
+    }
+    
+    if ($textLibre = $type->ouiNon) {
+      $analyse->type = "bool";
+    }
+
+    if ($application = $_analyse->application) {
+      $analayse->deb_application = (string) $application->debut;
+      $analayse->fin_application = (string) $application->fin;
+    }
+    
+    if ($applicabilite = $_analyse->applicabilite) {
+      $analayse->age_min = (string) $applicabilite->ageMinimum;
+      $analayse->age_max = (string) $applicabilite->ageMaximum;
+    }
+    
+    mbTrace($analyse->getProps(), "analyse à importer");
+
+    // Bind the id400
+    $anaAtt = $_analyse->attributes();
+    $idAna = new CIdSante400;
+    $idAna->tag = $remote_name;
+    $idAna->id400 = (string) $anaAtt["id"];
+    
+    $idAna->bindObject($analyse);
+  
+    $AppUI->stepAjax("Analyse '$analyse->libelle' importée", UI_MSG_OK);
   }
 }
 
@@ -49,9 +101,23 @@ if (false === $content = file_get_contents($remote_url)) {
   $AppUI->stepAjax("Couldn't connect to remote url", UI_MSG_ERROR);
 }
 
-$cat = new SimpleXMLElement($content);
-importCatalogue($cat);
+$doc = new CMbXMLDocument;
+$doc->loadXML($content);
+if (!$doc->schemaValidate("modules/$m/remote/catalogue.xsd")) {
+  $AppUI->stepAjax("Document is not valid", UI_MSG_ERROR);
+}
 
-mbTrace($cat, "Catalogue");
+$AppUI->stepAjax("Document is valid", UI_MSG_OK);
+
+$cat = new SimpleXMLElement($content);
+try {
+  importCatalogue($cat);
+} 
+catch (Exception $e) {
+  mbTrace($e);
+  $AppUI->stepAjax("Couldn't import catalogue for the  reason stated above", UI_MSG_ERROR);
+}
+
+
 
 ?>

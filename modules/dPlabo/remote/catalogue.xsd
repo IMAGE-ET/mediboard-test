@@ -54,7 +54,7 @@
 					</xs:choice>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="application">
+			<xs:element name="application" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="debut" type="xs:date" minOccurs="0"/>
@@ -62,16 +62,16 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="applicabilite">
+			<xs:element name="applicabilite" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="sexe" type="xs:Name"/>
+						<xs:element name="sexe" type="typeSexe"/>
 						<xs:element name="ageMinimum" type="xs:positiveInteger" minOccurs="0"/>
 						<xs:element name="ageMaximum" type="xs:positiveInteger" minOccurs="0"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="prelevement">
+			<xs:element name="prelevement" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="type" type="typePrelevement"/>
@@ -81,7 +81,7 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="conservation">
+			<xs:element name="conservation" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="duree" type="xs:duration"/>
@@ -89,7 +89,7 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="execution">
+			<xs:element name="execution" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="duree" type="xs:duration"/>
@@ -109,9 +109,9 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="technique" type="xs:string"/>
-			<xs:element name="materiel" type="xs:string"/>
-			<xs:element name="remarques" type="xs:string"/>
+			<xs:element name="technique" type="xs:string" minOccurs="0"/>
+			<xs:element name="materiel" type="xs:string" minOccurs="0"/>
+			<xs:element name="remarques" type="xs:string" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:ID"/>
 	</xs:complexType>
@@ -130,9 +130,9 @@
 			<xs:documentation>Biopsie, Sang ou Urine</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="homme"/>
-			<xs:enumeration value="femme"/>
-			<xs:enumeration value="unisexe"/>
+			<xs:enumeration value="bopsie"/>
+			<xs:enumeration value="sang"/>
+			<xs:enumeration value="urine"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

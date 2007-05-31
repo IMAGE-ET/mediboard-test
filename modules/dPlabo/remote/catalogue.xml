@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Sample catalogue file -->
 <catalogue id="ctl-1" xsi:noNamespaceSchemaLocation="catalogue.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<identifiant>Name 1</identifiant>
+	<identifiant>Name1</identifiant>
 	<libelle>String 1</libelle>
 	<sections>
 	  <catalogue id="ctl-11">
-				<identifiant>NAME 11</identifiant>
+				<identifiant>NAME11</identifiant>
 				<libelle>String 11</libelle>
 				<sections />
 				<analyses />
 		</catalogue>
 	  <catalogue id="ctl-12">
-				<identifiant>NAME 12</identifiant>
+				<identifiant>NAME12</identifiant>
 				<libelle>String 12</libelle>
 				<sections />
 				<analyses />
 		</catalogue>
 	</sections>
 	<analyses>
-		<analyse id="anl-1">
-			<identifiant>Name</identifiant>
+		<analyse id="anl-A">
+			<identifiant>NAMEA</identifiant>
 			<libelle>String</libelle>
 			<type>
 				<numerique>
-					<unite>String</unite>
+					<unite>String A</unite>
 					<min>0.0</min>
 					<max>0.0</max>
 				</numerique>
@@ -33,12 +33,12 @@
 				<fin>1967-08-13</fin>
 			</application>
 			<applicabilite>
-				<sexe>Name</sexe>
-				<ageMinimum>2</ageMinimum>
-				<ageMaximum>2</ageMaximum>
+				<sexe>homme</sexe>
+				<ageMinimum>7</ageMinimum>
+				<ageMaximum>77</ageMaximum>
 			</applicabilite>
 			<prelevement>
-				<type>homme</type>
+				<type>sang</type>
 				<methode>String</methode>
 				<quantite>0.0</quantite>
 				<unite>String</unite>
@@ -62,6 +62,28 @@
 			<technique>String</technique>
 			<materiel>String</materiel>
 			<remarques>String</remarques>
+		</analyse>
+		<analyse id="anl-B">
+			<identifiant>NameB</identifiant>
+			<libelle>String B</libelle>
+			<type>
+				<texteLibre />
+			</type>
+			<applicabilite>
+				<sexe>unisexe</sexe>
+				<ageMaximum>80</ageMaximum>
+			</applicabilite>
+		</analyse>
+		<analyse id="anl-C">
+			<identifiant>NameC</identifiant>
+			<libelle>String C</libelle>
+			<type>
+				<ouiNon />
+			</type>
+			<applicabilite>
+				<sexe>femme</sexe>
+				<ageMinimum>2</ageMinimum>
+			</applicabilite>
 		</analyse>
 	</analyses>
 </catalogue>

@@ -18,7 +18,10 @@ class CExamenLabo extends CMbObject {
   var $identifiant = null;
   var $libelle     = null;
   var $type        = null;
-
+  var $min         = null;
+  var $max         = null;
+  var $unite       = null;
+  
   var $deb_application = null;
   var $fin_application = null;
   var $realisateur = null;
@@ -42,11 +45,6 @@ class CExamenLabo extends CMbObject {
   var $execution_ven = null;
   var $execution_sam = null;
   var $execution_dim = null;
-  
-  var $min         = null;
-  var $max         = null;
-  
-  var $unite       = null;
   
   // Form fields
   var $_interne          = null;

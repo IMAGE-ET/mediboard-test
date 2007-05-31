@@ -1,5 +1,5 @@
 <?php
-$locales['CPrescriptionLaboExamen-commentaire'] = 'Commentaires';
+$locales['config-dPlabo-CCatalogueLabo-remote_url-desc'] = 'URL du catalogue distant';
 $locales['CCatalogueLabo'] = 'Catalogue d\'examens';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sous-catalogue';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Examen';
@@ -75,6 +75,9 @@ $locales['CExamenLabo.type.str'] = 'Texte libre';
 $locales['CExamenLabo.type_prelevement.biopsie'] = 'Biopsie';
 $locales['CExamenLabo.type_prelevement.sang'] = 'Sang';
 $locales['CExamenLabo.type_prelevement.urine'] = 'Urine';
+$locales['config-dPlabo-CCatalogueLabo-remote_name'] = 'Nom du catalogue distant';
+$locales['config-dPlabo-CCatalogueLabo-remote_name-desc'] = 'Nom du catalogue distant, utilisé en tant qu\'identifiant';
+$locales['config-dPlabo-CCatalogueLabo-remote_url'] = 'Url du catalogue';
 $locales['CPackExamensLabo'] = 'Pack d\'examens';
 $locales['CPackExamensLabo-back-items_examen_labo'] = 'Examen';
 $locales['CPackExamensLabo-function_id'] = 'Fonction';
@@ -89,6 +92,7 @@ $locales['CPrescriptionLabo-patient_id-desc'] = 'Patient concerné par la prescri
 $locales['CPrescriptionLabo-praticien_id'] = 'Praticien';
 $locales['CPrescriptionLabo-praticien_id-desc'] = 'Praticien prescripteur';
 $locales['CPrescriptionLaboExamen'] = 'Item de prescription';
+$locales['CPrescriptionLaboExamen-commentaire'] = 'Commentaires';
 $locales['CPrescriptionLaboExamen-commentaire-desc'] = 'Commentaires du praticien sur la valeur de l\'examen';
 $locales['CPrescriptionLaboExamen-date'] = 'Date';
 $locales['CPrescriptionLaboExamen-date-desc'] = 'Date du résultat de l\'examen';

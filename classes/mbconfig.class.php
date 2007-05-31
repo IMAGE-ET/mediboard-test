@@ -11,8 +11,8 @@ require_once("Config.php");
 
 class CMbConfig {
   var $options = array("name" => "dPconfig");
-  var $values = array();
   var $configType = "phparray";
+  var $values = array();
   var $sourcePath = "";
   var $targetPath = "";
   
