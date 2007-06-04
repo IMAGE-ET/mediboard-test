@@ -161,9 +161,8 @@ function updateEntreePrevue() {
 
   if(oOpForm.date.value) {
     oSejourForm._date_entree_prevue.value = oOpForm.date.value;
-    var dDate = makeDateFromDATE(oOpForm.date.value);
     oDiv = document.getElementById('editSejour__date_entree_prevue_da');
-    oDiv.innerHTML = makeLocaleDateFromDate(dDate);
+    oDiv.innerHTML = Date.fromDATE(oOpForm.date.value).toLocaleDate();  
   }
   
   updateSortiePrevue();

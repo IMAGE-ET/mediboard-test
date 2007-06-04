@@ -23,13 +23,11 @@ function popPlages() {
 
 function changeDate(sDebut, sFin){
   var oForm = document.paramFrm;
-  var date_debut  = makeDateFromDATE(sDebut);
-  var date_fin    = makeDateFromDATE(sFin);
-  
   oForm.deb.value = sDebut;
   oForm.fin.value = sFin;
-  $('paramFrm_deb_da').innerHTML = makeLocaleDateFromDate(date_debut);
-  $('paramFrm_fin_da').innerHTML = makeLocaleDateFromDate(date_fin);
+  $('paramFrm_deb_da').innerHTML = Date.fromDATE(sDebut).toLocaleDate();
+  $('paramFrm_fin_da').innerHTML = Date.fromDATE(sFin).toLocaleDate();  
+  
 }
 
 function changeDateCal(){

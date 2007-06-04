@@ -30,13 +30,10 @@ function popPlanning() {
 
 function changeDate(sDebut, sFin){
   var oForm = document.paramFrm;
-  var date_debut  = makeDateFromDATETIME(sDebut);
-  var date_fin    = makeDateFromDATETIME(sFin);
-  
   oForm.deb.value = sDebut;
   oForm.fin.value = sFin;
-  $('paramFrm_deb_da').innerHTML = makeLocaleDateTimeFromDate(date_debut);
-  $('paramFrm_fin_da').innerHTML = makeLocaleDateTimeFromDate(date_fin);
+  $('paramFrm_deb_da').innerHTML = Date.fromDATETIME(sDebut).toLocaleDateTime();
+  $('paramFrm_fin_da').innerHTML = Date.fromDATETIME(sFin).toLocaleDateTime();  
 }
 
 function changeDateCal(){

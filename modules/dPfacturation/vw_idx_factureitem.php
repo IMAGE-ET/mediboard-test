@@ -24,13 +24,12 @@ $factureitem_id = mbGetValueFromGet("factureitem_id");
 $facture = new CFacture();
 $facture->load($facture_id);
 
+// Chargement des éléments d'une facture demandé
 $factureitem = new CFactureitem();
 $factureitem->load($factureitem_id);
-//$factureitem->loadRefs();
 
 // Chargement des donnees de la facture
 $facture->loadRefs();
-
 
 // Récupération de la liste des factures
 $itemFacture = new CFacture;
