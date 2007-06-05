@@ -266,7 +266,7 @@ class CMbFieldSpec {
     global $AppUI;
     $class = htmlspecialchars(trim("$className $this->prop"));
     $field = htmlspecialchars($this->fieldName);
-    $date  = $value ? mbTranformTime(null, $value, "%d/%m/%Y") : "";
+    $date  = $value ? mbTranformTime(null, $value, $format) : "";
     $form  = CMbArray::extract($params, "form");
     $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);

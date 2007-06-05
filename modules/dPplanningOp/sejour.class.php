@@ -78,6 +78,14 @@ class CSejour extends CMbObject {
   var $_ref_GHM               = array();
   var $_ref_group             = null;
 
+  //Filter Fields
+  var $_date_min	 	= null;
+  var $_date_max 		= null;
+  var $_admission 		= null;
+  var $_service 		= null;
+  var $_type_admission 		= null;
+  var $_specialite 		= null;
+
 	function CSejour() {
     $this->CMbObject("sejour", "sejour_id");
     
@@ -121,7 +129,13 @@ class CSejour extends CMbObject {
       "television"         => "bool",
       "repas_diabete"      => "bool",
       "repas_sans_sel"     => "bool",
-      "repas_sans_residu"  => "bool"
+      "repas_sans_residu"  => "bool",
+      "_date_min" 		   => "dateTime",
+      "_date_max" 		   => "dateTime moreThan|_date_min",
+      "_admission" 		   => "text",
+      "_service" 		   => "text",
+      "_type_admission"    => "text",
+      "_specialite" 	   => "text"
     );
   }
   

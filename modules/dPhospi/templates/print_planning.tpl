@@ -15,8 +15,8 @@ function printAdmission(id) {
   <tr>
     <th>
       <a href="#" onclick="window.print()">
-        Planning du {{$deb|date_format:"%A %d %b %Y à %Hh%M"}}
-        au {{$fin|date_format:"%A %d %B %Y à %Hh%M"}} ({{$total}} admissions)
+        Planning du {{$filter->_date_min|date_format:"%A %d %b %Y à %Hh%M"}}
+        au {{$filter->_date_max|date_format:"%A %d %B %Y à %Hh%M"}} ({{$total}} admissions)
       </a>
     </th>
   </tr>

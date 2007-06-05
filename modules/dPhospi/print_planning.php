@@ -13,14 +13,15 @@ require_once($AppUI->getModuleFile($m, "inc_vw_affectations"));
 
 $can->needsRead();
 
-$deb     = mbGetValueFromGet("deb"    , date("Y-m-d")." 06:00:00");
-$fin     = mbGetValueFromGet("fin"    , date("Y-m-d")." 21:00:00");
-$service = mbGetValueFromGet("service", 0                        );
-$type    = mbGetValueFromGet("type"   , 0                        );
-$chir    = mbGetValueFromGet("chir"   , 0                        );
-$spe     = mbGetValueFromGet("spe"    , 0                        );
-$conv    = mbGetValueFromGet("conv"   , 0                        );
-$ordre   = mbGetValueFromGet("ordre"  , "heure"                  );
+$filter->_date_min = mbGetValueFromGet("_date_min"    , date("Y-m-d")." 06:00:00");
+$filter->_date_max = mbGetValueFromGet("_date_max"    , date("Y-m-d")." 21:00:00");
+$filter->_service = mbGetValueFromGet("service", 0                        );
+$filter->type    = mbGetValueFromGet("type"   , 0                        );
+$filter->praticien_id    = mbGetValueFromGet("chir"   , 0                        );
+$filter->_specialite      = mbGetValueFromGet("spe"    , 0                        );
+$filter->convalescence    = mbGetValueFromGet("conv"   , 0                        );
+$filter->_admission   = mbGetValueFromGet("ordre"  , "heure"                  );
+
 $total   = 0;
 
 $sejours = new CSejour;
@@ -29,33 +30,33 @@ $sejourReq = new CRequest;
 
 $sejourReq->addLJoinClause("patients", "patients.patient_id = sejour.patient_id");
 
-$sejourReq->addWhereClause("sejour.entree_prevue", "BETWEEN '$deb' AND '$fin'");
+$sejourReq->addWhereClause("sejour.entree_prevue", "BETWEEN '$filter->_date_min' AND '$filter->_date_max'");
 $sejourReq->addWhereClause("sejour.group_id", "= '$g'");
 $sejourReq->addWhereClause("sejour.annule", "= '0'");
 
 // Clause de filtre par spécialité / chir
-if ($spe or $chir) {
+if ($filter->_specialite or $filter->praticien_id) {
   $speChirs = new CMediusers;
-  $speChirs = $speChirs->loadList(array ("function_id" => "= '$spe'"));
-  $sejourReq->addWhereClause("sejour.praticien_id", db_prepare_in(array_keys($speChirs), $chir));
+  $speChirs = $speChirs->loadList(array ("function_id" => "= '$filter->_specialite '"));
+  $sejourReq->addWhereClause("sejour.praticien_id", db_prepare_in(array_keys($speChirs), $filter->praticien_id));
 }
 
-if ($type) {
-  $sejourReq->addWhereClause("sejour.type", "= '$type'");
+if ($filter->_type_admission) {
+  $sejourReq->addWhereClause("sejour.type", "= '$filter->type'");
 }
 
-if ($conv == "o") {
+if ($filter->convalescence == "o") {
   $sejourReq->addWhereClause(null, "(sejour.convalescence IS NOT NULL AND sejour.convalescence != '')");
 }
 
-if ($conv == "n") {
+if ($filter->convalescence == "n") {
   $sejourReq->addWhereClause(null, "(sejour.convalescence IS NULL OR sejour.convalescence = '')");
 }
 
 $sejourReq->addOrder("DATE(sejour.entree_prevue)");
 $sejourReq->addOrder("sejour.praticien_id");
 
-if($ordre == "heure") {
+if($filter->type  == "heure") {
   $sejourReq->addOrder("sejour.entree_prevue");
 } else {
   $sejourReq->addOrder("patients.nom");
@@ -81,10 +82,10 @@ foreach ($sejours as $key => &$sejour) {
   $sejour->_ref_first_affectation->loadRefLit();
   $sejour->_ref_first_affectation->_ref_lit->loadCompleteView();
 
-  if ($service && ($sejour->_ref_first_affectation->_ref_lit->_ref_chambre->service_id != $service)) {
+  if ($filter->_service  && ($sejour->_ref_first_affectation->_ref_lit->_ref_chambre->service_id != $filter->_service)) {
     unset($sejours[$key]);
     continue;
-  }elseif(!$service && $sejour->_ref_first_affectation->affectation_id && !in_array($sejour->_ref_first_affectation->_ref_lit->_ref_chambre->service_id,array_keys($services))){
+  }elseif(!$filter->_service && $sejour->_ref_first_affectation->affectation_id && !in_array($sejour->_ref_first_affectation->_ref_lit->_ref_chambre->service_id,array_keys($services))){
     unset($sejours[$key]);
     continue;
   } 
@@ -104,11 +105,10 @@ foreach ($sejours as $key => &$sejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("deb"      , $deb           );
-$smarty->assign("fin"      , $fin           );
-$smarty->assign("listDays" , $listDays      );
-$smarty->assign("listPrats", $listPrats     );
-$smarty->assign("total"    , count($sejours));
+$smarty->assign("filter" 	, $filter		 );
+$smarty->assign("listDays"  , $listDays      );
+$smarty->assign("listPrats" , $listPrats     );
+$smarty->assign("total"     , count($sejours));
 
 $smarty->display("print_planning.tpl");
 
