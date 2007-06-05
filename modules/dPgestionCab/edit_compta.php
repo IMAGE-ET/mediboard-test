@@ -24,6 +24,7 @@ $libelle          = mbGetValueFromGetOrSession("libelle"          , "");
 $rubrique_id      = mbGetValueFromGetOrSession("rubrique_id"      , 0);
 $mode_paiement_id = mbGetValueFromGetOrSession("mode_paiement_id" , 0);
 
+//Recuperation des identifiants pour les filtres
 $filter = new CGestionCab;
 $filter->_date_min = mbGetValueFromGetOrSession("_date_min");
 $filter->_date_max = mbGetValueFromGetOrSession("_date_max");
@@ -37,7 +38,7 @@ if(!$gestioncab->gestioncab_id) {
   $gestioncab->function_id = $user->function_id;
 }
 
-$where             = array();
+$where = array();
 
 // Récupération de la liste des rubriques hors fonction
 $where["function_id"] = "IS NULL";

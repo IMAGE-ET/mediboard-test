@@ -3,10 +3,10 @@
     <th>
       <a href="#" onclick="window.print()">
         &mdash; Dr. {{$prat->_view}} &mdash<br />
-        Plages du {{$deb|date_format:"%A %d %b %Y"}}
-        au {{$fin|date_format:"%A %d %B %Y"}}<br />
+        Plages du {{$filter->_date_min|date_format:"%A %d %b %Y"}}
+        au {{$filter->_date_max|date_format:"%A %d %B %Y"}}<br />
         {{$plages|@count}}
-        {{if $type}}
+        {{if $filter->paye}}
         plage(s) payée(s)
         {{else}}
         plage(s) en attente de paiement

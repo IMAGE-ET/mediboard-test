@@ -11,29 +11,34 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
+//Recuperation des identifiants pour les filtres
+$filter = new CPlageressource;
+$filter->_date_min = mbGetValueFromGetOrSession("_date_min",mbDate());
+$filter->_date_max = mbGetValueFromGetOrSession("_date_max",mbDate());
+$filter->prat_id = mbGetValueFromGetOrSession("prat_id");
+$filter->paye = mbGetValueFromGetOrSession("type");
+
 $prat_id = mbGetValueFromGet("prat_id", 0);
 if(!$prat_id) {
   echo "Vous devez choisir un praticien valide";
   exit(0);
 }
-$deb  = mbGetValueFromGet("deb", mbDate());
-$fin  = mbGetValueFromGet("fin", mbDate());
-if($fin > mbDate())
-  $fin = mbDate();
-$type = mbGetValueFromGet("type", 0);
+if($filter->_date_max > mbDate())
+ $filter->_date_max = mbDate();
+$filter->paye = mbGetValueFromGet("type", 0);
 $total = 0;
 
 // Chargement du praticien
 $prat = new CMediusers;
-$prat->load($prat_id);
+$prat->load($filter->prat_id);
 
 // Chargement des plages de ressource
 $plages = new CPlageressource;
 
-$where["date"] = "BETWEEN '$deb' AND '$fin'";
-$where["prat_id"] = "= $prat->user_id";
-$where["paye"] = "= '$type'";
-$order = "date, debut";
+$where["date"]     = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
+$where["prat_id"] = "= $filter->prat_id";
+$where["paye"] = "= '$filter->paye'";
+$order = "date";
 
 $plages = $plages->loadList($where, $order);
 
@@ -46,9 +51,7 @@ $smarty = new CSmartyDP();
 
 $smarty->debugging = false;
 
-$smarty->assign("deb"   , $deb   );
-$smarty->assign("fin"   , $fin   );
-$smarty->assign("type"  , $type  );
+$smarty->assign("filter", $filter);
 $smarty->assign("prat"  , $prat  );
 $smarty->assign("plages", $plages);
 $smarty->assign("total" , $total );

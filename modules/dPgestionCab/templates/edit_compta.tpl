@@ -134,14 +134,14 @@ function pageMain() {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_min"}}</td>
-          <td class="date">{{mb_field object=$filter field="_date_min" form="selectFrm"}}</td>
+          <td class="date">{{mb_field object=$filter field="_date_min" form="selectFrm" canNull="false"}}</td>
           <td class="button" colspan="3">
-            <button class="print" type="button" onclick="printRapport()">Imprimer</button>
+            <button type="submit" class="print" onclick="printRapport()">Imprimer</button>
           </td>
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_max"}}</td>
-          <td class="date" >{{mb_field object=$filter field="_date_max" form="selectFrm"}}</td>
+          <td class="date" >{{mb_field object=$filter field="_date_max" form="selectFrm"  canNull="false"}}</td>
           <td class="button" colspan="3">
             <button type="submit" class="search">Afficher</button>
           </td>
@@ -150,7 +150,7 @@ function pageMain() {
           <th class="category">Date</th>
           <th>{{mb_label object=$filter field="libelle"}}
 		  <br />
-            {{mb_field object=$filter field="libelle" canNull=true}}
+            {{mb_field object=$filter field="libelle" canNull="true"}}
           </th>
           <th class="category"> {{mb_label object=$filter field="rubrique_id"}}
             <br />

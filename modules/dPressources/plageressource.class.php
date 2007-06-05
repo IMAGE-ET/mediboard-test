@@ -36,6 +36,10 @@ class CPlageressource extends CMbObject {
   var $_min_fin  = null;
   var $_state    = null;
 
+  //Filter Fields
+  var $_date_min = null;
+  var $_date_max = null;
+
   // Object References
   var $_ref_prat     = null;
   var $_ref_patients = null;
@@ -48,13 +52,15 @@ class CPlageressource extends CMbObject {
   
   function getSpecs() {
     return array (
-      "prat_id" => "ref class|CMediusers",
-      "date"    => "notNull date",
-      "debut"   => "notNull time",
-      "fin"     => "notNull time",
-      "tarif"   => "notNull currency min|0 confidential",
-      "libelle" => "str confidential",
-      "paye"    => "bool"
+      "prat_id" 		=> "ref class|CMediusers",
+      "date"    		=> "notNull date",
+      "debut"   		=> "notNull time",
+      "fin"     		=> "notNull time",
+      "tarif"   		=> "notNull currency min|0 confidential",
+      "libelle" 		=> "str confidential",
+      "paye"    		=> "bool",
+      "_date_min" 		=> "date",
+      "_date_max" 		=> "date moreThan|_date_min"
     );
   }
   

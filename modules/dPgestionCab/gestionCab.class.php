@@ -49,8 +49,8 @@ class CGestionCab extends CMbObject {
       "mode_paiement_id" => "notNull ref class|CModePaiement",
       "num_facture"      => "notNull num",
       "rques"            => "text",
-      "_date_min" 		 => "notNull date",
-      "_date_max" 		 => "notNull date moreThan|_date_min"
+      "_date_min" 		 => "date",
+      "_date_max" 		 => "date moreThan|_date_min"
     );
   }
   

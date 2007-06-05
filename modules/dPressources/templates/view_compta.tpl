@@ -14,8 +14,8 @@ function popRapport() {
   var form = document.paramFrm;
   var url = new Url();
   url.setModuleAction("dPressources", "print_rapport");
-  url.addElement(form.deb);
-  url.addElement(form.fin);
+  url.addElement(form._date_min);
+  url.addElement(form._date_max);
   url.addElement(form.type);
   url.addElement(form.prat_id);
   url.popup(700, 550, "Rapport");
@@ -23,8 +23,8 @@ function popRapport() {
 
 function pageMain() {
   PairEffect.initGroup("effectPlage");
-  regFieldCalendar("paramFrm", "deb");
-  regFieldCalendar("paramFrm", "fin");  
+  regFieldCalendar("paramFrm", "_date_min");
+  regFieldCalendar("paramFrm", "_date_max");
 }
 
 </script>
@@ -82,23 +82,15 @@ function pageMain() {
           <th class="title" colspan="2">Edition des rapports</th>
         </tr>
         <tr>
-          <th><label for="deb" title="Date de début pour les rapports">Début</label></th>
-          <td class="date" colspan="2">
-            <div id="paramFrm_deb_da">{{$today|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="deb" class="notNull date" value="{{$today}}" />
-            <img id="paramFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-          </td>
+          <td>{{mb_label object=$filter field="_date_min"}}</td>
+          <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false"}} </td>
         </tr>
         <tr>
-          <th><label for="fin" title="Date de fin pour les rapports">Fin</label></th>
-          <td class="date" colspan="2">
-            <div id="paramFrm_fin_da">{{$today|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" class="notNull date moreEquals|deb" value="{{$today}}" />
-            <img id="paramFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
-          </td>
+          <td>{{mb_label object=$filter field="_date_max"}}</td>
+          <td class="date" >{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false"}}</td>
         </tr>
         <tr>
-          <th><label for="type">Filtre</label></th>
+          <td>{{mb_label object=$filter field="paye"}}</td>
           <td>
             <select name="type">
               <option value="0">Plages non payées</option>
@@ -106,7 +98,7 @@ function pageMain() {
             </select>
         </tr>
         <tr>
-          <th><label for="prat_id">Praticien</label></th>
+          <td>{{mb_label object=$filter field="prat_id"}}</td>
           <td>
             <select name="prat_id">
               {{foreach from=$listPrats item=curr_prat}}

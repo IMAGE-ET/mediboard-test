@@ -146,7 +146,7 @@ function smarty_function_mb_field($params, &$smarty) {
   global $AppUI;
   
   require_once $smarty->_get_plugin_filepath('shared','escape_special_chars');
-
+  //mbTrace($params);
   $object  = CMbArray::extract($params, "object", null, true);
   $field   = CMbArray::extract($params, "field" , null, true);
   $propKey = array_key_exists("prop", $params);
@@ -154,14 +154,16 @@ function smarty_function_mb_field($params, &$smarty) {
   $canNull = CMbArray::extract($params, "canNull");
  
   $spec = $propKey ?  CMbFieldSpecFact::getSpec($object, $field, $prop) : $object->_specs[$field];
- 
-  if($canNull) {
+
+  if($canNull === "true") {
   		$spec->notNull = 0;
   		$tabSpec = split(" ",$spec->prop);
   		CMbArray::extract($tabSpec, "0");
   		$spec->prop = join($tabSpec, " ");
+  } elseif ($canNull === "false") {
+  		$spec->notNull = 1;
+  		$spec->prop = "notNull ".$spec->prop;
   }
-  
   return $spec->getFormElement($object, $params);
 }
 

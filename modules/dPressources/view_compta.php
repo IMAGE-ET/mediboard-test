@@ -11,6 +11,12 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
+//Recuperation des identifiants pour les filtres
+$filter = new CPlageressource;
+$filter->_date_min = mbGetValueFromGetOrSession("_date_min",mbDate());
+$filter->_date_max = mbGetValueFromGetOrSession("_date_max",mbDate());
+$filter->prat_id = mbGetValueFromGetOrSession("prat_id");
+$filter->paye = mbGetValueFromGetOrSession("paye");
 // Chargement de la liste des praticiens pour l'historique
 
 $listPrats = new CMediusers;
@@ -76,6 +82,7 @@ foreach($list as $key => $value) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("listPrats", $listPrats);
+$smarty->assign("filter"   , $filter   );
 $smarty->assign("list"     , $list     );
 $smarty->assign("total"    , $total    );
 $smarty->assign("today"    , mbDate()  );

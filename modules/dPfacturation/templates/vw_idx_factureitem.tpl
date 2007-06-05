@@ -50,14 +50,14 @@
           {{/if}}
         </tr>
         <tr>
-          <th>{{mb_label object=$factureitem field="libelle"}}
+          <th>{{mb_label object=$factureitem field="libelle"}} 
           <br />
       	  <select name="_helpers_libelle" size="1" onchange="pasteHelperContent(this)">
         	<option value="">&mdash; Choisir une aide</option>
         	{{html_options options=$libelleItem->_aides.libelle.no_enum}}
           </select>
           <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CFactureItem', this.form.libelle)" />
-        </th>
+          </th>
           <td>{{mb_field object=$libelleItem field="libelle"}}</td>
         </tr>
         <tr>
