@@ -11,10 +11,13 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$typeAff = mbGetValueFromGetOrSession("typeAff");
+$now       = mbDate();
 
-$deb = mbDate();
-$fin = mbDate("+ 0 day");
+$filter = new CMateriel;
+$filter->_date_min = mbGetValueFromGet("_date_min"    , "$now");
+$filter->_date_max = mbGetValueFromGet("_date_max"    , "$now");
+
+$typeAff = mbGetValueFromGetOrSession("typeAff");
 
 // Récupération des opérations
 $ljoin = array();
@@ -38,10 +41,9 @@ foreach($op as $key => $value) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("typeAff", $typeAff);
-$smarty->assign("deb"    , $deb);
-$smarty->assign("fin"    , $fin);
-$smarty->assign("op"     , $op);
+$smarty->assign("typeAff"	, $typeAff);
+$smarty->assign("filter"    , $filter);
+$smarty->assign("op"     	, $op);
 
 $smarty->display("vw_idx_materiel.tpl");
 

@@ -131,7 +131,7 @@ class CSejour extends CMbObject {
       "repas_sans_sel"     => "bool",
       "repas_sans_residu"  => "bool",
       "_date_min" 		   => "dateTime",
-      "_date_max" 		   => "dateTime moreThan|_date_min",
+      "_date_max" 		   => "dateTime moreEquals|_date_min",
       "_admission" 		   => "text",
       "_service" 		   => "text",
       "_type_admission"    => "text",

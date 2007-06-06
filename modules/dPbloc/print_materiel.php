@@ -11,8 +11,11 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$deb = mbGetValueFromGetOrSession("deb", mbDate());
-$fin = mbGetValueFromGetOrSession("fin", mbDate());
+$now       = mbDate();
+
+$filter = new CMateriel;
+$filter->_date_min = mbGetValueFromGet("_date_min"    , "$now");
+$filter->_date_max = mbGetValueFromGet("_date_max"    , "$now");
 
 // Récupération des opérations
 $ljoin = array();
@@ -20,7 +23,7 @@ $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 $where = array();
 $where["materiel"] = "!= ''";
 $where["operations.plageop_id"] = "IS NOT NULL";
-$where[] = "plagesop.date BETWEEN '$deb' AND '$fin'";
+$where[] = "plagesop.date BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
 $order = array();
 $order[] = "plagesop.date";
 $order[] = "rank";

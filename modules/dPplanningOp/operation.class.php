@@ -89,6 +89,16 @@ class COperation extends CMbObject {
   // External references
   var $_ext_codes_ccam = null;
 
+ //Filter Fields
+  var $_date_min	 	= null;
+  var $_date_max 		= null;
+  var $_plage 			= null;
+  var $_service 		= null;
+  var $_intervention 	= null;
+  var $_specialite 		= null;
+  var $_scodes_ccam     = null;
+  var $_prat_id     	= null;
+
   function COperation() {
     $this->CMbObject("operations", "operation_id");
     
@@ -134,7 +144,14 @@ class COperation extends CMbObject {
       "induction_fin"  => "time",
       "entree_bloc"    => "time",
       "anapath"        => "bool",
-      "labo"           => "bool"
+      "labo"           => "bool",
+      "_date_min" 	   => "date",
+      "_date_max" 	   => "date moreEquals|_date_min",
+      "_plage" 		   => "bool",
+      "_intervention"  => "text",
+      "_prat_id"  	   => "text",
+      "_specialite"    => "text",
+      "_codes_ccam"    => "text"
     );
   }
   

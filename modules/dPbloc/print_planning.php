@@ -12,6 +12,17 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $now       = mbDate();
+
+$filter = new COperation;
+$filter->_date_min = mbGetValueFromGet("_date_min"    , "$now");
+$filter->_date_max = mbGetValueFromGet("_date_max"    , "$now");
+$filter->_prat_id = mbGetValueFromGetOrSession("chir");
+$filter->salle_id = mbGetValueFromGetOrSession("salle");
+$filter->_plage = mbGetValueFromGetOrSession("vide");
+$filter->_intervention = mbGetValueFromGetOrSession("type");
+$filter->_specialite = mbGetValueFromGetOrSession("spe");
+$filter->_codes_ccam = mbGetValueFromGetOrSession("code_ccam");
+
 $tomorrow  = mbDate("+1 day", $now);
 
 $week_deb  = mbDate("last sunday", $now);
@@ -29,7 +40,6 @@ $listPrat = $listPrat->loadPraticiens(PERM_READ);
 $listSpec = new CFunctions();
 $listSpec = $listSpec->loadSpecialites(PERM_READ);
 
-
 $order = "nom";
 $listSalles = new CSalle();
 $listSalles = $listSalles->loadList(null, $order);
@@ -37,6 +47,7 @@ $listSalles = $listSalles->loadList(null, $order);
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("filter"  , $filter);
 $smarty->assign("now"       , $now);
 $smarty->assign("tomorrow"  , $tomorrow);
 $smarty->assign("week_deb"  , $week_deb);

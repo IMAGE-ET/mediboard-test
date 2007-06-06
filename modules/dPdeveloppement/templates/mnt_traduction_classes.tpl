@@ -31,15 +31,16 @@
           <th>Nom</th>
           <th>Chaine</th>
           <th>fr</th>
-          <th class="category">
-     		 <button type="submit" class="modify notext">{{tr}}Save{{/tr}}</button>
-    	  </th>
+          <th>Save</th>
         </tr>
         {{foreach from=$backSpecs key=key item=_item}}
         <tr>
-	        <th colspan="4" class="category">
+	        <th colspan="3" class="category">
 	     		 {{$key}}
 	    	</th>
+	    	<th class="category">
+     		 <button type="submit" class="modify notext">{{tr}}Save{{/tr}}</button>
+    	  </th>
     	</tr>
     	
         {{foreach from=$_item key=nom item=tabTrad}}

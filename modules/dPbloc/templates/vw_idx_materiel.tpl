@@ -15,14 +15,14 @@ function popMateriel() {
   form = document.paramFrm;
   var url = new Url;
   url.setModuleAction("dPbloc", "print_materiel");
-  url.addElement(form.deb);
-  url.addElement(form.fin);
+  url.addElement(form._date_min);
+  url.addElement(form._date_max);
   url.popup(700, 550, 'Materiel');
 }
 
 function pageMain() {
-  regFieldCalendar("paramFrm", "deb");
-  regFieldCalendar("paramFrm", "fin");
+  regFieldCalendar("paramFrm", "_date_min");
+  regFieldCalendar("paramFrm", "_date_max");
 }
 
 </script>
@@ -82,22 +82,14 @@ function pageMain() {
         <th colspan="2" class="category">Imprimer l'historique</th>
       </tr>
       <tr>
-        <th><label for="deb" title="Date de début de la recherche">Début</label></th>
-        <td class="date" colspan="2">
-          <div id="paramFrm_deb_da">{{$deb|date_format:"%d/%m/%Y"}}</div>
-          <input type="hidden" name="deb" class="notNull date" value="{{$deb}}" />
-          <img id="paramFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-        </td>
+          <td>{{mb_label object=$filter field="_date_min"}}</td>
+          <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false"}} </td>
       </tr>
       <tr>
-        <th><label for="fin" title="Date de fin de la recherche">Fin</label></th>
-        <td class="date" colspan="2">
-          <div id="paramFrm_fin_da">{{$fin|date_format:"%d/%m/%Y"}}</div>
-          <input type="hidden" name="fin" class="notNull date moreEquals|deb" value="{{$fin}}" />
-          <img id="paramFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
-        </td>
+          <td>{{mb_label object=$filter field="_date_max"}}</td>
+          <td class="date" >{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false"}}</td>
       </tr>
-	    <tr>
+	  <tr>
 	      <td colspan="2" class="button">
 	        <button type="button" onclick="checkFormPrint()" class="search">Afficher</button>
 	      </td>

@@ -25,6 +25,10 @@ class CMateriel extends CMbObject {
   var $_ref_refMateriel = null;
   var $_ref_category    = null;
   
+  //Filter Fields
+  var $_date_min	 	= null;
+  var $_date_max 		= null;
+  
   function CMateriel() {
     $this->CMbObject("materiel", "materiel_id");
     $this->loadRefModule(basename(dirname(__FILE__)));
@@ -42,7 +46,9 @@ class CMateriel extends CMbObject {
       "nom"         => "notNull str maxLength|50",
       "code_barre"  => "num",
       "description" => "text",
-      "category_id" => "notNull ref class|CCategory"
+      "category_id" => "notNull ref class|CCategory",
+      "_date_min" 	   => "date",
+      "_date_max" 	   => "date moreEquals|_date_min",
     );
   }
   

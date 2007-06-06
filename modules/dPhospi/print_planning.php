@@ -15,12 +15,12 @@ $can->needsRead();
 
 $filter->_date_min = mbGetValueFromGet("_date_min"    , date("Y-m-d")." 06:00:00");
 $filter->_date_max = mbGetValueFromGet("_date_max"    , date("Y-m-d")." 21:00:00");
-$filter->_service = mbGetValueFromGet("service", 0                        );
-$filter->type    = mbGetValueFromGet("type"   , 0                        );
-$filter->praticien_id    = mbGetValueFromGet("chir"   , 0                        );
-$filter->_specialite      = mbGetValueFromGet("spe"    , 0                        );
-$filter->convalescence    = mbGetValueFromGet("conv"   , 0                        );
-$filter->_admission   = mbGetValueFromGet("ordre"  , "heure"                  );
+$filter->_service = mbGetValueFromGet("service", 0);
+$filter->type = mbGetValueFromGet("type"   , 0);
+$filter->praticien_id = mbGetValueFromGet("chir"   , 0);
+$filter->_specialite = mbGetValueFromGet("spe"    , 0);
+$filter->convalescence = mbGetValueFromGet("conv"   , 0);
+$filter->_admission = mbGetValueFromGet("ordre"  , "heure");
 
 $total   = 0;
 

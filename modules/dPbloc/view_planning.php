@@ -11,15 +11,17 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$deb = mbGetValueFromGetOrSession("deb", mbDate());
-$fin = mbGetValueFromGetOrSession("fin", mbDate());
+$now       = mbDate();
 
-$vide  = mbGetValueFromGet("vide" , false);
-$type  = mbGetValueFromGet("type" , 0);
-$chir  = mbGetValueFromGet("chir" , null);
-$spe   = mbGetValueFromGet("spe"  , null);
-$salle = mbGetValueFromGet("salle", 0);
-$CCAM  = mbGetValueFromGet("CCAM" , "");
+$filter = new COperation;
+$filter->_date_min = mbGetValueFromGet("_date_min"    , "$now");
+$filter->_date_max = mbGetValueFromGet("_date_max"    , "$now");
+$filter->_prat_id = mbGetValueFromGetOrSession("chir", null);
+$filter->salle_id = mbGetValueFromGetOrSession("salle", 0);
+$filter->_plage = mbGetValueFromGetOrSession("vide", 0);
+$filter->_intervention = mbGetValueFromGetOrSession("type", 0);
+$filter->_specialite = mbGetValueFromGetOrSession("spe", null);
+$filter->_codes_ccam = mbGetValueFromGetOrSession("code_ccam", "");
 
 //On sort les plages opératoires
 //  Chir - Salle - Horaires
@@ -27,7 +29,7 @@ $CCAM  = mbGetValueFromGet("CCAM" , "");
 $plagesop = new CPlageOp;
 
 $where = array();
-$where["date"] =  db_prepare("BETWEEN %1 AND %2", $deb, $fin);
+$where["date"] =  db_prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
 
 $order = array();
 $order[] = "date";
@@ -42,7 +44,7 @@ $user->load($AppUI->user_id);
 
 //if($user->isFromType(array("Anesthésiste"))) {
   if($chir_id) {
-    $where["chir_id"] = db_prepare("= %", $chir_id);
+    $where["chir_id"] = db_prepare("= %", $filter->_prat_id);
   }
 //} else {
 //  $listPrat = new CMediusers;
@@ -51,8 +53,8 @@ $user->load($AppUI->user_id);
 //}
 
 // En fonction de la salle
-if ($salle) {
-  $where["salle_id"] = "= '$salle'";
+if ($filter->salle_id) {
+  $where["salle_id"] = "= '$filter->salle_id'";
 }
 
 $plagesop = $plagesop->loadList($where, $order);
@@ -65,18 +67,18 @@ foreach($plagesop as $keyPlage => $valuePlage) {
   $listOp = new COperation;
   $where = array();
   $where["plageop_id"] = "= '".$valuePlage->plageop_id."'";
-  switch ($type) {
+  switch ($filter->_intervention) {
     case "1" : $where["rank"] = "!= '0'"; break;
     case "2" : $where["rank"] = "= '0'"; break;
   }
   
-  if ($CCAM) {
-    $where["codes_ccam"] = "LIKE '%$CCAM%'";
+  if ($filter->_codes_ccam) {
+    $where["codes_ccam"] = "LIKE '%$filter->_codes_ccam%'";
   }
   
   $order = "operations.rank";
   $listOp = $listOp->loadList($where, $order);
-  if ((sizeof($listOp) == 0) && ($vide == "false"))
+  if ((sizeof($listOp) == 0) && ($filter->_plage == "false"))
     unset($plagesop[$key]);
   else {
     foreach($listOp as $keyOp => $currOp) {
@@ -98,8 +100,7 @@ foreach($plagesop as $keyPlage => $valuePlage) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("deb"     , $deb);
-$smarty->assign("fin"     , $fin);
+$smarty->assign("filter"  , $filter);
 $smarty->assign("plagesop", $plagesop);
 
 $smarty->display("view_planning.tpl");

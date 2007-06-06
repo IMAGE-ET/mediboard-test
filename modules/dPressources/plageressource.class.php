@@ -60,7 +60,7 @@ class CPlageressource extends CMbObject {
       "libelle" 		=> "str confidential",
       "paye"    		=> "bool",
       "_date_min" 		=> "date",
-      "_date_max" 		=> "date moreThan|_date_min"
+      "_date_max" 		=> "date moreEquals|_date_min"
     );
   }
   

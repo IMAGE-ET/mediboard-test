@@ -29,8 +29,8 @@ function popPlanning() {
   form = document.paramFrm;
   var url = new Url;
   url.setModuleAction("dPbloc", "view_planning");
-  url.addElement(form.deb);
-  url.addElement(form.fin);
+  url.addElement(form._date_min);
+  url.addElement(form._date_max);
   url.addElement(form.vide);
   url.addElement(form.code_ccam, "CCAM");
   url.addElement(form.type);
@@ -42,10 +42,10 @@ function popPlanning() {
 
 function changeDate(sDebut, sFin){
   var oForm = document.paramFrm;
-  oForm.deb.value = sDebut;
-  oForm.fin.value = sFin;
-  $('paramFrm_deb_da').innerHTML = Date.fromDATE(sDebut).toLocaleDate();
-  $('paramFrm_fin_da').innerHTML = Date.fromDATE(sFin).toLocaleDate();  
+  oForm._date_min.value = sDebut;
+  oForm._date_max.value = sFin;
+  $('paramFrm__date_min_da').innerHTML = Date.fromDATE(sDebut).toLocaleDate();
+  $('paramFrm__date_max_da').innerHTML = Date.fromDATE(sFin).toLocaleDate();  
 }
 
 function changeDateCal(){
@@ -56,8 +56,8 @@ function changeDateCal(){
   oForm.select_days[3].checked = false;
 }
 function pageMain() {
-  regFieldCalendar("paramFrm", "deb");
-  regFieldCalendar("paramFrm", "fin");
+  regFieldCalendar("paramFrm", "_date_min");
+  regFieldCalendar("paramFrm", "_date_max");
 }
 
 </script>
@@ -72,12 +72,8 @@ function pageMain() {
       <table class="form">
         <tr><th class="category" colspan="3">Choix de la période</th></tr>
         <tr>
-          <th><label for="deb" title="Date de début de la recherche">Début</label></th>
-          <td class="date">
-            <div id="paramFrm_deb_da">{{$now|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" onchange="changeDateCal()" name="deb" class="notNull date" value="{{$now}}" />
-            <img id="paramFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-          </td>
+          <td>{{mb_label object=$filter field="_date_min"}}</td>
+          <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
           <td rowspan="2">
             <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
               <label for="select_days_day">Jour courant</label>
@@ -90,19 +86,15 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="fin" title="Date de fin de la recherche">Fin</label></th>
-          <td class="date">
-            <div id="paramFrm_fin_da">{{$now|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" onchange="changeDateCal()" name="fin" class="notNull date moreEquals|deb" value="{{$now}}" />
-            <img id="paramFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
-          </td>
+           <td>{{mb_label object=$filter field="_date_max"}}</td>
+           <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
         </tr>
         <tr>
-          <th><label for="vide" title="Afficher ou cacher les plages vides dans le rapport">Afficher les plages vides</label></th>
-          <td colspan="2"><input type="checkbox" name="vide" /></td>
+          <td>{{mb_label object=$filter field="_plage"}}</td>
+          <td colspan="2">{{mb_field object=$filter field="_plage" checked="checked"}}</td>
         </tr>
         <tr>
-          <th><label for="code_ccam" title="Rechercher en fonction d'un code CCAM">Code CCAM</label></th>
+          <td>{{mb_label object=$filter field="_codes_ccam"}}</td>
           <td><input type="text" name="code_ccam" size="10" value="" /></td>
           <td class="button"><button type="button" class="search" onclick="popCode('ccam')">sélectionner un code</button></td>
         </tr>
@@ -114,7 +106,7 @@ function pageMain() {
       <table class="form">
         <tr><th class="category" colspan="2">Choix des paramètres de tri</th></tr>
         <tr>
-          <th><label for="type" title="Recherche en fonction de la présence dans le planning">Affichage des interventions</label></th>
+          <td>{{mb_label object=$filter field="_intervention"}}</td>
           <td><select name="type">
             <option value="0">&mdash; Toutes les interventions &mdash;</option>
             <option value="1">insérées dans le planning</option>
@@ -122,7 +114,7 @@ function pageMain() {
           </select></td>
         </tr>
         <tr>
-          <th><label for="chir" title="Rechercher en fonction du praticien">Praticiens</label></th>
+          <td>{{mb_label object=$filter field="_prat_id"}}</td>
           <td><select name="chir">
             <option value="0">&mdash; Tous les praticiens &mdash;</option>
             {{foreach from=$listPrat item=curr_prat}}
@@ -133,7 +125,7 @@ function pageMain() {
           </select></td>
         </tr>
         <tr>
-          <th><label for="spe" title="Rechercher en fonction d'une spécialité opératoire">Specialité</label></th>
+		  <td>{{mb_label object=$filter field="_specialite"}}</td>
           <td><select name="spe">
             <option value="0">&mdash; Toutes les spécialités &mdash;</option>
             {{foreach from=$listSpec item=curr_spec}}
@@ -144,7 +136,7 @@ function pageMain() {
           </select></td>
         </tr>
         <tr>
-          <th><label for="salle" title="Rechercher en fonciton d'une salle d'opération">Salle</label></th>
+          <td>{{mb_label object=$filter field="salle_id"}}</td>
           <td><select name="salle">
             <option value="0">&mdash; Toutes les salles &mdash;</option>
             {{foreach from=$listSalles item=curr_salle}}
