@@ -51,11 +51,11 @@
 				<duree>P1Y2M3DT10H30M0S</duree>
 				<joursSemaine>
 					<lundi>true</lundi>
-					<mardi>true</mardi>
+					<mardi>false</mardi>
 					<mercredi>true</mercredi>
-					<jeudi>true</jeudi>
+					<jeudi>false</jeudi>
 					<vendredi>true</vendredi>
-					<samedi>true</samedi>
+					<samedi>false</samedi>
 					<dimanche>true</dimanche>
 				</joursSemaine>
 			</execution>

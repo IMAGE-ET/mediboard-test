@@ -236,6 +236,23 @@ function mbDateTime($relative = null, $ref = null) {
 }
 
 /**
+ * Converts an xs;duration XML duration into a DB friendly DATETIME
+ * @param string $duration where format is P1Y2M3DT10H30M0S
+ * @return string: the DATETIME, null if failed
+ **/
+function mbDateTimeFromXMLDuration($duration) {
+  $regexp = "/P((\d+)Y)?((\d+)M)?((\d+)D)?T((\d+)H)?((\d+)M)?((\d+)S)?/";
+  if (!preg_match($regexp, $duration, $matches)) {
+    return null;
+  }
+  
+  return sprintf("%d-%d-%d %d:%d:%d", 
+    $matches[2], $matches[4], $matches[6], 
+    $matches[8], $matches[10], $matches[12]);
+}
+
+
+/**
  * Transforms absolute or relative time into DB friendly DATE format
  * @return string: the transformed time 
  **/

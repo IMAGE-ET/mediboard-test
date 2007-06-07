@@ -178,10 +178,16 @@ class CNumSpec extends CMbFieldSpec {
   }
 
   function getFormHtmlElement($object, $params, $value, $className){
-    if(!array_key_exists("size", $params)) {
-      $length = max($this->length, $this->maxLength);
-      $params["size"] = $length ? $length : 8;
+    $size = mbGetValue(max($this->length, $this->maxLength), 8);
+
+    if (!array_key_exists("size", $params)) {
+      $params["size"] = $size + 2;
     }
+
+    if (!array_key_exists("maxlength", $params)) {
+      $params["maxlength"] = $size;
+    }
+
     return $this->getFormElementText($object, $params, $value, $className);
   }
 }

@@ -11,6 +11,7 @@ global $can, $m, $AppUI, $dPconfig, $remote_name;
 
 $can->needsAdmin();
 
+
 /**
  * Recursive catalogue import
  */
@@ -31,7 +32,7 @@ function importCatalogue($cat, $parent_id = null) {
   
   $idCat->bindObject($catalogue);
 
-  $AppUI->stepAjax("Catalogue '$catalogue->libelle' importé", UI_MSG_OK);
+  $AppUI->stepAjax("Catalogue '$catalogue->_view' importé", UI_MSG_OK);
 
   // Import child catalogues
   foreach ($cat->sections->catalogue as $_catalogue) {
@@ -40,7 +41,6 @@ function importCatalogue($cat, $parent_id = null) {
   
   // Import analyses
   foreach ($cat->analyses->analyse as $_analyse) {
-    mbTrace($_analyse, "analyse à trouvée");
     $analyse = new CExamenLabo;
     $analyse->identifiant = (string) $_analyse->identifiant;
     $analyse->libelle     = (string) $_analyse->libelle;
@@ -64,17 +64,45 @@ function importCatalogue($cat, $parent_id = null) {
     }
 
     if ($application = $_analyse->application) {
-      $analayse->deb_application = (string) $application->debut;
-      $analayse->fin_application = (string) $application->fin;
+      $analyse->deb_application = (string) $application->debut;
+      $analyse->fin_application = (string) $application->fin;
     }
     
     if ($applicabilite = $_analyse->applicabilite) {
-      $analayse->age_min = (string) $applicabilite->ageMinimum;
-      $analayse->age_max = (string) $applicabilite->ageMaximum;
+      $analyse->applicabilite = (string) $applicabilite->sexe;
+      $analyse->age_min       = (string) $applicabilite->ageMinimum;
+      $analyse->age_max       = (string) $applicabilite->ageMaximum;
+    }
+
+    if ($prelevement = $_analyse->prelevement) {
+      $analyse->type_prelevement     = (string) $prelevement->type;
+      $analyse->methode_prelevement  = (string) $prelevement->methode;
+      $analyse->quantite_prelevement = (string) $prelevement->quantite;
+      $analyse->unite_prelevement    = (string) $prelevement->unite;
+    }
+
+    if ($conservation = $_analyse->conservation) {
+      $analyse->temps_conservation = mbTranformTime(null, mbDateTimeFromXMLDuration((string) $conservation->duree), "%H");
+      $analyse->conservation = (string) $conservation->methode;
     }
     
-    mbTrace($analyse->getProps(), "analyse à importer");
+    if ($execution = $_analyse->execution) {
+      $analyse->duree_execution = mbTranformTime(null, mbDateTimeFromXMLDuration((string) $execution->duree), "%H");
+      if ($joursSemaine = $execution->joursSemaine) {
+        $analyse->execution_lun = "true" == $joursSemaine->lundi    ? "1": "0";
+        $analyse->execution_mar = "true" == $joursSemaine->mardi    ? "1": "0";
+        $analyse->execution_mer = "true" == $joursSemaine->mercredi ? "1": "0";
+        $analyse->execution_jeu = "true" == $joursSemaine->jeudi    ? "1": "0";
+        $analyse->execution_ven = "true" == $joursSemaine->vendredi ? "1": "0";
+        $analyse->execution_sam = "true" == $joursSemaine->samedi   ? "1": "0";
+        $analyse->execution_dim = "true" == $joursSemaine->dimanche ? "1": "0";
+      }
+    }
 
+    $analyse->technique = (string) $_analyse->technique;
+    $analyse->materiel  = (string) $_analyse->materiel;
+    $analyse->remarques = (string) $_analyse->remarques;
+    
     // Bind the id400
     $anaAtt = $_analyse->attributes();
     $idAna = new CIdSante400;
@@ -83,7 +111,7 @@ function importCatalogue($cat, $parent_id = null) {
     
     $idAna->bindObject($analyse);
   
-    $AppUI->stepAjax("Analyse '$analyse->libelle' importée", UI_MSG_OK);
+    $AppUI->stepAjax("Analyse '$analyse->_view' importée", UI_MSG_OK);
   }
 }
 

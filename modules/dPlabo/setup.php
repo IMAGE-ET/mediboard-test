@@ -11,7 +11,7 @@ global $AppUI;
 
 $config = array();
 $config["mod_name"]        = "dPlabo";
-$config["mod_version"]     = "0.19";
+$config["mod_version"]     = "0.20";
 $config["mod_type"]        = "user";
 
 class CSetupdPlabo extends CSetup {
@@ -146,8 +146,15 @@ class CSetupdPlabo extends CSetup {
         "\nADD `execution_dim` ENUM('0','1')," .
         "\nDROP `jour_execution`;";
     $this->addQuery($sql);
+    
+    
+    $this->makeRevision("0.19");
+    $sql = "ALTER TABLE `examen_labo`" .
+        "\nCHANGE `quantite` `quantite_prelevement` FLOAT," .
+        "\nADD `unite_prelevement` VARCHAR(255);";
+    $this->addQuery($sql);
 
-    $this->mod_version = "0.19";
+    $this->mod_version = "0.20";
   }
 }
 ?>

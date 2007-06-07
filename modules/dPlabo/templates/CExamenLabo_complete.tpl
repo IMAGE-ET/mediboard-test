@@ -105,8 +105,11 @@
   </tr>
 
   <tr>
-    <th>{{mb_label object=$examen field="quantite"}}</th>
-    <td>{{mb_value object=$examen field="quantite"}}</td>
+    <th>{{mb_label object=$examen field="quantite_prelevement"}}</th>
+    <td>
+      {{mb_value object=$examen field="quantite_prelevement"}}
+      {{mb_value object=$examen field="unite_prelevement"}}
+      </td>
   </tr>
 
   <tr>

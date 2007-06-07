@@ -36,6 +36,7 @@ class CMbObject {
   var $_shortview     = null; // universal shortview for the object
   var $_canRead       = null; // read permission for the object
   var $_canEdit       = null; // write permission for the object
+  var $_lock          = null; // true if object is locked
 
   var $_view_template          = null; // view template path
   var $_complete_view_template = null; // complete view template path

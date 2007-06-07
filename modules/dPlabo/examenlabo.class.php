@@ -24,20 +24,20 @@ class CExamenLabo extends CMbObject {
   
   var $deb_application = null;
   var $fin_application = null;
-  var $realisateur = null;
-  var $applicabilite = null;
+  var $realisateur     = null;
+  var $applicabilite   = null;
   var $age_min         = null;
   var $age_max         = null;
-  var $technique       = null;
-  var $materiel        = null;
-  var $type_prelevement = null;
-  var $methode_prelevement = null;
-  var $conservation = null;
-  var $temps_conservation = null;
-  var $quantite = null;
-  var $duree_execution = null;
-  var $remarques = null;
+  
+  var $type_prelevement     = null;
+  var $methode_prelevement  = null;
+  var $quantite_prelevement = null;
+  var $unite_prelevement    = null;
 
+  var $conservation       = null;
+  var $temps_conservation = null;
+  
+  var $duree_execution    = null;
   var $execution_lun = null;
   var $execution_mar = null;
   var $execution_mer = null;
@@ -46,12 +46,16 @@ class CExamenLabo extends CMbObject {
   var $execution_sam = null;
   var $execution_dim = null;
   
+  var $technique       = null;
+  var $materiel        = null;
+  var $remarques       = null;
+
   // Form fields
-  var $_interne          = null;
+  var $_interne = null;
   
   // Fwd References
   var $_ref_catalogue_labo = null;
-  var $_ref_realisateur = null;
+  var $_ref_realisateur    = null;
   
   // Back References
   var $_ref_items_pack_labo = null;
@@ -68,36 +72,45 @@ class CExamenLabo extends CMbObject {
   
   function getSpecs() {
     return array (
-      "catalogue_labo_id"   => "ref class|CCatalogueLabo notNull",
-      "identifiant"         => "str notNull",
-      "libelle"             => "str notNull",
-      "type"                => "enum list|bool|num|str notNull",
-      "unite"               => "str",
-      "min"                 => "float",
-      "max"                 => "float moreThan|min",
-      "deb_application"     => "date",
-      "fin_application"     => "date moreThan|deb_application",
-      "applicabilite"       => "enum list|homme|femme|unisexe",
-      "realisateur"         => "ref class|CMediusers",
-      "age_min"             => "num pos",
-      "age_max"             => "num pos moreThan|age_min",
-      "technique"           => "text",
-      "materiel"            => "text",
-      "type_prelevement"    => "enum list|sang|urine|biopsie",
-      "methode_prelevement" => "text",
-      "conservation"        => "text",
-      "temps_conservation"  => "num pos",
-      "quantite"            => "num pos",
-      "execution_lun"       => "bool",
-      "execution_mar"       => "bool",
-      "execution_mer"       => "bool",
-      "execution_jeu"       => "bool",
-      "execution_ven"       => "bool",
-      "execution_sam"       => "bool",
-      "execution_dim"       => "bool",
-      "duree_execution"     => "num pos",
-      "remarques"           => "text",
+      "catalogue_labo_id"    => "ref class|CCatalogueLabo notNull",
+      "identifiant"          => "str maxLength|10 notNull",
+      "libelle"              => "str notNull",
+      "type"                 => "enum list|bool|num|str notNull",
+      "unite"                => "str maxLength|12",
+      "min"                  => "float",
+      "max"                  => "float moreThan|min",
+      "deb_application"      => "date",
+      "fin_application"      => "date moreThan|deb_application",
+      "applicabilite"        => "enum list|homme|femme|unisexe",
+      "realisateur"          => "ref class|CMediusers",
+      "age_min"              => "num pos",
+      "age_max"              => "num pos moreThan|age_min",
+      "technique"            => "text",
+      "materiel"             => "text",
+      "type_prelevement"     => "enum list|sang|urine|biopsie",
+      "methode_prelevement"  => "text",
+      "quantite_prelevement" => "float",
+      "unite_prelevement"    => "str maxLength|12",
+      "conservation"         => "text",
+      "temps_conservation"   => "num pos",
+      "execution_lun"        => "bool",
+      "execution_mar"        => "bool",
+      "execution_mer"        => "bool",
+      "execution_jeu"        => "bool",
+      "execution_ven"        => "bool",
+      "execution_sam"        => "bool",
+      "execution_dim"        => "bool",
+      "duree_execution"      => "num pos",
+      "remarques"            => "text",
     );
+  }
+  
+  function check() {
+    parent::check();
+  }
+  
+  function getSiblings() {
+    mbTrace($$this->getProps());
   }
   
   function getBackRefs() {

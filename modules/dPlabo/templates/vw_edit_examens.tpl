@@ -53,7 +53,13 @@ function pageMain() {
       <table class="form">
         <tr>
           {{if $examen->_id}}
-          <th class="title modify" colspan="2">Modification de l'examen {{$examen->_view}}</th>
+          <th class="title modify" colspan="2">
+            <div class="idsante400" id="{{$examen->_class_name}}-{{$examen->_id}}" ></div>
+            <a style="float:right;" href="#nothing" onclick="view_log('{{$examen->_class_name}}', {{$examen->_id}})">
+              <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
+            </a>
+            Modification de l'examen {{$examen->_view}}
+          </th>
           {{else}}
           <th class="title" colspan="2">Création d'un examen</th>
           {{/if}}

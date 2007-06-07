@@ -42,6 +42,9 @@ function pageMain() {
           {{if $catalogue->_id}}
           <th class="title modify" colspan="0">
             <div class="idsante400" id="{{$catalogue->_class_name}}-{{$catalogue->_id}}" ></div>
+            <a style="float:right;" href="#nothing" onclick="view_log('{{$object->_class_name}}', {{$object->_id}})">
+              <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
+            </a>
             Modification du catalogue {{$catalogue->_view}}
           </th>
           {{else}}
