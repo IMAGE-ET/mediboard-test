@@ -50,13 +50,12 @@ foreach ($list_idSante400 as $curr_idSante400) {
   $curr_idSante400->loadRefs();
 }
 
-$last_update = mbGetValue($idSante400->last_update, mbDateTime());
+$filter->last_update = mbGetValue($idSante400->last_update, mbDateTime());
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("listClasses", $listClasses);
-$smarty->assign("last_update", $last_update);
 $smarty->assign("target", $target);
 $smarty->assign("filter", $filter);
 $smarty->assign("idSante400", $idSante400);

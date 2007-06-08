@@ -16,9 +16,7 @@
   </tr>
 
   <tr>
-    <th>
-      <label for="object_class" title="Classe de l'object">Classe</label>
-    </th>
+    <td>{{mb_label object=$filter field="object_class"}}</td>
     <td>
       <select name="object_class" class="str maxLength|25">
         <option value="">&mdash; Toutes les classes</option>
@@ -30,9 +28,7 @@
       </select>
     </td>
 
-    <th>
-      <label for="object_id" title="Identifiant de l'object">Objet</label>
-    </th>
+    <td>{{mb_label object=$filter field="object_id"}}</td>
     <td>
       <input name="object_id" class="ref" value="{{$filter->object_id}}" />
       <button class="search" type="button" onclick="popObject(this)">Chercher</button>
@@ -40,18 +36,10 @@
   </tr>
   
   <tr>
-    <th>
-      <label for="id400" title="Identifiant Santé 400 de l'objet">ID400</label>
-    </th>
-    <td>
-      <input name="id400" class="str" value="{{$filter->id400}}" />
-    </td>
-    <th>
-      <label for="tag" title="Etiquette (sémantique) de l'identifiant">Etiquette</label>
-    </th>
-    <td>
-      <input name="tag" class="str" value="{{$filter->tag}}" />
-    </td>
+    <td>{{mb_label object=$filter field="id400"}}</td>
+    <td>{{mb_field object=$filter field="id400" canNull="true"}}</td>
+    <td>{{mb_label object=$filter field="tag"}}</td>
+    <td>{{mb_field object=$filter field="tag" size="40"}}</td>
   </tr>
 
   <tr>
