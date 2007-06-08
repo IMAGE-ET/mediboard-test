@@ -41,7 +41,7 @@ if ($filter->_specialite or $filter->praticien_id) {
   $sejourReq->addWhereClause("sejour.praticien_id", db_prepare_in(array_keys($speChirs), $filter->praticien_id));
 }
 
-if ($filter->_type_admission) {
+if ($filter->type) {
   $sejourReq->addWhereClause("sejour.type", "= '$filter->type'");
 }
 

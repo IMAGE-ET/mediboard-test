@@ -57,11 +57,17 @@ class CConsultation extends CMbObject {
   var $_ref_examnyha       = null;
   var $_ref_exampossum     = null;
 
-  // Foreign form fields : updated at loadRefs()
-  var $_ref_chir  = null; //pseudo RefFwd, get that in plageConsult
-  var $_date      = null;
-  var $_is_anesth = null; 
+   // Foreign form fields : updated at loadRefs()
+   var $_ref_chir  = null; //pseudo RefFwd, get that in plageConsult
+   var $_date      = null;
+   var $_is_anesth = null; 
 
+   //Filter Fields
+   var $_date_min	 	= null;
+   var $_date_max 		= null;
+   var $_prat_id 		= null;
+   var $_etat_paiement  = null;
+   var $_type_affichage = null;
 
   function CConsultation() {
     $this->CMbObject("consultation", "consultation_id");
@@ -98,7 +104,12 @@ class CConsultation extends CMbObject {
       "premiere"        => "bool",
       "tarif"           => "str",
       "arrivee"         => "dateTime",
-      "type_tarif"      => "enum list|cheque|CB|especes|tiers|autre default|cheque"
+      "type_tarif"      => "enum list|cheque|CB|especes|tiers|autre",
+      "_date_min" 		=> "date",
+      "_date_max" 	    => "date moreEquals|_date_min",
+      "_etat_paiement"  => "enum list|paye|impaye default|paye",
+      "_type_affichage" => "enum list|complete|totaux",
+      "_prat_id"        => "text"
     );
   }
   

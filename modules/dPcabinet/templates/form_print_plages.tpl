@@ -15,19 +15,18 @@ function popPlages() {
 
   var url = new Url;
   url.setModuleAction("dPcabinet", "print_plages");
-  url.addElement(form.deb);
-  url.addElement(form.fin);
+  url.addElement(form._date_min);
+  url.addElement(form._date_max);
   url.addElement(form.chir);
   url.popup(700, 550, "Planning");
 }
 
 function changeDate(sDebut, sFin){
   var oForm = document.paramFrm;
-  oForm.deb.value = sDebut;
-  oForm.fin.value = sFin;
-  $('paramFrm_deb_da').innerHTML = Date.fromDATE(sDebut).toLocaleDate();
-  $('paramFrm_fin_da').innerHTML = Date.fromDATE(sFin).toLocaleDate();  
-  
+  oForm._date_min.value = sDebut;
+  oForm._date_max.value = sFin;
+  $('paramFrm__date_min_da').innerHTML = Date.fromDATE(sDebut).toLocaleDate();
+  $('paramFrm__date_max_da').innerHTML = Date.fromDATE(sFin).toLocaleDate();  
 }
 
 function changeDateCal(){
@@ -39,8 +38,8 @@ function changeDateCal(){
 }
 
 function pageMain() {
-  regFieldCalendar("paramFrm", "deb");
-  regFieldCalendar("paramFrm", "fin");
+  regFieldCalendar("paramFrm", "_date_min");
+  regFieldCalendar("paramFrm", "_date_max");
 }
 
 
@@ -55,12 +54,8 @@ function pageMain() {
       <table class="form">
         <tr><th class="category" colspan="3">Choix de la période</th></tr>
         <tr>
-          <th><label for="deb" title="Date de début de la période">Début</label></th>
-          <td class="date">
-            <div id="paramFrm_deb_da">{{$now|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" onchange="changeDateCal()" class="notNull date" name="deb" value="{{$now}}" />
-            <img id="paramFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-          </td>
+          <td>{{mb_label object=$filter field="_date_min"}}</td>
+          <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
           <td rowspan="2">
             <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
               <label for="select_days_day">Jour courant</label>
@@ -73,12 +68,8 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="fin" title="Date de fin de la période">Fin</label></th>
-          <td class="date">
-            <div id="paramFrm_fin_da">{{$now|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" onchange="changeDateCal()" class="notNull date moreEquals|deb" name="fin" value="{{$now}}" />
-            <img id="paramFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
-          </td>
+           <td>{{mb_label object=$filter field="_date_max"}}</td>
+           <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
         </tr>
       </table>
 

@@ -1,8 +1,8 @@
 <script type="text/javascript">
 
 function pageMain() {
-  regFieldCalendar("hospitalisation", "debutact");
-  regFieldCalendar("hospitalisation", "finact");
+  regFieldCalendar("hospitalisation", "_date_min_stat");
+  regFieldCalendar("hospitalisation", "_date_max_stat");
 }
 
 </script>
@@ -17,18 +17,14 @@ function pageMain() {
           <th colspan="4" class="category">Occupation des lits</th>
         </tr>
         <tr>
-          <th><label for="debutact" title="Date de début">Début</label></th>
-          <td class="date">
-            <div id="hospitalisation_debutact_da">{{$debutact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debutact" class="notNull date" value="{{$debutact}}" />
-            <img id="hospitalisation_debutact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-         </td>
-          <th><label for="service_id" title="Service">Service</label></th>
+          <td>{{mb_label object=$filter field="_date_min_stat"}}</td>
+          <td class="date">{{mb_field object=$filter field="_date_min_stat" form="hospitalisation" canNull="false"}} </td>
+          <td>{{mb_label object=$filter field="_service"}}</td>
           <td>
             <select name="service_id">
               <option value="0">&mdash; Tous les services</option>
               {{foreach from=$listServices item=curr_service}}
-              <option value="{{$curr_service->service_id}}" {{if $curr_service->service_id == $service_id}}selected="selected"{{/if}}>
+              <option value="{{$curr_service->service_id}}" {{if $curr_service->service_id == $filter->_service}}selected="selected"{{/if}}>
                 {{$curr_service->nom}}
               </option>
               {{/foreach}}
@@ -36,18 +32,14 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="finact" title="Date de fin">Fin</label></th>
-          <td class="date">
-            <div id="hospitalisation_finact_da">{{$finact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="finact" class="notNull date moreEquals|debutact" value="{{$finact}}" />
-            <img id="hospitalisation_finact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-          </td>
-          <th><label for="prat_id" title="Praticien">Praticien</label></th>
+          <td>{{mb_label object=$filter field="_date_max_stat"}}</td>
+          <td class="date">{{mb_field object=$filter field="_date_max_stat" form="hospitalisation" canNull="false"}} </td>
+          <td>{{mb_label object=$filter field="praticien_id"}}</td>
           <td>
             <select name="prat_id">
               <option value="0">&mdash; Tous les praticiens</option>
               {{foreach from=$listPrats item=curr_prat}}
-              <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $prat_id}}selected="selected"{{/if}}>
+              <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $filter->praticien_id}}selected="selected"{{/if}}>
                 {{$curr_prat->_view}}
               </option>
               {{/foreach}}
@@ -55,24 +47,25 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="type_adm" title="Type d'hospitalisation">Type d'hospitalisation</label></th>
+          <td>{{mb_label object=$filter field="type"}}</td>
           <td>
-            <select name="type_adm">
-              <option value="0">&mdash; Tous les types d'hospi</option>
-              <option value="1" {{if $type_adm == "1"}}selected="selected"{{/if}}>Hospi complètes + ambu</option>
+            <select name="type">
+              <option value="">&mdash; Tous les types d'hospi</option>
+              <option value="1" {{if $filter->type == "1"}}selected="selected"{{/if}}>Hospi complètes + ambu</option>
               {{foreach from=$listHospis key=key_hospi item=curr_hospi}}
-              <option value="{{$key_hospi}}" {{if $key_hospi == $type_adm}}selected="selected"{{/if}}>
+              <option value="{{$key_hospi}}" {{if $key_hospi == $filter->type}}selected="selected"{{/if}}>
                 {{$curr_hospi}}
               </option>
               {{/foreach}}
             </select>
           </td>
-          <th><label for="discipline_id" title="Spécialité">Spécialité</label></th>
+         
+          <td>{{mb_label object=$filter field="_specialite"}}</td>
           <td>
             <select name="discipline_id">
               <option value="0">&mdash; Toutes les spécialités</option>
               {{foreach from=$listDisciplines item=curr_disc}}
-              <option value="{{$curr_disc->discipline_id}}" {{if $curr_disc->discipline_id == $discipline_id}}selected="selected"{{/if}}>
+              <option value="{{$curr_disc->discipline_id}}" {{if $curr_disc->discipline_id == $filter->_specialite }}selected="selected"{{/if}}>
                 {{$curr_disc->_view}}
               </option>
               {{/foreach}}
@@ -80,12 +73,12 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <td colspan="4" class="button"><button class="search" type="submit">Go</button></td>
+          <td colspan="4" class="button"><button type="submit" class="search">Afficher</button></td>
         </tr>
         <tr>
           <td colspan="4" class="button">
-            <img alt="Patients par service" src='?m=dPstats&amp;a=graph_patparservice&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;service_id={{$service_id}}&amp;prat_id={{$prat_id}}&amp;type_adm={{$type_adm}}&amp;discipline_id={{$discipline_id}}' />
-            <img alt="Admissions par type d'hospitalisation" src='?m=dPstats&amp;a=graph_patpartypehospi&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;service_id={{$service_id}}&amp;prat_id={{$prat_id}}&amp;type_adm={{$type_adm}}&amp;discipline_id={{$discipline_id}}' />
+            <img alt="Patients par service" src='?m=dPstats&amp;a=graph_patparservice&amp;suppressHeaders=1&amp;debut={{$filter->_date_min_stat}}&amp;fin={{$filter->_date_max_stat}}&amp;service_id={{$filter->_service}}&amp;prat_id={{$filter->praticien_id}}&amp;type_adm={{$filter->type}}&amp;discipline_id={{$filter->_specialite}}' />
+            <img alt="Admissions par type d'hospitalisation" src='?m=dPstats&amp;a=graph_patpartypehospi&amp;suppressHeaders=1&amp;debut={{$filter->_date_min_stat}}&amp;fin={{$filter->_date_max_stat}}&amp;service_id={{$filter->_service}}&amp;prat_id={{$filter->praticien_id}}&amp;type_adm={{$filter->type}}&amp;discipline_id={{$filter->_specialite}}' />
           </td>
         </tr>
       </table>

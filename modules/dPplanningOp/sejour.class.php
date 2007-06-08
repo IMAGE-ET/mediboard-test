@@ -83,8 +83,10 @@ class CSejour extends CMbObject {
   var $_date_max 		= null;
   var $_admission 		= null;
   var $_service 		= null;
-  var $_type_admission 		= null;
+  var $_type_admission  = null;
   var $_specialite 		= null;
+  var $_date_min_stat	= null;
+  var $_date_max_stat 	= null;
 
 	function CSejour() {
     $this->CMbObject("sejour", "sejour_id");
@@ -135,7 +137,9 @@ class CSejour extends CMbObject {
       "_admission" 		   => "text",
       "_service" 		   => "text",
       "_type_admission"    => "text",
-      "_specialite" 	   => "text"
+      "_specialite" 	   => "text",
+       "_date_min_stat"    => "date",
+      "_date_max_stat" 	   => "date moreEquals|_date_min_stat",
     );
   }
   

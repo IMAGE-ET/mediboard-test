@@ -12,15 +12,24 @@
 global $AppUI, $can, $m;
 
 // Récupération des paramètres
-$deb  = mbGetValueFromGetOrSession("deb", mbDate());
-$fin  = mbGetValueFromGetOrSession("fin", mbDate());
+$filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate());
+$filter->_date_max =mbGetValueFromGetOrSession("_date_max", mbDate());
+$etat = $filter->_etat_paiement = 1;
+$type = $filter->type_tarif = mbGetValueFromGetOrSession("type_tarif", 0);
+if($type == null) {
+	$type = 0;
+}
+$aff = $filter->_type_affichage  = mbGetValueFromGetOrSession("_type_affichage" , 1);
+//Traduction pour le passage d'un enum en bool pour les requetes sur la base de donnee
+if($aff == "complete") {
+	$aff = 1;
+} elseif ($aff == "totaux"){
+	$aff = 0;
+}
+
 $chir = mbGetValueFromGetOrSession("chir");
 $chirSel = new CMediusers;
 $chirSel->load($chir);
-//$etat = mbGetValueFromGetOrSession("etat", 0);
-$etat = 1;
-$type = mbGetValueFromGetOrSession("type", 0);
-$aff  = mbGetValueFromGetOrSession("aff", 1);
 
 // Récupération des plages de dates de paiement
 $sql = "SELECT consultation.date_paiement AS date," .
@@ -35,8 +44,8 @@ else {
   $listPrat = $listPrat->loadPraticiens(PERM_READ);
   $sql .= "\n WHERE chir_id ".db_prepare_in(array_keys($listPrat));
 }
-$sql .= "\n AND date_paiement >= '$deb'";
-$sql .= "\n AND date_paiement <= '$fin'";
+$sql .= "\n AND date_paiement >= '$filter->_date_min'";
+$sql .= "\n AND date_paiement <= '$filter->_date_max'";
 $sql .= "\n GROUP BY date_paiement";
 $sql .= "\n ORDER BY date_paiement";
 
@@ -109,8 +118,7 @@ foreach($listPlage as $key => $value) {
 $smarty = new CSmartyDP();
 
 $smarty->debugging = false;
-$smarty->assign("deb"      , $deb);
-$smarty->assign("fin"      , $fin);
+$smarty->assign("filter"   , $filter);
 $smarty->assign("aff"      , $aff);
 $smarty->assign("etat"     , $etat);
 $smarty->assign("type"     , $type);

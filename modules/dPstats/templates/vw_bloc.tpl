@@ -5,17 +5,17 @@ function zoomGraphIntervention(date){
   url.setModuleAction("dPstats", "graph_activite_zoom");
   url.addParam("suppressHeaders", 1);
   url.addParam("date"         , date);
-  url.addParam("salle_id"     , "{{$salle_id}}");
-  url.addParam("prat_id"      , "{{$prat_id}}");
-  url.addParam("codeCCAM"     , "{{$codeCCAM|smarty:nodefaults|escape:"javascript"}}");
-  url.addParam("discipline_id", "{{$discipline_id}}");
+  url.addParam("salle_id"     , "{{$filter->salle_id}}");
+  url.addParam("prat_id"      , "{{$filter->_prat_id}}");
+  url.addParam("codeCCAM"     , "{{$filter->_codes_ccam|smarty:nodefaults|escape:"javascript"}}");
+  url.addParam("discipline_id", "{{$filter->_specialite}}");
   url.addParam("size"         , 2);
   url.popup(760, 400, "ZoomMonth");
 }
 
 function pageMain() {
-  regFieldCalendar("bloc", "debutact");
-  regFieldCalendar("bloc", "finact");
+  regFieldCalendar("bloc", "_date_min");
+  regFieldCalendar("bloc", "_date_max");
 }
 
 </script>
@@ -30,18 +30,14 @@ function pageMain() {
           <th colspan="4" class="category">Activité du bloc opératoire</th>
         </tr>
         <tr>
-          <th><label for="debutact" title="Date de début">Début</label></th>
-          <td class="date">
-            <div id="bloc_debutact_da">{{$debutact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debutact" class="notNull date" value="{{$debutact}}" />
-            <img id="bloc_debutact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-         </td>
-          <th><label for="salle_id" title="Salle">Salle</label></th>
+           <td>{{mb_label object=$filter field="_date_min"}}</td>
+          <td class="date">{{mb_field object=$filter field="_date_min" form="bloc" canNull="false"}} </td>
+          <td>{{mb_label object=$filter field="salle_id"}}</td>
           <td>
             <select name="salle_id">
               <option value="0">&mdash; Toutes les salles</option>
               {{foreach from=$listSalles item=curr_salle}}
-              <option value="{{$curr_salle->salle_id}}" {{if $curr_salle->salle_id == $salle_id}}selected="selected"{{/if}}>
+              <option value="{{$curr_salle->salle_id}}" {{if $curr_salle->salle_id == $filter->salle_id }}selected="selected"{{/if}}>
                 {{$curr_salle->nom}}
               </option>
               {{/foreach}}
@@ -49,18 +45,14 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="finact" title="Date de fin">Fin</label></th>
-          <td class="date">
-            <div id="bloc_finact_da">{{$finact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="finact" class="notNull date moreEquals|debutact" value="{{$finact}}" />
-            <img id="bloc_finact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-          </td>
-          <th><label for="prat_id" title="Praticien">Praticien</label></th>
+          <td>{{mb_label object=$filter field="_date_max"}}</td>
+          <td class="date">{{mb_field object=$filter field="_date_max" form="bloc" canNull="false"}} </td>
+          <td>{{mb_label object=$filter field="_prat_id"}}</td>
           <td>
-            <select name="prat_id" onchange="this.form.discipline_id.value = 0">
+            <select name="prat_id">
               <option value="0">&mdash; Tous les praticiens</option>
               {{foreach from=$listPrats item=curr_prat}}
-              <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $prat_id}}selected="selected"{{/if}}>
+              <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $filter->_prat_id}}selected="selected"{{/if}}>
                 {{$curr_prat->_view}}
               </option>
               {{/foreach}}
@@ -68,14 +60,15 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="codeCCAM" title="Acte CCAM">Acte CCAM</label></th>
-          <td><input type="text" name="codeCCAM" value="{{$codeCCAM|stripslashes}}" /></td>
-          <th><label for="discipline_id" title="Spécialité">Spécialité</label></th>
+          <td>{{mb_label object=$filter field="codes_ccam"}}</td>
+          <td>{{mb_field object=$filter field="codes_ccam" canNull="true"}} </td>
+
+          <td>{{mb_label object=$filter field="_specialite"}}</td>
           <td>
-            <select name="discipline_id" onchange="this.form.prat_id.value = 0">
+            <select name="discipline_id">
               <option value="0">&mdash; Toutes les spécialités</option>
               {{foreach from=$listDisciplines item=curr_disc}}
-              <option value="{{$curr_disc->discipline_id}}" {{if $curr_disc->discipline_id == $discipline_id}}selected="selected"{{/if}}>
+              <option value="{{$curr_disc->discipline_id}}" {{if $curr_disc->discipline_id == $filter->_specialite }}selected="selected"{{/if}}>
                 {{$curr_disc->_view}}
               </option>
               {{/foreach}}
@@ -83,18 +76,18 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <td colspan="4" class="button"><button class="search" type="submit">Go</button></td>
+          <td colspan="4" class="button"><button class="search" type="submit">Afficher</button></td>
         </tr>
         <tr>
           <td colspan="4" class="button">
             {{$map_graph_interventions|smarty:nodefaults}}
-            <img usemap="#graph_interventions" alt="Nombre d'interventions" src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;prat_id={{$prat_id}}&amp;codeCCAM={{$codeCCAM}}&amp;discipline_id={{$discipline_id}}' />
-            {{if $prat_id}}
-              <img alt="Occupation des plages" src='?m=dPstats&amp;a=graph_praticienbloc&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;prat_id={{$prat_id}}&amp;codeCCAM={{$codeCCAM}}' />
-            {{elseif $discipline_id}}
-              <img alt="Répartition par praticiens" src='?m=dPstats&amp;a=graph_pratdiscipline&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;discipline_id={{$discipline_id}}&amp;codeCCAM={{$codeCCAM}}' />
+            <img usemap="#graph_interventions" alt="Nombre d'interventions" src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;prat_id={{$filter->_prat_id}}&amp;codeCCAM={{$filter->codes_ccam}}&amp;discipline_id={{$filter->_specialite}}' />
+            {{if $filter->_prat_id}}
+              <img alt="Occupation des plages" src='?m=dPstats&amp;a=graph_praticienbloc&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;prat_id={{$filter->_prat_id}}&amp;codeCCAM={{$filter->codes_ccam}}' />
+            {{elseif $filter->_specialite}}
+              <img alt="Répartition par praticiens" src='?m=dPstats&amp;a=graph_pratdiscipline&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;discipline_id={{$discipline_id}}&amp;codeCCAM={{$filter->codes_ccam}}' />
             {{else}}
-              <img alt="Patients par jour par salle" src='?m=dPstats&amp;a=graph_patjoursalle&amp;suppressHeaders=1&amp;debut={{$debutact}}&amp;fin={{$finact}}&amp;salle_id={{$salle_id}}&amp;prat_id={{$prat_id}}&amp;codeCCAM={{$codeCCAM}}' />
+              <img alt="Patients par jour par salle" src='?m=dPstats&amp;a=graph_patjoursalle&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;prat_id={{$filter->_prat_id}}&amp;codeCCAM={{$filter->codes_ccam}}' />
             {{/if}}
           </td>
         </tr>

@@ -11,14 +11,18 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$deb  = mbGetValueFromGetOrSession("deb", mbDate());
-$fin  = mbGetValueFromGetOrSession("fin", mbDate());
+$now       = mbDate();
+
+$filter = new CConsultation;
+$filter->_date_min = mbGetValueFromGet("_date_min"    , "$now");
+$filter->_date_max = mbGetValueFromGet("_date_max"    , "$now");
+
 $chir = mbGetValueFromGetOrSession("chir");
 
 // On selectionne les plages
 $listPlage = new CPlageconsult;
 $where = array();
-$where["date"] = "BETWEEN '$deb' AND '$fin'";
+$where["date"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
 
 // Liste des praticiens
 $mediusers = new CMediusers();
@@ -50,8 +54,7 @@ foreach($listPlage as $keyPlage => $plage) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("deb", $deb);
-$smarty->assign("fin", $fin);
+$smarty->assign("filter", $filter);
 $smarty->assign("listPlage", $listPlage);
 
 $smarty->display("print_plages.tpl");

@@ -11,22 +11,22 @@ function checkRapport(){
 
   var url = new Url();
   url.setModuleAction("dPcabinet", form.a.value);
-  url.addElement(form.deb);
+  url.addElement(form._date_min);
   url.addElement(form.a);
-  url.addElement(form.deb);
-  url.addElement(form.fin);
+  url.addElement(form._date_min);
+  url.addElement(form._date_max);
   url.addElement(form.chir);
-  url.addElement(form.etat);
-  url.addElement(form.type);
-  url.addElement(form.aff);
+  url.addElement(form._etat_paiement);
+  url.addElement(form.type_tarif);
+  url.addElement(form._type_affichage);
   url.popup(700, 550, "Rapport");
   
   return false;
 }
 
 function pageMain() {
-  regFieldCalendar("printFrm", "deb");
-  regFieldCalendar("printFrm", "fin");
+  regFieldCalendar("printFrm", "_date_min");
+  regFieldCalendar("printFrm", "_date_max");
 }
 
 </script>
@@ -42,26 +42,18 @@ function pageMain() {
         <tr><th class="title" colspan="2">Edition de rapports</th></tr>
         <tr><th class="category" colspan="2">Choix de la periode</th></tr>
         <tr>
-          <th><label for="deb" title="Date de début de la recherche">Début</label></th>
-          <td class="date" colspan="2">
-            <div id="printFrm_deb_da">{{$deb|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="deb" class="notNull date" value="{{$deb}}" />
-            <img id="printFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-          </td>
+           <td>{{mb_label object=$filter field="_date_min"}}</td>
+           <td class="date">{{mb_field object=$filter field="_date_min" form="printFrm" canNull="false"}} </td>
         </tr>
         <tr>
-          <th><label for="fin" title="Date de fin de la recherche">Fin</label></th>
-          <td class="date" colspan="2">
-            <div id="printFrm_fin_da">{{$fin|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin" class="notNull date moreEquals|deb" value="{{$fin}}" />
-            <img id="printFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
-          </td>
+          <td>{{mb_label object=$filter field="_date_max"}}</td>
+           <td class="date">{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false"}} </td>
         </tr>
         <tr>
           <th class="category" colspan="2">Critères d'affichage</th>
         </tr>
         <tr>
-          <th><label for="chir" title="Praticien">Praticien</label></th>
+          <td>{{mb_label object=$filter field="_prat_id"}}</td>
           <td>
             <select name="chir">
               <!-- <option value="">&mdash; Tous &mdash;</option> -->
@@ -71,36 +63,16 @@ function pageMain() {
             </select>
           </td>
         <tr>
-          <th><label for="etat" title="Etat des paiements">Etat des paiements</label></th>
-          <td>
-            <select name="etat">
-              <option value="-1">&mdash; Tous &mdash;</option>
-              <option value="1">Payés</option>
-              <option value="0">Impayés</option>
-            </select>
-          </td>
+          <td>{{mb_label object=$filter field="_etat_paiement"}}</td>
+          <td>{{mb_field object=$filter field="_etat_paiement" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
         </tr>
         <tr>
-          <th><label for="type" title="Type de paiement">Type de paiement</label></th>
-          <td>
-            <select name="type">
-              <option value="0">Tout type</option>
-              <option value="cheque">Chèques</option>
-              <option value="CB">CB</option>
-              <option value="especes">Espèces</option>
-              <option value="tiers">Tiers-payant</option>
-              <option value="autre">Autre</option>
-            </select>
-          </td>
+          <td>{{mb_label object=$filter field="type_tarif"}}</td>
+          <td>{{mb_field object=$filter field="type_tarif" defaultOption="&mdash; Tout type &mdash;" canNull="true"}}</td>    
         </tr>
         <tr>
-          <th><label for="aff" title="Type d'affichage">Type d'affichage</label></th>
-          <td>
-            <select name="aff">
-              <option value="1">Liste complète</option>
-              <option value="0">Totaux</option>
-            </select>
-          </td>
+          <td>{{mb_label object=$filter field="_type_affichage"}}</td>
+          <td>{{mb_field object=$filter field="_type_affichage" canNull="true"}}</td>     
         </tr>
         <tr>
           <td class="button" colspan="2">

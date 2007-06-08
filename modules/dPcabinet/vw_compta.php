@@ -11,8 +11,17 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$deb = mbDate();
-$fin = mbDate("+ 0 day");
+//$deb = mbDate();
+//$fin = mbDate("+ 0 day");
+
+$filter = new CConsultation;
+
+$filter->_date_min = mbDate();
+$filter->_date_max = mbDate("+ 0 day");
+
+$filter->_etat_paiement = mbGetValueFromGetOrSession("_etat_paiement", 0);
+$filter->type_tarif = mbGetValueFromGetOrSession("type_tarif", 0);
+$filter->_type_affichage = mbGetValueFromGetOrSession("_type_affichage", 0);
 
 // Edite t'on un tarif ?
 $tarif_id = mbGetValueFromGetOrSession("tarif_id", null);
@@ -49,8 +58,7 @@ $listPrat = in_array($mediuser->_user_type, array("Administrator", "Secrétaire")
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("deb", $deb);
-$smarty->assign("fin", $fin);
+$smarty->assign("filter", $filter);
 $smarty->assign("mediuser", $mediuser);
 $smarty->assign("listeTarifsChir", $listeTarifsChir);
 $smarty->assign("listeTarifsSpe", $listeTarifsSpe);

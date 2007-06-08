@@ -11,19 +11,22 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$debutact      = mbGetValueFromGetOrSession("debutact", mbDate("-1 YEAR"));
-$rectif        = mbTranformTime("+0 DAY", $debutact, "%d")-1;
-$debutact      = mbDate("-$rectif DAYS", $debutact);
-$finact        = mbGetValueFromGetOrSession("finact", mbDate());
-$rectif        = mbTranformTime("+0 DAY", $finact, "%d")-1;
-$finact        = mbDate("-$rectif DAYS", $finact);
-$finact        = mbDate("+ 1 MONTH", $finact);
-$finact        = mbDate("-1 DAY", $finact);
-$prat_id       = mbGetValueFromGetOrSession("prat_id", 0);
-$salle_id      = mbGetValueFromGetOrSession("salle_id", 0);
-$discipline_id = mbGetValueFromGetOrSession("discipline_id", 0);
-$codeCCAM      = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
+$filter = new COperation();
 
+$debutact = $filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate("-1 YEAR"));
+$rectif = mbTranformTime("+0 DAY", $filter->_date_min, "%d")-1;
+$debutact = $filter->_date_min = mbDate("-$rectif DAYS", $filter->_date_min);
+
+$finact = $filter->_date_max = mbGetValueFromGetOrSession("_date_max",  mbDate());
+$rectif = mbTranformTime("+0 DAY", $filter->_date_max, "%d")-1;
+$finact = $filter->_date_max = mbDate("-$rectif DAYS", $filter->_date_max);
+$finact = $filter->_date_max = mbDate("+ 1 MONTH", $filter->_date_max);
+$finact = $filter->_date_max = mbDate("-1 DAY", $filter->_date_max);
+
+$salle_id = $filter->salle_id = mbGetValueFromGetOrSession("salle_id", 0);
+$codeCCAM = $filter->codes_ccam = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
+$prat_id = $filter->_prat_id = mbGetValueFromGetOrSession("prat_id", 0);
+$discipline_id = $filter->_specialite = mbGetValueFromGetOrSession("discipline_id", 0);
 
 // map Graph Interventions
 require_once($AppUI->getModuleFile($m, "inc_graph_activite"));
@@ -46,16 +49,11 @@ $listDisciplines = $listDisciplines->loadUsedDisciplines();
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("filter"       			  , $filter       );
 $smarty->assign("map_graph_interventions" , $map_graph_interventions);
-$smarty->assign("debutact"       , $debutact       );
-$smarty->assign("finact"         , $finact         );
-$smarty->assign("prat_id"        , $prat_id        );
-$smarty->assign("salle_id"       , $salle_id       );
-$smarty->assign("discipline_id"  , $discipline_id  );
-$smarty->assign("codeCCAM"       , $codeCCAM       );
-$smarty->assign("listPrats"      , $listPrats      );
-$smarty->assign("listSalles"     , $listSalles     );
-$smarty->assign("listDisciplines", $listDisciplines);
+$smarty->assign("listPrats"      		  , $listPrats      );
+$smarty->assign("listSalles"     		  , $listSalles     );
+$smarty->assign("listDisciplines"		  , $listDisciplines);
 
 $smarty->display("vw_bloc.tpl");
 

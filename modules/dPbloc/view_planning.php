@@ -12,7 +12,6 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $now       = mbDate();
-
 $filter = new COperation;
 $filter->_date_min = mbGetValueFromGet("_date_min"    , "$now");
 $filter->_date_max = mbGetValueFromGet("_date_max"    , "$now");

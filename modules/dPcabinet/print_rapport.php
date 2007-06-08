@@ -11,23 +11,40 @@
 
 global $AppUI, $can, $m;
 
-// Récupération des paramètres
 $today = mbDate();
-$deb = mbGetValueFromGetOrSession("deb", mbDate());
-$fin = mbGetValueFromGetOrSession("fin", mbDate());
+// Récupération des paramètres
+$filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate());
+$filter->_date_max =mbGetValueFromGetOrSession("_date_max", mbDate());
+$filter->_etat_paiement = mbGetValueFromGetOrSession("_etat_paiement", 0);
+//Traduction pour le passage d'un enum en bool pour les requetes sur la base de donnee
+if($filter->_etat_paiement == null) {
+	$etat = -1;
+} elseif ($filter->_etat_paiement == "impaye") {
+	$etat = 0;
+} elseif ($filter->_etat_paiement == "paye") {
+	$etat = 1;
+}
+$type = $filter->type_tarif = mbGetValueFromGetOrSession("type_tarif", 0);
+if($type == null) {
+	$type = 0;
+}
+$aff = $filter->_type_affichage  = mbGetValueFromGetOrSession("_type_affichage" , 1);
+//Traduction pour le passage d'un enum en bool pour les requetes sur la base de donnee
+if($aff == "complete") {
+	$aff = 1;
+} elseif ($aff == "totaux"){
+	$aff = 0;
+}
 
-$chir = mbGetValueFromGetOrSession("chir", 0);
+$chir = mbGetValueFromGetOrSession("chir");
 $chirSel = new CMediusers;
 $chirSel->load($chir);
 
-$etat = mbGetValueFromGetOrSession("etat", 0);
-$type = mbGetValueFromGetOrSession("type", 0);
-$aff  = mbGetValueFromGetOrSession("aff" , 1);
 
 // Requète sur les plages de consultation considérées
 $where = array();
-$where[] = "date >= '$deb'";
-$where[] = "date <= '$fin'";
+$where[] = "date >= '$filter->_date_min'";
+$where[] = "date <= '$filter->_date_max'";
 
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
@@ -112,8 +129,7 @@ foreach($listPlage as $key => $value) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("today"    , $today);
-$smarty->assign("deb"      , $deb);
-$smarty->assign("fin"      , $fin);
+$smarty->assign("filter"   , $filter);
 $smarty->assign("aff"      , $aff);
 $smarty->assign("etat"     , $etat);
 $smarty->assign("type"     , $type);

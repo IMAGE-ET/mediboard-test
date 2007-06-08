@@ -36,7 +36,10 @@ $listHospis = array();
 
 
 foreach($sejour->_enumsTrans["type"] as $keyType=>$vType){
-  if($type_adm == "0" || $type_adm==$keyType || (($keyType=="comp" || $keyType=="ambu") && $type_adm == "1")){
+  $testAmbuOrComp = (($keyType=="comp" || $keyType=="ambu") && $type_adm == "1");
+  $testCourant    = ($type_adm == $keyType);
+  $testTous       = ($type_adm == null);
+  if( $testTous || $testCourant || $testAmbuOrComp){
     $listHospis[$keyType] = str_replace(" ", "\n",$vType);
   }
 }

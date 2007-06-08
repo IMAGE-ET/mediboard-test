@@ -12,6 +12,11 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $now       = mbDate();
+
+$filter = new CConsultation;
+$filter->_date_min = mbGetValueFromGet("_date_min"    , "$now");
+$filter->_date_max = mbGetValueFromGet("_date_max"    , "$now");
+
 $tomorrow  = mbDate("+1 day", $now);
 
 $week_deb  = mbDate("last sunday", $now);
@@ -30,6 +35,7 @@ $listChir = $mediusers->loadPraticiens(PERM_EDIT);
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("filter"  , $filter);
 $smarty->assign("now"       , $now);
 $smarty->assign("tomorrow"  , $tomorrow);
 $smarty->assign("week_deb"  , $week_deb);

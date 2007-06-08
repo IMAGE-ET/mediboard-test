@@ -437,4 +437,10 @@ $locales['COperation-_codes_ccam-desc'] = 'Rechercher en fonction d\'un code CCA
 $locales['COperation-_prat_id'] = 'Praticiens';
 $locales['COperation-_prat_id-court'] = '';
 $locales['COperation-_prat_id-desc'] = 'Rechercher en fonction du praticien';
+$locales['CSejour-_date_max_stat'] = 'Jusqu\'au';
+$locales['CSejour-_date_max_stat-court'] = '';
+$locales['CSejour-_date_max_stat-desc'] = 'Date de fin de la recherche.';
+$locales['CSejour-_date_min_stat'] = 'Depuis le';
+$locales['CSejour-_date_min_stat-court'] = '';
+$locales['CSejour-_date_min_stat-desc'] = 'Date de début de la recherche.';
 ?>

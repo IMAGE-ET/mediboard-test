@@ -21,7 +21,7 @@ function pageMain() {
             <div id="bloc_deblist_da">{{$deblist|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="deblist" class="notNull date" value="{{$deblist}}" />
             <img id="bloc_deblist_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-            <button class="search" type="submit">Go</button>
+            <button class="search" type="submit">Afficher</button>
           </td>
         </tr>
       </table>

@@ -64,11 +64,11 @@ foreach($tabClass as $selected) {
   	$backSpecs[$object->_class_name][$keyObjetRefSpec][$classname."-".$keyObjetRefSpec."-court"] = !array_key_exists($classname."-".$keyObjetRefSpec."-court",$trans) ? '' : $trans[$classname."-".$keyObjetRefSpec."-court"]["fr"];
   }
   foreach ($object->_enums as $keyObjetEnum => $valueObjetEnum) { 
-  	if(is_a($keyObjetEnum,"CBoolSpec")) {
+  	//if(is_a($keyObjetEnum,"CBoolSpec")) { //prise en compte des valeurs booleennes
   		foreach ($valueObjetEnum as $key => $_item) { 
   			$backSpecs[$object->_class_name][$keyObjetEnum][$classname.".".$keyObjetEnum.".".$_item] = !array_key_exists($classname.".".$keyObjetEnum.".".$_item,$trans) ? '' : $trans[$classname.".".$keyObjetEnum.".".$_item]["fr"];
   		}
-  	}
+  	//}
   }
 }
 
