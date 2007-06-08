@@ -7,6 +7,8 @@
  *  @author Thomas Despoix
  */
 
+require_once($AppUI->getModuleFile("dPccam", "codableCCAM.class"));
+
 // @todo: Put the following in $config_dist;
 global $dPconfig;
 
@@ -14,9 +16,10 @@ global $dPconfig;
  * Classe CSejour. 
  * @abstract Gère les séjours en établissement
  */
-class CSejour extends CMbObject {
+class CSejour extends CCodableCCAM {
   // DB Table key
   var $sejour_id = null;
+  
   
   // DB Réference
   var $patient_id         = null; // remplace $op->pat_id
@@ -104,43 +107,43 @@ class CSejour extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
-      "patient_id"         => "notNull ref class|CPatient",
-      "praticien_id"       => "notNull ref class|CMediusers",
-      "group_id"           => "notNull ref class|CGroups",
-      "type"               => "notNull enum list|comp|ambu|exte|seances|ssr|psy default|ambu",
-      "modalite"           => "notNull enum list|office|libre|tiers default|libre",
-      "annule"             => "bool",
-      "chambre_seule"      => "bool",
-      "entree_prevue"      => "notNull dateTime",
-      "sortie_prevue"      => "notNull dateTime moreEquals|entree_prevue",
-      "entree_reelle"      => "dateTime",
-      "sortie_reelle"      => "dateTime",
-      "venue_SHS"          => "numchar length|8 confidential",
-      "saisi_SHS"          => "bool",
-      "modif_SHS"          => "bool",
-      "DP"                 => "code cim10",
-      "pathologie"         => "str length|3",
-      "septique"           => "bool",
-      "convalescence"      => "text confidential",
-      "rques"              => "text",
-      "ATNC"               => "bool",
-      "hormone_croissance" => "bool",
-      "lit_accompagnant"   => "bool",
-      "isolement"          => "bool",
-      "television"         => "bool",
-      "repas_diabete"      => "bool",
-      "repas_sans_sel"     => "bool",
-      "repas_sans_residu"  => "bool",
-      "_date_min" 		   => "dateTime",
-      "_date_max" 		   => "dateTime moreEquals|_date_min",
-      "_admission" 		   => "text",
-      "_service" 		   => "text",
-      "_type_admission"    => "text",
-      "_specialite" 	   => "text",
-       "_date_min_stat"    => "date",
-      "_date_max_stat" 	   => "date moreEquals|_date_min_stat",
-    );
+   	$specs = parent::getSpecs();
+    $specs["patient_id"]          = "notNull ref class|CPatient";
+    $specs["praticien_id"]        = "notNull ref class|CMediusers";
+    $specs["group_id"]            = "notNull ref class|CGroups";
+    $specs["type"]                = "notNull enum list|comp|ambu|exte|seances|ssr|psy default|ambu";
+    $specs["modalite"]            = "notNull enum list|office|libre|tiers default|libre";
+    $specs["annule"]              = "bool";
+    $specs["chambre_seule"]       = "bool";
+    $specs["entree_prevue"]       = "notNull dateTime";
+    $specs["sortie_prevue"]       = "notNull dateTime moreEquals|entree_prevue";
+    $specs["entree_reelle"]       = "dateTime";
+    $specs["sortie_reelle"]       = "dateTime";
+    $specs["venue_SHS"]           = "numchar length|8 confidential";
+    $specs["saisi_SHS"]           = "bool";
+    $specs["modif_SHS"]           = "bool";
+    $specs["DP"]                  = "code cim10";
+    $specs["pathologie"]          = "str length|3";
+    $specs["septique"]            = "bool";
+    $specs["convalescence"]       = "text confidential";
+    $specs["rques"]               = "text";
+    $specs["ATNC"]                = "bool";
+    $specs["hormone_croissance"]  = "bool";
+    $specs["lit_accompagnant"]    = "bool";
+    $specs["isolement"]           = "bool";
+    $specs["television"]          = "bool";
+    $specs["repas_diabete"]       = "bool";
+    $specs["repas_sans_sel"]      = "bool";
+    $specs["repas_sans_residu"]   = "bool";
+    $specs["_date_min"] 		  = "dateTime";
+    $specs["_date_max"] 		  = "dateTime moreEquals|_date_min";
+    $specs["_admission"] 		  = "text";
+    $specs["_service"] 		      = "text";
+    $specs["_type_admission"]     = "text";
+    $specs["_specialite"] 	      = "text";
+    $specs["_date_min_stat"]      = "date";
+    $specs["_date_max_stat"] 	  = "date moreEquals|_date_min_stat";
+    return $specs;
   }
   
   function getSeeks() {
@@ -234,6 +237,7 @@ class CSejour extends CMbObject {
     $this->_view .= mbTranformTime(null, $this->entree_prevue, "%d/%m/%Y");
     $this->_view .= " au ";
     $this->_view .= mbTranformTime(null, $this->sortie_prevue, "%d/%m/%Y");
+    $this->_acte_execution = mbAddDateTime($this->entree_prevue);
   }
   
   function updateDBFields() {
@@ -309,6 +313,12 @@ class CSejour extends CMbObject {
       $affectation->_ref_lit->loadCompleteView();
     }
   }
+  
+  
+  function getExecutant_id($code) {
+      return $this->praticien_id;
+  }
+  
   
   function getPerm($permType) {
     if(!$this->_ref_praticien) {

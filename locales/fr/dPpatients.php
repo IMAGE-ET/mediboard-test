@@ -1,5 +1,5 @@
 <?php
-$locales['CMbObject-back-traitements'] = 'Traitements';
+$locales['CConsultation-_ref_actes_ccam'] = 'Actes codés';
 $locales['CAntecedent'] = 'Antécédent';
 $locales['CAntecedent-date'] = 'Date';
 $locales['CAntecedent-date-desc'] = 'Date de l\'antécédent';
@@ -15,8 +15,10 @@ $locales['CAntecedent.type.gyn'] = 'Gynécologique';
 $locales['CAntecedent.type.med'] = 'Médical';
 $locales['CAntecedent.type.obst'] = 'Obstétrique';
 $locales['CAntecedent.type.trans'] = 'Transfusion';
+$locales['CConsultation-_ext_codes_ccam'] = 'Actes prévus';
 $locales['CMbObject-back-addictions'] = 'Addicitions';
 $locales['CMbObject-back-antecedants'] = 'Antécédents';
+$locales['CMbObject-back-traitements'] = 'Traitements';
 $locales['CMedecin'] = 'Médecin';
 $locales['CMedecin-adresse'] = 'Adresse';
 $locales['CMedecin-adresse-desc'] = 'Adresse du cabinet du médecin';

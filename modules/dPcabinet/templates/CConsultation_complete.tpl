@@ -49,6 +49,9 @@ newExam = function(sAction, consultation_id) {
       <i>{{$object->rques|nl2br}}</i>
     </td>
   </tr>
+  
+  
+  
   <tr>
     <td class="text">
       <strong>Examens :</strong>
@@ -68,6 +71,11 @@ newExam = function(sAction, consultation_id) {
     </td>
   </tr>
   {{/if}}
+  
+  {{assign var="vue" value="complete"}}
+  {{assign var="subject" value=$object}}
+  {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
+    
   <tr>
     <th class="category" colspan="2">
       Facturation

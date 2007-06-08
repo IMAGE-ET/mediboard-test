@@ -8,6 +8,7 @@ function selectCim10(code) {
   cim10url.popup(800, 500, "CIM10");
 }
 
+
 function popCode() {
   cim10url.setModuleAction("dPcim10", "vw_find_code");
   cim10url.popup(700, 500, "CIM10");

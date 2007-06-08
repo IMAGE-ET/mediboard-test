@@ -33,6 +33,9 @@ $chir = new CMediusers;
 if ($chir_id) {
   $chir->load($chir_id);
 }
+$prat = $chir;
+
+
 
 // Chargement du patient
 $patient = new CPatient;
@@ -44,21 +47,26 @@ if ($patient_id && !$operation_id && !$sejour_id) {
 // Vérification des droits sur les praticiens
 $listPraticiens = $chir->loadPraticiens(PERM_EDIT);
 $categorie_prat = array();
-foreach($listPraticiens as $keyPrat =>$prat){
-  $prat->loadRefsFwd();
-  $categorie_prat[$keyPrat] = $prat->_ref_discipline->categorie;
+foreach($listPraticiens as &$_prat){
+  $_prat->loadRefsFwd();
+  $categorie_prat[$_prat->_id] = $_prat->_ref_discipline->categorie;
 }
 
 // On récupère le séjour
 $sejour = new CSejour;
+
 if($sejour_id && !$operation_id) {
   $sejour->load($sejour_id);
   $sejour->loadRefsFwd();
+  
   if(!$chir_id) {
     $chir =& $sejour->_ref_praticien;
   }
   $patient =& $sejour->_ref_patient;
 }
+
+
+
 
 // On récupère l'opération
 $op = new COperation;
@@ -67,6 +75,8 @@ if ($operation_id && $op->load($operation_id)) {
   $sejour =& $op->_ref_sejour;
   $sejour->loadRefsFwd();
   $chir =& $op->_ref_chir;
+  $prat =& $sejour->_ref_praticien;
+  
   $patient =& $sejour->_ref_patient;
   // On vérifie que l'utilisateur a les droits sur l'operation et le sejour
   /*if(!$op->canEdit() || !$sejour->canEdit()) {
@@ -80,9 +90,12 @@ if ($operation_id && $op->load($operation_id)) {
   }
 }
 
+//mbTrace($sejour);
+
 $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;
 
+//mbTrace($sejour);
 // Récupération des modèles
 
 // Modèles de l'utilisateur
@@ -91,7 +104,7 @@ $order = "nom";
 if ($chir->user_id) {
   $where = array();
   $where["object_class"] = "= 'COperation'";
-  $where["chir_id"] = "= '".$chir->user_id."'";
+  $where["chir_id"] = "= '$chir->user_id'";
   $listModelePrat = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
 }
 
@@ -100,7 +113,7 @@ $listModeleFunc = array();
 if ($chir->user_id) {
   $where = array();
   $where["object_class"] = "= 'COperation'";
-  $where["function_id"] = "= '".$chir->function_id."'";
+  $where["function_id"] = "= '$chir->function_id'";
   $listModeleFunc = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
 }
 
@@ -108,7 +121,7 @@ if ($chir->user_id) {
 $listPack = array();
 if($chir->user_id) {
   $where = array();
-  $where["chir_id"] = "= '".$chir->user_id."'";
+  $where["chir_id"] = "= '$chir->user_id'";
   $listPack = new CPack;
   $listPack = $listPack->loadlist($where, $order);
 }
@@ -130,10 +143,16 @@ $smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
 $smarty->assign("op"        , $op);
 $smarty->assign("plage"     , $op->plageop_id ? $op->_ref_plageop : new CPlageOp );
 $smarty->assign("sejour"    , $sejour);
+//mbTrace($chir);
+//mbTrace($prat);
 $smarty->assign("chir"      , $chir);
-$smarty->assign("praticien" , $chir);
+$smarty->assign("praticien" , $prat);
 $smarty->assign("patient"   , $patient );
 $smarty->assign("sejours"   , $sejours);
+
+//where .. faire menage ....
+//  $where["chir_id"] = "= '".$chir->user_id."'";
+// en   $where["chir_id"] = "= '$chir->user_id'";
 
 $smarty->assign("modurgence", 0);
 $smarty->assign("today"     , $today);

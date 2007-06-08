@@ -226,11 +226,14 @@ newExam = function(sAction, consultation_id) {
   </tr>
   {{/if}}
   
+  
+  
   <tr>
     <th class="title" colspan="4">
       Examens Complémentaires
     </th>
   </tr>
+  
   
   <tr>
     <td class="text">
@@ -338,6 +341,13 @@ newExam = function(sAction, consultation_id) {
   </tr>  
 </table>
 
+<table class="form">
+  {{assign var="vue" value="complete"}}
+  {{assign var="subject" value=$object->_ref_consultation}}
+  {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
+</table>
+  
+  
 <table class="form">
   <tr>
     <th class="title" colspan="{{if $dPconfig.dPcabinet.addictions}}4{{else}}3{{/if}}">

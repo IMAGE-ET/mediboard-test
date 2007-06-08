@@ -1,14 +1,18 @@
-{{if $selOp->libelle}}
-  <em>[{{$selOp->libelle}}]</em>
+<script language="Javascript" type="text/javascript">
+	PairEffect.initGroup("acteEffect");
+</script>
+
+{{if $module!="dPcabinet" && $module!="dPhospi" && $subject->libelle}}
+  <em>[{{$subject->libelle}}]</em>
 {{/if}}
 <ul>
-  {{foreach from=$selOp->_ext_codes_ccam item=curr_code key=curr_key}}
+  {{foreach from=$subject->_ext_codes_ccam item=curr_code key=curr_key}}
   <li>
     <strong>{{$curr_code->libelleLong}}</strong> 
     <em>(<a class="action" href="?m=dPccam&amp;tab=vw_full_code&amp;codeacte={{$curr_code->code}}">{{$curr_code->code}}</a>)</em>
     {{if $can->edit || $modif_operation}}
     <br />Codes associés :
-    <select name="asso" onchange="setCode(this.value, 'ccam')">
+    <select name="asso" onchange="setCodeCCAM(this.value, 'ccam')">
       <option value="">&mdash; choix</option>
       {{foreach from=$curr_code->assos item=curr_asso}}
       <option value="{{$curr_asso.code}}">{{$curr_asso.code}}({{$curr_asso.texte|truncate:40:"...":true}})</option>
@@ -21,13 +25,13 @@
     {{assign var="acte" value=$curr_phase->_connected_acte}}
     {{assign var="view" value=$acte->_view}}
     {{assign var="key" value="$curr_key$view"}}
-    <form name="formActe-{{$acte->_view}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+    <form name="formActe-{{$acte->_view}}" action="?m={{$module}}" method="post" onsubmit="return checkForm(this)">
     <input type="hidden" name="m" value="dPsalleOp" />
     <input type="hidden" name="dosql" value="do_acteccam_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="acte_id" value="{{$acte->acte_id}}" />
-    <input type="hidden" name="subject_id" class="{{$acte->_props.subject_id}}" value="{{$selOp->operation_id}}" />
-    <input type="hidden" name="subject_class" class="{{$acte->_props.subject_class}}" value="COperation" />
+    <input type="hidden" name="subject_id" class="{{$acte->_props.subject_id}}" value="{{$subject->_id}}" />
+    <input type="hidden" name="subject_class" class="{{$acte->_props.subject_class}}" value="{{$subject->_class_name}}" />
     <input type="hidden" name="code_acte" class="{{$acte->_props.code_acte}}" value="{{$acte->code_acte}}" />
     <input type="hidden" name="code_activite" class="{{$acte->_props.code_activite}}" value="{{$acte->code_activite}}" />
     <input type="hidden" name="code_phase" class="{{$acte->_props.code_phase}}" value="{{$acte->code_phase}}" />
@@ -111,12 +115,17 @@
       <tr>
         <td class="button" colspan="2">
           {{if $acte->acte_id}}
-          <button class="modify" type="submit">Modifier cet acte</button>
-          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}'})">
+          
+          <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){loadActes({{$subject->_id}})}})">Modifier cet acte</button>
+          
+          
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){loadActes({{$subject->_id}})}})">
             Supprimer cet acte
           </button>
+          
+          
           {{else}}
-          <button class="submit" type="submit" style="background-color: #faa">Coder cet acte</button>
+          <button class="submit" type="button" style="background-color: #faa" onclick="submitFormAjax(this.form, 'systemMsg',{onComplete: function(){loadActes({{$subject->_id}})}})">Coder cet acte</button>
           {{/if}}
         </td>
       </tr>
@@ -128,3 +137,4 @@
   </li>
   {{/foreach}}
 </ul>
+

@@ -50,6 +50,12 @@ function newExam(sAction, consultation_id) {
           <strong>Audiogramme</strong>
         </a>
       {{/if}}
+       
+       {{assign var="vue" value="view"}}
+        {{assign var="subject" value=$object}}
+        {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
+  
+    
     </td>
   </tr>
 </table>

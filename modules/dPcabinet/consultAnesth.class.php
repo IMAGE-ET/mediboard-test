@@ -216,6 +216,7 @@ class CConsultAnesth extends CMbObject {
     $this->_ref_consultation = new CConsultation;
     $this->_ref_consultation->load($this->consultation_id);
     $this->_view = $this->_ref_consultation->_view;
+    $this->_ref_consultation->loadRefsActesCCAM();
   }
   
   function loadRefOperation() {
@@ -276,18 +277,30 @@ class CConsultAnesth extends CMbObject {
     }
   }
   
+  function loadView(){
+  	$this->loadRefsFwd();
+    $this->_ref_consultation->loadRefsActesCCAM();  
+  }
+   
+  
   function loadComplete(){
    parent::loadComplete();
    $this->_ref_consultation->loadExamsComp();
    $this->_ref_consultation->loadRefsExamNyha();
    $this->_ref_consultation->loadRefsExamPossum();
+   foreach ($this->_ref_consultation->_ref_actes_ccam as &$acte_ccam) {
+      $acte_ccam->loadRefsFwd();
+    }
   }
+  
+  
   function loadRefsFwd() {
     $this->loadRefsAntecedents();
     $this->loadRefsTraitements();
     $this->loadRefsAddictions();
     $this->loadRefConsultation();
     $this->_ref_consultation->loadRefsFwd();
+	$this->_ref_consultation->loadRefsCodesCCAM();  	
     $this->_ref_plageconsult =& $this->_ref_consultation->_ref_plageconsult;
     $this->loadRefOperation();
     $this->_ref_operation->loadRefsFwd();    
@@ -336,15 +349,18 @@ class CConsultAnesth extends CMbObject {
        $this->_imc_valeur = "Obésité morbide";
      }
    }
+ 
   }
   
   function loadRefsBack() {
     // Backward references    
+    //$this->_ref_consultation->loadRefsCodesCCAM(); 
     $this->_ref_techniques = new CTechniqueComp;
     $where = array();
     $where["consultation_anesth_id"] = "= '$this->consultation_anesth_id'";
     $order = "technique";
     $this->_ref_techniques = $this->_ref_techniques->loadList($where,$order);
+    
   }
   
   function getPerm($permType) {

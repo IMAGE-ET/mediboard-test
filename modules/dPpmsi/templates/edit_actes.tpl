@@ -1,3 +1,9 @@
+{{assign var="chir_id" value=$selOp->_ref_chir->_id}}
+{{assign var="do_subject_aed" value="do_planning_aed"}}
+{{assign var="module" value="dPpsmi"}}
+{{assign var="object" value=$selOp}}
+{{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
+
 <script type="text/javascript">
 function pageMain() {
   PairEffect.initGroup("acteEffect");
@@ -15,26 +21,16 @@ function pageMain() {
   </tr>
 
   <tr>
-    <th>Patient</th>
-    <td>{{$selOp->_ref_sejour->_ref_patient->_view}} &mdash; {{$selOp->_ref_sejour->_ref_patient->_age}} ans</td>
-  </tr>
 
-  <tr>
-    <th>Actes</th>
-    <td class="text">
-    {{include file="../../dPsalleOp/templates/inc_manage_codes.tpl"}}
-    </td>
+  <th>Patient</th>
+  <td>{{$selOp->_ref_sejour->_ref_patient->_view}} &mdash; {{$selOp->_ref_sejour->_ref_patient->_age}} ans</td>
   </tr>
   <tr>
-    <th>
-      Intervention
-      <br />
-      Côté {{tr}}COperation.cote.{{$selOp->cote}}{{/tr}}
-      <br />
-      ({{$selOp->temp_operation|date_format:"%Hh%M"}})
-    </th>
-    <td class="text">
-    {{include file="../../dPsalleOp/templates/inc_codage_actes.tpl"}}
-    </td>
+  <tbody id="ccam">
+    {{assign var="module" value="dPpmsi"}}
+    {{assign var="subject" value=$selOp}}
+    {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
+  </tbody>
+ 
   </tr>
 </table>

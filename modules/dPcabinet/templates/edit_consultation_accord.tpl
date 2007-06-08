@@ -48,8 +48,12 @@ function updateList() {
   url.periodicalUpdate('listConsult', { frequency: 90 });
 }
 var oCimField = null;
+
+
 function pageMain() {
   updateList();
+  
+  PairEffect.initGroup("acteEffect");
   
   {{if $consult->consultation_id}}
   incPatientHistoryMain();
@@ -70,6 +74,7 @@ function pageMain() {
       onChange : updateTokenCim10
     } ); 
   } 
+  
 }
 </script>
 

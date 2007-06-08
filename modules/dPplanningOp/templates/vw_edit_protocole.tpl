@@ -116,7 +116,7 @@ function popCode(type) {
   url.popup(600, 500, type);
 }
 
-function setCode( key, type ) {
+function setCodeCCAM( key, type ) {
   if (key) {
     var form = document.editFrm;
     var field = form.DP;

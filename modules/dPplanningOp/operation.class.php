@@ -7,11 +7,11 @@
 * @author Romain Ollivier
 */
 
-class COperation extends CMbObject {
+require_once($AppUI->getModuleFile("dPccam", "codableCCAM.class"));
+
+class COperation extends CCodableCCAM {
   // DB Table key
   var $operation_id  = null;
-  var $subject_id    = null;
-  var $subject_class = null;
 
   // DB References
   var $sejour_id  = null;
@@ -26,7 +26,6 @@ class COperation extends CMbObject {
   // DB Fields
   var $salle_id       = null;
   var $date           = null;
-  var $codes_ccam     = null;
   var $libelle        = null;
   var $cote           = null;
   var $temp_operation = null;
@@ -106,54 +105,61 @@ class COperation extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
-      "sejour_id"      => "notNull ref class|CSejour",
-      "chir_id"        => "notNull ref class|CMediusers",
-      "anesth_id"      => "ref class|CMediusers",
-      "plageop_id"     => "ref class|CPlageOp",
-      "pause"          => "time",
-      "salle_id"       => "ref class|CSalle",
-      "codes_ccam"     => "str",
-      "date"           => "date",
-      "code_uf"        => "str length|3",
-      "libelle_uf"     => "str maxLength|35",
-      "libelle"        => "str confidential",
-      "cote"           => "notNull enum list|droit|gauche|bilatéral|total",
-      "temp_operation" => "time",
-      "entree_salle"   => "time",
-      "sortie_salle"   => "time",
-      "time_operation" => "time",
-      "examen"         => "text confidential",
-      "materiel"       => "text confidential",
-      "commande_mat"   => "bool",
-      "info"           => "bool",
-      "type_anesth"    => "ref class|CTypeAnesth",
-      "rques"          => "text confidential",
-      "rank"           => "num max|255",
-      "depassement"    => "currency min|0 confidential",
-      "forfait"        => "currency min|0 confidential",
-      "fournitures"    => "currency min|0 confidential",
-      "annulee"        => "bool",
-      "pose_garrot"    => "time",
-      "debut_op"       => "time",
-      "fin_op"         => "time",
-      "retrait_garrot" => "time",
-      "entree_reveil"  => "time",
-      "sortie_reveil"  => "time",
-      "induction_debut"=> "time",
-      "induction_fin"  => "time",
-      "entree_bloc"    => "time",
-      "anapath"        => "bool",
-      "labo"           => "bool",
-      "_date_min" 	   => "date",
-      "_date_max" 	   => "date moreEquals|_date_min",
-      "_plage" 		   => "bool",
-      "_intervention"  => "text",
-      "_prat_id"  	   => "text",
-      "_specialite"    => "text",
-      "_codes_ccam"    => "text"
-    );
+    $specs = parent::getSpecs();
+    $specs["sejour_id"]      = "notNull ref class|CSejour";
+    $specs["chir_id"]        = "notNull ref class|CMediusers";
+    $specs["anesth_id"]      = "ref class|CMediusers";
+    $specs["plageop_id"]     = "ref class|CPlageOp";
+    $specs["pause"]          = "time";
+    $specs["salle_id"]       = "ref class|CSalle";
+    $specs["date"]           = "date";
+    $specs["code_uf"]        = "str length|3";
+    $specs["libelle_uf"]     = "str maxLength|35";
+    $specs["libelle"]        = "str confidential";
+    $specs["cote"]           = "notNull enum list|droit|gauche|bilatéral|total";
+    $specs["temp_operation"] = "time";
+    $specs["entree_salle"]   = "time";
+    $specs["sortie_salle"]   = "time";
+    $specs["time_operation"] = "time";
+    $specs["examen"]         = "text confidential";
+    $specs["materiel"]       = "text confidential";
+    $specs["commande_mat"]   = "bool";
+    $specs["info"]           = "bool";
+    $specs["type_anesth"]    = "ref class|CTypeAnesth";
+    $specs["rques"]          = "text confidential";
+    $specs["rank"]           = "num max|255";
+    $specs["depassement"]    = "currency min|0 confidential";
+    $specs["forfait"]        = "currency min|0 confidential";
+    $specs["fournitures"]    = "currency min|0 confidential";
+    $specs["annulee"]        = "bool";
+    $specs["pose_garrot"]    = "time";
+    $specs["debut_op"]       = "time";
+    $specs["fin_op"]         = "time";
+    $specs["retrait_garrot"] = "time";
+    $specs["entree_reveil"]  = "time";
+    $specs["sortie_reveil"]  = "time";
+    $specs["induction_debut"]= "time";
+    $specs["induction_fin"]  = "time";
+    $specs["entree_bloc"]    = "time";
+    $specs["anapath"]        = "bool";
+    $specs["labo"]           = "bool";
+    $specs["_date_min"] 	 = "date";
+    $specs["_date_max"] 	 = "date moreEquals|_date_min";
+    $specs["_plage"] 		 = "bool";
+    $specs["_intervention"]  = "text";
+    $specs["_prat_id"]  	 = "text";
+    $specs["_specialite"]    = "text";
+    $specs["_codes_ccam"]    = "text";
+    return $specs;
   }
+  
+  
+  function getExecutant_id($code) {
+  	$this->loadRefChir();
+  	$this->loadRefPlageOp();
+  	return ($code == 4 ? $this->_ref_anesth->user_id: $this->chir_id);
+  }
+  
   
   function getSeeks() {
     return array (
@@ -166,9 +172,9 @@ class COperation extends CMbObject {
 
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["actes_CCAM"] = "CActeCCAM subject_id";
+      $backRefs["actes_CCAM"]          = "CActeCCAM subject_id";
       $backRefs["dossiers_anesthesie"] = "CConsultAnesth operation_id";
-      $backRefs["naissances"] = "CNaissance operation_id";
+      $backRefs["naissances"]          = "CNaissance operation_id";
      return $backRefs;
   }
   
@@ -267,7 +273,8 @@ class COperation extends CMbObject {
     } else {
       $this->_link_editor = "index.php?m=dPplanningOp&tab=vw_edit_urgence&operation_id=".$this->_id;
     }
-  }
+    $this->_acte_depassement = $this->depassement;    
+ }
   
   function updateDBFields() {
     if (count($this->_codes_ccam)) {
@@ -344,7 +351,6 @@ class COperation extends CMbObject {
         $plageTmp->store();
       }
     }
-    
     return $msg;
   }
   
@@ -383,16 +389,9 @@ class COperation extends CMbObject {
       $this->_ref_salle->load($this->salle_id);
     }
     $this->_datetime .= " ".$this->time_operation;
+    $this->_acte_execution = mbAddDateTime($this->temp_operation, $this->_datetime);
   }
   
-  function loadRefCCAM() {
-    $this->_ext_codes_ccam = array();
-    foreach ($this->_codes_ccam as $code) {
-      $ext_code_ccam = new CCodeCCAM($code);
-      $ext_code_ccam->LoadLite();
-      $this->_ext_codes_ccam[] = $ext_code_ccam;
-    }
-  }
   
   function loadRefsConsultAnesth() {
     $this->_ref_consult_anesth = new CConsultAnesth();
@@ -415,19 +414,12 @@ class COperation extends CMbObject {
     $this->_ref_consult_anesth->_ref_consultation->canEdit();
     $this->loadRefChir();
     $this->loadRefPlageOp();
-    $this->loadRefCCAM();
+    $this->loadRefsCodesCCAM();
     $this->loadRefSejour();
     $this->_ref_sejour->loadRefsFwd();
     $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr. {$this->_ref_chir->_view}";
   }
   
-  function loadRefsActesCCAM() {
-    $where = array("subject_id" => "= '$this->operation_id'",
-				   "subject_class" => "= 'COperation'");
-    $this->_ref_actes_ccam = new CActeCCAM;
-    $this->_ref_actes_ccam = $this->_ref_actes_ccam->loadList($where);
-  }
-
   function loadRefsBack() {
     $this->loadRefsFiles();
     $this->loadRefsActesCCAM();
@@ -443,68 +435,8 @@ class COperation extends CMbObject {
     return ($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType));
   }
 
-  function loadPossibleActes () {
-    $depassement_affecte = false;
-    // existing acts may only be affected once to possible acts
-    $used_actes = array();
-    foreach ($this->_ext_codes_ccam as $codeKey => $codeValue) {
-      $code =& $this->_ext_codes_ccam[$codeKey];
-      $code->load($code->code);
-      
-
-      foreach ($code->activites as $activiteKey => $activiteValue) {
-        $activite =& $code->activites[$activiteKey];
-        foreach ($activite->phases as $phaseKey => $phaseValue) {
-          $phase =& $activite->phases[$phaseKey];
-          
-          $possible_acte = new CActeCCAM;
-          $possible_acte->montant_depassement = 0;
-          $possible_acte->code_acte = $code->code;
-          $possible_acte->code_activite = $activite->numero;
-          $possible_acte->code_phase = $phase->phase;
-          $possible_acte->execution = mbAddDateTime($this->temp_operation, $this->_datetime);
-          
-          
-          $possible_acte->executant_id = $possible_acte->code_activite == 4 ?
-            $this->_ref_anesth->user_id : 
-            $this->chir_id;
-          
-          if (!$depassement_affecte and $possible_acte->code_activite == 1) {
-            $depassement_affecte = true;
-            $possible_acte->montant_depassement = $this->depassement;        	
-          }
-          
-          $possible_acte->updateFormFields();
-          $possible_acte->loadRefs();
-          
-          // Affect a loaded acte if exists
-          foreach ($this->_ref_actes_ccam as $curr_acte) {
-            if ($curr_acte->code_acte == $possible_acte->code_acte 
-            and $curr_acte->code_activite == $possible_acte->code_activite 
-            and $curr_acte->code_phase == $possible_acte->code_phase) {
-              if (!isset($used_actes[$curr_acte->acte_id])) {
-                $possible_acte = $curr_acte;
-                $used_actes[$curr_acte->acte_id] = true;
-                break;
-              }
-            }
-          }
-          
-          $phase->_connected_acte = $possible_acte;
-          
-          foreach ($phase->_modificateurs as $modificateurKey => $modificateurValue) {
-            $modificateur =& $phase->_modificateurs[$modificateurKey];
-            if (strpos($phase->_connected_acte->modificateurs, $modificateur->code) !== false) {
-              $modificateur->_value = $modificateur->code;
-            } else {
-              $modificateur->_value = "";              
-            }
-          }
-        }
-      }
-    } 
-  }
-    
+ 
+  
   function fillTemplate(&$template) {
   	$this->loadRefsFwd();
     $this->_ref_sejour->loadRefsFwd();

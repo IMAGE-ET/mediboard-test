@@ -20,7 +20,7 @@ function popCode(type) {
   url.popup(700, 500, type);
 }
 
-function setCode(sCode, type ) {
+function setCodeCCAM(sCode, type ) {
   if (!sCode) {
     return;
   }
@@ -218,6 +218,7 @@ function pageMain() {
     <td>
       {{include file="inc_form_operation.tpl"}}
     </td>
+    
     <td id="inc_form_sejour">
       {{assign var="mode_operation" value=true}}
       {{include file="inc_form_sejour.tpl"}}

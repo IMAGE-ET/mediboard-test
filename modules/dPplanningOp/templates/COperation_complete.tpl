@@ -92,34 +92,12 @@
   </tr>
   {{/if}}
 
-  <tr>
-    <th class="category" colspan="2">{{tr}}COperation-_ext_codes_ccam{{/tr}}</th>
-  </tr>
-  {{foreach from=$operation->_ext_codes_ccam item=currCode}}
-  <tr>
-    <td class="text" colspan="2">
-      <strong>{{$currCode->code}}</strong> :
-      {{$currCode->libelleLong}}
-    </td>
-  </tr>
-  {{/foreach}}
   
-  <tr>
-    <th class="category" colspan="2">{{tr}}COperation-_ref_actes_ccam{{/tr}}</th>
-  </tr>
+  {{assign var="vue" value="complete"}}
+  {{assign var="subject" value=$object}}
+  {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
   
-  {{foreach from=$operation->_ref_actes_ccam item=curr_acte}}
-  <tr>
-    <td>
-      <strong>{{$curr_acte->_view}}</strong>
-      par {{$curr_acte->_ref_executant->_view}} 
-    </td>
-    <td>
-      {{$curr_acte->commentaire}}
-    </td>
-  </tr>
-  {{/foreach}}
-  
+    
   <tr>
     <th class="category" colspan="2">{{tr}}msg-COperation-horodatage{{/tr}}</th>
   </tr>

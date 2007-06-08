@@ -111,7 +111,7 @@ function loadServiceComplet(&$service, $date, $mode) {
           $sejour->getDroitsCMU();
 
           foreach($sejour->_ref_operations as $operation_id => $curr_operation) {
-            $sejour->_ref_operations[$operation_id]->loadRefCCAM();
+            $sejour->_ref_operations[$operation_id]->loadRefsCodesCCAM();
           }
                     
         } else {
@@ -152,7 +152,7 @@ function loadSejourNonAffectes($where) {
     // Chargement des opérations
     $sejour->loadRefsOperations();
     foreach($sejour->_ref_operations as &$operation) {
-      $operation->loadRefCCAM();
+      $operation->loadRefsCodesCCAM();
     }
   }
   

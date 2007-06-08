@@ -9,6 +9,8 @@
 
 
 class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
+	
+	
   function CDoActeCCAMAddEdit() {
     $this->CDoObjectAddEdit("CActeCCAM", "acte_id");
     
@@ -17,6 +19,8 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
     $this->deleteMsg = "Acte supprimé";
 	  
   }
+  
+  
   
   function doBind() {
     parent::doBind();

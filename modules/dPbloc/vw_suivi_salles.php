@@ -46,7 +46,7 @@ foreach($listSalles as $keySalle=>$currSalle){
       }else {
         $plages[$key]->_ref_operations[$key2]->loadRefSejour();
         $plages[$key]->_ref_operations[$key2]->_ref_sejour->loadRefPatient();
-        $plages[$key]->_ref_operations[$key2]->loadRefCCAM();
+        $plages[$key]->_ref_operations[$key2]->loadRefsCodesCCAM();
       }
     }
   }
@@ -62,7 +62,7 @@ foreach($listSalles as $keySalle=>$currSalle){
     $urgences[$keyOp]->loadRefChir();
     $urgences[$keyOp]->loadRefSejour();
     $urgences[$keyOp]->_ref_sejour->loadRefPatient();
-    $urgences[$keyOp]->loadRefCCAM();
+    $urgences[$keyOp]->loadRefsCodesCCAM();
   }
   $salle["urgences"] = $urgences;
 }

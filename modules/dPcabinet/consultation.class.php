@@ -7,11 +7,14 @@
 * @author Romain Ollivier
 */
 
-class CConsultation extends CMbObject {
+require_once($AppUI->getModuleFile("dPccam", "codableCCAM.class"));
+
+class CConsultation extends CCodableCCAM {
   const PLANIFIE = 16;
   const PATIENT_ARRIVE = 32;
   const EN_COURS = 48;
   const TERMINE = 64;
+ 
   
   // DB Table key
   var $consultation_id = null;
@@ -86,31 +89,31 @@ class CConsultation extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
-      "plageconsult_id" => "notNull ref class|CPlageconsult",
-      "patient_id"      => "ref class|CPatient",
-      "heure"           => "notNull time",
-      "duree"           => "numchar maxLength|1",
-      "secteur1"        => "currency min|0",
-      "secteur2"        => "currency min|0",
-      "chrono"          => "notNull enum list|16|32|48|64",
-      "annule"          => "bool",
-      "paye"            => "bool",
-      "date_paiement"   => "date",
-      "motif"           => "text",
-      "rques"           => "text",
-      "examen"          => "text",
-      "traitement"      => "text",
-      "premiere"        => "bool",
-      "tarif"           => "str",
-      "arrivee"         => "dateTime",
-      "type_tarif"      => "enum list|cheque|CB|especes|tiers|autre",
-      "_date_min" 		=> "date",
-      "_date_max" 	    => "date moreEquals|_date_min",
-      "_etat_paiement"  => "enum list|paye|impaye default|paye",
-      "_type_affichage" => "enum list|complete|totaux",
-      "_prat_id"        => "text"
-    );
+  	$specs = parent::getSpecs();
+    $specs["plageconsult_id"] = "notNull ref class|CPlageconsult";
+    $specs["patient_id"]      = "ref class|CPatient";
+    $specs["heure"]           = "notNull time";
+    $specs["duree"]           = "numchar maxLength|1";
+    $specs["secteur1"]        = "currency min|0";
+    $specs["secteur2"]        = "currency min|0";
+    $specs["chrono"]          = "notNull enum list|16|32|48|64";
+    $specs["annule"]          = "bool";
+    $specs["paye"]            = "bool";
+    $specs["date_paiement"]   = "date";
+    $specs["motif"]           = "text";
+    $specs["rques"]           = "text";
+    $specs["examen"]          = "text";
+    $specs["traitement"]      = "text";
+    $specs["premiere"]        = "bool";
+    $specs["tarif"]           = "str";
+    $specs["arrivee"]         = "dateTime";
+    $specs["type_tarif"]      = "enum list|cheque|CB|especes|tiers|autre default|cheque";
+    $specs["_date_min"]       = "date";
+    $specs["_date_max"] 	  = "date moreEquals|_date_min";
+    $specs["_etat_paiement"]  = "enum list|paye|impaye default|paye";
+    $specs["_type_affichage"] = "enum list|complete|totaux";
+    $specs["_prat_id"]        = "text";
+    return $specs;
   }
   
   function getSeeks() {
@@ -147,7 +150,6 @@ class CConsultation extends CMbObject {
     }
   }
   
-  
   function updateFormFields() {
     parent::updateFormFields();
   	$this->_somme = $this->secteur1 + $this->secteur2;
@@ -159,6 +161,9 @@ class CConsultation extends CMbObject {
     $this->getEtat();
     $this->_view = "Consultation ".$this->_etat;
   }
+  
+
+  
    
   function updateDBFields() {
   	if (($this->_hour !== null) && ($this->_min !== null)) {
@@ -188,11 +193,22 @@ class CConsultation extends CMbObject {
     return $msg . parent::check();
   }
   
+  
   function loadView() {
-    $this->loadRefPlageConsult();
-    $this->loadRefsExamAudio();
+  	$this->loadRefPlageConsult();
+    $this->loadRefsExamAudio(); 
+    $this->loadRefsFwd();
+    $this->loadRefsActesCCAM();
   }
-
+  
+  function loadComplete() {
+    parent::loadComplete();
+    foreach ($this->_ref_actes_ccam as &$acte_ccam) {
+      $acte_ccam->loadRefsFwd();
+    }
+  }
+  
+  
   function loadRefPatient() {
     $this->_ref_patient = new CPatient;
     $this->_ref_patient->load($this->patient_id);
@@ -206,7 +222,9 @@ class CConsultation extends CMbObject {
     // Foreign fields
     $this->_ref_chir =& $this->_ref_plageconsult->_ref_chir;
     $this->_date = $this->_ref_plageconsult->date;
+    $this->_acte_execution = mbAddDateTime($this->heure,$this->_date);
     $this->_is_anesth = $this->_ref_chir->isFromType(array("Anesthésiste"));
+    $this->_praticien_id = $this->_ref_plageconsult->_ref_chir->_id;
   }
   
   function loadRefsFwd() {
@@ -214,6 +232,7 @@ class CConsultation extends CMbObject {
     $this->loadRefPlageConsult();
     $this->_view = "Consult. de ".$this->_ref_patient->_view." par le Dr. ".$this->_ref_plageconsult->_ref_chir->_view;
     $this->_view .= " (".mbTranformTime(null, $this->_ref_plageconsult->date, "%d/%m/%Y").")";
+    $this->loadRefsCodesCCAM();
   }
 
   function loadRefsDocs() {
@@ -232,6 +251,13 @@ class CConsultation extends CMbObject {
     return $docs_valid;
   }
 
+  
+  function getExecutant_id($code) {
+  	$this->loadRefPlageConsult();
+    return $this->_praticien_id;
+  }
+  
+  
   function getNumDocsAndFiles(){
     if(!$this->_nb_files_docs){
       parent::getNumDocsAndFiles();
@@ -266,6 +292,8 @@ class CConsultation extends CMbObject {
     $where = array();
     $where["consultation_id"] = "= '$this->consultation_id'";
     $this->_ref_consult_anesth->loadObject($where);
+    $this->loadRefsCodesCCAM();
+    $this->loadRefsActesCCAM();
   }
   
   function loadRefsExamAudio(){
@@ -298,6 +326,7 @@ class CConsultation extends CMbObject {
     $this->loadExamsComp();
     $this->loadRefsExamNyha();
     $this->loadRefsExamPossum();
+    $this->loadRefsActesCCAM();
   }
   
   function loadExamsComp(){

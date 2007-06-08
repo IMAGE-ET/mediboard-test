@@ -773,7 +773,11 @@ function getInstalledClasses($properties = array()) {
   $AppUI->getAllClasses();
   $listClasses = getChildClasses("CMbObject", $properties);
   foreach ($listClasses as $key => $class) {
-    $object = new $class;
+    if(!has_default_constructor($class)) {
+    	unset($listClasses[$key]);
+    	continue;
+    }
+  	$object = new $class;
     //if ($object->_ref_module === null) {
     //  unset($listClasses[$key]);
     //}

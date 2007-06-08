@@ -40,7 +40,7 @@ foreach($plages as $key => $value) {
     else {
       $plages[$key]->_ref_operations[$key2]->loadRefSejour();
       $plages[$key]->_ref_operations[$key2]->_ref_sejour->loadRefPatient();
-      $plages[$key]->_ref_operations[$key2]->loadRefCCAM();
+      $plages[$key]->_ref_operations[$key2]->loadRefsCodesCCAM();
     }
   }
 }
@@ -55,7 +55,7 @@ foreach($urgences as $keyOp => $curr_op) {
   $urgences[$keyOp]->loadRefChir();
   $urgences[$keyOp]->loadRefSejour();
   $urgences[$keyOp]->_ref_sejour->loadRefPatient();
-  $urgences[$keyOp]->loadRefCCAM();
+  $urgences[$keyOp]->loadRefsCodesCCAM();
 }
 
 // Création du template

@@ -7,6 +7,7 @@
 * @author Romain Ollivier
 */
 
+
 global $AppUI, $can, $m, $dPconfig;
 
 $can->needsEdit();
@@ -21,9 +22,24 @@ $hour         = mbTime(null);
 $prat_id      = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
 $selConsult   = mbGetValueFromGetOrSession("selConsult", null);
 
+$listChirs = new CMediusers;
+$listChirs = $listChirs->loadPraticiens();
+
+$listAnesths = new CMediusers;
+$listAnesths = $listAnesths->loadAnesthesistes();
 
 $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 $consult = new CConsultation();
+  
+
+/*  
+$consult->loadRefs();
+
+  foreach($consult->_ext_codes_ccam as $keyCode => $code) {
+    $consult->_ext_codes_ccam[$keyCode]->Load();
+  }
+*/
+  
 
 if(isset($_GET["date"])) {
   $selConsult = null;
@@ -183,9 +199,22 @@ $techniquesComp->loadAides($userSel->user_id);
 
 $examComp = new CExamComp();
 $examComp->loadAides($userSel->user_id);
+ 
+
+
+$consult->loadRefsActesCCAM();
+$consult->loadRefsCodesCCAM();
+$consult->loadPossibleActes();
+
+
+
+
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("listAnesths"    , $listAnesths);
+$smarty->assign("listChirs"      , $listChirs);
 $smarty->assign("codePraticienEc", $codePraticienEc);
 $smarty->assign("etablissements" , $etablissements);
 $smarty->assign("date"           , $date);
@@ -216,6 +245,8 @@ if($consult->_is_anesth) {
   for ($i = 0; $i < 15; $i++) {
     $mins[] = $i;
   }
+
+  
   
   $smarty->assign("secs"          , $secs);
   $smarty->assign("mins"          , $mins);

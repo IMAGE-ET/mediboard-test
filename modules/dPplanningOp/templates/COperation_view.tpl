@@ -47,18 +47,9 @@
         <i>{{$object->rques|nl2br|truncate:50}}</i>
       {{/if}}
       <table width="100%" style="border-spacing: 0px;font-size: 100%;">
-        <tr>
-          <th class="category">{{tr}}COperation-codes_ccam-court{{/tr}}</th>
-        </tr>
-        {{assign var="styleBorder" value="border: solid #aaa 1px;"}}
-        {{foreach from=$object->_ext_codes_ccam item=currCode}}
-        <tr>
-          <td class="text" style="{{$styleBorder}}">
-            <strong>{{$currCode->code}}</strong> :
-            {{$currCode->libelleLong}}
-          </td>
-        </tr>
-        {{/foreach}}
+        {{assign var="vue" value="view"}}
+        {{assign var="subject" value=$object}}
+        {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
       </table>
     </td>
   </tr>

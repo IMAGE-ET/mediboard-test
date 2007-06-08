@@ -1,6 +1,6 @@
 <script type="text/javascript">
 function setClose(code, type) {
-  window.opener.setCode(code, type);
+  window.opener.setCodeCCAM(code, type);
   window.close();
 }
 

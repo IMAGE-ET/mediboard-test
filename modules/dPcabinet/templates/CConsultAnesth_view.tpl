@@ -33,11 +33,22 @@
         <strong>Motif:</strong>
         <i>{{$object->_ref_consultation->motif|nl2br|truncate:50}}</i>
       {{/if}}
+  
+      {{assign var="vue" value="view"}}
+      {{assign var="subject" value=$object->_ref_consultation}}
+      {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
+  
+      
       {{if $object->_ref_consultation->rques}}
         <br />
         <strong>Remarques:</strong>
         <i>{{$object->_ref_consultation->rques|nl2br|truncate:50}}</i>
       {{/if}}
     </td>
+  
   </tr>
+  
+  
+  
+  
 </table>

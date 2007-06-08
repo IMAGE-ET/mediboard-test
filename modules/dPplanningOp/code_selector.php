@@ -56,7 +56,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("type", $type);
 $smarty->assign("list", $list);
-
 $smarty->display("code_selector.tpl");
 
 ?>

@@ -1,5 +1,13 @@
-<script type="text/javascript">
+{{if $op}}
+{{assign var="chir_id" value=$selOp->_ref_chir->_id}}
+{{/if}}
+{{assign var="do_subject_aed" value="do_planning_aed"}}
+{{assign var="module" value="dPsalleOp"}}
+{{assign var="object" value=$selOp}}
+{{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
 
+
+<script type="text/javascript">
 function pageMain() {
   PairEffect.initGroup("acteEffect");
   
@@ -25,28 +33,14 @@ function pageMain() {
           </th>
         </tr>
         {{include file="inc_timings_anesth.tpl"}}
+       
         <tr>
-          <th>Actes</th>
-          <td class="text">
-          {{if $can->edit || $modif_operation}}
-          {{include file="inc_manage_codes.tpl"}}
-          {{else}}
-          Il n'est pas possible de modifier les actes d'une intervention antérieure.
-          {{/if}}
-          </td>
+        <tbody id = "ccam">
+        {{assign var="subject" value=$selOp}}
+        {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
+        </tbody>
         </tr>
-        <tr>
-          <th>
-            Intervention
-            <br />
-            Côté {{tr}}COperation.cote.{{$selOp->cote}}{{/tr}}
-            <br />
-            ({{$selOp->temp_operation|date_format:"%Hh%M"}})
-          </th>
-          <td class="text">
-          {{include file="inc_codage_actes.tpl"}}
-          </td>
-        </tr>
+        
         {{if $selOp->materiel}}
         <tr>
           <th>Matériel</th>

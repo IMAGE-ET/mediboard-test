@@ -17,7 +17,7 @@ $admission->loadRefs();
 $admission->_ref_patient->loadRefsFwd();
 foreach($admission->_ref_operations as $keyOp => $op) {
   $admission->_ref_operations[$keyOp]->loadRefsFwd();
-  $admission->_ref_operations[$keyOp]->loadRefCCAM();
+  $admission->_ref_operations[$keyOp]->loadRefsCodesCCAM();
 }
 
 // Création du template

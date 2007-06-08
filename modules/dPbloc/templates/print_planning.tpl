@@ -19,7 +19,7 @@ function popCode(type) {
   url.popup(600, 500, type);
 }
 
-function setCode(code, type) {
+function setCodeCCAM(code, type) {
   var oForm = document.paramFrm;
   var oField = oForm.code_ccam;
   oField.value = code;

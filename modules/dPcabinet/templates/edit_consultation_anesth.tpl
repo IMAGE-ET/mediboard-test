@@ -124,6 +124,8 @@ var oCimAnesthField = null;
 function pageMain() {
   updateList();  
   
+  PairEffect.initGroup("acteEffect");
+  
   {{if $consult->consultation_id}}
   incPatientHistoryMain();
   incAntecedantsMain();

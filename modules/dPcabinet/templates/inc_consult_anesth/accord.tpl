@@ -1,3 +1,9 @@
+{{assign var="chir_id" value=$consult->_ref_plageconsult->_ref_chir->_id}}
+{{assign var="object" value=$consult}}
+{{assign var="module" value="dPcabinet"}}
+{{assign var="do_subject_aed" value="do_consultation_aed"}}
+{{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
+
 <div class="accordionMain" id="accordionConsult">
     
   <div id="AntTrait">
@@ -17,7 +23,22 @@
       {{include file="inc_consult_anesth/acc_examens_clinique.tpl"}}
     </div>
   </div>
- 
+  
+  <div id="Actes">
+    <div id="ActesHeader" class="accordionTabTitleBar">
+      Actes CCAM
+    </div>
+    <div id="ActesContent"  class="accordionTabContentBox">
+    <table class="tbl">
+      <tbody id="ccam">
+      {{assign var="module" value="dPcabinet"}}
+      {{assign var="subject" value=$consult}}
+      {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
+      </tbody>
+    </table>
+    </div>
+  </div>
+   
   <div id="ExamsComp">
     <div id="ExamsCompHeader" class="accordionTabTitleBar">
       Examens Complémentaires
