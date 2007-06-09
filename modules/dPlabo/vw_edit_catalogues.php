@@ -7,15 +7,13 @@
  *  @author Romain Ollivier
  */
  
-global $AppUI, $can, $m;
+global $can;
 
 $can->needsRead();
 
-$catalogue_labo_id = mbGetValueFromGetOrSession("catalogue_labo_id");
-
 // Chargement du catalogue demandé
 $catalogue = new CCatalogueLabo;
-$catalogue->load($catalogue_labo_id);
+$catalogue->load(mbGetValueFromGetOrSession("catalogue_labo_id"));
 $catalogue->loadRefs();
 
 // Chargement de tous les catalogues

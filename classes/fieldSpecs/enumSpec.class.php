@@ -61,7 +61,7 @@ class CEnumSpec extends CMbFieldSpec {
     $extra         = CMbArray::makeXmlAttributes($params);
     $enumsTrans    = $object->_enumsTrans[$field];
     
-    if($typeEnum == "select"){
+    if ($typeEnum == "select") {
       $sHtml       = "<select name=\"$field\"";
       $sHtml      .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra>";
       
@@ -77,8 +77,10 @@ class CEnumSpec extends CMbFieldSpec {
         $sHtml    .= "<option value=\"$key\"$selected>$item</option>";
       }
       $sHtml      .= "</select>";
+      return $sHtml;
+    }
 
-    }elseif($typeEnum == "radio"){
+    if ($typeEnum == "radio"){
       $compteur    = 0;
       $sHtml       = "";
       
@@ -101,10 +103,10 @@ class CEnumSpec extends CMbFieldSpec {
         }
       }
       
-    }else{
-      trigger_error("mb_field: Type d'enumeration '$typeEnum' non pris en charge", E_USER_WARNING);
+      return $sHtml;
     }
-    return $sHtml;
+    
+    trigger_error("mb_field: Type d'enumeration '$typeEnum' non pris en charge", E_USER_WARNING);
   }
   
   function getLabelForElement($object, &$params){

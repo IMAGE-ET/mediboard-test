@@ -68,6 +68,8 @@ class CExamenLabo extends CMbObject {
     $this->CMbObject("examen_labo", "examen_labo_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    $this->_locked =& $this->_external;
   }
   
   function getSpecs() {
@@ -180,11 +182,15 @@ class CExamenLabo extends CMbObject {
   }
   
   function loadRefsBack() {
-    $this->_ref_packs_labo = array();
+    parent::loadRefsBack();
+    
+    // Chargement des pack items 
     $item = new CPackItemExamenLabo;
     $item->examen_labo_id = $this->_id;
     $this->_ref_items_pack_labo = $item->loadMatchingList();
     
+    // Chargement des packs correspondant
+    $this->_ref_packs_labo = array();
     foreach ($this->_ref_items_pack_labo as &$item) {
       $item->loadRefPack();
       $pack =& $item->_ref_pack_examens_labo;

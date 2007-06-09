@@ -235,7 +235,7 @@ class CMbFieldSpec {
     return $this->fieldName;
   }
   
-  function getFormHiddenElement($object, $params, $value, $className){
+  function getFormHiddenElement($object, $params, $value, $className) {
     $field = $this->fieldName;
     $extra = CMbArray::makeXmlAttributes($params);
     $sHtml = "<input type=\"hidden\" name=\"".htmlspecialchars($field)."\" value=\"".htmlspecialchars($value)."\"";
@@ -263,6 +263,10 @@ class CMbFieldSpec {
   }
   
   function getFormElementDateTime($object, &$params, $value, $className, $format = "%d/%m/%Y %H:%M") {
+    if ($object->_locked) {
+      $params["readonly"] = "readonly";
+    }
+    
     global $AppUI;
     $class = htmlspecialchars(trim("$className $this->prop"));
     $field = htmlspecialchars($this->fieldName);
@@ -287,7 +291,6 @@ class CMbFieldSpec {
     
   function getFormHtmlElement($object, &$params, $value, $className){
     return $this->getFormElementText($object, $params, $value, $className);
-    //trigger_error("mb_field: Specification '".$this->prop."' non prise en charge", E_USER_NOTICE);
   }
   
   function getSpecType() {

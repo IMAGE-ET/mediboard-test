@@ -36,7 +36,8 @@ class CMbObject {
   var $_shortview     = null; // universal shortview for the object
   var $_canRead       = null; // read permission for the object
   var $_canEdit       = null; // write permission for the object
-  var $_lock          = null; // true if object is locked
+  var $_external      = null; // true if object is has remote ids
+  var $_locked        = null; // true if object is locked
 
   var $_view_template          = null; // view template path
   var $_complete_view_template = null; // complete view template path
@@ -464,6 +465,7 @@ class CMbObject {
   }
 
   function loadRefsBack() {
+    $this->_external = $this->countBackRefs("identifiants");
   }
 
   function loadRefsFwd() {
@@ -656,6 +658,43 @@ class CMbObject {
     return true;
   }
 
+  /**
+   * Count number back refreferecing object
+   * @param string $backName name the of the back references to count
+   * @return int the count null if back references module is not installed
+   */
+  function countBackRefs($backName) {
+    $backRef = $this->_backRefs[$backName];
+    $backRefParts = split(" ", $backRef);
+    $backClass = $backRefParts[0];
+    $backField = $backRefParts[1];
+    $backObject = new $backClass;
+
+    // Cas du module non installé
+    if (!$backObject->_ref_module) {
+      continue;
+    }
+    
+    $query = "SELECT COUNT($backObject->_tbl_key) " .
+      "\nFROM `$backObject->_tbl` " .
+      "\nWHERE `$backField` = '$this->_id'";
+
+    // Cas des meta objects
+    $backSpec =& $backObject->_specs[$backField];
+    $backMeta = $backSpec->meta;      
+    if ($backMeta) {
+      $query .= "\nAND `$backMeta` = '$this->_class_name'";
+    }
+    
+    // Comptage des backrefs
+    return db_loadResult($query);
+  }
+
+  /**
+   * Check whether the object can be deleted.
+   * Default behaviour counts for back reference without cascade 
+   * @return null if ok error message otherwise
+   */
   function canDeleteEx() {
     global $AppUI;
 
@@ -704,21 +743,13 @@ class CMbObject {
             . "/" . count($cascadeObjects) 
             . " " . $AppUI->_("$backSpec->class-back-$backName");
         }
+        
+        continue;
       }
       
       // Vérification du nombre de backRefs
-      elseif(!$backSpec->unlink) {
-        $query = "SELECT COUNT($backObject->_tbl_key) " .
-          "\nFROM `$backObject->_tbl` " .
-          "\nWHERE `$backField` = '$this->_id'";
-
-        // Cas des meta objects
-        if ($backMeta) {
-          $query .= "\nAND `$backMeta` = '$this->_class_name'";
-        }
-        
-        // Comptage des backrefs
-        if ($backCount = db_loadResult($query)) {
+      if (!$backSpec->unlink) {
+        if ($backCount = $this->countBackRefs($backName)) {
           $issues[] = $backCount 
             . " " . $AppUI->_("$backSpec->class-back-$backName");
         }

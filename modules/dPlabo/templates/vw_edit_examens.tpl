@@ -48,6 +48,7 @@ function pageMain() {
       
       <input type="hidden" name="dosql" value="do_examen_aed" />
       <input type="hidden" name="examen_labo_id" value="{{$examen->_id}}" />
+      <input type="hidden" name="_locked" value="{{$examen->_locked}}" />
       <input type="hidden" name="del" value="0" />
       
       <table class="form">

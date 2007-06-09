@@ -162,6 +162,7 @@ var bGiveFormFocus = true;
 
 function prepareForm(oForm) {
   var sFormName = oForm.getAttribute("name");
+  oForm.locked = (oForm._locked && oForm._locked.value) == "1"; 
 
   // Build label targets
   aLabels = oForm.getElementsByTagName("label");
@@ -178,6 +179,11 @@ function prepareForm(oForm) {
   // For each element
   var iElement = 0;
   while (oElement = oForm.elements[iElement++]) {
+  	// Locked object
+  	if (oForm.locked) {
+  		oElement.disabled = true;
+  	}
+  	
     // Create id for each element if id is null
     if (!oElement.id) {
       oElement.id = sFormName + "_" + oElement.name;

@@ -35,6 +35,8 @@ class CCatalogueLabo extends CMbObject {
     $this->CMbObject("catalogue_labo", "catalogue_labo_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
+    $this->_locked =& $this->_external;
   }
   
   function check() {
@@ -64,7 +66,7 @@ class CCatalogueLabo extends CMbObject {
   function getSpecs() {
     return array (
       "pere_id"     => "ref class|CCatalogueLabo",
-      "identifiant" => "str notNull",
+      "identifiant" => "str maxLength|10 notNull",
       "libelle"     => "str notNull"
     );
   }
@@ -103,10 +105,13 @@ class CCatalogueLabo extends CMbObject {
   }
   
   function loadRefsBack() {
+    parent::loadRefsBack();
+    
     $examen = new CExamenLabo;
     $where = array("catalogue_labo_id" => "= $this->catalogue_labo_id");
     $order = "identifiant";
     $this->_ref_examens_labo = $examen->loadList($where, $order);
+
     $catalogue = new CCatalogueLabo;
     $where = array("pere_id" => "= $this->catalogue_labo_id");
     $order = "identifiant";

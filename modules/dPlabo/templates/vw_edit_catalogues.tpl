@@ -35,14 +35,15 @@ function pageMain() {
 
       <input type="hidden" name="dosql" value="do_catalogue_aed" />
       <input type="hidden" name="catalogue_labo_id" value="{{$catalogue->_id}}" />
+      <input type="hidden" name="_locked" value="{{$catalogue->_locked}}" />
       <input type="hidden" name="del" value="0" />
 
       <table class="form">
         <tr>
           {{if $catalogue->_id}}
-          <th class="title modify" colspan="0">
+          <th class="title modify" colspan="10">
             <div class="idsante400" id="{{$catalogue->_class_name}}-{{$catalogue->_id}}" ></div>
-            <a style="float:right;" href="#nothing" onclick="view_log('{{$object->_class_name}}', {{$object->_id}})">
+            <a style="float:right;" href="#nothing" onclick="view_log('{{$catalogue->_class_name}}', {{$catalogue->_id}})">
               <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
             </a>
             Modification du catalogue {{$catalogue->_view}}

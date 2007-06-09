@@ -480,11 +480,10 @@ Object.extend(ElementChecker, {
 /***************/
 
 
-function checkForm(oForm){
+function checkForm(oForm) {
   var oElementFirstFailed = null;
   var aMsgFailed = new Array;
   var iElement = 0;
-  
   while (oElement = oForm.elements[iElement++]) {
     var aMsg   = new Array;
     ElementChecker.prepare(oElement);
