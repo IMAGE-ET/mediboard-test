@@ -60,11 +60,20 @@ var AjaxResponse = {
  */
  
 SystemMessage = {
-  id : "systemMsg",
+  id: "systemMsg",
+  effect: null,
 
-  effect : function (idElement, oOldValue, oNewValue) {
-    new Effect.Appear(this.id);
-    new Effect.Fade(this.id, { delay : 3 } );
+  doEffect : function (idElement, oOldValue, oNewValue) {
+  	if (this.effect) {
+  		this.effect.cancel();
+  	}
+  	
+    $(this.id).show();
+    $(this.id).setOpacity(1);
+    this.effect = new Effect.Fade(this.id, { 
+    	delay : 2,
+    	queue: {position: 'end', scope: this.id},
+    } );
     return oNewValue;
   },
   
@@ -79,7 +88,7 @@ SystemMessage = {
       return;
     }
     
-    oElement.watch("innerHTML", this.effect);
+    oElement.watch("innerHTML", this.doEffect.bind(this));
   }
 }
 
