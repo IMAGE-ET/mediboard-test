@@ -6,6 +6,7 @@ function main() {
   BrowserDetect.init();
   ObjectInitialisation.hackIt();
   SystemMessage.init();
+  SystemMessage.doEffect();
   initPuces();
   pageMain();
 }
@@ -58,37 +59,67 @@ var AjaxResponse = {
 /**
  * System message effects
  */
- 
 SystemMessage = {
   id: "systemMsg",
+  type: null,
+  div: null,
   effect: null,
 
-  doEffect : function (idElement, oOldValue, oNewValue) {
+	// Catches the innerHTML watch event
+	refresh: function(idElement, oOldValue, oNewValue) {
+		var div = document.createElement("div");
+
+		// Get the type of message (loading, notice, warning, error)
+		div.innerHTML = oNewValue;
+  	this.type = $A(div.childNodes).pluck("className").first();
+
+		this.doEffect();
+
+		// Mandatory, or value is not set
+		return oNewValue;		
+	},
+	
+	// show/hide the div
+  doEffect : function (delay) {
   	if (this.effect) {
   		this.effect.cancel();
   	}
-  	
-    $(this.id).show();
-    $(this.id).setOpacity(1);
+  	  
+  	// Ensure visible  	  	
+    this.div.show();
+    this.div.setOpacity(1);
+    
+    // Only hide on type 'message'
+    if (this.type != "message") {
+    	return;
+    }
+    
+    // Program fading
     this.effect = new Effect.Fade(this.id, { 
-    	delay : 2,
+    	delay : delay || 3,
     	queue: {position: 'end', scope: this.id},
     } );
-    return oNewValue;
   },
   
   init : function () {
-    var oElement = $(this.id);
-    if (!oElement) {
+  	this.div = $(this.id);
+    if (!this.div) {
       return;
     }
     
-    if (!oElement.watch) {
+    // Hide on onclick
+    Event.observe(this.div, 'click', function(event) {
+    	SystemMessage.type = "message";
+    	SystemMessage.doEffect(0.1);
+    } );
+    
+    // Always show if watch does not exist (IE)
+    if (!this.div.watch) {
       Element.show(oElement);
       return;
     }
     
-    oElement.watch("innerHTML", this.doEffect.bind(this));
+    this.div.watch("innerHTML", this.refresh.bind(this));
   }
 }
 
