@@ -49,9 +49,6 @@ class CExamenLabo extends CMbObject {
   var $technique       = null;
   var $materiel        = null;
   var $remarques       = null;
-
-  // Form fields
-  var $_interne = null;
   
   // Fwd References
   var $_ref_catalogue_labo = null;
@@ -108,11 +105,19 @@ class CExamenLabo extends CMbObject {
   }
   
   function check() {
-    parent::check();
-  }
-  
-  function getSiblings() {
-    mbTrace($$this->getProps());
+    if ($msg = parent::check()) {
+      return $msg;
+    }
+    
+    // Checks whether there is a sibling examen in the same hierarchy
+    $root = $this->getRootCatalogue();
+    foreach ($this->getSiblings() as $_sibling) {
+      $_root = $_sibling->getRootCatalogue();
+      if ($root->_id == $_root->_id) {
+        return "CExamenLabo-sibling-conflict";
+      }
+    }
+    
   }
   
   function getBackRefs() {
@@ -126,14 +131,17 @@ class CExamenLabo extends CMbObject {
     parent::updateFormFields();
     $this->_shortview = $this->identifiant;
     $this->_view = "$this->identifiant : $this->libelle ($this->type_prelevement)";
-        
-    $this->_interne = 1;
   }
   
+  function loadCatalogue() {
+    if (!$this->_ref_catalogue_labo) {
+      $this->_ref_catalogue_labo = new CCatalogueLabo;
+      $this->_ref_catalogue_labo->load($this->catalogue_labo_id);
+    }
+  }
+
   function loadRefsFwd() {
-    $this->_ref_catalogue_labo = new CCatalogueLabo;
-    $this->_ref_catalogue_labo->load($this->catalogue_labo_id);
-    
+    $this->loadCatalogue();
     $this->_ref_realisateur = new CMediusers;
     $this->_ref_realisateur->load($this->realisateur);
   }
@@ -147,6 +155,25 @@ class CExamenLabo extends CMbObject {
     parent::loadComplete();
     $this->loadClassification();
     $this->loadRealisateurDeep();
+  }
+  
+  /**
+   * Recursive root catalogue accessor
+   */
+  function getRootCatalogue() {
+    $this->loadCatalogue();
+    return $this->_ref_catalogue_labo->getRootCatalogue();
+  }
+  
+  /**
+   * load catalogues with same identifier
+   */
+  function getSiblings() {
+    $examen = new CExamenLabo;
+    $where = array();
+    $where["identifiant"] = "= '$this->identifiant'";
+    $where["examen_labo_id"] = "!= '$this->examen_labo_id'";
+    return $examen->loadList($where);
   }
   
   /**

@@ -30,6 +30,9 @@ if($examen_labo_id && !mbGetValueFromGet("catalogue_labo_id")) {
 
 $catalogue->loadRefs();
 
+mbTrace($examen->getRootCatalogue()->_view, "Root catalogue");
+mbTrace(array_keys($examen->getSiblings()), "Sibling examens ids");
+
 $groups = CGroups::loadGroups();
 foreach ($groups as &$group) {
   $group->loadFunctions(null);

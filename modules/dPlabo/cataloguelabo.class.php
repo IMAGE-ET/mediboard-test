@@ -48,8 +48,42 @@ class CCatalogueLabo extends CMbObject {
       return "Cyclic catalog creation";
     }
     
+    // Checks whether there is a sibling catalogue in the same hierarchy
+    $root = $this->getRootCatalogue();
+    foreach ($this->getSiblings() as $_sibling) {
+      $_root = $_sibling->getRootCatalogue();
+      if ($root->_id == $_root->_id) {
+        return "CCatalogue-sibling-conflict";
+      }
+    }
   }
   
+  /**
+   * Recursive root catalogue accessor
+   */
+  function getRootCatalogue() {
+    if (!$this->pere_id) {
+      return $this;
+    }
+
+    $this->loadParent();
+    return $this->_ref_pere->getRootCatalogue();
+  }
+  
+  /**
+   * load catalogues with same identifier
+   */
+  function getSiblings() {
+    $catalogue = new CCatalogueLabo;
+    $where = array();
+    $where["identifiant"] = "= '$this->identifiant'";
+    $where["catalogue_labo_id"] = "!= '$this->catalogue_labo_id'";
+    return $catalogue->loadList($where);
+  }
+  
+  /**
+   * Checks whether given catalogue is an ancestor
+   */
   function hasAncestor($catalogue) {
     if (!$this->_id) {
       return false;
@@ -59,7 +93,7 @@ class CCatalogueLabo extends CMbObject {
       return true;
     }
     
-    $this->loadRefsFwd();
+    $this->loadParent();
     return $this->_ref_pere->hasAncestor($catalogue);
   }
   

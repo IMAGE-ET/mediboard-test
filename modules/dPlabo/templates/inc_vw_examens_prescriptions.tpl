@@ -60,7 +60,7 @@ Object.extend(Droppables, {
     <td colspan="2">{{mb_value object=$curr_examen field="type"}}</td>
     {{/if}}
     <td>
-      {{if $curr_examen->_interne}}
+      {{if $curr_examen->_external}}
       {{if $curr_item->date}}
         {{assign var=msgClass value=""}}
         {{if $curr_examen->type == "num"}}

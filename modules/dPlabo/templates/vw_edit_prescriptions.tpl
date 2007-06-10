@@ -247,9 +247,11 @@ function pageMain() {
             <input type="hidden" name="prescription_labo_id" value="" />
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
             <button class="search" type="button" onclick="popPat()">Chercher</button>
+            {{if $patient->_id}}
             <button class="new" type="button" onclick="Prescription.edit();">
               Prescrire
             </button>
+            {{/if}}
           </td>
         </tr>
       </table>
