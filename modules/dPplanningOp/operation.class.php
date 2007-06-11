@@ -99,9 +99,13 @@ class COperation extends CCodableCCAM {
   var $_prat_id     	= null;
 
   function COperation() {
+    global $dPconfig;
+    
     $this->CMbObject("operations", "operation_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+    
+    $this->_locked = $dPconfig["dPplanningOp"]["COperation"]["locked"];
   }
   
   function getSpecs() {

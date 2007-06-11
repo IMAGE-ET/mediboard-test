@@ -92,9 +92,13 @@ class CSejour extends CCodableCCAM {
   var $_date_max_stat 	= null;
 
 	function CSejour() {
+    global $dPconfig;
+    
     $this->CMbObject("sejour", "sejour_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+    
+    $this->_locked = $dPconfig["dPplanningOp"]["CSejour"]["locked"];
 	}
   
   function getBackRefs() {

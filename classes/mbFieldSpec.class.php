@@ -206,6 +206,9 @@ class CMbFieldSpec {
   function getFormElement($object, $params){
     $hidden    = CMbArray::extract($params, "hidden");
     $className = CMbArray::extract($params, "class");
+    if($object->_locked) {
+      $params["readonly"] = "readonly";
+    }
     $value     = $object->{$this->fieldName};
     if($hidden){
       return $this->getFormHiddenElement($object, $params, $value, $className);
