@@ -238,7 +238,7 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
   url = new Url;
   var iElement = 0;
   while (oElement = oForm.elements[iElement++]) {
-    if (oElement.type != "radio" || oElement.checked) {
+    if ((oElement.type != "radio" && oElement.type != "checkbox") || oElement.checked) {
       url.addParam(oElement.name, oElement.value);
     }
   }
@@ -263,7 +263,7 @@ function submitFormAjaxOffline(oForm, ioTarget, oOptions) {
   url = new Url;
   var iElement = 0;
   while (oElement = oForm.elements[iElement++]) {
-    if (oElement.type != "radio" || oElement.checked) {
+    if ((oElement.type != "radio" && oElement.type != "checkbox") || oElement.checked) {
       url.addParam(oElement.name, oElement.value);
     }
   }
