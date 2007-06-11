@@ -25,7 +25,7 @@ function addCode(subject_id) {
     aCCAM.push(oForm._newCode.value);
   aCCAM.sort();
   oForm.codes_ccam.value = aCCAM.join("|");
-  submitFormAjax(oForm, 'systemMsg', {onComplete: function(){loadActes(subject_id)}});
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadActes(subject_id) } } );
 }
 
 function loadActes(subject_id) {
@@ -37,7 +37,7 @@ function loadActes(subject_id) {
   url_actes.addParam("object_class", "{{$object->_class_name}}");
   url_actes.addParam("object_id", subject_id);
   url_actes.setModuleAction("dPsalleOp", "httpreq_ccam");
-  url_actes.requestUpdate('ccam');
+  url_actes.requestUpdate('ccam', { waitingText: null } );
 }
 
 function delCode(subject_id) {
