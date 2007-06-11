@@ -227,6 +227,11 @@ class CConsultation extends CCodableCCAM {
     $this->_praticien_id = $this->_ref_plageconsult->_ref_chir->_id;
   }
   
+  function preparePossibleActes() {
+  	$this->loadRefPlageConsult();
+  }
+  
+  
   function loadRefsFwd() {
     $this->loadRefPatient();
     $this->loadRefPlageConsult();
