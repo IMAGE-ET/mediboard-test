@@ -1,7 +1,3 @@
-
-
-
-
 {{assign var="do_subject_aed" value="do_sejour_aed"}}
 {{assign var="module" value="dPhospi"}}
 {{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}

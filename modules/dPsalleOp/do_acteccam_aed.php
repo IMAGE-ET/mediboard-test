@@ -23,19 +23,18 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
   
   
   function doBind() {
-    parent::doBind();
-    
+  	parent::doBind();
     $this->_obj->modificateurs = "";
     foreach ($_POST as $propName => $propValue) {
       $matches = null;
-      if (preg_match("/modificateur_(.)/", $propName, $matches)) {
-        $modificateur = $matches[1];
+      if (preg_match("/modificateur_(.)/", $propName, $matches)) {      
+      	$modificateur = $matches[1];
         $this->_obj->modificateurs .= $modificateur;
       }
     }
   }
 }
-
+//echo "toto"; die();
 $do = new CDoActeCCAMAddEdit();
 $do->doIt();
 ?>

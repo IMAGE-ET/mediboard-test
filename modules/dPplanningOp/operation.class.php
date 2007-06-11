@@ -392,6 +392,10 @@ class COperation extends CCodableCCAM {
     $this->_acte_execution = mbAddDateTime($this->temp_operation, $this->_datetime);
   }
   
+  function preparePossibleActes() {
+  	$this->loadRefPlageOp();
+  }
+  
   
   function loadRefsConsultAnesth() {
     $this->_ref_consult_anesth = new CConsultAnesth();

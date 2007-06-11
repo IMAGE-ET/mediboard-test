@@ -27,6 +27,9 @@ class CCodableCCAM extends CMbObject {
   	return $specs;
   }
   
+  function preparePossibleActes() {
+  }
+  
   function loadRefsCodesCCAM() {
     $this->_ext_codes_ccam = array();
     foreach ($this->_codes_ccam as $code) {
@@ -46,6 +49,7 @@ class CCodableCCAM extends CMbObject {
 
   
   function loadPossibleActes () {
+  	$this->preparePossibleActes();
     $depassement_affecte = false;
     // existing acts may only be affected once to possible acts
     $used_actes = array();

@@ -134,18 +134,14 @@
     </form>
   {{/foreach}}
   
-
-	{{if $ajax}}
-	<script type="text/javascript">
-	var test = "formActe-{{$acte->_view}}";
-	var oForm = document."formActe-{{$acte->_view}}";
-	
-  var sFormName = oForm.getAttribute("name");
-	alert("formActe-{{$acte->_view}}");
-	alert(sFormName);
-	prepareForm(oForm);
-	
-	</script>
+  {{if $ajax}}
+  
+  <script type="text/javascript">
+    var oElement = $('acte{{$key}}');
+    var oForm = getBoundingForm(oElement);
+    prepareForm(oForm);
+  </script>
+  
   {{/if}}
 
   {{/foreach}}
