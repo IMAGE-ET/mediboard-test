@@ -205,11 +205,11 @@ function setPlage(plage_id, sDate, bAdm) {
     // Initialize admission date according to operation date
     switch(bAdm) {
       case 0 :
-        dAdm.setHours(17);
+        dAdm.setHours("{{$heure_entree_veille}}");
         dAdm.setDate(dAdm.getDate()-1);
         break;
       case 1 :
-        dAdm.setHours(8);
+        dAdm.setHours("{{$heure_entree_jour}}");
         break;
     }
     

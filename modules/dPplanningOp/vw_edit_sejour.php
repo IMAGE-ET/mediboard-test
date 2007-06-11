@@ -11,6 +11,10 @@ global $AppUI, $can, $m, $tab, $dPconfig;
 
 $can->needsRead();
 
+
+
+
+
 $sejour_id    = mbGetValueFromGetOrSession("sejour_id");
 $patient_id   = mbGetValueFromGet("patient_id");
 $praticien_id = mbGetValueFromGetOrSession("praticien_id");
@@ -87,6 +91,12 @@ $sejours =& $patient->_ref_sejours;
 $config =& $dPconfig["dPplanningOp"]["CSejour"];
 $hours = range($config["heure_deb"], $config["heure_fin"]);
 $mins = range(0, 59, $config["min_intervalle"]);
+$heure_sortie_ambu   = $config["heure_sortie_ambu"];
+$heure_sortie_autre  = $config["heure_sortie_autre"];
+$heure_entree_veille = $config["heure_entree_veille"];
+$heure_entree_jour   = $config["heure_entree_jour"];
+//$locked_sejour       = $config["locked"];
+
 
 // Préparation de l'alerte dans le cas d'annulation d'un sejour avec opération
 $msg_alert = "";
@@ -103,6 +113,13 @@ if($sejour->_ref_operations){
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("heure_sortie_ambu"   , $heure_sortie_ambu);
+$smarty->assign("heure_sortie_autre"  , $heure_sortie_autre);
+$smarty->assign("heure_entree_veille" , $heure_entree_veille);
+$smarty->assign("heure_entree_jour"   , $heure_entree_jour);
+//$smarty->assign("locked_sejour"         , $locked_sejour);
+
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("sejour"        , $sejour);

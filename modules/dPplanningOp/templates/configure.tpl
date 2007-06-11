@@ -152,6 +152,66 @@
       </select>
     </td>
   </tr>  
+
+  <tr>
+    <th class="category" colspan="6">Heure par defaut du séjour</th>
+  </tr>
+  
+  <tr>
+    <th class="category" colspan="3">Heure d'entree</th>
+    <th class="category" colspan="3">Heure de sortie</th>
+  </tr>
+  
+  <tr>
+    <td colspan="3">
+      Heure d'entree la veille
+      {{assign var="class" value="CSejour"}}
+      {{assign var="var" value="heure_entree_veille"}}
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listHours item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_hour}}
+        </option>
+      {{/foreach}}
+      </select>
+  
+      Heure d'entree le jour meme
+      {{assign var="var" value="heure_entree_jour"}}
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listHours item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_hour}}
+        </option>
+      {{/foreach}}
+      </select>
+    </td>
+  
+    <td colspan="3">
+      Heure de sortie ambulatoire
+      {{assign var="var" value="heure_sortie_ambu"}}
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listHours item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_hour}}
+        </option>
+      {{/foreach}}
+      </select>
+
+      Heure de sortie autre (>=1 jour)
+      {{assign var="var" value="heure_sortie_autre"}}
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listHours item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_hour}}
+        </option>
+      {{/foreach}}
+      </select>
+    </td> 
+  </tr>
+
+
+
+
     
   <tr>
     <th class="category" colspan="6">DHE e-Cap</th>
@@ -169,7 +229,36 @@
       <input class="str" size="60" name="{{$mod}}[{{$var}}]" value="{{$dPconfig.$mod.$var}}" />
     </td>
   </tr>  
-    
+
+  <tr>
+    <th class="category" colspan="6">Blocage des objets</th>
+  </tr>
+  <form>
+
+  <tr>
+    <th class="category" colspan="3">Blocage des operations</th>
+    <th class="category" colspan="3">Blocage des sejours</th>
+  </tr>
+  
+  <tr>
+    {{assign var="class" value="COperation"}}
+    {{assign var="var" value="locked"}}
+    <td colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>     
+    {{assign var="class" value="CSejour"}}
+    {{assign var="var" value="locked"}}
+    <td colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/>
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>             
+  </tr>
+  
   <tr>
     <td class="button" colspan="0">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

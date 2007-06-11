@@ -120,10 +120,11 @@ function updateHeureSortie() {
   duree_prevu  = oForm._duree_prevue; 
   heure_sortie = oForm._hour_sortie_prevue;
   min_sortie   = oForm._min_sortie_prevue;
-  if(duree_prevu.value <= 1){
-    heure_sortie.value = "18";
+  
+  if(duree_prevu.value < 1){
+    heure_sortie.value = "{{$heure_sortie_ambu}}";
   }else{
-    heure_sortie.value = "10";
+    heure_sortie.value = "{{$heure_sortie_autre}}";
   }
   min_sortie.value = "00";
 }

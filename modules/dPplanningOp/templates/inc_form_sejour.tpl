@@ -125,7 +125,7 @@
     à
     <select name="_hour_entree_prevue" onchange="updateHeureSortie()">
     {{foreach from=$hours|smarty:nodefaults item=hour}}
-      <option value="{{$hour}}" {{if $sejour->_hour_entree_prevue == $hour || (!$sejour->sejour_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
+      <option value="{{$hour}}" {{if $sejour->_hour_entree_prevue == $hour || (!$sejour->sejour_id && $hour == $heure_entree_jour)}} selected="selected" {{/if}}>{{$hour}}</option>
     {{/foreach}}
     </select> h
     <select name="_min_entree_prevue" onchange="updateHeureSortie()">
@@ -157,7 +157,7 @@
     à 
     <select name="_hour_sortie_prevue">
     {{foreach from=$hours|smarty:nodefaults item=hour}}
-      <option value="{{$hour}}" {{if $sejour->_hour_sortie_prevue == $hour  || (!$sejour->sejour_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
+      <option value="{{$hour}}" {{if $sejour->_hour_sortie_prevue == $hour  || (!$sejour->sejour_id && $hour == $heure_sortie_ambu)}} selected="selected" {{/if}}>{{$hour}}</option>
     {{/foreach}}
     </select> h
     <select name="_min_sortie_prevue">

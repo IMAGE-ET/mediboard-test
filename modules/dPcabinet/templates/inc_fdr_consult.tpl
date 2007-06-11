@@ -142,10 +142,18 @@ function submitFdr(oForm) {
           </li>
           {{/if}}
           {{if $consult->_ref_examaudio->_id}}
-          <li>
-            <a href="#nothing" onclick="loadExam('exam_audio');">
-              Audiogramme
-            </a>
+          <li>    
+            <a href="#nothing" onclick="loadExam('exam_audio');">Audiogramme</a>
+            <form name="delFrm{{$consult->_ref_examaudio->_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
+              <input type="hidden" name="m" value="dPcabinet" />
+              <input type="hidden" name="dosql" value="do_exam_audio_aed" />
+              <input type="hidden" name="del" value="1" />
+              {{mb_field object=$consult->_ref_examaudio field="_view" hidden=1 prop=""}}
+              {{mb_field object=$consult->_ref_examaudio field="examaudio_id" hidden=1 prop=""}}
+              <input type="hidden" name="_conduction" value="" />
+              <input type="hidden" name="_oreille" value="" />
+              <button class="trash notext" type="button" onclick="confirmFileDeletion(this)"></button>
+            </form>
           </li>
           {{/if}}
           {{if $consult->_ref_exampossum->_id}}

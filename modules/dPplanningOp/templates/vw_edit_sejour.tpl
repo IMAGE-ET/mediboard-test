@@ -33,6 +33,7 @@ function pageMain() {
 </script>
   
 <table class="main">
+
   {{if $sejour->sejour_id}}
   <tr>
     <td>
