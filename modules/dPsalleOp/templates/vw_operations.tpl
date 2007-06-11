@@ -34,12 +34,10 @@ function pageMain() {
         </tr>
         {{include file="inc_timings_anesth.tpl"}}
        
-        <tr>
         <tbody id = "ccam">
         {{assign var="subject" value=$selOp}}
         {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
         </tbody>
-        </tr>
         
         {{if $selOp->materiel}}
         <tr>

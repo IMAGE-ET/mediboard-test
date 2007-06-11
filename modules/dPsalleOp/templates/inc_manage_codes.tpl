@@ -52,3 +52,12 @@
     </tr>
   </table>
 </form>
+
+{{if $ajax}}
+<script type="text/javascript">
+
+var oForm = document.manageCodes;
+prepareForm(oForm);
+
+</script>
+{{/if}}
