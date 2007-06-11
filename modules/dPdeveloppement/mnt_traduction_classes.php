@@ -47,12 +47,12 @@ foreach($localesDirs as $locale){
 }
 
 $backSpecs = array();
-
+$backRefs = array();
 foreach($tabClass as $selected) {
   $object = new $selected;
   $ref_modules = $object->_specs;
+  $classname = $object->_class_name;
   foreach ($object->_props as $keyObjetRefSpec => $valueObjetRefSpec) { 
-  	$classname = $object->_class_name;
   	$backSpecs[$object->_class_name][$classname][$classname] = !array_key_exists($classname,$trans) ? '' : $trans[$classname]["fr"];
   	$backSpecs[$object->_class_name][$classname][$classname.".one"] = !array_key_exists($classname.".one",$trans) ? '' : $trans[$classname.".one"]["fr"];
   	$backSpecs[$object->_class_name][$classname][$classname.".more"] = !array_key_exists($classname.".more",$trans) ? '' : $trans[$classname.".more"]["fr"];
@@ -69,6 +69,13 @@ foreach($tabClass as $selected) {
   			$backSpecs[$object->_class_name][$keyObjetEnum][$classname.".".$keyObjetEnum.".".$_item] = !array_key_exists($classname.".".$keyObjetEnum.".".$_item,$trans) ? '' : $trans[$classname.".".$keyObjetEnum.".".$_item]["fr"];
   		}
   	//}
+  }
+   foreach ($object->_specs as $objetRefSpec) {
+    if (is_a($objetRefSpec, 'CRefSpec')) {
+        $spec = array();
+        $fieldName = $objetRefSpec->fieldName;
+      	$backSpecs[$object->_class_name][$classname][$classname."-back-".$fieldName] = !array_key_exists($classname."-back-".$fieldName,$trans) ? '' : $trans[$classname."-back-".$fieldName]["fr"];
+    }
   }
 }
 

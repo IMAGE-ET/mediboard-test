@@ -33,7 +33,7 @@ $backRefs = array();
 // Extraction des propriétés 'spec' (théorique)
 foreach($classSelected as $selected) {
   $object = new $selected;
-    $backRefs[$selected]=$object->_backRefs;  
+  $backRefs[$selected]=$object->_backRefs;  
   foreach ($object->_specs as $objetRefSpec) {
     if (is_a($objetRefSpec, 'CRefSpec')) {
     
@@ -92,7 +92,7 @@ foreach($backSpecs as $keyBackSpec => $valueBackSpec) {
       $alert = "noCMbObject";
       continue;
     }
-    $alert = array_key_exists($keyBackSpec,$backRefs) && in_array($value,$backRefs[$keyBackSpec]) ? "ok" : $alert;
+      $alert = array_key_exists($keyBackSpec,$backRefs) && in_array($value,$backRefs[$keyBackSpec]) ? "ok" : $alert;
   }
 }
 $tabSuggestions = array();

@@ -40,15 +40,15 @@
   </tr>
 
   <tr>
-    <th>{{mb_label object=$user field="user_last_name"}}</th>
-    <td>{{mb_field tabindex="102" object=$user field="user_last_name"}}</td>
+    <th>{{mb_label object=$user field="user_last_name" }}</th>
+    <td>{{mb_field tabindex="102" object=$user field="user_last_name" size="20"}}</td>
     <th>{{mb_label object=$user field="user_address1"}}</th>
-    <td>{{mb_field tabindex="106" object=$user field="user_address1"}}</td>
+    <td>{{mb_field tabindex="106" object=$user field="user_address1" size="20"}}</td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$user field="user_first_name"}}</th>
-    <td>{{mb_field tabindex="103" object=$user field="user_first_name"}}</td>
+    <td>{{mb_field tabindex="103" object=$user field="user_first_name" size="20"}}</td>
     <th>{{mb_label object=$user field="user_zip"}}</th>
     <td>{{mb_field tabindex="107" object=$user field="user_zip"}}</td>
   </tr>
@@ -63,14 +63,14 @@
       </select>
     </td>
     <th>{{mb_label object=$user field="user_city"}}</th>
-    <td>{{mb_field tabindex="108" object=$user field="user_city"}}</td>
+    <td>{{mb_field tabindex="108" object=$user field="user_city" size="20"}}</td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$user field="user_email"}}</th>
-    <td>{{mb_field tabindex="105" object=$user field="user_email"}}</td>
+    <td>{{mb_field tabindex="105" object=$user field="user_email" size="20"}}</td>
     <th>{{mb_label object=$user field="user_phone"}}</th>
-    <td>{{mb_field tabindex="109" object=$user field="user_phone"}}</td>
+    <td>{{mb_field tabindex="109" object=$user field="user_phone" size="20"}}</td>
   </tr>
   <tr>
     <td class="button" colspan="4">

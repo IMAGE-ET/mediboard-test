@@ -18,6 +18,7 @@
 </form>
 
 <form action="index.php?m={{$m}}" name="translate" method="post">
+
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
 <input type="hidden" name="module" value="{{$module}}" />

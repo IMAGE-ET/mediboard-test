@@ -72,7 +72,7 @@
               {{else}}
                  class="ok"
               {{/if}} >
-            	{{tr}}{{$keyTab}}-back-{{$_item.real.attribut}}{{/tr}}
+            	{{$keyTab}}-back-{{$_item.real.attribut}}
 		  </td> 
           <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
               	 class="error"
