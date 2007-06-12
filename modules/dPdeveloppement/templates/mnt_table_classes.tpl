@@ -43,7 +43,7 @@
           </th>
         </tr>
         <tr id="Suggestion-{{$keyClass}}">
-          <td colspan="0">
+          <td colspan="100">
             <script type="text/javascript">new PairEffect('Suggestion-{{$keyClass}}');</script>
   
             <pre>{{tr}}{{$aSuggestions.$keyClass|default:"no suggestion"}}{{/tr}}</pre>

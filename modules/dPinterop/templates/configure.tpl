@@ -40,7 +40,7 @@ function doAction(sAction) {
 <table class="form">
 
   <tr>
-    <th class="category" colspan="0">Connexion au serveur FTP</th>
+    <th class="category" colspan="100">Connexion au serveur FTP</th>
   </tr>
   
   {{assign var="var" value="hostname"}}
@@ -80,7 +80,7 @@ function doAction(sAction) {
   </tr>  
 
   <tr>
-    <th class="category" colspan="0">Options de dépots de fichier</th>
+    <th class="category" colspan="100">Options de dépots de fichier</th>
   </tr>
   
   {{assign var="var" value="fileprefix"}}
@@ -96,7 +96,7 @@ function doAction(sAction) {
   </tr>  
 
   <tr>
-    <td class="button" colspan="0">
+    <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
     </td>
   </tr>

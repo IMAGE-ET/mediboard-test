@@ -20,7 +20,7 @@ function purgeObjects() {
 <table class="form">
 
   <tr>
-    <th class="category" colspan="0">Connexion à la source de données</th>
+    <th class="category" colspan="100">Connexion à la source de données</th>
   </tr>
   
   {{assign var="var" value="dsn"}}
@@ -60,7 +60,7 @@ function purgeObjects() {
   </tr>  
     
   <tr>
-    <th class="category" colspan="0">Traitement des mouvements</th>
+    <th class="category" colspan="100">Traitement des mouvements</th>
   </tr>
 
   {{assign var="var" value="group_id"}}

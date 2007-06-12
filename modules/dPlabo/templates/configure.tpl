@@ -30,7 +30,7 @@ var Action = {
   {{assign var="class" value="CCatalogueLabo"}}
     
   <tr>
-    <th class="category" colspan="0">{{tr}}{{$class}}{{/tr}}</th>
+    <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
   {{assign var="var" value="remote_name"}}
@@ -58,7 +58,7 @@ var Action = {
   </tr>  
     
   <tr>
-    <td class="button" colspan="0">
+    <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
     </td>
   </tr>
@@ -70,7 +70,7 @@ var Action = {
 <table class="tbl">
 
 <tr>
-  <th class="title" colspan="0">Configuration</th>
+  <th class="title" colspan="100">Configuration</th>
 </tr>
 
 <tr>

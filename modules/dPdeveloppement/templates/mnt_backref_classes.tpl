@@ -20,7 +20,7 @@
       <table class="tbl">
         <tr>
           <th colspan="4">Fonction getBackRefs()</th>
-          <th colspan="0">Classes de références</th>
+          <th colspan="100">Classes de références</th>
         </tr>
         <tr>
           <th>Alerte</th>
@@ -32,7 +32,7 @@
       
         {{foreach from=$tabInfo key=keyTab item=_itemTab}}
        	<tr>
-          <th colspan="0" class="title">
+          <th colspan="100" class="title">
            	<button id="Suggestion-{{$keyTab}}-trigger" class="edit" style="float: right">
               {{tr}}Suggestion{{/tr}}
             </button>
@@ -40,7 +40,7 @@
           </th>
         </tr>
         <tr id="Suggestion-{{$keyTab}}">
-          <td colspan="0">
+          <td colspan="100">
             <script type="text/javascript">new PairEffect('Suggestion-{{$keyTab}}');</script>
             <pre>{{tr}}{{$tabSuggestions.$keyTab|default:"no suggestion"}}{{/tr}}</pre>
           </td>

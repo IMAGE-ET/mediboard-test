@@ -7,7 +7,7 @@
 
   <!-- Mode d'addictions -->  
   <tr>
-    <th class="category" colspan="0">Mode d'addictions</th>
+    <th class="category" colspan="100">Mode d'addictions</th>
   </tr>
   
   <tr>
@@ -29,7 +29,7 @@
   {{assign var="class" value="CPlageconsult"}}
     
   <tr>
-    <th class="category" colspan="0">{{tr}}{{$class}}{{/tr}}</th>
+    <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
   <tr>

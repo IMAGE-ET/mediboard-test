@@ -260,7 +260,7 @@
   </tr>
   
   <tr>
-    <td class="button" colspan="0">
+    <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
     </td>
   </tr>

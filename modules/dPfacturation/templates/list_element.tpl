@@ -1,6 +1,6 @@
 <table class="tbl">
 	<tr>
-	  <th class="title" colspan="0">
+	  <th class="title" colspan="100">
       	<div style="float:left;" class="noteDiv CFacture-{{$facture->_id}}">
     		<img alt="Ecrire une note" src="images/icons/note_grey.png" />
  	 	</div>

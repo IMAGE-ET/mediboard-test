@@ -18,7 +18,7 @@ Object.extend(Droppables, {
 {{if $prescription->_id}}
 <table class="tbl" id="drop-listprescriptions-{{$prescription->_id}}">
   <tr>
-    <th class="title" colspan="0">
+    <th class="title" colspan="100">
       <a style="float:right;" href="#nothing" onclick="view_log('{{$prescription->_class_name}}', {{$prescription->_id}})">
         <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
       </a>

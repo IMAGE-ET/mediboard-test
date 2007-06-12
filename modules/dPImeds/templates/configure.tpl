@@ -6,7 +6,7 @@
 <table class="form">
 
   <tr>
-    <th class="category" colspan="0">{{tr}}{{$m}}{{/tr}}</th>
+    <th class="category" colspan="100">{{tr}}{{$m}}{{/tr}}</th>
   </tr>
 
   {{assign var="var" value="url"}}

@@ -12,7 +12,7 @@ function pageMain() {
       <input type="hidden" name="m" value="{{$m}}" />
       <table class="form">
         <tr>
-          <th class="title" colspan="0">Sélection d'un cabinet</th>
+          <th class="title" colspan="3">Sélection d'un cabinet</th>
         </tr>
         <tr>
           <th>
@@ -41,7 +41,7 @@ function pageMain() {
      <td>
        <table class="form">
        <tr>
-         <th class="title" colspan="0">Affichage du planning</th>
+         <th class="title" colspan="4">Affichage du planning</th>
        </tr>
        <tr>
        {{foreach from=$anesthesistes item=curr_anesthesiste}}

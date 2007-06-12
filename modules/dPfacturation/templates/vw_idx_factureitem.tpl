@@ -12,7 +12,7 @@
       		</td>
       	</tr>
         <tr>
-          <th class="title" colspan="0">Sélection d'une facture</th>
+          <th class="title" colspan="100">Sélection d'une facture</th>
         </tr>
         <tr>
           <th>
