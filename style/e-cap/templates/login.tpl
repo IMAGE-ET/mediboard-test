@@ -1,16 +1,5 @@
 {{include file="../../mediboard/templates/common.tpl"}}
 
-<div id="waitingMsgMask" class="chargementMask" style="display: none;"></div>
-<div id="waitingMsgText" class="chargementText" style="display: none;">
-  <table class="tbl">
-    <tr>
-      <th class="title">
-        <div class="loading"><span id="waitingInnerMsgText">Chargement en cours</span></div>
-      </th>
-    </tr>
-  </table>
-</div>
-
 <div id="login">
   <form name="loginFrm" action="./index.php" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="login" value="{{$time}}" />
@@ -105,8 +94,10 @@
   </form>
 </div>
 
-{{if $errorMessage}}
+<!-- System messages -->
+<div id="systemMsg">
   {{$errorMessage|nl2br|smarty:nodefaults}}
-{{/if}}
+</div>
+
 </body>
 </html>

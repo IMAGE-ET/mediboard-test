@@ -177,7 +177,7 @@ var Menu = {
 <td id="mainPane">
 
 {{if $dialog}}
-<div class="dialog" {{if !$errorMessage}} style="display: none"{{/if}} id="systemMsg">
+<div class="dialog" id="systemMsg">
   {{$errorMessage|nl2br|smarty:nodefaults}}
 </div>
 {{/if}}

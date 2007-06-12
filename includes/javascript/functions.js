@@ -65,14 +65,17 @@ SystemMessage = {
   div: null,
   effect: null,
 
+	// Check message type (loading, notice, warning, error) from given div
+	checkType: function(div) {
+  	this.type = $A(div.childNodes).pluck("className").compact().first();
+	},
+
 	// Catches the innerHTML watch event
 	refresh: function(idElement, oOldValue, oNewValue) {
 		var div = document.createElement("div");
-
-		// Get the type of message (loading, notice, warning, error)
 		div.innerHTML = oNewValue;
-  	this.type = $A(div.childNodes).pluck("className").first();
 
+		this.checkType(div);
 		this.doEffect();
 
 		// Mandatory, or value is not set
@@ -81,36 +84,39 @@ SystemMessage = {
 	
 	// show/hide the div
   doEffect : function (delay) {
+  	Assert.that(this.div, "No system message div");
+  	
+  	// Cancel current effect
   	if (this.effect) {
-  		this.effect.cancel();
-  	}
-  	  
-  	// Ensure visible  	  	
+      this.effect.cancel();
+      this.effect = null;
+    }
+      
+    // Ensure visible        
     this.div.show();
     this.div.setOpacity(1);
     
     // Only hide on type 'message'
     if (this.type != "message") {
-    	return;
+      return;
     }
     
     // Program fading
-    this.effect = new Effect.Fade(this.id, { 
-    	delay : delay || 3,
-    	queue: {position: 'end', scope: this.id},
-    } );
+    this.effect = new Effect.Fade(this.id, { delay : delay || 3} );
   },
   
   init : function () {
-  	this.div = $(this.id);
+    this.div = $(this.id);
     if (!this.div) {
       return;
     }
     
+    this.checkType(this.div);
+    
     // Hide on onclick
     Event.observe(this.div, 'click', function(event) {
-    	SystemMessage.type = "message";
-    	SystemMessage.doEffect(0.1);
+      SystemMessage.type = "message";
+      SystemMessage.doEffect(0.1);
     } );
     
     // Always show if watch does not exist (IE)
@@ -119,6 +125,7 @@ SystemMessage = {
       return;
     }
     
+    // Watch for content manipulation
     this.div.watch("innerHTML", this.refresh.bind(this));
   }
 }
@@ -133,22 +140,22 @@ var Console = {
   id: "console",
 
   hide: function() {
-  	Element.hide($(this.id));
+    Element.hide($(this.id));
   },
   
   trace: function(sContent, sClass, nIndent) {
-  	sClass = sClass || "label";
-  	
+    sClass = sClass || "label";
+    
     Element.show(this.id);
     var eDiv = document.createElement("div");
     eDiv.className = sClass;
     eDiv.innerHTML = sContent.toString().escapeHTML();
 
     if (nIndent) {
-	    Element.setStyle(eDiv, { marginLeft: nIndent + "em" } );
+      Element.setStyle(eDiv, { marginLeft: nIndent + "em" } );
     }
 
-		eParent = $(this.id);
+    eParent = $(this.id);
     eParent.appendChild(eDiv);
     eParent.scrollTop = eParent.scrollHeight;
   },
@@ -199,7 +206,7 @@ var Console = {
       return;
     }
             
-  	try {
+    try {
       this.trace(sLabel + ": ", "key", oDefault.current);
       
       if (oValue === null) {
@@ -259,8 +266,8 @@ var Console = {
     oElement = $(oElement);
     
     var oNoRecursion = { 
-	    level: oDefault.current, 
-	    current: oDefault.current
+      level: oDefault.current, 
+      current: oDefault.current
     };
     
     this.debug(oElement, sLabel, oNoRecursion);
@@ -272,19 +279,19 @@ var Console = {
     }
             
     oNoRecursion = { 
-	    level: oDefault.current, 
-	    current: oDefault.current
+      level: oDefault.current, 
+      current: oDefault.current
     };
 
     // Text nodes don't have tagName
-		if (oElement.tagName) {
-	    this.debug(oElement.tagName.toLowerCase(), "tagName",  oNoRecursion);
-		}
-		
-		if (oElement instanceof Text) {
-	    this.debug(oElement.textContent, "textContent", oNoRecursion);
-		}
-		
+    if (oElement.tagName) {
+      this.debug(oElement.tagName.toLowerCase(), "tagName",  oNoRecursion);
+    }
+    
+    if (oElement instanceof Text) {
+      this.debug(oElement.textContent, "textContent", oNoRecursion);
+    }
+    
     $A(oElement.attributes).each( function(oAttribute) {
       Console.debug(oAttribute.nodeValue, "Attributes." + oAttribute.nodeName, oDefault);
     } );
@@ -345,7 +352,7 @@ Class.extend(Element.ClassNames, {
   },
   
   toggle: function (sClassName) {
-  	this[this.include(sClassName) ? "remove" : "add"](sClassName)
+    this[this.include(sClassName) ? "remove" : "add"](sClassName)
   }
 });
 
@@ -606,7 +613,7 @@ function initSante400(){
   $$("div.idsante400").each(function(element) {
     var sIdDiv = element.id;
     var aInfos = sIdDiv.split("-");
-	
+  
     url = new Url;
     url.setModuleAction("system", "httpreq_vw_object_idsante400");
     url.addParam("object_class" , aInfos[0]);
@@ -770,16 +777,16 @@ function regRedirectFlatCal(sInitDate, sRedirectBase, sContainerId, bTime) {
  * Durations expressed in milliseconds
  */
 var Duration = {
-	// Exact durations
-	second: 1000,
-	minute: 60 * 1000,
-	hour: 60 * 60 * 1000,
-	day: 24 * 60 * 60 * 1000,
-	week: 7 * 24 * 60 * 60 * 1000,
-	
-	// Approximative durations
-	month: 30 * 24 * 60 * 60 * 1000,
-	year: 365 * 24 * 60 * 60 * 1000
+  // Exact durations
+  second: 1000,
+  minute: 60 * 1000,
+  hour: 60 * 60 * 1000,
+  day: 24 * 60 * 60 * 1000,
+  week: 7 * 24 * 60 * 60 * 1000,
+  
+  // Approximative durations
+  month: 30 * 24 * 60 * 60 * 1000,
+  year: 365 * 24 * 60 * 60 * 1000
 }
 
 Object.extend(Date, { 
