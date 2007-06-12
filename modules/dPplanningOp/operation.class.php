@@ -250,11 +250,6 @@ class COperation extends CCodableCCAM {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->codes_ccam = strtoupper($this->codes_ccam);
-    if($this->codes_ccam)
-      $this->_codes_ccam = explode("|", $this->codes_ccam);
-    else
-      $this->_codes_ccam = array();
     $this->_hour_op = intval(substr($this->temp_operation, 0, 2));
     $this->_min_op  = intval(substr($this->temp_operation, 3, 2));
     $this->_hour_urgence = intval(substr($this->time_operation, 0, 2));

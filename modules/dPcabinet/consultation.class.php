@@ -264,7 +264,7 @@ class CConsultation extends CCodableCCAM {
   
   
   function getNumDocsAndFiles(){
-    if(!$this->_nb_files_docs){
+  	if(!$this->_nb_files_docs){
       parent::getNumDocsAndFiles();
     }
     if($this->_nb_files_docs) {
@@ -293,12 +293,11 @@ class CConsultation extends CCodableCCAM {
   }
   
   function loadRefConsultAnesth() {
-    $this->_ref_consult_anesth = new CConsultAnesth;
+   
+  	$this->_ref_consult_anesth = new CConsultAnesth;
     $where = array();
     $where["consultation_id"] = "= '$this->consultation_id'";
     $this->_ref_consult_anesth->loadObject($where);
-    $this->loadRefsCodesCCAM();
-    $this->loadRefsActesCCAM();
   }
   
   function loadRefsExamAudio(){

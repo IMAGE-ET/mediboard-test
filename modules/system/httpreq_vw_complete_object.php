@@ -21,6 +21,7 @@ $object->load($object_id);
 if (!$object->_id) {
   $AppUI->redirect("?ajax=$ajax&suppressHeaders=1&m=$m&a=object_not_found&object_classname=$object_class");
 }
+
 $object->loadComplete();
 
 $canModule = CModule::getCanDo($object->_ref_module->mod_name);

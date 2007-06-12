@@ -35,4 +35,9 @@
       {{/if}}
     </td>
   </tr>
+  <table class="form">
+  {{assign var="vue" value="view"}}
+  {{assign var="subject" value=$sejour}}
+  {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
+  </table>
 </table>

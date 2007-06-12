@@ -69,6 +69,9 @@
     </td>
   </tr>
   
+  
+  
+  
   {{if $object->rques}}
   <tr>
     <td class="text" colspan="2">
@@ -152,6 +155,14 @@
       {{mb_value object=$sejour field="repas_sans_residu"}}
     </td>
   </tr>
+  
+  
+  <table class="form">
+  {{assign var="vue" value="complete"}}
+  {{assign var="subject" value=$sejour}}
+  {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
+  </table>
+
 
 </table>
 

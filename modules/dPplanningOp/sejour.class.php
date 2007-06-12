@@ -74,7 +74,6 @@ class CSejour extends CCodableCCAM {
   var $_ref_praticien         = null;
   var $_ref_operations        = null;
   var $_ref_last_operation    = null;
-  var $_codes_ccam            = null;
   var $_ref_affectations      = null;
   var $_ref_first_affectation = null;
   var $_ref_last_affectation  = null;
@@ -242,6 +241,7 @@ class CSejour extends CCodableCCAM {
     $this->_view .= " au ";
     $this->_view .= mbTranformTime(null, $this->sortie_prevue, "%d/%m/%Y");
     $this->_acte_execution = mbAddDateTime($this->entree_prevue);
+    
   }
   
   function updateDBFields() {
@@ -285,7 +285,6 @@ class CSejour extends CCodableCCAM {
     $this->_view .= mbTranformTime(null, $this->entree_prevue, "%d/%m/%Y");
     $this->_view .= " au ";
     $this->_view .= mbTranformTime(null, $this->sortie_prevue, "%d/%m/%Y");
-    
   }
   
   function loadRefPraticien() {
@@ -303,19 +302,29 @@ class CSejour extends CCodableCCAM {
     $this->loadRefPatient();
     $this->loadRefPraticien();
     $this->loadRefEtablissement();
+    $this->loadRefsCodesCCAM();
   }
+  
+  
+  function loadView() {
+    $this->loadRefsFwd();
+    $this->loadRefsActesCCAM();
+  }
+  
   
   function loadComplete() {
     parent::loadComplete();
-
     foreach ($this->_ref_operations as &$operation) {
       $operation->loadRefsFwd();
     }
-  
     foreach ($this->_ref_affectations as &$affectation) {
       $affectation->loadRefLit();
       $affectation->_ref_lit->loadCompleteView();
     }
+    
+    foreach ($this->_ref_actes_ccam as &$acte_ccam) {
+      $acte_ccam->loadRefsFwd();
+    } 
   }
   
   
@@ -372,7 +381,6 @@ class CSejour extends CCodableCCAM {
     
     if(count($this->_ref_operations) > 0) {
       $this->_ref_last_operation =& reset($this->_ref_operations);
-      $this->_codes_ccam = $this->_ref_last_operation->codes_ccam;
     } else {
       $this->_ref_last_operation =& new COperation;
     }
@@ -382,6 +390,7 @@ class CSejour extends CCodableCCAM {
     $this->loadRefsFiles();
     $this->loadRefsAffectations();
     $this->loadRefsOperations();
+    $this->loadRefsActesCCAM();
   }
   
   function loadRefGHM() {

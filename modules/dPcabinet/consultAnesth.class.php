@@ -299,11 +299,10 @@ class CConsultAnesth extends CMbObject {
     $this->loadRefsTraitements();
     $this->loadRefsAddictions();
     $this->loadRefConsultation();
-    $this->_ref_consultation->loadRefsFwd();
-	$this->_ref_consultation->loadRefsCodesCCAM();  	
+    $this->_ref_consultation->loadRefsFwd();  	
     $this->_ref_plageconsult =& $this->_ref_consultation->_ref_plageconsult;
     $this->loadRefOperation();
-    $this->_ref_operation->loadRefsFwd();    
+    $this->_ref_operation->loadRefsFwd();
     $this->_date_consult =& $this->_ref_consultation->_date;
     $this->_date_op =& $this->_ref_operation->_ref_plageop->date;
     
@@ -353,8 +352,7 @@ class CConsultAnesth extends CMbObject {
   }
   
   function loadRefsBack() {
-    // Backward references    
-    //$this->_ref_consultation->loadRefsCodesCCAM(); 
+    // Backward references  
     $this->_ref_techniques = new CTechniqueComp;
     $where = array();
     $where["consultation_anesth_id"] = "= '$this->consultation_anesth_id'";

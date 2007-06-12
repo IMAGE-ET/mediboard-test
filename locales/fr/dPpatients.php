@@ -1,5 +1,4 @@
 <?php
-$locales['CConsultation-_ref_actes_ccam'] = 'Actes codés';
 $locales['CAntecedent'] = 'Antécédent';
 $locales['CAntecedent-date'] = 'Date';
 $locales['CAntecedent-date-desc'] = 'Date de l\'antécédent';
@@ -16,6 +15,7 @@ $locales['CAntecedent.type.med'] = 'Médical';
 $locales['CAntecedent.type.obst'] = 'Obstétrique';
 $locales['CAntecedent.type.trans'] = 'Transfusion';
 $locales['CConsultation-_ext_codes_ccam'] = 'Actes prévus';
+$locales['CConsultation-_ref_actes_ccam'] = 'Actes codés';
 $locales['CMbObject-back-addictions'] = 'Addicitions';
 $locales['CMbObject-back-antecedants'] = 'Antécédents';
 $locales['CMbObject-back-traitements'] = 'Traitements';
@@ -138,6 +138,8 @@ $locales['CPatient.sexe.'] = ' ';
 $locales['CPatient.sexe.f'] = 'Féminin';
 $locales['CPatient.sexe.j'] = 'Femme Célibataire';
 $locales['CPatient.sexe.m'] = 'Masculin';
+$locales['CSejour-_ext_codes_ccam'] = 'Actes prévus';
+$locales['CSejour-_ref_actes_ccam'] = 'Actes codés';
 $locales['CTraitement'] = 'Traitement';
 $locales['CTraitement-debut'] = 'Début';
 $locales['CTraitement-debut-desc'] = 'Début du traitement';

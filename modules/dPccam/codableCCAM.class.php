@@ -3,7 +3,7 @@
 class CCodableCCAM extends CMbObject {
 	
   var $codes_ccam         = null;
-  var $_codes_ccam        = array();
+  var $_codes_ccam        = null;
   var $_ref_actes_ccam    = null;
   var $_ext_codes_ccam    = null;
   var $_acte_execution    = null;
@@ -16,6 +16,7 @@ class CCodableCCAM extends CMbObject {
 
   function updateFormFields() {
   	parent::updateFormFields();
+    
     $this->codes_ccam = strtoupper($this->codes_ccam);
     $this->_codes_ccam = array();
     if($this->codes_ccam)
@@ -32,10 +33,12 @@ class CCodableCCAM extends CMbObject {
   
   function loadRefsCodesCCAM() {
     $this->_ext_codes_ccam = array();
-    foreach ($this->_codes_ccam as $code) {
-      $ext_code_ccam = new CCodeCCAM($code);
-      $ext_code_ccam->LoadLite();
-      $this->_ext_codes_ccam[] = $ext_code_ccam;
+    if($this->_codes_ccam !== null) {
+      foreach ($this->_codes_ccam as $code) {
+        $ext_code_ccam = new CCodeCCAM($code);
+        $ext_code_ccam->LoadLite();
+        $this->_ext_codes_ccam[] = $ext_code_ccam;
+      }
     }
   }
 

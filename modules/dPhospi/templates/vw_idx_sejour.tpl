@@ -61,7 +61,7 @@ function loadSejour(sejour_id) {
             
             {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
             <tr>
-              <th class="category" colspan="3">
+              <th class="category" colspan="4">
                 {{$curr_chambre->_view}} - {{$curr_lit->_view}}
               </th> 
                 {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
@@ -72,14 +72,19 @@ function loadSejour(sejour_id) {
               </a>
               </td>
               <td>
-                <a style="float: right;" href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}">
+                <a style="float: right;" href="index.php?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}">
                   <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
-                </a>          
+                </a>
+                </td>
+                <td>
+                <a style="float: right;" href="{{$curr_affectation->_ref_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}">
+                  <img src="images/icons/search.png" alt="view" title="Afficher le dossier complet" />
+                </a>                             
               </td>
               <td class="action" style="background:#{{$curr_affectation->_ref_sejour->_ref_praticien->_ref_function->color}}">
               {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}
               </td>
-              </tr>
+            </tr>
             {{/foreach}}
             
             {{/foreach}}

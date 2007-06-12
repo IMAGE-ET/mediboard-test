@@ -77,6 +77,7 @@
       <strong>{{mb_label object=$object field="tel2"}}</strong>
       {{mb_value object=$object field="tel2"}}
     </td>
+    
   </tr>
   {{if $object->rques}}
   <tr>

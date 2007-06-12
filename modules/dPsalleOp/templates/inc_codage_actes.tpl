@@ -68,7 +68,7 @@
           <select name="executant_id" class="{{$acte->_props.executant_id}}">
             <option value="">&mdash; Choisir un professionnel de santé</option>
             {{foreach from=$listExecutants item=curr_executant}}
-            <option value="{{$curr_executant->user_id}}" {{if $acte->executant_id == $curr_executant->user_id}} selected="selected" {{/if}}>
+            <option class="mediuser" style="border-color: #{{$curr_executant->_ref_function->color}};" value="{{$curr_executant->user_id}}" {{if $acte->executant_id == $curr_executant->user_id}} selected="selected" {{/if}}>
               {{$curr_executant->_view}}
             </option>
             {{/foreach}}
