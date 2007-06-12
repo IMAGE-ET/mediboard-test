@@ -67,7 +67,7 @@ SystemMessage = {
 
 	// Check message type (loading, notice, warning, error) from given div
 	checkType: function(div) {
-  	this.type = $A(div.childNodes).pluck("className").compact().first();
+  	this.type = $A(div.childNodes).pluck("className").compact().unique().first();
 	},
 
 	// Catches the innerHTML watch event
