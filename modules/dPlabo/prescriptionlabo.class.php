@@ -8,6 +8,16 @@
 */
 
 class CPrescriptionLabo extends CMbObject {
+  
+  // Status const
+  const VIERGE       = 16;
+  const PRELEVEMENTS = 32;
+  const VEROUILLEE   = 48;
+  const TRANSMISE    = 64;
+  const SAISIE       = 80;
+  const VALIDEE      = 96;
+  const FERMEE       = 112;
+  
   // DB Table key
   var $prescription_labo_id = null;
   
@@ -17,6 +27,9 @@ class CPrescriptionLabo extends CMbObject {
   // DB references
   var $patient_id   = null;
   var $praticien_id = null;
+  
+  // Form Fields
+  var $_status = null;
   
   // Forward references
   var $_ref_patient   = null;
@@ -53,6 +66,7 @@ class CPrescriptionLabo extends CMbObject {
     parent::updateFormFields();
     $this->_shortview = $this->date;
     $this->_view      = "Prescription du ".mbTranformTime(null, $this->date, "%d/%m/%Y %Hh%M");
+    $this->getStatus();
   }
   
   function loadRefsFwd() {
@@ -80,6 +94,14 @@ class CPrescriptionLabo extends CMbObject {
         $this->_ref_examens[$examen->_id] =& $examen; 
       }
     }
+  }
+  
+  function getStatus() {
+    $this->_status = self::VIERGE;
+    if($this->countBackRefs("prescription_labo_examen")) {
+      $this->_status = self::PRELEVEMENTS;
+    }
+    return $this->_status;
   }
 
   /**

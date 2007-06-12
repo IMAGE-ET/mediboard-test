@@ -46,7 +46,7 @@
       {{$curr_prescription->_ref_prescription_items|@count}} Examens
     </td>
     <td class="text">
-      Validée, en attente
+      {{tr}}CPrescriptionLabo._status.{{$curr_prescription->_status}}{{/tr}}
     </td>
   </tr>
 {{/foreach}}
