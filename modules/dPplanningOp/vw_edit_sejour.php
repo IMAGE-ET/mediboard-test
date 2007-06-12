@@ -11,10 +11,6 @@ global $AppUI, $can, $m, $tab, $dPconfig;
 
 $can->needsRead();
 
-
-
-
-
 $sejour_id    = mbGetValueFromGetOrSession("sejour_id");
 $patient_id   = mbGetValueFromGet("patient_id");
 $praticien_id = mbGetValueFromGetOrSession("praticien_id");

@@ -161,12 +161,19 @@ $dPconfig["dPplanningOp"]["COperation"] = array (
   "duree_fin"        => "10",
   "hour_urgence_deb" => "0",
   "hour_urgence_fin" => "23",
-  "min_intervalle"   => "15"
+  "min_intervalle"   => "15",
+  "locked"           => "0"
 );
 $dPconfig["dPplanningOp"]["CSejour"] = array (
-  "heure_deb"      => "0",
-  "heure_fin"      => "23",
-  "min_intervalle" => "15"
+  "heure_deb"           => "0",
+  "heure_fin"           => "23",
+  "min_intervalle"      => "15",
+  "heure_entree_veille" => "17",
+  "heure_entree_jour"   => "10",
+  "heure_sortie_ambu"   => "18",
+  "heure_sortie_autre"  => "8",
+  "locked"              => "0"
+
 );
 
 $dPconfig["dPcabinet"]["addictions"] = 0;
