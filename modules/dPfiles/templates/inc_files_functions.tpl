@@ -64,6 +64,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
 }
 
 function setObject(oObject){
+  //alert("toto"+"id"+oObject.id+"view"+oObject.view+"class"+oObject.objClass+"key"+oObject.keyword);
   var oForm = document.FrmClass;
   oForm.selKey.value = oObject.id;
   oForm.selView.value = oObject.view;

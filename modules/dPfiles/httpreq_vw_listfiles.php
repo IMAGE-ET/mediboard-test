@@ -58,6 +58,10 @@ if ($userSel->user_id) {
   $listModeleFunc = $listModeleFunc->loadlist($where, $order);
 }
 
+
+
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -94,5 +98,6 @@ $smarty->display(
  	$typeVue == 2 ? "inc_list_view_gd_thumb.tpl":
 	"inc_list_view.tpl"
 );
+
 
 ?>

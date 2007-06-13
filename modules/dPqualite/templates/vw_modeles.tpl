@@ -94,8 +94,6 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           </th>
         </tr>
         <tr>
-          <th>{{mb_label object=$docGed field="ged[titre]"}}</th>
-          <td>{{mb_field object=$employe field="ged[titre]"}}</td>
           <th>
             <label for="ged[titre]" title="{{tr}}CDocGed-titre-modele-desc{{/tr}}">{{tr}}CDocGed-titre-modele{{/tr}}</label>
           </th>
