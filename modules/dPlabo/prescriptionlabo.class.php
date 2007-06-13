@@ -22,7 +22,8 @@ class CPrescriptionLabo extends CMbObject {
   var $prescription_labo_id = null;
   
   // DB Fields
-  var $date = null;
+  var $date       = null;
+  var $verouillee = null;
   
   // DB references
   var $patient_id   = null;
@@ -52,7 +53,8 @@ class CPrescriptionLabo extends CMbObject {
     return array (
       "patient_id"   => "ref class|CPatient notNull",
       "praticien_id" => "ref class|CMediusers notNull",
-      "date"         => "dateTime"
+      "date"         => "dateTime",
+      "verouillee"   => "bool"
     );
   }
   
@@ -97,10 +99,19 @@ class CPrescriptionLabo extends CMbObject {
   }
   
   function getStatus() {
-    $this->_status = self::VIERGE;
+    if($this->getNumFiles()) {
+      $this->_status = self::TRANSMISE;
+      return $this->_status;
+    }
+    if($this->verouillee) {
+      $this->_status = self::VEROUILLEE;
+      return $this->_status;
+    }
     if($this->countBackRefs("prescription_labo_examen")) {
       $this->_status = self::PRELEVEMENTS;
+      return $this->_status;
     }
+    $this->_status = self::VIERGE;
     return $this->_status;
   }
 
