@@ -24,7 +24,7 @@ $finact = $filter->_date_max = mbDate("+ 1 MONTH", $filter->_date_max);
 $finact = $filter->_date_max = mbDate("-1 DAY", $filter->_date_max);
 
 $salle_id = $filter->salle_id = mbGetValueFromGetOrSession("salle_id", 0);
-$codeCCAM = $filter->codes_ccam = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
+$codeCCAM = $filter->codes_ccam = strtoupper(mbGetValueFromGetOrSession("codes_ccam", ""));
 $prat_id = $filter->_prat_id = mbGetValueFromGetOrSession("prat_id", 0);
 $discipline_id = $filter->_specialite = mbGetValueFromGetOrSession("discipline_id", 0);
 
@@ -45,6 +45,7 @@ $listSalles = $listSalles->loadList($where, $order);
 
 $listDisciplines = new CDiscipline();
 $listDisciplines = $listDisciplines->loadUsedDisciplines();
+
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -121,7 +121,7 @@
         </option>
         {{/if}}
         <option value="{{$today}}">
-          {{$today|date_format:"%d/%m/%Y"}} (ajourd'hui)
+          {{$today|date_format:"%d/%m/%Y"}} (aujourd'hui)
         </option>
         <option value="{{$tomorow}}">
           {{$tomorow|date_format:"%d/%m/%Y"}} (demain)

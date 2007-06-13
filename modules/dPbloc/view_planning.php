@@ -78,7 +78,7 @@ foreach($plagesop as $keyPlage => $valuePlage) {
   $order = "operations.rank";
   $listOp = $listOp->loadList($where, $order);
   if ((sizeof($listOp) == 0) && ($filter->_plage == "false"))
-    unset($plagesop[$key]);
+    unset($plagesop[$keyPlage]);
   else {
     foreach($listOp as $keyOp => $currOp) {
       $operation =& $listOp[$keyOp];

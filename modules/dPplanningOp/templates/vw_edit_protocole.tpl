@@ -250,9 +250,9 @@ function pageMain() {
         </tr>
 
         <tr>
-          <td>{{mb_field object=$protocole field="depassement" size="4"}} €</td>
-          <td>{{mb_field object=$protocole field="forfait" size="4"}} €</td>
-          <td>{{mb_field object=$protocole field="fournitures" size="4"}} €</td>
+          <td>{{mb_field object=$protocole field="depassement" size="4"}}</td>
+          <td>{{mb_field object=$protocole field="forfait" size="4"}}</td>
+          <td>{{mb_field object=$protocole field="fournitures" size="4"}}</td>
         </tr>
       </table>
     </td>

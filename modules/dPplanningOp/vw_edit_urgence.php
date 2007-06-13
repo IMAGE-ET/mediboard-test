@@ -122,10 +122,25 @@ $hours_duree = range($config["duree_deb"], $config["duree_fin"]);
 $hours_urgence = range($config["hour_urgence_deb"], $config["hour_urgence_fin"]);
 $mins_duree = range(0, 59, $config["min_intervalle"]);
 
+
+
+$config =& $dPconfig["dPplanningOp"]["CSejour"];
+$heure_sortie_ambu   = $config["heure_sortie_ambu"];
+$heure_sortie_autre  = $config["heure_sortie_autre"];
+$heure_entree_veille = $config["heure_entree_veille"];
+$heure_entree_jour   = $config["heure_entree_jour"];
+
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
+
+$smarty->assign("heure_sortie_ambu"   , $heure_sortie_ambu);
+$smarty->assign("heure_sortie_autre"  , $heure_sortie_autre);
+$smarty->assign("heure_entree_veille" , $heure_entree_veille);
+$smarty->assign("heure_entree_jour"   , $heure_entree_jour);
 
 $smarty->assign("op"        , $op);
 $smarty->assign("plage"     , $op->plageop_id ? $op->_ref_plageop : new CPlageOp );

@@ -1,5 +1,19 @@
 <script type="text/javascript">
 
+function popCodeCCAM() {
+  var url = new Url();
+  url.setModuleAction("dPplanningOp", "code_selector");
+  url.addParam("type", "ccam");
+  url.popup(600, 500, "ccam");
+}
+
+function setCodeCCAM( key, type ) {
+  if (key) {
+    var oForm = document.bloc;
+    oForm.codes_ccam.value = key;
+  }
+}
+
 function zoomGraphIntervention(date){
   url = new Url();
   url.setModuleAction("dPstats", "graph_activite_zoom");
@@ -61,8 +75,11 @@ function pageMain() {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="codes_ccam"}}</td>
-          <td>{{mb_field object=$filter field="codes_ccam" canNull="true"}} </td>
-
+          <td>
+            {{mb_field object=$filter field="codes_ccam" canNull="true" size="8"}}
+            <button class="search" type="button" onclick="popCodeCCAM()">Rechercher</button>
+          </td>
+          
           <td>{{mb_label object=$filter field="_specialite"}}</td>
           <td>
             <select name="discipline_id">
@@ -85,7 +102,7 @@ function pageMain() {
             {{if $filter->_prat_id}}
               <img alt="Occupation des plages" src='?m=dPstats&amp;a=graph_praticienbloc&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;prat_id={{$filter->_prat_id}}&amp;codeCCAM={{$filter->codes_ccam}}' />
             {{elseif $filter->_specialite}}
-              <img alt="Répartition par praticiens" src='?m=dPstats&amp;a=graph_pratdiscipline&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;discipline_id={{$discipline_id}}&amp;codeCCAM={{$filter->codes_ccam}}' />
+              <img alt="Répartition par praticiens" src='?m=dPstats&amp;a=graph_pratdiscipline&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;discipline_id={{$filter->_specialite}}&amp;codeCCAM={{$filter->codes_ccam}}' />
             {{else}}
               <img alt="Patients par jour par salle" src='?m=dPstats&amp;a=graph_patjoursalle&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;prat_id={{$filter->_prat_id}}&amp;codeCCAM={{$filter->codes_ccam}}' />
             {{/if}}

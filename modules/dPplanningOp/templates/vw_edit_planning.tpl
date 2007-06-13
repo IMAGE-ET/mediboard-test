@@ -20,7 +20,7 @@ function popCode(type) {
   url.popup(700, 500, type);
 }
 
-function setCodeCCAM(sCode, type ) {
+function setCode(sCode, type ) {
   if (!sCode) {
     return;
   }

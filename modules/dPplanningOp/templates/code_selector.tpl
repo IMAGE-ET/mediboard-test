@@ -1,6 +1,11 @@
 <script type="text/javascript">
 function setClose(code, type) {
-  window.opener.setCodeCCAM(code, type);
+  if (type == "ccam") {
+    window.opener.setCodeCCAM(code, type);
+  }
+  if (type == "cim10") {
+    window.opener.setCode(code, type);
+  }
   window.close();
 }
 
