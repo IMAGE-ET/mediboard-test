@@ -131,15 +131,15 @@ function smarty_function_mb_field_spec($obj, $field, $propSpec = null){
 
 /**
  * @param array params tableau des parametres
- *        - object          : Objet
- *        - field           : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
- *        - prop            : {optionnel} Specification du champs, par defaut, celle de la classe
- *        - separator       : {optionnel} Séparation entre les champs de type "radio" [default: ""]
- *        - cycle           : {optionnel} Cycle de répétition du séparateur (pour les enums en type radio) [default: "1"]
- *        - typeEnum        : {optionnel} Type d'affichage des enums (values : "select", "radio") [default: "select"]
- *        - defaultOption   : {optionnel} Ajout d'un "option" en amont des valeurs ayant pour value ""
- *        - class           : {optionnel} Permet de donner une classe aux champs
- *        - hidden          : {optionnel} Permet de forcer le type "hidden"
+ * - object          : Objet
+ * - field           : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
+ * - prop            : {optionnel} Specification du champs, par defaut, celle de la classe
+ * - separator       : {optionnel} Séparation entre les champs de type "radio" [default: ""]
+ * - cycle           : {optionnel} Cycle de répétition du séparateur (pour les enums en type radio) [default: "1"]
+ * - typeEnum        : {optionnel} Type d'affichage des enums (values : "select", "radio") [default: "select"]
+ * - defaultOption   : {optionnel} Ajout d'un "option" en amont des valeurs ayant pour value ""
+ * - class           : {optionnel} Permet de donner une classe aux champs
+ * - hidden          : {optionnel} Permet de forcer le type "hidden"
  * 		  - canNull			: {optionnel} Permet de passer outre le notNull de la spécification
  */
 function smarty_function_mb_field($params, &$smarty) {
@@ -182,10 +182,10 @@ function smarty_function_mb_value($params, &$smarty) {
 /**
  * Fonction d'écriture  des labels
  * @param array params tableau des parametres
- *        - object      : Objet
- *        - field       : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
- *        - defaultFor  : {optionnel} Ajout d'une valeur à cibler pour "select" ou "radio"
- *        - typeEnum    : {optionnel} Type d'affichage des enums à cibler (values : "select", "radio") [default: "select"]
+ * - object      : Objet
+ * - field       : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
+ * - defaultFor  : {optionnel} Ajout d'une valeur à cibler pour "select" ou "radio"
+ * - typeEnum    : {optionnel} Type d'affichage des enums à cibler (values : "select", "radio") [default: "select"]
  */
 function smarty_function_mb_label($params, &$smarty) {
   global $AppUI;
@@ -194,6 +194,27 @@ function smarty_function_mb_label($params, &$smarty) {
   $field      = CMbArray::extract($params, "field" , null, true);
   
   return $object->_specs[$field]->getLabelElement($object, $params);
+}
+
+
+/**
+ * Fonction d'écriture  des labels
+ * @param array params 
+ * - var   : Name of the new variable
+ * - test  : Test for ternary operator 
+ * - value : Value if test is true
+ * - other : Value if test is false
+ */
+function smarty_function_mb_ternary($params, &$smarty) {
+  global $AppUI;
+  
+  $var   = CMbArray::extract($params, "var"   , null, true);
+  $test  = CMbArray::extract($params, "test"  , null, true);
+  $value = CMbArray::extract($params, "value" , null, true);
+  $other = CMbArray::extract($params, "other" , null, true);
+  
+  $smarty->assign($var, test ? $value : $other);
+  
 }
 
 /**
@@ -242,6 +263,7 @@ class CSmartyDP extends Smarty {
     $this->register_function("mb_field"     , "smarty_function_mb_field");
     $this->register_function("mb_value"     , "smarty_function_mb_value");
     $this->register_function("mb_label"     , "smarty_function_mb_label");
+    $this->register_function("mb_ternary"   , "smarty_function_mb_ternary");
     $this->register_modifier("json"         , "smarty_modifier_json");
     $this->register_modifier("const"        , "smarty_modifier_const");
     $this->register_modifier("cleanField"   , "smarty_modifier_cleanField");

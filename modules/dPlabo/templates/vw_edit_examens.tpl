@@ -38,10 +38,10 @@ function pageMain() {
     
     <td>
       
-      <!-- Edition de l'examen sélectionné -->
+      <!-- Edition de l'analyse sélectionné -->
       {{if $can->edit}}
       <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id=0">
-        Ajouter un nouvel examen
+        Ajouter unn nouvelle analyse
       </a>
       
       <form name="editExamen" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -100,7 +100,7 @@ function pageMain() {
 
       <script language="Javascript" type="text/javascript">
       var oAccord = new Rico.Accordion($('accordionExamen'), { 
-        panelHeight: 280, 
+        panelHeight: 270, 
         showDelay: 50, 
         showSteps: 3 
       } );
@@ -124,7 +124,7 @@ function pageMain() {
       {{if $examen->_id}}
       <table class="tbl">
         <tr>
-          <th class="title">Packs d'examens associés</th>
+          <th class="title">Packs d'analyses associées</th>
         </tr>
         <tr>
           <th>Nom du pack</th>
@@ -137,6 +137,39 @@ function pageMain() {
             </a>
           </td>
         </tr>
+        {{foreachelse}}
+        <tr><td><em>Analyse présente dans aucun pack</em></td></tr>
+        {{/foreach}}
+      </table>
+      {{/if}}
+
+      <!-- Analyses similaires -->
+      {{if $examen->_id}}
+      <table class="tbl">
+        <tr>
+          <th class="title" colspan="10">Analyses similaires </th>
+        </tr>
+        <tr>
+          <th>Analyse</th>
+          <th>Catalogue</th>
+        </tr>
+        {{foreach from=$examen->_ref_siblings item=_sibling}}
+        <tr>
+          <td>
+            <a href="?m=dPlabo&amp;tab=vw_edit_examens&amp;examen_labo_id={{$_sibling->_id}}">
+              {{$_sibling->_view}}
+            </a>
+          </td>
+          <td>
+            {{foreach from=$_sibling->_ref_catalogues item=_catalogue}}
+            <strong>{{tr}}CExamen-catalogue-{{$_catalogue->_level}}{{/tr}} :</strong>
+            {{$_catalogue->_view}}
+            <br />
+            {{/foreach}}
+          </td>
+        </tr>
+        {{foreachelse}}
+        <tr><td colspan="2"><em>Absent des autres catalogues</em></td></tr>
         {{/foreach}}
       </table>
       {{/if}}

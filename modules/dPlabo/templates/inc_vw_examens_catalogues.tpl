@@ -10,7 +10,7 @@
   </tr>
 
   <tr>
-    <th>Examen</th>
+    <th>Analyse</th>
     <th>Unité</th>
     <th>Références</th>
   </tr>

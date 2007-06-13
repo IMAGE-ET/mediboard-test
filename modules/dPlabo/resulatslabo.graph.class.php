@@ -19,6 +19,7 @@ class CResultatsLaboGraph extends Graph {
   var $resultats = null;
   
   function CResultatsLaboGraph($patient, $examen, $resultats) {
+    $resultats = array_reverse($resultats, true);
     if ($examen->type != "num") {
       JpGraphError::raise("Le type d'examen doit être numérique pour être affiché");
     }

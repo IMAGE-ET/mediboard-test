@@ -105,5 +105,36 @@ class CMbArray {
     
     return $array;
   }
+  
+  /**
+   * Pluck (collect) given key or attribute name of each value
+   * whether the values are arrays or objects.
+   * Preserves indexes
+   * @param array $array the array to pluck
+   * @param mixed $key the key or attribute name 
+   * @return an array with all plucked values
+   */
+  function pluck($array, $name) {
+    $values = array(); 
+    foreach ($array as $index => $value) {
+      if (is_object($value)) {
+        $value = get_object_vars($value);
+      }
+      
+      if (!is_array($value)) {
+        trigger_error("Value at index '$index' is neither an array nor an object", E_USER_WARNING);
+        continue;
+      }
+      
+      if (!array_key_exists($name, $value)) {
+        trigger_error("Value at index '$index' can't access to '$name' field", E_USER_WARNING);
+        continue;
+      }
+      
+      $values[$index] = $value[$name];
+    }
+    
+    return $values;    
+  }
 }
 ?>

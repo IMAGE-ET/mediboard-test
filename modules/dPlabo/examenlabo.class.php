@@ -58,8 +58,10 @@ class CExamenLabo extends CMbObject {
   var $_ref_items_pack_labo = null;
 
   // Distant References
-  var $_ref_packs_labo = null;
-  var $_ref_catalogues = null;
+  var $_ref_packs_labo     = null;
+  var $_ref_catalogues     = null;
+  var $_ref_siblings       = null;
+  var $_ref_root_catalogue = null;
   
   function CExamenLabo() {
     $this->CMbObject("examen_labo", "examen_labo_id");
@@ -130,7 +132,7 @@ class CExamenLabo extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_shortview = $this->identifiant;
-    $this->_view = "$this->identifiant : $this->libelle ($this->type_prelevement)";
+    $this->_view = "[$this->identifiant] $this->libelle ($this->type_prelevement)";
   }
   
   function loadCatalogue() {
@@ -162,7 +164,7 @@ class CExamenLabo extends CMbObject {
    */
   function getRootCatalogue() {
     $this->loadCatalogue();
-    return $this->_ref_catalogue_labo->getRootCatalogue();
+    return $this->_ref_root_catalogue = $this->_ref_catalogue_labo->getRootCatalogue();
   }
   
   /**
@@ -173,7 +175,7 @@ class CExamenLabo extends CMbObject {
     $where = array();
     $where["identifiant"] = "= '$this->identifiant'";
     $where["examen_labo_id"] = "!= '$this->examen_labo_id'";
-    return $examen->loadList($where);
+    return $this->_ref_siblings = $examen->loadList($where);
   }
   
   /**
@@ -191,6 +193,7 @@ class CExamenLabo extends CMbObject {
    * Load complete catalogue classification
    */
   function loadClassification() {
+    $this->loadCatalogue();
     $catalogue = $this->_ref_catalogue_labo;
     $catalogues = array();
     $catalogues[$catalogue->_id] = $catalogue;

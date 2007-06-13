@@ -18,8 +18,9 @@ $listPrats = $user->loadPraticiens(PERM_EDIT);
 // Chargement de la prescription choisie
 $prescription = new CPrescriptionLabo;
 $prescription->load($prescription_labo_id = mbGetValueFromGet("prescription_labo_id"));
-if(!$prescription->_id) {
+if (!$prescription->_id) {
   $prescription->patient_id = mbGetValueFromGet("patient_id");
+  $prescription->date = mbDateTime();
 }
 $prescription->loadRefsFwd();
 

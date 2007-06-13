@@ -132,15 +132,9 @@ class CPrescriptionLabo extends CMbObject {
       }
     }
 
-    echo "<h2>Needed catalogues</h2>";
-    foreach ($catalogues as $trace_id => $trace_catalogue) {
-      mbTrace($trace_catalogue->_id, "ID for key '$trace_id'");
-      mbTrace($trace_catalogue->pere_id, "Parent ID for key '$trace_id'");
-    }
-
     // Complete catalogue hierarchy
-    foreach ($catalogues as &$_catalogue) {
-      $child_catalogue =& $_catalogue;
+    foreach ($catalogues as $_catalogue) {
+      $child_catalogue = $_catalogue;
       while ($child_catalogue->pere_id && !array_key_exists($child_catalogue->pere_id, $catalogues)) {
         $catalogue = new CCatalogueLabo;
         $catalogue->load($child_catalogue->pere_id);
@@ -148,7 +142,7 @@ class CPrescriptionLabo extends CMbObject {
         $child_catalogue = $catalogue;
       }
     }
-    
+
     // Prepare catalogues collections
     foreach ($catalogues as &$ref_catalogue) {
       $ref_catalogue->_ref_catalogues_labo = array();
@@ -156,11 +150,11 @@ class CPrescriptionLabo extends CMbObject {
     }
 
     // Feed prescription items
-    foreach ($this->_ref_prescription_items as &$_item) {
+    foreach ($this->_ref_prescription_items as $_item) {
       $catalogue_id = $_item->_ref_examen_labo->catalogue_labo_id;
-      $catalogues[$catalogue_id]->_ref_prescription_items[$_item->_id] =& $_item;
+      $catalogues[$catalogue_id]->_ref_prescription_items[$_item->_id] = $_item;
     }
-    
+
     // Link catalogue hierarchy
     foreach ($catalogues as &$link_catalogue) {
       if ($parent_id = $link_catalogue->pere_id) {
@@ -170,20 +164,11 @@ class CPrescriptionLabo extends CMbObject {
       } 
     }
     
-    echo "<h2>Linked catalogues</h2>";
-    foreach ($catalogues as $trace_id => $trace_catalogue) {
-      mbTrace($trace_catalogue->_id, "ID for key '$trace_id'");
-      mbTrace($trace_catalogue->pere_id, "Parent ID for key '$trace_id'");
-    }
-
-    
     // Find classifications roots
     foreach ($catalogues as &$root_catalogue) {
       if ($root_catalogue->computeLevel() == 0) {
         $this->_ref_classification_roots[$root_catalogue->_id] =& $root_catalogue;
       }
-      
-      mbTrace($root_catalogue->_level, "Level for '$root_catalogue->_id'");
     }
   } 
    

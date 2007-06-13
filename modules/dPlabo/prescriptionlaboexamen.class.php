@@ -101,16 +101,23 @@ class CPrescriptionLaboExamen extends CMbObject {
     $examen = new CExamenLabo;
     $examen->load($examen_labo_id);
     
+    $order = "date DESC";
     $prescription = new CPrescriptionLabo;
     $prescription->patient_id = $patient_id;
-    $prescriptions = $prescription->loadMatchingList();
+    $prescriptions = $prescription->loadMatchingList($order);
     
-    $where = array ();
-    $where["examen_labo_id"] = "= '$examen_labo_id'";
-    $where["prescription_labo_id"] = db_prepare_in(array_keys($prescriptions));
-    $order = "date DESC";
     
-    $items = $this->loadList($where, $order, $limit);
+    // Load items for each prescription to preserve prescription date ordering
+    $items = array();
+    $item = new CPrescriptionLaboExamen;
+    foreach ($prescriptions as $_prescription) {
+      $item->prescription_labo_id = $_prescription->_id;
+      $item->examen_labo_id       = $examen_labo_id;
+      foreach ($item->loadMatchingList($order) as $_item) {
+        $items[$_item->_id] = $_item;
+      }
+    }
+    
     foreach ($items as &$item) {
       $item->_ref_prescription_labo =& $prescriptions[$item->prescription_labo_id];
       $item->_ref_examen_labo =& $examen;

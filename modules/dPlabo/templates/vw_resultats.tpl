@@ -26,6 +26,7 @@ var Prescription = {
 <table class="main">
   <tr>
   
+    <!-- Choose a patient -->
     <td class="halfPane">
       <form name="Patient" action="?" method="get">
 
@@ -49,6 +50,7 @@ var Prescription = {
     </td>
     
     {{if $patient->_id}}
+    <!-- Choose a prescription -->
     <td class="halfPane">
       
       <form name="Prescription" action="?" method="get">
@@ -77,7 +79,24 @@ var Prescription = {
 
     </td>
     {{/if}}
-    
   </tr>
+  
+  {{if $prescription->_id}}
+  <!-- Show results for selected prescription -->
+  <tr>
+    <td colspan="2">
+      <div id="resultats-internes">
+        <table class="resultatsLabo">
+        {{foreach from=$prescription->_ref_classification_roots item=_catalogue}}
+        {{include file="tree_resultats.tpl"}}
+        {{/foreach}}
+        </table>
+      </div>
+      
+      <div id="resultats-externes">
+      </div>
+    </td>
+  </tr>
+  {{/if}}
   
 </table>

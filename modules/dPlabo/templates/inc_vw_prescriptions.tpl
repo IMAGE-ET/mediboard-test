@@ -1,3 +1,5 @@
+{{* $Id: $ *}}
+
 <form name="dropPrescriptionItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dPlabo" />
   <input type="hidden" name="dosql" value="do_prescription_examen_aed" />
@@ -29,7 +31,7 @@
         hoverclass:'selected'
         } );
       </script>
-      <a href="#nothing" onclick="Prescription.select({{$curr_prescription->_id}})">
+      <a href="#{{$curr_prescription->_class_name}}-{{$curr_prescription->_id}}" onclick="Prescription.select({{$curr_prescription->_id}})">
         {{$curr_prescription->_view}}
       </a>
       <form name="delPrescription-{{$curr_prescription->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">

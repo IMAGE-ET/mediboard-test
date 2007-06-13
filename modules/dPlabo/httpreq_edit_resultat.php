@@ -15,9 +15,12 @@ $typeListe = mbGetValueFromGetOrSession("typeListe");
 
 // Chargement de l'item choisi
 $prescriptionItem = new CPrescriptionLaboExamen;
-$prescriptionItem->loadAides($AppUI->user_id);
-
 $prescriptionItem->load(mbGetValueFromGetOrSession("prescription_labo_examen_id"));
+$prescriptionItem->loadAides($AppUI->user_id);
+if ($prescriptionItem->_id) {
+  $prescriptionItem->date = mbDate();
+}
+
 $siblingItems = array();
 if ($prescriptionItem->loadRefs()) {
   $siblingItems = $prescriptionItem->loadSiblings();

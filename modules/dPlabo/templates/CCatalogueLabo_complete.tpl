@@ -38,7 +38,7 @@ var oDragOptions = {
     </th>
   </tr>
   <tr>
-    <th class="category">Examen</th>
+    <th class="category">Analyse</th>
     <th class="category">Type</th>
     <th class="category">Unité</th>
     <th class="category">Min</th>

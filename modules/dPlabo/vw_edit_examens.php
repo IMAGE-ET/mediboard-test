@@ -17,9 +17,14 @@ $examen_labo_id = mbGetValueFromGetOrSession("examen_labo_id");
 $examen = new CExamenLabo;
 
 // Chargement du catalogue demandé
-if($examen_labo_id && !mbGetValueFromGet("catalogue_labo_id")) {
+if ($examen_labo_id && !mbGetValueFromGet("catalogue_labo_id")) {
   $examen->load($examen_labo_id);
   $examen->loadRefs();
+  $examen->getSiblings();
+  foreach ($examen->_ref_siblings as &$_sibling) {
+    $_sibling->loadClassification();
+  }
+  $examen->loadClassification();
   $catalogue =& $examen->_ref_catalogue_labo;
 } else {
   $catalogue_labo_id = mbGetValueFromGetOrSession("catalogue_labo_id");
@@ -29,9 +34,6 @@ if($examen_labo_id && !mbGetValueFromGet("catalogue_labo_id")) {
 }
 
 $catalogue->loadRefs();
-
-mbTrace($examen->getRootCatalogue()->_view, "Root catalogue");
-mbTrace(array_keys($examen->getSiblings()), "Sibling examens ids");
 
 $groups = CGroups::loadGroups();
 foreach ($groups as &$group) {
@@ -45,8 +47,8 @@ foreach ($groups as &$group) {
 $where = array("pere_id" => "IS NULL");
 $order = "identifiant";
 $listCatalogues = $catalogue->loadList($where, $order);
-foreach($listCatalogues as $key => $curr_catalogue) {
-  $listCatalogues[$key]->loadRefsDeep();
+foreach($listCatalogues as &$_catalogue) {
+  $_catalogue->loadRefsDeep();
 }
 
 // Création du template
