@@ -75,7 +75,7 @@
   
   <tr>
     <th>{{mb_label object=$op field="libelle"}}</th>
-    <td colspan="2">{{mb_field object=$op field="libelle" size="50"}}</td>
+    <td colspan="2">{{mb_field object=$op field="libelle"}}</td>
   </tr>
   
   <tr>

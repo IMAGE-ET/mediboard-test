@@ -102,7 +102,8 @@ class CStrSpec extends CMbFieldSpec {
   
   function getFormHtmlElement($object, $params, $value, $className){
     $size = mbGetValue(max($this->length, $this->maxLength), 40);
-
+	$size = min($size, 40);
+	
     if (!array_key_exists("size", $params)) {
       $params["size"] = $size + 2;
     }
