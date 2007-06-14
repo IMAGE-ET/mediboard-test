@@ -15,6 +15,9 @@
           {{/foreach}}
         </select>
       </td>
+      
+      {{if $can->edit || $modif_operation}}
+      
       <td style="vertical-align:middle; text-align:right;">
         Ajouter un code
         <input type="text" size="7" name="_newCode" />
@@ -32,6 +35,7 @@
       </td>
       {{/if}}
     </tr>
+  
     <tr>
       <td style="vertical-align: middle;">
         <button class="trash" type="button" onclick="delCode({{$subject->_id}})">Supprimer</button>
@@ -50,6 +54,8 @@
       </td>
       {{/if}}
     </tr>
+    
+    {{/if}}
   </table>
 </form>
 
