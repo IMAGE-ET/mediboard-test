@@ -20,6 +20,28 @@ function popCode(type) {
   url.popup(700, 500, type);
 }
 
+
+
+
+function setCodeCCAM(sCode, type ) {
+  if (!sCode) {
+    return;
+  }
+  
+  var oElement = null;
+  
+  if (type == "ccam") {
+    oElement = document.editOp._codeCCAM;
+  }
+  
+  oElement.value = sCode;
+  
+  if (oElement.onblur) {
+    oElement.onblur();
+  }
+}
+
+
 function setCode(sCode, type ) {
   if (!sCode) {
     return;
