@@ -172,6 +172,7 @@ a.buttonprint,
 a.buttoncancel, 
 a.buttonmodify, 
 a.buttonsearch, 
+a.buttonlock, 
 a.buttontick, 
 a.buttonchange, 
 a.buttonremove, 
@@ -194,7 +195,7 @@ a.buttondown {
 
 a.button:hover, button:hover, a.buttonedit:hover, a.buttontrash:hover, a.buttonsubmit:hover,
 a.buttonnew:hover, a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, 
-a.buttonsearch:hover, a.buttontick:hover, a.buttonchange:hover, a.buttondown:hover,
+a.buttonsearch:hover, a.buttonlock:hover a.buttontick:hover, a.buttonchange:hover, a.buttondown:hover,
 a.buttonadd:hover, a.buttonremove:hover {
   background-color: #bbb;
 }
@@ -230,8 +231,14 @@ button.modify, a.buttonmodify {
   background-image: url(images/buttons/save.png);
   padding-left: 18px;
 }
+
 button.search, a.buttonsearch {
   background-image: url(images/buttons/search.png);
+  padding-left: 18px;
+}
+
+button.lock, a.buttonlock {
+  background-image: url(images/buttons/lock.png);
   padding-left: 18px;
 }
 

@@ -114,6 +114,13 @@ var Prescription = {
   },
 
   del: function(oForm) {
+    oForm.del.value = 1;
+    submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select } );
+    return true;
+  },
+
+  lock: function(oForm) {
+    oForm.verouillee.value = 1;
     submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select } );
     return true;
   },
@@ -124,6 +131,12 @@ var Prescription = {
     url.addParam("object_id", prescription_id);
     url.addParam("object_class", "CPrescriptionLabo");
     url.popup(500, 500, "CPrescriptionLabo");
+  },
+  
+  export: function(oForm) {
+    oForm.dosql.value = "do_prescription_export";
+    submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select } );
+    return true;
   },
   
   Examen : {

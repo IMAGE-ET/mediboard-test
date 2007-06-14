@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Sample prescription file -->
+<prescription id="pre-1" date="2007-06-13" xsi:noNamespaceSchemaLocation="prescription.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<nomPraticien>Name1</nomPraticien>
+	<prenomPraticien>FirstName1</prenomPraticien>
+	<nomPatient>Name2</nomPatient>
+	<prenomPatient>FirstName2</prenomPatient>
+	<date>2007-06-13</date>
+	<analyses>
+		<analyse id="anl-A">
+			<identifiant>IdtA</identifiant>
+			<libelle>StringA</libelle>
+		</analyse>
+		<analyse id="anl-B">
+			<identifiant>IdtB</identifiant>
+			<libelle>StringB</libelle>
+		</analyse>
+		<analyse id="anl-C">
+			<identifiant>IdtC</identifiant>
+			<libelle>StringC</libelle>
+		</analyse>
+	</analyses>
+</prescription>

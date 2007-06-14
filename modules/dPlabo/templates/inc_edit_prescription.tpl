@@ -44,12 +44,6 @@
       </select>
     </td>
   </tr>
-  {{if $prescription->_status >= $prescription|const:'PRELEVEMENTS'}}
-  <tr>
-    <th>{{mb_label object=$prescription field="verouillee"}}</th>
-    <td>{{mb_field object=$prescription field="verouillee"}}</td>
-  </tr>
-  {{/if}}
   <tr>
     <td colspan="2" class="button">
       <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg');">

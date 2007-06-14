@@ -63,6 +63,10 @@ class CPrescriptionLabo extends CMbObject {
     $backRefs["prescription_labo_examen"] = "CPrescriptionLaboExamen prescription_labo_id";
     return $backRefs;
   }
+  
+  function getSeeks() {
+    return array( "patient_id" => "ref|CPatient" );
+  }
 
   function updateFormFields() {
     parent::updateFormFields();

@@ -2,7 +2,7 @@
 
 /**
 * @package Mediboard
-* @subpackage mediusers
+* @subpackage dPlabo
 * @version $Revision: $
 * @author Romain Ollivier
 */

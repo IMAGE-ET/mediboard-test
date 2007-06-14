@@ -146,12 +146,35 @@ class CFile extends CMbObject {
     }
     
     // Checks complete file directory
-    $fileDir = "$filesDir/$this->_sub_dir/$this->file_object_id";
-    CMbPath::forceDir($fileDir);
+    $fileDirComp = "$filesDir/$this->_sub_dir/$this->file_object_id";
+    CMbPath::forceDir($fileDirComp);
     
     // Moves temp file to specific directory
-    $this->_file_path = "$fileDir/$this->file_real_filename";
+    $this->_file_path = "$fileDirComp/$this->file_real_filename";
     return move_uploaded_file($upload["tmp_name"], $this->_file_path);
+  }
+  
+  /**
+   * Move a file from a location to the file system
+   * @return boolean job-done
+   */
+  function moveFile($filename) {
+    global $filesDir;
+    $this->updateFormFields();
+    
+    // Check global directory
+    if (!CMbPath::forceDir($filesDir)) {
+      trigger_error("Files directory '$filesDir' is not writable", E_USER_WARNING);
+      return false;
+    }
+    
+    // Checks complete file directory
+    $fileDirComp = "$filesDir/$this->_sub_dir/$this->file_object_id";
+    CMbPath::forceDir($fileDirComp);
+    
+    // Moves temp file to specific directory
+    $this->_file_path = "$fileDirComp/$this->file_real_filename";
+    return rename($filename, $this->_file_path);
   }
 
   /**

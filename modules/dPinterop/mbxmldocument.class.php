@@ -12,10 +12,43 @@ if (!class_exists("DOMDocument")) {
 }
 
 class CMbXMLDocument extends DOMDocument {
+  
+  var $schemapath       = null;
+  var $schemafilename   = null;
+  var $documentfilename = null;
+  var $now              = null;
+  
   function __construct() {
     parent::__construct("1.0", "iso-8859-1");
 
     $this->format_output = true;
+  }
+  
+  function setDocument($doxumentfilename) {
+    $this->documentfilename = $doxumentfilename;
+  }
+  
+  function setSchema($schemapath, $schemaname) {
+    $this->schemapath     = $schemapath;
+    $this->schemafilename = "$schemapath/$schemaname";
+  }
+  
+  function checkSchema() {
+    if(!$this->schemafilename) {
+      trigger_error("You havent set the schema", E_USER_WARNING);
+      return false;
+    }
+    if (!is_dir($this->schemapath)) {
+      trigger_error("Schema directory is missing ($this->schemapath/)", E_USER_WARNING);
+      return false;
+    }
+    
+    if (!is_file($this->schemafilename)) {
+      trigger_error("Schema is missing ($this->schemafilename)", E_USER_WARNING);
+      return false;
+    }
+    
+    return true;
   }
 
   function libxml_display_error($error) {
@@ -48,7 +81,8 @@ class CMbXMLDocument extends DOMDocument {
      libxml_clear_errors();
   }
   
-  function schemaValidate($filename) {
+  function schemaValidate($filename = null) {
+    if(!$filename) $filename = $this->schemafilename;
     // PHP < 5.1.x
     if (!function_exists("libxml_use_internal_errors")) {
       return parent::schemaValidate($filename);
@@ -65,7 +99,7 @@ class CMbXMLDocument extends DOMDocument {
     return true;
   }
   
-  function addElement($elParent, $elName, $elValue = null, $elNS = "http://www.hprim.org/hprimXML") {
+  function addElement($elParent, $elName, $elValue = null, $elNS = null) {
     $elName  = utf8_encode($elName );
     $elValue = utf8_encode($elValue);
     return $elParent->appendChild(new DOMElement($elName, $elValue, $elNS));
@@ -105,7 +139,30 @@ class CMbXMLDocument extends DOMDocument {
         $node->parentNode->removeChild($node);
       }
     }
-    
+  }
+  
+  function saveFile() {
+    parent::save($this->documentfilename);
+  }
+  
+  function addFile($object) {
+    global $AppUI;
+    $this->saveFile();
+    $file = new CFile();
+    $file->file_object_id     = $object->_id;
+    $file->file_class         = $object->_class_name;
+    $file->file_name          = $object->_class_name."-".$object->_id.".xml";
+    $file->file_type          = "text/xml";
+    $file->file_size          = filesize($this->documentfilename);
+    $file->file_date          = db_unix2dateTime(time());
+    $file->file_real_filename = uniqid(rand());
+    $file->file_owner         = $AppUI->user_id;
+    $res = $file->moveFile($this->documentfilename); 
+    if($res) {
+      return $file->store();
+    } else {
+      return false;
+    }
   }
 }
 

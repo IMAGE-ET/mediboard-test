@@ -380,6 +380,7 @@ a.buttonprint,
 a.buttoncancel, 
 a.buttonmodify, 
 a.buttonsearch, 
+a.buttonlock, 
 a.buttontick, 
 a.buttonchange, 
 a.buttondown,
@@ -487,6 +488,16 @@ a.buttonsearch {
 button.search:hover, 
 a.buttonsearch:hover {
   background-image: url(../tonkin/images/buttons/searchover.png);
+}
+
+button.lock, 
+a.buttonlock {
+  background-image: url(../tonkin/images/buttons/lock.png);
+}
+
+button.lock:hover, 
+a.buttonlock:hover {
+  background-image: url(../tonkin/images/buttons/lockover.png);
 }
 
 button.tick, 

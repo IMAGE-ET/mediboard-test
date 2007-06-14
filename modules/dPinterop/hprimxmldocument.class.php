@@ -17,15 +17,12 @@ if (!class_exists("CMbXMLDocument")) {
 global $AppUI, $m;
 
 class CHPrimXMLDocument extends CMbXMLDocument {
+
   var $pmsipath = "modules/dPinterop/hprim";
   var $finalpath = "files/hprim";
-  var $schemapath = null;
-  var $schemafilename = null;
-  var $documentfilename = null;
   var $documentfinalprefix = null;
   var $documentfinalfilename = null;
   var $sentFiles = array();
-  var $now = null;
    
   function __construct($schemaname) {
     parent::__construct();
@@ -58,6 +55,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function schemaValidate() {
     return parent::schemaValidate($this->schemafilename);
   }
+  
+  function addElement($elParent, $elName, $elValue = null, $elNS = "http://www.hprim.org/hprimXML") {
+    return parent::addElement($elParent, $elName, $elValue, $elNS);
+	}
   
   function addNameSpaces() {
     // Ajout des namespace pour XML Spy

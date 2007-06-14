@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- by Romain Ollivier (openXtrem) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="prescription" type="typePrescription">
+		<xs:annotation>
+			<xs:documentation>Presription</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="typePrescription">
+		<xs:annotation>
+			<xs:documentation>Structure des analyses demandés</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="nomPraticien" type="xs:string"/>
+			<xs:element name="prenomPraticien" type="xs:string"/>
+			<xs:element name="nomPatient" type="xs:string"/>
+			<xs:element name="prenomPatient" type="xs:string"/>
+			<xs:element name="date" type="xs:date"/>
+			<xs:element name="analyses">
+				<xs:complexType>
+					<xs:sequence minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="analyse" type="typeAnalyse"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="required"/>
+		<xs:attribute name="date" type="xs:date" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="typeAnalyse">
+		<xs:annotation>
+			<xs:documentation>Description d'une analyse</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="identifiant" type="xs:string"/>
+			<xs:element name="libelle" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string"/>
+	</xs:complexType>
+</xs:schema>

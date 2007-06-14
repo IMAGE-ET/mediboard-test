@@ -48,7 +48,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
         $multifiles = true;
         foreach($upload["error"] as $fileNumber=>$etatFile){
          $upload ;
-         $aFiles[] = array("name"             => $upload["name"][$fileNumber],
+         $aFiles[] = array("name"              => $upload["name"][$fileNumber],
                             "type"             => $upload["type"][$fileNumber],
                             "tmp_name"         => $upload["tmp_name"][$fileNumber],
                             "error"            => $upload["error"][$fileNumber],
