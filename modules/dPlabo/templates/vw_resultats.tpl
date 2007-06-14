@@ -21,6 +21,34 @@ var Prescription = {
   }
 }
 
+var Anteriorite = {
+ viewItem: function(item_id) {
+   Console.trace("View anteriorité pour item " + item_id);
+ }
+}
+
+var IMeds = {
+  viewPatient: function(patient_id, div) {
+    var url = new Url;
+    url.setModuleAction("dPImeds", "httpreq_vw_patient_results");
+    url.addParam("patient_id", patient_id);
+    url.requestUpdate(div, { waitingText : null });
+  },
+  
+  viewSejour: function(sejour_id, div) {
+    var url = new Url;
+    url.setModuleAction("dPImeds", "httpreq_vw_sejour_results");
+    url.addParam("sejour_id", sejour_id);
+    url.requestUpdate(div, { waitingText : null });
+  }
+}
+
+function pageMain() {
+  ViewPort.SetAvlHeight("resultats-internes", 0.5);
+  ViewPort.SetAvlHeight("resultats-externes", 1);
+  IMeds.viewSejour({{$patient->_id}}, "resultats-externes");
+}
+
 </script>
 
 <table class="main">
@@ -83,16 +111,20 @@ var Prescription = {
   
   {{if $prescription->_id}}
   <!-- Show results for selected prescription -->
+  <tbody class="viewported">
   <tr>
-    <td colspan="2">
+    <td class="viewport" colspan="2">
       <div id="resultats-internes">
-        <table class="resultatsLabo">
+        <table class="tbl">
         {{foreach from=$prescription->_ref_classification_roots item=_catalogue}}
         {{include file="tree_resultats.tpl"}}
         {{/foreach}}
         </table>
       </div>
-      
+    </td>
+  </tr>
+  <tr>
+    <td class="viewport" colspan="2">
       <div id="resultats-externes">
       </div>
     </td>

@@ -23,11 +23,7 @@
           <td class="text">{{$curr_stock->_ref_group->_view}}</td>
           <td>{{$curr_stock->seuil_cmd}}</td>
           <td>
-            {{if $curr_stock->_rupture}}
-              {{assign var=msgClass value="warning"}}
-            {{else}}
-              {{assign var=msgClass value="message"}}
-            {{/if}}
+            {{mb_ternary var=msgClass test=$curr_stock->_rupture value=warning other=message}}
             <div class="{{$msgClass}}">
               {{$curr_stock->quantite}}
             </div>

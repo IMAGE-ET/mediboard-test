@@ -74,11 +74,15 @@ class CMbArray {
    * @param bool $mandatory will trigger an warning if value is null 
    */
   function extract(&$array, $key, $default = null, $mandatory = false) {
-    $value = mbGetValue(@$array[$key], $default);
-    unset($array[$key]);
-    if (!$value and $mandatory) {
-      trigger_error("mb_field: paramater 'object' missing", E_USER_WARNING);
+    if (!array_key_exists($key, $array)) {
+      if ($mandatory) {
+        trigger_error("Could not extract '$key' index in array", E_USER_WARNING);
+      }
+      return $default;
     }
+    
+    $value = $array[$key];
+    unset($array[$key]);
     return $value;
   }
   

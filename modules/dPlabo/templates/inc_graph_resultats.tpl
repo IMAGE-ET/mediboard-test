@@ -37,11 +37,7 @@
       <td {{if $_item->commentaire}}rowspan="2"{{/if}}>
         {{assign var=msgClass value=""}}
         {{if $examen->type == "num"}}
-          {{if $_item->_hors_limite}}
-          {{assign var=msgClass value="warning"}}
-          {{else}}
-          {{assign var=msgClass value="message"}}
-          {{/if}}
+          {{mb_ternary var=msgClass test=$_item->_hors_limite value=warning other=message}}
         {{/if}}
         
         <div class="{{$msgClass}}">

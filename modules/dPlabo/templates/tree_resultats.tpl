@@ -12,6 +12,10 @@
 {{foreach from=$_catalogue->_ref_prescription_items item=_item}}
 {{assign var=analyse value=$_item->_ref_examen_labo}}
 <tr>
+  <td>
+    <img 
+      src="images/icons/anteriorite.png" onclick="Anteriorite.viewItem({{$_item->_id}})" />
+  </td>
   <td>{{$analyse->libelle}}</td>
   <td>{{$_item->resultat}}</td>
   {{if $analyse->type == "num"}}

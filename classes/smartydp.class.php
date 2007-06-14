@@ -213,7 +213,7 @@ function smarty_function_mb_ternary($params, &$smarty) {
   $value = CMbArray::extract($params, "value" , null, true);
   $other = CMbArray::extract($params, "other" , null, true);
   
-  $smarty->assign($var, test ? $value : $other);
+  $smarty->assign($var, $test ? $value : $other);
   
 }
 
