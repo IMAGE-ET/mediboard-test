@@ -74,7 +74,7 @@
   </tr>
   <tr>
     <td colspan="2" class="button">
-      <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.Examen.edit() } });">
+      <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.Examen.edit(); } });">
         Valider
       </button>
     </td>

@@ -33,14 +33,14 @@ Object.extend(Droppables, {
     <th>Unité</th>
     <th>Références</th>
     <th>Resultat</th>
-    <th>Interne</th>
-    <th>Externe</th>
+    <th>Int</th>
+    <th>Ext</th>
   </tr>
   {{foreach from=$prescription->_ref_prescription_items item="_item"}}
   {{assign var="curr_examen" value=$_item->_ref_examen_labo}}
   <tbody class="hoverable">
   <tr id="PrescriptionItem-{{$_item->_id}}">
-    <td rowspan="2">
+    <td>
       <a href="#{{$_item->_class_name}}-{{$_item->_id}}" onclick="Prescription.Examen.edit({{$_item->_id}})">
         {{$curr_examen->_view}}
       </a>
@@ -59,10 +59,10 @@ Object.extend(Droppables, {
       </form>
     </td>
     {{if $curr_examen->type == "num"}}
-    <td rowspan="2">{{$curr_examen->unite}}</td>
-    <td rowspan="2">{{$curr_examen->min}} &ndash; {{$curr_examen->max}}</td>
+    <td>{{$curr_examen->unite}}</td>
+    <td>{{$curr_examen->min}} &ndash; {{$curr_examen->max}}</td>
     {{else}}
-    <td rowspan="2" colspan="2">{{mb_value object=$curr_examen field="type"}}</td>
+    <td colspan="2">{{mb_value object=$curr_examen field="type"}}</td>
     {{/if}}
     <td>
       {{if !$curr_examen->_external}}
@@ -83,34 +83,17 @@ Object.extend(Droppables, {
       {{/if}}
     </td>
     {{if $curr_examen->_external}}
-    <td rowspan="2">
+    <td>
       <input type="radio" name="radio-{{$_item->_id}}" disabled="disabled" />
     </td>
-    <td rowspan="2">
+    <td>
       <input type="radio" name="radio-{{$_item->_id}}" disabled="disabled" checked="checked" />
-    </td>
-    {{elseif $curr_examen->_ref_siblings|@count}}
-    <td>
-      <input type="radio" name="radio-{{$_item->_id}}" checked="checked" />
-    </td>
-    <td>
-      <input type="radio" name="radio-{{$_item->_id}}" />
-    </td>
-    </tr>
-    <tr>
-      <td colspan="3">
-      <select name="sibling">
-        <option value="">&mdash; Analyse externe</option>
-      {{foreach from=$curr_examen->_ref_siblings item="curr_sibling"}}
-        <option value="{{$cur_sibling_id}}">{{$curr_sibling->_view}}</option>
-      {{/foreach}}
-      </select>
     </td>
     {{else}}
-    <td rowspan="2">
+    <td>
       <input type="radio" name="radio-{{$_item->_id}}" disabled="disabled" checked="checked" />
     </td>
-    <td rowspan="2">
+    <td>
       <input type="radio" name="radio-{{$_item->_id}}" name="" disabled="disabled" />
     </td>
     {{/if}}
