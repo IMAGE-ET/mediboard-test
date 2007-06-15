@@ -30,8 +30,8 @@
     <input type="hidden" name="dosql" value="do_acteccam_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="acte_id" value="{{$acte->acte_id}}" />
-    <input type="hidden" name="subject_id" class="{{$acte->_props.subject_id}}" value="{{$subject->_id}}" />
-    <input type="hidden" name="subject_class" class="{{$acte->_props.subject_class}}" value="{{$subject->_class_name}}" />
+    <input type="hidden" name="object_id" class="{{$acte->_props.object_id}}" value="{{$subject->_id}}" />
+    <input type="hidden" name="object_class" class="{{$acte->_props.object_class}}" value="{{$subject->_class_name}}" />
     <input type="hidden" name="code_acte" class="{{$acte->_props.code_acte}}" value="{{$acte->code_acte}}" />
     <input type="hidden" name="code_activite" class="{{$acte->_props.code_activite}}" value="{{$acte->code_activite}}" />
     <input type="hidden" name="code_phase" class="{{$acte->_props.code_phase}}" value="{{$acte->code_phase}}" />

@@ -10,13 +10,9 @@
 /**
  * Stores id linkage between Mediboard and Sante400 records
  */
- class CIdSante400 extends CMbObject {
+ class CIdSante400 extends CMbMetaObject {
   // DB Table key
   var $id_sante400_id = null;
-
-  // DB References
-  var $object_id     = null;
-  var $object_class  = null;
 
   // DB fields
   var $id400         = null;
@@ -36,20 +32,15 @@
   }
   
   function getSpecs() {
-    return array (
-      "object_class" => "notNull str maxLength|25",
-      "object_id"    => "notNull ref class|CMbObject meta|object_class",
-      "id400"        => "notNull str maxLength|10",
-      "tag"          => "str maxLength|80",
-      "last_update"  => "notNull dateTime"
-    );
+  	$specs = parent::getSpecs();
+    $specs["id400"]        = "notNull str maxLength|10";
+    $specs["tag"]          = "str maxLength|80";
+    $specs["last_update"]  = "notNull dateTime";
+    return $specs;
   }
   
   function loadRefsFwd() {
-    if ($this->object_class) {
-    	$this->_ref_object = new $this->object_class;
-      $this->_ref_object->load($this->object_id);
-    }
+    parent::loadRefsFwd();
   }
   
   /**

@@ -8,18 +8,19 @@
 */
 
 /**
+ * 
  * Classe CNote. 
  * @abstract Permet de créer des notes sur n'importe quel objet
  */
-class CNote extends CMbObject {
+
+class CNote extends CMbMetaObject {
 
   // DB Table key
-	var $note_id = null;	
+  var $note_id = null;	
   
   // DB Fields
   var $user_id      = null;
-  var $object_id    = null;
-  var $object_class = null;
+  
   var $public       = null;
   var $degre        = null;
   var $date         = null;
@@ -30,30 +31,26 @@ class CNote extends CMbObject {
   var $_ref_user   = null;
   var $_ref_object = null;
   
-	function CNote() {
-		$this->CMbObject("note", "note_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+   function CNote() {
+	  $this->CMbObject("note", "note_id");
+      $this->loadRefModule(basename(dirname(__FILE__)));
 	}
 
   function getSpecs() {
-    return array (
-      "user_id"      => "notNull ref class|CMediusers",
-      "object_id"    => "notNull ref class|CMbObject meta|object_class",
-      "object_class" => "notNull str maxLength|25",
-      "public"       => "notNull bool",
-      "degre"        => "notNull enum list|low|high default|low",
-      "date"         => "notNull dateTime",
-      "libelle"      => "notNull str",
-      "text"         => "text"
-    );
+  	$specs = parent::getSpecs();
+    $specs["user_id"]      = "notNull ref class|CMediusers";
+    $specs["public"]       = "notNull bool";
+    $specs["degre"]        = "notNull enum list|low|high default|low";
+    $specs["date"]         = "notNull dateTime";
+    $specs["libelle"]      = "notNull str";
+    $specs["text"]         = "text";
+    return $specs;
   }
   
   function loadRefsFwd() {
+  	parent::loadRefsFwd();
     $this->_ref_user = new CMediusers;
     $this->_ref_user->load($this->user_id);
-    $this->_ref_object = new $this->object_class;
-    $this->_ref_object->load($this->object_id);
     $this->_view = "Note écrite par ".$this->_ref_user->_view;
   }
   

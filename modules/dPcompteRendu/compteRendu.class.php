@@ -1,25 +1,23 @@
 <?php /* $Id$ */
-
+  
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
 * @version $Revision$
 * @author Romain Ollivier
 */
-
-class CCompteRendu extends CMbObject {
+  
+class CCompteRendu extends CMbMetaObject {
   // DB Table key
   var $compte_rendu_id   = null;
-
+  
   // DB References
   var $chir_id           = null; // not null when is a template associated to a user
   var $function_id       = null; // not null when is a template associated to a function
-  var $object_id         = null; // null when is a template, not null when a document
-
+  
   // DB fields
   var $nom               = null;
   var $source            = null;
-  var $object_class      = null;
   var $valide            = null;
   var $file_category_id  = null;
   
@@ -46,16 +44,16 @@ class CCompteRendu extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
-      "chir_id"          => "ref xor|function_id|object_id class|CMediusers",
-      "function_id"      => "ref xor|chir_id|object_id class|CFunctions",
-      "object_id"        => "ref xor|function_id|chir_id class|CMbObject meta|object_class",
-      "object_class"     => "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation",
-      "nom"              => "notNull str",
-      "source"           => "html",
-      "file_category_id" => "ref class|CFilesCategory",
-      "valide"           => "numchar maxLength|1"
-    );
+    $specs = parent::getSpecs();
+    $specs["chir_id"]          = "ref xor|function_id|object_id class|CMediusers";
+    $specs["function_id"]      = "ref xor|chir_id|object_id class|CFunctions";
+    $specs["object_id"]        = "ref xor|function_id|chir_id class|CMbObject meta|object_class";
+    $specs["object_class"]     = "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation";
+    $specs["nom"]              = "notNull str";
+    $specs["source"]           = "html";
+    $specs["file_category_id"] = "ref class|CFilesCategory";
+    $specs["valide"]           = "numchar maxLength|1";
+    return $specs;
   }
 
   function loadModeles($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
@@ -92,12 +90,12 @@ class CCompteRendu extends CMbObject {
   }
 
   function loadRefsFwd() {
-
+	parent::loadRefsFwd();
     // Objet
     if (class_exists($this->object_class)) {
-      $this->_ref_object = new $this->object_class;
+      //$this->_ref_object = new $this->object_class;
       if ($this->object_id)
-        $this->_ref_object->load($this->object_id);
+        //$this->_ref_object->load($this->object_id);
         $this->_ref_object->loadRefsFwd();
     } else {
       trigger_error("Unable to create instance of '$this->object_class' class", E_USER_ERROR);

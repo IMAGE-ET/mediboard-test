@@ -12,15 +12,13 @@ global $AppUI;
 /**
  * The CUserLog Class
  */
-class CUserLog extends CMbObject {
+class CUserLog extends CMbMetaObject {
   // DB Table key
   var $user_log_id = null;
 
   // DB Fields
   var $user_id      = null;
   var $date         = null;
-  var $object_id    = null;
-  var $object_class = null;
   var $type         = null;
   var $fields       = null;
 
@@ -36,14 +34,13 @@ class CUserLog extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
-      "user_id"      => "notNull ref class|CUser",
-      "date"         => "notNull dateTime",
-      "object_id"    => "notNull ref class|CMbObject meta|object_class unlink",
-      "object_class" => "notNull str maxLength|25",
-      "type"         => "notNull enum list|create|store|delete",
-      "fields"       => "text"
-    );
+  	$specs = parent::getSpecs();
+  	$specs["object_id"]    = "notNull ref class|CMbObject meta|object_class unlink";
+    $specs["user_id"]      = "notNull ref class|CUser";
+    $specs["date"]         = "notNull dateTime";
+    $specs["type"]         = "notNull enum list|create|store|delete";
+    $specs["fields"]       = "text";
+    return $specs;
   }
   
   function canDelete(&$msg, $oid = null) {
@@ -78,12 +75,7 @@ class CUserLog extends CMbObject {
   function loadRefsFwd() {
     $this->_ref_user = new CUser;
     $this->_ref_user->load($this->user_id);
-
-    $this->_ref_object = new $this->object_class;
-    if(!$this->_ref_object->load($this->object_id)) {
-      $this->_ref_object->load(null);
-      $this->_ref_object->_view = "Element supprimé";
-    }
   }
+  
 }
 ?>

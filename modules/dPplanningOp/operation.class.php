@@ -176,7 +176,7 @@ class COperation extends CCodableCCAM {
 
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
-      $backRefs["actes_CCAM"]          = "CActeCCAM subject_id";
+      $backRefs["actes_CCAM"]          = "CActeCCAM object_id";
       $backRefs["dossiers_anesthesie"] = "CConsultAnesth operation_id";
       $backRefs["naissances"]          = "CNaissance operation_id";
      return $backRefs;

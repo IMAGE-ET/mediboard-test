@@ -548,7 +548,7 @@ class CMouvSejourEcap extends CMouvement400 {
       $acte = new CActeCCAM;
 
       // Champs issus de l'opération
-      $acte->subject_id = $operation->_id;
+      $acte->object_id = $operation->_id;
       $acte->execution = mbDateTime($operation->sortie_salle, $operation->date);
       
       // Praticien exécutant

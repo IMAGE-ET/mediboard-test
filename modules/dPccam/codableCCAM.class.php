@@ -44,8 +44,8 @@ class CCodableCCAM extends CMbObject {
 
   function loadRefsActesCCAM() {
   	$acte = new CActeCCAM();
-  	$acte->subject_id = $this->_id;
-  	$acte->subject_class = $this->_class_name;
+  	$acte->object_id = $this->_id;
+  	$acte->object_class = $this->_class_name;
   	
   	$this->_ref_actes_ccam = $acte->loadMatchingList();
   }
