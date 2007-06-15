@@ -59,7 +59,9 @@
     </tr>
     {{if $_item->commentaire}}
     <tr {{if $_item->_id == $prescriptionItem->_id}}class="selected"{{/if}}>
-      <td class="text" colspan="2">{{mb_value object=$_item field=commentaire}}</td>
+      <td class="text" colspan="2">
+        {{$_item->commentaire|nl2br}}
+      </td>
     </tr>
     {{/if}}
   </tbody>

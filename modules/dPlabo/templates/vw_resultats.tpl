@@ -22,8 +22,11 @@ var Prescription = {
 }
 
 var Anteriorite = {
+ url: new Url,
  viewItem: function(item_id) {
-   Console.trace("View anteriorité pour item " + item_id);
+   this.url.setModuleAction("dPlabo", "httpreq_graph_resultats");
+   this.url.addParam("prescription_labo_examen_id", item_id);
+   this.url.popup(370, 700, ["Anteriorite", item_id].join(), "Anteriorite");
  }
 }
 

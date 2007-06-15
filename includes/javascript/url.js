@@ -2,6 +2,7 @@
 function Url() {
   this.oParams = {};
   this.oWindow = null;
+  this.oPrefixed = {};
 }
 
 Url.prototype.setModuleAction = function(sModule, sAction) {
@@ -42,10 +43,25 @@ Url.prototype.redirect = function() {
     window.location.href = this.make();
 }
 
-Url.prototype.pop = function(iWidth, iHeight, sWindowName, sBaseUrl) {
+Url.prototype.pop = function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix) {
   this.addParam("dialog", "1");
+
+  var iLeft = 50;
+
+
+  // Pefixed window collection
+  if (sPrefix && this.oPrefixed[sPrefix]) {
+  	this.oPrefixed[sPrefix] = this.oPrefixed[sPrefix].reject(function(oWindow) {
+  		return oWindow.closed;
+  	} );
+  	  	
+  	// Purge closed windows
+  	iLeft += (iWidth + 8) * this.oPrefixed[sPrefix].length;
+  }
+  
+
   var aFeatures = new Array;
-  aFeatures.push("left=50");
+  aFeatures.push("left=" + iLeft);
   aFeatures.push("top=50");
   aFeatures.push("height=" + iHeight);
   aFeatures.push("width=" + iWidth);
@@ -57,6 +73,14 @@ Url.prototype.pop = function(iWidth, iHeight, sWindowName, sBaseUrl) {
   sWindowName = sWindowName.replace(/[ -]/gi, "_");
   var sTargetUrl = sBaseUrl || "";
   this.oWindow = window.open(sTargetUrl + this.make(), sWindowName, aFeatures.join(", "));  
+	
+  // Prefixed window collection
+  if (sPrefix) {
+    if (!this.oPrefixed[sPrefix]) {
+    	this.oPrefixed[sPrefix] = [];
+    }
+    this.oPrefixed[sPrefix].push(this.oWindow);
+  }
 }
 
 Url.prototype.popDirect = function(iWidth, iHeight, sWindowName, sBaseUrl) {
@@ -81,8 +105,16 @@ Url.prototype.popunder = function(iWidth, iHeight, sWindowName) {
   window.focus();
 }
 
-Url.prototype.popup = function(iWidth, iHeight, sWindowName) {
-  this.pop(iWidth, iHeight, sWindowName);
+Url.prototype.popup = function(iWidth, iHeight, sWindowName, sPrefix) {
+  this.pop(iWidth, iHeight, sWindowName, null, sPrefix);
+
+  // Prefixed window collection
+  if (sPrefix) {
+    (this.oPrefixed[sPrefix] || []).each(function (oWindow) { 
+    	oWindow.focus();
+    } );
+  }
+  
   this.oWindow.focus();
 }
 
@@ -164,7 +196,7 @@ Url.prototype.ViewFilePopup = function(objectClass, objectId, elementClass, elem
   this.addParam("elementClass", elementClass);
   this.addParam("elementId", elementId);
   if(sfn!=0){
-	  this.addParam("sfn", sfn);
+    this.addParam("sfn", sfn);
   }
   this.popup(750, 550, "Fichier");
 }
