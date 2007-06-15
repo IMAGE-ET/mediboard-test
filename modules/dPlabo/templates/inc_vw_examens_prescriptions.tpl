@@ -100,7 +100,7 @@ Object.extend(Droppables, {
     <tr>
       <td colspan="3">
       <select name="sibling">
-        <option value="">&mdash; Analyse à faire en externe</option>
+        <option value="">&mdash; Analyse externe</option>
       {{foreach from=$curr_examen->_ref_siblings item="curr_sibling"}}
         <option value="{{$cur_sibling_id}}">{{$curr_sibling->_view}}</option>
       {{/foreach}}
