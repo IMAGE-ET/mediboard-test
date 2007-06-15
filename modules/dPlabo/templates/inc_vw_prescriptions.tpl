@@ -38,13 +38,15 @@
         <input type="hidden" name="m" value="dPlabo" />
         <input type="hidden" name="dosql" value="do_prescription_aed" />
         <input type="hidden" name="prescription_labo_id" value="{{$curr_prescription->_id}}" />
-        <input type="hidden" name="verouillee" value="{{$curr_prescription->verouillee}}" />
         <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="verouillee" value="{{$curr_prescription->verouillee}}" />
+        <input type="hidden" name="validee" value="{{$curr_prescription->validee}}" />
         <button type="button" class="trash notext" onclick="Prescription.del(this.form);">{{tr}}Delete{{/tr}}</button>
         <button type="button" class="print notext" onclick="Prescription.print({{$curr_prescription->_id}});">print</button>
         <button type="button" class="edit notext" onclick="Prescription.edit({{$curr_prescription->_id}});">edit</button>
         <button type="button" class="lock notext" onclick="Prescription.lock(this.form);">lock</button>
         <button type="button" class="change notext" onclick="Prescription.export(this.form);">change</button>
+        <button type="button" class="tick notext" onclick="Prescription.valide(this.form);">tick</button>
       </form>
     </td>
     <td>

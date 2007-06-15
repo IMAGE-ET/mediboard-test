@@ -11,7 +11,7 @@ global $AppUI;
 
 $config = array();
 $config["mod_name"]        = "dPlabo";
-$config["mod_version"]     = "0.21";
+$config["mod_version"]     = "0.22";
 $config["mod_type"]        = "user";
 
 class CSetupdPlabo extends CSetup {
@@ -157,7 +157,13 @@ class CSetupdPlabo extends CSetup {
     $sql = "ALTER TABLE `prescription_labo`
             ADD `verouillee` ENUM('0','1');";
     $this->addQuery($sql);
-    $this->mod_version = "0.21";
+    
+    $this->makeRevision("0.21");
+    $sql = "ALTER TABLE `prescription_labo`
+            ADD `validee` ENUM('0','1');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.22";
   }
 }
 ?>

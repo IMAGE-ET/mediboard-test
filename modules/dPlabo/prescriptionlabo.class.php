@@ -24,6 +24,7 @@ class CPrescriptionLabo extends CMbObject {
   // DB Fields
   var $date       = null;
   var $verouillee = null;
+  var $validee    = null;
   
   // DB references
   var $patient_id   = null;
@@ -54,7 +55,8 @@ class CPrescriptionLabo extends CMbObject {
       "patient_id"   => "ref class|CPatient notNull",
       "praticien_id" => "ref class|CMediusers notNull",
       "date"         => "dateTime",
-      "verouillee"   => "bool"
+      "verouillee"   => "bool",
+      "validee"      => "bool"
     );
   }
   
@@ -72,7 +74,6 @@ class CPrescriptionLabo extends CMbObject {
     parent::updateFormFields();
     $this->_shortview = $this->date;
     $this->_view      = "Prescription du ".mbTranformTime(null, $this->date, "%d/%m/%Y %Hh%M");
-    $this->getStatus();
   }
   
   function loadRefsFwd() {
@@ -100,21 +101,52 @@ class CPrescriptionLabo extends CMbObject {
         $this->_ref_examens[$examen->_id] =& $examen; 
       }
     }
+    $this->getStatus();
   }
   
   function getStatus() {
-    if($this->getNumFiles()) {
+    $numFiles = $this->getNumFiles();
+    
+    // Vérification de l'état validée
+    if($this->validee) {
+      $this->_status = self::VALIDEE;
+      return $this->_status;
+    }
+    
+    // Vérification de l'etat saisie
+    $saisie = 1;
+    foreach($this->_ref_prescription_items as &$curr_result) {
+      $curr_result->loadRefExamen();
+      $curr_result->_ref_examen_labo->loadRefsBack();
+      if(!$curr_result->resultat && !$curr_result->_ref_examen_labo->_external) {
+        $saisie = 0;
+        continue;
+      }
+    }
+    if($saisie && $numFiles) {
+      $this->_status = self::SAISIE;
+      return $this->_status;
+    }
+    
+    // Vérification de l'état transmise
+    if($numFiles) {
       $this->_status = self::TRANSMISE;
       return $this->_status;
     }
+    
+    // Vérification de l'état vérouillée
     if($this->verouillee) {
       $this->_status = self::VEROUILLEE;
       return $this->_status;
     }
+    
+    // Vérification de l'état prélèvements
     if($this->countBackRefs("prescription_labo_examen")) {
       $this->_status = self::PRELEVEMENTS;
       return $this->_status;
     }
+    
+    // Sinon vierge
     $this->_status = self::VIERGE;
     return $this->_status;
   }

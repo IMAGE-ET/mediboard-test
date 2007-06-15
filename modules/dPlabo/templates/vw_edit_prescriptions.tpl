@@ -124,6 +124,12 @@ var Prescription = {
     submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select } );
     return true;
   },
+
+  valide: function(oForm) {
+    oForm.validee.value = 1;
+    submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select } );
+    return true;
+  },
   
   print: function(prescription_id) {
     var url = new Url;
