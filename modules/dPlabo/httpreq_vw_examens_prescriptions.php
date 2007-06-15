@@ -18,6 +18,10 @@ $prescription = new CPrescriptionLabo();
 $prescription->load($prescription_labo_id);
 $prescription->loadRefs();
 
+foreach($prescription->_ref_examens as &$curr_examen) {
+  $curr_examen->getSiblings();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
