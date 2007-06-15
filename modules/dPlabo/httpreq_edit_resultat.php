@@ -24,7 +24,10 @@ if ($prescriptionItem->_id) {
 $siblingItems = array();
 if ($prescriptionItem->loadRefs()) {
   $siblingItems = $prescriptionItem->loadSiblings();
-  $prescriptionItem->_ref_prescription_labo->loadRefsFwd();
+  $prescriptionItem->_ref_prescription_labo->loadRefs();
+  if($prescriptionItem->_ref_prescription_labo->_status >= CPrescriptionLabo::VALIDEE) {
+    $prescriptionItem->_locked = 1;
+  }
 }
 
 // Création du template

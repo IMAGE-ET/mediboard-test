@@ -43,10 +43,18 @@
         <input type="hidden" name="validee" value="{{$curr_prescription->validee}}" />
         <button type="button" class="trash notext" onclick="Prescription.del(this.form);">{{tr}}Delete{{/tr}}</button>
         <button type="button" class="print notext" onclick="Prescription.print({{$curr_prescription->_id}});">print</button>
+        {{if $curr_prescription->_status < $curr_prescription|const:"VEROUILLEE"}}
         <button type="button" class="edit notext" onclick="Prescription.edit({{$curr_prescription->_id}});">edit</button>
+        {{/if}}
+        {{if $curr_prescription->_status == $curr_prescription|const:"PRELEVEMENTS"}}
         <button type="button" class="lock notext" onclick="Prescription.lock(this.form);">lock</button>
+        {{/if}}
+        {{if $curr_prescription->_status == $curr_prescription|const:"VEROUILLEE"}}
         <button type="button" class="change notext" onclick="Prescription.export(this.form);">change</button>
+        {{/if}}
+        {{if $curr_prescription->_status == $curr_prescription|const:"SAISIE"}}
         <button type="button" class="tick notext" onclick="Prescription.valide(this.form);">tick</button>
+        {{/if}}
       </form>
     </td>
     <td>
