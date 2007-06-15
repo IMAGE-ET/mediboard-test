@@ -11,6 +11,11 @@
 
 {{foreach from=$_catalogue->_ref_prescription_items item=_item}}
 {{assign var=analyse value=$_item->_ref_examen_labo}}
+{{assign var=msgClass value=""}}
+{{if $_item->_ref_examen_labo->type == "num"}}
+  {{mb_ternary var=msgClass test=$_item->_hors_limite value=warning other=message}}
+{{/if}}
+
 <tr>
   <td>
     <img 
@@ -19,7 +24,13 @@
   <td>{{$analyse->libelle}}</td>
   
   <td>
-    {{$_item->resultat}}
+  {{if $_item->date}}
+    <div class="{{$msgClass}}">
+      {{mb_value object=$_item field=resultat prop=$analyse->type}}
+    </div>
+  {{else}}
+    <em>En attente</em>
+  {{/if}}
   </td>
 
   {{if $analyse->type == "num"}}
@@ -30,7 +41,9 @@
   {{/if}}
   <td>{{$_item->date}}</td>
   <td class="text">
-    {{$_item->commentaire|nl2br}}
+    <div class="{{$msgClass}}">
+      {{$_item->commentaire|nl2br}}
+    </div>
   </td>
 </tr>
 {{/foreach}}

@@ -883,6 +883,7 @@ div#systemMsg {
 
 div.warning {
   color: #666;
+  min-height: 16px;
   background: url(../../images/icons/warning.png) no-repeat center left;
   padding: 2px;
   padding-left: 20px;
@@ -890,6 +891,7 @@ div.warning {
 
 div.error {
   color: #f00;
+  min-height: 16px;
   background: url(../../images/icons/cancel.png) no-repeat center left;
   padding: 2px;
   padding-left: 20px;
@@ -897,12 +899,14 @@ div.error {
 
 div.message {
   color: #008;
+  min-height: 16px;
   background: url(../../images/icons/check.png) no-repeat center left;
   padding: 2px;
   padding-left: 20px;
 }
 
 div.loading {
+  min-height: 16px;
   background: url(images/icons/loading.gif) no-repeat center left;
   padding: 2px;
   padding-left: 20px;
