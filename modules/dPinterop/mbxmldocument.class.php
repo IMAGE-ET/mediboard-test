@@ -149,8 +149,8 @@ class CMbXMLDocument extends DOMDocument {
     global $AppUI;
     $this->saveFile();
     $file = new CFile();
-    $file->file_object_id     = $object->_id;
-    $file->file_class         = $object->_class_name;
+    $file->object_id          = $object->_id;
+    $file->object_class       = $object->_class_name;
     $file->file_name          = $object->_class_name."-".$object->_id.".xml";
     $file->file_type          = "text/xml";
     $file->file_size          = filesize($this->documentfilename);

@@ -11,8 +11,8 @@ class CFileAddEdit extends CDoObjectAddEdit {
 
   function CFileAddEdit() {
     global $m, $_POST;    
-    $selKey   = intval(mbGetValueFromPost("file_object_id", 0));
-    $selClass = mbGetValueFromPost("file_class"    , "");
+    $selKey   = intval(mbGetValueFromPost("object_id", 0));
+    $selClass = mbGetValueFromPost("object_class"    , "");
     
     $this->CDoObjectAddEdit("CFile", "file_id");
     
@@ -54,8 +54,8 @@ class CFileAddEdit extends CDoObjectAddEdit {
                             "error"            => $upload["error"][$fileNumber],
                             "size"             => $upload["size"][$fileNumber],
                             "file_category_id" => $_file_category_id[$fileNumber],
-                            "file_object_id"   => $_POST["file_object_id"],
-                            "file_class"       => $_POST["file_class"],);
+                            "object_id"   => $_POST["object_id"],
+                            "object_class"       => $_POST["object_class"],);
         }
       }else{
         // 1 seul fichier

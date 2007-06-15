@@ -73,6 +73,7 @@ class CUserLog extends CMbMetaObject {
   }
   
   function loadRefsFwd() {
+  	parent::loadRefsFwd();
     $this->_ref_user = new CUser;
     $this->_ref_user->load($this->user_id);
   }

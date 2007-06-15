@@ -138,7 +138,7 @@ function newExam(sAction, consultation_id) {
       </a>
       {{/foreach}}
       {{foreach from=$curr_consult->_ref_files item=curr_file}}
-      <a href="#" onclick="popFile('{{$curr_file->file_class}}','{{$curr_file->file_object_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">
+      <a href="#" onclick="popFile('{{$curr_file->object_class}}','{{$curr_file->object_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">
         {{$curr_file->file_name}}
       </a>
       {{/foreach}}
@@ -196,7 +196,7 @@ function newExam(sAction, consultation_id) {
       {{/foreach}}
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
       {{foreach from=$curr_op->_ref_files item=curr_file}}
-      <a href="#" onclick="popFile('{{$curr_file->file_class}}','{{$curr_file->file_object_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">
+      <a href="#" onclick="popFile('{{$curr_file->object_class}}','{{$curr_file->object_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">
         {{$curr_file->file_name}}
       </a>
       {{/foreach}}

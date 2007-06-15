@@ -381,8 +381,8 @@ class CConsultation extends CCodableCCAM {
       "label"     => "fichier(s)", 
       "name"      => "files_mediboard", 
       "idfield"   => "file_id", 
-      "joinfield" => "file_object_id",
-      "joinon"    => "`file_class` = 'CConsultation'"
+      "joinfield" => "object_id",
+      "joinon"    => "`object_class` = 'CConsultation'"
     );
     $tables[] = array (
       "label"     => "document(s)", 

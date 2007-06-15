@@ -271,8 +271,8 @@ function popFile(objectClass, objectId, elementClass, elementId){
             <th>{{tr}}CDocGed.one{{/tr}}</th>
             <td>
               {{$docGed->_reference_doc}}
-              <input type="hidden" name="file_class" value="CDocGed" />
-              <input type="hidden" name="file_object_id" value="{{$docGed->doc_ged_id}}" />
+              <input type="hidden" name="object_class" value="CDocGed" />
+              <input type="hidden" name="object_id" value="{{$docGed->doc_ged_id}}" />
               <input type="hidden" name="file_category_id" value="" />
             </td>
           </tr>

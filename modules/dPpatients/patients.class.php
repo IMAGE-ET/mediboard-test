@@ -422,8 +422,8 @@ class CPatient extends CMbObject {
       "label" => "fichier(s)", 
       "name" => "files_mediboard", 
       "idfield" => "file_id", 
-      "joinfield" => "file_object_id",
-      "joinon" => "`file_class`='CPatient'"
+      "joinfield" => "object_id",
+      "joinon" => "`object_class`='CPatient'"
     );
     $tables[] = array (
       "label" => "document(s)", 

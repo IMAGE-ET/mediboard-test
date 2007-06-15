@@ -9,13 +9,14 @@
 global $filesDir, $AppUI;
 $filesDir = $AppUI->cfg["root_dir"]."/files";
 
-class CFile extends CMbObject {
+class CFile extends CMbMetaObject {
   // DB Table key
   var $file_id = null;
   
   // DB Fields
-  var $file_object_id     = null;
-  var $file_class         = null;
+  //var $file_object_id     = null; ==> devient object_id
+  //var $file_class         = null; ==> devient object_class
+
   var $file_real_filename = null;
   var $file_name          = null;
   var $file_type          = null;
@@ -47,17 +48,15 @@ class CFile extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
-      "file_class"         => "notNull str",
-      "file_object_id"     => "notNull ref class|CMbObject meta|file_class",
-      "file_category_id"   => "ref class|CFilesCategory",
-      "file_date"          => "notNull dateTime",
-      "file_size"          => "num pos",
-      "file_real_filename" => "notNull str",
-      "file_owner"         => "notNull ref class|CMediusers",
-      "file_type"          => "str",
-      "file_name"          => "notNull str"
-    );
+  	$specs = parent::getSpecs();
+    $specs["file_category_id"]   = "ref class|CFilesCategory";
+    $specs["file_date"]          = "notNull dateTime";
+    $specs["file_size"]          = "num pos";
+    $specs["file_real_filename"] = "notNull str";
+    $specs["file_owner"]         = "notNull ref class|CMediusers";
+    $specs["file_type"]          = "str";
+    $specs["file_name"]          = "notNull str";
+    return $specs;
   }
 
   function check() {
@@ -67,12 +66,9 @@ class CFile extends CMbObject {
   }
   
   function loadRefsFwd() {
+  	parent::loadRefsFwd();
     $this->_ref_file_owner = new CMediusers;
     $this->_ref_file_owner->load($this->file_owner);
-    if(class_exists($this->file_class)) {
-      $this->_ref_object = new $this->file_class;
-      $this->_ref_object->load($this->file_object_id);
-    }
   }
   
   function loadView() {
@@ -84,13 +80,13 @@ class CFile extends CMbObject {
     global $filesDir;
     $this->_file_size = mbConvertDecaBinary($this->file_size);    
 
-    if ($this->file_object_id) {
+    if ($this->object_id) {
     
       // Computes complete file path
-      $this->_sub_dir = "$this->file_class";
-      $this->_sub_dir .= "/".intval($this->file_object_id / 1000);
+      $this->_sub_dir = "$this->object_class";
+      $this->_sub_dir .= "/".intval($this->object_id / 1000);
 
-      $this->_file_path = "$filesDir/$this->_sub_dir/$this->file_object_id/$this->file_real_filename";
+      $this->_file_path = "$filesDir/$this->_sub_dir/$this->object_id/$this->file_real_filename";
     }
     
     $this->_shortview = $this->file_name;
@@ -146,7 +142,7 @@ class CFile extends CMbObject {
     }
     
     // Checks complete file directory
-    $fileDirComp = "$filesDir/$this->_sub_dir/$this->file_object_id";
+    $fileDirComp = "$filesDir/$this->_sub_dir/$this->object_id";
     CMbPath::forceDir($fileDirComp);
     
     // Moves temp file to specific directory
@@ -169,7 +165,7 @@ class CFile extends CMbObject {
     }
     
     // Checks complete file directory
-    $fileDirComp = "$filesDir/$this->_sub_dir/$this->file_object_id";
+    $fileDirComp = "$filesDir/$this->_sub_dir/$this->object_id";
     CMbPath::forceDir($fileDirComp);
     
     // Moves temp file to specific directory
@@ -243,8 +239,8 @@ class CFile extends CMbObject {
   
   function loadFilesForObject($object){
     $key = $object->_tbl_key;
-    $where["file_class"]     = "= '".get_class($object)."'";
-    $where["file_object_id"] = "= '".$object->$key."'";
+    $where["object_class"]     = "= '".get_class($object)."'";
+    $where["object_id"] = "= '".$object->$key."'";
     $listFile = new CFile();
     $listFile = $listFile->loadList($where);
     

@@ -9,22 +9,22 @@
 
 global $AppUI, $can, $m, $dPconfig;
 
-$file_class       = mbGetValueFromGetOrSession("file_class");
-$file_object_id   = mbGetValueFromGetOrSession("file_object_id");
+$object_class     = mbGetValueFromGetOrSession("object_class");
+$object_id        = mbGetValueFromGetOrSession("object_id");
 $file_category_id = mbGetValueFromGetOrSession("file_category_id", null);
 $uploadok         = mbGetValueFromGet("uploadok", 0);
 
 $nb_files_upload = mbArrayCreateRange(1,$dPconfig["dPfiles"]["nb_upload_files"],true);
 
-$object = new $file_class;
-$object->load($file_object_id);
-$listCategory = CFilesCategory::listCatClass($file_class);
+$object = new $object_class;
+$object->load($object_id);
+$listCategory = CFilesCategory::listCatClass($object_class);
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("file_class"      , $file_class);
-$smarty->assign("file_object_id"  , $file_object_id);
+$smarty->assign("object_class"    , $object_class);
+$smarty->assign("object_id"       , $object_id);
 $smarty->assign("file_category_id", $file_category_id);
 $smarty->assign("upload_max_size" , ini_get("upload_max_filesize"));
 $smarty->assign("uploadok"        , $uploadok);

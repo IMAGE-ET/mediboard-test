@@ -204,8 +204,8 @@ class CMbObject {
       $select = "count(`file_id`) AS `total`";
       $table  = "files_mediboard";
       $where  = array();
-      $where["file_class"] = " = '".get_class($this)."'";
-      $where["file_object_id"] = "= '".$this->$key."'";
+      $where["object_class"] = " = '".get_class($this)."'";
+      $where["object_id"] = "= '".$this->$key."'";
       $sql = new CRequest();
       $sql->addTable($table);
       $sql->addSelect($select);
@@ -919,7 +919,7 @@ class CMbObject {
     return array (
       "identifiants" => "CIdSante400 object_id",
       "notes"        => "CNote object_id",
-      "files"        => "CFile file_object_id",
+      "files"        => "CFile object_id",
       "documents"    => "CCompteRendu object_id",
       "permissions"  => "CPermObject object_id",
       "logs"         => "CUserLog object_id",

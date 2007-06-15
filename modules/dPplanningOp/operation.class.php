@@ -221,8 +221,8 @@ class COperation extends CCodableCCAM {
       "label" => "fichier(s)", 
       "name" => "files_mediboard", 
       "idfield" => "file_id", 
-      "joinfield" => "file_object_id",
-      "joinon" => "`file_class`='COperation'"
+      "joinfield" => "object_id",
+      "joinon" => "`object_class`='COperation'"
     );
     $tables[] = array (
       "label"     => "consultation(s) d'anesthésie", 

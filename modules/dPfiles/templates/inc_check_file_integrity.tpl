@@ -48,8 +48,8 @@
   {{foreach from=$docsWithoutFileTruncated item=curr_doc}}
   
   <tr>
-    <td>{{$curr_doc->file_class}}</td>
-    <td>{{$curr_doc->file_object_id}}</td>
+    <td>{{$curr_doc->object_class}}</td>
+    <td>{{$curr_doc->object_id}}</td>
     <td>{{$curr_doc->file_name}}</td>
     <td>{{$curr_doc->_file_path}}</td>
   </tr>

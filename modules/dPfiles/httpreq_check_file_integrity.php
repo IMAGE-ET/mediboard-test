@@ -74,7 +74,7 @@ foreach($files as $filePath) {
   }
 
   if ($doc->file_id) {
-    if ($doc->file_object_id != $fileObjectId or $doc->file_class != $fileObjectClass) {
+    if ($doc->object_id != $fileObjectId or $doc->object_class != $fileObjectClass) {
       $filesWithBadDocCount++;
       if (count($filesWithBadDocTruncated) < $show) {
         $filesWithBadDocTruncated[] = array(

@@ -76,8 +76,8 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
       <input type="hidden" name="suivi[etat]" value="0" /> 
       <input type="hidden" name="suivi[file_id]" value="{{$docGed->_lastentry->file_id}}" />
       
-      <input type="hidden" name="file_class" value="CDocGed" />
-      <input type="hidden" name="file_object_id" value="" />
+      <input type="hidden" name="object_class" value="CDocGed" />
+      <input type="hidden" name="object_id" value="" />
       <input type="hidden" name="file_category_id" value="" />
               
       <table class="form">

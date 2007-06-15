@@ -888,8 +888,8 @@ function view_idsante400(classe, id) {
 function uploadFile(classe, id, categorie_id){
   url = new Url();
   url.setModuleAction("dPfiles", "upload_file");
-  url.addParam("file_class", classe);
-  url.addParam("file_object_id", id);
+  url.addParam("object_class", classe);
+  url.addParam("object_id", id);
   url.addParam("file_category_id", categorie_id);
   url.popup(600, 200, "uploadfile");
 }
