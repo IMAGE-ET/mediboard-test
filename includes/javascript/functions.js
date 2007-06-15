@@ -84,7 +84,7 @@ SystemMessage = {
 	
 	// show/hide the div
   doEffect : function (delay) {
-  	Assert.that(this.div, "No system message div");
+  	//Assert.that(this.div, "No system message div");
   	
   	// Cancel current effect
   	if (this.effect) {

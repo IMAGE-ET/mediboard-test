@@ -1,5 +1,19 @@
 <?php
 
+/**
+ *  @package Mediboard
+ *  @subpackage classes
+ *  @version $Revision: $
+ *  @author Alexis Granger
+*/
+
+/**
+ * Class CMbMetaObject 
+ * @abstract Adds Mediboard abstraction layer functionality for meta-objects
+ */
+
+global $AppUI;
+
 require_once($AppUI->getSystemClass("mbobject"));
 
 class CMbMetaObject extends CMbObject{
