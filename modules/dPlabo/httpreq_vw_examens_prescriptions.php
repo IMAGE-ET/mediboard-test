@@ -17,9 +17,10 @@ $prescription_labo_id = mbGetValueFromGetOrSession("prescription_labo_id");
 $prescription = new CPrescriptionLabo();
 $prescription->load($prescription_labo_id);
 $prescription->loadRefs();
-
-foreach($prescription->_ref_examens as &$curr_examen) {
-  $curr_examen->getSiblings();
+if($prescription->_id) {
+  foreach($prescription->_ref_examens as &$curr_examen) {
+    $curr_examen->getSiblings();
+  }
 }
 
 // Création du template
