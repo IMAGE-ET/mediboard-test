@@ -23,8 +23,11 @@ if ($prescriptionItem->_id) {
 
 $siblingItems = array();
 if ($prescriptionItem->loadRefs()) {
+  
   $siblingItems = $prescriptionItem->loadSiblings();
   $prescriptionItem->_ref_prescription_labo->loadRefs();
+  $prescriptionItem->_ref_examen_labo->loadRefsFwd();
+  $prescriptionItem->_ref_examen_labo->loadExternal();
   if($prescriptionItem->_ref_prescription_labo->_status >= CPrescriptionLabo::VALIDEE) {
     $prescriptionItem->_locked = 1;
   }

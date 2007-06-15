@@ -54,10 +54,12 @@
     <td class="date">{{mb_field object=$prescriptionItem field="date" form="editPrescriptionItem"}}</td>
   </tr>
 
+  {{if !$prescriptionItem->_ref_examen_labo->_external}}
   <tr>
     <th>{{mb_label object=$prescriptionItem field="resultat"}}</th>
     <td>{{mb_field object=$prescriptionItem field="resultat" prop=$prescriptionItem->_ref_examen_labo->type}}</td>
   </tr>
+  {{/if}}
   <tr>
     <th>
       {{mb_label object=$prescriptionItem field="commentaire"}}

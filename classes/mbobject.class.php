@@ -465,10 +465,14 @@ class CMbObject {
   }
 
   function loadRefsBack() {
-    $this->_external = $this->countBackRefs("identifiants");
+    $this->loadExternal();
   }
 
   function loadRefsFwd() {
+  }
+  
+  function loadExternal() {
+    $this->_external = $this->countBackRefs("identifiants");
   }
 
   /**
