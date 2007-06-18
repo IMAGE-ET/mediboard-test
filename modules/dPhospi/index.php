@@ -17,5 +17,5 @@ $module->registerTab("vw_idx_sejour"      , "Consulter un séjour"   , TAB_READ);
 $module->registerTab("vw_suivi_bloc"      , "Suivi bloc"            , TAB_READ);
 $module->registerTab("vw_idx_chambres"    , "Chambres"              , TAB_ADMIN);
 $module->registerTab("vw_idx_services"    , "Services"              , TAB_ADMIN);
-
+$module->registerTab("vw_idx_pathologies"  , "Pathologies"          , TAB_READ);
 ?>

@@ -1,11 +1,7 @@
     <table class="tbl">
       <tr>
         <th class="title">
-          Admissions 
-          {{if $group_name == "veille"}}de la veille{{/if}}
-          {{if $group_name == "matin" }}du matin{{/if}}
-          {{if $group_name == "soir"  }}du soir{{/if}}
-          {{if $group_name == "avant" }}antérieures{{/if}}
+          {{tr}}CSejour.groupe.{{$group_name}}{{/tr}}
         </th>
       </tr>
     </table>
@@ -91,7 +87,7 @@
         <input type="radio" name="septique" value="1" {{if $curr_sejour->septique == 1}} checked="checked" {{/if}} />
         <label for="septique_1" title="Séjour septique">Septique</label>
 
-        <input type="submit" value="valider" />
+        <button class="submit" onclick="submit()">Valider</button>
         
         </form>
         

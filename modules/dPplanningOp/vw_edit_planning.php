@@ -159,17 +159,10 @@ $smarty->assign("heure_entree_jour",   $heure_entree_jour);
 $smarty->assign("op"        , $op);
 $smarty->assign("plage"     , $op->plageop_id ? $op->_ref_plageop : new CPlageOp );
 $smarty->assign("sejour"    , $sejour);
-//mbTrace($chir);
-//mbTrace($prat);
 $smarty->assign("chir"      , $chir);
 $smarty->assign("praticien" , $prat);
 $smarty->assign("patient"   , $patient );
 $smarty->assign("sejours"   , $sejours);
-
-//where .. faire menage ....
-//  $where["chir_id"] = "= '".$chir->user_id."'";
-// en   $where["chir_id"] = "= '$chir->user_id'";
-
 $smarty->assign("modurgence", 0);
 $smarty->assign("today"     , $today);
 $smarty->assign("tomorow"   , $tomorow);

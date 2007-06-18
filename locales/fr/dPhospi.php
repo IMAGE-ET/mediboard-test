@@ -1,5 +1,4 @@
 <?php
-$locales['CLit-nom-desc'] = 'Nom du lit';
 $locales['CAffectation'] = 'Affectations';
 $locales['CAffectation-entree-court'] = 'Entrée';
 $locales['CAffectation-sortie-court'] = 'Sortie';
@@ -18,6 +17,11 @@ $locales['CChambre-service_id'] = 'Service';
 $locales['CChambre-service_id-desc'] = 'Service auquel la chambre est rattaché, obligatoire.';
 $locales['CLit'] = 'Lits';
 $locales['CLit-nom'] = 'Lit';
+$locales['CLit-nom-desc'] = 'Nom du lit';
+$locales['CSejour.groupe.avant'] = 'Admissions antérieures';
+$locales['CSejour.groupe.matin'] = 'Admissions du matin';
+$locales['CSejour.groupe.soir'] = 'Admissions du soir';
+$locales['CSejour.groupe.veille'] = 'Admissions de la veille';
 $locales['CService'] = 'Services';
 $locales['CService-description'] = 'Description';
 $locales['CService-description-desc'] = 'Description du service, responsabilités, lignes de conduite.';
