@@ -8,8 +8,6 @@
 
 include_once("./includes/magic_quotes_gpc.php");
 
-xdebug_start_trace();
-
 $dPconfig = array();
 global $performance;
 $performance = array();
@@ -305,5 +303,4 @@ if ($ajax) {
 ob_end_flush();
 require "./includes/access_log.php";
 
-xdebug_stop_trace();
 ?>
