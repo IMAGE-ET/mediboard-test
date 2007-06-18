@@ -7,6 +7,8 @@
 * @author Romain Ollivier
 */
 
+global $AppUI;
+
 require_once($AppUI->getModuleFile("dPccam", "codableCCAM.class"));
 
 class COperation extends CCodableCCAM {

@@ -7,6 +7,8 @@
  * @author Romain Ollivier
  */
 
+
+
 class CCodeCCAM {
   // Variables de structure 
   // Id de la base de données (qui doit être dans le config.php)
@@ -262,5 +264,7 @@ class CCodeCCAM {
     }
   }
 } 
+
+
 
 ?>

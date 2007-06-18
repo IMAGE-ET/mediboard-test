@@ -13,7 +13,7 @@ $can->needsEdit();
 
 //$deb = mbDate();
 //$fin = mbDate("+ 0 day");
-
+echo ( function_exists('xdebug_enable') ? 'Xdebug OK' : 'Xdebug not loaded' );
 $filter = new CConsultation;
 
 $filter->_date_min = mbDate();

@@ -7,6 +7,8 @@
  *  @author Thomas Despoix
  */
 
+global $AppUI;
+
 require_once($AppUI->getModuleFile("dPccam", "codableCCAM.class"));
 
 // @todo: Put the following in $config_dist;
