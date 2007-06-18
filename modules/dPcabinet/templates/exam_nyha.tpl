@@ -1,4 +1,4 @@
-<script type="text/javascript" src="modules/{{$m}}/javascript/exam_nyha.js?build={{$mb_version_build}}"></script>
+<script type="text/javascript" src="modules/{{$m}}/javascript/exam_nyha.js?build={{$app->version.build}}"></script>
 <script type="text/javascript">
 if (window.opener.reloadFdr) {
   window.opener.reloadFdr();

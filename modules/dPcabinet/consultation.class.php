@@ -8,9 +8,7 @@
 */
 
 global $AppUI;
-
-
-require_once($AppUI->getModuleFile("dPccam", "codableCCAM.class"));
+require_once($AppUI->getModuleClass("dPccam", "codableCCAM"));
 
 class CConsultation extends CCodableCCAM {
   const PLANIFIE = 16;

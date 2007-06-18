@@ -755,7 +755,7 @@ table.main th.urgence.modify {
   text-align: left;
 }
 
-div.dialog#systemMsg {
+table.dialog #systemMsg {
   float: right;
 }
 

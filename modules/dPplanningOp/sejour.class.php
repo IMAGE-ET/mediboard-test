@@ -8,11 +8,7 @@
  */
 
 global $AppUI;
-
-require_once($AppUI->getModuleFile("dPccam", "codableCCAM.class"));
-
-// @todo: Put the following in $config_dist;
-global $dPconfig;
+require_once($AppUI->getModuleClass("dPccam", "codableCCAM"));
 
 /**
  * Classe CSejour. 

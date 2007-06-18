@@ -65,11 +65,12 @@
   </tr>
 </table>
 {{/if}}
-{{else}}
+{{/if}}
 <div id="systemMsg">
   {{$errorMessage|nl2br|smarty:nodefaults}}
 </div>
-{{/if}}
-<table id="main" class="{{$m}}">
+
+<table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
+
 <tr>
   <td>

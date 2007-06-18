@@ -69,7 +69,7 @@
 </table>
 {{/if}}
 {{/if}}
-<table id="main" class="{{$m}}">
+<table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
   <tr>
     <td>
       <div id="systemMsg">

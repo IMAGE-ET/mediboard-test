@@ -52,32 +52,29 @@ class CAppUI {
   var $user_locale=null;
 /** @var string */
   var $base_locale = "en"; // do not change - the base "keys" will always be in english
+  
+  var $messages = array();
 
 /** @var string Message string*/
   var $msg = "";
 /** @var string */
-  var $msgNo = "";
+  var $msgNo = 0;
+  
 /** @var string Default page for a redirect call*/
   var $defaultRedirect = "";
 
 /** @var array Configuration variable array*/
   var $cfg=null;
 
-/** @var integer Version major */
-  var $version_major = null;
-
-/** @var integer Version minor */
-  var $version_minor = null;
-
-/** @var integer Version patch level */
-  var $version_patch = null;
+/** @var array Version information */
+  var $version = null;
 
 /** @var string Version string */
   var $version_string = null;
 
 /**
-* CAppUI Constructor
-*/
+ * CAppUI Constructor
+ */
   function CAppUI() {
     $this->state = array();
 
@@ -109,9 +106,9 @@ class CAppUI {
   }
 
 /**
-* Used to load a php class file from the system classes directory
-* @param string $name The class root file name (excluding .class.php)
-* @return string The path to the include file
+ * Used to load a php class file from the system classes directory
+ * @param string $name The class root file name (excluding .class.php)
+ * @return string The path to the include file
  */
   function getSystemClass($name=null) {
     if ($name) {
@@ -136,7 +133,6 @@ class CAppUI {
 
 /**
  * Used to load a php class file from the lib directory
- *
  * @param string <b>$name</b> The class root file name (excluding .php)
  * @return string The path to the include file
  */
@@ -149,9 +145,9 @@ class CAppUI {
   }
 
 /**
-* Used to load a php class file from the module directory
-* @param string $name The class root file name (excluding .class.php)
-* @return string The path to the include file
+ * Used to load a php class file from the module directory
+ * @param string $name The class root file name (excluding .class.php)
+ * @return string The path to the include file
  */
   function getModuleClass($name = null, $file = null) {
     if ($name) {
@@ -163,9 +159,9 @@ class CAppUI {
   }
 
 /**
-* Used to load a php file from the module directory
-* @param string $name The class root file name (excluding .class.php)
-* @return string The path to the include file
+ * Used to load a php file from the module directory
+ * @param string $name The class root file name (excluding .class.php)
+ * @return string The path to the include file
  */
   function getModuleFile($name = null, $file = null) {
     if ($name) {
@@ -177,9 +173,9 @@ class CAppUI {
   }
   
 /**
-* Used to store information in tmp directory
-* @param string $subpath in tmp directory
-* @return string The path to the include file
+ * Used to store information in tmp directory
+ * @param string $subpath in tmp directory
+ * @return string The path to the include file
  */
   function getTmpPath($subpath) {
     if ($subpath) {
@@ -191,18 +187,18 @@ class CAppUI {
   
 
 /**
-* Sets the internal confuration settings array.
-* @param array A named array of configuration variables (usually from config.php)
-*/
+ * Sets the internal confuration settings array.
+ * @param array A named array of configuration variables (usually from config.php)
+ */
   function setConfig(&$cfg) {
     $this->cfg = $cfg;
   }
 
 /**
-* Retrieves a configuration setting.
-* @param string The name of a configuration setting
-* @return The value of the setting, otherwise null if the key is not found in the configuration array
-*/
+ * Retrieves a configuration setting.
+ * @param string The name of a configuration setting
+ * @return The value of the setting, otherwise null if the key is not found in the configuration array
+ */
   function getConfig($key) {
     if (array_key_exists($key, $this->cfg)) {
       return $this->cfg[$key];
@@ -216,31 +212,12 @@ class CAppUI {
 * @return String value indicating the current dotproject version
 */
   function getVersion() {
-    if (! isset($this->version_major)) {
+    if (!isset($this->version)) {
       include_once $this->cfg["root_dir"] . "/includes/version.php";
-      $this->version_major = $dp_version_major;
-      $this->version_minor = $dp_version_minor;
-      $this->version_patch = $dp_version_patch;
-      $this->version_string = $this->version_major . "." . $this->version_minor;
-      if (isset($this->version_patch))
-        $this->version_string .= "." . $this->version_patch;
-      if (isset($dp_version_prepatch))
-        $this->version_string .= "-" . $dp_version_prepatch;
+      $this->version = $version;
+      return $this->version_string = join($this->version, ".");
     }
     return $this->version_string;
-  }
-
-/**
-* Checks that the current user preferred style is valid/exists.
-*/
-  function checkStyle() {
-    // check if default user's uistyle is installed
-    $uistyle = $this->getPref("UISTYLE");
-
-    if ($uistyle && !is_dir($this->cfg["root_dir"]."/style/$uistyle")) {
-      // fall back to host_style if user style is not installed
-      $this->setPref("UISTYLE", $this->cfg["host_style"]);
-    }
   }
 
 /**
@@ -430,20 +407,34 @@ class CAppUI {
 * @param boolean If true, $msg is appended to the current string otherwise
 * the existing message is overwritten with $msg.
 */
-  function setMsg($msg, $msgNo = null, $append = false) {
+  function setMsgOld($msg, $msgNo = null, $append = false) {
     $msg = $this->_($msg);
     $this->msg = ($append and $this->msg) ? join(array($this->msg, $msg), "\n") : $msg;
 
+    // Mix message types with existing
     if ($msgNo) {
-      $this->msgNo = $msgNo;
+      $this->msgNo = $append && $this->msgNo && $this->msgNo != $msgNo ?
+        UI_MSG_WARNING :
+        $msgNo;
     }
+    
   }
   
+ /**
+  * Add message to the the system UI
+  * @param string $msg The (translated) message
+  * @param int $type type of message (cf UI constants)
+  */
+  function setMsg($msg, $type = UI_MSG_OK) {
+    $msg = $this->_($msg);
+    @$this->messages[$type][$msg]++;
+  }
+
  /**
   * Display the formatted message and icon
   * @param boolean If true the current message state is cleared.
   */
-  function getMsg($reset=true) {
+  function getMsgOld($reset = true) {
     $msg = $this->msg;
 
     switch($this->msgNo) {
@@ -461,6 +452,38 @@ class CAppUI {
     
 
     return $msg ? "<div class='$class'>$msg</div>" : "";
+  }
+
+  /**
+   * Display the formatted message and icon
+   * @param boolean $reset If true the system UI is cleared
+   */
+  function getMsg($reset = true) {
+    $return = "";
+    
+    ksort($this->messages);
+    
+    foreach ($this->messages as $type => $messages) {
+      switch ($type) {
+        case UI_MSG_OK      : $class = "message"; break;
+        case UI_MSG_ALERT   : $class = "message"; break;
+        case UI_MSG_WARNING : $class = "warning"; break;
+        case UI_MSG_ERROR   : $class = "error" ; break;
+        default: $class = "message"; break;
+      }
+
+      foreach ($messages as $message => $count) {
+        $render = $count > 1 ? "$message x $count" : $message;
+        $return .= "<div class='$class'>$render</div>";
+      }
+      
+    }
+    
+    if ($reset) {
+      $this->messages = array();
+    }
+
+    return $return;
   }
 
  /**
@@ -486,33 +509,16 @@ class CAppUI {
   }
 
 /**
-* Set the value of a temporary state variable.
-*
-* The state is only held for the duration of a session.  It is not stored in the database.
-* @param string The label or key of the state variable
-* @param mixed Value to assign to the label/key
-*/
-  function setState($label, $value) {
-    $this->state[$label] = $value;
-  }
-/**
-* Get the value of a temporary state variable.
-* @return mixed
-*/
-  function getState($label) {
-    return array_key_exists($label, $this->state) ? $this->state[$label] : null;
-  }
-/**
-* Login function
-*
-* Upon a successful username and password match, several fields from the user
-* table are loaded in this object for convenient reference.  The style, localces
-* and preferences are also loaded at this time.
-*
-* @param string The user login name
-* @param string The user password
-* @return boolean True if successful, false if not
-*/
+ * Login function
+ *
+ * Upon a successful username and password match, several fields from the user
+ * table are loaded in this object for convenient reference.  The style, localces
+ * and preferences are also loaded at this time.
+ *
+ * @param string The user login name
+ * @param string The user password
+ * @return boolean True if successful, false if not
+ */
   function login() {
     // Test login and password validity
     $user = new CUser;
@@ -597,35 +603,18 @@ class CAppUI {
     // load the user preferences
     $this->loadPrefs($this->user_id);
     $this->setUserLocale();
-    $this->checkStyle();
     return true;
   }
 
 /**
- * Gets the value of the specified user preference
- * @param string Name of the preference
+ * Load the stored user preferences from the database into the internal
+ * preferences variable.
+ * @param int $uid User id number, 0 for default preferences
  */
-  function getPref($name) {
-    return @$this->user_prefs[$name];
-  }
-/**
-* Sets the value of a user preference specified by name
-* @param string Name of the preference
-* @param mixed The value of the preference
-*/
-  function setPref($name, $val) {
-    $this->user_prefs[$name] = $val;
-  }
-/**
-* Loads the stored user preferences from the database into the internal
-* preferences variable.
-* @param int User id number
-*/
-  function loadPrefs($uid=0) {
+  function loadPrefs($uid = 0) {
     $sql = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = '$uid'";
-    //writeDebug($sql, "Preferences for user $uid, SQL", __FILE__, __LINE__);
-    $prefs = db_loadHashList($sql);
-    $this->user_prefs = array_merge($this->user_prefs, db_loadHashList($sql));
+    $user_prefs = db_loadHashList($sql);
+    $this->user_prefs = array_merge($this->user_prefs, $user_prefs);
   }
 }
 

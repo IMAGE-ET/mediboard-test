@@ -17,7 +17,7 @@
         </a>
         <p>
           Plateforme Open Source pour les Etablissements de Santé<br/>
-          Version {{$mb_version_major}}.{{$mb_version_minor}}.{{$mb_version_patch}}
+          Version {{$app->version_string}}
         </p>
       </td>
     </tr>
@@ -89,8 +89,10 @@
   </form>
 </div>
 
-{{if $errorMessage}}
+<!-- System messages -->
+<div id="systemMsg">
   {{$errorMessage|nl2br|smarty:nodefaults}}
-{{/if}}
+</div>
+
 </body>
 </html>    

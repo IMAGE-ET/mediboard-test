@@ -1,4 +1,5 @@
 <?php
+$locales['msg-CPrescriptionLaboExamen-delete'] = 'Item de prescription supprimé';
 $locales['CCatalogueLabo'] = 'Catalogue d\'analyses';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sous-catalogue';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Analyse';
@@ -107,6 +108,7 @@ $locales['CPrescriptionLaboExamen-date'] = 'Date';
 $locales['CPrescriptionLaboExamen-date-desc'] = 'Date du résultat de l\'analyse';
 $locales['CPrescriptionLaboExamen-resultat'] = 'Valeur';
 $locales['CPrescriptionLaboExamen-resultat-desc'] = 'Valeur du résultat (le type dépend de l\'exemen)';
+$locales['CPrescriptionLaboExamen-unique-conflict'] = 'Analyse déjà présente dans la prescription';
 $locales['mod-dPlabo-inc-acc_conservation'] = 'Conservation';
 $locales['mod-dPlabo-inc-acc_infos'] = 'Informations Générales';
 $locales['mod-dPlabo-inc-acc_realisation'] = 'Réalisation';
@@ -116,4 +118,6 @@ $locales['mod-dPlabo-tab-vw_edit_examens'] = 'Analyses';
 $locales['mod-dPlabo-tab-vw_edit_packs'] = 'Packs (gestion)';
 $locales['mod-dPlabo-tab-vw_edit_prescriptions'] = 'Prescriptions';
 $locales['mod-dPlabo-tab-vw_resultats'] = 'Résultats';
+$locales['msg-CPrescriptionLaboExamen-create'] = 'Item de prescription ajouté';
+$locales['msg-CPrescriptionLaboExamen-modify'] = 'Item de prescription modifié';
 ?>

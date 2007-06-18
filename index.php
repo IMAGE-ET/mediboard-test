@@ -80,7 +80,7 @@ if (isset($_POST["login"])) {
 }
 
 // Get the user preference
-$uistyle = $AppUI->getPref("UISTYLE");
+$uistyle = $AppUI->user_prefs["UISTYLE"];
 
 require_once( $AppUI->getSystemClass("smartydp"));
 
@@ -117,16 +117,13 @@ if (!$AppUI->user_id) {
   } else {
     $smartyLogin = new CSmartyDP("style/$uistyle");
     $smartyLogin->assign("localeCharSet"        , $locale_char_set);
-    $smartyLogin->assign("mediboardVersion"     , @$AppUI->getVersion());
+    $smartyLogin->assign("mediboardVersion"     , $AppUI->getVersion());
     $smartyLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
     $smartyLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
     $smartyLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
     $smartyLogin->assign("mediboardScript"      , mbLoadScripts(1));
     $smartyLogin->assign("demoVersion"          , $dPconfig["demo_version"]);
     $smartyLogin->assign("dialog"               , $dialog);
-    $smartyLogin->assign("mb_version_major"     , $mb_version_major);
-    $smartyLogin->assign("mb_version_minor"     , $mb_version_minor);
-    $smartyLogin->assign("mb_version_patch"     , $mb_version_patch);
     $smartyLogin->assign("errorMessage"         , $AppUI->getMsg());
     $smartyLogin->assign("time"                 , time());
     $smartyLogin->assign("redirect"             , $redirect);
@@ -144,7 +141,7 @@ if (!$AppUI->user_id) {
 // Set the module and action from the url
 if (null == $m = $AppUI->checkFileName(mbGetValueFromGet("m", 0))) {
   $m = CPermModule::getFirstVisibleModule();
-  if ($pref_module = $AppUI->getPref("DEFMODULE")) {
+  if ($pref_module = $AppUI->user_prefs["DEFMODULE"]) {
     if (CPermModule::getViewModule(CModule::getInstalled($pref_module)->mod_id, PERM_READ)) {
       $m = $pref_module;
     }

@@ -52,11 +52,23 @@ class CPrescriptionLaboExamen extends CMbObject {
       return $msg;
     }
     
-    if(!$this->examen_labo_id) {
+    // Check unique item
+    $other = new CPrescriptionLaboExamen;
+    $other->prescription_labo_id = $this->prescription_labo_id;
+    $other->examen_labo_id = $this->examen_labo_id;
+    $other->loadMatchingObject();
+    if ($other->_id && $other->_id != $this->_id) {
+      return "$this->_class_name-unique-conflict";
+    }
+    
+    // Get the analysis to checl resultat
+    if (!$this->examen_labo_id) {
       $old_object = new CPrescriptionLaboExamen();
       $old_object->load($this->_id);
       $this->examen_labo_id = $old_object->examen_labo_id;
     }
+    
+    // Check resultat according to type
     $this->loadRefExamen();
     $resultTest = CMbFieldSpecFact::getSpec($this, "resultat", $this->_ref_examen_labo->type);
     return $resultTest->checkPropertyValue($this);

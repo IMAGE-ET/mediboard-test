@@ -7,8 +7,6 @@
  * @author Thomas Despoix
  */
 
-require_once("mb_version.php");
-
 /**
  * Utility function to return a value from a named array or a specified default
  */
@@ -493,11 +491,11 @@ function mbInsertCSV( $fileName, $tableName, $oldid = false )
  * Loads a javascript with build version postfix to prevent nasty cache effects
  * while updating the system.  */
 function mbLoadScript ($filepath,$modeReturn = 0) {
-  global $mb_version_build;
+  global $AppUI;
   if($modeReturn){
-    return "\n<script type='text/javascript' src='$filepath?build=$mb_version_build'></script>";
+    return "\n<script type='text/javascript' src='$filepath?build=$AppUI->version_string'></script>";
   }else{
-    echo "\n<script type='text/javascript' src='$filepath?build=$mb_version_build'></script>";
+    echo "\n<script type='text/javascript' src='$filepath?build=$AppUI->version_string'></script>";
   }
 }
 
@@ -506,11 +504,11 @@ function mbLoadScript ($filepath,$modeReturn = 0) {
  * Links a style sheet with build version postfix to prevent nasty cache effects
  * Only to be called while in the HTML header.  */
 function mbLinkStylesheet ($filepath, $media = "all",$modeReturn = 0) {
-  global $mb_version_build;
+  global $AppUI;
   if($modeReturn){
-    return "\n<link rel='stylesheet' type='text/css' href='$filepath?build=$mb_version_build' media='$media' />";
+    return "\n<link rel='stylesheet' type='text/css' href='$filepath?build=$AppUI->version_string' media='$media' />";
   }else{
-    echo "\n<link rel='stylesheet' type='text/css' href='$filepath?build=$mb_version_build' media='$media' />";
+    echo "\n<link rel='stylesheet' type='text/css' href='$filepath?build=$AppUI->version_string' media='$media' />";
   }
 }
 
@@ -518,11 +516,11 @@ function mbLinkStylesheet ($filepath, $media = "all",$modeReturn = 0) {
  * Links a shotcut icon version postfix to prevent nasty cache effects 
  * Only to be called while in the HTML header.  */
 function mbLinkShortcutIcon($filepath,$modeReturn = 0) {
-  global $mb_version_build;
+  global $AppUI;
   if($modeReturn){
-    return "\n<link rel='shortcut icon' type='image/ico' href='$filepath?build=$mb_version_build' />";
+    return "\n<link rel='shortcut icon' type='image/ico' href='$filepath?build=$AppUI->version_string' />";
   }else{
-    echo "\n<link rel='shortcut icon' type='image/ico' href='$filepath?build=$mb_version_build' />";
+    echo "\n<link rel='shortcut icon' type='image/ico' href='$filepath?build=$AppUI->version_string' />";
   }
 }
 
@@ -706,16 +704,6 @@ function mbRemovePath($dir) {
     return false;
   }
   return unlink ($dir);
-}
-
-/**
- * Gets Mediboard version string
- * @return string Mediboard version */
-function mbVersion() {
-  // Manual numbering
-  global $mb_version_major, $mb_version_minor, $mb_version_patch, $mb_version_build;
-  
-  return "v$mb_version_major.$mb_version_minor.$mb_version_patch b$mb_version_build";
 }
 
 /**

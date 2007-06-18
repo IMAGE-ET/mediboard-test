@@ -25,6 +25,5 @@ if(!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
 
 $AppUI =& $_SESSION["AppUI"];
 $AppUI->setConfig($dPconfig);
-$AppUI->checkStyle();
  
 ?>

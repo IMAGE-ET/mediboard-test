@@ -61,7 +61,7 @@
 </table>
 {{/if}}
 {{/if}}
-<table id="main">
+<table {{if $dialog}}class="dialog"{{if}} id="main">
   <tr>
     <td>
       <div id="systemMsg">

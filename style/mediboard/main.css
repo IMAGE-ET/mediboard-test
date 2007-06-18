@@ -866,7 +866,7 @@ td.tabox {
 
 /* Message styles */
 
-div.dialog#systemMsg,
+table.dialog #systemMsg,
 #leftMenu #systemMsg {
   position: fixed;
   top: 5px;

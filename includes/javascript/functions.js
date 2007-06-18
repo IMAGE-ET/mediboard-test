@@ -61,13 +61,13 @@ var AjaxResponse = {
  */
 SystemMessage = {
   id: "systemMsg",
-  type: null,
+  autohide: null,
   div: null,
   effect: null,
 
 	// Check message type (loading, notice, warning, error) from given div
 	checkType: function(div) {
-  	this.type = $A(div.childNodes).pluck("className").compact().first();
+  	this.autohide = $A(div.childNodes).pluck("className").compact().last() == ["message"];
 	},
 
 	// Catches the innerHTML watch event
@@ -85,7 +85,7 @@ SystemMessage = {
 	// show/hide the div
   doEffect : function (delay) {
   	//Assert.that(this.div, "No system message div");
-  	
+
   	// Cancel current effect
   	if (this.effect) {
       this.effect.cancel();
@@ -97,7 +97,7 @@ SystemMessage = {
     this.div.setOpacity(1);
     
     // Only hide on type 'message'
-    if (this.type != "message") {
+    if (!this.autohide) {
       return;
     }
     
@@ -115,7 +115,7 @@ SystemMessage = {
     
     // Hide on onclick
     Event.observe(this.div, 'click', function(event) {
-      SystemMessage.type = "message";
+      SystemMessage.autohide = true;
       SystemMessage.doEffect(0.1);
     } );
     

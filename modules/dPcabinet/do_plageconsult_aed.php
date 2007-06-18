@@ -9,102 +9,64 @@
 
 // Object binding
 $obj = new CPlageconsult();
-if (!$obj->bind( $_POST )) {
-	$AppUI->setMsg( $obj->getError(), UI_MSG_ERROR );
+if (!$obj->bind($_POST)) {
+	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 	$AppUI->redirect();
 }
 
 $del         = dPgetParam( $_POST, "del", 0 );
 $repeat      = dPgetParam( $_POST, "_repeat", 0 );
 $type_repeat = dPgetParam( $_POST, "_type_repeat", 1 );
-
-$body_msg = null;
-$header   = array();
-$msgNo    = null;
-
+   
 if ($del) {
   $obj->load();
 
-  $deleted = 0;
-  $not_deleted = 0;
-  $not_found = 0;
-
   while ($repeat-- > 0) {
-    $msg = NULL;
-    if ($obj->plageconsult_id) {
-      if ($obj->canDelete($msg)) {
-        if ($msg = $obj->delete()) {
-          $not_deleted++;
-        } else {
-          $msg = "plage supprimée";
-          $deleted++;
-        }
-      } else {
-        $not_deleted++;
-      } 
-    } else {
-      $not_found++;
-      $msg = "Impossible de supprimer, plage non trouvée";
+    if (!$obj->_id) {
+      $AppUI->setMsg("Plage non trouvée", UI_MSG_ERROR);
     }
-    
-    $body_msg .= "<br />Plage du $obj->date: $msg";
+    else {
+      if ($msg = $obj->delete()) {
+        $AppUI->setMsg("Plage non supprimée", UI_MSG_ERROR);
+        $AppUI->setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
+      } 
+      else {
+        $AppUI->setMsg("Plage supprimée", UI_MSG_OK);
+      }
+    }
     $obj->becomeNext();
   }
   
-  if ($deleted    ) $header [] = "$deleted plage(s) supprimée(s)";
-  if ($not_deleted) $header [] = "$not_deleted plage(s) non supprimée(s)";
-  if ($not_found  ) $header [] = "$not_found plage(s) non trouvée(s)";
-  
-  $msgNo = $deleted ? UI_MSG_ALERT : UI_MSG_ERROR;
-
   mbSetValueToSession("plageconsult_id");
 
 } else {
-  $created = 0;
-  $updated = 0;
-  $not_created = 0;
-  $not_updated = 0;  
-  
   while ($repeat-- > 0) {    
-    $msg = null;
-    if ($obj->plageconsult_id) {
+    if ($obj->_id) {
       if ($msg = $obj->store()) {
-        $not_updated++;
-      } else {
-        $msg = "plage mise à jour";
-        $updated++;
-      }
-    } else {
+        $AppUI->setMsg("Plage non mise à jour", UI_MSG_ERROR);
+        $AppUI->setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
+      } 
+      else {
+        $AppUI->setMsg("Plage mise à jour", UI_MSG_OK);
+      }      
+    } 
+    else {
       if ($msg = $obj->store()) {
-        $not_created++;
-      } else {
-        $msg = "plage créée";
-        $created++;
+        $AppUI->setMsg("Plage non crée", UI_MSG_ERROR);
+        $AppUI->setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
+      } 
+      else {
+        $AppUI->setMsg("Plage créée", UI_MSG_OK);
       }
     }
-    $body_msg .= "<br />Plage du $obj->date: " . $msg;
+
     
-    for($i=1;$i<=$type_repeat;$i++){
+    for ($i=1; $i <= $type_repeat; $i++) {
       $obj->becomeNext();
     }
-	
   }
 
-  if ($created) $header [] = "$created plage(s) créée(s)";
-  if ($updated) $header [] = "$updated plage(s) mise(s) à jour";
-  if ($not_created) $header [] = "$not_created plage(s) non créée(s)";
-  if ($not_updated) $header [] = "$not_created plage(s) non mise(s) à jour";
-  
-  $msgNo = ($not_created + $not_updated) ?
-    (($not_created + $not_updated) ? UI_MSG_ALERT : UI_MSG_ERROR) :
-    UI_MSG_OK;
 }
 
-$complete_msg = implode(" - ", $header);
-if ($body_msg) {
-// Uncomment for more verbose
-//  $complete_msg .= $body_msg; 
-}
-$AppUI->setMsg($complete_msg, $msgNo);
 $AppUI->redirect("m=$m");
 ?>

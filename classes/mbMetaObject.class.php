@@ -14,6 +14,7 @@
 
 global $AppUI;
 
+global $AppUI;
 require_once($AppUI->getSystemClass("mbobject"));
 
 class CMbMetaObject extends CMbObject{

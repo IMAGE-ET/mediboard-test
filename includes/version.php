@@ -1,7 +1,15 @@
 <?php
-// Set the version components separately.
-$dp_version_major = 1;
-$dp_version_minor = 0;
-$dp_version_patch = 2;	// Can be set to null if not used
-$dp_version_prepatch = null;	// Set to null if a release version.
+
+// RECHERCHER version_
+
+// Global system version
+$version = array(
+  // Manual numbering
+  "major" => 0,
+  "minor" => 4,
+  "patch" => 0,
+  
+  // Automated numbering (should be incremented at each commit)
+  "build" => 126,
+);
 ?>

@@ -3,7 +3,9 @@
 {{if !$dialog}}
 
 {{foreach from=$messages item=currMsg}}
-  <div style='background: #aaa; color: #fff;'><strong>{{$currMsg->titre}}</strong> : {{$currMsg->corps}}</div>
+  <div style='background: #aaa; color: #fff;'>
+    <strong>{{$currMsg->titre}}</strong> : {{$currMsg->corps}}
+  </div>
 {{/foreach}}
 
 <table id="header" cellspacing="0">
@@ -72,12 +74,14 @@
   </tr>
   {{/if}}
 </table>
-{{else}}
-<div class="dialog" {{if !$errorMessage}} style="display: none"{{/if}} id="systemMsg">
-  {{$errorMessage|nl2br|smarty:nodefaults}}
-</div>
 {{/if}}
 
-<table id="main" class="{{$m}}">
+<table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
 <tr>
   <td>
+
+<!-- System messages -->
+<div id="systemMsg">
+  {{$errorMessage|nl2br|smarty:nodefaults}}
+</div>
+  

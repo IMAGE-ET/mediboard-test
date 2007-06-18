@@ -1,4 +1,4 @@
-<script type="text/javascript" src="modules/dPpatients/javascript/autocomplete.js?build={{$mb_version_build}}"></script>
+<script type="text/javascript" src="modules/dPpatients/javascript/autocomplete.js?build={{$app->version.build}}"></script>
 <script type="text/javascript">
 function submitForm(oForm){
   submitFormAjax(oForm, 'systemMsg')

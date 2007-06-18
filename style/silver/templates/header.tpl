@@ -75,10 +75,11 @@
 </script>
 {{/if}}
 {{/if}}
-<table id="main" class="{{$m}}">
+<table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
   <tr>
     <td>
-      <div {{if $dialog}}class="dialog" {{if !$errorMessage}} style="display: none"{{/if}}{{/if}} id="systemMsg">
+      <!-- System messages -->
+      <div id="systemMsg">
         {{$errorMessage|nl2br|smarty:nodefaults}}
       </div>
       {{if !$dialog && !$offline}}

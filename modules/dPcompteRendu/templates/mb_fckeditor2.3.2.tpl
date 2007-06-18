@@ -6,7 +6,7 @@ var bAutoSelectSpans = {{if $templateManager->valueMode}} false {{else}} true {{
 // FCK editor general configuration
 sMbPath = "../../../";
 sMbPluginsPath = sMbPath + "modules/dPcompteRendu/fcke_plugins/" ;
-FCKConfig.EditorAreaCSS = sMbPath + "style/mediboard/htmlarea.css?build={{$mb_version_build}}";
+FCKConfig.EditorAreaCSS = sMbPath + "style/mediboard/htmlarea.css?build={{$app->version.build}}";
 FCKConfig.Debug = false;
 
 // Toolbar Configuration

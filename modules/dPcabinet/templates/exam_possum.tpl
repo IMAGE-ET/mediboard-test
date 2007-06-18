@@ -7,7 +7,7 @@ var listScoreOper   = {{$exam_possum->_score_possum_oper|@json}};
 var scorePhysio = {{$exam_possum->_score_physio}};
 var scoreOper   = {{$exam_possum->_score_oper}};
 </script>
-<script type="text/javascript" src="modules/{{$m}}/javascript/exam_possum.js?build={{$mb_version_build}}"></script>
+<script type="text/javascript" src="modules/{{$m}}/javascript/exam_possum.js?build={{$app->version.build}}"></script>
 
 <form name="editFrmPossum" action="?m=dPcabinet&amp;a=exam_possum&amp;dialog=1" method="post" onsubmit="return checkForm(this)">
 

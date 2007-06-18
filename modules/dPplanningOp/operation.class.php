@@ -8,8 +8,7 @@
 */
 
 global $AppUI;
-
-require_once($AppUI->getModuleFile("dPccam", "codableCCAM.class"));
+require_once($AppUI->getModuleClass("dPccam", "codableCCAM"));
 
 class COperation extends CCodableCCAM {
   // DB Table key
