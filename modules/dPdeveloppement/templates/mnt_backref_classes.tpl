@@ -67,13 +67,24 @@
               {{/if}} >
             	{{$_item.real.attribut}} 
 		  </td>
-		  <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
+		  {{if $_item.real.traduction == ""}}
+		  	<td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
+              	 class="error"
+              {{else}}
+                 class="warning"
+              {{/if}} >
+            	{{$keyTab}}-back-{{$_item.real.attribut}}
+		  </td>
+		  {{else}}
+		  	<td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
               	 class="error"
               {{else}}
                  class="ok"
               {{/if}} >
-            	{{$keyTab}}-back-{{$_item.real.attribut}}
-		  </td> 
+            	{{$_item.real.traduction}}
+		  </td>
+		  {{/if}}
+		   
           <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
               	 class="error"
               {{else}}

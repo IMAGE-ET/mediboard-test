@@ -125,9 +125,10 @@ class CRequest {
   function getRequest($obj = null) {
     // MbObject binding
     if ($obj) {
-      if (!is_a($obj, "CMbObject")) {
-        trigger_error("Object must be an instance of MbObject", E_USER_ERROR);
-      }
+    	// Removed for performance tests
+//      if (!is_a($obj, "CMbObject")) {
+//        trigger_error("Object must be an instance of MbObject", E_USER_ERROR);
+//      }
 
       if (count($this->select)) {
         trigger_error("You have to choose either an object or select(s)", E_USER_ERROR);

@@ -11,6 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
+
 $selClass = mbGetValueFromGetOrSession("selClass", null);
 
 $classSelected = array();
@@ -27,22 +28,54 @@ if($class_exist === false){
   $classSelected[] = $selClass;
 }
 
+// liste des dossiers modules + common et styles
+$modules = array_merge( array("common"=>"common", "styles"=>"styles") ,$AppUI->readDirs("modules"));
+mbRemoveValuesInArray(".svn", $modules);
+ksort($modules);
+
+// Dossier des traductions
+$localesDirs = $AppUI->readDirs("locales");
+mbRemoveValuesInArray(".svn",$localesDirs);
+mbRemoveValuesInArray("en",$localesDirs);
+	
 $backSpecs = array();
 $backRefs = array();
+$trans = array();
 
 // Extraction des propriétés 'spec' (théorique)
 foreach($classSelected as $selected) {
-  $object = new $selected;
+	if ($selected == 'CModule') {
+		continue;
+	}
+    $object = new $selected;
+    // Récupération du fichier demandé pour toutes les langues
+	$translateModule = new CMbConfig;
+	$translateModule->sourcePath = null;
+	$contenu_file = array();
+	//mbTrace($selected);
+	$module = $object->_ref_module->mod_name;
+	foreach($localesDirs as $locale){
+	  $translateModule->options = array("name" => "locales");
+	  $translateModule->targetPath = "locales/fr/$modules[$module].php";
+	  $translateModule->load();
+	  $contenu_file[$locale] = $translateModule->values;
+	}
+	
+	// Réattribution des clés et organisation
+	
+	foreach($localesDirs as $locale){
+		foreach($contenu_file[$locale] as $k=>$v){
+			$trans[ (is_int($k) ? $v : $k) ][$locale] = $v;
+		}
+	}
   $backRefs[$selected]=$object->_backRefs;  
   foreach ($object->_specs as $objetRefSpec) {
     if (is_a($objetRefSpec, 'CRefSpec')) {
-    
         $spec = array();
         $spec[] = $objetRefSpec->className;
         $spec[] = $objetRefSpec->fieldName;
-        
-      $backSpecs[$objetRefSpec->class][] = join($spec, " ");
-       }
+        $backSpecs[$objetRefSpec->class][] = join($spec, " ");
+    }
   }
 }
 
@@ -57,6 +90,8 @@ foreach ($backRefs as $keyBackRef => $valueBackRefs) {
       $realRef =& $tabInfo[$keyBackRef][$backRef]["real"];
       $realRef["condition"] = $ok; 
       $realRef["attribut"] = $key;
+      //mbTrace($keyBackRef.'-back-'.$key);
+      $realRef["traduction"] = !array_key_exists($keyBackRef.'-back-'.$key,$trans) ? '' : $trans[$keyBackRef."-back-".$key]["fr"];
       // Vérification que la fwd ref cible bien la class et non un ancêtre
       if (!in_array($backRef,$backSpecs[$keyBackRef])) {
         $backRefParts = split(" ", $backRef);

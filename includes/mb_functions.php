@@ -214,15 +214,15 @@ function mbWorkDaysInMonth($date = null) {
  * @return string: the transformed time 
  **/
 function mbTranformTime($relative = null, $ref = null, $format) {
-  if (!$relative) {
-    $relative = "+ 0 days";
-  } elseif ($relative == "last sunday") {
+  if ($relative == "last sunday") {
     $relative .= " 12:00:00";
   }
   
   $timestamp = $ref ? strtotime($ref) : time();
-  $transtime = strtotime($relative, $timestamp);
-  return strftime($format, $transtime);
+  if ($relative) {
+  	$timestamp = strtotime($relative, $timestamp);
+  } 
+  return strftime($format, $timestamp);
 }
 
 /**
