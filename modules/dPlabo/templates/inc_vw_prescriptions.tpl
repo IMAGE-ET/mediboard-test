@@ -50,7 +50,7 @@
         <button type="button" class="lock notext" onclick="Prescription.lock(this.form);">lock</button>
         {{/if}}
         {{if $curr_prescription->_status == $curr_prescription|const:"VEROUILLEE"}}
-        <button type="button" class="change notext" onclick="Prescription.export(this.form);">change</button>
+        <button type="button" class="change notext" onclick="Prescription.send(this.form);">change</button>
         {{/if}}
         {{if $curr_prescription->_status == $curr_prescription|const:"SAISIE"}}
         <button type="button" class="tick notext" onclick="Prescription.valide(this.form);">tick</button>

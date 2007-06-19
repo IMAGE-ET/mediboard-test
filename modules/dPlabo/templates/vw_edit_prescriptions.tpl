@@ -145,7 +145,7 @@ var Prescription = {
     url.popup(500, 500, "CPrescriptionLabo");
   },
   
-  export: function(oForm) {
+  send: function(oForm) {
     oForm.dosql.value = "do_prescription_export";
     submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select } );
     return true;

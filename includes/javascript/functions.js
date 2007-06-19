@@ -1,14 +1,19 @@
 // $Id$
 
 function main() {
-  prepareForms();
-  initFCKEditor();
-  BrowserDetect.init();
-  ObjectInitialisation.hackIt();
-  SystemMessage.init();
-  SystemMessage.doEffect();
-  initPuces();
-  pageMain();
+	try {
+	  prepareForms();
+	  initFCKEditor();
+	  BrowserDetect.init();
+	  ObjectInitialisation.hackIt();
+	  SystemMessage.init();
+	  SystemMessage.doEffect();
+	  initPuces();
+	  pageMain();
+	}
+	catch (e) {
+		Console.debug(e);
+	}
 }
 
 window.onbeforeunload= function () {
@@ -84,8 +89,6 @@ SystemMessage = {
 	
 	// show/hide the div
   doEffect : function (delay) {
-  	//Assert.that(this.div, "No system message div");
-
   	// Cancel current effect
   	if (this.effect) {
       this.effect.cancel();
@@ -107,9 +110,7 @@ SystemMessage = {
   
   init : function () {
     this.div = $(this.id);
-    if (!this.div) {
-      return;
-    }
+  	Assert.that(this.div, "No system message div");
     
     this.checkType(this.div);
     
@@ -121,7 +122,7 @@ SystemMessage = {
     
     // Always show if watch does not exist (IE)
     if (!this.div.watch) {
-      Element.show(oElement);
+      Element.show(this.div);
       return;
     }
     

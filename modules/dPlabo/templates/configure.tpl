@@ -5,16 +5,17 @@
 var Action = {
   module: "dPlabo",
   
-  do: function (sName) {
+  update: function (sName) {
     var url = new Url;
     url.setModuleAction(this.module, this.Requests[sName]);
     url.requestUpdate("action-" + sName);
   },
   
   Requests: {
-    import: "httpreq_import_catalogue"
+    "import": "httpreq_import_catalogue"
   }
 }
+
 </script>
 
 <h2>Environnement d'execution</h2>
@@ -74,7 +75,7 @@ var Action = {
 </tr>
 
 <tr>
-  <td><button class="tick" onclick="Action.do('import')">Importer</button></td>
+  <td><button class="tick" onclick="Action.update('import')">Importer</button></td>
   <td id="action-import"></td>
 </tr>
 
