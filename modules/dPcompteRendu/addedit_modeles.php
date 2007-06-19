@@ -20,6 +20,7 @@ $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 
 // L'utilisateur est-il praticien?
 $prat_id = mbGetValueFromGetOrSession("selPrat");
+
 if (!$prat_id) {
   $mediuser = new CMediusers;
   $mediuser->load($AppUI->user_id);
@@ -30,6 +31,8 @@ if (!$prat_id) {
   }
 }
 
+$user_id = $AppUI->user_id;
+  
 // Compte-rendu selectionné
 $compte_rendu_id = mbGetValueFromGetOrSession("compte_rendu_id");
 $compte_rendu = new CCompteRendu();
@@ -42,6 +45,7 @@ if($compte_rendu->object_id){
 // Gestion du modèle
 $templateManager = new CTemplateManager;
 $templateManager->editor = "fckeditor2.3.2";
+
 if ($compte_rendu->compte_rendu_id) {
   $prat_id = $compte_rendu->chir_id;
   $templateManager->valueMode = false;
@@ -64,8 +68,11 @@ foreach($listObjectClass as $keyClass=>$value){
     $listObjectClass[$keyClass][$keyCat] = htmlentities($listCategory[$keyCat]->nom);
   }
 }
+
+//mbTrace($compte_rendu);
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("user_id"             , $user_id);
 $smarty->assign("prat_id"             , $prat_id);
 $smarty->assign("compte_rendu_id"     , $compte_rendu_id);
 $smarty->assign("listPrat"            , $listPrat);
