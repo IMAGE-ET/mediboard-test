@@ -173,14 +173,15 @@ $extensions[] = $extension;
 
 $versions = array();
 
-$version = new CPHPVersion;
-$version->name = "5.1";
-$version->mandatory = true;
-$version->description = "Version de PHP5 récente";
-$version->reasons[] = "Intégration du support XML natif : utilisation pour l'intéropérabilité HPRIM XML'";
-$version->reasons[] = "Intégration de PDO : accès universel et sécurisé aux base de données";
-$version->reasons[] = "Conception objet plus évoluée";
-$versions[] = $version;
+// Do not use $version which is a Mediboard global
+$php = new CPHPVersion;
+$php->name = "5.1";
+$php->mandatory = true;
+$php->description = "Version de PHP5 récente";
+$php->reasons[] = "Intégration du support XML natif : utilisation pour l'intéropérabilité HPRIM XML'";
+$php->reasons[] = "Intégration de PDO : accès universel et sécurisé aux base de données";
+$php->reasons[] = "Conception objet plus évoluée";
+$versions[] = $php;
 
 ?>
 
