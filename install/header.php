@@ -12,9 +12,8 @@ set_time_limit(180);
 $mbpath = "../";
 
 require_once($mbpath."includes/mb_functions.php");
-require_once($mbpath."classes/chrono.class.php");
 require_once($mbpath."includes/version.php");
-$version_string = join($version, ".");
+require_once($mbpath."classes/chrono.class.php");
 
 $stepsText = array (
   "check" => "Prérequis", 
@@ -40,7 +39,7 @@ $chrono = new Chronometer();
 $chrono->start();
 
 function showHeader() {
-  global $stepsText, $currentStepKey, $currentStep, $steps, $version_string;
+  global $stepsText, $currentStepKey, $currentStep, $steps, $version;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -49,7 +48,7 @@ function showHeader() {
   <title>Mediboard :: Assistant d'installation &mdash; Etape <?php echo $currentStepKey+1; ?> : <?php echo $currentStep; ?></title>
   <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1" />
   <meta name="Description" content="Mediboard : Plateforme Open Source pour les Etablissements de Santé" />
-  <meta name="Version" content="<?php echo $version_string; ?>" />
+  <meta name="Version" content="<?php echo $version["string"]; ?>" />
   <link rel="stylesheet" type="text/css" href="../style/mediboard/main.css" />
 </head>
 
@@ -70,7 +69,7 @@ function showHeader() {
   </ol>
 </div>
 
-<h1>Installation de Mediboard <?php echo $version_string; ?> &mdash; Etape <?php echo $currentStepKey+1; ?>/<?php echo count($steps); ?>  </h1>
+<h1>Installation de Mediboard <?php echo $version["string"]; ?> &mdash; Etape <?php echo $currentStepKey+1; ?>/<?php echo count($steps); ?>  </h1>
 <?php 
 } 
 

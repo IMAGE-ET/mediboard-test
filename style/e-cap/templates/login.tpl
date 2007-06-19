@@ -22,7 +22,7 @@
         </a>
         <p>
           Plateforme Open Source pour les Etablissements de Santé<br/>
-          Version {{$app->version_string}}
+          Version {{$version.string}}
         </p>
       </td>
     </tr>
@@ -70,7 +70,7 @@
         <a href="http://www.dotproject.net/">
           <img src="images/pictures/dp_icon.gif" alt="dotProject logo" />
         </a>
-        <p>Version {{$mediboardVersion}}</p>
+        <p>Version {{$version.string}}</p>
       </td>
 
       {{if $demoVersion}}

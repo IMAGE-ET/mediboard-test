@@ -5,7 +5,7 @@
   <title>Mediboard :: Système de gestion des structures de santé</title>
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeCharSet}}" />
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissement de Santé" />
-  <meta name="Version" content="{{$mediboardVersion}}" />
+  <meta name="Version" content="{{$version.string}}" />
   {{$mediboardShortIcon|smarty:nodefaults}}
   {{$mediboardCommonStyle|smarty:nodefaults}}
   {{$mediboardStyle|smarty:nodefaults}}

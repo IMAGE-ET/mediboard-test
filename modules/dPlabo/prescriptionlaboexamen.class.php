@@ -61,7 +61,7 @@ class CPrescriptionLaboExamen extends CMbObject {
       return "$this->_class_name-unique-conflict";
     }
     
-    // Get the analysis to checl resultat
+    // Get the analysis to check resultat
     if (!$this->examen_labo_id) {
       $old_object = new CPrescriptionLaboExamen();
       $old_object->load($this->_id);

@@ -232,7 +232,7 @@ class CSmartyDP extends Smarty {
    * Standard data assignment
    */
   function CSmartyDP($rootDir = null) {
-    global $AppUI, $dbChronos, $dPconfig, $canRead, $can, $canEdit, $canAdmin, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax;
+    global $AppUI, $version, $dbChronos, $dPconfig, $canRead, $can, $canEdit, $canAdmin, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax;
 
     $root = $dPconfig["root_dir"];
 
@@ -275,6 +275,7 @@ class CSmartyDP extends Smarty {
     $this->assign("dbChronos", $dbChronos);
     $this->assign("dPconfig", $dPconfig);
     $this->assign("user", $AppUI->user_id); // shouldn't be necessary
+    $this->assign("version", $version);
     $this->assign("canEdit", $canEdit);
     $this->assign("canRead", $canRead);
     $this->assign("canAdmin", $canAdmin);

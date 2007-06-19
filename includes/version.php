@@ -1,15 +1,17 @@
 <?php
 
-// RECHERCHER version_
+global $version;
 
 // Global system version
-$version = array(
+$version = array (
   // Manual numbering
   "major" => 0,
   "minor" => 4,
   "patch" => 0,
   
   // Automated numbering (should be incremented at each commit)
-  "build" => 126,
+  "build" => 127,
 );
+
+$version["string"] = join($version, ".");
 ?>

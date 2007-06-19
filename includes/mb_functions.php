@@ -489,39 +489,45 @@ function mbInsertCSV( $fileName, $tableName, $oldid = false )
 
 /**
  * Loads a javascript with build version postfix to prevent nasty cache effects
- * while updating the system.  */
-function mbLoadScript ($filepath,$modeReturn = 0) {
-  global $AppUI;
-  if($modeReturn){
-    return "\n<script type='text/javascript' src='$filepath?build=$AppUI->version_string'></script>";
-  }else{
-    echo "\n<script type='text/javascript' src='$filepath?build=$AppUI->version_string'></script>";
+ * while updating the system.  
+ */
+function mbLoadScript($filepath, $modeReturn = 0) {
+  global $version;
+  $build = $version["build"];
+  $tag = "\n<script type='text/javascript' src='$filepath?build=$build'></script>";
+  if ($modeReturn) { 
+    return $tag;
   }
+  
+  echo $tag;
 }
-
 
 /**
  * Links a style sheet with build version postfix to prevent nasty cache effects
  * Only to be called while in the HTML header.  */
-function mbLinkStylesheet ($filepath, $media = "all",$modeReturn = 0) {
-  global $AppUI;
-  if($modeReturn){
-    return "\n<link rel='stylesheet' type='text/css' href='$filepath?build=$AppUI->version_string' media='$media' />";
-  }else{
-    echo "\n<link rel='stylesheet' type='text/css' href='$filepath?build=$AppUI->version_string' media='$media' />";
+function mbLinkStylesheet($filepath, $media = "all", $modeReturn = 0) {
+  global $version;
+  $build = $version["build"];
+  $tag = "\n<link rel='stylesheet' type='text/css' href='$filepath?build=$build' media='$media' />";
+  if ($modeReturn) { 
+    return $tag;
   }
+  
+  echo $tag;
 }
 
 /**
  * Links a shotcut icon version postfix to prevent nasty cache effects 
  * Only to be called while in the HTML header.  */
-function mbLinkShortcutIcon($filepath,$modeReturn = 0) {
-  global $AppUI;
-  if($modeReturn){
-    return "\n<link rel='shortcut icon' type='image/ico' href='$filepath?build=$AppUI->version_string' />";
-  }else{
-    echo "\n<link rel='shortcut icon' type='image/ico' href='$filepath?build=$AppUI->version_string' />";
+function mbLinkShortcutIcon($filepath, $modeReturn = 0) {
+  global $version;
+  $build = $version["build"];
+  $tag = "\n<link rel='shortcut icon' type='image/ico' href='$filepath?build=$build' />";
+  if ($modeReturn) { 
+    return $tag;
   }
+  
+  echo $tag;
 }
 
 /**

@@ -19,6 +19,7 @@ if (!is_file("./includes/config.php")) {
 
 require_once("./includes/config_dist.php");
 require_once("./includes/config.php");
+require_once("./includes/version.php");
 require_once("./classes/sharedmemory.class.php");
 
 // Check that the user has correctly set the root directory
@@ -117,7 +118,6 @@ if (!$AppUI->user_id) {
   } else {
     $smartyLogin = new CSmartyDP("style/$uistyle");
     $smartyLogin->assign("localeCharSet"        , $locale_char_set);
-    $smartyLogin->assign("mediboardVersion"     , $AppUI->getVersion());
     $smartyLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
     $smartyLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
     $smartyLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
@@ -230,7 +230,6 @@ if (!$suppressHeaders) {
   $smartyHeader->assign("offline"              , false);
   $smartyHeader->assign("configOffline"        , null);
   $smartyHeader->assign("localeCharSet"        , $locale_char_set);
-  $smartyHeader->assign("mediboardVersion"     , @$AppUI->getVersion());
   $smartyHeader->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
   $smartyHeader->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
   $smartyHeader->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));

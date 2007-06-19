@@ -878,6 +878,7 @@ table.dialog #systemMsg,
 }
 
 div#systemMsg {
+  cursor: pointer;
   float: right;
 }
 

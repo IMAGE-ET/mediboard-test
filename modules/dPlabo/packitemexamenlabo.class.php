@@ -25,6 +25,21 @@ class CPackItemExamenLabo extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  function check() {
+    if ($msg = parent::check()) {
+      return $msg;
+    }
+    
+    // Check unique item
+    $other = new CPackItemExamenLabo;
+    $other->pack_examens_labo_id = $this->pack_examens_labo_id;
+    $other->examen_labo_id = $this->examen_labo_id;
+    $other->loadMatchingObject();
+    if ($other->_id && $other->_id != $this->_id) {
+      return "$this->_class_name-unique-conflict";
+    }
+  }
+
   function getSpecs() {
     return array (
       "pack_examens_labo_id" => "ref class|CPackExamensLabo notNull",

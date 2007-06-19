@@ -18,7 +18,7 @@
         </a>
         <p>
           Plateforme Open Source pour les Etablissements de Santé<br/>
-          Version {{$app->version_string}}
+          Version {{$version.string}}
         </p>
       </td>
     </tr>

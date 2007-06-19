@@ -11,7 +11,7 @@ global $AppUI;
 
 $config = array();
 $config["mod_name"]        = "dPlabo";
-$config["mod_version"]     = "0.22";
+$config["mod_version"]     = "0.23";
 $config["mod_type"]        = "user";
 
 class CSetupdPlabo extends CSetup {
@@ -163,7 +163,17 @@ class CSetupdPlabo extends CSetup {
             ADD `validee` ENUM('0','1');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.22";
+    $this->makeRevision("0.22");
+    $sql = "ALTER TABLE `pack_item_examen_labo` ADD UNIQUE (" .
+        "\n`pack_examens_labo_id` ," .
+        "\n`examen_labo_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription_labo_examen` ADD UNIQUE (" .
+        "\n`prescription_labo_id` ," .
+        "\n`examen_labo_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.23";
   }
 }
 ?>

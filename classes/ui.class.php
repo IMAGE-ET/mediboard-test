@@ -66,12 +66,6 @@ class CAppUI {
 /** @var array Configuration variable array*/
   var $cfg=null;
 
-/** @var array Version information */
-  var $version = null;
-
-/** @var string Version string */
-  var $version_string = null;
-
 /**
  * CAppUI Constructor
  */
@@ -208,25 +202,12 @@ class CAppUI {
   }
 
 /**
-* Determines the version.
-* @return String value indicating the current dotproject version
-*/
-  function getVersion() {
-    if (!isset($this->version)) {
-      include_once $this->cfg["root_dir"] . "/includes/version.php";
-      $this->version = $version;
-      return $this->version_string = join($this->version, ".");
-    }
-    return $this->version_string;
-  }
-
-/**
-* Utility function to read the "directories" under "path"
-*
-* This function is used to read the modules or locales installed on the file system.
-* @param string The path to read.
-* @return array A named array of the directories (the key and value are identical).
-*/
+ * Utility function to read the "directories" under "path"
+ *
+ * This function is used to read the modules or locales installed on the file system.
+ * @param string The path to read.
+ * @return array A named array of the directories (the key and value are identical).
+ */
   function readDirs($path) {
     $dirs = array();
     $d = dir($this->cfg["root_dir"]."/$path");
@@ -240,11 +221,11 @@ class CAppUI {
   }
 
 /**
-* Utility function to read the "files" under "path"
-* @param string The path to read.
-* @param string A regular expression to filter by.
-* @return array A named array of the files (the key and value are identical).
-*/
+ * Utility function to read the "files" under "path"
+ * @param string The path to read.
+ * @param string A regular expression to filter by.
+ * @return array A named array of the files (the key and value are identical).
+ */
   function readFiles($path, $filter=".") {
     $files = array();
 
@@ -261,12 +242,12 @@ class CAppUI {
 
 
 /**
-* Utility function to check whether a file name is "safe"
-*
-* Prevents from access to relative directories (eg ../../dealyfile.php);
-* @param string The file name.
-* @return array A named array of the files (the key and value are identical).
-*/
+ * Utility function to check whether a file name is "safe"
+ *
+ * Prevents from access to relative directories (eg ../../dealyfile.php);
+ * @param string The file name.
+ * @return array A named array of the files (the key and value are identical).
+ */
   function checkFileName($file) {
     global $AppUI;
 
@@ -285,11 +266,11 @@ class CAppUI {
   }
 
 /**
-* Sets the user locale.
-*
-* Looks in the user preferences first.  If this value has not been set by the user it uses the system default set in config.php.
-* @param string Locale abbreviation corresponding to the sub-directory name in the locales directory (usually the abbreviated language code).
-*/
+ * Sets the user locale.
+ *
+ * Looks in the user preferences first.  If this value has not been set by the user it uses the system default set in config.php.
+ * @param string Locale abbreviation corresponding to the sub-directory name in the locales directory (usually the abbreviated language code).
+ */
   function setUserLocale() {
     $this->user_locale = $this->user_prefs["LOCALE"];
   }

@@ -1,5 +1,5 @@
 <?php
-$locales['msg-CPrescriptionLaboExamen-delete'] = 'Item de prescription supprimé';
+$locales['CPackItemExamenLabo-unique-conflict'] = 'Analyse déjà présente dans ce pack';
 $locales['CCatalogueLabo'] = 'Catalogue d\'analyses';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sous-catalogue';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Analyse';
@@ -119,5 +119,6 @@ $locales['mod-dPlabo-tab-vw_edit_packs'] = 'Packs (gestion)';
 $locales['mod-dPlabo-tab-vw_edit_prescriptions'] = 'Prescriptions';
 $locales['mod-dPlabo-tab-vw_resultats'] = 'Résultats';
 $locales['msg-CPrescriptionLaboExamen-create'] = 'Item de prescription ajouté';
+$locales['msg-CPrescriptionLaboExamen-delete'] = 'Item de prescription supprimé';
 $locales['msg-CPrescriptionLaboExamen-modify'] = 'Item de prescription modifié';
 ?>
