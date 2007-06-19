@@ -1,11 +1,31 @@
+<script type="text/javascript">
+
+Object.extend(Droppables, {
+  addPack: function(pack_id) {
+    var oDragOptions = {
+      onDrop: function(element) {
+        Pack.dropExamenCat(element.id, pack_id)
+      }, 
+      hoverclass:'selected'
+    }
+    
+    this.add('drop-listpacks-' + pack_id,  oDragOptions);
+  }
+} );
+  
+</script>
+
 {{if $pack->_id}}
-<table class="tbl">
+<table class="tbl" id="drop-listpacks-{{$pack->_id}}">
   <tr>
     <th class="title" colspan="6">
       <a style="float:right;" href="#nothing" onclick="view_log('{{$pack->_class_name}}', {{$pack->_id}})">
         <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
       </a>
       {{$pack->_view}}
+      <script type="text/javascript">
+        Droppables.addPack({{$pack->_id}});
+      </script>
     </th>
   </tr>
   
@@ -20,9 +40,9 @@
   {{assign var="curr_examen" value=$curr_item->_ref_examen_labo}}
   <tr>
     <td>
-      <div class="draggable" id="examen-{{$curr_examen->_id}}-{{$curr_item->_id}}">
+      <div class="draggable" id="examenPack-{{$curr_examen->_id}}-{{$curr_item->_id}}">
       <script type="text/javascript">
-        new Draggable('examen-{{$curr_examen->_id}}-{{$curr_item->_id}}', oDragOptions);
+        new Draggable('examenPack-{{$curr_examen->_id}}-{{$curr_item->_id}}', oDragOptions);
       </script>
       {{$curr_examen->_view}}
       </div>

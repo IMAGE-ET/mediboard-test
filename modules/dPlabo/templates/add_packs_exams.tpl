@@ -42,13 +42,29 @@ var Pack = {
     urlPack.requestUpdate('PacksView', { waitingText : null });
     urlExam.requestUpdate('PacksExamensView', { waitingText : null });
   },
+  dropExamenCat: function(sExamen_id, pack_id) {
+    oFormBase = document.editPackItem;
+    aExamen_id = sExamen_id.split("-");
+    if(aExamen_id[0] == "examenCat") {
+      oFormBase.examen_labo_id.value       = aExamen_id[1];
+      oFormBase.pack_examens_labo_id.value = pack_id;
+      submitFormAjax(oFormBase, 'systemMsg', { onComplete: Pack.select });
+      return true;
+    } else {
+      return false;
+    }
+  },
   dropExamen: function(sExamen_id, pack_id) {
     oFormBase = document.editPackItem;
     aExamen_id = sExamen_id.split("-");
-    oFormBase.examen_labo_id.value       = aExamen_id[1];
-    oFormBase.pack_examens_labo_id.value = pack_id;
-    submitFormAjax(oFormBase, 'systemMsg', { onComplete: Pack.select });
-    return true;
+    if(aExamen_id[0] == "examenPack" || aExamen_id[0] == "examenPack") {
+      oFormBase.examen_labo_id.value       = aExamen_id[1];
+      oFormBase.pack_examens_labo_id.value = pack_id;
+      submitFormAjax(oFormBase, 'systemMsg', { onComplete: Pack.select });
+      return true;
+    } else {
+      return false;
+    }
   },
   delExamen: function(oForm) {
     oFormBase = document.editPackItem;

@@ -60,6 +60,12 @@ var Pack = {
     urlPack.requestUpdate("topRightDiv", { waitingText: null });
     urlExam.requestUpdate("bottomRightDiv", { waitingText: null });
   },
+  dropExamenCat: function(sExamen_id, pack_id) {
+    return false;
+  },
+  dropExamen: function(sExamen_id, pack_id) {
+    return false;
+  },
   delExamen: function(oForm) {
     oFormBase = document.editPackItem;
     oFormBase.pack_examens_labo_id.value = oForm.pack_examens_labo_id.value;
@@ -195,7 +201,7 @@ var Prescription = {
     drop: function(sExamen_id, prescription_id) {
       var oFormBase = document.dropPrescriptionItem;
       aExamen_id = sExamen_id.split("-");
-      if(aExamen_id[0] == "examen") {
+      if(aExamen_id[0] == "examenPack" || aExamen_id[0] == "examenCat") {
         oFormBase.dosql.value = "do_prescription_examen_aed";
         oFormBase.examen_labo_id.value = aExamen_id[1];
       } else if(aExamen_id[0] == "pack") {
