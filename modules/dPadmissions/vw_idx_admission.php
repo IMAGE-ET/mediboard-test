@@ -12,12 +12,12 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 // Initialisation de variables
-xdebug_start_trace(); 
+
 $selAdmis = mbGetValueFromGetOrSession("selAdmis", "0");
 $selSaisis = mbGetValueFromGetOrSession("selSaisis", "0");
 $selTri = mbGetValueFromGetOrSession("selTri", "nom");
 $date = mbGetValueFromGetOrSession("date", mbDate());
-xdebug_stop_trace(); 
+
 // Création du template
 $smarty = new CSmartyDP();
 
