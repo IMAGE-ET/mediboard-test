@@ -8,8 +8,9 @@
 {{if $exclude_id != $_catalogue->_id}}
 <option value="{{$_catalogue->_id}}" 
   {{if $_catalogue->_id == $selected_id}}selected="selected"{{/if}}
-  style="padding-left: {{$_catalogue->_level}}em"
+  style="padding-left: {{$_catalogue->_level * 2}}em;"
 >
+  {{tr}}CExamen-catalogue-{{$_catalogue->_level}}{{/tr}} :
   {{$_catalogue->_view}}
 </option>
 

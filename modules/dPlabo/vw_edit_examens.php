@@ -21,6 +21,7 @@ if ($examen_labo_id && !mbGetValueFromGet("catalogue_labo_id")) {
   $examen->load($examen_labo_id);
   $examen->loadRefs();
   $examen->getSiblings();
+  $examen->getRootCatalogue();
   foreach ($examen->_ref_siblings as &$_sibling) {
     $_sibling->loadClassification();
   }

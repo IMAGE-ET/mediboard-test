@@ -488,14 +488,15 @@ function checkForm(oForm) {
     var aMsg   = new Array;
     ElementChecker.prepare(oElement);
     
-    if(ElementChecker.sTypeSpec){
+    if (ElementChecker.sTypeSpec) {
       // Type de spec trouvé
       var oLabel = getLabelFor(oElement);
       
-      if(sMsg = ElementChecker.checkElement()){
+      if (sMsg = ElementChecker.checkElement()) {
         aMsg.push("\n => " + sMsg);
       }
-      if(aMsg.length != 0){
+      
+      if (aMsg.length != 0) {
         var sLabelTitle = oLabel ? oLabel.getAttribute("title") : null;
         var sMsgFailed = sLabelTitle ? sLabelTitle : printf("%s (val:'%s', spec:'%s')", oElement.name, oElement.value, sPropSpec);
         sMsgFailed += aMsg.join("");
@@ -510,6 +511,7 @@ function checkForm(oForm) {
       }
     }
   }
+  
   if (aMsgFailed.length) {
     var sMsg = "Merci de remplir/corriger les champs suivants : \n";
     sMsg += aMsgFailed.join("\n")

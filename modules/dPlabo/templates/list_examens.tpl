@@ -4,7 +4,7 @@
   $examen_id : Selected exam
 *}}
 <table class="tbl">  <tr>
-    <th colspan="4" class="title">Liste des examens</th>
+    <th colspan="4" class="title">Liste des analyses</th>
  </tr>
  
   <tr>    <th>ID</th>    <th>Libellé</th>    <th>Unité</th>

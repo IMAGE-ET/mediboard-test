@@ -1,6 +1,24 @@
 {{* $Id$ *}}
 
 <script type="text/javascript">
+
+var Analyse = {
+  createSibling: function(oForm) {
+    if (!checkForm(oForm)) {
+      return false;
+    }
+    
+    var oEditForm = document.editExamen;
+    Console.debug(Form.toObject(oForm), "Sibling Form");
+    Console.debug(Form.toObject(oEditForm), "Edit Form");
+    oEditForm.examen_labo_id.value = "";
+    oEditForm.catalogue_labo_id.value = oForm.catalogue_labo_id.value;
+    oEditForm.submit();
+    
+    return false;
+  }
+}
+
 function pageMain() {
   regFieldCalendar('editExamen', 'deb_application');
   regFieldCalendar('editExamen', 'fin_application');
@@ -30,7 +48,7 @@ function pageMain() {
 
       </form>
       
-      <!-- Liste des examens pour le catalogue courant -->
+      <!-- Liste des analyses pour le catalogue courant -->
       {{assign var="examens" value=$catalogue->_ref_examens_labo}}
       {{assign var="examen_id" value=$examen->_id}}
       {{include file="list_examens.tpl"}}
@@ -41,7 +59,7 @@ function pageMain() {
       <!-- Edition de l'analyse sélectionné -->
       {{if $can->edit}}
       <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id=0">
-        Ajouter unn nouvelle analyse
+        Ajouter une nouvelle analyse
       </a>
       
       <form name="editExamen" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -124,7 +142,7 @@ function pageMain() {
       {{if $examen->_id}}
       <table class="tbl">
         <tr>
-          <th class="title">Packs d'analyses associées</th>
+          <th class="title">Packs d'analyses associés</th>
         </tr>
         <tr>
           <th>Nom du pack</th>
@@ -143,12 +161,34 @@ function pageMain() {
       </table>
       {{/if}}
 
-      <!-- Analyses similaires -->
+      <!-- Equivalents dans d'autres catalogues -->
       {{if $examen->_id}}
       <table class="tbl">
         <tr>
-          <th class="title" colspan="10">Analyses similaires </th>
+          <th class="title" colspan="10">Equivalents dans d'autres catalogues</th>
         </tr>
+
+        <tr>
+          <td colspan="2">
+            
+            <form name="createSibling" action="#nowhere" method="get" onsubmit="return Analyse.createSibling(this)">
+              
+              <label for="catalogue_labo_id" title="Choisir un catalogue pour créer un équivalent">
+                Créer un équivalent dans</label>
+              <select class="notNull ref class|CCatalogueLabo" name="catalogue_labo_id">
+                <option value="">&mdash; Choisir un catalogue</option>
+                {{assign var="selected_id" value=$examen->catalogue_labo_id}}
+                {{assign var="exclude_id" value=$examen->_ref_root_catalogue->_id}}
+                {{foreach from=$listCatalogues item="_catalogue"}}
+                {{include file="options_catalogues.tpl"}}
+                {{/foreach}}
+              </select>
+              <button class="new">Créer</button>
+            </form>
+  
+          <td>
+        </tr>
+        
         <tr>
           <th>Analyse</th>
           <th>Catalogue</th>

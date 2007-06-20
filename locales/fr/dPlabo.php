@@ -1,5 +1,5 @@
 <?php
-$locales['CPackItemExamenLabo-unique-conflict'] = 'Analyse déjà présente dans ce pack';
+$locales['CExamenLabo-sibling-conflict'] = 'Une analyse avec le même identifiant existe déjà dans ce catalogue';
 $locales['CCatalogueLabo'] = 'Catalogue d\'analyses';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sous-catalogue';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Analyse';
@@ -88,6 +88,7 @@ $locales['CPackExamensLabo-function_id-desc'] = 'Fonction associée au pack';
 $locales['CPackExamensLabo-libelle'] = 'Libellé';
 $locales['CPackExamensLabo-libelle-desc'] = 'Libellé du pack';
 $locales['CPackItemExamenLabo'] = 'Analyse de pack';
+$locales['CPackItemExamenLabo-unique-conflict'] = 'Analyse déjà présente dans ce pack';
 $locales['CPrescriptionLabo-back-prescription_labo_examen'] = 'Analyse';
 $locales['CPrescriptionLabo-date'] = 'Date';
 $locales['CPrescriptionLabo-date-desc'] = 'Date de la prescription';
