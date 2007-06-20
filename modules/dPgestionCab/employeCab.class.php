@@ -42,7 +42,7 @@ class CEmployeCab extends CMbObject {
   
   function getSpecs() {
     return array (
-      "function_id" => "notNull ref class|CFilesCategory",
+      "function_id" => "notNull ref class|CFunctions",
       "nom"         => "notNull str",
       "prenom"      => "notNull str",
       "function"    => "notNull str",
