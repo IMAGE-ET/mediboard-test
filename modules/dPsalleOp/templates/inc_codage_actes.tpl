@@ -59,11 +59,9 @@
       <tr class="{{$key}}">
         <th><label for="executant_id" title="Professionnel de santé exécutant l'acte">Exécutant</label></th>
         <td>
-          {{if $curr_activite->numero == 4}}
-            {{assign var="listExecutants" value=$listAnesths}}
-          {{else}}
-            {{assign var="listExecutants" value=$listChirs}}
-          {{/if}}
+        
+        {{mb_ternary var=listExecutants test=$acte->_anesth value=$listAnesths other=$listChirs}}
+       
           {{if $can->edit || $modif_operation}}
           <select name="executant_id" class="{{$acte->_props.executant_id}}">
             <option value="">&mdash; Choisir un professionnel de santé</option>
@@ -116,16 +114,16 @@
         <td class="button" colspan="2">
           {{if $acte->acte_id}}
           
-          <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){loadActes({{$subject->_id}})}})">Modifier cet acte</button>
+          <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){loadActes({{$subject->_id}},{{$subject->_praticien_id}})} })">Modifier cet acte</button>
           
           
-          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){loadActes({{$subject->_id}})}})">
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){loadActes({{$subject->_id}},{{$subject->_praticien_id}})} })">
             Supprimer cet acte
           </button>
           
           
           {{else}}
-          <button class="submit" type="button" style="background-color: #faa" onclick="submitFormAjax(this.form, 'systemMsg',{onComplete: function(){loadActes({{$subject->_id}})}})">Coder cet acte</button>
+          <button class="submit" type="button" style="background-color: #faa" onclick="submitFormAjax(this.form, 'systemMsg',{onComplete: function(){loadActes({{$subject->_id}},{{$subject->_praticien_id}})} })">Coder cet acte</button>
           {{/if}}
         </td>
       </tr>

@@ -272,7 +272,7 @@ class COperation extends CCodableCCAM {
     } else {
       $this->_link_editor = "index.php?m=dPplanningOp&tab=vw_edit_urgence&operation_id=".$this->_id;
     }
-    $this->_acte_depassement = $this->depassement;    
+    $this->_acte_depassement = $this->depassement;   
  }
   
   function updateDBFields() {
@@ -368,6 +368,7 @@ class COperation extends CCodableCCAM {
   function loadRefChir() {
     $this->_ref_chir = new CMediusers;
     $this->_ref_chir->load($this->chir_id);
+    $this->_praticien_id = $this->_ref_chir->_id;
   }
   
   function loadRefPlageOp() {

@@ -16,7 +16,7 @@ function setCodeCCAM( key, type ) {
   }
 }
 
-function addCode(subject_id) {
+function addCode(subject_id, chir_id) {
   var oForm = document.manageCodes;
   var aCCAM = oForm.codes_ccam.value.split("|");
   // Si la chaine est vide, il crée un tableau à un élément vide donc :
@@ -25,13 +25,14 @@ function addCode(subject_id) {
     aCCAM.push(oForm._newCode.value);
   aCCAM.sort();
   oForm.codes_ccam.value = aCCAM.join("|");
-  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadActes(subject_id) } } );
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadActes(subject_id, chir_id) } } );
 }
 
-function loadActes(subject_id) {
+function loadActes(subject_id, chir_id) {
   PairEffect.initGroup("acteEffect");
 
   url_actes = new Url;
+  url_actes.addParam("chir_id", chir_id);  
   url_actes.addParam("module","{{$module}}");
   url_actes.addParam("do_subject_aed","{{$do_subject_aed}}");
   url_actes.addParam("object_class", "{{$object->_class_name}}");

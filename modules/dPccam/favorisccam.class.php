@@ -17,11 +17,11 @@ class CFavoriCCAM extends CMbObject {
   
   var $_ref_code = null;
 
-	function CFavoriCCAM() {
-		$this->CMbObject("ccamfavoris", "favoris_id");
+  function CFavoriCCAM() {
+	$this->CMbObject("ccamfavoris", "favoris_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-	}
+  }
 
   function getSpecs() {
     return array (

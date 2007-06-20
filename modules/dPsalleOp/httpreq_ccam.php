@@ -31,6 +31,8 @@ $object->loadRefsActesCCAM();
 $object->loadRefsCodesCCAM();
 $object->loadPossibleActes();
 
+//mbTrace($object);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("listAnesths"      , $listAnesths);

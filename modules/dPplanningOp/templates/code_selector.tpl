@@ -21,21 +21,42 @@ function createFavori() {
 
 </script>
 
+<table>
+<tr>
+<td>
+
 <table class="selectCode">
   <tr>
   	<th>Favoris disponibles</th>
   </tr>
   
-  {{if !$list}}
+  {{if !$list2}}
   <tr>
   	<td>{{tr}}CFavoriCCAM.none{{/tr}}</td>
   </tr>
   {{/if}}
 
   <tr>
-  {{foreach from=$list item=curr_code key=curr_key}}
+  {{foreach from=$list2 item=curr_code key=curr_key}}
+  
+  
+  
     <td>
-      <strong>{{$curr_code->code}}</strong>
+      <strong>{{$curr_code.codeccam->code}} -- {{$curr_code.occ}}</strong>
+      <br />
+      {{$curr_code.codeccam->libelleLong}}
+      <br />
+      <button class="tick" type="button" onclick="setClose('{{$curr_code.codeccam->code}}', '{{$type}}')">
+        {{tr}}Select{{/tr}}
+      </button>
+    </td>
+  {{if ($curr_key+1) is div by 3}}
+  </tr><tr>
+  {{/if}}
+  {{/foreach}}
+   {{foreach from=$list item=curr_code key=curr_key}}
+    <td>
+      <strong>{{$curr_code->code}} -- 0</strong>
       <br />
       {{$curr_code->libelleLong}}
       <br />
@@ -47,7 +68,13 @@ function createFavori() {
   </tr><tr>
   {{/if}}
   {{/foreach}}
+ 
   </tr>
+</table>
+
+
+</td>
+</tr>
 </table>
 
 <table class="form">

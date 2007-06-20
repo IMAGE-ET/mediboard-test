@@ -9,10 +9,15 @@
 
 global $AppUI, $can, $m;
 
+//require_once("../dPccam/acteccam.class.php")
+require_once($AppUI->getModuleClass("dPsalleOp", "acteccam"));
+
 // @ todo : pourquoi on arrive pas à y accéder dès que le module n'est pas visible ???
 //$can->needsRead();
 
 $list = array();
+$list2 = array();
+
 $type = mbGetValueFromGet("type", 0 );
 $chir = mbGetValueFromGet("chir", 0 );
 
@@ -51,11 +56,32 @@ switch($type) {
   }
 }
 
+
+//Appel de la fonction listant les codes les plus utilisés pour un praticien 
+  $actes = new CActeCCAM();
+  $codes = $actes->getFavoris($chir);
+  $i = 0;
+ 
+  
+  // mbTrace($codes);
+  
+  foreach($codes as $key => $value) {
+    $list2[$i]["codeccam"] = new CCodeCCAM($value["code_acte"]);
+    $list2[$i]["occ"] = $value["nb_acte"];
+    $list2[$i]["codeccam"]->loadLite();
+    $i++;
+  }
+
+  //mbTrace($list2);
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("type", $type);
 $smarty->assign("list", $list);
+$smarty->assign("list2", $list2);
+
 $smarty->display("code_selector.tpl");
 
 ?>

@@ -12,7 +12,7 @@ class CCodableCCAM extends CMbObject {
   var $_praticien_id      = null;
   var $temp_operation     = null;
   var $_ref_anesth        = null;
-  
+  var $_anesth = null;
 
   function updateFormFields() {
   	parent::updateFormFields();
@@ -49,7 +49,6 @@ class CCodableCCAM extends CMbObject {
   	
   	$this->_ref_actes_ccam = $acte->loadMatchingList();
   }
-
   
   function loadPossibleActes () {
   	$this->preparePossibleActes();
@@ -68,6 +67,11 @@ class CCodableCCAM extends CMbObject {
           $possible_acte->montant_depassement = 0;
           $possible_acte->code_acte = $code->code;
           $_code = $possible_acte->code_activite = $activite->numero;
+          
+          
+          $possible_acte->_anesth=($activite->numero==4)?true:false;
+          
+          
           $possible_acte->code_phase = $phase->phase;
           $possible_acte->execution = $this->_acte_execution;
           $possible_acte->montant_depassement = $this->_acte_depassement;

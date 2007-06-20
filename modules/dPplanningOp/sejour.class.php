@@ -239,7 +239,7 @@ class CSejour extends CCodableCCAM {
     $this->_view .= " au ";
     $this->_view .= mbTranformTime(null, $this->sortie_prevue, "%d/%m/%Y");
     $this->_acte_execution = mbAddDateTime($this->entree_prevue);
-    
+    $this->_praticien_id = $this->praticien_id;   
   }
   
   function updateDBFields() {

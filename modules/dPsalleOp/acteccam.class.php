@@ -29,6 +29,7 @@ class CActeCCAM extends CMbMetaObject {
 
   // Form fields
   var $_modificateurs = array();
+  var $_anesth = null;
   
   // Object references
   //var $_ref_operation = null;
@@ -75,6 +76,8 @@ class CActeCCAM extends CMbMetaObject {
     	$this->_modificateurs[] = $this->modificateurs[$index];
     }
     $this->_view = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs"; 
+  
+    $this->_anesth=($this->code_activite==4)?true:false;
   }
   
   
@@ -99,6 +102,19 @@ class CActeCCAM extends CMbMetaObject {
     //$this->loadRefObject();
     $this->loadRefExecutant();
     $this->loadRefCodeCCAM();
+  }
+  
+  function getFavoris($chir){
+  	$sql = "select code_acte, count(code_acte) as nb_acte
+            from acte_ccam
+            where executant_id = '$chir'
+            group by code_acte
+            order by nb_acte DESC
+            limit 10";
+  	$codes = db_loadlist($sql);
+  	return $codes;
+  	
+  	//mbTrace($codes);
   }
   
   function getPerm($permType) {
