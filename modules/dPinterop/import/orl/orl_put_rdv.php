@@ -87,9 +87,7 @@ foreach ($rdv as $consult) {
     $consultation->chrono = strftime("%Y-%m-%d") > $consult->date ? CConsultation::TERMINE : CConsultation::PLANIFIE;
     $consultation->annule = 0;
     $consultation->paye = strftime("%Y-%m-%d") > $consult->date ? 1 : 0;
-    $consultation->cr_valide = 0;
     $consultation->motif = $consult->libelle;
-    $consultation->compte_rendu = null;
     $consultation->premiere = ($consult->libelle == "CS 1ère fois");
 
     $consultation->store();

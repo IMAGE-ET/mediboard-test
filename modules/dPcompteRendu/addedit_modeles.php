@@ -46,10 +46,10 @@ if($compte_rendu->object_id){
 $templateManager = new CTemplateManager;
 $templateManager->editor = "fckeditor2.3.2";
 
-if ($compte_rendu->compte_rendu_id) {
+if ($compte_rendu->_id) {
   $prat_id = $compte_rendu->chir_id;
   $templateManager->valueMode = false;
-  $templateManager->loadLists($compte_rendu->chir_id, $compte_rendu->compte_rendu_id);
+  $templateManager->loadLists($compte_rendu->chir_id, $compte_rendu->_id);
   $templateManager->loadHelpers($compte_rendu->chir_id, $compte_rendu->object_class);
   $templateManager->applyTemplate($compte_rendu);
   $templateManager->initHTMLArea();

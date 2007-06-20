@@ -134,7 +134,6 @@ class CConsultation extends CCodableCCAM {
       "rques"         => null,
       "examen"        => null,
       "traitement"    => null,
-      "compte_rendu"  => null
     );
   }
   

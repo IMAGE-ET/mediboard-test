@@ -188,7 +188,6 @@ class COperation extends CCodableCCAM {
       "examen"        => null,
       "materiel"      => null,
       "convalescence" => null,
-      "compte_rendu"  => null,
       "rques"         => null
     );
   }

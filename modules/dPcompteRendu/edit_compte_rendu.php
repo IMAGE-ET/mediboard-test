@@ -25,7 +25,7 @@ if($compte_rendu_id) {
   $compte_rendu->load($compte_rendu_id);
 } else {
   $compte_rendu->load($modele_id);
-  $compte_rendu->compte_rendu_id = null;
+  $compte_rendu->_id = null;
   $compte_rendu->chir_id = $praticien_id;
   $compte_rendu->function_id = null;
   $compte_rendu->object_id = $object_id;
