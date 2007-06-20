@@ -45,6 +45,7 @@
               <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->antecedent_id}}" />
               
               <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cet antécédent',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedentsAnesth})">
+               {{tr}}delete{{/tr}}
               </button>          
               {{if $curr_antecedent->date}}
                 {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
@@ -72,6 +73,7 @@
           <input type="hidden" name="dosql" value="do_traitement_aed" />
           <input type="hidden" name="traitement_id" value="{{$curr_trmt->traitement_id}}" />
           <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'ce traitement',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedentsAnesth})">
+              {{tr}}delete{{/tr}}
           </button>
           {{if $curr_trmt->fin}}
             Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}} :
@@ -91,6 +93,7 @@
         {{foreach from=$consult_anesth->_codes_cim10 item=curr_code}}
         <li>
           <button class="trash notext" type="button" onclick="oCimAnesthField.remove('{{$curr_code->code}}')">
+            {{tr}}delete{{/tr}}
           </button>
           {{$curr_code->code}}: {{$curr_code->libelle}}
         </li>

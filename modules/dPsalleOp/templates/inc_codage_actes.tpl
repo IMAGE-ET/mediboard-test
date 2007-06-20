@@ -46,15 +46,15 @@
         </td>
       </tr>
     
+      <tbody class="acteEffect" id="acte{{$key}}" style="display: none;">
+      
       <tr style="display: none;">
         <th><label for="execution" title="Date et heure d'exécution de l'acte">Exécution</label></th>
         <td>
           <input type="text" name="execution" class="{{$acte->_props.execution}}" readonly="readonly" value="{{$acte->execution}}" />
-          <button type="button" onclick="this.form.execution.value = makeDATETIMEFromDate(new Date());">Maintenant</button><br />
+          <button class="tick" onclick="this.form.execution.value = makeDATETIMEFromDate(new Date());">Maintenant</button><br />
         </td>
       </tr>
-      
-      <tbody class="acteEffect" id="acte{{$key}}">
       
       <tr class="{{$key}}">
         <th><label for="executant_id" title="Professionnel de santé exécutant l'acte">Exécutant</label></th>
@@ -146,6 +146,8 @@
 
   {{/foreach}}
   </li>
+  {{foreachelse}}
+  <li><em>Pas d'acte codés</em></li>
   {{/foreach}}
 </ul>
 
