@@ -68,6 +68,12 @@ class CPrescriptionLaboExamen extends CMbObject {
       return "$this->_class_name-unique-conflict";
     }
     
+    // Check prescription status
+    $clone->loadRefPrescription();
+    $clone->_ref_prescription_labo->loadRefsBack();
+    if($clone->_ref_prescription_labo->_status >= CPrescriptionLabo::VEROUILLEE) {
+      return "Prescription verrouillée";
+    }
     // Get the analysis to check resultat
     if (!$this->examen_labo_id) {
       if(!$clone) {

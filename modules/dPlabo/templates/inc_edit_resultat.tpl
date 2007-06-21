@@ -20,8 +20,9 @@
   </tr>
 </table>
 {{else}}
+{{assign var="prescription" value=$prescriptionItem->_ref_prescription_labo}}
 {{assign var="examen" value=$prescriptionItem->_ref_examen_labo}}
-{{assign var="patient" value=$prescriptionItem->_ref_prescription_labo->_ref_patient}}
+{{assign var="patient" value=$prescription->_ref_patient}}
 <table class="form">
   <tr>
     <th class="title modify" colspan="2">
@@ -48,7 +49,23 @@
       {{/if}}
     </td>
   </tr>
+  {{if $prescription->_status >= $prescription|const:"VALIDEE"}}
+  <tr>
+    <th>{{mb_label object=$prescriptionItem field="date"}}</th>
+    <td>{{mb_value object=$prescriptionItem field="date" form="editPrescriptionItem"}}</td>
+  </tr>
 
+  {{if !$prescriptionItem->_ref_examen_labo->_external}}
+  <tr>
+    <th>{{mb_label object=$prescriptionItem field="resultat"}}</th>
+    <td>{{mb_value object=$prescriptionItem field="resultat" prop=$prescriptionItem->_ref_examen_labo->type}}</td>
+  </tr>
+  {{/if}}
+  <tr>
+    <th>{{mb_label object=$prescriptionItem field="commentaire"}}</th>
+    <td>{{mb_value object=$prescriptionItem field="commentaire"}}</td>
+  </tr>
+  {{elseif $prescription->_status >= $prescription|const:"VEROUILLEE"}}
   <tr>
     <th>{{mb_label object=$prescriptionItem field="date"}}</th>
     <td class="date">{{mb_field object=$prescriptionItem field="date" form="editPrescriptionItem"}}</td>
@@ -74,11 +91,12 @@
   </tr>
   <tr>
     <td colspan="2" class="button">
-      <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.Examen.edit(); } });">
+      <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.select(); Prescription.Examen.edit({{$prescriptionItem->_id}}); } });">
         Valider
       </button>
     </td>
   </tr>
+  {{/if}}
 </table>
 
 {{/if}}
