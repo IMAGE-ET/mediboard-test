@@ -198,8 +198,8 @@ $dPconfig["dPsante400"] = array (
 
 $dPconfig["dPlabo"] = array (
   "CCatalogueLabo" => array (
-    "remote_name" => "",
-    "remote_url" => "",
+    "remote_name" => "LABO",
+    "remote_url" => "http://localhost/mediboard/modules/dPlabo/remote/catalogue.xml",
   ),
 );
 ?>
