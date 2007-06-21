@@ -82,7 +82,7 @@ class CSetupdPlabo extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.12");
-    $this->addDependency("dPpatients", "all");
+    $this->addDependency("dPpatients", "0.1");
     $sql = "ALTER TABLE `prescription_labo`" .
             "\nCHANGE `consultation_id` `patient_id` INT( 11 ) UNSIGNED NOT NULL DEFAULT 0;";
     $this->addQuery($sql);
