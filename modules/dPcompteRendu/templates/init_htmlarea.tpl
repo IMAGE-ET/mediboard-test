@@ -1,5 +1,5 @@
 {{if $templateManager->editor == "fckeditor2.3.2" }}
-<script type="text/javascript" src="lib/fckeditor/fckeditor.js?build={{$app->version.build}}"></script>
+<script type="text/javascript" src="lib/fckeditor/fckeditor.js?build={{$version.build}}"></script>
 <script language="JavaScript" type="text/javascript">
 function initFCKEditor() {
 	var field = document.getElementById("htmlarea");

@@ -1,5 +1,5 @@
 <!-- $Id$ -->
-<script type="text/javascript" src="modules/dPpatients/javascript/autocomplete.js?build={{$app->version.build}}"></script>
+<script type="text/javascript" src="modules/dPpatients/javascript/autocomplete.js?build={{$version.build}}"></script>
 <script type="text/javascript">
 var httpreq_running = false;
 function confirmCreation(oForm){

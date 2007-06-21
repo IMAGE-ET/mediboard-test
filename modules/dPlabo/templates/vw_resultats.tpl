@@ -3,7 +3,7 @@
 function popPat() {
   var url = new Url();
   url.setModuleAction("dPpatients", "pat_selector");
-  url.popup(600, 500, "Patient");
+  url.popup(750, 500, "Patient");
 }
 
 function setPat( key, val ) {

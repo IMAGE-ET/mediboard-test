@@ -34,7 +34,7 @@ function requestInfoPat() {
 function popPat() {
   var url = new Url;
   url.setModuleAction("dPpatients", "pat_selector");
-  url.popup(800, 500, "Patient");
+  url.popup(750, 500, "Patient");
   myNode = document.getElementById("infoPat");
   myNode.innerHTML = "";
 }

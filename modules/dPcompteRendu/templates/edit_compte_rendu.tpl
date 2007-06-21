@@ -37,13 +37,13 @@ if (window.opener.reloadAfterSaveDoc) {
   <tr>
     <th class="category">
       <strong>Nom du document :</strong>
-      <input name="nom" size="50" value="{{$compte_rendu->nom}}">
+      <input name="nom" size="50" value="{{$compte_rendu->nom}}" />
       &mdash;
       <strong>Catégorie :</strong>
       <select name="file_category_id">
       <option value=""{{if !$compte_rendu->file_category_id}} selected="selected"{{/if}}>&mdash; Aucune Catégorie</option>
       {{foreach from=$listCategory item=currCat}}
-      <option value="{{$currCat->file_category_id}}"{{if $currCat->file_category_id==$compte_rendu->file_category_id}} selected="selected"{{/if}}>{{$currCat->nom}}</otpion>
+      <option value="{{$currCat->file_category_id}}"{{if $currCat->file_category_id==$compte_rendu->file_category_id}} selected="selected"{{/if}}>{{$currCat->nom}}</option>
       {{/foreach}}
       </select>
     </th>

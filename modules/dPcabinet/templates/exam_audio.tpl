@@ -1,4 +1,4 @@
-<script type="text/javascript" src="modules/{{$m}}/javascript/exam_audio.js?build={{$app->version.build}}"></script>
+<script type="text/javascript" src="modules/{{$m}}/javascript/exam_audio.js?build={{$version.build}}"></script>
 <script type="text/javascript">
 if (window.opener.reloadFdr) {
   window.opener.reloadFdr();
