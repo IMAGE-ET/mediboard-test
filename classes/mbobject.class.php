@@ -647,7 +647,7 @@ class CMbObject {
 
     // Cas du module non installé
     if (!$backObject->_ref_module) {
-      continue;
+      return;
     }
     
     $query = "SELECT COUNT($backObject->_tbl_key) " .
