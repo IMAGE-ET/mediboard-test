@@ -438,6 +438,10 @@ class CMediusers extends CMbObject {
     return $this->loadListFromType(null, $permType, $function_id, $name);
   }
 
+  function loadMedecins($permType = PERM_READ, $function_id = null, $name = null) {
+    return $this->loadListFromType(array("Médecin"), $permType, $function_id, $name);
+  }
+
   function loadChirurgiens($permType = PERM_READ, $function_id = null, $name = null) {
     return $this->loadListFromType(array("Chirurgien"), $permType, $function_id, $name);
   }
@@ -447,7 +451,7 @@ class CMediusers extends CMbObject {
   }
 
   function loadPraticiens($permType = PERM_READ, $function_id = null, $name = null) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste"), $permType, $function_id, $name);
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin"), $permType, $function_id, $name);
   }
 
   function isFromType($user_types) {
