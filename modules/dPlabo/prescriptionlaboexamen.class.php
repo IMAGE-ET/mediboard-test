@@ -54,8 +54,15 @@ class CPrescriptionLaboExamen extends CMbObject {
     
     // Check unique item
     $other = new CPrescriptionLaboExamen;
-    $other->prescription_labo_id = $this->prescription_labo_id;
-    $other->examen_labo_id = $this->examen_labo_id;
+    $clone = null;
+    if($this->_id) {
+      $clone = new CPrescriptionLaboExamen;
+      $clone->load($this->_id);
+    } else {
+      $clone = $this;
+    }
+    $other->prescription_labo_id = $clone->prescription_labo_id;
+    $other->examen_labo_id = $clone->examen_labo_id;
     $other->loadMatchingObject();
     if ($other->_id && $other->_id != $this->_id) {
       return "$this->_class_name-unique-conflict";
@@ -63,9 +70,11 @@ class CPrescriptionLaboExamen extends CMbObject {
     
     // Get the analysis to check resultat
     if (!$this->examen_labo_id) {
-      $old_object = new CPrescriptionLaboExamen();
-      $old_object->load($this->_id);
-      $this->examen_labo_id = $old_object->examen_labo_id;
+      if(!$clone) {
+        $clone = new CPrescriptionLaboExamen;
+        $clone->load($this->_id);
+      }
+      $this->examen_labo_id = $clone->examen_labo_id;
     }
     
     // Check resultat according to type
