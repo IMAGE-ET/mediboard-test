@@ -276,6 +276,9 @@ function pageMain() {
             <button class="new" type="button" onclick="Prescription.edit();">
               Prescrire
             </button>
+            <button class="cancel notext" type="button" onclick="setPat(0, '&mdash;');">
+              Cancel
+            </button>
             {{/if}}
           </td>
         </tr>
