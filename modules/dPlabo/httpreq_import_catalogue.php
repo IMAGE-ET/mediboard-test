@@ -11,7 +11,6 @@ global $can, $m, $AppUI, $dPconfig, $remote_name;
 
 $can->needsAdmin();
 
-
 /**
  * Recursive catalogue import
  */
@@ -136,6 +135,9 @@ if (!$doc->schemaValidate("modules/$m/remote/catalogue.xsd")) {
 }
 
 $AppUI->stepAjax("Document is valid", UI_MSG_OK);
+
+$canSante400 = CModule::getCanDo("dPsante400");
+$canSante400->needsEdit();
 
 $cat = new SimpleXMLElement($content);
 try {
