@@ -22,7 +22,6 @@ class CSetupdPlabo extends CSetup {
     $this->mod_name = "dPlabo";
     
     $this->makeRevision("all");
-
     $sql = "CREATE TABLE `catalogue_labo` (" .
           "\n`catalogue_labo_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT ," .
           "\n`pere_id` INT(11) UNSIGNED DEFAULT NULL ," .
@@ -83,6 +82,7 @@ class CSetupdPlabo extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.12");
+    $this->addDependency("dPpatients", "all");
     $sql = "ALTER TABLE `prescription_labo`" .
             "\nCHANGE `consultation_id` `patient_id` INT( 11 ) UNSIGNED NOT NULL DEFAULT 0;";
     $this->addQuery($sql);
