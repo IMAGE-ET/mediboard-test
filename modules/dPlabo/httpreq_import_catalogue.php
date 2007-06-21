@@ -137,7 +137,7 @@ if (!$doc->schemaValidate("modules/$m/remote/catalogue.xsd")) {
 $AppUI->stepAjax("Document is valid", UI_MSG_OK);
 
 $canSante400 = CModule::getCanDo("dPsante400");
-if (!$canSante400->canEdit) {
+if (!$canSante400->edit) {
   $AppUI->stepAjax("No permission for module dPsante400 or module not installed", UI_MSG_ERROR);
 }
 
