@@ -148,73 +148,40 @@ class CMbObject {
    * Chargement des Fichiers et Documents
    */
   function loadRefsFiles() {
-    $this->_ref_files = new CFile();
-    if($this->_id){
-      $this->_ref_files = $this->_ref_files->loadFilesForObject($this);
+    $file = new CFile();
+    if ($file->_ref_module && $this->_id) {
+      $this->_ref_files = $file->loadFilesForObject($this);
       return count($this->_ref_files);
-    }else{
-      return 0;
     }
+
+    return;
   }
 
   function loadRefsDocs() {
-    $key = $this->_tbl_key;
-    $this->_ref_documents = new CCompteRendu();
-    if($this->_id){
-      $where = array();
-      $where["object_class"] = " = '".get_class($this)."'";
-      $where["object_id"] = "= '".$this->$key."'";
+    $document = new CCompteRendu();
+    if ($document->_ref_module && $this->_id) {
+      $document->object_class = $this->_class_name;
+      $document->object_id    = $this->_id;
       $order = "nom";
-      $this->_ref_documents = $this->_ref_documents->loadList($where, $order);
-      $docs_valid = count($this->_ref_documents);
-      return $docs_valid;
-    }else{
-      return 0;
+      $this->_ref_documents = $document->loadMatchingList($order);
+      return count($this->_ref_documents);
     }
+    
+    return;
   }
   
-  function loadRefsFilesAndDocs(){
+  function loadRefsFilesAndDocs() {
   	$nb_files = $this->loadRefsFiles();
     $nb_docs  = $this->loadRefsDocs();
     $this->_nb_files_docs = $nb_docs + $nb_files;
   }
   
-  function getNumDocs(){
-    if($this->_id){
-      $key = $this->_tbl_key;
-      $select = "count(`compte_rendu_id`) AS `total`";
-      $table  = "compte_rendu";
-      $where  = array();
-      $where["object_class"] = " = '".get_class($this)."'";
-      $where["object_id"] = "= '".$this->$key."'";
-      $sql = new CRequest();
-      $sql->addTable($table);
-      $sql->addSelect($select);
-      $sql->addWhere($where);
-      $nbDocs = db_loadResult($sql->getRequest());
-      return $nbDocs;
-    }else{
-      return 0;
-    }
+  function getNumDocs() {
+    return $this->countBackRefs("documents");
   }
   
   function getNumFiles(){
-    if($this->_id){
-      $key = $this->_tbl_key;
-      $select = "count(`file_id`) AS `total`";
-      $table  = "files_mediboard";
-      $where  = array();
-      $where["object_class"] = " = '".get_class($this)."'";
-      $where["object_id"] = "= '".$this->$key."'";
-      $sql = new CRequest();
-      $sql->addTable($table);
-      $sql->addSelect($select);
-      $sql->addWhere($where);
-      $nbFiles = db_loadResult($sql->getRequest());
-      return $nbFiles;
-    }else{
-      return 0;
-    }
+    return $this->countBackRefs("files");
   }
   
   function getNumDocsAndFiles($permType = null){
@@ -228,16 +195,20 @@ class CMbObject {
   
   function getNumDocsAndFilesWithPerm($permType = PERM_READ){
     $this->loadRefsFiles();
-    foreach($this->_ref_files as $file_id=>&$file){
-      if(!$file->getPerm($permType)){
-        unset($this->_ref_files[$file_id]);
+    if ($this->_ref_files) {
+      foreach ($this->_ref_files as $file_id => &$file){
+        if(!$file->getPerm($permType)){
+          unset($this->_ref_files[$file_id]);
+        }
       }
     }
     
     $this->loadRefsDocs();
-    foreach($this->_ref_documents as $doc_id=>&$doc){
-      if(!$doc->getPerm($permType)){
-        unset($this->_ref_documents[$doc_id]);
+    if ($this->_ref_documents) {
+      foreach ($this->_ref_documents as $doc_id=>&$doc){
+        if(!$doc->getPerm($permType)){
+          unset($this->_ref_documents[$doc_id]);
+        }
       }
     }
     
