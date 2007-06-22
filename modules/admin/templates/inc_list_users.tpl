@@ -19,6 +19,7 @@
     <th><label for="user_first_name" title="Prénom de l'utilisateur à rechercher, au moins les premières lettres">Prénom</label></th>
     <td><input tabindex="2" type="text" name="user_first_name" value="{{$user_first_name|stripslashes}}" /></td>
     <th><label for="user_type" title="Type de l'utilisateur">Type</label></th>
+    
     <td>
       <select tabindex="4" name="user_type">
         {{foreach from=$utypes key=curr_key item=type}}
@@ -26,6 +27,18 @@
         {{/foreach}}
       </select>
     </td>
+   </tr>
+   <tr>
+   <th colspan="3"><label for="template" title="Statut">Statut</label></th>
+    <td class="text">
+    <select name="template">
+    <option value="">&mdash; Choisir le statut</option>
+    <option value="0" {{if $template == "0"}}selected="selected"{{/if}}>Utilisateur</option>
+    <option value="1" {{if $template == "1"}}selected="selected"{{/if}}>Profil</option>
+    </select>
+    </td>
+    
+    
   </tr>
     
   <tr>
@@ -62,6 +75,7 @@
         {{$utypes.$type}}
       </a>
     </td>
+    
     <td class="button">
       <button class="search" onclick="window.location='?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$curr_user->_id}}'">
       	Droits

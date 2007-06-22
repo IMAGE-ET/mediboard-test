@@ -171,15 +171,11 @@ function pageMain() {
               </tr>
               <tr>
                 <th>{{mb_label object=$tarif field="secteur1"}}</th>
-                <td>
-                  {{mb_field object=$tarif field="secteur1" size="6"}} €
-                </td>
+                <td>{{mb_field object=$tarif field="secteur1" size="6"}}</td>
               </tr>
               <tr>
                 <th>{{mb_label object=$tarif field="secteur2"}}</th>
-                <td>
-                  {{mb_field object=$tarif field="secteur2" size="6"}} €
-                </td>
+                <td>{{mb_field object=$tarif field="secteur2" size="6"}}</td>
               </tr>
               <tr>
                 <td class="button" colspan="2">

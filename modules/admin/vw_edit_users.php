@@ -22,21 +22,25 @@ $user_last_name  = mbGetValueFromGetOrSession("user_last_name" , "");
 $user_first_name = mbGetValueFromGetOrSession("user_first_name", "");
 $user_username   = mbGetValueFromGetOrSession("user_username"  , "");
 $user_type       = mbGetValueFromGetOrSession("user_type"      , 0);
+$template     = mbGetValueFromGetOrSession("template"    , "");
 
 $where = null;
 if ($user_last_name ) $where["user_last_name"]  = "LIKE '".addslashes($user_last_name )."%'";
 if ($user_first_name) $where["user_first_name"] = "LIKE '".addslashes($user_first_name)."%'";
 if ($user_username  ) $where["user_username"]   = "LIKE '".addslashes($user_username)."%'";
 if ($user_type      ) $where["user_type"]       = "= '".addslashes($user_type)."'";
+if ($template != null)$where["template"]        = "= '".addslashes($template)."'";
+
 
 $users = null;
 if ($where) {
-  $users = $user->loadList($where, "user_type, user_last_name, user_first_name", "0, 100");
+  $users = $user->loadList($where, "user_type, user_last_name, user_first_name, template", "0, 100");
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("template"       , $template    );
 $smarty->assign("user_last_name" , $user_last_name );
 $smarty->assign("user_first_name", $user_first_name);
 $smarty->assign("user_username"  , $user_username  );

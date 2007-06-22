@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "admin";
-$config["mod_version"]     = "1.0.9";
+$config["mod_version"]     = "1.0.10";
 $config["mod_type"]        = "core";
 
 class CSetupadmin extends CSetup {
@@ -194,7 +194,13 @@ class CSetupadmin extends CSetup {
     $sql = "UPDATE `perm_module` SET `view` = '2' WHERE `user_id` = 1 AND `mod_id`IS NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.9";
+    $this->makeRevision("1.0.9");
+    $sql = "ALTER TABLE `users` ADD `template` enum('0','1') NOT NULL default '0';";
+    $this->addQuery($sql);
+    $sql = "UPDATE `users` SET `template` = '1' WHERE `user_username` like '>>%';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.10";
   }
 }
 ?>

@@ -37,7 +37,8 @@ $spec_cpam = $spec_cpam->loadList();
   
 // Récupération des profils
 $where = array (
-  "user_username" => "LIKE '>> %'"
+  //"user_username" => "LIKE '>> %'"
+    "template" => "= '1'"
 );
 $profiles = new CUser();
 $profiles = $profiles->loadList($where);

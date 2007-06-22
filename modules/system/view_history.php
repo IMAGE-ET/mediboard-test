@@ -26,7 +26,8 @@ $listClasses = getChildClasses();
 
 // Récupération de la liste des utilisateurs disponibles
 $where = array();
-$where["user_username"] = "NOT LIKE '>>%'";
+//$where["user_username"] = "NOT LIKE '>>%'";
+$where["template"] = "= '0'";
 $order = "user_last_name, user_first_name";
 $listUsers = new CUser;
 $listUsers = $listUsers->loadList($where, $order);
