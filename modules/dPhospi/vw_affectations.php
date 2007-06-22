@@ -107,10 +107,13 @@ if ($can->edit) {
   $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where);
 }
 
-
+$affectation = new CAffectation();
+$affectation->entree = mbDateTime("08:00:00");
+$affectation->sortie = mbDateTime("23:00:00");
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("affectation"           , $affectation);
 $smarty->assign("pathos"                , $pathos);
 $smarty->assign("date"                  , $date );
 $smarty->assign("demain"                , mbDate("+ 1 day", $date));

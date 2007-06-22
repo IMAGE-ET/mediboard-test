@@ -828,7 +828,11 @@ div.autocomplete ul {
   margin:0px;
   padding:0px;
 }
-div.autocomplete ul li.selected { background-color: #ffb;}
+div.autocomplete ul li.selected { 
+	background-color: #ffb;
+	font-weight:bold;
+}
+
 div.autocomplete ul li {
   list-style-type:none;
   display:block;

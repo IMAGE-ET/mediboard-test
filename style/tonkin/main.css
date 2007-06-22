@@ -157,7 +157,11 @@ div.autocomplete ul {
   margin:0px;
   padding:0px;
 }
-div.autocomplete ul li.selected { background-color: #ffe;}
+div.autocomplete ul li.selected { 
+  background-color: #ffe;
+  font-weight:bold;	
+}
+
 div.autocomplete ul li {
   list-style-type:none;
   display:block;

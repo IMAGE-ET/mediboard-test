@@ -179,7 +179,10 @@ div.autocomplete ul {
   margin:0px;
   padding:0px;
 }
-div.autocomplete ul li.selected { background-color: #ffd;}
+div.autocomplete ul li.selected { 
+	background-color: #ffd;
+    font-weight:bold;
+}
 div.autocomplete ul li {
   list-style-type:none;
   display:block;

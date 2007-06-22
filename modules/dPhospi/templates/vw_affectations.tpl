@@ -185,6 +185,11 @@ function pageMain() {
   {{/foreach}}
 
   regRedirectFlatCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+  
+ 
+  regFieldCalendar("addAffectationsejour", "entree", true);
+  regFieldCalendar("addAffectationsejour", "sortie", true);
+
 }
 
 </script>
@@ -257,9 +262,7 @@ function pageMain() {
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="lit_id" value="" />
       <input type="hidden" name="sejour_id" value="" />
-      <input type="hidden" name="entree" value="{{$date|date_format:"%Y-%m-%d"}} 08:00:00" />
-      <input type="hidden" name="sortie" value="{{$date|date_format:"%Y-%m-%d"}} 23:00:00" />
-
+            
       <table class="sejourcollapse" id="sejour">
         <tr>
         <td class="selectsejour">
@@ -269,7 +272,15 @@ function pageMain() {
         <td class="patient" onclick="flipSejour()">
           <strong><a name="sejour">[BLOQUER UN LIT]</a></strong>
         </td>
-      </tr> 
+        </tr>
+        <tr>
+          <td class="date"><em>Entrée</em></td>
+          <td class="date">{{mb_field object=$affectation field="entree" form="addAffectationsejour" }}</td>
+        </tr>
+        <tr>
+          <td class="date"><em>Sortie</em></td>
+          <td class="date">{{mb_field object=$affectation field="sortie" form="addAffectationsejour" }}</td>
+      </tr>
       <tr>
         <td class="date" colspan="2" style="background-color: #ff5">
           <label for="rques">Remarques</label> : 
