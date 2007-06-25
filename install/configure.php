@@ -308,9 +308,9 @@ $dPconfig = $mbConfig->values;
   </tr>
 
   <tr>
-    <th><label for="graph" title="Graphique">Selection du type de graphique :</label></th>
+    <th><label for="graph_engine" title="Graphique">Selection du type de graphique :</label></th>
     <td>
-      <select name="graph">
+      <select name="graph_engine">
         <option value="jpgraph" <?php if($dPconfig['graph_engine'] == 'jpgraph'){echo 'selected="selected"';} ?> >jpgraph</option>
         <option value="eZgraph" <?php if($dPconfig['graph_engine'] == 'eZgraph'){echo 'selected="selected"';} ?> >eZgraph</option>
       </select>
