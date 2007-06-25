@@ -234,7 +234,7 @@ $dPconfig = $mbConfig->values;
     <td>
       <select name="shared_memory" size="1">
         <option value="none"         <?php if ($dPconfig['shared_memory'] == 'none'        ) { echo 'selected="selected"'; } ?> >Aucune</option>
-        <option value="eaccelerator" <?php if ($dPconfig['shared_memory'] == 'eaccelerator') { echo 'selected="selected"'; } ?> >eAccelertaror</option>
+        <option value="eaccelerator" <?php if ($dPconfig['shared_memory'] == 'eaccelerator') { echo 'selected="selected"'; } ?> >eAccelerator</option>
       </select>
       
       <div>
