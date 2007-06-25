@@ -3,6 +3,7 @@
 function popCodeCCAM(chir_id) {
   var url = new Url();
   url.setModuleAction("dPplanningOp", "code_selector");
+  url.addParam("object_class", "{{$object->_class_name}}");
   url.addParam("chir", chir_id);  
   url.addParam("type", "ccam");
   url.popup(600, 500, "ccam");

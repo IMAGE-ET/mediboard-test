@@ -20,6 +20,8 @@ $list2 = array();
 
 $type = mbGetValueFromGet("type", 0 );
 $chir = mbGetValueFromGet("chir", 0 );
+$object_class = mbGetValueFromGet("object_class", 0 );
+$view = mbGetValueFromGet("view", "alpha");
 
 switch($type) {
 	case "ccam" :
@@ -30,13 +32,14 @@ switch($type) {
 				group by favoris_code
 				order by favoris_code";
 		$codes = db_loadlist($sql);
-		$i = 0;
+
     foreach($codes as $key => $value) {
-      $list[$i] = new CCodeCCAM($value["favoris_code"]);
-      $list[$i]->loadLite();
-      $i++;
+      $list[$value["favoris_code"]]["codeccam"] = new CCodeCCAM($value["favoris_code"]);
+      $list[$value["favoris_code"]]["codeccam"]->loadLite();
+      $list[$value["favoris_code"]]["codeccam"]->occ = "0";
     }
-		break;
+  
+    break;
 
 
 	default : {
@@ -56,32 +59,41 @@ switch($type) {
   }
 }
 
-
-//Appel de la fonction listant les codes les plus utilisés pour un praticien 
+  //Appel de la fonction listant les codes les plus utilisés pour un praticien 
   $actes = new CActeCCAM();
-  $codes = $actes->getFavoris($chir);
-  $i = 0;
- 
-  
-  // mbTrace($codes);
-  
+  $codes = $actes->getFavoris($chir,$object_class, $view);
+
   foreach($codes as $key => $value) {
-    $list2[$i]["codeccam"] = new CCodeCCAM($value["code_acte"]);
-    $list2[$i]["occ"] = $value["nb_acte"];
-    $list2[$i]["codeccam"]->loadLite();
-    $i++;
+    $list2[$value["code_acte"]]["codeccam"] = new CCodeCCAM($value["code_acte"]);
+    $list2[$value["code_acte"]]["codeccam"]->loadLite();
+    $list2[$value["code_acte"]]["codeccam"]->occ = $value["nb_acte"];;
   }
-
-  //mbTrace($list2);
-
+ 
+  // Fusion des 2 tableaux
+  $fusion = $list2;
+    
+  foreach($list as $keycode => $code){
+  	if(!array_key_exists($keycode, $fusion)) {
+  		$fusion[$keycode] = $code;
+  		continue;
+  	}
+  }
+ 
+  // si tri par ordre alphabetique selectionne
+  if($view=="alpha") {
+    sort($fusion);
+  }
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("view",$view);
 $smarty->assign("type", $type);
 $smarty->assign("list", $list);
+$smarty->assign("fusion", $fusion);
 $smarty->assign("list2", $list2);
-
+$smarty->assign("object_class", $object_class);
+$smarty->assign("chir" , $chir);
 $smarty->display("code_selector.tpl");
 
 ?>

@@ -54,12 +54,15 @@ class CFavoriCCAM extends CMbObject {
         $code->loadLite();
         $code->loadChaps();
         $code->favoris_id = $curr_fav->favoris_id;
+        $code->occ = 0;
         $chapitre =& $code->chapitres[0];
         $listOrdered[$chapitre["code"]]["nom"] = $chapitre["nom"];
-        $listOrdered[$chapitre["code"]]["codes"][] = $code;
+        //$listOrdered[$chapitre["code"]]["codes"] = $code;
+        $listOrdered[$chapitre["code"]]["codes"][$curr_fav->favoris_code] = $code;
       }
     }
     return $listOrdered;
+    
   }
 }
 ?>

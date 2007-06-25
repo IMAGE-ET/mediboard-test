@@ -21,7 +21,7 @@
             <table class="titleblock">
               <tr>
                 <td>
-                  <img src="./images/modules/{{$m}}.png" height="24" width="24" />
+                  <img src="./images/modules/{{$m}}.png" alt="Icone {{$m}}" height="24" width="24" />
                 </td>
                 <td class="titlecell">
                   {{tr}}module-{{$m}}-long{{/tr}}

@@ -80,7 +80,6 @@ class CActeCCAM extends CMbMetaObject {
     $this->_anesth=($this->code_activite==4)?true:false;
   }
   
-  
   function loadRefObject(){
     $this->_ref_object = new $this->object_class;
     $this->_ref_object->load($this->object_id); 
@@ -104,17 +103,18 @@ class CActeCCAM extends CMbMetaObject {
     $this->loadRefCodeCCAM();
   }
   
-  function getFavoris($chir){
+  function getFavoris($chir,$class,$view){
+  	$vue=($view=="taux")?$vue="nb_acte DESC":$vue="code_acte ASC";
+  	$condition=($class=="")?"executant_id = '$chir'":
+  	"executant_id = '$chir' AND object_class = '$class'";
   	$sql = "select code_acte, count(code_acte) as nb_acte
             from acte_ccam
-            where executant_id = '$chir'
+            where $condition
             group by code_acte
-            order by nb_acte DESC
+            order by $vue
             limit 10";
   	$codes = db_loadlist($sql);
   	return $codes;
-  	
-  	//mbTrace($codes);
   }
   
   function getPerm($permType) {

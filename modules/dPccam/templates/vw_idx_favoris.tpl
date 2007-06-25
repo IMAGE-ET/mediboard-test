@@ -9,30 +9,40 @@ function pageMain() {
 
 </script>
 
+
 <table class="bookCode">
   <tr>
     <th style="text-align: center;" colspan="4">
-      Codes favoris
+      Codes Favoris
     </th>
   </tr>
-  {{foreach from=$codesByChap item=curr_chap key=key_chap}}
+  {{foreach from=$fusion item=curr_chap key=key_chap}}
   <tr id="chap{{$key_chap}}-trigger">
     <th colspan="4">
-      {{$curr_chap.nom}} ({{$curr_chap.codes|@count}})
+      {{$curr_chap.nom}}
     </th>
   </tr>
-  <tbody id="chap{{$key_chap}}" class="ChapEffect" style="display: none;">
-  {{foreach from=$curr_chap.codes item=curr_code key=key_code}}
-  {{if $key_code is div by 4}}
+  <tbody>
+  {{foreach from=$curr_chap.codes item=curr_code key=key_code name="fusion"}}
+ 
+  {{if $smarty.foreach.fusion.index % 3 == 0}}
   <tr>
   {{/if}}
     <td>
       <strong>
         <a href="index.php?m={{$m}}&amp;tab=vw_full_code&amp;codeacte={{$curr_code->code}}">{{$curr_code->code}}</a>
+        
+      {{if $curr_code->occ==0}}
+      <span style="float:right">Favoris</span>
+      {{else}}
+      <span style="float:right">{{$curr_code->occ}} acte(s)</span>
+      {{/if}}
+       
       </strong>
       <br />
 
       {{$curr_code->libelleLong}}
+      {{if $curr_code->favoris_id != 0}}
       {{if $can->edit}}
       <br />
       <form name="delFavoris" action="index.php?m={{$m}}" method="post">
@@ -44,10 +54,12 @@ function pageMain() {
       </button>
 	  </form>
 	  {{/if}}
+	  {{/if}}
     </td>
-  {{if ($key_code+1) is div by 4 or ($key_code+1) == $curr_chap.codes|@count}}
+  {{if $smarty.foreach.fusion.index % 3 == 4}}
   </tr>
   {{/if}}
+  
   {{/foreach}}
   </tbody>
   {{/foreach}}
