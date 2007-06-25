@@ -7,8 +7,12 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $dPconfig;
 
+require_once "ezc/Base/base.php";
+function __autoload( $className ){
+	ezcBase::autoload( $className );
+}
 require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_pie"));
 
@@ -89,33 +93,66 @@ foreach($datas as $data) {
   $values[]  = $data["value"];
   $legends[] = $data["legend"];
 }
+$tab = array();
+foreach($datas as $data) {
+  $tab[$data['legend']] = $data['value'];
+}
 
-// Setup the graph.
-$graph = new PieGraph(300*(1+$size*0.2),200*$size,"auto");    
-$graph->SetMarginColor("lightblue");
+if($dPconfig['graph_engine'] == 'eZgraph') {
+	$graph = new ezcGraphPieChart();
+  	$graph->palette = new ezcGraphPaletteEzRed();
+	$title = mbTranformTime(null, $date, "%A %d %b %Y");
+	if($module) 
+		$title .= " : ".$AppUI->_($module);
+  	$graph->title = $title;
+  	$graph->options->label = '%2$d (%3$.1f%%)';
+   	$graph->data[$title] = new ezcGraphArrayDataSet($tab);
+  
+  	$graph->renderer = new ezcGraphRenderer3d();
+ 	$graph->renderer->options->moveOut = .2;
+ 	$graph->options->font = './shell/arial.ttf';
+ 	$graph->renderer->options->pieChartOffset = 63;
+ 	$graph->renderer->options->pieChartGleam = .3;
+ 	$graph->renderer->options->pieChartGleamColor = '#FFFFFF';
+	$graph->renderer->options->pieChartShadowSize = 5;
+  	$graph->renderer->options->pieChartShadowColor = '#000000';
+ 	$graph->renderer->options->legendSymbolGleam = .5;
+  	$graph->renderer->options->legendSymbolGleamSize = .9;
+  	$graph->renderer->options->legendSymbolGleamColor = '#FFFFFF';
+ 	$graph->renderer->options->pieChartSymbolColor = '#55575388';
+  
+  	$graph->renderer->options->pieChartHeight = 5;
+  	$graph->renderer->options->pieChartRotation = .8;
 
-// Set up the title for the graph
-$title = mbTranformTime(null, $date, "%A %d %b %Y");
-if($module) $title .= " : ".$AppUI->_($module);
-$graph->title->Set($title);
-$graph->title->SetFont(FF_ARIAL,FS_NORMAL,7+$size);
-$graph->title->SetColor("darkred");
-$graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,6+$size);
-$graph->img->SetAntiAliasing();
-
-// Legend
-$graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$graph->legend->Pos(0.015,0.1, "right", "top");
-
-// Create the Pie plot
-$pplot = new PiePlot($values);
-$pplot->SetLegends($legends);
-$pplot->SetCenter(0.25+($size*0.07), 0.55);
-$pplot->SetSize(0.3);
-$pplot ->SetGuideLines ();
-$graph->Add($pplot);
-
-// Finally send the graph to the browser
-$graph->Stroke();
-
+  	$graph->renderToOutput( 300, 145);
+	
+} else {
+	// Setup the graph.
+	$graph = new PieGraph(300*(1+$size*0.2),200*$size,"auto");    
+	$graph->SetMarginColor("lightblue");
+	
+	// Set up the title for the graph
+	$title = mbTranformTime(null, $date, "%A %d %b %Y");
+	if($module) $title .= " : ".$AppUI->_($module);
+	$graph->title->Set($title);
+	$graph->title->SetFont(FF_ARIAL,FS_NORMAL,7+$size);
+	$graph->title->SetColor("darkred");
+	$graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,6+$size);
+	$graph->img->SetAntiAliasing();
+	
+	// Legend
+	$graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
+	$graph->legend->Pos(0.015,0.1, "right", "top");
+	
+	// Create the Pie plot
+	$pplot = new PiePlot($values);
+	$pplot->SetLegends($legends);
+	$pplot->SetCenter(0.25+($size*0.07), 0.55);
+	$pplot->SetSize(0.3);
+	$pplot ->SetGuideLines ();
+	$graph->Add($pplot);
+	
+	// Finally send the graph to the browser
+	$graph->Stroke();
+}
 ?>

@@ -64,9 +64,31 @@ function pageMain() {
       <tr>
       {{/if}}
         <td class="button">
+        {{if $dPconfig.graph_engine == "eZgraph"}}
           {{if $groupres == 1}}
           <a href="#" onclick="zoom('{{$date}}', 0, '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
-            <img src="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" alt="Graphique pour la journée" />
+			<object data="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" type="image/svg+xml">
+			        You need a browser capeable of SVG to display this image.
+			</object>
+          </a>
+          </td>
+          <td class="button">
+          <a href="#" onclick="zoom('{{$date}}', 'total', '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
+          	<object data="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=total&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" type="image/svg+xml">
+			        You need a browser capeable of SVG to display this image.
+			</object>
+          </a>
+          {{else}}
+          <a href="#" onclick="zoom('{{$date}}', '{{$log->module}}', '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
+            <object data="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" type="image/svg+xml">
+			        You need a browser capeable of SVG to display this image.
+			</object>
+          </a>
+          {{/if}}
+         {{else}}
+          {{if $groupres == 1}}
+          <a href="#" onclick="zoom('{{$date}}', 0, '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
+           	<img src="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" alt="Graphique pour la journée" /> 
           </a>
           </td>
           <td class="button">
@@ -78,6 +100,7 @@ function pageMain() {
             <img src="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" alt="Graphique pour {{$log->module}}" />
           </a>
           {{/if}}
+         {{/if}}
         </td>
       {{if $tr == 2}}
       </tr>
@@ -86,6 +109,5 @@ function pageMain() {
     </table>
   </td>
 </tr>
-
 </table>
 

@@ -7,7 +7,7 @@
  * @author Romain Ollivier
  */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $dPconfig;
 
 $date     = mbGetValueFromGetOrSession("date"    , mbDate());
 $groupres = mbGetValueFromGetOrSession("groupres", 1);
@@ -37,6 +37,7 @@ $listModules = CModule::getInstalled();
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("dPconfig"   , $dPconfig);
 $smarty->assign("logs"       , $logs);
 $smarty->assign("date"       , $date);
 $smarty->assign("groupres"   , $groupres);
