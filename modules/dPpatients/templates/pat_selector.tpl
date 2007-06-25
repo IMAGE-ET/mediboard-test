@@ -1,4 +1,4 @@
-<!-- $Id$ -->
+{{* $Id$ *}}
 
 <script type="text/javascript">
 
@@ -34,7 +34,13 @@ var Patient = {
   },
   
   select: function(patient_id, patient_view) {
-    window.opener.setPat(patient_id, patient_view);
+    var oSelector = window.opener.PatSelector;
+    if (oSelector) {
+      oSelector.set(patient_id, patient_view);
+    }
+    else {
+      window.opener.setPat(patient_id, patient_view);
+    }
     window.close();
   }
 }

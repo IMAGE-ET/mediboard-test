@@ -174,7 +174,6 @@ function newDHE(oForm) {
 
 {{foreachelse}}
 <tr><td colspan="2"><em>Pas de séjours</em></td></tr>
-
 {{/foreach}}
 </tbody>
 
@@ -231,6 +230,8 @@ function newDHE(oForm) {
     {{/if}}
   </td>
 </tr>
+{{foreachelse}}
+<tr><td colspan="2"><em>Pas de consultations</em></td></tr>
 {{/foreach}}
 
 </tbody>

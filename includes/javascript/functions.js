@@ -8,21 +8,54 @@ function main() {
 	  ObjectInitialisation.hackIt();
 	  SystemMessage.init();
 	  SystemMessage.doEffect();
+	  WaitingMessage.init();
 	  initPuces();
 	  pageMain();
 	}
 	catch (e) {
 		Console.debug(e);
-	}
+	}	
 }
 
-window.onbeforeunload= function () {
-  //if(BrowserDetect.browser != "Explorer"){
-    waitingMessage(true);
-  //}
+var WaitingMessage = {
+	init: function() {
+		window.onbeforeunload = function () {
+		  WaitingMessage.show();
+    }
+
+		// Autoload loading image cuz the browser won't try on before unload
+    var eDiv = $(document.createElement("div"));
+	  eDiv.className = "loading";
+    var sStyle = eDiv.getStyle("background-image");
+    var sImg = sStyle.match(/url\((.*)\)/);
+    (new Image).src = sImg;
+	},
+	
+  show: function() {
+    var eMask = $('waitingMsgMask');
+    var eText = $('waitingMsgText');
+    var eDoc = document.documentElement;
+    if (!eMask && !eText) {
+      return;
+    }
+  
+    // Display waiting text   
+    eText.show();
+    Element.setOpacity(eText, 0.8);
+    var posTop  = eDoc.scrollTop  + (eDoc.clientHeight - eText.offsetHeight)/2;
+    var posLeft = eDoc.scrollLeft + (eDoc.clientWidth  - eText.offsetWidth )/2;
+    eText.style.top  = posTop + "px";
+    eText.style.left = posLeft + "px";
+    
+    // Display waiting mask
+    Element.setOpacity(eMask, 0.2);
+    eMask.show();
+    eMask.style.top  = "0px";
+    eMask.style.left = "0px";
+    eMask.style.height = eDoc.scrollHeight + "px";
+    eMask.style.width = eDoc.scrollWidth + "px";
+  }
 }
-
-
 
 function createDocument(oSelect, consultation_id) {
   if (modele_id = oSelect.value) {
@@ -70,27 +103,27 @@ SystemMessage = {
   div: null,
   effect: null,
 
-	// Check message type (loading, notice, warning, error) from given div
-	checkType: function(div) {
-  	this.autohide = $A(div.childNodes).pluck("className").compact().last() == ["message"];
-	},
+  // Check message type (loading, notice, warning, error) from given div
+  checkType: function(div) {
+    this.autohide = $A(div.childNodes).pluck("className").compact().last() == ["message"];
+  },
 
-	// Catches the innerHTML watch event
-	refresh: function(idElement, oOldValue, oNewValue) {
-		var div = document.createElement("div");
-		div.innerHTML = oNewValue;
+  // Catches the innerHTML watch event
+  refresh: function(idElement, oOldValue, oNewValue) {
+    var div = document.createElement("div");
+    div.innerHTML = oNewValue;
 
-		this.checkType(div);
-		this.doEffect();
+    this.checkType(div);
+    this.doEffect();
 
-		// Mandatory, or value is not set
-		return oNewValue;		
-	},
-	
-	// show/hide the div
+    // Mandatory, or value is not set
+    return oNewValue;    
+  },
+  
+  // show/hide the div
   doEffect : function (delay) {
-  	// Cancel current effect
-  	if (this.effect) {
+    // Cancel current effect
+    if (this.effect) {
       this.effect.cancel();
       this.effect = null;
     }
@@ -110,7 +143,7 @@ SystemMessage = {
   
   init : function () {
     this.div = $(this.id);
-  	Assert.that(this.div, "No system message div");
+    Assert.that(this.div, "No system message div");
     
     this.checkType(this.div);
     

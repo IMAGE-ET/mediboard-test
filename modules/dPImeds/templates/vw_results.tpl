@@ -1,20 +1,11 @@
+<script type="text/javascript" src="modules/dPpatients/javascript/pat_selector.js?build={{$version.build}}"></script>
+  
 <script type="text/javascript">
-
-function popPat() {
-  var url = new Url();
-  url.setModuleAction("dPpatients", "pat_selector");
-  url.popup(750, 500, "Patient");
-}
-
-function setPat(key, val) {
+function pageMain() {
   var oForm = document.patFrm;
-  if (val != '') {
-    oForm.patient_id.value = key;
-    oForm._view.value = val;
-  }
-  oForm.submit();
+  PatSelector.eId = oForm.patient_id;
+  PatSelector.eView = oForm._view;
 }
-
 </script>
 
 <table class="main">
@@ -26,11 +17,11 @@ function setPat(key, val) {
           <th><label for="_view" title="Merci de choisir un patient pour voir ses résultats">Choix du patient</label></th>
           <td class="readonly">
             <input type="hidden" name="m" value="{{$m}}" />
-            <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
+            <input type="hidden" name="patient_id" value="{{$patient->_id}}" onchange="this.form.submit()" />
             <input type="text" readonly="readonly" name="_view" value="{{$patient->_view}}" />
           </td>
           <td class="button">
-            <button class="search" type="button" onclick="popPat()">Chercher</button>
+            <button class="search" type="button" onclick="PatSelector.pop()">Chercher</button>
           </td>
         </tr>
       </table>

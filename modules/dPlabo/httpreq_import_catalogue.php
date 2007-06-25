@@ -114,6 +114,7 @@ function importCatalogue($cat, $parent_id = null) {
   }
 }
 
+
 // Check import configuration
 $config = $dPconfig[$m]["CCatalogueLabo"];
 
