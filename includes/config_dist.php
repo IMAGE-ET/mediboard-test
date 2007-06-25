@@ -187,6 +187,9 @@ $dPconfig["dPImeds"]["url"] = "http://localhost/listedossiers.aspx";
 
 $dPconfig["dPfiles"]["nb_upload_files"] = "1";
 
+$dPconfig["graph_engine"] = "jpgraph";
+
+
 $dPconfig["dPsante400"] = array (
   "nb_rows" => "5",
   "mark_row" => "0",
@@ -195,6 +198,7 @@ $dPconfig["dPsante400"] = array (
   "pass" => "",
   "group_id" => "",
 );
+
 
 $dPconfig["dPlabo"] = array (
   "CCatalogueLabo" => array (

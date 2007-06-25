@@ -7,6 +7,7 @@
 * @author Thomas Despoix
 */
 
+
 require_once("checkauth.php");
 require_once($mbpath."classes/mbconfig.class.php");
 
@@ -299,6 +300,25 @@ $dPconfig = $mbConfig->values;
   </tr>
 
 </table>
+
+
+<table class="form">
+  <tr>
+    <th class="category" colspan="4">Graphiques</th>
+  </tr>
+
+  <tr>
+    <th><label for="graph" title="Graphique">Selection du type de graphique :</label></th>
+    <td>
+      <select name="graph">
+        <option value="jpgraph" <?php if($dPconfig['graph_engine'] == 'jpgraph'){echo 'selected="selected"';} ?> >jpgraph</option>
+        <option value="eZgraph" <?php if($dPconfig['graph_engine'] == 'eZgraph'){echo 'selected="selected"';} ?> >eZgraph</option>
+      </select>
+    </td>
+  </tr>
+  
+</table>
+
 
 <table class="form">
 
