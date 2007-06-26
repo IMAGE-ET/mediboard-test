@@ -1,4 +1,6 @@
-<script type="text/javascript" src="modules/{{$m}}/javascript/exam_audio.js?build={{$version.build}}"></script>
+{{mb_include_script module=$m script="exam_audio"}}
+
+
 <script type="text/javascript">
 if (window.opener.reloadFdr) {
   window.opener.reloadFdr();

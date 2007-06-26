@@ -1,5 +1,5 @@
-<script type="text/javascript" src="modules/dPpatients/javascript/pat_selector.js?build={{$version.build}}"></script>
-  
+{{mb_include_script module="dPpatients" script="pat_selector"}}
+
 <script type="text/javascript">
 function pageMain() {
   var oForm = document.patFrm;

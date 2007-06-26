@@ -1,5 +1,8 @@
 <!-- $Id$ -->
-<script type="text/javascript" src="modules/dPpatients/javascript/autocomplete.js?build={{$version.build}}"></script>
+
+{{mb_include_script module="dPpatients" script="autocomplete"}}
+
+
 <script type="text/javascript">
 var httpreq_running = false;
 function confirmCreation(oForm){

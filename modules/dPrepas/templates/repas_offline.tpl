@@ -1,5 +1,6 @@
 {{$mediboardScriptStorage|smarty:nodefaults}}
-<script type="text/javascript" src="modules/dPrepas/javascript/dPrepas.js"></script>
+
+{{mb_include_script module="dPrepas" script="dPrepas"}}
 
 <table class='titleblock'>
   <tr>

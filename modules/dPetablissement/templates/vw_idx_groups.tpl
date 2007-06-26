@@ -1,10 +1,12 @@
-<script type="text/javascript" src="modules/dPpatients/javascript/autocomplete.js?build={{$version.build}}"></script>
+{{mb_include_script module="dPpatients" script="autocomplete"}}
+
 
 <script type="text/javascript">
 function pageMain() {
   initInseeFields("group", "cp", "ville");
 }
 </script>
+
 
 <table class="main">
   <tr>

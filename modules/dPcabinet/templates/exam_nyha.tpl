@@ -1,4 +1,5 @@
-<script type="text/javascript" src="modules/{{$m}}/javascript/exam_nyha.js?build={{$version.build}}"></script>
+{{mb_include_script module=$m script="exam_nyha"}}
+
 <script type="text/javascript">
 if (window.opener.reloadFdr) {
   window.opener.reloadFdr();

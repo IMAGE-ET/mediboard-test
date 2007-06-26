@@ -90,32 +90,6 @@ function smarty_modifier_stripslashes($string){
   return stripslashes($string);
 }
 
-
-function include_script($params, &$smarty) {
-    global $m;  
-
-    require_once $smarty->_get_plugin_filepath('shared','escape_special_chars');
-    
-
-    $module = $m;
-    $source = null;
-
-    foreach ($params as $_key => $_val) {
-        switch($_key) {
-            case 'module':
-                $$_key = $_val;
-                break;
-            case 'source':
-                $$_key = $_val;
-                break;
-        }
-    }
-
-    $_html_result = '';
-
-    return $_html_result;
-}
-
 function smarty_function_mb_field_spec($obj, $field, $propSpec = null){
   if($propSpec != null){
     $specs = $obj->getSpecsObj(array($field => $propSpec));
@@ -217,6 +191,37 @@ function smarty_function_mb_ternary($params, &$smarty) {
   
 }
 
+
+function smarty_function_mb_include_script($params, &$smarty) {
+  global $AppUI, $version;
+  $version_build = $version['build'];
+  
+  // Dans le cas ou le path est fourni
+  $path   = CMbArray::extract($params, "path"  );
+  $module = CMbArray::extract($params, "module");
+  $script = CMbArray::extract($params, "script");
+    
+    
+  if($path){
+    $path = "$path?build=$version_build";
+  }
+  if($module XOR $script){
+  	trigger_error("Module: $module Script: $script");
+  }
+  if($module && $script){
+    $path = "modules/$module/javascript/$script.js?build=$version_build";  
+  }
+  
+  
+  return "<script type='text/javascript' src=$path></script>";
+}
+
+
+
+
+
+
+
 /**
  * dotProject integration of Smarty engine main class
  *
@@ -258,24 +263,25 @@ class CSmartyDP extends Smarty {
     $this->default_modifiers = array("@cleanField");
     
     // Register mediboard functions
-    $this->register_block   ("tr"           , "do_translation"); 
-    $this->register_function("thumb"        , "thumb");
-    $this->register_function("mb_field"     , "smarty_function_mb_field");
-    $this->register_function("mb_value"     , "smarty_function_mb_value");
-    $this->register_function("mb_label"     , "smarty_function_mb_label");
-    $this->register_function("mb_ternary"   , "smarty_function_mb_ternary");
-    $this->register_modifier("json"         , "smarty_modifier_json");
-    $this->register_modifier("const"        , "smarty_modifier_const");
-    $this->register_modifier("cleanField"   , "smarty_modifier_cleanField");
-    $this->register_modifier("stripslashes" , "smarty_modifier_stripslashes");
-    $this->register_modifier("JSAttribute"  , "JSAttribute");
+    $this->register_block   ("tr"                , "do_translation"); 
+    $this->register_function("thumb"             , "thumb");
+    $this->register_function("mb_field"          , "smarty_function_mb_field");
+    $this->register_function("mb_value"          , "smarty_function_mb_value");
+    $this->register_function("mb_label"          , "smarty_function_mb_label");
+    $this->register_function("mb_ternary"        , "smarty_function_mb_ternary");
+    $this->register_function("mb_include_script" , "smarty_function_mb_include_script");
+    $this->register_modifier("json"              , "smarty_modifier_json");
+    $this->register_modifier("const"             , "smarty_modifier_const");
+    $this->register_modifier("cleanField"        , "smarty_modifier_cleanField");
+    $this->register_modifier("stripslashes"      , "smarty_modifier_stripslashes");
+    $this->register_modifier("JSAttribute"       , "JSAttribute");
     
     // Standard data assignment
     $this->assign("app", $AppUI);
     $this->assign("dbChronos", $dbChronos);
     $this->assign("dPconfig", $dPconfig);
     $this->assign("user", $AppUI->user_id); // shouldn't be necessary
-    $this->assign("version", $version);
+    $this->assign("version", $version); 
     $this->assign("canEdit", $canEdit);
     $this->assign("canRead", $canRead);
     $this->assign("canAdmin", $canAdmin);
