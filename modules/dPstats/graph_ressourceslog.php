@@ -10,6 +10,12 @@
 global $AppUI, $can, $m, $dPconfig;
 
 require_once "ezc/Base/base.php";
+function __autoload( $className )
+{
+    ezcBase::autoload( $className );
+}
+/*
+require_once "ezc/Base/base.php";
 require_once "ezc/Base/options.php";
 require_once "ezc/Base/struct.php";
 require_once "ezc/Graph/interfaces/chart.php";
@@ -53,7 +59,7 @@ require_once "ezc/Graph/colors/linear_gradient.php";
 require_once "ezc/Graph/structs/context.php";
 require_once "ezc/Graph/math/vector.php";
 require_once "ezc/Graph/colors/radial_gradient.php";
-
+*/
 require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_pie"));
 
@@ -164,8 +170,10 @@ if($dPconfig['graph_engine'] == 'eZgraph') {
   
   	$graph->renderer->options->pieChartHeight = 5;
   	$graph->renderer->options->pieChartRotation = .8;
-
-  	$graph->renderToOutput( 300, 145);
+	
+  	$graph->driver = new ezcGraphGdDriver();
+  	
+  	$graph->renderToOutput(300, 145);
 	
 } else {
 	// Setup the graph.
