@@ -40,14 +40,10 @@ $mediuser->load($AppUI->user_id);
 // Vérification des droits sur les praticiens
 $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
 
-$sejourConfig =& $dPconfig["dPplanningOp"]["sejour"];
-for ($i = $sejourConfig["heure_deb"]; $i <= $sejourConfig["heure_fin"]; $i++) {
-    $hours[] = $i;
-}
+$sejourConfig =& $dPconfig["dPplanningOp"]["CSejour"];
 
-for ($i = 0; $i < 60; $i += $sejourConfig["min_intervalle"]) {
-    $mins[] = $i;
-}
+$hours = range($sejourConfig["heure_deb"], $sejourConfig["heure_fin"]);
+$mins = range(0, 59, $sejourConfig["min_intervalle"]);
 
 // Création du template
 $smarty = new CSmartyDP();
