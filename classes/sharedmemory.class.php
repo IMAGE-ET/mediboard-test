@@ -1,6 +1,6 @@
-<?php /* CLASSES $Id$ */
+<?php /* $Id$ */
 
-require_once "classes/mbpath.class.php";
+
 /**
  *  @package Mediboard
  *  @subpackage classes
@@ -8,15 +8,21 @@ require_once "classes/mbpath.class.php";
  *  @version $Revision: 16 $
  */
 
+// Use $dPconfig for both application and install wizard to use it
+global $dPconfig;
+require_once $dPconfig["root_dir"]. "/classes/mbpath.class.php";
+
 /**
  * Default Shared Memory class with no shared memory behaviour
  */
 class SharedMemory {
-   var $dir = null;
-   function __construct() {
-   	 global $dPconfig;
-   	 $this->dir = $dPconfig["root_dir"].'/tmp/shared/';
-   }
+  var $dir = null;
+  
+  function __construct() {
+    global $dPconfig;
+    $this->dir = $dPconfig["root_dir"]."/tmp/shared/";
+  }
+  
   /**
    * Returns true if shared memory is available
    */
