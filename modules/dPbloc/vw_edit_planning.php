@@ -43,6 +43,10 @@ foreach($specs as $key => $spec) {
 $mediuser = new CMediusers;
 $anesths = $mediuser->loadAnesthesistes();
 
+
+$_temps_inter_op = range(0,59,15);
+
+
 // Liste des heures
 $listHours = array();
 for($i = 8; $i <= 20; $i++) {
@@ -114,6 +118,7 @@ $listSpec = $listSpec->loadSpecialites();
 //Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("_temps_inter_op", $_temps_inter_op);
 $smarty->assign("listSalles"     , $listSalles    );
 $smarty->assign("listHours"      , $listHours     );
 $smarty->assign("listMins"       , $listMins      );
