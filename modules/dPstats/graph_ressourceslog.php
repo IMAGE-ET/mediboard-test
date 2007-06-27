@@ -9,57 +9,6 @@
 
 global $AppUI, $can, $m, $dPconfig;
 
-require_once "ezc/Base/base.php";
-function __autoload( $className )
-{
-    ezcBase::autoload( $className );
-}
-/*
-require_once "ezc/Base/base.php";
-require_once "ezc/Base/options.php";
-require_once "ezc/Base/struct.php";
-require_once "ezc/Graph/interfaces/chart.php";
-require_once "ezc/Graph/charts/pie.php";
-require_once "ezc/Graph/interfaces/palette.php";
-require_once "ezc/Graph/palette/ez_red.php";
-require_once "ezc/Graph/datasets/base.php";
-require_once "ezc/Graph/datasets/array.php";
-require_once "ezc/Graph/interfaces/renderer.php";
-require_once "ezc/Graph/renderer/3d.php";
-require_once "ezc/Graph/options/chart.php";
-require_once "ezc/Graph/options/pie_chart.php";
-require_once "ezc/Graph/options/font.php";
-require_once "ezc/Graph/graph.php";
-require_once "ezc/Graph/colors/color.php";
-require_once "ezc/Graph/palette/tango.php";
-require_once "ezc/Graph/data_container/base.php";
-require_once "ezc/Graph/interfaces/element.php";
-require_once "ezc/Graph/element/background.php";
-require_once "ezc/Graph/math/boundings.php";
-require_once "ezc/Graph/element/text.php";
-require_once "ezc/Graph/element/legend.php";
-require_once "ezc/Graph/interfaces/driver.php";
-require_once "ezc/Graph/driver/svg.php";
-require_once "ezc/Graph/options/driver.php";
-require_once "ezc/Graph/options/svg_driver.php";
-require_once "ezc/Graph/structs/coordinate.php";
-require_once "ezc/Graph/interfaces/radar_renderer.php";
-require_once "ezc/Graph/renderer/2d.php";
-require_once "ezc/Graph/options/renderer.php";
-require_once "ezc/Graph/options/renderer_2d.php";
-require_once "ezc/Graph/data_container/single.php";
-require_once "ezc/Graph/interfaces/dataset_property.php";
-require_once "ezc/Graph/datasets/property/string.php";
-require_once "ezc/Graph/datasets/property/color.php";
-require_once "ezc/Graph/datasets/property/integer.php";
-require_once "ezc/Graph/datasets/property/boolean.php";
-require_once "ezc/Graph/options/renderer_3d.php";
-require_once "ezc/Graph/options/line_chart.php";
-require_once "ezc/Graph/colors/linear_gradient.php";
-require_once "ezc/Graph/structs/context.php";
-require_once "ezc/Graph/math/vector.php";
-require_once "ezc/Graph/colors/radial_gradient.php";
-*/
 require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_pie"));
 
@@ -152,7 +101,7 @@ if($dPconfig['graph_engine'] == 'eZgraph') {
 	if($module) 
 		$title .= " : ".$AppUI->_($module);
   	$graph->title = $title;
-  	$graph->options->label = '%2$d (%3$.1f%%)';
+  	$graph->options->label = '%3$.1f%%';
    	$graph->data[$title] = new ezcGraphArrayDataSet($tab);
   
   	$graph->renderer = new ezcGraphRenderer3d();
@@ -161,18 +110,14 @@ if($dPconfig['graph_engine'] == 'eZgraph') {
  	$graph->renderer->options->pieChartOffset = 63;
  	$graph->renderer->options->pieChartGleam = .3;
  	$graph->renderer->options->pieChartGleamColor = '#FFFFFF';
-	$graph->renderer->options->pieChartShadowSize = 5;
+ 	$graph->renderer->options->pieChartGleamBorder = 2;
+	$graph->renderer->options->pieChartShadowSize = 2;
   	$graph->renderer->options->pieChartShadowColor = '#000000';
  	$graph->renderer->options->legendSymbolGleam = .5;
   	$graph->renderer->options->legendSymbolGleamSize = .9;
   	$graph->renderer->options->legendSymbolGleamColor = '#FFFFFF';
- 	$graph->renderer->options->pieChartSymbolColor = '#55575388';
-  
-  	$graph->renderer->options->pieChartHeight = 5;
-  	$graph->renderer->options->pieChartRotation = .8;
-	
-  	$graph->driver = new ezcGraphGdDriver();
-  	
+ 	$graph->renderer->options->pieChartSymbolColor = '#BABDB688';
+    
   	$graph->renderToOutput(300, 145);
 	
 } else {

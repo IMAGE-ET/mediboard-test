@@ -1,5 +1,6 @@
 <?php /* CLASSES $Id$ */
 
+require_once "classes/mbpath.class.php";
 /**
  *  @package Mediboard
  *  @subpackage classes
@@ -11,26 +12,30 @@
  * Default Shared Memory class with no shared memory behaviour
  */
 class SharedMemory {
-    
+   var $dir = null;
+   function __construct() {
+   	 global $dPconfig;
+   	 $this->dir = $dPconfig["root_dir"].'/tmp/shared/';
+   }
   /**
    * Returns true if shared memory is available
    */
   function isReady() {
-    return false;
+     return CMbPath::forceDir($this->dir);
   }
   
   /**
    * Get a variable from shared memory
    */
   function get($key) {
-    return null;
+    return unserialize(file_get_contents($this->dir.$key));
   }
   
   /**
    * Put a variable into shared memory
    */
   function put($key, $value) {
-    return false;
+     file_put_contents($this->dir.$key, serialize($value)); 
   }
   
   /**
