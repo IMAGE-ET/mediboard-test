@@ -41,6 +41,13 @@ class CPHPVersion extends CPrerequisite {
 }
 $packages = array();
 
+$ezcPackage = new CPearPackage;
+$ezcPackage->name = "ezc/Graph/graph";
+$ezcPackage->description = "Package de manipulation des graphiques";
+$ezcPackage->mandatory = false;
+$ezcPackage->status = "beta";
+$ezcPackage->reasons[] = "Utilisation des graphiques dans Mediboard";
+
 $package = new CPearPackage;
 $package->name = "Archive/Tar";
 $package->description = "Package de manipulation d'archives au format GNU TAR";
@@ -356,6 +363,7 @@ $versions[] = $php;
 
 </table>
 
+
 <div class="big-info">
   Certains packages Pear ne sont pas publiés dans un status <strong>stable</strong>, 
   bien que suffisemment fonctionnels pour Mediboard. 
@@ -365,4 +373,54 @@ $versions[] = $php;
   <pre>pear config-set preferred_state beta</pre>
    
 </div>
+
+<h3>Packages ezComponent</h3>
+
+<p>
+  ezComponent permet d'accélèrer l'implémentation et réduit les risques des projets de développement d'applications sur la technologie PHP.
+  <br />
+  Si le package est manquant, n'hésitez pas à vous rendre 
+  sur le site officiel <a href="http://ez.no/fr/ezcomponents">http://ez.no/fr/ezcomponents</a>
+  pour l'installer sur votre déploiement de PHP. 
+</p>
+  
+<table class="tbl" >
+
+<tr>
+  <th>Nom</th>
+  <th>Description</th>
+  <th>Obligatoire ?</th>
+  <th>Utilité</th>
+  <th>Statut</th>
+  <th>Installation ?</th>
+</tr>
+
+<tr>
+  <td><strong><?php echo $ezcPackage->name; ?></strong></td>
+  <td class="text"><?php echo nl2br($ezcPackage->description); ?></td>
+  <td>
+    <?php if ($ezcPackage->mandatory) { ?>
+    Oui
+    <?php } else { ?>
+    Recommandé
+    <?php } ?>
+  </td>
+  <td class="text">
+    <ul>
+      <?php foreach($ezcPackage->reasons as $reason) { ?>
+      <li><?php echo $reason; ?></li>
+      <?php } ?>
+    </ul>
+  </td>
+  <td><?php echo $ezcPackage->status; ?></td>
+  <td>
+    <?php if ($ezcPackage->check()) { ?>
+    <div class="message">Package installé</div>
+    <?php } else { ?>
+    <div class="<?php echo $ezcPackage->mandatory ? "error" : "warning"; ?>">Package manquant</div>
+    <?php } ?>
+  </td>
+</tr>
+</table>
+
 <?php showFooter(); ?>
