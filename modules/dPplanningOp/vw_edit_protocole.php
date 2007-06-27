@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $tab;
+global $AppUI, $can, $m, $tab, $dPconfig;
 
 $can->needsEdit();
 
@@ -43,18 +43,15 @@ if($protocole_id) {
   $chir =& $protocole->_ref_chir;
 }
 
-// Heures & minutes
-$start = 7;
-$stop = 20;
-$step = 15;
 
-for ($i = $start; $i < $stop; $i++) {
-    $hours[] = $i;
-}
+// Durée d'une intervention
+$start = $dPconfig["dPplanningOp"]["COperation"]["duree_deb"];
+$stop = $dPconfig["dPplanningOp"]["COperation"]["duree_fin"];
+$step = $dPconfig["dPplanningOp"]["COperation"]["min_intervalle"];
 
-for ($i = 0; $i < 60; $i += $step) {
-    $mins[] = $i;
-}
+$hours = range($start, $stop);
+$mins = range(0,59,$step);
+
 
 // Création du template
 $smarty = new CSmartyDP();
