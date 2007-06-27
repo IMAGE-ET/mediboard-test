@@ -1,20 +1,6 @@
+{{mb_include_script module="dPpatients" script="pat_selector"}}
+
 <script type="text/javascript">
-
-function popPat() {
-  var url = new Url();
-  url.setModuleAction("dPpatients", "pat_selector");
-  url.popup(750, 500, "Patient");
-}
-
-function setPat( key, val ) {
-  var oForm = document.Patient;
-  if (val != '') {
-    oForm.patient_id.value = key;
-    oForm._view.value = val;
-  }
-  oForm.submit();
-}
-
 
 var Prescription = {
   select : function(prescription_id) {
@@ -50,6 +36,11 @@ function pageMain() {
   ViewPort.SetAvlHeight("resultats-internes", 0.5);
   ViewPort.SetAvlHeight("resultats-externes", 1);
   IMeds.viewSejour({{$patient->_id}}, "resultats-externes");
+  
+  var oForm = document.Patient;
+  PatSelector.eId = oForm.patient_id;
+  PatSelector.eView = oForm._view;
+  
 }
 
 </script>
@@ -62,7 +53,7 @@ function pageMain() {
       <form name="Patient" action="?" method="get">
 
       <input type="hidden" name="m" value="dPlabo" />
-      <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
+      <input type="hidden" name="patient_id" value="{{$patient->_id}}" onchange="this.form.submit()" />
 
       <table class="form">
         <tr>
@@ -71,7 +62,7 @@ function pageMain() {
           </th>
           <td class="readonly">
             <input type="text" readonly="readonly" name="_view" value="{{$patient->_view}}" />
-            <button class="search" type="button" onclick="popPat()">Chercher</button>
+            <button class="search" type="button" onclick="PatSelector.pop()">Chercher</button>
           </td>
         </tr>
       </table>

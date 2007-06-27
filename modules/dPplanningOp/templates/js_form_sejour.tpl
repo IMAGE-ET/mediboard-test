@@ -129,6 +129,7 @@ function updateHeureSortie() {
   min_sortie.value = "00";
 }
 
+/*
 function popPat() {
   var url = new Url();
   url.setModuleAction("dPpatients", "pat_selector");
@@ -146,6 +147,9 @@ function setPat(patient_id, _patient_view) {
   
   oForm.patient_id.onchange();
 }
+*/
+
+
 
 function checkSejoursToReload() {
   if(bChangePat) {

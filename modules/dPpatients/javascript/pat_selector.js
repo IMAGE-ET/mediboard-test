@@ -15,13 +15,14 @@ var PatSelector = {
   },
   
   set: function(id, view) {
-    if (id) {
       if (this.eView) {
-        this.eView.Value = view;
-      }
-
+        this.eView.value = view;
+      }      
       this.eId.value = id;
-      Try.these(this.eId.onchange.bind(this.eId));
-    }
+      
+      if(this.eId.onchange){
+        this.eId.onchange();
+      }
+    
   }
 }

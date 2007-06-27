@@ -1,19 +1,19 @@
 <!-- $Id$ -->
 
 {{include file="../../dPfiles/templates/inc_files_functions.tpl"}}
+{{mb_include_script module="dPpatients" script="pat_selector"}}
 
 <script type="text/javascript">
 
 function pageMain() {
   PairEffect.initGroup("consEffect", { bStoreInCookie: false });
   PairEffect.initGroup("operEffect", { bStoreInCookie: false });
+   
+  var oForm = document.patFrm;
+  PatSelector.eId = oForm.patSel;
+  PatSelector.eView = oForm.patNom;
 }
 
-function popPat() {
-  var url = new Url;
-  url.setModuleAction("dPpatients", "pat_selector");
-  url.popup(750, 500, 'Patient');
-}
 
 function printPack(hospi_id, pack_id) {
   if (pack_id) {
@@ -23,17 +23,6 @@ function printPack(hospi_id, pack_id) {
     url.addParam("pack_id", pack_id);
     url.popup(700, 600, "Impression de pack");
   }
-}
-
-function setPat( key, val ) {
-  var f = document.patFrm;
-
-  if (val != '') {
-    f.patSel.value = key;
-    f.patNom.value = val;
-  }
-  
-  f.submit();
 }
 
 function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
@@ -58,11 +47,11 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         <tr><th>Choix du patient :</th>
           <td class="readonly">
             <input type="hidden" name="m" value="{{$m}}" />
-            <input type="hidden" name="patSel" value="{{$patient->patient_id}}" />
-            <input type="text" size="40" readonly="readonly" ondblclick="popPat()" name="patNom" value="{{$patient->_view}}" />
+            <input type="hidden" name="patSel" value="{{$patient->patient_id}}" onchange="this.form.submit()" />
+            <input type="text" size="40" readonly="readonly" ondblclick="PatSelector.pop()" name="patNom" value="{{$patient->_view}}" />
           </td>
           <td class="button">
-            <button class="search" type="button" onclick="popPat()">Chercher</button>
+            <button class="search" type="button" onclick="PatSelector.pop()">Chercher</button>
           </td>
         </tr>
       </table>

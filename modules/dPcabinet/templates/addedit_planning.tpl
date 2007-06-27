@@ -1,5 +1,7 @@
 <!-- $Id$ -->
 
+{{mb_include_script module="dPpatients" script="pat_selector"}}
+
 <script type="text/javascript">
 
 function changePause(){
@@ -31,24 +33,6 @@ function requestInfoPat() {
   });
 }
 
-function popPat() {
-  var url = new Url;
-  url.setModuleAction("dPpatients", "pat_selector");
-  url.popup(750, 500, "Patient");
-  myNode = document.getElementById("infoPat");
-  myNode.innerHTML = "";
-}
-
-function setPat( key, val ) {
-  var f = document.editFrm;
-  
-  if (val != '') {
-    f.patient_id.value = key;
-    f._pat_name.value = val;
-    myNode = $("clickPat");
-    myNode.innerHTML = "++ Infos patient (cliquez pour afficher) ++";
-  }
-}
 
 function ClearRDV(){
   var f = document.editFrm;
@@ -96,14 +80,20 @@ function annuleConsult(oForm, etat) {
   }
 }
 
-{{if $plageConsult->plageconsult_id && !$consult->consultation_id}}
 function pageMain() {
   var oForm = document.editFrm;
+
+  {{if $plageConsult->plageconsult_id && !$consult->consultation_id}}
   oForm.plageconsult_id.value = {{$plageConsult->plageconsult_id}};
   oForm.chir_id.value = {{$plageConsult->chir_id}};
   popRDV();
+  {{/if}}
+
+  PatSelector.eId = oForm.patient_id;
+  PatSelector.eView = oForm._pat_name;
 }
-{{/if}}
+
+
 
 function checkFormRDV(oForm){
   if(!oForm._pause.checked && oForm.patient_id.value == ""){
@@ -177,11 +167,11 @@ function checkFormRDV(oForm){
 
         <tr id="viewPatient" {{if $consult->consultation_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
           <th>
-            {{mb_field object=$pat field="patient_id" hidden=1 prop="" ondblclick="popPat()"}}
+            {{mb_field object=$pat field="patient_id" hidden=1 prop="" ondblclick="PatSelector.pop()"}}
             {{mb_label object=$consult field="patient_id"}}
           </th>
           <td class="readonly"><input type="text" name="_pat_name" size="20" value="{{$pat->_view}}" readonly="readonly"  ondblclick="popPat()" /></td>
-          <td class="button"><button class="search" type="button" onclick="popPat()">Rechercher un patient</button></td>
+          <td class="button"><button class="search" type="button" onclick="PatSelector.pop()">Rechercher un patient</button></td>
         </tr>
         
         <tr>

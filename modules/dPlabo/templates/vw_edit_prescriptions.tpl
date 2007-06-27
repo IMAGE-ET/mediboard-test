@@ -1,20 +1,7 @@
+{{mb_include_script module="dPpatients" script="pat_selector"}}
+
 <script type="text/javascript">
-
-function popPat() {
-  var url = new Url();
-  url.setModuleAction("dPpatients", "pat_selector");
-  url.popup(750, 500, "Patient");
-}
-
-function setPat( key, val ) {
-  var oForm = document.patFrm;
-  if (val != '') {
-    oForm.patient_id.value = key;
-    oForm.patNom.value = val;
-  }
-  oForm.submit();
-}
-
+  
 var Catalogue = {
   select : function(iCatalogue) {
     if(isNaN(iCatalogue)) {
@@ -253,6 +240,10 @@ function pageMain() {
   ViewPort.SetAvlHeight('listExamens'      , 1);
   Prescription.select();
   window[getCheckedValue(document.typeListeFrm.typeListe)].select();
+  
+  var oForm = document.patFrm;
+  PatSelector.eId = oForm.patient_id;
+  PatSelector.eView = oForm.patNom;
 }
 
 </script>
@@ -268,15 +259,15 @@ function pageMain() {
           </th>
           <td class="readonly">
             <input type="hidden" name="m" value="dPlabo" />
-            <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
+            <input type="hidden" name="patient_id" value="{{$patient->_id}}" onchange="this.form.submit()"/>
             <input type="hidden" name="prescription_labo_id" value="" />
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
-            <button class="search" type="button" onclick="popPat()">Chercher</button>
+            <button class="search" type="button" onclick="PatSelector.pop();">Chercher</button>
             {{if $patient->_id}}
             <button class="new" type="button" onclick="Prescription.edit();">
               Prescrire
             </button>
-            <button class="cancel notext" type="button" onclick="setPat(0, '&mdash;');">
+            <button class="cancel notext" type="button" onclick="PatSelector.set(0, '&mdash;');">
               Cancel
             </button>
             {{/if}}

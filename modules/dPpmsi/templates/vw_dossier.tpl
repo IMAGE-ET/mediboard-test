@@ -1,6 +1,7 @@
 <!-- $Id$ -->
 
 {{include file="../../dPfiles/templates/inc_files_functions.tpl"}}
+{{mb_include_script module="dPpatients" script="pat_selector"}}
 
 <script type="text/javascript">
 
@@ -18,21 +19,6 @@ function choosePreselection(oSelect) {
   oForm.libelle_uf.value = sLibelle;
   
   oSelect.value = "";
-}
-
-function popPat() {
-  var url = new Url();
-  url.setModuleAction("dPpatients", "pat_selector");
-  url.popup(750, 500, "Patient");
-}
-
-function setPat( key, val ) {
-  var oForm = document.patFrm;
-  if (val != '') {
-    oForm.pat_id.value = key;
-    oForm.patNom.value = val;
-  }
-  oForm.submit();
 }
 
 function imprimerDocument(doc_id) {
@@ -97,6 +83,11 @@ function submitAllForms(operation_id) {
 
 function pageMain() {
   PairEffect.initGroup("effectSejour");
+  
+  var oForm = document.patFrm;
+  PatSelector.eId = oForm.pat_id;
+  PatSelector.eView = oForm.patNom;
+ 
 }
 
 function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
@@ -122,11 +113,11 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           <th><label for="patNom" title="Merci de choisir un patient pour voir son dossier">Choix du patient</label></th>
           <td class="readonly">
             <input type="hidden" name="m" value="dPpmsi" />
-            <input type="hidden" name="pat_id" value="{{$patient->patient_id}}" />
+            <input type="hidden" name="pat_id" value="{{$patient->patient_id}}" onchange="this.form.submit()" />
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
           </td>
           <td class="button">
-            <button class="search" type="button" onclick="popPat()">Chercher</button>
+            <button class="search" type="button" onclick="PatSelector.pop()">Chercher</button>
           </td>
         </tr>
       </table>
