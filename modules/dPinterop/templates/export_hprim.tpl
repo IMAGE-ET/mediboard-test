@@ -1,5 +1,7 @@
 <!-- $Id$ -->
 
+{{mb_include_script module="system" script="object_selector"}}
+
 <script type="text/javascript">
 
 function choosePreselection(oSelect) {
@@ -18,18 +20,13 @@ function choosePreselection(oSelect) {
   oSelect.value = "";
 }
 
-function popObject() {
-  var url = new Url;
-  url.setModuleAction("system", "object_selector");
-  url.addParam("selClass","COperation");
-  url.popup(600, 300, "Object Selector");
-}
 
-function setObject(oObject){
-	var oForm = document.formEdit;
-	oForm.mb_operation_id.value = oObject.id;
-	oForm._operation_view.value = oObject.view;	
-	oForm.mb_operation_id.onchange();
+function initObject(){
+  var oForm = document.formEdit;
+  ObjectSelector.eId = oForm.mb_operation_id;
+  ObjectSelector.eView = oForm._operation_view;
+  ObjectSelector.eClass = oForm._class_name;  
+  ObjectSelector.pop();
 }
 
 </script>
@@ -170,6 +167,7 @@ function setObject(oObject){
   <form name="formEdit" action="?" method="get" onsubmit="return checkForm(this)">  
   <input type="hidden" name="m" value="{{$m}}"/>
   <input type="hidden" name="tab" value="{{$tab}}"/>
+  <input type="hidden" name="_class_name" value="COperation"/>
   <table class="form">
 
   <tr>
@@ -184,11 +182,11 @@ function setObject(oObject){
        <td>
            <input type="hidden" class="notNull ref class|COperation" name="mb_operation_id" value="{{$mbOp->_id}}"/>
 	       {{if $mbOp->_id}}
-    	   <input type="text" size="30" readonly="readonly" ondblclick="popObject()" name="_operation_view" value="{{$mbOp->_view|stripslashes}}" />
+    	   <input type="text" size="30" readonly="readonly" ondblclick="initObject()" name="_operation_view" value="{{$mbOp->_view|stripslashes}}" />
     	   {{else}}
-    	   <input type="text" size="30" readonly="readonly" ondblclick="popObject()" name="_operation_view" value="" />
+    	   <input type="text" size="30" readonly="readonly" ondblclick="initObject()" name="_operation_view" value="" />
     	   {{/if}}
-           <button type="button" onclick="popObject()" class="search">Rechercher</button>
+           <button type="button" onclick="initObject()" class="search">Rechercher</button>
        </td>
   </tr>
   {{if $mbOp->operation_id}}

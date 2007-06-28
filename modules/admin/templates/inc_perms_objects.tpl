@@ -1,19 +1,6 @@
+{{mb_include_script module="system" script="object_selector"}}
+
 <script language="Javascript" type="text/javascript">
-
-function popObject() {
-  var oForm = document.editPermObj;
-  var url = new Url;
-  url.setModuleAction("system", "object_selector");
-  url.addParam("selClass", oForm.object_class.value); 
-  url.popup(600, 300, "Object");
-}
-
-function setObject(oObject) {
-  var oForm = document.editPermObj;
-  oForm.object_class.value = oObject.objClass;
-  oForm.object_id.value = oObject.id;
-  oForm._object_view.value = oObject.view;
-}
 
 function cancelObject(oObject) {
   var oForm = document.editPermObj;
@@ -54,7 +41,7 @@ function cancelObject(oObject) {
       <button type="button" class="cancel" onclick="cancelObject()">
         Pas d'objet
       </button>
-      <button type="button" class="search" onclick="popObject()">
+      <button type="button" class="search" onclick="initObject()">
         Chercher un objet
       </button>
     </td>
@@ -115,3 +102,15 @@ function cancelObject(oObject) {
   </tr>
   {{/foreach}}
 </table>
+
+<script language="Javascript" type="text/javascript">
+  
+function initObject(){
+  var oForm = document.editPermObj;
+  ObjectSelector.eId = oForm.object_id;
+  ObjectSelector.eView = oForm._object_view;
+  ObjectSelector.eClass = oForm.object_class;
+  ObjectSelector.pop();
+}
+  
+</script>

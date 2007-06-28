@@ -98,7 +98,7 @@ function pageMain() {
 function checkFormRDV(oForm){
   if(!oForm._pause.checked && oForm.patient_id.value == ""){
     alert("Veuillez Selectionner un Patient");
-    popPat();
+    PatSelector.pop();
     return false;
   }else{
     return checkForm(oForm);

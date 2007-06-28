@@ -31,7 +31,7 @@
     <td>{{mb_label object=$filter field="object_id"}}</td>
     <td>
       <input name="object_id" class="ref" value="{{$filter->object_id}}" />
-      <button class="search" type="button" onclick="popObject(this)">Chercher</button>
+      <button class="search" type="button" onclick="initObject1()">Chercher</button>
     </td>
   </tr>
   
@@ -50,3 +50,16 @@
 </table>
 
 </form>
+
+<script type="text/javascript">
+
+function initObject1(){
+  var oForm = document.filterFrm;
+  
+  ObjectSelector.eId = oForm.object_id;
+  ObjectSelector.eClass = oForm.object_class;  
+  ObjectSelector.pop();
+}
+
+</script>
+

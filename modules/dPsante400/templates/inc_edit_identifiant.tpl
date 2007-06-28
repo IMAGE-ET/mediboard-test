@@ -46,7 +46,7 @@
       {{$target->_view}}
 	  {{else}}
       <input name="object_id" class="{{$filter->_props.object_id}}" value="{{$idSante400->object_id}}" />
-      <button class="search" type="button" onclick="popObject(this)">Chercher</button>
+      <button class="search" type="button" onclick="initObject2()">Chercher</button>
       {{if $idSante400->_id}}
       <br />
       {{$idSante400->_ref_object->_view}}
@@ -90,3 +90,14 @@
 </table>
 
 </form>
+
+<script type="text/javascript">
+
+function initObject2(){
+  var oForm = document.editFrm;
+  ObjectSelector.eId = oForm.object_id;
+  ObjectSelector.eClass = oForm.object_class;  
+  ObjectSelector.pop();
+}
+</script>
+

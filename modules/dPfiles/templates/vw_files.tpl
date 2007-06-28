@@ -1,15 +1,17 @@
 {{include file="inc_files_functions.tpl"}}
+{{mb_include_script module="system" script="object_selector"}}
+
 
 <script type="text/javascript">
 
-function popObject() {
+function initObject(){
   var oForm = document.FrmClass;
-  var url = new Url;
-  url.setModuleAction("system", "object_selector");
-  url.addElement(oForm.keywords);
-  url.addElement(oForm.selClass);  
-  url.popup(600, 300, "Object Selector");
+  ObjectSelector.eId = oForm.file_id;
+  ObjectSelector.eView = oForm.selView;
+  ObjectSelector.eClass = oForm.selClass;  
+  ObjectSelector.pop();
 }
+
 
 function pageMain() {
   initAccord(true);
@@ -27,12 +29,12 @@ function pageMain() {
         <tr>
           <td  class="readonly">
             <label for="selClass" title="Type de l'objet courant">Type</label>
-            <input type="text" readonly="readonly" ondblclick="popObject()" name="selClass" value="{{$selClass|stripslashes}}" />
+            <input type="text" readonly="readonly" ondblclick="initObject()" name="selClass" value="{{$selClass|stripslashes}}" />
           </td>
           <td class="readonly">
             <label title="Nom de l'objet sélectionné">Nom</label>
-            <input type="text" size="50" readonly="readonly" ondblclick="popObject()" name="selView" value="{{$selView|stripslashes}}" />
-            <button type="button" onclick="popObject()" class="search">Rechercher</button>
+            <input type="text" size="50" readonly="readonly" ondblclick="initObject()" name="selView" value="{{$selView|stripslashes}}" />
+            <button type="button" onclick="initObject()" class="search">Rechercher</button>
             <input type="hidden" name="selKey" value="{{$selKey|stripslashes}}" />
             <input type="hidden" name="keywords" value="{{$keywords|stripslashes}}" />
           </td>

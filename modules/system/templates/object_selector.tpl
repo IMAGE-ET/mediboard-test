@@ -7,8 +7,15 @@ function setClose(selClass,keywords,key,val){
     view : val,
     keywords : keywords
   }
-
-  window.opener.setObject(oObject);
+  
+  var oSelector = window.opener.ObjectSelector;
+  
+  if (oSelector) {
+    oSelector.set(oObject);
+  }
+  else {
+    window.opener.setObject(oObject);
+  }
   window.close();
 }
 </script>

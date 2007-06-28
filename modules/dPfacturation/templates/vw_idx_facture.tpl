@@ -1,22 +1,12 @@
+{{ mb_include_script module="system" script="object_selector" }}
+
+
 <script type="text/javascript">
-
-function popObject() {
-  var url = new Url;
-  url.setModuleAction("system", "object_selector");
-  url.addParam("selClass","CSejour");
-  url.popup(600, 300, "Object Selector");
-}
-
-function setObject(oObject){
-	var oForm = document.editfacture;
-	oForm.sejour_id.value = oObject.id;
-	oForm._sejour_view.value = oObject.view;	
-	oForm.sejour_id.onchange();
-}
 
 function pageMain() {
   regFieldCalendar("editfacture", "date");
 }
+
 </script>
 
 <table class="main">
@@ -53,6 +43,7 @@ function pageMain() {
       <input type="hidden" name="dosql" value="do_facture_aed" />
       <input type="hidden" name="facture_id" value="{{$facture->_id}}" />
       <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="_class_name" value="CSejour" />
       <table class="form">
         <tr>
           {{if $facture->_id}}
@@ -74,11 +65,11 @@ function pageMain() {
             <td>
             	{{mb_field object=$facture field="sejour_id" hidden=true}}
 	            {{if $facture->sejour_id}}
-    	        <input type="text" size="30" readonly="readonly" ondblclick="popObject()" name="_sejour_view" value="{{$facture->_ref_sejour->_view|stripslashes}}" />
+    	        <input type="text" size="30" readonly="readonly" ondblclick="initObject()" name="_sejour_view" value="{{$facture->_ref_sejour->_view|stripslashes}}" />
     	        {{else}}
-    	        <input type="text" size="30" readonly="readonly" ondblclick="popObject()" name="_sejour_view" value="" />
+    	        <input type="text" size="30" readonly="readonly" ondblclick="initObject()" name="_sejour_view" value="" />
     	        {{/if}}
-        	  	<button type="button" onclick="popObject()" class="search">Rechercher</button>
+        	  	<button type="button" onclick="initObject()" class="search">Rechercher</button>       	  	
         	</td>
         </tr>
         <tr>
@@ -105,3 +96,16 @@ function pageMain() {
     </td>
   </tr>
  </table>
+
+ 
+<script type="text/javascript">
+
+function initObject(){
+  var oForm = document.editfacture;
+  ObjectSelector.eId = oForm.sejour_id;
+  ObjectSelector.eView = oForm._sejour_view;
+  ObjectSelector.eClass = oForm._class_name;  
+  ObjectSelector.pop();
+}
+
+</script> 
