@@ -11,7 +11,9 @@
 global $AppUI, $performance, $shm;
 
 // Complete autoload with eZC
-@include "ezc/Base/base.php"; 
+@include "ezc/Base/base.php";
+// Prevents crazy jpGraph from displaying previously escaped error
+$php_errormsg = null;
 
 $performance["autoload"] = 0;
 
