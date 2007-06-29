@@ -49,6 +49,7 @@ if($typeVue == 2) {
   $smarty->assign("type"      , $type);
 }
 
+$smarty->assign("user_id", $AppUI->user_id);
 $smarty->assign("listTemps", $listTemps);
 $smarty->assign("total", $total);
 $smarty->assign("typeVue", $typeVue);

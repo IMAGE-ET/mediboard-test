@@ -1,68 +1,7 @@
 <!-- $Id$ -->
 
+
 <script type="text/javascript">
-
-function popCode(type) {
-  var oElement = null;
-  
-  if (type == "ccam") {
-    oElement = document.editOp._codeCCAM;
-  }
-  
-  if (type == "cim10") {
-    oElement = document.editSejour.DP;
-  }
-
-  var url = new Url();
-  url.setModuleAction("dPplanningOp", "code_selector");
-  url.addElement(document.editOp.chir_id, "chir");
-  url.addParam("type", type)
-  url.popup(700, 500, type);
-}
-
-
-
-
-function setCodeCCAM(sCode, type ) {
-  if (!sCode) {
-    return;
-  }
-  
-  var oElement = null;
-  
-  if (type == "ccam") {
-    oElement = document.editOp._codeCCAM;
-  }
-  
-  oElement.value = sCode;
-  
-  if (oElement.onblur) {
-    oElement.onblur();
-  }
-}
-
-
-function setCode(sCode, type ) {
-  if (!sCode) {
-    return;
-  }
-  
-  var oElement = null;
-  
-  if (type == "ccam") {
-    oElement = document.editOp._codeCCAM;
-  }
-  
-  if (type == "cim10") {
-    oElement = document.editSejour.DP;
-  }
-  
-  oElement.value = sCode;
-  
-  if (oElement.onblur) {
-    oElement.onblur();
-  }
-}
 
 function popProtocole() {
   var url = new Url;

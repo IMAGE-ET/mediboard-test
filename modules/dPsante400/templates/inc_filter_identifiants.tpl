@@ -31,10 +31,17 @@
     <td>{{mb_label object=$filter field="object_id"}}</td>
     <td>
       <input name="object_id" class="ref" value="{{$filter->object_id}}" />
-      <button class="search" type="button" onclick="initObject1()">Chercher</button>
+      <button class="search" type="button" onclick="initObjectFilter()">Chercher</button>
     </td>
   </tr>
-  
+  <script type="text/javascript">
+    function initObjectFilter(){
+      var oForm = document.filterFrm;
+      ObjectSelector.eId = oForm.object_id;
+      ObjectSelector.eClass = oForm.object_class;  
+      ObjectSelector.pop();
+    }
+  </script>
   <tr>
     <td>{{mb_label object=$filter field="id400"}}</td>
     <td>{{mb_field object=$filter field="id400" canNull="true"}}</td>
@@ -51,15 +58,4 @@
 
 </form>
 
-<script type="text/javascript">
-
-function initObject1(){
-  var oForm = document.filterFrm;
-  
-  ObjectSelector.eId = oForm.object_id;
-  ObjectSelector.eClass = oForm.object_class;  
-  ObjectSelector.pop();
-}
-
-</script>
 

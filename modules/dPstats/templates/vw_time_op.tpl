@@ -1,5 +1,8 @@
+{{mb_include_script module="dPplanningOp" script="ccam_selector"}}
+
 <script>
 
+/*
 function popCode(type) {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "code_selector");
@@ -12,6 +15,7 @@ function setCodeCCAM(code, type) {
   var oField = oForm.codeCCAM;
   oField.value = code;
 }
+*/
 
 </script>
 
@@ -20,6 +24,8 @@ function setCodeCCAM(code, type) {
     <td>
       <form name="bloc" action="index.php" method="get">
       <input type="hidden" name="m" value="dPstats" />
+      <input type="hidden" name="_chir" value="{{$user_id}}" />
+      <input type="hidden" name="_class_name" value="" />
       <table class="form">
         <tr>
           <th colspan="2" class="category">
@@ -42,7 +48,18 @@ function setCodeCCAM(code, type) {
           <th><label for="codeCCAM" title="Acte CCAM">Acte CCAM</label></th>
           <td>
             <input type="text" name="codeCCAM" value="{{$codeCCAM|stripslashes}}" />
-            <button type="button" class="search" onclick="popCode('ccam')">Sélectionner un code</button>
+            <button type="button" class="search" onclick="CCAMSelector.init()">Sélectionner un code</button>
+            
+            <script type="text/javascript">
+              CCAMSelector.init = function(){
+                var oForm = document.bloc;
+                this.eView = oForm.codeCCAM;
+                this.eChir = oForm._chir;
+                this.eClass = oForm._class_name;
+                this.pop();
+              }
+            </script>
+            
           </td>
         </tr>
         <tr>

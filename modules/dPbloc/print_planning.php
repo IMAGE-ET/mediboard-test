@@ -47,6 +47,7 @@ $listSalles = $listSalles->loadList(null, $order);
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("chir"     , $AppUI->user_id);
 $smarty->assign("filter"  , $filter);
 $smarty->assign("now"       , $now);
 $smarty->assign("tomorrow"  , $tomorrow);

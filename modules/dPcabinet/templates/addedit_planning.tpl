@@ -88,9 +88,6 @@ function pageMain() {
   oForm.chir_id.value = {{$plageConsult->chir_id}};
   popRDV();
   {{/if}}
-
-  PatSelector.eId = oForm.patient_id;
-  PatSelector.eView = oForm._pat_name;
 }
 
 
@@ -167,13 +164,20 @@ function checkFormRDV(oForm){
 
         <tr id="viewPatient" {{if $consult->consultation_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
           <th>
-            {{mb_field object=$pat field="patient_id" hidden=1 prop="" ondblclick="PatSelector.pop()"}}
+            {{mb_field object=$pat field="patient_id" hidden=1 prop="" ondblclick="PatSelector.init()"}}
             {{mb_label object=$consult field="patient_id"}}
           </th>
           <td class="readonly"><input type="text" name="_pat_name" size="20" value="{{$pat->_view}}" readonly="readonly"  ondblclick="popPat()" /></td>
-          <td class="button"><button class="search" type="button" onclick="PatSelector.pop()">Rechercher un patient</button></td>
+          <td class="button"><button class="search" type="button" onclick="PatSelector.init()">Rechercher un patient</button></td>
         </tr>
-        
+        <script type="text/javascript">
+          PatSelector.init = function(){
+            var oForm = document.editFrm;
+            this.eId = oForm.patient_id;
+            this.eView = oForm._pat_name;
+            this.pop();
+          }
+        </script>        
         <tr>
           <th>
             {{mb_label object=$consult field="motif"}}<br />

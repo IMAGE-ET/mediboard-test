@@ -1,5 +1,5 @@
 <!-- $Id: $ -->
-
+{{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 <form name="editOp" action="?m={{$m}}" method="post" onsubmit="return checkFormOperation()">
 
 <input type="hidden" name="dosql" value="do_planning_aed" />
@@ -11,6 +11,8 @@
 {{mb_field object=$op field="rank" hidden=1 prop=""}}
 <input type="hidden" name="annulee" value="{{$op->annulee|default:"0"}}" />
 <input type="hidden" name="_group_id" value="{{$sejour->group_id}}" />
+<input type="hidden" name="_class_name" value="COperation" />
+
      
 <table class="form">
   <tr>
@@ -56,13 +58,23 @@
       {{mb_label object=$op field="codes_ccam" defaultFor="_codeCCAM"}}
     </th>
     <td>
-      <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" onblur="oCcamField.add(this.form._codeCCAM.value,true)" />
+      <input type="text" name="_codeCCAM" ondblclick="CCAMSelector.init()" size="10" value="" onblur="oCcamField.add(this.form._codeCCAM.value,true)" />
       <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
     </td>
     <td class="button">
-      <button type="button" class="search" onclick="popCode('ccam')">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
+      <button type="button" class="search" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
     </td>
   </tr>
+  
+  <script type="text/javascript">
+    CCAMSelector.init = function(){
+      var oForm = document.editOp;
+      this.eView = oForm._codeCCAM;
+      this.eChir = oForm.chir_id;
+      this.eClass = oForm._class_name;
+      this.pop();
+    }
+  </script>
 
   <tr>
     <th>

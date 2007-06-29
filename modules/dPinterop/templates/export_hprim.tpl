@@ -21,13 +21,6 @@ function choosePreselection(oSelect) {
 }
 
 
-function initObject(){
-  var oForm = document.formEdit;
-  ObjectSelector.eId = oForm.mb_operation_id;
-  ObjectSelector.eView = oForm._operation_view;
-  ObjectSelector.eClass = oForm._class_name;  
-  ObjectSelector.pop();
-}
 
 </script>
 
@@ -182,12 +175,21 @@ function initObject(){
        <td>
            <input type="hidden" class="notNull ref class|COperation" name="mb_operation_id" value="{{$mbOp->_id}}"/>
 	       {{if $mbOp->_id}}
-    	   <input type="text" size="30" readonly="readonly" ondblclick="initObject()" name="_operation_view" value="{{$mbOp->_view|stripslashes}}" />
+    	   <input type="text" size="30" readonly="readonly" ondblclick="ObjectSelector.init()" name="_operation_view" value="{{$mbOp->_view|stripslashes}}" />
     	   {{else}}
-    	   <input type="text" size="30" readonly="readonly" ondblclick="initObject()" name="_operation_view" value="" />
+    	   <input type="text" size="30" readonly="readonly" ondblclick="ObjectSelector.init()" name="_operation_view" value="" />
     	   {{/if}}
-           <button type="button" onclick="initObject()" class="search">Rechercher</button>
+           <button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>
        </td>
+       <script type="text/javascript">
+         ObjectSelector.init = function(){
+           var oForm = document.formEdit;
+           this.eId = oForm.mb_operation_id;
+           this.eView = oForm._operation_view;
+           this.eClass = oForm._class_name;  
+           this.pop();
+         }
+       </script>
   </tr>
   {{if $mbOp->operation_id}}
   <tr>

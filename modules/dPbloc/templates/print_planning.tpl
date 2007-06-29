@@ -1,4 +1,6 @@
 <!-- $Id$ -->
+{{mb_include_script module="dPplanningOp" script="ccam_selector"}}
+
 
 <script type="text/javascript">
 function checkFormPrint() {
@@ -11,19 +13,6 @@ function checkFormPrint() {
   popPlanning();
 }
 
-function popCode(type) {
-  var url = new Url;
-  url.setModuleAction("dPplanningOp", "code_selector");
-  url.addElement(document.paramFrm.chir);
-  url.addParam("type", type);
-  url.popup(600, 500, type);
-}
-
-function setCodeCCAM(code, type) {
-  var oForm = document.paramFrm;
-  var oField = oForm.code_ccam;
-  oField.value = code;
-}
 
 function popPlanning() {
   form = document.paramFrm;
@@ -64,11 +53,11 @@ function pageMain() {
 
 
 <form name="paramFrm" action="?m=dPbloc" method="post" onsubmit="return checkFormPrint()">
-
+<input type="hidden" name="_class_name" value="COperation" />
+<input type="hidden" name="_chir" value="{{$chir}}" />
 <table class="main">
   <tr>
     <td>
-
       <table class="form">
         <tr><th class="category" colspan="3">Choix de la période</th></tr>
         <tr>
@@ -96,7 +85,18 @@ function pageMain() {
         <tr>
           <td>{{mb_label object=$filter field="_codes_ccam"}}</td>
           <td><input type="text" name="code_ccam" size="10" value="" /></td>
-          <td class="button"><button type="button" class="search" onclick="popCode('ccam')">sélectionner un code</button></td>
+          <td class="button"><button type="button" class="search" onclick="CCAMSelector.init()">sélectionner un code</button></td>
+          
+          <script type="text/javascript">
+          CCAMSelector.init = function(){
+            var oForm = document.paramFrm;
+            this.eClass = oForm._class_name;
+            this.eChir = oForm._chir;
+            this.eView = oForm.code_ccam;
+            this.pop();
+          }
+          </script>
+          
         </tr>
       </table>
 

@@ -41,9 +41,18 @@ function cancelObject(oObject) {
       <button type="button" class="cancel" onclick="cancelObject()">
         Pas d'objet
       </button>
-      <button type="button" class="search" onclick="initObject()">
+      <button type="button" class="search" onclick="ObjectSelector.init()">
         Chercher un objet
       </button>
+      <script language="Javascript" type="text/javascript">
+        ObjectSelector.init = function(){  
+          var oForm = document.editPermObj;
+          this.eId = oForm.object_id;
+          this.eView = oForm._object_view;
+          this.eClass = oForm.object_class;
+          this.pop();
+        } 
+</script>
     </td>
     <td class="button">
       Permission :
@@ -102,15 +111,3 @@ function cancelObject(oObject) {
   </tr>
   {{/foreach}}
 </table>
-
-<script language="Javascript" type="text/javascript">
-  
-function initObject(){
-  var oForm = document.editPermObj;
-  ObjectSelector.eId = oForm.object_id;
-  ObjectSelector.eView = oForm._object_view;
-  ObjectSelector.eClass = oForm.object_class;
-  ObjectSelector.pop();
-}
-  
-</script>

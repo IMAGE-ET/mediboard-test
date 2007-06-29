@@ -17,6 +17,7 @@ require_once($AppUI->getModuleClass("dPsalleOp", "acteccam"));
 
 $list = array();
 $list2 = array();
+$fusion = array();
 
 $type = mbGetValueFromGet("type", 0 );
 $chir = mbGetValueFromGet("chir", 0 );
@@ -59,6 +60,8 @@ switch($type) {
   }
 }
 
+
+if($type=="ccam"){
   //Appel de la fonction listant les codes les plus utilisés pour un praticien 
   $actes = new CActeCCAM();
   $codes = $actes->getFavoris($chir,$object_class, $view);
@@ -68,7 +71,7 @@ switch($type) {
     $list2[$value["code_acte"]]["codeccam"]->loadLite();
     $list2[$value["code_acte"]]["codeccam"]->occ = $value["nb_acte"];;
   }
- 
+
   // Fusion des 2 tableaux
   $fusion = $list2;
     
@@ -83,7 +86,7 @@ switch($type) {
   if($view=="alpha") {
     sort($fusion);
   }
-
+}
 // Création du template
 $smarty = new CSmartyDP();
 

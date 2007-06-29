@@ -4,15 +4,6 @@
 
 <script type="text/javascript">
 
-function initObject(){
-  var oForm = document.FrmClass;
-  ObjectSelector.eId = oForm.file_id;
-  ObjectSelector.eView = oForm.selView;
-  ObjectSelector.eClass = oForm.selClass;  
-  ObjectSelector.pop();
-}
-
-
 function pageMain() {
   initAccord(true);
 }
@@ -29,15 +20,24 @@ function pageMain() {
         <tr>
           <td  class="readonly">
             <label for="selClass" title="Type de l'objet courant">Type</label>
-            <input type="text" readonly="readonly" ondblclick="initObject()" name="selClass" value="{{$selClass|stripslashes}}" />
+            <input type="text" readonly="readonly" ondblclick="ObjectSelector.init()" name="selClass" value="{{$selClass|stripslashes}}" />
           </td>
           <td class="readonly">
             <label title="Nom de l'objet sélectionné">Nom</label>
-            <input type="text" size="50" readonly="readonly" ondblclick="initObject()" name="selView" value="{{$selView|stripslashes}}" />
-            <button type="button" onclick="initObject()" class="search">Rechercher</button>
+            <input type="text" size="50" readonly="readonly" ondblclick="ObjectSelector.init()" name="selView" value="{{$selView|stripslashes}}" />
+            <button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>
             <input type="hidden" name="selKey" value="{{$selKey|stripslashes}}" />
             <input type="hidden" name="keywords" value="{{$keywords|stripslashes}}" />
           </td>
+          <script type="text/javascript">
+            ObjectSelector.init = function(){
+              var oForm = document.FrmClass;
+              this.eId = oForm.file_id;
+              this.eView = oForm.selView;
+              this.eClass = oForm.selClass;  
+              this.pop();
+            }
+         </script>
           {{if $selKey}}
           <td>
             <select name="typeVue" onchange="if (this.form.onsubmit()) { this.form.submit() };">

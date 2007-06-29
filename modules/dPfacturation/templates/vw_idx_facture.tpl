@@ -1,4 +1,4 @@
-{{ mb_include_script module="system" script="object_selector" }}
+{{mb_include_script module="system" script="object_selector"}}
 
 
 <script type="text/javascript">
@@ -65,12 +65,21 @@ function pageMain() {
             <td>
             	{{mb_field object=$facture field="sejour_id" hidden=true}}
 	            {{if $facture->sejour_id}}
-    	        <input type="text" size="30" readonly="readonly" ondblclick="initObject()" name="_sejour_view" value="{{$facture->_ref_sejour->_view|stripslashes}}" />
+    	        <input type="text" size="30" readonly="readonly" ondblclick="ObjectSelector.init()" name="_sejour_view" value="{{$facture->_ref_sejour->_view|stripslashes}}" />
     	        {{else}}
-    	        <input type="text" size="30" readonly="readonly" ondblclick="initObject()" name="_sejour_view" value="" />
+    	        <input type="text" size="30" readonly="readonly" ondblclick="ObjectSelector.init()" name="_sejour_view" value="" />
     	        {{/if}}
-        	  	<button type="button" onclick="initObject()" class="search">Rechercher</button>       	  	
+        	  	<button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>       	  	
         	</td>
+        	<script type="text/javascript">
+              ObjectSelector.init = function(){
+                var oForm = document.editfacture;
+                this.eId = oForm.sejour_id;
+                this.eView = oForm._sejour_view;
+                this.eClass = oForm._class_name;  
+                this.pop();
+              }
+            </script> 
         </tr>
         <tr>
           <td class="button" colspan="2">
@@ -98,14 +107,3 @@ function pageMain() {
  </table>
 
  
-<script type="text/javascript">
-
-function initObject(){
-  var oForm = document.editfacture;
-  ObjectSelector.eId = oForm.sejour_id;
-  ObjectSelector.eView = oForm._sejour_view;
-  ObjectSelector.eClass = oForm._class_name;  
-  ObjectSelector.pop();
-}
-
-</script> 

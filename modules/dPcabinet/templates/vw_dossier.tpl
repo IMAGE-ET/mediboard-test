@@ -8,10 +8,6 @@
 function pageMain() {
   PairEffect.initGroup("consEffect", { bStoreInCookie: false });
   PairEffect.initGroup("operEffect", { bStoreInCookie: false });
-   
-  var oForm = document.patFrm;
-  PatSelector.eId = oForm.patSel;
-  PatSelector.eView = oForm.patNom;
 }
 
 
@@ -48,11 +44,19 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           <td class="readonly">
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="patSel" value="{{$patient->patient_id}}" onchange="this.form.submit()" />
-            <input type="text" size="40" readonly="readonly" ondblclick="PatSelector.pop()" name="patNom" value="{{$patient->_view}}" />
+            <input type="text" size="40" readonly="readonly" ondblclick="PatSelector.init()" name="patNom" value="{{$patient->_view}}" />
           </td>
           <td class="button">
-            <button class="search" type="button" onclick="PatSelector.pop()">Chercher</button>
+            <button class="search" type="button" onclick="PatSelector.init()">Chercher</button>
           </td>
+          <script type="text/javascript">
+            PatSelector.init = function(){
+              var oForm = document.patFrm;
+              this.eId = oForm.patSel;
+              this.eView = oForm.patNom;
+              this.pop()
+            }
+          </script>
         </tr>
       </table>
       </form>

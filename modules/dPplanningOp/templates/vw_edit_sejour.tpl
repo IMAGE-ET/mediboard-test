@@ -1,30 +1,8 @@
 <!-- $Id: vw_addedit_planning.tpl 117 2006-06-13 12:54:06Z Rhum1 $ -->
 
+          
+          
 <script type="text/javascript">
-
-function popCode(type) {
-  var url = new Url();
-  url.setModuleAction("dPplanningOp", "code_selector");
-  url.addElement(document.editSejour.praticien_id, "chir");
-  url.addParam("type", type)
-  url.popup(600, 500, type);
-}
-
-function setCode(sCode, type ) {
-  if (!sCode) {
-    return;
-  }
-  
-  var oForm = null
-  var oField = null;
-  
-  if (type == "cim10") {
-    oForm = document.editSejour;
-    oField = oForm.DP;
-  }
-  
-  oField.value = sCode;
-}
 
 function pageMain() {
   incFormSejourMain();

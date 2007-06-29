@@ -1,13 +1,5 @@
 {{mb_include_script module="dPpatients" script="pat_selector"}}
 
-<script type="text/javascript">
-function pageMain() {
-  var oForm = document.patFrm;
-  PatSelector.eId = oForm.patient_id;
-  PatSelector.eView = oForm._view;
-}
-</script>
-
 <table class="main">
   <tr>
     <td class="halfPane">
@@ -21,8 +13,17 @@ function pageMain() {
             <input type="text" readonly="readonly" name="_view" value="{{$patient->_view}}" />
           </td>
           <td class="button">
-            <button class="search" type="button" onclick="PatSelector.pop()">Chercher</button>
+            <button class="search" type="button" onclick="PatSelector.init()">Chercher</button>
           </td>
+          <script type="text/javascript">
+            PatSelector.init = function(){
+              var oForm = document.patFrm;
+              this.eId = oForm.patient_id;
+              this.eView = oForm._view;
+              this.pop();
+            }
+          </script>
+
         </tr>
       </table>
       </form>

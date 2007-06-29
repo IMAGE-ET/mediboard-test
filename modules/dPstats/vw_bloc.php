@@ -50,6 +50,7 @@ $listDisciplines = $listDisciplines->loadUsedDisciplines();
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("user_id"                 , $AppUI->user_id);
 $smarty->assign("filter"       			  , $filter       );
 $smarty->assign("map_graph_interventions" , $map_graph_interventions);
 $smarty->assign("listPrats"      		  , $listPrats      );

@@ -1,5 +1,12 @@
+{{mb_include_script module="dPplanningOp" script="ccam_selector"}}
+
+
+
+
+
 <script type="text/javascript">
 
+/*
 function popCodeCCAM() {
   var url = new Url();
   url.setModuleAction("dPplanningOp", "code_selector");
@@ -13,6 +20,7 @@ function setCodeCCAM( key, type ) {
     oForm.codes_ccam.value = key;
   }
 }
+*/
 
 function zoomGraphIntervention(date){
   url = new Url();
@@ -39,6 +47,8 @@ function pageMain() {
     <td>
       <form name="bloc" action="index.php" method="get" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPstats" />
+      <input type="hidden" name="_chir" value="{{$user_id}}" />
+      <input type="hidden" name="_class_name" value="" />
       <table class="form">
         <tr>
           <th colspan="4" class="category">Activité du bloc opératoire</th>
@@ -77,9 +87,19 @@ function pageMain() {
           <td>{{mb_label object=$filter field="codes_ccam"}}</td>
           <td>
             {{mb_field object=$filter field="codes_ccam" canNull="true" size="8"}}
-            <button class="search" type="button" onclick="popCodeCCAM()">Rechercher</button>
-          </td>
+            <button class="search" type="button" onclick="CCAMSelector.init()">Rechercher</button>
           
+            <script type="text/javascript">
+              CCAMSelector.init = function(){
+                var oForm = document.bloc;
+                this.eView = oForm.codes_ccam;
+                this.eChir = oForm._chir;
+                this.eClass = oForm._class_name;
+                this.pop();
+              }
+            </script>
+            
+          </td>
           <td>{{mb_label object=$filter field="_specialite"}}</td>
           <td>
             <select name="discipline_id">

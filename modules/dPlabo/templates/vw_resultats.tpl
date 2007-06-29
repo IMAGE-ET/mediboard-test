@@ -36,11 +36,6 @@ function pageMain() {
   ViewPort.SetAvlHeight("resultats-internes", 0.5);
   ViewPort.SetAvlHeight("resultats-externes", 1);
   IMeds.viewSejour({{$patient->_id}}, "resultats-externes");
-  
-  var oForm = document.Patient;
-  PatSelector.eId = oForm.patient_id;
-  PatSelector.eView = oForm._view;
-  
 }
 
 </script>
@@ -62,8 +57,16 @@ function pageMain() {
           </th>
           <td class="readonly">
             <input type="text" readonly="readonly" name="_view" value="{{$patient->_view}}" />
-            <button class="search" type="button" onclick="PatSelector.pop()">Chercher</button>
+            <button class="search" type="button" onclick="PatSelector.init()">Chercher</button>
           </td>
+          <script type="text/javascript">
+            PatSelector.init = function(){
+              var oForm = document.Patient;
+              this.eId = oForm.patient_id;
+              this.eView = oForm._view;
+              this.pop();
+            }
+          </script>
         </tr>
       </table>
 

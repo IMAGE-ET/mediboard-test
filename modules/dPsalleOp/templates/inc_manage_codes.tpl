@@ -5,6 +5,8 @@
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="codes_ccam" value="{{$subject->codes_ccam}}" />
   <input type="submit" disabled="disabled" style="display:none;"/>
+  <input type="hidden" name="_chir" value="{{$subject->_praticien_id}}" />
+  <input type="hidden" name="_class_name" value="{{$subject->_class_name}}" />
   <table class="form">
     
     
@@ -26,8 +28,18 @@
       
       
       <td colspan="2" style="vertical-align:middle;">
-        <button class="search" type="button" onclick="popCodeCCAM({{$subject->_praticien_id}})">Rechercher</button>
+        <button class="search" type="button" onclick="CCAMSelector.init()">Rechercher</button>
      
+        <script type="text/javascript">   
+          CCAMSelector.init = function(){
+            var oForm = document.manageCodes;
+            this.eView = oForm._newCode;
+            this.eClass = oForm._class_name;
+            this.eChir = oForm._chir;
+            this.pop();
+          }
+        </script>
+        
         <input type="text" size="7" name="_newCode" />
         <button class="tick" type="button" onclick="addCode({{$subject->_id}},{{$subject->_praticien_id}})">Ajouter</button>        
       </td>

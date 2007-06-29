@@ -1,4 +1,6 @@
 <!-- $Id: vw_addedit_planning.tpl 110 2006-06-11 20:19:38Z Rhum1 $ -->
+{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 
 <script type="text/javascript">
 
@@ -108,22 +110,6 @@ function checkDuree() {
   return true
 }
 
-function popCode(type) {
-  var url = new Url();
-  url.setModuleAction("dPplanningOp", "code_selector");
-  url.addElement(document.editFrm.chir_id, "chir");
-  url.addParam("type", type)
-  url.popup(600, 500, type);
-}
-
-function setCodeCCAM( key, type ) {
-  if (key) {
-    var form = document.editFrm;
-    var field = form.DP;
-    if (type == 'ccam')  field = form._codeCCAM;
-    field.value = key;
-  }
-}
 
 function pageMain() {
   refreshListCCAM();
@@ -140,6 +126,8 @@ function pageMain() {
 
 <input type="hidden" name="dosql" value="do_protocole_aed" />
 <input type="hidden" name="del" value="0" />
+<input type="hidden" name="_class_name" value="COperation" />
+
 {{mb_field object=$protocole field="protocole_id" hidden=1 prop=""}}
 
 <table class="main" style="margin: 4px; border-spacing: 0px;">
@@ -213,11 +201,24 @@ function pageMain() {
             {{mb_label object=$protocole field="codes_ccam"}}
           </th>
           <td>
-            <input type="text" name="_codeCCAM" ondblclick="popCode('ccam')" size="10" value="" />
+            <input type="text" name="_codeCCAM" ondblclick="CCAMSelector.init()" size="10" value="" />
             <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
             
           </td>
-          <td class="button"><button class="search" type="button" onclick="popCode('ccam')">Choisir un code</button></td>
+          <td class="button"><button class="search" type="button" onclick="CCAMSelector.init()">Choisir un code</button></td>
+        
+          <script type="text/javascript">
+            CCAMSelector.init = function(){
+              var oForm = document.editFrm;
+              this.eView = oForm._codeCCAM;
+              this.eChir = oForm.chir_id;
+              this.eClass = oForm._class_name;
+              this.pop();
+            }
+          </script> 
+  
+  
+  
         </tr>
         <tr>
           <th>
@@ -264,7 +265,15 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$protocole field="DP"}}</th>
           <td>{{mb_field object=$protocole field="DP" size="10"}}</td>
-          <td class="button"><button type="button" class="search" onclick="popCode('cim10')">Choisir un code</button></td>
+          <td class="button"><button type="button" class="search" onclick="CIM10Selector.init()">Choisir un code</button></td>
+          <script type="text/javascript">
+            CIM10Selector.init = function(){
+              var oForm = document.editFrm;
+              this.eView = oForm.DP;
+              this.eChir = oForm.chir_id;
+              this.pop();
+            }
+          </script>
         </tr>
         <tr>
           <th>{{mb_label object=$protocole field="duree_hospi"}}</th>

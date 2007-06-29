@@ -83,11 +83,6 @@ function submitAllForms(operation_id) {
 
 function pageMain() {
   PairEffect.initGroup("effectSejour");
-  
-  var oForm = document.patFrm;
-  PatSelector.eId = oForm.pat_id;
-  PatSelector.eView = oForm.patNom;
- 
 }
 
 function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
@@ -117,8 +112,18 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
           </td>
           <td class="button">
-            <button class="search" type="button" onclick="PatSelector.pop()">Chercher</button>
+            <button class="search" type="button" onclick="PatSelector.init()">Chercher</button>
           </td>
+          <script type="text/javascript">
+          PatSelector.init = function(){
+            var oForm = document.patFrm;
+            this.eId = oForm.pat_id;
+            this.eView = oForm.patNom;
+            this.pop();
+          }
+          </script>
+ 
+ 
         </tr>
       </table>
       </form>

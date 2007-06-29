@@ -1,5 +1,6 @@
 <!-- $Id: $ -->
 {{mb_include_script module="dPpatients" script="pat_selector"}}
+{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 
 <form name="editSejour" action="?m={{$m}}" method="post" onsubmit="if(checkDureeHospi()){return checkForm(this);}else{return false;}">
 
@@ -94,22 +95,40 @@
 
 <tr>
   <th>
-    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.pop()" value="{{$patient->patient_id}}" onchange="bChangePat = 1;" />
+    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="bChangePat = 1;" />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td class="readonly">
-  	<input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" ondblclick="PatSelector.pop()" readonly="readonly" />
+  	<input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" ondblclick="PatSelector.init()" readonly="readonly" />
   </td>
   <td colspan="2" class="button">
-  	<button type="button" class="search" onclick="PatSelector.pop()">Choisir un patient</button>
+  	<button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
   </td>
+  
+  <script type="text/javascript">
+  PatSelector.init = function(){
+    var oForm = document.editSejour;
+    this.eId = oForm.patient_id;
+    this.eView = oForm._patient_view;
+    this.pop();
+  }
+  </script>
 </tr>
 
 <tr>
   <th>{{mb_label object=$sejour field="DP"}}</th>
   <td>{{mb_field object=$sejour field="DP" size="10"}}</td>
-  <td colspan="2" class="button"><button type="button" class="search" onclick="popCode('cim10')">{{tr}}button-CCodeCIM10-choix{{/tr}}</button></td>
+  <td colspan="2" class="button"><button type="button" class="search" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button></td>
 </tr>
+
+<script type="text/javascript">
+  CIM10Selector.init = function(){
+    var oForm = document.editSejour;
+    this.eView = oForm.DP;
+    this.eChir = oForm.praticien_id;
+    this.pop();
+  }
+</script>
 
 <tr>
   <th class="category" colspan="4">Admission</th>
@@ -313,9 +332,4 @@ prepareForm(document.editSejour);
 regFieldCalendar("editSejour", "_date_entree_prevue");
 regFieldCalendar("editSejour", "_date_sortie_prevue");
 removePlageOp(false);
-
-var oForm = document.editSejour;
-PatSelector.eId = oForm.patient_id;
-PatSelector.eView = oForm._patient_view;
-
 </script>

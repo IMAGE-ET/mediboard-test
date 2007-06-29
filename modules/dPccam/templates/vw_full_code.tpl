@@ -3,7 +3,7 @@
 <script type="text/javascript">
 
 function selectCode(code) {
-  window.opener.setCodeCCAM(code, "ccam");
+  window.opener.CCAMSelector.set(code, "ccam");
   window.close();
 }
 

@@ -1,12 +1,14 @@
 <script type="text/javascript">
 
 function setClose(code, type) {
-  if (type == "ccam") {
-    window.opener.setCodeCCAM(code, type);
+  if(type=="ccam"){
+  var oSelector = window.opener.CCAMSelector;
   }
-  if (type == "cim10") {
-    window.opener.setCode(code, type);
+  if(type=="cim10"){
+  var oSelector = window.opener.CIM10Selector;
   }
+  
+  oSelector.set(code, type);
   window.close();
 }
 
@@ -39,7 +41,8 @@ function view_() {
 </script>
 
 
-<table class="selectCode">  
+<table class="selectCode">
+{{if $type=="ccam"}}  
   <tr>
   	<th>Favoris disponibles</th>
     <td>
@@ -54,20 +57,16 @@ function view_() {
   	  </form>
   	</td>
   </tr>
- 
   <tr>
   {{foreach from=$fusion item=curr_code key=curr_key name=fusion}}
     <td>
       <strong><span style="float:left">{{$curr_code.codeccam->code}}</span>
-      
       {{if $curr_code.codeccam->occ==0}}
       <span style="float:right">Favoris</span>
       {{else}}
       <span style="float:right">{{$curr_code.codeccam->occ}} acte(s)</span>
       {{/if}}
-      
       </strong>
-      
       <br />
       {{$curr_code.codeccam->libelleLong}}
       <br />
@@ -75,16 +74,43 @@ function view_() {
         {{tr}}Select{{/tr}}
       </button>
     </td>  
-  
   {{if $smarty.foreach.fusion.index % 3 == 2}}
   </tr><tr>
   {{/if}}
-  
   {{/foreach}}
   </tr>
+</table>
+{{/if}}
+
+{{if $type=="cim10"}}
+  <tr>
+  	<th>Favoris disponibles</th>
+  </tr>
   
+  {{if !$list}}
+  <tr>
+  	<td>{{tr}}CFavoriCCAM.none{{/tr}}</td>
+  </tr>
+  {{/if}}
+  <tr>
+  {{foreach from=$list item=curr_code key=curr_key}}
+    <td>
+      <strong>{{$curr_code->code}}</strong>
+      <br />
+      {{$curr_code->libelleLong}}
+      <br />
+      <button class="tick" type="button" onclick="setClose('{{$curr_code->code}}', '{{$type}}')">
+        {{tr}}Select{{/tr}}
+      </button>
+    </td>
+  {{if ($curr_key+1) is div by 3}}
+  </tr><tr>
+  {{/if}}
+  {{/foreach}}
+  </tr>
 </table>
 
+{{/if}}
 
 <table class="form">
   <tr>
