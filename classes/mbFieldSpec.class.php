@@ -54,7 +54,7 @@ class CMbFieldSpec {
   function getValue($object, $smarty, $params = null) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    return $propValue;
+    return htmlspecialchars($propValue);
   }
   
   function checkParams($object){

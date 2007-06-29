@@ -10,11 +10,6 @@
 require_once("./classes/mbFieldSpec.class.php");
 
 class CPctSpec extends CMbFieldSpec {
-  function getValue($object, $smarty, $params = null) {
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
-    return $propValue;
-  }
   
   function getSpecType() {
     return("pct");

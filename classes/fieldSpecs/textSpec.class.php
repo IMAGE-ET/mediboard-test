@@ -14,7 +14,7 @@ class CTextSpec extends CMbFieldSpec {
   function getValue($object, $smarty, $params = null) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    return nl2br($propValue);
+    return nl2br(htmlspecialchars($propValue));
   }
   
   function getSpecType() {
