@@ -6,22 +6,6 @@
 
 <script type="text/javascript">
 
-/*
-function popCodeCCAM() {
-  var url = new Url();
-  url.setModuleAction("dPplanningOp", "code_selector");
-  url.addParam("type", "ccam");
-  url.popup(600, 500, "ccam");
-}
-
-function setCodeCCAM( key, type ) {
-  if (key) {
-    var oForm = document.bloc;
-    oForm.codes_ccam.value = key;
-  }
-}
-*/
-
 function zoomGraphIntervention(date){
   url = new Url();
   url.setModuleAction("dPstats", "graph_activite_zoom");

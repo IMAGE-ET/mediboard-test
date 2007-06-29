@@ -1,6 +1,8 @@
 <!-- $Id$ -->
 
 {{mb_include_script module="dPpatients" script="pat_selector"}}
+{{mb_include_script module="dPcabinet" script="plage_selector"}}
+
 
 <script type="text/javascript">
 
@@ -41,6 +43,8 @@ function ClearRDV(){
   f.heure.value = "";
 }
 
+
+/*
 function popRDV() {
   var oForm = document.editFrm;
   var url = new Url;
@@ -50,6 +54,8 @@ function popRDV() {
   url.popup(800, 600, "Plage");
 }
 
+
+ 
 function setRDV(heure, id, date, freq, chirid, chirname ) {
   var oForm = document.editFrm;
   oForm.plageconsult_id.value = id;
@@ -59,6 +65,8 @@ function setRDV(heure, id, date, freq, chirid, chirname ) {
   oForm.duree.value = freq;
   oForm.chir_id.value = chirid;
 }
+*/
+
 
 function annuleConsult(oForm, etat) {
   if(etat) {
@@ -167,7 +175,7 @@ function checkFormRDV(oForm){
             {{mb_field object=$pat field="patient_id" hidden=1 prop="" ondblclick="PatSelector.init()"}}
             {{mb_label object=$consult field="patient_id"}}
           </th>
-          <td class="readonly"><input type="text" name="_pat_name" size="20" value="{{$pat->_view}}" readonly="readonly"  ondblclick="popPat()" /></td>
+          <td class="readonly"><input type="text" name="_pat_name" size="20" value="{{$pat->_view}}" readonly="readonly"  ondblclick="PatSelector.init()" /></td>
           <td class="button"><button class="search" type="button" onclick="PatSelector.init()">Rechercher un patient</button></td>
         </tr>
         <script type="text/javascript">
@@ -217,17 +225,28 @@ function checkFormRDV(oForm){
             {{mb_label object=$consult field="_check_premiere"}}
           </td>
           <td rowspan="4" class="button">
-            <button class="search" type="button" onclick="popRDV()">choix de l'horaire</button>
+            <button class="search" type="button" onclick="PlageSelector.init()">choix de l'horaire</button>
           </td>
         </tr>
 
         <tr>
           <th>{{mb_label object=$consult field="plageconsult_id"}}</th>
           <td class="readonly">
-            <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="popRDV()" readonly="readonly" />
-            {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="popRDV()"}}
+            <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="PlageSelector.init()" readonly="readonly" />
+            {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageSelector.init()"}}
           </td>
         </tr>
+        <script type="text/javascript">
+        PlageSelector.init = function(){
+          var oForm = document.editFrm;
+          this.eHeure = oForm.heure;
+          this.ePlageconsult_id = oForm.plageconsult_id;
+          this.eDate = oForm._date;
+          this.eDuree = oForm.duree;
+          this.eChirid = oForm.chir_id;
+          this.pop();
+        }
+        </script>
 
         <tr>
           <th>{{mb_label object=$consult field="heure"}}</th>

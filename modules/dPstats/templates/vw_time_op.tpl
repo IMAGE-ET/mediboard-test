@@ -1,24 +1,5 @@
 {{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 
-<script>
-
-/*
-function popCode(type) {
-  var url = new Url;
-  url.setModuleAction("dPplanningOp", "code_selector");
-  url.addParam("type", type);
-  url.popup(600, 500, type);
-}
-
-function setCodeCCAM(code, type) {
-  var oForm = document.bloc;
-  var oField = oForm.codeCCAM;
-  oField.value = code;
-}
-*/
-
-</script>
-
 <table class="main">
   <tr>
     <td>

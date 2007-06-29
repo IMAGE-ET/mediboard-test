@@ -129,28 +129,6 @@ function updateHeureSortie() {
   min_sortie.value = "00";
 }
 
-/*
-function popPat() {
-  var url = new Url();
-  url.setModuleAction("dPpatients", "pat_selector");
-  url.popup(750, 500, "Patient");
-}
-
-function setPat(patient_id, _patient_view) {
-  var oForm = document.editSejour;
-
-  if (patient_id) {
-    oForm.patient_id.value = patient_id;
-    oForm._patient_view.value = _patient_view;
-    bChangePat = 1;
-  }
-  
-  oForm.patient_id.onchange();
-}
-*/
-
-
-
 function checkSejoursToReload() {
   if(bChangePat) {
     reloadListSejours();
