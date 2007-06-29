@@ -42,7 +42,7 @@ function newDHE(oForm) {
 <table class="form">
 
 <tr>
-  <th class="title">
+  <th class="title" colspan="2">
     <a href="#" onclick="viewCompleteItem('CPatient', {{$patient->_id}}); ViewFullPatient.select(this)">
       {{$patient->_view}} ({{$patient->_age}} ans)
     </a>
@@ -69,7 +69,7 @@ function newDHE(oForm) {
 <!-- Séjours -->
 
 <tr id="sejours-trigger">
-  <th colspan="2" class="title">{{$patient->_ref_sejours|@count}} séjour(s)</th>
+  <th colspan="3" class="title">{{$patient->_ref_sejours|@count}} séjour(s)</th>
 </tr>
 
 <tbody class="patientEffect" style="display: none" id="sejours">
@@ -86,9 +86,13 @@ function newDHE(oForm) {
       onclick="viewCompleteItem('CSejour', {{$curr_sejour->_id}}); ViewFullPatient.select(this)">
       Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
       au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
-      - Dr. {{$curr_sejour->_ref_praticien->_view}}
     </a>
-
+  </td>
+  <td>
+     {{assign var=praticien value=$curr_sejour->_ref_praticien}}
+     <div class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};">
+       {{$praticien->_view}}
+     </div>
   </td>
   <td style="text-align:right;">
   {{if $curr_sejour->_canRead}}
@@ -115,8 +119,14 @@ function newDHE(oForm) {
     <a href="#"
       onmouseover="ObjectTooltip.create(this, 'COperation', {{$curr_op->_id}})"
       onclick="viewCompleteItem('COperation', {{$curr_op->_id}}); ViewFullPatient.select(this)">
-      {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} - Intervention du Dr. {{$curr_op->_ref_chir->_view}}
+      Intervention du {{$curr_op->_datetime|date_format:"%d/%m/%Y"}}
     </a>
+  </td>
+  <td>
+     {{assign var=praticien value=$curr_op->_ref_chir}}
+     <div class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};">
+       {{$praticien->_view}}
+     </div>
   </td>
   <td style="text-align:right;">
   {{if $curr_op->_canRead}}
@@ -152,9 +162,16 @@ function newDHE(oForm) {
     <a href="#"
       onmouseover="ObjectTooltip.create(this, 'CConsultAnesth', {{$consult_anesth->_id}})"
       onclick="viewCompleteItem('CConsultAnesth', {{$consult_anesth->_id}}); ViewFullPatient.select(this)">
-      {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_consult->_ref_chir->_view}}
+      {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
     </a>
   </td>
+  <td>
+     {{assign var=praticien value=$curr_consult->_ref_chir}}
+     <div class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};">
+       {{$praticien->_view}}
+     </div>
+  </td>
+  
   <td style="text-align:right;">
   {{if $curr_consult->_canRead}}
     <a href="#" title="{{$curr_consult->_nb_files_docs}} doc(s)"
@@ -173,7 +190,7 @@ function newDHE(oForm) {
 {{/foreach}}
 
 {{foreachelse}}
-<tr><td colspan="2"><em>Pas de séjours</em></td></tr>
+<tr><td colspan="3"><em>Pas de séjours</em></td></tr>
 {{/foreach}}
 </tbody>
 
@@ -182,7 +199,7 @@ function newDHE(oForm) {
 <!-- Consultations -->
 
 <tr id="consultations-trigger">
-  <th colspan="2" class="title">{{$patient->_ref_consultations|@count}} consultation(s)</th>
+  <th colspan="3" class="title">{{$patient->_ref_consultations|@count}} consultation(s)</th>
 </tr>
 
 <tbody class="patientEffect" style="display: none" id="consultations">
@@ -213,8 +230,14 @@ function newDHE(oForm) {
     <a href="#"
       onmouseover="ObjectTooltip.create(this, '{{$object_class}}', {{$object_id}})"
       onclick="viewCompleteItem('{{$object_class}}', {{$object_id}}); ViewFullPatient.select(this)">
-      {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_consult->_ref_chir->_view}}
+      {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
     </a>
+  </td>
+  <td>
+     {{assign var=praticien value=$curr_consult->_ref_chir}}
+     <div class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};">
+       {{$praticien->_view}}
+     </div>
   </td>
   <td style="text-align:right;">
   {{if $curr_consult->_canRead}}
@@ -231,7 +254,7 @@ function newDHE(oForm) {
   </td>
 </tr>
 {{foreachelse}}
-<tr><td colspan="2"><em>Pas de consultations</em></td></tr>
+<tr><td colspan="3"><em>Pas de consultations</em></td></tr>
 {{/foreach}}
 
 </tbody>
