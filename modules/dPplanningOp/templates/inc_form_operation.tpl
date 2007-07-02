@@ -1,5 +1,7 @@
 <!-- $Id: $ -->
 {{mb_include_script module="dPplanningOp" script="ccam_selector"}}
+{{mb_include_script module="dPplanningOp" script="plage_selector"}}
+
 <form name="editOp" action="?m={{$m}}" method="post" onsubmit="return checkFormOperation()">
 
 <input type="hidden" name="dosql" value="do_planning_aed" />
@@ -158,13 +160,38 @@
       {{mb_label object=$op field="plageop_id"}}
       <input type="hidden" name="date" value="" />
       <input type="hidden" name="_date" value="{{$plage->date}}" />
-      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}" ondblclick="popPlage()" value="{{$plage->plageop_id}}" />
+      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}" ondblclick="PlageSelector.init()" value="{{$plage->plageop_id}}" />
     </th>
     <td class="readonly">
-      <input type="text" name="_datestr" readonly="readonly" size="10" ondblclick="popPlage()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
+      <input type="text" name="_datestr" readonly="readonly" size="10" ondblclick="PlageSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
     </td>
     <td class="button">
-      <button type="button" class="search" onclick="popPlage()">Choisir une date</button>
+      <button type="button" class="search" onclick="PlageSelector.init()">Choisir une date</button>
+ 
+      <script type="text/javascript">
+      PlageSelector.init = function(){
+        var oOpForm = document.editOp;
+        var oSejourForm = document.editSejour;
+        
+        this.eChir = oOpForm.chir_id;
+        this.eHour_op = oOpForm._hour_op;
+        this.eMin_op = oOpForm._min_op;
+        this.eGroup_id = oSejourForm.group_id;
+        this.eOperation_id = oOpForm.operation_id;
+        
+        this.ePlage_id = oOpForm.plageop_id;
+        this.eSDate = oOpForm._datestr;
+        
+        this.e_hour_entree_prevue = oSejourForm._hour_entree_prevue;
+        this.e_min_entree_prevue = oSejourForm._min_entree_prevue;
+        this.e_date_entree_prevue = oSejourForm._date_entree_prevue;
+        
+        this.heure_entree_veille = "{{$heure_entree_veille}}";
+        this.heure_entree_jour = "{{$heure_entree_jour}}";   
+        this.pop();
+      } 
+      </script>
+      
     </td>
     {{/if}}
   </tr>

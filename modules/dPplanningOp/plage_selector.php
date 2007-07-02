@@ -11,6 +11,7 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
+
 $chir         = mbGetValueFromGet("chir"         , 0);
 $month        = mbGetValueFromGet("month"        , date("m"));
 $year         = mbGetValueFromGet("year"         , date("Y"));
@@ -32,7 +33,9 @@ $mediChir->load($chir);
 // Chargement des plages pour le chir ou sa spécialité
 $listSalles = new CSalle;
 $where = array();
+
 $where["group_id"] = db_prepare("= %",$group_id);
+
 $listSalles = $listSalles->loadList($where);
 
 $listPlages = new CPlageOp;
@@ -42,6 +45,7 @@ $where["date"]     = "LIKE '$year-$month-__'";
 $where["salle_id"] = db_prepare_in(array_keys($listSalles));
 $order = "date, debut";
 $listPlages = $listPlages->loadList($where, $order);
+
 
 $nb_secondes = $curr_op_hour*3600 + $curr_op_min*60;
 

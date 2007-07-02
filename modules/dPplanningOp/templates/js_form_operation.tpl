@@ -168,62 +168,7 @@ function updateEntreePrevue() {
   updateSortiePrevue();
 }
 
-function popPlage() {
-  var oForm = document.editOp;
-  var oSejourForm = document.editSejour;
-  if (checkChir() && checkDuree()) {
-    var url = new Url();
-    url.setModuleAction("dPplanningOp", "plage_selector");
-    url.addElement(oForm.chir_id, "chir");
-    url.addElement(oForm._hour_op, "curr_op_hour");
-    url.addElement(oForm._min_op, "curr_op_min");
-    url.addElement(oSejourForm.group_id);
-    {{if $op->operation_id}}
-    url.addElement(oForm.operation_id);
-    {{/if}}
-    url.popup(450, 450, 'Plage');
-  }
-}
 
-function setPlage(plage_id, sDate, bAdm) {
-  var oOpForm     = document.editOp;
-  var oSejourForm = document.editSejour;
-    
-  if(!oSejourForm._duree_prevue.value) {
-    oSejourForm._duree_prevue.value = 0;
-  }
-
-  if (plage_id) {
-    if(oOpForm.plageop_id.value != plage_id) {
-      oOpForm.rank.value = 0;
-    }
-    oOpForm.plageop_id.value = plage_id;
-    oOpForm._datestr.value = sDate;
-    var dAdm = makeDateFromLocaleDate(sDate);
-    oOpForm._date.value = makeDATEFromDate(dAdm);
-    
-    // Initialize admission date according to operation date
-    switch(bAdm) {
-      case 0 :
-        dAdm.setHours("{{$heure_entree_veille}}");
-        dAdm.setDate(dAdm.getDate()-1);
-        break;
-      case 1 :
-        dAdm.setHours("{{$heure_entree_jour}}");
-        break;
-    }
-    
-    if (bAdm != 2) {
-      oSejourForm._hour_entree_prevue.value = dAdm.getHours();
-      oSejourForm._min_entree_prevue.value = dAdm.getMinutes();
-      oSejourForm._date_entree_prevue.value = makeDATEFromDate(dAdm);
-      var div_rdv_adm = document.getElementById("editSejour__date_entree_prevue_da");
-      div_rdv_adm.innerHTML = makeLocaleDateFromDate(dAdm);
-    }
-    
-    updateSortiePrevue();
-  }
-}
 
 function cancelOperation() {
   var oForm = document.editOp;
