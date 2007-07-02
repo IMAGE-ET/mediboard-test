@@ -2,16 +2,45 @@
 
 <script type="text/javascript">
 
-function addCode(subject_id, chir_id) {
+function checkAddCode() {
   var oForm = document.manageCodes;
-  var aCCAM = oForm.codes_ccam.value.split("|");
-  // Si la chaine est vide, il crée un tableau à un élément vide donc :
-  aCCAM.removeByValue("");
-  if(oForm._newCode.value != '')
-    aCCAM.push(oForm._newCode.value);
-  aCCAM.sort();
-  oForm.codes_ccam.value = aCCAM.join("|");
-  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadActes(subject_id, chir_id) } } );
+  var oField = null;
+  
+  if (oField = oForm._newCode) {
+    if (oField.value == 0) {
+      alert("Code manquant");
+      return false;
+    }
+  }
+  return true;
+}
+
+
+function checkDelCode() {
+  var oForm = document.manageCodes;
+  var oField = null;
+  
+  if (oField = oForm._selCode) {
+    if (oField.value == 0) {
+      alert("Aucun code selectionné");
+      return false;
+    }
+  }
+  return true;
+}
+
+function addCode(subject_id, chir_id) {
+  if(checkAddCode()){
+    var oForm = document.manageCodes;
+    var aCCAM = oForm.codes_ccam.value.split("|");
+    // Si la chaine est vide, il crée un tableau à un élément vide donc :
+    aCCAM.removeByValue("");
+    if(oForm._newCode.value != '')
+      aCCAM.push(oForm._newCode.value);
+      aCCAM.sort();
+      oForm.codes_ccam.value = aCCAM.join("|");
+      submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadActes(subject_id, chir_id) } } );
+    }
 }
 
 function loadActes(subject_id, chir_id) {
@@ -28,16 +57,18 @@ function loadActes(subject_id, chir_id) {
 }
 
 function delCode(subject_id) {
-  var oForm = document.manageCodes;
-  var aCCAM = oForm.codes_ccam.value.split("|");
-  // Si la chaine est vide, il crée un tableau à un élément vide donc :
-  aCCAM.removeByValue("");
-  if (oForm._selCode.value != '') {
-    aCCAM.removeByValue(oForm._selCode.value, true);
+  if(checkDelCode()){
+    var oForm = document.manageCodes;
+    var aCCAM = oForm.codes_ccam.value.split("|");
+    // Si la chaine est vide, il crée un tableau à un élément vide donc :
+    aCCAM.removeByValue("");
+    if (oForm._selCode.value != '') {
+      aCCAM.removeByValue(oForm._selCode.value, true);
+    }
+    aCCAM.sort();
+    oForm.codes_ccam.value = aCCAM.join("|");
+    submitFormAjax(oForm, 'systemMsg', {onComplete: function(){loadActes(subject_id)}});
   }
-  aCCAM.sort();
-  oForm.codes_ccam.value = aCCAM.join("|");
-  submitFormAjax(oForm, 'systemMsg', {onComplete: function(){loadActes(subject_id)}});
 }
 
 </script>
