@@ -1,22 +1,7 @@
 {{mb_include_script module="dPpatients" script="autocomplete"}}
+{{mb_include_script module="mediusers" script="color_selector"}}
 
 <script type="text/javascript">
-function popColor() {
-  var url = new Url;
-  url.setModuleAction("mediusers", "color_selector");
-  url.addParam("callback", "setColor");
-  url.popup(320, 250, "color");
-}
-
-function setColor(color) {
-  var f = document.editFrm;
-  if (color) {
-    f.color.value = color;
-  }
-  document.getElementById('test').style.background = '#' + f.color.value;
-  f.color.onchange();
-}
-
 function pageMain() {
   initInseeFields("editFrm", "cp", "ville");
 }
@@ -102,9 +87,18 @@ function pageMain() {
           <th>{{mb_label object=$userfunction field="color"}}</th>
           <td>
             <span id="test" title="test" style="background: #{{$userfunction->color}};">
-              <a href="#" onclick="popColor()">cliquez ici</a>
+              <a href="#" onclick="ColorSelector.init()">cliquez ici</a>
             </span>
             {{mb_field object=$userfunction field="color" hidden=1}}
+            
+            <script type="text/javascript">
+              ColorSelector.init = function(){
+                var oForm = document.editFrm;
+                this.eColor = oForm.color;
+                this.pop();
+              }
+            </script>
+         
           </td>
         </tr>
         <tr>

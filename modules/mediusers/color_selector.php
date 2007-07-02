@@ -3,7 +3,8 @@ $callback = isset( $_GET['callback'] ) ? $_GET['callback'] : 0;
 ?>
 <script language="javascript">
 	function setClose(color){
-		window.opener.<?php echo $callback;?>(color);
+		//window.opener.<?php echo $callback;?>(color);
+		window.opener.ColorSelector.set(color);
 		window.close();
 	}
 </script>
