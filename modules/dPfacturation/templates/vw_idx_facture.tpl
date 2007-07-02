@@ -44,6 +44,8 @@ function pageMain() {
       <input type="hidden" name="facture_id" value="{{$facture->_id}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="_class_name" value="CSejour" />
+      
+      
       <table class="form">
         <tr>
           {{if $facture->_id}}
@@ -70,16 +72,18 @@ function pageMain() {
     	        <input type="text" size="30" readonly="readonly" ondblclick="ObjectSelector.init()" name="_sejour_view" value="" />
     	        {{/if}}
         	  	<button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>       	  	
-        	</td>
-        	<script type="text/javascript">
-              ObjectSelector.init = function(){
-                var oForm = document.editfacture;
-                this.eId = oForm.sejour_id;
-                this.eView = oForm._sejour_view;
-                this.eClass = oForm._class_name;  
-                this.pop();
-              }
-            </script> 
+        	    <script type="text/javascript">
+                  ObjectSelector.init = function(){
+                    var oForm = document.editfacture;
+                    this.eId = oForm.sejour_id;
+                    this.eView = oForm._sejour_view;
+                    this.eClass = oForm._class_name;
+                    this.onlyclass = "true";
+                   
+                    this.pop();
+                  } 
+                 </script>
+        	 </td>
         </tr>
         <tr>
           <td class="button" colspan="2">

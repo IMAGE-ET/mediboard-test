@@ -16,6 +16,7 @@ function pageMain() {
       <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="return checkForm(this);">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="file_id" value="{{$file->file_id}}" />
+      
       <table class="form">
         <tr>
           <td  class="readonly">
@@ -28,16 +29,18 @@ function pageMain() {
             <button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>
             <input type="hidden" name="selKey" value="{{$selKey|stripslashes}}" />
             <input type="hidden" name="keywords" value="{{$keywords|stripslashes}}" />
+            <script type="text/javascript">
+              ObjectSelector.init = function(){
+                var oForm = document.FrmClass;
+                this.eId = oForm.file_id;
+                this.eView = oForm.selView;
+                this.eClass = oForm.selClass;
+                this.onlyclass = "false"; 
+                this.pop();
+              }
+            </script>
           </td>
-          <script type="text/javascript">
-            ObjectSelector.init = function(){
-              var oForm = document.FrmClass;
-              this.eId = oForm.file_id;
-              this.eView = oForm.selView;
-              this.eClass = oForm.selClass;  
-              this.pop();
-            }
-         </script>
+
           {{if $selKey}}
           <td>
             <select name="typeVue" onchange="if (this.form.onsubmit()) { this.form.submit() };">

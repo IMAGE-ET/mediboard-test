@@ -44,30 +44,6 @@ function ClearRDV(){
 }
 
 
-/*
-function popRDV() {
-  var oForm = document.editFrm;
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "plage_selector");
-  url.addElement(oForm.chir_id);
-  url.addElement(oForm.plageconsult_id);
-  url.popup(800, 600, "Plage");
-}
-
-
- 
-function setRDV(heure, id, date, freq, chirid, chirname ) {
-  var oForm = document.editFrm;
-  oForm.plageconsult_id.value = id;
-  oForm.plageconsult_id.onchange();
-  oForm._date.value = date;
-  oForm.heure.value = heure;
-  oForm.duree.value = freq;
-  oForm.chir_id.value = chirid;
-}
-*/
-
-
 function annuleConsult(oForm, etat) {
   if(etat) {
     if(confirm("Voulez-vous vraiment annuler cette consultation ?")) {
@@ -94,7 +70,8 @@ function pageMain() {
   {{if $plageConsult->plageconsult_id && !$consult->consultation_id}}
   oForm.plageconsult_id.value = {{$plageConsult->plageconsult_id}};
   oForm.chir_id.value = {{$plageConsult->chir_id}};
-  popRDV();
+  
+  PlageSelector.init();
   {{/if}}
 }
 

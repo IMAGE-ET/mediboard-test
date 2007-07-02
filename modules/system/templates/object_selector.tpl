@@ -25,7 +25,10 @@ function setClose(selClass,keywords,key,val){
 <input type="hidden" name="m" value="system" />
 <input type="hidden" name="a" value="object_selector" />
 <input type="hidden" name="dialog" value="1" />
-
+<input type="hidden" name="onlyclass" value="{{$onlyclass}}" />
+{{if $onlyclass=='true'}}
+<input type="hidden" name="selClass" value="{{$selClass}}" />
+{{/if}}
 <table class="form">
   <tr>
     <th class="category" colspan="3">Critères de sélection</th>
@@ -33,7 +36,7 @@ function setClose(selClass,keywords,key,val){
   <tr>
     <th><label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label></th>
     <td>
-      <select class="notNull str" name="selClass">
+      <select class="notNull str" name="selClass" {{if $onlyclass=='true'}}disabled="disabled"{{/if}}>
         <option value="">&mdash; Choisissez un type</option>
         {{foreach from=$listClass|smarty:nodefaults item=curr_listClass}}
         <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{tr}}{{$curr_listClass}}{{/tr}}</option>

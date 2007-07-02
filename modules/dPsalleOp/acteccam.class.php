@@ -104,14 +104,14 @@ class CActeCCAM extends CMbMetaObject {
   }
   
   function getFavoris($chir,$class,$view){
-  	$vue=($view=="taux")?$vue="nb_acte DESC":$vue="code_acte ASC";
+  	//$vue=($view=="taux")?$vue="nb_acte DESC":$vue="code_acte ASC";
   	$condition=($class=="")?"executant_id = '$chir'":
   	"executant_id = '$chir' AND object_class = '$class'";
   	$sql = "select code_acte, count(code_acte) as nb_acte
             from acte_ccam
             where $condition
             group by code_acte
-            order by $vue
+            order by nb_acte DESC
             limit 10";
   	$codes = db_loadlist($sql);
   	return $codes;

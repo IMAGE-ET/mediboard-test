@@ -161,6 +161,7 @@ function choosePreselection(oSelect) {
   <input type="hidden" name="m" value="{{$m}}"/>
   <input type="hidden" name="tab" value="{{$tab}}"/>
   <input type="hidden" name="_class_name" value="COperation"/>
+  
   <table class="form">
 
   <tr>
@@ -180,16 +181,18 @@ function choosePreselection(oSelect) {
     	   <input type="text" size="30" readonly="readonly" ondblclick="ObjectSelector.init()" name="_operation_view" value="" />
     	   {{/if}}
            <button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>
+           <script type="text/javascript">
+             ObjectSelector.init = function(){
+               var oForm = document.formEdit;
+               this.eId = oForm.mb_operation_id;
+               this.eView = oForm._operation_view;
+               this.eClass = oForm._class_name;  
+               this.onlyclass = "false";
+               this.pop();
+             }
+          </script>
        </td>
-       <script type="text/javascript">
-         ObjectSelector.init = function(){
-           var oForm = document.formEdit;
-           this.eId = oForm.mb_operation_id;
-           this.eView = oForm._operation_view;
-           this.eClass = oForm._class_name;  
-           this.pop();
-         }
-       </script>
+
   </tr>
   {{if $mbOp->operation_id}}
   <tr>

@@ -17,6 +17,7 @@ function cancelObject(oObject) {
 <input type="hidden" name="user_id" value="{{$user->user_id}}" />
 <input type="hidden" name="perm_object_id" value="" />
 
+
 <table class="form">
   <tr>
     <th colspan="4" class="title">Droits sur les objets</th>
@@ -50,9 +51,10 @@ function cancelObject(oObject) {
           this.eId = oForm.object_id;
           this.eView = oForm._object_view;
           this.eClass = oForm.object_class;
+          this.onlyclass = "false";
           this.pop();
         } 
-</script>
+       </script>
     </td>
     <td class="button">
       Permission :

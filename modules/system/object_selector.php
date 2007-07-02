@@ -9,8 +9,10 @@
 
 global $AppUI, $can, $m;
 
-$selClass = mbGetValueFromGetOrSession("selClass", null);
-$keywords = mbGetValueFromGetOrSession("keywords", null);
+$selClass  = mbGetValueFromGet("selClass");
+$keywords  = mbGetValueFromGet("keywords");
+$onlyclass = mbGetValueFromGet("onlyclass");
+
 
 // Liste des Class
 $listClass = getInstalledClasses();
@@ -41,6 +43,6 @@ if($selClass){
 $smarty->assign("listClass"  , $listClass );
 $smarty->assign("keywords"   , $keywords  );
 $smarty->assign("selClass"   , $selClass  );
-
+$smarty->assign("onlyclass"  , $onlyclass );
 $smarty->display("object_selector.tpl");
 ?>

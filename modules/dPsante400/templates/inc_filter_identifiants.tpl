@@ -4,6 +4,7 @@
 <input type="hidden" name="tab" value="{{$tab}}" />
 <input type="hidden" name="dialog" value="{{$dialog}}" />
 
+
 <table class="form">
   <tr>
     <th class="category" colspan="6">
@@ -31,17 +32,19 @@
     <td>{{mb_label object=$filter field="object_id"}}</td>
     <td>
       <input name="object_id" class="ref" value="{{$filter->object_id}}" />
-      <button class="search" type="button" onclick="initObjectFilter()">Chercher</button>
+      <button class="search" type="button" onclick="ObjectSelector.initObjectFilter()">Chercher</button>
+      <script type="text/javascript">
+        ObjectSelector.initObjectFilter = function(){
+          var oForm = document.filterFrm;
+          this.eId = oForm.object_id;
+          this.eClass = oForm.object_class;  
+          this.onlyclass = "false";
+          this.pop();
+        }
+      </script>
     </td>
   </tr>
-  <script type="text/javascript">
-    function initObjectFilter(){
-      var oForm = document.filterFrm;
-      ObjectSelector.eId = oForm.object_id;
-      ObjectSelector.eClass = oForm.object_class;  
-      ObjectSelector.pop();
-    }
-  </script>
+
   <tr>
     <td>{{mb_label object=$filter field="id400"}}</td>
     <td>{{mb_field object=$filter field="id400" canNull="true"}}</td>
