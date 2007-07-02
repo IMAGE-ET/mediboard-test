@@ -93,7 +93,7 @@ function pageMain() {
 
         {{foreach from=$rq|smarty:nodefaults item=curr_rq}}
         <tr>
-          <td><em>{{$curr_rq}}</em></td>
+          <td><em>{{$curr_rq|nl2br}}</em></td>
         </tr>
         {{/foreach}}
  
