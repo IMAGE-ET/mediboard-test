@@ -27,9 +27,8 @@
         {{include file="inc_consult_anesth/inc_list_addiction_anesth.tpl}}    
       {{/if}}
       
-      <strong>Antécédents significatifs de l'opération</strong>
+      <strong>Antécédents significatifs</strong>
       <ul>
-      {{if $consult_anesth->_ref_antecedents}}
         {{foreach from=$consult_anesth->_ref_antecedents key=curr_type item=list_antecedent}}
         {{if $list_antecedent|@count}}
         <li>
@@ -57,13 +56,12 @@
           {{/foreach}}
         </li>
         {{/if}}
+        {{foreachelse}}
+        <li><em>Pas d'antécédents</em></li>
         {{/foreach}}
-      {{else}}
-        <li>Pas d'antécédents</li>
-      {{/if}}
       </ul>
       
-      <strong>Traitements significatifs de l'opération</strong>
+      <strong>Traitements significatifs</strong>
       <ul>
         {{foreach from=$consult_anesth->_ref_traitements item=curr_trmt}}
         <li>
@@ -84,7 +82,7 @@
           </form>
         </li>
         {{foreachelse}}
-        <li>Pas de traitements</li>
+        <li><em>Pas de traitements</em></li>
         {{/foreach}}
       </ul>
       
@@ -98,6 +96,6 @@
           {{$curr_code->code}}: {{$curr_code->libelle}}
         </li>
         {{foreachelse}}
-        <li>Pas de diagnostic</li>
+        <li><em>Pas de diagnostic</em></li>
         {{/foreach}}
       </ul>

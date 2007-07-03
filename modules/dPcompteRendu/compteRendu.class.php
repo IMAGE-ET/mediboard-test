@@ -29,7 +29,6 @@ class CCompteRendu extends CMbMetaObject {
   var $_ref_chir         = null;
   var $_ref_category     = null;
   var $_ref_function     = null;
-  var $_ref_object       = null;
 
   function CCompteRendu() {
     $this->CMbObject("compte_rendu", "compte_rendu_id");
@@ -90,16 +89,9 @@ class CCompteRendu extends CMbMetaObject {
   }
 
   function loadRefsFwd() {
-	parent::loadRefsFwd();
-    // Objet
-    if (class_exists($this->object_class)) {
-      //$this->_ref_object = new $this->object_class;
-      if ($this->object_id)
-        //$this->_ref_object->load($this->object_id);
-        $this->_ref_object->loadRefsFwd();
-    } else {
-      trigger_error("Unable to create instance of '$this->object_class' class", E_USER_ERROR);
-    }
+	  parent::loadRefsFwd();
+
+    $this->_ref_object->loadRefsFwd();
     
     $this->loadCategory();
     
@@ -107,7 +99,8 @@ class CCompteRendu extends CMbMetaObject {
     $this->_ref_chir = new CMediusers;
     if($this->chir_id) {
       $this->_ref_chir->load($this->chir_id);
-    } elseif($this->object_id) {
+    } 
+    elseif($this->object_id) {
       switch($this->object_class) {
         case "CConsultation" :
           $this->_ref_chir->load($this->_ref_object->_ref_plageconsult->chir_id);

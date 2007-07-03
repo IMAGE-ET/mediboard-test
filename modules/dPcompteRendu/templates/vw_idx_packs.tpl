@@ -131,7 +131,7 @@
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
           <input type="hidden" name="_del" value="{{$key_modele}}" />
-          <button class="trash notext" type="submit"></button>
+          <button class="trash notext" type="submit">{{tr}}Delete{{/tr}}</button>
           </form>
         </td>
       </tr>
@@ -158,7 +158,7 @@
             {{/foreach}}
           </optgroup>
         </select>
-        <button type="submit" class="tick notext"></button>
+        <button type="submit" class="tick notext">{{tr}}Select{{/tr}}</button>
         </form>
       </td></tr>
     </table>

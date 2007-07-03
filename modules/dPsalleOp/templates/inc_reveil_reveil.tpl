@@ -38,7 +38,7 @@
                 <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
                 <input type="hidden" name="del" value="0" />
 	            <input name="sortie_salle" size="5" type="text" value="{{$curr_op->sortie_salle|date_format:"%H:%M"}}">
-	            <button class="tick notext" type="submit"></button>
+	            <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
 	          </form>
             {{else}}
             {{$curr_op->sortie_salle|date_format:"%Hh%M"}}
@@ -54,8 +54,8 @@
               -
               {{elseif $can->edit}}
 	          <input name="entree_reveil" size="5" type="text" value="{{$curr_op->entree_reveil|date_format:"%H:%M"}}">
-	          <button class="tick notext" type="submit"></button>
-	          <button class="cancel notext" type="submit" onclick="this.form.entree_reveil.value = ''"></button>
+	          <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
+	          <button class="cancel notext" type="submit" onclick="this.form.entree_reveil.value = ''">{{tr}}Cancel{{/tr}}</button>
               {{elseif $modif_operation}}
               <select name="entree_reveil" onchange="this.form.submit()">
                 <option value="">-</option>
@@ -65,7 +65,7 @@
                 </option>
                 {{/foreach}}
               </select>
-              <button class="cancel notext" type="submit" onclick="this.form.entree_reveil.value = ''"></button>
+              <button class="cancel notext" type="submit" onclick="this.form.entree_reveil.value = ''">{{tr}}Cancel{{/tr}}</button>
               {{else}}
                 {{$curr_op->entree_reveil|date_format:"%Hh%M"}}
               {{/if}}
@@ -79,7 +79,7 @@
               <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="sortie_reveil" value="" />
-              <button class="tick notext" type="submit" onclick="this.form.sortie_reveil.value = 'current'"></button>
+              <button class="tick notext" type="submit" onclick="this.form.sortie_reveil.value = 'current'">{{tr}}Modify{{/tr}}</button>
             </form>
             {{else}}-{{/if}}
           </td>

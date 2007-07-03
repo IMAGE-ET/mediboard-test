@@ -203,7 +203,7 @@ function pageMain() {
           {{mb_field object=$liste field="chir_id" hidden=1 prop=""}}
           {{mb_field object=$liste field="function_id" hidden=1 prop=""}}
           <input type="hidden" name="_del" value="{{$curr_valeur}}" />
-          <button class="trash notext" type="submit"></button>
+          <button class="trash notext" type="submit">{{tr}}Delete{{/tr}}</button>
           </form>
         </td>
       </tr>
@@ -219,7 +219,7 @@ function pageMain() {
         {{mb_field object=$liste field="chir_id" hidden=1 prop=""}}
         {{mb_field object=$liste field="function_id" hidden=1 prop=""}}
         <input type="text" name="_new" value="" />
-        <button type="submit" class="tick notext"></button>
+        <button type="submit" class="tick notext">{{tr}}Delete{{/tr}}</button>
         </form>
       </td></tr>
     </table>

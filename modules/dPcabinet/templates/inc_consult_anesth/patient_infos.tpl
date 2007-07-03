@@ -1,7 +1,7 @@
 <table class="form">
   <tr>
     <th class="category">
-      <button id="listConsult-trigger" type="button" style="float:left">+/-</button>
+      <button class="hslip notext" id="listConsult-trigger" style="float:left">Programme</button>
       Patient
     </th>
     <th class="category">Intervention</th>

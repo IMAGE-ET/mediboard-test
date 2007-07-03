@@ -18,9 +18,12 @@ global $AppUI;
 require_once($AppUI->getSystemClass("mbobject"));
 
 class CMbMetaObject extends CMbObject{
-	
+  // DB Fields	
   var $object_id    = null;
   var $object_class = null;
+
+  // Object References
+  var $_ref_object       = null;
 	
   function getSpecs() {
   	$specs = parent::getSpecs();
@@ -29,16 +32,28 @@ class CMbMetaObject extends CMbObject{
     return $specs;
   }
     
+  function setObject(CMbObject $object) {
+    $this->_ref_object = $object;
+    $this->object_id = $object->_id;
+    $this->object_class = $object->_class_name;
+  }
   
+  /**
+   * Load target of meta object
+   */
   function loadRefsFwd() {	
-    $specs = parent::loadRefsFwd();
+    parent::loadRefsFwd();
+
+    if (!class_exists($this->object_class)) {
+      trigger_error("Unable to create instance of '$this->object_class' class", E_USER_ERROR);
+    }
+
   	$this->_ref_object = new $this->object_class;
-    if(!$this->_ref_object->load($this->object_id)) {
+    if (!$this->_ref_object->load($this->object_id)) {
       $this->_ref_object->load(null);
       $this->_ref_object->_view = "Element supprimé";
     }
   }  
-    
 }
 
 

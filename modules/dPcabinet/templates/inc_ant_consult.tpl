@@ -336,7 +336,7 @@ function copyTraitement(traitement_id){
         {{if $_is_anesth}}
         <tr>
           <th class="category">
-            Eléments significatifs pour la prise en charge du séjour
+            Eléments significatifs pour le séjour
           </th>
         </tr>
         <tr>

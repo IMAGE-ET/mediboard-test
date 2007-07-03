@@ -38,7 +38,9 @@ function reloadFinishBanner() {
         Imprimer les documents
       </button>      
       {{else}}
-      <button id="listConsult-trigger" type="button" style="float:left">+/-</button>
+      <button class="hslip" id="listConsult-trigger" type="button" style="float:left">
+        {{tr}}Programme{{/tr}}
+      </button>
       <button class="print" type="button" style="float: right;" onclick="printAllDocs()">
         Imprimer les documents
       </button> 

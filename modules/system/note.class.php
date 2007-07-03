@@ -29,7 +29,6 @@ class CNote extends CMbMetaObject {
   
   // References
   var $_ref_user   = null;
-  var $_ref_object = null;
   
    function CNote() {
 	  $this->CMbObject("note", "note_id");

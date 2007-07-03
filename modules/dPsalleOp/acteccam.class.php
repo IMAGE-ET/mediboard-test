@@ -32,9 +32,6 @@ class CActeCCAM extends CMbMetaObject {
   var $_anesth = null;
   
   // Object references
-  //var $_ref_operation = null;
-  var $_ref_object   = null;
-  
   var $_ref_executant = null;
   var $_ref_code_ccam = null;
 
@@ -45,6 +42,8 @@ class CActeCCAM extends CMbMetaObject {
 	}
   
   function getSpecs() {
+    $specs = parent::getSpecs();
+    $specs["object_class"]        = "notNull enum list|COperation|CSejour|CConsultation";
     $specs["code_acte"]           = "notNull code ccam";
     $specs["code_activite"]       = "notNull num minMax|0|99";
     $specs["code_phase"]          = "notNull num minMax|0|99";
@@ -52,8 +51,6 @@ class CActeCCAM extends CMbMetaObject {
     $specs["modificateurs"]       = "str maxLength|4";
     $specs["montant_depassement"] = "currency min|0";
     $specs["commentaire"]         = "text";
-    $specs["object_id"]           = "notNull ref class|CMbObject meta|object_class";
-    $specs["object_class"]        = "notNull enum list|COperation|CSejour|CConsultation";
     $specs["executant_id"]        = "notNull ref class|CMediusers";
     return $specs;
   }
@@ -72,9 +69,7 @@ class CActeCCAM extends CMbMetaObject {
    
   function updateFormFields() {
     parent::updateFormFields();
-    for ($index = 0; $index < strlen($this->modificateurs); $index++) {
-    	$this->_modificateurs[] = $this->modificateurs[$index];
-    }
+    $this->_modificateurs[] = str_split($this->modificateurs);
     $this->_view = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs"; 
   
     $this->_anesth=($this->code_activite==4)?true:false;

@@ -407,7 +407,7 @@ Class.extend(PairEffect, {
       sEffect: null, // could be null, "appear", "slide", "blind"
       bStartVisible: false, // Make it visible at start
       bStoreInCookie: true,
-      sCookieName: "effect"
+      sCookieName: "effects"
     };
 
     Object.extend(oDefaultOptions, oOptions);

@@ -34,7 +34,7 @@
       <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="entree_bloc" value="" />
-      <button class="tick notext" type="submit" onclick="this.form.entree_bloc.value = 'current'"></button>
+      <button class="tick notext" type="submit" onclick="this.form.entree_bloc.value = 'current'">{{tr}}Modify{{/tr}}</button>
       </form>
       {{else}}-{{/if}}
     </td>

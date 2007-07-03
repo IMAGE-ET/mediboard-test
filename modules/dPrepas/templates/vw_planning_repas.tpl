@@ -56,9 +56,9 @@ function validationRepas(typerepas_id){
             {{assign var="type_id" value=$curr_type->_id}}
             {{assign var="validation" value=$service->_ref_validrepas.$date.$type_id}}
             {{if $validation->validationrepas_id}}
-            <button type="button" class="cancel notext" onclick="devalidationRepas({{$validation->validationrepas_id}})" style="float:right;"></button>            
+            <button type="button" class="cancel notext" onclick="devalidationRepas({{$validation->validationrepas_id}})" style="float:right;">{{tr}}Cancel{{/tr}}</button>            
             {{else}}
-            <button type="button" class="tick notext" onclick="validationRepas({{$curr_type->_id}})" style="float:right;"></button>
+            <button type="button" class="tick notext" onclick="validationRepas({{$curr_type->_id}})" style="float:right;">{{tr}}Modify{{/tr}}</button>
             {{/if}}
             {{$curr_type->nom}}
           </th>

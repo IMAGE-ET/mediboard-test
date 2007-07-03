@@ -11,7 +11,7 @@
         </li>
         {{/foreach}}
         <li>
-          <button class="tick notext" type="submit"></button>
+          <button class="tick notext" type="submit">{{tr}}Save{{/tr}}</button>
         </li>
       </ul>
       {{/if}}

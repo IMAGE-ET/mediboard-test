@@ -549,6 +549,7 @@ class CMouvSejourEcap extends CMouvement400 {
 
       // Champs issus de l'opération
       $acte->object_id = $operation->_id;
+      $acte->object_class = $operation->_class_name;
       $acte->execution = mbDateTime($operation->sortie_salle, $operation->date);
       
       // Praticien exécutant

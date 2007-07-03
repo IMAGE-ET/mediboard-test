@@ -35,7 +35,7 @@
               <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
               <input type="hidden" name="del" value="0" />
 	          <input name="sortie_salle" size="5" type="text" value="{{$curr_op->sortie_salle|date_format:"%H:%M"}}">
-	          <button class="tick notext" type="submit"></button>
+	          <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
             </form>
             {{else}}
             {{$curr_op->sortie_salle|date_format:"%Hh%M"}}
@@ -49,7 +49,7 @@
               <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
               <input type="hidden" name="del" value="0" />
 	          <input name="entree_reveil" size="5" type="text" value="{{$curr_op->entree_reveil|date_format:"%H:%M"}}">
-	          <button class="tick notext" type="submit"></button>
+	          <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
             </form>
             {{else}}
             {{$curr_op->entree_reveil|date_format:"%Hh%M"}}
@@ -63,8 +63,8 @@
               <input type="hidden" name="del" value="0" />
               {{if $can->edit}}
 	          <input name="sortie_reveil" size="5" type="text" value="{{$curr_op->sortie_reveil|date_format:"%H:%M"}}">
-	          <button class="tick notext" type="submit"></button>
-	          <button class="cancel notext" type="submit" onclick="this.form.sortie_reveil.value = ''"></button>
+	          <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
+	          <button class="cancel notext" type="submit" onclick="this.form.sortie_reveil.value = ''">{{tr}}Cancel{{/tr}}</button>
               {{elseif $modif_operation}}
               <select name="sortie_reveil" onchange="this.form.submit()">
                 <option value="">-</option>
@@ -74,7 +74,7 @@
                 </option>
                 {{/foreach}}
               </select>
-              <button class="cancel notext" type="submit" onclick="this.form.sortie_reveil.value = ''"></button>
+              <button class="cancel notext" type="submit" onclick="this.form.sortie_reveil.value = ''">{{tr}}Cancel{{/tr}}</button>
               {{else}}
                 {{$curr_op->sortie_reveil|date_format:"%Hh%M"}}
               {{/if}}

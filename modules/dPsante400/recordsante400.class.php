@@ -43,6 +43,7 @@ class CRecordSante400 {
     try {
       self::connect();
       $sth = self::$dbh->prepare($sql);
+      mbTrace($sql, "Query multiple");
       self::$chrono->start();
       $sth->execute($values);
       self::$chrono->stop("multiple load execute");
@@ -68,6 +69,7 @@ class CRecordSante400 {
     try {
       self::connect();
       $sth = self::$dbh->prepare($sql);
+      mbTrace($sql, "Query single");
       self::$chrono->start();
       $sth->execute($values);
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);

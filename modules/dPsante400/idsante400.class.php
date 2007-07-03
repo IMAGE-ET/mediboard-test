@@ -22,9 +22,6 @@
   // Derivate fields
   var $_last_id      = null;
   
-  // Object References
-  var $_ref_object   = null;
-
   function CIdSante400() {
     $this->CMbObject("id_sante400", "id_sante400_id");
     
@@ -37,10 +34,6 @@
     $specs["tag"]          = "str maxLength|80";
     $specs["last_update"]  = "notNull dateTime";
     return $specs;
-  }
-  
-  function loadRefsFwd() {
-    parent::loadRefsFwd();
   }
   
   /**

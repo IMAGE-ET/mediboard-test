@@ -31,9 +31,9 @@
         {{$curr_doc->nom}}
       </th>
       <td class="button">
-        <button type="button" onclick="nbDocMoins({{$curr_doc->compte_rendu_id}});" class="remove notext"></button>
+        <button type="button" onclick="nbDocMoins({{$curr_doc->compte_rendu_id}});" class="remove notext">{{tr}}Less{{/tr}}</button>
         <input name="nbDoc[{{$curr_doc->compte_rendu_id}}]" type="text" size="2" value="1" readonly="readonly" />
-        <button type="button" onclick="nbDocPlus({{$curr_doc->compte_rendu_id}});" class="add notext"></button>
+        <button type="button" onclick="nbDocPlus({{$curr_doc->compte_rendu_id}});" class="add notext">{{tr}}More{{/tr}}</button>
       </td>
     </tr>
     {{/foreach}}

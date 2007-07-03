@@ -7,22 +7,15 @@
 * @author Romain Ollivier
 */
 
-class CTraitement extends CMbObject {
+class CTraitement extends CMbMetaObject {
   // DB Table key
   var $traitement_id = null;
-
-  // DB References
-  var $object_id    = null;
-  var $object_class = null;
 
   // DB fields
   var $debut      = null;
   var $fin        = null;
   var $traitement = null;
   
-  // Object References
-  var $_ref_object = null;
-
   function CTraitement() {
     $this->CMbObject("traitement", "traitement_id");
     
@@ -30,15 +23,14 @@ class CTraitement extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
-      "object_id"    => "notNull ref class|CMbObject meta|object_class",
-      "object_class" => "notNull enum list|CPatient|CConsultAnesth",
-      "debut"        => "date",
-      "fin"          => "date moreEquals|debut",
-      "traitement"   => "text"
-    );
+    $specs = parent::getSpecs();
+    $specs["object_class"] = "notNull enum list|CPatient|CConsultAnesth";
+    $specs["debut"       ] = "date";
+    $specs["fin"         ] = "date moreEquals|debut";
+    $specs["traitement"  ] = "text";
+    return $specs;
   }
-  
+
   function getSeeks() {
     return array (
       "traitement" => "like"
@@ -51,16 +43,6 @@ class CTraitement extends CMbObject {
     );
   }
   
-  function loadRefsFwd() {
-    // Objet
-    if (class_exists($this->object_class)) {
-      $this->_ref_object = new $this->object_class;
-      if ($this->object_id)
-        $this->_ref_object->load($this->object_id);
-    } else {
-      trigger_error("Enable to create instance of '$this->object_class' class", E_USER_ERROR);
-    }
-  }
 }
 
 ?>

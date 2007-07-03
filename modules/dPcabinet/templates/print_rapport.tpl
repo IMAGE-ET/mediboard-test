@@ -100,7 +100,7 @@
                 <option value="tiers"   {{if $curr_consult->type_tarif == "tiers"  }}selected="selected"{{/if}}>Tiers-payant</option>
                 <option value="autre"   {{if $curr_consult->type_tarif == "autre"  }}selected="selected"{{/if}}>Autre       </option>
               </select>
-              <button type="submit" class="tick notext"></button>
+              <button type="submit" class="tick notext">{{tr}}Save{{/tr}}</button>
             {{/if}}
             </form>
           </td>

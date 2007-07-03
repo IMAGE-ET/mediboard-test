@@ -37,7 +37,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
                 <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
                 <input type="hidden" name="del" value="0" />
 	            <input name="sortie_salle" size="5" type="text" value="{{$curr_op->sortie_salle|date_format:"%H:%M"}}">
-	            <button class="tick notext" type="submit"></button>
+	            <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
 	          </form>
             {{else}}
               {{$curr_op->sortie_salle|date_format:"%Hh%M"}}
@@ -51,7 +51,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
               <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="entree_reveil" value="" />
-              <button class="tick notext" type="submit" onclick="this.form.entree_reveil.value = 'current'"></button>
+              <button class="tick notext" type="submit" onclick="this.form.entree_reveil.value = 'current'">{{tr}}Modify{{/tr}}</button>
             </form>
             {{else}}-{{/if}}
           </td>

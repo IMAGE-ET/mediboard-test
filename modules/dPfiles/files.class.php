@@ -14,9 +14,6 @@ class CFile extends CMbMetaObject {
   var $file_id = null;
   
   // DB Fields
-  //var $file_object_id     = null; ==> devient object_id
-  //var $file_class         = null; ==> devient object_class
-
   var $file_real_filename = null;
   var $file_name          = null;
   var $file_type          = null;
@@ -33,7 +30,6 @@ class CFile extends CMbMetaObject {
   
   // References
   var $_ref_file_owner = null;
-  var $_ref_object     = null;
 
   function CFile() {
     $this->CMbObject("files_mediboard", "file_id");
@@ -97,14 +93,12 @@ class CFile extends CMbMetaObject {
     if(!$this->_ref_file_owner){
       $this->loadRefsFwd();
     }
-    if($this->_ref_object->_id) {
-      $objectPerm = $this->_ref_object->getPerm($permType);
-    }else{
-      $objectPerm = false;
-    }
 
-// Following implementation would be for private file
-//    return ($this->_ref_file_owner->getPerm($permType) && $objectPerm);
+    // Delegate on target object
+    $objectPerm = $this->_ref_object->_id ?
+      $this->_ref_object->getPerm($permType) :
+      false;
+
     return $objectPerm;
   }
   
