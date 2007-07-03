@@ -209,7 +209,6 @@ $consult->loadPossibleActes();
 
 
 
-
 // Création du template
 $smarty = new CSmartyDP();
 

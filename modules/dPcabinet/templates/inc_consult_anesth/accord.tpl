@@ -24,6 +24,7 @@
     </div>
   </div>
   
+  {{if $app->user_prefs.ccam == 1 }}
   <div id="Actes">
     <div id="ActesHeader" class="accordionTabTitleBar">
       Actes CCAM
@@ -38,6 +39,7 @@
     </table>
     </div>
   </div>
+  {{/if}}
    
   <div id="ExamsComp">
     <div id="ExamsCompHeader" class="accordionTabTitleBar">

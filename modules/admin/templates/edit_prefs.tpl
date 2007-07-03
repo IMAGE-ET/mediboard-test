@@ -182,6 +182,19 @@
   </tr>
 
   <tr>
+    <th>
+      <label for="pref_name[ccam]" title="{{tr}}pref-ccam-desc{{/tr}}">{{tr}}pref-ccam{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[ccam]">
+        <option value="0"   {{if $prefsUser.dPcabinet.ccam == 0 }}selected="selected"{{/if}}>Cacher</option>
+        <option value="1"  {{if $prefsUser.dPcabinet.ccam == 1 }}selected="selected"{{/if}}>Visible</option>
+      </select>
+    </td>
+  </tr>
+
+
+  <tr>
     <th class="category" colspan="2">{{tr}}module-dPcabinet-long{{/tr}} - Anesth</th>
   </tr>
 

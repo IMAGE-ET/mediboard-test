@@ -56,9 +56,11 @@ function modifClass(){
       <a href="index.php?m={{$m}}&amp;tab=vw_full_code&amp;codeacte={{$curr_code->code}}">{{$curr_code->code}}</a>
        
       <span style="float:right">
-      {{if $curr_code->class=="CConsultation"}}Consultation{{/if}}
-      {{if $curr_code->class=="COperation"}}Opération{{/if}}
-      {{if $curr_code->class=="CSejour"}}Séjour{{/if}}
+      {{if $curr_code->class=="CConsultation"}}{{tr}}CFavoriCCAM.filter_class.CConsultation{{/tr}}{{/if}}
+      {{if $curr_code->class=="COperation"}}{{tr}}CFavoriCCAM.filter_class.COperation{{/tr}}{{/if}}
+      {{if $curr_code->class=="CSejour"}}{{tr}}CFavoriCCAM.filter_class.CSejour{{/tr}}{{/if}}
+      
+      
       </span>
       </strong>
       <br /><br />

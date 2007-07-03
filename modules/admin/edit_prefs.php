@@ -69,6 +69,7 @@ $array_list_module_pref = array (
     "DefaultPeriod",
     "DossierCabinet",
     "simpleCabinet",
+    "ccam",
   ),
   "system" => array (
     "INFOSYSTEM",
