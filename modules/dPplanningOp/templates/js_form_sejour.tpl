@@ -46,6 +46,7 @@ function removePlageOp(bIgnoreGroup){
       oFormOp._group_id.value = oFormSejour.group_id.value;
       oFormOp._datestr.value = "";
       oFormOp.plageop_id.value = "";
+      oFormOp.plageop_id.onchange();
       oFormOp._date.value = "";
       oFormOp.date.value = "";
     }

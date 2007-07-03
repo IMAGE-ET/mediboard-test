@@ -44,7 +44,7 @@
       {{mb_label object=$op field="chir_id"}}
     </th>
     <td colspan="2">
-      <select name="chir_id" class="{{$op->_props.chir_id}}" onchange="synchroPrat();removePlageOp(true);">
+      <select name="chir_id" class="{{$op->_props.chir_id}}" onchange="synchroPrat(); removePlageOp(true);">
         <option value="">&mdash; Choisir un chirurgien</option>
         {{foreach from=$listPraticiens item=curr_praticien}}
         <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -157,10 +157,10 @@
     </td>
     {{else}}
     <th>
+      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}" ondblclick="PlageSelector.init()" value="{{$plage->plageop_id}}" />
       {{mb_label object=$op field="plageop_id"}}
       <input type="hidden" name="date" value="" />
       <input type="hidden" name="_date" value="{{$plage->date}}" />
-      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}" ondblclick="PlageSelector.init()" value="{{$plage->plageop_id}}" />
     </th>
     <td class="readonly">
       <input type="text" name="_datestr" readonly="readonly" size="10" ondblclick="PlageSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
@@ -170,14 +170,11 @@
  
       <script type="text/javascript">
       PlageSelector.init = function(){
+        if(!(checkChir() && checkDuree())) {
+          return;
+        }
         var oOpForm = document.editOp;
         var oSejourForm = document.editSejour;
-        
-        this.eChir = oOpForm.chir_id;
-        this.eHour_op = oOpForm._hour_op;
-        this.eMin_op = oOpForm._min_op;
-        this.eGroup_id = oSejourForm.group_id;
-        this.eOperation_id = oOpForm.operation_id;
         
         this.ePlage_id = oOpForm.plageop_id;
         this.eSDate = oOpForm._datestr;
@@ -188,7 +185,9 @@
         
         this.heure_entree_veille = "{{$heure_entree_veille}}";
         this.heure_entree_jour = "{{$heure_entree_jour}}";   
-        this.pop();
+        this.pop(oOpForm.chir_id.value, oOpForm._hour_op.value,
+                 oOpForm._min_op.value, oSejourForm.group_id.value,
+                 oOpForm.operation_id.value);
       } 
       </script>
       

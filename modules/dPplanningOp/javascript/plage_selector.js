@@ -1,13 +1,10 @@
 // $Id: $
 
 var PlageSelector = {
-  eChir : null,
-  eHour_op: null,
-  eMin_op: null,
-  eGroup_id : null,
-  eOperation_id: null,
+  ePlage_id           : null,  // Identifiant de la plage
+  eSDate              : null,  // Date de la plage
   e_hour_entree_prevue: null,
-  e_min_entree_prevue: null,
+  e_min_entree_prevue : null,
   e_date_entree_prevue: null,
   options : {
     width : 450,
@@ -15,18 +12,16 @@ var PlageSelector = {
   },
 
 
-  pop: function() {
+  pop: function(iChir, iHour_op, iMin_op, iGroup_id, iOperation_id) {
     
     if (checkChir() && checkDuree()) {
       var url = new Url();
       url.setModuleAction("dPplanningOp", "plage_selector");
-      url.addParam("chir", this.eChir.value);
-      url.addParam("curr_op_hour", this.eHour_op.value);
-      url.addParam("curr_op_min", this.eMin_op.value);
-      url.addParam("group_id", this.eGroup_id.value);
-      //{{if $op->operation_id}}
-      url.addParam("operation_id",this.eOperation_id.value);
-      //{{/if}}
+      url.addParam("chir", iChir);
+      url.addParam("curr_op_hour", iHour_op);
+      url.addParam("curr_op_min", iMin_op);
+      url.addParam("group_id", iGroup_id);
+      url.addParam("operation_id",iOperation_id);
       url.popup(this.options.width, this.options.height, "Plage");
     } 
     
@@ -50,7 +45,9 @@ var PlageSelector = {
      
       this.ePlage_id.value = plage_id;
       this.eSDate.value = sDate;
-    
+      if(this.ePlage_id.onchange) {
+        this.ePlage_id.onchange();
+      }
       var dAdm = makeDateFromLocaleDate(sDate);
       oOpForm._date.value = makeDATEFromDate(dAdm);
       // Initialize admission date according to operation date
@@ -71,8 +68,8 @@ var PlageSelector = {
         var div_rdv_adm = document.getElementById("editSejour__date_entree_prevue_da");
         div_rdv_adm.innerHTML = makeLocaleDateFromDate(dAdm);
       }
-    
-      updateSortiePrevue();
+      
+      this.e_date_entree_prevue.onchange();
     }
   }
 }
