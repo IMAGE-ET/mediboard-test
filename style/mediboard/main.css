@@ -774,6 +774,17 @@ table.form th.mandatory {
   font-weight: bold;
 }
 
+label.notNull {
+  padding-right: 5px;
+  background: url(./images/icons/redbox.jpg) no-repeat center right;
+  font-weight: bold;
+}
+
+label.notNullOK {
+  padding-right: 5px;
+  font-weight: bold;
+}
+
 table.form th.text {
   white-space: normal;
   text-align: center;
