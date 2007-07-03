@@ -102,7 +102,7 @@ class CActeCCAM extends CMbMetaObject {
   	//$vue=($view=="taux")?$vue="nb_acte DESC":$vue="code_acte ASC";
   	$condition=($class=="")?"executant_id = '$chir'":
   	"executant_id = '$chir' AND object_class = '$class'";
-  	$sql = "select code_acte, count(code_acte) as nb_acte
+  	$sql = "select code_acte, object_class, count(code_acte) as nb_acte
             from acte_ccam
             where $condition
             group by code_acte

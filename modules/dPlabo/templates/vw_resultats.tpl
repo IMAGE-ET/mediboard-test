@@ -58,15 +58,15 @@ function pageMain() {
           <td class="readonly">
             <input type="text" readonly="readonly" name="_view" value="{{$patient->_view}}" />
             <button class="search" type="button" onclick="PatSelector.init()">Chercher</button>
-          </td>
-          <script type="text/javascript">
+            <script type="text/javascript">
             PatSelector.init = function(){
               var oForm = document.Patient;
               this.eId = oForm.patient_id;
               this.eView = oForm._view;
               this.pop();
             }
-          </script>
+            </script>
+          </td>
         </tr>
       </table>
 

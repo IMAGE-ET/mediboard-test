@@ -48,15 +48,15 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           </td>
           <td class="button">
             <button class="search" type="button" onclick="PatSelector.init()">Chercher</button>
-          </td>
-          <script type="text/javascript">
+            <script type="text/javascript">
             PatSelector.init = function(){
               var oForm = document.patFrm;
               this.eId = oForm.patSel;
               this.eView = oForm.patNom;
               this.pop()
             }
-          </script>
+            </script>
+          </td>
         </tr>
       </table>
       </form>

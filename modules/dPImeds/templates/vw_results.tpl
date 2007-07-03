@@ -14,8 +14,7 @@
           </td>
           <td class="button">
             <button class="search" type="button" onclick="PatSelector.init()">Chercher</button>
-          </td>
-          <script type="text/javascript">
+            <script type="text/javascript">
             PatSelector.init = function(){
               var oForm = document.patFrm;
               this.eId = oForm.patient_id;
@@ -23,7 +22,7 @@
               this.pop();
             }
           </script>
-
+          </td>
         </tr>
       </table>
       </form>

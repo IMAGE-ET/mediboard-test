@@ -65,19 +65,17 @@
     </td>
     <td class="button">
       <button type="button" class="search" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
+      <script type="text/javascript">
+        CCAMSelector.init = function(){
+        var oForm = document.editOp;
+        this.eView = oForm._codeCCAM;
+        this.eChir = oForm.chir_id;
+        this.eClass = oForm._class_name;
+        this.pop();
+      }
+      </script>
     </td>
   </tr>
-  
-  <script type="text/javascript">
-    CCAMSelector.init = function(){
-      var oForm = document.editOp;
-      this.eView = oForm._codeCCAM;
-      this.eChir = oForm.chir_id;
-      this.eClass = oForm._class_name;
-      this.pop();
-    }
-  </script>
-
   <tr>
     <th>
       Liste des codes CCAM

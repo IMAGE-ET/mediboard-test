@@ -153,16 +153,17 @@ function checkFormRDV(oForm){
             {{mb_label object=$consult field="patient_id"}}
           </th>
           <td class="readonly"><input type="text" name="_pat_name" size="20" value="{{$pat->_view}}" readonly="readonly"  ondblclick="PatSelector.init()" /></td>
-          <td class="button"><button class="search" type="button" onclick="PatSelector.init()">Rechercher un patient</button></td>
-        </tr>
-        <script type="text/javascript">
+          <td class="button"><button class="search" type="button" onclick="PatSelector.init()">Rechercher un patient</button>
+          <script type="text/javascript">
           PatSelector.init = function(){
             var oForm = document.editFrm;
             this.eId = oForm.patient_id;
             this.eView = oForm._pat_name;
             this.pop();
           }
-        </script>        
+          </script>             
+          </td>
+        </tr>     
         <tr>
           <th>
             {{mb_label object=$consult field="motif"}}<br />
@@ -211,19 +212,20 @@ function checkFormRDV(oForm){
           <td class="readonly">
             <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="PlageSelector.init()" readonly="readonly" />
             {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageSelector.init()"}}
+            <script type="text/javascript">
+            PlageSelector.init = function(){
+              var oForm = document.editFrm;
+              this.eHeure = oForm.heure;
+              this.ePlageconsult_id = oForm.plageconsult_id;
+              this.eDate = oForm._date;
+              this.eDuree = oForm.duree;
+              this.eChirid = oForm.chir_id;
+              this.pop();
+            }
+           </script> 
           </td>
         </tr>
-        <script type="text/javascript">
-        PlageSelector.init = function(){
-          var oForm = document.editFrm;
-          this.eHeure = oForm.heure;
-          this.ePlageconsult_id = oForm.plageconsult_id;
-          this.eDate = oForm._date;
-          this.eDuree = oForm.duree;
-          this.eChirid = oForm.chir_id;
-          this.pop();
-        }
-        </script>
+
 
         <tr>
           <th>{{mb_label object=$consult field="heure"}}</th>

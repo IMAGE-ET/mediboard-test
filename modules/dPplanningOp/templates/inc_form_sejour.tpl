@@ -103,33 +103,33 @@
   </td>
   <td colspan="2" class="button">
   	<button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
+    <script type="text/javascript">
+      PatSelector.init = function(){
+      var oForm = document.editSejour;
+      this.eId = oForm.patient_id;
+      this.eView = oForm._patient_view;
+      this.pop();
+    }
+    </script>
   </td>
   
-  <script type="text/javascript">
-  PatSelector.init = function(){
-    var oForm = document.editSejour;
-    this.eId = oForm.patient_id;
-    this.eView = oForm._patient_view;
-    this.pop();
-  }
-  </script>
+  
 </tr>
 
 <tr>
   <th>{{mb_label object=$sejour field="DP"}}</th>
   <td>{{mb_field object=$sejour field="DP" size="10"}}</td>
-  <td colspan="2" class="button"><button type="button" class="search" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button></td>
-</tr>
-
-<script type="text/javascript">
+  <td colspan="2" class="button"><button type="button" class="search" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
+  <script type="text/javascript">
   CIM10Selector.init = function(){
     var oForm = document.editSejour;
     this.eView = oForm.DP;
     this.eChir = oForm.praticien_id;
     this.pop();
   }
-</script>
-
+  </script>
+  </td>
+</tr>
 <tr>
   <th class="category" colspan="4">Admission</th>
 </tr>

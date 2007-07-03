@@ -205,8 +205,7 @@ function pageMain() {
             <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
             
           </td>
-          <td class="button"><button class="search" type="button" onclick="CCAMSelector.init()">Choisir un code</button></td>
-        
+          <td class="button"><button class="search" type="button" onclick="CCAMSelector.init()">Choisir un code</button>
           <script type="text/javascript">
             CCAMSelector.init = function(){
               var oForm = document.editFrm;
@@ -215,10 +214,8 @@ function pageMain() {
               this.eClass = oForm._class_name;
               this.pop();
             }
-          </script> 
-  
-  
-  
+          </script>          
+          </td>
         </tr>
         <tr>
           <th>
@@ -265,7 +262,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$protocole field="DP"}}</th>
           <td>{{mb_field object=$protocole field="DP" size="10"}}</td>
-          <td class="button"><button type="button" class="search" onclick="CIM10Selector.init()">Choisir un code</button></td>
+          <td class="button"><button type="button" class="search" onclick="CIM10Selector.init()">Choisir un code</button>
           <script type="text/javascript">
             CIM10Selector.init = function(){
               var oForm = document.editFrm;
@@ -274,6 +271,8 @@ function pageMain() {
               this.pop();
             }
           </script>
+          </td>
+          
         </tr>
         <tr>
           <th>{{mb_label object=$protocole field="duree_hospi"}}</th>

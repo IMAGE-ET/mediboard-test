@@ -85,8 +85,7 @@ function pageMain() {
         <tr>
           <td>{{mb_label object=$filter field="_codes_ccam"}}</td>
           <td><input type="text" name="code_ccam" size="10" value="" /></td>
-          <td class="button"><button type="button" class="search" onclick="CCAMSelector.init()">sélectionner un code</button></td>
-          
+          <td class="button"><button type="button" class="search" onclick="CCAMSelector.init()">sélectionner un code</button>
           <script type="text/javascript">
           CCAMSelector.init = function(){
             var oForm = document.paramFrm;
@@ -96,7 +95,7 @@ function pageMain() {
             this.pop();
           }
           </script>
-          
+          </td>
         </tr>
       </table>
 
