@@ -105,7 +105,7 @@ SystemMessage = {
 
   // Check message type (loading, notice, warning, error) from given div
   checkType: function(div) {
-    this.autohide = $A(div.childNodes).pluck("className").compact().last() == ["message"];
+    this.autohide = $A(div.childNodes).pluck("className").compact() == ["message"];
   },
 
   // Catches the innerHTML watch event
@@ -161,6 +161,11 @@ SystemMessage = {
     
     // Watch for content manipulation
     this.div.watch("innerHTML", this.refresh.bind(this));
+    
+    // Hide empty message
+    if (!this.div.innerHTML.strip()) {
+      new Effect.Fade(this.div);
+    }
   }
 }
 
