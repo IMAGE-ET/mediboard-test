@@ -27,8 +27,6 @@ var ObjectSelector = {
      this.eClass.value = oObject.objClass;
      this.eId.value = oObject.id;
      
-     //this.eonlyclass.value = oObject.objonlyclass;
-     
      if(this.eId.onchange){
         this.eId.onchange();
      }

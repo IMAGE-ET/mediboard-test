@@ -15,10 +15,12 @@ $codeacte = mbGetValueFromGetOrSession("codeacte");
 $code = new CCodeCCAM($codeacte);
 $code->Load();
 
+$favoris = new CFavoriCCAM();
 // Création du template
 $smarty = new CSmartyDP();
 
 // @todo : ne passer que $code. Adapter le template en conséquence
+$smarty->assign("favoris" , $favoris);
 $smarty->assign("codeacte", strtoupper($code->code));
 $smarty->assign("libelle" , $code->libelleLong);
 $smarty->assign("rq"      , $code->remarques);

@@ -11,8 +11,10 @@
  * The CFavoriCCAM Class
  */
 class CFavoriCCAM extends CMbObject {
-	var $favoris_id   = null;
-	var $favoris_user = null;
+  
+  var $object_class = null;
+  var $favoris_id   = null;
+  var $favoris_user = null;
   var $favoris_code = null;
   
   var $_ref_code = null;
@@ -24,10 +26,10 @@ class CFavoriCCAM extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
-      "favoris_user" => "notNull ref class|CUser",
-      "favoris_code" => "notNull str length|7"
-    );
+  	$specs["favoris_user"] = "notNull ref class|CUser";
+  	$specs["favoris_code"] = "notNull str length|7";
+  	$specs["object_class"] = "notNull str";
+  	return $specs;
   }
   
   function getSeeks() {

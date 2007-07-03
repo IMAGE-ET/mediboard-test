@@ -27,9 +27,11 @@ $view = mbGetValueFromGet("view", "alpha");
 switch($type) {
 	case "ccam" :
   case "ccam2":
+  	$condition=($object_class=="")?"favoris_user = '$chir' or favoris_user = '$AppUI->user_id'":
+  	"(favoris_user = '$chir' or favoris_user = '$AppUI->user_id') and object_class = '$object_class'";
 		$sql = "select favoris_code
 				from ccamfavoris
-				where favoris_user = '$chir' or favoris_user = '$AppUI->user_id'
+				where $condition
 				group by favoris_code
 				order by favoris_code";
 		$codes = db_loadlist($sql);

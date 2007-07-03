@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPccam";
-$config["mod_version"]     = "0.11";
+$config["mod_version"]     = "0.12";
 $config["mod_type"]        = "user";
 
 
@@ -36,7 +36,12 @@ class CSetupdPccam extends CSetup {
                "\nCHANGE `favoris_user` `favoris_user` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($sql);
 
-    $this->mod_version = "0.11";    
+    $this->makeRevision("0.11");
+    $sql = "ALTER TABLE `ccamfavoris` " .
+               "\nADD `object_class` VARCHAR(25) NOT NULL DEFAULT 'COperation';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.12";    
   }
 }
 ?>
