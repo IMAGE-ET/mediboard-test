@@ -56,7 +56,7 @@
         	<option value="">&mdash; Choisir une aide</option>
         	{{html_options options=$libelleItem->_aides.libelle.no_enum}}
           </select>
-          <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CFactureItem', this.form.libelle)" />
+          <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CFactureItem', this.form.libelle)">{{tr}}New{{/tr}}</button>
           </th>
           <td>{{mb_field object=$libelleItem field="libelle"}}</td>
         </tr>

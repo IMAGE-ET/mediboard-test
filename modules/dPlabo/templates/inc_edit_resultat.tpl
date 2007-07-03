@@ -85,7 +85,7 @@
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$prescriptionItem->_aides.commentaire.no_enum}}
       </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLaboExamen', this.form.commentaire)" />            
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLaboExamen', this.form.commentaire)">{{tr}}New{{/tr}}</button>            
     </th>
     <td>{{mb_field object=$prescriptionItem field="commentaire"}}</td>
   </tr>

@@ -13,7 +13,7 @@
             <option value="">&mdash; Choisir une aide</option>
             {{html_options options=$consult_anesth->_aides.tabac.no_enum}}
           </select>
-          <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.tabac)"/>
+          <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.tabac)">{{tr}}New{{/tr}}</button>
         </td>
         <td>
           {{mb_label object=$consult_anesth field="oenolisme"}}
@@ -21,7 +21,7 @@
             <option value="">&mdash; Choisir une aide</option>
             {{html_options options=$consult_anesth->_aides.oenolisme.no_enum}}
           </select>
-          <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.oenolisme)"/>
+          <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.oenolisme)">{{tr}}New{{/tr}}</button>
         </td>
       </tr>
       <tr>  

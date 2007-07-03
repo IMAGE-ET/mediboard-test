@@ -25,7 +25,7 @@
         </tbody>
         <tr>
           <td>
-            <button id="menuIcons-trigger" type="button" style="float:left" />
+            <button id="menuIcons-trigger" type="button" style="float:left" class="notext">{{tr}}Show/Hide{{/tr}}</button>
           </td>
           {{foreach from=$affModule item=currModule}}
           <td align="center" class="{{if $currModule.modName==$m}}textSelected{{else}}textNonSelected{{/if}}" title="{{$currModule.modNameLong}}">
