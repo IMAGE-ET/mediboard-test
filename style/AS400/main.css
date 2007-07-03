@@ -312,22 +312,46 @@ table.tabmenu td.selectedRight {
 
 /* Inputs */
 
-a.button, button, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
-a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange {
+button,
+a.button, 
+a.buttontrash, 
+a.buttonsubmit, 
+a.buttonnew, 
+a.buttonprint, 
+a.buttoncancel, 
+a.buttonmodify, 
+a.buttonsearch, 
+a.buttontick, 
+a.buttonchange {
   font-family: "Lucida Console", "Courier New", Courier, mono;
   color: #fff;
   background-color: #0f0;
 }
 
-a.button:hover, button:hover, a.buttontrash:hover, a.buttonsubmit:hover, a.buttonnew:hover,
-a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, a.buttonsearch:hover, 
-a.buttontick:hover, a.buttonchange:hover {
+button:hover, 
+a.button:hover, 
+a.buttontrash:hover, 
+a.buttonsubmit:hover, 
+a.buttonnew:hover,
+a.buttonprint:hover, 
+a.buttoncancel:hover, 
+a.buttonmodify:hover, 
+a.buttonsearch:hover, 
+a.buttontick:hover, 
+a.buttonchange:hover {
   color: #000;
   background-color: #ff0;
 }
-button.edit, a.buttonedit, button.trash, a.buttontrash, button.submit, a.buttonsubmit,
-button.new, a.buttonnew, button.print, a.buttonprint, button.cancel, a.buttoncancel,
-button.modify, a.buttonmodify, button.search, a.buttonsearch, button.tick, a.buttontick,
+
+button.edit, a.buttonedit, 
+button.trash, a.buttontrash, 
+button.submit, a.buttonsubmit, 
+button.new, a.buttonnew, 
+button.print, a.buttonprint, 
+button.cancel, a.buttoncancel,
+button.modify, a.buttonmodify, 
+button.search, a.buttonsearch, 
+button.tick, a.buttontick,
 button.change, a.buttonchange {
   background-image: none;
   padding: 1px;

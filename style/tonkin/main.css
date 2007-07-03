@@ -291,9 +291,21 @@ textarea {
   padding: 1px;
 }
 
-a.button, button, a.buttonedit, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
-a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange, a.buttondown,
-a.buttonadd, a.buttonremove,
+button, 
+a.button, 
+a.buttonedit, 
+a.buttontrash, 
+a.buttonsubmit, 
+a.buttonnew, 
+a.buttonprint, 
+a.buttoncancel, 
+a.buttonmodify, 
+a.buttonsearch, 
+a.buttontick, 
+a.buttonchange, 
+a.buttondown,
+a.buttonadd, 
+a.buttonremove,
 input[type=submit],
 input[type=reset],
 input[type=button] {
@@ -446,6 +458,18 @@ button.edit, a.buttonedit {
 
 button.edit:hover, a.buttonedit:hover {
   background-image: url(./images/buttons/editover.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.hslip, a.buttonhslip {
+  background-image: url(./images/buttons/hslip.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.hslip:hover, a.buttonhslip:hover {
+  background-image: url(./images/buttons/hslipover.png);
   background-position: left bottom;
   padding-left: 18px;
 }

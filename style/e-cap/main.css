@@ -543,6 +543,16 @@ a.buttonedit:hover {
   background-image: url(../tonkin/images/buttons/editover.png);
 }
 
+button.hslip, 
+a.buttonhslip {
+  background-image: url(../tonkin/images/buttons/hslip.png);
+}
+
+button.hslip:hover, 
+a.buttonhslip:hover {
+  background-image: url(../tonkin/images/buttons/hslipover.png);
+}
+
 button.add, 
 a.buttonadd {
   background-image: url(../tonkin/images/buttons/add.png);
