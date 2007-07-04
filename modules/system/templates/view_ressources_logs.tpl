@@ -6,13 +6,13 @@ function zoom(date, module, element, interval, numelem) {
   url = new Url();
   url.setModuleAction("dPstats", "graph_ressourceslog");
   url.addParam("suppressHeaders", 1);
-  url.addParam("size"           , 2);
+  url.addParam("size"           , 1.5);
   url.addParam("date"           , date);
   url.addParam("module"         , module);
   url.addParam("element"        , element);
   url.addParam("interval"       , interval);
   url.addParam("numelem"        , numelem);
-  url.popup(500, 445, date + " " + module + " " + element);
+  url.popup(650, 445, date + " " + module + " " + element);
 }
 
 function pageMain() {
@@ -64,7 +64,7 @@ function pageMain() {
       <tr>
       {{/if}}
         <td class="button">
-        {{if $dPconfig.graph_engine == "eZgraph"}}
+        {{if $dPconfig.graph_engine == "eZgraph" && $dPconfig.graph_svg == "oui"}}
           {{if $groupres == 1}}
           <a href="#" onclick="zoom('{{$date}}', 0, '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
 			<object data="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" type="image/svg+xml">

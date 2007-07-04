@@ -9,6 +9,7 @@
 
 global $AppUI, $can, $m, $dPconfig;
 
+require_once($AppUI->getSystemClass("mbGraph"));
 require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_pie"));
 
@@ -94,40 +95,23 @@ foreach($datas as $data) {
   $tab[$data['legend']] = $data['value'];
 }
 
+// Set up the title for the graph
+$title = mbTranformTime(null, $date, "%A %d %b %Y");
+if($module) 		
+	$title .= " : ".$AppUI->_($module);
+
 if($dPconfig['graph_engine'] == 'eZgraph') {
-	$graph = new ezcGraphPieChart();
-  	$graph->palette = new ezcGraphPaletteEzRed();
-	$title = mbTranformTime(null, $date, "%A %d %b %Y");
-	if($module) 
-		$title .= " : ".$AppUI->_($module);
-  	$graph->title = $title;
-  	$graph->options->label = '%3$.1f%%';
-   	$graph->data[$title] = new ezcGraphArrayDataSet($tab);
-  
-  	$graph->renderer = new ezcGraphRenderer3d();
- 	$graph->renderer->options->moveOut = .2;
- 	$graph->options->font = './shell/arial.ttf';
- 	$graph->renderer->options->pieChartOffset = 63;
- 	$graph->renderer->options->pieChartGleam = .3;
- 	$graph->renderer->options->pieChartGleamColor = '#FFFFFF';
- 	$graph->renderer->options->pieChartGleamBorder = 2;
-	$graph->renderer->options->pieChartShadowSize = 2;
-  	$graph->renderer->options->pieChartShadowColor = '#000000';
- 	$graph->renderer->options->legendSymbolGleam = .5;
-  	$graph->renderer->options->legendSymbolGleamSize = .9;
-  	$graph->renderer->options->legendSymbolGleamColor = '#FFFFFF';
- 	$graph->renderer->options->pieChartSymbolColor = '#BABDB688';
-    
-  	$graph->renderToOutput(300, 145);
-	
+  	$graph = new CMbGraph();
+  	$graph->selectType("Pie",$title,$size);
+  	$graph->selectPalette("ez");
+  	$graph->addData($tab,$title);
+  	$graph->selectMode($dPconfig['graph_svg']);
+  	$graph->render("out",$size);
 } else {
 	// Setup the graph.
 	$graph = new PieGraph(300*(1+$size*0.2),200*$size,"auto");    
 	$graph->SetMarginColor("lightblue");
 	
-	// Set up the title for the graph
-	$title = mbTranformTime(null, $date, "%A %d %b %Y");
-	if($module) $title .= " : ".$AppUI->_($module);
 	$graph->title->Set($title);
 	$graph->title->SetFont(FF_ARIAL,FS_NORMAL,7+$size);
 	$graph->title->SetColor("darkred");

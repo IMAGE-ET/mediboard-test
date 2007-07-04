@@ -189,6 +189,7 @@ $dPconfig["dPfiles"]["nb_upload_files"] = "1";
 
 $dPconfig["graph_engine"] = "jpgraph";
 
+$dPconfig["graph_svg"] = "non";
 
 $dPconfig["dPsante400"] = array (
   "nb_rows" => "5",

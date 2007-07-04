@@ -304,7 +304,7 @@ $dPconfig = $mbConfig->values;
 
 <table class="form">
   <tr>
-    <th class="category" colspan="4">Graphiques</th>
+    <th class="category" colspan="2">Graphiques</th>
   </tr>
 
   <tr>
@@ -317,6 +317,15 @@ $dPconfig = $mbConfig->values;
     </td>
   </tr>
   
+  <tr>
+    <th><label for="graph_svg" title="Graphique">Choix du mode SVG :</label></th>
+    <td>
+      <select name="graph_svg">
+        <option value="oui" <?php if($dPconfig['graph_svg'] == 'oui'){echo 'selected="selected"';} ?> >oui</option>
+        <option value="non" <?php if($dPconfig['graph_svg'] == 'non'){echo 'selected="selected"';} ?> >non</option>
+      </select>
+    </td>
+  </tr>
 </table>
 
 
