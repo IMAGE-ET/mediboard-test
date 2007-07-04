@@ -73,9 +73,9 @@ if($whereSoundex && ($nbExact = (100 - count($patients)))) {
 }
 
 // Sélection du premier de la liste si aucun n'est déjà sélectionné
-if (!$patient->_id and count($patients)) {
+if (!$patient->_id and count($patients) == 1) {
   $patient = reset($patients);
-} 
+}
 
 // Liste des praticiens disponibles
 $listPrat = array();
