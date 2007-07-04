@@ -17,8 +17,9 @@ class CMbGraph {
 			$this->graph->options->label = '%3$.1f%%';
 			$this->graph->options->font = './shell/arial.ttf';
 			$this->graph->legend->symbolSize = $size*9;
-  			$this->graph->legend->portraitSize = ".25";
+  			//$this->graph->legend->portraitSize = ".25";
 			$this->graph->options->font->maxFontSize = $size*8;
+			$this->graph->options->font->padding = "1";
 		}
 	}
 	
@@ -64,9 +65,9 @@ class CMbGraph {
 	function render($render,$size) {
 		$this->renderer->options->moveOut = .2;
 		if($render == "in") {
-			$this->graph->render($size*300, $size*145);
+			$this->graph->render($size*420, $size*200);
 		} else if($render == "out") {
-			$this->graph->renderToOutput($size*300, $size*145);
+			$this->graph->renderToOutput($size*420, $size*200);
 		}
 	}
 }

@@ -67,35 +67,47 @@ function pageMain() {
         {{if $dPconfig.graph_engine == "eZgraph" && $dPconfig.graph_svg == "oui"}}
           {{if $groupres == 1}}
           <a href="#" onclick="zoom('{{$date}}', 0, '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
-			<object data="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" type="image/svg+xml">
+          		Cliquez ici pour zoomer 
+          </a><br />
+		  <object width="100%" height="200px" data="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" type="image/svg+xml">
 			        You need a browser capeable of SVG to display this image.
-			</object>
-          </a>
-          </td>
-          <td class="button">
+		  </object>
+       </td>
+       <td class="button">
           <a href="#" onclick="zoom('{{$date}}', 'total', '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
-          	<object data="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=total&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" type="image/svg+xml">
+          		Cliquez ici pour zoomer
+          </a><br />
+          <object width="100%" height="200px"  data="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=total&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" type="image/svg+xml">
 			        You need a browser capeable of SVG to display this image.
-			</object>
-          </a>
+	      </object>
           {{else}}
           <a href="#" onclick="zoom('{{$date}}', '{{$log->module}}', '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
-            <object data="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" type="image/svg+xml">
+          		Cliquez ici pour zoomer
+          </a><br />
+          <object width="100%" height="200px"  data="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" type="image/svg+xml">
 			        You need a browser capeable of SVG to display this image.
-			</object>
-          </a>
+	      </object>
           {{/if}}
          {{else}}
           {{if $groupres == 1}}
+          <a href="#" onclick="zoom('{{$date}}', 0, '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
+				Cliquez ici pour zoomer <br />
+          </a><br />
           <a href="#" onclick="zoom('{{$date}}', 0, '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
            	<img src="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" alt="Graphique pour la journée" /> 
           </a>
           </td>
           <td class="button">
           <a href="#" onclick="zoom('{{$date}}', 'total', '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
+				Cliquez ici pour zoomer
+          </a><br />
+          <a href="#" onclick="zoom('{{$date}}', 'total', '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
             <img src="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=total&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" alt="Graphique pour la journée" />
           </a>
           {{else}}
+          <a href="#" onclick="zoom('{{$date}}', '{{$log->module}}', '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
+				Cliquez ici pour zoomer
+          </a><br />
           <a href="#" onclick="zoom('{{$date}}', '{{$log->module}}', '{{$element}}', '{{$interval}}', '{{$numelem}}')" title="Agrandir">
             <img src="index.php?m=dPstats&amp;a=graph_ressourceslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;element={{$element}}&amp;interval={{$interval}}&amp;numelem={{$numelem}}" alt="Graphique pour {{$log->module}}" />
           </a>
