@@ -4,7 +4,7 @@
 * @package Mediboard
 * @subpackage dPhospi
 * @version $Revision: $
-* @author Sébastien Fillonneau
+* @author Alexis Granger
 */
 
 global $AppUI, $can, $m, $g;
@@ -13,12 +13,14 @@ global $AppUI, $can, $m, $g;
 $date = mbGetValueFromGetOrSession("date", mbDate()); 
 $pathos = new CDiscipline();
 
+// Recuperation de l'id du sejour
 $sejour_id = mbGetValueFromGet("sejour_id");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
 $sejour->loadRefPraticien();
+$sejour->_ref_praticien->loadRefFunction();
 $sejour->loadRefPatient();
 $sejour->getDroitsCMU();
     
