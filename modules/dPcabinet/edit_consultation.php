@@ -199,15 +199,10 @@ $techniquesComp->loadAides($userSel->user_id);
 
 $examComp = new CExamComp();
 $examComp->loadAides($userSel->user_id);
- 
-
 
 $consult->loadRefsActesCCAM();
 $consult->loadRefsCodesCCAM();
 $consult->loadPossibleActes();
-
-
-
 
 // Création du template
 $smarty = new CSmartyDP();

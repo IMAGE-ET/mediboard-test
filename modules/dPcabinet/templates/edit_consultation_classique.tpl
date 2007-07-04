@@ -44,7 +44,6 @@ function pageMain() {
   updateList();
   
   {{if $consult->consultation_id}}
-  incPatientHistoryMain();
   new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
   {{/if}}
 }

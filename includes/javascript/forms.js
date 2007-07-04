@@ -106,7 +106,6 @@ function pasteHelperContent(oHelpElement) {
   
   var sPropName = aFieldFound[0];
   var oAreaField = oForm.elements[sPropName];
-  //Assert.that(oAreaField == "toto", "Helper element '%s' has no corresponding text area '%s' in the same form", oHelpElement.name, sPropName);
 
   var sValue = oHelpElement.value;
   oHelpElement.value = "";
@@ -114,29 +113,34 @@ function pasteHelperContent(oHelpElement) {
   oAreaField.scrollTop = oAreaField.scrollHeight;
 }
 
-function putHelperContent(oElem, sFieldSelect){
-  var oForm       = oElem.form;
-  var sValue      = oElem.options[oElem.selectedIndex].innerHTML;
-  
-  for(var i=0; i< oForm.elements.length; i++){
+function putHelperContent(oElem, sFieldSelect) {
+  var oForm      = oElem.form;
+  var sDependsOn = oElem.options[oElem.selectedIndex].innerHTML;
+
+  // Search for helpers elements in same form
+  for (var i=0; i< oForm.elements.length; i++) {
     var element = oForm.elements[i];
     
-    var aFound  = element.name.match(/_helpers_(.*)/);
-    var aFoundOk = aFound != null && aFound.length == 2;
-    
-    if (element.nodeType == 1 && element.nodeName == "SELECT" && aFoundOk) {
-      var aFieldsDepend = aFound[1].split("-");
-      if(aFieldsDepend[0] == sFieldSelect){
-        if(!aFieldsDepend[1]){
-          aFieldsDepend[1] = "";
-        }
-        if(aFieldsDepend[1] == sValue){
-          $(element).show();
-        }else{
-          $(element).hide();
-        }
-      }
+    // Filter helper elements
+    var aFound = element.name.match(/_helpers_(.*)/);
+    if (!aFound) {
+    	continue;
     }
+    
+    Assert.that(aFound.length == 2, "Helper field name '%s' incorrect", element.name);
+    Assert.that(element.nodeName == "SELECT", "Helper field name '%s' should be a select", element.name);
+    
+    // Check correspondance
+		var aHelperParts = aFound[1].split("-");
+		Assert.that(aHelperParts[0] == sFieldSelect, "Helper Field '%s' should target '%s' field",  element.name, sFieldSelect);
+    
+    // Show/Hide helpers
+    var sHelperDependsOn = aHelperParts[1]; 
+    if (sHelperDependsOn == "no_enum") {
+    	sHelperDependsOn = "";
+    }
+    
+    $(element)[sHelperDependsOn == sDependsOn ? "show" : "hide"]();
   }
 }
 

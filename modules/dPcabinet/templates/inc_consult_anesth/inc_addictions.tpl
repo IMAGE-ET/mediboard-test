@@ -6,7 +6,6 @@ function submitAddiction(oForm){
 function finAddiction(oForm){
   oForm._hidden_addiction.value = oForm.addiction.value;
   oForm.addiction.value = "";
-  oForm._helpers_addiction.value = "";
 }
 
 {{if $_is_anesth}}
@@ -21,7 +20,9 @@ function finAddiction(oForm){
 </script>
 
 <hr />
+
 <form name="editTabacFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
@@ -32,6 +33,7 @@ function finAddiction(oForm){
 </form>
 
 <form name="editAddictFrm" action="?m=dPcabinet" method="post">
+
 <input type="hidden" name="m" value="dPpatients" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_addiction_aed" />
@@ -46,13 +48,20 @@ function finAddiction(oForm){
     <td colspan="2"><strong>Addiction</strong></td>
     <td>
       {{mb_label object=$addiction field="addiction"}}
-      <select name="_helpers_addiction" size="1" onchange="pasteHelperContent(this)">
+      {{foreach from=$addiction->_aides.addiction item=_helpers key=dependsOn}}
+      <select name="_helpers_addiction-{{$dependsOn}}" size="1" onchange="pasteHelperContent(this)" style="display:none;">
         <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$addiction->_aides.addiction.no_enum}}
+        {{foreach from=$_helpers item=list_aides key=sTitleOpt}}
+        <optgroup label="{{$sTitleOpt}}">
+          {{html_options options=$list_aides}}
+        </optgroup>
+        {{/foreach}}
       </select>
+      {{/foreach}}
+
       <input type="hidden" name="_hidden_addiction" value="" />
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAddiction', this.form._hidden_addiction, 'addiction')">
-        Nouveau
+        {{tr}}New{{/tr}}
       </button>
     </td>
   </tr>
@@ -60,7 +69,7 @@ function finAddiction(oForm){
   <tr>
     <th>{{mb_label object=$addiction field="type"}}</th>
     <td>
-      {{html_options name="type" options=$addiction->_enumsTrans.type}}
+      {{mb_field object=$addiction field="type" onchange="putHelperContent(this,'addiction')"}}
     </td>
     <td>
       <textarea name="addiction" onblur="if(verifNonEmpty(this)){submitAddiction(this.form);finAddiction(this.form);}"></textarea>

@@ -56,8 +56,6 @@ function pageMain() {
   PairEffect.initGroup("acteEffect");
   
   {{if $consult->consultation_id}}
-  incPatientHistoryMain();
-  incAntecedantsMain();
   new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
   regFieldCalendar("editAntFrm", "date");
   regFieldCalendar("editTrmtFrm", "debut");

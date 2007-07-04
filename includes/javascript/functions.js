@@ -406,7 +406,7 @@ Class.extend(PairEffect, {
 
   // Constructor
   initialize: function(idTarget, oOptions) {
-
+  	
     var oDefaultOptions = {
       idTrigger: idTarget + "-trigger",
       sEffect: null, // could be null, "appear", "slide", "blind"
@@ -458,6 +458,7 @@ Class.extend(PairEffect, {
  */
 
 Object.extend(PairEffect, {
+	declaredEffects : {},
 
   // Initialize a whole group giving the className for all targets
   initGroup: function(sTargetsClass, oOptions) {

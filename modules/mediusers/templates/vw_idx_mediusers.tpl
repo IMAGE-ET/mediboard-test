@@ -7,6 +7,13 @@ var Functions = {
   
   expand: function() {
     Element.show.apply(null, $$("tbody.functionEffect"));
+  },
+  
+  initEffect: function(function_id) {
+    new PairEffect("function" + function_id, { 
+      bStoreInCookie: false,
+      bStartVisible: function_id == "{{$mediuserSel->function_id}}"
+    } );
   }
 }
 
@@ -19,11 +26,6 @@ function deldate(sField){
 }
 
 function pageMain() {
-  PairEffect.initGroup("functionEffect", { 
-    bStoreInCookie: false,
-    idStartVisible: "function{{$mediuserSel->function_id}}",
-    sEffect: "appear"
-  });
   regFieldCalendar("mediuser", "deb_activite");
   regFieldCalendar("mediuser", "fin_activite");
 }
@@ -53,19 +55,19 @@ function pageMain() {
             {{$curr_group->text}}
           </th>
         </tr>
-        {{foreach from=$curr_group->_ref_functions item=curr_function}}
-        <tr id="function{{$curr_function->_id}}-trigger">
-          <td style="background-color: #{{$curr_function->color}}">
-          </td>
+        {{foreach from=$curr_group->_ref_functions item=_function}}
+        <tr id="function{{$_function->_id}}-trigger">
+          <td style="background-color: #{{$_function->color}}" />
           <td colspan="4">
-            <strong>{{$curr_function->text}}</strong>
-            ({{$curr_function->_ref_users|@count}})
+            <strong>{{$_function->text}}</strong>
+            ({{$_function->_ref_users|@count}})
           </td>
         </tr>
-        <tbody class="functionEffect" id="function{{$curr_function->_id}}" style="display:none;">
-        {{foreach from=$curr_function->_ref_users item=curr_user}}
+        <tbody class="functionEffect" id="function{{$_function->_id}}">
+        <tr class="script"><td><script type="text/javascript">Functions.initEffect({{$_function->_id}});</script></td></tr>
+        {{foreach from=$_function->_ref_users item=curr_user}}
         <tr {{if $curr_user->_id == $mediuserSel->_id}}class="selected"{{/if}}>
-          <td style="background-color: #{{$curr_function->color}}"></td>
+          <td style="background-color: #{{$_function->color}}" />
           {{assign var=user_id value=$curr_user->_id}}
           {{assign var="href" value="?m=$m&tab=$tab&user_id=$user_id"}}
           <td>
@@ -103,8 +105,6 @@ function pageMain() {
         <tr>
           {{if $mediuserSel->_id}}
           <th class="title modify" colspan="2">
-            
-                      
             <div class="idsante400" id="CMediusers-{{$mediuserSel->_id}}"></div>
             
             <a style="float:right;" href="#" onclick="view_log('CMediusers',{{$mediuserSel->user_id}})">
@@ -115,7 +115,6 @@ function pageMain() {
           {{else}}
           <th class="title" colspan="2">
             <input type="hidden" name="_user_type" value="0" />
-          
             Création d'un nouvel utilisateur
           {{/if}}
           </th>
@@ -162,9 +161,9 @@ function pageMain() {
               <option value="">&mdash; Choisir une fonction &mdash;</option>
               {{foreach from=$groups item=curr_group}}
               <optgroup label="{{$curr_group->text}}">
-              {{foreach from=$curr_group->_ref_functions item=curr_function}}
-              <option class="mediuser" style="border-color: #{{$curr_function->color}};" value="{{$curr_function->_id}}" {{if $curr_function->_id == $mediuserSel->function_id}} selected="selected" {{/if}}>
-                {{$curr_function->text}}
+              {{foreach from=$curr_group->_ref_functions item=_function}}
+              <option class="mediuser" style="border-color: #{{$_function->color}};" value="{{$_function->_id}}" {{if $_function->_id == $mediuserSel->function_id}} selected="selected" {{/if}}>
+                {{$_function->text}}
               </option>
               {{/foreach}}
               </optgroup>

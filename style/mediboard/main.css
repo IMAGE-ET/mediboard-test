@@ -49,7 +49,6 @@ th {
 td {
 }
 
-
 th.title.modify {
   color: #f00;
 }
@@ -70,6 +69,10 @@ th.category.cancelled,
 table.form th.category.cancelled {
   color: #fff;
   background-color: #f00;
+}
+
+tr.script {
+  display: none;
 }
 
 img {
