@@ -56,8 +56,6 @@ if ($can->edit) {
   $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where);
 }
 
-
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("pathos",$pathos);
