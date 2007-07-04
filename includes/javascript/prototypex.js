@@ -103,6 +103,15 @@ Class.extend(Element.ClassNames, {
   }
 });
 
+
+Object.extend(Form.Element, {
+  // Set an element value an notify 'change' event
+  setValue: function(element, value) {
+   element.value = value;
+    (element.onchange || Prototype.emptyFunction)();
+  }
+});
+
 /**
  * Hack to make Ajax from prototype.js work with Rico
  * For prototype version 1.5.0 Final

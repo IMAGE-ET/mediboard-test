@@ -27,7 +27,7 @@ aProtocoles[{{$curr_protocole->protocole_id}}] = {
 {{/foreach}}
 
 function setClose(protocole_id) {
-  window.opener.setProtocole(aProtocoles[protocole_id]);
+  window.opener.ProtocoleSelector.set(aProtocoles[protocole_id]);
   window.close();
 }
 {{/if}}

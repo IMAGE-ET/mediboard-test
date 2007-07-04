@@ -1,40 +1,8 @@
 <!-- $Id$ -->
 
+{{mb_include_script module="dPplanningOp" script="protocole_selector"}}
 
 <script type="text/javascript">
-
-function popProtocole() {
-  var url = new Url;
-  url.setModuleAction("dPplanningOp", "vw_protocoles");
-  url.addElement(document.editOp.chir_id, "chir_id");
-  url.popup(700, 500, "Protocole");
-}
-
-function setProtocole(protocole) {
-
-  var formOp = document.editOp;
-  var formSejour = document.editSejour;
-  
-  formOp.chir_id.value           = protocole.chir_id;
-  formOp.chir_id.onchange();
-  formOp.codes_ccam.value        = protocole.codes_ccam;
-  refreshListCCAM();
-  formOp.libelle.value           = protocole.libelle;
-  formOp._hour_op.value          = protocole._hour_op;
-  formOp._min_op.value           = protocole._min_op;
-  formOp.materiel.value          = protocole.materiel;
-  formOp.examen.value            = protocole.examen;
-  formOp.depassement.value       = protocole.depassement;
-  formOp.forfait.value           = protocole.forfait;
-  formOp.fournitures.value       = protocole.fournitures;
-  formOp.rques.value             = protocole.rques_operation;
-  formSejour.type.value          = protocole.type;
-  formSejour._duree_prevue.value = protocole.duree_hospi;
-  formSejour._duree_prevue.onchange();
-  formSejour.convalescence.value = protocole.convalescence;
-  formSejour.DP.value            = protocole.DP;
-  formSejour.rques.value         = protocole.rques_sejour;
-}
 
 function printDocument(iDocument_id) {
   form = document.editOp;
@@ -152,25 +120,54 @@ function pageMain() {
     {{if $op->operation_id}}
     {{if $modurgence}}
     <th colspan="2" class="title urgence modify">
-      <button style="float:left;" class="search" type="button" onclick="popProtocole()">Choisir un protocole</button>
+      <button style="float:left;" class="search" type="button" onclick="ProtocoleSelector.init()">Choisir un protocole</button>
       {{tr}}msg-COperation-title-modify-urgence{{/tr}} {{$patient->_view}} par le Dr. {{$chir->_view}}
     </th>
     {{else}}
     <th colspan="2" class="title modify">
-      <button class="search" style="float:left;" type="button" onclick="popProtocole()">Choisir un protocole</button>
+      <button class="search" style="float:left;" type="button" onclick="ProtocoleSelector.init()">Choisir un protocole</button>
       {{tr}}msg-COperation-title-modify{{/tr}} {{$patient->_view}} par le Dr. {{$chir->_view}}
     </th>
     {{/if}}
     {{else}}
     {{if $modurgence}}
     <th colspan="2" class="title urgence"> 
-      <button class="search" style="float: left;" type="button" onclick="popProtocole()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
+      <button class="search" style="float: left;" type="button" onclick="ProtocoleSelector.init()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
       {{tr}}msg-COperation-title-create-urgence{{/tr}}
     </th>
     {{else}}
     <th colspan="2" class="title"> 
-      <button class="search" style="float: left;" type="button" onclick="popProtocole()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
+      <button class="search" style="float: left;" type="button" onclick="ProtocoleSelector.init()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
       {{tr}}msg-COperation-title-create{{/tr}}
+      
+      <script type="text/javascript">
+      ProtocoleSelector.init = function(){
+        
+        var formOp        = document.editOp;
+        var formSejour    = document.editSejour;
+  
+        this.eChir_id       = formOp.chir_id;
+        this.eCodes_ccam    = formOp.codes_ccam;
+        this.eLibelle       = formOp.libelle;
+        this.eHour_op       = formOp._hour_op;
+        this.eMin_op        = formOp._min_op;
+        this.eMateriel      = formOp.materiel;
+        this.eExamen        = formOp.examen;
+        this.eDepassement   = formOp.depassement;
+        this.eForfait       = formOp.forfait;
+        this.eFournitures    = formOp.fournitures;
+        this.eRques_op         = formOp.rques;
+        
+        this.eType          = formSejour.type;
+        this.eDuree_prevu   = formSejour._duree_prevue;
+        this.eConvalescence = formSejour.convalescence;
+        this.eDP            = formSejour.DP;
+        this.eRques_sej         = formSejour.rques;
+        
+        this.pop();
+      }
+      </script>
+     
     </th>
     {{/if}}
     {{/if}}
