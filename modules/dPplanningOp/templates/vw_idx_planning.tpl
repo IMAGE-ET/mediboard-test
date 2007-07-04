@@ -45,7 +45,7 @@ function pageMain() {
 
 <table class="main">
   <tr>
-    <td colspan="2">
+    <td style="height: 16px;">
       <form action="index.php" name="selection" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
@@ -60,15 +60,15 @@ function pageMain() {
       </select>
       </form>
     </td>
+    <td rowspan="3" id="operations" class="greedyPane" style="vertical-align:top;">
+    </td>
   </tr>
   <tr>
-    <th style="height: 100%;">
+    <th style="height: 16px;">
       <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
       {{$date|date_format:"%B %Y"}}
       <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
     </th>
-    <td rowspan="2" id="operations" class="greedyPane" style="vertical-align:top;">
-    </td>
   </tr>
   <tr>
     <td>
