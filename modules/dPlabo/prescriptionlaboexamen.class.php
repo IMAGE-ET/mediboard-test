@@ -71,8 +71,8 @@ class CPrescriptionLaboExamen extends CMbObject {
     // Check prescription status
     $clone->loadRefPrescription();
     $clone->_ref_prescription_labo->loadRefsBack();
-    if($clone->_ref_prescription_labo->_status >= CPrescriptionLabo::VEROUILLEE) {
-      return "Prescription verrouillée";
+    if($clone->_ref_prescription_labo->_status >= CPrescriptionLabo::VALIDEE) {
+      return "Prescription déjà validée";
     }
     // Get the analysis to check resultat
     if (!$this->examen_labo_id) {
