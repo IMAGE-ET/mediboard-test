@@ -86,3 +86,212 @@ table.tabmenu td.selectedRight {
 table.tabview td.tabox {
   background: url(./images/pictures/acierOnglet.png) repeat;
 }
+
+/* Bouttons */
+
+
+button, 
+a.button, 
+a.buttonedit, 
+a.buttontrash, 
+a.buttonsubmit, 
+a.buttonnew, 
+a.buttonprint, 
+a.buttoncancel, 
+a.buttonmodify, 
+a.buttonsearch, 
+a.buttonlock, 
+a.buttontick, 
+a.buttonchange, 
+a.buttondown,
+a.buttonadd, 
+a.buttonremove,
+input[type=submit],
+input[type=reset],
+input[type=button] {
+  color: #000;
+  text-decoration: none;
+  cursor: default;
+  border: 1px black solid;
+  font-size: 12px;
+  background-color: #ddd;
+  margin: 0 2px;
+  padding: 0 2px;
+  padding-left: 18px;
+  padding-bottom: 1px;
+  background-image: url(../tonkin/images/buttons/button.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  height: 18px
+}
+
+button:hover,
+a.button:hover,
+input[type=submit]:hover,
+input[type=reset]:hover,
+input[type=button]:hover {
+  background-image: url(../tonkin/images/buttons/buttonover.png);
+  background-position: left bottom;
+}
+
+button.notext,
+a.notext {
+  background-position: -1px bottom;
+  width: 20px;
+}
+
+button.trash, 
+a.buttontrash {
+  background-image: url(../tonkin/images/buttons/trash.png);
+}
+
+button.trash:hover, 
+a.buttontrash:hover {
+  background-image: url(../tonkin/images/buttons/trashover.png);
+}
+
+button.submit, 
+a.buttonsubmit {
+  background-image: url(../tonkin/images/buttons/save.png);
+}
+
+button.submit:hover, 
+a.buttonsubmit:hover {
+  background-image: url(../tonkin/images/buttons/saveover.png);
+}
+
+button.new, 
+a.buttonnew {
+  background-image: url(../tonkin/images/buttons/new.png);
+}
+
+button.new:hover, 
+a.buttonnew:hover {
+  background-image: url(../tonkin/images/buttons/newover.png);
+}
+
+button.print, 
+a.buttonprint {
+  background-image: url(../tonkin/images/buttons/print.png);
+}
+
+button.print:hover, 
+a.buttonprint:hover {
+  background-image: url(../tonkin/images/buttons/printover.png);
+}
+
+button.cancel, 
+a.buttoncancel {
+  background-image: url(../tonkin/images/buttons/cancel.png);
+}
+
+button.cancel:hover, 
+a.buttoncancel:hover {
+  background-image: url(../tonkin/images/buttons/cancelover.png);
+}
+
+button.modify, 
+a.buttonmodify {
+  background-image: url(../tonkin/images/buttons/save.png);
+}
+
+button.modify:hover, 
+a.buttonmodify:hover {
+  background-image: url(../tonkin/images/buttons/saveover.png);
+}
+
+button.search, 
+a.buttonsearch {
+  background-image: url(../tonkin/images/buttons/search.png);
+}
+
+button.search:hover, 
+a.buttonsearch:hover {
+  background-image: url(../tonkin/images/buttons/searchover.png);
+}
+
+button.lock, 
+a.buttonlock {
+  background-image: url(../tonkin/images/buttons/lock.png);
+}
+
+button.lock:hover, 
+a.buttonlock:hover {
+  background-image: url(../tonkin/images/buttons/lockover.png);
+}
+
+button.tick, 
+a.buttontick {
+  background-image: url(../tonkin/images/buttons/tick.png);
+}
+
+button.tick:hover, 
+a.buttontick:hover {
+  background-image: url(../tonkin/images/buttons/tickover.png);
+}
+
+button.down, 
+a.buttondown {
+  background-image: url(../tonkin/images/buttons/down.png);
+}
+
+button.down:hover, 
+a.buttondown:hover {
+  background-image: url(../tonkin/images/buttons/downover.png);
+}
+
+button.change, 
+a.buttonchange {
+  background-image: url(../tonkin/images/buttons/change.png);
+}
+
+button.change:hover, 
+a.buttonchange:hover {
+  background-image: url(../tonkin/images/buttons/changeover.png);
+}
+
+button.edit, 
+a.buttonedit {
+  background-image: url(../tonkin/images/buttons/edit.png);
+}
+
+button.edit:hover, 
+a.buttonedit:hover {
+  background-image: url(../tonkin/images/buttons/editover.png);
+}
+
+button.hslip, 
+a.buttonhslip {
+  background-image: url(../tonkin/images/buttons/hslip.png);
+}
+
+button.hslip:hover, 
+a.buttonhslip:hover {
+  background-image: url(../tonkin/images/buttons/hslipover.png);
+}
+
+button.add, 
+a.buttonadd {
+  background-image: url(../tonkin/images/buttons/add.png);
+}
+
+button.add:hover, 
+a.buttonadd:hover {
+  background-image: url(../tonkin/images/buttons/addover.png);
+}
+
+button.remove, a.buttonremove {
+  background-image: url(../tonkin/images/buttons/remove.png);
+}
+
+button.remove:hover, a.buttonremove:hover {
+  background-image: url(../tonkin/images/buttons/removeover.png);
+}
+
+button.notext, button.notext:hover{
+  padding : 0px 0px 0px 14px;
+}
+
+a.notext, a.notext:hover{
+  padding : 0px 0px 1px 18px;
+}
