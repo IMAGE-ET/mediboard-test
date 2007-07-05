@@ -77,7 +77,12 @@
       </form>
     </td>
     <td style="text-align: center">
-      {{$curr_prescription->_ref_prescription_items|@count}}
+      {{if $curr_prescription->_ref_internal_items|@count}}
+      {{$curr_prescription->_ref_internal_items|@count}} int.
+      {{/if}}
+      {{if $curr_prescription->_ref_external_items|@count}}
+      {{$curr_prescription->_ref_external_items|@count}} ext.
+      {{/if}}
     </td>
     <td class="text">
       {{tr}}CPrescriptionLabo-_status.{{$curr_prescription->_status}}{{/tr}}
