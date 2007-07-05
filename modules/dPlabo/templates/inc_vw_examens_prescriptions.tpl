@@ -68,7 +68,7 @@ Object.extend(Droppables, {
       {{if !$curr_examen->_external}}
       {{if $_item->date}}
         {{assign var=msgClass value=""}}
-        {{if $curr_examen->type == "num"}}
+        {{if $curr_examen->type == "num" && $_item->resultat}}
           {{mb_ternary var=msgClass test=$_item->_hors_limite value=warning other=message}}
         {{/if}}
         

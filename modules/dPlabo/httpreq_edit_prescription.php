@@ -7,7 +7,7 @@
  *  @author Romain Ollivier
  */
  
-global $can;
+global $AppUI, $can;
 
 $can->needsRead();
 
@@ -21,7 +21,9 @@ $prescription->load($prescription_labo_id = mbGetValueFromGet("prescription_labo
 if (!$prescription->_id) {
   $prescription->patient_id = mbGetValueFromGet("patient_id");
   $prescription->date = mbDateTime();
+  $prescription->praticien_id = $AppUI->user_id;
 }
+
 $prescription->loadRefsFwd();
 
 // Création du template
