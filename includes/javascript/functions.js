@@ -479,6 +479,96 @@ Object.extend(PairEffect, {
   }
 });
 
+
+
+/**
+ * TogglePairEffect Class
+ */
+
+var TogglePairEffect = Class.create();
+
+// TogglePairEffect Methods
+Class.extend(TogglePairEffect, {
+
+  // Constructor
+  initialize: function(idTarget1, idTarget2, oOptions) {
+  	
+    var oDefaultOptions = {
+      idTrigger: idTarget1 + "-trigger",
+      sEffect: null, // could be null, "appear", "slide", "blind"
+      bStoreInCookie: true,
+      sCookieName: "toggleEffects"
+    };
+
+    Object.extend(oDefaultOptions, oOptions);
+    
+    this.oOptions = oDefaultOptions;
+    this.oTarget1 = $(idTarget1);
+    this.oTarget2 = $(idTarget2);
+    this.oTrigger = $(this.oOptions.idTrigger);
+
+    Assert.that(this.oTarget1, "Target1 element '%s' is undefined", idTarget1);
+    Assert.that(this.oTarget2, "Target2 element '%s' is undefined", idTarget2);
+    Assert.that(this.oTrigger, "Trigger element '%s' is undefined ", this.oOptions.idTrigger);
+  
+    // Initialize the effect
+    Event.observe(this.oTrigger, "click", this.flip.bind(this));
+  
+    // Initialize classnames and adapt visibility
+    var aCNs = Element.classNames(this.oTrigger);
+    aCNs.add("target1");
+    if (this.oOptions.bStoreInCookie) {
+      aCNs.load(this.oOptions.sCookieName);
+    }
+    Element[aCNs.include("target1") ? "hide" : "show"](this.oTarget1);
+    Element[aCNs.include("target2") ? "hide" : "show"](this.oTarget2);   
+  },
+  
+  // Flipper callback
+  flip: function() {
+    if (this.oOptions.sEffect && BrowserDetect.browser != "Explorer") {
+      new Effect.toggle(this.oTarget1, this.oOptions.sEffect);
+      new Effect.toggle(this.oTarget2, this.oOptions.sEffect);
+    } else {
+      Element.toggle(this.oTarget1);
+      Element.toggle(this.oTarget2);
+    }
+  
+    var aCNs = Element.classNames(this.oTrigger);
+    aCNs.flip("target1", "target2");
+    
+    if (this.oOptions.bStoreInCookie) {
+      aCNs.save(this.oOptions.sCookieName);
+    }
+  }
+} );
+
+/**
+ * PairEffect utiliy function
+ */
+
+Object.extend(TogglePairEffect, {
+	declaredEffects : {},
+
+  // Initialize a whole group giving the className for all targets
+  initGroup: function(sTargetsClass, oOptions) {
+    var oDefaultOptions = {
+      idStartVisible   : null, // Forces one element to start visible
+      bStartAllVisible : false,
+      sCookieName      : sTargetsClass
+    }
+    
+    Object.extend(oDefaultOptions, oOptions);
+    
+    document.getElementsByClassName(sTargetsClass).each( 
+      function(oElement) {
+        oDefaultOptions.bStartVisible = oDefaultOptions.bStartAllVisible || (oElement.id == oDefaultOptions.idStartVisible);
+        new PairEffect(oElement.id, oDefaultOptions);
+      }
+    );
+  }
+});
+
 /**
  * View port manipulation object
  *   Handle view ported objects

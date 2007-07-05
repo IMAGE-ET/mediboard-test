@@ -88,9 +88,14 @@ function deleteObjects() {
 function cancelObjects() {
   cancelOperation();
 //  cancelSejour();
-}  
+}
+
+function toggleMode() {
+  alert('toto');
+} 
 
 function pageMain() {
+  new TogglePairEffect("modeEasy", "modeExpert");
   incFormOperationMain();
   incFormSejourMain();
 }
@@ -120,26 +125,40 @@ function pageMain() {
     {{if $op->operation_id}}
     {{if $modurgence}}
     <th colspan="2" class="title urgence modify">
-      <button style="float:left;" class="search" type="button" onclick="ProtocoleSelector.init()">Choisir un protocole</button>
+      <button style="float:left;" class="search" type="button" onclick="ProtocoleSelector.init()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
       {{tr}}msg-COperation-title-modify-urgence{{/tr}} {{$patient->_view}} par le Dr. {{$chir->_view}}
     </th>
     {{else}}
     <th colspan="2" class="title modify">
-      <button class="search" style="float:left;" type="button" onclick="ProtocoleSelector.init()">Choisir un protocole</button>
+      <button class="hslip" id="modeEasy-trigger" style="float: right;" type="button">{{tr}}button-COperation-toggleMode{{/tr}}</button> 
+      <button class="search" style="float:left;" type="button" onclick="ProtocoleSelector.init()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
       {{tr}}msg-COperation-title-modify{{/tr}} {{$patient->_view}} par le Dr. {{$chir->_view}}
     </th>
     {{/if}}
     {{else}}
     {{if $modurgence}}
-    <th colspan="2" class="title urgence"> 
+    <th colspan="2" class="title urgence">
       <button class="search" style="float: left;" type="button" onclick="ProtocoleSelector.init()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
       {{tr}}msg-COperation-title-create-urgence{{/tr}}
     </th>
     {{else}}
-    <th colspan="2" class="title"> 
+    <th colspan="2" class="title">
+      <button class="hslip" id="modeEasy-trigger" style="float: right;" type="button">{{tr}}button-COperation-toggleMode{{/tr}}</button> 
       <button class="search" style="float: left;" type="button" onclick="ProtocoleSelector.init()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
       {{tr}}msg-COperation-title-create{{/tr}}
-      
+    </th>
+    {{/if}}
+    {{/if}}
+  </tr>
+  <tbody id="modeEasy">
+    <tr>
+      <td colspan="2">Mode Easy</td>
+    </tr>
+  </tbody>
+  <tbody id="modeExpert">
+  <tr>
+    <td>
+      {{include file="inc_form_operation.tpl"}}
       <script type="text/javascript">
       ProtocoleSelector.init = function(){
         
@@ -162,19 +181,11 @@ function pageMain() {
         this.eDuree_prevu   = formSejour._duree_prevue;
         this.eConvalescence = formSejour.convalescence;
         this.eDP            = formSejour.DP;
-        this.eRques_sej         = formSejour.rques;
+        this.eRques_sej     = formSejour.rques;
         
         this.pop();
       }
-      </script>
-     
-    </th>
-    {{/if}}
-    {{/if}}
-  </tr>
-  <tr>
-    <td>
-      {{include file="inc_form_operation.tpl"}}
+      </script> 
     </td>
     
     <td id="inc_form_sejour">
@@ -182,6 +193,7 @@ function pageMain() {
       {{include file="inc_form_sejour.tpl"}}
     </td>
   </tr>
+  </tbody>
   <tr>
     <td colspan="2">
       <table class="form">

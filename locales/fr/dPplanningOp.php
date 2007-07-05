@@ -3,6 +3,7 @@ $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';
 $locales['button-COperation-choixProtocole'] = 'Choisir un protocole';
+$locales['button-COperation-toggleMode'] = 'Changer de mode';
 $locales['chambre_seule.'] = ' ';
 $locales['chambre_seule.0'] = 'n';
 $locales['chambre_seule.1'] = 'o';
