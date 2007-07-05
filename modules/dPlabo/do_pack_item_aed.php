@@ -10,9 +10,9 @@
 global $AppUI;
 
 $do = new CDoObjectAddEdit("CPackItemExamenLabo", "pack_item_examen_labo_id");
-$do->createMsg = "Examen ajouté";
-$do->modifyMsg = "Examen modifié";
-$do->deleteMsg = "Examen supprimé";
+$do->createMsg = "Analyse ajoutée";
+$do->modifyMsg = "Analyse modifiée";
+$do->deleteMsg = "Analyse enlevée";
 $do->doIt();
 
 ?>
