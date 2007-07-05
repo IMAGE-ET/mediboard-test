@@ -1,5 +1,5 @@
 <?php
-$locales['CExamenLabo-sibling-conflict'] = 'Une analyse avec le même identifiant existe déjà dans ce catalogue';
+$locales[' CExamenLabo-application'] = 'Application';
 $locales['CCatalogueLabo'] = 'Catalogue d\'analyses';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sous-catalogue';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Analyse';
@@ -21,6 +21,7 @@ $locales['CExamenLabo-age_min-desc'] = 'Age minimum pour l\'analyse';
 $locales['CExamenLabo-applicabilite'] = 'Applicabilité';
 $locales['CExamenLabo-applicabilite-desc'] = 'Applicabilité de l\'analyse (Homme, Femme, Unisexe)';
 $locales['CExamenLabo-back-items_pack_labo'] = 'Pack d\'analyse';
+$locales['CExamenLabo-back-prescriptions'] = 'Prescriptions';
 $locales['CExamenLabo-catalogue_labo_id'] = 'Catalogue';
 $locales['CExamenLabo-catalogue_labo_id-desc'] = 'Catalogue de l\'analyse';
 $locales['CExamenLabo-conservation'] = 'Conservation';
@@ -56,6 +57,7 @@ $locales['CExamenLabo-realisateur'] = 'Réalisateur';
 $locales['CExamenLabo-realisateur-desc'] = 'Ressource humaine ou matérielle réalisant l\'examen';
 $locales['CExamenLabo-remarques'] = 'Remarques';
 $locales['CExamenLabo-remarques-desc'] = 'Autres remarques/informations concernant l\'analyse';
+$locales['CExamenLabo-sibling-conflict'] = 'Une analyse avec le même identifiant existe déjà dans ce catalogue';
 $locales['CExamenLabo-technique'] = 'Technique';
 $locales['CExamenLabo-technique-desc'] = 'Technique employée pour l\'analyse';
 $locales['CExamenLabo-temps_conservation'] = 'Temps de conservation';

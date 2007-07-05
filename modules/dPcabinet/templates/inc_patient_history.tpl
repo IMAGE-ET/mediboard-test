@@ -4,10 +4,10 @@
     <td>Séjours ({{$patient->_ref_sejours|@count}})</td>
   </tr>
   <tbody id="sejours">
+    <tr class="script"><td><script type="text/javascript">new PairEffect("sejours");</script></td></tr>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
     <tr>
       <td>
-        <script type="text/javascript">new PairEffect("sejours");</script>
         <strong>Dr. {{$curr_sejour->_ref_praticien->_view}}</strong>
         Du {{$curr_sejour->entree_prevue|date_format:"%d %b %Y"}}
         au {{$curr_sejour->sortie_prevue|date_format:"%d %b %Y"}}

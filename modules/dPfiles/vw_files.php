@@ -11,8 +11,8 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$selClass      = mbGetValueFromGetOrSession("selClass", null);
 $keywords      = mbGetValueFromGetOrSession("keywords", null);
+$selClass      = mbGetValueFromGetOrSession("selClass", null);
 $selKey        = mbGetValueFromGetOrSession("selKey"  , null);
 $selView       = mbGetValueFromGetOrSession("selView" , null);
 $typeVue       = mbGetValueFromGetOrSession("typeVue" , 0);

@@ -194,6 +194,7 @@ $dPconfig["graph_svg"] = "non";
 $dPconfig["dPsante400"] = array (
   "nb_rows" => "5",
   "mark_row" => "0",
+  "cache_hours" => "1",
   "dsn" => "",
   "user" => "",
   "pass" => "",

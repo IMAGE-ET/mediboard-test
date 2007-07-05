@@ -21,18 +21,18 @@ function pageMain() {
         <tr>
           <td  class="readonly">
             <label for="selClass" title="Type de l'objet courant">Type</label>
-            <input type="text" readonly="readonly" ondblclick="ObjectSelector.init()" name="selClass" value="{{$selClass|stripslashes}}" />
+            <input type="text" readonly="readonly" ondblclick="ObjectSelector.init()" name="selClass" value="{{$selClass}}" />
           </td>
           <td class="readonly">
             <label title="Nom de l'objet sélectionné">Nom</label>
-            <input type="text" size="50" readonly="readonly" ondblclick="ObjectSelector.init()" name="selView" value="{{$selView|stripslashes}}" />
+            <input type="text" size="50" readonly="readonly" ondblclick="ObjectSelector.init()" name="selView" value="{{$selView}}" />
             <button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>
-            <input type="hidden" name="selKey" value="{{$selKey|stripslashes}}" />
-            <input type="hidden" name="keywords" value="{{$keywords|stripslashes}}" />
+            <input type="hidden" name="selKey" value="{{$selKey}}" onchange="this.form.submit()" />
+            <input type="hidden" name="keywords" value="{{$keywords}}" />
             <script type="text/javascript">
               ObjectSelector.init = function(){
                 var oForm = document.FrmClass;
-                this.eId = oForm.file_id;
+                this.eId = oForm.selKey;
                 this.eView = oForm.selView;
                 this.eClass = oForm.selClass;
                 this.onlyclass = "false"; 

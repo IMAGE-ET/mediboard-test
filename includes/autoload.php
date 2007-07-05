@@ -10,11 +10,6 @@
 
 global $AppUI, $performance, $shm;
 
-// Complete autoload with eZC
-@include "ezc/Base/base.php";
-// Prevents crazy jpGraph from displaying previously escaped error
-$php_errormsg = null;
-
 $performance["autoload"] = 0;
 
 // Load class paths in shared memory
@@ -32,16 +27,17 @@ if ($shm->isReady()) {
   
   function __autoload($className) {
     global $classPaths, $performance;
-    
     // Recherche dans les classes de mediboard
     if (array_key_exists($className, $classPaths)) {
       $performance["autoload"]++;
       require_once($classPaths[$className]);
-      return ;
+      return;
     } 
     
     // Recherche dans les classes de ezComponent
-    @ezcBase::autoload( $className );
+    if (@include "ezc/Base/base.php") {
+      ezcBase::autoload( $className );
+    }
   }
 }
 // Load all classes normally

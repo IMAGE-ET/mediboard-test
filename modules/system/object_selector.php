@@ -13,7 +13,6 @@ $selClass  = mbGetValueFromGet("selClass");
 $keywords  = mbGetValueFromGet("keywords");
 $onlyclass = mbGetValueFromGet("onlyclass");
 
-
 // Liste des Class
 $listClass = getInstalledClasses();
 
@@ -21,7 +20,12 @@ $keywords = trim($keywords);
 $keywords_search = explode(" ", $keywords);
 $keywords_search = array_filter($keywords_search);
 
-if($selClass){
+if ($selClass) {
+  if (!class_inherits_from($selClass, "CMbObject")) {
+    trigger_error("Class '$selClass' is not an CMbObject", E_USER_ERROR);
+    return;
+  }
+
   $object = new $selClass;
   $list = $object->seek($keywords_search);
   foreach($list as $key => $value) {
@@ -32,6 +36,8 @@ if($selClass){
   }
   $key = $object->_tbl_key;
 }
+
+
 
 // Création du template
 $smarty = new CSmartyDP();
