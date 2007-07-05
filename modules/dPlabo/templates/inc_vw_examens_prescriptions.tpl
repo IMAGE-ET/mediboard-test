@@ -51,10 +51,12 @@ Object.extend(Droppables, {
         <input type="hidden" name="prescription_labo_examen_id" value="{{$_item->_id}}" />
         <input type="hidden" name="del" value="1" />
         {{if $prescription->_status < $prescription|const:"VEROUILLEE"}}
-        <button type="button" class="trash notext" onclick="Prescription.Examen.del(this.form)" >{{tr}}Delete{{/tr}}</button>
+        <button type="button" class="trash notext" title="{{tr}}Delete{{/tr}}" onclick="Prescription.Examen.del(this.form)" >
+          {{tr}}Delete{{/tr}}
+        </button>
         {{/if}}
-        <button type="button" class="search notext" onclick="ObjectTooltip.create(this, 'CExamenLabo', {{$curr_examen->_id}}, { mode: 'complete', popup: true })">
-          view
+        <button type="button" class="search notext" title="{{tr}}View{{/tr}}" onclick="ObjectTooltip.create(this, 'CExamenLabo', {{$curr_examen->_id}}, { mode: 'complete', popup: true })">
+          {{tr}}View{{/tr}}
         </button>
       </form>
     </td>
