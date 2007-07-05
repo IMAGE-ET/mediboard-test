@@ -23,6 +23,13 @@ $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefsPrescriptions(PERM_EDIT);
 
+// Chargement de la première prescription dans le cas ou il n'y en a pas
+if(!$prescription->_id && $patient->_id && count($patient->_ref_prescriptions)) {
+  $prescription->load(reset($patient->_ref_prescriptions)->_id);
+  $prescription->loadRefsBack();
+  $prescription->loadClassification();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
