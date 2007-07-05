@@ -57,7 +57,7 @@ var Pack = {
   dropExamen: function(sExamen_id, pack_id) {
     oFormBase = document.editPackItem;
     aExamen_id = sExamen_id.split("-");
-    if(aExamen_id[0] == "examenPack" || aExamen_id[0] == "examenPack") {
+    if(aExamen_id[0] == "examenPack" || aExamen_id[0] == "examenCat") {
       oFormBase.examen_labo_id.value       = aExamen_id[1];
       oFormBase.pack_examens_labo_id.value = pack_id;
       submitFormAjax(oFormBase, 'systemMsg', { onComplete: Pack.select });
