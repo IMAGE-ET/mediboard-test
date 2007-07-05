@@ -24,7 +24,7 @@
   </script>
   {{/if}}
   <div style="float:right;">
-    {{$curr_pack->_ref_items_examen_labo|@count}} Examens
+    {{$curr_pack->_ref_items_examen_labo|@count}} Analyses
   </div>
   <div {{if $dragPacks}}class="draggable"{{/if}} id="pack-{{$curr_pack->_id}}">
     <a href="#nothing" onclick="Pack.select({{$curr_pack->_id}})">

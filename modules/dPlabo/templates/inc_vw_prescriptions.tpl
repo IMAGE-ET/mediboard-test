@@ -17,7 +17,7 @@
   </tr>
   <tr>
     <th>Prescriptions du patient</th>
-    <th>Examens</th>
+    <th>Analyses</th>
     <th>Etat</th>
   </tr>
   {{foreach from=$patient->_ref_prescriptions item="curr_prescription"}}
@@ -58,7 +58,7 @@
       </form>
     </td>
     <td>
-      {{$curr_prescription->_ref_prescription_items|@count}} Examens
+      {{$curr_prescription->_ref_prescription_items|@count}} Analyses
     </td>
     <td class="text">
       {{tr}}CPrescriptionLabo-_status.{{$curr_prescription->_status}}{{/tr}}

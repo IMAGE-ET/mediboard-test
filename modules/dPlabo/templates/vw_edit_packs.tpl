@@ -8,7 +8,7 @@
       <table class="tbl">
         <tr>
           <th>Libelle</th>
-          <th>Examens</th>
+          <th>Analyses</th>
         </tr>
         {{foreach from=$listPacks item="curr_pack"}}
         <tr {{if $curr_pack->_id == $pack->_id}}class="selected"{{/if}}>

@@ -8,7 +8,7 @@
   id="catalogue-{{$_catalogue->_id}}-header" 
   class="tree-header {{if $_catalogue->_id == $catalogue_id }}selected{{/if}}" >
   <a href="?m={{$m}}&amp;tab=vw_edit_examens&amp;catalogue_labo_id={{$_catalogue->_id}}" style="float:right;">
-    {{$_catalogue->_ref_examens_labo|@count}} Examens
+    {{$_catalogue->_ref_examens_labo|@count}} Analyses
   </a>
   <div class="tree-trigger" id="catalogue-{{$_catalogue->_id}}-trigger">showHide</div>  
   <a href="#" onclick="Catalogue.select({{$_catalogue->_id}})">
