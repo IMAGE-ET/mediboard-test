@@ -13,6 +13,7 @@ $can->needsRead();
 
 // Récupération du message à ajouter/éditer
 $message = new CMessage;
+$message->deb = mbDateTime();
 $message->load(mbGetValueFromGetOrSession("message_id"));
 $message->loadRefs();
 
