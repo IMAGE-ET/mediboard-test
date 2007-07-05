@@ -114,7 +114,6 @@ function importCatalogue($cat, $parent_id = null) {
   }
 }
 
-
 // Check import configuration
 $config = $dPconfig[$m]["CCatalogueLabo"];
 
@@ -132,14 +131,18 @@ if (false === $content = file_get_contents($remote_url)) {
 
 // Check imported catalogue document
 $doc = new CMbXMLDocument;
-$doc->loadXML($content);
+if (!$doc->loadXML($content)) {
+  $AppUI->stepAjax("Document is not well formed", UI_MSG_ERROR);
+}
+
+mbTrace($doc);
 if (!$doc->schemaValidate("modules/$m/remote/catalogue.xsd")) {
   $AppUI->stepAjax("Document is not valid", UI_MSG_ERROR);
 }
 
 $AppUI->stepAjax("Document is valid", UI_MSG_OK);
 
-// Checl access to idSante400
+// Check access to idSante400
 $canSante400 = CModule::getCanDo("dPsante400");
 if (!$canSante400->edit) {
   $AppUI->stepAjax("No permission for module 'dPsante400' or module not installed", UI_MSG_ERROR);

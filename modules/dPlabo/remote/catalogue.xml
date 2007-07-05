@@ -1,89 +1,89 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--Sample catalogue file -->
 <catalogue id="ctl-1" xsi:noNamespaceSchemaLocation="catalogue.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<identifiant>Name1</identifiant>
-	<libelle>String 1</libelle>
-	<sections>
-	  <catalogue id="ctl-11">
-				<identifiant>NAME11</identifiant>
-				<libelle>String 11</libelle>
-				<sections />
-				<analyses />
-		</catalogue>
-	  <catalogue id="ctl-12">
-				<identifiant>NAME12</identifiant>
-				<libelle>String 12</libelle>
-				<sections />
-				<analyses />
-		</catalogue>
-	</sections>
-	<analyses>
-		<analyse id="anl-A">
-			<identifiant>NAMEA</identifiant>
-			<libelle>String</libelle>
-			<type>
-				<numerique>
-					<unite>String A</unite>
-					<min>0.0</min>
-					<max>0.0</max>
-				</numerique>
-			</type>
-			<application>
-				<debut>1967-08-13</debut>
-				<fin>1967-08-13</fin>
-			</application>
-			<applicabilite>
-				<sexe>homme</sexe>
-				<ageMinimum>7</ageMinimum>
-				<ageMaximum>77</ageMaximum>
-			</applicabilite>
-			<prelevement>
-				<type>sang</type>
-				<methode>String</methode>
-				<quantite>0.0</quantite>
-				<unite>String</unite>
-			</prelevement>
-			<conservation>
-				<duree>P1Y2M3DT10H30M0S</duree>
-				<methode>String</methode>
-			</conservation>
-			<execution>
-				<duree>P1Y2M3DT10H30M0S</duree>
-				<joursSemaine>
-					<lundi>true</lundi>
-					<mardi>false</mardi>
-					<mercredi>true</mercredi>
-					<jeudi>false</jeudi>
-					<vendredi>true</vendredi>
-					<samedi>false</samedi>
-					<dimanche>true</dimanche>
-				</joursSemaine>
-			</execution>
-			<technique>String</technique>
-			<materiel>String</materiel>
-			<remarques>String</remarques>
-		</analyse>
-		<analyse id="anl-B">
-			<identifiant>NameB</identifiant>
-			<libelle>String B</libelle>
-			<type>
-				<texteLibre />
-			</type>
-			<applicabilite>
-				<sexe>unisexe</sexe>
-				<ageMaximum>80</ageMaximum>
-			</applicabilite>
-		</analyse>
-		<analyse id="anl-C">
-			<identifiant>NameC</identifiant>
-			<libelle>String C</libelle>
-			<type>
-				<ouiNon />
-			</type>
-			<applicabilite>
-				<sexe>femme</sexe>
-				<ageMinimum>2</ageMinimum>
-			</applicabilite>
-		</analyse>
-	</analyses>
+  <identifiant>Labo</identifiant>
+  <libelle>Catalogue Laboratoire</libelle>
+  <sections>
+    <catalogue id="ctl-11">
+      <identifiant>HMT</identifiant>
+      <libelle>Hématologie</libelle>
+      <sections />
+      <analyses />
+    </catalogue>
+    <catalogue id="ctl-12">
+      <identifiant>BIO</identifiant>
+      <libelle>Biochimie</libelle>
+      <sections>
+        <catalogue id="ctl-121">
+          <identifiant>ION</identifiant>
+          <libelle>Bilan ionique</libelle>
+          <sections />
+          <analyses>
+		        <analyse id="anl-1211">
+		          <identifiant>SOD</identifiant>
+		          <libelle>Sodium</libelle>
+		          <type>
+		            <numerique>
+		              <unite>mEq/l</unite>
+		              <min>135</min>
+		              <max>145</max>
+		            </numerique>
+		          </type>
+		        </analyse>
+		        <analyse id="anl-1212">
+		          <identifiant>POT</identifiant>
+		          <libelle>Potassium</libelle>
+		          <type>
+		            <numerique>
+		              <unite>mEq/l</unite>
+		              <min>3.6</min>
+		              <max>5.0</max>
+		            </numerique>
+		          </type>
+		        </analyse>
+          </analyses>
+        </catalogue>
+      </sections>
+      <analyses>
+        <analyse id="anl-121">
+          <identifiant>GLY</identifiant>
+          <libelle>Glycémie à jeun</libelle>
+          <type>
+            <numerique>
+              <unite>g/l</unite>
+              <min>0.7</min>
+              <max>1.1</max>
+            </numerique>
+          </type>
+          <application>
+            <debut>1995-05-10</debut>
+            <fin>2010-01-01</fin>
+          </application>
+          <applicabilite>
+            <sexe>unisexe</sexe>
+            <ageMinimum>7</ageMinimum>
+            <ageMaximum>77</ageMaximum>
+          </applicabilite>
+          <prelevement>
+            <type>sang</type>
+            <methode>Prise de sang</methode>
+            <quantite>10.0</quantite>
+            <unite>ml</unite>
+          </prelevement>
+        </analyse>
+        <analyse id="anl-122">
+          <identifiant>CTN</identifiant>
+          <libelle>Créatinine</libelle>
+          <type>
+            <numerique>
+              <unite>mg/l</unite>
+              <min>5</min>
+              <max>12</max>
+            </numerique>
+          </type>
+        </analyse>
+      </analyses>
+    </catalogue>
+  </sections>
+  <analyses />
 </catalogue>

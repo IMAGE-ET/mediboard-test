@@ -41,24 +41,43 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="verouillee" value="{{$curr_prescription->verouillee}}" />
         <input type="hidden" name="validee" value="{{$curr_prescription->validee}}" />
-        <button type="button" class="trash notext" onclick="Prescription.del(this.form);">{{tr}}Delete{{/tr}}</button>
-        <button type="button" class="print notext" onclick="Prescription.print({{$curr_prescription->_id}});">print</button>
+        {{if $curr_prescription->_status < $curr_prescription|const:"PRELEVEMENTS"}}
+        <button type="button" class="trash notext" onclick="Prescription.del(this.form);" title="{{tr}}Delete{{/tr}}">
+          {{tr}}Delete{{/tr}}
+        </button>
+        {{/if}}
+        <button type="button" class="print notext" onclick="Prescription.print({{$curr_prescription->_id}});" title="{{tr}}Print{{/tr}}">
+          {{tr}}Print{{/tr}}
+        </button>
         {{if $curr_prescription->_status < $curr_prescription|const:"VEROUILLEE"}}
-        <button type="button" class="edit notext" onclick="Prescription.edit({{$curr_prescription->_id}});">edit</button>
+        <button type="button" class="edit notext" onclick="Prescription.edit({{$curr_prescription->_id}});" title="{{tr}}Edit{{/tr}}">
+          {{tr}}Edit{{/tr}}
+        </button>
         {{/if}}
         {{if $curr_prescription->_status == $curr_prescription|const:"PRELEVEMENTS"}}
-        <button type="button" class="lock notext" onclick="Prescription.lock(this.form);">lock</button>
+        <button type="button" class="lock notext" onclick="Prescription.lock(this.form);" title="{{tr}}Lock{{/tr}}">
+          {{tr}}Lock{{/tr}}
+        </button>
         {{/if}}
         {{if $curr_prescription->_status == $curr_prescription|const:"VEROUILLEE"}}
-        <button type="button" class="change notext" onclick="Prescription.send(this.form);">change</button>
+        <button type="button" class="change notext" onclick="Prescription.send(this.form);" title="{{tr}}Send{{/tr}}">
+          {{tr}}Send{{/tr}}
+        </button>
         {{/if}}
         {{if $curr_prescription->_status == $curr_prescription|const:"SAISIE"}}
-        <button type="button" class="tick notext" onclick="Prescription.valide(this.form);">tick</button>
+        <button type="button" class="tick notext" onclick="Prescription.valide(this.form);" title="{{tr}}Validate{{/tr}}">
+          {{tr}}Validate{{/tr}}
+        </button>
+        {{/if}}
+        {{if $curr_prescription->_status >= $curr_prescription|const:"SAISIE"}}
+        <button type="button" class="search notext"onclick="Prescription.results({{$curr_prescription->_id}});" title="{{tr}}Results{{/tr}}">
+          {{tr}}Results{{/tr}}
+        </button>
         {{/if}}
       </form>
     </td>
-    <td>
-      {{$curr_prescription->_ref_prescription_items|@count}} Analyses
+    <td style="text-align: center">
+      {{$curr_prescription->_ref_prescription_items|@count}}
     </td>
     <td class="text">
       {{tr}}CPrescriptionLabo-_status.{{$curr_prescription->_status}}{{/tr}}

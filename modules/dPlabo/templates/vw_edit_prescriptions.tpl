@@ -105,6 +105,13 @@ var Prescription = {
     submitFormAjax(oForm, 'systemMsg', { onComplete: Prescription.select });
     return true;
   },
+  
+  results: function(prescription_id) {
+    var url = new Url;
+    url.setModuleTab("dPlabo", "vw_resultats");
+    url.addParam("prescription_id", prescription_id);
+    url.redirect();
+  },
 
   del: function(oForm) {
     oForm.del.value = 1;

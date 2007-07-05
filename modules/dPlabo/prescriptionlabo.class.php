@@ -90,21 +90,40 @@ class CPrescriptionLabo extends CMbObject {
   
   function loadRefsBack() {
     if (!$this->_ref_prescription_items) {
+      // Chargement des items
       $item = new CPrescriptionLaboExamen;
       $item->prescription_labo_id = $this->_id;
       $this->_ref_prescription_items = $item->loadMatchingList();
       $this->_ref_examens = array();
+      
+      // Classement des examens
       foreach ($this->_ref_prescription_items as &$_item) {
         $_item->_ref_prescription_labo =& $this;
         $_item->loadRefsFwd();
         $examen =& $_item->_ref_examen_labo;
         $this->_ref_examens[$examen->_id] =& $examen; 
       }
+      
+      // Classement des items internes et externes
+      $this->_ref_external_items = array();          
+      $this->_ref_internal_items = array();          
+      foreach ($this->_ref_prescription_items as &$_item) {
+        $examen =& $_item->_ref_examen_labo;
+        $examen->loadExternal();
+        
+        // Remplissage des collections
+        if ($examen->_external) {
+          $this->_ref_external_items[$_item->_id] =& $_item;          
+        }
+        else {
+          $this->_ref_internal_items[$_item->_id] =& $_item;          
+        }
+      }      
     }
-    $this->getStatus();
+    $this->checkStatus();
   }
   
-  function getStatus() {
+  function checkStatus() {
     $numFiles = $this->getNumFiles();
     
     // Vérification de l'état validée
@@ -114,34 +133,35 @@ class CPrescriptionLabo extends CMbObject {
     }
     
     // Vérification de l'etat saisie
-    $saisie = 1;
-    foreach($this->_ref_prescription_items as &$curr_result) {
-      $curr_result->loadRefExamen();
-      $curr_result->_ref_examen_labo->loadRefsBack();
-      if(!$curr_result->resultat && !$curr_result->_ref_examen_labo->_external) {
-        $saisie = 0;
-        continue;
+    $saisie = true;
+    foreach ($this->_ref_internal_items as $_item) {
+      if (null === $_item->resultat) {
+        $saisie = false;
+        break;
       }
     }
-    if($saisie && $numFiles) {
+    
+    if ($saisie && ($numFiles || !count($this->_ref_external_items))) {
       $this->_status = self::SAISIE;
       return $this->_status;
     }
     
     // Vérification de l'état transmise
-    if($numFiles) {
+    if ($numFiles) {
       $this->_status = self::TRANSMISE;
       return $this->_status;
     }
-    
+
     // Vérification de l'état vérouillée
-    if($this->verouillee) {
-      $this->_status = self::VEROUILLEE;
+    if ($this->verouillee) {
+      $this->_status = count($this->_ref_external_items) ? 
+        self::VEROUILLEE : 
+        self::TRANSMISE;
       return $this->_status;
     }
     
     // Vérification de l'état prélèvements
-    if($this->countBackRefs("prescription_labo_examen")) {
+    if ($this->countBackRefs("prescription_labo_examen")) {
       $this->_status = self::PRELEVEMENTS;
       return $this->_status;
     }
