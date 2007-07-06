@@ -494,10 +494,9 @@ Class.extend(TogglePairEffect, {
   initialize: function(idTarget1, idTarget2, oOptions) {
   	
     var oDefaultOptions = {
-      idTrigger: idTarget1 + "-trigger",
-      sEffect: null, // could be null, "appear", "slide", "blind"
-      bStoreInCookie: true,
-      sCookieName: "toggleEffects"
+    	idFirstVisible : 1,
+      idTrigger1: idTarget1 + "-trigger",
+      idTrigger2: idTarget2 + "-trigger",
     };
 
     Object.extend(oDefaultOptions, oOptions);
@@ -505,42 +504,29 @@ Class.extend(TogglePairEffect, {
     this.oOptions = oDefaultOptions;
     this.oTarget1 = $(idTarget1);
     this.oTarget2 = $(idTarget2);
-    this.oTrigger = $(this.oOptions.idTrigger);
+    this.oTrigger1 = $(this.oOptions.idTrigger1);
+    this.oTrigger2 = $(this.oOptions.idTrigger2);
 
     Assert.that(this.oTarget1, "Target1 element '%s' is undefined", idTarget1);
     Assert.that(this.oTarget2, "Target2 element '%s' is undefined", idTarget2);
-    Assert.that(this.oTrigger, "Trigger element '%s' is undefined ", this.oOptions.idTrigger);
+    Assert.that(this.oTrigger1, "Trigger1 element '%s' is undefined ", this.oOptions.idTrigger1);
+    Assert.that(this.oTrigger2, "Trigger2 element '%s' is undefined ", this.oOptions.idTrigger2);
   
     // Initialize the effect
-    Event.observe(this.oTrigger, "click", this.flip.bind(this));
-  
-    // Initialize classnames and adapt visibility
-    var aCNs = Element.classNames(this.oTrigger);
-    aCNs.add("target1");
-    if (this.oOptions.bStoreInCookie) {
-      aCNs.load(this.oOptions.sCookieName);
-    }
-    Element[aCNs.include("target1") ? "hide" : "show"](this.oTarget1);
-    Element[aCNs.include("target2") ? "hide" : "show"](this.oTarget2);   
+    var fShow = this.show.bind(this);
+    Event.observe(this.oTrigger1, "click", function() { fShow(2); } );
+    Event.observe(this.oTrigger2, "click", function() { fShow(1); } );
+  	
+  	this.show(this.oOptions.idFirstVisible);
   },
   
-  // Flipper callback
-  flip: function() {
-    if (this.oOptions.sEffect && BrowserDetect.browser != "Explorer") {
-      new Effect.toggle(this.oTarget1, this.oOptions.sEffect);
-      new Effect.toggle(this.oTarget2, this.oOptions.sEffect);
-    } else {
-      Element.toggle(this.oTarget1);
-      Element.toggle(this.oTarget2);
-    }
+  show: function(iWhich) {
+		this.oTarget1[1 == iWhich ? "show" : "hide"]();
+		this.oTarget2[2 == iWhich ? "show" : "hide"]();
+		this.oTrigger1[1 == iWhich ? "show" : "hide"]();
+		this.oTrigger2[2 == iWhich ? "show" : "hide"]();
+  },
   
-    var aCNs = Element.classNames(this.oTrigger);
-    aCNs.flip("target1", "target2");
-    
-    if (this.oOptions.bStoreInCookie) {
-      aCNs.save(this.oOptions.sCookieName);
-    }
-  }
 } );
 
 /**
