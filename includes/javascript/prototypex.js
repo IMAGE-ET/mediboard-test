@@ -78,7 +78,6 @@ Element.addEventHandler = function(oElement, sEvent, oHandler) {
   }
 }
 
-
 /**
  * Element.ClassNames class
  */
@@ -107,10 +106,10 @@ Class.extend(Element.ClassNames, {
 Object.extend(Form.Element, {
   // Set an element value an notify 'change' event
   setValue: function(element, value) {
-  // Test if element exist
+   // Test if element exist
    if(element && element.value != value) {
      element.value = value;
-     (element.onchange || Prototype.emptyFunction)();
+     (element.onchange || Prototype.emptyFunction).bind(element)();
    }
   }
 });

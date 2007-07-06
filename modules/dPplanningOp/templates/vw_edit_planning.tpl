@@ -135,7 +135,10 @@ function pageMain() {
       </button>
       {{mb_ternary var=message test=$op->_id value=modify other=create}}
       {{tr}}msg-COperation-title-{{$message}}{{if $modurgence}}-urgence{{/if}}{{/tr}} 
-      {{$patient->_view}} par le Dr. {{$chir->_view}}
+      {{$patient->_view}} 
+      {{if $chir->_id}}
+      par le Dr. {{$chir->_view}}
+      {{/if}}
     </th>
   </tr>
   
@@ -144,7 +147,13 @@ function pageMain() {
     <tr>
     <td class="text">
     {{if !$op->operation_id}}
-      Veuillez selectionner un protocole pour créer une intervention
+      <div class="big-info">
+        Ceci est le <strong>mode simplifié</strong> de planification d'intervention.
+        <br/>
+        Il est nécessaire de <strong>sélectionner un protocole</strong> pour créer une intervention.
+        <br/>
+        <em>Pour plus de paramètres vous pouvez passer en mode expert.</em>
+      </div>
     {{/if}}
     </td>
     </tr>
@@ -160,6 +169,17 @@ function pageMain() {
   <tr>
     <td>
       {{include file="inc_form_operation.tpl"}}
+    </td>
+    
+    <td id="inc_form_sejour">
+      {{assign var="mode_operation" value=true}}
+      {{include file="inc_form_sejour.tpl"}}
+    </td>
+  </tr>
+  </tbody>
+
+  <tr class="script">
+    <td>
       <script type="text/javascript">
       new TogglePairEffect("modeEasy", "modeExpert", { 
         idFirstVisible: {{$app->user_prefs.mode_dhe+1}}
@@ -197,14 +217,8 @@ function pageMain() {
       }
       </script> 
     </td>
-    
-    <td id="inc_form_sejour">
-      {{assign var="mode_operation" value=true}}
-      {{include file="inc_form_sejour.tpl"}}
-    </td>
   </tr>
-  </tbody>
-  
+    
   <tr>
     <td colspan="2">
       <table class="form">

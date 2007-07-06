@@ -44,7 +44,7 @@
       {{mb_label object=$op field="chir_id"}}
     </th>
     <td colspan="2">
-      <select name="chir_id" class="{{$op->_props.chir_id}}" onchange="synchroPrat(); modifChir(this.form); removePlageOp(true);">
+      <select name="chir_id" class="{{$op->_props.chir_id}}" onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true);">
         <option value="">&mdash; Choisir un chirurgien</option>
         {{foreach from=$listPraticiens item=curr_praticien}}
         <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -93,7 +93,7 @@
   <tr>
     <th>{{mb_label object=$op field="cote"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir un côté" onchange="modifCote(this.form)"}}
+      {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir un côté" onchange="Value.synchronize(this);"}}
     </td>
   </tr> 
 
@@ -126,7 +126,7 @@
       <input type="hidden" name="plageop_id" value="" />
       <input type="hidden" name="_date" value="" />
       <input type="hidden" name="_datestr" value="" />
-      <select name="date" onchange="{{if !$op->operation_id}}updateEntreePrevue();{{/if}} modifDate(this.form); modifSejour()">
+      <select name="date" onchange="{{if !$op->operation_id}}updateEntreePrevue();{{/if}} Value.synchronize(this); modifSejour()">
         {{if $op->operation_id}}
         <option value="{{$op->date}}" selected="selected">
           Inchangée ({{$op->date|date_format:"%d/%m/%Y"}} )
@@ -142,12 +142,12 @@
     </td>
     <td>
       à
-      <select name="_hour_urgence" onchange="modifHeure(this.form);">
+      <select name="_hour_urgence" onchange="Value.synchronize(this)">
       {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
         <option value="{{$hour}}" {{if $op->_hour_urgence == $hour || (!$op->operation_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
       {{/foreach}}
       </select> h
-      <select name="_min_urgence" onchange="modifMin(this.form);">
+      <select name="_min_urgence" onchange="Value.synchronize(this);">
       {{foreach from=$mins_duree|smarty:nodefaults item=min}}
         <option value="{{$min}}" {{if $op->_min_urgence == $min}}selected="selected"{{/if}}>{{$min}}</option>
       {{/foreach}}
