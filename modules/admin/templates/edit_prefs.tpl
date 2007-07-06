@@ -23,14 +23,18 @@
     </th>
   </tr>
 
+  <!-- Tous modules confondus -->
+  {{assign var="module" value="GENERALE"}}
+
+  {{assign var="var" value="LOCALE"}}
   <tr>
     <th>
-      <label for="pref_name[LOCALE]" title="Veuillez choisir le langage que vous souhaiter utiliser">{{tr}}Locale{{/tr}}</label>
+      <label for="pref_name[{{$var}}]" title="Veuillez choisir le langage que vous souhaiter utiliser">{{tr}}Langage{{/tr}}</label>
     </th>
     <td>
-      <select name="pref_name[LOCALE]" class="text" size="1">
+      <select name="pref_name[{{$var}}]" class="text" size="1">
         {{foreach from=$locales|smarty:nodefaults item=currLocale key=keyLocale}}
-        <option value="{{$keyLocale}}" {{if $keyLocale==$prefsUser.GENERALE.LOCALE}}selected="selected"{{/if}}>
+        <option value="{{$keyLocale}}" {{if $keyLocale==$prefsUser.$module.$var}}selected="selected"{{/if}}>
           {{tr}}{{$currLocale}}{{/tr}}
         </option>
         {{/foreach}}
@@ -38,14 +42,17 @@
     </td>
   </tr>
   
+  {{assign var="var" value="UISTYLE"}}
   <tr>
     <th>
-      <label for="pref_name[UISTYLE]" title="Veuillez choisir l'apparence que vous souhaiter utiliser">{{tr}}User Interface Style{{/tr}}</label>
+      <label for="pref_name[{{$var}}]" title="Veuillez choisir l'apparence que vous souhaiter utiliser">
+        {{tr}}User Interface Style{{/tr}}
+      </label>
     </th>
     <td>
-      <select name="pref_name[UISTYLE]" class="text" size="1">
+      <select name="pref_name[{{$var}}]" class="text" size="1">
         {{foreach from=$styles|smarty:nodefaults item=currStyles key=keyStyles}}
-        <option value="{{$keyStyles}}" {{if $keyStyles==$prefsUser.GENERALE.UISTYLE}}selected="selected"{{/if}}>
+        <option value="{{$keyStyles}}" {{if $keyStyles==$prefsUser.$module.$var}}selected="selected"{{/if}}>
           {{tr}}{{$currStyles}}{{/tr}}
         </option>
         {{/foreach}}
@@ -53,26 +60,30 @@
     </td>
   </tr>
   
+  {{assign var="var" value="MenuPosition"}}
   <tr>
     <th>
-      <label for="pref_name[MenuPosition]" title="{{tr}}pref-MenuPosition-desc{{/tr}}">{{tr}}pref-MenuPosition{{/tr}}</label>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">
+        {{tr}}pref-{{$var}}{{/tr}}
+      </label>
     </th>
     <td>
-      <select name="pref_name[MenuPosition]">
-        <option value="top"  {{if $prefsUser.GENERALE.MenuPosition == "top"  }}selected="selected"{{/if}}>{{tr}}pref-MenuPosition-top{{/tr}}</option>
-        <option value="left" {{if $prefsUser.GENERALE.MenuPosition == "left" }}selected="selected"{{/if}}>{{tr}}pref-MenuPosition-left{{/tr}}</option>
+      <select name="pref_name[{{$var}}]">
+        <option value="top"  {{if $prefsUser.$module.$var == "top"  }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-top{{/tr}}</option>
+        <option value="left" {{if $prefsUser.$module.$var == "left" }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-left{{/tr}}</option>
       </select>
     </td>
   </tr>
     
+  {{assign var="var" value="DEFMODULE"}}
   <tr>
     <th>
-      <label for="pref_name[DEFMODULE]" title="Veuillez choisir le module par défaut à afficher">{{tr}}Module par défaut{{/tr}}</label>
+      <label for="pref_name[{{$var}}]" title="Veuillez choisir le module par défaut à afficher">{{tr}}Module par défaut{{/tr}}</label>
     </th>
     <td>
-      <select name="pref_name[DEFMODULE]" class="text" size="1">
+      <select name="pref_name[{{$var}}]" class="text" size="1">
         {{foreach from=$modules|smarty:nodefaults item=currModule key=keyModule}}
-        <option value="{{$currModule->mod_name}}" {{if $currModule->mod_name==$prefsUser.GENERALE.DEFMODULE}}selected="selected"{{/if}}>
+        <option value="{{$currModule->mod_name}}" {{if $currModule->mod_name==$prefsUser.$module.$var}}selected="selected"{{/if}}>
           {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
         </option>
         {{/foreach}}
@@ -80,168 +91,191 @@
     </td>
   </tr>  
   
-  {{if $prefsUser.dPpatients}}  
+  {{assign var="module" value="dPpatients"}}
+  <!-- Préférences pour le module {{$module}} -->
+  {{if $prefsUser.$module}}  
+
+  {{assign var="var" value="DEPARTEMENT"}}
   <tr>
-    <th class="category" colspan="2">{{tr}}module-dPpatients-long{{/tr}}</th>
+    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
   </tr>
   <tr>
     <th>
-      <label for="pref_name[DEPARTEMENT]" title="Veuillez choisir le numéro du département par défaut à utiliser">{{tr}}N° du département par défaut{{/tr}}</label>
+      <label for="pref_name[{{$var}}]" title="Veuillez choisir le numéro du département par défaut à utiliser">{{tr}}N° du département par défaut{{/tr}}</label>
     </th>
     <td>
-      <input type="text" name="pref_name[DEPARTEMENT]" value="{{$prefsUser.dPpatients.DEPARTEMENT}}" maxlength="3" size="4" class="num minMax|0|999"/>
+      <input type="text" name="pref_name[{{$var}}]" value="{{$prefsUser.$module.$var}}" maxlength="3" size="4" class="num minMax|0|999"/>
     </td>
   </tr>
   {{/if}}
   
-  {{if $prefsUser.dPcabinet}}
+  {{assign var="module" value="dPcabinet"}}
+  <!-- Préférences pour le module {{$module}} -->
+  {{if $prefsUser.$module}}  
+  
+  {{assign var="var" value="AFFCONSULT"}}
   <tr>
-    <th class="category" colspan="2">{{tr}}module-dPcabinet-long{{/tr}}</th>
+    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
   </tr>
 
   <tr>
     <th>
-      <label for="pref_name[AFFCONSULT]" title="Type de vue par défaut des consultations">{{tr}}Vue des Consultations par défaut{{/tr}}</label>
+      <label for="pref_name[{{$var}}]" title="Type de vue par défaut des consultations">{{tr}}Vue des Consultations par défaut{{/tr}}</label>
     </th>
     <td>
-      <select name="pref_name[AFFCONSULT]">
-        <option value="0"{{if $prefsUser.dPcabinet.AFFCONSULT == "0"}}selected="selected"{{/if}}>Tout afficher</option>
-        <option value="1"{{if $prefsUser.dPcabinet.AFFCONSULT == "1"}}selected="selected"{{/if}}>Cacher les Terminées</option>
+      <select name="pref_name[{{$var}}]">
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>Tout afficher</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>Cacher les Terminées</option>
+      </select>
+    </td>
+  </tr>
+
+  {{assign var="var" value="MODCONSULT"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="Mode d'affichage des consultations">{{tr}}Mode d'affichage des Consultations{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>Classique</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>Avancée</option>
+      </select>
+    </td>
+  </tr>
+
+  {{assign var="var" value="GestionFSE"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+
+  {{assign var="var" value="DossierCabinet"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="dPcabinet" {{if $prefsUser.$module.$var == "dPcabinet" }}selected="selected"{{/if}}>{{tr}}module-dPcabinet-court {{/tr}}</option>
+        <option value="dPpatients"{{if $prefsUser.$module.$var == "dPpatients"}}selected="selected"{{/if}}>{{tr}}module-dPpatients-court{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+
+  {{assign var="var" value="InterMaxDir"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">
+        {{tr}}pref-{{$var}}{{/tr}}
+      </label>
+    </th>
+    <td>
+      <input class="str" type="text" size="40" name="pref_name[{{$var}}]" value="{{$prefsUser.$module.$var}}" />
+    </td>
+  </tr>
+
+  {{assign var="var" value="DefaultPeriod"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="day"   {{if $prefsUser.$module.$var == "day"  }}selected="selected"{{/if}}>{{tr}}Period.day{{/tr}}</option>
+        <option value="week"  {{if $prefsUser.$module.$var == "week" }}selected="selected"{{/if}}>{{tr}}Period.week{{/tr}}</option>
+        <option value="month" {{if $prefsUser.$module.$var == "month"}}selected="selected"{{/if}}>{{tr}}Period.month{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+
+  {{assign var="var" value="simpleCabinet"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>avec hospitalisation</option>
+        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>sans hospitalisation</option>
+      </select>
+    </td>
+  </tr>
+
+  {{assign var="var" value="ccam"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>Cacher</option>
+        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>Visible</option>
       </select>
     </td>
   </tr>
 
   <tr>
-    <th>
-      <label for="pref_name[MODCONSULT]" title="Mode d'affichage des consultations">{{tr}}Mode d'affichage des Consultations{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref_name[MODCONSULT]">
-        <option value="0"{{if $prefsUser.dPcabinet.MODCONSULT == "0"}}selected="selected"{{/if}}>Classique</option>
-        <option value="1"{{if $prefsUser.dPcabinet.MODCONSULT == "1"}}selected="selected"{{/if}}>Avancée</option>
-      </select>
-    </td>
+    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}} - Anesth</th>
   </tr>
 
+  {{assign var="var" value="AUTOADDSIGN"}}
   <tr>
     <th>
-      <label for="pref_name[GestionFSE]" title="{{tr}}pref-GestionFSE-desc{{/tr}}">{{tr}}pref-GestionFSE{{/tr}}</label>
+      <label for="pref_name[{{$var}}]" title="Ajout automatique des éléments significatifs">{{tr}}Ajout automatique des éléments significatifs{{/tr}}</label>
     </th>
     <td>
-      <select name="pref_name[GestionFSE]">
-        <option value="0"{{if $prefsUser.dPcabinet.GestionFSE == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.dPcabinet.GestionFSE == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-
-  <tr>
-    <th>
-      <label for="pref_name[DossierCabinet]" title="{{tr}}pref-DossierCabinet-desc{{/tr}}">{{tr}}pref-DossierCabinet{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref_name[DossierCabinet]">
-        <option value="dPcabinet" {{if $prefsUser.dPcabinet.DossierCabinet == "dPcabinet" }}selected="selected"{{/if}}>{{tr}}module-dPcabinet-court {{/tr}}</option>
-        <option value="dPpatients"{{if $prefsUser.dPcabinet.DossierCabinet == "dPpatients"}}selected="selected"{{/if}}>{{tr}}module-dPpatients-court{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-
-  <tr>
-    <th>
-      <label for="pref_name[InterMaxDir]" title="{{tr}}pref-InterMaxDir-desc{{/tr}}">{{tr}}pref-InterMaxDir{{/tr}}</label>
-    </th>
-    <td>
-      <input class="str" type="text" size="40" name="pref_name[InterMaxDir]" value="{{$prefsUser.dPcabinet.InterMaxDir}}" />
-    </td>
-  </tr>
-
-  <tr>
-    <th>
-      <label for="pref_name[DefaultPeriod]" title="{{tr}}pref-DefaultPeriod-desc{{/tr}}">{{tr}}pref-DefaultPeriod{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref_name[DefaultPeriod]">
-        <option value="day"   {{if $prefsUser.dPcabinet.DefaultPeriod == "day"  }}selected="selected"{{/if}}>{{tr}}Period.day{{/tr}}</option>
-        <option value="week"  {{if $prefsUser.dPcabinet.DefaultPeriod == "week" }}selected="selected"{{/if}}>{{tr}}Period.week{{/tr}}</option>
-        <option value="month" {{if $prefsUser.dPcabinet.DefaultPeriod == "month"}}selected="selected"{{/if}}>{{tr}}Period.month{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-
-  <tr>
-    <th>
-      <label for="pref_name[simpleCabinet]" title="{{tr}}pref-simpleCabinet-desc{{/tr}}">{{tr}}pref-simpleCabinet{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref_name[simpleCabinet]">
-        <option value="0"   {{if $prefsUser.dPcabinet.simpleCabinet == 0 }}selected="selected"{{/if}}>avec hospitalisation</option>
-        <option value="1"  {{if $prefsUser.dPcabinet.simpleCabinet == 1 }}selected="selected"{{/if}}>sans hospitalisation</option>
-      </select>
-    </td>
-  </tr>
-
-  <tr>
-    <th>
-      <label for="pref_name[ccam]" title="{{tr}}pref-ccam-desc{{/tr}}">{{tr}}pref-ccam{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref_name[ccam]">
-        <option value="0"   {{if $prefsUser.dPcabinet.ccam == 0 }}selected="selected"{{/if}}>Cacher</option>
-        <option value="1"  {{if $prefsUser.dPcabinet.ccam == 1 }}selected="selected"{{/if}}>Visible</option>
-      </select>
-    </td>
-  </tr>
-
-
-  <tr>
-    <th class="category" colspan="2">{{tr}}module-dPcabinet-long{{/tr}} - Anesth</th>
-  </tr>
-
-  <tr>
-    <th>
-      <label for="pref_name[AUTOADDSIGN]" title="Ajout automatique des éléments significatifs">{{tr}}Ajout automatique des éléments significatifs{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref_name[AUTOADDSIGN]">
-        <option value="0"{{if $prefsUser.dPcabinet.AUTOADDSIGN == "0"}}selected="selected"{{/if}}>Non</option>
-        <option value="1"{{if $prefsUser.dPcabinet.AUTOADDSIGN == "1"}}selected="selected"{{/if}}>Oui</option>
+      <select name="pref_name[{{$var}}]">
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>Non</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>Oui</option>
       </select>
     </td>
   </tr>
   {{/if}}
 
-  {{if $prefsUser.system}}
+  {{assign var="module" value="system"}}
+  <!-- Préférences pour le module {{$module}} -->
+  {{if $prefsUser.$module}}  
   <tr>
-    <th class="category" colspan="2">{{tr}}module-system-long{{/tr}}</th>
+    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
   </tr>
 
+  {{assign var="var" value="INFOSYSTEM"}}
   <tr>
     <th>
-      <label for="pref_name[INFOSYSTEM]" title="Afficher les informations système">{{tr}}Afficher les informations système{{/tr}}</label>
+      <label for="pref_name[{{$var}}]" title="Afficher les informations système">{{tr}}Afficher les informations système{{/tr}}</label>
     </th>
     <td>
-      <select name="pref_name[INFOSYSTEM]">
-        <option value="0"{{if $prefsUser.system.INFOSYSTEM == "0"}}selected="selected"{{/if}}>Cacher</option>
-        <option value="1"{{if $prefsUser.system.INFOSYSTEM == "1"}}selected="selected"{{/if}}>Visible</option>
+      <select name="pref_name[{{$var}}]">
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>Cacher</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>Visible</option>
       </select>
     </td>
   </tr>
   {{/if}}
   
-  {{if $prefsUser.dPplanningOp}}
+  {{assign var="module" value="dPplanningOp"}}
+  <!-- Préférences pour le module {{$module}} -->
+  {{if $prefsUser.$module}}  
   <tr>
-    <th class="category" colspan="2">{{tr}}module-dPplanningOp-long{{/tr}}</th>
+    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
   </tr>
 
+  {{assign var="var" value="mode_dhe"}}
   <tr>
     <th>
-      <label for="pref_name[mode_dhe]" title="Sélection du mode de création d'interventions">{{tr}}Sélection du mode de création d'interventions{{/tr}}</label>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
     </th>
     <td>
-      <select name="pref_name[mode_dhe]">
-        <option value="0"{{if $prefsUser.dPplanningOp.mode_dhe == "0"}}selected="selected"{{/if}}>Mode Simple</option>
-        <option value="1"{{if $prefsUser.dPplanningOp.mode_dhe == "1"}}selected="selected"{{/if}}>Mode Expert</option>
+      <select name="pref_name[{{$var}}]">
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
       </select>
     </td>
   </tr>
