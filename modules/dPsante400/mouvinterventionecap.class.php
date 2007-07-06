@@ -3,7 +3,7 @@
 global $AppUI;
 require_once $AppUI->getModuleClass("dPsante400", "mouvement400");
 
-class CMouvSejourEcap extends CMouvement400 {  
+class CMouvInterventionECap extends CMouvement400 {  
   const STATUS_ETABLISSEMENT = 0;
   const STATUS_FONCTION      = 1;
   const STATUS_PRATICIEN     = 2;

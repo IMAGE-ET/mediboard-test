@@ -10,8 +10,6 @@ class CMouvement400 extends CRecordSante400 {
   protected $idField = null;
   protected $typeField = null;
   protected $groupField = null;
-
-  public $verbose = false;
   
   public $statuses = array(null, null, null, null, null, null, null, null);
   public $cached   = array(null, null, null, null, null, null, null, null);
@@ -164,7 +162,7 @@ class CMouvement400 extends CRecordSante400 {
   }
 
   function trace($value, $title) {
-    if ($this->verbose) {
+    if (self::$verbose) {
       mbTrace($value, $title);
     }
   }
@@ -175,7 +173,7 @@ class CMouvement400 extends CRecordSante400 {
       $this->synchronize();
       $return = true;
     } catch (Exception $e) {
-      if ($this->verbose) {
+      if (self::$verbose) {
         trigger_error($e->getMessage(), E_USER_WARNING);
       }
       $return = false;

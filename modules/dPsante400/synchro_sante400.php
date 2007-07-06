@@ -1,14 +1,14 @@
 <?php 
 
-global $AppUI, $m, $can, $dbChronos, $dPconfig;
-
-$can->needsEdit();
-
-require_once($AppUI->getModuleClass("dPsante400", "mouvsejourtonkin"));
+global $m, $can, $dbChronos, $dPconfig;
 
 set_time_limit(90);
 
-switch ($mode_compat = @$dPconfig["interop"]["mode_compat"]) {
+$can->needsEdit();
+
+CRecordSante400::$verbose = mbGetValueFromGet("verbose");
+
+switch ($mode_compat = $dPconfig["interop"]["mode_compat"]) {
   case "medicap" : 
   $mouvFactory = new CMouvSejourEcap;
   break;
@@ -42,7 +42,6 @@ if ($rec = mbGetValueFromGet("rec")) {
 }
 
 foreach ($mouvs as $mouv) {
-  $mouv->verbose = mbGetValueFromGet("verbose");
   if ($mouv->proceed()) {
     $procs++;
   }

@@ -3,9 +3,11 @@
 class CRecordSante400 {
   static $dbh = null;
   static $chrono = null;
+  static $verbose = false;
  
   public $data = array();
   public $valuePrefix = "";
+  
   
   function __construct() {
   }
@@ -42,12 +44,22 @@ class CRecordSante400 {
     $records = array();
     try {
       self::connect();
+      
+      // Verbose
+      if (self::$verbose) {
+        mbTrace($sql, "Querying");
+        if (count($values)) {
+          mbTrace($values, "With values");
+        }
+      }
+
+      // Query execution
       $sth = self::$dbh->prepare($sql);
-      mbTrace($sql, "Query multiple");
       self::$chrono->start();
       $sth->execute($values);
       self::$chrono->stop("multiple load execute");
 
+      // Fetching results
       self::$chrono->start();
       while ($data = $sth->fetch(PDO::FETCH_ASSOC) and $max--) {
         self::$chrono->stop("multiple load fetch");
@@ -68,8 +80,17 @@ class CRecordSante400 {
   function query($sql, $values = array()) {
     try {
       self::connect();
+      // Verbose
+
+      if (self::$verbose) {
+        mbTrace($sql, "Querying");
+        if (count($values)) {
+          mbTrace($values, "With values");
+        }
+      }
+
+      // Query execution and fetching
       $sth = self::$dbh->prepare($sql);
-      mbTrace($sql, "Query single");
       self::$chrono->start();
       $sth->execute($values);
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);
@@ -114,7 +135,7 @@ class CRecordSante400 {
     
     $value = $this->data[$valueName];
     unset($this->data[$valueName]);
-    return trim($value);    
+    return trim(addslashes($value));    
   }
 
   function consumeTel($valueName) {

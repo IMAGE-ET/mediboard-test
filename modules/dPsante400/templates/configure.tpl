@@ -102,6 +102,34 @@ function purgeObjects() {
     </td>
   </tr>  
 
+  {{assign var="var" value="nb_rows"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input class="num pos" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+    </td>
+  </tr>  
+
+  <tr>
+    <th class="category" colspan="100">Synchronisation des objets</th>
+  </tr>
+
+  {{assign var="var" value="cache_hours"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input class="num min|0" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+    </td>
+  </tr>  
+
   <tr>
     <td class="button" colspan="6">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

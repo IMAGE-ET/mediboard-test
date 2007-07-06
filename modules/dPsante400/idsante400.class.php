@@ -54,12 +54,23 @@
   
   /**
    * Tries to get an already bound object if id400 is not older than delay
+   * @param int $delay hours number of cache duration, if null use module config
    */
   function getCachedObject($delay = null) {
+    // Get config cache duration
+    if (null === $delay) {
+      global $dPconfig;
+      $delay = $dPconfig["dPsante400"]["cache_hours"];
+    }
+    
+    $delay = "+ $delay HOURS";
+
+    // Look for object
     $this->_id = null;
     $this->loadMatchingObject("`last_update` DESC");
     $this->loadRefsFwd();
 
+    // Check against cache duration
     if ($delay && mbDateTime($delay, $this->last_update) < mbDateTime()) {
       $this->_ref_object = new $this->object_class;
     }
