@@ -162,7 +162,7 @@ function pageMain() {
       {{include file="inc_form_operation.tpl"}}
       <script type="text/javascript">
       new TogglePairEffect("modeEasy", "modeExpert", { 
-        idFirstVisible: {{$app->user_prefs.mode+1}}
+        idFirstVisible: {{$app->user_prefs.mode_dhe+1}}
       } );
 
       ProtocoleSelector.init = function(){
@@ -190,6 +190,8 @@ function pageMain() {
         this.eRques_sej     = formSejour.rques;
 
         this.eChir_id_easy = formOpEasy.chir_id;
+        this.eLibelle_easy = formOpEasy.libelle;
+        //this.eCodes_ccam_easy = formOpEasy.codes_ccam;
         
         this.pop();
       }

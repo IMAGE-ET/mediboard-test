@@ -182,7 +182,6 @@
         this.eSDate = oOpForm._datestr;
         this.eSDate_easy = oOpFormEasy._datestr;
         
-        
         this.e_hour_entree_prevue = oSejourForm._hour_entree_prevue;
         this.e_min_entree_prevue = oSejourForm._min_entree_prevue;
         this.e_date_entree_prevue = oSejourForm._date_entree_prevue;

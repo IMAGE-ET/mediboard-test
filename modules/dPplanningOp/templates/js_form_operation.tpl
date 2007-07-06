@@ -148,6 +148,7 @@ function modifCote(oForm){
   modifOp();
 }
 
+
 function modifChir(oForm){
   var oOpForm = (oForm.name == "editOp") ? document.editOpEasy : document.editOp;
   Form.Element.setValue(oOpForm.chir_id, oForm.chir_id.value);

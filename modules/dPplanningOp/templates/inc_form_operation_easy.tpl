@@ -21,7 +21,14 @@
       </select>
     </td>
   </tr>
-   
+  
+  <!-- Affichage du libelle -->
+  <tr>
+    <th>{{mb_label object=$op field="libelle"}}</th>
+    <td colspan="2">{{mb_field object=$op field="libelle" readonly="readonly"}}</td>
+  </tr>
+  
+    
   <!-- Selection du coté --> 
   <tr>
     <th>{{mb_label object=$op field="cote"}}</th>

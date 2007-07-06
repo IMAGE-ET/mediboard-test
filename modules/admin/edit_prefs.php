@@ -72,7 +72,7 @@ $array_list_module_pref = array (
     "ccam",
   ),
   "dPplanningOp" => array (
-    "mode",
+    "mode_dhe",
   ),
   "system" => array (
     "INFOSYSTEM",
