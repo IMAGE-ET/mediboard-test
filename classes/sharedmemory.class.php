@@ -34,21 +34,21 @@ class SharedMemory {
    * Get a variable from shared memory
    */
   function get($key) {
-    return unserialize(file_get_contents($this->dir.$key));
+    return @unserialize(file_get_contents($this->dir.$key));
   }
   
   /**
    * Put a variable into shared memory
    */
   function put($key, $value) {
-     file_put_contents($this->dir.$key, serialize($value)); 
+     return file_put_contents($this->dir.$key, serialize($value)); 
   }
   
   /**
    * Remove a variable from shared memory
    */
   function rem($key) {
-    return false;
+    return unlink($this->dir.$key);
   }
 }
 
