@@ -1,4 +1,5 @@
 <?php
+$locales['pref-mode_dhe-1'] = 'Mode expert';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';
@@ -444,5 +445,8 @@ $locales['msg-CSejour-infoOper'] = 'Informations sur les opérations pendant le s
 $locales['msg-CSejour-informations'] = 'Informations concernant le séjour';
 $locales['msg-CTypeAnesth-title-create'] = 'Création d\'un type d\'anesthésie';
 $locales['msg-CTypeAnesth-title-modify'] = 'Modification du type d\'anesthésie';
+$locales['pref-mode_dhe'] = 'Mode de création d\'interventions';
+$locales['pref-mode_dhe-0'] = 'Mode simple';
+$locales['pref-mode_dhe-desc'] = 'Sélection du mode de création d\'interventions';
 $locales['type_adm'] = 'Admission en';
 ?>
