@@ -71,6 +71,9 @@ $array_list_module_pref = array (
     "simpleCabinet",
     "ccam",
   ),
+  "dPplanningOp" => array (
+    "mode",
+  ),
   "system" => array (
     "INFOSYSTEM",
   ),

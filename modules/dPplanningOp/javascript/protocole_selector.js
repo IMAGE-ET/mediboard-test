@@ -16,7 +16,8 @@ var ProtocoleSelector = {
   set: function(protocole) {  
     Form.Element.setValue(this.eChir_id, protocole.chir_id);
     Form.Element.setValue(this.eDuree_prevu, protocole.duree_hospi);
-      
+    Form.Element.setValue(this.eChir_id_easy, protocole.chir_id);
+    
     this.eCodes_ccam.value    = protocole.codes_ccam;
     this.eLibelle.value       = protocole.libelle;
     this.eHour_op.value       = protocole._hour_op;

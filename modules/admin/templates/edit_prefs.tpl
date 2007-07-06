@@ -229,6 +229,23 @@
   </tr>
   {{/if}}
   
+  {{if $prefsUser.dPplanningOp}}
+  <tr>
+    <th class="category" colspan="2">{{tr}}module-dPplanningOp-long{{/tr}}</th>
+  </tr>
+
+  <tr>
+    <th>
+      <label for="pref_name[mode]" title="Sélection du mode de création d'interventions">{{tr}}Sélection du mode de création d'interventions{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[mode]">
+        <option value="0"{{if $prefsUser.dPplanningOp.mode == "0"}}selected="selected"{{/if}}>Mode Simple</option>
+        <option value="1"{{if $prefsUser.dPplanningOp.mode == "1"}}selected="selected"{{/if}}>Mode Expert</option>
+      </select>
+    </td>
+  </tr>
+  {{/if}}
   
   <tr>
     <td class="button" colspan="2">

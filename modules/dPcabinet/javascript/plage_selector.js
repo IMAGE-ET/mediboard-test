@@ -22,7 +22,9 @@ var PlageSelector = {
   set: function(heure, id, date, freq, chirid, chirname) {
     this.eHeure.value = heure;
     this.ePlageconsult_id.value = id;
+    
     this.eDate.value = date;
+     
     this.eDuree.value = freq;
     this.eChirid.value = chirid;
  

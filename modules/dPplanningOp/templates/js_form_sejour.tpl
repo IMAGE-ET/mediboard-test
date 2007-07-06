@@ -45,10 +45,7 @@ function removePlageOp(bIgnoreGroup){
     if((oFormOp._group_id.value != oFormSejour.group_id.value) || bIgnoreGroup){
       oFormOp._group_id.value = oFormSejour.group_id.value;
       oFormOp._datestr.value = "";
-      oFormOp.plageop_id.value = "";
-      if(oFormOp.plageop_id.onchange) {
-        oFormOp.plageop_id.onchange();
-      }
+      Form.Element.setValue(oFormOp.plageop_id, "");
       oFormOp._date.value = "";
       oFormOp.date.value = "";
     }

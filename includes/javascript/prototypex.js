@@ -107,8 +107,11 @@ Class.extend(Element.ClassNames, {
 Object.extend(Form.Element, {
   // Set an element value an notify 'change' event
   setValue: function(element, value) {
-   element.value = value;
-    (element.onchange || Prototype.emptyFunction)();
+  // Test if element exist
+   if(element && element.value != value) {
+     element.value = value;
+     (element.onchange || Prototype.emptyFunction)();
+   }
   }
 });
 

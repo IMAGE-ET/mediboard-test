@@ -15,14 +15,9 @@ var PatSelector = {
   },
   
   set: function(id, view) {
-      if (this.eView) {
-        this.eView.value = view;
-      }      
-      this.eId.value = id;
-      
-      if(this.eId.onchange){
-        this.eId.onchange();
-      }
-    
+    Form.Element.setValue(this.eId, id);
+    Form.Element.setValue(this.eView, view);
+    Form.Element.setValue(this.eId_easy, id);
+    Form.Element.setValue(this.eView_easy, view);
   }
 }

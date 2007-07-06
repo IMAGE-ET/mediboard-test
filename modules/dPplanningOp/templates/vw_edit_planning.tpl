@@ -95,7 +95,16 @@ function toggleMode() {
 } 
 
 function pageMain() {
+  // Mode Easy
+  {{if $app->user_prefs.mode == 0}}
+  new TogglePairEffect("modeExpert", "modeEasy");
+  {{/if}}
+
+  // Mode Expert
+  {{if $app->user_prefs.mode == 1}} 
   new TogglePairEffect("modeEasy", "modeExpert");
+  {{/if}}
+
   incFormOperationMain();
   incFormSejourMain();
 }
@@ -125,12 +134,13 @@ function pageMain() {
     {{if $op->operation_id}}
     {{if $modurgence}}
     <th colspan="2" class="title urgence modify">
+      <button class="hslip" id="{{if $app->user_prefs.mode == 1}}modeEasy-trigger{{else}}modeExpert-trigger{{/if}}" style="float: right;" type="button">{{tr}}button-COperation-toggleMode{{/tr}}</button>
       <button style="float:left;" class="search" type="button" onclick="ProtocoleSelector.init()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
       {{tr}}msg-COperation-title-modify-urgence{{/tr}} {{$patient->_view}} par le Dr. {{$chir->_view}}
     </th>
     {{else}}
     <th colspan="2" class="title modify">
-      <button class="hslip" id="modeEasy-trigger" style="float: right;" type="button">{{tr}}button-COperation-toggleMode{{/tr}}</button> 
+      <button class="hslip" id="{{if $app->user_prefs.mode == 1}}modeEasy-trigger{{else}}modeExpert-trigger{{/if}}" style="float: right;" type="button">{{tr}}button-COperation-toggleMode{{/tr}}</button> 
       <button class="search" style="float:left;" type="button" onclick="ProtocoleSelector.init()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
       {{tr}}msg-COperation-title-modify{{/tr}} {{$patient->_view}} par le Dr. {{$chir->_view}}
     </th>
@@ -138,23 +148,38 @@ function pageMain() {
     {{else}}
     {{if $modurgence}}
     <th colspan="2" class="title urgence">
+    <button class="hslip" id="{{if $app->user_prefs.mode == 1}}modeEasy-trigger{{else}}modeExpert-trigger{{/if}}" style="float: right;" type="button">{{tr}}button-COperation-toggleMode{{/tr}}</button>
       <button class="search" style="float: left;" type="button" onclick="ProtocoleSelector.init()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
       {{tr}}msg-COperation-title-create-urgence{{/tr}}
     </th>
     {{else}}
     <th colspan="2" class="title">
-      <button class="hslip" id="modeEasy-trigger" style="float: right;" type="button">{{tr}}button-COperation-toggleMode{{/tr}}</button> 
+      <button class="hslip" id="{{if $app->user_prefs.mode == 1}}modeEasy-trigger{{else}}modeExpert-trigger{{/if}}" style="float: right;" type="button">{{tr}}button-COperation-toggleMode{{/tr}}</button> 
       <button class="search" style="float: left;" type="button" onclick="ProtocoleSelector.init()">{{tr}}button-COperation-choixProtocole{{/tr}}</button>
       {{tr}}msg-COperation-title-create{{/tr}}
     </th>
     {{/if}}
     {{/if}}
   </tr>
+  
+  
   <tbody id="modeEasy">
     <tr>
-      <td colspan="2">Mode Easy</td>
+    <td class="text">
+    {{if !$op->operation_id}}
+      Veuillez selectionner un protocole pour créer une intervention
+    {{/if}}
+    </td>
+    </tr>
+    <tr>
+      <td>
+      {{include file="inc_form_operation_easy.tpl"}}
+      </td>
     </tr>
   </tbody>
+  
+  
+  
   <tbody id="modeExpert">
   <tr>
     <td>
@@ -163,7 +188,9 @@ function pageMain() {
       ProtocoleSelector.init = function(){
         
         var formOp        = document.editOp;
+        var formOpEasy    = document.editOpEasy;
         var formSejour    = document.editSejour;
+  
   
         this.eChir_id       = formOp.chir_id;
         this.eCodes_ccam    = formOp.codes_ccam;
@@ -182,6 +209,10 @@ function pageMain() {
         this.eConvalescence = formSejour.convalescence;
         this.eDP            = formSejour.DP;
         this.eRques_sej     = formSejour.rques;
+
+        
+        this.eChir_id_easy = formOpEasy.chir_id;
+        
         
         this.pop();
       }

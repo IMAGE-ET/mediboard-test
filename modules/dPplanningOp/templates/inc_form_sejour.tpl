@@ -106,6 +106,11 @@
     <script type="text/javascript">
       PatSelector.init = function(){
       var oForm = document.editSejour;
+      var oFormEasy = document.editOpEasy;
+      
+      this.eView_easy = oFormEasy._patient_view; 
+      this.eId_easy = oFormEasy.patient_id;
+      
       this.eId = oForm.patient_id;
       this.eView = oForm._patient_view;
       this.pop();

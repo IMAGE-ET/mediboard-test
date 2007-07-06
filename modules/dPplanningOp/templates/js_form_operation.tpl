@@ -141,6 +141,33 @@ function modifOp() {
   modifSejour();
 }
 
+
+function modifCote(oForm){
+  var oOpForm=(oForm.name=="editOp")?document.editOpEasy:document.editOp;
+  Form.Element.setValue(oOpForm.cote, oForm.cote.value);
+  modifOp();
+}
+
+function modifChir(oForm){
+  var oOpForm = (oForm.name == "editOp") ? document.editOpEasy : document.editOp;
+  Form.Element.setValue(oOpForm.chir_id, oForm.chir_id.value);
+}
+
+function modifDate(oForm){
+  var oOpForm = (oForm.name == "editOp") ? document.editOpEasy : document.editOp;
+  Form.Element.setValue(oOpForm.date, oForm.date.value);
+}
+
+function modifHeure(oForm){
+  var oOpForm=(oForm.name=="editOp")?document.editOpEasy:document.editOp;
+  Form.Element.setValue(oOpForm._hour_urgence, oForm._hour_urgence.value);
+}
+
+function modifMin(oForm){
+  var oOpForm=(oForm.name=="editOp")?document.editOpEasy:document.editOp;
+  Form.Element.setValue(oOpForm._min_urgence, oForm._min_urgence.value);
+}
+
 function synchroPrat() {
   var oOpForm = document.editOp;
   var oSejourForm = document.editSejour;

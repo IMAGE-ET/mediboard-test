@@ -33,6 +33,9 @@ var PlageSelector = {
   set: function(plage_id, sDate, bAdm) {
     var oOpForm     = document.editOp;
     var oSejourForm = document.editSejour;
+    var oOpFormEasy = document.editOpEasy;
+    
+    
  
     if(!oSejourForm._duree_prevue.value) {
       oSejourForm._duree_prevue.value = 0;
@@ -42,12 +45,12 @@ var PlageSelector = {
       if(oOpForm.plageop_id.value != plage_id) {
         oOpForm.rank.value = 0;
       }
+      
+      Form.Element.setValue(this.ePlage_id, plage_id);
+      Form.Element.setValue(this.eSDate, sDate);
+      Form.Element.setValue(this.ePlage_id_easy, plage_id);
+      Form.Element.setValue(this.eSDate_easy, sDate);
      
-      this.ePlage_id.value = plage_id;
-      this.eSDate.value = sDate;
-      if(this.ePlage_id.onchange) {
-        this.ePlage_id.onchange();
-      }
       var dAdm = makeDateFromLocaleDate(sDate);
       oOpForm._date.value = makeDATEFromDate(dAdm);
       // Initialize admission date according to operation date

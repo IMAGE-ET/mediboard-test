@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.66";
+$config["mod_version"]     = "0.67";
 $config["mod_type"]        = "user";
 
 class CSetupdPplanningOp extends CSetup {
@@ -654,7 +654,12 @@ class CSetupdPplanningOp extends CSetup {
     $sql = "ALTER TABLE `sejour` ADD `codes_ccam` VARCHAR(255);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.66";
+    $this->makeRevision("0.66");
+    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
+        "\nVALUES ('0', 'mode', '1');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.67";
   }
 }
 ?>

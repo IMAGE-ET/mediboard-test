@@ -154,8 +154,6 @@ $smarty->assign("heure_sortie_autre",  $heure_sortie_autre);
 $smarty->assign("heure_entree_veille", $heure_entree_veille);
 $smarty->assign("heure_entree_jour",   $heure_entree_jour);
 
-
-
 $smarty->assign("op"        , $op);
 $smarty->assign("plage"     , $op->plageop_id ? $op->_ref_plageop : new CPlageOp );
 $smarty->assign("sejour"    , $sejour);
