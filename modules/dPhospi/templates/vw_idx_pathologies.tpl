@@ -7,7 +7,6 @@ function reloadPatient(oForm) {
   url_patient.requestUpdate('sejour-'+oForm.sejour_id.value, { waitingText : null });
 }
 
-
 function pageMain() {
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
 }

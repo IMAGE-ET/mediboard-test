@@ -32,6 +32,9 @@ function loadSejour(sejour_id) {
   } );
 }
 
+function pageMain() {
+  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+}
 
 </script>
 
@@ -41,6 +44,12 @@ function loadSejour(sejour_id) {
   <tr>
     <td style="width:200px;" rowspan="3">
       <table>
+        <tr>
+          <th>
+            {{$date|date_format:"%A %d %B %Y"}}
+            <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+          </th>
+        </tr>
         <tr>
           <td>
             <form name="selService" action="?m={{$m}}" method="get">
