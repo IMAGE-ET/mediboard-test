@@ -9,8 +9,6 @@ function updateTokenCcam(){
   modifOp();
 }
 
-var periodicalTimeUpdater = new PeriodicalExecuter(updateTime, 1);
-
 function refreshListCCAM() {
   oCcamNode = document.getElementById("listCodesCcam");
   var oForm = document.editOp;
@@ -31,6 +29,7 @@ function refreshListCCAM() {
 }
 
 function updateTime() {
+  Console.trace("Updating time");
   var oForm = document.editOp;
   if(oForm.chir_id.value) {
     var timeUrl = new Url;
@@ -208,12 +207,17 @@ function cancelOperation() {
   }
 }
   
+var periodicalTimeUpdater = null;
+  
 function incFormOperationMain() {
+  periodicalTimeUpdater = new PeriodicalExecuter(updateTime, 1);
+
   refreshListCCAM();
+  
   if({{$modurgence && !$op->operation_id}}) {
     updateEntreePrevue();
   }
-  
+    
   oCcamField = new TokenField(document.editOp.codes_ccam, { 
     onChange : updateTokenCcam,
     sProps : "notNull code ccam"
