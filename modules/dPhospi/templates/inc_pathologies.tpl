@@ -78,13 +78,13 @@
 {{if $curr_sejour->rques || $curr_operation->rques || $curr_sejour->_ref_patient->rques}}
 <tr>
   <td class="text">
-    {{if $curr_sejour->rques != ""}}
+    {{if $curr_sejour->rques}}
     <em>Séjour</em>: {{$curr_sejour->rques|nl2br}}<br />
     {{/if}}
     {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
-    {{if $curr_operation->rques != ""}}
-    <em>Intervention</em>: {{$curr_operation->rques|nl2br}}<br />
-    {{/if}}
+      {{if $curr_operation->rques}}
+      <em>Intervention</em>: {{$curr_operation->rques|nl2br}}<br />
+      {{/if}}
     {{/foreach}}
     {{if $curr_sejour->_ref_patient->rques}}
     <em>Patient</em>: {{$curr_sejour->_ref_patient->rques|nl2br}}<br />
