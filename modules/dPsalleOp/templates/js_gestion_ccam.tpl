@@ -2,6 +2,13 @@
 
 <script type="text/javascript">
 
+
+
+function setCodeTemp(code){
+  document.manageCodes._newCode.value = code; 
+}
+
+
 function checkAddCode() {
   var oForm = document.manageCodes;
   var oField = null;

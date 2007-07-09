@@ -12,7 +12,12 @@
     <em>(<a class="action" href="?m=dPccam&amp;tab=vw_full_code&amp;codeacte={{$curr_code->code}}">{{$curr_code->code}}</a>)</em>
     {{if $can->edit || $modif_operation}}
     <br />Codes associés :
-    <select name="asso" onchange="setCodeCCAM(this.value, 'ccam')">
+    
+    
+    <!-- <select name="asso" onchange="CCAMSelector.set(this.value, 'ccam')">  -->
+    <select name="asso" onchange="setCodeTemp(this.value)">  
+    
+    
       <option value="">&mdash; choix</option>
       {{foreach from=$curr_code->assos item=curr_asso}}
       <option value="{{$curr_asso.code}}">{{$curr_asso.code}}({{$curr_asso.texte|truncate:40:"...":true}})</option>
