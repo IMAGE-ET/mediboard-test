@@ -104,7 +104,7 @@ db_exec( $sql ); $msg .= db_error();
 if(CModule::getInstalled("dPfiles")) {
   $sql = "UPDATE files_mediboard" .
       "\nSET object_id = '$patient_id'" .
-      "\nWHERE file_object_id IN ('$patient1->patient_id','$patient2->patient_id')" .
+      "\nWHERE object_id IN ('$patient1->patient_id','$patient2->patient_id')" .
       "\nAND object_class = 'CPatient'";
   db_exec( $sql ); $msg .= db_error();
 }
