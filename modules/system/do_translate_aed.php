@@ -25,7 +25,7 @@ if(!$module || !$trans || !$chaine || !is_array($trans) || !is_array($chaine)){
 // Dossier des traductions
 $localesDirs = $AppUI->readDirs("locales");
 mbRemoveValuesInArray(".svn",$localesDirs);
-mbRemoveValuesInArray("en",$localesDirs);
+//mbRemoveValuesInArray("en",$localesDirs);
 
 $translateModule = new CMbConfig;
 $translateModule->sourcePath = null;

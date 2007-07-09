@@ -40,4 +40,6 @@ $locales['CFactureItem.none'] = '';
 $locales['CFactureItem.one'] = '';
 $locales['mod-dPfacturation-tab-vw_idx_facture'] = 'Gestion des factures';
 $locales['mod-dPfacturation-tab-vw_idx_factureitem'] = 'Gestion des éléments';
+$locales['CFacture-back-sejour_id'] = '';
+$locales['CFactureItem-back-facture_id'] = '';
 ?>

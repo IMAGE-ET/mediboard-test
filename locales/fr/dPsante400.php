@@ -35,4 +35,5 @@ $locales['config-dPsante400-pass'] = 'Mot de passe';
 $locales['config-dPsante400-pass-desc'] = 'Mot de passe de la DSN';
 $locales['config-dPsante400-user'] = 'Utilisateur';
 $locales['config-dPsante400-user-desc'] = 'Nom d\'utilisation de la DSN';
+$locales['CIdSante400-back-object_id'] = '';
 ?>

@@ -125,4 +125,12 @@ $locales['CStock.modify'] = '';
 $locales['CStock.more'] = '';
 $locales['CStock.none'] = '';
 $locales['CStock.one'] = '';
+$locales['CCommandeMateriel-back-reference_id'] = '';
+$locales['CCommandeMateriel.recu.0'] = '';
+$locales['CCommandeMateriel.recu.1'] = '';
+$locales['CMateriel-back-category_id'] = '';
+$locales['CRefMateriel-back-fournisseur_id'] = '';
+$locales['CRefMateriel-back-materiel_id'] = '';
+$locales['CStock-back-group_id'] = '';
+$locales['CStock-back-materiel_id'] = '';
 ?>

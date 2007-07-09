@@ -39,4 +39,5 @@ $locales['CPlageressource.modify'] = '';
 $locales['CPlageressource.more'] = '';
 $locales['CPlageressource.none'] = '';
 $locales['CPlageressource.one'] = '';
+$locales['CPlageressource-back-prat_id'] = '';
 ?>
