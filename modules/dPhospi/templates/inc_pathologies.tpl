@@ -75,7 +75,16 @@
   </td>  
 </tr>
 
-{{if $curr_sejour->rques || $curr_operation->rques || $curr_sejour->_ref_patient->rques}}
+<!-- Affichage des remarques -->
+
+{{assign var=operations_rques value=false}}
+{{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
+  {{if $curr_operation->rques}}
+  {{assign var=operations_rques value=true}}
+  {{/if}}
+{{/foreach}}
+
+{{if $curr_sejour->rques || $operations_rques || $curr_sejour->_ref_patient->rques}}
 <tr>
   <td class="text">
     {{if $curr_sejour->rques}}
