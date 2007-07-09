@@ -246,11 +246,7 @@ function popPlanning(debut) {
         </td>
         <th>{{mb_label object=$plagesel field="_min_inter_op"}}</th>
         <td>
-          <select name="_min_inter_op" class="notNull num pos">
-          {{foreach from=$_temps_inter_op item=curr_inter_op}}
-            <option value="{{$curr_inter_op}}" {{if $plagesel->_min_inter_op == $curr_inter_op}} selected ="selected" {{/if}}>{{$curr_inter_op}}</option>
-          {{/foreach}}
-          </select>
+          <input type="text" size="2" name="_min_inter_op" class="notNull num pos" />
           min
         </td>
       </tr>
