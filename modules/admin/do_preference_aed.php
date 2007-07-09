@@ -16,13 +16,13 @@ foreach ($_POST["pref_name"] as $name => $value) {
 		if ($msg = $obj->delete()) {
 			$AppUI->setMsg($msg, UI_MSG_ERROR);
 		} else {
-			$AppUI->setMsg("CPreferences deleted", UI_MSG_ALERT);
+			$AppUI->setMsg("msg-CPreferences-delete", UI_MSG_ALERT);
 		}
 	} else {
 		if ($msg = $obj->store()) {
 			$AppUI->setMsg($msg, UI_MSG_ERROR);
 		} else {
-			$AppUI->setMsg("CPreferences updated", UI_MSG_OK);
+			$AppUI->setMsg("msg-CPreferences-modify", UI_MSG_OK);
 		}
 	}
 }

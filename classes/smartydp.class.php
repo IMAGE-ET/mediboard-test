@@ -31,9 +31,6 @@ function do_translation($params, $content, &$smarty, &$repeat) {
         default:
       }
     }
-    if ($dPconfig["locale_warn"]){
-    	$content = $dPconfig["locale_alert"] . $content . $dPconfig["locale_warn"];
-    }
     return $content;
   }
 }

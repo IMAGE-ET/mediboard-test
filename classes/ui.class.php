@@ -52,7 +52,9 @@ class CAppUI {
   var $user_locale=null;
 /** @var string */
   var $base_locale = "en"; // do not change - the base "keys" will always be in english
-  
+/** @var string langage alert mask */
+  var $locale_mask = "";
+
   var $messages = array();
 
 /** @var string Message string*/
@@ -70,6 +72,9 @@ class CAppUI {
  * CAppUI Constructor
  */
   function CAppUI() {
+    
+    global $dPconfig;
+    
     $this->state = array();
 
     $this->user_first_name = "";
@@ -79,9 +84,17 @@ class CAppUI {
     $this->project_id = 0;
 
     $this->defaultRedirect = "";
-// set up the default preferences
+    
+    // set up the default preferences
     $this->user_locale = $this->base_locale;
     $this->user_prefs = array();
+
+    // choose to alert for missing translation or not
+    if ($dPconfig["locale_warn"]) {
+      $this->locale_mask = @$dPconfig["locale_alert"]."%s".@$dPconfig["locale_alert"];
+    } else {
+      $this->locale_mask = "%s";
+    }
   }
   
   function getAllClasses() {
@@ -294,29 +307,12 @@ class CAppUI {
     if (empty($str)) {
       return "";
     }
-    $x = @$GLOBALS["translate"][$str];
-    if ($x) {
-      $str = $x;
-    } else if (@$this->cfg["locale_warn"]) {
-      if ($this->base_locale != $this->user_locale ||
-        ($this->base_locale == $this->user_locale && !in_array($str, @$GLOBALS["translate"]))) {
-        $str .= @$this->cfg["locale_alert"];
-      }
+    if ( $found = @$GLOBALS["translate"][$str]) {
+      return $found;
     }
-    switch ($case) {
-      case UI_CASE_UPPER:
-        $str = strtoupper($str);
-        break;
-      case UI_CASE_LOWER:
-        $str = strtolower($str);
-        break;
-      case UI_CASE_UPPERFIRST:
-        break;
-    }
-    /* stripslashes added to fix #811242 on 2004 Jan 10
-     * if no problems occur, delete this comment. (gregor) */
-    return $str;
+    return sprintf($this->locale_mask, $str);
   }
+
 /**
 * Set the display of warning for untranslated strings
 * @param string
