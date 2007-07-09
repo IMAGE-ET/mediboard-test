@@ -1,3 +1,5 @@
+{{* $Id$ *}}
+
 {{if $can->edit}}
 <div>
   <form name="editFrm" action="?m=system" method="post">
@@ -6,5 +8,6 @@
     <button class="cancel" type="submit">
       Réinitialiser les logs
     </button>
+  </form>
 </div>
 {{/if}}
