@@ -18,7 +18,7 @@
   <tr>
     <th><label for="user_id" title="Identifiant de l'utilisateur">Utilisateur</label></th>
     <td>
-      <select name="user_id" class="ref">
+      <select name="user_id">
         <option value="0">&mdash; Tous les utilisateurs</option>
         {{foreach from=$listUsers item=curr_user}}
         <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $user_id}}selected="selected"{{/if}}>
