@@ -28,8 +28,8 @@ function pageMain() {
 function popPlanning(debut) {
   var url = new Url;
   url.setModuleAction("dPbloc", "view_planning");
-  url.addParam("deb", debut);
-  url.addParam("fin", debut);
+  url.addParam("_date_min", debut);
+  url.addParam("_date_max", debut);
   url.popup(700, 550, "Planning");
 }
 </script>
