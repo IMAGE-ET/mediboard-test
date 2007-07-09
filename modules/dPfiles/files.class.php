@@ -54,12 +54,6 @@ class CFile extends CMbMetaObject {
     $specs["file_name"]          = "notNull str";
     return $specs;
   }
-
-  function check() {
-    // Ensure the integrity of some variables
-    $this->file_id = intval($this->file_id);
-    //$this->file_object_id = intval($this->file_object_id);
-  }
   
   function loadRefsFwd() {
   	parent::loadRefsFwd();
