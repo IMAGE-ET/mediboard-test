@@ -31,7 +31,6 @@ require_once("$mbPath/classes/ui.class.php");
 require_once("$mbPath/includes/session.php");
 require_once("$mbPath/classes/sharedmemory.class.php");
 require_once("$mbPath/includes/autoload.php" );
-require_once("$mbPath/includes/main_functions.php" );
 
 $templateManager =& $_SESSION[$m]["templateManager"];
 
