@@ -6,8 +6,13 @@
 
 var oCcamField = null;
 
-function refreshListCCAM() {
-  oCcamNode = document.getElementById("listCodesCcam");
+function refreshListCCAM(mode) {
+  if(mode=="expert"){
+    oCcamNode = document.getElementById("listCodesCcam");
+  }
+  if(mode=="easy"){
+    oCcamNode = document.getElementById("listCodesCcamEasy");
+  }
   var oForm = document.editFrm;
   oForm._codeCCAM.value="";
   var aCcam = oForm.codes_ccam.value.split("|");
@@ -18,8 +23,10 @@ function refreshListCCAM() {
   var iCode = 0;
   while (sCode = aCcam[iCode++]) {
     var sCodeNode = sCode;
-    sCodeNode += "<button class='cancel notext' type='button' onclick='oCcamField.remove(\"" + sCode + "\")'>";
-    sCodeNode += "<\/button>";
+    if(mode=="expert"){
+      sCodeNode += "<button class='cancel notext' type='button' onclick='oCcamField.remove(\"" + sCode + "\")'>";
+      sCodeNode += "<\/button>";
+    }
     aCodeNodes.push(sCodeNode);
   }
   oCcamNode.innerHTML = aCodeNodes.join(" &mdash; ");
@@ -112,7 +119,7 @@ function checkDuree() {
 
 
 function pageMain() {
-  refreshListCCAM();
+  refreshListCCAM("expert");
 
   oCcamField = new TokenField(document.editFrm.codes_ccam, { 
     onChange : refreshListCCAM,

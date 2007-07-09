@@ -28,6 +28,17 @@
     <td  class="readonly" colspan="2">{{mb_field object=$op field="libelle" readonly="readonly"}}</td>
   </tr>
   
+  
+  <!-- Liste des codes ccam -->
+  <tr>
+    <th>Liste des codes CCAM
+    {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM('easy');" hidden=1 prop=""}}
+    </th>
+    <td colspan="2" class="text" id="listCodesCcamEasy">
+  </td>
+  </tr>
+  
+  
     
   <!-- Selection du coté --> 
   <tr>

@@ -143,27 +143,35 @@ function pageMain() {
   </tr>
   
   <!-- Mode easy -->
+  
+  
   <tbody id="modeEasy" style="display:none;">
-    <tr>
-    <td class="text">
-    {{if !$op->operation_id}}
-      <div class="big-info">
-        Ceci est le <strong>mode simplifié</strong> de planification d'intervention.
-        <br/>
-        Il est nécessaire de <strong>sélectionner un protocole</strong> pour créer une intervention.
-        <br/>
-        <em>Pour plus de paramètres vous pouvez passer en mode expert.</em>
-      </div>
-    {{/if}}
-    </td>
-    </tr>
-    <tr>
+    <tr> 
       <td>
       {{include file="inc_form_operation_easy.tpl"}}
+      </td>
+      
+      <td class="text">
+      {{if !$op->operation_id}}
+        <div class="big-info">
+         Ceci est le <strong>mode simplifié</strong> de planification d'intervention.
+         <br/>
+         Il est nécessaire de <strong>sélectionner un protocole</strong> pour créer une intervention.
+         <br/>
+         <em>Pour plus de paramètres vous pouvez passer en mode expert.</em>
+        </div>
+      {{/if}}
       </td>
     </tr>
   </tbody>
   
+
+
+
+
+
+
+
   <!-- Mode expert -->
   <tbody id="modeExpert" style="display:none;">
   <tr>
@@ -211,7 +219,7 @@ function pageMain() {
 
         this.eChir_id_easy = formOpEasy.chir_id;
         this.eLibelle_easy = formOpEasy.libelle;
-        //this.eCodes_ccam_easy = formOpEasy.codes_ccam;
+        this.eCodes_ccam_easy = formOpEasy.codes_ccam;
         
         this.pop();
       }

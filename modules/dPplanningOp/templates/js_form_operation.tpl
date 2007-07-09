@@ -4,13 +4,21 @@
 
 var oCcamField = null;
 function updateTokenCcam(){
-  refreshListCCAM();
+  refreshListCCAM("expert");
+  refreshListCCAM("easy");
   document.editOp._codeCCAM.value="";
   modifOp();
 }
 
-function refreshListCCAM() {
-  oCcamNode = document.getElementById("listCodesCcam");
+
+
+function refreshListCCAM(mode) {
+  if(mode=="expert"){
+    oCcamNode = document.getElementById("listCodesCcam");
+  }
+  if(mode=="easy"){
+    oCcamNode = document.getElementById("listCodesCcamEasy");
+  }
   var oForm = document.editOp;
   var aCcam = oForm.codes_ccam.value.split("|");
   // Si la chaine est vide, il crée un tableau à un élément vide donc :
@@ -20,8 +28,10 @@ function refreshListCCAM() {
   var iCode = 0;
   while (sCode = aCcam[iCode++]) {
     var sCodeNode = sCode;
-    sCodeNode += "<button class='cancel notext' type='button' onclick='oCcamField.remove(\"" + sCode + "\")'>";
-    sCodeNode += "<\/button>";
+    if(mode=="expert"){
+      sCodeNode += "<button class='cancel notext' type='button' onclick='oCcamField.remove(\"" + sCode + "\")'>";
+      sCodeNode += "<\/button>";
+    }
     aCodeNodes.push(sCodeNode);
   }
   oCcamNode.innerHTML = aCodeNodes.join(" &mdash; ");
@@ -211,7 +221,8 @@ var periodicalTimeUpdater = null;
 function incFormOperationMain() {
   periodicalTimeUpdater = new PeriodicalExecuter(updateTime, 1);
 
-  refreshListCCAM();
+  refreshListCCAM("expert");
+  refreshListCCAM("easy");
   
   if({{$modurgence && !$op->operation_id}}) {
     updateEntreePrevue();

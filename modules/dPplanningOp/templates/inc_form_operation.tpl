@@ -79,7 +79,7 @@
   <tr>
     <th>
       Liste des codes CCAM
-      {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM()" hidden=1 prop=""}}
+      {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM('expert');" hidden=1 prop=""}}
     </th>
     <td colspan="2" class="text" id="listCodesCcam">
     </td>
