@@ -36,7 +36,6 @@ function dateAntecedent(){
   var oForm = document.editAntFrm;
   var oEnCours = oForm._date_ant;
   var oHiddenField = oForm.date;
-  oForm._helpers_rques.value = "";
   oForm._hidden_rques.value = oForm.rques.value;
   oForm.rques.value = "";
   var oViewField = document.getElementById('editAntFrm_date_da');
