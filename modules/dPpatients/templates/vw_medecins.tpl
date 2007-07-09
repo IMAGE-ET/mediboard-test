@@ -1,7 +1,6 @@
-<!-- $Id$ -->
+{{* $Id$ *}}
 
 {{mb_include_script module="dPpatients" script="autocomplete"}}
-
 
 <script type="text/javascript">
 
@@ -11,7 +10,9 @@ function setClose(iId, sNom, sPrenom, sType) {
 }
 
 function pageMain() {
-  initInseeFields("editFrm", "cp", "ville","_tel1");
+  if (document.editFrm) {
+    initInseeFields("editFrm", "cp", "ville","_tel1");
+  }
 }
 </script>
 
