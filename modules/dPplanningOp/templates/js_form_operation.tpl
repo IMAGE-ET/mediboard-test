@@ -29,7 +29,6 @@ function refreshListCCAM() {
 }
 
 function updateTime() {
-  Console.trace("Updating time");
   var oForm = document.editOp;
   if(oForm.chir_id.value) {
     var timeUrl = new Url;
