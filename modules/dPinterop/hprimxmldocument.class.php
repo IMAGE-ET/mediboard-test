@@ -141,7 +141,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $medecin;
   }
   
-  function addActeCCAM($elParent, $mbActeCCAM, $mbOp) {        
+  function addActeCCAM($elParent, $mbActeCCAM, $mbOp) {
     $acteCCAM = $this->addElement($elParent, "acteCCAM");
     $this->addAttribute($acteCCAM, "action", "création");
     $this->addAttribute($acteCCAM, "facturable", "oui");
