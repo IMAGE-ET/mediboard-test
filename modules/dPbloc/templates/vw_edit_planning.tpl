@@ -147,24 +147,6 @@ function popPlanning(debut) {
             {{/foreach}}
           </select>
         </td>
-        <th>{{mb_label object=$plagesel field="_heuredeb"}}</th>
-        <td>
-          <select name="_heuredeb" class="notNull num">
-          {{foreach from=$listHours|smarty:nodefaults item=heure}}
-            <option value="{{$heure|string_format:"%02d"}}" {{if $plagesel->_heuredeb == $heure}} selected="selected" {{/if}} >
-              {{$heure|string_format:"%02d"}}
-            </option>
-          {{/foreach}}
-          </select>
-          :
-          <select name="_minutedeb">
-          {{foreach from=$listMins|smarty:nodefaults item=minute}}
-            <option value="{{$minute|string_format:"%02d"}}" {{if $plagesel->_minutedeb == $minute}} selected="selected" {{/if}} >
-              {{$minute|string_format:"%02d"}}
-            </option>
-          {{/foreach}}
-          </select>
-        </td>
       </tr>
       <tr>
         <th>{{mb_label object=$plagesel field="spec_id"}}</th>
@@ -191,7 +173,48 @@ function popPlanning(debut) {
           <!-- Possibilité de changer la date ? -->
           <!--img id="editFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date"/-->
         </td>
-    	<th>{{mb_label object=$plagesel field="_heurefin"}}</th>
+      </tr>
+      
+      <tr>
+        <th>{{mb_label object=$plagesel field="anesth_id"}}</th>
+        <td>
+          <select name="anesth_id">
+            <option value="">&mdash; Choisir un anesthésiste</option>
+            {{foreach from=$anesths item=anesth}}
+            <option value="{{$anesth->user_id}}" {{if $plagesel->anesth_id == $anesth->user_id}} selected="selected" {{/if}} >
+              {{$anesth->_view}}
+            </option>
+            {{/foreach}}
+    	  </select>
+        </td>
+        <th>{{mb_label object=$plagesel field="_heuredeb"}}</th>
+        <td>
+          <select name="_heuredeb" class="notNull num">
+          {{foreach from=$listHours|smarty:nodefaults item=heure}}
+            <option value="{{$heure|string_format:"%02d"}}" {{if $plagesel->_heuredeb == $heure}} selected="selected" {{/if}} >
+              {{$heure|string_format:"%02d"}}
+            </option>
+          {{/foreach}}
+          </select>
+          :
+          <select name="_minutedeb">
+          {{foreach from=$listMins|smarty:nodefaults item=minute}}
+            <option value="{{$minute|string_format:"%02d"}}" {{if $plagesel->_minutedeb == $minute}} selected="selected" {{/if}} >
+              {{$minute|string_format:"%02d"}}
+            </option>
+          {{/foreach}}
+          </select>
+        </td>
+      </tr>
+      
+      <tr>
+        <th>
+          <label for="_repeat" title="Nombre de plages à créer">Nombre de plages</label>
+        </th>
+        <td>
+          <input type="text" class="notNull num min|1" name="_repeat" size="1" value="1" />
+        </td>
+    	  <th>{{mb_label object=$plagesel field="_heurefin"}}</th>
         <td>
           <select name="_heurefin" class="notNull num">
             {{foreach from=$listHours|smarty:nodefaults item=heure}}
@@ -210,23 +233,19 @@ function popPlanning(debut) {
           </select>
         </td>
       </tr>
-      
       <tr>
-        <th>{{mb_label object=$plagesel field="anesth_id"}}</th>
+        <th>
+          <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>
+        </th>
         <td>
-          <select name="anesth_id">
-            <option value="">&mdash; Choisir un anesthésiste</option>
-            {{foreach from=$anesths item=anesth}}
-            <option value="{{$anesth->user_id}}" {{if $plagesel->anesth_id == $anesth->user_id}} selected="selected" {{/if}} >
-              {{$anesth->_view}}
-            </option>
-            {{/foreach}}
-    	  </select>
+          <select name="_type_repeat">
+            <option value="1">Normale</option>
+            <option value="2">Une semaine sur deux</option>
+            <option value="3">Une semaine sur trois</option>
+          </select>
         </td>
         <th>{{mb_label object=$plagesel field="_min_inter_op"}}</th>
         <td>
-        
-          
           <select name="_min_inter_op" class="notNull num pos">
           {{foreach from=$_temps_inter_op item=curr_inter_op}}
             <option value="{{$curr_inter_op}}" {{if $plagesel->_min_inter_op == $curr_inter_op}} selected ="selected" {{/if}}>{{$curr_inter_op}}</option>
@@ -235,27 +254,8 @@ function popPlanning(debut) {
           min
         </td>
       </tr>
-      
       <tr>
-        <th>
-          <label for="_repeat" title="Nombre de plages à créer">Nombre de plages</label>
-        </th>
-        <td>
-          <input type="text" class="notNull num min|1" name="_repeat" size="1" value="1" />
-        </td>
-        <th>
-          <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>
-        </th>
-        <td colspan="3">
-          <select name="_type_repeat">
-            <option value="1">Normale</option>
-            <option value="2">Une semaine sur deux</option>
-            <option value="3">Une semaine sur trois</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td class="button" colspan="6">
+        <td class="button" colspan="4">
         {{if $plagesel->plageop_id}}
           <button type="submit" class="modify">Modifier</button>
         {{else}}
