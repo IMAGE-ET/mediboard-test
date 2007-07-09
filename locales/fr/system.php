@@ -1,5 +1,4 @@
 <?php
-$locales['CNote-public-desc'] = 'Note visible par tout le monde';
 $locales['Abbreviation'] = 'Abréviation';
 $locales['active'] = 'Activé';
 $locales['added'] = 'ajouté';
@@ -16,6 +15,7 @@ $locales['CNote-degre-desc'] = 'Degré d\'importance de la note';
 $locales['CNote-libelle'] = 'Libellé';
 $locales['CNote-libelle-desc'] = 'Libellé de la note';
 $locales['CNote-public'] = 'Note publique';
+$locales['CNote-public-desc'] = 'Note visible par tout le monde';
 $locales['CNote-text'] = 'Contenu';
 $locales['CNote-text-desc'] = 'Contenu de la note';
 $locales['CNote-user_id'] = 'Utilisateur';
