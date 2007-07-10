@@ -202,44 +202,6 @@ class COperation extends CCodableCCAM {
     }
     return $msg . parent::check();
   }
-
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "acte(s) CCAM", 
-      "name"      => "acte_ccam", 
-      "idfield"   => "acte_id", 
-      "joinfield" => "operation_id"
-    );
-    $tables[] = array (
-      "label" => "document(s)", 
-      "name" => "compte_rendu", 
-      "idfield" => "compte_rendu_id", 
-      "joinfield" => "object_id",
-      "joinon" => "(`object_class` = 'COperation')"
-    );
-    $tables[] = array (
-      "label" => "fichier(s)", 
-      "name" => "files_mediboard", 
-      "idfield" => "file_id", 
-      "joinfield" => "object_id",
-      "joinon" => "`object_class`='COperation'"
-    );
-    $tables[] = array (
-      "label"     => "consultation(s) d'anesthésie", 
-      "name"      => "consultation_anesth", 
-      "idfield"   => "consultation_anesth_id", 
-      "joinfield" => "operation_id"
-    );   
-
-//    $tables[] = array (
-//      "label" => "naissance(s)", 
-//      "name" => "naissance", 
-//      "idfield" => "naissance_id", 
-//      "joinfield" => "operation_id",
-//    );    
-
-    return parent::canDelete($msg, $oid, $tables);
-  }
   
   function delete() {
     $msg = parent::delete();

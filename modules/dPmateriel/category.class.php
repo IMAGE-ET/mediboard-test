@@ -54,16 +54,6 @@ class CCategory extends CMbObject {
     $this->_ref_materiel = $this->_ref_materiel->loadList($where);
   }
   
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "matériel(s)", 
-      "name"      => "materiel", 
-      "idfield"   => "materiel_id", 
-      "joinfield" => "category_id"
-    );
-    
-    return CMbObject::canDelete( $msg, $oid, $tables );	
-  }
 
 }
 ?>

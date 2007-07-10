@@ -147,52 +147,6 @@ class CMediusers extends CMbObject {
     return $user;
   }
 
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "opération(s)", 
-      "name"      => "operations", 
-      "idfield"   => "operation_id", 
-      "joinfield" => "chir_id"
-      );
-
-      $tables[] = array (
-      "label"     => "acte(s) CCAM", 
-      "name"      => "acte_ccam", 
-      "idfield"   => "acte_id", 
-      "joinfield" => "executant_id"
-      );
-
-      $tables[] = array (
-      "label"     => "plage(s) de consultation", 
-      "name"      => "plageconsult", 
-      "idfield"   => "plageconsult_id", 
-      "joinfield" => "chir_id"
-      );
-
-      $tables[] = array (
-      "label"     => "plage(s) opératoire(s) (chirurgien)", 
-      "name"      => "plagesop", 
-      "idfield"   => "plageop_id", 
-      "joinfield" => "chir_id"
-      );
-
-      $tables[] = array (
-      "label"     => "plage(s) opératoire(s) (anesthésiste)", 
-      "name"      => "plagesop", 
-      "idfield"   => "plageop_id", 
-      "joinfield" => "anesth_id"
-      );
-
-      $tables[] = array (
-      "label"     => "Pack(s) de documents", 
-      "name"      => "pack", 
-      "idfield"   => "pack_id", 
-      "joinfield" => "chir_id"
-      );
-
-      return parent::canDelete($msg, $oid, $tables);
-  }
-
   function delete() {
     // @todo delete Favoris CCAM et CIM en cascade
 

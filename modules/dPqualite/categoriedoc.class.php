@@ -44,15 +44,5 @@ class CCategorieDoc extends CMbObject {
     $this->_shortview = $this->code; 
   }  
 
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "msg-CDocGed-canDelete",
-      "name"      => "doc_ged", 
-      "idfield"   => "doc_ged_id", 
-      "joinfield" => "doc_categorie_id"
-    );
-    
-    return CMbObject::canDelete( $msg, $oid, $tables );
-  }
 }
 ?>

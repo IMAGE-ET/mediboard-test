@@ -64,20 +64,5 @@ class CTypeRepas extends CMbObject {
     $this->_fin   = substr($this->fin  , 0, 2);
   }
   
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "menu(s)", 
-      "name"      => "menu",
-      "idfield"   => "menu_id", 
-      "joinfield" => "typerepas"
-    );
-    $tables[] = array (
-      "label"     => "plat(s)", 
-      "name"      => "plats",
-      "idfield"   => "plat_id", 
-      "joinfield" => "typerepas"
-    );
-    return parent::canDelete( $msg, $oid, $tables );
-  }
 }
 ?>

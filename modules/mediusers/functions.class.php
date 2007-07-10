@@ -128,24 +128,6 @@ class CFunctions extends CMbObject {
     }
   }
   
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "utilisateurs", 
-      "name"      => "users_mediboard", 
-      "idfield"   => "user_id", 
-      "joinfield" => "function_id"
-    );
-    
-    $tables[] = array (
-      "label"     => "plages opératoires", 
-      "name"      => "plagesop", 
-      "idfield"   => "plageop_id", 
-      "joinfield" => "spec_id"
-    );
-    
-    return parent::canDelete( $msg, $oid, $tables );
-  }
-
   // Forward references
   function loadRefsFwd() {
     $this->_ref_group = new CGroups();

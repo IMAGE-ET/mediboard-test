@@ -395,44 +395,6 @@ class CConsultAnesth extends CMbObject {
     $template->addProperty("Anesthésie - ASA"            , $this->ASA);
   }
   
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "document(s)", 
-      "name"      => "compte_rendu", 
-      "idfield"   => "compte_rendu_id", 
-      "joinfield" => "object_id",
-      "joinon"    => "(`object_class` = 'CConsultAnesth')"
-    );
-    $tables[] = array (
-      "label"     => "Technique(s) Complémentaire(s)", 
-      "name"      => "techniques_anesth", 
-      "idfield"   => "technique_id", 
-      "joinfield" => "consultation_anesth_id"
-    );
-    $tables[] = array (
-      "label" => "antécédent(s)", 
-      "name" => "antecedent", 
-      "idfield" => "antecedent_id", 
-      "joinfield" => "object_id",
-      "joinon" => "`object_class` = 'CConsultAnesth'"
-    );
-    $tables[] = array (
-      "label" => "traitement(s)", 
-      "name" => "traitement", 
-      "idfield" => "traitement_id", 
-      "joinfield" => "object_id",
-      "joinon" => "`object_class` = 'CConsultAnesth'"
-    );
-    $tables[] = array (
-      "label" => "addiction(s)", 
-      "name" => "addiction", 
-      "idfield" => "addiction_id", 
-      "joinfield" => "object_id",
-      "joinon" => "`object_class` = 'CConsultAnesth'"
-    );
-    return parent::canDelete( $msg, $oid, $tables );
-  }
-
   function canDeleteEx() {
     // Date dépassée
     $this->loadRefConsultation();

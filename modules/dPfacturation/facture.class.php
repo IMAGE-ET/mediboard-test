@@ -73,15 +73,5 @@ class CFacture extends CMbObject {
     return ($this->_ref_sejour->getPerm($permType));
   }
   
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "élément(s) de facture", 
-      "name"      => "factureitem", 
-      "idfield"   => "facture_item_id", 
-      "joinfield" => "facture_id"
-    );
-    
-    return CMbObject::canDelete( $msg, $oid, $tables );
-  }
 }
 ?>

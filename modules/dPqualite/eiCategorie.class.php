@@ -46,15 +46,5 @@ class CEiCategorie extends CMbObject {
     $this->_ref_items = $this->_ref_items->loadList($where, $order);
   }
   
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "msg-CEiItem-canDelete", 
-      "name"      => "ei_item", 
-      "idfield"   => "ei_item_id", 
-      "joinfield" => "ei_categorie_id"
-    );
-    
-    return parent::canDelete( $msg, $oid, $tables );
-  }
 }
 ?>

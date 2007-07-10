@@ -55,18 +55,7 @@ class CSpecCPAM extends CMbObject {
     else
       $this->_shortview = $this->_view;
   }
-  
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "utilisateurs", 
-      "name"      => "users_mediboard", 
-      "idfield"   => "user_id", 
-      "joinfield" => "spec_cpam_id"
-    );
     
-    return parent::canDelete( $msg, $oid, $tables );
-  }
-  
   // Backward references
   function loadRefsBack() {
     $where = array(

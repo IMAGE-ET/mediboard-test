@@ -59,27 +59,7 @@ class CPlat extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->nom;
   }
-  
-  function canDelete(&$msg, $oid = null) {
-    global $AppUI;
-    $select       = "\nSELECT COUNT(DISTINCT repas.repas_id) AS number";
-    $from        = "\nFROM repas ";
-    $sql_where   = "\nWHERE (`$this->type` IS NOT NULL AND `$this->type` = '$this->plat_id')";
     
-    $sql = $select . $from . $sql_where;
-    $obj = null;
-    
-    if (!db_loadObject($sql, $obj)) {
-      $msg = db_error();
-      return false;
-    }
-    if ($obj->number) {
-      $msg = $AppUI->_("noDeleteRecord") . ": " . $obj->number . " repas";
-      return false;
-    }
-    return true;
-  }
-  
   function canDeleteEx() {
     global $AppUI;
     $select       = "\nSELECT COUNT(DISTINCT repas.repas_id) AS number";

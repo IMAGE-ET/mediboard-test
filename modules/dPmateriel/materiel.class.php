@@ -88,15 +88,5 @@ class CMateriel extends CMbObject {
     return ($this->_ref_category->getPerm($permType));
   }
   
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "stock(s)", 
-      "name"      => "stock", 
-      "idfield"   => "stock_id", 
-      "joinfield" => "materiel_id"
-    );
-    
-    return CMbObject::canDelete( $msg, $oid, $tables );
-  }
 }
 ?>

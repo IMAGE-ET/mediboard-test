@@ -53,17 +53,6 @@ class CSalle extends CMbObject {
   function updateFormFields() {
     $this->_view = $this->nom;
   }
-
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "plages opératoires", 
-      "name"      => "plagesop", 
-      "idfield"   => "plageop_id", 
-      "joinfield" => "salle_id"
-    );
-    
-    return CMbObject::canDelete($msg, $oid, $tables);
-  }
   
   function loadRefsFwd(){
     // Chargement de l'établissement correspondant

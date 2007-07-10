@@ -79,18 +79,7 @@ class CService extends CMbObject {
     }
     return (CPermObject::getPermObject($this, $permType) && $this->_ref_group->getPerm($permType));
   }
-  
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "Chambres", 
-      "name"      => "chambre", 
-      "idfield"   => "chambre_id", 
-      "joinfield" => "service_id"
-    );
-        
-    return CMbObject::canDelete( $msg, $oid, $tables );
-  }
-  
+   
   function validationRepas($date, $listTypeRepas = null){
     $this->_ref_validrepas[$date] = array();
     $validation =& $this->_ref_validrepas[$date];

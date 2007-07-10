@@ -370,29 +370,6 @@ class CConsultation extends CCodableCCAM {
     $template->addProperty("Consultation - examen"    , $this->examen);
     $template->addProperty("Consultation - traitement", $this->traitement);
   }
-
-  function canDelete(&$msg, $oid = null) {
-    $this->loadRefPlageConsult();
-    if($this->_ref_plageconsult->date < mbDate()){
-      $msg = "Imposible de supprimer une consultation passée";
-      return false;
-    }
-    $tables[] = array (
-      "label"     => "fichier(s)", 
-      "name"      => "files_mediboard", 
-      "idfield"   => "file_id", 
-      "joinfield" => "object_id",
-      "joinon"    => "`object_class` = 'CConsultation'"
-    );
-    $tables[] = array (
-      "label"     => "document(s)", 
-      "name"      => "compte_rendu", 
-      "idfield"   => "compte_rendu_id", 
-      "joinfield" => "object_id",
-      "joinon"    => "`object_class` = 'CConsultation'"
-    );
-    return parent::canDelete($msg, $oid, $tables);
-  }
     
   function canDeleteEx() {
     // Date dépassée

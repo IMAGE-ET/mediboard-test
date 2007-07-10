@@ -145,17 +145,7 @@ class CPlageOp extends CMbObject {
       }
     }
   }
-
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "Opérations", 
-      "name"      => "operations", 
-      "idfield"   => "operation_id", 
-      "joinfield" => "plageop_id"
-    );
-    
-    return parent::canDelete( $msg, $oid, $tables );
-  }
+  
 
 /*
  * returns collision message, null for no collision

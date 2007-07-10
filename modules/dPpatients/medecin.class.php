@@ -120,36 +120,7 @@ class CMedecin extends CMbObject {
         $this->_fax5;
     }
   }
-	
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "patient(s)", 
-      "name"      => "patients", 
-      "idfield"   => "patient_id", 
-      "joinfield" => "medecin_traitant"
-    );
-    $tables[] = array (
-      "label"     => "patient(s)", 
-      "name"      => "patients", 
-      "idfield"   => "patient_id", 
-      "joinfield" => "medecin1"
-    );
-    $tables[] = array (
-      "label"     => "patient(s)", 
-      "name"      => "patients", 
-      "idfield"   => "patient_id", 
-      "joinfield" => "medecin2"
-    );
-    $tables[] = array (
-      "label"     => "patient(s)", 
-      "name"      => "patients", 
-      "idfield"   => "patient_id", 
-      "joinfield" => "medecin3"
-    );
-    
-    return parent::canDelete( $msg, $oid, $tables );
-  }
-  
+	 
   function loadRefs() {
     // Backward references
     $obj = new CPatient();

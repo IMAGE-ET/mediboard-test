@@ -101,17 +101,6 @@ class CLit extends CMbObject {
     }
     return ($this->_ref_chambre->getPerm($permType));
   }
-
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "Affectations", 
-      "name"      => "affectation", 
-      "idfield"   => "affectation_id", 
-      "joinfield" => "lit_id"
-    );
-        
-    return CMbObject::canDelete($msg, $oid, $tables);
-  }
   
   function checkOverBooking() {
     assert($this->_ref_affectations !== null);

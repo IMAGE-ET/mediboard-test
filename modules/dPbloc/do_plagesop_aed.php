@@ -37,7 +37,8 @@ if ($del) {
   while ($repeat--) {
     $msg = NULL;
     if ($obj->plageop_id) {
-      if ($obj->canDelete($msg)) {
+    	
+      if ($msg = $obj->canDeleteEx()) {
         if ($msg = $obj->delete()) {
           $not_deleted++;
         } 

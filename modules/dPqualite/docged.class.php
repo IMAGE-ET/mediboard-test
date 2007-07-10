@@ -199,22 +199,6 @@ class CDocGed extends CMbObject {
     $this->_firstentry->loadRefsFwd();
   }
   
-  function canDelete(&$msg, $oid = null) {
-    // Suppr si Demande, redac, valid ou refus de demande (Terminé sans doc actif)
-    if($this->etat==self::DEMANDE 
-       || $this->etat==self::REDAC 
-       || $this->etat==self::VALID
-       || $this->etat==self::MODELE
-       || ($this->etat==self::TERMINE && !$this->_lastactif->doc_ged_suivi_id)
-       || ($this->etat==self::TERMINE && $this->_lastactif->doc_ged_suivi_id!=$this->_lastentry->doc_ged_suivi_id)
-       ){
-      return true;
-    }else{
-      $msg = $AppUI->_("msg-CDocGed-error_delete");
-      return false;
-    }
-  }
-
   function canDeleteEx() {
     // Suppr si Demande, redac, valid ou refus de demande (Terminé sans doc actif)
     if($this->etat==self::DEMANDE 

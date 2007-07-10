@@ -174,11 +174,6 @@ class CFicheEi extends CMbObject {
     }
   }
   
-  function canDelete(&$msg, $oid = null) {
-    $msg = $AppUI->_("msg-CFicheEi-canDelete");
-    return false;
-  }
-  
   function canDeleteEx() {
     return $AppUI->_("msg-CFicheEi-canDelete");
   }

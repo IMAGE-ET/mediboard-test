@@ -43,24 +43,7 @@ class CFilesCategory extends CMbObject {
       "nom" => "like"
     );
   }
-  
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "fichier(s)", 
-      "name"      => "files_mediboard", 
-      "idfield"   => "file_category_id", 
-      "joinfield" => "file_category_id"
-    );
     
-    $tables[] = array (
-      "label"     => "compte(s) rendu(s)", 
-      "name"      => "compte_rendu", 
-      "idfield"   => "compte_rendu_id", 
-      "joinfield" => "file_category_id"
-    );
-  return CMbObject::canDelete( $msg, $oid, $tables );	
-  }
-  
   function listCatClass($paramclass = null){
     $where = array();
     $where[] = db_prepare("`class` IS NULL OR `class` = %", $paramclass);

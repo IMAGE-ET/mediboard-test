@@ -90,17 +90,6 @@ class CChambre extends CMbObject {
     }
     return ($this->_ref_service->getPerm($permType));
   }
-
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "Lits", 
-      "name"      => "lit", 
-      "idfield"   => "lit_id", 
-      "joinfield" => "chambre_id"
-    );
-        
-    return CMbObject::canDelete($msg, $oid, $tables);
-  }
   
   function checkChambre() {
     static $pathos = null;

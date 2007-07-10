@@ -128,16 +128,6 @@ class CPlageconsult extends CMbObject {
       or count($oldValues->_ref_consultations) == 0;
   }
   
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "consultations", 
-      "name"      => "consultation",
-      "idfield"   => "consultation_id", 
-      "joinfield" => "plageconsult_id"
-    );
-    return parent::canDelete( $msg, $oid, $tables );
-  }
-
 /*
  * returns collision message, null for no collision
  */

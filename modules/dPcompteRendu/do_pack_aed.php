@@ -19,7 +19,7 @@ if (!$obj->bind( $_POST )) {
 $del = dPgetParam( $_POST, 'del', 0 );
 if ($del) {
 	// check canDelete
-	if (!$obj->canDelete( $msg )) {
+	if (null == $msg = $obj->canDeleteEx()) {	
 		$AppUI->setMsg( $msg, UI_MSG_ERROR );
 		$AppUI->redirect();
 	}

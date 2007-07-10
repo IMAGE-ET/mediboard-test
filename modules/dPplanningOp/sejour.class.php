@@ -165,18 +165,7 @@ class CSejour extends CCodableCCAM {
 
     return $msg . parent::check();
   }
-  
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "opérations", 
-      "name"      => "operations", 
-      "idfield"   => "operation_id", 
-      "joinfield" => "sejour_id"
-    );
     
-    return CMbObject::canDelete($msg, $oid, $tables);
-  }
-  
   function store() {
     if ($msg = parent::store()) {
       return $msg;

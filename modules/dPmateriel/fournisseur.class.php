@@ -73,14 +73,5 @@ class CFournisseur extends CMbObject {
     $this->_ref_references = $this->_ref_references->loadList($where);
   } 	
   
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "référence(s)", 
-      "name"      => "ref_materiel", 
-      "idfield"   => "reference_id", 
-      "joinfield" => "fournisseur_id"
-    );
-    return CMbObject::canDelete( $msg, $oid, $tables );
-  }
 }
 ?>

@@ -32,7 +32,7 @@ if ($del) {
   while ($repeat-- > 0) {
     $msg = NULL;
     if ($obj->plageressource_id) {
-      if ($obj->canDelete($msg)) {
+      if ($msg = $obj->canDeleteEx()) {	
         if ($msg = $obj->delete()) {
           $not_deleted++;
         } 

@@ -44,11 +44,6 @@ class CUserLog extends CMbMetaObject {
     return $specs;
   }
   
-  function canDelete(&$msg, $oid = null) {
-    $tables = array ();
-    
-    return parent::canDelete( $msg, $oid, $tables );
-  }
   
   function updateFormFields() {
     parent::updateFormFields();

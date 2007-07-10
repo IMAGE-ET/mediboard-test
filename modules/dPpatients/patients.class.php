@@ -390,57 +390,6 @@ class CPatient extends CMbObject {
         $this->_jour;
   	}
   }
-
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label" => "sejour(s)", 
-      "name" => "sejour", 
-      "idfield" => "sejour_id", 
-      "joinfield" => "patient_id"
-    );
-    $tables[] = array (
-      "label" => "consultation(s)", 
-      "name" => "consultation", 
-      "idfield" => "consultation_id", 
-      "joinfield" => "patient_id"
-    );
-    $tables[] = array (
-      "label" => "antécédent(s)", 
-      "name" => "antecedent", 
-      "idfield" => "antecedent_id", 
-      "joinfield" => "object_id",
-      "joinon" => "`object_class` = 'CPatient'"
-    );
-    $tables[] = array (
-      "label" => "traitement(s)", 
-      "name" => "traitement", 
-      "idfield" => "traitement_id", 
-      "joinfield" => "object_id",
-      "joinon" => "`object_class` = 'CPatient'"
-    );
-    $tables[] = array (
-      "label" => "fichier(s)", 
-      "name" => "files_mediboard", 
-      "idfield" => "file_id", 
-      "joinfield" => "object_id",
-      "joinon" => "`object_class`='CPatient'"
-    );
-    $tables[] = array (
-      "label" => "document(s)", 
-      "name" => "compte_rendu", 
-      "idfield" => "compte_rendu_id", 
-      "joinfield" => "object_id",
-      "joinon" => "`object_class` = 'CPatient'"
-    );
-    $tables[] = array (
-      "label" => "addiction(s)", 
-      "name" => "addiction", 
-      "idfield" => "addiction_id", 
-      "joinfield" => "object_id",
-      "joinon" => "`object_class` = 'CPatient'"
-    );
-    return parent::canDelete( $msg, $oid, $tables );
-  }
   
   // Backward references
   function loadRefsSejours($where = null) {

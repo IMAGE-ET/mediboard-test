@@ -129,22 +129,6 @@ class CGroups extends CMbObject {
     }
   }
   
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "Fonctions", 
-      "name"      => "functions_mediboard", 
-      "idfield"   => "function_id", 
-      "joinfield" => "group_id"
-    );
-    $tables[] = array (
-      "label"     => "Sejours", 
-      "name"      => "sejour", 
-      "idfield"   => "sejour_id", 
-      "joinfield" => "group_id"
-    );
-    
-    return CMbObject::canDelete( $msg, $oid, $tables );
-  }
 
   /**
    * Load functions with given permission

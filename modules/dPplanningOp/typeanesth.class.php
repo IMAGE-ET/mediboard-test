@@ -36,14 +36,5 @@ class CTypeAnesth extends CMbObject {
     );
   }
   
-  function canDelete(&$msg, $oid = null) {
-    $tables[] = array (
-      "label"     => "opération(s)", 
-      "name"      => "operations", 
-      "idfield"   => "operation_id", 
-      "joinfield" => "type_anesth"
-    );
-    return CMbObject::canDelete( $msg, $oid, $tables );
-  }
 }
 ?>
