@@ -1,11 +1,14 @@
 // $Id: $
 
-var PlageSelector = {
-  ePlage_id           : null,  // Identifiant de la plage
-  eSDate              : null,  // Date de la plage
-  e_hour_entree_prevue: null,
-  e_min_entree_prevue : null,
-  e_date_entree_prevue: null,
+var PlageOpSelector = {
+  sForm               : null,  // Ici, on ne se sert pas de ce formulaire
+  sPlage_id           : null,  // Identifiant de la plage
+  sDate               : null,  // Date de la plage
+  sPlage_id_easy      : null,
+  sDateEasy           : null,
+  s_hour_entree_prevue: null,
+  s_min_entree_prevue : null,
+  s_date_entree_prevue: null,
   options : {
     width : 450,
     height: 450
@@ -17,11 +20,11 @@ var PlageSelector = {
     if (checkChir() && checkDuree()) {
       var url = new Url();
       url.setModuleAction("dPplanningOp", "plage_selector");
-      url.addParam("chir", iChir);
+      url.addParam("chir"        , iChir);
       url.addParam("curr_op_hour", iHour_op);
-      url.addParam("curr_op_min", iMin_op);
-      url.addParam("group_id", iGroup_id);
-      url.addParam("operation_id",iOperation_id);
+      url.addParam("curr_op_min" , iMin_op);
+      url.addParam("group_id"    , iGroup_id);
+      url.addParam("operation_id", iOperation_id);
       url.popup(this.options.width, this.options.height, "Plage");
     } 
     
@@ -34,8 +37,6 @@ var PlageSelector = {
     var oOpForm     = document.editOp;
     var oSejourForm = document.editSejour;
     var oOpFormEasy = document.editOpEasy;
-    
-    
  
     if(!oSejourForm._duree_prevue.value) {
       oSejourForm._duree_prevue.value = 0;
@@ -46,10 +47,12 @@ var PlageSelector = {
         oOpForm.rank.value = 0;
       }
       
-      Form.Element.setValue(this.ePlage_id, plage_id);
-      Form.Element.setValue(this.eSDate, sDate);
-      Form.Element.setValue(this.ePlage_id_easy, plage_id);
-      Form.Element.setValue(this.eSDate_easy, sDate);
+      Form.Element.setValue(oOpForm[this.sPlage_id], plage_id);
+      Form.Element.setValue(oOpForm[this.sDate]    , sDate);
+      if(oOpFormEasy) {
+        Form.Element.setValue(oOpFormEasy[this.sPlage_id_easy], plage_id);
+        Form.Element.setValue(oOpFormEasy[this.sDate_easy]    , sDate);
+      }
      
       var dAdm = makeDateFromLocaleDate(sDate);
       oOpForm._date.value = makeDATEFromDate(dAdm);
@@ -65,14 +68,14 @@ var PlageSelector = {
       }
     
       if (bAdm != 2) {
-        this.e_hour_entree_prevue.value = dAdm.getHours();
-        this.e_min_entree_prevue.value = dAdm.getMinutes();
-        this.e_date_entree_prevue.value = makeDATEFromDate(dAdm);
+        oSejourForm[this.s_hour_entree_prevue].value = dAdm.getHours();
+        oSejourForm[this.s_min_entree_prevue].value  = dAdm.getMinutes();
+        oSejourForm[this.s_date_entree_prevue].value = makeDATEFromDate(dAdm);
         var div_rdv_adm = document.getElementById("editSejour__date_entree_prevue_da");
         div_rdv_adm.innerHTML = makeLocaleDateFromDate(dAdm);
       }
       
-      this.e_date_entree_prevue.onchange();
+      oSejourForm[this.s_date_entree_prevue].onchange();
     }
   }
 }

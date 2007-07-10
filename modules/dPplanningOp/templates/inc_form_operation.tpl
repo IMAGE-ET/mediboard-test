@@ -155,39 +155,38 @@
     </td>
     {{else}}
     <th>
-      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}" ondblclick="PlageSelector.init()" value="{{$plage->plageop_id}}" />
+      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}" ondblclick="PlageOpSelector.init()" value="{{$plage->plageop_id}}" />
       {{mb_label object=$op field="plageop_id"}}
       <input type="hidden" name="date" value="" />
       <input type="hidden" name="_date" value="{{$plage->date}}" />
     </th>
     <td class="readonly">
-      <input type="text" name="_datestr" readonly="readonly" size="10" ondblclick="PlageSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
+      <input type="text" name="_datestr" readonly="readonly" size="10" ondblclick="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
     </td>
     <td class="button">
-      <button type="button" class="search" onclick="PlageSelector.init()">Choisir une date</button>
+      <button type="button" class="search" onclick="PlageOpSelector.init()">Choisir une date</button>
  
       <script type="text/javascript">
       
-      PlageSelector.init = function(){
+      PlageOpSelector.init = function(){
         if(!(checkChir() && checkDuree())) {
           return;
         }
-        var oOpForm = document.editOp;
-        var oOpFormEasy = document.editOpEasy;
+
+        var oOpForm     = document.editOp;
         var oSejourForm = document.editSejour;
         
-        this.ePlage_id = oOpForm.plageop_id;
-        this.ePlage_id_easy = oOpFormEasy.plageop_id;
+        this.sPlage_id      = "plageop_id";
+        this.sPlage_id_easy = "plageop_id";
+        this.sDate         = "_datestr";
+        this.sDate_easy    = "_datestr";
         
-        this.eSDate = oOpForm._datestr;
-        this.eSDate_easy = oOpFormEasy._datestr;
-        
-        this.e_hour_entree_prevue = oSejourForm._hour_entree_prevue;
-        this.e_min_entree_prevue = oSejourForm._min_entree_prevue;
-        this.e_date_entree_prevue = oSejourForm._date_entree_prevue;
+        this.s_hour_entree_prevue = "_hour_entree_prevue";
+        this.s_min_entree_prevue  = "_min_entree_prevue";
+        this.s_date_entree_prevue = "_date_entree_prevue";
         
         this.heure_entree_veille = "{{$heure_entree_veille}}";
-        this.heure_entree_jour = "{{$heure_entree_jour}}";   
+        this.heure_entree_jour   = "{{$heure_entree_jour}}";   
         this.pop(oOpForm.chir_id.value, oOpForm._hour_op.value,
                  oOpForm._min_op.value, oSejourForm.group_id.value,
                  oOpForm.operation_id.value);

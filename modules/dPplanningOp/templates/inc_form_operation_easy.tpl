@@ -91,16 +91,16 @@
   {{else}}
   <tr>
     <th>
-      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}" ondblclick="PlageSelector.init()" value="{{$plage->plageop_id}}" />
+      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}" ondblclick="PlageOpSelector.init()" value="{{$plage->plageop_id}}" />
       {{mb_label object=$op field="plageop_id"}}
       <input type="hidden" name="date" value="" />
       <input type="hidden" name="_date" value="{{$plage->date}}" />
     </th>
     <td class="readonly">
-      <input type="text" name="_datestr" readonly="readonly" size="10" ondblclick="PlageSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
+      <input type="text" name="_datestr" readonly="readonly" size="10" ondblclick="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
     </td>
     <td class="button">
-      <button type="button" class="search" onclick="PlageSelector.init()">Choisir une date</button>
+      <button type="button" class="search" onclick="PlageOpSelector.init()">Choisir une date</button>
     </td>
   </tr>
   {{/if}}

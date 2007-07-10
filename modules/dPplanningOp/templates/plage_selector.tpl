@@ -20,7 +20,7 @@ function setClose(date) {
     adm = 2;
   }
   
-  window.opener.PlageSelector.set(key,val,adm);
+  window.opener.PlageOpSelector.set(key,val,adm);
   window.close();
 }
 </script>
