@@ -67,7 +67,9 @@ class CMbObject {
   var $_ref_notes     = array(); // Notes
   var $_ref_documents = array(); // Documents
   var $_ref_files     = array(); // Fichiers
-
+  var $_objBefore     = null;
+  var $_obj           = null;
+  var $_logable       = null;
   /**
    * Constructor
    */
@@ -122,6 +124,8 @@ class CMbObject {
     $this->_enums         =& $enums;
     $this->_enumsTrans    =& $enumsTrans;
     $this->_helped_fields =& $helped_fields;
+    
+    $this->_logable = true;
   }
   
   /**
@@ -538,6 +542,56 @@ class CMbObject {
   function updateDBFields() {
   }
   
+  
+  function log($type,$_objBefore) {
+  	global $AppUI;
+    $fields = array();
+    
+    
+    foreach($this->getProps() as $propName => $propValue) {
+    	if ($propValue !== null) {
+        $propValueBefore = $this->_objBefore->$propName;
+        if ($propValueBefore != $propValue) {
+          $fields[] = $propName;
+        }
+      }
+    }
+    
+    $object_id = $this->_id;
+    
+    $type = "store";
+    if ($this->_objBefore->_id == null) {
+      $type = "create";
+      $fields = array();
+    }
+    
+    if ($this->_id == null) {
+      $type = "delete";
+      $object_id = $this->_objBefore->_id;
+      $fields = array();
+    }
+
+    if (!count($fields) && $type == "store") {
+      return;
+    }
+    
+    // Si object non logable
+    if(!$this->_logable){
+    	return;
+    }
+
+    $log = new CUserLog;
+    $log->user_id = $AppUI->user_id;
+    $log->object_id = $object_id;
+    $log->object_class = $this->_class_name;
+    $log->type = $type;
+    $log->_fields = $fields;
+    $log->date = mbDateTime();
+    $log->store();  
+  }
+  
+  
+  
   /**
    *  Inserts a new row if id is zero or updates an existing row in the database table
    *  @return null|string null if successful otherwise returns and error message
@@ -547,6 +601,18 @@ class CMbObject {
     
     // Properties checking
     $this->updateDBFields();
+
+    // Si l'object existe alors, on affecte à objBefore sa valeur
+    if($this->_id){ 
+      $_obj_class = $this->_class_name;
+      $this->_objBefore = new $_obj_class();
+      $this->_objBefore->load($this->_id);
+    } else {
+    // Sinon, on cree un nouveau objBefore du type de l'objet 
+      $_obj_class = $this->_class_name;
+      $this->_objBefore = new $_obj_class();
+    } 
+     
     if ($checkobject) {
       if ($msg = $this->check()) {
         return $AppUI->_(get_class($this)) . 
@@ -554,7 +620,7 @@ class CMbObject {
           $AppUI->_($msg);
       }
     }
-    
+   
     // The object may not exist in database anymore : re-insert it
     $k = $this->_tbl_key;
     $query = db_prepare("SELECT * FROM `$this->_tbl` WHERE `$k` = %", $this->_id);
@@ -569,14 +635,16 @@ class CMbObject {
         }
       }
     }
-    
+  
     // DB query
     if ($this->_id) {
       $ret = db_updateObject($this->_tbl, $this, $k);
+      
     } else {
       $ret = db_insertObject($this->_tbl, $this, $k);
     }
     
+
     if (!$ret) {
       return get_class($this)."::store failed <br />" . db_error();
     } 
@@ -584,6 +652,10 @@ class CMbObject {
     // Load the object to get all properties
     unset($this->_objectsTable[$this->_id]);
     $this->load();
+    
+    //Creation du log une fois le store terminé
+    $this->log("store",$this->_objBefore);
+    
     return null;
   }
 
@@ -744,6 +816,12 @@ class CMbObject {
    */
   function delete($oid = null) {
 
+    // Chargement de _objBefore 
+    $_obj_class = $this->_class_name;
+    $this->_objBefore = new $_obj_class();
+    $this->_objBefore->load($this->_id);
+    
+    
     if ($oid) {
       $this->_id = intval($oid);
     }
@@ -794,14 +872,19 @@ class CMbObject {
       }
     }
     
+    
     // Actually delete record
     $sql = "DELETE FROM $this->_tbl WHERE $this->_tbl_key = '$this->_id'";
     if (!db_exec($sql)) {
       return db_error();
     }
-    
+         
     // Deletion successful
     $this->_id = null;
+   
+    //Creation du log une fois le delete terminé
+    $this->log("delete",$this->_objBefore);
+    
     return null;
   }
   

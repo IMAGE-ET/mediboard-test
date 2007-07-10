@@ -20,7 +20,8 @@ class CAccessLog extends CMbObject {
   
   // Form fields
   var $_average_duration = null;
-  var $_average_request = null;
+  var $_average_request  = null;
+  var $_logable          = null;
   
   function getSpecs() {
     return array (
@@ -38,6 +39,7 @@ class CAccessLog extends CMbObject {
     $this->CMbObject("access_log", "accesslog_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+    $this->_logable = false;
   }
   
   function updateFormFields() {
@@ -46,6 +48,7 @@ class CAccessLog extends CMbObject {
       $this->_average_duration = $this->duration / $this->hits;
       $this->_average_request = $this->request / $this->hits;
     }
+    
   }
   
   function loadAgregation($start, $end, $groupmod = 0, $module = 0) {

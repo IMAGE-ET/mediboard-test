@@ -81,7 +81,7 @@ class CDoObjectAddEdit {
       }
     } else {
       mbSetValueToSession($this->objectKeyGetVarName);
-      $this->doLog("delete");
+      //$this->doLog("delete");
       $AppUI->setMsg($this->deleteMsg, UI_MSG_ALERT);
       if ($this->redirectDelete) {
         $this->redirect =& $this->redirectDelete;
@@ -100,7 +100,7 @@ class CDoObjectAddEdit {
       $id = $this->objectKeyGetVarName;
       mbSetValueToSession($id, $this->_obj->$id);
       $this->isNotNew = @$this->refTab[$this->objectKeyGetVarName];
-      $this->doLog("store");
+      //$this->doLog("store");
       $AppUI->setMsg($this->isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
       if ($this->redirectStore) {
         $this->redirect =& $this->redirectStore;
@@ -124,47 +124,6 @@ class CDoObjectAddEdit {
 
     if ($this->redirect !== null) {
       $AppUI->redirect($this->redirect);
-    }
-  }
-
-  function doLog($type) {
-    global $AppUI;
-    $fields = array();
-    foreach ($this->_obj->getProps() as $propName => $propValue) {
-      if ($propValue !== null) {
-        $propValueBefore = $this->_objBefore->$propName;
-        if ($propValueBefore != $propValue) {
-          $fields[] = $propName;
-        }
-      }
-    }
-
-    $object_id = $this->_obj->_id;
-    $type = "store";
-    if ($this->_objBefore->_id == null) {
-      $type = "create";
-      $fields = array();
-    }
-
-    if ($this->_obj->_id == null) {
-      $type = "delete";
-      $object_id = $this->_objBefore->_id;
-      $fields = array();
-    }
-
-    if (!count($fields) && $type == "store") {
-      return;
-    }
-    
-    if ($this->_logIt) {
-      $log = new CUserLog;
-      $log->user_id = $AppUI->user_id;
-      $log->object_id = $object_id;
-      $log->object_class = $this->className;
-      $log->type = $type;
-      $log->_fields = $fields;
-      $log->date = mbDateTime();
-      $log->store();
     }
   }
 

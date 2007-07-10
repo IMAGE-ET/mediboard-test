@@ -52,7 +52,7 @@ class CRefSpec extends CMbFieldSpec {
     }
     
     $ref = new $class;
-    if (!$ref->load($propValue)) {
+    if (!$this->unlink && !$ref->load($propValue)) {
       return "Objet référencé de type '$class' introuvable";      
     }
 
