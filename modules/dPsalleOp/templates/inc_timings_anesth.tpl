@@ -187,7 +187,7 @@
                     {{assign var="typeAnesth" value=$listAnesthType.$keyAnesth}}
                     {{$typeAnesth->name}}
                   {{else}}-{{/if}}
-                  par le Dr.
+                  <br />par le Dr.
                   {{if $can->edit || $modif_operation}}
                   <select name="anesth_id" onchange="submit()">
                     <option value="">&mdash; Anesthésiste</option>

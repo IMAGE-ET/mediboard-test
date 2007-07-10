@@ -39,7 +39,7 @@ var WaitingMessage = {
       return;
     }
   
-    // Display waiting text   
+    // Display waiting text
     eText.show();
     Element.setOpacity(eText, 0.8);
     var posTop  = eDoc.scrollTop  + (eDoc.clientHeight - eText.offsetHeight)/2;
@@ -373,6 +373,31 @@ var Assert = {
 };
 
 /**
+ * Function that clean references to avoid memory leaks
+ */
+
+cleanReferences = function(obj) {
+  var chi, cou, len, nam;
+  chi = obj.childNodes;
+  if(chi) {
+    len = chi.length;
+    for (cou = 0; cou < len; cou++) {
+      cleanReferences(obj.childNodes[cou]);
+    }
+  }
+  chi = obj.attributes;
+  if(chi) {
+    len = chi.length;
+    for(cou = 0; cou < len; cou++) {
+      nam = chi[cou].name;
+      if(typeof(obj[nam]) == 'function') {
+        obj[nam] = null;
+      }
+    }
+  }
+}
+
+/**
  * Element.ClassNames class
  */
 
@@ -408,43 +433,46 @@ Class.extend(PairEffect, {
   initialize: function(idTarget, oOptions) {
   	
     var oDefaultOptions = {
-      idTrigger: idTarget + "-trigger",
-      sEffect: null, // could be null, "appear", "slide", "blind"
-      bStartVisible: false, // Make it visible at start
-      bStoreInCookie: true,
-      sCookieName: "effects"
+      idTarget       : idTarget,
+      idTrigger      : idTarget + "-trigger",
+      sEffect        : null, // could be null, "appear", "slide", "blind"
+      bStartVisible  : false, // Make it visible at start
+      bStoreInCookie : true,
+      sCookieName    : "effects"
     };
 
     Object.extend(oDefaultOptions, oOptions);
     
     this.oOptions = oDefaultOptions;
-    this.oTarget = $(idTarget);
-    this.oTrigger = $(this.oOptions.idTrigger);
+    var oTarget   = $(this.oOptions.idTarget);
+    var oTrigger  = $(this.oOptions.idTrigger);
 
-    Assert.that(this.oTarget, "Target element '%s' is undefined", idTarget);
-    Assert.that(this.oTrigger, "Trigger element '%s' is undefined ", this.oOptions.idTrigger);
+    Assert.that(oTarget, "Target element '%s' is undefined", idTarget);
+    Assert.that(oTrigger, "Trigger element '%s' is undefined ", this.oOptions.idTrigger);
   
     // Initialize the effect
-    Event.observe(this.oTrigger, "click", this.flip.bind(this));
+    Event.observe(oTrigger, "click", this.flip.bind(this));
   
     // Initialize classnames and adapt visibility
-    var aCNs = Element.classNames(this.oTrigger);
+    var aCNs = Element.classNames(oTrigger);
     aCNs.add(this.oOptions.bStartVisible ? "triggerHide" : "triggerShow");
     if (this.oOptions.bStoreInCookie) {
       aCNs.load(this.oOptions.sCookieName);
     }
-    Element[aCNs.include("triggerShow") ? "hide" : "show"](this.oTarget);   
+    Element[aCNs.include("triggerShow") ? "hide" : "show"](oTarget);   
   },
   
   // Flipper callback
   flip: function() {
+    var oTarget = $(this.oOptions.idTarget);
+    var oTrigger = $(this.oOptions.idTrigger);
     if (this.oOptions.sEffect && BrowserDetect.browser != "Explorer") {
-      new Effect.toggle(this.oTarget, this.oOptions.sEffect);
+      new Effect.toggle(oTarget, this.oOptions.sEffect);
     } else {
-      Element.toggle(this.oTarget);
+      Element.toggle(oTarget);
     }
   
-    var aCNs = Element.classNames(this.oTrigger);
+    var aCNs = Element.classNames(oTrigger);
     aCNs.flip("triggerShow", "triggerHide");
     
     if (this.oOptions.bStoreInCookie) {
@@ -495,32 +523,38 @@ Class.extend(TogglePairEffect, {
   	
     var oDefaultOptions = {
     	idFirstVisible : 1,
-      idTrigger1: idTarget1 + "-trigger",
-      idTrigger2: idTarget2 + "-trigger",
+      idTarget1      : idTarget1,
+      idTarget2      : idTarget2,
+      idTrigger1     : idTarget1 + "-trigger",
+      idTrigger2     : idTarget2 + "-trigger",
     };
 
     Object.extend(oDefaultOptions, oOptions);
     
     this.oOptions = oDefaultOptions;
-    this.oTarget1 = $(idTarget1);
-    this.oTarget2 = $(idTarget2);
-    this.oTrigger1 = $(this.oOptions.idTrigger1);
-    this.oTrigger2 = $(this.oOptions.idTrigger2);
+    var oTarget1  = $(this.oOptions.idTarget1);
+    var oTarget2  = $(this.oOptions.idTarget2);
+    var oTrigger1 = $(this.oOptions.idTrigger1);
+    var oTrigger2 = $(this.oOptions.idTrigger2);
 
-    Assert.that(this.oTarget1, "Target1 element '%s' is undefined", idTarget1);
-    Assert.that(this.oTarget2, "Target2 element '%s' is undefined", idTarget2);
-    Assert.that(this.oTrigger1, "Trigger1 element '%s' is undefined ", this.oOptions.idTrigger1);
-    Assert.that(this.oTrigger2, "Trigger2 element '%s' is undefined ", this.oOptions.idTrigger2);
+    Assert.that(oTarget1, "Target1 element '%s' is undefined", idTarget1);
+    Assert.that(oTarget2, "Target2 element '%s' is undefined", idTarget2);
+    Assert.that(oTrigger1, "Trigger1 element '%s' is undefined ", this.oOptions.idTrigger1);
+    Assert.that(oTrigger2, "Trigger2 element '%s' is undefined ", this.oOptions.idTrigger2);
   
     // Initialize the effect
     var fShow = this.show.bind(this);
-    Event.observe(this.oTrigger1, "click", function() { fShow(2); } );
-    Event.observe(this.oTrigger2, "click", function() { fShow(1); } );
+    Event.observe(oTrigger1, "click", function() { fShow(2); } );
+    Event.observe(oTrigger2, "click", function() { fShow(1); } );
   	
   	this.show(this.oOptions.idFirstVisible);
   },
   
   show: function(iWhich) {
+    var oTarget1  = $(this.oOptions.idTarget1);
+    var oTarget2  = $(this.oOptions.idTarget2);
+    var oTrigger1 = $(this.oOptions.idTrigger1);
+    var oTrigger2 = $(this.oOptions.idTrigger2);
 		this.oTarget1[1 == iWhich ? "show" : "hide"]();
 		this.oTarget2[2 == iWhich ? "show" : "hide"]();
 		this.oTrigger1[1 == iWhich ? "show" : "hide"]();

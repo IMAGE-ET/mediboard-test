@@ -145,8 +145,9 @@ Url.prototype.requestUpdate = function(ioTarget, oOptions) {
   
   if (oDefaultOptions.waitingText)
     $(ioTarget).innerHTML = "<div class='loading'>" + oDefaultOptions.waitingText + "...<br>Merci de patienter.</div>";
-    
-  new Ajax.Updater(ioTarget, oDefaultOptions["urlBase"] + "index.php", oDefaultOptions);  
+
+  cleanReferences($(ioTarget));
+  new Ajax.Updater(ioTarget, oDefaultOptions["urlBase"] + "index.php", oDefaultOptions);
 }
 
 Url.prototype.requestUpdateOffline = function(ioTarget, oOptions) {
@@ -164,7 +165,8 @@ Url.prototype.requestUpdateOffline = function(ioTarget, oOptions) {
   };
 
   Object.extend(oDefaultOptions, oOptions);
-  
+
+  cleanReferences(ioTarget);
   this.requestUpdate(ioTarget, oDefaultOptions);
 }
 
