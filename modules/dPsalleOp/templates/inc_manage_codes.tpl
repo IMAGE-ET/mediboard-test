@@ -51,7 +51,7 @@
       {{if ($subject->_class_name=="COperation")}}
       <tr>
      
-        <th style="vertical-align:middle; text-align: left">
+        <th style="vertical-align:middle; text-align: right">
           <label for="anapath_1" title="Examen anatomie pathologique">Anapath :</label>
         </th>
         <td style="vertical-align:middle;">      
