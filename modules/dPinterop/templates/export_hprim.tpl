@@ -183,10 +183,10 @@ function choosePreselection(oSelect) {
            <button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>
            <script type="text/javascript">
              ObjectSelector.init = function(){
-               var oForm = document.formEdit;
-               this.eId = oForm.mb_operation_id;
-               this.eView = oForm._operation_view;
-               this.eClass = oForm._class_name;  
+               this.sForm     = "formEdit";
+               this.sId       = "mb_operation_id";
+               this.sView     = "_operation_view";
+               this.sClass    = "_class_name";  
                this.onlyclass = "false";
                this.pop();
              }

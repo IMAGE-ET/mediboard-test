@@ -1,9 +1,11 @@
 // $Id: $
 
 var ObjectSelector = {
-  eId : null,
-  eView : null,
-  eClass : null,
+  sForm    : null,
+  sId      : null,
+  sView    : null,
+  sClass   : null,
+  onlyclass: null,
 
   options : {
     width : 600,
@@ -11,25 +13,26 @@ var ObjectSelector = {
   },
    
   pop: function() {
+    var oForm = document[this.sForm];
     var url = new Url();
     url.setModuleAction("system", "object_selector");
     url.addParam("onlyclass", this.onlyclass);
-    url.addParam("selClass", this.eClass.value);
+    url.addParam("selClass", oForm[this.sClass].value);
     
     url.popup(this.options.width, this.options.height, "Object Selector");
   },
   
   
   set: function(oObject) {
-     if (this.eView) {
-       this.eView.value = oObject.view;
-     }
-     this.eClass.value = oObject.objClass;
-     this.eId.value = oObject.id;
+    var oForm = document[this.sForm];
+    
+    if (oForm[this.sView]) {
+      oForm[this.sView].value = oObject.view;
+    }
+    
+    oForm[this.sClass].value = oObject.objClass;
      
-     if(this.eId.onchange){
-        this.eId.onchange();
-     }
+    Form.Element.setValue(oForm[this.sId], oObject.id);
       
   }
    

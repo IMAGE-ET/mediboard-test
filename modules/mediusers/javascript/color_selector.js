@@ -1,7 +1,8 @@
 // $Id: $
 
 var ColorSelector = {
-  eColor: null,
+  sForm : null,
+  sColor: null,
   options : {
     width : 320,
     height: 250
@@ -15,12 +16,11 @@ var ColorSelector = {
   },
   
   set: function(color) {
+    oForm = document[this.sForm];
     if (color) {
-      this.eColor.value = color;
+      Form.Element.setValue(oForm[this.sColor], color);
     }
-    document.getElementById('test').style.background = '#' + this.eColor.value;
-  
-    this.eColor.onchange();
+    $('test').style.background = '#' + oForm[this.sColor].value;
    
   }
 }

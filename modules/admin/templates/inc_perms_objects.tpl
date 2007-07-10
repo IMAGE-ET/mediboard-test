@@ -47,10 +47,10 @@ function cancelObject(oObject) {
       </button>
       <script language="Javascript" type="text/javascript">
         ObjectSelector.init = function(){  
-          var oForm = document.editPermObj;
-          this.eId = oForm.object_id;
-          this.eView = oForm._object_view;
-          this.eClass = oForm.object_class;
+          this.sForm     = "editPermObj";
+          this.sId       = "object_id";
+          this.sView     = "_object_view";
+          this.sClass    = "object_class";
           this.onlyclass = "false";
           this.pop();
         } 

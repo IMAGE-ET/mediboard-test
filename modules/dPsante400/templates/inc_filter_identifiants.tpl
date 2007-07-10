@@ -32,12 +32,12 @@
     <td>{{mb_label object=$filter field="object_id"}}</td>
     <td>
       <input name="object_id" class="ref" value="{{$filter->object_id}}" />
-      <button class="search" type="button" onclick="ObjectSelector.initObjectFilter()">Chercher</button>
+      <button class="search" type="button" onclick="ObjectSelector.initFilter()">Chercher</button>
       <script type="text/javascript">
-        ObjectSelector.initObjectFilter = function(){
-          var oForm = document.filterFrm;
-          this.eId = oForm.object_id;
-          this.eClass = oForm.object_class;  
+        ObjectSelector.initFilter = function(){
+          this.sForm     = "filterFrm";
+          this.sId       = "object_id";
+          this.sClass    = "object_class";  
           this.onlyclass = "false";
           this.pop();
         }

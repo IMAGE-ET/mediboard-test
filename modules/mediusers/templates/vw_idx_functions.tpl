@@ -93,8 +93,8 @@ function pageMain() {
             
             <script type="text/javascript">
               ColorSelector.init = function(){
-                var oForm = document.editFrm;
-                this.eColor = oForm.color;
+                this.sForm  = "editFrm";
+                this.sColor = "color";
                 this.pop();
               }
             </script>

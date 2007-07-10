@@ -31,10 +31,10 @@ function pageMain() {
             <input type="hidden" name="keywords" value="{{$keywords}}" />
             <script type="text/javascript">
               ObjectSelector.init = function(){
-                var oForm = document.FrmClass;
-                this.eId = oForm.selKey;
-                this.eView = oForm.selView;
-                this.eClass = oForm.selClass;
+                this.sForm     = "FrmClass";
+                this.sId       = "selKey";
+                this.sView     = "selView";
+                this.sClass    = "selClass";
                 this.onlyclass = "false"; 
                 this.pop();
               }

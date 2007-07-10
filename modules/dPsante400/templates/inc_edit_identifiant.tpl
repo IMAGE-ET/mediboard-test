@@ -46,12 +46,12 @@
       {{$target->_view}}
 	  {{else}}
       <input name="object_id" class="{{$filter->_props.object_id}}" value="{{$idSante400->object_id}}" />
-      <button class="search" type="button" onclick="ObjectSelector.initObjectEdit()">Chercher</button>
+      <button class="search" type="button" onclick="ObjectSelector.initEdit()">Chercher</button>
       <script type="text/javascript">
-        ObjectSelector.initObjectEdit = function(){
-          var oForm = document.editFrm;
-          this.eId = oForm.object_id;
-          this.eClass = oForm.object_class;
+        ObjectSelector.initEdit = function(){
+          this.sForm     = "editFrm";
+          this.sId       = "object_id";
+          this.sClass    = "object_class";
           this.onlyclass = "false";
           this.pop();
         }

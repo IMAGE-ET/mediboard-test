@@ -74,10 +74,10 @@ function pageMain() {
         	  	<button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>       	  	
         	    <script type="text/javascript">
                   ObjectSelector.init = function(){
-                    var oForm = document.editfacture;
-                    this.eId = oForm.sejour_id;
-                    this.eView = oForm._sejour_view;
-                    this.eClass = oForm._class_name;
+                    this.sForm     = "editfacture";
+                    this.sId       = "sejour_id";
+                    this.sView     = "_sejour_view";
+                    this.sClass    = "_class_name";
                     this.onlyclass = "true";
                    
                     this.pop();
