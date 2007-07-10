@@ -5,7 +5,7 @@
 <script type="text/javascript">
 {{if $plage->plageconsult_id}}
 function setClose(time) {
-  window.opener.PlageSelector.set(time,
+  window.opener.PlageConsultSelector.set(time,
     "{{$plage->plageconsult_id}}",
     "{{$plage->date|date_format:"%A %d/%m/%Y"}}",
     "{{$plage->freq}}",

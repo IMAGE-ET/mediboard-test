@@ -1,35 +1,38 @@
 // $Id: $
 
-var PlageSelector = {
-  eHeure : null,
-  ePlageconsult_id : null,
-  eDate : null,
-  eDuree : null,
-  eChirid : null,
+var PlageConsultSelector = {
+  sForm            : null,
+  sHeure           : null,
+  sPlageconsult_id : null,
+  sDate            : null,
+  sDuree           : null,
+  sChir_id         : null,
   options : {
     width : 800,
     height: 600
   },
-    
+
   pop: function() {
+    var oForm = document[this.sForm];
     var url = new Url();
     url.setModuleAction("dPcabinet", "plage_selector");
-    url.addParam("chir_id", this.eChirid.value);
-    url.addParam("plageconsult_id", this.ePlageconsult_id.value);
-    url.popup(this.options.width, this.options.height, "Plage");
+    url.addParam("chir_id", oForm[this.sChir_id].value);
+    url.addParam("plageconsult_id", oForm[this.sPlageconsult_id].value);
+    url.popup(this.options.width, this.options.height, "PlageConsult");
   },
-  
-  set: function(heure, id, date, freq, chirid, chirname) {
-    this.eHeure.value = heure;
-    this.ePlageconsult_id.value = id;
+
+  set: function(heure, id, date, freq, chir_id, chirname) {
+    var oForm = document[this.sForm];
+    oForm[this.sHeure].value = heure;
+    oForm[this.sPlageconsult_id].value = id;
     
-    this.eDate.value = date;
+    oForm[this.sDate].value = date;
      
-    this.eDuree.value = freq;
-    this.eChirid.value = chirid;
+    oForm[this.sDuree].value = freq;
+    oForm[this.sChir_id].value = chir_id;
  
-     if(this.ePlageconsult_id.onchange){
-        this.ePlageconsult_id.onchange();
+     if(oForm[this.sPlageconsult_id].onchange){
+        oForm[this.sPlageconsult_id].onchange();
      }
          
   }

@@ -71,7 +71,7 @@ function pageMain() {
   oForm.plageconsult_id.value = {{$plageConsult->plageconsult_id}};
   oForm.chir_id.value = {{$plageConsult->chir_id}};
   
-  PlageSelector.init();
+  PlageConsultSelector.init();
   {{/if}}
 }
 
@@ -203,23 +203,23 @@ function checkFormRDV(oForm){
             {{mb_label object=$consult field="_check_premiere"}}
           </td>
           <td rowspan="4" class="button">
-            <button class="search" type="button" onclick="PlageSelector.init()">choix de l'horaire</button>
+            <button class="search" type="button" onclick="PlageConsultSelector.init()">choix de l'horaire</button>
           </td>
         </tr>
 
         <tr>
           <th>{{mb_label object=$consult field="plageconsult_id"}}</th>
           <td class="readonly">
-            <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="PlageSelector.init()" readonly="readonly" />
-            {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageSelector.init()"}}
+            <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="PlageConsultSelector.init()" readonly="readonly" />
+            {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}
             <script type="text/javascript">
-            PlageSelector.init = function(){
-              var oForm = document.editFrm;
-              this.eHeure = oForm.heure;
-              this.ePlageconsult_id = oForm.plageconsult_id;
-              this.eDate = oForm._date;
-              this.eDuree = oForm.duree;
-              this.eChirid = oForm.chir_id;
+            PlageConsultSelector.init = function(){
+              this.sForm = "editFrm";
+              this.sHeure = "heure";
+              this.sPlageconsult_id = "plageconsult_id";
+              this.sDate = "_date";
+              this.sDuree = "duree";
+              this.sChir_id = "chir_id";
               this.pop();
             }
            </script> 
