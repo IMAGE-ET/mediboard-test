@@ -9,6 +9,7 @@
 
 global $AppUI, $can, $m;
 
+require_once($AppUI->getSystemClass("mbGraph"));
 require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_bar"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
@@ -85,77 +86,18 @@ foreach($datax as $x) {
   }
 }
 
-// Setup the graph.
-$graph = new Graph(320*$size,125*$size,"auto");    
-$graph->img->SetMargin(15+$size*10,75+$size*10,10+$size*10,15+$size*10);
-$graph->SetScale("textlin");
-$graph->SetY2Scale("int");
-$graph->SetMarginColor("lightblue");
-
-// Set up the title for the graph
 $title = mbTranformTime(null, $date, "%A %d %b %Y");
 if($module) $title .= " : ".$AppUI->_($module);
 if($actionName) $title .= " - $actionName";
-$graph->title->Set($title);
-$graph->title->SetFont(FF_ARIAL,FS_NORMAL,7+$size);
-$graph->title->SetColor("darkred");
-$graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,6+$size);
-$graph->img->SetAntiAliasing();
+$data = array($duration, $request);
+$legend = array("Page (s)","DB (s)");
 
-// Setup font for axis
-$graph->xaxis->SetFont(FF_ARIAL,FS_NORMAL,6+$size);
-$graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,6+$size);
-$graph->y2axis->SetFont(FF_ARIAL,FS_NORMAL,6+$size);
-
-// Show 0 label on Y-axis (default is not to show)
-$graph->yscale->ticks->SupressZeroLabel(false);
-$graph->y2axis->SetColor("#888888");
-$graph->yaxis->SetColor("black");
-
-// Setup X-axis labels
-$graph->xaxis->SetTickLabels($datax);
-$graph->xaxis->SetTextTickInterval(2);
-$graph->xaxis->SetLabelAngle(50);
-
-// Legend
-//$graph->legend->SetMarkAbsSize(5);
-$graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$graph->legend->Pos(0.015,0.79, "right", "center");
-
-// Create the bar hits pot
-$listPlots = array();
-$bplot = new BarPlot($nbHits);
-$from = "#aaaaaa";
-$to = "#EEEEEE";
-$bplot->SetWidth(0.8);
-$bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);
-$bplot->SetColor("white");
-$bplot->setLegend("Hits");
-
-// Create the line main duration plot
-$lplot = new LinePlot($duration);
-$lplot->SetColor("#008800");
-$lplot->SetWeight($size);
-//$lplot->value->SetFormat("%01.2f");
-//$lplot->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
-//$lplot->value->SetMargin(10);
-$lplot->setLegend("Page (s)");
-
-// Create the line database duration plot
-$lplot2 = new LinePlot($request);
-$lplot2->SetColor("#880000");
-$lplot2->SetWeight(1);
-//$lplot2->value->SetFormat("%01.2f");
-//$lplot2->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
-//$lplot2->value->SetMargin(10);
-$lplot2->setLegend("DB (s)");
-
-// Add the graphs
-$graph->Add($lplot);
-$graph->Add($lplot2);
-$graph->AddY2($bplot);
-
-// Finally send the graph to the browser
-$graph->Stroke();
+$graph = new CMbGraph();
+$graph->selectType("Bar",$title,$size);
+$graph->selectPalette("lightblue");
+$graph->setupAxis($datax,$size);
+$graph->addDataBarPlot($nbHits,"#aaaaaa","#EEEEEE","white","Hits");
+$graph->addDataLinePlot($data,$legend,$size);
+$graph->render("out",$size);
 
 ?>

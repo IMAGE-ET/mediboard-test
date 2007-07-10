@@ -100,37 +100,10 @@ $title = mbTranformTime(null, $date, "%A %d %b %Y");
 if($module) 		
 	$title .= " : ".$AppUI->_($module);
 
-if($dPconfig['graph_engine'] == 'eZgraph') {
-  	$graph = new CMbGraph();
-  	$graph->selectType("Pie",$title,$size);
-  	$graph->selectPalette("ez");
-  	$graph->addData($tab,$title);
-  	$graph->selectMode($dPconfig['graph_svg']);
-  	$graph->render("out",$size);
-} else {
-	// Setup the graph.
-	$graph = new PieGraph(300*(1+$size*0.2),200*$size,"auto");    
-	$graph->SetMarginColor("lightblue");
-	
-	$graph->title->Set($title);
-	$graph->title->SetFont(FF_ARIAL,FS_NORMAL,7+$size);
-	$graph->title->SetColor("darkred");
-	$graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,6+$size);
-	$graph->img->SetAntiAliasing();
-	
-	// Legend
-	$graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-	$graph->legend->Pos(0.015,0.1, "right", "top");
-	
-	// Create the Pie plot
-	$pplot = new PiePlot($values);
-	$pplot->SetLegends($legends);
-	$pplot->SetCenter(0.25+($size*0.07), 0.55);
-	$pplot->SetSize(0.3);
-	$pplot ->SetGuideLines ();
-	$graph->Add($pplot);
-	
-	// Finally send the graph to the browser
-	$graph->Stroke();
-}
+$graph = new CMbGraph();
+$graph->selectType("Pie",$title,$size);
+$graph->selectPalette("lightblue");
+$graph->addDataPiePlot($datas,$title,$size);
+$graph->render("out",$size);
+
 ?>
