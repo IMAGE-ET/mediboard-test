@@ -194,32 +194,28 @@ function pageMain() {
       } );
 
       ProtocoleSelector.init = function(){
-        
-        var formOp        = document.editOp;
-        var formOpEasy    = document.editOpEasy;
-        var formSejour    = document.editSejour;
   
-        this.eChir_id       = formOp.chir_id;
-        this.eCodes_ccam    = formOp.codes_ccam;
-        this.eLibelle       = formOp.libelle;
-        this.eHour_op       = formOp._hour_op;
-        this.eMin_op        = formOp._min_op;
-        this.eMateriel      = formOp.materiel;
-        this.eExamen        = formOp.examen;
-        this.eDepassement   = formOp.depassement;
-        this.eForfait       = formOp.forfait;
-        this.eFournitures    = formOp.fournitures;
-        this.eRques_op         = formOp.rques;
+        this.sChir_id       = "chir_id";
+        this.sCodes_ccam    = "codes_ccam";
+        this.sLibelle       = "libelle";
+        this.sHour_op       = "_hour_op";
+        this.sMin_op        = "_min_op";
+        this.sMateriel      = "materiel";
+        this.sExamen        = "examen";
+        this.sDepassement   = "depassement";
+        this.sForfait       = "forfait";
+        this.sFournitures   = "fournitures";
+        this.sRques_op      = "rques";
         
-        this.eType          = formSejour.type;
-        this.eDuree_prevu   = formSejour._duree_prevue;
-        this.eConvalescence = formSejour.convalescence;
-        this.eDP            = formSejour.DP;
-        this.eRques_sej     = formSejour.rques;
+        this.sType          = "type";
+        this.sDuree_prevu   = "_duree_prevue";
+        this.sConvalescence = "convalescence";
+        this.sDP            = "DP";
+        this.sRques_sej     = "rques";
 
-        this.eChir_id_easy = formOpEasy.chir_id;
-        this.eLibelle_easy = formOpEasy.libelle;
-        this.eCodes_ccam_easy = formOpEasy.codes_ccam;
+        this.sChir_id_easy    = "chir_id";
+        this.sLibelle_easy    = "libelle";
+        this.sCodes_ccam_easy = "codes_ccam";
         
         this.pop();
       }

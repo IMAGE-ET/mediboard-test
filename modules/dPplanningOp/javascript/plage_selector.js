@@ -14,9 +14,7 @@ var PlageOpSelector = {
     height: 450
   },
 
-
   pop: function(iChir, iHour_op, iMin_op, iGroup_id, iOperation_id) {
-    
     if (checkChir() && checkDuree()) {
       var url = new Url();
       url.setModuleAction("dPplanningOp", "plage_selector");
@@ -26,13 +24,9 @@ var PlageOpSelector = {
       url.addParam("group_id"    , iGroup_id);
       url.addParam("operation_id", iOperation_id);
       url.popup(this.options.width, this.options.height, "Plage");
-    } 
-    
+    }
   },
-  
-  
-  
-  
+
   set: function(plage_id, sDate, bAdm) {
     var oOpForm     = document.editOp;
     var oSejourForm = document.editSejour;
