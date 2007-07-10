@@ -628,7 +628,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->id400Sej->id400 = $NDOS;
     $this->id400Sej->object_class = "CSejour";
     $this->id400Sej->tag = join(" ", $tags);
-    $this->sejour = $this->id400Sej->getCachedObject();
+    $this->sejour = $this->id400Sej->getCachedObject(0);
 
     // Références principales
     $this->sejour->group_id     = $this->etablissement->_id;
