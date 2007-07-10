@@ -555,10 +555,10 @@ Class.extend(TogglePairEffect, {
     var oTarget2  = $(this.oOptions.idTarget2);
     var oTrigger1 = $(this.oOptions.idTrigger1);
     var oTrigger2 = $(this.oOptions.idTrigger2);
-		this.oTarget1[1 == iWhich ? "show" : "hide"]();
-		this.oTarget2[2 == iWhich ? "show" : "hide"]();
-		this.oTrigger1[1 == iWhich ? "show" : "hide"]();
-		this.oTrigger2[2 == iWhich ? "show" : "hide"]();
+		oTarget1[1 == iWhich ? "show" : "hide"]();
+		oTarget2[2 == iWhich ? "show" : "hide"]();
+		oTrigger1[1 == iWhich ? "show" : "hide"]();
+		oTrigger2[2 == iWhich ? "show" : "hide"]();
   },
   
 } );

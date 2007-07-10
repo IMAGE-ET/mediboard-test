@@ -115,9 +115,9 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             <button class="search" type="button" onclick="PatSelector.init()">Chercher</button>
             <script type="text/javascript">
             PatSelector.init = function(){
-              var oForm = document.patFrm;
-              this.eId = oForm.pat_id;
-              this.eView = oForm.patNom;
+              this.sForm = "patFrm";
+              this.sId   = "pat_id";
+              this.sView = "patNom";
               this.pop();
             }
             </script>
@@ -197,7 +197,6 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
                   Depuis le {{$curr_trmt->debut|date_format:"%d %b %Y"}}
                 {{/if}}
                 : <em>{{$curr_trmt->traitement}}</em>
-                </form>
               </li>
               {{foreachelse}}
               <li>Pas de traitements</li>
@@ -440,7 +439,9 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             <input type="hidden" name="dosql" value="do_acteccam_aed" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
-            <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'l\'acte',objName:'{{$curr_acte->code_acte|smarty:nodefaults|JSAttribute}}'})" />
+            <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'l\'acte',objName:'{{$curr_acte->code_acte|smarty:nodefaults|JSAttribute}}'})">
+            {{tr}}Delete{{/tr}}
+            </button>
             </form>
           </td>
           <td class="text">{{$curr_acte->_ref_executant->_view}} : {{$curr_acte->code_acte}}</td>

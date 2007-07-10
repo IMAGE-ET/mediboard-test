@@ -1,8 +1,12 @@
 // $Id: $
 
 var PatSelector = {
-  eId : null,
-  eView : null,
+  sForm     : null,
+  sFormEasy : null,
+  sId       : null,
+  sView     : null,
+  sId_easy  : null,
+  sView_easy: null,
   options : {
     width : 750,
     height: 500
@@ -15,9 +19,13 @@ var PatSelector = {
   },
   
   set: function(id, view) {
-    Form.Element.setValue(this.eId, id);
-    Form.Element.setValue(this.eView, view);
-    Form.Element.setValue(this.eId_easy, id);
-    Form.Element.setValue(this.eView_easy, view);
+    var oForm     = document[this.sForm];
+    var oFormEasy = document[this.sFormEasy];
+    Form.Element.setValue(oForm[this.sId]           , id);
+    Form.Element.setValue(oForm[this.sView]         , view);
+    if(oFormEasy) {
+      Form.Element.setValue(oFormEasy[this.sId_easy]  , id);
+      Form.Element.setValue(oFormEasy[this.sView_easy], view);
+    }
   }
 }

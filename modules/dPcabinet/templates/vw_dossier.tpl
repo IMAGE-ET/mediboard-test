@@ -50,10 +50,10 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             <button class="search" type="button" onclick="PatSelector.init()">Chercher</button>
             <script type="text/javascript">
             PatSelector.init = function(){
-              var oForm = document.patFrm;
-              this.eId = oForm.patSel;
-              this.eView = oForm.patNom;
-              this.pop()
+              this.sForm = "patFrm";
+              this.sId   = "patSel";
+              this.sView = "patNom";
+              this.pop();
             }
             </script>
           </td>

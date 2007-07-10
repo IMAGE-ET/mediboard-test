@@ -105,14 +105,14 @@
   	<button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
     <script type="text/javascript">
       PatSelector.init = function(){
-      var oForm = document.editSejour;
-      var oFormEasy = document.editOpEasy;
+      this.sForm     = "editSejour";
+      this.sFormEasy = "editOpEasy";
       
-      this.eView_easy = oFormEasy._patient_view; 
-      this.eId_easy = oFormEasy.patient_id;
+      this.sView_easy = "_patient_view"; 
+      this.sId_easy   = "patient_id";
       
-      this.eId = oForm.patient_id;
-      this.eView = oForm._patient_view;
+      this.sId   = "patient_id";
+      this.sView = "_patient_view";
       this.pop();
     }
     </script>

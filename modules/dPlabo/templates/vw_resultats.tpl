@@ -60,9 +60,9 @@ function pageMain() {
             <button class="search" type="button" onclick="PatSelector.init()">Chercher</button>
             <script type="text/javascript">
             PatSelector.init = function(){
-              var oForm = document.Patient;
-              this.eId = oForm.patient_id;
-              this.eView = oForm._view;
+              this.sForm = "Patient";
+              this.sId   = "patient_id";
+              this.sView = "_view";
               this.pop();
             }
             </script>

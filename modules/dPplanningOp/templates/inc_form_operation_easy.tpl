@@ -101,34 +101,6 @@
     </td>
     <td class="button">
       <button type="button" class="search" onclick="PlageSelector.init()">Choisir une date</button>
-      <script type="text/javascript">
-      /*
-      PlageSelector.init = function(){
-        if(!(checkChir() && checkDuree())) {
-          return;
-        }
-        var oOpForm = document.editOp;
-        var oOpFormEasy = document.editOpEasy;
-        var oSejourForm = document.editSejour;
-        
-        if(this.ePlage_id_easy) {
-          this.ePlage_id_easy = oOpFormEasy.plageop_id; 
-        }
-        
-        this.ePlage_id = oOpForm.plageop_id;
-        this.eSDate = oOpForm._datestr;
-         
-        this.e_hour_entree_prevue = oSejourForm._hour_entree_prevue;
-        this.e_min_entree_prevue = oSejourForm._min_entree_prevue;
-        this.e_date_entree_prevue = oSejourForm._date_entree_prevue;
-        
-        this.heure_entree_veille = "{{$heure_entree_veille}}";
-        this.heure_entree_jour = "{{$heure_entree_jour}}";   
-        this.pop(oOpForm.chir_id.value, oOpForm._hour_op.value,
-                 oOpForm._min_op.value, oSejourForm.group_id.value,
-                 oOpForm.operation_id.value);
-      } */
-      </script>
     </td>
   </tr>
   {{/if}}
@@ -144,24 +116,6 @@
   </td>
   <td colspan="2" class="button">
   	<button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
-    <script type="text/javascript">
-    /*
-      PatSelector.init = function(){
-      var oForm = document.editSejour;
-      var oFormEasy = document.editOpEasy;
-      
-      Console.debug(oFormEasy._patient_view,"view");
-      Console.debug(oFormEasy.patient_id,"patient_id");
-      
-      this.eView_easy = oFormEasy._patient_view;
-      this.eId_easy = oFormEasy.patient_id;
-      
-      this.eId = oForm.patient_id;
-      this.eView = oForm._patient_view;
-      this.pop(); 
-    }
-    */
-    </script>
    </td>
   </tr>
 </table>

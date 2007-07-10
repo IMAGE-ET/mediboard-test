@@ -80,7 +80,7 @@ function pageMain() {
 function checkFormRDV(oForm){
   if(!oForm._pause.checked && oForm.patient_id.value == ""){
     alert("Veuillez Selectionner un Patient");
-    PatSelector.pop();
+    PatSelector.init();
     return false;
   }else{
     return checkForm(oForm);
@@ -155,12 +155,12 @@ function checkFormRDV(oForm){
           <td class="readonly"><input type="text" name="_pat_name" size="20" value="{{$pat->_view}}" readonly="readonly"  ondblclick="PatSelector.init()" /></td>
           <td class="button"><button class="search" type="button" onclick="PatSelector.init()">Rechercher un patient</button>
           <script type="text/javascript">
-          PatSelector.init = function(){
-            var oForm = document.editFrm;
-            this.eId = oForm.patient_id;
-            this.eView = oForm._pat_name;
-            this.pop();
-          }
+            PatSelector.init = function(){
+              this.sForm = "editFrm";
+              this.sId   = "patient_id";
+              this.sView = "_pat_name";
+              this.pop();
+            }
           </script>             
           </td>
         </tr>     

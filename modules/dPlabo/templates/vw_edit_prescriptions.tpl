@@ -248,9 +248,9 @@ function pageMain() {
   Prescription.select();
   window[getCheckedValue(document.typeListeFrm.typeListe)].select();
   
-  var oForm = document.patFrm;
-  PatSelector.eId = oForm.patient_id;
-  PatSelector.eView = oForm.patNom;
+  PatSelector.sForm = "patFrm";
+  PatSelector.sId   = "patient_id";
+  PatSelector.sView = "patNom";
 }
 
 </script>
