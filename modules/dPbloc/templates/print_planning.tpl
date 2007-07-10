@@ -88,10 +88,10 @@ function pageMain() {
           <td class="button"><button type="button" class="search" onclick="CCAMSelector.init()">sélectionner un code</button>
           <script type="text/javascript">
           CCAMSelector.init = function(){
-            var oForm = document.paramFrm;
-            this.eClass = oForm._class_name;
-            this.eChir = oForm._chir;
-            this.eView = oForm.code_ccam;
+            this.sForm  = "paramFrm";
+            this.sClass = "_class_name";
+            this.sChir  = "_chir";
+            this.sView  = "code_ccam";
             this.pop();
           }
           </script>

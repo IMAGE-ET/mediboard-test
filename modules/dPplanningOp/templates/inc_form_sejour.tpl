@@ -127,9 +127,9 @@
   <td colspan="2" class="button"><button type="button" class="search" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
   <script type="text/javascript">
   CIM10Selector.init = function(){
-    var oForm = document.editSejour;
-    this.eView = oForm.DP;
-    this.eChir = oForm.praticien_id;
+    this.sForm = "editSejour";
+    this.sView = "DP";
+    this.sChir = "praticien_id";
     this.pop();
   }
   </script>

@@ -67,10 +67,10 @@
       <button type="button" class="search" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
       <script type="text/javascript">
         CCAMSelector.init = function(){
-        var oForm = document.editOp;
-        this.eView = oForm._codeCCAM;
-        this.eChir = oForm.chir_id;
-        this.eClass = oForm._class_name;
+        this.sForm  = "editOp";
+        this.sView  = "_codeCCAM";
+        this.sChir  = "chir_id";
+        this.sClass = "_class_name";
         this.pop();
       }
       </script>

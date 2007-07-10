@@ -215,10 +215,10 @@ function pageMain() {
           <td class="button"><button class="search" type="button" onclick="CCAMSelector.init()">Choisir un code</button>
           <script type="text/javascript">
             CCAMSelector.init = function(){
-              var oForm = document.editFrm;
-              this.eView = oForm._codeCCAM;
-              this.eChir = oForm.chir_id;
-              this.eClass = oForm._class_name;
+              this.sForm  = "editFrm";
+              this.sView  = "_codeCCAM";
+              this.sChir  = "chir_id";
+              this.sClass = "_class_name";
               this.pop();
             }
           </script>          
@@ -272,9 +272,9 @@ function pageMain() {
           <td class="button"><button type="button" class="search" onclick="CIM10Selector.init()">Choisir un code</button>
           <script type="text/javascript">
             CIM10Selector.init = function(){
-              var oForm = document.editFrm;
-              this.eView = oForm.DP;
-              this.eChir = oForm.chir_id;
+              this.sForm = "editFrm";
+              this.sView = "DP";
+              this.sChir = "chir_id";
               this.pop();
             }
           </script>

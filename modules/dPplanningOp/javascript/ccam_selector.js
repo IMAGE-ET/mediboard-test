@@ -1,28 +1,30 @@
 // $Id: $
 
 var CCAMSelector = {
-  eView : null,
-  eClass : null,
-  eChir : null,
+  sForm  : null,
+  sView  : null,
+  sClass : null,
+  sChir  : null,
   options : {
     width : 600,
     height: 500
   },
 
   pop: function() {
-  
+    var oForm = document[this.sForm];
     var url = new Url();
     url.setModuleAction("dPplanningOp", "code_selector");
     
-    url.addParam("chir", this.eChir.value);
-    url.addParam("object_class", this.eClass.value);
-    url.addParam("type", "ccam");
+    url.addParam("chir"        , oForm[this.sChir].value);
+    url.addParam("object_class", oForm[this.sClass].value);
+    url.addParam("type"        , "ccam");
     
     url.popup(this.options.width, this.options.height, "CCAM Selector");
   },
   
-  set: function(code, type) {
-     this.eView.value = code;
+  set: function(code) {
+    var oForm = document[this.sForm];
+    oForm[this.sView].value = code;
   }
    
   

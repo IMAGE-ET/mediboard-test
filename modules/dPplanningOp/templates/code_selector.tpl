@@ -8,7 +8,7 @@ function setClose(code, type) {
   var oSelector = window.opener.CIM10Selector;
   }
   
-  oSelector.set(code, type);
+  oSelector.set(code);
   window.close();
 }
 
