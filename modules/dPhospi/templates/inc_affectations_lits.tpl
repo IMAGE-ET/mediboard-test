@@ -326,13 +326,13 @@ Septique
     <input type="hidden" name="id" value="{{$sejour->sejour_id}}" />
     {{if $sejour->chambre_seule}}
     <input type="hidden" name="value" value="0" />
-    <button class="change" type="submit" style="background-color: #f55;">
-chambre simple
+    <button class="change" type="submit" style="color: #f22;">
+      chambre simple
     </button>
     {{else}}
     <input type="hidden" name="value" value="1" />
     <button class="change" type="submit">
-chambre double
+      chambre double
     </button>
     {{/if}}
     </form>

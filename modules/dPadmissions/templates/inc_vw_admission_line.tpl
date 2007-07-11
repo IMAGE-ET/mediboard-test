@@ -36,7 +36,7 @@
   <input type="hidden" name="id" value="{{$curr_adm->sejour_id}}" />
   {{if $curr_adm->chambre_seule}}
   <input type="hidden" name="value" value="0" />
-  <button class="change" type="button" style="background-color: #f55;" onclick="submitAdmission(this.form);">
+  <button class="change" type="button" style="color: #f22" onclick="submitAdmission(this.form);">
     simple
   </button>
   {{else}}
