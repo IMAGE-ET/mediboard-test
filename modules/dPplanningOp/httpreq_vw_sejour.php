@@ -40,13 +40,32 @@ $mediuser->load($AppUI->user_id);
 // Vérification des droits sur les praticiens
 $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
 
-$sejourConfig =& $dPconfig["dPplanningOp"]["CSejour"];
+// Configuration
+$config =& $dPconfig["dPplanningOp"]["CSejour"];
+$hours = range($config["heure_deb"], $config["heure_fin"]);
+$mins = range(0, 59, $config["min_intervalle"]);
+$heure_sortie_ambu   = $config["heure_sortie_ambu"];
+$heure_sortie_autre  = $config["heure_sortie_autre"];
+$heure_entree_veille = $config["heure_entree_veille"];
+$heure_entree_jour   = $config["heure_entree_jour"];
 
-$hours = range($sejourConfig["heure_deb"], $sejourConfig["heure_fin"]);
-$mins = range(0, 59, $sejourConfig["min_intervalle"]);
+$config =& $dPconfig["dPplanningOp"]["COperation"];
+$hours_duree = range($config["duree_deb"], $config["duree_fin"]);
+$hours_urgence = range($config["hour_urgence_deb"], $config["hour_urgence_fin"]);
+$mins_duree = range(0, 59, $config["min_intervalle"]);
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("heure_sortie_ambu",   $heure_sortie_ambu);
+$smarty->assign("heure_sortie_autre",  $heure_sortie_autre);
+$smarty->assign("heure_entree_veille", $heure_entree_veille);
+$smarty->assign("heure_entree_jour",   $heure_entree_jour);
+$smarty->assign("hours"        , $hours);
+$smarty->assign("mins"         , $mins);
+$smarty->assign("hours_duree"  , $hours_duree);
+$smarty->assign("hours_urgence", $hours_urgence);
+$smarty->assign("mins_duree"   , $mins_duree);
 
 $smarty->assign("sejour"   , $sejour);
 $smarty->assign("praticien", $praticien);
@@ -54,8 +73,6 @@ $smarty->assign("patient"  , $patient);
 $smarty->assign("sejours"  , $sejours);
 
 $smarty->assign("listPraticiens", $listPraticiens);
-$smarty->assign("hours"      , $hours);
-$smarty->assign("mins"       , $mins);
 $smarty->assign("mode_operation", $mode_operation);
 $smarty->assign("etablissements", $etablissements);
 

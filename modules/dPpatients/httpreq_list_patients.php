@@ -13,6 +13,8 @@ $can->needsRead();
 
 $board = mbGetValueFromGet("board", 0);
 
+$patient_id = mbGetValueFromGetOrSession("patient_id");
+
 // Patients
 $patient_nom       = mbGetValueFromGetOrSession("nom"       , ""       );
 $patient_prenom    = mbGetValueFromGetOrSession("prenom"    , ""       );
@@ -22,6 +24,16 @@ $patient_cp        = mbGetValueFromGetOrSession("cp"        , ""       );
 $patient_day       = mbGetValueFromGetOrSession("Date_Day"  , date("d"));
 $patient_month     = mbGetValueFromGetOrSession("Date_Month", date("m"));
 $patient_year      = mbGetValueFromGetOrSession("Date_Year" , date("Y"));
+
+$patient = new CPatient;
+if ($new = mbGetValueFromGet("new")) {
+  $patient->load(null);
+  mbSetValueToSession("patient_id", null);
+  mbSetValueToSession("selClass", null);
+  mbSetValueToSession("selKey", null);
+} else {
+  $patient->load($patient_id);
+}
 
 $where        = array();
 $whereSoundex = array();
@@ -82,5 +94,6 @@ $smarty->assign("cp"             , $patient_cp                                );
 $smarty->assign("datePat"        , "$patient_year-$patient_month-$patient_day");
 $smarty->assign("patients"       , $patients                                  );
 $smarty->assign("patientsSoundex", $patientsSoundex                           );
+$smarty->assign("patient"        , $patient                                   );
 
 $smarty->display("inc_list_patient.tpl");
