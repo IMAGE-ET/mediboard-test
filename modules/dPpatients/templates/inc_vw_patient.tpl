@@ -233,7 +233,7 @@ function reloadAfterSaveDoc(){
   {{/if}}
 </table>
 
-<table class="tbl">
+<table class="form">
   {{assign var="affectation" value=$patient->_ref_curr_affectation}}
   {{if $affectation->affectation_id}}
   <tr>
