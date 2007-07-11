@@ -36,11 +36,11 @@ $listMins[] = "30";
 $listMins[] = "45";
 
 // Liste des Salles
-$listSalles = new CSalle();
+$salle = new CSalle();
 $where = array();
 $where["group_id"] = "= '$g'";
 $order = "'nom'";
-$listSalles = $listSalles->loadList($where, $order);
+$listSalles = $salle->loadListWithPerms(PERM_READ, $where, $order);
 
 // Création du tableau de visualisation
 $arrayAffichage = array();

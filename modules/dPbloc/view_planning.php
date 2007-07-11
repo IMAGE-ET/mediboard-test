@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
@@ -52,9 +52,10 @@ $user->load($AppUI->user_id);
 //}
 
 // En fonction de la salle
-if ($filter->salle_id) {
-  $where["salle_id"] = "= '$filter->salle_id'";
-}
+$salle = new CSalle;
+$whereSalle = array();
+$whereSalle["group_id"] = "= '$g'";
+$where["salle_id"] = db_prepare_in(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)), $filter->salle_id);
 
 $plagesop = $plagesop->loadList($where, $order);
 

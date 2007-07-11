@@ -13,11 +13,11 @@ $date = mbGetValueFromGetOrSession("date", mbDate());
 $plageop_id = mbGetValueFromGetOrSession("plageop_id");
 
 // Liste des Salles
-$listSalles = new CSalle();
+$salle = new CSalle();
 $where = array();
 $where["group_id"] = "= '$g'";
 $order = "'nom'";
-$listSalles = $listSalles->loadList($where, $order);
+$listSalles = $salle->loadListWithPerms(PERM_READ, $where, $order);
 
 
 // Informations sur la plage demandée

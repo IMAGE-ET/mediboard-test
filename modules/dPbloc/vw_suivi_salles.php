@@ -15,9 +15,10 @@ $date_suivi  = mbGetValueFromGetOrSession("date_suivi", mbDate());
 
 
 // Chargement des salles
-$listSalles = new CSalle;
+$salle = new CSalle;
 $where = array("group_id"=>"= '$g'");
-$listSalles = $listSalles->loadList($where);
+$order = "'nom'";
+$listSalles = $salle->loadListWithPerms(PERM_READ, $where, $order);
 
 // Chargement des Anesthésistes
 $listAnesths = new CMediusers;

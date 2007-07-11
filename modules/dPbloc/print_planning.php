@@ -41,8 +41,8 @@ $listSpec = new CFunctions();
 $listSpec = $listSpec->loadSpecialites(PERM_READ);
 
 $order = "nom";
-$listSalles = new CSalle();
-$listSalles = $listSalles->loadList(null, $order);
+$salle = new CSalle();
+$listSalles = $salle->loadListWithPerms(PERM_READ, null, $order);
 
 // Création du template
 $smarty = new CSmartyDP();
