@@ -32,11 +32,11 @@
      
         <script type="text/javascript">   
           CCAMSelector.init = function(){
-            var oForm = document.manageCodes;
-            this.eView = oForm._newCode;
-            this.eClass = oForm._class_name;
-            this.eChir = oForm._chir;
-            this.pop();
+            this.sForm = "manageCodes";
+            this.sClass = "_class_name";
+            this.sChir = "_chir";
+            this.sView = "_newCode";
+          this.pop();
           }
         </script>
         
