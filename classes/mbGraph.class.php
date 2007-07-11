@@ -1,5 +1,7 @@
 <?php
 
+global $AppUI;
+
 require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_bar"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
