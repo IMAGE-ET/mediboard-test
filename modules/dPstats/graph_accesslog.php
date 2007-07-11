@@ -10,10 +10,6 @@
 global $AppUI, $can, $m;
 
 require_once($AppUI->getSystemClass("mbGraph"));
-require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_bar"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_regstat"));
 
 $date       = mbGetValueFromGet("date"       , mbDate());
 $module     = mbGetValueFromGet("module"     , 0);
@@ -89,15 +85,28 @@ foreach($datax as $x) {
 $title = mbTranformTime(null, $date, "%A %d %b %Y");
 if($module) $title .= " : ".$AppUI->_($module);
 if($actionName) $title .= " - $actionName";
-$data = array($duration, $request);
-$legend = array("Page (s)","DB (s)");
 
+$options = array( "size" => $size,
+									"title" => $title,
+									"margin" => array(15+$size*10, 75+$size*10, 10+$size*10, 15+$size*10),
+									"posLegend" => array(0.015,0.79, "right", "center"), 
+									"sizeFontAxis" => 6,
+									"labelAngle" => 50,
+									"textTickInterval" => 2,
+									"posXAbsDelta" => 0,
+									"posYAbsDelta" => 0,
+									"dataBar" => $nbHits,
+									"dataLine" => array($duration, $request),
+									"datax" => $datax,
+									"graphBarLegend" => "Hits",
+									"graphLineLegend" => array("Page (s)","DB (s)") );
+				
 $graph = new CMbGraph();
-$graph->selectType("Bar",$title,$size);
-$graph->selectPalette("lightblue");
-$graph->setupAxis($datax,$size);
-$graph->addDataBarPlot($nbHits,"#aaaaaa","#EEEEEE","white","Hits");
-$graph->addDataLinePlot($data,$legend,$size);
-$graph->render("out",$size);
+$graph->selectType("Graph",$options);
+$graph->selectPalette($options);
+$graph->setupAxis($options);
+$graph->addDataBarPlot($options);
+$graph->addDataLinePlot($options);
+$graph->render($options);
 
 ?>

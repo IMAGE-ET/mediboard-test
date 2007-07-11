@@ -10,8 +10,6 @@
 global $AppUI, $can, $m, $dPconfig;
 
 require_once($AppUI->getSystemClass("mbGraph"));
-require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_pie"));
 
 $date     = mbGetValueFromGet("date"       , mbDate());
 $module   = mbGetValueFromGet("module"     , 0);
@@ -100,10 +98,16 @@ $title = mbTranformTime(null, $date, "%A %d %b %Y");
 if($module) 		
 	$title .= " : ".$AppUI->_($module);
 
+$options = array( "height" => 200,
+									"size" => $size,
+									"title" => $title,
+									"posLegend" => array(0.015,0.1, "right", "top"), 
+									"dataPie" => $values,
+									"graphPieLegend" => $legends );	
 $graph = new CMbGraph();
-$graph->selectType("Pie",$title,$size);
-$graph->selectPalette("lightblue");
-$graph->addDataPiePlot($datas,$title,$size);
-$graph->render("out",$size);
+$graph->selectType("Pie",$options);
+$graph->selectPalette($options);
+$graph->addDataPiePlot($options);
+$graph->render($options);
 
 ?>

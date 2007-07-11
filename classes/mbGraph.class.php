@@ -1,75 +1,127 @@
 <?php
 
+require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_bar"));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_regstat"));
+require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_pie"));
+
 /**
  *  @package Mediboard
  *  @subpackage classes
  *  @author  Poiron Yohann
  *  @version $Revision: $
  */
- 
+
 class CMbGraph {
 	var $graph = null;
+	
+	var $options = null; //tab of options
+	
 	var $palette = null;
 	var $config = null;
+	var $taille = null;
+	var $margin = null;
+	var $tailleAxis = null;
 	
 	function CMbGraph() {
 		global $dPconfig;
 		$this->config = $dPconfig['graph_engine'];
-		$this->palette =  array(
-				"#aa5500", "#55aa00", "#0055aa", "#aa0055", "#5500aa", "#00aa55", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff", '#FFFFFF', '#C90062', '#E05206', '#F0AB00', '#000000', '#FF0000', '#3C8A2E', '#006983', '#0098C3', '#21578A', '#55517B', '#4E7D5B', );
+		$this->options = array ("width" => 320,
+														"height" => 125,
+														"size" => 1,
+														"title" => "Title",
+														"sizeFontTitle" => 7,
+														"palette" => array ( "#aa5500", "#55aa00", "#0055aa", "#aa0055", 
+																								 "#5500aa", "#00aa55", "#ff0000", "#00ff00", 
+																								 "#0000ff", "#ffff00", "#ff00ff", "#00ffff", 
+																								 "#FFFFFF", "#C90062", "#E05206", "#F0AB00", 
+																								 "#000000", "#FF0000", "#3C8A2E", "#006983", 
+																								 "#0098C3", "#21578A", "#55517B", "#4E7D5B" ),
+														
+														"margin" => array (0, 
+																							 0, 
+																							 0, 
+																							 0),
+														"marginColor" => "lightblue",
+														"titleColor"	=> "darkred",
+														"sizeFontLegend" => 7,
+														"posLegend" => array(0, 
+																								 0,
+																								 "right",
+																								 "top"),
+														"sizeFontAxis" => 6,
+														"labelAngle" => 0,
+														"textTickInterval" => 0,
+														"posXAbsDelta" => 0,
+														"posYAbsDelta" => 0,
+														"dataPie" => array(),
+														"dataBar" => array(),
+														"dataLine" => array(),
+														"datax" => array(),
+														"from" => "#AAAAAA",
+														"to" => "#EEEEEE",
+														"graphBarColor" => "white",
+														"graphBarLegend" => "Legend",
+														"graphLineColor" => "white",
+														"graphLineLegend" => "Legend",
+														"graphPieLegend" => "Legend",																																										
+														"render" => "out"										 								 												 		
+														);
 	}
 
-	function selectType($type,$title,$size) {
+	function selectType($type,$options) {
 		if($this->config == 'eZgraph') {
-			$this->eZgraphSelectType($type,$title,$size);
+			$this->eZgraphSelectType($type,$options);
 		} else if($this->config == 'jpgraph'){
-			$this->jpgraphSelectType($type,$title,$size);
+			$this->jpgraphSelectType($type,$options);
 		}
 	}
 	
-	function selectPalette($palette) {
+	function selectPalette($options) {
 		if($this->config == 'eZgraph') {
-			$this->eZgraphSelectPalette($palette);
+			$this->eZgraphSelectPalette($options);
 		} else if($this->config == 'jpgraph'){
-			$this->jpgraphSelectPalette($palette);
+			$this->jpgraphSelectPalette($options);
 		}
 	}
 	
-	function setupAxis($datax,$size) {
+	function setupAxis($options) {
 		if($this->config == 'jpgraph'){
-			$this->jpgraphSetupAxis($datax,$size);
+			$this->jpgraphSetupAxis($options);
 		}
 	}
 	
-	function addDataPiePlot($datas,$title = null,$size = null) {
+	function addDataPiePlot($options) {
 		if($this->config == 'eZgraph') {
-			$this->eZgraphAddData($datas,$title = null,$size = null);
+			$this->eZgraphAddData($options);
 		} else if($this->config == 'jpgraph'){
-			$this->jpgraphAddDataPiePlot($datas,$title,$size);
+			$this->jpgraphAddDataPiePlot($options);
 		}
 	}
 	
-	function addDataBarPlot($data,$from,$to,$color,$legend) {
+	function addDataBarPlot($options) {
 		if($this->config == 'jpgraph'){
-			$this->jpgraphAddDataBarPlot($data,$from,$to,$color,$legend);
+			$this->jpgraphAddDataBarPlot($options);
 		}
 	}
 	
-	function addDataLinePlot($data,$legend,$size,$color = null) {
+	function addDataLinePlot($options) {
 		if($this->config == 'jpgraph'){
-			$this->jpgraphAddDataLinePlot($data,$legend,$size,$color);
+			$this->jpgraphAddDataLinePlot($options);
 		}
 	}
 	
-	function render($render,$size = null) {
+	function render($options) {
 		if($this->config == 'eZgraph') {
-			$this->eZgraphRender($render,$size);
+			$this->eZgraphRender($options);
 		} else if($this->config == 'jpgraph'){
-			$this->jpgraphRender($render,$size);
+			$this->jpgraphRender($options);
 		}
 	}
 	
-	function eZgraphSelectType($type,$title,$size) {
+	//$type,$title,$size,$taille,$margin
+	function eZgraphSelectType($type,$title,$size,$taille,$margin) {
 		if($type == "Pie") {
 			$this->graph = new ezcGraphPieChart();
 			$this->graph->title = $title;
@@ -82,6 +134,7 @@ class CMbGraph {
 		}
 	}
 	
+	//$palette
 	function eZgraphSelectPalette($palette) {
 		if($palette == "ez") {
 			$this->graph->palette = new ezcGraphPaletteEz();
@@ -97,6 +150,7 @@ class CMbGraph {
 		}
 	}
 	
+	//$datas,$title,$size
 	function eZgraphAddData($datas,$title,$size) {
 		$tab = array();
 		foreach($datas as $data) {
@@ -105,6 +159,7 @@ class CMbGraph {
 		$this->graph->data[$title] = new ezcGraphArrayDataSet($tab);
 	}
 	
+	//$render,$size
 	function eZgraphRender($render,$size) {
 		global $dPconfig;
 		if($dPconfig['graph_svg'] == "non") {
@@ -130,108 +185,98 @@ class CMbGraph {
 		}
 	}
 	
-	function jpgraphSelectType ($type,$title,$size) {
-		if($type == "Pie") {
-			$this->graph = new PieGraph(300*(1+$size*0.2),200*$size,"auto");
-			$this->graph->title->Set($title);
-			$this->graph->title->SetFont(FF_ARIAL,FS_NORMAL,7+$size);
-			$this->graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-			$this->graph->legend->Pos(0.015,0.1, "right", "top");
-			$this->graph->img->SetAntiAliasing();
-		} else if($type == "Bar") {
-			$this->graph = new Graph(320*$size,125*$size,"auto");    
-			$this->graph->img->SetMargin(15+$size*10,75+$size*10,10+$size*10,15+$size*10);
-			$this->graph->img->SetAntiAliasing();
+	//$type,$title,$size,$taille,$margin
+	function jpgraphSelectType ($type,$options) {
+		$this->options = array_merge($this->options, $options);
+		if ($type == "Pie") {
+			$this->graph = new PieGraph($this->options['width']*(1+$this->options['size']*0.2),$this->options['height']*$this->options['size'],"auto");	
+		} else if ($type == "Graph") {
+			$this->graph = new Graph($this->options['width']*$this->options['size'],$this->options['height']*$this->options['size'],"auto");    
 			$this->graph->SetScale("textlin");
 			$this->graph->SetY2Scale("int");
-			$this->graph->title->Set($title);
-			$this->graph->title->SetFont(FF_ARIAL,FS_NORMAL,7+$size);
-			$this->graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,6+$size);
-			$this->graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-			$this->graph->legend->Pos(0.015,0.79, "right", "center");
+			$this->graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,6+$this->options['size']);
 		}
+		$this->graph->title->Set($this->options['title']);
+		$this->graph->img->SetMargin($this->options['margin'][0], $this->options['margin'][1], $this->options['margin'][2], $this->options['margin'][3]);
+		$this->graph->img->SetAntiAliasing();
+		$this->graph->title->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontTitle']+$this->options['size']);
+		$this->graph->legend->SetFont(FF_ARIAL,FS_NORMAL, $this->options['sizeFontLegend']);
+		$this->graph->legend->Pos($this->options['posLegend'][0], $this->options['posLegend'][1], $this->options['posLegend'][2], $this->options['posLegend'][3]);
 	}
-		
-	function jpgraphSelectPalette ($palette) {
-		$this->graph->SetMarginColor($palette);
-		$this->graph->title->SetColor("darkred");
+
+	//$palette
+	function jpgraphSelectPalette ($options) {
+		$this->options = array_merge($this->options, $options);
+		$this->graph->SetMarginColor($this->options['marginColor']);
+		$this->graph->title->SetColor($this->options['titleColor']);
 	}
 	
-	function jpgraphSetupAxis ($datax,$size) {
+	//$datax,$size,$taille
+	function jpgraphSetupAxis ($options) {
+		$this->options = array_merge($this->options, $options);
 		// Setup font for axis
-		$this->graph->xaxis->SetFont(FF_ARIAL,FS_NORMAL,6+$size);
-		$this->graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,6+$size);
-		$this->graph->y2axis->SetFont(FF_ARIAL,FS_NORMAL,6+$size);
+		$this->graph->xaxis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
+		$this->graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
+		$this->graph->y2axis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
 		
 		// Show 0 label on Y-axis (default is not to show)
 		$this->graph->yscale->ticks->SupressZeroLabel(false);
-		$this->graph->y2axis->SetColor("#888888");
 		$this->graph->yaxis->SetColor("black");
+		$this->graph->y2axis->SetColor("#888888");
 		
 		// Setup X-axis labels
-		$this->graph->xaxis->SetTickLabels($datax);
-		$this->graph->xaxis->SetTextTickInterval(2);
-		$this->graph->xaxis->SetLabelAngle(50);
+		$this->graph->xaxis->SetTickLabels($this->options['datax']);
+		$this->graph->xaxis->SetTextTickInterval($this->options['textTickInterval']);
+		$this->graph->xaxis->SetLabelAngle($this->options['labelAngle']);
 	}
 	
-	function jpgraphAddDataPiePlot ($datas,$title,$size) {
-		$values  = array();
-		$legends = array();
-		foreach($datas as $data) {
-  			$values[]  = $data["value"];
-  			$legends[] = $data["legend"];
-		}
-		$this->graph->pplot = new PiePlot($values);
-		$this->graph->pplot->SetLegends($legends);
-		$this->graph->pplot->SetCenter(0.25+($size*0.07), 0.55);
+	//$datas,$title,$size
+	function jpgraphAddDataPiePlot ($options) {
+		$this->options = array_merge($this->options, $options);
+		$this->graph->pplot = new PiePlot($this->options['dataPie']);
+		$this->graph->pplot->SetLegends($this->options['graphPieLegend']);
+		$this->graph->pplot->SetCenter(0.25+($this->options['size']*0.07), 0.55);
 		$this->graph->pplot->SetSize(0.3);
 		$this->graph->pplot->SetGuideLines ();
 		$this->graph->Add($this->graph->pplot);
 	}
 	
-	function jpgraphAddDataBarPlot ($data,$from,$to,$color,$legend) {
+	//$data,$from,$to,$color,$legend
+	function jpgraphAddDataBarPlot ($options) {
+		$this->options = array_merge($this->options, $options);
 		// Create the bar hits pot
-		$this->graph->bplot = new BarPlot($data);
+		$this->graph->bplot = new BarPlot($this->options['dataBar']);
 		$this->graph->bplot->SetWidth(0.8);
-		$this->graph->bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);
-		$this->graph->bplot->SetColor($color);
-		$this->graph->bplot->setLegend($legend);
+		$this->graph->bplot->SetFillGradient($this->options['from'],$this->options['to'],GRAD_LEFT_REFLECTION);
+		$this->graph->bplot->SetColor($this->options['graphBarColor']);
+		$this->graph->bplot->setLegend($this->options['graphBarLegend']);
 		$this->graph->AddY2($this->graph->bplot);
 	}
 	
-	function jpgraphAddDataLinePlot ($data,$legend,$size,$color) {
-		//pas de légende
-		if ($legend == null) {
-		  return "Ne pas peut pas avoir une valeur nulle";
-		} else if (!is_array($legend)) {
-			$this->graph->lplot = new LinePlot($data);
-			if($color == null) {
-					$this->graph->lplot->SetColor($this->palette[0]);
-			} else {
-					$this->graph->lplot->SetColor($color);
-			}
-			$this->graph->lplot->SetWeight($size);
-			$this->graph->lplot->setLegend($legend);
+	//$data,$legend,$size,$color
+	function jpgraphAddDataLinePlot ($options) {
+		$this->options = array_merge($this->options, $options);
+		if (!is_array($this->options['graphLineLegend'])) {
+			$this->graph->lplot = new LinePlot($this->options['dataLine']);
+			$this->graph->lplot->setLegend($this->options['graphLineLegend']);
+			$this->graph->lplot->SetWeight($this->options['size']);
 			$this->graph->Add($this->graph->lplot);
 		} else {
 			$i = 0;
-			foreach($legend as $key => $value) {
-				$this->graph->lplot = new LinePlot($data[$key]);
-				$this->graph->lplot->setLegend($legend[$key]);
-				$this->graph->lplot->SetWeight($size);
-				if($color == null) {
-					$this->graph->lplot->SetColor($this->palette[$i]);
-				} else {
-					$this->graph->lplot->SetColor($color[$key]);
-				}
+			foreach($this->options['graphLineLegend'] as $key => $value) {
+				$this->graph->lplot = new LinePlot($this->options['dataLine'][$key]);
+				$this->graph->lplot->setLegend($this->options['graphLineLegend'][$key]);
+				$this->graph->lplot->SetWeight($this->options['size']);
+				$this->graph->lplot->SetColor($this->options['palette'][$key]);
 				$this->graph->Add($this->graph->lplot);
 				$i++;
 			}
 		}
 	}
 	
-	function jpgraphRender ($render,$size) {
-		if($render == "out") {
+	//$render,$size
+	function jpgraphRender ($options) {
+		if($this->options['render'] == "out") {
 			$this->graph->Stroke();
 		}
 	}
