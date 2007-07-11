@@ -100,7 +100,6 @@ var AjaxResponse = {
 SystemMessage = {
   id: "systemMsg",
   autohide: null,
-  div: null,
   effect: null,
 
   // Check message type (loading, notice, warning, error) from given div
@@ -122,6 +121,7 @@ SystemMessage = {
   
   // show/hide the div
   doEffect : function (delay) {
+    var oDiv = $(this.id);
     // Cancel current effect
     if (this.effect) {
       this.effect.cancel();
@@ -129,8 +129,8 @@ SystemMessage = {
     }
       
     // Ensure visible        
-    this.div.show();
-    this.div.setOpacity(1);
+    oDiv.show();
+    oDiv.setOpacity(1);
     
     // Only hide on type 'message'
     if (!this.autohide) {
@@ -142,29 +142,29 @@ SystemMessage = {
   },
   
   init : function () {
-    this.div = $(this.id);
-    Assert.that(this.div, "No system message div");
+    var oDiv = $(this.id);
+    Assert.that(oDiv, "No system message div");
     
-    this.checkType(this.div);
+    this.checkType(oDiv);
     
     // Hide on onclick
-    Event.observe(this.div, 'click', function(event) {
+    Event.observe(oDiv, 'click', function(event) {
       SystemMessage.autohide = true;
       SystemMessage.doEffect(0.1);
     } );
     
     // Always show if watch does not exist (IE)
-    if (!this.div.watch) {
-      Element.show(this.div);
+    if (!oDiv.watch) {
+      Element.show(oDiv);
       return;
     }
     
     // Watch for content manipulation
-    this.div.watch("innerHTML", this.refresh.bind(this));
+    oDiv.watch("innerHTML", this.refresh.bind(this));
     
     // Hide empty message
-    if (!this.div.innerHTML.strip()) {
-      new Effect.Fade(this.div);
+    if (!oDiv.innerHTML.strip()) {
+      new Effect.Fade(oDiv);
     }
   }
 }
