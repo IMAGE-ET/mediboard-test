@@ -194,7 +194,7 @@ var Console = {
       Element.setStyle(eDiv, { marginLeft: nIndent + "em" } );
     }
 
-    eParent = $(this.id);
+    var eParent = $(this.id);
     eParent.appendChild(eDiv);
     eParent.scrollTop = eParent.scrollHeight;
   },
