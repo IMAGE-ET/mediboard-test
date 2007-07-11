@@ -81,7 +81,6 @@ class CDoObjectAddEdit {
       }
     } else {
       mbSetValueToSession($this->objectKeyGetVarName);
-      //$this->doLog("delete");
       $AppUI->setMsg($this->deleteMsg, UI_MSG_ALERT);
       if ($this->redirectDelete) {
         $this->redirect =& $this->redirectDelete;
@@ -100,7 +99,6 @@ class CDoObjectAddEdit {
       $id = $this->objectKeyGetVarName;
       mbSetValueToSession($id, $this->_obj->$id);
       $this->isNotNew = @$this->refTab[$this->objectKeyGetVarName];
-      //$this->doLog("store");
       $AppUI->setMsg($this->isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
       if ($this->redirectStore) {
         $this->redirect =& $this->redirectStore;

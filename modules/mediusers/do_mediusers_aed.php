@@ -43,7 +43,6 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
       $this->_obj->insGroupPermission();
       
       $isNotNew = @$_POST[$this->objectKeyGetVarName];
-      $this->doLog("store");
       $AppUI->setMsg( $isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
       if ($this->redirectStore) {
         $AppUI->redirect($this->redirectStore);

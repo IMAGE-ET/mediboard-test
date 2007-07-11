@@ -85,7 +85,6 @@ class CFileAddEdit extends CDoObjectAddEdit {
               $msgs["file_upload_error"]++;
             }else{
               $msgs["file_ok"]++;
-              //$this->doLog("store");
             }
           }
         }elseif($file["error"] <=3){
