@@ -30,8 +30,7 @@ $object->updateFormFields();
 $object->loadRefsActesCCAM();
 $object->loadRefsCodesCCAM();
 $object->loadPossibleActes();
-
-//mbTrace($object);
+$object->loadRefPraticien();
 
 // Création du template
 $smarty = new CSmartyDP();

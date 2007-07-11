@@ -333,6 +333,10 @@ class COperation extends CCodableCCAM {
     $this->_praticien_id = $this->_ref_chir->_id;
   }
   
+  function loadRefPraticien(){
+  	$this->loadRefChir();
+  }
+  
   function loadRefPlageOp() {
     $this->_ref_anesth = new CMediusers;
     $this->_ref_anesth->load($this->anesth_id);
