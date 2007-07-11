@@ -1,5 +1,5 @@
 <?php
-$locales['CMbObject-back-traitements'] = '';
+$locales['CDossierMedical-back-traitements'] = '';
 $locales['CAntecedent'] = '';
 $locales['CAntecedent-date'] = 'Date';
 $locales['CAntecedent-date-desc'] = '';
@@ -15,8 +15,8 @@ $locales['CAntecedent.type.gyn'] = '';
 $locales['CAntecedent.type.med'] = '';
 $locales['CAntecedent.type.obst'] = '';
 $locales['CAntecedent.type.trans'] = '';
-$locales['CMbObject-back-addictions'] = '';
-$locales['CMbObject-back-antecedants'] = '';
+$locales['CDossierMedical-back-addictions'] = '';
+$locales['CDossierMedical-back-antecedants'] = '';
 $locales['CMedecin'] = '';
 $locales['CMedecin-adresse'] = '';
 $locales['CMedecin-adresse-desc'] = '';

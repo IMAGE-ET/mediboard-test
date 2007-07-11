@@ -24,6 +24,7 @@ class CAntecedent extends CMbMetaObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
+    $specs["object_id"   ] = "notNull ref class|CDossierMedical meta|object_class";
     $specs["object_class"] = "notNull enum list|CPatient|CConsultAnesth";
     $specs["type"        ] = "notNull enum list|med|alle|trans|obst|chir|fam|anesth|gyn";
     $specs["date"        ] = "date";

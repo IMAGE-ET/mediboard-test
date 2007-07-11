@@ -7,7 +7,10 @@
 * @author Romain Ollivier
 */
 
-class CConsultAnesth extends CMbObject {
+global $AppUI;
+require_once($AppUI->getModuleClass("dPpatients", "dossierMedical"));
+
+class CConsultAnesth extends CDossierMedical {
   // DB Table key
   var $consultation_anesth_id = null;
 
@@ -53,7 +56,6 @@ class CConsultAnesth extends CMbObject {
   var $ht_final      = null;
   var $premedication = null;
   var $prepa_preop   = null;
-  var $listCim10     = null;
 
   // Form fields
   var $_date_consult = null;
@@ -62,7 +64,6 @@ class CConsultAnesth extends CMbObject {
   var $_min_tsivy    = null;
   var $_sec_tca      = null;
   var $_min_tca      = null;
-  var $_codes_cim10  = null;
 
   // Object References
   var $_ref_consultation       = null;
@@ -71,10 +72,6 @@ class CConsultAnesth extends CMbObject {
   var $_ref_operation          = null;
   var $_ref_plageconsult       = null;
   var $_intub_difficile        = null;
-  var $_ref_antecedents        = null;
-  var $_ref_traitements        = null;
-  var $_ref_addictions         = null;
-  var $_ref_types_addiction    = null;
   var $_clairance              = null;
   var $_imc                    = null;
   var $_imc_valeur             = null;
@@ -94,51 +91,55 @@ class CConsultAnesth extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
-      "consultation_id" => "notNull ref class|CConsultation cascade",
-      "operation_id"    => "ref class|COperation",
-      // @todo : un type particulier pour le poid et la taille
-      "poid"            => "float pos",
-      "taille"          => "float min|0",
-      "groupe"          => "enum list|?|O|A|B|AB default|?",
-      "rhesus"          => "enum list|?|NEG|POS default|?",
-      "antecedents"     => "text confidential",
-      "traitements"     => "text confidential",
-      "tabac"           => "text",
-      "oenolisme"       => "text",
-      "tasys"           => "num max|64",
-      "tadias"          => "num max|64",
-      "intubation"      => "enum list|?|dents|bouche|cou",
-      "biologie"        => "enum list|?|NF|COAG|IONO",
-      "commande_sang"   => "enum list|?|clinique|CTS|autologue",
-      "ASA"             => "enum list|1|2|3|4|5 default|1",
-      // Données examens complementaires
-      "rai"             => "enum list|?|NEG|POS default|?",
-      "hb"              => "float min|0",
-      "tp"              => "float minMax|0|100",
-      "tca"             => "numchar maxLength|2",
-      "tca_temoin"      => "numchar maxLength|2",
-      "creatinine"      => "float",
-      "na"              => "float min|0",
-      "k"               => "float min|0",
-      "tsivy"           => "time",
-      "plaquettes"      => "numchar maxLength|7 pos",
-      "ecbu"            => "enum list|?|NEG|POS default|?",
-      "pouls"           => "numchar maxLength|4 pos",
-      "spo2"            => "float minMax|0|100",
-      "ht"              => "float minMax|0|100",
-      "ht_final"        => "float minMax|0|100",
-      "premedication"   => "text",
-      "prepa_preop"     => "text",
-      // Champs pour les conditions d'intubation
-      "mallampati"      => "enum list|classe1|classe2|classe3|classe4",
-      "bouche"          => "enum list|m20|m35|p35",
-      "distThyro"       => "enum list|m65|p65",
-      "etatBucco"       => "text",
-      "conclusion"      => "text",
-      "position"        => "enum list|DD|DV|DL|GP|AS|TO|GYN",
-      "listCim10"       => "text"
-    );
+    $specs = parent::getSpecs();
+    
+    $specs["consultation_id"]  = "notNull ref class|CConsultation cascade";
+    $specs["operation_id"]     = "ref class|COperation";
+
+    // @todo : un type particulier pour le poid et la taille
+    $specs["poid"]             = "float pos";
+    $specs["taille"]           = "float min|0";
+    $specs["groupe"]           = "enum list|?|O|A|B|AB default|?";
+    $specs["rhesus"]           = "enum list|?|NEG|POS default|?";
+    $specs["antecedents"]      = "text confidential";
+    $specs["traitements"]      = "text confidential";
+    $specs["tabac"]            = "text";
+    $specs["oenolisme"]        = "text";
+    $specs["tasys"]            = "num max|64";
+    $specs["tadias"]           = "num max|64";
+    $specs["intubation"]       = "enum list|?|dents|bouche|cou";
+    $specs["biologie"]         = "enum list|?|NF|COAG|IONO";
+    $specs["commande_sang"]    = "enum list|?|clinique|CTS|autologue";
+    $specs["ASA"]              = "enum list|1|2|3|4|5 default|1";
+
+    // Données examens complementaires
+    $specs["rai"]              = "enum list|?|NEG|POS default|?";
+    $specs["hb"]               = "float min|0";
+    $specs["tp"]               = "float minMax|0|100";
+    $specs["tca"]              = "numchar maxLength|2";
+    $specs["tca_temoin"]       = "numchar maxLength|2";
+    $specs["creatinine"]       = "float";
+    $specs["na"]               = "float min|0";
+    $specs["k"]                = "float min|0";
+    $specs["tsivy"]            = "time";
+    $specs["plaquettes"]       = "numchar maxLength|7 pos";
+    $specs["ecbu"]             = "enum list|?|NEG|POS default|?";
+    $specs["pouls"]            = "numchar maxLength|4 pos";
+    $specs["spo2"]             = "float minMax|0|100";
+    $specs["ht"]               = "float minMax|0|100";
+    $specs["ht_final"]         = "float minMax|0|100";
+    $specs["premedication"]    = "text";
+    $specs["prepa_preop"]      = "text";
+
+    // Champs pour les conditions d'intubation
+    $specs["mallampati"]       = "enum list|classe1|classe2|classe3|classe4";
+    $specs["bouche"]           = "enum list|m20|m35|p35";
+    $specs["distThyro"]        = "enum list|m65|p65";
+    $specs["etatBucco"]        = "text";
+    $specs["conclusion"]       = "text";
+    $specs["position"]         = "enum list|DD|DV|DL|GP|AS|TO|GYN";
+    
+    return $specs;
   }
   
   function getSeeks() {
@@ -182,15 +183,6 @@ class CConsultAnesth extends CMbObject {
     // Hack for ZEROFILL issue
     $this->tasys  = intval($this->tasys);
     $this->tadias = intval($this->tadias);
-    
-    // Codes CIM10
-    $this->_codes_cim10 = array();
-    $arrayCodes = array();
-    if($this->listCim10)
-      $arrayCodes = explode("|", $this->listCim10);
-    foreach($arrayCodes as $value) {
-      $this->_codes_cim10[] = new CCodeCIM10($value, 1);
-    }
   }
    
   function updateDBFields() {
@@ -232,57 +224,7 @@ class CConsultAnesth extends CMbObject {
     $this->_ref_files =& $this->_ref_consultation->_ref_files;
   }
     
-  function loadRefsAddictions() {
-    global $dPconfig;
-    if ($this->consultation_anesth_id && $dPconfig["dPcabinet"]["addictions"]) {
-      $addiction = new CAddiction();
-      
-      // Chargement des addictions
-      $where = array();
-      $where["object_id"]    = "= '$this->consultation_anesth_id'";
-      $where["object_class"] = "= 'CConsultAnesth'";
-      $order = "type ASC";
-      $this->_ref_addictions = $addiction->loadList($where, $order);
-
-      // Classement des addictions
-      $this->_ref_types_addiction = array();
-      
-      foreach($this->_ref_addictions as $keyAddict => &$currAddict){
-        $this->_ref_types_addiction[$currAddict->type][$keyAddict] = $currAddict;
-      }
-    }
-  }
-  
-  function loadRefsAntecedents() {
-    if ($this->consultation_anesth_id) {
-      $antecedent = new CAntecedent();
-      
-      // Chargement des antécédents
-      $where = array();
-      $where["object_id"]    = "= '$this->consultation_anesth_id'";
-      $where["object_class"] = "= 'CConsultAnesth'";
-      $order = "type ASC";
-      $antecedents = $antecedent->loadList($where, $order);
-
-      // Classements des antécédants
-      foreach ($antecedents as &$_antecedent) {
-        $this->_ref_antecedents[$_antecedent->type][$_antecedent->_id] = $_antecedent;
-      }
-    }
-  }
-
-  function loadRefsTraitements() {
-    if($this->consultation_anesth_id){
-      $this->_ref_traitements = new CTraitement;
-      $where = array();
-      $where["object_id"]    = "= '$this->consultation_anesth_id'";
-      $where["object_class"] = "= 'CConsultAnesth'";
-      $order = "fin DESC, debut DESC";
-      $this->_ref_traitements = $this->_ref_traitements->loadList($where, $order);
-    }
-  }
-  
-  function loadView(){
+  function loadView() {
   	$this->loadRefsFwd();
     $this->_ref_consultation->loadRefsActesCCAM();  
   }
@@ -296,20 +238,16 @@ class CConsultAnesth extends CMbObject {
    foreach ($this->_ref_consultation->_ref_actes_ccam as &$acte_ccam) {
       $acte_ccam->loadRefsFwd();
     }
-  }
-  
+  }  
   
   function loadRefsFwd() {
-    $this->loadRefsAntecedents();
-    $this->loadRefsTraitements();
-    $this->loadRefsAddictions();
     $this->loadRefConsultation();
     $this->_ref_consultation->loadRefsFwd();  	
     $this->_ref_plageconsult =& $this->_ref_consultation->_ref_plageconsult;
     $this->loadRefOperation();
     $this->_ref_operation->loadRefsFwd();
     $this->_date_consult =& $this->_ref_consultation->_date;
-    $this->_date_op =& $this->_ref_operation->_ref_plageop->date;
+    $this->_date_op =& $this->_ref_operation->_datetime;
     
     // Calcul de la Clairance créatinine
   	if($this->poid && $this->creatinine && $this->_ref_consultation->_ref_patient->_age
@@ -356,14 +294,17 @@ class CConsultAnesth extends CMbObject {
  
   }
   
-  function loadRefsBack() {
-    // Backward references  
+  function loadRefsTechniques() {
     $this->_ref_techniques = new CTechniqueComp;
     $where = array();
     $where["consultation_anesth_id"] = "= '$this->consultation_anesth_id'";
     $order = "technique";
     $this->_ref_techniques = $this->_ref_techniques->loadList($where,$order);
-    
+  }
+
+  function loadRefsBack() {
+    parent::loadRefsBack();
+    $this->loadRefsTechniques();
   }
   
   function getPerm($permType) {

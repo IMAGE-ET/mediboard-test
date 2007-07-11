@@ -7,10 +7,13 @@
 * @author Romain Ollivier
 */
 
+global $AppUI;
+require_once($AppUI->getModuleClass("dPpatients", "dossierMedical"));
+
 /**
  * The CPatient Class
  */
-class CPatient extends CMbObject {
+class CPatient extends CDossierMedical {
   static $dossier_cabinet_prefix = array (
     "dPcabinet" => "?m=dPcabinet&tab=vw_dossier&patSel=",
     "dPpatients" => "?m=dPpatients&tab=vw_full_patients&patient_id="
@@ -43,7 +46,6 @@ class CPatient extends CMbObject {
   var $SHS              = null;
   var $regime_sante     = null;
   var $rques            = null;
-  var $listCim10        = null;
   var $cmu              = null;
   var $ald              = null;
   var $rang_beneficiaire= null;
@@ -97,7 +99,6 @@ class CPatient extends CMbObject {
   var $_tel44       = null;
   var $_tel45       = null;
   var $_age         = null;
-  var $_codes_cim10 = null;
   
   // Navigation Fields
   var $_dossier_cabinet_url = null;
@@ -117,11 +118,7 @@ class CPatient extends CMbObject {
   var $_nb_docs              = null;
   var $_ref_sejours          = null;
   var $_ref_consultations    = null;
-  var $_ref_antecedents      = null;
-  var $_ref_traitements      = null;
-  var $_ref_addictions       = null;
   var $_ref_prescriptions    = null;
-  var $_ref_types_addiction  = null;
   var $_ref_curr_affectation = null;
   var $_ref_next_affectation = null;
   var $_ref_medecin_traitant = null;
@@ -143,55 +140,55 @@ class CPatient extends CMbObject {
   }
  
   function getSpecs() {
-    return array (
-      "nom"              => "notNull str confidential",
-      "prenom"           => "notNull str",
-      "nom_jeune_fille"  => "str confidential",
-      "nom_soundex2"     => "str",
-      "prenom_soundex2"  => "str",
-      "nomjf_soundex2"   => "str",
-      "medecin_traitant" => "ref class|CMedecin",
-      "medecin1"         => "ref class|CMedecin",
-      "medecin2"         => "ref class|CMedecin",
-      "medecin3"         => "ref class|CMedecin",
-      "matricule"        => "code insee confidential",
-      "regime_sante"     => "str",
-      "SHS"              => "numchar length|8",
-      "sexe"             => "enum list|m|f|j default|m",
-      "adresse"          => "text confidential",
-      "ville"            => "str confidential",
-      "cp"               => "numchar length|5 confidential",
-      "tel"              => "numchar length|10 confidential",
-      "tel2"             => "numchar length|10 confidential",
-      "incapable_majeur" => "bool",
-      "ATNC"             => "bool",
-      "naissance"        => "date confidential",
-      "rques"            => "text",
-      "listCim10"        => "text",
-      "cmu"              => "date",
-      "ald"              => "text",
-      "rang_beneficiaire"=> "enum list|1|2|11|12|13",
-      
-      "pays"             => "str",
-      "nationalite"      => "notNull enum list|local|etranger default|local",
-      "lieu_naissance"   => "str",
-      "profession"       => "str",
-      
-      "employeur_nom"     => "str confidential",
-      "employeur_adresse" => "text",
-      "employeur_cp"      => "numchar length|5",
-      "employeur_ville"   => "str confidential",
-      "employeur_tel"     => "numchar length|10 confidential",
-      "employeur_urssaf"  => "numchar length|11 confidential",
+    $specs = parent::getSpecs();
 
-      "prevenir_nom"      => "str confidential",
-      "prevenir_prenom"   => "str",
-      "prevenir_adresse"  => "text",
-      "prevenir_cp"       => "numchar length|5",
-      "prevenir_ville"    => "str confidential",
-      "prevenir_tel"      => "numchar length|10 confidential",
-      "prevenir_parente"  => "enum list|conjoint|enfant|ascendant|colateral|divers"
-    );
+    $specs["nom"]               = "notNull str confidential";
+    $specs["prenom"]            = "notNull str";
+    $specs["nom_jeune_fille"]   = "str confidential";
+    $specs["nom_soundex2"]      = "str";
+    $specs["prenom_soundex2"]   = "str";
+    $specs["nomjf_soundex2"]    = "str";
+    $specs["medecin_traitant"]  = "ref class|CMedecin";
+    $specs["medecin1"]          = "ref class|CMedecin";
+    $specs["medecin2"]          = "ref class|CMedecin";
+    $specs["medecin3"]          = "ref class|CMedecin";
+    $specs["matricule"]         = "code insee confidential";
+    $specs["regime_sante"]      = "str";
+    $specs["SHS"]               = "numchar length|8";
+    $specs["sexe"]              = "enum list|m|f|j default|m";
+    $specs["adresse"]           = "text confidential";
+    $specs["ville"]             = "str confidential";
+    $specs["cp"]                = "numchar length|5 confidential";
+    $specs["tel"]               = "numchar length|10 confidential";
+    $specs["tel2"]              = "numchar length|10 confidential";
+    $specs["incapable_majeur"]  = "bool";
+    $specs["ATNC"]              = "bool";
+    $specs["naissance"]         = "date confidential";
+    $specs["rques"]             = "text";
+    $specs["cmu"]               = "date";
+    $specs["ald"]               = "text";
+    $specs["rang_beneficiaire"] = "enum list|1|2|11|12|13";
+      
+    $specs["pays"]              = "str";
+    $specs["nationalite"]       = "notNull enum list|local|etranger default|local";
+    $specs["lieu_naissance"]    = "str";
+    $specs["profession"]        = "str";
+      
+    $specs["employeur_nom"]      = "str confidential";
+    $specs["employeur_adresse"]  = "text";
+    $specs["employeur_cp"]       = "numchar length|5";
+    $specs["employeur_ville"]    = "str confidential";
+    $specs["employeur_tel"]      = "numchar length|10 confidential";
+    $specs["employeur_urssaf"]   = "numchar length|11 confidential";
+
+    $specs["prevenir_nom"]       = "str confidential";
+    $specs["prevenir_prenom"]    = "str";
+    $specs["prevenir_adresse"]   = "text";
+    $specs["prevenir_cp"]        = "numchar length|5";
+    $specs["prevenir_ville"]     = "str confidential";
+    $specs["prevenir_tel"]       = "numchar length|10 confidential";
+    $specs["prevenir_parente"]   = "enum list|conjoint|enfant|ascendant|colateral|divers";
+    return $specs;
   }
   
   function getSeeks() {
@@ -270,15 +267,6 @@ class CPatient extends CMbObject {
     else
       $this->_shortview = "Mlle.";
     $this->_view = $this->_shortview." $this->nom $this->prenom";
-    
-    // Codes CIM10
-    $this->_codes_cim10 = array();
-    $arrayCodes = array();
-    if($this->listCim10)
-      $arrayCodes = explode("|", $this->listCim10);
-    foreach($arrayCodes as $value) {
-      $this->_codes_cim10[] = new CCodeCIM10($value, 1);
-    }
     
     // Navigation fields
     global $AppUI;
@@ -417,56 +405,6 @@ class CPatient extends CMbObject {
       $this->_ref_consultations = $this->_ref_consultations->loadList($where, $order, null, null, $leftjoin);
     }
   }
-
-  function loadRefsAddictions() {
-    global $dPconfig;
-    if ($this->patient_id && $dPconfig["dPcabinet"]["addictions"]) {
-      $addiction = new CAddiction();
-      
-      // Chargement des addictions
-      $where = array();
-      $where["object_id"]    = "= '$this->patient_id'";
-      $where["object_class"] = "= 'CPatient'";
-      $order = "type ASC";
-      $this->_ref_addictions = $addiction->loadList($where, $order);
-
-      // Classement des addictions
-      $this->_ref_types_addiction = array();
-      
-      foreach($this->_ref_addictions as $keyAddict => &$currAddict){
-        $this->_ref_types_addiction[$currAddict->type][$keyAddict] = $currAddict;
-      }
-    }
-  }
-  
-  function loadRefsAntecedents() {
-    if ($this->patient_id) {
-      $antecedent = new CAntecedent();
-      
-      // Chargement des antécédents
-      $where = array();
-      $where["object_id"]    = "= '$this->patient_id'";
-      $where["object_class"] = "= 'CPatient'";
-      $order = "type ASC";
-      $antecedents = $antecedent->loadList($where, $order);
-
-      // Classements des antécédants
-      foreach ($antecedents as &$_antecedent) {
-        $this->_ref_antecedents[$_antecedent->type][$_antecedent->_id] = $_antecedent;
-      }
-    }
-  }
-
-  function loadRefsTraitements() {
-    if($this->patient_id){
-      $this->_ref_traitements = new CTraitement;
-      $where = array();
-      $where["object_id"]    = "= '$this->patient_id'";
-      $where["object_class"] = "= 'CPatient'";
-      $order = "fin DESC, debut DESC";
-      $this->_ref_traitements = $this->_ref_traitements->loadList($where, $order);
-    }
-  }
   
   function loadRefsAffectations() {
     $this->loadRefsSejours();
@@ -502,13 +440,11 @@ class CPatient extends CMbObject {
   }
 
   function loadRefsBack() {
+    parent::loadRefsBack();
     $this->loadRefsFiles();
     $this->loadRefsDocs();
     $this->loadRefsConsultations();
-    $this->loadRefsAntecedents();
-    $this->loadRefsTraitements();
     $this->loadRefsAffectations();
-    $this->loadRefsAddictions();
     $this->loadRefsPrescriptions();
   }
 
@@ -698,10 +634,8 @@ class CPatient extends CMbObject {
   }
   
   function fillTemplate(&$template) {
-  	global $AppUI;
     $this->loadRefsFwd();
-    $this->loadRefsAntecedents();
-    $this->loadRefsTraitements();
+
     $template->addProperty("Patient - article"           , $this->_shortview );
     $template->addProperty("Patient - nom"               , $this->nom        );
     $template->addProperty("Patient - prénom"            , $this->prenom     );
@@ -741,64 +675,8 @@ class CPatient extends CMbObject {
       $template->addProperty("Patient - médecin correspondant 3 - adresse");
     }
     
-    if(is_array($this->_ref_antecedents)){
-      // Réécritude des antécédents
-      $sAntecedents = null;
-      foreach($this->_ref_antecedents as $keyAnt=>$currTypeAnt){
-        if($currTypeAnt){
-          if($sAntecedents){$sAntecedents.="<br />";}
-          $sAntecedents .= $AppUI->_("CAntecedent.type.".$keyAnt)."\n";
-          foreach($currTypeAnt as $currAnt){
-            $sAntecedents .= " &bull; ";
-            if($currAnt->date){
-              $sAntecedents .= substr($currAnt->date, 8, 2) ."/";
-              $sAntecedents .= substr($currAnt->date, 5, 2) ."/";
-              $sAntecedents .= substr($currAnt->date, 0, 4) ." : ";
-            }
-            $sAntecedents .= $currAnt->rques;
-          }
-        }
-      }
-      $template->addProperty("Patient - antécédents", $sAntecedents);
-    }else{
-      $template->addProperty("Patient - antécédents");
-    }
-    
-    if($this->_ref_traitements){
-      $sTrmt = null;
-      foreach($this->_ref_traitements as $curr_trmt){
-        if($sTrmt){$sTrmt.=" &bull; ";}
-        if ($curr_trmt->fin){
-          $sTrmt .= "Du ";
-          $sTrmt .= substr($curr_trmt->debut, 8, 2) ."/";
-          $sTrmt .= substr($curr_trmt->debut, 5, 2) ."/";
-          $sTrmt .= substr($curr_trmt->debut, 0, 4) ." au ";
-          $sTrmt .= substr($curr_trmt->fin, 8, 2) ."/";
-          $sTrmt .= substr($curr_trmt->fin, 5, 2) ."/";
-          $sTrmt .= substr($curr_trmt->fin, 0, 4) ." : ";
-        }elseif($curr_trmt->debut){
-          $sTrmt .= "Depuis le ";
-          $sTrmt .= substr($curr_trmt->debut, 8, 2) ."/";
-          $sTrmt .= substr($curr_trmt->debut, 5, 2) ."/";
-          $sTrmt .= substr($curr_trmt->debut, 0, 4) ." : ";
-        }
-        $sTrmt .= $curr_trmt->traitement;
-      }
-      $template->addProperty("Patient - traitements", $sTrmt);
-    }else{
-      $template->addProperty("Patient - traitements");
-    }
-    
-    if($this->_codes_cim10){
-      $sCim10 = null;
-      foreach($this->_codes_cim10 as $curr_code){
-        if($sCim10){$sCim10.=" &bull; ";}
-        $sCim10 .= $curr_code->code . " : " . $curr_code->libelle;
-      }
-      $template->addProperty("Patient - diagnostics", $sCim10);
-    }else{
-      $template->addProperty("Patient - diagnostics");
-    }
+    // Dossier médical
+    parent::fillTemplate($template);
   }
 }
 

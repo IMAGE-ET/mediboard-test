@@ -24,7 +24,9 @@ foreach ($object_ids as $object_id) {
 
 // Empty object
 $object = new $object_class;
-$object->makeBackSpecs();
+$backSpecs = $object->_backSpecs;
+unset($backSpecs["logs"]);
+$object->_backSpecs = array_reverse($backSpecs);
 
 // Création du template
 $smarty = new CSmartyDP();

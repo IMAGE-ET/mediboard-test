@@ -9,7 +9,7 @@
   <tr>
     <td>
       <strong>Intervention le :</Strong>
-      <i>{{$object->_ref_operation->_ref_plageop->date|date_format:"%a %d %b %Y"}}</i><br />
+      <i>{{$object->_date_op|date_format:"%a %d %b %Y"}}</i><br />
       <strong>Par :</strong>
       <i>Dr {{$object->_ref_operation->_ref_chir->_view}}</i><br />
       Coté {{tr}}COperation.cote.{{$object->_ref_operation->cote}}{{/tr}} &mdash; 

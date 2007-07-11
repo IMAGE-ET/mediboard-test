@@ -89,7 +89,7 @@ class CMbObject {
     static $objectsTable  = array();
     static $props         = null;
     static $backRefs      = null;
-    static $backSpecs     = null;
+    static $backSpecs     = array();
     static $specsObj      = null;
     static $seeks         = null;
     static $enums         = null;
@@ -698,41 +698,48 @@ class CMbObject {
   }
 
   /**
-   * Load all back refs
+   * Load named back references
    * @return null
    */
-  function loadAllBackRefs() {
+  function loadBackRefs($backName = null, $order = null, $limit = null) {
     // Empty object
     if (!$this->_id) {
       return;
     }
     
-    $this->makeBackSpecs();
+    $this->makeBackSpec($backName);
     
-    // Counting backrefs
-    $backReferences = array();
-    foreach ($this->_backSpecs as $backSpec) {
-      $backObject = new $backSpec->class;
-      $backField = $backSpec->field;
-      $fwdSpec =& $backObject->_specs[$backField];
-      $backMeta = $fwdSpec->meta;      
+    // Spécifications
+    $backSpec = $this->_backSpecs[$backName];
+    $backObject = new $backSpec->class;
+    $backField = $backSpec->field;
+    $fwdSpec =& $backObject->_specs[$backField];
+    $backMeta = $fwdSpec->meta;      
 
-      // Cas du module non installé
-      if (!$backObject->_ref_module) {
-        continue;
-      }
-      
-      // Vérification de la possibilité de supprimer chaque backref
-      $backObject->$backField = $this->_id;
-
-      // Cas des meta objects
-      if ($backMeta) {
-        $backObject->$backMeta = $this->_class_name;
-      }
-      
-      $this->_back[$backSpec->name] = $backObject->loadMatchingList();
+    // Cas du module non installé
+    if (!$backObject->_ref_module) {
+      continue;
     }
     
+    // Vérification de la possibilité de supprimer chaque backref
+    $backObject->$backField = $this->_id;
+
+    // Cas des meta objects
+    if ($backMeta) {
+      $backObject->$backMeta = $this->_class_name;
+    }
+    
+    return $this->_back[$backSpec->name] = $backObject->loadMatchingList($order, $limit);
+  }
+  
+  /**
+   * Load all back references
+   * @return null
+   */
+  function loadAllBackRefs() {
+    foreach ($this->_backRefs as $backName => $backRef) {
+      $this->loadBackRefs($backName);
+    }
   }
 
   /**
@@ -969,9 +976,6 @@ class CMbObject {
       "documents"    => "CCompteRendu object_id",
       "permissions"  => "CPermObject object_id",
       "logs"         => "CUserLog object_id",
-      "antecedants"  => "CAntecedent object_id",
-      "addictions"   => "CAddiction object_id",
-      "traitements"  => "CTraitement object_id",
     );
   }
   
@@ -986,17 +990,12 @@ class CMbObject {
   /**
    * Converts string back specifications to objet specifications
    */
-  function makeBackSpecs() {
-    if ($this->_backSpecs) {
+  function makeBackSpec($backName) {
+    if (array_key_exists($backName, $this->_backSpecs)) {
       return;
     }
     
-    $this->_backSpecs = array();
-    foreach ($this->_backRefs as $backName => $backString) {
-      $this->_backSpecs[$backName] = new CMbBackSpec($backName, $backString);
-    }
-
-    $this->_backSpecs = array_reverse($this->_backSpecs);    
+    $this->_backSpecs[$backName] = new CMbBackSpec($backName, $this->_backRefs[$backName]);
   }
 
   /**
