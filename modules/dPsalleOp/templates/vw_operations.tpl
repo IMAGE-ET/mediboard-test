@@ -32,12 +32,33 @@ function pageMain() {
             &mdash; Dr. {{$selOp->_ref_chir->_view}}
           </th>
         </tr>
+        
+        
         {{include file="inc_timings_anesth.tpl"}}
-       
-        <tbody id = "ccam">
-        {{assign var="subject" value=$selOp}}
-        {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
-        </tbody>
+      
+      
+      
+      
+        <!-- <tbody id = "ccam"> -->
+        <tr>
+          <th>Actes<br /><br />
+          {{tr}}{{$selOp->_class_name}}{{/tr}}
+          {{if ($module=="dPplanningOp") || ($module=="dPsalleOp")}}
+          <br />
+          Côté {{tr}}COperation.cote.{{$selOp->cote}}{{/tr}}
+          <br />
+          ({{$selOp->temp_operation|date_format:"%Hh%M"}})
+          {{/if}}
+          </th>
+          
+          <td>
+            <div id="ccam">
+            {{assign var="subject" value=$selOp}}
+            {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
+            </div>
+          </td>
+        </tr>
+        <!-- </tbody> -->
         
         {{if $selOp->materiel}}
         <tr>

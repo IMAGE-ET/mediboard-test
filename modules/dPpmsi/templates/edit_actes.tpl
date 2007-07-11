@@ -26,11 +26,21 @@ function pageMain() {
   <td>{{$selOp->_ref_sejour->_ref_patient->_view}} &mdash; {{$selOp->_ref_sejour->_ref_patient->_age}} ans</td>
   </tr>
   <tr>
-  <tbody id="ccam">
-    {{assign var="module" value="dPpmsi"}}
-    {{assign var="subject" value=$selOp}}
-    {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
-  </tbody>
- 
+    <th>Actes<br /><br />
+      {{tr}}{{$selOp->_class_name}}{{/tr}}
+      {{if ($module=="dPplanningOp") || ($module=="dPsalleOp")}}
+      <br />
+      Côté {{tr}}COperation.cote.{{$selOp->cote}}{{/tr}}
+      <br />
+      ({{$selOp->temp_operation|date_format:"%Hh%M"}})
+      {{/if}}
+    </th>
+    <td>
+      <div id="ccam">
+        {{assign var="module" value="dPpmsi"}}
+        {{assign var="subject" value=$selOp}}
+        {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
+      </div>
+    </td> 
   </tr>
 </table>

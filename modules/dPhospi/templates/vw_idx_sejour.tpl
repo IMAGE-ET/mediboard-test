@@ -124,7 +124,14 @@ function pageMain() {
      </div>
      <div id="ActesContent"  class="accordionTabContentBox">
        <table class="tbl">
-       <tbody id="ccam"></tbody>
+         <tr>
+           <th>Actes<br /><br />
+             Séjour
+           </th>
+           <td>
+             <div id="ccam"></div>
+           </td>
+         </tr>
        </table>
      </div>
     </div>

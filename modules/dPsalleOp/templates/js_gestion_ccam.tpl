@@ -60,7 +60,7 @@ function loadActes(subject_id, chir_id) {
   url_actes.addParam("object_class", "{{$object->_class_name}}");
   url_actes.addParam("object_id", subject_id);
   url_actes.setModuleAction("dPsalleOp", "httpreq_ccam");
-  url_actes.requestUpdate('ccam', { waitingText: null } );
+  url_actes.requestUpdate('ccam');
 }
 
 function delCode(subject_id) {

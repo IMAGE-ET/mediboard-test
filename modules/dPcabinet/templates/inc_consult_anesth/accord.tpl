@@ -30,12 +30,25 @@
       Actes CCAM
     </div>
     <div id="ActesContent"  class="accordionTabContentBox">
-    <table class="tbl">
-      <tbody id="ccam">
-      {{assign var="module" value="dPcabinet"}}
-      {{assign var="subject" value=$consult}}
-      {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
-      </tbody>
+      <table class="tbl"> 
+        <tr>
+          <th>Actes<br /><br />
+            {{tr}}{{$consult->_class_name}}{{/tr}}
+            {{if ($module=="dPplanningOp") || ($module=="dPsalleOp")}}
+            <br />
+            Côté {{tr}}COperation.cote.{{$consult->cote}}{{/tr}}
+            <br />
+            ({{$consult->temp_operation|date_format:"%Hh%M"}})
+            {{/if}}
+          </th>
+          <td>    
+            <div id="ccam">
+              {{assign var="module" value="dPcabinet"}}
+              {{assign var="subject" value=$consult}}
+              {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
+            </div>
+          </td>
+        </tr>
     </table>
     </div>
   </div>
