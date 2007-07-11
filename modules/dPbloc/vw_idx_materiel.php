@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
  
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
@@ -22,11 +22,19 @@ $typeAff = mbGetValueFromGetOrSession("typeAff");
 // Récupération des opérations
 $ljoin = array();
 $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
+
 $where = array();
+
+$salle = new CSalle;
+$whereSalle = array();
+$whereSalle["group_id"] = "= '$g'";
+$where["plagesop.salle_id"] = db_prepare_in(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
+
 $where["materiel"] = "!= ''";
 $where["operations.plageop_id"] = "IS NOT NULL";
 $where["commande_mat"] = $typeAff ? "= '1'" : "!= '1'";
 $where["annulee"]      = $typeAff ? "= '1'" : "!= '1'";
+
 $order = array();
 $order[] = "plagesop.date";
 $order[] = "rank";
