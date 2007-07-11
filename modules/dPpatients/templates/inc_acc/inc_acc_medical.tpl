@@ -20,6 +20,7 @@
       {{mb_field object=$patient field="cmu" hidden=1 prop="date"}}
       <img tabindex="202" id="editFrm_cmu_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
       <button class="cancel notext" type="button" onclick="delCmu()">{{tr}}Delete{{/tr}}</button>
+      <button class="tick notext" type="button" onclick="setCmu()"></button>
     </td>
     <th>
       {{mb_label object=$patient field="medecin1"}}

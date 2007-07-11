@@ -47,6 +47,13 @@ function delCmu(){
   
 }
 
+function setCmu(){
+  oForm = document.editFrm;
+  oForm.cmu.value = "{{$dateCMU}}";
+  oDateDiv = $("editFrm_cmu_da");
+  oDateDiv.innerHTML = "{{$dateCMU}}";
+}
+
 function delMed(sElementName) {
   oForm = document.editFrm;
   
