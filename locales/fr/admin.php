@@ -1,4 +1,5 @@
 <?php
+$locales['CMbObject-merge-moreinfo'] = 'Plus d\'information sur les objets liés';
 $locales['CMbObject-back-logs'] = 'Logs utilisateurs';
 $locales['CMbObject-back-permissions'] = 'Permissions';
 $locales['copied from template'] = 'copiés depuis un modèle';

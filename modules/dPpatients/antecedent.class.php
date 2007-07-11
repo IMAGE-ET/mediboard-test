@@ -36,17 +36,6 @@ class CAntecedent extends CMbMetaObject {
       "rques" => "type"
     );
   }
-
-  function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
-    $results = parent::loadList($where, $order, $limit, $group, $leftjoin);
-    
-    // Classement des antécédants par type
-    $listAnt = array();
-    foreach($results as $keyAnt => &$currAnt){
-      $listAnt[$currAnt->type][$keyAnt] = $currAnt;
-    }
-    return $listAnt;
-  }
 }
 
 ?>

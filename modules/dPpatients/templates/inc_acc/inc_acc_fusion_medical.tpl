@@ -55,11 +55,11 @@
   <tr>
     <th>{{mb_label object=$finalPatient field="incapable_majeur"}}</th>
     <td>
-      <input type="radio" name="_choix_incapable majeur" value="{{$patient1->incapable_majeur}}" checked="checked" onclick="setChecked(this.form.incapable_majeur, '{{$patient1->incapable_majeur|smarty:nodefaults|JSAttribute}}')" />
+      <input type="radio" name="_choix_incapable majeur" value="{{$patient1->incapable_majeur}}" checked="checked" onclick="setCheckedValue(this.form.incapable_majeur, '{{$patient1->incapable_majeur|smarty:nodefaults|JSAttribute}}')" />
       {{tr}}CPatient.incapable_majeur.{{$patient1->incapable_majeur}}{{/tr}}
     </td>
     <td>
-      <input type="radio" name="_choix_incapable majeur" value="{{$patient2->incapable_majeur}}" onclick="setChecked(this.form.incapable_majeur, '{{$patient2->incapable_majeur|smarty:nodefaults|JSAttribute}}')" />
+      <input type="radio" name="_choix_incapable majeur" value="{{$patient2->incapable_majeur}}" onclick="setCheckedValue(this.form.incapable_majeur, '{{$patient2->incapable_majeur|smarty:nodefaults|JSAttribute}}')" />
       {{tr}}CPatient.incapable_majeur.{{$patient2->incapable_majeur}}{{/tr}}
     </td>
     <td>
@@ -69,11 +69,11 @@
   <tr>
     <th>{{mb_label object=$finalPatient field="ATNC"}}</th>
     <td>
-      <input type="radio" name="_choix_ATNC" value="{{$patient1->ATNC}}" checked="checked" onclick="setChecked(this.form.ATNC, '{{$patient1->ATNC|smarty:nodefaults|JSAttribute}}')" />
+      <input type="radio" name="_choix_ATNC" value="{{$patient1->ATNC}}" checked="checked" onclick="setCheckedValue(this.form.ATNC, '{{$patient1->ATNC|smarty:nodefaults|JSAttribute}}')" />
       {{tr}}CPatient.ATNC.{{$patient1->ATNC}}{{/tr}}
     </td>
     <td>
-      <input type="radio" name="_choix_ATNC" value="{{$patient2->ATNC}}" onclick="setChecked(this.form.ATNC, '{{$patient2->ATNC|smarty:nodefaults|JSAttribute}}')" />
+      <input type="radio" name="_choix_ATNC" value="{{$patient2->ATNC}}" onclick="setCheckedValue(this.form.ATNC, '{{$patient2->ATNC|smarty:nodefaults|JSAttribute}}')" />
       {{tr}}CPatient.ATNC.{{$patient2->ATNC}}{{/tr}}
     </td>
     <td>

@@ -448,7 +448,12 @@ class CPatient extends CMbObject {
       $where["object_id"]    = "= '$this->patient_id'";
       $where["object_class"] = "= 'CPatient'";
       $order = "type ASC";
-      $this->_ref_antecedents = $antecedent->loadList($where, $order);
+      $antecedents = $antecedent->loadList($where, $order);
+
+      // Classements des antécédants
+      foreach ($antecedents as &$_antecedent) {
+        $this->_ref_antecedents[$_antecedent->type][$_antecedent->_id] = $_antecedent;
+      }
     }
   }
 

@@ -254,10 +254,8 @@ class CSejour extends CCodableCCAM {
   }
   
   // Calcul des droits CMU pour la duree totale du sejour
-  function getDroitsCMU(){
-  	if($this->_date_sortie_prevue<=$this->_ref_patient->cmu){
-  		$this->_couvert_cmu = true;
-  	}
+  function getDroitsCMU () {
+     $this->_couvert_cmu = $this->_date_sortie_prevue <= $this->_ref_patient->cmu;
   }
   
   function loadRefPatient() {

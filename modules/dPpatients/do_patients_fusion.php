@@ -77,7 +77,6 @@ if (intval(dPgetParam($_POST, "del"))) {
   $do->doStore();
 }
 
-
 $patient_id = $do->_obj->patient_id;
 
 // Régularisation des liens étrangers

@@ -15,7 +15,7 @@ $can->needsEdit();
 
 $module = mbGetValueFromGetOrSession("module" , "admin");
 
-$tabClass = mbGetClassByModule($module);
+$classes = mbGetClassByModule($module);
 
 // liste des dossiers modules + common et styles
 $modules = array_merge( array("common"=>"common", "styles"=>"styles") ,$AppUI->readDirs("modules"));
@@ -39,6 +39,7 @@ foreach($localesDirs as $locale){
 }
 
 // Réattribution des clés et organisation
+global $trans;
 $trans = array();
 foreach($localesDirs as $locale){
 	foreach($contenu_file[$locale] as $k=>$v){
@@ -46,35 +47,48 @@ foreach($localesDirs as $locale){
 	}
 }
 
+function checkTrans(&$array, $key) {
+  global $trans;
+  $array[$key] = array_key_exists($key,$trans) ? $trans[$key]["fr"] : "";
+}
+
+
 $backSpecs = array();
 $backRefs = array();
-foreach($tabClass as $selected) {
-  $object = new $selected;
+foreach($classes as $class) {
+  $object = new $class;
   $ref_modules = $object->_specs;
   $classname = $object->_class_name;
-  foreach ($object->_props as $keyObjetRefSpec => $valueObjetRefSpec) { 
-  	$backSpecs[$object->_class_name][$classname][$classname] = !array_key_exists($classname,$trans) ? '' : $trans[$classname]["fr"];
-  	$backSpecs[$object->_class_name][$classname][$classname.".one"] = !array_key_exists($classname.".one",$trans) ? '' : $trans[$classname.".one"]["fr"];
-  	$backSpecs[$object->_class_name][$classname][$classname.".more"] = !array_key_exists($classname.".more",$trans) ? '' : $trans[$classname.".more"]["fr"];
-  	$backSpecs[$object->_class_name][$classname][$classname.".none"] = !array_key_exists($classname.".none",$trans) ? '' : $trans[$classname.".none"]["fr"];
-  	$backSpecs[$object->_class_name][$classname][$classname.".create"] = !array_key_exists($classname.".create",$trans) ? '' : $trans[$classname.".create"]["fr"];
-  	$backSpecs[$object->_class_name][$classname][$classname.".modify"] = !array_key_exists($classname.".modify",$trans) ? '' : $trans[$classname.".modify"]["fr"];
-  	$backSpecs[$object->_class_name][$keyObjetRefSpec][$classname."-".$keyObjetRefSpec] = !array_key_exists($classname."-".$keyObjetRefSpec,$trans) ? '' : $trans[$classname."-".$keyObjetRefSpec]["fr"];  	
-  	$backSpecs[$object->_class_name][$keyObjetRefSpec][$classname."-".$keyObjetRefSpec."-desc"] = !array_key_exists($classname."-".$keyObjetRefSpec."-desc",$trans) ? '' : $trans[$classname."-".$keyObjetRefSpec."-desc"]["fr"];
-  	$backSpecs[$object->_class_name][$keyObjetRefSpec][$classname."-".$keyObjetRefSpec."-court"] = !array_key_exists($classname."-".$keyObjetRefSpec."-court",$trans) ? '' : $trans[$classname."-".$keyObjetRefSpec."-court"]["fr"];
-  }
-  foreach ($object->_enums as $keyObjetEnum => $valueObjetEnum) { 
-  	//if(is_a($keyObjetEnum,"CBoolSpec")) { //prise en compte des valeurs booleennes
-  		foreach ($valueObjetEnum as $key => $_item) { 
-  			$backSpecs[$object->_class_name][$keyObjetEnum][$classname.".".$keyObjetEnum.".".$_item] = !array_key_exists($classname.".".$keyObjetEnum.".".$_item,$trans) ? '' : $trans[$classname.".".$keyObjetEnum.".".$_item]["fr"];
-  		}
-  	//}
-  }
-   foreach ($object->_specs as $objetRefSpec) {
-    if (is_a($objetRefSpec, 'CRefSpec')) {
-        $spec = array();
-        $fieldName = $objetRefSpec->fieldName;
-      	$backSpecs[$object->_class_name][$classname][$classname."-back-".$fieldName] = !array_key_exists($classname."-back-".$fieldName,$trans) ? '' : $trans[$classname."-back-".$fieldName]["fr"];
+  
+  checkTrans($backSpecs[$classname][$classname], "$classname");
+  checkTrans($backSpecs[$classname][$classname], "$classname.one");
+  checkTrans($backSpecs[$classname][$classname], "$classname.more");
+  checkTrans($backSpecs[$classname][$classname], "$classname.none");
+  checkTrans($backSpecs[$classname][$classname], "$classname.modify");
+  
+  foreach ($object->_specs as $prop => $spec) { 
+    if (!$spec->prop) {
+      continue;
+    }
+    checkTrans($backSpecs[$classname][$prop], "$classname-$prop");
+    checkTrans($backSpecs[$classname][$prop], "$classname-$prop-desc");
+    checkTrans($backSpecs[$classname][$prop], "$classname-$prop-court");
+    
+    if (is_a($spec, "CRefSpec")) {
+      // CAccessLog serves as dummy class when we need to instanciate anyhow
+      $fwdClass = $spec->class != "CMbObject" ? $spec->class : "CAccessLog"; 
+      $fwdObject = new $fwdClass;
+      
+      // Find corresponding back ref
+      $fwdObject->makeBackSpecs();
+      $backSpec = null;
+      foreach ($fwdObject->_backSpecs as $_backSpec) {
+        if ($_backSpec->class == $spec->className && $_backSpec->field == $spec->fieldName) {
+          $backSpec = $_backSpec;
+        }
+      }
+      
+      checkTrans($backSpecs[$classname][$prop], "$spec->class-back-$backSpec->name");
     }
   }
 }

@@ -216,7 +216,7 @@ $locales['CPrescriptionLabo'] = '';
 $locales['CPrescriptionLabo-back-patient_id'] = '';
 $locales['CPrescriptionLabo-back-praticien_id'] = '';
 $locales['CPrescriptionLabo-date-court'] = '';
-$locales['CPrescriptionLabo-patient_id-court'] = '';
+$locales['CPrescriptionLabo-patient_id-court'] = 'Pat';
 $locales['CPrescriptionLabo-praticien_id-court'] = '';
 $locales['CPrescriptionLabo-validee'] = '';
 $locales['CPrescriptionLabo-validee-court'] = '';
@@ -249,4 +249,8 @@ $locales['CPrescriptionLaboExamen.modify'] = '';
 $locales['CPrescriptionLaboExamen.more'] = '';
 $locales['CPrescriptionLaboExamen.none'] = '';
 $locales['CPrescriptionLaboExamen.one'] = '';
+$locales['CFunctions-back-pack_examens'] = '';
+$locales['CMediusers-back-examens'] = '';
+$locales['CMediusers-back-prescriptions_labo'] = 'Prescriptions';
+$locales['CPatient-back-prescriptions_labo'] = 'Prescriptions';
 ?>

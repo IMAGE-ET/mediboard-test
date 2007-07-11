@@ -48,7 +48,6 @@ foreach ($today as $keySejour => $valueSejour) {
   $sejour->loadRefPraticien();
   $sejour->loadRefsOperations();
   $sejour->loadRefsAffectations();
-  $sejour->getDroitsCMU();
 
   foreach($sejour->_ref_operations as $key_op => $curr_op) {
     $sejour->_ref_operations[$key_op]->loadRefsConsultAnesth();

@@ -1,14 +1,9 @@
+{{mb_include_script module=system script="mb_object"}}
+
 <script type="text/javascript">
 
 function setField(oField, sValue) {
   oField.value = sValue;
-}
-
-function setChecked(oField, sValue) {
-  for (i=0; i < oField.length; i++){
-    if (oField[i].value == sValue)
-      oField[i].checked = true;
-  }
 }
 
 </script>
@@ -184,7 +179,15 @@ function setChecked(oField, sValue) {
     </td>
   </tr>
   <tr>
-    <td class="button" colspan="4"><button type="submit" class="submit">Fusionner</button></td>
+    <td class="button" colspan="4">
+      <button type="button" class="search" onclick="MbObject.viewBackRefs('{{$medecin1->_class_name}}', ['{{$medecin1->_id}}', '{{$medecin2->_id}}']);">
+        {{tr}}CMbObject-merge-moreinfo{{/tr}}
+      </button>
+
+      <button type="submit" class="submit">
+        {{tr}}Merge{{/tr}}
+      </button>
+    </td>
   </tr>
 </table>
 

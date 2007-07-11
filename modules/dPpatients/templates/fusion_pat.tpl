@@ -1,26 +1,22 @@
+{{mb_include_script module=system script="mb_object"}}
+
 <script type="text/javascript">
 
 function setField(oField, sValue) {
   oField.value = sValue;
 }
 
-function setChecked(oField, sValue) {
-  for (i=0; i < oField.length; i++){
-    if (oField[i].value == sValue)
-      oField[i].checked = true;
-  }
-}
 </script>
 
 <h2 class="module {{$m}}">Fusion de patients</h2>
 
-
-
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+
 <input type="hidden" name="dosql" value="do_patients_fusion" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="patient1_id" value="{{$patient1->patient_id}}" />
-<input type="hidden" name="patient2_id" value="{{$patient2->patient_id}}" />
+<input type="hidden" name="patient1_id" value="{{$patient1->_id}}" />
+<input type="hidden" name="patient2_id" value="{{$patient2->_id}}" />
+
 <table class="main">
   <tr>
     <td>
@@ -52,17 +48,25 @@ function setChecked(oField, sValue) {
       </div>
     </td>
   </tr>
+  
   <tr>
     <td class="button" colspan="5" style="text-align:center;">
-      <button type="submit" class="submit">Fusionner</button>
+      <button type="button" class="search" onclick="MbObject.viewBackRefs('{{$patient1->_class_name}}', ['{{$patient1->_id}}', '{{$patient2->_id}}']);">
+        {{tr}}CMbObject-merge-moreinfo{{/tr}}
+      </button>
+
+      <button type="submit" class="submit">
+        {{tr}}Merge{{/tr}}
+      </button>
     </td>
   </tr>
 </table>
 </form>
+
 <script language="Javascript" type="text/javascript">
 var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-  panelHeight: 350, 
-  showDelay:50, 
-  showSteps:3 
+  panelHeight: 500, 
+  showDelay: 50, 
+  showSteps: 3 
 } );
 </script>

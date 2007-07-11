@@ -48,8 +48,10 @@ class CMbObject {
 
   var $_helped_fields = array(); // Champs concerné par les aides a la saisie
   var $_aides         = array(); // aides à la saisie
-  var $_props         = array(); // properties specifications
-  var $_specs         = array();
+  var $_props         = array(); // properties specifications as string
+  var $_specs         = array(); // properties specifications as objects
+  var $_backRefs      = array(); // Back reference specification as string
+  var $_backSpecs     = array(); // Back reference specification as objects
   var $_enums         = array(); // enums fields elements
   var $_enumsTrans    = array(); // enums fields translated elements
   var $_seek          = array(); // seekable fields
@@ -60,6 +62,7 @@ class CMbObject {
    * References
    */
   
+  var $_back          = null; // All back references
   var $_ref_module    = null; // Parent module
   var $_ref_logs      = null; // history of the object
   var $_ref_first_log = null;
@@ -86,6 +89,7 @@ class CMbObject {
     static $objectsTable  = array();
     static $props         = null;
     static $backRefs      = null;
+    static $backSpecs     = null;
     static $specsObj      = null;
     static $seeks         = null;
     static $enums         = null;
@@ -119,6 +123,7 @@ class CMbObject {
     $this->_objectsTable  =& $objectsTable;
     $this->_props         =& $props;
     $this->_backRefs      =& $backRefs;
+    $this->_backSpecs     =& $backSpecs;
     $this->_specs         =& $specsObj;
     $this->_seek          =& $seeks;
     $this->_enums         =& $enums;
@@ -693,6 +698,44 @@ class CMbObject {
   }
 
   /**
+   * Load all back refs
+   * @return null
+   */
+  function loadAllBackRefs() {
+    // Empty object
+    if (!$this->_id) {
+      return;
+    }
+    
+    $this->makeBackSpecs();
+    
+    // Counting backrefs
+    $backReferences = array();
+    foreach ($this->_backSpecs as $backSpec) {
+      $backObject = new $backSpec->class;
+      $backField = $backSpec->field;
+      $fwdSpec =& $backObject->_specs[$backField];
+      $backMeta = $fwdSpec->meta;      
+
+      // Cas du module non installé
+      if (!$backObject->_ref_module) {
+        continue;
+      }
+      
+      // Vérification de la possibilité de supprimer chaque backref
+      $backObject->$backField = $this->_id;
+
+      // Cas des meta objects
+      if ($backMeta) {
+        $backObject->$backMeta = $this->_class_name;
+      }
+      
+      $this->_back[$backSpec->name] = $backObject->loadMatchingList();
+    }
+    
+  }
+
+  /**
    * Check whether the object can be deleted.
    * Default behaviour counts for back reference without cascade 
    * @return null if ok error message otherwise
@@ -720,7 +763,7 @@ class CMbObject {
         continue;
       }
       
-      // Cas de la supression en cascade
+      // Cas de la suppression en cascade
       if ($backSpec->cascade) {
         
         // Vérification de la possibilité de supprimer chaque backref
@@ -794,8 +837,6 @@ class CMbObject {
       $backSpec =& $backObject->_specs[$backField];
       $backMeta = $backSpec->meta;      
       
-//        mbTrace($backSpec, "Back spec to delete");
-//        die;
       // Cas du module non installé
       if (!$backObject->_ref_module) {
         continue; 
@@ -941,6 +982,26 @@ class CMbObject {
     return array();
   }
   
+  
+  /**
+   * Converts string back specifications to objet specifications
+   */
+  function makeBackSpecs() {
+    if ($this->_backSpecs) {
+      return;
+    }
+    
+    $this->_backSpecs = array();
+    foreach ($this->_backRefs as $backName => $backString) {
+      $this->_backSpecs[$backName] = new CMbBackSpec($backName, $backString);
+    }
+
+    $this->_backSpecs = array_reverse($this->_backSpecs);    
+  }
+
+  /**
+   * Converts string specifications to objet specifications
+   */
   function getSpecsObj($props = null){
     if($props == null){
       $specs =& $this->_props;

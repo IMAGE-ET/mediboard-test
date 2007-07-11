@@ -22,7 +22,6 @@ $sejour->load($sejour_id);
 $sejour->loadRefPraticien();
 $sejour->_ref_praticien->loadRefFunction();
 $sejour->loadRefPatient();
-$sejour->getDroitsCMU();
     
 $sejour->loadRefsOperations();
 foreach($sejour->_ref_operations as &$operation) {

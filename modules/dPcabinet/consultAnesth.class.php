@@ -262,7 +262,12 @@ class CConsultAnesth extends CMbObject {
       $where["object_id"]    = "= '$this->consultation_anesth_id'";
       $where["object_class"] = "= 'CConsultAnesth'";
       $order = "type ASC";
-      $this->_ref_antecedents = $antecedent->loadList($where, $order);
+      $antecedents = $antecedent->loadList($where, $order);
+
+      // Classements des antécédants
+      foreach ($antecedents as &$_antecedent) {
+        $this->_ref_antecedents[$_antecedent->type][$_antecedent->_id] = $_antecedent;
+      }
     }
   }
 
