@@ -79,15 +79,16 @@ class CSejour extends CCodableCCAM {
   var $_ref_group             = null;
 
   //Filter Fields
-  var $_date_min	 	= null;
-  var $_date_max 		= null;
-  var $_admission 		= null;
-  var $_service 		= null;
+  var $_date_min	 			= null;
+  var $_date_max 				= null;
+  var $_admission 			= null;
+  var $_service 				= null;
   var $_type_admission  = null;
-  var $_specialite 		= null;
-  var $_date_min_stat	= null;
+  var $_specialite 			= null;
+  var $_date_min_stat		= null;
   var $_date_max_stat 	= null;
-
+  var $_filter_type 		= null;
+    
 	function CSejour() {
     global $dPconfig;
     
@@ -136,14 +137,15 @@ class CSejour extends CCodableCCAM {
     $specs["repas_diabete"]       = "bool";
     $specs["repas_sans_sel"]      = "bool";
     $specs["repas_sans_residu"]   = "bool";
-    $specs["_date_min"] 		  = "dateTime";
-    $specs["_date_max"] 		  = "dateTime moreEquals|_date_min";
-    $specs["_admission"] 		  = "text";
-    $specs["_service"] 		      = "text";
+    $specs["_date_min"] 		  		= "dateTime";
+    $specs["_date_max"] 		  		= "dateTime moreEquals|_date_min";
+    $specs["_admission"] 		  		= "text";
+    $specs["_service"] 		      	= "text";
     $specs["_type_admission"]     = "text";
     $specs["_specialite"] 	      = "text";
     $specs["_date_min_stat"]      = "date";
-    $specs["_date_max_stat"] 	  = "date moreEquals|_date_min_stat";
+    $specs["_date_max_stat"] 	  	= "date moreEquals|_date_min_stat";
+    $specs["_filter_type"]        = "enum list|comp|ambu|exte|seances|ssr|psy";
     return $specs;
   }
   

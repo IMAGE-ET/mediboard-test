@@ -20,7 +20,7 @@ function popPlanning() {
   url.addElement(form._date_max);
   url.addElement(form.ordre);
   url.addElement(form.service);
-  url.addElement(form.type);
+  url.addElement(form._filter_type);
   url.addElement(form.chir);
   url.addElement(form.spe);
   url.addElement(form.conv);
@@ -100,8 +100,8 @@ function pageMain() {
       <table class="form">
         <tr><th class="category" colspan="2">Paramètres de filtrage</th></tr>
         <tr>
-          <td>{{mb_label object=$filter field="type"}}</td>
-          <td>{{mb_field object=$filter field="type" defaultOption="&mdash; Tous types d'admission &mdash;" canNull="true"}}</td>
+          <td>{{mb_label object=$filter field="_filter_type"}}</td>
+          <td>{{mb_field object=$filter field="_filter_type" defaultOption="&mdash; Tous types d'admission &mdash;"}}</td>
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="praticien_id"}}</td>

@@ -485,4 +485,13 @@ $locales['CSejour.repas_sans_sel.0'] = '';
 $locales['CSejour.repas_sans_sel.1'] = '';
 $locales['CSejour.television.0'] = '';
 $locales['CSejour.television.1'] = '';
+$locales['CSejour-_filter_type'] = 'Type d\'admission';
+$locales['CSejour-_filter_type-court'] = 'Type d\'admission';
+$locales['CSejour-_filter_type-desc'] = '';
+$locales['CSejour._filter_type.ambu'] = 'Ambulatoire';
+$locales['CSejour._filter_type.comp'] = 'Hospitalisation Complète';
+$locales['CSejour._filter_type.exte'] = 'Externe';
+$locales['CSejour._filter_type.psy'] = 'Psychiatrie';
+$locales['CSejour._filter_type.seances'] = 'Séance(s)';
+$locales['CSejour._filter_type.ssr'] = 'SSR';
 ?>

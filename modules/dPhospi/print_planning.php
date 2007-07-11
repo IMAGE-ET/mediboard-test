@@ -16,7 +16,7 @@ $can->needsRead();
 $filter->_date_min = mbGetValueFromGet("_date_min"    , date("Y-m-d")." 06:00:00");
 $filter->_date_max = mbGetValueFromGet("_date_max"    , date("Y-m-d")." 21:00:00");
 $filter->_service = mbGetValueFromGet("service", 0);
-$filter->type = mbGetValueFromGet("type"   , 0);
+$filter->_filter_type = mbGetValueFromGet("_filter_type"   , 0);
 $filter->praticien_id = mbGetValueFromGet("chir"   , 0);
 $filter->_specialite = mbGetValueFromGet("spe"    , 0);
 $filter->convalescence = mbGetValueFromGet("conv"   , 0);
@@ -41,8 +41,8 @@ if ($filter->_specialite or $filter->praticien_id) {
   $sejourReq->addWhereClause("sejour.praticien_id", db_prepare_in(array_keys($speChirs), $filter->praticien_id));
 }
 
-if ($filter->type) {
-  $sejourReq->addWhereClause("sejour.type", "= '$filter->type'");
+if ($filter->_filter_type) {
+  $sejourReq->addWhereClause("sejour.type", "= '$filter->_filter_type'");
 }
 
 if ($filter->convalescence == "o") {
@@ -56,7 +56,7 @@ if ($filter->convalescence == "n") {
 $sejourReq->addOrder("DATE(sejour.entree_prevue)");
 $sejourReq->addOrder("sejour.praticien_id");
 
-if($filter->type  == "heure") {
+if($filter->_filter_type  == "heure") {
   $sejourReq->addOrder("sejour.entree_prevue");
 } else {
   $sejourReq->addOrder("patients.nom");
