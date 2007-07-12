@@ -50,7 +50,7 @@ function setField(oField, sValue) {
   </tr>
   
   <tr>
-    <td class="button" colspan="5" style="text-align:center;">
+    <td class="button" colspan="5" style="text-align:center;" id="button">
       <button type="button" class="search" onclick="MbObject.viewBackRefs('{{$patient1->_class_name}}', ['{{$patient1->_id}}', '{{$patient2->_id}}']);">
         {{tr}}CMbObject-merge-moreinfo{{/tr}}
       </button>
@@ -65,7 +65,7 @@ function setField(oField, sValue) {
 
 <script language="Javascript" type="text/javascript">
 var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-  panelHeight: 500, 
+  panelHeight: ViewPort.SetAccordHeight('accordionConsult','button',7),
   showDelay: 50, 
   showSteps: 3 
 } );

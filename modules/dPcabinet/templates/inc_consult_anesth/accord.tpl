@@ -4,6 +4,8 @@
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
 {{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
 
+
+<!-- div global de l'accordeon ==> accordionConsult -->
 <div class="accordionMain" id="accordionConsult">
     
   <div id="AntTrait">
@@ -80,13 +82,6 @@
     {{include file="inc_fdr_consult.tpl"}}
     </div>
   </div>
-
+  
 </div>
 
-<script language="Javascript" type="text/javascript">
-var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-  panelHeight: fHeight, 
-  showDelay:50, 
-  showSteps:3 
-} );
-</script>

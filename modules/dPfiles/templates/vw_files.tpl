@@ -1,15 +1,6 @@
 {{include file="inc_files_functions.tpl"}}
 {{mb_include_script module="system" script="object_selector"}}
 
-
-<script type="text/javascript">
-
-function pageMain() {
-  initAccord(true);
-}
-
-</script>
-
 <table class="main">
   <tr>
     <td>

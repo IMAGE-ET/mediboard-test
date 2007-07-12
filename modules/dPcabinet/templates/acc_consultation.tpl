@@ -66,11 +66,3 @@
   </div>
 
 </div>
-
-<script language="Javascript" type="text/javascript">
-var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-  panelHeight: 320, 
-  showDelay:50, 
-  showSteps:3 
-} );
-</script>

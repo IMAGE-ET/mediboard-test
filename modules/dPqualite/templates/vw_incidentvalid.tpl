@@ -67,7 +67,7 @@ function pageMain() {
   regFieldCalendar("ProcEditFrm", "qualite_date_verification");
   {{else}}
   regFieldCalendar("ProcEditFrm", "qualite_date_controle");
-  {{/if}}
+  {{/if}}  
 }
 {{/if}}
 </script>
@@ -181,21 +181,24 @@ function pageMain() {
         {{/if}}
 
       </div>
-      <script language="Javascript" type="text/javascript">
-      var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-        panelHeight: 300,
-        showDelay:50,
-        onShowTab: storeVoletAcc,
-        showSteps:3,
-        onLoadShowTab: showTabAcc
-      } );
-      </script>
+
       {{/if}}
       <br />
       {{assign var="listeFichesTitle" value="Mes fiches d'EI"}}
       {{assign var="listeFiches" value=$listFiches.AUTHOR}}
       {{include file="inc_ei_liste.tpl"}}
     </td>
+
+    <script language="Javascript" type="text/javascript">
+      var oAccord = new Rico.Accordion( $('accordionConsult'), { 
+        panelHeight: ViewPort.SetAccordHeight('accordionConsult','ei_liste'),
+        showDelay:50,
+        onShowTab: storeVoletAcc,
+        showSteps:3,
+        onLoadShowTab: showTabAcc
+      } );
+      </script>
+
     <td class="halfPane">
       {{if $fiche->fiche_ei_id}}
       

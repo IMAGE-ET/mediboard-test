@@ -23,27 +23,6 @@ function storeKeyCat(objAcc){
   }
 }
 
-function initAccord(init_resize){
-  var oAccordionDiv = $("accordionConsult");
-  if (!oAccordionDiv) {
-    return;
-  }
-  var fHeightDivTitle = 0;
-  var fhauteur_div = 0;
-  fHeightDivTitle = Element.getOffsetHeightByClassName("accordionTabTitleBar");
-  fhauteur_div = window.getInnerDimensions().y - Position.cumulativeOffset($('accordionConsult'))[1] - fHeightDivTitle;
-  aAccordBorderTop = Element.getStyle("accordionConsult","border-top-width").split("px");
-  fHeight = fhauteur_div - parseFloat(aAccordBorderTop[0]) - 14; //-14 pour les marges et bordures en bas des tableaux  
-  if(fHeight<=120){
-    fHeight = 120;
-  }
-  oCookie.setSubValue("height", fHeight);
-  if(init_resize){
-    oAccord.lastExpandedTab.content.style.height = fHeight + "px";
-    oAccord.options.panelHeight = fHeight;
-  }
-}
-
 function popFile(objectClass, objectId, elementClass, elementId, sfn){
   var url = new Url;
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, sfn);
@@ -87,7 +66,7 @@ function reloadListFileDossier(sAction){
     return false;
   }
   var url = new Url;
-  initAccord(false);
+ 
   url.setModuleAction("dPfiles", "httpreq_vw_listfiles");
   url.addParam("selKey", sSelKey);
   url.addParam("selClass", sSelClass);  
@@ -113,7 +92,7 @@ function reloadListFile(sAction){
     ZoomAjax("","","","", 0);
   }
   var url = new Url;
-  initAccord(false);
+
   url.setModuleAction("{{$m}}", "httpreq_vw_listfiles");
   url.addParam("selKey", document.FrmClass.selKey.value);
   url.addParam("selClass", document.FrmClass.selClass.value);  

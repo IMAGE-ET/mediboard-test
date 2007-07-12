@@ -589,6 +589,11 @@ Object.extend(TogglePairEffect, {
   }
 });
 
+
+
+
+
+
 /**
  * View port manipulation object
  *   Handle view ported objects
@@ -611,6 +616,42 @@ var ViewPort = {
     fDivHeight = fNavHeight - fYDivPos;
     oDiv.style.overflow = "auto";
     oDiv.style.height = (fDivHeight * iPct - 10) +"px";
+  },
+  
+  SetAccordHeight: function(oAccordionDiv, oAutreDiv, iPx){
+    var oDiv = $(oAccordionDiv); 
+    if (oAutreDiv) {
+      var oAutreDivElt = $(oAutreDiv); 
+    }
+    if(!iPx){
+      iPx = 0;
+    }
+    // Calcul de la hauteur de la div supplementaire a soustraire si elle existe
+    fDivAutreHeight = (oAutreDiv)?oAutreDivElt.offsetHeight:0;
+   
+    if (!oDiv) {
+      return;
+    }
+    
+    var fYDivPos         = 0;
+    var fNavHeight       = 0;
+    var fDivHeight       = 0;
+    var fDivTitleHeight  = 0;
+    var fDivAccordHeight = 0;
+      
+    // Calcul de la position top de la div
+    fYDivPos = Position.cumulativeOffset(oDiv)[1];   
+    // hauteur de la fenetre
+    fNavHeight = window.getInnerDimensions().y;
+    // Calcul de la hauteur de la div
+    fDivHeight = fNavHeight - fYDivPos;
+    // Cumul des AccordTitle
+    fDivTitleHeight = Element.getOffsetHeightByClassName("accordionTabTitleBar");
+    // Hauteur de la div interne de l'accordeon
+    fDivAccordHeight = fDivHeight - fDivTitleHeight;
+    // Hauteur final
+    fDivAccordHeightFinal = fDivAccordHeight - fDivAutreHeight - iPx; 
+    return fDivAccordHeightFinal;
   }
 }
 

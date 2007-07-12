@@ -73,6 +73,12 @@ function pageMain() {
     } ); 
   } 
   
+  var oAccord = new Rico.Accordion( $('accordionConsult'), { 
+    panelHeight: ViewPort.SetAccordHeight('accordionConsult'), 
+    showDelay:50, 
+    showSteps:3 
+  } );
+  
 }
 </script>
 

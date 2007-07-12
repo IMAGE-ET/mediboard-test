@@ -19,7 +19,7 @@ function reloadListFile(sAction){
     ZoomAjax("","","","", 0);
   }
   var url = new Url;
-  initAccord(false);
+  
   
   url.setModuleAction("{{$m}}", "httpreq_vw_listfiles");
   url.addParam("selKey", document.FrmClass.selKey.value);
@@ -77,7 +77,6 @@ function printPatient(id) {
 }
 
 function pageMain() {
-  initAccord(true);
   ViewFullPatient.main();
   initNotes();
 }

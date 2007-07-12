@@ -22,6 +22,15 @@ var Analyse = {
 function pageMain() {
   regFieldCalendar('editExamen', 'deb_application');
   regFieldCalendar('editExamen', 'fin_application');
+
+  var oAccord = new Rico.Accordion($('accordionExamen'), { 
+    panelHeight: ViewPort.SetAccordHeight('accordionExamen','button',4),
+    showDelay: 50, 
+    showSteps: 3 
+  } );
+      
+      
+      
 }
 </script>
 
@@ -116,17 +125,11 @@ function pageMain() {
         
       </div>
 
-      <script language="Javascript" type="text/javascript">
-      var oAccord = new Rico.Accordion($('accordionExamen'), { 
-        panelHeight: 270, 
-        showDelay: 50, 
-        showSteps: 3 
-      } );
-      </script>
+      
             
       <table class="form">
         <tr>
-          <td class="button" colspan="2">
+          <td class="button" colspan="2" id="button">
             <button class="submit" type="submit">Valider</button>
             {{if $examen->_id}}
               <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l \'examen',objName:'{{$examen->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>

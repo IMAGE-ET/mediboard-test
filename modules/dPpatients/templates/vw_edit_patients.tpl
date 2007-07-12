@@ -153,7 +153,7 @@ function pageMain() {
       </tr>
       
       <tr>
-        <td class="button" colspan="5" style="text-align:center;">
+        <td class="button" colspan="5" style="text-align:center;" id="button">
           <div id="divSiblings" style="display:none;"></div>
           {{if $patient->patient_id}}
             <button tabindex="400" type="submit" class="submit">Valider</button>
@@ -176,7 +176,7 @@ function pageMain() {
 </table>
 <script language="Javascript" type="text/javascript">
 var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-  panelHeight: 250, 
+  panelHeight: ViewPort.SetAccordHeight('accordionConsult','button',7),
   showDelay: 50, 
   showSteps: 3 
 } );

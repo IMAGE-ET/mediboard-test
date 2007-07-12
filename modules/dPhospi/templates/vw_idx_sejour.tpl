@@ -4,6 +4,8 @@
 
 <script language="Javascript" type="text/javascript">
 
+   
+   
 var oCookie = new CJL_CookieUtil("EIAccordion");
 var showTabAcc = 0;
 
@@ -34,6 +36,7 @@ function loadSejour(sejour_id) {
 
 function pageMain() {
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+
 }
 
 </script>
@@ -146,7 +149,7 @@ function pageMain() {
 
 <script language="Javascript" type="text/javascript">
 var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-  panelHeight: 400, 
+  panelHeight: ViewPort.SetAccordHeight('accordionConsult'),
   showDelay:50,
   showSteps:3,
   onShowTab: storeVoletAcc,

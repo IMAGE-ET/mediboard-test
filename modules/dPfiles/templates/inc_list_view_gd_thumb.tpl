@@ -94,13 +94,13 @@
 <script language="Javascript" type="text/javascript">
 {{if $accordDossier}}
 var oAccord{{$selClass}}{{$selKey}} = new Rico.Accordion( $('accordion{{$selClass}}{{$selKey}}'), {
-  panelHeight: 200, 
+  panelHeight: ViewPort.SetAccordHeight('accordion{{$selClass}}{{$selKey}}'),
   showDelay:50,
   showSteps:3
 });
 {{else}}
 var oAccord = new Rico.Accordion( $('accordionConsult'), {
-  panelHeight: fHeight, 
+  panelHeight: ViewPort.SetAccordHeight('accordionConsult'),
   onShowTab: storeKeyCat,
   showDelay:50,
   showSteps:3,

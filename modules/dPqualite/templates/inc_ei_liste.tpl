@@ -1,7 +1,7 @@
 {{if $voletAcc}}
 <form name="Ei{{$voletAcc}}" action="?m={{$m}}">
 {{/if}}
-<table class="form">
+<table class="form" id="ei_liste">
   {{if $listeFichesTitle}}
   <tr>
     <th class="title" colspan="5">
