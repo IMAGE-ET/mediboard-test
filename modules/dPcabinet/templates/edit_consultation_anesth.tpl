@@ -123,7 +123,7 @@ function pageMain() {
   
   // Accordeon
   var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-    panelHeight: ViewPort.SetAccordHeight('accordionConsult','finishBanner',12), 
+    panelHeight: ViewPort.SetAccordHeight('accordionConsult', { sOtherElmt: 'finishBanner', iBottomMargin : 12, iMinHeight : 360 } ), 
     showDelay:50, 
     showSteps:3 
   } );

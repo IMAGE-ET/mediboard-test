@@ -589,11 +589,6 @@ Object.extend(TogglePairEffect, {
   }
 });
 
-
-
-
-
-
 /**
  * View port manipulation object
  *   Handle view ported objects
@@ -618,26 +613,26 @@ var ViewPort = {
     oDiv.style.height = (fDivHeight * iPct - 10) +"px";
   },
   
-  SetAccordHeight: function(oAccordionDiv, oAutreDiv, iPx){
-    var oDiv = $(oAccordionDiv); 
-    if (oAutreDiv) {
-      var oAutreDivElt = $(oAutreDiv); 
-    }
-    if(!iPx){
-      iPx = 0;
-    }
-    // Calcul de la hauteur de la div supplementaire a soustraire si elle existe
-    fDivAutreHeight = (oAutreDiv)?oAutreDivElt.offsetHeight:0;
-   
+  SetAccordHeight: function(sAccordionId, oOptions){
+
+    var oDiv = $(sAccordionId);
     if (!oDiv) {
       return;
     }
     
-    var fYDivPos         = 0;
-    var fNavHeight       = 0;
-    var fDivHeight       = 0;
-    var fDivTitleHeight  = 0;
-    var fDivAccordHeight = 0;
+    var oDefaultOptions = {
+      sOtherElmt    : null,
+      iBottomMargin : 0,
+      iMinHeight    : 100
+    }
+    Object.extend(oDefaultOptions, oOptions);
+    
+    var fYDivPos            = 0;
+    var fNavHeight          = 0;
+    var fDivHeight          = 0;
+    var fDivTitleHeight     = 0;
+    var fDivAccordHeight    = 0;
+    var fDivOtherElmtHeight = 0;
       
     // Calcul de la position top de la div
     fYDivPos = Position.cumulativeOffset(oDiv)[1];   
@@ -649,8 +644,15 @@ var ViewPort = {
     fDivTitleHeight = Element.getOffsetHeightByClassName("accordionTabTitleBar");
     // Hauteur de la div interne de l'accordeon
     fDivAccordHeight = fDivHeight - fDivTitleHeight;
+    // Hauteur de l'élément optionnel
+    // Calcul de la hauteur de la div supplementaire a soustraire si elle existe
+    var oOtherElmt = $(oDefaultOptions.sOtherElmt);
+    fDivOtherElmtHeight = oOtherElmt ? oOtherElmt.offsetHeight : 0;
+    
     // Hauteur final
-    fDivAccordHeightFinal = fDivAccordHeight - fDivAutreHeight - iPx; 
+    fDivAccordHeightFinal = fDivAccordHeight - fDivOtherElmtHeight - oDefaultOptions.iBottomMargin;
+    fDivAccordHeightFinal = Math.max(fDivAccordHeightFinal, oDefaultOptions.iMinHeight);
+    
     return fDivAccordHeightFinal;
   }
 }

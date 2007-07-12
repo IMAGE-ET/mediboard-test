@@ -176,7 +176,7 @@ function pageMain() {
 </table>
 <script language="Javascript" type="text/javascript">
 var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-  panelHeight: ViewPort.SetAccordHeight('accordionConsult','button',7),
+  panelHeight: ViewPort.SetAccordHeight('accordionConsult', { sOtherElmt: 'button', iBottomMargin : 7 }),
   showDelay: 50, 
   showSteps: 3 
 } );
