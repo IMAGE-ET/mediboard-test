@@ -101,11 +101,11 @@ $libraries = array();
 $library = new CLibrary;
 $library->name = "Smarty";
 $library->url = "http://smarty.php.net/";
-$library->fileName = "Smarty-2.6.13.tar.gz";
+$library->fileName = "Smarty-2.6.18.tar.gz";
 $library->description = "Moteur de templates PHP et framework de présentation";
 
 $renamer = new CLibraryRenamer;
-$renamer->sourceDir = "Smarty-2.6.13";
+$renamer->sourceDir = "Smarty-2.6.18";
 $renamer->targetDir = "smarty";
 
 $library->renamer = $renamer;
