@@ -807,8 +807,7 @@ class CMbObject {
         }
       }
     };
-    
-    $msg = count($issues) ? 
+    $msg = count($issues) ?
       $AppUI->_("noDeleteRecord") . ": " . implode(", ", $issues) :
       null;
     

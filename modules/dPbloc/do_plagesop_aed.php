@@ -38,7 +38,7 @@ if ($del) {
     $msg = NULL;
     if ($obj->plageop_id) {
     	
-      if ($msg = $obj->canDeleteEx()) {
+      if (!$msg = $obj->canDeleteEx()) {
         if ($msg = $obj->delete()) {
           $not_deleted++;
         } 
