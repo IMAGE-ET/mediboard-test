@@ -1,5 +1,12 @@
 <?php
 
+/**
+ *  @package Mediboard
+ *  @subpackage classes
+ *  @author  Poiron Yohann
+ *  @version $Revision: $
+ */
+
 global $AppUI;
 
 require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
@@ -8,24 +15,11 @@ require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_regstat"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_pie"));
 
-/**
- *  @package Mediboard
- *  @subpackage classes
- *  @author  Poiron Yohann
- *  @version $Revision: $
- */
-
 class CMbGraph {
 	var $graph = null;
 	
 	var $options = null; //tab of options
-	
-	var $palette = null;
-	var $config = null;
-	var $taille = null;
-	var $margin = null;
-	var $tailleAxis = null;
-	
+
 	function CMbGraph() {
 		global $dPconfig;
 		$this->config = $dPconfig['graph_engine'];
@@ -33,6 +27,7 @@ class CMbGraph {
 														"height" => 125,
 														"size" => 1,
 														"title" => "Title",
+														"subtitle" => " ",
 														"sizeFontTitle" => 7,
 														"palette" => array ( "#aa5500", "#55aa00", "#0055aa", "#aa0055", 
 																								 "#5500aa", "#00aa55", "#ff0000", "#00ff00", 
@@ -47,6 +42,7 @@ class CMbGraph {
 																							 0),
 														"marginColor" => "lightblue",
 														"titleColor"	=> "darkred",
+														"subtitleColor"	=> "black",
 														"sizeFontLegend" => 7,
 														"posLegend" => array(0, 
 																								 0,
@@ -60,6 +56,7 @@ class CMbGraph {
 														"dataPie" => array(),
 														"dataBar" => array(),
 														"dataLine" => array(),
+														"dataAccBar" => array(),										 
 														"datax" => array(),
 														"from" => "#AAAAAA",
 														"to" => "#EEEEEE",
@@ -67,7 +64,8 @@ class CMbGraph {
 														"graphBarLegend" => "Legend",
 														"graphLineColor" => "white",
 														"graphLineLegend" => "Legend",
-														"graphPieLegend" => "Legend",																																										
+														"graphPieLegend" => "Legend",
+														"graphAccLegend" => "Legend",											 																																										
 														"render" => "out"										 								 												 		
 														);
 	}
@@ -111,6 +109,18 @@ class CMbGraph {
 	function addDataLinePlot($options) {
 		if($this->config == 'jpgraph'){
 			$this->jpgraphAddDataLinePlot($options);
+		}
+	}
+	
+	function accBarPlot($options) {
+		if($this->config == 'jpgraph'){
+			$this->jpgraphAccBarPlot($options);
+		}
+	}
+	
+	function addSecondAxis ($options) {
+	if($this->config == 'jpgraph'){
+			$this->jpgraphAddSecondAxis($options);
 		}
 	}
 	
@@ -195,10 +205,10 @@ class CMbGraph {
 		} else if ($type == "Graph") {
 			$this->graph = new Graph($this->options['width']*$this->options['size'],$this->options['height']*$this->options['size'],"auto");    
 			$this->graph->SetScale("textlin");
-			$this->graph->SetY2Scale("int");
 			$this->graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,6+$this->options['size']);
 		}
 		$this->graph->title->Set($this->options['title']);
+		$this->graph->subtitle->Set($this->options['subtitle']);
 		$this->graph->img->SetMargin($this->options['margin'][0], $this->options['margin'][1], $this->options['margin'][2], $this->options['margin'][3]);
 		$this->graph->img->SetAntiAliasing();
 		$this->graph->title->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontTitle']+$this->options['size']);
@@ -211,6 +221,7 @@ class CMbGraph {
 		$this->options = array_merge($this->options, $options);
 		$this->graph->SetMarginColor($this->options['marginColor']);
 		$this->graph->title->SetColor($this->options['titleColor']);
+		$this->graph->subtitle->SetColor($this->options['subtitleColor']);
 	}
 	
 	//$datax,$size,$taille
@@ -219,12 +230,12 @@ class CMbGraph {
 		// Setup font for axis
 		$this->graph->xaxis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
 		$this->graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
-		$this->graph->y2axis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
+		//$this->graph->y2axis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
 		
 		// Show 0 label on Y-axis (default is not to show)
 		$this->graph->yscale->ticks->SupressZeroLabel(false);
 		$this->graph->yaxis->SetColor("black");
-		$this->graph->y2axis->SetColor("#888888");
+		//$this->graph->y2axis->SetColor("#888888");
 		
 		// Setup X-axis labels
 		$this->graph->xaxis->SetTickLabels($this->options['datax']);
@@ -274,6 +285,35 @@ class CMbGraph {
 				$i++;
 			}
 		}
+	}
+	
+	function jpgraphAccBarPlot ($options) {
+		$this->options = array_merge($this->options, $options);
+		$this->graph->listPlots = array();
+		foreach($this->options['dataAccBar'] as $key => $value) {
+		  $this->graph->bplot = new BarPlot($value["data"]);
+		  $this->graph->bplot->to = "#EEEEEE";
+		  $this->graph->bplot->SetFillGradient($this->options['palette'][$key],$this->options['to'],GRAD_LEFT_REFLECTION);
+		  $this->graph->bplot->SetColor("white");
+		  $this->graph->bplot->setLegend($value["legend"]);
+		  $this->graph->bplot->value->SetFormat("%01.0f");
+		  $this->graph->bplot->value->SetColor($this->options['palette'][$key]);
+		  $this->graph->bplot->value->SetFont(FF_ARIAL,FS_NORMAL, 8); 
+		  $this->graph->listPlots[] = $this->graph->bplot;
+		}
+
+		$this->graph->gbplot = new AccBarPlot($this->graph->listPlots);
+		$this->graph->gbplot->SetWidth(0.6);
+		$this->graph->gbplot->value->SetFormat("%01.0f"); 
+		$this->graph->gbplot->value->show();
+		$this->graph->Add($this->graph->gbplot);
+	}
+	
+	function jpgraphAddSecondAxis ($options) {
+		$this->options = array_merge($this->options, $options);
+		$this->graph->SetY2Scale("int");
+		$this->graph->y2axis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
+		$this->graph->y2axis->SetColor("#888888");		
 	}
 	
 	//$render,$size

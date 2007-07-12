@@ -105,6 +105,7 @@ $graph = new CMbGraph();
 $graph->selectType("Graph",$options);
 $graph->selectPalette($options);
 $graph->setupAxis($options);
+$graph->addSecondAxis($options);
 $graph->addDataBarPlot($options);
 $graph->addDataLinePlot($options);
 $graph->render($options);

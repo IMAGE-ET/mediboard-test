@@ -9,8 +9,7 @@
 
 global $AppUI, $can, $m;
 
-require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"    ));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_bar"));
+require_once($AppUI->getSystemClass("mbGraph"));
 
 $debut         = mbGetValueFromGet("debut"        , mbDate("-1 YEAR"));
 $fin           = mbGetValueFromGet("fin"          , mbDate()         );
@@ -34,7 +33,6 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
 $sejour = new CSejour;
 $listHospis = array();
 
-
 foreach($sejour->_enumsTrans["type"] as $keyType=>$vType){
   $testAmbuOrComp = (($keyType=="comp" || $keyType=="ambu") && $type_adm == "1");
   $testCourant    = ($type_adm == $keyType);
@@ -44,11 +42,10 @@ foreach($sejour->_enumsTrans["type"] as $keyType=>$vType){
   }
 }
 
-
-
 $patbyhospi = array();
+$i = 0;
 foreach($listHospis as $type=>$vType) {
-  $patbyhospi[$type]["nom"] = $vType;
+  $patbyhospi[$i]["legend"] = $vType;
   $sql = "SELECT COUNT(sejour.sejour_id) AS total," .
     "\nsejour.type," .
     "\nDATE_FORMAT(sejour.entree_prevue, '%m/%Y') AS mois," .
@@ -70,23 +67,17 @@ foreach($listHospis as $type=>$vType) {
     $f = true;
     foreach($result as $totaux) {
       if($x == $totaux["mois"]) {
-        $patbyhospi[$type]["sejour"][] = $totaux["total"];
+        $patbyhospi[$i]["data"][] = $totaux["total"];
         $total += $totaux["total"];
         $f = false;
       }
     }
     if($f) {
-      $patbyhospi[$type]["sejour"][] = 0;
+      $patbyhospi[$i]["data"][] = 0;
     }
   }
+  $i++;
 }
-
-// Setup the graph.
-$graph = new Graph(480,300,"auto");
-$graph->img->SetMargin(50,40,50,70);
-//$graph->img->SetMargin(50,100,50,70);
-$graph->SetScale("textlin");
-$graph->SetMarginColor("lightblue");
 
 // Set up the title for the graph
 $title = "Nombre d'admissions par type d'hospitalisation";
@@ -97,62 +88,26 @@ if($prat_id) {
 if($discipline_id) {
   $subtitle .= " $disciplineSel->_view -";
 }
-$graph->title->Set($title);
-$graph->title->SetFont(FF_ARIAL,FS_NORMAL,10);
-$graph->title->SetColor("darkred");
-$graph->subtitle->Set($subtitle);
-$graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,7);
-$graph->subtitle->SetColor("black");
-//$graph->img->SetAntiAliasing();
-$graph->SetScale("textint");
 
-// Setup font for axis
-$graph->xaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
-$graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
-
-// Show 0 label on Y-axis (default is not to show)
-$graph->yscale->ticks->SupressZeroLabel(false);
-
-// Setup X-axis labels
-$graph->xaxis->SetTickLabels($datax);
-$graph->xaxis->SetPosAbsDelta(15);
-$graph->yaxis->SetPosAbsDelta(-15);
-$graph->xaxis->SetLabelAngle(50);
-
-// Legend
-$graph->legend->SetMarkAbsSize(5);
-$graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$graph->legend->Pos(0.02,0.06, "right", "top");
-
-// Create the bar pot
-$colors = array("comp"   => "#aa5500",
-                "ambu"    => "#55aa00",
-                "exte"    => "#0055aa",
-                "seances" => "#aa0055",
-                "ssr"     => "#5500aa",
-                "psy"     => "#00aa55");
-$listPlots = array();
-foreach($patbyhospi as $key => $value) {
-  $bplot = new BarPlot($value["sejour"]);
-  $from = $colors[$key];
-  $to = "#EEEEEE";
-  $bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);
-  $bplot->SetColor("white");
-  $bplot->setLegend($value["nom"]);
-  $bplot->value->SetFormat("%01.0f");
-  $bplot->value->SetColor($colors[$key]);
-  $bplot->value->SetFont(FF_ARIAL,FS_NORMAL, 8); 
-  //$bplot->value->show();
-  $listPlots[] = $bplot;
-}
-
-$gbplot = new AccBarPlot($listPlots);
-$gbplot->SetWidth(0.6);
-$gbplot->value->SetFormat("%01.0f"); 
-$gbplot->value->show();
-
-// Set color for the frame of each bar
-$graph->Add($gbplot);
-
-// Finally send the graph to the browser
-$graph->Stroke();
+$options = array( "width" => 480,
+									"height" => 300,
+									"title" => $title,
+									"subtitle" => $subtitle,
+									"sizeFontTitle" => 10,
+									"margin" => array(50,40,50,70),
+									"posLegend" => array(0.02, 0.06, "right", "top"), 
+									"sizeFontAxis" => 8,
+									"labelAngle" => 50,
+									"textTickInterval" => 2,
+									"posXAbsDelta" => 15,
+									"posYAbsDelta" => -15,
+									"dataAccBar" => $patbyhospi,
+									"datax" => $datax,
+									"graphAccLegend" => $patbyhospi,);
+				
+$graph = new CMbGraph();
+$graph->selectType("Graph",$options);
+$graph->selectPalette($options);
+$graph->setupAxis($options);
+$graph->accBarPlot($options);
+$graph->render($options);
