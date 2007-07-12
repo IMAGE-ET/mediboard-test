@@ -1,3 +1,22 @@
+<script type="text/javascript">
+
+function viewFile(objectClass, objectId, elementClass, elementId, sfn){
+  file_preview = elementId;
+  var url = new Url;
+  url.setModuleAction("dPfiles", "preview_files");
+  url.addParam("objectClass", objectClass);
+  url.addParam("objectId", objectId);
+  url.addParam("elementClass", elementClass);
+  url.addParam("elementId", elementId);
+  if(sfn && sfn!=0){
+    url.addParam("sfn", sfn);
+  }
+  url.requestUpdate('viewFile-'+elementId, { waitingText : "Chargement du miniature" });
+}
+
+</script>
+
+
 {{if $accordDossier}}
 <div class="accordionMain" id="accordion{{$selClass}}{{$selKey}}">
 {{else}}
@@ -46,13 +65,17 @@
             {{assign var="confirmDeleteType" value="le fichier"}}
             {{assign var="confirmDeleteName" value=$curr_file->file_name}}
             {{assign var="elementId" value=$curr_file->file_id}}
-            {{assign var="srcImg" value="index.php?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&hp=450&wl=450"}}
-            
-          {{/if}} 
-          
-          <a href="#" onclick="popFile('{{$selClass}}', '{{$selKey}}', '{{$curr_file->_class_name}}', '{{$elementId}}', '0');">
-            <img src="{{$srcImg}}" alt="Petit aperçu" title="Afficher le grand aperçu" />
-            <br />{{$curr_file->_view}}
+            {{assign var="srcImg" value="index.php?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&hp=450&wl=450"}}        
+          {{/if}}
+            <div id="viewFile-{{$curr_file->_id}}">
+              {{include file="inc_preview_file.tpl"}}  
+            </div>
+            <script type="text/javascript">
+               viewFile("{{$selClass}}", "{{$selKey}}", "{{$curr_file->_class_name}}", "{{$curr_file->_id}}","0"); 
+            </script>
+         
+            <br />
+            {{$curr_file->_view}}
             {{if $curr_file->_class_name=="CFile"}}
               <br />Date : {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
             {{/if}}
