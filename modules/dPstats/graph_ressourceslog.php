@@ -108,6 +108,6 @@ $graph = new CMbGraph();
 $graph->selectType("Pie",$options);
 $graph->selectPalette($options);
 $graph->addDataPiePlot($options);
-$graph->render($options);
+$graph->render("out",$options);
 
 ?>

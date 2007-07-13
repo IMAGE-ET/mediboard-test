@@ -9,15 +9,15 @@
 
 global $AppUI, $can, $m;
 
-require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"    ));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_bar"));
+require_once($AppUI->getSystemClass("mbGraph"));
 
 $size          = mbGetValueFromGet("size" , 1);
 $date          = mbGetValueFromGetOrSession("date", mbTranformTime("+0 DAY", mbDate(), "%m/%Y"));
 $prat_id       = mbGetValueFromGetOrSession("prat_id", 0);
 $salle_id      = mbGetValueFromGetOrSession("salle_id", 0);
 $discipline_id = mbGetValueFromGetOrSession("discipline_id", 0);
-$codeCCAM      = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
+$codes_ccam    = strtoupper(mbGetValueFromGetOrSession("codes_ccam", ""));
+
 $total = 0;
 
 $pratSel = new CMediusers;
@@ -52,7 +52,7 @@ $salles = db_loadlist($sql);
 $opbysalle = array();
 foreach($salles as $salle) {
   $curr_salle_id = $salle["salle_id"];
-  $opbysalle[$curr_salle_id]["nom"] = $salle["nom"];
+  $opbysalle[$curr_salle_id]["legend"] = $salle["nom"];
   
   $sql = "SELECT COUNT(operations.operation_id) AS total," .
     "\nDATE_FORMAT(plagesop.date, '$date_format') AS jour," .
@@ -71,8 +71,8 @@ foreach($salles as $salle) {
     $sql .= "\nAND operations.chir_id = '$prat_id'";
   if($discipline_id)
     $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if($codeCCAM)
-    $sql .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if($codes_ccam)
+    $sql .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
   $sql .= "\nAND sallesbloc.salle_id = '$curr_salle_id'" .
     "\nGROUP BY jour" .
     "\nORDER BY orderitem";
@@ -80,28 +80,17 @@ foreach($salles as $salle) {
   foreach($datax as $x) {
     $f = true;
     foreach($result as $totaux) {
-      //echo "$x <=> ".$totaux["jour"]."<br />";
       if($x == $totaux["jour"]) {        
-        $opbysalle[$curr_salle_id]["op"][] = $totaux["total"];
+        $opbysalle[$curr_salle_id]["data"][] = $totaux["total"];
         $total += $totaux["total"];
         $f = false;
       }
     }
     if($f) {
-      $opbysalle[$curr_salle_id]["op"][] = 0;
+      $opbysalle[$curr_salle_id]["data"][] = 0;
     }
   }
-  //exit(0);
 }
-
-
-// Setup the graph.
-
-
-$graph = new Graph(370*$size,180*$size,"auto");    
-$graph->img->SetMargin(20+$size*10,75+$size*10,30+$size*10,50+$size*10);
-$graph->SetScale("textlin");
-$graph->SetMarginColor("lightblue");
 
 // Set up the title for the graph
 $title = "Nombre d'interventions par salle - ".mbTranformTime(null, $startx, "%m/%Y");;
@@ -112,74 +101,32 @@ if($prat_id) {
 if($discipline_id) {
   $subtitle .= " $disciplineSel->_view -";
 }
-if($codeCCAM) {
-  $subtitle .= " CCAM : $codeCCAM -";
-}
-$graph->title->Set($title);
-$graph->title->SetFont(FF_ARIAL,FS_NORMAL,10);
-$graph->title->SetColor("darkred");
-$graph->subtitle->Set($subtitle);
-$graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,7);
-$graph->subtitle->SetColor("black");
-//$graph->img->SetAntiAliasing();
-$graph->SetScale("textint");
-
-// Setup font for axis
-$graph->xaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
-$graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
-
-// Show 0 label on Y-axis (default is not to show)
-$graph->yscale->ticks->SupressZeroLabel(false);
-
-// Setup X-axis labels
-$graph->xaxis->SetTickLabels($datax2);
-$graph->xaxis->SetPosAbsDelta(15);
-$graph->yaxis->SetPosAbsDelta(-15);
-$graph->xaxis->SetLabelAngle(50);
-
-// Legend
-$graph->legend->SetMarkAbsSize(5);
-$graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$graph->legend->Pos(0.02,0.02, "right", "top");
-
-// Create the bar pot
-$colors = array("#aa5500",
-                "#55aa00",
-                "#0055aa",
-                "#aa0055",
-                "#5500aa",
-                "#00aa55",
-                "#ff0000",
-                "#00ff00",
-                "#0000ff",
-                "#ffff00",
-                "#ff00ff",
-                "#00ffff",);
-
-$listPlots = array();
-foreach($opbysalle as $key => $value) {
-  $bplot = new BarPlot($value["op"]);
-  $from = $colors[$key];
-  $to = "#EEEEEE";
-  $bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);
-  $bplot->SetColor("white");
-  $bplot->setLegend($value["nom"]);
-  $bplot->value->SetFormat("%01.0f");
-  $bplot->value->SetColor($colors[$key]);
-  $bplot->value->SetFont(FF_ARIAL,FS_NORMAL, 8); 
-  //$bplot->value->show();
-  $listPlots[] = $bplot;
+if($codes_ccam) {
+  $subtitle .= " CCAM : $codes_ccam -";
 }
 
-$gbplot = new AccBarPlot($listPlots);
-$gbplot->SetWidth(0.6);
-$gbplot->value->SetFormat("%01.0f"); 
-$gbplot->value->show();
-
-// Set color for the frame of each bar
-$graph->Add($gbplot);
-
-
-$graph->Stroke();
+$options = array( "width" => 370,
+									"height" => 180,
+									"size" => $size,
+									"title" => $title,
+									"subtitle" => $subtitle,
+									"sizeFontTitle" => 10,
+									"margin" => array(20+$size*10,75+$size*10,30+$size*10,50+$size*10),
+									"posLegend" => array(0.02, 0.02, "right", "top"), 
+									"sizeFontAxis" => 7,
+									"labelAngle" => 50,
+									"textTickInterval" => 2,
+									"posXAbsDelta" => 15,
+									"posYAbsDelta" => -15,
+									"dataAccBar" => $opbysalle,
+									"datax" => $datax2,
+									"graphAccLegend" => $opbysalle,);
+				
+$graph = new CMbGraph();
+$graph->selectType("Graph",$options);
+$graph->selectPalette($options);
+$graph->setupAxis($options);
+$graph->accBarPlot($options);
+$graph->render("out",$options);
 
 ?>

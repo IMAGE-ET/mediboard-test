@@ -131,4 +131,4 @@ $graph->selectType("Graph",$options);
 $graph->selectPalette($options);
 $graph->setupAxis($options);
 $graph->accBarPlot($options);
-$graph->render($options);
+$graph->render("out",$options);

@@ -108,6 +108,6 @@ $graph->setupAxis($options);
 $graph->addSecondAxis($options);
 $graph->addDataBarPlot($options);
 $graph->addDataLinePlot($options);
-$graph->render($options);
+$graph->render("out",$options);
 
 ?>

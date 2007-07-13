@@ -20,10 +20,9 @@ $finact        = mbDate("-1 DAY", $finact);
 $prat_id       = mbGetValueFromGetOrSession("prat_id", 0);
 $salle_id      = mbGetValueFromGetOrSession("salle_id", 0);
 $discipline_id = mbGetValueFromGetOrSession("discipline_id", 0);
-$codeCCAM      = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
+$codes_ccam    = strtoupper(mbGetValueFromGetOrSession("codes_ccam", ""));
 
 require_once($AppUI->getModuleFile($m, "inc_graph_activite"));
-
 // Finally send the graph to the browser
-$graph->Stroke();
+$graph->render("out",$options);
 ?>

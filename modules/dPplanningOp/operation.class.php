@@ -154,7 +154,6 @@ class COperation extends CCodableCCAM {
     $specs["_intervention"]  = "text";
     $specs["_prat_id"]  	 = "text";
     $specs["_specialite"]    = "text";
-    $specs["_codes_ccam"]    = "text";
     return $specs;
   }
   

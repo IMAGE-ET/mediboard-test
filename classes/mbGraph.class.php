@@ -65,70 +65,85 @@ class CMbGraph {
 														"graphLineColor" => "white",
 														"graphLineLegend" => "Legend",
 														"graphPieLegend" => "Legend",
-														"graphAccLegend" => "Legend",											 																																										
-														"render" => "out"										 								 												 		
+														"graphAccLegend" => "Legend",
+														"map" => "non",
+													  "mapInfo" => array(),						 										 											 																																										
+														"renderPath" => "tmp/graphtmp.png",
+														"nameHtmlImageMap" => "nameHtmlImageMap"										 									 								 												 		
 														);
 	}
 
 	function selectType($type,$options) {
-		if($this->config == 'eZgraph') {
+		if ($this->config == 'eZgraph') {
 			$this->eZgraphSelectType($type,$options);
-		} else if($this->config == 'jpgraph'){
+		} else if ($this->config == 'jpgraph'){
 			$this->jpgraphSelectType($type,$options);
 		}
 	}
 	
 	function selectPalette($options) {
-		if($this->config == 'eZgraph') {
+		if ($this->config == 'eZgraph') {
 			$this->eZgraphSelectPalette($options);
-		} else if($this->config == 'jpgraph'){
+		} else if ($this->config == 'jpgraph'){
 			$this->jpgraphSelectPalette($options);
 		}
 	}
 	
 	function setupAxis($options) {
-		if($this->config == 'jpgraph'){
+		if ($this->config == 'jpgraph'){
 			$this->jpgraphSetupAxis($options);
 		}
 	}
 	
 	function addDataPiePlot($options) {
-		if($this->config == 'eZgraph') {
+		if ($this->config == 'eZgraph') {
 			$this->eZgraphAddData($options);
-		} else if($this->config == 'jpgraph'){
+		} else if ($this->config == 'jpgraph'){
 			$this->jpgraphAddDataPiePlot($options);
 		}
 	}
 	
 	function addDataBarPlot($options) {
-		if($this->config == 'jpgraph'){
+		if ($this->config == 'jpgraph'){
 			$this->jpgraphAddDataBarPlot($options);
 		}
 	}
 	
 	function addDataLinePlot($options) {
-		if($this->config == 'jpgraph'){
+		if ($this->config == 'jpgraph'){
 			$this->jpgraphAddDataLinePlot($options);
 		}
 	}
 	
 	function accBarPlot($options) {
-		if($this->config == 'jpgraph'){
+		if ($this->config == 'jpgraph'){
 			$this->jpgraphAccBarPlot($options);
 		}
 	}
 	
 	function addSecondAxis ($options) {
-	if($this->config == 'jpgraph'){
+	  if ($this->config == 'jpgraph'){
 			$this->jpgraphAddSecondAxis($options);
 		}
 	}
 	
-	function render($options) {
-		if($this->config == 'eZgraph') {
-			$this->eZgraphRender($options);
-		} else if($this->config == 'jpgraph'){
-			$this->jpgraphRender($options);
+	function setMapTarget ($options){
+	  if ($this->config == 'jpgraph'){
+			$this->jpgraphSetMapTarget($options);
+		}
+	}
+	
+	function getHTMLImageMap (){
+	  if ($this->config == 'jpgraph'){
+			return $this->jpgraphGetHTMLImageMap();
+		}
+	}
+	
+	function render ($type,$options) {
+		if ($this->config == 'eZgraph') {
+			$this->eZgraphRender($type,$options);
+		} else if ($this->config == 'jpgraph'){
+			$this->jpgraphRender($type,$options);
 		}
 	}
 	
@@ -276,7 +291,7 @@ class CMbGraph {
 			$this->graph->Add($this->graph->lplot);
 		} else {
 			$i = 0;
-			foreach($this->options['graphLineLegend'] as $key => $value) {
+			foreach ($this->options['graphLineLegend'] as $key => $value) {
 				$this->graph->lplot = new LinePlot($this->options['dataLine'][$key]);
 				$this->graph->lplot->setLegend($this->options['graphLineLegend'][$key]);
 				$this->graph->lplot->SetWeight($this->options['size']);
@@ -289,24 +304,28 @@ class CMbGraph {
 	
 	function jpgraphAccBarPlot ($options) {
 		$this->options = array_merge($this->options, $options);
-		$this->graph->listPlots = array();
-		foreach($this->options['dataAccBar'] as $key => $value) {
-		  $this->graph->bplot = new BarPlot($value["data"]);
-		  $this->graph->bplot->to = "#EEEEEE";
-		  $this->graph->bplot->SetFillGradient($this->options['palette'][$key],$this->options['to'],GRAD_LEFT_REFLECTION);
-		  $this->graph->bplot->SetColor("white");
-		  $this->graph->bplot->setLegend($value["legend"]);
-		  $this->graph->bplot->value->SetFormat("%01.0f");
-		  $this->graph->bplot->value->SetColor($this->options['palette'][$key]);
-		  $this->graph->bplot->value->SetFont(FF_ARIAL,FS_NORMAL, 8); 
-		  $this->graph->listPlots[] = $this->graph->bplot;
+		//mbTrace($this->options['dataAccBar'])
+		$listPlots = array();
+		foreach ($this->options['dataAccBar'] as $key => $value) {
+			$bplot = new BarPlot($value["data"]);
+		  //$bplot->to = "#EEEEEE";
+		  $bplot->SetFillGradient($this->options['palette'][$key],$this->options['to'],GRAD_LEFT_REFLECTION);
+		  $bplot->SetColor("white");
+		  $bplot->setLegend($value["legend"]);
+		  $bplot->value->SetFormat("%01.0f");
+		  $bplot->value->SetColor($this->options['palette'][$key]);
+		  $bplot->value->SetFont(FF_ARIAL,FS_NORMAL, 8); 
+		  $listPlots[] = $bplot;
+		  if ($this->options['map'] == "oui") {
+		  	$bplot->SetCSIMTargets($this->options['mapInfo'][0],$this->options['mapInfo'][1]);
+		  }
 		}
-
-		$this->graph->gbplot = new AccBarPlot($this->graph->listPlots);
-		$this->graph->gbplot->SetWidth(0.6);
-		$this->graph->gbplot->value->SetFormat("%01.0f"); 
-		$this->graph->gbplot->value->show();
-		$this->graph->Add($this->graph->gbplot);
+		$gbplot = new AccBarPlot($listPlots);
+		$gbplot->SetWidth(0.6);
+		$gbplot->value->SetFormat("%01.0f"); 
+		$gbplot->value->show();
+		
+		$this->graph->Add($gbplot);
 	}
 	
 	function jpgraphAddSecondAxis ($options) {
@@ -316,10 +335,16 @@ class CMbGraph {
 		$this->graph->y2axis->SetColor("#888888");		
 	}
 	
+	function jpgraphGetHTMLImageMap () {
+		return $this->graph->GetHTMLImageMap("graph_interventions");
+	}
+	
 	//$render,$size
-	function jpgraphRender ($options) {
-		if($this->options['render'] == "out") {
+	function jpgraphRender ($type,$options) {
+		if ($type == "out") {
 			$this->graph->Stroke();
+		} else if ($type == "in") {
+			$this->graph->Stroke($this->options['renderPath']);
 		}
 	}
 }
