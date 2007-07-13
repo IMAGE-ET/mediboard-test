@@ -33,10 +33,10 @@
             
             <script type="text/javascript">
               CCAMSelector.init = function(){
-                var oForm = document.bloc;
-                this.eView = oForm.codeCCAM;
-                this.eChir = oForm._chir;
-                this.eClass = oForm._class_name;
+                this.sForm = "bloc";
+                this.sView = "codeCCAM";
+                this.sChir = "_chir";
+                this.sClass = "_class_name";
                 this.pop();
               }
             </script>
