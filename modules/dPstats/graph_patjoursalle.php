@@ -9,15 +9,14 @@
 
 global $AppUI, $can, $m;
 
-require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"        ));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"   ));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_regstat"));
+require_once($AppUI->getSystemClass("mbGraph"));
+
 
 $debut    = mbGetValueFromGet("debut"   , mbDate("-1 YEAR"));
 $fin      = mbGetValueFromGet("fin"     , mbDate()         );
 $prat_id  = mbGetValueFromGet("prat_id" , 0                );
 $salle_id = mbGetValueFromGet("salle_id", 0                );
-$codeCCAM = mbGetValueFromGet("codeCCAM", ""               );
+$codes_ccam = mbGetValueFromGet("codes_ccam", ""               );
 
 $pratSel = new CMediusers;
 $pratSel->load($prat_id);
@@ -48,8 +47,8 @@ $sql = "SELECT COUNT(operations.operation_id) AS total," .
   "\nAND plagesop.date BETWEEN '$debut' AND '$fin'";
   if($prat_id)
     $sql .= "\nAND operations.chir_id = '$prat_id'";
-  if($codeCCAM)
-    $sql .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if($codes_ccam)
+    $sql .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
   if($salle_id)
     $sql .= "\nAND plagesop.salle_id = '$salle_id'";
 $sql .= "\nGROUP BY mois" .
@@ -69,12 +68,6 @@ foreach($datax as $x) {
   }
 }
 
-// Setup the graph.
-$graph = new Graph(480,300,"auto");    
-$graph->img->SetMargin(50,40,50,70);
-$graph->SetScale("textlin");
-$graph->SetMarginColor("lightblue");
-
 // Set up the title for the graph
 $title = "Patients / jour / salle";
 $subtitle = "";
@@ -84,59 +77,31 @@ if($prat_id) {
 if($salle_id) {
   $subtitle .= "- $salleSel->nom ";
 }
-if($codeCCAM) {
-  $subtitle .= "- CCAM : $codeCCAM ";
+if($codes_ccam) {
+  $subtitle .= "- CCAM : $codes_ccam ";
 }
 if($subtitle) {
   $subtitle .= "-";
-  $graph->subtitle->Set($subtitle);
 }
-$graph->title->Set($title);
-$graph->title->SetFont(FF_ARIAL,FS_NORMAL,10);
-$graph->title->SetColor("darkred");
-$graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,7);
-$graph->subtitle->SetColor("black");
-//$graph->img->SetAntiAliasing();
-$opSorted = $op;
-rsort($opSorted);
-$graph->SetScale("intint", 0, intval($opSorted[0])+1);
 
-// Setup font for axis
-$graph->xaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
-$graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
+$options = array( "width" => 480,
+									"height" => 300,
+									"title" => $title,
+									"margin" => array(50,40,50,70),
+									"posLegend" => array(0.015,0.79, "right", "center"), 
+									"sizeFontAxis" => 6,
+									"labelAngle" => 50,
+									"textTickInterval" => 2,
+									"posXAbsDelta" => 0,
+									"posYAbsDelta" => 0,
+									"dataLine" => $op,
+									"datax" => $datax,
+								);
+				
+$graph = new CMbGraph();
+$graph->selectType("Graph",$options);
+$graph->selectPalette($options);
+$graph->setupAxis($options);
+$graph->addSplinePlot($options);
+$graph->render("out",$options);
 
-// Show 0 label on Y-axis (default is not to show)
-$graph->yscale->ticks->SupressZeroLabel(false);
-
-// Setup X-axis labels
-$graph->xaxis->SetTickLabels($datax);
-$graph->xaxis->SetPosAbsDelta(15);
-$graph->xgrid->Show();
-$graph->xaxis->SetLabelAngle(50);
-$graph->yaxis->SetPosAbsDelta(-15);
-
-// Create the plot
-$lplot = new LinePlot($op);
-$lplot->SetColor("blue");
-$lplot->SetWeight(-10);
-$lplot->value->SetFormat("%01.2f");
-$lplot->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$lplot->value->SetMargin(10);
-$lplot->mark->SetType(MARK_FILLEDCIRCLE);
-$lplot->mark->SetColor("blue");
-$lplot->mark->SetFillColor("blue:1.5");
-$lplot->value->show();
-
-// Create the spline plot
-$spline = new Spline(array_keys($datax), array_values($op));
-list($sdatax,$sdatay) = $spline->Get(50);
-$lplot2 = new LinePlot($sdatay, $sdatax);
-$lplot2->SetFillGradient("white", "darkgray");
-$lplot2->SetColor("black");
-
-// Add the plots to the graph
-$graph->Add($lplot2);
-$graph->Add($lplot);
-
-// Finally send the graph to the browser
-$graph->Stroke();

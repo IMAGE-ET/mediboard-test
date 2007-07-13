@@ -121,6 +121,12 @@ class CMbGraph {
 		}
 	}
 	
+	function addSplinePlot($options) {
+	  if ($this->config == 'jpgraph'){
+			$this->jpgraphAddSplinePlot($options);
+		}	
+	}
+	
 	function addSecondAxis ($options) {
 	  if ($this->config == 'jpgraph'){
 			$this->jpgraphAddSecondAxis($options);
@@ -261,42 +267,42 @@ class CMbGraph {
 	//$datas,$title,$size
 	function jpgraphAddDataPiePlot ($options) {
 		$this->options = array_merge($this->options, $options);
-		$this->graph->pplot = new PiePlot($this->options['dataPie']);
-		$this->graph->pplot->SetLegends($this->options['graphPieLegend']);
-		$this->graph->pplot->SetCenter(0.25+($this->options['size']*0.07), 0.55);
-		$this->graph->pplot->SetSize(0.3);
-		$this->graph->pplot->SetGuideLines ();
-		$this->graph->Add($this->graph->pplot);
+		$pplot = new PiePlot($this->options['dataPie']);
+		$pplot->SetLegends($this->options['graphPieLegend']);
+		$pplot->SetCenter(0.25+($this->options['size']*0.07), 0.55);
+		$pplot->SetSize(0.3);
+		$pplot->SetGuideLines ();
+		$this->graph->Add($pplot);
 	}
 	
 	//$data,$from,$to,$color,$legend
 	function jpgraphAddDataBarPlot ($options) {
 		$this->options = array_merge($this->options, $options);
 		// Create the bar hits pot
-		$this->graph->bplot = new BarPlot($this->options['dataBar']);
-		$this->graph->bplot->SetWidth(0.8);
-		$this->graph->bplot->SetFillGradient($this->options['from'],$this->options['to'],GRAD_LEFT_REFLECTION);
-		$this->graph->bplot->SetColor($this->options['graphBarColor']);
-		$this->graph->bplot->setLegend($this->options['graphBarLegend']);
-		$this->graph->AddY2($this->graph->bplot);
+		$bplot = new BarPlot($this->options['dataBar']);
+		$bplot->SetWidth(0.8);
+		$bplot->SetFillGradient($this->options['from'],$this->options['to'],GRAD_LEFT_REFLECTION);
+		$bplot->SetColor($this->options['graphBarColor']);
+		$bplot->setLegend($this->options['graphBarLegend']);
+		$this->graph->AddY2($bplot);
 	}
 	
 	//$data,$legend,$size,$color
 	function jpgraphAddDataLinePlot ($options) {
 		$this->options = array_merge($this->options, $options);
 		if (!is_array($this->options['graphLineLegend'])) {
-			$this->graph->lplot = new LinePlot($this->options['dataLine']);
-			$this->graph->lplot->setLegend($this->options['graphLineLegend']);
-			$this->graph->lplot->SetWeight($this->options['size']);
-			$this->graph->Add($this->graph->lplot);
+			$lplot = new LinePlot($this->options['dataLine']);
+			$lplot->setLegend($this->options['graphLineLegend']);
+			$lplot->SetWeight($this->options['size']);
+			$this->graph->Add($lplot);
 		} else {
 			$i = 0;
 			foreach ($this->options['graphLineLegend'] as $key => $value) {
-				$this->graph->lplot = new LinePlot($this->options['dataLine'][$key]);
-				$this->graph->lplot->setLegend($this->options['graphLineLegend'][$key]);
-				$this->graph->lplot->SetWeight($this->options['size']);
-				$this->graph->lplot->SetColor($this->options['palette'][$key]);
-				$this->graph->Add($this->graph->lplot);
+				$lplot = new LinePlot($this->options['dataLine'][$key]);
+				$lplot->setLegend($this->options['graphLineLegend'][$key]);
+				$lplot->SetWeight($this->options['size']);
+				$lplot->SetColor($this->options['palette'][$key]);
+				$this->graph->Add($lplot);
 				$i++;
 			}
 		}
@@ -326,6 +332,36 @@ class CMbGraph {
 		$gbplot->value->show();
 		
 		$this->graph->Add($gbplot);
+	}
+	
+	function jpgraphAddSplinePlot ($options) {
+		$opSorted = $this->options['dataLine'];
+		rsort($opSorted);
+		$this->graph->SetScale("intint", 0, intval($opSorted[0])+1);
+		
+		// Create the plot
+		$lplot = new LinePlot($this->options['dataLine']);
+		$lplot->SetColor("blue");
+		$lplot->SetWeight(-10);
+		$lplot->value->SetFormat("%01.2f");
+		$lplot->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
+		$lplot->value->SetMargin(10);
+		$lplot->mark->SetType(MARK_FILLEDCIRCLE);
+		$lplot->mark->SetColor("blue");
+		$lplot->mark->SetFillColor("blue:1.5");
+		$lplot->value->show();
+		
+		// Create the spline plot
+		$spline = new Spline(array_keys($this->options['datax']), array_values($this->options['dataLine']));
+		list($sdatax,$sdatay) = $spline->Get(50);
+		
+		$lplot2 = new LinePlot($sdatay, $sdatax);
+		$lplot2->SetFillGradient("white", "darkgray");
+		$lplot2->SetColor("black");
+		
+		// Add the plots to the graph
+		$this->graph->Add($lplot2);
+		$this->graph->Add($lplot);	
 	}
 	
 	function jpgraphAddSecondAxis ($options) {
