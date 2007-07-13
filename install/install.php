@@ -59,16 +59,26 @@ class CLibrary {
   var $nbFiles = 0;
   var $renamer = null;
   var $patches = array();
+  var $lib_ = null;
   
-  function clearLibraries() {
+  function clearLibraries($lib_,$librairies) {
     global $mbpath;
     $libsDir = $mbpath."lib";
-
-    foreach (glob("$libsDir/*") as $libDir) {
-      mbRemovePath($libDir);
+    
+    if($lib_==""){
+      foreach (glob("$libsDir/*") as $libDir) {  
+        mbRemovePath($libDir);
+      }
+    } 
+    else {
+      foreach (glob("$libsDir/*") as $libDir) {
+        if($libDir==$mbpath."lib/".$librairies[$lib_]->renamer->targetDir){
+          mbRemovePath($libDir);  		
+        }
+      }
     }
-  }
-  
+  } 
+    
   function countLibraries() {
     global $mbpath;
     $libsDir = $mbpath."lib";
@@ -96,6 +106,8 @@ class CLibrary {
   }
 }
 
+$libSel = mbGetValueFromPost("libSel","");
+
 $libraries = array();
 
 $library = new CLibrary;
@@ -110,7 +122,7 @@ $renamer->targetDir = "smarty";
 
 $library->renamer = $renamer;
 
-$libraries[] = $library;
+$libraries[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "JPGraph";
@@ -131,7 +143,7 @@ $patch->targetDir = "src";
 
 $library->patches[] = $patch;
 
-$libraries[] = $library;
+$libraries[$library->name] = $library;
 
 
 $library = new CLibrary;
@@ -146,7 +158,7 @@ $renamer->targetDir = "fpdf";
 
 $library->renamer = $renamer;
 
-$libraries[] = $library;
+$libraries[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "PHPMailer";
@@ -154,7 +166,7 @@ $library->url = "http://phpmailer.sourceforge.net/";
 $library->fileName = "phpmailer-1.73.tar.gz";
 $library->description = "Composant PHP d'envoi d'email";
 
-$libraries[] = $library;
+$libraries[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "JSON-PHP";
@@ -163,7 +175,7 @@ $library->fileName = "JSON.tar.gz";
 $library->extraDir = "json";
 $library->description = "Composant PHP de genération de données JSON. Bientôt en package PEAR";
 
-$libraries[] = $library;
+$libraries[$library->name] = $library;
 
 $library = new CLibrary;
 
@@ -181,7 +193,7 @@ $renamer->targetDir = "scriptaculous";
 
 $library->renamer = $renamer;
 
-$libraries[] = $library;
+$libraries[$library->name] = $library;
 
 $library = new CLibrary;
 
@@ -196,7 +208,7 @@ $renamer->targetDir = "rico";
 
 $library->renamer = $renamer;
 
-$libraries[] = $library;
+$libraries[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "JSCalendar";
@@ -217,7 +229,7 @@ $patch->targetDir = "lang";
 
 $library->patches[] = $patch;
 
-$libraries[] = $library;
+$libraries[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "phpThumb";
@@ -233,7 +245,7 @@ $patch->targetDir = "";
 
 $library->patches[] = $patch;
 
-$libraries[] = $library;
+$libraries[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "FCKEditor";
@@ -270,7 +282,7 @@ $patch->targetDir = "editor/css";
 
 $library->patches[] = $patch;
 
-$libraries[] = $library;
+$libraries[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "Dojo";
@@ -284,7 +296,7 @@ $renamer->targetDir = "dojo";
 
 $library->renamer = $renamer;
 
-$libraries[] = $library;
+$libraries[$library->name] = $library;
 
 ?>
 
@@ -310,7 +322,13 @@ $libraries[] = $library;
   </tr>
   <tr>
     <td class="button">
-      <input type="submit" name="do" value="Installer les bibliothèques" />
+      <select name="libSel">
+        <option value="">Toutes les bibliothèques</option>     
+        <?php foreach($libraries as $library) { ?>
+        <option value="<?php echo $library->name ?>"><?php echo $library->name ?></option>
+        <?php } ?>
+      </select>
+      <input type="submit" name="do" value="Installer" />
     </td>
   </tr>
 </table>
@@ -326,8 +344,10 @@ $libraries[] = $library;
 <?php } ?>
 
 <?php 
-if (@$_POST["do"]) {
-  CLibrary::clearLibraries();
+
+ if (@$_POST["do"]) {
+  CLibrary::clearLibraries($libSel,$libraries);
+
 ?>
 
 
@@ -341,7 +361,10 @@ if (@$_POST["do"]) {
   <th>Installation</th>
 </tr>
 
-<?php foreach($libraries as $library) { ?>
+<?php foreach($libraries as $library) { 
+        if($libSel == $library->name || $libSel == "") {
+
+?>
 <tr>
   <td><strong><?php echo $library->name; ?></strong></td>
   <td class="text"><?php echo nl2br($library->description); ?></td>
@@ -394,7 +417,9 @@ if (@$_POST["do"]) {
 
 <?php } ?>
 
-<?php } ?>
+<?php }  ?>
+
+<?php }  ?>
 
 </table>
 
