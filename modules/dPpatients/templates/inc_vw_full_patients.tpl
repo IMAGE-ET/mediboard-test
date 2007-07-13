@@ -111,7 +111,7 @@ function newDHE(oForm) {
 
 {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
 <tr>
-  <td style="padding-left: 10px;">
+  <td style="padding-left: 20px;">
     <a title="Modifier l'intervention" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
       <img src="images/icons/edit.png" alt="Planifier"/>
     </a>
@@ -146,7 +146,7 @@ function newDHE(oForm) {
 {{assign var="consult_anesth" value=$curr_op->_ref_consult_anesth}}
 {{if $consult_anesth->_id}}
 <tr>
-  <td style="padding-left: 10px;">
+  <td style="padding-left: 20px;">
     {{assign var="curr_consult" value=$consult_anesth->_ref_consultation}}
     {{if $curr_consult->annule}}
     [ANNULE]<br />
