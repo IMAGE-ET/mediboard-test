@@ -4,5 +4,5 @@
   width="100%" 
   height="100%"
   >
-  Serveur de résultats indisponible pour le séjour '{{$sejour->view}}'
+  Serveur de résultats indisponible pour le séjour '{{$sejour->_view}}'
 </iframe>
