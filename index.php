@@ -158,11 +158,7 @@ if (null == $currentModule = CModule::getInstalled($m)) {
 
 // Get current module permissions
 // these can be further modified by the included action files
-$can = new CCanDo;
-$can->read  = $canRead  = $currentModule->canRead();
-$can->edit  = $canEdit  = $currentModule->canEdit();
-$can->view  = $canView  = $currentModule->canView();
-$can->admin = $canAdmin = $currentModule->canAdmin();
+$can = $currentModule->canDo();
 
 $a     = $AppUI->checkFileName(mbGetValueFromGet("a"     , "index"));
 $u     = $AppUI->checkFileName(mbGetValueFromGet("u"     , ""));
@@ -172,14 +168,13 @@ $dosql = $AppUI->checkFileName(mbGetValueFromPost("dosql", ""));
 $g = mbGetAbsValueFromGetOrSession("g", $AppUI->user_group);
 $indexGroup = new CGroups;
 $indexGroup->load($g);
-
 if (!$indexGroup->canRead()) {
   mbSetAbsValueToSession("g", $AppUI->user_group);
   $g = $AppUI->user_group;
 }
 
 // do some db work if dosql is set
-if($dosql) {
+if ($dosql) {
   $mDo = mbGetValueFromPost("m", $m);
   require("./modules/$mDo/$dosql.php");
 }
@@ -188,9 +183,9 @@ ob_start();
 
 // Feed modules with tabs
 foreach (CModule::getActive() as $module) {
-  require_once "./modules/".$module->mod_name."/index.php";
+  require_once "./modules/$module->mod_name/index.php";
 }
-  
+
 if (!$suppressHeaders) {
   
   // -- Code pour le HEADER --
@@ -266,8 +261,8 @@ if( !function_exists("memory_get_usage") ) {
   function memory_get_usage() {
     return "-";
   }
-  
 }
+
 $performance["genere"]  = number_format($phpChrono->total, 3);
 $performance["memoire"] = mbConvertDecaBinary(memory_get_usage());
 $performance["objets"]  = $mbObjectCount;

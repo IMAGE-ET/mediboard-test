@@ -125,6 +125,11 @@ $dPconfig["readonly"] = false;
 // Choose shared memory handler [none|eaccelerator] up to now
 $dPconfig["shared_memory"] = "none";
 
+// Object handlers
+$dPconfig["object_handlers"] = array (
+//  "CMyObjectHandler" => true,
+);
+
 /********* 
  * Configuration settings to be removed with dotProject legacy purge
  */

@@ -165,10 +165,10 @@ class CNumSpec extends CMbFieldSpec {
         $type_sql = "MEDIUMINT(9)";
       }
       if ($valeur_max > pow(2,16)) {
-        $type_sql = "INT";
+        $type_sql = "INT(11)";
       }
       if ($valeur_max > pow(2,32)) {
-        $type_sql = "BIGINT";
+        $type_sql = "BIGINT(20)";
       }
     }elseif($this->pos){
       $type_sql = "INT(11) UNSIGNED";

@@ -180,22 +180,26 @@ class CModule extends CMbObject {
   function showTabs() {
     global $uistyle, $AppUI, $tab, $a, $action, $actionType;
 
-    if(!is_file("./modules/".$this->mod_name."/".$tab.".php")) {
+    // Add configure tab if exist
+    $configPath = "./modules/$this->mod_name/configure.php";
+    if (is_file($configPath)){
+      $this->registerTab("configure", "Configurer", TAB_ADMIN);
+    }
+
+    // Try to access wanted tab
+    $tabPath = "./modules/$this->mod_name/$tab.php";
+    if (!is_file($tabPath)) {
       $tab = $this->_tabs[0][0];
-      if(!is_file("./modules/".$this->mod_name."/".$tab.".php")) {
+      $tabPath = "./modules/$this->mod_name/$tab.php";
+      if (!is_file($tabPath)) {
         $AppUI->redirect("m=system&a=access_denied");
       }
     }
     
     $AppUI->savePlace();
     
-    $moduleAdmin = CModule::getInstalled("system");
-    
-    if($moduleAdmin->canAdmin() && is_file("./modules/".$this->mod_name."/configure.php")){
-      $this->registerTab("configure", "Configurer", TAB_READ);
-    }
-    
-    if(count($this->_tabs) == 1) {
+    // Tab becomes an action if unique
+    if (count($this->_tabs) == 1) {
       $a = $tab;
       $this->showAction();
       return;
@@ -203,16 +207,17 @@ class CModule extends CMbObject {
 
     $action     = $tab;
     $actionType = "tab";
-
+    
+    // Show template
     require_once($AppUI->getSystemClass("smartydp"));
     $smartyStyle = new CSmartyDP("style/$uistyle");
-    
     $smartyStyle->assign("tabs"   , $this->_tabs);
     $smartyStyle->assign("tab"    , $tab);
+
     $smartyStyle->assign("fintab" , false);
-      
     $smartyStyle->display("tabbox.tpl");
-    require_once "./modules/".$this->mod_name."/".$tab.".php";
+
+    require_once $tabPath;
   
     $smartyStyle->assign("fintab", true);
     $smartyStyle->display("tabbox.tpl");
@@ -222,7 +227,10 @@ class CModule extends CMbObject {
     global $AppUI, $u, $a, $action, $actionType;
     $action     = $a;
     $actionType = "a";
-    require_once "./modules/".$this->mod_name."/".($u ? "$u/" : "")."$a.php";
+    $actionPath = "./modules/$this->mod_name/";
+    $actionPath .= $u ? "$u/" : "";
+    $actionPath .= "$a.php";
+    require_once $actionPath;
   }
   
   /**

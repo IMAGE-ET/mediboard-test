@@ -24,9 +24,10 @@ if ($shm->isReady()) {
     
     $shm->put("class-paths", $classPaths);
   } 
-  
+
   function __autoload($className) {
     global $classPaths, $performance;
+      
     // Recherche dans les classes de mediboard
     if (array_key_exists($className, $classPaths)) {
       $performance["autoload"]++;
@@ -44,5 +45,7 @@ if ($shm->isReady()) {
 else {
   $AppUI->getAllClasses();
 }
+
+CMbObject::buildHandlers();
 
 ?>

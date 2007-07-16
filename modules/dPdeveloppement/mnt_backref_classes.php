@@ -52,7 +52,6 @@ foreach($classSelected as $selected) {
 	$translateModule = new CMbConfig;
 	$translateModule->sourcePath = null;
 	$contenu_file = array();
-	//mbTrace($selected);
 	$module = $object->_ref_module->mod_name;
 	foreach($localesDirs as $locale){
 	  $translateModule->options = array("name" => "locales");

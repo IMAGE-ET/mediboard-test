@@ -20,6 +20,7 @@ require_once("./classes/request.class.php");
 require_once("./classes/mbFieldSpecFact.class.php");
  
 class CMbObject {
+  static $handlers = null;
   
   /**
    * Global properties
@@ -133,6 +134,17 @@ class CMbObject {
     $this->_logable = true;
   }
   
+  /**
+   * Saticly build object handlers array
+   */
+  function buildHandlers() {
+    // Static initialisations
+    global $dPconfig;
+    foreach ($dPconfig["object_handlers"] as $handler => $dummy) {
+      CMbObject::$handlers[] = new $handler;
+    }
+  }
+
   /**
    * Set/get functions
    */
@@ -581,7 +593,7 @@ class CMbObject {
     }
     
     // Si object non logable
-    if(!$this->_logable){
+    if (!$this->_logable){
     	return;
     }
 
@@ -626,27 +638,17 @@ class CMbObject {
       }
     }
    
-    // The object may not exist in database anymore : re-insert it
-    $k = $this->_tbl_key;
-    $query = db_prepare("SELECT * FROM `$this->_tbl` WHERE `$k` = %", $this->_id);
-    if ($this->_id) {
-        if (!db_loadResult($query)) {
-        $this->_id = null;
-        
-        // Recheck for missing values when object was deleted
-        if ($msg = $this->check()) {
-          return $AppUI->_(get_class($this)) . " " .
-            $AppUI->_("::deleted not recreated");
-        }
-      }
+    // Event Handlers
+    foreach(self::$handlers as $handler) {
+      $handler->onStore($this);
     }
-  
+     
     // DB query
     if ($this->_id) {
-      $ret = db_updateObject($this->_tbl, $this, $k);
+      $ret = db_updateObject($this->_tbl, $this, $this->_tbl_key);
       
     } else {
-      $ret = db_insertObject($this->_tbl, $this, $k);
+      $ret = db_insertObject($this->_tbl, $this, $this->_tbl_key);
     }
     
 
@@ -833,6 +835,11 @@ class CMbObject {
     if ($msg = $this->canDeleteEx()) {
       return $msg;
     }
+
+    // Event Handlers
+    foreach (self::$handlers as $handler) {
+      $handler->onDelete($this);
+    }   
 
     // Deleting backRefs
     foreach ($this->_backRefs as $backName => $backRef) {
@@ -1241,27 +1248,17 @@ class CMbObject {
     return db_loadHashList($sql, $index);
   }
   
-  function loadLogs($type = null){
-    $class = get_class($this);
-    $key = $this->_tbl_key;
-    $obj_id = $this->$key;
-    $where = array();
-    
-    if($obj_id !== "" && $obj_id !== null)
-      $where["object_id"] = "= '$obj_id'";
-    if($class)
-      $where["object_class"] = "= '$class'";
-    if($type)
-      $where["type"] = "= '$type'";
+  function loadLogs() {
     $order = "date ASC";
-    $list = new CUserLog;
-    $list = $list->loadList($where, $order, "0, 100");
-    foreach($list as $key => $value) {
-      $list[$key]->loadRefsFwd();
-    }   
-    $this->_ref_logs  = $list;
-    $this->_ref_first_log = reset($list);
-    $this->_ref_last_log  = end($list);
+    $limit = "0, 100";
+    $this->_ref_logs = $this->loadBackRefs("logs", $order, $limit);
+
+    foreach($this->_ref_logs as &$_log) {
+      $_log->loadRefsFwd();
+    }
+     
+    $this->_ref_first_log = reset($this->_ref_logs);
+    $this->_ref_last_log  = end($this->_ref_logs);
   }
 
 /**
@@ -1291,8 +1288,5 @@ function purgeHtmlText($regexps, &$source) {
 
   return $total;
 }
-
-
-
 
 ?>
