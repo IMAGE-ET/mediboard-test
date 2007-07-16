@@ -47,8 +47,8 @@ $listSalles = $salle->loadListWithPerms(PERM_READ, null, $order);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("chir"     , $AppUI->user_id);
-$smarty->assign("filter"  , $filter);
+$smarty->assign("chir"      , $AppUI->user_id);
+$smarty->assign("filter"    , $filter);
 $smarty->assign("now"       , $now);
 $smarty->assign("tomorrow"  , $tomorrow);
 $smarty->assign("week_deb"  , $week_deb);

@@ -30,6 +30,7 @@ function popPlanning(debut) {
   url.setModuleAction("dPbloc", "view_planning");
   url.addParam("_date_min", debut);
   url.addParam("_date_max", debut);
+  url.addParam("salle"    , 0);
   url.popup(700, 550, "Planning");
 }
 </script>

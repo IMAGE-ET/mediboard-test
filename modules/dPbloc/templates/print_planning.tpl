@@ -136,12 +136,16 @@ function pageMain() {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="salle_id"}}</td>
-          <td><select name="salle">
-            <option value="0">&mdash; Toutes les salles &mdash;</option>
-            {{foreach from=$listSalles item=curr_salle}}
-	            <option value="{{$curr_salle->salle_id}}">{{$curr_salle->nom}}</option>
-            {{/foreach}}
-          </select></td>
+          <td>
+            <select name="salle">
+              <option value="0">&mdash; Toutes les salles &mdash;</option>
+              {{foreach from=$listSalles item=curr_salle}}
+	              <option value="{{$curr_salle->salle_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
+	                {{$curr_salle->nom}}
+	              </option>
+              {{/foreach}}
+            </select>
+          </td>
         </tr>
       </table>
 

@@ -21,7 +21,7 @@ $order[] = "group_id, nom";
 $where = array();
 $where["group_id"] = db_prepare_in(array_keys($etablissements));
 $salle = new CSalle;
-$salle = $salles->loadListWithPerms(PERM_EDIT, $where, $order);
+$salles = $salle->loadListWithPerms(PERM_EDIT, $where, $order);
 foreach($salles as $keySalle=>$valSalle){
   $salles[$keySalle]->loadRefsFwd();
 } 
