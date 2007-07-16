@@ -21,7 +21,7 @@ function supprimer() {
   form.del.value = 1;
   form.submit();
 }
-{{if !$compte_rendu->compte_rendu_id}}
+{{if !$compte_rendu->_id}}
 var listObjectClass = {{$listObjectClass|@json}};
 
 var aTraducClass = new Array();
@@ -134,7 +134,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$compte_rendu field="object_class"}}</th>
             <td>
-              {{mb_field object=$compte_rendu field="object_class" hidden="1"}}
+              {{*mb_field object=$compte_rendu field="object_class" hidden="1"*}}
               {{if !$compte_rendu->_id}}
               <select name="object_class" class="{{$compte_rendu->_props.object_class}}" onchange="loadCategory()">
                 <option value="">&mdash; Choisir un objet</option>
