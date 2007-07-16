@@ -140,6 +140,7 @@ class CMbObject {
   function buildHandlers() {
     // Static initialisations
     global $dPconfig;
+    CMbObject::$handlers = array();
     foreach ($dPconfig["object_handlers"] as $handler => $dummy) {
       CMbObject::$handlers[] = new $handler;
     }
