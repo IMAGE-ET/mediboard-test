@@ -69,7 +69,6 @@ foreach($listObjectClass as $keyClass=>$value){
   }
 }
 
-//mbTrace($compte_rendu);
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("user_id"             , $user_id);
