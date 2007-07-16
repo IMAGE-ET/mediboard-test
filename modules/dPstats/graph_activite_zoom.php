@@ -126,7 +126,7 @@ $graph = new CMbGraph();
 $graph->selectType("Graph",$options);
 $graph->selectPalette($options);
 $graph->setupAxis($options);
-$graph->accBarPlot($options);
+$graph->addAccBarPlot($options);
 $graph->render("out",$options);
 
 ?>

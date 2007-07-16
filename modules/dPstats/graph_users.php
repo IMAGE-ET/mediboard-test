@@ -41,37 +41,22 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 DAY", $i)) {
     $datay[] = 0;
 }
 
-// Setup the graph.
-$graph = new Graph(400,300,"auto");    
-$graph->img->SetMargin(40,10,30,70);
-$graph->SetScale("textlin");
-$graph->SetMarginColor("lightblue");
-//$graph->SetShadow();
-
-// Set up the title for the graph
-$graph->title->Set($user->_view);
-$graph->title->SetFont(FF_ARIAL,FS_NORMAL,10);
-$graph->title->SetColor("darkred");
-
-// Setup font for axis
-$graph->xaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
-$graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
-
-// Show 0 label on Y-axis (default is not to show)
-$graph->yscale->ticks->SupressZeroLabel(false);
-
-// Setup X-axis labels
-$graph->xaxis->SetTickLabels($datax);
-$graph->xaxis->SetLabelAngle(50);
-
-// Create the bar pot
-$bplot = new BarPlot($datay);
-$bplot->SetWidth(0.6);
-$bplot->SetFillGradient("navy","#EEEEEE",GRAD_LEFT_REFLECTION);
-$bplot->SetColor("white");
-
-// Set color for the frame of each bar
-$graph->Add($bplot);
-
-// Finally send the graph to the browser
-$graph->Stroke();
+$options = array( "width" => 400,
+									"height" => 300,
+									"title" => $user->_view,
+									"sizeFontTitle" => 10,
+									"margin" => array(40,10,30,70),
+									"sizeFontAxis" => 8,
+									"labelAngle" => 50,
+									"from" => "navy",
+									"to" => "#EEEEEE",
+									"graphBarColor" => "white",
+									"dataBar" => $datay,
+									"datax" => $datax );
+				
+$graph = new CMbGraph();
+$graph->selectType("Graph",$options);
+$graph->selectPalette($options);
+$graph->setupAxis($options);
+$graph->addDataBarPlot($options);
+$graph->render("out",$options);

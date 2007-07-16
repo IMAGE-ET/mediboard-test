@@ -95,12 +95,6 @@ foreach($datax as $x) {
   }
 }
 
-// Setup the graph.
-$graph = new Graph(480,300,"auto");    
-$graph->img->SetMargin(50,40,50,70);
-$graph->SetScale("textlin");
-$graph->SetMarginColor("lightblue");
-
 // Set up the title for the graph
 $title = "Heures réservées / occupées par mois";
 $subtitle = "";
@@ -112,85 +106,35 @@ if($salle_id) {
 }
 if($subtitle) {
   $subtitle .= "-";
-  $graph->subtitle->Set($subtitle);
 }
-$graph->title->Set($title);
-$graph->title->SetFont(FF_ARIAL,FS_NORMAL,10);
-$graph->title->SetColor("darkred");
-$graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,7);
-$graph->subtitle->SetColor("black");
-//$graph->img->SetAntiAliasing();
+
 $hours1Sorted = $nbHours;
 rsort($hours1Sorted);
 $hours2Sorted = $doneHours;
 rsort($hours2Sorted);
 $scale = max(intval($hours1Sorted[0]), intval($hours2Sorted[0]));
-$graph->SetScale("intint", 0, $scale + $scale/10);
 
-// Setup font for axis
-$graph->xaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
-$graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
-
-// Show 0 label on Y-axis (default is not to show)
-$graph->yscale->ticks->SupressZeroLabel(false);
-
-// Setup X-axis labels
-$graph->xaxis->SetTickLabels($datax);
-$graph->xaxis->SetPosAbsDelta(15);
-$graph->xgrid->Show();
-$graph->xaxis->SetLabelAngle(50);
-$graph->yaxis->SetPosAbsDelta(-15);
-
-// Legend
-$graph->legend->SetMarkAbsSize(5);
-$graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$graph->legend->Pos(0.02,0.02, "right", "top");
-
-// Create the first plot
-$lplot = new LinePlot($nbHours);
-$lplot->SetColor("blue");
-$lplot->SetWeight(-10);
-$lplot->value->SetFormat("%01.2f");
-$lplot->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$lplot->value->SetMargin(10);
-$lplot->mark->SetType(MARK_FILLEDCIRCLE);
-$lplot->mark->SetColor("blue");
-$lplot->mark->SetFillColor("blue:1.5");
-$lplot->value->show();
-$lplot->setLegend("Réservé");
-
-// Create the first spline plot
-$spline = new Spline(array_keys($datax), array_values($nbHours));
-list($sdatax,$sdatay) = $spline->Get(50);
-$splot = new LinePlot($sdatay, $sdatax);
-//$splot->SetFillGradient("white", "darkgray");
-$splot->SetColor("black");
-
-// Create the second plot
-$lplot2 = new LinePlot($doneHours);
-$lplot2->SetColor("blue");
-$lplot2->SetWeight(-10);
-$lplot2->value->SetFormat("%01.2f");
-$lplot2->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$lplot2->value->SetMargin(10);
-$lplot2->mark->SetType(MARK_FILLEDCIRCLE);
-$lplot2->mark->SetColor("red");
-$lplot2->mark->SetFillColor("red:1.5");
-$lplot2->value->show();
-$lplot2->setLegend("Occupé");
-
-// Create the first spline plot
-$spline2 = new Spline(array_keys($datax), array_values($doneHours));
-list($sdatax2,$sdatay2) = $spline2->Get(50);
-$splot2 = new LinePlot($sdatay2, $sdatax2);
-//$splot2->SetFillGradient("white", "darkgray");
-$splot2->SetColor("black");
-
-// Add the plots to the graph
-$graph->Add($splot);
-$graph->Add($lplot);
-$graph->Add($splot2);
-$graph->Add($lplot2);
-
-// Finally send the graph to the browser
-$graph->Stroke();
+$options = array( "width" => 480,
+									"height" => 300,				
+									"title" => $title,
+									"subtitle" => $subtitle,
+									"margin" => array(50,40,50,70),
+									"posLegend" => array(0.02,0.02, "right", "top"), 
+									"sizeFontAxis" => 8,
+									"labelAngle" => 50,
+									"textTickInterval" => 1,
+									"posXAbsDelta" => 15,
+									"posYAbsDelta" => -15,
+									"datax" => $datax,
+									"dataLine" => array($nbHours, $doneHours),
+									"graphSplineLegend" => array("Réservé","Occupé"),
+									"scale" => array(0, $scale + $scale/10),
+								);
+		
+$graph = new CMbGraph();
+$graph->selectType("Graph",$options);
+$graph->selectPalette($options);
+$graph->setupAxis($options);
+$graph->addDataLinePlot($options);
+$graph->addSplinePlot($options);
+$graph->render("out",$options);

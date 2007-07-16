@@ -203,7 +203,7 @@
     <td>
       <select name="pref_name[{{$var}}]">
         <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
+        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
       </select>
     </td>
   </tr>
@@ -216,7 +216,7 @@
     <td>
       <select name="pref_name[{{$var}}]">
         <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
+        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
       </select>
     </td>
   </tr>

@@ -84,18 +84,22 @@ if($subtitle) {
   $subtitle .= "-";
 }
 
+$opSorted = $op;
+rsort($opSorted);
+
 $options = array( "width" => 480,
 									"height" => 300,
 									"title" => $title,
 									"margin" => array(50,40,50,70),
 									"posLegend" => array(0.015,0.79, "right", "center"), 
-									"sizeFontAxis" => 6,
+									"sizeFontAxis" => 8,
 									"labelAngle" => 50,
 									"textTickInterval" => 2,
-									"posXAbsDelta" => 0,
-									"posYAbsDelta" => 0,
+									"posXAbsDelta" => 15,
+									"posYAbsDelta" => -15,
 									"dataLine" => $op,
 									"datax" => $datax,
+									"scale" => array(0,intval($opSorted[0])+1),
 								);
 				
 $graph = new CMbGraph();

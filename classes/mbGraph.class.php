@@ -16,60 +16,70 @@ require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_regstat"));
 require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_pie"));
 
 class CMbGraph {
-	var $graph = null;
-	
+	/**
+   * Global properties
+   */
+	var $graph = null;   //graph object
 	var $options = null; //tab of options
-
+	
+	/**
+  * Constructor
+  */
 	function CMbGraph() {
 		global $dPconfig;
 		$this->config = $dPconfig['graph_engine'];
-		$this->options = array ("width" => 320,
-														"height" => 125,
-														"size" => 1,
-														"title" => "Title",
-														"subtitle" => " ",
-														"sizeFontTitle" => 7,
+		$this->options = array ("width" => 320,   //width of frame 
+														"height" => 125,  //height of frame
+														"size" => 1, 			//frame scale
+														"title" => "Title",  //title of frame
+														"subtitle" => " ",   //subtitle of frame 
+														"sizeFontTitle" => 7,  //title font size 
 														"palette" => array ( "#aa5500", "#55aa00", "#0055aa", "#aa0055", 
 																								 "#5500aa", "#00aa55", "#ff0000", "#00ff00", 
 																								 "#0000ff", "#ffff00", "#ff00ff", "#00ffff", 
 																								 "#FFFFFF", "#C90062", "#E05206", "#F0AB00", 
 																								 "#000000", "#FF0000", "#3C8A2E", "#006983", 
-																								 "#0098C3", "#21578A", "#55517B", "#4E7D5B" ),
-														
+																								 "#0098C3", "#21578A", "#55517B", "#4E7D5B" ),  //color pallets
+														"ezCPalette" => "ez", //eZComponent pallets
 														"margin" => array (0, 
 																							 0, 
 																							 0, 
-																							 0),
-														"marginColor" => "lightblue",
-														"titleColor"	=> "darkred",
-														"subtitleColor"	=> "black",
-														"sizeFontLegend" => 7,
+																							 0), //margin of frame
+														"marginColor" => "lightblue", //margin color
+														"titleColor"	=> "darkred", //title color
+														"subtitleColor"	=> "black", //subtitle color
+														"sizeFontLegend" => 7, //legend font size 
 														"posLegend" => array(0, 
 																								 0,
 																								 "right",
-																								 "top"),
-														"sizeFontAxis" => 6,
-														"labelAngle" => 0,
-														"textTickInterval" => 0,
-														"posXAbsDelta" => 0,
-														"posYAbsDelta" => 0,
-														"dataPie" => array(),
-														"dataBar" => array(),
-														"dataLine" => array(),
-														"dataAccBar" => array(),										 
-														"datax" => array(),
-														"from" => "#AAAAAA",
-														"to" => "#EEEEEE",
-														"graphBarColor" => "white",
-														"graphBarLegend" => "Legend",
-														"graphLineColor" => "white",
-														"graphLineLegend" => "Legend",
-														"graphPieLegend" => "Legend",
-														"graphAccLegend" => "Legend",
-														"map" => "non",
-													  "mapInfo" => array(),						 										 											 																																										
-														"renderPath" => "tmp/graphtmp.png",
-														"nameHtmlImageMap" => "nameHtmlImageMap"										 									 								 												 		
+																								 "top"),  //legend position
+														"sizeFontAxis" => 6, //axis font size 
+														"labelAngle" => 0,   //label angle
+														"textTickInterval" => 0, //text tick interval
+														"posXAbsDelta" => 0, //position X 
+														"posYAbsDelta" => 0, //position Y
+														"dataPie" => array(), //data of pie graph 
+														"dataBar" => array(), //data of bar graph 
+														"dataLine" => array(), //data of line graph 
+														"dataAccBar" => array(), //data of accBar graph 
+														"datax" => array(),		//data of X axis							 
+														"addY" => "addY1",		//choice add data is Y1 or Y2
+														"from" => "#AAAAAA",  //beginning graph color 
+														"to" => "#EEEEEE",		//end graph color 
+														"graphBarColor" => "white", //color of bar graph 
+														"graphBarLegend" => "", //legend of bar graph 
+														"graphLineColor" => "white", //color of line graph 
+														"graphLineLegend" => "", //legend of line graph 
+														"graphSplineLegend" => "", //legend of spline graph
+														"graphPieLegend" => "Legend", //legend of pie graph
+														"graphAccLegend" => "Legend", //legend of accBar graph
+														"graphLineSize" => 1,  //size of line size
+														"map" => "non", //choice if graph is a map
+													  "mapInfo" => array(),	//map info					 								 		 											 																																										
+														"renderPath" => "tmp/graphtmp.png",  //render path
+														"nameHtmlImageMap" => "nameHtmlImageMap", //name html image map
+														"scale" => array(0, 
+																						 0)	//scale of xaxis and yaxis									 									 								 												 		
 														);
 	}
 
@@ -115,9 +125,9 @@ class CMbGraph {
 		}
 	}
 	
-	function accBarPlot($options) {
+	function addAccBarPlot($options) {
 		if ($this->config == 'jpgraph'){
-			$this->jpgraphAccBarPlot($options);
+			$this->jpgraphAddAccBarPlot($options);
 		}
 	}
 	
@@ -153,47 +163,52 @@ class CMbGraph {
 		}
 	}
 	
-	//$type,$title,$size,$taille,$margin
-	function eZgraphSelectType($type,$title,$size,$taille,$margin) {
+	function eZgraphSelectType($type,$options) {
+		$this->options = array_merge($this->options, $options);
 		if($type == "Pie") {
 			$this->graph = new ezcGraphPieChart();
-			$this->graph->title = $title;
+			$this->graph->title = $this->options['title'];
 			$this->graph->options->label = '%3$.1f%%';
 			$this->graph->options->font = './shell/arial.ttf';
-			$this->graph->legend->symbolSize = $size*9;
+			$this->graph->legend->symbolSize = $this->options['size']*9;
   			//$this->graph->legend->portraitSize = ".25";
-			$this->graph->options->font->maxFontSize = $size*8;
+			$this->graph->options->font->maxFontSize = $this->options['size']*8;
 			$this->graph->options->font->padding = "1";
 		}
 	}
 	
-	//$palette
-	function eZgraphSelectPalette($palette) {
-		if($palette == "ez") {
+	function eZgraphSelectPalette($options) {
+		$this->options = array_merge($this->options, $options);
+		if($this->options['ezCPalette'] == "ez") {
 			$this->graph->palette = new ezcGraphPaletteEz();
-			$this->graph->palette->dataSetColor  = $this->palette;
-		} else if($palette == "black") {
+			$this->graph->palette->dataSetColor  = $this->options['palette'];
+		} else if($this->options['ezCPalette'] == "black") {
 			$this->graph->palette = new ezcGraphPaletteEzBlack();
-		} else if($palette == "blue") {
+		} else if($this->options['ezCPalette'] == "blue") {
 			$this->graph->palette = new ezcGraphPaletteEzBlue();
-		} else if($palette == "green") {
+		} else if($this->options['ezCPalette'] == "green") {
 			$this->graph->palette = new ezcGraphPaletteEzGreen();
-		} else if($palette == "red") {
+		} else if($this->options['ezCPalette'] == "red") {
 			$this->graph->palette = new ezcGraphPaletteEzRed();
 		}
 	}
 	
-	//$datas,$title,$size
-	function eZgraphAddData($datas,$title,$size) {
-		$tab = array();
-		foreach($datas as $data) {
-  			$tab[$data['legend']] = $data['value'];
+	function eZgraphAddData($options) {
+		$this->options = array_merge($this->options, $options);
+//		$tab = array();
+//		foreach($datas as $data) {
+//  			$tab[$data['legend']] = $data['value'];
+//		}
+		$datas = array();
+		mbTrace($this->options['dataPie']);
+		foreach($values as $value) {
+//  		$datas[]  = $data["value"];
+//  		$legends[] = $data["legend"];
 		}
-		$this->graph->data[$title] = new ezcGraphArrayDataSet($tab);
+		$this->graph->data[$this->options['title']] = new ezcGraphArrayDataSet($tab);
 	}
 	
-	//$render,$size
-	function eZgraphRender($render,$size) {
+	function eZgraphRender($render,$options) {
 		global $dPconfig;
 		if($dPconfig['graph_svg'] == "non") {
 			$this->graph->driver = new ezcGraphGdDriver();
@@ -218,7 +233,6 @@ class CMbGraph {
 		}
 	}
 	
-	//$type,$title,$size,$taille,$margin
 	function jpgraphSelectType ($type,$options) {
 		$this->options = array_merge($this->options, $options);
 		if ($type == "Pie") {
@@ -237,7 +251,6 @@ class CMbGraph {
 		$this->graph->legend->Pos($this->options['posLegend'][0], $this->options['posLegend'][1], $this->options['posLegend'][2], $this->options['posLegend'][3]);
 	}
 
-	//$palette
 	function jpgraphSelectPalette ($options) {
 		$this->options = array_merge($this->options, $options);
 		$this->graph->SetMarginColor($this->options['marginColor']);
@@ -245,9 +258,12 @@ class CMbGraph {
 		$this->graph->subtitle->SetColor($this->options['subtitleColor']);
 	}
 	
-	//$datax,$size,$taille
 	function jpgraphSetupAxis ($options) {
 		$this->options = array_merge($this->options, $options);
+		
+		if ($this->options['scale'] == array(0,0)) {
+			$this->graph->SetScale("intint", $this->options['scale'][0], $this->options['scale'][1]);
+		}
 		// Setup font for axis
 		$this->graph->xaxis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
 		$this->graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
@@ -257,14 +273,20 @@ class CMbGraph {
 		$this->graph->yscale->ticks->SupressZeroLabel(false);
 		$this->graph->yaxis->SetColor("black");
 		//$this->graph->y2axis->SetColor("#888888");
-		
+
 		// Setup X-axis labels
 		$this->graph->xaxis->SetTickLabels($this->options['datax']);
 		$this->graph->xaxis->SetTextTickInterval($this->options['textTickInterval']);
 		$this->graph->xaxis->SetLabelAngle($this->options['labelAngle']);
 	}
 	
-	//$datas,$title,$size
+	function jpgraphAddSecondAxis ($options) {
+		$this->options = array_merge($this->options, $options);
+		$this->graph->SetY2Scale("int");
+		$this->graph->y2axis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
+		$this->graph->y2axis->SetColor("#888888");		
+	}
+
 	function jpgraphAddDataPiePlot ($options) {
 		$this->options = array_merge($this->options, $options);
 		$pplot = new PiePlot($this->options['dataPie']);
@@ -275,7 +297,6 @@ class CMbGraph {
 		$this->graph->Add($pplot);
 	}
 	
-	//$data,$from,$to,$color,$legend
 	function jpgraphAddDataBarPlot ($options) {
 		$this->options = array_merge($this->options, $options);
 		// Create the bar hits pot
@@ -284,37 +305,37 @@ class CMbGraph {
 		$bplot->SetFillGradient($this->options['from'],$this->options['to'],GRAD_LEFT_REFLECTION);
 		$bplot->SetColor($this->options['graphBarColor']);
 		$bplot->setLegend($this->options['graphBarLegend']);
-		$this->graph->AddY2($bplot);
+		if ($this->options['addY'] == "addY2") {
+			$this->graph->AddY2($bplot);
+		} else {
+			$this->graph->Add($bplot);
+		}
 	}
 	
-	//$data,$legend,$size,$color
 	function jpgraphAddDataLinePlot ($options) {
 		$this->options = array_merge($this->options, $options);
 		if (!is_array($this->options['graphLineLegend'])) {
 			$lplot = new LinePlot($this->options['dataLine']);
 			$lplot->setLegend($this->options['graphLineLegend']);
-			$lplot->SetWeight($this->options['size']);
+			$lplot->SetWeight($this->options['graphLineSize']);
 			$this->graph->Add($lplot);
 		} else {
-			$i = 0;
 			foreach ($this->options['graphLineLegend'] as $key => $value) {
 				$lplot = new LinePlot($this->options['dataLine'][$key]);
 				$lplot->setLegend($this->options['graphLineLegend'][$key]);
-				$lplot->SetWeight($this->options['size']);
+				$lplot->SetWeight($this->options['graphLineSize']);
 				$lplot->SetColor($this->options['palette'][$key]);
 				$this->graph->Add($lplot);
-				$i++;
 			}
 		}
 	}
 	
-	function jpgraphAccBarPlot ($options) {
+	function jpgraphAddAccBarPlot ($options) {
 		$this->options = array_merge($this->options, $options);
-		//mbTrace($this->options['dataAccBar'])
+			
 		$listPlots = array();
 		foreach ($this->options['dataAccBar'] as $key => $value) {
 			$bplot = new BarPlot($value["data"]);
-		  //$bplot->to = "#EEEEEE";
 		  $bplot->SetFillGradient($this->options['palette'][$key],$this->options['to'],GRAD_LEFT_REFLECTION);
 		  $bplot->SetColor("white");
 		  $bplot->setLegend($value["legend"]);
@@ -335,47 +356,63 @@ class CMbGraph {
 	}
 	
 	function jpgraphAddSplinePlot ($options) {
-		$opSorted = $this->options['dataLine'];
-		rsort($opSorted);
-		$this->graph->SetScale("intint", 0, intval($opSorted[0])+1);
-		
-		// Create the plot
-		$lplot = new LinePlot($this->options['dataLine']);
-		$lplot->SetColor("blue");
-		$lplot->SetWeight(-10);
-		$lplot->value->SetFormat("%01.2f");
-		$lplot->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
-		$lplot->value->SetMargin(10);
-		$lplot->mark->SetType(MARK_FILLEDCIRCLE);
-		$lplot->mark->SetColor("blue");
-		$lplot->mark->SetFillColor("blue:1.5");
-		$lplot->value->show();
-		
-		// Create the spline plot
-		$spline = new Spline(array_keys($this->options['datax']), array_values($this->options['dataLine']));
-		list($sdatax,$sdatay) = $spline->Get(50);
-		
-		$lplot2 = new LinePlot($sdatay, $sdatax);
-		$lplot2->SetFillGradient("white", "darkgray");
-		$lplot2->SetColor("black");
-		
-		// Add the plots to the graph
-		$this->graph->Add($lplot2);
-		$this->graph->Add($lplot);	
-	}
-	
-	function jpgraphAddSecondAxis ($options) {
 		$this->options = array_merge($this->options, $options);
-		$this->graph->SetY2Scale("int");
-		$this->graph->y2axis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
-		$this->graph->y2axis->SetColor("#888888");		
+		
+		$this->graph->xgrid->Show();	
+		if (!is_array($this->options['graphSplineLegend'])) {
+			// Create the plot
+			$lplot = new LinePlot($this->options['dataLine']);
+			$lplot->SetColor("blue");
+			$lplot->SetWeight(-10);
+			$lplot->value->SetFormat("%01.2f");
+			$lplot->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
+			$lplot->value->SetMargin(10);
+			$lplot->mark->SetType(MARK_FILLEDCIRCLE);
+			$lplot->mark->SetColor("blue");
+			$lplot->mark->SetFillColor("blue:1.5");
+			$lplot->value->show();
+		
+			// Create the spline plot
+			$spline = new Spline(array_keys($this->options['datax']), array_values($this->options['dataLine']));
+			list($sdatax,$sdatay) = $spline->Get(50);	
+			$splot = new LinePlot($sdatay, $sdatax);
+			$splot->SetFillGradient("white", "darkgray");
+			$splot->SetColor("black");
+			
+			// Add the plots to the graph
+			$this->graph->Add($splot);	
+			$this->graph->Add($lplot);
+		} else {
+			// Create the plot
+			foreach ($this->options['graphSplineLegend'] as $key => $value) {
+				$lplot = new LinePlot($this->options['dataLine'][$key]);
+				$lplot->setLegend($this->options['graphSplineLegend'][$key]);
+				$lplot->SetColor($this->options['palette'][$key]);
+				$lplot->SetWeight(-10);
+				$lplot->value->SetFormat("%01.2f");
+				$lplot->value->SetFont(FF_ARIAL,FS_NORMAL, 7);
+				$lplot->value->SetMargin(10);
+				$lplot->mark->SetType(MARK_FILLEDCIRCLE);
+				$lplot->mark->SetColor($this->options['palette'][$key]);
+				$lplot->mark->SetFillColor($this->options['palette'][$key].":1.5");
+				$lplot->value->show();
+				
+				// Create the spline plot
+				$spline = new Spline(array_keys($this->options['datax']), array_values($this->options['dataLine'][$key]));
+				list($sdatax,$sdatay) = $spline->Get(50);			
+				$splot = new LinePlot($sdatay, $sdatax);
+				
+				// Add the plots to the graph
+				$this->graph->Add($splot);	
+				$this->graph->Add($lplot);
+			}	
+		}
 	}
 	
 	function jpgraphGetHTMLImageMap () {
 		return $this->graph->GetHTMLImageMap("graph_interventions");
 	}
 	
-	//$render,$size
 	function jpgraphRender ($type,$options) {
 		if ($type == "out") {
 			$this->graph->Stroke();
