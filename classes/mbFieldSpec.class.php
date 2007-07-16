@@ -303,10 +303,14 @@ class CMbFieldSpec {
   function checkProperty(){
   }
   
-  function sample(&$object){
+  // Return a sample value.
+  //If consistent, the random value stay the same for a given initial value
+  function sample(&$object, $consistent = true){
     $fieldName = $this->fieldName;
     $propValue =& $object->$fieldName;
-    srand(crc32($propValue));
+    if($consistent) {
+      srand(crc32($propValue));
+    }
   }
   
   function getDBSpec(){

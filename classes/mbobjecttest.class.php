@@ -19,7 +19,7 @@ class CMbObjectTest {
         $object->$key = $staticsProps[$key];
       }
       elseif($key[0] != "_"){
-        $spec->sample($object);
+        $spec->sample($object, false);
       }
     }
   }

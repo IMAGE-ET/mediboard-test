@@ -33,8 +33,8 @@ class CEmailSpec extends CMbFieldSpec {
     return $this->getFormElementText($object, $params, $value, $className);
   }
   
-  function sample(&$object) {
-    parent::sample($object);
+  function sample(&$object, $consistent = true) {
+    parent::sample($object, $consistent);
     $fieldName = $this->fieldName;
     $object->$fieldName = "noone@nowhere.com";
   }

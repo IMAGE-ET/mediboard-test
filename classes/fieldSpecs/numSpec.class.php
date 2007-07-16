@@ -112,8 +112,8 @@ class CNumSpec extends CMbFieldSpec {
     return null;
   }
 
-  function sample(&$object){
-    parent::sample($object);
+  function sample(&$object, $consistent = true){
+    parent::sample($object, $consistent);
     $fieldName = $this->fieldName;
     $propValue =& $object->$fieldName;
     
