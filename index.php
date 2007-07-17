@@ -48,7 +48,14 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modifi
 header("Cache-Control: no-cache, must-revalidate");  // HTTP/1.1
 header("Pragma: no-cache");  // HTTP/1.0
 
-require_once("./includes/db_connect.php");
+ 
+  require_once("./includes/db_connect.php");
+
+  require_once("./classes/sqlDataSource.class.php");
+  require_once("./classes/mysqlDataSource.class.php");  	
+
+
+
 require_once("./includes/autoload.php");
 
 // Load default preferences if not logged in

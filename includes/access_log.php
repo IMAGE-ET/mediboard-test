@@ -9,9 +9,23 @@
 
 global $AppUI, $m, $tab, $a, $dosql, $action;
 
-if (!db_loadTable("access_log")) {
-  return;
+
+if (!isset($dPconfig['bd'])) {
+  if (!db_loadTable("access_log")) {
+    return;
+  }
 }
+
+
+if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){
+  $mysql_data_source = CSQLDataSource::get("std");
+  if (!$mysql_data_source->db_loadTable("access_log")) {
+    return;
+  }
+}
+
+
+
 
 $module = $m;
 $period = mbTranformTime(null, null, "%Y-%m-%d %H:00:00");
@@ -34,6 +48,15 @@ if (!$log->accesslog_id) {
 
 $log->hits++;
 $log->duration += $phpChrono->total;
-$log->request += $dbChronos["std"]->total;
+
+
+if (!isset($dPconfig['bd'])) {
+  $log->request += $dbChronos["std"]->total;
+}
+
+if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){
+  $log->request += $mysql_data_source->chrono->total;
+}
+
 $log->store();
 ?>

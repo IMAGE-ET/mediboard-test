@@ -16,6 +16,7 @@ global $mbObjectCount, $mbCacheObjectCount;
 $mbObjectCount = 0;
 $mbCacheObjectCount = 0;
 
+
 require_once("./classes/request.class.php");
 require_once("./classes/mbFieldSpecFact.class.php");
 require_once("./classes/mbObjectSpec.class.php");
@@ -133,6 +134,16 @@ class CMbObject {
     $this->_enums         =& $enums;
     $this->_enumsTrans    =& $enumsTrans;
     $this->_helped_fields =& $helped_fields;
+    
+    global $dPconfig;
+    
+    if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){
+      $this->dataSource = new CMySQLDataSource();
+
+      // Initialisation et connection
+      $this->dataSource->init("std");
+    }
+    
   }
   
   /**
@@ -291,12 +302,20 @@ class CMbObject {
    */
 
   function bind($hash, $doStripSlashes = true) {
-    if (!is_array($hash)) {
+    global $dPconfig;
+    
+  	if (!is_array($hash)) {
       $this->_error = get_class($this)."::bind failed.";
       return false;
     } else {
-      bindHashToObject($hash, $this, $doStripSlashes);
-      return true;
+      
+      if (!isset($dPconfig['bd'])) {
+        bindHashToObject($hash, $this, $doStripSlashes);
+      }
+      if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')) {
+        $this->dataSource->bindHashToObject($hash, $this, $doStripSlashes);
+      }	
+    	return true;
     }
   }
   
@@ -306,7 +325,9 @@ class CMbObject {
 
   // One object by ID
   function load($oid = null, $strip = true) {
-    if ($oid) {
+    global $dPconfig;
+    
+  	if ($oid) {
       $this->_id = intval($oid);
     }
 
@@ -315,8 +336,15 @@ class CMbObject {
     }
     
     $sql = "SELECT * FROM `$this->_tbl` WHERE `$this->_tbl_key` = '$this->_id'";
-    $object = db_loadObject($sql, $this);
-
+    
+    if (!isset($dPconfig['bd'])) {
+      $object = db_loadObject($sql, $this);
+    }
+    
+    if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')) {
+      $object = $this->dataSource->db_loadObject($sql, $this);
+    }
+    
     if (!$object) {
       $this->_id = null;
       return false;
@@ -345,6 +373,8 @@ class CMbObject {
     }
     
     $this->loadObject($request->where, $request->order, $request->group, $request->ljoin);
+  
+  
   }
   
   /**
@@ -392,19 +422,35 @@ class CMbObject {
    * Object list by a request constructor
    */
   function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
-    $request = new CRequest();
+    global $dPconfig;
+    
+  	$request = new CRequest();
     $request->addLJoin($leftjoin);
     $request->addWhere($where);
     $request->addGroup($group);
     $request->addOrder($order);
     $request->setLimit($limit);
-    $result = db_loadObjectList($request->getRequest($this), $this);
+    
+    if (!isset($dPconfig['bd'])){
+      $result = db_loadObjectList($request->getRequest($this), $this);
+    }
+    
+    if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){
+      $result = $this->dataSource->db_loadObjectList($request->getRequest($this), $this);
+    }
     return $result;
   }
   
   function loadListByReq($request) {
-    $result = db_loadObjectList($request->getRequest($this), $this);
-    return $result;
+    global $dPconfig;
+    
+  	if (!isset($dPconfig['bd'])){
+      $result = db_loadObjectList($request->getRequest($this), $this);
+    }
+    if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){
+      $result = $this->dataSource->db_loadObjectList($request->getRequest($this), $this);
+    }
+  	return $result;
   }
 
   /**
@@ -622,11 +668,12 @@ class CMbObject {
    *  @return null|string null if successful otherwise returns and error message
    */
   function store($checkobject = true) {
-    global $AppUI;
+    global $dPconfig;
+  	global $AppUI;
     
     // Properties checking
     $this->updateDBFields();
-    
+
     // Si l'object existe alors, on affecte à objBefore sa valeur
     $objBefore = new $this->_class_name();
     $objBefore->load($this->_id);
@@ -638,18 +685,34 @@ class CMbObject {
           $AppUI->_($msg);
       }
     }
-   
+
     // DB query
     if ($objBefore->_id) {
-      $ret = db_updateObject($this->_tbl, $this, $this->_tbl_key);
+      if (!isset($dPconfig['bd'])){		
+        $ret = db_updateObject($this->_tbl, $this, $this->_tbl_key);
+      }
+      if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){
+        $ret = $this->dataSource->db_updateObject($this->_tbl, $this, $this->_tbl_key);
+      }
     } else {
-      $ret = db_insertObject($this->_tbl, $this, $this->_tbl_key);
+      if (!isset($dPconfig['bd'])){	
+        $ret = db_insertObject($this->_tbl, $this, $this->_tbl_key);
+      }
+      if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){
+        $ret = $this->dataSource->db_insertObject($this->_tbl, $this, $this->_tbl_key);
+      }
     }
     
 
     if (!$ret) {
-      return get_class($this)."::store failed <br />" . db_error();
+      if (!isset($dPconfig['bd'])) {
+        return get_class($this)."::store failed <br />" . db_error();
+      }
+      if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){
+        return get_class($this)."::store failed <br />" . $this->dataSource->db_error();
+      }
     } 
+    
 
     // Load the object to get all properties
     unset($this->_objectsTable[$this->_id]);
@@ -674,6 +737,8 @@ class CMbObject {
    * @return int the count null if back references module is not installed
    */
   function countBackRefs($backName) {
+  	global $dPconfig;
+    
     $backRef = $this->_backRefs[$backName];
     $backRefParts = split(" ", $backRef);
     $backClass = $backRefParts[0];
@@ -697,7 +762,12 @@ class CMbObject {
     }
     
     // Comptage des backrefs
+    if (!isset($dPconfig['bd'])) {
     return db_loadResult($query);
+    }
+    if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){
+    return $this->dataSource->db_loadResult($query);	
+    }
   }
 
   /**
@@ -822,7 +892,8 @@ class CMbObject {
    * @return null|string null if successful otherwise returns and error message
    */
   function delete($oid = null) {
-
+    global $dPconfig;
+    
     // Chargement de _objBefore 
     $objBefore = new $this->_class_name;
     $objBefore->load($this->_id);
@@ -875,10 +946,20 @@ class CMbObject {
     
     // Actually delete record
     $sql = "DELETE FROM $this->_tbl WHERE $this->_tbl_key = '$this->_id'";
-    if (!db_exec($sql)) {
-      return db_error();
+    
+    if (!isset($dPconfig['bd'])){		
+      if (!db_exec($sql)) {
+        return db_error();
+      }
     }
-         
+    if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){
+      if (!$this->dataSource->db_exec($sql)) {
+        return $this->dataSource->db_error();
+      }
+    }
+    	
+    
+    
     // Deletion successful
     $this->_id = null;
    
@@ -941,7 +1022,15 @@ class CMbObject {
     }
     $sql .= "\n $this->_tbl_key";
     $sql .=" LIMIT 0,100";
-    return db_loadObjectList($sql, $this);
+    
+    if (!isset($dPconfig['bd'])) {		
+      return db_loadObjectList($sql, $this);
+    }
+    if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){		
+      return $this->dataSource->db_loadObjectList($sql, $this);
+    }
+    
+    
   }
   
   /**
@@ -1106,6 +1195,7 @@ class CMbObject {
   
   function checkConfidential($specs = null) {
     global $dPconfig;
+    
     if($dPconfig["hide_confidential"]) {
       if($specs == null){
         $specs = $this->_specs;
@@ -1120,7 +1210,9 @@ class CMbObject {
   }
 
   function loadAides($user_id) {
-    foreach ($this->_helped_fields as $field => $prop) {
+    global $dPconfig;
+    
+  	foreach ($this->_helped_fields as $field => $prop) {
       $this->_aides[$field] = array();
       $this->_aides[$field]["no_enum"] = null;
       
@@ -1140,8 +1232,17 @@ class CMbObject {
     
     // Préparation du chargement des aides
     $where = array();
-    $where["user_id"] = db_prepare("= %", $user_id);
-    $where["class"]   = db_prepare("= %", $this->_class_name);
+    
+    
+    if (!isset($dPconfig['bd'])) {		
+      $where["user_id"] = db_prepare("= %", $user_id);
+      $where["class"]   = db_prepare("= %", $this->_class_name);
+    }
+    if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){		
+      $where["user_id"] = $this->dataSource->db_prepare("= %", $user_id);
+      $where["class"]   = $this->dataSource->db_prepare("= %", $this->_class_name);
+    }
+    
     $order = "name";
     
     // Chargement des Aides de l'utilisateur
@@ -1205,7 +1306,14 @@ class CMbObject {
       AND permission_item = $this->_tbl_key
       AND permission_value = 0
     ";
-    return db_loadColumn($sql);
+    
+    if (!isset($dPconfig['bd'])) {		
+      return db_loadColumn($sql);
+    }
+    
+    if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){		
+      return $this->dataSource->db_loadColumn($sql);
+    }
   }
 
   /**
@@ -1220,7 +1328,9 @@ class CMbObject {
 
   // returns a list of records exposed to the user
   function getAllowedRecords($uid, $fields = "*", $orderby = "", $index = null, $extra = null) {
-    $uid = intval($uid);
+    global $dPconfig;
+    
+  	$uid = intval($uid);
     $uid || exit ("FATAL ERROR<br />" . get_class($this) . "::getAllowedRecords failed");
     $deny = $this->getDeniedRecords($uid);
 
@@ -1245,8 +1355,14 @@ class CMbObject {
     }
 
     $sql .= ($orderby ? "\nORDER BY $orderby" : "");
-
-    return db_loadHashList($sql, $index);
+ 
+    if (!isset($dPconfig['bd'])){		
+      return db_loadHashList($sql, $index);
+    }
+    
+    if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){		
+      return $this->dataSource->db_loadHashList($sql, $index);
+    }
   }
   
   function loadLogs() {
@@ -1281,13 +1397,15 @@ function htmlReplace($find, $replace, &$source) {
   return $nbFound;
 }
 
+
 function purgeHtmlText($regexps, &$source) {
   $total = 0;
   foreach ($regexps as $find => $replace) {
     $total += htmlReplace($find, $replace, $source); 
   }
-
   return $total;
 }
+
+
 
 ?>
