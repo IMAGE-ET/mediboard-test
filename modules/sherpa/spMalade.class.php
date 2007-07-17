@@ -29,7 +29,6 @@ class CSpMalade extends CSpObject {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-
     $specs["malnum"] = "numchar length|6";
     $specs["malnom"] = "str maxLength|20";
     $specs["malpre"] = "str maxLength|10";

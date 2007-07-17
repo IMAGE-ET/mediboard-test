@@ -12,7 +12,10 @@
  * - base association
  */
 class CSpObject extends CMbObject {  
-    
+
+ function loadExternal() {
+    $this->_external = true;
+  }
   /**
    * Map the sherpa object form a mediboard 
    */
