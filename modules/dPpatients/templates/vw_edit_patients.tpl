@@ -32,49 +32,6 @@ function printPatient(id) {
   url.popup(700, 550, "Patient");
 }
 
-function popMed(type) {
-  var url = new Url();
-  url.setModuleAction("dPpatients", "vw_medecins");
-  url.addParam("type", type);
-  url.popup(700, 450, "Medecin");
-}
-
-function delCmu(){
-  oForm = document.editFrm;
-  oForm.cmu.value = "";
-  oDateDiv = $("editFrm_cmu_da");
-  oDateDiv.innerHTML = "";
-  
-}
-
-function setCmu(){
-  oForm = document.editFrm;
-  oForm.cmu.value = "{{$dateCMU}}";
-  oDateDiv = $("editFrm_cmu_da");
-  oDateDiv.innerHTML = "{{$dateCMU}}";
-}
-
-function delMed(sElementName) {
-  oForm = document.editFrm;
-  
-  oFieldMedecin = eval("oForm.medecin" + sElementName);
-  oFieldMedecinName = eval("oForm._medecin" + sElementName + "_name");
-	
-  oFieldMedecin.value = "";
-  oFieldMedecinName.value = "";
-}
-
-function setMed( key, nom, prenom, sElementName ){
-  oForm = document.editFrm;
-  
-  oFieldMedecin = eval("oForm.medecin" + sElementName);
-  oFieldMedecinName = eval("oForm._medecin" + sElementName + "_name");
-	
-  oFieldMedecin.value = key;
-  oFieldMedecinName.value = "Dr. " + nom + " " + prenom;
-}
-
-
 function pageMain() {
   initInseeFields("editFrm", "cp", "ville","pays");
   initInseeFields("editFrm", "prevenir_cp", "prevenir_ville", "_tel31");

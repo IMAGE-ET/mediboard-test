@@ -5,7 +5,7 @@
 <script type="text/javascript">
 
 function setClose(iId, sNom, sPrenom, sType) {
-  window.opener.setMed(iId, sNom, sPrenom, sType);
+  window.opener.Medecin.set(iId, sNom, sPrenom, sType);
   window.close();
 }
 

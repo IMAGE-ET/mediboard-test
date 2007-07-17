@@ -138,7 +138,7 @@ class CMbObject {
   /**
    * Saticly build object handlers array
    */
-  function buildHandlers() {
+  function makeHandlers() {
     if (CMbObject::$handlers) {
       return;
     }
@@ -639,12 +639,6 @@ class CMbObject {
       }
     }
    
-    // Event Handlers
-    self::buildHandlers();
-    foreach (self::$handlers as $handler) {
-      $handler->onStore($this);
-    }
-     
     // DB query
     if ($objBefore->_id) {
       $ret = db_updateObject($this->_tbl, $this, $this->_tbl_key);
@@ -664,6 +658,12 @@ class CMbObject {
     //Creation du log une fois le store terminé
     $this->log($objBefore);
     
+    // Event Handlers
+    self::makeHandlers();
+    foreach (self::$handlers as $handler) {
+      $handler->onStore($this);
+    }
+
     return null;
   }
 
@@ -824,8 +824,7 @@ class CMbObject {
   function delete($oid = null) {
 
     // Chargement de _objBefore 
-    $_obj_class = $this->_class_name;
-    $objBefore = new $_obj_class();
+    $objBefore = new $this->_class_name;
     $objBefore->load($this->_id);
     
     
@@ -836,12 +835,6 @@ class CMbObject {
     if ($msg = $this->canDeleteEx()) {
       return $msg;
     }
-
-    // Event Handlers
-    self::buildHandlers();
-    foreach (self::$handlers as $handler) {
-      $handler->onDelete($this);
-    }   
 
     // Deleting backRefs
     foreach ($this->_backRefs as $backName => $backRef) {
@@ -889,9 +882,15 @@ class CMbObject {
     // Deletion successful
     $this->_id = null;
    
-    //Creation du log une fois le delete terminé
+    // Creation du log une fois le delete terminé
     $this->log($objBefore);
     
+    // Event Handlers
+    self::makeHandlers();
+    foreach (self::$handlers as $handler) {
+      $handler->onDelete($this);
+    }   
+
     return null;
   }
   
