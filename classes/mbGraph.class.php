@@ -261,7 +261,7 @@ class CMbGraph {
 	function jpgraphSetupAxis ($options) {
 		$this->options = array_merge($this->options, $options);
 		
-		if ($this->options['scale'] == array(0,0)) {
+		if ($this->options['scale'] != array(0,0)) {
 			$this->graph->SetScale("intint", $this->options['scale'][0], $this->options['scale'][1]);
 		}
 		// Setup font for axis
