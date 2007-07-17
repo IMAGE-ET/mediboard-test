@@ -7,6 +7,8 @@
 * @author Romain Ollivier
 */
 
+global $AppUI;
+require_once($AppUI->getModuleClass("sherpa", "spObject"));
 
 /**
  * Classe du malade sherpa
