@@ -2,7 +2,7 @@
 
       {{if $can->edit}}
       <form name="editEtablissement" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="dosql" value="do_etablissement_aed" />
+      <input type="hidden" name="dosql" value="do_SpEtablissement_aed" />
       <input type="hidden" name="facture_id" value="{{$etablissement->_id}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="_class_name" value="CGroups" />

@@ -13,6 +13,7 @@ $can->needsRead();
 // Chargement de l'établissement courant
 $etablissement = new CSpEtablissement;
 $etablissement->load(mbGetAbsValueFromGetOrSession("sp_etab_id"));
+$etablissement->loadRefs();
 
 // Chargement de tous les établissements
 $etablissements = $etablissement->loadList();
