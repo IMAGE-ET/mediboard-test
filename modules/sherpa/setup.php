@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "sherpa";
-$config["mod_version"]     = "0.12";
+$config["mod_version"]     = "0.13";
 $config["mod_type"]        = "user";
 
 class CSetupsherpa extends CSetup {
@@ -41,7 +41,14 @@ class CSetupsherpa extends CSetup {
     $this->addQuery($sql);
     $this->makeRevision("0.11");
         
-    $this->mod_version = "0.12";
+    $sql = "ALTER TABLE `t_malade` " .
+        "\nDROP `malade_id`," .
+        "\nCHANGE `malnum` `malnum` INT( 6 ) UNSIGNED ZEROFILL NOT NULL DEFAULT '0'," .
+        "\nADD PRIMARY KEY ( `malnum` ) ;";
+    $this->addQuery($sql);
+    $this->makeRevision("0.12");
+
+    $this->mod_version = "0.13";
     
   }
 }

@@ -24,25 +24,70 @@ class CSpObjectHandler extends CMbObjectHandler {
   function getIdsFor(CMbObject &$mbObject) {
     global $g, $m;
     
-    // Etablissement courant
+    // Instance for current group
     $id400 = new CIdSante400;
-    $tags = array (
-      "sherpa",
-      "etab:$g",
-    );
-    $id400->loadLatestFor($mbObject, join($tags, " "));
-    mbTrace($id400->getProps());
+    $id400->loadLatestFor($mbObject, "sherpa group:$g");
+    if (!$id400->_id) {
+      // Create sherpa instance
+      $spInstance = $this->getSpInstance($mbObject);
+      $spInstance->mapFrom($mbObject);
+      if ($msg = $spInstance->store()) {
+        trigger_error("Error mapping object '$mbObject->_view' : $msg", E_USER_WARNING);
+        return;
+      }
+
+      // Store id400;
+      $id400->id400 = $spInstance->_id;
+      $id400->last_update = mbDateTime();
+      if ($msg = $id400->store()) {
+        trigger_error("Error creating id400 for object  '$mbObject->_view' : $msg", E_USER_WARNING);
+        return;
+      }
+    }
+      
+    // Get all id400 for mediboard object
+    $where["object_class"] = "= '$mbObject->_class_name'";
+    $where["object_id"] = "= '$mbObject->_id'";
+    $where["tag"] = "LIKE 'sherpa group:%'";
+    return $id400->loadList($where);
   }
   
   function onStore(CMbObject &$mbObject) {
-    if (null == $spInstance = $this->getSpInstance($mbObject)) {
+    if (!$this->getSpInstance($mbObject)) {
       return;
     }
-    
-    mbTrace($mbObject->getProps(), "Storing object");
-    mbTrace($this->getIdsFor($mbObject), "Found ids");
-    die;
-    
+  
+    // Propagate modifications to other IDs
+    foreach ($this->getIdsFor($mbObject) as $id400) {
+      $spInstance = $this->getSpInstance($mbObject);
+      $spInstance->mapFrom($mbObject);
+      $spInstance->_id = $id400->id400;
+      
+      // Find group
+      $matches = array();
+      if (!preg_match("/sherpa group:([\d]+)/", $id400->tag, $matches)) {
+        trigger_error("Found id for propagating has wrong tag '$id400->tag' : $msg", E_USER_WARNING);
+        continue;
+      }
+      
+      $group_id = $matches[1];
+
+      // CHANGE DATA SOURCE NAME !!!
+     
+      // Propagated object
+      if ($msg = $spInstance->store()) {
+        trigger_error("Error propagating object '$spInstance->_view' : $msg", E_USER_WARNING);
+        continue;
+      }
+      
+      // Store id400;
+      $id400->id400 = $spInstance->_id;
+      $id400->last_update = mbDateTime();
+      if ($msg = $id400->store()) {
+        trigger_error("Error updating id400 for object  '$mbObject->_view' : $msg", E_USER_WARNING);
+        continue;
+      }
+    }    
   }
   
   function onDelete(CMbObject &$mbObject) {}

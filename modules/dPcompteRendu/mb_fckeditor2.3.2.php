@@ -1,5 +1,4 @@
 <?php /* $Id: $ */
-
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu

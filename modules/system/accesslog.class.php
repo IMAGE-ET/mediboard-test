@@ -21,8 +21,13 @@ class CAccessLog extends CMbObject {
   // Form fields
   var $_average_duration = null;
   var $_average_request  = null;
-  var $_logable          = null;
   
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->loggable = false;
+    return $spec;
+  }
+
   function getSpecs() {
     return array (
       "module"   => "str",
@@ -39,7 +44,6 @@ class CAccessLog extends CMbObject {
     $this->CMbObject("access_log", "accesslog_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-    $this->_logable = false;
   }
   
   function updateFormFields() {

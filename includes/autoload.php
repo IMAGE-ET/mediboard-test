@@ -46,6 +46,4 @@ else {
   $AppUI->getAllClasses();
 }
 
-CMbObject::buildHandlers();
-
 ?>

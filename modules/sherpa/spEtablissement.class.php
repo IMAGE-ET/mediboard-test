@@ -36,9 +36,29 @@ class CSpEtablissement extends CMbObject {
     return $specs;
   }
    
+  function initIncrements() {
+    $increment_year = mbTranformTime(null, null, "%Y") % 10;
+    $increment_patient = 0;
+  }
+   
   function loadRefsFwd() {
     $this->_ref_group = new CGroups;
     $this->_ref_group->load($this->group_id);
+  }
+  
+  function getCurrent() {
+    global $g;
+    $etab = new CSpEtablissement;
+    $etab->group_id = $g;
+    $etab->loadMatchingObject();
+    
+    // Create instance corresponding to current group
+    if ($etab->_id) {
+      $etab->initIncrements();
+      $etab->store();
+    }
+    
+    return $etab;
   }
 }
 

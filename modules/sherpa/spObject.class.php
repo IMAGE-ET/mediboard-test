@@ -12,24 +12,20 @@
  * - base association
  */
 class CSpObject extends CMbObject {  
-  
-  // Form fields
-  var $_sp_id = null;
-  
-  /**
-   * Produce sherpa id form mediboard object
-   */
-  function makeSpIdFrom(CMbObject &$mbObject) {
-    // Dummy id computation
-    $this->_sp_id = $mbObject->_id + 10;
-  }
-  
+    
   /**
    * Map the sherpa object form a mediboard 
    */
   function mapFrom(CMbObject &$mbObject) {
   }
   
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->incremented = false;
+    $spec->loggable = true;
+    return $spec;
+  }
+
   function getBackRefs() {
     return array();
   }

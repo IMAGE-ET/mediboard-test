@@ -28,6 +28,12 @@
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->loggable = true;
+    return $spec;
+  }
+
   function getSpecs() {
   	$specs = parent::getSpecs();
     $specs["id400"]        = "notNull str maxLength|10";

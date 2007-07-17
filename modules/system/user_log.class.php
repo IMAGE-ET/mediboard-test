@@ -25,13 +25,17 @@ class CUserLog extends CMbMetaObject {
   // Object References
   var $_fields = null;
   var $_ref_user = null;
-  var $_logable = null;
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->loggable = false;
+    return $spec;
+  }
 
   function CUserLog() {
     $this->CMbObject("user_log", "user_log_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-    $this->_logable = false;
   }
 
   function getSpecs() {

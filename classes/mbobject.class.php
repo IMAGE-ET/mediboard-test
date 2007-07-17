@@ -18,6 +18,7 @@ $mbCacheObjectCount = 0;
 
 require_once("./classes/request.class.php");
 require_once("./classes/mbFieldSpecFact.class.php");
+require_once("./classes/mbObjectSpec.class.php");
  
 class CMbObject {
   static $handlers = null;
@@ -47,6 +48,7 @@ class CMbObject {
    * Properties  specification
    */
 
+  var $_spec          = null;    // Spécifications unifiées
   var $_helped_fields = array(); // Champs concerné par les aides a la saisie
   var $_aides         = array(); // aides à la saisie
   var $_props         = array(); // properties specifications as string
@@ -71,9 +73,7 @@ class CMbObject {
   var $_ref_notes     = array(); // Notes
   var $_ref_documents = array(); // Documents
   var $_ref_files     = array(); // Fichiers
-  var $_objBefore     = null;
-  var $_obj           = null;
-  var $_logable       = null;
+
   /**
    * Constructor
    */
@@ -86,6 +86,7 @@ class CMbObject {
     $this->_tbl_key = $key;
     $this->_id      =& $this->$key;
     
+    static $spec          = null;
     static $class         = null;
     static $objectsTable  = array();
     static $props         = null;
@@ -99,6 +100,7 @@ class CMbObject {
 
     static $static = false;
     if (!$static) {
+      $spec = $this->getSpec();
       $class = get_class($this);
       $this->_class_name =& $class;
       $this->_objectsTable =& $objectsTable;
@@ -120,6 +122,7 @@ class CMbObject {
       $static = true;
     }
     
+    $this->_spec          =& $spec;
     $this->_class_name    =& $class;
     $this->_objectsTable  =& $objectsTable;
     $this->_props         =& $props;
@@ -130,14 +133,15 @@ class CMbObject {
     $this->_enums         =& $enums;
     $this->_enumsTrans    =& $enumsTrans;
     $this->_helped_fields =& $helped_fields;
-    
-    $this->_logable = true;
   }
   
   /**
    * Saticly build object handlers array
    */
   function buildHandlers() {
+    if (CMbObject::$handlers) {
+      return;
+    }
     // Static initialisations
     global $dPconfig;
     CMbObject::$handlers = array();
@@ -146,6 +150,9 @@ class CMbObject {
     }
   }
 
+  function getSpec() {
+    return new CMbObjectSpec;
+  }
   /**
    * Set/get functions
    */
@@ -561,14 +568,19 @@ class CMbObject {
   }
   
   
-  function log($type,$_objBefore) {
+  function log($objBefore) {
   	global $AppUI;
+
+    // Si object non loggable
+    if (!$this->_spec->loggable){
+      return;
+    }
+
+    // Analyse changes fields
     $fields = array();
-    
-    
-    foreach($this->getProps() as $propName => $propValue) {
+    foreach ($this->getProps() as $propName => $propValue) {
     	if ($propValue !== null) {
-        $propValueBefore = $this->_objBefore->$propName;
+        $propValueBefore = $objBefore->$propName;
         if ($propValueBefore != $propValue) {
           $fields[] = $propName;
         }
@@ -578,14 +590,14 @@ class CMbObject {
     $object_id = $this->_id;
     
     $type = "store";
-    if ($this->_objBefore->_id == null) {
+    if ($objBefore->_id == null) {
       $type = "create";
       $fields = array();
     }
     
     if ($this->_id == null) {
       $type = "delete";
-      $object_id = $this->_objBefore->_id;
+      $object_id = $objBefore->_id;
       $fields = array();
     }
 
@@ -593,11 +605,6 @@ class CMbObject {
       return;
     }
     
-    // Si object non logable
-    if (!$this->_logable){
-    	return;
-    }
-
     $log = new CUserLog;
     $log->user_id = $AppUI->user_id;
     $log->object_id = $object_id;
@@ -619,18 +626,11 @@ class CMbObject {
     
     // Properties checking
     $this->updateDBFields();
-
+    
     // Si l'object existe alors, on affecte à objBefore sa valeur
-    if($this->_id){ 
-      $_obj_class = $this->_class_name;
-      $this->_objBefore = new $_obj_class();
-      $this->_objBefore->load($this->_id);
-    } else {
-    // Sinon, on cree un nouveau objBefore du type de l'objet 
-      $_obj_class = $this->_class_name;
-      $this->_objBefore = new $_obj_class();
-    } 
-     
+    $objBefore = new $this->_class_name();
+    $objBefore->load($this->_id);
+    
     if ($checkobject) {
       if ($msg = $this->check()) {
         return $AppUI->_(get_class($this)) . 
@@ -640,14 +640,14 @@ class CMbObject {
     }
    
     // Event Handlers
-    foreach(self::$handlers as $handler) {
+    self::buildHandlers();
+    foreach (self::$handlers as $handler) {
       $handler->onStore($this);
     }
      
     // DB query
-    if ($this->_id) {
+    if ($objBefore->_id) {
       $ret = db_updateObject($this->_tbl, $this, $this->_tbl_key);
-      
     } else {
       $ret = db_insertObject($this->_tbl, $this, $this->_tbl_key);
     }
@@ -662,7 +662,7 @@ class CMbObject {
     $this->load();
     
     //Creation du log une fois le store terminé
-    $this->log("store",$this->_objBefore);
+    $this->log($objBefore);
     
     return null;
   }
@@ -825,8 +825,8 @@ class CMbObject {
 
     // Chargement de _objBefore 
     $_obj_class = $this->_class_name;
-    $this->_objBefore = new $_obj_class();
-    $this->_objBefore->load($this->_id);
+    $objBefore = new $_obj_class();
+    $objBefore->load($this->_id);
     
     
     if ($oid) {
@@ -889,7 +889,7 @@ class CMbObject {
     $this->_id = null;
    
     //Creation du log une fois le delete terminé
-    $this->log("delete",$this->_objBefore);
+    $this->log($objBefore);
     
     return null;
   }
