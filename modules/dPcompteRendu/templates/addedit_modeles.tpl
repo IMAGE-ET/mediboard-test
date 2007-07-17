@@ -74,12 +74,11 @@ function pageMain() {
 </script>
 
 
-
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 <table class="main">
   <tr>
     <td>
-     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_modele_aed" />
@@ -174,12 +173,14 @@ function pageMain() {
             </td>
           </tr>
         </table>
+      </td>
       
       <td class="greedyPane" style="height: 500px">
        {{if $compte_rendu->compte_rendu_id}}
        {{mb_field object=$compte_rendu field="source" id="htmlarea"}}
        {{/if}}
       </td>
-    </form>     
   </tr>
 </table>      
+
+</form>     
