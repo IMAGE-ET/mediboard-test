@@ -1,7 +1,8 @@
 <?php
-$locales['CMbObject-merge-moreinfo'] = '';
+$locales['mod-admin-tab-edit_perms'] = '';
 $locales['CMbObject-back-logs'] = 'User logs';
 $locales['CMbObject-back-permissions'] = 'Permissions';
+$locales['CMbObject-merge-moreinfo'] = '';
 $locales['copied from template'] = '';
 $locales['cpermission::store failed'] = '';
 $locales['CPermModule'] = 'Modules Permissions';
@@ -102,6 +103,7 @@ $locales['CUser.none'] = '';
 $locales['CUser.one'] = '';
 $locales['menu-toggleIcons'] = 'Toggle icons in menu';
 $locales['mod-admin-tab-edit_prefs'] = 'User preferences';
+$locales['mod-admin-tab-vw_edit_users'] = '';
 $locales['mod-dPrepas-tab-vw_planning_repas'] = '';
 $locales['msg-CPermModule-create'] = '';
 $locales['msg-CPermModule-delete'] = '';

@@ -1,7 +1,8 @@
 <?php
-$locales['CMbObject-merge-moreinfo'] = 'Plus d\'information sur les objets liés';
+$locales['mod-admin-tab-edit_perms'] = 'Gestion des droits';
 $locales['CMbObject-back-logs'] = 'Logs utilisateurs';
 $locales['CMbObject-back-permissions'] = 'Permissions';
+$locales['CMbObject-merge-moreinfo'] = 'Plus d\'information sur les objets liés';
 $locales['copied from template'] = 'copiés depuis un modèle';
 $locales['cpermission::store failed'] = 'CPermission::store() a échoué';
 $locales['CPermModule'] = 'Permissions Modules';
@@ -102,6 +103,7 @@ $locales['CUser.none'] = '';
 $locales['CUser.one'] = '';
 $locales['menu-toggleIcons'] = 'Afficher/masquer les icônes dans le menu';
 $locales['mod-admin-tab-edit_prefs'] = 'Préférences utilisateur';
+$locales['mod-admin-tab-vw_edit_users'] = 'Utilisateurs';
 $locales['mod-dPrepas-tab-vw_planning_repas'] = 'Planning des Repas';
 $locales['msg-CPermModule-create'] = 'Permission créée';
 $locales['msg-CPermModule-delete'] = 'Permission supprimée';

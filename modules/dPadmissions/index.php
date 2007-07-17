@@ -9,8 +9,8 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_idx_admission", "Consultation des admissions"   , TAB_READ);
-$module->registerTab("vw_idx_sortie"   , "Validation des sorties"        , TAB_READ);
-$module->registerTab("vw_idx_consult"  , "Consultation des anesthésistes", TAB_READ);
+$module->registerTab("vw_idx_admission", null, TAB_READ);
+$module->registerTab("vw_idx_sortie"   , null, TAB_READ);
+$module->registerTab("vw_idx_consult"  , null, TAB_READ);
 
 ?>

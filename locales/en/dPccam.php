@@ -1,5 +1,29 @@
 <?php
 $locales['CCodeCCAM'] = '';
 $locales['CFavoriCCAM'] = '';
+$locales['CFavoriCCAM-back-favoris_user'] = '';
+$locales['CFavoriCCAM-favoris_code'] = '';
+$locales['CFavoriCCAM-favoris_code-court'] = '';
+$locales['CFavoriCCAM-favoris_code-desc'] = '';
+$locales['CFavoriCCAM-favoris_user'] = '';
+$locales['CFavoriCCAM-favoris_user-court'] = '';
+$locales['CFavoriCCAM-favoris_user-desc'] = '';
+$locales['CFavoriCCAM-filter_class'] = '';
+$locales['CFavoriCCAM-filter_class-court'] = '';
+$locales['CFavoriCCAM-filter_class-desc'] = '';
+$locales['CFavoriCCAM-object_class'] = '';
+$locales['CFavoriCCAM-object_class-court'] = '';
+$locales['CFavoriCCAM-object_class-desc'] = '';
+$locales['CFavoriCCAM.create'] = '';
+$locales['CFavoriCCAM.filter_class.CConsultation'] = '';
+$locales['CFavoriCCAM.filter_class.COperation'] = '';
+$locales['CFavoriCCAM.filter_class.CSejour'] = '';
+$locales['CFavoriCCAM.modify'] = '';
+$locales['CFavoriCCAM.more'] = '';
 $locales['CFavoriCCAM.none'] = '';
+$locales['CFavoriCCAM.one'] = '';
+$locales['mod-dPccam-tab-vw_find_code'] = '';
+$locales['mod-dPccam-tab-vw_full_code'] = '';
+$locales['mod-dPccam-tab-vw_idx_favoris'] = '';
+$locales['pref-ccam'] = '';
 ?>
