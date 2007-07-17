@@ -267,12 +267,10 @@ class CMbGraph {
 		// Setup font for axis
 		$this->graph->xaxis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
 		$this->graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
-		//$this->graph->y2axis->SetFont(FF_ARIAL,FS_NORMAL,$this->options['sizeFontAxis']+$this->options['size']);
 		
 		// Show 0 label on Y-axis (default is not to show)
 		$this->graph->yscale->ticks->SupressZeroLabel(false);
 		$this->graph->yaxis->SetColor("black");
-		//$this->graph->y2axis->SetColor("#888888");
 
 		// Setup X-axis labels
 		$this->graph->xaxis->SetTickLabels($this->options['datax']);

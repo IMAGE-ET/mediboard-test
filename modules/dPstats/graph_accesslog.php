@@ -99,7 +99,8 @@ $options = array( "size" => $size,
 									"dataLine" => array($duration, $request),
 									"datax" => $datax,
 									"graphBarLegend" => "Hits",
-									"graphLineLegend" => array("Page (s)","DB (s)") );
+									"graphLineLegend" => array("Page (s)","DB (s)"), 
+									"addY" => "addY2");
 				
 $graph = new CMbGraph();
 $graph->selectType("Graph",$options);
