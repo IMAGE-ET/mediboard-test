@@ -838,6 +838,7 @@ class CMbObject {
     }
 
     // Event Handlers
+    self::buildHandlers();
     foreach (self::$handlers as $handler) {
       $handler->onDelete($this);
     }   
