@@ -42,6 +42,14 @@
         	 	</td>
         </tr>
         <tr>
+      		<th>{{mb_label object=$etablissement field="increment_year"}}</th>
+      		<td>{{mb_field object=$etablissement field="increment_year"}}</td>
+        </tr>
+        <tr>
+      		<th>{{mb_label object=$etablissement field="increment_patient"}}</th>
+      		<td>{{mb_field object=$etablissement field="increment_patient"}}</td>
+        </tr>
+        <tr>
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
             {{if $etablissement->_id}}
