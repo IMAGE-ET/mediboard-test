@@ -144,8 +144,10 @@ class CTemplateManager {
       $fields[] = $property["fieldHTML"];
       $values[] = nl2br($property["valueHTML"]);
     }
-
-    $this->document = str_replace($fields, $values, $source);
+    
+    if(count($fields)) {
+      $this->document = str_replace($fields, $values, $source);
+    }
   }
   
   // Obtention des listes utilisées dans le document
