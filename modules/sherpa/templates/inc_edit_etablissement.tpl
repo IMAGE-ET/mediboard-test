@@ -3,7 +3,7 @@
       {{if $can->edit}}
       <form name="editEtablissement" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_SpEtablissement_aed" />
-      <input type="hidden" name="facture_id" value="{{$etablissement->_id}}" />
+      <input type="hidden" name="sp_etab_id" value="{{$etablissement->_id}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="_class_name" value="CGroups" />
       <table class="form">
@@ -53,7 +53,7 @@
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
             {{if $etablissement->_id}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l'etablissement',objName:'{{$etablissement->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'etablissement',objName:'{{$etablissement->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
             {{/if}}
           </td>
         </tr>        
