@@ -70,8 +70,6 @@
   </tr>
   
   
-  
-  
   {{if $object->rques}}
   <tr>
     <td class="text" colspan="2">

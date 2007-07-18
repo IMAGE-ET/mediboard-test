@@ -82,13 +82,13 @@ var File = {
             <br />
             {{$curr_file->_view}}
             {{if $curr_file->_class_name=="CFile"}}
-              <br />Date : {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
+              <br />Date : {{$curr_file->file_date|date_format:"%d/%m/%Y ï¿½ %Hh%M"}}
             {{/if}}
           </a>
           <br />  
             
           {{if $canFile->edit && !$accordDossier}}  
-            Déplacer vers 
+            Dï¿½placer vers 
             <select name="file_category_id" onchange="submitFileChangt(this.form)">
               <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune</option>
               {{foreach from=$listCategory item=curr_cat}}

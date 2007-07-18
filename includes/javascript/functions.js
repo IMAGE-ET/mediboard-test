@@ -526,7 +526,7 @@ Class.extend(TogglePairEffect, {
       idTarget1      : idTarget1,
       idTarget2      : idTarget2,
       idTrigger1     : idTarget1 + "-trigger",
-      idTrigger2     : idTarget2 + "-trigger",
+      idTrigger2     : idTarget2 + "-trigger"
     };
 
     Object.extend(oDefaultOptions, oOptions);
@@ -559,7 +559,7 @@ Class.extend(TogglePairEffect, {
 		oTarget2[2 == iWhich ? "show" : "hide"]();
 		oTrigger1[1 == iWhich ? "show" : "hide"]();
 		oTrigger2[2 == iWhich ? "show" : "hide"]();
-  },
+  }
   
 } );
 
@@ -1004,6 +1004,10 @@ Class.extend(Date, {
   
   toLocaleDateTime: function() {
     return makeLocaleDateTimeFromDate(this);
+  },
+  
+  addDays: function(iDays) {
+    this.setDate(this.getDate() + iDays);
   }
 } );
 

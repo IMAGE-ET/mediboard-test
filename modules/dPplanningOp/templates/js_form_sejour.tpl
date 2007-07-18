@@ -84,20 +84,21 @@ function modifSejour() {
 function updateSortiePrevue() {
   var oForm = document.editSejour;
     
-  if(!oForm._duree_prevue.value) {
+  if (!oForm._duree_prevue.value) {
     oForm._duree_prevue.value = 0;
   }
   
-  if(oForm._date_entree_prevue.value) {
-    var dDate = makeDateFromDATE(oForm._date_entree_prevue.value);
-    var iDelta = parseInt(oForm._duree_prevue.value, 10);
-    if(iDelta) {
-      dDate.setDate(dDate.getDate() + iDelta);
-    }
-    oForm._date_sortie_prevue.value = makeDATEFromDate(dDate);
-    oForm._date_sortie_prevue.onchange();
+  var sDate = oForm._date_entree_prevue.value;
+  if (sDate) {
+    // Add days
+    var dDate = Date.fromDATE(sDate);
+    
+    dDate.addDays(parseInt(oForm._duree_prevue.value, 10));
+		
+		// Update fields
+		Form.Element.setValue(oForm._date_sortie_prevue, dDate.toDATE());
     oDiv = document.getElementById('editSejour__date_sortie_prevue_da');
-    oDiv.innerHTML = makeLocaleDateFromDate(dDate);
+    oDiv.innerHTML = dDate.toLocaleDate();
     updateHeureSortie();
   }
 }
@@ -121,12 +122,8 @@ function updateHeureSortie() {
   heure_sortie = oForm._hour_sortie_prevue;
   min_sortie   = oForm._min_sortie_prevue;
   
-  if(duree_prevu.value < 1){
-    heure_sortie.value = "{{$heure_sortie_ambu}}";
-  }else{
-    heure_sortie.value = "{{$heure_sortie_autre}}";
-  }
-  min_sortie.value = "00";
+  heure_sortie.value = duree_prevu.value < 1 ? "{{$heure_sortie_ambu}}" : "{{$heure_sortie_autre}}";
+  min_sortie.value = "0";
 }
 
 function checkSejoursToReload() {
