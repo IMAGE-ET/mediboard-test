@@ -31,7 +31,9 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
 $sql = "SELECT * FROM sallesbloc WHERE stats = '1'";
 if($salle_id)
   $sql .= "\nAND salle_id = '$salle_id'";
-$salles = db_loadlist($sql);
+
+$ds = CSQLDataSource::get("std");
+$salles = $ds->loadlist($sql);
 
 $op = array();
 $sql = "SELECT COUNT(operations.operation_id) AS total," .
@@ -53,7 +55,7 @@ $sql = "SELECT COUNT(operations.operation_id) AS total," .
     $sql .= "\nAND plagesop.salle_id = '$salle_id'";
 $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
-$result = db_loadlist($sql);
+$result = $ds->loadlist($sql);
 foreach($datax as $x) {
   $f = true;
   foreach($result as $total) {

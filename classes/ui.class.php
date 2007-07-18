@@ -68,6 +68,7 @@ class CAppUI {
 /** @var array Configuration variable array*/
   var $cfg=null;
 
+  var $ds = null;
 /**
  * CAppUI Constructor
  */
@@ -95,6 +96,8 @@ class CAppUI {
     } else {
       $this->locale_mask = "%s";
     }
+    
+    $this->ds = CSQLDataSource::get("std");
   }
   
   function getAllClasses() {
@@ -530,10 +533,10 @@ class CAppUI {
     
     // Put user_group in AppUI
     $remote = 1;
-    if ($this->_spec->ds->loadTable("users_mediboard") && $this->_spec->ds->loadTable("groups_mediboard")) {
+    if ($this->ds->loadTable("users_mediboard") && $this->ds->loadTable("groups_mediboard")) {
       $sql = "SELECT `remote` FROM `users_mediboard` WHERE `user_id` = '$user->user_id'";
-      if ($cur = $this->_spec->ds->exec($sql)) {
-        if ($row = $this->_spec->ds->fetchRow($cur)) {
+      if ($cur = $this->ds->exec($sql)) {
+        if ($row = $this->ds->fetchRow($cur)) {
           $remote = intval($row[0]);
         }
       }
@@ -542,7 +545,7 @@ class CAppUI {
           "\nWHERE `groups_mediboard`.`group_id` = `functions_mediboard`.`group_id`" .
           "\nAND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`" .
           "\nAND `users_mediboard`.`user_id` = '$user->user_id'";
-      $this->user_group = $this->_spec->ds->loadResult($sql);
+      $this->user_group = $this->ds->loadResult($sql);
     }
     
     // Test if remote connection is allowed
@@ -570,7 +573,7 @@ class CAppUI {
     $this->user_last_login = $user->user_last_login;
     
     // save the last_login dateTime
-    if($this->_spec->ds->loadField("users", "user_last_login")) {
+    if($this->ds->loadField("users", "user_last_login")) {
       // Nullify password or you md5 it once more
       $user->user_last_name = null;
       $user->user_last_login = mbDateTime();
@@ -589,8 +592,9 @@ class CAppUI {
  * @param int $uid User id number, 0 for default preferences
  */
   function loadPrefs($uid = 0) {
+  	$ds = CSQLDataSource::get("std");
     $sql = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = '$uid'";
-    $user_prefs = $this->_spec->ds->loadHashList($sql);
+    $user_prefs = $ds->loadHashList($sql);
     $this->user_prefs = array_merge($this->user_prefs, $user_prefs);
   }
 }

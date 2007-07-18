@@ -30,7 +30,9 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
 $sql = "SELECT * FROM service WHERE";
 if($service_id)
   $sql .= "\nAND id = '$service_id'";
-$services = db_loadlist($sql);
+  
+$ds = CSQLDataSource::get("std");
+$services = $ds->loadlist($sql);
 
 $opbysalle = array();
 foreach($services as $service) {
@@ -52,7 +54,8 @@ foreach($services as $service) {
     "\nAND service.service_id = '$id'" .
     "\nGROUP BY mois" .
     "\nORDER BY orderitem";
-  $result = db_loadlist($sql);
+    
+  $result = $ds->loadlist($sql);
   foreach($datax as $x) {
     $f = true;
     foreach($result as $totaux) {

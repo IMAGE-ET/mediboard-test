@@ -60,7 +60,10 @@ if($actionName) {
 $sql .= "\nGROUP BY `gperiod`" .
     "\nORDER BY `period`";
 
-$logs = db_loadObjectList($sql, $logs);
+
+    
+$ds = CSQLDataSource::get("std");
+$logs = $ds->loadObjectList($sql, $logs);
 
 $nbHits = array();
 $duration = array();

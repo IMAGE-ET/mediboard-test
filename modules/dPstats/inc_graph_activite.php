@@ -35,7 +35,9 @@ for($i = $debutact; $i <= $finact; $i = mbDate("+1 MONTH", $i)) {
 $sql = "SELECT * FROM sallesbloc WHERE stats = '1'";
 if($salle_id)
   $sql .= "\nAND salle_id = '$salle_id'";
-$salles = db_loadlist($sql);
+
+$ds = CSQLDataSource::get("std");
+$salles = $ds->loadlist($sql);
 
 $opbysalle = array();
 $i=0;
@@ -65,7 +67,7 @@ foreach($salles as $salle) {
   $sql .= "\nAND sallesbloc.salle_id = '$curr_salle_id'" .
     "\nGROUP BY mois" .
     "\nORDER BY orderitem";
-  $result = db_loadlist($sql);
+  $result = $ds->loadlist($sql);
   foreach($datax as $x) {
     $f = true;
     foreach($result as $totaux) {

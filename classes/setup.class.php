@@ -15,6 +15,7 @@ class CSetup {
   // Public vars
   var $mod_name = null;
   var $mod_version = null;
+  var $ds = null;
   var $mod_type = "user";
 
   // Protected vars
@@ -26,6 +27,7 @@ class CSetup {
   var $tables = array();
   
   function __construct() {
+  	$this->ds = CSQLDataSource::get("std");
   }
 
   /**
@@ -134,7 +136,7 @@ class CSetup {
 
       // Query upgrading
       foreach ($this->queries[$currRevision] as $query) {
-        if (!$this->_spec->ds->exec($query)) {
+        if (!$this->ds->exec($query)) {
           $AppUI->setMsg("Error in queries for revision '$currRevision': see logs.", UI_MSG_ERROR);
           return $currRevision;
         }
@@ -162,7 +164,7 @@ class CSetup {
     $success = true;
     foreach ($this->tables as $table) {
       $query = "DROP TABLE `$table`";
-      if (!$this->_spec->ds->exec($query)) {
+      if (!$this->ds->exec($query)) {
         $success = false;
         $AppUI->setMsg("Failed to remove table '$table'", UI_MSG_ERROR, true);
       } 

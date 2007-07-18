@@ -32,7 +32,8 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
 $sql = "SELECT * FROM sallesbloc WHERE stats = '1'";
 if($salle_id)
   $sql .= "\nAND salle_id = '$salle_id'";
-$salles = db_loadlist($sql);
+$ds = CSQLDataSource::get("std");
+$salles = $ds->loadlist($sql);
 
 $nbHours = array();
 $sql = "SELECT SUM(TIME_TO_SEC(plagesop.fin) - TIME_TO_SEC(plagesop.debut)) AS total," .
@@ -49,7 +50,7 @@ $sql = "SELECT SUM(TIME_TO_SEC(plagesop.fin) - TIME_TO_SEC(plagesop.debut)) AS t
     $sql .= "\nAND plagesop.salle_id = '$salle_id'";
 $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
-$result = db_loadlist($sql);
+$result = $ds->loadlist($sql);
 foreach($datax as $x) {
   $f = true;
   foreach($result as $total) {
@@ -81,7 +82,7 @@ $sql = "SELECT SUM(TIME_TO_SEC(operations.sortie_salle) - TIME_TO_SEC(operations
     $sql .= "\nAND plagesop.salle_id = '$salle_id'";
 $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
-$result = db_loadlist($sql);
+$result = $ds->loadlist($sql);
 foreach($datax as $x) {
   $f = true;
   foreach($result as $total) {

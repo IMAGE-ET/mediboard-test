@@ -32,7 +32,8 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
 $sql = "SELECT * FROM service";
 if($service_id)
   $sql .= "\nWHERE service_id = '$service_id'";
-$services = db_loadlist($sql);
+$ds = CSQLDataSource::get("std");
+$services = $ds->loadlist($sql);
 
 $maxDuree = 0;
 $hoursByService = array();
@@ -43,7 +44,7 @@ foreach($services as $service) {
       "\nAND chambre.service_id = service.service_id" .
       "\nAND service.service_id = '".$service["service_id"]."'" .
       "\nGROUP BY service.service_id";
-  $result = db_loadResult($sql);
+  $result = $ds->loadResult($sql);
   $numLits = $result["total"];
   foreach($datax["date"] as $x) {
     $debMonth = $x."-01";
@@ -63,7 +64,7 @@ foreach($services as $service) {
         "\nAND" .
           "\n(DATE_FORMAT(affectation.entree, '%Y-%m') = '".$x."'" .
           "\nOR DATE_FORMAT(affectation.sortie, '%Y-%m') = '".$x."')";
-    $result = db_loadlist($sql);
+    $result = $ds->loadlist($sql);
     $duree = 0;
     foreach($result as $value) {
       $entree = strtotime(max($value["entree"], $debMonth));

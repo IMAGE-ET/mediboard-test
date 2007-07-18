@@ -49,7 +49,8 @@ elseif($module) {
   $sql .= "\nGROUP BY `module`";
 }
 
-$logs = db_loadObjectList($sql, $logs);
+$ds = CSQLDataSource::get("std");
+$logs = $ds->loadObjectList($sql, $logs);
 
 $datasTotal = array();
 $i = 0;

@@ -25,7 +25,8 @@ $sql = "SELECT COUNT(user_log.user_log_id) AS total," .
     "\nAND user_log.user_id = '$user_id'" .
     "\nGROUP BY day" .
     "\nORDER BY day";
-$logs = db_loadlist($sql);
+$ds = CSQLDataSource::get("std");
+$logs = $ds->loadlist($sql);
 $datax = array();
 $datay = array();
 for($i = $debut; $i <= $fin; $i = mbDate("+1 DAY", $i)) {

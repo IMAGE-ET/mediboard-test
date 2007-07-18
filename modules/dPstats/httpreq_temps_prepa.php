@@ -26,7 +26,8 @@ $preparation = array();
 $result = array();
 
 // Vide la table contenant les données
-db_exec("TRUNCATE `temps_prepa`"); db_error();
+$ds = CSQLDataSource::get("std");
+$ds->exec("TRUNCATE `temps_prepa`"); $ds->error();
 
 
 foreach($listPrats as $_prat) {
@@ -56,7 +57,7 @@ foreach($listPrats as $_prat) {
 
     $sql .= "\nORDER BY plageop_id, sec_entree ASC";
 
-  $operations = db_loadList($sql);
+  $operations = $ds->loadList($sql);
 
   $old_plagesop = 0;
   $old_operation_id = 0;
@@ -92,7 +93,7 @@ foreach($listPrats as $_prat) {
             		'".$nb_plage[$_prat->user_id]."',
             		'".strftime("%H:%M:%S",mbMoyenne($preparation[$_prat->user_id]))."',
             		'".strftime("%H:%M:%S",mbEcartType($preparation[$_prat->user_id]))."');";
-	db_exec( $sql ); db_error();
+	$ds->exec( $sql ); $ds->error();
   }
 }
 echo("Liste des temps de Préparation mise à jour");

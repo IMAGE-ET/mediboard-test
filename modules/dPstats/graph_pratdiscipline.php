@@ -58,7 +58,8 @@ foreach($users as $user) {
     $sql .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
-  $result = db_loadlist($sql);
+  $ds = CSQLDataSource::get("std");
+  $result = $ds->loadlist($sql);
   foreach($datax as $x) {
     $f = true;
     foreach($result as $totaux) {

@@ -62,7 +62,8 @@ foreach($listHospis as $type=>$vType) {
     $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
-  $result = db_loadlist($sql);
+  $ds = CSQLDataSource::get("std");
+  $result = $ds->loadlist($sql);
   foreach($datax as $x) {
     $f = true;
     foreach($result as $totaux) {

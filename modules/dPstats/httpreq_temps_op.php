@@ -16,7 +16,8 @@ global $AppUI, $can, $m;
 $intervalle = mbGetValueFromGet("intervalle", "none");
 
 // Vide la table contenant les données
-db_exec("TRUNCATE `temps_op`"); db_error();
+$ds = CSQLDataSource::get("std");
+$ds->exec("TRUNCATE `temps_op`"); $ds->error();
 
 $sql = "SELECT operations.chir_id, " .
        "\nCOUNT(operations.operation_id) AS total," .
@@ -56,7 +57,7 @@ switch($intervalle) {
 $sql .= "\nGROUP BY operations.chir_id, ccam" .
         "\nORDER BY ccam";
        
-$listOps = db_loadList($sql);       
+$listOps = $ds->loadList($sql);       
 
 // Mémorisation des données dans MySQL
 foreach($listOps as $keylistOps => $curr_listOps){
@@ -71,7 +72,7 @@ foreach($listOps as $keylistOps => $curr_listOps){
             	  '".$curr_listOps["ecart_bloc"]."',
             	  '".$curr_listOps["duree_operation"]."',
             	  '".$curr_listOps["ecart_operation"]."');";
-  db_exec( $sql ); db_error();
+  $ds->exec( $sql ); $ds->error();
 }
 
 echo "Liste des temps opératoire mise à jour (".count($listOps)." lignes trouvées)";

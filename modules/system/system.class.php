@@ -7,8 +7,10 @@ class CPreferences {
 	var $pref_user = null;
 	var $pref_name = null;
 	var $pref_value = null;
-
+	var $ds = null ; 
+    
 	function CPreferences() {
+		$this->ds = CSQLDataSource::get("std");
 		// empty constructor
 	}
 
@@ -34,8 +36,8 @@ class CPreferences {
 		if (($msg = $this->delete())) {
 			return "CPreference::store-delete failed<br />$msg";
 		}
-		if (!($ret = $this->_spec->ds->insertObject("user_preferences", $this, "pref_user"))) {
-			return "CPreference::store failed <br />" . $this->_spec->ds->error();
+		if (!($ret = $this->ds->insertObject("user_preferences", $this, "pref_user"))) {
+			return "CPreference::store failed <br />" . $this->ds->error();
 		} else {
 			return null;
 		}
@@ -43,8 +45,8 @@ class CPreferences {
 
 	function delete() {
 		$sql = "DELETE FROM user_preferences WHERE pref_user = '$this->pref_user' AND pref_name = '$this->pref_name'";
-		if (!$this->_spec->ds->exec( $sql )) {
-			return $this->_spec->ds->error();
+		if ($this->ds->exec( $sql )) {
+			return $this->ds->error();
 		} else {
 			return null;
 		}

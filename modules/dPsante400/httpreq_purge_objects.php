@@ -34,16 +34,17 @@ function purgeObjects($className, $fakeClassName = null) {
       "\n  FROM `id_sante400`" .
       "\n  WHERE `object_class` = '$classNameID')";
   
-  db_exec($query);
-  $countObjects = db_affected_rows();
+  $ds = CSQLDataSource::get("std");
+  $ds->exec($query);
+  $countObjects = $ds->affectedRows();
   
   $AppUI->stepAjax("$countObjects objets de type '$className' purgés");
 
   if (!$fakeClassName) {
     $query = "DELETE FROM `id_sante400`" .
       "\n  WHERE `object_class` = '$classNameID'";
-    db_exec($query);
-    $countIDs = db_affected_rows();
+    $ds->exec($query);
+    $countIDs = $ds->affectedRows();
 
     $AppUI->stepAjax("$countIDs identifiants purgés pour le type '$className'");
   }  

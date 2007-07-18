@@ -16,7 +16,8 @@ global $AppUI, $can, $m;
 $intervalle = mbGetValueFromGet("intervalle", "none");
 
 // Vide la table contenant les données
-db_exec("TRUNCATE `temps_hospi`"); db_error();
+$ds = CSQLDataSource::get("std");
+$ds->exec("TRUNCATE `temps_hospi`"); $ds->error();
 
 $sql = "SELECT sejour.praticien_id, " .
        "\nCOUNT(sejour.sejour_id) AS total," .
@@ -50,7 +51,7 @@ switch($intervalle) {
        
 $sql .= "\nGROUP BY sejour.type, sejour.praticien_id, operations.codes_ccam";
        
-$listSejours = db_loadList($sql); 
+$listSejours = $ds->loadList($sql); 
 
 // Mémorisation des données dans MySQL
 foreach($listSejours as $keylistSejours => $curr_listSejours){
@@ -63,7 +64,7 @@ foreach($listSejours as $keylistSejours => $curr_listSejours){
                 '".$curr_listSejours["total"]."',
                 '".$curr_listSejours["duree_hospi"]."',
                 '".$curr_listSejours["ecart_hospi"]."');";
-  db_exec( $sql ); db_error();
+  $ds->exec( $sql ); $ds->error();
 }
 
 echo "Liste des temps d'hospitalisation mise à jour (".count($listSejours)." lignes trouvées)";

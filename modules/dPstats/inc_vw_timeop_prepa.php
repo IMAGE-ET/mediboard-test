@@ -15,7 +15,8 @@ $total["moyenne"] = 0;
 $listTemps = new CTempsPrepa;
 
 $where = array();
-$where["chir_id"] = db_prepare_in(array_keys($listPrats));
+$ds = CSQLDataSource::get("std");
+$where["chir_id"] = $ds->prepareIn(array_keys($listPrats));
 
 $ljoin = array();
 $ljoin["users"] = "users.user_id = temps_prepa.chir_id";
