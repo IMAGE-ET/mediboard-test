@@ -7,7 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can;
+
+$can->needsAdmin();
 
 set_time_limit(360);
 ini_set("memory_limit", "128M");
