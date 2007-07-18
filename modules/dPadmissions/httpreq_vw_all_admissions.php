@@ -8,6 +8,7 @@
 */
 
 global $AppUI, $can, $m, $g;
+$ds = CSQLDataSource::get("std");
 
 $can->needsRead();
 
@@ -23,7 +24,7 @@ $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entre
     "\nWHERE `sejour`.`entree_prevue` LIKE '$month' AND `sejour`.`group_id` = '$g'" .
     "\nGROUP BY `date`" .
     "\nORDER BY `date`";
-$list1 = db_loadlist($sql);
+$list1 = $ds->loadlist($sql);
 
 // Liste des admissions non effectuées par jour
 $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
@@ -33,7 +34,7 @@ $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entre
     "\nAND `sejour`.`annule` = '0'" .
     "\nGROUP BY `date`" .
     "\nORDER BY `date`";
-$list2 = db_loadlist($sql);
+$list2 = $ds->loadlist($sql);
 
 // Liste des admissions non préparées
 $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
@@ -43,7 +44,7 @@ $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entre
     "\nAND `sejour`.`annule` = '0'" .
     "\nGROUP BY `date`" .
     "\nORDER BY `date`";
-$list3 = db_loadlist($sql);
+$list3 = $ds->loadlist($sql);
 
 // On met toutes les sommes d'intervention dans le même tableau
 foreach($list1 as $key => $value) {

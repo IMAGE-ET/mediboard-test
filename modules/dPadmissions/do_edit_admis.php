@@ -8,7 +8,8 @@
 */
 
 global $AppUI, $m;
-
+$ds = CSQLDataSource::get("std");
+ 
 $ajax  = mbGetValueFromPost("ajax", 0);
 $m     = mbGetValueFromPost("m", 0);
 $mode  = mbGetValueFromPost("mode", 0);
@@ -29,8 +30,8 @@ switch ($mode) {
           "\n`entree_reelle` = NULL" .
           "\nWHERE sejour_id = '$id';";
       }
-      $result = db_exec($sql);
-      db_error();
+     
+      $result = $ds->exec($sql); $ds->error();
     }
     break;
   }
@@ -39,7 +40,7 @@ switch ($mode) {
       $sql = "UPDATE sejour" .
         "\nSET sejour.saisi_SHS = '$value', sejour.modif_SHS = '0'" .
         "\nWHERE sejour.sejour_id = '$id';";
-      $result = db_exec($sql); db_error();
+      $result = $ds->exec($sql); $ds->error();
     }
     break;
   }
@@ -47,14 +48,14 @@ switch ($mode) {
       $sql = "UPDATE sejour" .
         "\nSET sejour.saisi_SHS = '$value', sejour.modif_SHS = '0'" .
         "\nWHERE sejour.entree_prevue LIKE '$id __:__:__';";
-    $result = db_exec($sql); db_error();
+    $result = $ds->exec($sql); $ds->error();
     $id = 0;
     break;
   }
 }
 
 if($ajax) {
-  $dbError = db_error();
+  $dbError = $ds->error();
   echo "<div class='message'>Action effectuée</div>";
   exit(0);
 }
