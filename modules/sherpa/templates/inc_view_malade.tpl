@@ -7,7 +7,7 @@
         <tr>
           {{if $malade->_id}}
           <th class="title modify" colspan="2">
-     	 				Affichage des informations du malade {{$malade->malnom}}
+     	 				Affichage des informations du malade {{$malade->malnom}} {{$malade->malpre}}
           </th>
           {{else}}
           <th class="title" colspan="2">

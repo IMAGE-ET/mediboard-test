@@ -1,4 +1,5 @@
 <?php
+$locales['mod-sherpa-tab-view_malades  	 '] = 'Malades';
 $locales['config-object_handlers-CSpObjectHandler'] = 'Activer le gestionnaire Sherpa';
 $locales['CSpEtablissement.create'] = 'Créer un nouvel établissement';
 $locales['CSpObjectHandler'] = 'Gestionnaire Sherpa';

@@ -1,4 +1,5 @@
 <?php
+$locales['mod-sherpa-tab-view_malades  	 '] = '';
 $locales['config-object_handlers-CSpObjectHandler'] = '';
 $locales['CSpEtablissement.create'] = '';
 $locales['CSpObjectHandler'] = '';

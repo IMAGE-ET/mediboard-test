@@ -39,7 +39,7 @@ if ($malade_nom) {
 if ($malade_prenom) {
   $where["malpre"]                 = "LIKE '$malade_prenom%'";
 }
-if ($malade_naissance == "on") $where["datnai"] = $whereSoundex["naissance"] = "= '$malade_year-$malade_month-$malade_day'";
+if ($malade_naissance == "on") $where["datnai"] = "= '$malade_day$malade_month$malade_year'";
 
 $malades        = array();
 
@@ -60,9 +60,9 @@ $smarty = new CSmartyDP();
 $smarty->assign("nom"            , $malade_nom                                );
 $smarty->assign("prenom"         , $malade_prenom                             );
 $smarty->assign("naissance"      , $malade_naissance                          );
-$smarty->assign("dateMal"        , "$malade_year-$malade_month-$malade_day");
-$smarty->assign("malades"        , $malades                                  );
-$smarty->assign("malade"         , $malade                                  );
+$smarty->assign("dateMal"        , "$malade_year-$malade_month-$malade_day"			);
+$smarty->assign("malades"        , $malades                                 		);
+$smarty->assign("malade"         , $malade                                  		);
 $smarty->assign("board"          , 0                                          );
 
 $smarty->display("view_malades.tpl");
