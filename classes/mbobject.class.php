@@ -150,8 +150,10 @@ class CMbObject {
     // Static initialisations
     global $dPconfig;
     CMbObject::$handlers = array();
-    foreach ($dPconfig["object_handlers"] as $handler => $dummy) {
-      CMbObject::$handlers[] = new $handler;
+    foreach ($dPconfig["object_handlers"] as $handler => $active) {
+      if ($active) {
+        CMbObject::$handlers[] = new $handler;
+      }
     }
   }
 
