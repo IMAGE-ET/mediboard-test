@@ -214,7 +214,7 @@ class CCodeCIM10 {
     
   }
   
-  function loadRefs($connection = 1) {
+  function loadRefs() {
     $ds =& $this->_spec->ds;
     
     // Exclusions

@@ -25,7 +25,23 @@ class CSQLDataSource {
   function CDataSource(){
   }
   
+  /**
+   * Get the data source with given name.
+   * Create it if necessary
+   * @return CSQLDataSource
+   */
+  static function get($dsn) {  	
+  	if(!array_key_exists($dsn, self::$dataSources)){
+  	  $dataSource = new CMySQLDataSource();
+  	  $dataSource->init($dsn);
+  	  self::$dataSources[$dsn] = $dataSource;
+  	}
+  	return self::$dataSources[$dsn];
+  }
   
+  /**
+   * Initialize a data source by creating the link to the data base
+   */
   function init($dsn) {
     
     global $dPconfig;
@@ -42,23 +58,50 @@ class CSQLDataSource {
     $this->link = $this->connect($dsn, $this->dbhost, $this->dbname, $this->dbuser, $this->dbpass,$this->dbport, $this->dbpersist);
   }
   
-  
-  // Recherche le dataSource s'il existe ou en crée un
-  function get($dsn) {  	
-  	if(!array_key_exists($dsn, self::$dataSources)){
-  	  $dataSource = new CMySQLDataSource();
-  	  $dataSource->init($dsn);
-  	  self::$dataSources[$dsn] = $dataSource;
-  	}
-  	return self::$dataSources[$dsn];
-  }
-  
-  
-  
   function connect($dsn, $dbhost, $dbname, $dbuser, $dbpass, $dbport, $dbpersist){
     return null;	
   }
-	  
+	
+  /**
+   * Query an SQL dump
+   * Will fail to and exit to the first error
+   * @param string $dumpPath the dump path
+   * @return int number of queried lines, false if failed
+   */
+  function queryDump($dumpPath, $utfDecode = false) {
+		$sqlLines = file($dumpPath);
+		$query = "";
+		foreach ($sqlLines as $lineNumber => $sqlLine) {
+		  $sqlLine = trim($sqlLine);
+		  if ($utfDecode) {
+  		  $sqlLine = utf8_decode($sqlLine);
+		  }
+
+		  // Remove empty lignes
+		  if (!$sqlLine) {
+		    continue;
+		  }
+		  
+		  // Remove comment lines
+      if (substr($sqlLine, 0, 2) == "--" || substr($sqlLine, 0, 1) == "#") {
+        continue;
+      }
+
+      $query .= $sqlLine;
+      
+      // Query at line end
+	    if (preg_match("/;\s*$/", $sqlLine)) {
+	      $this->exec($query);
+	      if ($msg = $this->error()) {
+	        trigger_error("Error reading dump on line $lineNumber : $msg");
+	        return false;
+	      }
+	      $query = "";
+	    }
+		}  
+
+		return $lineNumber;
+  }
 
   /**
    * Returns a link handler for given sourcename
