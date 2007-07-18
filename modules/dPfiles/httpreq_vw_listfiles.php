@@ -93,11 +93,18 @@ $smarty->assign("object"         , $object      );
 $smarty->assign("typeVue"        , $typeVue     );
 $smarty->assign("accordDossier"  , $accordDossier);
 
-$smarty->display(
- 	$typeVue == 1 ? "inc_list_view_colonne.tpl":
- 	$typeVue == 2 ? "inc_list_view_gd_thumb.tpl":
-	"inc_list_view.tpl"
-);
+//$smarty->display("inc_list_view_colonne.tpl");
+switch($typeVue) {
+  case 0 :
+    $smarty->display("inc_list_view.tpl");
+    break;
+  case 1 :
+    $smarty->display("inc_list_view_colonne.tpl");
+    break;
+  case 2 :
+    $smarty->display("inc_list_view_gd_thumb.tpl");
+    break;
+}
 
 
 ?>
