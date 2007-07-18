@@ -74,7 +74,7 @@ class CMenu extends CMbObject {
     global $g;
     $where = array();
     if($typerepas_id){
-      $where["typerepas"] = db_prepare("= %",$typerepas_id);
+      $where["typerepas"] = $this->_spec->ds->prepare("= %",$typerepas_id);
     }
     $where["group_id"] = db_prepare("= %",$g);
     $where["debut"]    = db_prepare("<= %",$date);

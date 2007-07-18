@@ -96,8 +96,6 @@ class CAppUI {
     } else {
       $this->locale_mask = "%s";
     }
-    
-    $this->ds = CSQLDataSource::get("std");
   }
   
   function getAllClasses() {
@@ -500,6 +498,7 @@ class CAppUI {
  * @return boolean True if successful, false if not
  */
   function login() {
+  	$ds = CSQLDataSource::get("std");
     // Test login and password validity
     $user = new CUser;
     $user->user_username = trim(mbGetValueFromPost("username"));
@@ -533,10 +532,10 @@ class CAppUI {
     
     // Put user_group in AppUI
     $remote = 1;
-    if ($this->ds->loadTable("users_mediboard") && $this->ds->loadTable("groups_mediboard")) {
+    if ($ds->loadTable("users_mediboard") && $ds->loadTable("groups_mediboard")) {
       $sql = "SELECT `remote` FROM `users_mediboard` WHERE `user_id` = '$user->user_id'";
-      if ($cur = $this->ds->exec($sql)) {
-        if ($row = $this->ds->fetchRow($cur)) {
+      if ($cur = $ds->exec($sql)) {
+        if ($row = $ds->fetchRow($cur)) {
           $remote = intval($row[0]);
         }
       }
@@ -545,7 +544,7 @@ class CAppUI {
           "\nWHERE `groups_mediboard`.`group_id` = `functions_mediboard`.`group_id`" .
           "\nAND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`" .
           "\nAND `users_mediboard`.`user_id` = '$user->user_id'";
-      $this->user_group = $this->ds->loadResult($sql);
+      $this->user_group = $ds->loadResult($sql);
     }
     
     // Test if remote connection is allowed
@@ -573,7 +572,7 @@ class CAppUI {
     $this->user_last_login = $user->user_last_login;
     
     // save the last_login dateTime
-    if($this->ds->loadField("users", "user_last_login")) {
+    if($ds->loadField("users", "user_last_login")) {
       // Nullify password or you md5 it once more
       $user->user_last_name = null;
       $user->user_last_login = mbDateTime();

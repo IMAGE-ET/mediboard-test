@@ -10,6 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsEdit();
+$ds = CSQLDataSource::get("std");
 
 //Recuperation des identifiants pour les filtres
 $filter = new CPlageressource;
@@ -44,7 +45,7 @@ $sql = "SELECT prat_id" .
     "\nAND prat_id <> 0" .
     "\nGROUP BY prat_id" .
     "\nORDER BY prat_id";
-$sqlPrats = db_loadlist($sql);
+$sqlPrats = $ds->loadlist($sql);
 
 $total = array();
 $total["total"] = 0;
@@ -61,7 +62,7 @@ $sql = "SELECT prat_id," .
     "\nAND paye = '0'" .
     "\nGROUP BY prat_id" .
     "\nORDER BY somme DESC";
-$list = db_loadlist($sql);
+$list = $ds->loadlist($sql);
 
 $where = array();
 $where["date"] = "< '".mbDate()."'";

@@ -10,6 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
+$ds = CSQLDataSource::get("std");
 
 // Période
 $today = mbDate();
@@ -53,7 +54,7 @@ if($isprat) {
       "\nWHERE prat_id = '$prat->user_id'" .
       "\nAND date < '".mbDate()."'" .
       "\nAND paye = '0'";
-  $result = db_loadlist($sql);
+  $result = $ds->loadlist($sql);
   $compte["impayes"]["total"] = $result[0]["total"];
   $compte["impayes"]["somme"] = $result[0]["somme"];
   $compte["impayes"]["plages"] = new CPlageressource;
@@ -68,7 +69,7 @@ if($isprat) {
       "\nFROM plageressource" .
       "\nWHERE prat_id = '$prat->user_id'" .
       "\nAND date BETWEEN '".mbDate()."' AND '".mbDate("+15 DAYS")."'";
-  $result = db_loadlist($sql);
+  $result = $ds->loadlist($sql);
   $compte["inf15"]["total"] = $result[0]["total"];
   $compte["inf15"]["somme"] = $result[0]["somme"];
   $compte["inf15"]["plages"] = new CPlageressource;
@@ -82,7 +83,7 @@ if($isprat) {
       "\nFROM plageressource" .
       "\nWHERE prat_id = '$prat->user_id'" .
       "\nAND date > '".mbDate("+15 DAYS")."'";
-  $result = db_loadlist($sql);
+  $result = $ds->loadlist($sql);
   $compte["sup15"]["total"] = $result[0]["total"];
   $compte["sup15"]["somme"] = $result[0]["somme"];
   $compte["sup15"]["plages"] = new CPlageressource;

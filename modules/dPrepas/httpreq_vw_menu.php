@@ -10,6 +10,7 @@
 global $AppUI, $can, $m, $g;
 
 $can->needsRead();
+$ds = CSQLDataSource::get("std");
 
 $menu_id  = mbGetValueFromGetOrSession("menu_id" , null);
 $repas_id = mbGetValueFromGet("repas_id" , null);
@@ -27,13 +28,13 @@ $repas->load($repas_id);
 $plats     = new CPlat;
 $listPlats = array();
 $where              = array();
-$where["typerepas"] = db_prepare("= %",$menu->typerepas);
+$where["typerepas"] = $ds->prepare("= %",$menu->typerepas);
 $order              = "nom";
 foreach($plats->_enums["type"] as $key=>$value){
   $listPlats[$value] = array();
   
   if($menu->modif){
-    $where["type"] = db_prepare("= %",$value);
+    $where["type"] = $ds->prepare("= %",$value);
     $listPlats[$value] = $plats->loadList($where, $order);
   }
 }

@@ -14,6 +14,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
   var $synchro         = null;
   var $synchroConfirm  = null;
   var $synchroDatetime = null;
+  var $ds = null;
   
   function CDoRepasAddEdit() {
     global $m;
@@ -30,6 +31,8 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
     $this->synchro         = mbGetValueFromPost("_syncroOffline"  , false);
     $this->synchroConfirm  = mbGetValueFromPost("_synchroConfirm" , null);
     $this->synchroDatetime = mbGetValueFromPost("_synchroDatetime", null);
+    $this->ds = CSQLDataSource::get("std");
+    
   }
   
   function doRedirect($demandeSynchro = false) {
@@ -117,7 +120,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
          $sql->addSelect($select);
          $sql->addWhere($where);
          
-         $nbLogs = db_loadResult($sql->getRequest());
+         $nbLogs = $this->ds->loadResult($sql->getRequest());
          
          if($nbLogs){
            $AppUI->setMsg("Le repas a été modifié depuis la dernière synchronisation. Voulez-vous tout de même l'enregistrer ?", UI_MSG_WARNING);
