@@ -38,11 +38,20 @@ class CCodeCCAM {
   // Variable calculées
   var $_code7 = null;
   
-  // Constructeur
+  /**
+   * Construction
+   */
   function CCodeCCAM($code) {
-    global $AppUI;
-    $this->dbccam = $AppUI->cfg["baseCCAM"];
-    do_connect($this->dbccam);
+    // Static initialisation
+    static $spec = null;
+    if (!$spec) {
+      $spec = new CMbObjectSpec();
+      $spec->dsn = "ccamV2";
+      $spec->init();
+    }
+    
+    $this->_spec =& $spec;
+
     $this->code = strtoupper($code);
   }
   

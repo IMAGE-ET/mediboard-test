@@ -8,10 +8,20 @@
 */
 
 class CMbObjectSpec {
+  // Specification fields
   public $incremented = true;
   public $loggable = true;
-  var $dsn = "std";
-  var $ds = null;
+  public $dsn = "std";
+  
+  // Derivate fields
+  public $ds = null;
+  
+  /**
+   * Initialize derivate fields
+   */
+  public function init() {
+    $this->ds = CSQLDataSource::get($this->dsn);
+  }
 }
 
 ?>

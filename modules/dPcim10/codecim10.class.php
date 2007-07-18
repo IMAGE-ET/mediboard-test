@@ -12,6 +12,8 @@ class CCodeCIM10 {
   const LANG_EN = "EN_OMS";
   const LANG_DE = "GE_DIMDI";
 
+  var $_spec = null;
+  
   // Lite props
   var $code = null;
   var $sid = null;
@@ -38,15 +40,25 @@ class CCodeCIM10 {
   // Id de la base de données (qui doit être dans le config.php)
   var $dbcim10 = null;
   
-  
-  // Constructeur
+  /**
+   * Construction
+   */
   function CCodeCIM10($code = "(A00-B99)", $loadlite = 0) {
-    global $AppUI;
-    $this->dbcim10 = $AppUI->cfg["baseCIM10"];
-    do_connect($this->dbcim10);
+    // Static initialisation
+    static $spec = null;
+    if (!$spec) {
+      $spec = new CMbObjectSpec();
+      $spec->dsn = "cim10";
+      $spec->init();
+    }
+    
+    $this->_spec =& $spec;
+
     $this->code = strtoupper($code);
-    if($loadlite)
+    
+    if ($loadlite) {
       $this->loadLite();
+    }
   }
   
   // Chargement des données Lite
@@ -70,6 +82,7 @@ class CCodeCIM10 {
     $result = $this->_spec->ds->exec($query, $this->dbcim10);
     $row = $this->_spec->ds->fetchArray($result);
     $this->sid = $row["SID"];
+    
     // code et level
     $query = "SELECT abbrev, level" .
         "\nFROM master" .
@@ -78,6 +91,7 @@ class CCodeCIM10 {
     $row = $this->_spec->ds->fetchArray($result);
     $this->code = $row["abbrev"];
     $this->level = $row["level"];
+    
     //libelle
     $query = "SELECT $this->_lang" .
         "\nFROM libelle" .

@@ -27,17 +27,17 @@ class CSQLDataSource {
   
   
   function init($dsn) {
-
-    global $AppUI;
-    $AppUI->getSystemClass("chrono");
+    
+    global $dPconfig;
+    $dsConfig = $dPconfig["db"][$dsn];
     
     $this->dsn       = $dsn;
-    $this->dbhost    = $AppUI->cfg["db"][$dsn]["dbhost"];
-    $this->dbname    = $AppUI->cfg["db"][$dsn]["dbname"];
-    $this->dbuser    = $AppUI->cfg["db"][$dsn]["dbuser"];
-    $this->dbpass    = $AppUI->cfg["db"][$dsn]["dbpass"];
-    $this->dbport    = $AppUI->cfg["db"][$dsn]["dbport"];
-    $this->dbpersist = $AppUI->cfg["dbpersist"];
+    $this->dbhost    = $dsConfig["dbhost"];
+    $this->dbname    = $dsConfig["dbname"];
+    $this->dbuser    = $dsConfig["dbuser"];
+    $this->dbpass    = $dsConfig["dbpass"];
+    $this->dbport    = $dsConfig["dbport"];
+    $this->dbpersist = $dPconfig["dbpersist"];
     
     $this->link = $this->connect($dsn, $this->dbhost, $this->dbname, $this->dbuser, $this->dbpass,$this->dbport, $this->dbpersist);
   }
