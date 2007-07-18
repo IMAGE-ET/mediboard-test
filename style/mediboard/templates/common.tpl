@@ -2,7 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-  <title>Mediboard :: Système de gestion des structures de santé</title>
+  <title>
+    Mediboard 
+    &mdash; {{tr}}module-{{$m}}-court{{/tr}}
+  </title>
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeCharSet}}" />
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissement de Santé" />
   <meta name="Version" content="{{$version.string}}" />

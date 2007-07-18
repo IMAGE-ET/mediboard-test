@@ -44,8 +44,8 @@
         <tr>
           <td id="userWelcome">
             <form name="ChangeGroup" action="" method="get">
-              <span title="{{tr}}last connection{{/tr}} : {{$AppUI->user_last_login|date_format:"%A %d %B %Y %H:%M"}}">
-                {{tr}}Welcome{{/tr}} {{$AppUI->user_first_name}} {{$AppUI->user_last_name}}
+              <span title="{{tr}}last connection{{/tr}} : {{$app->user_last_login|date_format:"%A %d %B %Y %H:%M"}}">
+                {{tr}}Welcome{{/tr}} {{$app->user_first_name}} {{$app->user_last_name}}
               </span>
               <input type="hidden" name="m" value="{{$m}}" />
               <select name="g" onchange="ChangeGroup.submit();">
@@ -62,7 +62,7 @@
             <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">{{tr}}portal-tracker{{/tr}}</a> |
             <a href="#" onclick="popChgPwd();">{{tr}}menu-changePassword{{/tr}}</a> |
             <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a> |
-            <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}mod-admin-tab-edit_prefs{{/tr}}</a> |
+            <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$app->user_id}}">{{tr}}mod-admin-tab-edit_prefs{{/tr}}</a> |
             <a href="?logout=-1">{{tr}}menu-logout{{/tr}}</a>
           </td>
         </tr>

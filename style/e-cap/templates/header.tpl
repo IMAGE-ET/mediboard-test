@@ -48,8 +48,8 @@ var Menu = {
   </form>
   
   <!-- Welcome -->
-  <label title="{{tr}}last connection{{/tr}} : {{$AppUI->user_last_login|date_format:"%A %d %B %Y %H:%M"}}">
-  {{tr}}Welcome{{/tr}} {{$AppUI->user_first_name}} {{$AppUI->user_last_name}}
+  <label title="{{tr}}last connection{{/tr}} : {{$app->user_last_login|date_format:"%A %d %B %Y %H:%M"}}">
+  {{tr}}Welcome{{/tr}} {{$app->user_first_name}} {{$app->user_last_name}}
   </label>
   {{/if}}
 
@@ -68,7 +68,7 @@ var Menu = {
       <a href="?m=mediusers&amp;a=edit_infos" title="{{tr}}menu-myInfo{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/myinfos.png" alt="{{tr}}menu-myInfo{{/tr}}" />
       </a>
-      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}" title="{{tr}}mod-admin-tab-edit_prefs{{/tr}}">
+      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$app->user_id}}" title="{{tr}}mod-admin-tab-edit_prefs{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/prefs.png" alt="{{tr}}mod-admin-tab-edit_prefs{{/tr}}" />
       </a>
       <a href="?logout=-1" title="{{tr}}menu-logout{{/tr}}">
@@ -142,8 +142,8 @@ var Menu = {
             </form>
             {{/if}}
             <br />
-            <span title="{{tr}}last connection{{/tr}} : {{$AppUI->user_last_login|date_format:"%A %d %B %Y %H:%M"}}">
-            {{tr}}Welcome{{/tr}} {{$AppUI->user_first_name}} {{$AppUI->user_last_name}}
+            <span title="{{tr}}last connection{{/tr}} : {{$app->user_last_login|date_format:"%A %d %B %Y %H:%M"}}">
+            {{tr}}Welcome{{/tr}} {{$app->user_first_name}} {{$app->user_last_name}}
             </span>
 
           </td>
@@ -161,7 +161,7 @@ var Menu = {
       {{/foreach}}
       <a href="#" onclick="popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a>
       <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a>
-      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">{{tr}}mod-admin-tab-edit_prefs{{/tr}}</a>
+      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$app->user_id}}">{{tr}}mod-admin-tab-edit_prefs{{/tr}}</a>
       <a href="?logout=-1">{{tr}}menu-logout{{/tr}}</a>
     </td>
   </tr>

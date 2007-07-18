@@ -54,7 +54,7 @@ function chgMenu(id, type) {
           </a>
         </div>
         <div class="menuItem">
-          <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$AppUI->user_id}}">
+          <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$app->user_id}}">
             <img src="style/aero/images/icons/prefs.png" alt="Preferences" border="0" height="16" width="16" />
             {{tr}}mod-admin-tab-edit_prefs{{/tr}}
           </a>

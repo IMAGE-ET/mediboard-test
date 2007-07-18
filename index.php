@@ -129,7 +129,6 @@ if (!$AppUI->user_id) {
     $smartyLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
     $smartyLogin->assign("mediboardScript"      , mbLoadScripts(1));
     $smartyLogin->assign("demoVersion"          , $dPconfig["demo_version"]);
-    $smartyLogin->assign("dialog"               , $dialog);
     $smartyLogin->assign("errorMessage"         , $AppUI->getMsg());
     $smartyLogin->assign("time"                 , time());
     $smartyLogin->assign("redirect"             , $redirect);
@@ -238,7 +237,6 @@ if (!$suppressHeaders) {
   $smartyHeader->assign("dialog"               , $dialog);
   $smartyHeader->assign("messages"             , $messages);
   $smartyHeader->assign("uistyle"              , $uistyle);
-  $smartyHeader->assign("AppUI"                , $AppUI);
   $smartyHeader->assign("errorMessage"         , $AppUI->getMsg());
   $smartyHeader->assign("Etablissements"       , $etablissements);
   $smartyHeader->assign("portal"               , array (
