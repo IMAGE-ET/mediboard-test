@@ -409,7 +409,7 @@ class CPatient extends CDossierMedical {
   function loadRefsAffectations() {
     $this->loadRefsSejours();
     // Affectation actuelle et prochaine affectation
-    $where["sejour_id"] = db_prepare_in(array_keys($this->_ref_sejours));
+    $where["sejour_id"] = $this->_spec->ds->prepareIn(array_keys($this->_ref_sejours));
     $order = "entree";
     $now = mbDateTime();
     
@@ -612,7 +612,7 @@ class CPatient extends CDossierMedical {
       $where["patient_id"] = "!= '$this->patient_id'";
     }
     
-    $where[] = db_prepare("((nom = %1 AND prenom = %2) " .
+    $where[] = $this->_spec->ds->prepare("((nom = %1 AND prenom = %2) " .
                             "OR (nom = %1 AND naissance = %3 AND naissance != '0000-00-00') " .
                             "OR (prenom = %2 AND naissance = %3 AND naissance != '0000-00-00'))",
                           $this->nom, $this->prenom, $this->naissance);
@@ -629,7 +629,7 @@ class CPatient extends CDossierMedical {
       		"AND nom    = '".addslashes($this->nom)."'" .
       		"AND prenom = '".addslashes($this->prenom)."'" .
       		"AND naissance = '$this->naissance'";
-    $siblings = db_loadlist($sql);
+    $siblings = $this->_spec->ds->loadlist($sql);
     return $siblings;
   }
   

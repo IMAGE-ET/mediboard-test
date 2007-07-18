@@ -70,11 +70,11 @@ class CRepas extends CMbObject {
     $msg = parent::check();
     if(!$msg){
       $where = array();
-      $where["date"]           = db_prepare("= %", $this->date);
-      $where["affectation_id"] = db_prepare("= %", $this->affectation_id);
-      $where["typerepas_id"]   = db_prepare("= %", $this->typerepas_id);
+      $where["date"]           = $this->_spec->ds->prepare("= %", $this->date);
+      $where["affectation_id"] = $this->_spec->ds->prepare("= %", $this->affectation_id);
+      $where["typerepas_id"]   = $this->_spec->ds->prepare("= %", $this->typerepas_id);
       if($this->repas_id){
-        $where["repas_id"]   = db_prepare("!= %", $this->repas_id);
+        $where["repas_id"]   = $this->_spec->ds->prepare("!= %", $this->repas_id);
       }
       $select = "count(`".$this->_tbl_key."`) AS `total`";
       
@@ -83,7 +83,7 @@ class CRepas extends CMbObject {
       $sql->addSelect($select);
       $sql->addWhere($where);
       
-      $nbRepas = db_loadResult($sql->getRequest());
+      $nbRepas = $this->_spec->ds->loadResult($sql->getRequest());
       
       if($nbRepas){
         $msg .= "Un repas a déjà été créé, vous ne pouvez pas en créer un nouveau.";
@@ -97,9 +97,9 @@ class CRepas extends CMbObject {
     if(!$this->_no_synchro){
       $service = $this->getService();
       $where = array();
-      $where["date"]         = db_prepare("= %", $this->date);
-      $where["service_id"]   = db_prepare("= %", $service->_id);
-      $where["typerepas_id"] = db_prepare("= %", $this->typerepas_id);
+      $where["date"]         = $this->_spec->ds->prepare("= %", $this->date);
+      $where["service_id"]   = $this->_spec->ds->prepare("= %", $service->_id);
+      $where["typerepas_id"] = $this->_spec->ds->prepare("= %", $this->typerepas_id);
       $validationrepas = new CValidationRepas;
       $validationrepas->loadObject($where);
       if($validationrepas->validationrepas_id){

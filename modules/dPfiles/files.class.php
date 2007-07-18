@@ -102,15 +102,15 @@ class CFile extends CMbMetaObject {
 
     // Delete any index entries
     $sql = "DELETE FROM files_index_mediboard WHERE file_id = $this->file_id";
-    if (!db_exec($sql)) {
-      return db_error();
+    if (!$this->_spec->ds->exec($sql)) {
+      return $this->_spec->ds->error();
     }
     
     // Delete the main table reference
     $sql = "DELETE FROM files_mediboard WHERE file_id = $this->file_id";
     
-    if (!db_exec($sql)) {
-      return db_error();
+    if (!$this->_spec->ds->exec($sql)) {
+      return $this->_spec->ds->error();
     }
     return null;
   }
@@ -206,7 +206,7 @@ class CFile extends CMbMetaObject {
         $wordarr[] = array("word" => $newword, "wordplace" => $x);
       }
     }
-    db_exec("LOCK TABLES files_index_mediboard WRITE");
+    $this->_spec->ds->exec("LOCK TABLES files_index_mediboard WRITE");
     
     // filter out common strings
     $ignore = array();
@@ -218,10 +218,10 @@ class CFile extends CMbMetaObject {
     // insert the strings into the table
     while(list($key, $val) = each($wordarr)) {
       $sql = "INSERT INTO files_index_mediboard VALUES ('" . $this->file_id . "', '" . $wordarr[$key]["word"] . "', '" . $wordarr[$key]["wordplace"] . "')";
-      db_exec($sql);
+      $this->_spec->ds->exec($sql);
     }
 
-    db_exec("UNLOCK TABLES;");
+    $this->_spec->ds->exec("UNLOCK TABLES;");
     return $nwords;
   }
   

@@ -69,8 +69,8 @@ class CPlat extends CMbObject {
     $sql = $select . $from . $sql_where;
     $obj = null;
     
-    if (!db_loadObject($sql, $obj)) {
-      return db_error();
+    if (!$this->_spec->ds->loadObject($sql, $obj)) {
+      return $this->_spec->ds->error();
     }
     if ($obj->number) {
       return $AppUI->_("noDeleteRecord") . ": " . $obj->number . " repas";

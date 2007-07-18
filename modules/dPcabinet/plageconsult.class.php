@@ -93,7 +93,7 @@ class CPlageconsult extends CMbObject {
       "\nWHERE `plageconsult_id` = $this->_id" .
       "\nAND `consultation`.`patient_id` IS NOT NULL && `annule` = '0'";
       
-    $this->_affected = intval(db_loadResult($query));
+    $this->_affected = intval($this->_spec->ds->loadResult($query));
 
     if ($this->_total) {
       $this->_fill_rate= round($this->_affected/$this->_total*100);

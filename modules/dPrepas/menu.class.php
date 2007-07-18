@@ -76,9 +76,9 @@ class CMenu extends CMbObject {
     if($typerepas_id){
       $where["typerepas"] = $this->_spec->ds->prepare("= %",$typerepas_id);
     }
-    $where["group_id"] = db_prepare("= %",$g);
-    $where["debut"]    = db_prepare("<= %",$date);
-    //$where["fin"]      = db_prepare(">= %",$date);
+    $where["group_id"] = $this->_spec->ds->prepare("= %",$g);
+    $where["debut"]    = $this->_spec->ds->prepare("<= %",$date);
+    //$where["fin"]      = $this->_spec->ds->prepare(">= %",$date);
     $order = "nom";
     
     $listRepas = new CMenu;

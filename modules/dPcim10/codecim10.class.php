@@ -58,8 +58,8 @@ class CCodeCIM10 {
     $query = "SELECT COUNT(abbrev) AS total" .
         "\nFROM master" .
         "\nWHERE abbrev = '$this->code'";
-    $result = db_exec($query, $this->dbcim10);
-    $row = db_fetch_array($result);
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
+    $row = $this->_spec->ds->fetchArray($result);
     if ($row["total"] == 0) {
       $this->code = "(A00-B99)";
     }
@@ -67,15 +67,15 @@ class CCodeCIM10 {
     $query = "SELECT SID" .
         "\nFROM master" .
         "\nWHERE abbrev = '$this->code'";
-    $result = db_exec($query, $this->dbcim10);
-    $row = db_fetch_array($result);
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
+    $row = $this->_spec->ds->fetchArray($result);
     $this->sid = $row["SID"];
     // code et level
     $query = "SELECT abbrev, level" .
         "\nFROM master" .
         "\nWHERE SID = '$this->sid'";
-    $result = db_exec($query, $this->dbcim10);
-    $row = db_fetch_array($result);
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
+    $row = $this->_spec->ds->fetchArray($result);
     $this->code = $row["abbrev"];
     $this->level = $row["level"];
     //libelle
@@ -83,8 +83,8 @@ class CCodeCIM10 {
         "\nFROM libelle" .
         "\nWHERE SID = '$this->sid'" .
         "\nAND source = 'S'";
-    $result = db_exec($query, $this->dbcim10);
-    $row = db_fetch_array($result);
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
+    $row = $this->_spec->ds->fetchArray($result);
     $this->libelle = $row[$this->_lang];
   }
   
@@ -98,13 +98,13 @@ class CCodeCIM10 {
     $query = "SELECT LID" .
         "\nFROM descr" .
         "\nWHERE SID = '$this->sid'";
-    $result = db_exec($query, $this->dbcim10);
-    while($row = db_fetch_array($result)) {
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
+    while($row = $this->_spec->ds->fetchArray($result)) {
       $query = "SELECT $this->_lang" .
           "\nFROM libelle" .
           "\nWHERE LID = '".$row["LID"]."'";
-      $result2 = db_exec($query, $this->dbcim10);
-      if ($row2 = db_fetch_array($result2)) {
+      $result2 = $this->_spec->ds->exec($query, $this->dbcim10);
+      if ($row2 = $this->_spec->ds->fetchArray($result2)) {
         $found = $row2[$this->_lang];
         if ($found != "" and array_search($found, $this->descr) === false) {
           $this->descr[] = $found;
@@ -117,14 +117,14 @@ class CCodeCIM10 {
     $query = "SELECT MID" .
         "\nFROM glossaire" .
         "\nWHERE SID = '$this->sid'";
-    $result = db_exec($query, $this->dbcim10);
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
     $i = 0;
-    while($row = db_fetch_array($result)) {
+    while($row = $this->_spec->ds->fetchArray($result)) {
       $query = "SELECT $this->_lang" .
           "\nFROM memo" .
           "\nWHERE MID = '".$row["MID"]."'";
-      $result2 = db_exec($query, $this->dbcim10);
-      if ($row2 = db_fetch_array($result2)) {
+      $result2 = $this->_spec->ds->exec($query, $this->dbcim10);
+      if ($row2 = $this->_spec->ds->fetchArray($result2)) {
         $found = $row2[$this->_lang];
         if ($found != "" and array_search($found, $this->glossaire) === false) {
           $this->glossaire[] = $found;
@@ -137,13 +137,13 @@ class CCodeCIM10 {
     $query = "SELECT LID" .
         "\nFROM include" .
         "\nWHERE SID = '$this->sid'";
-    $result = db_exec($query, $this->dbcim10);
-    while($row = db_fetch_array($result)) {
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
+    while($row = $this->_spec->ds->fetchArray($result)) {
       $query = "SELECT $this->_lang" .
           "\nFROM libelle" .
           "\nWHERE LID = '".$row["LID"]."'";
-      $result2 = db_exec($query, $this->dbcim10);
-      if ($row2 = db_fetch_array($result2)) {
+      $result2 = $this->_spec->ds->exec($query, $this->dbcim10);
+      if ($row2 = $this->_spec->ds->fetchArray($result2)) {
         $found = $row2[$this->_lang];
         if ($found != "" and array_search($found, $this->include) === false) {
           $this->include[] = $found;
@@ -156,13 +156,13 @@ class CCodeCIM10 {
     $query = "SELECT LID" .
         "\nFROM indir" .
         "\nWHERE SID = '$this->sid'";
-    $result = db_exec($query, $this->dbcim10);
-    while($row = db_fetch_array($result)) {
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
+    while($row = $this->_spec->ds->fetchArray($result)) {
       $query = "SELECT $this->_lang" .
           "\nFROM libelle" .
           "\nWHERE LID = '".$row["LID"]."'";
-      $result2 = db_exec($query, $this->dbcim10);
-      if ($row2 = db_fetch_array($result2)) {
+      $result2 = $this->_spec->ds->exec($query, $this->dbcim10);
+      if ($row2 = $this->_spec->ds->fetchArray($result2)) {
         $found = $row2[$this->_lang];
         if ($found != "" and array_search($found, $this->indir) === false) {
           $this->indir[] = $found;
@@ -175,14 +175,14 @@ class CCodeCIM10 {
     $query = "SELECT MID" .
         "\nFROM note" .
         "\nWHERE SID = '$this->sid'";
-    $result = db_exec($query, $this->dbcim10);
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
     $i = 0;
-    while($row = db_fetch_array($result)) {
+    while($row = $this->_spec->ds->fetchArray($result)) {
       $query = "SELECT $this->_lang" .
           "\nFROM memo" .
           "\nWHERE MID = '".$row["MID"]."'";
-      $result2 = db_exec($query, $this->dbcim10);
-      if ($row2 = db_fetch_array($result2)) {
+      $result2 = $this->_spec->ds->exec($query, $this->dbcim10);
+      if ($row2 = $this->_spec->ds->fetchArray($result2)) {
         $found = $row2[$this->_lang];
         if ($found != "" and array_search($found, $this->notes) === false) {
           $this->notes[] = $found;
@@ -206,13 +206,13 @@ class CCodeCIM10 {
     $query = "SELECT LID, excl" .
         "\nFROM exclude" .
         "\nWHERE SID = '$this->sid'";
-    $result = db_exec($query, $this->dbcim10);
-    while ($row = db_fetch_array($result)) {
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
+    while ($row = $this->_spec->ds->fetchArray($result)) {
       $query = "SELECT abbrev" .
           "\nFROM master" .
           "\nWHERE SID = '".$row["excl"]."'";
-      $result2 = db_exec($query, $this->dbcim10);
-      if ($row2 = db_fetch_array($result2)) {
+      $result2 = $this->_spec->ds->exec($query, $this->dbcim10);
+      if ($row2 = $this->_spec->ds->fetchArray($result2)) {
         $code_cim10 = $row2["abbrev"];
         if (array_key_exists($code_cim10, $this->_exclude) === false) {
           $code = new CCodeCIM10($code_cim10);
@@ -227,8 +227,8 @@ class CCodeCIM10 {
     $query = "SELECT *" .
         "\nFROM master" .
         "\nWHERE SID = '$this->sid'";
-    $result = db_exec($query, $this->dbcim10);
-    $row = db_fetch_array($result);
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
+    $row = $this->_spec->ds->fetchArray($result);
 
     // Niveaux superieurs
     $this->_levelsup = array();
@@ -238,8 +238,8 @@ class CCodeCIM10 {
         $query = "SELECT abbrev" .
             "\nFROM master" .
             "\nWHERE SID = '$code_cim10_id'";
-        $result = db_exec($query, $this->dbcim10);
-        $row2 = db_fetch_array($result);
+        $result = $this->_spec->ds->exec($query, $this->dbcim10);
+        $row2 = $this->_spec->ds->fetchArray($result);
         $code_cim10 = $row2["abbrev"];
         $code = new CCodeCIM10($code_cim10);
         $code->loadLite($this->_lang, 0);
@@ -257,8 +257,8 @@ class CCodeCIM10 {
       $query .= "\nAND id".($this->level+2)." = '0'";
     }
     
-    $result = db_exec($query, $this->dbcim10);
-    while ($row = db_fetch_array($result)) {
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
+    while ($row = $this->_spec->ds->fetchArray($result)) {
       $code_cim10 = $row["abbrev"];
       $code = new CCodeCIM10($code_cim10);
       $code->loadLite($this->_lang, 0);
@@ -273,17 +273,17 @@ class CCodeCIM10 {
     $this->_lang = $lang;
 
     $query = "SELECT * FROM chapter ORDER BY chap";
-    $result = db_exec($query, $this->dbcim10);
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
     $i = 0;
-    while($row = db_fetch_array($result)) {
+    while($row = $this->_spec->ds->fetchArray($result)) {
       $chapter[$i]["rom"] = $row["rom"];
       $query = "SELECT * FROM master WHERE SID = '".$row["SID"]."'";
-      $result2 = db_exec($query, $this->dbcim10);
-      $row2 = db_fetch_array($result2);
+      $result2 = $this->_spec->ds->exec($query, $this->dbcim10);
+      $row2 = $this->_spec->ds->fetchArray($result2);
       $chapter[$i]["code"] = $row2["abbrev"];
       $query = "SELECT * FROM libelle WHERE SID = '".$row["SID"]."' AND source = 'S'";
-      $result2 = db_exec($query, $this->dbcim10);
-      $row2 = db_fetch_array($result2);
+      $result2 = $this->_spec->ds->exec($query, $this->dbcim10);
+      $row2 = $this->_spec->ds->fetchArray($result2);
       $chapter[$i]["text"] = $row2[$this->_lang];
       $i++;
     }
@@ -305,14 +305,14 @@ class CCodeCIM10 {
       $query .= ")";
     }
     $query .= " ORDER BY SID LIMIT 0 , 100";
-    $result = db_exec($query, $this->dbcim10);
+    $result = $this->_spec->ds->exec($query, $this->dbcim10);
     $master = array();
     $i = 0;
-    while($row = db_fetch_array($result)) {
+    while($row = $this->_spec->ds->fetchArray($result)) {
       $master[$i]["text"] = $row[$this->_lang];
       $query = "SELECT * FROM master WHERE SID = '".$row["SID"]."'";
-      $result2 =db_exec($query, $this->dbcim10);
-      $row2 = db_fetch_array($result2);
+      $result2 =$this->_spec->ds->exec($query, $this->dbcim10);
+      $row2 = $this->_spec->ds->fetchArray($result2);
       $master[$i]["code"] = $row2["abbrev"];
       $i++;
     }

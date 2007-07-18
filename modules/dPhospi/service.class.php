@@ -90,10 +90,10 @@ class CService extends CMbObject {
     }
     
     $where               = array();
-    $where["date"]       = db_prepare(" = %", $date);
-    $where["service_id"] = db_prepare(" = %", $this->service_id);
+    $where["date"]       = $this->_spec->ds->prepare(" = %", $date);
+    $where["service_id"] = $this->_spec->ds->prepare(" = %", $this->service_id);
     foreach($listTypeRepas as $keyType=>$typeRepas){
-      $where["typerepas_id"] = db_prepare("= %",$keyType);
+      $where["typerepas_id"] = $this->_spec->ds->prepare("= %",$keyType);
       $validrepas = new CValidationRepas;
       $validrepas->loadObject($where);
       $validation[$keyType] = $validrepas;

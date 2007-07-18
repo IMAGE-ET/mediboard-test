@@ -126,7 +126,7 @@ class CCompteRendu extends CMbMetaObject {
     if(is_array($catName)) {
       $where = array_merge($where, $catName);
     }elseif(is_string($catName)){
-      $where["nom"] = db_prepare("= %", $catName);
+      $where["nom"] = $this->_spec->ds->prepare("= %", $catName);
     }
     $category = new CFilesCategory;
     $resultCategory = $category->loadList($where);
@@ -136,9 +136,9 @@ class CCompteRendu extends CMbMetaObject {
       $where = array();
     	if($horsCat){
         $resultCategory[0] = "";
-    	  $where[] = "file_category_id IS NULL OR file_category_id ".db_prepare_in(array_keys($resultCategory));
+    	  $where[] = "file_category_id IS NULL OR file_category_id ".$this->_spec->ds->prepareIn(array_keys($resultCategory));
       } else {
-        $where["file_category_id"] = db_prepare_in(array_keys($resultCategory));
+        $where["file_category_id"] = $this->_spec->ds->prepareIn(array_keys($resultCategory));
       }
       $where["object_id"] = " IS NULL";
       if($where1){

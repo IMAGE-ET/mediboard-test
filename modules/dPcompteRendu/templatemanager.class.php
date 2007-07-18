@@ -108,7 +108,7 @@ class CTemplateManager {
       $chir->load($AppUI->user_id); 
       $where["function_id"] = "= '$chir->function_id'";
     }
-    $where[] = db_prepare("`compte_rendu_id` IS NULL OR compte_rendu_id = %",$compte_rendu_id); 
+    $where[] = $this->_spec->ds->prepare("`compte_rendu_id` IS NULL OR compte_rendu_id = %",$compte_rendu_id); 
     $order = "nom ASC";
     $lists = new CListeChoix();
     $lists = $lists->loadList($where, $order);

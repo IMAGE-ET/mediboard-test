@@ -227,11 +227,11 @@ class CGHM  extends CMbObject {
       $column1 = "code";
       $column2 = "liste_id";
       $sql = "SELECT liste_id FROM liste WHERE nom LIKE '%$liste%'";
-      $result = db_exec($sql, $this->_dbghm);
+      $result = $this->_spec->ds->exec($sql, $this->_dbghm);
       if(mysql_num_rows($result) == 0) {
         return 0;
       }
-      while($row = db_fetch_array($result)) {
+      while($row = $this->_spec->ds->fetchArray($result)) {
         $liste_ids[] = $row["liste_id"];
       }
     }
@@ -241,7 +241,7 @@ class CGHM  extends CMbObject {
         $sql = "SELECT * FROM $table WHERE $column1 = '$element'";
         if($column2)
           $sql .= "AND $column2 = '$liste_id'";
-        $result = db_exec($sql, $this->_dbghm);
+        $result = $this->_spec->ds->exec($sql, $this->_dbghm);
         $n = $n + mysql_num_rows($result);
       }
     }
@@ -253,19 +253,19 @@ class CGHM  extends CMbObject {
     if($groupe == "non opératoires") {
       $n = 0;
       $sql = "SELECT * FROM liste WHERE nom LIKE '%(non opératoires)%'";
-      $listeNO = db_loadList($sql, null, $this->_dbghm);
+      $listeNO = $this->_spec->ds->loadList($sql, null, $this->_dbghm);
       foreach($this->_actes as $acte) {
         $isNO = 0;
         foreach($listeNO as $liste) {
           $sql = "SELECT code FROM acte" .
               "\nWHERE code = '".$acte["code"]."'";
-          $resultExists = db_exec($sql, $this->_dbghm);
+          $resultExists = $this->_spec->ds->exec($sql, $this->_dbghm);
           $sql = "SELECT code FROM acte" .
               "\nWHERE code = '".$acte["code"]."'" .
               "\nAND phase = '".$acte["phase"]."'" .
               "\nAND liste_id = '".$liste["liste_id"]."'" .
               "\nAND CM_id = '$this->_CM'";
-          $resultNO = db_exec($sql, $this->_dbghm);
+          $resultNO = $this->_spec->ds->exec($sql, $this->_dbghm);
           if (!mysql_num_rows($resultExists) || mysql_num_rows($resultNO))
             $isNO = 1;
         }
@@ -279,7 +279,7 @@ class CGHM  extends CMbObject {
     } else if($groupe == "operatoire") {
       $n = 0;
       $sql = "SELECT * FROM liste WHERE nom LIKE '%(non opératoires)%'";
-      $listeNO = db_loadList($sql, null, $this->_dbghm);
+      $listeNO = $this->_spec->ds->loadList($sql, null, $this->_dbghm);
       foreach($this->_actes as $acte) {
         $isO = 1;
         foreach($listeNO as $liste) {
@@ -288,7 +288,7 @@ class CGHM  extends CMbObject {
               "\nAND phase = '".$acte["phase"]."'" .
               "\nAND liste_id = '".$liste["liste_id"]."'" .
               "\nAND CM_id = '$this->_CM'";
-          $result = db_exec($sql, $this->_dbghm);
+          $result = $this->_spec->ds->exec($sql, $this->_dbghm);
           if (mysql_num_rows($result))
             $isO = 0;
         }
@@ -303,7 +303,7 @@ class CGHM  extends CMbObject {
             "\nWHERE code = '".$acte["code"]."'" .
             "\nAND phase = '".$acte["phase"]."'" .
             "\nAND liste_id = 'A-med'";
-        $result = db_exec($sql, $this->_dbghm);
+        $result = $this->_spec->ds->exec($sql, $this->_dbghm);
         if (mysql_num_rows($result))
           $n++;
       }
@@ -336,18 +336,18 @@ class CGHM  extends CMbObject {
       $this->_CM = "25";
     } else {
       $sql = "SELECT * FROM diagcm WHERE diag = '$this->_DP'";
-      $result = db_exec($sql, $this->_dbghm);
+      $result = $this->_spec->ds->exec($sql, $this->_dbghm);
       if(mysql_num_rows($result) == 0) {
         $this->_CM = 100;
       } else {
-        $row = db_fetch_array($result);
+        $row = $this->_spec->ds->fetchArray($result);
         $this->_CM = $row["CM_id"];
       }
     }
     if($this->_CM) {
       $sql = "SELECT * FROM cm WHERE CM_id = '$this->_CM'";
-      $result = db_exec($sql, $this->_dbghm);
-      $row = db_fetch_array($result);
+      $result = $this->_spec->ds->exec($sql, $this->_dbghm);
+      $row = $this->_spec->ds->fetchArray($result);
       $this->_CM_nom = $row["nom"];
     }
     return $this->_CM;
@@ -460,7 +460,7 @@ class CGHM  extends CMbObject {
     }
     foreach($this->_DASs as $key => $DAS) {
       $sql = "SELECT * FROM incomp WHERE CIM1 = '$DAS' AND CIM2 = '".$this->_DP."'";
-      $result = db_exec($sql, $this->_dbghm);
+      $result = $this->_spec->ds->exec($sql, $this->_dbghm);
       if(mysql_num_rows($result)) {
         $this->_DADs[] = $DAS;
         unset($this->_DASs[$key]);
@@ -469,7 +469,7 @@ class CGHM  extends CMbObject {
     if(!$this->_CM)
       $this->getCM();
     $sql = "SELECT * FROM arbre WHERE CM_id = '$this->_CM'";
-    $listeBranches = db_loadList($sql, null, $this->_dbghm);
+    $listeBranches = $this->_spec->ds->loadList($sql, null, $this->_dbghm);
     $parcoursBranches = 0;
     $row = $listeBranches[0];
     $maxcond = 5;
@@ -515,8 +515,8 @@ class CGHM  extends CMbObject {
     }
     if($this->_GHM) {
       $sql = "SELECT * FROM ghm WHERE GHM_id = '$this->_GHM'";
-      $result = db_exec($sql, $this->_dbghm);
-      $row = db_fetch_array($result);
+      $result = $this->_spec->ds->exec($sql, $this->_dbghm);
+      $row = $this->_spec->ds->fetchArray($result);
       $this->_GHM_nom = $row["nom"];
       $this->_GHM_groupe = $row["groupe"];
       $this->_GHS = $row["GHS"];

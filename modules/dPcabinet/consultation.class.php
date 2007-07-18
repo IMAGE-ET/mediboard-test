@@ -289,7 +289,7 @@ class CConsultation extends CCodableCCAM {
       $sql->addTable($table);
       $sql->addSelect($select);
       $sql->addWhere($where);
-      $nbDocs = db_loadResult($sql->getRequest());
+      $nbDocs = $this->_spec->ds->loadResult($sql->getRequest());
     }else{
       $nbDocs = parent::getNumDocs();
     }

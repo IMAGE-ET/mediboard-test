@@ -38,21 +38,21 @@ class CAideSaisie extends CMbObject {
     
     $where = array();
     if($this->user_id){
-      $where["user_id"] = db_prepare("= %",$this->user_id);
+      $where["user_id"] = $this->_spec->ds->prepare("= %",$this->user_id);
     }else{
-      $where["function_id"] = db_prepare("= %",$this->function_id);
+      $where["function_id"] = $this->_spec->ds->prepare("= %",$this->function_id);
     }
-    $where["class"]   = db_prepare("= %",$this->class);
-    $where["field"]   = db_prepare("= %",$this->field);
-    $where["text"]    = db_prepare("= %",$this->text);
-    $where["aide_id"] = db_prepare("!= %",$this->aide_id);
+    $where["class"]   = $this->_spec->ds->prepare("= %",$this->class);
+    $where["field"]   = $this->_spec->ds->prepare("= %",$this->field);
+    $where["text"]    = $this->_spec->ds->prepare("= %",$this->text);
+    $where["aide_id"] = $this->_spec->ds->prepare("!= %",$this->aide_id);
     
     $sql = new CRequest();
     $sql->addSelect("count(aide_id)");
     $sql->addTable("aide_saisie");
     $sql->addWhere($where);
     
-    $nb_result = db_loadResult($sql->getRequest());
+    $nb_result = $this->_spec->ds->loadResult($sql->getRequest());
     
     if($nb_result){
       $msg.= "Cette aide existe déjà<br />";

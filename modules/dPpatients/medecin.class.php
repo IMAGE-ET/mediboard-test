@@ -129,10 +129,10 @@ class CMedecin extends CMbObject {
   
   function getExactSiblings() {
   	$where = array();
-  	$where["medecin_id"] = db_prepare("!= %", $this->medecin_id);
-  	$where["nom"]        = db_prepare("= %", $this->nom);
-  	$where["prenom"]     = db_prepare("= %", $this->prenom);
-    $where["cp"] = $this->cp == null ? "IS NULL" : db_prepare("= %", $this->cp);
+  	$where["medecin_id"] = $this->_spec->ds->prepare("!= %", $this->medecin_id);
+  	$where["nom"]        = $this->_spec->ds->prepare("= %", $this->nom);
+  	$where["prenom"]     = $this->_spec->ds->prepare("= %", $this->prenom);
+    $where["cp"] = $this->cp == null ? "IS NULL" : $this->_spec->ds->prepare("= %", $this->cp);
       
   	$siblings = new CMedecin;
   	$siblings = $siblings->loadList($where);
