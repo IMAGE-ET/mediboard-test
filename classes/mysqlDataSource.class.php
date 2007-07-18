@@ -36,13 +36,13 @@ class CMySQLDataSource extends CSQLDataSource {
 
   
   /**
-  * Document::db_insertArray() 
+  * Document::insertArray() 
   *
   * { Description }
   *
   * @param [type] $verbose
   */
-  function db_insertArray($table, &$hash, $verbose = false) {
+  function insertArray($table, &$hash, $verbose = false) {
     //global $dPconfig;
     if($dPconfig["readonly"]) {
       return false;
@@ -53,28 +53,28 @@ class CMySQLDataSource extends CSQLDataSource {
         continue;
       }
       $fields[] = $k;
-      $values[] = "'" . db_escape($v) . "'";
+      $values[] = "'" . escape($v) . "'";
     }
     $sql = sprintf($fmtsql, implode(",", $fields) ,  implode(",", $values));
 
     ($verbose) && print "$sql<br />\n";
 
-    if (!$this->db_exec($sql)) {
+    if (!$this->exec($sql)) {
       return false;
     }
-    $id = $this->db_insert_id();
+    $id = $this->insertId();
     return true;
   }
   
   
   /**
-  * Document::db_updateArray() 
+  * Document::updateArray() 
   *
   * { Description }
   *
   * @param [type] $verbose
   */
-  function db_updateArray($table, &$hash, $keyName, $verbose = false) {
+  function updateArray($table, &$hash, $keyName, $verbose = false) {
     global $dPconfig;
     if($dPconfig["readonly"]) {
       return false;
@@ -85,54 +85,54 @@ class CMySQLDataSource extends CSQLDataSource {
         continue;
 
       if($k == $keyName) { // PK not to be updated
-        $where = "$keyName='" . $this->db_escape($v) . "'";
+        $where = "$keyName='" . $this->escape($v) . "'";
         continue;
       }
       if ($v == "") {
         $val = "NULL";
       } else {
-        $val = "'" . $this->db_escape($v) . "'";
+        $val = "'" . $this->escape($v) . "'";
       }
       $tmp[] = "$k=$val";
     }
     $sql = sprintf($fmtsql, implode(",", $tmp) , $where);
     ($verbose) && print "$sql<br />\n";
     
-    $ret = $this->db_exec($sql);
+    $ret = $this->exec($sql);
     return $ret;
   }
   
   
   /**
-  * Document::db_delete()  
+  * Document::delete()  
   *
   * { Description } 
   *
   */
-  function db_delete($table, $keyName, $keyValue) {
+  function delete($table, $keyName, $keyValue) {
     global $dPconfig;
     if($dPconfig["readonly"]) {
       return false;
     }
-    $keyName = $this->db_escape($keyName);
-    $keyValue = $this->db_escape($keyValue);
+    $keyName = $this->escape($keyName);
+    $keyValue = $this->escape($keyValue);
     $sql = "DELETE FROM $table WHERE $keyName='$keyValue'";
     
-    $ret = $this->db_exec($sql);
+    $ret = $this->exec($sql);
     return $ret;
   }
   
   
 
   /**
-  * Document::db_insertObject() 
+  * Document::insertObject() 
   *
   * { Description } 
   *
   * @param [type] $keyName
   * @param [type] $verbose
   */
-  function db_insertObject($table, &$object, $keyName = null, $verbose = false) {
+  function insertObject($table, &$object, $keyName = null, $verbose = false) {
     global $dPconfig;
     if($dPconfig["readonly"]) {
       return false;
@@ -150,16 +150,16 @@ class CMySQLDataSource extends CSQLDataSource {
         continue;
       }
       $fields[] = "`$k`";
-      $values[] = "'" . $this->db_escape($v) . "'";
+      $values[] = "'" . $this->escape($v) . "'";
     }
     $sql = sprintf($fmtsql, implode(",", $fields) ,  implode(",", $values));
     ($verbose) && print "$sql<br />\n";
 
    
-    if (!$this->db_exec($sql)) {
+    if (!$this->exec($sql)) {
       return false;
     }
-    $id = $this->db_insert_id();
+    $id = $this->insertId();
     ($verbose) && print "id=[$id]<br />\n";
     if ($keyName && $id)
       $object->$keyName = $id;
@@ -169,13 +169,13 @@ class CMySQLDataSource extends CSQLDataSource {
   
   
   /**
-  * Document::db_updateObject() 
+  * Document::updateObject() 
   *
   * { Description }
   *
   * @param [type] $updateNulls
   */
-  function db_updateObject($table, &$object, $keyName) {
+  function updateObject($table, &$object, $keyName) {
     global $dPconfig;
     if($dPconfig["readonly"]) {
       return false;
@@ -187,7 +187,7 @@ class CMySQLDataSource extends CSQLDataSource {
         continue;
       }
       if($k == $keyName) { // PK not to be updated
-        $where = "`$keyName`='" . $this->db_escape($v) . "'";
+        $where = "`$keyName`='" . $this->escape($v) . "'";
         continue;
       }
       if ($v === null) {
@@ -198,31 +198,33 @@ class CMySQLDataSource extends CSQLDataSource {
         // Tries to nullify empty values but won't fail if not possible
         $val = "NULL";
       } else {
-        $val = "'" . $this->db_escape($v) . "'";
+        $val = "'" . $this->escape($v) . "'";
       }
       $tmp[] = "`$k`=$val";
     }
     $sql = sprintf($fmtsql, implode(",", $tmp) , $where);
  
-    return $this->db_exec($sql);
+    return $this->exec($sql);
   }
   
   
-  function db_loadTable($table, $dsn = "std") {
-    $query = $this->db_prepare("SHOW TABLES LIKE %", $table);
-    return $this->db_loadResult($query, $dsn);
+  function loadTable($table, $dsn = "std") {
+    $query = $this->prepare("SHOW TABLES LIKE %", $table);
+    return $this->loadResult($query, $dsn);
   }
 
-  function db_loadField($table, $field, $dsn = "std") {
-    $query = $this->db_prepare("SHOW COLUMNS FROM `$table` LIKE %", $field);
-    return $this->db_loadResult($query, $dsn);
+  function loadField($table, $field, $dsn = "std") {
+    $query = $this->prepare("SHOW COLUMNS FROM `$table` LIKE %", $field);
+    return $this->loadResult($query, $dsn);
   } 
 
   /**
   * Prepares an IN where clause with a given array of values
   * Prepares a standard = where clause when alternate value is supplied
   */
-  function db_prepare_in($values, $alternate = null) {
+
+  // à remonter
+  function prepareIn($values, $alternate = null) {
     if ($alternate) {
       return "= '$alternate'";
     }
@@ -234,25 +236,25 @@ class CMySQLDataSource extends CSQLDataSource {
   }
   
 
-  function db_error($dsn = "std") {
+  function error($dsn = "std") {
     if(!isset($this->link))
       trigger_error( "FATAL ERROR: link to $dsn not found.", E_USER_ERROR );
   	return mysql_error($this->link);
   }
 
-  function db_errno($dsn = "std") {
+  function errno($dsn = "std") {
     if(!isset($this->link))
      trigger_error( "FATAL ERROR: link to $dsn not found.", E_USER_ERROR );
    return mysql_errno($this->link);
   }
 
-  function db_insert_id($dsn = "std") {
+  function insertId($dsn = "std") {
     if(!isset($this->link))
       trigger_error( "FATAL ERROR: link to $dsn not found.", E_USER_ERROR );
 	return mysql_insert_id($this->link);
   }
 
-  function db_exec($sql, $dsn = "std") {
+  function exec($sql, $dsn = "std") {
     global $db_trace;
     
     if(!isset($this->link))
@@ -268,7 +270,7 @@ class CMySQLDataSource extends CSQLDataSource {
 
 	if (!$cur) {
       trigger_error("Exécution SQL : $sql", E_USER_NOTICE);
-      trigger_error("Erreur SQL : ".db_error(), E_USER_WARNING);
+      trigger_error("Erreur SQL : ".$this->error(), E_USER_WARNING);
 	  return false;
 	}
   
@@ -277,40 +279,39 @@ class CMySQLDataSource extends CSQLDataSource {
 
 
   
-  function db_free_result( $cur ) {
+  function freeResult( $cur ) {
 	mysql_free_result( $cur );
   }
 
-  function db_num_rows( $qid ) {
+  function numRows( $qid ) {
 	return mysql_num_rows( $qid );
   }
 
-  function db_affected_rows($dsn = "std" ) {
-    return mysql_affected_rows(db_link($dsn));
+  function affectedRows($dsn = "std" ) {
+    return mysql_affected_rows(link($dsn));
   }
 
-  function db_fetch_row( $cur ) {
+  function fetchRow( $cur ) {
 	return mysql_fetch_row( $cur );
   }
 
-  function db_fetch_assoc( $cur ) {
+  function fetchAssoc( $cur ) {
     return mysql_fetch_assoc( $cur );
   }
 
-  function db_fetch_array( $cur  ) {
+  function fetchArray( $cur  ) {
 	return mysql_fetch_array( $cur );
   }
 
-  function db_fetch_object( $cur  ) {
+  function fetchObject( $cur  ) {
 	return mysql_fetch_object( $cur );
   }
 
-  function db_escape( $str ) {
+  function escape( $str ) {
 	return mysql_escape_string( $str );
   }
 
-  function db_version($dsn = "std") {
-
+  function version($dsn = "std") {
     if(!isset($this->link))
       trigger_error( "FATAL ERROR: link to $dsn not found.", E_USER_ERROR );
   	  if( ($cur = mysql_query( "SELECT VERSION()",  $this->link)) ) {

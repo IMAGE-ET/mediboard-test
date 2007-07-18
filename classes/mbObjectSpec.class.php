@@ -10,7 +10,8 @@
 class CMbObjectSpec {
   public $incremented = true;
   public $loggable = true;
+  var $dsn = "std";
+  var $ds = null;
 }
-
 
 ?>

@@ -64,7 +64,7 @@ class CSQLDataSource {
    * Returns a link handler for given sourcename
    * @param string $dsn The DB sourcename
    */
-  function db_link($dsn = "std") {
+  function link($dsn = "std") {
     if (!array_key_exists($dsn, $this->dataSources)) {
       trigger_error( "FATAL ERROR: link to $dsn not found.", E_USER_ERROR );
     }
@@ -78,14 +78,14 @@ class CSQLDataSource {
   * @param strong The db identifier
   * @return The value returned in the query or null if the query failed.
   */
-  function db_loadResult($sql, $dsn = "std") {
-    $cur = $this->db_exec($sql, $dsn);
-    $cur or exit($this->db_error());
+  function loadResult($sql, $dsn = "std") {
+    $cur = $this->exec($sql, $dsn);
+    $cur or exit($this->error());
     $ret = null;
-    if ($row = $this->db_fetch_row($cur)) {
+    if ($row = $this->fetchRow($cur)) {
       $ret = $row[0];
     }
-    $this->db_free_result($cur);
+    $this->freeResult($cur);
     return $ret;
   }
 
@@ -98,21 +98,21 @@ class CSQLDataSource {
   * @param string The SQL query
   * @param object The address of variable
   */
-  function db_loadObject($sql, &$object) {
+  function loadObject($sql, &$object) {
     //global $mbCacheObjectCount;
     $class = get_class($object);
     if ($object != null) {
       $hash = array();
-      if(!$this->db_loadHash($sql, $hash)) {
+      if(!$this->loadHash($sql, $hash)) {
         return false;
       }
       $this->bindHashToObject($hash, $object, false);
       return true;
     } else {
-      $cur = $this->db_exec($sql);
-      $cur or exit($this->db_error());
-      if ($object = $this->db_fetch_object($cur)) {
-        $this->db_free_result($cur);
+      $cur = $this->exec($sql);
+      $cur or exit($this->error());
+      if ($object = $this->fetchObject($cur)) {
+        $this->freeResult($cur);
         return true;
       } else {
         $object = null;
@@ -122,7 +122,7 @@ class CSQLDataSource {
   }
 
   
-  function db_loadObjectWithOpt($sql, &$object) {
+  function loadObjectWithOpt($sql, &$object) {
     global $mbCacheObjectCount;
     $class = get_class($object);
     if ($object != null) {
@@ -132,17 +132,17 @@ class CSQLDataSource {
         return true;
       } else {
         $hash = array();
-        if(!$this->db_loadHash($sql, $hash)) {
+        if(!$this->loadHash($sql, $hash)) {
           return false;
         }
         $this->bindHashToObject($hash, $object, false);
         return true;
       }
     } else {
-      $cur = $this->db_exec($sql);
-      $cur or exit($this->db_error());
-      if ($object = $this->db_fetch_object($cur)) {
-        $this->db_free_result($cur);
+      $cur = $this->exec($sql);
+      $cur or exit($this->error());
+      if ($object = $this->fetchObject($cur)) {
+        $this->freeResult($cur);
         return true;
       } else {
         $object = null;
@@ -158,11 +158,11 @@ class CSQLDataSource {
   * @param array An array for the result to be return in
   * @return <b>True</b> is the query was successful, <b>False</b> otherwise
   */
-  function db_loadHash($sql, &$hash) {
-    $cur = $this->db_exec($sql);
-    $cur or exit($this->db_error());
-    $hash = $this->db_fetch_assoc($cur);
-    $this->db_free_result($cur);
+  function loadHash($sql, &$hash) {
+    $cur = $this->exec($sql);
+    $cur or exit($this->error());
+    $hash = $this->fetchAssoc($cur);
+    $this->freeResult($cur);
     if ($hash == false) {
       return false;
     } else {
@@ -171,25 +171,25 @@ class CSQLDataSource {
   }
 
   /**
-  * Document::db_loadHashList()
+  * Document::loadHashList()
   *
   * { Description }
   *
   * @param string $index
   */
-  function db_loadHashList($sql, $index = "") {
-    $cur = $this->db_exec($sql);
-    $cur or exit($this->db_error());
+  function loadHashList($sql, $index = "") {
+    $cur = $this->exec($sql);
+    $cur or exit($this->error());
     $hashlist = array();
-    while ($hash = $this->db_fetch_array($cur)) {
+    while ($hash = $this->fetchArray($cur)) {
       $hashlist[$hash[$index ? $index : 0]] = $index ? $hash : $hash[1];
     }
-    $this->db_free_result($cur);
+    $this->freeResult($cur);
     return $hashlist;
   }
 
   /**
-  * Document::db_loadList() 
+  * Document::loadList() 
   *
   * return an array of the db lines
   * can connect to any database via $dsn param 
@@ -198,46 +198,46 @@ class CSQLDataSource {
   * @param string the db identifier
   * @return array the query result
   */
-  function db_loadList($sql, $maxrows = null, $dsn = "std") {
+  function loadList($sql, $maxrows = null, $dsn = "std") {
     //global $AppUI;
-    if (!($cur = $this->db_exec($sql, $dsn))) {;
-      $AppUI->setMsg($this->db_error(), UI_MSG_ERROR);
+    if (!($cur = $this->exec($sql, $dsn))) {;
+      $AppUI->setMsg($this->error(), UI_MSG_ERROR);
       return false;
     }
     $list = array();
     $cnt = 0;
-    while ($hash = $this->db_fetch_assoc($cur)) {
+    while ($hash = $this->fetchAssoc($cur)) {
       $list[] = $hash;
       if($maxrows && $maxrows == $cnt++) {
         break;
       }
     }
-    $this->db_free_result($cur);
+    $this->freeResult($cur);
     return $list;
   }
 
   /**
-  * Document::db_loadColumn()
+  * Document::loadColumn()
   *
   * Loads the first column for a given query
   *
   * @param int $maxrows limit to a maximum nember of rows
   */
-  function db_loadColumn($sql, $maxrows = null, $dsn = "std") {
+  function loadColumn($sql, $maxrows = null, $dsn = "std") {
     global $AppUI;
-    if (!($cur = $this->db_exec($sql, $dsn))) {
-      $AppUI->setMsg($this->db_error($dsn), UI_MSG_ERROR);
+    if (!($cur = $this->exec($sql, $dsn))) {
+      $AppUI->setMsg($this->error($dsn), UI_MSG_ERROR);
       return false;
     }
     $list = array();
     $cnt = 0;
-    while ($row = $this->db_fetch_row($cur)) {
+    while ($row = $this->fetchRow($cur)) {
       $list[] = $row[0];
       if($maxrows && $maxrows == $cnt++) {
         break;
       }
     }
-    $this->db_free_result($cur);
+    $this->freeResult($cur);
     return $list;
   }
 
@@ -245,14 +245,14 @@ class CSQLDataSource {
    * class must implement the Load() factory, see examples in Webo classes
    * @note to optimize request, only select object oids in $sql
    */
-  function db_loadObjectList($sql, $object, $maxrows = null) {
+  function loadObjectList($sql, $object, $maxrows = null) {
     global $mbCacheObjectCount;
-    $cur = $this->db_exec($sql);
+    $cur = $this->exec($sql);
     $list = array();
     $cnt = 0;
     $class = get_class($object);
     $table_key = $object->_tbl_key;
-    while ($row = $this->db_fetch_array($cur)) {
+    while ($row = $this->fetchArray($cur)) {
       $key = $row[$table_key];
       $newObject = new $class();
       $newObject->bind($row, false);
@@ -263,18 +263,18 @@ class CSQLDataSource {
         break;
       }
     }
-    $this->db_free_result($cur);
+    $this->freeResult($cur);
     return $list;
   }
 
-  function db_loadObjectListWithOpt($sql, $object, $maxrows = null) {
+  function loadObjectListWithOpt($sql, $object, $maxrows = null) {
     global $mbCacheObjectCount;
-    $cur = $this->db_exec($sql);
+    $cur = $this->exec($sql);
     $list = array();
     $cnt = 0;
     $class = get_class($object);
     $table_key = $object->_tbl_key;
-    while ($row = $this->db_fetch_array($cur)) {
+    while ($row = $this->fetchArray($cur)) {
       $key = $row[$table_key];
       if(isset($object->_objectsTable[$key])) {
         $list[$key] = $object->_objectsTable[$key];
@@ -291,91 +291,91 @@ class CSQLDataSource {
         break;
       }
     }
-    $this->db_free_result($cur);
+    $this->freeResult($cur);
     return $list;
   }
 
 
   /**
-  * Document::db_insertArray() 
+  * Document::insertArray() 
   *
   * { Description }
   *
   * @param [type] $verbose
   */
-  function db_insertArray($table, &$hash, $verbose = false) {
+  function insertArray($table, &$hash, $verbose = false) {
     return null;
   }
 
   
   /**
-  * Document::db_updateArray() 
+  * Document::updateArray() 
   *
   * { Description }
   *
   * @param [type] $verbose
   */
-  function db_updateArray($table, &$hash, $keyName, $verbose = false) {
+  function updateArray($table, &$hash, $keyName, $verbose = false) {
     return null;
   }
 
   
   /**
-  * Document::db_delete()  
+  * Document::delete()  
   *
   * { Description } 
   *
   */
-  function db_delete($table, $keyName, $keyValue) {
+  function delete($table, $keyName, $keyValue) {
     return null;
   }
 
 
   /**
-  * Document::db_insertObject() 
+  * Document::insertObject() 
   *
   * { Description } 
   *
   * @param [type] $keyName
   * @param [type] $verbose
   */
-  function db_insertObject($table, &$object, $keyName = null, $verbose = false) {
+  function insertObject($table, &$object, $keyName = null, $verbose = false) {
     return null;
   }
 
   
   
   /**
-  * Document::db_updateObject() 
+  * Document::updateObject() 
   *
   * { Description }
   *
   * @param [type] $updateNulls
   */
-  function db_updateObject($table, &$object, $keyName) {
+  function updateObject($table, &$object, $keyName) {
     return null;
   }
 
   /**
-  * Document::db_dateConvert() 
+  * Document::dateConvert() 
   *
   * { Description } 
   *
   */
-  function db_dateConvert($src, &$dest, $srcFmt) {
+  function dateConvert($src, &$dest, $srcFmt) {
     $result = strtotime($src);
     $dest = $result;
     return ($result != 0);
   }
 
   /**
-  * Document::db_datetime() 
+  * Document::datetime() 
   *
   * { Description } 
   *
   * @param [type] $timestamp
   */
-  function db_datetime($timestamp = null) {
+  function datetime($timestamp = null) {
     if (!$timestamp) {
      return null;
     }
@@ -387,12 +387,12 @@ class CSQLDataSource {
   }
 
   /**
-  * Document::db_dateTime2locale()  
+  * Document::dateTime2locale()  
   *
   * { Description }
   *  
   */
-  function db_dateTime2locale($dateTime, $format) {
+  function dateTime2locale($dateTime, $format) {
     if (intval($dateTime)) {
       $date = new CDate($dateTime);
       return $date->format($format);
@@ -439,29 +439,26 @@ class CSQLDataSource {
     }
   }
 
-  function db_loadTable($table, $dsn = "std") {
+  function loadTable($table, $dsn = "std") {
     return null;
   }
 
-  function db_loadField($table, $field, $dsn = "std") {
+  function loadField($table, $field, $dsn = "std") {
     return null;
   } 
-
-	
-  //-------------------------------------
 
   
   /**
    * Escapes up to nine values for SQL queries
-   * => db_prepare("INSERT INTO table_name VALUES (%)", $value);
-   * => db_prepare("INSERT INTO table_name VALUES (%1, %2)", $value1, $value2);
+   * => prepare("INSERT INTO table_name VALUES (%)", $value);
+   * => prepare("INSERT INTO table_name VALUES (%1, %2)", $value1, $value2);
    */
-  function db_prepare($sql) {
+  function prepare($sql) {
     $values = func_get_args();
     array_shift($values);
     $trans = array();
     for ($i = 0; $i < count($values); $i++) {
-      $escaped = $this->db_escape($values[$i]);
+      $escaped = $this->escape($values[$i]);
       $quoted = "'$escaped'";
       if ($i == 0) {
         $trans["%"] = $quoted;
@@ -477,72 +474,72 @@ class CSQLDataSource {
    * Prepares an IN where clause with a given array of values
    * Prepares a standard = where clause when alternate value is supplied
    */
-  function db_prepare_in($values, $alternate = null) {
+  function prepareIn($values, $alternate = null) {
     return null;
   }
   
   
 
-  function db_error($dsn = "std") {
+  function error($dsn = "std") {
     return null;
   }
 
-  function db_errno($dsn = "std") {
+  function errno($dsn = "std") {
     return null;
   }
 
-  function db_insert_id($dsn = "std") {
+  function insertId($dsn = "std") {
     return null;
   }
 
-  function db_exec($sql, $dsn = "std") {
+  function exec($sql, $dsn = "std") {
     return null;
   }
 
   
-  function db_free_result( $cur ) {
+  function freeResult( $cur ) {
 	return null;
   }
 
-  function db_num_rows( $qid ) {
+  function numRows( $qid ) {
 	return null;
   }
 
-  function db_affected_rows($dsn = "std" ) {
+  function affectedRows($dsn = "std" ) {
     return null;
   }
 
-  function db_fetch_row( $cur ) {
+  function fetchRow( $cur ) {
 	return null;
   }
 
-  function db_fetch_assoc( $cur ) {
+  function fetchAssoc( $cur ) {
     return null;
   }
 
-  function db_fetch_array( $cur  ) {
+  function fetchArray( $cur  ) {
 	return null;
   }
 
-  function db_fetch_object( $cur  ) {
+  function fetchObject( $cur  ) {
 	return null;
   }
 
-  function db_escape( $str ) {
+  function escape( $str ) {
 	return null;
   }
 
-  function db_version($dsn = "std") {
+  function version($dsn = "std") {
     return null;
   }
 
 
-  function db_unix2dateTime( $time ) {
+  function unix2dateTime( $time ) {
   	// converts a unix time stamp to the default date format
     return $time > 0 ? date("Y-m-d H:i:s", $time) : null;
   }
 
-  function db_dateTime2unix( $time ) {
+  function dateTime2unix( $time ) {
 	if ($time == "0000-00-00 00:00:00") {
 		return -1;
 	}

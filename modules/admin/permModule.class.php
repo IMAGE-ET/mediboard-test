@@ -11,16 +11,10 @@ global $permissionSystemeDown;
 $sql = "SHOW TABLE STATUS LIKE 'perm_module'";
 
 global $dPconfig;
-    
-if (!isset($dPconfig['bd'])) {
-  $permissionSystemeDown = !db_loadResult($sql);
-}
 
+$ds = CSQLDataSource::get("std");
+$permissionSystemeDown = !$ds->loadResult($sql);
 
-if (isset($dPconfig['bd']) && ($dPconfig['bd'] == 'sqldataSource')){
-  $mysql_data_source = CSQLDataSource::get("std");
-  $permissionSystemeDown = !$mysql_data_source->db_loadResult($sql);
-}
 
 /**
  * The CPermModule class
