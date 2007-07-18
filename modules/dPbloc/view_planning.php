@@ -8,6 +8,7 @@
 */
 
 global $AppUI, $can, $m, $g;
+$ds = CSQLDataSource::get("std");
 
 $can->needsRead();
 
@@ -28,7 +29,7 @@ $filter->_codes_ccam = mbGetValueFromGetOrSession("code_ccam", "");
 $plagesop = new CPlageOp;
 
 $where = array();
-$where["date"] =  db_prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
+$where["date"] =  $db->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
 
 $order = array();
 $order[] = "date";
@@ -43,7 +44,7 @@ $user->load($AppUI->user_id);
 
 //if($user->isFromType(array("Anesthésiste"))) {
   if($chir_id) {
-    $where["chir_id"] = db_prepare("= %", $filter->_prat_id);
+    $where["chir_id"] = $db->prepare("= %", $filter->_prat_id);
   }
 //} else {
 //  $listPrat = new CMediusers;
@@ -55,7 +56,7 @@ $user->load($AppUI->user_id);
 $salle = new CSalle;
 $whereSalle = array();
 $whereSalle["group_id"] = "= '$g'";
-$where["salle_id"] = db_prepare_in(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)), $filter->salle_id);
+$where["salle_id"] = $db->prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)), $filter->salle_id);
 
 $plagesop = $plagesop->loadList($where, $order);
 

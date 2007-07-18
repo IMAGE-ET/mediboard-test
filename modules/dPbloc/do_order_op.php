@@ -8,6 +8,7 @@
 */
 
 global $AppUI, $m;
+$ds = CSQLDataSource::get("std");
 
 $cmd = dPgetParam( $_GET, "cmd", "0" );
 $id  = dPgetParam( $_GET, "id",  "0" );
@@ -15,7 +16,7 @@ $id  = dPgetParam( $_GET, "id",  "0" );
 $sql = "SELECT operations.plageop_id, operations.rank
         FROM operations
         WHERE operations.operation_id = '$id'";
-$result = db_loadlist($sql);
+$result = $ds->loadlist($sql);
 $plageop = $result[0]["plageop_id"];
 $rank = $result[0]["rank"];
 
@@ -28,11 +29,11 @@ switch($cmd)
             WHERE plagesop.plageop_id = '$plageop'
             AND operations.plageop_id = plagesop.plageop_id
             ORDER BY operations.rank DESC";
-    $result = db_loadlist($sql);
+    $result = $ds->loadlist($sql);
     $sql = "UPDATE operations
             SET rank = '".($result[0]["rank"] + 1)."'
             WHERE operations.operation_id = '$id'";
-    $exec = db_exec($sql);
+    $exec = $ds->exec($sql);
     cleanOrderOp($plageop, "rank");
     break;
   }
@@ -42,16 +43,16 @@ switch($cmd)
     		"\nFROM operations" .
     		"\nWHERE operations.plageop_id = '$plageop'" .
     		"\nAND rank = '".($rank + 1)."'";
-    $id_temp = db_loadlist($sql);
+    $id_temp = $ds->loadlist($sql);
     $sql = "UPDATE operations
             SET rank = '$rank'
             WHERE operations.operation_id = '".$id_temp[0]["operation_id"]."'";
-    $exec = db_exec($sql);
+    $exec = $ds->exec($sql);
     //On fait descendre celui qu'on a choisit
     $sql = "UPDATE operations
             SET rank = '".($rank + 1)."'
             WHERE operations.operation_id = '$id'";
-    $exec = db_exec($sql);
+    $exec = $ds->exec($sql);
     cleanOrderOp($plageop, "rank");
     break;
   }
@@ -61,16 +62,16 @@ switch($cmd)
     		"\nFROM operations" .
     		"\nWHERE operations.plageop_id = '$plageop'" .
     		"\nAND rank = '".($rank - 1)."'";
-    $id_temp = db_loadlist($sql);
+    $id_temp = $ds->loadlist($sql);
     $sql = "UPDATE operations
             SET rank = '$rank'
             WHERE  operations.operation_id = '".$id_temp[0]["operation_id"]."'";
-    $exec = db_exec($sql);
+    $exec = $ds->exec($sql);
     //On fait monter celui qu'on a choisit
     $sql = "UPDATE operations
             SET rank = '".($rank - 1)."'
             WHERE operations.operation_id = '$id'";
-    $exec = db_exec($sql);
+    $exec = $ds->exec($sql);
     cleanOrderOp($plageop, "rank");
     break;
   }
@@ -78,7 +79,7 @@ switch($cmd)
   	$sql = "UPDATE operations
 			SET time_operation = '00:00:00', rank = 0
 			WHERE operations.operation_id = '$id'";
-    $result = db_exec($sql);
+    $result = $ds->exec($sql);
     cleanOrderOp($plageop, "time");
     changeAffect($id, "rm");
     break;
@@ -89,7 +90,7 @@ switch($cmd)
     $sql = "UPDATE operations
 			SET pause = '".$hour.":".$min.":00'
 			WHERE operations.operation_id = '$id'";
-    $result = db_exec($sql);
+    $result = $ds->exec($sql);
     cleanOrderOp($plageop, "time");
     break;
   }
@@ -98,7 +99,7 @@ switch($cmd)
     $sql = "UPDATE operations
             SET type_anesth = '$type'
             WHERE operations.operation_id = '$id'";
-    $result = db_exec($sql);
+    $result = $ds->exec($sql);
     break;
   }
 }
@@ -117,14 +118,14 @@ function cleanOrderOp($plageop, $type = "rank") {
           "\nWHERE operations.plageop_id = '$plageop'" .
           "\nAND operations.rank != 0" .
           "\nORDER BY operations.time_operation ASC";
-      $result = db_loadlist($sql);
+      $result = $ds->loadlist($sql);
       $i = 1;
       foreach($result as $key => $value) {
         $curr_id = $value["operation_id"];
         $sql = "UPDATE operations" .
             "\nSET operations.rank = '$i'" .
             "\nWHERE operations.operation_id = '$curr_id'";
-        db_exec($sql);
+        $ds->exec($sql);
         $i++;
       }
     case "rank" :
@@ -140,7 +141,7 @@ function cleanOrderOp($plageop, $type = "rank") {
           "\nWHERE operations.plageop_id = '$plageop'" .
           "\nAND operations.rank != '0'" .
           "\nORDER BY operations.rank ASC";
-      $result = db_loadlist($sql);
+      $result = $ds->loadlist($sql);
       if(count($result)) {
         $debut = $result[0]["debut"];
         foreach($result as $key => $value) {
@@ -148,7 +149,7 @@ function cleanOrderOp($plageop, $type = "rank") {
           $sql = "UPDATE operations" .
               "\nSET operations.time_operation = '$debut'" .
               "\nWHERE operations.operation_id = '$curr_id'";
-          db_exec($sql);
+          $ds->exec($sql);
           changeAffect($curr_id);
           $debut = mbAddTime($value["temp_operation"], $debut); // durée de l'opération
           $debut = mbAddTime($value["temps_inter_op"], $debut); // pause d'1/4h

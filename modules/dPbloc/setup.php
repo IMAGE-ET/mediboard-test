@@ -72,7 +72,7 @@ class CSetupdPbloc extends CSetup {
       $sql = "SELECT id_chir" .
           "\nFROM plagesop" .
           "\nGROUP BY id_chir";
-      $listPlages = db_loadList($sql);
+      $listPlages = $this->_spec->ds->loadList($sql);
       foreach($listPlages as $key => $plage) {
         $where["user_username"] = "= '".$plage["id_chir"]."'";
         $user->loadObject($where);
@@ -80,7 +80,7 @@ class CSetupdPbloc extends CSetup {
           $sql = "UPDATE plagesop" .
               "\nSET chir_id = '$user->user_id'" .
               "\nWHERE id_chir = '$user->user_username'";
-          db_exec( $sql ); db_error();
+          $this->_spec->ds->exec( $sql ); $this->_spec->ds->error();
         }
       }
       
@@ -88,7 +88,7 @@ class CSetupdPbloc extends CSetup {
       $sql = "SELECT id_anesth" .
           "\nFROM plagesop" .
           "\nGROUP BY id_anesth";
-      $listPlages = db_loadList($sql);
+      $listPlages = $this->_spec->ds->loadList($sql);
       foreach($listPlages as $key => $plage) {
         $where["user_username"] = "= '".$plage["id_anesth"]."'";
         $user->loadObject($where);
@@ -96,7 +96,7 @@ class CSetupdPbloc extends CSetup {
           $sql = "UPDATE plagesop" .
               "\nSET anesth_id = '$user->user_id'" .
               "\nWHERE id_anesth = '$user->user_username'";
-          db_exec( $sql ); db_error();
+          $this->_spec->ds->exec( $sql ); $this->_spec->ds->error();
         }
       }
       return true;

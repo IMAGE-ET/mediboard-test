@@ -8,6 +8,7 @@
  */
  
 global $AppUI, $can, $m, $g;
+$ds = CSQLDataSource::get("std");
 
 $can->needsRead();
 
@@ -19,7 +20,7 @@ $etablissements = $etablissements->loadEtablissements(PERM_READ);
 $order = array();
 $order[] = "group_id, nom";
 $where = array();
-$where["group_id"] = db_prepare_in(array_keys($etablissements));
+$where["group_id"] = $db->prepareIn(array_keys($etablissements));
 $salle = new CSalle;
 $salles = $salle->loadListWithPerms(PERM_EDIT, $where, $order);
 foreach($salles as $keySalle=>$valSalle){

@@ -8,6 +8,7 @@
 */
  
 global $AppUI, $can, $m, $g;
+$ds = CSQLDataSource::get("std");
 
 $can->needsRead();
 
@@ -28,7 +29,7 @@ $where = array();
 $salle = new CSalle;
 $whereSalle = array();
 $whereSalle["group_id"] = "= '$g'";
-$where["plagesop.salle_id"] = db_prepare_in(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
+$where["plagesop.salle_id"] = $db->prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
 
 $where["materiel"] = "!= ''";
 $where["operations.plageop_id"] = "IS NOT NULL";
