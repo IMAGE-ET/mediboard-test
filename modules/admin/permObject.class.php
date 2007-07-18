@@ -108,10 +108,10 @@ class CPermObject extends CMbObject {
     $msg = null;
     if(!$this->perm_object_id) {
       $where = array();
-      $where["user_id"]      = db_prepare("= %",$this->user_id);
-      $where["object_class"] = db_prepare("= %",$this->object_class);
+      $where["user_id"]      = $this->_spec->ds->prepare("= %",$this->user_id);
+      $where["object_class"] = $this->_spec->ds->prepare("= %",$this->object_class);
       if($this->object_id){
-        $where["object_id"]    = db_prepare("= %",$this->object_id);
+        $where["object_id"]    = $this->_spec->ds->prepare("= %",$this->object_id);
       }else{
         $where["object_id"]    = "IS NULL";
       }
@@ -121,7 +121,7 @@ class CPermObject extends CMbObject {
       $sql->addTable("perm_object");
       $sql->addWhere($where);
       
-      $nb_result = db_loadResult($sql->getRequest());
+      $nb_result = $this->_spec->ds->loadResult($sql->getRequest());
       
       if($nb_result){
         $msg.= "Une permission sur cet objet existe déjà.<br />";

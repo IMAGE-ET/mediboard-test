@@ -8,6 +8,7 @@
 */
 
 global $AppUI, $can, $m, $utypes;
+$ds = CSQLDataSource::get("std");
 // Utilisateur demandé
 $user_id = mbGetValueFromGet("user_id" , 0);
 
@@ -31,7 +32,7 @@ if($user_id!==null){
     $sql = "SELECT pref_name, pref_value
           FROM user_preferences
           WHERE pref_user = $user_id";
-    $prefs = db_loadHashList( $sql );
+    $prefs = $ds->loadHashList( $sql );
   }
 }
 

@@ -1,5 +1,7 @@
 <?php /* PUBLIC $Id$ */
 
+$ds = CSQLDataSource::get("std");
+
 function selPermWhere( $table, $idfld ) {
 	global $AppUI;
 
@@ -11,8 +13,8 @@ function selPermWhere( $table, $idfld ) {
 		."\n	AND permission_item = $idfld"
 		."\n	AND permission_value = 0";
 
-	$deny = db_loadColumn( $sql );
-	echo db_error();
+	$deny = $ds->loadColumn( $sql );
+	echo $ds->error();
 
 	return "permission_user = $AppUI->user_id"
 		."\nAND permission_value <> 0"
@@ -70,8 +72,8 @@ if (!$ok) {
   $sql .= $order ? " ORDER BY $order" : '';
   //echo "<pre>$sql</pre>";
 
-  $list = db_loadHashList($sql);
-  echo db_error();
+  $list = $ds->loadHashList($sql);
+  echo $ds->error();
 }
 
 // Template creation
