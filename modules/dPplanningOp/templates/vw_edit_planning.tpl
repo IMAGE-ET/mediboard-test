@@ -165,13 +165,6 @@ function pageMain() {
     </tr>
   </tbody>
   
-
-
-
-
-
-
-
   <!-- Mode expert -->
   <tbody id="modeExpert" style="display:none;">
   <tr>

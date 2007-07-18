@@ -277,19 +277,19 @@ class CMbFieldSpec {
     $form  = CMbArray::extract($params, "form");
     $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);
-    $sHtml = '<div id="'.$id.'_da">'.$date.'</div>';
-    $sHtml.= '<input type="hidden" name="'.$field.'" class="'.$class.'" value="'.$value.'" '.$extra.' />';
-    $sHtml.= '<img id="'.$id.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"/>';
+    $aHtml[] = '<div id="'.$id.'_da">'.$date.'</div>';
+    $aHtml[] = '<input type="hidden" name="'.$field.'" class="'.$class.'" value="'.$value.'" '.$extra.' />';
+    $aHtml[] = '<img id="'.$id.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"/>';
     
     if (!$this->notNull) {
-      $sHtml.= '<button class="cancel notext" type="button" onclick="this.form.'.$field.'.value = new String; $(\''.$id.'_da\').innerHTML = new String;">'.$AppUI->_("Delete").'</button>';
+      $aHtml[] = '<button class="cancel notext" type="button" onclick="this.form.'.$field.'.value = new String; $(\''.$id.'_da\').innerHTML = new String;">'.$AppUI->_("Delete").'</button>';
     }
     
     // Can't be handeld here cauz preporeForms has to be done
-    //$sHtml       .= '<script type="text/javascript">';
-    //$sHtml       .= 'regFieldCalendar("'.$form.'", "'.$field.'");';
-    //$sHtml       .= '</script>';
-    return $sHtml;
+    //$aHtml[] = '<script type="text/javascript">';
+    //$aHtml[] = 'regFieldCalendar("'.$form.'", "'.$field.'");';
+    //$aHtml[] = '</script>';
+    return join("\n", $aHtml);
   }
     
   function getFormHtmlElement($object, &$params, $value, $className){

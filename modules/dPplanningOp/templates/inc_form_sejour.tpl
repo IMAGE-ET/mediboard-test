@@ -142,9 +142,7 @@
 <tr>
   <th>{{mb_label object=$sejour field="_date_entree_prevue"}}</th>
   <td class="date">
-    <div id="editSejour__date_entree_prevue_da">{{$sejour->_date_entree_prevue|date_format:"%d/%m/%Y"}}</div>
-    {{mb_field object=$sejour field="_date_entree_prevue" hidden=1 prop="notNull date" onchange="modifSejour(); updateSortiePrevue();"}}
-    <img id="editSejour__date_entree_prevue_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
+    {{mb_field object=$sejour form="editSejour" field="_date_entree_prevue" prop="notNull date" onchange="modifSejour(); updateSortiePrevue();"}}
   </td>
   <td colspan="2">
     à
@@ -171,13 +169,10 @@
   </td>
 </tr>
 
-<tr {{if $mode_operation}} style="display: all" {{/if}}>
+<tr {{if $mode_operation}} style="display: none" {{/if}}>
   <th>{{mb_label object=$sejour field="_date_sortie_prevue"}}</th>
   <td class="date">
-    <div id="editSejour__date_sortie_prevue_da">{{$sejour->_date_sortie_prevue|date_format:"%d/%m/%Y"}}</div>
-    <img id="editSejour__date_sortie_prevue_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
-
-    {{mb_field object=$sejour field="_date_sortie_prevue" hidden=1 prop="notNull date moreEquals|_date_entree_prevue" onchange="updateDureePrevue(); modifSejour()"}}
+    {{mb_field object=$sejour form="editSejour" field="_date_sortie_prevue" prop="notNull date moreEquals|_date_entree_prevue" onchange="updateDureePrevue(); modifSejour()"}}
   </td>
   <td colspan="2">
     à 
