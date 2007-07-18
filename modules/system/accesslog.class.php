@@ -74,7 +74,7 @@ class CAccessLog extends CMbObject {
       $sql .= "\nGROUP BY module, action" .
           "\nORDER BY module, action";
     }
-    $list = db_loadObjectList($sql, $this);
+    $list = $this->_spec->ds->loadObjectList($sql, $this);
     return $list;
   }
 }

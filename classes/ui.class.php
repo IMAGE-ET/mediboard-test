@@ -530,10 +530,10 @@ class CAppUI {
     
     // Put user_group in AppUI
     $remote = 1;
-    if (db_loadTable("users_mediboard") && db_loadTable("groups_mediboard")) {
+    if ($this->_spec->ds->loadTable("users_mediboard") && $this->_spec->ds->loadTable("groups_mediboard")) {
       $sql = "SELECT `remote` FROM `users_mediboard` WHERE `user_id` = '$user->user_id'";
-      if ($cur = db_exec($sql)) {
-        if ($row = db_fetch_row($cur)) {
+      if ($cur = $this->_spec->ds->exec($sql)) {
+        if ($row = $this->_spec->ds->fetchRow($cur)) {
           $remote = intval($row[0]);
         }
       }
@@ -542,7 +542,7 @@ class CAppUI {
           "\nWHERE `groups_mediboard`.`group_id` = `functions_mediboard`.`group_id`" .
           "\nAND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`" .
           "\nAND `users_mediboard`.`user_id` = '$user->user_id'";
-      $this->user_group = db_loadResult($sql);
+      $this->user_group = $this->_spec->ds->loadResult($sql);
     }
     
     // Test if remote connection is allowed
@@ -570,7 +570,7 @@ class CAppUI {
     $this->user_last_login = $user->user_last_login;
     
     // save the last_login dateTime
-    if(db_loadField("users", "user_last_login")) {
+    if($this->_spec->ds->loadField("users", "user_last_login")) {
       // Nullify password or you md5 it once more
       $user->user_last_name = null;
       $user->user_last_login = mbDateTime();
@@ -590,7 +590,7 @@ class CAppUI {
  */
   function loadPrefs($uid = 0) {
     $sql = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = '$uid'";
-    $user_prefs = db_loadHashList($sql);
+    $user_prefs = $this->_spec->ds->loadHashList($sql);
     $this->user_prefs = array_merge($this->user_prefs, $user_prefs);
   }
 }

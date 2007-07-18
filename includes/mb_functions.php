@@ -467,7 +467,7 @@ function mbInsertCSV( $fileName, $tableName, $oldid = false )
               $requete = 'INSERT INTO '.$tableName.' VALUES ( \''.$line.'\', \'\' ) ';
             else
               $requete = 'INSERT INTO '.$tableName.' VALUES ( \''.$line.'\' ) ';
-            if ( ! db_exec ( $requete ) ) {
+            if ( ! $this->_spec->ds->exec ( $requete ) ) {
                 echo 'Erreur Ligne '.$k.' : '.mysql_error().'<br>'.$requete.'<br>';
                 $echec++;
             }  else {

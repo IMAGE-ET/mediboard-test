@@ -197,12 +197,12 @@ class CSetupmediusers extends CSetup {
     $sql = "ALTER TABLE `functions_mediboard` ADD `type` ENUM('administratif', 'cabinet') DEFAULT 'administratif' NOT NULL AFTER `group_id`;";
     $this->addQuery($sql);
     function setup_updateFct(){
-      if(db_loadTable("groups_mediboard")) {
+      if($this->_spec->ds->loadTable("groups_mediboard")) {
         $sql = "UPDATE `functions_mediboard`, `groups_mediboard`" .
             "\nSET `functions_mediboard`.`type` = 'cabinet'" .
             "\nWHERE `functions_mediboard`.`group_id` = `groups_mediboard`.`group_id`" .
             "\nAND `groups_mediboard`.`text` = 'Cabinets'";
-        db_exec($sql); db_error();
+        $this->_spec->ds->exec($sql); $this->_spec->ds->error();
       }
       return true;
     }

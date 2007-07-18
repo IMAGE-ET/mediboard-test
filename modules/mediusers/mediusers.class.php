@@ -250,13 +250,13 @@ class CMediusers extends CMbObject {
 
     // Can't use parent::store cuz user_id don't auto-increment
     if ($this->user_id) {
-      $ret = db_updateObject($this->_tbl, $this, $this->_tbl_key);
+      $ret = $this->_spec->ds->updateObject($this->_tbl, $this, $this->_tbl_key);
     } else {
       $this->user_id = $dPuser->user_id;
-      $ret = db_insertObject($this->_tbl, $this, $this->_tbl_key);
+      $ret = $this->_spec->ds->insertObject($this->_tbl, $this, $this->_tbl_key);
     }
 
-    return db_error();
+    return $this->_spec->ds->error();
   }
 
   function delFunctionPermission() {
@@ -320,7 +320,7 @@ class CMediusers extends CMbObject {
     }
 
     $where = array();
-    $where["users_mediboard.function_id"] = db_prepare_in(array_keys($functions));
+    $where["users_mediboard.function_id"] = $this->_spec->ds->prepareIn(array_keys($functions));
 
     // Filters on users' values
     $ljoin = array();
@@ -335,7 +335,7 @@ class CMediusers extends CMbObject {
         $user_types[$key] = $utypes_flip[$value];
       }
 
-      $where["users.user_type"] = db_prepare_in($user_types);
+      $where["users.user_type"] = $this->_spec->ds->prepareIn($user_types);
     }
 
     $order = "`users`.`user_last_name`, `users`.`user_first_name`";

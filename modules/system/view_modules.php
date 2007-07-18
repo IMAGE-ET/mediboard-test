@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 $can->needsEdit();
 
 $sql = "SELECT * FROM modules ORDER BY mod_ui_order";
-$modules = db_loadList($sql);
+$modules = $this->_spec->ds->loadList($sql);
 
 // get the modules actually installed on the file system
 $modFiles = $AppUI->readDirs("modules");

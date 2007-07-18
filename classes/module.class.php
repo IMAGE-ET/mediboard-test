@@ -283,11 +283,11 @@ class CModule extends CMbObject {
   
   function reorder() {
     $sql = "SELECT * FROM modules ORDER BY mod_ui_order";
-    $result = db_exec($sql);
+    $result = $this->_spec->ds->exec($sql);
     $i = 1;
-    while($row = db_fetch_array($result)) {
+    while($row = $this->_spec->ds->fetchArray($result)) {
       $sql = "UPDATE modules SET mod_ui_order = '$i' WHERE mod_id = '".$row["mod_id"]."'";
-      db_exec($sql);
+      $this->_spec->ds->exec($sql);
       $i++;
     }
   }
@@ -295,7 +295,7 @@ class CModule extends CMbObject {
   function install() {
     $sql = "SELECT mod_name FROM modules WHERE mod_name = '$this->mod_name'";
     $temp = null;
-    if (db_loadHash($sql, $temp)) {
+    if ($this->_spec->ds->loadHash($sql, $temp)) {
       // the module is already installed
       // TODO: check for older version - upgrade
       return false;
@@ -307,12 +307,12 @@ class CModule extends CMbObject {
 
   function remove() {
     $sql = "DELETE FROM modules WHERE mod_id = $this->mod_id";
-    if (!db_exec( $sql )) {
-      return db_error();
+    if (!$this->_spec->ds->exec( $sql )) {
+      return $this->_spec->ds->error();
     } else {
       $this->reorder();
       $sql = "DELETE FROM perm_module WHERE mod_id = $this->mod_id";
-      db_exec( $sql );
+      $this->_spec->ds->exec( $sql );
       return null;
     }
   }
@@ -322,14 +322,14 @@ class CModule extends CMbObject {
     if($dirn == "moveup") {
       $temp--;
       $sql = "UPDATE modules SET mod_ui_order = (mod_ui_order+1) WHERE mod_ui_order = $temp";
-      db_exec($sql);
+      $this->_spec->ds->exec($sql);
     } else if($dirn == "movedn") {
       $temp++;
       $sql = "UPDATE modules SET mod_ui_order = (mod_ui_order-1) WHERE mod_ui_order = $temp";
-      db_exec($sql);
+      $this->_spec->ds->exec($sql);
     }
     $sql = "UPDATE modules SET mod_ui_order = $temp WHERE mod_id = $this->mod_id";
-    db_exec($sql);
+    $this->_spec->ds->exec($sql);
 
     $this->mod_id = $temp;
     

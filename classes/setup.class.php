@@ -134,7 +134,7 @@ class CSetup {
 
       // Query upgrading
       foreach ($this->queries[$currRevision] as $query) {
-        if (!db_exec($query)) {
+        if (!$this->_spec->ds->exec($query)) {
           $AppUI->setMsg("Error in queries for revision '$currRevision': see logs.", UI_MSG_ERROR);
           return $currRevision;
         }
@@ -162,7 +162,7 @@ class CSetup {
     $success = true;
     foreach ($this->tables as $table) {
       $query = "DROP TABLE `$table`";
-      if (!db_exec($query)) {
+      if (!$this->_spec->ds->exec($query)) {
         $success = false;
         $AppUI->setMsg("Failed to remove table '$table'", UI_MSG_ERROR, true);
       } 

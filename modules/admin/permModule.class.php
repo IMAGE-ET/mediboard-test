@@ -11,9 +11,7 @@ global $permissionSystemeDown;
 $sql = "SHOW TABLE STATUS LIKE 'perm_module'";
 
 global $dPconfig;
-
-$ds = CSQLDataSource::get("std");
-$permissionSystemeDown = !$ds->loadResult($sql);
+$permissionSystemeDown = !CSQLDataSource::get("std")->loadResult($sql);
 
 
 /**
@@ -37,6 +35,7 @@ class CPermModule extends CMbObject {
     $this->CMbObject("perm_module", "perm_module_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+
   }
   
   function getSpecs() {

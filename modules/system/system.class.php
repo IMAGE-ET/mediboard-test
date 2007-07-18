@@ -34,8 +34,8 @@ class CPreferences {
 		if (($msg = $this->delete())) {
 			return "CPreference::store-delete failed<br />$msg";
 		}
-		if (!($ret = db_insertObject("user_preferences", $this, "pref_user"))) {
-			return "CPreference::store failed <br />" . db_error();
+		if (!($ret = $this->_spec->ds->insertObject("user_preferences", $this, "pref_user"))) {
+			return "CPreference::store failed <br />" . $this->_spec->ds->error();
 		} else {
 			return null;
 		}
@@ -43,8 +43,8 @@ class CPreferences {
 
 	function delete() {
 		$sql = "DELETE FROM user_preferences WHERE pref_user = '$this->pref_user' AND pref_name = '$this->pref_name'";
-		if (!db_exec( $sql )) {
-			return db_error();
+		if (!$this->_spec->ds->exec( $sql )) {
+			return $this->_spec->ds->error();
 		} else {
 			return null;
 		}
