@@ -5,6 +5,13 @@
 
 <form name="editOpEasy" action="?m={{$m}}" method="post" onsubmit="return checkFormOperation()">
 <table class="form">
+  {{if $op->annulee == 1}}
+  <tr>
+    <th class="category cancelled" colspan="3">
+    {{tr}}COperation-annulee{{/tr}}
+    </th>
+  </tr>
+  {{/if}}
   <!-- Selection du chirurgien -->
   <tr>
     <th>

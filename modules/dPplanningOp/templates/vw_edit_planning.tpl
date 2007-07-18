@@ -152,7 +152,6 @@ function pageMain() {
       </td>
       
       <td class="text">
-      {{if !$op->operation_id}}
         <div class="big-info">
          Ceci est le <strong>mode simplifié</strong> de planification d'intervention.
          <br/>
@@ -160,7 +159,6 @@ function pageMain() {
          <br/>
          <em>Pour plus de paramètres vous pouvez passer en mode expert.</em>
         </div>
-      {{/if}}
       </td>
     </tr>
   </tbody>
