@@ -10,6 +10,7 @@
 global $AppUI, $can, $m, $g;
 
 $can->needsRead();
+$ds = CSQLDataSource::get("std");
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $date_now = mbDate();
@@ -24,7 +25,7 @@ $plages = $plages->loadList($where);
 // Listes des opérations
 $listEntree = new COperation;
 $where = array();
-$where[] = "`plageop_id` ".db_prepare_in(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
+$where[] = "`plageop_id` ".$ds->prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
 $where["entree_bloc"] = "IS NULL";
 $order = "time_operation";
 $listEntree = $listEntree->loadList($where,$order);

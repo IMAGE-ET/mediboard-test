@@ -10,6 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
+$ds = CSQLDataSource::get("std");
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $date_now = mbDate();
@@ -38,7 +39,7 @@ $timing = array();
 
 $listReveil = new COperation;
 $where = array();
-$where[] = "`plageop_id` ".db_prepare_in(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
+$where[] = "`plageop_id` ".$ds->prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
 $where["entree_reveil"] = "IS NOT NULL";
 $where["sortie_reveil"] = "IS NULL";
 $order = "entree_reveil";
@@ -68,7 +69,7 @@ foreach($listReveil as $key => $value) {
 
 $listOut = new COperation;
 $where = array();
-$where[] = "`plageop_id` ".db_prepare_in(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
+$where[] = "`plageop_id` ".$ds->prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
 $where["entree_reveil"] = "IS NOT NULL";
 $where["sortie_reveil"] = "IS NOT NULL";
 $order = "sortie_reveil DESC";

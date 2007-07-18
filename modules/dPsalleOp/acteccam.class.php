@@ -108,7 +108,7 @@ class CActeCCAM extends CMbMetaObject {
             group by code_acte
             order by nb_acte DESC
             limit 10";
-  	$codes = db_loadlist($sql);
+  	$codes = $this->_spec->ds->loadlist($sql);
   	return $codes;
   }
   

@@ -10,6 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
+$ds = CSQLDataSource::get("std");
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $hour = mbTime(null);
@@ -38,7 +39,7 @@ $timing = array();
 
 $listOps = new COperation;
 $where = array();
-$where[] = "`plageop_id` ".db_prepare_in(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
+$where[] = "`plageop_id` ".$ds->prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
 $where["sortie_salle"] = "IS NOT NULL";
 $where["entree_reveil"] = "IS NULL";
 $order = "sortie_salle";

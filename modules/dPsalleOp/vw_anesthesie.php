@@ -10,6 +10,7 @@
 global $AppUI, $can, $m, $g;
 
 $can->needsRead();
+$ds = CSQLDataSource::get("std");
 
 $salle = mbGetValueFromGetOrSession("salle");
 $op    = mbGetValueFromGetOrSession("op");
@@ -23,7 +24,7 @@ $listModeleFunc = array();
 
 if($op) {
   $where = array();
-  $where["operation_id"] = db_prepare("= %", $op);
+  $where["operation_id"] = $ds->prepare("= %", $op);
 
   if($consultAnesth->loadObject($where)){
     $consultAnesth->loadRefConsultation();
@@ -56,14 +57,14 @@ if($op) {
     // Modèles de l'utilisateur
     if($userSel->user_id){
       $where = $whereCommon;
-      $where["chir_id"] = db_prepare("= %", $userSel->user_id);
+      $where["chir_id"] = $ds->prepare("= %", $userSel->user_id);
       $listModelePrat = new CCompteRendu;
       $listModelePrat = $listModelePrat->loadlist($where, $order);
     }
     // Modèles de la fonction
     if($userSel->user_id){
       $where = $whereCommon;
-      $where["function_id"] = db_prepare("= %", $userSel->function_id);
+      $where["function_id"] = $ds->prepare("= %", $userSel->function_id);
       $listModeleFunc = new CCompteRendu;
       $listModeleFunc = $listModeleFunc->loadlist($where, $order);
     }
