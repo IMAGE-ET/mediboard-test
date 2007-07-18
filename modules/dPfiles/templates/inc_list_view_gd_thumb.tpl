@@ -1,17 +1,19 @@
 <script type="text/javascript">
 
-function viewFile(objectClass, objectId, elementClass, elementId, sfn){
-  file_preview = elementId;
-  var url = new Url;
-  url.setModuleAction("dPfiles", "preview_files");
-  url.addParam("objectClass", objectClass);
-  url.addParam("objectId", objectId);
-  url.addParam("elementClass", elementClass);
-  url.addParam("elementId", elementId);
-  if(sfn && sfn!=0){
-    url.addParam("sfn", sfn);
+var File = { 
+  view: function (objectClass, objectId, elementClass, elementId, sfn) {
+    file_preview = elementId;
+    var url = new Url;
+    url.setModuleAction("dPfiles", "preview_files");
+    url.addParam("objectClass", objectClass);
+    url.addParam("objectId", objectId);
+    url.addParam("elementClass", elementClass);
+    url.addParam("elementId", elementId);
+    if(sfn && sfn!=0){
+      url.addParam("sfn", sfn);
+    }
+    url.requestUpdate('viewFile-'+elementId, { waitingText : "Chargement de la miniature" });
   }
-  url.requestUpdate('viewFile-'+elementId, { waitingText : "Chargement du miniature" });
 }
 
 </script>
@@ -44,6 +46,7 @@ function viewFile(objectClass, objectId, elementClass, elementId, sfn){
         <tr>
         {{/if}}
         <td class="halfPane button {{cycle name=cellicon values="dark, light"}}">
+          {{assign var="includeInfosFile" value="0"}}
           
           {{if $curr_file->_class_name=="CCompteRendu"}}
             <form name="editDoc{{$curr_file->compte_rendu_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -55,6 +58,7 @@ function viewFile(objectClass, objectId, elementClass, elementId, sfn){
             {{assign var="confirmDeleteName" value=$curr_file->nom}}
             {{assign var="elementId" value=$curr_file->compte_rendu_id}}
             {{assign var="srcImg" value="images/pictures/medifile.png"}}
+            {{assign var="includeInfosFile" value="$curr_file->source"}}
           
           {{elseif $curr_file->_class_name=="CFile"}}
             <form name="editFile{{$curr_file->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -68,10 +72,11 @@ function viewFile(objectClass, objectId, elementClass, elementId, sfn){
             {{assign var="srcImg" value="index.php?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&hp=450&wl=450"}}        
           {{/if}}
             <div id="viewFile-{{$curr_file->_id}}">
-              {{include file="inc_preview_file.tpl"}}  
+              {{assign var="fileSel" value=$curr_file}}
+              {{include file="../../dPfiles/templates/inc_preview_file.tpl"}}  
             </div>
             <script type="text/javascript">
-               viewFile("{{$selClass}}", "{{$selKey}}", "{{$curr_file->_class_name}}", "{{$curr_file->_id}}","0"); 
+               File.view("{{$selClass}}", "{{$selKey}}", "{{$curr_file->_class_name}}", "{{$curr_file->_id}}","0"); 
             </script>
          
             <br />

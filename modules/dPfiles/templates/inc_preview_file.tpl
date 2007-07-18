@@ -27,7 +27,7 @@
   {{/if}}<br />
     {{if $includeInfosFile}}
     {{assign var="stylecontenu" value="previewfileMinus"}}
-    {{include file="inc_preview_contenu_file.tpl"}}
+    {{include file="../../dPfiles/templates/inc_preview_contenu_file.tpl"}}
     {{else}}
     <a href="#" onclick="popFile('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}',{{if $sfn}}{{$sfn}}{{else}}0{{/if}})">
       <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->file_id}}&amp;phpThumb=1&amp;hp=450&amp;wl=450{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" title="Afficher le grand aperçu" border="0" />
