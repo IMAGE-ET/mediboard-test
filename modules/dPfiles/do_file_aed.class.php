@@ -71,7 +71,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
           $this->_obj->file_name = $file["name"];
           $this->_obj->file_type = $file["type"];
           $this->_obj->file_size = $file["size"];
-          $this->_obj->file_date = $this->_obj->_spec->ds->unix2dateTime(time());
+          $this->_obj->file_date = $this->_obj->unix2dateTime(time());
           $this->_obj->file_real_filename = uniqid(rand());
             
           $res = $this->_obj->moveTemp($file); 

@@ -45,7 +45,7 @@ foreach($listImport as $key => $value) {
     $file_id = '';
     // DB Fields
     $file->file_name = trim($value["nom"]);
-    $file->file_date = $ds->unix2dateTime( time() );
+    $file->file_date = unix2dateTime( time() );
     $file->file_real_filename = uniqid( rand() );
     if(strpos($file->file_name, ".txt")) {
       $file->file_type = "text/plain";

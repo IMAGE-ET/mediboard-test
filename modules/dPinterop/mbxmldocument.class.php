@@ -154,7 +154,7 @@ class CMbXMLDocument extends DOMDocument {
     $file->file_name          = $object->_class_name."-".$object->_id.".xml";
     $file->file_type          = "text/xml";
     $file->file_size          = filesize($this->documentfilename);
-    $file->file_date          = $file->_spec->ds->unix2dateTime(time());
+    $file->file_date          = $file->unix2dateTime(time());
     $file->file_real_filename = uniqid(rand());
     $file->file_owner         = $AppUI->user_id;
     $res = $file->moveFile($this->documentfilename); 
