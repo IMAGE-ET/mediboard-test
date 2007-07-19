@@ -77,6 +77,8 @@ function pageMain() {
                 {{$curr_chambre->_view}} - {{$curr_lit->_view}}
               </th> 
                 {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
+              
+              {{if $curr_affectation->_ref_sejour->_id != ""}}
               <tr>
               <td>
               <a href="#nothing" onclick="loadSejour({{$curr_affectation->_ref_sejour->_id}}); loadActes('{{$curr_affectation->_ref_sejour->_id}}', '{{$curr_affectation->_ref_sejour->praticien_id}}');">
@@ -97,6 +99,7 @@ function pageMain() {
               {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}
               </td>
             </tr>
+            {{/if}}
             {{/foreach}}
             
             {{/foreach}}

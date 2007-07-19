@@ -108,8 +108,10 @@ if ($can->edit) {
 }
 
 $affectation = new CAffectation();
-$affectation->entree = mbDateTime("08:00:00");
-$affectation->sortie = mbDateTime("23:00:00");
+$affectation->entree = mbAddDateTime("08:00:00",$date);
+$affectation->sortie = mbAddDateTime("23:00:00",$date);
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
