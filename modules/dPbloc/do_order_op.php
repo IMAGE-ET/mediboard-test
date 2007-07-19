@@ -106,6 +106,7 @@ switch($cmd)
 
 //Réarrangement de l'ordre des interventions
 function cleanOrderOp($plageop, $type = "rank") {
+  $ds = CSQLDataSource::get("std");
   switch($type) {
     case "time" :
       $sql = "SELECT operations.operation_id," .
