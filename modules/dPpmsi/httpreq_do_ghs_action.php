@@ -7,13 +7,15 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-global $filepath, $filedir, $regCim10, $regCCAM, $alnum, $alpha;
+global $AppUI, $can;
+$can->needsAdmin();
 $ds = CSQLDataSource::get("std");
+global $sourcePath, $targetDir, $regCim10, $regCCAM, $alnum, $alpha;
+
 $type = mbGetValueFromGet("type");
 
-$filepath = "modules/dPpmsi/ghm/ghm.tar.gz";
-$filedir = "tmp/ghm";
+$sourcePath = "modules/dPpmsi/ghm/ghm.tar.gz";
+$targetDir = "tmp/ghm";
 
 //Hack pour les accents sous linux
 $alnum = "éèêùàûîôï[:alnum:]";
@@ -39,39 +41,44 @@ switch($type) {
   echo "<div class='error'>L'action '$type' n'existe pas";
 }
 
-/** Extraction des fichiers sources de Ajout des CM, valide pour la version 1010
+/** 
+ * Extraction des fichiers sources de Ajout des CM, 
+ * valide pour la version 1010
  **/
 function extractFiles() {
-  global $filepath, $filedir;
-  if ($nbFiles = CMbPath::extract($filepath, $filedir)) {
-    echo "<div class='message'>Extraction de $nbFiles fichiers</div>";
-  } else {
-    echo "<div class='error'>Impossible d'extraire l'archive</div>";
+  global $sourcePath, $targetDir, $AppUI;
+  if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
+    $AppUI->stepAjax("Impossible d'extraire l'archive", UI_MSG_ERROR);
   }
+  $AppUI->stepAjax("Extraction de $nbFiles fichiers", UI_MSG_OK);
 }
 
-/** Ajout des CM, valide pour la version 1010
+/**
+ * Ajout des CM, valide pour la version 1010
  * Fichier texte : ./modules/dPpmsi/ghm/CM.txt
- * Ligne sous la forme "XX Nom du CM" */
+ * Ligne sous la forme "XX Nom du CM" 
+ **/
 function addcm() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $filedir;
-  $base = $AppUI->cfg['baseGHS'];
-  $fileName = "$filedir/CM.txt";
-  do_connect($base);
+  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  $ds = CSQLDataSource::get("GHS1010");
+
+  $fileName = "$targetDir/CM.txt";
 
   // Table des CM
   $sql = "DROP TABLE IF EXISTS `cm`;";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if ($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   }
+  
   $sql = "CREATE TABLE `cm` (
-  `CM_id` varchar(2) NOT NULL default '0',
-  `nom` varchar(100) default NULL,
-  PRIMARY KEY  (`CM_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des catégoris majeurs';";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+    `CM_id` varchar(2) NOT NULL default '0',
+    `nom` varchar(100) default NULL,
+    PRIMARY KEY  (`CM_id`)
+    ) ENGINE=MyISAM
+    COMMENT='Table des catégoris majeurs';";
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
     echo "<div class='message'>Table des CM créée</div>";
@@ -92,8 +99,8 @@ function addcm() {
     fgets($file, 2);
     $nom = fgets($file, 1024);
     $sql = "INSERT INTO cm values('$id', '".addslashes($nom)."');";
-    $ds->exec($sql, $base);
-    if($error = $ds->error($base)) {
+    $ds->exec($sql);
+    if($error = $ds->error()) {
       echo "<div class='error'>$error ($sql)</div>";
     } else {
       $nCM++;
@@ -106,13 +113,12 @@ function addcm() {
 /** Ajout des diagnostics d'entrée dans les CM, valide pour la version 1010
  * Fichier texte : ./modules/dPpmsi/ghm/diagCM.txt */
 function adddiagcm() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $filedir;
-  $base = $AppUI->cfg['baseGHS'];
-  $fileName = "$filedir/diagCM.txt";
-  do_connect($base);
+  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  $ds = CSQLDataSource::get("GHS1010");
+  $fileName = "$targetDir/diagCM.txt";
   $sql = "DROP TABLE IF EXISTS `diagcm`;";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   }
   $sql = "CREATE TABLE `diagcm` (
@@ -120,8 +126,8 @@ function adddiagcm() {
   `CM_id` varchar(2) NOT NULL default '01',
   PRIMARY KEY  (`diag`, `CM_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des diagnostics d\'entree dans les CM';";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
     echo "<div class='message'> Table des diagnostics d'entrée créée</div>";
@@ -144,8 +150,8 @@ function adddiagcm() {
       $curr_cmd = $cmd[1];
       $nCM++;
     } else if(preg_match("`^($regCim10)`", $line, $diag)) {
-      $sql = "INSERT INTO diagcm VALUES('".$diag[1]."', '$curr_cmd')";$ds->exec($sql, $base);
-      if($error = $ds->error($base)) {
+      $sql = "INSERT INTO diagcm VALUES('".$diag[1]."', '$curr_cmd')";$ds->exec($sql);
+      if($error = $ds->error()) {
         echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nDiags++;
@@ -163,13 +169,13 @@ function adddiagcm() {
  * "Liste AouD-XXX : nom"
  * "CCAMXXX/Phase Libelle" */
 function addactes() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $filedir;
-  $base = $AppUI->cfg['baseGHS'];
-  $fileName = "$filedir/Listes.txt";
-  do_connect($base);
+  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  $ds = CSQLDataSource::get("GHS1010");
+  $fileName = "$targetDir/Listes.txt";
+
   $sql = "DROP TABLE IF EXISTS `liste`;";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   }
   $sql = "CREATE TABLE `liste` (
@@ -177,15 +183,15 @@ function addactes() {
   `nom` varchar(100) default NULL,
   PRIMARY KEY  (`liste_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des listes';";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
     echo "<div class='message'> Table des listes créée</div>";
   }
   $sql = "DROP TABLE IF EXISTS `acte`;";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   }
   $sql = "CREATE TABLE `acte` (
@@ -195,15 +201,15 @@ function addactes() {
   `CM_id` varchar(2) NOT NULL default '01',
   PRIMARY KEY  (`code`, `phase`, `liste_id`, `CM_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des actes';";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
     echo "<div class='message'> Table des actes créée</div>";
   }
   $sql = "DROP TABLE IF EXISTS `diag`;";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   }
   $sql = "CREATE TABLE `diag` (
@@ -212,8 +218,8 @@ function addactes() {
   `CM_id` varchar(2) NOT NULL default '01',
   PRIMARY KEY  (`code`, `liste_id`, `CM_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des diagnostics';";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
     echo "<div class='message'> Table des diagnostics créée</div>";
@@ -244,9 +250,9 @@ function addactes() {
       $isListe = $ds->loadResult($sql);
       if(!$isListe) {
         $sql = "INSERT INTO liste VALUES('".$liste[1]."', '".addslashes($liste[2])."')";
-        $ds->exec($sql, $base);
+        $ds->exec($sql);
       }
-      if($error = $ds->error($base)) {
+      if($error = $ds->error()) {
         echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nListes++;
@@ -254,8 +260,8 @@ function addactes() {
       }
     } else if(preg_match("`^($regCCAM)/([[:digit:]])`", $line, $acte) && $curr_liste) {
       $sql = "INSERT INTO acte VALUES('".$acte[1]."', '".$acte[2]."', '$curr_liste', '$curr_cmd')";
-      $ds->exec($sql, $base);
-      if($error = $ds->error($base)) {
+      $ds->exec($sql);
+      if($error = $ds->error()) {
         echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nActes++;
@@ -263,8 +269,8 @@ function addactes() {
       }
     } else if(preg_match("`^($regCim10)`", $line, $diag) && $curr_liste) {
       $sql = "INSERT INTO diag VALUES('".$diag[1]."', '$curr_liste', '$curr_cmd')";
-      $ds->exec($sql, $base);
-      if($error = $ds->error($base)) {
+      $ds->exec($sql);
+      if($error = $ds->error()) {
         //echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nDiags++;
@@ -273,15 +279,15 @@ function addactes() {
     }
   }
   // Cas de la liste des actes medicaux reclassants dans un GHM médical
-  $fileName = "$filedir/Actes_Med.txt";
+  $fileName = "$targetDir/Actes_Med.txt";
   $file = @fopen( $fileName, 'rw' );
   if(! $file) {
     echo "Fichier $fileName non trouvé<br>";
     return;
   }
   $sql = "INSERT INTO liste VALUES('A-med', 'Actes reclassant dans un GHM médical')";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
     $nListes++;
@@ -290,8 +296,8 @@ function addactes() {
     $line = fgets($file, 1024);
     if(preg_match("`^($regCCAM)/([[:digit:]])`", $line, $acte) && $curr_liste) {
       $sql = "INSERT INTO acte VALUES('".$acte[1]."', '".$acte[2]."', 'A-med', '99')";
-      $ds->exec($sql, $base);
-      if($error = $ds->error($base)) {
+      $ds->exec($sql);
+      if($error = $ds->error()) {
         echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nActes++;
@@ -305,15 +311,14 @@ function addactes() {
 /** Ajout des GHM, valide pour la version 1010
  * Fichier texte : ./modules/dPpmsi/ghm/GHM.txt */
 function addghm() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $filedir;
-  $base = $AppUI->cfg['baseGHS'];
-  do_connect($base);
-
+  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  $ds = CSQLDataSource::get("GHS1010");
+  
   // Table des GHM
-  $fileName = "$filedir/GHM.txt";
+  $fileName = "$targetDir/GHM.txt";
   $sql = "DROP TABLE IF EXISTS `ghm`;";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   }
   $sql = "CREATE TABLE `ghm` (
@@ -328,8 +333,8 @@ function addghm() {
   `EXH` float default NULL,
   PRIMARY KEY  (`GHM_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des groupements homogènes de malades';";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
     echo "<div class='message'> Table des GHM créée</div>";
@@ -363,8 +368,8 @@ function addghm() {
           "\nvalues('".addslashes($GHM[1])."', '".addslashes($GHM[2])."'," .
           "\n'".addslashes($curr_group)."', '".addslashes($curr_CM)."'," .
           "\nnull, null, null, null, null);";
-      $ds->exec($sql, $base);
-      if($error = $ds->error($base)) {
+      $ds->exec($sql);
+      if($error = $ds->error()) {
         echo "<div class='error'>$error ($sql)</div>";
       } else {
         //echo "<div class='message'> ".$id."-".$nom."</div>";
@@ -375,7 +380,7 @@ function addghm() {
   echo "<div class='message'> $nGHM GHM créés</div>";
   
   // Ajout des tarifs
-  $fileName = "$filedir/tarifsGHS.csv";
+  $fileName = "$targetDir/tarifsGHS.csv";
   // Lecture du fichier
   $file = @fopen($fileName, 'rw');
   if(!$file) {
@@ -409,8 +414,8 @@ function addghm() {
         "\ntarif_2006 = '".strtr($result[5], $trans2)."'," .
         "\nEXH = '".strtr($result[6], $trans2)."'" .
         "\nWHERE GHM_id = '".strtr($result[1], $trans2)."';";
-    $ds->exec($sql, $base);
-    if($error = $ds->error($base)) {
+    $ds->exec($sql);
+    if($error = $ds->error()) {
       echo "<div class='error'>$error ($sql)</div>";
       $nFailed++;
     } else {
@@ -427,31 +432,30 @@ function addghm() {
  * ./modules/dPpmsi/ghm/cmas.txt
  * ./modules/dPpmsi/ghm/cmasnt.txt */
 function addcma() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $filedir;
-  $base = $AppUI->cfg['baseGHS'];
-  do_connect($base);
-
+  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  $ds = CSQLDataSource::get("GHS1010");
+  
   // Table des Complications et Morbidités Associées, CMA Sévères et CMAS Non Traumatiques
   $listCM = array("cma", "cmas", "cmasnt");
   foreach($listCM as $typeCM) {
     //$typeCM = "cma";
     $sql = "DROP TABLE IF EXISTS `$typeCM`;";
-    $ds->exec($sql, $base);
-    if($error = $ds->error($base)) {
+    $ds->exec($sql);
+    if($error = $ds->error()) {
       echo "<div class='error'>$error ($sql)</div>";
     }
     $sql = "CREATE TABLE `$typeCM` (
     `".$typeCM."_id` varchar(10) NOT NULL default '0',
     PRIMARY KEY  (`".$typeCM."_id`)
   ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des $typeCM';";
-    $ds->exec($sql, $base);
-    if($error = $ds->error($base)) {
+    $ds->exec($sql);
+    if($error = $ds->error()) {
       echo "<div class='error'>$error ($sql)</div>";
     } else {
       echo "<div class='message'> Table des $typeCM créée</div>";
     }
   
-    $fileName = "$filedir/$typeCM.txt";
+    $fileName = "$targetDir/$typeCM.txt";
     // Lecture du fichier
     $file = @fopen($fileName, 'rw');
     if(!$file) {
@@ -467,8 +471,8 @@ function addcma() {
       $CMA = null;
       if(preg_match("`^($regCim10)`", $line, $CMA)) {
         $sql = "INSERT INTO $typeCM values('$CMA[1]');";
-        $ds->exec($sql, $base);
-        if($error = $ds->error($base)) {
+        $ds->exec($sql);
+        if($error = $ds->error()) {
           echo "<div class='error'>$error ($sql)</div>";
         } else {
           $nombre++;
@@ -482,14 +486,13 @@ function addcma() {
 /** Ajout des incompatibilités entre DP - CMA, valide pour la version 1010
  * Fichier texte : ./modules/dPpmsi/ghm/incomp.txt */
 function addincomp() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $filedir;
-  $base = $AppUI->cfg['baseGHS'];
-  do_connect($base);
-
+  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  $ds = CSQLDataSource::get("GHS1010");
+  
   // Table des incompatibilités
   $sql = "DROP TABLE IF EXISTS `incomp`;";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   }
   $sql = "CREATE TABLE `incomp` (
@@ -497,14 +500,14 @@ function addincomp() {
   `CIM2` varchar(10) NOT NULL default '0',
   PRIMARY KEY  (`CIM1`, `CIM2`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des incompatibilités DP - CMA';";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
     echo "<div class='message'> Table des incompatibilités créée</div>";
   }
 
-  $fileName = "$filedir/incomp.txt";
+  $fileName = "$targetDir/incomp.txt";
   // Lecture du fichier
   $file = @fopen($fileName, 'rw');
   if(!$file) {
@@ -555,8 +558,8 @@ function addincomp() {
   foreach($tabIncomp as $baseCode => $liste) {
     foreach($liste as $code) {
       $sql = "INSERT INTO incomp VALUES('$baseCode', '$code');";
-      $ds->exec($sql, $base);
-      if($error = $ds->error($base)) {
+      $ds->exec($sql);
+      if($error = $ds->error()) {
         echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nIncomp++;
@@ -575,18 +578,17 @@ function addincomp() {
  */
 
 function addarbre() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $filedir;
-  $base = $AppUI->cfg['baseGHS'];
-  do_connect($base);
-
+  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  $ds = CSQLDataSource::get("GHS1010");
+  
   // Table des incompatibilités
   $sql = "DROP TABLE IF EXISTS `arbre`;";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   }
 
-  $fileName = "$filedir/arbreGHM.csv";
+  $fileName = "$targetDir/arbreGHM.csv";
   // Lecture du fichier
   $file = @fopen($fileName, 'rw');
   if(!$file) {
@@ -610,8 +612,8 @@ function addarbre() {
   $sql .= "\nPRIMARY KEY (`arbre_id`)," .
       "\nKEY `CM_id` (`CM_id`)" .
       ") ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table de l\'arbre de décision pour les GHM';";
-  $ds->exec($sql, $base);
-  if($error = $ds->error($base)) {
+  $ds->exec($sql);
+  if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
     echo "<div class='message'> Table de l'arbre de décision créée</div>";
@@ -633,8 +635,8 @@ function addarbre() {
       $line .= "''";
     $sql = "INSERT INTO arbre" .
         "\nvalues('', $line);";
-    $ds->exec($sql, $base);
-    if($error = $ds->error($base)) {
+    $ds->exec($sql);
+    if($error = $ds->error()) {
       echo "<div class='error'>$error ($sql)</div>";
       $nFailed++;
     } else {
@@ -642,6 +644,6 @@ function addarbre() {
       $nPass++;
     }
   }
-  echo "<div class='message'> $nPass lignes créés, $nFailed lignes échouées (l'echec de la dernière ligne est normal)</div>";
+  echo "<div class='message'> $nPass lignes créés, $nFailed lignes échouées</div>";
 }
 ?>

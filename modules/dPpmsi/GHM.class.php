@@ -17,8 +17,8 @@ class CGHM  extends CMbObject {
   var $DASs         = null; // Diagnostics associés significatifs sérialisés
   var $DADs         = null; // Diagnostics associés documentaires sérialisés
   
-  // Database id (found in config.php)
-  var $_dbghm = null;
+
+  var $_dsghm = null; // Data source pour le groupage
   
   // Patient
   var $_age  = null;
@@ -67,8 +67,7 @@ class CGHM  extends CMbObject {
     global $AppUI;
     
     // Connection à la base
-    $this->_dbghm = $AppUI->cfg["baseGHS"];
-    do_connect($this->_dbghm);
+    $this->_dsghm = CSQLDataSource::get("GHS1010");
     
     // Initialisation des variables
     $this->_type_hospi = "comp";
@@ -227,7 +226,7 @@ class CGHM  extends CMbObject {
       $column1 = "code";
       $column2 = "liste_id";
       $sql = "SELECT liste_id FROM liste WHERE nom LIKE '%$liste%'";
-      $result = $this->_spec->ds->exec($sql, $this->_dbghm);
+      $result = $this->_dsghm->exec($sql);
       if(mysql_num_rows($result) == 0) {
         return 0;
       }
@@ -241,7 +240,7 @@ class CGHM  extends CMbObject {
         $sql = "SELECT * FROM $table WHERE $column1 = '$element'";
         if($column2)
           $sql .= "AND $column2 = '$liste_id'";
-        $result = $this->_spec->ds->exec($sql, $this->_dbghm);
+        $result = $this->_dsghm->exec($sql);
         $n = $n + mysql_num_rows($result);
       }
     }
@@ -253,20 +252,20 @@ class CGHM  extends CMbObject {
     if($groupe == "non opératoires") {
       $n = 0;
       $sql = "SELECT * FROM liste WHERE nom LIKE '%(non opératoires)%'";
-      $listeNO = $this->_spec->ds->loadList($sql, null, $this->_dbghm);
+      $listeNO = $this->_dsghm->loadList($sql);
       foreach($this->_actes as $acte) {
         $isNO = 0;
         foreach($listeNO as $liste) {
           $sql = "SELECT code FROM acte" .
               "\nWHERE code = '".$acte["code"]."'";
-          $resultExists = $this->_spec->ds->exec($sql, $this->_dbghm);
+          $resultExists = $this->_dsghm->exec($sql);
           $sql = "SELECT code FROM acte" .
               "\nWHERE code = '".$acte["code"]."'" .
               "\nAND phase = '".$acte["phase"]."'" .
               "\nAND liste_id = '".$liste["liste_id"]."'" .
               "\nAND CM_id = '$this->_CM'";
-          $resultNO = $this->_spec->ds->exec($sql, $this->_dbghm);
-          if (!mysql_num_rows($resultExists) || mysql_num_rows($resultNO))
+          $resultNO = $this->_dsghm->exec($sql);
+          if (!$this->_dsghm->numRows($resultExists) || $this->_dsghm->numRows($resultNO))
             $isNO = 1;
         }
         if($isNO)
@@ -279,7 +278,7 @@ class CGHM  extends CMbObject {
     } else if($groupe == "operatoire") {
       $n = 0;
       $sql = "SELECT * FROM liste WHERE nom LIKE '%(non opératoires)%'";
-      $listeNO = $this->_spec->ds->loadList($sql, null, $this->_dbghm);
+      $listeNO = $this->_dsghm->loadList($sql);
       foreach($this->_actes as $acte) {
         $isO = 1;
         foreach($listeNO as $liste) {
@@ -288,8 +287,8 @@ class CGHM  extends CMbObject {
               "\nAND phase = '".$acte["phase"]."'" .
               "\nAND liste_id = '".$liste["liste_id"]."'" .
               "\nAND CM_id = '$this->_CM'";
-          $result = $this->_spec->ds->exec($sql, $this->_dbghm);
-          if (mysql_num_rows($result))
+          $result = $this->_dsghm->exec($sql);
+          if ($this->_dsghm->numRows($result))
             $isO = 0;
         }
         if($isO)
@@ -303,8 +302,8 @@ class CGHM  extends CMbObject {
             "\nWHERE code = '".$acte["code"]."'" .
             "\nAND phase = '".$acte["phase"]."'" .
             "\nAND liste_id = 'A-med'";
-        $result = $this->_spec->ds->exec($sql, $this->_dbghm);
-        if (mysql_num_rows($result))
+        $result = $this->_dsghm->exec($sql);
+        if ($this->_dsghm->numRows($result))
           $n++;
       }
       return $n;
@@ -336,8 +335,8 @@ class CGHM  extends CMbObject {
       $this->_CM = "25";
     } else {
       $sql = "SELECT * FROM diagcm WHERE diag = '$this->_DP'";
-      $result = $this->_spec->ds->exec($sql, $this->_dbghm);
-      if(mysql_num_rows($result) == 0) {
+      $result = $this->_dsghm->exec($sql);
+      if($this->_dsghm->numRows($result) == 0) {
         $this->_CM = 100;
       } else {
         $row = $this->_spec->ds->fetchArray($result);
@@ -346,7 +345,7 @@ class CGHM  extends CMbObject {
     }
     if($this->_CM) {
       $sql = "SELECT * FROM cm WHERE CM_id = '$this->_CM'";
-      $result = $this->_spec->ds->exec($sql, $this->_dbghm);
+      $result = $this->_dsghm->exec($sql);
       $row = $this->_spec->ds->fetchArray($result);
       $this->_CM_nom = $row["nom"];
     }
@@ -460,8 +459,8 @@ class CGHM  extends CMbObject {
     }
     foreach($this->_DASs as $key => $DAS) {
       $sql = "SELECT * FROM incomp WHERE CIM1 = '$DAS' AND CIM2 = '".$this->_DP."'";
-      $result = $this->_spec->ds->exec($sql, $this->_dbghm);
-      if(mysql_num_rows($result)) {
+      $result = $this->_dsghm->exec($sql);
+      if($this->_dsghm->numRows($result)) {
         $this->_DADs[] = $DAS;
         unset($this->_DASs[$key]);
       }
@@ -469,7 +468,7 @@ class CGHM  extends CMbObject {
     if(!$this->_CM)
       $this->getCM();
     $sql = "SELECT * FROM arbre WHERE CM_id = '$this->_CM'";
-    $listeBranches = $this->_spec->ds->loadList($sql, null, $this->_dbghm);
+    $listeBranches = $this->_dsghm->loadList($sql);
     $parcoursBranches = 0;
     $row = $listeBranches[0];
     $maxcond = 5;
@@ -488,10 +487,10 @@ class CGHM  extends CMbObject {
       $this->_chemin .= "Pour i = ".(($i+1)/2).", arbre_id = ".$row["arbre_id"].", ";
       if($row[$type] == '') {
         $this->_chemin .= "c'est bon";
-        $this->_chemin .= " pour ".$row["GHM"]."<br />";
+        $this->_chemin .= " pour ".$row["GHM"]."\n";
         $this->_GHM = $row["GHM"];
       } else if(!($this->checkCondition($row[$type], $row[$cond]))) {
-        $this->_chemin .= " pour ".$row["GHM"]."<br />";
+        $this->_chemin .= " pour ".$row["GHM"]."\n";
         // On avance d'une ligne
         $parcoursBranches++;
         $row = $listeBranches[$parcoursBranches];
@@ -510,12 +509,12 @@ class CGHM  extends CMbObject {
         }
         $i = $i - 2;
       } else {
-        $this->_chemin .= " pour ".$row["GHM"]."<br />";
+        $this->_chemin .= " pour ".$row["GHM"]."\n";
       }
     }
     if($this->_GHM) {
       $sql = "SELECT * FROM ghm WHERE GHM_id = '$this->_GHM'";
-      $result = $this->_spec->ds->exec($sql, $this->_dbghm);
+      $result = $this->_dsghm->exec($sql);
       $row = $this->_spec->ds->fetchArray($result);
       $this->_GHM_nom = $row["nom"];
       $this->_GHM_groupe = $row["groupe"];
