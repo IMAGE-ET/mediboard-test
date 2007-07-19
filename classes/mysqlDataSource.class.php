@@ -11,26 +11,31 @@
 class CMySQLDataSource extends CSQLDataSource {
 		
   function connect($dsn = "std", $dbhost = "localhost", $dbname, $dbuser = "root", $dbpass = "", $dbport = "3306", $dbpersist = false) {
-	
-  	if(!isset($this->link)) {
-      if(!function_exists( "mysql_connect" )) 
-        trigger_error( "FATAL ERROR: MySQL support not available.  Please check your configuration.", E_USER_ERROR );
- 	    
-      if ($dbpersist) {
-        if(!($this->link = mysql_pconnect( "$dbhost:$dbport", $dbuser, $dbpass ))) 
-          trigger_error( "FATAL ERROR: Connection to database server failed", E_USER_ERROR );
-      } 
-      else {
-        if(!($this->link = mysql_connect( "$dbhost:$dbport", $dbuser, $dbpass ))) 
-          trigger_error( "FATAL ERROR: Connection to database server failed", E_USER_ERROR );
+     if (!function_exists( "mysql_connect" )) {
+       trigger_error( "FATAL ERROR: MySQL support not available.  Please check your configuration.", E_USER_ERROR );
+       die;
+     }
+	    
+     if ($dbpersist) {
+       if (null == $this->link = mysql_pconnect( "$dbhost:$dbport", $dbuser, $dbpass )) { 
+         trigger_error( "FATAL ERROR: Connection to database server failed", E_USER_ERROR );
+         die;
+       } 
+     }
+     else {
+       if (null == $this->link = mysql_connect( "$dbhost:$dbport", $dbuser, $dbpass )) { 
+         trigger_error( "FATAL ERROR: Connection to database server failed", E_USER_ERROR );
+         die;
+       }
+     }
+     
+    if ($dbname) {
+      if (!mysql_select_db($dbname, $this->link)) {
+        trigger_error( "FATAL ERROR: Database not found ($dbname)", E_USER_ERROR );
+        die;
       }
-      if ($dbname) {
-	    if(!mysql_select_db( $dbname, $this->link )) trigger_error( "FATAL ERROR: Database not found ($dbname)", E_USER_ERROR );
-      } else {
-        trigger_error( "FATAL ERROR: Database name not supplied<br />(connection to database server succesful)", E_USER_ERROR );
-      }
-      $this->chrono = new Chronometer;
     }
+
     return $this->link;
   }
 
@@ -208,14 +213,14 @@ class CMySQLDataSource extends CSQLDataSource {
   }
   
   
-  function loadTable($table, $dsn = "std") {
+  function loadTable($table) {
     $query = $this->prepare("SHOW TABLES LIKE %", $table);
-    return $this->loadResult($query, $dsn);
+    return $this->loadResult($query);
   }
 
-  function loadField($table, $field, $dsn = "std") {
+  function loadField($table, $field) {
     $query = $this->prepare("SHOW COLUMNS FROM `$table` LIKE %", $field);
-    return $this->loadResult($query, $dsn);
+    return $this->loadResult($query);
   } 
 
   /**
@@ -236,25 +241,19 @@ class CMySQLDataSource extends CSQLDataSource {
   }
   
 
-  function error($dsn = "std") {
-    if(!isset($this->link))
-      trigger_error( "FATAL ERROR: link to $dsn not found.", E_USER_ERROR );
-  	return mysql_error($this->link);
+  function error() {
+    return mysql_error($this->link);
   }
 
-  function errno($dsn = "std") {
-    if(!isset($this->link))
-     trigger_error( "FATAL ERROR: link to $dsn not found.", E_USER_ERROR );
-   return mysql_errno($this->link);
+  function errno() {
+    return mysql_errno($this->link);
   }
 
-  function insertId($dsn = "std") {
-    if(!isset($this->link))
-      trigger_error( "FATAL ERROR: link to $dsn not found.", E_USER_ERROR );
-	return mysql_insert_id($this->link);
+  function insertId() {
+    return mysql_insert_id($this->link);
   }
 
-  function exec($sql, $dsn = "std") {
+  function exec($sql) {
     global $db_trace;
     
     if(!isset($this->link))
@@ -287,8 +286,8 @@ class CMySQLDataSource extends CSQLDataSource {
 	return mysql_num_rows( $qid );
   }
 
-  function affectedRows($dsn = "std" ) {
-    return mysql_affected_rows(link($dsn));
+  function affectedRows() {
+    return mysql_affected_rows($this->link);
   }
 
   function fetchRow( $cur ) {
@@ -311,7 +310,7 @@ class CMySQLDataSource extends CSQLDataSource {
 	return mysql_escape_string( $str );
   }
 
-  function version($dsn = "std") {
+  function version() {
     if(!isset($this->link))
       trigger_error( "FATAL ERROR: link to $dsn not found.", E_USER_ERROR );
   	  if( ($cur = mysql_query( "SELECT VERSION()",  $this->link)) ) {

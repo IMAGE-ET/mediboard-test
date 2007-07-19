@@ -15,12 +15,6 @@ class CSQLDataSource {
     var $dsn       = null;
     var $link      = null;
     var $chrono    = null;
-    var $dbhost    = null;
-    var $dbname    = null;
-    var $dbuser    = null;
-    var $dbpass    = null;
-    var $dbport    = null; 
-    var $dbpersist = null;
   
   function CDataSource(){
   }
@@ -43,19 +37,21 @@ class CSQLDataSource {
    * Initialize a data source by creating the link to the data base
    */
   function init($dsn) {
+    $this->dsn = $dsn;
     
     global $dPconfig;
     $dsConfig = $dPconfig["db"][$dsn];
     
-    $this->dsn       = $dsn;
-    $this->dbhost    = $dsConfig["dbhost"];
-    $this->dbname    = $dsConfig["dbname"];
-    $this->dbuser    = $dsConfig["dbuser"];
-    $this->dbpass    = $dsConfig["dbpass"];
-    $this->dbport    = $dsConfig["dbport"];
-    $this->dbpersist = $dPconfig["dbpersist"];
+    $this->link = $this->connect($dsn, 
+	    $dsConfig["dbhost"],
+	    $dsConfig["dbname"],
+	    $dsConfig["dbuser"],
+	    $dsConfig["dbpass"],
+	    $dsConfig["dbport"],
+	    $dPconfig["dbpersist"]
+    );
     
-    $this->link = $this->connect($dsn, $this->dbhost, $this->dbname, $this->dbuser, $this->dbpass,$this->dbport, $this->dbpersist);
+    $this->chrono = new Chronometer;
   }
   
   function connect($dsn, $dbhost, $dbname, $dbuser, $dbpass, $dbport, $dbpersist){
@@ -104,25 +100,14 @@ class CSQLDataSource {
   }
 
   /**
-   * Returns a link handler for given sourcename
-   * @param string $dsn The DB sourcename
-   */
-  function link($dsn = "std") {
-    if (!array_key_exists($dsn, $this->dataSources)) {
-      trigger_error( "FATAL ERROR: link to $dsn not found.", E_USER_ERROR );
-    }
-    return $this->dataSources[$dsn];  
-  }
-
-  /**
   * This global function loads the first field of the first row returned by the query.
   *
   * @param string The SQL query
   * @param strong The db identifier
   * @return The value returned in the query or null if the query failed.
   */
-  function loadResult($sql, $dsn = "std") {
-    $cur = $this->exec($sql, $dsn);
+  function loadResult($sql) {
+    $cur = $this->exec($sql);
     $cur or exit($this->error());
     $ret = null;
     if ($row = $this->fetchRow($cur)) {
@@ -241,7 +226,7 @@ class CSQLDataSource {
   * @param string the db identifier
   * @return array the query result
   */
-  function loadList($sql, $maxrows = null, $dsn = "std") {
+  function loadList($sql, $maxrows = null) {
     //global $AppUI;
     if (!($cur = $this->exec($sql, $dsn))) {;
       $AppUI->setMsg($this->error(), UI_MSG_ERROR);
@@ -266,7 +251,7 @@ class CSQLDataSource {
   *
   * @param int $maxrows limit to a maximum nember of rows
   */
-  function loadColumn($sql, $maxrows = null, $dsn = "std") {
+  function loadColumn($sql, $maxrows = null) {
     global $AppUI;
     if (!($cur = $this->exec($sql, $dsn))) {
       $AppUI->setMsg($this->error($dsn), UI_MSG_ERROR);
@@ -482,11 +467,11 @@ class CSQLDataSource {
     }
   }
 
-  function loadTable($table, $dsn = "std") {
+  function loadTable($table) {
     return null;
   }
 
-  function loadField($table, $field, $dsn = "std") {
+  function loadField($table, $field) {
     return null;
   } 
 
@@ -521,21 +506,23 @@ class CSQLDataSource {
     return null;
   }
   
-  
-
-  function error($dsn = "std") {
+  /**
+   * The last error message
+   * @return string the message
+   */
+  function error() {
     return null;
   }
 
-  function errno($dsn = "std") {
+  function errno() {
     return null;
   }
 
-  function insertId($dsn = "std") {
+  function insertId() {
     return null;
   }
 
-  function exec($sql, $dsn = "std") {
+  function exec($sql) {
     return null;
   }
 
@@ -548,7 +535,11 @@ class CSQLDataSource {
 	return null;
   }
 
-  function affectedRows($dsn = "std" ) {
+  /**
+   * Number of rows affected by last query
+   * @return int the actual number
+   */
+  function affectedRows() {
     return null;
   }
 
@@ -572,7 +563,7 @@ class CSQLDataSource {
 	return null;
   }
 
-  function version($dsn = "std") {
+  function version() {
     return null;
   }
 

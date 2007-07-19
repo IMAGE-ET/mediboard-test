@@ -7,25 +7,26 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can;
 
-$filepath = "modules/dPpatients/INSEE/insee.tar.gz";
-$filedir = "tmp/insee";
+$can->needsAdmin();
 
-if ($nbFiles = CMbPath::extract($filepath, $filedir)) {
-  echo "<div class='message'>Extraction de $nbFiles fichiers</div>";
-} else {
-  echo "<div class='error'>Erreur, impossible d'extraire l'archive<div>";
-  exit(0);
-}
+$sourcePath = "modules/dPpatients/INSEE/insee.tar.gz";
+$targetDir = "tmp/insee";
 
-$base = $AppUI->cfg["baseINSEE"];
+// Extract the CSV Files dump
+if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
+  $AppUI->stepAjax("Erreur, impossible d'extraire l'archive", UI_MSG_ERROR);
+} 
 
-do_connect($base);
+$AppUI->stepAjax("Extraction de $nbFiles fichier(s)", UI_MSG_OK);
 
-$sql = "DROP TABLE IF EXISTS `communes_france`";
-db_exec($sql, $base);
-$sql = "CREATE TABLE `communes_france` (
+$ds = CSQLDataSource::get("INSEE");
+
+// Create communes table
+$query = "DROP TABLE IF EXISTS `communes_france`";
+$ds->exec($query);
+$query = "CREATE TABLE `communes_france` (
           `commune` varchar(25) NOT NULL default '',
           `code_postal` varchar(5) NOT NULL default '',
           `departement` varchar(25) NOT NULL default '',
@@ -34,23 +35,26 @@ $sql = "CREATE TABLE `communes_france` (
           KEY `commune` (`commune`),
           KEY `code_postal` (`code_postal`)
         ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des informations sur les communes françaises';";
-db_exec($sql, $base);
+$ds->exec($query);
 
-$fileTmpPath = $AppUI->cfg["root_dir"]."/$filedir/insee.csv";
-
-$sql = "LOAD DATA LOCAL INFILE '$fileTmpPath'" .
+// Load communes data from CSV
+$targetPath = $AppUI->getTmpPath("insee/insee.csv");
+$query = "LOAD DATA LOCAL INFILE '$targetPath'" .
     "\nINTO TABLE `communes_france`" .
     "\nFIELDS TERMINATED BY ';'" .
     "\nLINES TERMINATED BY '\r\n'";
-db_exec($sql, $base);
-if(!($msg = db_error($base)))
-  echo '<div class="message">import villes INSEE effectué avec succès</div>';
-else
-  echo '<div class="error"><strong>une erreur s\'est produite</strong> : '.$msg.'</div>';
+$ds->exec($query);
+if ($msg = $ds->error()) {
+  $AppUI->stepAjax("Erreur d'import CSV : $msg", UI_MSG_ERROR);
+}
 
-$sql = "DROP TABLE IF EXISTS `pays`";
-db_exec($sql, $base);
-$sql = "CREATE TABLE `pays` (
+$nbRows = $ds->affectedRows();
+$AppUI->stepAjax("Import villes INSEE effectué avec succès : $nbRows enregistrements", UI_MSG_OK);
+
+// Create pays table
+$query = "DROP TABLE IF EXISTS `pays`";
+$ds->exec($query);
+$query = "CREATE TABLE `pays` (
           `numerique` mediumint(3) unsigned zerofill NOT NULL,
           `alpha_3` char(3) NOT NULL default '',
           `alpha_2` char(2) NOT NULL default '',
@@ -58,17 +62,21 @@ $sql = "CREATE TABLE `pays` (
           `nom_ISO` varchar(255) NOT NULL default '',
           PRIMARY KEY (`alpha_3`)
         ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des nom de pays';";
-db_exec($sql, $base);
+$ds->exec($query);
 
-$fileTmpPath = $AppUI->cfg["root_dir"]."/$filedir/pays-iso.csv";
-
-$sql = "LOAD DATA LOCAL INFILE '$fileTmpPath'" .
+// Load pays data from CSV
+$targetPath = $AppUI->getTmpPath("insee/pays-iso.csv");
+$query = "LOAD DATA LOCAL INFILE '$targetPath'" .
     "\nINTO TABLE `pays`" .
     "\nFIELDS TERMINATED BY '|'" .
     "\nENCLOSED BY ''" .
     "\nLINES TERMINATED BY '\r\n'";
-db_exec($sql, $base);
-if(!($msg = db_error($base)))
-  echo '<div class="message">import pays ISO effectué avec succès</div>';
-else
-  echo '<div class="error"><strong>une erreur s\'est produite</strong> : '.$msg.'</div>';
+$ds->exec($query);
+if ($msg = $ds->error()) {
+  $AppUI->stepAjax("Erreur d'import CSV : $msg", UI_MSG_ERROR);
+}
+
+$nbRows = $ds->affectedRows();
+$AppUI->stepAjax("Import pays ISO effectué avec succès : $nbRows enregistrements", UI_MSG_OK);
+
+?>
