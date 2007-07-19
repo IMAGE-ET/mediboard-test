@@ -8,14 +8,13 @@
 */
 
 global $AppUI, $can, $m;
-$ds = CSQLDataSource::get("std");
-do_connect($AppUI->cfg["baseCCAM"]);
+$ds = CSQLDataSource::get("ccamV2");
 
 if($codeacte = @$_POST["codeacte"]){
   $sql = "SELECT CODE, LIBELLELONG FROM actes WHERE CODE LIKE '" . addslashes($codeacte) . "%'";
 }
 
-$result = $ds->loadList($sql, null, $AppUI->cfg["baseCCAM"]);
+$result = $ds->loadList($sql, null);
 
 if ($can->read) {
   // Création du template
