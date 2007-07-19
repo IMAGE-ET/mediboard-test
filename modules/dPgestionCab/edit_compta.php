@@ -77,19 +77,19 @@ foreach($listGestionCab as $key => $fiche) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("etablissement"       		, $etablissement);
-$smarty->assign("fonction"       			, $fonction);
-$smarty->assign("gestioncab"       			, $gestioncab);
-$smarty->assign("gestioncab"       			, $gestioncab);
-$smarty->assign("filter"           			, $filter);
-$smarty->assign("libelle"          			, $libelle);
-$smarty->assign("rubrique_id"      			, $rubrique_id);
-$smarty->assign("mode_paiement_id" 			, $mode_paiement_id);
-$smarty->assign("listRubriques"    			, $listRubriques);
-$smarty->assign("listRubriquesFonction"		, $listRubriquesFonction);
-$smarty->assign("listModesPaiement"			, $listModesPaiement);
+$smarty->assign("etablissement"       			, $etablissement);
+$smarty->assign("fonction"       						, $fonction);
+$smarty->assign("gestioncab"       					, $gestioncab);
+$smarty->assign("gestioncab"       					, $gestioncab);
+$smarty->assign("filter"           					, $filter);
+$smarty->assign("libelle"          					, $libelle);
+$smarty->assign("rubrique_id"      					, $rubrique_id);
+$smarty->assign("mode_paiement_id" 					, $mode_paiement_id);
+$smarty->assign("listRubriques"    					, $listRubriques);
+$smarty->assign("listRubriquesFonction"			, $listRubriquesFonction);
+$smarty->assign("listModesPaiement"					, $listModesPaiement);
 $smarty->assign("listModePaiementFonction"	, $listModePaiementFonction);
-$smarty->assign("listGestionCab"   			, $listGestionCab);
+$smarty->assign("listGestionCab"   					, $listGestionCab);
 
 $smarty->display("edit_compta.tpl");
 ?>

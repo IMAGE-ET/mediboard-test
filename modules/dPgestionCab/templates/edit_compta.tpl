@@ -66,7 +66,7 @@ function pageMain() {
             {{/foreach}}
             </optgroup>
             <optgroup label="{{$fonction}}">
-            {{foreach from=$listRubriqueFonction item=rubrique}}
+            {{foreach from=$listRubriquesFonction item=rubrique}}
               <option value="{{$rubrique->rubrique_id}}" {{if $rubrique->rubrique_id == $gestioncab->rubrique_id}}selected="selected"{{/if}}>
                 {{$rubrique->nom}}
               </option>
@@ -163,7 +163,7 @@ function pageMain() {
             {{/foreach}}
             </optgroup>
             <optgroup label="{{$fonction}}">
-            {{foreach from=$listRubriqueFonction item=rubrique}}
+            {{foreach from=$listRubriquesFonction item=rubrique}}
               <option value="{{$rubrique->rubrique_id}}" {{if $rubrique->rubrique_id == $gestioncab->rubrique_id}}selected="selected"{{/if}}>
                 {{$rubrique->nom}}
               </option>
