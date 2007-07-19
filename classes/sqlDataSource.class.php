@@ -429,12 +429,6 @@ class CSQLDataSource {
     }
   }
 
-  function stripslashes_deep($value) {
-    return is_array($value) ?
-      array_map("stripslashes_deep", $value) :
-      stripslashes($value);
-  }
-
   /**
   * copy the hash array content into the object as properties
   * only existing properties of object are filled. when undefined in hash, properties wont be deleted

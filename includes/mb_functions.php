@@ -825,4 +825,10 @@ function mbGetClassByModule($module) {
   	return $tabClass;
 }
 
+
+function stripslashes_deep($value) {
+  return is_array($value) ?
+    array_map("stripslashes_deep", $value) :
+    stripslashes($value);
+}
 ?>
