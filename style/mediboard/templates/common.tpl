@@ -3,7 +3,7 @@
 
 <head>
   <title>
-    Mediboard 
+    {{$dPconfig.page_title}} 
     &mdash; {{tr}}module-{{$m}}-court{{/tr}}
   </title>
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeCharSet}}" />
