@@ -35,6 +35,116 @@ abstract class CSQLDataSource {
   }
   
   /**
+   * Create connection to database
+   * @param string $dsn
+   * @param string $host
+   * @param string $name
+   * @param string $user
+   * @param string $pass
+   * @param string $port
+   * @param bool $persist 
+   */
+  abstract function connect($dsn, $host, $name, $user, $pass, $port, $persist);
+
+  /**
+   * Get the first table like given name
+   * @param string $table 
+   */
+  abstract function loadTable($table);
+
+  /**
+   * Get the first field like given name in table
+   * @param string $table
+   * @param string $field 
+   **/
+  abstract function loadField($table, $field);
+  
+  /**
+   * Get the last error message
+   * @return string the message
+   */
+  abstract function error();
+
+  /**
+   * Get the last error id
+   * @return int The Id
+   **/
+  abstract function errno();
+
+  /**
+   * Get the last autoincremented id
+   * @return int The Id
+   */
+  abstract function insertId();
+
+  /**
+   * Execute a any query
+   * @param string $query
+   * @return resource The result resource on SELECT, true on others, false if failed 
+   **/
+  abstract function exec($query);
+  
+  /**
+   * Free a query result
+   * @param resource $result
+   **/
+  abstract function freeResult($result);
+
+  /**
+   * Returns number of rows for given result
+   * @param resource $result Query result
+   * @return int the rows count
+   **/
+  abstract function numRows($result);
+
+  /**
+   * Number of rows affected by last query
+   * @return int the actual number
+   */
+  abstract function affectedRows();
+
+  /**
+   * Get a result row as an enumerative array
+   * @param resource $result Query result
+   * @return array the result
+   **/
+  abstract function fetchRow($result);
+
+  /**
+   * Get a result row as an associative array
+   * @param resource $result Query result
+   * @return array the result
+   **/
+  abstract function fetchAssoc($result);
+
+  /**
+   * Get a result row as both associative and enumerative array
+   * @param resource $result Query result
+   * @return array the result
+   **/
+  abstract function fetchArray($result);
+
+  /**
+   * Get a result row as an object
+   * @param resource $result Query result
+   * @return object the result
+   **/
+  abstract function fetchObject($result);
+
+  /**
+   * Escape value
+   * @param string $value
+   * @return string the escaped value
+   **/
+  abstract function escape($value);
+
+  /**
+   * Get the DB engine version
+   * @return string the version number
+   **/
+  abstract function version();  
+  
+  /**
    * Initialize a data source by creating the link to the data base
    */
   function init($dsn) {
@@ -59,18 +169,6 @@ abstract class CSQLDataSource {
     $this->chrono = new Chronometer;
   }
   
-  /**
-   * Create connection to database
-   * @param string $dsn
-   * @param string $host
-   * @param string $name
-   * @param string $user
-   * @param string $pass
-   * @param string $port
-   * @param bool $persist 
-   */
-  abstract function connect($dsn, $host, $name, $user, $pass, $port, $persist);
-	
   /**
    * Query an SQL dump
    * Will fail to and exit to the first error
@@ -147,7 +245,7 @@ abstract class CSQLDataSource {
         return false;
       }
       
-      $this->bindHashToObject($hash, $object, false);
+      bindHashToObject($hash, $object, false);
       return true;
     } else {
       $cur = $this->exec($sql);
@@ -240,159 +338,117 @@ abstract class CSQLDataSource {
     $this->freeResult($cur);
     return $list;
   }
-
+    
   /**
-  * Document::insertArray() 
-  *
-  * { Description }
-  *
-  * @param [type] $verbose
-  */
-  function insertArray($table, &$hash, $verbose = false) {
-    return null;
-  }
+   * Insert a row matching object fields
+   * null and underscored vars are skipped
+   * @param string $table The table name
+   * @param object $object The object with fields
+   * @param string $keyName The var name of the key to set
+   * @return bool job done
+   **/
+  function insertObject($table, &$object, $keyName = null) {
+    global $dPconfig;
+    if ($dPconfig["readonly"]) {
+      return false;
+    }
+    
+    foreach (get_object_vars($object) as $k => $v) {
+      // Skip null, arrays and objects
+      if ($v === null || is_array($v) || is_object($v)) {
+        continue;
+      }
+      
+      // Skip underscored
+      if ($k[0] == "_") {
+        continue;
+      }
+      
+      $v = trim($v);
+      
+      // Skip empty vars
+      if ($v === "" && $k != $keyName) {
+        continue;
+      }
+      
+      $fields[] = "`$k`";
+      $values[] = "'" . $this->escape($v) . "'";
+    }
+    
+    $fields = implode(",", $fields);
+    $values = implode(",", $values);
+    
+    $query = "INSERT INTO $table ($fields) VALUES ($values)";
+   
+    if (!$this->exec($query)) {
+      return false;
+    }
 
+    // Valuate id
+    $id = $this->insertId();
+    if ($keyName && $id) {
+      $object->$keyName = $id;
+    }
+    
+    return true;
+  }
   
   /**
-  * Document::updateArray() 
-  *
-  * { Description }
-  *
-  * @param [type] $verbose
-  */
-  function updateArray($table, &$hash, $keyName, $verbose = false) {
-    return null;
-  }
-
-  
-  /**
-  * Document::delete()  
-  *
-  * { Description } 
-  *
-  */
-  function delete($table, $keyName, $keyValue) {
-    return null;
-  }
-
-
-  /**
-  * Document::insertObject() 
-  *
-  * { Description } 
-  *
-  * @param [type] $keyName
-  * @param [type] $verbose
-  */
-  function insertObject($table, &$object, $keyName = null, $verbose = false) {
-    return null;
-  }
-
-  
-  
-  /**
-  * Document::updateObject() 
-  *
-  * { Description }
-  *
-  * @param [type] $updateNulls
-  */
+   * Update a row matching object fields
+   * null and underscored vars are skipped
+   * @param string $table The table name
+   * @param object $object The object with fields
+   * @param string $keyName The var name of the key to set
+   * @return bool job done
+   **/
   function updateObject($table, &$object, $keyName) {
-    return null;
-  }
-
-  /**
-  * Document::dateConvert() 
-  *
-  * { Description } 
-  *
-  */
-  function dateConvert($src, &$dest, $srcFmt) {
-    $result = strtotime($src);
-    $dest = $result;
-    return ($result != 0);
-  }
-
-  /**
-  * Document::datetime() 
-  *
-  * { Description } 
-  *
-  * @param [type] $timestamp
-  */
-  function datetime($timestamp = null) {
-    if (!$timestamp) {
-     return null;
+    global $dPconfig;
+    if ($dPconfig["readonly"]) {
+      return false;
     }
-    if (is_object($timestamp)) {
-      return $timestamp->toString("%Y-%m-%d %H:%M:%S");
-    } else {
-      return strftime("%Y-%m-%d %H:%M:%S", $timestamp);
+    
+    $tmp = array();
+    foreach (get_object_vars($object) as $k => $v) {
+      // Where clause on key name
+      if ($k == $keyName) { 
+        $where = "`$keyName`='" . $this->escape($v) . "'";
+        continue;
+      }
+      
+      // Skip null, arrays and objects
+      if ($v === null || is_array($v) || is_object($v)) {
+        continue;
+      }
+      
+      // Skip underscored
+      if ($k[0] == "_") { // internal field
+        continue;
+      }
+
+      $v = trim($v);
+
+      // Nullify empty values or escape
+      $val = $v === "" ? "NULL" : "'" . $this->escape($v) . "'";
+        
+      $tmp[] = "`$k`=$val";
     }
+    
+    $values = implode(",", $tmp);
+    $query = "UPDATE $table SET $values WHERE $where";
+ 
+    return $this->exec($query);
+    
   }
-
-  /**
-  * Document::dateTime2locale()  
-  *
-  * { Description }
-  *  
-  */
-  function dateTime2locale($dateTime, $format) {
-    if (intval($dateTime)) {
-      $date = new CDate($dateTime);
-      return $date->format($format);
-    } else {
-      return null;
-    }
-  }
-
-  /**
-  * copy the hash array content into the object as properties
-  * only existing properties of object are filled. when undefined in hash, properties wont be deleted
-  * @param array the input array
-  * @param obj byref the object to fill of any class
-  * @param string
-  * @param boolean
-  * @param boolean
-  */
-  function bindHashToObject($hash, &$obj, $doStripSlashes = true) {
-    is_array($hash) or die("bindHashToObject : hash expected");
-    is_object($obj) or die("bindHashToObject : object expected");
-
-    foreach (get_object_vars($obj) as $k => $v) {
-      if (isset($hash[$k])) {
-        if($doStripSlashes){
-          $obj->$k = stripslashes_deep($hash[$k]);
-        }else{
-          $obj->$k = $hash[$k];
-        }
-      } 
-    }
-  }
-
-  function bindObjectToObject($obj1, &$obj) {
-    is_object($obj1) or die("bindObjectToObject : object expected");
-    is_object($obj) or die("bindObjectToObject : object expected");
-    foreach ($obj1->getProps() as $k => $v) {
-      $obj->$k = $v;
-    }
-  }
-
-  function loadTable($table) {
-    return null;
-  }
-
-  function loadField($table, $field) {
-    return null;
-  } 
-
   
   /**
    * Escapes up to nine values for SQL queries
    * => prepare("INSERT INTO table_name VALUES (%)", $value);
    * => prepare("INSERT INTO table_name VALUES (%1, %2)", $value1, $value2);
-   */
-  function prepare($sql) {
+   * @param $string $query
+   * @param $string Unlimited values
+   * @return strin The prepared query
+   **/
+  function prepare($query) {
     $values = func_get_args();
     array_shift($values);
     $trans = array();
@@ -405,86 +461,27 @@ abstract class CSQLDataSource {
       $key = $i+1;
       $trans["%$key"] = $quoted;
     }
-    return strtr($sql, $trans);
+    return strtr($query, $trans);
   }
 
-  
   /**
    * Prepares an IN where clause with a given array of values
-   * Prepares a standard = where clause when alternate value is supplied
-   */
+   * Prepares a standard where clause when alternate value is supplied
+   * @param array $values
+   * @param string $alternate
+   * @return string The prepared where clause
+   **/
   function prepareIn($values, $alternate = null) {
-    return null;
+    if ($alternate) {
+      return "= '$alternate'";
+    }
+    
+    if (!count($values)) {
+      return "IS NULL AND 0";
+    }
+    
+    $str = join($values, ", ");
+    return "IN ($str)";
   }
-  
-  /**
-   * The last error message
-   * @return string the message
-   */
-  abstract function error();
-
-  function errno() {
-    return null;
-  }
-
-  function insertId() {
-    return null;
-  }
-
-  /**
-   * Execute a query
-   * @param string $query
-   * @return resource The result resource on SELECT, true on others, false if failed 
-   */
-  function exec($query) {
-    return null;
-  }
-
-  
-  function freeResult( $cur ) {
-	return null;
-  }
-
-  /**
-   * Returns number of rows for given result
-   * @param resource $result Query result
-   * @return int the rows count
-   */
-  function numRows($result) {
-	  return null;
-  }
-
-  /**
-   * Number of rows affected by last query
-   * @return int the actual number
-   */
-  function affectedRows() {
-    return null;
-  }
-
-  function fetchRow( $cur ) {
-	return null;
-  }
-
-  function fetchAssoc( $cur ) {
-    return null;
-  }
-
-  function fetchArray( $cur  ) {
-	return null;
-  }
-
-  function fetchObject( $cur  ) {
-	return null;
-  }
-
-  function escape( $str ) {
-	return null;
-  }
-
-  function version() {
-    return null;
-  }
-  
 }
 ?>

@@ -128,11 +128,16 @@ class CUser extends CMbObject {
         
     // Delete existing permissions
     if ($delExistingPerms) {
-      if (!$this->_spec->ds->delete("perm_module", "user_id", $this->user_id)) {
-        return "Can't delete modules permissions";
+      $perm = new CPermModule;
+      $perm->user_id = $this->user_id;
+      foreach ($perm->loadMatchingList() as $_perm) {
+        $_perm->delete();
       }
-      if (!$this->_spec->ds->delete("perm_object", "user_id", $this->user_id)) {
-        return "Can't delete objects permissions";
+      
+      $perm = new CPermObject;
+      $perm->user_id = $this->user_id;
+      foreach ($perm->loadMatchingList() as $_perm) {
+        $_perm->delete();
       }
     }    
 

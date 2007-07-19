@@ -370,33 +370,6 @@ class CAppUI {
     header("Location: index.php?$params");
     exit(); // stop the PHP execution
   }
-/**
-* Set the page message.
-*
-* The page message is displayed above the title block and then again
-* at the end of the page.
-*
-* IMPORTANT: Please note that append should not be used, since for some
-* languagues atomic-wise translation doesn't work. Append should be
-* deprecated.
-*
-* @param string The (translated) message
-* @param int The type of message
-* @param boolean If true, $msg is appended to the current string otherwise
-* the existing message is overwritten with $msg.
-*/
-  function setMsgOld($msg, $msgNo = null, $append = false) {
-    $msg = $this->_($msg);
-    $this->msg = ($append and $this->msg) ? join(array($this->msg, $msg), "\n") : $msg;
-
-    // Mix message types with existing
-    if ($msgNo) {
-      $this->msgNo = $append && $this->msgNo && $this->msgNo != $msgNo ?
-        UI_MSG_WARNING :
-        $msgNo;
-    }
-    
-  }
   
  /**
   * Add message to the the system UI

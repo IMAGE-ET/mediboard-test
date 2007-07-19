@@ -17,10 +17,9 @@ class CPreferences {
 	function bind( $hash ) {
 		if (!is_array( $hash )) {
 			return "CPreferences::bind failed";
-		} else {
-			$ds->bindHashToObject( $hash, $this );
-			return null;
-		}
+		} 
+		
+		bindHashToObject($hash, $this);
 	}
 
 	function check() {

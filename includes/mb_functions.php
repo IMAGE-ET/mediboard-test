@@ -826,18 +826,43 @@ function mbGetClassByModule($module) {
 }
 
 
+/**
+ * Strip slashes recursively if value is an array
+ * @param mixed $value
+ * @param mixed stripped value
+ **/
 function stripslashes_deep($value) {
   return is_array($value) ?
     array_map("stripslashes_deep", $value) :
     stripslashes($value);
 }
 
+/**
+ * Copy the hash array content into the object as properties
+ * only existing properties of object are filled. when defined in hash
+ * @param array $hash the input array
+ * @param object $object to fill of any class
+ * @param boolean $doStripSlashes
+ **/
+function bindHashToObject($hash, &$object, $doStripSlashes = true) {
+  foreach (get_object_vars($object) as $k => $v) {
+    if (isset($hash[$k])) {
+      $object->$k = $doStripSlashes ? stripslashes_deep($hash[$k]) : $hash[$k];
+    } 
+  }
+}
 
+/**
+ * @todo A SUPPRIMER APRES VERIFICATION
+ */
 function unix2dateTime( $time ) {
   // converts a unix time stamp to the default date format
   return $time > 0 ? date("Y-m-d H:i:s", $time) : null;
 }
 
+/**
+ * @todo A SUPPRIMER APRES VERIFICATION
+ */
 function dateTime2unix( $time ) {
   if ($time == "0000-00-00 00:00:00") {
 	return -1;

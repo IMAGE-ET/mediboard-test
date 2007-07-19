@@ -302,15 +302,8 @@ class CMbObject {
    */
 
   function bind($hash, $doStripSlashes = true) {
-    global $dPconfig;
-    
-  	if (!is_array($hash)) {
-      $this->_error = get_class($this)."::bind failed.";
-      return false;
-    } else {
-      $this->_spec->ds->bindHashToObject($hash, $this, $doStripSlashes);
-      return true;
-    }
+    bindHashToObject($hash, $this, $doStripSlashes);
+    return true;
   }
   
   /**
