@@ -49,7 +49,7 @@ header("Cache-Control: no-cache, must-revalidate");  // HTTP/1.1
 header("Pragma: no-cache");  // HTTP/1.0
 
  
-require_once("./includes/db_connect.php");
+//require_once("./includes/db_connect.php");
 
 require_once("./classes/sqlDataSource.class.php");
 require_once("./classes/mysqlDataSource.class.php");  	
