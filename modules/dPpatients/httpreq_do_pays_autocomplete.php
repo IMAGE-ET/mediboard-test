@@ -10,7 +10,6 @@
 
 global $AppUI, $can, $m;
 $ds = CSQLDataSource::get("INSEE");
-//do_connect($AppUI->cfg["baseINSEE"]);
 $sql = null;
 
 if($pays = @$_GET[$_GET["fieldpays"]]) {

@@ -12,8 +12,6 @@ set_time_limit(300);
 global $AppUI;
 $ds = CSQLDataSource::get("Transit");
 $dsn = "AMI";
-//$base = "Transit";
-//do_connect($base);
 
 // DSN Connection
 if (null == $link = odbc_connect($dsn, "", "")) {

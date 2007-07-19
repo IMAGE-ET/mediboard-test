@@ -11,8 +11,7 @@ set_time_limit(30);
 
 global $AppUI;
 
-$base = "Transit";
-do_connect($base);
+$ds = CSQLDataSource::get("Transit");
 
 $AppUI->stepAjax("Nothing implement yet", UI_MSG_WARNING);
 

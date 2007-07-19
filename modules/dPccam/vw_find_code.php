@@ -10,15 +10,14 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
+
 $ds = CSQLDataSource::get("ccamV2");
+
 $clefs    = mbGetValueFromGetOrSession("clefs");
 $code     = mbGetValueFromGetOrSession("code");
 $selacces = mbGetValueFromGetOrSession("selacces");
 $seltopo1 = mbGetValueFromGetOrSession("seltopo1");
 $seltopo2 = mbGetValueFromGetOrSession("seltopo2");
-
-// Connexion a la base de donnees pour la recherche
-//do_connect($AppUI->cfg["baseCCAM"]);
 
 // Création de la requête
 $query = "SELECT CODE, LIBELLELONG FROM actes WHERE 0";

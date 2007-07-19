@@ -11,8 +11,6 @@ set_time_limit(30);
 
 global $AppUI;
 $ds = CSQLDataSource::get("Transit");
-//$base = "Transit";
-//do_connect($base);
 
 $tableCount = 0;
 $emptyTableCount = 0;
