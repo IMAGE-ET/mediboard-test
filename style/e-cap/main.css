@@ -111,6 +111,13 @@ table.form th a:link {
   color: #eee;
 }
 
+table.form th a.button:link,
+table.form th a.buttonedit:link,
+table.form th a.buttonsearch:link,
+table.form th a.buttonsave:link {
+	color: #000;
+}
+
 table.form td {
   white-space: nowrap;
   vertical-align: top;

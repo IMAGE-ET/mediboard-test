@@ -282,8 +282,8 @@ class CMySQLDataSource extends CSQLDataSource {
 	mysql_free_result( $cur );
   }
 
-  function numRows( $qid ) {
-	return mysql_num_rows( $qid );
+  function numRows($result) {
+    return mysql_num_rows($result);
   }
 
   function affectedRows() {

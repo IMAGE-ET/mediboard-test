@@ -217,15 +217,14 @@ class CSQLDataSource {
   }
 
   /**
-  * Document::loadList() 
-  *
-  * return an array of the db lines
-  * can connect to any database via $dsn param 
-  *
-  * @param int $maxrows
-  * @param string the db identifier
-  * @return array the query result
-  */
+   * Document::loadList() 
+   *
+   * return an array of the db lines
+   * can connect to any database via $dsn param 
+   * @param string $sql
+   * @param int $maxrows
+   * @return array the query result
+   **/
   function loadList($sql, $maxrows = null) {
     //global $AppUI;
     if (!($cur = $this->exec($sql))) {;
@@ -525,8 +524,13 @@ class CSQLDataSource {
 	return null;
   }
 
-  function numRows( $qid ) {
-	return null;
+  /**
+   * Returns number of rows for given result
+   * @param resource $result Query result
+   * @return int the rows count
+   */
+  function numRows($result) {
+	  return null;
   }
 
   /**

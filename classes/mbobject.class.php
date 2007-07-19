@@ -157,6 +157,10 @@ class CMbObject {
     }
   }
 
+  /**
+   * Initilize object specification
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     return new CMbObjectSpec;
   }
