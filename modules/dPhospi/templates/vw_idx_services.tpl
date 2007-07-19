@@ -1,7 +1,9 @@
 <table class="main">
 <tr>
   <td class="halfPane">
-    <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;service_id=0" class="buttonnew"><strong>Créer un service</strong></a>
+    <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;service_id=0" class="buttonnew">
+      Créer un service
+    </a>
     <table class="tbl">
     <tr>
       <th colspan="3">Liste des services</th>
@@ -27,13 +29,15 @@
     <input type="hidden" name="del" value="0" />
     <table class="form">
     <tr>
-      <th class="category" colspan="2">
       {{if $serviceSel->service_id}}
+      <th class="title modify" colspan="2">
         Modification du service &lsquo;{{$serviceSel->nom}}&rsquo;
-      {{else}}
-        Création d'un service
-      {{/if}}
       </th>
+      {{else}}
+      <th class="title" colspan="2">
+        Création d'un service
+      </th>
+      {{/if}}
     </tr>
     <tr>
       <th>{{mb_label object=$serviceSel field="group_id"}}</th>
