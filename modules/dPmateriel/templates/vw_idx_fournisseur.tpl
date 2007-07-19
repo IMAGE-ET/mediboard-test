@@ -1,6 +1,5 @@
 {{mb_include_script module="dPpatients" script="autocomplete"}}
 
-
 <script type="text/javascript">
 function pageMain() {
   initInseeFields("editFournisseur", "codepostal", "ville");
@@ -64,14 +63,14 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$fournisseur field="codepostal"}}</th>
           <td>
-      		{{mb_field object=$fournisseur field="codepostal" tabindex="152" size="31" maxlength="5"}}
-      		<div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
+      		{{mb_field object=$fournisseur field="codepostal" size="31" maxlength="5"}}
+      		<div style="display:none;" class="autocomplete" id="codepostal_auto_complete"></div>
     	  </td>
         </tr>
         <tr> 
           <th>{{mb_label object=$fournisseur field="ville"}}</th>
           <td>
-      		{{mb_field object=$fournisseur field="ville" tabindex="153" size="31"}}
+      		{{mb_field object=$fournisseur field="ville" size="31"}}
       		<div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
     	  </td>
         </tr>
