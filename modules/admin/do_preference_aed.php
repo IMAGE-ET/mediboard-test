@@ -9,7 +9,7 @@ $obj->pref_user = isset($_POST["pref_user"]) ? $_POST["pref_user"] : 0;
 
 foreach ($_POST["pref_name"] as $name => $value) {
 	$obj->pref_name = $name;
-	$obj->pref_value = $ds->stripslashes_deep($value);
+	$obj->pref_value = stripslashes_deep($value);
 
 	// prepare (and translate) the module name ready for the suffix
 	if ($del) {

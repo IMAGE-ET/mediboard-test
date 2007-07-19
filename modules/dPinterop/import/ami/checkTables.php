@@ -38,7 +38,7 @@ $columnsError = 0;
 $tableMissing = 0;
 
 foreach ($tables as $table => $columns) {
-  if ($ds->loadTable($table, $base)) {
+  if ($ds->loadTable($table)) {
     // Rows count
     $query = "SELECT COUNT(*) AS  total FROM `$table`";
     $res = odbc_exec($link, $query);
@@ -51,7 +51,7 @@ foreach ($tables as $table => $columns) {
     }
 
     // Column count
-    $columnsCopy = $ds->loadColumn("SHOW COLUMNS FROM `$table`", null, $base);
+    $columnsCopy = $ds->loadColumn("SHOW COLUMNS FROM `$table`", null);
     if (array_values($columns) != array_values($columnsCopy)) {
       $AppUI->stepAjax("Columns names for table '$table' differ", UI_MSG_WARNING);
       $columnsError++;

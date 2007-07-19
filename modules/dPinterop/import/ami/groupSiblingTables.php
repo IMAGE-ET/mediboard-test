@@ -14,11 +14,11 @@ $ds = CSQLDataSource::get("Transit");
 
 $tableCount = 0;
 $groups = array();
-foreach ($ds->loadColumn("SHOW TABLE STATUS", null, $base) as $table) {
+foreach ($ds->loadColumn("SHOW TABLE STATUS", null) as $table) {
   if (++$tableCount > 2000) {
     break;
   }
-  $columns = $ds->loadColumn("SHOW COLUMNS FROM `$table`", null, $base);
+  $columns = $ds->loadColumn("SHOW COLUMNS FROM `$table`", null);
   $tokens = split("_", $table);
   $prefix = $tokens[0];
   $groups[join($columns, ",")][$prefix][] = $table;
