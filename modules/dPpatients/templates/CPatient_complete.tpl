@@ -213,7 +213,9 @@
           <strong>{{$curr_code->code}}:</strong> {{$curr_code->libelle}}
         </li>
       {{foreachelse}}
-        <em>Pas de diagnostics</em>
+        <li>
+          <em>Pas de diagnostics</em>
+        </li>
       {{/foreach}}
       {{if $object->_ref_traitements|@count}}</ul>{{/if}}
     </td>

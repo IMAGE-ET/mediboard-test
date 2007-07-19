@@ -13,10 +13,10 @@
   Classes auto-chargées : {{$performance.autoload}}
   <br />
   Requêtes SQL : 
-  {{foreach from=$dbChronos item=currdbChrono key=keydbConfigName}}
-  &ndash; {{$currdbChrono->nbSteps}} 
-  sur '{{$keydbConfigName}}'
-  en {{$currdbChrono->total|string_format:"%.3f"}} secondes
+  {{foreach from=$dataSources item=ds}}
+  &ndash; {{$ds->chrono->nbSteps}} 
+  sur '{{$ds->dsn}}'
+  en {{$ds->chrono->total|string_format:"%.3f"}} secondes
   {{/foreach}}
 </div>
 {{/if}}
