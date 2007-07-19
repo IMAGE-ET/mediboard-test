@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 $selClass = mbGetValueFromGetOrSession("selClass", null);
 
 $classSelected = array();
@@ -53,9 +53,9 @@ foreach ($classSelected as $selected){
   }
   
   //Extraction des champs de la BDD
-  if(db_loadTable($object->_tbl)) {
+  if($ds->loadTable($object->_tbl)) {
 	  $sql = "SHOW FULL FIELDS FROM `".$object->_tbl."`";
-	  $listFields = db_loadList($sql);
+	  $listFields = $ds->loadList($sql);
 	  foreach($listFields as $currField){
 	  	$aBdd_field =& $aClass[$currField["Field"]];
 	    $aBdd_field["BDD_name"]    = $currField["Field"];
@@ -68,7 +68,7 @@ foreach ($classSelected as $selected){
 	  // Extraction des Index
 	  $sql = "SHOW INDEX FROM `$object->_tbl`";
     
-	  $listIndex = db_loadList($sql);
+	  $listIndex = $ds->loadList($sql);
 	  foreach($listIndex as $currIndex) {
 	    if($aClass[$currIndex["Column_name"]]["BDD_index"]){
 	      $aClass[$currIndex["Column_name"]]["BDD_index"] .= ", ";
@@ -163,7 +163,7 @@ foreach($aChamps as $nameClass=>$currClass){
 $aSuggestions = array();
 foreach ($aChamps as $class => $aFields) {
   $object = new $class;
-  $newTable = !db_loadTable($object->_tbl);
+  $newTable = !$ds->loadTable($object->_tbl);
 
   // Production de chaque item de suggestion
   foreach ($aFields as $fieldName => $fieldInfo) {

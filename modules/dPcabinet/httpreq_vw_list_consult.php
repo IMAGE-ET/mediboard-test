@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
   
 $can->needsEdit();
-
+$ds = CSQLDataSource::get("std");
 $date      = mbGetValueFromGetOrSession("date", mbDate());
 $today     = mbDate();
 $hour      = mbTime(null);
@@ -65,7 +65,7 @@ $where = array();
 $where["chir_id"] = "= '$userSel->user_id'";
 $where["date"] = "= '$date'";
 if($plageconsult_id && $boardItem){
-  $where["plageconsult_id"] =  db_prepare("= %", $plageconsult_id);
+  $where["plageconsult_id"] =  $ds->prepare("= %", $plageconsult_id);
 }
 $order = "debut";
 $listPlage = $listPlage->loadList($where, $order);

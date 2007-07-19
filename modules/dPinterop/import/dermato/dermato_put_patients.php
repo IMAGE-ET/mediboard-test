@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 set_time_limit( 1800 );
 
 $step = 100;
@@ -21,7 +21,7 @@ $link = mbGetValueFromGet("link", 0);
 
 $sql = "SELECT * FROM dermato_import_patients" .
     "\nLIMIT ".($current*$step).", $step";
-$listImport = db_loadlist($sql);
+$listImport = $ds->loadlist($sql);
 
 foreach($listImport as $key => $value) {
   $tmpNom = addslashes(trim($value["nom"]));
@@ -32,7 +32,7 @@ foreach($listImport as $key => $value) {
   		"\nWHERE patients.nom = '$tmpNom'" .
   		"\nAND patients.prenom = '$tmpPrenom'" .
   		"\nAND patients.naissance = '".$value["naissance"]."'";
-  $match = db_loadlist($sql);
+  $match = $ds->loadlist($sql);
   if(!count($match)) {
   	$pat = new CPatient;
   	// DB Table key
@@ -82,28 +82,28 @@ foreach($listImport as $key => $value) {
       $sql = "SELECT medecin_id" .
       		"FROM dermato_import_medecins" .
       		"WHERE medecin_id = '".$value["medecin_traitant"]."'";
-      $med = db_loadlist($sql);
+      $med = $ds->loadlist($sql);
       $pat->medecin_traitant = $med[0]["mb_id"];
     }
     if($pat->medecin1) {
       $sql = "SELECT medecin_id" .
       		"FROM dermato_import_medecins" .
       		"WHERE medecin_id = '".$value["medecin1"]."'";
-      $med = db_loadlist($sql);
+      $med = $ds->loadlist($sql);
       $pat->medecin1 = $med[0]["mb_id"];
     }
     if($pat->medecin2) {
       $sql = "SELECT medecin_id" .
       		"FROM dermato_import_medecins" .
       		"WHERE medecin_id = '".$value["medecin2"]."'";
-      $med = db_loadlist($sql);
+      $med = $ds->loadlist($sql);
       $pat->medecin2 = $med[0]["mb_id"];
     }
     if($pat->medecin3) {
       $sql = "SELECT medecin_id" .
       		"FROM dermato_import_medecins" .
       		"WHERE medecin_id = '".$value["medecin3"]."'";
-      $med = db_loadlist($sql);
+      $med = $ds->loadlist($sql);
       $pat->medecin3 = $med[0]["mb_id"];
     }
     $pat->incapable_majeur = $value["incapable_majeur"];
@@ -115,13 +115,13 @@ foreach($listImport as $key => $value) {
     $sql = "UPDATE dermato_import_patients" .
     		"\nSET mb_id = '".$pat->patient_id."'" .
     		"\nWHERE patient_id = '".$value["patient_id"]."'";
-    db_exec($sql);
+    $ds->exec($sql);
     $new++;
   } else {
     $sql = "UPDATE dermato_import_patients" .
     		"\nSET mb_id = '".$match[0]["patient_id"]."'" .
     		"\nWHERE patient_id = '".$value["patient_id"]."'";
-    db_exec($sql);
+    $ds->exec($sql);
     $link++;
   }
 }

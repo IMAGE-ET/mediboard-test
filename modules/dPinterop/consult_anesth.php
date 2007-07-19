@@ -40,7 +40,7 @@ $sql = "SELECT
         GROUP BY consultation.consultation_id
         ORDER BY plageconsult.date";
 
-$listConsult = db_loadlist($sql);
+$listConsult = $ds->loadlist($sql);
 
 $n = count($listConsult);
 $i = 0;

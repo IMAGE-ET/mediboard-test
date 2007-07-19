@@ -8,7 +8,7 @@
 */
 
 global $AppUI, $can, $m;
-
+$ds = CSQLDataSource::get("std");
 $can->needsRead();
 
 // Liste des Class
@@ -46,7 +46,7 @@ foreach($listClass as $sClassName){
 $listPrat = new CMediusers();
 $listFct = $listPrat->loadFonctions(PERM_EDIT);
 $where = array();
-$where["users_mediboard.function_id"] = db_prepare_in(array_keys($listFct));
+$where["users_mediboard.function_id"] = $ds->prepareIn(array_keys($listFct));
 $ljoin = array();
 $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
 $order = "`users`.`user_last_name`, `users`.`user_first_name`";

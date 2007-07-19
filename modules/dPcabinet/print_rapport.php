@@ -10,7 +10,7 @@
 // !! Attention, régression importante si ajout de type de paiement
 
 global $AppUI, $can, $m;
-
+$ds = CSQLDataSource::get("std");
 $today = mbDate();
 // Récupération des paramètres
 $filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate());
@@ -48,7 +48,7 @@ $where[] = "date <= '$filter->_date_max'";
 
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
-$where["chir_id"] = db_prepare_in(array_keys($listPrat), $chir);
+$where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir);
 
 $listPlage = new CPlageconsult;
 $listPlage = $listPlage->loadList($where, "date, chir_id");

@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 // Récupération des paramètres
 $chirSel   = mbGetValueFromGetOrSession("chirSel");
 $date      = mbGetValueFromGetOrSession("date", mbDate());
@@ -47,7 +47,7 @@ foreach($listSejours as $key => $curr_sejour) {
 $where = array();
 $order = "nom";
 $where["object_class"] = "= 'COperation'";
-$where["chir_id"] = db_prepare("= %", $chirSel);
+$where["chir_id"] = $ds->prepare("= %", $chirSel);
 $crList    = CCompteRendu::loadModeleByCat("Opération", $where, $order, true);
 $hospiList = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
 

@@ -10,7 +10,7 @@
 global $AppUI, $can, $m, $g;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 $fiche_ei_id         = mbGetValueFromGetOrSession("fiche_ei_id",null);
 $ficheAnnuleVisible  = mbGetValueFromGetOrSession("ficheAnnuleVisible" , 0);
 $ficheTermineVisible = mbGetValueFromGetOrSession("ficheTermineVisible" , 0);
@@ -99,7 +99,7 @@ foreach($listFiches as $keyList=>$valueList){
   if($keyList=="ALL_TERM" && $can->admin){
     $where = array();
     if($allEi_user_id){
-      $where["user_id"] = db_prepare("= %",$allEi_user_id);
+      $where["user_id"] = $ds->prepare("= %",$allEi_user_id);
      }
   }
   

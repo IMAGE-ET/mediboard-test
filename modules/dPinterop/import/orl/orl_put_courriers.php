@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 $chrono = new Chronometer;
 
 set_time_limit( 1800 );
@@ -28,7 +28,7 @@ $total = mbGetValueFromGet("total", 0);
 
 $sql = "SELECT * FROM import_courriers" .
       "\nLIMIT ".($current*$step).", $step";
-$listImport = db_loadlist($sql);
+$listImport = $ds->loadlist($sql);
 
 
 foreach($listImport as $key => $value) {
@@ -37,7 +37,7 @@ foreach($listImport as $key => $value) {
   
   $sql = "SELECT * FROM files_mediboard" .
       "\nWHERE files_mediboard.file_name = '".addslashes(trim($value["nom"]))."'";
-  $match = db_loadlist($sql);
+  $match = $ds->loadlist($sql);
   //echo "$total : Cas de ".$value["nom"]." :<br>";
   if(!count($match)) {
     $file = new CFile;
@@ -45,7 +45,7 @@ foreach($listImport as $key => $value) {
     $file_id = '';
     // DB Fields
     $file->file_name = trim($value["nom"]);
-    $file->file_date = db_unix2dateTime( time() );
+    $file->file_date = $ds->unix2dateTime( time() );
     $file->file_real_filename = uniqid( rand() );
     if(strpos($file->file_name, ".txt")) {
       $file->file_type = "text/plain";
@@ -67,7 +67,7 @@ foreach($listImport as $key => $value) {
         "\nAND plageconsult.chir_id = users_mediboard.user_id" .
         "\nAND users_mediboard.function_id = '11'" .
         "\nORDER by plageconsult.date DESC, plageconsult.debut DESC";
-    $result = db_loadlist($sql);
+    $result = $ds->loadlist($sql);
     if(!count($result))
       $noconsult++;
     elseif(!file_exists("modules/dPinterop/courriers/".$file->file_name)) {
@@ -87,7 +87,7 @@ foreach($listImport as $key => $value) {
       $sql = "UPDATE import_courriers" .
             "\nSET mb_id = '".$file->file_id."'" .
             "\nWHERE nom = '".$value["nom"]."'";
-      db_exec($sql);
+      $ds->exec($sql);
       //mbTrace($file);
       $new++;
     }
@@ -95,7 +95,7 @@ foreach($listImport as $key => $value) {
     $sql = "UPDATE import_courriers" .
         "\nSET mb_id = '".$match[0]["file_id"]."'" .
         "\nWHERE nom = '".$value["nom"]."'";
-    db_exec($sql);
+    $ds->exec($sql);
     $link++;
   }
   $total++;

@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 
@@ -59,7 +59,7 @@ if($rubrique_id)
 if($mode_paiement_id)
   $sql .= "\nAND mode_paiement_id = '$mode_paiement_id'";
 $sql .= "\nGROUP BY rubrique_id";
-$totaux = db_loadList($sql);
+$totaux = $ds->loadList($sql);
 
 $sql = "SELECT SUM(montant) AS value, 0 as invar" .
     "\nFROM `gestioncab`" .
@@ -72,7 +72,7 @@ if($rubrique_id)
 if($mode_paiement_id)
   $sql .= "\nAND mode_paiement_id = '$mode_paiement_id'";
 $sql .= "\nGROUP BY invar";
-$total = db_loadResult($sql);
+$total = $ds->loadResult($sql);
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 // Paramètres
 $freq = "00:15:00";
 $freqs = array (
@@ -26,9 +26,9 @@ $sql = "SELECT import_rdv.*, import_praticiens.mb_id AS prat_mb_id, import_patie
     "\nWHERE import_rdv.libelle NOT LIKE '%bloc opératoire%'" .
     "\nAND import_rdv.patient_id = import_patients.patient_id";
 echo $sql;
-$res = db_exec($sql);
+$res = $ds->exec($sql);
 $rdv = array();
-while ($row = db_fetch_object($res)) {
+while ($row = $ds->fetchObject($res)) {
   $rdv[] = $row;
 }
 
@@ -74,7 +74,7 @@ foreach ($rdv as $consult) {
         AND consultation.patient_id = '$consult->patient_mb_id'
         AND plageconsult.date = '$consult->date'
         AND plageconsult.chir_id = '$consult->prat_mb_id'";
-  $result = db_loadlist($sql);
+  $result = $ds->loadlist($sql);
   if(count($result))
     $consultation->load($result[0]["consultation_id"]);
   

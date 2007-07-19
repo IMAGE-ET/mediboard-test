@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 $field = mbGetValueFromGet("field");
 $text  = utf8_decode(mbGetValueFromGet("text" ));
 $class = mbGetValueFromGet("class");
@@ -19,7 +19,7 @@ $class = mbGetValueFromGet("class");
 $listPrat = new CMediusers();
 $listFct = $listPrat->loadFonctions(PERM_EDIT);
 $where = array();
-$where["users_mediboard.function_id"] = db_prepare_in(array_keys($listFct));
+$where["users_mediboard.function_id"] = $ds->prepareIn(array_keys($listFct));
 $ljoin = array();
 $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
 $order = "`users`.`user_last_name`, `users`.`user_first_name`";

@@ -177,9 +177,9 @@ class CSetupdPcabinet extends CSetup {
           "\nFROM `consultation`" .
           "\nWHERE `$document_name` IS NOT NULL" .
           "\nAND `$document_name` != ''";
-        $res = db_exec( $sql );
+        $res = $this->ds->exec( $sql );
   
-        while ($obj = db_fetch_object($res)) {
+        while ($obj = $this->ds->fetchObject($res)) {
           $document = new CCompteRendu;
           $document->type = "consultation";
           $document->nom = $document_name;
@@ -335,7 +335,7 @@ class CSetupdPcabinet extends CSetup {
              "\nFROM users, users_mediboard" .
              "\nWHERE users.user_id = users_mediboard.user_id" .
              "\nAND users.user_type='$id_anesth'";
-      $result = db_loadList($sql);
+      $result = $this->ds->loadList($sql);
       $listAnesthid = array();
       foreach($result as $keyresult => $resultAnesth){
         $listAnesthid[$keyresult] = $result[$keyresult]["user_id"];
@@ -344,9 +344,9 @@ class CSetupdPcabinet extends CSetup {
       $sql = "SELECT consultation.consultation_id FROM consultation" .
              "\nLEFT JOIN consultation_anesth ON consultation.consultation_id = consultation_anesth.consultation_id" .
              "\nLEFT JOIN plageconsult ON consultation.plageconsult_id = plageconsult.plageconsult_id" .
-             "\nWHERE plageconsult.chir_id " . db_prepare_in($listAnesthid) .
+             "\nWHERE plageconsult.chir_id " . $this->ds->prepareIn($listAnesthid) .
              "\nAND consultation_anesth.consultation_anesth_id IS NULL" ;  
-      $result = db_loadList($sql);
+      $result = $this->ds->loadList($sql);
 
       foreach($result as $keyresult => $resultAnesth){
         $consultAnesth = new CConsultAnesth;
@@ -537,13 +537,13 @@ class CSetupdPcabinet extends CSetup {
       $sql->addSelect("consultation_anesth_id");
       $sql->addTable("consultation_anesth");
       $sql->addWhere($where);
-      $aKeyxAnesth = db_loadColumn($sql->getRequest());
+      $aKeyxAnesth = $this->ds->loadColumn($sql->getRequest());
       if($aKeyxAnesth === false){
         return false;
       }
       if(count($aKeyxAnesth)) {
-        $sql = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".db_prepare_in($aKeyxAnesth).")";
-        if (!db_exec($sql)) {
+        $sql = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".$this->ds->prepareIn($aKeyxAnesth).")";
+        if (!$this->ds->exec($sql)) {
           return false;
         }
         return true;

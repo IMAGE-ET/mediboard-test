@@ -10,10 +10,10 @@
 set_time_limit(300);
 
 global $AppUI;
-
+$ds = CSQLDataSource::get("Transit");
 $dsn = "AMI";
-$base = "Transit";
-do_connect($base);
+//$base = "Transit";
+//do_connect($base);
 
 // DSN Connection
 if (null == $link = odbc_connect($dsn, "", "")) {
@@ -40,20 +40,20 @@ $columnsError = 0;
 $tableMissing = 0;
 
 foreach ($tables as $table => $columns) {
-  if (db_loadTable($table, $base)) {
+  if ($ds->loadTable($table, $base)) {
     // Rows count
     $query = "SELECT COUNT(*) AS  total FROM `$table`";
     $res = odbc_exec($link, $query);
     $rowCount = odbc_result($res, "total");
   
-    $rowCountCopy = db_loadResult("SELECT COUNT(*) FROM `$table`", $base);
+    $rowCountCopy = $ds->loadResult("SELECT COUNT(*) FROM `$table`", $base);
     if ($rowCount != $rowCountCopy) {
       $AppUI->stepAjax("Rows count for table '$table' differ, $rowCountCopy instead of $rowCount", UI_MSG_WARNING);
       $tableMissing++;
     }
 
     // Column count
-    $columnsCopy = db_loadColumn("SHOW COLUMNS FROM `$table`", null, $base);
+    $columnsCopy = $ds->loadColumn("SHOW COLUMNS FROM `$table`", null, $base);
     if (array_values($columns) != array_values($columnsCopy)) {
       $AppUI->stepAjax("Columns names for table '$table' differ", UI_MSG_WARNING);
       $columnsError++;

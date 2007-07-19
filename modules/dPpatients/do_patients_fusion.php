@@ -83,29 +83,29 @@ $patient_id = $do->_obj->patient_id;
 $sql = "UPDATE sejour" .
     "\nSET patient_id = '$patient_id'" .
     "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
-db_exec( $sql ); $msg = db_error();
+$ds->exec( $sql ); $msg = $ds->error();
 
 $sql = "UPDATE consultation" .
     "\nSET patient_id = '$patient_id'" .
     "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
-db_exec( $sql ); $msg .= db_error();
+$ds->exec( $sql ); $msg .= $ds->error();
 
 $sql = "UPDATE antecedent" .
     "\nSET object_id = '$patient_id'" .
     "\nWHERE object_class = 'CPatient' AND object_id IN ('$patient1->patient_id','$patient2->patient_id')";
-db_exec( $sql ); $msg .= db_error();
+$ds->exec( $sql ); $msg .= $ds->error();
 
 $sql = "UPDATE traitement" .
     "\nSET object_id = '$patient_id'" .
     "\nWHERE object_class = 'CPatient' AND object_id IN ('$patient1->patient_id','$patient2->patient_id')";
-db_exec( $sql ); $msg .= db_error();
+$ds->exec( $sql ); $msg .= $ds->error();
 
 if(CModule::getInstalled("dPfiles")) {
   $sql = "UPDATE files_mediboard" .
       "\nSET object_id = '$patient_id'" .
       "\nWHERE object_id IN ('$patient1->patient_id','$patient2->patient_id')" .
       "\nAND object_class = 'CPatient'";
-  db_exec( $sql ); $msg .= db_error();
+  $ds->exec( $sql ); $msg .= $ds->error();
 }
 
 
@@ -114,7 +114,7 @@ if(CModule::getInstalled("dPcompteRendu")) {
       "\nSET object_id = '$patient_id'" .
       "\nWHERE object_id IN ('$patient1->patient_id','$patient2->patient_id')" .
       "\nAND object_class = 'CPatient'";
-  db_exec( $sql ); $msg .= db_error();
+  $ds->exec( $sql ); $msg .= $ds->error();
 }
 
 if(CModule::getInstalled("dPsante400")) {
@@ -122,7 +122,7 @@ if(CModule::getInstalled("dPsante400")) {
       "\nSET object_id = '$patient_id'" .
       "\nWHERE object_id IN ('$patient1->patient_id','$patient2->patient_id')" .
       "\nAND object_class = 'CPatient'";
-  db_exec( $sql ); $msg .= db_error();
+  $ds->exec( $sql ); $msg .= $ds->error();
 }
 
 if($msg) {

@@ -10,7 +10,7 @@
 global $AppUI, $can, $m, $g;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 $service_id = mbGetValueFromGetOrSession("service_id", 0); 
 $date_suivi = mbGetValueFromGetOrSession("date_suivi", mbDate());
 $listOps = array();
@@ -40,7 +40,7 @@ $plages = $plages->loadList($where);
 // Listes des opérations
 $listOps = new COperation;
 $where = array();
-$where[] = "`plageop_id` ".db_prepare_in(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date_suivi')";
+$where[] = "`plageop_id` ".$ds->prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date_suivi')";
 $where["annulee"] = "= '0'";
 $order = "time_operation";
 $listOps = $listOps->loadList($where,$order);
@@ -74,7 +74,7 @@ foreach($listService as $currService){
   $request->addSelect($select);
   $request->addLJoin($leftjoin);
   $request->addWhere($where);
-  $resultLit = db_loadList($request->getRequest());  
+  $resultLit = $ds->loadList($request->getRequest());  
   
   $listLit = array();
   foreach($resultLit as $aLit){

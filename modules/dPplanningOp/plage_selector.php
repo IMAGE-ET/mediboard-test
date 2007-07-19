@@ -10,7 +10,7 @@
 global $AppUI, $can, $m, $g;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 
 $chir         = mbGetValueFromGet("chir"         , 0);
 $month        = mbGetValueFromGet("month"        , date("m"));
@@ -34,15 +34,15 @@ $mediChir->load($chir);
 $listSalles = new CSalle;
 $where = array();
 
-$where["group_id"] = db_prepare("= %",$group_id);
+$where["group_id"] = $ds->prepare("= %",$group_id);
 
 $listSalles = $listSalles->loadList($where);
 
 $listPlages = new CPlageOp;
 $where = array();
-$where[]           = db_prepare("(plagesop.chir_id = %1 OR plagesop.spec_id = %2)",$mediChir->user_id,$mediChir->function_id);
+$where[]           = $ds->prepare("(plagesop.chir_id = %1 OR plagesop.spec_id = %2)",$mediChir->user_id,$mediChir->function_id);
 $where["date"]     = "LIKE '$year-$month-__'";
-$where["salle_id"] = db_prepare_in(array_keys($listSalles));
+$where["salle_id"] = $ds->prepareIn(array_keys($listSalles));
 $order = "date, debut";
 $listPlages = $listPlages->loadList($where, $order);
 

@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 $aChamps   = array();
 // Liste des Class
 $listClass = getInstalledClasses();
@@ -29,7 +29,7 @@ foreach($listClass as $selected){
     if($typeProp == "refMandatory" || $typeProp == "ref"){
       //Comptage du nombre d'entrées à 0
       $sql = "SELECT count(`".$object->_tbl_key."`) FROM `".$object->_tbl."` WHERE `$k` = '0';";
-      $nb_result = db_loadResult($sql);
+      $nb_result = $ds->loadResult($sql);
       
       if($nb_result){
         $aClass[$k]["class_field"] = $k;
@@ -38,7 +38,7 @@ foreach($listClass as $selected){
       
         //Comptage du nombre d'entrées totale
         $sql = "SELECT count(`".$object->_tbl_key."`) FROM `".$object->_tbl."`";
-        $aClass[$k]["count_bdd"] = db_loadResult($sql);
+        $aClass[$k]["count_bdd"] = $ds->loadResult($sql);
       }
     }
   }

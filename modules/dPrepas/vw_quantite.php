@@ -10,16 +10,16 @@
 global $AppUI, $can, $m, $g;
 
 $can->needsEdit();
-
+$ds = CSQLDataSource::get("std");
 $service_id = mbGetValueFromGetOrSession("service_id" , null);
 $type       = mbGetValueFromGetOrSession("type"       , null);
 $date       = mbGetValueFromGetOrSession("date"       , mbDate());
 
 $listRepas   = new CRepas;
 $where = array();
-$where["group_id"]    = db_prepare("= %", $g);
-$where["date"]        = db_prepare("= %", $date);
-$where["typerepas"] = db_prepare("= %", $type);
+$where["group_id"]    = $ds->prepare("= %", $g);
+$where["date"]        = $ds->prepare("= %", $date);
+$where["typerepas"] = $ds->prepare("= %", $type);
 
 $ljoin = array("menu" => "repas.menu_id = menu.menu_id");
 $listRepas = $listRepas->loadList($where, null, null, null, $ljoin);

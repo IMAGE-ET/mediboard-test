@@ -27,7 +27,7 @@ $where = array();
 $salle = new CSalle;
 $whereSalle = array();
 $whereSalle["group_id"] = "= '$g'";
-$where["plagesop.salle_id"] = $db->prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
+$where["plagesop.salle_id"] = $ds->prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
 
 $where["materiel"] = "!= ''";
 $where["operations.plageop_id"] = "IS NOT NULL";

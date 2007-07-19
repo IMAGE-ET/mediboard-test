@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 $result = array();
 
 // Nom des tables à récupérer
@@ -27,7 +27,7 @@ $listesTables = array( "users"           => "Utilisateurs",
 foreach ($listesTables as $keyListTables => $currListTables){
 
   $sql="SHOW TABLE STATUS LIKE '$keyListTables'";
-  $statusTable = db_loadList($sql);
+  $statusTable = $ds->loadList($sql);
   if($statusTable){
     $result[$keyListTables]["descr"] = $currListTables;
     $result[$keyListTables]["nombre"] = $statusTable[0]["Rows"];

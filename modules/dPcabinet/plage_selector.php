@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 // Initialisation des variables
 $plageconsult_id = mbGetValueFromGet("plageconsult_id");
 
@@ -32,7 +32,7 @@ $chir_id = mbGetValueFromGet("chir_id");
 $listPrat = new CMediusers;
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
-$where["chir_id"] = db_prepare_in(array_keys($listPrat), $chir_id);
+$where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir_id);
 
 // Filtres
 if ($hour = mbGetValueFromGet("hour")) {
@@ -41,7 +41,7 @@ if ($hour = mbGetValueFromGet("hour")) {
 }
 
 if ($hide_finished = mbGetValueFromGet("hide_finished", 1)) {
-  $where[] = db_prepare("`date` >= %", mbDate());
+  $where[] = $ds->prepare("`date` >= %", mbDate());
 }
 
 // Filtre de la période
@@ -71,7 +71,7 @@ switch ($period) {
 $ndate = mbDate("+1 $period", $date);
 $pdate = mbDate("-1 $period", $date);
 
-$where["date"] = db_prepare("BETWEEN %1 AND %2", $minDate, $maxDate);
+$where["date"] = $ds->prepare("BETWEEN %1 AND %2", $minDate, $maxDate);
 
 $order = "date, debut";
 

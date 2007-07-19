@@ -10,7 +10,7 @@
 global $AppUI, $can, $m, $g;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 // Récupération des paramètres
 $typeVue = mbGetValueFromGetOrSession("typeVue");
 $selPrat = mbGetValueFromGetOrSession("selPrat");
@@ -40,7 +40,7 @@ $sql = "SELECT lit.lit_id" .
 		"\nON lit.lit_id = affectation.lit_id" .
 		"\nWHERE '$date_recherche' BETWEEN affectation.entree AND affectation.sortie" .
 		"\nGROUP BY lit.lit_id";
-$occupes = db_loadlist($sql);
+$occupes = $ds->loadlist($sql);
 $arrayIn = array();
 foreach($occupes as $key => $value) {
   $arrayIn[] = $occupes[$key]["lit_id"];
@@ -61,10 +61,10 @@ $sql = "SELECT lit.nom AS lit, chambre.nom AS chambre, service.nom AS service, M
 		"\nON service.service_id = chambre.service_id" .
 		"\nWHERE lit.lit_id NOT IN($notIn)" .
     "\nAND service.group_id = '$g'" .
-    "\nAND service.service_id " . db_prepare_in(array_keys($services)) .
+    "\nAND service.service_id " . $ds->prepareIn(array_keys($services)) .
 		"\nGROUP BY lit.lit_id" .
 		"\nORDER BY service.nom, limite DESC, chambre.nom, lit.nom";
-$libre = db_loadlist($sql);
+$libre = $ds->loadlist($sql);
 $listAff = null;
 }
 
@@ -87,12 +87,12 @@ if ($typeVue == 1) {
 		"\nON sejour.sejour_id = affectation.sejour_id" .
 		"\nWHERE affectation.entree < '$date 23:59:59'" .
 		"\nAND affectation.sortie > '$date 00:00:00'" .
-		"\nAND service.service_id " . db_prepare_in(array_keys($services)) .
+		"\nAND service.service_id " . $ds->prepareIn(array_keys($services)) .
     "\nAND sejour.praticien_id = '$selPrat'" .
     "\nAND sejour.group_id = '$g'" .
 		"\nORDER BY service.nom, chambre.nom, lit.nom";
   $listAff = new CAffectation;
-  $listAff = db_loadObjectList($sql, $listAff);
+  $listAff = $ds->loadObjectList($sql, $listAff);
   foreach($listAff as $key => $currAff) {
     $listAff[$key]->loadRefs();
     $listAff[$key]->_ref_sejour->loadRefsFwd();

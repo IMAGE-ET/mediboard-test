@@ -10,7 +10,7 @@
 global $AppUI, $can, $m, $g;
 
 $can->needsAdmin();
-
+$ds = CSQLDataSource::get("std");
 $allEi_user_id   = mbGetValueFromGetOrSession("allEi_user_id",null);
 
 $listUsersTermine = new CMediusers;
@@ -18,7 +18,7 @@ $listUsersTermine = $listUsersTermine->loadListFromType();
 
 $where_allei = array();
 if($allEi_user_id){
-  $where_allei["user_id"] = db_prepare("= %",$allEi_user_id);
+  $where_allei["user_id"] = $ds->prepare("= %",$allEi_user_id);
 }
 
 $listeFiches = CFicheEi::loadFichesEtat("ALL_TERM",null,$where_allei);

@@ -49,7 +49,7 @@ $user->load($AppUI->user_id);
 //} else {
 //  $listPrat = new CMediusers;
 //  $listPrat = $listPrat->loadPraticiens(PERM_READ, $spe);
-//  $where["chir_id"] = db_prepare_in(array_keys($listPrat), $chir_id);
+//  $where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir_id);
 //}
 
 // En fonction de la salle

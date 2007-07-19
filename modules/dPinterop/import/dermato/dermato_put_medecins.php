@@ -10,11 +10,11 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 set_time_limit( 1800 );
 
 $sql = "SELECT * FROM dermato_import_medecins";
-$listImport = db_loadlist($sql);
+$listImport = $ds->loadlist($sql);
 
 $new = 0;
 $link = 0;
@@ -29,7 +29,7 @@ foreach($listImport as $key => $value) {
   		"\nWHERE medecin.nom = '$tmpNom'" .
   		"\nAND medecin.prenom = '$tmpPrenom'" .
   		"\nAND medecin.cp = '".$value["cp"]."'";
-  $match = db_loadlist($sql);
+  $match = $ds->loadlist($sql);
   //echo "$total : Cas de ".$value["nom"]." ".$value["prenom"]." dans le ".$value["cp"]." :<br>";
   if(!count($match)) {
   	$med = new CMedecin;
@@ -55,13 +55,13 @@ foreach($listImport as $key => $value) {
   $sql = "UPDATE dermato_import_medecins" .
         "\nSET mb_id = '".$med->medecin_id."'" .
         "\nWHERE medecin_id = '".$value["medecin_id"]."'";
-    db_exec($sql);
+    $ds->exec($sql);
     $new++;
   } else {
     $sql = "UPDATE dermato_import_medecins" .
         "\nSET mb_id = '".$match[0]["medecin_id"]."'" .
         "\nWHERE medecin_id = '".$value["medecin_id"]."'";
-    db_exec($sql);
+    $ds->exec($sql);
     $link++;
   }
   $total++;

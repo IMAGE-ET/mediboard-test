@@ -10,7 +10,7 @@
 global $AppUI, $can, $m, $g;
 
 $can->needsEdit();
-
+$ds = CSQLDataSource::get("std");
 $menu_id      = mbGetValueFromGetOrSession("menu_id", null);
 $plat_id      = mbGetValueFromGetOrSession("plat_id", null);
 $typerepas_id = mbGetValueFromGetOrSession("typerepas_id", null);
@@ -18,7 +18,7 @@ $typeVue      = mbGetValueFromGetOrSession("typeVue", 0);
 
 // Liste des Type de Repas
 $listTypeRepas = new CTypeRepas;
-$where = array("group_id" => db_prepare("= %", $g) );
+$where = array("group_id" => $ds->prepare("= %", $g) );
 $order = "debut, fin, nom";
 $listTypeRepas = $listTypeRepas->loadList($where,$order);
 
@@ -61,7 +61,7 @@ if($typeVue == 2){
   
   // Liste des plats
   $listPlats = new CPlat;
-  $where = array("group_id" => db_prepare("= %", $g) );
+  $where = array("group_id" => $ds->prepare("= %", $g) );
   $order = "nom, type";
   $listPlats = $listPlats->loadList($where,$order);
   
@@ -80,7 +80,7 @@ if($typeVue == 2){
   
   // Liste des menus
   $listMenus = new CMenu;
-  $where = array("group_id" => db_prepare("= %", $g) );
+  $where = array("group_id" => $ds->prepare("= %", $g) );
   $order = "nom";
   $listMenus = $listMenus->loadList($where, $order);
   

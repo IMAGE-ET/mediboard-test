@@ -10,7 +10,7 @@
 // !! Attention, régression importante si ajout de type de paiement
 
 global $AppUI, $can, $m;
-
+$ds = CSQLDataSource::get("std");
 // Récupération des paramètres
 $filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate());
 $filter->_date_max =mbGetValueFromGetOrSession("_date_max", mbDate());
@@ -42,14 +42,14 @@ if ($chir)
 else {
   $listPrat = new CMediusers();
   $listPrat = $listPrat->loadPraticiens(PERM_READ);
-  $sql .= "\n WHERE chir_id ".db_prepare_in(array_keys($listPrat));
+  $sql .= "\n WHERE chir_id ".$ds->prepareIn(array_keys($listPrat));
 }
 $sql .= "\n AND date_paiement >= '$filter->_date_min'";
 $sql .= "\n AND date_paiement <= '$filter->_date_max'";
 $sql .= "\n GROUP BY date_paiement";
 $sql .= "\n ORDER BY date_paiement";
 
-$listPlage = db_loadlist($sql);
+$listPlage = $ds->loadlist($sql);
 
 // On charge les références des consultations qui nous interessent
 $total["cheque"]["valeur"] = 0;

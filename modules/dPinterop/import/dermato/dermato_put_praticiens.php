@@ -10,11 +10,11 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 set_time_limit( 1800 );
 
 $sql = "SELECT * FROM dermato_import_praticiens";
-$listImport = db_loadlist($sql);
+$listImport = $ds->loadlist($sql);
 
 $new = 0;
 $link = 0;
@@ -24,7 +24,7 @@ foreach($listImport as $key => $value) {
   		"\nWHERE users.user_id = users_mediboard.user_id" .
   		"\nAND users.user_first_name = '".trim($value["prenom"])."'" .
   		"\nAND users.user_last_name = '".trim($value["nom"])."'";
-  $match = db_loadlist($sql);
+  $match = $ds->loadlist($sql);
   if(!count($match)) {
   	$user = new CMediusers;
   	// DB Table key
@@ -44,13 +44,13 @@ foreach($listImport as $key => $value) {
 	$sql = "UPDATE dermato_import_praticiens" .
     		"\nSET mb_id = '".$user->user_id."'" .
     		"\nWHERE praticien_id = '".$value["praticien_id"]."'";
-    db_exec($sql);
+    $ds->exec($sql);
     $new++;
   } else {
     $sql = "UPDATE dermato_import_praticiens" .
     		"\nSET mb_id = '".$match[0]["user_id"]."'" .
     		"\nWHERE praticien_id = '".$value["praticien_id"]."'";
-    db_exec($sql);
+    $ds->exec($sql);
     $link++;
   }
 }

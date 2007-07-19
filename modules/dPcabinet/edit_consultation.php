@@ -11,7 +11,7 @@
 global $AppUI, $can, $m, $dPconfig;
 
 $can->needsEdit();
-
+$ds = CSQLDataSource::get("std");
 $vue2_default = isset($AppUI->user_prefs["AFFCONSULT"]) ? $AppUI->user_prefs["AFFCONSULT"] : 0 ;
 
 $date         = mbGetValueFromGetOrSession("date", mbDate());
@@ -159,7 +159,7 @@ $order = "nom";
 $listModelePrat = array();
 if ($userSel->user_id) {
   $where = $whereCommon;
-  $where["chir_id"] = db_prepare("= %", $userSel->user_id);
+  $where["chir_id"] = $ds->prepare("= %", $userSel->user_id);
   $listModelePrat = new CCompteRendu;
   $listModelePrat = $listModelePrat->loadlist($where, $order);
 }
@@ -168,7 +168,7 @@ if ($userSel->user_id) {
 $listModeleFunc = array();
 if ($userSel->user_id) {
   $where = $whereCommon;
-  $where["function_id"] = db_prepare("= %", $userSel->function_id);
+  $where["function_id"] = $ds->prepare("= %", $userSel->function_id);
   $listModeleFunc = new CCompteRendu;
   $listModeleFunc = $listModeleFunc->loadlist($where, $order);
 }

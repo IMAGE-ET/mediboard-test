@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 $sql = "CREATE TABLE `dermato_import_patients` (
   `patient_id` bigint(20) NOT NULL default '0',
   `nom` varchar(50) NOT NULL default '',
@@ -33,7 +33,7 @@ $sql = "CREATE TABLE `dermato_import_patients` (
   `rques` text,
   PRIMARY KEY  (`patient_id`)
 ) COMMENT='import des patients DERMATO';";
-db_exec( $sql ); db_error();
+$ds->exec( $sql ); $ds->error();
 echo "Table des patients créée<br />";
 
 $sql = "CREATE TABLE `dermato_import_praticiens` (
@@ -42,7 +42,7 @@ $sql = "CREATE TABLE `dermato_import_praticiens` (
   `prenom` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`praticien_id`)
 ) COMMENT='import des praticiens DERMATO';";
-db_exec( $sql ); db_error();
+$ds->exec( $sql ); $ds->error();
 echo "Table des praticiens créée<br />";
 
 $sql = "CREATE TABLE `dermato_import_medecins` (
@@ -58,7 +58,7 @@ $sql = "CREATE TABLE `dermato_import_medecins` (
   `cp` varchar(5) default NULL,
   PRIMARY KEY  (`medecin_id`)
 ) COMMENT='import des medecins traitants des DERMATO';";
-db_exec( $sql ); db_error();
+$ds->exec( $sql ); $ds->error();
 echo "Table des medecins créée<br />";
 
 $sql = "CREATE TABLE `dermato_import_consultations1` (
@@ -71,7 +71,7 @@ $sql = "CREATE TABLE `dermato_import_consultations1` (
   `fin` time NOT NULL default '00:00:00',
   PRIMARY KEY  (`consultation1_id`)
 ) COMMENT='import des consultations 1 DERMATO';";
-db_exec( $sql ); db_error();
+$ds->exec( $sql ); $ds->error();
 echo "Table des consultations1 créée<br />";
 
 $sql = "CREATE TABLE `dermato_import_consultations2` (
@@ -96,7 +96,7 @@ $sql = "CREATE TABLE `dermato_import_consultations2` (
   `type_tarif` enum('cheque','CB','especes','tiers','autre') default NULL,
   PRIMARY KEY  (`consultation_id`)
 ) COMMENT='import des consultations 2 DERMATO';";
-db_exec( $sql ); db_error();
+$ds->exec( $sql ); $ds->error();
 echo "Table des consultations2 créée<br />";
 
 $sql = "CREATE TABLE `dermato_import_rdv` (
@@ -109,7 +109,7 @@ $sql = "CREATE TABLE `dermato_import_rdv` (
   `libelle` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`rdv_id`)
 ) COMMENT='table des rdv a venir DERMATO';";
-db_exec( $sql ); db_error();
+$ds->exec( $sql ); $ds->error();
 echo "Table des RDV créée<br />";
 
 $sql = "CREATE TABLE `dermato_import_courriers` (
@@ -118,7 +118,7 @@ $sql = "CREATE TABLE `dermato_import_courriers` (
   `chemin` text NOT NULL,
   PRIMARY KEY  (`nom`)
 ) COMMENT='import des courriers DERMATO';";
-db_exec( $sql ); db_error();
+$ds->exec( $sql ); $ds->error();
 echo "Table des courriers créée<br />";
 
 $sql = "CREATE TABLE `dermato_import_fichiers` (
@@ -127,5 +127,5 @@ $sql = "CREATE TABLE `dermato_import_fichiers` (
   `chemin` text NOT NULL,
   PRIMARY KEY  (`nom`)
 ) COMMENT='import des fichiers DERMATO';";
-db_exec( $sql ); db_error();
+$ds->exec( $sql ); $ds->error();
 echo "Table des fichiers créée<br />";

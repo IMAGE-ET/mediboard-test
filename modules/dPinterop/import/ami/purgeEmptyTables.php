@@ -10,14 +10,14 @@
 set_time_limit(30);
 
 global $AppUI;
-
-$base = "Transit";
-do_connect($base);
+$ds = CSQLDataSource::get("Transit");
+//$base = "Transit";
+//do_connect($base);
 
 $tableCount = 0;
 $emptyTableCount = 0;
-foreach (db_loadColumn("SHOW TABLE STATUS", null, $base) as $table) {
-  if (!db_loadResult("SELECT COUNT(*) FROM `$table`", $base)) {
+foreach ($ds->loadColumn("SHOW TABLE STATUS", null, $base) as $table) {
+  if (!$ds->loadResult("SELECT COUNT(*) FROM `$table`", $base)) {
     $tableCount++;
   }
 }

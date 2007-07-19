@@ -228,7 +228,7 @@ class CSQLDataSource {
   */
   function loadList($sql, $maxrows = null) {
     //global $AppUI;
-    if (!($cur = $this->exec($sql, $dsn))) {;
+    if (!($cur = $this->exec($sql))) {;
       $AppUI->setMsg($this->error(), UI_MSG_ERROR);
       return false;
     }
@@ -253,8 +253,8 @@ class CSQLDataSource {
   */
   function loadColumn($sql, $maxrows = null) {
     global $AppUI;
-    if (!($cur = $this->exec($sql, $dsn))) {
-      $AppUI->setMsg($this->error($dsn), UI_MSG_ERROR);
+    if (!($cur = $this->exec($sql))) {
+      $AppUI->setMsg($this->error(), UI_MSG_ERROR);
       return false;
     }
     $list = array();

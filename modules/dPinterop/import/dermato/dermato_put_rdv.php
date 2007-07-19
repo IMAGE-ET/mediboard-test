@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 set_time_limit( 1800 );
 
 // Paramètres
@@ -27,9 +27,9 @@ $sql = "SELECT dermato_import_rdv.*, dermato_import_praticiens.mb_id AS prat_mb_
     "\nON dermato_import_rdv.praticien_id = dermato_import_praticiens.praticien_id" .
     "\nWHERE dermato_import_rdv.libelle NOT LIKE '%bloc opératoire%'" .
     "\nAND dermato_import_rdv.patient_id = dermato_import_patients.patient_id";
-$res = db_exec($sql);
+$res = $ds->exec($sql);
 $rdv = array();
-while ($row = db_fetch_object($res)) {
+while ($row = $ds->fetchObject($res)) {
   $rdv[] = $row;
 }
 
@@ -75,7 +75,7 @@ foreach ($rdv as $consult) {
         AND consultation.patient_id = '$consult->patient_mb_id'
         AND plageconsult.date = '$consult->date'
         AND plageconsult.chir_id = '$consult->prat_mb_id'";
-  $result = db_loadlist($sql);
+  $result = $ds->loadlist($sql);
   if(count($result))
     $consultation->load($result[0]["consultation_id"]);
   

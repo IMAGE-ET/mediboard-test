@@ -8,7 +8,7 @@
 */
 
 global $AppUI, $can, $m;
-
+$ds = CSQLDataSource::get("std");
 $can->needsRead();
 
 // Utilisateur sélectionné ou utilisateur courant
@@ -29,7 +29,7 @@ $users = $users->loadPraticiens(PERM_EDIT);
 // Filtres sur la liste des packs
 $where["chir_id"] = $userSel->user_id ? 
   "= '$userSel->user_id'" : 
-  db_prepare_in(array_keys($users));
+  $ds->prepareIn(array_keys($users));
 
 $packs = new CPack();
 $packs = $packs->loadList($where);
@@ -48,7 +48,7 @@ $order = "nom";
 $listModelePrat = array();
 if ($userSel->user_id) {
   $where = $whereCommon;
-  $where["chir_id"] = db_prepare("= %", $userSel->user_id);
+  $where["chir_id"] = $ds->prepare("= %", $userSel->user_id);
   $listModelePrat = new CCompteRendu;
   $listModelePrat = $listModelePrat->loadlist($where, $order);
 }
@@ -57,7 +57,7 @@ if ($userSel->user_id) {
 $listModeleFunc = array();
 if ($userSel->user_id) {
   $where = $whereCommon;
-  $where["function_id"] = db_prepare("= %", $userSel->function_id);
+  $where["function_id"] = $ds->prepare("= %", $userSel->function_id);
   $listModeleFunc = new CCompteRendu;
   $listModeleFunc = $listModeleFunc->loadlist($where, $order);
 }

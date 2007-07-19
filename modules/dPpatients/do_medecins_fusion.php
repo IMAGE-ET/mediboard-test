@@ -8,7 +8,7 @@
 */
 
 global $AppUI, $m;
-
+$ds = CSQLDataSource::get("std");
 $medecin1 = new CMedecin;
 $medecin1->load($_POST["medecin1_id"]);
 $medecin2 = new CMedecin;
@@ -30,35 +30,35 @@ $medecin_id = $do->_obj->medecin_id;
 $sql = "UPDATE `patients` SET" .
     "\n`medecin_traitant` = '$medecin_id'" .
     "\nWHERE `medecin_traitant` = '$medecin1->medecin_id'";
-db_exec( $sql ); $msg = db_error();
+$ds->exec( $sql ); $msg = $ds->error();
 $sql = "UPDATE `patients` SET" .
     "\n`medecin_traitant` = '$medecin_id'" .
     "\nWHERE `medecin_traitant` = '$medecin2->medecin_id'";
-db_exec( $sql ); $msg .= db_error();
+$ds->exec( $sql ); $msg .= $ds->error();
 
 $sql = "UPDATE `patients` SET" .
     "\n`medecin1` = '$medecin_id'" .
     "\nWHERE `medecin1` = '$medecin1->medecin_id'";
-db_exec( $sql ); $msg .= db_error();$sql = "UPDATE `patients` SET" .
+$ds->exec( $sql ); $msg .= $ds->error();$sql = "UPDATE `patients` SET" .
     "\n`medecin1` = '$medecin_id'" .
     "\nWHERE `medecin1` = '$medecin2->medecin_id'";
-db_exec( $sql ); $msg .= db_error();
+$ds->exec( $sql ); $msg .= $ds->error();
 
 $sql = "UPDATE `patients` SET" .
     "\n`medecin2` = '$medecin_id'" .
     "\nWHERE `medecin2` = '$medecin1->medecin_id'";
-db_exec( $sql ); $msg .= db_error();$sql = "UPDATE `patients` SET" .
+$ds->exec( $sql ); $msg .= $ds->error();$sql = "UPDATE `patients` SET" .
     "\n`medecin2` = '$medecin_id'" .
     "\nWHERE `medecin2` = '$medecin2->medecin_id'";
-db_exec( $sql ); $msg .= db_error();
+$ds->exec( $sql ); $msg .= $ds->error();
 
 $sql = "UPDATE `patients` SET" .
     "\n`medecin3` = '$medecin_id'" .
     "\nWHERE `medecin3` = '$medecin1->medecin_id'";
-db_exec( $sql ); $msg .= db_error();$sql = "UPDATE `patients` SET" .
+$ds->exec( $sql ); $msg .= $ds->error();$sql = "UPDATE `patients` SET" .
     "\n`medecin3` = '$medecin_id'" .
     "\nWHERE `medecin3` = '$medecin2->medecin_id'";
-db_exec( $sql ); $msg .= db_error();
+$ds->exec( $sql ); $msg .= $ds->error();
 
 if($msg) {
   mbTrace($msg, "erreur sql", true);

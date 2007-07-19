@@ -119,9 +119,9 @@ class CSetupdPplanningOp extends CSetup {
             "\nFROM `operations`" .
             "\nWHERE `$document_name` IS NOT NULL" .
             "\nAND `$document_name` != ''";
-        $res = db_exec( $sql );
+        $res = $this->ds->exec( $sql );
     
-        while ($obj = db_fetch_object($res)) {
+        while ($obj = $this->ds->fetchObject($res)) {
           $document = new CCompteRendu;
           $document->type = "operation";
           $document->nom = $document_name;
@@ -145,8 +145,8 @@ class CSetupdPplanningOp extends CSetup {
     function setup_ccam(){
       $sql = "SELECT `operation_id` , `CCAM_code` , `CCAM_code2`" .
              "\nFROM `operations`";
-      $res = db_exec( $sql );
-      while ($obj = db_fetch_object($res)) {
+      $res = $this->ds->exec( $sql );
+      while ($obj = $this->ds->fetchObject($res)) {
         $obj->codes_ccam = $obj->CCAM_code;
         if ($obj->CCAM_code2) {
           $obj->codes_ccam .= "|$obj->CCAM_code2";
@@ -155,7 +155,7 @@ class CSetupdPplanningOp extends CSetup {
         $sql2 = "UPDATE `operations` " .
           "\nSET `codes_ccam` = '$obj->codes_ccam' " .
           "\nWHERE `operation_id` = $obj->operation_id";
-        db_exec($sql2); db_error();
+        $this->ds->exec($sql2); $this->ds->error();
       }
       return true;
     }

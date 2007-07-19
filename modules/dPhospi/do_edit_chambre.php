@@ -8,7 +8,7 @@
 */
 
 global $AppUI, $m;
-
+$ds = CSQLDataSource::get("std");
 $ajax  = mbGetValueFromPost("ajax", 0);
 $m     = mbGetValueFromPost("otherm", mbGetValueFromPost("m", ""));
 $value = mbGetValueFromPost("value", 1);
@@ -18,8 +18,8 @@ if($id) {
   $sql = "UPDATE sejour
           SET chambre_seule = '$value'
           WHERE sejour_id = '$id'";
-  $result = db_exec($sql);
-  db_error();
+  $result = $ds->exec($sql);
+  $ds->error();
 }
 
 if($ajax) {

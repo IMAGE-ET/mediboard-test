@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 //$can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 $selClass      = mbGetValueFromGetOrSession("selClass", null);
 $selKey        = mbGetValueFromGetOrSession("selKey"  , null);
 $typeVue       = mbGetValueFromGetOrSession("typeVue" , 0);
@@ -44,7 +44,7 @@ $order = "nom";
 $listModelePrat = array();
 if ($userSel->user_id) {
   $where = $whereCommon;
-  $where["chir_id"] = db_prepare("= %", $userSel->user_id);
+  $where["chir_id"] = $ds->prepare("= %", $userSel->user_id);
   $listModelePrat = new CCompteRendu;
   $listModelePrat = $listModelePrat->loadlist($where, $order);
 }
@@ -53,7 +53,7 @@ if ($userSel->user_id) {
 $listModeleFunc = array();
 if ($userSel->user_id) {
   $where = $whereCommon;
-  $where["function_id"] = db_prepare("= %", $userSel->function_id);
+  $where["function_id"] = $ds->prepare("= %", $userSel->function_id);
   $listModeleFunc = new CCompteRendu;
   $listModeleFunc = $listModeleFunc->loadlist($where, $order);
 }

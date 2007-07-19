@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $limit = mbGetValueFromGetOrSession("limit", 0);
-
+$ds = CSQLDataSource::get("std");
 if ($limit == -1) {
   return;	
 }
@@ -41,9 +41,9 @@ $sql = "SELECT " .
     "\nAND dermato_import_consultations1.consultation1_id = dermato_import_consultations2.plageconsult_id" .
     "\nAND dermato_import_consultations2.patient_id = dermato_import_patients.patient_id" .
     "\nLIMIT $limit, 1000";
-$res = db_exec($sql);
+$res = $ds->exec($sql);
 $consults = array();
-while ($row = db_fetch_object($res)) {
+while ($row = $ds->fetchObject($res)) {
   $consults[] = $row;
 }
 
@@ -81,7 +81,7 @@ foreach ($consults as $consult) {
         AND consultation.patient_id = '$consult->patient_mb_id'
         AND plageconsult.date = '$consult->date'
         AND plageconsult.chir_id = '$consult->prat_mb_id'";
-  $result = db_loadlist($sql);
+  $result = $ds->loadlist($sql);
   if(count($result))
     $consultation->load($result[0]["consultation_id"]);
   

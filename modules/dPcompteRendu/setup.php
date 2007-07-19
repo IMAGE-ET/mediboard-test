@@ -149,7 +149,7 @@ class CSetupdPcompteRendu extends CSetup {
         }
         $sql = "UPDATE `compte_rendu` SET `file_category_id`='".$category->file_category_id."', 
                `object_class`='".$aValue["class"]."' WHERE `object_class`='$sKey'";
-        db_exec($sql); db_error();          
+        $this->ds->exec($sql); $this->ds->error();          
       }
       return true;
     }

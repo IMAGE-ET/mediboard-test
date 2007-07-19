@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 set_time_limit(1800);
 
 
@@ -19,10 +19,10 @@ $sql = "SELECT `operation_id` , `codes_ccam`, `CCAM_code` , `CCAM_code2`" .
   "\nWHERE (`codes_ccam` = '' OR `codes_ccam` IS NULL)" .
   "\nAND (`CCAM_code` != '' OR `CCAM_code` IS NOT NULL)";
 
-$res = db_exec( $sql );
+$res = $ds->exec( $sql );
 $i = 0;
 
-while ($obj = db_fetch_object($res)) {
+while ($obj = $ds->fetchObject($res)) {
   $i++;
   $obj->codes_ccam = $obj->CCAM_code;
   if ($obj->CCAM_code2) {
@@ -32,7 +32,7 @@ while ($obj = db_fetch_object($res)) {
   $sql2 = "UPDATE `operations` " .
     "\nSET `codes_ccam` = '$obj->codes_ccam' " .
     "\nWHERE `operation_id` = $obj->operation_id";
-  db_exec($sql2); db_error();
+  $ds->exec($sql2); $ds->error();
 };
 
 echo "$i interventions mises à jour";

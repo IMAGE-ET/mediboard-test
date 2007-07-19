@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("ccamV2");
 $clefs    = mbGetValueFromGetOrSession("clefs");
 $code     = mbGetValueFromGetOrSession("code");
 $selacces = mbGetValueFromGetOrSession("selacces");
@@ -18,7 +18,7 @@ $seltopo1 = mbGetValueFromGetOrSession("seltopo1");
 $seltopo2 = mbGetValueFromGetOrSession("seltopo2");
 
 // Connexion a la base de donnees pour la recherche
-do_connect($AppUI->cfg["baseCCAM"]);
+//do_connect($AppUI->cfg["baseCCAM"]);
 
 // Création de la requête
 $query = "SELECT CODE, LIBELLELONG FROM actes WHERE 0";
@@ -54,10 +54,10 @@ if ($code || $clefs || $selacces || $seltopo1) {
 $query .= " ORDER BY CODE LIMIT 0 , 100";
 
 //Codes correspondants à la requete
-$result = db_exec($query, $AppUI->cfg["baseCCAM"]);
+$result = $ds->exec($query);
 $i = 0;
 $codes = array();
-while($row = db_fetch_array($result)) {
+while($row = $ds->fetchArray($result)) {
   $codes[$i]["code"] = $row["CODE"];
   $codes[$i]["texte"] = $row["LIBELLELONG"];
   $i++;
@@ -66,9 +66,9 @@ $numcodes = $i;
 
 //On récupère les voies d'accès
 $query = "select * from acces1";
-$result = db_exec($query, $AppUI->cfg["baseCCAM"]);
+$result = $ds->exec($query);
 $i = 1;
-while($row = db_fetch_array($result)) {
+while($row = $ds->fetchArray($result)) {
   $acces[$i]["code"] = $row["CODE"];
   $acces[$i]["texte"] = $row["ACCES"];
   $i++;
@@ -76,10 +76,10 @@ while($row = db_fetch_array($result)) {
 
 //On récupère les appareils : topographie1
 $query = "select * from topographie1";
-$result = db_exec($query, $AppUI->cfg["baseCCAM"]);
+$result = $ds->exec($query);
 
 $i = 1;
-while($row = db_fetch_array($result)) {
+while($row = $ds->fetchArray($result)) {
   $topo1[$i]["code"] = $row["CODE"];
   $topo1[$i]["texte"] = $row["LIBELLE"];
   $i++;
@@ -87,10 +87,10 @@ while($row = db_fetch_array($result)) {
 
 // On récupère les systèmes correspondants à l'appareil : topographie2
 $query = "SELECT * FROM topographie2 WHERE PERE = '$seltopo1'";
-$result = db_exec($query, $AppUI->cfg["baseCCAM"]);
+$result = $ds->exec($query);
 $topo2 = array();
 $i = 1;
-while($row = db_fetch_array($result)) {
+while($row = $ds->fetchArray($result)) {
   $topo2[$i]["code"] = $row["CODE"];
   $topo2[$i]["texte"] = $row["LIBELLE"];
   $i++;

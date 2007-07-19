@@ -26,7 +26,7 @@ $noconsult = mbGetValueFromGet("noconsult", 0);
 $sql = "SELECT * FROM import_fichiers" .
       "\nWHERE mb_id IS NOT NULL" .
       "\nLIMIT ".($current*$step).", $step";
-$listImport = db_loadlist($sql);
+$listImport = $ds->loadlist($sql);
 
 
 foreach($listImport as $key => $value) {
@@ -48,7 +48,7 @@ foreach($listImport as $key => $value) {
         "\nAND plageconsult.chir_id = users_mediboard.user_id" .
         "\nAND users_mediboard.function_id = '11'" .
         "\nORDER by plageconsult.date DESC, plageconsult.debut DESC";
-    $result = db_loadlist($sql);
+    $result = $ds->loadlist($sql);
     if(!count($result)) {
       $noconsult++;
     } else {

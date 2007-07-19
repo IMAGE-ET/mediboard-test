@@ -11,6 +11,7 @@ global $AppUI, $can, $m;
 
 //require_once("../dPccam/acteccam.class.php")
 require_once($AppUI->getModuleClass("dPsalleOp", "acteccam"));
+$ds = CSQLDataSource::get("std");
 
 // @ todo : pourquoi on arrive pas à y accéder dès que le module n'est pas visible ???
 //$can->needsRead();
@@ -34,7 +35,7 @@ switch($type) {
 				where $condition
 				group by favoris_code
 				order by favoris_code";
-		$codes = db_loadlist($sql);
+		$codes = $ds->loadlist($sql);
 
     foreach($codes as $key => $value) {
       $list[$value["favoris_code"]]["codeccam"] = new CCodeCCAM($value["favoris_code"]);
@@ -50,7 +51,7 @@ switch($type) {
 				from cim10favoris
 				where favoris_user = '$chir' or favoris_user = '$AppUI->user_id'
 				order by favoris_code";
-		$codes = db_loadlist($sql);
+		$codes = $ds->loadlist($sql);
     $i = 0;
     foreach($codes as $key => $value) {
       $list[$i] = new CCodeCIM10($value["favoris_code"]);

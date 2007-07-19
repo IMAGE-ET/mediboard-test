@@ -8,8 +8,8 @@
 */
 
 global $AppUI, $can, $m;
-
-do_connect($AppUI->cfg["baseINSEE"]);
+$ds = CSQLDataSource::get("INSEE");
+//do_connect($AppUI->cfg["baseINSEE"]);
 $sql = null;
 
 if($cp = @$_GET[$_GET["fieldcp"]]) {
@@ -24,7 +24,7 @@ if($ville = @$_GET[$_GET["fieldcity"]]) {
 }
 
 if ($can->read && $sql) {
-	 $result = db_loadList($sql, 30, $AppUI->cfg["baseINSEE"]);
+	 $result = $ds->loadList($sql, 30, $AppUI->cfg["baseINSEE"]);
   // Création du template
   $smarty = new CSmartyDP();
 

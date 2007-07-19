@@ -14,7 +14,7 @@ require_once($AppUI->getModuleFile($m, "inc_vw_affectations"));
 $pathos = new CDiscipline();
 
 $can->needsRead();
-
+$ds = CSQLDataSource::get("std");
 // A passer en variable de configuration
 $heureLimit = "16:00:00";
 
@@ -62,7 +62,7 @@ $sql->addSelect($select);
 $sql->addWhere($where);
 $sql->addLJoin($leftjoin);
 
-$alerte = db_loadResult($sql->getRequest());
+$alerte = $ds->loadResult($sql->getRequest());
 
 // Liste des patients à placer
 

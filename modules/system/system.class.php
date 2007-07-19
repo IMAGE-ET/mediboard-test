@@ -18,7 +18,7 @@ class CPreferences {
 		if (!is_array( $hash )) {
 			return "CPreferences::bind failed";
 		} else {
-			bindHashToObject( $hash, $this );
+			$ds->bindHashToObject( $hash, $this );
 			return null;
 		}
 	}

@@ -82,7 +82,7 @@ class CSetupdPrepas extends CSetup {
     $this->addQuery($sql);
     function setup_menu(){
       $sql = "SELECT * FROM menu";
-      $menus = db_loadList($sql);
+      $menus = $this->ds->loadList($sql);
       foreach($menus as $menu){
         $nbDays  = mbDaysRelative($menu["debut"], $menu["fin"]);
         $nbWeeks = floor($nbDays / 7);
@@ -92,12 +92,12 @@ class CSetupdPrepas extends CSetup {
           $menu["nb_repet"] = ceil($nbWeeks/$menu["repetition"]);
         }
         $sql = "UPDATE `menu` SET `nb_repet` = '".$menu["nb_repet"]."' WHERE(`menu_id`='".$menu["menu_id"]."');";
-        db_exec($sql); db_error();
+        $this->ds->exec($sql); $this->ds->error();
         $sql = "UPDATE `repas` SET `typerepas_id`='".$menu["typerepas"]."' WHERE(`menu_id`='".$menu["menu_id"]."');";
-        db_exec($sql); db_error();
+        $this->ds->exec($sql); $this->ds->error();
       }
       $sql = "ALTER TABLE `menu` DROP `fin` ";
-      db_exec($sql); db_error(); 
+      $this->ds->exec($sql); $this->ds->error(); 
       return true;
     }
     $this->addFunctions("setup_menu");

@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsEdit();
-
+$ds = CSQLDataSource::get("std");
 $date      = mbGetValueFromGetOrSession("date", mbDate());
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
@@ -50,7 +50,7 @@ $sql = "SELECT plagesop.*," .
 		"\nGROUP BY plagesop.plageop_id" .
 		"\nORDER BY plagesop.date, plagesop.debut, plagesop.plageop_id";
 if($selChirLogin) {
-  $listPlages = db_loadList($sql);
+  $listPlages = $ds->loadList($sql);
 } else {
   $listPlages = null;
 }

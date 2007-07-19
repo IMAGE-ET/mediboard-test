@@ -23,7 +23,7 @@ class CSetupdPfiles extends CSetup {
     $this->mod_name = "dPfiles";
     $this->makeRevision("all");
     $this->setTimeLimit(120);
-    if(!db_loadTable("files_mediboard")) {
+    if(!$this->ds->loadTable("files_mediboard")) {
       $sql = "CREATE TABLE files_mediboard (
                       file_id int(11) NOT NULL auto_increment,
                       file_real_filename varchar(255) NOT NULL default '',
