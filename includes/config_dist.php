@@ -43,15 +43,6 @@ $dPconfig["db"]["cim10"] = array(
   "dbport" => ""
 );
 
-// CCAM
-$dPconfig["db"]["ccam"] = array(
-  "dbhost" => "localhost",
-  "dbname" => "ccam",
-  "dbuser" => "CCAMAdmin",
-  "dbpass" => "AdminCCAM",
-  "dbport" => ""
-);
-
 $dPconfig["baseCCAM"] = "ccamV2";
 $dPconfig["db"]["ccamV2"] = array(
   "dbhost" => "localhost",
