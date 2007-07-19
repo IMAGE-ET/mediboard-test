@@ -251,8 +251,7 @@ class CPlageOp extends CMbObject {
         "\nWHERE `operations`.`plageop_id` = '$this->plageop_id'" .
         "\nAND `operations`.`plageop_id` = `plagesop`.`plageop_id`" .
         "\nAND `operations`.`annulee` = '0'";
-    $result = null;
-    $this->_spec->ds->loadHash($sql, $result);
+    $result = $this->_spec->ds->loadHash($sql);
     $this->_nb_operations = $result["total"];
     if($addedTime){
       $result["time"] = $result["time"] + $addedTime;

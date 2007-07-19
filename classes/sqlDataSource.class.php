@@ -8,15 +8,16 @@
  */
 
 
-class CSQLDataSource { 
+abstract class CSQLDataSource { 
 
-	static $dataSources     = array();
+	static $dataSources = array();
+	static $trace = false;
     
-    var $dsn       = null;
-    var $link      = null;
-    var $chrono    = null;
-  
-  function CDataSource(){
+  public $dsn       = null;
+  public $link      = null;
+  public $chrono    = null;
+
+  function CSQLDataSource(){
   }
   
   /**
@@ -51,12 +52,24 @@ class CSQLDataSource {
 	    $dPconfig["dbpersist"]
     );
     
+    if (!$this->link) {
+      trigger_error( "FATAL ERROR: link to $this->dsn not found.", E_USER_ERROR );
+    }
+    
     $this->chrono = new Chronometer;
   }
   
-  function connect($dsn, $dbhost, $dbname, $dbuser, $dbpass, $dbport, $dbpersist){
-    return null;	
-  }
+  /**
+   * Create connection to database
+   * @param string $dsn
+   * @param string $host
+   * @param string $name
+   * @param string $user
+   * @param string $pass
+   * @param string $port
+   * @param bool $persist 
+   */
+  abstract function connect($dsn, $host, $name, $user, $pass, $port, $persist);
 	
   /**
    * Query an SQL dump
@@ -125,15 +138,15 @@ class CSQLDataSource {
   * If <var>object</var> has a value of null, then all of the returned query fields returned in the object. 
   * @param string The SQL query
   * @param object The address of variable
-  */
+  **/
   function loadObject($sql, &$object) {
     //global $mbCacheObjectCount;
     $class = get_class($object);
     if ($object != null) {
-      $hash = array();
-      if(!$this->loadHash($sql, $hash)) {
+      if (null == $hash = $this->loadHash($sql)) {
         return false;
       }
+      
       $this->bindHashToObject($hash, $object, false);
       return true;
     } else {
@@ -149,126 +162,88 @@ class CSQLDataSource {
     }
   }
 
-  
-  function loadObjectWithOpt($sql, &$object) {
-    global $mbCacheObjectCount;
-    $class = get_class($object);
-    if ($object != null) {
-      if($object->_id && isset($object->_objectsTable[$object->_id])) {
-        $this->bindObjectToObject($object->_objectsTable[$object->_id], $object);
-        $mbCacheObjectCount++;
-        return true;
-      } else {
-        $hash = array();
-        if(!$this->loadHash($sql, $hash)) {
-          return false;
-        }
-        $this->bindHashToObject($hash, $object, false);
-        return true;
-      }
-    } else {
-      $cur = $this->exec($sql);
-      $cur or exit($this->error());
-      if ($object = $this->fetchObject($cur)) {
-        $this->freeResult($cur);
-        return true;
-      } else {
-        $object = null;
-        return false;
-      }
-    }
-  }
-
   /**
-  * This global function return a result row as an associative array 
-  *
-  * @param string The SQL query
-  * @param array An array for the result to be return in
-  * @return <b>True</b> is the query was successful, <b>False</b> otherwise
-  */
-  function loadHash($sql, &$hash) {
-    $cur = $this->exec($sql);
+   * Execute query and returns first result row as array 
+   * @param string $query
+   * @return array The hash, false if failed
+   **/
+  function loadHash($query) {
+    $cur = $this->exec($query);
     $cur or exit($this->error());
     $hash = $this->fetchAssoc($cur);
     $this->freeResult($cur);
-    if ($hash == false) {
-      return false;
-    } else {
-      return true;
-    }
+    return $hash;
   }
 
   /**
-  * Document::loadHashList()
-  *
-  * { Description }
-  *
-  * @param string $index
-  */
-  function loadHashList($sql, $index = "") {
-    $cur = $this->exec($sql);
+   * Returns a array as result of query
+   * where column 0 is key and column 1 is value
+   * @param string $query
+   **/
+  function loadHashList($query) {
+    $cur = $this->exec($query);
     $cur or exit($this->error());
     $hashlist = array();
     while ($hash = $this->fetchArray($cur)) {
-      $hashlist[$hash[$index ? $index : 0]] = $index ? $hash : $hash[1];
+      $hashlist[$hash[0]] = $hash[1];
     }
     $this->freeResult($cur);
     return $hashlist;
   }
 
   /**
-   * Document::loadList() 
-   *
-   * return an array of the db lines
-   * can connect to any database via $dsn param 
-   * @param string $sql
+   * Return a list of associative array as the query result
+   * @param string $query
    * @param int $maxrows
    * @return array the query result
    **/
-  function loadList($sql, $maxrows = null) {
-    //global $AppUI;
-    if (!($cur = $this->exec($sql))) {;
+  function loadList($query, $maxrows = null) {
+    global $AppUI;
+    if (null == $cur = $this->exec($query)) {
       $AppUI->setMsg($this->error(), UI_MSG_ERROR);
       return false;
     }
+    
     $list = array();
-    $cnt = 0;
     while ($hash = $this->fetchAssoc($cur)) {
       $list[] = $hash;
-      if($maxrows && $maxrows == $cnt++) {
+      if ($maxrows && $maxrows == count($list)) {
         break;
       }
     }
+    
     $this->freeResult($cur);
     return $list;
   }
 
   /**
-  * Document::loadColumn()
-  *
-  * Loads the first column for a given query
-  *
-  * @param int $maxrows limit to a maximum nember of rows
-  */
-  function loadColumn($sql, $maxrows = null) {
+   * Return a array of the first column of the query result
+   * @param string $query
+   * @param int $maxrows
+   * @return array the query result
+   **/
+  function loadColumn($query, $maxrows = null) {
     global $AppUI;
-    if (!($cur = $this->exec($sql))) {
+    if (null == $cur = $this->exec($query)) {
       $AppUI->setMsg($this->error(), UI_MSG_ERROR);
       return false;
     }
+    
     $list = array();
-    $cnt = 0;
     while ($row = $this->fetchRow($cur)) {
       $list[] = $row[0];
-      if($maxrows && $maxrows == $cnt++) {
+      if ($maxrows && $maxrows == count($list)) {
         break;
       }
     }
+    
     $this->freeResult($cur);
     return $list;
   }
-
-  /* return an array of objects from a SQL SELECT query
+  
+  /**
+   * SHOULD BE TRANSFERED TO CMbObject
+   * return an array of objects from a SQL SELECT query
    * class must implement the Load() factory, see examples in Webo classes
    * @note to optimize request, only select object oids in $sql
    */
@@ -293,35 +268,6 @@ class CSQLDataSource {
     $this->freeResult($cur);
     return $list;
   }
-
-  function loadObjectListWithOpt($sql, $object, $maxrows = null) {
-    global $mbCacheObjectCount;
-    $cur = $this->exec($sql);
-    $list = array();
-    $cnt = 0;
-    $class = get_class($object);
-    $table_key = $object->_tbl_key;
-    while ($row = $this->fetchArray($cur)) {
-      $key = $row[$table_key];
-      if(isset($object->_objectsTable[$key])) {
-        $list[$key] = $object->_objectsTable[$key];
-        $mbCacheObjectCount++;
-      } else {
-        $newObject = new $class();
-        $newObject->bind($row, false);
-        $newObject->checkConfidential();
-        $newObject->updateFormFields();
-        $object->_objectsTable[$newObject->_id] = $newObject;
-        $list[$newObject->_id] = $newObject;
-      }
-      if($maxrows && $maxrows == $cnt++) {
-        break;
-      }
-    }
-    $this->freeResult($cur);
-    return $list;
-  }
-
 
   /**
   * Document::insertArray() 
@@ -503,9 +449,7 @@ class CSQLDataSource {
    * The last error message
    * @return string the message
    */
-  function error() {
-    return null;
-  }
+  abstract function error();
 
   function errno() {
     return null;
@@ -515,7 +459,12 @@ class CSQLDataSource {
     return null;
   }
 
-  function exec($sql) {
+  /**
+   * Execute a query
+   * @param string $query
+   * @return resource The result resource on SELECT, true on others, false if failed 
+   */
+  function exec($query) {
     return null;
   }
 

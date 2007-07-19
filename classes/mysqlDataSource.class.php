@@ -10,28 +10,28 @@
 
 class CMySQLDataSource extends CSQLDataSource {
 		
-  function connect($dsn = "std", $dbhost = "localhost", $dbname, $dbuser = "root", $dbpass = "", $dbport = "3306", $dbpersist = false) {
+  function connect($dsn, $host, $name, $user, $pass, $port, $persist) {
      if (!function_exists( "mysql_connect" )) {
        trigger_error( "FATAL ERROR: MySQL support not available.  Please check your configuration.", E_USER_ERROR );
        die;
      }
 	    
-     if ($dbpersist) {
-       if (null == $this->link = mysql_pconnect( "$dbhost:$dbport", $dbuser, $dbpass )) { 
+     if ($persist) {
+       if (null == $this->link = mysql_pconnect( "$host:$port", $user, $pass )) { 
          trigger_error( "FATAL ERROR: Connection to database server failed", E_USER_ERROR );
          die;
        } 
      }
      else {
-       if (null == $this->link = mysql_connect( "$dbhost:$dbport", $dbuser, $dbpass )) { 
+       if (null == $this->link = mysql_connect( "$host:$port", $user, $pass )) { 
          trigger_error( "FATAL ERROR: Connection to database server failed", E_USER_ERROR );
          die;
        }
      }
      
-    if ($dbname) {
-      if (!mysql_select_db($dbname, $this->link)) {
-        trigger_error( "FATAL ERROR: Database not found ($dbname)", E_USER_ERROR );
+    if ($name) {
+      if (!mysql_select_db($name, $this->link)) {
+        trigger_error( "FATAL ERROR: Database not found ($name)", E_USER_ERROR );
         die;
       }
     }
@@ -253,27 +253,23 @@ class CMySQLDataSource extends CSQLDataSource {
     return mysql_insert_id($this->link);
   }
 
-  function exec($sql) {
-    global $db_trace;
-    
-    if(!isset($this->link))
-      trigger_error( "FATAL ERROR: link to $this->dsn not found.", E_USER_ERROR );
- 
-      $this->chrono->start();
-      $cur = mysql_query( $sql, $this->link );
-      $this->chrono->stop();
-
-    if ($db_trace) {
-      trigger_error("Exécution SQL : $sql", E_USER_NOTICE);
+  function exec($query) {
+    if (CSQLDataSource::$trace) {
+      trigger_error("Exécution SQL : $query", E_USER_NOTICE);
     }
+    
+    $this->chrono->start();
+    $cur = mysql_query($query, $this->link );
+    $this->chrono->stop();
 
-	if (!$cur) {
-      trigger_error("Exécution SQL : $sql", E_USER_NOTICE);
+
+    if (!$cur) {
+      trigger_error("Exécution SQL : $query", E_USER_NOTICE);
       trigger_error("Erreur SQL : ".$this->error(), E_USER_WARNING);
 	  return false;
 	}
   
-	return $cur;
+	  return $cur;
   }
 
 
