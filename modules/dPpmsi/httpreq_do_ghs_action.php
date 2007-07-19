@@ -241,7 +241,7 @@ function addactes() {
     } else if(preg_match("`^Liste ([AD]-[[:digit:]]*) : ([{$alnum}[:space:][:punct:]]*)`", $line, $liste) && $curr_cmd) {
       $curr_liste = $liste[1];
       $sql = "SELECT `liste_id` FROM `liste` WHERE `liste_id` = '".$liste[1]."'";
-      $isListe = $ds->loadResult($sql, $base);
+      $isListe = $ds->loadResult($sql);
       if(!$isListe) {
         $sql = "INSERT INTO liste VALUES('".$liste[1]."', '".addslashes($liste[2])."')";
         $ds->exec($sql, $base);

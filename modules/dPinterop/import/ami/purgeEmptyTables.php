@@ -17,7 +17,7 @@ $ds = CSQLDataSource::get("Transit");
 $tableCount = 0;
 $emptyTableCount = 0;
 foreach ($ds->loadColumn("SHOW TABLE STATUS", null, $base) as $table) {
-  if (!$ds->loadResult("SELECT COUNT(*) FROM `$table`", $base)) {
+  if (!$ds->loadResult("SELECT COUNT(*) FROM `$table`")) {
     $tableCount++;
   }
 }

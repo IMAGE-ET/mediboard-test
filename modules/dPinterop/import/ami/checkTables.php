@@ -46,7 +46,7 @@ foreach ($tables as $table => $columns) {
     $res = odbc_exec($link, $query);
     $rowCount = odbc_result($res, "total");
   
-    $rowCountCopy = $ds->loadResult("SELECT COUNT(*) FROM `$table`", $base);
+    $rowCountCopy = $ds->loadResult("SELECT COUNT(*) FROM `$table`");
     if ($rowCount != $rowCountCopy) {
       $AppUI->stepAjax("Rows count for table '$table' differ, $rowCountCopy instead of $rowCount", UI_MSG_WARNING);
       $tableMissing++;
