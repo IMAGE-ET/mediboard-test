@@ -50,7 +50,7 @@ elseif($module) {
 }
 
 $ds = CSQLDataSource::get("std");
-$logs = $ds->loadObjectList($sql, $logs);
+$logs = $logs->loadQueryList($sql);
 
 $datasTotal = array();
 $i = 0;

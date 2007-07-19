@@ -63,7 +63,7 @@ $sql .= "\nGROUP BY `gperiod`" .
 
     
 $ds = CSQLDataSource::get("std");
-$logs = $ds->loadObjectList($sql, $logs);
+$logs = $logs->loadQueryList($sql);
 
 $nbHits = array();
 $duration = array();

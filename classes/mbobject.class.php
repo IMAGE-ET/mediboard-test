@@ -419,7 +419,7 @@ class CMbObject {
     $request->addOrder($order);
     $request->setLimit($limit);
     
-    $result = $this->_spec->ds->loadObjectList($request->getRequest($this), $this);
+    $result = $this->loadQueryList($request->getRequest($this));
     
     return $result;
   }
@@ -427,8 +427,34 @@ class CMbObject {
   function loadListByReq($request) {
     global $dPconfig;
 
-    $result = $this->_spec->ds->loadObjectList($request->getRequest($this), $this);
+    $result = $this->loadQueryList($request->getRequest($this));
   	return $result;
+  }
+  
+  /**
+   * return an array of objects from a SQL SELECT query
+   * class must implement the Load() factory, see examples in Webo classes
+   * @note to optimize request, only select object oids in $sql
+   */
+  function loadQueryList($sql, $maxrows = null) {
+    $cur = $this->_spec->ds->exec($sql);
+    $list = array();
+    $cnt = 0;
+    $class = get_class($this);
+    $table_key = $this->_tbl_key;
+    while ($row = $this->_spec->ds->fetchArray($cur)) {
+      $key = $row[$table_key];
+      $newObject = new $class();
+      $newObject->bind($row, false);
+      $newObject->checkConfidential();
+      $newObject->updateFormFields();
+      $list[$newObject->_id] = $newObject;
+      if($maxrows && $maxrows == $cnt++) {
+        break;
+      }
+    }
+    $this->_spec->ds->freeResult($cur);
+    return $list;
   }
 
   /**
@@ -972,7 +998,7 @@ class CMbObject {
     $sql .= "\n $this->_tbl_key";
     $sql .=" LIMIT 0,100";
     
-    return $this->_spec->ds->loadObjectList($sql, $this);
+    return $this->loadQueryList($sql);
   }
   
   /**

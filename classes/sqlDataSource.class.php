@@ -240,34 +240,6 @@ abstract class CSQLDataSource {
     $this->freeResult($cur);
     return $list;
   }
-  
-  /**
-   * SHOULD BE TRANSFERED TO CMbObject
-   * return an array of objects from a SQL SELECT query
-   * class must implement the Load() factory, see examples in Webo classes
-   * @note to optimize request, only select object oids in $sql
-   */
-  function loadObjectList($sql, $object, $maxrows = null) {
-    global $mbCacheObjectCount;
-    $cur = $this->exec($sql);
-    $list = array();
-    $cnt = 0;
-    $class = get_class($object);
-    $table_key = $object->_tbl_key;
-    while ($row = $this->fetchArray($cur)) {
-      $key = $row[$table_key];
-      $newObject = new $class();
-      $newObject->bind($row, false);
-      $newObject->checkConfidential();
-      $newObject->updateFormFields();
-      $list[$newObject->_id] = $newObject;
-      if($maxrows && $maxrows == $cnt++) {
-        break;
-      }
-    }
-    $this->freeResult($cur);
-    return $list;
-  }
 
   /**
   * Document::insertArray() 

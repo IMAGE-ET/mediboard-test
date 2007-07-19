@@ -92,7 +92,7 @@ if ($typeVue == 1) {
     "\nAND sejour.group_id = '$g'" .
 		"\nORDER BY service.nom, chambre.nom, lit.nom";
   $listAff = new CAffectation;
-  $listAff = $ds->loadObjectList($sql, $listAff);
+  $listAff = $listAff->loadQueryList($sql);
   foreach($listAff as $key => $currAff) {
     $listAff[$key]->loadRefs();
     $listAff[$key]->_ref_sejour->loadRefsFwd();
