@@ -3,9 +3,9 @@
 		<th class="title" colspan="3">Etablissement</th>
 	</tr>
 	<tr>
-		<th>Groupe</th>
-		<th>Increment Year</th>
-		<th>Increment Patient</th>
+		<th>{{mb_label object=$etablissement field="group_id"}}</th>
+		<th>{{mb_label object=$etablissement field="increment_year"}}</th>
+		<th>{{mb_label object=$etablissement field="increment_patient"}}</th>
 	</tr>
 	{{foreach from=$etablissements item=_item}}
 		<tr {{if $_item->_id == $etablissement->_id}}class="selected"{{/if}}>

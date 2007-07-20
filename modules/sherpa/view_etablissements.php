@@ -21,11 +21,16 @@ foreach ($etablissements as &$_etablissement) {
   $_etablissement->loadRefs();
 }
 
+// Récupération des groupes
+$listGroups = new CGroups;
+$listGroups = $listGroups->loadList();
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("etablissement", $etablissement);
+$smarty->assign("etablissement"	, $etablissement);
 $smarty->assign("etablissements", $etablissements);
+$smarty->assign("listGroups"		, $listGroups);
 
 $smarty->display("view_etablissements.tpl");
 

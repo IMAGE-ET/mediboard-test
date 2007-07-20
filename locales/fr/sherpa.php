@@ -1,8 +1,14 @@
 <?php
-$locales['CSpMalade-datnai-desc'] = 'Date de Naissance du malade.';
+$locales['CSpEtablissement-increment_patient-desc'] = 'Incrémentation du patient.';
 $locales['config-object_handlers-CSpObjectHandler'] = 'Activer le gestionnaire Sherpa';
+$locales['CSpEtablissement-group_id'] = 'Établissement';
+$locales['CSpEtablissement-group_id-desc'] = 'Nom de l\'établissement.';
+$locales['CSpEtablissement-increment_patient'] = 'Incrémente Patient';
+$locales['CSpEtablissement-increment_year'] = 'Incrémente Année';
+$locales['CSpEtablissement-increment_year-desc'] = 'Incrémentation de l\'année.';
 $locales['CSpEtablissement.create'] = 'Créer un nouvel établissement';
 $locales['CSpMalade-datnai'] = 'Date de Naissance';
+$locales['CSpMalade-datnai-desc'] = 'Date de Naissance du malade.';
 $locales['CSpMalade-malnom'] = 'Nom';
 $locales['CSpMalade-malnom-desc'] = 'Nom du malade.';
 $locales['CSpMalade-malpre'] = 'Prénom';

@@ -1,11 +1,8 @@
-{{mb_include_script module="system" script="object_selector"}}
-
-      {{if $can->edit}}
+			{{if $can->edit}}
       <form name="editEtablissement" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_SpEtablissement_aed" />
       <input type="hidden" name="sp_etab_id" value="{{$etablissement->_id}}" />
       <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="_class_name" value="CGroups" />
       <table class="form">
         <tr>
           {{if $etablissement->_id}}
@@ -21,25 +18,15 @@
         <tr>	
           	<th>{{mb_label object=$etablissement field="group_id"}}</th>
             <td>
-            	{{mb_field object=$etablissement field="group_id" hidden=true}}
-		            {{if $etablissement->group_id}}
-	    	        	<input type="text" size="30" readonly="readonly" ondblclick="ObjectSelector.init()" name="_group_view" value="{{$etablissement->_ref_group->_view|stripslashes}}" />
-	    	        {{else}}
-	    	        	<input type="text" size="30" readonly="readonly" ondblclick="ObjectSelector.init()" name="_group_view" value="" />
-	    	        {{/if}}
-	        	  		<button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>       	  	
-	        	    	<script type="text/javascript">
-	                  ObjectSelector.init = function(){
-	                    this.sForm     = "editEtablissement";
-	                    this.sId       = "group_id";
-	                    this.sView     = "_group_view";
-	                    this.sClass    = "_class_name";
-	                    this.onlyclass = "true";
-	                   
-	                    this.pop();
-	                  } 
-	               	</script>
-        	 	</td>
+            	<select name="group_id">
+              	<option value="">&mdash; Choisir un établissement &mdash;</option>
+              		{{foreach from=$listGroups item=curr_groupe}}
+                		<option value="{{$curr_groupe->_id}}" {{if $curr_groupe->_id == $etablissement->_id}} selected="selected" {{/if}}  >
+                  		{{$curr_groupe->_view}}
+                		</option>
+              		{{/foreach}}
+            	</select>
+          	</td>
         </tr>
         <tr>
       		<th>{{mb_label object=$etablissement field="increment_year"}}</th>
