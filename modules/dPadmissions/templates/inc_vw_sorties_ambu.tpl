@@ -22,12 +22,19 @@
       <button class="cancel" type="button" onclick="submitAmbu(this.form)">
         Annuler la sortie
       </button>
+      <br />
+      {{$curr_sortie->_ref_sejour->sortie_reelle|date_format:"%H h %M"}} / 
+      {{tr}}CAffectation._mode_sortie.{{$curr_sortie->_ref_sejour->mode_sortie}}{{/tr}} 
       {{else}}
       <input type="hidden" name="effectue" value="1" />
       <button class="tick" type="button" onclick="submitAmbu(this.form)">
         Effectuer la sortie
       </button>
+      <br />      
+      {{mb_field object=$curr_sortie field="_mode_sortie"}}
+
       {{/if}}
+    
       </form>
     </td>
     <td class="text">

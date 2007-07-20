@@ -1,5 +1,4 @@
 <?php
-$locales['mod-admin-tab-edit_perms'] = '';
 $locales['CMbObject-back-logs'] = 'User logs';
 $locales['CMbObject-back-permissions'] = 'Permissions';
 $locales['CMbObject-merge-moreinfo'] = '';
@@ -45,6 +44,9 @@ $locales['CPermObject.modify'] = '';
 $locales['CPermObject.more'] = '';
 $locales['CPermObject.none'] = '';
 $locales['CPermObject.one'] = '';
+$locales['CAffectation._mode_sortie.deces'] = '';
+$locales['CAffectation._mode_sortie.normal'] = '';
+$locales['CAffectation._mode_sortie.transfert'] = '';
 $locales['CUser'] = 'Users';
 $locales['CUser-user_address1'] = '';
 $locales['CUser-user_address1-court'] = '';
@@ -102,6 +104,7 @@ $locales['CUser.more'] = '';
 $locales['CUser.none'] = '';
 $locales['CUser.one'] = '';
 $locales['menu-toggleIcons'] = 'Toggle icons in menu';
+$locales['mod-admin-tab-edit_perms'] = '';
 $locales['mod-admin-tab-edit_prefs'] = 'User preferences';
 $locales['mod-admin-tab-vw_edit_users'] = '';
 $locales['mod-dPrepas-tab-vw_planning_repas'] = '';

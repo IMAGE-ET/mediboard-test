@@ -46,6 +46,7 @@ foreach($listComp as $key => $value) {
   }
 }
 
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("date"     , $date );

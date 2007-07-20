@@ -1,5 +1,4 @@
 <?php
-$locales['mod-admin-tab-edit_perms'] = 'Gestion des droits';
 $locales['CMbObject-back-logs'] = 'Logs utilisateurs';
 $locales['CMbObject-back-permissions'] = 'Permissions';
 $locales['CMbObject-merge-moreinfo'] = 'Plus d\'information sur les objets liés';
@@ -45,6 +44,9 @@ $locales['CPermObject.modify'] = '';
 $locales['CPermObject.more'] = '';
 $locales['CPermObject.none'] = '';
 $locales['CPermObject.one'] = '';
+$locales['CAffectation._mode_sortie.deces'] = 'Décès ';
+$locales['CAffectation._mode_sortie.normal'] = 'Normal';
+$locales['CAffectation._mode_sortie.transfert'] = 'Transfert';
 $locales['CUser'] = 'Utilisateurs';
 $locales['CUser-user_address1'] = 'Adresse';
 $locales['CUser-user_address1-court'] = '';
@@ -102,6 +104,7 @@ $locales['CUser.more'] = '';
 $locales['CUser.none'] = '';
 $locales['CUser.one'] = '';
 $locales['menu-toggleIcons'] = 'Afficher/masquer les icônes dans le menu';
+$locales['mod-admin-tab-edit_perms'] = 'Gestion des droits';
 $locales['mod-admin-tab-edit_prefs'] = 'Préférences utilisateur';
 $locales['mod-admin-tab-vw_edit_users'] = 'Utilisateurs';
 $locales['mod-dPrepas-tab-vw_planning_repas'] = 'Planning des Repas';

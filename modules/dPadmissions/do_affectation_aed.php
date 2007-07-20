@@ -14,4 +14,5 @@ $do->createMsg = "Affectation créée";
 $do->modifyMsg = "Affectation modifiée";
 $do->deleteMsg = "Affectation supprimée";
 $do->doIt();
+
 ?>

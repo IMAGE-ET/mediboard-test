@@ -29,6 +29,7 @@ class CAffectation extends CMbObject {
   // Form Fields
   var $_entree_relative;
   var $_sortie_relative;
+  var $_mode_sortie;
   
   // Object references
   var $_ref_lit    = null;
@@ -52,13 +53,14 @@ class CAffectation extends CMbObject {
  
   function getSpecs() {
     return array (
-      "lit_id"    => "notNull ref class|CLit",
-      "sejour_id" => "ref class|CSejour cascade",
-      "entree"    => "notNull dateTime",
-      "sortie"    => "notNull dateTime",
-      "confirme"  => "bool",
-      "effectue"  => "bool",
-      "rques"     => "text"
+      "lit_id"       => "notNull ref class|CLit",
+      "sejour_id"    => "ref class|CSejour cascade",
+      "entree"       => "notNull dateTime",
+      "sortie"       => "notNull dateTime",
+      "_mode_sortie" => "enum list|normal|transfert|deces default|normal",
+      "confirme"     => "bool",
+      "effectue"     => "bool",
+      "rques"        => "text"
     );
   }
 
@@ -72,6 +74,9 @@ class CAffectation extends CMbObject {
   	$obj = new CAffectation();
   	$obj->load($this->affectation_id);
   	$obj->loadRefsFwd();
+  	
+  	$obj->_mode_sortie = $this->_mode_sortie;
+  	
   	if(!$this->entree && $obj->affectation_id)
   	  $this->entree = $obj->entree;
   	if(!$this->sortie && $obj->affectation_id)
@@ -105,7 +110,9 @@ class CAffectation extends CMbObject {
     }
     // Modification de la date d'admission et de la durée de l'hospi
     $this->load($this->affectation_id);
+    
     $this->loadRefsFwd();
+     
     $changeSejour = 0;
 
     if($this->_no_synchro) {
@@ -123,8 +130,10 @@ class CAffectation extends CMbObject {
       }
       if($this->effectue) {
         $this->_ref_sejour->sortie_reelle = mbDateTime();
+        $this->_ref_sejour->mode_sortie = $this->_mode_sortie;
       } else {
         $this->_ref_sejour->sortie_reelle = "";
+        $this->_ref_sejour->mode_sortie = "";
       }
       $changeSejour = 1;
     }
@@ -156,6 +165,7 @@ class CAffectation extends CMbObject {
     
     $this->_ref_sejour = new CSejour;
     $this->_ref_sejour->loadObject($where);
+    
   }
   
   function loadRefsFwd() {
