@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$facture_id = mbGetValueFromGet("facture_id");
+$facture_id = mbGetValueFromGetOrSession("facture_id");
 
 // Chargement de la facture demandé
 $facture = new CFacture();

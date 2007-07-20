@@ -43,7 +43,7 @@ function pageMain() {
       <input type="hidden" name="dosql" value="do_facture_aed" />
       <input type="hidden" name="facture_id" value="{{$facture->_id}}" />
       <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="_class_name" value="CSejour" />
+      <input type="hidden" name="_selector_class_name" value="CSejour" />
       
       
       <table class="form">
@@ -77,7 +77,7 @@ function pageMain() {
                     this.sForm     = "editfacture";
                     this.sId       = "sejour_id";
                     this.sView     = "_sejour_view";
-                    this.sClass    = "_class_name";
+                    this.sClass    = "_selector_class_name";
                     this.onlyclass = "true";
                    
                     this.pop();
