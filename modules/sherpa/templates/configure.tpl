@@ -6,7 +6,6 @@
 <input type="hidden" name="m" value="system" />
 
 <table class="form">
-
   
   <!-- CSpObjectHandler --> 
   {{assign var=col value="object_handlers"}}
@@ -34,5 +33,9 @@
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
     </td>
   </tr>
+  
+  {{assign var=dsn value=sherpa}}
+  {{include file="../../system/templates/configure_dsn.tpl"}}
+  
 </table>
 </form>

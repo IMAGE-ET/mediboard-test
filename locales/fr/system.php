@@ -1,5 +1,5 @@
 <?php
-$locales['msg-CPreferences-create'] = 'Préférences créées';
+$locales['config-db-dbpass'] = 'Mot de passe';
 $locales['Abbreviation'] = 'Abréviation';
 $locales['active'] = 'Activé';
 $locales['added'] = 'ajouté';
@@ -84,6 +84,10 @@ $locales['CNote.none'] = '';
 $locales['CNote.one'] = '';
 $locales['CNote.public.0'] = '';
 $locales['CNote.public.1'] = '';
+$locales['config-db'] = 'Source de données';
+$locales['config-db-dbhost'] = 'Hôte';
+$locales['config-db-dbname'] = 'Base de données';
+$locales['config-db-dbuser'] = 'Utilisateur';
 $locales['configure'] = 'Configurer';
 $locales['Could not open locales file to save.'] = 'Impossible d\'ouvrir les fichiers de langages à sauver';
 $locales['CPreferences'] = 'Préférences Utilisateur';
@@ -156,6 +160,7 @@ $locales['Module removed'] = 'Module supprimé';
 $locales['Module setup file could not be found'] = 'Le fichier d\'installation du module n\'a pas pu être trouvé';
 $locales['Module state changed'] = 'Etat module changé';
 $locales['Module upgraded'] = 'Module mis à jour';
+$locales['msg-CPreferences-create'] = 'Préférences créées';
 $locales['msg-CPreferences-delete'] = 'Préférences supprimées';
 $locales['msg-CPreferences-modify'] = 'Préférences modifiées';
 $locales['pl'] = 'Polonais';

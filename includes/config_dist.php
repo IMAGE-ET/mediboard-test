@@ -82,6 +82,14 @@ $dPconfig["db"]["Transit"] = array(
   "dbport" => ""
 );
 
+$dPconfig["db"]["sherpa"] = array(
+  "dbhost" => "localhost",
+  "dbname" => "CPTransit",
+  "dbuser" => "CPTAdmin",
+  "dbpass" => "AdminCPT",
+  "dbport" => ""
+);
+  
 // you can add as much databases as you want by using
 //$dPconfig["logical_name"] = "physical_name";
 //$dPconfig["db"]["physical_name"] = array(

@@ -1,5 +1,6 @@
 <?php
-$locales['msg-CPreferences-create'] = '';
+$locales['config-db-dbpass'] = 'Password
+';
 $locales['Abbreviation'] = '';
 $locales['active'] = '';
 $locales['added'] = '';
@@ -84,6 +85,10 @@ $locales['CNote.none'] = '';
 $locales['CNote.one'] = '';
 $locales['CNote.public.0'] = '';
 $locales['CNote.public.1'] = '';
+$locales['config-db'] = 'Data source';
+$locales['config-db-dbhost'] = '';
+$locales['config-db-dbname'] = 'Database name';
+$locales['config-db-dbuser'] = 'User';
 $locales['configure'] = '';
 $locales['Could not open locales file to save.'] = '';
 $locales['CPreferences'] = 'Préférences Utilisateur';
@@ -156,6 +161,7 @@ $locales['Module removed'] = '';
 $locales['Module setup file could not be found'] = '';
 $locales['Module state changed'] = '';
 $locales['Module upgraded'] = '';
+$locales['msg-CPreferences-create'] = '';
 $locales['msg-CPreferences-delete'] = '';
 $locales['msg-CPreferences-modify'] = '';
 $locales['pl'] = 'Polish';

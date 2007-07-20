@@ -66,8 +66,8 @@ abstract class CSQLDataSource {
   abstract function error();
 
   /**
-   * Get the last error id
-   * @return int The Id
+   * Get the last error number
+   * @return int The number
    **/
   abstract function errno();
 
@@ -163,7 +163,7 @@ abstract class CSQLDataSource {
     );
     
     if (!$this->link) {
-      trigger_error( "FATAL ERROR: link to $this->dsn not found.", E_USER_ERROR );
+      trigger_error( "FATAL ERROR: link to '$this->dsn' not found.", E_USER_ERROR );
     }
     
     $this->chrono = new Chronometer;
