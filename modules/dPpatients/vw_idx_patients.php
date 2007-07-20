@@ -55,7 +55,16 @@ if ($patient_prenom) {
   $where["prenom"]                 = "LIKE '$patient_prenom%'";
   $whereSoundex["prenom_soundex2"] = "LIKE '".$soundexObj->build($patient_prenom)."%'";
 }
-if ($patient_naissance == "on") $where["naissance"] = $whereSoundex["naissance"] = "= '$patient_year-$patient_month-$patient_day'";
+
+if ($patient_naissance == "on"){
+  $year =($patient_year != "")?"$patient_year-":"%-";
+  $month =($patient_month != "")?"$patient_month-":"%-";
+  $day =($patient_day != "")?"$patient_day":"%";
+
+  $naissance = $year.$month.$day;
+  $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$naissance'";
+}
+
 if ($patient_ville)             $where["ville"]     = $whereSoundex["ville"]     = "= '$patient_ville'";
 if ($patient_cp)                $where["cp"]        = $whereSoundex["cp"]        = "= '$patient_cp'";
 

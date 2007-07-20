@@ -33,18 +33,24 @@
           </th>
           <td colspan="2">
             {{if $naissance == "on"}}
-            {{html_select_date
+               {{html_select_date
                  time=$datePat
                  start_year=1900
                  field_order=DMY
+                 day_empty="Jour"
+                 month_empty="Mois"
+                 year_empty="Année"
                  all_extra="style='display:inline;'"}}
-             {{else}}
-            {{html_select_date
+                 {{else}}
+               {{html_select_date
                  time=$datePat
                  start_year=1900
                  field_order=DMY
+                 day_empty="Jour"
+                 month_empty="Mois"
+                 year_empty="Année"
                  all_extra="style='display:none;'"}}
-             {{/if}}
+               {{/if}}  
           </td>
         </tr>
         
@@ -71,26 +77,25 @@
           <th>Adresse</th>
         </tr>
 
-        {{if $board}}
-        {{assign var="href" value="index.php?m=dPpatients&tab=vw_full_patients&patient_id="}}
-        {{else}}
-        {{assign var="href" value="index.php?m=dPpatients&tab=vw_idx_patients&patient_id="}}
-        {{/if}}
+        {{mb_ternary var="tabPatient" test=$board 
+                     value="vw_full_patients&patient_id=" 
+                     other="vw_idx_patients&patient_id="}}
+        
         {{foreach from=$patients item=curr_patient}}
         <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
           <td><input type="checkbox" name="fusion_{{$curr_patient->patient_id}}" /></td>
           <td class="text">
-            <a href="{{$href}}{{$curr_patient->patient_id}}">
+            <a href="?m=dPpatients&tab={{$tabPatient}}{{$curr_patient->patient_id}}">
               {{mb_value object=$curr_patient field="_view"}}
             </a>
           </td>
           <td class="text">
-            <a href="{{$href}}{{$curr_patient->patient_id}}">
+            <a href="?m=dPpatients&tab={{$tabPatient}}{{$curr_patient->patient_id}}">
               {{mb_value object=$curr_patient field="naissance"}}
             </a>
           </td>
           <td class="text">
-            <a href="{{$href}}{{$curr_patient->patient_id}}">
+            <a href="?m=dPpatients&tab={{$tabPatient}}{{$curr_patient->patient_id}}">
               {{mb_value object=$curr_patient field="adresse"}}
               {{mb_value object=$curr_patient field="cp"}}
               {{mb_value object=$curr_patient field="ville"}}
@@ -109,17 +114,17 @@
         <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
           <td><input type="checkbox" name="fusion_{{$curr_patient->patient_id}}" /></td>
           <td class="text">
-            <a href="{{$href}}{{$curr_patient->patient_id}}">
+            <a href="?m=dPpatients&tab={{$tabPatient}}{{$curr_patient->patient_id}}">
               {{mb_value object=$curr_patient field="_view"}}
             </a>
           </td>
           <td class="text">
-            <a href="{{$href}}{{$curr_patient->patient_id}}">
+            <a href="?m=dPpatients&tab={{$tabPatient}}{{$curr_patient->patient_id}}">
               {{mb_value object=$curr_patient field="naissance"}}
             </a>
           </td>
           <td class="text">
-            <a href="{{$href}}{{$curr_patient->patient_id}}">
+            <a href="?m=dPpatients&tab={{$tabPatient}}{{$curr_patient->patient_id}}">
               {{mb_value object=$curr_patient field="adresse"}}
               {{mb_value object=$curr_patient field="cp"}}
               {{mb_value object=$curr_patient field="ville"}}
