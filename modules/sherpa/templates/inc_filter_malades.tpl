@@ -8,12 +8,12 @@
           <th class="category" colspan="3">Recherche d'un malade</th>
         </tr>
         <tr>
-          <th><label for="nom" title="Nom du malade à rechercher, au moins les premières lettres">Nom</label></th>
-          <td><input tabindex="1" type="text" name="nom" value="{{$nom|stripslashes}}" /></td>
+          <th>{{mb_label object=$filter field="malnom"}}</th>
+      		<td>{{mb_field object=$filter field="malnom"}}</td>
  				</tr>
         <tr>
-          <th><label for="prenom" title="Prénom du malade à rechercher, au moins les premières lettres">Prénom</label></th>
-          <td><input tabindex="2" type="text" name="prenom" value="{{$prenom|stripslashes}}" /></td>
+          <th>{{mb_label object=$filter field="malpre"}}</th>
+      		<td>{{mb_field object=$filter field="malpre"}}</td>
         </tr>
         <tr>
           <th colspan="1">
@@ -49,9 +49,9 @@
       </form>
       <table class="tbl">
         <tr>
-          <th>Nom</th>
-          <th>Prenom</th>
-          <th>Date de naissance</th>
+          <th>{{mb_label object=$filter field="malnom"}}</th>
+          <th>{{mb_label object=$filter field="malpre"}}</th>
+          <th>{{mb_label object=$malade field="datnai"}}</th>
         </tr>
 
         {{assign var="href" value="index.php?m=sherpa&tab=view_malades&malnum="}}
@@ -76,4 +76,3 @@
         </tr>
         {{/foreach}}
       </table>
-      </form>

@@ -23,21 +23,22 @@ if ($new = mbGetValueFromGet("new")) {
   $malade->load($malnum);
 }
 
-// Récuperation des malades recherchés
-$malade_nom       = mbGetValueFromGetOrSession("nom"       , ""       );
-$malade_prenom    = mbGetValueFromGetOrSession("prenom"    , ""       );
-$malade_naissance = mbGetValueFromGetOrSession("naissance" , "off"    );
-$malade_day       = mbGetValueFromGetOrSession("Date_Day"  , date("d"));
-$malade_month     = mbGetValueFromGetOrSession("Date_Month", date("m"));
-$malade_year      = mbGetValueFromGetOrSession("Date_Year" , date("Y"));
+//Recuperation des identifiants pour les filtres
+$filter = new CSpMalade;
+$filter->malade_nom       = mbGetValueFromGetOrSession("malnom"       , ""       );
+$filter->malade_prenom    = mbGetValueFromGetOrSession("malpre"    , ""       );
+$malade_naissance 				= mbGetValueFromGetOrSession("naissance" , "off"    );
+$malade_day       				= mbGetValueFromGetOrSession("Date_Day"  , date("d"));
+$malade_month     				= mbGetValueFromGetOrSession("Date_Month", date("m"));
+$malade_year      				= mbGetValueFromGetOrSession("Date_Year" , date("Y"));
 
 $where        = array();
 
-if ($malade_nom) {
-  $where["malnom"]                 = "LIKE '$malade_nom%'";
+if ($filter->malade_nom) {
+  $where["malnom"]                 = "LIKE '$filter->malade_nom%'";
 }
-if ($malade_prenom) {
-  $where["malpre"]                 = "LIKE '$malade_prenom%'";
+if ($filter->malade_prenom) {
+  $where["malpre"]                 = "LIKE '$filter->malade_prenom%'";
 }
 if ($malade_naissance == "on") $where["datnai"] = "= '$malade_day$malade_month$malade_year'";
 
@@ -57,13 +58,11 @@ if (!$malade->_id and count($malades) == 1) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("nom"            , $malade_nom                                );
-$smarty->assign("prenom"         , $malade_prenom                             );
-$smarty->assign("naissance"      , $malade_naissance                          );
+$smarty->assign("filter"         , $filter           			                    );
+$smarty->assign("naissance", $malade_naissance           			  );
 $smarty->assign("dateMal"        , "$malade_year-$malade_month-$malade_day"			);
 $smarty->assign("malades"        , $malades                                 		);
 $smarty->assign("malade"         , $malade                                  		);
-$smarty->assign("board"          , 0                                          );
 
 $smarty->display("view_malades.tpl");
 ?>
