@@ -57,7 +57,6 @@
       {{mb_value object=$sejour field="sortie_reelle"}}
     </td>
   </tr>
-
   <tr>
     <td>
       <strong>{{tr}}CSejour-_duree_prevue{{/tr}} :</strong>
@@ -68,7 +67,15 @@
       {{$sejour->_duree_reelle}} jour(s)
     </td>
   </tr>
-  
+  <tr>
+    <td>
+    {{if $sejour->mode_sortie != null}}
+      <strong>{{tr}}CSejour-mode_sortie{{/tr}}:</strong>
+      <i>{{tr}}CAffectation._mode_sortie.{{$sejour->mode_sortie}}{{/tr}}</i>
+      <br />
+    {{/if}}
+    <td>
+  </tr>
   
   {{if $object->rques}}
   <tr>

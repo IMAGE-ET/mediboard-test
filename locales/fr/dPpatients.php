@@ -1,4 +1,5 @@
 <?php
+$locales['CSejour-mode_sortie'] = 'Mode de sortie';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = 'Description';
 $locales['CAddiction-addiction-court'] = 'Description de l\'addication du patient';

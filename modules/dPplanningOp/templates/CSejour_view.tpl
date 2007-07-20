@@ -23,6 +23,11 @@
       <strong>{{tr}}CSejour-sortie_prevue-court{{/tr}}:</strong>
       <i>le {{$sejour->sortie_prevue|date_format:"%d %B %Y à %Hh%M"}}</i>
       <br />
+      {{if $sejour->mode_sortie != ""}}
+      <strong>{{tr}}CSejour-mode_sortie{{/tr}}:</strong>
+      <i>{{tr}}CAffectation._mode_sortie.{{$sejour->mode_sortie}}{{/tr}}</i>
+      <br />
+      {{/if}}
       <strong>{{tr}}CSejour-praticien_id{{/tr}}:</strong>
       <i>{{$sejour->_ref_praticien->_view}}</i>
       <br />
