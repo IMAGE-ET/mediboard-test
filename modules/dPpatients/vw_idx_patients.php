@@ -57,12 +57,16 @@ if ($patient_prenom) {
 }
 
 if ($patient_naissance == "on"){
-  $year =($patient_year != "")?"$patient_year-":"%-";
-  $month =($patient_month != "")?"$patient_month-":"%-";
-  $day =($patient_day != "")?"$patient_day":"%";
-
+  $year =($patient_year)?"$patient_year-":"%-";
+  $month =($patient_month)?"$patient_month-":"%-";
+  $day =($patient_day)?"$patient_day":"%";
+  $day = str_pad($day,2,"0",STR_PAD_LEFT);
+  
   $naissance = $year.$month.$day;
-  $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$naissance'";
+  
+  if($patient_year || $patient_month || $patient_day){
+    $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$naissance'";
+  }
 }
 
 if ($patient_ville)             $where["ville"]     = $whereSoundex["ville"]     = "= '$patient_ville'";
