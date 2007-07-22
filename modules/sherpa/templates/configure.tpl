@@ -34,8 +34,10 @@
     </td>
   </tr>
   
-  {{assign var=dsn value=sherpa}}
-  {{include file="../../system/templates/configure_dsn.tpl"}}
-  
 </table>
+
 </form>
+
+{{assign var=dsn value=sherpa}}
+{{include file="../../system/templates/configure_dsn.tpl"}}
+  
