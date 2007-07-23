@@ -134,6 +134,7 @@ CREATE TABLE `user_preferences` (
 -- 
 
 INSERT INTO `user_preferences` VALUES ('0', 'LOCALE', 'fr');
+INSERT INTO `user_preferences` VALUES ('0', 'DEFMODULE', 'system');
 INSERT INTO `user_preferences` VALUES ('0', 'TABVIEW', '1');
 INSERT INTO `user_preferences` VALUES ('0', 'SHDATEFORMAT', '%d/%m/%Y');
 INSERT INTO `user_preferences` VALUES ('0', 'TIMEFORMAT', '%I:%M %p');
