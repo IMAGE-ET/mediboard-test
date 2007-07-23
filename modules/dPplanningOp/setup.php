@@ -108,7 +108,10 @@ class CSetupdPplanningOp extends CSetup {
     
     $this->makeRevision("0.27");
     $this->setTimeLimit(1800);
+    
     function setup_moveDocs(){
+      $ds = CSQLDataSource::get("std");
+      
       $document_types = array (
       array ("name" => "compte_rendu", "valide" => "cr_valide"));
       foreach ($document_types as $document_type) {
@@ -119,9 +122,9 @@ class CSetupdPplanningOp extends CSetup {
             "\nFROM `operations`" .
             "\nWHERE `$document_name` IS NOT NULL" .
             "\nAND `$document_name` != ''";
-        $res = $this->ds->exec( $sql );
+        $res = $ds->exec( $sql );
     
-        while ($obj = $this->ds->fetchObject($res)) {
+        while ($obj = $ds->fetchObject($res)) {
           $document = new CCompteRendu;
           $document->type = "operation";
           $document->nom = $document_name;
@@ -143,10 +146,11 @@ class CSetupdPplanningOp extends CSetup {
     
     $this->makeRevision("0.29");
     function setup_ccam(){
+      $ds = CSQLDataSource::get("std");
       $sql = "SELECT `operation_id` , `CCAM_code` , `CCAM_code2`" .
              "\nFROM `operations`";
-      $res = $this->ds->exec( $sql );
-      while ($obj = $this->ds->fetchObject($res)) {
+      $res = $ds->exec( $sql );
+      while ($obj = $ds->fetchObject($res)) {
         $obj->codes_ccam = $obj->CCAM_code;
         if ($obj->CCAM_code2) {
           $obj->codes_ccam .= "|$obj->CCAM_code2";
@@ -155,7 +159,7 @@ class CSetupdPplanningOp extends CSetup {
         $sql2 = "UPDATE `operations` " .
           "\nSET `codes_ccam` = '$obj->codes_ccam' " .
           "\nWHERE `operation_id` = $obj->operation_id";
-        $this->ds->exec($sql2); $this->ds->error();
+        $ds->exec($sql2); $ds->error();
       }
       return true;
     }

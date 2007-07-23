@@ -16,6 +16,7 @@ $modules = $this->_spec->ds->loadList($sql);
 
 // get the modules actually installed on the file system
 $modFiles = $AppUI->readDirs("modules");
+
 mbRemoveValuesInArray(".svn", $modFiles);
 
 $coreModules = array();

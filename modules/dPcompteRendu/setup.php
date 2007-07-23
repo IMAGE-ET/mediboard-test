@@ -132,6 +132,7 @@ class CSetupdPcompteRendu extends CSetup {
     $sql = "ALTER TABLE `compte_rendu` ADD `file_category_id` INT(11) DEFAULT 0;";
     $this->addQuery($sql);
     function setup_category(){
+      $ds = CSQLDataSource::get("std");
       $aConversion = array();
       $aConversion["operation"]       = array("class"=>"COperation",    "nom"=>"Opération");
       $aConversion["hospitalisation"] = array("class"=>"COperation",    "nom"=>"Hospitalisation");
@@ -149,7 +150,7 @@ class CSetupdPcompteRendu extends CSetup {
         }
         $sql = "UPDATE `compte_rendu` SET `file_category_id`='".$category->file_category_id."', 
                `object_class`='".$aValue["class"]."' WHERE `object_class`='$sKey'";
-        $this->ds->exec($sql); $this->ds->error();          
+        $ds->exec($sql); $ds->error();          
       }
       return true;
     }

@@ -80,9 +80,12 @@ class CSetupdPrepas extends CSetup {
     $this->addQuery($sql);
     $sql = "ALTER TABLE `menu` ADD `nb_repet` int(11) unsigned NOT NULL;";
     $this->addQuery($sql);
+    
     function setup_menu(){
+      $ds = CSQLDataSource::get("std");
+ 
       $sql = "SELECT * FROM menu";
-      $menus = $this->ds->loadList($sql);
+      $menus = $ds->loadList($sql);
       foreach($menus as $menu){
         $nbDays  = mbDaysRelative($menu["debut"], $menu["fin"]);
         $nbWeeks = floor($nbDays / 7);
@@ -92,12 +95,12 @@ class CSetupdPrepas extends CSetup {
           $menu["nb_repet"] = ceil($nbWeeks/$menu["repetition"]);
         }
         $sql = "UPDATE `menu` SET `nb_repet` = '".$menu["nb_repet"]."' WHERE(`menu_id`='".$menu["menu_id"]."');";
-        $this->ds->exec($sql); $this->ds->error();
+        $ds->exec($sql); $ds->error();
         $sql = "UPDATE `repas` SET `typerepas_id`='".$menu["typerepas"]."' WHERE(`menu_id`='".$menu["menu_id"]."');";
-        $this->ds->exec($sql); $this->ds->error();
+        $ds->exec($sql); $ds->error();
       }
       $sql = "ALTER TABLE `menu` DROP `fin` ";
-      $this->ds->exec($sql); $this->ds->error(); 
+      $ds->exec($sql); $ds->error(); 
       return true;
     }
     $this->addFunctions("setup_menu");

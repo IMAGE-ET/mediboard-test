@@ -63,6 +63,8 @@ class CSetupdPbloc extends CSetup {
     $sql = "ALTER TABLE `plagesop` ADD INDEX ( `anesth_id` ) ;";
     $this->addQuery($sql);
     function setup_swapPratIds() {
+      $ds = CSQLDataSource::get("std");
+ 
       global $AppUI;
       set_time_limit(1800);
       ignore_user_abort(1);
@@ -72,7 +74,7 @@ class CSetupdPbloc extends CSetup {
       $sql = "SELECT id_chir" .
           "\nFROM plagesop" .
           "\nGROUP BY id_chir";
-      $listPlages = $this->ds->loadList($sql);
+      $listPlages = $ds->loadList($sql);
       foreach($listPlages as $key => $plage) {
         $where["user_username"] = "= '".$plage["id_chir"]."'";
         $user->loadObject($where);
@@ -80,7 +82,7 @@ class CSetupdPbloc extends CSetup {
           $sql = "UPDATE plagesop" .
               "\nSET chir_id = '$user->user_id'" .
               "\nWHERE id_chir = '$user->user_username'";
-          $this->ds->exec( $sql ); $this->ds->error();
+          $ds->exec( $sql ); $ds->error();
         }
       }
       
@@ -88,7 +90,7 @@ class CSetupdPbloc extends CSetup {
       $sql = "SELECT id_anesth" .
           "\nFROM plagesop" .
           "\nGROUP BY id_anesth";
-      $listPlages = $this->ds->loadList($sql);
+      $listPlages = $ds->loadList($sql);
       foreach($listPlages as $key => $plage) {
         $where["user_username"] = "= '".$plage["id_anesth"]."'";
         $user->loadObject($where);
@@ -96,7 +98,7 @@ class CSetupdPbloc extends CSetup {
           $sql = "UPDATE plagesop" .
               "\nSET anesth_id = '$user->user_id'" .
               "\nWHERE id_anesth = '$user->user_username'";
-          $this->ds->exec( $sql ); $this->ds->error();
+          $ds->exec( $sql ); $ds->error();
         }
       }
       return true;

@@ -163,6 +163,8 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("0.30");
     $this->setTimeLimit(1800);
     function setup_moveDocs(){
+      $ds = CSQLDataSource::get("std");
+
       $document_types = array (
       array ("name" => "compte_rendu", "valide" => "cr_valide"),
       array ("name" => "ordonnance", "valide" => "or_valide"),
@@ -177,9 +179,9 @@ class CSetupdPcabinet extends CSetup {
           "\nFROM `consultation`" .
           "\nWHERE `$document_name` IS NOT NULL" .
           "\nAND `$document_name` != ''";
-        $res = $this->ds->exec( $sql );
+        $res = $ds->exec( $sql );
   
-        while ($obj = $this->ds->fetchObject($res)) {
+        while ($obj = $ds->fetchObject($res)) {
           $document = new CCompteRendu;
           $document->type = "consultation";
           $document->nom = $document_name;
@@ -328,6 +330,8 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("0.44");
     $this->addDependency("mediusers", "0.1");
     function setup_consultAnesth(){
+      $ds = CSQLDataSource::get("std");
+ 
       global $utypes;
       $utypes_flip = array_flip($utypes);
       $id_anesth = $utypes_flip["Anesthésiste"];
@@ -335,7 +339,7 @@ class CSetupdPcabinet extends CSetup {
              "\nFROM users, users_mediboard" .
              "\nWHERE users.user_id = users_mediboard.user_id" .
              "\nAND users.user_type='$id_anesth'";
-      $result = $this->ds->loadList($sql);
+      $result = $ds->loadList($sql);
       $listAnesthid = array();
       foreach($result as $keyresult => $resultAnesth){
         $listAnesthid[$keyresult] = $result[$keyresult]["user_id"];
@@ -344,9 +348,9 @@ class CSetupdPcabinet extends CSetup {
       $sql = "SELECT consultation.consultation_id FROM consultation" .
              "\nLEFT JOIN consultation_anesth ON consultation.consultation_id = consultation_anesth.consultation_id" .
              "\nLEFT JOIN plageconsult ON consultation.plageconsult_id = plageconsult.plageconsult_id" .
-             "\nWHERE plageconsult.chir_id " . $this->ds->prepareIn($listAnesthid) .
+             "\nWHERE plageconsult.chir_id " . $ds->prepareIn($listAnesthid) .
              "\nAND consultation_anesth.consultation_anesth_id IS NULL" ;  
-      $result = $this->ds->loadList($sql);
+      $result = $ds->loadList($sql);
 
       foreach($result as $keyresult => $resultAnesth){
         $consultAnesth = new CConsultAnesth;
@@ -528,6 +532,7 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("0.56");
     $this->addDependency("dPplanningOp", "0.63");
     function setup_cleanOperationIdError(){
+      $ds = CSQLDataSource::get("std");
       $where = array();
       $where["consultation_anesth.operation_id"] = "!= 0";
       $where[] = "consultation_anesth.operation_id IS NOT NULL";
@@ -537,13 +542,13 @@ class CSetupdPcabinet extends CSetup {
       $sql->addSelect("consultation_anesth_id");
       $sql->addTable("consultation_anesth");
       $sql->addWhere($where);
-      $aKeyxAnesth = $this->ds->loadColumn($sql->getRequest());
+      $aKeyxAnesth = $ds->loadColumn($sql->getRequest());
       if($aKeyxAnesth === false){
         return false;
       }
       if(count($aKeyxAnesth)) {
-        $sql = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".$this->ds->prepareIn($aKeyxAnesth).")";
-        if (!$this->ds->exec($sql)) {
+        $sql = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".$ds->prepareIn($aKeyxAnesth).")";
+        if (!$ds->exec($sql)) {
           return false;
         }
         return true;

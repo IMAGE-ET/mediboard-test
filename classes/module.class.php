@@ -294,7 +294,7 @@ class CModule extends CMbObject {
 
   function install() {
     $sql = "SELECT mod_name FROM modules WHERE mod_name = '$this->mod_name'";
-    if (null == $hash = $this->_spec->ds->loadHash($sql)) {
+    if ($this->_spec->ds->loadHash($sql)) {
       // the module is already installed
       // TODO: check for older version - upgrade
       return false;

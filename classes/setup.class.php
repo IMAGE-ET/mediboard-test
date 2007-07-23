@@ -34,6 +34,7 @@ class CSetup {
    * Creates a revision of a given name
    */
   function makeRevision($revision) {
+  	 
     if (in_array($revision, $this->revisions)) {
       trigger_error("Revision '$revision' already exists", E_USER_ERROR);
     }
