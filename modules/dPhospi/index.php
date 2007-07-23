@@ -18,5 +18,4 @@ $module->registerTab("vw_idx_sejour"      , null, TAB_READ);
 $module->registerTab("vw_suivi_bloc"      , null, TAB_READ);
 $module->registerTab("vw_idx_chambres"    , null, TAB_ADMIN);
 $module->registerTab("vw_idx_services"    , null, TAB_ADMIN);
-$module->registerTab("vw_parcours"    		, null, TAB_ADMIN);
 ?>
