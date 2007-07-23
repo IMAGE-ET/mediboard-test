@@ -100,7 +100,8 @@ $g = "";
 // load locale settings
 $AppUI->setUserLocale();
 require_once("./locales/core.php");
-setlocale(LC_TIME, $AppUI->user_locale);
+//setlocale(LC_TIME, $AppUI->user_locale);
+setlocale(LC_TIME, "fr_FR");
 
 if (!$suppressHeaders || $ajax) {
   // output the character set header
