@@ -648,6 +648,10 @@ class CMbObject {
       return;
     }
     
+    if(CModule::getInstalled("system")->mod_version < "1.0.4"){
+      return;	
+    }
+    
     $log = new CUserLog;
     $log->user_id = $AppUI->user_id;
     $log->object_id = $object_id;
