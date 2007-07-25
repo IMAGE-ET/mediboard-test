@@ -64,6 +64,11 @@ class CAffectation extends CMbObject {
     );
   }
 
+	function loadView() {
+  	$this->loadRefLit();
+    $this->_ref_lit->loadCompleteView();
+  }
+  
   function check() {
     if($msg = parent::check()) {
       return $msg;
