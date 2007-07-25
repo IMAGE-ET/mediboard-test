@@ -90,7 +90,7 @@ var ViewFullPatient = {
 	   	 	</a>
 			</td>
 			<td class="space"> </td>
-		{{elseif ($diagramme.bloc.salle != "") && ($diagramme.bloc.salleReveil == "")}}
+		{{elseif ($diagramme.bloc.salle != "") && ($diagramme.bloc.sortieSalleReveil != "")}}
 			<td class="space"> </td>
 			<td class="only current" colspan=3> AU BLOC <br/> 
 				<a href="#"
@@ -101,7 +101,7 @@ var ViewFullPatient = {
 	   	<td class="space"> </td>
 	  {{else}}
 	  	<td class="space"> </td>
-			<td class="only done ray" colspan=3> AU BLOC <br/> 
+			<td class="only expect ray" colspan=3> AU BLOC <br/> 
 				<a href="#"
 	      	onmouseover="ObjectTooltip.create(this, 'COperation', {{$diagramme.bloc.id}})">
 	      		Operation : {{$diagramme.bloc.vue}}
