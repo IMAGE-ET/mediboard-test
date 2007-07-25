@@ -34,6 +34,13 @@ function loadSejour(sejour_id) {
   } );
 }
 
+function popEtatSejour(sejour_id) {
+  var url = new Url;
+  url.setModuleAction("dPhospi", "vw_parcours");
+  url.addParam("sejour_id",sejour_id);
+  url.pop(1000, 700, 'Etat du Séjour');
+}
+
 function pageMain() {
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
 
@@ -73,13 +80,18 @@ function pageMain() {
             
             {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
             <tr>
-              <th class="category" colspan="4">
+              <th class="category" colspan="5">
                 {{$curr_chambre->_view}} - {{$curr_lit->_view}}
               </th> 
                 {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
               
               {{if $curr_affectation->_ref_sejour->_id != ""}}
               <tr>
+              <td>
+              <a href="#nothing" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});">
+                Etat du Séjour
+              </a>
+              </td>
               <td>
               <a href="#nothing" onclick="loadSejour({{$curr_affectation->_ref_sejour->_id}}); loadActes('{{$curr_affectation->_ref_sejour->_id}}', '{{$curr_affectation->_ref_sejour->praticien_id}}');">
                 {{$curr_affectation->_ref_sejour->_ref_patient->_view}}

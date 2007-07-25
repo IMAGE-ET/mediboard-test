@@ -1,5 +1,5 @@
 <?php
-$locales['mod-dPhospi-tab-vw_idx_services'] = 'Services';
+$locales['CAffectation-chambre'] = 'Chambre';
 $locales['CAffectation'] = 'Affectations';
 $locales['CAffectation-back-lit_id'] = '';
 $locales['CAffectation-back-sejour_id'] = '';
@@ -90,6 +90,7 @@ $locales['mod-dPhospi-tab-vw_affectations'] = 'Affectations';
 $locales['mod-dPhospi-tab-vw_idx_chambres'] = 'Chambres';
 $locales['mod-dPhospi-tab-vw_idx_pathologies'] = 'Pathologies';
 $locales['mod-dPhospi-tab-vw_idx_sejour'] = 'Consulter un séjour';
+$locales['mod-dPhospi-tab-vw_idx_services'] = 'Services';
 $locales['mod-dPhospi-tab-vw_recherche'] = 'Chercher une chambre';
 $locales['mod-dPhospi-tab-vw_suivi_bloc'] = 'Suivi bloc';
 ?>

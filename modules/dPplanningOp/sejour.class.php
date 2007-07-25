@@ -351,7 +351,6 @@ class CSejour extends CCodableCCAM {
     $order = "sortie DESC";
     $this->_ref_affectations = new CAffectation();
     $this->_ref_affectations = $this->_ref_affectations->loadList($where, $order);
-
     if(count($this->_ref_affectations) > 0) {
       $this->_ref_first_affectation =& end($this->_ref_affectations);
       $this->_ref_last_affectation =& reset($this->_ref_affectations);

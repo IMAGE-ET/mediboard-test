@@ -2589,3 +2589,65 @@ div.idsante400 {
   	float: right;
 	padding: 0 4px;
 }
+
+table#diagramme {
+	height: 100%;
+  width: 100%;
+  font-size: 12px;
+}
+
+table#diagramme td.only {
+	border: 2px solid #050440;
+	color : #050440;
+}
+
+table#diagramme td.done {
+	background-color:#f3f5f7;
+	text-align: center;
+}
+
+table#diagramme td.current {
+	background-color:#aabcee;
+	text-align: center;
+}
+
+table#diagramme td.expect {
+	text-align: center;
+	background-color:#aaaaaa;
+}
+
+table#diagramme td.ray {
+	background-image: url(./images/icons/ray.gif); 
+	background-repeat: repeat;
+}
+
+table#diagramme td.arrowdown {
+	height: 40px;
+	background-image: url(./images/icons/downarrow.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+table#diagramme td.arrowup {
+	height: 40px;
+	background-image: url(./images/icons/uparrow.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+table#diagramme td.arrowright {
+	height: 40px;
+	width: 100px;
+	background-image: url(./images/icons/loopnone.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+div.sejour {
+ 	font-weight: bold;
+}
+
+span.listeCurrent a {
+ 	color:red ;
+}
+
