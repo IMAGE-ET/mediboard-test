@@ -89,7 +89,7 @@ function pageMain() {
               <tr>
               <td>
               <a href="#nothing" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});">
-                Etat du Séjour
+                <img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
               </a>
               </td>
               <td>
