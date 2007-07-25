@@ -2643,6 +2643,10 @@ table#diagramme td.arrowright {
   background-position: center;
 }
 
+table#diagramme td.space {
+	width: 100px;
+}
+
 div.sejour {
  	font-weight: bold;
 }
