@@ -27,17 +27,17 @@ var ViewFullPatient = {
 	</tr>
 	<tr>
 		{{if ($diagramme.bloc.type) != "none"}}
-			<td class="only done ray" colspan=2> ADMIS <br/> Date : {{$diagramme.admission.entree.date}}</td>
+			<td class="only done ray" colspan=2> ADMIS <br/> Date : {{$diagramme.admission.entree.date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
 		{{else}}
-			<td class="only" colspan=2> ADMIS <br/> Date : {{$diagramme.admission.entree.date}}</td>
+			<td class="only" colspan=2> ADMIS <br/> Date : {{$diagramme.admission.entree.date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
 		{{/if}}
 		<td> </td>
 		{{if ($diagramme.bloc.type) != "none" && $diagramme.admission.sortie.reelle == "sortie_prevue"}}
-			<td class="only expect ray" colspan=2> SORTIE <br/> Date : {{$diagramme.admission.sortie.date}} <br/> Mode Sortie : {{$diagramme.admission.sortie.mode_sortie}}</td>
+			<td class="only expect ray" colspan=2> SORTIE <br/> Date : {{$diagramme.admission.sortie.date|date_format:"%d/%m/%Y à %Hh%M"}} <br/> Mode Sortie : {{$diagramme.admission.sortie.mode_sortie}}</td>
 		{{elseif ($diagramme.admission.sortie.reelle) == "sortie_reelle"}}
-			<td class="only current" colspan=2> SORTIE <br/> Date : {{$diagramme.admission.sortie.date}} <br/> Mode Sortie : {{$diagramme.admission.sortie.mode_sortie}}</td>	
+			<td class="only current" colspan=2> SORTIE <br/> Date : {{$diagramme.admission.sortie.date|date_format:"%d/%m/%Y à %Hh%M"}} <br/> Mode Sortie : {{$diagramme.admission.sortie.mode_sortie}}</td>	
 		{{else}}
-			<td class="only" colspan=2> SORTIE <br/> Date : {{$diagramme.admission.sortie.date}} <br/> Mode Sortie : {{$diagramme.admission.sortie.mode_sortie}}</td>
+			<td class="only" colspan=2> SORTIE <br/> Date : {{$diagramme.admission.sortie.date|date_format:"%d/%m/%Y à %Hh%M"}} <br/> Mode Sortie : {{$diagramme.admission.sortie.mode_sortie}}</td>
 		{{/if}}
 		<td> </td>
 	</tr>
@@ -73,9 +73,11 @@ var ViewFullPatient = {
 	</tr>
 	{{if ($diagramme.bloc.type) != "none"}}
 	<tr>
-		<td class="arrowdown" colspan=2> </td>
+		<td class="space"> </td>
+		<td class="arrowdown" colspan=1> </td>
 		<td> </td>
-		<td class="arrowup" colspan=2> </td>
+		<td class="arrowup" colspan=1> </td>
+		<td class="space"> </td>
 		<td> </td>
 	</tr>
 	<tr>
@@ -118,16 +120,18 @@ var ViewFullPatient = {
     		<br/>
 	    	<a href="#"
 	      	onmouseover="ObjectTooltip.create(this, 'COperation', {{$curr_op->_id}})">
-	      	Intervention du {{$curr_op->_datetime|date_format:"%d/%m/%Y"}}
+	      	Intervention du {{$curr_op->_datetime|date_format:"%d/%m/%Y à %Hh%M"}}
 	   	 	</a>
 	   	 	</span>
    	 	{{/foreach}}
 		</td>
 	</tr>
 	<tr>
-		<td class="arrowdown" colspan=2> </td>
+		<td class="space"> </td>
+		<td class="arrowdown" colspan=1> </td>
 		<td> </td>
-		<td class="arrowup" colspan=2> </td>
+		<td class="arrowup" colspan=1> </td>
+		<td class="space"> </td>
 		<td> </td>
 	</tr>
 	{{if ($diagramme.bloc.type) == "current"}}
@@ -150,9 +154,11 @@ var ViewFullPatient = {
 		<td> </td>
 	</tr>
 	<tr>
-		<td class="arrowdown" colspan=2> </td>
+		<td class="space"> </td>
+		<td class="arrowdown" colspan=1> </td>
 		<td> </td>
-		<td class="arrowup" colspan=2> </td>
+		<td class="arrowup" colspan=1> </td>
+		<td class="space"> </td>
 		<td> </td>
 	</tr>
 	<tr>
@@ -189,9 +195,11 @@ var ViewFullPatient = {
 		<td> </td>
 	</tr>
 	<tr>
-		<td class="arrowdown"> </td>
+		<td class="space"> </td>
+		<td class="arrowdown" colspan=1> </td>
 		<td> </td>
-		<td class="arrowup"> </td>
+		<td class="arrowup" colspan=1> </td>
+		<td class="space"> </td>
 		<td> </td>
 	</tr>
 	<tr>
@@ -212,9 +220,11 @@ var ViewFullPatient = {
 		<td> </td>
 	</tr>
 	<tr>
-		<td class="arrowdown"> </td>
+		<td class="space"> </td>
+		<td class="arrowdown" colspan=1> </td>
 		<td> </td>
-		<td class="arrowup"> </td>
+		<td class="arrowup" colspan=1> </td>
+		<td class="space"> </td>
 		<td> </td>
 	</tr>
 	<tr>
