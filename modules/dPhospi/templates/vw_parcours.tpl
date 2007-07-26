@@ -11,15 +11,20 @@ var ViewFullPatient = {
     Element.classNames(this.eCurrent).add("selected");
   },
   
-  main: function() {
-    PairEffect.initGroup("patientEffect", { 
-      bStoreInCookie: true
-    } );
-  }
 }
-  
-</script>
 
+function effectHighlight(){
+  var elts = document.getElementsByClassName("current"); 
+	for (var i=0;i<elts.length;i++) { 
+			  new Effect.Highlight(elts[i]);
+	}
+}
+
+function pageMain() {
+	var periode = new PeriodicalExecuter(effectHighlight,1);
+}
+
+</script>
 
 <table id="diagramme">
 	<tr> 
@@ -90,7 +95,7 @@ var ViewFullPatient = {
 	   	 	</a>
 			</td>
 			<td class="space"> </td>
-		{{elseif ($diagramme.bloc.salle != "") && ($diagramme.bloc.sortieSalleReveil != "")}}
+		{{elseif ($diagramme.bloc.salle != "") && ($diagramme.bloc.sortieSalleReveil == "")}}
 			<td class="space"> </td>
 			<td class="only current" colspan=3> AU BLOC <br/> 
 				<a href="#"
@@ -112,16 +117,30 @@ var ViewFullPatient = {
 		<td colspan=2>
 			Liste des interventions :
     	{{foreach from=$sejour->_ref_operations item=curr_op}}
-    		{{if ($curr_op->_id == $diagramme.bloc.id)}}	
-    			<span class="listeCurrent">
-    		{{else}}
-    			<span>
-    		{{/if}}
-    		<br/>
-	    	<a href="#"
-	      	onmouseover="ObjectTooltip.create(this, 'COperation', {{$curr_op->_id}})">
-	      	Intervention du {{$curr_op->_datetime|date_format:"%d/%m/%Y à %Hh%M"}}
-	   	 	</a>
+    		{{if ($diagramme.bloc.checkCurrent == "check" && $diagramme.bloc.idCurrent == $curr_op->_id)}}	
+	    		{{if ($curr_op->_id == $diagramme.bloc.id)}}	
+    				<span class="listeCurrent">
+    			{{else}}
+    				<span>
+    			{{/if}}
+    			<br/>
+    			<img src="images/icons/tick.png" alt="edit" title="Etat du Séjour" />
+	    		<a href="?m=dPhospi&amp;dialog=1&ampa=vw_parcours&amp;operation_id={{$curr_op->_id}}" 
+	      			onmouseover="ObjectTooltip.create(this, 'COperation', {{$curr_op->_id}})">
+	      			Intervention du {{$curr_op->_datetime|date_format:"%d/%m/%Y à %Hh%M"}}
+	   	 		</a>
+	   	 {{else}}
+	   	 		{{if ($curr_op->_id == $diagramme.bloc.id)}}	
+    				<span class="listeCurrent">
+    			{{else}}
+    				<span>
+    			{{/if}}
+    			<br/>
+	   	 		<a href="?m=dPhospi&amp;dialog=1&amp;a=vw_parcours&amp;operation_id={{$curr_op->_id}}" 
+	      		onmouseover="ObjectTooltip.create(this, 'COperation', {{$curr_op->_id}})">
+	      		Intervention du {{$curr_op->_datetime|date_format:"%d/%m/%Y à %Hh%M"}}
+	   	 		</a>
+	   	 	{{/if}}
 	   	 	</span>
    	 	{{/foreach}}
 		</td>

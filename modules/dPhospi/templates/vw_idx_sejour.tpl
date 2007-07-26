@@ -38,7 +38,7 @@ function popEtatSejour(sejour_id) {
   var url = new Url;
   url.setModuleAction("dPhospi", "vw_parcours");
   url.addParam("sejour_id",sejour_id);
-  url.pop(1000, 500, 'Etat du Séjour');
+  url.pop(1000, 550, 'Etat du Séjour');
 }
 
 function pageMain() {

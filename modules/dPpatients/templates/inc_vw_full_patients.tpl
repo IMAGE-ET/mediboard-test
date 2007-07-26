@@ -40,7 +40,7 @@ function popEtatSejour(sejour_id) {
   var url = new Url;
   url.setModuleAction("dPhospi", "vw_parcours");
   url.addParam("sejour_id",sejour_id);
-  url.pop(1000, 500, 'Etat du Séjour');
+  url.pop(1000, 550, 'Etat du Séjour');
 }
  
 </script>
@@ -84,7 +84,7 @@ function popEtatSejour(sejour_id) {
 {{foreach from=$patient->_ref_sejours item=curr_sejour}}
 <tr id="CSejour-{{$curr_sejour->_id}}">
   <td>
-  	<a href="#nothing" onclick="popEtatSejour({{$curr_sejour->sejour_id}});">
+  	<a href="#" onclick="popEtatSejour({{$curr_sejour->sejour_id}});">
     	<img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
     </a>
     <a title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
