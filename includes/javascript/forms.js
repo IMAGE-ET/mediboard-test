@@ -250,8 +250,7 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
   var oDefaultOptions = {
     method : oForm.method
   };
-  
-  Console.debug(oDefaultOptions);
+ 
   Object.extend(oDefaultOptions, oOptions);
 
   url.requestUpdate(ioTarget, oDefaultOptions);
