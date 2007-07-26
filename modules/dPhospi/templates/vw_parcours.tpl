@@ -24,6 +24,9 @@ function pageMain() {
 	var periode = new PeriodicalExecuter(effectHighlight,1);
 }
 
+function editIntervention(op_id) {
+  window.opener.location.href="?m=dPplanningOp&tab=vw_edit_planning&operation_id="+op_id;
+}
 </script>
 
 <table id="diagramme">
@@ -124,8 +127,13 @@ function pageMain() {
     				<span>
     			{{/if}}
     			<br/>
+    			{{if $canCabinet->edit}}
+	    			<a href="#" title="Modifier l'intervention" onclick="editIntervention({{$curr_op->_id}})">
+	      			<img src="images/icons/edit.png" alt="Planifier"/>
+	    			</a>
+    			{{/if}}
     			<img src="images/icons/tick.png" alt="edit" title="Etat du Séjour" />
-	    		<a href="?m=dPhospi&amp;dialog=1&ampa=vw_parcours&amp;operation_id={{$curr_op->_id}}" 
+	    		<a href="?m=dPhospi&amp;dialog=1&amp;a=vw_parcours&amp;operation_id={{$curr_op->_id}}" 
 	      			onmouseover="ObjectTooltip.create(this, 'COperation', {{$curr_op->_id}})">
 	      			Intervention du {{$curr_op->_datetime|date_format:"%d/%m/%Y à %Hh%M"}}
 	   	 		</a>
@@ -136,6 +144,11 @@ function pageMain() {
     				<span>
     			{{/if}}
     			<br/>
+    			{{if $canCabinet->edit}}
+	    			<a href="#" title="Modifier l'intervention" onclick="editIntervention({{$curr_op->_id}})">
+	      			<img src="images/icons/edit.png" alt="Planifier"/>
+	    			</a>
+    			{{/if}}
 	   	 		<a href="?m=dPhospi&amp;dialog=1&amp;a=vw_parcours&amp;operation_id={{$curr_op->_id}}" 
 	      		onmouseover="ObjectTooltip.create(this, 'COperation', {{$curr_op->_id}})">
 	      		Intervention du {{$curr_op->_datetime|date_format:"%d/%m/%Y à %Hh%M"}}

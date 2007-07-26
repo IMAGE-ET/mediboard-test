@@ -8,6 +8,7 @@
 */
 
 global $AppUI, $can, $m, $g;
+$can->needsRead();
 
 $today = mbDateTime();
 $sejour_id 		= mbGetValueFromGetOrSession("sejour_id",0);
@@ -182,6 +183,8 @@ if ($operation) {
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("canCabinet", CModule::getCanDo("dPcabinet"));
 
 $smarty->assign("sejour"		, $sejour);
 $smarty->assign("operations", $operations);
