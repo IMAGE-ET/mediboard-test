@@ -74,11 +74,10 @@ class CCodableCCAM extends CMbObject {
           
           $possible_acte->code_phase = $phase->phase;
           $possible_acte->execution = $this->_acte_execution;
-          $possible_acte->montant_depassement = $this->_acte_depassement;
           
           if (!$depassement_affecte and $possible_acte->code_activite == 1) {
-            $depassement_affecte = true;       	
-            $possible_acte->depassement = $this->_acte_depassement;
+            $depassement_affecte = true;     	
+            $possible_acte->montant_depassement = $this->_acte_depassement;
           }
           
           $possible_acte->executant_id = $this->getExecutant_id($possible_acte->code_activite);
