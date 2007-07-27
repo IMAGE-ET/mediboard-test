@@ -227,10 +227,6 @@ function pageMain() {
             {{else}}
             <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
             {{/if}}
-          {{else}}
-            <button class="submit" type="button" onclick="submitForms();">{{tr}}Create{{/tr}}</button>
-          {{/if}}
-          {{if $op->operation_id}}
             <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
             <select name="_choix_modele" onchange="printDocument(this)">
               <option value="">&mdash; {{tr}}modele-choice{{/tr}}</option>
@@ -257,6 +253,8 @@ function pageMain() {
                 <option value="">{{tr}}pack-none{{/tr}}</option>
               {{/foreach}}
             </select>
+          {{else}}
+            <button class="submit" type="button" onclick="submitForms();">{{tr}}Create{{/tr}}</button>
           {{/if}}
           </td>
         </tr>

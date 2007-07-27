@@ -86,6 +86,29 @@ function checkFormRDV(oForm){
     return checkForm(oForm);
   }
 }
+
+function printForm() {
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "view_consultation"); 
+  url.addElement(document.editFrm.consultation_id);
+  url.popup(700, 500, "printConsult");
+  return;
+}
+
+function printDocument(iDocument_id) {
+	oForm = document.editFrm;
+  if (iDocument_id.value != 0) {
+    var url = new Url;
+    url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+    url.addElement(oForm.consultation_id, "object_id");
+    url.addElement(iDocument_id, "modele_id");
+    url.popup(700, 600, "Document");
+    return true;
+  }
+  
+  return false;
+}
+
 </script>
 
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkFormRDV(this)">
@@ -283,6 +306,24 @@ function checkFormRDV(oForm){
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la consultation de',objName:'{{$consult->_ref_patient->_view|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
+            <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
+            <select name="_choix_modele" onchange="printDocument(this)">
+              <option value="">&mdash; {{tr}}modele-choice{{/tr}}</option>
+              <optgroup label="Modèles du praticien">
+              {{foreach from=$listModelePrat item=curr_modele}}
+                <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
+              {{foreachelse}}
+                <option value="">{{tr}}modele-none{{/tr}}</option>
+              {{/foreach}}
+              </optgroup>
+              <optgroup label="Modèles du cabinet">
+              {{foreach from=$listModeleFunc item=curr_modele}}
+                <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
+              {{foreachelse}}
+                <option value="">{{tr}}modele-none{{/tr}}</option>
+              {{/foreach}}
+              </optgroup>
+            </select>
           {{else}}
             <button class="submit" type="submit">Créer</button>
           {{/if}}

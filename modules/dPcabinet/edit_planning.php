@@ -32,6 +32,9 @@ $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
 $consultation_id = mbGetValueFromGetOrSession("consultation_id");
 $plageconsult_id = mbGetValueFromGet("plageconsult_id", null);
 
+$listModelePrat = array();
+$listModeleFunc = array();
+
 if(!$consultation_id) {
   // A t'on fourni une plage de consultation
   if($plageconsult_id){
@@ -58,15 +61,38 @@ if(!$consultation_id) {
 
   $chir =& $consult->_ref_plageconsult->_ref_chir;
   $pat  =& $consult->_ref_patient;
+  
+	// Modèles de l'utilisateur
+	$order = "nom";
+	if ($chir->user_id) {
+	  $where = array();
+	  $where["object_class"] = "= 'CConsultation'";
+	  $where["chir_id"] = "= '$chir->user_id'";
+	  $listModelePrat = CCompteRendu::loadModeleByCat(null, $where, $order, true);
+	}
+	
+	// Modèles de la fonction
+	if ($chir->user_id) {
+	  $where = array();
+	  $where["object_class"] = "= 'CConsultation'";
+	  $where["function_id"] = "= '$chir->function_id'";
+	  $listModeleFunc = CCompteRendu::loadModeleByCat(null, $where, $order, true);
+	}
 }
+
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("plageConsult"     , $plageConsult     );
+$smarty->assign("plageConsult"     	, $plageConsult     );
 $smarty->assign("consult"           , $consult           );
 $smarty->assign("chir"              , $chir              );
 $smarty->assign("pat"               , $pat               );
 $smarty->assign("listPraticiens"    , $listPraticiens    );
+
+$smarty->assign("listModelePrat"		, $listModelePrat);
+$smarty->assign("listModeleFunc"		, $listModeleFunc);
 
 $smarty->display("addedit_planning.tpl");
 
