@@ -32,7 +32,11 @@
       <li><em>[{{$consult_anesth->_ref_operation->libelle}}]</em></li>
       {{/if}}
       {{foreach from=$consult_anesth->_ref_operation->_ext_codes_ccam item=curr_code}}
-      <li><em>{{$curr_code->libelleLong}}</em> ({{$curr_code->code}})</li>
+      <li><em>{{$curr_code->libelleLong}}</em> ({{$curr_code->code}}) - 
+      {{foreach from=$curr_code->activites item=curr_act}}
+      	Act. {{$curr_act->numero}} : {{$curr_act->phases.0->tarif}} euros - 
+      {{/foreach}}
+      </li>
       {{/foreach}}
     </ul>
   {{/if}}

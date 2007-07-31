@@ -31,12 +31,16 @@ class CCodableCCAM extends CMbObject {
   function preparePossibleActes() {
   }
   
-  function loadRefsCodesCCAM() {
+  function loadRefsCodesCCAM($full = 0) {
     $this->_ext_codes_ccam = array();
     if($this->_codes_ccam !== null) {
       foreach ($this->_codes_ccam as $code) {
         $ext_code_ccam = new CCodeCCAM($code);
-        $ext_code_ccam->LoadLite();
+        if($full) {
+        	$ext_code_ccam->Load();
+        } else {
+          $ext_code_ccam->LoadLite();
+        }
         $this->_ext_codes_ccam[] = $ext_code_ccam;
       }
     }
