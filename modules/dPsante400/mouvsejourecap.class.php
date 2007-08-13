@@ -406,11 +406,11 @@ class CMouvSejourEcap extends CMouvement400 {
     
     // Horodatage
     $entree = $dheECap->consumeDateTime("ATDTEN", "ATHREN");
-    $duree = $dheECap->consume("ATDMSJ");
+    $duree = max(1, $dheECap->consume("ATDMSJ"));
     $sortie = mbDateTime("+$duree days", $entree);
     $this->sejour->entree_prevue = $entree;
     $this->sejour->sortie_prevue = $sortie;
-    
+
     // Evite le updateFormField()
     $this->sejour->_hour_entree_prevue = null;
     $this->sejour->_hour_sortie_prevue = null;

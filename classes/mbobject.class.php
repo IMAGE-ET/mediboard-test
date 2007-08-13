@@ -666,6 +666,7 @@ class CMbObject {
   
   /**
    *  Inserts a new row if id is zero or updates an existing row in the database table
+   *  @param boolean $checkobject check values before storing if true (default)
    *  @return null|string null if successful otherwise returns and error message
    */
   function store($checkobject = true) {

@@ -21,7 +21,7 @@ class CRecordSante400 {
     global $dPconfig;
     $dsnConfig = $dPconfig["dPsante400"];
     
-    if (!$dsn = $dsnConfig["dsn"]) {
+    if (null == $dsn = $dsnConfig["dsn"]) {
       trigger_error("Data Source Name not defined, please configure module", E_USER_ERROR);
       die;
     }
@@ -175,20 +175,28 @@ class CRecordSante400 {
       return null;
     }
     
-    // Cas
-    if (false !== strpos($time, "h")) {
-      $frags = split("h", $time);
-      return join(":", $frags) . ":00";
-    }
+//    // Cas
+//    if (false !== strpos($time, "h")) {
+//      $frags = split("h", $time);
+//      mnTrace($frags, "Fragments for '$time'");
+//      return join(":", $frags) . ":00";
+//    }
     
-    if (strlen($time) <= 2) {
-      $time = "00" . $time;
-    }
+//    if (strlen($time) <= 2) {
+//      $time = "00" . $time;
+//    }
     
     $time = str_pad($time, 4, "0", STR_PAD_LEFT);
 
-    $reg = "/(\d{1,2})h?(\d{2})/i";
-    return preg_replace($reg, "$1:$2:00", $time);
+    $reg = "/(\d{2})h?(\d{2})/i";
+    $array = array();
+    if (!preg_match($reg, $time, $array)) {
+      return null;
+    }    
+    
+    $h = $array[1] % 24;
+    $m = $array[2];
+    return "$h:$m:00";
   }
 
   /**
