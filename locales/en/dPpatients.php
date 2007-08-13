@@ -1,5 +1,5 @@
 <?php
-$locales['CSejour-mode_sortie'] = '';
+$locales['mod-dPpatients-tab-vw_recherche'] = '';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-court'] = '';
@@ -269,6 +269,7 @@ $locales['CPatient.sexe.'] = ' ';
 $locales['CPatient.sexe.f'] = '';
 $locales['CPatient.sexe.j'] = '';
 $locales['CPatient.sexe.m'] = '';
+$locales['CSejour-mode_sortie'] = '';
 $locales['CSejour-_ext_codes_ccam'] = '';
 $locales['CSejour-_ref_actes_ccam'] = '';
 $locales['CTraitement'] = '';
