@@ -36,7 +36,7 @@ class CCodeCIM10 {
   var $_lang = null;
   
   // Other
-  var $isInfo = null;
+  var $_isInfo = null;
   // Id de la base de données (qui doit être dans le config.php)
   var $dbcim10 = null;
   
@@ -74,7 +74,8 @@ class CCodeCIM10 {
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
     if ($row["total"] == 0) {
-      $this->code = "(A00-B99)";
+      $this->libelle = "Code CIM inexistant";
+      return false;
     }
     // sid
     $query = "SELECT SID" .
@@ -101,11 +102,14 @@ class CCodeCIM10 {
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
     $this->libelle = $row[$this->_lang];
+    return true;
   }
   
   // Chargement des données
   function load($lang = self::LANG_FR) {
-    $this->loadLite($lang, 0);
+  	if (!$this->loadLite($lang, 0)){
+  		return false;
+  	}
 
     $ds =& $this->_spec->ds;
     //descr
@@ -211,10 +215,15 @@ class CCodeCIM10 {
     $this->_isInfo += count($this->include);
     $this->_isInfo += count($this->indir);
     $this->_isInfo += count($this->notes);
-    
+    return true;
   }
   
   function loadRefs() {
+  	
+  	if (!$this->loadLite($this->_lang, 0)){
+  		return false;
+  	}
+  	
     $ds =& $this->_spec->ds;
     
     // Exclusions

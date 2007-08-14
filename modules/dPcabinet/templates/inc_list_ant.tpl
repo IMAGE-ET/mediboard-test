@@ -72,6 +72,7 @@
         {{/foreach}}
       </ul>
       <strong>Diagnostics du patient</strong>
+      {{$patient->listCim10}}
       <ul>
         {{foreach from=$patient->_codes_cim10 item=curr_code}}
         <li>
