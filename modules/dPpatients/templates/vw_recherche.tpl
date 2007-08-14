@@ -1,10 +1,14 @@
+{{mb_include_script module="dPplanningOp" script="ccam_selector"}}
+{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+
+
 <script type="text/javascript">
 
 function pageMain() {
   regFieldCalendar("recherche", "date_debut");
   
   var oAccord = new Rico.Accordion($('accordionResultats'), { 
-    panelHeight: ViewPort.SetAccordHeight('accordionResultats'),
+    panelHeight: ViewPort.SetAccordHeight('accordionResultats', { iBottomMargin : 5 }),
     showDelay: 50, 
     showSteps: 3 
   } );       
@@ -21,7 +25,9 @@ function pageMain() {
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="tab" value="{{$tab}}" />
     <input type="hidden" name="new" value="1" />
-      
+    <input type="hidden" name="rechercheOpClass" value="COperation" />
+    <input type="hidden" name="rechercheChir" value="{{$user_id}}" />
+    
        
     <table class="form">
       <tr>
@@ -40,7 +46,18 @@ function pageMain() {
       </tr>
       <tr>
         <th>{{mb_label object=$pat_diag field="listCim10"}}</th>
-        <td colspan="4"><input type="text" name="diagnostic_patient" value="{{$diagnostic_patient|stripslashes}}" /></td>
+        <td colspan="4">
+          <input type="text" name="diagnostic_patient" value="{{$diagnostic_patient|stripslashes}}" />
+          <button class="search notext" type="button" onclick="CIM10Selector.init()">Rechercher</button>
+          <script type="text/javascript">   
+            CIM10Selector.init = function(){
+              this.sForm = "recherche";
+              this.sView = "diagnostic_patient";
+              this.sChir = "rechercheChir";
+              this.pop();
+            }
+          </script>
+        </td>
       </tr>       
          
       
@@ -107,8 +124,29 @@ function pageMain() {
       </tr>
       <tr>
         <th>{{mb_label object=$intervention field="rques"}}</th>
-        <td colspan="4"><input type="text" name="remarque_intervention" value="{{$remarque_intervention|stripslashes}}"/></td>
-      </tr>   
+        <td><input type="text" name="remarque_intervention" value="{{$remarque_intervention|stripslashes}}"/></td>
+        <th>{{mb_label object=$intervention field="libelle"}}</th>
+        <td><input type="text" name="libelle_intervention" value="{{$libelle_intervention|stripslashes}}"/></td>
+      </tr> 
+      <tr>
+        <th>Codes CCAM</th>
+        <td colspan="4">
+          <input type="text" name="ccam_intervention" value="{{$ccam_intervention|stripslashes}}"/>
+          <button class="search notext" type="button" onclick="CCAMSelector.init()">Rechercher</button>
+          
+          <script type="text/javascript">   
+            CCAMSelector.init = function(){
+              this.sForm = "recherche";
+              this.sClass = "rechercheOpClass";
+              this.sChir = "rechercheChir";
+              this.sView = "ccam_intervention";
+              this.pop();
+            }
+          </script>
+        
+       
+        </td>
+      </tr>  
       
     
       <tr>

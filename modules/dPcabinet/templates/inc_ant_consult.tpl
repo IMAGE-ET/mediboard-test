@@ -1,3 +1,5 @@
+{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+
 <script type="text/javascript">
 
 var cim10url = new Url;
@@ -8,7 +10,7 @@ function selectCim10(code) {
   cim10url.popup(800, 500, "CIM10");
 }
 
-
+/*
 function popCode() {
   cim10url.setModuleAction("dPcim10", "vw_find_code");
   cim10url.popup(700, 500, "CIM10");
@@ -20,6 +22,18 @@ function setCode(sCode, type, sFullCode) {
   oCimAnesthField.add(sCode);
   {{/if}}
   updateTokenCim10();
+}
+*/
+
+function reloadCim10(sCode){
+  var oForm = document.addDiagFrm;
+  
+  oCimField.add(sCode);
+  {{if $_is_anesth}}
+  oCimAnesthField.add(sCode);
+  {{/if}}
+  updateTokenCim10();
+  oForm.code_diag.value="";
 }
 
 function updateTokenCim10() {
@@ -280,9 +294,32 @@ function copyTraitement(traitement_id){
       
       <hr />
       
-      <strong>Ajouter un diagnostic</strong>
+      <form name="addDiagFrm" action="?m={{$m}}" method="post">
+        <strong>Ajouter un diagnostic</strong>
+
+        <input type="hidden" name="chir" value="{{$userSel->_id}}" />
       
-      <button class="search" onclick="popCode()">Chercher un diagnostic</button>
+        <button class="search" type="button" onclick="CIM10Selector.init()">Chercher un diagnostic</button>
+        <input type="text" name="code_diag" size="5"/>
+       
+        <button class="tick notext" type="button" onclick="reloadCim10(code_diag.value)" />Valider</button>
+       
+       
+        <script type="text/javascript">   
+          CIM10Selector.init = function(){
+            this.sForm = "addDiagFrm";
+            this.sView = "code_diag";
+            this.sChir = "chir";
+            this.pop();
+          }
+        </script>
+        
+        
+      </form>
+      
+      
+      
+      
       <form name="editDiagFrm" action="?m={{$m}}" method="post">
 
       <input type="hidden" name="m" value="dPpatients" />

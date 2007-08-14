@@ -7,6 +7,11 @@
 * @author Alexis Granger
 */
 
+global $AppUI, $can, $m;
+
+
+$user_id = $AppUI->user_id;
+
 // Récupération des critères de recherche
 $antecedent_patient      = mbGetValueFromGetOrSession("antecedent_patient"          );
 $traitement_patient      = mbGetValueFromGetOrSession("traitement_patient"          );
@@ -21,6 +26,9 @@ $remarque_sejour         = mbGetValueFromGetOrSession("remarque_sejour"         
 $materiel_intervention   = mbGetValueFromGetOrSession("materiel_intervention"       );
 $examen_intervention     = mbGetValueFromGetOrSession("examen_intervention"         );
 $remarque_intervention   = mbGetValueFromGetOrSession("remarque_intervention"       );
+$libelle_intervention    = mbGetValueFromGetOrSession("libelle_intervention"        );
+$ccam_intervention       = mbGetValueFromGetOrSession("ccam_intervention"           );
+
 
 $recherche_consult       = mbGetValueFromGetOrSession("recherche_consult","or"      );
 $recherche_sejour        = mbGetValueFromGetOrSession("recherche_sejour","or"       );
@@ -217,6 +225,12 @@ if($recherche_intervention == "and") {
   if($remarque_intervention){
    $where_intervention["rques"]     = "LIKE '%$remarque_intervention%'";
   }
+  if($libelle_intervention){
+   $where_intervention["libelle"]     = "LIKE '%$libelle_intervention%'";
+  }
+  if($ccam_intervention){
+   $where_intervention["codes_ccam"]     = "LIKE '%$ccam_intervention%'";
+  }
 }
 
 if($recherche_intervention == "or"){
@@ -232,9 +246,18 @@ if($recherche_intervention == "or"){
 	$where_remarque = "`rques` LIKE '%$remarque_intervention%'";
     $where_intervention[] = $where_remarque;
   }
+  if($libelle_intervention){
+	$where_libelle = "`libelle` LIKE '%$libelle_intervention%'";
+    $where_intervention[] = $where_libelle;
+  }
+  if($ccam_intervention){
+	$where_ccam = "`codes_ccam` LIKE '%$ccam_intervention%'";
+    $where_intervention[] = $where_ccam;
+  }
   if($where_intervention){
     $where_intervention = implode(" OR ", $where_intervention);
   }
+  
 }
 
 $order_intervention = "rques";
@@ -282,6 +305,9 @@ $smarty->assign("remarque_sejour"         , $remarque_sejour         );
 $smarty->assign("materiel_intervention"   , $materiel_intervention   );
 $smarty->assign("examen_intervention"     , $examen_intervention     );
 $smarty->assign("remarque_intervention"   , $remarque_intervention   );
+$smarty->assign("libelle_intervention"    , $libelle_intervention    );
+$smarty->assign("ccam_intervention"       , $ccam_intervention       );
+
 
 $smarty->assign("recherche_consult"       , $recherche_consult       );
 $smarty->assign("recherche_sejour"        , $recherche_sejour        );
@@ -294,6 +320,7 @@ $smarty->assign("patients_consult"        , $patients_consult        );
 $smarty->assign("patients_sejour"         , $patients_sejour         );
 $smarty->assign("patients_intervention"   , $patients_intervention   );
 
+$smarty->assign("user_id"                 , $user_id                 );
 $smarty->display("vw_recherche.tpl");
 
 ?>

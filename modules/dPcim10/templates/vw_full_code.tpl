@@ -4,7 +4,8 @@
 function selectCode() {
   var sCode = '{{$cim10->code}}';
   var sFullCode = '{{$cim10->libelle}}';
-  window.opener.setCode(sCode, "cim10", sFullCode);
+  window.opener.CIM10Selector.set(sCode);
+  window.close();
 }
 
 </script>
